@@ -1,65 +1,19 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
-  "path": "/Users/summercards/Documents/弹壳风暴2",
-  "status": "completed",
-  "currentPhase": 1,
+  "path": "/Users/summercards/ShellStorm2",
+  "status": "running",
+  "currentPhase": 2,
   "lastTask": "Code",
   "planVersion": "v3.0",
   "phase1": {
     "T01": "completed"
   },
+  "phase2": {
+    "T01": "completed"
+  },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "currentTarget": "Phase 1 Plan: 项目初始化与核心射击框架",
-  "notes": "全新顶视角射击搜打撤肉鸽游戏，基于模块化武器装配树 + 命运卡片 + 搜打撤风险决策。核心特色：枪身+子弹+配件自由组合，命运卡片改造武器树，战场撤离风险选择。",
-  "completedPhases": [],
-  "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md",
-  "phase1Plan": {
-    "title": "Phase 1: 项目初始化与核心射击框架",
-    "goal": "建立 Godot 4.6 项目，搭建顶视角射击基础框架，验证射击手感与移动控制",
-    "analysis": "作为全新项目，第一步需要建立 Godot 4.6 工程，配置 autoload 基础模块，搭建玩家控制和射击基础。必须确保射击手感流畅、移动响应及时，为后续复杂武器系统奠定基础。",
-    "tasks": [
-      {
-        "id": "T01",
-        "title": "Godot 4.6 项目初始化",
-        "priority": "critical",
-        "description": "创建 Godot 4.6 项目：\n- 项目名称：弹壳风暴2\n- 窗口设置：1280x720 或 1920x1080，全屏可选\n- 配置 InputMap：八方向移动( WASD/方向键 )、鼠标瞄准、左键射击、右键技能、Shift翻滚/冲刺、Space交互/拾取\n- 基础场景：Main.tscn 包含 Player + 简单背景\n- 项目features配置：4.6, GL Compatibility",
-        "deliverables": ["project.godot/InputMap配置/Main场景/Player基础节点"]
-      },
-      {
-        "id": "T02",
-        "title": "Player 控制器",
-        "priority": "critical",
-        "description": "Player 核心控制：\n- 八方向移动（CharacterBody2D）\n- 移动速度：300-400 px/s\n- 冲刺/闪避：Shift触发，冷却3秒，无敌帧0.2s\n- 鼠标瞄准方向\n- 生命值：100，护盾值：0（后续扩展）\n- 受伤硬直与无敌帧\n- 碰撞层设置",
-        "deliverables": ["Player.gd/移动逻辑/冲刺闪避/受伤处理"]
-      },
-      {
-        "id": "T03",
-        "title": "基础射击框架",
-        "priority": "critical",
-        "description": "射击基础框架：\n- WeaponController 挂载在 Player 上\n- 枪身接口设计：IGunBody，发射子弹\n- 子弹基类：IBulletProjectile，移动+碰撞\n- 投射物池：BulletPool，预创建减少GC\n- 命中检测：Area2D/CollisionShape2D\n- 伤害传递：发出伤害事件\n- 射速控制：fire rate管理\n- 弹药/过热系统（可选）",
-        "deliverables": ["WeaponController.gd/BulletBase.gd/BulletPool.gd/射击接口设计"]
-      },
-      {
-        "id": "T04",
-        "title": "基础敌人与波次",
-        "priority": "high",
-        "description": "基础敌人系统：\n- EnemyBase 敌人基类：移动+朝向玩家+碰撞\n- 简单敌人类型：近战追击型（朝玩家移动，接触造成伤害）\n- 敌人生成器：每3秒在屏幕边缘生成1-3个敌人\n- 击杀判定：子弹碰撞敌人，敌人HP归零则死亡\n- 敌人死亡效果：简单爆炸粒子或消失动画",
-        "deliverables": ["EnemyBase.gd/近战敌人/敌人生成器/击杀判定"]
-      },
-      {
-        "id": "T05",
-        "title": "UI基础与HUD",
-        "priority": "high",
-        "description": "游戏UI基础：\n- 主HUD：生命条、当前武器图标、背包容量、金币数\n- 简单小地图（可选）\n- 暂停菜单：继续/退出\n- 退出确认\n- 字体和配色方案",
-        "deliverables": ["GameUI.gd/HUD场景/暂停菜单/配色方案"]
-      },
-      {
-        "id": "T06",
-        "title": "git 仓库初始化",
-        "priority": "high",
-        "description": "Git 仓库：\n- 在新项目目录初始化 git\n- 创建 .gitignore（Godot专用）\n- 首次 commit：Phase 1 基础框架\n- 推送到 GitHub：https://github.com/summercard/ShellStorm2",
-        "deliverables": ["git init/.gitignore/首次commit/GitHub推送"]
-      }
-    ]
-  }
+  "currentTarget": "Phase 2: 武器系统模块化重构",
+  "notes": "Phase1 完成，Phase2 启动：武器系统核心接口WeaponCore.gd创建完毕，定义fire_rate/projectile_count/spread/reload_time及fire()模板方法。",
+  "completedPhases": ["phase1"],
+  "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
 }
