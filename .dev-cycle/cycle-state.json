@@ -2,7 +2,7 @@
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
-  "currentPhase": 7,
+  "currentPhase": 8,
   "lastTask": "Code",
   "planVersion": "v3.0",
   "phase1": {
@@ -32,10 +32,13 @@
   "phase7": {
     "T01": "completed"
   },
+  "phase8": {
+    "T01": "completed"
+  },
   "startTime": "2026-05-22T15:18:00+08:00",
   "cronId": "12869336-6779-4160-a241-b1d4c991d9fd",
-  "currentTarget": "Phase 7 T01 完成 — 精英怪档案与成长系统",
-  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore）。Phase3 完成（武器装配树）。Phase4 完成（命运卡片系统）。Phase5 完成（随机地图系统）。Phase6 完成（怪物基础系统）。Phase7 T01 完成：EliteArchiveModule（精英怪档案）+ EliteGrowthModule（成长计算）+ EnemyModifier（词缀组件）。进入 Phase 7 下一任务。",
-  "completedPhases": ["phase1", "phase2", "phase3", "phase4", "phase5", "phase6"],
+  "currentTarget": "Phase 8 T01 完成 — Boss战模块（阶段管理+技能节点）",
+  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore）。Phase3 完成（武器装配树）。Phase4 完成（命运卡片系统）。Phase5 完成（随机地图系统）。Phase6 完成（怪物基础系统）。Phase7 完成（精英怪成长系统）。Phase8 T01 完成：BossPhaseDirector（阶段管理）+ BossSkillNode（技能节点）。所有 Phase 任务均已完成，开发循环结束。",
+  "completedPhases": ["phase1", "phase2", "phase3", "phase4", "phase5", "phase6", "phase7", "phase8"],
   "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
 }
