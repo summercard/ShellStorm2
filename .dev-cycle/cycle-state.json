@@ -3,7 +3,7 @@
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
   "currentPhase": 5,
-  "lastTask": "Plan",
+  "lastTask": "Code",
   "planVersion": "v3.0",
   "phase1": {
     "T01": "completed"
@@ -22,14 +22,14 @@
     "T03": "completed"
   },
   "phase5": {
-    "T01": "pending",
+    "T01": "completed",
     "T02": "pending",
     "T03": "pending"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
   "cronId": "12869336-6779-4160-a241-b1d4c991d9fd",
-  "currentTarget": "Phase 5 进行中 — 随机地图模块",
-  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore 重构）。Phase3 完成（武器装配树核心数据 + 射击接口集成）。Phase4 完成（命运卡片系统）。Phase5 开始：T01 MapGenerator核心+节点图结构。",
+  "currentTarget": "Phase 5 T01 完成 — 随机地图节点图核心",
+  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore 重构）。Phase3 完成（武器装配树核心数据 + 射击接口集成）。Phase4 完成（命运卡片系统）。Phase5 T01 完成：NodeGraph + RoomData + MapGenerator + RoomFactory + PathDirector。下一个：T02 地图层级与房间内容注入分离。",
   "completedPhases": ["phase1", "phase2", "phase3", "phase4"],
   "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
 }
