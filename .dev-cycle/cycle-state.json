@@ -2,7 +2,7 @@
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
-  "currentPhase": 4,
+  "currentPhase": 5,
   "lastTask": "Plan",
   "planVersion": "v3.0",
   "phase1": {
@@ -16,11 +16,20 @@
     "T01": "completed",
     "T02": "completed"
   },
-  "phase4": {},
+  "phase4": {
+    "T01": "completed",
+    "T02": "completed",
+    "T03": "completed"
+  },
+  "phase5": {
+    "T01": "pending",
+    "T02": "pending",
+    "T03": "pending"
+  },
   "startTime": "2026-05-22T15:18:00+08:00",
   "cronId": "12869336-6779-4160-a241-b1d4c991d9fd",
-  "currentTarget": "Phase 4: 命运卡片系统",
-  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore 重构）。Phase3 完成（武器装配树核心数据 + 射击接口集成）。Phase4 命运卡片系统：提供对装配树节点进行改造的规则卡，包括组合卡/强化卡/变种卡/复制卡/融合卡/诅咒卡。",
-  "completedPhases": ["phase1", "phase2", "phase3"],
+  "currentTarget": "Phase 5 进行中 — 随机地图模块",
+  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore 重构）。Phase3 完成（武器装配树核心数据 + 射击接口集成）。Phase4 完成（命运卡片系统）。Phase5 开始：T01 MapGenerator核心+节点图结构。",
+  "completedPhases": ["phase1", "phase2", "phase3", "phase4"],
   "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
 }
