@@ -1,4 +1,5 @@
 class_name MapManager
+extends Node2D
 ## 地图总管理器 — 整合所有地图模块，管理地图生成和房间切换
 
 signal map_generated(graph: NodeGraph)

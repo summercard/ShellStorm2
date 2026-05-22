@@ -109,7 +109,7 @@ func get_computed_stats() -> Dictionary:
 	return root.get_computed_stats() if root != null else {}
 
 ## 获取树的可读结构（用于调试/UI）
-func get_tree_string() -> String:
+func _get_tree_string() -> String:
 	return root.get_path_string() if root != null else "(empty)"
 
 ## ========== 射击接口（从 WeaponCore 迁移过来的逻辑）==========
@@ -142,7 +142,8 @@ func fire_from(spawn_pos: Vector2, direction: Vector2) -> bool:
 ## 兼容旧接口
 func fire(direction: Vector2) -> bool:
 	"""兼容旧接口，从 global_position 发射"""
-	return fire_from(global_position, direction)
+	# WeaponAssemblyTree extends Node, not Node2D - require explicit position
+	return fire_from(Vector2.ZERO, direction)
 
 func _can_fire() -> bool:
 	"""检查是否可以射击"""

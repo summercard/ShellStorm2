@@ -118,7 +118,7 @@ func remove_from_slot(slot_index: int, count: int = 1) -> bool:
 	if slot.is_empty():
 		return false
 	
-	var to_remove := min(count, slot.count)
+	var to_remove: int = min(count, slot.count)
 	slot.count -= to_remove
 	if slot.count <= 0:
 		slot.clear()
@@ -222,7 +222,7 @@ func consume_item(item_id: String, count: int = 1) -> bool:
 	var total_needed := count
 	for i in _slots.size():
 		if not _slots[i].is_empty() and _slots[i].get_item_id() == item_id:
-			var can_take := min(_slots[i].count, total_needed)
+			var can_take: int = min(_slots[i].count, total_needed)
 			_slots[i].count -= can_take
 			total_needed -= can_take
 			if _slots[i].count <= 0:

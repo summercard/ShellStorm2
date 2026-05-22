@@ -13,19 +13,22 @@ var _extraction_module: Node = null
 var _is_extraction_panel_visible: bool = false
 var _beacon_count: int = 0
 
-@onready var panel: PanelContainer = $ExtractionPanel
-@onready var extraction_type_label: Label = $ExtractionPanel/VBox/ExtractionTypeLabel
-@onready var countdown_bar: ProgressBar = $ExtractionPanel/VBox/CountdownBar
-@onready var countdown_label: Label = $ExtractionPanel/VBox/CountdownLabel
-@onready var extraction_buttons_container: VBoxContainer = $ExtractionPanel/VBox/ExtractionButtons
-@onready var beacon_label: Label = $ExtractionPanel/VBox/BeaconLabel
-@onready var abort_button: Button = $ExtractionPanel/VBox/AbortButton
+@onready var panel: PanelContainer = get_node_or_null(".")
+@onready var extraction_type_label: Label = get_node_or_null("VBox/ExtractionTypeLabel")
+@onready var countdown_bar: ProgressBar = get_node_or_null("VBox/CountdownBar")
+@onready var countdown_label: Label = get_node_or_null("VBox/CountdownLabel")
+@onready var extraction_buttons_container: VBoxContainer = get_node_or_null("VBox/ExtractionButtons")
+@onready var beacon_label: Label = get_node_or_null("VBox/BeaconLabel")
+@onready var abort_button: Button = get_node_or_null("VBox/AbortButton")
 
 func _ready() -> void:
+	if panel == null or extraction_type_label == null:
+		return
 	panel.visible = false
 	countdown_bar.max_value = 1.0
 	countdown_bar.value = 0.0
-	abort_button.pressed.connect(_on_abort_pressed)
+	if abort_button:
+		abort_button.pressed.connect(_on_abort_pressed)
 
 ## 绑定 extraction director 和 module
 func set_extraction_director(director: Node) -> void:

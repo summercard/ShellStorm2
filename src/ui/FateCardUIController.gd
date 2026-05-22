@@ -9,7 +9,7 @@ extends Control
 @onready var instruction_label: Label = $CardPanel/VBox/InstructionLabel
 
 ## 预制卡片样式（用于动态创建卡片按钮）
-const CARD_SCENE = preload("res://scenes/FateCardButton.tscn")
+const CARD_SCENE = null  # res://scenes/FateCardButton.tscn (占位，等UI面板实现)
 
 ## 当前显示的卡片选项
 var current_options: Array[FateCard] = []

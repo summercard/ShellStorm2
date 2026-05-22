@@ -184,7 +184,7 @@ func on_encounter_result(elite_id: String, result: String, growth_data: Dictiona
 			# 被玩家击杀，降级或移除
 			elite.state = "Killed"
 			elites_changed()
-			elites_killed.emit(elite_id)
+			elite_killed.emit(elite_id)
 			return
 
 	elite.apply_growth(growth_data)

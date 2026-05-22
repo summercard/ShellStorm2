@@ -24,7 +24,7 @@ var _insurance_slots: Array[TextureRect] = []
 @onready var insurance_label: Label = $InsurancePanel/VBox/InsuranceLabel
 
 const SLOT_SIZE := 56
-const SLOT_SCENE := preload("res://src/ui/ItemSlot.tscn")
+const SLOT_SCENE: PackedScene = null  # res://src/ui/ItemSlot.tscn (占位，等UI面板实现)
 
 func _ready() -> void:
 	_build_inventory_grid()

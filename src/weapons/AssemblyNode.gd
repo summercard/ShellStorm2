@@ -211,5 +211,5 @@ func get_debug_info() -> Dictionary:
 	info["slots"] = slot_info
 	return info
 
-func to_string() -> String:
+func _to_string() -> String:
 	return "[AssemblyNode:%s %s(%s) d=%d]" % [node_id, node_name, NodeType.keys()[node_type], depth]

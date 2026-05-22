@@ -35,7 +35,7 @@ var death_settlement_module: DeathSettlementModule
 ## 状态
 var current_floor: int = 1
 var score: int = 0
-var room_cleared: bool = false
+var _room_cleared_flag: bool = false
 
 func _ready() -> void:
 	_setup_map_manager()
@@ -129,7 +129,7 @@ func instantiate_all_rooms() -> void:
 
 ## 进入房间
 func _on_room_entered(room_data: RoomData) -> void:
-	room_cleared = false
+	_room_cleared_flag = false
 	_update_room_info_label("当前: %s [%s]" % [RoomData.get_type_name(room_data.room_type), RoomData.get_level_name(room_data.floor_level)])
 	
 	# 初始化清理进度条
@@ -149,7 +149,7 @@ func _on_room_exited(room_id: String) -> void:
 func _on_floor_changed(old_floor: int, new_floor: int) -> void:
 	current_floor = new_floor
 	_update_room_info_label("进入第 %d 层..." % [new_floor])
-	room_cleared = true
+	_room_cleared_flag = true
 	
 	# 切换到新楼层后重新实例化
 	instantiate_all_rooms()
@@ -243,7 +243,7 @@ func _process(delta: float) -> void:
 	
 	# 非战斗房间直接标记为已清理
 	if not current_data.is_combat():
-		room_cleared = true
+		_room_cleared_flag = true
 		room_cleared.emit(current_data)
 		return
 	
@@ -255,7 +255,7 @@ func _process(delta: float) -> void:
 	_update_clearing_progress(killed, total)
 	
 	if map_manager.is_current_room_cleared():
-		room_cleared = true
+		_room_cleared_flag = true
 		_on_room_cleared(current_data)
 
 ## 房间清理完成
@@ -324,7 +324,7 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 func advance_to_next_floor() -> void:
 	var next_graph: NodeGraph = map_manager.advance_to_next_floor()
 	current_floor = map_manager.get_current_floor()
-	room_cleared = false
+	_room_cleared_flag = false
 
 ## 获取当前地图管理器
 func get_map_manager() -> MapManager:
@@ -374,7 +374,7 @@ func _update_ui() -> void:
 func debug_status() -> String:
 	var lines: Array[String] = [
 		"RoomGameMode Floor %d" % [current_floor],
-		"Score: %d | Room cleared: %s" % [score, room_cleared]
+		"Score: %d | Room cleared: %s" % [score, _room_cleared_flag]
 	]
 	
 	if map_manager != null:

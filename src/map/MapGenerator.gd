@@ -30,7 +30,7 @@ func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	_rng.seed = seed_value
 	
 	# 获取楼层配置
-	var config := FLOOR_ROOM_CONFIG.get(floor, FLOOR_ROOM_CONFIG[4])
+	var config: Dictionary = FLOOR_ROOM_CONFIG.get(floor, FLOOR_ROOM_CONFIG[4])
 	
 	# 创建节点图
 	var graph := NodeGraph.new()

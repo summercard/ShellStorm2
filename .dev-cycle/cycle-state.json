@@ -2,19 +2,24 @@
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
-  "currentPhase": 9,
-  "lastTask": "Plan",
+  "currentPhase": 10,
+  "lastTask": "Code",
   "planVersion": "v3.0",
   "phase9": {
     "T01": "completed",
     "T02": "completed",
+    "T03": "completed"
+  },
+  "phase10": {
+    "T01": "completed",
+    "T02": "pending",
     "T03": "pending"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "resumeTime": "2026-05-22T21:22:00+08:00",
+  "resumeTime": "2026-05-22T21:28:00+08:00",
   "cronId": "ec1fd8bf-d99d-415c-bbc5-a57917ff8c97",
-  "currentTarget": "Phase 9: 搜打撤深化 - 背包+保险格+撤离结算",
-  "notes": "Phase 1-8 已完成。Phase 9 T01: 四大模块（Inventory/Insurance/Extraction/DeathSettlement）已实现。T02: 撤离UI面板+背包UI格子已添加。T03: 整局流程串联测试（待执行）。",
-  "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8],
-  "designDoc": "docs/PH09_搜打撤深化.md"
+  "currentTarget": "Phase 10: 基地养成 - 长期解锁与局外成长",
+  "notes": "Phase 1-9 已完成。Phase 10 T01: BaseManager+BaseData核心结构。T02: 建筑槽位（工坊/温室/垃圾场/占卜屋/保险柜/黑市/档案室）。T03: 解锁进度与玩家持久化。",
+  "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "designDoc": "docs/PH10_基地养成.md"
 }

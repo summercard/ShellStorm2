@@ -14,7 +14,7 @@ func load_base() -> void:
 		if f:
 			var json_str := f.get_as_text()
 			f.close()
-			var json := JSON.parse_string(json_str)
+			var json: Variant = JSON.parse_string(json_str)
 			if json and typeof(json) == TYPE_DICTIONARY:
 				data = BaseData.from_dict(json as Dictionary)
 				return

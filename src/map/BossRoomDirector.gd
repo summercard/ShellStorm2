@@ -141,7 +141,7 @@ func _generate_rewards(boss_data: Dictionary) -> Dictionary:
 	}
 
 ## Boss逃脱
-func boss_escaped() -> void:
+func on_boss_escaped() -> void:
 	if _current_boss.size() > 0:
 		_current_boss["is_escaped"] = true
 		boss_escaped.emit(_current_boss["boss_id"])

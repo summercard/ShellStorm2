@@ -50,7 +50,7 @@ func configure(config: Dictionary) -> void:
 	area_radius = config.get("area_radius", area_radius)
 	effect_scene = config.get("effect_scene", effect_scene)
 
-func set_owner(boss_id: String) -> void:
+func set_owner_boss(boss_id: String) -> void:
 	_owner_boss_id = boss_id
 
 func can_trigger() -> bool:

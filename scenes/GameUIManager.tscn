@@ -1,0 +1,155 @@
+[gd_scene load_steps=2 format=3 uid="uid://gameui001"]
+
+[ext_resource type="Script" path="res://src/ui/GameUIManager.gd" id="1_gameui"]
+
+[node name="GameUIManager" type="CanvasLayer"]
+script = ExtResource("1_gameui")
+
+[node name="GameHUD" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="TopRightPanel" type="PanelContainer" parent="GameHUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 100.0
+grow_horizontal = 0
+
+[node name="VBox" type="VBoxContainer" parent="GameHUD/TopRightPanel"]
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="GameHUD/TopRightPanel/VBox"]
+layout_mode = 2
+text = "Score: 0"
+
+[node name="WaveLabel" type="Label" parent="GameHUD/TopRightPanel/VBox"]
+layout_mode = 2
+text = "Floor: 1"
+
+[node name="HPBarBG" type="PanelContainer" parent="GameHUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 110.0
+offset_right = -16.0
+offset_bottom = 138.0
+grow_horizontal = 0
+
+[node name="HPBar" type="ProgressBar" parent="GameHUD/HPBarBG"]
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="CurrencyLabel" type="Label" parent="GameHUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -44.0
+offset_right = 150.0
+offset_bottom = -16.0
+grow_vertical = 0
+text = "魂: 0"
+
+[node name="RoomInfoLabel" type="Label" parent="GameHUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -80.0
+offset_right = 200.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "探索中..."
+
+[node name="ClearingProgress" type="ProgressBar" parent="GameHUD"]
+anchors_preset = 3
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="InventoryPanel" type="PanelContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -320.0
+offset_top = 150.0
+offset_right = -16.0
+offset_bottom = 600.0
+grow_horizontal = 0
+
+[node name="VBox" type="VBoxContainer" parent="InventoryPanel"]
+layout_mode = 2
+
+[node name="CapacityLabel" type="Label" parent="InventoryPanel/VBox"]
+layout_mode = 2
+text = "背包 0/12"
+
+[node name="ExtractionPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="ExtractionPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="ExtractionTypeLabel" type="Label" parent="ExtractionPanel/VBox"]
+layout_mode = 2
+text = "选择撤离方式"
+horizontal_alignment = 1
+
+[node name="CountdownBar" type="ProgressBar" parent="ExtractionPanel/VBox"]
+layout_mode = 2
+max_value = 1.0
+value = 0.5
+show_percentage = false
+
+[node name="CountdownLabel" type="Label" parent="ExtractionPanel/VBox"]
+layout_mode = 2
+text = "倒计时: 10s"
+horizontal_alignment = 1
+
+[node name="AbortButton" type="Button" parent="ExtractionPanel/VBox"]
+layout_mode = 2
+text = "中断撤离"
+
+[node name="FateCardPanel" type="Control" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2

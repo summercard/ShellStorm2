@@ -147,5 +147,5 @@ func get_debug_info() -> Dictionary:
 		"visual": visual,
 	}
 
-func to_string() -> String:
+func _to_string() -> String:
 	return "[FateCard:%s %s(%s)]" % [card_id, card_name, rarity_name(card_rarity)]
