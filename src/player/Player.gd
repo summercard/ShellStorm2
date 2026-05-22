@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal hp_changed(current: int, maximum: int)
+signal enemy_killed()  # 击杀信号，供 UI 计分用
 
 const SPEED: float = 350.0
 const DASH_SPEED: float = 800.0
