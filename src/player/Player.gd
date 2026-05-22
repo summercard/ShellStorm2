@@ -1,7 +1,10 @@
 extends CharacterBody2D
 
 signal hp_changed(current: int, maximum: int)
-signal enemy_killed()  # 击杀信号，供 UI 计分用
+signal enemy_killed()          # 击杀信号，供 UI 计分用
+signal dash_started()          # 闪避开始
+signal dash_ended()             # 闪避结束
+signal dash_cooldown_changed(cooldown_ratio: float)  # 闪避冷却进度 [0.0~1.0]，0=就绪
 
 const SPEED: float = 350.0
 const DASH_SPEED: float = 800.0
@@ -18,6 +21,9 @@ var is_dashing: bool = false
 var dash_cooldown_timer: float = 0.0
 var aim_direction: Vector2 = Vector2.RIGHT
 
+## 音频管理器引用
+var _audio: AudioManager = null
+
 @onready var weapon_anchor: Marker2D = $WeaponAnchor
 @onready var invincible_timer: Timer = $InvincibleTimer
 
@@ -27,6 +33,7 @@ var weapon_tree: WeaponAssemblyTree
 func _ready() -> void:
 	current_hp = max_hp
 	hp_changed.connect(_on_hp_changed)
+	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 	
 	# 初始化武器装配树
 	weapon_tree = WeaponPresets.build_rifle()
@@ -62,17 +69,26 @@ func _get_input_direction() -> Vector2:
 func _handle_dash_cooldown(delta: float) -> void:
 	if dash_cooldown_timer > 0:
 		dash_cooldown_timer -= delta
+		# 发射冷却进度（0.0=刚用完，1.0=就绪）
+		dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
+	else:
+		# 冷却已就绪
+		dash_cooldown_changed.emit(0.0)
 	
 	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0 and not is_dashing:
 		_start_dash()
 
 func _start_dash() -> void:
+	dash_started.emit()
+	if _audio:
+		_audio.play_dash_sfx()
 	is_dashing = true
 	is_invincible = true
 	dash_cooldown_timer = DASH_COOLDOWN
 	invincible_timer.start(INVINCIBLE_DURATION)
 	await get_tree().create_timer(DASH_DURATION).timeout
 	is_dashing = false
+	dash_ended.emit()
 
 func _update_invincibility() -> void:
 	# Handled by timer

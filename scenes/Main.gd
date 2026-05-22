@@ -36,6 +36,10 @@ func _spawn_player() -> void:
 		player.global_position = Vector2(640, 360)
 	add_child(player)
 
+	# 将玩家引用传给 UI 管理器
+	if ui_manager and ui_manager.has_method("set_player"):
+		ui_manager.set_player(player)
+
 func _on_hp_changed(current: int, maximum: int) -> void:
 	if ui_manager and ui_manager.has_method("update_hp"):
 		ui_manager.update_hp(current, maximum)

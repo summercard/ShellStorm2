@@ -7,6 +7,7 @@ extends CanvasLayer
 
 ## — 游戏状态 UI —
 @onready var hp_bar: ProgressBar = $GameHUD/HPBarBG/HPBar
+@onready var dash_cooldown_bar: ProgressBar = $GameHUD/DashCooldownBG/DashCooldownBar
 @onready var score_label: Label = $GameHUD/TopRightPanel/VBox/ScoreLabel
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
@@ -72,6 +73,13 @@ func set_room_game_mode(mode: Node) -> void:
 		mode.floor_changed.connect(_on_floor_changed)
 	if mode.has_signal("kill_recorded"):
 		mode.kill_recorded.connect(_on_kill_recorded)
+
+## 绑定玩家（用于闪避冷却条等）
+func set_player(player: Node) -> void:
+	if player and player.has_signal("dash_cooldown_changed"):
+		player.dash_cooldown_changed.connect(_on_dash_cooldown_changed)
+	if player and player.has_signal("dash_started"):
+		player.dash_started.connect(_on_dash_started)
 
 ## 绑定背包模块
 func set_inventory_module(module: Node) -> void:
@@ -195,6 +203,20 @@ func _on_capacity_changed(current: int, maximum: int) -> void:
 ## 保险格变化
 func _on_insurance_changed() -> void:
 	pass  # 可扩展
+
+## 闪避冷却进度更新（ratio: 0.0=就绪，1.0=冷却中）
+func _on_dash_cooldown_changed(cooldown_ratio: float) -> void:
+	if dash_cooldown_bar:
+		# value=1 就绪，value=0 冷却中（进度条反向）
+		dash_cooldown_bar.value = 1.0 - cooldown_ratio
+
+## 闪避启动时高亮
+func _on_dash_started() -> void:
+	if dash_cooldown_bar:
+		dash_cooldown_bar.modulate = Color(0.6, 0.9, 1.0, 1.0)
+		# 淡出高亮
+		var t := dash_cooldown_bar.create_tween()
+		t.tween_property(dash_cooldown_bar, "modulate", Color.WHITE, 0.3)
 
 ## 撤离完成
 func _on_extraction_completed(success: bool, loot: Array) -> void:

@@ -44,6 +44,27 @@ max_value = 100.0
 value = 100.0
 show_percentage = false
 
+[node name="DashCooldownBG" type="PanelContainer" parent="GameHUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 146.0
+offset_right = -16.0
+offset_bottom = 174.0
+grow_horizontal = 0
+
+[node name="DashCooldownBar" type="ProgressBar" parent="GameHUD/DashCooldownBG"]
+max_value = 1.0
+value = 0.0
+show_percentage = false
+
+[node name="DashLabel" type="Label" parent="GameHUD/DashCooldownBG"]
+layout_mode = 2
+text = "闪避"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CurrencyLabel" type="Label" parent="GameHUD"]
 anchors_preset = 2
 anchor_top = 1.0

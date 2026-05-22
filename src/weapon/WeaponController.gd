@@ -16,12 +16,17 @@ var _muzzle_flash: PointLight2D = null
 ## 本地冷却计时器（委托给 weapon_tree.tick 更新）
 var fire_cooldown: float = 0.0
 
+## 音频管理器引用
+var _audio: AudioManager = null
+
 func _ready() -> void:
 	# 从 Player 获取 weapon_tree
 	if player and player.has_method("get_weapon_tree"):
 		weapon_tree = player.get_weapon_tree()
 	# 获取枪口闪光节点
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
+	# 获取音频管理器
+	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 
 func _process(delta: float) -> void:
 	# 更新 weapon_tree 的冷却（内部会处理 _fire_cooldown）
@@ -40,7 +45,11 @@ func fire() -> void:
 	var muzzle_pos = player.global_position + aim_dir * 35.0
 
 	if weapon_tree:
+		var prev_ammo: int = weapon_tree.current_ammo
 		weapon_tree.fire_from(muzzle_pos, aim_dir)
+		# 弹药减少时（成功射击）播放音效
+		if weapon_tree.current_ammo < prev_ammo and _audio:
+			_audio.play_fire_sfx(weapon_tree.fire_rate, weapon_tree.projectile_count)
 	else:
 		# Fallback: 无装配树时直接生成子弹（不应该发生）
 		_spawn_bullet_fallback(muzzle_pos, aim_dir)
