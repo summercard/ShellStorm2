@@ -16,6 +16,12 @@ var map_manager: MapManager
 var fate_card_ui: Control
 var player: Node2D
 
+## 搜打撤模块
+var inventory_module: InventoryModule
+var insurance_module: InsuranceModule
+var extraction_module: ExtractionModule
+var death_settlement_module: DeathSettlementModule
+
 ## UI 引用
 @onready var player_spawn_marker: Marker2D = $PlayerSpawn
 @onready var ui_layer: CanvasLayer = $UI
@@ -33,6 +39,7 @@ var room_cleared: bool = false
 
 func _ready() -> void:
 	_setup_map_manager()
+	_setup_extraction_modules()
 	_setup_signals()
 	_spawn_player()
 	_start_game()
@@ -47,6 +54,17 @@ func _setup_map_manager() -> void:
 	map_manager.room_exited.connect(_on_room_exited)
 	map_manager.floor_changed.connect(_on_floor_changed)
 	map_manager.all_rooms_cleared.connect(_on_all_rooms_cleared)
+
+## 初始化搜打撤模块
+func _setup_extraction_modules() -> void:
+	inventory_module = InventoryModule.new(12)       # 12格背包
+	insurance_module = InsuranceModule.new(2)     # 2格保险格
+	extraction_module = ExtractionModule.new()
+	death_settlement_module = DeathSettlementModule.new()
+	
+	# 信号连接（用于UI更新等）
+	inventory_module.inventory_changed.connect(_on_inventory_changed)
+	insurance_module.insurance_changed.connect(_on_insurance_changed)
 
 ## 连接信号
 func _setup_signals() -> void:
@@ -139,7 +157,17 @@ func _on_all_rooms_cleared() -> void:
 
 ## 全局游戏结束
 func _on_global_game_over() -> void:
+	# 触发死亡结算
+	if death_settlement_module != null and inventory_module != null:
+		var settlement_result: Dictionary = death_settlement_module.process_death_settlement(
+			inventory_module, insurance_module
+		)
+		_print_death_settlement(settlement_result)
 	game_over.emit("玩家死亡")
+
+func _print_death_settlement(result: Dictionary) -> void:
+	var text: String = death_settlement_module.get_death_summary_text(result)
+	print(text)
 
 ## 更新房间信息标签
 func _update_room_info_label(text: String) -> void:
@@ -168,10 +196,11 @@ func _get_fate_card_controller() -> Control:
 		fate_card_ui = existing as Control
 	return fate_card_ui
 
-## 每帧检测房间清理状态
+## 每帧检测房间清理状态 & 撤离读条
 func _process(delta: float) -> void:
-	if map_manager == null or room_cleared:
-		return
+	# 更新撤离读条
+	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
+		extraction_module.update(delta)
 	
 	var current_data: RoomData = map_manager.get_current_room_data()
 	if current_data == null:
@@ -265,6 +294,26 @@ func advance_to_next_floor() -> void:
 ## 获取当前地图管理器
 func get_map_manager() -> MapManager:
 	return map_manager
+
+## 获取背包模块
+func get_inventory() -> InventoryModule:
+	return inventory_module
+
+## 获取保险格模块
+func get_insurance() -> InsuranceModule:
+	return insurance_module
+
+## 获取撤离模块
+func get_extraction_module() -> ExtractionModule:
+	return extraction_module
+
+## 开始撤离读条（供UI或信号调用）
+func begin_extraction(extraction_type: String, countdown: float = 5.0) -> bool:
+	if extraction_module == null:
+		return false
+	if extraction_module.get_status() != ExtractionModule.ExtractionStatus.IDLE:
+		return false
+	return extraction_module.start_extraction(extraction_type, countdown)
 
 ## HP变化回调
 func _on_hp_changed(current: int, maximum: int) -> void:
