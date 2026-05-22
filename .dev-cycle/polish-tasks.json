@@ -4,25 +4,25 @@
       "id": "P01",
       "title": "枪口火焰与射击视觉反馈",
       "description": "让 WeaponAssemblyTree 触发枪口火焰（MuzzleFlash）、子弹尾迹、击发音效占位，WeaponController 在 fire() 时激活 MuzzleFlash 节点",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "P02",
       "title": "怪物受击反馈强化",
       "description": "EnemyBase 受伤时颜色闪烁更明显 + 添加受击发光特效（HitEffects 发光）；添加死亡消散动画替代直接 queue_free()",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "P03",
       "title": "屏幕震动强度与武器类型挂钩",
       "description": "不同武器 fire_rate 和 damage 应触发不同强度的屏幕震动；高伤害/霰弹枪用大震屏，手枪用微震或无震屏",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "P04",
       "title": "暴击系统 + 暴击伤害数字",
       "description": "Bullet 随机暴击（10%基础概率），暴击时伤害翻倍 + 黄色大号伤害数字（DamageNumbers.is_crit=true）；怪物受伤时根据子弹来源判断暴击",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "P05",

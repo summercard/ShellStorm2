@@ -4,7 +4,7 @@
   "status": "running",
   "mode": "infinite_polish",
   "currentPhase": "polish",
-  "lastTask": "Plan",
+  "lastTask": "Code",
   "planVersion": "v3.1",
   "polish": {
     "current": 1,

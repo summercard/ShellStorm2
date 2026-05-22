@@ -12,7 +12,7 @@ static func gun_pistol() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Pistol")
 	node.tags = ["pistol", "semi_auto", "sidearm"]
 	node.set_base_stats({
-		"damage": 12,
+		"damage": 18,
 		"fire_rate": 3.5,
 		"bullet_count": 1,
 		"spread": 0.03,
@@ -26,7 +26,7 @@ static func gun_rifle() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Rifle")
 	node.tags = ["rifle", "automatic", "assault"]
 	node.set_base_stats({
-		"damage": 15,
+		"damage": 22,
 		"fire_rate": 6.0,
 		"bullet_count": 1,
 		"spread": 0.07,
@@ -40,7 +40,7 @@ static func gun_shotgun() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Shotgun")
 	node.tags = ["shotgun", "close_range", "burst"]
 	node.set_base_stats({
-		"damage": 8,
+		"damage": 12,
 		"fire_rate": 1.2,
 		"bullet_count": 5,
 		"spread": 0.35,
@@ -54,7 +54,7 @@ static func gun_smg() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_SMG")
 	node.tags = ["smg", "automatic", "close_range"]
 	node.set_base_stats({
-		"damage": 8,
+		"damage": 14,
 		"fire_rate": 10.0,
 		"bullet_count": 1,
 		"spread": 0.12,
@@ -68,7 +68,7 @@ static func gun_sniper() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sniper")
 	node.tags = ["sniper", "precision", "semi_auto"]
 	node.set_base_stats({
-		"damage": 45,
+		"damage": 55,
 		"fire_rate": 1.0,
 		"bullet_count": 1,
 		"spread": 0.01,
@@ -82,7 +82,7 @@ static func gun_launcher() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Launcher")
 	node.tags = ["launcher", "explosive", "slow"]
 	node.set_base_stats({
-		"damage": 30,
+		"damage": 38,
 		"fire_rate": 0.8,
 		"bullet_count": 1,
 		"spread": 0.1,
@@ -98,7 +98,7 @@ static func bullet_standard() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, "Bullet_Standard")
 	node.tags = ["bullet", "kinetic", "standard"]
 	node.set_base_stats({
-		"bullet_damage": 5,
+		"bullet_damage": 8,
 		"bullet_speed": 1.0,
 	})
 	return node
@@ -108,7 +108,7 @@ static func bullet_piercing() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, "Bullet_Piercing")
 	node.tags = ["bullet", "piercing", "armor_penetration"]
 	node.set_base_stats({
-		"bullet_damage": 9,
+		"bullet_damage": 14,
 		"bullet_speed": 1.4,
 	})
 	return node
@@ -118,7 +118,7 @@ static func bullet_explosive() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, "Bullet_Explosive")
 	node.tags = ["bullet", "explosive", "area_damage"]
 	node.set_base_stats({
-		"bullet_damage": 20,
+		"bullet_damage": 28,
 		"bullet_speed": 0.75,
 	})
 	return node
@@ -128,7 +128,7 @@ static func bullet_hyper() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, "Bullet_Hyper")
 	node.tags = ["bullet", "hyper", "long_range"]
 	node.set_base_stats({
-		"bullet_damage": 4,
+		"bullet_damage": 7,
 		"bullet_speed": 2.0,
 	})
 	return node
