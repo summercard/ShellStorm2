@@ -15,8 +15,20 @@ script = ExtResource("1_player")
 [node name="Body" type="Node2D" parent="."]
 script = ExtResource("3_vis")
 
+[node name="Shape" type="ColorRect" parent="Body"]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.3, 0.7, 1.0, 1.0)
+
 [node name="Aim" type="Node2D" parent="."]
 script = ExtResource("2_aim")
+
+[node name="AimLine" type="Line2D" parent="Aim"]
+points = PackedVector2Array(0, 0, 200, 0)
+width = 2.0
+default_color = Color(1.0, 0.9, 0.3, 0.8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
