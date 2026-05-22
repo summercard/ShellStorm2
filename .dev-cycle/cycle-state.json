@@ -3,7 +3,7 @@
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
   "currentPhase": 3,
-  "lastTask": "Plan",
+  "lastTask": "Code",
   "planVersion": "v3.0",
   "phase1": {
     "T01": "completed"
@@ -13,12 +13,12 @@
     "T02": "completed"
   },
   "phase3": {
-    "T01": "pending"
+    "T01": "completed"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
   "cronId": "12869336-6779-4160-a241-b1d4c991d9fd",
   "currentTarget": "Phase 3: 武器装配树 - T01 装配树数据结构",
-  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（T02 WeaponController + WeaponCore 重构，fire_from 接口）。Phase3: 武器装配树数据结构与可视化界面。",
+  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（T02 WeaponController + WeaponCore 重构，fire_from 接口）。Phase3: 武器装配树数据结构与可视化界面。T01 完成（AssemblyNode + WeaponAssemblyTree）。",
   "completedPhases": ["phase1", "phase2"],
   "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
 }
