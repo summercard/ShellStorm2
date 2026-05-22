@@ -4,7 +4,7 @@
   "status": "running",
   "mode": "infinite_polish",
   "currentPhase": "polish",
-  "lastTask": "Plan",
+  "lastTask": "Code",
   "planVersion": "v3.1",
   "polish": {
     "current": 1,
@@ -14,7 +14,53 @@
   "resumeTime": "2026-05-22T22:48:00+08:00",
   "cronId": "92eb0bfd-8a58-4f39-85b6-4925e302718d",
   "currentTarget": "无限打磨循环 - 持续改善游戏体验",
-  "notes": "深化轮次完成。枪械手感+暴击系统+战斗反馈+数值平衡已落地。下轮继续：波次配置/玩家闪避反馈/音效骨架/地图信息UI。",
+  "notes": "P07完成：闪避残影+音效骨架+冷却条。下轮继续：波次配置/地图信息UI/武器后坐力动画",
   "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  "designDoc": "docs/PH02_模块化武器系统.md + PH06_怪物系统.md"
+  "designDoc": "docs/PH02_模块化武器系统.md + docs/PH06_怪物系统.md",
+  "polishTasks": [
+    {
+      "id": "P01",
+      "title": "枪口火焰与射击视觉反馈",
+      "description": "让 WeaponAssemblyTree 触发枪口火焰（MuzzleFlash）、子弹尾迹、击发音效占位，WeaponController 在 fire() 时激活 MuzzleFlash 节点",
+      "status": "completed"
+    },
+    {
+      "id": "P02",
+      "title": "怪物受击反馈强化",
+      "description": "EnemyBase 受伤时颜色闪烁更明显 + 添加受击发光特效（HitEffects 发光）；添加死亡消散动画替代直接 queue_free()",
+      "status": "completed"
+    },
+    {
+      "id": "P03",
+      "title": "屏幕震动强度与武器类型挂钩",
+      "description": "不同武器 fire_rate 和 damage 应触发不同强度的屏幕震动；高伤害/霰弹枪用大震屏，手枪用微震或无震屏",
+      "status": "completed"
+    },
+    {
+      "id": "P04",
+      "title": "暴击系统 + 暴击伤害数字",
+      "description": "Bullet 随机暴击（10%基础概率），暴击时伤害翻倍 + 黄色大号伤害数字（DamageNumbers.is_crit=true）；怪物受伤时根据子弹来源判断暴击",
+      "status": "completed"
+    },
+    {
+      "id": "P05",
+      "title": "怪物动态生成密度配置",
+      "description": "RoomGameMode 中怪物波次生成配置化，每波数量根据房间难度系数动态调整；补充 MonsterInjector 支持波次配置",
+      "status": "completed"
+    },
+    {
+      "id": "P06",
+      "title": "武器伤害与怪物血量数值平衡",
+      "description": "调整 WeaponPresets 各枪械的 bullet_damage 和 EnemyBase max_hp，使玩家初始武器能打死小怪（3-5枪），但需要合理走位",
+      "status": "completed"
+    },
+    {
+      "id": "P07",
+      "title": "玩家闪避反馈",
+      "description": "闪避残影（PlayerVisuals.gd）+ 闪避音效骨架（AudioManager.gd）+ 闪避冷却条（GameUIManager.tscn）+ dash_cooldown_changed信号（Player.gd）",
+      "status": "completed"
+    }
+  ],
+  "completedTasks": ["P01", "P02", "P03", "P04", "P05", "P06", "P07"],
+  "currentTaskIndex": 1
 }

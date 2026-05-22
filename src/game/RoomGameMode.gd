@@ -38,6 +38,9 @@ var current_floor: int = 1
 var score: int = 0
 var _room_cleared_flag: bool = false
 
+## 波次生成器（当前房间）
+var _current_wave_spawner: RoomWaveSpawner = null
+
 func _ready() -> void:
 	_setup_map_manager()
 	_setup_extraction_modules()
@@ -133,18 +136,20 @@ func _on_room_entered(room_data: RoomData) -> void:
 	_room_cleared_flag = false
 	_update_room_info_label("当前: %s [%s]" % [RoomData.get_type_name(room_data.room_type), RoomData.get_level_name(room_data.floor_level)])
 	
-	# 初始化清理进度条
-	var enemies: Array[Dictionary] = map_manager.get_current_room_enemies()
-	var total: int = enemies.size()
-	_update_clearing_progress(0, total)
-	
-	# 如果是出生房，显示初始命运卡片
 	if room_data.room_type == RoomData.RoomType.PLAYER_SPAWN:
 		_show_initial_fate_cards()
+		_update_clearing_progress(1, 1)
+		return
+	
+	# 战斗房：启动波次生成器
+	if room_data.is_combat():
+		_start_combat_waves(room_data)
+	else:
+		_update_clearing_progress(0, 1)
 
-## 离开房间
+## 离开房间（清理当前房间生成器）
 func _on_room_exited(room_id: String) -> void:
-	pass
+	_stop_current_room_spawner()
 
 ## 楼层切换
 func _on_floor_changed(old_floor: int, new_floor: int) -> void:
@@ -216,6 +221,89 @@ func _update_clearing_progress(killed: int, total: int) -> void:
 		clearing_progress.max_value = max(1, total)
 		clearing_progress.value = killed
 
+## 启动战斗房波次生成
+func _start_combat_waves(room_data: RoomData) -> void:
+	# 停止旧的生成器
+	_stop_current_room_spawner()
+	
+	# 计算波次配置
+	var wave_counts: Array[int] = _calculate_wave_counts(room_data)
+	
+	# 创建波次生成器
+	_current_wave_spawner = RoomWaveSpawner.new()
+	add_child(_current_wave_spawner)
+	
+	# 连接波次信号
+	_current_wave_spawner.wave_started.connect(_on_wave_started)
+	_current_wave_spawner.all_waves_cleared.connect(_on_all_waves_cleared)
+	
+	# 查找当前房间实例（用于获取房间节点引用）
+	var current_room_node: Node2D = _get_current_room_instance()
+	
+	# 启动生成
+	_current_wave_spawner.configure(wave_counts, current_room_node, player, current_floor, room_data.floor_level)
+	_current_wave_spawner.start()
+	_update_clearing_progress(0, wave_counts.sum())
+
+## 计算波次数量配置
+func _calculate_wave_counts(room_data: RoomData) -> Array[int]:
+	var base_count: int = 2 + current_floor
+	var wave_count: int = 1
+	
+	match room_data.floor_level:
+		RoomData.FloorLevel.SHALLOW:
+			wave_count = 1
+			base_count = 2 + current_floor
+		RoomData.FloorLevel.MEDIUM:
+			wave_count = 2
+			base_count = 2 + current_floor / 2
+		RoomData.FloorLevel.DEEP:
+			wave_count = 2
+			base_count = 3 + current_floor / 2
+		RoomData.FloorLevel.ABYSS:
+			wave_count = 3
+			base_count = 3 + current_floor / 2
+	
+	# 每波敌人数递减：第一波最多，后续减少
+	var waves: Array[int] = []
+	var remaining: int = base_count * wave_count
+	for i in range(wave_count):
+		var this_wave: int = remaining / (wave_count - i)
+		waves.append(this_wave)
+		remaining -= this_wave
+	
+	return waves
+
+## 停止当前房间的波次生成器
+func _stop_current_room_spawner() -> void:
+	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+		_current_wave_spawner.stop()
+		_current_wave_spawner.queue_free()
+	_current_wave_spawner = null
+
+## 获取当前房间对应的场景实例节点
+func _get_current_room_instance() -> Node2D:
+	if map_manager == null:
+		return self
+	var room_id: int = map_manager._current_room_id
+	var instance: Node2D = map_manager.get_instantiated_room(room_id)
+	if instance != null:
+		return instance
+	return self  # Fallback
+
+## 波次开始回调
+func _on_wave_started(wave: int, total: int) -> void:
+	_update_room_info_label("第 %d/%d 波袭来！" % [wave, total])
+
+## 所有波次清理完毕回调
+func _on_all_waves_cleared() -> void:
+	var room_data: RoomData = map_manager.get_current_room_data()
+	if room_data:
+		var reward_text: String = _calculate_room_reward(room_data)
+		_update_room_info_label("%s 已清理！%s" % [RoomData.get_type_name(room_data.room_type), reward_text])
+		room_cleared.emit(room_data)
+		_check_map_completion()
+
 ## 显示初始命运卡片选择
 func _show_initial_fate_cards() -> void:
 	await get_tree().process_frame
@@ -238,17 +326,34 @@ func _process(delta: float) -> void:
 	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
 		extraction_module.update(delta)
 	
+	# 更新波次生成器
+	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+		_current_wave_spawner.tick(delta)
+	
 	var current_data: RoomData = map_manager.get_current_room_data()
 	if current_data == null:
 		return
 	
 	# 非战斗房间直接标记为已清理
 	if not current_data.is_combat():
-		_room_cleared_flag = true
-		room_cleared.emit(current_data)
+		if not _room_cleared_flag:
+			_room_cleared_flag = true
+			room_cleared.emit(current_data)
 		return
 	
-	# 检测战斗房清理状态
+	# 检测战斗房清理状态（波次生成器优先）
+	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+		var info: Dictionary = _current_wave_spawner.get_wave_info()
+		var alive: int = info.get("alive", 0)
+		var total: int = info.get("total", 0)
+		var current_wave: int = info.get("current", 1)
+		_update_clearing_progress(total - alive, total)
+		if _current_wave_spawner.is_complete():
+			_room_cleared_flag = true
+			_on_room_cleared(current_data)
+		return
+	
+	# Fallback: 旧字典追踪方式
 	var killed: int = map_manager.get_current_room_killed_count()
 	var enemies: Array[Dictionary] = map_manager.get_current_room_enemies()
 	var total: int = enemies.size() + killed
@@ -261,6 +366,11 @@ func _process(delta: float) -> void:
 
 ## 房间清理完成
 func _on_room_cleared(room_data: RoomData) -> void:
+	# 防止重复触发（波次生成器已处理过）
+	if _room_cleared_flag:
+		return
+	_room_cleared_flag = true
+	
 	room_cleared.emit(room_data)
 	
 	var reward_text: String = _calculate_room_reward(room_data)
