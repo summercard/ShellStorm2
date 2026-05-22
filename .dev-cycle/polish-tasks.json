@@ -51,16 +51,16 @@
     {
       "id": "P09",
       "title": "地图信息UI增强",
-      "description": "当前房间类型+层级提示、波次进度显示（RoomInfoLabel）、MiniMap/小地图占位、房间路径预览",
-      "status": "pending"
+      "description": "当前房间类型+层级提示、波次进度显示（RoomInfoLabel）、波次剩余数显示（WaveIndicatorLabel）、房间路径预览",
+      "status": "completed"
     },
     {
       "id": "P10",
       "title": "武器后坐力动画",
-      "description": "WeaponAssemblyTree.fire_from 时播放武器后座动画（武器节点抖动/后退），霰弹/狙击高反冲，手枪微反冲",
-      "status": "pending"
+      "description": "WeaponAssemblyTree.fire_from 时播放武器后座动画（武器节点抖动/后退），霰弹/狙击高反冲，手枪微反冲；新增 WeaponRecoil.gd",
+      "status": "completed"
     }
   ],
-  "completedTasks": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"],
-  "currentTaskIndex": 1
+  "completedTasks": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10"],
+  "currentTaskIndex": 9
 }

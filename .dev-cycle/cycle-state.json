@@ -1,10 +1,10 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "stopped",
+  "status": "completed",
   "mode": "infinite_polish",
   "currentPhase": "polish",
-  "lastTask": "Plan",
+  "lastTask": "Code",
   "planVersion": "v3.1",
   "polish": {
     "current": 1,
@@ -13,8 +13,8 @@
   "startTime": "2026-05-22T15:18:00+08:00",
   "resumeTime": "2026-05-22T22:48:00+08:00",
   "cronId": "92eb0bfd-8a58-4f39-85b6-4925e302718d",
-  "currentTarget": "无限打磨循环 - 持续改善游戏体验",
-  "notes": "P07完成：闪避残影+音效骨架+冷却条。P08完成：RoomWaveSpawner波次生成。下轮继续：地图信息UI(P09)+武器后坐力(P10)",
+  "currentTarget": "深化枪械与怪物系统 — P09地图信息UI增强 + P10武器后坐力动画",
+  "notes": "P09完成：地图信息UI增强（波次剩余数标签+wave_progress_updated信号链）。P10完成：武器后坐力动画（WeaponRecoil.gd+recoil trigger）。全部深化任务完成！",
   "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   "designDoc": "docs/PH02_模块化武器系统.md + docs/PH06_怪物系统.md"
 }
