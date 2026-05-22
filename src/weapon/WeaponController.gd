@@ -13,6 +13,9 @@ var weapon_tree: WeaponAssemblyTree = null
 ## 枪口闪光引用
 var _muzzle_flash: PointLight2D = null
 
+## 后坐力控制器引用
+var _recoil: WeaponRecoil = null
+
 ## 本地冷却计时器（委托给 weapon_tree.tick 更新）
 var fire_cooldown: float = 0.0
 
@@ -25,6 +28,8 @@ func _ready() -> void:
 		weapon_tree = player.get_weapon_tree()
 	# 获取枪口闪光节点
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
+	# 获取后坐力控制器
+	_recoil = get_node_or_null("WeaponRecoil") as WeaponRecoil
 	# 获取音频管理器
 	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 
@@ -56,6 +61,13 @@ func fire() -> void:
 
 	# 触发枪口闪光
 	_trigger_muzzle_flash()
+
+	# 触发后坐力动画（从 weapon_tree 根节点获取 tags）
+	if _recoil and weapon_tree:
+		var root_tags: Array[String] = []
+		if weapon_tree.get_root():
+			root_tags = weapon_tree.get_root().tags
+		_recoil.trigger(root_tags)
 
 func _trigger_muzzle_flash() -> void:
 	if _muzzle_flash:

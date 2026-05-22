@@ -8,6 +8,7 @@ signal room_cleared(room_data: RoomData)
 signal game_over(reason: String)
 signal extraction_ready()
 signal kill_recorded()
+signal wave_progress_changed(killed: int, total: int, wave: int)
 
 @export var initial_floor: int = 1
 @export var map_seed: int = -1
@@ -236,6 +237,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	# 连接波次信号
 	_current_wave_spawner.wave_started.connect(_on_wave_started)
 	_current_wave_spawner.all_waves_cleared.connect(_on_all_waves_cleared)
+	_current_wave_spawner.wave_progress_updated.connect(_on_wave_progress_updated)
 	
 	# 查找当前房间实例（用于获取房间节点引用）
 	var current_room_node: Node2D = _get_current_room_instance()
@@ -294,6 +296,9 @@ func _get_current_room_instance() -> Node2D:
 ## 波次开始回调
 func _on_wave_started(wave: int, total: int) -> void:
 	_update_room_info_label("第 %d/%d 波袭来！" % [wave, total])
+
+func _on_wave_progress_updated(killed: int, total: int, wave: int) -> void:
+	wave_progress_changed.emit(killed, total, wave)
 
 ## 所有波次清理完毕回调
 func _on_all_waves_cleared() -> void:

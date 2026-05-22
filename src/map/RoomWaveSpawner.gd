@@ -5,6 +5,7 @@ class_name RoomWaveSpawner
 signal wave_started(wave: int, total: int)
 signal wave_enemies_spawned(wave: int, spawned: int)
 signal enemy_spawned(count: int)
+signal wave_progress_updated(killed: int, total: int, wave: int)
 signal all_waves_cleared()
 signal wave_cleared(wave: int)
 
@@ -172,6 +173,10 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2) -> void:
 		_room.add_child(enemy)
 	else:
 		get_tree().root.add_child(enemy)
+	
+	# 发出进度更新（已被击杀数 / 当前波总数）
+	var killed = _enemy_count_per_wave[_current_wave] - _alive_count
+	wave_progress_updated.emit(killed, _enemy_count_per_wave[_current_wave], _current_wave + 1)
 
 func _on_enemy_died() -> void:
 	# 敌人死亡的信号自动触发计数减少

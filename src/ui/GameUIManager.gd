@@ -12,6 +12,7 @@ extends CanvasLayer
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
+@onready var wave_indicator_label: Label = $GameHUD/WaveIndicatorLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
 
 ## — 背包 UI —
@@ -31,6 +32,7 @@ extends CanvasLayer
 var _room_game_mode: Node = null
 var _inventory_module: Node = null
 var _extraction_module: Node = null
+var _insurance_module: Node = null
 ## — 游戏结束界面 —
 @onready var death_overlay: ColorRect = $DeathOverlay
 @onready var game_over_panel: PanelContainer = $GameOverPanel
@@ -73,6 +75,8 @@ func set_room_game_mode(mode: Node) -> void:
 		mode.floor_changed.connect(_on_floor_changed)
 	if mode.has_signal("kill_recorded"):
 		mode.kill_recorded.connect(_on_kill_recorded)
+	if mode.has_signal("wave_progress_changed"):
+		mode.wave_progress_changed.connect(_on_wave_progress_changed)
 
 ## 绑定玩家（用于闪避冷却条等）
 func set_player(player: Node) -> void:
@@ -109,24 +113,27 @@ func update_hp(current: int, maximum: int) -> void:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
 
-## 更新分数
+## 更新分数（带跳动动画）
 func update_score(score_val: int) -> void:
 	if score_label:
 		score_label.text = "Score: %d" % score_val
+		_bounce_label(score_label)
 
 ## 击杀记录
 func _on_kill_recorded() -> void:
 	_kill_count += 1
 
-## 更新货币
+## 更新货币（带跳动动画）
 func update_currency(amount: int) -> void:
 	if currency_label:
 		currency_label.text = "魂: %d" % amount
+		_bounce_label(currency_label)
 
 ## 更新楼层
 func update_floor(floor: int) -> void:
 	if wave_label:
 		wave_label.text = "Floor: %d" % floor
+		_bounce_label(wave_label)
 
 ## 房间清理完成
 func _on_room_cleared(room_data) -> void:
@@ -165,6 +172,15 @@ func set_loot_info(saved: int, lost: int) -> void:
 	_death_loot = {"saved": saved, "lost": lost}
 	if loot_label:
 		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [saved, lost]
+
+## 标签跳动动画（数值变化时触发）
+func _bounce_label(label: Label) -> void:
+	if not label:
+		return
+	var tween := label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08).set_trans(Tween.TRANS_QUAD)
+	tween.chain().tween_property(label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BOUNCE)
 
 func _on_retry_pressed() -> void:
 	get_tree().paused = false
@@ -217,6 +233,12 @@ func _on_dash_started() -> void:
 		# 淡出高亮
 		var t := dash_cooldown_bar.create_tween()
 		t.tween_property(dash_cooldown_bar, "modulate", Color.WHITE, 0.3)
+
+## 波次进度更新（显示波次击杀状态）
+func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
+	if wave_indicator_label:
+		var remaining = total - killed
+		wave_indicator_label.text = "第 %d 波 | 剩余: %d" % [wave, remaining]
 
 ## 撤离完成
 func _on_extraction_completed(success: bool, loot: Array) -> void:

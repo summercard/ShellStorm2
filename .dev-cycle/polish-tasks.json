@@ -35,8 +35,32 @@
       "title": "武器伤害与怪物血量数值平衡",
       "description": "调整 WeaponPresets 各枪械的 bullet_damage 和 EnemyBase max_hp，使玩家初始武器能打死小怪（3-5枪），但需要合理走位",
       "status": "completed"
+    },
+    {
+      "id": "P07",
+      "title": "玩家闪避反馈",
+      "description": "闪避残影（PlayerVisuals.gd）+ 闪避音效骨架（AudioManager.gd）+ 闪避冷却条（GameUIManager.tscn）+ dash_cooldown_changed信号（Player.gd）",
+      "status": "completed"
+    },
+    {
+      "id": "P08",
+      "title": "波次配置与房间波次生成器",
+      "description": "新建 RoomWaveSpawner.gd 实现基于波次的真实敌人场景生成；RoomGameMode._start_combat_waves() 配置波次数量；RoomCombat.tscn 战斗房场景占位符",
+      "status": "completed"
+    },
+    {
+      "id": "P09",
+      "title": "地图信息UI增强",
+      "description": "当前房间类型+层级提示、波次进度显示（RoomInfoLabel）、MiniMap/小地图占位、房间路径预览",
+      "status": "pending"
+    },
+    {
+      "id": "P10",
+      "title": "武器后坐力动画",
+      "description": "WeaponAssemblyTree.fire_from 时播放武器后座动画（武器节点抖动/后退），霰弹/狙击高反冲，手枪微反冲",
+      "status": "pending"
     }
   ],
-  "completedTasks": [],
-  "currentTaskIndex": 0
+  "completedTasks": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08"],
+  "currentTaskIndex": 1
 }
