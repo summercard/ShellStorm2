@@ -1,0 +1,31 @@
+# Godot 4.x specific
+.godot/
+*.import
+*.translation
+*.bak
+*.backup
+
+# Editor
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+
+# Build outputs
+bin/
+*.pck
+*.exe
+*.dmg
+*.app
+*.apk
+*.aab
+
+# OS
+.DS_Store
+Thumbs.db
+*.log
+
+# Project specific (sensitive)
+export_presets.cfg
+*.keystore
