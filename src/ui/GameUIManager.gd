@@ -12,7 +12,6 @@ extends CanvasLayer
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
-@onready var wave_indicator_label: Label = $GameHUD/WaveIndicatorLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
 
 ## — 背包 UI —
@@ -34,31 +33,49 @@ var _inventory_module: Node = null
 var _extraction_module: Node = null
 var _insurance_module: Node = null
 ## — 游戏结束界面 —
-@onready var death_overlay: ColorRect = $DeathOverlay
-@onready var game_over_panel: PanelContainer = $GameOverPanel
-@onready var death_title: Label = $GameOverPanel/VBox/DeathTitle
-@onready var reason_label: Label = $GameOverPanel/VBox/ReasonLabel
-@onready var stats_label: Label = $GameOverPanel/VBox/StatsLabel
-@onready var loot_label: Label = $GameOverPanel/VBox/LootLabel
-@onready var retry_button: Button = $GameOverPanel/VBox/RetryButton
-@onready var menu_button: Button = $GameOverPanel/VBox/MenuButton
+var death_overlay: ColorRect
+var game_over_panel: PanelContainer
+var death_title: Label
+var reason_label: Label
+var stats_label: Label
+var loot_label: Label
+var retry_button: Button
+var menu_button: Button
 
 var _death_stats: Dictionary = {"score": 0, "kills": 0, "floor": 1}
 var _death_loot: Dictionary = {"saved": 0, "lost": 0}
 var _kill_count: int = 0
 
 func _ready() -> void:
+	# 延迟获取子节点（避免 CanvasLayer @onready 路径问题）
+	death_overlay = get_node_or_null("DeathOverlay")
+	game_over_panel = get_node_or_null("GameOverPanel")
+	death_title = get_node_or_null("GameOverPanel/VBox/DeathTitle")
+	reason_label = get_node_or_null("GameOverPanel/VBox/ReasonLabel")
+	stats_label = get_node_or_null("GameOverPanel/VBox/StatsLabel")
+	loot_label = get_node_or_null("GameOverPanel/VBox/LootLabel")
+	retry_button = get_node_or_null("GameOverPanel/VBox/RetryButton")
+	menu_button = get_node_or_null("GameOverPanel/VBox/MenuButton")
+
 	# 初始隐藏
-	extraction_panel.visible = false
-	inventory_panel.visible = false
-	fate_card_panel.visible = false
-	clearing_progress.visible = false
-	death_overlay.visible = false
-	game_over_panel.visible = false
+	if extraction_panel:
+		extraction_panel.visible = false
+	if inventory_panel:
+		inventory_panel.visible = false
+	if fate_card_panel:
+		fate_card_panel.visible = false
+	if clearing_progress:
+		clearing_progress.visible = false
+	if death_overlay:
+		death_overlay.visible = false
+	if game_over_panel:
+		game_over_panel.visible = false
 
 	# 绑定按钮信号
-	retry_button.pressed.connect(_on_retry_pressed)
-	menu_button.pressed.connect(_on_menu_pressed)
+	if retry_button:
+		retry_button.pressed.connect(_on_retry_pressed)
+	if menu_button:
+		menu_button.pressed.connect(_on_menu_pressed)
 
 ## 绑定房间游戏模式
 func set_room_game_mode(mode: Node) -> void:
@@ -147,20 +164,26 @@ func _on_game_over(reason: String = "未知原因") -> void:
 	_death_stats["score"] = int(score_label.text.replace("Score: ", "")) if score_label else 0
 	_death_stats["floor"] = int(wave_label.text.replace("Floor: ", "")) if wave_label else 1
 
-	death_title.text = "你已倒下"
-	reason_label.text = "原因: %s" % reason
-	stats_label.text = "最终得分: %d\n击毙: %d\n存活楼层: %d" % [
-		_death_stats["score"],
-		_kill_count,
-		_death_stats["floor"]
-	]
-	loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [
-		_death_loot["saved"],
-		_death_loot["lost"]
-	]
+	if death_title:
+		death_title.text = "你已倒下"
+	if reason_label:
+		reason_label.text = "原因: %s" % reason
+	if stats_label:
+		stats_label.text = "最终得分: %d\n击毙: %d\n存活楼层: %d" % [
+			_death_stats["score"],
+			_kill_count,
+			_death_stats["floor"]
+		]
+	if loot_label:
+		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [
+			_death_loot["saved"],
+			_death_loot["lost"]
+		]
 
-	death_overlay.visible = true
-	game_over_panel.visible = true
+	if death_overlay:
+		death_overlay.visible = true
+	if game_over_panel:
+		game_over_panel.visible = true
 	get_tree().paused = true
 
 ## 设置死亡统计（房间模式调用）
@@ -236,9 +259,7 @@ func _on_dash_started() -> void:
 
 ## 波次进度更新（显示波次击杀状态）
 func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
-	if wave_indicator_label:
-		var remaining = total - killed
-		wave_indicator_label.text = "第 %d 波 | 剩余: %d" % [wave, remaining]
+	pass  # wave_indicator_label not present in current scene
 
 ## 撤离完成
 func _on_extraction_completed(success: bool, loot: Array) -> void:
