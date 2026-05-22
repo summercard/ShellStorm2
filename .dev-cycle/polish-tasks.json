@@ -28,13 +28,13 @@
       "id": "P05",
       "title": "怪物动态生成密度配置",
       "description": "RoomGameMode 中怪物波次生成配置化，每波数量根据房间难度系数动态调整；补充 MonsterInjector 支持波次配置",
-      "status": "pending"
+      "status": "completed"
     },
     {
       "id": "P06",
       "title": "武器伤害与怪物血量数值平衡",
       "description": "调整 WeaponPresets 各枪械的 bullet_damage 和 EnemyBase max_hp，使玩家初始武器能打死小怪（3-5枪），但需要合理走位",
-      "status": "pending"
+      "status": "completed"
     }
   ],
   "completedTasks": [],

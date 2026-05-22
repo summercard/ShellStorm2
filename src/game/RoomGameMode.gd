@@ -7,6 +7,7 @@ extends Node2D
 signal room_cleared(room_data: RoomData)
 signal game_over(reason: String)
 signal extraction_ready()
+signal kill_recorded()
 
 @export var initial_floor: int = 1
 @export var map_seed: int = -1
@@ -318,6 +319,7 @@ func _check_map_completion() -> void:
 func notify_enemy_killed(enemy_data: Dictionary) -> void:
 	score += enemy_data.get("xp_value", 10)
 	GameManager.add_currency(10)
+	kill_recorded.emit()
 	_update_ui()
 
 ## 手动前进到下一层

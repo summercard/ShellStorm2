@@ -30,7 +30,19 @@ extends CanvasLayer
 var _room_game_mode: Node = null
 var _inventory_module: Node = null
 var _extraction_module: Node = null
-var _insurance_module: Node = null
+## — 游戏结束界面 —
+@onready var death_overlay: ColorRect = $DeathOverlay
+@onready var game_over_panel: PanelContainer = $GameOverPanel
+@onready var death_title: Label = $GameOverPanel/VBox/DeathTitle
+@onready var reason_label: Label = $GameOverPanel/VBox/ReasonLabel
+@onready var stats_label: Label = $GameOverPanel/VBox/StatsLabel
+@onready var loot_label: Label = $GameOverPanel/VBox/LootLabel
+@onready var retry_button: Button = $GameOverPanel/VBox/RetryButton
+@onready var menu_button: Button = $GameOverPanel/VBox/MenuButton
+
+var _death_stats: Dictionary = {"score": 0, "kills": 0, "floor": 1}
+var _death_loot: Dictionary = {"saved": 0, "lost": 0}
+var _kill_count: int = 0
 
 func _ready() -> void:
 	# 初始隐藏
@@ -38,6 +50,12 @@ func _ready() -> void:
 	inventory_panel.visible = false
 	fate_card_panel.visible = false
 	clearing_progress.visible = false
+	death_overlay.visible = false
+	game_over_panel.visible = false
+
+	# 绑定按钮信号
+	retry_button.pressed.connect(_on_retry_pressed)
+	menu_button.pressed.connect(_on_menu_pressed)
 
 ## 绑定房间游戏模式
 func set_room_game_mode(mode: Node) -> void:
@@ -52,6 +70,8 @@ func set_room_game_mode(mode: Node) -> void:
 		mode.extraction_ready.connect(_on_extraction_ready)
 	if mode.has_signal("floor_changed"):
 		mode.floor_changed.connect(_on_floor_changed)
+	if mode.has_signal("kill_recorded"):
+		mode.kill_recorded.connect(_on_kill_recorded)
 
 ## 绑定背包模块
 func set_inventory_module(module: Node) -> void:
@@ -86,6 +106,10 @@ func update_score(score_val: int) -> void:
 	if score_label:
 		score_label.text = "Score: %d" % score_val
 
+## 击杀记录
+func _on_kill_recorded() -> void:
+	_kill_count += 1
+
 ## 更新货币
 func update_currency(amount: int) -> void:
 	if currency_label:
@@ -103,9 +127,49 @@ func _on_room_cleared(room_data) -> void:
 	clearing_progress.visible = false
 
 ## 游戏结束
-func _on_game_over(reason: String) -> void:
-	if room_info_label:
-		room_info_label.text = "游戏结束: %s" % reason
+func _on_game_over(reason: String = "未知原因") -> void:
+	# 构建死亡统计
+	_death_stats["score"] = int(score_label.text.replace("Score: ", "")) if score_label else 0
+	_death_stats["floor"] = int(wave_label.text.replace("Floor: ", "")) if wave_label else 1
+
+	death_title.text = "你已倒下"
+	reason_label.text = "原因: %s" % reason
+	stats_label.text = "最终得分: %d\n击毙: %d\n存活楼层: %d" % [
+		_death_stats["score"],
+		_kill_count,
+		_death_stats["floor"]
+	]
+	loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [
+		_death_loot["saved"],
+		_death_loot["lost"]
+	]
+
+	death_overlay.visible = true
+	game_over_panel.visible = true
+	get_tree().paused = true
+
+## 设置死亡统计（房间模式调用）
+func set_death_stats(stats: Dictionary) -> void:
+	_death_stats = stats
+
+## 设置战利品信息
+func set_loot_info(saved: int, lost: int) -> void:
+	_death_loot = {"saved": saved, "lost": lost}
+	if loot_label:
+		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [saved, lost]
+
+func _on_retry_pressed() -> void:
+	get_tree().paused = false
+	death_overlay.visible = false
+	game_over_panel.visible = false
+	get_tree().reload_current_scene()
+
+func _on_menu_pressed() -> void:
+	get_tree().paused = false
+	death_overlay.visible = false
+	game_over_panel.visible = false
+	# 返回主菜单（暂用 reload 代替，实际可跳转菜单场景）
+	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
 ## 撤离就绪
 func _on_extraction_ready() -> void:

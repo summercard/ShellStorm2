@@ -153,3 +153,72 @@ offset_right = 300.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+
+## — Game Over Overlay —
+[node name="DeathOverlay" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0, 0.0, 0.0, 0.75)
+
+[node name="GameOverPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -160.0
+offset_right = 200.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="GameOverPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="DeathTitle" type="Label" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "你已倒下"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1.0)
+theme_override_font_sizes/font_size = 36
+
+[node name="ReasonLabel" type="Label" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "原因: 未知"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+
+[node name="HSeparator" type="HSeparator" parent="GameOverPanel/VBox"]
+layout_mode = 2
+
+[node name="StatsLabel" type="Label" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "最终得分: 0
+击毙: 0
+存活楼层: 1"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="LootLabel" type="Label" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "战利品: 保险保住 0 件 / 损失 0 件"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1.0)
+theme_override_font_sizes/font_size = 14
+
+[node name="RetryButton" type="Button" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "再来一局"
+theme_override_font_sizes/font_size = 22
+
+[node name="MenuButton" type="Button" parent="GameOverPanel/VBox"]
+layout_mode = 2
+text = "返回主菜单"
+theme_override_font_sizes/font_size = 16
