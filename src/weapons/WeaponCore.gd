@@ -19,7 +19,7 @@ var _is_reloading: bool = false
 var _is_active: bool = true
 
 ## 子弹配置
-@export var bullet_scene: PackedScene
+@export var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
 @export var bullet_speed: float = 600.0
 @export var bullet_damage: int = 10
 
@@ -38,61 +38,67 @@ func _process(delta: float) -> void:
 	if _fire_cooldown > 0:
 		_fire_cooldown -= delta
 
-## 核心射击方法
-func fire(direction: Vector2) -> bool:
+## 核心射击方法 — 带世界坐标（用于枪口偏移）
+func fire_from(spawn_pos: Vector2, direction: Vector2) -> bool:
 	"""
-	执行射击
+	执行射击，从指定世界坐标生成子弹（支持枪口偏移）
+	参数: spawn_pos — 子弹生成的世界坐标（通常是枪口位置）
 	参数: direction — 射击方向（归一化向量）
 	返回: 是否成功发射
 	"""
 	if not _can_fire():
 		return false
-	
+
 	_fire_cooldown = 1.0 / fire_rate
-	
+
 	if not _is_reloading and current_ammo > 0:
-		_spawn_projectiles(direction)
+		_spawn_projectiles_from(spawn_pos, direction)
 		current_ammo -= 1
 		ammo_changed.emit(current_ammo, magazine_size)
-		weapon_fired.emit(global_position, direction, projectile_count)
-		
+		weapon_fired.emit(spawn_pos, direction, projectile_count)
+
 		if current_ammo <= 0:
 			start_reload()
-		
+
 		return true
 	return false
+
+## 兼容旧接口（无位置参数，使用当前节点位置）
+func fire(direction: Vector2) -> bool:
+	"""兼容旧接口，内部调用 fire_from(global_position, direction)"""
+	return fire_from(global_position, direction)
 
 func _can_fire() -> bool:
 	"""检查是否可以射击"""
 	return _is_active and _fire_cooldown <= 0 and not _is_reloading and current_ammo > 0
 
-func _spawn_projectiles(direction: Vector2) -> void:
-	"""生成投射物（子类可重写）"""
+func _spawn_projectiles_from(spawn_pos: Vector2, direction: Vector2) -> void:
+	"""从指定位置生成投射物（子类可重写）"""
 	for i in range(projectile_count):
 		var spread_angle := _calculate_spread(i)
 		var spawn_dir := direction.rotated(spread_angle)
-		_spawn_bullet(spawn_dir)
+		_spawn_bullet_from(spawn_pos, spawn_dir)
 
 func _calculate_spread(index: int) -> float:
 	"""计算单个投射物的扩散角度"""
 	if projectile_count <= 1 or spread <= 0:
 		return 0.0
-	
+
 	var step := spread / float(projectile_count - 1)
 	var offset := -spread * 0.5
 	return offset + step * index
 
-func _spawn_bullet(direction: Vector2) -> void:
-	"""实际生成子弹的模板方法（子类重写可自定义子弹行为）"""
+func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
+	"""从指定位置实际生成子弹（子类重写可自定义子弹行为）"""
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
-		_setup_bullet(bullet, direction)
-		add_child(bullet)
+		_setup_bullet(bullet, spawn_pos, direction)
+		get_tree().root.add_child(bullet)
 
-func _setup_bullet(bullet: Node, direction: Vector2) -> void:
+func _setup_bullet(bullet: Node, spawn_pos: Vector2, direction: Vector2) -> void:
 	"""配置子弹属性"""
 	if bullet.has_method("fire"):
-		bullet.fire(global_position, direction, bullet_speed, bullet_damage)
+		bullet.fire(spawn_pos, direction, bullet_speed, bullet_damage)
 
 ## 换弹
 func start_reload() -> void:
