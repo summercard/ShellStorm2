@@ -33,8 +33,10 @@ var current_ammo: int = 30      # 当前弹药
 var projectile_count: int = 1   # 每次射击投射物数量
 var spread: float = 0.0         # 扩散角度（弧度）
 var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
-var bullet_speed: float = 600.0
-var bullet_damage: int = 10
+## 基础弹速（会被 bullet_speed 属性倍率缩放）
+const BASE_BULLET_SPEED: float = 600.0
+var bullet_speed: float = 1.0   # 弹速倍率（1.0 = 不变）
+var bullet_damage: int = 5      # 每颗子弹的伤害值
 
 ## 所有节点注册表（用于通过 node_id 快速查找）
 var _node_registry: Dictionary = {}
@@ -169,7 +171,7 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
 		if bullet.has_method("fire"):
-			bullet.fire(spawn_pos, direction, bullet_speed, bullet_damage)
+			bullet.fire(spawn_pos, direction, BASE_BULLET_SPEED * bullet_speed, bullet_damage)
 		get_tree().root.add_child(bullet)
 
 ## 换弹
@@ -197,6 +199,9 @@ func _apply_stats(stats: Dictionary) -> void:
 	magazine_size = stats.get("magazine_size", 30)
 	projectile_count = stats.get("bullet_count", 1)
 	spread = stats.get("spread", 0.0)
+	# 子弹自有属性（从 BULLET 节点透传上来）
+	bullet_damage = stats.get("bullet_damage", 5)
+	bullet_speed = stats.get("bullet_speed", 600.0)
 	current_ammo = magazine_size  # 重置弹药
 
 ## 获取武器信息（调试用）

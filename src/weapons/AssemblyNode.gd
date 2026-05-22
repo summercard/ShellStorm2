@@ -101,6 +101,9 @@ func _combine_stats(target: Dictionary, source: Dictionary) -> void:
 		elif key == "speed":
 			# 速度取乘积
 			target[key] = target.get(key, 1.0) * source[key]
+		elif key in ["bullet_damage", "bullet_speed"]:
+			# 子弹属性直接覆盖（子弹节点自有属性，不与枪身混加）
+			target[key] = source[key]
 		else:
 			# 其他属性取加成
 			target[key] = target.get(key, 0) + source[key]
