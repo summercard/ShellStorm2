@@ -43,7 +43,7 @@ func set_beacon_count(count: int) -> void:
 func show_extraction_panel() -> void:
 	_is_extraction_panel_visible = true
 	panel.visible = true
-	_countdown_bar.visible = false
+	countdown_bar.visible = false
 	abort_button.visible = false
 	_update_beacon_label()
 	_update_extraction_buttons()
@@ -107,7 +107,7 @@ func _on_extraction_type_button_pressed(etype: String) -> void:
 ## 开始撤离读条UI
 func start_extraction_countdown(extraction_type: String, duration: float) -> void:
 	panel.visible = true
-	_countdown_bar.visible = true
+	countdown_bar.visible = true
 	abort_button.visible = true
 	extraction_type_label.text = "撤离中: %s" % extraction_type
 	countdown_bar.max_value = 1.0
@@ -126,7 +126,7 @@ func _update_countdown_label(remaining: float, total: float) -> void:
 ## 撤离完成
 func show_extraction_success() -> void:
 	panel.visible = true
-	_countdown_bar.visible = false
+	countdown_bar.visible = false
 	abort_button.visible = false
 	extraction_type_label.text = "撤离成功！"
 	countdown_label.text = "战利品已保存"
@@ -134,7 +134,7 @@ func show_extraction_success() -> void:
 ## 撤离中断
 func show_extraction_aborted() -> void:
 	panel.visible = true
-	_countdown_bar.visible = false
+	countdown_bar.visible = false
 	abort_button.visible = false
 	extraction_type_label.text = "撤离中断！"
 

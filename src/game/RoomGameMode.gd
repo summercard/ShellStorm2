@@ -65,6 +65,9 @@ func _setup_extraction_modules() -> void:
 	# 信号连接（用于UI更新等）
 	inventory_module.inventory_changed.connect(_on_inventory_changed)
 	insurance_module.insurance_changed.connect(_on_insurance_changed)
+	extraction_module.extraction_completed.connect(_on_extraction_completed)
+	extraction_module.extraction_aborted.connect(_on_extraction_aborted)
+	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 
 ## 连接信号
 func _setup_signals() -> void:
@@ -168,6 +171,38 @@ func _on_global_game_over() -> void:
 func _print_death_settlement(result: Dictionary) -> void:
 	var text: String = death_settlement_module.get_death_summary_text(result)
 	print(text)
+
+## 撤离完成回调
+func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
+	if success:
+		var extracted: int = death_settlement_module.process_extraction_settlement(inventory_module, insurance_module)
+		var insurance_items: Array[Dictionary] = insurance_module.get_all_insured_items()
+		_print_extraction_success(extracted, insurance_items)
+	else:
+		_print_extraction_failure()
+
+func _print_extraction_success(extracted_count: int, insurance_items: Array[Dictionary]) -> void:
+	var lines: Array[String] = ["=== 撤离成功 ==="]
+	lines.append("背包物品已保存: %d 件" % extracted_count)
+	if not insurance_items.is_empty():
+		lines.append("保险格物品: %d 件" % insurance_items.size())
+	print("\n".join(lines))
+
+func _print_extraction_failure() -> void:
+	print("=== 撤离失败 ===")
+	print("撤离未成功，物资可能丢失。")
+
+## 撤离中断回调
+func _on_extraction_aborted() -> void:
+	_update_room_info_label("撤离已中断！")
+	print("撤离读条被中断。")
+
+## 死亡结算处理完毕回调
+func _on_death_settlement_processed(dropped: Array[Dictionary], insurance_saved: Array[Dictionary]) -> void:
+	var lines: Array[String] = ["=== 死亡结算 ==="]
+	lines.append("保险保住: %d 件" % insurance_saved.size())
+	lines.append("战利品损失: %d 件" % dropped.size())
+	print("\n".join(lines))
 
 ## 更新房间信息标签
 func _update_room_info_label(text: String) -> void:

@@ -70,6 +70,31 @@ func _setup_extraction_ui() -> void:
 	# 监听撤离 UI 事件
 	if ext_ui.has_signal("extraction_type_selected"):
 		ext_ui.extraction_type_selected.connect(_on_extraction_type_selected)
+	
+	# 监听撤离完成/中断，驱动 UI 状态切换
+	if room_game_mode.extraction_module:
+		if ext_ui.has_method("show_extraction_success"):
+			room_game_mode.extraction_module.extraction_completed.connect(
+				func(success: bool, loot: Array[Dictionary]):
+					if success:
+						ext_ui.show_extraction_success()
+					else:
+						ext_ui.show_extraction_aborted()
+			)
+		if ext_ui.has_method("show_extraction_aborted"):
+			room_game_mode.extraction_module.extraction_aborted.connect(
+				func(): ext_ui.show_extraction_aborted()
+			)
+		# 同步撤离进度到 UI（读条期间每帧推送）
+		if ext_ui.has_method("update_countdown"):
+			room_game_mode.extraction_module.extraction_progress_updated.connect(
+				func(progress: float):
+					var remaining: float = room_game_mode.extraction_module.get_remaining_time()
+					ext_ui.update_countdown(progress, remaining)
+			)
+		# 同步信标数量到 UI
+		if ext_ui.has_method("set_beacon_count"):
+			ext_ui.set_beacon_count(0)  # 默认0，可在后续接入玩家背包数据
 
 func _on_extraction_type_selected(extraction_type: String, countdown: float) -> void:
 	if room_game_mode:
