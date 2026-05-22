@@ -10,6 +10,9 @@ extends Node2D
 @onready var wave_label: Label = $UI/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $UI/CurrencyLabel
 
+# 命运卡片选择 UI（由 T03 添加）
+@onready var fate_card_ui: Control = $FateCardUIController
+
 var player: Node2D
 var enemy_scene: PackedScene = preload("res://scenes/Enemy.tscn")
 var spawn_timer: float = 0.0
@@ -28,6 +31,11 @@ func _ready() -> void:
 	hp_bar.value = GameManager.current_hp
 	_update_ui()
 
+	# Phase 4 T03: 玩家生成后显示命运卡片选择界面
+	# 延迟一帧确保 Player 节点完全初始化
+	await get_tree().process_frame
+	_show_initial_card_selection()
+
 func _process(delta: float) -> void:
 	spawn_timer += delta
 	if spawn_timer >= spawn_interval:
@@ -41,6 +49,14 @@ func _spawn_player() -> void:
 	player = player_scene.instantiate()
 	player.global_position = player_spawn.global_position
 	add_child(player)
+
+## Phase 4 T03: 初始命运卡片选择
+func _show_initial_card_selection() -> void:
+	# 等待 FateCardGameBridge 连接到玩家 weapon_tree
+	await get_tree().create_timer(0.2).timeout
+	
+	if fate_card_ui and fate_card_ui.has_method("show_card_selection"):
+		fate_card_ui.show_card_selection()
 
 func _spawn_enemies() -> void:
 	var count = randi() % 3 + 1

@@ -21,9 +21,25 @@ var aim_direction: Vector2 = Vector2.RIGHT
 @onready var weapon_anchor: Marker2D = $WeaponAnchor
 @onready var invincible_timer: Timer = $InvincibleTimer
 
+## 玩家武器装配树（由命运卡片系统使用）
+var weapon_tree: WeaponAssemblyTree
+
 func _ready() -> void:
 	current_hp = max_hp
 	hp_changed.connect(_on_hp_changed)
+	
+	# 初始化武器装配树
+	weapon_tree = WeaponAssemblyTree.new()
+	var root_gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "默认豌豆手枪")
+	root_gun.set_base_stats({
+		"damage": 10,
+		"fire_rate": 4.0,
+		"bullet_count": 1,
+		"spread": 0.0,
+		"reload_time": 2.0,
+		"magazine_size": 12,
+	})
+	weapon_tree.set_root(root_gun)
 
 func _physics_process(delta: float) -> void:
 	_handle_movement(delta)
@@ -102,3 +118,7 @@ func get_aim_direction() -> Vector2:
 
 func set_aim_direction(dir: Vector2) -> void:
 	aim_direction = dir.normalized()
+
+## 获取玩家的武器装配树（供 FateCardGameBridge 使用）
+func get_weapon_tree() -> WeaponAssemblyTree:
+	return weapon_tree
