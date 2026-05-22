@@ -10,6 +10,9 @@ class_name WeaponController
 ## 武器装配树引用（从 Player 获取）
 var weapon_tree: WeaponAssemblyTree = null
 
+## 枪口闪光引用
+var _muzzle_flash: PointLight2D = null
+
 ## 本地冷却计时器（委托给 weapon_tree.tick 更新）
 var fire_cooldown: float = 0.0
 
@@ -17,12 +20,14 @@ func _ready() -> void:
 	# 从 Player 获取 weapon_tree
 	if player and player.has_method("get_weapon_tree"):
 		weapon_tree = player.get_weapon_tree()
+	# 获取枪口闪光节点
+	_muzzle_flash = get_node_or_null("../MuzzleFlash")
 
 func _process(delta: float) -> void:
 	# 更新 weapon_tree 的冷却（内部会处理 _fire_cooldown）
 	if weapon_tree:
 		weapon_tree.tick(delta)
-	
+
 	# 检查射击输入
 	if Input.is_action_pressed("shoot"):
 		# WeaponAssemblyTree 内部已处理自己的冷却
@@ -40,11 +45,15 @@ func fire() -> void:
 		# Fallback: 无装配树时直接生成子弹（不应该发生）
 		_spawn_bullet_fallback(muzzle_pos, aim_dir)
 
-func _spawn_bullet_fallback(muzzle_pos: Vector2, direction: Vector2) -> void:
-	var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
-	var bullet = bullet_scene.instantiate()
-	bullet.fire(muzzle_pos, direction, 600.0, 10)
-	get_tree().root.add_child(bullet)
+	# 触发枪口闪光
+	_trigger_muzzle_flash()
+
+func _trigger_muzzle_flash() -> void:
+	if _muzzle_flash:
+		_muzzle_flash.visible = true
+		# 快速闪烁消失
+		var tween := _muzzle_flash.create_tween()
+		tween.tween_property(_muzzle_flash, "visible", false, 0.06)
 
 func get_fire_rate() -> float:
 	if weapon_tree:

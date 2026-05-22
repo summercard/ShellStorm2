@@ -6,7 +6,6 @@ class_name HitEffects
 # 挂载在 Main 节点下
 
 var _screen_shake: ScreenShake
-var _shake_intensity: float = 6.0
 
 func _ready() -> void:
 	# 优先查找 Camera2D 子节点下的 ScreenShake
@@ -32,6 +31,15 @@ func _connect_enemy_signals(enemy: Node) -> void:
 		if not enemy.enemy_hit.is_connected(_on_enemy_hit):
 			enemy.enemy_hit.connect(_on_enemy_hit)
 
-func _on_enemy_hit(_hit_from: Vector2) -> void:
+func _on_enemy_hit(_hit_from: Vector2, damage: int, is_crit: bool) -> void:
 	if _screen_shake:
-		_screen_shake.trigger(_shake_intensity, 0.12)
+		# 震动强度根据伤害和暴击动态调整
+		var intensity := 5.0
+		if damage >= 20:
+			intensity = 10.0
+		elif damage >= 10:
+			intensity = 7.0
+		if is_crit:
+			intensity *= 1.5
+		var duration := 0.12 if not is_crit else 0.18
+		_screen_shake.trigger(intensity, duration)

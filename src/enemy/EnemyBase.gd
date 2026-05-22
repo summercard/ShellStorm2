@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 signal hp_changed(current: int, maximum: int)
 signal enemy_died()  # 敌人死亡信号
-signal enemy_hit(hit_from: Vector2)  # 被击中时发射（用于震屏/击中特效）
+signal enemy_hit(hit_from: Vector2, damage: int, is_crit: bool)  # 被击中时发射（用于震屏/击中特效）
 
 @export var max_hp: int = 30
 @export var speed: float = 80.0
@@ -172,14 +172,14 @@ func _trigger_explosion() -> void:
 	die()
 
 ## ========== 受伤 ==========
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, is_crit: bool = false) -> void:
 	current_hp -= amount
 	_update_hp_bar()
 	flash_damage()
-	enemy_hit.emit(global_position)  # 触发震屏
+	enemy_hit.emit(global_position, amount, is_crit)  # 触发震屏（带伤害值和暴击标记）
 	
-	# 弹出伤害数字
-	_spawn_damage_number(global_position, amount)
+	# 弹出伤害数字（暴击时更大更亮）
+	_spawn_damage_number(global_position, amount, is_crit)
 
 	if current_hp <= 0:
 		die()
@@ -187,7 +187,15 @@ func take_damage(amount: int) -> void:
 ## ========== 死亡 ==========
 func die() -> void:
 	enemy_died.emit()
-	queue_free()
+	# 死亡消散动画：缩小+淡出
+	if shape:
+		var tween := create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(shape, "scale", Vector2(0.1, 0.1), 0.25).set_trans(Tween.TRANS_QUAD)
+		tween.tween_property(shape, "mod:a", 0.0, 0.25).set_trans(Tween.TRANS_QUAD)
+		tween.chain().tween_callback(queue_free)
+	else:
+		queue_free()
 
 func _update_hp_bar() -> void:
 	if hp_bar:
@@ -213,17 +221,22 @@ func add_modifier(modifier_id: String, tier: int = 1) -> void:
 		mod.apply(self)
 
 ## ========== 伤害数字（内部工具）==========
-func _spawn_damage_number(world_pos: Vector2, damage: int) -> void:
+func _spawn_damage_number(world_pos: Vector2, damage: int, is_crit: bool = false) -> void:
 	var scene_path := "res://scenes/DamageNumber.tscn"
 	var num_scene: PackedScene = load(scene_path)
 	if num_scene:
 		var label := num_scene.instantiate()
 		if label is Label:
 			label.text = str(damage)
+			if is_crit:
+				label.text = str(damage) + "!"
 			label.position = world_pos + Vector2(randf_range(-8, 8), -20)
 			label.z_index = 200
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			if is_crit:
+				label.add_theme_font_size_override("font_size", 28)
+				label.mod = Color(1.0, 0.9, 0.2, 1.0)
 			get_tree().root.add_child(label)
 			var tween := label.create_tween()
 			tween.set_parallel(true)

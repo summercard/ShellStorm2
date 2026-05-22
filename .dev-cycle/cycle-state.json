@@ -1,20 +1,20 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "completed",
-  "currentPhase": "deepen",
-  "lastTask": "Code",
+  "status": "running",
+  "mode": "infinite_polish",
+  "currentPhase": "polish",
+  "lastTask": "Plan",
   "planVersion": "v3.1",
-  "deepen": {
-    "T01": "completed",
-    "T02": "completed",
-    "T03": "completed"
+  "polish": {
+    "current": 1,
+    "total": "infinite"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "completedTime": "2026-05-22T14:47:00+08:00",
-  "cronId": "35c62de1-b44c-49b3-ab4a-9c80926d9d9d",
-  "currentTarget": "深化枪械与怪物系统 - 预设武器 + 6种怪物 + 战斗手感",
-  "notes": "✅ 深化阶段全部完成。枪械与怪物系统已具备完整可玩战斗手感。",
+  "resumeTime": "2026-05-22T22:48:00+08:00",
+  "cronId": "eaa174b0-24fe-49ff-b2c5-d29230853834",
+  "currentTarget": "无限打磨循环 - 持续改善游戏体验",
+  "notes": "主人要求无限打磨游戏内容。10项优先打磨：武器手感/敌人行为/战斗反馈/UI/数值平衡/音效/玩家手感/敌人生成/退出流程/地图信息。每次只做一个改善项，6分钟自动续。",
   "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   "designDoc": "docs/PH02_模块化武器系统.md + PH06_怪物系统.md"
 }

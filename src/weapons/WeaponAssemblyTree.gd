@@ -167,11 +167,15 @@ func _calculate_spread(index: int) -> float:
 	return offset + step * index
 
 func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
-	"""从指定位置生成子弹"""
+	"""从指定位置生成子弹，暴击判定"""
+	# 暴击判定（10%基础概率）
+	var is_crit := randf() < 0.10
+	var final_damage := bullet_damage * 2 if is_crit else bullet_damage
+
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
 		if bullet.has_method("fire"):
-			bullet.fire(spawn_pos, direction, BASE_BULLET_SPEED * bullet_speed, bullet_damage)
+			bullet.fire(spawn_pos, direction, BASE_BULLET_SPEED * bullet_speed, final_damage, is_crit)
 		get_tree().root.add_child(bullet)
 
 ## 换弹
