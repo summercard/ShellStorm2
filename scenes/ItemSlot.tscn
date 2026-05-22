@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8xk2m3n5pqr7"]
+
+[ext_resource type="Script" path="res://src/ui/ItemSlot.gd" id="1"]
+
+[node name="ItemSlot" type="TextureRect"]
+custom_minimum_size = Vector2(56, 56)
+expand_mode = 1
+stretch_mode = 5
+script = ExtResource("1")

@@ -51,6 +51,29 @@ func _setup_room_game_mode() -> void:
 	room_game_mode.room_cleared.connect(_on_room_cleared)
 	room_game_mode.game_over.connect(_on_game_over)
 	room_game_mode.extraction_ready.connect(_on_extraction_ready)
+	
+	# 绑定搜打撤 UI 到对应模块
+	_setup_extraction_ui()
+
+func _setup_extraction_ui() -> void:
+	var inv_ui: Node = $UI/InventoryPanel
+	var ext_ui: Node = $UI/ExtractionPanel
+	
+	if room_game_mode.inventory_module and inv_ui.has_method("set_inventory_module"):
+		inv_ui.set_inventory_module(room_game_mode.inventory_module)
+	if room_game_mode.insurance_module and inv_ui.has_method("set_insurance_module"):
+		inv_ui.set_insurance_module(room_game_mode.insurance_module)
+	
+	if room_game_mode.extraction_module and ext_ui.has_method("set_extraction_module"):
+		ext_ui.set_extraction_module(room_game_mode.extraction_module)
+	
+	# 监听撤离 UI 事件
+	if ext_ui.has_signal("extraction_type_selected"):
+		ext_ui.extraction_type_selected.connect(_on_extraction_type_selected)
+
+func _on_extraction_type_selected(extraction_type: String, countdown: float) -> void:
+	if room_game_mode:
+		room_game_mode.begin_extraction(extraction_type, countdown)
 
 ## 房间清理完成回调
 func _on_room_cleared(room_data: RoomData) -> void:
@@ -69,6 +92,9 @@ func _calculate_room_score(room_data: RoomData) -> int:
 ## 提取就绪（所有房间清理完）
 func _on_extraction_ready() -> void:
 	print("地图清理完成！可以撤离或前往下一层。")
+	var ext_ui: Node = $UI/ExtractionPanel
+	if ext_ui.has_method("show_extraction_panel"):
+		ext_ui.show_extraction_panel()
 
 func _process(delta: float) -> void:
 	pass

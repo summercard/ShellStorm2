@@ -2,43 +2,19 @@
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
   "status": "running",
-  "currentPhase": 8,
+  "currentPhase": 9,
   "lastTask": "Code",
   "planVersion": "v3.0",
-  "phase1": {
-    "T01": "completed"
-  },
-  "phase2": {
+  "phase9": {
     "T01": "completed",
-    "T02": "completed"
-  },
-  "phase3": {
-    "T01": "completed",
-    "T02": "completed"
-  },
-  "phase4": {
-    "T01": "completed",
-    "T02": "completed",
-    "T03": "completed"
-  },
-  "phase5": {
-    "T01": "completed",
-    "T02": "completed",
-    "T03": "completed"
-  },
-  "phase6": {
-    "T01": "completed"
-  },
-  "phase7": {
-    "T01": "completed"
-  },
-  "phase8": {
-    "T01": "completed"
+    "T02": "pending",
+    "T03": "pending"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "cronId": "12869336-6779-4160-a241-b1d4c991d9fd",
-  "currentTarget": "Phase 8 T01 完成 — Boss战模块（阶段管理+技能节点）",
-  "notes": "Phase1 完成（玩家+敌人+子弹+HUD）。Phase2 完成（WeaponController + WeaponCore）。Phase3 完成（武器装配树）。Phase4 完成（命运卡片系统）。Phase5 完成（随机地图系统）。Phase6 完成（怪物基础系统）。Phase7 完成（精英怪成长系统）。Phase8 T01 完成：BossPhaseDirector（阶段管理）+ BossSkillNode（技能节点）。所有 Phase 任务均已完成，开发循环结束。",
-  "completedPhases": ["phase1", "phase2", "phase3", "phase4", "phase5", "phase6", "phase7", "phase8"],
-  "designDoc": "顶视角_2_d射击搜打撤肉鸽策划案.md"
+  "resumeTime": "2026-05-22T21:10:00+08:00",
+  "cronId": "ec1fd8bf-d99d-415c-bbc5-a57917ff8c97",
+  "currentTarget": "Phase 9: 搜打撤深化 - 背包+保险格+撤离结算",
+  "notes": "Phase 1-8 已完成。Phase 9: 搜打撤深化 - 背包格子、保险格、死亡结算、撤离读条、多撤离方式。T01已完成（四大模块实现）。T02: 完善撤离方式和UI。T03: 整局流程串联测试。",
+  "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8],
+  "designDoc": "docs/PH09_搜打撤深化.md"
 }
