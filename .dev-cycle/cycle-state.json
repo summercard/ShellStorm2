@@ -2,9 +2,12 @@
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/Documents/弹壳风暴2",
   "status": "running",
-  "currentPhase": 0,
-  "lastTask": "Plan",
+  "currentPhase": 1,
+  "lastTask": "Code",
   "planVersion": "v3.0",
+  "phase1": {
+    "T01": "completed"
+  },
   "startTime": "2026-05-22T15:18:00+08:00",
   "currentTarget": "Phase 1 Plan: 项目初始化与核心射击框架",
   "notes": "全新顶视角射击搜打撤肉鸽游戏，基于模块化武器装配树 + 命运卡片 + 搜打撤风险决策。核心特色：枪身+子弹+配件自由组合，命运卡片改造武器树，战场撤离风险选择。",
