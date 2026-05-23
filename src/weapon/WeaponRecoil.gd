@@ -1,4 +1,5 @@
 class_name WeaponRecoil
+extends Node2D
 ## 武器后坐力动画
 ## 挂载在武器节点上，通过 recoil_signal 信号与 WeaponController 联动
 ## 每次 fire() 时播放反向抖动动画，高后坐力武器（霰弹/狙击）幅度更大

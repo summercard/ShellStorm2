@@ -1,4 +1,5 @@
 class_name ContentInjector
+extends RefCounted
 ## 内容注入器接口 — 定义房间内容注入的协议
 
 ## 返回内容字典的结构
@@ -8,6 +9,21 @@ class ContentConfig:
 	var events: Array[Dictionary] = []     # 事件配置
 	var interactables: Array[Dictionary] = []  # 可交互对象
 	var special_conditions: Array[String] = []   # 特殊条件
+
+	func to_dict() -> Dictionary:
+		return {
+			"enemies": _copy_dictionary_array(enemies),
+			"loot": _copy_dictionary_array(loot),
+			"events": _copy_dictionary_array(events),
+			"interactables": _copy_dictionary_array(interactables),
+			"special_conditions": special_conditions.duplicate(),
+		}
+
+	func _copy_dictionary_array(values: Array[Dictionary]) -> Array[Dictionary]:
+		var result: Array[Dictionary] = []
+		for value in values:
+			result.append(value.duplicate(true))
+		return result
 
 ## 注入内容到房间
 func inject(room_data: RoomData) -> ContentConfig:

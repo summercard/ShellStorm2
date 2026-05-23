@@ -5,9 +5,17 @@ extends CanvasLayer
 ## 展示蓝图解锁进度，玩家可消耗资源解锁新枪身/子弹/配件类别
 ## 解锁后将使对应的装备池在局内掉落和初始选择时可用
 
-@onready var content: VBoxContainer = $Panel/VBox/Content
-@onready var status_label: Label = $Panel/VBox/StatusLabel
-@onready var close_button: Button = $Panel/VBox/CloseButton
+var content: VBoxContainer = null
+var status_label: Label = null
+var close_button: Button = null
+
+func _ready() -> void:
+	content = get_node_or_null("Panel/VBox/Content")
+	status_label = get_node_or_null("Panel/VBox/StatusLabel")
+	close_button = get_node_or_null("Panel/VBox/CloseButton")
+	if close_button:
+		close_button.pressed.connect(_on_close_pressed)
+	_build_blueprint_list()
 
 ## 蓝图解锁阶段定义
 ## 每个类别有多个Tier，每个Tier解锁后增加该类别在局内的可用变体数量
@@ -31,11 +39,6 @@ const BLUEPRINT_TIERS := {
 		"unlock_costs": [0, 50, 120, 350]
 	}
 }
-
-func _ready() -> void:
-	if close_button:
-		close_button.pressed.connect(_on_close_pressed)
-	_build_blueprint_list()
 
 func _build_blueprint_list() -> void:
 	if content == null:

@@ -1,4 +1,5 @@
 class_name InventoryModule
+extends RefCounted
 ## 背包格子与容量管理模块
 ## 负责：格子容量、物品存取、物品堆叠、超格拒绝
 
@@ -34,13 +35,16 @@ var _loot_table: Dictionary = {}
 func _init(capacity: int = DEFAULT_CAPACITY) -> void:
 	_capacity = capacity
 	_slots.resize(_capacity)
-	for i in _slots:
-		i = InventorySlot.new()
+	for i in range(_slots.size()):
+		_slots[i] = InventorySlot.new()
 
 ## 设置容量
 func set_capacity(cap: int) -> void:
 	_capacity = max(1, cap)
 	_slots.resize(_capacity)
+	for i in range(_slots.size()):
+		if _slots[i] == null:
+			_slots[i] = InventorySlot.new()
 	capacity_changed.emit(_slots.size(), _capacity)
 
 ## 获取容量

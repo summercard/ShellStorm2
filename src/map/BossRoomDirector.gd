@@ -1,4 +1,5 @@
 class_name BossRoomDirector
+extends RefCounted
 ## Boss房管理 — 管理Boss房的状态、进入条件和击败后的奖励结算
 
 signal boss_spawned(boss_data: Dictionary)
@@ -131,13 +132,6 @@ func _defeat_boss() -> void:
 	# 解锁Boss撤离（使用注入的 extraction_director 引用）
 	if _extraction_director != null:
 		_extraction_director.unlock_boss_extraction()
-	elif ExtractionDirector != null:
-		# 兜底：直接从 MapManager 获取（适用于 BossRoomDirector 作为 MapManager 子节点）
-		var ed = get_node_or_null("/root/Main/MapManager/ExtractionDirector")
-		if ed == null:
-			ed = get_node_or_null("/root/MapManager/ExtractionDirector")
-		if ed != null and ed.has_method("unlock_boss_extraction"):
-			ed.unlock_boss_extraction()
 
 ## 生成奖励
 func _generate_rewards(boss_data: Dictionary) -> Dictionary:

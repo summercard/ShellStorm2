@@ -1,25 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckm8xvk5yqnl2"]
+[gd_scene load_steps=6 format=3 uid="uid://ckm8xvk5yqnl2"]
 
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="1_gameui"]
 [ext_resource type="Script" path="res://src/fx/ScreenShake.gd" id="2_shake"]
 [ext_resource type="Script" path="res://src/fx/HitEffects.gd" id="3_hiteffects"]
-[ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="4_room"]
+[ext_resource type="Script" path="res://src/game/CoreCombatMode.gd" id="4_core"]
+[ext_resource type="Script" path="res://src/game/WorldPlaceholder.gd" id="5_world"]
 
 [node name="Main" type="Node2D"]
 
-[node name="Background" type="ColorRect" parent="."]
-z_index = -10
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.1, 0.1, 0.15, 1.0)
-
-[node name="PlayerSpawn" type="Marker2D" parent="."]
-position = Vector2(640, 360)
+[node name="WorldPlaceholder" type="Node2D" parent="."]
+z_index = -20
+script = ExtResource("5_world")
+arena_size = Vector2(1800, 1100)
 
 [node name="Camera2D" type="Camera2D" parent="."]
+enabled = true
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+zoom = Vector2(1, 1)
 
 [node name="ScreenShake" type="Node" parent="Camera2D"]
 script = ExtResource("2_shake")
@@ -29,8 +27,6 @@ script = ExtResource("3_hiteffects")
 
 [node name="GameUIManager" type="CanvasLayer" parent="." instance=ExtResource("1_gameui")]
 
-[node name="RoomGameMode" type="Node2D" parent="."]
-script = ExtResource("4_room")
-
-[node name="PlayerSpawn" type="Marker2D" parent="RoomGameMode"]
-position = Vector2(640, 360)
+[node name="CoreCombatMode" type="Node2D" parent="."]
+script = ExtResource("4_core")
+arena_size = Vector2(1800, 1100)

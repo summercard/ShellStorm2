@@ -32,7 +32,7 @@ static func run_all() -> String:
 	lines.append("\n[2] FateCardEngine.apply_card 模拟测试")
 	
 	# 获取玩家武器树
-	var player = _get_player()
+	var player: Node = _get_player()
 	if player == null or not player.has_method("get_weapon_tree"):
 		lines.append("  ⚠ 无法获取玩家武器树，跳过实际应用测试")
 	else:
@@ -41,9 +41,9 @@ static func run_all() -> String:
 			lines.append("  ⚠ 武器树为 null，跳过测试")
 		else:
 			# 随机选3张测试
-			var test_cards := all_cards.slice(0, min(3, all_cards.size()))
+			var test_cards: Array = all_cards.slice(0, min(3, all_cards.size()))
 			for card in test_cards:
-				var result = FateCardEngine.apply_card(card, tree)
+				var result: FateCardEngine.ApplyResult = FateCardEngine.apply_card(card, tree)
 				lines.append("  [%s] %s: %s (%s)" % [
 					FateCard.rarity_name(card.card_rarity),
 					card.card_name,
@@ -55,7 +55,7 @@ static func run_all() -> String:
 	
 	# 3. 检查命运卡片与 BlueprintTier 的联动
 	lines.append("\n[3] 命运卡片局内可用性检查")
-	var usable_count := 0
+	var usable_count: int = 0
 	for card in all_cards:
 		if _is_card_usable(card):
 			usable_count += 1
@@ -63,7 +63,7 @@ static func run_all() -> String:
 	
 	# 4. 检查各稀有度卡片数量是否满足设计目标
 	lines.append("\n[4] 稀有度分布健康检查")
-	var rarity_thresholds := {
+	var rarity_thresholds: Dictionary = {
 		"common": 8,    # 至少8张白卡
 		"rare": 6,      # 至少6张蓝卡
 		"epic": 5,      # 至少5张紫卡
@@ -73,16 +73,16 @@ static func run_all() -> String:
 	for rarity in rarity_thresholds:
 		var count: int = by_rarity.get(rarity, 0)
 		var threshold: int = rarity_thresholds[rarity]
-		var status := "✅" if count >= threshold else "⚠"
+		var status: String = "✅" if count >= threshold else "⚠"
 		lines.append("  %s %s: %d 张 (目标≥%d)" % [status, rarity, count, threshold])
 	
 	return "\n".join(lines)
 
 static func _get_player() -> Node:
-	var tree := Engine.get_main_loop()
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree == null:
 		return null
-	var root := tree.get_root()
+	var root: Window = tree.get_root()
 	if root == null:
 		return null
 	return root.get_node_or_null("Main/Player")

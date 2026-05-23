@@ -127,13 +127,16 @@ var pending_fate_card: Dictionary = {}
 
 func set_pending_fate_card(card_data: Dictionary) -> void:
 	pending_fate_card = card_data
+	data.pending_fate_card = card_data
 	save_base()
 
 func get_pending_fate_card() -> Dictionary:
-	return pending_fate_card
+	return data.pending_fate_card
 
 func clear_pending_fate_card() -> void:
 	pending_fate_card = {}
+	data.pending_fate_card = {}
+	save_base()
 
 ## — 蓝图系统 —
 func get_blueprint_tier(category_id: String) -> int:
@@ -167,7 +170,11 @@ func spend_extraction_points(amount: int) -> bool:
 
 ## — 保险柜物品持久化 —
 func get_vault_items() -> Array[Dictionary]:
-	return data.vault_items
+	var result: Array[Dictionary] = []
+	for item in data.vault_items:
+		if item is Dictionary:
+			result.append(item)
+	return result
 
 func set_vault_items(items: Array[Dictionary]) -> void:
 	data.vault_items = items
@@ -190,3 +197,62 @@ func remove_vault_item(index: int) -> bool:
 func _get_vault_capacity() -> int:
 	# 保险柜容量 = 默认2格 + vault_level增加
 	return 2 + data.vault_level
+
+func get_vault_capacity() -> int:
+	return _get_vault_capacity()
+
+func get_vault_free_slots() -> int:
+	return max(0, _get_vault_capacity() - data.vault_items.size())
+
+func get_pending_loadout_items() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for item in data.pending_loadout_items:
+		if item is Dictionary:
+			result.append(item.duplicate(true))
+	return result
+
+func stage_vault_item_for_loadout(vault_index: int) -> bool:
+	if vault_index < 0 or vault_index >= data.vault_items.size():
+		return false
+	var item: Dictionary = data.vault_items[vault_index]
+	if item.is_empty():
+		return false
+	data.pending_loadout_items.append(item.duplicate(true))
+	save_base()
+	return true
+
+func remove_pending_loadout_item(loadout_index: int) -> bool:
+	if loadout_index < 0 or loadout_index >= data.pending_loadout_items.size():
+		return false
+	data.pending_loadout_items.remove_at(loadout_index)
+	save_base()
+	return true
+
+func clear_pending_loadout() -> void:
+	data.pending_loadout_items.clear()
+	save_base()
+
+func consume_pending_loadout() -> Array[Dictionary]:
+	var consumed: Array[Dictionary] = []
+	for staged in data.pending_loadout_items:
+		if not (staged is Dictionary):
+			continue
+		var vault_index := _find_matching_vault_item(staged)
+		if vault_index < 0:
+			continue
+		var item: Dictionary = data.vault_items[vault_index]
+		consumed.append(item.duplicate(true))
+		data.vault_items.remove_at(vault_index)
+	data.pending_loadout_items.clear()
+	save_base()
+	return consumed
+
+func _find_matching_vault_item(target: Dictionary) -> int:
+	var target_id: String = target.get("id", "")
+	for i in data.vault_items.size():
+		var item: Dictionary = data.vault_items[i]
+		if target_id != "" and item.get("id", "") == target_id:
+			return i
+		if item == target:
+			return i
+	return -1

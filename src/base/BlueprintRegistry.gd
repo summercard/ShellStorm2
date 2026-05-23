@@ -283,7 +283,7 @@ func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
 
 	var bullet_node: AssemblyNode = create_assembly_node(bullet_id)
 	if bullet_node != null:
-		gun_node.mount(AssemblyNode.SlotType.BULLET, bullet_node)
+		tree.mount(gun_node, AssemblyNode.SlotType.BULLET, bullet_node)
 
 	return tree
 

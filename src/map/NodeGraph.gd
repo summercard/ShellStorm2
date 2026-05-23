@@ -1,4 +1,5 @@
 class_name NodeGraph
+extends RefCounted
 ## 节点图结构 — 管理房间节点列表和连接关系
 
 var _nodes: Array[RoomNode] = []
@@ -165,7 +166,7 @@ func get_deepest_node() -> RoomNode:
 	var deepest_node: RoomNode = null
 	
 	for node in _nodes:
-		var depth := _calc_depth(node.id, [])
+		var depth: int = _calc_depth(node.id, [])
 		if depth > max_depth:
 			max_depth = depth
 			deepest_node = node
@@ -203,6 +204,9 @@ func debug_print() -> String:
 	lines.append("NodeGraph [%d nodes, %d edges]" % [_nodes.size(), _edges.size()])
 	for node in _nodes:
 		var data: RoomData = node.room_data
-		var conns := ",".join(node.connections as Array[String])
+		var conn_strings: Array[String] = []
+		for conn in node.connections:
+			conn_strings.append(str(conn))
+		var conns := ",".join(conn_strings)
 		lines.append("  Node#%d [%s] pos=%v conns=[%s]" % [node.id, data.room_type, node.position, conns])
 	return "\n".join(lines)

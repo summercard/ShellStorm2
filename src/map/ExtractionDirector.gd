@@ -1,4 +1,5 @@
 class_name ExtractionDirector
+extends RefCounted
 ## 撤离点管理 — 管理各种类型的撤离点
 
 signal extraction_unlocked(extraction_type: String)
@@ -38,9 +39,11 @@ signal extraction_completed(point_id: String, player_escaped: bool)
 
 ## 添加撤离点
 func add_extraction_point(extraction_type: ExtractionType, requirements: Dictionary = {}) -> String:
-	var point_id := "extract_%d_%d" % [_extraction_points.size(), extraction_type]
+	var point_id: String = "extract_%d_%d" % [_extraction_points.size(), extraction_type]
 	var point := ExtractionPoint.new(point_id, extraction_type)
 	point.requirements = requirements
+	if extraction_type == ExtractionType.STANDARD:
+		point.is_unlocked = true
 	
 	_extraction_points.append(point)
 	return point_id

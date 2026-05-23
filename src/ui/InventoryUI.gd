@@ -250,7 +250,7 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	# 尝试加载物品图标
 	var icon_path: String = item.get("icon", "")
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
-		var tex := load(icon_path)
+		var tex: Texture2D = load(icon_path) as Texture2D
 		if slot is TextureRect:
 			(slot as TextureRect).texture = tex
 	else:

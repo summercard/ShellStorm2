@@ -1,4 +1,5 @@
 class_name RoomFactory
+extends RefCounted
 ## 房间工厂 — 将 RoomData 实例化为游戏场景节点
 
 ## 场景预制件映射（未来会从外部配置加载）
@@ -83,8 +84,11 @@ func _bind_merchant_npc(room_instance: Node2D, room_data: RoomData, inventory: I
 ## 仅用于占位符房间；真实房间场景应在场景编辑器中预置 Container 节点
 func _spawn_containers_for_room(room_instance: Node2D, room_data: RoomData, inventory: InventoryModule) -> void:
 	# 获取房间内的容器配置（来自 ContentInjector 的 inject() 结果）
-	var content_config: Dictionary = room_data.get("content_config", {})
-	var interactables: Array[Dictionary] = content_config.get("interactables", [])
+	var content_config: Dictionary = room_data.get_content_config()
+	var interactables: Array[Dictionary] = []
+	for item in content_config.get("interactables", []):
+		if item is Dictionary:
+			interactables.append(item)
 	
 	# 如果没有配置，根据房间类型生成默认容器
 	if interactables.is_empty():
@@ -164,8 +168,11 @@ func _get_scavenge_container_position(index: int, total: int) -> Vector2:
 
 ## 在改造房间中生成工作台
 func _spawn_workbench_for_room(room_instance: Node2D, room_data: RoomData, inventory: InventoryModule) -> void:
-	var content_config: Dictionary = room_data.get("content_config", {})
-	var interactables: Array[Dictionary] = content_config.get("interactables", [])
+	var content_config: Dictionary = room_data.get_content_config()
+	var interactables: Array[Dictionary] = []
+	for item in content_config.get("interactables", []):
+		if item is Dictionary:
+			interactables.append(item)
 	
 	# 查找 workbench 类型配置
 	var bench_config: Dictionary = {}
@@ -223,10 +230,12 @@ func _create_placeholder_room(room_data: RoomData) -> Node2D:
 	# 根据房间类型设置不同颜色用于调试
 	var color := _get_room_debug_color(room_data.room_type)
 	
-	# 添加一个可见的调试精灵
+	# 添加一个低透明度调试区域。注意要以房间中心为原点，
+	# 否则会出现一整块从右下角铺开的红色区域。
 	var debug_sprite := ColorRect.new()
+	debug_sprite.position = -room_data.size * 0.5
 	debug_sprite.size = room_data.size
-	debug_sprite.color = color
+	debug_sprite.color = Color(color.r, color.g, color.b, min(color.a, 0.08))
 	debug_sprite.name = "DebugRect"
 	node.add_child(debug_sprite)
 	
@@ -259,6 +268,6 @@ func get_scene_for_tags(tags: Array[String]) -> String:
 func preload_scenes() -> void:
 	for scene_path in SCENE_MAP.values():
 		if not _scene_cache.has(scene_path) and ResourceLoader.exists(scene_path):
-			var scene := load(scene_path) as PackedScene
+			var scene: PackedScene = load(scene_path) as PackedScene
 			if scene != null:
 				_scene_cache[scene_path] = scene

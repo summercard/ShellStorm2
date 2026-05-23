@@ -1,15 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://room_combat"]
+[gd_scene load_steps=2 format=3 uid="uid://room_combat"]
 
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="1_spawner"]
 
 [node name="RoomCombat" type="Node2D"]
 
-[node name="WaveSpawner" type="Node" parent=".")]
+[node name="WaveSpawner" type="Node" parent="."]
 script = ExtResource("1_spawner")
 
 [node name="SpawnMarker" type="Marker2D" parent="."]
 
-## 战斗房默认尺寸（用于放置门和UI）
+; 战斗房默认尺寸（用于放置门和UI）
 [node name="Area" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area"]

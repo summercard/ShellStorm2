@@ -1,4 +1,5 @@
 class_name ContainerInteraction
+extends Area2D
 ## 容器交互组件 — 挂在可开启的容器节点上（箱子/宝箱/补给箱等）
 ## 检测玩家接近，按E键开启，从 LootModule 生成掉落，物品入背包
 
@@ -56,7 +57,7 @@ func _setup_interaction_label() -> void:
 
 ## Area2D 玩家进入信号回调
 func _on_body_entered(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = true
 		if _state != ContainerState.LOCKED and not _opened and _interact_label:
 			_interact_label.modulate = Color(1, 1, 1, 1)
@@ -64,7 +65,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 ## Area2D 玩家离开信号回调
 func _on_body_exited(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = false
 		if _interact_label:
 			_interact_label.modulate = Color(1, 1, 1, 0)

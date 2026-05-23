@@ -57,7 +57,7 @@ func _setup_interaction_label() -> void:
 
 ## Area2D 玩家进入信号回调
 func _on_body_entered(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = true
 		_player = body
 		if _state != WorkbenchState.OPEN and _interact_label:
@@ -66,7 +66,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 ## Area2D 玩家离开信号回调
 func _on_body_exited(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = false
 		_player = null
 		if _interact_label:
@@ -162,7 +162,7 @@ func _get_weapon_tree_info() -> String:
 	if tree == null or not tree.has_method("get_tree_string"):
 		return "武器树未初始化"
 	
-	return tree.get_tree_string()
+	return tree.get_assembly_tree_string()
 
 ## 关闭工作台界面
 func _close_workbench() -> void:

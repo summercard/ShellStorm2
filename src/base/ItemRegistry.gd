@@ -1,4 +1,5 @@
 class_name ItemRegistry
+extends RefCounted
 ## 物品注册表 — 全局游戏物品定义
 ## 提供所有可获取物品的数据模板，供掉落系统、背包、商人使用
 ## 不负责堆叠/格子等运行时数据，只提供静态物品定义
@@ -59,7 +60,7 @@ func _register_weapon_modules() -> void:
 
 func _register_gunbody_tier0() -> void:
 	# 基础枪身蓝图（Tier 0，初始可用）
-	var gun_bodies := [
+	var gun_bodies: Array = [
 		{
 			"id": "bp_pistol",
 			"name": "豌豆手枪蓝图碎片",
@@ -116,7 +117,7 @@ func _register_gunbody_tier0() -> void:
 
 func _register_gunbody_tier1() -> void:
 	# 进阶枪身蓝图（Tier 1+，蓝图Tier >= 1 时可用）
-	var gun_bodies := [
+	var gun_bodies: Array = [
 		{
 			"id": "bp_rifle",
 			"name": "步枪蓝图碎片",
@@ -244,7 +245,7 @@ func _register_gunbody_tier1() -> void:
 
 ## 注册消耗品
 func _register_consumables() -> void:
-	var consumables := [
+	var consumables: Array = [
 		{
 			"id": "item_health_potion",
 			"name": "治疗药水",
@@ -282,7 +283,9 @@ func _register_consumables() -> void:
 	]
 	for c in consumables:
 		_items[c["id"]] = c
-	var bullets := [
+
+func _register_bullet_tier0() -> void:
+	var bullets: Array = [
 		{
 			"id": "mod_bullet_standard",
 			"name": "标准子弹模块",
@@ -351,7 +354,7 @@ func _register_consumables() -> void:
 		_items[b["id"]] = b
 
 func _register_bullet_tier1() -> void:
-	var bullets := [
+	var bullets: Array = [
 		{
 			"id": "mod_bullet_piercing",
 			"name": "穿甲弹模块",
@@ -455,7 +458,7 @@ func _register_bullet_tier1() -> void:
 		_items[b["id"]] = b
 
 func _register_attachment_tier0() -> void:
-	var attachments := [
+	var attachments: Array = [
 		{
 			"id": "attach_triple_muzzle",
 			"name": "三叉枪口",
@@ -503,7 +506,7 @@ func _register_attachment_tier0() -> void:
 		_items[a["id"]] = a
 
 func _register_attachment_tier1() -> void:
-	var attachments := [
+	var attachments: Array = [
 		{
 			"id": "attach_scope",
 			"name": "放大镜瞄具",

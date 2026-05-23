@@ -11,7 +11,7 @@ func _ready() -> void:
 	Global.start_game()
 
 	# 实例化 GameUIManager（独立UI系统）
-	var ui_scene := preload("res://scenes/GameUIManager.tscn")
+	var ui_scene: PackedScene = preload("res://scenes/GameUIManager.tscn")
 	ui_manager = ui_scene.instantiate()
 	add_child(ui_manager)
 
@@ -27,7 +27,7 @@ func _ready() -> void:
 	_on_currency_changed(GameManager.currency)
 
 func _spawn_player() -> void:
-	var player_scene := preload("res://scenes/Player.tscn")
+	var player_scene: PackedScene = preload("res://scenes/Player.tscn")
 	player = player_scene.instantiate()
 	var spawn_marker: Marker2D = get_node_or_null("PlayerSpawn")
 	if spawn_marker:

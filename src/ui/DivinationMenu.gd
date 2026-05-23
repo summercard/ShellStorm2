@@ -5,10 +5,10 @@ extends CanvasLayer
 ## 玩家可在局间抽卡，选定后该卡将自动应用于下一局
 ## 通过 FateCardPresets 随机生成选项，通过 FateCardGameBridge 暂存下一局卡片
 
-@onready var card_options_container: HBoxContainer = $Panel/VBox/CardOptions
-@onready var instruction_label: Label = $Panel/VBox/InstructionLabel
-@onready var skip_button: Button = $Panel/VBox/SkipButton
-@onready var selected_card_label: Label = $Panel/VBox/SelectedCardLabel
+var card_options_container: HBoxContainer
+var instruction_label: Label
+var skip_button: Button
+var selected_card_label: Label
 
 ## 暂存的下一局命运卡片
 var pending_card: FateCard = null
@@ -17,12 +17,19 @@ var pending_card: FateCard = null
 const FREE_DRAWS_PER_RUN := 1
 
 func _ready() -> void:
+	card_options_container = get_node_or_null("Panel/VBox/CardOptions")
+	instruction_label = get_node_or_null("Panel/VBox/InstructionLabel")
+	skip_button = get_node_or_null("Panel/VBox/SkipButton")
+	selected_card_label = get_node_or_null("Panel/VBox/SelectedCardLabel")
 	if skip_button:
 		skip_button.pressed.connect(_on_skip_pressed)
 	_selected_card_label_reset()
 	_draw_cards()
 
 func _draw_cards() -> void:
+	if not card_options_container:
+		push_warning("DivinationMenu: card_options_container is null, skipping _draw_cards")
+		return
 	# 清空旧选项
 	for child in card_options_container.get_children():
 		child.queue_free()
@@ -48,7 +55,7 @@ func _create_card_button(card: FateCard) -> Button:
 	
 	# 品质颜色
 	var rarity_color := FateCard.rarity_color(card.card_rarity)
-	var rarity_hex := "#%02X%02X%02X" % [
+	var rarity_hex: String = "#%02X%02X%02X" % [
 		int(rarity_color.r * 255),
 		int(rarity_color.g * 255),
 		int(rarity_color.b * 255)
@@ -62,8 +69,6 @@ func _create_card_button(card: FateCard) -> Button:
 		type_str,
 		card.description
 	]
-	btn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	btn.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	btn.add_theme_color_override("font_color", rarity_color)
 	btn.add_theme_font_size_override("font_size", 14)
 	btn.set_meta("card", card)
@@ -91,7 +96,7 @@ func _create_card_button(card: FateCard) -> Button:
 
 ## 选中了一张卡片
 func _on_card_button_pressed(card: FateCard) -> void:
-	_pending_card = card
+	pending_card = card
 	_update_selected_label(card)
 	
 	# 持久化到 BaseManager（下一局自动加载）
@@ -115,7 +120,7 @@ func _update_selected_label(card: FateCard) -> void:
 	if selected_card_label == null:
 		return
 	var color := FateCard.rarity_color(card.card_rarity)
-	var hex := "#%02X%02X%02X" % [int(color.r*255), int(color.g*255), int(color.b*255)]
+	var hex: String = "#%02X%02X%02X" % [int(color.r*255), int(color.g*255), int(color.b*255)]
 	selected_card_label.text = "已选: [%s] %s" % [FateCard.rarity_name(card.card_rarity), card.card_name]
 	selected_card_label.add_theme_color_override("font_color", color)
 	selected_card_label.visible = true

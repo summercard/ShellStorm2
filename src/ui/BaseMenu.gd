@@ -95,26 +95,24 @@ func _set_building_enabled_style(btn: Button) -> void:
 	btn.add_theme_stylebox_override("normal", style)
 
 func _on_building_divination_pressed() -> void:
-	# 动态加载 DivinationMenu 脚本以避免循环依赖
-	var menu_script: GDScript = load("res://src/ui/DivinationMenu.gd")
-	var menu: CanvasLayer = menu_script.new() as CanvasLayer
-	get_tree().get_root().add_child(menu)
+	var menu_scene: PackedScene = load("res://scenes/DivinationMenu.tscn")
+	if menu_scene:
+		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
+		get_tree().get_root().add_child(menu)
 
 func _on_building_workshop_pressed() -> void:
-	# 动态加载 WorkshopMenu 脚本
-	var menu_script: GDScript = load("res://src/ui/WorkshopMenu.gd")
-	var menu: CanvasLayer = menu_script.new() as CanvasLayer
-	get_tree().get_root().add_child(menu)
+	# 加载 WorkshopMenu 场景文件并实例化，而非直接 new() 脚本
+	var menu_scene: PackedScene = load("res://scenes/WorkshopMenu.tscn")
+	if menu_scene:
+		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
+		get_tree().get_root().add_child(menu)
 
 func _on_building_vault_pressed() -> void:
-	# 动态加载 VaultMenu 脚本
-	var menu_script: GDScript = load("res://src/ui/VaultMenu.gd")
-	var menu: CanvasLayer = menu_script.new() as CanvasLayer
-	get_tree().get_root().add_child(menu)
+	var menu_scene: PackedScene = load("res://scenes/VaultMenu.tscn")
+	if menu_scene:
+		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
+		get_tree().get_root().add_child(menu)
 
 func _on_start_pressed() -> void:
-	# 记录本局开始（总局数+1）
-	if BaseManager != null:
-		BaseManager.record_run(false, 0)
 	# 清理基地界面，过渡到游戏主场景
 	get_tree().change_scene_to_file("res://scenes/Main.tscn")

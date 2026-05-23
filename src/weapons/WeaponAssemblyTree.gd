@@ -120,6 +120,9 @@ func get_computed_stats() -> Dictionary:
 func _get_tree_string() -> String:
 	return root.get_path_string() if root != null else "(empty)"
 
+func get_assembly_tree_string() -> String:
+	return _get_tree_string()
+
 ## ========== 射击接口（从 WeaponCore 迁移过来的逻辑）==========
 
 ## 主射击方法 — 带世界坐标（用于枪口偏移）
@@ -180,6 +183,7 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
+		_add_projectile_to_world(bullet)
 		if bullet.has_method("fire"):
 			bullet.fire(spawn_pos, direction, BASE_BULLET_SPEED * bullet_speed, final_damage, is_crit)
 		# 检查子弹节点是否有挂载枪（命运卡片"子弹背枪"机制）
@@ -187,7 +191,6 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 		var attached_gun: AssemblyNode = _find_bullet_attached_gun()
 		if attached_gun != null and bullet.has_method("set_attached_gun"):
 			bullet.set_attached_gun(attached_gun)
-		get_tree().root.add_child(bullet)
 
 	# 处理枪上加枪：主枪开火时副枪也跟随射击
 	_fire_co_mounted_gun(spawn_pos, direction)
@@ -252,11 +255,21 @@ func _spawn_bullet_from_co_gun(spawn_pos: Vector2, direction: Vector2, damage: i
 			var spread_angle := _calculate_spread(i)
 			var spawn_dir := direction.rotated(spread_angle)
 			var bullet = bullet_scene.instantiate()
+			_add_projectile_to_world(bullet)
 			if bullet.has_method("fire"):
 				bullet.fire(spawn_pos, spawn_dir, BASE_BULLET_SPEED * bullet_speed, damage, false)
-			get_tree().root.add_child(bullet)
 
 ## 换弹
+
+func _add_projectile_to_world(projectile: Node) -> void:
+	var tree := get_tree()
+	if tree == null:
+		return
+	var parent := tree.current_scene
+	if parent == null:
+		parent = tree.root
+	parent.add_child(projectile)
+
 func start_reload() -> void:
 	"""开始换弹"""
 	if _is_reloading or current_ammo == magazine_size:
@@ -283,7 +296,7 @@ func _apply_stats(stats: Dictionary) -> void:
 	spread = stats.get("spread", 0.0)
 	# 子弹自有属性（从 BULLET 节点透传上来）
 	bullet_damage = stats.get("bullet_damage", 5)
-	bullet_speed = stats.get("bullet_speed", 600.0)
+	bullet_speed = stats.get("bullet_speed", 1.0)
 	current_ammo = magazine_size  # 重置弹药
 
 ## 获取武器信息（调试用）
@@ -296,7 +309,7 @@ func get_weapon_info() -> Dictionary:
 		"ammo": "%d/%d" % [current_ammo, magazine_size],
 		"damage": root.get_computed_stats().get("damage", 10) if root != null else 0,
 		"reloading": _is_reloading,
-		"tree_string": get_tree_string(),
+		"tree_string": get_assembly_tree_string(),
 	}
 
 ## 获取调试信息
@@ -307,7 +320,7 @@ func get_debug_info() -> Dictionary:
 		"max_depth": get_max_depth(),
 		"node_count": _node_registry.size(),
 		"computed_stats": root.get_computed_stats(),
-		"tree_string": get_tree_string(),
+		"tree_string": get_assembly_tree_string(),
 		"root_info": root.get_debug_info(),
 	}
 

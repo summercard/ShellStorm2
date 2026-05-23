@@ -179,7 +179,7 @@ static func build_rifle() -> WeaponAssemblyTree:
 	var gun := gun_rifle()
 	var bul := bullet_standard()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
 	return tree
 
 ## 手枪 + 穿甲子弹
@@ -188,7 +188,7 @@ static func build_pistol_piercing() -> WeaponAssemblyTree:
 	var gun := gun_pistol()
 	var bul := bullet_piercing()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
 	return tree
 
 ## 霰弹枪 + 爆炸弹
@@ -197,7 +197,7 @@ static func build_shotgun_explosive() -> WeaponAssemblyTree:
 	var gun := gun_shotgun()
 	var bul := bullet_explosive()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
 	return tree
 
 ## 冲锋枪 + 高速弹
@@ -206,7 +206,7 @@ static func build_smg_hyper() -> WeaponAssemblyTree:
 	var gun := gun_smg()
 	var bul := bullet_hyper()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
 	return tree
 
 ## 狙击枪 + 穿甲弹（带枪口制动器）
@@ -216,8 +216,8 @@ static func build_sniper() -> WeaponAssemblyTree:
 	var bul := bullet_piercing()
 	var att := att_muzzle_brake()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
-	gun.mount(AssemblyNode.SlotType.MUZZLE, att)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.MUZZLE, att)
 	return tree
 
 ## 榴弹发射器 + 爆炸弹
@@ -226,7 +226,7 @@ static func build_launcher() -> WeaponAssemblyTree:
 	var gun := gun_launcher()
 	var bul := bullet_explosive()
 	tree.set_root(gun)
-	gun.mount(AssemblyNode.SlotType.BULLET, bul)
+	tree.mount(gun, AssemblyNode.SlotType.BULLET, bul)
 	return tree
 
 ## ========== 预设注册表（用于武器切换）==========

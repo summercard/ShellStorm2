@@ -28,7 +28,11 @@ func _setup_ghost_container() -> void:
 	_ghost_container = Node2D.new()
 	_ghost_container.name = "GhostContainer"
 	_ghost_container.z_index = -1
-	get_parent().add_child(_ghost_container)
+	var world_parent: Node = get_parent()
+	var tree := get_tree()
+	if tree != null and tree.current_scene != null:
+		world_parent = tree.current_scene
+	world_parent.add_child.call_deferred(_ghost_container)
 
 ## 监听 Player 闪避信号
 func _setup_dash_signals() -> void:
@@ -59,34 +63,27 @@ func _spawn_ghost() -> void:
 	if not player:
 		return
 	
-	# 从父节点（Player）查找 Shape 节点
-	var shape: Node = player.get_node_or_null("Body/Shape")
-	if not shape or not (shape is ColorRect):
+	# 优先复制程序 emoji；没有 emoji 时再退回 ColorRect 占位形状。
+	var source: CanvasItem = player.get_node_or_null("Body/Emoji") as CanvasItem
+	if source == null:
+		source = player.get_node_or_null("Body/Shape") as CanvasItem
+	if source == null:
 		return
-	
-	# 创建一个 ghost Shape 副本
-	var ghost := ColorRect.new()
-	ghost.name = "GhostShape"
-	ghost.anchor_right = 0.0
-	ghost.anchor_bottom = 0.0
-	ghost.offset_left = shape.offset_left
-	ghost.offset_top = shape.offset_top
-	ghost.offset_right = shape.offset_right
-	ghost.offset_bottom = shape.offset_bottom
-	ghost.color = shape.color
-	ghost.modulate = Color(shape.color.r, shape.color.g, shape.color.b, GHOST_ALPHA)
-	
-	# 残影位置跟随玩家
-	var world_pos: Vector2 = player.global_position
-	ghost.global_position = world_pos + shape.position
+
+	var ghost: CanvasItem = source.duplicate() as CanvasItem
+	if ghost == null:
+		return
+	ghost.name = "GhostVisual"
+	ghost.modulate = Color(1.0, 1.0, 1.0, GHOST_ALPHA)
 	ghost.z_index = player.z_index - 1
 	
 	_ghost_container.add_child(ghost)
+	ghost.global_position = source.global_position
 	
 	# 残影动画：快速淡出
 	var t := ghost.create_tween()
 	t.set_parallel(true)
-	t.tween_property(ghost, "mod:a", 0.0, GHOST_LIFETIME).set_trans(Tween.TRANS_QUAD)
+	t.tween_property(ghost, "modulate:a", 0.0, GHOST_LIFETIME).set_trans(Tween.TRANS_QUAD)
 	t.chain().tween_callback(ghost.queue_free)
 	
 	# 控制残影总数量

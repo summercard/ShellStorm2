@@ -33,13 +33,13 @@ class ApplyResult:
 static func apply_card_to_player(card: FateCard) -> ApplyResult:
 	# 查找玩家节点
 	var player: Node = null
-	var tree := Engine.get_main_loop()
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree != null and tree.get_root() != null:
 		player = tree.get_root().get_node_or_null("Player")
 	if player == null:
 		player = tree.get_root().get_first_node_in_group("player") if tree and tree.get_root() else null
 	if player == null or not player.has_method("get_weapon_tree"):
-		var result := ApplyResult.new()
+		var result: ApplyResult = ApplyResult.new()
 		result.success = false
 		result.error = ApplyError.TARGET_INVALID
 		result.message = "Player node not found in scene tree"
@@ -47,7 +47,7 @@ static func apply_card_to_player(card: FateCard) -> ApplyResult:
 
 	var weapon_tree: WeaponAssemblyTree = player.get_weapon_tree()
 	if weapon_tree == null:
-		var result := ApplyResult.new()
+		var result: ApplyResult = ApplyResult.new()
 		result.success = false
 		result.error = ApplyError.TARGET_INVALID
 		result.message = "Player weapon tree not initialized"
@@ -59,7 +59,7 @@ static func apply_card_to_player(card: FateCard) -> ApplyResult:
 ## 应用一张卡片到装配树
 ## 返回 ApplyResult
 static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: Array[AssemblyNode] = []) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 
 	if card == null or tree == null:
 		result.error = ApplyError.TARGET_INVALID
@@ -76,7 +76,7 @@ static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: A
 		return result
 
 	# 根据 EffectAction 执行
-	var action = card.effect.get("action", -1)
+	var action: int = int(card.effect.get("action", -1))
 	match action:
 		-1:
 			result.error = ApplyError.APPLY_FAILED
@@ -117,7 +117,7 @@ static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: A
 
 ## 自动选择目标节点（基于 card.target_rules）
 static func _auto_select_targets(card: FateCard, tree: WeaponAssemblyTree) -> Array[AssemblyNode]:
-	var root := tree.get_root()
+	var root: AssemblyNode = tree.get_root()
 	if root == null:
 		return []
 
@@ -128,9 +128,11 @@ static func _auto_select_targets(card: FateCard, tree: WeaponAssemblyTree) -> Ar
 		candidates.append(root)
 	else:
 		for rule in card.target_rules:
-			var select: String = rule.get("select", "")
-			var required_tags: Array = rule.get("requiredTags", [])
-			var matched := _find_nodes_by_selector(root, select, required_tags)
+			var select: String = str(rule.get("select", ""))
+			var required_tags: Array[String] = []
+			for tag in rule.get("requiredTags", []):
+				required_tags.append(str(tag))
+			var matched: Array[AssemblyNode] = _find_nodes_by_selector(root, select, required_tags)
 			for node in matched:
 				if not candidates.has(node):
 					candidates.append(node)
@@ -141,7 +143,7 @@ static func _auto_select_targets(card: FateCard, tree: WeaponAssemblyTree) -> Ar
 ## 根据选择器查找节点
 static func _find_nodes_by_selector(root: AssemblyNode, select: String, required_tags: Array[String]) -> Array[AssemblyNode]:
 	var results: Array[AssemblyNode] = []
-	var descendants := root.get_all_descendants()
+	var descendants: Array[AssemblyNode] = root.get_all_descendants()
 	descendants.append(root)  # 包含根节点
 
 	var node_type_filter := -1
@@ -172,8 +174,8 @@ static func _node_has_all_tags(node: AssemblyNode, tags: Array[String]) -> bool:
 ## ===== 效果执行：ATTACH_GUN_TO_BULLET =====
 ## 子弹上挂枪身，子弹飞行时会携带枪并自动射击
 static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
-	var root := tree.get_root()
+	var result: ApplyResult = ApplyResult.new()
+	var root: AssemblyNode = tree.get_root()
 	var modified: Array[AssemblyNode] = []
 
 	# 找第一个子弹节点作为子弹
@@ -185,7 +187,7 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 
 	if bullet_node == null:
 		# 自动找一个子弹
-		var descendants := root.get_all_descendants()
+		var descendants: Array[AssemblyNode] = root.get_all_descendants()
 		for d in descendants:
 			if d.node_type == AssemblyNode.NodeType.BULLET:
 				bullet_node = d
@@ -197,7 +199,7 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 		return result
 
 	# 创建新枪身节点
-	var attached_gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "AttachedGun_" + card.card_id)
+	var attached_gun: AssemblyNode = AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "AttachedGun_" + card.card_id)
 	var damage_scale: float = card.effect.get("damage_scale", 0.5)
 	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 0.6)
 	attached_gun.set_base_stats({
@@ -213,7 +215,7 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 		result.message = "Bullet mount slot already occupied"
 		return result
 
-	var ok := tree.mount(bullet_node, AssemblyNode.SlotType.MOUNT, attached_gun)
+	var ok: bool = tree.mount(bullet_node, AssemblyNode.SlotType.MOUNT, attached_gun)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount gun to bullet"
@@ -231,7 +233,7 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 ## ===== 效果执行：ATTACH_TO_MOUNT =====
 ## 挂载任意节点到目标槽位
 static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -249,7 +251,6 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 
 	if card.card_type == FateCard.CardType.COMBINE:
 		# 组合类：创建一个匹配的子节点
-		var node_type: int = AssemblyNode.NodeType.ATTACHMENT
 		if action_str == "ATTACH_TO_MOUNT":
 			# 默认创建附件节点
 			child_node = AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id)
@@ -266,7 +267,7 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 		result.message = "Target slot %s already occupied" % AssemblyNode.SlotType.keys()[slot_type]
 		return result
 
-	var ok := tree.mount(target, slot_type, child_node)
+	var ok: bool = tree.mount(target, slot_type, child_node)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount node"
@@ -284,8 +285,8 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 ## 实现：找到一个 GUN_BODY 节点作为主枪，在其 MOUNT 槽挂载一个副枪身
 ## 副枪的射击通过 WeaponAssemblyTree._fire_co_mounted_gun() 实现
 static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
-	var root := tree.get_root()
+	var result: ApplyResult = ApplyResult.new()
+	var root: AssemblyNode = tree.get_root()
 
 	# 找主枪身节点（优先选 targets 中的 GUN_BODY，否则找根节点或第一个 GUN_BODY）
 	var main_gun: AssemblyNode = null
@@ -299,7 +300,7 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 		if root != null and root.node_type == AssemblyNode.NodeType.GUN_BODY:
 			main_gun = root
 		else:
-			var descendants := root.get_all_descendants()
+			var descendants: Array[AssemblyNode] = root.get_all_descendants()
 			for d in descendants:
 				if d.node_type == AssemblyNode.NodeType.GUN_BODY:
 					main_gun = d
@@ -322,7 +323,7 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 	var follow_probability: float = card.effect.get("follow_probability", 1.0)  # 跟随射击概率
 
 	# 创建副枪身节点
-	var secondary_gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id)
+	var secondary_gun: AssemblyNode = AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id)
 	secondary_gun.set_base_stats({
 		"damage": int(10 * damage_scale),
 		"fire_rate": 4.0 * fire_rate_scale,
@@ -331,7 +332,7 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 	secondary_gun.tags = ["Fate.SecondaryGun", card.card_id, "Fate.GunOnGun"]
 
 	# 将副枪挂载到主枪的 MOUNT 槽
-	var ok := tree.mount(main_gun, AssemblyNode.SlotType.MOUNT, secondary_gun)
+	var ok: bool = tree.mount(main_gun, AssemblyNode.SlotType.MOUNT, secondary_gun)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Failed to mount secondary gun"
@@ -347,7 +348,7 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 ## ===== 效果执行：SCALE_NODE =====
 ## 缩放节点
 static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
@@ -358,7 +359,7 @@ static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets:
 	var speed_multiplier: float = card.effect.get("speed_multiplier", 1.0)
 
 	# 在 base_stats 中记录缩放因子
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["fate_scale"] = scale
 	stats["damage"] = stats.get("damage", 10) + damage_bonus
 	stats["speed"] = stats.get("speed", 1.0) * speed_multiplier
@@ -375,14 +376,14 @@ static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets:
 ## ===== 效果执行：MULTIPLY_FIRE_RATE =====
 ## 射速倍率
 static func _apply_multiply_fire_rate(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
 
 	var target: AssemblyNode = targets[0]
 	var multiplier: float = card.effect.get("multiplier", 1.5)
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["fire_rate_multiplier"] = multiplier
 	stats["fire_rate"] = stats.get("fire_rate", 4.0) * multiplier
 	target.set_base_stats(stats)
@@ -398,7 +399,7 @@ static func _apply_multiply_fire_rate(card: FateCard, tree: WeaponAssemblyTree, 
 ## ===== 效果执行：ADD_DAMAGE =====
 ## 增加伤害
 static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
@@ -406,7 +407,7 @@ static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets:
 	var target: AssemblyNode = targets[0]
 	var damage_bonus: int = card.effect.get("damage_bonus", 5)
 	var pierce_level: int = card.effect.get("pierce_level", 0)
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["damage"] = stats.get("damage", 10) + damage_bonus
 	if pierce_level > 0:
 		stats["pierce_level"] = pierce_level
@@ -423,7 +424,7 @@ static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets:
 ## ===== 效果执行：MUTATE_TO_HOMING =====
 ## 子弹变追踪弹
 static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
@@ -433,7 +434,7 @@ static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, ta
 	var speed_penalty: float = card.effect.get("speed_penalty", 0.2)
 	var return_to_player: bool = card.effect.get("return_to_player", false)
 
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["homing"] = true
 	stats["homing_strength"] = homing_strength
 	stats["speed"] = stats.get("speed", 1.0) * (1.0 - speed_penalty)
@@ -455,7 +456,7 @@ static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, ta
 ## ===== 效果执行：EVERY_NTH_FIRE =====
 ## 每第N发触发特殊效果
 static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
@@ -464,7 +465,7 @@ static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targ
 	var nth: int = card.effect.get("nth", 7)
 	var attach_gun: bool = card.effect.get("attach_gun", true)
 
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["every_nth_fire"] = nth
 	stats["every_nth_attach_gun"] = attach_gun
 	target.set_base_stats(stats)
@@ -480,14 +481,14 @@ static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targ
 ## ===== 效果执行：CRIT_ON_KILL =====
 ## 击杀必暴击
 static func _apply_crit_on_kill(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
 
 	var target: AssemblyNode = targets[0]
 	var crit_mult: float = card.effect.get("crit_damage_multiplier", 2.5)
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["crit_on_kill"] = true
 	stats["crit_damage_multiplier"] = crit_mult
 	target.set_base_stats(stats)
@@ -502,20 +503,19 @@ static func _apply_crit_on_kill(card: FateCard, tree: WeaponAssemblyTree, target
 
 ## ===== 效果执行：SCALE_UP（视觉类）=====
 static func _apply_scale_up(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
 	return _apply_scale_node(card, tree, targets)
 
 
 ## ===== 效果执行：ADD_EYES（视觉类）=====
 static func _apply_add_eyes(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
 
 	var target: AssemblyNode = targets[0]
 	var eye_count: int = card.effect.get("eye_count", 2)
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["visual_eyes"] = eye_count
 	stats["visual_has_eyes"] = true
 	target.set_base_stats(stats)
@@ -530,13 +530,13 @@ static func _apply_add_eyes(card: FateCard, tree: WeaponAssemblyTree, targets: A
 
 ## ===== 效果执行：ADD_LEGS（视觉类）=====
 static func _apply_add_legs(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
-	var result := ApplyResult.new()
+	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
 		return result
 
 	var target: AssemblyNode = targets[0]
-	var stats := target.get_base_stats()
+	var stats: Dictionary = target.get_base_stats()
 	stats["visual_has_legs"] = true
 	stats["visual_leg_count"] = card.effect.get("leg_count", 4)
 	target.set_base_stats(stats)

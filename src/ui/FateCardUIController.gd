@@ -4,9 +4,9 @@ extends Control
 # 管理卡片选择界面的显示/隐藏、卡片列表、选中逻辑
 
 ## 引用
-@onready var card_container: HBoxContainer = $CardPanel/VBox/CardsContainer
-@onready var card_panel: Panel = $CardPanel
-@onready var instruction_label: Label = $CardPanel/VBox/InstructionLabel
+var card_container: HBoxContainer
+var card_panel: Panel
+var instruction_label: Label
 
 ## 预制卡片样式（用于动态创建卡片按钮）
 const CARD_SCENE = null  # res://scenes/FateCardButton.tscn (占位，等UI面板实现)

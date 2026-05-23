@@ -1,4 +1,5 @@
 class_name PathDirector
+extends RefCounted
 ## 路径与门管理 — 管理房间之间的连接和门的开关状态
 
 signal door_opened(from_room: String, to_room: String)

@@ -2,93 +2,77 @@ extends Node2D
 class_name WeaponController
 
 # WeaponController.gd — 武器射击控制
-# 挂载在 Player 下，接收输入并调用 WeaponAssemblyTree 射击
-# T03: 重构使用 WeaponAssemblyTree.fire_from(muzzle_pos, dir) 接口
+# 挂载在 Player 下，接收输入并调用 WeaponAssemblyTree 射击。
 
 @onready var player: CharacterBody2D = get_parent()
 
-## 武器装配树引用（从 Player 获取）
 var weapon_tree: WeaponAssemblyTree = null
-
-## 枪口闪光引用
 var _muzzle_flash: PointLight2D = null
-
-## 后坐力控制器引用
 var _recoil: Node = null
-
-## 本地冷却计时器（委托给 weapon_tree.tick 更新）
-var fire_cooldown: float = 0.0
-
-## 音频管理器引用
 var _audio: AudioManager = null
 
 func _ready() -> void:
-	# 从 Player 获取 weapon_tree
-	if player and player.has_method("get_weapon_tree"):
-		weapon_tree = player.get_weapon_tree()
-	# 获取枪口闪光节点
+	_refresh_weapon_tree()
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
-	# 获取后坐力控制器
 	_recoil = get_node_or_null("WeaponRecoil")
 	if _recoil != null and not (_recoil is WeaponRecoil):
 		push_warning("[WeaponController] WeaponRecoil node found but type mismatch, ignoring")
 		_recoil = null
-	# 获取音频管理器
 	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 
 func _process(delta: float) -> void:
-	# 更新 weapon_tree 的冷却（内部会处理 _fire_cooldown）
+	if weapon_tree == null or not is_instance_valid(weapon_tree):
+		_refresh_weapon_tree()
 	if weapon_tree:
 		weapon_tree.tick(delta)
-
-	# 检查射击输入
 	if Input.is_action_pressed("shoot"):
-		# WeaponAssemblyTree 内部已处理自己的冷却
-		if weapon_tree and weapon_tree._fire_cooldown <= 0:
+		if weapon_tree == null:
+			fire()
+		elif weapon_tree._fire_cooldown <= 0.0:
 			fire()
 
-func fire() -> void:
-	# 从枪口位置发射
-	var aim_dir = player.get_aim_direction() if player.has_method("get_aim_direction") else Vector2.RIGHT
-	var muzzle_pos = player.global_position + aim_dir * 35.0
+func _refresh_weapon_tree() -> void:
+	if player and player.has_method("get_weapon_tree"):
+		weapon_tree = player.get_weapon_tree()
 
+func fire() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	var aim_dir: Vector2 = player.get_aim_direction() if player.has_method("get_aim_direction") else Vector2.RIGHT
+	var muzzle_pos: Vector2 = player.global_position + aim_dir * 35.0
+	var fired := false
 	if weapon_tree:
 		var prev_ammo: int = weapon_tree.current_ammo
-		weapon_tree.fire_from(muzzle_pos, aim_dir)
-		# 弹药减少时（成功射击）播放音效
-		if weapon_tree.current_ammo < prev_ammo and _audio:
+		fired = weapon_tree.fire_from(muzzle_pos, aim_dir)
+		if fired and weapon_tree.current_ammo < prev_ammo and _audio:
 			_audio.play_fire_sfx(weapon_tree.fire_rate, weapon_tree.projectile_count)
 	else:
-		# Fallback: 无装配树时直接生成子弹（不应该发生）
 		_spawn_bullet_fallback(muzzle_pos, aim_dir)
-
-	# 触发枪口闪光
-	_trigger_muzzle_flash()
-
-	# 触发后坐力动画（从 weapon_tree 根节点获取 tags）
-	if _recoil and weapon_tree:
-		var root_tags: Array[String] = []
-		if weapon_tree.get_root():
-			root_tags = weapon_tree.get_root().tags
-		_recoil.trigger(root_tags)
+		fired = true
+	if fired:
+		_trigger_muzzle_flash()
+		if _recoil and weapon_tree:
+			var root_tags: Array[String] = []
+			if weapon_tree.get_root():
+				root_tags = weapon_tree.get_root().tags
+			_recoil.trigger(root_tags)
 
 func _trigger_muzzle_flash() -> void:
 	if _muzzle_flash:
 		_muzzle_flash.visible = true
-		# 快速闪烁消失
+		_muzzle_flash.global_position = player.global_position + player.get_aim_direction() * 38.0
 		var tween := _muzzle_flash.create_tween()
-		tween.tween_property(_muzzle_flash, "visible", false, 0.06)
+		tween.tween_property(_muzzle_flash, "visible", false, 0.055)
 
 func get_fire_rate() -> float:
 	if weapon_tree:
 		return weapon_tree.fire_rate
 	return 4.0
 
-## Fallback bullet spawn when weapon_tree is null (should not happen normally)
 func _spawn_bullet_fallback(spawn_pos: Vector2, direction: Vector2) -> void:
 	var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
+		get_tree().current_scene.add_child(bullet)
 		if bullet.has_method("fire"):
-			bullet.fire(spawn_pos, direction, 600.0, 5, false)
-		get_tree().root.add_child(bullet)
+			bullet.fire(spawn_pos, direction, 650.0, 8, false)

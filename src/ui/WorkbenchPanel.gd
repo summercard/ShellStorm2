@@ -5,13 +5,13 @@ extends Control
 ## 展示当前武器装配树、可选枪身/子弹/配件
 ## 允许玩家重新选择和装配武器
 
-@onready var panel_container: PanelContainer = $PanelContainer
-@onready var title_label: Label = $PanelContainer/VBox/TitleLabel
-@onready var weapon_tree_label: Label = $PanelContainer/VBox/WeaponTreeLabel
-@onready var gunbody_options: VBoxContainer = $PanelContainer/VBox/GunbodyPanel/VBox
-@onready var bullet_options: VBoxContainer = $PanelContainer/VBox/BulletPanel/VBox
-@onready var status_label: Label = $PanelContainer/VBox/StatusLabel
-@onready var close_button: Button = $PanelContainer/VBox/CloseButton
+@onready var panel_container: PanelContainer
+@onready var title_label: Label
+@onready var weapon_tree_label: Label
+@onready var gunbody_options: VBoxContainer
+@onready var bullet_options: VBoxContainer
+@onready var status_label: Label
+@onready var close_button: Button
 
 var _player: Node = null
 var _workbench_ref: Node = null
@@ -70,8 +70,8 @@ func _update_weapon_tree_display() -> void:
 	
 	if _player and _player.has_method("get_weapon_tree"):
 		var tree: Node = _player.get_weapon_tree()
-		if tree != null and tree.has_method("get_tree_string"):
-			weapon_tree_label.text = "当前武器:\n" + tree.get_tree_string()
+		if tree != null and tree.has_method("get_assembly_tree_string"):
+			weapon_tree_label.text = "当前武器:\n" + tree.get_assembly_tree_string()
 		elif tree != null and tree.has_method("get_weapon_info"):
 			var info: Dictionary = tree.get_weapon_info()
 			weapon_tree_label.text = "当前武器:\n射速:%.1f 弹丸:%d 扩散:%.2f\n弹药:%s" % [

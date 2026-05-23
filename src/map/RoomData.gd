@@ -1,4 +1,5 @@
 class_name RoomData
+extends RefCounted
 ## 房间数据 — 描述单个房间的类型、属性和标签
 
 enum RoomType {
@@ -29,6 +30,13 @@ var floor: int = 1  # 所在层
 var position: Vector2 = Vector2.ZERO  # 在节点图中的坐标
 var tags: Array[String] = []  # 房间标签，用于内容注入
 var size: Vector2 = Vector2(800, 600)  # 默认房间尺寸
+var content_config: Dictionary = {
+	"enemies": [],
+	"loot": [],
+	"events": [],
+	"interactables": [],
+	"special_conditions": [],
+}
 
 func _init(type: RoomType = RoomType.COMBAT, p_floor: int = 1):
 	room_type = type
@@ -83,6 +91,32 @@ func add_tag(tag: String) -> void:
 ## 是否有特定标签
 func has_tag(tag: String) -> bool:
 	return tag in tags
+
+## 设置由 ContentInjector 生成的房间内容配置
+func set_content_config(config: Dictionary) -> void:
+	content_config = {
+		"enemies": _duplicate_dictionary_array(config.get("enemies", [])),
+		"loot": _duplicate_dictionary_array(config.get("loot", [])),
+		"events": _duplicate_dictionary_array(config.get("events", [])),
+		"interactables": _duplicate_dictionary_array(config.get("interactables", [])),
+		"special_conditions": config.get("special_conditions", []).duplicate(),
+	}
+
+func get_content_config() -> Dictionary:
+	return {
+		"enemies": _duplicate_dictionary_array(content_config.get("enemies", [])),
+		"loot": _duplicate_dictionary_array(content_config.get("loot", [])),
+		"events": _duplicate_dictionary_array(content_config.get("events", [])),
+		"interactables": _duplicate_dictionary_array(content_config.get("interactables", [])),
+		"special_conditions": content_config.get("special_conditions", []).duplicate(),
+	}
+
+func _duplicate_dictionary_array(values: Array) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for value in values:
+		if value is Dictionary:
+			result.append(value.duplicate(true))
+	return result
 
 ## 房间危险等级（用于UI显示）
 func danger_level() -> int:

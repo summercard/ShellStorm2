@@ -29,13 +29,21 @@ func _connect_to_player() -> void:
 		if main != null and main.has_node("Player"):
 			player = main.get_node("Player")
 	if player != null and player.has_method("get_weapon_tree"):
-		_player_weapon_tree = player.get_weapon_tree()
-		if _player_weapon_tree != null:
-			_player_weapon_tree.tree_changed.connect(_on_tree_changed)
-		else:
+		set_player(player)
+		if _player_weapon_tree == null:
 			push_warning("[FateCardGameBridge] Player found but weapon tree is null (weapon may not be initialized yet)")
-	else:
-		push_warning("[FateCardGameBridge] Player node not found during _connect_to_player()")
+
+func set_player(player: Node) -> void:
+	if player == null or not player.has_method("get_weapon_tree"):
+		return
+	var weapon_tree: WeaponAssemblyTree = player.get_weapon_tree()
+	if weapon_tree == null:
+		return
+	if _player_weapon_tree != null and _player_weapon_tree.tree_changed.is_connected(_on_tree_changed):
+		_player_weapon_tree.tree_changed.disconnect(_on_tree_changed)
+	_player_weapon_tree = weapon_tree
+	if not _player_weapon_tree.tree_changed.is_connected(_on_tree_changed):
+		_player_weapon_tree.tree_changed.connect(_on_tree_changed)
 
 ## 实例方法：实际应用卡片
 func apply_card_instance(card: FateCard) -> Dictionary:
@@ -96,4 +104,3 @@ func _on_tree_changed() -> void:
 
 func _to_string() -> String:
 	return "[FateCardGameBridge: cards=%d]" % applied_cards.size()
-

@@ -67,24 +67,24 @@ func _kill_current_tween() -> void:
 ## 带动画的显示面板
 func _show_panel_animated() -> void:
 	_kill_current_tween()
-	visible_ratio = 0.0
-	modulate = Color(1, 1, 1, 1.0)
+	visible = true
+	modulate = Color(1, 1, 1, 0.0)
 	_current_tween = create_tween()
 	_current_tween.set_parallel(false)
-	_current_tween.tween_property(self, "visible_ratio", 1.0, _tween_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_current_tween.tween_property(self, "modulate:a", 1.0, _tween_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 ## 带动画的隐藏面板（淡出后触发 closed 信号）
 func _hide_panel_animated() -> void:
 	_kill_current_tween()
 	_current_tween = create_tween()
 	_current_tween.set_parallel(false)
-	_current_tween.tween_property(self, "visible_ratio", 0.0, _tween_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_current_tween.tween_property(self, "modulate:a", 0.0, _tween_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	_current_tween.finished.connect(_on_hide_animation_finished)
 
 func _on_hide_animation_finished() -> void:
 	_current_tween = null
 	# 确保面板完全隐藏
-	visible_ratio = 0.0
+	visible = false
 
 ## 关闭按钮 + Esc 关闭
 func _input(event: InputEvent) -> void:
@@ -237,7 +237,7 @@ func _on_slot_clicked(slot_index: int) -> void:
 func _on_currency_changed(amount: int) -> void:
 	_currency = amount
 	_refresh_affordability()
-	var currency_lbl := get_node_or_null("CurrencyLabel") as Label
+	var currency_lbl: Label = get_node_or_null("CurrencyLabel") as Label
 	if currency_lbl:
 		currency_lbl.text = "魂: %d" % amount
 
@@ -282,4 +282,5 @@ func _set_panel_visibility(visible: bool) -> void:
 
 func _hide_panel() -> void:
 	# 旧方法保留，MerchantInteraction 内部使用
-	visible_ratio = 0.0
+	modulate.a = 0.0
+	visible = false

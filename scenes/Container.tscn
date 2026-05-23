@@ -2,8 +2,11 @@
 
 [ext_resource type="Script" path="res://src/game/ContainerInteraction.gd" id="1_container"]
 
-## 容器场景 — 可开启的箱子/宝箱/补给箱
-## 挂在 Area2D 上检测玩家接近，按 interact 键开启
+; 容器场景 — 可开启的箱子/宝箱/补给箱
+; 挂在 Area2D 上检测玩家接近，按 interact 键开启
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_area"]
+radius = 45.0
 
 [node name="Container" type="Area2D"]
 collision_layer = 0
@@ -16,7 +19,10 @@ shape = SubResource("CircleShape2D_area")
 
 [node name="Sprite" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(40, 40)
-offset = Vector2(-20, -20)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
 color = Color(0.7, 0.6, 0.2, 0.85)
 
 [node name="InteractLabel" type="Label" parent="."]
@@ -31,6 +37,3 @@ grow_horizontal = 2
 text = "[E] 开启"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_area"]
-radius = 45.0

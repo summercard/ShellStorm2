@@ -1,4 +1,5 @@
 class_name MonsterInjector
+extends RefCounted
 ## 怪物注入器 — 根据房间类型和层级生成怪物配置
 
 ## 怪物基础类型配置

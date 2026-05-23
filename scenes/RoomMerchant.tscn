@@ -2,26 +2,33 @@
 
 [ext_resource type="Script" path="res://src/game/MerchantInteraction.gd" id="1_merchant"]
 
-## 商人房间 — 商人NPC站在房间中央，玩家可与其交易
+; 商人房间 — 商人NPC站在房间中央，玩家可与其交易
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_area"]
+radius = 60.0
 
 [node name="RoomMerchant" type="Node2D"]
 
-## 商人NPC碰撞检测区域
+; 商人NPC碰撞检测区域
 [node name="MerchantArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 2
 monitorable = true
+script = ExtResource("1_merchant")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="MerchantArea"]
 shape = SubResource("CircleShape2D_area")
 
-## 商人NPC视觉节点（简单矩形代表商人）
+; 商人NPC视觉节点（简单矩形代表商人）
 [node name="Sprite" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(50, 60)
-offset = Vector2(-25, -30)
+offset_left = -25.0
+offset_top = -30.0
+offset_right = 25.0
+offset_bottom = 30.0
 color = Color(0.9, 0.85, 0.3, 0.9)
 
-## 交互提示标签
+; 交互提示标签
 [node name="InteractLabel" type="Label" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
@@ -34,6 +41,3 @@ grow_horizontal = 2
 text = "[E] 交易"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_area"]
-radius = 60.0

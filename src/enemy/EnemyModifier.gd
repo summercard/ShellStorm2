@@ -29,8 +29,10 @@ class HugeModifier:
 	func apply(enemy_node: Node) -> void:
 		if enemy_node.has_method("apply_scale"):
 			enemy_node.apply_scale(1.5 + tier * 0.25)
-		if enemy_node.has_property("max_hp"):
-			enemy_node.max_hp = int(enemy_node.max_hp * (1.3 + tier * 0.1))
+		var hp_value = enemy_node.get("max_hp")
+		if hp_value != null:
+			enemy_node.set("max_hp", int(hp_value * (1.3 + tier * 0.1)))
+			enemy_node.set("current_hp", enemy_node.get("max_hp"))
 
 
 class SpawnOnDeathModifier:
@@ -100,5 +102,15 @@ class Factory:
 			"Elite.Parasite":
 				return ParasiteModifier.new()
 			"Elite.WeaponParasite":
-				return WeaponParasiteModifier.new()
+				return WeaponParasiteModifier.new({})
+			"巨大化":
+				return HugeModifier.new()
+			"分裂":
+				return SpawnOnDeathModifier.new()
+			"反弹":
+				return RicochetModifier.new()
+			"寄生":
+				return ParasiteModifier.new()
+			"抢枪":
+				return WeaponParasiteModifier.new({})
 		return null

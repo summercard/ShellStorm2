@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://bullet001"]
+[gd_scene load_steps=3 format=3 uid="uid://bullet001"]
 
 [ext_resource type="Script" path="res://src/bullet/Bullet.gd" id="1_bullet"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bullet"]
+radius = 8.0
 
 [node name="Bullet" type="Area2D"]
 collision_layer = 0
@@ -25,6 +28,4 @@ color = Color(1.0, 0.6, 0.1, 0.4)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
-
-[node name="CircleShape2D_bullet" type="CircleShape2D" parent="CollisionShape2D"]
-radius = 8.0
+shape = SubResource("CircleShape2D_bullet")

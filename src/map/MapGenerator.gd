@@ -1,4 +1,5 @@
 class_name MapGenerator
+extends RefCounted
 ## 随机地图生成器 — 根据楼层生成节点图结构的地图
 
 signal map_generated(graph: NodeGraph)
@@ -176,7 +177,7 @@ func _set_floor_levels(graph: NodeGraph, path_ids: Array[int]) -> void:
 	var n := path_ids.size()
 	
 	for i in range(n):
-		var node := graph.get_node(path_ids[i])
+		var node: NodeGraph.RoomNode = graph.get_node(path_ids[i])
 		var data: RoomData = node.room_data
 		
 		# 根据位置（从起点到末端）设置层级

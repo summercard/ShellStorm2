@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.0"
+const SAVE_VERSION := "1.1"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -46,6 +46,9 @@ var vault_items: Array = []
 # 下一局预选命运卡片（格式：{card_id, card_name, card_type, card_rarity, description, tags, effect, visual}）
 var pending_fate_card: Dictionary = {}
 
+# 下一局从保险柜带入的物品（启动任务时从 vault_items 转移到局内背包）
+var pending_loadout_items: Array = []
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -76,7 +79,8 @@ func _to_dict() -> Dictionary:
 		"blueprint_attachment_tier": blueprint_attachment_tier,
 		"extraction_points": extraction_points,
 		"vault_items": vault_items,
-		"pending_fate_card": pending_fate_card
+		"pending_fate_card": pending_fate_card,
+		"pending_loadout_items": pending_loadout_items,
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -109,6 +113,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("extraction_points"): data.extraction_points = d["extraction_points"]
 	if d.has("vault_items") and d["vault_items"] is Array: data.vault_items = Array(d["vault_items"])
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
+	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	return data
 
 func record_run(success: bool, kills: int) -> void:

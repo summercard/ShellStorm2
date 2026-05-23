@@ -1,4 +1,5 @@
 class_name InsuranceModule
+extends RefCounted
 ## 保险格管理模块
 ## 负责：保险格数量上限、保险/取出规则、死亡后保底
 
@@ -31,13 +32,16 @@ var _carry_over_on_death: bool = true
 func _init(max_slots: int = DEFAULT_INSURANCE_SLOTS) -> void:
 	_max_slots = max_slots
 	_insurance_slots.resize(_max_slots)
-	for i in _insurance_slots:
-		i = InsuranceSlot.new()
+	for i in range(_insurance_slots.size()):
+		_insurance_slots[i] = InsuranceSlot.new()
 
 ## 设置保险格上限
 func set_max_slots(max_s: int) -> void:
 	_max_slots = max(0, max_s)
 	_insurance_slots.resize(_max_slots)
+	for i in range(_insurance_slots.size()):
+		if _insurance_slots[i] == null:
+			_insurance_slots[i] = InsuranceSlot.new()
 	insurance_changed.emit()
 
 ## 获取保险格上限

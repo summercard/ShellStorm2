@@ -1,4 +1,5 @@
 class_name DeathSettlementModule
+extends RefCounted
 ## 死亡结算模块 — 负责死亡掉落计算
 ## 规则：局内临时组合全丢，背包未保险资源部分丢，保险格物品必定保留
 

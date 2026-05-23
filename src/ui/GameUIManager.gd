@@ -49,9 +49,9 @@ var _fate_card_notification_timer: float = 0.0  ## 提示显示计时器
 const _FATE_CARD_NOTIFICATION_DURATION: float = 4.0  ## 提示显示4秒
 
 var _room_game_mode: Node = null
-var _inventory_module: Node = null
-var _extraction_module: Node = null
-var _insurance_module: Node = null
+var _inventory_module: Object = null
+var _extraction_module: Object = null
+var _insurance_module: Object = null
 var _inventory_ui: Control = null  ## InventoryUI 引用（由本类实例化）
 var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信标撤离计数）
 
@@ -164,7 +164,7 @@ func set_player(player: Node) -> void:
 		player.dash_started.connect(_on_dash_started)
 
 ## 绑定背包模块
-func set_inventory_module(module: Node) -> void:
+func set_inventory_module(module: Object) -> void:
 	_inventory_module = module
 	if module.has_signal("inventory_changed"):
 		module.inventory_changed.connect(_on_inventory_changed)
@@ -172,13 +172,13 @@ func set_inventory_module(module: Node) -> void:
 		module.capacity_changed.connect(_on_capacity_changed)
 
 ## 绑定保险格模块
-func set_insurance_module(module: Node) -> void:
+func set_insurance_module(module: Object) -> void:
 	_insurance_module = module
 	if module.has_signal("insurance_changed"):
 		module.insurance_changed.connect(_on_insurance_changed)
 
 ## 绑定撤离模块
-func set_extraction_module(module: Node) -> void:
+func set_extraction_module(module: Object) -> void:
 	_extraction_module = module
 	_connect_extraction_module_signals(module)
 
@@ -205,7 +205,7 @@ func update_currency(amount: int) -> void:
 		_bounce_label(currency_label)
 
 ## 连接 ExtractionModule 信号（由 set_extraction_module 调用）
-func _connect_extraction_module_signals(module: Node) -> void:
+func _connect_extraction_module_signals(module: Object) -> void:
 	if module.has_signal("extraction_completed"):
 		module.extraction_completed.connect(_on_extraction_completed)
 	if module.has_signal("extraction_progress_updated"):
@@ -487,6 +487,10 @@ func _build_extraction_buttons() -> void:
 	for etype in _extraction_types:
 		var btn := Button.new()
 		btn.text = _get_extraction_button_text(etype)
+		var can_use := _can_use_extraction_type(etype)
+		btn.disabled = not can_use
+		if not can_use:
+			btn.tooltip_text = _get_extraction_disabled_reason(etype)
 		btn.pressed.connect(_on_extraction_type_button_pressed.bind(etype))
 		extraction_buttons_container.add_child(btn)
 
@@ -498,6 +502,22 @@ func _get_extraction_button_text(etype: String) -> String:
 		"ELITE_KILL": return "精英撤离 (需击败精英)"
 		"TRADE": return "交易撤离 (消耗资源)"
 	return etype
+
+func _get_extraction_disabled_reason(etype: String) -> String:
+	match etype:
+		"BEACON": return "没有信标道具"
+		"BOSS_KILL": return "尚未击败Boss，无法解锁"
+		"ELITE_KILL": return "尚未击败精英怪，无法解锁"
+		"TRADE":
+			if _room_game_mode != null:
+				var cost := 0
+				if _room_game_mode.has_method("get_map_manager"):
+					var mm = _room_game_mode.get_map_manager()
+					if mm and mm.extraction_director:
+						cost = mm.extraction_director.get_trade_cost(_room_game_mode.current_floor)
+				return "需要 %d 魂，当前货币不足" % cost
+			return "资源不足"
+	return ""
 
 func _can_use_extraction_type(etype: String) -> bool:
 	match etype:
@@ -699,7 +719,7 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	var count: int = slot_info.get("count", 1)
 	var icon_path: String = item.get("icon", "")
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
-		var tex := load(icon_path)
+		var tex: Texture2D = load(icon_path) as Texture2D
 		if slot is TextureRect:
 			(slot as TextureRect).texture = tex
 	else:

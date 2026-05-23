@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://src/ui/WorkbenchPanel.gd" id="1_panel"]
 
-## 武器改造面板场景 — 由 WorkbenchPanel.gd 驱动
-## 显示武器装配树和可选枪身/子弹/配件列表
+; 武器改造面板场景 — 由 WorkbenchPanel.gd 驱动
+; 显示武器装配树和可选枪身/子弹/配件列表
 
 [node name="WorkbenchPanel" type="Control"]
 layout_mode = 3

@@ -1,4 +1,5 @@
 class_name MerchantInteraction
+extends Area2D
 ## 商人交互组件 — 挂在商人NPC节点上，检测玩家接近并激活商人面板
 
 ## 信号
@@ -105,6 +106,8 @@ func _on_merchant_ui_closed() -> void:
 ## 创建交互提示标签
 func _setup_interaction_label() -> void:
 	_interact_label = get_node_or_null("InteractLabel") as Label
+	if _interact_label == null:
+		_interact_label = get_node_or_null("../InteractLabel") as Label
 	if _interact_label != null:
 		_interact_label.z_index = 100
 		_interact_label.modulate = Color(1, 1, 1, 0)
@@ -115,7 +118,7 @@ func _setup_interaction_label() -> void:
 
 ## Area2D 玩家进入信号回调
 func _on_body_entered(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = true
 		if _state == MerchantState.IDLE:
 			_state = MerchantState.AVAILABLE
@@ -125,7 +128,7 @@ func _on_body_entered(body: Node2D) -> void:
 
 ## Area2D 玩家离开信号回调
 func _on_body_exited(body: Node2D) -> void:
-	if body is Player or body.is_in_group("player"):
+	if body.is_in_group("player"):
 		_player_in_range = false
 		if _state == MerchantState.ACTIVE:
 			_close_shop()

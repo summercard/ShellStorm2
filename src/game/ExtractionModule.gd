@@ -1,4 +1,5 @@
 class_name ExtractionModule
+extends RefCounted
 ## 撤离模块 — 管理撤离读条、结算、带入带出
 ## 与 ExtractionDirector 配合：ExtractionDirector 管点位，ExtractionModule 管读条和结算
 

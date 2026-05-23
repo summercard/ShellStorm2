@@ -1,4 +1,5 @@
 class_name LootModule
+extends RefCounted
 ## 掉落模块 — 管理物品掉落生成
 ## 使用 ItemRegistry 提供可配置的掉落表
 ## 负责：掉落生成、商人供货、宝箱内容
