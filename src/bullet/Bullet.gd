@@ -25,6 +25,8 @@ var _trail_line: Line2D = null
 @onready var glow: ColorRect = $Shape/Glow
 
 func _ready() -> void:
+	z_as_relative = false
+	z_index = 900
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 	_setup_trail()

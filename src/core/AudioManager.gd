@@ -31,7 +31,9 @@ func _ready() -> void:
 func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
 	var path: String = SFX.get(sfx_name, "")
 	if path.is_empty():
-		# 音效骨架未替换，跳过（避免报错）
+		return
+	if not FileAccess.file_exists(path):
+		# 音效文件不存在，跳过
 		return
 	var stream: AudioStream = load(path)
 	if stream:

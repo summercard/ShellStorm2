@@ -19,6 +19,10 @@ func load_base() -> void:
 				return
 	data = BaseData.new()
 
+func _ensure_data() -> void:
+	if data == null:
+		load_base()
+
 func save_base() -> void:
 	var json_str := JSON.stringify(data._to_dict(), "\t")
 	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
@@ -140,6 +144,7 @@ func clear_pending_fate_card() -> void:
 
 ## — 蓝图系统 —
 func get_blueprint_tier(category_id: String) -> int:
+	_ensure_data()
 	match category_id:
 		"gunbody": return data.blueprint_gunbody_tier
 		"bullet": return data.blueprint_bullet_tier
@@ -147,6 +152,7 @@ func get_blueprint_tier(category_id: String) -> int:
 	return 0
 
 func set_blueprint_tier(category_id: String, tier: int) -> void:
+	_ensure_data()
 	match category_id:
 		"gunbody": data.blueprint_gunbody_tier = tier
 		"bullet": data.blueprint_bullet_tier = tier

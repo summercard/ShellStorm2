@@ -12,6 +12,8 @@ var _active: bool = false
 @onready var shape: ColorRect = $Shape
 
 func _ready() -> void:
+	z_as_relative = false
+	z_index = 890
 	body_entered.connect(_on_body_entered)
 	monitoring = true
 

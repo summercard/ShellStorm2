@@ -82,9 +82,23 @@
       "id": "P14",
       "title": "物品存入取出信号响应+宝箱开启逻辑",
       "description": "GameUIManager 响应 item_to_insurance_requested（背包格→保险格）和 item_extraction_requested（保险格→背包）；宝箱/容器开启→物品入背包→InventoryUI刷新",
-      "status": "in_progress"
+      "status": "completed"
     }
   ],
-  "completedTasks": ["P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P09", "P10", "P11", "P12", "P13"],
+  "completedTasks": [
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06",
+    "P07",
+    "P08",
+    "P09",
+    "P10",
+    "P11",
+    "P12",
+    "P13"
+  ],
   "currentTaskIndex": 14
 }

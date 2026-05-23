@@ -6,7 +6,11 @@
 script = ExtResource("1_gameui")
 
 [node name="GameHUD" type="Control" parent="."]
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="TopRightPanel" type="PanelContainer" parent="GameHUD"]
 anchors_preset = 1
@@ -64,6 +68,32 @@ layout_mode = 2
 text = "闪避"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="AmmoPanel" type="PanelContainer" parent="GameHUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 174.0
+offset_right = -16.0
+offset_bottom = 202.0
+grow_horizontal = 0
+
+[node name="AmmoBar" type="ProgressBar" parent="GameHUD/AmmoPanel"]
+max_value = 30.0
+value = 30.0
+show_percentage = false
+
+[node name="AmmoLabel" type="Label" parent="GameHUD/AmmoPanel"]
+layout_mode = 2
+text = "30/30"
+horizontal_alignment = 1
+
+[node name="ReloadIndicator" type="Label" parent="GameHUD/AmmoPanel"]
+visible = false
+layout_mode = 2
+text = "换弹中..."
+horizontal_alignment = 1
 
 [node name="CurrencyLabel" type="Label" parent="GameHUD"]
 anchors_preset = 2

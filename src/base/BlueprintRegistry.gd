@@ -12,6 +12,10 @@ extends Node
 func _ready() -> void:
 	_build_registry()
 
+func _ensure_registry() -> void:
+	if _registry["gunbody"].is_empty() or _registry["bullet"].is_empty():
+		_build_registry()
+
 ## ========== 注册表结构 ==========
 ## 格式：category_id -> blueprint_id -> {
 ##   item_id: String,         # ItemRegistry 中的物品ID
@@ -197,6 +201,7 @@ func _register_attachment(entry: Dictionary) -> void:
 
 ## 获取给定蓝图Tier下可用的枪身蓝图列表
 func get_available_gunbodies(blueprint_tier: int) -> Array[Dictionary]:
+	_ensure_registry()
 	var result: Array[Dictionary] = []
 	for item_id in _registry["gunbody"]:
 		var entry: Dictionary = _registry["gunbody"][item_id]
@@ -211,6 +216,7 @@ func get_available_gunbodies(blueprint_tier: int) -> Array[Dictionary]:
 
 ## 获取给定蓝图Tier下可用的子弹蓝图列表
 func get_available_bullets(blueprint_tier: int) -> Array[Dictionary]:
+	_ensure_registry()
 	var result: Array[Dictionary] = []
 	for item_id in _registry["bullet"]:
 		var entry: Dictionary = _registry["bullet"][item_id]
@@ -239,6 +245,7 @@ func get_available_attachments(blueprint_tier: int) -> Array[Dictionary]:
 
 ## 通过物品ID创建装配节点（用于初始武器装配）
 func create_assembly_node(item_id: String) -> AssemblyNode:
+	_ensure_registry()
 	# 尝试枪身
 	var gun_entry: Dictionary = _registry["gunbody"].get(item_id, {})
 	if not gun_entry.is_empty():

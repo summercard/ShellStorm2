@@ -75,7 +75,7 @@ func _on_body_exited(body: Node2D) -> void:
 func _process(delta: float) -> void:
 	if _opened:
 		return
-	
+
 	# 检测 E 键按下（Space）
 	if _player_in_range and Input.is_action_just_pressed("interact"):
 		_try_open_container()
@@ -86,26 +86,26 @@ func _try_open_container() -> void:
 		return
 	if _state == ContainerState.LOCKED:
 		return
-	
+
 	_opened = true
 	_state = ContainerState.OPENED
 	if _interact_label:
 		_interact_label.modulate = Color(1, 1, 1, 0)
 	interaction_available.emit(false)
-	
+
 	# 播放开启动画（如果有）
 	if open_animation:
 		_play_open_animation()
-	
+
 	# 生成掉落
 	var loot: Array[Dictionary] = _generate_loot()
-	
+
 	# 将掉落物品加入背包
 	var granted: int = _grant_loot(loot)
-	
+
 	# 发送信号
 	container_opened.emit(loot)
-	
+
 	print("[ContainerInteraction] %s 已开启，获得 %d 件物品" % [container_type, granted])
 
 ## 生成掉落
@@ -114,9 +114,9 @@ func _generate_loot() -> Array[Dictionary]:
 		setup_loot()
 	if _loot_module == null:
 		return []
-	
+
 	var loot: Array[Dictionary]
-	
+
 	# 根据容器类型确定掉落数量
 	match container_type:
 		"chest":
@@ -130,14 +130,14 @@ func _generate_loot() -> Array[Dictionary]:
 			loot = _loot_module.generate_loot(loot_table, 3 + floor / 2)
 		_:
 			loot = _loot_module.generate_loot(loot_table, 1)
-	
+
 	return loot
 
 ## 将掉落加入背包（过滤掉货币条目）
 func _grant_loot(loot: Array[Dictionary]) -> int:
 	if _inventory_module == null or loot.is_empty():
 		return 0
-	
+
 	# 过滤掉 is_currency 条目（货币直接由调用方处理，不入背包）
 	var real_items: Array[Dictionary] = []
 	for item_data in loot:
@@ -145,8 +145,13 @@ func _grant_loot(loot: Array[Dictionary]) -> int:
 			# 货币跳过后续处理（货币由 RoomGameMode.notify_enemy_killed 处理）
 			continue
 		real_items.append(item_data)
-	
+
 	var granted: int = _loot_module.grant_loot_to_inventory(real_items, _inventory_module)
+
+	# 通过游戏全局组广播容器开启事件（供 UI 层监听飘字效果）
+	# 使用 Node 的 group 广播，避免直接依赖 GameUIManager
+	get_tree().call_group("game_ui", "_on_container_loot_granted", global_position, real_items, granted)
+
 	return granted
 
 ## 播放开启动画（简单的缩放+消失）
@@ -156,7 +161,7 @@ func _play_open_animation() -> void:
 	# 向上飘起并淡出
 	tween.tween_property(self, "position:y", position.y - 20, 0.4).set_trans(Tween.TRANS_QUAD)
 	tween.chain().tween_property(self, "modulate:a", 0.0, 0.3)
-	
+
 	# 或者：简单旋转消失
 	var original_scale := scale
 	tween.tween_property(self, "scale", original_scale * 1.2, 0.2).set_trans(Tween.TRANS_QUAD)

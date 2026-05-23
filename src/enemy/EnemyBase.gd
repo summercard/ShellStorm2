@@ -50,6 +50,7 @@ func get_enemy_data() -> Dictionary:
 func _ready() -> void:
 	current_hp = max_hp
 	add_to_group("enemy")
+	z_as_relative = false
 	_fire_timers()
 	_update_hp_bar(true)
 	_update_z_index()
@@ -148,7 +149,7 @@ func _separation_velocity() -> Vector2:
 		var d: float = delta.length()
 		if d > 0.01 and d < 42.0:
 			push += delta.normalized() * (42.0 - d)
-	return push * 2.2
+	return push * 0.8  # 降低分离强度，避免挤压时弹飞 + 减少粘附
 
 func _try_contact_damage() -> void:
 	if _contact_timer > 0.0 or player_ref == null or not is_instance_valid(player_ref):
@@ -195,7 +196,7 @@ func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.
 	if hit_dir.length_squared() > 0.0001:
 		_knockback_velocity += hit_dir.normalized() * (95.0 if not is_crit else 150.0)
 	_update_hp_bar()
-	flash_damage()
+	flash_damage(is_crit)
 	enemy_hit.emit(global_position, amount, is_crit)
 	_spawn_damage_number(global_position, amount, is_crit)
 	if current_hp <= 0:
@@ -233,6 +234,8 @@ func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
 
 func _spawn_explosion_flash() -> void:
 	var flash := ColorRect.new()
+	flash.z_as_relative = false
+	flash.z_index = 950
 	flash.size = Vector2(explosion_radius * 2.0, explosion_radius * 2.0)
 	flash.pivot_offset = flash.size * 0.5
 	flash.color = Color(1.0, 0.45, 0.12, 0.42)
@@ -246,10 +249,25 @@ func _spawn_explosion_flash() -> void:
 	t.chain().tween_callback(flash.queue_free)
 
 func _spawn_death_flash() -> void:
+	# 颜色随敌人类型变化：从 _enemy_data.color 或当前 shape.color 读取
+	var flash_color: Color = Color(1.0, 1.0, 0.8, 0.85)  # 默认淡黄白
+	if _enemy_data.has("color") and _enemy_data["color"] is Color:
+		flash_color = _enemy_data["color"]
+	elif shape and shape.color != Color.WHITE:
+		flash_color = shape.color
+	# 略微提亮、增强饱和度，让死亡爆炸更醒目
+	flash_color = Color(
+		min(flash_color.r * 1.2, 1.0),
+		min(flash_color.g * 1.2, 1.0),
+		min(flash_color.b * 1.2, 1.0),
+		0.85
+	)
 	var flash := ColorRect.new()
+	flash.z_as_relative = false
+	flash.z_index = 960
 	flash.size = Vector2(46, 46)
 	flash.pivot_offset = flash.size * 0.5
-	flash.color = Color(1.0, 1.0, 0.8, 0.85)
+	flash.color = flash_color
 	var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
 	parent.add_child(flash)
 	flash.global_position = global_position - flash.size * 0.5
@@ -279,22 +297,39 @@ func _update_hp_bar(force: bool = false) -> void:
 		hp_bar.visible = force or current_hp < max_hp
 	hp_changed.emit(current_hp, max_hp)
 
-func flash_damage() -> void:
+func flash_damage(is_crit: bool = false) -> void:
+	# 基础闪白（敌人受击的标准反馈）
 	if shape:
 		var original := shape.color
-		shape.color = Color.WHITE
-		await get_tree().create_timer(0.045).timeout
+		var flash_color := Color(1.0, 1.0, 1.0, 1.0)  # 纯白闪
+		var flash_duration := 0.045
+		var scale_target := Vector2(1.0, 1.0)
+		if is_crit:
+			# 暴击：更亮、更久、伴随缩放脉冲
+			flash_color = Color(1.0, 0.98, 0.6, 1.0)   # 亮黄白（暴击感）
+			flash_duration = 0.10
+			scale_target = Vector2(1.12, 1.12)          # 轻微放大脉冲
+		shape.color = flash_color
+		# 缩放脉冲（暴击时更明显）
+		if scale_target != Vector2(1.0, 1.0):
+			var orig_scale := shape.scale
+			shape.scale = scale_target
+			var scale_tween := create_tween()
+			scale_tween.tween_property(shape, "scale", orig_scale, flash_duration * 1.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		await get_tree().create_timer(flash_duration).timeout
 		if shape and not _is_dead:
 			shape.color = original
 	if emoji_label:
 		var old := emoji_label.modulate
-		emoji_label.modulate = Color(1.0, 0.72, 0.72, 1.0)
-		await get_tree().create_timer(0.045).timeout
+		var emoji_flash := Color(1.0, 0.85, 0.85, 1.0) if not is_crit else Color(1.0, 0.98, 0.6, 1.0)
+		var emoji_duration := 0.045 if not is_crit else 0.10
+		emoji_label.modulate = emoji_flash
+		await get_tree().create_timer(emoji_duration).timeout
 		if emoji_label and not _is_dead:
 			emoji_label.modulate = old
 
 func _update_z_index() -> void:
-	z_index = int(global_position.y)
+	z_index = 1000 + int(global_position.y)  # 负Y区域也必须高于背景层
 
 func add_modifier(modifier_id: String, tier: int = 1) -> void:
 	var mod = EnemyModifierScript.Factory.create(modifier_id, tier)
@@ -303,23 +338,78 @@ func add_modifier(modifier_id: String, tier: int = 1) -> void:
 		mod.apply(self)
 
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool = false) -> void:
+	get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)
+	return
 	var scene_path := "res://scenes/DamageNumber.tscn"
 	var num_scene: PackedScene = load(scene_path)
 	if num_scene:
 		var label: Node = num_scene.instantiate()
 		if label is Label:
+			# 文本内容：暴击加 "!" 后缀
 			label.text = str(dmg) + ("!" if is_crit else "")
-			label.position = world_pos + Vector2(randf_range(-8, 8), -20)
+			# 初始随机偏移，位置在敌人头顶
+			var offset := Vector2(randf_range(-8, 8), -20)
+			label.position = world_pos + offset
 			label.z_index = 200
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+			# --- 样式分层 ---
+			var font_size := 18
+			var base_color := Color(1.0, 0.35, 0.2, 1.0)   # 红橙
+			var anim_duration := 0.8
+			var float_range := 50.0
+
 			if is_crit:
-				label.add_theme_font_size_override("font_size", 28)
-				label.modulate = Color(1.0, 0.9, 0.2, 1.0)
+				# 暴击：金色，更大字号，更高飘幅
+				font_size = 30
+				base_color = Color(1.0, 0.92, 0.15, 1.0)   # 亮金
+				float_range = 65.0
+			elif dmg >= 50:
+				# 大伤害：橙色，更大字号
+				font_size = 24
+				base_color = Color(1.0, 0.55, 0.1, 1.0)    # 橙红
+				float_range = 58.0
+
+			# 字号覆盖 & 颜色
+			label.add_theme_font_size_override("font_size", font_size)
+			label.modulate = base_color
+
+			# 描边效果（通过暗色阴影模拟 Outline）
+			# 在 label 下方叠加一个偏移暗色副本做描边
+			var outline_label := Label.new()
+			outline_label.text = label.text
+			outline_label.add_theme_font_size_override("font_size", font_size)
+			outline_label.modulate = Color(0.0, 0.0, 0.0, 0.7)
+			outline_label.z_index = label.z_index - 1
+			outline_label.position = label.position + Vector2(2, 2)
+			outline_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			outline_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
-			parent.add_child(label)
+			parent.add_child(outline_label)
+
+			# --- 动画：飘字 + 透明度 + 缩放消失（与 DamageNumbers.gd 一致）---
+			label.scale = Vector2(1.25, 1.25)   # 初始放大（弹入感）
+			outline_label.scale = Vector2(1.25, 1.25)
+
 			var tween := label.create_tween()
 			tween.set_parallel(true)
-			tween.tween_property(label, "position:y", world_pos.y - 50.0, 0.7).set_trans(Tween.TRANS_LINEAR)
-			tween.tween_property(label, "modulate:a", 0.0, 0.7).set_trans(Tween.TRANS_LINEAR)
+			tween.tween_property(label, "position:y", world_pos.y - float_range + offset.y, anim_duration).set_trans(Tween.TRANS_LINEAR)
+			tween.tween_property(label, "modulate:a", 0.0, anim_duration).set_trans(Tween.TRANS_LINEAR)
+			tween.tween_property(label, "scale", Vector2(0.75, 0.75), anim_duration).set_trans(Tween.TRANS_LINEAR)
+
+			var outline_tween := outline_label.create_tween()
+			outline_tween.set_parallel(true)
+			outline_tween.tween_property(outline_label, "position:y", world_pos.y - float_range + offset.y, anim_duration).set_trans(Tween.TRANS_LINEAR)
+			outline_tween.tween_property(outline_label, "modulate:a", 0.0, anim_duration).set_trans(Tween.TRANS_LINEAR)
+			outline_tween.tween_property(outline_label, "scale", Vector2(0.75, 0.75), anim_duration).set_trans(Tween.TRANS_LINEAR)
+
+			# 弹入动画：快速收缩到正常大小
+			var pop := label.create_tween()
+			pop.tween_property(label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BACK)
+			var outline_pop := outline_label.create_tween()
+			outline_pop.tween_property(outline_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BACK)
+
+			# 完成后自毁
 			tween.chain().tween_callback(label.queue_free)
+			outline_tween.chain().tween_callback(outline_label.queue_free)

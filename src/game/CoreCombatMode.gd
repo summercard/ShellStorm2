@@ -42,6 +42,8 @@ var wave_active: bool = false
 var game_is_over: bool = false
 var rng := RandomNumberGenerator.new()
 var _waiting_for_next_wave: bool = false
+var inventory_module: InventoryModule = null
+var insurance_module: InsuranceModule = null
 
 func _ready() -> void:
 	rng.randomize()
@@ -69,6 +71,8 @@ func _reset_run_state() -> void:
 	game_is_over = false
 	_waiting_for_next_wave = false
 	active_enemies.clear()
+	inventory_module = InventoryModule.new(12)
+	insurance_module = InsuranceModule.new(2)
 	if not Global.game_over.is_connected(_on_global_game_over):
 		Global.game_over.connect(_on_global_game_over)
 	if not GameManager.currency_changed.is_connected(_on_currency_changed):
@@ -89,6 +93,10 @@ func _bind_ui() -> void:
 			ui_layer.call("set_player", player)
 		if ui_layer.has_method("set_room_game_mode"):
 			ui_layer.call("set_room_game_mode", self)
+		if ui_layer.has_method("set_inventory_module"):
+			ui_layer.call("set_inventory_module", inventory_module)
+		if ui_layer.has_method("set_insurance_module"):
+			ui_layer.call("set_insurance_module", insurance_module)
 	if clearing_progress:
 		clearing_progress.visible = true
 	if wave_indicator:
@@ -272,8 +280,20 @@ func _on_enemy_died(enemy: Node, data: Dictionary) -> void:
 	wave_killed = min(wave_total, wave_killed + 1)
 	kills += 1
 	score += int(data.get("xp_value", 10))
-	GameManager.add_currency(int(data.get("currency_value", 4)))
+	var currency_gain := int(data.get("currency_value", 4))
+	GameManager.add_currency(currency_gain)
+	if ui_layer != null and ui_layer.has_method("show_currency_popup"):
+		ui_layer.call("show_currency_popup", currency_gain, enemy.global_position if is_instance_valid(enemy) else player.global_position)
 	kill_recorded.emit()
+	# 敌人死亡时触发额外屏幕震动（增强击杀反馈）
+	if screen_shake != null and screen_shake.has_method("trigger"):
+		var death_hp: int = int(data.get("hp", 30))
+		var death_intensity := 5.0
+		if death_hp >= 80:
+			death_intensity = 13.0
+		elif death_hp >= 40:
+			death_intensity = 9.0
+		screen_shake.call("trigger", death_intensity, 0.10)
 	wave_progress_changed.emit(wave_killed, wave_total, current_wave)
 	_update_ui()
 
@@ -289,6 +309,7 @@ func _on_wave_cleared() -> void:
 	wave_active = false
 	_waiting_for_next_wave = true
 	_show_message("第 %d 波清理完成" % current_wave, 0.85)
+	room_cleared.emit({"wave": current_wave})
 	if current_wave % 3 == 0 and player != null and is_instance_valid(player):
 		player.heal(12)
 	await get_tree().create_timer(wave_clear_delay).timeout
@@ -352,3 +373,15 @@ func _show_message(text: String, seconds: float = 1.0) -> void:
 	var t := wave_indicator.create_tween()
 	t.tween_interval(seconds)
 	t.tween_property(wave_indicator, "modulate:a", 0.0, 0.35)
+
+func get_inventory() -> InventoryModule:
+	return inventory_module
+
+func get_insurance() -> InsuranceModule:
+	return insurance_module
+
+func get_player() -> Player:
+	return player
+
+func get_map_manager():
+	return null

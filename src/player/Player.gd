@@ -47,9 +47,10 @@ func _ready() -> void:
 
 func _ensure_weapon_tree() -> void:
 	if weapon_tree == null:
-		if BlueprintRegistry != null:
-			weapon_tree = BlueprintRegistry.get_starting_weapon_tree()
-		else:
+		var blueprint_registry := get_node_or_null("/root/BlueprintRegistry")
+		if blueprint_registry != null and blueprint_registry.has_method("get_starting_weapon_tree"):
+			weapon_tree = blueprint_registry.call("get_starting_weapon_tree") as WeaponAssemblyTree
+		if weapon_tree == null:
 			weapon_tree = WeaponPresets.build_rifle()
 	if weapon_tree != null and weapon_tree.get_parent() == null:
 		weapon_tree.name = "WeaponAssemblyTree"
@@ -121,6 +122,7 @@ func take_damage(amount: int) -> void:
 	current_hp = max(0, current_hp - final_damage)
 	hp_changed.emit(current_hp, max_hp)
 	_flash_damage()
+	_play_damage_sfx()
 	is_invincible = true
 	if invincible_timer:
 		invincible_timer.start(INVINCIBLE_DURATION)
@@ -138,6 +140,10 @@ func heal(amount: int) -> void:
 func _flash_damage() -> void:
 	if body_visuals and body_visuals.has_method("flash_damage"):
 		body_visuals.call("flash_damage")
+
+func _play_damage_sfx() -> void:
+	if _audio:
+		_audio.play_player_hit_sfx()
 
 func get_weapon_anchor() -> Marker2D:
 	return weapon_anchor

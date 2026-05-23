@@ -37,6 +37,7 @@ var death_settlement_module: DeathSettlementModule
 
 ## UI 管理器引用（用于飘字等效果）
 var _ui_manager: Node = null
+var _wave_indicator_label: Label = null
 
 ## 状态
 var current_floor: int = 1
@@ -117,6 +118,9 @@ func _call_ui_manager_method(method_name: String, arg = null) -> void:
 	else:
 		_ui_manager.call(method_name)
 
+func _get_base_manager() -> Node:
+	return get_node_or_null("/root/BaseManager")
+
 ## 初始化地图管理器
 func _setup_map_manager() -> void:
 	map_manager = MapManager.new()
@@ -145,15 +149,21 @@ func _setup_extraction_modules() -> void:
 	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 
 func _apply_pending_loadout() -> void:
-	if BaseManager == null or inventory_module == null:
+	var base_manager := _get_base_manager()
+	if base_manager == null or inventory_module == null:
 		return
-	var loadout_items: Array[Dictionary] = BaseManager.consume_pending_loadout()
+	var loadout_items: Array[Dictionary] = []
+	var raw_loadout: Variant = base_manager.call("consume_pending_loadout")
+	if raw_loadout is Array:
+		for item in raw_loadout:
+			if item is Dictionary:
+				loadout_items.append((item as Dictionary).duplicate(true))
 	for item in loadout_items:
 		var count: int = item.get("count", 1)
 		var added: int = inventory_module.add_item(item, count)
 		if added < count:
 			item["count"] = count - added
-			BaseManager.add_vault_item(item)
+			base_manager.call("add_vault_item", item)
 
 ## 连接信号
 func _setup_signals() -> void:
@@ -282,8 +292,9 @@ func _on_global_game_over() -> void:
 		)
 		_print_death_settlement(settlement_result)
 	# 记录基地数据（死亡）
-	if BaseManager != null:
-		BaseManager.record_run(false, _get_kill_count())
+	var base_manager := _get_base_manager()
+	if base_manager != null:
+		base_manager.call("record_run", false, _get_kill_count())
 	game_over.emit("玩家死亡")
 
 func _print_death_settlement(result: Dictionary) -> void:
@@ -302,7 +313,9 @@ func _grant_extraction_points() -> void:
 	var loot_bonus: int = loot_count * 3
 	var total_points: int = floor_bonus + loot_bonus
 	if total_points > 0:
-		BaseManager.add_extraction_points(total_points)
+		var base_manager := _get_base_manager()
+		if base_manager != null:
+			base_manager.call("add_extraction_points", total_points)
 		print("[RoomGameMode] Granted extraction_points: %d (floor bonus=%d, loot bonus=%d)" % [total_points, floor_bonus, loot_bonus])
 
 ## 撤离完成回调
@@ -321,8 +334,9 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 		print("[RoomGameMode] Saved extracted items to vault: %d" % saved_to_vault)
 		_sync_beacon_count()
 		# 记录成功撤离到基地
-		if BaseManager != null:
-			BaseManager.record_run(true, _kill_count)
+		var base_manager := _get_base_manager()
+		if base_manager != null:
+			base_manager.call("record_run", true, _kill_count)
 	else:
 		_print_extraction_failure()
 
@@ -337,7 +351,8 @@ func _print_extraction_success(extracted_count: int, insurance_items: Array[Dict
 	print("\n".join(lines))
 
 func _persist_extracted_items_to_vault() -> int:
-	if BaseManager == null:
+	var base_manager := _get_base_manager()
+	if base_manager == null:
 		return 0
 	var saved := 0
 	var overflow := 0
@@ -347,7 +362,7 @@ func _persist_extracted_items_to_vault() -> int:
 			if item.is_empty():
 				continue
 			item["count"] = slot.get("count", 1)
-			if BaseManager.add_vault_item(item):
+			if bool(base_manager.call("add_vault_item", item)):
 				saved += 1
 			else:
 				overflow += 1
@@ -358,13 +373,13 @@ func _persist_extracted_items_to_vault() -> int:
 			if item.is_empty():
 				continue
 			item["count"] = insured.get("count", 1)
-			if BaseManager.add_vault_item(item):
+			if bool(base_manager.call("add_vault_item", item)):
 				saved += 1
 			else:
 				overflow += 1
 		insurance_module.clear_all()
 	if overflow > 0:
-		BaseManager.add_extraction_points(overflow * 5)
+		base_manager.call("add_extraction_points", overflow * 5)
 		print("[RoomGameMode] Vault full, converted %d overflow items to extraction_points" % overflow)
 	return saved
 
@@ -431,7 +446,9 @@ func _calculate_wave_counts_for_enemy_plan(room_data: RoomData, enemy_count: int
 	match room_data.floor_level:
 		RoomData.FloorLevel.SHALLOW:
 			wave_count = 1
-		RoomData.FloorLevel.MEDIUM, RoomData.FloorLevel.DEEP:
+		RoomData.FloorLevel.MEDIUM:
+			wave_count = 2
+		RoomData.FloorLevel.DEEP:
 			wave_count = 2
 		RoomData.FloorLevel.ABYSS:
 			wave_count = 3
@@ -494,6 +511,31 @@ func _get_current_room_instance() -> Node2D:
 ## 波次开始回调
 func _on_wave_started(wave: int, total: int) -> void:
 	_update_room_info_label("第 %d/%d 波袭来！" % [wave, total])
+	_show_wave_announcement(wave, total)
+
+## 显示波次公告（底部 WaveIndicatorLabel）
+func _show_wave_announcement(wave: int, total: int) -> void:
+	if _wave_indicator_label == null:
+		if _ui_manager != null and is_instance_valid(_ui_manager):
+			_wave_indicator_label = _ui_manager.get_node_or_null("GameHUD/WaveIndicatorLabel") as Label
+		if _wave_indicator_label == null:
+			_wave_indicator_label = get_node_or_null("../GameUIManager/GameHUD/WaveIndicatorLabel") as Label
+	if _wave_indicator_label == null:
+		return
+
+	var text := "第 %d/%d 波" % [wave, total]
+	_wave_indicator_label.text = text
+	_wave_indicator_label.visible = true
+	_wave_indicator_label.modulate.a = 1.0
+
+	# 波次公告淡入后停留再淡出
+	var tween := _wave_indicator_label.create_tween()
+	tween.tween_interval(2.0)
+	tween.tween_property(_wave_indicator_label, "modulate:a", 0.0, 0.5)
+	tween.tween_callback(func():
+		if _wave_indicator_label != null and is_instance_valid(_wave_indicator_label):
+			_wave_indicator_label.visible = false
+	)
 
 func _on_wave_progress_updated(killed: int, total: int, wave: int) -> void:
 	wave_progress_changed.emit(killed, total, wave)
@@ -509,7 +551,12 @@ func _show_initial_fate_cards() -> void:
 	await get_tree().process_frame
 
 	# 检查局前是否已通过命运占卜屋预选了卡片
-	var pending: Dictionary = BaseManager.get_pending_fate_card()
+	var pending: Dictionary = {}
+	var base_manager := _get_base_manager()
+	if base_manager != null:
+		var raw_pending: Variant = base_manager.call("get_pending_fate_card")
+		if raw_pending is Dictionary:
+			pending = (raw_pending as Dictionary).duplicate(true)
 	if not pending.is_empty():
 		# 从 pending 数据重建 FateCard 实例并自动应用
 		var card := _reconstruct_fate_card_from_dict(pending)
@@ -519,7 +566,8 @@ func _show_initial_fate_cards() -> void:
 				print("[RoomGameMode] 局前预选卡片已应用: %s" % card.card_name)
 			else:
 				print("[RoomGameMode] 局前预选卡片应用失败: %s — %s" % [card.card_name, result.message])
-		BaseManager.clear_pending_fate_card()
+		if base_manager != null:
+			base_manager.call("clear_pending_fate_card")
 		call_deferred("_enter_first_combat_room")
 		return
 

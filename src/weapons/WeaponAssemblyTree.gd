@@ -259,15 +259,19 @@ func _spawn_bullet_from_co_gun(spawn_pos: Vector2, direction: Vector2, damage: i
 			if bullet.has_method("fire"):
 				bullet.fire(spawn_pos, spawn_dir, BASE_BULLET_SPEED * bullet_speed, damage, false)
 
-## 换弹
-
-func _add_projectile_to_world(projectile: Node) -> void:
+## 世界坐标 → 子弹父节点（bullet 的 parent 要在 current_scene 不然无法碰撞）
+func _get_bullet_parent() -> Node:
 	var tree := get_tree()
 	if tree == null:
-		return
-	var parent := tree.current_scene
+		return null
+	var parent: Node = tree.current_scene
 	if parent == null:
 		parent = tree.root
+	return parent
+
+## 换弹
+func _add_projectile_to_world(projectile: Node) -> void:
+	var parent := _get_bullet_parent()
 	parent.add_child(projectile)
 
 func start_reload() -> void:
