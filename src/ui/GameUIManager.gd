@@ -507,8 +507,8 @@ func _get_extraction_button_text(etype: String) -> String:
 func _can_use_extraction_type(etype: String) -> bool:
 	match etype:
 		"BEACON": return _beacon_count > 0
-		"BOSS_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL).size() > 0
-		"ELITE_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL).size() > 0
+		"BOSS_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL, true).size() > 0
+		"ELITE_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL, true).size() > 0
 		"TRADE": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.current_floor > 0 and GameManager.currency >= _room_game_mode.get_map_manager().extraction_director.get_trade_cost(_room_game_mode.current_floor)
 	return true
 

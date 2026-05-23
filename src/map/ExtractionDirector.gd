@@ -250,11 +250,12 @@ func clear() -> void:
 	_current_extraction = null
 
 ## 获取指定类型的所有撤离点
-func get_points_by_type(extraction_type: ExtractionType) -> Array[ExtractionPoint]:
+func get_points_by_type(extraction_type: ExtractionType, only_unlocked: bool = false) -> Array[ExtractionPoint]:
 	var result: Array[ExtractionPoint] = []
 	for p in _extraction_points:
 		if p.type == extraction_type:
-			result.append(p)
+			if not only_unlocked or p.is_unlocked:
+				result.append(p)
 	return result
 
 func _get_point(point_id: String) -> ExtractionPoint:
