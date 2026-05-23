@@ -14,7 +14,7 @@ var weapon_tree: WeaponAssemblyTree = null
 var _muzzle_flash: PointLight2D = null
 
 ## 后坐力控制器引用
-var _recoil: WeaponRecoil = null
+var _recoil: Node = null
 
 ## 本地冷却计时器（委托给 weapon_tree.tick 更新）
 var fire_cooldown: float = 0.0
@@ -29,9 +29,10 @@ func _ready() -> void:
 	# 获取枪口闪光节点
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
 	# 获取后坐力控制器
-	_recoil = get_node_or_null("WeaponRecoil") as WeaponRecoil
-	if _recoil == null:
-		push_warning("[WeaponController] WeaponRecoil not found in WeaponController child")
+	_recoil = get_node_or_null("WeaponRecoil")
+	if _recoil != null and not (_recoil is WeaponRecoil):
+		push_warning("[WeaponController] WeaponRecoil node found but type mismatch, ignoring")
+		_recoil = null
 	# 获取音频管理器
 	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 
