@@ -66,6 +66,14 @@ enum EffectAction {
 	SCALE_UP,                 # 巨大化
 	ADD_EYES,                 # 加眼睛动画
 	ADD_LEGS,                 # 加脚动画
+
+	# 环境命运触发器专用（无目标节点）
+	REINFORCE_WAVE,           # 触发波次外额外刷怪
+	GRANT_RANDOM_CARD,        # 给予随机命运卡片
+	LUCKY_CHEST,              # 下次开箱品质提升
+	EXTRA_LOOT,               # 下次开箱额外掉落
+	CURSE_ROOM_ENEMIES,       # 当前房间敌人伤害提升（诅咒）
+	BLESS_DEAD,               # 低血量存活后获得伤害加成（祝福）
 }
 
 ## 元数据

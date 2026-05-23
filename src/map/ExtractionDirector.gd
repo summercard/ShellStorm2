@@ -33,6 +33,7 @@ var _current_extraction: ExtractionPoint = null
 var _beacon_count: int = 0
 var _beacon_item_id: String = "item_beacon"  ## 信标道具ID，与物品系统对齐
 var _inventory_ref: InventoryModule = null  ## 背包引用（用于真实消耗物品）
+var _room_game_mode: RoomGameMode = null  ## 房间游戏模式引用（用于精英/Boss击杀计数回调）
 
 signal extraction_started(point_id: String)
 signal extraction_completed(point_id: String, player_escaped: bool)
@@ -145,6 +146,10 @@ func bind_inventory(inventory: InventoryModule) -> void:
 	_inventory_ref = inventory
 	sync_beacon_count_from_inventory(inventory)
 
+## 绑定房间游戏模式引用（用于精英/Boss击杀状态回调）
+func bind_room_game_mode(game_mode: RoomGameMode) -> void:
+	_room_game_mode = game_mode
+
 ## 使用信标道具召唤撤离
 ## 真实从背包消耗物品（_beacon_count 仅作镜像，不参与消耗逻辑）
 func summon_beacon_extraction() -> bool:
@@ -182,20 +187,39 @@ func start_extraction(point_id: String) -> bool:
 func _check_requirements(point: ExtractionPoint) -> bool:
 	var reqs: Dictionary = point.requirements
 	
+	# 检查精英/Boss击杀计数（通过 RoomGameMode 回调）
+	var room_killed_count: int = 0
+	var room_boss_killed: bool = false
+	if _room_game_mode != null:
+		room_killed_count = _room_game_mode.get_elites_killed_in_current_room()
+		room_boss_killed = _room_game_mode.is_boss_killed_in_current_room()
+	
 	if reqs.get("must_kill_elite", false):
-		# 需要当前房间精英怪已击杀
-		# 检查逻辑由外部提供，这里简化处理
-		pass
+		# 需要当前房间精英怪已全部击杀
+		var elite_count: int = _get_elite_count_for_point(point)
+		if elite_count > 0 and room_killed_count < elite_count:
+			return false
 	
 	if reqs.get("must_kill_boss", false):
 		# 需要Boss已击杀
-		pass
+		if not room_boss_killed:
+			return false
 	
 	if reqs.get("min_items", 0) > 0:
 		# 需要携带最低数量物品
-		pass
+		if _inventory_ref == null or _inventory_ref.get_item_count_all() < reqs.get("min_items", 0):
+			return false
 	
 	return true
+
+## 获取指定撤离点关联房间的精英怪数量（通过 requirements.room_node_id 查找）
+func _get_elite_count_for_point(point: ExtractionPoint) -> int:
+	var room_node_id = point.requirements.get("room_node_id", -1)
+	if room_node_id == -1 or _room_game_mode == null:
+		# 无关联房间信息，尝试从 map_manager 获取当前房间
+		var current_room_elites: int = _room_game_mode.get_current_room_elite_count() if _room_game_mode else 0
+		return current_room_elites
+	return _room_game_mode.get_room_elite_count(room_node_id)
 
 ## 完成撤离
 func complete_extraction(player_escaped: bool) -> void:

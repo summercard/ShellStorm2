@@ -107,6 +107,18 @@ static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: A
 			result = _apply_add_eyes(card, tree, target_nodes)
 		FateCard.EffectAction.ADD_LEGS:
 			result = _apply_add_legs(card, tree, target_nodes)
+		FateCard.EffectAction.REINFORCE_WAVE:
+			result = _apply_reinforce_wave(card, tree, target_nodes)
+		FateCard.EffectAction.GRANT_RANDOM_CARD:
+			result = _apply_grant_random_card(card, tree, target_nodes)
+		FateCard.EffectAction.LUCKY_CHEST:
+			result = _apply_lucky_chest(card, tree, target_nodes)
+		FateCard.EffectAction.EXTRA_LOOT:
+			result = _apply_extra_loot(card, tree, target_nodes)
+		FateCard.EffectAction.CURSE_ROOM_ENEMIES:
+			result = _apply_curse_room_enemies(card, tree, target_nodes)
+		FateCard.EffectAction.BLESS_DEAD:
+			result = _apply_bless_dead(card, tree, target_nodes)
 		_:
 			result.error = ApplyError.APPLY_FAILED
 			result.message = "Unsupported effect action: %d" % action
@@ -547,3 +559,114 @@ static func _apply_add_legs(card: FateCard, tree: WeaponAssemblyTree, targets: A
 	result.effect_value = true
 	result.message = "Added legs visual to %s" % target.node_name
 	return result
+
+
+## ===== 效果执行：REINFORCE_WAVE（环境命运触发器）=====
+## 触发波次外额外刷怪 — 无需目标节点，直接通知 RoomWaveSpawner
+static func _apply_reinforce_wave(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	result.success = true
+	result.message = "Reinforce wave triggered (no target node needed)"
+	# 通知房间游戏模式触发额外刷怪
+	var rgm: Node = _find_room_game_mode()
+	if rgm != null and rgm.has_method("trigger_extra_wave"):
+		rgm.trigger_extra_wave()
+	return result
+
+
+## ===== 效果执行：GRANT_RANDOM_CARD（环境命运触发器）=====
+## 给予随机命运卡片 — 无需目标节点，给玩家一张随机卡片
+static func _apply_grant_random_card(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	result.success = true
+	result.message = "Grant random fate card triggered"
+	# 通过 FateCardGameBridge 应用一张随机卡片
+	var bridge: Node = _find_fate_card_bridge()
+	if bridge != null and bridge.has_method("grant_random_card_from_trigger"):
+		bridge.grant_random_card_from_trigger()
+	return result
+
+
+## ===== 效果执行：LUCKY_CHEST（环境命运触发器）=====
+## 下次开箱品质提升 — 通过 RoomGameMode 设置标记
+static func _apply_lucky_chest(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	result.success = true
+	result.effect_value = card.effect.get("quality_boost", 1)
+	result.message = "Lucky chest quality boost: +%d" % [result.effect_value]
+	var rgm: Node = _find_room_game_mode()
+	if rgm != null and rgm.has_method("set_next_chest_quality_boost"):
+		rgm.set_next_chest_quality_boost(int(result.effect_value))
+	return result
+
+
+## ===== 效果执行：EXTRA_LOOT（环境命运触发器）=====
+## 下次开箱额外掉落
+static func _apply_extra_loot(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	result.success = true
+	result.message = "Extra loot triggered"
+	var rgm: Node = _find_room_game_mode()
+	if rgm != null and rgm.has_method("set_extra_loot_next_chest"):
+		rgm.set_extra_loot_next_chest(true)
+	return result
+
+
+## ===== 效果执行：CURSE_ROOM_ENEMIES（环境命运触发器）=====
+## 当前房间内所有敌人伤害提升
+static func _apply_curse_room_enemies(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	var damage_mult: float = card.effect.get("damage_multiplier", 1.15)
+	result.success = true
+	result.effect_value = damage_mult
+	result.message = "Curse room enemies: %.0f%% damage boost" % [(damage_mult - 1.0) * 100.0]
+	var rgm: Node = _find_room_game_mode()
+	if rgm != null and rgm.has_method("apply_curse_to_current_room"):
+		rgm.apply_curse_to_current_room(damage_mult)
+	return result
+
+
+## ===== 效果执行：BLESS_DEAD（环境命运触发器）=====
+## 低血量存活后获得伤害加成
+static func _apply_bless_dead(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	result.success = true
+	result.effect_value = {
+		"hp_threshold": card.effect.get("hp_threshold", 0.3),
+		"survive_duration": card.effect.get("survive_duration", 30.0),
+		"damage_bonus": card.effect.get("damage_bonus", 0.1),
+	}
+	result.message = "Bless dead: HP<%.0f%% survive %ds = +%.0f%% damage" % [
+		result.effect_value.hp_threshold * 100.0,
+		result.effect_value.survive_duration,
+		result.effect_value.damage_bonus * 100.0,
+	]
+	# 通过 RoomGameMode 设置祝福状态
+	var rgm: Node = _find_room_game_mode()
+	if rgm != null and rgm.has_method("apply_bless_dead"):
+		rgm.apply_bless_dead(
+			result.effect_value.hp_threshold,
+			result.effect_value.survive_duration,
+			result.effect_value.damage_bonus
+		)
+	return result
+
+
+## ========== 辅助方法 ==========
+
+static func _find_room_game_mode() -> Node:
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.get_root() == null:
+		return null
+	var root: Node = tree.get_root()
+	var rgm: Node = root.get_node_or_null("Main/RoomGameMode")
+	if rgm == null:
+		rgm = root.find_child("RoomGameMode", false, false)
+	return rgm
+
+
+static func _find_fate_card_bridge() -> Node:
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return null
+	return tree.get_first_node_in_group("fate_cards")

@@ -21,6 +21,7 @@ var _current_room_id: int = -1
 var _current_floor: int = 1
 var _instantiated_rooms: Dictionary = {}  # node_id -> Node2D
 var _spawned_enemies: Dictionary = {}  # room_id -> Array[Dictionary]
+var _player_ref: Node2D = null  ## 玩家引用（小地图绘制用）
 
 func _init():
 	map_generator = MapGenerator.new()
@@ -239,6 +240,18 @@ func use_extraction(point_id: String) -> bool:
 ## 获取地图节点图
 func get_graph() -> NodeGraph:
 	return _current_graph
+
+## 获取当前房间ID（供小地图等使用）
+func get_current_room_id() -> int:
+	return _current_room_id
+
+## 设置玩家引用（小地图绘制用）
+func set_player(player: Node2D) -> void:
+	_player_ref = player
+
+## 获取玩家引用
+func get_player() -> Node2D:
+	return _player_ref
 
 ## 获取当前楼层
 func get_current_floor() -> int:

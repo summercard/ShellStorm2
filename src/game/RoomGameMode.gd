@@ -48,11 +48,14 @@ var _start_room_done: bool = false
 
 ## 波次生成器（当前房间）
 var _current_wave_spawner: RoomWaveSpawner = null
+## 区域刷怪控制器（当前房间）
+var _current_regional_controller: RegionalSpawnController = null
 
 func _ready() -> void:
 	_setup_map_manager()
 	_setup_extraction_modules()
 	_setup_signals()
+	_setup_map_fate_triggers()
 	# 同步信标数量（在 UI 绑定之前，确保 extraction_director 有正确计数）
 	_sync_beacon_count()
 	_setup_ui_manager()
@@ -125,6 +128,8 @@ func _get_base_manager() -> Node:
 func _setup_map_manager() -> void:
 	map_manager = MapManager.new()
 	add_child(map_manager)
+	# 注入 RoomGameMode 引用，使 ExtractionDirector 能通过回调查询精英/Boss击杀状态
+	map_manager.extraction_director.bind_room_game_mode(self)
 
 	map_manager.map_generated.connect(_on_map_generated)
 	map_manager.room_entered.connect(_on_room_entered)
@@ -173,6 +178,52 @@ func _setup_signals() -> void:
 	GameManager.hp_changed.connect(_on_hp_changed)
 	GameManager.currency_changed.connect(_on_currency_changed)
 
+## 连接商人关闭事件 → 解锁交易撤离
+## 注：merchant_interaction 由 _auto_open_merchant 在进入商人房时获取，
+## 这里先设置存根引用，实际连接在进入商人房时确保
+_call_connect_merchant_signals()
+
+## 设置开箱后命运触发回调（连接 ContainerInteraction → MapFateTriggers）
+## 在容器开启时触发环境命运计数（开箱×N）
+func _setup_container_fate_bridge() -> void:
+	var ct: Node = get_node_or_null("ContainerInteraction")
+	var triggers: Node = get_node_or_null("MapFateTriggers")
+	if ct == null or triggers == null:
+		return
+	if not ct.container_opened.is_connected(triggers.on_container_opened):
+		ct.container_opened.connect(triggers.on_container_opened)
+		print("[RoomGameMode] Container → FateTriggers 桥接已建立")
+
+## 初始化地图环境命运触发器
+func _setup_map_fate_triggers() -> void:
+	var triggers := MapFateTriggers.new()
+	add_child(triggers)
+	triggers.name = "MapFateTriggers"
+	print("[RoomGameMode] MapFateTriggers 已初始化")
+	# 连接触发器激活信号，触发时通过 FateCardEngine 执行命运卡片效果
+	if triggers.trigger_activated.connect(_on_map_fate_trigger_activated) == OK:
+		print("[RoomGameMode] MapFateTriggers trigger_activated 信号已连接")
+	# 延迟建立容器桥接（等 ContainerInteraction 完全挂载）
+	call_deferred("_setup_container_fate_bridge")
+
+## 环境命运触发器激活回调 — 将触发转换为实际命运卡片效果
+func _on_map_fate_trigger_activated(trigger_type: String, threshold: int, fate_card_id: String, effect_preview: String) -> void:
+	print("[RoomGameMode] 环境命运触发器激活: %s ×%d → %s" % [trigger_type, threshold, fate_card_id])
+	# 通过 FateCardEngine 查找并执行对应的命运卡片
+	var card: FateCard = FateCardPresets.get_by_card_id(fate_card_id)
+	if card == null:
+		push_warning("[RoomGameMode] 未找到命运卡片: %s" % fate_card_id)
+		return
+	# 应用卡片（静态方法，自动从场景树查找玩家武器树）
+	var apply_result: FateCardEngine.ApplyResult = FateCardEngine.apply_card_to_player(card)
+	if apply_result.success:
+		print("[RoomGameMode] 命运卡片应用成功: %s — %s" % [card.card_name, apply_result.message])
+		# 向 UI 发送成功通知
+		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+			_ui_manager.show_fate_card_notification("命运效果: %s" % effect_preview)
+	else:
+		push_warning("[RoomGameMode] 命运卡片应用失败: %s — %s" % [card.card_name, apply_result.message])
+
 ## 生成玩家
 func _spawn_player() -> void:
 	var player_scene = preload("res://scenes/Player.tscn")
@@ -187,6 +238,9 @@ func _spawn_player() -> void:
 		player.hp_changed.connect(_on_hp_changed)
 	if FateCardGameBridge.has_method("set_player"):
 		FateCardGameBridge.set_player(player)
+	# 同步玩家引用到 MapManager（小地图绘制用）
+	if map_manager and map_manager.has_method("set_player"):
+		map_manager.set_player(player)
 
 ## 开始游戏
 func _start_game() -> void:
@@ -387,6 +441,13 @@ func _print_extraction_failure() -> void:
 	print("=== 撤离失败 ===")
 	print("撤离未成功，物资可能丢失。")
 
+## 商人关闭事件 → 解锁交易撤离
+## 当玩家与商人完成首次交易并关闭商人面板时，解锁交易撤离点
+func _on_merchant_closed() -> void:
+	if map_manager != null and map_manager.extraction_director != null:
+		map_manager.extraction_director.unlock_trade_extraction()
+		print("[RoomGameMode] 商人大厅关闭 → 解锁交易撤离")
+
 ## 撤离中断回调
 func _on_extraction_aborted() -> void:
 	_update_room_info_label("撤离已中断！")
@@ -424,6 +485,13 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	# 创建波次生成器
 	_current_wave_spawner = RoomWaveSpawner.new()
 	add_child(_current_wave_spawner)
+
+	# 创建区域刷怪控制器（PH11 P1: 房间级刷怪管理 + 区域增援）
+	_setup_regional_spawn_controller(room_data)
+
+	# 将区域控制器注入波次生成器（敌人CHASE → 触发增援）
+	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
+		_current_wave_spawner.set_regional_controller(_current_regional_controller)
 
 	# 连接波次信号
 	_current_wave_spawner.wave_started.connect(_on_wave_started)
@@ -497,6 +565,116 @@ func _stop_current_room_spawner() -> void:
 		_current_wave_spawner.stop()
 		_current_wave_spawner.queue_free()
 	_current_wave_spawner = null
+	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
+		_current_regional_controller.queue_free()
+	_current_regional_controller = null
+
+## 设置区域刷怪控制器（PH11 P1: 房间级刷怪管理 + 区域增援）
+func _setup_regional_spawn_controller(room_data: RoomData) -> void:
+	_current_regional_controller = RegionalSpawnController.new()
+	add_child(_current_regional_controller)
+
+	# 获取当前房间实例，计算房间边界
+	var room_instance: Node2D = _get_current_room_instance()
+	var room_bounds: Rect2 = _calculate_room_bounds_for_spawn_controller(room_instance, room_data)
+
+	# 配置控制器参数（根据房间层级调整）
+	if room_data.floor_level == RoomData.FloorLevel.ABYSS:
+		_current_regional_controller.set_cooldown(10.0)
+		_current_regional_controller.set_count(4)
+	elif room_data.floor_level == RoomData.FloorLevel.DEEP:
+		_current_regional_controller.set_cooldown(12.0)
+		_current_regional_controller.set_count(3)
+	else:
+		_current_regional_controller.set_cooldown(15.0)
+		_current_regional_controller.set_count(2)
+
+	# 初始化
+	_current_regional_controller.setup(room_instance, room_data, room_bounds, self)
+
+	# PH11 P2: 构建相邻房间敌人字典，注入到控制器
+	_build_adjacent_enemies_for_controller(room_data)
+
+	# 连接区域增援信号 → 触发额外刷怪
+	if _current_regional_controller.reinforcement_ready.connect(_on_regional_reinforcement_ready) == OK:
+		print("[RoomGameMode] RegionalSpawnController 增援信号已连接")
+
+	# 连接敌人追击信号 → 触发增援判断
+	_connect_enemy_chase_signals()
+
+	# PH11 P2: 延迟注册当前房间敌人（等敌人真正生成到场景后）
+	# 连接精英怪 elite_entered_chase → 相邻房间AI联动
+	_call_deferred_register_adjacent_enemies()
+
+## PH11 P2: 构建相邻房间敌人字典并注入到控制器
+## 获取当前房间的相邻房间ID → 收集每个相邻房间内的敌人节点
+func _build_adjacent_enemies_for_controller(room_data: RoomData) -> void:
+	if map_manager == null or _current_regional_controller == null:
+		return
+	var graph: NodeGraph = map_manager.get_graph()
+	if graph == null:
+		return
+	var current_room_id: int = room_data.room_id
+	var neighbor_ids: Array[int] = graph.get_neighbors(current_room_id)
+	var adjacent_enemies: Dictionary = {}
+	for neighbor_id in neighbor_ids:
+		var neighbor_enemies: Array[Node] = []
+		var neighbor_instance: Node2D = map_manager.get_instantiated_room(neighbor_id)
+		if is_instance_valid(neighbor_instance):
+			for child in neighbor_instance.get_children():
+				if child is CharacterBody2D and child.is_in_group("enemy"):
+					neighbor_enemies.append(child)
+		adjacent_enemies[neighbor_id] = neighbor_enemies
+	_current_regional_controller.set_adjacent_enemies(adjacent_enemies)
+	print("[RoomGameMode] P2相邻房间敌人已注入: %s" % adjacent_enemies)
+
+## PH11 P2: 延迟注册当前房间敌人并连接 elite_entered_chase 信号
+func _call_deferred_register_adjacent_enemies() -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var room_instance: Node2D = _get_current_room_instance()
+	if room_instance == null or _current_regional_controller == null:
+		return
+	var current_enemies: Array[Node] = []
+	for child in room_instance.get_children():
+		if child is CharacterBody2D and child.is_in_group("enemy"):
+			current_enemies.append(child)
+	_current_regional_controller.register_enemies(current_enemies)
+	print("[RoomGameMode] P2当前房间敌人注册完成: %d个敌人已连精英信号" % current_enemies.size())
+
+## 计算房间边界Rect2（供 RegionalSpawnController 使用）
+func _calculate_room_bounds_for_spawn_controller(room_instance: Node2D, room_data: RoomData) -> Rect2:
+	var room_center: Vector2 = Vector2.ZERO
+	if is_instance_valid(room_instance):
+		room_center = room_instance.global_position
+	else:
+		room_center = room_data.position
+	var half_size: Vector2 = room_data.size * 0.5
+	return Rect2(room_center - half_size, room_data.size)
+
+## 区域增援触发回调
+func _on_regional_reinforcement_ready(room_id: int, count: int) -> void:
+	print("[RoomGameMode] 区域增援触发！房间ID=%d，数量=%d" % [room_id, count])
+	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+		_current_wave_spawner.trigger_extra_spawn(count)
+
+## 连接当前房间所有敌人的追击信号（房间内任一敌人进入 CHASE → 区域增援）
+func _connect_enemy_chase_signals() -> void:
+	# 延迟连接（等敌人真正生成到场景后）
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var room_instance: Node2D = _get_current_room_instance()
+	if room_instance == null:
+		return
+	for child in room_instance.get_children():
+		if child is CharacterBody2D and child.has_signal("enemy_entered_chase"):
+			if not child.enemy_entered_chase.is_connected(_on_enemy_entered_chase_wrapper):
+				child.enemy_entered_chase.connect(_on_enemy_entered_chase_wrapper)
+
+## 敌人进入 CHASE 的信号包装（统一路由到区域控制器）
+func _on_enemy_entered_chase_wrapper(enemy: Node, last_known_pos: Vector2) -> void:
+	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
+		_current_regional_controller._on_enemy_chase(enemy, last_known_pos)
 
 ## 获取当前房间对应的场景实例节点
 func _get_current_room_instance() -> Node2D:
@@ -689,6 +867,9 @@ func _auto_open_merchant(room_data: RoomData) -> void:
 		ui.show_merchant(merchant_interaction._goods)
 		# 同步商人状态为 ACTIVE，避免离开时状态不一致导致无法正确关闭
 		merchant_interaction.force_set_active()
+		# 连接交易成功信号 → 解锁交易撤离（单人购买即解锁，不需要等待关闭）
+		if not ui.merchant_closed.is_connected(_on_merchant_closed):
+			ui.merchant_closed.connect(_on_merchant_closed)
 		_update_room_info_label("与 [%s] 交易中..." % merchant_interaction.shop_name)
 	else:
 		# 降级：控制台打印商品
@@ -847,6 +1028,21 @@ func _process(delta: float) -> void:
 	# 更新波次生成器
 	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
 		_current_wave_spawner.tick(delta)
+
+	# 更新区域刷怪控制器（PH11 P1: 冷却计时）
+	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
+		_current_regional_controller.tick(delta)
+
+	# 亡者祝福计时（低HP存活检查）
+	if not _bless_dead_config.is_empty() and _bless_dead_config.get("active", false):
+		var timer = _bless_dead_config.get("survive_timer", 0.0) - delta
+		_bless_dead_config["survive_timer"] = timer
+		if timer <= 0.0:
+			var bonus = _bless_dead_config.get("damage_bonus", 0.1)
+			print("[RoomGameMode] 亡者祝福生效！伤害+%.0f%%" % (bonus * 100.0))
+			if player != null and player.has_method("apply_damage_multiplier"):
+				player.apply_damage_multiplier(1.0 + bonus)
+			_bless_dead_config["active"] = false
 
 	var current_data: RoomData = map_manager.get_current_room_data()
 	if current_data == null:
@@ -1014,6 +1210,48 @@ func get_insurance() -> InsuranceModule:
 func get_extraction_module() -> ExtractionModule:
 	return extraction_module
 
+## 获取当前房间精英怪已击杀数量（供 ExtractionDirector._check_requirements 调用）
+func get_elites_killed_in_current_room() -> int:
+	if map_manager == null:
+		return 0
+	var enemies: Array[Dictionary] = map_manager.get_current_room_enemies()
+	var killed: int = 0
+	for e in enemies:
+		if e.get("is_elite", false) and e.get("hp", 1) <= 0:
+			killed += 1
+	return killed
+
+## 获取当前房间精英怪总数量
+func get_current_room_elite_count() -> int:
+	if map_manager == null:
+		return 0
+	var enemies: Array[Dictionary] = map_manager.get_current_room_enemies()
+	var elite_count: int = 0
+	for e in enemies:
+		if e.get("is_elite", false):
+			elite_count += 1
+	return elite_count
+
+## 获取指定房间的精英怪总数量
+func get_room_elite_count(room_id: int) -> int:
+	if map_manager == null:
+		return 0
+	var enemies: Array[Dictionary] = map_manager._spawned_enemies.get(room_id, [])
+	var elite_count: int = 0
+	for e in enemies:
+		if e.get("is_elite", false):
+			elite_count += 1
+	return elite_count
+
+## 检查Boss房Boss是否已击杀
+func is_boss_killed_in_current_room() -> bool:
+	if map_manager == null:
+		return false
+	var room_data: RoomData = map_manager.get_current_room_data()
+	if room_data == null or room_data.room_type != RoomData.RoomType.BOSS:
+		return false
+	return map_manager.is_current_room_cleared()
+
 ## 开始撤离读条（供UI或信号调用）
 func begin_extraction(extraction_type: String, countdown: float = 5.0) -> bool:
 	if extraction_module == null:
@@ -1053,3 +1291,60 @@ func debug_status() -> String:
 		lines.append(map_manager.debug_status())
 
 	return "\n".join(lines)
+## ========== 环境命运卡片效果回调方法（由 FateCardEngine._apply_* 调用）==========
+
+## 触发额外波次（REINFORCE_WAVE）
+func trigger_extra_wave() -> void:
+	print("[RoomGameMode] 触发额外波次（环境命运: 敌增援）")
+	var ws = _current_wave_spawner
+	if ws != null and ws.has_method("trigger_extra_spawn"):
+		ws.trigger_extra_spawn()
+
+## 设置下次开箱品质提升（LUCKY_CHEST）
+func set_next_chest_quality_boost(boost: int) -> void:
+	print("[RoomGameMode] 设置下次开箱品质提升: +%d" % boost)
+	var ct = get_node_or_null("ContainerInteraction")
+	if ct != null and ct.has_method("set_quality_boost"):
+		ct.set_quality_boost(boost)
+
+## 设置下次开箱额外掉落（EXTRA_LOOT）
+func set_extra_loot_next_chest(enabled: bool) -> void:
+	print("[RoomGameMode] 设置下次开箱额外掉落: %s" % enabled)
+	var ct = get_node_or_null("ContainerInteraction")
+	if ct != null and ct.has_method("set_extra_loot"):
+		ct.set_extra_loot(enabled)
+
+## 对当前房间敌人施加诅咒（CURSE_ROOM_ENEMIES）
+func apply_curse_to_current_room(damage_multiplier: float) -> void:
+	print("[RoomGameMode] 对当前房间施加诅咒: 伤害×%.2f" % damage_multiplier)
+	var room_node = null
+	if map_manager != null:
+		var current_room_id = map_manager.get_current_room_id()
+		room_node = map_manager.get_instantiated_room(current_room_id)
+	if room_node != null:
+		for child in room_node.get_children():
+			if child.has_method("apply_damage_multiplier"):
+				child.apply_damage_multiplier(damage_multiplier)
+
+## 应用亡者祝福（BLESS_DEAD）
+func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus: float) -> void:
+	print("[RoomGameMode] 应用亡者祝福: HP<%.0f%%存活%.0f秒→伤害+%.0f%%" % [
+		hp_threshold * 100.0, survive_duration, damage_bonus * 100.0])
+	_bless_dead_config = {
+		"hp_threshold": hp_threshold,
+		"survive_duration": survive_duration,
+		"damage_bonus": damage_bonus,
+		"active": false,
+	}
+	if not GameManager.hp_changed.is_connected(_on_bless_dead_hp_check):
+		GameManager.hp_changed.connect(_on_bless_dead_hp_check)
+
+var _bless_dead_config: Dictionary = {}
+
+func _on_bless_dead_hp_check(current: int, maximum: int) -> void:
+	if _bless_dead_config.is_empty() or _bless_dead_config.get("active", false):
+		return
+	var threshold_ratio = _bless_dead_config.get("hp_threshold", 0.3)
+	if float(current) / float(maximum) <= threshold_ratio:
+		_bless_dead_config["active"] = true
+		print("[RoomGameMode] 亡者祝福已激活！HP<%.0f%%" % (threshold_ratio * 100.0))

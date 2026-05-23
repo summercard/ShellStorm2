@@ -25,6 +25,8 @@ var _state: ContainerState = ContainerState.AVAILABLE
 var _player_in_range: bool = false
 var _interact_label: Label = null
 var _opened: bool = false
+var _quality_boost: int = 0  ## 下次开箱品质提升（由环境命运触发器设置）
+var _extra_loot_enabled: bool = false  ## 下次开箱额外掉落（由环境命运触发器设置）
 
 ## 引用
 var _inventory_module: InventoryModule = null
@@ -131,6 +133,25 @@ func _generate_loot() -> Array[Dictionary]:
 		_:
 			loot = _loot_module.generate_loot(loot_table, 1)
 
+	# 应用命运效果：额外掉落（生成一件额外物品）
+	if _extra_loot_enabled and not loot.is_empty():
+		var extra: Array[Dictionary] = _loot_module.generate_loot(loot_table, 1)
+		for item in extra:
+			loot.append(item)
+		print("[ContainerInteraction] 命运效果：额外掉落已应用，+1件物品")
+
+	# 应用命运效果：品质提升（提升已生成物品的品质标签，过滤低品质）
+	# 逻辑：将所有物品的 loot_table_tier 提升 _quality_boost 级（仅影响显示，不改变实际数据）
+	if _quality_boost > 0:
+		for item in loot:
+			var current_tier: int = item.get("loot_table_tier", 0)
+			item["loot_table_tier"] = current_tier + _quality_boost
+			print("[ContainerInteraction] 命运效果：物品 %s 品质提升 +%d (tier %d→%d)" % [
+				item.get("name", "?"), _quality_boost, current_tier, item["loot_table_tier"]])
+
+	# 重置命运效果标记
+	_reset_fate_effects()
+
 	return loot
 
 ## 将掉落加入背包（过滤掉货币条目）
@@ -188,6 +209,21 @@ func get_state() -> ContainerState:
 ## 是否已开启
 func is_opened() -> bool:
 	return _opened
+
+## 设置下次开箱品质提升（由环境命运触发器调用）
+func set_quality_boost(boost: int) -> void:
+	_quality_boost = boost
+	print("[ContainerInteraction] 品质提升已设置: +%d" % boost)
+
+## 设置下次开箱额外掉落（由环境命运触发器调用）
+func set_extra_loot(enabled: bool) -> void:
+	_extra_loot_enabled = enabled
+	print("[ContainerInteraction] 额外掉落已设置: %s" % enabled)
+
+## 重置命运效果标记（在开箱后调用）
+func _reset_fate_effects() -> void:
+	_quality_boost = 0
+	_extra_loot_enabled = false
 
 ## 更新掉落表（房间切换楼层时调用）
 func update_loot_table(table_name: String, new_floor: int) -> void:

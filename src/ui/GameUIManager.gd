@@ -16,6 +16,8 @@ const _ITEM_USE_HANDLER_PATH := "res://src/game/ItemUseHandler.gd"
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
+@onready var minimap_panel: PanelContainer = $GameHUD/MiniMapPanel
+@onready var minimap_view: ReferenceRect = $GameHUD/MiniMapPanel/MiniMapView
 
 ## — 弹药 UI —
 @onready var ammo_panel: PanelContainer = $GameHUD/AmmoPanel
@@ -70,6 +72,13 @@ var _extraction_module: Object = null
 var _insurance_module: Object = null
 var _inventory_ui: Control = null  ## InventoryUI 引用（由本类实例化）
 var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信标撤离计数）
+
+## — 小地图 UI（PH11）—
+var _minimap_panel: PanelContainer = null
+var _minimap_view: ReferenceRect = null
+var _minimap_dirty: bool = false  ## 标记需要重绘
+var _minimap_nodes: Array[Dictionary] = []  ## 当前地图节点缓存
+var _minimap_player_node_id: int = -1  ## 玩家所在节点ID
 
 ## — 游戏结束界面 —
 var death_overlay: ColorRect
@@ -176,6 +185,7 @@ func _ensure_hud_layout() -> void:
 ## 绑定房间游戏模式
 func set_room_game_mode(mode: Node) -> void:
 	_room_game_mode = mode
+	_init_minimap()
 
 	# 连接信号
 	if mode.has_signal("room_cleared"):
@@ -190,6 +200,11 @@ func set_room_game_mode(mode: Node) -> void:
 		mode.kill_recorded.connect(_on_kill_recorded)
 	if mode.has_signal("wave_progress_changed"):
 		mode.wave_progress_changed.connect(_on_wave_progress_changed)
+	# 小地图随地图生成和房间切换刷新
+	if mode.has_signal("map_generated"):
+		mode.map_generated.connect(_on_map_generated_for_minimap)
+	if mode.has_signal("room_entered"):
+		mode.room_entered.connect(_on_room_entered_for_minimap)
 
 ## 绑定玩家（用于闪避冷却条等）
 func set_player(player: Node) -> void:
@@ -405,6 +420,28 @@ func _on_container_loot_granted(world_pos: Vector2, items: Array[Dictionary], gr
 			add_child(item_label)
 			_fly_and_fade(item_label, offset_pos)
 
+## 小地图刷新信号处理
+func _on_map_generated_for_minimap(graph: NodeGraph) -> void:
+	_minimap_dirty = true
+
+func _on_room_entered_for_minimap(room_data: RoomData) -> void:
+	_minimap_dirty = true
+	# 根据房间类型更新 room_info_label（中文显示）
+	if room_info_label and room_data != null:
+		var type_name := ""
+		match room_data.room_type:
+			RoomData.RoomType.PLAYER_SPAWN: type_name = "玩家出生"
+			RoomData.RoomType.COMBAT: type_name = "普通战斗"
+			RoomData.RoomType.ELITE: type_name = "精英战斗"
+			RoomData.RoomType.SCAVENGE: type_name = "搜刮"
+			RoomData.RoomType.MERCHANT: type_name = "商人"
+			RoomData.RoomType.UPGRADE: type_name = "改造"
+			RoomData.RoomType.EVENT: type_name = "事件"
+			RoomData.RoomType.EXTRACTION: type_name = "撤离"
+			RoomData.RoomType.BOSS: type_name = "Boss"
+			_: type_name = "房间"
+		room_info_label.text = type_name
+
 ## 飘字动画：Y 上浮 + 淡出消失
 func _fly_and_fade(label: Label, start_pos: Vector2) -> void:
 	var tween := label.create_tween()
@@ -421,6 +458,162 @@ func update_floor(floor: int) -> void:
 		wave_label.text = "Floor: %d" % floor
 		_bounce_label(wave_label)
 		_sync_wave_outline()
+
+## — 小地图绘制（PH11 P1）—
+func _init_minimap() -> void:
+	_minimap_panel = minimap_panel
+	_minimap_view = minimap_view
+	if _minimap_view:
+		_minimap_view.resized.connect(_on_minimap_view_resized)
+	_minimap_dirty = true
+
+func _on_minimap_view_resized() -> void:
+	_minimap_dirty = true
+
+func _refresh_minimap_nodes() -> void:
+	_minimap_nodes.clear()
+	_minimap_player_node_id = -1
+	if _room_game_mode == null or not _room_game_mode.has_method("get_map_manager"):
+		return
+	var mm = _room_game_mode.get_map_manager()
+	var graph: NodeGraph = mm.get_graph() if mm else null
+	if graph == null:
+		return
+	var nodes: Array = graph.get_all_nodes()
+	var current_room_id: int = mm.get_current_room_id() if mm.has_method("get_current_room_id") else -1
+	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
+	var map_rect: Rect2 = _calc_map_bounds(nodes)
+
+	# 获取玩家世界位置（用于计算小地图玩家点偏移）
+	var player_world_pos: Vector2 = Vector2.ZERO
+	var player_ref: Node = mm.get_player() if mm.has_method("get_player") else null
+	if player_ref and is_instance_valid(player_ref):
+		player_world_pos = player_ref.global_position
+
+	for node in nodes:
+		var rd: RoomData = node.room_data
+		var color: Color = _get_room_color(rd.room_type)
+		var pos: Vector2
+		if map_rect.size.x > 0 and map_rect.size.y > 0:
+			var norm := (node.position - map_rect.position) / map_rect.size
+			pos = Vector2(norm.x * view_size.x, norm.y * view_size.y)
+		else:
+			pos = Vector2(view_size.x * 0.5, view_size.y * 0.5)
+		_minimap_nodes.append({
+			"id": node.id,
+			"pos": pos,
+			"node_pos": node.position,  # 房间世界坐标（计算玩家相对偏移用）
+			"color": color,
+			"type": rd.room_type,
+			"is_current": node.id == current_room_id,
+			"connections": node.connections.duplicate(),
+		})
+	_minimap_dirty = true
+
+func _calc_map_bounds(nodes: Array) -> Rect2:
+	if nodes.is_empty():
+		return Rect2(0, 0, 1, 1)
+	var min_x := INF, min_y := INF, max_x := -INF, max_y := -INF
+	for node in nodes:
+		min_x = minf(min_x, node.position.x)
+		min_y = minf(min_y, node.position.y)
+		max_x = maxf(max_x, node.position.x)
+		max_y = maxf(max_y, node.position.y)
+	var pad := 50.0
+	return Rect2(min_x - pad, min_y - pad, (max_x - min_x) + pad * 2, (max_y - min_y) + pad * 2)
+
+func _get_room_color(room_type: int) -> Color:
+	match room_type:
+		0: return Color(0.5, 1.0, 0.5, 0.9)
+		1: return Color(1.0, 0.3, 0.3, 0.9)
+		2: return Color(1.0, 0.6, 0.1, 0.9)
+		3: return Color(0.3, 0.8, 1.0, 0.9)
+		4: return Color(1.0, 0.85, 0.2, 0.9)
+		5: return Color(0.6, 0.4, 1.0, 0.9)
+		6: return Color(0.9, 0.3, 0.9, 0.9)
+		7: return Color(0.2, 1.0, 0.6, 0.9)
+		8: return Color(1.0, 0.1, 0.1, 1.0)
+		_: return Color(0.7, 0.7, 0.7, 0.9)
+
+func _draw_minimap_rserver(canvas: RID) -> void:
+	if _minimap_nodes.is_empty():
+		return
+	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
+	RenderingServer.canvas_item_add_rect(canvas, Rect2(Vector2.ZERO, view_size), Color(0.07, 0.07, 0.12, 0.95))
+
+	# 计算玩家当前房间的相对偏移（用于在当前房间节点上显示玩家位置）
+	var player_local_offset: Vector2 = Vector2.ZERO
+	var player_node_pos: Vector2 = Vector2.ZERO  # 当前房间节点的世界坐标
+	var map_rect: Rect2 = _calc_map_bounds(_minimap_nodes)
+
+	# 获取玩家世界坐标
+	var player_world_pos: Vector2 = Vector2.ZERO
+	if _room_game_mode and _room_game_mode.has_method("get_player"):
+		var p: Node = _room_game_mode.get_player()
+		if p and is_instance_valid(p):
+			player_world_pos = p.global_position
+
+	# 找到当前房间节点（is_current=true）的世界坐标
+	for nd in _minimap_nodes:
+		if nd.get("is_current", false):
+			player_node_pos = nd.get("node_pos", Vector2.ZERO)
+			break
+
+	# 计算玩家在当前房间内的相对偏移（归一化到小地图视图内）
+	if map_rect.size.x > 0 and map_rect.size.y > 0 and player_node_pos != Vector2.ZERO:
+		var rel: Vector2 = (player_world_pos - player_node_pos) / map_rect.size
+		# 限制最大偏移不超过房间节点大小的2倍
+		var max_offset: float = minf(view_size.x, view_size.y) * 0.25
+		player_local_offset = rel * maxf(view_size.x, view_size.y) * 0.5
+		player_local_offset = Vector2(
+			clamp(player_local_offset.x, -max_offset, max_offset),
+			clamp(player_local_offset.y, -max_offset, max_offset)
+		)
+
+	# 绘制连接线
+	for node_data in _minimap_nodes:
+		var pos: Vector2 = node_data["pos"]
+		for conn_id in node_data["connections"]:
+			var conn_pos: Vector2 = _get_node_pos_by_id(conn_id)
+			RenderingServer.canvas_item_add_line(canvas, pos, conn_pos, Color(0.3, 0.3, 0.4, 0.7), 1.0)
+
+	# 绘制房间节点
+	for node_data in _minimap_nodes:
+		var pos: Vector2 = node_data["pos"]
+		var color: Color = node_data["color"]
+		var is_current: bool = node_data["is_current"]
+		var node_size := 8.0
+		if is_current:
+			node_size = 12.0
+			RenderingServer.canvas_item_add_rect(canvas, Rect2(pos - Vector2(node_size + 3, node_size + 3), Vector2((node_size + 3) * 2, (node_size + 3) * 2)), Color(1.0, 1.0, 1.0, 0.35))
+		RenderingServer.canvas_item_add_rect(canvas, Rect2(pos - Vector2(node_size, node_size), Vector2(node_size * 2, node_size * 2)), color)
+
+	# 绘制玩家位置点（白色小圆点，跟随玩家在当前房间内的实际位置偏移）
+	var current_node_pos: Vector2 = Vector2.ZERO
+	for nd in _minimap_nodes:
+		if nd.get("is_current", false):
+			current_node_pos = nd.get("pos", Vector2.ZERO)
+			break
+	if current_node_pos != Vector2.ZERO:
+		var player_dot_pos: Vector2 = current_node_pos + player_local_offset
+		# 玩家点：白色填充圆（用小矩形模拟点）
+		RenderingServer.canvas_item_add_rect(canvas, Rect2(player_dot_pos - Vector2(2.5, 2.5), Vector2(5, 5)), Color(1.0, 1.0, 1.0, 1.0))
+		# 外圈高亮（表示玩家）
+		RenderingServer.canvas_item_add_rect(canvas, Rect2(player_dot_pos - Vector2(4, 4), Vector2(8, 8)), Color(0.4, 0.8, 1.0, 0.4))
+
+func _get_node_pos_by_id(node_id: int) -> Vector2:
+	for nd in _minimap_nodes:
+		if nd.get("id") == node_id:
+			return nd.get("pos")
+	return Vector2.ZERO
+
+func refresh_minimap() -> void:
+	_minimap_dirty = true
+
+func _draw() -> void:
+	if _minimap_view == null or _minimap_nodes.is_empty():
+		return
+	_draw_minimap_rserver(_minimap_view.get_top_level_rc())
 
 ## 房间清理完成
 func _on_room_cleared(room_data) -> void:
@@ -483,6 +676,33 @@ func _show_fate_card_notification() -> void:
 	# 淡入动画
 	var tween := _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
+
+## 显示命运卡片提示（供外部调用，支持自定义文字）
+func show_fate_card_notification(message: String = "") -> void:
+	if _fate_card_notification_label == null:
+		return
+	# 如果传入了自定义文字，临时替换
+	var original_text: String = ""
+	if message != "":
+		original_text = _fate_card_notification_label.text
+		_fate_card_notification_label.text = message
+	# 停止可能正在播放的旧动画，防止多次调用叠加导致闪烁
+	var existing_tweens: Array = _fate_card_notification_label.get_tree().get_nodes_in_group("")
+	for t in _fate_card_notification_label.get_children():
+		if t is Tween:
+			t.kill()
+	_fate_card_notification_label.modulate.a = 1.0
+	_fate_card_notification_timer = _FATE_CARD_NOTIFICATION_DURATION
+	_fate_card_notification_label.visible = true
+	var tween := _fate_card_notification_label.create_tween()
+	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
+	# 恢复原文字（如果有自定义文字，且提示结束后恢复）
+	if message != "" and original_text != "":
+		_fate_card_notification_label.text = original_text
+
+## 命运触发通知别名（兼容 MapFateTriggers 调用）
+func show_fate_trigger_notification(trigger_type: String, threshold: int, preview: String) -> void:
+	show_fate_card_notification("%s ×%d → %s" % [trigger_type, threshold, preview])
 
 ## 隐藏命运卡片提示
 func _hide_fate_card_notification() -> void:
@@ -823,6 +1043,7 @@ func _on_extraction_ready() -> void:
 	if extraction_panel:
 		_update_beacon_label()
 		_build_extraction_buttons()
+		_update_extraction_buttons()  # 刷新按钮状态（可能刚有extraction_unlocked信号解锁了条件撤离点）
 		extraction_panel.visible = true
 
 ## 构建撤离类型按钮
@@ -944,6 +1165,7 @@ func _update_countdown_label(remaining: float, total: float) -> void:
 func set_beacon_count(count: int) -> void:
 	_beacon_count = count
 	_update_beacon_label()
+	_update_extraction_buttons()  # 信标数量变化时同步刷新按钮可用性（BEACON按钮依赖_beacon_count）
 
 ## 隐藏所有面板
 func hide_all_panels() -> void:

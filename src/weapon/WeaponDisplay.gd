@@ -253,6 +253,8 @@ func _trigger_muzzle_flash() -> void:
 	if _muzzle_tween and _muzzle_tween.is_valid():
 		_muzzle_tween.kill()
 	_muzzle.visible = true
+	# 枪口火焰应在枪管前端（local space X=40，rotation 后自动跟随枪管方向）
+	_muzzle.position = Vector2(40, 0)
 	
 	# 根据枪型选择不同火焰大小
 	var muzzle_cfg: Dictionary = _get_muzzle_config()

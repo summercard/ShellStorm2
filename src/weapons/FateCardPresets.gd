@@ -230,3 +230,87 @@ static func by_type(card_type: FateCard.CardType) -> Array[FateCard]:
 		if card.card_type == card_type:
 			result.append(card)
 	return result
+
+## ========== 环境命运触发器专用卡片（由 MapFateTriggers 调用）==========
+
+## 敌增援：连续击杀N个敌人后，波次外额外刷怪
+## 注意：这是一种规则型效果，不依赖目标节点选择
+static func fate_reinforce() -> FateCard:
+	var card := FateCard.new("敌增援", FateCard.CardType.RULE, RARITY_RARE)
+	card.tags = ["Fate.Rule", "Fate.Reinforce", "Fate.MapTrigger"]
+	card.description = "连续击杀敌人后，波次外额外刷出一批增援怪物"
+	card.effect = {
+		"action": FateCard.EffectAction.REINFORCE_WAVE,
+	}
+	return card
+
+## 命运标记：击杀第N个敌人后，获得一张随机命运卡片
+static func fate_mark_enemy() -> FateCard:
+	var card := FateCard.new("命运标记", FateCard.CardType.RULE, RARITY_EPIC)
+	card.tags = ["Fate.Rule", "Fate.MapTrigger"]
+	card.description = "击杀足够多的敌人后，获得一张随机命运卡片"
+	card.effect = {
+		"action": FateCard.EffectAction.GRANT_RANDOM_CARD,
+	}
+	return card
+
+## 幸运发现：第N个箱子开启后，箱子物品品质提升
+static func fate_lucky_chest() -> FateCard:
+	var card := FateCard.new("幸运发现", FateCard.CardType.ENHANCE, RARITY_RARE)
+	card.tags = ["Fate.Enhance", "Fate.MapTrigger"]
+	card.description = "下一个箱子的物品品质提升一个等级（蓝+以上）"
+	card.effect = {
+		"action": FateCard.EffectAction.LUCKY_CHEST,
+		"quality_boost": 1,
+	}
+	return card
+
+## 额外掉落：开箱获得额外物品
+static func fate_extra_loot() -> FateCard:
+	var card := FateCard.new("额外掉落", FateCard.CardType.ENHANCE, RARITY_RARE)
+	card.tags = ["Fate.Enhance", "Fate.MapTrigger"]
+	card.description = "下一个箱子开启时额外掉落一件物品"
+	card.effect = {
+		"action": FateCard.EffectAction.EXTRA_LOOT,
+	}
+	return card
+
+## 诅咒降临：本房间内怪物伤害+15%
+static func fate_curse_map() -> FateCard:
+	var card := FateCard.new("诅咒降临", FateCard.CardType.CURSE, RARITY_MYSTIC)
+	card.tags = ["Fate.Curse", "Fate.MapTrigger"]
+	card.description = "本房间内所有怪物伤害提升15%，持续到当前房间清理完成"
+	card.effect = {
+		"action": FateCard.EffectAction.CURSE_ROOM_ENEMIES,
+		"damage_multiplier": 1.15,
+	}
+	return card
+
+## 亡者祝福：HP低于30%后存活30秒，获得30秒伤害加成
+static func fate_bless_dead() -> FateCard:
+	var card := FateCard.new("亡者祝福", FateCard.CardType.ENHANCE, RARITY_EPIC)
+	card.tags = ["Fate.Enhance", "Fate.MapTrigger"]
+	card.description = "HP低于30%后存活30秒，获得30秒内伤害+10%"
+	card.effect = {
+		"action": FateCard.EffectAction.BLESS_DEAD,
+		"hp_threshold": 0.3,
+		"survive_duration": 30.0,
+		"damage_bonus": 0.1,
+	}
+	return card
+
+## 根据 card_id 字符串查找并生成对应的预设卡片实例（用于环境命运触发器）
+static func get_by_card_id(card_id: String) -> FateCard:
+	match card_id:
+		"fate_reinforce": return fate_reinforce()
+		"fate_mark_enemy": return fate_mark_enemy()
+		"fate_lucky_chest": return fate_lucky_chest()
+		"fate_extra_loot": return fate_extra_loot()
+		"fate_curse_map": return fate_curse_map()
+		"fate_bless_dead": return fate_bless_dead()
+		# 兜底：返回一张通用的随机卡片
+		_:
+			var all := all_presets()
+			if not all.is_empty():
+				return all[randi() % all.size()]
+			return scale_up()  # 兜底默认返回"变大了"

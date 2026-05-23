@@ -6,6 +6,26 @@ const ENEMY_PROJECTILE_SCENE := preload("res://scenes/EnemyProjectile.tscn")
 signal hp_changed(current: int, maximum: int)
 signal enemy_died()
 signal enemy_hit(hit_from: Vector2, damage: int, is_crit: bool)
+## 当敌人进入 CHASE 追击状态时，向房间的区域刷怪控制器发送警觉信号
+signal enemy_entered_chase(enemy: Node, last_known_pos: Vector2)
+## 精英怪专属：进入 CHASE 时触发相邻房间 AI 联动（PH11 P2）
+signal elite_entered_chase(enemy: Node, last_known_pos: Vector2)
+
+## AI状态机枚举（PH11 警觉AI核心）
+enum AIState {
+	IDLE = 0,    # 空闲：原地小范围移动，不主动攻击，眼睛正常
+	ALERT = 1,   # 警觉：停止、看向玩家方向、头上出现 ❓，计时中
+	CHASE = 2,   # 追击：全速追击玩家，头上出现 ❗
+	SEARCH = 3,  # 搜索：在最后看到玩家的位置徘徊，眼睛黄+问号
+	PATROL = 4,  # 巡逻：沿固定路线巡逻
+}
+
+## 警觉感知配置
+@export var awareness_enabled: bool = true  # 是否启用警觉AI（false=旧行为，直接chase）
+@export var visual_range: float = 350.0    # 视觉感知范围 px
+@export var hearing_range: float = 250.0    # 听觉感知范围 px
+@export var alert_duration: float = 3.0     # ALERT状态持续时间（秒）
+@export var search_duration: float = 5.0    # SEARCH状态持续时间（秒）
 
 @export var max_hp: int = 30
 @export var speed: float = 80.0
@@ -34,6 +54,28 @@ var _is_dead: bool = false
 var _knockback_velocity: Vector2 = Vector2.ZERO
 var _modifiers: Array = []
 var _enemy_data: Dictionary = {}
+var _damage_multiplier: float = 1.0  # 伤害倍率（由环境命运触发器设置）
+var _is_elite: bool = false          # 是否为精英怪（PH11 P2: 精英进入CHASE时触发相邻房间AI联动）
+
+## AI状态机变量
+var _ai_state: AIState = AIState.IDLE
+var _alert_timer: float = 0.0       # ALERT状态剩余时间
+var _search_timer: float = 0.0       # SEARCH状态剩余时间
+var _last_known_player_pos: Vector2 = Vector2.ZERO  # 玩家最后被看到的位置
+var _noise_accumulator: float = 0.0  # 声音累积（玩家移动/射击时增加）
+
+## 巡逻变量（PH11 区域AI核心）
+var _patrol_waypoints: Array[Vector2] = []  # 当前巡逻路径点列表
+var _current_patrol_idx: int = 0             # 当前目标路径点索引
+var _patrol_reach_threshold: float = 28.0   # 到达路径点的判定距离
+var _patrol_idle_duration: float = 0.0       # 路径点间停顿计时
+var _patrol_idle_max: float = 1.2           # 路径点间最大停顿时间
+var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)  # 房间边界（默认800×600，居于原点）
+var _is_in_patrol_mode: bool = false         # 是否正在执行巡逻路径
+var _patrol_cooldown: float = 0.0            # 巡逻冷却（防止频繁重新规划）
+
+## 声音累积衰减（每帧减少）
+const _NOISE_DECAY_RATE: float = 15.0       # 声音累积每秒衰减量
 
 @onready var shape: ColorRect = $Shape
 @onready var emoji_label: Label = get_node_or_null("Emoji") as Label
@@ -41,6 +83,7 @@ var _enemy_data: Dictionary = {}
 
 func set_enemy_data(data: Dictionary) -> void:
 	_enemy_data = data.duplicate(true)
+	_is_elite = data.get("is_elite", false)
 	if data.has("emoji") or data.has("color"):
 		set_visuals(data.get("emoji", "👾"), data.get("color", Color(1.0, 0.25, 0.25, 1.0)), float(data.get("scale", 1.0)))
 
@@ -68,6 +111,266 @@ func _physics_process(delta: float) -> void:
 		player_ref = get_tree().get_first_node_in_group("player") as Node2D
 		if player_ref == null:
 			return
+
+	if awareness_enabled:
+		_ai_tick(delta)
+	else:
+		# 兼容旧行为：直接走 ai_type 派发的行为
+		_dispatch_behavior(delta)
+
+	velocity += _separation_velocity()
+	velocity += _knockback_velocity
+	_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, 900.0 * delta)
+	move_and_slide()
+	_try_contact_damage()
+	_update_z_index()
+
+## AI状态机主循环
+func _ai_tick(delta: float) -> void:
+	var dist_to_player: float = global_position.distance_to(player_ref.global_position)
+	var can_see_player: bool = _line_of_sight_check(global_position, player_ref.global_position)
+	var can_hear_player: bool = dist_to_player <= hearing_range
+
+	# 声音衰减（所有状态共享）
+	_noise_accumulator = maxf(0.0, _noise_accumulator - _NOISE_DECAY_RATE * delta)
+
+	# 声音累积：玩家移动时持续增加
+	var player_moving: bool = false
+	if player_ref.has_method("is_moving"):
+		player_moving = player_ref.is_moving()
+	elif player_ref.get("velocity"):
+		player_moving = player_ref.velocity.length() > 10.0
+	if player_moving:
+		_noise_accumulator = min(_noise_accumulator + delta * 30.0, hearing_range)
+
+	match _ai_state:
+		AIState.IDLE:
+			velocity = Vector2.ZERO
+			_update_emoji_display("👾", Color.WHITE)
+			if can_see_player:
+				_transition_to(AIState.ALERT)
+			elif can_hear_player and _noise_accumulator > hearing_range * 0.6:
+				_transition_to(AIState.SEARCH)
+			else:
+				_idle_wander(delta)
+
+		AIState.ALERT:
+			velocity = Vector2.ZERO  # 停止，原地警戒
+			_update_emoji_display("❓", Color(1.0, 0.85, 0.0, 1.0))  # 黄色问号
+			_alert_timer -= delta
+			if can_see_player:
+				_alert_timer = alert_duration  # 持续看到目标，重置计时
+			if _alert_timer <= 0.0:
+				if can_see_player:
+					_transition_to(AIState.CHASE)
+				else:
+					_last_known_player_pos = player_ref.global_position
+					_transition_to(AIState.SEARCH)
+
+		AIState.CHASE:
+			var dir: Vector2 = (player_ref.global_position - global_position).normalized()
+			# PH11 P3: 房间边界拦截——靠近边界时减速并折返，不冲出去
+			velocity = _apply_boundary_on_dir(dir, speed)
+			_update_emoji_display("❗", Color(1.0, 0.15, 0.15, 1.0))  # 红色感叹号
+			if not can_see_player:
+				_last_known_player_pos = player_ref.global_position
+				_transition_to(AIState.SEARCH)
+
+		AIState.SEARCH:
+			var to_last: Vector2 = _last_known_player_pos - global_position
+			if to_last.length() > 15.0:
+				velocity = _apply_boundary_on_dir(to_last.normalized(), speed * 0.6)
+			else:
+				velocity = Vector2.ZERO
+			_update_emoji_display("❓", Color(0.9, 0.75, 0.0, 1.0))  # 暗黄色
+			_search_timer -= delta
+			if can_see_player:
+				_transition_to(AIState.CHASE)
+			elif _search_timer <= 0.0:
+				_transition_to(AIState.PATROL)
+
+		AIState.PATROL:
+			# 声音衰减（每帧独立衰减）
+			_noise_accumulator = maxf(0.0, _noise_accumulator - _NOISE_DECAY_RATE * delta)
+			_patrol_cooldown -= delta
+			_update_emoji_display("👾", Color(0.6, 0.6, 0.6, 1.0))  # 灰白色
+			# 在房间边界内巡逻
+			_patrol_tick(delta)
+			# 检测玩家：看到就进入ALERT
+			if can_see_player:
+				_transition_to(AIState.ALERT)
+			elif can_hear_player and _noise_accumulator > hearing_range * 0.5:
+				_last_known_player_pos = player_ref.global_position
+				_transition_to(AIState.SEARCH)
+
+## 状态转换
+func _transition_to(new_state: AIState) -> void:
+	var was_chasing: bool = _ai_state == AIState.CHASE
+	_ai_state = new_state
+	match new_state:
+		AIState.ALERT:
+			_alert_timer = alert_duration
+		AIState.SEARCH:
+			_search_timer = search_duration
+		AIState.IDLE:
+			_noise_accumulator = 0.0
+		AIState.PATROL:
+			_noise_accumulator = 0.0
+		AIState.CHASE:
+			# PH11 P1: 追击时向区域刷怪控制器发送警觉信号（相邻房间增援）
+			if not was_chasing:
+				enemy_entered_chase.emit(self, _last_known_player_pos)
+			# PH11 P2: 精英怪进入追击时触发相邻房间 AI 联动
+			if _is_elite and not was_chasing:
+				elite_entered_chase.emit(self, _last_known_player_pos)
+
+## IDLE状态：原地轻微徘徊（每帧微小随机位移）
+func _idle_wander(_delta: float) -> void:
+	var jitter: Vector2 = Vector2(randf_range(-1, 1), randf_range(-1, 1)) * 12.0
+	velocity += jitter
+
+## 视线检测：两点之间是否有掩体遮挡（简化检测：中间有墙返回false）
+func _line_of_sight_check(from: Vector2, to: Vector2) -> bool:
+	var dist: float = from.distance_to(to)
+	if dist > visual_range:
+		return false
+	# 简化版：检测路径中是否有障碍物节点（后续接入房间碰撞几何）
+	# 目前先用距离判定
+	return true
+
+## emoji 显示文字 + 颜色更新
+func _update_emoji_display(text: String, color: Color) -> void:
+	if emoji_label:
+		emoji_label.text = text
+		emoji_label.modulate = color
+
+## ========== 房间边界 & 巡逻系统（PH11 区域AI核心）==========
+
+## 设置所属房间的边界（由 RoomWaveSpawner 在生成敌人时调用）
+## bounds: Rect2 — 房间矩形区域（世界坐标）
+func set_room_bounds(bounds: Rect2) -> void:
+	_room_bounds = bounds
+
+## 获取当前房间边界
+func get_room_bounds() -> Rect2:
+	return _room_bounds
+
+## PH11 P2: 查询是否为精英怪
+func is_elite() -> bool:
+	return _is_elite
+
+## PH11 P2: 强制唤醒敌人进入 ALERT 状态（由相邻房间精英触发）
+## pos: 玩家最后被看到的位置（作为 SEARCH 的起点）
+func force_alert(pos: Vector2) -> void:
+	if _ai_state == AIState.CHASE:
+		return  # 已经在追击，不用强制唤醒
+	if _ai_state == AIState.PATROL or _ai_state == AIState.IDLE:
+		_last_known_player_pos = pos
+		_transition_to(AIState.ALERT)
+
+## 巡逻主循环（PATROL 状态时每帧调用）
+func _patrol_tick(delta: float) -> void:
+	# 初始化巡逻路径（如尚未建立或被清空）
+	if _patrol_waypoints.is_empty() or _current_patrol_idx >= _patrol_waypoints.size():
+		_build_patrol_path()
+
+	# 路径点间停顿
+	if _patrol_idle_duration > 0.0:
+		_patrol_idle_duration -= delta
+		velocity = velocity.move_toward(Vector2.ZERO, speed * 2.5 * delta)
+		return
+
+	# 移动到当前目标路径点
+	var target: Vector2 = _patrol_waypoints[_current_patrol_idx]
+	var to_target: Vector2 = target - global_position
+	var dist: float = to_target.length()
+
+	if dist < _patrol_reach_threshold:
+		# 到达路径点，停顿后前往下一个
+		_current_patrol_idx = (_current_patrol_idx + 1) % _patrol_waypoints.size()
+		_patrol_idle_duration = randf_range(0.5, _patrol_idle_max)
+		velocity = velocity.move_toward(Vector2.ZERO, speed * 3.0 * delta)
+	else:
+		# 向路径点移动（减速靠近）
+		var dir: Vector2 = to_target.normalized()
+		var speed_factor: float = 0.55 if dist < 90.0 else 0.75
+		velocity = dir * speed * speed_factor
+
+	# 限制在房间边界内（超出时强力推回）
+	_apply_room_bounds()
+
+## 构建随机巡逻路径点（在房间边界内生成若干随机路径点）
+func _build_patrol_path() -> void:
+	_patrol_waypoints.clear()
+	_current_patrol_idx = 0
+
+	# 生成 3~5 个随机路径点，均匀分布在房间内
+	var count: int = randi() % 3 + 3  # 3~5 个点
+	var room_center: Vector2 = _room_bounds.position + _room_bounds.size * 0.5
+	var half: Vector2 = _room_bounds.size * 0.5 - Vector2(60, 60)  # 留60px边距
+
+	for i in range(count):
+		var angle: float = (TAU / count) * i + randf_range(-0.3, 0.3)
+		var radius: float = randf_range(0.35, 0.9) * minf(half.x, half.y)
+		var wp: Vector2 = room_center + Vector2(cos(angle), sin(angle)) * radius
+		_patrol_waypoints.append(wp)
+
+## 将敌人限制在房间边界内（超出时施加反向推力）
+func _apply_room_bounds() -> void:
+	if not _room_bounds.has_area():
+		return
+	# 检查并推回
+	var pos: Vector2 = global_position
+	var margin: float = 22.0
+	var pushback: Vector2 = Vector2.ZERO
+	if pos.x < _room_bounds.position.x + margin:
+		pushback.x = ( (_room_bounds.position.x + margin) - pos.x ) * 8.0
+	if pos.x > _room_bounds.position.x + _room_bounds.size.x - margin:
+		pushback.x = ( (_room_bounds.position.x + _room_bounds.size.x - margin) - pos.x ) * 8.0
+	if pos.y < _room_bounds.position.y + margin:
+		pushback.y = ( (_room_bounds.position.y + margin) - pos.y ) * 8.0
+	if pos.y > _room_bounds.position.y + _room_bounds.size.y - margin:
+		pushback.y = ( (_room_bounds.position.y + _room_bounds.size.y - margin) - pos.y ) * 8.0
+	velocity += pushback
+
+## PH11 P3: 房间边界方向拦截+减速
+## 给定方向向量和速度，在即将撞墙时折返而非被推回
+## 返回值：安全的速度向量
+func _apply_boundary_on_dir(base_dir: Vector2, base_speed: float) -> Vector2:
+	if not _room_bounds.has_area():
+		return base_dir * base_speed
+	var margin: float = 22.0
+	var safe_margin: float = 80.0  # 提前80px开始减速
+	var pos: Vector2 = global_position
+	# 检查各方向是否接近边界
+	var near_left: bool = pos.x < _room_bounds.position.x + safe_margin
+	var near_right: bool = pos.x > _room_bounds.position.x + _room_bounds.size.x - safe_margin
+	var near_top: bool = pos.y < _room_bounds.position.y + safe_margin
+	var near_bottom: bool = pos.y > _room_bounds.position.y + _room_bounds.size.y - safe_margin
+	if not (near_left or near_right or near_top or near_bottom):
+		return base_dir * base_speed
+	# 计算剩余安全空间
+	var space_left: float = pos.x - (_room_bounds.position.x + margin)
+	var space_right: float = (_room_bounds.position.x + _room_bounds.size.x - margin) - pos.x
+	var space_top: float = pos.y - (_room_bounds.position.y + margin)
+	var space_bottom: float = (_room_bounds.position.y + _room_bounds.size.y - margin) - pos.y
+	# 决定折返方向：朝空间更大的方向
+	var alt_dir: Vector2 = Vector2.ZERO
+	if space_left > space_right and space_left > space_top and space_left > space_bottom:
+		alt_dir = Vector2.LEFT
+	elif space_right > space_left and space_right > space_top and space_right > space_bottom:
+		alt_dir = Vector2.RIGHT
+	elif space_top > space_bottom:
+		alt_dir = Vector2.UP
+	else:
+		alt_dir = Vector2.DOWN
+	# 计算方向与边界的冲突成分：0表示方向朝向边界，1表示方向背向边界
+	var dot: float = base_dir.dot(alt_dir)
+	var speed_factor: float = 0.3 if dot < -0.3 else (0.7 if dot < 0.0 else 1.0)
+	return base_dir * base_speed * speed_factor
+
+## 派发旧行为（awareness_enabled=false 时使用）
+func _dispatch_behavior(delta: float) -> void:
 	match ai_type:
 		"chase":
 			_behavior_chase(delta)
@@ -156,7 +459,7 @@ func _try_contact_damage() -> void:
 		return
 	if global_position.distance_to(player_ref.global_position) <= contact_radius:
 		if player_ref.has_method("take_damage"):
-			player_ref.take_damage(damage)
+			player_ref.take_damage(int(float(damage) * _damage_multiplier))
 		_contact_timer = contact_damage_interval
 
 func _ranged_shoot(dir: Vector2) -> void:
@@ -165,7 +468,7 @@ func _ranged_shoot(dir: Vector2) -> void:
 	parent.add_child(projectile)
 	var spawn_pos := global_position + dir * 28.0
 	if projectile.has_method("launch"):
-		projectile.launch(spawn_pos, dir, 315.0, damage)
+		projectile.launch(spawn_pos, dir, 315.0, int(float(damage) * _damage_multiplier))
 
 func _spawn_minion() -> void:
 	var minion_scene: PackedScene = preload("res://scenes/Enemy.tscn")
@@ -336,6 +639,12 @@ func add_modifier(modifier_id: String, tier: int = 1) -> void:
 	if mod:
 		_modifiers.append(mod)
 		mod.apply(self)
+
+## 设置伤害倍率（由环境命运触发器的 CURSE_ROOM_ENEMIES 调用）
+## multiplier=1.15 表示伤害+15%
+func apply_damage_multiplier(multiplier: float) -> void:
+	_damage_multiplier = multiplier
+	print("[EnemyBase] 伤害倍率设置为 %.2f（触发来源：环境命运-诅咒降临）" % multiplier)
 
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool = false) -> void:
 	get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)

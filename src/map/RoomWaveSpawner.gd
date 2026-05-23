@@ -36,6 +36,7 @@ var _all_spawned: bool = false
 var _enemy_pool: Array[Dictionary] = []
 var _monster_injector: MonsterInjector
 var _rng: RandomNumberGenerator
+var _current_regional_controller: Node = null  # 区域刷怪控制器引用（由 RoomGameMode 注入）
 
 func _init() -> void:
 	_rng = RandomNumberGenerator.new()
@@ -83,6 +84,57 @@ func start() -> void:
 ## 停止（切换房间时调用）
 func stop() -> void:
 	_active = false
+
+## 外部触发额外刷怪（由 FateCardEngine._apply_reinforce_wave → RoomGameMode.trigger_extra_wave 调用）
+## 在当前房间波次外额外生成一批敌人，不受波次限制影响
+func trigger_extra_spawn(count: int = 5) -> void:
+	if not is_instance_valid(self):
+		return
+	if not _active and _alive_count <= 0:
+		# 房间已清空但玩家还在此房间，额外波次仍然有效
+		pass
+	# 计算额外敌人生成位置（在玩家周围，而不是房间中心）
+	var center: Vector2 = Vector2.ZERO
+	if is_instance_valid(_player):
+		center = _player.global_position
+
+	# 增加一个临时计数
+	var extra_count: int = mini(count, max_enemies_per_wave)
+	_alive_count += extra_count
+
+	# 预先生成所有不重叠的出生位置
+	var spawn_positions: Array[Vector2] = []
+	for i in range(extra_count):
+		var attempts: int = 0
+		var spawn_pos: Vector2
+		var found_valid: bool = false
+		while attempts < 20 and not found_valid:
+			spawn_pos = _get_spawn_position(center)
+			found_valid = true
+			for prev in spawn_positions:
+				if spawn_pos.distance_to(prev) < min_spawn_distance:
+					found_valid = false
+					break
+			attempts += 1
+		spawn_positions.append(spawn_pos)
+
+	# 逐个生成（异步间隔，携带区域控制器用于CHASE信号连接）
+	_spawn_extra_enemies_async(spawn_positions, _current_regional_controller)
+
+func _spawn_extra_enemies_async(positions: Array[Vector2], regional_controller: Node = null) -> void:
+	# 在额外的协程中逐个生成（不在主循环阻塞）
+	for spawn_pos in positions:
+		var enemy_data: Dictionary = _generate_enemy_data()
+		_spawn_enemy_instance(enemy_data, spawn_pos, regional_controller)
+		# 额外敌人生成时也发出进度更新（让UI感知到增量）
+		_spawn_extra_enemy_progress()
+		enemy_spawned.emit(1)
+		await get_tree().create_timer(0.12).timeout
+
+## 更新额外敌人生成时的进度条（extra enemy 不在 _enemy_count_per_wave 内，需要独立追踪）
+func _spawn_extra_enemy_progress() -> void:
+	var total_seen: int = _killed_count + _alive_count
+	wave_progress_updated.emit(_killed_count, max(1, total_seen), _current_wave + 1)
 
 ## 每帧更新
 func tick(delta: float) -> void:
@@ -208,7 +260,7 @@ func _generate_enemy_data() -> Dictionary:
 		base["currency_value"] = 10  # 默认普通怪 +10魂
 	return base
 
-func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2) -> void:
+func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_controller: Node = null) -> void:
 	var scene_path := "res://scenes/Enemy.tscn"
 	var enemy_scene: PackedScene = load(scene_path)
 	if enemy_scene == null:
@@ -231,6 +283,7 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2) -> void:
 		_apply_ai_type_from_enemy_kind(enemy, data.get("enemy_type", ""))
 	if data.get("is_elite"):
 		enemy.add_modifier("巨大化", 1)
+		enemy._is_elite = true  # PH11 P2: 设置精英标志，使 elite_entered_chase 信号能正确触发相邻房间AI联动
 	if data.get("modifier"):
 		enemy.add_modifier(data["modifier"], 1)
 
@@ -249,9 +302,57 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2) -> void:
 		get_tree().root.add_child(enemy)
 	enemy.global_position = spawn_pos
 
+	# 设置房间边界（PH11 区域AI：敌人不会游走出房间）
+	if enemy.has_method("set_room_bounds"):
+		var room_center: Vector2 = Vector2.ZERO
+		if is_instance_valid(_room):
+			room_center = _room.global_position
+		# 计算敌人相对于房间中心的偏移，加上 spawn_pos 得到敌人的世界坐标
+		# room_size 是房间的场景尺寸，room_center 是房间根节点世界坐标
+		# 敌人出生在 room_center 附近（spawn_pos 是世界坐标）
+		# 房间的 Rect2 以 room_center 为中心，尺寸为 room_size
+		var half_size: Vector2 = room_size * 0.5
+		var bounds: Rect2 = Rect2(room_center - half_size, room_size)
+		enemy.set_room_bounds(bounds)
+
+	# 连接敌人 CHASE 信号 → 触发区域增援（PH11 警觉AI联动）
+	_connect_chase_signal(enemy, regional_controller if regional_controller != null else _current_regional_controller)
+
+	# 连接敌人死亡信号（已有上方 if 检查，这里是双重保险）
+	if enemy.has_signal("enemy_died") and not enemy.enemy_died.is_connected(_on_enemy_died):
+		enemy.enemy_died.connect(_on_enemy_died)
+
 	# 发出进度更新（已被击杀数 / 当前波总数）
 	var killed = _enemy_count_per_wave[_current_wave] - _alive_count
 	wave_progress_updated.emit(killed, _enemy_count_per_wave[_current_wave], _current_wave + 1)
+
+## 连接敌人CHASE信号 → 触发区域增援（PH11 警觉AI联动）
+func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = null) -> void:
+	if enemy == null or not is_instance_valid(enemy):
+		return
+	if not enemy.has_signal("enemy_entered_chase"):
+		return
+	# regional_controller 优先，fallback 到 _current_regional_controller
+	var controller: Node = regional_controller if regional_controller != null else _current_regional_controller
+	if not enemy.enemy_entered_chase.is_connected(_on_enemy_chase_for_reinforcement):
+		enemy.enemy_entered_chase.connect(_on_enemy_chase_for_reinforcement)
+	# 立即注入当前 controller 引用（用于回调时访问）
+	if controller != null:
+		enemy.set("regional_controller_ref", controller)
+
+func _on_enemy_chase_for_reinforcement(enemy: Node, last_known_pos: Vector2) -> void:
+	# 优先使用该敌人绑定的 regional_controller_ref（每个敌人独立绑定）
+	var controller: Node = null
+	if enemy != null and is_instance_valid(enemy) and enemy.has("regional_controller_ref"):
+		controller = enemy.get("regional_controller_ref")
+	if controller == null:
+		controller = _current_regional_controller
+	if controller != null and is_instance_valid(controller):
+		controller._on_enemy_chase(enemy, last_known_pos)
+
+## 设置区域刷怪控制器引用（由 RoomGameMode 调用）
+func set_regional_controller(controller: Node) -> void:
+	_current_regional_controller = controller
 
 func _apply_ai_type_from_enemy_kind(enemy: CharacterBody2D, enemy_type: String) -> void:
 	match enemy_type:
