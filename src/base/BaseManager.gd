@@ -1,4 +1,3 @@
-class_name BaseManager
 extends Node
 
 const SAVE_PATH := "user://base_save.json"
@@ -103,7 +102,7 @@ func get_unlock_cost(type: int) -> int:
 	return UNLOCK_COSTS.get(type, 999)
 
 func get_upgrade_cost(type: int) -> int:
-	var base := UPGRADE_BASE_COST.get(type, 0)
+	var base: int = UPGRADE_BASE_COST.get(type, 0)
 	return base * (get_level(type) + 1)
 
 func update_long_term_progress(progress_type: String, value: float) -> void:
@@ -122,3 +121,72 @@ func get_stats() -> Dictionary:
 		"total_kills": data.total_kills,
 		"extraction_rate": float(data.successful_extractions) / max(1, data.total_runs)
 	}
+
+## — 命运卡片局前选择 —
+var pending_fate_card: Dictionary = {}
+
+func set_pending_fate_card(card_data: Dictionary) -> void:
+	pending_fate_card = card_data
+	save_base()
+
+func get_pending_fate_card() -> Dictionary:
+	return pending_fate_card
+
+func clear_pending_fate_card() -> void:
+	pending_fate_card = {}
+
+## — 蓝图系统 —
+func get_blueprint_tier(category_id: String) -> int:
+	match category_id:
+		"gunbody": return data.blueprint_gunbody_tier
+		"bullet": return data.blueprint_bullet_tier
+		"attachment": return data.blueprint_attachment_tier
+	return 0
+
+func set_blueprint_tier(category_id: String, tier: int) -> void:
+	match category_id:
+		"gunbody": data.blueprint_gunbody_tier = tier
+		"bullet": data.blueprint_bullet_tier = tier
+		"attachment": data.blueprint_attachment_tier = tier
+	save_base()
+
+## — 资源点数系统 —
+func get_extraction_points() -> int:
+	return data.extraction_points
+
+func add_extraction_points(amount: int) -> void:
+	data.extraction_points += amount
+	save_base()
+
+func spend_extraction_points(amount: int) -> bool:
+	if data.extraction_points < amount:
+		return false
+	data.extraction_points -= amount
+	save_base()
+	return true
+
+## — 保险柜物品持久化 —
+func get_vault_items() -> Array[Dictionary]:
+	return data.vault_items
+
+func set_vault_items(items: Array[Dictionary]) -> void:
+	data.vault_items = items
+	save_base()
+
+func add_vault_item(item: Dictionary) -> bool:
+	if data.vault_items.size() >= _get_vault_capacity():
+		return false
+	data.vault_items.append(item.duplicate())
+	save_base()
+	return true
+
+func remove_vault_item(index: int) -> bool:
+	if index < 0 or index >= data.vault_items.size():
+		return false
+	data.vault_items.remove_at(index)
+	save_base()
+	return true
+
+func _get_vault_capacity() -> int:
+	# 保险柜容量 = 默认2格 + vault_level增加
+	return 2 + data.vault_level

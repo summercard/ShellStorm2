@@ -34,10 +34,14 @@ var death_settlement_module: DeathSettlementModule
 @onready var room_info_label: Label = $UI/RoomInfoLabel
 @onready var clearing_progress: ProgressBar = $UI/ClearingProgress
 
+## UI 管理器引用（用于飘字等效果）
+var _ui_manager: Node = null
+
 ## 状态
 var current_floor: int = 1
 var score: int = 0
 var _room_cleared_flag: bool = false
+var _kill_count: int = 0
 
 ## 波次生成器（当前房间）
 var _current_wave_spawner: RoomWaveSpawner = null
@@ -46,8 +50,46 @@ func _ready() -> void:
 	_setup_map_manager()
 	_setup_extraction_modules()
 	_setup_signals()
+	# 同步信标数量（在 UI 绑定之前，确保 extraction_director 有正确计数）
+	_sync_beacon_count()
+	_setup_ui_manager()
 	_spawn_player()
 	_start_game()
+
+## 初始化 UI 管理器引用并绑定游戏模块
+func _setup_ui_manager() -> void:
+	# 查找 GameUIManager（作为 CanvasLayer 子节点或同级节点）
+	_ui_manager = get_node_or_null("UI/GameUIManager")
+	if _ui_manager == null:
+		_ui_manager = get_node_or_null("GameUIManager")
+	if _ui_manager == null:
+		_ui_manager = get_node_or_null("../GameUIManager")  # 尝试父节点同级
+	# 如果仍然找不到，延迟查找（UI 可能后实例化）
+	if _ui_manager == null:
+		await get_tree().process_frame
+		_ui_manager = get_node_or_null("UI/GameUIManager")
+		if _ui_manager == null:
+			_ui_manager = get_node_or_null("GameUIManager")
+	
+	# 绑定各模块到 GameUIManager
+	_call_ui_manager_method("set_extraction_module", extraction_module)
+	_call_ui_manager_method("set_inventory_module", inventory_module)
+	_call_ui_manager_method("set_insurance_module", insurance_module)
+	# 同步信标数量（需要 extraction_director 已 bind_inventory）
+	if map_manager != null and map_manager.extraction_director != null:
+		var beacon_count := map_manager.extraction_director.get_beacon_count()
+		_call_ui_manager_method("set_beacon_count", beacon_count)
+
+## 安全调用 _ui_manager 的方法（处理 null 和方法不存在情况）
+func _call_ui_manager_method(method_name: String, arg = null) -> void:
+	if _ui_manager == null:
+		return
+	if not _ui_manager.has_method(method_name):
+		return
+	if arg != null:
+		_ui_manager.call(method_name, arg)
+	else:
+		_ui_manager.call(method_name)
 
 ## 初始化地图管理器
 func _setup_map_manager() -> void:
@@ -69,9 +111,11 @@ func _setup_extraction_modules() -> void:
 	
 	# 信号连接（用于UI更新等）
 	inventory_module.inventory_changed.connect(_on_inventory_changed)
+	inventory_module.inventory_changed.connect(_sync_beacon_count)  # 背包变化时同步信标数量
 	insurance_module.insurance_changed.connect(_on_insurance_changed)
 	extraction_module.extraction_completed.connect(_on_extraction_completed)
 	extraction_module.extraction_aborted.connect(_on_extraction_aborted)
+	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 
 ## 连接信号
@@ -109,6 +153,9 @@ func _on_map_generated(graph: NodeGraph) -> void:
 	
 	# 更新房间信息
 	_update_room_info_label("地图已生成，等待进入...")
+	
+	# 同步信标数量（从背包读取信标道具数量）
+	_sync_beacon_count()
 
 ## 实例化所有房间到场景
 func instantiate_all_rooms() -> void:
@@ -125,9 +172,9 @@ func instantiate_all_rooms() -> void:
 		if room_data.room_type == RoomData.RoomType.PLAYER_SPAWN:
 			continue
 		
-		# 房间实例化到世界（使用 RoomFactory）
+		# 房间实例化到世界（使用 RoomFactory，传入背包引用）
 		var factory := RoomFactory.new()
-		var room_instance: Node2D = factory.create_room(room_data, self)
+		var room_instance: Node2D = factory.create_room(room_data, self, inventory_module)
 		
 		# 设置房间在世界中的位置
 		room_instance.global_position = room_data.position
@@ -141,7 +188,13 @@ func _on_room_entered(room_data: RoomData) -> void:
 		_show_initial_fate_cards()
 		_update_clearing_progress(1, 1)
 		return
-	
+
+	# 商人房：自动弹出交易面板（进入即触发，无需按E）
+	if room_data.room_type == RoomData.RoomType.MERCHANT:
+		_update_clearing_progress(0, 1)
+		_auto_open_merchant(room_data)
+		return
+
 	# 战斗房：启动波次生成器
 	if room_data.is_combat():
 		_start_combat_waves(room_data)
@@ -173,20 +226,51 @@ func _on_global_game_over() -> void:
 			inventory_module, insurance_module
 		)
 		_print_death_settlement(settlement_result)
+	# 记录基地数据（死亡）
+	if BaseManager != null:
+		BaseManager.record_run(false, _get_kill_count())
 	game_over.emit("玩家死亡")
 
 func _print_death_settlement(result: Dictionary) -> void:
 	var text: String = death_settlement_module.get_death_summary_text(result)
 	print(text)
 
+## 撤离完成后赋予玩家应得的 extraction_points
+## extraction_points 是局后ersistent 资源，用于在 Workshop 解锁蓝图
+func _grant_extraction_points() -> void:
+	var floor_bonus: int = current_floor * 15
+	var loot_count: int = 0
+	if inventory_module != null:
+		loot_count = inventory_module.get_used_slots()
+	if insurance_module != null:
+		loot_count += insurance_module.get_used_slots()
+	var loot_bonus: int = loot_count * 3
+	var total_points: int = floor_bonus + loot_bonus
+	if total_points > 0:
+		BaseManager.add_extraction_points(total_points)
+		print("[RoomGameMode] Granted extraction_points: %d (floor bonus=%d, loot bonus=%d)" % [total_points, floor_bonus, loot_bonus])
+
 ## 撤离完成回调
 func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
+	# 如果是交易撤离，需要通知 ExtractionDirector 做最终结算
+	var ext_type: String = extraction_module.get_extraction_type() if extraction_module else ""
+	if ext_type == "TRADE" and map_manager != null and map_manager.extraction_director != null:
+		map_manager.extraction_director.try_use_trade_extraction(success, GameManager.currency, current_floor)
+	
 	if success:
 		var extracted: int = death_settlement_module.process_extraction_settlement(inventory_module, insurance_module)
 		var insurance_items: Array[Dictionary] = insurance_module.get_all_insured_items()
 		_print_extraction_success(extracted, insurance_items)
+		_sync_beacon_count()
+		_grant_extraction_points()
+		# 记录成功撤离到基地
+		if BaseManager != null:
+			BaseManager.record_run(true, _kill_count)
 	else:
 		_print_extraction_failure()
+
+func _get_kill_count() -> int:
+	return _kill_count
 
 func _print_extraction_success(extracted_count: int, insurance_items: Array[Dictionary]) -> void:
 	var lines: Array[String] = ["=== 撤离成功 ==="]
@@ -243,7 +327,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	var current_room_node: Node2D = _get_current_room_instance()
 	
 	# 启动生成
-	_current_wave_spawner.configure(wave_counts, current_room_node, player, current_floor, room_data.floor_level)
+	_current_wave_spawner.configure(wave_counts, current_room_node, player, current_floor, room_data.floor_level, self, room_data.size)
 	_current_wave_spawner.start()
 	_update_clearing_progress(0, wave_counts.sum())
 
@@ -309,13 +393,42 @@ func _on_all_waves_cleared() -> void:
 		room_cleared.emit(room_data)
 		_check_map_completion()
 
-## 显示初始命运卡片选择
+## 显示初始命运卡片选择（强制展示：出生房进入时自动弹出，不依赖Tab）
 func _show_initial_fate_cards() -> void:
 	await get_tree().process_frame
 	
-	var fate_card_ctrl = _get_fate_card_controller()
-	if fate_card_ctrl and fate_card_ctrl.has_method("show_card_selection"):
-		fate_card_ctrl.show_card_selection()
+	# 检查局前是否已通过命运占卜屋预选了卡片
+	var pending: Dictionary = BaseManager.get_pending_fate_card()
+	if not pending.is_empty():
+		# 从 pending 数据重建 FateCard 实例并自动应用
+		var card := _reconstruct_fate_card_from_dict(pending)
+		if card != null:
+			var result := FateCardGameBridge.apply_card(card)
+			if result.success:
+				print("[RoomGameMode] 局前预选卡片已应用: %s" % card.card_name)
+			else:
+				print("[RoomGameMode] 局前预选卡片应用失败: %s — %s" % [card.card_name, result.message])
+		BaseManager.clear_pending_fate_card()
+		return
+	
+	# 无预选卡片时，强制在 GameUIManager 面板中展示 3 张初始卡
+	_show_fate_cards_in_panel()
+
+## 从局前预选字典重建 FateCard 实例
+func _reconstruct_fate_card_from_dict(d: Dictionary) -> FateCard:
+	# card_id / card_name / card_type / card_rarity / description / tags / effect / visual
+	if d.is_empty() or not d.has("card_name"):
+		return null
+	var card := FateCard.new(d.get("card_name", "Unknown"), d.get("card_type", 0), d.get("card_rarity", 0))
+	card.card_id = d.get("card_id", "")
+	card.description = d.get("description", "")
+	if d.has("tags"):
+		card.tags = Array(d["tags"], TYPE_STRING, "", [])
+	if d.has("effect"):
+		card.effect = d["effect"]
+	if d.has("visual"):
+		card.visual = d["visual"]
+	return card
 
 func _get_fate_card_controller() -> Control:
 	if fate_card_ui != null:
@@ -324,6 +437,186 @@ func _get_fate_card_controller() -> Control:
 	if existing:
 		fate_card_ui = existing as Control
 	return fate_card_ui
+
+## 自动打开商人交易面板（商人房进入时自动触发）
+func _auto_open_merchant(room_data: RoomData) -> void:
+	# MerchantInteraction.gd 脚本挂载在 RoomMerchant（根节点）而非 MerchantArea
+	# 所以要用 RoomMerchant 节点获取 MerchantInteraction，而不是 MerchantArea
+	var merchant_node: Node2D = null
+	if map_manager != null and map_manager._current_room_id >= 0:
+		var room_instance: Node2D = map_manager.get_instantiated_room(map_manager._current_room_id)
+		if room_instance != null:
+			merchant_node = room_instance as Node2D
+	
+	if merchant_node == null:
+		push_warning("[RoomGameMode] Cannot auto-open merchant: room instance not found for room %s" % room_data.room_id)
+		return
+	
+	# 确保 MerchantInteraction 脚本已挂载
+	if not merchant_node.has_method("set_inventory"):
+		push_warning("[RoomGameMode] RoomMerchant node has no MerchantInteraction script")
+		return
+	
+	# merchant_node 就是 RoomMerchant 节点（挂载了 MerchantInteraction.gd）
+	var merchant_interaction: Node = merchant_node
+	
+	# 绑定背包和商品
+	merchant_interaction.set_inventory(inventory_module)
+	
+	# 确保背包模块已设置（MerchantInteraction 需要这个引用）
+	merchant_interaction.set_inventory(inventory_module)
+	
+	# 预生成商品（如果没有的话）
+	if merchant_interaction._goods.is_empty():
+		var loot := LootModule.get_instance()
+		if loot != null:
+			var goods: Array[Dictionary] = loot.generate_merchant_goods(room_data.floor, 6)
+			merchant_interaction.prepare_goods(goods)
+	
+	# 获取或创建商人面板并直接展示
+	var ui: MerchantUI = merchant_interaction.get_or_create_merchant_ui()
+	if ui != null:
+		ui.show_merchant(merchant_interaction._goods)
+		# 同步商人状态为 ACTIVE，避免离开时状态不一致导致无法正确关闭
+		merchant_interaction.force_set_active()
+		_update_room_info_label("与 [%s] 交易中..." % merchant_interaction.shop_name)
+	else:
+		# 降级：控制台打印商品
+		merchant_interaction._print_goods_list()
+		_update_room_info_label("[%s] 在附近徘徊..." % merchant_interaction.shop_name)
+
+## 获取或创建 GameUIManager 中的命运卡片选择面板
+## 复用 GameUIManager.tscn 中已有的 FateCardPanel（Control 节点）
+func _get_or_create_fate_card_panel() -> Control:
+	if _ui_manager == null:
+		return null
+	# GameUIManager 的 CanvasLayer 下有 FateCardPanel
+	var panel: Control = _ui_manager.get_node_or_null("FateCardPanel")
+	if panel == null:
+		push_warning("[RoomGameMode] FateCardPanel not found in GameUIManager")
+	return panel
+
+## 在 GameUIManager 的 FateCardPanel 中显示 3 张初始命运卡片（强制展示）
+func _show_fate_cards_in_panel() -> void:
+	var panel: Control = _get_or_create_fate_card_panel()
+	if panel == null:
+		push_warning("[RoomGameMode] Cannot show fate cards: panel not found")
+		# Fallback: 不要默默失败，改为打印提示给玩家
+		_update_room_info_label("命运卡片加载失败，请按 Tab 选择")
+		return
+	
+	# 构建卡片容器（从 VBox/CardsContainer 获取，如不存在则创建）
+	var cards_container: HBoxContainer = panel.get_node_or_null("VBox/CardsContainer") as HBoxContainer
+	if cards_container == null:
+		# 动态创建 VBox 容器结构
+		var vbox := VBoxContainer.new()
+		vbox.name = "VBox"
+		vbox.custom_minimum_size = Vector2(600, 220)
+		vbox.alignment = VBoxContainer.ALIGNMENT_CENTER
+		panel.add_child(vbox)
+		cards_container = HBoxContainer.new()
+		cards_container.name = "CardsContainer"
+		cards_container.custom_minimum_size = Vector2(560, 220)
+		cards_container.alignment = HBoxContainer.ALIGNMENT_CENTER
+		vbox.add_child(cards_container)
+	
+	# 清空旧卡片
+	for child in cards_container.get_children():
+		child.queue_free()
+	
+	# 随机抽取 3 张
+	var all_cards: Array[FateCard] = FateCardPresets.all_presets()
+	all_cards.shuffle()
+	var options: Array[FateCard] = all_cards.slice(0, 3)
+	
+	for card in options:
+		var btn := _create_fate_card_button(card)
+		cards_container.add_child(btn)
+	
+	# 显示面板
+	panel.visible = true
+	
+	# 更新提示标签
+	var instruction: Label = panel.get_node_or_null("VBox/InstructionLabel") as Label
+	if instruction == null:
+		# 动态创建说明标签
+		instruction = Label.new()
+		instruction.name = "InstructionLabel"
+		instruction.text = "选择一张命运卡片（自动应用）"
+		instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var vbox_parent: Node = cards_container.get_parent()
+		if vbox_parent and vbox_parent.has_node("InstructionLabel"):
+			instruction = vbox_parent.get_node("InstructionLabel") as Label
+		elif vbox_parent:
+			vbox_parent.add_child(instruction)
+			var idx: int = vbox_parent.get_child_index(cards_container)
+			vbox_parent.move_child(instruction, idx)
+	
+	if instruction:
+		instruction.text = "选择一张命运卡片（自动应用）"
+		instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+## 创建一张命运卡片按钮（用于面板内动态创建）
+func _create_fate_card_button(card: FateCard) -> Button:
+	var btn := Button.new()
+	btn.custom_minimum_size = Vector2(160, 200)
+	
+	var rarity_color: Color = FateCard.rarity_color(card.card_rarity)
+	var bg_style := StyleBoxFlat.new()
+	bg_style.bg_color = Color(0.10, 0.11, 0.16, 0.97)
+	bg_style.set_border_width_all(2)
+	bg_style.set_border_color(rarity_color)
+	bg_style.set_corner_radius_all(8)
+	btn.add_theme_stylebox_override("normal", bg_style)
+	
+	var hover_style := StyleBoxFlat.new()
+	hover_style.bg_color = Color(0.18, 0.20, 0.28, 0.97)
+	hover_style.set_border_width_all(2)
+	hover_style.set_border_color(Color(1.0, 0.9, 0.6, 0.9))
+	hover_style.set_corner_radius_all(8)
+	btn.add_theme_stylebox_override("hover", hover_style)
+	
+	var pressed_style := StyleBoxFlat.new()
+	pressed_style.bg_color = Color(0.22, 0.24, 0.32, 0.97)
+	pressed_style.set_border_width_all(3)
+	pressed_style.set_border_color(Color(1.0, 0.8, 0.3, 1.0))
+	pressed_style.set_corner_radius_all(8)
+	btn.add_theme_stylebox_override("pressed", pressed_style)
+	
+	btn.add_theme_color_override("font_color", rarity_color)
+	btn.add_theme_font_size_override("font_size", 13)
+	btn.tooltip_text = card.description
+	
+	# 多行文本按钮标签
+	var type_str := FateCard.type_name(card.card_type)
+	btn.text = "[%s] %s\n%s\n%s" % [
+		FateCard.rarity_name(card.card_rarity),
+		card.card_name,
+		type_str,
+		card.description
+	]
+	btn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	btn.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	btn.set_meta("fate_card", card)
+	btn.pressed.connect(_on_fate_card_button_pressed.bind(card))
+	
+	return btn
+
+## 玩家点击了命运卡片按钮
+func _on_fate_card_button_pressed(card: FateCard) -> void:
+	var result := FateCardGameBridge.apply_card(card)
+	if result.success:
+		print("[RoomGameMode] 命运卡片应用成功: %s — %s" % [card.card_name, result.message])
+	else:
+		push_warning("[RoomGameMode] 命运卡片应用失败: %s — %s" % [card.card_name, result.message])
+	
+	# 关闭面板
+	var panel: Control = _get_or_create_fate_card_panel()
+	if panel:
+		panel.visible = false
+	
+	# 通知玩家
+	_update_room_info_label("命运卡片 [%s] 已应用！" % card.card_name)
 
 ## 每帧检测房间清理状态 & 撤离读条
 func _process(delta: float) -> void:
@@ -433,7 +726,33 @@ func _check_map_completion() -> void:
 ## 通知怪物死亡（外部调用）
 func notify_enemy_killed(enemy_data: Dictionary) -> void:
 	score += enemy_data.get("xp_value", 10)
-	GameManager.add_currency(10)
+	_kill_count += 1
+	
+	# 处理怪物掉落（物品入背包）
+	var loot: Array[Dictionary] = LootModule.get_instance().generate_enemy_loot(enemy_data)
+	var currency_earned: int = 0
+	for item_data in loot:
+		if item_data.get("is_currency", false):
+			currency_earned += item_data.get("count", 0)
+		else:
+			# 物品入背包
+			if inventory_module != null:
+				inventory_module.add_item(item_data, item_data.get("count", 1))
+	
+	# 基础击杀奖励 + 额外掉落货币
+	var base_reward: int = enemy_data.get("currency_value", 10)
+	GameManager.add_currency(base_reward)
+	currency_earned += base_reward
+	
+	# 显示货币飘字（在世界坐标显示）
+	if _ui_manager != null:
+		var enemy_pos: Vector2 = enemy_data.get("last_position", Vector2.ZERO)
+		_ui_manager.show_currency_popup(currency_earned, enemy_pos)
+	
+	# 如果是精英怪，触发精英撤离点解锁
+	if enemy_data.get("is_elite", false) and map_manager != null:
+		map_manager.extraction_director.unlock_elite_extraction()
+	
 	kill_recorded.emit()
 	_update_ui()
 
@@ -447,7 +766,17 @@ func advance_to_next_floor() -> void:
 func get_map_manager() -> MapManager:
 	return map_manager
 
-## 获取背包模块
+## 同步信标数量（从背包读取信标道具数量到 ExtractionDirector）
+## 同时绑定背包引用，用于信标消耗时真实扣除
+func _sync_beacon_count() -> void:
+	if map_manager == null or map_manager.extraction_director == null:
+		return
+	# bind_inventory 会同时设置引用和同步计数
+	map_manager.extraction_director.bind_inventory(inventory_module)
+
+## 获取玩家节点（供 GameUIManager 获取 Player 引用用于消耗品效果）
+func get_player() -> Node2D:
+	return player
 func get_inventory() -> InventoryModule:
 	return inventory_module
 

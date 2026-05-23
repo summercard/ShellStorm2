@@ -1,7 +1,7 @@
 extends Node
-class_name FateCardExecutor
+class_name FateCardEngine
 
-# FateCardExecutor.gd — 命运卡片效果执行器
+# FateCardEngine.gd — 命运卡片效果执行器
 # 负责将 FateCard 的效果应用到 WeaponAssemblyTree / AssemblyNode
 # 是 FateCard 系统与武器装配系统的桥梁
 
@@ -27,6 +27,34 @@ class ApplyResult:
 	var message: String = ""
 	var modified_nodes: Array[AssemblyNode] = []
 	var effect_value: Variant = null
+
+## 应用一张命运卡片到玩家武器装配树（静态方法，供外部 UI 调用）
+## 自动从场景树查找玩家的 WeaponAssemblyTree 并应用卡片
+static func apply_card_to_player(card: FateCard) -> ApplyResult:
+	# 查找玩家节点
+	var player: Node = null
+	var tree := Engine.get_main_loop()
+	if tree != null and tree.get_root() != null:
+		player = tree.get_root().get_node_or_null("Player")
+	if player == null:
+		player = tree.get_root().get_first_node_in_group("player") if tree and tree.get_root() else null
+	if player == null or not player.has_method("get_weapon_tree"):
+		var result := ApplyResult.new()
+		result.success = false
+		result.error = ApplyError.TARGET_INVALID
+		result.message = "Player node not found in scene tree"
+		return result
+
+	var weapon_tree: WeaponAssemblyTree = player.get_weapon_tree()
+	if weapon_tree == null:
+		var result := ApplyResult.new()
+		result.success = false
+		result.error = ApplyError.TARGET_INVALID
+		result.message = "Player weapon tree not initialized"
+		return result
+
+	return apply_card(card, weapon_tree)
+
 
 ## 应用一张卡片到装配树
 ## 返回 ApplyResult
@@ -59,6 +87,8 @@ static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: A
 			result = _apply_attach_gun_to_bullet(card, tree, target_nodes)
 		FateCard.EffectAction.ATTACH_TO_MOUNT:
 			result = _apply_attach_to_mount(card, tree, target_nodes)
+		FateCard.EffectAction.ATTACH_GUN_TO_GUN:
+			result = _apply_attach_gun_to_gun(card, tree, target_nodes)
 		FateCard.EffectAction.SCALE_NODE:
 			result = _apply_scale_node(card, tree, target_nodes)
 		FateCard.EffectAction.MULTIPLY_FIRE_RATE:
@@ -246,6 +276,71 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 	result.modified_nodes = [target, child_node]
 	result.effect_value = child_node
 	result.message = "Mounted %s to %s slot of %s" % [child_node.node_name, AssemblyNode.SlotType.keys()[slot_type], target.node_name]
+	return result
+
+
+## ===== 效果执行：ATTACH_GUN_TO_GUN =====
+## 枪上加枪：枪身挂枪身，主枪开火时副枪也跟随射击
+## 实现：找到一个 GUN_BODY 节点作为主枪，在其 MOUNT 槽挂载一个副枪身
+## 副枪的射击通过 WeaponAssemblyTree._fire_co_mounted_gun() 实现
+static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+	var result := ApplyResult.new()
+	var root := tree.get_root()
+
+	# 找主枪身节点（优先选 targets 中的 GUN_BODY，否则找根节点或第一个 GUN_BODY）
+	var main_gun: AssemblyNode = null
+	for t in targets:
+		if t.node_type == AssemblyNode.NodeType.GUN_BODY:
+			main_gun = t
+			break
+
+	if main_gun == null:
+		# 自动找一个枪身
+		if root != null and root.node_type == AssemblyNode.NodeType.GUN_BODY:
+			main_gun = root
+		else:
+			var descendants := root.get_all_descendants()
+			for d in descendants:
+				if d.node_type == AssemblyNode.NodeType.GUN_BODY:
+					main_gun = d
+					break
+
+	if main_gun == null:
+		result.error = ApplyError.NO_TARGET
+		result.message = "No GUN_BODY node found to attach secondary gun"
+		return result
+
+	# 检查主枪的 MOUNT 槽是否空闲
+	if main_gun.slots[AssemblyNode.SlotType.MOUNT] != null:
+		result.error = ApplyError.SLOT_OCCUPIED
+		result.message = "Main gun mount slot already occupied"
+		return result
+
+	# 从 effect 参数获取缩放参数
+	var damage_scale: float = card.effect.get("damage_scale", 0.5)
+	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 0.6)
+	var follow_probability: float = card.effect.get("follow_probability", 1.0)  # 跟随射击概率
+
+	# 创建副枪身节点
+	var secondary_gun := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id)
+	secondary_gun.set_base_stats({
+		"damage": int(10 * damage_scale),
+		"fire_rate": 4.0 * fire_rate_scale,
+		"bullet_count": 1,
+	})
+	secondary_gun.tags = ["Fate.SecondaryGun", card.card_id, "Fate.GunOnGun"]
+
+	# 将副枪挂载到主枪的 MOUNT 槽
+	var ok := tree.mount(main_gun, AssemblyNode.SlotType.MOUNT, secondary_gun)
+	if not ok:
+		result.error = ApplyError.APPLY_FAILED
+		result.message = "Failed to mount secondary gun"
+		return result
+
+	result.success = true
+	result.modified_nodes = [main_gun, secondary_gun]
+	result.effect_value = secondary_gun
+	result.message = "Attached secondary gun to %s (follow_prob=%.0f%%)" % [main_gun.node_name, follow_probability * 100]
 	return result
 
 

@@ -78,14 +78,14 @@ func _setup_extraction_points() -> void:
 	# 添加基础撤离点
 	extraction_director.add_extraction_point(ExtractionDirector.ExtractionType.STANDARD)
 	
-	# 中层以上预先添加精英撤离点占位符（实际解锁由精英击杀触发）
+	# 中层以上预设精英撤离点（由精英击杀事件触发 unlock_elite_extraction）
 	if _current_floor >= 2:
 		extraction_director.add_extraction_point(
 			ExtractionDirector.ExtractionType.ELITE_KILL,
-			{"floor_min": 2, "pre_placed": true}  # pre_placed 表示尚未触发条件
+			{"floor_min": 2, "pre_placed": true}
 		)
-		# 但不 unlock，等待精英击杀事件
-		extraction_director.unlock_extraction()
+		# 初始为 LOCKED，等待精英击杀后由 ExtractionDirector.unlock_elite_extraction() 解锁
+		# 不调用 unlock_extraction()，让它保持 is_unlocked=false
 	
 	# Boss房撤离由 BossRoomDirector 在击败后通过注入的 extraction_director 引用解锁
 

@@ -5,13 +5,13 @@ class_name HitEffects
 # 监听 enemy_hit 信号，触发屏幕震动
 # 挂载在 Main 节点下
 
-var _screen_shake: ScreenShake
+var _screen_shake: Node = null
 
 func _ready() -> void:
 	# 优先查找 Camera2D 子节点下的 ScreenShake
 	_screen_shake = get_node_or_null("Camera2D/ScreenShake")
 	if not _screen_shake:
-		_screen_shake = get_tree().root.find_child("ScreenShake", false, false) as ScreenShake
+		_screen_shake = get_tree().root.find_child("ScreenShake", false, false)
 
 	# 动态连接所有现有敌人
 	_connect_all_enemies()

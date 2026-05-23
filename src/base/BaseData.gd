@@ -32,6 +32,20 @@ var boss_defeated: bool = false
 var zero_load_extraction: bool = false
 var five_tier_weapon_made: bool = false
 
+# 蓝图解锁Tier（枪身/子弹/配件各有一个Tier，影响局内掉落池）
+var blueprint_gunbody_tier: int = 0
+var blueprint_bullet_tier: int = 0
+var blueprint_attachment_tier: int = 0
+
+# 玩家累计资源点数（用于蓝图解锁消费）
+var extraction_points: int = 0
+
+# 保险柜物品数据（跨局持久化，格式：[{item, insured_at}, ...]）
+var vault_items: Array[Dictionary] = []
+
+# 下一局预选命运卡片（格式：{card_id, card_name, card_type, card_rarity, description, tags, effect, visual}）
+var pending_fate_card: Dictionary = {}
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -56,7 +70,13 @@ func _to_dict() -> Dictionary:
 		"bullet_variant_progress": bullet_variant_progress,
 		"boss_defeated": boss_defeated,
 		"zero_load_extraction": zero_load_extraction,
-		"five_tier_weapon_made": five_tier_weapon_made
+		"five_tier_weapon_made": five_tier_weapon_made,
+		"blueprint_gunbody_tier": blueprint_gunbody_tier,
+		"blueprint_bullet_tier": blueprint_bullet_tier,
+		"blueprint_attachment_tier": blueprint_attachment_tier,
+		"extraction_points": extraction_points,
+		"vault_items": vault_items,
+		"pending_fate_card": pending_fate_card
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -83,6 +103,12 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("boss_defeated"): data.boss_defeated = d["boss_defeated"]
 	if d.has("zero_load_extraction"): data.zero_load_extraction = d["zero_load_extraction"]
 	if d.has("five_tier_weapon_made"): data.five_tier_weapon_made = d["five_tier_weapon_made"]
+	if d.has("blueprint_gunbody_tier"): data.blueprint_gunbody_tier = d["blueprint_gunbody_tier"]
+	if d.has("blueprint_bullet_tier"): data.blueprint_bullet_tier = d["blueprint_bullet_tier"]
+	if d.has("blueprint_attachment_tier"): data.blueprint_attachment_tier = d["blueprint_attachment_tier"]
+	if d.has("extraction_points"): data.extraction_points = d["extraction_points"]
+	if d.has("vault_items"): data.vault_items = d["vault_items"]
+	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	return data
 
 func record_run(success: bool, kills: int) -> void:

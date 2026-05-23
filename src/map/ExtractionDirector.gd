@@ -30,6 +30,8 @@ class ExtractionPoint:
 var _extraction_points: Array[ExtractionPoint] = []
 var _current_extraction: ExtractionPoint = null
 var _beacon_count: int = 0
+var _beacon_item_id: String = "item_beacon"  ## 信标道具ID，与物品系统对齐
+var _inventory_ref: InventoryModule = null  ## 背包引用（用于真实消耗物品）
 
 signal extraction_started(point_id: String)
 signal extraction_completed(point_id: String, player_escaped: bool)
@@ -65,21 +67,93 @@ func unlock_extraction(point_id: String = "") -> bool:
 
 ## 解锁精英击杀撤离
 func unlock_elite_extraction() -> void:
-	# 创建精英专属撤离点
-	add_extraction_point(ExtractionType.ELITE_KILL, {"must_kill_elite": true})
-	unlock_extraction()
+	# 找到第一个 ELITE_KILL 类型的撤离点并解锁
+	var elite_point: ExtractionPoint = null
+	for p in _extraction_points:
+		if p.type == ExtractionType.ELITE_KILL:
+			elite_point = p
+			break
+	if elite_point == null:
+		# 不存在则创建一个
+		add_extraction_point(ExtractionType.ELITE_KILL, {"must_kill_elite": true})
+		elite_point = _extraction_points[-1]
+	if not elite_point.is_unlocked:
+		elite_point.is_unlocked = true
+		extraction_unlocked.emit("ELITE_KILL")
 
 ## 解锁Boss撤离
 func unlock_boss_extraction() -> void:
-	add_extraction_point(ExtractionType.BOSS_KILL, {"must_kill_boss": true})
-	unlock_extraction()
+	# 找到第一个 BOSS_KILL 类型的撤离点并解锁
+	var boss_point: ExtractionPoint = null
+	for p in _extraction_points:
+		if p.type == ExtractionType.BOSS_KILL:
+			boss_point = p
+			break
+	if boss_point == null:
+		# 不存在则创建一个
+		add_extraction_point(ExtractionType.BOSS_KILL, {"must_kill_boss": true})
+		boss_point = _extraction_points[-1]
+	if not boss_point.is_unlocked:
+		boss_point.is_unlocked = true
+		extraction_unlocked.emit("BOSS_KILL")
 
-## 使用信标道具召唤撤离
-func summon_beacon_extraction() -> bool:
-	if _beacon_count <= 0:
+## 解锁交易撤离（由商人房触发）
+func unlock_trade_extraction() -> void:
+	var trade_point: ExtractionPoint = null
+	for p in _extraction_points:
+		if p.type == ExtractionType.TRADE:
+			trade_point = p
+			break
+	if trade_point == null:
+		add_extraction_point(ExtractionType.TRADE, {"must_pay_currency": true})
+		trade_point = _extraction_points[-1]
+	if not trade_point.is_unlocked:
+		trade_point.is_unlocked = true
+		extraction_unlocked.emit("TRADE")
+
+## 获取交易撤离的花费（楼层越高越高）
+func get_trade_cost(floor: int = 1) -> int:
+	return floor * 30
+
+## 尝试执行交易撤离（花费货币，永久消耗撤离点）
+## 返回是否成功
+func try_use_trade_extraction(player_escaped: bool, current_currency: int, floor: int = 1) -> bool:
+	# 找到 TRADE 撤离点
+	var trade_point: ExtractionPoint = null
+	for p in _extraction_points:
+		if p.type == ExtractionType.TRADE and p.is_unlocked and not p.is_used:
+			trade_point = p
+			break
+	if trade_point == null:
 		return false
 	
-	_beacon_count -= 1
+	var cost: int = get_trade_cost(floor)
+	# 货币已在 GameUIManager 层面预扣，这里只做最终结算
+	if player_escaped:
+		trade_point.is_used = true
+		extraction_completed.emit(trade_point.id, true)
+		extraction_used.emit(ExtractionType.keys()[trade_point.type], true)
+		# 通知货币已花费（供外部更新 GameManager）
+		print("[ExtractionDirector] TRADE extraction used, cost %d魂" % cost)
+	return true
+
+## 绑定背包引用（由 RoomGameMode 在初始化时调用）
+func bind_inventory(inventory: InventoryModule) -> void:
+	_inventory_ref = inventory
+	sync_beacon_count_from_inventory(inventory)
+
+## 使用信标道具召唤撤离
+## 真实从背包消耗物品
+func summon_beacon_extraction() -> bool:
+	# 优先用背包引用真实消耗，没有则用内存计数
+	if _inventory_ref != null:
+		if not _inventory_ref.consume_item(_beacon_item_id, 1):
+			return false
+	else:
+		if _beacon_count <= 0:
+			return false
+		_beacon_count -= 1
+	
 	add_extraction_point(ExtractionType.BEACON, {"beacon_used": true})
 	var point_id = unlock_extraction()
 	extraction_countdown_started.emit("BEACON", 10.0)
@@ -149,6 +223,22 @@ func set_beacon_count(count: int) -> void:
 ## 获取信标数量
 func get_beacon_count() -> int:
 	return _beacon_count
+
+## 获取信标道具ID
+func get_beacon_item_id() -> String:
+	return _beacon_item_id
+
+## 从 InventoryModule 同步信标数量
+## 由 RoomGameMode 或 GameManager 每局开始时调用
+func sync_beacon_count_from_inventory(inventory: InventoryModule) -> void:
+	if inventory == null:
+		_beacon_count = 0
+		return
+	_beacon_count = inventory.get_item_count(_beacon_item_id)
+
+## 检查是否有信标可用（用于UI按钮可用性）
+func has_beacon() -> bool:
+	return _beacon_count > 0
 
 ## 获取当前撤离点
 func get_current_extraction() -> ExtractionPoint:

@@ -509,6 +509,7 @@ func _can_use_extraction_type(etype: String) -> bool:
 		"BEACON": return _beacon_count > 0
 		"BOSS_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL).size() > 0
 		"ELITE_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL).size() > 0
+		"TRADE": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.current_floor > 0 and GameManager.currency >= _room_game_mode.get_map_manager().extraction_director.get_trade_cost(_room_game_mode.current_floor)
 	return true
 
 func _update_extraction_buttons() -> void:
@@ -538,6 +539,18 @@ func _on_extraction_type_button_pressed(etype: String) -> void:
 		if map_mgr != null and map_mgr.extraction_director != null:
 			map_mgr.extraction_director.summon_beacon_extraction()
 			_beacon_count = map_mgr.extraction_director.get_beacon_count()
+
+	# 交易撤离：预扣货币（不满足则禁用按钮）
+	if etype == "TRADE" and _room_game_mode != null:
+		var map_mgr = _room_game_mode.get_map_manager()
+		if map_mgr != null and map_mgr.extraction_director != null:
+			var ed = map_mgr.extraction_director
+			var cost = ed.get_trade_cost(_room_game_mode.current_floor)
+			if not GameManager.spend_currency(cost):
+				# 货币不足，无法交易撤离
+				return
+			# 货币已预扣，等待撤离完成时通知 ExtractionDirector 做最终结算
+			ed.set("_trade_pending_refund", false)  # 标记已预扣，不需要退款
 
 	extraction_panel.visible = false
 	_room_game_mode.begin_extraction(etype, countdown)

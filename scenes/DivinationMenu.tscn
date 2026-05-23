@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://divination_menu_scene"]
+
+[ext_resource type="Script" path="res://src/ui/DivinationMenu.gd" id="1_divination"]
+
+[node name="DivinationMenu" type="CanvasLayer"]
+script = ExtResource("1_divination")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.06, 0.1, 0.97)
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -420.0
+offset_top = -260.0
+offset_right = 420.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "命运占卜屋"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="InstructionLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "选择一张命运卡片，它将用于你的下一局"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CardOptions" type="HBoxContainer" parent="Panel/VBox"]
+custom_minimum_size = Vector2(560, 220)
+layout_mode = 2
+alignment = 1
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="SelectedCardLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="SkipButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(560, 48)
+layout_mode = 2
+text = "跳过（不选）"

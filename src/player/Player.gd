@@ -34,9 +34,13 @@ func _ready() -> void:
 	current_hp = max_hp
 	hp_changed.connect(_on_hp_changed)
 	_audio = get_node_or_null("/root/AudioManager") as AudioManager
+	add_to_group("player")
 	
-	# 初始化武器装配树
-	weapon_tree = WeaponPresets.build_rifle()
+	# 初始化武器装配树（基于蓝图Tier选择初始武器）
+	if BlueprintRegistry != null:
+		weapon_tree = BlueprintRegistry.get_starting_weapon_tree()
+	else:
+		weapon_tree = WeaponPresets.build_rifle()
 
 func _physics_process(delta: float) -> void:
 	_handle_movement(delta)

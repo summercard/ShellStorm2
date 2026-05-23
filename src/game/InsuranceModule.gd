@@ -142,14 +142,22 @@ func clear_all() -> void:
 	insurance_changed.emit()
 
 ## 获取所有保险物品（用于UI）
+## 返回格式与 InventoryModule.get_occupied_slots() 对齐：{item, count, insurance_slot}
 func get_all_insured_items() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for i in _insurance_slots.size():
 		if not _insurance_slots[i].is_empty():
-			var d: Dictionary = _insurance_slots[i].item.duplicate()
-			d["insurance_slot"] = i
+			var d: Dictionary = {
+				"item": _insurance_slots[i].item.duplicate(),
+				"count": 1,
+				"insurance_slot": i  # 与 GameUIManager._refresh_insurance_ui() 的 key 对齐
+			}
 			result.append(d)
 	return result
+
+## API 对齐方法（与 InventoryModule.get_occupied_slots() 对称）
+func get_occupied_slots() -> Array[Dictionary]:
+	return get_all_insured_items()
 
 ## 是否有保险某物品
 func has_item(item_id: String) -> bool:

@@ -41,10 +41,16 @@ var bullet_damage: int = 5      # 每颗子弹的伤害值
 ## 所有节点注册表（用于通过 node_id 快速查找）
 var _node_registry: Dictionary = {}
 
+## 子弹挂载枪缓存（命运卡片"子弹背枪"机制）
+## 避免每生成一颗子弹都遍历整棵树，树下变化时由 tree_changed 信号更新
+var _cached_bullet_attached_gun: AssemblyNode = null
+
 ## 构造函数：从一个根节点装配树创建
 func _init(root_node: AssemblyNode = null) -> void:
 	if root_node != null:
 		set_root(root_node)
+	# 连接 tree_changed 信号以刷新挂载枪缓存
+	tree_changed.connect(_on_tree_changed)
 
 ## 设置根节点（主枪身）
 func set_root(new_root: AssemblyNode) -> bool:
@@ -176,7 +182,80 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 		var bullet = bullet_scene.instantiate()
 		if bullet.has_method("fire"):
 			bullet.fire(spawn_pos, direction, BASE_BULLET_SPEED * bullet_speed, final_damage, is_crit)
+		# 检查子弹节点是否有挂载枪（命运卡片"子弹背枪"机制）
+		# 使用缓存避免每颗子弹都遍历整棵树
+		var attached_gun: AssemblyNode = _find_bullet_attached_gun()
+		if attached_gun != null and bullet.has_method("set_attached_gun"):
+			bullet.set_attached_gun(attached_gun)
 		get_tree().root.add_child(bullet)
+
+	# 处理枪上加枪：主枪开火时副枪也跟随射击
+	_fire_co_mounted_gun(spawn_pos, direction)
+
+## 树结构变化时刷新挂载枪缓存
+func _on_tree_changed() -> void:
+	_cached_bullet_attached_gun = _find_bullet_attached_gun_raw()
+
+## 遍历装配树找到有挂载枪的子弹节点（命运卡片"子弹背枪"机制）
+## 内部实现，不使用缓存
+func _find_bullet_attached_gun_raw() -> AssemblyNode:
+	if root == null:
+		return null
+	# 遍历所有节点，找 BULLET 类型且 MOUNT 槽有数据的节点
+	var all_nodes := root.get_all_descendants()
+	all_nodes.append(root)  # 包含根节点
+	for node in all_nodes:
+		if node.node_type == AssemblyNode.NodeType.BULLET:
+			var mounted_gun: AssemblyNode = node.slots[AssemblyNode.SlotType.MOUNT]
+			if mounted_gun != null and mounted_gun.node_type == AssemblyNode.NodeType.GUN_BODY:
+				return mounted_gun
+	return null
+
+## 公开接口：获取缓存的挂载枪（供 _spawn_bullet_from 使用）
+func _find_bullet_attached_gun() -> AssemblyNode:
+	return _cached_bullet_attached_gun
+
+## 枪上加枪：主枪开火时触发副枪射击
+## 遍历装配树找到有 Fate.SecondaryGun 标签的枪身节点并让其发射子弹
+func _fire_co_mounted_gun(spawn_pos: Vector2, direction: Vector2) -> void:
+	if root == null:
+		return
+	# 收集所有节点并检查是否有副枪
+	var all_nodes := root.get_all_descendants()
+	all_nodes.append(root)
+	for node in all_nodes:
+		if node.node_type == AssemblyNode.NodeType.GUN_BODY and node.tags.has("Fate.SecondaryGun"):
+			# 获取副枪属性并发射
+			var stats: Dictionary = node.get_base_stats()
+			var gun_fire_rate: float = stats.get("fire_rate", 4.0)
+			var gun_damage: int = stats.get("damage", 5)
+			var bullet_count: int = stats.get("bullet_count", 1)
+			# 计算射击间隔
+			var fire_interval: float = 1.0 / gun_fire_rate if gun_fire_rate > 0 else 0.25
+			# 副枪独立冷却追踪（每个副枪节点自己的冷却）
+			var cooldown_key := "co_mounted_" + node.node_id
+			if not _co_mounted_cooldowns.has(cooldown_key):
+				_co_mounted_cooldowns[cooldown_key] = 0.0
+			_co_mounted_cooldowns[cooldown_key] -= get_process_delta_time()
+			if _co_mounted_cooldowns[cooldown_key] > 0:
+				return
+			_co_mounted_cooldowns[cooldown_key] = fire_interval
+			# 生成副枪子弹（从主枪枪口位置偏移发射）
+			var offset_pos := spawn_pos + direction * 15.0
+			_spawn_bullet_from_co_gun(offset_pos, direction, gun_damage, bullet_count)
+
+var _co_mounted_cooldowns: Dictionary = {}
+
+func _spawn_bullet_from_co_gun(spawn_pos: Vector2, direction: Vector2, damage: int, bullet_count: int) -> void:
+	"""生成副枪的子弹（不带暴击判定，减少性能开销）"""
+	if bullet_scene:
+		for i in range(bullet_count):
+			var spread_angle := _calculate_spread(i)
+			var spawn_dir := direction.rotated(spread_angle)
+			var bullet = bullet_scene.instantiate()
+			if bullet.has_method("fire"):
+				bullet.fire(spawn_pos, spawn_dir, BASE_BULLET_SPEED * bullet_speed, damage, false)
+			get_tree().root.add_child(bullet)
 
 ## 换弹
 func start_reload() -> void:

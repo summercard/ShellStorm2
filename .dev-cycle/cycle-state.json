@@ -7,15 +7,15 @@
   "lastTask": "Code",
   "planVersion": "v3.4",
   "polish": {
-    "current": 60,
+    "current": 62,
     "total": "infinite"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "lastRunTime": "2026-05-23T08:36:00+08:00",
-  "currentTarget": "信标消耗后UI信标数量同步",
-  "notes": "轮次60完成：\n1) GameUIManager._on_inventory_changed() 新增 _sync_beacon_label_from_inventory() 调用\n2) 新增 _sync_beacon_label_from_inventory() 方法：从 RoomGameMode→MapManager→ExtractionDirector 获取真实信标剩余数量并更新 beacon_label\n3) 链路：consume_item→inventory_changed→_on_inventory_changed→_sync_beacon_label_from_inventory→ExtractionDirector.get_beacon_count()→_update_beacon_label\n4) Godot headless --quit-after 1 编译 EXIT: 0 ✅\n\n\n核心发现：\n- GameUIManager._on_inventory_changed() 已有，_on_slot_right_clicked() 中 consume_item 后已有 inventory_changed.emit()，但未同步信标UI\n- 新增 _sync_beacon_label_from_inventory() 让背包变化时自动同步信标数量\n- 注意：信标撤离按钮点击时通过 begin_extraction() 路由，最终由 ExtractionModule 触发 extraction_completed 再触发 _on_extraction_completed 更新信标数\n\n遗留：\n- BOSS_KILL / ELITE_KILL / TRADE 撤离类型的按钮条件判断需实际数据验证\n- 实际信标道具使用流程需人类试玩验证\n- 副枪瞄准跟随主枪方向（非独立寻敌）",
-  "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59],
+  "lastRunTime": "2026-05-23T08:54:00+08:00",
+  "currentTarget": "精英击杀信号连接 + ELITE_KILL 撤离正确解锁",
+  "notes": "轮次62完成：\n1) ExtractionDirector.unlock_elite_extraction() 修复：找到已有的 ELITE_KILL 点而非重复创建；只解锁该类型的点，不调用 unlock_extraction() 导致解锁到 STANDARD\n2) ExtractionDirector.unlock_boss_extraction() 同样修复为只解锁 BOSS_KILL 类型点\n3) MapManager._setup_extraction_points() 不再调用 unlock_extraction() 让 ELITE_KILL 保持 LOCKED\n4) RoomGameMode.notify_enemy_killed() 添加精英击杀触发 unlock_elite_extraction()\n5) Godot headless --quit-after 1 编译 EXIT: 0 ✅\n\n核心发现：\n- unlock_extraction() 无参数时解锁第一个未解锁点，之前连续调用会把 ELITE_KILL 的解锁机会浪费在 STANDARD 点上\n- ELITE_KILL 点在地图生成时就 add_extraction_point() 了，但处于 LOCKED 状态，精英击杀事件才是真正的触发器\n- unlock_elite_extraction() 需要精准找到 ELITE_KILL 类型的点并单独解锁\n\n遗留：\n- TRADE 撤离（ExtractionType.TRADE = 4）尚未实现\n- 宝箱开启→InventoryUI刷新待 P14 后续处理\n- 确认 RoomWaveSpawner 中 is_elite 标记的敌人被正确识别",
+  "completedPhases": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61],
   "designDoc": "docs/PH09_搜打撤深化.md",
-  "nextTarget": "信标道具消耗后UI同步 + 其他撤离类型逻辑验证",
-  "nextDirection": "P14剩余逻辑：宝箱/容器开启→物品入背包→InventoryUI刷新；其他撤离类型（BOSS_KILL/ELITE_KILL/TRADE）按钮可用性接入真实房间完成状态"
+  "nextTarget": "TRADE撤离实现 + 宝箱→InventoryUI刷新 + 确认精英击杀触发",
+  "nextDirection": "1) 确认 TRADE 撤离是否保留；2) 宝箱开启→InventoryUI刷新链路；3) 精英击杀事件实际触发验证"
 }

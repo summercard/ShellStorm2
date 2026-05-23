@@ -31,12 +31,23 @@ var _exploded: bool = false          # 自爆型是否已爆炸
 ## 词缀引用
 var _modifiers: Array = []
 
+## 存储怪物数据（由 RoomWaveSpawner 设置，用于死亡时回调）
+var _enemy_data: Dictionary = {}
+
 ## 碰撞层
 const LAYER_PLAYER: int = 2
 const LAYER_ENEMY: int = 4
 
 @onready var shape: ColorRect = $Shape
 @onready var hp_bar: ProgressBar = $HPBar
+
+## 设置怪物数据（由 RoomWaveSpawner 在生成时调用）
+func set_enemy_data(data: Dictionary) -> void:
+	_enemy_data = data
+
+## 获取怪物数据
+func get_enemy_data() -> Dictionary:
+	return _enemy_data
 
 func _ready() -> void:
 	current_hp = max_hp

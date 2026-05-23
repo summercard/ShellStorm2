@@ -32,6 +32,7 @@ enum EffectAction {
 	ATTACH_GUN_TO_BULLET,     # 子弹上挂枪（子弹背枪）
 	ATTACH_BULLET_TO_GUN,     # 枪身上挂子弹
 	ATTACH_TO_MOUNT,          # 挂载槽挂载任意节点
+	ATTACH_GUN_TO_GUN,        # 枪上加枪（主枪开火时副枪也开火）
 
 	# 强化类
 	SCALE_NODE,               # 缩放节点（变大了）

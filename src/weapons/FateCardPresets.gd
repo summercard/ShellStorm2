@@ -37,10 +37,10 @@ static func gun_on_gun() -> FateCard:
 	card.tags = ["Fate.Combine", "Fate.AddChildNode"]
 	card.description = "选择一个枪身，将其挂到当前枪身上，副枪跟随射击"
 	card.effect = {
-		"action": FateCard.EffectAction.ATTACH_TO_MOUNT,
-		"target_slot": "MOUNT",
-		"follow_fire": true,
+		"action": FateCard.EffectAction.ATTACH_GUN_TO_GUN,
 		"damage_scale": 0.5,
+		"fire_rate_scale": 0.6,
+		"follow_probability": 1.0,
 	}
 	return card
 

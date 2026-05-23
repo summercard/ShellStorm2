@@ -1,0 +1,96 @@
+[gd_scene load_steps=2 format=3 uid="uid://base_menu_scene"]
+
+[ext_resource type="Script" path="res://src/ui/BaseMenu.gd" id="1_basemenu"]
+
+[node name="BaseMenu" type="CanvasLayer"]
+script = ExtResource("1_basemenu")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.09, 0.12, 1.0)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -280.0
+offset_right = 280.0
+offset_bottom = 280.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "弹壳风暴2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="StatsPanel" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(560, 80)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBox/StatsPanel"]
+layout_mode = 2
+
+[node name="RunsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+layout_mode = 2
+text = "总局数: 0"
+
+[node name="ExtractionsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+layout_mode = 2
+text = "成功撤离: 0"
+
+[node name="KillsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+layout_mode = 2
+text = "总击杀: 0"
+
+[node name="HSeparator2" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="StartButton" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(560, 60)
+layout_mode = 2
+text = "开始任务"
+
+[node name="HSeparator3" type="HSeparator" parent="VBox"]
+layout_mode = 2
+
+[node name="BuildingsLabel" type="Label" parent="VBox"]
+layout_mode = 2
+text = "基地设施"
+
+[node name="BuildingsPanel" type="PanelContainer" parent="VBox"]
+custom_minimum_size = Vector2(560, 120)
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="VBox/BuildingsPanel"]
+layout_mode = 2
+
+[node name="BuildingWorkshop" type="Button" parent="VBox/BuildingsPanel/VBox"]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+text = "枪械工坊"
+
+[node name="BuildingDivination" type="Button" parent="VBox/BuildingsPanel/VBox"]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+text = "命运占卜屋"
+
+[node name="BuildingVault" type="Button" parent="VBox/BuildingsPanel/VBox"]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+text = "保险柜"
+
+[node name="BuildingArchive" type="Button" parent="VBox/BuildingsPanel/VBox"]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+text = "怪物档案室"

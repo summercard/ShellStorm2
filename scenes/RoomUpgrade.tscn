@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://room_upgrade_001"]
+
+[ext_resource type="Script" path="res://src/game/WorkbenchInteraction.gd" id="1_workbench"]
+
+[ext_resource type="PackedScene" path="res://scenes/Container.tscn" id="2_container"]
+
+## 改造房 — 工作台交互间
+## 玩家在此房间可以通过工作台重新装配武器（枪身+子弹+配件）
+## 工作台是 Area2D，可通过 interact 键触发装配界面
+
+[node name="RoomUpgrade" type="Node2D"]
+
+## 工作台交互区域（挂 WorkbenchInteraction 脚本）
+[node name="WorkbenchArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorkbenchArea"]
+shape = SubResource("CircleShape2D_bench")
+script = ExtResource("1_workbench")
+
+## 工作台视觉（底座+机械臂外形）
+[node name="BenchBase" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(80, 80)
+offset = Vector2(-40, -40)
+color = Color(0.4, 0.35, 0.3, 0.9)
+
+[node name="BenchArm" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(20, 50)
+offset = Vector2(-10, -90)
+color = Color(0.55, 0.5, 0.45, 0.9)
+
+[node name="InteractLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_top = -130.0
+offset_right = 50.0
+offset_bottom = -110.0
+grow_horizontal = 2
+text = "[E] 改造"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bench"]
+radius = 60.0
