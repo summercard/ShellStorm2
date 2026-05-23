@@ -12,6 +12,11 @@ var _current_boss: Dictionary = {}
 var _boss_rooms: Dictionary = {}  # room_id -> boss_data
 var _defeated_bosses: Array[String] = []
 var _phase_count: int = 0
+var _extraction_director: ExtractionDirector = null  ## 由 MapManager 注入，避免创建局部实例
+
+## 注入 ExtractionDirector 引用（由 MapManager 在初始化时调用）
+func set_extraction_director(director: ExtractionDirector) -> void:
+	_extraction_director = director
 
 ## 注册Boss房
 func register_boss_room(room_id: String, boss_id: String, boss_type: String = "standard") -> void:
@@ -123,9 +128,16 @@ func _defeat_boss() -> void:
 	boss_defeated.emit(boss_id, rewards)
 	_defeated_bosses.append(boss_id)
 	
-	# 解锁Boss撤离
-	if ExtractionDirector != null:
-		ExtractionDirector.new().unlock_boss_extraction()
+	# 解锁Boss撤离（使用注入的 extraction_director 引用）
+	if _extraction_director != null:
+		_extraction_director.unlock_boss_extraction()
+	elif ExtractionDirector != null:
+		# 兜底：直接从 MapManager 获取（适用于 BossRoomDirector 作为 MapManager 子节点）
+		var ed = get_node_or_null("/root/Main/MapManager/ExtractionDirector")
+		if ed == null:
+			ed = get_node_or_null("/root/MapManager/ExtractionDirector")
+		if ed != null and ed.has_method("unlock_boss_extraction"):
+			ed.unlock_boss_extraction()
 
 ## 生成奖励
 func _generate_rewards(boss_data: Dictionary) -> Dictionary:

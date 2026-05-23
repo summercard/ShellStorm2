@@ -30,6 +30,7 @@ func _init():
 	monster_injector = MonsterInjector.new()
 	extraction_director = ExtractionDirector.new()
 	boss_director = BossRoomDirector.new()
+	boss_director.set_extraction_director(extraction_director)
 	
 	path_director.set_graph(null)
 
@@ -77,15 +78,16 @@ func _setup_extraction_points() -> void:
 	# 添加基础撤离点
 	extraction_director.add_extraction_point(ExtractionDirector.ExtractionType.STANDARD)
 	
-	# 中层以上添加精英撤离点
+	# 中层以上预先添加精英撤离点占位符（实际解锁由精英击杀触发）
 	if _current_floor >= 2:
 		extraction_director.add_extraction_point(
 			ExtractionDirector.ExtractionType.ELITE_KILL,
-			{"floor_min": 2}
+			{"floor_min": 2, "pre_placed": true}  # pre_placed 表示尚未触发条件
 		)
+		# 但不 unlock，等待精英击杀事件
+		extraction_director.unlock_extraction()
 	
-	# Boss房总是有Boss撤离
-	# （由boss_director在击败后解锁）
+	# Boss房撤离由 BossRoomDirector 在击败后通过注入的 extraction_director 引用解锁
 
 ## 实例化地图到场景
 func instantiate_map(parent: Node2D) -> void:
