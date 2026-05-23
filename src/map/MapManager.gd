@@ -7,6 +7,7 @@ signal room_entered(room_data: RoomData)
 signal room_exited(room_id: String)
 signal floor_changed(old_floor: int, new_floor: int)
 signal all_rooms_cleared()
+signal adjacent_rooms_revealed(room_id: String, revealed_count: int)
 
 var map_generator: MapGenerator
 var room_factory: RoomFactory
@@ -278,10 +279,48 @@ func clear_all_rooms() -> void:
 	_current_graph = null
 	_current_room_id = -1
 
-	extraction_director.clear()
-	boss_director.clear()
+## 揭示周围房间（事件房 REVEAL 事件用）
+## 标记指定房间周围的房间为"已揭示"，小地图可以显示这些房间的类型
+## room_id: 当前房间ID（来自 RoomData.room_id）
+func reveal_adjacent_rooms(room_id: String) -> void:
+	if _current_graph == null:
+		return
 
-	all_rooms_cleared.emit()
+	# 找到当前房间节点
+	var current_node: NodeGraph.RoomNode = null
+	for node in _current_graph.get_all_nodes():
+		if node != null and node.room_data != null and node.room_data.room_id == room_id:
+			current_node = node
+			break
+
+	if current_node == null:
+		# 通过 node_id 查找（room_id 可能是字符串形式的 node_id）
+		var node_id_int: int = room_id.to_int() if room_id.is_valid_int() else -1
+		if node_id_int >= 0:
+			current_node = _current_graph.get_node(node_id_int)
+
+	if current_node == null:
+		push_warning("[MapManager] reveal_adjacent_rooms: room not found for %s" % room_id)
+		return
+
+	# 获取相邻节点并标记为已揭示
+	if current_node.connections.is_empty():
+		return
+
+	# 通过 RoomGameMode 信号让小地图UI更新显示
+	# 发出 reveal 事件，UI 层监听并刷新小地图
+	var revealed_ids: Array[int] = []
+	for conn in current_node.connections:
+		if conn is int:
+			revealed_ids.append(conn)
+			# 标记节点元数据（供小地图读取）
+			var adjacent_node: NodeGraph.RoomNode = _current_graph.get_node(conn)
+			if adjacent_node != null and adjacent_node.room_data != null:
+				adjacent_node.room_data.set_meta("revealed", true)
+
+	print("[MapManager] Revealed %d adjacent rooms from room %s" % [revealed_ids.size(), room_id])
+
+	adjacent_rooms_revealed.emit(room_id, revealed_ids.size())
 
 ## 调试：打印地图状态
 func debug_status() -> String:

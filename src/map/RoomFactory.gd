@@ -14,6 +14,8 @@ const SCENE_MAP := {
 	RoomData.RoomType.EVENT: "res://scenes/RoomEvent.tscn",
 	RoomData.RoomType.EXTRACTION: "res://scenes/RoomExtraction.tscn",
 	RoomData.RoomType.BOSS: "res://scenes/RoomBoss.tscn",
+	RoomData.RoomType.STORAGE: "res://scenes/RoomStorage.tscn",
+	RoomData.RoomType.TRAP: "res://scenes/RoomTrap.tscn",
 }
 
 var _scene_cache: Dictionary = {}
@@ -253,6 +255,8 @@ func _get_room_debug_color(room_type: RoomData.RoomType) -> Color:
 		RoomData.RoomType.EVENT: return Color(0.4, 0.2, 0.6, 0.3)
 		RoomData.RoomType.EXTRACTION: return Color(0.1, 0.9, 0.5, 0.3)
 		RoomData.RoomType.BOSS: return Color(0.7, 0.1, 0.1, 0.5)
+		RoomData.RoomType.STORAGE: return Color(0.5, 0.3, 0.1, 0.3)
+		RoomData.RoomType.TRAP: return Color(0.5, 0.1, 0.1, 0.3)
 		_: return Color(0.5, 0.5, 0.5, 0.3)
 
 ## 根据房间标签过滤场景

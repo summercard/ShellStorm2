@@ -144,6 +144,9 @@ func _choose_special_room_type(config: Dictionary) -> RoomData.RoomType:
 	var scavenge_chance: float = config["scavenge_chance"]
 	var merchant_chance: float = config["merchant_chance"]
 	var event_chance: float = config["event_chance"]
+	# 深层额外：藏储室和陷阱房概率（各5%，仅深层出现）
+	var storage_chance: float = 0.05
+	var trap_chance: float = 0.05
 	
 	if roll < elite_chance:
 		return RoomData.RoomType.ELITE
@@ -151,8 +154,12 @@ func _choose_special_room_type(config: Dictionary) -> RoomData.RoomType:
 		return RoomData.RoomType.SCAVENGE
 	elif roll < elite_chance + scavenge_chance + merchant_chance:
 		return RoomData.RoomType.MERCHANT
+	elif roll < elite_chance + scavenge_chance + merchant_chance + event_chance:
+		return RoomData.RoomType.EVENT
+	elif roll < elite_chance + scavenge_chance + merchant_chance + event_chance + storage_chance:
+		return RoomData.RoomType.STORAGE
 	else:
-		return RoomData.RoomType.UPGRADE
+		return RoomData.RoomType.TRAP
 
 ## 确保Boss房存在
 func _ensure_boss_room(graph: NodeGraph, path_ids: Array[int]) -> void:

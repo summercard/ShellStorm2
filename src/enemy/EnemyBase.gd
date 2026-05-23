@@ -115,8 +115,10 @@ func _physics_process(delta: float) -> void:
 	if awareness_enabled:
 		_ai_tick(delta)
 	else:
-		# 兼容旧行为：直接走 ai_type 派发的行为
+		# 兼容旧行为：直接走 ai_type 派发的行为。_dispatch_behavior() 内部已经负责移动和碰撞，
+		# 这里必须直接返回，避免同一帧 move_and_slide() 被执行两次。
 		_dispatch_behavior(delta)
+		return
 
 	velocity += _separation_velocity()
 	velocity += _knockback_velocity
@@ -137,9 +139,11 @@ func _ai_tick(delta: float) -> void:
 	# 声音累积：玩家移动时持续增加
 	var player_moving: bool = false
 	if player_ref.has_method("is_moving"):
-		player_moving = player_ref.is_moving()
-	elif player_ref.get("velocity"):
-		player_moving = player_ref.velocity.length() > 10.0
+		player_moving = bool(player_ref.call("is_moving"))
+	else:
+		var player_velocity = player_ref.get("velocity")
+		if player_velocity is Vector2:
+			player_moving = player_velocity.length() > 10.0
 	if player_moving:
 		_noise_accumulator = min(_noise_accumulator + delta * 30.0, hearing_range)
 

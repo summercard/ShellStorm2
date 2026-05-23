@@ -11,6 +11,7 @@ signal kill_recorded()
 signal wave_progress_changed(killed: int, total: int, wave: int)
 
 const PLAYER_SCENE := preload("res://scenes/Player.tscn")
+const SOUL_ORB_SCENE := preload("res://scenes/SoulOrb.tscn")
 const ENEMY_SCENE := preload("res://scenes/Enemy.tscn")
 
 @export var arena_size: Vector2 = Vector2(1800, 1100)
@@ -42,6 +43,7 @@ var wave_active: bool = false
 var game_is_over: bool = false
 var rng := RandomNumberGenerator.new()
 var _waiting_for_next_wave: bool = false
+var _message_tween: Tween = null
 var inventory_module: InventoryModule = null
 var insurance_module: InsuranceModule = null
 
@@ -242,6 +244,10 @@ func _apply_enemy_data(enemy: Node, data: Dictionary) -> void:
 		enemy.set("speed", float(data["speed"]))
 	if data.has("ai_type"):
 		enemy.set("ai_type", str(data["ai_type"]))
+	# Main.tscn 的 CoreCombatMode 是直接刷怪的街机战斗循环，
+	# 这里显式启用 ai_type 行为，避免所有怪都停留在警觉 AI 的 IDLE/ALERT 状态。
+	if enemy.get("awareness_enabled") != null:
+		enemy.set("awareness_enabled", false)
 	if data.has("shoot_interval"):
 		enemy.set("shoot_interval", float(data["shoot_interval"]))
 	if data.has("explosion_damage"):
@@ -281,9 +287,13 @@ func _on_enemy_died(enemy: Node, data: Dictionary) -> void:
 	kills += 1
 	score += int(data.get("xp_value", 10))
 	var currency_gain := int(data.get("currency_value", 4))
+	# 即时到账 + 显示魂数飘字
 	GameManager.add_currency(currency_gain)
 	if ui_layer != null and ui_layer.has_method("show_currency_popup"):
 		ui_layer.call("show_currency_popup", currency_gain, enemy.global_position if is_instance_valid(enemy) else player.global_position)
+	# 掉落魂魄（视觉表现）
+	var enemy_pos: Vector2 = enemy.global_position if is_instance_valid(enemy) else player.global_position
+	_spawn_soul_orb(enemy_pos, currency_gain)
 	kill_recorded.emit()
 	# 敌人死亡时触发额外屏幕震动（增强击杀反馈）
 	if screen_shake != null and screen_shake.has_method("trigger"):
@@ -370,9 +380,24 @@ func _show_message(text: String, seconds: float = 1.0) -> void:
 	wave_indicator.visible = true
 	wave_indicator.modulate.a = 1.0
 	wave_indicator.text = text
-	var t := wave_indicator.create_tween()
-	t.tween_interval(seconds)
-	t.tween_property(wave_indicator, "modulate:a", 0.0, 0.35)
+	if _message_tween != null and _message_tween.is_valid():
+		_message_tween.kill()
+	_message_tween = wave_indicator.create_tween()
+	_message_tween.tween_interval(seconds)
+	_message_tween.tween_property(wave_indicator, "modulate:a", 0.0, 0.35)
+
+func _spawn_soul_orb(world_pos: Vector2, amount: int) -> void:
+	if amount <= 0 or not is_instance_valid(self):
+		return
+	var orb: SoulOrb = SOUL_ORB_SCENE.instantiate() as SoulOrb
+	orb.amount = amount
+	# 在尸体位置生成，略微偏移避免重叠
+	orb.global_position = world_pos + Vector2(randf_range(-6, 6), randf_range(-6, 6))
+	orb.collected.connect(_on_soul_orb_collected)
+	add_child(orb)
+
+func _on_soul_orb_collected(amount: int, orb: SoulOrb) -> void:
+	GameManager.add_currency(amount)
 
 func get_inventory() -> InventoryModule:
 	return inventory_module

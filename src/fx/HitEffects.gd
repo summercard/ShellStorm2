@@ -11,7 +11,7 @@ func _ready() -> void:
 	# 优先查找 Camera2D 子节点下的 ScreenShake
 	_screen_shake = get_node_or_null("Camera2D/ScreenShake")
 	if not _screen_shake:
-		_screen_shake = get_tree().root.find_child("ScreenShake", false, false)
+		_screen_shake = get_tree().root.find_child("ScreenShake", true, false)
 
 	# 动态连接所有现有敌人
 	_connect_all_enemies()

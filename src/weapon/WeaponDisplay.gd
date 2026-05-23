@@ -253,8 +253,11 @@ func _trigger_muzzle_flash() -> void:
 	if _muzzle_tween and _muzzle_tween.is_valid():
 		_muzzle_tween.kill()
 	_muzzle.visible = true
-	# 枪口火焰应在枪管前端（local space X=40，rotation 后自动跟随枪管方向）
-	_muzzle.position = Vector2(40, 0)
+	# 枪口火焰应在枪管前端（local space X=10，在 WeaponAnchor 30px 偏移之后再向前 10px）
+	# WeaponAnchor Marker2D 在 Player 30px 处，枪管终点约 X=30，枪口约 X=40
+	# 但 Player.tscn 中 MuzzleFlash PointLight2D 在 Player 根部（非 WeaponAnchor 子节点），
+	# 其 global_position = player.global_position + aim_dir * 38，两者保持一致需要 local X=10
+	_muzzle.position = Vector2(10, 0)
 	
 	# 根据枪型选择不同火焰大小
 	var muzzle_cfg: Dictionary = _get_muzzle_config()

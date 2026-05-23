@@ -1,11 +1,12 @@
 class_name RegionalSpawnController
+extends Node
 ## PH11 P1 区域刷怪控制器 + P2 精英警觉增援
 ## 挂载在每个房间节点（RoomCombat/RoomElite）上，监听本房间敌人追击状态，
 ## 当敌人进入 CHASE 时触发区域增援，在相邻房间（或本房间）生成额外敌人。
 ## P2: 精英怪进入 CHASE 时还会通知相邻房间敌人进入 ALERT（跨房间AI联动）。
 ## 由 RoomGameMode 在进入房间时统一管理生命周期。
 
-signal reinforcement_ready(room_id: int, count: int)
+signal reinforcement_ready(room_id: String, count: int)
 signal reinforcement_triggered(source_enemy: Node, target_room_id: int, count: int)
 ## 相邻房间敌人被精英警觉唤醒
 signal adjacent_alert_triggered(source_elite: Node, adjacent_room_id: int)
@@ -107,7 +108,7 @@ func trigger_reinforcement(count_override: int = -1) -> void:
 	var count: int = count_override if count_override > 0 else reinforce_count
 	_cooldown_timer = reinforce_cooldown
 	_reinforcements_available = false
-	reinforcement_ready.emit(_room_data.room_id if _room_data else -1, count)
+	reinforcement_ready.emit(_room_data.room_id if _room_data else "", count)
 	print("[RegionalSpawnController] 区域增援触发！房间=%s，数量=%d" % [
 		_room_data.get_type_name(_room_data.room_type) if _room_data else "?", count])
 

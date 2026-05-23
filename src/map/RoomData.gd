@@ -13,6 +13,8 @@ enum RoomType {
 	EVENT = 6,           # 事件房（随机事件、赌局）
 	EXTRACTION = 7,     # 撤离房（可选择结束本局）
 	BOSS = 8,            # Boss房
+	STORAGE = 9,         # 藏储室（隐藏容器，需要钥匙或特殊条件）
+	TRAP = 10,           # 陷阱房（环境危险，怪物埋伏）
 }
 
 ## 房间层级（影响难度和奖励）
@@ -60,6 +62,8 @@ static func get_type_name(t: RoomType) -> String:
 		RoomType.EVENT: return "事件"
 		RoomType.EXTRACTION: return "撤离"
 		RoomType.BOSS: return "Boss"
+		RoomType.STORAGE: return "藏储室"
+		RoomType.TRAP: return "陷阱"
 		_: return "未知"
 
 ## 层级名称

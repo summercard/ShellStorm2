@@ -191,6 +191,11 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 		var attached_gun: AssemblyNode = _find_bullet_attached_gun()
 		if attached_gun != null and bullet.has_method("set_attached_gun"):
 			bullet.set_attached_gun(attached_gun)
+		# 应用子弹节点自身的命运视觉（变大了、加眼睛等）
+		if bullet.has_method("apply_fate_stats_from_node"):
+			var bullet_node: AssemblyNode = _find_bullet_node()
+			if bullet_node != null:
+				bullet.apply_fate_stats_from_node(bullet_node)
 
 	# 处理枪上加枪：主枪开火时副枪也跟随射击
 	_fire_co_mounted_gun(spawn_pos, direction)
@@ -217,6 +222,17 @@ func _find_bullet_attached_gun_raw() -> AssemblyNode:
 ## 公开接口：获取缓存的挂载枪（供 _spawn_bullet_from 使用）
 func _find_bullet_attached_gun() -> AssemblyNode:
 	return _cached_bullet_attached_gun
+
+## 遍历装配树找到第一个 BULLET 类型节点（供命运视觉使用）
+func _find_bullet_node() -> AssemblyNode:
+	if root == null:
+		return null
+	var all_nodes := root.get_all_descendants()
+	all_nodes.append(root)
+	for node in all_nodes:
+		if node.node_type == AssemblyNode.NodeType.BULLET:
+			return node
+	return null
 
 ## 枪上加枪：主枪开火时触发副枪射击
 ## 遍历装配树找到有 Fate.SecondaryGun 标签的枪身节点并让其发射子弹

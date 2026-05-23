@@ -85,6 +85,15 @@ func start() -> void:
 func stop() -> void:
 	_active = false
 
+## 埋伏怪物生成（由 TrapRoomLogic / StorageRoomLogic 调用）
+## 在玩家进入陷阱房/藏储室时，延迟生成埋伏怪物
+func spawn_ambush_enemies(count: int = 3) -> void:
+	if not is_instance_valid(self):
+		return
+	print("[RoomWaveSpawner] 埋伏模式：生成 %d 只埋伏怪物" % count)
+	# 埋伏怪物使用标准额外刷怪流程
+	trigger_extra_spawn(count)
+
 ## 外部触发额外刷怪（由 FateCardEngine._apply_reinforce_wave → RoomGameMode.trigger_extra_wave 调用）
 ## 在当前房间波次外额外生成一批敌人，不受波次限制影响
 func trigger_extra_spawn(count: int = 5) -> void:

@@ -21,6 +21,17 @@ var _attached_gun_fire_rate: float = 4.0
 
 var _trail_line: Line2D = null
 
+## 命运卡片视觉反馈状态
+var _fate_scale: float = 1.0       # fate_scale > 1 时子弹放大
+var _fate_has_eyes: bool = false   # 加眼睛
+var _fate_has_legs: bool = false   # 加脚
+var _eye_nodes: Array[Node2D] = []  # 眼睛节点引用
+var _leg_nodes: Array[Node2D] = []  # 脚节点引用
+var _leg_anim_timer: float = 0.0
+
+## 原始碰撞半径（恢复时用）
+var _base_collision_radius: float = 8.0
+
 @onready var shape: ColorRect = $Shape
 @onready var glow: ColorRect = $Shape/Glow
 
@@ -50,6 +61,13 @@ func _process(delta: float) -> void:
 	rotation = direction.angle()
 	if _attached_gun_node != null:
 		_process_attached_gun_firing(delta)
+	# 腿部动画（脚在子弹尾部，绕子弹旋转）
+	if _fate_has_legs and not _leg_nodes.is_empty():
+		_leg_anim_timer += delta * 8.0
+		for i in range(_leg_nodes.size()):
+			var leg: Node2D = _leg_nodes[i]
+			var phase: float = (float(i) / float(_leg_nodes.size())) * TAU
+			leg.rotation = leg.rotation + sin(_leg_anim_timer + phase) * 0.3 * delta
 	if _life_timer >= max_lifetime or _travelled >= max_distance:
 		queue_free()
 
@@ -120,9 +138,83 @@ func set_attached_gun(gun_node: AssemblyNode) -> void:
 	var stats: Dictionary = gun_node.get_base_stats()
 	_attached_gun_fire_rate = stats.get("fire_rate", 4.0)
 	_attached_gun_cooldown = 0.0
+	# 读取枪身节点上记录的 fate_scale（来自"变大了"等卡片对子弹的应用）
+	if stats.has("fate_scale"):
+		_apply_fate_visual_from_scale(stats.get("fate_scale", 1.0))
 
 func get_attached_gun() -> AssemblyNode:
 	return _attached_gun_node
+
+## 应用命运卡片视觉缩放（由 WeaponAssemblyTree 触发）
+## 从 bullet_node 的 base_stats 读取 scale/eyes/legs 等视觉标签
+func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
+	if bullet_node == null:
+		return
+	var node_stats: Dictionary = bullet_node.get_base_stats()
+	# fate_scale（"变大了"等卡片）
+	if node_stats.has("fate_scale"):
+		_apply_fate_visual_from_scale(float(node_stats.get("fate_scale", 1.0)))
+	# 视觉标签
+	if node_stats.has("visual_has_eyes") or node_stats.has("visual_has_legs"):
+		_apply_visual_effects(node_stats)
+
+## 根据 scale 值应用命运视觉（子弹放大）
+func _apply_fate_visual_from_scale(scale: float) -> void:
+	if scale <= 1.0:
+		return
+	_fate_scale = scale
+	# 缩放子弹外观（ColorRect offset 基于锚点，scale 直接放大）
+	if shape:
+		shape.scale = Vector2(scale, scale)
+		glow.scale = Vector2(scale, scale)
+	# 缩放碰撞体
+	var col: CollisionShape2D = get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col != null and col.shape is CircleShape2D:
+		var circle: CircleShape2D = col.shape as CircleShape2D
+		circle.radius = _base_collision_radius * scale
+
+## 应用完整视觉改造（眼睛、脚等）
+func _apply_visual_effects(node_stats: Dictionary) -> void:
+	# 加眼睛
+	if node_stats.get("visual_has_eyes", false):
+		_fate_has_eyes = true
+		_add_eye_nodes(int(node_stats.get("visual_eyes", 2)))
+	# 加脚
+	if node_stats.get("visual_has_legs", false):
+		_fate_has_legs = true
+		_add_leg_nodes(int(node_stats.get("visual_leg_count", 4)))
+
+func _add_eye_nodes(count: int) -> void:
+	for i in range(count):
+		var eye: Node2D = Node2D.new()
+		eye.name = "Eye_" + str(i)
+		var circle: ColorRect = ColorRect.new()
+		circle.color = Color(1.0, 1.0, 0.2, 1.0)
+		circle.size = Vector2(4, 4)
+		eye.add_child(circle)
+		# 分布在子弹前方
+		var angle: float = (float(i) / float(count)) * TAU - TAU * 0.25
+		var dist: float = 8.0
+		eye.position = Vector2(cos(angle) * dist, sin(angle) * dist)
+		add_child(eye)
+		_eye_nodes.append(eye)
+
+func _add_leg_nodes(count: int) -> void:
+	for i in range(count):
+		var leg: Node2D = Node2D.new()
+		leg.name = "Leg_" + str(i)
+		var rect: ColorRect = ColorRect.new()
+		rect.color = Color(0.6, 0.4, 0.2, 1.0)
+		rect.size = Vector2(3, 6)
+		rect.position = Vector2(-1.5, 0)
+		leg.add_child(rect)
+		# 分布在子弹尾部
+		var angle: float = PI + (float(i) / float(count)) * TAU - TAU * 0.1
+		var dist: float = 10.0
+		leg.position = Vector2(cos(angle) * dist, sin(angle) * dist)
+		leg.rotation = angle - PI * 0.5
+		add_child(leg)
+		_leg_nodes.append(leg)
 
 func _on_body_entered(body: Node) -> void:
 	if not is_active:

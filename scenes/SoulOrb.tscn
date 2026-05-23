@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://soul_orb_01"]
+
+[ext_resource type="Script" path="res://src/items/SoulOrb.gd" id="1"]
+
+[node name="SoulOrb" type="Node2D"]
+script = ExtResource("1")

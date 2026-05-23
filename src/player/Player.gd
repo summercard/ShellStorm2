@@ -145,6 +145,9 @@ func _play_damage_sfx() -> void:
 	if _audio:
 		_audio.play_player_hit_sfx()
 
+func is_moving() -> bool:
+	return velocity.length() > 10.0
+
 func get_weapon_anchor() -> Marker2D:
 	return weapon_anchor
 

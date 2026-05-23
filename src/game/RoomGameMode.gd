@@ -24,6 +24,9 @@ var insurance_module: InsuranceModule
 var extraction_module: ExtractionModule
 var death_settlement_module: DeathSettlementModule
 
+## 事件房处理器
+var _current_event_handler: Node = null
+
 ## UI 引用
 @onready var player_spawn_marker: Marker2D = get_node_or_null("PlayerSpawn") as Marker2D
 @onready var ui_layer: CanvasLayer = get_node_or_null("../GameUIManager") as CanvasLayer
@@ -136,6 +139,9 @@ func _setup_map_manager() -> void:
 	map_manager.room_exited.connect(_on_room_exited)
 	map_manager.floor_changed.connect(_on_floor_changed)
 	map_manager.all_rooms_cleared.connect(_on_all_rooms_cleared)
+	# PH11 P1: REVEAL事件 -> 小地图刷新（RoomEventHandler -> MapManager -> 此处 -> GameUIManager）
+	if map_manager.has_signal("adjacent_rooms_revealed"):
+		map_manager.adjacent_rooms_revealed.connect(_on_adjacent_rooms_revealed)
 
 ## 初始化搜打撤模块
 func _setup_extraction_modules() -> void:
@@ -178,12 +184,7 @@ func _setup_signals() -> void:
 	GameManager.hp_changed.connect(_on_hp_changed)
 	GameManager.currency_changed.connect(_on_currency_changed)
 
-## 连接商人关闭事件 → 解锁交易撤离
-## 注：merchant_interaction 由 _auto_open_merchant 在进入商人房时获取，
-## 这里先设置存根引用，实际连接在进入商人房时确保
-_call_connect_merchant_signals()
-
-## 设置开箱后命运触发回调（连接 ContainerInteraction → MapFateTriggers）
+## 设置开箱后命运触发回调（连接 ContainerInteraction -> MapFateTriggers）
 ## 在容器开启时触发环境命运计数（开箱×N）
 func _setup_container_fate_bridge() -> void:
 	var ct: Node = get_node_or_null("ContainerInteraction")
@@ -192,7 +193,7 @@ func _setup_container_fate_bridge() -> void:
 		return
 	if not ct.container_opened.is_connected(triggers.on_container_opened):
 		ct.container_opened.connect(triggers.on_container_opened)
-		print("[RoomGameMode] Container → FateTriggers 桥接已建立")
+		print("[RoomGameMode] Container -> FateTriggers 桥接已建立")
 
 ## 初始化地图环境命运触发器
 func _setup_map_fate_triggers() -> void:
@@ -208,7 +209,7 @@ func _setup_map_fate_triggers() -> void:
 
 ## 环境命运触发器激活回调 — 将触发转换为实际命运卡片效果
 func _on_map_fate_trigger_activated(trigger_type: String, threshold: int, fate_card_id: String, effect_preview: String) -> void:
-	print("[RoomGameMode] 环境命运触发器激活: %s ×%d → %s" % [trigger_type, threshold, fate_card_id])
+	print("[RoomGameMode] 环境命运触发器激活: %s x%d -> %s" % [trigger_type, threshold, fate_card_id])
 	# 通过 FateCardEngine 查找并执行对应的命运卡片
 	var card: FateCard = FateCardPresets.get_by_card_id(fate_card_id)
 	if card == null:
@@ -314,6 +315,18 @@ func _on_room_entered(room_data: RoomData) -> void:
 		_auto_open_merchant(room_data)
 		return
 
+	# 改造房：自动弹出武器改造面板（进入即触发，无需按E）
+	if room_data.room_type == RoomData.RoomType.UPGRADE:
+		_update_clearing_progress(0, 1)
+		_auto_open_workbench(room_data)
+		return
+
+	# 事件房：激活随机事件处理器
+	if room_data.room_type == RoomData.RoomType.EVENT:
+		_update_clearing_progress(0, 1)
+		_activate_event_room(room_data)
+		return
+
 	# 战斗房：启动波次生成器
 	if room_data.is_combat():
 		_start_combat_waves(room_data)
@@ -336,6 +349,13 @@ func _on_floor_changed(old_floor: int, new_floor: int) -> void:
 ## 所有房间清理完毕（地图清空）
 func _on_all_rooms_cleared() -> void:
 	extraction_ready.emit()
+
+## PH11 P1: REVEAL事件触发后刷新小地图
+func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
+	print("[RoomGameMode] REVEAL事件: 揭示 %d 个相邻房间 from room %s" % [revealed_count, room_id])
+	# 通知 GameUIManager 小地图需要重建节点（读取 MapManager 中已更新的 revealed 元数据）
+	if _ui_manager != null and _ui_manager.has_method("refresh_minimap"):
+		_ui_manager.refresh_minimap()
 
 ## 全局游戏结束
 func _on_global_game_over() -> void:
@@ -441,12 +461,75 @@ func _print_extraction_failure() -> void:
 	print("=== 撤离失败 ===")
 	print("撤离未成功，物资可能丢失。")
 
-## 商人关闭事件 → 解锁交易撤离
+## 商人关闭事件 -> 解锁交易撤离
 ## 当玩家与商人完成首次交易并关闭商人面板时，解锁交易撤离点
 func _on_merchant_closed() -> void:
 	if map_manager != null and map_manager.extraction_director != null:
 		map_manager.extraction_director.unlock_trade_extraction()
-		print("[RoomGameMode] 商人大厅关闭 → 解锁交易撤离")
+		print("[RoomGameMode] 商人大厅关闭 -> 解锁交易撤离")
+
+## 事件房：激活随机事件处理器
+func _activate_event_room(room_data: RoomData) -> void:
+	# 清理旧的事件处理器
+	if _current_event_handler != null:
+		_current_event_handler.cleanup()
+		_current_event_handler.queue_free()
+		_current_event_handler = null
+
+	# 创建新的事件处理器
+	var event_handler_script: GDScript = preload("res://src/game/RoomEventHandler.gd") as GDScript
+	var event_handler := Node2D.new()
+	event_handler.set_script(event_handler_script)
+	event_handler.name = "RoomEventHandler"
+	add_child(event_handler)
+	_current_event_handler = event_handler
+
+	# 设置玩家和房间数据
+	if player != null and player.has_method("get_weapon_tree"):
+		event_handler.setup(player, room_data)
+	else:
+		event_handler.setup(self, room_data)
+
+	# 激活事件
+	var activated: bool = event_handler.activate()
+	if activated:
+		_update_room_info_label("事件: %s" % event_handler.get_current_event().get("event_name", "未知"))
+		print("[RoomGameMode] 事件房已激活: %s" % event_handler.get_current_event().get("event_name", "未知"))
+	else:
+		_update_room_info_label("事件房: 无可用事件")
+		print("[RoomGameMode] 事件房激活失败: %s" % room_data.room_id)
+
+## 改造房：自动弹出武器改造面板（进入即触发）
+func _auto_open_workbench(room_data: RoomData) -> void:
+	# 查找工作台节点（由 RoomFactory 在 UPGRADE 房间创建）
+	var room_instance: Node = get_tree().get_root().get_node_or_null("RoomInstance")
+	if room_instance == null:
+		room_instance = get_node_or_null("..")
+	var workbench_node: Node = null
+	if room_instance != null:
+		workbench_node = room_instance.find_child("Workbench", true, false)
+	if workbench_node == null:
+		# 尝试全局查找
+		workbench_node = get_node_or_null("/root/Workbench")
+	if workbench_node == null and room_instance != null:
+		workbench_node = room_instance.find_child("Workbench", true, false)
+
+	if workbench_node == null or not workbench_node.has_method("set_inventory"):
+		push_warning("[RoomGameMode] Cannot auto-open workbench: workbench node not found or missing script in room %s" % room_data.room_id)
+		_update_room_info_label("工作台未就绪...")
+		return
+
+	# 绑定背包
+	if workbench_node.has_method("set_inventory"):
+		workbench_node.set_inventory(inventory_module)
+
+	# 打开工作台（模拟按下 interact）
+	if workbench_node.has_method("_open_workbench"):
+		workbench_node._open_workbench()
+		_update_room_info_label("武器改造台已打开...")
+		print("[RoomGameMode] 工作台自动打开 for room %s" % room_data.room_id)
+	else:
+		_update_room_info_label("[工作台] 在附近徘徊...")
 
 ## 撤离中断回调
 func _on_extraction_aborted() -> void:
@@ -489,7 +572,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	# 创建区域刷怪控制器（PH11 P1: 房间级刷怪管理 + 区域增援）
 	_setup_regional_spawn_controller(room_data)
 
-	# 将区域控制器注入波次生成器（敌人CHASE → 触发增援）
+	# 将区域控制器注入波次生成器（敌人CHASE -> 触发增援）
 	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
 		_current_wave_spawner.set_regional_controller(_current_regional_controller)
 
@@ -595,26 +678,26 @@ func _setup_regional_spawn_controller(room_data: RoomData) -> void:
 	# PH11 P2: 构建相邻房间敌人字典，注入到控制器
 	_build_adjacent_enemies_for_controller(room_data)
 
-	# 连接区域增援信号 → 触发额外刷怪
+	# 连接区域增援信号 -> 触发额外刷怪
 	if _current_regional_controller.reinforcement_ready.connect(_on_regional_reinforcement_ready) == OK:
 		print("[RoomGameMode] RegionalSpawnController 增援信号已连接")
 
-	# 连接敌人追击信号 → 触发增援判断
+	# 连接敌人追击信号 -> 触发增援判断
 	_connect_enemy_chase_signals()
 
 	# PH11 P2: 延迟注册当前房间敌人（等敌人真正生成到场景后）
-	# 连接精英怪 elite_entered_chase → 相邻房间AI联动
+	# 连接精英怪 elite_entered_chase -> 相邻房间AI联动
 	_call_deferred_register_adjacent_enemies()
 
 ## PH11 P2: 构建相邻房间敌人字典并注入到控制器
-## 获取当前房间的相邻房间ID → 收集每个相邻房间内的敌人节点
+## 获取当前房间的相邻房间ID -> 收集每个相邻房间内的敌人节点
 func _build_adjacent_enemies_for_controller(room_data: RoomData) -> void:
 	if map_manager == null or _current_regional_controller == null:
 		return
 	var graph: NodeGraph = map_manager.get_graph()
 	if graph == null:
 		return
-	var current_room_id: int = room_data.room_id
+	var current_room_id: int = map_manager._current_room_id
 	var neighbor_ids: Array[int] = graph.get_neighbors(current_room_id)
 	var adjacent_enemies: Dictionary = {}
 	for neighbor_id in neighbor_ids:
@@ -653,12 +736,12 @@ func _calculate_room_bounds_for_spawn_controller(room_instance: Node2D, room_dat
 	return Rect2(room_center - half_size, room_data.size)
 
 ## 区域增援触发回调
-func _on_regional_reinforcement_ready(room_id: int, count: int) -> void:
-	print("[RoomGameMode] 区域增援触发！房间ID=%d，数量=%d" % [room_id, count])
+func _on_regional_reinforcement_ready(room_id: String, count: int) -> void:
+	print("[RoomGameMode] 区域增援触发！房间ID=%s，数量=%d" % [room_id, count])
 	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
 		_current_wave_spawner.trigger_extra_spawn(count)
 
-## 连接当前房间所有敌人的追击信号（房间内任一敌人进入 CHASE → 区域增援）
+## 连接当前房间所有敌人的追击信号（房间内任一敌人进入 CHASE -> 区域增援）
 func _connect_enemy_chase_signals() -> void:
 	# 延迟连接（等敌人真正生成到场景后）
 	await get_tree().process_frame
@@ -828,28 +911,18 @@ func _get_fate_card_controller() -> Control:
 
 ## 自动打开商人交易面板（商人房进入时自动触发）
 func _auto_open_merchant(room_data: RoomData) -> void:
-	# MerchantInteraction.gd 脚本挂载在 RoomMerchant（根节点）而非 MerchantArea
-	# 所以要用 RoomMerchant 节点获取 MerchantInteraction，而不是 MerchantArea
-	var merchant_node: Node2D = null
+	var room_instance: Node2D = null
 	if map_manager != null and map_manager._current_room_id >= 0:
-		var room_instance: Node2D = map_manager.get_instantiated_room(map_manager._current_room_id)
-		if room_instance != null:
-			merchant_node = room_instance as Node2D
+		room_instance = map_manager.get_instantiated_room(map_manager._current_room_id)
 
-	if merchant_node == null:
+	if room_instance == null:
 		push_warning("[RoomGameMode] Cannot auto-open merchant: room instance not found for room %s" % room_data.room_id)
 		return
 
-	# 确保 MerchantInteraction 脚本已挂载
-	if not merchant_node.has_method("set_inventory"):
-		push_warning("[RoomGameMode] RoomMerchant node has no MerchantInteraction script")
+	var merchant_interaction: Node = room_instance.get_node_or_null("MerchantArea")
+	if merchant_interaction == null or not merchant_interaction.has_method("set_inventory"):
+		push_warning("[RoomGameMode] RoomMerchant has no usable MerchantInteraction")
 		return
-
-	# merchant_node 就是 RoomMerchant 节点（挂载了 MerchantInteraction.gd）
-	var merchant_interaction: Node = merchant_node
-
-	# 绑定背包和商品
-	merchant_interaction.set_inventory(inventory_module)
 
 	# 确保背包模块已设置（MerchantInteraction 需要这个引用）
 	merchant_interaction.set_inventory(inventory_module)
@@ -867,7 +940,7 @@ func _auto_open_merchant(room_data: RoomData) -> void:
 		ui.show_merchant(merchant_interaction._goods)
 		# 同步商人状态为 ACTIVE，避免离开时状态不一致导致无法正确关闭
 		merchant_interaction.force_set_active()
-		# 连接交易成功信号 → 解锁交易撤离（单人购买即解锁，不需要等待关闭）
+		# 连接交易成功信号 -> 解锁交易撤离（单人购买即解锁，不需要等待关闭）
 		if not ui.merchant_closed.is_connected(_on_merchant_closed):
 			ui.merchant_closed.connect(_on_merchant_closed)
 		_update_room_info_label("与 [%s] 交易中..." % merchant_interaction.shop_name)
@@ -1328,7 +1401,7 @@ func apply_curse_to_current_room(damage_multiplier: float) -> void:
 
 ## 应用亡者祝福（BLESS_DEAD）
 func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus: float) -> void:
-	print("[RoomGameMode] 应用亡者祝福: HP<%.0f%%存活%.0f秒→伤害+%.0f%%" % [
+	print("[RoomGameMode] 应用亡者祝福: HP<%.0f%%存活%.0f秒->伤害+%.0f%%" % [
 		hp_threshold * 100.0, survive_duration, damage_bonus * 100.0])
 	_bless_dead_config = {
 		"hp_threshold": hp_threshold,

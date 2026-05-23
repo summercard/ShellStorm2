@@ -170,7 +170,7 @@ func _ready() -> void:
 	# 初始化 ScreenShake 引用（从 Camera2D 子节点获取）
 	_screen_shake = get_node_or_null("Camera2D/ScreenShake")
 	if not _screen_shake:
-		_screen_shake = get_tree().root.find_child("ScreenShake", false, false)
+		_screen_shake = get_tree().root.find_child("ScreenShake", true, false)
 
 func _ensure_hud_layout() -> void:
 	var hud := get_node_or_null("GameHUD") as Control
@@ -187,30 +187,35 @@ func set_room_game_mode(mode: Node) -> void:
 	_room_game_mode = mode
 	_init_minimap()
 
-	# 连接信号
-	if mode.has_signal("room_cleared"):
+	if mode == null or not is_instance_valid(mode):
+		return
+
+	# 连接信号。这里要防止重复连接；UI 重新绑定时 Godot 会报 Signal already connected。
+	if mode.has_signal("room_cleared") and not mode.room_cleared.is_connected(_on_room_cleared):
 		mode.room_cleared.connect(_on_room_cleared)
-	if mode.has_signal("game_over"):
+	if mode.has_signal("game_over") and not mode.game_over.is_connected(_on_game_over):
 		mode.game_over.connect(_on_game_over)
-	if mode.has_signal("extraction_ready"):
+	if mode.has_signal("extraction_ready") and not mode.extraction_ready.is_connected(_on_extraction_ready):
 		mode.extraction_ready.connect(_on_extraction_ready)
-	if mode.has_signal("floor_changed"):
+	if mode.has_signal("floor_changed") and not mode.floor_changed.is_connected(_on_floor_changed):
 		mode.floor_changed.connect(_on_floor_changed)
-	if mode.has_signal("kill_recorded"):
+	if mode.has_signal("kill_recorded") and not mode.kill_recorded.is_connected(_on_kill_recorded):
 		mode.kill_recorded.connect(_on_kill_recorded)
-	if mode.has_signal("wave_progress_changed"):
+	if mode.has_signal("wave_progress_changed") and not mode.wave_progress_changed.is_connected(_on_wave_progress_changed):
 		mode.wave_progress_changed.connect(_on_wave_progress_changed)
 	# 小地图随地图生成和房间切换刷新
-	if mode.has_signal("map_generated"):
+	if mode.has_signal("map_generated") and not mode.map_generated.is_connected(_on_map_generated_for_minimap):
 		mode.map_generated.connect(_on_map_generated_for_minimap)
-	if mode.has_signal("room_entered"):
+	if mode.has_signal("room_entered") and not mode.room_entered.is_connected(_on_room_entered_for_minimap):
 		mode.room_entered.connect(_on_room_entered_for_minimap)
+	if mode.has_signal("adjacent_rooms_revealed") and not mode.adjacent_rooms_revealed.is_connected(_on_adjacent_rooms_revealed):
+		mode.adjacent_rooms_revealed.connect(_on_adjacent_rooms_revealed)
 
 ## 绑定玩家（用于闪避冷却条等）
 func set_player(player: Node) -> void:
-	if player and player.has_signal("dash_cooldown_changed"):
+	if player and player.has_signal("dash_cooldown_changed") and not player.dash_cooldown_changed.is_connected(_on_dash_cooldown_changed):
 		player.dash_cooldown_changed.connect(_on_dash_cooldown_changed)
-	if player and player.has_signal("dash_started"):
+	if player and player.has_signal("dash_started") and not player.dash_started.is_connected(_on_dash_started):
 		player.dash_started.connect(_on_dash_started)
 	# 连接武器弹药信号
 	_bind_weapon_signals(player)
@@ -235,9 +240,11 @@ func _bind_weapon_signals(player: Node) -> void:
 ## 绑定背包模块
 func set_inventory_module(module: Object) -> void:
 	_inventory_module = module
-	if module.has_signal("inventory_changed"):
+	if module == null:
+		return
+	if module.has_signal("inventory_changed") and not module.inventory_changed.is_connected(_on_inventory_changed):
 		module.inventory_changed.connect(_on_inventory_changed)
-	if module.has_signal("capacity_changed"):
+	if module.has_signal("capacity_changed") and not module.capacity_changed.is_connected(_on_capacity_changed):
 		module.capacity_changed.connect(_on_capacity_changed)
 	_refresh_inventory_ui()
 	_on_inventory_changed()
@@ -245,14 +252,17 @@ func set_inventory_module(module: Object) -> void:
 ## 绑定保险格模块
 func set_insurance_module(module: Object) -> void:
 	_insurance_module = module
-	if module.has_signal("insurance_changed"):
+	if module == null:
+		return
+	if module.has_signal("insurance_changed") and not module.insurance_changed.is_connected(_on_insurance_changed):
 		module.insurance_changed.connect(_on_insurance_changed)
 	_refresh_insurance_ui()
 
 ## 绑定撤离模块
 func set_extraction_module(module: Object) -> void:
 	_extraction_module = module
-	_connect_extraction_module_signals(module)
+	if module != null:
+		_connect_extraction_module_signals(module)
 
 ## 更新 HP 显示
 func update_hp(current: int, maximum: int) -> void:
@@ -280,11 +290,13 @@ func update_currency(amount: int) -> void:
 
 ## 连接 ExtractionModule 信号（由 set_extraction_module 调用）
 func _connect_extraction_module_signals(module: Object) -> void:
-	if module.has_signal("extraction_completed"):
+	if module == null:
+		return
+	if module.has_signal("extraction_completed") and not module.extraction_completed.is_connected(_on_extraction_completed):
 		module.extraction_completed.connect(_on_extraction_completed)
-	if module.has_signal("extraction_progress_updated"):
+	if module.has_signal("extraction_progress_updated") and not module.extraction_progress_updated.is_connected(_on_extraction_progress_updated):
 		module.extraction_progress_updated.connect(_on_extraction_progress_updated)
-	if module.has_signal("extraction_aborted"):
+	if module.has_signal("extraction_aborted") and not module.extraction_aborted.is_connected(_on_extraction_aborted):
 		module.extraction_aborted.connect(_on_extraction_aborted)
 
 ## 撤离读条进度更新
@@ -442,6 +454,13 @@ func _on_room_entered_for_minimap(room_data: RoomData) -> void:
 			_: type_name = "房间"
 		room_info_label.text = type_name
 
+## 小地图 REVEAL 事件信号处理（地图揭示后刷新小地图）
+func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
+	print("[GameUIManager] 小地图刷新：REVEAL事件揭示了 %d 个相邻房间 from room %s" % [revealed_count, room_id])
+	# 重建小地图节点数据（读取 MapManager 中已更新的 revealed 元数据）
+	_refresh_minimap_nodes()
+	_minimap_dirty = true
+
 ## 飘字动画：Y 上浮 + 淡出消失
 func _fly_and_fade(label: Label, start_pos: Vector2) -> void:
 	var tween := label.create_tween()
@@ -463,7 +482,7 @@ func update_floor(floor: int) -> void:
 func _init_minimap() -> void:
 	_minimap_panel = minimap_panel
 	_minimap_view = minimap_view
-	if _minimap_view:
+	if _minimap_view and not _minimap_view.resized.is_connected(_on_minimap_view_resized):
 		_minimap_view.resized.connect(_on_minimap_view_resized)
 	_minimap_dirty = true
 
@@ -495,7 +514,7 @@ func _refresh_minimap_nodes() -> void:
 		var color: Color = _get_room_color(rd.room_type)
 		var pos: Vector2
 		if map_rect.size.x > 0 and map_rect.size.y > 0:
-			var norm := (node.position - map_rect.position) / map_rect.size
+			var norm: Vector2 = (node.position - map_rect.position) / map_rect.size
 			pos = Vector2(norm.x * view_size.x, norm.y * view_size.y)
 		else:
 			pos = Vector2(view_size.x * 0.5, view_size.y * 0.5)
@@ -507,13 +526,17 @@ func _refresh_minimap_nodes() -> void:
 			"type": rd.room_type,
 			"is_current": node.id == current_room_id,
 			"connections": node.connections.duplicate(),
+			"revealed": rd.get_meta("revealed") if rd.has_meta("revealed") else false,
 		})
 	_minimap_dirty = true
 
 func _calc_map_bounds(nodes: Array) -> Rect2:
 	if nodes.is_empty():
 		return Rect2(0, 0, 1, 1)
-	var min_x := INF, min_y := INF, max_x := -INF, max_y := -INF
+	var min_x := INF
+	var min_y := INF
+	var max_x := -INF
+	var max_y := -INF
 	for node in nodes:
 		min_x = minf(min_x, node.position.x)
 		min_y = minf(min_y, node.position.y)
@@ -577,11 +600,15 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 			var conn_pos: Vector2 = _get_node_pos_by_id(conn_id)
 			RenderingServer.canvas_item_add_line(canvas, pos, conn_pos, Color(0.3, 0.3, 0.4, 0.7), 1.0)
 
-	# 绘制房间节点
+	# 绘制房间节点（未揭示的房间降低透明度）
 	for node_data in _minimap_nodes:
 		var pos: Vector2 = node_data["pos"]
 		var color: Color = node_data["color"]
 		var is_current: bool = node_data["is_current"]
+		var is_revealed: bool = node_data.get("revealed", false)
+		# 未揭示且非当前房间：降低透明度并缩小
+		if not is_revealed and not is_current:
+			color.a = 0.25
 		var node_size := 8.0
 		if is_current:
 			node_size = 12.0
@@ -613,7 +640,8 @@ func refresh_minimap() -> void:
 func _draw() -> void:
 	if _minimap_view == null or _minimap_nodes.is_empty():
 		return
-	_draw_minimap_rserver(_minimap_view.get_top_level_rc())
+	# ReferenceRect/Control 本身才有可绘制的 CanvasItem RID；避免调用不存在的 get_top_level_rc()。
+	_draw_minimap_rserver(_minimap_view.get_canvas_item())
 
 ## 房间清理完成
 func _on_room_cleared(room_data) -> void:
@@ -674,7 +702,7 @@ func _show_fate_card_notification() -> void:
 	_fate_card_notification_timer = _FATE_CARD_NOTIFICATION_DURATION
 	_fate_card_notification_label.visible = true
 	# 淡入动画
-	var tween := _fate_card_notification_label.create_tween()
+	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
 
 ## 显示命运卡片提示（供外部调用，支持自定义文字）
@@ -687,14 +715,11 @@ func show_fate_card_notification(message: String = "") -> void:
 		original_text = _fate_card_notification_label.text
 		_fate_card_notification_label.text = message
 	# 停止可能正在播放的旧动画，防止多次调用叠加导致闪烁
-	var existing_tweens: Array = _fate_card_notification_label.get_tree().get_nodes_in_group("")
-	for t in _fate_card_notification_label.get_children():
-		if t is Tween:
-			t.kill()
+	_fate_card_notification_label.get_tree().create_timer(0.0).timeout
 	_fate_card_notification_label.modulate.a = 1.0
 	_fate_card_notification_timer = _FATE_CARD_NOTIFICATION_DURATION
 	_fate_card_notification_label.visible = true
-	var tween := _fate_card_notification_label.create_tween()
+	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
 	# 恢复原文字（如果有自定义文字，且提示结束后恢复）
 	if message != "" and original_text != "":
@@ -709,7 +734,7 @@ func _hide_fate_card_notification() -> void:
 	if _fate_card_notification_label == null:
 		return
 	# 淡出动画
-	var tween := _fate_card_notification_label.create_tween()
+	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 0.0, 0.3)
 	await tween.finished
 	if _fate_card_notification_label:
@@ -868,14 +893,10 @@ func _on_capacity_changed(current: int, maximum: int) -> void:
 
 ## 从背包同步信标数量到UI标签（背包变化或消耗品使用后调用）
 func _sync_beacon_label_from_inventory() -> void:
-	if _room_game_mode == null:
+	var ed := _get_extraction_director_safe()
+	if ed == null or not ed.has_method("get_beacon_count"):
 		return
-	if not _room_game_mode.has_method("get_map_manager"):
-		return
-	var map_mgr = _room_game_mode.get_map_manager()
-	if map_mgr == null or map_mgr.extraction_director == null:
-		return
-	_beacon_count = map_mgr.extraction_director.get_beacon_count()
+	_beacon_count = int(ed.get_beacon_count())
 	_update_beacon_label()
 
 ## 闪避冷却进度更新（ratio: 0.0=就绪，1.0=冷却中）
@@ -1048,6 +1069,8 @@ func _on_extraction_ready() -> void:
 
 ## 构建撤离类型按钮
 func _build_extraction_buttons() -> void:
+	if extraction_buttons_container == null:
+		return
 	for child in extraction_buttons_container.get_children():
 		child.queue_free()
 
@@ -1070,36 +1093,76 @@ func _get_extraction_button_text(etype: String) -> String:
 		"TRADE": return "交易撤离 (消耗资源)"
 	return etype
 
+func _get_map_manager_safe() -> Node:
+	if _room_game_mode == null or not is_instance_valid(_room_game_mode):
+		return null
+	if not _room_game_mode.has_method("get_map_manager"):
+		return null
+	var mm = _room_game_mode.get_map_manager()
+	if mm == null or not is_instance_valid(mm):
+		return null
+	return mm
+
+func _get_extraction_director_safe() -> Object:
+	var mm := _get_map_manager_safe()
+	if mm == null:
+		return null
+	var ed = mm.get("extraction_director")
+	if ed == null:
+		return null
+	return ed
+
+func _get_current_floor_safe() -> int:
+	if _room_game_mode == null or not is_instance_valid(_room_game_mode):
+		return 1
+	var floor_value = _room_game_mode.get("current_floor")
+	if floor_value == null:
+		return 1
+	return max(1, int(floor_value))
+
 func _get_extraction_disabled_reason(etype: String) -> String:
 	match etype:
 		"BEACON": return "没有信标道具"
 		"BOSS_KILL": return "尚未击败Boss，无法解锁"
 		"ELITE_KILL": return "尚未击败精英怪，无法解锁"
 		"TRADE":
-			if _room_game_mode != null:
-				var cost := 0
-				if _room_game_mode.has_method("get_map_manager"):
-					var mm = _room_game_mode.get_map_manager()
-					if mm and mm.extraction_director:
-						cost = mm.extraction_director.get_trade_cost(_room_game_mode.current_floor)
+			var ed := _get_extraction_director_safe()
+			if ed != null and ed.has_method("get_trade_cost"):
+				var cost: int = int(ed.get_trade_cost(_get_current_floor_safe()))
 				return "需要 %d 魂，当前货币不足" % cost
-			return "资源不足"
+			return "当前模式未接入交易撤离"
 	return ""
 
 func _can_use_extraction_type(etype: String) -> bool:
 	match etype:
-		"BEACON": return _beacon_count > 0
-		"BOSS_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL, true).size() > 0
-		"ELITE_KILL": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.get_map_manager().extraction_director.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL, true).size() > 0
-		"TRADE": return _room_game_mode != null and _room_game_mode.has_method("get_map_manager") and _room_game_mode.current_floor > 0 and GameManager.currency >= _room_game_mode.get_map_manager().extraction_director.get_trade_cost(_room_game_mode.current_floor)
-	return true
+		"STANDARD":
+			return true
+		"BEACON":
+			return _beacon_count > 0
+		"BOSS_KILL":
+			var ed_boss := _get_extraction_director_safe()
+			return ed_boss != null and ed_boss.has_method("get_points_by_type") and ed_boss.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL, true).size() > 0
+		"ELITE_KILL":
+			var ed_elite := _get_extraction_director_safe()
+			return ed_elite != null and ed_elite.has_method("get_points_by_type") and ed_elite.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL, true).size() > 0
+		"TRADE":
+			var ed_trade_check := _get_extraction_director_safe()
+			return ed_trade_check != null and ed_trade_check.has_method("get_trade_cost") and GameManager.currency >= int(ed_trade_check.get_trade_cost(_get_current_floor_safe()))
+	return false
 
 func _update_extraction_buttons() -> void:
-	for i in extraction_buttons_container.get_children().size():
-		var btn: Button = extraction_buttons_container.get_child(i) as Button
+	if extraction_buttons_container == null:
+		return
+	var children := extraction_buttons_container.get_children()
+	var count: int = mini(children.size(), _extraction_types.size())
+	for i in range(count):
+		var btn: Button = children[i] as Button
+		if btn == null:
+			continue
 		var etype: String = _extraction_types[i]
 		btn.disabled = not _can_use_extraction_type(etype)
 		btn.modulate = Color.WHITE if not btn.disabled else Color.GRAY
+		btn.tooltip_text = "" if not btn.disabled else _get_extraction_disabled_reason(etype)
 
 func _update_beacon_label() -> void:
 	if beacon_label:
@@ -1116,25 +1179,29 @@ func _on_extraction_type_button_pressed(etype: String) -> void:
 		"TRADE": countdown = 5.0
 
 	# 信标撤离：先消耗信标道具创建撤离点
-	if etype == "BEACON" and _room_game_mode != null:
-		var map_mgr = _room_game_mode.get_map_manager()
-		if map_mgr != null and map_mgr.extraction_director != null:
-			map_mgr.extraction_director.summon_beacon_extraction()
-			_beacon_count = map_mgr.extraction_director.get_beacon_count()
+	if etype == "BEACON":
+		var ed_beacon := _get_extraction_director_safe()
+		if ed_beacon != null and ed_beacon.has_method("summon_beacon_extraction"):
+			ed_beacon.summon_beacon_extraction()
+			if ed_beacon.has_method("get_beacon_count"):
+				_beacon_count = int(ed_beacon.get_beacon_count())
 
 	# 交易撤离：预扣货币（不满足则禁用按钮）
-	if etype == "TRADE" and _room_game_mode != null:
-		var map_mgr = _room_game_mode.get_map_manager()
-		if map_mgr != null and map_mgr.extraction_director != null:
-			var ed = map_mgr.extraction_director
-			var cost = ed.get_trade_cost(_room_game_mode.current_floor)
+	if etype == "TRADE":
+		var ed_trade := _get_extraction_director_safe()
+		if ed_trade != null and ed_trade.has_method("get_trade_cost"):
+			var cost: int = int(ed_trade.get_trade_cost(_get_current_floor_safe()))
 			if not GameManager.spend_currency(cost):
-				# 货币不足，无法交易撤离
 				return
-			# 货币已预扣，等待撤离完成时通知 ExtractionDirector 做最终结算
-			ed.set("_trade_pending_refund", false)  # 标记已预扣，不需要退款
+			ed_trade.set("_trade_pending_refund", false)
 
-	extraction_panel.visible = false
+	if _room_game_mode == null or not _room_game_mode.has_method("begin_extraction"):
+		if room_info_label:
+			room_info_label.text = "当前战斗模式暂未接入撤离流程"
+		return
+
+	if extraction_panel:
+		extraction_panel.visible = false
 	_room_game_mode.begin_extraction(etype, countdown)
 	_start_extraction_countdown_ui(etype, countdown)
 
@@ -1149,13 +1216,15 @@ func _start_extraction_countdown_ui(extraction_type: String, duration: float) ->
 	_update_countdown_label(duration, duration)
 
 	# 隐藏撤离按钮容器
-	for child in extraction_buttons_container.get_children():
-		child.visible = false
+	if extraction_buttons_container:
+		for child in extraction_buttons_container.get_children():
+			child.visible = false
 
 ## 更新读条进度
 func update_countdown(progress: float, remaining: float) -> void:
-	countdown_bar.value = progress
-	_update_countdown_label(remaining, countdown_bar.max_value)
+	if countdown_bar:
+		countdown_bar.value = progress
+		_update_countdown_label(remaining, countdown_bar.max_value)
 
 func _update_countdown_label(remaining: float, total: float) -> void:
 	if countdown_label:
@@ -1169,9 +1238,12 @@ func set_beacon_count(count: int) -> void:
 
 ## 隐藏所有面板
 func hide_all_panels() -> void:
-	extraction_panel.visible = false
-	inventory_panel.visible = false
-	fate_card_panel.visible = false
+	if extraction_panel:
+		extraction_panel.visible = false
+	if inventory_panel:
+		inventory_panel.visible = false
+	if fate_card_panel:
+		fate_card_panel.visible = false
 
 ## 每帧更新命运卡片提示计时器
 ## 弹药变化回调
@@ -1303,10 +1375,12 @@ func _create_slot() -> Control:
 	return slot
 
 func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
+	if slot.has_method("set_slot_index"):
+		slot.call("set_slot_index", idx)
 	if slot.has_signal("slot_clicked"):
-		(slot as Node).slot_clicked.connect(_on_slot_clicked.bind(idx, is_inventory))
+		(slot as Node).slot_clicked.connect(_on_slot_clicked.bind(is_inventory))
 	if slot.has_signal("slot_right_clicked"):
-		(slot as Node).slot_right_clicked.connect(_on_slot_right_clicked.bind(idx, is_inventory))
+		(slot as Node).slot_right_clicked.connect(_on_slot_right_clicked.bind(is_inventory))
 
 func _refresh_inventory_ui() -> void:
 	if _inventory_module == null or inventory_grid == null:
@@ -1454,9 +1528,9 @@ func _on_item_extraction_requested(slot_index: int) -> void:
 	_refresh_inventory_ui()
 	_refresh_insurance_ui()
 
-## 输入处理：Tab 切换背包+保险面板
+## 输入处理：I 键切换背包+保险面板
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_tab"):
+	if event.is_action_pressed("ui_inventory"):
 		if inventory_panel:
 			var visible := not inventory_panel.visible
 			inventory_panel.visible = visible
@@ -1465,3 +1539,4 @@ func _input(event: InputEvent) -> void:
 			if visible:
 				_refresh_inventory_ui()
 				_refresh_insurance_ui()
+			get_viewport().set_input_as_handled()

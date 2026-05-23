@@ -48,6 +48,8 @@ func setup_loot() -> void:
 ## 创建交互提示标签（使用场景已有的 InteractLabel 节点）
 func _setup_interaction_label() -> void:
 	_interact_label = get_node_or_null("InteractLabel") as Label
+	if _interact_label == null:
+		_interact_label = get_node_or_null("../InteractLabel") as Label
 	if _interact_label != null:
 		_interact_label.z_index = 100
 		# 初始隐藏

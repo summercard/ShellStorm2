@@ -62,7 +62,11 @@ func _trigger_muzzle_flash() -> void:
 		_muzzle_flash.visible = true
 		_muzzle_flash.global_position = player.global_position + player.get_aim_direction() * 38.0
 		var tween := _muzzle_flash.create_tween()
-		tween.tween_property(_muzzle_flash, "visible", false, 0.055)
+		tween.tween_interval(0.055)
+		tween.tween_callback(func():
+			if _muzzle_flash and is_instance_valid(_muzzle_flash):
+				_muzzle_flash.visible = false
+		)
 
 func get_fire_rate() -> float:
 	if weapon_tree:
