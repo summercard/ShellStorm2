@@ -234,10 +234,9 @@ func _fire_co_mounted_gun(spawn_pos: Vector2, direction: Vector2) -> void:
 			var fire_interval: float = 1.0 / gun_fire_rate if gun_fire_rate > 0 else 0.25
 			# 副枪独立冷却追踪（每个副枪节点自己的冷却）
 			var cooldown_key := "co_mounted_" + node.node_id
-			if not _co_mounted_cooldowns.has(cooldown_key):
-				_co_mounted_cooldowns[cooldown_key] = 0.0
-			_co_mounted_cooldowns[cooldown_key] -= get_process_delta_time()
-			if _co_mounted_cooldowns[cooldown_key] > 0:
+			var cooldown: float = _co_mounted_cooldowns.get(cooldown_key, 0.0)
+			if cooldown > 0:
+				_co_mounted_cooldowns[cooldown_key] = cooldown - get_process_delta_time()
 				return
 			_co_mounted_cooldowns[cooldown_key] = fire_interval
 			# 生成副枪子弹（从主枪枪口位置偏移发射）

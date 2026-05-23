@@ -15,6 +15,7 @@ var applied_cards: Array[FateCard] = []
 var _player_weapon_tree: WeaponAssemblyTree = null
 
 func _ready() -> void:
+	add_to_group("fate_cards")
 	await get_tree().create_timer(0.1).timeout
 	_connect_to_player()
 
@@ -74,15 +75,12 @@ static func apply_card(card: FateCard) -> Dictionary:
 
 	return instance.apply_card_instance(card)
 
-## 获取单例实例
+## 获取单例实例（通过组查找，比节点路径更稳定）
 static func _get_instance() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree == null:
 		return null
-	var root: Node = tree.get_root()
-	if root == null:
-		return null
-	return root.get_node_or_null("FateCardGameBridge")
+	return tree.get_first_node_in_group("fate_cards")
 
 func get_weapon_tree() -> WeaponAssemblyTree:
 	return _player_weapon_tree

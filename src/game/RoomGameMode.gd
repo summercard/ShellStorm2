@@ -71,14 +71,16 @@ func _setup_ui_manager() -> void:
 		if _ui_manager == null:
 			_ui_manager = get_node_or_null("GameUIManager")
 	
-	# 绑定各模块到 GameUIManager
+	# 绑定各模块到 GameUIManager（GameUIManager 需要知道 RoomGameMode 的引用才能订阅信号）
+	_call_ui_manager_method("set_room_game_mode", self)
 	_call_ui_manager_method("set_extraction_module", extraction_module)
 	_call_ui_manager_method("set_inventory_module", inventory_module)
 	_call_ui_manager_method("set_insurance_module", insurance_module)
 	# 同步信标数量（需要 extraction_director 已 bind_inventory）
+	var bc: int = 0
 	if map_manager != null and map_manager.extraction_director != null:
-		var beacon_count := map_manager.extraction_director.get_beacon_count()
-		_call_ui_manager_method("set_beacon_count", beacon_count)
+		bc = map_manager.extraction_director.get_beacon_count()
+	_call_ui_manager_method("set_beacon_count", bc)
 
 ## 安全调用 _ui_manager 的方法（处理 null 和方法不存在情况）
 func _call_ui_manager_method(method_name: String, arg = null) -> void:
@@ -115,7 +117,6 @@ func _setup_extraction_modules() -> void:
 	insurance_module.insurance_changed.connect(_on_insurance_changed)
 	extraction_module.extraction_completed.connect(_on_extraction_completed)
 	extraction_module.extraction_aborted.connect(_on_extraction_aborted)
-	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 
 ## 连接信号

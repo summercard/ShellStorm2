@@ -41,7 +41,7 @@ var blueprint_attachment_tier: int = 0
 var extraction_points: int = 0
 
 # 保险柜物品数据（跨局持久化，格式：[{item, insured_at}, ...]）
-var vault_items: Array[Dictionary] = []
+var vault_items: Array = []
 
 # 下一局预选命运卡片（格式：{card_id, card_name, card_type, card_rarity, description, tags, effect, visual}）
 var pending_fate_card: Dictionary = {}
@@ -107,7 +107,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("blueprint_bullet_tier"): data.blueprint_bullet_tier = d["blueprint_bullet_tier"]
 	if d.has("blueprint_attachment_tier"): data.blueprint_attachment_tier = d["blueprint_attachment_tier"]
 	if d.has("extraction_points"): data.extraction_points = d["extraction_points"]
-	if d.has("vault_items"): data.vault_items = d["vault_items"]
+	if d.has("vault_items") and d["vault_items"] is Array: data.vault_items = Array(d["vault_items"])
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	return data
 

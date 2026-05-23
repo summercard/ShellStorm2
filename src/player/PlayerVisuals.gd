@@ -77,7 +77,7 @@ func _spawn_ghost() -> void:
 	ghost.modulate = Color(shape.color.r, shape.color.g, shape.color.b, GHOST_ALPHA)
 	
 	# 残影位置跟随玩家
-	var world_pos := player.global_position
+	var world_pos: Vector2 = player.global_position
 	ghost.global_position = world_pos + shape.position
 	ghost.z_index = player.z_index - 1
 	

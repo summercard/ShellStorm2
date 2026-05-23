@@ -143,12 +143,14 @@ func bind_inventory(inventory: InventoryModule) -> void:
 	sync_beacon_count_from_inventory(inventory)
 
 ## 使用信标道具召唤撤离
-## 真实从背包消耗物品
+## 真实从背包消耗物品（_beacon_count 仅作镜像，不参与消耗逻辑）
 func summon_beacon_extraction() -> bool:
-	# 优先用背包引用真实消耗，没有则用内存计数
+	# 优先用背包引用真实消耗，没有则用内存计数兜底
 	if _inventory_ref != null:
 		if not _inventory_ref.consume_item(_beacon_item_id, 1):
 			return false
+		# 同步镜像计数（防止 bind_inventory 和此处消耗之间的时序差）
+		_beacon_count = _inventory_ref.get_item_count(_beacon_item_id)
 	else:
 		if _beacon_count <= 0:
 			return false

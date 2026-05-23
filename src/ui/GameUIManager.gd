@@ -355,11 +355,6 @@ func _on_menu_pressed() -> void:
 	# 返回基地主界面（而非直接重新开始游戏）
 	get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
 
-## 撤离就绪
-func _on_extraction_ready() -> void:
-	if extraction_panel:
-		extraction_panel.visible = true
-
 ## 楼层变化
 func _on_floor_changed(old_f: int, new_f: int) -> void:
 	update_floor(new_f)

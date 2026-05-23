@@ -30,6 +30,8 @@ func _ready() -> void:
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
 	# 获取后坐力控制器
 	_recoil = get_node_or_null("WeaponRecoil") as WeaponRecoil
+	if _recoil == null:
+		push_warning("[WeaponController] WeaponRecoil not found in WeaponController child")
 	# 获取音频管理器
 	_audio = get_node_or_null("/root/AudioManager") as AudioManager
 
@@ -80,3 +82,12 @@ func get_fire_rate() -> float:
 	if weapon_tree:
 		return weapon_tree.fire_rate
 	return 4.0
+
+## Fallback bullet spawn when weapon_tree is null (should not happen normally)
+func _spawn_bullet_fallback(spawn_pos: Vector2, direction: Vector2) -> void:
+	var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
+	if bullet_scene:
+		var bullet = bullet_scene.instantiate()
+		if bullet.has_method("fire"):
+			bullet.fire(spawn_pos, direction, 600.0, 5, false)
+		get_tree().root.add_child(bullet)

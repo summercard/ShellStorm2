@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckm8xvk5yqnl2"]
+[gd_scene load_steps=5 format=3 uid="uid://ckm8xvk5yqnl2"]
 
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="1_gameui"]
 [ext_resource type="Script" path="res://src/fx/ScreenShake.gd" id="2_shake"]
 [ext_resource type="Script" path="res://src/fx/HitEffects.gd" id="3_hiteffects"]
+[ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="4_room"]
 
 [node name="Main" type="Node2D"]
 
@@ -27,3 +28,9 @@ script = ExtResource("2_shake")
 script = ExtResource("3_hiteffects")
 
 [node name="GameUIManager" type="CanvasLayer" parent="." instance=ExtResource("1_gameui")]
+
+[node name="RoomGameMode" type="Node2D" parent="."]
+script = ExtResource("4_room")
+
+[node name="PlayerSpawn" type="Marker2D" parent="RoomGameMode"]
+position = Vector2(640, 360)
