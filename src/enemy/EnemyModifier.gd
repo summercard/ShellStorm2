@@ -23,12 +23,13 @@ class EnemyModifier:
 class HugeModifier:
 	extends EnemyModifier
 
-	func _init():
-		super("Elite.Huge", 1)
+	func _init(mod_tier: int = 1):
+		super("Elite.Huge", mod_tier)
 
 	func apply(enemy_node: Node) -> void:
+		var scale_factor := 1.5 + tier * 0.25
 		if enemy_node.has_method("apply_scale"):
-			enemy_node.apply_scale(1.5 + tier * 0.25)
+			enemy_node.apply_scale(Vector2.ONE * scale_factor)
 		var hp_value = enemy_node.get("max_hp")
 		if hp_value != null:
 			enemy_node.set("max_hp", int(hp_value * (1.3 + tier * 0.1)))
@@ -38,8 +39,8 @@ class HugeModifier:
 class SpawnOnDeathModifier:
 	extends EnemyModifier
 
-	func _init():
-		super("Elite.SpawnOnDeath", 1)
+	func _init(mod_tier: int = 1):
+		super("Elite.SpawnOnDeath", mod_tier)
 
 	func apply(enemy_node: Node) -> void:
 		enemy_node.connect("enemy_died", _on_enemy_died)
@@ -52,8 +53,8 @@ class SpawnOnDeathModifier:
 class RicochetModifier:
 	extends EnemyModifier
 
-	func _init():
-		super("Elite.Ricochet", 2)
+	func _init(mod_tier: int = 2):
+		super("Elite.Ricochet", mod_tier)
 
 	func apply(enemy_node: Node) -> void:
 		if enemy_node.has_method("add_bullet_effect"):
@@ -63,8 +64,8 @@ class RicochetModifier:
 class ParasiteModifier:
 	extends EnemyModifier
 
-	func _init():
-		super("Elite.Parasite", 2)
+	func _init(mod_tier: int = 2):
+		super("Elite.Parasite", mod_tier)
 
 	func apply(enemy_node: Node) -> void:
 		# 死亡后附着到附近怪物
@@ -80,8 +81,8 @@ class WeaponParasiteModifier:
 
 	var stolen_skill: Dictionary
 
-	func _init(skill_data: Dictionary):
-		super("Elite.WeaponParasite", 3)
+	func _init(skill_data: Dictionary, mod_tier: int = 3):
+		super("Elite.WeaponParasite", mod_tier)
 		stolen_skill = skill_data
 
 	func apply(enemy_node: Node) -> void:
@@ -94,23 +95,23 @@ class Factory:
 	static func create(modifier_id: String, tier: int = 1) -> EnemyModifier:
 		match modifier_id:
 			"Elite.Huge":
-				return HugeModifier.new()
+				return HugeModifier.new(tier)
 			"Elite.SpawnOnDeath":
-				return SpawnOnDeathModifier.new()
+				return SpawnOnDeathModifier.new(tier)
 			"Elite.Ricochet":
-				return RicochetModifier.new()
+				return RicochetModifier.new(tier)
 			"Elite.Parasite":
-				return ParasiteModifier.new()
+				return ParasiteModifier.new(tier)
 			"Elite.WeaponParasite":
-				return WeaponParasiteModifier.new({})
+				return WeaponParasiteModifier.new({}, tier)
 			"巨大化":
-				return HugeModifier.new()
+				return HugeModifier.new(tier)
 			"分裂":
-				return SpawnOnDeathModifier.new()
+				return SpawnOnDeathModifier.new(tier)
 			"反弹":
-				return RicochetModifier.new()
+				return RicochetModifier.new(tier)
 			"寄生":
-				return ParasiteModifier.new()
+				return ParasiteModifier.new(tier)
 			"抢枪":
-				return WeaponParasiteModifier.new({})
+				return WeaponParasiteModifier.new({}, tier)
 		return null

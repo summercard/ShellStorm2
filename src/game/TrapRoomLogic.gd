@@ -50,10 +50,10 @@ func _process(delta: float) -> void:
 		return
 	
 	# 处理埋伏延迟
-		if not _ambush_active and _ambush_timer > 0.0:
-			_ambush_timer -= delta
-			if _ambush_timer <= 0.0:
-				_activate_ambush()
+	if not _ambush_active and _ambush_timer > 0.0:
+		_ambush_timer -= delta
+		if _ambush_timer <= 0.0:
+			_activate_ambush()
 	
 	# 处理陷阱持续时间
 	if _triggered and _trap_timer > 0.0:

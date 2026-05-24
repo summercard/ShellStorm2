@@ -44,8 +44,17 @@ func create_room(room_data: RoomData, parent: Node = null, inventory: InventoryM
 	if parent != null:
 		parent.add_child(room_instance)
 	
-	# 如果是搜刮房间或出生房间，在场景中生成可交互容器
-	if room_data.room_type in [RoomData.RoomType.SCAVENGE, RoomData.RoomType.PLAYER_SPAWN]:
+	# 在主要探索房间中生成可搜索容器；战斗房清完后仍可回来搜刮。
+	if room_data.room_type in [
+		RoomData.RoomType.PLAYER_SPAWN,
+		RoomData.RoomType.COMBAT,
+		RoomData.RoomType.ELITE,
+		RoomData.RoomType.SCAVENGE,
+		RoomData.RoomType.STORAGE,
+		RoomData.RoomType.TRAP,
+		RoomData.RoomType.BOSS,
+		RoomData.RoomType.EXTRACTION,
+	]:
 		_spawn_containers_for_room(room_instance, room_data, inventory)
 	
 	# 改造房：生成工作台
@@ -55,8 +64,18 @@ func create_room(room_data: RoomData, parent: Node = null, inventory: InventoryM
 	# 商人房：绑定商人NPC的 MerchantInteraction 到背包和商品
 	if room_data.room_type == RoomData.RoomType.MERCHANT:
 		_bind_merchant_npc(room_instance, room_data, inventory)
+
+	_bind_existing_interactables(room_instance, inventory)
 	
 	return room_instance
+
+func _bind_existing_interactables(root: Node, inventory: InventoryModule) -> void:
+	if root == null:
+		return
+	if root.has_method("set_inventory"):
+		root.call("set_inventory", inventory)
+	for child in root.get_children():
+		_bind_existing_interactables(child, inventory)
 
 ## 为商人房绑定商人NPC（MerchantInteraction -> inventory + goods）
 func _bind_merchant_npc(room_instance: Node2D, room_data: RoomData, inventory: InventoryModule) -> void:
@@ -100,7 +119,7 @@ func _spawn_containers_for_room(room_instance: Node2D, room_data: RoomData, inve
 	for config in interactables:
 		var container: Node2D = _create_container_from_config(config, room_data.floor)
 		if container != null:
-			container.global_position = room_instance.global_position + config.get("position", Vector2.ZERO)
+			container.position = config.get("position", Vector2.ZERO)
 			room_instance.add_child(container)
 			
 			# 绑定背包引用（用于掉落入背包）
@@ -160,6 +179,43 @@ func _get_default_containers_for_room(room_data: RoomData) -> Array[Dictionary]:
 					"position": _get_scavenge_container_position(i, count),
 					"loot_table": loot_table,
 				})
+		RoomData.RoomType.COMBAT:
+			containers.append({
+				"type": "crate",
+				"position": Vector2(120, -95),
+				"loot_table": "combat_floor_%d" % [min(5, floor)],
+			})
+		RoomData.RoomType.ELITE:
+			containers.append({
+				"type": "locker",
+				"position": Vector2(-130, 80),
+				"loot_table": "elite_floor_%d" % [min(5, floor)],
+			})
+		RoomData.RoomType.STORAGE:
+			for i in 3:
+				containers.append({
+					"type": "locker",
+					"position": _get_scavenge_container_position(i, 3),
+					"loot_table": "storage_floor_%d" % [min(5, floor)],
+				})
+		RoomData.RoomType.TRAP:
+			containers.append({
+				"type": "hidden_cache",
+				"position": Vector2(90, 70),
+				"loot_table": "trap_floor_%d" % [min(5, floor)],
+			})
+		RoomData.RoomType.BOSS:
+			containers.append({
+				"type": "chest",
+				"position": Vector2(0, -130),
+				"loot_table": "boss_floor_%d" % [min(5, floor)],
+			})
+		RoomData.RoomType.EXTRACTION:
+			containers.append({
+				"type": "locker",
+				"position": Vector2(120, 80),
+				"loot_table": "extraction_floor_%d" % [min(5, floor)],
+			})
 	return containers
 
 ## 获取搜刮房间中容器的分布位置（螺旋分布）
@@ -194,7 +250,7 @@ func _spawn_workbench_for_room(room_instance: Node2D, room_data: RoomData, inven
 	
 	var workbench: Node2D = _create_workbench_from_config(bench_config)
 	if workbench != null:
-		workbench.global_position = room_instance.global_position + bench_config.get("position", Vector2.ZERO)
+		workbench.position = bench_config.get("position", Vector2.ZERO)
 		room_instance.add_child(workbench)
 		
 		# 绑定背包引用（用于工作台改造逻辑）
@@ -240,8 +296,32 @@ func _create_placeholder_room(room_data: RoomData) -> Node2D:
 	debug_sprite.color = Color(color.r, color.g, color.b, min(color.a, 0.08))
 	debug_sprite.name = "DebugRect"
 	node.add_child(debug_sprite)
+	_add_room_boundary_collision(node, room_data.size)
 	
 	return node
+
+func _add_room_boundary_collision(room_node: Node2D, room_size: Vector2) -> void:
+	var body := StaticBody2D.new()
+	body.name = "BoundaryCollision"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	room_node.add_child(body)
+
+	var half := room_size * 0.5
+	var thickness := 40.0
+	_add_boundary_wall(body, "Top", Vector2(0, -half.y - thickness * 0.5), Vector2(room_size.x + thickness * 2.0, thickness))
+	_add_boundary_wall(body, "Bottom", Vector2(0, half.y + thickness * 0.5), Vector2(room_size.x + thickness * 2.0, thickness))
+	_add_boundary_wall(body, "Left", Vector2(-half.x - thickness * 0.5, 0), Vector2(thickness, room_size.y + thickness * 2.0))
+	_add_boundary_wall(body, "Right", Vector2(half.x + thickness * 0.5, 0), Vector2(thickness, room_size.y + thickness * 2.0))
+
+func _add_boundary_wall(parent: Node, wall_name: String, wall_position: Vector2, wall_size: Vector2) -> void:
+	var shape := CollisionShape2D.new()
+	shape.name = wall_name
+	var rect := RectangleShape2D.new()
+	rect.size = wall_size
+	shape.shape = rect
+	shape.position = wall_position
+	parent.add_child(shape)
 
 ## 获取房间调试颜色
 func _get_room_debug_color(room_type: RoomData.RoomType) -> Color:

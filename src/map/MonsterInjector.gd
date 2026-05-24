@@ -12,6 +12,16 @@ const BASE_ENEMY_TYPES := {
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
 }
 
+const ENEMY_PRESENTATION := {
+	"melee_chaser": { "emoji": "🐗", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
+	"ranged_caster": { "emoji": "🍄", "color": Color(0.62, 0.35, 1.0, 1.0), "ai_type": "ranged" },
+	"summoner": { "emoji": "🐝", "color": Color(0.95, 0.70, 0.16, 1.0), "ai_type": "summoner" },
+	"shielded": { "emoji": "🛡", "color": Color(0.35, 0.62, 0.95, 1.0), "ai_type": "chase" },
+	"exploder": { "emoji": "💣", "color": Color(1.0, 0.58, 0.14, 1.0), "ai_type": "bomber" },
+	"ambusher": { "emoji": "🦂", "color": Color(0.78, 0.28, 0.88, 1.0), "ai_type": "trapper" },
+	"boss": { "emoji": "👹", "color": Color(1.0, 0.12, 0.08, 1.0), "ai_type": "chase" },
+}
+
 ## 精英词缀配置
 const ELITE_MODIFIERS := {
 	"巨大化": { "hp_mult": 2.0, "scale_mult": 1.5, "speed_mult": 0.8 },
@@ -90,6 +100,7 @@ func _get_available_types_for_level(floor_level: int) -> Array[String]:
 func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> Dictionary:
 	var base: Dictionary = BASE_ENEMY_TYPES.get(enemy_type, BASE_ENEMY_TYPES["melee_chaser"])
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
+	var presentation: Dictionary = ENEMY_PRESENTATION.get(enemy_type, ENEMY_PRESENTATION["melee_chaser"])
 	
 	var hp: float = base["hp_base"] * scaling["hp_mult"]
 	var damage: float = base["damage_base"] * scaling["damage_mult"]
@@ -102,6 +113,9 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 		"max_hp": int(hp),
 		"damage": int(damage),
 		"speed": speed,
+		"emoji": presentation.get("emoji", "🐗"),
+		"color": presentation.get("color", Color(1.0, 0.25, 0.25, 1.0)),
+		"ai_type": presentation.get("ai_type", "chase"),
 		"floor": floor,
 		"loot_table": _get_loot_table(floor_level),
 		"xp_value": 10 + floor * 5
@@ -140,6 +154,10 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 		"max_hp": int(hp),
 		"damage": int(20.0 * scaling["damage_mult"]),
 		"speed": 60,
+		"emoji": ENEMY_PRESENTATION["boss"]["emoji"],
+		"color": ENEMY_PRESENTATION["boss"]["color"],
+		"scale": 1.45,
+		"ai_type": ENEMY_PRESENTATION["boss"]["ai_type"],
 		"floor": floor,
 		"is_boss": true,
 		"phases": 2 + floor / 3,

@@ -9,6 +9,12 @@ signal floor_changed(old_floor: int, new_floor: int)
 signal all_rooms_cleared()
 signal adjacent_rooms_revealed(room_id: String, revealed_count: int)
 
+## — Boss 事件穿透信号（透传 BossRoomDirector 的信号到外部） —
+signal boss_spawned(boss_data: Dictionary)
+signal boss_damaged(boss_id: String, damage: float, new_hp: float)
+signal boss_phase_changed(boss_id: String, new_phase: int)
+signal boss_defeated(boss_id: String, rewards: Dictionary)
+
 var map_generator: MapGenerator
 var room_factory: RoomFactory
 var path_director: PathDirector
@@ -33,6 +39,11 @@ func _init():
 	extraction_director = ExtractionDirector.new()
 	boss_director = BossRoomDirector.new()
 	boss_director.set_extraction_director(extraction_director)
+	# Boss 事件穿透：BossRoomDirector 的信号转发到 MapManager（让外部如 RoomGameMode 可以统一订阅 MapManager）
+	boss_director.boss_spawned.connect(_forward_boss_spawned)
+	boss_director.boss_damaged.connect(_forward_boss_damaged)
+	boss_director.boss_phase_changed.connect(_forward_boss_phase_changed)
+	boss_director.boss_defeated.connect(_forward_boss_defeated)
 
 	path_director.set_graph(null)
 
@@ -41,6 +52,7 @@ func generate_map(floor: int, seed_value: int = -1) -> NodeGraph:
 	_current_floor = floor
 	_spawned_enemies.clear()
 	_current_graph = map_generator.generate(floor, seed_value)
+	path_director.clear()
 	path_director.set_graph(_current_graph)
 
 	# 为每个节点添加路径连接
@@ -64,8 +76,15 @@ func _add_all_connections() -> void:
 		return
 
 	var nodes: Array = _current_graph.get_all_nodes()
+	var seen: Dictionary = {}
 	for node in nodes:
 		for conn_id in node.connections:
+			var a: int = mini(node.id, conn_id)
+			var b: int = maxi(node.id, conn_id)
+			var key := "%d:%d" % [a, b]
+			if seen.has(key):
+				continue
+			seen[key] = true
 			path_director.add_connection(node.id, conn_id, true)
 
 func _inject_content_for_all_rooms() -> void:
@@ -146,9 +165,6 @@ func enter_room(node_id: int) -> RoomData:
 
 	_current_room_id = node_id
 	var data: RoomData = node.room_data
-
-	# 开启该房间的门
-	path_director.open_doors_from(node_id)
 
 	# 如果是Boss房，生成Boss
 	if data.room_type == RoomData.RoomType.BOSS:
@@ -321,6 +337,19 @@ func reveal_adjacent_rooms(room_id: String) -> void:
 	print("[MapManager] Revealed %d adjacent rooms from room %s" % [revealed_ids.size(), room_id])
 
 	adjacent_rooms_revealed.emit(room_id, revealed_ids.size())
+
+## — Boss 事件穿透（转发 BossRoomDirector → MapManager 信号）—
+func _forward_boss_spawned(boss_data: Dictionary) -> void:
+	boss_spawned.emit(boss_data)
+
+func _forward_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
+	boss_damaged.emit(boss_id, damage, new_hp)
+
+func _forward_boss_phase_changed(boss_id: String, new_phase: int) -> void:
+	boss_phase_changed.emit(boss_id, new_phase)
+
+func _forward_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
+	boss_defeated.emit(boss_id, rewards)
 
 ## 调试：打印地图状态
 func debug_status() -> String:

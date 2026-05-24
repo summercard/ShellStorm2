@@ -31,13 +31,7 @@ class ApplyResult:
 ## 应用一张命运卡片到玩家武器装配树（静态方法，供外部 UI 调用）
 ## 自动从场景树查找玩家的 WeaponAssemblyTree 并应用卡片
 static func apply_card_to_player(card: FateCard) -> ApplyResult:
-	# 查找玩家节点
-	var player: Node = null
-	var tree: SceneTree = Engine.get_main_loop() as SceneTree
-	if tree != null and tree.get_root() != null:
-		player = tree.get_root().get_node_or_null("Player")
-	if player == null:
-		player = tree.get_root().get_first_node_in_group("player") if tree and tree.get_root() else null
+	var player: Node = _find_player()
 	if player == null or not player.has_method("get_weapon_tree"):
 		var result: ApplyResult = ApplyResult.new()
 		result.success = false
@@ -653,6 +647,19 @@ static func _apply_bless_dead(card: FateCard, tree: WeaponAssemblyTree, targets:
 
 
 ## ========== 辅助方法 ==========
+
+static func _find_player() -> Node:
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	if tree == null or tree.get_root() == null:
+		return null
+	var player: Node = tree.get_first_node_in_group("player")
+	if player != null:
+		return player
+	var root: Node = tree.get_root()
+	player = root.get_node_or_null("Main/RoomGameMode/Player")
+	if player == null:
+		player = root.find_child("Player", true, false)
+	return player
 
 static func _find_room_game_mode() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree

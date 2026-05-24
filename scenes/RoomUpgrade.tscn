@@ -1,8 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://room_upgrade_001"]
+[gd_scene load_steps=4 format=3 uid="uid://room_upgrade_001"]
 
-[ext_resource type="Script" path="res://src/game/WorkbenchInteraction.gd" id="1_workbench"]
-
-[ext_resource type="PackedScene" path="res://scenes/Container.tscn" id="2_container"]
+[ext_resource type="Script" path="res://src/game/WorkbenchInteraction.gd" id="2_workbench"]
+[ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="3_tilemap_init"]
 
 ; 改造房 — 工作台交互间
 ; 玩家在此房间可以通过工作台重新装配武器（枪身+子弹+配件）
@@ -18,7 +17,7 @@ radius = 60.0
 collision_layer = 0
 collision_mask = 2
 monitorable = true
-script = ExtResource("1_workbench")
+script = ExtResource("2_workbench")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WorkbenchArea"]
 shape = SubResource("CircleShape2D_bench")
@@ -52,3 +51,50 @@ grow_horizontal = 2
 text = "[E] 改造"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+; TileMap 地面/墙体层
+[node name="FloorLayer" type="TileMapLayer" parent="."]
+
+; 房间氛围装饰（角落暗角 + 边界提示）
+[node name="AmbientDecoration" type="Node2D" parent="."]
+
+[node name="CornerShadow_TL" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(120, 120)
+offset_left = -440.0
+offset_top = -340.0
+offset_right = -320.0
+offset_bottom = -220.0
+color = Color(0.05, 0.08, 0.12, 0.45)
+
+[node name="CornerShadow_BR" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(120, 120)
+offset_left = 320.0
+offset_top = 220.0
+offset_right = 440.0
+offset_bottom = 340.0
+color = Color(0.05, 0.08, 0.12, 0.45)
+
+; 房间边界提示（边缘稍暗）
+[node name="BoundaryOverlay" type="ColorRect" parent="."]
+z_index = -5
+custom_minimum_size = Vector2(800, 600)
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+color = Color(0.10, 0.12, 0.15, 0.2)
+
+; 区域标记（中圈）
+[node name="ZoneMarker_Center" type="ColorRect" parent="."]
+z_index = -4
+custom_minimum_size = Vector2(200, 200)
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+color = Color(0.20, 0.40, 0.60, 0.06)
+
+; 房间视觉化组件
+[node name="Visualizer" type="Node2D" parent="."]
+script = ExtResource("3_tilemap_init")
+room_type = 5

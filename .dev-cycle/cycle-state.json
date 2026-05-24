@@ -1,28 +1,28 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "running",
+  "status": "stopped",
   "mode": "infinite_polish",
   "currentPhase": "polish",
   "lastTask": "Code",
   "planVersion": "v3.5",
   "polish": {
-    "current": 108,
+    "current": 116,
     "total": "infinite"
   },
   "startTime": "2026-05-22T15:18:00+08:00",
-  "lastRunTime": "2026-05-24T01:19:00+08:00",
-  "currentTarget": "命运卡片视觉反馈（Bullet.fate_scale/eyes/legs）",
-  "notes": "轮次108完成（命运卡片视觉反馈）：\n\n核心问题：命运卡片（变大了、加眼睛、加脚）对武器装配树的应用只改了数值，但子弹和枪械的视觉表现完全没有变化，玩家完全感知不到卡片效果。\n\n本轮改进：\n1. Bullet.gd 新增视觉反馈状态：_fate_scale（放大）、_fate_has_eyes（眼睛）、_fate_has_legs（脚）；_apply_fate_visual_from_scale() 放大子弹外观和碰撞体；_apply_visual_effects() 添加眼睛/脚节点；腿部动画在 _process 中实时更新。\n2. Bullet.gd.fire() 后调用 apply_fate_stats_from_node() 读取子弹节点的 base_stats 中的 fate_scale/visual_has_eyes/visual_has_legs 标签并应用。\n3. WeaponAssemblyTree._spawn_bullet_from() 中新增调用 bullet.apply_fate_stats_from_node(bullet_node)，由 WeaponAssemblyTree 在生成子弹时将子弹节点自身记录的 fate 视觉标签注入给子弹场景。\n4. 新增 WeaponAssemblyTree._find_bullet_node() 遍历找第一个 BULLET 节点供命运视觉注入使用。\n5. 碰撞体缩放使用 CircleShape2D（之前写成了 CircleShape2DD，已修正）。\n\nGodot headless --quit-after 1: EXIT 0 ✅",
+  "lastRunTime": "2026-05-24T10:39:00+08:00",
+  "currentTarget": "PH12统一完善：Merchant/Upgrade/Trap氛围节点补齐 + TileMap装饰函数",
+  "notes": "轮次116完成：\n1. RoomMerchant.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n2. RoomUpgrade.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n3. RoomTrap.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n4. RoomTileSetBuilder.gd 新增 _add_merchant_glow() 和 _add_upgrade_cables() 装饰函数\n5. Godot headless --quit-after 1: EXIT 0 ✅\n\n氛围一致性：所有房间现在都有标准氛围装饰体系（角落阴影+边界叠加+区域标记）\n\n下轮方向：\n1) 武器装配树可视化\n2) 容器→InventoryUI刷新验证\n3) DoorVisualizer 其余房间添加",
   "completedPhases": [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
     41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
     61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
     81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-    101, 102, 103, 104, 105, 106, 107
+    101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116
   ],
-  "designDoc": "docs/PH04_命运卡片系统.md",
-  "nextTarget": "命运卡片系统持续深化",
-  "nextDirection": "1) 枪上加枪副枪视觉（WeaponDisplay 如何显示装配树上挂载的副枪）；2) FateCard 视觉卡实际装配树节点更新机制完善；3) 命运卡片装配界面与 DivinationMenu 联调；4) PH11 P1 完整试玩验证"
+  "designDoc": "docs/PH12_Room场景视觉化.md",
+  "nextTarget": "武器装配树可视化 / 容器→InventoryUI刷新验证",
+  "nextDirection": "1) 武器装配树可视化（枪身+子弹+配件组合效果预览）；2) 容器→InventoryUI刷新链路实际验证；3) 其余房间 DoorVisualizer 节点添加（Storage/Trap/Merchant/Upgrade）；4) Event 房场景实现"
 }

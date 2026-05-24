@@ -65,6 +65,7 @@ var _fate_card_notification_timer: float = 0.0  ## 提示显示计时器
 const _FATE_CARD_NOTIFICATION_DURATION: float = 4.0  ## 提示显示4秒
 
 var _screen_shake: Node = null  ## ScreenShake 引用（用于震屏反馈）
+var _health_vignette: Control = null  ## 低血量 Vignette 引用
 
 var _room_game_mode: Node = null
 var _inventory_module: Object = null
@@ -72,6 +73,8 @@ var _extraction_module: Object = null
 var _insurance_module: Object = null
 var _inventory_ui: Control = null  ## InventoryUI 引用（由本类实例化）
 var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信标撤离计数）
+var _run_choice_overlay: Control = null
+var _run_choice_kind: String = ""
 
 ## — 小地图 UI（PH11）—
 var _minimap_panel: PanelContainer = null
@@ -104,6 +107,8 @@ var _kill_count: int = 0
 signal item_to_insurance_requested(slot_index: int)
 signal item_extraction_requested(slot_index: int)
 signal inventory_ui_changed()
+signal fate_choice_selected(choice_id: String)
+signal extraction_choice_selected(choice_id: String)
 
 func _ready() -> void:
 	# 注册为 game_ui 组（供 ContainerInteraction 等通过 group call 触发 UI 方法）
@@ -172,6 +177,10 @@ func _ready() -> void:
 	if not _screen_shake:
 		_screen_shake = get_tree().root.find_child("ScreenShake", true, false)
 
+	# 初始化低血量 Vignette（HealthVignette 挂为本类子节点）
+	_health_vignette = load("res://src/fx/HealthVignette.tscn").instantiate()
+	add_child(_health_vignette)
+
 func _ensure_hud_layout() -> void:
 	var hud := get_node_or_null("GameHUD") as Control
 	if hud == null:
@@ -217,6 +226,9 @@ func set_player(player: Node) -> void:
 		player.dash_cooldown_changed.connect(_on_dash_cooldown_changed)
 	if player and player.has_signal("dash_started") and not player.dash_started.is_connected(_on_dash_started):
 		player.dash_started.connect(_on_dash_started)
+	# 让低血量 Vignette 直接监听玩家 HP 信号
+	if _health_vignette and _health_vignette.has_method("set_player_ref"):
+		_health_vignette.set_player_ref(player)
 	# 连接武器弹药信号
 	_bind_weapon_signals(player)
 
@@ -650,13 +662,21 @@ func _on_room_cleared(room_data) -> void:
 	clearing_progress.visible = false
 	# 显示命运卡片提示
 	_show_fate_card_notification()
-	# 波次完成庆祝：飘字 + 震屏
-	_show_wave_complete_celebration()
+	# 波次完成庆祝：飘字 + 震屏（Boss 房显示"Boss 已击败！"）
+	var room_type_val: int = -1
+	if room_data is RoomData:
+		room_type_val = int(room_data.room_type)
+	elif room_data is Dictionary and room_data.has("room_type"):
+		room_type_val = int(room_data.get("room_type", -1))
+	_show_wave_complete_celebration(room_type_val)
 
 ## 波次完成庆祝飘字（金色大字，居中屏幕）
-func _show_wave_complete_celebration() -> void:
+func _show_wave_complete_celebration(room_type: int = -1) -> void:
+	# 根据房间类型选择文案：Boss 房显示"Boss 已击败！"否则显示"房间清理完成！"
+	var is_boss_room: bool = room_type == 8  # RoomData.RoomType.BOSS = 8
+	var message: String = "Boss 已击败！" if is_boss_room else "房间清理完成！"
 	var celebration_label := Label.new()
-	celebration_label.text = "房间清理完成！"
+	celebration_label.text = message
 	celebration_label.z_index = 300
 	celebration_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	celebration_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -695,35 +715,175 @@ func _show_wave_complete_celebration() -> void:
 	if _screen_shake and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 4.0, 0.10)
 
+## — Boss 事件处理器（由 RoomGameMode 调用）—
+## Boss 出现时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
+func on_boss_spawned(boss_data: Dictionary) -> void:
+	room_info_label.text = "Boss 出现了！"
+
+## Boss 受伤时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
+func on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
+	pass  # Boss 血条 UI 后续扩展
+
+## Boss 阶段切换时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
+func on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
+	room_info_label.text = "Boss 进入阶段 %d！" % new_phase
+
+## Boss 被击败时回调（目前仅日志记录）
+func on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
+	room_info_label.text = "Boss 已击败！"
+
 ## 显示命运卡片提示（房间清理后、或出生时）
+## 命运卡片触发时短暂屏幕闪光特效（白金色快速闪烁）
 func _show_fate_card_notification() -> void:
 	if _fate_card_notification_label == null:
 		return
 	_fate_card_notification_timer = _FATE_CARD_NOTIFICATION_DURATION
 	_fate_card_notification_label.visible = true
+	_fate_card_notification_label.modulate.a = 0.0
 	# 淡入动画
 	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
+	# 命运触发时屏幕闪光（快速白色淡入淡出，z_index 高于普通UI）
+	_show_fate_card_flash()
+
+## 命运卡片触发时屏幕闪光特效
+func _show_fate_card_flash() -> void:
+	var flash := ColorRect.new()
+	flash.name = "FateFlash"
+	flash.anchors_preset = Control.PRESET_FULL_RECT
+	flash.offset_left = 0
+	flash.offset_top = 0
+	flash.offset_right = 0
+	flash.offset_bottom = 0
+	flash.color = Color(1.0, 0.95, 0.6, 0.0)  # 淡金色闪光
+	flash.z_index = 400
+	add_child(flash)
+
+	# 快速闪入→淡出（0.2s 闪入 + 0.35s 淡出）
+	var ft := flash.create_tween()
+	ft.set_parallel(true)
+	ft.tween_property(flash, "color:a", 0.18, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	ft.chain().set_parallel(false)
+	ft.chain().tween_property(flash, "color:a", 0.0, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	ft.chain().tween_callback(func():
+		if flash and is_instance_valid(flash):
+			flash.queue_free()
+	)
 
 ## 显示命运卡片提示（供外部调用，支持自定义文字）
 func show_fate_card_notification(message: String = "") -> void:
 	if _fate_card_notification_label == null:
 		return
-	# 如果传入了自定义文字，临时替换
-	var original_text: String = ""
 	if message != "":
-		original_text = _fate_card_notification_label.text
 		_fate_card_notification_label.text = message
-	# 停止可能正在播放的旧动画，防止多次调用叠加导致闪烁
-	_fate_card_notification_label.get_tree().create_timer(0.0).timeout
 	_fate_card_notification_label.modulate.a = 1.0
 	_fate_card_notification_timer = _FATE_CARD_NOTIFICATION_DURATION
 	_fate_card_notification_label.visible = true
 	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
-	# 恢复原文字（如果有自定义文字，且提示结束后恢复）
-	if message != "" and original_text != "":
-		_fate_card_notification_label.text = original_text
+	_show_fate_card_flash()
+
+func show_run_choice_panel(kind: String, title: String, subtitle: String, choices: Array) -> void:
+	if _fate_card_notification_label:
+		_fate_card_notification_timer = 0.0
+		_fate_card_notification_label.visible = false
+	_ensure_run_choice_overlay()
+	if _run_choice_overlay == null:
+		return
+	_run_choice_kind = kind
+	for child in _run_choice_overlay.get_children():
+		child.queue_free()
+
+	var bg := ColorRect.new()
+	bg.color = Color(0.02, 0.025, 0.035, 0.68)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_run_choice_overlay.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_run_choice_overlay.add_child(center)
+
+	var panel := PanelContainer.new()
+	panel.custom_minimum_size = Vector2(760, 330)
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	center.add_child(panel)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 22)
+	margin.add_theme_constant_override("margin_right", 22)
+	margin.add_theme_constant_override("margin_top", 18)
+	margin.add_theme_constant_override("margin_bottom", 18)
+	panel.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 12)
+	margin.add_child(vbox)
+
+	var title_label := Label.new()
+	title_label.text = title
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title_label.add_theme_font_size_override("font_size", 28)
+	title_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.58, 1.0))
+	vbox.add_child(title_label)
+
+	var subtitle_label := Label.new()
+	subtitle_label.text = subtitle
+	subtitle_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	subtitle_label.add_theme_font_size_override("font_size", 14)
+	subtitle_label.add_theme_color_override("font_color", Color(0.78, 0.86, 0.92, 1.0))
+	vbox.add_child(subtitle_label)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	row.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(row)
+
+	for choice in choices:
+		var btn := Button.new()
+		var choice_id := str(choice.get("id", ""))
+		var card_title := str(choice.get("title", choice_id))
+		var tag := str(choice.get("tag", "选择"))
+		var body := str(choice.get("body", ""))
+		btn.text = "%s\n[%s]\n%s" % [card_title, tag, body]
+		btn.custom_minimum_size = Vector2(220, 150)
+		btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		btn.disabled = bool(choice.get("disabled", false))
+		btn.focus_mode = Control.FOCUS_ALL
+		btn.add_theme_font_size_override("font_size", 15)
+		btn.pressed.connect(_on_run_choice_pressed.bind(kind, choice_id))
+		row.add_child(btn)
+
+	_run_choice_overlay.visible = true
+	_run_choice_overlay.modulate.a = 0.0
+	var tween := _run_choice_overlay.create_tween()
+	tween.tween_property(_run_choice_overlay, "modulate:a", 1.0, 0.16)
+
+func hide_run_choice_panel() -> void:
+	if _run_choice_overlay:
+		_run_choice_overlay.visible = false
+		_run_choice_kind = ""
+
+func _ensure_run_choice_overlay() -> void:
+	if _run_choice_overlay != null and is_instance_valid(_run_choice_overlay):
+		return
+	_run_choice_overlay = Control.new()
+	_run_choice_overlay.name = "RunChoiceOverlay"
+	_run_choice_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_run_choice_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_run_choice_overlay.z_index = 520
+	_run_choice_overlay.visible = false
+	add_child(_run_choice_overlay)
+
+func _on_run_choice_pressed(kind: String, choice_id: String) -> void:
+	hide_run_choice_panel()
+	match kind:
+		"fate":
+			fate_choice_selected.emit(choice_id)
+		"extraction":
+			extraction_choice_selected.emit(choice_id)
 
 ## 命运触发通知别名（兼容 MapFateTriggers 调用）
 func show_fate_trigger_notification(trigger_type: String, threshold: int, preview: String) -> void:
@@ -994,11 +1154,16 @@ func _on_extraction_completed(_success: bool, loot: Array) -> void:
 	extraction_panel.visible = false
 	_show_extraction_success()
 
-## 显示撤离成功面板
+## 显示撤离成功面板（淡入动画 + 物品闪光）
 func _show_extraction_success() -> void:
 	if extraction_success_panel == null:
 		return
+
+	# 先设为可见但完全透明+缩小，作为动画起点
 	extraction_success_panel.visible = true
+	extraction_success_panel.modulate.a = 0.0
+	extraction_success_panel.scale = Vector2(0.85, 0.85)
+
 	get_tree().paused = true
 
 	# 获取背包和保险格物品
@@ -1014,22 +1179,61 @@ func _show_extraction_success() -> void:
 	if extracted_count_label:
 		extracted_count_label.text = "物品已保存: %d 件" % total_count
 
-	# 清空并填充物品列表
+	# 清空并填充物品列表（带品质边框颜色）
 	if extracted_items_vbox:
 		for child in extracted_items_vbox.get_children():
 			child.queue_free()
 		for item in extracted:
 			var item_name: String = item.get("id", "未知物品")
+			var tier: int = item.get("loot_table_tier", 0)
 			var lbl := Label.new()
 			lbl.text = "• %s" % item_name
 			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			# 品质边框颜色：0=白/黄，1=蓝，2=紫，3=金
+			match tier:
+				3: lbl.modulate = Color(1.0, 0.85, 0.2, 1.0)   # 金
+				2: lbl.modulate = Color(0.75, 0.35, 1.0, 1.0)  # 紫
+				1: lbl.modulate = Color(0.35, 0.55, 1.0, 1.0)  # 蓝
+				_: lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)   # 米黄
 			extracted_items_vbox.add_child(lbl)
 		for item in insured:
 			var item_name: String = item.get("id", "保险物品")
+			var tier: int = item.get("loot_table_tier", 0)
 			var lbl := Label.new()
 			lbl.text = "• %s [保险]" % item_name
-			lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
+			match tier:
+				3: lbl.modulate = Color(0.8, 0.95, 0.6, 1.0)
+				2: lbl.modulate = Color(0.85, 0.75, 1.0, 1.0)
+				1: lbl.modulate = Color(0.7, 0.8, 1.0, 1.0)
+				_: lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
 			extracted_items_vbox.add_child(lbl)
+
+	# 淡入+放大动画（0.4s 后弹回正常大小）
+	var tween := extraction_success_panel.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(extraction_success_panel, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(extraction_success_panel, "scale", Vector2(1.0, 1.0), 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+	# 撤离成功时轻度震屏（强化"完成撤离"的仪式感）
+	if _screen_shake and _screen_shake.has_method("trigger"):
+		_screen_shake.call("trigger", 3.5, 0.12)
+
+func show_run_extraction_success(stats: Dictionary) -> void:
+	_show_extraction_success()
+	if extracted_count_label:
+		extracted_count_label.text = "撤离成功  波次 %d  击杀 %d  魂 %d" % [
+			int(stats.get("wave", 0)),
+			int(stats.get("kills", 0)),
+			int(stats.get("currency", 0))
+		]
+	if extracted_items_vbox:
+		var score_label_node := Label.new()
+		score_label_node.text = "最终得分: %d  风险层级: %d" % [
+			int(stats.get("score", 0)),
+			int(stats.get("risk", 0))
+		]
+		score_label_node.modulate = Color(0.85, 0.95, 1.0, 1.0)
+		extracted_items_vbox.add_child(score_label_node)
 
 ## 继续按钮 — 返回基地主界面
 func _on_continue_pressed() -> void:

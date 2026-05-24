@@ -5,7 +5,7 @@ extends Node2D
 ## 自动漂浮展示，有吸附动画，被玩家靠近时自动拾取并飘向玩家
 
 ## 信号
-signal collected(amount: int)
+signal collected(amount: int, orb: SoulOrb)
 
 ## 配置
 const COLLECT_RADIUS := 68.0   # 玩家靠近此距离即自动拾取

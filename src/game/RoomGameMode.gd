@@ -5,10 +5,14 @@ class_name RoomGameMode
 extends Node2D
 
 signal room_cleared(room_data: RoomData)
+signal room_entered(room_data: RoomData)
 signal game_over(reason: String)
 signal extraction_ready()
 signal kill_recorded()
 signal wave_progress_changed(killed: int, total: int, wave: int)
+
+const ROOM_KEY_PICKUP_SCRIPT := preload("res://src/game/RoomKeyPickup.gd")
+const ROOM_DOOR_INTERACTION_SCRIPT := preload("res://src/game/RoomDoorInteraction.gd")
 
 @export var initial_floor: int = 1
 @export var map_seed: int = -1
@@ -37,6 +41,7 @@ var _current_event_handler: Node = null
 @onready var room_info_label: Label = get_node_or_null("../GameUIManager/GameHUD/RoomInfoLabel") as Label
 @onready var clearing_progress: ProgressBar = get_node_or_null("../GameUIManager/GameHUD/ClearingProgress") as ProgressBar
 @onready var game_camera: Camera2D = get_node_or_null("../Camera2D") as Camera2D
+@onready var _screen_shake: Node = get_node_or_null("../Camera2D/ScreenShake")
 
 ## UI 管理器引用（用于飘字等效果）
 var _ui_manager: Node = null
@@ -48,6 +53,11 @@ var score: int = 0
 var _room_cleared_flag: bool = false
 var _kill_count: int = 0
 var _start_room_done: bool = false
+var _room_key_count: int = 0
+var _cleared_room_ids: Dictionary = {}
+var _spawned_key_room_ids: Dictionary = {}
+var _revealed_room_ids: Dictionary = {}
+var _initial_fate_card_chosen: bool = false
 
 ## 波次生成器（当前房间）
 var _current_wave_spawner: RoomWaveSpawner = null
@@ -55,6 +65,7 @@ var _current_wave_spawner: RoomWaveSpawner = null
 var _current_regional_controller: RegionalSpawnController = null
 
 func _ready() -> void:
+	add_to_group("room_game_mode")
 	_setup_map_manager()
 	_setup_extraction_modules()
 	_setup_signals()
@@ -142,6 +153,11 @@ func _setup_map_manager() -> void:
 	# PH11 P1: REVEAL事件 -> 小地图刷新（RoomEventHandler -> MapManager -> 此处 -> GameUIManager）
 	if map_manager.has_signal("adjacent_rooms_revealed"):
 		map_manager.adjacent_rooms_revealed.connect(_on_adjacent_rooms_revealed)
+	# Boss 事件穿透信号订阅（Boss 刷新 → UI 更新）
+	map_manager.boss_spawned.connect(_on_boss_spawned)
+	map_manager.boss_damaged.connect(_on_boss_damaged)
+	map_manager.boss_phase_changed.connect(_on_boss_phase_changed)
+	map_manager.boss_defeated.connect(_on_boss_defeated)
 
 ## 初始化搜打撤模块
 func _setup_extraction_modules() -> void:
@@ -187,13 +203,35 @@ func _setup_signals() -> void:
 ## 设置开箱后命运触发回调（连接 ContainerInteraction -> MapFateTriggers）
 ## 在容器开启时触发环境命运计数（开箱×N）
 func _setup_container_fate_bridge() -> void:
-	var ct: Node = get_node_or_null("ContainerInteraction")
 	var triggers: Node = get_node_or_null("MapFateTriggers")
-	if ct == null or triggers == null:
+	if triggers == null:
 		return
-	if not ct.container_opened.is_connected(triggers.on_container_opened):
-		ct.container_opened.connect(triggers.on_container_opened)
-		print("[RoomGameMode] Container -> FateTriggers 桥接已建立")
+	var room_node: Node = _get_current_room_instance()
+	if room_node == null:
+		return
+	var connected := 0
+	for ct in _get_container_interactions(room_node):
+		var callable := Callable(self, "_on_container_opened_for_fate")
+		if ct.has_signal("container_opened") and not ct.container_opened.is_connected(callable):
+			ct.container_opened.connect(callable)
+			connected += 1
+	if connected > 0:
+		print("[RoomGameMode] Container -> FateTriggers 桥接已建立: %d" % connected)
+
+func _get_container_interactions(root: Node) -> Array[ContainerInteraction]:
+	var result: Array[ContainerInteraction] = []
+	if root == null:
+		return result
+	if root is ContainerInteraction:
+		result.append(root as ContainerInteraction)
+	for child in root.get_children():
+		result.append_array(_get_container_interactions(child))
+	return result
+
+func _on_container_opened_for_fate(_loot: Array = []) -> void:
+	var triggers: Node = get_node_or_null("MapFateTriggers")
+	if triggers != null and triggers.has_method("on_container_opened"):
+		triggers.call("on_container_opened")
 
 ## 初始化地图环境命运触发器
 func _setup_map_fate_triggers() -> void:
@@ -289,7 +327,8 @@ func instantiate_all_rooms() -> void:
 		var room_instance: Node2D = factory.create_room(room_data, self, inventory_module)
 
 		# 设置房间在世界中的位置
-		room_instance.global_position = room_data.position
+		room_instance.global_position = room_node.position
+		room_instance.visible = false
 		map_manager.register_instantiated_room(room_node.id, room_instance)
 
 func _sum_ints(values: Array[int]) -> int:
@@ -300,13 +339,26 @@ func _sum_ints(values: Array[int]) -> int:
 
 ## 进入房间
 func _on_room_entered(room_data: RoomData) -> void:
-	_room_cleared_flag = false
+	room_entered.emit(room_data)
+	var current_id: int = map_manager.get_current_room_id() if map_manager != null else -1
+	_room_cleared_flag = _cleared_room_ids.has(current_id)
 	_update_room_info_label("当前: %s [%s]" % [RoomData.get_type_name(room_data.room_type), RoomData.get_level_name(room_data.floor_level)])
+	_refresh_room_doors_for_state()
+	_setup_container_fate_bridge()
 
 	if room_data.room_type == RoomData.RoomType.PLAYER_SPAWN:
 		_update_room_info_label("选择命运卡片后进入战斗")
 		_show_initial_fate_cards()
 		_update_clearing_progress(0, 1)
+		return
+
+	if room_data.room_type == RoomData.RoomType.EXTRACTION:
+		_activate_extraction_room(room_data)
+		return
+
+	if _room_cleared_flag:
+		_update_clearing_progress(1, 1)
+		_update_room_info_label("%s 已清理，选择门继续探索。钥匙 %d" % [RoomData.get_type_name(room_data.room_type), _room_key_count])
 		return
 
 	# 商人房：自动弹出交易面板（进入即触发，无需按E）
@@ -499,6 +551,18 @@ func _activate_event_room(room_data: RoomData) -> void:
 		_update_room_info_label("事件房: 无可用事件")
 		print("[RoomGameMode] 事件房激活失败: %s" % room_data.room_id)
 
+func _activate_extraction_room(room_data: RoomData) -> void:
+	_stop_current_room_spawner()
+	var current_id: int = map_manager.get_current_room_id() if map_manager != null else -1
+	if current_id >= 0:
+		_cleared_room_ids[current_id] = true
+	_room_cleared_flag = true
+	_update_clearing_progress(0, 1)
+	_update_room_info_label("撤离房已抵达，撤离读条开始...")
+	room_cleared.emit(room_data)
+	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.IDLE:
+		begin_extraction("STANDARD", 4.0)
+
 ## 改造房：自动弹出武器改造面板（进入即触发）
 func _auto_open_workbench(room_data: RoomData) -> void:
 	# 查找工作台节点（由 RoomFactory 在 UPGRADE 房间创建）
@@ -583,6 +647,9 @@ func _start_combat_waves(room_data: RoomData) -> void:
 
 	# 查找当前房间实例（用于获取房间节点引用）
 	var current_room_node: Node2D = _get_current_room_instance()
+
+	# PH12: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
+	_configure_room_visualizer(current_room_node, room_data)
 
 	# 启动生成
 	_current_wave_spawner.configure(wave_counts, current_room_node, player, current_floor, room_data.floor_level, self, room_data.size)
@@ -769,6 +836,23 @@ func _get_current_room_instance() -> Node2D:
 		return instance
 	return self  # Fallback
 
+## PH12: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
+func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
+	if room_node == null or not is_instance_valid(room_node):
+		return
+	# 尝试获取 RoomVisualizer 组件（RoomCombat.tscn 已挂载）
+	var visualizer: Node = room_node.get_node_or_null("RoomVisualizer") as Node
+	if visualizer == null:
+		# fallback：查找同 name 的 Node2D（RoomCombat/RoomTrap 等本身）
+		visualizer = room_node as Node
+	if visualizer != null and visualizer.has_method("configure"):
+		var door_info: Array[Dictionary] = []
+		if map_manager != null and map_manager.path_director != null and map_manager._current_room_id >= 0:
+			door_info = map_manager.path_director.get_open_door_info(map_manager._current_room_id)
+		visualizer.configure(room_data.room_type, room_data.size, door_info)
+		print("[RoomGameMode] 房间视觉化已配置: %s size=%s" % [RoomData.get_type_name(room_data.room_type), room_data.size])
+
+
 ## 波次开始回调
 func _on_wave_started(wave: int, total: int) -> void:
 	_update_room_info_label("第 %d/%d 波袭来！" % [wave, total])
@@ -867,6 +951,7 @@ func _enter_first_combat_room() -> void:
 	_stop_current_room_spawner()
 	var room_instance: Node2D = map_manager.get_instantiated_room(target_id)
 	if room_instance != null:
+		_set_room_revealed(target_id, true)
 		player.global_position = room_instance.global_position
 	else:
 		player.global_position = Vector2.ZERO
@@ -970,22 +1055,72 @@ func _show_fate_cards_in_panel() -> void:
 		call_deferred("_enter_first_combat_room")
 		return
 
-	# 构建卡片容器（从 VBox/CardsContainer 获取，如不存在则创建）
-	var cards_container: HBoxContainer = panel.get_node_or_null("VBox/CardsContainer") as HBoxContainer
-	if cards_container == null:
-		# 动态创建 VBox 容器结构
-		var vbox := VBoxContainer.new()
-		vbox.name = "VBox"
-		vbox.custom_minimum_size = Vector2(600, 220)
-		vbox.alignment = VBoxContainer.ALIGNMENT_CENTER
-		panel.add_child(vbox)
-		cards_container = HBoxContainer.new()
-		cards_container.name = "CardsContainer"
-		cards_container.custom_minimum_size = Vector2(560, 220)
-		cards_container.alignment = HBoxContainer.ALIGNMENT_CENTER
-		vbox.add_child(cards_container)
+	_prepare_fate_modal_panel(panel)
+	_initial_fate_card_chosen = false
 
-	# 清空旧卡片
+	var bg := ColorRect.new()
+	bg.name = "ModalDim"
+	bg.color = Color(0.02, 0.025, 0.035, 0.72)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	bg.process_mode = Node.PROCESS_MODE_ALWAYS
+	panel.add_child(bg)
+
+	var center := CenterContainer.new()
+	center.name = "ModalCenter"
+	center.set_anchors_preset(Control.PRESET_FULL_RECT)
+	center.mouse_filter = Control.MOUSE_FILTER_PASS
+	center.process_mode = Node.PROCESS_MODE_ALWAYS
+	panel.add_child(center)
+
+	var modal := PanelContainer.new()
+	modal.name = "FateModal"
+	modal.custom_minimum_size = Vector2(760, 360)
+	modal.mouse_filter = Control.MOUSE_FILTER_STOP
+	modal.process_mode = Node.PROCESS_MODE_ALWAYS
+	center.add_child(modal)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	margin.process_mode = Node.PROCESS_MODE_ALWAYS
+	modal.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	vbox.name = "VBox"
+	vbox.alignment = VBoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 14)
+	vbox.process_mode = Node.PROCESS_MODE_ALWAYS
+	margin.add_child(vbox)
+
+	var instruction := Label.new()
+	instruction.name = "InstructionLabel"
+	instruction.text = "选择一张命运卡片"
+	instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	instruction.add_theme_font_size_override("font_size", 24)
+	instruction.add_theme_color_override("font_color", Color(1.0, 0.90, 0.55, 1.0))
+	instruction.process_mode = Node.PROCESS_MODE_ALWAYS
+	vbox.add_child(instruction)
+
+	var subtitle := Label.new()
+	subtitle.text = "选择后进入第一间房间。选择期间角色不会移动。"
+	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle.add_theme_font_size_override("font_size", 14)
+	subtitle.add_theme_color_override("font_color", Color(0.78, 0.86, 0.92, 1.0))
+	subtitle.process_mode = Node.PROCESS_MODE_ALWAYS
+	vbox.add_child(subtitle)
+
+	var cards_container := HBoxContainer.new()
+	cards_container.name = "CardsContainer"
+	cards_container.alignment = HBoxContainer.ALIGNMENT_CENTER
+	cards_container.add_theme_constant_override("separation", 12)
+	cards_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	cards_container.process_mode = Node.PROCESS_MODE_ALWAYS
+	vbox.add_child(cards_container)
+
+	# 清空旧卡片（上面的 _prepare 已清空，这里保留防御）
 	for child in cards_container.get_children():
 		child.queue_free()
 
@@ -1000,31 +1135,34 @@ func _show_fate_cards_in_panel() -> void:
 
 	# 显示面板
 	panel.visible = true
+	panel.move_to_front()
+	if _ui_manager != null:
+		_ui_manager.layer = 100
+		_ui_manager.process_mode = Node.PROCESS_MODE_ALWAYS
+	_set_player_input_locked(true)
 
-	# 更新提示标签
-	var instruction: Label = panel.get_node_or_null("VBox/InstructionLabel") as Label
-	if instruction == null:
-		# 动态创建说明标签
-		instruction = Label.new()
-		instruction.name = "InstructionLabel"
-		instruction.text = "选择一张命运卡片（自动应用）"
-		instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		var vbox_parent: Node = cards_container.get_parent()
-		if vbox_parent and vbox_parent.has_node("InstructionLabel"):
-			instruction = vbox_parent.get_node("InstructionLabel") as Label
-		elif vbox_parent:
-			vbox_parent.add_child(instruction)
-			var idx: int = cards_container.get_index()
-			vbox_parent.move_child(instruction, idx)
-
-	if instruction:
-		instruction.text = "选择一张命运卡片（自动应用）"
-		instruction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+func _prepare_fate_modal_panel(panel: Control) -> void:
+	get_tree().paused = false
+	panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
+	panel.offset_left = 0
+	panel.offset_top = 0
+	panel.offset_right = 0
+	panel.offset_bottom = 0
+	panel.z_index = 700
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	for child in panel.get_children():
+		child.queue_free()
 
 ## 创建一张命运卡片按钮（用于面板内动态创建）
 func _create_fate_card_button(card: FateCard) -> Button:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(160, 200)
+	btn.custom_minimum_size = Vector2(220, 190)
+	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	btn.focus_mode = Control.FOCUS_ALL
+	btn.mouse_filter = Control.MOUSE_FILTER_STOP
+	btn.process_mode = Node.PROCESS_MODE_ALWAYS
 
 	var rarity_color: Color = FateCard.rarity_color(card.card_rarity)
 	var bg_style := StyleBoxFlat.new()
@@ -1062,11 +1200,15 @@ func _create_fate_card_button(card: FateCard) -> Button:
 	]
 	btn.set_meta("fate_card", card)
 	btn.pressed.connect(_on_fate_card_button_pressed.bind(card))
+	btn.button_down.connect(_on_fate_card_button_pressed.bind(card))
 
 	return btn
 
 ## 玩家点击了命运卡片按钮
 func _on_fate_card_button_pressed(card: FateCard) -> void:
+	if _initial_fate_card_chosen:
+		return
+	_initial_fate_card_chosen = true
 	var result := FateCardGameBridge.apply_card(card)
 	if result.success:
 		print("[RoomGameMode] 命运卡片应用成功: %s — %s" % [card.card_name, result.message])
@@ -1077,10 +1219,21 @@ func _on_fate_card_button_pressed(card: FateCard) -> void:
 	var panel: Control = _get_or_create_fate_card_panel()
 	if panel:
 		panel.visible = false
+	get_tree().paused = false
+	_set_player_input_locked(false)
+	if _ui_manager != null:
+		_ui_manager.layer = 1
+		_ui_manager.process_mode = Node.PROCESS_MODE_INHERIT
 
 	# 通知玩家，并进入第一间战斗房，避免出生房无怪导致试玩卡住。
 	_update_room_info_label("命运卡片 [%s] 已应用，进入战斗！" % card.card_name)
 	call_deferred("_enter_first_combat_room")
+
+func _set_player_input_locked(locked: bool) -> void:
+	if player == null or not is_instance_valid(player):
+		return
+	if player.has_method("set_input_locked"):
+		player.call("set_input_locked", locked)
 
 ## 调试/占位操作：在出生房按交互键也可以直接进入战斗，避免 UI 选择异常时卡住。
 func _unhandled_input(event: InputEvent) -> void:
@@ -1094,6 +1247,7 @@ func _unhandled_input(event: InputEvent) -> void:
 ## 每帧检测房间清理状态 & 撤离读条
 func _process(delta: float) -> void:
 	_sync_camera_to_player(false)
+	_update_current_room_from_player_position()
 	# 更新撤离读条
 	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
 		extraction_module.update(delta)
@@ -1120,12 +1274,13 @@ func _process(delta: float) -> void:
 	var current_data: RoomData = map_manager.get_current_room_data()
 	if current_data == null:
 		return
+	if current_data.room_type in [RoomData.RoomType.PLAYER_SPAWN, RoomData.RoomType.EXTRACTION]:
+		return
 
 	# 非战斗房间直接标记为已清理
 	if not current_data.is_combat():
 		if not _room_cleared_flag:
-			_room_cleared_flag = true
-			room_cleared.emit(current_data)
+			_on_room_cleared(current_data)
 		return
 
 	# 检测战斗房清理状态（波次生成器优先）
@@ -1156,23 +1311,242 @@ func _on_room_cleared(room_data: RoomData) -> void:
 	if _room_cleared_flag:
 		return
 	_room_cleared_flag = true
+	var current_id: int = map_manager.get_current_room_id() if map_manager != null else -1
+	if current_id >= 0:
+		_cleared_room_ids[current_id] = true
 
 	room_cleared.emit(room_data)
 
 	var reward_text: String = _calculate_room_reward(room_data)
-	_update_room_info_label("%s 已清理！%s" % [RoomData.get_type_name(room_data.room_type), reward_text])
-
-	# 解锁通往下一个房间的门
-	var graph: NodeGraph = map_manager.get_graph()
-	if graph != null:
-		var current_id: int = map_manager._current_room_id
-		var neighbors: Array = graph.get_neighbors(current_id)
-		var path_dir: PathDirector = map_manager.path_director
-		for neighbor_id in neighbors:
-			path_dir.open_door(current_id, neighbor_id)
+	_update_room_info_label("%s 已清理！%s | 钥匙已掉落" % [RoomData.get_type_name(room_data.room_type), reward_text])
+	_spawn_key_for_room(current_id, room_data)
+	_refresh_room_doors_for_state()
 
 	# 检测是否还有下一个房间
 	_check_map_completion()
+
+func _spawn_key_for_room(room_id: int, room_data: RoomData) -> void:
+	if room_id < 0 or room_data == null:
+		return
+	if room_data.room_type in [RoomData.RoomType.PLAYER_SPAWN, RoomData.RoomType.EXTRACTION]:
+		return
+	if _spawned_key_room_ids.has(room_id):
+		return
+	_spawned_key_room_ids[room_id] = true
+	var room_node: Node2D = _get_current_room_instance()
+	if room_node == null:
+		return
+	var key := Area2D.new()
+	key.name = "RoomKey_%d" % room_id
+	key.set_script(ROOM_KEY_PICKUP_SCRIPT)
+	key.position = Vector2(0, -72)
+	room_node.add_child(key)
+	if key.has_method("setup"):
+		key.call("setup", self, room_id)
+
+func collect_room_key(room_id: int) -> void:
+	if room_id < 0:
+		return
+	_room_key_count += 1
+	_update_room_info_label("获得钥匙：选择一个方向的门开启。钥匙 %d" % _room_key_count)
+	_refresh_room_doors_for_state()
+	if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+		_ui_manager.call("show_fate_card_notification", "获得房间钥匙：可开启一扇门")
+
+func _refresh_room_doors_for_state() -> void:
+	if map_manager == null or map_manager.get_graph() == null:
+		return
+	var current_id: int = map_manager.get_current_room_id()
+	if current_id < 0:
+		return
+	var room_node: Node2D = map_manager.get_instantiated_room(current_id)
+	if room_node == null:
+		return
+	_clear_room_door_interactions(room_node)
+	var graph: NodeGraph = map_manager.get_graph()
+	var current_graph_node := graph.get_node(current_id)
+	if current_graph_node == null:
+		return
+	var current_data: RoomData = current_graph_node.room_data
+	var can_show_closed: bool = _cleared_room_ids.has(current_id) and _room_key_count > 0
+	for neighbor_id in graph.get_neighbors(current_id):
+		var is_open := map_manager.path_director.are_connected(current_id, neighbor_id)
+		if not is_open and not can_show_closed:
+			continue
+		_spawn_door_interaction(room_node, current_data, current_id, neighbor_id, is_open)
+	_configure_room_visualizer(room_node, current_data)
+	_apply_open_doors_to_room(current_id)
+
+func _clear_room_door_interactions(room_node: Node) -> void:
+	if room_node == null:
+		return
+	for child in room_node.get_children():
+		if child.name.begins_with("DoorExit_"):
+			child.queue_free()
+
+func _spawn_door_interaction(room_node: Node2D, room_data: RoomData, from_id: int, to_id: int, is_open: bool) -> void:
+	var graph: NodeGraph = map_manager.get_graph()
+	var from_node := graph.get_node(from_id)
+	var to_node := graph.get_node(to_id)
+	if from_node == null or to_node == null:
+		return
+	var direction := _direction_between_rooms(from_node.position, to_node.position)
+	var door := Area2D.new()
+	door.name = "DoorExit_%d" % to_id
+	door.set_script(ROOM_DOOR_INTERACTION_SCRIPT)
+	door.position = _door_local_position(room_data.size, direction)
+	room_node.add_child(door)
+	var door_type := _get_door_type(to_node.room_data)
+	if door.has_method("setup"):
+		door.call("setup", self, from_id, to_id, direction, door_type, is_open)
+
+func _direction_between_rooms(from_pos: Vector2, to_pos: Vector2) -> Vector2:
+	var delta := to_pos - from_pos
+	if absf(delta.x) >= absf(delta.y):
+		return Vector2.RIGHT if delta.x >= 0.0 else Vector2.LEFT
+	return Vector2.DOWN if delta.y >= 0.0 else Vector2.UP
+
+func _door_local_position(room_size: Vector2, direction: Vector2) -> Vector2:
+	var half := room_size * 0.5
+	var inset := 46.0
+	if direction == Vector2.RIGHT:
+		return Vector2(half.x - inset, 0)
+	if direction == Vector2.LEFT:
+		return Vector2(-half.x + inset, 0)
+	if direction == Vector2.DOWN:
+		return Vector2(0, half.y - inset)
+	return Vector2(0, -half.y + inset)
+
+func _get_door_type(room_data: RoomData) -> String:
+	if room_data == null:
+		return "normal"
+	if room_data.room_type == RoomData.RoomType.BOSS:
+		return "boss"
+	if room_data.room_type == RoomData.RoomType.EXTRACTION:
+		return "extraction"
+	return "normal"
+
+func try_open_room_door(target_id: int) -> void:
+	if map_manager == null or target_id < 0:
+		return
+	var current_id: int = map_manager.get_current_room_id()
+	if current_id < 0 or current_id == target_id:
+		return
+	var is_open := map_manager.path_director.are_connected(current_id, target_id)
+	if is_open:
+		_update_room_info_label("门已经打开，直接走过去。")
+		return
+	if _room_key_count <= 0:
+		_update_room_info_label("需要钥匙才能开启这扇门。")
+		return
+	if not _cleared_room_ids.has(current_id):
+		_update_room_info_label("清理当前房间后才能开门。")
+		return
+	_room_key_count -= 1
+	map_manager.path_director.open_door(current_id, target_id)
+	_set_room_revealed(target_id, true)
+	_refresh_room_doors_for_state()
+	_apply_open_doors_to_room(current_id)
+	_apply_open_doors_to_room(target_id)
+	_update_room_info_label("门已打开，直接穿过门洞进入新房间。钥匙 %d" % _room_key_count)
+
+func try_enter_room_via_door(target_id: int) -> void:
+	try_open_room_door(target_id)
+
+func _enter_room_by_id(target_id: int, from_id: int) -> void:
+	var graph: NodeGraph = map_manager.get_graph()
+	if graph == null:
+		return
+	var target_node := graph.get_node(target_id)
+	var from_node := graph.get_node(from_id)
+	if target_node == null:
+		return
+	_stop_current_room_spawner()
+	map_manager.exit_room()
+	var target_room: Node2D = map_manager.get_instantiated_room(target_id)
+	if target_room != null and player != null and is_instance_valid(player):
+		var dir := Vector2.RIGHT
+		if from_node != null:
+			dir = _direction_between_rooms(from_node.position, target_node.position)
+		player.global_position = target_room.global_position - dir * 210.0
+	_sync_camera_to_player(true)
+	map_manager.enter_room(target_id)
+
+func _set_room_revealed(room_id: int, revealed: bool) -> void:
+	var room_node: Node2D = map_manager.get_instantiated_room(room_id) if map_manager != null else null
+	if room_node == null:
+		return
+	_revealed_room_ids[room_id] = revealed
+	room_node.visible = revealed
+
+func _apply_open_doors_to_room(room_id: int) -> void:
+	if map_manager == null or map_manager.get_graph() == null:
+		return
+	var room_node: Node2D = map_manager.get_instantiated_room(room_id)
+	if room_node == null:
+		return
+	var graph := map_manager.get_graph()
+	var graph_node := graph.get_node(room_id)
+	if graph_node == null:
+		return
+	var door_info: Array[Dictionary] = []
+	for neighbor_id in graph.get_neighbors(room_id):
+		if not map_manager.path_director.are_connected(room_id, neighbor_id):
+			continue
+		var neighbor_node := graph.get_node(neighbor_id)
+		if neighbor_node == null:
+			continue
+		door_info.append({
+			"from_id": room_id,
+			"to_id": neighbor_id,
+			"door_type": _get_door_type(neighbor_node.room_data),
+			"direction": _direction_between_rooms(graph_node.position, neighbor_node.position),
+			"is_open": true,
+		})
+	var visualizer := _get_room_visualizer_node(room_node)
+	if visualizer != null and visualizer.has_method("set_open_doors"):
+		visualizer.call("set_open_doors", door_info)
+
+func _get_room_visualizer_node(room_node: Node2D) -> Node:
+	if room_node == null:
+		return null
+	if room_node.has_method("set_open_doors") or room_node.has_method("configure"):
+		return room_node
+	var direct := room_node.get_node_or_null("Visualizer")
+	if direct != null:
+		return direct
+	direct = room_node.get_node_or_null("RoomVisualizer")
+	if direct != null:
+		return direct
+	return null
+
+func _update_current_room_from_player_position() -> void:
+	if map_manager == null or player == null or not is_instance_valid(player):
+		return
+	var current_id: int = map_manager.get_current_room_id()
+	var room_id := _find_room_at_position(player.global_position)
+	if room_id < 0 or room_id == current_id:
+		return
+	if current_id >= 0 and not map_manager.path_director.are_connected(current_id, room_id):
+		return
+	_stop_current_room_spawner()
+	map_manager.enter_room(room_id)
+
+func _find_room_at_position(world_pos: Vector2) -> int:
+	if map_manager == null or map_manager.get_graph() == null:
+		return -1
+	for graph_node in map_manager.get_graph().get_all_nodes():
+		var room_id: int = graph_node.id
+		if not _revealed_room_ids.get(room_id, false):
+			continue
+		var room_instance: Node2D = map_manager.get_instantiated_room(room_id)
+		if room_instance == null:
+			continue
+		var room_data: RoomData = graph_node.room_data
+		var rect := Rect2(room_instance.global_position - room_data.size * 0.5, room_data.size)
+		if rect.has_point(world_pos):
+			return room_id
+	return -1
 
 ## 计算房间奖励
 func _calculate_room_reward(room_data: RoomData) -> String:
@@ -1249,6 +1623,33 @@ func advance_to_next_floor() -> void:
 	var next_graph: NodeGraph = map_manager.advance_to_next_floor()
 	current_floor = map_manager.get_current_floor()
 	_room_cleared_flag = false
+
+## — Boss 事件处理器（由 MapManager 穿透信号触发）—
+func _on_boss_spawned(boss_data: Dictionary) -> void:
+	# 通知 UI 显示 Boss 相关信息（如存在）
+	_update_room_info_label("Boss 出现了！")
+	if _ui_manager != null and _ui_manager.has_method("on_boss_spawned"):
+		_ui_manager.call("on_boss_spawned", boss_data)
+
+func _on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
+	# 通知 UI 更新 Boss 血条
+	if _ui_manager != null and _ui_manager.has_method("on_boss_damaged"):
+		_ui_manager.call("on_boss_damaged", boss_id, damage, new_hp)
+
+func _on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
+	# Boss 阶段切换时显示提示
+	_update_room_info_label("Boss 进入阶段 %d！" % new_phase)
+	if _ui_manager != null and _ui_manager.has_method("on_boss_phase_changed"):
+		_ui_manager.call("on_boss_phase_changed", boss_id, new_phase)
+
+func _on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
+	# Boss 击败时触发强烈震屏 + 特殊庆祝文字
+	_update_room_info_label("Boss已击败！前往下一层或撤离...")
+	# Boss 击败重震屏（boss_defeated 信号说明 BossRoomDirector 已解锁 BOSS_KILL 撤离点）
+	if _screen_shake != null and _screen_shake.has_method("trigger"):
+		_screen_shake.call("trigger", 12.0, 0.20)
+	if _ui_manager != null and _ui_manager.has_method("on_boss_defeated"):
+		_ui_manager.call("on_boss_defeated", boss_id, rewards)
 
 ## 获取当前地图管理器
 func get_map_manager() -> MapManager:
@@ -1376,16 +1777,23 @@ func trigger_extra_wave() -> void:
 ## 设置下次开箱品质提升（LUCKY_CHEST）
 func set_next_chest_quality_boost(boost: int) -> void:
 	print("[RoomGameMode] 设置下次开箱品质提升: +%d" % boost)
-	var ct = get_node_or_null("ContainerInteraction")
-	if ct != null and ct.has_method("set_quality_boost"):
+	var ct := _get_next_available_container()
+	if ct != null:
 		ct.set_quality_boost(boost)
 
 ## 设置下次开箱额外掉落（EXTRA_LOOT）
 func set_extra_loot_next_chest(enabled: bool) -> void:
 	print("[RoomGameMode] 设置下次开箱额外掉落: %s" % enabled)
-	var ct = get_node_or_null("ContainerInteraction")
-	if ct != null and ct.has_method("set_extra_loot"):
+	var ct := _get_next_available_container()
+	if ct != null:
 		ct.set_extra_loot(enabled)
+
+func _get_next_available_container() -> ContainerInteraction:
+	var room_node: Node = _get_current_room_instance()
+	for ct in _get_container_interactions(room_node):
+		if not ct.is_opened():
+			return ct
+	return null
 
 ## 对当前房间敌人施加诅咒（CURSE_ROOM_ENEMIES）
 func apply_curse_to_current_room(damage_multiplier: float) -> void:

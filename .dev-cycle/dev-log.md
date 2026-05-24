@@ -85,3 +85,87 @@
 1. 容器→InventoryUI刷新实际验证（LootModule 发放物品 + UI 刷新链路）
 2. RoomWaveSpawner 精英识别和 EliteArchiveModule 对接
 3. 武器装配树可视化
+
+**时间**: 2026-05-24 09:39
+**维度**: 波次/房间完成震屏分层 + Boss击败信号穿透
+
+### 本轮选择
+在战局内表现层审视中，发现 Boss 被击败时（`BossRoomDirector.boss_defeated` 信号发出后）的视觉反馈与普通房间清理完全相同——都是同一个 "房间清理完成！" 飘字 + 4.0 intensity 震屏。这是感官体验上的缺失：玩家辛辛苦苦打 Boss 获得的成就感与普通波次清理没有区分度。
+
+同时发现 `BossRoomDirector` 的 `boss_spawned`、`boss_damaged`、`boss_phase_changed`、`boss_defeated` 信号完全没有任何外部订阅者——它们从未被转发到 `RoomGameMode`，导致 Boss 事件对 UI 完全不可见。
+
+### 玩家可感知的变化
+- Boss 房完成时飘字文案变为 **"Boss 已击败！"**（而普通房间仍是"房间清理完成！"）
+- Boss 被击败时触发更强烈的震屏反馈（intensity=12.0, duration=0.20s），明显强于普通波次清理的 4.0
+- Boss 出现、受伤、进入新阶段时 `room_info_label` 会更新对应提示文字
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/map/MapManager.gd | 新增 boss_spawned/boss_damaged/boss_phase_changed/boss_defeated 信号穿透（BossRoomDirector → MapManager → 外部） |
+| src/game/RoomGameMode.gd | 订阅 MapManager 的 Boss 穿透信号，新增 `_on_boss_spawned/_on_boss_damaged/_on_boss_phase_changed/_on_boss_defeated` 处理器，触发强烈震屏（12.0） |
+| src/ui/GameUIManager.gd | `_show_wave_complete_celebration(room_type)` 支持 Boss 房类型检测（Boss 房显示"Boss 已击败！"文案）；新增 `on_boss_spawned/boss_damaged/boss_phase_changed/boss_defeated` 空方法供 RoomGameMode 调用 |
+
+### 验证
+- Godot headless --quit-after 1: EXIT 0 ✅（45秒无报错）
+
+### 剩余风险
+- Boss 血条 UI（`on_boss_damaged` 目前为空桩，后续扩展可在此基础上做 Boss HP bar）
+- 实际 Boss 击败震屏效果需人类试玩确认震屏强度是否足够
+- `boss_phase_changed` 时 `room_info_label` 直接覆盖原文字，没有考虑当前是否处于战斗中（理论上 Boss 阶段切换时玩家应该在战斗中，此时 room_info_label 可能被战斗信息覆盖）
+
+### 下轮最可能方向
+1. 容器→InventoryUI刷新实际验证（LootModule 发放物品 + UI 刷新链路）
+2. 武器装配树可视化
+3. 枪口火焰位置修复（position 在 local space，父节点 rotation 导致偏移）
+
+## 轮次 118 — 多房间钥匙门与搜索撤离闭环
+
+**时间**: 2026-05-24
+**维度**: 战局内结构 — 房间推进 / 门 / 钥匙 / 搜索 / 撤离
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| scenes/Main.tscn | 主战局入口切换为 RoomGameMode |
+| src/game/RoomGameMode.gd | 清房掉钥匙、钥匙开一个方向门、进入下一房、撤离房读条 |
+| src/game/RoomKeyPickup.gd | 新增房间钥匙拾取物 |
+| src/game/RoomDoorInteraction.gd | 新增方向门交互区域 |
+| src/map/MapGenerator.gd | 保证每层生成撤离房 |
+| src/map/RoomFactory.gd | 主要房间生成搜索容器，修正容器本地坐标放置 |
+| src/map/ContentInjector.gd | 战斗/精英/Boss/撤离/藏储/陷阱房补搜索内容 |
+
+### 验证
+- Godot headless `--quit`: EXIT 0
+- Main 场景 headless `--quit-after 20`: EXIT 0，无脚本错误；日志显示多房间地图和撤离房节点
+- `git diff --check`: EXIT 0
+
+### 剩余风险
+- 需要实际试玩验证按 E 拾钥匙/开门/进入下一房的手感。
+- 撤离房当前进入即读条，后续应改为撤离点交互。
+
+## 轮次 119 — 物理房间门与地图扩张修订
+
+**时间**: 2026-05-25
+**维度**: 战局内空间结构 — 物理门 / 房间拼接 / 地图展开
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/map/MapGenerator.gd | 房间按 800×600 正交网格排布，主路径横向、分支上下接入 |
+| src/map/NodeGraph.gd | 节点位置同步写入 `RoomData.position`，避免房间实例重叠在原点 |
+| src/game/RoomGameMode.gd | 开门不再传送；开门后目标房显露；玩家走入目标房范围才触发进入 |
+| src/game/RoomDoorInteraction.gd | 门交互改为只开门 |
+| src/map/RoomVisualizer.gd | 开启方向的房间边界碰撞留出门洞 |
+| src/map/RoomTileMapInitializer.gd | 非战斗房同样支持物理门洞 |
+| src/map/RoomWaveSpawner.gd | 额外刷怪无标准波次时不再访问空数组 |
+
+### 验证
+- 临时 headless 自动化：开门不移动玩家，目标房显露；玩家坐标进入目标房后才切房。
+- `godot --headless --path . --quit`: EXIT 0
+- `godot --headless --path . --quit-after 20 --scene scenes/Main.tscn`: EXIT 0
+- `git diff --check`: EXIT 0
+
+### 剩余风险
+- 需要编辑器内试玩门洞宽度、碰撞边缘和相机跟随手感。
+- 未开启房间目前只是隐藏，后续可以加暗区/雾门表现。

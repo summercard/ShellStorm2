@@ -23,6 +23,7 @@ var dash_cooldown_timer: float = 0.0
 var aim_direction: Vector2 = Vector2.RIGHT
 var last_move_direction: Vector2 = Vector2.RIGHT
 var dash_direction: Vector2 = Vector2.RIGHT
+var input_locked: bool = false
 
 var _audio: AudioManager = null
 
@@ -61,6 +62,10 @@ func _physics_process(delta: float) -> void:
 	_handle_dash_cooldown(delta)
 
 func _handle_movement(_delta: float) -> void:
+	if input_locked:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	var input_direction := _get_input_direction()
 	if input_direction != Vector2.ZERO:
 		last_move_direction = input_direction
@@ -86,6 +91,9 @@ func _get_input_direction() -> Vector2:
 	return direction.normalized() if direction != Vector2.ZERO else Vector2.ZERO
 
 func _handle_dash_cooldown(delta: float) -> void:
+	if input_locked:
+		dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0) if dash_cooldown_timer > 0.0 else 0.0)
+		return
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer = max(0.0, dash_cooldown_timer - delta)
 		dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
@@ -114,6 +122,12 @@ func _start_dash() -> void:
 func _on_invincible_timeout() -> void:
 	if not is_dashing:
 		is_invincible = false
+
+func set_input_locked(locked: bool) -> void:
+	input_locked = locked
+	if locked:
+		is_dashing = false
+		velocity = Vector2.ZERO
 
 func take_damage(amount: int) -> void:
 	if is_invincible or current_hp <= 0:
@@ -144,6 +158,12 @@ func _flash_damage() -> void:
 func _play_damage_sfx() -> void:
 	if _audio:
 		_audio.play_player_hit_sfx()
+	# 受伤震屏（通过 HitEffects 或直接找 ScreenShake）
+	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
+	if shake == null:
+		shake = get_node_or_null("../fx/HitEffects")
+	if shake != null and shake.has_method("trigger"):
+		shake.call("trigger", 6.0, 0.12)
 
 func is_moving() -> bool:
 	return velocity.length() > 10.0

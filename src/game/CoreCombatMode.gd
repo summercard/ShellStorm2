@@ -46,6 +46,10 @@ var _waiting_for_next_wave: bool = false
 var _message_tween: Tween = null
 var inventory_module: InventoryModule = null
 var insurance_module: InsuranceModule = null
+var run_risk: int = 0
+var extracted: bool = false
+var _reward_multiplier: float = 1.0
+var _pending_post_wave_extraction: bool = false
 
 func _ready() -> void:
 	rng.randomize()
@@ -71,6 +75,10 @@ func _reset_run_state() -> void:
 	wave_killed = 0
 	wave_active = false
 	game_is_over = false
+	extracted = false
+	run_risk = 0
+	_reward_multiplier = 1.0
+	_pending_post_wave_extraction = false
 	_waiting_for_next_wave = false
 	active_enemies.clear()
 	inventory_module = InventoryModule.new(12)
@@ -99,12 +107,21 @@ func _bind_ui() -> void:
 			ui_layer.call("set_inventory_module", inventory_module)
 		if ui_layer.has_method("set_insurance_module"):
 			ui_layer.call("set_insurance_module", insurance_module)
+		_connect_ui_choice_signal("fate_choice_selected", "_on_fate_choice_selected")
+		_connect_ui_choice_signal("extraction_choice_selected", "_on_extraction_choice_selected")
 	if clearing_progress:
 		clearing_progress.visible = true
 	if wave_indicator:
 		wave_indicator.visible = true
 		wave_indicator.text = ""
 	_update_hp_bar(player.current_hp, player.max_hp)
+
+func _connect_ui_choice_signal(signal_name: StringName, method_name: StringName) -> void:
+	if ui_layer == null or not ui_layer.has_signal(signal_name):
+		return
+	var callable := Callable(self, method_name)
+	if not ui_layer.is_connected(signal_name, callable):
+		ui_layer.connect(signal_name, callable)
 
 func _setup_camera(force: bool = false) -> void:
 	if game_camera == null or player == null:
@@ -235,11 +252,14 @@ func _spawn_enemy(data: Dictionary, index: int) -> void:
 	wave_progress_changed.emit(wave_killed, wave_total, current_wave)
 
 func _apply_enemy_data(enemy: Node, data: Dictionary) -> void:
+	var pressure_hp := 1.0 + float(run_risk) * 0.12
+	var pressure_damage := 1.0 + float(run_risk) * 0.08
 	if data.has("hp"):
-		enemy.set("max_hp", int(data["hp"]))
-		enemy.set("current_hp", int(data["hp"]))
+		var scaled_hp := maxi(1, int(round(float(data["hp"]) * pressure_hp)))
+		enemy.set("max_hp", scaled_hp)
+		enemy.set("current_hp", scaled_hp)
 	if data.has("damage"):
-		enemy.set("damage", int(data["damage"]))
+		enemy.set("damage", maxi(1, int(round(float(data["damage"]) * pressure_damage))))
 	if data.has("speed"):
 		enemy.set("speed", float(data["speed"]))
 	if data.has("ai_type"):
@@ -286,12 +306,7 @@ func _on_enemy_died(enemy: Node, data: Dictionary) -> void:
 	wave_killed = min(wave_total, wave_killed + 1)
 	kills += 1
 	score += int(data.get("xp_value", 10))
-	var currency_gain := int(data.get("currency_value", 4))
-	# 即时到账 + 显示魂数飘字
-	GameManager.add_currency(currency_gain)
-	if ui_layer != null and ui_layer.has_method("show_currency_popup"):
-		ui_layer.call("show_currency_popup", currency_gain, enemy.global_position if is_instance_valid(enemy) else player.global_position)
-	# 掉落魂魄（视觉表现）
+	var currency_gain := maxi(1, int(round(float(data.get("currency_value", 4)) * _reward_multiplier)))
 	var enemy_pos: Vector2 = enemy.global_position if is_instance_valid(enemy) else player.global_position
 	_spawn_soul_orb(enemy_pos, currency_gain)
 	kill_recorded.emit()
@@ -323,9 +338,211 @@ func _on_wave_cleared() -> void:
 	if current_wave % 3 == 0 and player != null and is_instance_valid(player):
 		player.heal(12)
 	await get_tree().create_timer(wave_clear_delay).timeout
-	_waiting_for_next_wave = false
 	if not game_is_over:
-		_start_next_wave()
+		_run_post_wave_sequence()
+
+func _run_post_wave_sequence() -> void:
+	if game_is_over:
+		return
+	_pending_post_wave_extraction = _should_offer_extraction()
+	if current_wave % 2 == 0:
+		_present_fate_choice()
+	elif _pending_post_wave_extraction:
+		_present_extraction_choice()
+	else:
+		_continue_run()
+
+func _should_offer_extraction() -> bool:
+	return current_wave >= 3 and current_wave % 3 == 0
+
+func _present_fate_choice() -> void:
+	var choices := _build_fate_choices()
+	if ui_layer != null and ui_layer.has_method("show_run_choice_panel"):
+		ui_layer.call(
+			"show_run_choice_panel",
+			"fate",
+			"命运介入",
+			"选择一张阶段强化。越晚撤离，收益越高，战局压力也会增长。",
+			choices
+		)
+		_show_message("选择命运卡牌", 1.2)
+	else:
+		_on_fate_choice_selected(str(choices[0].get("id", "piercing_oath")))
+
+func _build_fate_choices() -> Array[Dictionary]:
+	var pool: Array[Dictionary] = [
+		{
+			"id": "piercing_oath",
+			"title": "穿甲誓约",
+			"tag": "火力",
+			"body": "子弹伤害提升，适合稳扎稳打清怪。"
+		},
+		{
+			"id": "rapid_pulse",
+			"title": "急速脉冲",
+			"tag": "手感",
+			"body": "射速提升，换弹略微加快。"
+		},
+		{
+			"id": "split_chamber",
+			"title": "分裂枪膛",
+			"tag": "弹幕",
+			"body": "每次射击增加投射物，但扩散也会上升。"
+		},
+		{
+			"id": "field_mending",
+			"title": "战地缝合",
+			"tag": "续航",
+			"body": "提升生命上限并立即回复生命。"
+		},
+		{
+			"id": "blood_pact",
+			"title": "血契赏金",
+			"tag": "风险",
+			"body": "立刻获得魂并提升伤害，但之后敌人更危险。"
+		},
+	]
+	pool.shuffle()
+	return pool.slice(0, 3)
+
+func _on_fate_choice_selected(choice_id: String) -> void:
+	_apply_fate_choice(choice_id)
+	if _pending_post_wave_extraction:
+		_pending_post_wave_extraction = false
+		_present_extraction_choice()
+	else:
+		_continue_run("命运已生效")
+
+func _apply_fate_choice(choice_id: String) -> void:
+	var wt = _get_weapon_tree()
+	var message := "命运已生效"
+	match choice_id:
+		"piercing_oath":
+			if wt != null:
+				wt.bullet_damage += 2 + int(current_wave / 3)
+				message = "穿甲誓约：子弹伤害提升"
+		"rapid_pulse":
+			if wt != null:
+				wt.fire_rate = min(wt.fire_rate * 1.16, 14.0)
+				wt.reload_time = max(wt.reload_time * 0.92, 0.55)
+				message = "急速脉冲：射速提升"
+		"split_chamber":
+			if wt != null:
+				wt.projectile_count = mini(wt.projectile_count + 1, 5)
+				wt.spread = min(wt.spread + 0.16, 0.72)
+				message = "分裂枪膛：弹幕扩展"
+		"field_mending":
+			if player != null and is_instance_valid(player):
+				player.max_hp += 15
+				player.heal(30)
+				message = "战地缝合：生命上限提升"
+		"blood_pact":
+			run_risk += 1
+			_reward_multiplier += 0.18
+			GameManager.add_currency(30 + current_wave * 8)
+			if wt != null:
+				wt.bullet_damage += 4
+			message = "血契赏金：魂到账，风险上升"
+	if wt != null:
+		wt.ammo_changed.emit(wt.current_ammo, wt.magazine_size)
+		wt.stats_changed.emit(wt.get_computed_stats())
+	if ui_layer != null and ui_layer.has_method("show_fate_card_notification"):
+		ui_layer.call("show_fate_card_notification", message)
+	_update_ui()
+
+func _present_extraction_choice() -> void:
+	var choices: Array[Dictionary] = [
+		{
+			"id": "extract",
+			"title": "立刻撤离",
+			"tag": "保存",
+			"body": "保存当前魂与战利品，结束本局。"
+		},
+		{
+			"id": "continue",
+			"title": "继续深入",
+			"tag": "贪婪",
+			"body": "下一段敌人更强，魂收益提高。"
+		},
+		{
+			"id": "recover",
+			"title": "整备后深入",
+			"tag": "稳健",
+			"body": "回复生命再进入下一波，但收益加成较低。"
+		},
+	]
+	if ui_layer != null and ui_layer.has_method("show_run_choice_panel"):
+		ui_layer.call(
+			"show_run_choice_panel",
+			"extraction",
+			"撤离窗口",
+			"搜打撤的核心选择：带着收益离开，或押上更高风险继续推进。",
+			choices
+		)
+		_show_message("选择撤离或深入", 1.2)
+	else:
+		_on_extraction_choice_selected("continue")
+
+func _on_extraction_choice_selected(choice_id: String) -> void:
+	match choice_id:
+		"extract":
+			_complete_extraction()
+		"recover":
+			if player != null and is_instance_valid(player):
+				player.heal(20)
+			run_risk += 1
+			_reward_multiplier += 0.14
+			_continue_run("整备完成：继续深入")
+		_:
+			run_risk += 1
+			_reward_multiplier += 0.25
+			_continue_run("继续深入：收益与风险上升")
+
+func _continue_run(message: String = "") -> void:
+	if game_is_over:
+		return
+	_waiting_for_next_wave = false
+	if message != "":
+		_show_message(message, 0.9)
+	_start_next_wave()
+
+func begin_extraction(_etype: String = "STANDARD", countdown: float = 1.8) -> void:
+	if game_is_over:
+		return
+	_waiting_for_next_wave = true
+	wave_active = false
+	_show_message("撤离读条中...", countdown)
+	await get_tree().create_timer(maxf(0.2, countdown)).timeout
+	if not game_is_over:
+		_complete_extraction()
+
+func _complete_extraction() -> void:
+	if game_is_over:
+		return
+	extracted = true
+	game_is_over = true
+	wave_active = false
+	_waiting_for_next_wave = true
+	if ui_layer != null:
+		if ui_layer.has_method("set_death_stats"):
+			ui_layer.call("set_death_stats", {"score": score, "kills": kills, "floor": max(1, current_wave)})
+		if ui_layer.has_method("set_loot_info"):
+			ui_layer.call("set_loot_info", 0, 0)
+		if ui_layer.has_method("show_run_extraction_success"):
+			ui_layer.call("show_run_extraction_success", {
+				"score": score,
+				"kills": kills,
+				"wave": current_wave,
+				"currency": GameManager.currency,
+				"risk": run_risk,
+			})
+		elif ui_layer.has_method("_show_extraction_success"):
+			ui_layer.call("_show_extraction_success")
+
+func _get_weapon_tree():
+	if player != null and is_instance_valid(player) and player.has_method("get_weapon_tree"):
+		return player.get_weapon_tree()
+	return null
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
 	_update_hp_bar(current, maximum)
@@ -398,6 +615,9 @@ func _spawn_soul_orb(world_pos: Vector2, amount: int) -> void:
 
 func _on_soul_orb_collected(amount: int, orb: SoulOrb) -> void:
 	GameManager.add_currency(amount)
+	if ui_layer != null and ui_layer.has_method("show_currency_popup"):
+		var pos := orb.global_position if orb != null and is_instance_valid(orb) else player.global_position
+		ui_layer.call("show_currency_popup", amount, pos)
 
 func get_inventory() -> InventoryModule:
 	return inventory_module

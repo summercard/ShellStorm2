@@ -290,8 +290,9 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_contro
 		enemy.ai_type = data["ai_type"]
 	else:
 		_apply_ai_type_from_enemy_kind(enemy, data.get("enemy_type", ""))
+	# 房间模式先使用明确的 ai_type 行为，避免警觉状态机把远程/召唤/自爆怪都退化成普通追击。
+	enemy.awareness_enabled = false
 	if data.get("is_elite"):
-		enemy.add_modifier("巨大化", 1)
 		enemy._is_elite = true  # PH11 P2: 设置精英标志，使 elite_entered_chase 信号能正确触发相邻房间AI联动
 	if data.get("modifier"):
 		enemy.add_modifier(data["modifier"], 1)
@@ -332,8 +333,10 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_contro
 		enemy.enemy_died.connect(_on_enemy_died)
 
 	# 发出进度更新（已被击杀数 / 当前波总数）
-	var killed = _enemy_count_per_wave[_current_wave] - _alive_count
-	wave_progress_updated.emit(killed, _enemy_count_per_wave[_current_wave], _current_wave + 1)
+	if _current_wave >= 0 and _current_wave < _enemy_count_per_wave.size():
+		var wave_total: int = _enemy_count_per_wave[_current_wave]
+		var killed: int = wave_total - _alive_count
+		wave_progress_updated.emit(killed, wave_total, _current_wave + 1)
 
 ## 连接敌人CHASE信号 → 触发区域增援（PH11 警觉AI联动）
 func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = null) -> void:
@@ -352,7 +355,7 @@ func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = n
 func _on_enemy_chase_for_reinforcement(enemy: Node, last_known_pos: Vector2) -> void:
 	# 优先使用该敌人绑定的 regional_controller_ref（每个敌人独立绑定）
 	var controller: Node = null
-	if enemy != null and is_instance_valid(enemy) and enemy.has("regional_controller_ref"):
+	if enemy != null and is_instance_valid(enemy):
 		controller = enemy.get("regional_controller_ref")
 	if controller == null:
 		controller = _current_regional_controller

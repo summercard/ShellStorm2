@@ -56,6 +56,11 @@ var _modifiers: Array = []
 var _enemy_data: Dictionary = {}
 var _damage_multiplier: float = 1.0  # 伤害倍率（由环境命运触发器设置）
 var _is_elite: bool = false          # 是否为精英怪（PH11 P2: 精英进入CHASE时触发相邻房间AI联动）
+var regional_controller_ref: Node = null
+var _base_emoji: String = "👾"
+var _base_color: Color = Color.WHITE
+var _base_scale: float = 1.0
+var _state_marker_label: Label = null
 
 ## AI状态机变量
 var _ai_state: AIState = AIState.IDLE
@@ -90,10 +95,24 @@ func set_enemy_data(data: Dictionary) -> void:
 func get_enemy_data() -> Dictionary:
 	return _enemy_data
 
+## 兼容旧调用：部分房间增援逻辑曾把 EnemyBase 当 Dictionary 调用 `.has()`。
+func has(property_name: String) -> bool:
+	return property_name in [
+		"regional_controller_ref",
+		"enemy_data",
+		"is_elite",
+		"ai_type",
+		"max_hp",
+		"current_hp",
+		"damage",
+		"speed",
+	]
+
 func _ready() -> void:
 	current_hp = max_hp
 	add_to_group("enemy")
 	z_as_relative = false
+	_ensure_state_marker()
 	_fire_timers()
 	_update_hp_bar(true)
 	_update_z_index()
@@ -244,9 +263,21 @@ func _line_of_sight_check(from: Vector2, to: Vector2) -> bool:
 
 ## emoji 显示文字 + 颜色更新
 func _update_emoji_display(text: String, color: Color) -> void:
+	_ensure_state_marker()
+	if text in ["❓", "❗"]:
+		if emoji_label:
+			emoji_label.text = _base_emoji
+			emoji_label.modulate = Color.WHITE
+		if _state_marker_label:
+			_state_marker_label.text = text
+			_state_marker_label.modulate = color
+			_state_marker_label.visible = true
+		return
 	if emoji_label:
-		emoji_label.text = text
-		emoji_label.modulate = color
+		emoji_label.text = _base_emoji if text == "👾" else text
+		emoji_label.modulate = Color.WHITE if text == "👾" else color
+	if _state_marker_label:
+		_state_marker_label.visible = false
 
 ## ========== 房间边界 & 巡逻系统（PH11 区域AI核心）==========
 
@@ -531,6 +562,9 @@ func die() -> void:
 		queue_free()
 
 func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
+	_base_emoji = emoji
+	_base_color = color
+	_base_scale = scale_mult
 	if emoji_label:
 		emoji_label.text = emoji
 		emoji_label.scale = Vector2.ONE * scale_mult
@@ -538,6 +572,20 @@ func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
 		shape.color = color
 		shape.scale = Vector2.ONE * scale_mult
 	_update_hp_bar(true)
+
+func _ensure_state_marker() -> void:
+	if _state_marker_label != null and is_instance_valid(_state_marker_label):
+		return
+	_state_marker_label = Label.new()
+	_state_marker_label.name = "StateMarker"
+	_state_marker_label.position = Vector2(-12, -48)
+	_state_marker_label.size = Vector2(24, 22)
+	_state_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_state_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_state_marker_label.add_theme_font_size_override("font_size", 18)
+	_state_marker_label.z_index = 2
+	_state_marker_label.visible = false
+	add_child(_state_marker_label)
 
 func _spawn_explosion_flash() -> void:
 	var flash := ColorRect.new()

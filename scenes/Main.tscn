@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="1_gameui"]
 [ext_resource type="Script" path="res://src/fx/ScreenShake.gd" id="2_shake"]
 [ext_resource type="Script" path="res://src/fx/HitEffects.gd" id="3_hiteffects"]
-[ext_resource type="Script" path="res://src/game/CoreCombatMode.gd" id="4_core"]
+[ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="4_room_mode"]
 [ext_resource type="Script" path="res://src/game/WorldPlaceholder.gd" id="5_world"]
 
 [node name="Main" type="Node2D"]
@@ -27,6 +27,5 @@ script = ExtResource("3_hiteffects")
 
 [node name="GameUIManager" type="CanvasLayer" parent="." instance=ExtResource("1_gameui")]
 
-[node name="CoreCombatMode" type="Node2D" parent="."]
-script = ExtResource("4_core")
-arena_size = Vector2(1800, 1100)
+[node name="RoomGameMode" type="Node2D" parent="."]
+script = ExtResource("4_room_mode")

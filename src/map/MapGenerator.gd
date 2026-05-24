@@ -11,6 +11,7 @@ var _current_floor: int = 1
 ## 生成配置
 const MIN_PATH_LENGTH := 4   # 最短路径长度（房间数）
 const MAX_PATH_LENGTH := 8   # 最长路径长度
+const ROOM_SPACING := Vector2(800, 600)
 
 ## 楼层配置
 const FLOOR_ROOM_CONFIG = {
@@ -45,6 +46,9 @@ func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	
 	# 确保Boss房存在且在末端
 	_ensure_boss_room(graph, main_path)
+
+	# 确保本层存在至少一个撤离房，作为搜打撤的带出终点
+	_ensure_extraction_room(graph, main_path)
 	
 	# 设置房间层级
 	_set_floor_levels(graph, main_path)
@@ -62,7 +66,7 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 	var start_id := graph.add_node(start_data, Vector2(0, 0))
 	path_ids.append(start_id)
 	
-	# 中间房间
+	# 中间房间。物理房间按网格拼接，门洞才能成为真实通路。
 	var last_pos := Vector2(0, 0)
 	var last_id := start_id
 	
@@ -70,9 +74,7 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 		var room_type := _choose_path_room_type(i, length)
 		var room_data := RoomData.new(room_type, _current_floor)
 		
-		# 计算位置（向右扩展，随机上下偏移）
-		var offset := Vector2(300, _rng.randf_range(-100, 100))
-		var new_pos := last_pos + offset
+		var new_pos := last_pos + Vector2(ROOM_SPACING.x, 0)
 		
 		var node_id := graph.add_node(room_data, new_pos)
 		graph.add_edge(last_id, node_id, true)
@@ -83,7 +85,7 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 	
 	# 末端房间（Boss前一个）
 	var pre_boss_data := RoomData.new(RoomData.RoomType.COMBAT, _current_floor)
-	var pre_boss_pos := last_pos + Vector2(300, 0)
+	var pre_boss_pos := last_pos + Vector2(ROOM_SPACING.x, 0)
 	var pre_boss_id := graph.add_node(pre_boss_data, pre_boss_pos)
 	graph.add_edge(last_id, pre_boss_id, true)
 	path_ids.append(pre_boss_id)
@@ -118,7 +120,6 @@ func _generate_special_rooms(graph: NodeGraph, path_ids: Array[int], config: Dic
 		var from_id: int = path_ids[i]
 		var to_id: int = path_ids[i + 1]
 		var from_node := graph.get_node(from_id)
-		var to_node := graph.get_node(to_id)
 		
 		# 随机决定是否插入分支
 		if _rng.randf() > branch_chance:
@@ -128,14 +129,22 @@ func _generate_special_rooms(graph: NodeGraph, path_ids: Array[int], config: Dic
 		var branch_type: RoomData.RoomType = _choose_special_room_type(config)
 		var branch_data := RoomData.new(branch_type, _current_floor)
 		
-		# 放置在主路径旁边
-		var offset_pos := from_node.position + Vector2(150, _rng.randf_range(-200, 200))
+		# 分支房是物理侧房，只接在主路径房间上，避免生成无法对齐门洞的斜向连接。
+		var side := -1.0 if _rng.randf() < 0.5 else 1.0
+		var offset_pos := from_node.position + Vector2(0, ROOM_SPACING.y * side)
+		if _is_position_occupied(graph, offset_pos):
+			offset_pos = from_node.position + Vector2(0, -ROOM_SPACING.y * side)
+		if _is_position_occupied(graph, offset_pos):
+			continue
 		var branch_id := graph.add_node(branch_data, offset_pos)
 		
-		# 连接：from → branch → to（把原来直连打断）
-		# 移除 from-to 的直接连接（临时做法，实际上应该保留双向通道，这里仅添加分支）
 		graph.add_edge(from_id, branch_id, true)
-		graph.add_edge(branch_id, to_id, true)
+
+func _is_position_occupied(graph: NodeGraph, pos: Vector2) -> bool:
+	for node in graph.get_all_nodes():
+		if node.position.distance_to(pos) < 1.0:
+			return true
+	return false
 
 ## 选择特殊房间类型
 func _choose_special_room_type(config: Dictionary) -> RoomData.RoomType:
@@ -171,13 +180,33 @@ func _ensure_boss_room(graph: NodeGraph, path_ids: Array[int]) -> void:
 	if last_data.room_type != RoomData.RoomType.BOSS:
 		var boss_data := RoomData.new(RoomData.RoomType.BOSS, _current_floor)
 		boss_data.floor_level = RoomData.FloorLevel.DEEP
-		var boss_pos := last_node.position + Vector2(300, 0)
+		var boss_pos := last_node.position + Vector2(ROOM_SPACING.x, 0)
 		var boss_id := graph.add_node(boss_data, boss_pos)
 		graph.add_edge(last_id, boss_id, true)
 		path_ids.append(boss_id)
 	else:
 		# 已经是Boss房，设置为深层
 		last_data.floor_level = RoomData.FloorLevel.DEEP
+
+## 确保撤离房存在：默认接在 Boss 前节点附近，玩家可以用钥匙选择前往撤离。
+func _ensure_extraction_room(graph: NodeGraph, path_ids: Array[int]) -> void:
+	for node in graph.get_all_nodes():
+		if node.room_data != null and node.room_data.room_type == RoomData.RoomType.EXTRACTION:
+			return
+	if path_ids.size() < 2:
+		return
+	var anchor_index: int = maxi(1, path_ids.size() - 2)
+	var anchor_id: int = path_ids[anchor_index]
+	var anchor_node := graph.get_node(anchor_id)
+	if anchor_node == null:
+		return
+	var extraction_data := RoomData.new(RoomData.RoomType.EXTRACTION, _current_floor)
+	extraction_data.floor_level = RoomData.FloorLevel.MEDIUM
+	var extraction_pos := anchor_node.position + Vector2(0, ROOM_SPACING.y)
+	if _is_position_occupied(graph, extraction_pos):
+		extraction_pos = anchor_node.position + Vector2(0, -ROOM_SPACING.y)
+	var extraction_id := graph.add_node(extraction_data, extraction_pos)
+	graph.add_edge(anchor_id, extraction_id, true)
 
 ## 设置房间层级
 func _set_floor_levels(graph: NodeGraph, path_ids: Array[int]) -> void:

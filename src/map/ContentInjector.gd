@@ -49,6 +49,10 @@ func inject(room_data: RoomData) -> ContentConfig:
 			_inject_extraction_room(config, room_data)
 		RoomData.RoomType.BOSS:
 			_inject_boss_room(config, room_data)
+		RoomData.RoomType.STORAGE:
+			_inject_storage_room(config, room_data)
+		RoomData.RoomType.TRAP:
+			_inject_trap_room(config, room_data)
 	
 	return config
 
@@ -87,6 +91,11 @@ func _inject_combat_room(config: ContentConfig, room_data: RoomData) -> void:
 			"tags": room_data.tags.duplicate()
 		}
 		config.enemies.append(enemy)
+	config.interactables.append({
+		"type": "crate",
+		"position": Vector2(110, -90),
+		"loot_table": "combat_floor_%d" % [min(5, floor)],
+	})
 
 ## 注入精英战斗房间
 func _inject_elite_room(config: ContentConfig, room_data: RoomData) -> void:
@@ -106,6 +115,11 @@ func _inject_elite_room(config: ContentConfig, room_data: RoomData) -> void:
 			"type": "minion",
 			"floor_level": room_data.floor_level
 		})
+	config.interactables.append({
+		"type": "locker",
+		"position": Vector2(-130, 80),
+		"loot_table": "elite_floor_%d" % [min(5, room_data.floor)],
+	})
 
 ## 注入搜刮房间
 func _inject_scavenge_room(config: ContentConfig, room_data: RoomData) -> void:
@@ -177,6 +191,11 @@ func _inject_extraction_room(config: ContentConfig, room_data: RoomData) -> void
 		"extraction_type": "standard",
 		"countdown": 10
 	})
+	config.interactables.append({
+		"type": "locker",
+		"position": Vector2(120, 80),
+		"loot_table": "extraction_floor_%d" % [min(5, room_data.floor)],
+	})
 
 ## 注入Boss房间
 func _inject_boss_room(config: ContentConfig, room_data: RoomData) -> void:
@@ -194,6 +213,32 @@ func _inject_boss_room(config: ContentConfig, room_data: RoomData) -> void:
 			"type": "elite",
 			"floor_level": room_data.floor_level
 		})
+	config.interactables.append({
+		"type": "chest",
+		"position": Vector2(0, -130),
+		"loot_table": "boss_floor_%d" % [min(5, room_data.floor)],
+	})
+
+func _inject_storage_room(config: ContentConfig, room_data: RoomData) -> void:
+	var count := 2 + room_data.floor
+	for i in range(count):
+		config.interactables.append({
+			"type": "locker",
+			"position": _get_scavenge_position(i),
+			"loot_table": "storage_floor_%d" % [min(5, room_data.floor)],
+		})
+
+func _inject_trap_room(config: ContentConfig, room_data: RoomData) -> void:
+	config.interactables.append({
+		"type": "hidden_cache",
+		"position": Vector2(90, 70),
+		"loot_table": "trap_floor_%d" % [min(5, room_data.floor)],
+	})
+	config.enemies.append({
+		"type": "ambush",
+		"floor_level": room_data.floor_level,
+		"count": 1 + int(room_data.floor / 2),
+	})
 
 ## 获取搜刮房间中容器位置
 func _get_scavenge_position(index: int) -> Vector2:

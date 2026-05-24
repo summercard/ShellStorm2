@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://room_storage_001"]
+[gd_scene load_steps=7 format=3 uid="uid://room_storage_001"]
 
 [ext_resource type="PackedScene" path="res://scenes/Container.tscn" id="1_container"]
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="2_spawner"]
-[ext_resource type="Script" path="res://src/game/StorageRoomLogic.gd" id="3_storage"]
-[ext_resource type="Script" path="res://src/game/ContainerInteraction.gd" id="4_container_script"]
+[ext_resource type="Script" path="res://src/map/RoomTileSetBuilder.gd" id="3_tilebuilder"]
+[ext_resource type="Script" path="res://src/game/StorageRoomLogic.gd" id="4_storage"]
+[ext_resource type="Script" path="res://src/game/ContainerInteraction.gd" id="5_container_script"]
+[ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="6_tilemap_init"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_area"]
 radius = 45.0
@@ -14,7 +16,7 @@ radius = 45.0
 ; 颜色主题：棕色/焦糖色（与 STORAGE 房间调试色一致）
 
 [node name="RoomStorage" type="Node2D"]
-script = ExtResource("3_storage")
+script = ExtResource("4_storage")
 
 ; 波次生成器（由 RoomGameMode 配置并驱动）
 [node name="WaveSpawner" type="Node" parent="."]
@@ -28,7 +30,7 @@ position = Vector2(-320, -180)
 collision_layer = 0
 collision_mask = 2
 monitorable = true
-script = ExtResource("4_container_script")
+script = ExtResource("5_container_script")
 container_type = "hidden_cache"
 loot_table = "scavenge_floor_3"
 
@@ -79,3 +81,11 @@ offset_top = 250.0
 offset_right = 450.0
 offset_bottom = 350.0
 color = Color(0.1, 0.05, 0.0, 0.4)
+
+; TileMap 地面/墙体层
+[node name="FloorLayer" type="TileMapLayer" parent="."]
+
+; 房间视觉化组件（运行时构建 TileSet + 氛围装饰）
+[node name="Visualizer" type="Node2D" parent="."]
+script = ExtResource("6_tilemap_init")
+room_type = 9

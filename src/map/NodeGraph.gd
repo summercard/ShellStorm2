@@ -29,6 +29,8 @@ class GraphEdge:
 ## 添加节点
 func add_node(data: RoomData, pos: Vector2 = Vector2.ZERO) -> int:
 	var node_id := _nodes.size()
+	if data != null:
+		data.position = pos
 	var node := RoomNode.new(node_id, data, pos)
 	_nodes.append(node)
 	return node_id
