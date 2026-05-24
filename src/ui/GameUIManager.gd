@@ -48,6 +48,14 @@ var _reload_duration: float = 0.0
 var _extraction_types: Array[String] = ["STANDARD", "BEACON", "BOSS_KILL", "ELITE_KILL", "TRADE"]
 var _beacon_count: int = 0
 
+## — Boss HP UI —
+var _boss_hp_panel: PanelContainer = null
+var _boss_hp_bar: ProgressBar = null
+var _boss_name_label: Label = null
+var _boss_hp_label: Label = null
+var _boss_max_hp: float = 0.0
+var _boss_current_hp: float = 0.0
+
 ## — 命运卡片 UI —
 @onready var fate_card_panel: Control = $FateCardPanel
 var _fate_card_card_container: HBoxContainer = null        ## 卡片按钮容器
@@ -180,6 +188,9 @@ func _ready() -> void:
 	# 初始化低血量 Vignette（HealthVignette 挂为本类子节点）
 	_health_vignette = load("res://src/fx/HealthVignette.tscn").instantiate()
 	add_child(_health_vignette)
+	
+	# 初始化 Boss HP UI 面板（在 GameHUD 之上，居中顶部）
+	_init_boss_hp_ui()
 
 func _ensure_hud_layout() -> void:
 	var hud := get_node_or_null("GameHUD") as Control
@@ -716,13 +727,20 @@ func _show_wave_complete_celebration(room_type: int = -1) -> void:
 		_screen_shake.call("trigger", 4.0, 0.10)
 
 ## — Boss 事件处理器（由 RoomGameMode 调用）—
-## Boss 出现时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
+## Boss 出现时回调（显示 Boss HP UI）
 func on_boss_spawned(boss_data: Dictionary) -> void:
 	room_info_label.text = "Boss 出现了！"
+	var boss_name: String = boss_data.get("boss_id", "BOSS")
+	var max_hp: float = boss_data.get("max_hp", 500.0)
+	var current_hp: float = max_hp
+	show_boss_hp(boss_name, max_hp, current_hp)
 
-## Boss 受伤时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
+## Boss 受伤时回调（更新 Boss HP 条）
 func on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
-	pass  # Boss 血条 UI 后续扩展
+	_boss_current_hp = new_hp
+	if _boss_hp_bar != null:
+		_boss_hp_bar.value = new_hp
+	_update_boss_hp_label()
 
 ## Boss 阶段切换时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
 func on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
@@ -731,6 +749,154 @@ func on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
 ## Boss 被击败时回调（目前仅日志记录）
 func on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
 	room_info_label.text = "Boss 已击败！"
+	_hide_boss_hp_ui()
+	_show_boss_defeated_victory()
+	_trigger_boss_defeated_screen_effects()
+## Boss击败后的胜利提示文字动画
+func _show_boss_defeated_victory() -> void:
+	var victory_label := Label.new()
+	victory_label.name = 'BossDefeatedVictory'
+	victory_label.text = '✦ BOSS DEFEATED ✦'
+	victory_label.position = Vector2(640, 400)
+	victory_label.size = Vector2(600, 60)
+	victory_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	victory_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	victory_label.add_theme_font_size_override('font_size', 42)
+	victory_label.modulate.a = 0.0
+	victory_label.z_index = 2000
+	add_child(victory_label)
+	
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(victory_label, 'modulate:a', 1.0, 0.2)
+	tween.tween_property(victory_label, 'position:y', 350.0, 0.5)
+	await tween.finished
+	tween = create_tween()
+	tween.tween_property(victory_label, 'modulate:a', 0.0, 0.6)
+	await tween.finished
+	victory_label.queue_free()
+
+## Boss击败时的屏幕震动+白闪特效（通过 ScreenShake）
+func _trigger_boss_defeated_screen_effects() -> void:
+	var shake: Node = get_tree().root.find_child('ScreenShake', true, false)
+	if shake != null:
+		if shake.has_method('screen_shake_death'):
+			shake.call('screen_shake_death')
+		elif shake.has_method('trigger'):
+			shake.call('trigger', 22.0, 0.5)
+		if shake.has_method('screen_flash'):
+			shake.call('screen_flash', Color(1.0, 1.0, 1.0, 0.8), 0.2)
+
+
+## — Boss HP UI 初始化 —
+func _init_boss_hp_ui() -> void:
+	# 创建 Boss HP 面板（居中屏幕顶部，战斗时显示）
+	_boss_hp_panel = PanelContainer.new()
+	_boss_hp_panel.name = "BossHPPanel"
+	_boss_hp_panel.anchors_preset = 7  # Center horizontal, top
+	_boss_hp_panel.anchor_left = 0.5
+	_boss_hp_panel.anchor_top = 0.0
+	_boss_hp_panel.anchor_right = 0.5
+	_boss_hp_panel.anchor_bottom = 0.0
+	_boss_hp_panel.offset_left = -180.0
+	_boss_hp_panel.offset_top = 16.0
+	_boss_hp_panel.offset_right = 180.0
+	_boss_hp_panel.offset_bottom = 70.0
+	_boss_hp_panel.grow_horizontal = 2
+	_boss_hp_panel.visible = false
+	add_child(_boss_hp_panel)
+	
+	var vbox := VBoxContainer.new()
+	vbox.name = "VBox"
+	vbox.alignment = VBoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 4)
+	_boss_hp_panel.add_child(vbox)
+	
+	# Boss 名称标签
+	_boss_name_label = Label.new()
+	_boss_name_label.name = "BossNameLabel"
+	_boss_name_label.text = "BOSS"
+	_boss_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_name_label.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3, 1.0))
+	_boss_name_label.add_theme_font_size_override("font_size", 16)
+	vbox.add_child(_boss_name_label)
+	
+	# Boss HP 条背景
+	var hp_bg := PanelContainer.new()
+	hp_bg.add_theme_stylebox_override("panel", _make_boss_hp_bg_style())
+	vbox.add_child(hp_bg)
+	
+	# Boss HP 条（ProgressBar）
+	_boss_hp_bar = ProgressBar.new()
+	_boss_hp_bar.name = "BossHPBar"
+	_boss_hp_bar.max_value = 100.0
+	_boss_hp_bar.value = 100.0
+	_boss_hp_bar.show_percentage = false
+	_boss_hp_bar.custom_minimum_size = Vector2(340, 18)
+	# 设置百分比文字颜色（浅色）
+	_boss_hp_bar.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 0.8))
+	# 设置 bar 填充样式（深红背景+亮红前景）
+	var fill_style := StyleBoxFlat.new()
+	fill_style.bg_color = Color(0.25, 0.05, 0.05, 1.0)
+	fill_style.fill_center = true
+	fill_style.corner_radius_top_left = 3.0
+	fill_style.corner_radius_top_right = 3.0
+	fill_style.corner_radius_bottom_right = 3.0
+	fill_style.corner_radius_bottom_left = 3.0
+	_boss_hp_bar.add_theme_stylebox_override("fill", fill_style)
+	hp_bg.add_child(_boss_hp_bar)
+	
+	# HP 数值标签
+	_boss_hp_label = Label.new()
+	_boss_hp_label.name = "BossHPLabel"
+	_boss_hp_label.text = "100 / 100"
+	_boss_hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_hp_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
+	_boss_hp_label.add_theme_font_size_override("font_size", 12)
+	vbox.add_child(_boss_hp_label)
+
+## 创建 Boss HP 背景样式
+func _make_boss_hp_bg_style() -> StyleBox:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.15, 0.05, 0.05, 0.85)
+	style.corner_radius_top_left = 4.0
+	style.corner_radius_top_right = 4.0
+	style.corner_radius_bottom_right = 4.0
+	style.corner_radius_bottom_left = 4.0
+	style.content_margin_left = 4.0
+	style.content_margin_top = 4.0
+	style.content_margin_right = 4.0
+	style.content_margin_bottom = 4.0
+	return style
+
+## 显示 Boss HP UI
+func show_boss_hp(boss_name: String, max_hp: float, current_hp: float) -> void:
+	if _boss_hp_panel == null:
+		return
+	_boss_max_hp = max_hp
+	_boss_current_hp = current_hp
+	_boss_name_label.text = boss_name
+	_boss_hp_bar.max_value = max_hp
+	_boss_hp_bar.value = current_hp
+	_update_boss_hp_label()
+	_boss_hp_panel.visible = true
+
+## 更新 Boss HP 数值显示
+func _update_boss_hp_label() -> void:
+	if _boss_hp_label != null:
+		_boss_hp_label.text = "%d / %d" % [int(_boss_current_hp), int(_boss_max_hp)]
+
+## 刷新 Boss HP（供外部调用）
+func update_boss_hp(current_hp: float) -> void:
+	_boss_current_hp = current_hp
+	if _boss_hp_bar != null:
+		_boss_hp_bar.value = current_hp
+	_update_boss_hp_label()
+
+## 隐藏 Boss HP UI
+func _hide_boss_hp_ui() -> void:
+	if _boss_hp_panel != null:
+		_boss_hp_panel.visible = false
 
 ## 显示命运卡片提示（房间清理后、或出生时）
 ## 命运卡片触发时短暂屏幕闪光特效（白金色快速闪烁）

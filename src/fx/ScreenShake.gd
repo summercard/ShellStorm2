@@ -37,6 +37,50 @@ func trigger(intensity: float = 8.0, duration: float = 0.15) -> void:
 	_shake_timer = duration
 	_shake_elapsed = 0.0
 
+## 屏幕闪白 — Boss死亡/重大事件时全屏短暂白闪
+## hex_color: 闪白颜色（默认白色）；duration: 持续时间（秒）
+func screen_flash(hex_color: Color = Color(1.0, 1.0, 1.0, 0.7), duration: float = 0.12) -> void:
+	if not _camera:
+		_camera = get_viewport().get_camera_2d()
+	if not _camera:
+		return
+	
+	# 创建临时白闪覆盖层（置于相机子节点）
+	var flash := ColorRect.new()
+	flash.name = "ScreenFlash"
+	flash.custom_minimum_size = Vector2(9999, 9999)
+	flash.size = Vector2(9999, 9999)
+	flash.color = hex_color
+	flash.z_index = 9999
+	flash.modulate.a = 0.0
+	_camera.add_child(flash)
+	
+	# 白闪动画：快速亮起 → 快速淡出
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(flash, "modulate:a", hex_color.a, duration * 0.3)
+	await tween.finished
+	tween = create_tween()
+	tween.tween_property(flash, "modulate:a", 0.0, duration * 0.7)
+	await tween.finished
+	flash.queue_free()
+
+## Boss死亡专用的强烈震屏（全屏震动 + 震幅衰减）
+func screen_shake_death() -> void:
+	if not enabled:
+		return
+	if not _camera:
+		_camera = get_viewport().get_camera_2d()
+	# 强烈震屏：高频 + 快速衰减
+	var intensity := 20.0
+	var duration := 0.6
+	shake_intensity = intensity
+	shake_duration = duration
+	shake_frequency = 45.0
+	_is_shaking = true
+	_shake_timer = duration
+	_shake_elapsed = 0.0
+
 ## 内部震动更新
 func _process(delta: float) -> void:
 	if not _is_shaking:

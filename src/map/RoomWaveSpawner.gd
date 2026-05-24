@@ -15,7 +15,7 @@ signal wave_cleared(wave: int)
 @export var inter_wave_delay: float = 1.5 # 波次之间等待时间
 @export var max_enemies_per_wave: int = 8  # 每波最大敌人数
 @export var min_spawn_distance: float = 60.0  # 同波次敌人生成最小间隔
-@export var room_size: Vector2 = Vector2(800, 600)  # 房间尺寸（用于限制出生点在房间内）
+@export var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 房间尺寸（用于限制出生点在房间内）
 
 ## 内部状态
 var _room: Node2D = null

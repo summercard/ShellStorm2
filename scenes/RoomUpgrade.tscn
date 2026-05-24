@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://room_upgrade_001"]
+[gd_scene load_steps=5 format=3 uid="uid://room_upgrade_001"]
 
 [ext_resource type="Script" path="res://src/game/WorkbenchInteraction.gd" id="2_workbench"]
 [ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="3_tilemap_init"]
+[ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="4_door_viz"]
 
 ; 改造房 — 工作台交互间
 ; 玩家在此房间可以通过工作台重新装配武器（枪身+子弹+配件）
@@ -98,3 +99,7 @@ color = Color(0.20, 0.40, 0.60, 0.06)
 [node name="Visualizer" type="Node2D" parent="."]
 script = ExtResource("3_tilemap_init")
 room_type = 5
+
+; 门过渡视觉标记（由 RoomTileMapInitializer 配置并显示方向 — P2 补全）
+[node name="DoorVisualizer" type="Node2D" parent="."]
+script = ExtResource("4_door_viz")

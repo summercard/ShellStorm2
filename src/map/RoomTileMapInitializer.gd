@@ -3,15 +3,19 @@ extends Node2D
 ## 房间 TileMap 初始化器 — 用于非 Combat 房间
 ## 读取 room_type 配置，构建 TileSet 并填充 TileMap
 ## 挂载在每个房间场景的 Visualizer 节点上
+## P2: 集成门过渡视觉（DoorVisualizer）+ 边界碰撞体门洞支持
 
 @export var room_type: RoomData.RoomType = RoomData.RoomType.COMBAT
-@export var room_size: Vector2 = Vector2(800, 600)
+@export var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
 
 @onready var floor_layer: TileMapLayer = $"../FloorLayer" as TileMapLayer
 
 var _tile_set_builder: RoomTileSetBuilder = RoomTileSetBuilder.new()
 var _built: bool = false
 var _door_info: Array[Dictionary] = []
+
+## 门过渡视觉引用（由场景中 DoorVisualizer 子节点赋值）
+@onready var door_visualizer: Node2D = $"../DoorVisualizer" as Node2D
 
 
 func _ready() -> void:
@@ -35,6 +39,9 @@ func build() -> void:
 	# 应用氛围主题（角落暗角）
 	_apply_ambient()
 	_ensure_boundary_collision()
+	
+	# 应用门过渡视觉
+	_apply_door_visualization()
 
 
 ## 应用氛围主题（角落暗角装饰）
@@ -53,6 +60,14 @@ func _apply_ambient() -> void:
 		if child is ColorRect and child.name.begins_with("CornerShadow"):
 			var shadow: ColorRect = child as ColorRect
 			shadow.color = Color(floor_color.r * 0.4, floor_color.g * 0.3, floor_color.b * 0.2, 0.45)
+
+
+## 应用门过渡视觉（如果有门信息）
+func _apply_door_visualization() -> void:
+	if _door_info.is_empty() or door_visualizer == null:
+		return
+	if door_visualizer.has_method("configure"):
+		door_visualizer.configure(_door_info)
 
 
 ## 重置视觉（房间重新进入时）

@@ -24,7 +24,7 @@ signal adjacent_alert_triggered(source_elite: Node, adjacent_room_id: int)
 ## 内部状态
 var _parent_room: Node2D = null
 var _room_data: RoomData = null
-var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)
+var _room_bounds: Rect2 = Rect2(-GridConstants.ROOM_PIXEL_WIDTH * 0.5, -GridConstants.ROOM_PIXEL_HEIGHT * 0.5, GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)
 var _room_center: Vector2 = Vector2.ZERO
 var _cooldown_timer: float = 0.0
 var _reinforcements_available: bool = true

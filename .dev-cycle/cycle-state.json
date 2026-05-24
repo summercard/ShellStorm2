@@ -1,28 +1,37 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "stopped",
+  "status": "running",
   "mode": "infinite_polish",
   "currentPhase": "polish",
-  "lastTask": "Code",
-  "planVersion": "v3.5",
+  "lastTask": "Plan",
+  "planVersion": "v3.7",
   "polish": {
-    "current": 116,
+    "current": 147,
     "total": "infinite"
   },
-  "startTime": "2026-05-22T15:18:00+08:00",
-  "lastRunTime": "2026-05-24T10:39:00+08:00",
-  "currentTarget": "PH12统一完善：Merchant/Upgrade/Trap氛围节点补齐 + TileMap装饰函数",
-  "notes": "轮次116完成：\n1. RoomMerchant.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n2. RoomUpgrade.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n3. RoomTrap.tscn 新增 AmbientDecoration+CornerShadow+BoundaryOverlay+ZoneMarker\n4. RoomTileSetBuilder.gd 新增 _add_merchant_glow() 和 _add_upgrade_cables() 装饰函数\n5. Godot headless --quit-after 1: EXIT 0 ✅\n\n氛围一致性：所有房间现在都有标准氛围装饰体系（角落阴影+边界叠加+区域标记）\n\n下轮方向：\n1) 武器装配树可视化\n2) 容器→InventoryUI刷新验证\n3) DoorVisualizer 其余房间添加",
+  "startTime": "2026-05-25T01:17:00+08:00",
+  "lastRunTime": "2026-05-25T05:41:00+08:00",
+  "currentTarget": "WeaponDisplay.gd 修复（重复函数定义+错误节点重建+缺失_setup_nodes）",
+  "notes": "开发目标：\n1. 建立房间组件化基础（格子系统+组件基类+组件注册表）✅ 已完成（轮次120）\n2. Demo场景：5房间线性链，最后为撤离房 ✅ 已完成（轮次123）\n3. 每房间有敌人+可搜查家具（容器组件） ✅ 已完成（轮次126）\n4. 门碰撞+交互正确（清怪开门） ✅ 已完成（轮次124）\n5. RoomVisualizer重构为组件渲染器 ✅ 已完成（轮次120）\n6. 门过渡视觉DoorVisualizer ✅ 已完成（轮次114）\n7. 非Combat房间DoorVisualizer节点补全 ✅ 已完成（轮次121）\n8. RoomExtraction.tscn场景 ✅ 已完成（轮次122）\n9. ExtractionRoomLogic.gd ✅ 已完成（轮次122）\n10. DemoRoomChain场景（5房间线性链）✅ 已完成（轮次123）\n11. DemoRoomGameMode.gd ✅ 已完成（轮次123）\n12. 门交互帧同步修复 ✅ 已完成（轮次124）\n13. 撤离读条完整流程 ✅ 已完成（轮次125）\n14. 容器→Inventory链路 ✅ 已完成（轮次126）\n15. InventoryUI接入 ✅ 已完成（轮次127）\n16. 房间切换淡入淡出 ✅ 已完成（轮次128）\n17. 门标签视觉区分 ✅ 已完成（轮次129）\n18. 开箱物品实际验证 ✅ 已完成（轮次130）\n19. DemoRoomChain房间视觉化主题色正确性 ✅ 已完成（轮次131）\n20. 武器装配树面板Tab绑定修复 ✅ 已完成（轮次132）\n21. ELITE房间视觉风格区分 ✅ 已完成（轮次133）\n22. 武器装配树节点交互（点击节点显示详情）✅ 已完成（轮次134）\n23. 7房间Demo链（4战斗+1搜刮+1商人+1改造+1精英+1撤离）✅ 已完成（轮次135）\n24. BOSS房间场景RoomBoss.tscn ✅ 已完成（轮次136）\n25. BossRoomLogic.gd（BOSS房氛围+Boss生成/击败信号）✅ 已完成（轮次136）\n26. BOSS房接入DemoRoomChain（8房间链：4战斗+1搜刮+1商人+1改造+1BOSS+1精英+1撤离）✅ 已完成（轮次137）\n27. BOSS房Boss血条UI（GameUIManager接入BossHP显示）✅ 已完成（轮次138）\n28. BOSS真实扣血+伤害飘字（DemoBoss实体接入Bullet→take_damage）✅ 已完成（轮次139）\n29. ELITE房间独立场景RoomElite.tscn（深蓝/金属地板+独立Arena标记）✅ 已完成（轮次140）\n30. Boss死亡动画（HP扣到0+震屏+白闪+Boss收缩+粒子爆炸+胜利提示）✅ 已完成（轮次141）\n31. 命运卡片UI整合（GameUIManager/FateCardPanel接入+Tab键呼出）✅ 已完成（轮次143）\n32. 武器装配树节点选中高亮反馈 ✅ 已完成（轮次144）\n33. 改造房WorkbenchPanel接入真实FateCard选择流程（改造房工作台）✅ 已完成（轮次145）\n34. WeaponAssemblyTree→WeaponDisplay命运改造后枪械视觉刷新 ✅ 已完成（轮次146）\n35. WeaponDisplay.gd 修复（重复函数+错误节点重建+缺失_setup_nodes）✅ 已完成（轮次147）\n",
   "completedPhases": [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
-    61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
-    81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-    101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+    11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+    51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+    61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+    71, 72, 73, 74, 75, 76, 77, 78, 79, 80,
+    81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+    91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
+    101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
+    111, 112, 113, 114, 115, 116, 117, 118, 119, 120,
+    121, 122, 123, 124, 125, 126, 127, 128, 129, 130,
+    131, 132, 133, 134, 135, 136, 137, 138, 139, 140,
+    141, 143, 144, 145, 146, 147
   ],
   "designDoc": "docs/PH12_Room场景视觉化.md",
-  "nextTarget": "武器装配树可视化 / 容器→InventoryUI刷新验证",
-  "nextDirection": "1) 武器装配树可视化（枪身+子弹+配件组合效果预览）；2) 容器→InventoryUI刷新链路实际验证；3) 其余房间 DoorVisualizer 节点添加（Storage/Trap/Merchant/Upgrade）；4) Event 房场景实现"
+  "nextTarget": "命运卡片子弹背枪效果：Bullet.gd 挂载枪渲染为多边形 + 自动射击验证",
+  "nextDirection": "轮次147修复了WeaponDisplay.gd的三个严重问题（重复函数定义+缺失_setup_nodes+错误节点重建）。下一轮验证命运卡片改造的完整链路：\n1) FateCardEngine.apply_card(ATTACH_GUN_TO_BULLET)后 Bullet.gd的set_attached_gun被正确调用\n2) 子弹上挂载的枪在Bullet.gd中渲染为附加多边形（当前Bullet.gd只有基础子弹形状，需要实现挂载枪的视觉表现）\n3) Bullet._process_attached_gun_firing已实现，但需要验证近战范围内是否正确自动射击\n4) Bullet.apply_fate_stats_from_node的视觉（眼睛/脚/缩放）验证\n"
 }

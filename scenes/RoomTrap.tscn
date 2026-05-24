@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://room_trap_001"]
+[gd_scene load_steps=8 format=3 uid="uid://room_trap_001"]
 
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="1_spawner"]
 [ext_resource type="Script" path="res://src/map/RoomTileSetBuilder.gd" id="2_tilebuilder"]
 [ext_resource type="Script" path="res://src/game/TrapRoomLogic.gd" id="3_trap"]
 [ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="4_tilemap_init"]
+[ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="5_door_viz"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_trigger"]
 size = Vector2(800, 700)
@@ -146,3 +147,7 @@ color = Color(0.50, 0.08, 0.05, 0.10)
 [node name="Visualizer" type="Node2D" parent="."]
 script = ExtResource("4_tilemap_init")
 room_type = 10
+
+; 门过渡视觉标记（由 RoomTileMapInitializer 配置并显示方向 — P2 补全）
+[node name="DoorVisualizer" type="Node2D" parent="."]
+script = ExtResource("5_door_viz")

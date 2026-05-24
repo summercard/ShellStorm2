@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://room_storage_001"]
+[gd_scene load_steps=8 format=3 uid="uid://room_storage_001"]
 
 [ext_resource type="PackedScene" path="res://scenes/Container.tscn" id="1_container"]
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="2_spawner"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://src/game/StorageRoomLogic.gd" id="4_storage"]
 [ext_resource type="Script" path="res://src/game/ContainerInteraction.gd" id="5_container_script"]
 [ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="6_tilemap_init"]
+[ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="7_door_viz"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_area"]
 radius = 45.0
@@ -63,6 +64,38 @@ vertical_alignment = 1
 [node name="Crate" type="Node2D" parent="."]
 position = Vector2(200, 120)
 
+[node name="Container" type="Area2D" parent="Crate"]
+collision_layer = 0
+collision_mask = 2
+monitorable = true
+script = ExtResource("5_container_script")
+container_type = "crate"
+loot_table = "scavenge_floor_3"
+
+[node name="InteractionArea" type="CollisionShape2D" parent="Crate/Container"]
+shape = SubResource("CircleShape2D_area")
+
+[node name="Sprite" type="ColorRect" parent="Crate/Container"]
+custom_minimum_size = Vector2(40, 40)
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+color = Color(0.7, 0.6, 0.2, 0.85)
+
+[node name="InteractLabel" type="Label" parent="Crate/Container"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = -65.0
+offset_right = 40.0
+offset_bottom = -45.0
+grow_horizontal = 2
+text = "[E] 开启"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 ; 房间氛围装饰（暗角/边界提示）
 [node name="AmbientDecoration" type="Node2D" parent="."]
 
@@ -89,3 +122,7 @@ color = Color(0.1, 0.05, 0.0, 0.4)
 [node name="Visualizer" type="Node2D" parent="."]
 script = ExtResource("6_tilemap_init")
 room_type = 9
+
+; 门过渡视觉标记（由 RoomTileMapInitializer 配置并显示方向 — P2 补全）
+[node name="DoorVisualizer" type="Node2D" parent="."]
+script = ExtResource("7_door_viz")

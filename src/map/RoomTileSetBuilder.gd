@@ -3,8 +3,9 @@ extends RefCounted
 ## 运行时构建 Room TileSet — 生成纯色占位 Tile，不依赖外部图片资源
 ## 使用方式：在 Room 场景的 _ready() 中调用 build_tile_set(tilemap_layer)
 
-## TileSet 配置
-const CELL_SIZE := 64  # 单元格尺寸（pixels）
+## TileSet 配置（从 GridConstants 读取格子尺寸，房间格数由外部传入）
+## CELL_SIZE 和 TILESET_SIZE 保持本地，因为 TileSet 是 4×4 图集，不是房间格
+const CELL_SIZE := GridConstants.CELL_SIZE  # 64px，从 GridConstants 引用
 const TILESET_SIZE := Vector2i(4, 4)  # 4×4 图集网格（共16个tile slot）
 
 ## 各房间类型的视觉配置

@@ -1,0 +1,101 @@
+[gd_scene load_steps=5 format=3 uid="uid://room_elite_001"]
+
+[ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="1_spawner"]
+[ext_resource type="Script" path="res://src/map/RoomVisualizer.gd" id="2_visualizer"]
+[ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="3_door_viz"]
+
+; ELITE 精英战斗房 — 独立场景
+; 风格：深蓝/金属地板 + 禁区感氛围，四角暗角更重，中央危险区标记
+; 与 RoomCombat.tscn 的灰色工业风区分开
+
+[node name="RoomElite" type="Node2D"]
+script = ExtResource("2_visualizer")
+
+; 波次生成器（由 RoomGameMode 配置并驱动）
+[node name="WaveSpawner" type="Node" parent="."]
+script = ExtResource("1_spawner")
+
+; TileMap 地面/墙体层（ELITE 主题：深蓝金属）
+[node name="FloorLayer" type="TileMapLayer" parent="."]
+
+[node name="SpawnMarker" type="Marker2D" parent="."]
+
+; 精英房氛围装饰
+[node name="AmbientDecoration" type="Node2D" parent="."]
+
+; 角落暗角（左上）- 比 COMBAT 更重
+[node name="CornerShadow_TL" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(140, 140)
+offset_left = -440.0
+offset_top = -340.0
+offset_right = -300.0
+offset_bottom = -200.0
+color = Color(0.04, 0.06, 0.12, 0.65)
+
+; 角落暗角（右下）
+[node name="CornerShadow_BR" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(140, 140)
+offset_left = 300.0
+offset_top = 200.0
+offset_right = 440.0
+offset_bottom = 340.0
+color = Color(0.04, 0.06, 0.12, 0.65)
+
+; 角落暗角（右上）
+[node name="CornerShadow_TR" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(140, 140)
+offset_left = 300.0
+offset_top = -340.0
+offset_right = 440.0
+offset_bottom = -200.0
+color = Color(0.04, 0.06, 0.12, 0.65)
+
+; 角落暗角（左下）
+[node name="CornerShadow_BL" type="ColorRect" parent="AmbientDecoration"]
+custom_minimum_size = Vector2(140, 140)
+offset_left = -440.0
+offset_top = 200.0
+offset_right = -300.0
+offset_bottom = 340.0
+color = Color(0.04, 0.06, 0.12, 0.65)
+
+; 房间边界暗边（比 COMBAT 更暗）
+[node name="BoundaryOverlay" type="ColorRect" parent="."]
+z_index = -5
+custom_minimum_size = Vector2(800, 600)
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+color = Color(0.06, 0.08, 0.15, 0.30)
+
+; ELITE 危险区标记（中央，比 COMBAT 的 ZoneMarker 更醒目）
+[node name="EliteArena" type="ColorRect" parent="."]
+z_index = -4
+custom_minimum_size = Vector2(180, 180)
+offset_left = -90.0
+offset_top = -90.0
+offset_right = 90.0
+offset_bottom = 90.0
+color = Color(0.15, 0.20, 0.40, 0.12)
+
+; ELITE 区域内圈（微亮，提示安全区范围）
+[node name="EliteArenaInner" type="ColorRect" parent="."]
+z_index = -3
+custom_minimum_size = Vector2(60, 60)
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+color = Color(0.20, 0.28, 0.50, 0.08)
+
+; 门过渡视觉标记（由 RoomVisualizer 配置并显示方向）
+[node name="DoorVisualizer" type="Node2D" parent="."]
+script = ExtResource("3_door_viz")
+
+; 精英房默认尺寸
+[node name="Area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_room"]
+size = Vector2(800, 600)

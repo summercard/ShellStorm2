@@ -16,6 +16,8 @@ extends Control
 var _player: Node = null
 var _workbench_ref: Node = null
 var _current_selection: Dictionary = {}
+var _transform_button: Button = null
+var _transform_mode: bool = false
 
 func _ready() -> void:
 	panel_container = get_node_or_null("PanelContainer")
@@ -31,12 +33,38 @@ func _ready() -> void:
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
 	
+	_build_transform_button()
 	_build_weapon_options()
+
+func _build_transform_button() -> void:
+	_transform_button = Button.new()
+	_transform_button.text = "🔮 命运改造 [T]"
+	_transform_button.custom_minimum_size = Vector2(260, 36)
+	_transform_button.add_theme_font_size_override("font_size", 14)
+	var normal_style := StyleBoxFlat.new()
+	normal_style.bg_color = Color(0.12, 0.15, 0.22, 0.95)
+	normal_style.set_border_width_all(1)
+	normal_style.set_border_color(Color(0.35, 0.30, 0.55, 0.9))
+	normal_style.set_corner_radius_all(5)
+	_transform_button.add_theme_stylebox_override("normal", normal_style)
+	var hover_style := StyleBoxFlat.new()
+	hover_style.bg_color = Color(0.18, 0.15, 0.30, 0.95)
+	hover_style.set_border_width_all(1)
+	hover_style.set_border_color(Color(0.70, 0.55, 0.90, 0.9))
+	hover_style.set_corner_radius_all(5)
+	_transform_button.add_theme_stylebox_override("hover", hover_style)
+	_transform_button.pressed.connect(_on_transform_toggle)
+	# 添加到 gunbody panel 标题下面
+	if gunbody_options != null:
+		gunbody_options.add_child(_transform_button)
 
 func _process(delta: float) -> void:
 	# ESC 关闭
 	if Input.is_action_just_pressed("ui_cancel") or Input.is_key_pressed(KEY_ESCAPE):
 		_on_close_pressed()
+	# T 键切换命运改造模式
+	if Input.is_action_just_pressed("ui_text_completion") and _transform_button != null:
+		_on_transform_toggle()
 
 func set_player(player: Node) -> void:
 	_player = player
@@ -44,25 +72,35 @@ func set_player(player: Node) -> void:
 func set_workbench_ref(ref: Node) -> void:
 	_workbench_ref = ref
 
+## 切换命运改造模式（基础/命运卡片）
+func _on_transform_toggle() -> void:
+	_transform_mode = not _transform_mode
+	_rebuild_options()
+
+## 重建选项（根据当前模式显示枪身/子弹或命运卡片）
+func _rebuild_options() -> void:
+	if _transform_mode:
+		_show_fate_card_options()
+	else:
+		_show_blueprint_options()
+
+func _show_blueprint_options() -> void:
+	var gunbody_tier: int = BaseManager.get_blueprint_tier("gunbody")
+	var bullet_tier: int = BaseManager.get_blueprint_tier("bullet")
+	_populate_gunbody_options(gunbody_tier)
+	_populate_bullet_options(bullet_tier)
+	if _transform_button:
+		_transform_button.text = "🔮 命运改造 [T]"
+	_update_weapon_tree_display()
+
 ## 构建可选武器列表
 func _build_weapon_options() -> void:
 	if _player == null:
 		_update_status("玩家未就绪")
 		return
 	
-	# 获取 BlueprintTier
-	var gunbody_tier: int = BaseManager.get_blueprint_tier("gunbody")
-	var bullet_tier: int = BaseManager.get_blueprint_tier("bullet")
-	var attachment_tier: int = BaseManager.get_blueprint_tier("attachment")
-	
-	# 更新武器树显示
 	_update_weapon_tree_display()
-	
-	# 填充枪身选项
-	_populate_gunbody_options(gunbody_tier)
-	
-	# 填充子弹选项
-	_populate_bullet_options(bullet_tier)
+	_rebuild_options()
 
 func _update_weapon_tree_display() -> void:
 	if weapon_tree_label == null:
@@ -149,6 +187,74 @@ func _on_bullet_selected(item_id: String) -> void:
 	_apply_selection()
 	_update_status("已选择子弹: %s" % item_id)
 
+## 在命运改造模式下显示随机抽取的命运卡片
+func _show_fate_card_options() -> void:
+	if gunbody_options == null or bullet_options == null:
+		return
+	
+	# 清空两侧
+	for child in gunbody_options.get_children():
+		child.queue_free()
+	for child in bullet_options.get_children():
+		child.queue_free()
+	
+	# 更新标题
+	if _transform_button:
+		_transform_button.text = "⚙ 基础改造 [T]"
+	
+	var header := Label.new()
+	header.text = "— 命运卡片 —"
+	header.add_theme_color_override("font_color", Color(0.8, 0.5, 1.0, 1.0))
+	gunbody_options.add_child(header)
+	
+	# 随机抽 3 张
+	var all_cards: Array[FateCard] = FateCardPresets.all_presets()
+	all_cards.shuffle()
+	var choices: Array[FateCard] = all_cards.slice(0, 3)
+	
+	if choices.is_empty():
+		var empty_lbl := Label.new()
+		empty_lbl.text = "无可用命运卡片"
+		gunbody_options.add_child(empty_lbl)
+		return
+	
+	for card in choices:
+		var btn := Button.new()
+		var rarity_color: Color = FateCard.rarity_color(card.card_rarity)
+		var color_hex := "#%02X%02X%02X" % [int(rarity_color.r * 255), int(rarity_color.g * 255), int(rarity_color.b * 255)]
+		btn.text = "[%s] %s\n%s" % [
+			FateCard.rarity_name(card.card_rarity),
+			card.card_name,
+			FateCard.type_name(card.card_type),
+		]
+		btn.custom_minimum_size = Vector2(240, 80)
+		btn.tooltip_text = card.description
+		var normal_style := StyleBoxFlat.new()
+		normal_style.bg_color = Color(0.10, 0.12, 0.18, 0.95)
+		normal_style.set_border_width_all(2)
+		normal_style.set_border_color(rarity_color)
+		normal_style.set_corner_radius_all(6)
+		btn.add_theme_stylebox_override("normal", normal_style)
+		var hover_style := StyleBoxFlat.new()
+		hover_style.bg_color = Color(0.15, 0.18, 0.28, 0.95)
+		hover_style.set_border_width_all(2)
+		hover_style.set_border_color(Color(1.0, 1.0, 1.0, 0.8))
+		hover_style.set_corner_radius_all(6)
+		btn.add_theme_stylebox_override("hover", hover_style)
+		btn.add_theme_color_override("font_color", rarity_color)
+		btn.add_theme_font_size_override("font_size", 13)
+		btn.pressed.connect(_on_fate_card_selected.bind(card))
+		gunbody_options.add_child(btn)
+	
+	# 右侧显示说明
+	var desc := Label.new()
+	desc.text = "选择一张卡片\neffects will be applied\nto your weapon assembly"
+	desc.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7, 0.9))
+	desc.add_theme_font_size_override("font_size", 13)
+	desc.autowrap_mode = TextServer.AUTOWRAP_WORD
+	desc.custom_minimum_size = Vector2(200, 100)
+	bullet_options.add_child(desc)
+
 func _apply_selection() -> void:
 	if _player == null or not _player.has_method("get_weapon_tree"):
 		return
@@ -175,6 +281,15 @@ func _apply_selection() -> void:
 	
 	_current_selection.clear()
 	_update_weapon_tree_display()
+
+## 命运卡片被选中 → 通过 FateCardGameBridge 应用到武器树
+func _on_fate_card_selected(card: FateCard) -> void:
+	var result: Dictionary = FateCardGameBridge.apply_card(card)
+	if result.get("success", false):
+		_update_status("✓ %s 已应用！" % card.card_name)
+		_update_weapon_tree_display()
+	else:
+		_update_status("✗ %s 失败: %s" % [card.card_name, result.get("message", "未知错误")])
 
 func _update_status(msg: String) -> void:
 	if status_label:

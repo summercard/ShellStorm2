@@ -280,6 +280,31 @@ offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="VBox" type="VBoxContainer" parent="FateCardPanel"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -180.0
+offset_right = 280.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InstructionLabel" type="Label" parent="FateCardPanel/VBox"]
+layout_mode = 2
+text = "选择一张命运卡片"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CardOptions" type="HBoxContainer" parent="FateCardPanel/VBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
 ; — Game Over Overlay —
 [node name="DeathOverlay" type="ColorRect" parent="."]
 visible = false

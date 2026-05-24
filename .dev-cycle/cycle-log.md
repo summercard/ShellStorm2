@@ -1,5 +1,103 @@
 # ShellStorm2 开发日志
 
+## 轮次146（2026-05-25 05:27 UTC+8）
+
+### 维度选择
+**命运卡片改造后枪械视觉不刷新 — WeaponAssemblyTree → WeaponDisplay 链路补全**
+
+从核心玩法"武器装配树+命运卡片改造"链路审查，发现一个关键断点：
+- WorkbenchPanel 选中命运卡片 → `FateCardGameBridge.apply_card_instance()` → `FateCardEngine.apply_card()` → 武器树挂载新节点并 emit `tree_changed`
+- `WeaponAssemblyTreePanel` 通过 `tree_changed` 信号刷新树结构显示
+- **但 `WeaponDisplay`（玩家手上枪的视觉表现）完全没有监听 `tree_changed`** — 玩家换枪身后枪型正确，但命运卡片改造武器树结构后，枪型视觉不会更新
+
+这是命运卡片核心体验的缺口：玩家改造了武器（装上了奇怪子弹、多了枪上枪），但手上拿的枪形状不变，严重破坏"无厘头武器进化"的可感知性。
+
+### 玩家可感知的结果
+命运卡片改造武器后，枪械外形能正确刷新。具体来说：
+- 在改造房选择"子弹背枪"类命运卡片 → 子弹节点上挂载了枪身节点 → `tree_changed` 触发 → `WeaponDisplay` 收到通知并刷新枪型显示
+- 枪型切换（主枪身改变）时枪械多边形形状立即切换
+
+### 修改内容
+
+#### `src/weapon/WeaponDisplay.gd` — 核心修复
+
+**问题根源**：`WeaponDisplay._ready()` 在 `_refresh_weapon_from_player()` 时 `_weapon_tree` 尚未初始化（因为 WeaponDisplay 是 Player 子节点，Player.get_weapon_tree() 需要 Player._ready 执行完），导致 weapon_fired 连接失败且无 tree_changed 监听。
+
+**修复方案**：
+1. 移除 `_ready()` 中直接调用 `_weapon_tree.weapon_fired.connect`（此时 tree 为 null）
+2. 改为在 `_refresh_weapon_from_player()` 内部延迟获取 tree 后**同时**连接两个信号：`tree_changed`（命运卡片改造触发刷新）+ `weapon_fired`（射击动画）
+3. 新增 `_on_tree_changed_by_fate()` 回调：`tree_changed` 触发时取 `weapon_tree.get_root().node_name` 并调用 `_update_gun_display()` 刷新枪型
+4. `_refresh_weapon_from_player()` 支持重复调用（先断开旧连接，防止重复订阅）
+5. 添加 `await get_tree().create_timer(0.05).timeout` 延迟初始化，确保 Player 已就绪
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅
+- [ ] 人类试玩：在改造房选择一张命运卡片（如"子弹背枪"），卡片应用后枪型显示正确刷新
+- [ ] 人类试玩：在 Workbench 切换枪身（如从 Pistol 换成 Rifle），WeaponDisplay 枪型立即更新
+- [ ] 人类试玩：连续多次命运改造，树刷新不丢失、不重复订阅信号
+
+### 剩余风险
+- 枪型列表 `GUN_SHAPES` 键名（如 "GunBody_Pistol"）是否与实际 BlueprintRegistry 的 item_id 一致，需要在完整 DemoRoomChain 中验证
+- 命运卡片改造后如果枪型没变（节点名称相同），`_update_gun_display` 会跳过更新，此时枪型视觉确实不需要变化，但命运改造的"枪上枪"视觉需要额外机制（如额外节点叠加），属于下一轮方向
+
+### 下轮最可能方向
+1. **命运卡片改造后视觉完整性**（子弹背枪后枪在子弹上+自动射击效果）：验证子弹飞行时携带的枪是否正确渲染
+2. **DemoRoomChain 完整试玩验证**：当前所有功能在 DemoRoomChain 链路上逐一验证
+3. **Bullet.gd 命中后处理**：子弹命中有击退但缺乏伤害反馈 UI（如伤害数字）
+
+---
+
+## 轮次122（2026-05-25 01:59 UTC+8）
+
+### 维度选择
+**撤离房场景缺失填补 — RoomExtraction.tscn + ExtractionRoomLogic.gd**
+
+从组件化目标和 DemoRoomChain 规格出发审查，发现撤离房场景完全缺失：
+- RoomFactory.SCENE_MAP 中 EXTRACTION → "res://scenes/RoomExtraction.tscn"
+- 但 scenes/ 中只有 Combat/Merchant/Storage/Trap/Upgrade，缺少 RoomExtraction.tscn
+- RoomTileSetBuilder.ROOM_THEMES 中已有 EXTRACTION 主题（深蓝/青色）
+- PH12 设计文档中 EXTRACTION 视觉风格定义存在，代码未实现
+
+### 玩家可感知结果
+- 撤离房（EXTRACTION）现在有专属场景：`scenes/RoomExtraction.tscn`
+- 撤离房风格：深蓝/青色调 + 中央撤离光圈 + 4方向出口标记
+- 撤离光圈脉冲动画：进入撤离房后光圈持续脉动，视觉暗示"这是终点"
+- 方向标记强化：进入撤离房后 4 个方向标记颜色从 0.7 → 0.85 alpha，强化可离开感
+- 搜打撤终点现在有正确的视觉锚点
+
+### 修改内容
+| 文件 | 改动 |
+|---|---|
+| `scenes/RoomExtraction.tscn` | 新建 — 撤离房场景，含 TileMap（EXTRACTION主题）+ 4角落暗角 + 中央光圈 ExtractionCircle + 4方向 ExitMarker + DoorVisualizer |
+| `src/game/ExtractionRoomLogic.gd` | 新建 — 撤离房逻辑组件，含光圈脉冲动画 `_process()` + `activate_extraction()` 视觉激活方法 |
+| `src/game/RoomGameMode.gd` | `_activate_extraction_room()` 末尾新增 `_apply_extraction_visual_activation()` 调用链 |
+
+### 技术细节
+- **TileMap 主题**：RoomTileSetBuilder.ROOM_THEMES[EXTRACTION]（深蓝/青色），在 `RoomTileMapInitializer.build()` 时自动应用
+- **Visualizer 节点**：RoomExtraction.tscn 根节点 script = ExtractionRoomLogic，Visualizer 子节点 = RoomTileMapInitializer
+- **门过渡视觉**：DoorVisualizer 节点已添加，与其他房间一致（P2 补全）
+- **撤离光圈动画**：sin 脉冲，周期 2.5rad/s，alpha 在 0.08~0.23 间脉动
+- **视觉激活链路**：RoomGameMode._activate_extraction_room() → _apply_extraction_visual_activation() → room_instance.activate_extraction()（ExtractionRoomLogic 实例方法）
+
+### 验收标准
+- [x] Godot headless --quit-after 1 编译通过 ✅
+- [ ] 玩家进入 EXTRACTION 房间，撤离光圈可见且持续脉动
+- [ ] 玩家进入 EXTRACTION 房间，4 个方向 ExitMarker 颜色强化
+- [ ] 玩家在撤离读条期间走回其他房间，撤离中断且撤离光圈停止脉动
+- [ ] 完整搜打撤 DemoRoomChain 试玩验证
+
+### 剩余风险
+- ExtractionRoomLogic 光圈脉冲在玩家中断撤离时未停止（需要额外信号触发 reset）
+- RoomExtraction.tscn 的 Visualizer 节点与 RoomFactory 联动逻辑待真实试玩确认
+- DoorVisualizer 方向标记在撤离房场景的实际显示位置需要人类试玩确认是否合理
+
+### 下轮最可能方向
+1. **DemoRoomChain 场景创建**（5房间线性链）：建立完整搜打撤 Demo 链
+2. **撤离中断光圈停止**：extraction_aborted → ExtractionRoomLogic 光圈停止脉动
+3. **RoomTileSetBuilder 补全 STORAGE 主题**：Storage 房间地板色已定义但未在 TileSet 中正确应用
+
+---
+
 ## 轮次36（2026-05-23 05:12 UTC+8）
 
 ### 维度选择

@@ -31,7 +31,7 @@ var room_id: String = ""
 var floor: int = 1  # 所在层
 var position: Vector2 = Vector2.ZERO  # 在节点图中的坐标
 var tags: Array[String] = []  # 房间标签，用于内容注入
-var size: Vector2 = Vector2(800, 600)  # 默认房间尺寸
+var size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
 var content_config: Dictionary = {
 	"enemies": [],
 	"loot": [],

@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://weapon_assembly_tree_panel"]
+
+[ext_resource type="Script" path="res://src/ui/WeaponAssemblyTreePanel.gd" id="1"]
+
+[node name="WeaponAssemblyTreePanel" type="Control"]
+script = ExtResource("1")
+anchors_preset = 15
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 380.0
+offset_bottom = 520.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 8

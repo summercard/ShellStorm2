@@ -165,35 +165,44 @@ var _is_muzzle_flashing: bool = false
 
 func _ready() -> void:
 	_setup_nodes()
+	# 延迟获取 weapon_tree（等待 Player 初始化完成）
+	await get_tree().create_timer(0.05).timeout
 	_refresh_weapon_from_player()
-	# 监听 weapon_fired 信号（来自 WeaponAssemblyTree）
-	if _weapon_tree and _weapon_tree.has_signal("weapon_fired"):
-		_weapon_tree.weapon_fired.connect(_on_weapon_fired)
 
+## 初始化枪身和枪口火焰多边形节点
 func _setup_nodes() -> void:
-	# 枪身多边形
 	_body = Polygon2D.new()
 	_body.name = "GunBody"
 	_body.z_index = 1
 	add_child(_body)
 
-	# 枪口火焰（不激活时隐藏）
 	_muzzle = Polygon2D.new()
 	_muzzle.name = "MuzzleFlash"
 	_muzzle.visible = false
 	_muzzle.z_index = 2
 	add_child(_muzzle)
 
-	# 默认空枪
-	_apply_shape(DEFAULT_SHAPE)
-
-## 从 Player 获取 weapon_tree 并刷新枪型显示
+## 连接 weapon_tree 的 tree_changed 信号，命运卡片改造武器树后枪械视觉能刷新
 func _refresh_weapon_from_player() -> void:
 	_parent_player = get_parent().get_parent() as CharacterBody2D
 	if _parent_player and _parent_player.has_method("get_weapon_tree"):
 		_weapon_tree = _parent_player.get_weapon_tree()
-		if _weapon_tree and _weapon_tree.get_root():
-			_update_gun_display(_weapon_tree.get_root().node_name)
+		if _weapon_tree:
+			# 先断开旧的（防止重复连接）
+			if _weapon_tree.tree_changed.is_connected(_on_tree_changed_by_fate):
+				_weapon_tree.tree_changed.disconnect(_on_tree_changed_by_fate)
+			_weapon_tree.tree_changed.connect(_on_tree_changed_by_fate)
+			# weapon_fired 信号
+			if not _weapon_tree.weapon_fired.is_connected(_on_weapon_fired):
+				_weapon_tree.weapon_fired.connect(_on_weapon_fired)
+			# 初始刷新
+			if _weapon_tree.get_root():
+				_update_gun_display(_weapon_tree.get_root().node_name)
+
+## weapon_tree 树结构变化时回调（命运卡片改造武器后触发）
+func _on_tree_changed_by_fate() -> void:
+	if _weapon_tree and _weapon_tree.get_root():
+		_update_gun_display(_weapon_tree.get_root().node_name)
 
 ## 从 weapon_tree 获取枪型信息更新显示
 func _update_gun_display(gun_name: String) -> void:

@@ -75,7 +75,7 @@ var _current_patrol_idx: int = 0             # 当前目标路径点索引
 var _patrol_reach_threshold: float = 28.0   # 到达路径点的判定距离
 var _patrol_idle_duration: float = 0.0       # 路径点间停顿计时
 var _patrol_idle_max: float = 1.2           # 路径点间最大停顿时间
-var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)  # 房间边界（默认800×600，居于原点）
+var _room_bounds: Rect2 = Rect2(-GridConstants.ROOM_PIXEL_WIDTH * 0.5, -GridConstants.ROOM_PIXEL_HEIGHT * 0.5, GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 房间边界（居原点）
 var _is_in_patrol_mode: bool = false         # 是否正在执行巡逻路径
 var _patrol_cooldown: float = 0.0            # 巡逻冷却（防止频繁重新规划）
 

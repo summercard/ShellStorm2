@@ -11,7 +11,7 @@ var _current_floor: int = 1
 ## 生成配置
 const MIN_PATH_LENGTH := 4   # 最短路径长度（房间数）
 const MAX_PATH_LENGTH := 8   # 最长路径长度
-const ROOM_SPACING := Vector2(800, 600)
+const ROOM_SPACING := Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 960×768
 
 ## 楼层配置
 const FLOOR_ROOM_CONFIG = {

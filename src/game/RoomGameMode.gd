@@ -562,6 +562,8 @@ func _activate_extraction_room(room_data: RoomData) -> void:
 	room_cleared.emit(room_data)
 	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.IDLE:
 		begin_extraction("STANDARD", 4.0)
+	# 触发撤离房视觉激活（光圈脉冲+方向标记强化）
+	_apply_extraction_visual_activation()
 
 ## 改造房：自动弹出武器改造面板（进入即触发）
 func _auto_open_workbench(room_data: RoomData) -> void:
@@ -851,6 +853,22 @@ func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
 			door_info = map_manager.path_director.get_open_door_info(map_manager._current_room_id)
 		visualizer.configure(room_data.room_type, room_data.size, door_info)
 		print("[RoomGameMode] 房间视觉化已配置: %s size=%s" % [RoomData.get_type_name(room_data.room_type), room_data.size])
+
+## 撤离房视觉激活（光圈脉冲+方向标记强化）
+func _apply_extraction_visual_activation() -> void:
+	if map_manager == null:
+		return
+	var current_id: int = map_manager.get_current_room_id()
+	if current_id < 0:
+		return
+	var room_instance: Node2D = map_manager.get_instantiated_room(current_id)
+	if room_instance == null or not is_instance_valid(room_instance):
+		return
+	# 查找 ExtractionRoomLogic 组件（挂载在 RoomExtraction 根节点）
+	var extraction_logic: Node = room_instance as Node
+	if extraction_logic != null and extraction_logic.has_method("activate_extraction"):
+		extraction_logic.call("activate_extraction")
+		print("[RoomGameMode] 撤离房视觉已激活: %s" % room_instance.name)
 
 
 ## 波次开始回调

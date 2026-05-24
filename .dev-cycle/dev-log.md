@@ -169,3 +169,89 @@
 ### 剩余风险
 - 需要编辑器内试玩门洞宽度、碰撞边缘和相机跟随手感。
 - 未开启房间目前只是隐藏，后续可以加暗区/雾门表现。
+
+## 轮次 120 — 房间组件化基础建立（GridConstants + RoomComponent + RoomBlueprint + Registry + DoorComponent）
+
+**时间**: 2026-05-25 01:25
+**维度**: 战局内结构 — 房间组件化系统基础
+
+### 本轮选择
+房间组件化是"5房间Demo链"目标的基础设施。当前房间尺寸硬编码散落（800×600 在多处出现），组件系统缺失，无法支撑可复用的房间模板。本轮聚焦建立格子系统常量、组件基类、组件注册表和独立碰撞体门组件，为后续 RoomTileMapInitializer 重构铺垫。
+
+### 玩家可感知的变化
+- 房间尺寸统一为 960×768（15×12格 × 64px），视觉更开阔
+- 组件系统为未来房间装饰/交互的灵活配置奠基
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| `src/map/GridConstants.gd` | 新建 — 格子系统常量（CELL_SIZE/ROOM_CELLS/ROOM_PIXEL/门洞配置/坐标转换工具） |
+| `src/map/RoomComponent.gd` | 新建 — 房间组件基类（Foor/Wall/Door/Interact/Spawn/DECORATION/Trigger 类型枚举 + 优先级 + initialize/activate/deactivate 接口） |
+| `src/map/RoomBlueprint.gd` | 新建 — 房间模板（持有组件配置列表；含 create_combat/elite/scavenge/extraction/spawn_blueprint 工厂方法） |
+| `src/map/RoomComponentRegistry.gd` | 新建 — 组件注册表（运行时按类型查询/激活/停用组件；get_door_by_direction 等快捷方法） |
+| `src/map/DoorComponent.gd` | 新建 — 独立碰撞体门组件（StaticBody2D+Area2D 实现门洞；unlock/open/close 接口） |
+| `src/map/RoomTileSetBuilder.gd` | CELL_SIZE 从硬编码 64 改为 `GridConstants.CELL_SIZE` 引用 |
+| `src/map/MapGenerator.gd` | ROOM_SPACING 改为 GridConstants 引用 |
+| `src/map/RoomData.gd` | `size` 默认值改为 GridConstants 引用 |
+| `src/map/RoomWaveSpawner.gd` | `room_size` 默认值改为 GridConstants 引用 |
+| `src/map/RoomTileMapInitializer.gd` | `room_size` 默认值改为 GridConstants 引用 |
+| `src/map/RoomVisualizer.gd` | `room_size` 默认值改为 GridConstants 引用 |
+| `src/enemy/EnemyBase.gd` | `_room_bounds` 改为 GridConstants 引用 |
+| `src/map/RegionalSpawnController.gd` | `_room_bounds` 改为 GridConstants 引用 |
+
+### 验证
+- Godot headless --quit: EXIT 0 ✅
+
+### 剩余风险
+- GridConstants 目前在 DoorComponent 构造函数中引用（_setup_door_collision），需要确认无循环依赖风险
+- DoorComponent 的 _setup_interaction_area 有 named parameter 语法（GDScript 不支持），已修复为位置参数
+- RoomBlueprint 的格子坐标使用 GridConstants（960×768 房间），需确认与 RoomTileSetBuilder 的 CELL_SIZE=64 一致
+- 实际组件渲染/碰撞效果需人类试玩验证
+- DemoRoomChain 场景尚未创建（后续循环）
+
+### 下轮最可能方向
+1. DemoRoomChain.tscn 场景创建（5房间线性链，4战斗+1撤离）
+2. RoomTileMapInitializer 重构为组件渲染器（FloorTileComponent/WallTileComponent）
+3. RoomFactory 接入 RoomBlueprint 实例化组件化房间
+
+---
+
+## Round 141 — 2026-05-25 05:08
+
+**维度**: Boss死亡动画（HP扣到0 + boss_defeated + 死亡视觉）
+
+**当前玩家问题**: Boss房Demo中，Boss可被子弹扣血（轮次139已接入take_damage），但当HP归零时死亡流程不完整——没有震屏、没有胜利提示、Boss视觉没有消失、粒子爆炸效果也没有。
+
+**本轮选择原因**: Boss死亡是玩家击败Boss最核心的情绪高点，必须有强烈的视觉反馈。之前的轮次已经完成了Boss HP扣血+GameUIManager血条（139、138），现在补全死亡链条的最后一段。
+
+**玩家体验的前后变化**: 
+- Before: Boss掉血但死亡时无反馈，玩家不确定是否击败了Boss
+- After: Boss死亡时有放射状粒子爆炸 + 全屏震屏 + 屏幕白闪 + 中央"✦ BOSS DEFEATED ✦"胜利文字
+
+**涉及代码/数据/文档**:
+- `src/fx/ScreenShake.gd`: 新增 `screen_flash()` 和 `screen_shake_death()` 方法
+- `src/game/DemoBoss.gd`: 
+  - `_ready()` 新增 `add_to_group("enemy")` 修复Bullet检测
+  - 新增 `_spawn_death_particles()` 放射状粒子爆炸
+  - `_trigger_death()` 新增震屏+白闪调用
+- `src/ui/GameUIManager.gd`: 
+  - `on_boss_defeated()` 新增胜利提示文字动画和屏幕特效调用
+  - 新增 `_show_boss_defeated_victory()` 和 `_trigger_boss_defeated_screen_effects()`
+
+**验收标准**:
+- [ ] DemoRoomChain进入Boss房后，攻击DemoBoss，HP扣到0
+- [ ] Boss死亡时有16方向粒子向外飞散消散
+- [ ] 死亡时全屏震屏（高频强烈衰减震屏）
+- [ ] 死亡时屏幕短暂白闪
+- [ ] 屏幕上出现"✦ BOSS DEFEATED ✦"文字，渐入渐出后消失
+- [ ] Boss Room HP条消失
+- [ ] 门变为绿色可进入状态
+
+**验证**: Godot 4.6.2 headless 编译通过 ✅
+
+**剩余风险**: 粒子爆炸使用ColorRect而非Sprite/ParticlesSystem2D，性能一般但Demo够用。后续可用GPUParticles2D优化。仍需人类试玩确认实际手感。
+
+**下一轮可能方向**:
+1. 命运卡片改造效果融入Demo链（当前Demo链无命运卡片）
+2. 武器装配树节点高亮/选中反馈
+3. 商人房完整交易流程

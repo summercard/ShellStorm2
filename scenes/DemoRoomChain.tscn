@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://demo_room_chain_001"]
+
+[ext_resource type="Script" path="res://src/game/DemoRoomGameMode.gd" id="1_demo_gamemode"]
+
+; DemoRoomChain.tscn — 5房间线性链搜打撤Demo
+; 演示房间组件化系统的完整流程
+; 布局：R1(COMBAT) → R2(COMBAT) → R3(STORAGE) → R4(ELITE) → R5(EXTRACTION)
+; 规则：清怪开门，E键交互，钥匙消耗
+
+[node name="DemoRoomChain" type="Node2D"]
+script = ExtResource("1_demo_gamemode")

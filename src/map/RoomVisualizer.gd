@@ -7,7 +7,7 @@ extends Node2D
 signal visual_ready
 
 @export var room_type: RoomData.RoomType = RoomData.RoomType.COMBAT
-@export var room_size: Vector2 = Vector2(800, 600)  # 默认房间尺寸
+@export var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
 
 @onready var floor_layer: TileMapLayer = $FloorLayer
 @onready var ambient: Node2D = $AmbientDecoration
@@ -94,6 +94,9 @@ func _apply_ambient_theme() -> void:
 		RoomData.RoomType.TRAP:
 			# 陷阱房：警告标记
 			_show_trap_warnings()
+		RoomData.RoomType.ELITE:
+			# 精英房：暗红色氛围光斑（区别于普通战斗房）
+			_add_elite_glow()
 		_:
 			pass
 
@@ -129,6 +132,18 @@ func _add_merchant_glow() -> void:
 	glow.position = Vector2(-100, -100)
 	glow.z_index = -3
 	glow.color = Color(0.9, 0.75, 0.20, 0.08)
+	ambient.add_child(glow)
+
+
+## 精英房：暗红色压迫光斑（区别于普通战斗房）
+func _add_elite_glow() -> void:
+	var glow := ColorRect.new()
+	glow.name = "EliteGlow"
+	glow.custom_minimum_size = Vector2(240, 240)
+	glow.size = Vector2(240, 240)
+	glow.position = Vector2(-120, -120)
+	glow.z_index = -3
+	glow.color = Color(0.45, 0.08, 0.03, 0.12)
 	ambient.add_child(glow)
 
 
@@ -214,4 +229,5 @@ func _add_boundary_wall(parent: Node, wall_name: String, wall_position: Vector2,
 	rect.size = wall_size
 	shape.shape = rect
 	shape.position = wall_position
-	parent.add_child(shape)
+	# Godot 4 不允许在物理查询flush期间改变碰撞体状态，必须延迟添加
+	parent.call_deferred("add_child", shape)
