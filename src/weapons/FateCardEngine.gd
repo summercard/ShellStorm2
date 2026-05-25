@@ -89,6 +89,12 @@ static func apply_card(
 			result = _apply_attach_gun_to_gun(card, tree, target_nodes)
 		FateCard.EffectAction.SCALE_NODE:
 			result = _apply_scale_node(card, tree, target_nodes)
+		FateCard.EffectAction.SCALE_UP:
+			result = _apply_scale_up(card, tree, target_nodes)
+		FateCard.EffectAction.ADD_EYES:
+			result = _apply_add_eyes(card, tree, target_nodes)
+		FateCard.EffectAction.ADD_LEGS:
+			result = _apply_add_legs(card, tree, target_nodes)
 		FateCard.EffectAction.MULTIPLY_FIRE_RATE:
 			result = _apply_multiply_fire_rate(card, tree, target_nodes)
 		FateCard.EffectAction.ADD_DAMAGE:
@@ -99,12 +105,6 @@ static func apply_card(
 			result = _apply_every_nth_fire(card, tree, target_nodes)
 		FateCard.EffectAction.CRIT_ON_KILL:
 			result = _apply_crit_on_kill(card, tree, target_nodes)
-		FateCard.EffectAction.SCALE_UP:
-			result = _apply_scale_up(card, tree, target_nodes)
-		FateCard.EffectAction.ADD_EYES:
-			result = _apply_add_eyes(card, tree, target_nodes)
-		FateCard.EffectAction.ADD_LEGS:
-			result = _apply_add_legs(card, tree, target_nodes)
 		FateCard.EffectAction.REINFORCE_WAVE:
 			result = _apply_reinforce_wave(card, tree, target_nodes)
 		FateCard.EffectAction.GRANT_RANDOM_CARD:
@@ -245,6 +245,7 @@ static func _apply_attach_gun_to_bullet(
 	modified.append(bullet_node)
 	modified.append(attached_gun)
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = modified
 	result.effect_value = attached_gun
 	result.message = "Attached gun to bullet: %s" % bullet_node.node_id
@@ -299,6 +300,7 @@ static func _apply_attach_to_mount(
 		return result
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target, child_node]
 	result.effect_value = child_node
 	result.message = (
@@ -376,6 +378,7 @@ static func _apply_attach_gun_to_gun(
 		return result
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [main_gun, secondary_gun]
 	result.effect_value = secondary_gun
 	result.message = (
@@ -413,6 +416,7 @@ static func _apply_scale_node(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = scale
 	result.message = "Scaled node %s by %.1fx" % [target.node_name, scale]
@@ -439,6 +443,7 @@ static func _apply_multiply_fire_rate(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = multiplier
 	result.message = "Applied %.1fx fire rate to %s" % [multiplier, target.node_name]
@@ -470,6 +475,7 @@ static func _apply_add_damage(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = damage_bonus
 	result.message = "Added +%d damage to %s" % [damage_bonus, target.node_name]
@@ -505,6 +511,7 @@ static func _apply_mutate_to_homing(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = homing_strength
 	result.message = "Mutated %s to homing (strength=%.2f)" % [target.node_name, homing_strength]
@@ -533,6 +540,7 @@ static func _apply_every_nth_fire(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = nth
 	result.message = "Set every %d-th fire trigger on %s" % [nth, target.node_name]
@@ -559,6 +567,7 @@ static func _apply_crit_on_kill(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = crit_mult
 	result.message = "Set crit-on-kill (%.1fx) on %s" % [crit_mult, target.node_name]
@@ -591,6 +600,7 @@ static func _apply_add_eyes(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = eye_count
 	result.message = "Added %d eyes visual to %s" % [eye_count, target.node_name]
@@ -615,6 +625,7 @@ static func _apply_add_legs(
 	tree.refresh_stats()
 
 	result.success = true
+	_fate_audio_card_applied()
 	result.modified_nodes = [target]
 	result.effect_value = true
 	result.message = "Added legs visual to %s" % target.node_name
@@ -628,6 +639,7 @@ static func _apply_reinforce_wave(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
+	_fate_audio_card_applied()
 	result.message = "Reinforce wave triggered (no target node needed)"
 	# 通知房间游戏模式触发额外刷怪
 	var rgm: Node = _find_room_game_mode()
@@ -643,6 +655,7 @@ static func _apply_grant_random_card(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
+	_fate_audio_card_applied()
 	result.message = "Grant random fate card triggered"
 	# 通过 FateCardGameBridge 应用一张随机卡片
 	var bridge: Node = _find_fate_card_bridge()
@@ -658,6 +671,7 @@ static func _apply_lucky_chest(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
+	_fate_audio_card_applied()
 	result.effect_value = card.effect.get("quality_boost", 1)
 	result.message = "Lucky chest quality boost: +%d" % [result.effect_value]
 	var rgm: Node = _find_room_game_mode()
@@ -673,6 +687,7 @@ static func _apply_extra_loot(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
+	_fate_audio_card_applied()
 	result.message = "Extra loot triggered"
 	var rgm: Node = _find_room_game_mode()
 	if rgm != null and rgm.has_method("set_extra_loot_next_chest"):
@@ -688,6 +703,7 @@ static func _apply_curse_room_enemies(
 	var result: ApplyResult = ApplyResult.new()
 	var damage_mult: float = card.effect.get("damage_multiplier", 1.15)
 	result.success = true
+	_fate_audio_card_applied()
 	result.effect_value = damage_mult
 	result.message = "Curse room enemies: %.0f%% damage boost" % [(damage_mult - 1.0) * 100.0]
 	var rgm: Node = _find_room_game_mode()
@@ -703,6 +719,7 @@ static func _apply_bless_dead(
 ) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
+	_fate_audio_card_applied()
 	result.effect_value = {
 		"hp_threshold": card.effect.get("hp_threshold", 0.3),
 		"survive_duration": card.effect.get("survive_duration", 30.0),
@@ -760,3 +777,10 @@ static func _find_fate_card_bridge() -> Node:
 	if tree == null:
 		return null
 	return tree.get_first_node_in_group("fate_cards")
+
+
+## 播放命运卡片应用音效（供各效果方法调用）
+static func _fate_audio_card_applied() -> void:
+	var audio := Engine.get_singleton("AudioManager") as AudioManager
+	if audio != null:
+		audio.play_fate_card_sfx()

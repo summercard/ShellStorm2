@@ -213,6 +213,19 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 	var is_crit := randf() < 0.10
 	var final_damage := bullet_damage * 2 if is_crit else bullet_damage
 
+	# every_nth_fire：每第N发触发挂载枪额外射击（"每第七发子弹携带一把枪"）
+	var bullet_node: AssemblyNode = _find_bullet_node()
+	var nth_fire: int = 0
+	var nth_attach_gun: bool = false
+	if bullet_node != null:
+		var bn_stats: Dictionary = bullet_node.get_base_stats()
+		nth_fire = int(bn_stats.get("every_nth_fire", 0))
+		nth_attach_gun = bool(bn_stats.get("every_nth_attach_gun", false))
+
+	_fire_count += 1
+	var is_nth_shot: bool = (nth_fire > 0 and _fire_count % nth_fire == 0)
+	var fire_nth_attached_gun: bool = is_nth_shot and nth_attach_gun
+
 	if bullet_scene:
 		var bullet = bullet_scene.instantiate()
 		_add_projectile_to_world(bullet)
@@ -226,10 +239,12 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 		if attached_gun != null and bullet.has_method("set_attached_gun"):
 			bullet.set_attached_gun(attached_gun)
 		# 应用子弹节点自身的命运视觉（变大了、加眼睛等）
-		if bullet.has_method("apply_fate_stats_from_node"):
-			var bullet_node: AssemblyNode = _find_bullet_node()
-			if bullet_node != null:
-				bullet.apply_fate_stats_from_node(bullet_node)
+		if bullet.has_method("apply_fate_stats_from_node") and bullet_node != null:
+			bullet.apply_fate_stats_from_node(bullet_node)
+		# every_nth_fire：第N发额外发射挂载枪子弹（"每第七发携带一把枪"）
+		# 注意：不传 attached_gun，避免同一挂载枪节点被多个子弹同时显示
+		if fire_nth_attached_gun and attached_gun != null:
+			_spawn_every_nth_attached_bullet(spawn_pos, direction, attached_gun)
 
 	# 处理枪上加枪：主枪开火时副枪也跟随射击
 	_fire_co_mounted_gun(spawn_pos, direction)
@@ -303,6 +318,21 @@ func _fire_co_mounted_gun(spawn_pos: Vector2, direction: Vector2) -> void:
 
 
 var _co_mounted_cooldowns: Dictionary = {}
+
+## 射击计数器：用于 every_nth_fire 机制（"每第七发子弹携带一把枪"）
+var _fire_count: int = 0
+
+
+## every_nth_fire：第N发额外发射挂载枪子弹
+## 与普通挂载枪（子弹背枪，持续跟随）不同，这是"每第N发时额外发射一发烧枪"
+func _spawn_every_nth_attached_bullet(spawn_pos: Vector2, direction: Vector2, attached_gun: AssemblyNode) -> void:
+	var stats: Dictionary = attached_gun.get_base_stats()
+	var gun_damage: int = stats.get("damage", 5)
+	var bullet_count: int = stats.get("bullet_count", 1)
+	var offset_pos := spawn_pos + direction * 20.0
+	# 额外挂载枪子弹使用独立缩放伤害
+	var nth_damage: int = maxi(1, int(float(gun_damage) * 0.5))
+	_spawn_bullet_from_co_gun(offset_pos, direction, nth_damage, bullet_count)
 
 
 func _spawn_bullet_from_co_gun(

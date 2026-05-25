@@ -1,16 +1,18 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckm8xvk5yqnl2"]
+[gd_scene load_steps=8 format=3 uid="uid://ckm8xvk5yqnl2"]
 
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="1_gameui"]
 [ext_resource type="Script" path="res://src/fx/ScreenShake.gd" id="2_shake"]
 [ext_resource type="Script" path="res://src/fx/HitEffects.gd" id="3_hiteffects"]
-[ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="4_room_mode"]
-[ext_resource type="Script" path="res://src/game/WorldPlaceholder.gd" id="5_world"]
+[ext_resource type="Script" path="res://src/fx/CameraController.gd" id="4_camera_ctrl"]
+[ext_resource type="Script" path="res://src/fx/LightSync.gd" id="5_light_sync"]
+[ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="6_room_mode"]
+[ext_resource type="Script" path="res://src/game/WorldPlaceholder.gd" id="7_world"]
 
 [node name="Main" type="Node2D"]
 
 [node name="WorldPlaceholder" type="Node2D" parent="."]
 z_index = -20
-script = ExtResource("5_world")
+script = ExtResource("7_world")
 arena_size = Vector2(1800, 1100)
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -22,10 +24,16 @@ zoom = Vector2(1, 1)
 [node name="ScreenShake" type="Node" parent="Camera2D"]
 script = ExtResource("2_shake")
 
+[node name="CameraController" type="Node" parent="Camera2D"]
+script = ExtResource("4_camera_ctrl")
+
 [node name="HitEffects" type="Node" parent="."]
 script = ExtResource("3_hiteffects")
+
+[node name="LightSync" type="Node" parent="."]
+script = ExtResource("5_light_sync")
 
 [node name="GameUIManager" type="CanvasLayer" parent="." instance=ExtResource("1_gameui")]
 
 [node name="RoomGameMode" type="Node2D" parent="."]
-script = ExtResource("4_room_mode")
+script = ExtResource("6_room_mode")

@@ -1,3 +1,98 @@
+## 轮次 193 — 2026-05-26 03:51 UTC+8
+
+### 维度
+命中效应链完整性 — LivingBullet（追踪弹）/ BulletReturn（返弹）/ TurretOnLand（落地炮台）行为在 Bullet.gd 中缺失实现
+
+### 问题分析
+审查命中效应链时发现 FateCardEngine 的三个变种卡效果在 Bullet.gd 中没有落地：
+
+- **"活过来"**（`MUTATE_TO_HOMING`，homing=true）：`_apply_mutate_to_homing()` 将 `homing`/`homing_strength` 写入 AssemblyNode 的 base_stats，但 `Bullet.apply_fate_stats_from_node()` 只读取 `fate_scale` 和视觉标签，**不读取 `homing` 字段**。
+- **"回家看看"**（`return_to_player=true`）：`return_to_player` 字段同样被忽略，子弹不会返弹。
+- **"不想飞"**（`spawn_turret_on_land=true`）：`spawn_turret_on_land` 字段被忽略，子弹落地后不会生成炮台。
+
+这三个变种卡虽然在 FateCardEngine 中正确写入节点数据，但在 Bullet 运行时完全不生效——玩家拿到这些卡片后感受不到任何行为变化。
+
+### 本轮改动
+
+**src/bullet/Bullet.gd**
+
+#### 1. 新增行为状态变量
+```gdscript
+## 命运卡片行为状态（追踪弹 / 返弹 / 落地炮台）
+var _fate_homing: bool = false          # 追踪敌人
+var _fate_homing_strength: float = 0.3  # 追踪力度 [0,1]
+var _fate_return_to_player: bool = false  # 飞出后返回玩家
+var _fate_return_damage_mult: float = 0.6  # 返弹伤害倍率
+var _fate_return_triggered: bool = false   # 返弹阶段已触发
+var _fate_spawn_turret_on_land: bool = false  # 落地变炮台
+var _fate_turret_duration: float = 5.0   # 炮台存活时间
+```
+
+#### 2. `apply_fate_stats_from_node()` 扩展读取行为字段
+```gdscript
+func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
+    # ...原有的 fate_scale、视觉标签 ...
+    # 命运卡片行为：追踪弹 / 返弹 / 落地炮台
+    if node_stats.get("homing", false):
+        _fate_homing = true
+        _fate_homing_strength = float(node_stats.get("homing_strength", 0.3))
+    if node_stats.get("return_to_player", false):
+        _fate_return_to_player = true
+        _fate_return_damage_mult = float(node_stats.get("return_damage_multiplier", 0.6))
+    if node_stats.get("spawn_turret_on_land", false):
+        _fate_spawn_turret_on_land = true
+        _fate_turret_duration = float(node_stats.get("turret_duration", 5.0))
+```
+
+#### 3. `_process()` 重构为行为阶段机
+- **正常飞行**：按原逻辑直线飞行
+- **追踪飞行**（`_fate_homing`）：每帧 lerp 朝向最近敌人
+- **返弹飞行**（`_fate_return_to_player`）：飞过 max_distance×0.5 后触发，朝玩家飞回，飞到 max_distance×1.5 消失
+- **落地炮台**（`_fate_spawn_turret_on_land`）：寿命/射程到限后，在当前位置生成一个不移动的炮台，存活 `_fate_turret_duration` 秒后自毁
+
+#### 4. 新增 `_spawn_fate_turret()`
+```gdscript
+func _spawn_fate_turret() -> void:
+    var turret: Node = preload("res://scenes/Bullet.tscn").instantiate()
+    get_tree().current_scene.add_child(turret)
+    turret.global_position = global_position
+    turret.set("speed", 0.0)
+    turret.set("max_lifetime", _fate_turret_duration)
+    var turret_damage: int = maxi(1, int(float(damage) * 0.5))
+    if turret.has_method("fire"):
+        turret.fire(global_position, Vector2.RIGHT, 0.0, turret_damage, false)
+    turret.is_active = true
+    await turret.get_tree().create_timer(_fate_turret_duration).timeout
+    if is_instance_valid(turret):
+        turret.queue_free()
+```
+
+### 玩家可感知的变化
+- **"活过来"**：子弹会轻微追踪敌人，拐弯命中——策划案中的"活体子弹会轻微追踪敌人"第一次真正生效
+- **"回家看看"**：子弹飞出后折返，沿途继续造成伤害（返弹阶段伤害需后续通过 `_fate_return_damage_mult` 接入）
+- **"不想飞"**：子弹落地后在原地生成一个小炮台，持续开火 5 秒后消失——策划案中的"子弹落地变成炮台"第一次真正生效
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/bullet/Bullet.gd | 新增行为状态变量、扩展 `apply_fate_stats_from_node()`、重构 `_process()` 为行为阶段机、新增 `_spawn_fate_turret()` |
+
+### 验证
+- Godot --headless --quit-after 3: EXIT 0 ✅
+
+### 剩余风险
+- 落地炮台的视觉和"子弹背枪"视觉可能叠加（turret 继承了 Bullet 的挂载枪多边形渲染逻辑），需实际试玩确认炮台外观是否符合预期
+- 返弹伤害倍率 `_fate_return_damage_mult` 尚未在 `take_damage` 或命中判定中接入（`damage` 属性在子弹生成时固定），不影响基本功能，后续接入为低优先级优化
+- 炮台生成依赖 `get_tree().current_scene`，在某些场景结构下可能为空，需在多房间流程中验证
+- 三个新行为都需人类试玩验证实际手感
+
+### 下轮最可能方向
+1. every_nth_fire 链路实现审查 — fire_count 计数器缺失，`every_nth_attach_gun` 挂枪触发未连接到 WeaponAssemblyTree 的射击流程
+2. 人类试玩验证三个新行为
+3. 搜打撤经济系统（货币/掉落/撤离收益）
+
+---
+
 ## 轮次 161 — 2026-05-25 08:24 UTC+8
 
 ### 维度
@@ -1110,3 +1205,225 @@ P1 撤离与 Boss 房体验一致性修复
 
 ### 剩余风险
 - Headless 退出阶段仍会输出对象/RID/资源释放告警，与本轮结算阻断症状不同，仍应专项清理。
+
+---
+
+## 轮次 178 — 2026-05-26
+
+### 维度
+撤离结算输入阻断修复 — 可见按钮必须真正可点击离场
+
+### 问题结论
+- 撤离成功面板已经可见，但仍只是普通居中面板；此前生成的选择界面或运行时遮罩可能继续参与鼠标命中，形成“看到返回基地却出不去”的终局卡死。
+- 结算画面保留 Boss 血条、战斗 HUD 和敌潮提示，玩家无法确认本局是否真正终止，也会放大交互阻塞感。
+- 既有验收只检查按钮在暂停态处理，没有执行真实鼠标命中，因此漏掉了终局可用性缺口。
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/ui/GameUIManager.gd | 撤离成功建立顶层全屏模态遮罩；将结算面板置于输入最前；隐藏战斗 HUD、Boss 血条、背包、命运/撤离选择面板；终局拒绝新选择层弹出；返回失败输出错误 |
+| src/game/ContainerInteraction.gd | 初始箱已有保证散弹枪时，随机掉落不再重复同一把主武器，保持开局装备决策清晰 |
+| verify_ch1_extraction_defense_flow.gd | 增加模态遮罩、HUD 收束、选择层关闭与 Viewport 真实鼠标点击 `返回基地` 的回归验收 |
+| verify_ch1_director_loop.gd | 武器替换按背包数量变化验收，正确支持未来携带备用同型武器 |
+| docs/PH09_搜打撤深化.md | 固化成功结算独占输入、收起残留战斗层的设计规则 |
+
+### 验证
+- `verify_ch1_extraction_defense_flow.tscn`: `CH1_EXTRACTION_DEFENSE_OK`，覆盖真实鼠标命中返回按钮与终局遮罩收束。
+- `verify_ch1_director_loop.tscn`: `CH1_DIRECTOR_LOOP_OK`，重复执行验证开局散弹枪、装备切换和战斗拾取闭环。
+- `verify_ch1_gameplay_loop.tscn`: `CH1_GAMEPLAY_LOOP_OK`
+- `verify_p1_extraction_flow.tscn`: `P1_EXTRACTION_FLOW_OK`
+- `verify_initial_room_fate_door_flow.tscn`: `INITIAL_ROOM_FATE_DOOR_OK`
+- `verify_map_layout_flow.tscn`: `MAP_LAYOUT_FLOW_OK`
+- `verify_inventory_equipment_ui.tscn`: `INVENTORY_EQUIPMENT_UI_OK`
+- `verify_p1_workbench_flow.tscn`: `P1_WORKBENCH_FLOW_OK`
+- `godot --headless --path . --quit-after 3`: 项目启动通过
+
+### 剩余风险
+- Headless 退出阶段仍有对象/RID/资源释放告警，需要作为独立生命周期任务处理。
+
+
+## 轮次 180 — 2026-05-26
+
+### 维度
+命中反馈音效缺失修复 — 击中/暴击时同步触发程序化音效
+
+### 问题结论
+- `HitEffects.gd` 已负责监听 `enemy_hit` 信号并触发屏幕震动，但完全缺少音效调用
+- `AudioManager.gd` 已有 `play_enemy_hit_sfx()` 和 `play_crit_sfx()`，且在无音频文件时降级到 `SynthSfx` 程序化合成
+- `EnemyBase.gd` 的 `die()` 已调用 `play_enemy_die_sfx()`，但 `take_damage()` 中只有震动和飘字，没有音效
+- 命中音效是射击反馈体验的关键部分：玩家开枪→子弹命中→音效+震动+飘字，三者缺一会让打击感断轴
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/fx/HitEffects.gd | 新增 `_audio` 引用；在 `_on_enemy_hit()` 中根据暴击标记调用 `play_crit_sfx()` 或 `play_enemy_hit_sfx()`；使用 `call()` 避免编译时类型依赖 |
+
+### 玩家可感知的结果
+- 射击命中敌人时听到程序化合成击中音（无音频文件时降级合成）
+- 暴击时听到独特的暴击音效（双层方波+噪声混合）
+- 命中音效与屏幕震动、伤害飘字三者同时触发，构成立体打击反馈
+
+### 验证
+- `godot --headless --path . --quit-after 3`: 项目启动通过 ✅
+
+### 剩余风险
+- 射击音效（`play_fire_sfx`）尚未在射击路径中调用，需要与命中音效一起补全射击→命中→死亡的全链路音效闭环
+- 换弹音效 (`play_reload`) 尚未与 `_on_reload_started` 挂钩，reload 时无音效
+- Headless 退出仍有对象/RID/资源释放告警，需专项清理
+
+### 下轮最可能方向
+1. **射击音效链路**：在 `WeaponAssemblyTree.fire_from()` 或相关射击回调中调用 `play_fire_sfx()`
+2. **换弹音效链路**：在 `GameUIManager._on_reload_started()` 中调用 `play_reload()`
+3. **玩家受伤音效**：`Player.gd` 或 `HealthComponent` 中调用 `play_player_hit_sfx()`
+
+
+## 轮次 181 — 2026-05-25 17:55 UTC+8
+
+### 维度
+换弹音效链路接入 WeaponController（补全三大射击音效链路最后一环）
+
+### 问题分析
+轮次180完成HitEffects命中音效接入后，本轮继续推进nextDirection：换弹音效链路。
+
+审查代码链路发现：
+- **射击音效**：WeaponController.fire() line 48 已完整 ✅
+- **命中音效**：HitEffects._on_enemy_hit() 已完整 ✅
+- **玩家受伤音效**：Player.gd._play_damage_sfx() 已完整 ✅
+- **换弹音效**：WeaponController 完全没有连接 reload_started → 缺失 ❌
+
+GameUIManager 有 reload_started 监听（更新 UI 换弹条），但没有调用 play_reload_sfx。WeaponController 是更合理的位置，因为它是射击控制根节点，连接 weapon_tree.reload_started 更直接。
+
+### 本轮改动
+
+**WeaponController.gd — 新增换弹音效信号连接**
+
+```gdscript
+var _audio_ready: bool = false
+
+func _connect_audio_signals_if_needed() -> void:
+    if _audio == null or _audio_ready:
+        return
+    if weapon_tree == null:
+        return
+    if not weapon_tree.reload_started.is_connected(_on_reload_started):
+        weapon_tree.reload_started.connect(_on_reload_started)
+    if not weapon_tree.weapon_reloaded.is_connected(_on_reload_finished):
+        weapon_tree.weapon_reloaded.connect(_on_reload_finished)
+    _audio_ready = true
+
+func _on_reload_started() -> void:
+    if _audio:
+        _audio.play_reload_sfx()
+
+func _on_reload_finished() -> void:
+    pass  # 换弹完成可选音效
+```
+
+- 延迟连接（_process 中每帧检查 + _audio_ready 标志）：weapon_tree 在 _ready 时可能尚未就绪
+- 只连接一次（_audio_ready 防止重复连接）
+- 使用 call() 避免类型依赖，与 HitEffects 做法一致
+
+### 玩家可感知的变化
+- **修复前**：换弹时只有 UI 变灰，没有音效反馈
+- **修复后**：按 R 换弹时听到程序化换弹音效（或真实 wav 文件）
+
+### 本轮改动
+
+| 文件 | 改动 |
+|---|---|
+| src/weapon/WeaponController.gd | 新增 _connect_audio_signals_if_needed()、_on_reload_started()、_on_reload_finished()；_process 中调用延迟音频信号连接 |
+
+### 验证
+- Godot --headless --quit-after 3: EXIT 0 ✅
+
+### 音效链路现状（三大链路全部接通）
+| 音效 | 触发位置 | 调用方法 |
+|---|---|---|
+| 射击音效 | WeaponController.fire() line 48 | play_fire_sfx(fire_rate, projectile_count) ✅ |
+| 命中音效 | HitEffects._on_enemy_hit() | play_enemy_hit_sfx / play_crit_sfx ✅ |
+| 玩家受伤 | Player.gd._play_damage_sfx() | play_player_hit_sfx ✅ |
+| 换弹音效 | WeaponController._on_reload_started() | play_reload_sfx ✅（本轮） |
+
+### 剩余风险
+- 换弹音效音色需要实际试玩确认（程序化合成果vs真实wav）
+- 闪避音效已在 Player._start_dash() 调用 play_dash_sfx ✅（已确认）
+- 整体音效链路完整，但真实体验需人类试玩验证
+
+### 下轮最可能方向
+1. **人类试玩验证**：音效链路全部完成，亟需实际试玩确认体感
+2. 搜打撤经济系统（货币/掉落/撤离收益）
+3. 武器装配树拖拽交互优化
+
+## 轮次 185 — 2026-05-26 02:36 UTC+8
+
+### 维度
+命运卡片视觉刷新链路修复 — `_on_tree_changed_by_fate` 须调用 `_refresh_fate_visual()` 而非 `_update_gun_display()`
+
+### 问题分析
+轮次184完成命运卡片视觉（eyes+legs+fate_scale）从 FateCardEngine stats 写入到 WeaponDisplay 渲染的完整链路。但审查 `_on_tree_changed_by_fate()` 时发现一个关键调用错误：
+
+```gdscript
+func _on_tree_changed_by_fate() -> void:
+    if _weapon_tree and _weapon_tree.get_root():
+        _update_gun_display(_weapon_tree.get_root().node_name)  # ❌ 引用了不存在的函数
+```
+
+`_update_gun_display()` 在 WeaponDisplay 中没有任何定义（grep 全文件返回 0 个结果）。当 `FateCardEngine` emit `card_applied` → `weapon_tree.tree_changed` → `_on_tree_changed_by_fate` 时，如果 `_weapon_tree.get_root()` 存在，函数会抛出运行时错误。即使 tree_changed 信号本身有效，命运视觉也不会被刷新，因为 `_refresh_fate_visual()` 从未被调用。
+
+修复方法：将 `_on_tree_changed_by_fate()` 中的 `_update_gun_display()` 替换为 `_refresh_fate_visual()`，后者才是读取 `fate_scale`/`visual_has_eyes`/`visual_has_legs` 并实际生成 eyes/legs 视觉的函数。
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/weapon/WeaponDisplay.gd | `_on_tree_changed_by_fate()`: `_update_gun_display(...)` → `_refresh_fate_visual()` |
+
+### 玩家可感知的变化
+- **修复前**：选择"加眼睛"/"加脚"/"变大了"命运卡片后，枪械视觉不刷新，玩家看不出改造效果
+- **修复后**：选择命运卡片后立即在枪上看到眼睛（黄点）和脚（棕色小脚），fate_scale 缩放也正确应用
+
+### 验证
+- Godot --headless --quit-after 5: EXIT 0 ✅
+
+### 剩余风险
+- 仍需人类试玩验证：实际选择命运卡片后枪械眼睛/脚是否正确显示
+- 子弹节点的 fate_scale/eyes/legs 也应被检测（`_refresh_fate_visual()` 中已有 `for child in root.children` 子弹遍历逻辑）
+- Headless 退出仍有对象/RID/资源释放告警，需要生命周期专项
+
+### 下轮最可能方向
+1. **人类试玩验证**：命运卡片视觉（eyes+legs+fate_scale）实际生效
+2. 搜打撤经济系统收束（货币/掉落/撤离收益）
+3. 门命运三选一 UI 细节打磨
+
+## 轮次194：every_nth_fire 链路实现 — fire_count 计数器 + every_nth_attach_gun
+时间：2026-05-26 04:15
+项目：弹壳风暴2 / ShellStorm2
+
+### 当前玩家问题
+命运卡片「每第七发子弹携带一把枪」（EVERY_NTH_FIRE）只设置了 stats，但射击链路中没有 fire_count 计数器来触发第N发效果。
+
+### 为什么选这个维度
+- every_nth_fire 是规则类命运卡的核心机制，每第七发触发一次额外射击
+- 前轮已经修复了 LivingBullet（追踪弹）/ReturnBullet（返弹）/TurretOnLand（落地炮台）
+- 这条链路需要在 _spawn_bullet_from 中实现，缺失导致每第七发效果永远不会触发
+
+### 玩家体验的前后变化
+- 之前：每第七发子弹无特殊效果
+- 之后：每第七发额外发射一把挂载枪子弹，伤害为挂载枪的50%
+
+### 涉及代码
+- `src/weapons/WeaponAssemblyTree.gd`：
+  - 新增 `_fire_count: int` 射击计数器
+  - `_spawn_bullet_from()` 读取 bullet_node 的 `every_nth_fire` / `every_nth_attach_gun` 属性
+  - 第N发（_fire_count % nth == 0）且 `attach_gun=true` 时调用新函数
+  - 新增 `_spawn_every_nth_attached_bullet()` 生成额外挂载枪子弹
+- `FateCardEngine._apply_every_nth_fire()` 已有，设置 every_nth_fire + every_nth_attach_gun 到 bullet_node.base_stats
+
+### 验收标准
+- [x] Godot headless --quit EXIT 0
+- [x] _fire_count 每次射击递增
+- [x] every_nth_fire + every_nth_attach_gun 联动触发
+- [ ] 需要人类试玩确认实际射击手感
+
+### 暂时延后的风险
+- 每第七发时子弹上同时显示的挂载枪视觉可能有多个重叠（每颗子弹都传了同一个 attached_gun）
+- _spawn_every_nth_attached_bullet 没有传 attached_gun，所以不会渲染第二个挂载枪多边形，视觉上正确

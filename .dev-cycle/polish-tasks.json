@@ -83,6 +83,12 @@
       "title": "物品存入取出信号响应+宝箱开启逻辑",
       "description": "GameUIManager 响应 item_to_insurance_requested（背包格→保险格）和 item_extraction_requested（保险格→背包）；宝箱/容器开启→物品入背包→InventoryUI刷新",
       "status": "completed"
+    },
+    {
+      "id": "P16",
+      "title": "子弹轨迹动态尾迹",
+      "description": "Bullet._process 每帧记录本地轨迹点到 _trail_points（最大30帧），_process 中实时用这些点计算世界坐标 Line2D；暴击时尾迹加粗变金色",
+      "status": "completed"
     }
   ],
   "completedTasks": [

@@ -1,5 +1,7 @@
 extends Node
 
+var _return_button_pressed := false
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -98,6 +100,39 @@ func _ready() -> void:
 				failures.append(
 					"Return-to-base button cannot process input while result screen pauses play"
 				)
+			var modal_backdrop := ui.get_node_or_null("ExtractionSuccessBackdrop") as Control
+			if modal_backdrop == null or not modal_backdrop.visible:
+				failures.append(
+					"Extraction settlement has no full-screen input-blocking modal layer"
+				)
+			elif success_panel != null and success_panel.z_index <= modal_backdrop.z_index:
+				failures.append(
+					"Extraction settlement action panel is not above its modal backdrop"
+				)
+			var game_hud := ui.get_node_or_null("GameHUD") as Control
+			if game_hud != null and game_hud.visible:
+				failures.append("Combat HUD remains active behind extraction settlement")
+			var run_choices := ui.get_node_or_null("RunChoiceOverlay") as Control
+			if run_choices != null and run_choices.visible:
+				failures.append("Run choice overlay can intercept extraction settlement input")
+			if continue_button != null:
+				var return_connections := continue_button.pressed.get_connections()
+				if return_connections.is_empty():
+					failures.append("Return-to-base button has no scene transition handler")
+				for connection in return_connections:
+					continue_button.pressed.disconnect(connection["callable"])
+				_return_button_pressed = false
+				continue_button.pressed.connect(_on_return_button_test_pressed)
+				await _click_button(continue_button)
+				if not _return_button_pressed:
+					var hovered := get_viewport().gui_get_hovered_control()
+					var hovered_path := str(hovered.get_path()) if hovered != null else "<none>"
+					failures.append(
+						(
+							"Visible return-to-base button receives no mouse click; hovered=%s"
+							% hovered_path
+						)
+					)
 
 	Global.is_paused = false
 	get_tree().paused = false
@@ -143,6 +178,28 @@ func _has_center_container(root: Node, center: Vector2) -> bool:
 		if _has_center_container(child, center):
 			return true
 	return false
+
+
+func _click_button(button: Button) -> void:
+	var center := button.get_global_rect().get_center()
+	var motion := InputEventMouseMotion.new()
+	motion.position = center
+	motion.global_position = center
+	get_viewport().push_input(motion, true)
+	await get_tree().process_frame
+	for is_pressed in [true, false]:
+		var click := InputEventMouseButton.new()
+		click.button_index = MOUSE_BUTTON_LEFT
+		click.position = center
+		click.global_position = center
+		click.pressed = is_pressed
+		click.button_mask = MOUSE_BUTTON_MASK_LEFT if is_pressed else 0
+		get_viewport().push_input(click, true)
+		await get_tree().process_frame
+
+
+func _on_return_button_test_pressed() -> void:
+	_return_button_pressed = true
 
 
 func _finish(failures: Array[String]) -> void:

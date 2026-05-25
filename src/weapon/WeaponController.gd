@@ -10,6 +10,7 @@ var weapon_tree: WeaponAssemblyTree = null
 var _muzzle_flash: PointLight2D = null
 var _recoil: Node = null
 var _audio: AudioManager = null
+var _audio_ready: bool = false
 
 func _ready() -> void:
 	_refresh_weapon_tree()
@@ -25,6 +26,7 @@ func _process(delta: float) -> void:
 		_refresh_weapon_tree()
 	if weapon_tree:
 		weapon_tree.tick(delta)
+		_connect_audio_signals_if_needed()
 	if Input.is_action_pressed("shoot"):
 		if weapon_tree == null:
 			fire()
@@ -34,6 +36,24 @@ func _process(delta: float) -> void:
 func _refresh_weapon_tree() -> void:
 	if player and player.has_method("get_weapon_tree"):
 		weapon_tree = player.get_weapon_tree()
+
+func _connect_audio_signals_if_needed() -> void:
+	if _audio == null or _audio_ready:
+		return
+	if weapon_tree == null:
+		return
+	if not weapon_tree.reload_started.is_connected(_on_reload_started):
+		weapon_tree.reload_started.connect(_on_reload_started)
+	if not weapon_tree.weapon_reloaded.is_connected(_on_reload_finished):
+		weapon_tree.weapon_reloaded.connect(_on_reload_finished)
+	_audio_ready = true
+
+func _on_reload_started() -> void:
+	if _audio:
+		_audio.play_reload_sfx()
+
+func _on_reload_finished() -> void:
+	pass  # 换弹完成可选音效
 
 func fire() -> void:
 	if player == null or not is_instance_valid(player):

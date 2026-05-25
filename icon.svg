@@ -1,5 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <circle cx="64" cy="64" r="60" fill="#2d2d3a"/>
-  <circle cx="64" cy="64" r="40" fill="#4a4a5a"/>
-  <polygon points="64,24 84,84 44,84" fill="#ff6b35"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#0a0a14"/>
+    </radialGradient>
+    <linearGradient id="shell" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0a500"/>
+      <stop offset="50%" stop-color="#ff6b35"/>
+      <stop offset="100%" stop-color="#c0392b"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b0b0b0"/>
+      <stop offset="100%" stop-color="#606060"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="120" fill="url(#bg)" stroke="#f0a500" stroke-width="4"/>
+
+  <!-- Bullet / Shell shape (stylized top-down) -->
+  <g transform="translate(128,128)">
+    <!-- Outer shell casing -->
+    <ellipse cx="0" cy="0" rx="60" ry="60" fill="url(#shell)" opacity="0.95"/>
+    <!-- Bullet tip inner -->
+    <ellipse cx="0" cy="0" rx="40" ry="40" fill="#c0392b"/>
+    <!-- Center hole (top-down view of barrel) -->
+    <circle cx="0" cy="0" r="18" fill="#1a1a2e" stroke="#f0a500" stroke-width="2"/>
+    <!-- Crosshair lines -->
+    <line x1="-50" y1="0" x2="-25" y2="0" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="25" y1="0" x2="50" y2="0" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="0" y1="-50" x2="0" y2="-25" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="0" y1="25" x2="0" y2="50" stroke="#f0a500" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- Highlight gleam -->
+    <ellipse cx="-20" cy="-20" rx="12" ry="8" fill="white" opacity="0.15" transform="rotate(-45,-20,-20)"/>
+  </g>
+
+  <!-- Decorative bullet trails -->
+  <g opacity="0.6">
+    <path d="M 30 80 Q 60 100 50 140" stroke="#f0a500" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 226 80 Q 196 100 206 140" stroke="#f0a500" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 50 200 Q 80 180 100 195" stroke="#ff6b35" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M 206 200 Q 176 180 156 195" stroke="#ff6b35" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Small dot accents -->
+  <circle cx="40" cy="40" r="4" fill="#f0a500" opacity="0.7"/>
+  <circle cx="216" cy="40" r="4" fill="#f0a500" opacity="0.7"/>
+  <circle cx="40" cy="216" r="4" fill="#ff6b35" opacity="0.7"/>
+  <circle cx="216" cy="216" r="4" fill="#ff6b35" opacity="0.7"/>
 </svg>

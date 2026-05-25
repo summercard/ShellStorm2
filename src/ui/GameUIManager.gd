@@ -121,6 +121,7 @@ var extraction_success_panel: PanelContainer
 var extracted_count_label: Label
 var extracted_items_vbox: VBoxContainer
 var continue_button: Button
+var _extraction_success_backdrop: ColorRect = null
 
 var _death_stats: Dictionary = {"score": 0, "kills": 0, "floor": 1}
 var _death_loot: Dictionary = {"saved": 0, "lost": 0}
@@ -182,6 +183,7 @@ func _ready() -> void:
 		if continue_button:
 			continue_button.process_mode = Node.PROCESS_MODE_ALWAYS
 			continue_button.pressed.connect(_on_continue_pressed)
+		_ensure_extraction_success_modal()
 
 	# 构建背包、保险格与 HUD 装备位 UI
 	_setup_inventory_system_ui()
@@ -1187,6 +1189,8 @@ func show_fate_card_notification(message: String = "") -> void:
 
 
 func show_run_choice_panel(kind: String, title: String, subtitle: String, choices: Array) -> void:
+	if _extraction_success_shown:
+		return
 	if _fate_card_notification_label:
 		_fate_card_notification_timer = 0.0
 		_fate_card_notification_label.visible = false
@@ -1596,7 +1600,7 @@ func _show_extraction_success() -> void:
 		return
 	_extraction_success_shown = true
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	extraction_success_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	_prepare_extraction_success_modal()
 
 	# 先设为可见但完全透明+缩小，作为动画起点
 	extraction_success_panel.visible = true
@@ -1679,6 +1683,51 @@ func _show_extraction_success() -> void:
 	get_tree().paused = true
 
 
+func _ensure_extraction_success_modal() -> void:
+	if _extraction_success_backdrop == null or not is_instance_valid(_extraction_success_backdrop):
+		_extraction_success_backdrop = ColorRect.new()
+		_extraction_success_backdrop.name = "ExtractionSuccessBackdrop"
+		_extraction_success_backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_extraction_success_backdrop.color = Color(0.02, 0.025, 0.035, 0.84)
+		_extraction_success_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+		_extraction_success_backdrop.process_mode = Node.PROCESS_MODE_ALWAYS
+		_extraction_success_backdrop.z_index = 2000
+		_extraction_success_backdrop.visible = false
+		add_child(_extraction_success_backdrop)
+	extraction_success_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	extraction_success_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	extraction_success_panel.z_index = 2001
+	if continue_button:
+		continue_button.process_mode = Node.PROCESS_MODE_ALWAYS
+		continue_button.mouse_filter = Control.MOUSE_FILTER_STOP
+		continue_button.focus_mode = Control.FOCUS_ALL
+
+
+func _prepare_extraction_success_modal() -> void:
+	_ensure_extraction_success_modal()
+	extraction_success_panel.move_to_front()
+	hide_run_choice_panel()
+	if fate_card_panel:
+		fate_card_panel.visible = false
+	if extraction_panel:
+		extraction_panel.visible = false
+	if inventory_panel:
+		inventory_panel.visible = false
+	if insurance_panel:
+		insurance_panel.visible = false
+	if _weapon_panel != null and _weapon_panel.has_method("hide_panel"):
+		_weapon_panel.call("hide_panel")
+	var hud := get_node_or_null("GameHUD") as Control
+	if hud:
+		hud.visible = false
+	_hide_boss_hp_ui()
+	if _extraction_success_backdrop:
+		_extraction_success_backdrop.visible = true
+	if continue_button:
+		continue_button.disabled = false
+		continue_button.grab_focus()
+
+
 func show_run_extraction_success(stats: Dictionary) -> void:
 	_show_extraction_success()
 	if extracted_count_label:
@@ -1700,6 +1749,8 @@ func _on_continue_pressed() -> void:
 	Global.is_paused = false
 	get_tree().paused = false
 	_extraction_success_shown = false
+	if _extraction_success_backdrop:
+		_extraction_success_backdrop.visible = false
 	if extraction_success_panel:
 		extraction_success_panel.visible = false
 	if game_over_panel:
@@ -1707,7 +1758,9 @@ func _on_continue_pressed() -> void:
 	if death_overlay:
 		death_overlay.visible = false
 	# 返回基地主界面
-	get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
+	var change_error := get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
+	if change_error != OK:
+		push_error("返回基地场景切换失败：%s" % error_string(change_error))
 
 
 ## 撤离中断
@@ -2684,6 +2737,8 @@ func _on_item_extraction_requested(slot_index: int) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _extraction_success_shown:
+		return
 	var inventory_pressed := event.is_action_pressed("ui_inventory")
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:
 		inventory_pressed = true

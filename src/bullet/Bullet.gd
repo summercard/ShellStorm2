@@ -20,6 +20,8 @@ var _attached_gun_cooldown: float = 0.0
 var _attached_gun_fire_rate: float = 4.0
 
 var _trail_line: Line2D = null
+var _trail_points: Array[Vector2] = []
+const MAX_TRAIL_POINTS: int = 30
 
 ## 子弹挂载枪视觉多边形（Bullet飞行时，背上的枪渲染为多边形）
 ## 挂载枪多边形通过 _render_attached_gun() 动态设置 polygon/color
@@ -31,6 +33,15 @@ var _fate_has_legs: bool = false   # 加脚
 var _eye_nodes: Array[Node2D] = []  # 眼睛节点引用
 var _leg_nodes: Array[Node2D] = []  # 脚节点引用
 var _leg_anim_timer: float = 0.0
+
+## 命运卡片行为状态（追踪弹 / 返弹 / 落地炮台）
+var _fate_homing: bool = false          # 追踪敌人
+var _fate_homing_strength: float = 0.3  # 追踪力度 [0,1]
+var _fate_return_to_player: bool = false  # 飞出后返回玩家
+var _fate_return_damage_mult: float = 0.6  # 返弹伤害倍率
+var _fate_return_triggered: bool = false   # 返弹阶段已触发
+var _fate_spawn_turret_on_land: bool = false  # 落地变炮台
+var _fate_turret_duration: float = 5.0   # 炮台存活时间
 
 ## 挂载枪型 → 多边形顶点映射（与 WeaponDisplay.gd 保持一致）
 ## 格式：[p1, p2, ...] 组成 Polygon2D polygon，按顺时针/逆时针均可
@@ -135,18 +146,76 @@ func _setup_trail() -> void:
 	_trail_line.default_color = Color(1.0, 0.7, 0.1, 0.45)
 	_trail_line.z_index = -1
 	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
+	_trail_points.clear()
 	add_child(_trail_line)
 
 func _process(delta: float) -> void:
 	if not is_active:
 		return
 	_life_timer += delta
-	var step: float = speed * delta
-	_travelled += step
-	global_position += direction * step
-	rotation = direction.angle()
+
+	# === 行为阶段机 ===
+	# 返弹模式：飞行超过 max_distance 的一半后进入返回阶段
+	if _fate_return_to_player and not _fate_return_triggered:
+		if _travelled >= max_distance * 0.5:
+			_fate_return_triggered = true
+			# 立即朝向玩家
+			var player: Node = get_tree().get_first_node_in_group("player")
+			if player != null:
+				direction = (player.global_position - global_position).normalized()
+			else:
+				direction = Vector2.ZERO
+
+	if _fate_return_to_player and _fate_return_triggered:
+		# 返弹：朝向玩家飞回
+		var player: Node = get_tree().get_first_node_in_group("player")
+		if player != null:
+			var to_player: Vector2 = (player.global_position - global_position).normalized()
+			direction = to_player
+		# 返回时速度略慢，伤害打折扣
+		var return_speed: float = speed * 0.85
+		var step: float = return_speed * delta
+		_travelled += step
+		global_position += direction * step
+		rotation = direction.angle()
+		# 超出往返总距离上限时消失
+		if _travelled >= max_distance * 1.5:
+			queue_free()
+			return
+	else:
+		# 正常/追踪飞行
+		var current_speed: float = speed
+		# 追踪：如果有目标，轻微转向
+		if _fate_homing:
+			var target: Node = _find_nearest_enemy()
+			if target != null:
+				var to_target: Vector2 = (target.global_position - global_position).normalized()
+				direction = direction.lerp(to_target, _fate_homing_strength * 0.15).normalized()
+		var step: float = current_speed * delta
+		_travelled += step
+		global_position += direction * step
+		rotation = direction.angle()
+
+	# 轨迹：记录每帧位置（相对子弹本地空间，向后延伸）
+	_trail_points.append(Vector2.ZERO)
+	if _trail_points.size() > MAX_TRAIL_POINTS:
+		_trail_points.pop_front()
+	if _trail_points.size() >= 2:
+		var world_trail: PackedVector2Array = PackedVector2Array()
+		for i in range(_trail_points.size()):
+			# 轨迹点在本地空间向枪尾（-X）延伸
+			var local_pt: Vector2 = Vector2(-i * 3.0, 0.0).rotated(rotation)
+			world_trail.append(global_position + local_pt)
+		_trail_line.points = world_trail
+		# 只在非暴击时每帧重置为橙色——暴击颜色由 fire() 设置，应保持不变
+		if not is_crit:
+			_trail_line.default_color = Color(1.0, 0.7, 0.1, 0.45)
+	else:
+		_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
+
 	if _attached_gun_node != null:
 		_process_attached_gun_firing(delta)
+
 	# 腿部动画（脚在子弹尾部，绕子弹旋转）
 	if _fate_has_legs and not _leg_nodes.is_empty():
 		_leg_anim_timer += delta * 8.0
@@ -154,7 +223,11 @@ func _process(delta: float) -> void:
 			var leg: Node2D = _leg_nodes[i]
 			var phase: float = (float(i) / float(_leg_nodes.size())) * TAU
 			leg.rotation = leg.rotation + sin(_leg_anim_timer + phase) * 0.3 * delta
-	if _life_timer >= max_lifetime or _travelled >= max_distance:
+
+	# 落地炮台：超出射程或超时，生成炮台
+	if (_life_timer >= max_lifetime or _travelled >= max_distance) and not _fate_return_to_player:
+		if _fate_spawn_turret_on_land:
+			_spawn_fate_turret()
 		queue_free()
 
 func _process_attached_gun_firing(delta: float) -> void:
@@ -209,6 +282,10 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	_life_timer = 0.0
 	_travelled = 0.0
 	rotation = direction.angle()
+	# 重置轨迹数据
+	_trail_points.clear()
+	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
+	_trail_line.width = 3.0
 	if shape:
 		shape.rotation = 0.0
 		if crit:
@@ -216,6 +293,11 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 			glow.color = Color(1.0, 0.9, 0.2, 0.75)
 			if _trail_line:
 				_trail_line.default_color = Color(1.0, 0.9, 0.2, 0.65)
+				_trail_line.width = 4.5
+		else:
+			if _trail_line:
+				_trail_line.default_color = Color(1.0, 0.7, 0.1, 0.45)
+				_trail_line.width = 3.0
 
 func set_attached_gun(gun_node: AssemblyNode) -> void:
 	if gun_node == null:
@@ -259,9 +341,19 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 	# fate_scale（"变大了"等卡片）
 	if node_stats.has("fate_scale"):
 		_apply_fate_visual_from_scale(float(node_stats.get("fate_scale", 1.0)))
-	# 视觉标签
+	# 视觉标签（眼睛、脚）
 	if node_stats.has("visual_has_eyes") or node_stats.has("visual_has_legs"):
 		_apply_visual_effects(node_stats)
+	# 命运卡片行为：追踪弹 / 返弹 / 落地炮台
+	if node_stats.get("homing", false):
+		_fate_homing = true
+		_fate_homing_strength = float(node_stats.get("homing_strength", 0.3))
+	if node_stats.get("return_to_player", false):
+		_fate_return_to_player = true
+		_fate_return_damage_mult = float(node_stats.get("return_damage_multiplier", 0.6))
+	if node_stats.get("spawn_turret_on_land", false):
+		_fate_spawn_turret_on_land = true
+		_fate_turret_duration = float(node_stats.get("turret_duration", 5.0))
 
 ## 根据 scale 值应用命运视觉（子弹放大）
 func _apply_fate_visual_from_scale(scale: float) -> void:
@@ -320,6 +412,25 @@ func _add_leg_nodes(count: int) -> void:
 		leg.rotation = angle - PI * 0.5
 		add_child(leg)
 		_leg_nodes.append(leg)
+
+## 生成落地炮台（"不想飞"命运卡片效果）
+func _spawn_fate_turret() -> void:
+	# 炮台用自己的 Bullet.tscn 实例，位置固定，持续 _fate_turret_duration 秒后自毁
+	var turret: Node = preload("res://scenes/Bullet.tscn").instantiate()
+	get_tree().current_scene.add_child(turret)
+	turret.global_position = global_position
+	# 炮台不移动，持续朝最近敌人开火
+	turret.set("speed", 0.0)
+	turret.set("max_lifetime", _fate_turret_duration)
+	# 炮台继承子弹部分伤害（降低）
+	var turret_damage: int = maxi(1, int(float(damage) * 0.5))
+	if turret.has_method("fire"):
+		turret.fire(global_position, Vector2.RIGHT, 0.0, turret_damage, false)
+	turret.is_active = true
+	# 炮台计时自毁
+	await turret.get_tree().create_timer(_fate_turret_duration).timeout
+	if is_instance_valid(turret):
+		turret.queue_free()
 
 func _on_body_entered(body: Node) -> void:
 	if not is_active:

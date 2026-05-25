@@ -2,16 +2,22 @@ extends Node
 class_name HitEffects
 
 # HitEffects.gd — 战斗反馈中枢
-# 监听 enemy_hit 信号，触发屏幕震动
+# 监听 enemy_hit 信号，触发屏幕震动 + 命中音效
 # 挂载在 Main 节点下
 
 var _screen_shake: Node = null
+var _audio: Node = null
 
 func _ready() -> void:
 	# 优先查找 Camera2D 子节点下的 ScreenShake
 	_screen_shake = get_node_or_null("Camera2D/ScreenShake")
 	if not _screen_shake:
 		_screen_shake = get_tree().root.find_child("ScreenShake", true, false)
+
+	# 获取 AudioManager（用于命中音效）
+	_audio = get_node_or_null("/root/AudioManager") as Node
+	if not _audio:
+		_audio = get_tree().root.find_child("AudioManager", true, false)
 
 	# 动态连接所有现有敌人
 	_connect_all_enemies()
@@ -43,3 +49,10 @@ func _on_enemy_hit(_hit_from: Vector2, damage: int, is_crit: bool) -> void:
 			intensity *= 1.5
 		var duration := 0.12 if not is_crit else 0.18
 		_screen_shake.trigger(intensity, duration)
+
+	# 命中音效：暴击用暴击音效
+	if _audio:
+		if _audio.has_method("play_crit_sfx") and is_crit:
+			_audio.call("play_crit_sfx")
+		elif _audio.has_method("play_enemy_hit_sfx"):
+			_audio.call("play_enemy_hit_sfx")

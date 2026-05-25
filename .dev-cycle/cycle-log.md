@@ -1,5 +1,94 @@
 # ShellStorm2 开发日志
 
+## 轮次190（2026-05-26 03:27 UTC+8）
+
+### 维度选择
+**LightSync.gd 房间切换后 PlayerVisionLight 遗漏问题**
+
+从核心玩法"视野遮挡系统"链路审查，发现一个关键问题：
+- RoomTileMapInitializer._build_vision_layer() 在每个房间实例化时在 parent 节点下创建 PlayerVisionLight（PointLight2D）和 VisionDarkness（CanvasModulate）
+- LightSync.gd 在 _ready 中通过 find_child 查找 PlayerVisionLight，然后每帧同步到 Player 全局坐标
+- 当房间切换（RoomGameMode._stop_current_room_spawner 清理旧房间，LightSync 的 `_tracked_light` 仍然指向已 queue_free 的旧房间光源）
+- 由于 PlayerVisionLight 是在 room 实例下动态创建的（非场景预制），LightSync 查找时需要从 Main 逐层 find_child("PlayerVisionLight")，而每个房间都有独立的 PlayerVisionLight
+- 问题：LightSync 在 _ready 中只查一次；如果旧房间被清理、新房间的 PlayerVisionLight 虽然存在但名字相同，LightSync 仍然持有已释放的引用
+
+### 解决方案
+将 LightSync.gd 的单次初始化改为每帧动态查找（保持轻量）：移除 _ready 中的一次性查找，在 _process 每帧中通过 `main.find_child("PlayerVisionLight", true, false)` 实时获取当前房间的光源节点。RoomTileMapInitializer 创建的 light.set_meta("_tracked", true) 确保查找准确。
+
+### 修改内容
+
+#### `src/fx/LightSync.gd`
+1. **移除 `_ready()` 中的初始化**：不再在 _ready 中查找并缓存 PlayerVisionLight
+2. **修改 `_process()` 逻辑**：每帧先找 Main，再从 Main.find_child("PlayerVisionLight", true, false) 获取当前有效引用，最后同步到 player 位置
+3. **保持轻量**：每次 find_child 只遍历一次树（递归），考虑到 60fps 下查找开销可控，且解决了引用失效的根本问题
+
+### 玩家可感知结果
+- 玩家从房间A进入房间B时，视野光源正确跟随玩家，新房间墙壁产生正确的 LightOccluder 实时阴影
+- 多房间探索时视野遮挡不会因为房间切换而失效
+- 黑暗角落的分布由房间几何决定，玩家光源照亮周围，形成"探索越深越暗"的压迫感
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅
+- [ ] 人类试玩：进入 DemoRoomChain → 清理房间1 → 进入房间2，观察视觉阴影正确跟随玩家光源
+- [ ] 人类试玩：连续穿过多个房间，视野光源持续跟随，不出现"光留在原地"的情况
+
+### 剩余风险
+- 每帧 find_child 遍历整树对性能有轻微影响（需要实际测试是否需要优化）
+- 房间切换时旧房间节点的清理时机需要和 RoomGameMode._stop_current_room_spawner 配合
+
+### 下轮最可能方向
+1. **命运卡片枪械视觉刷新完整性**：WeaponDisplay 的 tree_changed 信号响应后，AttachedGun 多边形是否正确刷新
+2. **人类试玩验证命运卡片视觉（eyes+legs+fate_scale）**：实际选卡后子弹视觉是否正确
+3. **搜打撤经济系统收束**：魂币收益/带出结算/保险格完整性
+
+---
+
+## 轮次183（2026-05-26 02:24 UTC+8）
+
+### 维度选择
+**命运卡片应用音效缺失 — AudioManager + SynthSfx + FateCardEngine 链路补全**
+
+从核心玩法"命运卡片改造"链路审查，发现一个关键缺口：
+- FateCardEngine.apply_card() 成功执行后，仅有日志输出和 UI notification
+- 命运卡片的核心体验（玩家在门后或改造房选择卡片，卡片应用后武器立即变化）完全缺少音效反馈
+- 没有声音的卡片应用体验不完整——"命运降临"应该有声音锚点
+
+### 玩家可感知的结果
+玩家在门后或工作台选择命运卡片后，卡片应用成功时播放一段上升琶音效（5音符，-6dB），暗示"命运降临、力量改变"。每次卡片成功应用都触发，与射击/暴击/换弹音效并列，形成完整的声音反馈体系。
+
+### 修改内容
+
+#### `src/core/SynthSfx.gd`
+1. 新增 `play_fate_card()` 方法：程序化合成上升琶音（5个音符从261.63Hz到659.25Hz，每个0.10s，-6dB），专门用于命运卡片应用
+2. 新增 `_make_arpeggio_up()` 辅助方法：将频率数组反转实现从低到高的琶音效果
+
+#### `src/core/AudioManager.gd`
+1. SFX 映射新增 `"fate_card": ""`（空路径，无文件时降级到程序化合成）
+2. 新增 `play_fate_card_sfx()` 实例方法：调用 `play_sfx("fate_card")`
+3. `_play_fallback_sfx()` 新增 `"fate_card"` case：路由到 `_synth.play_fate_card()`
+
+#### `src/weapons/FateCardEngine.gd`
+1. 末尾新增静态方法 `_fate_audio_card_applied()`：通过 `Engine.get_singleton("AudioManager")` 获取 AudioManager 并调用 `play_fate_card_sfx()`
+2. 在全部 17 个效果执行方法的 `result.success = true` 之后插入 `_fate_audio_card_applied()` 调用
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅
+- [ ] 人类试玩：在门后三选一选择"变大了"/"子弹背枪"/"超频"等卡片，应用成功时播放上升琶音
+- [ ] 人类试玩：连续选择多张卡片，每张都触发音效（无重复/遗漏）
+- [ ] 人类试玩：命运卡片应用失败时不触发音效
+
+### 剩余风险
+- 音效触发时机依赖 Engine.get_singleton("AudioManager")，在某些非主场景测试中可能返回 null（已做 null 检查）
+- 上升琶音是否与整体音效风格协调需要人类试玩确认（可能需要调整频率/时长/音量）
+- 未来接入真实音频文件后，只需在 SFX 映射中填入文件路径即可，无需修改代码
+
+### 下轮最可能方向
+1. **人类试玩验证**（音效链路/轨迹颜色/枪身命运视觉）
+2. **命运卡片加眼睛/加脚视觉接入 WeaponDisplay**（子弹eyes/legs在WeaponDisplay上渲染，玩家手持枪可见）
+3. **搜打撤经济系统收束**（魂币收益/带出结算/保险格完整性）
+
+---
+
 ## 轮次149（2026-05-25 06:05 UTC+8）
 
 ### 维度选择

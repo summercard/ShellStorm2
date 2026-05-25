@@ -8,17 +8,17 @@ signal container_opened(loot: Array[Dictionary])
 signal interaction_available(available: bool)
 
 enum ContainerState {
-	LOCKED,      # 未解锁（可能需要钥匙或未到触发时机）
-	AVAILABLE,   # 可交互（玩家在范围内）
-	OPENED,      # 已开启（可能还有额外掉落）
+	LOCKED,  # 未解锁（可能需要钥匙或未到触发时机）
+	AVAILABLE,  # 可交互（玩家在范围内）
+	OPENED,  # 已开启（可能还有额外掉落）
 }
 
 ## 配置
 @export var container_type: String = "crate"  # "crate", "chest", "locker", "hidden_cache"
-@export var loot_table: String = ""            # 掉落表名，如 "scavenge_floor_1"
-@export var floor: int = 1                      # 当前楼层（影响掉落数量）
-@export var interaction_radius: float = 60.0   # 交互范围（像素）
-@export var open_animation: bool = true        # 是否播放开启动画
+@export var loot_table: String = ""  # 掉落表名，如 "scavenge_floor_1"
+@export var floor: int = 1  # 当前楼层（影响掉落数量）
+@export var interaction_radius: float = 60.0  # 交互范围（像素）
+@export var open_animation: bool = true  # 是否播放开启动画
 var guaranteed_items: Array[String] = []
 
 ## 状态
@@ -33,18 +33,22 @@ var _extra_loot_enabled: bool = false  ## 下次开箱额外掉落（由环境�
 var _inventory_module: InventoryModule = null
 var _loot_module: LootModule = null
 
+
 func _ready() -> void:
 	_setup_interaction_label()
 	_state = ContainerState.AVAILABLE
 	interaction_available.emit(false)
 
+
 ## 设置背包引用（由 RoomGameMode 在实例化时传入）
 func set_inventory(inventory: InventoryModule) -> void:
 	_inventory_module = inventory
 
+
 ## 设置掉落模块引用
 func setup_loot() -> void:
 	_loot_module = LootModule.get_instance()
+
 
 ## 创建交互提示标签（使用场景已有的 InteractLabel 节点）
 func _setup_interaction_label() -> void:
@@ -60,6 +64,7 @@ func _setup_interaction_label() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
+
 ## Area2D 玩家进入信号回调
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
@@ -67,6 +72,7 @@ func _on_body_entered(body: Node2D) -> void:
 		if _state != ContainerState.LOCKED and not _opened and _interact_label:
 			_interact_label.modulate = Color(1, 1, 1, 1)
 		interaction_available.emit(true)
+
 
 ## Area2D 玩家离开信号回调
 func _on_body_exited(body: Node2D) -> void:
@@ -76,6 +82,7 @@ func _on_body_exited(body: Node2D) -> void:
 			_interact_label.modulate = Color(1, 1, 1, 0)
 		interaction_available.emit(false)
 
+
 ## 每帧处理输入
 func _process(delta: float) -> void:
 	if _opened:
@@ -84,6 +91,7 @@ func _process(delta: float) -> void:
 	# 检测 E 键按下（Space）
 	if _player_in_range and Input.is_action_just_pressed("interact"):
 		_try_open_container()
+
 
 ## 尝试开启容器
 func _try_open_container() -> void:
@@ -112,6 +120,7 @@ func _try_open_container() -> void:
 	container_opened.emit(loot)
 
 	print("[ContainerInteraction] %s 已开启，获得 %d 件物品" % [container_type, granted])
+
 
 ## 生成掉落
 func _generate_loot() -> Array[Dictionary]:
@@ -143,6 +152,10 @@ func _generate_loot() -> Array[Dictionary]:
 			loot.append(item)
 		print("[ContainerInteraction] 命运效果：额外掉落已应用，+1件物品")
 
+	# 指定赠送的核心道具只出现一次，避免初始箱随机重复主武器。
+	for item_id in guaranteed_items:
+		loot = loot.filter(func(item: Dictionary) -> bool: return item.get("id", "") != item_id)
+
 	for item_id in guaranteed_items:
 		var guaranteed := ItemRegistry.get_instance().get_item(item_id)
 		if not guaranteed.is_empty():
@@ -155,13 +168,18 @@ func _generate_loot() -> Array[Dictionary]:
 		for item in loot:
 			var current_tier: int = item.get("loot_table_tier", 0)
 			item["loot_table_tier"] = current_tier + _quality_boost
-			print("[ContainerInteraction] 命运效果：物品 %s 品质提升 +%d (tier %d→%d)" % [
-				item.get("name", "?"), _quality_boost, current_tier, item["loot_table_tier"]])
+			print(
+				(
+					"[ContainerInteraction] 命运效果：物品 %s 品质提升 +%d (tier %d→%d)"
+					% [item.get("name", "?"), _quality_boost, current_tier, item["loot_table_tier"]]
+				)
+			)
 
 	# 重置命运效果标记
 	_reset_fate_effects()
 
 	return loot
+
 
 ## 将掉落加入背包（过滤掉货币条目）
 func _grant_loot(loot: Array[Dictionary]) -> int:
@@ -180,9 +198,12 @@ func _grant_loot(loot: Array[Dictionary]) -> int:
 
 	# 通过游戏全局组广播容器开启事件（供 UI 层监听飘字效果）
 	# 使用 Node 的 group 广播，避免直接依赖 GameUIManager
-	get_tree().call_group("game_ui", "_on_container_loot_granted", global_position, real_items, granted)
+	get_tree().call_group(
+		"game_ui", "_on_container_loot_granted", global_position, real_items, granted
+	)
 
 	return granted
+
 
 ## 播放开启动画（简单的缩放+消失）
 func _play_open_animation() -> void:
@@ -196,6 +217,7 @@ func _play_open_animation() -> void:
 	var original_scale := scale
 	tween.tween_property(self, "scale", original_scale * 1.2, 0.2).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(self, "modulate:a", 0.0, 0.2)
+
 
 ## 设置容器状态
 func set_locked(locked: bool) -> void:
@@ -211,28 +233,34 @@ func set_locked(locked: bool) -> void:
 			if not _player_in_range:
 				_interact_label.modulate = Color(1, 1, 1, 0)
 
+
 ## 获取容器状态
 func get_state() -> ContainerState:
 	return _state
 
+
 ## 是否已开启
 func is_opened() -> bool:
 	return _opened
+
 
 ## 设置下次开箱品质提升（由环境命运触发器调用）
 func set_quality_boost(boost: int) -> void:
 	_quality_boost = boost
 	print("[ContainerInteraction] 品质提升已设置: +%d" % boost)
 
+
 ## 设置下次开箱额外掉落（由环境命运触发器调用）
 func set_extra_loot(enabled: bool) -> void:
 	_extra_loot_enabled = enabled
 	print("[ContainerInteraction] 额外掉落已设置: %s" % enabled)
 
+
 ## 重置命运效果标记（在开箱后调用）
 func _reset_fate_effects() -> void:
 	_quality_boost = 0
 	_extra_loot_enabled = false
+
 
 ## 更新掉落表（房间切换楼层时调用）
 func update_loot_table(table_name: String, new_floor: int) -> void:

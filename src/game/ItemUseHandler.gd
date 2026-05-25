@@ -1,3 +1,4 @@
+extends Node
 class_name ItemUseHandler
 ## 物品使用处理器 — 集中处理 use_action 字符串路由
 ## 配合 InventoryModule.consume_item 使用：consume_item 扣物品数量，handler 触发效果

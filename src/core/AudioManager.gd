@@ -7,6 +7,9 @@ var music_bus: int = 2
 var sfx_volume: float = 1.0
 var music_volume: float = 0.8
 
+## 程序化音效降级（无音频文件时的备选）
+var _synth = null  # SynthSfx, typed lazily
+
 # 音效映射（骨架，后续替换真实音频文件）
 const SFX: Dictionary = {
 	"pistol_fire":    "res://assets/audio/sfx/pistol_fire.wav",
@@ -21,19 +24,30 @@ const SFX: Dictionary = {
 	"player_dash":    "res://assets/audio/sfx/player_dash.wav",
 	"reload":         "res://assets/audio/sfx/reload.wav",
 	"crit_hit":       "res://assets/audio/sfx/crit_hit.wav",
+	"fate_card":      "",  # 程序化合成，无文件时自动降级到 SynthSfx.play_fate_card
 	"extraction_start": "res://assets/audio/sfx/extraction_start.wav",
 	"extraction_done":  "res://assets/audio/sfx/extraction_done.wav",
 }
 
 func _ready() -> void:
 	load_audio_settings()
+	_init_synth()
+
+func _init_synth() -> void:
+	if _synth != null:
+		return
+	var synth_node := Node.new()
+	synth_node.set_script(load("res://src/core/SynthSfx.gd"))
+	add_child(synth_node)
+	_synth = synth_node
 
 func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
 	var path: String = SFX.get(sfx_name, "")
 	if path.is_empty():
 		return
 	if not FileAccess.file_exists(path):
-		# 音效文件不存在，跳过
+		# 音效文件不存在 → 降级到程序化合成
+		_play_fallback_sfx(sfx_name)
 		return
 	var stream: AudioStream = load(path)
 	if stream:
@@ -45,6 +59,32 @@ func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0
 		add_child(player)
 		player.play()
 		player.finished.connect(player.queue_free)
+
+## 音效文件缺失时，按名称路由到程序化合成
+func _play_fallback_sfx(sfx_name: String) -> void:
+	if _synth == null:
+		return
+	match sfx_name:
+		"pistol_fire", "rifle_fire", "shotgun_fire", "smg_fire", "sniper_fire":
+			_synth.play_shoot(5.0, 1)
+		"enemy_hit":
+			_synth.play_hit()
+		"enemy_die":
+			_synth.play_enemy_die()
+		"player_hit":
+			_synth.play_player_hit()
+		"player_dash":
+			_synth.play_dash()
+		"reload":
+			_synth.play_reload()
+		"crit_hit":
+			_synth.play_crit()
+		"fate_card":
+			_synth.play_fate_card()
+		"extraction_start":
+			_synth.play_extraction_start()
+		"extraction_done":
+			_synth.play_extraction_done()
 
 func play_music(music_name: String, volume_db: float = -6.0) -> void:
 	# 占位：后续接入背景音乐
@@ -84,6 +124,10 @@ func play_fire_sfx(fire_rate: float, projectile_count: int) -> void:
 ## 暴击命中音效
 func play_crit_sfx() -> void:
 	play_sfx("crit_hit")
+
+## 命运卡片应用音效
+func play_fate_card_sfx() -> void:
+	play_sfx("fate_card")
 
 ## 玩家受伤音效
 func play_player_hit_sfx() -> void:

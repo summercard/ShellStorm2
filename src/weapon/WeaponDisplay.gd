@@ -151,6 +151,8 @@ const MUZZLE_PARTICLES: Dictionary = {
 ## 节点引用
 var _body: Polygon2D
 var _muzzle: Polygon2D       # 枪口火焰（不激活时 invisible）
+var _eyes: Node2D            # 命运眼睛（eyes sprite 容器）
+var _legs: Node2D            # 命运脚（legs sprite 容器）
 var _recoil_tween: Tween = null
 var _muzzle_tween: Tween = null
 var _parent_player: CharacterBody2D = null
@@ -182,6 +184,16 @@ func _setup_nodes() -> void:
 	_muzzle.z_index = 2
 	add_child(_muzzle)
 
+	_eyes = Node2D.new()
+	_eyes.name = "FateEyes"
+	_eyes.z_index = 3
+	add_child(_eyes)
+
+	_legs = Node2D.new()
+	_legs.name = "FateLegs"
+	_legs.z_index = 3
+	add_child(_legs)
+
 ## 连接 weapon_tree 的 tree_changed 信号，命运卡片改造武器树后枪械视觉能刷新
 func _refresh_weapon_from_player() -> void:
 	_parent_player = get_parent().get_parent() as CharacterBody2D
@@ -197,20 +209,101 @@ func _refresh_weapon_from_player() -> void:
 				_weapon_tree.weapon_fired.connect(_on_weapon_fired)
 			# 初始刷新
 			if _weapon_tree.get_root():
-				_update_gun_display(_weapon_tree.get_root().node_name)
+				var root_name: String = _weapon_tree.get_root().node_name
+				_current_gun_name = root_name
+				var shape: Dictionary = GUN_SHAPES.get(root_name, DEFAULT_SHAPE)
+				_apply_shape(shape)
+				_refresh_fate_visual()
 
 ## weapon_tree 树结构变化时回调（命运卡片改造武器后触发）
 func _on_tree_changed_by_fate() -> void:
 	if _weapon_tree and _weapon_tree.get_root():
-		_update_gun_display(_weapon_tree.get_root().node_name)
+		_refresh_fate_visual()
 
-## 从 weapon_tree 获取枪型信息更新显示
-func _update_gun_display(gun_name: String) -> void:
-	if gun_name == _current_gun_name:
+## 从 weapon_tree 读取命运卡片视觉标签（fate_scale / eyes / legs），应用到对应节点
+## 在 _update_gun_display 后调用，或在 tree_changed 信号触发时调用
+func _refresh_fate_visual() -> void:
+	if _weapon_tree == null or _body == null:
 		return
-	_current_gun_name = gun_name
-	var shape: Dictionary = GUN_SHAPES.get(gun_name, DEFAULT_SHAPE)
-	_apply_shape(shape)
+
+	# 重置所有命运视觉
+	_body.scale = Vector2.ONE
+	_clear_fate_children(_eyes)
+	_clear_fate_children(_legs)
+
+	# 遍历 weapon_tree 节点读取命运标签
+	var root: AssemblyNode = _weapon_tree.get_root()
+	if root == null:
+		return
+
+	# fate_scale（"变大了"等效果）：可能设置在 gun body 根节点，也可能在 bullet 子节点
+	var rstats: Dictionary = root.get_base_stats()
+	var rscale: float = float(rstats.get("fate_scale", 1.0))
+	if rscale > 1.0:
+		_body.scale = Vector2(rscale, rscale)
+
+	# 遍历根节点的槽位（MOUNT/MUZZLE/MAGAZINE/BULLET），找 BULLET 类型节点
+	for slot_type in AssemblyNode.SlotType.keys():
+		var slot_child: AssemblyNode = root.slots[AssemblyNode.SlotType.get(slot_type)]
+		if slot_child != null and slot_child.node_type == AssemblyNode.NodeType.BULLET:
+			var bstats: Dictionary = slot_child.get_base_stats()
+			var scale: float = float(bstats.get("fate_scale", 1.0))
+			if scale > 1.0:
+				_body.scale = Vector2(scale, scale)
+
+	# 眼睛视觉（"加眼睛"卡片）
+	if rstats.get("visual_has_eyes", false):
+		var eye_count: int = int(rstats.get("visual_eyes", 2))
+		_spawn_eyes(eye_count)
+	for slot_type in AssemblyNode.SlotType.keys():
+		var slot_child: AssemblyNode = root.slots[AssemblyNode.SlotType.get(slot_type)]
+		if slot_child != null and slot_child.node_type == AssemblyNode.NodeType.BULLET:
+			var bstats: Dictionary = slot_child.get_base_stats()
+			if bstats.get("visual_has_eyes", false):
+				var eye_count: int = int(bstats.get("visual_eyes", 2))
+				_spawn_eyes(eye_count)
+
+	# 脚视觉（"加脚"卡片）
+	if rstats.get("visual_has_legs", false):
+		var leg_count: int = int(rstats.get("visual_leg_count", 4))
+		_spawn_legs(leg_count)
+	for slot_type in AssemblyNode.SlotType.keys():
+		var slot_child: AssemblyNode = root.slots[AssemblyNode.SlotType.get(slot_type)]
+		if slot_child != null and slot_child.node_type == AssemblyNode.NodeType.BULLET:
+			var bstats: Dictionary = slot_child.get_base_stats()
+			if bstats.get("visual_has_legs", false):
+				var leg_count: int = int(bstats.get("visual_leg_count", 4))
+				_spawn_legs(leg_count)
+
+## 生成眼睛子节点（CircleShape2D 小球）
+func _spawn_eyes(count: int) -> void:
+	for i in range(count):
+		var eye: ColorRect = ColorRect.new()
+		eye.name = "Eye_%d" % i
+		eye.color = Color(1.0, 1.0, 0.2, 1.0)  # 黄色小圆点
+		eye.size = Vector2(4, 4)
+		# 眼睛分布在枪身中段
+		var x_pos: float = -4.0 + i * 4.0
+		eye.position = Vector2(x_pos, -6.0)
+		_eyes.add_child(eye)
+
+## 生成脚子节点（ColorRect 小矩形）
+func _spawn_legs(count: int) -> void:
+	for i in range(count):
+		var leg: ColorRect = ColorRect.new()
+		leg.name = "Leg_%d" % i
+		leg.color = Color(0.6, 0.3, 0.1, 1.0)  # 棕色小脚
+		leg.size = Vector2(3, 5)
+		# 脚分布在枪身尾部
+		var angle: float = (float(i) / float(count)) * TAU
+		var radius: float = 8.0
+		leg.position = Vector2(cos(angle) * radius - 8.0, sin(angle) * radius + 4.0)
+		_legs.add_child(leg)
+
+## 清理命运子节点容器
+func _clear_fate_children(container: Node2D) -> void:
+	for ch in container.get_children():
+		ch.queue_free()
 
 ## 应用多边形形状
 func _apply_shape(shape: Dictionary) -> void:
@@ -236,7 +329,10 @@ func _process(delta: float) -> void:
 	if _weapon_tree and _weapon_tree.get_root():
 		var root_name: String = _weapon_tree.get_root().node_name
 		if root_name != _current_gun_name:
-			_update_gun_display(root_name)
+			_current_gun_name = root_name
+			var shape: Dictionary = GUN_SHAPES.get(root_name, DEFAULT_SHAPE)
+			_apply_shape(shape)
+			_refresh_fate_visual()
 
 ## 武器射击回调 → 触发后坐力 + 枪口火焰
 func _on_weapon_fired(_pos: Vector2, _dir: Vector2, _count: int) -> void:

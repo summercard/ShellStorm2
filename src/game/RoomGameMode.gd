@@ -162,8 +162,8 @@ func _call_ui_manager_method(method_name: String, arg = null) -> void:
 		_ui_manager.call(method_name)
 
 
-func _get_base_manager() -> Node:
-	return get_node_or_null("/root/BaseManager")
+func _get_base_manager() -> BaseManager:
+	return get_node_or_null("/root/BaseManager") as BaseManager
 
 
 ## 初始化地图管理器
@@ -207,21 +207,20 @@ func _setup_extraction_modules() -> void:
 
 
 func _apply_pending_loadout() -> void:
-	var base_manager := _get_base_manager()
-	if base_manager == null or inventory_module == null:
+	var bm: BaseManager = _get_base_manager()
+	if bm == null or inventory_module == null:
 		return
 	var loadout_items: Array[Dictionary] = []
-	var raw_loadout: Variant = base_manager.call("consume_pending_loadout")
-	if raw_loadout is Array:
-		for item in raw_loadout:
-			if item is Dictionary:
-				loadout_items.append((item as Dictionary).duplicate(true))
+	var raw_loadout: Array = bm.consume_pending_loadout()
+	for item in raw_loadout:
+		if item is Dictionary:
+			loadout_items.append((item as Dictionary).duplicate(true))
 	for item in loadout_items:
 		var count: int = item.get("count", 1)
 		var added: int = inventory_module.add_item(item, count)
 		if added < count:
 			item["count"] = count - added
-			base_manager.call("add_vault_item", item)
+			bm.add_vault_item(item)
 
 
 ## 连接信号
@@ -482,9 +481,9 @@ func _on_global_game_over() -> void:
 		)
 		_print_death_settlement(settlement_result)
 	# 记录基地数据（死亡）
-	var base_manager := _get_base_manager()
+	var base_manager: BaseManager = _get_base_manager()
 	if base_manager != null:
-		base_manager.call("record_run", false, _get_kill_count())
+		base_manager.record_run(false, _get_kill_count())
 	game_over.emit("玩家死亡")
 
 
@@ -494,7 +493,7 @@ func _print_death_settlement(result: Dictionary) -> void:
 
 
 ## 撤离完成后赋予玩家应得的 extraction_points
-## extraction_points 是局后ersistent 资源，用于在 Workshop 解锁蓝图
+## extraction_points 是局后持久化资源，用于在 Workshop 解锁蓝图
 func _grant_extraction_points() -> void:
 	var floor_bonus: int = current_floor * 15
 	var loot_count: int = 0
@@ -505,9 +504,9 @@ func _grant_extraction_points() -> void:
 	var loot_bonus: int = loot_count * 3
 	var total_points: int = floor_bonus + loot_bonus
 	if total_points > 0:
-		var base_manager := _get_base_manager()
-		if base_manager != null:
-			base_manager.call("add_extraction_points", total_points)
+		var bm: BaseManager = _get_base_manager()
+		if bm != null:
+			bm.add_extraction_points(total_points)
 		print(
 			(
 				"[RoomGameMode] Granted extraction_points: %d (floor bonus=%d, loot bonus=%d)"
@@ -543,9 +542,9 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 		print("[RoomGameMode] Saved extracted items to vault: %d" % saved_to_vault)
 		_sync_beacon_count()
 		# 记录成功撤离到基地
-		var base_manager := _get_base_manager()
-		if base_manager != null:
-			base_manager.call("record_run", true, _kill_count)
+		var bm: BaseManager = _get_base_manager()
+		if bm != null:
+			bm.record_run(true, _kill_count)
 		# 显示撤离成功面板（HUD + 战局统计）
 		if ui_layer != null and ui_layer.has_method("show_run_extraction_success"):
 			ui_layer.call(
@@ -584,8 +583,8 @@ func _print_extraction_success(extracted_count: int, insurance_items: Array[Dict
 
 
 func _persist_extracted_items_to_vault() -> int:
-	var base_manager := _get_base_manager()
-	if base_manager == null:
+	var bm: BaseManager = _get_base_manager()
+	if bm == null:
 		return 0
 	var saved := 0
 	var overflow := 0
@@ -595,7 +594,7 @@ func _persist_extracted_items_to_vault() -> int:
 			if item.is_empty():
 				continue
 			item["count"] = slot.get("count", 1)
-			if bool(base_manager.call("add_vault_item", item)):
+			if bm.add_vault_item(item):
 				saved += 1
 			else:
 				overflow += 1
@@ -606,13 +605,13 @@ func _persist_extracted_items_to_vault() -> int:
 			if item.is_empty():
 				continue
 			item["count"] = insured.get("count", 1)
-			if bool(base_manager.call("add_vault_item", item)):
+			if bm.add_vault_item(item):
 				saved += 1
 			else:
 				overflow += 1
 		insurance_module.clear_all()
 	if overflow > 0:
-		base_manager.call("add_extraction_points", overflow * 5)
+		bm.add_extraction_points(overflow * 5)
 		print(
 			"[RoomGameMode] Vault full, converted %d overflow items to extraction_points" % overflow
 		)
@@ -1094,17 +1093,12 @@ func _on_all_waves_cleared() -> void:
 ## 显示开门命运卡片选择：钥匙开启的新门都会先给一次构筑选择。
 func _show_door_fate_cards() -> void:
 	await get_tree().process_frame
-	var base_manager := _get_base_manager()
-	if (
-		base_manager != null
-		and _reserved_door_fate_card == null
-		and base_manager.has_method("get_pending_fate_card")
-	):
-		var raw_pending: Variant = base_manager.call("get_pending_fate_card")
-		if raw_pending is Dictionary and not (raw_pending as Dictionary).is_empty():
-			_reserved_door_fate_card = _reconstruct_fate_card_from_dict(raw_pending as Dictionary)
-			if base_manager.has_method("clear_pending_fate_card"):
-				base_manager.call("clear_pending_fate_card")
+	var bm: BaseManager = _get_base_manager()
+	if bm != null and _reserved_door_fate_card == null:
+		var raw_pending: Dictionary = bm.get_pending_fate_card()
+		if not raw_pending.is_empty():
+			_reserved_door_fate_card = _reconstruct_fate_card_from_dict(raw_pending)
+			bm.clear_pending_fate_card()
 	_show_fate_cards_in_panel()
 
 

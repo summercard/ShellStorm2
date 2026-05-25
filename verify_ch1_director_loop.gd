@@ -58,15 +58,14 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 	if shotgun_slot < 0:
 		failures.append("Shotgun weapon is not present in an operable inventory slot")
 	else:
+		var shotgun_count_before := mode.inventory_module.get_item_count("weapon_shotgun")
 		ui.call("_on_slot_right_clicked", shotgun_slot, true)
 		await get_tree().process_frame
 		var root: AssemblyNode = mode.player.get_weapon_tree().get_root()
 		if root == null or root.node_name != "GunBody_Shotgun":
 			failures.append("Right-clicking shotgun did not switch the player's main weapon")
-		if mode.inventory_module.has_item("weapon_shotgun"):
-			failures.append(
-				"Equipped shotgun stayed in backpack instead of moving to the equipment slot"
-			)
+		if mode.inventory_module.get_item_count("weapon_shotgun") != shotgun_count_before - 1:
+			failures.append("Equipping shotgun did not remove exactly one weapon from the backpack")
 		if not mode.inventory_module.has_item("weapon_pistol"):
 			failures.append("Equipping shotgun did not return the previous weapon to backpack")
 
