@@ -531,6 +531,8 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 		)
 
 	if success:
+		_set_player_input_locked(true)
+		_clear_extraction_room_attackers()
 		var extracted: int = death_settlement_module.process_extraction_settlement(
 			inventory_module, insurance_module
 		)
@@ -558,6 +560,15 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 			)
 	else:
 		_print_extraction_failure()
+
+
+func _clear_extraction_room_attackers() -> void:
+	var room_instance := _get_current_room_instance()
+	if room_instance == null:
+		return
+	for child in room_instance.get_children():
+		if child.is_in_group("enemy"):
+			child.queue_free()
 
 
 func _get_kill_count() -> int:

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://verify_ch1_gameplay_loop.gd" id="1_ch1_loop"]
+
+[node name="VerifyCh1GameplayLoop" type="Node"]
+script = ExtResource("1_ch1_loop")

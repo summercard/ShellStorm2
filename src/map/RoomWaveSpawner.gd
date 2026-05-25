@@ -7,15 +7,16 @@ signal wave_started(wave: int, total: int)
 signal wave_enemies_spawned(wave: int, spawned: int)
 signal enemy_spawned(count: int)
 signal wave_progress_updated(killed: int, total: int, wave: int)
-signal all_waves_cleared()
+signal all_waves_cleared
 signal wave_cleared(wave: int)
 
 ## 可配置属性
-@export var spawn_radius: float = 400.0   # 敌人出生范围（相对玩家中心）
-@export var inter_wave_delay: float = 1.5 # 波次之间等待时间
+@export var spawn_radius: float = 400.0  # 敌人出生范围（相对玩家中心）
+@export var inter_wave_delay: float = 1.5  # 波次之间等待时间
 @export var max_enemies_per_wave: int = 8  # 每波最大敌人数
 @export var min_spawn_distance: float = 60.0  # 同波次敌人生成最小间隔
-@export var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 房间尺寸（用于限制出生点在房间内）
+@export
+var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 房间尺寸（用于限制出生点在房间内）
 
 ## 内部状态
 var _room: Node2D = null
@@ -32,22 +33,33 @@ var _killed_count: int = 0
 var _wave_timer: float = 0.0
 var _waiting_next_wave: bool = false
 var _active: bool = false
+var _spawning_enabled: bool = true
 var _all_spawned: bool = false
 var _enemy_pool: Array[Dictionary] = []
 var _monster_injector: MonsterInjector
 var _rng: RandomNumberGenerator
 var _current_regional_controller: Node = null  # 区域刷怪控制器引用（由 RoomGameMode 注入）
 
+
 func _init() -> void:
 	_rng = RandomNumberGenerator.new()
 	_rng.seed = Time.get_ticks_msec()
 	_monster_injector = MonsterInjector.new()
 
+
 ## 配置波次（外部调用）
 ## wave_counts: Array[int] — 每波敌人数，如 [3, 4, 5]
 ## room_game_mode: RoomGameMode 引用，用于通知击杀（货币+飘字）
 ## room_size_override: Vector2 — 可选，指定房间尺寸用于限制出生点
-func configure(wave_counts: Array[int], room: Node2D, player: Node2D, floor: int, floor_level: int, room_game_mode: Node = null, room_size_override: Vector2 = Vector2.ZERO) -> void:
+func configure(
+	wave_counts: Array[int],
+	room: Node2D,
+	player: Node2D,
+	floor: int,
+	floor_level: int,
+	room_game_mode: Node = null,
+	room_size_override: Vector2 = Vector2.ZERO
+) -> void:
 	_enemy_count_per_wave = wave_counts
 	_room = room
 	_player = player
@@ -64,14 +76,17 @@ func configure(wave_counts: Array[int], room: Node2D, player: Node2D, floor: int
 	_waiting_next_wave = false
 	_all_spawned = false
 	_enemy_pool.clear()
+	_spawning_enabled = true
 	if room_size_override != Vector2.ZERO:
 		room_size = room_size_override
+
 
 func set_enemy_pool(enemy_pool: Array[Dictionary]) -> void:
 	_enemy_pool.clear()
 	for enemy_data in enemy_pool:
 		if enemy_data is Dictionary:
 			_enemy_pool.append(enemy_data.duplicate(true))
+
 
 ## 开始波次生成
 func start() -> void:
@@ -81,9 +96,12 @@ func start() -> void:
 	_active = true
 	_spawn_next_wave()
 
+
 ## 停止（切换房间时调用）
 func stop() -> void:
 	_active = false
+	_spawning_enabled = false
+
 
 ## 埋伏怪物生成（由 TrapRoomLogic / StorageRoomLogic 调用）
 ## 在玩家进入陷阱房/藏储室时，延迟生成埋伏怪物
@@ -94,10 +112,11 @@ func spawn_ambush_enemies(count: int = 3) -> void:
 	# 埋伏怪物使用标准额外刷怪流程
 	trigger_extra_spawn(count)
 
+
 ## 外部触发额外刷怪（由 FateCardEngine._apply_reinforce_wave → RoomGameMode.trigger_extra_wave 调用）
 ## 在当前房间波次外额外生成一批敌人，不受波次限制影响
 func trigger_extra_spawn(count: int = 5) -> void:
-	if not is_instance_valid(self):
+	if not is_instance_valid(self) or not _spawning_enabled:
 		return
 	if not _active and _alive_count <= 0:
 		# 房间已清空但玩家还在此房间，额外波次仍然有效
@@ -130,9 +149,14 @@ func trigger_extra_spawn(count: int = 5) -> void:
 	# 逐个生成（异步间隔，携带区域控制器用于CHASE信号连接）
 	_spawn_extra_enemies_async(spawn_positions, _current_regional_controller)
 
-func _spawn_extra_enemies_async(positions: Array[Vector2], regional_controller: Node = null) -> void:
+
+func _spawn_extra_enemies_async(
+	positions: Array[Vector2], regional_controller: Node = null
+) -> void:
 	# 在额外的协程中逐个生成（不在主循环阻塞）
 	for spawn_pos in positions:
+		if not is_instance_valid(self) or not _spawning_enabled:
+			return
 		var enemy_data: Dictionary = _generate_enemy_data()
 		_spawn_enemy_instance(enemy_data, spawn_pos, regional_controller)
 		# 额外敌人生成时也发出进度更新（让UI感知到增量）
@@ -140,10 +164,12 @@ func _spawn_extra_enemies_async(positions: Array[Vector2], regional_controller: 
 		enemy_spawned.emit(1)
 		await get_tree().create_timer(0.12).timeout
 
+
 ## 更新额外敌人生成时的进度条（extra enemy 不在 _enemy_count_per_wave 内，需要独立追踪）
 func _spawn_extra_enemy_progress() -> void:
 	var total_seen: int = _killed_count + _alive_count
 	wave_progress_updated.emit(_killed_count, max(1, total_seen), _current_wave + 1)
+
 
 ## 每帧更新
 func tick(delta: float) -> void:
@@ -155,6 +181,7 @@ func tick(delta: float) -> void:
 			_waiting_next_wave = false
 			_spawn_next_wave()
 
+
 ## 获取当前波次信息
 func get_wave_info() -> Dictionary:
 	return {
@@ -165,9 +192,11 @@ func get_wave_info() -> Dictionary:
 		"killed": _killed_count,
 	}
 
+
 ## 是否所有波次已完成
 func is_complete() -> bool:
 	return _all_spawned and _alive_count <= 0
+
 
 ## 外部通知敌人死亡（RoomGameMode 调用）
 func on_enemy_killed() -> void:
@@ -189,7 +218,9 @@ func on_enemy_killed() -> void:
 				_active = false
 				all_waves_cleared.emit()
 
+
 ## ========== 内部方法 ==========
+
 
 func _spawn_next_wave() -> void:
 	if _current_wave >= _total_waves:
@@ -235,6 +266,7 @@ func _spawn_next_wave() -> void:
 	_all_spawned = _current_wave >= _total_waves - 1
 	wave_enemies_spawned.emit(_current_wave + 1, count)
 
+
 func _get_spawn_position(center: Vector2) -> Vector2:
 	var room_center: Vector2 = center
 	if is_instance_valid(_room):
@@ -253,9 +285,18 @@ func _get_spawn_position(center: Vector2) -> Vector2:
 			return candidate
 
 	return Vector2(
-		clamp(room_center.x + _rng.randf_range(-spawn_radius, spawn_radius), min_corner.x, max_corner.x),
-		clamp(room_center.y + _rng.randf_range(-spawn_radius, spawn_radius), min_corner.y, max_corner.y)
+		clamp(
+			room_center.x + _rng.randf_range(-spawn_radius, spawn_radius),
+			min_corner.x,
+			max_corner.x
+		),
+		clamp(
+			room_center.y + _rng.randf_range(-spawn_radius, spawn_radius),
+			min_corner.y,
+			max_corner.y
+		)
 	)
+
 
 func _generate_enemy_data() -> Dictionary:
 	if not _enemy_pool.is_empty():
@@ -266,13 +307,20 @@ func _generate_enemy_data() -> Dictionary:
 
 	var config := {"type": "random", "floor": _floor, "floor_level": _floor_level}
 	var result: Array = _monster_injector.generate_enemies(config)
-	var base: Dictionary = result[0] if not result.is_empty() else {"enemy_type": "melee_chaser", "hp": 25, "damage": 5, "speed": 80.0}
+	var base: Dictionary = (
+		result[0]
+		if not result.is_empty()
+		else {"enemy_type": "melee_chaser", "hp": 25, "damage": 5, "speed": 80.0}
+	)
 	# 确保包含货币价值字段
 	if not base.has("currency_value"):
 		base["currency_value"] = 10  # 默认普通怪 +10魂
 	return base
 
-func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_controller: Node = null) -> void:
+
+func _spawn_enemy_instance(
+	data: Dictionary, spawn_pos: Vector2, regional_controller: Node = null
+) -> void:
 	var scene_path := "res://scenes/Enemy.tscn"
 	var enemy_scene: PackedScene = load(scene_path)
 	if enemy_scene == null:
@@ -329,7 +377,9 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_contro
 		enemy.set_room_bounds(bounds)
 
 	# 连接敌人 CHASE 信号 → 触发区域增援（PH11 警觉AI联动）
-	_connect_chase_signal(enemy, regional_controller if regional_controller != null else _current_regional_controller)
+	_connect_chase_signal(
+		enemy, regional_controller if regional_controller != null else _current_regional_controller
+	)
 
 	# 连接敌人死亡信号（已有上方 if 检查，这里是双重保险）
 	if enemy.has_signal("enemy_died") and not enemy.enemy_died.is_connected(_on_enemy_died):
@@ -341,6 +391,7 @@ func _spawn_enemy_instance(data: Dictionary, spawn_pos: Vector2, regional_contro
 		var killed: int = wave_total - _alive_count
 		wave_progress_updated.emit(killed, wave_total, _current_wave + 1)
 
+
 ## 连接敌人CHASE信号 → 触发区域增援（PH11 警觉AI联动）
 func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = null) -> void:
 	if enemy == null or not is_instance_valid(enemy):
@@ -348,12 +399,15 @@ func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = n
 	if not enemy.has_signal("enemy_entered_chase"):
 		return
 	# regional_controller 优先，fallback 到 _current_regional_controller
-	var controller: Node = regional_controller if regional_controller != null else _current_regional_controller
+	var controller: Node = (
+		regional_controller if regional_controller != null else _current_regional_controller
+	)
 	if not enemy.enemy_entered_chase.is_connected(_on_enemy_chase_for_reinforcement):
 		enemy.enemy_entered_chase.connect(_on_enemy_chase_for_reinforcement)
 	# 立即注入当前 controller 引用（用于回调时访问）
 	if controller != null:
 		enemy.set("regional_controller_ref", controller)
+
 
 func _on_enemy_chase_for_reinforcement(enemy: Node, last_known_pos: Vector2) -> void:
 	# 优先使用该敌人绑定的 regional_controller_ref（每个敌人独立绑定）
@@ -365,9 +419,11 @@ func _on_enemy_chase_for_reinforcement(enemy: Node, last_known_pos: Vector2) -> 
 	if controller != null and is_instance_valid(controller):
 		controller._on_enemy_chase(enemy, last_known_pos)
 
+
 ## 设置区域刷怪控制器引用（由 RoomGameMode 调用）
 func set_regional_controller(controller: Node) -> void:
 	_current_regional_controller = controller
+
 
 func _apply_ai_type_from_enemy_kind(enemy: CharacterBody2D, enemy_type: String) -> void:
 	match enemy_type:
@@ -381,6 +437,7 @@ func _apply_ai_type_from_enemy_kind(enemy: CharacterBody2D, enemy_type: String) 
 			enemy.ai_type = "trapper"
 		_:
 			enemy.ai_type = "chase"
+
 
 func _on_enemy_died() -> void:
 	# 敌人死亡时获取其数据用于货币结算

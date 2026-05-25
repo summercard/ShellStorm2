@@ -1075,3 +1075,38 @@ P1 撤离与 Boss 房体验一致性修复
 ### 剩余风险
 - 14 秒与三阶段敌潮为第一版手感参数，需要真人连续游玩确认第一章枪械火力下是否过松或过压。
 - Headless 退出阶段仍有对象/RID/资源释放告警，后续仍需生命周期专项。
+
+---
+
+## 轮次 177 — 2026-05-25
+
+### 维度
+撤离成功态阻断修复 — 结算可见、战斗收束、可返回基地
+
+### 问题结论
+- 结算面板先变为透明再立刻暂停场景，但 UI 未设置为暂停时继续处理，导致淡入和按钮一同冻结；玩家只能按 `Esc` 解冻后才看到界面。
+- 撤离防守使用异步追加刷怪，`RoomWaveSpawner.stop()` 只停止波次 tick，没有取消已经启动的生成协程。
+- 成功结算后未锁定玩家和清掉撤离房中的攻击者，解冻画面后仍会继续战斗。
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/ui/GameUIManager.gd | 结算面板和返回按钮在暂停状态持续处理；成功面板只显示一次；同步 `Global.is_paused`，返回时正确解除暂停 |
+| src/game/RoomGameMode.gd | 撤离成功时锁定玩家输入、停止生成器并清除撤离房袭击者 |
+| src/map/RoomWaveSpawner.gd | 为异步额外刷怪加入取消状态，调用 `stop()` 后不再续刷 |
+| verify_ch1_extraction_defense_flow.gd | 补充无需 `Esc` 的面板淡入、暂停一致性、玩家锁定、敌人清除与按钮可处理验收 |
+| docs/PH09_搜打撤深化.md | 将撤离结算定义为冻结战局且可操作的终局状态 |
+
+### 验证
+- `verify_ch1_extraction_defense_flow.tscn`: `CH1_EXTRACTION_DEFENSE_OK`，覆盖暂停结算立即显示、玩家锁定、停止刷怪与返回按钮暂停交互状态
+- `verify_ch1_gameplay_loop.tscn`: `CH1_GAMEPLAY_LOOP_OK`
+- `verify_ch1_director_loop.tscn`: `CH1_DIRECTOR_LOOP_OK`
+- `verify_p1_extraction_flow.tscn`: `P1_EXTRACTION_FLOW_OK`
+- `verify_initial_room_fate_door_flow.tscn`: `INITIAL_ROOM_FATE_DOOR_OK`
+- `verify_map_layout_flow.tscn`: `MAP_LAYOUT_FLOW_OK`
+- `verify_inventory_equipment_ui.tscn`: `INVENTORY_EQUIPMENT_UI_OK`
+- `verify_p1_workbench_flow.tscn`: `P1_WORKBENCH_FLOW_OK`
+- `godot --headless --path . --quit-after 3`: EXIT 0
+
+### 剩余风险
+- Headless 退出阶段仍会输出对象/RID/资源释放告警，与本轮结算阻断症状不同，仍应专项清理。

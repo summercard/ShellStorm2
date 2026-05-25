@@ -52,6 +52,7 @@ var _reload_duration: float = 0.0
 var _extraction_types: Array[String] = ["STANDARD", "BEACON", "BOSS_KILL", "ELITE_KILL", "TRADE"]
 var _beacon_count: int = 0
 var _active_extraction_duration: float = 0.0
+var _extraction_success_shown := false
 
 ## — Boss HP UI —
 var _boss_hp_panel: PanelContainer = null
@@ -177,7 +178,9 @@ func _ready() -> void:
 	continue_button = get_node_or_null("ExtractionSuccessPanel/VBox/ContinueButton")
 	if extraction_success_panel:
 		extraction_success_panel.visible = false
+		extraction_success_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 		if continue_button:
+			continue_button.process_mode = Node.PROCESS_MODE_ALWAYS
 			continue_button.pressed.connect(_on_continue_pressed)
 
 	# 构建背包、保险格与 HUD 装备位 UI
@@ -1589,15 +1592,16 @@ func _on_extraction_completed(_success: bool, loot: Array) -> void:
 
 ## 显示撤离成功面板（淡入动画 + 物品闪光）
 func _show_extraction_success() -> void:
-	if extraction_success_panel == null:
+	if extraction_success_panel == null or _extraction_success_shown:
 		return
+	_extraction_success_shown = true
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	extraction_success_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 
 	# 先设为可见但完全透明+缩小，作为动画起点
 	extraction_success_panel.visible = true
-	extraction_success_panel.modulate.a = 0.0
-	extraction_success_panel.scale = Vector2(0.85, 0.85)
-
-	get_tree().paused = true
+	extraction_success_panel.modulate.a = 1.0
+	extraction_success_panel.scale = Vector2.ONE
 
 	# 获取背包和保险格物品
 	var extracted: Array[Dictionary] = []
@@ -1649,7 +1653,9 @@ func _show_extraction_success() -> void:
 					lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
 			extracted_items_vbox.add_child(lbl)
 
-	# 淡入+放大动画（0.4s 后弹回正常大小）
+	# 结算已立即可见；轻量动画在暂停状态下仍由 UI 自身继续处理。
+	extraction_success_panel.modulate.a = 0.0
+	extraction_success_panel.scale = Vector2(0.92, 0.92)
 	var tween := extraction_success_panel.create_tween()
 	tween.set_parallel(true)
 	(
@@ -1668,6 +1674,9 @@ func _show_extraction_success() -> void:
 	# 撤离成功时轻度震屏（强化"完成撤离"的仪式感）
 	if _screen_shake and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 3.5, 0.12)
+
+	Global.is_paused = true
+	get_tree().paused = true
 
 
 func show_run_extraction_success(stats: Dictionary) -> void:
@@ -1688,7 +1697,9 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 
 ## 继续按钮 — 返回基地主界面
 func _on_continue_pressed() -> void:
+	Global.is_paused = false
 	get_tree().paused = false
+	_extraction_success_shown = false
 	if extraction_success_panel:
 		extraction_success_panel.visible = false
 	if game_over_panel:
