@@ -319,6 +319,9 @@ func _spawn_player() -> void:
 	# 同步玩家引用到 MapManager（小地图绘制用）
 	if map_manager and map_manager.has_method("set_player"):
 		map_manager.set_player(player)
+	# 连接击杀信号 → 驱动 crit_on_kill 堆栈（每击杀一次，下一颗子弹必定暴击）
+	if kill_recorded.is_connected(_on_kill_for_crit_on_kill) == false:
+		kill_recorded.connect(_on_kill_for_crit_on_kill)
 
 
 ## 开始游戏
@@ -2275,6 +2278,14 @@ func _on_hp_changed(current: int, maximum: int) -> void:
 func _on_currency_changed(amount: int) -> void:
 	if currency_label:
 		currency_label.text = "魂: %d" % amount
+
+
+## crit_on_kill 命运卡片：每次击杀后通知武器树增加一颗暴击堆栈
+func _on_kill_for_crit_on_kill() -> void:
+	if player != null:
+		var wt: Node = player.get_weapon_tree()
+		if wt != null and wt.has_method("add_crit_on_kill_stack"):
+			wt.call("add_crit_on_kill_stack", 1)
 
 
 ## 更新基础UI

@@ -253,6 +253,7 @@ static func playable_presets() -> Array[FateCard]:
 		living_bullet(),    # 活过来：子弹变活体，自动追踪敌人（MUTATE_TO_LIVING + MUTATE_TO_HOMING）
 		turret_on_land(),   # 不想飞：子弹落地后变成小炮台继续攻击（MUTATE_TO_LIVING）
 		bullet_return(),   # 回家看看：子弹飞出后返回玩家，返回途中造成伤害（MUTATE_TO_HOMING + return_to_player）
+		crit_on_kill(),    # 致命一击：击杀后下一次射击必定暴击（RULE + CRIT_ON_KILL）
 	]
 
 

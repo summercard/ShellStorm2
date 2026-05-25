@@ -212,8 +212,10 @@ func _calculate_spread(index: int) -> float:
 
 func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 	"""从指定位置生成子弹，暴击判定"""
-	# 暴击判定（10%基础概率）
-	var is_crit := randf() < 0.10
+	# 暴击判定：优先消费击杀必暴击堆栈，否则 10% 基础概率
+	var is_crit := consume_crit_on_kill_stack()
+	if not is_crit:
+		is_crit = randf() < 0.10
 	var base_damage := bullet_damage * 2 if is_crit else bullet_damage
 	var final_damage := int(float(base_damage) * _damage_multiplier)  # 应用伤害倍率（BLESS_DEAD等）
 
@@ -252,6 +254,25 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 
 	# 处理枪上加枪：主枪开火时副枪也跟随射击
 	_fire_co_mounted_gun(spawn_pos, direction)
+
+
+## 公开接口：消耗一次击杀必暴击堆栈（返回 true 表示本次射击强制暴击）
+## 由玩家子弹命中敌人并击杀后调用
+func consume_crit_on_kill_stack() -> bool:
+	if _crit_on_kill_stack > 0:
+		_crit_on_kill_stack -= 1
+		return true
+	return false
+
+
+## 公开接口：获取当前击杀必暴击堆栈数量
+func get_crit_on_kill_stack() -> int:
+	return _crit_on_kill_stack
+
+
+## 公开接口：增加击杀必暴击堆栈（由外部调用，RoomGameMode 在 kill_recorded 信号触发后调用）
+func add_crit_on_kill_stack(count: int = 1) -> void:
+	_crit_on_kill_stack += count
 
 
 ## 树结构变化时刷新挂载枪缓存
@@ -330,6 +351,10 @@ var _co_mounted_cooldowns: Dictionary = {}
 
 ## 射击计数器：用于 every_nth_fire 机制（"每第七发子弹携带一把枪"）
 var _fire_count: int = 0
+
+## 击杀必暴击堆栈（crit_on_kill 命运卡片机制）
+## 每次击杀后累加，消费时按子弹计，不按射击计
+var _crit_on_kill_stack: int = 0
 
 
 ## every_nth_fire：第N发额外发射挂载枪子弹

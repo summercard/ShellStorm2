@@ -437,7 +437,9 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
 		body.call("take_damage", damage, is_crit, direction)
-		queue_free()
+		# 延迟一帧释放子弹，确保 enemy_died 信号在当前帧内完成派发
+		# 这样 crit_on_kill 才能在本帧内消费堆栈（命中→击杀→堆栈-1→下一发暴击）
+		call_deferred("queue_free")
 	elif body is StaticBody2D:
 		queue_free()
 

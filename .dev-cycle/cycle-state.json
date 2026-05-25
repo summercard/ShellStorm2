@@ -7,14 +7,14 @@
   "lastTask": "Plan",
   "planVersion": "v3.7",
   "polish": {
-    "current": 204,
+    "current": 205,
     "total": "infinite"
   },
   "startTime": "2026-05-25T01:17:00+08:00",
-  "lastRunTime": "2026-05-26T06:53:00+08:00",
-  "currentTarget": "轮次204：可玩命卡池扩大（活过来/回家看看/不想飞入 playable_presets）",
-  "nextTarget": "轮次205方向：crit_on_kill 击杀暴击链路实现（Bullet→Enemy kill event→WeaponAssemblyTree crit flag）；人类试玩验证（新落地行为）；every_nth_fire 完整链路测试；或搜打撤经济系统收束",
-  "notes": "轮次204扩大可玩命卡池：playable_presets() 从5张增加到8张（+living_bullet活过来、+turret_on_land不想飞、+bullet_return回家看看）。这3张卡已在 FateCardEngine 有完整实现链路（_apply_mutate_to_homing/_apply_mutate_to_living），Bullet.gd 已有 _fate_homing/_fate_return_to_player/_fate_spawn_turret_on_land 完整运行逻辑。每张卡都有 MUTATE 类 EffectAction，匹配策划案'变种类'定位。crit_on_kill 存在执行链路缺口（子弹击杀不触发暴击标记回写），建议下轮补全或标记为设计待定。Godot headless 编译通过（Exit 0）。",
+  "lastRunTime": "2026-05-26T06:59:00+08:00",
+  "currentTarget": "轮次205：crit_on_kill 击杀必暴击链路闭环（WeaponAssemblyTree 堆栈+击杀信号连接+Bullet延迟释放）",
+  "nextTarget": "轮次206方向：人类试玩验证 crit_on_kill 暴击红字特效；every_nth_fire 挂载枪实际表现验证；搜打撤经济系统收束；或活体子弹/落地炮台实际落地验证",
+  "notes": "轮次205实现 crit_on_kill 完整链路：WeaponAssemblyTree 新增 _crit_on_kill_stack 变量 + consume/add/get 方法；击杀后 Bullet 延迟一帧释放确保 enemy_died 信号在本帧派发；RoomGameMode 在玩家生成后连接 kill_recorded → _on_kill_for_crit_on_kill → weapon_tree.add_crit_on_kill_stack；下次射击时优先消费堆栈实现必定暴击。子弹背枪/枪上加枪/落地炮台/every_nth_fire/活体子弹均已落地。Godot headless 编译通过（Exit 0）。",
   "completedPhases": [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -35,7 +35,7 @@
     162, 163, 170, 171, 172, 173, 174, 175, 176,
     177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
     187, 188, 189, 190, 191, 192, 193, 194, 195, 196,
-    197, 198, 199, 200, 201, 202, 203, 204
+    197, 198, 199, 200, 201, 202, 203, 204, 205
   ],
   "designDoc": "docs/PH09_搜打撤深化.md"
 }
