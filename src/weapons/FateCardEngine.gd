@@ -769,7 +769,7 @@ static func _apply_bless_dead(
 	if rgm != null and rgm.has_method("apply_bless_dead"):
 		rgm.apply_bless_dead(
 			result.effect_value.hp_threshold,
-			result.effect_value.survive_duration,
+			result.effect_value.survive_timer,
 			result.effect_value.damage_bonus
 		)
 	return result
