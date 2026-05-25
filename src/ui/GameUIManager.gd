@@ -7,6 +7,7 @@ extends CanvasLayer
 
 ## 物品使用处理器引用（通过脚本路径获取，避免循环依赖）
 const _ITEM_USE_HANDLER_PATH := "res://src/game/ItemUseHandler.gd"
+const _WEAPON_PANEL_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTreePanel.tscn")
 
 ## — 游戏状态 UI —
 @onready var hp_bar: ProgressBar = $GameHUD/HPBarBG/HPBar
@@ -14,6 +15,7 @@ const _ITEM_USE_HANDLER_PATH := "res://src/game/ItemUseHandler.gd"
 @onready var score_label: Label = $GameHUD/TopRightPanel/VBox/ScoreLabel
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
+@onready var risk_label: Label = $GameHUD/RiskLabel
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
 @onready var minimap_panel: PanelContainer = $GameHUD/MiniMapPanel
@@ -24,6 +26,8 @@ const _ITEM_USE_HANDLER_PATH := "res://src/game/ItemUseHandler.gd"
 @onready var ammo_bar: ProgressBar = $GameHUD/AmmoPanel/AmmoBar
 @onready var ammo_label: Label = $GameHUD/AmmoPanel/AmmoLabel
 @onready var reload_indicator: Label = $GameHUD/AmmoPanel/ReloadIndicator
+@onready var fire_rate_bar: ProgressBar = $GameHUD/FireRatePanel/FireRateBar
+@onready var fire_rate_label: Label = $GameHUD/FireRatePanel/FireRateLabel
 var _is_reloading: bool = false
 var _reload_progress: float = 0.0
 var _reload_duration: float = 0.0
@@ -47,6 +51,7 @@ var _reload_duration: float = 0.0
 
 var _extraction_types: Array[String] = ["STANDARD", "BEACON", "BOSS_KILL", "ELITE_KILL", "TRADE"]
 var _beacon_count: int = 0
+var _active_extraction_duration: float = 0.0
 
 ## — Boss HP UI —
 var _boss_hp_panel: PanelContainer = null
@@ -58,8 +63,8 @@ var _boss_current_hp: float = 0.0
 
 ## — 命运卡片 UI —
 @onready var fate_card_panel: Control = $FateCardPanel
-var _fate_card_card_container: HBoxContainer = null        ## 卡片按钮容器
-var _fate_card_instruction: Label = null                ## 提示标签
+var _fate_card_card_container: HBoxContainer = null  ## 卡片按钮容器
+var _fate_card_instruction: Label = null  ## 提示标签
 var _fate_card_panel_base: Control = null  ## 命运卡片选择面板容器（Control 类型，与场景一致）
 var _wave_kill_anim_tween: Tween = null
 var _wave_indicator_label: Label = null  ## 波次指示器（运行时获取）
@@ -80,6 +85,15 @@ var _inventory_module: Object = null
 var _extraction_module: Object = null
 var _insurance_module: Object = null
 var _inventory_ui: Control = null  ## InventoryUI 引用（由本类实例化）
+var _weapon_panel: Control = null
+var _equipped_weapon_slot: TextureRect = null
+var _equipped_weapon_label: Label = null
+var _selected_inventory_slot: int = -1
+var _selected_insurance_slot: int = -1
+var _dragging_inventory_panel: bool = false
+var _inventory_drag_start_mouse: Vector2 = Vector2.ZERO
+var _inventory_drag_start_panel: Vector2 = Vector2.ZERO
+var _inventory_drag_start_insurance: Vector2 = Vector2.ZERO
 var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信标撤离计数）
 var _run_choice_overlay: Control = null
 var _run_choice_kind: String = ""
@@ -114,9 +128,10 @@ var _kill_count: int = 0
 ## 背包物品操作信号
 signal item_to_insurance_requested(slot_index: int)
 signal item_extraction_requested(slot_index: int)
-signal inventory_ui_changed()
+signal inventory_ui_changed
 signal fate_choice_selected(choice_id: String)
 signal extraction_choice_selected(choice_id: String)
+
 
 func _ready() -> void:
 	# 注册为 game_ui 组（供 ContainerInteraction 等通过 group call 触发 UI 方法）
@@ -165,7 +180,8 @@ func _ready() -> void:
 		if continue_button:
 			continue_button.pressed.connect(_on_continue_pressed)
 
-	# 构建背包和保险格 UI
+	# 构建背包、保险格与 HUD 装备位 UI
+	_setup_inventory_system_ui()
 	_build_inventory_grid()
 	_build_insurance_grid()
 	if insurance_panel:
@@ -188,9 +204,10 @@ func _ready() -> void:
 	# 初始化低血量 Vignette（HealthVignette 挂为本类子节点）
 	_health_vignette = load("res://src/fx/HealthVignette.tscn").instantiate()
 	add_child(_health_vignette)
-	
+
 	# 初始化 Boss HP UI 面板（在 GameHUD 之上，居中顶部）
 	_init_boss_hp_ui()
+
 
 func _ensure_hud_layout() -> void:
 	var hud := get_node_or_null("GameHUD") as Control
@@ -201,6 +218,7 @@ func _ensure_hud_layout() -> void:
 	hud.offset_top = 0
 	hud.offset_right = 0
 	hud.offset_bottom = 0
+
 
 ## 绑定房间游戏模式
 func set_room_game_mode(mode: Node) -> void:
@@ -215,33 +233,60 @@ func set_room_game_mode(mode: Node) -> void:
 		mode.room_cleared.connect(_on_room_cleared)
 	if mode.has_signal("game_over") and not mode.game_over.is_connected(_on_game_over):
 		mode.game_over.connect(_on_game_over)
-	if mode.has_signal("extraction_ready") and not mode.extraction_ready.is_connected(_on_extraction_ready):
+	if (
+		mode.has_signal("extraction_ready")
+		and not mode.extraction_ready.is_connected(_on_extraction_ready)
+	):
 		mode.extraction_ready.connect(_on_extraction_ready)
 	if mode.has_signal("floor_changed") and not mode.floor_changed.is_connected(_on_floor_changed):
 		mode.floor_changed.connect(_on_floor_changed)
 	if mode.has_signal("kill_recorded") and not mode.kill_recorded.is_connected(_on_kill_recorded):
 		mode.kill_recorded.connect(_on_kill_recorded)
-	if mode.has_signal("wave_progress_changed") and not mode.wave_progress_changed.is_connected(_on_wave_progress_changed):
+	if (
+		mode.has_signal("wave_progress_changed")
+		and not mode.wave_progress_changed.is_connected(_on_wave_progress_changed)
+	):
 		mode.wave_progress_changed.connect(_on_wave_progress_changed)
 	# 小地图随地图生成和房间切换刷新
-	if mode.has_signal("map_generated") and not mode.map_generated.is_connected(_on_map_generated_for_minimap):
+	if (
+		mode.has_signal("map_generated")
+		and not mode.map_generated.is_connected(_on_map_generated_for_minimap)
+	):
 		mode.map_generated.connect(_on_map_generated_for_minimap)
-	if mode.has_signal("room_entered") and not mode.room_entered.is_connected(_on_room_entered_for_minimap):
+	if (
+		mode.has_signal("room_entered")
+		and not mode.room_entered.is_connected(_on_room_entered_for_minimap)
+	):
 		mode.room_entered.connect(_on_room_entered_for_minimap)
-	if mode.has_signal("adjacent_rooms_revealed") and not mode.adjacent_rooms_revealed.is_connected(_on_adjacent_rooms_revealed):
+	if (
+		mode.has_signal("adjacent_rooms_revealed")
+		and not mode.adjacent_rooms_revealed.is_connected(_on_adjacent_rooms_revealed)
+	):
 		mode.adjacent_rooms_revealed.connect(_on_adjacent_rooms_revealed)
+
 
 ## 绑定玩家（用于闪避冷却条等）
 func set_player(player: Node) -> void:
-	if player and player.has_signal("dash_cooldown_changed") and not player.dash_cooldown_changed.is_connected(_on_dash_cooldown_changed):
+	if (
+		player
+		and player.has_signal("dash_cooldown_changed")
+		and not player.dash_cooldown_changed.is_connected(_on_dash_cooldown_changed)
+	):
 		player.dash_cooldown_changed.connect(_on_dash_cooldown_changed)
-	if player and player.has_signal("dash_started") and not player.dash_started.is_connected(_on_dash_started):
+	if (
+		player
+		and player.has_signal("dash_started")
+		and not player.dash_started.is_connected(_on_dash_started)
+	):
 		player.dash_started.connect(_on_dash_started)
 	# 让低血量 Vignette 直接监听玩家 HP 信号
 	if _health_vignette and _health_vignette.has_method("set_player_ref"):
 		_health_vignette.set_player_ref(player)
 	# 连接武器弹药信号
 	_bind_weapon_signals(player)
+	_bind_weapon_panel(player)
+	_update_equipped_weapon_slot()
+
 
 func _bind_weapon_signals(player: Node) -> void:
 	if player == null or not is_instance_valid(player):
@@ -254,32 +299,61 @@ func _bind_weapon_signals(player: Node) -> void:
 			wt.reload_started.connect(_on_reload_started.bind())
 		if not wt.weapon_reloaded.is_connected(_on_weapon_reloaded):
 			wt.weapon_reloaded.connect(_on_weapon_reloaded.bind())
+		if not wt.fire_cooldown_changed.is_connected(_on_fire_cooldown_changed):
+			wt.fire_cooldown_changed.connect(_on_fire_cooldown_changed.bind())
+		if not wt.tree_changed.is_connected(_update_equipped_weapon_slot):
+			wt.tree_changed.connect(_update_equipped_weapon_slot)
 	else:
 		# Player 还没准备好，等一下再试
 		await get_tree().create_timer(0.5).timeout
 		if player and is_instance_valid(player) and player.has_method("get_weapon_tree"):
 			_bind_weapon_signals(player)
 
+
+func _bind_weapon_panel(player: Node) -> void:
+	if player == null or not is_instance_valid(player) or not player.has_method("get_weapon_tree"):
+		return
+	if _weapon_panel == null:
+		_weapon_panel = _WEAPON_PANEL_SCENE.instantiate() as Control
+		_weapon_panel.name = "WeaponAssemblyTreePanel"
+		_weapon_panel.position = Vector2(18, 96)
+		add_child(_weapon_panel)
+	var wt = player.get_weapon_tree()
+	if wt != null and _weapon_panel.has_method("set_weapon_tree"):
+		_weapon_panel.call("set_weapon_tree", wt)
+
+
 ## 绑定背包模块
 func set_inventory_module(module: Object) -> void:
 	_inventory_module = module
 	if module == null:
 		return
-	if module.has_signal("inventory_changed") and not module.inventory_changed.is_connected(_on_inventory_changed):
+	if (
+		module.has_signal("inventory_changed")
+		and not module.inventory_changed.is_connected(_on_inventory_changed)
+	):
 		module.inventory_changed.connect(_on_inventory_changed)
-	if module.has_signal("capacity_changed") and not module.capacity_changed.is_connected(_on_capacity_changed):
+	if (
+		module.has_signal("capacity_changed")
+		and not module.capacity_changed.is_connected(_on_capacity_changed)
+	):
 		module.capacity_changed.connect(_on_capacity_changed)
 	_refresh_inventory_ui()
 	_on_inventory_changed()
+
 
 ## 绑定保险格模块
 func set_insurance_module(module: Object) -> void:
 	_insurance_module = module
 	if module == null:
 		return
-	if module.has_signal("insurance_changed") and not module.insurance_changed.is_connected(_on_insurance_changed):
+	if (
+		module.has_signal("insurance_changed")
+		and not module.insurance_changed.is_connected(_on_insurance_changed)
+	):
 		module.insurance_changed.connect(_on_insurance_changed)
 	_refresh_insurance_ui()
+
 
 ## 绑定撤离模块
 func set_extraction_module(module: Object) -> void:
@@ -287,11 +361,13 @@ func set_extraction_module(module: Object) -> void:
 	if module != null:
 		_connect_extraction_module_signals(module)
 
+
 ## 更新 HP 显示
 func update_hp(current: int, maximum: int) -> void:
 	if hp_bar:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
+
 
 ## 更新分数（带跳动动画 + 描边）
 func update_score(score_val: int) -> void:
@@ -300,9 +376,11 @@ func update_score(score_val: int) -> void:
 		_bounce_label(score_label)
 		_sync_score_outline()
 
+
 ## 击杀记录
 func _on_kill_recorded() -> void:
 	_kill_count += 1
+
 
 ## 更新货币（带跳动动画 + 描边）
 func update_currency(amount: int) -> void:
@@ -311,24 +389,52 @@ func update_currency(amount: int) -> void:
 		_bounce_label(currency_label)
 		_sync_currency_outline()
 
+
+## 更新风险等级显示（由 RoomGameMode 调用）
+func update_risk(level: int) -> void:
+	if risk_label:
+		risk_label.text = "风险: %d" % level
+		_risk_outline_sync()
+
+
+var _risk_outline_done: bool = false
+
+
+func _risk_outline_sync() -> void:
+	if _risk_outline_done or risk_label == null:
+		return
+	_risk_outline_done = true
+
+
 ## 连接 ExtractionModule 信号（由 set_extraction_module 调用）
 func _connect_extraction_module_signals(module: Object) -> void:
 	if module == null:
 		return
-	if module.has_signal("extraction_completed") and not module.extraction_completed.is_connected(_on_extraction_completed):
+	if (
+		module.has_signal("extraction_completed")
+		and not module.extraction_completed.is_connected(_on_extraction_completed)
+	):
 		module.extraction_completed.connect(_on_extraction_completed)
-	if module.has_signal("extraction_progress_updated") and not module.extraction_progress_updated.is_connected(_on_extraction_progress_updated):
+	if (
+		module.has_signal("extraction_progress_updated")
+		and not module.extraction_progress_updated.is_connected(_on_extraction_progress_updated)
+	):
 		module.extraction_progress_updated.connect(_on_extraction_progress_updated)
-	if module.has_signal("extraction_aborted") and not module.extraction_aborted.is_connected(_on_extraction_aborted):
+	if (
+		module.has_signal("extraction_aborted")
+		and not module.extraction_aborted.is_connected(_on_extraction_aborted)
+	):
 		module.extraction_aborted.connect(_on_extraction_aborted)
+
 
 ## 撤离读条进度更新
 func _on_extraction_progress_updated(progress: float) -> void:
 	if countdown_bar:
 		countdown_bar.value = progress
-		var total: float = countdown_bar.max_value
+		var total: float = _active_extraction_duration
 		var remaining: float = (1.0 - progress) * total
 		_update_countdown_label(remaining, total)
+
 
 ## 显示货币飘字（在指定世界坐标显示 +N魂 飘字）
 ## world_pos: 世界坐标（会被转换到 CanvasLayer 坐标系）
@@ -336,7 +442,9 @@ func _on_extraction_progress_updated(progress: float) -> void:
 func show_currency_popup(amount: int, world_pos: Vector2) -> void:
 	var popup_label := Label.new()
 	popup_label.text = "+%d魂" % amount if amount > 0 else "%d魂" % amount
-	popup_label.add_theme_color_override("font_color", Color(0.3, 1.0, 0.4, 1.0) if amount > 0 else Color(1.0, 0.3, 0.3, 1.0))
+	popup_label.add_theme_color_override(
+		"font_color", Color(0.3, 1.0, 0.4, 1.0) if amount > 0 else Color(1.0, 0.3, 0.3, 1.0)
+	)
 	popup_label.add_theme_font_size_override("font_size", 16)
 	popup_label.z_index = 200  # 在 UI 层之上
 
@@ -350,21 +458,31 @@ func show_currency_popup(amount: int, world_pos: Vector2) -> void:
 	# 上浮动画：Y -60像素，透明度 1→0，1.5秒
 	var tween := popup_label.create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(popup_label, "position:y", canvas_pos.y - 60, 1.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(popup_label, "position:y", canvas_pos.y - 60, 1.5)
+		. set_trans(Tween.TRANS_QUAD)
+		. set_ease(Tween.EASE_OUT)
+	)
 	tween.chain().tween_property(popup_label, "modulate:a", 0.0, 0.5).set_delay(1.0)
 	await tween.finished
 	if popup_label and is_instance_valid(popup_label):
 		popup_label.queue_free()
 
+
 func show_damage_popup(world_pos: Vector2, damage: int, is_crit: bool = false) -> void:
 	var label := Label.new()
 	label.text = str(damage) + ("!" if is_crit else "")
 	label.add_theme_font_size_override("font_size", 28 if is_crit else 18)
-	label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.15, 1.0) if is_crit else Color(1.0, 0.36, 0.18, 1.0))
+	label.add_theme_color_override(
+		"font_color", Color(1.0, 0.92, 0.15, 1.0) if is_crit else Color(1.0, 0.36, 0.18, 1.0)
+	)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	label.z_index = 260
-	var start_pos := _world_to_canvas(world_pos) + Vector2(randf_range(-10, 10), -28 + randf_range(-6, 6))
+	var start_pos := (
+		_world_to_canvas(world_pos) + Vector2(randf_range(-10, 10), -28 + randf_range(-6, 6))
+	)
 	label.position = start_pos
 	add_child(label)
 
@@ -389,12 +507,14 @@ func show_damage_popup(world_pos: Vector2, damage: int, is_crit: bool = false) -
 	tween.tween_property(shadow, "position:y", end_y + 2, 0.75).set_trans(Tween.TRANS_QUAD)
 	tween.tween_property(shadow, "modulate:a", 0.0, 0.75).set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(shadow, "scale", Vector2(0.85, 0.85), 0.75).set_trans(Tween.TRANS_LINEAR)
-	tween.chain().tween_callback(func():
-		if is_instance_valid(label):
-			label.queue_free()
-		if is_instance_valid(shadow):
-			shadow.queue_free()
+	tween.chain().tween_callback(
+		func():
+			if is_instance_valid(label):
+				label.queue_free()
+			if is_instance_valid(shadow):
+				shadow.queue_free()
 	)
+
 
 ## 世界坐标 → CanvasLayer 局部坐标
 func _world_to_canvas(world_pos: Vector2) -> Vector2:
@@ -407,8 +527,11 @@ func _world_to_canvas(world_pos: Vector2) -> Vector2:
 	var viewport_size := viewport.get_visible_rect().size
 	return (world_pos - camera.get_screen_center_position()) * camera.zoom + viewport_size * 0.5
 
+
 ## 容器开启时显示物品获得飘字（由 ContainerInteraction 通过 group call 触发）
-func _on_container_loot_granted(world_pos: Vector2, items: Array[Dictionary], granted_count: int) -> void:
+func _on_container_loot_granted(
+	world_pos: Vector2, items: Array[Dictionary], granted_count: int
+) -> void:
 	if items.is_empty():
 		return
 
@@ -455,9 +578,11 @@ func _on_container_loot_granted(world_pos: Vector2, items: Array[Dictionary], gr
 			add_child(item_label)
 			_fly_and_fade(item_label, offset_pos)
 
+
 ## 小地图刷新信号处理
 func _on_map_generated_for_minimap(graph: NodeGraph) -> void:
 	_minimap_dirty = true
+
 
 func _on_room_entered_for_minimap(room_data: RoomData) -> void:
 	_minimap_dirty = true
@@ -465,17 +590,28 @@ func _on_room_entered_for_minimap(room_data: RoomData) -> void:
 	if room_info_label and room_data != null:
 		var type_name := ""
 		match room_data.room_type:
-			RoomData.RoomType.PLAYER_SPAWN: type_name = "玩家出生"
-			RoomData.RoomType.COMBAT: type_name = "普通战斗"
-			RoomData.RoomType.ELITE: type_name = "精英战斗"
-			RoomData.RoomType.SCAVENGE: type_name = "搜刮"
-			RoomData.RoomType.MERCHANT: type_name = "商人"
-			RoomData.RoomType.UPGRADE: type_name = "改造"
-			RoomData.RoomType.EVENT: type_name = "事件"
-			RoomData.RoomType.EXTRACTION: type_name = "撤离"
-			RoomData.RoomType.BOSS: type_name = "Boss"
-			_: type_name = "房间"
+			RoomData.RoomType.PLAYER_SPAWN:
+				type_name = "玩家出生"
+			RoomData.RoomType.COMBAT:
+				type_name = "普通战斗"
+			RoomData.RoomType.ELITE:
+				type_name = "精英战斗"
+			RoomData.RoomType.SCAVENGE:
+				type_name = "搜刮"
+			RoomData.RoomType.MERCHANT:
+				type_name = "商人"
+			RoomData.RoomType.UPGRADE:
+				type_name = "改造"
+			RoomData.RoomType.EVENT:
+				type_name = "事件"
+			RoomData.RoomType.EXTRACTION:
+				type_name = "撤离"
+			RoomData.RoomType.BOSS:
+				type_name = "Boss"
+			_:
+				type_name = "房间"
 		room_info_label.text = type_name
+
 
 ## 小地图 REVEAL 事件信号处理（地图揭示后刷新小地图）
 func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
@@ -484,15 +620,22 @@ func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
 	_refresh_minimap_nodes()
 	_minimap_dirty = true
 
+
 ## 飘字动画：Y 上浮 + 淡出消失
 func _fly_and_fade(label: Label, start_pos: Vector2) -> void:
 	var tween := label.create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(label, "position:y", start_pos.y - 50, 1.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(label, "position:y", start_pos.y - 50, 1.2)
+		. set_trans(Tween.TRANS_QUAD)
+		. set_ease(Tween.EASE_OUT)
+	)
 	tween.chain().tween_property(label, "modulate:a", 0.0, 0.5).set_delay(0.7)
 	await tween.finished
 	if label and is_instance_valid(label):
 		label.queue_free()
+
 
 ## 更新楼层
 func update_floor(floor: int) -> void:
@@ -500,6 +643,7 @@ func update_floor(floor: int) -> void:
 		wave_label.text = "Floor: %d" % floor
 		_bounce_label(wave_label)
 		_sync_wave_outline()
+
 
 ## — 小地图绘制（PH11 P1）—
 func _init_minimap() -> void:
@@ -509,8 +653,10 @@ func _init_minimap() -> void:
 		_minimap_view.resized.connect(_on_minimap_view_resized)
 	_minimap_dirty = true
 
+
 func _on_minimap_view_resized() -> void:
 	_minimap_dirty = true
+
 
 func _refresh_minimap_nodes() -> void:
 	_minimap_nodes.clear()
@@ -522,7 +668,9 @@ func _refresh_minimap_nodes() -> void:
 	if graph == null:
 		return
 	var nodes: Array = graph.get_all_nodes()
-	var current_room_id: int = mm.get_current_room_id() if mm.has_method("get_current_room_id") else -1
+	var current_room_id: int = (
+		mm.get_current_room_id() if mm.has_method("get_current_room_id") else -1
+	)
 	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
 	var map_rect: Rect2 = _calc_map_bounds(nodes)
 
@@ -541,17 +689,23 @@ func _refresh_minimap_nodes() -> void:
 			pos = Vector2(norm.x * view_size.x, norm.y * view_size.y)
 		else:
 			pos = Vector2(view_size.x * 0.5, view_size.y * 0.5)
-		_minimap_nodes.append({
-			"id": node.id,
-			"pos": pos,
-			"node_pos": node.position,  # 房间世界坐标（计算玩家相对偏移用）
-			"color": color,
-			"type": rd.room_type,
-			"is_current": node.id == current_room_id,
-			"connections": node.connections.duplicate(),
-			"revealed": rd.get_meta("revealed") if rd.has_meta("revealed") else false,
-		})
+		(
+			_minimap_nodes
+			. append(
+				{
+					"id": node.id,
+					"pos": pos,
+					"node_pos": node.position,  # 房间世界坐标（计算玩家相对偏移用）
+					"color": color,
+					"type": rd.room_type,
+					"is_current": node.id == current_room_id,
+					"connections": node.connections.duplicate(),
+					"revealed": rd.get_meta("revealed") if rd.has_meta("revealed") else false,
+				}
+			)
+		)
 	_minimap_dirty = true
+
 
 func _calc_map_bounds(nodes: Array) -> Rect2:
 	if nodes.is_empty():
@@ -568,24 +722,38 @@ func _calc_map_bounds(nodes: Array) -> Rect2:
 	var pad := 50.0
 	return Rect2(min_x - pad, min_y - pad, (max_x - min_x) + pad * 2, (max_y - min_y) + pad * 2)
 
+
 func _get_room_color(room_type: int) -> Color:
 	match room_type:
-		0: return Color(0.5, 1.0, 0.5, 0.9)
-		1: return Color(1.0, 0.3, 0.3, 0.9)
-		2: return Color(1.0, 0.6, 0.1, 0.9)
-		3: return Color(0.3, 0.8, 1.0, 0.9)
-		4: return Color(1.0, 0.85, 0.2, 0.9)
-		5: return Color(0.6, 0.4, 1.0, 0.9)
-		6: return Color(0.9, 0.3, 0.9, 0.9)
-		7: return Color(0.2, 1.0, 0.6, 0.9)
-		8: return Color(1.0, 0.1, 0.1, 1.0)
-		_: return Color(0.7, 0.7, 0.7, 0.9)
+		0:
+			return Color(0.5, 1.0, 0.5, 0.9)
+		1:
+			return Color(1.0, 0.3, 0.3, 0.9)
+		2:
+			return Color(1.0, 0.6, 0.1, 0.9)
+		3:
+			return Color(0.3, 0.8, 1.0, 0.9)
+		4:
+			return Color(1.0, 0.85, 0.2, 0.9)
+		5:
+			return Color(0.6, 0.4, 1.0, 0.9)
+		6:
+			return Color(0.9, 0.3, 0.9, 0.9)
+		7:
+			return Color(0.2, 1.0, 0.6, 0.9)
+		8:
+			return Color(1.0, 0.1, 0.1, 1.0)
+		_:
+			return Color(0.7, 0.7, 0.7, 0.9)
+
 
 func _draw_minimap_rserver(canvas: RID) -> void:
 	if _minimap_nodes.is_empty():
 		return
 	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
-	RenderingServer.canvas_item_add_rect(canvas, Rect2(Vector2.ZERO, view_size), Color(0.07, 0.07, 0.12, 0.95))
+	RenderingServer.canvas_item_add_rect(
+		canvas, Rect2(Vector2.ZERO, view_size), Color(0.07, 0.07, 0.12, 0.95)
+	)
 
 	# 计算玩家当前房间的相对偏移（用于在当前房间节点上显示玩家位置）
 	var player_local_offset: Vector2 = Vector2.ZERO
@@ -621,7 +789,9 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 		var pos: Vector2 = node_data["pos"]
 		for conn_id in node_data["connections"]:
 			var conn_pos: Vector2 = _get_node_pos_by_id(conn_id)
-			RenderingServer.canvas_item_add_line(canvas, pos, conn_pos, Color(0.3, 0.3, 0.4, 0.7), 1.0)
+			RenderingServer.canvas_item_add_line(
+				canvas, pos, conn_pos, Color(0.3, 0.3, 0.4, 0.7), 1.0
+			)
 
 	# 绘制房间节点（未揭示的房间降低透明度）
 	for node_data in _minimap_nodes:
@@ -635,8 +805,19 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 		var node_size := 8.0
 		if is_current:
 			node_size = 12.0
-			RenderingServer.canvas_item_add_rect(canvas, Rect2(pos - Vector2(node_size + 3, node_size + 3), Vector2((node_size + 3) * 2, (node_size + 3) * 2)), Color(1.0, 1.0, 1.0, 0.35))
-		RenderingServer.canvas_item_add_rect(canvas, Rect2(pos - Vector2(node_size, node_size), Vector2(node_size * 2, node_size * 2)), color)
+			RenderingServer.canvas_item_add_rect(
+				canvas,
+				Rect2(
+					pos - Vector2(node_size + 3, node_size + 3),
+					Vector2((node_size + 3) * 2, (node_size + 3) * 2)
+				),
+				Color(1.0, 1.0, 1.0, 0.35)
+			)
+		RenderingServer.canvas_item_add_rect(
+			canvas,
+			Rect2(pos - Vector2(node_size, node_size), Vector2(node_size * 2, node_size * 2)),
+			color
+		)
 
 	# 绘制玩家位置点（白色小圆点，跟随玩家在当前房间内的实际位置偏移）
 	var current_node_pos: Vector2 = Vector2.ZERO
@@ -647,9 +828,16 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 	if current_node_pos != Vector2.ZERO:
 		var player_dot_pos: Vector2 = current_node_pos + player_local_offset
 		# 玩家点：白色填充圆（用小矩形模拟点）
-		RenderingServer.canvas_item_add_rect(canvas, Rect2(player_dot_pos - Vector2(2.5, 2.5), Vector2(5, 5)), Color(1.0, 1.0, 1.0, 1.0))
+		RenderingServer.canvas_item_add_rect(
+			canvas,
+			Rect2(player_dot_pos - Vector2(2.5, 2.5), Vector2(5, 5)),
+			Color(1.0, 1.0, 1.0, 1.0)
+		)
 		# 外圈高亮（表示玩家）
-		RenderingServer.canvas_item_add_rect(canvas, Rect2(player_dot_pos - Vector2(4, 4), Vector2(8, 8)), Color(0.4, 0.8, 1.0, 0.4))
+		RenderingServer.canvas_item_add_rect(
+			canvas, Rect2(player_dot_pos - Vector2(4, 4), Vector2(8, 8)), Color(0.4, 0.8, 1.0, 0.4)
+		)
+
 
 func _get_node_pos_by_id(node_id: int) -> Vector2:
 	for nd in _minimap_nodes:
@@ -657,14 +845,17 @@ func _get_node_pos_by_id(node_id: int) -> Vector2:
 			return nd.get("pos")
 	return Vector2.ZERO
 
+
 func refresh_minimap() -> void:
 	_minimap_dirty = true
+
 
 func _draw() -> void:
 	if _minimap_view == null or _minimap_nodes.is_empty():
 		return
 	# ReferenceRect/Control 本身才有可绘制的 CanvasItem RID；避免调用不存在的 get_top_level_rc()。
 	_draw_minimap_rserver(_minimap_view.get_canvas_item())
+
 
 ## 房间清理完成
 func _on_room_cleared(room_data) -> void:
@@ -680,6 +871,7 @@ func _on_room_cleared(room_data) -> void:
 	elif room_data is Dictionary and room_data.has("room_type"):
 		room_type_val = int(room_data.get("room_type", -1))
 	_show_wave_complete_celebration(room_type_val)
+
 
 ## 波次完成庆祝飘字（金色大字，居中屏幕）
 func _show_wave_complete_celebration(room_type: int = -1) -> void:
@@ -708,23 +900,46 @@ func _show_wave_complete_celebration(room_type: int = -1) -> void:
 	var tween := celebration_label.create_tween()
 	tween.set_parallel(true)
 	# 入场动画
-	tween.tween_property(celebration_label, "modulate:a", 1.0, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(celebration_label, "scale", Vector2(1.0, 1.0), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(celebration_label, "modulate:a", 1.0, 0.3)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
+	(
+		tween
+		. tween_property(celebration_label, "scale", Vector2(1.0, 1.0), 0.3)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
 	# 停留 0.8s
 	tween.chain().set_parallel(false)
 	tween.chain().tween_interval(0.8)
 	# 飘出 + 淡出
 	tween.chain().set_parallel(true)
-	tween.tween_property(celebration_label, "modulate:a", 0.0, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.chain().tween_property(celebration_label, "position:y", celebration_label.position.y - 30, 0.5).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	tween.chain().tween_callback(func():
-		if celebration_label and is_instance_valid(celebration_label):
-			celebration_label.queue_free()
+	(
+		tween
+		. tween_property(celebration_label, "modulate:a", 0.0, 0.5)
+		. set_trans(Tween.TRANS_QUAD)
+		. set_ease(Tween.EASE_IN)
+	)
+	(
+		tween
+		. chain()
+		. tween_property(celebration_label, "position:y", celebration_label.position.y - 30, 0.5)
+		. set_trans(Tween.TRANS_QUAD)
+		. set_ease(Tween.EASE_IN)
+	)
+	tween.chain().tween_callback(
+		func():
+			if celebration_label and is_instance_valid(celebration_label):
+				celebration_label.queue_free()
 	)
 
 	# 波次完成震屏效果（比伤害震屏轻，用于强化"完成了"的节拍感）
 	if _screen_shake and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 4.0, 0.10)
+
 
 ## — Boss 事件处理器（由 RoomGameMode 调用）—
 ## Boss 出现时回调（显示 Boss HP UI）
@@ -735,6 +950,7 @@ func on_boss_spawned(boss_data: Dictionary) -> void:
 	var current_hp: float = max_hp
 	show_boss_hp(boss_name, max_hp, current_hp)
 
+
 ## Boss 受伤时回调（更新 Boss HP 条）
 func on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
 	_boss_current_hp = new_hp
@@ -742,9 +958,11 @@ func on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
 		_boss_hp_bar.value = new_hp
 	_update_boss_hp_label()
 
+
 ## Boss 阶段切换时回调（目前仅日志记录，Boss 血条 UI 可后续扩展）
 func on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
 	room_info_label.text = "Boss 进入阶段 %d！" % new_phase
+
 
 ## Boss 被击败时回调（目前仅日志记录）
 func on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
@@ -752,40 +970,43 @@ func on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
 	_hide_boss_hp_ui()
 	_show_boss_defeated_victory()
 	_trigger_boss_defeated_screen_effects()
+
+
 ## Boss击败后的胜利提示文字动画
 func _show_boss_defeated_victory() -> void:
 	var victory_label := Label.new()
-	victory_label.name = 'BossDefeatedVictory'
-	victory_label.text = '✦ BOSS DEFEATED ✦'
+	victory_label.name = "BossDefeatedVictory"
+	victory_label.text = "✦ BOSS DEFEATED ✦"
 	victory_label.position = Vector2(640, 400)
 	victory_label.size = Vector2(600, 60)
 	victory_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	victory_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	victory_label.add_theme_font_size_override('font_size', 42)
+	victory_label.add_theme_font_size_override("font_size", 42)
 	victory_label.modulate.a = 0.0
 	victory_label.z_index = 2000
 	add_child(victory_label)
-	
+
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(victory_label, 'modulate:a', 1.0, 0.2)
-	tween.tween_property(victory_label, 'position:y', 350.0, 0.5)
+	tween.tween_property(victory_label, "modulate:a", 1.0, 0.2)
+	tween.tween_property(victory_label, "position:y", 350.0, 0.5)
 	await tween.finished
 	tween = create_tween()
-	tween.tween_property(victory_label, 'modulate:a', 0.0, 0.6)
+	tween.tween_property(victory_label, "modulate:a", 0.0, 0.6)
 	await tween.finished
 	victory_label.queue_free()
 
+
 ## Boss击败时的屏幕震动+白闪特效（通过 ScreenShake）
 func _trigger_boss_defeated_screen_effects() -> void:
-	var shake: Node = get_tree().root.find_child('ScreenShake', true, false)
+	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
 	if shake != null:
-		if shake.has_method('screen_shake_death'):
-			shake.call('screen_shake_death')
-		elif shake.has_method('trigger'):
-			shake.call('trigger', 22.0, 0.5)
-		if shake.has_method('screen_flash'):
-			shake.call('screen_flash', Color(1.0, 1.0, 1.0, 0.8), 0.2)
+		if shake.has_method("screen_shake_death"):
+			shake.call("screen_shake_death")
+		elif shake.has_method("trigger"):
+			shake.call("trigger", 22.0, 0.5)
+		if shake.has_method("screen_flash"):
+			shake.call("screen_flash", Color(1.0, 1.0, 1.0, 0.8), 0.2)
 
 
 ## — Boss HP UI 初始化 —
@@ -805,13 +1026,13 @@ func _init_boss_hp_ui() -> void:
 	_boss_hp_panel.grow_horizontal = 2
 	_boss_hp_panel.visible = false
 	add_child(_boss_hp_panel)
-	
+
 	var vbox := VBoxContainer.new()
 	vbox.name = "VBox"
 	vbox.alignment = VBoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", 4)
 	_boss_hp_panel.add_child(vbox)
-	
+
 	# Boss 名称标签
 	_boss_name_label = Label.new()
 	_boss_name_label.name = "BossNameLabel"
@@ -820,12 +1041,12 @@ func _init_boss_hp_ui() -> void:
 	_boss_name_label.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3, 1.0))
 	_boss_name_label.add_theme_font_size_override("font_size", 16)
 	vbox.add_child(_boss_name_label)
-	
+
 	# Boss HP 条背景
 	var hp_bg := PanelContainer.new()
 	hp_bg.add_theme_stylebox_override("panel", _make_boss_hp_bg_style())
 	vbox.add_child(hp_bg)
-	
+
 	# Boss HP 条（ProgressBar）
 	_boss_hp_bar = ProgressBar.new()
 	_boss_hp_bar.name = "BossHPBar"
@@ -838,14 +1059,13 @@ func _init_boss_hp_ui() -> void:
 	# 设置 bar 填充样式（深红背景+亮红前景）
 	var fill_style := StyleBoxFlat.new()
 	fill_style.bg_color = Color(0.25, 0.05, 0.05, 1.0)
-	fill_style.fill_center = true
 	fill_style.corner_radius_top_left = 3.0
 	fill_style.corner_radius_top_right = 3.0
 	fill_style.corner_radius_bottom_right = 3.0
 	fill_style.corner_radius_bottom_left = 3.0
 	_boss_hp_bar.add_theme_stylebox_override("fill", fill_style)
 	hp_bg.add_child(_boss_hp_bar)
-	
+
 	# HP 数值标签
 	_boss_hp_label = Label.new()
 	_boss_hp_label.name = "BossHPLabel"
@@ -854,6 +1074,7 @@ func _init_boss_hp_ui() -> void:
 	_boss_hp_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
 	_boss_hp_label.add_theme_font_size_override("font_size", 12)
 	vbox.add_child(_boss_hp_label)
+
 
 ## 创建 Boss HP 背景样式
 func _make_boss_hp_bg_style() -> StyleBox:
@@ -869,6 +1090,7 @@ func _make_boss_hp_bg_style() -> StyleBox:
 	style.content_margin_bottom = 4.0
 	return style
 
+
 ## 显示 Boss HP UI
 func show_boss_hp(boss_name: String, max_hp: float, current_hp: float) -> void:
 	if _boss_hp_panel == null:
@@ -881,10 +1103,12 @@ func show_boss_hp(boss_name: String, max_hp: float, current_hp: float) -> void:
 	_update_boss_hp_label()
 	_boss_hp_panel.visible = true
 
+
 ## 更新 Boss HP 数值显示
 func _update_boss_hp_label() -> void:
 	if _boss_hp_label != null:
 		_boss_hp_label.text = "%d / %d" % [int(_boss_current_hp), int(_boss_max_hp)]
+
 
 ## 刷新 Boss HP（供外部调用）
 func update_boss_hp(current_hp: float) -> void:
@@ -893,10 +1117,12 @@ func update_boss_hp(current_hp: float) -> void:
 		_boss_hp_bar.value = current_hp
 	_update_boss_hp_label()
 
+
 ## 隐藏 Boss HP UI
 func _hide_boss_hp_ui() -> void:
 	if _boss_hp_panel != null:
 		_boss_hp_panel.visible = false
+
 
 ## 显示命运卡片提示（房间清理后、或出生时）
 ## 命运卡片触发时短暂屏幕闪光特效（白金色快速闪烁）
@@ -911,6 +1137,7 @@ func _show_fate_card_notification() -> void:
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
 	# 命运触发时屏幕闪光（快速白色淡入淡出，z_index 高于普通UI）
 	_show_fate_card_flash()
+
 
 ## 命运卡片触发时屏幕闪光特效
 func _show_fate_card_flash() -> void:
@@ -928,13 +1155,19 @@ func _show_fate_card_flash() -> void:
 	# 快速闪入→淡出（0.2s 闪入 + 0.35s 淡出）
 	var ft := flash.create_tween()
 	ft.set_parallel(true)
-	ft.tween_property(flash, "color:a", 0.18, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	ft.chain().set_parallel(false)
-	ft.chain().tween_property(flash, "color:a", 0.0, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	ft.chain().tween_callback(func():
-		if flash and is_instance_valid(flash):
-			flash.queue_free()
+	ft.tween_property(flash, "color:a", 0.18, 0.2).set_trans(Tween.TRANS_QUAD).set_ease(
+		Tween.EASE_OUT
 	)
+	ft.chain().set_parallel(false)
+	ft.chain().tween_property(flash, "color:a", 0.0, 0.35).set_trans(Tween.TRANS_QUAD).set_ease(
+		Tween.EASE_IN
+	)
+	ft.chain().tween_callback(
+		func():
+			if flash and is_instance_valid(flash):
+				flash.queue_free()
+	)
+
 
 ## 显示命运卡片提示（供外部调用，支持自定义文字）
 func show_fate_card_notification(message: String = "") -> void:
@@ -948,6 +1181,7 @@ func show_fate_card_notification(message: String = "") -> void:
 	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 1.0, 0.3)
 	_show_fate_card_flash()
+
 
 func show_run_choice_panel(kind: String, title: String, subtitle: String, choices: Array) -> void:
 	if _fate_card_notification_label:
@@ -1027,10 +1261,12 @@ func show_run_choice_panel(kind: String, title: String, subtitle: String, choice
 	var tween := _run_choice_overlay.create_tween()
 	tween.tween_property(_run_choice_overlay, "modulate:a", 1.0, 0.16)
 
+
 func hide_run_choice_panel() -> void:
 	if _run_choice_overlay:
 		_run_choice_overlay.visible = false
 		_run_choice_kind = ""
+
 
 func _ensure_run_choice_overlay() -> void:
 	if _run_choice_overlay != null and is_instance_valid(_run_choice_overlay):
@@ -1043,6 +1279,7 @@ func _ensure_run_choice_overlay() -> void:
 	_run_choice_overlay.visible = false
 	add_child(_run_choice_overlay)
 
+
 func _on_run_choice_pressed(kind: String, choice_id: String) -> void:
 	hide_run_choice_panel()
 	match kind:
@@ -1051,9 +1288,11 @@ func _on_run_choice_pressed(kind: String, choice_id: String) -> void:
 		"extraction":
 			extraction_choice_selected.emit(choice_id)
 
+
 ## 命运触发通知别名（兼容 MapFateTriggers 调用）
 func show_fate_trigger_notification(trigger_type: String, threshold: int, preview: String) -> void:
 	show_fate_card_notification("%s ×%d → %s" % [trigger_type, threshold, preview])
+
 
 ## 隐藏命运卡片提示
 func _hide_fate_card_notification() -> void:
@@ -1066,6 +1305,7 @@ func _hide_fate_card_notification() -> void:
 	if _fate_card_notification_label:
 		_fate_card_notification_label.visible = false
 
+
 ## 游戏结束
 func _on_game_over(reason: String = "未知原因") -> void:
 	# 构建死亡统计
@@ -1077,16 +1317,12 @@ func _on_game_over(reason: String = "未知原因") -> void:
 	if reason_label:
 		reason_label.text = "原因: %s" % reason
 	if stats_label:
-		stats_label.text = "最终得分: %d\n击毙: %d\n存活楼层: %d" % [
-			_death_stats["score"],
-			_kill_count,
-			_death_stats["floor"]
-		]
+		stats_label.text = (
+			"最终得分: %d\n击毙: %d\n存活楼层: %d"
+			% [_death_stats["score"], _kill_count, _death_stats["floor"]]
+		)
 	if loot_label:
-		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [
-			_death_loot["saved"],
-			_death_loot["lost"]
-		]
+		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [_death_loot["saved"], _death_loot["lost"]]
 
 	if death_overlay:
 		death_overlay.visible = true
@@ -1094,15 +1330,18 @@ func _on_game_over(reason: String = "未知原因") -> void:
 		game_over_panel.visible = true
 	get_tree().paused = true
 
+
 ## 设置死亡统计（房间模式调用）
 func set_death_stats(stats: Dictionary) -> void:
 	_death_stats = stats
+
 
 ## 设置战利品信息
 func set_loot_info(saved: int, lost: int) -> void:
 	_death_loot = {"saved": saved, "lost": lost}
 	if loot_label:
 		loot_label.text = "战利品: 保险保住 %d 件 / 损失 %d 件" % [saved, lost]
+
 
 ## 标签跳动动画（数值变化时触发）
 func _bounce_label(label: Label) -> void:
@@ -1111,7 +1350,10 @@ func _bounce_label(label: Label) -> void:
 	var tween := label.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(label, "scale", Vector2(1.3, 1.3), 0.08).set_trans(Tween.TRANS_QUAD)
-	tween.chain().tween_property(label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BOUNCE)
+	tween.chain().tween_property(label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(
+		Tween.TRANS_BOUNCE
+	)
+
 
 ## 同步 ScoreLabel 描边
 func _sync_score_outline() -> void:
@@ -1127,6 +1369,7 @@ func _sync_score_outline() -> void:
 			parent.add_child(_score_outline_label)
 			parent.move_child(_score_outline_label, score_label.get_index())
 
+
 ## 同步 CurrencyLabel 描边
 func _sync_currency_outline() -> void:
 	if currency_label == null:
@@ -1140,6 +1383,7 @@ func _sync_currency_outline() -> void:
 		if parent:
 			parent.add_child(_currency_outline_label)
 			parent.move_child(_currency_outline_label, currency_label.get_index())
+
 
 ## 同步弹药描边（与 ammo_label 配合，弹药数值变化时同步描边副本）
 func _sync_ammo_outline() -> void:
@@ -1155,6 +1399,7 @@ func _sync_ammo_outline() -> void:
 			parent.add_child(_ammo_outline_label)
 			parent.move_child(_ammo_outline_label, ammo_label.get_index())
 
+
 ## 同步 WaveLabel 描边
 func _sync_wave_outline() -> void:
 	if wave_label == null:
@@ -1168,6 +1413,7 @@ func _sync_wave_outline() -> void:
 		if parent:
 			parent.add_child(_wave_num_outline_label)
 			parent.move_child(_wave_num_outline_label, wave_label.get_index())
+
 
 ## 创建一个标签的描边副本（偏移2px，黑色60%透明度）
 func _make_outline(main_label: Label) -> Label:
@@ -1185,11 +1431,13 @@ func _make_outline(main_label: Label) -> Label:
 	ol.scale = main_label.scale
 	return ol
 
+
 func _on_retry_pressed() -> void:
 	get_tree().paused = false
 	death_overlay.visible = false
 	game_over_panel.visible = false
 	get_tree().reload_current_scene()
+
 
 func _on_menu_pressed() -> void:
 	get_tree().paused = false
@@ -1198,9 +1446,11 @@ func _on_menu_pressed() -> void:
 	# 返回基地主界面（而非直接重新开始游戏）
 	get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
 
+
 ## 楼层变化
 func _on_floor_changed(old_f: int, new_f: int) -> void:
 	update_floor(new_f)
+
 
 ## 背包变化
 func _on_inventory_changed() -> void:
@@ -1211,11 +1461,13 @@ func _on_inventory_changed() -> void:
 	_sync_beacon_label_from_inventory()
 	_refresh_inventory_ui()
 
+
 ## 容量变化
 func _on_capacity_changed(current: int, maximum: int) -> void:
 	if inventory_capacity_label:
 		inventory_capacity_label.text = "背包 %d/%d" % [current, maximum]
 	_refresh_inventory_ui()
+
 
 ## 从背包同步信标数量到UI标签（背包变化或消耗品使用后调用）
 func _sync_beacon_label_from_inventory() -> void:
@@ -1225,11 +1477,13 @@ func _sync_beacon_label_from_inventory() -> void:
 	_beacon_count = int(ed.get_beacon_count())
 	_update_beacon_label()
 
+
 ## 闪避冷却进度更新（ratio: 0.0=就绪，1.0=冷却中）
 func _on_dash_cooldown_changed(cooldown_ratio: float) -> void:
 	if dash_cooldown_bar:
 		# value=1 就绪，value=0 冷却中（进度条反向）
 		dash_cooldown_bar.value = 1.0 - cooldown_ratio
+
 
 ## 闪避启动时高亮
 func _on_dash_started() -> void:
@@ -1238,6 +1492,13 @@ func _on_dash_started() -> void:
 		# 淡出高亮
 		var t := dash_cooldown_bar.create_tween()
 		t.tween_property(dash_cooldown_bar, "modulate", Color.WHITE, 0.3)
+
+
+## 射速冷却进度更新（ratio: 1.0=就绪，0.0=冷却中）
+func _on_fire_cooldown_changed(cooldown_ratio: float) -> void:
+	if fire_rate_bar:
+		fire_rate_bar.value = cooldown_ratio
+
 
 ## 波次进度更新（显示波次击杀状态 + 平滑动画）
 func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
@@ -1257,7 +1518,9 @@ func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
 	if ratio < 0.5:
 		clearing_progress.modulate = Color(1.0, 0.4 + ratio * 0.6, 0.2, 1.0)
 	elif ratio < 0.8:
-		clearing_progress.modulate = Color(1.0, 0.7 + (ratio - 0.5) * 1.0, 0.2 + (ratio - 0.5) * 0.8, 1.0)
+		clearing_progress.modulate = Color(
+			1.0, 0.7 + (ratio - 0.5) * 1.0, 0.2 + (ratio - 0.5) * 0.8, 1.0
+		)
 	else:
 		clearing_progress.modulate = Color(0.4 + ratio * 0.6, 1.0, 0.4, 1.0)
 
@@ -1296,7 +1559,9 @@ func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
 		_wave_outline_label.z_index = _wave_indicator_label.z_index - 1
 		_wave_outline_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		_wave_outline_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		_wave_outline_label.add_theme_font_size_override("font_size", _wave_indicator_label.get_theme_font_size("font_size"))
+		_wave_outline_label.add_theme_font_size_override(
+			"font_size", _wave_indicator_label.get_theme_font_size("font_size")
+		)
 		_wave_outline_label.scale = _wave_indicator_label.scale
 
 		# 插入到主标签之前（使其在视觉上位于底层）
@@ -1315,10 +1580,12 @@ func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
 		if outline_tween:
 			outline_tween.tween_property(_wave_outline_label, "scale", Vector2(1.0, 1.0), 0.12)
 
+
 ## 撤离完成
 func _on_extraction_completed(_success: bool, loot: Array) -> void:
 	extraction_panel.visible = false
 	_show_extraction_success()
+
 
 ## 显示撤离成功面板（淡入动画 + 物品闪光）
 func _show_extraction_success() -> void:
@@ -1357,10 +1624,14 @@ func _show_extraction_success() -> void:
 			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			# 品质边框颜色：0=白/黄，1=蓝，2=紫，3=金
 			match tier:
-				3: lbl.modulate = Color(1.0, 0.85, 0.2, 1.0)   # 金
-				2: lbl.modulate = Color(0.75, 0.35, 1.0, 1.0)  # 紫
-				1: lbl.modulate = Color(0.35, 0.55, 1.0, 1.0)  # 蓝
-				_: lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)   # 米黄
+				3:
+					lbl.modulate = Color(1.0, 0.85, 0.2, 1.0)  # 金
+				2:
+					lbl.modulate = Color(0.75, 0.35, 1.0, 1.0)  # 紫
+				1:
+					lbl.modulate = Color(0.35, 0.55, 1.0, 1.0)  # 蓝
+				_:
+					lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)  # 米黄
 			extracted_items_vbox.add_child(lbl)
 		for item in insured:
 			var item_name: String = item.get("id", "保险物品")
@@ -1368,38 +1639,52 @@ func _show_extraction_success() -> void:
 			var lbl := Label.new()
 			lbl.text = "• %s [保险]" % item_name
 			match tier:
-				3: lbl.modulate = Color(0.8, 0.95, 0.6, 1.0)
-				2: lbl.modulate = Color(0.85, 0.75, 1.0, 1.0)
-				1: lbl.modulate = Color(0.7, 0.8, 1.0, 1.0)
-				_: lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
+				3:
+					lbl.modulate = Color(0.8, 0.95, 0.6, 1.0)
+				2:
+					lbl.modulate = Color(0.85, 0.75, 1.0, 1.0)
+				1:
+					lbl.modulate = Color(0.7, 0.8, 1.0, 1.0)
+				_:
+					lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
 			extracted_items_vbox.add_child(lbl)
 
 	# 淡入+放大动画（0.4s 后弹回正常大小）
 	var tween := extraction_success_panel.create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(extraction_success_panel, "modulate:a", 1.0, 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(extraction_success_panel, "scale", Vector2(1.0, 1.0), 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	(
+		tween
+		. tween_property(extraction_success_panel, "modulate:a", 1.0, 0.4)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
+	(
+		tween
+		. tween_property(extraction_success_panel, "scale", Vector2(1.0, 1.0), 0.4)
+		. set_trans(Tween.TRANS_BACK)
+		. set_ease(Tween.EASE_OUT)
+	)
 
 	# 撤离成功时轻度震屏（强化"完成撤离"的仪式感）
 	if _screen_shake and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 3.5, 0.12)
 
+
 func show_run_extraction_success(stats: Dictionary) -> void:
 	_show_extraction_success()
 	if extracted_count_label:
-		extracted_count_label.text = "撤离成功  波次 %d  击杀 %d  魂 %d" % [
-			int(stats.get("wave", 0)),
-			int(stats.get("kills", 0)),
-			int(stats.get("currency", 0))
-		]
+		extracted_count_label.text = (
+			"撤离成功  波次 %d  击杀 %d  魂 %d"
+			% [int(stats.get("wave", 0)), int(stats.get("kills", 0)), int(stats.get("currency", 0))]
+		)
 	if extracted_items_vbox:
 		var score_label_node := Label.new()
-		score_label_node.text = "最终得分: %d  风险层级: %d" % [
-			int(stats.get("score", 0)),
-			int(stats.get("risk", 0))
-		]
+		score_label_node.text = (
+			"最终得分: %d  风险层级: %d" % [int(stats.get("score", 0)), int(stats.get("risk", 0))]
+		)
 		score_label_node.modulate = Color(0.85, 0.95, 1.0, 1.0)
 		extracted_items_vbox.add_child(score_label_node)
+
 
 ## 继续按钮 — 返回基地主界面
 func _on_continue_pressed() -> void:
@@ -1413,6 +1698,7 @@ func _on_continue_pressed() -> void:
 	# 返回基地主界面
 	get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
 
+
 ## 撤离中断
 func _on_extraction_aborted() -> void:
 	if room_info_label:
@@ -1420,6 +1706,7 @@ func _on_extraction_aborted() -> void:
 	if abort_button:
 		abort_button.disabled = true
 		abort_button.text = "已中断"
+
 
 ## 中断撤离按钮
 func _on_abort_button_pressed() -> void:
@@ -1429,13 +1716,15 @@ func _on_abort_button_pressed() -> void:
 	if _extraction_module:
 		_extraction_module.abort_extraction()
 
+
 ## 显示撤离选择面板（房间清理后）
 func _on_extraction_ready() -> void:
 	if extraction_panel:
 		_update_beacon_label()
 		_build_extraction_buttons()
 		_update_extraction_buttons()  # 刷新按钮状态（可能刚有extraction_unlocked信号解锁了条件撤离点）
-		extraction_panel.visible = true
+		_restore_extraction_choice_panel()
+
 
 ## 构建撤离类型按钮
 func _build_extraction_buttons() -> void:
@@ -1454,14 +1743,21 @@ func _build_extraction_buttons() -> void:
 		btn.pressed.connect(_on_extraction_type_button_pressed.bind(etype))
 		extraction_buttons_container.add_child(btn)
 
+
 func _get_extraction_button_text(etype: String) -> String:
 	match etype:
-		"STANDARD": return "撤离点 (安全但偏远)"
-		"BEACON": return "信标撤离 (消耗道具)"
-		"BOSS_KILL": return "Boss撤离 (需击败Boss)"
-		"ELITE_KILL": return "精英撤离 (需击败精英)"
-		"TRADE": return "交易撤离 (消耗资源)"
+		"STANDARD":
+			return "撤离点 (安全但偏远)"
+		"BEACON":
+			return "信标撤离 (消耗道具)"
+		"BOSS_KILL":
+			return "Boss撤离 (需击败Boss)"
+		"ELITE_KILL":
+			return "精英撤离 (需击败精英)"
+		"TRADE":
+			return "交易撤离 (消耗资源)"
 	return etype
+
 
 func _get_map_manager_safe() -> Node:
 	if _room_game_mode == null or not is_instance_valid(_room_game_mode):
@@ -1473,6 +1769,7 @@ func _get_map_manager_safe() -> Node:
 		return null
 	return mm
 
+
 func _get_extraction_director_safe() -> Object:
 	var mm := _get_map_manager_safe()
 	if mm == null:
@@ -1482,6 +1779,7 @@ func _get_extraction_director_safe() -> Object:
 		return null
 	return ed
 
+
 func _get_current_floor_safe() -> int:
 	if _room_game_mode == null or not is_instance_valid(_room_game_mode):
 		return 1
@@ -1490,11 +1788,15 @@ func _get_current_floor_safe() -> int:
 		return 1
 	return max(1, int(floor_value))
 
+
 func _get_extraction_disabled_reason(etype: String) -> String:
 	match etype:
-		"BEACON": return "没有信标道具"
-		"BOSS_KILL": return "尚未击败Boss，无法解锁"
-		"ELITE_KILL": return "尚未击败精英怪，无法解锁"
+		"BEACON":
+			return "没有信标道具"
+		"BOSS_KILL":
+			return "尚未击败Boss，无法解锁"
+		"ELITE_KILL":
+			return "尚未击败精英怪，无法解锁"
 		"TRADE":
 			var ed := _get_extraction_director_safe()
 			if ed != null and ed.has_method("get_trade_cost"):
@@ -1502,6 +1804,7 @@ func _get_extraction_disabled_reason(etype: String) -> String:
 				return "需要 %d 魂，当前货币不足" % cost
 			return "当前模式未接入交易撤离"
 	return ""
+
 
 func _can_use_extraction_type(etype: String) -> bool:
 	match etype:
@@ -1511,14 +1814,44 @@ func _can_use_extraction_type(etype: String) -> bool:
 			return _beacon_count > 0
 		"BOSS_KILL":
 			var ed_boss := _get_extraction_director_safe()
-			return ed_boss != null and ed_boss.has_method("get_points_by_type") and ed_boss.get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL, true).size() > 0
+			return (
+				ed_boss != null
+				and ed_boss.has_method("get_points_by_type")
+				and (
+					(
+						ed_boss
+						. get_points_by_type(ExtractionDirector.ExtractionType.BOSS_KILL, true)
+						. size()
+					)
+					> 0
+				)
+			)
 		"ELITE_KILL":
 			var ed_elite := _get_extraction_director_safe()
-			return ed_elite != null and ed_elite.has_method("get_points_by_type") and ed_elite.get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL, true).size() > 0
+			return (
+				ed_elite != null
+				and ed_elite.has_method("get_points_by_type")
+				and (
+					(
+						ed_elite
+						. get_points_by_type(ExtractionDirector.ExtractionType.ELITE_KILL, true)
+						. size()
+					)
+					> 0
+				)
+			)
 		"TRADE":
 			var ed_trade_check := _get_extraction_director_safe()
-			return ed_trade_check != null and ed_trade_check.has_method("get_trade_cost") and GameManager.currency >= int(ed_trade_check.get_trade_cost(_get_current_floor_safe()))
+			return (
+				ed_trade_check != null
+				and ed_trade_check.has_method("get_trade_cost")
+				and (
+					GameManager.currency
+					>= int(ed_trade_check.get_trade_cost(_get_current_floor_safe()))
+				)
+			)
 	return false
+
 
 func _update_extraction_buttons() -> void:
 	if extraction_buttons_container == null:
@@ -1534,25 +1867,43 @@ func _update_extraction_buttons() -> void:
 		btn.modulate = Color.WHITE if not btn.disabled else Color.GRAY
 		btn.tooltip_text = "" if not btn.disabled else _get_extraction_disabled_reason(etype)
 
+
 func _update_beacon_label() -> void:
 	if beacon_label:
 		beacon_label.text = "信标数量: %d" % _beacon_count
+
 
 ## 撤离类型按钮点击
 func _on_extraction_type_button_pressed(etype: String) -> void:
 	var countdown: float = 5.0
 	match etype:
-		"STANDARD": countdown = 8.0
-		"BEACON": countdown = 10.0
-		"BOSS_KILL": countdown = 3.0
-		"ELITE_KILL": countdown = 5.0
-		"TRADE": countdown = 5.0
+		"STANDARD":
+			countdown = 8.0
+		"BEACON":
+			countdown = 10.0
+		"BOSS_KILL":
+			countdown = 3.0
+		"ELITE_KILL":
+			countdown = 5.0
+		"TRADE":
+			countdown = 5.0
+
+	if _room_game_mode == null or not _room_game_mode.has_method("begin_extraction"):
+		if room_info_label:
+			room_info_label.text = "当前战斗模式暂未接入撤离流程"
+		return
+
+	if not _is_extraction_backend_ready():
+		_restore_extraction_choice_panel("撤离装置尚未就绪")
+		return
 
 	# 信标撤离：先消耗信标道具创建撤离点
 	if etype == "BEACON":
 		var ed_beacon := _get_extraction_director_safe()
 		if ed_beacon != null and ed_beacon.has_method("summon_beacon_extraction"):
-			ed_beacon.summon_beacon_extraction()
+			if not bool(ed_beacon.summon_beacon_extraction()):
+				_restore_extraction_choice_panel("信标撤离启动失败")
+				return
 			if ed_beacon.has_method("get_beacon_count"):
 				_beacon_count = int(ed_beacon.get_beacon_count())
 
@@ -1562,25 +1913,35 @@ func _on_extraction_type_button_pressed(etype: String) -> void:
 		if ed_trade != null and ed_trade.has_method("get_trade_cost"):
 			var cost: int = int(ed_trade.get_trade_cost(_get_current_floor_safe()))
 			if not GameManager.spend_currency(cost):
+				_restore_extraction_choice_panel("魂不足，无法交易撤离")
 				return
 			ed_trade.set("_trade_pending_refund", false)
 
-	if _room_game_mode == null or not _room_game_mode.has_method("begin_extraction"):
-		if room_info_label:
-			room_info_label.text = "当前战斗模式暂未接入撤离流程"
+	var started: bool = bool(_room_game_mode.call("begin_extraction", etype, countdown))
+	if not started:
+		if etype == "TRADE":
+			var ed_trade_refund := _get_extraction_director_safe()
+			if ed_trade_refund != null and ed_trade_refund.has_method("get_trade_cost"):
+				GameManager.add_currency(
+					int(ed_trade_refund.get_trade_cost(_get_current_floor_safe()))
+				)
+		_restore_extraction_choice_panel("撤离启动失败，请重新选择")
 		return
 
-	if extraction_panel:
-		extraction_panel.visible = false
-	_room_game_mode.begin_extraction(etype, countdown)
 	_start_extraction_countdown_ui(etype, countdown)
+
 
 ## 开始撤离读条UI
 func _start_extraction_countdown_ui(extraction_type: String, duration: float) -> void:
+	_active_extraction_duration = duration
+	if extraction_panel:
+		extraction_panel.visible = true
 	extraction_type_label.text = "撤离中: %s" % extraction_type
 	countdown_bar.visible = true
 	countdown_label.visible = true
 	abort_button.visible = true
+	abort_button.disabled = false
+	abort_button.text = "中断撤离"
 	countdown_bar.max_value = 1.0
 	countdown_bar.value = 0.0
 	_update_countdown_label(duration, duration)
@@ -1590,21 +1951,59 @@ func _start_extraction_countdown_ui(extraction_type: String, duration: float) ->
 		for child in extraction_buttons_container.get_children():
 			child.visible = false
 
+
+func show_extraction_room_countdown(duration: float) -> void:
+	_start_extraction_countdown_ui("守点撤离", duration)
+
+
+func _is_extraction_backend_ready() -> bool:
+	if _extraction_module == null or not _extraction_module.has_method("get_status"):
+		return true
+	return int(_extraction_module.get_status()) == ExtractionModule.ExtractionStatus.IDLE
+
+
+func _restore_extraction_choice_panel(message: String = "") -> void:
+	_active_extraction_duration = 0.0
+	if room_info_label and not message.is_empty():
+		room_info_label.text = message
+	if extraction_type_label:
+		extraction_type_label.text = "选择撤离方式"
+	if countdown_bar:
+		countdown_bar.visible = false
+		countdown_bar.value = 0.0
+	if countdown_label:
+		countdown_label.visible = false
+	if abort_button:
+		abort_button.visible = false
+		abort_button.disabled = false
+		abort_button.text = "中断撤离"
+	if extraction_buttons_container:
+		for child in extraction_buttons_container.get_children():
+			child.visible = true
+	_update_beacon_label()
+	_update_extraction_buttons()
+	if extraction_panel:
+		extraction_panel.visible = true
+
+
 ## 更新读条进度
 func update_countdown(progress: float, remaining: float) -> void:
 	if countdown_bar:
 		countdown_bar.value = progress
 		_update_countdown_label(remaining, countdown_bar.max_value)
 
+
 func _update_countdown_label(remaining: float, total: float) -> void:
 	if countdown_label:
 		countdown_label.text = "%.1f 秒" % remaining
+
 
 ## 同步信标数量（由 RoomGameMode 在初始化时调用）
 func set_beacon_count(count: int) -> void:
 	_beacon_count = count
 	_update_beacon_label()
 	_update_extraction_buttons()  # 信标数量变化时同步刷新按钮可用性（BEACON按钮依赖_beacon_count）
+
 
 ## 隐藏所有面板
 func hide_all_panels() -> void:
@@ -1614,6 +2013,7 @@ func hide_all_panels() -> void:
 		inventory_panel.visible = false
 	if fate_card_panel:
 		fate_card_panel.visible = false
+
 
 ## 每帧更新命运卡片提示计时器
 ## 弹药变化回调
@@ -1641,6 +2041,7 @@ func _on_ammo_changed(current: int, maximum: int) -> void:
 		else:
 			ammo_bar.modulate = Color(0.45, 1.0, 0.55, 1.0)  # 绿色正常
 
+
 ## 开始换弹
 func _on_reload_started() -> void:
 	_is_reloading = true
@@ -1657,6 +2058,7 @@ func _on_reload_started() -> void:
 		_reload_duration = 2.0
 	_reload_progress = 0.0
 
+
 ## 换弹完成
 func _on_weapon_reloaded() -> void:
 	_is_reloading = false
@@ -1666,6 +2068,7 @@ func _on_weapon_reloaded() -> void:
 	if ammo_label:
 		ammo_label.modulate = Color.WHITE
 
+
 ## 获取武器装配树引用
 func _get_weapon_tree():
 	if _room_game_mode != null and _room_game_mode.has_method("get_player"):
@@ -1673,6 +2076,7 @@ func _get_weapon_tree():
 		if player != null and player.has_method("get_weapon_tree"):
 			return player.get_weapon_tree()
 	return null
+
 
 func _process(delta: float) -> void:
 	if _is_reloading and _reload_duration > 0:
@@ -1687,12 +2091,84 @@ func _process(delta: float) -> void:
 			_fate_card_notification_timer = 0.0
 			_hide_fate_card_notification()
 
+
 ## — 物品存入取出（保险格）系统 —
 const SLOT_SIZE := 56
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 
 var _inventory_slot_nodes: Array[Control] = []
 var _insurance_slot_nodes: Array[Control] = []
+
+
+func _setup_inventory_system_ui() -> void:
+	_ensure_equipped_weapon_widget()
+	_style_inventory_panel(inventory_panel, "背包")
+	_style_inventory_panel(insurance_panel, "保险箱")
+	if (
+		inventory_panel != null
+		and not inventory_panel.gui_input.is_connected(_on_inventory_panel_gui_input)
+	):
+		inventory_panel.gui_input.connect(_on_inventory_panel_gui_input)
+	if (
+		insurance_panel != null
+		and not insurance_panel.gui_input.is_connected(_on_inventory_panel_gui_input)
+	):
+		insurance_panel.gui_input.connect(_on_inventory_panel_gui_input)
+
+
+func _ensure_equipped_weapon_widget() -> void:
+	if _equipped_weapon_slot != null and is_instance_valid(_equipped_weapon_slot):
+		return
+	var hud := get_node_or_null("GameHUD") as Control
+	if hud == null:
+		return
+	var panel := PanelContainer.new()
+	panel.name = "EquippedWeaponPanel"
+	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	panel.offset_left = 18
+	panel.offset_top = 18
+	panel.offset_right = 182
+	panel.offset_bottom = 92
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.055, 0.065, 0.085, 0.92)
+	style.set_border_width_all(1)
+	style.set_border_color(Color(0.42, 0.50, 0.62, 0.85))
+	style.set_corner_radius_all(6)
+	panel.add_theme_stylebox_override("panel", style)
+	hud.add_child(panel)
+
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 8)
+	panel.add_child(row)
+
+	_equipped_weapon_slot = TextureRect.new()
+	_equipped_weapon_slot.name = "EquippedWeaponSlot"
+	_equipped_weapon_slot.custom_minimum_size = Vector2(56, 56)
+	_equipped_weapon_slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_equipped_weapon_slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	row.add_child(_equipped_weapon_slot)
+
+	_equipped_weapon_label = Label.new()
+	_equipped_weapon_label.name = "EquippedWeaponLabel"
+	_equipped_weapon_label.custom_minimum_size = Vector2(86, 56)
+	_equipped_weapon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_equipped_weapon_label.add_theme_font_size_override("font_size", 12)
+	_equipped_weapon_label.add_theme_color_override("font_color", Color(0.86, 0.90, 0.96, 1.0))
+	row.add_child(_equipped_weapon_label)
+
+
+func _style_inventory_panel(panel: PanelContainer, title: String) -> void:
+	if panel == null:
+		return
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.055, 0.06, 0.078, 0.96)
+	style.set_border_width_all(1)
+	style.set_border_color(Color(0.36, 0.44, 0.58, 0.9))
+	style.set_corner_radius_all(6)
+	panel.add_theme_stylebox_override("panel", style)
+	panel.tooltip_text = "%s: 拖动面板空白处移动。背包左键选择，Shift+左键存保险，右键使用/装备；保险箱左键取回。" % title
+
 
 func _build_inventory_grid() -> void:
 	if inventory_grid == null:
@@ -1707,6 +2183,7 @@ func _build_inventory_grid() -> void:
 		_inventory_slot_nodes.append(slot)
 		_connect_slot_signals(slot, i, true)
 
+
 func _build_insurance_grid() -> void:
 	if insurance_grid == null:
 		return
@@ -1719,6 +2196,7 @@ func _build_insurance_grid() -> void:
 		insurance_grid.add_child(slot)
 		_insurance_slot_nodes.append(slot)
 		_connect_slot_signals(slot, i, false)
+
 
 func _create_slot() -> Control:
 	var slot: Control
@@ -1744,6 +2222,7 @@ func _create_slot() -> Control:
 	slot.add_theme_stylebox_override("hover", hover_style)
 	return slot
 
+
 func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
 	if slot.has_method("set_slot_index"):
 		slot.call("set_slot_index", idx)
@@ -1751,6 +2230,7 @@ func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
 		(slot as Node).slot_clicked.connect(_on_slot_clicked.bind(is_inventory))
 	if slot.has_signal("slot_right_clicked"):
 		(slot as Node).slot_right_clicked.connect(_on_slot_right_clicked.bind(is_inventory))
+
 
 func _refresh_inventory_ui() -> void:
 	if _inventory_module == null or inventory_grid == null:
@@ -1769,6 +2249,9 @@ func _refresh_inventory_ui() -> void:
 	var cap: int = _inventory_module.get_capacity()
 	if inventory_capacity_label:
 		inventory_capacity_label.text = "背包 %d/%d" % [used, cap]
+	_highlight_selected_slots()
+	_update_equipped_weapon_slot()
+
 
 func _refresh_insurance_ui() -> void:
 	if _insurance_module == null or insurance_grid == null:
@@ -1788,6 +2271,8 @@ func _refresh_insurance_ui() -> void:
 	var used: int = occupied.size()
 	if insurance_label:
 		insurance_label.text = "保险格 %d/%d" % [used, 2]
+	_highlight_selected_slots()
+
 
 func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	var item: Dictionary = slot_info.get("item", {})
@@ -1800,7 +2285,12 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 			(slot as TextureRect).texture = tex
 	else:
 		if slot is TextureRect:
-			(slot as TextureRect).texture = null
+			(slot as TextureRect).texture = _make_item_icon(item)
+	_update_slot_text(slot, item)
+	slot.tooltip_text = (
+		"%s\n%s\n左键: 选择/查看  Shift+左键: 存保险  右键: 使用/装备/装配"
+		% [item.get("name", item_id), item.get("description", item.get("type", "物品"))]
+	)
 	if slot.has_node("CountLabel"):
 		var cl: Label = slot.get_node("CountLabel") as Label
 		if count > 1:
@@ -1815,9 +2305,12 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	style_box.set_corner_radius_all(4)
 	slot.add_theme_stylebox_override("normal", style_box)
 
+
 func _clear_slot(slot: Control) -> void:
 	if slot is TextureRect:
 		(slot as TextureRect).texture = null
+	_update_slot_text(slot, {})
+	slot.tooltip_text = ""
 	if slot.has_node("CountLabel"):
 		var cl: Label = slot.get_node("CountLabel") as Label
 		cl.visible = false
@@ -1828,52 +2321,325 @@ func _clear_slot(slot: Control) -> void:
 	style_box.set_corner_radius_all(4)
 	slot.add_theme_stylebox_override("normal", style_box)
 
+
+func _highlight_selected_slots() -> void:
+	for i in _inventory_slot_nodes.size():
+		_apply_slot_selection(_inventory_slot_nodes[i], i == _selected_inventory_slot)
+	for i in _insurance_slot_nodes.size():
+		_apply_slot_selection(_insurance_slot_nodes[i], i == _selected_insurance_slot)
+
+
+func _apply_slot_selection(slot: Control, selected: bool) -> void:
+	if slot == null:
+		return
+	var style_box := StyleBoxFlat.new()
+	style_box.bg_color = Color(0.18, 0.20, 0.27, 0.96) if selected else Color(0.12, 0.14, 0.18, 0.9)
+	style_box.set_border_width_all(2 if selected else 1)
+	style_box.set_border_color(
+		Color(1.0, 0.82, 0.35, 0.95) if selected else Color(0.3, 0.33, 0.4, 0.6)
+	)
+	style_box.set_corner_radius_all(4)
+	slot.add_theme_stylebox_override("normal", style_box)
+
+
+func _on_inventory_panel_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed:
+			_dragging_inventory_panel = true
+			_inventory_drag_start_mouse = get_viewport().get_mouse_position()
+			_inventory_drag_start_panel = (
+				Vector2(inventory_panel.offset_left, inventory_panel.offset_top)
+				if inventory_panel != null
+				else Vector2.ZERO
+			)
+			_inventory_drag_start_insurance = (
+				Vector2(insurance_panel.offset_left, insurance_panel.offset_top)
+				if insurance_panel != null
+				else Vector2.ZERO
+			)
+		else:
+			_dragging_inventory_panel = false
+	elif event is InputEventMouseMotion and _dragging_inventory_panel:
+		var delta := get_viewport().get_mouse_position() - _inventory_drag_start_mouse
+		_move_inventory_panel_pair(delta)
+
+
+func _move_inventory_panel_pair(delta: Vector2) -> void:
+	if inventory_panel != null:
+		var size := inventory_panel.size
+		inventory_panel.offset_left = _inventory_drag_start_panel.x + delta.x
+		inventory_panel.offset_top = _inventory_drag_start_panel.y + delta.y
+		inventory_panel.offset_right = inventory_panel.offset_left + size.x
+		inventory_panel.offset_bottom = inventory_panel.offset_top + size.y
+	if insurance_panel != null:
+		var size := insurance_panel.size
+		insurance_panel.offset_left = _inventory_drag_start_insurance.x + delta.x
+		insurance_panel.offset_top = _inventory_drag_start_insurance.y + delta.y
+		insurance_panel.offset_right = insurance_panel.offset_left + size.x
+		insurance_panel.offset_bottom = insurance_panel.offset_top + size.y
+
+
+func _update_equipped_weapon_slot() -> void:
+	if _equipped_weapon_slot == null or not is_instance_valid(_equipped_weapon_slot):
+		_ensure_equipped_weapon_widget()
+	if _equipped_weapon_slot == null:
+		return
+	var player := _get_player_reference()
+	var item := _current_equipped_weapon_item(player)
+	if item.is_empty():
+		_equipped_weapon_slot.texture = null
+		if _equipped_weapon_label != null:
+			_equipped_weapon_label.text = "主武器\n未装备"
+		return
+	_equipped_weapon_slot.texture = _make_item_icon(item)
+	_update_slot_text(_equipped_weapon_slot, item)
+	_equipped_weapon_slot.tooltip_text = "当前装备: %s" % item.get("name", "武器")
+	if _equipped_weapon_label != null:
+		_equipped_weapon_label.text = "主武器\n%s" % item.get("name", "武器")
+
+
+func _current_equipped_weapon_item(player: Node) -> Dictionary:
+	if player == null or not player.has_method("get_weapon_tree"):
+		return {}
+	var wt: WeaponAssemblyTree = player.get_weapon_tree() as WeaponAssemblyTree
+	if wt == null:
+		return {}
+	return _item_for_weapon_root(wt.get_root())
+
+
 func _on_insurance_changed() -> void:
 	_refresh_insurance_ui()
 
+
 func _on_slot_clicked(slot_index: int, is_inventory: bool) -> void:
 	if is_inventory:
-		item_to_insurance_requested.emit(slot_index)
+		_selected_inventory_slot = slot_index
+		_selected_insurance_slot = -1
+		if Input.is_key_pressed(KEY_SHIFT):
+			item_to_insurance_requested.emit(slot_index)
+		else:
+			_highlight_selected_slots()
 	else:
+		_selected_insurance_slot = slot_index
+		_selected_inventory_slot = -1
+		_highlight_selected_slots()
 		item_extraction_requested.emit(slot_index)
+
 
 func _on_slot_right_clicked(slot_index: int, is_inventory: bool) -> void:
 	if is_inventory:
-		# 尝试使用消耗品（右键使用物品）
 		var slot_data: Dictionary = _inventory_module.get_slot(slot_index)
 		if not slot_data.is_empty():
 			var item: Dictionary = slot_data["item"]
+			if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
+				if _equip_weapon_from_inventory(slot_index, item):
+					_refresh_inventory_ui()
+				return
+			if item.get("type", "") in ["module", "attachment"]:
+				if _install_weapon_module_from_item(item):
+					_inventory_module.remove_from_slot(slot_index, 1)
+					_refresh_inventory_ui()
+				return
 			var use_action: String = item.get("use_action", "")
 			if not use_action.is_empty():
-				# 消耗品使用：扣物品 + 触发效果
 				if _inventory_module.consume_item(item.get("id", ""), 1):
-					# 动态加载 handler 脚本并调用（避免跨脚本类型声明问题）
 					var handler_script: GDScript = load(_ITEM_USE_HANDLER_PATH)
 					var handler: Object = handler_script.new()
 					var context: Dictionary = {"player": _get_player_reference()}
 					var ok: bool = handler.apply(item, context)
 					handler.free()
 					if not ok:
-						# 使用失败：尝试恢复物品（consume 已调用，这里只是占位）
 						_inventory_module.add_item(item, 1)
 					_refresh_inventory_ui()
-					return
-		# 非消耗品：存入保险格
+				return
 		item_to_insurance_requested.emit(slot_index)
 	else:
 		item_extraction_requested.emit(slot_index)
 
-## 获取 Player 引用（供 ItemUseHandler 上下文使用）
+
+func _make_item_icon(item: Dictionary) -> Texture2D:
+	var img := Image.create(48, 48, false, Image.FORMAT_RGBA8)
+	var color := _item_color(item)
+	img.fill(Color(0.08, 0.09, 0.12, 1.0))
+	for y in range(4, 44):
+		for x in range(4, 44):
+			img.set_pixel(x, y, color)
+	for i in range(48):
+		img.set_pixel(i, 0, Color.WHITE)
+		img.set_pixel(i, 47, Color.WHITE)
+		img.set_pixel(0, i, Color.WHITE)
+		img.set_pixel(47, i, Color.WHITE)
+	return ImageTexture.create_from_image(img)
+
+
+func _item_color(item: Dictionary) -> Color:
+	match item.get("rarity", "common"):
+		"uncommon":
+			return Color(0.25, 0.62, 0.95, 1.0)
+		"rare":
+			return Color(0.58, 0.35, 0.95, 1.0)
+		"epic":
+			return Color(0.95, 0.45, 0.18, 1.0)
+		_:
+			pass
+	match item.get("type", ""):
+		"module":
+			return Color(0.22, 0.72, 0.56, 1.0)
+		"attachment":
+			return Color(0.76, 0.58, 0.24, 1.0)
+		"weapon":
+			return Color(0.88, 0.50, 0.24, 1.0)
+		"blueprint":
+			return Color(0.32, 0.50, 0.95, 1.0)
+		"key":
+			return Color(0.95, 0.76, 0.22, 1.0)
+		"consumable":
+			return Color(0.68, 0.86, 0.30, 1.0)
+		_:
+			return Color(0.55, 0.58, 0.64, 1.0)
+
+
+func _update_slot_text(slot: Control, item: Dictionary) -> void:
+	var label := slot.get_node_or_null("ItemGlyph") as Label
+	if item.is_empty():
+		if label != null:
+			label.visible = false
+		return
+	if label == null:
+		label = Label.new()
+		label.name = "ItemGlyph"
+		label.set_anchors_preset(Control.PRESET_FULL_RECT)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 15)
+		label.add_theme_color_override("font_color", Color.WHITE)
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		slot.add_child(label)
+	label.text = _item_glyph(item)
+	label.visible = true
+
+
+func _item_glyph(item: Dictionary) -> String:
+	var subtype := str(item.get("subtype", ""))
+	if item.get("id", "") == "item_room_key":
+		return "KEY"
+	if item.get("type", "") == "blueprint":
+		return "BP"
+	if subtype == "bullet":
+		return "BUL"
+	if subtype == "gun_body":
+		return "GUN"
+	if item.get("type", "") == "attachment":
+		return "ATT"
+	if item.get("type", "") == "weapon":
+		return "GUN"
+	if item.get("type", "") == "module":
+		return "MOD"
+	if item.get("use_action", "") == "heal":
+		return "HP"
+	if item.get("use_action", "") == "refill_ammo":
+		return "AM"
+	return "ITM"
+
+
+func _install_weapon_module_from_item(item: Dictionary) -> bool:
+	var player := _get_player_reference()
+	if player == null or not player.has_method("get_weapon_tree"):
+		return false
+	var wt: WeaponAssemblyTree = player.get_weapon_tree() as WeaponAssemblyTree
+	if wt == null or wt.get_root() == null:
+		return false
+	var assembly_id := str(item.get("assembly_id", item.get("id", "")))
+	var new_node: AssemblyNode = BlueprintRegistry.create_assembly_node(assembly_id)
+	if new_node == null:
+		return false
+	var root: AssemblyNode = wt.get_root()
+	var slot_type := AssemblyNode.SlotType.MOUNT
+	match item.get("subtype", ""):
+		"bullet":
+			slot_type = AssemblyNode.SlotType.BULLET
+		"muzzle":
+			slot_type = AssemblyNode.SlotType.MUZZLE
+		"magazine":
+			slot_type = AssemblyNode.SlotType.MAGAZINE
+		_:
+			slot_type = AssemblyNode.SlotType.MOUNT
+	var existing: AssemblyNode = root.slots.get(slot_type)
+	if existing != null:
+		wt.unmount(existing)
+	var ok := wt.mount(root, slot_type, new_node)
+	if ok:
+		show_fate_card_notification("已装配: %s。按 K 查看武器树" % item.get("name", item.get("id", "模块")))
+		if _weapon_panel != null and _weapon_panel.has_method("set_weapon_tree"):
+			_weapon_panel.call("set_weapon_tree", wt)
+	else:
+		show_fate_card_notification("装配失败: %s" % item.get("name", "模块"))
+	return ok
+
+
+func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
+	if _inventory_module == null:
+		return false
+	var player := _get_player_reference()
+	if player == null or not player.has_method("get_weapon_tree"):
+		return false
+	var wt: WeaponAssemblyTree = player.get_weapon_tree() as WeaponAssemblyTree
+	if wt == null or wt.get_root() == null:
+		return false
+	var assembly_id := str(item.get("assembly_id", item.get("id", "")))
+	var new_root: AssemblyNode = BlueprintRegistry.create_assembly_node(assembly_id)
+	if new_root == null:
+		show_fate_card_notification("无法装备: %s" % item.get("name", "武器"))
+		return false
+	var old_root := wt.get_root()
+	var old_weapon_item := _item_for_weapon_root(old_root)
+	if old_weapon_item.get("id", "") == item.get("id", ""):
+		show_fate_card_notification("已经装备: %s" % item.get("name", "武器"))
+		return false
+	var old_bullet: AssemblyNode = (
+		old_root.slots.get(AssemblyNode.SlotType.BULLET) if old_root != null else null
+	)
+	if old_bullet != null:
+		wt.unmount(old_bullet)
+	wt.set_root(new_root)
+	if old_bullet != null:
+		wt.mount(new_root, AssemblyNode.SlotType.BULLET, old_bullet)
+	_inventory_module.remove_from_slot(slot_index, 1)
+	if not old_weapon_item.is_empty():
+		_inventory_module.add_item(old_weapon_item, 1)
+	_bind_weapon_panel(player)
+	_update_equipped_weapon_slot()
+	show_fate_card_notification("已装备: %s；原武器已放回背包" % item.get("name", item.get("id", "武器")))
+	return true
+
+
+func _item_for_weapon_root(root: AssemblyNode) -> Dictionary:
+	if root == null:
+		return {}
+	var item_id := ""
+	match root.node_name:
+		"GunBody_Pistol":
+			item_id = "weapon_pistol"
+		"GunBody_Shotgun":
+			item_id = "weapon_shotgun"
+		"GunBody_Rifle":
+			item_id = "weapon_rifle"
+		_:
+			item_id = ""
+	if item_id.is_empty():
+		return {}
+	return ItemRegistry.get_instance().get_item(item_id)
+
+
 func _get_player_reference() -> Node:
 	if _room_game_mode != null and _room_game_mode.has_method("get_player"):
 		return _room_game_mode.get_player()
-	# Fallback：按节点路径查找
 	var player: Node = get_node_or_null("/root/Main/YSort/Player")
 	if player == null:
 		player = get_node_or_null("/root/Main/Player")
 	return player
 
-## 保险存入请求处理（被调用时执行存入保险格逻辑）
+
 func _on_item_to_insurance_requested(slot_index: int) -> void:
 	if _inventory_module == null or _insurance_module == null:
 		return
@@ -1884,29 +2650,54 @@ func _on_item_to_insurance_requested(slot_index: int) -> void:
 	if not ok:
 		print("[GameUIManager] 保险格已满，无法存入物品")
 		return
+	_selected_inventory_slot = -1
 	_refresh_inventory_ui()
 	_refresh_insurance_ui()
 
-## 保险取出请求处理
+
 func _on_item_extraction_requested(slot_index: int) -> void:
 	if _inventory_module == null or _insurance_module == null:
 		return
 	var item: Dictionary = _insurance_module.claim_item(slot_index)
 	if item.is_empty():
 		return
-	_inventory_module.add_item(item, item.get("count", 1))
+	var added: int = _inventory_module.add_item(item, item.get("count", 1))
+	if added <= 0:
+		if _insurance_module.has_method("insure_item_direct"):
+			_insurance_module.insure_item_direct(item)
+		show_fate_card_notification("背包已满，无法取回保险物品")
+		return
+	_selected_insurance_slot = -1
 	_refresh_inventory_ui()
 	_refresh_insurance_ui()
 
-## 输入处理：I 键切换背包+保险面板
+
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_inventory"):
+	var inventory_pressed := event.is_action_pressed("ui_inventory")
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:
+		inventory_pressed = true
+	if inventory_pressed:
 		if inventory_panel:
-			var visible := not inventory_panel.visible
-			inventory_panel.visible = visible
+			var panel_visible := not inventory_panel.visible
+			inventory_panel.visible = panel_visible
 			if insurance_panel:
-				insurance_panel.visible = visible
-			if visible:
+				insurance_panel.visible = panel_visible
+			if panel_visible:
+				inventory_panel.move_to_front()
 				_refresh_inventory_ui()
 				_refresh_insurance_ui()
+				if _weapon_panel != null and _weapon_panel.has_method("show_panel"):
+					_weapon_panel.call("show_panel")
+					_weapon_panel.move_to_front()
+			elif _weapon_panel != null and _weapon_panel.has_method("hide_panel"):
+				_weapon_panel.call("hide_panel")
+			get_viewport().set_input_as_handled()
+	if (
+		event is InputEventKey
+		and event.pressed
+		and not event.echo
+		and event.keycode in [KEY_K, KEY_TAB]
+	):
+		if _weapon_panel != null and _weapon_panel.has_method("toggle"):
+			_weapon_panel.call("toggle")
 			get_viewport().set_input_as_handled()

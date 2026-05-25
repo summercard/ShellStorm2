@@ -219,10 +219,12 @@ func set_weapon_tree(wt: WeaponAssemblyTree) -> void:
 
 ## 信号回调：树结构变化
 func _on_tree_changed() -> void:
-	var prev_path := _selected_node.get_path_string() if _selected_node != null else ""
+	var prev_path := ""
+	if _selected_node != null and is_instance_valid(_selected_node):
+		prev_path = _selected_node.get_path_string()
 	_refresh()
-	# 树刷新后恢复选中高亮
-	if prev_path != "":
+	# 树刷新后恢复选中高亮（仅在之前有有效选中时）
+	if prev_path != "" and _weapon_tree != null:
 		_find_and_highlight_row(_weapon_tree.get_root(), prev_path)
 
 ## 信号回调：属性变化
@@ -424,7 +426,7 @@ func _find_and_highlight_row(node: AssemblyNode, target_path: String) -> bool:
 				return true
 	return false
 
-func _set_row_highlight(row: Control, color: Color) -> void:
+func _set_row_highlight(row: Control, color) -> void:
 	if row == null:
 		return
 	# 清除现有的背景装饰
@@ -457,7 +459,7 @@ func _show_node_detail(node: AssemblyNode) -> void:
 	_clicked_node_path = node.get_path_string()
 	
 	# 构建详情文本
-	var type_str := AssemblyNode.NodeType.keys()[node.node_type]
+	var type_str: String = str(AssemblyNode.NodeType.keys()[node.node_type])
 	var stats: Dictionary = node.get_computed_stats()
 	var base_stats: Dictionary = node.get_base_stats()
 	

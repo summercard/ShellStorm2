@@ -31,6 +31,7 @@ func add_node(data: RoomData, pos: Vector2 = Vector2.ZERO) -> int:
 	var node_id := _nodes.size()
 	if data != null:
 		data.position = pos
+		data.assign_number(node_id)
 	var node := RoomNode.new(node_id, data, pos)
 	_nodes.append(node)
 	return node_id

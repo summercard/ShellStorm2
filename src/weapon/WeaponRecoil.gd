@@ -59,7 +59,10 @@ func _apply_weapon_multiplier(tags: Array[String]) -> void:
 	else:
 		_recoil_multiplier = 1.0
 
-## 核心后坐力动画：反向射击方向抖动 + 枪口上扬
+## 核心后坐力动画：沿枪口反方向（局部 -X 轴）抖动 + 枪口上扬
+## 修复：之前用世界坐标 X/Y 移动，不受枪口朝向影响。
+## 现在把局部偏移（-X 方向=枪口反方向，-Y 方向=枪口上方）旋转到世界坐标，
+## 让后坐力在任意朝向都正确表现为"枪口向后的反冲"。
 func _trigger_recoil() -> void:
 	if not is_instance_valid(_host) or _recoil_tween != null:
 		return
@@ -68,23 +71,34 @@ func _trigger_recoil() -> void:
 	if _recoil_tween and _recoil_tween.is_valid():
 		_recoil_tween.kill()
 	
-	_recoil_tween = _host.create_tween()
-	_recoil_tween.set_parallel(true)
-	
 	var actual_intensity := recoil_intensity * _recoil_multiplier
 	var actual_kick := kick_intensity * _recoil_multiplier
 	
-	# 后坐力：往射击反方向抖动
-	# _host.rotation 方向的反向
-	_recoil_tween.tween_property(_host, "position:x", _host.position.x - actual_intensity, recoil_duration * 0.5) \
-		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_recoil_tween.chain().tween_property(_host, "position:x", _host.position.x + actual_intensity * 0.3, recoil_duration * 0.5) \
-		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	# 局部空间偏移：-X=枪口反方向，-Y=枪口上方
+	var local_backward := Vector2(-actual_intensity, 0.0)
+	var local_upward := Vector2(0.0, -actual_kick * 0.5)
 	
-	# 枪口上扬（Y轴正向 = 往下，实际是旋转补偿）
-	_recoil_tween.tween_property(_host, "position:y", _host.position.y - actual_kick, recoil_duration * 0.3) \
+	# 旋转到世界坐标（_host.rotation 是枪口朝向，-X 绕原点旋转后就是枪口向后）
+	var world_backward := local_backward.rotated(_host.rotation)
+	var world_upward := local_upward.rotated(_host.rotation)
+	
+	# 基准位置
+	var origin_pos := _host.position
+	
+	# 最终回归位置
+	var final_pos := origin_pos
+	
+	# 峰值位置（向后的偏移 + 枪口上扬）
+	var peak_pos := origin_pos + world_backward + world_upward
+	
+	_recoil_tween = _host.create_tween()
+	
+	# 峰值（后坐力最大点）—— 快速
+	_recoil_tween.tween_property(_host, "position", peak_pos, recoil_duration * 0.3) \
 		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_recoil_tween.chain().tween_property(_host, "position:y", _host.position.y, recoil_duration * 0.7) \
+	
+	# 回弹（弹力回正）—— 较慢
+	_recoil_tween.tween_property(_host, "position", final_pos, recoil_duration * 0.7) \
 		.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
 	
 	_recoil_tween.chain().tween_callback(_on_recoil_done)

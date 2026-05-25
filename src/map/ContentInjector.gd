@@ -61,9 +61,10 @@ func _inject_spawn_room(config: ContentConfig, room_data: RoomData) -> void:
 	# 出生房通常没有敌人，但可能有引导性交互物
 	var chest := {
 		"type": "chest",
-		"position": Vector2(100, 0),
+		"position": Vector2(-96, 0),
 		"loot_table": "spawn_starter",
-		"locked": false
+		"locked": false,
+		"guaranteed_items": ["weapon_shotgun"],
 	}
 	config.interactables.append(chest)
 

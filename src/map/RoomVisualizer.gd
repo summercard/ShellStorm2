@@ -7,7 +7,8 @@ extends Node2D
 signal visual_ready
 
 @export var room_type: RoomData.RoomType = RoomData.RoomType.COMBAT
-@export var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
+@export
+var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
 
 @onready var floor_layer: TileMapLayer = $FloorLayer
 @onready var ambient: Node2D = $AmbientDecoration
@@ -16,6 +17,7 @@ signal visual_ready
 var _tile_set_builder: RoomTileSetBuilder = RoomTileSetBuilder.new()
 var _is_built: bool = false
 var _door_info: Array[Dictionary] = []
+var _boundary_collision_enabled := true
 
 
 func _ready() -> void:
@@ -29,7 +31,9 @@ func _ready() -> void:
 ## p_room_type: 房间类型
 ## p_room_size: 房间像素尺寸
 ## p_door_info: 可选，Array[Dictionary] 包含门方向信息（来自 PathDirector.get_open_door_info）
-func configure(p_room_type: RoomData.RoomType, p_room_size: Vector2, p_door_info: Array[Dictionary] = []) -> void:
+func configure(
+	p_room_type: RoomData.RoomType, p_room_size: Vector2, p_door_info: Array[Dictionary] = []
+) -> void:
 	room_type = p_room_type
 	room_size = p_room_size
 	_door_info = p_door_info
@@ -40,10 +44,23 @@ func configure(p_room_type: RoomData.RoomType, p_room_size: Vector2, p_door_info
 
 func set_open_doors(p_door_info: Array[Dictionary]) -> void:
 	_door_info = p_door_info
+	_apply_door_visualization()
+	if not _boundary_collision_enabled:
+		return
 	var boundary_collision := get_node_or_null("BoundaryCollision")
 	if boundary_collision != null:
 		boundary_collision.queue_free()
-	_ensure_boundary_collision()
+	call_deferred("_ensure_boundary_collision")
+
+
+func set_boundary_collision_enabled(enabled: bool) -> void:
+	_boundary_collision_enabled = enabled
+	if not enabled:
+		var boundary_collision := get_node_or_null("BoundaryCollision")
+		if boundary_collision != null:
+			boundary_collision.queue_free()
+	elif _is_built:
+		call_deferred("_ensure_boundary_collision")
 
 
 ## 构建房间视觉（TileMap + 氛围装饰 + 门过渡视觉）
@@ -51,38 +68,38 @@ func build_visual() -> void:
 	if _is_built:
 		return
 	_is_built = true
-	
+
 	# 构建 TileSet 并填充 TileMap
 	_tile_set_builder.build_tile_set(floor_layer, room_type)
 	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type)
-	
+
 	# 根据房间类型配置氛围装饰
 	_apply_ambient_theme()
-	
+
 	# 门过渡视觉（如果有门信息）
 	_apply_door_visualization()
 
 	_ensure_boundary_collision()
-	
+
 	visual_ready.emit()
 
 
 ## 应用房间氛围主题（设置装饰节点颜色/可见性）
 func _apply_ambient_theme() -> void:
 	var theme: Dictionary = _tile_set_builder.get_room_theme_colors(room_type)
-	
+
 	# 更新边界叠加层颜色（与房间主色调呼应）
-	var boundary: ColorRect = $BoundaryOverlay as ColorRect
+	var boundary: ColorRect = get_node_or_null("BoundaryOverlay") as ColorRect
 	if boundary:
 		var floor_color: Color = theme.get("floor", Color.GRAY)
 		boundary.color = Color(floor_color.r * 0.5, floor_color.g * 0.5, floor_color.b * 0.55, 0.25)
-	
+
 	# 更新区域标记颜色
-	var zone: ColorRect = $ZoneMarker_Center as ColorRect
+	var zone: ColorRect = get_node_or_null("ZoneMarker_Center") as ColorRect
 	if zone:
 		var accent_color: Color = theme.get("accent", Color.GRAY)
 		zone.color = Color(accent_color.r, accent_color.g, accent_color.b, 0.08)
-	
+
 	# 根据房间类型显示/隐藏特殊装饰
 	match room_type:
 		RoomData.RoomType.BOSS:
@@ -105,7 +122,7 @@ func _apply_ambient_theme() -> void:
 func _apply_door_visualization() -> void:
 	if _door_info.is_empty() or door_visualizer == null:
 		return
-	
+
 	# 门标记已在场景中配置，直接配置门方向
 	if door_visualizer.has_method("configure"):
 		door_visualizer.configure(_door_info)
@@ -175,6 +192,8 @@ func reset_visual() -> void:
 
 
 func _ensure_boundary_collision() -> void:
+	if not _boundary_collision_enabled:
+		return
 	if get_node_or_null("BoundaryCollision") != null:
 		return
 	var body := StaticBody2D.new()
@@ -186,10 +205,42 @@ func _ensure_boundary_collision() -> void:
 	var half := room_size * 0.5
 	var thickness := 40.0
 	var door_width := 132.0
-	_add_horizontal_boundary(body, "Top", -half.y - thickness * 0.5, room_size.x + thickness * 2.0, thickness, _has_open_door(Vector2.UP), door_width)
-	_add_horizontal_boundary(body, "Bottom", half.y + thickness * 0.5, room_size.x + thickness * 2.0, thickness, _has_open_door(Vector2.DOWN), door_width)
-	_add_vertical_boundary(body, "Left", -half.x - thickness * 0.5, room_size.y + thickness * 2.0, thickness, _has_open_door(Vector2.LEFT), door_width)
-	_add_vertical_boundary(body, "Right", half.x + thickness * 0.5, room_size.y + thickness * 2.0, thickness, _has_open_door(Vector2.RIGHT), door_width)
+	_add_horizontal_boundary(
+		body,
+		"Top",
+		-half.y - thickness * 0.5,
+		room_size.x + thickness * 2.0,
+		thickness,
+		_has_open_door(Vector2.UP),
+		door_width
+	)
+	_add_horizontal_boundary(
+		body,
+		"Bottom",
+		half.y + thickness * 0.5,
+		room_size.x + thickness * 2.0,
+		thickness,
+		_has_open_door(Vector2.DOWN),
+		door_width
+	)
+	_add_vertical_boundary(
+		body,
+		"Left",
+		-half.x - thickness * 0.5,
+		room_size.y + thickness * 2.0,
+		thickness,
+		_has_open_door(Vector2.LEFT),
+		door_width
+	)
+	_add_vertical_boundary(
+		body,
+		"Right",
+		half.x + thickness * 0.5,
+		room_size.y + thickness * 2.0,
+		thickness,
+		_has_open_door(Vector2.RIGHT),
+		door_width
+	)
 
 
 func _has_open_door(direction: Vector2) -> bool:
@@ -202,7 +253,15 @@ func _has_open_door(direction: Vector2) -> bool:
 	return false
 
 
-func _add_horizontal_boundary(parent: Node, prefix: String, y: float, total_width: float, thickness: float, has_gap: bool, gap_width: float) -> void:
+func _add_horizontal_boundary(
+	parent: Node,
+	prefix: String,
+	y: float,
+	total_width: float,
+	thickness: float,
+	has_gap: bool,
+	gap_width: float
+) -> void:
 	if not has_gap:
 		_add_boundary_wall(parent, prefix, Vector2(0, y), Vector2(total_width, thickness))
 		return
@@ -212,17 +271,29 @@ func _add_horizontal_boundary(parent: Node, prefix: String, y: float, total_widt
 	_add_boundary_wall(parent, prefix + "Right", Vector2(offset, y), Vector2(side_width, thickness))
 
 
-func _add_vertical_boundary(parent: Node, prefix: String, x: float, total_height: float, thickness: float, has_gap: bool, gap_width: float) -> void:
+func _add_vertical_boundary(
+	parent: Node,
+	prefix: String,
+	x: float,
+	total_height: float,
+	thickness: float,
+	has_gap: bool,
+	gap_width: float
+) -> void:
 	if not has_gap:
 		_add_boundary_wall(parent, prefix, Vector2(x, 0), Vector2(thickness, total_height))
 		return
 	var side_height: float = max(1.0, (total_height - gap_width) * 0.5)
 	var offset: float = gap_width * 0.5 + side_height * 0.5
 	_add_boundary_wall(parent, prefix + "Top", Vector2(x, -offset), Vector2(thickness, side_height))
-	_add_boundary_wall(parent, prefix + "Bottom", Vector2(x, offset), Vector2(thickness, side_height))
+	_add_boundary_wall(
+		parent, prefix + "Bottom", Vector2(x, offset), Vector2(thickness, side_height)
+	)
 
 
-func _add_boundary_wall(parent: Node, wall_name: String, wall_position: Vector2, wall_size: Vector2) -> void:
+func _add_boundary_wall(
+	parent: Node, wall_name: String, wall_position: Vector2, wall_size: Vector2
+) -> void:
 	var shape := CollisionShape2D.new()
 	shape.name = wall_name
 	var rect := RectangleShape2D.new()

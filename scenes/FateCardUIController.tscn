@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://fate_card_ui_controller"]
+
+[ext_resource type="Script" path="res://src/ui/FateCardUIController.gd" id="1_fate_card_ui"]
+
+; 命运卡片选择 UI 控制器场景
+; 最小化 Control 节点，仅承载 _input() Tab键处理
+; 实际卡片选择面板使用 GameUIManager/FateCardPanel
+
+[node name="FateCardUIController" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fate_card_ui")

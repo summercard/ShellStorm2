@@ -1,5 +1,51 @@
 # ShellStorm2 开发日志
 
+## 轮次149（2026-05-25 06:05 UTC+8）
+
+### 维度选择
+**命运卡片"子弹背枪"挂载枪多边形兜底 — Bullet.gd 渲染逻辑支持 AttachedGun_* 前缀匹配**
+
+轮次148完成了 Bullet.gd 的 AttachedGunPolygon 节点添加和 GUN_SHAPES 定义，但在审查链路时发现一个渲染断点：
+- `_apply_attach_gun_to_bullet()` 创建的挂载枪节点名为 `"AttachedGun_" + card.card_id`（例如 `AttachedGun_card_bullet_carry_gun_001`）
+- `_render_attached_gun()` 使用 `GUN_SHAPES.get(gun_name, DEFAULT_GUN_SHAPE)` 直接精确匹配键名
+- `GUN_SHAPES` 中没有 `AttachedGun_*` 前缀的键，导致渲染回退到 `DEFAULT_GUN_SHAPE`（灰色多边形，视觉不明确）
+- 此外，`DEFAULT_GUN_SHAPE` 的 polygon 顶点数（5个）与 `AttachedGun` 专用外形（5个）不匹配，且颜色不够独特（灰色 vs 暗金色）
+
+### 玩家可感知结果
+选择"子弹背枪"命运卡片后，发射的子弹尾部会显示一个暗金色的小型枪多边形（而非默认灰色通用形状）。挂载枪有独特的视觉身份，让玩家明确感知"子弹上背了一把枪"。
+
+### 修改内容
+
+#### `src/bullet/Bullet.gd`
+
+1. **GUN_SHAPES 新增 "AttachedGun" 专用键**：
+   - 专门给命运卡片"子弹背枪"等机制创建的挂载枪使用
+   - 形状：紧凑手枪外形（5顶点多边形），暗金色，区分于玩家主枪
+   - 匹配模式：`AttachedGun_*` 前缀节点名统一渲染为此类型
+
+2. **`_render_attached_gun()` 前缀匹配逻辑**：
+   - 优先精确匹配键名（如 "GunBody_Pistol"）
+   - 回退：检测 `gun_name.begins_with("AttachedGun")` 前缀，匹配到 "AttachedGun" 键
+   - 最终兜底：`DEFAULT_GUN_SHAPE`
+
+### 验收标准
+- [x] Godot headless --quit-after 4 编译通过 ✅
+- [ ] 人类试玩：在改造房选择"子弹背枪"卡片后，发射子弹尾部显示暗金色小型枪多边形
+- [ ] 人类试玩：挂载枪多边形在子弹飞行/转向时持续跟随子弹（AttachedGunPolygon 作为 Bullet 子节点）
+- [ ] 人类试玩：命运视觉（变大了/加眼睛/加脚）与挂载枪多边形同时存在时，两者都能正确渲染
+
+### 剩余风险
+- 挂载枪多边形位置固定在 Bullet 本地坐标（0,0），朝向随子弹方向旋转，但视觉上"背在子弹尾部"的位置感需要确认（可能需要局部偏移）
+- 挂载枪自动射击（`_process_attached_gun_firing`）在子弹转向时方向是否正确追踪敌人，需要人类试玩验证
+- `visual_has_eyes/legs` 标签的视觉叠加在挂载枪多边形上，需要确认 z_index 层叠顺序
+
+### 下轮最可能方向
+1. **命运卡片完整链路人类试玩验证**：DemoRoomChain 实际验证子弹背枪+命运视觉（eyes/legs/scale）+自动射击的完整流程
+2. **挂载枪多边形位置微调**：当前AttachedGunPolygon在(0,0)，可能需要偏移到子弹尾部让视觉更自然
+3. **改造房命运卡片→WeaponDisplay枪型实际刷新链路验证**
+
+---
+
 ## 轮次146（2026-05-25 05:27 UTC+8）
 
 ### 维度选择

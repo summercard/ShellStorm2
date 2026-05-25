@@ -236,23 +236,26 @@ func _spawn_next_wave() -> void:
 	wave_enemies_spawned.emit(_current_wave + 1, count)
 
 func _get_spawn_position(center: Vector2) -> Vector2:
-	# 计算房间边界（以 center 为中心的矩形区域）
-	var half_room: Vector2 = (room_size * 0.5) - Vector2(50, 50)  # 留50px边距
-	var half_spawn: Vector2 = Vector2(spawn_radius, spawn_radius)
-	var max_offset: Vector2 = half_room.abs().min(half_spawn)
+	var room_center: Vector2 = center
+	if is_instance_valid(_room):
+		room_center = _room.global_position
+	var player_pos: Vector2 = center
+	var safe_margin := Vector2(120.0, 112.0)
+	var min_corner := room_center - room_size * 0.5 + safe_margin
+	var max_corner := room_center + room_size * 0.5 - safe_margin
 
-	# 在圆盘内均匀采样
-	var angle := _rng.randf() * TAU
-	var radius := spawn_radius * sqrt(_rng.randf())  # sqrt → 均匀圆分布
-	var offset := Vector2(cos(angle), sin(angle)) * radius
+	for attempt in range(24):
+		var candidate := Vector2(
+			_rng.randf_range(min_corner.x, max_corner.x),
+			_rng.randf_range(min_corner.y, max_corner.y)
+		)
+		if candidate.distance_to(player_pos) >= 150.0:
+			return candidate
 
-	# 限制在房间边界内
-	var raw_pos: Vector2 = center + offset
-	var clamped := Vector2(
-		clamp(raw_pos.x, center.x - max_offset.x, center.x + max_offset.x),
-		clamp(raw_pos.y, center.y - max_offset.y, center.y + max_offset.y)
+	return Vector2(
+		clamp(room_center.x + _rng.randf_range(-spawn_radius, spawn_radius), min_corner.x, max_corner.x),
+		clamp(room_center.y + _rng.randf_range(-spawn_radius, spawn_radius), min_corner.y, max_corner.y)
 	)
-	return clamped
 
 func _generate_enemy_data() -> Dictionary:
 	if not _enemy_pool.is_empty():

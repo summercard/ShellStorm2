@@ -164,11 +164,11 @@ func _spawn_death_particles() -> void:
 		tween.tween_property(particle, "size", Vector2(4, 4), 0.35)
 	
 	# 动画结束后批量清理残留粒子
-	func _cleanup() -> void:
+	var cleanup := func() -> void:
 		for p in particles:
 			if is_instance_valid(p):
 				p.queue_free()
-	get_tree().create_timer(0.4).timeout.connect(_cleanup)
+	get_tree().create_timer(0.4).timeout.connect(cleanup)
 
 func _trigger_death() -> void:
 	if _is_dead:

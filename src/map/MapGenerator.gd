@@ -63,6 +63,7 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 	# 起始房间（玩家出生）
 	var start_data := RoomData.new(RoomData.RoomType.PLAYER_SPAWN, _current_floor)
 	start_data.floor_level = RoomData.FloorLevel.SHALLOW
+	start_data.size = Vector2(448, 320)
 	var start_id := graph.add_node(start_data, Vector2(0, 0))
 	path_ids.append(start_id)
 	
@@ -116,7 +117,7 @@ func _generate_special_rooms(graph: NodeGraph, path_ids: Array[int], config: Dic
 	# 在相邻节点之间添加分支
 	var branch_chance: float = config["elite_chance"] + config["scavenge_chance"] + config["merchant_chance"] + config["event_chance"]
 	
-	for i in range(path_ids.size() - 1):
+	for i in range(1, path_ids.size() - 1):
 		var from_id: int = path_ids[i]
 		var to_id: int = path_ids[i + 1]
 		var from_node := graph.get_node(from_id)

@@ -4,6 +4,9 @@
 [ext_resource type="Script" path="res://src/map/RoomVisualizer.gd" id="2_visualizer"]
 [ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="3_door_viz"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_room"]
+size = Vector2(800, 600)
+
 ; ELITE 精英战斗房 — 独立场景
 ; 风格：深蓝/金属地板 + 禁区感氛围，四角暗角更重，中央危险区标记
 ; 与 RoomCombat.tscn 的灰色工业风区分开
@@ -97,5 +100,4 @@ script = ExtResource("3_door_viz")
 [node name="Area" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area"]
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_room"]
-size = Vector2(800, 600)
+shape = SubResource("RectangleShape2D_room")

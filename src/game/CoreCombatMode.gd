@@ -506,12 +506,16 @@ func _continue_run(message: String = "") -> void:
 		_show_message(message, 0.9)
 	_start_next_wave()
 
-func begin_extraction(_etype: String = "STANDARD", countdown: float = 1.8) -> void:
+func begin_extraction(_etype: String = "STANDARD", countdown: float = 1.8) -> bool:
 	if game_is_over:
-		return
+		return false
 	_waiting_for_next_wave = true
 	wave_active = false
 	_show_message("撤离读条中...", countdown)
+	_run_extraction_countdown(countdown)
+	return true
+
+func _run_extraction_countdown(countdown: float) -> void:
 	await get_tree().create_timer(maxf(0.2, countdown)).timeout
 	if not game_is_over:
 		_complete_extraction()

@@ -13,6 +13,7 @@ const RARITY_MYSTIC := FateCard.CardRarity.MYSTIC
 
 ## ========== 组合类（COMBINE）==========
 
+
 ## 子弹背枪：选择子弹上挂枪身，子弹飞行时会携带枪并自动射击
 static func bullet_carry_gun() -> FateCard:
 	var card := FateCard.new("子弹背枪", FateCard.CardType.COMBINE, RARITY_EPIC)
@@ -31,6 +32,7 @@ static func bullet_carry_gun() -> FateCard:
 	}
 	return card
 
+
 ## 枪上加枪：枪身挂枪身，主枪开火时副枪也跟随射击
 static func gun_on_gun() -> FateCard:
 	var card := FateCard.new("枪上加枪", FateCard.CardType.COMBINE, RARITY_LEGENDARY)
@@ -44,6 +46,7 @@ static func gun_on_gun() -> FateCard:
 	}
 	return card
 
+
 ## 配件寄生：配件寄生到子弹上，命中时触发效果
 static func attachment_parasite() -> FateCard:
 	var card := FateCard.new("配件寄生", FateCard.CardType.COMBINE, RARITY_EPIC)
@@ -56,13 +59,16 @@ static func attachment_parasite() -> FateCard:
 	}
 	return card
 
+
 ## ========== 强化类（ENHANCE）==========
 
-## 变大了：节点变大，伤害提升，速度降低
+
+## 变大了：当前子弹变大并提升命中伤害。
 static func scale_up() -> FateCard:
 	var card := FateCard.new("变大了", FateCard.CardType.ENHANCE, RARITY_COMMON)
 	card.tags = ["Fate.Enhance", "Fate.ScaleNode"]
-	card.description = "选择一个节点，体型与碰撞范围增加，伤害提升，速度降低"
+	card.target_rules = [{"select": "BULLET"}]
+	card.description = "当前子弹体型与碰撞范围增加，伤害 +3，弹速降低"
 	card.effect = {
 		"action": FateCard.EffectAction.SCALE_NODE,
 		"scale": 1.5,
@@ -75,11 +81,13 @@ static func scale_up() -> FateCard:
 	}
 	return card
 
-## 超频：射速大幅提升，但过热更快
+
+## 超频：当前枪身射速大幅提升。
 static func overclock() -> FateCard:
 	var card := FateCard.new("超频", FateCard.CardType.ENHANCE, RARITY_RARE)
 	card.tags = ["Fate.Enhance", "Fate.MultiplyFireRate"]
-	card.description = "选择一个枪身，射速提升 80%，但过热惩罚增加"
+	card.target_rules = [{"select": "GUN_BODY"}]
+	card.description = "当前枪身射速提升 80%"
 	card.effect = {
 		"action": FateCard.EffectAction.MULTIPLY_FIRE_RATE,
 		"multiplier": 1.8,
@@ -87,11 +95,13 @@ static func overclock() -> FateCard:
 	}
 	return card
 
-## 穿甲强化：增加穿透效果
+
+## 穿甲强化：提升当前子弹的即时命中伤害。
 static func armor_pierce() -> FateCard:
 	var card := FateCard.new("穿甲强化", FateCard.CardType.ENHANCE, RARITY_RARE)
 	card.tags = ["Fate.Enhance", "Fate.AddDamage"]
-	card.description = "选择一个子弹，增加伤害和穿透能力"
+	card.target_rules = [{"select": "BULLET"}]
+	card.description = "当前子弹伤害 +5"
 	card.effect = {
 		"action": FateCard.EffectAction.ADD_DAMAGE,
 		"damage_bonus": 5,
@@ -99,12 +109,15 @@ static func armor_pierce() -> FateCard:
 	}
 	return card
 
+
 ## ========== 变种类（MUTATE）==========
+
 
 ## 活过来：子弹变成活体，轻微追踪敌人
 static func living_bullet() -> FateCard:
 	var card := FateCard.new("活过来", FateCard.CardType.MUTATE, RARITY_EPIC)
 	card.tags = ["Fate.Mutate", "Fate.MutateToHoming"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.description = "选择一个子弹，变成活体子弹，会轻微追踪敌人"
 	card.effect = {
 		"action": FateCard.EffectAction.MUTATE_TO_HOMING,
@@ -116,6 +129,7 @@ static func living_bullet() -> FateCard:
 		"eye_count": 2,
 	}
 	return card
+
 
 ## 不想飞：子弹落地变成炮台
 static func turret_on_land() -> FateCard:
@@ -129,10 +143,12 @@ static func turret_on_land() -> FateCard:
 	}
 	return card
 
+
 ## 回家看看：子弹飞出后返回玩家
 static func bullet_return() -> FateCard:
 	var card := FateCard.new("回家看看", FateCard.CardType.MUTATE, RARITY_EPIC)
 	card.tags = ["Fate.Mutate", "Fate.Return"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.description = "子弹飞出后返回玩家，返回途中继续造成伤害"
 	card.effect = {
 		"action": FateCard.EffectAction.MUTATE_TO_HOMING,
@@ -141,7 +157,9 @@ static func bullet_return() -> FateCard:
 	}
 	return card
 
+
 ## ========== 诅咒类（CURSE）==========
+
 
 ## 管不住了：子弹上的枪自动射击但不准
 static func out_of_control() -> FateCard:
@@ -156,6 +174,7 @@ static func out_of_control() -> FateCard:
 	}
 	return card
 
+
 ## 火力暴食：子弹命中越大，但降移速
 static func gluttony() -> FateCard:
 	var card := FateCard.new("火力暴食", FateCard.CardType.CURSE, RARITY_MYSTIC)
@@ -169,7 +188,9 @@ static func gluttony() -> FateCard:
 	}
 	return card
 
+
 ## ========== 规则类（RULE）==========
+
 
 ## 每第七发：每第七发子弹携带一把枪
 static func every_seventh() -> FateCard:
@@ -184,6 +205,7 @@ static func every_seventh() -> FateCard:
 	}
 	return card
 
+
 ## 击杀必暴击
 static func crit_on_kill() -> FateCard:
 	var card := FateCard.new("致命一击", FateCard.CardType.RULE, RARITY_LEGENDARY)
@@ -195,7 +217,9 @@ static func crit_on_kill() -> FateCard:
 	}
 	return card
 
+
 ## ========== 快捷方法==========
+
 
 ## 获取所有预设卡片的列表
 static func all_presets() -> Array[FateCard]:
@@ -213,7 +237,26 @@ static func all_presets() -> Array[FateCard]:
 		gluttony(),
 		every_seventh(),
 		crit_on_kill(),
+		fate_lucky_chest(),
+		fate_extra_loot(),
 	]
+
+
+## 玩家可获得的卡池只投放已接入实战反馈、能够立即感知的卡片。
+static func playable_presets() -> Array[FateCard]:
+	return [
+		scale_up(),
+		overclock(),
+		armor_pierce(),
+		bullet_carry_gun(),
+		gun_on_gun(),
+	]
+
+
+## 开门命运与工作台/局前展示共享可玩牌池，避免抽到尚未完成的概念效果。
+static func door_reward_presets() -> Array[FateCard]:
+	return playable_presets()
+
 
 ## 按品质获取预设卡片
 static func by_rarity(rarity: FateCard.CardRarity) -> Array[FateCard]:
@@ -223,6 +266,7 @@ static func by_rarity(rarity: FateCard.CardRarity) -> Array[FateCard]:
 			result.append(card)
 	return result
 
+
 ## 按类型获取预设卡片
 static func by_type(card_type: FateCard.CardType) -> Array[FateCard]:
 	var result: Array[FateCard] = []
@@ -231,7 +275,9 @@ static func by_type(card_type: FateCard.CardType) -> Array[FateCard]:
 			result.append(card)
 	return result
 
+
 ## ========== 环境命运触发器专用卡片（由 MapFateTriggers 调用）==========
+
 
 ## 敌增援：连续击杀N个敌人后，波次外额外刷怪
 ## 注意：这是一种规则型效果，不依赖目标节点选择
@@ -244,6 +290,7 @@ static func fate_reinforce() -> FateCard:
 	}
 	return card
 
+
 ## 命运标记：击杀第N个敌人后，获得一张随机命运卡片
 static func fate_mark_enemy() -> FateCard:
 	var card := FateCard.new("命运标记", FateCard.CardType.RULE, RARITY_EPIC)
@@ -253,6 +300,7 @@ static func fate_mark_enemy() -> FateCard:
 		"action": FateCard.EffectAction.GRANT_RANDOM_CARD,
 	}
 	return card
+
 
 ## 幸运发现：第N个箱子开启后，箱子物品品质提升
 static func fate_lucky_chest() -> FateCard:
@@ -265,6 +313,7 @@ static func fate_lucky_chest() -> FateCard:
 	}
 	return card
 
+
 ## 额外掉落：开箱获得额外物品
 static func fate_extra_loot() -> FateCard:
 	var card := FateCard.new("额外掉落", FateCard.CardType.ENHANCE, RARITY_RARE)
@@ -274,6 +323,7 @@ static func fate_extra_loot() -> FateCard:
 		"action": FateCard.EffectAction.EXTRA_LOOT,
 	}
 	return card
+
 
 ## 诅咒降临：本房间内怪物伤害+15%
 static func fate_curse_map() -> FateCard:
@@ -285,6 +335,7 @@ static func fate_curse_map() -> FateCard:
 		"damage_multiplier": 1.15,
 	}
 	return card
+
 
 ## 亡者祝福：HP低于30%后存活30秒，获得30秒伤害加成
 static func fate_bless_dead() -> FateCard:
@@ -299,15 +350,22 @@ static func fate_bless_dead() -> FateCard:
 	}
 	return card
 
+
 ## 根据 card_id 字符串查找并生成对应的预设卡片实例（用于环境命运触发器）
 static func get_by_card_id(card_id: String) -> FateCard:
 	match card_id:
-		"fate_reinforce": return fate_reinforce()
-		"fate_mark_enemy": return fate_mark_enemy()
-		"fate_lucky_chest": return fate_lucky_chest()
-		"fate_extra_loot": return fate_extra_loot()
-		"fate_curse_map": return fate_curse_map()
-		"fate_bless_dead": return fate_bless_dead()
+		"fate_reinforce":
+			return fate_reinforce()
+		"fate_mark_enemy":
+			return fate_mark_enemy()
+		"fate_lucky_chest":
+			return fate_lucky_chest()
+		"fate_extra_loot":
+			return fate_extra_loot()
+		"fate_curse_map":
+			return fate_curse_map()
+		"fate_bless_dead":
+			return fate_bless_dead()
 		# 兜底：返回一张通用的随机卡片
 		_:
 			var all := all_presets()

@@ -20,6 +20,7 @@ enum ApplyError {
 	APPLY_FAILED = 6,
 }
 
+
 ## 执行结果
 class ApplyResult:
 	var success: bool = false
@@ -27,6 +28,7 @@ class ApplyResult:
 	var message: String = ""
 	var modified_nodes: Array[AssemblyNode] = []
 	var effect_value: Variant = null
+
 
 ## 应用一张命运卡片到玩家武器装配树（静态方法，供外部 UI 调用）
 ## 自动从场景树查找玩家的 WeaponAssemblyTree 并应用卡片
@@ -52,7 +54,9 @@ static func apply_card_to_player(card: FateCard) -> ApplyResult:
 
 ## 应用一张卡片到装配树
 ## 返回 ApplyResult
-static func apply_card(card: FateCard, tree: WeaponAssemblyTree, target_nodes: Array[AssemblyNode] = []) -> ApplyResult:
+static func apply_card(
+	card: FateCard, tree: WeaponAssemblyTree, target_nodes: Array[AssemblyNode] = []
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 
 	if card == null or tree == null:
@@ -147,7 +151,9 @@ static func _auto_select_targets(card: FateCard, tree: WeaponAssemblyTree) -> Ar
 
 
 ## 根据选择器查找节点
-static func _find_nodes_by_selector(root: AssemblyNode, select: String, required_tags: Array[String]) -> Array[AssemblyNode]:
+static func _find_nodes_by_selector(
+	root: AssemblyNode, select: String, required_tags: Array[String]
+) -> Array[AssemblyNode]:
 	var results: Array[AssemblyNode] = []
 	var descendants: Array[AssemblyNode] = root.get_all_descendants()
 	descendants.append(root)  # 包含根节点
@@ -179,7 +185,9 @@ static func _node_has_all_tags(node: AssemblyNode, tags: Array[String]) -> bool:
 
 ## ===== 效果执行：ATTACH_GUN_TO_BULLET =====
 ## 子弹上挂枪身，子弹飞行时会携带枪并自动射击
-static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_attach_gun_to_bullet(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	var root: AssemblyNode = tree.get_root()
 	var modified: Array[AssemblyNode] = []
@@ -205,14 +213,21 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 		return result
 
 	# 创建新枪身节点
-	var attached_gun: AssemblyNode = AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "AttachedGun_" + card.card_id)
+	var attached_gun: AssemblyNode = AssemblyNode.new(
+		AssemblyNode.NodeType.GUN_BODY, "AttachedGun_" + card.card_id
+	)
 	var damage_scale: float = card.effect.get("damage_scale", 0.5)
 	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 0.6)
-	attached_gun.set_base_stats({
-		"damage": int(10 * damage_scale),
-		"fire_rate": 4.0 * fire_rate_scale,
-		"bullet_count": 1,
-	})
+	(
+		attached_gun
+		. set_base_stats(
+			{
+				"damage": int(10 * damage_scale),
+				"fire_rate": 4.0 * fire_rate_scale,
+				"bullet_count": 1,
+			}
+		)
+	)
 	attached_gun.tags = ["Fate.AttachedGun", card.card_id]
 
 	# 挂载到子弹的 MOUNT 槽
@@ -238,7 +253,9 @@ static func _apply_attach_gun_to_bullet(card: FateCard, tree: WeaponAssemblyTree
 
 ## ===== 效果执行：ATTACH_TO_MOUNT =====
 ## 挂载任意节点到目标槽位
-static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_attach_to_mount(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 
 	if targets.is_empty():
@@ -259,7 +276,9 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 		# 组合类：创建一个匹配的子节点
 		if action_str == "ATTACH_TO_MOUNT":
 			# 默认创建附件节点
-			child_node = AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id)
+			child_node = AssemblyNode.new(
+				AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id
+			)
 			child_node.tags = card.tags.duplicate()
 			child_node.set_base_stats({"damage": 0, "fire_rate": 0})
 
@@ -282,7 +301,10 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 	result.success = true
 	result.modified_nodes = [target, child_node]
 	result.effect_value = child_node
-	result.message = "Mounted %s to %s slot of %s" % [child_node.node_name, AssemblyNode.SlotType.keys()[slot_type], target.node_name]
+	result.message = (
+		"Mounted %s to %s slot of %s"
+		% [child_node.node_name, AssemblyNode.SlotType.keys()[slot_type], target.node_name]
+	)
 	return result
 
 
@@ -290,7 +312,9 @@ static func _apply_attach_to_mount(card: FateCard, tree: WeaponAssemblyTree, tar
 ## 枪上加枪：枪身挂枪身，主枪开火时副枪也跟随射击
 ## 实现：找到一个 GUN_BODY 节点作为主枪，在其 MOUNT 槽挂载一个副枪身
 ## 副枪的射击通过 WeaponAssemblyTree._fire_co_mounted_gun() 实现
-static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_attach_gun_to_gun(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	var root: AssemblyNode = tree.get_root()
 
@@ -329,12 +353,19 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 	var follow_probability: float = card.effect.get("follow_probability", 1.0)  # 跟随射击概率
 
 	# 创建副枪身节点
-	var secondary_gun: AssemblyNode = AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id)
-	secondary_gun.set_base_stats({
-		"damage": int(10 * damage_scale),
-		"fire_rate": 4.0 * fire_rate_scale,
-		"bullet_count": 1,
-	})
+	var secondary_gun: AssemblyNode = AssemblyNode.new(
+		AssemblyNode.NodeType.GUN_BODY, "SecondaryGun_" + card.card_id
+	)
+	(
+		secondary_gun
+		. set_base_stats(
+			{
+				"damage": int(10 * damage_scale),
+				"fire_rate": 4.0 * fire_rate_scale,
+				"bullet_count": 1,
+			}
+		)
+	)
 	secondary_gun.tags = ["Fate.SecondaryGun", card.card_id, "Fate.GunOnGun"]
 
 	# 将副枪挂载到主枪的 MOUNT 槽
@@ -347,13 +378,18 @@ static func _apply_attach_gun_to_gun(card: FateCard, tree: WeaponAssemblyTree, t
 	result.success = true
 	result.modified_nodes = [main_gun, secondary_gun]
 	result.effect_value = secondary_gun
-	result.message = "Attached secondary gun to %s (follow_prob=%.0f%%)" % [main_gun.node_name, follow_probability * 100]
+	result.message = (
+		"Attached secondary gun to %s (follow_prob=%.0f%%)"
+		% [main_gun.node_name, follow_probability * 100]
+	)
 	return result
 
 
 ## ===== 效果执行：SCALE_NODE =====
 ## 缩放节点
-static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_scale_node(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -367,10 +403,14 @@ static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets:
 	# 在 base_stats 中记录缩放因子
 	var stats: Dictionary = target.get_base_stats()
 	stats["fate_scale"] = scale
-	stats["damage"] = stats.get("damage", 10) + damage_bonus
+	if target.node_type == AssemblyNode.NodeType.BULLET:
+		stats["bullet_damage"] = stats.get("bullet_damage", 5) + damage_bonus
+	else:
+		stats["damage"] = stats.get("damage", 10) + damage_bonus
 	stats["speed"] = stats.get("speed", 1.0) * speed_multiplier
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Scaled")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -381,7 +421,9 @@ static func _apply_scale_node(card: FateCard, tree: WeaponAssemblyTree, targets:
 
 ## ===== 效果执行：MULTIPLY_FIRE_RATE =====
 ## 射速倍率
-static func _apply_multiply_fire_rate(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_multiply_fire_rate(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -394,6 +436,7 @@ static func _apply_multiply_fire_rate(card: FateCard, tree: WeaponAssemblyTree, 
 	stats["fire_rate"] = stats.get("fire_rate", 4.0) * multiplier
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Overclocked")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -404,7 +447,9 @@ static func _apply_multiply_fire_rate(card: FateCard, tree: WeaponAssemblyTree, 
 
 ## ===== 效果执行：ADD_DAMAGE =====
 ## 增加伤害
-static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_add_damage(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -414,11 +459,15 @@ static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets:
 	var damage_bonus: int = card.effect.get("damage_bonus", 5)
 	var pierce_level: int = card.effect.get("pierce_level", 0)
 	var stats: Dictionary = target.get_base_stats()
-	stats["damage"] = stats.get("damage", 10) + damage_bonus
+	if target.node_type == AssemblyNode.NodeType.BULLET:
+		stats["bullet_damage"] = stats.get("bullet_damage", 5) + damage_bonus
+	else:
+		stats["damage"] = stats.get("damage", 10) + damage_bonus
 	if pierce_level > 0:
 		stats["pierce_level"] = pierce_level
 	target.set_base_stats(stats)
 	target.tags.append("Fate.ArmorPierced")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -429,7 +478,9 @@ static func _apply_add_damage(card: FateCard, tree: WeaponAssemblyTree, targets:
 
 ## ===== 效果执行：MUTATE_TO_HOMING =====
 ## 子弹变追踪弹
-static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_mutate_to_homing(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -451,6 +502,7 @@ static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, ta
 	target.tags.append("Fate.Homing")
 	if return_to_player:
 		target.tags.append("Fate.ReturnBullet")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -461,7 +513,9 @@ static func _apply_mutate_to_homing(card: FateCard, tree: WeaponAssemblyTree, ta
 
 ## ===== 效果执行：EVERY_NTH_FIRE =====
 ## 每第N发触发特殊效果
-static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_every_nth_fire(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -476,6 +530,7 @@ static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targ
 	stats["every_nth_attach_gun"] = attach_gun
 	target.set_base_stats(stats)
 	target.tags.append("Fate.EveryNthFire")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -486,7 +541,9 @@ static func _apply_every_nth_fire(card: FateCard, tree: WeaponAssemblyTree, targ
 
 ## ===== 效果执行：CRIT_ON_KILL =====
 ## 击杀必暴击
-static func _apply_crit_on_kill(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_crit_on_kill(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -499,6 +556,7 @@ static func _apply_crit_on_kill(card: FateCard, tree: WeaponAssemblyTree, target
 	stats["crit_damage_multiplier"] = crit_mult
 	target.set_base_stats(stats)
 	target.tags.append("Fate.CritOnKill")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -508,12 +566,16 @@ static func _apply_crit_on_kill(card: FateCard, tree: WeaponAssemblyTree, target
 
 
 ## ===== 效果执行：SCALE_UP（视觉类）=====
-static func _apply_scale_up(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_scale_up(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	return _apply_scale_node(card, tree, targets)
 
 
 ## ===== 效果执行：ADD_EYES（视觉类）=====
-static func _apply_add_eyes(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_add_eyes(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -526,6 +588,7 @@ static func _apply_add_eyes(card: FateCard, tree: WeaponAssemblyTree, targets: A
 	stats["visual_has_eyes"] = true
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Visual.HasEyes")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -535,7 +598,9 @@ static func _apply_add_eyes(card: FateCard, tree: WeaponAssemblyTree, targets: A
 
 
 ## ===== 效果执行：ADD_LEGS（视觉类）=====
-static func _apply_add_legs(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_add_legs(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	if targets.is_empty():
 		result.error = ApplyError.NO_TARGET
@@ -547,6 +612,7 @@ static func _apply_add_legs(card: FateCard, tree: WeaponAssemblyTree, targets: A
 	stats["visual_leg_count"] = card.effect.get("leg_count", 4)
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Visual.HasLegs")
+	tree.refresh_stats()
 
 	result.success = true
 	result.modified_nodes = [target]
@@ -557,7 +623,9 @@ static func _apply_add_legs(card: FateCard, tree: WeaponAssemblyTree, targets: A
 
 ## ===== 效果执行：REINFORCE_WAVE（环境命运触发器）=====
 ## 触发波次外额外刷怪 — 无需目标节点，直接通知 RoomWaveSpawner
-static func _apply_reinforce_wave(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_reinforce_wave(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
 	result.message = "Reinforce wave triggered (no target node needed)"
@@ -570,7 +638,9 @@ static func _apply_reinforce_wave(card: FateCard, tree: WeaponAssemblyTree, targ
 
 ## ===== 效果执行：GRANT_RANDOM_CARD（环境命运触发器）=====
 ## 给予随机命运卡片 — 无需目标节点，给玩家一张随机卡片
-static func _apply_grant_random_card(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_grant_random_card(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
 	result.message = "Grant random fate card triggered"
@@ -583,7 +653,9 @@ static func _apply_grant_random_card(card: FateCard, tree: WeaponAssemblyTree, t
 
 ## ===== 效果执行：LUCKY_CHEST（环境命运触发器）=====
 ## 下次开箱品质提升 — 通过 RoomGameMode 设置标记
-static func _apply_lucky_chest(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_lucky_chest(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
 	result.effect_value = card.effect.get("quality_boost", 1)
@@ -596,7 +668,9 @@ static func _apply_lucky_chest(card: FateCard, tree: WeaponAssemblyTree, targets
 
 ## ===== 效果执行：EXTRA_LOOT（环境命运触发器）=====
 ## 下次开箱额外掉落
-static func _apply_extra_loot(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_extra_loot(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
 	result.message = "Extra loot triggered"
@@ -608,7 +682,9 @@ static func _apply_extra_loot(card: FateCard, tree: WeaponAssemblyTree, targets:
 
 ## ===== 效果执行：CURSE_ROOM_ENEMIES（环境命运触发器）=====
 ## 当前房间内所有敌人伤害提升
-static func _apply_curse_room_enemies(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_curse_room_enemies(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	var damage_mult: float = card.effect.get("damage_multiplier", 1.15)
 	result.success = true
@@ -622,7 +698,9 @@ static func _apply_curse_room_enemies(card: FateCard, tree: WeaponAssemblyTree, 
 
 ## ===== 效果执行：BLESS_DEAD（环境命运触发器）=====
 ## 低血量存活后获得伤害加成
-static func _apply_bless_dead(card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]) -> ApplyResult:
+static func _apply_bless_dead(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
 	var result: ApplyResult = ApplyResult.new()
 	result.success = true
 	result.effect_value = {
@@ -630,11 +708,14 @@ static func _apply_bless_dead(card: FateCard, tree: WeaponAssemblyTree, targets:
 		"survive_duration": card.effect.get("survive_duration", 30.0),
 		"damage_bonus": card.effect.get("damage_bonus", 0.1),
 	}
-	result.message = "Bless dead: HP<%.0f%% survive %ds = +%.0f%% damage" % [
-		result.effect_value.hp_threshold * 100.0,
-		result.effect_value.survive_duration,
-		result.effect_value.damage_bonus * 100.0,
-	]
+	result.message = (
+		"Bless dead: HP<%.0f%% survive %ds = +%.0f%% damage"
+		% [
+			result.effect_value.hp_threshold * 100.0,
+			result.effect_value.survive_duration,
+			result.effect_value.damage_bonus * 100.0,
+		]
+	)
 	# 通过 RoomGameMode 设置祝福状态
 	var rgm: Node = _find_room_game_mode()
 	if rgm != null and rgm.has_method("apply_bless_dead"):
@@ -648,6 +729,7 @@ static func _apply_bless_dead(card: FateCard, tree: WeaponAssemblyTree, targets:
 
 ## ========== 辅助方法 ==========
 
+
 static func _find_player() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree == null or tree.get_root() == null:
@@ -660,6 +742,7 @@ static func _find_player() -> Node:
 	if player == null:
 		player = root.find_child("Player", true, false)
 	return player
+
 
 static func _find_room_game_mode() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree

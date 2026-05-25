@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://room_boss_001"]
+[gd_scene load_steps=8 format=3 uid="uid://room_boss_001"]
 
 [ext_resource type="Script" path="res://src/game/BossRoomLogic.gd" id="1_boss_logic"]
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="2_spawner"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="4_tilemap_init"]
 [ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="5_door_viz"]
 [ext_resource type="Script" path="res://src/game/DemoBoss.gd" id="1_demo_boss"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
+size = Vector2(800, 600)
 
 ; BOSS 房间 — 玩家挑战 Boss 的专用场景
 ; 风格：深红/纯黑主题，中央 Boss 站位光圈，四角暗角
@@ -24,7 +27,7 @@ script = ExtResource("2_spawner")
 ; 房间视觉化组件（运行时构建 TileSet + 氛围装饰）
 [node name="Visualizer" type="Node2D" parent="."]
 script = ExtResource("4_tilemap_init")
-room_type = 8  ; BOSS
+room_type = 8
 
 ; BOSS 房氛围装饰
 [node name="AmbientDecoration" type="Node2D" parent="."]
@@ -134,14 +137,13 @@ z_index = 5
 
 ; 门过渡视觉标记（由 RoomTileMapInitializer 配置并显示方向）
 [node name="DoorVisualizer" type="Node2D" parent="."]
-script = ExtResource("4_door_viz")
+script = ExtResource("5_door_viz")
 
 ; BOSS 房区域（用于玩家存在检测）
 [node name="Area" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area"]
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
-size = Vector2(800, 600)
+shape = SubResource("RectangleShape2D_boss")
 
 ; ———————————————————————————
 ; Demo Boss 实体（HP 管理 + 受伤扣血 + GameUIManager 同步）

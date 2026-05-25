@@ -19,6 +19,7 @@ enum ContainerState {
 @export var floor: int = 1                      # 当前楼层（影响掉落数量）
 @export var interaction_radius: float = 60.0   # 交互范围（像素）
 @export var open_animation: bool = true        # 是否播放开启动画
+var guaranteed_items: Array[String] = []
 
 ## 状态
 var _state: ContainerState = ContainerState.AVAILABLE
@@ -135,12 +136,18 @@ func _generate_loot() -> Array[Dictionary]:
 		_:
 			loot = _loot_module.generate_loot(loot_table, 1)
 
-	# 应用命运效果：额外掉落（生成一件额外物品）
+		# 应用命运效果：额外掉落（生成一件额外物品）
 	if _extra_loot_enabled and not loot.is_empty():
 		var extra: Array[Dictionary] = _loot_module.generate_loot(loot_table, 1)
 		for item in extra:
 			loot.append(item)
 		print("[ContainerInteraction] 命运效果：额外掉落已应用，+1件物品")
+
+	for item_id in guaranteed_items:
+		var guaranteed := ItemRegistry.get_instance().get_item(item_id)
+		if not guaranteed.is_empty():
+			guaranteed["count"] = max(1, int(guaranteed.get("count", 1)))
+			loot.append(guaranteed)
 
 	# 应用命运效果：品质提升（提升已生成物品的品质标签，过滤低品质）
 	# 逻辑：将所有物品的 loot_table_tier 提升 _quality_boost 级（仅影响显示，不改变实际数据）

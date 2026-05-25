@@ -20,6 +20,7 @@ func _init() -> void:
 ## 注册所有内置物品
 func _register_all_items() -> void:
 	_register_beacon_item()
+	_register_room_key_item()
 	_register_weapon_modules()
 	_register_consumables()
 
@@ -51,9 +52,29 @@ func _register_beacon_item() -> void:
 		"price": 150,
 	}
 
+func _register_room_key_item() -> void:
+	_items["item_room_key"] = {
+		"id": "item_room_key",
+		"name": "房间钥匙",
+		"description": "用于开启地图上的一扇房门。来自怪物掉落或房间搜索。",
+		"type": "key",
+		"rarity": "common",
+		"stack_max": 9,
+		"tags": ["key", "progression"],
+		"floor_loot_weights": {
+			"loot_common": 1.0,
+			"loot_floor_1_2": 1.8,
+			"scavenge_floor_1": 2.4,
+			"scavenge_floor_2": 2.0,
+			"combat_floor_1": 1.2,
+			"elite_floor_1": 1.0,
+		},
+	}
+
 ## 注册武器模块类（蓝图类，玩家获得后可在基地解锁）
 func _register_weapon_modules() -> void:
 	# Tier 0 — 基础（总是可用）
+	_register_weapon_drops()
 	_register_gunbody_tier0()
 	# Tier 1 — 解锁后追加
 	_register_gunbody_tier1()
@@ -61,6 +82,64 @@ func _register_weapon_modules() -> void:
 	_register_bullet_tier1()
 	_register_attachment_tier0()
 	_register_attachment_tier1()
+
+func _register_weapon_drops() -> void:
+	var weapons: Array = [
+		{
+			"id": "weapon_pistol",
+			"assembly_id": "bp_pistol",
+			"name": "豌豆手枪",
+			"description": "可靠的基础半自动武器。右键装备为当前主武器。",
+			"type": "weapon",
+			"subtype": "gun_body",
+			"rarity": "common",
+			"stack_max": 1,
+			"tags": ["weapon", "gun_body", "pistol"],
+			"floor_loot_weights": {
+				"loot_floor_1_2": 0.8,
+				"scavenge_floor_1": 0.8,
+				"combat_floor_1": 0.5,
+			},
+			"price": 70,
+		},
+		{
+			"id": "weapon_shotgun",
+			"assembly_id": "bp_shotgun",
+			"name": "散射喷壶",
+			"description": "近距离多弹丸散射武器。右键装备为当前主武器。",
+			"type": "weapon",
+			"subtype": "gun_body",
+			"rarity": "uncommon",
+			"stack_max": 1,
+			"tags": ["weapon", "gun_body", "shotgun"],
+			"floor_loot_weights": {
+				"spawn_starter": 3.0,
+				"loot_floor_1_2": 1.0,
+				"scavenge_floor_1": 1.4,
+				"combat_floor_1": 0.8,
+			},
+			"price": 110,
+		},
+		{
+			"id": "weapon_rifle",
+			"assembly_id": "bp_rifle",
+			"name": "步枪",
+			"description": "稳定连发的中距离武器。右键装备为当前主武器。",
+			"type": "weapon",
+			"subtype": "gun_body",
+			"rarity": "rare",
+			"stack_max": 1,
+			"tags": ["weapon", "gun_body", "rifle"],
+			"floor_loot_weights": {
+				"loot_floor_3_4": 1.0,
+				"scavenge_floor_3": 0.8,
+				"boss_floor_1": 1.2,
+			},
+			"price": 150,
+		},
+	]
+	for weapon in weapons:
+		_items[weapon["id"]] = weapon
 
 func _register_gunbody_tier0() -> void:
 	# 基础枪身蓝图（Tier 0，初始可用）
@@ -593,10 +672,6 @@ func _register_attachment_tier1() -> void:
 	for a in attachments:
 		_items[a["id"]] = a
 
-## 获取物品定义（不存在返回空字典）
-func get_item(item_id: String) -> Dictionary:
-	return _items.get(item_id, {})
-
 ## 检查物品是否存在
 func has_item(item_id: String) -> bool:
 	return _items.has(item_id)
@@ -632,6 +707,11 @@ func get_loot_table(table_name: String) -> Array[Dictionary]:
 			entry["loot_weight"] = weights[table_name]
 			result.append(entry)
 	return result
+
+func get_item(item_id: String) -> Dictionary:
+	if not _items.has(item_id):
+		return {}
+	return (_items[item_id] as Dictionary).duplicate(true)
 
 ## 获取商人商品（根据层级）
 func get_merchant_goods(tier: int) -> Array[Dictionary]:

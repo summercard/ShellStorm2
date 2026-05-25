@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="4_door_viz"]
 
 ; 撤离房场景 — 搜打撤循环的终点
-; 玩家到达后自动开始撤离读条（由 RoomGameMode._activate_extraction_room 触发）
+; 玩家到达后需操作中央撤离装置，再开始守点撤离读条
 ; 房间设计：中央撤离光圈 + 四个方向的门（连接其他房间）
 ; 风格：深蓝/青色调，神秘感，暗示"出口就在这里"
 

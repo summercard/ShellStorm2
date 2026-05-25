@@ -6,22 +6,20 @@ class_name DemoRoomGameMode
 
 extends Node2D
 
-## 撤离模块（延迟实例化，避免循环引用）
+## 撤离模块（直接实例化，ExtractionModule extends RefCounted 不能作为 Node child）
 var _extraction_module: ExtractionModule = null
 
 func _get_extraction_module() -> ExtractionModule:
 	if _extraction_module == null:
 		_extraction_module = ExtractionModule.new()
-		add_child(_extraction_module)
 	return _extraction_module
 
-## 背包模块（给容器组件用）
+## 背包模块（直接实例化，InventoryModule extends RefCounted 不能作为 Node child）
 var _inventory_module: InventoryModule = null
 
 func _get_inventory_module() -> InventoryModule:
 	if _inventory_module == null:
 		_inventory_module = InventoryModule.new()
-		add_child(_inventory_module)
 	return _inventory_module
 
 ## 背包UI（standalone模式，Tab切换显示）
@@ -287,6 +285,22 @@ func _spawn_player() -> void:
 	camera.enabled = true
 	add_child(camera)
 	camera.make_current()
+	
+	# 实例化命运卡片 UI 控制器（Tab 键呼出卡片选择）
+	_spawn_fate_card_ui()
+	
+	# 连接玩家受伤信号（用于撤离读条中断）
+	if _player.has_signal("hp_changed"):
+		_player.hp_changed.connect(_on_player_hp_changed)
+
+## 实例化命运卡片 UI 控制器
+func _spawn_fate_card_ui() -> void:
+	var fate_ui_scene := preload("res://scenes/FateCardUIController.tscn") as PackedScene
+	if fate_ui_scene != null:
+		var fate_ui: Control = fate_ui_scene.instantiate() as Control
+		if fate_ui != null:
+			add_child(fate_ui)
+			print("[DemoRoomGameMode] FateCardUIController 已实例化")
 
 ## 实例化所有Demo房间
 func _instantiate_demo_rooms() -> void:
@@ -327,16 +341,17 @@ func _instantiate_demo_rooms() -> void:
 ## 初始化房间视觉（TileMap + 边界碰撞体）
 func _initialize_room_visual(room_instance: Node2D, room_type: RoomData.RoomType, room_data: Dictionary) -> void:
 	var room_size := Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)
+	var door_info: Array[Dictionary] = []
 	
 	# 优先使用 RoomVisualizer.configure() — 直接调用，确保 ELITE 房间主题色正确注入
 	var room_visualizer := room_instance.get_node_or_null("Visualizer") as RoomVisualizer
 	if room_visualizer != null:
-		room_visualizer.configure(room_type, room_size, [])
+		room_visualizer.configure(room_type, room_size, door_info)
 	elif room_instance.has_method("configure"):
 		# fallback：其他实现
-		room_instance.configure(room_type, room_size, [])
+		room_instance.configure(room_type, room_size, door_info)
 	
-	_add_boundary_collision(room_instance, room_size, [])
+	_add_boundary_collision(room_instance, room_size, door_info)
 
 ## 为容器组件注入背包引用
 func _setup_room_containers(room_instance: Node2D) -> void:
@@ -423,8 +438,8 @@ func _create_door_area(parent: Node2D, local_pos: Vector2, from_id: int, to_id: 
 	area.position = local_pos
 	area.collision_layer = 0
 	area.collision_mask = 2  # Player layer
-	area.body_entered.connect(_on_door_body_entered.bind(from_id, to_id))
-	area.body_exited.connect(_on_door_body_exited.bind(from_id, to_id))
+	area.body_entered.connect(_on_door_body_entered.bind(area, from_id, to_id))
+	area.body_exited.connect(_on_door_body_exited.bind(area, from_id, to_id))
 	
 	var shape := CollisionShape2D.new()
 	var rect := RectangleShape2D.new()
@@ -463,12 +478,11 @@ func _create_door_area(parent: Node2D, local_pos: Vector2, from_id: int, to_id: 
 ## 门交互状态
 var _door_entry_time: Dictionary = {}  # door_area → timestamp when player entered
 
-func _on_door_body_entered(body: Node2D, from_id: int, to_id: int) -> void:
+func _on_door_body_entered(body: Node2D, door_area: Area2D, from_id: int, to_id: int) -> void:
 	if not body.is_in_group("player"):
 		return
 	
 	# 记录当前靠近的门
-	var door_area: Area2D = body as Area2D
 	if door_area != null:
 		var lbl: Label = door_area.get_meta("door_label") as Label
 		if lbl != null:
@@ -477,11 +491,10 @@ func _on_door_body_entered(body: Node2D, from_id: int, to_id: int) -> void:
 			_refresh_door_visual(door_area, from_id, to_id, lbl)
 		_near_door[door_area] = {"from_id": from_id, "to_id": to_id, "label": lbl}
 
-func _on_door_body_exited(body: Node2D, from_id: int, to_id: int) -> void:
+func _on_door_body_exited(body: Node2D, door_area: Area2D, from_id: int, to_id: int) -> void:
 	if not body.is_in_group("player"):
 		return
 	
-	var door_area: Area2D = body as Area2D
 	if door_area != null and _near_door.has(door_area):
 		var lbl: Label = _near_door[door_area].get("label") as Label
 		if lbl != null:
@@ -621,16 +634,22 @@ func _on_enemy_spawned(count: int) -> void:
 ## BOSS房：连接BossRoomLogic信号
 func _setup_boss_room_signals(room_instance: Node2D) -> void:
 	var boss_logic: Node = room_instance.get_node_or_null("BossRoomLogic") as Node
+	if boss_logic == null and room_instance.has_signal("boss_spawn_triggered"):
+		boss_logic = room_instance
 	if boss_logic == null:
 		_update_label("BOSS房逻辑未找到！")
 		return
 	
 	if boss_logic.has_signal("boss_spawn_triggered"):
-		if not boss_logic.connect("boss_spawn_triggered", _on_boss_spawn_triggered):
-			pass  # 已连接
+		var spawn_signal := Signal(boss_logic, "boss_spawn_triggered")
+		var spawn_callback := Callable(self, "_on_boss_spawn_triggered")
+		if not spawn_signal.is_connected(spawn_callback):
+			spawn_signal.connect(spawn_callback)
 	if boss_logic.has_signal("boss_defeated_triggered"):
-		if not boss_logic.connect("boss_defeated_triggered", _on_boss_defeated_triggered):
-			pass  # 已连接
+		var defeated_signal := Signal(boss_logic, "boss_defeated_triggered")
+		var defeated_callback := Callable(self, "_on_boss_defeated_triggered")
+		if not defeated_signal.is_connected(defeated_callback):
+			defeated_signal.connect(defeated_callback)
 	
 	# 触发Boss生成（模拟）
 	var boss_data := {
@@ -685,16 +704,55 @@ func _try_start_extraction() -> bool:
 	var ok: bool = _extraction_module.start_extraction("STANDARD", 5.0)
 	if ok:
 		_update_label("=== 撤离读条中 ===\n5秒后完成撤离！\n（此Demo到此结束）")
-		# 连接撤离完成信号
-		_extraction_module.extraction_completed.connect(_on_extraction_completed)
+		# 连接撤离完成/中断信号
+		if not _extraction_module.extraction_completed.is_connected(_on_extraction_completed):
+			_extraction_module.extraction_completed.connect(_on_extraction_completed)
+		if not _extraction_module.extraction_aborted.is_connected(_on_extraction_aborted):
+			_extraction_module.extraction_aborted.connect(_on_extraction_aborted)
 	return ok
 
 ## 撤离完成回调
 func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 	if success:
+		# 通知 GameUIManager 显示撤离成功面板（完整战局统计 HUD）
+		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+		if gui != null and gui.has_method("show_run_extraction_success"):
+			# 统计本局：击杀数=已清理房间敌人数，货币=Inventory中魂总和
+			var total_kills: int = 0
+			for cleared_id in _rooms_cleared:
+				if _room_instances.has(cleared_id):
+					var spawner: Node = _room_instances[cleared_id].get_node_or_null("WaveSpawner")
+					if spawner != null and spawner.has_method("get_wave_info"):
+						var info: Dictionary = spawner.call("get_wave_info")
+						total_kills += info.get("total", 0)
+			var currency_amount: int = 0
+			if _inventory_module != null and _inventory_module.has_method("get_all_items"):
+				for item in _inventory_module.get_all_items():
+					if item.get("id", "").begins_with("soul_"):
+						currency_amount += item.get("stack", 0)
+			gui.call("show_run_extraction_success", {
+				"score": total_kills * 10,
+				"kills": total_kills,
+				"wave": _rooms_cleared.size(),
+				"currency": currency_amount,
+				"risk": _rooms_cleared.size(),
+			})
 		_update_label("=== 撤离成功！ ===\nDemo演示结束\n感谢游玩！")
 	else:
 		_update_label("=== 撤离失败 ===")
+
+## 撤离中断回调（玩家在撤离读条期间受伤）
+func _on_extraction_aborted() -> void:
+	_update_label("=== 撤离已中断 ===\n你在读条期间受到了攻击！\n请重新按 [E] 开启撤离")
+
+## 玩家受伤时中断撤离读条（搜打撤核心机制）
+func _on_player_hp_changed(current: int, maximum: int) -> void:
+	if _extraction_module == null:
+		return
+	# 仅在撤离读条进行中时响应（不是在IDLE或已完成状态）
+	if _extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
+		_extraction_module.abort_extraction()
+		_update_label("=== 撤离已中断 ===\n受到攻击！请重新按 [E] 撤离")
 
 ## 更新UI标签
 func _update_label(text: String) -> void:

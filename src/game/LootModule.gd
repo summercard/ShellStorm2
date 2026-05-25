@@ -6,22 +6,28 @@ extends RefCounted
 
 ## 单例引用
 static var _instance: LootModule = null
+
+
 static func get_instance() -> LootModule:
 	if _instance == null:
 		_instance = LootModule.new()
 	return _instance
 
+
 var _item_registry: ItemRegistry
 var _rng: RandomNumberGenerator
+
 
 func _init() -> void:
 	_item_registry = ItemRegistry.get_instance()
 	_rng = RandomNumberGenerator.new()
 	_rng.seed = Time.get_ticks_msec()
 
+
 ## 设置随机种子（用于 deterministic 掉落）
 func set_seed(seed: int) -> void:
 	_rng.seed = seed
+
 
 ## 从掉落表生成掉落物品列表
 ## table_name: 掉落表名称，如 "loot_floor_1_2", "scavenge_floor_3" 等
@@ -29,18 +35,28 @@ func set_seed(seed: int) -> void:
 ## returns: Array[Dictionary] 物品数据列表（可直接 add_item 到 InventoryModule）
 func generate_loot(table_name: String, count: int = 3) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = _item_registry.get_loot_table(table_name)
+	if candidates.is_empty() and table_name.begins_with("combat_floor_"):
+		candidates = _item_registry.get_loot_table("loot_floor_1_2")
+	if candidates.is_empty() and table_name.begins_with("elite_floor_"):
+		candidates = _item_registry.get_loot_table("loot_floor_1_2")
+	if candidates.is_empty() and table_name.begins_with("scavenge_floor_"):
+		candidates = _item_registry.get_loot_table("loot_floor_1_2")
+	if table_name.begins_with("combat_floor_") or table_name.begins_with("elite_floor_"):
+		candidates = _merge_loot_candidates(
+			candidates, _item_registry.get_loot_table("loot_floor_1_2")
+		)
 	if candidates.is_empty():
 		return []
-	
+
 	# 按权重排序并选择
 	candidates.sort_custom(func(a, b): return a.get("loot_weight", 0) > b.get("loot_weight", 0))
-	
+
 	# 过滤：根据蓝图Tier排除不可用的物品
 	var usable: Array[Dictionary] = _filter_by_blueprint_tier(candidates)
-	
+
 	var result: Array[Dictionary] = []
 	var attempts: int = count * 3  # 防止运气太差选不到
-	
+
 	for i in range(attempts):
 		if result.size() >= count:
 			break
@@ -53,8 +69,9 @@ func generate_loot(table_name: String, count: int = 3) -> Array[Dictionary]:
 			var stack: int = entry.get("stack_max", 1)
 			entry["count"] = _rng.randi() % stack + 1
 			result.append(entry)
-	
+
 	return result
+
 
 ## 根据蓝图Tier过滤物品（蓝图Tier决定可掉落的高级物品）
 func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionary]:
@@ -66,7 +83,7 @@ func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionar
 		gunbody_tier = BaseManager.get_blueprint_tier("gunbody")
 		bullet_tier = BaseManager.get_blueprint_tier("bullet")
 		attach_tier = BaseManager.get_blueprint_tier("attachment")
-	
+
 	for item in candidates:
 		var item_tier: int = item.get("loot_table_tier", 0)
 		var blueprint_loot_tier: int = item.get("blueprint_loot_tier", -1)  # -1 means not a blueprint
@@ -74,9 +91,12 @@ func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionar
 		var item_type: String = item.get("type", "")
 		var max_tier: int = 0
 		match subtype:
-			"gun_body": max_tier = gunbody_tier
-			"bullet": max_tier = bullet_tier
-			"muzzle", "stock", "scope", "magazine", "external", "mutator": max_tier = attach_tier
+			"gun_body":
+				max_tier = gunbody_tier
+			"bullet":
+				max_tier = bullet_tier
+			"muzzle", "stock", "scope", "magazine", "external", "mutator":
+				max_tier = attach_tier
 			_:
 				# 消耗品/信标/其他不受限
 				max_tier = 99
@@ -87,27 +107,29 @@ func _filter_by_blueprint_tier(candidates: Array[Dictionary]) -> Array[Dictionar
 			effective_tier = blueprint_loot_tier
 		if effective_tier <= max_tier:
 			usable.append(item)
-	
+
 	return usable
+
 
 ## 加权随机选择
 func _weighted_random_select(candidates: Array[Dictionary]) -> Dictionary:
 	if candidates.is_empty():
 		return {}
-	
+
 	var total_weight: float = 0.0
 	for c in candidates:
 		total_weight += c.get("loot_weight", 1.0)
-	
+
 	var roll: float = _rng.randf() * total_weight
 	var cumulative: float = 0.0
-	
+
 	for c in candidates:
 		cumulative += c.get("loot_weight", 1.0)
 		if roll <= cumulative:
 			return c
-	
+
 	return candidates[-1]  # fallback
+
 
 ## 生成商人供货列表
 ## tier: 商人层级（影响可选商品范围）
@@ -116,10 +138,10 @@ func generate_merchant_goods(tier: int, count: int = 6) -> Array[Dictionary]:
 	var candidates: Array[Dictionary] = _item_registry.get_merchant_goods(tier)
 	if candidates.is_empty():
 		return []
-	
+
 	# 过滤：按蓝图Tier
 	candidates = _filter_by_blueprint_tier(candidates)
-	
+
 	candidates.shuffle()
 	var result: Array[Dictionary] = []
 	for i in range(min(count, candidates.size())):
@@ -129,8 +151,9 @@ func generate_merchant_goods(tier: int, count: int = 6) -> Array[Dictionary]:
 		var base_price: int = item.get("price", 10)
 		item["price"] = int(base_price * (0.9 + _rng.randf() * 0.2))  # ±10%
 		result.append(item)
-	
+
 	return result
+
 
 ## 生成搜刮房容器内容
 ## container_type: "crate", "locker", "hidden_cache"
@@ -138,32 +161,49 @@ func generate_merchant_goods(tier: int, count: int = 6) -> Array[Dictionary]:
 func generate_container_loot(container_type: String, floor: int) -> Array[Dictionary]:
 	var table_name: String = "scavenge_floor_%d" % [min(5, floor)]
 	var base_count: int = 1
-	
+
 	match container_type:
-		"crate": base_count = 1 + floor / 3
-		"locker": base_count = 2
-		"hidden_cache": base_count = 3 + floor / 2
-	
-	return generate_loot(table_name, base_count)
+		"crate":
+			base_count = 1 + floor / 3
+		"locker":
+			base_count = 2
+		"hidden_cache":
+			base_count = 3 + floor / 2
+
+	var loot := generate_loot(table_name, base_count)
+	if floor <= 1 and not _contains_item(loot, "item_room_key"):
+		var key := _item_registry.get_item("item_room_key")
+		if not key.is_empty() and _rng.randf() < 0.45:
+			key["count"] = 1
+			loot.append(key)
+	return loot
+
 
 ## 生成怪物掉落
 ## enemy_data: 怪物配置数据（来自 MonsterInjector）
-## returns: Array[Dictionary] 可直接入背包的物品列表
+## returns: Array[Dictionary] 死亡点可生成的概率物品列表；货币由 RoomGameMode 必定生成魂球
 func generate_enemy_loot(enemy_data: Dictionary) -> Array[Dictionary]:
 	var floor: int = enemy_data.get("floor", 1)
-	var loot_table: String = enemy_data.get("loot_table", "loot_common")
+	var loot_table: String = enemy_data.get(
+		"loot_table", "loot_floor_1_2" if floor <= 2 else "loot_common"
+	)
 	var is_boss: bool = enemy_data.get("is_boss", false)
 	var is_elite: bool = enemy_data.get("is_elite", false)
-	
-	# Boss/精英有更高掉落
-	var count: int = 1
+
+	# 普通怪以魂币为主，物品是低概率惊喜；精英/Boss 才稳定提供构筑收益。
+	var count: int = 1 if _rng.randf() < 0.26 else 0
 	if is_elite:
-		count = 2 + floor / 2
+		count = 1 + floor / 3
 	elif is_boss:
-		count = 4 + floor
-	
+		count = 3 + floor / 2
+
 	var loot: Array[Dictionary] = generate_loot(loot_table, count)
-	
+	if floor <= 1 and not is_boss and _rng.randf() < (0.20 if is_elite else 0.08):
+		var key := _item_registry.get_item("item_room_key")
+		if not key.is_empty():
+			key["count"] = 1
+			loot.append(key)
+
 	# Boss/精英额外掉落货币
 	# 返回货币奖励数据供 RoomGameMode 调用 GameManager.add_currency()
 	var currency_bonus: int = 0
@@ -181,15 +221,43 @@ func generate_enemy_loot(enemy_data: Dictionary) -> Array[Dictionary]:
 			"is_currency": true
 		}
 		loot.append(currency_entry)
-	
+
 	return loot
+
+
+func _contains_item(loot: Array[Dictionary], item_id: String) -> bool:
+	for item in loot:
+		if item.get("id", "") == item_id:
+			return true
+	return false
+
+
+func _merge_loot_candidates(
+	primary: Array[Dictionary], fallback: Array[Dictionary]
+) -> Array[Dictionary]:
+	var merged: Array[Dictionary] = []
+	var seen: Dictionary = {}
+	for item in primary:
+		var item_id := str(item.get("id", ""))
+		if item_id.is_empty() or seen.has(item_id):
+			continue
+		seen[item_id] = true
+		merged.append(item)
+	for item in fallback:
+		var item_id := str(item.get("id", ""))
+		if item_id.is_empty() or seen.has(item_id):
+			continue
+		seen[item_id] = true
+		merged.append(item)
+	return merged
+
 
 ## 将掉落物品添加到背包
 ## returns: 实际添加成功的物品数量
 func grant_loot_to_inventory(loot: Array[Dictionary], inventory: InventoryModule) -> int:
 	if inventory == null or loot.is_empty():
 		return 0
-	
+
 	var granted: int = 0
 	for item_data in loot:
 		var item_id: String = item_data.get("id", "")
@@ -204,6 +272,7 @@ func grant_loot_to_inventory(loot: Array[Dictionary], inventory: InventoryModule
 				_sync_beacon_to_extraction_director(inventory)
 	return granted
 
+
 ## 同步信标数量到 ExtractionDirector
 ## 在 RoomGameMode 地图生成时和每次获得物品后调用
 func _sync_beacon_to_extraction_director(inventory: InventoryModule) -> void:
@@ -211,9 +280,11 @@ func _sync_beacon_to_extraction_director(inventory: InventoryModule) -> void:
 	# 这里只提供辅助方法
 	pass
 
+
 ## 获取物品注册表引用（用于查询）
 func get_item_registry() -> ItemRegistry:
 	return _item_registry
+
 
 ## 调试：测试掉落
 func debug_test_loot(table_name: String, count: int = 5) -> String:

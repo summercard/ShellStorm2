@@ -7,7 +7,7 @@ radius = 8.0
 
 [node name="Bullet" type="Area2D"]
 collision_layer = 0
-collision_mask = 4
+collision_mask = 5
 script = ExtResource("1_bullet")
 
 [node name="Shape" type="ColorRect" parent="."]
@@ -29,3 +29,7 @@ color = Color(1.0, 0.6, 0.1, 0.4)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = 1.5708
 shape = SubResource("CircleShape2D_bullet")
+
+[node name="AttachedGunPolygon" type="Polygon2D" parent="."]
+visible = false
+z_index = 2

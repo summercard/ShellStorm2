@@ -21,6 +21,9 @@ var _attached_gun_fire_rate: float = 4.0
 
 var _trail_line: Line2D = null
 
+## 子弹挂载枪视觉多边形（Bullet飞行时，背上的枪渲染为多边形）
+## 挂载枪多边形通过 _render_attached_gun() 动态设置 polygon/color
+
 ## 命运卡片视觉反馈状态
 var _fate_scale: float = 1.0       # fate_scale > 1 时子弹放大
 var _fate_has_eyes: bool = false   # 加眼睛
@@ -29,11 +32,94 @@ var _eye_nodes: Array[Node2D] = []  # 眼睛节点引用
 var _leg_nodes: Array[Node2D] = []  # 脚节点引用
 var _leg_anim_timer: float = 0.0
 
+## 挂载枪型 → 多边形顶点映射（与 WeaponDisplay.gd 保持一致）
+## 格式：[p1, p2, ...] 组成 Polygon2D polygon，按顺时针/逆时针均可
+static var GUN_SHAPES: Dictionary = {
+	"GunBody_Pistol": {
+		"polygon": PackedVector2Array([
+			Vector2(-6, -4), Vector2(14, -4), Vector2(18, -2),
+			Vector2(18, 2), Vector2(14, 4), Vector2(-6, 4),
+		]),
+		"color": Color(0.55, 0.57, 0.62, 1.0),
+	},
+	"GunBody_Rifle": {
+		"polygon": PackedVector2Array([
+			Vector2(-10, -5), Vector2(16, -4), Vector2(22, -3),
+			Vector2(24, 0), Vector2(22, 3), Vector2(16, 4), Vector2(-10, 5),
+		]),
+		"color": Color(0.38, 0.42, 0.38, 1.0),
+	},
+	"GunBody_Shotgun": {
+		"polygon": PackedVector2Array([
+			Vector2(-8, -6), Vector2(8, -5), Vector2(20, -4),
+			Vector2(24, 0), Vector2(20, 4), Vector2(8, 5), Vector2(-8, 6),
+		]),
+		"color": Color(0.45, 0.35, 0.22, 1.0),
+	},
+	"GunBody_SMG": {
+		"polygon": PackedVector2Array([
+			Vector2(-7, -4), Vector2(10, -4), Vector2(16, -2),
+			Vector2(18, 0), Vector2(16, 2), Vector2(10, 4), Vector2(-7, 4),
+		]),
+		"color": Color(0.30, 0.30, 0.32, 1.0),
+	},
+	"GunBody_Sniper": {
+		"polygon": PackedVector2Array([
+			Vector2(-12, -4), Vector2(22, -3), Vector2(30, -1),
+			Vector2(32, 0), Vector2(30, 1), Vector2(22, 3), Vector2(-12, 4),
+		]),
+		"color": Color(0.22, 0.25, 0.28, 1.0),
+	},
+	"GunBody_Launcher": {
+		"polygon": PackedVector2Array([
+			Vector2(-10, -7), Vector2(6, -7), Vector2(14, -5),
+			Vector2(18, 0), Vector2(14, 5), Vector2(6, 7), Vector2(-10, 7),
+		]),
+		"color": Color(0.50, 0.42, 0.18, 1.0),
+	},
+	"GunBody_Machinegun": {
+		"polygon": PackedVector2Array([
+			Vector2(-12, -6), Vector2(14, -5), Vector2(22, -3),
+			Vector2(26, 0), Vector2(22, 3), Vector2(14, 5), Vector2(-12, 6),
+		]),
+		"color": Color(0.28, 0.28, 0.25, 1.0),
+	},
+	"GunBody_Charge": {
+		"polygon": PackedVector2Array([
+			Vector2(-8, -6), Vector2(4, -6), Vector2(12, -4),
+			Vector2(18, -2), Vector2(20, 0), Vector2(18, 2),
+			Vector2(12, 4), Vector2(4, 6), Vector2(-8, 6),
+		]),
+		"color": Color(0.60, 0.30, 0.60, 1.0),
+	},
+	# 挂载枪通用外形（命运卡片"子弹背枪"等机制创建的枪身节点）
+	# 匹配模式：AttachedGun_* 前缀节点名，统一渲染为紧凑多边形
+	"AttachedGun": {
+		"polygon": PackedVector2Array([
+			Vector2(-5, -4),
+			Vector2(8, -3),
+			Vector2(12, 0),
+			Vector2(8, 3),
+			Vector2(-5, 4),
+		]),
+		"color": Color(0.70, 0.65, 0.20, 1.0),   # 暗金色（与子弹背枪视觉风格匹配）
+	},
+}
+
+## 默认外形
+static var DEFAULT_GUN_SHAPE: Dictionary = {
+	"polygon": PackedVector2Array([
+		Vector2(-8, -4), Vector2(12, -4), Vector2(16, 0), Vector2(12, 4), Vector2(-8, 4),
+	]),
+	"color": Color(0.5, 0.5, 0.5, 1.0),
+}
+
 ## 原始碰撞半径（恢复时用）
 var _base_collision_radius: float = 8.0
 
 @onready var shape: ColorRect = $Shape
 @onready var glow: ColorRect = $Shape/Glow
+@onready var _attached_gun_polygon: Polygon2D = $AttachedGunPolygon
 
 func _ready() -> void:
 	z_as_relative = false
@@ -138,9 +224,28 @@ func set_attached_gun(gun_node: AssemblyNode) -> void:
 	var stats: Dictionary = gun_node.get_base_stats()
 	_attached_gun_fire_rate = stats.get("fire_rate", 4.0)
 	_attached_gun_cooldown = 0.0
+	# 渲染挂载枪的多边形外形
+	_render_attached_gun(gun_node.node_name)
 	# 读取枪身节点上记录的 fate_scale（来自"变大了"等卡片对子弹的应用）
 	if stats.has("fate_scale"):
 		_apply_fate_visual_from_scale(stats.get("fate_scale", 1.0))
+
+## 渲染挂载枪的多边形外形
+func _render_attached_gun(gun_name: String) -> void:
+	if _attached_gun_polygon == null:
+		return
+	# 优先精确匹配，兜底前缀匹配（AttachedGun_<card_id> → AttachedGun）
+	var shape: Dictionary
+	if GUN_SHAPES.has(gun_name):
+		shape = GUN_SHAPES[gun_name]
+	elif gun_name.begins_with("AttachedGun"):
+		# 子弹背枪等命运卡片创建的挂载枪，前缀匹配到 AttachedGun 类型
+		shape = GUN_SHAPES.get("AttachedGun", DEFAULT_GUN_SHAPE)
+	else:
+		shape = DEFAULT_GUN_SHAPE
+	_attached_gun_polygon.polygon = shape.get("polygon", PackedVector2Array())
+	_attached_gun_polygon.color = shape.get("color", Color.WHITE)
+	_attached_gun_polygon.visible = true
 
 func get_attached_gun() -> AssemblyNode:
 	return _attached_gun_node
@@ -221,6 +326,8 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
 		body.call("take_damage", damage, is_crit, direction)
+		queue_free()
+	elif body is StaticBody2D:
 		queue_free()
 
 func _on_area_entered(area: Area2D) -> void:
