@@ -46,6 +46,9 @@ var _node_registry: Dictionary = {}
 ## 避免每生成一颗子弹都遍历整棵树，树下变化时由 tree_changed 信号更新
 var _cached_bullet_attached_gun: AssemblyNode = null
 
+## 伤害倍率（由 Player.apply_damage_multiplier() 同步过来，如 BLESS_DEAD）
+var _damage_multiplier: float = 1.0
+
 
 ## 构造函数：从一个根节点装配树创建
 func _init(root_node: AssemblyNode = null) -> void:
@@ -211,7 +214,8 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 	"""从指定位置生成子弹，暴击判定"""
 	# 暴击判定（10%基础概率）
 	var is_crit := randf() < 0.10
-	var final_damage := bullet_damage * 2 if is_crit else bullet_damage
+	var base_damage := bullet_damage * 2 if is_crit else bullet_damage
+	var final_damage := int(float(base_damage) * _damage_multiplier)  # 应用伤害倍率（BLESS_DEAD等）
 
 	# every_nth_fire：每第N发触发挂载枪额外射击（"每第七发子弹携带一把枪"）
 	var bullet_node: AssemblyNode = _find_bullet_node()
@@ -274,6 +278,11 @@ func _find_bullet_attached_gun_raw() -> AssemblyNode:
 ## 公开接口：获取缓存的挂载枪（供 _spawn_bullet_from 使用）
 func _find_bullet_attached_gun() -> AssemblyNode:
 	return _cached_bullet_attached_gun
+
+
+## 设置伤害倍率（由 Player.apply_damage_multiplier() 同步过来）
+func apply_damage_multiplier(multiplier: float) -> void:
+	_damage_multiplier = multiplier
 
 
 ## 遍历装配树找到第一个 BULLET 类型节点（供命运视觉使用）

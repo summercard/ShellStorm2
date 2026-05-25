@@ -24,6 +24,7 @@ var aim_direction: Vector2 = Vector2.RIGHT
 var last_move_direction: Vector2 = Vector2.RIGHT
 var dash_direction: Vector2 = Vector2.RIGHT
 var input_locked: bool = false
+var _damage_multiplier: float = 1.0  # 伤害倍率（由命运触发器/祝福效果设置，如 BLESS_DEAD）
 
 var _audio: AudioManager = null
 
@@ -181,3 +182,43 @@ func set_aim_direction(dir: Vector2) -> void:
 func get_weapon_tree() -> WeaponAssemblyTree:
 	_ensure_weapon_tree()
 	return weapon_tree
+
+
+## 设置玩家伤害倍率（由命运触发器/祝福效果调用，如 BLESS_DEAD）
+func apply_damage_multiplier(multiplier: float) -> void:
+	_damage_multiplier = multiplier
+	# 同时同步给 WeaponAssemblyTree，确保完整伤害链路生效
+	if weapon_tree != null and weapon_tree.has_method("apply_damage_multiplier"):
+		weapon_tree.apply_damage_multiplier(multiplier)
+
+
+## 设置指定 key 的临时伤害加成（由 RoomEventHandler 祝福效果调用）
+## source_key: "blessing"/"curse" 等标识，叠加时覆盖
+var _named_damage_multipliers: Dictionary = {}
+
+
+func set_damage_multiplier(source_key: String, multiplier: float) -> void:
+	_named_damage_multipliers[source_key] = multiplier
+	_apply_named_multipliers()
+
+
+func apply_damage_buff(source_key: String, additive_bonus: float) -> void:
+	# additive_bonus: 0.10 表示+10%
+	var target_mult: float = 1.0 + additive_bonus
+	_named_damage_multipliers[source_key] = target_mult
+	_apply_named_multipliers()
+
+
+func remove_damage_buff(source_key: String) -> void:
+	_named_damage_multipliers.erase(source_key)
+	_apply_named_multipliers()
+
+
+func _apply_named_multipliers() -> void:
+	# 合并所有 named 增益，取最大值作为最终倍率
+	var final_mult: float = 1.0
+	for k in _named_damage_multipliers:
+		final_mult = max(final_mult, _named_damage_multipliers[k])
+	_damage_multiplier = final_mult
+	if weapon_tree != null and weapon_tree.has_method("apply_damage_multiplier"):
+		weapon_tree.apply_damage_multiplier(_damage_multiplier)

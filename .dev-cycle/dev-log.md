@@ -1,3 +1,69 @@
+## 轮次 203 — 2026-05-26 06:41 UTC+8
+
+### 维度
+BLESS_DEAD 亡者祝福链路缺失存活计时 —— 玩家低HP时直接加伤害，没给"存活X秒"的验收窗口
+
+### 问题分析
+轮次202审查环境命运触发器时发现 `apply_bless_dead` 机制不完整：
+
+- **设计意图**：玩家低血量时激活祝福，启动 N 秒存活倒计时；若玩家在倒计时内未死亡，触发伤害加成——这是核心乐趣（低HP博弈风险）。
+- **原实现问题**：`apply_bless_dead` 激活祝福后直接在下一帧 `_process` 末尾对 `_bless_dead_config["survive_timer"]` 做倒计时，到 0 就加伤害。但逻辑写在 `_process` 末尾且没有处理 `survive_timer == 0` 的情况，导致：玩家低HP → 立即激活 → timer 直接减到 0 → **没有给玩家任何存活验证的机会**。
+- **对比 RoomEventHandler 的 BLESSING**：60秒限时Buff通过 `SceneTreeTimer` 实现，有清晰的生命周期和到期回调，代码结构正确。
+
+### 本轮改动
+
+**src/game/RoomGameMode.gd**
+
+```gdscript
+var _bless_dead_timer: SceneTreeTimer = null  # 新增
+
+func _on_bless_dead_hp_check(current: int, maximum: int) -> void:
+    if _bless_dead_config.is_empty() or _bless_dead_config.get("active", false):
+        return
+    var threshold_ratio: float = _bless_dead_config.get("hp_threshold", 0.3)
+    if float(current) / float(maximum) <= threshold_ratio:
+        _bless_dead_config["active"] = true
+        print("[RoomGameMode] 亡者祝福已激活！HP<%.0f%%，等待存活%.0f秒后生效" % [...])
+        # 启动 SceneTreeTimer，倒计时结束才应用伤害
+        if is_instance_valid(_bless_dead_timer):
+            _bless_dead_timer.timeout.disconnect(_on_bless_dead_survive_timeout)
+        _bless_dead_timer = get_tree().create_timer(_bless_dead_config.get("survive_timer", 30.0))
+        _bless_dead_timer.timeout.connect(_on_bless_dead_survive_timeout)
+
+func _on_bless_dead_survive_timeout() -> void:
+    # 存活计时结束，应用伤害加成
+    var bonus: float = _bless_dead_config.get("damage_bonus", 0.1)
+    if player != null and is_instance_valid(player):
+        if player.has_method("apply_damage_multiplier"):
+            player.apply_damage_multiplier(1.0 + bonus)
+        # 通知 UI 显示飘字
+        if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+            _ui_manager.show_fate_card_notification("亡者祝福生效：伤害+%.0f%%（永久）" % (bonus * 100.0))
+```
+
+### 玩家可感知的变化
+- **原行为**：玩家低HP → 瞬间获得伤害加成（无风险、无反馈）——与"低HP存活博弈"设计完全背离
+- **修复后**：玩家低HP → 显示"亡者祝福已激活！HP<X%，等待存活Y秒后生效"→ 存活倒计时 → 计时结束前未死亡 → 伤害+10%（永久），并飘字通知
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/game/RoomGameMode.gd | 新增 `_bless_dead_timer` (SceneTreeTimer)、`_on_bless_dead_survive_timeout()` 回调；`_on_bless_dead_hp_check` 改用 Timer 替代 _process 末尾手动倒计时 |
+
+### 验证
+- Godot --headless --quit-after 3: Exit 0 ✅
+
+### 剩余风险
+- 实际触发时机（低HP时是否立即激活、倒计时是否正确）需要人类试玩确认
+- `_bless_dead_timer` 可能在玩家撤离成功后仍然触发，但撤离成功时战局已暂停，风险可接受
+
+### 下轮最可能方向
+1. 人类试玩验证：新落地的 3 个变种行为（活过来/回家看看/不想飞）+ 亡者祝福触发体验
+2. every_nth_fire 链路审查（轮次 193 建议的后续）
+3. 搜打撤经济系统收束（魂球 vs 地面掉落 vs 撤离收益）
+
+---
+
 ## 轮次 193 — 2026-05-26 03:51 UTC+8
 
 ### 维度

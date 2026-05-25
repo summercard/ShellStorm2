@@ -2373,12 +2373,35 @@ func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus
 
 
 var _bless_dead_config: Dictionary = {}
+var _bless_dead_timer: SceneTreeTimer = null
 
 
 func _on_bless_dead_hp_check(current: int, maximum: int) -> void:
 	if _bless_dead_config.is_empty() or _bless_dead_config.get("active", false):
 		return
-	var threshold_ratio = _bless_dead_config.get("hp_threshold", 0.3)
+	var threshold_ratio: float = _bless_dead_config.get("hp_threshold", 0.3)
 	if float(current) / float(maximum) <= threshold_ratio:
 		_bless_dead_config["active"] = true
-		print("[RoomGameMode] 亡者祝福已激活！HP<%.0f%%" % (threshold_ratio * 100.0))
+		print("[RoomGameMode] 亡者祝福已激活！HP<%.0f%%，等待存活%.0f秒后生效" % [
+			threshold_ratio * 100.0,
+			_bless_dead_config.get("survive_timer", 30.0)
+		])
+		# 开始存活计时，计时结束后应用伤害加成
+		if is_instance_valid(_bless_dead_timer):
+			_bless_dead_timer.timeout.disconnect(_on_bless_dead_survive_timeout)
+			_bless_dead_timer = null
+		_bless_dead_timer = get_tree().create_timer(_bless_dead_config.get("survive_timer", 30.0))
+		if _bless_dead_timer.timeout.is_connected(_on_bless_dead_survive_timeout):
+			_bless_dead_timer.timeout.disconnect(_on_bless_dead_survive_timeout)
+		_bless_dead_timer.timeout.connect(_on_bless_dead_survive_timeout)
+
+
+func _on_bless_dead_survive_timeout() -> void:
+	# 存活计时结束，应用伤害加成
+	var bonus: float = _bless_dead_config.get("damage_bonus", 0.1)
+	if player != null and is_instance_valid(player):
+		if player.has_method("apply_damage_multiplier"):
+			player.apply_damage_multiplier(1.0 + bonus)
+		print("[RoomGameMode] 亡者祝福生效！伤害+%.0f%%（永久）" % (bonus * 100.0))
+		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+			_ui_manager.show_fate_card_notification("亡者祝福生效：伤害+%.0f%%（永久）" % (bonus * 100.0))
