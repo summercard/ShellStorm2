@@ -261,6 +261,7 @@ func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 func consume_crit_on_kill_stack() -> bool:
 	if _crit_on_kill_stack > 0:
 		_crit_on_kill_stack -= 1
+		crit_stacks_changed.emit(_crit_on_kill_stack)
 		return true
 	return false
 
@@ -272,7 +273,8 @@ func get_crit_on_kill_stack() -> int:
 
 ## 公开接口：增加击杀必暴击堆栈（由外部调用，RoomGameMode 在 kill_recorded 信号触发后调用）
 func add_crit_on_kill_stack(count: int = 1) -> void:
-	_crit_on_kill_stack += count
+	_crit_on_kill_stack = mini(_crit_on_kill_stack + count, MAX_CRIT_STACK)
+	crit_stacks_changed.emit(_crit_on_kill_stack)
 
 
 ## 树结构变化时刷新挂载枪缓存
@@ -352,8 +354,14 @@ var _co_mounted_cooldowns: Dictionary = {}
 ## 射击计数器：用于 every_nth_fire 机制（"每第七发子弹携带一把枪"）
 var _fire_count: int = 0
 
+const MAX_CRIT_STACK: int = 10
+
+## 击杀必暴击堆栈变化信号（供 UI 层订阅以更新 HUD 暴击计数显示）
+signal crit_stacks_changed(new_count: int)
+
 ## 击杀必暴击堆栈（crit_on_kill 命运卡片机制）
 ## 每次击杀后累加，消费时按子弹计，不按射击计
+## 上限 MAX_CRIT_STACK，避免无限叠加导致暴击失去节奏感
 var _crit_on_kill_stack: int = 0
 
 

@@ -50,6 +50,7 @@ var run_risk: int = 0
 var extracted: bool = false
 var _reward_multiplier: float = 1.0
 var _pending_post_wave_extraction: bool = false
+var _base_manager: Node = null
 
 func _ready() -> void:
 	rng.randomize()
@@ -83,6 +84,7 @@ func _reset_run_state() -> void:
 	active_enemies.clear()
 	inventory_module = InventoryModule.new(12)
 	insurance_module = InsuranceModule.new(2)
+	_base_manager = get_node_or_null("/root/BaseManager")
 	if not Global.game_over.is_connected(_on_global_game_over):
 		Global.game_over.connect(_on_global_game_over)
 	if not GameManager.currency_changed.is_connected(_on_currency_changed):
@@ -109,6 +111,15 @@ func _bind_ui() -> void:
 			ui_layer.call("set_insurance_module", insurance_module)
 		_connect_ui_choice_signal("fate_choice_selected", "_on_fate_choice_selected")
 		_connect_ui_choice_signal("extraction_choice_selected", "_on_extraction_choice_selected")
+	# crit_on_kill 命运卡片：每次击杀后通知武器树增加暴击堆栈
+	if kill_recorded.is_connected(_on_kill_for_crit_on_kill) == false:
+		kill_recorded.connect(_on_kill_for_crit_on_kill)
+	# 订阅 crit_stacks_changed 信号，暴击堆栈变化时更新 HUD
+	if player != null:
+		var wt: Node = player.get_weapon_tree()
+		if wt != null and wt.has_signal("crit_stacks_changed"):
+			if not wt.crit_stacks_changed.is_connected(_on_crit_stacks_changed):
+				wt.crit_stacks_changed.connect(_on_crit_stacks_changed)
 	if clearing_progress:
 		clearing_progress.visible = true
 	if wave_indicator:
@@ -527,6 +538,15 @@ func _complete_extraction() -> void:
 	game_is_over = true
 	wave_active = false
 	_waiting_for_next_wave = true
+	# 计算撤离收益（魂币 → extraction_points）
+	var extracted_count := 0
+	if inventory_module != null:
+		extracted_count = inventory_module.get_used_slots()
+	var currency := GameManager.currency
+	if _base_manager != null and _base_manager.has_method("add_extraction_points"):
+		var points := currency / 2
+		_base_manager.call("add_extraction_points", points)
+		print("[CoreCombatMode] 撤离成功：魂=%d → extraction_points=%d，保险格=%d 件" % [currency, points, insurance_module.get_used_slots() if insurance_module else 0])
 	if ui_layer != null:
 		if ui_layer.has_method("set_death_stats"):
 			ui_layer.call("set_death_stats", {"score": score, "kills": kills, "floor": max(1, current_wave)})
@@ -561,6 +581,10 @@ func _trigger_game_over(reason: String) -> void:
 		return
 	game_is_over = true
 	wave_active = false
+	if inventory_module != null and insurance_module != null:
+		var death_mod := DeathSettlementModule.new()
+		var result: Dictionary = death_mod.process_death_settlement(inventory_module, insurance_module)
+		print("[CoreCombatMode] 死亡结算：掉落 %d 件，保险保住 %d 件" % [result.get("total_lost", 0), result.get("insurance_saved", []).size()])
 	if ui_layer != null:
 		if ui_layer.has_method("set_death_stats"):
 			ui_layer.call("set_death_stats", {"score": score, "kills": kills, "floor": max(1, current_wave)})
@@ -571,6 +595,19 @@ func _trigger_game_over(reason: String) -> void:
 func _on_currency_changed(amount: int) -> void:
 	if currency_label:
 		currency_label.text = "魂: %d" % amount
+
+
+## crit_on_kill 命运卡片：每次击杀后通知武器树增加暴击堆栈
+func _on_kill_for_crit_on_kill() -> void:
+	if player != null:
+		var wt: Node = player.get_weapon_tree()
+		if wt != null and wt.has_method("add_crit_on_kill_stack"):
+			wt.call("add_crit_on_kill_stack", 1)
+
+## crit_stacks_changed 信号处理：更新 HUD 暴击计数显示
+func _on_crit_stacks_changed(new_count: int) -> void:
+	if ui_layer != null and ui_layer.has_method("update_crit_stacks"):
+		ui_layer.call("update_crit_stacks", new_count)
 
 func _update_hp_bar(current: int, maximum: int) -> void:
 	if hp_bar:

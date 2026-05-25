@@ -1493,3 +1493,49 @@ func _on_tree_changed_by_fate() -> void:
 ### 暂时延后的风险
 - 每第七发时子弹上同时显示的挂载枪视觉可能有多个重叠（每颗子弹都传了同一个 attached_gun）
 - _spawn_every_nth_attached_bullet 没有传 attached_gun，所以不会渲染第二个挂载枪多边形，视觉上正确
+
+## 轮次 208 — 2026-05-26 07:28 UTC+8
+
+### 维度
+暴击子弹颜色一致性修复 — Bullet.gd crit 子弹 shape.color 应为金黄色与暴击主题统一
+
+### 问题分析
+审查 Bullet.gd crit 子弹视觉时发现一处不一致：
+- 暴击子弹：shape.color = Color(1.0, 0.3, 0.1, 1.0)（红橙色）
+- 暴击伤害文字（GameUIManager.show_damage_popup）：金色 Color(1.0, 0.92, 0.15, 1.0)
+- 暴击尾迹（Bullet._update_trail）：金色 Color(1.0, 0.9, 0.2, 0.65)
+
+暴击子弹本身却是红橙色，与金色主题不一致。玩家感知：击杀后下一发子弹的颜色应与尾迹/伤害数字同属金黄色暴击主题。
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/bullet/Bullet.gd | crit 子弹 shape.color：红橙色(1.0,0.3,0.1) → 金黄色(1.0,0.88,0.15) |
+
+### 玩家可感知的变化
+- **修复前**：暴击子弹是红橙色，与金色尾迹/暴击伤害文字割裂
+- **修复后**：暴击子弹变为金黄色，与暴击尾迹(金色)、暴击伤害数字(金字)视觉统一，形成完整金色暴击反馈
+
+### 验证
+- Godot --headless --quit-after 5: EXIT 0 ✅
+
+### crit_on_kill 链路完整性确认（207轮次审查）
+| 组件 | 状态 |
+|---|---|
+| FateCardPresets.crit_on_kill() | ✅ 完整 |
+| FateCardEngine._apply_crit_on_kill | ✅ 完整 |
+| RoomGameMode._on_kill_for_crit_on_kill | ✅ 完整 |
+| WeaponAssemblyTree._spawn_bullet_from (consume stack) | ✅ 完整 |
+| Bullet._on_body_entered (call_deferred queue_free) | ✅ 完整 |
+| Bullet.fire() (is_crit=true → 金色尾迹+大width) | ✅ 完整 |
+| Bullet._update_trail (crit → 金色尾迹) | ✅ 完整 |
+| EnemyBase.take_damage → _spawn_damage_number → show_damage_popup (crit金字) | ✅ 完整 |
+| Bullet.gd crit 子弹 shape.color（修复前红色，修复后金色）| ✅ 本轮修复 |
+
+### 剩余风险
+- 仍需人类试玩验证：实际 crit_on_kill 暴击红字体感、every_nth_fire 节奏感、活子弹追踪
+- 搜打撤经济系统（货币/保险格/撤离收益）尚未收束
+
+### 下轮最可能方向
+1. **人类试玩验证**（最高优先级）：crit_on_kill 暴击红字、every_nth_fire 节奏感、活子弹追踪、撤离房完整流程
+2. 搜打撤经济系统收束（保险格/背包/撤离收益转化）

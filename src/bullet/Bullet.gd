@@ -289,7 +289,7 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	if shape:
 		shape.rotation = 0.0
 		if crit:
-			shape.color = Color(1.0, 0.3, 0.1, 1.0)
+			shape.color = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色，与暴击尾迹/伤害文字一致
 			glow.color = Color(1.0, 0.9, 0.2, 0.75)
 			if _trail_line:
 				_trail_line.default_color = Color(1.0, 0.9, 0.2, 0.65)

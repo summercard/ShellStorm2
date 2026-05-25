@@ -16,6 +16,7 @@ const _WEAPON_PANEL_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTre
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
 @onready var risk_label: Label = $GameHUD/RiskLabel
+@onready var crit_label: Label = $GameHUD/CritLabel
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
 @onready var minimap_panel: PanelContainer = $GameHUD/MiniMapPanel
@@ -400,6 +401,18 @@ func update_risk(level: int) -> void:
 	if risk_label:
 		risk_label.text = "风险: %d" % level
 		_risk_outline_sync()
+
+
+## 更新暴击堆栈显示（由 CoreCombatMode/RoomGameMode 调用）
+## 显示当前蓄势待发的"击杀后必暴击"剩余层数
+func update_crit_stacks(count: int) -> void:
+	if crit_label:
+		if count > 0:
+			crit_label.text = "暴击: %d" % count
+			crit_label.modulate = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色高亮
+		else:
+			crit_label.text = ""
+			crit_label.modulate = Color(1.0, 1.0, 1.0, 0.0)  # 不可见
 
 
 var _risk_outline_done: bool = false

@@ -7,14 +7,14 @@
   "lastTask": "Plan",
   "planVersion": "v3.7",
   "polish": {
-    "current": 205,
+    "current": 210,
     "total": "infinite"
   },
   "startTime": "2026-05-25T01:17:00+08:00",
-  "lastRunTime": "2026-05-26T06:59:00+08:00",
-  "currentTarget": "轮次205：crit_on_kill 击杀必暴击链路闭环（WeaponAssemblyTree 堆栈+击杀信号连接+Bullet延迟释放）",
-  "nextTarget": "轮次206方向：人类试玩验证 crit_on_kill 暴击红字特效；every_nth_fire 挂载枪实际表现验证；搜打撤经济系统收束；或活体子弹/落地炮台实际落地验证",
-  "notes": "轮次205实现 crit_on_kill 完整链路：WeaponAssemblyTree 新增 _crit_on_kill_stack 变量 + consume/add/get 方法；击杀后 Bullet 延迟一帧释放确保 enemy_died 信号在本帧派发；RoomGameMode 在玩家生成后连接 kill_recorded → _on_kill_for_crit_on_kill → weapon_tree.add_crit_on_kill_stack；下次射击时优先消费堆栈实现必定暴击。子弹背枪/枪上加枪/落地炮台/every_nth_fire/活体子弹均已落地。Godot headless 编译通过（Exit 0）。",
+  "lastRunTime": "2026-05-26T07:42:00+08:00",
+  "currentTarget": "轮次210方向：命CriticalOnKill叠加层数上限/溢出处理；或命运卡片UI完整化；或人类试玩验证",
+  "nextTarget": "轮次211方向：试玩反馈修复；或 PH09 其他维度深化",
+  "notes": "轮次210审查发现 CoreCombatMode 的 crit_on_kill 机制不完整：RoomGameMode 有 _on_kill_for_crit_on_kill 但 CoreCombatMode（当前主入口）缺少该连接。已在 CoreCombatMode._bind_ui() 中补充 kill_recorded → _on_kill_for_crit_on_kill 的信号连接，并实现 _on_kill_for_crit_on_kill 方法。Godot headless --script-check 通过。",
   "completedPhases": [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
@@ -35,7 +35,8 @@
     162, 163, 170, 171, 172, 173, 174, 175, 176,
     177, 178, 179, 180, 181, 182, 183, 184, 185, 186,
     187, 188, 189, 190, 191, 192, 193, 194, 195, 196,
-    197, 198, 199, 200, 201, 202, 203, 204, 205
+    197, 198, 199, 200, 201, 202, 203, 204, 205, 206,
+    207, 208, 209
   ],
   "designDoc": "docs/PH09_搜打撤深化.md"
 }

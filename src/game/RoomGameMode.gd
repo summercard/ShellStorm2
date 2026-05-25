@@ -322,6 +322,12 @@ func _spawn_player() -> void:
 	# 连接击杀信号 → 驱动 crit_on_kill 堆栈（每击杀一次，下一颗子弹必定暴击）
 	if kill_recorded.is_connected(_on_kill_for_crit_on_kill) == false:
 		kill_recorded.connect(_on_kill_for_crit_on_kill)
+	# 订阅 crit_stacks_changed 信号，暴击堆栈变化时更新 HUD
+	if player != null and player.has_method("get_weapon_tree"):
+		var wt: Node = player.call("get_weapon_tree")
+		if wt != null and wt.has_signal("crit_stacks_changed"):
+			if not wt.crit_stacks_changed.is_connected(_on_crit_stacks_changed):
+				wt.crit_stacks_changed.connect(_on_crit_stacks_changed)
 
 
 ## 开始游戏
@@ -2286,6 +2292,12 @@ func _on_kill_for_crit_on_kill() -> void:
 		var wt: Node = player.get_weapon_tree()
 		if wt != null and wt.has_method("add_crit_on_kill_stack"):
 			wt.call("add_crit_on_kill_stack", 1)
+
+
+## crit_stacks_changed 信号处理：更新 HUD 暴击计数显示
+func _on_crit_stacks_changed(new_count: int) -> void:
+	if _ui_manager != null and _ui_manager.has_method("update_crit_stacks"):
+		_ui_manager.call("update_crit_stacks", new_count)
 
 
 ## 更新基础UI
