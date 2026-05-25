@@ -101,6 +101,8 @@ static func apply_card(
 			result = _apply_add_damage(card, tree, target_nodes)
 		FateCard.EffectAction.MUTATE_TO_HOMING:
 			result = _apply_mutate_to_homing(card, tree, target_nodes)
+		FateCard.EffectAction.MUTATE_TO_LIVING:
+			result = _apply_mutate_to_living(card, tree, target_nodes)
 		FateCard.EffectAction.EVERY_NTH_FIRE:
 			result = _apply_every_nth_fire(card, tree, target_nodes)
 		FateCard.EffectAction.CRIT_ON_KILL:
@@ -518,6 +520,35 @@ static func _apply_mutate_to_homing(
 	return result
 
 
+## ===== 效果执行：MUTATE_TO_LIVING =====
+## 子弹变活体（不想飞：落地生成炮台）
+static func _apply_mutate_to_living(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var spawn_turret: bool = card.effect.get("spawn_turret_on_land", true)
+	var turret_duration: float = card.effect.get("turret_duration", 5.0)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["spawn_turret_on_land"] = spawn_turret
+	stats["turret_duration"] = turret_duration
+	target.set_base_stats(stats)
+	target.tags.append("Fate.Turret")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = turret_duration
+	result.message = "Set turret-on-land (duration=%.1fs) on %s" % [turret_duration, target.node_name]
+	return result
+
+
 ## ===== 效果执行：EVERY_NTH_FIRE =====
 ## 每第N发触发特殊效果
 static func _apply_every_nth_fire(
@@ -722,14 +753,14 @@ static func _apply_bless_dead(
 	_fate_audio_card_applied()
 	result.effect_value = {
 		"hp_threshold": card.effect.get("hp_threshold", 0.3),
-		"survive_duration": card.effect.get("survive_duration", 30.0),
+		"survive_timer": card.effect.get("survive_duration", 30.0),
 		"damage_bonus": card.effect.get("damage_bonus", 0.1),
 	}
 	result.message = (
-		"Bless dead: HP<%.0f%% survive %ds = +%.0f%% damage"
+		"Bless dead: HP<%.0f%% survive %.0fs = +%.0f%% damage"
 		% [
 			result.effect_value.hp_threshold * 100.0,
-			result.effect_value.survive_duration,
+			result.effect_value.survive_timer,
 			result.effect_value.damage_bonus * 100.0,
 		]
 	)

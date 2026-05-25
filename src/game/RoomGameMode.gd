@@ -2364,7 +2364,7 @@ func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus
 	)
 	_bless_dead_config = {
 		"hp_threshold": hp_threshold,
-		"survive_duration": survive_duration,
+		"survive_timer": survive_duration,
 		"damage_bonus": damage_bonus,
 		"active": false,
 	}
