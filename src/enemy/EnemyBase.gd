@@ -91,6 +91,7 @@ func set_enemy_data(data: Dictionary) -> void:
 	_is_elite = data.get("is_elite", false)
 	if data.has("emoji") or data.has("color"):
 		set_visuals(data.get("emoji", "👾"), data.get("color", Color(1.0, 0.25, 0.25, 1.0)), float(data.get("scale", 1.0)))
+	_set_elite_name_label(data)
 
 func get_enemy_data() -> Dictionary:
 	return _enemy_data
@@ -506,7 +507,8 @@ func _ranged_shoot(dir: Vector2) -> void:
 		projectile.launch(spawn_pos, dir, 315.0, int(float(damage) * _damage_multiplier))
 
 func _spawn_minion() -> void:
-	var minion_scene: PackedScene = preload("res://scenes/Enemy.tscn")
+	# Load at summon time; preloading this script's own scene creates a cyclic editor load.
+	var minion_scene: PackedScene = load("res://scenes/Enemy.tscn") as PackedScene
 	var minion = minion_scene.instantiate()
 	var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
 	parent.add_child(minion)
@@ -572,6 +574,18 @@ func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
 		shape.color = color
 		shape.scale = Vector2.ONE * scale_mult
 	_update_hp_bar(true)
+
+func _set_elite_name_label(data: Dictionary) -> void:
+	if not data.get("is_elite", false):
+		return
+	var name: String = data.get("name", "")
+	if name.is_empty():
+		return
+	_ensure_state_marker()
+	if _state_marker_label:
+		_state_marker_label.text = name
+		_state_marker_label.modulate = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色，与暴击主题一致
+		_state_marker_label.visible = true
 
 func _ensure_state_marker() -> void:
 	if _state_marker_label != null and is_instance_valid(_state_marker_label):

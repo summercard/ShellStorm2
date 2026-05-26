@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fog_of_war"]
+
+[ext_resource type="Script" path="res://src/ui/FogOfWarLayer.gd" id="1_fog"]
+
+[node name="FogOfWarLayer" type="CanvasLayer"]
+script = ExtResource("1_fog")
