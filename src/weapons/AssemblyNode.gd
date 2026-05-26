@@ -104,9 +104,18 @@ func _combine_stats(target: Dictionary, source: Dictionary) -> void:
 		elif key in ["bullet_damage", "bullet_speed"]:
 			# 子弹属性直接覆盖（子弹节点自有属性，不与枪身混加）
 			target[key] = source[key]
-		else:
-			# 其他属性取加成
+		elif key == "overheat_penalty":
+			# 过热惩罚取最大值（多个超频效果取最严格者）
+			target[key] = max(target.get(key, 1.0), source[key])
+		elif key in ["bullet_damage", "bullet_speed"]:
+			# 子弹属性直接覆盖（子弹节点自有属性，不与枪身混加）
+			target[key] = source[key]
+		elif source[key] is int or source[key] is float:
+			# 其他数值属性取加成
 			target[key] = target.get(key, 0) + source[key]
+		else:
+			# 非数值类型（bool等）直接覆盖，不做加法
+			target[key] = source[key]
 
 ## 挂载子节点到指定槽位
 func mount(slot_type: SlotType, child: AssemblyNode) -> bool:

@@ -122,7 +122,14 @@ func _create_card_button(card: FateCard) -> Button:
 	btn.custom_minimum_size = Vector2(200, 110)
 	btn.tooltip_text = card.description
 
-	# 样式
+	# 简化版UI显示：emoji + 名称 + 一行说明
+	var display_text := ""
+	if card.icon_emoji != "":
+		display_text += card.icon_emoji + " "
+	display_text += card.card_name
+	if card.short_description != "":
+		display_text += "\n" + card.short_description
+	btn.text = display_text
 	var bg_style := StyleBoxFlat.new()
 	bg_style.bg_color = Color(0.12, 0.13, 0.18, 0.95)
 	bg_style.set_border_width_all(2)

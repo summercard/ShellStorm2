@@ -45,7 +45,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	# 触屏捏合缩放
 	if event is InputEventMagnifyGesture:
 		var mg: InputEventMagnifyGesture = event
-		var new_zoom := _target_zoom * mg.relative
+		var new_zoom: float = _target_zoom * mg.relative
 		_set_zoom(new_zoom)
 	
 	# 键盘 +/- 缩放（辅助）

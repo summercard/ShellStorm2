@@ -29,7 +29,8 @@ class EliteRecord:
 	func _init(base_id: String, base_name: String = ""):
 		elite_id = "elite_%06d" % 0
 		base_enemy_id = base_id
-		name = base_name if base_name else "未知精英"
+		# 如果没有传入名字，自动生成
+		name = base_name if not base_name.is_empty() else "未知精英"
 		level = 1
 		state = "Newborn"
 		history = {
@@ -48,6 +49,94 @@ class EliteRecord:
 		fate_residues = []
 		spawn_weight = 0.1
 		bounty_reward_level = 0
+
+	const TITLE_TEMPLATES: Array[String] = [
+		"背枪的%base%",
+		"吞弹者·%base%",
+		"抢走机枪的%base%",
+		"三次逃脱的%base%幼体",
+		"%base%仇敌",
+		"狡猾的%base%",
+		"不死的%base%",
+		"带毒的%base%",
+		"焦黑的%base%",
+		"冰壳的%base%"
+	]
+
+	static func generate_elite_name(base_enemy_id: String, modifiers: Array[String], stolen_modules: Array[Dictionary]) -> String:
+		"""根据精英怪的成长经历生成半随机名字
+		
+		名字格式：称号 + 怪物基础名 + 后缀
+		示例：背枪的孢子射手、吞弹者·毒囊花、抢走机枪的蜂巢怪
+		"""
+		# 基础怪物名映射
+		var base_names: Dictionary = {
+			"melee_chaser": "裂口爬虫",
+			"ranged_caster": "孢子射手",
+			"summoner": "蜂巢怪",
+			"shielded": "壳甲卫兵",
+			"exploder": "炸弹果",
+			"ambusher": "地刺虫",
+			"boss": "弹壳巨兽"
+		}
+		var base_name: String = base_names.get(base_enemy_id, "小菌猪")
+
+		# 按优先级构建称号关键词列表
+		var title_parts: Array[String] = []
+
+		# 装备类称号（最高优先级，决定性特征）
+		for m in stolen_modules:
+			if m is Dictionary:
+				match m.get("module_type", ""):
+					"GunBody":
+						title_parts.append("背枪的")
+					"Bullet":
+						title_parts.append("吞弹的")
+					"Attachment":
+						title_parts.append("挂载的")
+					"FateCard":
+						title_parts.append("命运的")
+
+		# 词缀类称号（成长经历）
+		for mod in modifiers:
+			match mod:
+				"Elite.WeaponParasite":
+					title_parts.append("枪械寄生的")
+				"Elite.Huge":
+					title_parts.append("巨型的")
+				"Elite.SpawnOnDeath":
+					title_parts.append("分裂的")
+				"Elite.Ricochet":
+					title_parts.append("弹跳的")
+				"Elite.Parasite":
+					title_parts.append("寄生的")
+				"Elite.GunFeed":
+					title_parts.append("喂枪的")
+				"Elite.Shielded":
+					title_parts.append("护盾的")
+				"Elite.PoisonResist":
+					title_parts.append("抗毒的")
+				"Elite.FireResist":
+					title_parts.append("耐火的")
+				"Elite.IceResist":
+					title_parts.append("抗寒的")
+				"Elite.FateResidue":
+					title_parts.append("残魂的")
+
+		# 如果没有任何特征，用随机称号池
+		if title_parts.is_empty():
+			var rng := RandomNumberGenerator.new()
+			rng.seed = Time.get_ticks_msec()
+			var template: String = TITLE_TEMPLATES[rng.randi() % TITLE_TEMPLATES.size()]
+			return template.replace("%base%", base_name)
+
+		# 取第一个有意义的称号（最重要的特征）
+		var title: String = title_parts[0]
+		# 去掉末尾的"的"方便连接，或保留"XX的"格式
+		if title.ends_with("的"):
+			return title + base_name
+		else:
+			return title + base_name
 
 	func to_dict() -> Dictionary:
 		return {
@@ -103,6 +192,8 @@ class EliteRecord:
 	func add_modifier(mod: String) -> void:
 		if mod not in modifiers:
 			modifiers.append(mod)
+			# 当精英获得新词缀时，更新名字以反映最新成长状态
+			name = generate_elite_name(base_enemy_id, modifiers, stolen_modules)
 
 	func equip_module(module_data: Dictionary) -> void:
 		stolen_modules.append(module_data)
@@ -112,6 +203,8 @@ class EliteRecord:
 				add_modifier("Elite.WeaponParasite")
 			"FateCard":
 				add_modifier("Elite.FateResidue")
+		# 当精英获得新装备/词缀时，更新名字以反映最新成长状态
+		name = generate_elite_name(base_enemy_id, modifiers, stolen_modules)
 
 
 func _ready() -> void:
@@ -120,6 +213,9 @@ func _ready() -> void:
 
 func create_elite(base_enemy_id: String, name: String = "", biome: String = "") -> EliteRecord:
 	"""创建新的精英怪记录"""
+	# 如果没有传入名字，自动生成半随机名字
+	if name.is_empty():
+		name = EliteRecord.generate_elite_name(base_enemy_id, [], [])
 	var elite = EliteRecord.new(base_enemy_id, name)
 	elite.elite_id = "elite_%06d" % _get_next_id()
 	if biome:

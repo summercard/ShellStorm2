@@ -27,6 +27,7 @@ const SFX: Dictionary = {
 	"fate_card":      "",  # 程序化合成，无文件时自动降级到 SynthSfx.play_fate_card
 	"extraction_start": "res://assets/audio/sfx/extraction_start.wav",
 	"extraction_done":  "res://assets/audio/sfx/extraction_done.wav",
+	"extraction_abort": "",  # 程序化合成，无文件时自动降级到 SynthSfx.play_extraction_abort
 }
 
 func _ready() -> void:
@@ -85,6 +86,8 @@ func _play_fallback_sfx(sfx_name: String) -> void:
 			_synth.play_extraction_start()
 		"extraction_done":
 			_synth.play_extraction_done()
+		"extraction_abort":
+			_synth.play_extraction_abort()
 
 func play_music(music_name: String, volume_db: float = -6.0) -> void:
 	# 占位：后续接入背景音乐

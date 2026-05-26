@@ -16,6 +16,9 @@ const ROOM_DOOR_INTERACTION_SCRIPT := preload("res://src/game/RoomDoorInteractio
 const ROOM_LAYOUT_SCRIPT := preload("res://src/map/RoomLayout.gd")
 const SOUL_ORB_SCENE: PackedScene = preload("res://scenes/SoulOrb.tscn")
 const GROUND_ITEM_PICKUP_SCRIPT := preload("res://src/items/GroundItemPickup.gd")
+const VISION_SYSTEM_SCRIPT := preload("res://src/game/VisionSystem.gd")
+const ELITE_ARCHIVE_MODULE_SCRIPT := preload("res://src/enemy/EliteArchiveModule.gd")
+const ELITE_SPAWN_DIRECTOR_SCRIPT := preload("res://src/enemy/EliteSpawnDirector.gd")
 const EXTRACTION_DEFENSE_DURATION := 14.0
 
 @export var initial_floor: int = 1
@@ -31,6 +34,15 @@ var inventory_module: InventoryModule
 var insurance_module: InsuranceModule
 var extraction_module: ExtractionModule
 var death_settlement_module: DeathSettlementModule
+
+## 视野系统
+var vision_system: Variant = VISION_SYSTEM_SCRIPT.new()
+
+## 迷雾层引用（用于向 FogOfWarLayer 推送墙体几何）
+@onready var fog_layer: Node = get_node_or_null("../FogOfWarLayer")
+
+## 精英怪档案（PH06 精英成长链路）
+var _elite_archive: EliteArchiveModule = null
 
 ## 事件房处理器
 var _current_event_handler: Node = null
@@ -59,6 +71,8 @@ var room_info_label: Label = get_node_or_null("../GameUIManager/GameHUD/RoomInfo
 ## UI 管理器引用（用于飘字等效果）
 var _ui_manager: Node = null
 var _wave_indicator_label: Label = null
+## 音频管理器引用
+var _audio: Node = null
 
 ## 状态
 var current_floor: int = 1
@@ -84,12 +98,21 @@ var _run_risk: int = 0
 var _current_wave_spawner: RoomWaveSpawner = null
 ## 区域刷怪控制器（当前房间）
 var _current_regional_controller: RegionalSpawnController = null
+## 精英怪档案模块（PH06 精英成长链路）
+var _elite_archive: EliteArchiveModule
+## 精英怪出现调度器（PH06）
+var _elite_spawn_director: Node
+## 当前房间已击杀精英的 elite_id 列表（用于识别要删除的记录）
+var _killed_elite_ids_this_room: Array[String] = []
+## 当前房间遭遇的所有精英 elite_id（用于遭遇结果记录）
+var _encountered_elite_ids_this_room: Array[String] = []
 
 
 func _ready() -> void:
 	add_to_group("room_game_mode")
 	_setup_map_manager()
 	_setup_extraction_modules()
+	_setup_elite_archive()
 	_setup_signals()
 	_setup_map_fate_triggers()
 	# 同步信标数量（在 UI 绑定之前，确保 extraction_director 有正确计数）
@@ -148,6 +171,8 @@ func _setup_ui_manager() -> void:
 	if map_manager != null and map_manager.extraction_director != null:
 		bc = map_manager.extraction_director.get_beacon_count()
 	_call_ui_manager_method("set_beacon_count", bc)
+	# 初始化音频管理器引用（延迟查找，确保 AudioManager 已就绪）
+	_audio = get_tree().root.find_child("AudioManager", true, false)
 
 
 ## 安全调用 _ui_manager 的方法（处理 null 和方法不存在情况）
@@ -204,6 +229,56 @@ func _setup_extraction_modules() -> void:
 	extraction_module.extraction_completed.connect(_on_extraction_completed)
 	extraction_module.extraction_aborted.connect(_on_extraction_aborted)
 	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
+
+
+## 初始化精英怪档案模块（PH06 精英成长链路）
+func _setup_elite_archive() -> void:
+	_elite_archive = ELITE_ARCHIVE_MODULE_SCRIPT.new()
+	add_child(_elite_archive)
+	_elite_spawn_director = ELITE_SPAWN_DIRECTOR_SCRIPT.new()
+	add_child(_elite_spawn_director)
+	print("[RoomGameMode] EliteArchiveModule 已初始化（当前存档: %d 精英）" % _elite_archive.get_total_count())
+
+
+func _on_elite_spawn_recorded(elite_id: String) -> void:
+	# PH06: 精英生成时记录遭遇结果（玩家撤离/死亡时统一结算）
+	if not elite_id.is_empty() and elite_id not in _encountered_elite_ids_this_room:
+		_encountered_elite_ids_this_room.append(elite_id)
+		print("[RoomGameMode] 精英遭遇已记录: %s" % elite_id)
+
+
+## PH06: 成功撤离时结算精英逃脱成长（对所有本局遭遇但未击杀的精英）
+func _resolve_elite_encounters_for_extraction() -> void:
+	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
+		return
+	# 排除已击杀的（_killed_elite_ids_this_room 中的已经在 kill_elite 时处理过了）
+	var escaped_ids: Array[String] = []
+	for eid in _encountered_elite_ids_this_room:
+		if eid not in _killed_elite_ids_this_room:
+			escaped_ids.append(eid)
+	if escaped_ids.is_empty():
+		return
+	var growth_data: Dictionary = {"hp_gain": 0.05, "damage_gain": 0.0, "speed_gain": 0.03, "level_up": 0}
+	for eid in escaped_ids:
+		_elite_archive.on_encounter_result(eid, "PlayerExtracted", growth_data.duplicate(true))
+		print("[RoomGameMode] 精英逃脱成长已结算: %s" % eid)
+
+
+## PH06: 玩家死亡时结算精英击杀玩家成长（精英获得"击杀玩家"标记并变强）
+func _resolve_elite_encounters_for_death() -> void:
+	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
+		return
+	# 排除已击杀的（它们已经在 kill_elite 时处理过了）
+	var survivor_ids: Array[String] = []
+	for eid in _encountered_elite_ids_this_room:
+		if eid not in _killed_elite_ids_this_room:
+			survivor_ids.append(eid)
+	if survivor_ids.is_empty():
+		return
+	var growth_data: Dictionary = {"hp_gain": 0.15, "damage_gain": 0.20, "speed_gain": 0.05, "level_up": 1}
+	for eid in survivor_ids:
+		_elite_archive.on_encounter_result(eid, "PlayerDied", growth_data.duplicate(true))
+		print("[RoomGameMode] 精英击杀玩家成长已结算: %s" % eid)
 
 
 func _apply_pending_loadout() -> void:
@@ -396,6 +471,9 @@ func _on_room_entered(room_data: RoomData) -> void:
 	room_entered.emit(room_data)
 	var current_id: int = map_manager.get_current_room_id() if map_manager != null else -1
 	_room_cleared_flag = _cleared_room_ids.has(current_id)
+	# PH06: 进入新房间时清空本局精英遭遇记录（每房间独立结算）
+	_encountered_elite_ids_this_room.clear()
+	_killed_elite_ids_this_room.clear()
 	_update_room_info_label(
 		(
 			"当前: %s [%s]"
@@ -407,6 +485,12 @@ func _on_room_entered(room_data: RoomData) -> void:
 	)
 	_refresh_room_doors_for_state()
 	_setup_container_fate_bridge()
+
+	# 构建房间视野遮挡几何（供 VisionSystem 使用）
+	_build_vision_occlusion_for_room()
+
+	# 通知 GameUIManager 更新敌人可见性
+	_update_enemy_visibility()
 
 	if room_data.room_type == RoomData.RoomType.PLAYER_SPAWN:
 		_update_room_info_label("初始房间：你有 1 把钥匙。开门时会触发命运卡牌。")
@@ -483,6 +567,8 @@ func _on_global_game_over() -> void:
 	if extraction_module != null:
 		extraction_module.abort_extraction()
 	_stop_current_room_spawner()
+	# PH06: 玩家死亡时结算所有遭遇精英的击杀玩家成长（精英吃掉玩家）
+	_resolve_elite_encounters_for_death()
 	# 触发死亡结算
 	if death_settlement_module != null and inventory_module != null:
 		var settlement_result: Dictionary = death_settlement_module.process_death_settlement(
@@ -541,6 +627,8 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 	if success:
 		_set_player_input_locked(true)
 		_clear_extraction_room_attackers()
+		# PH06: 成功撤离时结算所有遭遇精英的逃脱成长
+		_resolve_elite_encounters_for_extraction()
 		var extracted: int = death_settlement_module.process_extraction_settlement(
 			inventory_module, insurance_module
 		)
@@ -549,6 +637,9 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 		var saved_to_vault: int = _persist_extracted_items_to_vault()
 		_print_extraction_success(extracted, insurance_items)
 		print("[RoomGameMode] Saved extracted items to vault: %d" % saved_to_vault)
+		# 播放撤离成功音效
+		if _audio and _audio.has_method("play_sfx"):
+			_audio.call("play_sfx", "extraction_done")
 		_sync_beacon_count()
 		# 记录成功撤离到基地
 		var bm: BaseManager = _get_base_manager()
@@ -563,7 +654,8 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 					"kills": _kill_count,
 					"currency": GameManager.currency,
 					"score": score,
-					"risk": _run_risk
+					"risk": _run_risk,
+					"floor": current_floor
 				}
 			)
 	else:
@@ -581,6 +673,120 @@ func _clear_extraction_room_attackers() -> void:
 
 func _get_kill_count() -> int:
 	return _kill_count
+
+
+## 构建当前房间的视野遮挡几何
+func _build_vision_occlusion_for_room() -> void:
+	vision_system.reset()
+
+	var room_node: Node2D = _get_current_room_instance()
+	if room_node == null or map_manager == null:
+		return
+
+	# 获取当前房间尺寸
+	var room_data: RoomData = map_manager.get_current_room_data()
+	var room_size: Vector2 = Vector2(960, 768)  # 默认值
+	if room_data != null:
+		room_size = room_data.size
+
+	var room_bounds: Rect2 = Rect2(room_node.global_position - room_size * 0.5, room_size)
+
+	# 收集房间内所有墙体格的世界坐标 Rect2
+	var wall_rects: Array[Rect2] = []
+
+	# 方式1：从 FloorLayer 的 TileMap 中提取墙体格位置
+	var floor_layer: TileMapLayer = room_node.find_child("FloorLayer", true, false) as TileMapLayer
+	if floor_layer != null and floor_layer.tile_set != null:
+		var cell_size: Vector2i = floor_layer.tile_set.tile_size
+		var used_cells: Array[Vector2i] = floor_layer.get_used_cells()
+		for cell in used_cells:
+			var source_coords: Vector2i = floor_layer.get_cell_atlas_coords(cell)
+			# WALL=(2,0), WALL_TOP=(3,0)
+			if (source_coords.x == 2 or source_coords.x == 3) and source_coords.y == 0:
+				var world_pos: Vector2 = floor_layer.to_global(floor_layer.map_to_local(cell))
+				var half_w: float = cell_size.x * 0.5
+				var half_h: float = cell_size.y * 0.5
+				var world_rect: Rect2 = Rect2(
+					world_pos.x - half_w, world_pos.y - half_h, float(cell_size.x), float(cell_size.y)
+				)
+				wall_rects.append(world_rect)
+
+	# 方式2：从 VisionOccluders 节点收集已有的 LightOccluder2D 包围盒
+	var occluders_node: Node2D = room_node.find_child("VisionOccluders", true, false) as Node2D
+	if occluders_node != null:
+		for child in occluders_node.get_children():
+			if child is LightOccluder2D:
+				var occluder: LightOccluder2D = child as LightOccluder2D
+				var polygon: OccluderPolygon2D = occluder.occluder as OccluderPolygon2D
+				if polygon != null and polygon.polygon.size() >= 2:
+					# 从多边形计算 AABB
+					var min_x: float = INF
+					var min_y: float = INF
+					var max_x: float = -INF
+					var max_y: float = -INF
+					for pt in polygon.polygon:
+						min_x = minf(min_x, pt.x)
+						min_y = minf(min_y, pt.y)
+						max_x = maxf(max_x, pt.x)
+						max_y = maxf(max_y, pt.y)
+					var occluder_rect: Rect2 = Rect2(
+						occluder.global_position.x + min_x, occluder.global_position.y + min_y,
+						max_x - min_x, max_y - min_y
+					)
+					# 避免重复（只加入不在 wall_rects 内的）
+					var already := false
+					for wr in wall_rects:
+						if wr.position.distance_to(occluder_rect.position) < 4.0:
+							already = true
+							break
+					if not already:
+						wall_rects.append(occluder_rect)
+
+	vision_system.build_room_occlusion(room_bounds, wall_rects)
+
+	# 同步墙体检疫到 FogOfWarLayer（迷雾系统需要同一套几何）
+	if fog_layer != null and fog_layer.has_method("set_wall_rects"):
+		fog_layer.set_wall_rects(wall_rects)
+
+	# 立即更新一次可见性（初始状态）
+	call_deferred("_do_update_enemy_visibility")
+
+
+## 每帧更新敌人可见性（在 _process 中调用）
+func _update_enemy_visibility() -> void:
+	# 延迟到下一帧执行（等待 vision_system 就绪）
+	call_deferred("_do_update_enemy_visibility")
+
+
+func _do_update_enemy_visibility() -> void:
+	if player == null or not is_instance_valid(player):
+		return
+
+	if player.has_method("get_aim_direction"):
+		vision_system.set_view_direction(player.call("get_aim_direction") as Vector2)
+
+	var enemies: Array[Node] = []
+	# 收集当前活跃敌人
+	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+		var active: Array[CharacterBody2D] = _current_wave_spawner.get_active_enemies()
+		if not active.is_empty():
+			enemies.append_array(active)
+	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
+		var reg_enemies = _current_regional_controller.get_active_enemies()
+		if not reg_enemies.is_empty():
+			enemies.append_array(reg_enemies)
+
+	for enemy in enemies:
+		if enemy == null or not is_instance_valid(enemy):
+			continue
+		# 判断敌人是否在视野内（射线检测）
+		var enemy_pos: Vector2 = enemy.global_position
+		var visible: bool = vision_system.is_point_visible(player.global_position, enemy_pos)
+
+		# 保留轮廓提示，但不要覆盖 EnemyBase 的纵深排序。
+		if enemy is CanvasItem:
+			var canvas_enemy: CanvasItem = enemy as CanvasItem
+			canvas_enemy.modulate.a = 1.0 if visible else 0.3
 
 
 func _print_extraction_success(extracted_count: int, insurance_items: Array[Dictionary]) -> void:
@@ -737,6 +943,9 @@ func _on_extraction_aborted() -> void:
 		room_instance.call("reset_switch")
 	_update_room_info_label("撤离已中断！")
 	print("撤离读条被中断。")
+	# 播放撤离中断音效
+	if _audio and _audio.has_method("play_sfx"):
+		_audio.call("play_sfx", "extraction_abort")
 
 
 ## 死亡结算处理完毕回调
@@ -790,6 +999,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	_current_wave_spawner.wave_started.connect(_on_wave_started)
 	_current_wave_spawner.all_waves_cleared.connect(_on_all_waves_cleared)
 	_current_wave_spawner.wave_progress_updated.connect(_on_wave_progress_updated)
+	_current_wave_spawner.elite_spawn_recorded.connect(_on_elite_spawn_recorded)  # PH06: 记录精英遭遇
 
 	# 查找当前房间实例（用于获取房间节点引用）
 	var current_room_node: Node2D = _get_current_room_instance()
@@ -807,6 +1017,12 @@ func _start_combat_waves(room_data: RoomData) -> void:
 		self,
 		room_data.size
 	)
+	# PH06: 从 EliteSpawnDirector 抽取精英并注入到波次生成器
+	if _elite_spawn_director != null and _elite_spawn_director.has_method("try_select_elite"):
+		var elite_spawn_data: Dictionary = _elite_spawn_director.try_select_elite(current_floor, _run_risk)
+		if not elite_spawn_data.is_empty():
+			_current_wave_spawner.set_pending_elite_spawn(elite_spawn_data)
+			print("[RoomGameMode] 精英待注入: %s" % elite_spawn_data.get("elite_id", "?"))
 	_current_wave_spawner.set_enemy_pool(enemy_plan)
 	_current_wave_spawner.start()
 	_update_clearing_progress(0, _sum_ints(wave_counts))
@@ -1435,6 +1651,10 @@ func _on_fate_card_button_pressed(card: FateCard) -> void:
 	_door_fate_selection_active = false
 	print("[RoomGameMode] 命运卡片应用成功: %s — %s" % [card.card_name, result.message])
 
+	# 通知玩家卡片已应用
+	if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+		_ui_manager.show_fate_card_notification("✓ %s 已应用！" % card.card_name)
+
 	# 关闭面板
 	var panel: Control = _get_or_create_fate_card_panel()
 	if panel:
@@ -1479,6 +1699,10 @@ func _process(delta: float) -> void:
 	# 更新波次生成器
 	if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
 		_current_wave_spawner.tick(delta)
+
+	# 更新敌人视野可见性（每帧检查玩家与敌人之间的遮挡）
+	if player != null and is_instance_valid(player):
+		_do_update_enemy_visibility()
 
 	# 更新区域刷怪控制器（PH11 P1: 冷却计时）
 	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
@@ -1929,9 +2153,16 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 	if not ground_items.is_empty():
 		call_deferred("_spawn_enemy_item_pickups", enemy_pos, ground_items)
 
-	# 如果是精英怪，触发精英撤离点解锁
-	if enemy_data.get("is_elite", false) and map_manager != null:
-		map_manager.extraction_director.unlock_elite_extraction()
+	# 如果是精英怪，触发精英撤离点解锁并记录击杀
+	if enemy_data.get("is_elite", false):
+		if map_manager != null:
+			map_manager.extraction_director.unlock_elite_extraction()
+		# PH06: 通知 EliteArchiveModule 精英被击杀
+		var elite_id: String = enemy_data.get("elite_id", "")
+		if not elite_id.is_empty() and _elite_archive != null:
+			_elite_archive.kill_elite(elite_id)
+			_killed_elite_ids_this_room.append(elite_id)
+			print("[RoomGameMode] 精英击杀已记录: %s" % elite_id)
 
 	kill_recorded.emit()
 	_update_ui()
@@ -2158,6 +2389,9 @@ func request_extraction_switch_activation() -> bool:
 	_extraction_mid_wave_spawned = false
 	_extraction_elite_wave_spawned = false
 	_apply_extraction_visual_activation()
+	# 播放撤离开始音效
+	if _audio and _audio.has_method("play_sfx"):
+		_audio.call("play_sfx", "extraction_start")
 	_start_extraction_defense(room_data)
 	_update_room_info_label("撤离信号已发送：守住 14 秒，敌潮正在接近！")
 	if _ui_manager != null and _ui_manager.has_method("show_extraction_room_countdown"):
@@ -2278,6 +2512,11 @@ func _on_hp_changed(current: int, maximum: int) -> void:
 	if hp_bar:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
+
+	# 撤离读条期间受击 → 中断撤离（只有正在读条时才中断）
+	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
+		extraction_module.abort_extraction()
+		_call_ui_manager_method("show_fate_card_notification", "撤离中断：受到攻击！")
 
 
 ## 货币变化回调

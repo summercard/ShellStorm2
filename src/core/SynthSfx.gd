@@ -57,6 +57,12 @@ func play_extraction_done() -> void:
 	var stream := _make_arpeggio(notes, 0.12, -4.0)
 	_play_stream(stream)
 
+## 播放撤离中断音效
+## 短促降频噪声：下降的嘣声，表示"被打断"
+func play_extraction_abort() -> void:
+	var stream := _make_noise_burst(0.16, -8.0, 900.0, 60.0)
+	_play_stream(stream)
+
 ## 播放敌人死亡音效
 func play_enemy_die() -> void:
 	var stream := _make_noise_burst(0.14, -8.0, 2000.0, 80.0)

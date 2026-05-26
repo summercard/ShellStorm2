@@ -88,8 +88,7 @@ func _build_elite_spawn_data(archive_dict: Dictionary, floor: int) -> Dictionary
 		"is_elite": true,
 		"elite_id": archive_dict.get("elite_id", ""),
 		"name": archive_dict.get("name", "未知精英"),
-		# HP: 基准 × 成长 × 楼层
-		"hp": int(float(base_stats.get("hp_base", 25)) * hp_mult * float(floor_scale.get("hp_mult", 1.0))),
+		"max_hp": int(float(base_stats.get("hp_base", 25)) * hp_mult * float(floor_scale.get("hp_mult", 1.0))),
 		# Damage: 基准 × 成长 × 楼层
 		"damage": int(float(base_stats.get("damage_base", 5)) * damage_mult * float(floor_scale.get("damage_mult", 1.0))),
 		# Speed: 基准 × 速度成长
@@ -106,6 +105,8 @@ func _build_elite_spawn_data(archive_dict: Dictionary, floor: int) -> Dictionary
 		"ai_type": base_stats.get("ai_type", "chase"),
 		# 特殊标记（复仇者/区域霸主有额外行为）
 		"elite_state": archive_dict.get("state", "Newborn"),
+		# 挂载装备（用于视觉渲染）
+		"stolen_modules": archive_dict.get("stolen_modules", []),
 	}
 
 	# 复仇者标记：更积极追人

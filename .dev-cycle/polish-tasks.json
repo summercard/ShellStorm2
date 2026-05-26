@@ -85,6 +85,12 @@
       "status": "completed"
     },
     {
+      "id": "P15",
+      "title": "陷阱房实际伤害系统",
+      "description": "TrapRoomLogic.gd 毒雾/落石陷阱原来只发信号无实际效果。新增毒雾持续伤害区域逻辑（每0.5秒对范围内玩家造成 trap_damage 伤害+飘字）、落石即时伤害计时器框架，_damage_player() 调用 Player.take_damage()，修复 player 引用为空导致伤害静默失败的问题",
+      "status": "completed"
+    },
+    {
       "id": "P16",
       "title": "子弹轨迹动态尾迹",
       "description": "Bullet._process 每帧记录本地轨迹点到 _trail_points（最大30帧），_process 中实时用这些点计算世界坐标 Line2D；暴击时尾迹加粗变金色",
@@ -104,7 +110,10 @@
     "P10",
     "P11",
     "P12",
-    "P13"
+    "P13",
+    "P14",
+    "P15",
+    "P16"
   ],
-  "currentTaskIndex": 14
+  "currentTaskIndex": 15
 }

@@ -43,8 +43,19 @@ var _fate_return_triggered: bool = false   # 返弹阶段已触发
 var _fate_spawn_turret_on_land: bool = false  # 落地变炮台
 var _fate_turret_duration: float = 5.0   # 炮台存活时间
 
+## 命运卡片行为：乱射（管不住了）/ 子弹变大（火力暴食）
+var _fate_uncontrolled_gun: bool = false  # 乱射模式
+var _fate_aim_randomness: float = 0.5     # 乱射随机角度 [0,1]
+var _fate_uncontrolled_damage_scale: float = 0.8  # 乱射子弹伤害缩放
+var _fate_size_growth: bool = false       # 子弹变大模式
+var _fate_growth_per_hit: float = 0.2     # 每次命中增长比例
+var _fate_max_scale: float = 3.0          # 最大缩放上限
+var _fate_attachment_hit_trigger: bool = false  # 配件寄生命中触发标记
+
 ## 挂载枪型 → 多边形顶点映射（与 WeaponDisplay.gd 保持一致）
 ## 格式：[p1, p2, ...] 组成 Polygon2D polygon，按顺时针/逆时针均可
+## 信号：命中时若有配件寄生标记则派发 attachment_hit_triggered
+signal attachment_hit_triggered(damage: int, is_crit: bool, direction: Vector2)
 static var GUN_SHAPES: Dictionary = {
 	"GunBody_Pistol": {
 		"polygon": PackedVector2Array([
@@ -186,11 +197,13 @@ func _process(delta: float) -> void:
 		# 正常/追踪飞行
 		var current_speed: float = speed
 		# 追踪：如果有目标，轻微转向
+		# _fate_homing_strength 直接作为 lerp factor（0.0~1.0）
+		# 设计意图：0.3 = 轻度追踪（轻微曲线）, 0.6 = 中度追踪, 1.0 = 几乎完全跟随
 		if _fate_homing:
 			var target: Node = _find_nearest_enemy()
 			if target != null:
 				var to_target: Vector2 = (target.global_position - global_position).normalized()
-				direction = direction.lerp(to_target, _fate_homing_strength * 0.15).normalized()
+				direction = direction.lerp(to_target, _fate_homing_strength).normalized()
 		var step: float = current_speed * delta
 		_travelled += step
 		global_position += direction * step
@@ -224,6 +237,14 @@ func _process(delta: float) -> void:
 			var phase: float = (float(i) / float(_leg_nodes.size())) * TAU
 			leg.rotation = leg.rotation + sin(_leg_anim_timer + phase) * 0.3 * delta
 
+	# 炮台模式：持续朝敌人射击（由 _spawn_fate_turret 注入的炮台节点执行）
+	if _turret_mode:
+		if _life_timer >= max_lifetime:
+			queue_free()
+			return
+		_turret_loop(delta)
+		return
+
 	# 落地炮台：超出射程或超时，生成炮台
 	if (_life_timer >= max_lifetime or _travelled >= max_distance) and not _fate_return_to_player:
 		if _fate_spawn_turret_on_land:
@@ -240,11 +261,29 @@ func _process_attached_gun_firing(delta: float) -> void:
 	var gun_bullet_count: int = gun_stats.get("bullet_count", 1)
 	var fire_interval: float = 1.0 / gun_fire_rate if gun_fire_rate > 0 else 0.25
 	_attached_gun_cooldown = fire_interval
-	var nearest_enemy: Node = _find_nearest_enemy()
-	if nearest_enemy == null:
-		return
-	var aim_dir: Vector2 = (nearest_enemy.global_position - global_position).normalized()
-	_spawn_attached_gun_bullet(gun_damage, aim_dir, gun_bullet_count)
+
+	# 计算最终伤害（乱射时缩放）
+	var final_damage: int = gun_damage
+	if _fate_uncontrolled_gun:
+		final_damage = int(float(gun_damage) * _fate_uncontrolled_damage_scale)
+
+	# 乱射模式：随机方向偏移，不一定瞄准敌人
+	var aim_dir: Vector2
+	if _fate_uncontrolled_gun:
+		# 完全随机方向（加上乱射角度扰动）
+		var random_angle: float = randf() * TAU
+		var random_strength: float = _fate_aim_randomness * (1.0 + randf() * 0.5)
+		# 以子弹飞行方向为基准，偏移随机角度
+		var base_dir: Vector2 = direction.normalized() if direction.length_squared() > 0.0001 else Vector2.RIGHT
+		var offset_angle: float = (randf() - 0.5) * random_strength * PI
+		aim_dir = base_dir.rotated(offset_angle)
+	else:
+		var nearest_enemy: Node = _find_nearest_enemy()
+		if nearest_enemy == null:
+			return
+		aim_dir = (nearest_enemy.global_position - global_position).normalized()
+
+	_spawn_attached_gun_bullet(final_damage, aim_dir, gun_bullet_count)
 
 func _find_nearest_enemy() -> Node:
 	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
@@ -282,12 +321,18 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	_life_timer = 0.0
 	_travelled = 0.0
 	rotation = direction.angle()
+	# 重置命运卡片状态（每次发射时清零，防止状态泄漏到下一发）
+	_fate_scale = 1.0
+	_fate_homing = false
+	_fate_return_triggered = false
 	# 重置轨迹数据
 	_trail_points.clear()
 	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
 	_trail_line.width = 3.0
 	if shape:
 		shape.rotation = 0.0
+		shape.scale = Vector2.ONE
+		glow.scale = Vector2.ONE
 		if crit:
 			shape.color = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色，与暴击尾迹/伤害文字一致
 			glow.color = Color(1.0, 0.9, 0.2, 0.75)
@@ -354,6 +399,18 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 	if node_stats.get("spawn_turret_on_land", false):
 		_fate_spawn_turret_on_land = true
 		_fate_turret_duration = float(node_stats.get("turret_duration", 5.0))
+	# 命运卡片行为：乱射（管不住了）/ 子弹变大（火力暴食）
+	if node_stats.get("uncontrolled_gun", false):
+		_fate_uncontrolled_gun = true
+		_fate_aim_randomness = float(node_stats.get("aim_randomness", 0.5))
+		_fate_uncontrolled_damage_scale = float(node_stats.get("uncontrolled_damage_scale", 0.8))
+	if node_stats.get("size_growth", false):
+		_fate_size_growth = true
+		_fate_growth_per_hit = float(node_stats.get("growth_per_hit", 0.2))
+		_fate_max_scale = float(node_stats.get("max_fate_scale", 3.0))
+	# 配件寄生命中触发（三叉枪口等命中时分裂/强化）
+	if node_stats.get("fate_attachment_hit_trigger", false):
+		_fate_attachment_hit_trigger = true
 
 ## 根据 scale 值应用命运视觉（子弹放大）
 func _apply_fate_visual_from_scale(scale: float) -> void:
@@ -414,29 +471,79 @@ func _add_leg_nodes(count: int) -> void:
 		_leg_nodes.append(leg)
 
 ## 生成落地炮台（"不想飞"命运卡片效果）
+## 炮台原地固定，通过计时循环持续朝最近敌人开火
+var _turret_cooldown: float = 0.0
+var _turret_mode: bool = false  # 炮台节点由 _spawn_fate_turret 注入后标记此标志，执行射击循环
+var _turret_damage: int = 0
+var _turret_fire_interval: float = 0.25
+
 func _spawn_fate_turret() -> void:
-	# 炮台用自己的 Bullet.tscn 实例，位置固定，持续 _fate_turret_duration 秒后自毁
+	# 炮台用自己的 Bullet.tscn 实例，位置固定，通过 _process_turret_loop 持续射击
 	var turret: Node = preload("res://scenes/Bullet.tscn").instantiate()
 	get_tree().current_scene.add_child(turret)
 	turret.global_position = global_position
-	# 炮台不移动，持续朝最近敌人开火
 	turret.set("speed", 0.0)
 	turret.set("max_lifetime", _fate_turret_duration)
 	# 炮台继承子弹部分伤害（降低）
 	var turret_damage: int = maxi(1, int(float(damage) * 0.5))
-	if turret.has_method("fire"):
-		turret.fire(global_position, Vector2.RIGHT, 0.0, turret_damage, false)
+	# 注入炮台循环逻辑：turret 自己通过 _process 持续射击
+	# 注入后turret 通过内部计时器循环射击最近敌人直到超时自毁
+	var turret_fire_rate: float = _attached_gun_fire_rate
+	var turret_fire_interval: float = 1.0 / turret_fire_rate if turret_fire_rate > 0.0 else 0.25
+	turret.set("_turret_cooldown", turret_fire_interval)
+	turret.set("_turret_damage", turret_damage)
+	turret.set("_turret_fire_interval", turret_fire_interval)
+	turret.set("_turret_mode", true)  # 标记为炮台模式（_process 检测此标志执行射击循环）
 	turret.is_active = true
-	# 炮台计时自毁
-	await turret.get_tree().create_timer(_fate_turret_duration).timeout
-	if is_instance_valid(turret):
-		turret.queue_free()
+
+## 炮台射击循环（_spawn_fate_turret 注入炮台节点后，由 _process 中的 _turret_mode 分支调用）
+func _turret_loop(delta: float) -> void:
+	# 炮台每帧减少冷却 → 冷却到0则查找最近敌人开火 → 重置冷却
+	# 上限 delta（避免多帧跳跃导致炮台过速）
+	var dt := minf(delta, 0.05)
+	_turret_cooldown -= dt
+	if _turret_cooldown > 0.0:
+		return
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
+	var nearest: Node = null
+	var min_dist: float = INF
+	for e in enemies:
+		if not is_instance_valid(e):
+			continue
+		var dist: float = global_position.distance_to(e.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			nearest = e
+	if nearest == null:
+		# 找不到敌人时，每帧仍然减少冷却以便下次重新检测
+		_turret_cooldown = _turret_fire_interval
+		return
+	var aim_dir: Vector2 = (nearest.global_position - global_position).normalized()
+	_turret_cooldown = _turret_fire_interval
+	var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
+	var bullet: Node = bullet_scene.instantiate()
+	get_tree().current_scene.add_child(bullet)
+	bullet.global_position = global_position
+	if bullet.has_method("fire"):
+		bullet.fire(global_position, aim_dir, 350.0, _turret_damage, false)
 
 func _on_body_entered(body: Node) -> void:
 	if not is_active:
 		return
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
 		body.call("take_damage", damage, is_crit, direction)
+
+		# 火力暴食：每次命中子弹变大（伤害同时增加）
+		if _fate_size_growth:
+			_fate_scale = mini(_fate_scale * (1.0 + _fate_growth_per_hit), _fate_max_scale)
+			_apply_fate_visual_from_scale(_fate_scale)
+			# 伤害也随 scale 增大
+			damage = int(float(damage) * (1.0 + _fate_growth_per_hit))
+
+		# 配件寄生命中触发
+		if _fate_attachment_hit_trigger:
+			attachment_hit_triggered.emit(damage, is_crit, direction)
+
 		# 延迟一帧释放子弹，确保 enemy_died 信号在当前帧内完成派发
 		# 这样 crit_on_kill 才能在本帧内消费堆栈（命中→击杀→堆栈-1→下一发暴击）
 		call_deferred("queue_free")

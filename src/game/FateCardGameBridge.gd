@@ -101,7 +101,7 @@ func get_cards() -> Array[FateCard]:
 
 ## 给予随机命运卡片（由环境命运触发器调用，通过 FateCardEngine 间接触发）
 func grant_random_card_from_trigger() -> void:
-	# 从 FateCardPresets 随机选一张给予玩家（实际上只是记录到应用列表，UI展示由调用方处理）
+	# 从 FateCardPresets 随机选一张给予玩家（仅记录到应用列表，UI展示由调用方处理）
 	var all_cards: Array[FateCard] = []
 	var by_type = FateCardPresets.by_type(FateCard.CardType.ENHANCE)
 	for c in by_type:
@@ -117,6 +117,14 @@ func grant_random_card_from_trigger() -> void:
 	var random_card: FateCard = all_cards[randi() % all_cards.size()]
 	applied_cards.append(random_card)
 	card_applied.emit(random_card, true, "环境命运：获得随机命运卡片 " + random_card.card_name)
+	card_list_changed.emit()
+
+## 记录已应用的命运卡片（由 FateCardEngine 在环境命运触发器中调用）
+func record_applied_card(card: FateCard) -> void:
+	if card == null:
+		return
+	applied_cards.append(card)
+	card_applied.emit(card, true, "随机命卡：" + card.card_name)
 	card_list_changed.emit()
 
 func _on_tree_changed() -> void:

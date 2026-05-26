@@ -117,6 +117,10 @@ static func apply_card(
 			result = _apply_extra_loot(card, tree, target_nodes)
 		FateCard.EffectAction.CURSE_ROOM_ENEMIES:
 			result = _apply_curse_room_enemies(card, tree, target_nodes)
+		FateCard.EffectAction.OUT_OF_CONTROL:
+			result = _apply_out_of_control(card, tree, target_nodes)
+		FateCard.EffectAction.SIZE_GROWTH:
+			result = _apply_size_growth(card, tree, target_nodes)
 		FateCard.EffectAction.BLESS_DEAD:
 			result = _apply_bless_dead(card, tree, target_nodes)
 		_:
@@ -283,12 +287,23 @@ static func _apply_attach_to_mount(
 				AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id
 			)
 			child_node.tags = card.tags.duplicate()
-			child_node.set_base_stats({"damage": 0, "fire_rate": 0})
+			# 配件寄生默认效果：命中触发。命中时 Bullet 会派发 attachment_hit_triggered 信号，
+			# 其效果（分裂/强化等）由 Bullet 根据挂载的配件节点 stats 具体决定
+			var default_stats := {"damage": 0, "fire_rate": 0, "fate_attachment_hit_trigger": true, "trigger_on_hit": true}
+			child_node.set_base_stats(default_stats)
 
 	if child_node == null:
 		result.error = ApplyError.APPLY_FAILED
 		result.message = "Could not create child node for combine card"
 		return result
+
+	# 配件寄生：标记命中触发效果，供 Bullet 运行时检测
+	if card.card_id == "配件寄生" or card.effect.get("trigger_on_hit", false):
+		var attach_stats: Dictionary = child_node.get_base_stats()
+		attach_stats["fate_attachment_hit_trigger"] = true
+		attach_stats["trigger_on_hit"] = true
+		child_node.set_base_stats(attach_stats)
+		child_node.tags.append("Fate.AttachmentHitTrigger")
 
 	if target.slots[slot_type] != null:
 		result.error = ApplyError.SLOT_OCCUPIED
@@ -437,11 +452,13 @@ static func _apply_multiply_fire_rate(
 
 	var target: AssemblyNode = targets[0]
 	var multiplier: float = card.effect.get("multiplier", 1.5)
+	var overheat_penalty: float = card.effect.get("overheat_penalty", 1.0)
 	var stats: Dictionary = target.get_base_stats()
 	stats["fire_rate_multiplier"] = multiplier
 	stats["fire_rate"] = stats.get("fire_rate", 4.0) * multiplier
-	target.set_base_stats(stats)
+	stats["overheat_penalty"] = overheat_penalty
 	target.tags.append("Fate.Overclocked")
+	target.set_base_stats(stats)
 	tree.refresh_stats()
 
 	result.success = true
@@ -511,6 +528,26 @@ static func _apply_mutate_to_homing(
 	if return_to_player:
 		target.tags.append("Fate.ReturnBullet")
 	tree.refresh_stats()
+
+	# Apply visual enhancements from card.visual (e.g. AddEyes for "活过来")
+	if card.visual.has("action"):
+		var visual_action: String = str(card.visual.get("action", ""))
+		if visual_action == "AddEyes":
+			var eye_count: int = int(card.visual.get("eye_count", 2))
+			var vstats: Dictionary = target.get_base_stats()
+			vstats["visual_eyes"] = eye_count
+			vstats["visual_has_eyes"] = true
+			target.set_base_stats(vstats)
+			target.tags.append("Fate.Visual.HasEyes")
+			target.node_name += " 👁"
+		elif visual_action == "AddLegs":
+			var leg_count: int = int(card.visual.get("leg_count", 4))
+			var vstats: Dictionary = target.get_base_stats()
+			vstats["visual_legs"] = leg_count
+			vstats["visual_has_legs"] = true
+			target.set_base_stats(vstats)
+			target.tags.append("Fate.Visual.HasLegs")
+			target.node_name += " 🦵"
 
 	result.success = true
 	_fate_audio_card_applied()
@@ -680,7 +717,7 @@ static func _apply_reinforce_wave(
 
 
 ## ===== 效果执行：GRANT_RANDOM_CARD（环境命运触发器）=====
-## 给予随机命运卡片 — 无需目标节点，给玩家一张随机卡片
+## 给予随机命运卡片 — 随机选一张可玩命卡，真正应用其效果（修改武器树）
 static func _apply_grant_random_card(
 	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
 ) -> ApplyResult:
@@ -688,10 +725,31 @@ static func _apply_grant_random_card(
 	result.success = true
 	_fate_audio_card_applied()
 	result.message = "Grant random fate card triggered"
-	# 通过 FateCardGameBridge 应用一张随机卡片
+	# 随机选一张可玩命卡（不含 MAP_TRIGGER 类，避免递归触发环境触发器本身）
+	var all_cards: Array[FateCard] = []
+	var playable: Array[FateCard] = FateCardPresets.playable_presets()
+	for c in playable:
+		if c.card_type != FateCard.CardType.CURSE:  # 诅咒类不随机给予（风险太高）
+			all_cards.append(c)
+	if all_cards.is_empty():
+		result.message = "No available cards to grant"
+		return result
+	var random_card: FateCard = all_cards[randi() % all_cards.size()]
+	# 真正执行卡片的 EffectAction（武器树修改），而非只记录到列表
 	var bridge: Node = _find_fate_card_bridge()
-	if bridge != null and bridge.has_method("grant_random_card_from_trigger"):
-		bridge.grant_random_card_from_trigger()
+	if bridge != null:
+		var engine_script: GDScript = preload("res://src/weapons/FateCardEngine.gd") as GDScript
+		var engine_class: Variant = engine_script
+		var engine_result: Object = engine_class.apply_card(random_card, tree)
+		result.success = engine_result.success
+		result.message = "随机命卡：" + random_card.card_name + " — " + engine_result.message
+		if result.success:
+			if bridge.has_method("record_applied_card"):
+				bridge.record_applied_card(random_card)
+		else:
+			push_warning("[FateCardEngine] 随机命卡应用失败: " + random_card.card_name)
+	else:
+		result.message = "随机命卡：" + random_card.card_name + "（桥接器未就绪，仅记录）"
 	return result
 
 
@@ -775,6 +833,97 @@ static func _apply_bless_dead(
 	return result
 
 
+## ===== 效果执行：OUT_OF_CONTROL（管不住了）=====
+## 子弹上的挂载枪随机乱射，不一定瞄准敌人
+static func _apply_out_of_control(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	var root: AssemblyNode = tree.get_root()
+	var bullet_node: AssemblyNode = null
+
+	# 找子弹节点
+	for t in targets:
+		if t.node_type == AssemblyNode.NodeType.BULLET:
+			bullet_node = t
+			break
+	if bullet_node == null:
+		var descendants: Array[AssemblyNode] = root.get_all_descendants()
+		for d in descendants:
+			if d.node_type == AssemblyNode.NodeType.BULLET:
+				bullet_node = d
+				break
+	if bullet_node == null:
+		result.error = ApplyError.NO_TARGET
+		result.message = "No bullet node found for OUT_OF_CONTROL"
+		return result
+
+	# 读取乱射参数
+	var aim_randomness: float = card.effect.get("aim_randomness", 0.5)  # 0=精准，1=完全随机
+	var damage_scale: float = card.effect.get("damage_scale", 0.8)
+
+	# 将乱射标记写入子弹节点 stats
+	var stats: Dictionary = bullet_node.get_base_stats()
+	stats["uncontrolled_gun"] = true
+	stats["aim_randomness"] = aim_randomness
+	stats["uncontrolled_damage_scale"] = damage_scale
+	bullet_node.set_base_stats(stats)
+	bullet_node.tags.append("Fate.Uncontrolled")
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [bullet_node]
+	result.effect_value = aim_randomness
+	result.message = "Set uncontrolled gun (aim_randomness=%.0f%%, damage_scale=%.0f%%) on %s" % [
+		aim_randomness * 100.0, damage_scale * 100.0, bullet_node.node_name
+	]
+	return result
+
+
+## ===== 效果执行：SIZE_GROWTH（火力暴食）=====
+## 子弹每命中一次就变大，但也会降低玩家移速
+static func _apply_size_growth(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	var root: AssemblyNode = tree.get_root()
+	var bullet_node: AssemblyNode = null
+
+	for t in targets:
+		if t.node_type == AssemblyNode.NodeType.BULLET:
+			bullet_node = t
+			break
+	if bullet_node == null:
+		var descendants: Array[AssemblyNode] = root.get_all_descendants()
+		for d in descendants:
+			if d.node_type == AssemblyNode.NodeType.BULLET:
+				bullet_node = d
+				break
+	if bullet_node == null:
+		result.error = ApplyError.NO_TARGET
+		result.message = "No bullet node found for SIZE_GROWTH"
+		return result
+
+	var growth_per_hit: float = card.effect.get("growth_per_hit", 0.2)
+	var max_scale: float = card.effect.get("max_scale", 3.0)
+
+	var stats: Dictionary = bullet_node.get_base_stats()
+	stats["size_growth"] = true
+	stats["growth_per_hit"] = growth_per_hit
+	stats["max_fate_scale"] = max_scale
+	bullet_node.set_base_stats(stats)
+	bullet_node.tags.append("Fate.SizeGrowth")
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [bullet_node]
+	result.effect_value = {"growth_per_hit": growth_per_hit, "max_scale": max_scale}
+	result.message = "Set size growth (+%.0f%%/hit, max=%.0fx) on %s" % [
+		growth_per_hit * 100.0, max_scale, bullet_node.node_name
+	]
+	return result
+
+
 ## ========== 辅助方法 ==========
 
 
@@ -812,6 +961,9 @@ static func _find_fate_card_bridge() -> Node:
 
 ## 播放命运卡片应用音效（供各效果方法调用）
 static func _fate_audio_card_applied() -> void:
-	var audio := Engine.get_singleton("AudioManager") as AudioManager
+	var tree: SceneTree = Engine.get_main_loop() as SceneTree
+	if tree == null:
+		return
+	var audio := tree.root.get_node_or_null("AudioManager") as AudioManager
 	if audio != null:
 		audio.play_fate_card_sfx()

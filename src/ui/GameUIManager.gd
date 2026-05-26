@@ -69,6 +69,7 @@ var _fate_card_card_container: HBoxContainer = null  ## 卡片按钮容器
 var _fate_card_instruction: Label = null  ## 提示标签
 var _fate_card_panel_base: Control = null  ## 命运卡片选择面板容器（Control 类型，与场景一致）
 var _wave_kill_anim_tween: Tween = null
+var _wave_total: int = 0
 var _wave_indicator_label: Label = null  ## 波次指示器（运行时获取）
 var _wave_outline_label: Label = null  ## 波次描边标签（与 WaveIndicatorLabel 配合）
 var _score_outline_label: Label = null  ## 分数描边标签
@@ -123,6 +124,7 @@ var extracted_count_label: Label
 var extracted_items_vbox: VBoxContainer
 var continue_button: Button
 var _extraction_success_backdrop: ColorRect = null
+var _extraction_floor_label: Label = null  # 撤离面板楼层标签
 
 var _death_stats: Dictionary = {"score": 0, "kills": 0, "floor": 1}
 var _death_loot: Dictionary = {"saved": 0, "lost": 0}
@@ -185,6 +187,7 @@ func _ready() -> void:
 			continue_button.process_mode = Node.PROCESS_MODE_ALWAYS
 			continue_button.pressed.connect(_on_continue_pressed)
 		_ensure_extraction_success_modal()
+		_extraction_floor_label = get_node_or_null("ExtractionSuccessPanel/VBox/FloorLabel")
 
 	# 构建背包、保险格与 HUD 装备位 UI
 	_setup_inventory_system_ui()
@@ -210,7 +213,6 @@ func _ready() -> void:
 	# 初始化低血量 Vignette（HealthVignette 挂为本类子节点）
 	_health_vignette = load("res://src/fx/HealthVignette.tscn").instantiate()
 	add_child(_health_vignette)
-
 	# 初始化 Boss HP UI 面板（在 GameHUD 之上，居中顶部）
 	_init_boss_hp_ui()
 
@@ -411,8 +413,8 @@ func update_crit_stacks(count: int) -> void:
 			crit_label.text = "暴击: %d" % count
 			crit_label.modulate = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色高亮
 		else:
-			crit_label.text = ""
-			crit_label.modulate = Color(1.0, 1.0, 1.0, 0.0)  # 不可见
+			crit_label.text = "暴击: 0"  # 0层时显示而非清空，保持存在感
+			crit_label.modulate = Color(1.0, 0.88, 0.15, 0.6)  # 灰色半透明
 
 
 var _risk_outline_done: bool = false
@@ -1522,37 +1524,37 @@ func _on_fire_cooldown_changed(cooldown_ratio: float) -> void:
 
 ## 波次进度更新（显示波次击杀状态 + 平滑动画）
 func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
-	if clearing_progress == null:
-		return
-
-	# 进度比例
-	var ratio: float = 0.0
 	if total > 0:
-		ratio = float(killed) / float(total)
+		_wave_total = total
+	if total == 0:
+		total = max(1, _wave_total)
 
-	# 目标值
-	var target := ratio * clearing_progress.max_value
-	var current := clearing_progress.value
+	var ratio: float = float(killed) / float(total)
 
-	# 进度条颜色随进度变化：0%=暗红 → 50%=橙 → 100%=亮绿
-	if ratio < 0.5:
-		clearing_progress.modulate = Color(1.0, 0.4 + ratio * 0.6, 0.2, 1.0)
-	elif ratio < 0.8:
-		clearing_progress.modulate = Color(
-			1.0, 0.7 + (ratio - 0.5) * 1.0, 0.2 + (ratio - 0.5) * 0.8, 1.0
-		)
-	else:
-		clearing_progress.modulate = Color(0.4 + ratio * 0.6, 1.0, 0.4, 1.0)
+	# 进度条更新
+	if clearing_progress != null:
+		var target := ratio * clearing_progress.max_value
 
-	# 已有动画则停止，避免叠加
-	if _wave_kill_anim_tween != null and _wave_kill_anim_tween.is_valid():
-		_wave_kill_anim_tween.kill()
+		# 已有动画则停止，避免叠加
+		if _wave_kill_anim_tween != null and _wave_kill_anim_tween.is_valid():
+			_wave_kill_anim_tween.kill()
 
-	# 平滑动画（200ms，过冲效果让数字滚动更有"撞击感"）
-	_wave_kill_anim_tween = clearing_progress.create_tween()
-	_wave_kill_anim_tween.set_trans(Tween.TRANS_BACK)
-	_wave_kill_anim_tween.set_ease(Tween.EASE_OUT)
-	_wave_kill_anim_tween.tween_property(clearing_progress, "value", target, 0.2)
+		# 进度条颜色变化
+		if ratio < 0.5:
+			clearing_progress.modulate = Color(1.0, 0.4 + ratio * 0.6, 0.2, 1.0)
+		elif ratio < 0.8:
+			clearing_progress.modulate = Color(1.0, 0.7 + (ratio - 0.5) * 1.0, 0.2 + (ratio - 0.5) * 0.8, 1.0)
+		else:
+			clearing_progress.modulate = Color(0.4 + ratio * 0.6, 1.0, 0.4, 1.0)
+
+		# 平滑动画
+		_wave_kill_anim_tween = clearing_progress.create_tween()
+		_wave_kill_anim_tween.set_trans(Tween.TRANS_BACK)
+		_wave_kill_anim_tween.tween_property(clearing_progress, "value", target, 0.2)
+
+	# WaveLabel 文字同步更新（双保险：即便进度条失效，文字也正确）
+	if wave_label != null:
+		wave_label.text = "第 %d 波 | %d/%d" % [wave, killed, total]
 
 	# 更新波次文字指示器
 	var remaining := total - killed
@@ -1604,6 +1606,9 @@ func _on_wave_progress_changed(killed: int, total: int, wave: int) -> void:
 ## 撤离完成
 func _on_extraction_completed(_success: bool, loot: Array) -> void:
 	extraction_panel.visible = false
+	# 撤离成功时播放完成音效（与 extraction_start 形成完整音效闭环）
+	if has_method("play_sfx"):
+		call("play_sfx", "extraction_done")
 	_show_extraction_success()
 
 
@@ -1617,8 +1622,8 @@ func _show_extraction_success() -> void:
 
 	# 先设为可见但完全透明+缩小，作为动画起点
 	extraction_success_panel.visible = true
-	extraction_success_panel.modulate.a = 1.0
-	extraction_success_panel.scale = Vector2.ONE
+	extraction_success_panel.modulate.a = 0.0
+	extraction_success_panel.scale = Vector2(0.92, 0.92)
 
 	# 获取背包和保险格物品
 	var extracted: Array[Dictionary] = []
@@ -1743,10 +1748,10 @@ func _prepare_extraction_success_modal() -> void:
 
 func show_run_extraction_success(stats: Dictionary) -> void:
 	_show_extraction_success()
+	var ep_total: int = BaseManager.get_extraction_points()
 	if extracted_count_label:
 		extracted_count_label.text = (
-			"撤离成功  波次 %d  击杀 %d  魂 %d"
-			% [int(stats.get("wave", 0)), int(stats.get("kills", 0)), int(stats.get("currency", 0))]
+			"撤离成功  波次 %d  击杀 %d  魂 %d  积分 %d" % [int(stats.get("wave", 0)), int(stats.get("kills", 0)), int(stats.get("currency", 0)), ep_total]
 		)
 	if extracted_items_vbox:
 		var score_label_node := Label.new()
@@ -1755,6 +1760,10 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 		)
 		score_label_node.modulate = Color(0.85, 0.95, 1.0, 1.0)
 		extracted_items_vbox.add_child(score_label_node)
+	if _extraction_floor_label:
+		var floor: int = int(stats.get("floor", 1))
+		_extraction_floor_label.text = "第 %d 层" % floor
+		_extraction_floor_label.visible = true
 
 
 ## 继续按钮 — 返回基地主界面
@@ -1776,13 +1785,29 @@ func _on_continue_pressed() -> void:
 		push_error("返回基地场景切换失败：%s" % error_string(change_error))
 
 
-## 撤离中断
+## 撤离中断（玩家受击中断 / 手动中断）
 func _on_extraction_aborted() -> void:
 	if room_info_label:
 		room_info_label.text = "撤离已中断！"
+	# 播放撤离中断音效
+	if has_method("play_sfx"):
+		call("play_sfx", "extraction_abort")
 	if abort_button:
+		abort_button.visible = false
 		abort_button.disabled = true
 		abort_button.text = "已中断"
+	# 中断撤离读条UI：隐藏倒计时条和剩余时间，恢复撤离选择按钮
+	if countdown_bar:
+		countdown_bar.visible = false
+		countdown_bar.value = 0.0
+	if countdown_label:
+		countdown_label.visible = false
+	if extraction_type_label:
+		extraction_type_label.text = "选择撤离方式"
+	if extraction_buttons_container:
+		for child in extraction_buttons_container.get_children():
+			child.visible = true
+	_active_extraction_duration = 0.0
 
 
 ## 中断撤离按钮
@@ -2751,6 +2776,10 @@ func _on_item_extraction_requested(slot_index: int) -> void:
 
 func _input(event: InputEvent) -> void:
 	if _extraction_success_shown:
+		# ESCAPE: 撤离成功后按 ESC 也可直接返回基地
+		if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+			_on_continue_pressed()
+			get_viewport().set_input_as_handled()
 		return
 	var inventory_pressed := event.is_action_pressed("ui_inventory")
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_I:

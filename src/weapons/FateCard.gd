@@ -54,6 +54,8 @@ enum EffectAction {
 	FUSE_SPEED,               # 速度融合
 
 	# 诅咒类
+	OUT_OF_CONTROL,          # 子弹上的枪乱射（管不住了）
+	SIZE_GROWTH,             # 子弹越打越大（火力暴食）
 	EXPLODE_ON_RELOAD,        # 换弹爆炸
 	SLUGGISH,                 # 卡壳（降低命中率）
 	SLOW_ON_HIT,              # 命中后减速
@@ -79,7 +81,9 @@ enum EffectAction {
 ## 元数据
 var card_id: String = ""
 var card_name: String = ""
-var description: String = ""
+var description: String = ""          # 完整说明（可选，UI可显示简化版）
+var short_description: String = ""     # 简化版单行说明（用于UI显示）
+var icon_emoji: String = ""           # 物品图标emoji（用于UI显示）
 
 ## 类型与品质
 var card_type: CardType = CardType.ENHANCE

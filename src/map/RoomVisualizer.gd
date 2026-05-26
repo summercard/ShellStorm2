@@ -80,6 +80,7 @@ func build_visual() -> void:
 	_apply_door_visualization()
 
 	_ensure_boundary_collision()
+	_build_vision_occluders()
 
 	visual_ready.emit()
 
@@ -168,6 +169,32 @@ func _add_elite_glow() -> void:
 func _show_trap_warnings() -> void:
 	# 陷阱房已有 TrapWarningLabel，在 RoomTrap.tscn 中
 	pass
+
+
+func _build_vision_occluders() -> void:
+	if get_node_or_null("VisionOccluders") != null or floor_layer == null or floor_layer.tile_set == null:
+		return
+	var occluders := Node2D.new()
+	occluders.name = "VisionOccluders"
+	for cell in floor_layer.get_used_cells():
+		var atlas: Vector2i = floor_layer.get_cell_atlas_coords(cell)
+		if not ((atlas.x == 2 or atlas.x == 3) and atlas.y == 0):
+			continue
+		var size := Vector2(floor_layer.tile_set.tile_size)
+		var polygon := OccluderPolygon2D.new()
+		polygon.polygon = PackedVector2Array([
+			-size * 0.5,
+			Vector2(size.x * 0.5, -size.y * 0.5),
+			size * 0.5,
+			Vector2(-size.x * 0.5, size.y * 0.5),
+		])
+		polygon.cull_mode = OccluderPolygon2D.CULL_COUNTER_CLOCKWISE
+		var occluder := LightOccluder2D.new()
+		occluder.occluder_light_mask = 1
+		occluder.occluder = polygon
+		occluder.position = floor_layer.map_to_local(cell)
+		occluders.add_child(occluder)
+	add_child(occluders)
 
 
 ## 获取当前房间的主题色（供其他组件使用）

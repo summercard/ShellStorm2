@@ -82,6 +82,14 @@ func register_enemies(enemies: Array[Node]) -> void:
 			if not enemy.elite_entered_chase.is_connected(_on_elite_chase):
 				enemy.elite_entered_chase.connect(_on_elite_chase)
 
+func get_active_enemies() -> Array[Node]:
+	var alive: Array[Node] = []
+	for e in _current_enemies:
+		if is_instance_valid(e) and not e.is_queued_for_deletion():
+			alive.append(e)
+	return alive
+
+
 ## 每帧更新（由 RoomGameMode._process 调用）
 func tick(delta: float) -> void:
 	if not reinforcement_enabled:

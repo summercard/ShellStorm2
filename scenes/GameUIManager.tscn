@@ -271,17 +271,17 @@ columns = 2
 
 [node name="ExtractionPanel" type="PanelContainer" parent="."]
 visible = false
-anchors_preset = 8
+anchors_preset = 7
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 offset_left = -180.0
 offset_top = -140.0
 offset_right = 180.0
-offset_bottom = 140.0
+offset_bottom = -10.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
 [node name="VBox" type="VBoxContainer" parent="ExtractionPanel"]
 layout_mode = 2
@@ -453,6 +453,14 @@ layout_mode = 2
 text = "物品已保存: 0 件"
 horizontal_alignment = 1
 theme_override_font_sizes/font_size = 18
+
+[node name="FloorLabel" type="Label" parent="ExtractionSuccessPanel/VBox"]
+layout_mode = 2
+text = "第 1 层"
+visible = false
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.6, 0.85, 1.0, 1.0)
+theme_override_font_sizes/font_size = 16
 
 [node name="HSeparator" type="HSeparator" parent="ExtractionSuccessPanel/VBox"]
 layout_mode = 2

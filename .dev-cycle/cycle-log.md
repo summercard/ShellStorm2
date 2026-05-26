@@ -418,3 +418,43 @@
 2. **TRADE 撤离处理**：确认设计意图，或移除按钮
 3. **宝箱系统完善**：P14 剩余的"宝箱/容器开启→物品入背包→InventoryUI刷新"逻辑
 
+
+## 轮次247（2026-05-27 02:07 UTC+8）
+
+### 维度选择
+**环境命运触发器 GRANT_RANDOM_CARD 效果为空 — MAP_TRIGGER 类命卡只记录不应用**
+
+从核心玩法"命运卡片改造"链路审查，结合轮次246精英Attachment模块落地后的下一目标（人类试玩验证），发现环境命运触发器存在关键缺陷：
+- MapFateTriggers.gd 监听游戏事件（击杀/开箱/进入房间），触发阈值后激活 MAP_TRIGGER 类命卡
+- fate_mark_enemy（击杀第10敌获得随机命卡）使用 `EffectAction.GRANT_RANDOM_CARD`
+- 当前 `_apply_grant_random_card()` 只调用 `bridge.grant_random_card_from_trigger()` 将卡片**记录到 applied_cards 列表**，但**从未执行卡片的 EffectAction**
+- 结果：fate_mark_enemy 触发后，给的是一张"记录在列表里但武器树没有任何变化"的空气命卡
+- grant_random_card_from_trigger() 还只从 ENHANCE/RULE/MUTATE 抽，漏掉了 COMBINE 类可用组合卡
+
+### 玩家可感知的结果
+击杀第10个敌人后，触发的命运标记效果现在真正给予并应用一张随机命卡（从可玩命卡池不含诅咒类），武器树实际变化。例如触发"变大了"后子弹实际变大，触发"子弹背枪"后子弹携带枪身飞行。UI 显示"随机命卡：XXX — 效果描述"。
+
+### 修改内容
+
+#### `src/weapons/FateCardEngine.gd` — _apply_grant_random_card 重写
+原实现只记录到列表 → 改为直接通过 FateCardEngine.apply_card() 真正应用随机卡片的 EffectAction。
+排除 CARD.CURSE 类（风险过高不随机给），调用 `bridge.record_applied_card()` 记录到列表。
+
+#### `src/game/FateCardGameBridge.gd` — grant_random_card_from_trigger 保留 + record_applied_card 新增
+保留原方法（供其他调用方使用），新增 `record_applied_card(card)` 方法供 FateCardEngine 在环境命运触发器中调用，避免 double-count。
+
+### 验收标准
+- [x] Godot headless --quit-after 4 编译通过 ✅
+- [ ] 人类试玩：击杀第10个敌人触发 fate_mark_enemy，获得的随机命卡实际修改武器树（观察卡片名称与武器变化对应）
+- [ ] 人类试玩：连续多次环境命运触发，每次都正确应用不同随机命卡（无重复、无遗漏）
+- [ ] 人类试玩：诅咒降临等 CURSE 类命卡不会通过随机给予（由玩家主动选择）
+- [ ] 人类试玩：精英多枪扇形射击+追踪弹+落地炮台+乱射+火力暴食+Attachment修饰 完整验证
+
+### 剩余风险
+- 随机命卡池不含 CURSE 类，但 COMBINE 类（如子弹背枪/枪上加枪）是否过强需要试玩确认
+- record_applied_card 在 bridge 为 null 时未打印警告（已在 engine_result.message 中注明）
+
+### 下轮最可能方向
+1. **人类试玩验证**（精英Attachment链路+fate_mark_enemy随机命卡链路）
+2. **FateCardPresets.map_trigger_presets() 方法创建**：将 MAP_TRIGGER 类命卡聚合，替代注释标记的"环境触发型"
+3. **搜打撤经济系统收束**（魂币收益/带出结算/保险格完整性）

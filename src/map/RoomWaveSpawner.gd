@@ -6,6 +6,7 @@ extends Node
 signal wave_started(wave: int, total: int)
 signal wave_enemies_spawned(wave: int, spawned: int)
 signal enemy_spawned(count: int)
+signal elite_spawn_recorded(elite_id: String)  # PH06: 记录精英遭遇
 signal wave_progress_updated(killed: int, total: int, wave: int)
 signal all_waves_cleared
 signal wave_cleared(wave: int)
@@ -36,9 +37,16 @@ var _active: bool = false
 var _spawning_enabled: bool = true
 var _all_spawned: bool = false
 var _enemy_pool: Array[Dictionary] = []
+var _spawned_enemies: Array[CharacterBody2D] = []  # 追踪所有存活敌人节点
 var _monster_injector: MonsterInjector
 var _rng: RandomNumberGenerator
 var _current_regional_controller: Node = null  # 区域刷怪控制器引用（由 RoomGameMode 注入）
+var _pending_elite_spawn: Dictionary = {}      # 待注入的精英生成数据（一次只注入一个）
+
+
+## 设置待注入的精英生成数据（在波次开始前由 RoomGameMode 调用）
+func set_pending_elite_spawn(spawn_data: Dictionary) -> void:
+	_pending_elite_spawn = spawn_data.duplicate(true)
 
 
 func _init() -> void:
@@ -76,6 +84,7 @@ func configure(
 	_waiting_next_wave = false
 	_all_spawned = false
 	_enemy_pool.clear()
+	_spawned_enemies.clear()
 	_spawning_enabled = true
 	if room_size_override != Vector2.ZERO:
 		room_size = room_size_override
@@ -146,8 +155,8 @@ func trigger_extra_spawn(count: int = 5) -> void:
 			attempts += 1
 		spawn_positions.append(spawn_pos)
 
-	# 逐个生成（异步间隔，携带区域控制器用于CHASE信号连接）
-	_spawn_extra_enemies_async(spawn_positions, _current_regional_controller)
+	# 命运增援可能由 body_entered/死亡回调触发；推迟到物理查询刷新结束后再挂载碰撞体。
+	call_deferred("_spawn_extra_enemies_async", spawn_positions, _current_regional_controller)
 
 
 func _spawn_extra_enemies_async(
@@ -191,6 +200,15 @@ func get_wave_info() -> Dictionary:
 		"alive": _alive_count,
 		"killed": _killed_count,
 	}
+
+
+## 获取当前所有存活敌人（供视野检测使用）
+func get_active_enemies() -> Array[CharacterBody2D]:
+	var alive: Array[CharacterBody2D] = []
+	for e in _spawned_enemies:
+		if is_instance_valid(e) and not e.is_queued_for_deletion():
+			alive.append(e)
+	return alive
 
 
 ## 是否所有波次已完成
@@ -257,6 +275,10 @@ func _spawn_next_wave() -> void:
 		spawn_positions.append(spawn_pos)
 
 		var enemy_data: Dictionary = _generate_enemy_data()
+		# PH06: 第一波第一只如果有待注入精英数据，用精英替换
+		if _current_wave == 0 and i == 0 and not _pending_elite_spawn.is_empty():
+			enemy_data = _pending_elite_spawn.duplicate(true)
+			_pending_elite_spawn.clear()
 		_spawn_enemy_instance(enemy_data, spawn_pos)
 		enemy_spawned.emit(1)
 		# 每只间隔一点
@@ -345,6 +367,9 @@ func _spawn_enemy_instance(
 	enemy.awareness_enabled = false
 	if data.get("is_elite"):
 		enemy._is_elite = true  # PH11 P2: 设置精英标志，使 elite_entered_chase 信号能正确触发相邻房间AI联动
+		var elite_id: String = data.get("elite_id", "")
+		if not elite_id.is_empty():
+			elite_spawn_recorded.emit(elite_id)  # PH06: 通知 RoomGameMode 记录精英遭遇
 	if data.get("modifier"):
 		enemy.add_modifier(data["modifier"], 1)
 
@@ -362,6 +387,10 @@ func _spawn_enemy_instance(
 	else:
 		get_tree().root.add_child(enemy)
 	enemy.global_position = spawn_pos
+
+	# 追踪存活敌人
+	_spawned_enemies.append(enemy)
+	enemy.tree_exited.connect(_on_enemy_removed_from_tree.bind(enemy))
 
 	# 设置房间边界（PH11 区域AI：敌人不会游走出房间）
 	if enemy.has_method("set_room_bounds"):
@@ -407,6 +436,10 @@ func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = n
 	# 立即注入当前 controller 引用（用于回调时访问）
 	if controller != null:
 		enemy.set("regional_controller_ref", controller)
+
+
+func _on_enemy_removed_from_tree(enemy: CharacterBody2D) -> void:
+	_spawned_enemies.erase(enemy)
 
 
 func _on_enemy_chase_for_reinforcement(enemy: Node, last_known_pos: Vector2) -> void:

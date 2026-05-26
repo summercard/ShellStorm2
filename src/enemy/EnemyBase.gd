@@ -56,11 +56,17 @@ var _modifiers: Array = []
 var _enemy_data: Dictionary = {}
 var _damage_multiplier: float = 1.0  # 伤害倍率（由环境命运触发器设置）
 var _is_elite: bool = false          # 是否为精英怪（PH11 P2: 精英进入CHASE时触发相邻房间AI联动）
+var _elite_gun_modules: Array[Dictionary] = []   # 精英偷取的GunBody模块（用于挂枪射击）
+var _elite_bullet_modules: Array[Dictionary] = []  # 精英偷取的Bullet模块（用于子弹行为）
+var _elite_attachment_modules: Array[Dictionary] = []  # 精英偷取的Attachment模块（用于修饰射击参数）
+var _elite_shoot_timer: float = 0.0   # 精英挂枪射击计时器
+var _elite_shoot_interval: float = 1.8  # 精英挂枪射击间隔（秒）
 var regional_controller_ref: Node = null
 var _base_emoji: String = "👾"
 var _base_color: Color = Color.WHITE
 var _base_scale: float = 1.0
 var _state_marker_label: Label = null
+var _state_marker_offset_y: float = -58.0  # 名字标签 Y 偏移（位于 emoji 上方）
 
 ## AI状态机变量
 var _ai_state: AIState = AIState.IDLE
@@ -92,6 +98,7 @@ func set_enemy_data(data: Dictionary) -> void:
 	if data.has("emoji") or data.has("color"):
 		set_visuals(data.get("emoji", "👾"), data.get("color", Color(1.0, 0.25, 0.25, 1.0)), float(data.get("scale", 1.0)))
 	_set_elite_name_label(data)
+	_set_elite_equipment_visual(data)
 
 func get_enemy_data() -> Dictionary:
 	return _enemy_data
@@ -108,6 +115,21 @@ func has(property_name: String) -> bool:
 		"damage",
 		"speed",
 	]
+
+## 确保 _state_marker_label 已创建（延迟创建，避免 _ready 顺序问题）
+## _state_marker_label 用于显示精英名字、❓/❗ 警觉标记
+func _ensure_state_marker() -> void:
+	if _state_marker_label != null and is_instance_valid(_state_marker_label):
+		return
+	_state_marker_label = Label.new()
+	_state_marker_label.name = "StateMarker"
+	_state_marker_label.z_index = 3
+	_state_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_state_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_state_marker_label.add_theme_font_size_override("font_size", 13)
+	_state_marker_label.modulate = Color(1.0, 0.88, 0.15, 1.0)
+	_state_marker_label.visible = false
+	add_child(_state_marker_label)
 
 func _ready() -> void:
 	current_hp = max_hp
@@ -272,6 +294,7 @@ func _update_emoji_display(text: String, color: Color) -> void:
 		if _state_marker_label:
 			_state_marker_label.text = text
 			_state_marker_label.modulate = color
+			_state_marker_label.position = Vector2(-_state_marker_label.size.x * 0.5, _state_marker_offset_y)
 			_state_marker_label.visible = true
 		return
 	if emoji_label:
@@ -447,6 +470,12 @@ func _behavior_ranged(delta: float) -> void:
 	if _shoot_timer <= 0.0:
 		_shoot_timer = shoot_interval
 		_ranged_shoot(dir)
+	# 精英挂枪射击（偷来的枪身模块自己也会开火）
+	if _is_elite and not _elite_gun_modules.is_empty():
+		_elite_shoot_timer -= delta
+		if _elite_shoot_timer <= 0.0:
+			_elite_shoot_timer = _elite_shoot_interval
+			_do_elite_gun_shoot()
 
 func _behavior_summoner(delta: float) -> void:
 	var direction := (player_ref.global_position - global_position).normalized()
@@ -585,21 +614,128 @@ func _set_elite_name_label(data: Dictionary) -> void:
 	if _state_marker_label:
 		_state_marker_label.text = name
 		_state_marker_label.modulate = Color(1.0, 0.88, 0.15, 1.0)  # 金黄色，与暴击主题一致
+		_state_marker_label.size = Vector2(max(name.length() * 10, 24), 22)
+		_state_marker_label.position = Vector2(-_state_marker_label.size.x * 0.5, _state_marker_offset_y)
 		_state_marker_label.visible = true
 
-func _ensure_state_marker() -> void:
-	if _state_marker_label != null and is_instance_valid(_state_marker_label):
+## 设置精英挂载装备的视觉表现（视觉化显示精英偷走的枪械模块）
+## 精英身上会显示一个枪械标记，表示它偷走了玩家的武器
+func _set_elite_equipment_visual(data: Dictionary) -> void:
+	if not data.get("is_elite", false):
 		return
-	_state_marker_label = Label.new()
-	_state_marker_label.name = "StateMarker"
-	_state_marker_label.position = Vector2(-12, -48)
-	_state_marker_label.size = Vector2(24, 22)
-	_state_marker_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_state_marker_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_state_marker_label.add_theme_font_size_override("font_size", 18)
-	_state_marker_label.z_index = 2
-	_state_marker_label.visible = false
-	add_child(_state_marker_label)
+	var stolen_modules: Array = data.get("stolen_modules", [])
+	if stolen_modules.is_empty():
+		return
+
+	# 查找是否有 GunBody 类型装备
+	var has_gun: bool = false
+	for m in stolen_modules:
+		if m is Dictionary and m.get("module_type") == "GunBody":
+			has_gun = true
+			break
+
+	if not has_gun:
+		return
+
+	# 获取精英缩放比例，用于同步放大装备标记
+	var elite_scale: float = data.get("scale", 1.0)
+	elite_scale = max(1.0, elite_scale)
+
+	# 在精英头顶（名字上方）创建一个装备标记 Label
+	var gun_badge := Label.new()
+	gun_badge.name = "GunBadge"
+	gun_badge.text = "🔫"
+	gun_badge.position = Vector2(-8, -72)  # 在名字标签下方
+	gun_badge.size = Vector2(16, 16)
+	gun_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	gun_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	gun_badge.add_theme_font_size_override("font_size", 14)
+	gun_badge.modulate = Color(1.0, 0.88, 0.15, 0.9)  # 金黄色，带透明度
+	gun_badge.z_index = 2
+	gun_badge.scale = Vector2.ONE * elite_scale
+	gun_badge.visible = true
+	add_child(gun_badge)
+
+	# 保存GunBody、Bullet和Attachment模块用于挂枪射击和子弹行为
+	_elite_gun_modules.clear()
+	_elite_bullet_modules.clear()
+	_elite_attachment_modules.clear()
+	for m in stolen_modules:
+		if m is Dictionary:
+			match m.get("module_type"):
+				"GunBody":
+					_elite_gun_modules.append(m)
+				"Bullet":
+					_elite_bullet_modules.append(m)
+				"Attachment":
+					_elite_attachment_modules.append(m)
+
+## 执行精英偷来的枪身模块射击
+## 精英用 Bullet.tscn 发射子弹，从偷来的 GunBody 模块获取伤害参数
+## 如果偷了 Bullet 模块，则应用行为修饰（追踪弹/落地炮台/乱射/火力暴食等命运行为生效）
+func _do_elite_gun_shoot() -> void:
+	if _elite_gun_modules.is_empty() or player_ref == null or not is_instance_valid(player_ref):
+		return
+	var dir := (player_ref.global_position - global_position).normalized()
+
+	# 多GunBody多角度射击：每把枪从精英周围略微不同的方向发射
+	# 而非全部重叠在一个 spawn_pos，造成"扇形交叉火力"效果
+	var gun_count: int = _elite_gun_modules.size()
+	var spread_rad: float = 0.18  # 每把枪之间的角度偏移（弧度），≈10度
+
+	for i in _elite_gun_modules.size():
+		var gun_module: Dictionary = _elite_gun_modules[i]
+		var gun_damage: int = int(gun_module.get("damage", 8))
+		# bullet_speed from WeaponPresets: if < 10 it's a multiplier (1.0=normal, 2.0=fast), need absolute speed
+		var raw_bullet_speed: float = float(gun_module.get("bullet_speed", 280.0))
+		var bullet_speed: float = raw_bullet_speed if raw_bullet_speed > 10.0 else 280.0 * raw_bullet_speed
+		# fire_rate from WeaponPresets: if < 10 it's a multiplier, compute absolute interval
+		var raw_fire_rate: float = float(gun_module.get("fire_rate", 3.5))
+		var fire_rate: float = raw_fire_rate if raw_fire_rate > 10.0 else raw_fire_rate
+		_elite_shoot_interval = 1.0 / fire_rate if fire_rate > 0.0 else 1.8
+
+		# 为每把枪计算略微不同的发射方向（扇形散布）
+		var offset_rad: float = (float(i) - float(gun_count - 1) * 0.5) * spread_rad
+		var base_angle: float = dir.angle()
+		var gun_dir: Vector2 = Vector2.from_angle(base_angle + offset_rad)
+		# 每把枪的 spawn_pos 也随角度偏移，在精英周围形成一个扇形发射圈
+		var spawn_pos := global_position + gun_dir * 28.0
+
+		# 判断是否偷了子弹模块：有则使用 Bullet.tscn 并应用行为修饰
+		# Bullet.tscn 才有 apply_fate_stats_from_node()，使追踪弹/落地炮台/乱射等命运行为生效
+		var bullet_scene: PackedScene = preload("res://scenes/Bullet.tscn")
+		var projectile: Node = bullet_scene.instantiate()
+		var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
+		parent.add_child(projectile)
+		projectile.z_as_relative = false
+		projectile.z_index = 890
+
+		# 应用精英偷取的Attachment模块修饰效果
+		# Attachment模块修饰射击参数：spread减少（更精准）、damage加成、命中触发等
+		if not _elite_attachment_modules.is_empty():
+			var combined_attachment_stats: Dictionary = {}
+			for att_module in _elite_attachment_modules:
+				for key in att_module.keys():
+					if key in ["spread", "damage", "fate_attachment_hit_trigger", "trigger_on_hit", "ricochet_count", "homing", "explosion_radius"]:
+						combined_attachment_stats[key] = att_module.get(key)
+			if not combined_attachment_stats.is_empty():
+				var att_node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "EliteAttachment")
+				att_node.set_base_stats(combined_attachment_stats)
+				if projectile.has_method("apply_fate_stats_from_node"):
+					projectile.apply_fate_stats_from_node(att_node)
+				att_node.free()
+
+		if projectile.has_method("fire"):
+			projectile.fire(spawn_pos, gun_dir, bullet_speed, gun_damage, false)
+
+		# 如果偷了Bullet模块，对第一颗子弹应用行为修饰
+		if i == 0 and not _elite_bullet_modules.is_empty():
+			var bullet_module: Dictionary = _elite_bullet_modules[0]
+			var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, bullet_module.get("module_id", "EliteBullet"))
+			node.set_base_stats(bullet_module)
+			if projectile.has_method("apply_fate_stats_from_node"):
+				projectile.apply_fate_stats_from_node(node)
+			node.free()
 
 func _spawn_explosion_flash() -> void:
 	var flash := ColorRect.new()

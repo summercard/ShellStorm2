@@ -94,6 +94,8 @@ enum TileId {
 	ACCENT_GLOW = 5,  # (1,1) 光效装饰
 	PROP_DOOR = 6, # (2,1) 门框标记
 	PROP_MARKER = 7,  # (3,1) 特殊标记
+	PROP_CRATE = 8,   # (0,2) 木箱障碍物
+	PROP_BARREL = 9,  # (1,2) 桶障碍物
 }
 
 
@@ -118,8 +120,8 @@ func build_tile_set(tilemap: TileMapLayer, room_type: RoomData.RoomType) -> void
 		theme["accent_glow"],  # (1,1) ACCENT_GLOW
 		Color(0.5, 0.5, 0.4),  # (2,1) PROP_DOOR
 		Color(0.4, 0.4, 0.5),  # (3,1) PROP_MARKER
-		Color(0.25, 0.25, 0.27),  # (0,2) extra
-		Color(0.22, 0.22, 0.24),  # (1,2) extra
+		Color(0.42, 0.32, 0.20),  # (0,2) PROP_CRATE — 木箱棕
+		Color(0.38, 0.20, 0.12),  # (1,2) PROP_BARREL — 桶深棕
 		Color(0.18, 0.18, 0.20),  # (2,2) extra
 		Color(0.22, 0.22, 0.24),  # (3,2) extra
 		theme["accent"] * 0.8,  # (0,3) darker accent
@@ -197,6 +199,7 @@ func populate_room_tilemap(tilemap: TileMapLayer, room_size: Vector2, room_type:
 	# 在战斗房添加血迹装饰
 	if room_type == RoomData.RoomType.COMBAT or room_type == RoomData.RoomType.ELITE:
 		_add_splatter_decoration(tilemap, cell_count_x, cell_count_y, offset)
+		_add_obstacle_props(tilemap, cell_count_x, cell_count_y, offset)
 	# 在商人房添加暖色光斑
 	elif room_type == RoomData.RoomType.MERCHANT:
 		_add_merchant_glow(tilemap, cell_count_x, cell_count_y, offset, theme)
@@ -252,3 +255,42 @@ func _add_upgrade_cables(tilemap: TileMapLayer, cell_count_x: int, cell_count_y:
 ## 获取房间主题色（用于其他装饰节点）
 func get_room_theme_colors(room_type: RoomData.RoomType) -> Dictionary:
 	return ROOM_THEMES.get(room_type, ROOM_THEMES[RoomData.RoomType.COMBAT])
+
+
+## 在战斗房/精英房添加可破坏障碍物（木箱、桶）
+## 放置在内部区域，有物理碰撞体，玩家和敌人都无法穿过
+func _add_obstacle_props(tilemap: TileMapLayer, cell_count_x: int, cell_count_y: int, offset: Vector2i) -> void:
+	# 基于房间尺寸生成确定性种子（同一房间每次布局一样）
+	var seed_value: int = int(cell_count_x * 31 + cell_count_y * 17)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	
+	# 障碍物放置位置（在内部区域，避免太靠边）
+	var obstacle_templates: Array[Dictionary] = [
+		# 每个模板：local_coords是格坐标，tile是tile_id
+		{"local": Vector2i(3, 3), "tile": TileId.PROP_CRATE},
+		{"local": Vector2i(7, 5), "tile": TileId.PROP_BARREL},
+		{"local": Vector2i(5, 7), "tile": TileId.PROP_CRATE},
+		{"local": Vector2i(9, 3), "tile": TileId.PROP_BARREL},
+		{"local": Vector2i(4, 6), "tile": TileId.PROP_CRATE},
+	]
+	
+	# 按种子随机挑选 3~4 个放置
+	var chosen: Array[Dictionary] = []
+	for i in range(min(3 + rng.randi() % 2, obstacle_templates.size())):
+		var idx: int = rng.randi() % obstacle_templates.size()
+		chosen.append(obstacle_templates[idx])
+		obstacle_templates.remove_at(idx)
+	
+	for obs in chosen:
+		var lx: int = obs["local"].x
+		var ly: int = obs["local"].y
+		# 确保不在边缘
+		if lx <= 1 or ly <= 1 or lx >= cell_count_x - 2 or ly >= cell_count_y - 2:
+			continue
+		var coords := Vector2i(lx + offset.x, ly + offset.y)
+		tilemap.set_cell(coords, 0, Vector2i(obs["tile"], 0))
+	
+	# 注意：物理碰撞体（StaticBody2D）由 RoomTileMapInitializer 在 build() 时
+	# 统一从 TileMap 的障碍物格坐标生成，详见 _build_obstacle_bodies()
+	# 这里只负责视觉 tile 铺设，实际碰撞体在 RoomTileMapInitializer 中创建

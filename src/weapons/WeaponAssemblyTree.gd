@@ -49,6 +49,9 @@ var _cached_bullet_attached_gun: AssemblyNode = null
 ## 伤害倍率（由 Player.apply_damage_multiplier() 同步过来，如 BLESS_DEAD）
 var _damage_multiplier: float = 1.0
 
+## 超频受击惩罚倍率（由超频命卡写入，overheat_penalty>1 时每次射击叠加受击伤害倍率）
+var _overheat_penalty: float = 1.0
+
 
 ## 构造函数：从一个根节点装配树创建
 func _init(root_node: AssemblyNode = null) -> void:
@@ -458,6 +461,7 @@ func _apply_stats(stats: Dictionary) -> void:
 	bullet_damage = stats.get("bullet_damage", 5)
 	bullet_speed = stats.get("bullet_speed", 1.0)
 	current_ammo = magazine_size  # 重置弹药
+	_overheat_penalty = stats.get("overheat_penalty", 1.0)  # 超频受击惩罚倍率
 
 
 ## 获取武器信息（调试用）

@@ -269,6 +269,12 @@ func _apply_enemy_data(enemy: Node, data: Dictionary) -> void:
 		var scaled_hp := maxi(1, int(round(float(data["hp"]) * pressure_hp)))
 		enemy.set("max_hp", scaled_hp)
 		enemy.set("current_hp", scaled_hp)
+	elif data.has("max_hp"):
+		# EliteSpawnDirector already pre-scales max_hp; just pass through with risk pressure applied minimally
+		var base_hp: int = int(data["max_hp"])
+		var scaled_hp: int = maxi(1, int(round(float(base_hp) * (1.0 + float(run_risk) * 0.04))))
+		enemy.set("max_hp", scaled_hp)
+		enemy.set("current_hp", scaled_hp)
 	if data.has("damage"):
 		enemy.set("damage", maxi(1, int(round(float(data["damage"]) * pressure_damage))))
 	if data.has("speed"):
@@ -557,6 +563,7 @@ func _complete_extraction() -> void:
 				"score": score,
 				"kills": kills,
 				"wave": current_wave,
+				"floor": max(1, current_wave),
 				"currency": GameManager.currency,
 				"risk": run_risk,
 			})

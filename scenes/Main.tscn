@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ckm8xvk5yqnl2"]
+[gd_scene load_steps=9 format=3 uid="uid://ckm8xvk5yqnl2"]
 
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="1_gameui"]
 [ext_resource type="Script" path="res://src/fx/ScreenShake.gd" id="2_shake"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/fx/LightSync.gd" id="5_light_sync"]
 [ext_resource type="Script" path="res://src/game/RoomGameMode.gd" id="6_room_mode"]
 [ext_resource type="Script" path="res://src/game/WorldPlaceholder.gd" id="7_world"]
+[ext_resource type="PackedScene" path="res://src/ui/FogOfWarLayer.tscn" id="8_fog"]
 
 [node name="Main" type="Node2D"]
 
@@ -34,6 +35,8 @@ script = ExtResource("3_hiteffects")
 script = ExtResource("5_light_sync")
 
 [node name="GameUIManager" type="CanvasLayer" parent="." instance=ExtResource("1_gameui")]
+
+[node name="FogOfWarLayer" type="CanvasLayer" parent="." instance=ExtResource("8_fog")]
 
 [node name="RoomGameMode" type="Node2D" parent="."]
 script = ExtResource("6_room_mode")
