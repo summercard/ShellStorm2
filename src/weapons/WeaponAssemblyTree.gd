@@ -72,6 +72,7 @@ func set_root(new_root: AssemblyNode) -> bool:
 	root.depth = 0
 	_register_node(root)
 	_apply_stats(root.get_computed_stats())
+	_fire_count = 0  # 重置射击计数器（换枪/换子弹时）
 	tree_changed.emit()
 	stats_changed.emit(root.get_computed_stats())
 	return true
@@ -212,21 +213,23 @@ func _calculate_spread(index: int) -> float:
 
 func _spawn_bullet_from(spawn_pos: Vector2, direction: Vector2) -> void:
 	"""从指定位置生成子弹，暴击判定"""
-	# 暴击判定：优先消费击杀必暴击堆栈，否则 10% 基础概率
-	var is_crit := consume_crit_on_kill_stack()
-	if not is_crit:
-		is_crit = randf() < 0.10
-	var base_damage := bullet_damage * 2 if is_crit else bullet_damage
-	var final_damage := int(float(base_damage) * _damage_multiplier)  # 应用伤害倍率（BLESS_DEAD等）
-
 	# every_nth_fire：每第N发触发挂载枪额外射击（"每第七发子弹携带一把枪"）
 	var bullet_node: AssemblyNode = _find_bullet_node()
 	var nth_fire: int = 0
 	var nth_attach_gun: bool = false
+	var crit_mult: float = 2.0  # 默认暴击倍率 2.0（兼容无命运卡片的普通子弹）
 	if bullet_node != null:
 		var bn_stats: Dictionary = bullet_node.get_base_stats()
 		nth_fire = int(bn_stats.get("every_nth_fire", 0))
 		nth_attach_gun = bool(bn_stats.get("every_nth_attach_gun", false))
+		crit_mult = float(bn_stats.get("crit_damage_multiplier", 2.0))
+
+	# 暴击判定：优先消费击杀必暴击堆栈，否则 10% 基础概率
+	var is_crit := consume_crit_on_kill_stack()
+	if not is_crit:
+		is_crit = randf() < 0.10
+	var base_damage := int(float(bullet_damage) * crit_mult) if is_crit else bullet_damage
+	var final_damage := int(float(base_damage) * _damage_multiplier)  # 应用伤害倍率（BLESS_DEAD等）
 
 	_fire_count += 1
 	var is_nth_shot: bool = (nth_fire > 0 and _fire_count % nth_fire == 0)
