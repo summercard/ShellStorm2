@@ -50,6 +50,13 @@ var _summon_timer: float = 0.0
 var _contact_timer: float = 0.0
 var _triggered: bool = false
 var _exploded: bool = false
+
+## 远程敌人侧翼机动（PH06强化）
+var _ranged_flank_dir: int = 1          # 1=右侧翼绕后, -1=左侧翼绕后
+var _ranged_flank_timer: float = 0.0    # 侧翼切换倒计时
+var _ranged_flank_interval: float = 3.8  # 默认3.8秒切换一次侧翼方向
+var _ranged_tangent_dir: int = 1        # 切向移动方向（每次绕圈后反转）
+var _ranged_minion_spawn_timer: float = 0.0  # 远程召唤型小怪生成计时（独立于summon_interval）
 var _is_dead: bool = false
 var _knockback_velocity: Vector2 = Vector2.ZERO
 var _modifiers: Array = []
@@ -65,6 +72,7 @@ var regional_controller_ref: Node = null
 var _base_emoji: String = "👾"
 var _base_color: Color = Color.WHITE
 var _base_scale: float = 1.0
+var _current_scale: float = 1.0  # 当前综合缩放（原始 * 词缀增幅）
 var _state_marker_label: Label = null
 var _state_marker_offset_y: float = -58.0  # 名字标签 Y 偏移（位于 emoji 上方）
 
@@ -500,20 +508,45 @@ func _dispatch_behavior(delta: float) -> void:
 
 func _behavior_chase(_delta: float) -> void:
 	var direction := (player_ref.global_position - global_position).normalized()
-	velocity = direction * speed
+	# PH06: elite chase 略微带侧翼感（不是直线追，略有弧线）
+	if _is_elite:
+		var tangent := Vector2(-direction.y, direction.x) * _ranged_flank_dir * 0.25
+		velocity = (direction + tangent) * speed
+	else:
+		velocity = direction * speed
 
 func _behavior_ranged(delta: float) -> void:
 	var to_player := player_ref.global_position - global_position
 	var dist := to_player.length()
 	var dir := to_player.normalized()
 	var preferred_dist := 310.0
-	var tangent := Vector2(-dir.y, dir.x)
+
+	# --- 侧翼机动增强（PH06强化） ---
+	# 远程敌人不是简单切向移动，而是主动绕到玩家侧后方
+	# 侧翼方向 _ranged_flank_dir 控制绕向哪一侧
+	# 绕到一定角度后切入，保持与玩家间距，同时造成压迫感
+	_ranged_flank_timer -= delta
+	if _ranged_flank_timer <= 0.0:
+		_ranged_flank_dir *= -1  # 定期反转侧翼方向，打破规律
+		_ranged_flank_timer = _ranged_flank_interval
+		_ranged_tangent_dir *= -1  # 切向方向也反转，增加不规则感
+
+	# 计算垂直于玩家方向的切向分量（用于侧翼绕行）
+	var tangent := Vector2(-dir.y, dir.x) * _ranged_tangent_dir
+
 	if dist < preferred_dist - 55.0:
-		velocity = -dir * speed
+		# 太近：向后退（但用后退+侧翼结合，而非直线后退）
+		# 后退时同时侧向移动，让退路更多变
+		velocity = (-dir * 0.8 + tangent * _ranged_flank_dir * 0.35) * speed
 	elif dist > preferred_dist + 120.0:
-		velocity = dir * speed * 0.55
+		# 太远：前进追击
+		velocity = (dir * 0.6 + tangent * _ranged_flank_dir * 0.25) * speed
 	else:
-		velocity = tangent * speed * 0.34
+		# 在最佳射程附近：侧翼绕行（绕到玩家侧后方）
+		# 侧翼速度比主方向快，让敌人有弧线感而非原地切圈
+		velocity = tangent * _ranged_flank_dir * speed * 0.72
+
+	# 射击（保持原有逻辑）
 	_shoot_timer -= delta
 	if _shoot_timer <= 0.0:
 		_shoot_timer = shoot_interval
@@ -674,7 +707,7 @@ func apply_freeze(freeze_dur: float) -> void:
 		# 冰晶效果用缩放表现（稍微放大）
 		var base_shape: Node = shape
 		if base_shape is ColorRect:
-			base_shape.scale = Vector2(1.15, 1.15)
+			base_shape.scale = Vector2.ONE * _current_scale * 1.15
 
 func die() -> void:
 	if _is_dead:
@@ -701,6 +734,7 @@ func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
 	_base_emoji = emoji
 	_base_color = color
 	_base_scale = scale_mult
+	_current_scale = scale_mult
 	if emoji_label:
 		emoji_label.text = emoji
 		emoji_label.scale = Vector2.ONE * scale_mult
@@ -774,6 +808,48 @@ func _set_elite_equipment_visual(data: Dictionary) -> void:
 					_elite_bullet_modules.append(m)
 				"Attachment":
 					_elite_attachment_modules.append(m)
+
+## 应用缩放倍率（巨大化词缀/命运卡片调用）
+## 会同步放大碰撞半径和房间边界约束
+## new_scale: 目标缩放值（基于原始1.0的倍率）
+func apply_scale(new_scale: float) -> void:
+	if new_scale <= 0.01:
+		return
+	var old_scale: float = _current_scale
+	_current_scale = new_scale
+	_base_scale = new_scale
+
+	# 同步放大碰撞半径
+	contact_radius = 31.0 * _current_scale
+
+	# 同步放大房间边界（按比例扩张安全区，让大型敌人不会被边界夹住）
+	var margin: float = 22.0 * _current_scale
+	var safe_margin: float = 80.0 * _current_scale
+	# 房间边界扩张：保持中心不变，边际按比例放大
+	var old_bounds: Rect2 = _room_bounds
+	if old_bounds.has_area():
+		var center: Vector2 = old_bounds.position + old_bounds.size * 0.5
+		var new_size: Vector2 = old_bounds.size * _current_scale
+		_room_bounds = Rect2(center - new_size * 0.5, new_size)
+
+	# 传播到所有子节点视觉
+	if emoji_label:
+		emoji_label.scale = Vector2.ONE * _current_scale
+	if shape:
+		shape.scale = Vector2.ONE * _current_scale
+	# 装备标记也放大
+	var gun_badge: Node = find_child("GunBadge", false, false)
+	if gun_badge:
+		gun_badge.scale = Vector2.ONE * _current_scale
+	# 状态标签放大
+	if _state_marker_label and is_instance_valid(_state_marker_label):
+		_state_marker_label.scale = Vector2.ONE * _current_scale
+	# HP条放大（但保持文字可读）
+	if hp_bar:
+		hp_bar.scale = Vector2.ONE * _current_scale
+
+	print("[EnemyBase] apply_scale: %.2f (was %.2f), contact_radius=%.1f, room_bounds=%s"
+		% [_current_scale, old_scale, contact_radius, _room_bounds])
 
 ## 执行精英偷来的枪身模块射击
 ## 精英用 Bullet.tscn 发射子弹，从偷来的 GunBody 模块获取伤害参数

@@ -28,12 +28,16 @@ class HugeModifier:
 
 	func apply(enemy_node: Node) -> void:
 		var scale_factor := 1.5 + tier * 0.25
+		# 调用 enemy_node.apply_scale() — 会同步放大碰撞半径和房间边界
 		if enemy_node.has_method("apply_scale"):
-			enemy_node.apply_scale(Vector2.ONE * scale_factor)
+			enemy_node.apply_scale(scale_factor)
+		# 也更新 HP（当前值随当前缩放重新基准）
 		var hp_value = enemy_node.get("max_hp")
 		if hp_value != null:
 			enemy_node.set("max_hp", int(hp_value * (1.3 + tier * 0.1)))
-			enemy_node.set("current_hp", enemy_node.get("max_hp"))
+			var cur_hp = enemy_node.get("current_hp")
+			if cur_hp != null:
+				enemy_node.set("current_hp", enemy_node.get("max_hp"))
 
 
 class SpawnOnDeathModifier:

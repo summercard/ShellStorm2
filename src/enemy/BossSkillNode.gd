@@ -66,7 +66,8 @@ func trigger() -> void:
 	_execute_skill()
 
 func _execute_skill() -> void:
-	"""执行技能效果 — 子类重写"""
+	"""执行技能效果 — 子类重写，或由 factory 静态方法创建的预置技能调用"""
+	# 空实现；实际行为由预置技能子类在构造时通过闭包或派生类重写补充
 	pass
 
 func tick(delta: float) -> void:
@@ -94,7 +95,10 @@ static func create_spawn_minions(minion_type: String, count: int, delay: float) 
 	s.configure({
 		"duration": delay * count,
 		"cooldown": 15.0,
-		"target_type": "self"
+		"target_type": "self",
+		"minion_type": minion_type,
+		"minion_count": count,
+		"spawn_delay": delay,
 	})
 	return s
 
@@ -125,7 +129,8 @@ static func create_debuff_zone(duration: float, effect_type: String) -> BossSkil
 		"duration": duration,
 		"cooldown": 12.0,
 		"target_type": "area",
-		"area_radius": 120.0
+		"area_radius": 120.0,
+		"effect_type": effect_type,
 	})
 	return s
 
@@ -133,6 +138,7 @@ static func create_weapon_copy(weapon_tree: Dictionary) -> BossSkillNode:
 	var s = BossSkillNode.new("weapon_copy", "复制武器", TriggerMode.MANUAL)
 	s.configure({
 		"duration": 8.0,
-		"cooldown": 20.0
+		"cooldown": 20.0,
+		"weapon_tree": weapon_tree,
 	})
 	return s

@@ -1,25 +1,21 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "stopped",
+  "status": "running",
   "lastTask": "Plan",
   "planVersion": "v3.9",
   "polish": {
-    "current": 301,
+    "current": 302,
     "total": "infinite"
   },
-  "startTime": "2026-05-28T00:48:00+08:00",
-  "lastRunTime": "2026-05-28T05:42:00.000000+08:00",
-  "currentTarget": "轮次302 Bug修复：撤离积分写入遗漏；状态仍stopped，等待人类试玩验证",
-  "nextTarget": "人类试玩验证（最高且唯一优先级）",
-  "notes": "[杰西卡 2026-05-28 05:42] 轮次302：_complete_extraction() 新增保险柜存入逻辑覆盖了 add_extraction_points 调用，本轮修复。状态stopped，不续排自动化循环。Godot headless --check-only EXIT 0 ✅。",
+  "startTime": "2026-05-28T07:43:00+08:00",
+  "lastRunTime": "2026-05-28T07:43:00.000000+08:00",
+  "currentTarget": "轮次305：怪物AI寻路/技能/战斗逻辑/Boss技能/Boss体型专项打磨",
+  "nextTarget": "待定",
+  "notes": "[杰西卡 2026-05-28 07:43] 主人指令：跳过人类测试，继续打磨怪物AI/寻路/技能/战斗逻辑/Boss技能/Boss体型。状态改为running，续排自动化循环。",
   "direction": {
-    "focus": ["人类试玩验证"],
-    "constraint": "停止所有自动化循环；清理cron堆积；发现Bug后针对性修复"
-  },
-  "cronCleanup": {
-    "action": "delete-all-duplicate-crons",
-    "reason": "状态已stopped，但调度器积压了11个重复任务；为防止资源浪费和误触发，执行一次性清理"
+    "focus": ["怪物AI", "寻路", "技能", "战斗逻辑", "Boss技能", "Boss体型"],
+    "constraint": "不改变主要游戏体系，聚焦打磨现有功能的深度和质量"
   },
   "completedPhases": [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,

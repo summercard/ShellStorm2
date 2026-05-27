@@ -586,3 +586,56 @@
 1. **人类试玩验证撤离物品保存**：实际撤离一局，确认 VaultMenu 出现物品
 2. **VaultMenu 显示逻辑审查**：读取 vault_items → 渲染品质边框 → 取出按钮
 3. **死亡结算完整性**：局内死亡时背包未保险物品按比例掉落（DeathSettlementModule）
+
+## 轮次304（2026-05-28 07:29 UTC+8）
+
+### 维度选择
+**撤离物品保存链路终态确认（系统级终验）**
+
+从核心玩法"搜打撤经济系统"出发，对轮次299实现的 `_complete_extraction()` 背包+保险格→基地保险柜链路做系统级代码审查。
+
+### 链路确认结论
+**链路完整 ✅**
+
+- `_complete_extraction()` → 遍历 inventory_module.get_occupied_slots() 和 insurance_module.get_all_insured_items() → 对每个物品调用 `_base_manager.call("add_vault_item", item_copy)`（第569/581行）
+- BaseManager.add_vault_item() 写入 `BaseData.vault_items[]` 持久数组（第192行）
+- VaultMenu._get_vault_items() 通过 BaseManager.get_vault_items() 读取并渲染（第29-31行）
+- BaseManager 是 Autoload，单例全局可用（第24行 project.godot 配置确认）
+- 物品保存时标记 `from_inventory: true` 和 `from_insurance: true`，来源可追溯
+
+### 确认的边界情况
+1. **保险柜满**：add_vault_item() 在容量已满时返回 false，_complete_extraction() 打印日志但不 crash ✅
+2. **物品重复**：每个撤离物品都 .duplicate() 后存入，避免引用污染 ✅
+3. **BaseManager 未连接**：_base_manager 存在空值保护（`if _base_manager != null`），但不打印警告——这是可接受的静默失败（开发期日志已够用）
+
+### 本轮审查发现
+**VaultMenu 品质边框缺失（cosmetic，不影响功能）**：
+- _make_vault_item_row() 只渲染 name + count，无品质边框颜色
+- 命卡/物品品质使用 `rarity` 字段（common/rare/epic/legendary）+ FateCard.rarity_color()，但 VaultMenu 没有用到
+- 这是 cosmetic 问题，不是链路问题，不作为本轮修复目标
+
+### 玩家可感知结果
+撤离成功后，物品正确存入基地保险柜。VaultMenu 显示名称和数量，但无品质边框颜色（cosmetic polish）。
+
+### 修改内容
+无代码修改（当前实现已完整，轮次299已正确实现）
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅（EXIT 0）
+- [x] 代码链路确认：_complete_extraction → BaseManager.add_vault_item → BaseData.vault_items → VaultMenu 渲染 ✅
+- [ ] 人类试玩验证：局内背包有物品 → 撤离成功 → 回基地 → VaultMenu 看到这些物品
+- [ ] 人类试玩验证：保险格有物品 → 撤离成功 → 回基地 → VaultMenu 看到保险物品
+
+### 剩余风险
+1. **VaultMenu 品质边框缺失**：cosmetic polish，暂不修复（主链路正常）
+2. **所有链路均需人类试玩验证**：代码层面完整，但无自动化测试覆盖
+
+### 状态结论
+**状态：stopped（不变）**
+
+循环状态已为 stopped，本轮确认主链路完整。不主动修复 cosmetic 问题。不续排 isolated cron。
+
+### 下轮最可能方向
+1. **人类试玩验证**（最高且唯一优先级）：撤离物品保存、小地图刷新、命运卡片视觉、精英怪物链路
+2. 精英击杀信号连接（EliteArchiveModule → ExtractionDirector）
+3. Boss 战完整流程（RoomBoss.tscn + BossRoomDirector）
