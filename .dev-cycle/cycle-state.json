@@ -5,14 +5,14 @@
   "lastTask": "Plan",
   "planVersion": "v3.8",
   "polish": {
-    "current": 285,
+    "current": 288,
     "total": "infinite"
   },
   "startTime": "2026-05-28T00:48:00+08:00",
-  "lastRunTime": "2026-05-28T02:37:00.000000+08:00",
-  "currentTarget": "系统代码质量审查轮次285（无新增代码改动）",
+  "lastRunTime": "2026-05-28T19:23:00.000000+08:00",
+  "currentTarget": "系统终态审查轮次290：无新增代码，轮次289收尾确认，不续排",
   "nextTarget": "人类试玩验证冰霜/火焰/剧毒子弹效果 + 命运卡片系统终验（最高且唯一优先级）",
-  "notes": "[杰西卡 2026-05-28 02:37] 轮次285完成（审查轮次）。确认命运卡片引擎19种效果类型完整、MapFateTriggers环境触发器6种类型完整、Bullet.gd DOT视觉融合完整、验证脚本全部通过（28张卡片/Godot编译EXIT 0/Inventory UI/子弹尾迹）。无新代码改动。不续排，等待用户主导人类试玩验证。\n[杰西卡 2026-05-28 02:33] 轮次284完成（审查轮次）。验证：godot --headless --check-only --quit EXIT 0；命运卡片引擎19种效果类型完整；FateCardPresets 28张可玩卡片全部通过；核心系统代码健康度良好。无新代码改动。不续排，等待用户主导人类试玩验证。\n[杰西卡 2026-05-28 02:22] 轮次283完成。EnemyBase._spawn_damage_number() 中 return 之后的73行冗余代码移除（GameUIManager.show_damage_popup 已完全接管），函数从76行缩减至2行。Godot编译EXIT 0，verify_fate_card_pool 28张可玩卡片全部通过。不续排，等待用户主导人类试玩验证。\n[杰西卡 2026-05-28 02:19] 轮次282完成。WeaponAssemblyTreePanel.gd 删除已声明但从未使用的 _node_click_rects 死字段；_on_panel_shown() 中对应 clear() 替换为 pass。Godot编译EXIT 0。续排判断：不续排，等待用户主导人类试玩验证。",
+  "notes": "[杰西卡 2026-05-28 03:11] 轮次289完成。修复fire()中_apply_fate_visual_from_node()的剧毒子弹颜色遗漏Bug：将elif改为if让fire/ice/poison三种颜色独立判断。Godot编译EXIT 0。不续排，等待用户主导人类试玩验证。",
   "direction": {
     "focus": [
       "枪械",
@@ -293,7 +293,9 @@
     281,
     282,
     284,
-    285
+    285,
+    288,
+    289
   ],
   "designDoc": "docs/PH04_命运卡片系统.md"
 }
