@@ -103,6 +103,18 @@ static func apply_card(
 			result = _apply_mutate_to_homing(card, tree, target_nodes)
 		FateCard.EffectAction.MUTATE_TO_LIVING:
 			result = _apply_mutate_to_living(card, tree, target_nodes)
+		FateCard.EffectAction.MUTATE_TO_BOUNCE:
+			result = _apply_mutate_to_bounce(card, tree, target_nodes)
+		FateCard.EffectAction.MUTATE_TO_CHAIN:
+			result = _apply_mutate_to_chain(card, tree, target_nodes)
+		FateCard.EffectAction.MUTATE_TO_TURRET_ON_LAND:
+			result = _apply_mutate_to_turret(card, tree, target_nodes)
+		FateCard.EffectAction.COPY_NODE:
+			result = _apply_copy_node(card, tree, target_nodes)
+		FateCard.EffectAction.FUSE_DAMAGE:
+			result = _apply_fuse_damage(card, tree, target_nodes)
+		FateCard.EffectAction.EXPLODE_ON_RELOAD:
+			result = _apply_explode_on_reload(card, tree, target_nodes)
 		FateCard.EffectAction.EVERY_NTH_FIRE:
 			result = _apply_every_nth_fire(card, tree, target_nodes)
 		FateCard.EffectAction.CRIT_ON_KILL:
@@ -583,6 +595,221 @@ static func _apply_mutate_to_living(
 	result.modified_nodes = [target]
 	result.effect_value = turret_duration
 	result.message = "Set turret-on-land (duration=%.1fs) on %s" % [turret_duration, target.node_name]
+	return result
+
+
+## ===== 效果执行：MUTATE_TO_BOUNCE =====
+## 子弹变弹跳弹（弹跳弹）
+static func _apply_mutate_to_bounce(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var bounce_count: int = card.effect.get("bounce_count", 3)
+	var bounce_walls: bool = card.effect.get("bounce_walls", true)
+	var damage_scale: float = card.effect.get("damage_scale", 0.85)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["bounce"] = true
+	stats["bounce_count"] = bounce_count
+	stats["bounce_walls"] = bounce_walls
+	stats["bounce_damage_scale"] = damage_scale
+	target.set_base_stats(stats)
+	target.tags.append("Fate.Bounce")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = bounce_count
+	result.message = "Set bounce (count=%d) on %s" % [bounce_count, target.node_name]
+	return result
+
+
+## ===== 效果执行：MUTATE_TO_CHAIN =====
+## 子弹变连锁闪电（连锁闪电）
+static func _apply_mutate_to_chain(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var chain_count: int = card.effect.get("chain_count", 3)
+	var chain_range: float = card.effect.get("chain_range", 150.0)
+	var chain_damage_scale: float = card.effect.get("chain_damage_scale", 0.7)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["chain_lightning"] = true
+	stats["chain_count"] = chain_count
+	stats["chain_range"] = chain_range
+	stats["chain_damage_scale"] = chain_damage_scale
+	target.set_base_stats(stats)
+	target.tags.append("Fate.ChainLightning")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = chain_count
+	result.message = "Set chain lightning (count=%d, range=%.0f) on %s" % [chain_count, chain_range, target.node_name]
+	return result
+
+
+## ===== 效果执行：MUTATE_TO_TURRET_ON_LAND =====
+## 子弹落地生成炮台（落地炮台）
+static func _apply_mutate_to_turret(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var turret_duration: float = card.effect.get("turret_duration", 8.0)
+	var turret_fire_rate: float = card.effect.get("turret_fire_rate", 2.0)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["spawn_turret_on_land"] = true
+	stats["turret_duration"] = turret_duration
+	stats["turret_fire_rate"] = turret_fire_rate
+	target.set_base_stats(stats)
+	target.tags.append("Fate.Turret")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = turret_duration
+	result.message = "Set turret-on-land (duration=%.1fs, rate=%.1f) on %s" % [turret_duration, turret_fire_rate, target.node_name]
+	return result
+
+
+## ===== 效果执行：COPY_NODE =====
+## 复制节点（弹幕模式）
+static func _apply_copy_node(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var copy_fire_delay: float = card.effect.get("copy_fire_delay", 0.1)
+	var second_wave_damage_scale: float = card.effect.get("second_wave_damage_scale", 0.6)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["copy_fire"] = true
+	stats["copy_fire_delay"] = copy_fire_delay
+	stats["second_wave_damage_scale"] = second_wave_damage_scale
+	target.set_base_stats(stats)
+	target.tags.append("Fate.CopyFire")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = copy_fire_delay
+	result.message = "Set copy fire (delay=%.2fs) on %s" % [copy_fire_delay, target.node_name]
+	return result
+
+
+## ===== 效果执行：FUSE_DAMAGE =====
+## 伤害融合（火焰子弹 / 冰霜子弹 / 剧毒子弹）
+## 根据 damage_type 写入子弹属性，Bullet.gd 读取并应用对应视觉/行为
+static func _apply_fuse_damage(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var damage_type: String = card.effect.get("damage_type", "fire")
+	var dot_damage_per_sec: float = card.effect.get("dot_damage_per_sec", 0.08)
+	var dot_duration: float = card.effect.get("dot_duration", 3.0)
+	var freeze_duration: float = card.effect.get("freeze_duration", 0.5)
+	var freeze_duration_elite: float = card.effect.get("freeze_duration_elite", 0.25)
+	var dot_damage_per_stack: float = card.effect.get("dot_damage_per_stack", 0.05)
+	var max_stacks: int = card.effect.get("max_stacks", 5)
+	var dot_tick_rate: float = card.effect.get("dot_tick_rate", 1.0)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["fuse_damage"] = true
+	stats["fuse_damage_type"] = damage_type
+	# 通用 DOT 参数
+	stats["dot_damage_per_sec"] = dot_damage_per_sec
+	stats["dot_duration"] = dot_duration
+	stats["dot_damage_per_stack"] = dot_damage_per_stack
+	stats["max_stacks"] = max_stacks
+	stats["dot_tick_rate"] = dot_tick_rate
+	# 冰冻参数
+	stats["freeze_duration"] = freeze_duration
+	stats["freeze_duration_elite"] = freeze_duration_elite
+	target.set_base_stats(stats)
+
+	# 视觉标签 + 视觉特效写入
+	match damage_type:
+		"fire":
+			target.tags.append("Fate.Fire")
+			target.tags.append("Fate.FuseDamage")
+		"ice":
+			target.tags.append("Fate.Ice")
+			target.tags.append("Fate.FuseDamage")
+		"poison":
+			target.tags.append("Fate.Poison")
+			target.tags.append("Fate.FuseDamage")
+		_:
+			target.tags.append("Fate.FuseDamage")
+
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = 1.0
+	result.message = "Set fuse damage (type=%s) on %s" % [damage_type, target.node_name]
+	return result
+
+
+## ===== 效果执行：EXPLODE_ON_RELOAD =====
+## 换弹爆炸（诅咒）
+static func _apply_explode_on_reload(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var explosion_radius: float = card.effect.get("explosion_radius", 150.0)
+	var explosion_damage_scale: float = card.effect.get("explosion_damage_scale", 0.8)
+	var reload_penalty: float = card.effect.get("reload_penalty", 0.5)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["explode_on_reload"] = true
+	stats["explosion_radius"] = explosion_radius
+	stats["explosion_damage_scale"] = explosion_damage_scale
+	stats["reload_penalty"] = reload_penalty
+	target.set_base_stats(stats)
+	target.tags.append("Fate.CurseReload")
+	tree.refresh_stats()
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = explosion_radius
+	result.message = "Set explode-on-reload (radius=%.0f) on %s" % [explosion_radius, target.node_name]
 	return result
 
 
