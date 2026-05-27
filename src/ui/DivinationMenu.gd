@@ -54,7 +54,7 @@ func _draw_cards() -> void:
 ## 创建一张命运卡片按钮
 func _create_card_button(card: FateCard) -> Button:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(160, 200)
+	btn.custom_minimum_size = Vector2(150, 150)
 
 	# 品质颜色
 	var rarity_color := FateCard.rarity_color(card.card_rarity)
@@ -66,11 +66,14 @@ func _create_card_button(card: FateCard) -> Button:
 	# 多行文本：品质/名称/类型/描述
 	var type_str := FateCard.type_name(card.card_type)
 	btn.text = (
-		"[%s] %s\n%s\n%s"
-		% [FateCard.rarity_name(card.card_rarity), card.card_name, type_str, card.description]
+		"[%s]\n%s\n%s"
+		% [FateCard.rarity_name(card.card_rarity), card.card_name, type_str]
 	)
+	btn.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
+	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 	btn.add_theme_color_override("font_color", rarity_color)
-	btn.add_theme_font_size_override("font_size", 14)
+	btn.add_theme_font_size_override("font_size", 12)
+	btn.add_theme_font_size_override("normal", 12)
 	btn.set_meta("card", card)
 	btn.pressed.connect(_on_card_button_pressed.bind(card))
 
