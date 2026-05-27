@@ -56,6 +56,7 @@ enum EffectAction {
 	# 变种类（扩展）
 	MUTATE_TO_CHAIN,           # 连锁闪电
 	MUTATE_TO_TURRET_ON_LAND,  # 落地炮台
+	MUTATE_TO_HOME_ON_LAND,    # 落地后返航（回家看看）
 
 	# 诅咒类
 	OUT_OF_CONTROL,           # 子弹上的枪乱射（管不住了）

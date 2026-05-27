@@ -15,6 +15,34 @@ var is_active: bool = false
 var _life_timer: float = 0.0
 var _travelled: float = 0.0
 
+## 命运卡片行为：弹跳弹（bounce）
+var _fate_bounce: bool = false        # 是否弹跳弹
+var _fate_bounce_count: int = 0       # 剩余弹跳次数
+var _fate_bounce_walls: bool = true   # 是否撞墙弹跳
+var _fate_bounce_damage_scale: float = 0.85  # 每次弹跳伤害衰减
+
+## 命运卡片行为：连锁闪电（chain）
+var _fate_chain: bool = false          # 是否连锁弹
+var _fate_chain_count: int = 0         # 剩余连锁次数
+var _fate_chain_range: float = 150.0   # 连锁查找范围
+var _fate_chain_damage_scale: float = 0.7  # 每次连锁伤害衰减
+var _fate_chain_targets_hit: Array = []  # 本次弹射中已打击过的目标（防止同帧重复连锁）
+
+## 命运卡片行为：伤害融合（fuse_damage / element: fire/ice/poison DOT）
+var _fate_fuse_type: String = ""        # fire / ice / poison
+var _fate_fuse_dot_dps: float = 0.0     # 每秒伤害百分比
+var _fate_fuse_dot_duration: float = 0.0  # DOT 持续时间
+var _fate_fuse_dot_stacks: int = 1      # 当前叠加层数
+var _fate_fuse_max_stacks: int = 5     # 最大叠加层数
+var _fate_fuse_dot_timer: float = 0.0   # DOT tick 计时器
+var _fate_freeze_duration: float = 0.0   # 冰冻持续时间（秒），由命运卡片注入
+
+## 命运卡片行为：换弹爆炸（explode_on_reload）
+## 注意：换弹爆炸由 WeaponController 监听 reload 信号触发，Bullet 本身只存储爆炸参数
+var _fate_explode_on_reload: bool = false
+var _fate_explosion_radius: float = 150.0
+var _fate_explosion_damage_scale: float = 0.8
+
 var _attached_gun_node: AssemblyNode = null
 var _attached_gun_cooldown: float = 0.0
 var _attached_gun_fire_rate: float = 4.0
@@ -41,6 +69,8 @@ var _fate_return_to_player: bool = false  # 飞出后返回玩家
 var _fate_return_damage_mult: float = 0.6  # 返弹伤害倍率
 var _fate_return_triggered: bool = false   # 返弹阶段已触发
 var _fate_spawn_turret_on_land: bool = false  # 落地变炮台
+var _fate_home_on_land: bool = false         # 落地后返回玩家
+var _fate_home_lifetime: float = 5.0        # 落地后存活时间
 var _fate_turret_duration: float = 5.0   # 炮台存活时间
 
 ## 命运卡片行为：乱射（管不住了）/ 子弹变大（火力暴食）
@@ -245,10 +275,12 @@ func _process(delta: float) -> void:
 		_turret_loop(delta)
 		return
 
-	# 落地炮台：超出射程或超时，生成炮台
+	# 落地炮台：超出射程或超时，生成炮台或激活返航
 	if (_life_timer >= max_lifetime or _travelled >= max_distance) and not _fate_return_to_player:
 		if _fate_spawn_turret_on_land:
 			_spawn_fate_turret()
+		if _fate_home_on_land:
+			_activate_home_on_land()
 		queue_free()
 
 func _process_attached_gun_firing(delta: float) -> void:
@@ -325,6 +357,13 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	_fate_scale = 1.0
 	_fate_homing = false
 	_fate_return_triggered = false
+	# 重置弹跳/连锁状态
+	_fate_bounce_count = 0
+	_fate_chain_targets_hit.clear()
+	_fate_chain_count = 0
+	# 重置元素DOT叠加
+	_fate_fuse_dot_stacks = 1
+	_fate_freeze_duration = 0.0
 	# 重置轨迹数据
 	_trail_points.clear()
 	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
@@ -399,6 +438,9 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 	if node_stats.get("spawn_turret_on_land", false):
 		_fate_spawn_turret_on_land = true
 		_fate_turret_duration = float(node_stats.get("turret_duration", 5.0))
+	if node_stats.get("home_on_land", false):
+		_fate_home_on_land = true
+		_fate_home_lifetime = float(node_stats.get("home_lifetime", 5.0))
 	# 命运卡片行为：乱射（管不住了）/ 子弹变大（火力暴食）
 	if node_stats.get("uncontrolled_gun", false):
 		_fate_uncontrolled_gun = true
@@ -411,6 +453,158 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 	# 配件寄生命中触发（三叉枪口等命中时分裂/强化）
 	if node_stats.get("fate_attachment_hit_trigger", false):
 		_fate_attachment_hit_trigger = true
+	# 弹跳弹（弹跳弹命运卡片）
+	if node_stats.get("bounce", false):
+		_fate_bounce = true
+		_fate_bounce_count = int(node_stats.get("bounce_count", 3))
+		_fate_bounce_walls = bool(node_stats.get("bounce_walls", true))
+		_fate_bounce_damage_scale = float(node_stats.get("bounce_damage_scale", 0.85))
+	# 连锁闪电（连锁闪电命运卡片）
+	if node_stats.get("chain_lightning", false):
+		_fate_chain = true
+		_fate_chain_count = int(node_stats.get("chain_count", 3))
+		_fate_chain_range = float(node_stats.get("chain_range", 150.0))
+		_fate_chain_damage_scale = float(node_stats.get("chain_damage_scale", 0.7))
+		_fate_chain_targets_hit.clear()
+	# 伤害融合（火焰/冰霜/剧毒子弹）
+	if node_stats.get("fuse_damage", false):
+		_fate_fuse_type = str(node_stats.get("fuse_damage_type", "fire"))
+		_fate_fuse_dot_dps = float(node_stats.get("dot_damage_per_sec", 0.08))
+		_fate_fuse_dot_duration = float(node_stats.get("dot_duration", 3.0))
+		_fate_fuse_max_stacks = int(node_stats.get("max_stacks", 5))
+		_fate_fuse_dot_timer = 0.0
+		# 叠加层数重置为1
+		_fate_fuse_dot_stacks = 1
+		# 视觉标记：火焰橙色，冰霜蓝色，毒绿色
+		if _fate_fuse_type == "fire" and shape:
+			shape.color = Color(1.0, 0.45, 0.1, 1.0)
+			glow.color = Color(1.0, 0.3, 0.05, 0.8)
+		elif _fate_fuse_type == "ice" and shape:
+			shape.color = Color(0.3, 0.75, 1.0, 1.0)
+			glow.color = Color(0.2, 0.6, 1.0, 0.8)
+		# 注意：冰冻和冰DOT的实际触发在命中时（_apply_element_dot）处理
+		# 此处只设置子弹颜色标记
+		# 冰冻持续时间（由命运卡片注入，命中时触发）
+		_fate_freeze_duration = float(node_stats.get("freeze_duration", 0.0))
+	elif _fate_fuse_type == "poison" and shape:
+		shape.color = Color(0.25, 0.75, 0.2, 1.0)
+		glow.color = Color(0.15, 0.6, 0.1, 0.8)
+	# 换弹爆炸（换弹爆炸诅咒卡片）
+	if node_stats.get("explode_on_reload", false):
+		_fate_explode_on_reload = true
+		_fate_explosion_radius = float(node_stats.get("explosion_radius", 150.0))
+		_fate_explosion_damage_scale = float(node_stats.get("explosion_damage_scale", 0.8))
+
+## 应用命中后DOT和连锁逻辑
+## 在 _on_body_entered 中命中敌人后调用，处理弹跳/连锁/元素DOT
+func _handle_post_hit_behaviors(hit_body: Node) -> void:
+	# === 弹跳弹：撞墙或撞敌人后反弹 ===
+	if _fate_bounce and _fate_bounce_count > 0:
+		_bounce(hit_body)
+
+	# === 连锁闪电：命中后在敌人间跳跃 ===
+	if _fate_chain and _fate_chain_count > 0:
+		_chain_to_next_enemy(hit_body)
+
+	# === 元素DOT：附加持续伤害 ===
+	if _fate_fuse_type != "":
+		_apply_element_dot(hit_body)
+
+## 弹跳逻辑（撞墙/撞敌人都弹）
+func _bounce(hit_body: Node) -> void:
+	_fate_bounce_count -= 1
+	if _fate_bounce_count < 0:
+		return
+	# 伤害衰减
+	damage = int(float(damage) * _fate_bounce_damage_scale)
+	# 反弹方向计算
+	if hit_body is StaticBody2D:
+		# 撞墙：取当前方向的反射方向
+		# 简化：随机偏移当前方向，模拟墙面反弹
+		var random_angle: float = (randf() - 0.5) * PI * 0.8
+		direction = direction.rotated(random_angle)
+	else:
+		# 撞敌人：从敌人位置计算反射方向
+		var to_enemy: Vector2 = (hit_body.global_position - global_position).normalized()
+		direction = direction.reflect(to_enemy).normalized()
+		if direction.length_squared() < 0.01:
+			direction = direction.rotated(PI * 0.5)
+	# 重置寿命以继续飞行
+	_life_timer = 0.0
+	# 视觉闪烁反馈
+	if shape:
+		var orig_scale: float = shape.scale.x
+		shape.scale = Vector2(orig_scale * 0.7, orig_scale * 0.7)
+		await get_tree().create_timer(0.08).timeout
+		if is_instance_valid(self):
+			shape.scale = Vector2(orig_scale, orig_scale)
+
+## 连锁闪电逻辑
+func _chain_to_next_enemy(hit_body: Node) -> void:
+	_fate_chain_targets_hit.append(hit_body)
+	_fate_chain_count -= 1
+	if _fate_chain_count < 0:
+		return
+	# 伤害衰减
+	damage = int(float(damage) * _fate_chain_damage_scale)
+	# 在连锁范围内找下一个未击中的敌人
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
+	var next_target: Node = null
+	var min_dist: float = _fate_chain_range
+	for e in enemies:
+		if not is_instance_valid(e):
+			continue
+		if _fate_chain_targets_hit.has(e):
+			continue
+		var dist: float = global_position.distance_to(e.global_position)
+		if dist < min_dist:
+			min_dist = dist
+			next_target = e
+	if next_target == null:
+		return
+	# 朝下一个目标飞去
+	direction = (next_target.global_position - global_position).normalized()
+	rotation = direction.angle()
+	_life_timer = 0.0  # 重置寿命
+	# 视觉：连锁时子弹变细变白
+	if shape:
+		shape.rect_size = Vector2(shape.rect_size.x * 0.6, shape.rect_size.y * 0.6)
+		if glow:
+			glow.color = Color(0.7, 0.9, 1.0, 0.9)
+	# 延迟后恢复颜色
+	await get_tree().create_timer(0.05).timeout
+	if is_instance_valid(self) and shape:
+		shape.rect_size = Vector2(10, 10)  # 恢复原始尺寸
+
+## 应用元素DOT
+func _apply_element_dot(enemy: Node) -> void:
+	if not is_instance_valid(enemy):
+		return
+	# 增加叠加层数（不超过上限）
+	_fate_fuse_dot_stacks = mini(_fate_fuse_dot_stacks + 1, _fate_fuse_max_stacks)
+	# 冰冻子弹：命中时触发冰冻，不触发DOT
+	if _fate_freeze_duration > 0.0 and enemy.has_method("apply_freeze"):
+		enemy.call("apply_freeze", _fate_freeze_duration)
+		_fate_freeze_duration = 0.0  # 重置防止重复触发
+		return  # 冰冻优先，不触发DOT
+	# 元素DOT：附加持续伤害
+	if enemy.has_method("apply_dot"):
+		var dot_damage: int = maxi(1, int(float(damage) * _fate_fuse_dot_dps))
+		var dot_duration: float = _fate_fuse_dot_duration * (float(_fate_fuse_dot_stacks) / float(_fate_fuse_max_stacks))
+		enemy.call("apply_dot", _fate_fuse_type, dot_damage, dot_duration)
+	elif enemy.has_method("take_damage"):
+		# DOT 直接造成一次伤害（真实伤害）
+		var dot_damage: int = maxi(1, int(float(damage) * _fate_fuse_dot_dps * 0.5))
+		enemy.call("take_damage", dot_damage, false, Vector2.ZERO)
+	# 视觉反馈：叠加时子弹闪烁
+	if shape and _fate_fuse_dot_stacks > 1:
+		match _fate_fuse_type:
+			"fire":
+				shape.color = Color(1.0, 0.6 + 0.1 * _fate_fuse_dot_stacks, 0.1, 1.0)
+			"ice":
+				shape.color = Color(0.3, 0.75 + 0.05 * _fate_fuse_dot_stacks, 1.0, 1.0)
+			"poison":
+				shape.color = Color(0.25, 0.75 + 0.05 * _fate_fuse_dot_stacks, 0.2, 1.0)
 
 ## 根据 scale 值应用命运视觉（子弹放大）
 func _apply_fate_visual_from_scale(scale: float) -> void:
@@ -496,6 +690,18 @@ func _spawn_fate_turret() -> void:
 	turret.set("_turret_mode", true)  # 标记为炮台模式（_process 检测此标志执行射击循环）
 	turret.is_active = true
 
+## 激活落地返航模式（"回家看看"命运卡片效果）
+## 子弹落地后转向玩家飞行，返回途中继续造成伤害
+func _activate_home_on_land() -> void:
+	is_active = true
+	_fate_return_to_player = true
+	_fate_return_triggered = false
+	_life_timer = 0.0
+	max_lifetime = _fate_home_lifetime
+	_travelled = 0.0
+	speed *= 0.7  # 返回速度稍慢
+	# _fate_return_damage_mult 已在 apply_fate_stats_from_node 中设置
+
 ## 炮台射击循环（_spawn_fate_turret 注入炮台节点后，由 _process 中的 _turret_mode 分支调用）
 func _turret_loop(delta: float) -> void:
 	# 炮台每帧减少冷却 → 冷却到0则查找最近敌人开火 → 重置冷却
@@ -533,6 +739,9 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("enemy") and body.has_method("take_damage"):
 		body.call("take_damage", damage, is_crit, direction)
 
+		# 弹跳弹 / 连锁闪电 / 元素DOT（命中后触发后续行为）
+		_handle_post_hit_behaviors(body)
+
 		# 火力暴食：每次命中子弹变大（伤害同时增加）
 		if _fate_size_growth:
 			_fate_scale = mini(_fate_scale * (1.0 + _fate_growth_per_hit), _fate_max_scale)
@@ -548,6 +757,10 @@ func _on_body_entered(body: Node) -> void:
 		# 这样 crit_on_kill 才能在本帧内消费堆栈（命中→击杀→堆栈-1→下一发暴击）
 		call_deferred("queue_free")
 	elif body is StaticBody2D:
+		# 弹跳弹撞墙：触发弹跳逻辑，然后子弹不直接消失
+		if _fate_bounce and _fate_bounce_count > 0:
+			_bounce(body)
+			return  # 不消失，继续弹跳
 		queue_free()
 
 func _on_area_entered(area: Area2D) -> void:

@@ -156,6 +156,26 @@ static func turret_on_land() -> FateCard:
 	return card
 
 
+## 回家看看：子弹飞出后返回玩家，返回途中继续造成伤害
+static func home_on_land() -> FateCard:
+	var card := FateCard.new("回家看看", FateCard.CardType.MUTATE, RARITY_RARE)
+	card.icon_emoji = "🏠"
+	card.short_description = "子弹飞出去后返回玩家"
+	card.description = "选择一个子弹，子弹飞出后返回玩家方向，返回途中继续造成 60% 伤害，持续 5 秒"
+	card.tags = ["Fate.Mutate", "Fate.HomeOnLand"]
+	card.target_rules = [{"select": "BULLET"}]
+	card.effect = {
+		"action": FateCard.EffectAction.MUTATE_TO_HOME_ON_LAND,
+		"home_lifetime": 5.0,
+		"return_damage_multiplier": 0.6,
+	}
+	card.visual = {
+		"action": "AddLegs",
+		"leg_count": 4,
+	}
+	return card
+
+
 ## 子弹折返：子弹打中目标后反弹
 static func bullet_return() -> FateCard:
 	var card := FateCard.new("子弹折返", FateCard.CardType.MUTATE, RARITY_RARE)
@@ -503,6 +523,7 @@ static func all_presets() -> Array[FateCard]:
 		bullet_return(),
 		chain_lightning(),
 		bounce_bullet(),
+		home_on_land(),
 		barrage_copy(),
 		fuse_fire(),
 		fuse_frost(),
@@ -534,6 +555,7 @@ static func playable_presets() -> Array[FateCard]:
 		attachment_parasite(), # 🦠 配件寄生（命中触发配件效果）
 		living_bullet(),    # 👁 活过来
 		turret_on_land(),   # 🏰 落地炮台
+		home_on_land(),    # 🏠 回家看看
 		bullet_return(),    # ↩️ 子弹折返
 		chain_lightning(),  # ⚡ 连锁闪电
 		bounce_bullet(),    # 🏓 弹跳弹

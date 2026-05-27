@@ -80,6 +80,8 @@ var current_floor: int = 1
 var score: int = 0
 var _room_cleared_flag: bool = false
 var _kill_count: int = 0
+var _killed_elite_ids_this_room: Array[String] = []
+var _elite_kill_bounty: int = 0  # 本局精英击杀悬赏金累计
 var _start_room_done: bool = false
 var _room_key_count: int = 0
 var _inventory_room_key_snapshot: int = 0
@@ -604,15 +606,16 @@ func _grant_extraction_points() -> void:
 	if insurance_module != null:
 		loot_count += insurance_module.get_used_slots()
 	var loot_bonus: int = loot_count * 3
-	var total_points: int = floor_bonus + loot_bonus
+	var bounty_points: int = int(_elite_kill_bounty * 0.5)  # 悬赏金50%转积分
+	var total_points: int = floor_bonus + loot_bonus + bounty_points
 	if total_points > 0:
 		var bm: BaseManager = _get_base_manager()
 		if bm != null:
 			bm.add_extraction_points(total_points)
 		print(
 			(
-				"[RoomGameMode] Granted extraction_points: %d (floor bonus=%d, loot bonus=%d)"
-				% [total_points, floor_bonus, loot_bonus]
+				"[RoomGameMode] Granted extraction_points: %d (floor bonus=%d, loot bonus=%d, bounty points=%d)"
+				% [total_points, floor_bonus, loot_bonus, bounty_points]
 			)
 		)
 
@@ -662,7 +665,9 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 					"currency": GameManager.currency,
 					"score": score,
 					"risk": _run_risk,
-					"floor": current_floor
+					"floor": current_floor,
+					"elite_kills": _killed_elite_ids_this_room.size(),
+					"elite_bounty": _elite_kill_bounty
 				}
 			)
 	else:
@@ -2180,6 +2185,12 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 			_elite_archive.kill_elite(elite_id)
 			_killed_elite_ids_this_room.append(elite_id)
 			print("[RoomGameMode] 精英击杀已记录: %s" % elite_id)
+		# 悬赏金即时到账并通知
+		var bounty: int = enemy_data.get("currency_value", 10)
+		_elite_kill_bounty += bounty
+		GameManager.add_currency(bounty)
+		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+			_ui_manager.show_fate_card_notification("★ 精英击杀！+ %d 悬赏金" % bounty)
 
 	kill_recorded.emit()
 	_update_ui()

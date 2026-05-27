@@ -725,11 +725,7 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 					if spawner != null and spawner.has_method("get_wave_info"):
 						var info: Dictionary = spawner.call("get_wave_info")
 						total_kills += info.get("total", 0)
-			var currency_amount: int = 0
-			if _inventory_module != null and _inventory_module.has_method("get_all_items"):
-				for item in _inventory_module.get_all_items():
-					if item.get("id", "").begins_with("soul_"):
-						currency_amount += item.get("stack", 0)
+			var currency_amount: int = GameManager.currency
 			gui.call("show_run_extraction_success", {
 				"score": total_kills * 10,
 				"kills": total_kills,

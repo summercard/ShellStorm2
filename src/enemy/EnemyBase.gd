@@ -68,6 +68,20 @@ var _base_scale: float = 1.0
 var _state_marker_label: Label = null
 var _state_marker_offset_y: float = -58.0  # 名字标签 Y 偏移（位于 emoji 上方）
 
+## DOT/冰冻状态（命运卡片元素子弹）
+var _fuse_dot_active: bool = false
+var _fuse_dot_type: String = ""        # fire / ice / poison
+var _fuse_dot_dps: float = 0.0         # 每秒伤害（真实值，非倍率）
+var _fuse_dot_timer: float = 0.0       # DOT 持续计时
+var _fuse_dot_duration: float = 0.0   # DOT 总持续时间
+var _fuse_dot_last_hp: int = 0        # 用于计算真实伤害
+var _fuse_dot_original_speed: float = 80.0  # 记录原始速度（冰冻后恢复）
+
+## 冰冻状态
+var _frozen: bool = false
+var _freeze_timer: float = 0.0        # 冰冻剩余时间
+var _freeze_original_modulate: Color = Color.WHITE
+
 ## AI状态机变量
 var _ai_state: AIState = AIState.IDLE
 var _alert_timer: float = 0.0       # ALERT状态剩余时间
@@ -147,12 +161,46 @@ func _fire_timers() -> void:
 func _physics_process(delta: float) -> void:
 	if _is_dead:
 		return
+	# === DOT 持续伤害 ===
+	if _fuse_dot_active and _fuse_dot_timer < _fuse_dot_duration:
+		_fuse_dot_timer += delta
+		# 每秒造成一次伤害（DOT DPS 是 "每秒"）
+		var tick_interval: float = 0.5  # 每0.5秒tick一次
+		var tick_damage: int = maxi(1, int(_fuse_dot_dps * tick_interval))
+		current_hp = max(0, current_hp - tick_damage)
+		_spawn_damage_number(global_position, tick_damage, false)
+		if shape:
+			match _fuse_dot_type:
+				"fire":
+					shape.color = Color(1.0, clampf(0.4 + _fuse_dot_timer * 0.1, 0.0, 0.8), 0.1, 1.0)
+				"poison":
+					shape.color = Color(0.1, clampf(0.7 - _fuse_dot_timer * 0.05, 0.1, 0.8), 0.1, 1.0)
+		if current_hp <= 0:
+			die()
+			return
+	# === 冰冻 ===
+	if _frozen:
+		_freeze_timer -= delta
+		if _freeze_timer <= 0.0:
+			_frozen = false
+			if shape:
+				shape.modulate = _freeze_original_modulate
+				var base_shape: Node = shape
+				if base_shape is ColorRect:
+					base_shape.scale = Vector2.ONE
+	# === 常规逻辑 ===
 	if _contact_timer > 0.0:
 		_contact_timer -= delta
 	if not player_ref or not is_instance_valid(player_ref):
 		player_ref = get_tree().get_first_node_in_group("player") as Node2D
 		if player_ref == null:
 			return
+
+	if _frozen:
+		# 冰冻时停止移动，不执行AI
+		velocity = velocity.move_toward(Vector2.ZERO, 999.0 * delta)
+		move_and_slide()
+		return
 
 	if awareness_enabled:
 		_ai_tick(delta)
@@ -568,8 +616,65 @@ func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.
 	flash_damage(is_crit)
 	enemy_hit.emit(global_position, amount, is_crit)
 	_spawn_damage_number(global_position, amount, is_crit)
+	# DOT 每次直接扣血也触发死亡检查
 	if current_hp <= 0:
 		die()
+
+## 命运卡片元素DOT入口（火焰/冰霜/剧毒子弹调用）
+func apply_dot(dot_type: String, dps: float, duration: float) -> void:
+	if _is_dead:
+		return
+	if not _fuse_dot_active or _fuse_dot_type != dot_type:
+		# 新类型DOT，重置叠加
+		_fuse_dot_active = true
+		_fuse_dot_type = dot_type
+		_fuse_dot_dps = dps
+		_fuse_dot_duration = duration
+		_fuse_dot_timer = 0.0
+		_fuse_dot_last_hp = current_hp
+	else:
+		# 同类型DOT，刷新持续时间并叠加伤害
+		_fuse_dot_duration = duration
+		_fuse_dot_dps += dps * 0.5  # 叠加时每秒伤害略微增加
+	_fuse_dot_timer = 0.0
+	# 视觉：敌人身上显示DOT状态颜色
+	_apply_dot_visual(dot_type)
+
+func _apply_dot_visual(dot_type: String) -> void:
+	if shape == null:
+		return
+	match dot_type:
+		"fire":
+			# 火焰：橙红色叠加
+			var fire_intensity := clampf(_fuse_dot_dps / 10.0, 0.0, 1.0)
+			shape.color = Color(1.0, 0.4 * (1.0 - fire_intensity), 0.1, 1.0)
+		"poison":
+			# 毒素：绿色叠加
+			var poison_intensity := clampf(_fuse_dot_dps / 10.0, 0.0, 1.0)
+			shape.color = Color(0.1 + 0.3 * poison_intensity, 0.7, 0.1, 1.0)
+		"ice":
+			# 冰霜：蓝色叠加（DOT视觉，冰冻走另一个通道）
+			pass
+
+## 冰冻入口（冰霜子弹命中时调用）
+func apply_freeze(freeze_dur: float) -> void:
+	if _is_dead:
+		return
+	if _frozen:
+		# 已冰冻则刷新时间（不叠加）
+		_freeze_timer = maxf(_freeze_timer, freeze_dur)
+	else:
+		_freeze_timer = freeze_dur
+		_freeze_original_modulate = shape.modulate if shape else Color.WHITE
+	_frozen = true
+	_fuse_dot_active = false  # 冰冻同时结束DOT
+	# 冰冻视觉：蓝白色，敌人停止移动
+	if shape:
+		shape.modulate = Color(0.5, 0.8, 1.0, 0.85)
+		# 冰晶效果用缩放表现（稍微放大）
+		var base_shape: Node = shape
+		if base_shape is ColorRect:
+			base_shape.scale = Vector2(1.15, 1.15)
 
 func die() -> void:
 	if _is_dead:
@@ -852,76 +957,3 @@ func apply_damage_multiplier(multiplier: float) -> void:
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool = false) -> void:
 	get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)
 	return
-	var scene_path := "res://scenes/DamageNumber.tscn"
-	var num_scene: PackedScene = load(scene_path)
-	if num_scene:
-		var label: Node = num_scene.instantiate()
-		if label is Label:
-			# 文本内容：暴击加 "!" 后缀
-			label.text = str(dmg) + ("!" if is_crit else "")
-			# 初始随机偏移，位置在敌人头顶
-			var offset := Vector2(randf_range(-8, 8), -20)
-			label.position = world_pos + offset
-			label.z_index = 200
-			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-
-			# --- 样式分层 ---
-			var font_size := 18
-			var base_color := Color(1.0, 0.35, 0.2, 1.0)   # 红橙
-			var anim_duration := 0.8
-			var float_range := 50.0
-
-			if is_crit:
-				# 暴击：金色，更大字号，更高飘幅
-				font_size = 30
-				base_color = Color(1.0, 0.92, 0.15, 1.0)   # 亮金
-				float_range = 65.0
-			elif dmg >= 50:
-				# 大伤害：橙色，更大字号
-				font_size = 24
-				base_color = Color(1.0, 0.55, 0.1, 1.0)    # 橙红
-				float_range = 58.0
-
-			# 字号覆盖 & 颜色
-			label.add_theme_font_size_override("font_size", font_size)
-			label.modulate = base_color
-
-			# 描边效果（通过暗色阴影模拟 Outline）
-			# 在 label 下方叠加一个偏移暗色副本做描边
-			var outline_label := Label.new()
-			outline_label.text = label.text
-			outline_label.add_theme_font_size_override("font_size", font_size)
-			outline_label.modulate = Color(0.0, 0.0, 0.0, 0.7)
-			outline_label.z_index = label.z_index - 1
-			outline_label.position = label.position + Vector2(2, 2)
-			outline_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			outline_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
-			parent.add_child(outline_label)
-
-			# --- 动画：飘字 + 透明度 + 缩放消失（与 DamageNumbers.gd 一致）---
-			label.scale = Vector2(1.25, 1.25)   # 初始放大（弹入感）
-			outline_label.scale = Vector2(1.25, 1.25)
-
-			var tween := label.create_tween()
-			tween.set_parallel(true)
-			tween.tween_property(label, "position:y", world_pos.y - float_range + offset.y, anim_duration).set_trans(Tween.TRANS_LINEAR)
-			tween.tween_property(label, "modulate:a", 0.0, anim_duration).set_trans(Tween.TRANS_LINEAR)
-			tween.tween_property(label, "scale", Vector2(0.75, 0.75), anim_duration).set_trans(Tween.TRANS_LINEAR)
-
-			var outline_tween := outline_label.create_tween()
-			outline_tween.set_parallel(true)
-			outline_tween.tween_property(outline_label, "position:y", world_pos.y - float_range + offset.y, anim_duration).set_trans(Tween.TRANS_LINEAR)
-			outline_tween.tween_property(outline_label, "modulate:a", 0.0, anim_duration).set_trans(Tween.TRANS_LINEAR)
-			outline_tween.tween_property(outline_label, "scale", Vector2(0.75, 0.75), anim_duration).set_trans(Tween.TRANS_LINEAR)
-
-			# 弹入动画：快速收缩到正常大小
-			var pop := label.create_tween()
-			pop.tween_property(label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BACK)
-			var outline_pop := outline_label.create_tween()
-			outline_pop.tween_property(outline_label, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_BACK)
-
-			# 完成后自毁
-			tween.chain().tween_callback(label.queue_free)
-			outline_tween.chain().tween_callback(outline_label.queue_free)

@@ -46,9 +46,6 @@ var _detail_popup: Panel = null
 var _detail_label: Label = null
 var _clicked_node_path: String = ""
 
-## 节点点击区域追踪（node_path → 节点引用）
-var _node_click_rects: Dictionary = {}
-
 ## 选中节点高亮
 var _selected_node: AssemblyNode = null
 const SELECTED_BG_COLOR: Color = Color(0.30, 0.25, 0.40, 0.95)
@@ -176,7 +173,7 @@ func _close_detail_popup() -> void:
 
 ## 面板显示时重置点击追踪
 func _on_panel_shown() -> void:
-	_node_click_rects.clear()
+	pass
 
 ## 隐藏面板（立即）
 func _hide_immediately() -> void:

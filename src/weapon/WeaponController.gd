@@ -68,6 +68,70 @@ func _on_reload_started() -> void:
 func _on_reload_finished() -> void:
 	pass  # 换弹完成可选音效
 
+## 换弹爆炸命运卡片（EXPLODE_ON_RELOAD）
+## 换弹完成时，检查 WeaponAssemblyTree 当前子弹节点是否标记了 explode_on_reload
+## 若标记则在玩家位置触发范围爆炸
+func _on_reload_finished() -> void:
+	if _audio:
+		_audio.play_reload_sfx()
+	# 检查换弹爆炸标记
+	if weapon_tree != null:
+		var bullet_node: AssemblyNode = _find_bullet_node_in_tree()
+		if bullet_node != null:
+			var stats: Dictionary = bullet_node.get_base_stats()
+			if stats.get("explode_on_reload", false):
+				var radius: float = stats.get("explosion_radius", 150.0)
+				var damage_scale: float = stats.get("explosion_damage_scale", 0.8)
+				var bullet_dmg: int = weapon_tree.bullet_damage
+				var explosion_damage: int = int(float(bullet_dmg) * damage_scale)
+				var player_pos: Vector2 = player.global_position if player != null else Vector2.ZERO
+				_explode_at(player_pos, explosion_damage, radius)
+
+func _find_bullet_node_in_tree() -> AssemblyNode:
+	if weapon_tree == null or weapon_tree.get_root() == null:
+		return null
+	var all_nodes: Array[AssemblyNode] = weapon_tree.get_root().get_all_descendants()
+	all_nodes.append(weapon_tree.get_root())
+	for node in all_nodes:
+		if node.node_type == 1:  # BULLET = 1
+			return node
+	return null
+
+## 换弹爆炸命运卡片：当检测到子弹有 explode_on_reload 标记时触发爆炸
+func trigger_explosion_on_reload(bullet_damage: int, bullet_global_pos: Vector2) -> void:
+	if _pending_explode == null:
+		return
+	var radius: float = _pending_explode.get("radius", 150.0)
+	var damage_scale: float = _pending_explode.get("damage_scale", 0.8)
+	var explosion_damage: int = int(float(bullet_damage) * damage_scale)
+	_explode_at(bullet_global_pos, explosion_damage, radius)
+	_pending_explode = null
+
+var _pending_explode: Dictionary = null  # 爆炸参数缓存（每次 fire 后从 weapon_tree 读取）
+
+func _explode_at(pos: Vector2, dmg: int, radius: float) -> void:
+	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
+	for e in enemies:
+		if not is_instance_valid(e):
+			continue
+		var dist: float = pos.distance_to(e.global_position)
+		if dist <= radius and e.has_method("take_damage"):
+			e.call("take_damage", dmg, false, Vector2.ZERO)
+	# 播放爆炸特效
+	_spawn_explosion_effect(pos, radius)
+
+func _spawn_explosion_effect(pos: Vector2, radius: float) -> void:
+	# 用 ColorRect 临时模拟爆炸范围光效（后续替换为专业特效场景）
+	var flash: ColorRect = ColorRect.new()
+	flash.color = Color(1.0, 0.5, 0.1, 0.6)
+	flash.size = Vector2(radius * 2.0, radius * 2.0)
+	flash.position = pos - Vector2(radius, radius)
+	flash.z_index = 950
+	get_tree().current_scene.add_child(flash)
+	var tween := flash.create_tween()
+	tween.tween_property(flash, "modulate:a", 0.0, 0.25)
+	tween.tween_callback(flash.queue_free)
+
 func fire() -> void:
 	if player == null or not is_instance_valid(player):
 		return

@@ -109,6 +109,8 @@ static func apply_card(
 			result = _apply_mutate_to_chain(card, tree, target_nodes)
 		FateCard.EffectAction.MUTATE_TO_TURRET_ON_LAND:
 			result = _apply_mutate_to_turret(card, tree, target_nodes)
+		FateCard.EffectAction.MUTATE_TO_HOME_ON_LAND:
+			result = _apply_mutate_to_home_on_land(card, tree, target_nodes)
 		FateCard.EffectAction.COPY_NODE:
 			result = _apply_copy_node(card, tree, target_nodes)
 		FateCard.EffectAction.FUSE_DAMAGE:
@@ -689,6 +691,48 @@ static func _apply_mutate_to_turret(
 	result.modified_nodes = [target]
 	result.effect_value = turret_duration
 	result.message = "Set turret-on-land (duration=%.1fs, rate=%.1f) on %s" % [turret_duration, turret_fire_rate, target.node_name]
+	return result
+
+
+## ===== 效果执行：MUTATE_TO_HOME_ON_LAND =====
+## 子弹落地后返回玩家，返回途中继续造成伤害（回家看看）
+static func _apply_mutate_to_home_on_land(
+	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
+) -> ApplyResult:
+	var result: ApplyResult = ApplyResult.new()
+	if targets.is_empty():
+		result.error = ApplyError.NO_TARGET
+		return result
+
+	var target: AssemblyNode = targets[0]
+	var home_lifetime: float = card.effect.get("home_lifetime", 5.0)
+	var return_damage_mult: float = card.effect.get("return_damage_multiplier", 0.6)
+
+	var stats: Dictionary = target.get_base_stats()
+	stats["home_on_land"] = true
+	stats["home_lifetime"] = home_lifetime
+	stats["return_damage_multiplier"] = return_damage_mult
+	target.set_base_stats(stats)
+	target.tags.append("Fate.HomeOnLand")
+	tree.refresh_stats()
+
+	# Apply visual: add legs to indicate "returning home"
+	if card.visual.has("action"):
+		var visual_action: String = str(card.visual.get("action", ""))
+		if visual_action == "AddLegs":
+			var leg_count: int = int(card.visual.get("leg_count", 4))
+			var vstats: Dictionary = target.get_base_stats()
+			vstats["visual_legs"] = leg_count
+			vstats["visual_has_legs"] = true
+			target.set_base_stats(vstats)
+			target.tags.append("Fate.Visual.HasLegs")
+			target.node_name += " 🦵"
+
+	result.success = true
+	_fate_audio_card_applied()
+	result.modified_nodes = [target]
+	result.effect_value = home_lifetime
+	result.message = "Set home-on-land (lifetime=%.1fs) on %s" % [home_lifetime, target.node_name]
 	return result
 
 

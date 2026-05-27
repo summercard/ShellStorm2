@@ -1627,16 +1627,16 @@ func _show_extraction_success() -> void:
 	extraction_success_panel.modulate.a = 0.0
 	extraction_success_panel.scale = Vector2(0.92, 0.92)
 
-	# 获取背包和保险格物品
-	var extracted: Array[Dictionary] = []
-	if _inventory_module and _inventory_module.has_method("get_all_items"):
-		extracted = _inventory_module.get_all_items()
-	var insured: Array[Dictionary] = []
+	# 获取背包和保险格物品（用 get_occupied_slots，返回 {index, item, count} 结构）
+	var extracted_slots: Array[Dictionary] = []
+	if _inventory_module and _inventory_module.has_method("get_occupied_slots"):
+		extracted_slots = _inventory_module.get_occupied_slots()
+	var insured_slots: Array[Dictionary] = []
 	if _insurance_module and _insurance_module.has_method("get_all_insured_items"):
-		insured = _insurance_module.get_all_insured_items()
+		insured_slots = _insurance_module.get_all_insured_items()
 
 	# 更新物品数量标签
-	var total_count := extracted.size() + insured.size()
+	var total_count := extracted_slots.size() + insured_slots.size()
 	if extracted_count_label:
 		extracted_count_label.text = "物品已保存: %d 件" % total_count
 
@@ -1644,8 +1644,9 @@ func _show_extraction_success() -> void:
 	if extracted_items_vbox:
 		for child in extracted_items_vbox.get_children():
 			child.queue_free()
-		for item in extracted:
-			var item_name: String = item.get("id", "未知物品")
+		for slot_data in extracted_slots:
+			var item: Dictionary = slot_data.get("item", {})
+			var item_name: String = item.get("name", item.get("id", "未知物品"))
 			var tier: int = item.get("loot_table_tier", 0)
 			var lbl := Label.new()
 			lbl.text = "• %s" % item_name
@@ -1661,8 +1662,9 @@ func _show_extraction_success() -> void:
 				_:
 					lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)  # 米黄
 			extracted_items_vbox.add_child(lbl)
-		for item in insured:
-			var item_name: String = item.get("id", "保险物品")
+		for slot_data in insured_slots:
+			var item: Dictionary = slot_data.get("item", {})
+			var item_name: String = item.get("name", item.get("id", "保险物品"))
 			var tier: int = item.get("loot_table_tier", 0)
 			var lbl := Label.new()
 			lbl.text = "• %s [保险]" % item_name
