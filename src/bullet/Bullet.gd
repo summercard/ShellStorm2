@@ -357,13 +357,31 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	_fate_scale = 1.0
 	_fate_homing = false
 	_fate_return_triggered = false
+	_fate_uncontrolled_gun = false
+	_fate_size_growth = false
+	_fate_spawn_turret_on_land = false
+	_fate_home_on_land = false
+	_fate_explode_on_reload = false
 	# 重置弹跳/连锁状态
+	_fate_bounce = false
 	_fate_bounce_count = 0
-	_fate_chain_targets_hit.clear()
+	_fate_chain = false
 	_fate_chain_count = 0
+	_fate_chain_targets_hit.clear()
 	# 重置元素DOT叠加
+	_fate_fuse_type = ""
+	_fate_fuse_dot_dps = 0.0
+	_fate_fuse_dot_duration = 0.0
 	_fate_fuse_dot_stacks = 1
+	_fate_fuse_dot_timer = 0.0
 	_fate_freeze_duration = 0.0
+	# 还原子弹颜色（消除上一发的命运颜色残留）
+	if shape:
+		shape.color = Color.WHITE
+		shape.scale = Vector2.ONE
+	if glow:
+		glow.color = Color(1.0, 0.7, 0.1, 0.6)
+		glow.scale = Vector2.ONE
 	# 重置轨迹数据
 	_trail_points.clear()
 	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
@@ -482,13 +500,13 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 		elif _fate_fuse_type == "ice" and shape:
 			shape.color = Color(0.3, 0.75, 1.0, 1.0)
 			glow.color = Color(0.2, 0.6, 1.0, 0.8)
+		elif _fate_fuse_type == "poison" and shape:
+			shape.color = Color(0.25, 0.75, 0.2, 1.0)
+			glow.color = Color(0.15, 0.6, 0.1, 0.8)
 		# 注意：冰冻和冰DOT的实际触发在命中时（_apply_element_dot）处理
 		# 此处只设置子弹颜色标记
 		# 冰冻持续时间（由命运卡片注入，命中时触发）
 		_fate_freeze_duration = float(node_stats.get("freeze_duration", 0.0))
-	elif _fate_fuse_type == "poison" and shape:
-		shape.color = Color(0.25, 0.75, 0.2, 1.0)
-		glow.color = Color(0.15, 0.6, 0.1, 0.8)
 	# 换弹爆炸（换弹爆炸诅咒卡片）
 	if node_stats.get("explode_on_reload", false):
 		_fate_explode_on_reload = true

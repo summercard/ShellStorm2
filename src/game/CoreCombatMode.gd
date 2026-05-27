@@ -564,7 +564,7 @@ func _complete_extraction() -> void:
 				"score": score,
 				"kills": kills,
 				"wave": current_wave,
-				"floor": max(1, current_wave),
+				"floor": _get_floor_for_extraction(),
 				"currency": GameManager.currency,
 				"risk": run_risk,
 				"points": points,
@@ -576,6 +576,12 @@ func _get_weapon_tree():
 	if player != null and is_instance_valid(player) and player.has_method("get_weapon_tree"):
 		return player.get_weapon_tree()
 	return null
+
+## 获取撤离时的实际楼层（用波次估算：每3波约等于1层）
+func _get_floor_for_extraction() -> int:
+	if current_wave > 0:
+		return maxi(1, (current_wave - 1) / 3 + 1)
+	return 1
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
 	_update_hp_bar(current, maximum)
