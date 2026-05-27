@@ -493,3 +493,96 @@
 1. PH11大地图小地图实际运行验证（RoomGameMode map_generated信号发出时机 + 小地图节点数据正确性）
 2. RoomBoss.tscn接入DemoRoomChain验证Boss战完整流程
 3. 继续polish其他边界问题
+
+## 轮次296（2026-05-28 04:14 UTC+8）
+
+### 维度选择
+**命运卡片系统代码链路终验 — FUSE类（火焰/冰霜/剧毒） + crit_on_kill 完整性确认**
+
+从核心玩法"命运卡片改造"出发，对轮次293以来发现的所有命卡链路做最后一次系统性代码审查，确认所有命卡从 FateCardEngine → AssemblyNode.base_stats → Bullet → Enemy 端的完整链路。
+
+### 结论
+**命运卡片系统代码实现阶段宣告结束。** 所有命卡链路在代码层面完整：
+
+| 命卡 | 链路状态 |
+|---|---|
+| 超频（fire_rate_scale） | ✅ 已修复（轮次295） |
+| overheat_penalty 受击惩罚 | ✅ 链路完整 |
+| 子弹背枪（ATTACH_GUN_TO_BULLET） | ✅ 链路完整 |
+| 枪上加枪（ATTACH_GUN_TO_GUN） | ✅ 链路完整 |
+| 落地炮台（MUTATE_TO_TURRET_ON_LAND） | ✅ 链路完整 |
+| 追踪弹（MUTATE_TO_HOMING） | ✅ 链路完整 |
+| 乱射（OUT_OF_CONTROL） | ✅ 链路完整 |
+| crit_on_kill | ✅ 链路完整 |
+| fate_mark_enemy | ✅ 已修复（轮次247） |
+| 火焰子弹（FUSE_DAMAGE→apply_dot） | ✅ 链路完整 |
+| 冰霜子弹（FUSE_DAMAGE→apply_freeze） | ✅ 链路完整 |
+| 剧毒子弹（FUSE_DAMAGE→apply_dot+叠加） | ✅ 链路完整 |
+
+### Enemy 端关键方法确认
+- `EnemyBase.apply_dot(dot_type, dps, duration)` ✅ — 带视觉反馈（橙红色=fire，绿色=poison）
+- `EnemyBase.apply_freeze(freeze_dur)` ✅ — 带蓝白色视觉 + 停止移动
+- `enemy_died` 信号 → CoreCombatMode/RoomGameMode → `add_crit_on_kill_stack()` ✅
+
+### 验收标准
+- [x] Godot headless --quit 验证编译通过（EXIT 0）
+- [ ] **人类试玩验证**：火焰子弹命中敌人后视觉（橙红色持续闪烁）和 DOT 实际伤害
+- [ ] **人类试玩验证**：冰霜子弹命中敌人后冻结 0.5s/0.25s（精英）+ 蓝白色视觉
+- [ ] **人类试玩验证**：剧毒子弹叠加 5 层视觉（敌人变深绿）+ 层数显示
+- [ ] **人类试玩验证**：crit_on_kill 击杀后下一次射击必暴击（2.5x）
+- [ ] **人类试玩验证**：子弹背枪实际射击（🔫挂枪视觉 + 子弹飞行中开火）
+- [ ] **人类试玩验证**：活子弹实际追踪敌人（👁视觉）
+- [ ] **人类试玩验证**：落地炮台实际生成（🏰）
+- [ ] **人类试玩验证**：开门命运选卡后 UI 通知是否正确显示
+- [ ] **人类试玩验证**：MapFateTriggers 环境命运触发器实际触发与效果
+- [ ] **人类试玩验证**：撤离守点敌潮强度缩放实际效果
+- [ ] **人类试玩验证**：小地图刷新（轮次267修复后）
+
+### 剩余风险
+- 所有剩余任务均为**人类试玩验证**，无法通过代码审查替代
+- fuse_poison 命卡 preset 缺少显式 `dot_damage_per_stack` 和 `max_stacks` key（cosmetic，不影响功能）
+
+### 下轮最可能方向
+1. **人类试玩验证**（最高且唯一优先级）
+2. 搜打撤经济系统收束（魂币收益/带出结算/保险格完整性）
+3. 地图系统完善（PH11 小地图实际运行、Boss 房完整流程）
+
+## 轮次299（2026-05-28 04:35 UTC+8）
+
+### 维度选择
+**撤离链路物品保存缺失 — CoreCombatMode._complete_extraction() 背包+保险格→基地保险柜持续化修复**
+
+从核心玩法"搜打撤经济系统"链路审查，发现撤离成功后的物品保存断点：
+- `_complete_extraction()` 中仅计算了魂币→extraction_points的转换
+- 背包物品（inventory_module.get_occupied_slots()）和保险格物品（insurance_module.get_all_insured_items()）**从未被存入基地保险柜**
+- BaseManager 已有 `add_vault_item(item)` 方法，但 CoreCombatMode 在撤离时从未调用
+- PH09 设计意图："撤离成功时，背包与保险格物品会尝试存回基地保险柜"
+- **结果**：玩家辛辛苦苦捡的物品，撤离成功后全部丢失——严重破坏搜打撤核心循环的满足感
+
+### 玩家可感知结果
+玩家撤离成功后，背包和保险格中的物品现在正确存入基地保险柜。下局可以在基地 VaultMenu 取回这些物品，而不是"东西白捡了"。保险柜满时物品记录到日志而非静默丢失。
+
+### 修改内容
+
+#### `src/game/CoreCombatMode.gd` — _complete_extraction() 新增物品保存逻辑
+- 遍历 inventory_module.get_occupied_slots()，每个物品通过 BaseManager.add_vault_item() 存入基地保险柜（标记 from_inventory=true）
+- 遍历 insurance_module.get_all_insured_items()，同样存入保险柜（标记 from_insurance=true）
+- 保险柜满时（add_vault_item 返回 false）记录日志，不静默丢弃
+- 撤离日志现在显示：魂→extraction_points、背包物品件数、保险格件数、实际存入件数
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅
+- [ ] 人类试玩：局内背包有物品 → 撤离成功 → 回基地 → VaultMenu 看到这些物品
+- [ ] 人类试玩：保险格有物品 → 撤离成功 → 回基地 → VaultMenu 看到保险物品
+- [ ] 人类试玩：保险柜满时，溢出物品记录到日志但不 crash
+- [ ] 人类试玩：保险格物品来源标注（from_insurance 标签）可用于 VaultMenu 显示逻辑
+
+### 剩余风险
+- VaultMenu 是否正确读取 vault_items 并显示，需要确认 VaultMenu.gd 的 load_vault 内容
+- 带出物品的 quality/tier 属性是否正确保留（影响 VaultMenu 显示的品质边框颜色）
+- 基地升级增加保险柜容量后，vault_capacity 正确更新
+
+### 下轮最可能方向
+1. **人类试玩验证撤离物品保存**：实际撤离一局，确认 VaultMenu 出现物品
+2. **VaultMenu 显示逻辑审查**：读取 vault_items → 渲染品质边框 → 取出按钮
+3. **死亡结算完整性**：局内死亡时背包未保险物品按比例掉落（DeathSettlementModule）

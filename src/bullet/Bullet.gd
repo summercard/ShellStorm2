@@ -36,6 +36,7 @@ var _fate_fuse_dot_stacks: int = 1      # 当前叠加层数
 var _fate_fuse_max_stacks: int = 5     # 最大叠加层数
 var _fate_fuse_dot_timer: float = 0.0   # DOT tick 计时器
 var _fate_freeze_duration: float = 0.0   # 冰冻持续时间（秒），由命运卡片注入
+var _fate_freeze_duration_elite: float = 0.0  # 精英冰冻时间（短版本）
 
 ## 命运卡片行为：换弹爆炸（explode_on_reload）
 ## 注意：换弹爆炸由 WeaponController 监听 reload 信号触发，Bullet 本身只存储爆炸参数
@@ -375,6 +376,7 @@ func fire(pos: Vector2, dir: Vector2, spd: float, dmg: int, crit: bool = false) 
 	_fate_fuse_dot_stacks = 1
 	_fate_fuse_dot_timer = 0.0
 	_fate_freeze_duration = 0.0
+	_fate_freeze_duration_elite = 0.0
 	# 还原子弹颜色（消除上一发的命运颜色残留）
 	if shape:
 		shape.color = Color.WHITE
@@ -507,6 +509,7 @@ func apply_fate_stats_from_node(bullet_node: AssemblyNode) -> void:
 		# 此处只设置子弹颜色标记
 		# 冰冻持续时间（由命运卡片注入，命中时触发）
 		_fate_freeze_duration = float(node_stats.get("freeze_duration", 0.0))
+		_fate_freeze_duration_elite = float(node_stats.get("freeze_duration_elite", 0.25))
 	# 换弹爆炸（换弹爆炸诅咒卡片）
 	if node_stats.get("explode_on_reload", false):
 		_fate_explode_on_reload = true
@@ -600,10 +603,15 @@ func _apply_element_dot(enemy: Node) -> void:
 		return
 	# 增加叠加层数（不超过上限）
 	_fate_fuse_dot_stacks = mini(_fate_fuse_dot_stacks + 1, _fate_fuse_max_stacks)
-	# 冰冻子弹：命中时触发冰冻，不触发DOT
+	# 冰冻子弹：命中时触发冰冻（精英减半），不触发DOT
 	if _fate_freeze_duration > 0.0 and enemy.has_method("apply_freeze"):
-		enemy.call("apply_freeze", _fate_freeze_duration)
+		var freeze_dur: float = _fate_freeze_duration
+		# 检查目标是否为精英怪，精英冰冻时间减半
+		if enemy.has_method("is_elite") and enemy.call("is_elite") == true:
+			freeze_dur = _fate_freeze_duration_elite
+		enemy.call("apply_freeze", freeze_dur)
 		_fate_freeze_duration = 0.0  # 重置防止重复触发
+		_fate_freeze_duration_elite = 0.0
 		return  # 冰冻优先，不触发DOT
 	# 元素DOT：附加持续伤害
 	if enemy.has_method("apply_dot"):

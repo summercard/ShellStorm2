@@ -277,6 +277,11 @@ func get_crit_on_kill_stack() -> int:
 	return _crit_on_kill_stack
 
 
+## 公开接口：获取超频受击惩罚倍率（由超频命卡写入，取值>1时玩家受击伤害增加）
+func get_overheat_penalty() -> float:
+	return _overheat_penalty
+
+
 ## 公开接口：增加击杀必暴击堆栈（由外部调用，RoomGameMode 在 kill_recorded 信号触发后调用）
 func add_crit_on_kill_stack(count: int = 1) -> void:
 	_crit_on_kill_stack = mini(_crit_on_kill_stack + count, MAX_CRIT_STACK)

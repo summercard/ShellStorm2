@@ -133,7 +133,11 @@ func set_input_locked(locked: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_invincible or current_hp <= 0:
 		return
-	var final_damage: int = maxi(1, amount - armor)
+	# 获取武器树超频惩罚（每次射击叠加效果，超频命卡写入 overheat_penalty>1）
+	var overheat_mult: float = 1.0
+	if weapon_tree != null and weapon_tree.has_method("get_overheat_penalty"):
+		overheat_mult = weapon_tree.call("get_overheat_penalty")
+	var final_damage: int = maxi(1, int(float(amount - armor) * overheat_mult))
 	current_hp = max(0, current_hp - final_damage)
 	hp_changed.emit(current_hp, max_hp)
 	_flash_damage()

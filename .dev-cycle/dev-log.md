@@ -137,3 +137,244 @@ func _get_floor_for_extraction() -> int:
 1. 人类试玩验证（最高且唯一优先级）
 2. 若发现 Bug → 针对性修复
 3. 若未发现 Bug → 战斗视觉反馈（命中特效/击中音效）或关卡内容
+
+## 轮次 292 — 2026-05-28 03:36 UTC+8
+
+### 维度
+元素子弹视觉链路终态确认 + crit_on_kill/BLESS_DEAD 全链路交叉验证
+
+### 问题分析
+本轮进行代码链路深度审查，验证以下关键系统是否正确落地：
+
+**1. 元素子弹视觉链路（三类融合子弹）**
+- **火焰子弹 (fire)**：Bullet.gd 检测到 `fuse_damage_type == "fire"` → shape.color=橙红色 + glow.color → 命中时 DOT 叠加使颜色加深 ✅
+- **冰霜子弹 (ice)**：Bullet.gd 检测到 `fuse_damage_type == "ice"` → shape.color=冰蓝色 + glow.color → 命中时冰冻冻结（不触发 DOT）→ 敌人 apply_freeze() ✅
+- **剧毒子弹 (poison)**：Bullet.gd 检测到 `fuse_damage_type == "poison"` → shape.color=绿色 + glow.color → 命中时 DOT 叠加层数（max 5层）→ 敌人身上绿色加深 ✅
+
+**2. crit_on_kill 击杀必暴击链路（全链路贯通）**
+```
+apply_card(SCALE_NODE + crit_on_kill) 
+  → stats["crit_on_kill"]=true, stats["crit_damage_multiplier"]=2.5
+  → WeaponAssemblyTree: fire() 每次检查 consume_crit_on_kill_stack()
+  → enemy_died.emit() → kill_recorded.emit()
+  → _on_kill_for_crit_on_kill() → add_crit_on_kill_stack(1)
+  → consume_crit_on_kill_stack() → is_crit=true（优先消费）
+```
+- 击杀堆栈上限 MAX_CRIT_STACK = 10
+- 基础暴击率 10%，优先消费击杀堆栈 ✅
+
+**3. BLESS_DEAD 亡者祝福链路（全链路贯通）**
+```
+FateCardEngine._apply_bless_dead() 
+  → RoomGameMode.apply_bless_dead(threshold=0.3, duration=30, bonus=0.1)
+  → RoomGameMode._on_bless_dead_hp_check() 监听 hp_changed
+  → 存活30秒后 → player.apply_damage_multiplier(1.1)
+  → WeaponAssemblyTree._damage_multiplier = 1.1
+  → fire() → final_damage *= 1.1（对所有伤害生效）
+```
+
+**4. 伤害飘字系统**
+- EnemyBase.gd:958 → `get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)`
+- GameUIManager.show_damage_popup() 手动创建飘字 Label ✅
+- DOT 每次扣血也触发 `_spawn_damage_number()` ✅
+
+**5. Godot headless 编译验证**
+- 轮次291已确认 EXIT 0 ✅，本次无代码改动
+
+### 本轮无新增代码改动（审查轮次）
+
+### 验证
+- Godot headless --quit-after 3: **EXIT 0** ✅（轮次291验证，代码无改动）
+- commit: `66ed04d` ✅
+
+### 剩余风险（全部人类试玩验证项）
+1. 冰霜子弹命中冻结效果（0.5s/0.25s for elite）
+2. 火焰子弹命中后 DOT 视觉（橙红色敌人）
+3. 剧毒子弹叠加5层视觉（绿色加深）
+4. 精英名字+🔫挂枪+活子弹追踪+落地炮台+crit×2.5暴击实际体验
+5. FateCardEngine._apply_grant_random_card() 随机选卡效果
+6. 开门命运选卡后通知是否正确显示
+7. MapFateTriggers 环境命运触发器实际触发与效果
+8. 撤离守点敌潮强度缩放实际效果
+9. 炮台射击间隔稳定性（dt上限保护）
+10. 搜打撤经济系统整体平衡
+11. 超频命卡（overheat_penalty）受击惩罚实际表现
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`，所有核心系统代码链路已确认贯通。剩余所有待验证项均为"人类试玩才能确认"的体验级验证。继续以孤立 cron 推进。
+
+### 下轮最可能方向
+1. 人类试玩验证（最高且唯一优先级）
+2. 若发现 Bug → 针对性修复
+3. 若未发现 Bug → 战斗视觉反馈或关卡内容扩展
+
+## 轮次 301 — 2026-05-28 04:44 UTC+8
+
+### 维度
+系统终态审查 + 轮次 301 验证
+
+### 问题分析
+本轮审查轮次（轮次 300 → 301），验证最新代码改动是否正确落地：
+
+**审查项 1：精英冰冻时间缩短（Bullet.gd）**
+- `_fate_freeze_duration_elite` 变量声明 ✅
+- `apply_fate_stats_from_node()` 中 `freeze_duration_elite` 默认 0.25s ✅
+- `_apply_element_dot()` 中对精英检测 `is_elite()` 后使用缩短冰冻时间 ✅
+- 普通怪：完整冰冻时间；精英怪：0.25s（短版本）✅
+
+**审查项 2：超频受击惩罚（Player.gd + WeaponAssemblyTree.gd）**
+- `get_overheat_penalty()` 公开接口 ✅
+- `refresh_stats()` 中读取 `stats["overheat_penalty"]` → `_overheat_penalty` ✅
+- `Player.take_damage()` 中调用 `get_overheat_penalty()` 并乘算伤害 ✅
+- 超频命卡（OVERCLOCKED）施压后实际影响受击伤害 ✅
+
+**审查项 3：撤离物品保存（CoreCombatMode.gd）**
+- `inventory_module.get_occupied_slots()` → `BaseManager.add_vault_item()` ✅
+- `insurance_module.get_all_insured_items()` → `BaseManager.add_vault_item()` ✅
+- 物品标记 `from_inventory`/`from_insurance` ✅
+- 保险柜满时返回 false 并记录日志 ✅
+- 撤离日志显示实际存入件数 ✅
+
+**审查项 4：FateCardEngine 超频命卡 fire_rate_scale**
+- 变量名 `fire_rate_scale` 替代旧的 `multiplier` ✅
+- `stats["fire_rate"]` 正确乘算 ✅
+- `overheat_penalty` 正确写入 ✅
+
+### 验证
+- Godot headless --check-only --quit: **EXIT 0** ✅
+
+### 系统终态确认（六维度）
+| 系统 | 落地状态 | 关键证据 |
+|---|---|---|
+| 搜打撤全链路 | ✅ | 撤离→基地保险柜（背包+保险格）；魂→积分；带出结算 |
+| 命卡系统 | ✅ | 34 presets × 28 _apply；overheat_penalty 连接到 Player.gd |
+| 精英成长档案池 | ✅ | 精英冰冻时间缩短（0.25s vs 0.5s）差异化 |
+| Boss框架 | ✅ | 3阶段 HP 切换 + BossSkillNode |
+| 武器装配树 | ✅ | WeaponAssemblyTree + WeaponDisplay + Panel 详情弹窗 |
+| 元素子弹视觉 | ✅ | 火焰 DOT / 冰霜冻结（精英减半）/ 剧毒叠加 |
+
+### 剩余风险（全部人类试玩验证项）
+1. 冰霜子弹命中冻结效果（0.5s/0.25s for elite）
+2. 火焰子弹命中后 DOT 视觉（橙红色敌人）
+3. 剧毒子弹叠加5层视觉（绿色加深）
+4. 精英名字+🔫挂枪+活子弹追踪+落地炮台+crit×2.5暴击实际体验
+5. FateCardEngine._apply_grant_random_card() 随机选卡效果
+6. 开门命运选卡后通知显示
+7. 撤离成功面板楼层显示
+8. 保险格物品在 VaultMenu 的正确显示
+9. 基地 VaultMenu 读取 vault_items 并渲染品质边框
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`，系统完整度满足全面终态标准，所有已知代码改动均已验证通过 EXIT 0。继续以孤立 cron 推进，等待人类主导试玩验证。
+
+### 下轮最可能方向
+1. 人类试玩验证（最高且唯一优先级）
+2. VaultMenu 显示逻辑审查（若发现显示问题）
+3. 若发现 Bug → 针对性修复后继续排 cron
+
+## 轮次 301 — 2026-05-28 04:47 UTC+8
+
+### 维度
+系统终态最终确认 + 炮台TurretMode链路审查 + 循环停止决策
+
+### 本轮审查结果
+
+**炮台TurretMode除零风险审查**
+- `_spawn_fate_turret()` 中 `turret_fire_interval = 1.0 / turret_fire_rate`
+- `_attached_gun_fire_rate` 默认值 `4.0`，始终 > 0 → **无除零风险** ✅
+- `_turret_loop` 有 `dt = minf(delta, 0.05)` 上限保护 ✅
+- 炮台通过 `is_instance_valid` 检查目标有效性 ✅
+- 炮台自毁由 `max_lifetime = _fate_turret_duration` 驱动 ✅
+
+**GRANT_RANDOM_CARD链路终验**
+- 从 `FateCardPresets.playable_presets()` 过滤 `CURSE` 和 `Fate.MapTrigger` 后随机选卡
+- 真正执行 `FateCardEngine.apply_card(random_card, tree)`，修改武器树 ✅
+- `bridge.record_applied_card(random_card)` 记录到玩家已使用列表 ✅
+- 桥接器未就绪时降级为仅记录 ⚠️（但主要链路完整）✅
+
+### 验证
+- Godot headless --check-only --quit: **EXIT 0** ✅
+- 本轮无新增代码改动（审查轮次）
+
+### 循环停止决策
+**停止自动循环** — 系统完整度已全面达标，所有核心命卡链路已确认贯通。剩余待验证项全部为"人类试玩才能确认"的体验级验证，无法通过代码审查替代。
+
+### 已确认贯通的核心系统
+| 系统 | 状态 | 关键里程碑 |
+|---|---|---|
+| 搜打撤全链路 | ✅ | extraction_points→基地保险柜（背包+保险格物品）；魂→积分 |
+| 命卡34张×28个_apply | ✅ | crit×2.5/BLESS_DEAD/MAP_TRIGGER/GRANT_RANDOM_CARD/FUSE |
+| 精英成长档案池 | ✅ | 冰冻时间差异化（普通0.5s/精英0.25s）；警觉联动 |
+| Boss框架 | ✅ | 3阶段HP切换+BossSkillNode |
+| 武器装配树 | ✅ | WeaponAssemblyTree+WeaponDisplay+Panel详情弹窗+炮台节点 |
+| 元素子弹视觉 | ✅ | 火焰DOT橙红/冰霜冻结（精英减半）/剧毒5层叠加变色 |
+| 伤害飘字 | ✅ | is_crit=true时黄色大号飘字(DamageNumbers) |
+| 保险柜 | ✅ | VaultMenu显示+stage_vault_item_for_loadout取出+基地升级容量 |
+| 区域增援+精英警觉 | ✅ | RegionalSpawnController+P2精英force_alert |
+
+### 剩余人类试玩验证项（全部停驻）
+1. 冰霜子弹命中冻结效果（0.5s/0.25s for elite）— 实际冻结是否生效
+2. 火焰子弹命中后DOT视觉（橙红色敌人）— DOT叠加变色是否可见
+3. 剧毒子弹叠加5层视觉（绿色加深）— 层数叠加变色是否可见
+4. 精英名字+🔫挂枪+活子弹追踪+落地炮台+crit×2.5暴击实际体验
+5. FateCardEngine._apply_grant_random_card() 随机命卡实际效果
+6. 开门命运选卡后通知显示
+7. 撤离成功面板楼层显示
+8. 基地VaultMenu正确显示vault_items
+9. 超频命卡（overheat_penalty）受击惩罚实际表现
+
+### 循环状态更新
+`cycle-state.json`: `status: "running"` → `status: "stopped"`
+
+### 主人下一步
+请实际启动游戏试玩验证以上体验项。发现任何Bug可通过对话告知，杰西卡会针对性修复并恢复自动化循环。
+
+## 轮次 302 — 2026-05-28 06:55 UTC+8
+
+### 维度
+撤离保险柜逻辑终验 + 代码提交 + 循环停止决策
+
+### 问题分析
+审查 `_complete_extraction()` 撤离结算链路：
+
+**确认：** `add_extraction_points` 调用始终在 `_base_manager` 检查块内（第 551-555 行），保险柜存入逻辑在同一检查块内执行（第 557-580 行），**不是覆盖关系**。轮次 301 的"覆盖"判断为误判。
+
+**已验证链路（HEAD）：**
+- 魂币 → extraction_points：`points = currency / 2` → `_base_manager.call("add_extraction_points", points)` ✅
+- 背包物品 → 基地保险柜：`inventory_module.get_occupied_slots()` → 逐件 `add_vault_item()` ✅
+- 保险格物品 → 基地保险柜：`insurance_module.get_all_insured_items()` → 逐件 `add_vault_item()` ✅
+- 撤离面板显示：`_get_floor_for_extraction()` 正确用波次估算楼层 ✅
+
+### 代码改动
+**提交：** `d4f53f9` — feat: 撤离成功保存背包+保险格物品到基地保险柜；补全命卡系统polish（轮次302）
+
+### 验证
+- Godot headless --check-only --quit: **EXIT 0** ✅
+
+### 系统终态确认（六维度）
+| 系统 | 状态 | 关键里程碑 |
+|---|---|---|
+| 搜打撤全链路 | ✅ | 撤离→基地保险柜（背包+保险格）；魂→积分；带出结算 |
+| 命卡系统 | ✅ | 34 presets × 28 _apply |
+| 精英成长档案池 | ✅ | 冰冻时间差异化 |
+| Boss框架 | ✅ | 3阶段 HP 切换 + BossSkillNode |
+| 武器装配树 | ✅ | WeaponAssemblyTree + WeaponDisplay + Panel |
+| 元素子弹视觉 | ✅ | 火焰DOT/冰霜冻结/剧毒叠加 |
+
+### 循环停止决策
+**状态 `stopped`**，不续排自动化循环。所有系统已满足终态标准。剩余全部为人类试玩验证项。
+
+### 主人下一步
+请实际启动游戏，验证以下体验项：
+1. 冰霜子弹命中冻结效果（0.5s/0.25s for elite）
+2. 火焰子弹命中后 DOT 视觉（橙红色敌人）
+3. 剧毒子弹叠加 5 层视觉（绿色加深）
+4. 精英名字+🔫挂枪+活子弹追踪+落地炮台+crit×2.5 暴击实际体验
+5. FateCardEngine._apply_grant_random_card() 随机命卡效果
+6. 开门命运选卡后通知显示
+7. 撤离成功面板楼层显示
+8. 基地 VaultMenu 正确显示 vault_items
+9. 超频命卡（overheat_penalty）受击惩罚实际表现
+10. 撤离成功后台保险柜物品是否正确带入下局
+
+发现任何 Bug 可通过对话告知，杰西卡会针对性修复。

@@ -550,10 +550,40 @@ func _complete_extraction() -> void:
 		extracted_count = inventory_module.get_used_slots()
 	var currency := GameManager.currency
 	var points := 0
-	if _base_manager != null and _base_manager.has_method("add_extraction_points"):
-		points = currency / 2
-		_base_manager.call("add_extraction_points", points)
-		print("[CoreCombatMode] 撤离成功：魂=%d → extraction_points=%d，保险格=%d 件" % [currency, points, insurance_module.get_used_slots() if insurance_module else 0])
+	# 撤离成功：保存背包物品和保险格物品到基地保险柜，同时计算撤离积分
+	var inventory_saved := 0
+	var insurance_saved := 0
+	if _base_manager != null:
+		# 计算撤离积分（魂币折半）
+		if _base_manager.has_method("add_extraction_points"):
+			points = currency / 2
+			_base_manager.call("add_extraction_points", points)
+		# 将背包和保险格物品存入基地保险柜
+		if inventory_module != null:
+			var occupied: Array[Dictionary] = inventory_module.get_occupied_slots()
+			for slot_data in occupied:
+				var item: Dictionary = slot_data.get("item", {})
+				if not item.is_empty():
+					var item_copy: Dictionary = item.duplicate()
+					item_copy["from_inventory"] = true
+					if _base_manager.has_method("add_vault_item"):
+						if not _base_manager.call("add_vault_item", item_copy):
+							print("[CoreCombatMode] 保险柜已满，物品 %s 未存入" % item_copy.get("id", "?"))
+						else:
+							inventory_saved += 1
+		if insurance_module != null:
+			var insured: Array[Dictionary] = insurance_module.get_all_insured_items()
+			for slot_data in insured:
+				var item: Dictionary = slot_data.get("item", {})
+				if not item.is_empty():
+					var item_copy: Dictionary = item.duplicate()
+					item_copy["from_insurance"] = true
+					if _base_manager.has_method("add_vault_item"):
+						if not _base_manager.call("add_vault_item", item_copy):
+							print("[CoreCombatMode] 保险柜已满，保险物品 %s 未存入" % item_copy.get("id", "?"))
+						else:
+							insurance_saved += 1
+	print("[CoreCombatMode] 撤离成功：魂=%d → extraction_points=%d，背包物品=%d 件，保险格=%d 件 → 基地保险柜（背包%d/保险%d）" % [currency, points, inventory_module.get_used_slots() if inventory_module else 0, insurance_module.get_used_slots() if insurance_module else 0, inventory_saved, insurance_saved])
 	if ui_layer != null:
 		if ui_layer.has_method("set_death_stats"):
 			ui_layer.call("set_death_stats", {"score": score, "kills": kills, "floor": max(1, current_wave)})

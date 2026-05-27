@@ -465,11 +465,10 @@ static func _apply_multiply_fire_rate(
 		return result
 
 	var target: AssemblyNode = targets[0]
-	var multiplier: float = card.effect.get("multiplier", 1.5)
+	var fire_rate_scale: float = card.effect.get("fire_rate_scale", 1.5)
 	var overheat_penalty: float = card.effect.get("overheat_penalty", 1.0)
 	var stats: Dictionary = target.get_base_stats()
-	stats["fire_rate_multiplier"] = multiplier
-	stats["fire_rate"] = stats.get("fire_rate", 4.0) * multiplier
+	stats["fire_rate"] = stats.get("fire_rate", 4.0) * fire_rate_scale
 	stats["overheat_penalty"] = overheat_penalty
 	target.tags.append("Fate.Overclocked")
 	target.set_base_stats(stats)
@@ -478,8 +477,8 @@ static func _apply_multiply_fire_rate(
 	result.success = true
 	_fate_audio_card_applied()
 	result.modified_nodes = [target]
-	result.effect_value = multiplier
-	result.message = "Applied %.1fx fire rate to %s" % [multiplier, target.node_name]
+	result.effect_value = fire_rate_scale
+	result.message = "Applied %.1fx fire rate to %s" % [fire_rate_scale, target.node_name]
 	return result
 
 
