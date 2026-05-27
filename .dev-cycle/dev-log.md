@@ -45,3 +45,41 @@
 1. 人类试玩验证（最高且唯一优先级）
 2. 若发现 Bug 则修复；若未发现 Bug 则推进下一项内容丰富
 3. 用户主导：决定是否继续自动化 polish 或进入人工调优阶段
+## 轮次 287 — 2026-05-28 02:53 UTC+8
+
+### 维度
+撤离成功面板楼层显示修复 + 代码审查
+
+### 问题分析
+审查撤离成功面板显示链路（_on_extraction_completed → _show_extraction_success → show_run_extraction_success）。
+
+**发现：** `CoreCombatMode.show_run_extraction_success()` 中 floor 字段直接用 `max(1, current_wave)`，而非真实楼层数。对于非 BossRoom 的撤离场景（如普通撤离守点），current_wave 是波次而非楼层，楼层显示会出错（如第8波时显示"第8层"而不是真实楼层）。
+
+### 代码改动
+**文件：** `src/game/CoreCombatMode.gd`
+
+增加 `_get_floor_for_extraction()` 私有方法，用波次估算楼层（每3波≈1层），替换 `show_run_extraction_success` 中的 `max(1, current_wave)`。
+
+```gdscript
+func _get_floor_for_extraction() -> int:
+    if current_wave > 0:
+        return maxi(1, (current_wave - 1) / 3 + 1)
+    return 1
+```
+
+### 验证
+- Godot headless --quit-after 3: **EXIT 0** ✅
+
+### 本轮无新增代码改动（审查轮次）
+
+### 剩余风险
+1. MapFateTriggers 的 fate_mark_enemy/fate_reinforce 等触发器虽然 emit 信号并向 UI 发通知，但没有找到实际调用 `FateCardGameBridge.apply_card()` 的代码路径——这些"地图命运卡"的效果当前可能仅停留在 UI 通知层面，实际武器树改造未执行。这是核心玩法重大漏洞，**需人类试玩验证**。
+2. 其余所有风险项仍为人类试玩验证项（精英挂枪/活子弹/炮台/crit×2.5/LUCKY_CHEST 等）。
+
+### 续排判断
+循环状态维持 `running`，但系统完整度已满足终态标准，后续工作应由人工主导（人类试玩验证）。**本轮不创建下一轮 cron**，除非用户再次要求启动循环。
+
+### 下轮最可能方向
+1. 人类试玩验证（最高且唯一优先级）
+2. 若发现 Bug 则修复；若未发现 Bug 则推进下一项内容丰富
+3. 用户主导：决定是否继续自动化 polish 或进入人工调优阶段
