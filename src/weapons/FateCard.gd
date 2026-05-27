@@ -53,8 +53,12 @@ enum EffectAction {
 	FUSE_DAMAGE,              # 伤害融合
 	FUSE_SPEED,               # 速度融合
 
+	# 变种类（扩展）
+	MUTATE_TO_CHAIN,           # 连锁闪电
+	MUTATE_TO_TURRET_ON_LAND,  # 落地炮台
+
 	# 诅咒类
-	OUT_OF_CONTROL,          # 子弹上的枪乱射（管不住了）
+	OUT_OF_CONTROL,           # 子弹上的枪乱射（管不住了）
 	SIZE_GROWTH,             # 子弹越打越大（火力暴食）
 	EXPLODE_ON_RELOAD,        # 换弹爆炸
 	SLUGGISH,                 # 卡壳（降低命中率）
