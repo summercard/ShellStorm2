@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://fate_card_collection_menu"]
+
+[ext_resource type="Script" path="res://src/ui/FateCardCollectionMenu.gd" id="1"]
+
+[node name="FateCardCollectionMenu" type="CanvasLayer"]
+script = ExtResource("1")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="HeaderLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "命运卡牌收藏室"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+text = "×"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Content" type="VBoxContainer" parent="Panel/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

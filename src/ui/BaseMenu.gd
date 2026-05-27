@@ -15,6 +15,7 @@ extends CanvasLayer
 @onready var building_divination: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingDivination
 @onready var building_vault: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingVault
 @onready var building_archive: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingArchive
+@onready var building_fate_card_collection: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingFateCardCollection
 
 func _ready() -> void:
 	# BaseManager 已是 Autoload，直接通过全局名称访问
@@ -40,6 +41,10 @@ func _ready() -> void:
 	_set_building_enabled(building_archive, "怪物档案室")
 	_set_building_enabled_style(building_archive)
 	building_archive.pressed.connect(_on_building_archive_pressed)
+
+	# 建筑按钮 — 命运卡牌收藏室（可用）
+	_set_building_enabled_style(building_fate_card_collection)
+	building_fate_card_collection.pressed.connect(_on_building_fate_card_collection_pressed)
 
 	# 显示玩家数据
 	_refresh_stats()
@@ -120,6 +125,12 @@ func _on_building_vault_pressed() -> void:
 
 func _on_building_archive_pressed() -> void:
 	var menu_scene: PackedScene = load("res://scenes/MonsterArchiveMenu.tscn")
+	if menu_scene:
+		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
+		get_tree().get_root().add_child(menu)
+
+func _on_building_fate_card_collection_pressed() -> void:
+	var menu_scene: PackedScene = load("res://scenes/FateCardCollectionMenu.tscn")
 	if menu_scene:
 		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
 		get_tree().get_root().add_child(menu)
