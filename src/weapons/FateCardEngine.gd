@@ -275,22 +275,22 @@ static func _apply_attach_to_mount(
 		var slot_name: String = card.effect.get("target_slot", "MOUNT")
 		slot_type = AssemblyNode.SlotType.get(slot_name)
 
-	# 如果是子弹背枪效果，自动创建一个枪身
-	var action_str: String = card.effect.get("action", "")
+	# 如果是挂载类组合卡，自动创建一个配件节点。
+	var action: int = int(card.effect.get("action", -1))
 	var child_node: AssemblyNode = null
 
 	if card.card_type == FateCard.CardType.COMBINE:
 		# 组合类：创建一个匹配的子节点
-		if action_str == "ATTACH_TO_MOUNT":
+		if action == FateCard.EffectAction.ATTACH_TO_MOUNT:
 			# 默认创建附件节点
 			child_node = AssemblyNode.new(
 				AssemblyNode.NodeType.ATTACHMENT, "FateAttachment_" + card.card_id
 			)
-			child_node.tags = card.tags.duplicate()
-			# 配件寄生默认效果：命中触发。命中时 Bullet 会派发 attachment_hit_triggered 信号，
-			# 其效果（分裂/强化等）由 Bullet 根据挂载的配件节点 stats 具体决定
-			var default_stats := {"damage": 0, "fire_rate": 0, "fate_attachment_hit_trigger": true, "trigger_on_hit": true}
-			child_node.set_base_stats(default_stats)
+		child_node.tags = card.tags.duplicate()
+		# 配件寄生默认效果：命中触发。命中时 Bullet 会派发 attachment_hit_triggered 信号，
+		# 其效果（分裂/强化等）由 Bullet 根据挂载的配件节点 stats 具体决定
+		var default_stats := {"damage": 0, "fire_rate": 0, "fate_attachment_hit_trigger": true, "trigger_on_hit": true}
+		child_node.set_base_stats(default_stats)
 
 	if child_node == null:
 		result.error = ApplyError.APPLY_FAILED
@@ -298,7 +298,7 @@ static func _apply_attach_to_mount(
 		return result
 
 	# 配件寄生：标记命中触发效果，供 Bullet 运行时检测
-	if card.card_id == "配件寄生" or card.effect.get("trigger_on_hit", false):
+	if card.card_name == "配件寄生" or card.effect.get("trigger_on_hit", false):
 		var attach_stats: Dictionary = child_node.get_base_stats()
 		attach_stats["fate_attachment_hit_trigger"] = true
 		attach_stats["trigger_on_hit"] = true
@@ -729,7 +729,7 @@ static func _apply_grant_random_card(
 	var all_cards: Array[FateCard] = []
 	var playable: Array[FateCard] = FateCardPresets.playable_presets()
 	for c in playable:
-		if c.card_type != FateCard.CardType.CURSE:  # 诅咒类不随机给予（风险太高）
+		if c.card_type != FateCard.CardType.CURSE and not c.tags.has("Fate.MapTrigger"):
 			all_cards.append(c)
 	if all_cards.is_empty():
 		result.message = "No available cards to grant"

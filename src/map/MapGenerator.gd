@@ -63,7 +63,6 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 	# 起始房间（玩家出生）
 	var start_data := RoomData.new(RoomData.RoomType.PLAYER_SPAWN, _current_floor)
 	start_data.floor_level = RoomData.FloorLevel.SHALLOW
-	start_data.size = Vector2(448, 320)
 	var start_id := graph.add_node(start_data, Vector2(0, 0))
 	path_ids.append(start_id)
 	

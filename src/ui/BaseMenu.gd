@@ -9,6 +9,7 @@ extends CanvasLayer
 @onready var runs_label: Label = $VBox/StatsPanel/VBox/RunsLabel
 @onready var extractions_label: Label = $VBox/StatsPanel/VBox/ExtractionsLabel
 @onready var kills_label: Label = $VBox/StatsPanel/VBox/KillsLabel
+@onready var points_label: Label = $VBox/StatsPanel/VBox/PointsLabel
 @onready var start_button: Button = $VBox/StartButton
 @onready var building_workshop: Button = $VBox/BuildingsPanel/VBox/BuildingWorkshop
 @onready var building_divination: Button = $VBox/BuildingsPanel/VBox/BuildingDivination
@@ -35,8 +36,10 @@ func _ready() -> void:
 	_set_building_enabled_style(building_vault)
 	building_vault.pressed.connect(_on_building_vault_pressed)
 
-	# 其他建筑按钮框架
-	_set_building_disabled(building_archive, "怪物档案室")
+	# 建筑按钮 — 怪物档案室（可用）
+	_set_building_enabled(building_archive, "怪物档案室")
+	_set_building_enabled_style(building_archive)
+	building_archive.pressed.connect(_on_building_archive_pressed)
 
 	# 显示玩家数据
 	_refresh_stats()
@@ -52,6 +55,8 @@ func _refresh_stats() -> void:
 		extractions_label.text = "成功撤离: %d" % d.successful_extractions
 	if kills_label:
 		kills_label.text = "总击杀: %d" % d.total_kills
+	if points_label:
+		points_label.text = "资源: %d" % BaseManager.get_extraction_points()
 
 func _set_building_disabled(btn: Button, name: String) -> void:
 	if btn == null:
@@ -109,6 +114,12 @@ func _on_building_workshop_pressed() -> void:
 
 func _on_building_vault_pressed() -> void:
 	var menu_scene: PackedScene = load("res://scenes/VaultMenu.tscn")
+	if menu_scene:
+		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
+		get_tree().get_root().add_child(menu)
+
+func _on_building_archive_pressed() -> void:
+	var menu_scene: PackedScene = load("res://scenes/MonsterArchiveMenu.tscn")
 	if menu_scene:
 		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
 		get_tree().get_root().add_child(menu)

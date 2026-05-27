@@ -549,8 +549,9 @@ func _complete_extraction() -> void:
 	if inventory_module != null:
 		extracted_count = inventory_module.get_used_slots()
 	var currency := GameManager.currency
+	var points := 0
 	if _base_manager != null and _base_manager.has_method("add_extraction_points"):
-		var points := currency / 2
+		points = currency / 2
 		_base_manager.call("add_extraction_points", points)
 		print("[CoreCombatMode] 撤离成功：魂=%d → extraction_points=%d，保险格=%d 件" % [currency, points, insurance_module.get_used_slots() if insurance_module else 0])
 	if ui_layer != null:
@@ -566,6 +567,7 @@ func _complete_extraction() -> void:
 				"floor": max(1, current_wave),
 				"currency": GameManager.currency,
 				"risk": run_risk,
+				"points": points,
 			})
 		elif ui_layer.has_method("_show_extraction_success"):
 			ui_layer.call("_show_extraction_success")

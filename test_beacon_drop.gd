@@ -25,5 +25,5 @@ func _init():
 		total_beacons += beacons_in_table
 		print("Table %s: %d/%d rolls had a beacon" % [t, beacons_in_table, rolls])
 	
-	print("Overall: %d/%d (%s) rolls had a beacon" % [total_beacons, total_rolls, str(stepify(100.0*total_beacons/total_rolls, 0.1)) + "%"])
+	print("Overall: %d/%d (%s) rolls had a beacon" % [total_beacons, total_rolls, str(snapped(100.0*total_beacons/total_rolls, 0.1)) + "%"])
 	quit()

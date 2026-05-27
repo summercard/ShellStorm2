@@ -36,10 +36,31 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 	if medkit_slot < 0:
 		failures.append("Could not seed inventory with medkit")
 	else:
-		ui.call("_on_slot_clicked", medkit_slot, true)
+		var slot_node := ui.get_node_or_null("InventoryPanel/VBox/InventoryGrid/InvSlot_%d" % medkit_slot)
+		if slot_node == null:
+			failures.append("Inventory medkit slot is not wired as a clickable control")
+		else:
+			ui.call("_on_slot_mouse_entered", slot_node)
+			await get_tree().process_frame
+			var hover_card := ui.get("_item_hover_card") as Control
+			if hover_card == null or not hover_card.visible:
+				failures.append("Hovering an inventory item does not show the item info card")
+			ui.call("_on_slot_mouse_exited", slot_node)
+			var count_label := slot_node.get_node_or_null("CountLabel") as Control
+			if count_label != null and count_label.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+				failures.append("Inventory count label intercepts clicks intended for its item slot")
+			var click := InputEventMouseButton.new()
+			click.button_index = MOUSE_BUTTON_LEFT
+			click.pressed = true
+			slot_node.call("_on_gui_input", click)
 		await get_tree().process_frame
 		if mode.insurance_module.get_used_slots() != 0:
-			failures.append("Plain left-click moved item into insurance; it should only select")
+			failures.append("Plain left-click moved an actionable item into insurance")
+		if mode.inventory_module.has_item("item_health_potion"):
+			failures.append("Left-clicking a consumable item did not use it")
+		mode.inventory_module.add_item(medkit, 1)
+		await get_tree().process_frame
+		medkit_slot = _find_inventory_slot(mode.inventory_module, "item_health_potion")
 		ui.call("_on_item_to_insurance_requested", medkit_slot)
 		await get_tree().process_frame
 		if mode.insurance_module.get_used_slots() != 1:
@@ -54,6 +75,22 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 	if inventory_panel == null or insurance_panel == null:
 		failures.append("Inventory/insurance panels are missing")
 	else:
+		inventory_panel.visible = true
+		insurance_panel.visible = true
+		if not ui.call("blocks_gameplay_input"):
+			failures.append("Open inventory panels do not block gameplay input")
+		var player := mode.get_player()
+		var weapon_controller := (
+			player.get_node_or_null("WeaponController") if player != null else null
+		)
+		if weapon_controller == null:
+			failures.append("Player weapon controller is missing")
+		elif not weapon_controller.call("_is_gameplay_input_blocked"):
+			failures.append("Weapon controller still accepts shooting while inventory is open")
+		inventory_panel.visible = false
+		insurance_panel.visible = false
+		if ui.call("blocks_gameplay_input"):
+			failures.append("Closed inventory panels still block gameplay input")
 		var before := Vector2(inventory_panel.offset_left, inventory_panel.offset_top)
 		ui.set("_dragging_inventory_panel", true)
 		ui.set("_inventory_drag_start_panel", before)
@@ -63,6 +100,21 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 		var after := Vector2(inventory_panel.offset_left, inventory_panel.offset_top)
 		if after == before:
 			failures.append("Inventory panel drag helper did not move the panel")
+
+	var transition_fx := main.get_node_or_null("RoomTransitionFX")
+	var curtain := (
+		transition_fx.get_node_or_null("RoomTransitionCurtain") as Control
+		if transition_fx != null
+		else null
+	)
+	if curtain == null or curtain.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+		failures.append("Room transition overlay blocks inventory mouse hover/clicks")
+	var fog_layer := main.get_node_or_null("FogOfWarLayer")
+	var fog_rect := (
+		fog_layer.get_node_or_null("FogOfWar") as Control if fog_layer != null else null
+	)
+	if fog_rect == null or fog_rect.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+		failures.append("Fog overlay blocks inventory mouse hover/clicks")
 
 	main.queue_free()
 

@@ -47,7 +47,7 @@ func try_select_elite(floor: int, risk_level: int = 0) -> Dictionary:
 	var roll: float = _rng.randf() * total_weight
 	for entry in weighted:
 		if roll <= entry["cum"]:
-			var selected: Dictionary = entry["record"]
+			var selected: Variant = entry["record"]
 			if selected is Dictionary:
 				return _build_elite_spawn_data(selected, floor)
 			# EliteRecord object

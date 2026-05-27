@@ -1,18 +1,18 @@
 {
   "project": "弹壳风暴2 / ShellStorm2",
   "path": "/Users/summercards/ShellStorm2",
-  "status": "running",
+  "status": "stopped",
   "lastTask": "Plan",
   "planVersion": "v3.7",
   "polish": {
-    "current": 254,
+    "current": 272,
     "total": "infinite"
   },
   "startTime": "2026-05-25T01:17:00+08:00",
-  "lastRunTime": "2026-05-27T05:12:00.000000+08:00",
-  "currentTarget": "轮次254完成：落地炮台_turret_loop帧率过速保护（_turret_cooldown dt上限）；Godot编译通过✅",
-  "nextTarget": "人类试玩验证：精英名字+挂枪+活子弹+落地炮台+crit×2.5暴击+BlessDead+MAP_TRIGGER命卡",
-  "notes": "轮次254完成：_turret_loop添加dt=minf(delta,0.05)上限保护，防止帧率过高导致炮台过射。轮次253完成：EnemyBase._ensure_state_marker()函数体补全。轮次252完成：EliteSpawnDirector._build_elite_spawn_data()提供max_hp字段；CoreCombatMode对精英叠加轻微风险压力（0.04×risk）。",
+  "lastRunTime": "2026-05-27T08:13:00.000000+08:00",
+  "currentTarget": "轮次273完成：精英击杀悬赏金即时结算——notify_enemy_killed()精英分支即时+悬赏金+UI通知；_grant_extraction_points()悬赏金50%转积分；show_run_extraction_success()显示★精英×N(+M)明细。Godot headless编译✅。",
+  "nextTarget": "人类试玩验证或精英多GunBody多角度射击实际效果",
+  "notes": "[杰西卡 2026-05-27 08:12] 主人指令停止循环",
   "completedPhases": [
     1,
     2,
@@ -255,7 +255,25 @@
     250,
     251,
     253,
-    254
+    254,
+    255,
+    256,
+    257,
+    258,
+    259,
+    260,
+    261,
+    262,
+    263,
+    264,
+    265,
+    266,
+    267,
+    268,
+    269,
+    270,
+    272,
+    273
   ],
-  "designDoc": "docs/PH09_搜打撤深化.md"
+  "designDoc": "docs/PH07_精英怪成长系统.md"
 }

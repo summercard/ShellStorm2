@@ -48,7 +48,7 @@ func _update_occluder() -> void:
 		return
 	var polygon := OccluderPolygon2D.new()
 	polygon.polygon = occluder_polygon
-	polygon.cull_mode = OccluderPolygon2D.CULL_CCW
+	polygon.cull_mode = OccluderPolygon2D.CULL_COUNTER_CLOCKWISE
 	_occluder.occluder = polygon
 
 func _apply_polygon() -> void:

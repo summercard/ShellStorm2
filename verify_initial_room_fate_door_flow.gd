@@ -27,16 +27,39 @@ func _ready() -> void:
 
 	if start_node.room_data.room_type != RoomData.RoomType.PLAYER_SPAWN:
 		failures.append("Room 0 is not the initial spawn room")
-	if start_node.room_data.size != Vector2(448, 320):
-		failures.append("Initial room is not the fixed small size")
+	if start_node.room_data.size != Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT):
+		failures.append("Initial room size does not match the physical room grid")
 	if int(mode.get("_room_key_count")) != 1:
 		failures.append("Initial room does not grant exactly one starting key")
+	var start_room: Node2D = mode.map_manager.get_instantiated_room(0)
+	if start_room == null or start_room.get_node_or_null("Visualizer") == null:
+		failures.append("Initial room does not use a dedicated visualized scene")
+	else:
+		var floor_layer: TileMapLayer = start_room.get_node_or_null("FloorLayer") as TileMapLayer
+		if floor_layer == null or floor_layer.get_used_cells().is_empty():
+			failures.append("Initial room does not build its floor tiles")
+		else:
+			var world_background := main.get_node_or_null("WorldPlaceholder") as Node2D
+			if world_background != null and floor_layer.z_index <= world_background.z_index:
+				failures.append("Walkable floor is rendered underneath the black world background")
+			if mode.player != null and floor_layer.z_index >= mode.player.z_index:
+				failures.append("Walkable floor is rendered above the player")
+			var floor_bounds := floor_layer.get_used_rect()
+			if floor_bounds.position.x < -10 or floor_bounds.position.y < -10:
+				failures.append("Initial room tile map is not centered on the room origin")
+		var visualizer: Node = start_room.get_node_or_null("Visualizer")
+		if visualizer.get("room_size") != Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT):
+			failures.append("Initial room visualizer does not cover its full walkable bounds")
 
 	var fate_panel: Control = ui.get_node_or_null("FateCardPanel") as Control
 	if fate_panel == null:
 		failures.append("FateCardPanel missing")
 	elif fate_panel.visible:
 		failures.append("Fate card panel appears before opening the initial door")
+	await get_tree().create_timer(0.15).timeout
+	var boss_panel: Control = ui.get_node_or_null("BossHPPanel") as Control
+	if boss_panel != null and boss_panel.visible:
+		failures.append("Boss HP appears before the player enters the boss room")
 
 	var neighbors: Array[int] = graph.get_neighbors(0)
 	if neighbors.is_empty():

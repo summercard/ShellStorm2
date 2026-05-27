@@ -458,3 +458,38 @@
 1. **人类试玩验证**（精英Attachment链路+fate_mark_enemy随机命卡链路）
 2. **FateCardPresets.map_trigger_presets() 方法创建**：将 MAP_TRIGGER 类命卡聚合，替代注释标记的"环境触发型"
 3. **搜打撤经济系统收束**（魂币收益/带出结算/保险格完整性）
+## 轮次 267 — 2026-05-27 07:28
+
+### 维度选择
+**小地图脏标记重绘驱动修复（polish/边界问题）**
+
+### 问题诊断
+在审查 GameUIManager.gd 小地图系统时发现一个阻断性bug：`_minimap_dirty` 标记在地图生成/房间切换/区域揭示时会被正确设置为 `true`，`_draw()` 也实现了完整的 `_draw_minimap_rserver()` RenderingServer 绘制逻辑，但 **`_process()` 中完全没有驱动 `queue_redraw()` 的代码**，导致 `_minimap_dirty` 永远无法触发 ReferenceRect 重绘回调，小地图实际上永远不会刷新。
+
+这是一个典型的"脏标记设置了但消费者缺失"bug，表现为玩家在小地图上永远看不到房间切换/探索揭示的更新。
+
+### 玩家可感知结果
+- 修复后：小地图在房间切换、区域揭示、地图生成时能正确刷新
+- 玩家能在小地图上看到自己移动到不同房间节点、看到已揭示相邻房间的连线
+
+### 修改内容
+**代码：**
+1. `src/ui/GameUIManager.gd`
+   - `_process()` 新增 `if _minimap_dirty:` 分支
+   - 当脏标记为 true 时：重置脏标记 → 调用 `_minimap_view.queue_redraw()` 触发 `_draw()` 回调
+   - 脏标记来源：`_on_map_generated_for_minimap()` / `_on_room_entered_for_minimap()` / `_on_adjacent_rooms_revealed()` / `_on_minimap_view_resized()` 均正确设置
+
+### 验收标准
+- [ ] 地图生成时小地图显示所有房间节点和连线
+- [ ] 玩家进入新房间时小地图高亮点更新到当前房间节点
+- [ ] 相邻房间揭示时小地图正确显示新房间节点
+- [ ] Godot headless --quit-after 1 编译通过 ✅
+
+### 剩余风险
+- `_draw()` 中的玩家位置点偏移计算依赖 `map_rect.size`，当房间网格跨度较大时玩家点可能跳变（需人类试玩确认）
+- 小地图玩家位置跟随的实际精度需在 RoomGameMode map_generated 信号发出后才能验证
+
+### 下轮最可能方向
+1. PH11大地图小地图实际运行验证（RoomGameMode map_generated信号发出时机 + 小地图节点数据正确性）
+2. RoomBoss.tscn接入DemoRoomChain验证Boss战完整流程
+3. 继续polish其他边界问题

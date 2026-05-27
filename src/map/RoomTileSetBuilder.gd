@@ -82,6 +82,14 @@ const ROOM_THEMES := {
 		"accent": Color(0.35, 0.25, 0.15),
 		"accent_glow": Color(0.0, 0.0, 0.0),
 	},
+	RoomData.RoomType.PLAYER_SPAWN: {
+		"floor": Color(0.20, 0.28, 0.22),
+		"floor_alt": Color(0.18, 0.25, 0.20),
+		"wall": Color(0.15, 0.22, 0.18),
+		"wall_top": Color(0.22, 0.30, 0.24),
+		"accent": Color(0.20, 0.50, 0.35),
+		"accent_glow": Color(0.25, 0.65, 0.45),
+	},
 	}
 
 ## tile_id → 配置索引（对应 TileSetAtlasSource 的坐标）
@@ -166,40 +174,28 @@ func _create_atlas_texture(colors: Array) -> Texture2D:
 
 ## 填充房间 TileMap（内部用）
 ## room_size: Vector2，房间像素尺寸（如 800×600）
-## fills the interior with FLOOR tiles, borders with WALL tiles
+## FloorLayer only paints walkable ground and floor markings.
+## Runtime walls and door apertures are owned by RoomLayout.
 func populate_room_tilemap(tilemap: TileMapLayer, room_size: Vector2, room_type: RoomData.RoomType) -> void:
 	var theme: Dictionary = ROOM_THEMES.get(room_type, ROOM_THEMES[RoomData.RoomType.COMBAT])
 	
 	var cell_count_x: int = int(room_size.x) / CELL_SIZE
 	var cell_count_y: int = int(room_size.y) / CELL_SIZE
 	
-	# 计算偏移（让 TileMap 以房间中心为原点）
-	var offset: Vector2i = Vector2i(-room_size.x / 2, -room_size.y / 2)
+	# TileMap 的坐标单位是格子，不是像素；让生成内容实际围绕房间原点展开。
+	var offset: Vector2i = Vector2i(-cell_count_x / 2, -cell_count_y / 2)
 	
-	# 填充地板（内部格）
-	for cy in range(1, cell_count_y - 1):
-		for cx in range(1, cell_count_x - 1):
-			var use_alt: bool = (cx + cy) % 3 == 0
-			var tile_id: Vector2i = Vector2i(0, 0) if use_alt else Vector2i(1, 0)
-			# 交错地板变化格
-			var coords := Vector2i(cx + offset.x, cy + offset.y)
-			tilemap.set_cell(coords, 0, tile_id)
-	
-	# 边缘：墙（第一圈和最后一圈）
+	# 填满房间地板；RoomLayout 的墙面会覆盖边缘，门洞下方则自然露出地面。
 	for cy in range(cell_count_y):
 		for cx in range(cell_count_x):
-			var is_edge: bool = (cx == 0 or cy == 0 or cx == cell_count_x - 1 or cy == cell_count_y - 1)
-			if is_edge:
-				var coords := Vector2i(cx + offset.x, cy + offset.y)
-				# 顶层用 WALL_TOP（更亮），其他用 WALL
-				var is_top_edge: bool = (cy == 0 or cy == cell_count_y - 1)
-				var tile_id: Vector2i = Vector2i(3, 0) if is_top_edge else Vector2i(2, 0)
-				tilemap.set_cell(coords, 0, tile_id)
-	
+			var use_alt: bool = (cx + cy) % 3 == 0
+			var tile_id: Vector2i = Vector2i(0, 0) if use_alt else Vector2i(1, 0)
+			var coords := Vector2i(cx + offset.x, cy + offset.y)
+			tilemap.set_cell(coords, 0, tile_id)
+
 	# 在战斗房添加血迹装饰
 	if room_type == RoomData.RoomType.COMBAT or room_type == RoomData.RoomType.ELITE:
 		_add_splatter_decoration(tilemap, cell_count_x, cell_count_y, offset)
-		_add_obstacle_props(tilemap, cell_count_x, cell_count_y, offset)
 	# 在商人房添加暖色光斑
 	elif room_type == RoomData.RoomType.MERCHANT:
 		_add_merchant_glow(tilemap, cell_count_x, cell_count_y, offset, theme)
@@ -255,42 +251,3 @@ func _add_upgrade_cables(tilemap: TileMapLayer, cell_count_x: int, cell_count_y:
 ## 获取房间主题色（用于其他装饰节点）
 func get_room_theme_colors(room_type: RoomData.RoomType) -> Dictionary:
 	return ROOM_THEMES.get(room_type, ROOM_THEMES[RoomData.RoomType.COMBAT])
-
-
-## 在战斗房/精英房添加可破坏障碍物（木箱、桶）
-## 放置在内部区域，有物理碰撞体，玩家和敌人都无法穿过
-func _add_obstacle_props(tilemap: TileMapLayer, cell_count_x: int, cell_count_y: int, offset: Vector2i) -> void:
-	# 基于房间尺寸生成确定性种子（同一房间每次布局一样）
-	var seed_value: int = int(cell_count_x * 31 + cell_count_y * 17)
-	var rng := RandomNumberGenerator.new()
-	rng.seed = seed_value
-	
-	# 障碍物放置位置（在内部区域，避免太靠边）
-	var obstacle_templates: Array[Dictionary] = [
-		# 每个模板：local_coords是格坐标，tile是tile_id
-		{"local": Vector2i(3, 3), "tile": TileId.PROP_CRATE},
-		{"local": Vector2i(7, 5), "tile": TileId.PROP_BARREL},
-		{"local": Vector2i(5, 7), "tile": TileId.PROP_CRATE},
-		{"local": Vector2i(9, 3), "tile": TileId.PROP_BARREL},
-		{"local": Vector2i(4, 6), "tile": TileId.PROP_CRATE},
-	]
-	
-	# 按种子随机挑选 3~4 个放置
-	var chosen: Array[Dictionary] = []
-	for i in range(min(3 + rng.randi() % 2, obstacle_templates.size())):
-		var idx: int = rng.randi() % obstacle_templates.size()
-		chosen.append(obstacle_templates[idx])
-		obstacle_templates.remove_at(idx)
-	
-	for obs in chosen:
-		var lx: int = obs["local"].x
-		var ly: int = obs["local"].y
-		# 确保不在边缘
-		if lx <= 1 or ly <= 1 or lx >= cell_count_x - 2 or ly >= cell_count_y - 2:
-			continue
-		var coords := Vector2i(lx + offset.x, ly + offset.y)
-		tilemap.set_cell(coords, 0, Vector2i(obs["tile"], 0))
-	
-	# 注意：物理碰撞体（StaticBody2D）由 RoomTileMapInitializer 在 build() 时
-	# 统一从 TileMap 的障碍物格坐标生成，详见 _build_obstacle_bodies()
-	# 这里只负责视觉 tile 铺设，实际碰撞体在 RoomTileMapInitializer 中创建

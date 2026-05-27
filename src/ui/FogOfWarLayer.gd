@@ -8,6 +8,8 @@ class_name FogOfWarLayer
 ## 迷雾每像素代表的世界单位大小（越小精度越高，性能也更低）
 const CELL_PIXELS: int = 32  # 每 32 像素一个采样点
 
+@export var software_fog_enabled: bool = false
+
 ## 迷雾更新频率（每帧更新太贵，改用每 3 帧更新一次）
 var _update_interval: int = 3
 var _frame_counter: int = 0
@@ -37,6 +39,10 @@ var _wall_rects: Array[Rect2] = []
 
 func _ready() -> void:
 	_setup_fog_layer()
+	if _fog_rect != null:
+		_fog_rect.visible = software_fog_enabled
+	if not software_fog_enabled:
+		return
 	_update_fog_image_full()
 	_update_fog_texture()
 
@@ -48,6 +54,7 @@ func _setup_fog_layer() -> void:
 	_fog_rect.anchors_preset = Control.PRESET_FULL_RECT
 	_fog_rect.size = get_viewport().get_visible_rect().size
 	_fog_rect.z_index = 200  # 确保在最上层
+	_fog_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var shader := Shader.new()
 	shader.code = _get_fog_shader_code()
@@ -108,6 +115,8 @@ func setup(room_node: Node2D, vision_system: Node, player: Node2D) -> void:
 
 
 func _process(delta: float) -> void:
+	if not software_fog_enabled:
+		return
 	_frame_counter += 1
 	if _frame_counter % _update_interval != 0:
 		return
@@ -248,6 +257,8 @@ func _update_fog_texture() -> void:
 ## 外部调用：设置墙体检疫（由 RoomGameMode 提供）
 func set_wall_rects(rects: Array[Rect2]) -> void:
 	_wall_rects = rects
+	if not software_fog_enabled:
+		return
 	_update_fog_image()
 	_update_fog_texture()
 
@@ -256,6 +267,8 @@ func set_wall_rects(rects: Array[Rect2]) -> void:
 func rebuild_for_room(room_node: Node2D, player: Node2D) -> void:
 	_room_node = room_node
 	_player = player
+	if not software_fog_enabled:
+		return
 	_wall_rects.clear()
 	_load_wall_rects()
 	_last_player_pos = Vector2(-9999, -9999)

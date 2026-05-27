@@ -2,7 +2,10 @@ class_name RoomLayout
 extends Node2D
 ## Runtime room shell: stable room number, wall collision, and door apertures.
 
+signal occlusion_changed
+
 const WALL_LAYER := 1
+const OCCLUDER_MASK := 1
 const WALL_THICKNESS := GridConstants.BOUNDARY_THICKNESS
 const DOOR_WIDTH := GridConstants.DOOR_WIDTH
 const WALL_COLOR := Color(0.16, 0.17, 0.19, 0.92)
@@ -14,6 +17,7 @@ var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.R
 var _door_info: Array[Dictionary] = []
 var _wall_root: Node2D = null
 var _collision_body: StaticBody2D = null
+var _occluder_root: Node2D = null
 var _label: Label = null
 var _rebuild_queued := false
 
@@ -62,6 +66,9 @@ func _rebuild() -> void:
 	if _collision_body != null and is_instance_valid(_collision_body):
 		remove_child(_collision_body)
 		_collision_body.free()
+	if _occluder_root != null and is_instance_valid(_occluder_root):
+		remove_child(_occluder_root)
+		_occluder_root.free()
 	_wall_root = Node2D.new()
 	_wall_root.name = "GeneratedWalls"
 	add_child(_wall_root)
@@ -70,8 +77,12 @@ func _rebuild() -> void:
 	_collision_body.collision_layer = WALL_LAYER
 	_collision_body.collision_mask = 0
 	add_child(_collision_body)
+	_occluder_root = Node2D.new()
+	_occluder_root.name = "LayoutOccluders"
+	add_child(_occluder_root)
 	_build_walls()
 	_ensure_room_label()
+	occlusion_changed.emit()
 
 
 func _build_walls() -> void:
@@ -134,6 +145,21 @@ func _add_wall_segment(
 	shape.shape = rect
 	shape.position = local_pos
 	_collision_body.add_child(shape)
+
+	var occluder := LightOccluder2D.new()
+	occluder.name = "%sOccluder" % segment_name
+	occluder.occluder_light_mask = OCCLUDER_MASK
+	var polygon := OccluderPolygon2D.new()
+	polygon.polygon = PackedVector2Array([
+		Vector2(-segment_size.x * 0.5, -segment_size.y * 0.5),
+		Vector2(segment_size.x * 0.5, -segment_size.y * 0.5),
+		Vector2(segment_size.x * 0.5, segment_size.y * 0.5),
+		Vector2(-segment_size.x * 0.5, segment_size.y * 0.5),
+	])
+	polygon.cull_mode = OccluderPolygon2D.CULL_COUNTER_CLOCKWISE
+	occluder.occluder = polygon
+	occluder.position = local_pos
+	_occluder_root.add_child(occluder)
 
 	var visual := ColorRect.new()
 	visual.name = "%sVisual" % segment_name

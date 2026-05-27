@@ -3,14 +3,18 @@ extends Node2D
 
 @export var arena_size: Vector2 = Vector2(1800, 1100)
 @export var grid_size: int = 80
+@export var debug_visuals: bool = false
 
 func _ready() -> void:
 	queue_redraw()
 
 func _draw() -> void:
 	var rect := Rect2(-arena_size * 0.5, arena_size)
-	# 主背景
-	draw_rect(rect, Color(0.075, 0.085, 0.105, 1.0), true)
+	# 房间外的世界只提供黑底；可行走表面由房间 TileMap 独占。
+	draw_rect(rect, Color.BLACK, true)
+	if not debug_visuals:
+		return
+
 	# 内圈区域
 	draw_rect(Rect2(rect.position + Vector2(80, 80), rect.size - Vector2(160, 160)), Color(0.10, 0.11, 0.14, 1.0), true)
 

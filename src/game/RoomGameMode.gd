@@ -17,6 +17,7 @@ const ROOM_LAYOUT_SCRIPT := preload("res://src/map/RoomLayout.gd")
 const SOUL_ORB_SCENE: PackedScene = preload("res://scenes/SoulOrb.tscn")
 const GROUND_ITEM_PICKUP_SCRIPT := preload("res://src/items/GroundItemPickup.gd")
 const VISION_SYSTEM_SCRIPT := preload("res://src/game/VisionSystem.gd")
+const ROOM_LIGHTING_SCRIPT := preload("res://src/fx/RoomLightingSystem.gd")
 const ELITE_ARCHIVE_MODULE_SCRIPT := preload("res://src/enemy/EliteArchiveModule.gd")
 const ELITE_SPAWN_DIRECTOR_SCRIPT := preload("res://src/enemy/EliteSpawnDirector.gd")
 const EXTRACTION_DEFENSE_DURATION := 14.0
@@ -42,7 +43,7 @@ var vision_system: Variant = VISION_SYSTEM_SCRIPT.new()
 @onready var fog_layer: Node = get_node_or_null("../FogOfWarLayer")
 
 ## 精英怪档案（PH06 精英成长链路）
-var _elite_archive: EliteArchiveModule = null
+var _elite_archive: Node = null
 
 ## 事件房处理器
 var _current_event_handler: Node = null
@@ -98,8 +99,6 @@ var _run_risk: int = 0
 var _current_wave_spawner: RoomWaveSpawner = null
 ## 区域刷怪控制器（当前房间）
 var _current_regional_controller: RegionalSpawnController = null
-## 精英怪档案模块（PH06 精英成长链路）
-var _elite_archive: EliteArchiveModule
 ## 精英怪出现调度器（PH06）
 var _elite_spawn_director: Node
 ## 当前房间已击杀精英的 elite_id 列表（用于识别要删除的记录）
@@ -341,6 +340,7 @@ func _on_container_opened_for_fate(_loot: Array = []) -> void:
 	var triggers: Node = get_node_or_null("MapFateTriggers")
 	if triggers != null and triggers.has_method("on_container_opened"):
 		triggers.call("on_container_opened")
+	call_deferred("_refresh_current_room_vision_occlusion")
 
 
 ## 初始化地图环境命运触发器
@@ -488,6 +488,7 @@ func _on_room_entered(room_data: RoomData) -> void:
 
 	# 构建房间视野遮挡几何（供 VisionSystem 使用）
 	_build_vision_occlusion_for_room()
+	call_deferred("_refresh_current_room_vision_occlusion")
 
 	# 通知 GameUIManager 更新敌人可见性
 	_update_enemy_visibility()
@@ -500,6 +501,12 @@ func _on_room_entered(room_data: RoomData) -> void:
 	if room_data.room_type == RoomData.RoomType.EXTRACTION:
 		_activate_extraction_room(room_data)
 		return
+
+	if room_data.room_type == RoomData.RoomType.BOSS:
+		var boss_room := _get_current_room_instance()
+		var demo_boss: Node = boss_room.get_node_or_null("DemoBoss") if boss_room != null else null
+		if demo_boss != null and demo_boss.has_method("activate"):
+			demo_boss.call("activate")
 
 	if _room_cleared_flag:
 		_update_clearing_progress(1, 1)
@@ -691,58 +698,16 @@ func _build_vision_occlusion_for_room() -> void:
 
 	var room_bounds: Rect2 = Rect2(room_node.global_position - room_size * 0.5, room_size)
 
-	# 收集房间内所有墙体格的世界坐标 Rect2
+	# RoomLayout 和明确放置的遮挡组件是唯一可信的阻光来源。
+	# FloorLayer 只负责表现；把地砖当墙会让开门后仍残留不可见的封口。
 	var wall_rects: Array[Rect2] = []
-
-	# 方式1：从 FloorLayer 的 TileMap 中提取墙体格位置
-	var floor_layer: TileMapLayer = room_node.find_child("FloorLayer", true, false) as TileMapLayer
-	if floor_layer != null and floor_layer.tile_set != null:
-		var cell_size: Vector2i = floor_layer.tile_set.tile_size
-		var used_cells: Array[Vector2i] = floor_layer.get_used_cells()
-		for cell in used_cells:
-			var source_coords: Vector2i = floor_layer.get_cell_atlas_coords(cell)
-			# WALL=(2,0), WALL_TOP=(3,0)
-			if (source_coords.x == 2 or source_coords.x == 3) and source_coords.y == 0:
-				var world_pos: Vector2 = floor_layer.to_global(floor_layer.map_to_local(cell))
-				var half_w: float = cell_size.x * 0.5
-				var half_h: float = cell_size.y * 0.5
-				var world_rect: Rect2 = Rect2(
-					world_pos.x - half_w, world_pos.y - half_h, float(cell_size.x), float(cell_size.y)
-				)
-				wall_rects.append(world_rect)
-
-	# 方式2：从 VisionOccluders 节点收集已有的 LightOccluder2D 包围盒
-	var occluders_node: Node2D = room_node.find_child("VisionOccluders", true, false) as Node2D
-	if occluders_node != null:
-		for child in occluders_node.get_children():
-			if child is LightOccluder2D:
-				var occluder: LightOccluder2D = child as LightOccluder2D
-				var polygon: OccluderPolygon2D = occluder.occluder as OccluderPolygon2D
-				if polygon != null and polygon.polygon.size() >= 2:
-					# 从多边形计算 AABB
-					var min_x: float = INF
-					var min_y: float = INF
-					var max_x: float = -INF
-					var max_y: float = -INF
-					for pt in polygon.polygon:
-						min_x = minf(min_x, pt.x)
-						min_y = minf(min_y, pt.y)
-						max_x = maxf(max_x, pt.x)
-						max_y = maxf(max_y, pt.y)
-					var occluder_rect: Rect2 = Rect2(
-						occluder.global_position.x + min_x, occluder.global_position.y + min_y,
-						max_x - min_x, max_y - min_y
-					)
-					# 避免重复（只加入不在 wall_rects 内的）
-					var already := false
-					for wr in wall_rects:
-						if wr.position.distance_to(occluder_rect.position) < 4.0:
-							already = true
-							break
-					if not already:
-						wall_rects.append(occluder_rect)
+	# 统一收集实际遮挡体（运行时外墙及有遮挡组件的实体）。
+	_append_occluder_rects(room_node, wall_rects)
 
 	vision_system.build_room_occlusion(room_bounds, wall_rects)
+	var lighting: Node = room_node.get_node_or_null("RoomLightingSystem")
+	if lighting != null and lighting.has_method("get_visibility_light_sources"):
+		vision_system.set_static_light_sources(lighting.call("get_visibility_light_sources"))
 
 	# 同步墙体检疫到 FogOfWarLayer（迷雾系统需要同一套几何）
 	if fog_layer != null and fog_layer.has_method("set_wall_rects"):
@@ -750,6 +715,43 @@ func _build_vision_occlusion_for_room() -> void:
 
 	# 立即更新一次可见性（初始状态）
 	call_deferred("_do_update_enemy_visibility")
+
+
+func _refresh_current_room_vision_occlusion() -> void:
+	if map_manager != null and map_manager.get_current_room_id() >= 0:
+		_build_vision_occlusion_for_room()
+
+
+func _append_occluder_rects(root: Node, rects: Array[Rect2]) -> void:
+	for child in root.get_children():
+		if child.is_queued_for_deletion():
+			continue
+		if child is LightOccluder2D:
+			var rect := _get_occluder_world_rect(child as LightOccluder2D)
+			if rect.size.x > 0.0 and rect.size.y > 0.0 and not _contains_matching_rect(rects, rect):
+				rects.append(rect)
+		_append_occluder_rects(child, rects)
+
+
+func _get_occluder_world_rect(occluder: LightOccluder2D) -> Rect2:
+	var polygon: OccluderPolygon2D = occluder.occluder as OccluderPolygon2D
+	if polygon == null or polygon.polygon.size() < 2:
+		return Rect2()
+	var first := occluder.to_global(polygon.polygon[0])
+	var bounds := Rect2(first, Vector2.ZERO)
+	for point in polygon.polygon:
+		bounds = bounds.expand(occluder.to_global(point))
+	return bounds
+
+
+func _contains_matching_rect(rects: Array[Rect2], candidate: Rect2) -> bool:
+	for existing in rects:
+		if (
+			existing.position.distance_to(candidate.position) < 2.0
+			and existing.size.distance_to(candidate.size) < 2.0
+		):
+			return true
+	return false
 
 
 ## 每帧更新敌人可见性（在 _process 中调用）
@@ -764,6 +766,9 @@ func _do_update_enemy_visibility() -> void:
 
 	if player.has_method("get_aim_direction"):
 		vision_system.set_view_direction(player.call("get_aim_direction") as Vector2)
+	var player_light := player.get_node_or_null("PlayerVisionLight")
+	if player_light != null and player_light.has_method("get_visibility_descriptor"):
+		vision_system.set_player_light_source(player_light.call("get_visibility_descriptor"))
 
 	var enemies: Array[Node] = []
 	# 收集当前活跃敌人
@@ -783,10 +788,11 @@ func _do_update_enemy_visibility() -> void:
 		var enemy_pos: Vector2 = enemy.global_position
 		var visible: bool = vision_system.is_point_visible(player.global_position, enemy_pos)
 
-		# 保留轮廓提示，但不要覆盖 EnemyBase 的纵深排序。
+		# 未被照亮或被墙挡住的敌人不可观察，不能留下轮廓提示。
 		if enemy is CanvasItem:
 			var canvas_enemy: CanvasItem = enemy as CanvasItem
-			canvas_enemy.modulate.a = 1.0 if visible else 0.3
+			canvas_enemy.visible = visible
+			canvas_enemy.modulate.a = 1.0
 
 
 func _print_extraction_success(extracted_count: int, insurance_items: Array[Dictionary]) -> void:
@@ -1227,11 +1233,8 @@ func _get_current_room_instance() -> Node2D:
 func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
 	if room_node == null or not is_instance_valid(room_node):
 		return
-	# 尝试获取 RoomVisualizer 组件（RoomCombat.tscn 已挂载）
-	var visualizer: Node = room_node.get_node_or_null("RoomVisualizer") as Node
-	if visualizer == null:
-		# fallback：查找同 name 的 Node2D（RoomCombat/RoomTrap 等本身）
-		visualizer = room_node as Node
+	# Combat 场景将组件挂在根上，其它房型将组件挂在 Visualizer 子节点。
+	var visualizer: Node = _get_room_visualizer_node(room_node)
 	if visualizer != null and visualizer.has_method("configure"):
 		var door_info: Array[Dictionary] = []
 		if (
@@ -1631,7 +1634,6 @@ func _create_fate_card_button(card: FateCard) -> Button:
 	)
 	btn.set_meta("fate_card", card)
 	btn.pressed.connect(_on_fate_card_button_pressed.bind(card))
-	btn.button_down.connect(_on_fate_card_button_pressed.bind(card))
 
 	return btn
 
@@ -1950,6 +1952,10 @@ func _set_room_revealed(room_id: int, revealed: bool) -> void:
 		return
 	_revealed_room_ids[room_id] = revealed
 	room_node.visible = revealed
+	if revealed:
+		var lighting: Node = room_node.get_node_or_null("RoomLightingSystem")
+		if lighting != null and lighting.has_method("activate"):
+			lighting.call("activate")
 
 
 func _apply_open_doors_to_room(room_id: int) -> void:
@@ -1973,6 +1979,8 @@ func _apply_open_doors_to_room(room_id: int) -> void:
 	var visualizer := _get_room_visualizer_node(room_node)
 	if visualizer != null and visualizer.has_method("set_open_doors"):
 		visualizer.call("set_open_doors", open_door_info)
+	if room_id == map_manager.get_current_room_id():
+		call_deferred("_refresh_current_room_vision_occlusion")
 
 
 func _build_room_door_info(room_id: int, open_only: bool) -> Array[Dictionary]:
@@ -2017,6 +2025,15 @@ func _ensure_room_layout(room_node: Node2D, room_id: int, room_data: RoomData) -
 		layout = ROOM_LAYOUT_SCRIPT.new() as Node
 		layout.name = "RoomLayout"
 		room_node.add_child(layout)
+	var lighting: Node = room_node.get_node_or_null("RoomLightingSystem")
+	if lighting == null:
+		lighting = ROOM_LIGHTING_SCRIPT.new() as Node
+		lighting.name = "RoomLightingSystem"
+		room_node.add_child(lighting)
+	lighting.call("configure", room_data.room_type, room_data.size, room_id)
+	var lighting_changed := Callable(self, "_refresh_current_room_vision_occlusion")
+	if lighting.has_signal("lighting_changed") and not lighting.is_connected("lighting_changed", lighting_changed):
+		lighting.connect("lighting_changed", lighting_changed)
 	layout.call("configure", room_id, room_data, _build_room_door_info(room_id, false))
 	return layout
 

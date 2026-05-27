@@ -27,11 +27,24 @@ func _process(delta: float) -> void:
 	if weapon_tree:
 		weapon_tree.tick(delta)
 		_connect_audio_signals_if_needed()
+	if _is_gameplay_input_blocked():
+		return
 	if Input.is_action_pressed("shoot"):
 		if weapon_tree == null:
 			fire()
 		elif weapon_tree._fire_cooldown <= 0.0:
 			fire()
+
+
+func _is_gameplay_input_blocked() -> bool:
+	if player != null and is_instance_valid(player):
+		var locked = player.get("input_locked")
+		if locked is bool and locked:
+			return true
+	var ui := get_tree().root.find_child("GameUIManager", true, false)
+	if ui != null and ui.has_method("blocks_gameplay_input"):
+		return bool(ui.call("blocks_gameplay_input"))
+	return false
 
 func _refresh_weapon_tree() -> void:
 	if player and player.has_method("get_weapon_tree"):

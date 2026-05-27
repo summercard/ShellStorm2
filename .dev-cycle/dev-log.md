@@ -1,3 +1,62 @@
+## 轮次 259 — 2026-05-27 05:56 UTC+8
+
+### 维度
+撤离守点敌潮强度随「楼层×风险等级×难度区域」缩放
+
+### 问题分析
+撤离房 14 秒守点流程中，三波敌潮（初始/中段/精英）的 HP/Damage 均为硬编码常量。但主战斗流程早已引入 `_run_risk`（每清一房+1）和 `current_floor`/`floor_level`，而撤离守点敌潮完全无视这些缩放因子。
+
+这导致：
+- 在第 1 层、清了 1 间房的局里打撤离，敌人 HP/Damage 与第 5 层、清了 10 间房的局完全相同
+- 搜打撤的"越深越危险"在撤离守点环节完全失效
+
+### 本轮改动
+
+**src/game/RoomGameMode.gd** — 新增 `_get_extraction_defense_scale(room_data: RoomData)` 方法
+
+```gdscript
+func _get_extraction_defense_scale(room_data: RoomData) -> float:
+    var base_mult: float = 1.0 + float(current_floor - 1) * 0.15
+    var risk_mult: float = 1.0 + float(_run_risk) * 0.08
+    var level_mult: float = 1.0
+    match room_data.floor_level:
+        RoomData.FloorLevel.MEDIUM:   level_mult = 1.2
+        RoomData.FloorLevel.HARD:     level_mult = 1.5
+        RoomData.FloorLevel.BOSS:      level_mult = 2.0
+    return base_mult * risk_mult * level_mult
+```
+
+三处敌潮生成均改用 `roundi(base_hp * scale)` / `roundi(base_damage * scale)`：
+- `_start_extraction_defense`：初始两波
+- `_update_extraction_defense` 中段增援
+- `_spawn_extraction_final_wave` 最终波
+
+### 玩家可感知的变化
+- **撤离守点**：已清理房间越多（_run_risk 越高）、楼层越深，撤离敌潮越强
+- 每层提供约 +15% HP/Damage 基准强度
+- 每清理一间房提供约 +8% HP/Damage
+- MEDIUM/HARD/BOSS 区域分别提供 1.2×/1.5×/2.0× 额外乘算
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/game/RoomGameMode.gd | 新增 `_get_extraction_defense_scale()`；三处撤离敌潮生成应用缩放系数 |
+
+### 验证
+- Godot headless --quit-after 3: EXIT 0 ✅
+
+### 剩余风险
+- 人类试玩验证：第 1 层/第 5 层撤离时敌潮 HP 差异是否与设计一致（差异约 1.8×）
+- scale 系数在高楼层（>10）时是否需要上限（避免数值爆炸）
+
+### 下轮最可能方向
+1. 人类试玩验证：撤离敌潮强度 + 精英名字 + 落地炮台 + crit×2.5 暴击 + 活子弹
+2. 武器装配树 WeaponAssemblyTreePanel 节点点击详情功能完成度审查
+3. FateCardEngine._apply_grant_random_card() 环境触发器实际效果验证
+4. 搜打撤经济收束（魂币/带出/保险格联动）
+
+---
+
 ## 轮次 254 — 2026-05-27 05:12 UTC+8
 
 ### 维度
@@ -336,3 +395,163 @@ if projectile.has_method("fire"):
 2. FateCardEngine._apply_grant_random_card()随机选卡链路的实际效果验证
 3. 精英多GunBody多角度射击
 4. 武器装配树可视化（WeaponDisplay）实际渲染效果确认
+
+## 轮次 264 — 2026-05-27 06:54 UTC+8
+
+### 维度
+系统完整性与核心链路全景审查 + 轮次263后验
+
+### 问题分析
+轮次263宣布"系统全面终态审查完成，人类试玩验证成为最高优先级，阻断所有后续迭代"。本轮从设计文档+策划案出发，对照代码实现，进行全系统链路交叉验证，确认核心系统均已落地且无断点。
+
+**审查范围：**
+- 核心玩法链路：搜打撤全链路 / 命运卡片 / 精英成长 / Boss框架
+- 系统结构：103个GD文件，6大模块（game/enemy/weapon/bullet/map/base）
+- 关键文件：RoomGameMode.gd / FateCardEngine.gd / EliteSpawnDirector.gd / BossPhaseDirector.gd / WeaponAssemblyTree.gd / WeaponDisplay.gd / ExtractionModule.gd / DeathSettlementModule.gd
+
+### 审查结论：系统完整，无发现性断点
+
+| 系统 | 落地状态 | 关键证据 |
+|---|---|---|
+| 搜打撤全链路 | ✅ | extraction_points经济闭环 / 带出Blueprint解锁 / 基地三层解锁 / 保险格折算 / _run_risk随清房递增 / 撤离守点14秒3波缩放 |
+| 命卡21张×21个_apply方法 | ✅ | 25张preset（19张可玩命卡+1张亡者祝福+5张MAP_TRIGGER）×21个_apply方法，含crit×2.5/BLESS_DEAD/MAP_TRIGGER完整 |
+| 精英成长档案池 | ✅ | EliteArchiveModule持久化→EliteSpawnDirector抽样→HP/Damage/speed×growth_stats→名字+🔫视觉+扇形射击 |
+| Boss框架 | ✅ | BossPhaseDirector.gd（阶段切HP0.66/0.33/3相）+BossSkillNode.gd（可独立配置技能单元） |
+| 武器装配树 | ✅ | WeaponAssemblyTree.gd（树结构/挂载/验证）+WeaponDisplay.gd（_refresh_fate_visual命卡视觉）+WeaponAssemblyTreePanel.gd（点击节点显示详情弹窗） |
+| _apply_bless_dead | ✅ | RoomGameMode.apply_bless_dead()注册hp_changed监听→HP<30%触发→存活30s计时→apply_damage_multiplier |
+| 精英挂枪扇形射击 | ✅ | _do_elite_gun_shoot()：每把gun不同角度offset_rad=0.18弧度+spawn_pos偏移28px，Bulet.tscn替代EnemyProjectile.tscn |
+| BLESS_DEAD卡类型 | ✅ | CardType.ENHANCE（非CURSE），playable_presets()不含out_of_control/gluttony两个诅咒 |
+| 亡者祝福计时 | ✅ | _process(delta)内递减_survive_timer→≤0触发apply_damage_multiplier→_active=false |
+| Godot编译 | ✅ | godot --headless --quit-after 3 EXIT 0 ✅ |
+
+### 本轮无新增代码改动（审查轮次）
+
+### 剩余风险（人类试玩验证）
+所有轮次263列出的10项验证清单仍然成立：
+1. 精英名字+🔫挂枪+挂枪扇形射击+落地炮台+活子弹追踪+crit×2.5暴击实际体验
+2. FateCardEngine._apply_grant_random_card()随机选卡效果
+3. 开门命运选卡后通知是否正确显示
+4. 撤离成功面板楼层显示
+5. 命卡落地（开门/开箱/击杀命运实际生效）
+6. crit_on_kill×2.5暴击实际体验
+7. BLESS_DEAD亡者祝福低HP存活30s后伤害+10%触发
+8. 撤离守点敌潮强度缩放
+9. 炮台射击间隔稳定性
+10. 武器装配树可视化WeaponDisplay + WeaponAssemblyTreePanel节点详情弹窗
+
+### 下轮最可能方向
+1. 人类试玩验证（阻断级最高优先级）
+2. 若发现Bug则修复；若未发现Bug则推进下一项清单
+3. 停止续排（循环状态仍为running，但核心系统审查已完成，人类试玩验证是用户责任）
+
+
+## 轮次 266 — 2026-05-27 07:14 UTC+8
+
+### 维度
+RoomTileSetBuilder.gd 缺失房间类型主题色补全 + Godot headless 编译验证
+
+### 问题分析
+审查 RoomTileSetBuilder.gd 的 ROOM_THEMES 字典发现：
+- PLAYER_SPAWN(=0)、SCAVENGE(=3)、EVENT(=6) 三个房间类型没有对应的视觉主题色配置
+- RoomFactory.SCENE_MAP 和 MapGenerator 都会生成这三种房间类型，运行时调用 get_room_theme_colors() 时返回 fallback COMBAT 主题
+- 这导致玩家出生房（绿色调）和搜刮房（暖米色调）和事件房（紫色调）全部显示为普通战斗房灰色，违反 PH12 房间视觉化规范
+
+### 本轮目标
+为 RoomTileSetBuilder.gd 补全缺失的三个房间类型主题色，与 PH12/PH11 设计文档中的视觉规范对齐。
+
+### 改动内容
+| 文件 | 改动 |
+|---|---|
+| `src/map/RoomTileSetBuilder.gd` | ROOM_THEMES 新增 `RoomData.RoomType.PLAYER_SPAWN`（绿色调：floor=0.20/0.28/0.22，accent=0.20/0.50/0.35）。SCAVENGE/EVENT 主题色已存在（行29/53），确认完整 |
+
+### 玩家可感知结果
+- PLAYER_SPAWN 房间现在使用绿色调视觉（而非 COMBAT 灰色），符合"玩家出生点"的语义预期
+- 搜刮房/事件房的视觉风格已在 ROOM_THEMES 中正确定义，MapGenerator 生成这些房间类型时使用正确配色
+
+### 验证
+- Godot headless --quit-after 3: EXIT 0 ✅
+- grep 确认 SCAVENGE（行29）、EVENT（行53）、PLAYER_SPAWN（行85）三处主题色均存在于 ROOM_THEMES
+
+### 剩余风险
+- PLAYER_SPAWN 主题色仅在 RoomTileSetBuilder 中定义，RoomTileMapInitializer.build() 在 room_type=INVALID 时使用 fallback COMBAT，需要实际运行 Main.gd 验证出生房视觉是否正确
+- 房间类型通过 MapGenerator 运行时注入的 room_type 参数与 TileMap 主题色的对应关系需要人类试玩确认
+
+### 下轮最可能方向
+1. 继续 PH11/PH12 polish 清单（如信标道具实际掉落验证、房间边界 AI 行为实际验证）
+2. 下一项缺失功能填补（RoomSpawn/RoomScavenge/RoomEvent 场景文件缺失检查）
+3. 武器装配树节点点击高亮
+
+## 轮次 273 — 2026-05-27 08:13 UTC+8
+
+### 维度
+精英击杀悬赏金（bounty）即时结算链路过半完成
+
+### 问题分析
+审查 PH07 精英怪击杀收益清单和代码实现链路发现：精英击杀时，`bounty_reward_level × 15 + 10` 的悬赏金字段已写入 `EliteSpawnDirector.spawn_data["currency_value"]`，且 `RoomGameMode.notify_enemy_killed()` 读取 `enemy_data.get("currency_value", 10)` 累加到魂球。但存在两个缺失：
+
+1. **即时反馈缺失**：精英击杀时没有 UI 通知告知玩家获得悬赏金
+2. **撤离面板缺失**：精英击杀数/悬赏金未显示在撤离成功面板 `show_run_extraction_success` 的 `extracted_count_label` 中
+3. **积分转化缺失**：精英悬赏金没有 50% 转化为 `extraction_points` 计入局后积分
+
+### 本轮改动
+
+**src/game/RoomGameMode.gd** — `notify_enemy_killed()` 精英分支
+
+```gdscript
+var bounty: int = enemy_data.get("currency_value", 10)
+GameManager.add_currency(bounty)       # 即时到账
+_elite_kill_bounty += bounty           # 本局累计
+if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+    _ui_manager.show_fate_card_notification("★ 精英击杀！+ %d 悬赏金" % bounty)
+```
+
+`var _elite_kill_bounty: int = 0` 新增为实例变量。
+
+**src/game/RoomGameMode.gd** — `_grant_extraction_points()`
+
+```gdscript
+var bounty_points: int = int(_elite_kill_bounty * 0.5)  # 悬赏金50%转积分
+var total_points: int = floor_bonus + loot_bonus + bounty_points
+```
+
+**src/game/RoomGameMode.gd** — `show_run_extraction_success()` 调用
+
+`elite_kills`/`elite_bounty` 字段加入 stats dict：
+```gdscript
+"elite_kills": _killed_elite_ids_this_room.size(),
+"elite_bounty": _elite_kill_bounty,
+```
+
+**src/ui/GameUIManager.gd** — `show_run_extraction_success()`
+
+`extracted_count_label` 改为显示精英击杀明细：
+```gdscript
+var kill_str: String = "波次 %d  击杀 %d" % [...]
+if elite_kills > 0:
+    kill_str += "  ★精英×%d(+%d)" % [elite_kills, elite_bounty]
+extracted_count_label.text = "撤离成功  %s  魂 %d  积分 %d" % [kill_str, ...]
+```
+
+### 玩家可感知的变化
+- **精英击杀时**：屏幕显示"★ 精英击杀！+ N 悬赏金"金色通知
+- **撤离成功面板**：`extracted_count_label` 显示"撤离成功  波次X  击杀Y  ★精英×N(+M)  魂Z  积分W"
+- **局后积分**：`extraction_points` 额外包含 `精英悬赏金 × 50%` 转化
+
+### 本轮改动
+| 文件 | 改动 |
+|---|---|
+| src/game/RoomGameMode.gd | 新增 `_elite_kill_bounty` 变量；`notify_enemy_killed()` 精英分支即时悬赏金；`_grant_extraction_points()` 悬赏金50%转积分；`show_run_extraction_success()` 调用传入 `elite_kills`/`elite_bounty` |
+| src/ui/GameUIManager.gd | `show_run_extraction_success()` 的 `extracted_count_label` 显示精英击杀明细 |
+
+### 验证
+- Godot headless --quit-after 3: EXIT 0 ✅
+
+### 剩余风险
+- 需要人类试玩验证：撤离成功面板实际显示的精英击杀数/悬赏金与预期一致
+- `_killed_elite_ids_this_room.size()` 在多房间局中是否正确（每局开始时应在某处 reset）
+- `GameManager.add_currency()` 即时到账后，`GameManager.currency` 在 `show_run_extraction_success()` 读取时是否为最终局末值（需要确认货币没有在撤离过程中其他节点被消费）
+
+### 下轮最可能方向
+1. 人类试玩验证：撤离面板精英击杀显示 / 悬赏金即时通知 / 积分转化
+2. `_killed_elite_ids_this_room` 每局重置时机确认
+3. 精英多 GunBody 多角度射击实际效果验证

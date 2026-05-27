@@ -57,6 +57,7 @@ static func attachment_parasite() -> FateCard:
 	card.short_description = "配件附在子弹上，命中时触发效果"
 	card.description = "选择一个配件使其寄生到子弹上，命中时触发配件效果"
 	card.tags = ["Fate.Combine", "Fate.AddChildNode", "attachment"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.effect = {
 		"action": FateCard.EffectAction.ATTACH_TO_MOUNT,
 		"target_slot": "MUZZLE",
@@ -149,6 +150,7 @@ static func turret_on_land() -> FateCard:
 	card.short_description = "子弹落地后变成小炮台"
 	card.description = "子弹落地后变成小炮台，继续攻击周围敌人"
 	card.tags = ["Fate.Mutate", "Fate.Turret"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.effect = {
 		"action": FateCard.EffectAction.MUTATE_TO_LIVING,
 		"spawn_turret_on_land": true,
@@ -182,8 +184,9 @@ static func out_of_control() -> FateCard:
 	card.short_description = "子弹上的枪乱开枪，但不一定打中"
 	card.description = "所有挂载在子弹上的枪自动射击，但子弹不一定瞄准敌人"
 	card.tags = ["Fate.Curse", "Fate.UncontrolledFire"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.effect = {
-		"action": FateCard.EffectAction.ATTACH_TO_MOUNT,
+		"action": FateCard.EffectAction.OUT_OF_CONTROL,
 		"auto_fire": true,
 		"aim_randomness": 0.5,
 		"damage_scale": 0.8,
@@ -198,8 +201,9 @@ static func gluttony() -> FateCard:
 	card.short_description = "子弹每命中一次就变大，但会减速"
 	card.description = "子弹每命中一次就变大，但也会降低玩家移速"
 	card.tags = ["Fate.Curse", "Fate.SizeGrowth"]
+	card.target_rules = [{"select": "BULLET"}]
 	card.effect = {
-		"action": FateCard.EffectAction.SCALE_NODE,
+		"action": FateCard.EffectAction.SIZE_GROWTH,
 		"growth_per_hit": 0.2,
 		"speed_penalty": 0.05,
 		"max_scale": 3.0,

@@ -6,6 +6,11 @@ extends Node2D
 
 signal visual_ready
 
+# WorldPlaceholder is the black void at z=-20; walkable floor must remain above it
+# while still drawing underneath walls, entities, and interaction markers.
+const FLOOR_Z_INDEX := -12
+const AMBIENT_Z_INDEX := -11
+
 @export var room_type: RoomData.RoomType = RoomData.RoomType.COMBAT
 @export
 var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
@@ -70,6 +75,9 @@ func build_visual() -> void:
 	_is_built = true
 
 	# 构建 TileSet 并填充 TileMap
+	floor_layer.z_index = FLOOR_Z_INDEX
+	if ambient != null:
+		ambient.z_index = AMBIENT_Z_INDEX
 	_tile_set_builder.build_tile_set(floor_layer, room_type)
 	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type)
 
@@ -80,7 +88,6 @@ func build_visual() -> void:
 	_apply_door_visualization()
 
 	_ensure_boundary_collision()
-	_build_vision_occluders()
 
 	visual_ready.emit()
 
@@ -171,32 +178,6 @@ func _show_trap_warnings() -> void:
 	pass
 
 
-func _build_vision_occluders() -> void:
-	if get_node_or_null("VisionOccluders") != null or floor_layer == null or floor_layer.tile_set == null:
-		return
-	var occluders := Node2D.new()
-	occluders.name = "VisionOccluders"
-	for cell in floor_layer.get_used_cells():
-		var atlas: Vector2i = floor_layer.get_cell_atlas_coords(cell)
-		if not ((atlas.x == 2 or atlas.x == 3) and atlas.y == 0):
-			continue
-		var size := Vector2(floor_layer.tile_set.tile_size)
-		var polygon := OccluderPolygon2D.new()
-		polygon.polygon = PackedVector2Array([
-			-size * 0.5,
-			Vector2(size.x * 0.5, -size.y * 0.5),
-			size * 0.5,
-			Vector2(-size.x * 0.5, size.y * 0.5),
-		])
-		polygon.cull_mode = OccluderPolygon2D.CULL_COUNTER_CLOCKWISE
-		var occluder := LightOccluder2D.new()
-		occluder.occluder_light_mask = 1
-		occluder.occluder = polygon
-		occluder.position = floor_layer.map_to_local(cell)
-		occluders.add_child(occluder)
-	add_child(occluders)
-
-
 ## 获取当前房间的主题色（供其他组件使用）
 func get_theme_colors() -> Dictionary:
 	return _tile_set_builder.get_room_theme_colors(room_type)
@@ -210,6 +191,9 @@ func reset_visual() -> void:
 	var boundary_collision := get_node_or_null("BoundaryCollision")
 	if boundary_collision != null:
 		boundary_collision.queue_free()
+	var legacy_tile_occluders := get_node_or_null("VisionOccluders")
+	if legacy_tile_occluders != null:
+		legacy_tile_occluders.queue_free()
 	# 清理氛围子节点（保留 AmbientDecoration 本身）
 	if ambient != null:
 		for child in ambient.get_children():

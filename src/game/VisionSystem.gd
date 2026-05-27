@@ -26,6 +26,8 @@ var _wall_world_rects: Array[Rect2] = []
 var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)
 
 var _debug_occluders: Array[Rect2] = []
+var _static_light_sources: Array[Dictionary] = []
+var _player_light_source: Dictionary = {}
 
 
 ## 由 RoomGameMode 在进入房间时调用，构建房间级别的遮挡几何
@@ -46,21 +48,56 @@ func is_point_visible(from: Vector2, to: Vector2) -> bool:
 		return false
 	
 	var distance: float = from.distance_to(to)
-	if distance > view_radius:
+	if not _has_clear_line(from, to):
 		return false
 
-	if distance > NEAR_VIEW_RADIUS and view_angle >= 0.0:
-		var target_direction: Vector2 = (to - from).normalized()
-		var angle_to_target: float = absf(view_direction.angle_to(target_direction))
-		if angle_to_target > view_angle * 0.5:
-			return false
-
-	if _point_in_any_rect(from, _wall_world_rects) or _point_in_any_rect(to, _wall_world_rects):
-		return false
-
-	if distance < 1.0:
+	var player_source := _player_light_source
+	if player_source.is_empty():
+		player_source = {
+			"position": from,
+			"radius": view_radius,
+			"shape": "flashlight",
+			"direction": view_direction,
+			"cone_angle": view_angle,
+			"near_radius": NEAR_VIEW_RADIUS,
+		}
+	else:
+		player_source["position"] = from
+		player_source["direction"] = view_direction
+	if _source_illuminates_point(player_source, to):
 		return true
 
+	for source in _static_light_sources:
+		var light_position: Vector2 = source.get("position", Vector2.ZERO)
+		if _source_illuminates_point(source, to) and _has_clear_line(light_position, to):
+			return true
+	return false
+
+
+func _source_illuminates_point(source: Dictionary, point: Vector2) -> bool:
+	var light_position: Vector2 = source.get("position", Vector2.ZERO)
+	var offset: Vector2 = point - light_position
+	var distance := offset.length()
+	var near_radius: float = float(source.get("near_radius", 0.0))
+	if distance <= near_radius:
+		return true
+	var radius: float = float(source.get("radius", 0.0))
+	if radius <= 0.0 or distance > radius:
+		return false
+	if str(source.get("shape", "radial")) != "flashlight":
+		return true
+	var direction: Vector2 = source.get("direction", Vector2.RIGHT)
+	if direction.length_squared() <= 0.0001:
+		return false
+	var cone_angle: float = float(source.get("cone_angle", view_angle))
+	return absf(direction.normalized().angle_to(offset.normalized())) <= cone_angle * 0.5
+
+
+func _has_clear_line(from: Vector2, to: Vector2) -> bool:
+	if _point_in_any_rect(from, _wall_world_rects) or _point_in_any_rect(to, _wall_world_rects):
+		return false
+	if from.distance_to(to) < 1.0:
+		return true
 	for rect in _wall_world_rects:
 		if _ray_intersects_rect(from, to, rect):
 			return false
@@ -133,7 +170,21 @@ func set_view_angle(angle_radians: float) -> void:
 	view_angle = clampf(angle_radians, 0.05, TAU)
 
 
+func set_static_light_sources(sources: Array[Dictionary]) -> void:
+	_static_light_sources.clear()
+	for source in sources:
+		var radius: float = float(source.get("radius", 0.0))
+		if radius > 0.0:
+			_static_light_sources.append(source.duplicate(true))
+
+
+func set_player_light_source(source: Dictionary) -> void:
+	_player_light_source = source.duplicate(true)
+
+
 ## 重置（切换房间时）
 func reset() -> void:
 	_wall_world_rects.clear()
 	_debug_occluders.clear()
+	_static_light_sources.clear()
+	_player_light_source.clear()

@@ -31,6 +31,23 @@ func _ready() -> void:
 		var collision: StaticBody2D = layout.get_node_or_null("WallCollision") as StaticBody2D
 		if collision == null or collision.get_child_count() < 4:
 			failures.append("Room %d has no usable wall collision" % node.id)
+		for neighbor_id in graph.get_neighbors(node.id):
+			if neighbor_id <= node.id:
+				continue
+			var neighbor := graph.get_node(neighbor_id)
+			if neighbor == null or neighbor.room_data == null:
+				continue
+			var delta: Vector2 = neighbor.position - node.position
+			var expected_distance := (
+				(node.room_data.size.x + neighbor.room_data.size.x) * 0.5
+				if absf(delta.x) >= absf(delta.y)
+				else (node.room_data.size.y + neighbor.room_data.size.y) * 0.5
+			)
+			var actual_distance := absf(delta.x) if absf(delta.x) >= absf(delta.y) else absf(delta.y)
+			if not is_equal_approx(actual_distance, expected_distance):
+				failures.append(
+					"Connected rooms %d and %d leave an unbounded walkable gap" % [node.id, neighbor_id]
+				)
 
 	var player: Node2D = mode.player
 	var current_id: int = mode.map_manager.get_current_room_id()

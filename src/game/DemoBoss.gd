@@ -23,6 +23,7 @@ var _current_hp: float = 500.0
 var _damage_cooldown_timer: float = 0.0
 var _is_dead: bool = false
 var _invulnerable: bool = false
+var _activated: bool = false
 
 func _ready() -> void:
 	# 设为敌人碰撞层（与普通 Enemy 同层，方便子弹检测）
@@ -37,11 +38,16 @@ func _ready() -> void:
 	current_hp = max_hp
 	_setup_hp_bar()
 	
-	# Boss 出现时通知 GameUIManager
-	_connect_to_game_ui()
-	
 	z_index = 100
 	print("[DemoBoss] Ready - HP: %d/%d" % [_current_hp, max_hp])
+
+
+func activate() -> void:
+	if _activated:
+		return
+	_activated = true
+	_connect_to_game_ui()
+
 
 func _setup_hp_bar() -> void:
 	if hp_bar:

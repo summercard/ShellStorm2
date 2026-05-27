@@ -53,6 +53,10 @@ text = "成功撤离: 0"
 layout_mode = 2
 text = "总击杀: 0"
 
+[node name="PointsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+layout_mode = 2
+text = "资源: 0"
+
 [node name="HSeparator2" type="HSeparator" parent="VBox"]
 layout_mode = 2
 

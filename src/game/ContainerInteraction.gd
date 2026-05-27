@@ -104,6 +104,7 @@ func _try_open_container() -> void:
 	_state = ContainerState.OPENED
 	if _interact_label:
 		_interact_label.modulate = Color(1, 1, 1, 0)
+	_disable_opened_container_obstacle()
 	interaction_available.emit(false)
 
 	# 播放开启动画（如果有）
@@ -120,6 +121,18 @@ func _try_open_container() -> void:
 	container_opened.emit(loot)
 
 	print("[ContainerInteraction] %s 已开启，获得 %d 件物品" % [container_type, granted])
+
+
+func _disable_opened_container_obstacle() -> void:
+	monitoring = false
+	collision_layer = 0
+	collision_mask = 0
+	var blocker := get_node_or_null("VisionBlocker")
+	if blocker != null:
+		blocker.queue_free()
+	var shape := get_node_or_null("InteractionArea") as CollisionShape2D
+	if shape != null:
+		shape.set_deferred("disabled", true)
 
 
 ## 生成掉落

@@ -728,9 +728,10 @@ func _do_elite_gun_shoot() -> void:
 		if projectile.has_method("fire"):
 			projectile.fire(spawn_pos, gun_dir, bullet_speed, gun_damage, false)
 
-		# 如果偷了Bullet模块，对第一颗子弹应用行为修饰
-		if i == 0 and not _elite_bullet_modules.is_empty():
-			var bullet_module: Dictionary = _elite_bullet_modules[0]
+		# 如果偷了Bullet模块，对当前子弹应用行为修饰
+		if not _elite_bullet_modules.is_empty():
+			var bullet_idx: int = mini(i, _elite_bullet_modules.size() - 1)
+			var bullet_module: Dictionary = _elite_bullet_modules[bullet_idx]
 			var node := AssemblyNode.new(AssemblyNode.NodeType.BULLET, bullet_module.get("module_id", "EliteBullet"))
 			node.set_base_stats(bullet_module)
 			if projectile.has_method("apply_fate_stats_from_node"):

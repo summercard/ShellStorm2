@@ -2,6 +2,8 @@ class_name RoomFactory
 extends RefCounted
 ## 房间工厂 — 将 RoomData 实例化为游戏场景节点
 
+const WALL_OCCLUDER_SCRIPT := preload("res://src/map/WallOccluderComponent.gd")
+
 ## 场景预制件映射（未来会从外部配置加载）
 ## 目前先用占位符场景名称
 const SCENE_MAP := {
@@ -83,8 +85,25 @@ func _bind_existing_interactables(root: Node, inventory: InventoryModule) -> voi
 		return
 	if root.has_method("set_inventory"):
 		root.call("set_inventory", inventory)
+		if root is Node2D:
+			_attach_vision_blocker(root as Node2D, Vector2(40, 40))
 	for child in root.get_children():
 		_bind_existing_interactables(child, inventory)
+
+
+func _attach_vision_blocker(target: Node2D, size: Vector2) -> void:
+	if target == null or target.get_node_or_null("VisionBlocker") != null:
+		return
+	var blocker: Node2D = WALL_OCCLUDER_SCRIPT.new() as Node2D
+	blocker.name = "VisionBlocker"
+	var half := size * 0.5
+	blocker.set("occluder_polygon", PackedVector2Array([
+		Vector2(-half.x, -half.y),
+		Vector2(half.x, -half.y),
+		Vector2(half.x, half.y),
+		Vector2(-half.x, half.y),
+	]))
+	target.add_child(blocker)
 
 
 ## 为商人房绑定商人NPC（MerchantInteraction -> inventory + goods）
@@ -138,6 +157,7 @@ func _spawn_containers_for_room(
 		if container != null:
 			container.position = config.get("position", Vector2.ZERO)
 			room_instance.add_child(container)
+			_attach_vision_blocker(container, Vector2(40, 40))
 
 			# 绑定背包引用（用于掉落入背包）
 			var ci: ContainerInteraction = container as ContainerInteraction
@@ -319,6 +339,7 @@ func _spawn_workbench_for_room(
 	if workbench != null:
 		workbench.position = bench_config.get("position", Vector2.ZERO)
 		room_instance.add_child(workbench)
+		_attach_vision_blocker(workbench, Vector2(80, 86))
 
 		# 绑定背包引用（用于工作台改造逻辑）
 		if workbench.has_method("set_inventory"):

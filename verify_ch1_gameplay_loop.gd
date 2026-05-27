@@ -107,7 +107,7 @@ func _verify_main_scene_loop(failures: Array[String]) -> void:
 					"Inventory attachment slot does not show an operable weapon-part marker"
 				)
 
-			ui.call("_on_slot_right_clicked", slot_index, true)
+			_click_inventory_slot(ui, slot_index, MOUSE_BUTTON_LEFT)
 			await get_tree().process_frame
 			var root: AssemblyNode = mode.player.get_weapon_tree().get_root()
 			if root == null or root.slots.get(AssemblyNode.SlotType.MUZZLE) == null:
@@ -150,6 +150,16 @@ func _find_slot_with_id(slots: Array[Dictionary], item_id: String) -> int:
 		if item.get("id", "") == item_id:
 			return int(slot.get("slot", -1))
 	return -1
+
+
+func _click_inventory_slot(ui: CanvasLayer, slot_index: int, button_index: MouseButton) -> void:
+	var slot := ui.get_node_or_null("InventoryPanel/VBox/InventoryGrid/InvSlot_%d" % slot_index)
+	if slot == null:
+		return
+	var event := InputEventMouseButton.new()
+	event.button_index = button_index
+	event.pressed = true
+	slot.call("_on_gui_input", event)
 
 
 func _finish(failures: Array[String]) -> void:

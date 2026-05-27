@@ -156,6 +156,7 @@ func _setup_trail() -> void:
 	_trail_line.width = 3.0
 	_trail_line.default_color = Color(1.0, 0.7, 0.1, 0.45)
 	_trail_line.z_index = -1
+	_trail_line.z_as_relative = true
 	_trail_line.points = PackedVector2Array([Vector2.ZERO, Vector2(-36, 0)])
 	_trail_points.clear()
 	add_child(_trail_line)
@@ -209,17 +210,16 @@ func _process(delta: float) -> void:
 		global_position += direction * step
 		rotation = direction.angle()
 
-	# 轨迹：记录每帧位置（相对子弹本地空间，向后延伸）
+	# 轨迹：Line2D 是子弹的子节点，点必须保持本地坐标。
+	# 之前这里写入世界坐标，会被子弹节点再次变换，画出很长很细的异常线。
 	_trail_points.append(Vector2.ZERO)
 	if _trail_points.size() > MAX_TRAIL_POINTS:
 		_trail_points.pop_front()
 	if _trail_points.size() >= 2:
-		var world_trail: PackedVector2Array = PackedVector2Array()
+		var local_trail: PackedVector2Array = PackedVector2Array()
 		for i in range(_trail_points.size()):
-			# 轨迹点在本地空间向枪尾（-X）延伸
-			var local_pt: Vector2 = Vector2(-i * 3.0, 0.0).rotated(rotation)
-			world_trail.append(global_position + local_pt)
-		_trail_line.points = world_trail
+			local_trail.append(Vector2(-i * 3.0, 0.0))
+		_trail_line.points = local_trail
 		# 只在非暴击时每帧重置为橙色——暴击颜色由 fire() 设置，应保持不变
 		if not is_crit:
 			_trail_line.default_color = Color(1.0, 0.7, 0.1, 0.45)

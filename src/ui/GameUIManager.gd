@@ -97,6 +97,8 @@ var _dragging_inventory_panel: bool = false
 var _inventory_drag_start_mouse: Vector2 = Vector2.ZERO
 var _inventory_drag_start_panel: Vector2 = Vector2.ZERO
 var _inventory_drag_start_insurance: Vector2 = Vector2.ZERO
+var _item_hover_card: PanelContainer = null
+var _item_hover_label: Label = null
 var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信标撤离计数）
 var _run_choice_overlay: Control = null
 var _run_choice_kind: String = ""
@@ -1749,11 +1751,24 @@ func _prepare_extraction_success_modal() -> void:
 func show_run_extraction_success(stats: Dictionary) -> void:
 	_show_extraction_success()
 	var ep_total: int = BaseManager.get_extraction_points()
+	var elite_kills: int = int(stats.get("elite_kills", 0))
+	var elite_bounty: int = int(stats.get("elite_bounty", 0))
+	var kill_str: String = "波次 %d  击杀 %d" % [int(stats.get("wave", 0)), int(stats.get("kills", 0))]
+	if elite_kills > 0:
+		kill_str += "  ★精英×%d(+%d)" % [elite_kills, elite_bounty]
 	if extracted_count_label:
 		extracted_count_label.text = (
-			"撤离成功  波次 %d  击杀 %d  魂 %d  积分 %d" % [int(stats.get("wave", 0)), int(stats.get("kills", 0)), int(stats.get("currency", 0)), ep_total]
+			"撤离成功  %s  魂 %d  积分 %d" % [kill_str, int(stats.get("currency", 0)), ep_total]
 		)
 	if extracted_items_vbox:
+		# 显示本局获得的积分（灵魂兑换）
+		var points_earned: int = int(stats.get("points", 0))
+		if points_earned > 0:
+			var points_node := Label.new()
+			points_node.text = "▶ 本局获得资源: +%d" % points_earned
+			points_node.modulate = Color(0.3, 1.0, 0.55, 1.0)
+			points_node.add_theme_font_size_override("font_size", 16)
+			extracted_items_vbox.add_child(points_node)
 		var score_label_node := Label.new()
 		score_label_node.text = (
 			"最终得分: %d  风险层级: %d" % [int(stats.get("score", 0)), int(stats.get("risk", 0))]
@@ -2181,6 +2196,11 @@ func _get_weapon_tree():
 
 
 func _process(delta: float) -> void:
+	# 小地图脏标记驱动重绘
+	if _minimap_dirty:
+		_minimap_dirty = false
+		if _minimap_view:
+			_minimap_view.queue_redraw()
 	if _is_reloading and _reload_duration > 0:
 		_reload_progress = min(_reload_progress + delta, _reload_duration)
 		if ammo_bar:
@@ -2192,6 +2212,26 @@ func _process(delta: float) -> void:
 		if _fate_card_notification_timer <= 0.0:
 			_fate_card_notification_timer = 0.0
 			_hide_fate_card_notification()
+	if _item_hover_card != null and _item_hover_card.visible:
+		_position_item_hover_card()
+
+
+func blocks_gameplay_input() -> bool:
+	if inventory_panel != null and inventory_panel.visible:
+		return true
+	if insurance_panel != null and insurance_panel.visible:
+		return true
+	if fate_card_panel != null and fate_card_panel.visible:
+		return true
+	if _run_choice_overlay != null and _run_choice_overlay.visible:
+		return true
+	if game_over_panel != null and game_over_panel.visible:
+		return true
+	if _extraction_success_shown:
+		return true
+	if extraction_success_panel != null and extraction_success_panel.visible:
+		return true
+	return false
 
 
 ## — 物品存入取出（保险格）系统 —
@@ -2269,7 +2309,7 @@ func _style_inventory_panel(panel: PanelContainer, title: String) -> void:
 	style.set_border_color(Color(0.36, 0.44, 0.58, 0.9))
 	style.set_corner_radius_all(6)
 	panel.add_theme_stylebox_override("panel", style)
-	panel.tooltip_text = "%s: 拖动面板空白处移动。背包左键选择，Shift+左键存保险，右键使用/装备；保险箱左键取回。" % title
+	panel.tooltip_text = "%s: 拖动面板空白处移动。左键使用/装备，Shift+左键存保险，右键同样可操作；保险箱左键取回。" % title
 
 
 func _build_inventory_grid() -> void:
@@ -2332,6 +2372,8 @@ func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
 		(slot as Node).slot_clicked.connect(_on_slot_clicked.bind(is_inventory))
 	if slot.has_signal("slot_right_clicked"):
 		(slot as Node).slot_right_clicked.connect(_on_slot_right_clicked.bind(is_inventory))
+	_ensure_slot_hover_signals(slot)
+	slot.set_meta("slot_is_inventory", is_inventory)
 
 
 func _refresh_inventory_ui() -> void:
@@ -2380,6 +2422,9 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	var item: Dictionary = slot_info.get("item", {})
 	var item_id: String = item.get("id", "")
 	var count: int = slot_info.get("count", 1)
+	_ensure_slot_hover_signals(slot)
+	slot.set_meta("slot_item", item.duplicate(true))
+	slot.set_meta("slot_count", count)
 	var icon_path: String = item.get("icon", "")
 	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
 		var tex: Texture2D = load(icon_path) as Texture2D
@@ -2390,7 +2435,7 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 			(slot as TextureRect).texture = _make_item_icon(item)
 	_update_slot_text(slot, item)
 	slot.tooltip_text = (
-		"%s\n%s\n左键: 选择/查看  Shift+左键: 存保险  右键: 使用/装备/装配"
+		"%s\n%s\n左键: 使用/装备/装配  Shift+左键: 存保险  右键: 快速操作"
 		% [item.get("name", item_id), item.get("description", item.get("type", "物品"))]
 	)
 	if slot.has_node("CountLabel"):
@@ -2411,6 +2456,12 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 func _clear_slot(slot: Control) -> void:
 	if slot is TextureRect:
 		(slot as TextureRect).texture = null
+	if slot.has_meta("slot_item"):
+		slot.remove_meta("slot_item")
+	if slot.has_meta("slot_count"):
+		slot.remove_meta("slot_count")
+	if _item_hover_card != null and _item_hover_card.visible:
+		_hide_item_hover_card()
 	_update_slot_text(slot, {})
 	slot.tooltip_text = ""
 	if slot.has_node("CountLabel"):
@@ -2446,6 +2497,7 @@ func _apply_slot_selection(slot: Control, selected: bool) -> void:
 
 func _on_inventory_panel_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		get_viewport().set_input_as_handled()
 		if event.pressed:
 			_dragging_inventory_panel = true
 			_inventory_drag_start_mouse = get_viewport().get_mouse_position()
@@ -2462,8 +2514,116 @@ func _on_inventory_panel_gui_input(event: InputEvent) -> void:
 		else:
 			_dragging_inventory_panel = false
 	elif event is InputEventMouseMotion and _dragging_inventory_panel:
+		get_viewport().set_input_as_handled()
 		var delta := get_viewport().get_mouse_position() - _inventory_drag_start_mouse
 		_move_inventory_panel_pair(delta)
+
+
+func _ensure_slot_hover_signals(slot: Control) -> void:
+	if slot == null or slot.has_meta("slot_hover_connected"):
+		return
+	slot.mouse_entered.connect(_on_slot_mouse_entered.bind(slot))
+	slot.mouse_exited.connect(_on_slot_mouse_exited.bind(slot))
+	slot.set_meta("slot_hover_connected", true)
+
+
+func _on_slot_mouse_entered(slot: Control) -> void:
+	if slot == null:
+		return
+	var item: Dictionary = {}
+	var count := 1
+	var slot_index := int(slot.get("slot_index"))
+	var is_inventory := bool(slot.get_meta("slot_is_inventory", true))
+	if is_inventory and _inventory_module != null:
+		var slot_data: Dictionary = _inventory_module.get_slot(slot_index)
+		item = slot_data.get("item", {})
+		count = int(slot_data.get("count", 1))
+	elif not is_inventory and _insurance_module != null and _insurance_module.has_method("get_occupied_slots"):
+		for slot_data in _insurance_module.get_occupied_slots():
+			if int(slot_data.get("insurance_slot", slot_data.get("slot", -1))) == slot_index:
+				item = slot_data.get("item", {})
+				count = int(slot_data.get("count", 1))
+				break
+	elif slot.has_meta("slot_item"):
+		item = slot.get_meta("slot_item")
+		count = int(slot.get_meta("slot_count", 1))
+	if item.is_empty():
+		return
+	_show_item_hover_card(item, count)
+
+
+func _on_slot_mouse_exited(slot: Control) -> void:
+	_hide_item_hover_card()
+
+
+func _ensure_item_hover_card() -> void:
+	if _item_hover_card != null and is_instance_valid(_item_hover_card):
+		return
+	_item_hover_card = PanelContainer.new()
+	_item_hover_card.name = "ItemHoverCard"
+	_item_hover_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_item_hover_card.z_index = 2600
+	_item_hover_card.visible = false
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.035, 0.04, 0.055, 0.97)
+	style.set_border_width_all(1)
+	style.set_border_color(Color(0.55, 0.64, 0.78, 0.95))
+	style.set_corner_radius_all(6)
+	style.set_content_margin_all(10)
+	_item_hover_card.add_theme_stylebox_override("panel", style)
+	_item_hover_label = Label.new()
+	_item_hover_label.custom_minimum_size = Vector2(220, 0)
+	_item_hover_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_item_hover_label.add_theme_font_size_override("font_size", 13)
+	_item_hover_label.add_theme_color_override("font_color", Color(0.9, 0.94, 1.0, 1.0))
+	_item_hover_card.add_child(_item_hover_label)
+	add_child(_item_hover_card)
+
+
+func _show_item_hover_card(item: Dictionary, count: int) -> void:
+	_ensure_item_hover_card()
+	if _item_hover_card == null or _item_hover_label == null:
+		return
+	var name := str(item.get("name", item.get("id", "物品")))
+	var rarity := str(item.get("rarity", "common"))
+	var type_text := str(item.get("type", "物品"))
+	var desc := str(item.get("description", ""))
+	var action := "左键: 选择"
+	if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
+		action = "左键: 装备"
+	elif item.get("type", "") in ["module", "attachment"]:
+		action = "左键: 装配"
+	elif not str(item.get("use_action", "")).is_empty():
+		action = "左键: 使用"
+	_item_hover_label.text = "%s x%d\n%s / %s\n%s\n%s  |  Shift+左键: 存保险" % [
+		name,
+		count,
+		type_text,
+		rarity,
+		desc,
+		action,
+	]
+	_item_hover_card.visible = true
+	_item_hover_card.move_to_front()
+	_position_item_hover_card()
+
+
+func _hide_item_hover_card() -> void:
+	if _item_hover_card != null:
+		_item_hover_card.visible = false
+
+
+func _position_item_hover_card() -> void:
+	if _item_hover_card == null:
+		return
+	var viewport_size := get_viewport().get_visible_rect().size
+	var pos := get_viewport().get_mouse_position() + Vector2(18, 18)
+	var card_size := _item_hover_card.size
+	if card_size == Vector2.ZERO:
+		card_size = _item_hover_card.get_combined_minimum_size()
+	pos.x = clamp(pos.x, 8.0, max(8.0, viewport_size.x - card_size.x - 8.0))
+	pos.y = clamp(pos.y, 8.0, max(8.0, viewport_size.y - card_size.y - 8.0))
+	_item_hover_card.global_position = pos
 
 
 func _move_inventory_panel_pair(delta: Vector2) -> void:
@@ -2519,8 +2679,10 @@ func _on_slot_clicked(slot_index: int, is_inventory: bool) -> void:
 		_selected_insurance_slot = -1
 		if Input.is_key_pressed(KEY_SHIFT):
 			item_to_insurance_requested.emit(slot_index)
-		else:
-			_highlight_selected_slots()
+			return
+		if _activate_inventory_slot(slot_index):
+			return
+		_highlight_selected_slots()
 	else:
 		_selected_insurance_slot = slot_index
 		_selected_inventory_slot = -1
@@ -2530,33 +2692,41 @@ func _on_slot_clicked(slot_index: int, is_inventory: bool) -> void:
 
 func _on_slot_right_clicked(slot_index: int, is_inventory: bool) -> void:
 	if is_inventory:
-		var slot_data: Dictionary = _inventory_module.get_slot(slot_index)
-		if not slot_data.is_empty():
-			var item: Dictionary = slot_data["item"]
-			if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
-				if _equip_weapon_from_inventory(slot_index, item):
-					_refresh_inventory_ui()
-				return
-			if item.get("type", "") in ["module", "attachment"]:
-				if _install_weapon_module_from_item(item):
-					_inventory_module.remove_from_slot(slot_index, 1)
-					_refresh_inventory_ui()
-				return
-			var use_action: String = item.get("use_action", "")
-			if not use_action.is_empty():
-				if _inventory_module.consume_item(item.get("id", ""), 1):
-					var handler_script: GDScript = load(_ITEM_USE_HANDLER_PATH)
-					var handler: Object = handler_script.new()
-					var context: Dictionary = {"player": _get_player_reference()}
-					var ok: bool = handler.apply(item, context)
-					handler.free()
-					if not ok:
-						_inventory_module.add_item(item, 1)
-					_refresh_inventory_ui()
-				return
-		item_to_insurance_requested.emit(slot_index)
+		if not _activate_inventory_slot(slot_index):
+			item_to_insurance_requested.emit(slot_index)
 	else:
 		item_extraction_requested.emit(slot_index)
+
+
+func _activate_inventory_slot(slot_index: int) -> bool:
+	if _inventory_module == null:
+		return false
+	var slot_data: Dictionary = _inventory_module.get_slot(slot_index)
+	if slot_data.is_empty():
+		return false
+	var item: Dictionary = slot_data["item"]
+	if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
+		if _equip_weapon_from_inventory(slot_index, item):
+			_refresh_inventory_ui()
+		return true
+	if item.get("type", "") in ["module", "attachment"]:
+		if _install_weapon_module_from_item(item):
+			_inventory_module.remove_from_slot(slot_index, 1)
+			_refresh_inventory_ui()
+		return true
+	var use_action: String = item.get("use_action", "")
+	if not use_action.is_empty():
+		if _inventory_module.consume_item(item.get("id", ""), 1):
+			var handler_script: GDScript = load(_ITEM_USE_HANDLER_PATH)
+			var handler: Object = handler_script.new()
+			var context: Dictionary = {"player": _get_player_reference()}
+			var ok: bool = handler.apply(item, context)
+			handler.free()
+			if not ok:
+				_inventory_module.add_item(item, 1)
+			_refresh_inventory_ui()
+		return true
+	return false
 
 
 func _make_item_icon(item: Dictionary) -> Texture2D:
@@ -2799,6 +2969,8 @@ func _input(event: InputEvent) -> void:
 					_weapon_panel.move_to_front()
 			elif _weapon_panel != null and _weapon_panel.has_method("hide_panel"):
 				_weapon_panel.call("hide_panel")
+			if not panel_visible:
+				_hide_item_hover_card()
 			get_viewport().set_input_as_handled()
 	if (
 		event is InputEventKey

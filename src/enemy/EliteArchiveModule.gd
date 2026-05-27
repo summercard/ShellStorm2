@@ -1,4 +1,5 @@
 extends Node
+class_name EliteArchiveModule
 ## 精英怪档案模块
 ## 负责精英怪的全生命周期记录、状态变迁、属性存档
 ## 跨局持久化：玩家死亡/撤离后，精英怪按成长规则继续存在于档案池
@@ -163,7 +164,7 @@ class EliteRecord:
 		r.history = d.get("history", {})
 		r.growth_stats = d.get("growth_stats", {})
 		r.modifiers = Array(d.get("modifiers", []), TYPE_STRING, "", null)
-		r.stolen_modules = d.get("stolen_modules", [])
+		r.stolen_modules = Array(d.get("stolen_modules", []), TYPE_DICTIONARY, "", null)
 		r.fate_residues = Array(d.get("fate_residues", []), TYPE_STRING, "", null)
 		r.spawn_weight = d.get("spawn_weight", 0.1)
 		r.bounty_reward_level = d.get("bounty_reward_level", 0)
@@ -208,6 +209,7 @@ class EliteRecord:
 
 
 func _ready() -> void:
+	add_to_group("elite_archive")
 	_load_archive()
 
 
@@ -306,9 +308,12 @@ func get_active_count() -> int:
 
 func _load_archive() -> void:
 	if not FileAccess.file_exists(SAVE_PATH):
+		# 首次运行：播种新手引导型精英怪，让玩家从第一局就感受到精英威胁
+		_seed_starter_elites()
 		return
 	var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
 	if not f:
+		_seed_starter_elites()
 		return
 	var data = JSON.parse_string(f.get_as_text())
 	if typeof(data) == TYPE_DICTIONARY:
@@ -318,6 +323,63 @@ func _load_archive() -> void:
 			var rec = EliteRecord.from_dict(d)
 			archive[rec.elite_id] = rec
 		_next_id = data.get("next_id", 0)
+	# 防止存档损坏导致空池：再次检查，为空则播种
+	if archive.is_empty():
+		_seed_starter_elites()
+
+
+## 播种新手引导型精英怪（首次运行无存档时）
+## 2只：近战追击型 + 远程弹幕型，各自带独特名字后缀
+## 它们会在玩家第一局后就开始构建精英威胁记忆
+func _seed_starter_elites() -> void:
+	var starters: Array[Dictionary] = [
+		{
+			"base_enemy_id": "melee_chaser",
+			"name": "背枪的裂口爬虫",
+			"level": 1,
+			"state": "Newborn",
+			"history": {
+				"escaped_count": 0,
+				"killed_player_count": 0,
+				"last_seen_biome": "",
+				"last_encounter_result": ""
+			},
+			"growth_stats": {"hp_multiplier": 1.0, "damage_multiplier": 1.0, "move_speed_multiplier": 1.0},
+			"modifiers": ["Elite.WeaponParasite"],
+			"stolen_modules": [
+				{"module_id": "gunbody_pea_pistol", "module_type": "GunBody", "converted_skill": "EnemySkill_BackMountedMachinegun"}
+			],
+			"fate_residues": [],
+			"spawn_weight": 0.2,
+			"bounty_reward_level": 1
+		},
+		{
+			"base_enemy_id": "ranged_caster",
+			"name": "吞弹者·孢子射手",
+			"level": 1,
+			"state": "Newborn",
+			"history": {
+				"escaped_count": 0,
+				"killed_player_count": 0,
+				"last_seen_biome": "",
+				"last_encounter_result": ""
+			},
+			"growth_stats": {"hp_multiplier": 1.0, "damage_multiplier": 1.0, "move_speed_multiplier": 1.0},
+			"modifiers": [],
+			"stolen_modules": [
+				{"module_id": "bullet_sticky", "module_type": "Bullet", "converted_skill": "EnemyRanged_AdaptedBullet"}
+			],
+			"fate_residues": [],
+			"spawn_weight": 0.2,
+			"bounty_reward_level": 1
+		}
+	]
+	for d in starters:
+		var rec := EliteRecord.from_dict(d)
+		rec.elite_id = "elite_%06d" % _get_next_id()
+		archive[rec.elite_id] = rec
+	print("[EliteArchive] 播种新手精英 %d 只" % starters.size())
+	elites_changed()
 
 
 func save_archive() -> void:

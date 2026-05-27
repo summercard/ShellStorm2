@@ -1,4 +1,3 @@
-extends Node
-class_name TestBase
 extends Resource
+class_name TestBase
 var test_var: BaseData

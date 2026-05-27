@@ -36,10 +36,14 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 	if start_chest == null:
 		failures.append("Initial room has no searchable starter chest")
 	else:
+		if start_chest.get_node_or_null("VisionBlocker") == null:
+			failures.append("Physical container does not block light before pickup")
 		start_chest.call("_try_open_container")
 		await get_tree().process_frame
 		if not mode.inventory_module.has_item("weapon_shotgun"):
 			failures.append("Initial starter chest did not grant the shotgun weapon")
+		if start_chest.get_node_or_null("VisionBlocker") != null:
+			failures.append("Opened container keeps casting a stale light shadow")
 
 	var press_i := InputEventKey.new()
 	press_i.keycode = KEY_I
@@ -59,7 +63,7 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		failures.append("Shotgun weapon is not present in an operable inventory slot")
 	else:
 		var shotgun_count_before := mode.inventory_module.get_item_count("weapon_shotgun")
-		ui.call("_on_slot_right_clicked", shotgun_slot, true)
+		_click_inventory_slot(ui, shotgun_slot, MOUSE_BUTTON_LEFT)
 		await get_tree().process_frame
 		var root: AssemblyNode = mode.player.get_weapon_tree().get_root()
 		if root == null or root.node_name != "GunBody_Shotgun":
@@ -167,6 +171,16 @@ func _find_inventory_slot(inventory: InventoryModule, item_id: String) -> int:
 		if item.get("id", "") == item_id:
 			return int(slot.get("slot", -1))
 	return -1
+
+
+func _click_inventory_slot(ui: CanvasLayer, slot_index: int, button_index: MouseButton) -> void:
+	var slot := ui.get_node_or_null("InventoryPanel/VBox/InventoryGrid/InvSlot_%d" % slot_index)
+	if slot == null:
+		return
+	var event := InputEventMouseButton.new()
+	event.button_index = button_index
+	event.pressed = true
+	slot.call("_on_gui_input", event)
 
 
 func _find_soul_orb(root: Node) -> SoulOrb:
