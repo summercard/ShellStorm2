@@ -2,12 +2,16 @@ class_name FateCardCollectionMenu
 extends CanvasLayer
 
 ## 命运卡牌收藏室 — 基地建筑界面
-## 展示所有已解锁的命运卡片，支持查看详情
+## 展示所有已解锁的命运卡片，使用游戏内卡牌样式
 
 @onready var content: VBoxContainer
 @onready var close_button: Button
 @onready var scroll_container: ScrollContainer
 @onready var header_label: Label
+
+const CARD_WIDTH := 200.0
+const CARD_HEIGHT := 280.0
+const CARDS_PER_ROW := 4
 
 func _ready() -> void:
 	content = get_node_or_null("Panel/VBox/ScrollContainer/Content")
@@ -26,19 +30,19 @@ func _build_collection_view() -> void:
 	var title := Label.new()
 	title.text = "命运卡牌收藏室"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_font_size_override("font_size", 22)
 	content.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "全部卡牌均已解锁"
+	subtitle.text = "全部已解锁卡牌"
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	subtitle.add_theme_color_override("font_color", Color(0.6, 0.7, 0.8, 1.0))
+	subtitle.add_theme_color_override("font_color", Color(0.55, 0.6, 0.7))
 	content.add_child(subtitle)
 
 	var separator := HSeparator.new()
 	content.add_child(separator)
 
-	# 按品质分组展示
+	# 按品质分组
 	var rarities: Array = [
 		FateCard.CardRarity.COMMON,
 		FateCard.CardRarity.RARE,
@@ -54,55 +58,109 @@ func _build_collection_view() -> void:
 		var group_label := Label.new()
 		group_label.text = "── %s ──" % FateCard.rarity_name(rarity)
 		group_label.add_theme_color_override("font_color", FateCard.rarity_color(rarity))
+		group_label.add_theme_font_size_override("font_size", 14)
 		content.add_child(group_label)
 
 		var grid := GridContainer.new()
-		grid.columns = 3
+		grid.columns = CARDS_PER_ROW
+		grid.add_theme_constant_override("h_separation", 16)
+		grid.add_theme_constant_override("v_separation", 16)
 		content.add_child(grid)
 
 		for card in cards:
-			var card_ui := _create_card_item(card)
+			var card_ui := _create_card_ui(card)
 			grid.add_child(card_ui)
 
 	_add_close_hint()
 
-func _create_card_item(card: FateCard) -> Control:
+func _create_card_ui(card: FateCard) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(180, 100)
+	panel.custom_minimum_size = Vector2(CARD_WIDTH, CARD_HEIGHT)
 
-	var color := FateCard.rarity_color(card.card_rarity)
-	var normal_style := StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.12, 0.13, 0.18, 0.95)
-	normal_style.set_border_width_all(2)
-	normal_style.set_border_color(color)
-	normal_style.set_corner_radius_all(6)
-	panel.add_theme_stylebox_override("normal", normal_style)
+	var rarity_clr := FateCard.rarity_color(card.card_rarity)
+
+	# 背景
+	var bg := StyleBoxFlat.new()
+	bg.bg_color = Color(0.1, 0.1, 0.14, 0.97)
+	bg.set_border_width_all(2)
+	bg.set_border_color(rarity_clr)
+	bg.set_corner_radius_all(10)
+	panel.add_theme_stylebox_override("normal", bg)
+
+	# 悬停高亮
+	var hover := StyleBoxFlat.new()
+	hover.bg_color = Color(0.15, 0.15, 0.2, 0.97)
+	hover.set_border_width_all(3)
+	hover.set_border_color(Color(1.0, 1.0, 1.0, 0.6))
+	hover.set_corner_radius_all(10)
+	panel.add_theme_stylebox_override("hover", hover)
 
 	var vbox := VBoxContainer.new()
+	vbox.add_theme_constant_override("separation", 6)
 	panel.add_child(vbox)
 
+	# 顶部：emoji + 品质角标
+	var top_hbox := HBoxContainer.new()
+	top_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_child(top_hbox)
+
+	var emoji_lbl := Label.new()
+	emoji_lbl.text = card.icon_emoji
+	emoji_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	emoji_lbl.add_theme_font_size_override("font_size", 40)
+	top_hbox.add_child(emoji_lbl)
+
+	var type_lbl := Label.new()
+	type_lbl.text = FateCard.type_name(card.card_type)
+	type_lbl.add_theme_color_override("font_color", rarity_clr)
+	type_lbl.add_theme_font_size_override("font_size", 11)
+	type_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	top_hbox.add_child(type_lbl)
+
+	# 卡牌名称
 	var name_lbl := Label.new()
 	name_lbl.text = card.card_name
-	name_lbl.add_theme_color_override("font_color", color)
+	name_lbl.add_theme_color_override("font_color", Color.WHITE)
+	name_lbl.add_theme_font_size_override("font_size", 15)
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(name_lbl)
 
-	var type_lbl := Label.new()
-	type_lbl.text = "[%s] %s" % [FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type)]
-	type_lbl.add_theme_font_size_override("font_size", 11)
-	type_lbl.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7, 1.0))
-	type_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(type_lbl)
+	# 分隔线
+	var divider := HSeparator.new()
+	divider.add_theme_constant_override("custom_minimum_size", 0)
+	divider.add_theme_color_override("line_color", Color(1, 1, 1, 0.15))
+	vbox.add_child(divider)
 
+	# 效果描述
 	var desc_lbl := Label.new()
 	desc_lbl.text = card.short_description
-	desc_lbl.add_theme_font_size_override("font_size", 10)
-	desc_lbl.add_theme_color_override("font_color", Color(0.5, 0.5, 0.55))
+	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.65, 0.7))
+	desc_lbl.add_theme_font_size_override("font_size", 11)
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-	desc_lbl.custom_minimum_size.y = 36
+	desc_lbl.custom_minimum_size.y = 52
 	vbox.add_child(desc_lbl)
+
+	# 标签行
+	var tag_lbl := Label.new()
+	var tag_str := " ".join(card.tags) if not card.tags.is_empty() else ""
+	tag_lbl.text = tag_str
+	tag_lbl.add_theme_color_override("font_color", Color(0.4, 0.4, 0.45))
+	tag_lbl.add_theme_font_size_override("font_size", 10)
+	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(tag_lbl)
+
+	# 底部品质角标
+	var bottom_hbox := HBoxContainer.new()
+	bottom_hbox.alignment = BoxContainer.ALIGNMENT_END
+	vbox.add_child(bottom_hbox)
+
+	var rarity_badge := Label.new()
+	rarity_badge.text = "◆ %s" % FateCard.rarity_name(card.card_rarity)
+	rarity_badge.add_theme_color_override("font_color", rarity_clr)
+	rarity_badge.add_theme_font_size_override("font_size", 10)
+	bottom_hbox.add_child(rarity_badge)
 
 	panel.tooltip_text = card.description
 	return panel
@@ -110,7 +168,7 @@ func _create_card_item(card: FateCard) -> Control:
 func _add_close_hint() -> void:
 	var hint := Label.new()
 	hint.text = "按 [×] 关闭"
-	hint.add_theme_color_override("font_color", Color(0.4, 0.4, 0.45))
+	hint.add_theme_color_override("font_color", Color(0.35, 0.35, 0.4))
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	content.add_child(hint)
 
