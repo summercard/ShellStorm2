@@ -6,15 +6,15 @@ extends CanvasLayer
 ##
 ## BaseManager 通过 Autoload 直接访问（已在 project.godot 注册）
 
-@onready var runs_label: Label = $VBox/StatsPanel/VBox/RunsLabel
-@onready var extractions_label: Label = $VBox/StatsPanel/VBox/ExtractionsLabel
-@onready var kills_label: Label = $VBox/StatsPanel/VBox/KillsLabel
-@onready var points_label: Label = $VBox/StatsPanel/VBox/PointsLabel
-@onready var start_button: Button = $VBox/StartButton
-@onready var building_workshop: Button = $VBox/BuildingsPanel/VBox/BuildingWorkshop
-@onready var building_divination: Button = $VBox/BuildingsPanel/VBox/BuildingDivination
-@onready var building_vault: Button = $VBox/BuildingsPanel/VBox/BuildingVault
-@onready var building_archive: Button = $VBox/BuildingsPanel/VBox/BuildingArchive
+@onready var runs_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/RunsLabel
+@onready var extractions_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/ExtractionsLabel
+@onready var kills_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/KillsLabel
+@onready var points_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/PointsLabel
+@onready var start_button: Button = $VBox/HSplit/StartButton
+@onready var building_workshop: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingWorkshop
+@onready var building_divination: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingDivination
+@onready var building_vault: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingVault
+@onready var building_archive: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingArchive
 
 func _ready() -> void:
 	# BaseManager 已是 Autoload，直接通过全局名称访问

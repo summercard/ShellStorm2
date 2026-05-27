@@ -18,10 +18,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -280.0
-offset_right = 280.0
-offset_bottom = 280.0
+offset_left = -420.0
+offset_top = -320.0
+offset_right = 420.0
+offset_bottom = 320.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -34,67 +34,92 @@ vertical_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="VBox"]
 layout_mode = 2
 
-[node name="StatsPanel" type="PanelContainer" parent="VBox"]
-custom_minimum_size = Vector2(560, 80)
+[node name="HSplit" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StartButton" type="Button" parent="VBox/HSplit"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "进入任务"
+
+[node name="RightPanel" type="VBoxContainer" parent="VBox/HSplit"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="StatsLabel" type="Label" parent="VBox/HSplit/RightPanel"]
+layout_mode = 2
+text = "基地数据"
+horizontal_alignment = 1
+
+[node name="StatsPanel" type="PanelContainer" parent="VBox/HSplit/RightPanel"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="VBox" type="VBoxContainer" parent="VBox/StatsPanel"]
+[node name="VBox" type="VBoxContainer" parent="VBox/HSplit/RightPanel/StatsPanel"]
 layout_mode = 2
 
-[node name="RunsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+[node name="RunsLabel" type="Label" parent="VBox/HSplit/RightPanel/StatsPanel/VBox"]
 layout_mode = 2
 text = "总局数: 0"
 
-[node name="ExtractionsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+[node name="ExtractionsLabel" type="Label" parent="VBox/HSplit/RightPanel/StatsPanel/VBox"]
 layout_mode = 2
 text = "成功撤离: 0"
 
-[node name="KillsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+[node name="KillsLabel" type="Label" parent="VBox/HSplit/RightPanel/StatsPanel/VBox"]
 layout_mode = 2
 text = "总击杀: 0"
 
-[node name="PointsLabel" type="Label" parent="VBox/StatsPanel/VBox"]
+[node name="PointsLabel" type="Label" parent="VBox/HSplit/RightPanel/StatsPanel/VBox"]
 layout_mode = 2
 text = "资源: 0"
+
+[node name="BuildingsLabel" type="Label" parent="VBox/HSplit/RightPanel"]
+layout_mode = 2
+text = "基地设施"
+horizontal_alignment = 1
+
+[node name="BuildingsGrid" type="GridContainer" parent="VBox/HSplit/RightPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="BuildingWorkshop" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "枪械工坊"
+
+[node name="BuildingDivination" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "命运占卜屋"
+
+[node name="BuildingVault" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "保险柜"
+
+[node name="BuildingArchive" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
+custom_minimum_size = Vector2(160, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "怪物档案室"
 
 [node name="HSeparator2" type="HSeparator" parent="VBox"]
 layout_mode = 2
 
-[node name="StartButton" type="Button" parent="VBox"]
-custom_minimum_size = Vector2(560, 60)
+[node name="FooterLabel" type="Label" parent="VBox"]
 layout_mode = 2
-text = "开始任务"
-
-[node name="HSeparator3" type="HSeparator" parent="VBox"]
-layout_mode = 2
-
-[node name="BuildingsLabel" type="Label" parent="VBox"]
-layout_mode = 2
-text = "基地设施"
-
-[node name="BuildingsPanel" type="PanelContainer" parent="VBox"]
-custom_minimum_size = Vector2(560, 120)
-layout_mode = 2
-
-[node name="VBox" type="VBoxContainer" parent="VBox/BuildingsPanel"]
-layout_mode = 2
-
-[node name="BuildingWorkshop" type="Button" parent="VBox/BuildingsPanel/VBox"]
-custom_minimum_size = Vector2(260, 48)
-layout_mode = 2
-text = "枪械工坊"
-
-[node name="BuildingDivination" type="Button" parent="VBox/BuildingsPanel/VBox"]
-custom_minimum_size = Vector2(260, 48)
-layout_mode = 2
-text = "命运占卜屋"
-
-[node name="BuildingVault" type="Button" parent="VBox/BuildingsPanel/VBox"]
-custom_minimum_size = Vector2(260, 48)
-layout_mode = 2
-text = "保险柜"
-
-[node name="BuildingArchive" type="Button" parent="VBox/BuildingsPanel/VBox"]
-custom_minimum_size = Vector2(260, 48)
-layout_mode = 2
-text = "怪物档案室"
+text = "按 [进入任务] 开始冒险"
+horizontal_alignment = 1
