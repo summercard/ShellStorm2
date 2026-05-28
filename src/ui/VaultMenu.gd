@@ -102,6 +102,24 @@ func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 	var hbox := HBoxContainer.new()
 	panel.add_child(hbox)
 
+	# 品质边框颜色（根据物品类型推断）
+	var item_type: String = item_dict.get("type", "")
+	var border_color: Color
+	if item_type == "FateCard":
+		var rarity_str: String = item_dict.get("rarity", "COMMON")
+		var rarity_val: int = FateCard.CardRarity.get(rarity_str, -1)
+		if rarity_val >= 0:
+			border_color = FateCard.rarity_color(rarity_val as FateCard.CardRarity)
+		else:
+			border_color = Color.WHITE
+	elif item_type == "Weapon" or item_type == "GunBody":
+		border_color = Color("F59E0B")  # 金色
+	elif item_type == "Bullet":
+		border_color = Color("4A9EFF")   # 蓝色
+	else:
+		border_color = Color("888888")   # 灰色
+	panel.add_theme_stylebox_override("panel", _make_rarity_border_style(border_color))
+
 	var name_lbl := Label.new()
 	name_lbl.text = item_dict.get("name", "?")
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -117,6 +135,20 @@ func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 	hbox.add_child(take_btn)
 
 	return panel
+
+func _make_rarity_border_style(color: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.1, 0.1, 0.9)
+	style.border_color = color
+	style.border_width_left = 3
+	style.border_width_top = 3
+	style.border_width_right = 3
+	style.border_width_bottom = 3
+	style.corner_radius_top_left = 4
+	style.corner_radius_top_right = 4
+	style.corner_radius_bottom_left = 4
+	style.corner_radius_bottom_right = 4
+	return style
 
 func _make_loadout_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 	var panel := PanelContainer.new()
