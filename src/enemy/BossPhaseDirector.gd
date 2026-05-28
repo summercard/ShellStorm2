@@ -20,6 +20,26 @@ var _hp_thresholds: Array[float] = [0.66, 0.33, 0.0]
 func _init(b_id: String = ""):
 	boss_id = b_id
 
+
+func _process(delta: float) -> void:
+	"""每帧更新：管理冷却 + 自动触发定时技能"""
+	tick(delta)
+	_auto_trigger_time_skills()
+
+
+func _auto_trigger_time_skills() -> void:
+	"""检查当前阶段所有技能，对 TIME 模式的技能在冷却结束后自动触发"""
+	var phase_skills = _skill_trees.get(current_phase, [])
+	for skill_config in phase_skills:
+		var trigger_mode = skill_config.get("trigger", "time")
+		if trigger_mode != "time":
+			continue  # 只处理定时技能
+		var skill_id = skill_config.get("id", "")
+		if skill_id == "" or is_on_cooldown(skill_id):
+			continue
+		# 冷却已就绪，触发技能
+		trigger_skill(skill_id)
+
 func configure(max_phases: int, skill_trees: Dictionary) -> void:
 	"""配置 Boss 阶段和技能树
 	
@@ -57,7 +77,12 @@ func trigger_skill(skill_id: String) -> void:
 	"""触发指定的技能"""
 	if is_on_cooldown(skill_id):
 		return
-	_skill_trees.get(current_phase, []).filter(func(s): return s.get("id") == skill_id)
+	# 验证技能在当前阶段存在
+	var phase_skills = _skill_trees.get(current_phase, [])
+	var found = phase_skills.filter(func(s): return s.get("id") == skill_id)
+	if found.is_empty():
+		print("[BossPhaseDirector] skill '%s' 不在 Phase %d 的技能树中，跳过" % [skill_id, current_phase])
+		return
 	skill_triggered.emit(boss_id, skill_id, current_phase)
 	_set_cooldown(skill_id, _get_skill_cooldown(skill_id))
 
