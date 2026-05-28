@@ -9,9 +9,9 @@
     "total": "infinite"
   },
   "startTime": "2026-05-28T07:43:00+08:00",
-  "lastRunTime": "2026-05-28T00:21:00.000000+08:00",
-  "currentTarget": "人类试玩验证（最低优先级）：元素子弹视觉/冰冻时长/暴击数字/精英挂枪/活子弹追踪/炮台生成/命卡落地/BLESS_DEAD",
-  "nextTarget": "人类试玩验证",
+  "lastRunTime": "2026-05-28T00:30:00.000000+08:00",
+  "currentTarget": "轮次310完成：BossActor技能树+冲刺边界限制+精英寻路优化",
+  "nextTarget": "人类试玩验证Boss阶段切换/技能施放/冲刺撞墙",
   "notes": "[杰西卡 2026-05-28 08:21] VaultMenu品质边框polish完成(git commit)。本轮DemoBoss→BossActor切换全链路清理完毕。人类试玩验证为唯一剩余项。",
   "direction": {
     "focus": [
@@ -318,7 +318,8 @@
     306,
     307,
     308,
-    309
+    309,
+    310
   ],
   "designDoc": "docs/PH04_命运卡片系统.md"
 }
