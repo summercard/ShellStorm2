@@ -23,7 +23,7 @@ func _ready() -> void:
 		add_child(main)
 		await get_tree().process_frame
 		await get_tree().process_frame
-		var boss: Node = get_tree().root.find_child("DemoBoss", true, false)
+		var boss: Node = get_tree().root.find_child("BossActor", true, false)
 		if boss == null:
 			failures.append("Main flow does not instantiate a readable Boss encounter")
 		main.queue_free()
