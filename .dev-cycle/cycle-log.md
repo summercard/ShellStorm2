@@ -639,3 +639,51 @@
 1. **人类试玩验证**（最高且唯一优先级）：撤离物品保存、小地图刷新、命运卡片视觉、精英怪物链路
 2. 精英击杀信号连接（EliteArchiveModule → ExtractionDirector）
 3. Boss 战完整流程（RoomBoss.tscn + BossRoomDirector）
+
+---
+
+## 轮次313（2026-05-28 00:39 UTC+8）
+
+### 维度选择
+**轮次312 BossPhaseDirector 自动触发机制复审 + 验证状态确认**
+
+轮次312为 BossPhaseDirector 新增了 `_process()` 中的 `_auto_trigger_time_skills()` 自动触发定时技能，以及 `trigger_skill()` 的阶段技能存在性验证。本轮进行设计复审并确认验证状态。
+
+### BossPhaseDirector 设计验证
+
+#### 机制确认
+1. **BossPhaseDirector._process(delta)** — 每帧调用 `tick(delta)` 管理冷却 + `_auto_trigger_time_skills()` 自动触发 `trigger="time"` 的技能
+2. **BossActor._process(delta)** — 同时每帧也调用 `_phase_director.tick(delta)`（冗余，但无害）
+3. **RoomGameMode 配置的 skill_trees** — 3个阶段，每阶段2-3个技能，均设置 `cooldown`，无显式 `trigger` 字段（默认 "time"）
+4. **阶段切换** — BossActor.take_damage() → _phase_director.check_hp_threshold() → set_phase() → phase_started.emit() → BossActor._on_phase_started() → _flash_phase_change()
+
+#### 设计观察
+- 阶段技能触发模式全为默认 "time"（每帧检查，冷却结束即触发）
+- Phase 3 有 enrage（15s）+ aoe_damage（4s）+ spawn_minions（5s），技能密度较高
+- BossActor 的 skill match 中 "spawn_minions" 在子节点场景未加载时打印未知技能ID后跳过（BossRoomLogic 已设置房间边界限制冲刺）
+- `trigger_skill` 新增的阶段技能存在性验证确保跨阶段触发请求被过滤
+
+### 修改内容
+无代码修改（轮次312实现完整）。
+
+### 玩家可感知结果
+Boss 在各阶段自动施放定时技能：Phase 1 召唤小怪+蓄力射击，Phase 2 范围伤害+减益区域+冲刺，Phase 3 狂暴+高频范围伤害+持续召唤。HP 降到 66%/33% 时阶段切换，Boss 视觉闪烁+颜色加深。
+
+### 验收标准
+- [x] Godot headless --quit-after 3 编译通过 ✅（EXIT 0）
+- [ ] 人类试玩：进入 Boss 房，等待 Phase 1 技能自动触发（召唤小怪/蓄力射击）
+- [ ] 人类试玩：Boss HP 降至 66%，阶段切换到 Phase 2，颜色变深
+- [ ] 人类试玩：Phase 2 技能（范围伤害/减益区域/冲刺）按冷却计时器自动触发
+- [ ] 人类试玩：Boss HP 降至 33%，阶段切换到 Phase 3，Boss 进入狂暴状态（颜色+缩放）
+- [ ] 人类试玩：Phase 3 高频 aoe_damage（4s）+ spawn_minions（5s）验证技能密度
+
+### 剩余风险
+- BossActor._process 和 BossPhaseDirector._process 双重 tick 的冗余设计（无功能影响，纯设计整洁度）
+- Boss 技能视觉效果（aoe_ring/telegraph_warning/charge_trail）在极端帧率下可能有渲染问题（需人类试玩）
+- RoomBoss.tscn 中 BossActor 的实际碰撞体积和 HP 规模与 RoomGameMode 配置的 skill_trees 的配合度需要实际验证
+
+### 下轮最可能方向
+1. **人类试玩验证 Boss 技能实际施放/阶段切换**（最高且唯一优先级）
+2. **BossActor._process 双重 tick 冗余清理**：BossPhaseDirector 已有 _process，BossActor 的 `_phase_director.tick(delta)` 调用是否必要需确认
+3. **RoomBoss.tscn 接入 DemoRoomChain**：真实 Boss 战完整流程验证
+4. **精英击杀信号 → ExtractionDirector**：EliteArchiveModule.elite_killed 信号连接

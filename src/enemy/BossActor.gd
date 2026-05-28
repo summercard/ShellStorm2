@@ -47,8 +47,14 @@ func _ready() -> void:
 	_current_hp = max_hp
 	current_hp = max_hp
 	_current_scale = boss_scale
+	# Scale HP based on boss_scale (larger boss = more HP)
+	var scaled_max_hp: float = max_hp * _current_scale
+	max_hp = int(scaled_max_hp)
+	_current_hp = scaled_max_hp
+	current_hp = scaled_max_hp
 	_setup_hp_bar()
 	_connect_phase_signals()
+	_apply_shape_scale()
 	z_index = 100
 	print("[BossActor] Ready - HP: %d/%d scale: %.1f" % [_current_hp, max_hp, _current_scale])
 
@@ -339,6 +345,19 @@ func _setup_hp_bar() -> void:
 		hp_bar.show_percentage = false
 	if boss_name_label:
 		boss_name_label.text = boss_id
+
+
+func _apply_shape_scale() -> void:
+	if shape == null:
+		return
+	var base_size: float = 110.0
+	var scaled_size: float = base_size * _current_scale
+	shape.custom_minimum_size = Vector2(scaled_size, scaled_size)
+	shape.offset_left = -scaled_size * 0.5
+	shape.offset_top = -scaled_size * 0.5
+	shape.offset_right = scaled_size * 0.5
+	shape.offset_bottom = scaled_size * 0.5
+	shape.scale = Vector2.ONE
 
 
 func _notify_game_ui_spawn() -> void:

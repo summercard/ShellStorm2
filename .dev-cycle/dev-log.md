@@ -378,3 +378,46 @@ FateCardEngine._apply_bless_dead()
 10. 撤离成功后台保险柜物品是否正确带入下局
 
 发现任何 Bug 可通过对话告知，杰西卡会针对性修复。
+
+### 轮次 312 — 2026-05-28 08:37 UTC+8
+
+### 维度
+BossPhaseDirector 自动触发定时技能 + 触发验证
+
+### 问题分析
+审查 `BossPhaseDirector` 发现两个问题：
+
+**问题 1：定时技能无自动触发机制**
+- `BossActor._process()` 每帧调用 `_phase_director.tick(delta)` 更新冷却
+- 但 `_phase_director.tick()` 只减少冷却字典中的值，从不触发技能
+- 技能施放依赖外部手动调用 `trigger_skill()`，BossPhaseDirector 从不自主施放技能
+- 即使配置了 cooldown，技能也永远不会自己触发
+
+**问题 2：`trigger_skill()` 无阶段技能存在性验证**
+- `trigger_skill()` 调用 `skill_triggered.emit()` 前没有检查该技能是否在当前阶段技能树中
+- 可能触发不存在于当前阶段的技能（如果外部错误调用）
+
+### 改动
+
+**BossPhaseDirector.gd：**
+1. 增加 `_process()` → 每帧调用 `tick()` + 新方法 `_auto_trigger_time_skills()`
+2. 新方法 `_auto_trigger_time_skills()` → 遍历当前阶段所有技能，TIME 模式的技能冷却就绪后自动调用 `trigger_skill()`
+3. `trigger_skill()` 增加阶段技能存在性验证，技能不在当前阶段时打印警告并跳过
+
+### 验证
+- Godot headless --check-only --quit: **EXIT 0** ✅
+- git commit: `da18a01` ✅
+
+### 系统影响
+| 系统 | 状态 |
+|---|---|
+| BossPhaseDirector | ✅ 自动触发定时技能 + 阶段验证 |
+| BossActor | ✅ 无改动（信号驱动机制不变）|
+
+### 剩余风险
+- 技能实际施放的视觉效果需要人类试玩确认（震屏/AOE圈/减益区域）
+- Phase 3 的 enrage 技能（狂暴）只能触发一次，之后进入冷却但不会重新触发（符合设计）
+
+### 下轮最可能方向
+- Boss 体型落地（boss_scale 参数实际影响碰撞半径/HP）
+- 审查 RoomGameMode 中 skill_trees 配置的 trigger 字段是否需要从 "time" 改为按配置触发
