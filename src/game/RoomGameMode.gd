@@ -2274,6 +2274,14 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 	var boss_room := _get_current_room_instance()
 	var boss_actor: Node = boss_room.get_node_or_null("BossActor") if boss_room != null else null
 	if boss_actor != null and boss_actor.has_method("configure_phases"):
+		# 先把房间边界传给 BossActor，让冲刺限制在真实房间范围内
+		var boss_room_instance: Node2D = _get_current_room_instance()
+		if boss_actor.has_method("set_room_bounds") and boss_room_instance != null:
+			var current_room_data: RoomData = map_manager.get_current_room_data()
+			if current_room_data != null:
+				var boss_room_bounds: Rect2 = _calculate_room_bounds_for_spawn_controller(boss_room_instance, current_room_data)
+				boss_actor.call("set_room_bounds", boss_room_bounds)
+				print("[RoomGameMode] 为 BossActor 设置房间边界: %s" % str(boss_room_bounds))
 		# 从 boss_data 中提取 max_phases，如果没有则默认 3
 		var max_phases: int = boss_data.get("max_phases", 3)
 		# 构建技能树配置（3个阶段，每个阶段有对应技能）
