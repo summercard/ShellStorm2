@@ -506,9 +506,9 @@ func _on_room_entered(room_data: RoomData) -> void:
 
 	if room_data.room_type == RoomData.RoomType.BOSS:
 		var boss_room := _get_current_room_instance()
-		var demo_boss: Node = boss_room.get_node_or_null("DemoBoss") if boss_room != null else null
-		if demo_boss != null and demo_boss.has_method("activate"):
-			demo_boss.call("activate")
+		var boss_actor: Node = boss_room.get_node_or_null("BossActor") if boss_room != null else null
+		if boss_actor != null and boss_actor.has_method("activate"):
+			boss_actor.call("activate")
 
 	if _room_cleared_flag:
 		_update_clearing_progress(1, 1)
@@ -2269,6 +2269,32 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 	_update_room_info_label("Boss 出现了！")
 	if _ui_manager != null and _ui_manager.has_method("on_boss_spawned"):
 		_ui_manager.call("on_boss_spawned", boss_data)
+
+	# 配置 BossActor 的 BossPhaseDirector 技能树
+	var boss_room := _get_current_room_instance()
+	var boss_actor: Node = boss_room.get_node_or_null("BossActor") if boss_room != null else null
+	if boss_actor != null and boss_actor.has_method("configure_phases"):
+		# 从 boss_data 中提取 max_phases，如果没有则默认 3
+		var max_phases: int = boss_data.get("max_phases", 3)
+		# 构建技能树配置（3个阶段，每个阶段有对应技能）
+		var skill_trees: Dictionary = {
+			1: [
+				{"id": "spawn_minions", "cooldown": 8.0},
+				{"id": "telegraphed_shot", "cooldown": 5.0},
+			],
+			2: [
+				{"id": "aoe_damage", "cooldown": 6.0},
+				{"id": "debuff_zone", "cooldown": 10.0},
+				{"id": "charge", "cooldown": 7.0},
+			],
+			3: [
+				{"id": "enrage", "cooldown": 15.0},
+				{"id": "aoe_damage", "cooldown": 4.0},
+				{"id": "spawn_minions", "cooldown": 5.0},
+			],
+		}
+		boss_actor.call("configure_phases", skill_trees)
+		print("[RoomGameMode] 为 BossActor 配置了 %d 阶段的技能树" % max_phases)
 
 
 func _on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:

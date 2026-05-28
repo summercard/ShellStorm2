@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://room_boss_001"]
+[gd_scene load_steps=9 format=3 uid="uid://room_boss_001"]
 
 [ext_resource type="Script" path="res://src/game/BossRoomLogic.gd" id="1_boss_logic"]
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="2_spawner"]
 [ext_resource type="Script" path="res://src/map/RoomTileSetBuilder.gd" id="3_tilebuilder"]
 [ext_resource type="Script" path="res://src/map/RoomTileMapInitializer.gd" id="4_tilemap_init"]
 [ext_resource type="Script" path="res://src/map/RoomDoorVisualizer.gd" id="5_door_viz"]
-[ext_resource type="Script" path="res://src/game/DemoBoss.gd" id="1_demo_boss"]
+[ext_resource type="Script" path="res://src/enemy/BossActor.gd" id="3_boss_actor"]
+[ext_resource type="Script" path="res://src/enemy/BossPhaseDirector.gd" id="2_boss_phase_director"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
 size = Vector2(800, 600)
@@ -148,22 +149,22 @@ shape = SubResource("RectangleShape2D_boss")
 ; ———————————————————————————
 ; Demo Boss 实体（HP 管理 + 受伤扣血 + GameUIManager 同步）
 ; ———————————————————————————
-[node name="DemoBoss" type="CharacterBody2D" parent="."]
+[node name="BossActor" type="CharacterBody2D" parent="."]
 position = Vector2(0, 0)
 collision_layer = 4
 collision_mask = 0
-script = ExtResource("1_demo_boss")
+script = ExtResource("3_boss_actor")
 
-[node name="Shape" type="ColorRect" parent="DemoBoss"]
-custom_minimum_size = Vector2(80, 80)
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-color = Color(0.85, 0.15, 0.15, 1.0)
+[node name="Shape" type="ColorRect" parent="BossActor"]
+custom_minimum_size = Vector2(110, 110)
+offset_left = -55.0
+offset_top = -55.0
+offset_right = 55.0
+offset_bottom = 55.0
+color = Color(0.75, 0.12, 0.12, 1.0)
 z_index = 2
 
-[node name="HPBarBG" type="PanelContainer" parent="DemoBoss"]
+[node name="HPBarBG" type="PanelContainer" parent="BossActor"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 1.0
@@ -176,25 +177,28 @@ offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HPBar" type="ProgressBar" parent="DemoBoss/HPBarBG"]
+[node name="HPBar" type="ProgressBar" parent="BossActor/HPBarBG"]
 custom_minimum_size = Vector2(160, 12)
 layout_mode = 2
 max_value = 500.0
 value = 500.0
 show_percentage = false
 
-[node name="BossNameLabel" type="Label" parent="DemoBoss"]
+[node name="BossNameLabel" type="Label" parent="BossActor"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -80.0
-offset_top = -95.0
+offset_top = -120.0
 offset_right = 80.0
-offset_bottom = -75.0
+offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "BOSS"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BossPhaseDirector" type="Node" parent="BossActor"]
+script = ExtResource("2_boss_phase_director")

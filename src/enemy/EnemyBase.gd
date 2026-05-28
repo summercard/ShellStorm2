@@ -336,9 +336,19 @@ func _line_of_sight_check(from: Vector2, to: Vector2) -> bool:
 	var dist: float = from.distance_to(to)
 	if dist > visual_range:
 		return false
-	# 简化版：检测路径中是否有障碍物节点（后续接入房间碰撞几何）
-	# 目前先用距离判定
-	return true
+	# 基础射线检测：检测路径上是否有 StaticBody2D 障碍物
+	var space_state: PhysicsDirectSpaceState2D = get_tree().root.get_world_2d().direct_space_state
+	var query := PhysicsRayQueryParameters2D.create(from, to)
+	query.collision_mask = 1  # 与 BoundaryCollision layer 对应
+	var result: Dictionary = space_state.intersect_ray(query)
+	if result.is_empty():
+		return true  # 无障碍，视线通
+	# 有障碍物在路径上。检查距离：如果障碍物很近（<60px），才遮挡
+	# 这是为了避免房间边界（距敌人几百像素）被误判为遮挡
+	var obstacle_dist: float = from.distance_to(result["position"])
+	if obstacle_dist < 60.0:
+		return false  # 近距离障碍物遮挡视线
+	return true  # 远距离障碍物不遮挡（可能是边界）
 
 ## emoji 显示文字 + 颜色更新
 func _update_emoji_display(text: String, color: Color) -> void:
@@ -532,19 +542,30 @@ func _behavior_ranged(delta: float) -> void:
 		_ranged_tangent_dir *= -1  # 切向方向也反转，增加不规则感
 
 	# 计算垂直于玩家方向的切向分量（用于侧翼绕行）
+	# 防止零向量：dir 接近零向量时（玩家在敌人正上方/下方），使用上一帧方向
 	var tangent := Vector2(-dir.y, dir.x) * _ranged_tangent_dir
+	if tangent.length_squared() < 0.01:
+		tangent = Vector2.LEFT * _ranged_tangent_dir  # fallback 水平向
+	# 限制 tangent 的最大侧向速度比例，避免纯侧向运动（让敌人始终有朝向玩家的分量）
+	var tangent_speed_ratio: float = 0.72  # 侧翼时 tangent 最大占比
+	if dist > preferred_dist + 120.0:
+		# 远离时，朝向玩家为主（tangent 只占 25%）
+		tangent_speed_ratio = 0.25
+	elif dist < preferred_dist - 55.0:
+		# 太近时，后退为主（tangent 占 35%）
+		tangent_speed_ratio = 0.35
 
 	if dist < preferred_dist - 55.0:
 		# 太近：向后退（但用后退+侧翼结合，而非直线后退）
 		# 后退时同时侧向移动，让退路更多变
-		velocity = (-dir * 0.8 + tangent * _ranged_flank_dir * 0.35) * speed
+		velocity = (-dir * 0.8 + tangent * _ranged_flank_dir * tangent_speed_ratio * 0.45) * speed
 	elif dist > preferred_dist + 120.0:
 		# 太远：前进追击
-		velocity = (dir * 0.6 + tangent * _ranged_flank_dir * 0.25) * speed
+		velocity = (dir * 0.6 + tangent * _ranged_flank_dir * tangent_speed_ratio) * speed
 	else:
 		# 在最佳射程附近：侧翼绕行（绕到玩家侧后方）
 		# 侧翼速度比主方向快，让敌人有弧线感而非原地切圈
-		velocity = tangent * _ranged_flank_dir * speed * 0.72
+		velocity = (dir * 0.28 + tangent * _ranged_flank_dir * tangent_speed_ratio) * speed
 
 	# 射击（保持原有逻辑）
 	_shoot_timer -= delta
