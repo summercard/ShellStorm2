@@ -41,6 +41,10 @@ func _is_gameplay_input_blocked() -> bool:
 		var locked = player.get("input_locked")
 		if locked is bool and locked:
 			return true
+		# 沉默状态阻止射击（被精英"抢枪"词缀命中时生效）
+		var silenced = player.get("_is_silenced")
+		if silenced is bool and silenced:
+			return true
 	var ui := get_tree().root.find_child("GameUIManager", true, false)
 	if ui != null and ui.has_method("blocks_gameplay_input"):
 		return bool(ui.call("blocks_gameplay_input"))
@@ -57,8 +61,8 @@ func _connect_audio_signals_if_needed() -> void:
 		return
 	if not weapon_tree.reload_started.is_connected(_on_reload_started):
 		weapon_tree.reload_started.connect(_on_reload_started)
-	if not weapon_tree.weapon_reloaded.is_connected(_on_reload_finished):
-		weapon_tree.weapon_reloaded.connect(_on_reload_finished)
+	if not weapon_tree.weapon_reloaded.is_connected(_on_reload_finished_impl):
+		weapon_tree.weapon_reloaded.connect(_on_reload_finished_impl)
 	_audio_ready = true
 
 func _on_reload_started() -> void:
@@ -66,26 +70,27 @@ func _on_reload_started() -> void:
 		_audio.play_reload_sfx()
 
 func _on_reload_finished() -> void:
-	pass  # 换弹完成可选音效
+	pass  # 已迁移到 _on_reload_finished_impl()
 
-## 换弹爆炸命运卡片（EXPLODE_ON_RELOAD）
 ## 换弹完成时，检查 WeaponAssemblyTree 当前子弹节点是否标记了 explode_on_reload
 ## 若标记则在玩家位置触发范围爆炸
-func _on_reload_finished() -> void:
+func _on_reload_finished_impl() -> void:
 	if _audio:
 		_audio.play_reload_sfx()
-	# 检查换弹爆炸标记
-	if weapon_tree != null:
-		var bullet_node: AssemblyNode = _find_bullet_node_in_tree()
-		if bullet_node != null:
-			var stats: Dictionary = bullet_node.get_base_stats()
-			if stats.get("explode_on_reload", false):
-				var radius: float = stats.get("explosion_radius", 150.0)
-				var damage_scale: float = stats.get("explosion_damage_scale", 0.8)
-				var bullet_dmg: int = weapon_tree.bullet_damage
-				var explosion_damage: int = int(float(bullet_dmg) * damage_scale)
-				var player_pos: Vector2 = player.global_position if player != null else Vector2.ZERO
-				_explode_at(player_pos, explosion_damage, radius)
+	if weapon_tree == null:
+		return
+	var bullet_node: AssemblyNode = _find_bullet_node_in_tree()
+	if bullet_node == null:
+		return
+	var stats: Dictionary = bullet_node.get_base_stats()
+	if not stats.get("explode_on_reload", false):
+		return
+	var radius: float = stats.get("explosion_radius", 150.0)
+	var damage_scale: float = stats.get("explosion_damage_scale", 0.8)
+	var bullet_dmg: int = weapon_tree.bullet_damage
+	var explosion_damage: int = int(float(bullet_dmg) * damage_scale)
+	var player_pos: Vector2 = player.global_position if player != null else Vector2.ZERO
+	_explode_at(player_pos, explosion_damage, radius)
 
 func _find_bullet_node_in_tree() -> AssemblyNode:
 	if weapon_tree == null or weapon_tree.get_root() == null:
@@ -105,9 +110,9 @@ func trigger_explosion_on_reload(bullet_damage: int, bullet_global_pos: Vector2)
 	var damage_scale: float = _pending_explode.get("damage_scale", 0.8)
 	var explosion_damage: int = int(float(bullet_damage) * damage_scale)
 	_explode_at(bullet_global_pos, explosion_damage, radius)
-	_pending_explode = null
+	_pending_explode.clear()
 
-var _pending_explode: Dictionary = null  # 爆炸参数缓存（每次 fire 后从 weapon_tree 读取）
+var _pending_explode: Dictionary = {}  # 爆炸参数缓存（每次 fire 后从 weapon_tree 读取）
 
 func _explode_at(pos: Vector2, dmg: int, radius: float) -> void:
 	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")
@@ -121,7 +126,24 @@ func _explode_at(pos: Vector2, dmg: int, radius: float) -> void:
 	_spawn_explosion_effect(pos, radius)
 
 func _spawn_explosion_effect(pos: Vector2, radius: float) -> void:
-	# 用 ColorRect 临时模拟爆炸范围光效（后续替换为专业特效场景）
+	var scene := preload("res://scenes/ExplosionEffect.tscn") as PackedScene
+	if scene != null:
+		var effect: Node2D = scene.instantiate() as Node2D
+		if effect != null:
+			effect.global_position = pos
+			if effect.has_node("ExplosionEffect") or effect is GPUParticles2D:
+				var particles: GPUParticles2D = effect as GPUParticles2D
+				if particles and particles.process_material:
+					particles.process_material.set("scale_min", radius / 80.0)
+					particles.process_material.set("scale_max", radius / 60.0)
+			get_tree().current_scene.add_child(effect)
+		else:
+			_fallback_explosion_flash(pos, radius)
+	else:
+		_fallback_explosion_flash(pos, radius)
+
+func _fallback_explosion_flash(pos: Vector2, radius: float) -> void:
+	# 回退：ColorRect 淡出光效
 	var flash: ColorRect = ColorRect.new()
 	flash.color = Color(1.0, 0.5, 0.1, 0.6)
 	flash.size = Vector2(radius * 2.0, radius * 2.0)

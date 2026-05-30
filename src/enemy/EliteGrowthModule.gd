@@ -12,6 +12,9 @@ const MODULE_CONVERSION = {
 }
 
 func _ready() -> void:
+	# 初始化全局随机种子，确保每次游戏运行 randf()/randi() 产生不同序列
+	# 注意：EliteArchiveModule 使用自己的 RandomNumberGenerator（自带种子）不受影响
+	randomize()
 	pass
 
 

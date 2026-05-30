@@ -11,10 +11,15 @@ const ARCHIVE_MODULE_PATH := "res://src/enemy/EliteArchiveModule.gd"
 
 var _elite_archive: Node = null
 var _rng: RandomNumberGenerator = null
+var _pending_elite_id: String = ""  # 已选中但尚未注入波次的精英 ID（用于 has_pending_elite 预查询）
 
 func _init() -> void:
 	_rng = RandomNumberGenerator.new()
 	_rng.seed = Time.get_ticks_msec()
+
+## 查询是否已有选中但尚未注入的精英（供 RoomGameMode 波次分配预判）
+func has_pending_elite() -> bool:
+	return not _pending_elite_id.is_empty()
 
 ## 尝试从档案池抽取一个可出现的精英
 ## floor: 当前楼层（影响出现概率和生成强度）
@@ -48,10 +53,13 @@ func try_select_elite(floor: int, risk_level: int = 0) -> Dictionary:
 	for entry in weighted:
 		if roll <= entry["cum"]:
 			var selected: Variant = entry["record"]
+			var result: Dictionary
 			if selected is Dictionary:
-				return _build_elite_spawn_data(selected, floor)
-			# EliteRecord object
-			return _build_elite_spawn_data_from_record(selected, floor)
+				result = _build_elite_spawn_data(selected, floor)
+			else:
+				result = _build_elite_spawn_data_from_record(selected, floor)
+			_pending_elite_id = result.get("elite_id", "")
+			return result
 
 	return {}
 
@@ -101,6 +109,10 @@ func _build_elite_spawn_data(archive_dict: Dictionary, floor: int) -> Dictionary
 		"scale": 1.0 + (level - 1) * 0.08,  # 每级 +8% 体型
 		# 词缀（从 archive modifiers 映射）
 		"modifier": _select_modifier_from_archive(archive_dict, level),
+		# modifier_id_en: 英文词缀ID，供 EliteActiveSkillComponent.inject_elite_skills() 路由精英专属主动技能
+		"modifier_id_en": _select_modifier_id_en_from_archive(archive_dict, level),
+		# tier: 1-3，从 level 换算（level 1-2→tier1，3-4→tier2，5+→tier3）
+		"tier": mini(3, (level - 1) / 2 + 1),
 		# AI（根据基础类型决定）
 		"ai_type": base_stats.get("ai_type", "chase"),
 		# 特殊标记（复仇者/区域霸主有额外行为）
@@ -150,6 +162,37 @@ func _select_modifier_from_archive(archive_dict: Dictionary, level: int) -> Stri
 			return ""
 		return default_mods[0]
 	return modifiers[0]
+
+
+## 英文词缀ID映射（Mirror MonsterInjector._map_modifier_to_english）
+static func _map_modifier_to_english(cn_id: String) -> String:
+	match cn_id:
+		"巨大化": return "Elite.Huge"
+		"分裂": return "Elite.SpawnOnDeath"
+		"反弹": return "Elite.Ricochet"
+		"寄生": return "Elite.Parasite"
+		"抢枪": return "Elite.WeaponParasite"
+		"吞弹": return "Elite.BulletEater"
+	return "Elite.Huge"
+
+
+## 从 archive modifiers 中选择英文词缀ID（供精英专属主动技能注入）
+func _select_modifier_id_en_from_archive(archive_dict: Dictionary, level: int) -> String:
+	var modifiers: Array = archive_dict.get("modifiers", [])
+	var cn_modifier: String = ""
+	if modifiers.is_empty():
+		# 与 _select_modifier_from_archive 保持一致的默认生成逻辑
+		if level >= 6:
+			cn_modifier = "反弹"
+		elif level >= 4:
+			cn_modifier = "分裂"
+		elif level >= 2:
+			cn_modifier = "巨大化"
+		else:
+			cn_modifier = "巨大化"
+	else:
+		cn_modifier = str(modifiers[0])
+	return _map_modifier_to_english(cn_modifier)
 
 
 ## 找到场景中的 EliteArchiveModule（通过分组或父节点向上查找）

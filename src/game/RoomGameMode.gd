@@ -21,6 +21,8 @@ const ROOM_LIGHTING_SCRIPT := preload("res://src/fx/RoomLightingSystem.gd")
 const ELITE_ARCHIVE_MODULE_SCRIPT := preload("res://src/enemy/EliteArchiveModule.gd")
 const ELITE_SPAWN_DIRECTOR_SCRIPT := preload("res://src/enemy/EliteSpawnDirector.gd")
 const EXTRACTION_DEFENSE_DURATION := 14.0
+const EXTRACTION_MID_WAVE_REMAINING := 9.0
+const EXTRACTION_FINAL_WAVE_REMAINING := 5.0
 
 @export var initial_floor: int = 1
 @export var map_seed: int = -1
@@ -103,8 +105,6 @@ var _current_wave_spawner: RoomWaveSpawner = null
 var _current_regional_controller: RegionalSpawnController = null
 ## 精英怪出现调度器（PH06）
 var _elite_spawn_director: Node
-## 当前房间已击杀精英的 elite_id 列表（用于识别要删除的记录）
-var _killed_elite_ids_this_room: Array[String] = []
 ## 当前房间遭遇的所有精英 elite_id（用于遭遇结果记录）
 var _encountered_elite_ids_this_room: Array[String] = []
 
@@ -327,6 +327,41 @@ func _setup_container_fate_bridge() -> void:
 		print("[RoomGameMode] Container -> FateTriggers 桥接已建立: %d" % connected)
 
 
+## 设置楼梯/电梯交互检测（连接 StairsInteraction -> 垂直楼层切换）
+func _setup_stairs_detection() -> void:
+	var room_node: Node = _get_current_room_instance()
+	if room_node == null:
+		return
+	for child in room_node.get_children():
+		var stairs: StairsInteraction = child as StairsInteraction
+		if stairs != null and stairs.has_signal("vertical_transition_requested"):
+			if not stairs.vertical_transition_requested.is_connected(_on_vertical_transition_requested):
+				stairs.vertical_transition_requested.connect(_on_vertical_transition_requested)
+				print("[RoomGameMode] Stairs 绑定: %s direction=%s" % [stairs.name, stairs.direction])
+
+
+func _on_vertical_transition_requested(from_level: int, to_level: int, direction: String) -> void:
+	if map_manager == null:
+		return
+	var target_vertical: RoomData.VerticalLevel = RoomData.VerticalLevel.MAIN
+	match str(to_level):
+		"-1":
+			target_vertical = RoomData.VerticalLevel.BASEMENT
+		"1":
+			target_vertical = RoomData.VerticalLevel.UPPER
+		"0":
+			target_vertical = RoomData.VerticalLevel.MAIN
+		_:
+			target_vertical = RoomData.VerticalLevel.MAIN
+	var result: RoomData = map_manager.enter_vertical_room(target_vertical)
+	if result != null:
+		print("[RoomGameMode] 垂直切换: %s -> %s (%s)" % [from_level, target_vertical, direction])
+		# 触发房间进入逻辑
+		_enter_room_by_id(map_manager.get_current_room_id(), map_manager.get_current_room_id())
+	else:
+		print("[RoomGameMode] 垂直切换失败: target_vertical=%s" % target_vertical)
+
+
 func _get_container_interactions(root: Node) -> Array[ContainerInteraction]:
 	var result: Array[ContainerInteraction] = []
 	if root == null:
@@ -409,8 +444,14 @@ func _spawn_player() -> void:
 
 ## 开始游戏
 func _start_game() -> void:
+	# 检查关卡选择状态（LevelSelectState 为 Autoload）
+	var start_floor: int = initial_floor
+	if LevelSelect != null and LevelSelect.selection_made:
+		start_floor = LevelSelect.selected_floor
+		LevelSelect.selection_made = false  # 重置，避免污染下次普通进入
+
 	# 生成第一层地图
-	map_manager.generate_map(initial_floor, map_seed)
+	map_manager.generate_map(start_floor, map_seed)
 	_room_key_count = 1 + _inventory_room_key_snapshot
 	_cleared_room_ids[0] = true
 	_set_room_revealed(0, true)
@@ -457,6 +498,13 @@ func instantiate_all_rooms() -> void:
 		# 设置房间在世界中的位置
 		room_instance.global_position = room_node.position
 		room_instance.visible = false
+
+		# 未揭示的房间关闭碰撞（避免"空气墙"）
+		# 起始房间总是揭示的（id最小的那个）
+		var is_start_room: bool = (room_node.id == 0) or (room_node.room_data != null and room_node.room_data.room_type == RoomData.RoomType.PLAYER_SPAWN)
+		var is_revealed: bool = is_start_room or _revealed_room_ids.has(room_node.id)
+		_set_room_collision_enabled(room_instance, is_revealed)
+
 		map_manager.register_instantiated_room(room_node.id, room_instance)
 		_ensure_room_layout(room_instance, room_node.id, room_data)
 
@@ -487,6 +535,7 @@ func _on_room_entered(room_data: RoomData) -> void:
 	)
 	_refresh_room_doors_for_state()
 	_setup_container_fate_bridge()
+	_setup_stairs_detection()
 
 	# 构建房间视野遮挡几何（供 VisionSystem 使用）
 	_build_vision_occlusion_for_room()
@@ -584,6 +633,13 @@ func _on_global_game_over() -> void:
 			inventory_module, insurance_module
 		)
 		_print_death_settlement(settlement_result)
+		# 将结算结果传递给 GameUIManager 显示
+		var ui: CanvasLayer = get_node_or_null("GameUIManager")
+		if ui != null:
+			var saved_count: int = settlement_result.get("insurance_saved", []).size()
+			var lost_count: int = settlement_result.get("total_lost", 0)
+			if ui.has_method("set_loot_info"):
+				ui.set_loot_info(saved_count, lost_count)
 	# 记录基地数据（死亡）
 	var base_manager: BaseManager = _get_base_manager()
 	if base_manager != null:
@@ -595,6 +651,18 @@ func _print_death_settlement(result: Dictionary) -> void:
 	var text: String = death_settlement_module.get_death_summary_text(result)
 	print(text)
 
+
+## 计算本局撤离可获得的 extraction_points（用于 UI 显示，不执行持久化）
+func _calc_extraction_points_earned() -> int:
+	var floor_bonus: int = current_floor * 15
+	var loot_count: int = 0
+	if inventory_module != null:
+		loot_count = inventory_module.get_used_slots()
+	if insurance_module != null:
+		loot_count += insurance_module.get_used_slots()
+	var loot_bonus: int = loot_count * 3
+	var bounty_points: int = int(_elite_kill_bounty * 0.5)
+	return floor_bonus + loot_bonus + bounty_points
 
 ## 撤离完成后赋予玩家应得的 extraction_points
 ## extraction_points 是局后持久化资源，用于在 Workshop 解锁蓝图
@@ -643,7 +711,11 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 			inventory_module, insurance_module
 		)
 		var insurance_items: Array[Dictionary] = insurance_module.get_all_insured_items()
+		# 计算本局获得的 extraction_points（用于 UI 显示）
+		var extraction_points_earned: int = _calc_extraction_points_earned()
 		_grant_extraction_points()
+		# 撤离成功面板在清空背包前先读取本次带出的真实物品列表（用于显示本局获得资源）
+		var extracted_items: Array[Dictionary] = inventory_module.get_occupied_slots()
 		var saved_to_vault: int = _persist_extracted_items_to_vault()
 		_print_extraction_success(extracted, insurance_items)
 		print("[RoomGameMode] Saved extracted items to vault: %d" % saved_to_vault)
@@ -667,7 +739,9 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 					"risk": _run_risk,
 					"floor": current_floor,
 					"elite_kills": _killed_elite_ids_this_room.size(),
-					"elite_bounty": _elite_kill_bounty
+					"elite_bounty": _elite_kill_bounty,
+					"points_earned": extraction_points_earned,
+					"extracted_items": extracted_items
 				}
 			)
 	else:
@@ -812,36 +886,31 @@ func _persist_extracted_items_to_vault() -> int:
 	var bm: BaseManager = _get_base_manager()
 	if bm == null:
 		return 0
-	var saved := 0
-	var overflow := 0
+	var total := 0
+	var all_items: Array[Dictionary] = []
+	# 收集背包物品
 	if inventory_module != null:
 		for slot in inventory_module.get_occupied_slots():
 			var item: Dictionary = slot.get("item", {}).duplicate(true)
 			if item.is_empty():
 				continue
 			item["count"] = slot.get("count", 1)
-			if bm.add_vault_item(item):
-				saved += 1
-			else:
-				overflow += 1
+			all_items.append(item)
 		inventory_module.clear_all()
+	# 收集保险格物品
 	if insurance_module != null:
 		for insured in insurance_module.get_all_insured_items():
 			var item: Dictionary = insured.get("item", {}).duplicate(true)
 			if item.is_empty():
 				continue
 			item["count"] = insured.get("count", 1)
-			if bm.add_vault_item(item):
-				saved += 1
-			else:
-				overflow += 1
+			all_items.append(item)
 		insurance_module.clear_all()
-	if overflow > 0:
-		bm.add_extraction_points(overflow * 5)
-		print(
-			"[RoomGameMode] Vault full, converted %d overflow items to extraction_points" % overflow
-		)
-	return saved
+	# 添加到战利品区（不清空仓库，物品暂存此处）
+	bm.add_extraction_loot_items(all_items)
+	total = all_items.size()
+	print("[RoomGameMode] Extraction loot collected: %d items" % total)
+	return total
 
 
 func _print_extraction_failure() -> void:
@@ -1054,31 +1123,52 @@ func _calculate_wave_counts_for_enemy_plan(room_data: RoomData, enemy_count: int
 			wave_count = 3
 	wave_count = clamp(wave_count, 1, enemy_count)
 
+	# ELITEBOOST: 如果精英已被 EliteSpawnDirector 选出（pending），将其从普通敌人数中分离，
+	# 波次分配时先不算它，最后再加回第一波（RoomWaveSpawner.set_pending_elite_spawn 处理注入）
+	var has_pending_elite: bool = (
+		_elite_spawn_director != null
+		and _elite_spawn_director.has_method("has_pending_elite")
+		and _elite_spawn_director.has_pending_elite()
+	)
+	if has_pending_elite:
+		enemy_count = maxi(enemy_count - 1, 0)
+
 	var waves: Array[int] = []
 	var remaining: int = enemy_count
 	for i in range(wave_count):
 		var this_wave: int = int(ceil(float(remaining) / float(wave_count - i)))
 		waves.append(this_wave)
 		remaining -= this_wave
+
+	# ELITEBOOST: 把精英名额加回第一波
+	if has_pending_elite and not waves.is_empty():
+		waves[0] += 1
+
 	return waves
 
 
 ## 计算波次数量配置
 func _calculate_wave_counts(room_data: RoomData) -> Array[int]:
+	# base_count：每波敌人数基准（不区分难度层级，统一用 current_floor）
+	# wave_count：波次数量（随难度层级增加）
 	var base_count: int = 2 + current_floor
 	var wave_count: int = 1
 
 	match room_data.floor_level:
 		RoomData.FloorLevel.SHALLOW:
+			# 新手区：单波冲击，敌人数随楼层线性增加
 			wave_count = 1
 			base_count = 2 + current_floor
 		RoomData.FloorLevel.MEDIUM:
+			# 中层：2波，敌人数略少（波次分担）
 			wave_count = 2
 			base_count = 2 + current_floor / 2
 		RoomData.FloorLevel.DEEP:
+			# 深层：2波，敌人数更多（压力感）
 			wave_count = 2
 			base_count = 3 + current_floor / 2
 		RoomData.FloorLevel.ABYSS:
+			# 深淵：3波，每波敌人数适中（持续压力）
 			wave_count = 3
 			base_count = 3 + current_floor / 2
 
@@ -1248,7 +1338,7 @@ func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
 			and map_manager._current_room_id >= 0
 		):
 			door_info = map_manager.path_director.get_open_door_info(map_manager._current_room_id)
-		visualizer.configure(room_data.room_type, room_data.size, door_info)
+		visualizer.configure(room_data.room_type, room_data.size, door_info, current_floor)
 		print(
 			(
 				"[RoomGameMode] 房间视觉化已配置: %s size=%s"
@@ -1598,7 +1688,7 @@ func _prepare_fate_modal_panel(panel: Control) -> void:
 ## 创建一张命运卡片按钮（用于面板内动态创建）
 func _create_fate_card_button(card: FateCard) -> Button:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(220, 190)
+	btn.custom_minimum_size = Vector2(150, 150)
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	btn.focus_mode = Control.FOCUS_ALL
@@ -1957,10 +2047,20 @@ func _set_room_revealed(room_id: int, revealed: bool) -> void:
 		return
 	_revealed_room_ids[room_id] = revealed
 	room_node.visible = revealed
+	_set_room_collision_enabled(room_node, revealed)
 	if revealed:
 		var lighting: Node = room_node.get_node_or_null("RoomLightingSystem")
 		if lighting != null and lighting.has_method("activate"):
 			lighting.call("activate")
+
+
+func _set_room_collision_enabled(root: Node, enabled: bool) -> void:
+	if root is CollisionShape2D:
+		(root as CollisionShape2D).disabled = not enabled
+	if root is CollisionPolygon2D:
+		(root as CollisionPolygon2D).disabled = not enabled
+	for child in root.get_children():
+		_set_room_collision_enabled(child, enabled)
 
 
 func _apply_open_doors_to_room(room_id: int) -> void:
@@ -2282,8 +2382,14 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 				var boss_room_bounds: Rect2 = _calculate_room_bounds_for_spawn_controller(boss_room_instance, current_room_data)
 				boss_actor.call("set_room_bounds", boss_room_bounds)
 				print("[RoomGameMode] 为 BossActor 设置房间边界: %s" % str(boss_room_bounds))
-		# 从 boss_data 中提取 max_phases，如果没有则默认 3
-		var max_phases: int = boss_data.get("max_phases", 3)
+		# 注入 boss_scale（由 MonsterInjector._generate_boss 根据楼层计算）
+		# 必须在 configure_phases 前设置，让 BossActor._ready() 正确应用 HP 缩放
+		if boss_actor.has_method("set_boss_scale_override"):
+			var incoming_scale: float = boss_data.get("boss_scale", 1.0)
+			boss_actor.call("set_boss_scale_override", incoming_scale)
+			print("[RoomGameMode] 为 BossActor 注入 boss_scale=%.2f" % incoming_scale)
+		# 从 boss_data 中提取 phases（实际字段名），用于确定技能树阶段数
+		var max_phases: int = boss_data.get("phases", 3)
 		# 构建技能树配置（3个阶段，每个阶段有对应技能）
 		var skill_trees: Dictionary = {
 			1: [
@@ -2498,7 +2604,9 @@ func _update_extraction_defense() -> void:
 	if not _extraction_defense_active or extraction_module == null:
 		return
 	var remaining := extraction_module.get_remaining_time()
-	if not _extraction_mid_wave_spawned and remaining <= 9.5:
+	# 用 elif 确保顺序：先判断 mid-wave，再判断 final-wave
+	# 防止 remaining 已经 <= 5.0 时，mid-wave 的条件仍为 true，导致 mid-wave 在 final-wave 之后才触发
+	if not _extraction_mid_wave_spawned and remaining <= EXTRACTION_MID_WAVE_REMAINING and remaining > EXTRACTION_FINAL_WAVE_REMAINING:
 		_extraction_mid_wave_spawned = true
 		_update_room_info_label("撤离信号 2/3：增援逼近！")
 		_spawn_extraction_attackers(
@@ -2519,7 +2627,7 @@ func _update_extraction_defense() -> void:
 				},
 			]
 		)
-	if not _extraction_elite_wave_spawned and remaining <= 5.0:
+	elif not _extraction_elite_wave_spawned and remaining <= EXTRACTION_FINAL_WAVE_REMAINING:
 		_extraction_elite_wave_spawned = true
 		_spawn_extraction_final_wave()
 

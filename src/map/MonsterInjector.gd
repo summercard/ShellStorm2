@@ -33,9 +33,13 @@ const ELITE_MODIFIERS := {
 }
 
 ## 层级难度缩放
+## 注意：floor参数是实际楼层（1-4），不是 floor_level 进度层级
+## 第一关：教学难度，怪物弱，种类少
+## 第二关：正式挑战开始，怪物变强，种类增加，体型明显增大
+## 第三关及以上：硬核，怪物强，密度高
 const FLOOR_SCALING := {
 	1: { "hp_mult": 1.0, "damage_mult": 1.0, "loot_mult": 1.0 },
-	2: { "hp_mult": 1.2, "damage_mult": 1.15, "loot_mult": 1.2 },
+	2: { "hp_mult": 1.4, "damage_mult": 1.2, "loot_mult": 1.3 },  # 第二关：显著提升（hp 1.2→1.4, dmg 1.15→1.2）
 	3: { "hp_mult": 1.5, "damage_mult": 1.3, "loot_mult": 1.5 },
 	4: { "hp_mult": 1.8, "damage_mult": 1.5, "loot_mult": 1.8 },
 	5: { "hp_mult": 2.2, "damage_mult": 1.8, "loot_mult": 2.2 },
@@ -72,10 +76,11 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 
 ## 生成随机敌人
 func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]:
+	# 怪物数量随楼层增加：2-4个（第二层比第一层更多）
 	var count: int = 1 + floor / 2
 	var enemies: Array[Dictionary] = []
 	
-	var available_types: Array = _get_available_types_for_level(floor_level)
+	var available_types: Array = _get_available_types_for_level(floor_level, floor)
 	
 	for i in range(count):
 		var enemy_type: String = available_types[_rng.randi() % available_types.size()]
@@ -83,17 +88,27 @@ func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]
 	
 	return enemies
 
-## 获取指定层级可用的敌人类型
-func _get_available_types_for_level(floor_level: int) -> Array[String]:
+## 获取指定层级可用的敌人类型（按楼层差异化）
+## floor_level: RoomData.FloorLevel 进度层级（SHALLOW/MEDIUM/DEEP/ABYSS）
+## floor: 实际楼层数字（1-4），影响同进度层级下的怪物池大小
+func _get_available_types_for_level(floor_level: int, floor: int = 1) -> Array[String]:
 	match floor_level:
 		RoomData.FloorLevel.SHALLOW:
-			return ["melee_chaser", "ranged_caster", "exploder"]
+			# 第一层：3种基础怪物（新手熟悉）
+			if floor <= 1:
+				return ["melee_chaser", "ranged_caster", "exploder"]
+			# 第二层及以上：SHALLOW也开放6种怪物池，丰富度提升
+			else:
+				return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
 		RoomData.FloorLevel.MEDIUM:
+			# 全部6种
 			return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
 		RoomData.FloorLevel.DEEP:
+			# 全部6种，且怪物密度更高（波次更多）
 			return ["melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher"]
 		RoomData.FloorLevel.ABYSS:
-			return ["summoner", "shielded", "ambusher"]  # 高难度只留精英类型
+			# 仅精英类型
+			return ["summoner", "shielded", "ambusher"]
 	return ["melee_chaser"]
 
 ## 生成基础敌人
@@ -136,9 +151,14 @@ func _generate_elite(floor: int, floor_level: int) -> Dictionary:
 	
 	base["modifier"] = selected_modifier
 	base["modifier_data"] = mod_data
+	# 映射中文词缀到英文ID，供 EliteActiveSkillComponent.inject_elite_skills() 正确路由技能
+	base["modifier_id_en"] = _map_modifier_to_english(selected_modifier)
 	base["name"] = selected_modifier + base["name"]
 	base["xp_value"] = 50 + floor * 20
 	base["bounty_tier"] = floor
+	# 精英怪使用专用掉落表（elite_floor_1 / elite_floor_2）
+	# 这样 ItemRegistry 中配置的 elite_floor_* 权重才能生效
+	base["loot_table"] = "elite_floor_1" if floor <= 2 else "elite_floor_2"
 	
 	return base
 
@@ -147,16 +167,22 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
 	var hp: float = 200.0 * scaling["hp_mult"]
 	
+	# 第二关 Boss 体型更大（boss_scale=1.5），HP 按体型缩放同步放大
+	var boss_scale: float = 1.0
+	if floor >= 2:
+		boss_scale = 1.3 + (floor - 2) * 0.15  # floor=2→1.3, floor=3→1.45, floor=4→1.6
+	
 	return {
 		"enemy_type": "boss",
 		"name": "Boss 第%d层" % [floor],
-		"hp": int(hp),
-		"max_hp": int(hp),
+		"hp": int(hp * boss_scale),  # boss_scale 同步放大 HP（与 BossActor._apply_shape_scale 联动）
+		"max_hp": int(hp * boss_scale),
 		"damage": int(20.0 * scaling["damage_mult"]),
 		"speed": 60,
 		"emoji": ENEMY_PRESENTATION["boss"]["emoji"],
 		"color": ENEMY_PRESENTATION["boss"]["color"],
-		"scale": 1.45,
+		"scale": 1.45 * boss_scale,  # 视觉效果同步放大
+		"boss_scale": boss_scale,   # BossActor 读取此字段并应用到碰撞体形状大小
 		"ai_type": ENEMY_PRESENTATION["boss"]["ai_type"],
 		"floor": floor,
 		"is_boss": true,
@@ -206,3 +232,14 @@ static func get_modifier_description(modifier: String) -> String:
 		"抢枪": return "短暂复制玩家的武器效果"
 		"吞弹": return "吃掉投射物并转化为攻击"
 	return ""
+
+## 映射中文词缀ID到英文，供 EliteActiveSkillComponent.inject_elite_skills() 正确路由
+static func _map_modifier_to_english(cn_id: String) -> String:
+	match cn_id:
+		"巨大化": return "Elite.Huge"
+		"分裂": return "Elite.SpawnOnDeath"
+		"反弹": return "Elite.Ricochet"
+		"寄生": return "Elite.Parasite"
+		"抢枪": return "Elite.WeaponParasite"
+		"吞弹": return "Elite.BulletEater"
+	return "Elite.Huge"

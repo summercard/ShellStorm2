@@ -18,6 +18,10 @@ const SCENE_MAP := {
 	RoomData.RoomType.BOSS: "res://scenes/RoomBoss.tscn",
 	RoomData.RoomType.STORAGE: "res://scenes/RoomStorage.tscn",
 	RoomData.RoomType.TRAP: "res://scenes/RoomTrap.tscn",
+	RoomData.RoomType.BASEMENT: "res://scenes/RoomStorage.tscn",  # 地下室复用藏储室场景（后期需独立场景）
+	RoomData.RoomType.STAIRS_DOWN: "res://scenes/RoomStairs.tscn",
+	RoomData.RoomType.STAIRS_UP: "res://scenes/RoomStairs.tscn",
+	RoomData.RoomType.ELEVATOR: "res://scenes/RoomStairs.tscn",
 }
 
 var _scene_cache: Dictionary = {}

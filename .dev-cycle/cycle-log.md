@@ -1,5 +1,72 @@
 # ShellStorm2 开发日志
 
+## 轮次377（2026-05-29 20:54 UTC+8）
+
+### 维度选择
+**冰霜DOT敌人视觉反馈缺失 — `_apply_dot_visual` 的 ice case 为 pass 空操作**
+
+从核心玩法"元素子弹视觉反馈"链路审查，发现冰霜DOT视觉缺口：
+- `_apply_dot_visual(dot_type)` 处理 fire/poison 时会实时更新 `shape.color`，让玩家看到DOT叠加效果
+- ice case 为 `pass`（空操作），冰霜DOT命中敌人后，敌人 shape 颜色完全不变，无法让玩家感知冰霜DOT已生效
+- 冰冻（apply_freeze）已有蓝白modulate视觉，但冰霜DOT走的是另一个通道（apply_dot），两个通道独立
+- 子弹击中敌人后，如果触发冰霜DOT（而非冰冻），敌人不会有任何视觉变化，玩家无法读懂"这个敌人正在持续受冰霜伤害"
+
+### 解决方案
+在 `_apply_dot_visual` 的 ice case 中实现与 fire/poison 风格一致的视觉反馈：淡蓝色叠加，颜色强度随 `_fuse_dot_dps` 变化，方向为蓝白增强（RGB从淡蓝向亮蓝）。
+
+### 修改内容
+
+#### `src/enemy/EnemyBase.gd`
+```gdscript
+# 修改前
+"ice":
+    # 冰霜：蓝色叠加（DOT视觉，冰冻走另一个通道）
+    pass
+
+# 修改后
+"ice":
+    # 冰霜DOT：淡蓝色叠加（与冰冻视觉互补，冰冻走 apply_freeze 通道）
+    var ice_intensity := clampf(_fuse_dot_dps / 10.0, 0.0, 1.0)
+    shape.color = Color(0.3 + 0.15 * ice_intensity, 0.6 + 0.15 * ice_intensity, 1.0, 1.0)
+```
+
+### 玩家可感知的变化
+- Before：冰霜DOT命中的敌人 shape 颜色完全不变（相比 fire 的橙红、poison 的绿色，ice 为空）
+- After：冰霜DOT命中敌人时，shape 颜色从淡蓝逐渐增强为亮蓝（强度与 DPS 相关），玩家能感知冰霜DOT已激活并持续叠加
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0，输出干净）
+- [ ] 人类试玩：冰霜子弹命中敌人，观察敌人 shape 颜色是否从淡蓝变为亮蓝（DPS越高越蓝）
+- [ ] 人类试玩：冰冻（apply_freeze，蓝白modulate）和冰霜DOT（_apply_dot_visual，蓝白色color）同时存在时视觉不冲突
+
+### 系统完整度确认
+同轮次376，本轮补充冰霜DOT视觉缺口后，元素子弹反馈体系完整度：
+| 系统 | 落地状态 |
+|---|---|
+| 火焰DOT视觉 | ✅ shape.color 从白→橙红 |
+| 毒素DOT视觉 | ✅ shape.color 从白→绿色 |
+| 冰霜DOT视觉 | ✅ 本轮新增 shape.color 从白→亮蓝 |
+| 冰冻视觉 | ✅ shape.modulate 蓝白，scale 1.15x |
+| 换弹爆炸特效 | ✅ ExplosionEffect.tscn GPUParticles2D + signal fix |
+| 冰冻子弹视觉（命中时子弹闪烁） | ✅ Bullet.gd _apply_element_dot |
+
+### 剩余风险（人类试玩验证项）
+1. **元素子弹**：冰霜DOT叠加后敌人颜色是否可区分（与冰冻modulate冲突吗？）
+2. **换弹爆炸**：explode_on_reload 信号修复后是否真正触发爆炸
+3. **第二关怪物类型**：6种怪物随楼层强度曲线是否正确
+4. **精英怪实际表现**：🔫挂枪+活子弹+炮台+主动技能
+5. **撤离守点敌潮**：精英出现频率
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。冰霜DOT视觉反馈已补全，所有元素子弹视觉通道已完整。最高且唯一优先级：**人类试玩验证**。
+
+### 下轮最可能方向
+1. **人类试玩验证（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈
+
+---
+
 ## 轮次190（2026-05-26 03:27 UTC+8）
 
 ### 维度选择
@@ -687,3 +754,390 @@ Boss 在各阶段自动施放定时技能：Phase 1 召唤小怪+蓄力射击，
 2. **BossActor._process 双重 tick 冗余清理**：BossPhaseDirector 已有 _process，BossActor 的 `_phase_director.tick(delta)` 调用是否必要需确认
 3. **RoomBoss.tscn 接入 DemoRoomChain**：真实 Boss 战完整流程验证
 4. **精英击杀信号 → ExtractionDirector**：EliteArchiveModule.elite_killed 信号连接
+
+---
+
+## 轮次319（2026-05-28 13:44 UTC+8）
+
+### 维度选择
+**怪物技能差异化强化 + 武器枪身数值差异扩大（主人明确优先级）**
+
+从核心玩法"搜打撤+怪物压迫+武器装配"链路审查，发现以下问题：
+
+**怪物技能差异化不足：**
+- Chaser：狂暴化阈值0.4太低，反击proc 15%太弱
+- Ranged：弹幕节奏慢(5s)，3发太少，侧翼机动未落地
+- Tank：格挡率15%不够，没有盾墙技能
+- Bomber：没有殉爆机制，死亡碎片偏少
+- Trapper：技能单一，没有毒雾
+
+**武器枪身数值差异偏小：**
+- 步枪(132 DPS) vs 冲锋枪(108 DPS)差距不够大
+- 狙击枪(117 DPS) vs 步枪差距太小
+- LMG和榴弹的差异化不够极端
+- 手枪换弹1.5s不够快，定位模糊
+
+### 玩家可感知结果
+
+**怪物方面：**
+- Chaser低血量狂暴化更早触发(50%)，追击更凶猛
+- Ranged弹幕4发更密集，狙击更频繁(8s)，低血逃逸更快
+- Tank格挡率达20%，新增盾墙技能（举起盾挡所有近战伤害）
+- Bomber低血量时提前殉爆（不等玩家跑远），碎片更多(10颗)
+- Trapper释放毒雾区域持续伤害，新增减速效果
+
+**武器方面：**
+- 手枪：换弹1.2s极快，高频战斗中快速重整（但DPS只有70）
+- 冲锋枪：14射速+35弹容爆发力强，但换弹2.5s制造风险
+- 狙击枪：75伤害1.5射速，远程点名更极端，近距灾难
+- LMG：80弹容压制，但单发8伤害+25扩散+5s换弹，极端化
+
+### 修改内容
+
+#### `src/enemy/components/EnemySkillComponent.gd`（怪物技能 v2）
+1. **inject_chaser_skill**：狂暴化阈值0.5（更早触发），移速+50%，反击proc 20%，伤害+40%
+2. **inject_ranged_skill**：弹幕4发(4.5s)，扩散0.25，狙击8s/22伤害/520速，新增侧翼技能框架
+3. **inject_tank_skill**：格挡20%，盾击0.6s眩晕，投石18伤害/70半径，新增盾墙技能(12s冷却)
+4. **inject_bomber_skill**：陷阱5.5s，布放更快，新增殉爆(低血35%提前爆)，碎片10颗/10伤害
+5. **inject_trapper_skill**：陷阱4.5s/85半径/5s持续，新增毒云(10s/80半径/4s/DOT6)，被攻击减速效果
+
+#### `src/weapons/WeaponPresets.gd`（武器枪身 v2）
+1. **gun_pistol**：换弹1.5s→1.2s（极快差异化）
+2. **gun_smg**：12dmg→10dmg，FR 9→14，弹容30→35，换弹1.8s→2.5s（爆发强但换弹慢）
+3. **gun_sniper**：65dmg→75dmg，FR 1.8→1.5，spread 0.008→0.005，换弹3.5s→3.8s，弹容5→4（极端化）
+4. **gun_lmg**：10dmg→8dmg，FR 14→12，spread 0.20→0.25，换弹4.2s→5s，弹容60→80（极端压制型）
+5. **新增gun_burst_rifle详细注释**：DPS 162全最高，但必须3发全中+非持续
+
+#### `docs/PH06_怪物系统.md`（v2 — 怪物类型表更新）
+- 所有怪物类型备注更新为主动/被动技能强化数值
+
+#### `docs/PH02_模块化武器系统.md`（v2 — 枪身数值平衡表新增）
+- 新增"枪身数值平衡表"：8种枪身完整DPS/克制/弱点一览
+
+### 验收标准
+- [x] Godot headless --quit-after 4 编译通过 ✅（EXIT 0）
+- [ ] 人类试玩：Chaser低血量时明显追得更快更凶
+- [ ] 人类试玩：Ranged弹幕4发密集感，狙击更频繁
+- [ ] 人类试玩：Tank举起盾墙时近战伤害大幅降低
+- [ ] 人类试玩：Bomber低血量提前爆炸（不等玩家跑远）
+- [ ] 人类试玩：冲锋枪14射速+35弹容压制感 vs 步枪6射速精准感差异明显
+- [ ] 人类试玩：狙击枪75伤害点名精英的感觉
+
+### 剩余风险
+- 新技能(tank_shield_wall/trapper_poison_cloud/bomber_early_detonation)需要EnemyBase支持_shield_wall_active等属性
+- 毒云DOT在异步loop中需要_owner._is_dead检查防止死后继续伤害
+- 殉爆触发take_damage(current_hp)扣到0的行为需要确认EnemyBase死亡处理链路
+
+### 下轮最可能方向
+1. **EnemyBase._shield_wall_active/_shield_wall_effectiveness 支持**：Tank盾墙技能的状态属性
+2. **怪物数量和波次平衡**：6种怪物在第二关的分布密度
+3. **枪械手感深度验证**：实际使用各枪械的DPS体验差异
+4. **召唤型怪物（Summoner）技能增强**：治疗光环+防御结界
+
+## 轮次337（2026-05-28 18:57 UTC+8）
+
+### 维度选择
+**BossPhaseDirector._auto_trigger_time_skills 重复定义问题**
+
+审查发现 BossPhaseDirector.gd 有两个严重问题：
+
+1. **函数重复定义**：`BossPhaseDirector.gd` 中 `_auto_trigger_time_skills` 被定义了两次（第一次在第30行，第二次在第43行configure之后）。Godot 4.x 中，后定义的函数会覆盖前面的定义，但前面定义的函数体仍然在 `_process` 第27行被调用——导致**每次 `_process 调用 tick 后，紧接着调用 `_auto_trigger_time_skills`（第二次定义版本），但第二次定义的版本逻辑与第一次相同**。
+
+2. **性能问题**：虽然没有实际 bug（两次函数体相同），但代码结构混乱。而且 `_process` 每帧执行 `_auto_trigger_time_skills`，里面遍历所有 phase_skills 并检查每个技能的 trigger_mode 和 cooldown——如果 Boss 有多个技能，每帧都遍历一遍会造成不必要的性能开销。
+
+虽然这个重复定义没有产生可感知的 bug，但属于代码质量问题，需要清理。
+
+### 玩家可感知的结果
+无直接玩家可感知变化。属于代码质量和性能优化。
+
+### 修改内容
+
+#### `src/enemy/BossPhaseDirector.gd`
+1. **删除第二个 `_auto_trigger_time_skills` 函数体**（重复定义）：保留第30行的第一次定义，删除 configure 函数之后重复的第二个函数体
+2. **`_process` 保持不变：继续在 tick 后调用 `_auto_trigger_time_skills`**，这是正确的设计（冷却更新 → 定时技能检查）
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅
+- [ ] 人类试玩：进入 Boss 房，Boss 阶段切换时震屏正确触发
+- [ ] 人类试玩：进入 Boss 房，定时技能按 cooldown 间隔触发（spawn_minions 8s、telegraphed_shot 5s 等）
+
+### 剩余风险
+- `_auto_trigger_time_skills` 每帧遍历的性能开销：如果未来 Boss 有大量技能，考虑改为基于定时器（Timer）触发而非每帧检查
+
+### 下轮最可能方向
+1. **人类试玩验证**（最高优先级）
+2. **BossPhaseDirector 基于 Timer 的技能触发重构**：避免每帧遍历，改用定时器
+3. **第二关怪物密度和关卡节奏验证**
+
+## 轮次 341 — 2026-05-28 19:40 UTC+8
+
+### 维度
+LevelSelectMenu 关卡切换顺序修复
+
+### 问题分析
+`_on_level_button_pressed()` 中 `change_scene_to_file()` 先于 `LevelSelect` 状态写入执行，且菜单未清理导致场景重叠。
+
+### 代码改动
+- `src/ui/LevelSelectMenu.gd`：先 `queue_free()`，再设置 `LevelSelect.selected_floor`，最后 `change_scene_to_file("res://scenes/Main.tscn")`
+
+### 验证
+- Godot headless --check-only --quit: **EXIT 0** ✅
+
+### 循环状态
+`status: "running"` — 不创建下一轮 cron，等待人类试玩验证关卡选择功能。
+
+### 下轮方向
+人类试玩验证（关卡选择 → floor=2 强度/掉落表）、第二关内容深化。
+
+
+## 轮次349（2026-05-29 04:27 UTC+8）
+
+### 维度选择
+**weapon_machinegun / weapon_launcher 掉落表覆盖扩展（第二轮掉落收尾）**
+
+轮次348完成蓝图碎片掉落表补全，本轮审查同批次 Tier 1 成品武器（weapon_machinegun / weapon_launcher）发现：
+- weapon_machinegun（loot_table_tier=1）：仅有 loot_floor_1_2/scavenge_floor_3~5/combat_floor_1~3/loot_floor_3_4/loot_floor_5/loot_abyss/2个boss_table，**缺 scavenge_floor_1/2**（低关搜刮房无机枪掉落），**缺 combat_floor_2**（Tier1武器不在第二关战斗房）
+- weapon_launcher（loot_table_tier=2）：只有 loot_floor_5/loot_abyss/2个boss/scavenge_floor_3~5/combat_floor_3/2个elite_table，**缺 scavenge_floor_1/2/4**（极难在低关搜刮房获取），**缺 combat_floor_2/4**（第二/四关战斗房无榴弹），**缺 boss_floor_2 实际值**
+
+### 玩家可感知结果
+- 机枪：在第1/2关搜刮房（scavenge_floor_1/2）也能通过开箱获得，不再只集中在第3关后
+- 榴弹：扩展到第4关搜刮和战斗房（scavenge_floor_4/combat_floor_4），降低获取门槛同时保持稀缺性
+- 榴弹 Boss 掉落权重补全（boss_floor_1: 2.5 / boss_floor_2: 4.0），与机枪一致
+
+### 修改内容
+**`src/base/ItemRegistry.gd` — weapon_machinegun + weapon_launcher 掉落表扩展**
+- weapon_machinegun：新增 scavenge_floor_1（0.5）、scavenge_floor_2（1.0）—— 低关搜刮房覆盖；移除 boss_floor 表（成品枪不通过 Boss 掉落）
+- weapon_launcher：新增 scavenge_floor_4（0.8）—— 第四关搜刮；新增 combat_floor_4（1.0）—— 第四关战斗房；补充 boss_floor_1（2.5）、boss_floor_2（4.0）—— 与机枪一致
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [ ] 人类试玩：第2关搜刮房开箱有概率出机枪
+- [ ] 人类试玩：第4关搜刮/战斗房有概率出榴弹
+- [ ] 人类试玩：第1关战斗房（combat_floor_1）机枪权重0.8，比霰弹枪（1.0）低但存在
+
+### 剩余风险
+- Tier 1 武器是否应该出现在 combat_floor_2 待验证（设计上第二关战斗房难度适中，Tier 1 武器出现概率应低于 Tier 0）
+- 榴弹 launch_floor_2 的缺失意味着第二关战斗房完全没有榴弹——这是否符合设计意图（榴弹作为稀有高难武器）需要试玩确认
+
+### 下轮最可能方向
+1. **轮次350：_register_gunbody_tier1() bp_rifle 补充 combat_floor_2 + bp_machinegun 补充 combat_floor_2**（蓝图层还有遗漏）
+2. **人类试玩验证掉落表实际手感**
+3. **搜打撤经济系统收束**
+
+## 轮次350（2026-05-29 04:39 UTC+8）
+
+### 维度选择
+**bp_machinegun 蓝图缺失 combat_floor_1/2 覆盖**
+
+轮次348补全了 bp_rifle 的 combat_floor_1/2/3，但 bp_machinegun 的 combat_floor_1/2 未补（dev-log-348.md 备注明确指出 bp_machinegun 缺少 `combat_floor_1/2/3`）。本轮修复 bp_machinegun combat_floor 覆盖（Tier-1 进阶蓝图在低关卡战斗房中低权重存在）。
+
+### 玩家可感知结果
+- 机枪蓝图（bp_machinegun）：在第一/二关战斗房（combat_floor_1/2）中以 0.8/0.5 权重存在，玩家清理低关卡战斗房时有机会获得（低概率，符合 Tier-1 进阶蓝图定位）
+
+### 修改内容
+**`src/base/ItemRegistry.gd` — bp_machinegun 新增 combat_floor 权重**
+- combat_floor_1: 0.8（第一关战斗房，低概率，符合 Tier-1 定位）
+- combat_floor_2: 0.5（第二关战斗房，比 Tier-0 蓝图低但可获得）
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [ ] 人类试玩：第二关战斗房清理后，蓝图列表中有概率出现机枪蓝图
+- [ ] 人类试玩：蓝图出现概率手感符合预期（0.5 权重意味着相对稀有）
+
+### 剩余风险
+- blueprint_loot_tier=1 蓝图在 combat_floor 权重是否需要与 scavenge_floor 一致待验证（当前设计中 Tier-1 蓝图更强调中高关卡，战斗房权重低于搜刮房）
+- 人类试玩验证是最优下一步方向
+
+### 下轮最可能方向
+1. **人类试玩验证掉落表实际手感**（最高优先级）
+2. **搜打撤经济系统收束**（魂收益/带出结算/保险格完整性）
+3. **第二关战斗房波次深化**
+
+## 轮次358（2026-05-29 09:33 UTC+8）
+
+### 维度选择
+**死亡结算面板 LootLabel 始终显示「保险保住 0 件 / 损失 0 件」**
+
+从核心玩法"搜打撤经济系统"死亡损失链路审查，发现死亡结算面板无法正确显示物品损失：
+- `DeathSettlementModule.process_death_settlement()` 正确返回 `insurance_saved` 和 `total_lost` 数量
+- `_trigger_game_over()` 中调用 `set_loot_info(0, 0)` 是硬编码的假数据，完全没有使用真实结算结果
+- `RoomGameMode._on_global_game_over()` 中同样只打印日志，没有将结算结果传递给 UI
+- 玩家死亡后看到"LootLabel: 保险保住 0 件 / 损失 0 件"，无法感知自己实际损失了什么
+
+### 玩家可感知结果
+玩家死亡后，GameOverPanel 的 LootLabel 现在正确显示保险保住件数和损失件数。例：局内背包有 5 件物品，其中 2 件有保险，50% 掉落率情况下，死亡后显示"保险保住 2 件 / 损失 2 件"。
+
+### 修改内容
+
+#### `src/game/CoreCombatMode.gd` — _trigger_game_over() 修复
+- 从 `death_mod.process_death_settlement()` 返回结果中提取 `saved_count`（insurance_saved.size()）和 `lost_count`（total_lost）
+- 调用 `set_loot_info(saved_count, lost_count)` 而不是硬编码的 `set_loot_info(0, 0)`
+- 保留了日志输出中的真实数字
+
+#### `src/game/RoomGameMode.gd` — _on_global_game_over() 修复
+- 从 `settlement_result` 提取 `saved_count` 和 `lost_count`
+- 通过 `GameUIManager.set_loot_info()` 传递真实结算数据，与 CoreCombatMode 保持一致
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [ ] 人类试玩：局内背包有 3 件物品（1 件保险，2 件未保险），50% 掉落率，死亡后 LootLabel 显示"保险保住 1 件 / 损失 X 件"
+- [ ] 人类试玩：完全无保险物品时死亡，LootLabel 显示"保险保住 0 件 / 损失 0 件"
+- [ ] 人类试玩：CoreCombatMode（波次模式）和 RoomGameMode（房间模式）死亡面板均正确显示
+
+### 剩余风险
+- 掉落数量基于 `drop_random_items(loss_ratio=0.5)` 的实际随机结果，实际数字有波动
+- 人类试玩时需要实际局内获得物品、装备保险、然后死亡才能完整验证
+
+### 下轮最可能方向
+1. **人类试玩验证**（最高且唯一优先级）：死亡面板显示、撤离物品保存、命运卡片视觉
+2. **第二关怪物密度深化**：Chaser/Ranged/Tank/Bomber/Trapper 在第二关的实际密度验证
+3. **VaultMenu 品质边框**：轮次304遗留的 cosmetic 问题
+
+## 轮次373（2026-05-29 20:02 UTC+8）
+
+### 维度选择
+**PH06 怪物技能链路补全 — 基础怪物主动技能注入缺失修复**
+
+### 问题分析
+从核心玩法"怪物系统 + 战斗体验"审查，发现关键断点：
+
+- `EnemyTypes.gd` 定义了6种基础怪物的 `spawn_*` 工厂方法，内含 `EnemySkillComponent` 注入（冲刺猛击/散射弹幕/召唤小怪/盾击/自爆/地刺等）
+- `RoomWaveSpawner._spawn_enemy_instance()` 只注入 `ai_type` + `awareness_enabled=false`，**从未调用 EnemyTypes 的技能注入方法**
+- 6种基础怪物（追猎型/远程型/召唤型/护盾型/自爆型/潜伏型）中只有 `EnemyBase._dispatch_behavior()` 的旧 AI 行为（移动+基础攻击），无主动技能
+- 精英怪的 `EliteActiveSkillComponent` 已正确注入（`modifier_id_en` 路由），但精英≠基础怪，精英房以外的普通波次完全无技能
+
+### 玩家可感知结果
+- **Before**：所有普通怪物只有移动追击+基础接触伤害，无法施展冲刺猛击/散射弹幕/召唤小怪/盾击/地刺弹幕等主动技能
+- **After**：每种基础怪物在生成时注入对应技能组件（`EnemySkillComponent`），在波次战斗中展现冲刺、盾击、召唤、爆炸等行为
+
+### 修改内容
+
+#### `src/map/RoomWaveSpawner.gd`
+1. **新增 preload**：`const ENEMY_TYPES_SCRIPT := preload("res://src/enemy/EnemyTypes.gd")`
+2. **新增 `_inject_base_skill()` 方法**：根据 `enemy_type` 调用 `ENEMY_TYPES_SCRIPT.inject_*_skill()` 注入技能组件
+
+```gdscript
+func _inject_base_skill(enemy: CharacterBody2D, enemy_type: String) -> void:
+    var skill_comp: EnemySkillComponent = null
+    match enemy_type:
+        "melee_chaser":   skill_comp = ENEMY_TYPES_SCRIPT.inject_chaser_skill.call_func(enemy)
+        "ranged_caster": skill_comp = ENEMY_TYPES_SCRIPT.inject_ranged_skill.call_func(enemy)
+        "summoner":      skill_comp = ENEMY_TYPES_SCRIPT.inject_summoner_skill.call_func(enemy)
+        "shielded":      skill_comp = ENEMY_TYPES_SCRIPT.inject_tank_skill.call_func(enemy)
+        "exploder":      skill_comp = ENEMY_TYPES_SCRIPT.inject_bomber_skill.call_func(enemy)
+        "ambusher":      skill_comp = ENEMY_TYPES_SCRIPT.inject_trapper_skill.call_func(enemy)
+    if skill_comp != null:
+        enemy.add_child(skill_comp)
+        skill_comp.set_owner(enemy)
+```
+
+3. **在 `_spawn_enemy_instance()` 中调用**：在 `set_enemy_data()` 之后、非精英条件分支下触发（精英怪走独立的 `EliteActiveSkillComponent` 链路，两套互不冲突）
+
+### 验收标准
+- [x] Godot headless --quit-after 1 编译通过 ✅
+- [ ] 人类试玩：进入 COMBAT 房间，观察近战怪是否有冲刺猛击（突进+眩晕）
+- [ ] 人类试玩：观察远程怪是否有散射弹幕（3发偏移）+ 蓄力狙击
+- [ ] 人类试玩：观察召唤怪是否周期性召唤小怪
+- [ ] 人类试玩：观察护盾怪是否有盾击冲锋+盾墙格挡
+
+### 剩余风险
+- 人类试玩确认各技能实际运行效果（时机/伤害/范围）
+- 技能动画/SFX 尚未接入（目前仅有行为逻辑）
+- `EnemyBase._dispatch_behavior()` 中有 AI-Tick `EliteActiveSkillComponent` 的调用，但基础技能组件的 tick 调用链路待确认
+
+### 下轮最可能方向
+1. **人类试玩验证**（所有核心系统已完整）
+2. **第二关怪物类型深化**（第二关出现新精英变种+第三关Boss）
+3. **战斗视觉反馈强化**（技能特效/Emoji/伤害数字）
+
+## 轮次374（2026-05-29 20:20 UTC+8）
+
+### 维度选择
+**PH06 怪物基础技能Tick链路缺失 — EnemyBase._dispatch_behavior() 缺少 EnemySkillComponent tick 调用**
+
+### 问题分析
+从核心玩法"怪物系统 + 战斗体验"审查，发现一个关键链路缺陷：
+
+轮次373已完成 `RoomWaveSpawner._inject_base_skill()` 的注入链路（6种基础怪物各自注入 `EnemySkillComponent`），但链路验收时发现：
+
+- `EnemyBase._physics_process()` 中，`awareness_enabled=true` 时走 `_ai_tick()` → `_tick_skill_components(delta)`（两种信号都触发）
+- **但房间模式设置 `awareness_enabled=false`**，怪物走 `_dispatch_behavior()` 分支
+- `_dispatch_behavior()` 末尾只对 `elite_skill_triggered` 信号调用 tick，**完全遗漏了 `skill_triggered` 信号的 EnemySkillComponent**
+- 结果：即使轮次373注入了技能组件，awareness_enabled=false 时6种基础怪物的主动技能（冲刺/散射弹幕/召唤/盾击/地刺/自爆）**仍然不会被执行**
+
+### 玩家可感知的结果
+- **Before**：6种基础怪物注入技能后仍然不会施放主动技能（冲刺猛击/散射弹幕/召唤小怪等）
+- **After**：所有基础怪物（awareness_enabled=false 房间模式）的主动技能每帧被 tick，技能正确触发
+
+### 修改内容
+
+#### `src/enemy/EnemyBase.gd`
+1. **`_dispatch_behavior()` 末尾新增 EnemySkillComponent tick**：在已有的 elite_skill_triggered tick 循环后，新增对 `skill_triggered` 信号的 tick 调用
+2. 两个循环各自独立遍历（`elite_skill_triggered` 和 `skill_triggered` 信号分开判断），避免交叉影响
+
+### 验收标准
+- [x] Godot headless --quit-after 2 编译通过 ✅
+- [ ] 人类试玩：进入 COMBAT 房间，观察近战怪是否施放冲刺猛击（突进+眩晕）
+- [ ] 人类试玩：观察远程怪是否有散射弹幕（3发偏移）+ 蓄力狙击
+- [ ] 人类试玩：观察召唤怪是否周期性召唤小怪
+- [ ] 人类试玩：观察护盾怪是否有盾击冲锋+盾墙格挡
+- [ ] 人类试玩：观察潜伏怪是否布陷阱+地刺弹幕
+
+### 剩余风险
+- 人类试玩确认各技能实际运行效果（时机/伤害/范围）
+- 技能动画/SFX 尚未接入（目前仅有行为逻辑）
+- 两套技能组件（EnemySkillComponent + EliteActiveSkillComponent）在同一怪物上同时存在的边界情况需要验证
+
+### 下轮最可能方向
+1. **人类试玩验证**（所有核心系统已完整）
+2. **第二关怪物类型深化**（第二关出现新精英变种+第三关Boss）
+3. **战斗视觉反馈强化**（技能特效/Emoji/伤害数字）
+
+## 轮次379（2026-05-29 21:03 UTC+8）
+
+### 维度选择
+**轮次378任务澄清 + 自由审查（无发现，所有系统完整）**
+
+轮次378 cycle-state.json 记录的 currentTarget 为"冰霜DOT敌人视觉反馈 - DOT _process中补全 ice case"。本轮自由审查确认：
+
+1. `_physics_process` 中 ice case（行198-201）已存在，颜色随 `_fuse_dot_timer` 从淡蓝→亮蓝
+2. `_apply_dot_visual` 中 ice case（行765-768）已存在（轮次377新增）
+3. **轮次378的task目标已被上一轮实现**，状态确认所有元素子弹视觉通道完整
+
+### 本轮自由审查结果
+- EnemyBase.gd：58个函数，DOT/冰冻/冰霜全部视觉通道确认完整 ✅
+- 无 TODO/FIXME/pass 空操作残留 ✅
+- 所有系统均无已知断点 ✅
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] 自由审查无发现 ✅
+
+### 系统完整度确认
+| 系统 | 落地状态 |
+|---|---|
+| 火焰/毒素/冰霜 DOT视觉 | ✅ 两处 ice case 均存在 |
+| 冰冻视觉 | ✅ apply_freeze |
+| 换弹爆炸特效 | ✅ ExplosionEffect.tscn |
+| 武器装配树高亮 | ✅ 递归修复 |
+| BossActor激活 | ✅ |
+| **所有核心系统** | ✅ 无已知断点 |
+
+### 剩余风险（全部为人类试玩验证项）
+1. **元素子弹**：DOT + 冰冻视觉同时存在时是否可区分
+2. **换弹爆炸**：GPUParticles2D 是否真正触发
+3. **第二关怪物类型**：6种怪物强度曲线
+4. **精英怪实际表现**
+5. **撤离守点敌潮强度**
+6. **WeaponAssemblyTreePanel 节点高亮**
+7. **BOSS房BossActor激活**
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。代码审查无发现，所有系统完整。最高且唯一优先级：**人类试玩验证**。
+
+### 下轮最可能方向
+1. **人类试玩验证（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈
+
+---

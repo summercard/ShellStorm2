@@ -23,6 +23,7 @@ var _tile_set_builder: RoomTileSetBuilder = RoomTileSetBuilder.new()
 var _is_built: bool = false
 var _door_info: Array[Dictionary] = []
 var _boundary_collision_enabled := true
+var _current_floor: int = 1  ## 当前楼层，用于楼层感知配色
 
 
 func _ready() -> void:
@@ -35,13 +36,19 @@ func _ready() -> void:
 ## 配置房间视觉（由 RoomGameMode 调用，进入房间时）
 ## p_room_type: 房间类型
 ## p_room_size: 房间像素尺寸
-## p_door_info: 可选，Array[Dictionary] 包含门方向信息（来自 PathDirector.get_open_door_info）
+## p_door_info: 可选，Array[Dictionary] 包含门方向信息
+## p_floor: 当前楼层（用于楼层感知配色，默认1）
 func configure(
-	p_room_type: RoomData.RoomType, p_room_size: Vector2, p_door_info: Array[Dictionary] = []
+	p_room_type: RoomData.RoomType,
+	p_room_size: Vector2,
+	p_door_info: Array[Dictionary] = [],
+	p_floor: int = 1
 ) -> void:
 	room_type = p_room_type
 	room_size = p_room_size
 	_door_info = p_door_info
+	_current_floor = p_floor
+	_current_floor = p_floor
 	if _is_built:
 		reset_visual()
 	build_visual()
@@ -50,22 +57,12 @@ func configure(
 func set_open_doors(p_door_info: Array[Dictionary]) -> void:
 	_door_info = p_door_info
 	_apply_door_visualization()
-	if not _boundary_collision_enabled:
-		return
-	var boundary_collision := get_node_or_null("BoundaryCollision")
-	if boundary_collision != null:
-		boundary_collision.queue_free()
-	call_deferred("_ensure_boundary_collision")
+	# 碰撞由 RoomLayout 统一提供，不重建 BoundaryCollision
 
 
 func set_boundary_collision_enabled(enabled: bool) -> void:
 	_boundary_collision_enabled = enabled
-	if not enabled:
-		var boundary_collision := get_node_or_null("BoundaryCollision")
-		if boundary_collision != null:
-			boundary_collision.queue_free()
-	elif _is_built:
-		call_deferred("_ensure_boundary_collision")
+	# 碰撞由 RoomLayout 统一提供，不创建 BoundaryCollision
 
 
 ## 构建房间视觉（TileMap + 氛围装饰 + 门过渡视觉）
@@ -78,23 +75,22 @@ func build_visual() -> void:
 	floor_layer.z_index = FLOOR_Z_INDEX
 	if ambient != null:
 		ambient.z_index = AMBIENT_Z_INDEX
-	_tile_set_builder.build_tile_set(floor_layer, room_type)
-	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type)
+	_tile_set_builder.build_tile_set(floor_layer, room_type, _current_floor)
+	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type, _current_floor, _door_info)
 
 	# 根据房间类型配置氛围装饰
 	_apply_ambient_theme()
 
 	# 门过渡视觉（如果有门信息）
 	_apply_door_visualization()
-
-	_ensure_boundary_collision()
+	# 碰撞由 RoomLayout 统一提供，不再创建 BoundaryCollision
 
 	visual_ready.emit()
 
 
 ## 应用房间氛围主题（设置装饰节点颜色/可见性）
 func _apply_ambient_theme() -> void:
-	var theme: Dictionary = _tile_set_builder.get_room_theme_colors(room_type)
+	var theme: Dictionary = _tile_set_builder.get_room_theme_colors(room_type, _current_floor)
 
 	# 更新边界叠加层颜色（与房间主色调呼应）
 	var boundary: ColorRect = get_node_or_null("BoundaryOverlay") as ColorRect

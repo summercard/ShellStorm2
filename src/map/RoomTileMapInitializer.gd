@@ -20,6 +20,7 @@ var _tile_set_builder: RoomTileSetBuilder = RoomTileSetBuilder.new()
 var _built: bool = false
 var _door_info: Array[Dictionary] = []
 var _boundary_collision_enabled := true
+var _current_floor: int = 1  ## 当前楼层，用于楼层感知配色
 
 ## 门过渡视觉引用（由场景中 DoorVisualizer 子节点赋值）
 @onready var door_visualizer: Node2D = $"../DoorVisualizer" as Node2D
@@ -41,12 +42,12 @@ func build() -> void:
 		return
 
 	floor_layer.z_index = FLOOR_Z_INDEX
-	_tile_set_builder.build_tile_set(floor_layer, room_type)
-	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type)
+	_tile_set_builder.build_tile_set(floor_layer, room_type, _current_floor)
+	_tile_set_builder.populate_room_tilemap(floor_layer, room_size, room_type, _current_floor, _door_info)
 
 	# 应用氛围主题（角落暗角）
 	_apply_ambient()
-	_ensure_boundary_collision()
+	# 碰撞由 RoomLayout 统一提供，不再创建 BoundaryCollision
 
 	# 应用门过渡视觉
 	_apply_door_visualization()
@@ -57,8 +58,8 @@ func build() -> void:
 
 ## 应用氛围主题（角落暗角装饰）
 func _apply_ambient() -> void:
-	var theme: Dictionary = _tile_set_builder.get_room_theme_colors(room_type)
-	var ambient: Node2D = $"../AmbientDecoration"
+	var theme: Dictionary = _tile_set_builder.get_room_theme_colors(room_type, _current_floor)
+	var ambient: Node2D = get_node_or_null("../AmbientDecoration")
 	if ambient == null:
 		return
 	ambient.z_index = AMBIENT_Z_INDEX
@@ -90,11 +91,15 @@ func reset_visual() -> void:
 
 
 func configure(
-	p_room_type: RoomData.RoomType, p_room_size: Vector2, p_door_info: Array[Dictionary] = []
+	p_room_type: RoomData.RoomType,
+	p_room_size: Vector2,
+	p_door_info: Array[Dictionary] = [],
+	p_floor: int = 1
 ) -> void:
 	room_type = p_room_type
 	room_size = p_room_size
 	_door_info = p_door_info
+	_current_floor = p_floor
 	var boundary_collision := get_node_or_null("BoundaryCollision")
 	if boundary_collision != null:
 		boundary_collision.queue_free()
@@ -107,12 +112,7 @@ func configure(
 func set_open_doors(p_door_info: Array[Dictionary]) -> void:
 	_door_info = p_door_info
 	_apply_door_visualization()
-	if not _boundary_collision_enabled:
-		return
-	var boundary_collision := get_node_or_null("BoundaryCollision")
-	if boundary_collision != null:
-		boundary_collision.queue_free()
-	call_deferred("_ensure_boundary_collision")
+	# 墙体碰撞由 TileSet 的 physics_layer_0 提供，不再使用独立的 BoundaryCollision StaticBody2D
 
 
 func set_boundary_collision_enabled(enabled: bool) -> void:
@@ -121,8 +121,7 @@ func set_boundary_collision_enabled(enabled: bool) -> void:
 		var boundary_collision := get_node_or_null("BoundaryCollision")
 		if boundary_collision != null:
 			boundary_collision.queue_free()
-	elif _built:
-		call_deferred("_ensure_boundary_collision")
+	# 碰撞由 RoomLayout 统一提供，不再创建 BoundaryCollision
 
 
 func _ensure_boundary_collision() -> void:

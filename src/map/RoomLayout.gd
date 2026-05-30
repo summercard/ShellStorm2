@@ -16,7 +16,6 @@ var room_number: int = -1
 var room_size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)
 var _door_info: Array[Dictionary] = []
 var _wall_root: Node2D = null
-var _collision_body: StaticBody2D = null
 var _occluder_root: Node2D = null
 var _label: Label = null
 var _rebuild_queued := false
@@ -63,22 +62,15 @@ func _rebuild() -> void:
 	if _wall_root != null and is_instance_valid(_wall_root):
 		remove_child(_wall_root)
 		_wall_root.free()
-	if _collision_body != null and is_instance_valid(_collision_body):
-		remove_child(_collision_body)
-		_collision_body.free()
 	if _occluder_root != null and is_instance_valid(_occluder_root):
 		remove_child(_occluder_root)
 		_occluder_root.free()
+	# 统一的墙体根节点：每个墙壁段落包含碰撞+视觉+遮挡，统一管理
 	_wall_root = Node2D.new()
-	_wall_root.name = "GeneratedWalls"
+	_wall_root.name = "Walls"
 	add_child(_wall_root)
-	_collision_body = StaticBody2D.new()
-	_collision_body.name = "WallCollision"
-	_collision_body.collision_layer = WALL_LAYER
-	_collision_body.collision_mask = 0
-	add_child(_collision_body)
 	_occluder_root = Node2D.new()
-	_occluder_root.name = "LayoutOccluders"
+	_occluder_root.name = "Occluders"
 	add_child(_occluder_root)
 	_build_walls()
 	_ensure_room_label()
@@ -89,16 +81,16 @@ func _build_walls() -> void:
 	var half := room_size * 0.5
 	var t := WALL_THICKNESS
 	_add_horizontal_wall(
-		"Top", -half.y - t * 0.5, room_size.x + t * 2.0, t, _has_open_door(Vector2.UP)
+		"Top", -half.y, room_size.x + t * 2.0, t, _has_open_door(Vector2.UP)
 	)
 	_add_horizontal_wall(
-		"Bottom", half.y + t * 0.5, room_size.x + t * 2.0, t, _has_open_door(Vector2.DOWN)
+		"Bottom", half.y, room_size.x + t * 2.0, t, _has_open_door(Vector2.DOWN)
 	)
 	_add_vertical_wall(
-		"Left", -half.x - t * 0.5, room_size.y + t * 2.0, t, _has_open_door(Vector2.LEFT)
+		"Left", -half.x, room_size.y + t * 2.0, t, _has_open_door(Vector2.LEFT)
 	)
 	_add_vertical_wall(
-		"Right", half.x + t * 0.5, room_size.y + t * 2.0, t, _has_open_door(Vector2.RIGHT)
+		"Right", half.x, room_size.y + t * 2.0, t, _has_open_door(Vector2.RIGHT)
 	)
 
 
@@ -138,16 +130,37 @@ func _add_vertical_wall(
 func _add_wall_segment(
 	segment_name: String, local_pos: Vector2, segment_size: Vector2, near_door: bool
 ) -> void:
+	# 统一墙壁段落：碰撞+视觉+遮挡都作为子节点
+	var wall_node := Node2D.new()
+	wall_node.name = segment_name
+	wall_node.position = local_pos
+	_wall_root.add_child(wall_node)
+
+	# 1. 碰撞体（StaticBody2D + CollisionShape2D）
+	var body := StaticBody2D.new()
+	body.name = "Collision"
+	body.collision_layer = WALL_LAYER
+	body.collision_mask = 0
+	wall_node.add_child(body)
 	var shape := CollisionShape2D.new()
-	shape.name = "%sCollision" % segment_name
+	shape.name = "Shape"
 	var rect := RectangleShape2D.new()
 	rect.size = segment_size
 	shape.shape = rect
-	shape.position = local_pos
-	_collision_body.add_child(shape)
+	body.add_child(shape)
 
+	# 2. 视觉（ColorRect）
+	var visual := ColorRect.new()
+	visual.name = "Visual"
+	visual.size = segment_size
+	visual.position = -segment_size * 0.5
+	visual.color = WALL_ACCENT if near_door else WALL_COLOR
+	visual.z_index = 8
+	wall_node.add_child(visual)
+
+	# 3. 光照遮挡（LightOccluder2D）
 	var occluder := LightOccluder2D.new()
-	occluder.name = "%sOccluder" % segment_name
+	occluder.name = "Occluder"
 	occluder.occluder_light_mask = OCCLUDER_MASK
 	var polygon := OccluderPolygon2D.new()
 	polygon.polygon = PackedVector2Array([
@@ -158,16 +171,7 @@ func _add_wall_segment(
 	])
 	polygon.cull_mode = OccluderPolygon2D.CULL_COUNTER_CLOCKWISE
 	occluder.occluder = polygon
-	occluder.position = local_pos
-	_occluder_root.add_child(occluder)
-
-	var visual := ColorRect.new()
-	visual.name = "%sVisual" % segment_name
-	visual.size = segment_size
-	visual.position = local_pos - segment_size * 0.5
-	visual.color = WALL_ACCENT if near_door else WALL_COLOR
-	visual.z_index = 8
-	_wall_root.add_child(visual)
+	wall_node.add_child(occluder)
 
 
 func _ensure_room_label() -> void:

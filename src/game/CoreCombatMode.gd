@@ -255,6 +255,11 @@ func _spawn_enemy(data: Dictionary, index: int) -> void:
 	add_child(enemy)
 	enemy.global_position = _pick_spawn_position(index)
 	_apply_enemy_data(enemy, data)
+	# 注入基础技能（非精英怪）
+	var enemy_type_key: String = data.get("enemy_type", "")
+	if not data.get("is_elite", false) and not enemy_type_key.is_empty():
+		if enemy.has_method("inject_basic_skill_for_kind"):
+			enemy.call("inject_basic_skill_for_kind", enemy_type_key)
 	active_enemies.append(enemy)
 	if enemy.has_signal("enemy_died"):
 		enemy.enemy_died.connect(_on_enemy_died.bind(enemy, data))
@@ -629,12 +634,15 @@ func _trigger_game_over(reason: String) -> void:
 	if inventory_module != null and insurance_module != null:
 		var death_mod := DeathSettlementModule.new()
 		var result: Dictionary = death_mod.process_death_settlement(inventory_module, insurance_module)
-		print("[CoreCombatMode] 死亡结算：掉落 %d 件，保险保住 %d 件" % [result.get("total_lost", 0), result.get("insurance_saved", []).size()])
+		var saved_count: int = result.get("insurance_saved", []).size()
+		var lost_count: int = result.get("total_lost", 0)
+		print("[CoreCombatMode] 死亡结算：掉落 %d 件，保险保住 %d 件" % [lost_count, saved_count])
+		if ui_layer != null:
+			if ui_layer.has_method("set_loot_info"):
+				ui_layer.call("set_loot_info", saved_count, lost_count)
 	if ui_layer != null:
 		if ui_layer.has_method("set_death_stats"):
 			ui_layer.call("set_death_stats", {"score": score, "kills": kills, "floor": max(1, current_wave)})
-		if ui_layer.has_method("set_loot_info"):
-			ui_layer.call("set_loot_info", 0, 0)
 	game_over.emit(reason)
 
 func _on_currency_changed(amount: int) -> void:

@@ -15,6 +15,21 @@ enum RoomType {
 	BOSS = 8,  # Boss房
 	STORAGE = 9,  # 藏储室（隐藏容器，需要钥匙或特殊条件）
 	TRAP = 10,  # 陷阱房（环境危险，怪物埋伏）
+	BASEMENT = 11,  # 地下室（垂直关卡下层，比浅层更难，奖励更丰富）
+	STAIRS_DOWN = 12,  # 通往地下室的楼梯入口
+	STAIRS_UP = 13,   # 通往二楼的楼梯出口
+	ELEVATOR = 14,    # 电梯（可上可下）
+}
+
+## 垂直楼层（用于实现真实上下楼结构）
+## 注意：这不是 floor（关卡层），而是同一 floor 内的垂直位置
+## floor=1, vertical_level=0 → 一楼
+## floor=1, vertical_level=-1 → 地下室
+## floor=1, vertical_level=1 → 二楼
+enum VerticalLevel {
+	BASEMENT = -1,  # 地下室（地下层）
+	MAIN = 0,       # 主层（默认）
+	UPPER = 1,      # 上层（二楼）
 }
 
 ## 房间层级（影响难度和奖励）
@@ -25,14 +40,83 @@ enum FloorLevel {
 	ABYSS = 3,  # 污染/异化层：变种规则
 }
 
+## 房间尺寸分类（PH11 规范）
+enum RoomSize {
+	SMALL = 0,    # 单向出口，1v1战斗，快速通过（640×512）
+	MEDIUM = 1,   # 标准战斗房（960×768）
+	LARGE = 2,   # 多波次精英战，有更多走位空间（1280×1024）
+	ARENA = 3,   # Boss战、事件爆发、极限压力（1600×1200）
+}
+
+## 房间尺寸像素对照表（按 RoomSize 枚举）
+const ROOM_SIZE_TABLE: Dictionary = {
+	RoomSize.SMALL:   Vector2(640, 512),
+	RoomSize.MEDIUM:  Vector2(960, 768),
+	RoomSize.LARGE:   Vector2(1280, 1024),
+	RoomSize.ARENA:   Vector2(1600, 1200),
+}
+
 var room_type: RoomType = RoomType.COMBAT
 var floor_level: FloorLevel = FloorLevel.SHALLOW
 var room_id: String = ""
 var room_number: int = -1
-var floor: int = 1  # 所在层
+var floor: int = 1  # 所在层（关卡层，如第1关、第2关）
+var vertical_level: VerticalLevel = VerticalLevel.MAIN  # 垂直楼层（地下室、主层、二楼）
 var position: Vector2 = Vector2.ZERO  # 在节点图中的坐标
 var tags: Array[String] = []  # 房间标签，用于内容注入
-var size: Vector2 = Vector2(GridConstants.ROOM_PIXEL_WIDTH, GridConstants.ROOM_PIXEL_HEIGHT)  # 默认房间尺寸 960×768
+## 房间尺寸（默认 MEDIUM）
+var room_size: RoomSize = RoomSize.MEDIUM
+## 房间像素尺寸
+var size: Vector2 = Vector2(960, 768)
+func get_default_room_size() -> RoomSize:
+	match room_type:
+		RoomType.BOSS:
+			return RoomSize.ARENA       # Boss房最大
+		RoomType.ELITE:
+			return RoomSize.LARGE       # 精英战需要更多走位
+		RoomType.PLAYER_SPAWN:
+			return RoomSize.MEDIUM      # 出生房标准
+		RoomType.SCAVENGE:
+			return RoomSize.MEDIUM      # 搜刮房标准
+		RoomType.MERCHANT:
+			return RoomSize.MEDIUM      # 商人房标准
+		RoomType.UPGRADE:
+			return RoomSize.MEDIUM      # 改造房标准
+		RoomType.EVENT:
+			return RoomSize.MEDIUM      # 事件房标准
+		RoomType.EXTRACTION:
+			return RoomSize.MEDIUM      # 撤离房标准
+		RoomType.BASEMENT:
+			return RoomSize.LARGE       # 地下室更大（有隐藏奖励探索空间）
+		RoomType.STAIRS_DOWN, RoomType.STAIRS_UP, RoomType.ELEVATOR:
+			return RoomSize.SMALL       # 通道房间最小（单向出口）
+		RoomType.STORAGE:
+			return RoomSize.SMALL       # 隐藏储藏室小
+		RoomType.TRAP:
+			return RoomSize.SMALL       # 陷阱房小（紧凑增加压力）
+		_:
+			# COMBAT：根据进度层级微调
+			match floor_level:
+				FloorLevel.SHALLOW:
+					return RoomSize.MEDIUM
+				FloorLevel.MEDIUM:
+					return RoomSize.MEDIUM
+				FloorLevel.DEEP:
+					return RoomSize.LARGE
+				FloorLevel.ABYSS:
+					return RoomSize.LARGE
+	return RoomSize.MEDIUM
+
+
+## 获取房间像素尺寸（查表）
+func get_pixel_size() -> Vector2:
+	return ROOM_SIZE_TABLE.get(room_size, Vector2(960, 768))
+
+
+## 创建后自动设置尺寸（供 MapGenerator 调用）
+func auto_size() -> void:
+	room_size = get_default_room_size()
+	size = get_pixel_size()
 var content_config: Dictionary = {
 	"enemies": [],
 	"loot": [],
@@ -84,6 +168,14 @@ static func get_type_name(t: RoomType) -> String:
 			return "藏储室"
 		RoomType.TRAP:
 			return "陷阱"
+		RoomType.BASEMENT:
+			return "地下室"
+		RoomType.STAIRS_DOWN:
+			return "楼梯口(下)"
+		RoomType.STAIRS_UP:
+			return "楼梯口(上)"
+		RoomType.ELEVATOR:
+			return "电梯"
 		_:
 			return "未知"
 
@@ -103,6 +195,19 @@ static func get_level_name(l: FloorLevel) -> String:
 			return "未知"
 
 
+## 垂直楼层名称
+static func get_vertical_level_name(v: VerticalLevel) -> String:
+	match v:
+		VerticalLevel.BASEMENT:
+			return "地下室"
+		VerticalLevel.MAIN:
+			return "主层"
+		VerticalLevel.UPPER:
+			return "二楼"
+		_:
+			return "未知"
+
+
 ## 是否为战斗相关房间
 func is_combat() -> bool:
 	return room_type in [RoomType.COMBAT, RoomType.ELITE, RoomType.BOSS]
@@ -116,6 +221,25 @@ func is_scavenge() -> bool:
 ## 是否可撤离
 func is_extraction() -> bool:
 	return room_type == RoomType.EXTRACTION
+
+
+## 是否为垂直通道房间（楼梯/电梯，可前往其他垂直楼层）
+func is_vertical_access() -> bool:
+	return room_type in [RoomType.STAIRS_UP, RoomType.STAIRS_DOWN, RoomType.ELEVATOR]
+
+
+## 获取完整显示名称（包含垂直楼层）
+func get_display_name() -> String:
+	var base_name := get_type_name(room_type)
+	if vertical_level != VerticalLevel.MAIN:
+		var vname := get_vertical_level_name(vertical_level)
+		return "%s[%s]" % [base_name, vname]
+	return base_name
+
+
+## 是否为垂直关卡关联房间（与当前房间相连的不同垂直楼层房间）
+func is_basement() -> bool:
+	return room_type == RoomType.BASEMENT or vertical_level == VerticalLevel.BASEMENT
 
 
 ## 添加标签

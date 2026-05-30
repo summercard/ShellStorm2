@@ -2,7 +2,6 @@ class_name DemoRoomGameMode
 ## 8房间线性链 Demo 游戏模式
 ## 演示房间组件化系统的完整搜打撤流程
 ## 房间布局：R1-R2(战斗) → R3(搜刮) → R4(商人) → R5(改造) → R6(BOSS) → R7(精英) → R8(撤离)
-## 门规则：清怪开门，E键交互，钥匙消耗
 
 extends Node2D
 
@@ -69,7 +68,7 @@ var _transition_overlay: ColorRect = null
 var _is_transitioning: bool = false
 const FADE_DURATION: float = 0.25  # 每次淡入/淡出时长（秒）
 
-## 房间节点数据（7房间线性链：4战斗+1搜刮+1商人+1改造+1精英+1撤离）
+## 8房间线性链 Demo 游戏模式（node_id 0-7）
 ## node_id: {type, position, enemy_count, is_cleared, is_extraction}
 const DEMO_ROOMS: Array[Dictionary] = [
 	{
@@ -410,7 +409,12 @@ func _configure_wave_spawner(room_instance: Node2D, room_data: Dictionary) -> vo
 	var enemy_count: int = room_data["enemy_count"]
 	var wave_counts: Array[int] = [enemy_count]
 	
-	spawner.configure(wave_counts, room_instance, _player, 1, RoomData.FloorLevel.SHALLOW, self)
+	# ELITE/BOSS 房使用 floor=2（第二关难度），模拟进入更深楼层
+	var demo_floor: int = 1
+	var room_node_id: int = room_data.get("node_id", 0)
+	if room_node_id >= 5:
+		demo_floor = 2
+	spawner.configure(wave_counts, room_instance, _player, demo_floor, RoomData.FloorLevel.SHALLOW, self)
 	spawner.all_waves_cleared.connect(_on_waves_cleared.bind(room_data["node_id"]))
 	spawner.enemy_spawned.connect(_on_enemy_spawned)
 
@@ -665,9 +669,15 @@ func _setup_boss_room_signals(room_instance: Node2D) -> void:
 ## BOSS房：Boss生成回调
 func _on_boss_spawn_triggered(boss_data: Dictionary) -> void:
 	_update_label("Boss已出现：%s\n击败它！" % boss_data.get("boss_id", "?"))
-	# 通知 GameUIManager 显示 Boss HP（通过 BossRoomLogic 的 boss_spawn_triggered 信号已经触发了，
-	# 这里再次调用确保 GameUIManager 显示）
-	var boss_logic: Node = _room_instances[_current_room_id].get_node_or_null("BossRoomLogic") if _room_instances.has(_current_room_id) else null
+	# 激活 BossActor（确保 HP 条和攻击行为启动）
+	var room_instance: Node2D = _room_instances[_current_room_id] if _room_instances.has(_current_room_id) else null
+	if room_instance != null:
+		var boss_actor: Node = room_instance.get_node_or_null("BossActor") as Node
+		if boss_actor != null and boss_actor.has_method("activate"):
+			boss_actor.call("activate")
+			print("[DemoRoomGameMode] 激活 BossActor")
+	# 通知 GameUIManager 显示 Boss HP
+	var boss_logic: Node = room_instance.get_node_or_null("BossRoomLogic") if room_instance != null else null
 	if boss_logic != null and boss_logic.has_method("get_boss_data"):
 		var bd: Dictionary = boss_logic.get_boss_data()
 		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)

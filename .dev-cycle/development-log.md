@@ -150,3 +150,84 @@
 2. **出生房命运卡片强制展示**：出生时自动弹出3张初始卡
 3. **商人房自动交易面板**：玩家进入商人房时自动打开商人面板
 4. **基地系统UI补全**：基地主界面框架
+
+## 轮次 343 — 2026-05-28 22:18
+
+### 主题
+第二关掉落表补全 — 为weapon_pistol和weapon_shotgun补充combat_floor_2
+
+### 选择本轮的原因
+审查第二关战斗房（combat_floor_2）掉落表覆盖时发现：
+- weapon_pistol和weapon_shotgun缺少combat_floor_2，导致第二关COMBAT房间无法掉落这两把基础枪
+- 第二关FLOOR_ROOM_CONFIG.path_len=5（5个房间），COMBAT房间占大多数，缺失combat_floor_2会影响玩家武器获取体验
+- 轮次342已补全scavenge_floor_2，本次补全combat_floor_2
+
+### 玩家可感知结果
+- 第二关COMBAT房间能掉落豌豆手枪和散射喷壶（与第一关一致的体验）
+- weapon_shotgun在combat_floor_2权重1.2（高于combat_floor_1的0.8），随楼层提升出现概率
+
+### 修改内容
+
+**数据：**
+
+1. **`src/base/ItemRegistry.gd`** — weapon_pistol新增`"combat_floor_2": 0.8`，weapon_shotgun新增`"combat_floor_2": 1.2`
+   - weapon_pistol掉落表：loot_floor_1_2+scavenge_floor_1/2+combat_floor_1/2（完整覆盖）
+   - weapon_shotgun掉落表：spawn_starter+loot_floor_1_2+scavenge_floor_1/2+combat_floor_1/2（完整覆盖）
+
+### 验收标准
+- [ ] weapon_pistol和weapon_shotgun在第二关COMBAT房间的掉落权重已补全 ✅
+- [ ] Godot headless --quit-after 1 编译通过 ✅（EXIT 0）
+
+### 剩余风险
+- 第二关掉落表（elite_floor_2/boss_floor_2）已有完整覆盖
+- weapon_shotgun和weapon_pistol在第三关+的掉落通过loot_floor_1_2（1-2关合并表）仍有覆盖，但权重偏低，建议后续审视
+
+### 下一轮最可能方向
+1. 第二关战斗房怪物密度深化（base_count 2+floor=4 vs 第一关2+floor=3）
+2. Boss战流程完整化（RoomBoss.tscn + BossRoomLogic.gd接入真实Boss战）
+3. 垂直关卡（地下室）视觉深化
+
+## 轮次 357 — 2026-05-29 08:55
+
+### 主题
+EliteSpawnDirector 档案精英缺失 modifier_id_en，导致精英专属主动技能无法注入
+
+### 选择本轮的原因
+审查 PH06 精英怪系统实现链路时发现：
+- MonsterInjector 生成精英时正确写入 `modifier_id_en`（供 `EliteActiveSkillComponent.inject_elite_skills()` 路由）
+- 但 EliteSpawnDirector 的 `_build_elite_spawn_data()` 只写了 `modifier`（中文词缀），完全没有写入 `modifier_id_en`
+- 导致 RoomWaveSpawner._spawn_enemy_instance() 中的条件 `data.get("is_elite") and data.get("modifier_id_en")` 永远不满足
+- **档案精英只有词缀效果（EnemyModifier），完全没有精英专属主动技能**（冲锋/护盾反射/召集/狂暴/沉默玩家/瞬移背后AOE）
+- 这直接破坏了"精英怪比普通怪更有威胁感"的核心设计意图
+
+### 玩家可感知结果
+- 档案精英（背枪的裂口爬虫、吞弹者·孢子射手）出现后能使用精英专属主动技能
+- 不同词缀的精英有不同战斗行为（巨大化→冲锋、反弹→护盾反射、分裂→召集令等）
+- 精英怪的战斗体验与普通怪有显著差异
+
+### 修改内容
+
+**代码：**
+
+1. **`src/enemy/EliteSpawnDirector.gd`** — 修复 modifier_id_en 缺失
+   - `_build_elite_spawn_data()` 的 spawn_data 字典新增 `"modifier_id_en": _select_modifier_id_en_from_archive(...)` 字段
+   - 新增 `_map_modifier_to_english()` 静态方法，中文词缀→英文ID 映射与 MonsterInjector._map_modifier_to_english 完全一致
+   - 新增 `_select_modifier_id_en_from_archive()` 方法，与 `_select_modifier_from_archive()` 共享默认词缀生成逻辑，确保 modifier 和 modifier_id_en 配对正确
+
+**数据契约变化：**
+- `_build_elite_spawn_data()` 返回的 spawn_data 新增 `modifier_id_en` 字段（String，与 MonsterInjector 生成格式一致）
+
+### 验收标准
+- [ ] 档案精英出现时，modifier_id_en 字段被正确写入 spawn_data
+- [ ] 精英专属主动技能（EliteActiveSkillComponent）能被正确注入（tier 1-3 影响技能强度）
+- [ ] 英文映射与 MonsterInjector._map_modifier_to_english 保持一致
+- [ ] Godot headless --check-only --quit 编译通过 ✅
+
+### 剩余风险
+- 需要人类试玩验证：档案精英实际出现时能触发对应精英专属主动技能
+- modifier_id_en 和 modifier 的中文词缀名称需要保持一致（_select_modifier_id_en_from_archive 和 _select_modifier_from_archive 共用同一套默认生成逻辑）
+
+### 下一轮最可能方向
+1. **人类试玩验证**：实际游戏中触发档案精英，观察精英专属主动技能是否正常运作
+2. **第二关战斗房密度深化**：第二关 base_count 2+floor=4 vs 第一关 2+floor=3
+3. **搜打撤经济系统收束**：货币实时反馈、商人房自动打开

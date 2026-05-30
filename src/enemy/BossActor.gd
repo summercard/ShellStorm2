@@ -37,6 +37,24 @@ var _invulnerable: bool = false
 var _activated: bool = false
 var _current_scale: float = 1.0
 var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)
+## 外置 boss_scale 覆盖（由 MonsterInjector._generate_boss 根据楼层计算，RoomGameMode 注入）
+## 在 _ready() 之后通过 set_boss_scale_override() 注入，用于实现第二关体型显著增大
+var _boss_scale_override: float = -1.0
+var _base_max_hp: float = 800.0  ## 原始 base HP（用于 override 时的反推）
+
+func set_boss_scale_override(scale: float) -> void:
+	## 外部注入 boss_scale 时重新应用 HP 缩放和碰撞体形状
+	## 在 _ready() 之后调用（BossActor 已完成初始化），安全地重新缩放
+	_boss_scale_override = scale
+	_current_scale = scale
+	# 重新计算 HP（使用 _base_max_hp 原始值）
+	var new_scaled_hp: float = _base_max_hp * _current_scale
+	max_hp = int(new_scaled_hp)
+	_current_hp = new_scaled_hp
+	current_hp = new_scaled_hp
+	_apply_shape_scale()
+	_setup_hp_bar()
+	print("[BossActor] boss_scale override applied: %.2f → HP: %d/%d" % [_current_scale, max_hp, int(_current_hp)])
 
 func _ready() -> void:
 	collision_layer = 4
@@ -44,6 +62,7 @@ func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("boss")
 	
+	_base_max_hp = max_hp  # 记录原始 base HP（用于外置 override 反推）
 	_current_hp = max_hp
 	current_hp = max_hp
 	_current_scale = boss_scale
@@ -61,9 +80,9 @@ func _ready() -> void:
 
 func _connect_phase_signals() -> void:
 	if _phase_director and _phase_director.has_signal("phase_started"):
-	_phase_director.phase_started.connect(_on_phase_started)
+		_phase_director.phase_started.connect(_on_phase_started)
 	if _phase_director and _phase_director.has_signal("skill_triggered"):
-	_phase_director.skill_triggered.connect(_on_skill_triggered)
+		_phase_director.skill_triggered.connect(_on_skill_triggered)
 
 
 ## 设置阶段技能树（由外部调用，配置 BossPhaseDirector）
@@ -92,6 +111,11 @@ func _on_phase_started(b_id: String, phase: int) -> void:
 	print("[BossActor] 阶段切换 -> Phase %d" % phase)
 	# 阶段切换时触发视觉反馈：Boss 闪烁
 	_flash_phase_change(phase)
+	# 阶段切换时触发全屏震屏（Boss 威压感）
+	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
+	if shake != null and shake.has_method("trigger"):
+		var intensity := 12.0 + phase * 2.0  # 阶段越高震动越强
+		shake.call("trigger", intensity, 0.25)
 
 
 func _on_skill_triggered(b_id: String, skill_id: String, phase: int) -> void:
@@ -143,7 +167,7 @@ func _skill_spawn_minions() -> void:
 		minion.global_position = global_position + spawn_offset
 		minion.set("max_hp", max(15, int(max_hp * 0.04)))
 		minion.set("current_hp", minion.get("max_hp"))
-		minion.set("damage", max(6, int(damage * 0.5)))
+		minion.set("damage", max(6, int(max_hp * 0.5)))
 		minion.set("speed", 90.0)
 		if minion.has_method("set_visuals"):
 			minion.set_visuals("👾", Color(0.65, 0.10, 0.10, 1.0), 0.85)
@@ -284,7 +308,7 @@ func _spawn_telegraph_warning(target_pos: Vector2) -> void:
 	parent.add_child(warn)
 	warn.global_position = target_pos - warn.size * 0.5
 	var t: Tween = warn.create_tween()
-	t.set_loop(true)
+	t.set_loops(-1)
 	t.tween_property(warn, "modulate:a", 0.6, 0.2)
 	t.tween_property(warn, "modulate:a", 0.15, 0.2)
 	await get_tree().create_timer(0.9).timeout
@@ -403,6 +427,8 @@ func take_damage(damage: float, is_crit: bool = false) -> void:
 	_spawn_damage_number(global_position, int(damage), is_crit)
 	_trigger_hit_screen_shake(damage, is_crit)
 	_notify_boss_damaged(damage)
+	# HitStop：命中停顿感
+	Global.trigger_hitstop(is_crit)
 	if _current_hp <= 0:
 		_trigger_death()
 	print("[BossActor] took %.0f damage, HP: %.0f/%d" % [damage, _current_hp, max_hp])

@@ -34,6 +34,11 @@ vertical_alignment = 1
 [node name="HSeparator" type="HSeparator" parent="VBox"]
 layout_mode = 2
 
+[node name="LevelSelectButton" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(840, 60)
+layout_mode = 2
+text = "关卡选择"
+
 [node name="HSplit" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 size_flags_vertical = 3

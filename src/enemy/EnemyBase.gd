@@ -166,6 +166,18 @@ func _fire_timers() -> void:
 	_shoot_timer = randf_range(0.25, shoot_interval)
 	_summon_timer = summon_interval
 
+
+func _tick_skill_components(delta: float) -> void:
+	for child in get_children():
+		if child.has_method("tick") and (child.has_signal("skill_triggered") or child.has_signal("elite_skill_triggered")):
+			child.tick(delta)
+
+
+func _notify_skill_components(method_name: String, args: Array = []) -> void:
+	for child in get_children():
+		if child.has_method(method_name):
+			child.callv(method_name, args)
+
 func _physics_process(delta: float) -> void:
 	if _is_dead:
 		return
@@ -183,6 +195,10 @@ func _physics_process(delta: float) -> void:
 					shape.color = Color(1.0, clampf(0.4 + _fuse_dot_timer * 0.1, 0.0, 0.8), 0.1, 1.0)
 				"poison":
 					shape.color = Color(0.1, clampf(0.7 - _fuse_dot_timer * 0.05, 0.1, 0.8), 0.1, 1.0)
+				"ice":
+					# 冰霜DOT每帧蓝色增强，颜色随DOT持续时间从淡蓝→亮蓝
+					var ice_tick_intensity := clampf(_fuse_dot_timer * 0.05, 0.0, 1.0)
+					shape.color = Color(0.3 + 0.2 * ice_tick_intensity, 0.6 + 0.15 * ice_tick_intensity, 1.0, 1.0)
 		if current_hp <= 0:
 			die()
 			return
@@ -217,6 +233,10 @@ func _physics_process(delta: float) -> void:
 		# 这里必须直接返回，避免同一帧 move_and_slide() 被执行两次。
 		_dispatch_behavior(delta)
 		return
+
+	#精英主动技能组件每帧Tick（awareness_enabled=true时由AI状态机驱动，false时由_dispatch_behavior返回前驱动）
+	#用 has_signal 判断：只有真正挂载了技能组件的节点才会触发 tick
+	_tick_skill_components(delta)
 
 	velocity += _separation_velocity()
 	velocity += _knockback_velocity
@@ -322,6 +342,7 @@ func _transition_to(new_state: AIState) -> void:
 			# PH11 P1: 追击时向区域刷怪控制器发送警觉信号（相邻房间增援）
 			if not was_chasing:
 				enemy_entered_chase.emit(self, _last_known_player_pos)
+				_notify_skill_components("on_engaged")
 			# PH11 P2: 精英怪进入追击时触发相邻房间 AI 联动
 			if _is_elite and not was_chasing:
 				elite_entered_chase.emit(self, _last_known_player_pos)
@@ -509,6 +530,15 @@ func _dispatch_behavior(delta: float) -> void:
 			_behavior_trapper(delta)
 		_:
 			_behavior_chase(delta)
+	#精英主动技能组件每帧Tick（awareness_enabled=false时由_dispatch_behavior返回前驱动）
+	#用 has_signal 判断：只有真正挂载了 EliteActiveSkillComponent 的节点才会触发 tick
+	for child in get_children():
+		if child.has_method("tick") and child.has_signal("elite_skill_triggered"):
+			child.tick(delta)
+	# EnemySkillComponent（基础怪物主动技能）也走同样的 tick 流程，确保当 awareness_enabled=false 时也能触发
+	for child in get_children():
+		if child.has_method("tick") and child.has_signal("skill_triggered"):
+			child.tick(delta)
 	velocity += _separation_velocity()
 	velocity += _knockback_velocity
 	_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, 900.0 * delta)
@@ -626,7 +656,13 @@ func _try_contact_damage() -> void:
 		return
 	if global_position.distance_to(player_ref.global_position) <= contact_radius:
 		if player_ref.has_method("take_damage"):
-			player_ref.take_damage(int(float(damage) * _damage_multiplier))
+			var final_dmg := int(float(damage) * _damage_multiplier)
+			# counter_strike buff：被攻击触发后，下次攻击伤害×1.4（持续3秒）
+			var cs_until: float = get("counter_strike_until") if get("counter_strike_until") != null else 0.0
+			var now: float = Time.get_ticks_msec() * 0.001
+			if now < cs_until:
+				final_dmg = int(float(final_dmg) * 1.4)
+			player_ref.take_damage(final_dmg)
 		_contact_timer = contact_damage_interval
 
 func _ranged_shoot(dir: Vector2) -> void:
@@ -663,6 +699,16 @@ func _trigger_explosion() -> void:
 func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.ZERO) -> void:
 	if _is_dead:
 		return
+	# === 护盾格挡（Tank类精英/护盾型敌人）===
+	var shield_rate_val: float = 0.0
+	var shield_rate_variant = get("shield_rate")
+	if shield_rate_variant != null:
+		shield_rate_val = float(shield_rate_variant)
+	if shield_rate_val > 0.0 and randf() < shield_rate_val:
+		_spawn_block_effect()
+		return  # 完全抵挡本次伤害
+	# 记录是否刚跨过低血线
+	var was_above_low_hp := float(current_hp) / maxf(1.0, float(max_hp)) > 0.4
 	current_hp = max(0, current_hp - amount)
 	if hit_dir.length_squared() > 0.0001:
 		_knockback_velocity += hit_dir.normalized() * (95.0 if not is_crit else 150.0)
@@ -670,6 +716,18 @@ func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.
 	flash_damage(is_crit)
 	enemy_hit.emit(global_position, amount, is_crit)
 	_spawn_damage_number(global_position, amount, is_crit)
+	# HitStop：命中停顿感（2-4帧短暂停顿，增强打击感）
+	Global.trigger_hitstop(is_crit)
+	# 通知技能组件受击
+	var attacker_pos := global_position - hit_dir.normalized() * 64.0 if hit_dir.length_squared() > 0.0001 else global_position
+	_notify_skill_components("on_taken_damage", [amount, attacker_pos])
+	if _is_dead:
+		return
+	# 检查是否刚跨过低血线
+	if current_hp > 0 and was_above_low_hp and float(current_hp) / maxf(1.0, float(max_hp)) <= 0.4:
+		_notify_skill_components("on_low_hp")
+		if _is_dead:
+			return
 	# DOT 每次直接扣血也触发死亡检查
 	if current_hp <= 0:
 		die()
@@ -707,8 +765,9 @@ func _apply_dot_visual(dot_type: String) -> void:
 			var poison_intensity := clampf(_fuse_dot_dps / 10.0, 0.0, 1.0)
 			shape.color = Color(0.1 + 0.3 * poison_intensity, 0.7, 0.1, 1.0)
 		"ice":
-			# 冰霜：蓝色叠加（DOT视觉，冰冻走另一个通道）
-			pass
+			# 冰霜DOT：淡蓝色叠加（与冰冻视觉互补，冰冻走 apply_freeze 通道）
+			var ice_intensity := clampf(_fuse_dot_dps / 10.0, 0.0, 1.0)
+			shape.color = Color(0.3 + 0.15 * ice_intensity, 0.6 + 0.15 * ice_intensity, 1.0, 1.0)
 
 ## 冰冻入口（冰霜子弹命中时调用）
 func apply_freeze(freeze_dur: float) -> void:
@@ -733,6 +792,7 @@ func apply_freeze(freeze_dur: float) -> void:
 func die() -> void:
 	if _is_dead:
 		return
+	_notify_skill_components("on_death")
 	_is_dead = true
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
@@ -805,7 +865,7 @@ func _set_elite_equipment_visual(data: Dictionary) -> void:
 	var gun_badge := Label.new()
 	gun_badge.name = "GunBadge"
 	gun_badge.text = "🔫"
-	gun_badge.position = Vector2(-8, -72)  # 在名字标签下方
+	gun_badge.position = Vector2(-8, -45)  # 在名字标签下方（名字底部约-36，枪标底部约-37）
 	gun_badge.size = Vector2(16, 16)
 	gun_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	gun_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -833,7 +893,7 @@ func _set_elite_equipment_visual(data: Dictionary) -> void:
 ## 应用缩放倍率（巨大化词缀/命运卡片调用）
 ## 会同步放大碰撞半径和房间边界约束
 ## new_scale: 目标缩放值（基于原始1.0的倍率）
-func apply_scale(new_scale: float) -> void:
+func apply_scale_factor(new_scale: float) -> void:
 	if new_scale <= 0.01:
 		return
 	var old_scale: float = _current_scale
@@ -940,6 +1000,70 @@ func _do_elite_gun_shoot() -> void:
 				projectile.apply_fate_stats_from_node(node)
 			node.free()
 
+## 格挡效果：白色闪白 + "格挡" 文字弹出（Tank类护盾触发）
+func _spawn_block_effect() -> void:
+	# Shape 白光闪烁
+	if shape:
+		var orig_color: Color = shape.color
+		shape.color = Color(1.0, 1.0, 1.0, 1.0)  # 纯白
+		var t := create_tween()
+		t.tween_property(shape, "color", orig_color, 0.12).set_trans(Tween.TRANS_QUAD)
+	# 屏幕震动（intensity=2.0，格挡反馈）
+	var shake := get_tree().root.find_child("ScreenShake", true, false) as Node
+	if shake and shake.has_method("trigger"):
+		shake.trigger(2.0, 0.08)
+	# "格挡" 文字弹出
+	var block_label := Label.new()
+	block_label.text = "格挡"
+	block_label.add_theme_font_size_override("font_size", 16)
+	block_label.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0, 1.0))  # 白色
+	block_label.add_theme_color_override("font_outline_color", Color(1.0, 0.85, 0.0, 1.0))  # 金色描边
+	block_label.outline_size = 2
+	block_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	block_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	block_label.z_index = 260
+	# 在敌人头顶弹出
+	var canvas_pos := _world_to_canvas_label(global_position + Vector2(0, -50))
+	block_label.position = canvas_pos
+	add_child(block_label)
+	var shadow := Label.new()
+	shadow.text = block_label.text
+	shadow.add_theme_font_size_override("font_size", 16)
+	shadow.add_theme_color_override("font_color", Color(0, 0, 0, 0.6))
+	shadow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	shadow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	shadow.position = block_label.position + Vector2(1, 1)
+	shadow.z_index = block_label.z_index - 1
+	add_child(shadow)
+	var end_y: float = block_label.position.y - 38.0
+	var tw := create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(block_label, "position:y", end_y, 0.65).set_trans(Tween.TRANS_QUAD)
+	tw.tween_property(block_label, "modulate:a", 0.0, 0.65).set_trans(Tween.TRANS_LINEAR)
+	tw.tween_property(block_label, "scale", Vector2(0.8, 0.8), 0.65).set_trans(Tween.TRANS_LINEAR)
+	tw.tween_property(shadow, "position:y", end_y + 1, 0.65).set_trans(Tween.TRANS_QUAD)
+	tw.tween_property(shadow, "modulate:a", 0.0, 0.65).set_trans(Tween.TRANS_LINEAR)
+	tw.tween_property(shadow, "scale", Vector2(0.8, 0.8), 0.65).set_trans(Tween.TRANS_LINEAR)
+	tw.chain().tween_callback(
+		func():
+			if is_instance_valid(block_label):
+				block_label.queue_free()
+			if is_instance_valid(shadow):
+				shadow.queue_free()
+	)
+	# 格挡次数打印（调试用）
+	print("[EnemyBase] 格挡！ shield_rate=%.2f" % (get("shield_rate") if get("shield_rate") != null else 0.0))
+
+## 世界坐标 → CanvasLayer 局部坐标（用于伤害/状态文字定位）
+func _world_to_canvas_label(world_pos: Vector2) -> Vector2:
+	var viewport := get_viewport()
+	if viewport == null:
+		return world_pos
+	var cam := viewport.get_camera_2d()
+	if cam == null:
+		return world_pos
+	return cam.get_global_transform().affine_inverse() * world_pos
+
 func _spawn_explosion_flash() -> void:
 	var flash := ColorRect.new()
 	flash.z_as_relative = false
@@ -1045,6 +1169,67 @@ func add_modifier(modifier_id: String, tier: int = 1) -> void:
 		_modifiers.append(mod)
 		mod.apply(self)
 
+## 注入精英主动技能（由 RoomWaveSpawner 在精英生成时调用）
+## modifier_id: 词缀ID，用于 EliteActiveSkillComponent.inject_elite_skills() 路由技能
+## tier: 1-3，影响技能强度
+func _inject_elite_active_skills(modifier_id: String, tier: int) -> void:
+	if not _is_elite:
+		return
+	if not has_method("add_child"):
+		return
+	var skill_comp_class: GDScript = load("res://src/enemy/components/EliteActiveSkillComponent.gd")
+	if skill_comp_class == null:
+		push_warning("[EnemyBase] EliteActiveSkillComponent script not found")
+		return
+	# 避免重复注入
+	for child in get_children():
+		if child.has_method("tick") and child.has_signal("elite_skill_triggered"):
+			return
+	var comp: Node = skill_comp_class.inject_elite_skills(self, modifier_id, tier)
+	if comp == null:
+		return
+	if comp.has_signal("elite_skill_triggered") and not comp.elite_skill_triggered.is_connected(_on_elite_skill_triggered):
+		comp.elite_skill_triggered.connect(_on_elite_skill_triggered)
+
+## 精英技能触发回调（可由具体实现扩展）
+func _on_elite_skill_triggered(skill_id: String, source: Node) -> void:
+	pass
+
+## 统一注入基础技能（由 RoomWaveSpawner / CoreCombatMode 调用）
+func inject_basic_skill_for_kind(kind: String) -> void:
+	var normalized := String(kind).to_lower()
+
+	# 避免重复注入普通技能组件
+	for child in get_children():
+		if child.has_signal("skill_triggered") and not child.has_signal("elite_skill_triggered"):
+			return
+
+	var script_res := load("res://src/enemy/components/EnemySkillComponent.gd")
+	if script_res == null:
+		return
+
+	var comp: Node = null
+
+	match normalized:
+		"chaser", "basic", "melee":
+			comp = script_res.inject_chaser_skill(self)
+		"ranged", "ranged_caster", "caster", "shooter":
+			comp = script_res.inject_ranged_skill(self)
+		"summoner":
+			comp = script_res.inject_summoner_skill(self)
+		"tank", "shielded", "brute":
+			comp = script_res.inject_tank_skill(self)
+		"bomber", "exploder", "suicide":
+			comp = script_res.inject_bomber_skill(self)
+		"trapper", "ambusher":
+			comp = script_res.inject_trapper_skill(self)
+		_:
+			comp = script_res.inject_chaser_skill(self)
+
+	if comp:
+		add_child(comp)
+		comp.set_owner(self)
+
 ## 设置伤害倍率（由环境命运触发器的 CURSE_ROOM_ENEMIES 调用）
 ## multiplier=1.15 表示伤害+15%
 func apply_damage_multiplier(multiplier: float) -> void:
@@ -1054,3 +1239,11 @@ func apply_damage_multiplier(multiplier: float) -> void:
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool = false) -> void:
 	get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)
 	return
+
+## 治疗（由召唤者光环等调用）
+func heal(amount: int) -> void:
+	if _is_dead:
+		return
+	current_hp = min(max_hp, current_hp + amount)
+	_update_hp_bar()
+	_spawn_damage_number(global_position, -amount, false)

@@ -53,6 +53,12 @@ func inject(room_data: RoomData) -> ContentConfig:
 			_inject_storage_room(config, room_data)
 		RoomData.RoomType.TRAP:
 			_inject_trap_room(config, room_data)
+		RoomData.RoomType.BASEMENT:
+			_inject_basement_room(config, room_data)
+		RoomData.RoomType.STAIRS_DOWN, RoomData.RoomType.STAIRS_UP:
+			_inject_stairs_room(config, room_data)
+		RoomData.RoomType.ELEVATOR:
+			_inject_elevator_room(config, room_data)
 	
 	return config
 
@@ -72,22 +78,24 @@ func _inject_spawn_room(config: ContentConfig, room_data: RoomData) -> void:
 func _inject_combat_room(config: ContentConfig, room_data: RoomData) -> void:
 	var floor: int = room_data.floor
 	var enemy_count: int = 2 + floor
-	
-	# 根据层级调整怪物数量和类型
+
+	# 根据楼层和进度层级调整怪物数量和类型
+	# 第二关（floor>=2）起怪物密度要有明显提升——这是玩家熟悉基础后进入正式挑战的节点
 	match room_data.floor_level:
 		RoomData.FloorLevel.SHALLOW:
 			enemy_count = 2 + floor
 		RoomData.FloorLevel.MEDIUM:
-			enemy_count = 3 + floor
+			enemy_count = 3 + floor + maxi(0, floor - 1)  # 第二关 MEDIUM: 3+2+1=6（比旧公式多1）
 		RoomData.FloorLevel.DEEP:
-			enemy_count = 4 + floor
+			enemy_count = 4 + floor + maxi(0, floor - 1)  # 第二关 DEEP: 4+2+1=7（比旧公式多2）
 		RoomData.FloorLevel.ABYSS:
 			enemy_count = 5 + floor
 	
-	# 生成怪物配置
+	# 生成怪物配置（同时传入 floor 和 floor_level，让 MonsterInjector 正确差异化怪物类型池）
 	for i in range(enemy_count):
 		var enemy := {
 			"type": "random",
+			"floor": floor,                              # 实际关卡数字，影响怪物类型池和缩放
 			"floor_level": room_data.floor_level,
 			"tags": room_data.tags.duplicate()
 		}
@@ -103,6 +111,7 @@ func _inject_elite_room(config: ContentConfig, room_data: RoomData) -> void:
 	# 精英房：1个精英怪 + 若干小怪
 	var elite := {
 		"type": "elite",
+		"floor": room_data.floor,
 		"floor_level": room_data.floor_level,
 		"modifier_chance": 0.5,
 		"tags": room_data.tags.duplicate()
@@ -114,6 +123,7 @@ func _inject_elite_room(config: ContentConfig, room_data: RoomData) -> void:
 	for i in range(minion_count):
 		config.enemies.append({
 			"type": "minion",
+			"floor": room_data.floor,
 			"floor_level": room_data.floor_level
 		})
 	config.interactables.append({
@@ -142,6 +152,7 @@ func _inject_scavenge_room(config: ContentConfig, room_data: RoomData) -> void:
 	if randf() < 0.5:
 		config.enemies.append({
 			"type": "random",
+			"floor": room_data.floor,
 			"floor_level": room_data.floor_level,
 			"count": 1
 		})
@@ -203,6 +214,7 @@ func _inject_boss_room(config: ContentConfig, room_data: RoomData) -> void:
 	# Boss房：Boss + 小怪
 	config.enemies.append({
 		"type": "boss",
+		"floor": room_data.floor,
 		"floor_level": room_data.floor_level,
 		"boss_id": "boss_floor_%d" % [room_data.floor]
 	})
@@ -212,6 +224,7 @@ func _inject_boss_room(config: ContentConfig, room_data: RoomData) -> void:
 	for i in range(elite_count):
 		config.enemies.append({
 			"type": "elite",
+			"floor": room_data.floor,
 			"floor_level": room_data.floor_level
 		})
 	config.interactables.append({
@@ -237,6 +250,7 @@ func _inject_trap_room(config: ContentConfig, room_data: RoomData) -> void:
 	})
 	config.enemies.append({
 		"type": "ambush",
+		"floor": room_data.floor,
 		"floor_level": room_data.floor_level,
 		"count": 1 + int(room_data.floor / 2),
 	})
@@ -247,3 +261,63 @@ func _get_scavenge_position(index: int) -> Vector2:
 	var angle: float = index * 1.618 * PI
 	var radius: float = 100 + index * 30
 	return Vector2(cos(angle), sin(angle)) * radius
+
+
+## 注入地下室房间（高奖励、高风险）
+func _inject_basement_room(config: ContentConfig, room_data: RoomData) -> void:
+	# 地下室：更多箱子、更丰富的资源、更多精英怪
+	var container_count: int = 2 + room_data.floor
+	var containers: Array[String] = ["crate", "locker", "hidden_cache", "chest"]
+	
+	for i in range(container_count):
+		var container_type: String = containers[randi() % containers.size()]
+		var container := {
+			"type": container_type,
+			"position": _get_scavenge_position(i),
+			"loot_table": "scavenge_floor_%d" % [min(5, room_data.floor)],  # 修复：basement_floor_* 不存在于 ItemRegistry，用 scavenge_floor_* 代替
+			"has_secret": randf() < 0.4  # 地下室更多隐藏容器
+		}
+		config.interactables.append(container)
+	
+	# 地下室精英怪概率更高（难度补偿）
+	if randf() < 0.6:
+		config.enemies.append({
+			"type": "elite",
+			"floor": room_data.floor,
+			"floor_level": room_data.floor_level,
+			"modifier_chance": 0.6,
+			"tags": ["basement"]
+		})
+	
+	# 伴随小怪
+	var minion_count: int = 1 + room_data.floor / 2
+	for i in range(minion_count):
+		config.enemies.append({
+			"type": "random",
+			"floor": room_data.floor,
+			"floor_level": room_data.floor_level,
+			"count": 1
+		})
+
+
+## 注入楼梯房间（垂直通道）
+func _inject_stairs_room(config: ContentConfig, room_data: RoomData) -> void:
+	# 楼梯房：没有敌人，但有通往其他垂直楼层的提示
+	# 交互物是"楼梯"本身，触发后切换 vertical_level
+	config.interactables.append({
+		"type": "stairs",
+		"position": Vector2.ZERO,
+		"direction": "down" if room_data.room_type == RoomData.RoomType.STAIRS_DOWN else "up",
+		"target_vertical": room_data.vertical_level,
+	})
+
+
+## 注入电梯房间（可上可下的垂直通道）
+func _inject_elevator_room(config: ContentConfig, room_data: RoomData) -> void:
+	# 电梯房：可选择前往上层或下层
+	config.interactables.append({
+		"type": "elevator",
+		"position": Vector2.ZERO,
+		"can_go_up": room_data.vertical_level != RoomData.VerticalLevel.UPPER,
+		"can_go_down": room_data.vertical_level != RoomData.VerticalLevel.BASEMENT,
+	})

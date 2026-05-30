@@ -611,6 +611,12 @@ func _on_room_entered_for_minimap(room_data: RoomData) -> void:
 	# 根据房间类型更新 room_info_label（中文显示）
 	if room_info_label and room_data != null:
 		var type_name := ""
+		var floor_desc := "第%d关" % room_data.floor
+		# 垂直层信息
+		if room_data.vertical_level != RoomData.VerticalLevel.MAIN:
+			var vname := RoomData.get_vertical_level_name(room_data.vertical_level)
+			floor_desc += " [%s]" % vname
+		
 		match room_data.room_type:
 			RoomData.RoomType.PLAYER_SPAWN:
 				type_name = "玩家出生"
@@ -630,9 +636,17 @@ func _on_room_entered_for_minimap(room_data: RoomData) -> void:
 				type_name = "撤离"
 			RoomData.RoomType.BOSS:
 				type_name = "Boss"
+			RoomData.RoomType.BASEMENT:
+				type_name = "地下室"
+			RoomData.RoomType.STAIRS_DOWN:
+				type_name = "楼梯口(下)"
+			RoomData.RoomType.STAIRS_UP:
+				type_name = "楼梯口(上)"
+			RoomData.RoomType.ELEVATOR:
+				type_name = "电梯"
 			_:
 				type_name = "房间"
-		room_info_label.text = type_name
+		room_info_label.text = "%s · %s" % [floor_desc, type_name]
 
 
 ## 小地图 REVEAL 事件信号处理（地图揭示后刷新小地图）
@@ -1352,6 +1366,12 @@ func _on_game_over(reason: String = "未知原因") -> void:
 		death_overlay.visible = true
 	if game_over_panel:
 		game_over_panel.visible = true
+		# 允许在暂停状态下接收输入
+		game_over_panel.process_mode = Node.PROCESS_MODE_ALWAYS
+	if retry_button:
+		retry_button.process_mode = Node.PROCESS_MODE_ALWAYS
+	if menu_button:
+		menu_button.process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = true
 
 
@@ -1627,57 +1647,16 @@ func _show_extraction_success() -> void:
 	extraction_success_panel.modulate.a = 0.0
 	extraction_success_panel.scale = Vector2(0.92, 0.92)
 
-	# 获取背包和保险格物品（用 get_occupied_slots，返回 {index, item, count} 结构）
-	var extracted_slots: Array[Dictionary] = []
-	if _inventory_module and _inventory_module.has_method("get_occupied_slots"):
-		extracted_slots = _inventory_module.get_occupied_slots()
-	var insured_slots: Array[Dictionary] = []
-	if _insurance_module and _insurance_module.has_method("get_all_insured_items"):
-		insured_slots = _insurance_module.get_all_insured_items()
-
-	# 更新物品数量标签
-	var total_count := extracted_slots.size() + insured_slots.size()
-	if extracted_count_label:
-		extracted_count_label.text = "物品已保存: %d 件" % total_count
-
-	# 清空并填充物品列表（带品质边框颜色）
+	# 清空物品列表（物品渲染已移至 show_run_extraction_success 中的 stats 传入）
 	if extracted_items_vbox:
 		for child in extracted_items_vbox.get_children():
 			child.queue_free()
-		for slot_data in extracted_slots:
-			var item: Dictionary = slot_data.get("item", {})
-			var item_name: String = item.get("name", item.get("id", "未知物品"))
-			var tier: int = item.get("loot_table_tier", 0)
-			var lbl := Label.new()
-			lbl.text = "• %s" % item_name
-			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			# 品质边框颜色：0=白/黄，1=蓝，2=紫，3=金
-			match tier:
-				3:
-					lbl.modulate = Color(1.0, 0.85, 0.2, 1.0)  # 金
-				2:
-					lbl.modulate = Color(0.75, 0.35, 1.0, 1.0)  # 紫
-				1:
-					lbl.modulate = Color(0.35, 0.55, 1.0, 1.0)  # 蓝
-				_:
-					lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)  # 米黄
-			extracted_items_vbox.add_child(lbl)
-		for slot_data in insured_slots:
-			var item: Dictionary = slot_data.get("item", {})
-			var item_name: String = item.get("name", item.get("id", "保险物品"))
-			var tier: int = item.get("loot_table_tier", 0)
-			var lbl := Label.new()
-			lbl.text = "• %s [保险]" % item_name
-			match tier:
-				3:
-					lbl.modulate = Color(0.8, 0.95, 0.6, 1.0)
-				2:
-					lbl.modulate = Color(0.85, 0.75, 1.0, 1.0)
-				1:
-					lbl.modulate = Color(0.7, 0.8, 1.0, 1.0)
-				_:
-					lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
-			extracted_items_vbox.add_child(lbl)
+	# 更新物品数量标签（从 stats 传入的 extracted_items 长度估算）
+	var total_count := 0
+	if extracted_items_vbox.get_child_count() > 2:
+		total_count = extracted_items_vbox.get_child_count() - 2  # 减去 score_label_node 和 points_node
+	if extracted_count_label:
+		extracted_count_label.text = "物品已保存: %d 件" % total_count
 
 	# 结算已立即可见；轻量动画在暂停状态下仍由 UI 自身继续处理。
 	extraction_success_panel.modulate.a = 0.0
@@ -1764,7 +1743,7 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 		)
 	if extracted_items_vbox:
 		# 显示本局获得的积分（灵魂兑换）
-		var points_earned: int = int(stats.get("points", 0))
+		var points_earned: int = int(stats.get("points_earned", 0))
 		if points_earned > 0:
 			var points_node := Label.new()
 			points_node.text = "▶ 本局获得资源: +%d" % points_earned
@@ -1777,6 +1756,53 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 		)
 		score_label_node.modulate = Color(0.85, 0.95, 1.0, 1.0)
 		extracted_items_vbox.add_child(score_label_node)
+		# 如果 stats 中带了本局带出的真实物品列表（在背包清空前读取），直接渲染
+		# 否则回退到实时读取（适用于 CoreCombatMode 等没有提前传入 extracted_items 的场景）
+		var extracted_slots: Array[Dictionary] = []
+		var passed_extracted: Array[Dictionary] = stats.get("extracted_items", [])
+		if not passed_extracted.is_empty():
+			extracted_slots = passed_extracted
+		elif _inventory_module and _inventory_module.has_method("get_occupied_slots"):
+			extracted_slots = _inventory_module.get_occupied_slots()
+		var insured_slots: Array[Dictionary] = []
+		var passed_insured: Array[Dictionary] = stats.get("insured_items", [])
+		if not passed_insured.is_empty():
+			insured_slots = passed_insured
+		elif _insurance_module and _insurance_module.has_method("get_all_insured_items"):
+			insured_slots = _insurance_module.get_all_insured_items()
+		for slot_data in extracted_slots:
+			var item: Dictionary = slot_data.get("item", {})
+			var item_name: String = item.get("name", item.get("id", "未知物品"))
+			var tier: int = item.get("loot_table_tier", 0)
+			var lbl := Label.new()
+			lbl.text = "• %s" % item_name
+			lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			match tier:
+				3:
+					lbl.modulate = Color(1.0, 0.85, 0.2, 1.0)
+				2:
+					lbl.modulate = Color(0.75, 0.35, 1.0, 1.0)
+				1:
+					lbl.modulate = Color(0.35, 0.55, 1.0, 1.0)
+				_:
+					lbl.modulate = Color(1.0, 0.92, 0.6, 1.0)
+			extracted_items_vbox.add_child(lbl)
+		for slot_data in insured_slots:
+			var item: Dictionary = slot_data.get("item", {})
+			var item_name: String = item.get("name", item.get("id", "保险物品"))
+			var tier: int = item.get("loot_table_tier", 0)
+			var lbl := Label.new()
+			lbl.text = "• %s [保险]" % item_name
+			match tier:
+				3:
+					lbl.modulate = Color(0.8, 0.95, 0.6, 1.0)
+				2:
+					lbl.modulate = Color(0.85, 0.75, 1.0, 1.0)
+				1:
+					lbl.modulate = Color(0.7, 0.8, 1.0, 1.0)
+				_:
+					lbl.modulate = Color(0.7, 0.85, 0.7, 1.0)
+			extracted_items_vbox.add_child(lbl)
 	if _extraction_floor_label:
 		var floor: int = int(stats.get("floor", 1))
 		_extraction_floor_label.text = "第 %d 层" % floor
@@ -2898,6 +2924,14 @@ func _item_for_weapon_root(root: AssemblyNode) -> Dictionary:
 			item_id = "weapon_shotgun"
 		"GunBody_Rifle":
 			item_id = "weapon_rifle"
+		"GunBody_Machinegun":
+			item_id = "weapon_machinegun"
+		"GunBody_Sniper":
+			item_id = "weapon_sniper"
+		"GunBody_Launcher":
+			item_id = "weapon_launcher"
+		"GunBody_Charge":
+			item_id = "weapon_charge"
 		_:
 			item_id = ""
 	if item_id.is_empty():

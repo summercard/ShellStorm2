@@ -49,6 +49,9 @@ var pending_fate_card: Dictionary = {}
 # 下一局从保险柜带入的物品（启动任务时从 vault_items 转移到局内背包）
 var pending_loadout_items: Array = []
 
+# 撤离后待存入仓库的战利品（返回大厅后显示，可一键存入或逐个存入）
+var extraction_loot: Array = []
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -81,6 +84,7 @@ func _to_dict() -> Dictionary:
 		"vault_items": vault_items,
 		"pending_fate_card": pending_fate_card,
 		"pending_loadout_items": pending_loadout_items,
+		"extraction_loot": extraction_loot,
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -114,6 +118,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("vault_items") and d["vault_items"] is Array: data.vault_items = Array(d["vault_items"])
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
+	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
 	return data
 
 func record_run(success: bool, kills: int) -> void:

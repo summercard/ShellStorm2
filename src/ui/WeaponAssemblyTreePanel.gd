@@ -414,7 +414,7 @@ func _find_and_highlight_row(node: AssemblyNode, target_path: String) -> bool:
 					_set_row_highlight(child, SELECTED_BG_COLOR)
 					_selected_row = child
 					return true
-		return true
+		return false  # 目标节点在树中但不在容器中，继续搜索其他分支
 	# 递归检查子节点（槽位）
 	for slot_type in AssemblyNode.SlotType.values():
 		var child: AssemblyNode = node.slots[slot_type]

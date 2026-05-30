@@ -26,6 +26,11 @@ var dash_direction: Vector2 = Vector2.RIGHT
 var input_locked: bool = false
 var _damage_multiplier: float = 1.0  # 伤害倍率（由命运触发器/祝福效果设置，如 BLESS_DEAD）
 
+## 沉默状态（被精英"抢枪"词缀 skill_countershot 命中时生效）
+var _is_silenced: bool = false
+var _silence_timer: float = 0.0
+var _silence_duration: float = 0.0
+
 var _audio: AudioManager = null
 
 @onready var weapon_anchor: Marker2D = $WeaponAnchor
@@ -34,6 +39,12 @@ var _audio: AudioManager = null
 
 ## 玩家武器装配树（由命运卡片系统使用）
 var weapon_tree: WeaponAssemblyTree
+
+## 调试用标签（屏幕显示）
+var _debug_label: Label = null
+
+## 移动端输入方向
+var _mobile_input: Vector2 = Vector2.ZERO
 
 func _enter_tree() -> void:
 	_ensure_weapon_tree()
@@ -46,6 +57,26 @@ func _ready() -> void:
 		invincible_timer.timeout.connect(_on_invincible_timeout)
 	add_to_group("player")
 	hp_changed.emit(current_hp, max_hp)
+
+	# 连接移动端控制信号
+	var mobile := get_node_or_null("/root/MobileControls")
+	if mobile != null and mobile.has_signal("move_direction"):
+		mobile.connect("move_direction", _on_mobile_move)
+		mobile.connect("dash_pressed", _on_mobile_dash)
+		mobile.connect("shoot_pressed", _on_mobile_shoot)
+
+
+func _on_mobile_move(dir: Vector2) -> void:
+	_mobile_input = dir
+
+
+func _on_mobile_dash() -> void:
+	if dash_cooldown_timer <= 0.0 and not is_dashing:
+		_start_dash()
+
+
+func _on_mobile_shoot() -> void:
+	pass  # 射击由武器系统处理，这里只是占位
 
 func _ensure_weapon_tree() -> void:
 	if weapon_tree == null:
@@ -61,6 +92,7 @@ func _ensure_weapon_tree() -> void:
 func _physics_process(delta: float) -> void:
 	_handle_movement(delta)
 	_handle_dash_cooldown(delta)
+	_handle_silence(delta)
 
 func _handle_movement(_delta: float) -> void:
 	if input_locked:
@@ -89,7 +121,97 @@ func _get_input_direction() -> Vector2:
 		direction.x -= 1
 	if Input.is_action_pressed("move_right"):
 		direction.x += 1
+
+	# 合并移动端输入（优先级更高）
+	if _mobile_input != Vector2.ZERO:
+		direction = _mobile_input
+
 	return direction.normalized() if direction != Vector2.ZERO else Vector2.ZERO
+
+
+var _debug_visible := false
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("debug_ray") or (event is InputEventKey and event.pressed and event.keycode == 86):
+		_debug_visible = not _debug_visible
+		if _debug_visible:
+			_print_collision_debug()
+		elif _debug_label != null:
+			_debug_label.text = ""
+
+
+func _print_collision_debug() -> void:
+	# 获取或创建调试UI
+	if _debug_label == null or not is_instance_valid(_debug_label):
+		_debug_label = Label.new()
+		_debug_label.name = "DebugCollisionLabel"
+		_debug_label.z_index = 1000
+		_debug_label.add_theme_font_size_override("font_size", 16)
+		_debug_label.modulate = Color(1, 1, 0.2, 1)
+		add_child(_debug_label)
+
+	var space_rid := get_world_2d().direct_space_state
+	var pos := global_position
+	var msg := "========== 碰撞调试 ==========\n"
+	msg += "玩家位置: (%.0f, %.0f)\n\n" % [pos.x, pos.y]
+
+	var dist: float
+	var result: Dictionary
+	var query := PhysicsRayQueryParameters2D.new()
+	query.collision_mask = 7
+	query.exclude = [self]
+
+	# 右
+	query.from = pos
+	query.to = pos + Vector2(500.0, 0)
+	result = space_rid.intersect_ray(query)
+	if result.size() > 0:
+		dist = pos.distance_to(result.get("position", Vector2.ZERO))
+		var collider_name = result.get("collider", null)
+		var name_str = collider_name.name if collider_name else "null"
+		msg += "[右] 碰撞! 距离=%.1f %s\n" % [dist, name_str]
+	else:
+		msg += "[右] 无碰撞\n"
+
+	# 左
+	query.from = pos
+	query.to = pos + Vector2(-500.0, 0)
+	result = space_rid.intersect_ray(query)
+	if result.size() > 0:
+		dist = pos.distance_to(result.get("position", Vector2.ZERO))
+		var collider_name = result.get("collider", null)
+		var name_str = collider_name.name if collider_name else "null"
+		msg += "[左] 碰撞! 距离=%.1f %s\n" % [dist, name_str]
+	else:
+		msg += "[左] 无碰撞\n"
+
+	# 上
+	query.from = pos
+	query.to = pos + Vector2(0, -500.0)
+	result = space_rid.intersect_ray(query)
+	if result.size() > 0:
+		dist = pos.distance_to(result.get("position", Vector2.ZERO))
+		var collider_name = result.get("collider", null)
+		var name_str = collider_name.name if collider_name else "null"
+		msg += "[上] 碰撞! 距离=%.1f %s\n" % [dist, name_str]
+	else:
+		msg += "[上] 无碰撞\n"
+
+	# 下
+	query.from = pos
+	query.to = pos + Vector2(0, 500.0)
+	result = space_rid.intersect_ray(query)
+	if result.size() > 0:
+		dist = pos.distance_to(result.get("position", Vector2.ZERO))
+		var collider_name = result.get("collider", null)
+		var name_str = collider_name.name if collider_name else "null"
+		msg += "[下] 碰撞! 距离=%.1f %s\n" % [dist, name_str]
+	else:
+		msg += "[下] 无碰撞\n"
+
+	msg += "================================\n按 V 键关闭"
+
+	_debug_label.text = msg
 
 func _handle_dash_cooldown(delta: float) -> void:
 	if input_locked:
@@ -130,6 +252,24 @@ func set_input_locked(locked: bool) -> void:
 		is_dashing = false
 		velocity = Vector2.ZERO
 
+## 沉默入口（被精英"抢枪"词缀 skill_countershot 命中时由 EliteActiveSkillComponent 调用）
+func apply_silence(duration: float) -> void:
+	if current_hp <= 0:
+		return
+	_is_silenced = true
+	_silence_duration = duration
+	_silence_timer = duration
+	print("[Player] 被沉默 %.1f 秒" % duration)
+
+func _handle_silence(delta: float) -> void:
+	if not _is_silenced:
+		return
+	_silence_timer -= delta
+	if _silence_timer <= 0.0:
+		_is_silenced = false
+		_silence_timer = 0.0
+		print("[Player] 沉默解除")
+
 func take_damage(amount: int) -> void:
 	if is_invincible or current_hp <= 0:
 		return
@@ -155,6 +295,7 @@ func heal(amount: int) -> void:
 	hp_changed.emit(current_hp, max_hp)
 	if body_visuals and body_visuals.has_method("flash_heal"):
 		body_visuals.call("flash_heal")
+
 
 func _flash_damage() -> void:
 	if body_visuals and body_visuals.has_method("flash_damage"):

@@ -174,6 +174,14 @@ func _fire_trigger(cfg: TriggerConfig, current: int) -> void:
 		cfg.fate_card_id,
 		preview
 	)
+	# 通过 FateCardGameBridge 执行实际命运卡片效果（修改武器树 / 触发房间逻辑）
+	var bridge: Node = _get_fate_card_bridge()
+	if bridge != null and bridge.has_method("apply_fate_card_from_trigger"):
+		var result: Dictionary = bridge.apply_fate_card_from_trigger(cfg.fate_card_id)
+		if result.get("success", false):
+			print("[MapFateTriggers] 命运效果已应用 → %s: %s" % [cfg.fate_card_id, result.get("message", "")])
+		else:
+			print("[MapFateTriggers] 命运效果应用失败 → %s: %s" % [cfg.fate_card_id, result.get("message", "")])
 	# 向 UI 发送通知（如果 GameUIManager 存在）
 	var ui: Node = _find_ui_manager()
 	if ui != null and ui.has_method("show_fate_trigger_notification"):
@@ -206,3 +214,13 @@ func _find_ui_manager() -> Node:
 	if ui == null:
 		ui = get_node_or_null("/root/GameUIManager")
 	return ui
+
+func _get_fate_card_bridge() -> Node:
+	# 延迟获取（首次调用时场景树已就绪）
+	if _fate_card_bridge == null:
+		_fate_card_bridge = get_tree().get_first_node_in_group("fate_cards")
+		if _fate_card_bridge == null:
+			_fate_card_bridge = get_node_or_null("/root/Main/FateCardGameBridge")
+		if _fate_card_bridge == null:
+			_fate_card_bridge = get_node_or_null("/root/FateCardGameBridge")
+	return _fate_card_bridge

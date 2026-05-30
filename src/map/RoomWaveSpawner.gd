@@ -42,6 +42,7 @@ var _monster_injector: MonsterInjector
 var _rng: RandomNumberGenerator
 var _current_regional_controller: Node = null  # 区域刷怪控制器引用（由 RoomGameMode 注入）
 var _pending_elite_spawn: Dictionary = {}      # 待注入的精英生成数据（一次只注入一个）
+const ENEMY_TYPES_SCRIPT := preload("res://src/enemy/EnemyTypes.gd")
 
 
 ## 设置待注入的精英生成数据（在波次开始前由 RoomGameMode 调用）
@@ -372,10 +373,22 @@ func _spawn_enemy_instance(
 			elite_spawn_recorded.emit(elite_id)  # PH06: 通知 RoomGameMode 记录精英遭遇
 	if data.get("modifier"):
 		enemy.add_modifier(data["modifier"], 1)
+	# 精英主动技能注入（PH06: 词缀→主动技能映射，tier影响强度）
+	# 使用 modifier_id_en（英文）来匹配 EliteActiveSkillComponent.inject_elite_skills() 的路由表
+	if data.get("is_elite") and data.get("modifier_id_en"):
+		var skill_tier: int = data.get("tier", 1)
+		enemy.call_deferred("_inject_elite_active_skills", data["modifier_id_en"], skill_tier)
 
 	# 将 enemy_data 存储在 enemy 节点上，供死亡时回调使用
 	if enemy.has_method("set_enemy_data"):
 		enemy.set_enemy_data(data)
+
+	# 基础怪物技能注入（通过 EnemyBase.inject_basic_skill_for_kind 统一注入）
+	# 注意：精英怪的精英专属主动技能在上面 _inject_elite_active_skills 处理，两套互不冲突
+	var enemy_type_key: String = data.get("enemy_type", "")
+	if not data.get("is_elite", false) and not enemy_type_key.is_empty():
+		if enemy.has_method("inject_basic_skill_for_kind"):
+			enemy.call("inject_basic_skill_for_kind", enemy_type_key)
 
 	# 连接死亡信号
 	if enemy.has_signal("enemy_died"):
@@ -468,8 +481,32 @@ func _apply_ai_type_from_enemy_kind(enemy: CharacterBody2D, enemy_type: String) 
 			enemy.ai_type = "bomber"
 		"ambusher":
 			enemy.ai_type = "trapper"
-		_:
-			enemy.ai_type = "chase"
+
+
+## 根据 enemy_type 调用 EnemyTypes 对应工厂方法注入基础主动技能
+## 与精英怪的 EliteActiveSkillComponent 互不冲突：基础怪用这套，精英怪用 _inject_elite_active_skills
+const SKILL_COMP_SCRIPT := preload("res://src/enemy/components/EnemySkillComponent.gd")
+
+func _inject_base_skill(enemy: CharacterBody2D, enemy_type: String) -> void:
+	var skill_comp: EnemySkillComponent = null
+	match enemy_type:
+		"melee_chaser":
+			skill_comp = SKILL_COMP_SCRIPT.inject_chaser_skill(enemy)
+		"ranged_caster":
+			skill_comp = SKILL_COMP_SCRIPT.inject_ranged_skill(enemy)
+		"summoner":
+			skill_comp = SKILL_COMP_SCRIPT.inject_summoner_skill(enemy)
+		"shielded":
+			skill_comp = SKILL_COMP_SCRIPT.inject_tank_skill(enemy)
+		"exploder":
+			skill_comp = SKILL_COMP_SCRIPT.inject_bomber_skill(enemy)
+		"ambusher":
+			skill_comp = SKILL_COMP_SCRIPT.inject_trapper_skill(enemy)
+	if skill_comp != null:
+		enemy.add_child(skill_comp)
+		skill_comp.set_component_owner(enemy)
+	else:
+		enemy.ai_type = "chase"
 
 
 func _on_enemy_died() -> void:

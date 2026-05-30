@@ -589,13 +589,13 @@ func _chain_to_next_enemy(hit_body: Node) -> void:
 	_life_timer = 0.0  # 重置寿命
 	# 视觉：连锁时子弹变细变白
 	if shape:
-		shape.rect_size = Vector2(shape.rect_size.x * 0.6, shape.rect_size.y * 0.6)
+		shape.size = Vector2(shape.size.x * 0.6, shape.size.y * 0.6)
 		if glow:
 			glow.color = Color(0.7, 0.9, 1.0, 0.9)
 	# 延迟后恢复颜色
 	await get_tree().create_timer(0.05).timeout
 	if is_instance_valid(self) and shape:
-		shape.rect_size = Vector2(10, 10)  # 恢复原始尺寸
+		shape.size = Vector2(10, 10)  # 恢复原始尺寸
 
 ## 应用元素DOT
 func _apply_element_dot(enemy: Node) -> void:

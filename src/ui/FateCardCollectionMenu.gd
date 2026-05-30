@@ -9,9 +9,8 @@ extends CanvasLayer
 @onready var scroll_container: ScrollContainer
 @onready var header_label: Label
 
-const CARD_WIDTH := 200.0
-const CARD_HEIGHT := 280.0
-const CARDS_PER_ROW := 4
+const CARD_SIZE := 150.0
+const CARDS_PER_ROW := 5
 
 func _ready() -> void:
 	content = get_node_or_null("Panel/VBox/ScrollContainer/Content")
@@ -75,7 +74,7 @@ func _build_collection_view() -> void:
 
 func _create_card_ui(card: FateCard) -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(CARD_WIDTH, CARD_HEIGHT)
+	panel.custom_minimum_size = Vector2(CARD_SIZE, CARD_SIZE)
 
 	var rarity_clr := FateCard.rarity_color(card.card_rarity)
 
@@ -84,19 +83,23 @@ func _create_card_ui(card: FateCard) -> Control:
 	bg.bg_color = Color(0.1, 0.1, 0.14, 0.97)
 	bg.set_border_width_all(2)
 	bg.set_border_color(rarity_clr)
-	bg.set_corner_radius_all(10)
+	bg.set_corner_radius_all(6)
 	panel.add_theme_stylebox_override("normal", bg)
 
 	# 悬停高亮
 	var hover := StyleBoxFlat.new()
 	hover.bg_color = Color(0.15, 0.15, 0.2, 0.97)
-	hover.set_border_width_all(3)
+	hover.set_border_width_all(2)
 	hover.set_border_color(Color(1.0, 1.0, 1.0, 0.6))
-	hover.set_corner_radius_all(10)
+	hover.set_corner_radius_all(6)
 	panel.add_theme_stylebox_override("hover", hover)
 
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 6)
+	vbox.add_theme_constant_override("separation", 4)
+	vbox.add_theme_constant_override("margin_left", 8)
+	vbox.add_theme_constant_override("margin_right", 8)
+	vbox.add_theme_constant_override("margin_top", 6)
+	vbox.add_theme_constant_override("margin_bottom", 6)
 	panel.add_child(vbox)
 
 	# 顶部：emoji + 品质角标
@@ -107,13 +110,13 @@ func _create_card_ui(card: FateCard) -> Control:
 	var emoji_lbl := Label.new()
 	emoji_lbl.text = card.icon_emoji
 	emoji_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	emoji_lbl.add_theme_font_size_override("font_size", 40)
+	emoji_lbl.add_theme_font_size_override("font_size", 28)
 	top_hbox.add_child(emoji_lbl)
 
 	var type_lbl := Label.new()
 	type_lbl.text = FateCard.type_name(card.card_type)
 	type_lbl.add_theme_color_override("font_color", rarity_clr)
-	type_lbl.add_theme_font_size_override("font_size", 11)
+	type_lbl.add_theme_font_size_override("font_size", 10)
 	type_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	top_hbox.add_child(type_lbl)
 
@@ -121,46 +124,35 @@ func _create_card_ui(card: FateCard) -> Control:
 	var name_lbl := Label.new()
 	name_lbl.text = card.card_name
 	name_lbl.add_theme_color_override("font_color", Color.WHITE)
-	name_lbl.add_theme_font_size_override("font_size", 15)
+	name_lbl.add_theme_font_size_override("font_size", 12)
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name_lbl.custom_minimum_size.y = 32
 	vbox.add_child(name_lbl)
 
 	# 分隔线
 	var divider := HSeparator.new()
 	divider.add_theme_constant_override("custom_minimum_size", 0)
-	divider.add_theme_color_override("line_color", Color(1, 1, 1, 0.15))
+	divider.add_theme_color_override("line_color", Color(1, 1, 1, 0.1))
 	vbox.add_child(divider)
 
 	# 效果描述
 	var desc_lbl := Label.new()
 	desc_lbl.text = card.short_description
 	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.65, 0.7))
-	desc_lbl.add_theme_font_size_override("font_size", 11)
+	desc_lbl.add_theme_font_size_override("font_size", 10)
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-	desc_lbl.custom_minimum_size.y = 52
+	desc_lbl.custom_minimum_size.y = 36
 	vbox.add_child(desc_lbl)
 
-	# 标签行
-	var tag_lbl := Label.new()
-	var tag_str := " ".join(card.tags) if not card.tags.is_empty() else ""
-	tag_lbl.text = tag_str
-	tag_lbl.add_theme_color_override("font_color", Color(0.4, 0.4, 0.45))
-	tag_lbl.add_theme_font_size_override("font_size", 10)
-	tag_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(tag_lbl)
-
 	# 底部品质角标
-	var bottom_hbox := HBoxContainer.new()
-	bottom_hbox.alignment = BoxContainer.ALIGNMENT_END
-	vbox.add_child(bottom_hbox)
-
 	var rarity_badge := Label.new()
 	rarity_badge.text = "◆ %s" % FateCard.rarity_name(card.card_rarity)
 	rarity_badge.add_theme_color_override("font_color", rarity_clr)
 	rarity_badge.add_theme_font_size_override("font_size", 10)
-	bottom_hbox.add_child(rarity_badge)
+	rarity_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(rarity_badge)
 
 	panel.tooltip_text = card.description
 	return panel

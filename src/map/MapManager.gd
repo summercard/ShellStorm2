@@ -173,6 +173,40 @@ func enter_room(node_id: int) -> RoomData:
 	room_entered.emit(data)
 	return data
 
+
+## 切换到相邻垂直楼层的房间
+## target_vertical: RoomData.VerticalLevel
+## 返回值：目标房间的 RoomData，null 表示没有可用的相邻房间
+func enter_vertical_room(target_vertical: RoomData.VerticalLevel) -> RoomData:
+	if _current_graph == null:
+		return null
+
+	var current_node := _current_graph.get_node(_current_room_id)
+	if current_node == null:
+		return null
+
+	# 找到当前房间的楼梯/电梯相邻的目标垂直层房间
+	var best_target: NodeGraph.RoomNode = null
+	var best_distance: float = INF
+
+	for conn_id in current_node.connections:
+		var neighbor: NodeGraph.RoomNode = _current_graph.get_node(conn_id)
+		if neighbor != null and neighbor.room_data != null:
+			# 检查是否是目标垂直层且是可进入的房间（不是楼梯本身）
+			if neighbor.room_data.vertical_level == target_vertical and not neighbor.room_data.is_vertical_access():
+				var dist: float = current_node.position.distance_to(neighbor.position)
+				if dist < best_distance:
+					best_distance = dist
+					best_target = neighbor
+
+	if best_target == null:
+		push_warning("[MapManager] No vertical room found for level %s" % target_vertical)
+		return null
+
+	# 找到楼梯房（当前房间的连接中去找楼梯类型的房间作为中介）
+	# 但实际上，玩家应该在楼梯房间触发，所以这里直接进入目标层房间
+	return enter_room(best_target.id)
+
 ## 离开房间
 func exit_room() -> void:
 	if _current_room_id < 0:

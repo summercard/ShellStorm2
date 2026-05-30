@@ -262,3 +262,67 @@ func _find_matching_vault_item(target: Dictionary) -> int:
 		if item == target:
 			return i
 	return -1
+
+## — 撤离战利品管理（返回大厅后待存入仓库）—
+func get_extraction_loot() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for item in data.extraction_loot:
+		if item is Dictionary:
+			result.append(item.duplicate(true))
+	return result
+
+func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
+	var new_item: Dictionary = item.duplicate(true)
+	new_item["count"] = count
+	data.extraction_loot.append(new_item)
+	save_base()
+
+func add_extraction_loot_items(items: Array[Dictionary]) -> void:
+	for item in items:
+		if item is Dictionary:
+			add_extraction_loot(item, item.get("count", 1))
+	save_base()
+
+func get_extraction_loot_count() -> int:
+	return data.extraction_loot.size()
+
+func deposit_extraction_loot_item(index: int) -> bool:
+	if index < 0 or index >= data.extraction_loot.size():
+		return false
+	var item: Dictionary = data.extraction_loot[index]
+	if item.is_empty():
+		data.extraction_loot.remove_at(index)
+		save_base()
+		return false
+	if add_vault_item(item):
+		data.extraction_loot.remove_at(index)
+		save_base()
+		return true
+	return false
+
+func deposit_all_extraction_loot() -> int:
+	var deposited := 0
+	# 逐个存入，溢出处理
+	var overflow_count := 0
+	for item in data.extraction_loot:
+		if item is Dictionary and not item.is_empty():
+			if add_vault_item(item):
+				deposited += 1
+			else:
+				overflow_count += 1
+	# 溢出转换为资源点数
+	if overflow_count > 0:
+		add_extraction_points(overflow_count * 5)
+	data.extraction_loot.clear()
+	save_base()
+	return deposited
+
+func discard_extraction_loot_item(index: int) -> void:
+	if index < 0 or index >= data.extraction_loot.size():
+		return
+	data.extraction_loot.remove_at(index)
+	save_base()
+
+func clear_extraction_loot() -> void:
+	data.extraction_loot.clear()
+	save_base()
