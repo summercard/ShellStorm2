@@ -1,0 +1,76 @@
+[gd_scene load_steps=4 format=3 uid="uid://dungeon_entrance_scene"]
+
+[ext_resource type="Script" path="res://src/base/DungeonEntrance.gd" id="1_entrance"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(220, 150)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_building"]
+size = Vector2(280, 220)
+
+[node name="DungeonEntrance" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_entrance")
+
+[node name="Building" type="Polygon2D" parent="."]
+position = Vector2(0, -110)
+polygon = PackedVector2Array(-140, -110, 140, -110, 140, 110, -140, 110)
+color = Color(0.45, 0.18, 0.12, 1)
+
+[node name="Roof" type="Polygon2D" parent="Building"]
+polygon = PackedVector2Array(-165, -110, 0, -185, 165, -110)
+color = Color(0.72, 0.34, 0.2, 1)
+
+[node name="Door" type="Polygon2D" parent="Building"]
+polygon = PackedVector2Array(-44, 12, 44, 12, 44, 110, -44, 110)
+color = Color(0.92, 0.62, 0.42, 1)
+
+[node name="BuildingBody" type="StaticBody2D" parent="."]
+position = Vector2(0, -110)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingBody"]
+position = Vector2(0, -34)
+shape = SubResource("RectangleShape2D_building")
+
+[node name="InteractionShape" type="CollisionShape2D" parent="."]
+position = Vector2(0, 22)
+shape = SubResource("RectangleShape2D_interaction")
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -170.0
+offset_top = -290.0
+offset_right = 170.0
+offset_bottom = -255.0
+text = "副本入口"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 0.88, 0.66, 1)
+theme_override_font_sizes/font_size = 22
+
+[node name="DescriptionLabel" type="Label" parent="."]
+offset_left = -180.0
+offset_top = -254.0
+offset_right = 180.0
+offset_bottom = -208.0
+text = "入口描述"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.76, 0.8, 0.82, 1)
+theme_override_font_sizes/font_size = 13
+
+[node name="PromptLabel" type="Label" parent="."]
+visible = false
+z_index = 20
+offset_left = -160.0
+offset_top = 95.0
+offset_right = 160.0
+offset_bottom = 130.0
+text = "[E] 进入副本"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
+theme_override_font_sizes/font_size = 18

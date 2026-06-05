@@ -37,10 +37,17 @@ func _ready() -> void:
 	get_tree().quit(1 if not failures.is_empty() else 0)
 
 func _validate_demo_flow(demo: Node, failures: Array[String]) -> void:
+	await _wait_for_demo_transition(demo)
 	var player: Node = demo.get("_player")
 	if player == null:
 		failures.append("Demo starts without a player")
 		return
+	var camera := demo.get("_camera") as Camera2D
+	if camera == null or camera.get_parent() != player:
+		failures.append("Demo camera does not follow the player across rooms")
+	var ui := demo.get_node_or_null("GameUIManager") as GameUIManager
+	if ui == null or ui.get("_room_game_mode") != demo:
+		failures.append("Demo does not bind its HUD to the active game mode")
 
 	var room_zero: Node = demo.get("_room_instances").get(0)
 	var first_door: Area2D = room_zero.get_node_or_null("Door_to_1") as Area2D if room_zero != null else null
@@ -49,6 +56,9 @@ func _validate_demo_flow(demo: Node, failures: Array[String]) -> void:
 		return
 
 	demo.call("_on_waves_cleared", 0)
+	var fate_controller: Control = demo.call("_get_fate_card_controller") as Control
+	if fate_controller != null:
+		fate_controller.call("hide_card_selection")
 	demo.call("_on_door_body_entered", player, first_door, 0, 1)
 	var near_door: Dictionary = demo.get("_near_door")
 	if near_door.is_empty():
@@ -60,10 +70,19 @@ func _validate_demo_flow(demo: Node, failures: Array[String]) -> void:
 		failures.append("Cleared first-room door cannot be opened")
 		return
 
-	await get_tree().create_timer(0.7).timeout
+	await _wait_for_demo_transition(demo)
 	var current_room_id: int = int(demo.get("_current_room_id"))
 	var key_count: int = int(demo.get("_room_key_count"))
 	if current_room_id != 1:
 		failures.append("Opening the first door does not advance the player to room 1")
 	if key_count != 1:
 		failures.append("Door progression does not preserve the expected key economy after room 1 entry")
+	if camera != null and camera.global_position.distance_to(player.global_position) > 1.0:
+		failures.append("Demo camera loses the player after advancing rooms")
+
+
+func _wait_for_demo_transition(demo: Node) -> void:
+	for i in range(40):
+		await get_tree().create_timer(0.05).timeout
+		if not bool(demo.get("_is_transitioning")):
+			return

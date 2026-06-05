@@ -55,7 +55,14 @@ func spawn_boss(room_id: String, floor: int, config: Dictionary = {}) -> Diction
 	boss_data["damage"] = int(20.0 * scaling["damage_mult"])
 	boss_data["max_phases"] = 2 + floor / 3
 	boss_data["phase"] = 1
-	
+
+	# 计算 Boss 体型缩放（与 MonsterInjector._generate_boss 保持一致）
+	# 第二关 1.5x，第三关 1.65，第四关 1.8，后续按 +0.15 递增
+	var boss_scale: float = 1.0
+	if floor >= 2:
+		boss_scale = 1.5 + (floor - 2) * 0.15
+	boss_data["boss_scale"] = boss_scale
+
 	_current_boss = boss_data
 	boss_spawned.emit(boss_data)
 	

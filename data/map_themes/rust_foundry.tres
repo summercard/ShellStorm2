@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MapThemeProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/map/MapThemeProfile.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "rust_foundry"
+display_name = "锈蚀铸造厂"
+fantasy = "失控生产线仍在运作。危险集中在狭窄主路，侧线提供改造与高价值库存。"
+difficulty_rank = 2
+visual_floor = 2
+layout_rules = {"pattern": "pressure_line", "path_length": 7, "branch_chance": 0.62, "basement_chance": 0.35, "upper_chance": 0.2, "sequence_variation_chance": 0.08, "path_sequence": ["COMBAT", "TRAP", "COMBAT", "ELITE"], "vertical_room_weights": {"COMBAT": 4.0, "ELITE": 3.0, "STORAGE": 3.0}}
+path_room_weights = {"COMBAT": 5.0, "TRAP": 2.0, "ELITE": 2.0, "SCAVENGE": 1.0}
+branch_room_weights = {"UPGRADE": 3.0, "STORAGE": 3.0, "TRAP": 2.0, "EVENT": 1.0, "MERCHANT": 1.0}
+required_branch_types = Array[String](["UPGRADE", "STORAGE"])
+enemy_rules = {"enemy_pool": ["shielded", "shielded", "exploder", "ranged_caster", "melee_chaser"], "hp_multiplier": 1.08, "damage_multiplier": 1.05, "speed_multiplier": 0.95, "name_prefix": "炉渣", "boss_name": "熔炉监工"}
+content_rules = {"container_bonus": 1, "event_pool": ["ambush", "trade", "curse"]}
+npc_rules = Array[Dictionary]([{"id": "foundry_mechanic", "name": "流亡机械师", "role": "生产线改造", "text": "机器不会停，但可以让它们替你工作。", "room_types": ["UPGRADE"], "chance": 1.0, "position": Vector2(100, 90), "color": Color(0.9, 0.48, 0.2, 1)}, {"id": "foundry_salvager", "name": "炉渣拾荒者", "role": "库存情报", "text": "地下库存更肥，也更容易被堵死。", "room_types": ["STORAGE"], "chance": 0.7, "position": Vector2(-100, 80), "color": Color(0.7, 0.55, 0.28, 1)}])

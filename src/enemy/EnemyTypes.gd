@@ -36,7 +36,7 @@ static func spawn_ranged(pos: Vector2) -> CharacterBody2D:
 	enemy.set("shoot_interval", 2.0)
 	var skill_comp := EnemySkillComponent.inject_ranged_skill(enemy)
 	enemy.add_child(skill_comp)
-	skill_comp.set_owner(enemy)
+	skill_comp.set_component_owner(enemy)
 	return enemy
 
 ## ========== 3. 召唤型 — 蜂巢怪 ==========
@@ -52,7 +52,7 @@ static func spawn_summoner(pos: Vector2) -> CharacterBody2D:
 	enemy.set("summon_interval", 5.0)
 	var skill_comp := EnemySkillComponent.inject_summoner_skill(enemy)
 	enemy.add_child(skill_comp)
-	skill_comp.set_owner(enemy)
+	skill_comp.set_component_owner(enemy)
 	return enemy
 
 ## ========== 4. 护盾型 — 壳甲卫兵 ==========
@@ -68,7 +68,7 @@ static func spawn_tank(pos: Vector2) -> CharacterBody2D:
 	enemy.set("shield_rate", 0.3)  # 30% 概率格挡
 	var skill_comp := EnemySkillComponent.inject_tank_skill(enemy)
 	enemy.add_child(skill_comp)
-	skill_comp.set_owner(enemy)
+	skill_comp.set_component_owner(enemy)
 	return enemy
 
 ## ========== 5. 自爆型 — 膨胀鼠 ==========
@@ -85,7 +85,7 @@ static func spawn_bomber(pos: Vector2) -> CharacterBody2D:
 	enemy.set("explosion_damage", 25)
 	var skill_comp := EnemySkillComponent.inject_bomber_skill(enemy)
 	enemy.add_child(skill_comp)
-	skill_comp.set_owner(enemy)
+	skill_comp.set_component_owner(enemy)
 	return enemy
 
 ## ========== 6. 潜伏型 — 地刺虫 ==========
@@ -101,7 +101,7 @@ static func spawn_trapper(pos: Vector2) -> CharacterBody2D:
 	enemy.set("trigger_radius", 100.0)
 	var skill_comp := EnemySkillComponent.inject_trapper_skill(enemy)
 	enemy.add_child(skill_comp)
-	skill_comp.set_owner(enemy)
+	skill_comp.set_component_owner(enemy)
 	return enemy
 
 ## ========== 内部工具 ==========

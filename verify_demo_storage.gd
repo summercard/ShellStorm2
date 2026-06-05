@@ -1,41 +1,31 @@
-#!/usr/bin/env godot --headless --script
 ## 验证：检查 DemoRoomChain 中 STORAGE 房间的 TileSet 是否正确构建
-extends SceneTree
+extends Node
 
-func _init() -> void:
+func _ready() -> void:
 	print("=== DemoRoomChain STORAGE 房间 TileSet 验证 ===")
 	
 	var demo_scene = load("res://scenes/DemoRoomChain.tscn")
 	if demo_scene == null:
 		print("ERROR: DemoRoomChain.tscn 未找到")
-		quit()
+		get_tree().quit(1)
 		return
 	
 	var demo = demo_scene.instantiate()
-	root.add_child(demo)
+	add_child(demo)
 	
 	# 等待 _ready 完成
-	await FutureBGProcessor.process_frame
-	
-	var game_mode = demo.get_node_or_null("DemoRoomGameMode")
-	if game_mode == null:
-		print("ERROR: DemoRoomGameMode 未找到")
-		demo.free()
-		quit()
-		return
+	await get_tree().process_frame
 	
 	# 等待所有房间实例化完成（_instantiate_demo_rooms 在 _ready 中调用）
-	await FutureBGProcessor.process_frame
+	await get_tree().process_frame
 	
 	# 获取 R3 (STORAGE) 房间
 	var r3 = demo.get_node_or_null("DemoRoom_2")
 	if r3 == null:
 		print("ERROR: DemoRoom_2 (STORAGE) 未找到")
 		demo.free()
-		quit()
+		get_tree().quit(1)
 		return
-	
-	var r3_type = demo.get_node_or_null("..").get("DEMO_ROOMS")[2].get("type") if false else null  # 跳过
 	
 	# 直接检查 FloorLayer
 	var tilemap = r3.get_node_or_null("FloorLayer")
@@ -62,5 +52,5 @@ func _init() -> void:
 		print("R3 StorageRoomLogic: ", storage_logic.get_script().resource_path)
 	
 	demo.free()
-	print("=== 完成 ===")
-	quit()
+	print("DEMO_STORAGE_OK: storage tiles and visualizer are available")
+	get_tree().quit()

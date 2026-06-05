@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MapThemeProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/map/MapThemeProfile.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "iron_frontier"
+display_name = "冷钢边境"
+fantasy = "废弃防线与冷却管道组成的边境哨站。路线稳定，适合建立第一套搜打撤认知。"
+difficulty_rank = 1
+visual_floor = 1
+layout_rules = {"pattern": "patrol_route", "path_length": 6, "branch_chance": 0.5, "basement_chance": 0.15, "upper_chance": 0.1, "sequence_variation_chance": 0.12, "path_sequence": ["COMBAT", "SCAVENGE", "COMBAT", "EVENT"], "vertical_room_weights": {"SCAVENGE": 4.0, "COMBAT": 3.0, "STORAGE": 2.0}}
+path_room_weights = {"COMBAT": 6.0, "SCAVENGE": 2.0, "EVENT": 1.0}
+branch_room_weights = {"SCAVENGE": 3.0, "MERCHANT": 2.0, "UPGRADE": 2.0, "EVENT": 1.0, "STORAGE": 1.0}
+required_branch_types = Array[String](["MERCHANT", "UPGRADE"])
+enemy_rules = {"enemy_pool": ["melee_chaser", "melee_chaser", "ranged_caster", "exploder"], "hp_multiplier": 0.95, "damage_multiplier": 0.95, "speed_multiplier": 1.0, "name_prefix": "边境", "boss_name": "边境封锁机"}
+content_rules = {"container_bonus": 0, "event_pool": ["trade", "blessing", "ambush"]}
+npc_rules = Array[Dictionary]([{"id": "frontier_quartermaster", "name": "边防军需官", "role": "补给与路线情报", "text": "主路安全，但真正值钱的东西都在侧翼仓库。", "room_types": ["MERCHANT"], "chance": 1.0, "position": Vector2(0, 120), "color": Color(0.35, 0.65, 0.85, 1)}, {"id": "frontier_scout", "name": "失联侦察兵", "role": "区域线索", "text": "每次警报都会把相邻房间的敌人引过来。", "room_types": ["EVENT"], "chance": 0.55, "position": Vector2(-120, 80), "color": Color(0.45, 0.75, 0.55, 1)}])

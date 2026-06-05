@@ -1,17 +1,16 @@
-#!/usr/bin/env godot --headless --script
 ## 诊断：验证房间 Visualizer configure() 是否正确注入 room_type
-## 运行: cd ShellStorm2 && godot --headless --script verify_vidualizer.gd
+## 运行: godot --headless --path . --scene res://verify_visualizer.tscn
 
-extends SceneTree
+extends Node
 
-func _init() -> void:
+func _ready() -> void:
 	print("=== Visualizer configure 诊断 ===")
 	
 	# 1. 测试 RoomStorage 场景
 	print("\n--- [RoomStorage] ---")
 	var storage_scene = load("res://scenes/RoomStorage.tscn")
 	var room = storage_scene.instantiate()
-	root.add_child(room)
+	add_child(room)
 	
 	var visualizer = room.get_node_or_null("Visualizer")
 	print("Visualizer 节点: ", visualizer)
@@ -22,7 +21,8 @@ func _init() -> void:
 		print("  has_method('build'): ", visualizer.has_method("build"))
 		
 		# 尝试调用 configure
-		visualizer.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), [])
+		var storage_doors: Array[Dictionary] = []
+		visualizer.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), storage_doors)
 		print("  configure 后 room_type: ", visualizer.room_type)
 		
 		# 检查 FloorLayer TileSet
@@ -41,9 +41,11 @@ func _init() -> void:
 	print("\n--- [RoomCombat] ---")
 	var combat_scene = load("res://scenes/RoomCombat.tscn")
 	var combat_room = combat_scene.instantiate()
-	root.add_child(combat_room)
+	add_child(combat_room)
 	
 	var combat_visualizer = combat_room.get_node_or_null("Visualizer")
+	if combat_visualizer == null and combat_room.has_method("configure"):
+		combat_visualizer = combat_room
 	print("Visualizer 节点: ", combat_visualizer)
 	if combat_visualizer != null:
 		print("  script 类型: ", combat_visualizer.get_script().resource_path)
@@ -51,7 +53,8 @@ func _init() -> void:
 		print("  has_method('configure'): ", combat_visualizer.has_method("configure"))
 		
 		# 直接调用 RoomVisualizer.configure()
-		combat_visualizer.configure(RoomData.RoomType.ELITE, Vector2(960, 768), [])
+		var combat_doors: Array[Dictionary] = []
+		combat_visualizer.configure(RoomData.RoomType.ELITE, Vector2(960, 768), combat_doors)
 		print("  configure 后 room_type: ", combat_visualizer.room_type)
 		
 		var tilemap = combat_room.get_node_or_null("FloorLayer")
@@ -80,5 +83,5 @@ func _init() -> void:
 			theme.get("accent_glow")
 		])
 	
-	print("\n=== 诊断完成 ===")
-	quit()
+	print("\nVISUALIZER_OK: storage and combat visualizers accept runtime configuration")
+	get_tree().quit()

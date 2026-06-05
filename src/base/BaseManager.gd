@@ -8,15 +8,13 @@ func _ready() -> void:
 	load_base()
 
 func load_base() -> void:
-	if FileAccess.file_exists(SAVE_PATH):
-		var f := FileAccess.open(SAVE_PATH, FileAccess.READ)
-		if f:
-			var json_str := f.get_as_text()
-			f.close()
-			var json: Variant = JSON.parse_string(json_str)
-			if json and typeof(json) == TYPE_DICTIONARY:
-				data = BaseData.from_dict(json as Dictionary)
-				return
+	var json: Variant = AtomicJsonStore.load_dictionary(SAVE_PATH)
+	if json is Dictionary:
+		var save_version := str(json.get("save_version", "legacy"))
+		if save_version != BaseData.SAVE_VERSION:
+			push_warning("[BaseManager] Loading compatible save version %s" % save_version)
+		data = BaseData.from_dict(json)
+		return
 	data = BaseData.new()
 
 func _ensure_data() -> void:
@@ -24,11 +22,8 @@ func _ensure_data() -> void:
 		load_base()
 
 func save_base() -> void:
-	var json_str := JSON.stringify(data._to_dict(), "\t")
-	var f := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	if f:
-		f.store_string(json_str)
-		f.close()
+	_ensure_data()
+	AtomicJsonStore.save_dictionary(SAVE_PATH, data._to_dict())
 
 func record_run(success: bool, kills: int) -> void:
 	data.record_run(success, kills)

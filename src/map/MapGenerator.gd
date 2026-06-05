@@ -2,11 +2,14 @@ class_name MapGenerator
 extends RefCounted
 ## 随机地图生成器 — 根据楼层生成节点图结构的地图
 
+const THEME_PROFILE_SCRIPT := preload("res://src/map/MapThemeProfile.gd")
+
 signal map_generated(graph: NodeGraph)
 
 ## 地图生成配置
 var _rng: RandomNumberGenerator
 var _current_floor: int = 1
+var _theme_profile: Resource = null
 
 ## 生成配置
 const MIN_PATH_LENGTH := 4   # 最短路径长度（房间数）
@@ -21,6 +24,10 @@ const FLOOR_ROOM_CONFIG = {
 	4: { "path_len": 7, "elite_chance": 0.35, "scavenge_chance": 0.1, "merchant_chance": 0.1, "event_chance": 0.2, "boss_exists": true },
 }
 
+
+func set_theme_profile(profile: Resource) -> void:
+	_theme_profile = profile
+
 ## 生成地图
 func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	_current_floor = floor
@@ -32,7 +39,10 @@ func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	_rng.seed = seed_value
 	
 	# 获取楼层配置
-	var config: Dictionary = FLOOR_ROOM_CONFIG.get(floor, FLOOR_ROOM_CONFIG[4])
+	var config: Dictionary = FLOOR_ROOM_CONFIG.get(floor, FLOOR_ROOM_CONFIG[4]).duplicate(true)
+	if _theme_profile != null:
+		config["path_len"] = int(_theme_profile.get_layout_rule("path_length", config["path_len"]))
+		config["branch_chance"] = float(_theme_profile.get_layout_rule("branch_chance", 0.55))
 	
 	# 创建节点图
 	var graph := NodeGraph.new()
@@ -41,7 +51,8 @@ func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	var path_length: int = config["path_len"]
 	var main_path: Array[int] = _generate_main_path(graph, path_length)
 	
-	# 在主路径节点之间插入特殊房间
+	# 先放置主题必出节点，再填充随机支线，避免概率内容占满可用位置。
+	_ensure_required_theme_branches(graph, main_path)
 	_generate_special_rooms(graph, main_path, config)
 	
 	# 确保Boss房存在且在末端
@@ -55,6 +66,7 @@ func generate(floor: int, seed_value: int = -1) -> NodeGraph:
 	
 	# 生成垂直关卡（地下室、二楼等）
 	_generate_vertical_levels(graph, main_path)
+	_apply_theme_tags(graph)
 	
 	map_generated.emit(graph)
 	return graph
@@ -111,6 +123,14 @@ func _generate_main_path(graph: NodeGraph, length: int) -> Array[int]:
 
 ## 选择路径上的房间类型
 func _choose_path_room_type(index: int, total: int) -> RoomData.RoomType:
+	if _theme_profile != null:
+		var sequence: Array = _theme_profile.get_layout_rule("path_sequence", [])
+		var variation := float(_theme_profile.get_layout_rule("sequence_variation_chance", 0.15))
+		if not sequence.is_empty() and _rng.randf() >= variation:
+			return THEME_PROFILE_SCRIPT.room_type_from_name(str(sequence[(index - 1) % sequence.size()]))
+		return _theme_profile.choose_room_type(
+			_rng, _theme_profile.path_room_weights, RoomData.RoomType.COMBAT
+		)
 	var roll := _rng.randf()
 	
 	# 浅层/前段：普通战斗为主
@@ -131,7 +151,10 @@ func _choose_path_room_type(index: int, total: int) -> RoomData.RoomType:
 ## 在路径节点之间插入特殊房间
 func _generate_special_rooms(graph: NodeGraph, path_ids: Array[int], config: Dictionary) -> void:
 	# 在相邻节点之间添加分支
-	var branch_chance: float = config["elite_chance"] + config["scavenge_chance"] + config["merchant_chance"] + config["event_chance"]
+	var branch_chance: float = float(config.get(
+		"branch_chance",
+		config["elite_chance"] + config["scavenge_chance"] + config["merchant_chance"] + config["event_chance"]
+	))
 	
 	for i in range(1, path_ids.size() - 1):
 		var from_id: int = path_ids[i]
@@ -149,9 +172,10 @@ func _generate_special_rooms(graph: NodeGraph, path_ids: Array[int], config: Dic
 		
 		# 分支房是物理侧房，只接在主路径房间上，避免生成无法对齐门洞的斜向连接。
 		var side := -1.0 if _rng.randf() < 0.5 else 1.0
-		var offset_pos := from_node.position + Vector2(0, ROOM_SPACING.y * side)
+		var side_spacing: float = (from_node.room_data.size.y + branch_data.size.y) * 0.5
+		var offset_pos := from_node.position + Vector2(0, side_spacing * side)
 		if _is_position_occupied(graph, offset_pos):
-			offset_pos = from_node.position + Vector2(0, -ROOM_SPACING.y * side)
+			offset_pos = from_node.position + Vector2(0, -side_spacing * side)
 		if _is_position_occupied(graph, offset_pos):
 			continue
 		var branch_id := graph.add_node(branch_data, offset_pos)
@@ -166,6 +190,10 @@ func _is_position_occupied(graph: NodeGraph, pos: Vector2) -> bool:
 
 ## 选择特殊房间类型
 func _choose_special_room_type(config: Dictionary) -> RoomData.RoomType:
+	if _theme_profile != null:
+		return _theme_profile.choose_room_type(
+			_rng, _theme_profile.branch_room_weights, RoomData.RoomType.EVENT
+		)
 	var roll := _rng.randf()
 	var elite_chance: float = config["elite_chance"]
 	var scavenge_chance: float = config["scavenge_chance"]
@@ -224,9 +252,10 @@ func _ensure_extraction_room(graph: NodeGraph, path_ids: Array[int]) -> void:
 	var extraction_data := RoomData.new(RoomData.RoomType.EXTRACTION, _current_floor)
 	extraction_data.floor_level = RoomData.FloorLevel.MEDIUM
 	extraction_data.auto_size()
-	var extraction_pos := anchor_node.position + Vector2(0, ROOM_SPACING.y)
+	var side_spacing: float = (anchor_node.room_data.size.y + extraction_data.size.y) * 0.5
+	var extraction_pos := anchor_node.position + Vector2(0, side_spacing)
 	if _is_position_occupied(graph, extraction_pos):
-		extraction_pos = anchor_node.position + Vector2(0, -ROOM_SPACING.y)
+		extraction_pos = anchor_node.position + Vector2(0, -side_spacing)
 	var extraction_id := graph.add_node(extraction_data, extraction_pos)
 	graph.add_edge(anchor_id, extraction_id, true)
 
@@ -253,7 +282,10 @@ func _set_floor_levels(graph: NodeGraph, path_ids: Array[int]) -> void:
 ## 每个垂直层都有自己的房间分支，通过楼梯/电梯连接
 func _generate_vertical_levels(graph: NodeGraph, main_path: Array[int]) -> void:
 	# 地下室概率：每层有30%概率在路径中某处生成地下室分支
-	if _rng.randf() < 0.30:
+	var basement_chance := 0.30
+	if _theme_profile != null:
+		basement_chance = float(_theme_profile.get_layout_rule("basement_chance", basement_chance))
+	if _rng.randf() < basement_chance:
 		# 找到适合的分叉点（避开出生房和Boss房）
 		var branch_candidates: Array[int] = []
 		for j in range(2, main_path.size() - 1):
@@ -271,6 +303,8 @@ func _generate_vertical_levels(graph: NodeGraph, main_path: Array[int]) -> void:
 		
 	# 二楼概率：每层有20%概率生成二楼分支（更深楼层概率更高）
 	var upper_chance: float = 0.10 + 0.05 * _current_floor
+	if _theme_profile != null:
+		upper_chance = float(_theme_profile.get_layout_rule("upper_chance", upper_chance))
 	if _rng.randf() < upper_chance:
 		var branch_candidates: Array[int] = []
 		for j in range(1, main_path.size() - 1):
@@ -279,7 +313,7 @@ func _generate_vertical_levels(graph: NodeGraph, main_path: Array[int]) -> void:
 				branch_candidates.append(main_path[j])
 		
 		if not branch_candidates.is_empty():
-			var anchor_idx: int = branch_candidates[randi() % branch_candidates.size()]
+			var anchor_idx: int = branch_candidates[_rng.randi() % branch_candidates.size()]
 			var anchor_node: NodeGraph.RoomNode = graph.get_node(anchor_idx)
 			
 			_add_vertical_branch(graph, anchor_node, RoomData.RoomType.STAIRS_UP, RoomData.VerticalLevel.UPPER, 1, 1)
@@ -295,17 +329,18 @@ func _add_vertical_branch(
 	max_rooms: int
 ) -> void:
 	# 生成楼梯入口房间
-	var side_offset: float = -1.0 if _rng.randf() < 0.5 else 1.0
-	var stairs_pos: Vector2 = anchor_node.position + Vector2(0, ROOM_SPACING.y * side_offset)
-	if _is_position_occupied_by_level(graph, stairs_pos, anchor_node.room_data.vertical_level):
-		stairs_pos = anchor_node.position + Vector2(0, -ROOM_SPACING.y * side_offset)
-	if _is_position_occupied_by_level(graph, stairs_pos, anchor_node.room_data.vertical_level):
-		return  # 无法放置
-	
 	var stairs_data := RoomData.new(stairs_type, _current_floor)
 	stairs_data.vertical_level = anchor_node.room_data.vertical_level
 	stairs_data.floor_level = anchor_node.room_data.floor_level
 	stairs_data.auto_size()
+	var side_offset: float = -1.0 if _rng.randf() < 0.5 else 1.0
+	var side_spacing: float = (anchor_node.room_data.size.y + stairs_data.size.y) * 0.5
+	var stairs_pos: Vector2 = anchor_node.position + Vector2(0, side_spacing * side_offset)
+	if _is_position_occupied_by_level(graph, stairs_pos, anchor_node.room_data.vertical_level):
+		stairs_pos = anchor_node.position + Vector2(0, -side_spacing * side_offset)
+	if _is_position_occupied_by_level(graph, stairs_pos, anchor_node.room_data.vertical_level):
+		return  # 无法放置
+	
 	var stairs_id := graph.add_node(stairs_data, stairs_pos)
 	graph.add_edge(anchor_node.id, stairs_id, true)
 	
@@ -329,6 +364,7 @@ func _add_vertical_branch(
 		# 如果是地下室，提升难度（地下室总是更难）
 		if target_vertical == RoomData.VerticalLevel.BASEMENT:
 			target_data.floor_level = RoomData.FloorLevel.MEDIUM
+		target_data.auto_size()
 		
 		var target_pos := last_pos + Vector2(ROOM_SPACING.x * 0.5, ROOM_SPACING.y * vertical_offset)
 		if _is_position_occupied_by_level(graph, target_pos, target_vertical):
@@ -345,6 +381,10 @@ func _add_vertical_branch(
 
 ## 选择垂直楼层的房间类型（主要生成搜刮房、战斗房、精英房）
 func _choose_vertical_room_type() -> RoomData.RoomType:
+	if _theme_profile != null:
+		var weights: Dictionary = _theme_profile.get_layout_rule("vertical_room_weights", {})
+		if not weights.is_empty():
+			return _theme_profile.choose_room_type(_rng, weights, RoomData.RoomType.SCAVENGE)
 	var roll := _rng.randf()
 	
 	if roll < 0.35:
@@ -370,6 +410,47 @@ func _is_position_occupied_by_level(graph: NodeGraph, pos: Vector2, vertical_lev
 ## 获取当前楼层
 func get_current_floor() -> int:
 	return _current_floor
+
+
+func _ensure_required_theme_branches(graph: NodeGraph, main_path: Array[int]) -> void:
+	if _theme_profile == null or main_path.size() < 3:
+		return
+	for room_name in _theme_profile.required_branch_types:
+		var room_type := THEME_PROFILE_SCRIPT.room_type_from_name(room_name, RoomData.RoomType.INVALID)
+		if room_type == RoomData.RoomType.INVALID or _graph_has_room_type(graph, room_type):
+			continue
+		for anchor_index in range(1, main_path.size() - 1):
+			var anchor := graph.get_node(main_path[anchor_index])
+			var data := RoomData.new(room_type, _current_floor)
+			data.auto_size()
+			var side := -1.0 if anchor_index % 2 == 0 else 1.0
+			var spacing := (anchor.room_data.size.y + data.size.y) * 0.5
+			var position := anchor.position + Vector2(0.0, spacing * side)
+			if _is_position_occupied(graph, position):
+				position = anchor.position + Vector2(0.0, -spacing * side)
+			if _is_position_occupied(graph, position):
+				continue
+			var branch_id := graph.add_node(data, position)
+			graph.add_edge(anchor.id, branch_id, true)
+			break
+
+
+func _graph_has_room_type(graph: NodeGraph, room_type: RoomData.RoomType) -> bool:
+	for node in graph.get_all_nodes():
+		if node.room_data != null and node.room_data.room_type == room_type:
+			return true
+	return false
+
+
+func _apply_theme_tags(graph: NodeGraph) -> void:
+	if _theme_profile == null:
+		return
+	for node in graph.get_all_nodes():
+		var data: RoomData = node.room_data
+		data.theme_id = _theme_profile.theme_id
+		data.visual_floor = int(_theme_profile.get("visual_floor"))
+		data.add_tag("theme:%s" % _theme_profile.theme_id)
+		data.add_tag("pattern:%s" % str(_theme_profile.get_layout_rule("pattern", "branching_path")))
 
 ## 调试：打印生成的地图
 func debug_map(graph: NodeGraph) -> String:

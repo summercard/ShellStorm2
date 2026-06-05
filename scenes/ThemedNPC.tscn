@@ -1,0 +1,59 @@
+[gd_scene load_steps=3 format=3 uid="uid://themed_npc_scene"]
+
+[ext_resource type="Script" path="res://src/game/ThemedNPC.gd" id="1_npc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_npc"]
+radius = 72.0
+
+[node name="ThemedNPC" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_npc")
+
+[node name="Body" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-22, -28, 22, -28, 28, 18, 0, 34, -28, 18)
+color = Color(0.35, 0.75, 0.9, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_npc")
+
+[node name="NameLabel" type="Label" parent="."]
+offset_left = -100.0
+offset_top = -72.0
+offset_right = 100.0
+offset_bottom = -46.0
+text = "区域居民"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+
+[node name="RoleLabel" type="Label" parent="."]
+offset_left = -100.0
+offset_top = 42.0
+offset_right = 100.0
+offset_bottom = 66.0
+text = "情报提供者"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.55, 0.7, 0.8, 1)
+theme_override_font_sizes/font_size = 11
+
+[node name="PromptLabel" type="Label" parent="."]
+offset_left = -110.0
+offset_top = 72.0
+offset_right = 110.0
+offset_bottom = 98.0
+text = "[E] 交谈"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(1, 0.86, 0.42, 1)
+
+[node name="DialogueLabel" type="Label" parent="."]
+z_index = 10
+offset_left = -180.0
+offset_top = -142.0
+offset_right = 180.0
+offset_bottom = -88.0
+text = "这片区域仍有许多秘密。"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.95, 1, 1)
+theme_override_font_sizes/font_size = 13

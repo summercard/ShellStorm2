@@ -15,6 +15,7 @@ const INVINCIBLE_DURATION: float = 0.22
 
 @export var max_hp: int = 100
 @export var armor: int = 0
+@export var combat_enabled: bool = true
 
 var current_hp: int = 100
 var is_invincible: bool = false
@@ -56,6 +57,7 @@ func _ready() -> void:
 	if invincible_timer and not invincible_timer.timeout.is_connected(_on_invincible_timeout):
 		invincible_timer.timeout.connect(_on_invincible_timeout)
 	add_to_group("player")
+	set_combat_enabled(combat_enabled)
 	hp_changed.emit(current_hp, max_hp)
 
 	# 连接移动端控制信号
@@ -251,6 +253,20 @@ func set_input_locked(locked: bool) -> void:
 	if locked:
 		is_dashing = false
 		velocity = Vector2.ZERO
+
+
+func set_combat_enabled(enabled: bool) -> void:
+	combat_enabled = enabled
+	var aim_node := get_node_or_null("Aim") as CanvasItem
+	var weapon_display := get_node_or_null("WeaponAnchor") as CanvasItem
+	if aim_node != null:
+		aim_node.visible = enabled
+	if weapon_display != null:
+		weapon_display.visible = enabled
+
+
+func is_combat_enabled() -> bool:
+	return combat_enabled
 
 ## 沉默入口（被精英"抢枪"词缀 skill_countershot 命中时由 EliteActiveSkillComponent 调用）
 func apply_silence(duration: float) -> void:

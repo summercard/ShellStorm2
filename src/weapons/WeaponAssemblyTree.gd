@@ -22,9 +22,9 @@ var root: AssemblyNode = null
 const MAX_DEPTH: int = 5
 
 ## 弹药属性（直接从 WeaponCore 迁移过来的弹药管理逻辑）
+## 注意：换弹使用 async await 模式，不使用 _reload_timer 累加
 var _fire_cooldown: float = 0.0
 var _is_reloading: bool = false
-var _reload_timer: float = 0.0
 
 ## 射击参数（由装配树动态决定）
 var fire_rate: float = 4.0  # 每秒射击次数（来自根枪身）

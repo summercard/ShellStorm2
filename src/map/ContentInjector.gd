@@ -2,6 +2,16 @@ class_name ContentInjector
 extends RefCounted
 ## 内容注入器接口 — 定义房间内容注入的协议
 
+var _rng := RandomNumberGenerator.new()
+var _theme_profile: Resource = null
+
+func set_seed(seed_value: int) -> void:
+	_rng.seed = seed_value
+
+
+func set_theme_profile(profile: Resource) -> void:
+	_theme_profile = profile
+
 ## 返回内容字典的结构
 class ContentConfig:
 	var enemies: Array[Dictionary] = []   # 怪物配置列表
@@ -59,7 +69,8 @@ func inject(room_data: RoomData) -> ContentConfig:
 			_inject_stairs_room(config, room_data)
 		RoomData.RoomType.ELEVATOR:
 			_inject_elevator_room(config, room_data)
-	
+
+	_apply_theme_content(config, room_data)
 	return config
 
 ## 注入出生房间
@@ -139,17 +150,17 @@ func _inject_scavenge_room(config: ContentConfig, room_data: RoomData) -> void:
 	var containers: Array[String] = ["crate", "locker", "hidden_cache"]
 	
 	for i in range(container_count):
-		var container_type: String = containers[randi() % containers.size()]
+		var container_type: String = containers[_rng.randi() % containers.size()]
 		var container := {
 			"type": container_type,
 			"position": _get_scavenge_position(i),
 			"loot_table": "scavenge_floor_%d" % [min(5, room_data.floor)],
-			"has_secret": randf() < 0.3
+			"has_secret": _rng.randf() < 0.3
 		}
 		config.interactables.append(container)
 	
 	# 可能有1-2个守卫
-	if randf() < 0.5:
+	if _rng.randf() < 0.5:
 		config.enemies.append({
 			"type": "random",
 			"floor": room_data.floor,
@@ -187,7 +198,13 @@ func _inject_upgrade_room(config: ContentConfig, room_data: RoomData) -> void:
 func _inject_event_room(config: ContentConfig, room_data: RoomData) -> void:
 	# 事件房：随机事件触发器
 	var event_types: Array[String] = ["gamble", "trade", "curse", "blessing", "ambush"]
-	var event_type: String = event_types[randi() % event_types.size()]
+	if _theme_profile != null:
+		var themed_events: Array = _theme_profile.get_content_rule("event_pool", [])
+		if not themed_events.is_empty():
+			event_types.clear()
+			for event_name in themed_events:
+				event_types.append(str(event_name))
+	var event_type: String = event_types[_rng.randi() % event_types.size()]
 	
 	config.events.append({
 		"type": event_type,
@@ -270,17 +287,17 @@ func _inject_basement_room(config: ContentConfig, room_data: RoomData) -> void:
 	var containers: Array[String] = ["crate", "locker", "hidden_cache", "chest"]
 	
 	for i in range(container_count):
-		var container_type: String = containers[randi() % containers.size()]
+		var container_type: String = containers[_rng.randi() % containers.size()]
 		var container := {
 			"type": container_type,
 			"position": _get_scavenge_position(i),
 			"loot_table": "scavenge_floor_%d" % [min(5, room_data.floor)],  # 修复：basement_floor_* 不存在于 ItemRegistry，用 scavenge_floor_* 代替
-			"has_secret": randf() < 0.4  # 地下室更多隐藏容器
+			"has_secret": _rng.randf() < 0.4  # 地下室更多隐藏容器
 		}
 		config.interactables.append(container)
 	
 	# 地下室精英怪概率更高（难度补偿）
-	if randf() < 0.6:
+	if _rng.randf() < 0.6:
 		config.enemies.append({
 			"type": "elite",
 			"floor": room_data.floor,
@@ -321,3 +338,37 @@ func _inject_elevator_room(config: ContentConfig, room_data: RoomData) -> void:
 		"can_go_up": room_data.vertical_level != RoomData.VerticalLevel.UPPER,
 		"can_go_down": room_data.vertical_level != RoomData.VerticalLevel.BASEMENT,
 	})
+
+
+func _apply_theme_content(config: ContentConfig, room_data: RoomData) -> void:
+	if _theme_profile == null:
+		return
+	config.special_conditions.append("theme:%s" % _theme_profile.theme_id)
+	for enemy_config in config.enemies:
+		enemy_config["theme_id"] = _theme_profile.theme_id
+
+	var container_bonus := int(_theme_profile.get_content_rule("container_bonus", 0))
+	if container_bonus > 0 and room_data.room_type in [
+		RoomData.RoomType.SCAVENGE, RoomData.RoomType.STORAGE, RoomData.RoomType.EVENT
+	]:
+		for i in range(container_bonus):
+			config.interactables.append({
+				"type": "hidden_cache",
+				"position": _get_scavenge_position(config.interactables.size() + i),
+				"loot_table": "scavenge_floor_%d" % min(5, room_data.floor),
+				"theme_id": _theme_profile.theme_id,
+			})
+
+	for npc_rule in _theme_profile.npc_rules:
+		var room_types: Array = npc_rule.get("room_types", [])
+		var room_name := RoomData.get_type_name(room_data.room_type)
+		var enum_name: String = RoomData.get_type_id_name(room_data.room_type)
+		if not room_types.is_empty() and enum_name not in room_types and room_name not in room_types:
+			continue
+		if _rng.randf() > float(npc_rule.get("chance", 1.0)):
+			continue
+		var npc_config: Dictionary = npc_rule.duplicate(true)
+		npc_config["type"] = "themed_npc"
+		npc_config["position"] = npc_config.get("position", Vector2(0, 110))
+		npc_config["theme_id"] = _theme_profile.theme_id
+		config.interactables.append(npc_config)

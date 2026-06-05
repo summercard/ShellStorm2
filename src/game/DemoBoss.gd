@@ -139,7 +139,7 @@ func _trigger_hit_screen_shake(damage: float, is_crit: bool) -> void:
 func _notify_boss_damaged(damage: float) -> void:
 	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
 	if gui != null and gui.has_method("on_boss_damaged"):
-		gui.call("on_boss_damaged", boss_id, damage, _current_hp, max_hp)
+		gui.call("on_boss_damaged", boss_id, damage, _current_hp)
 
 ## Boss 死亡粒子爆炸效果（放射状扩散消散）
 func _spawn_death_particles() -> void:

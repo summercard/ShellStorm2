@@ -59,6 +59,10 @@ func _ready() -> void:
 			await get_tree().process_frame
 			if mode.extraction_module.get_status() != ExtractionModule.ExtractionStatus.COUNTDOWN:
 				failures.append("Switch activation does not enter extraction countdown")
+			mode.player.heal(1)
+			await get_tree().process_frame
+			if mode.extraction_module.get_status() != ExtractionModule.ExtractionStatus.COUNTDOWN:
+				failures.append("Healing incorrectly interrupts extraction countdown")
 			if _count_enemies(extraction_room) < 1:
 				failures.append("Extraction countdown does not immediately create pressure")
 			var countdown_bar := ui.get_node_or_null("ExtractionPanel/VBox/CountdownBar") as Control

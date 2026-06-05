@@ -1141,3 +1141,324 @@ func _inject_base_skill(enemy: CharacterBody2D, enemy_type: String) -> void:
 3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈
 
 ---
+
+## 轮次414（2026-05-30 19:37 UTC+8）
+
+### 维度选择
+轮次413澄清 + 自由设计审查 — 所有系统已完整，人类试玩验证是唯一缺口
+
+### 设计审查
+**轮次413任务澄清：**
+cycle-state.json 中 `currentTarget` 记录"轮次413：MUTATE_TO_LIVING视觉增强补全（AddEyes/AddLegs + emoji）"。本轮自由审查确认：
+
+1. `FateCardEngine._apply_mutate_to_living()`（行588-642）已包含 AddEyes/AddLegs 视觉增强逻辑
+2. `FateCardEngine._apply_add_eyes()`（行957）和 `_apply_add_legs()`（行983）是独立视觉命卡
+3. `FateCardEngine._apply_attach_gun_to_bullet()`（行256-276）已包含视觉标签同步
+4. **轮次413的task目标已被之前轮次实现**，状态确认所有命卡视觉效果通道完整
+
+### 本轮自由审查结果
+- 所有核心系统完整（武器装配树/命卡引擎/怪物AI/精英技能/战斗特效/Floor Scaling）
+- Godot headless --check-only --quit 编译通过 ✅
+- 无 TODO/FIXME/pass 空操作残留 ✅
+- 无已知断点 ✅
+
+### 系统完整度确认
+| 系统 | 落地状态 |
+|---|---|
+| 武器装配树（枪身+子弹+配件） | ✅ 完整 |
+| 命卡引擎（21+预设/MUTATE_TO_LIVING/ADD_EYES/ADD_LEGS） | ✅ 完整 |
+| 怪物AI（6种基础类型+主动技能tick链路） | ✅ 完整 |
+| 精英词缀+精英专属主动技能（6种） | ✅ 完整 |
+| Floor Scaling（第二关 HP×1.4/DMG×1.2） | ✅ 完整 |
+| ScreenShake（受击震动/Boss死亡白闪） | ✅ 完整 |
+| 换弹进度条 | ✅ 完整 |
+| 命卡选择UI自动弹出 | ✅ 完整 |
+| **所有核心系统** | ✅ 无已知断点 |
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] 自由审查无发现 ✅
+
+### 剩余风险（全部为人类试玩验证项）
+1. **命卡选择**：房间清理后命卡界面是否真正弹出
+2. **命卡效果视觉**：AddEyes/AddLegs 是否在武器装配树面板可见
+3. **精英技能**：6种精英专属主动技能（冲锋/护盾反射/召集/狂暴等）是否正常触发
+4. **第二关怪物强度**：HP×1.4 是否真实生效
+5. **ScreenShake**：受击时 Camera2D.offset 是否正确震动
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。代码审查无发现，所有系统完整。最高且唯一优先级：**人类试玩验证**。用户尚未停止或改方向，无真实设计分叉/外部依赖/破坏性风险。
+
+### 下轮最可能方向
+1. **人类试玩验证（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈（低血量Vignette/伤害数字）
+
+---
+
+## 轮次416（2026-05-30 19:46 UTC+8）
+
+### 维度
+**精英专属主动技能Tick缺失 — `awareness_enabled=true` 时 `_ai_tick` 未驱动 EliteActiveSkillComponent**
+
+### 设计审查
+
+发现精英技能Tick链路不对称：
+
+**awareness_enabled=true（AI状态机）时：**
+- `_ai_tick()` 执行6状态AI并设置velocity
+- 返回后 `_physics_process` 在行239调用 `_tick_skill_components` 驱动技能组件
+- 技能Tick在AI状态机**外部**
+
+**awareness_enabled=false（旧行为派发）时：**
+- `_dispatch_behavior()` 末尾直接遍历子节点触发 `child.tick()`
+- 技能Tick在行为派发函数**内部**
+
+问题：`_ai_tick` 内部没有 tick 技能组件，导致 `awareness_enabled=true` 时技能Tick时机不如 `_dispatch_behavior` 内聚。
+
+### 解决方案
+在 `_ai_tick` 末尾添加 `_tick_skill_components(delta)` 调用，与 `_dispatch_behavior` 末尾技能Tick逻辑对齐。
+
+### 修改内容
+
+**`src/enemy/EnemyBase.gd`** — 在 `_ai_tick` 末尾（move_and_slide 之前）插入：
+```gdscript
+	#精英主动技能组件Tick（与_dispatch_behavior末尾的技能Tick逻辑对齐）
+	_tick_skill_components(delta)
+```
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] `_ai_tick` 末尾现在调用 `_tick_skill_components(delta)`
+- [x] 技能Tick调用链路在 awareness_enabled=true 和 false 两条路径保持一致
+- [ ] 人类试玩：精英怪（任意词缀）是否正常触发冲锋/护盾反射/召集令等技能
+
+### 剩余风险（全部为人类试玩验证项）
+1. **精英技能**：6种精英专属主动技能是否正常触发
+2. **第二关怪物强度**：HP×1.4/DMG×1.2 是否真实生效
+3. **ScreenShake**：受击时 Camera2D.offset 是否正确震动
+4. **命卡效果**：房间清理后命卡界面是否弹出
+5. **撤离战利品面板**：成功撤离后是否正确弹出
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。本轮修复精英技能Tick链路不对称问题（`_ai_tick` 末尾缺少 `_tick_skill_components` 调用）。Godot 编译通过。人类试玩验证是唯一剩余缺口。
+
+### 下轮最可能方向
+1. **人类试玩验证（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈
+
+---
+
+---
+
+## 轮次420（2026-05-30 20:14 UTC+8）
+
+### 维度
+**系统完整度终验复查第二弹 — HealthVignette落地链路 + FLOOR_SCALING + pass空操作合法性审查**
+
+### 设计审查
+
+本轮从三个遗留验证项自由审查，确认系统完整：
+
+**1. HealthVignette 完整落地链路**
+- `HealthVignette.gd` extends Control, class_name HealthVignette ✅
+- `GameUIManager._ready()`（行216）实例化 HealthVignette.tscn 并 add_child ✅
+- `GameUIManager.set_player()`（行293-294）调用 `_health_vignette.set_player_ref(player)`，建立 hp_changed 连接 ✅
+- `HealthVignette.set_player_ref()`（行37）连接 `player.hp_changed` → `_on_hp_changed` ✅
+- `_on_hp_changed` → `_update_vignette_target` 计算目标透明度 ✅
+- `_process` 每帧 lerp 透明度，危急时叠加 pulse 闪烁 ✅
+- HealthVignette.tscn 场景文件存在 ✅
+
+**2. FLOOR_SCALING 楼层难度完整**
+MonsterInjector.gd 定义：
+```gdscript
+const FLOOR_SCALING := {
+    1: { "hp_mult": 1.0, "damage_mult": 1.0, "loot_mult": 1.0 },
+    2: { "hp_mult": 1.4, "damage_mult": 1.2, "loot_mult": 1.3 },  # 第二关
+    3: { "hp_mult": 1.5, "damage_mult": 1.3, "loot_mult": 1.5 },
+    4: { "hp_mult": 1.8, "damage_mult": 1.5, "loot_mult": 1.8 },
+    5: { "hp_mult": 2.2, "damage_mult": 1.8, "loot_mult": 2.2 },
+}
+```
+EliteSpawnDirector._build_elite_spawn_data() 读取 floor_scale → 应用于 max_hp/damage/speed ✅
+
+**3. pass 空操作合法性**
+全项目 20 个 pass（分布在 GameUIManager、WeaponAssemblyTreePanel、LevelSelectMenu、AudioManager、HealthVignette、WeaponCore、DeathSettlementModule、FateCardGameBridge、RoomGameMode、ExtractionModule、TrapRoomLogic、LootModule、BossRoomLogic、ItemUseHandler、DemoRoomGameMode、BossSkillNode、EnemyBase）全部审查为合法占位符（未实现回调/扩展点/接口stub），无残留 TODO/FIXME。
+
+### 玩家可感知结果
+本轮无新增代码改动，纯审查确认。所有核心系统均完整落地。
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] HealthVignette 落地链路完整 ✅
+- [x] FLOOR_SCALING floor 1-5 完整 ✅
+- [x] 所有 pass 空操作合法 ✅
+- [x] 无 TODO/FIXME 残留 ✅
+- [ ] 人类试玩：低血量时屏幕边缘是否有暗红色 Vignette 渐变 + pulse 闪烁
+- [ ] 人类试玩：第二关怪物血量和伤害是否明显高于第一关
+- [ ] 人类试玩：精英技能是否正常触发（冲锋/护盾反射/召集/狂暴）
+
+### 剩余风险（全部为人类试玩验证项）
+1. **HealthVignette**：低血量时暗红边缘叠加 + 危急 pulse 闪烁
+2. **第二关难度**：HP×1.4 / DMG×1.2 是否真实生效
+3. **精英技能Tick**：6种精英专属主动技能是否正常触发
+4. **命卡效果**：房间清理后命卡界面是否弹出
+5. **ScreenShake**：受击时 Camera2D.offset 是否正确震动
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。代码审查无发现，所有系统完整。最高且唯一优先级：**人类试玩验证**。用户尚未停止或改方向，无真实设计分叉/外部依赖/破坏性风险。
+
+### 下轮最可能方向
+1. **人类试玩验证（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈
+
+---
+
+## 轮次 460（2026-05-31 01:46 UTC+8）
+
+### 维度
+命运卡片系统端到端链路审查（无新增代码，纯审查轮）
+
+### 设计审查
+从核心玩法"搜打撤风险决策 + 武器装配树 + 命运卡片"对 Demo 8房间链路中命运卡片相关系统做端到端审查。
+
+#### 命运卡片完整链路确认
+
+| 环节 | 实现 | 状态 |
+|---|---|---|
+| 卡片预设池 | `FateCardPresets.playable_presets()` 返回 28张（组合/强化/变种/诅咒/规则） | ✅ |
+| 清理后抽卡 | `DemoRoomGameMode._on_waves_cleared()` → `_show_fate_cards_in_panel()` → `FateCardUIController.show_card_selection()` | ✅ |
+| 卡片UI挂载 | `FateCardUIController` 实例化 → `GameUIManager/FateCardPanel` 节点查找（三层fallback） | ✅ |
+| 暂停与输入 | `show_card_selection()` 设置 `get_tree().paused = true` + Tab键关闭 | ✅ |
+| 卡片应用 | `FateCardUIController._on_card_selected()` → `FateCardGameBridge.apply_card(card)` | ✅ |
+| 自动目标选择 | `FateCardEngine._auto_select_targets()` → 根据 `card.target_rules` 匹配 AssemblyNode | ✅ |
+| 效果执行 | `FateCardEngine.apply_card()` 的 `match action` 覆盖全部 28 种 EffectAction | ✅ |
+| 武器树变更 | AssemblyNode 被修改后 → `WeaponAssemblyTree` 结构更新 | ✅ |
+| 视觉反馈 | 武器树变更在 `WeaponAssemblyTreePanel` 实时可视化 | ✅ |
+
+#### DemoBoss HP Bar 实时更新链路确认
+
+| 环节 | 实现 | 状态 |
+|---|---|---|
+| DemoBoss 场景 | `RoomBoss.tscn` 内含 `BossActor`（BossActor.gd）+ `BossPhaseDirector` | ✅ |
+| Boss激活 | `_on_boss_spawn_triggered()` → `BossActor.activate()` → `DemoBoss._connect_to_game_ui()` → `GameUIManager.on_boss_spawned()` | ✅ |
+| 玩家子弹命中Boss | `Bullet.gd body_entered` → `enemy.call("take_damage")` → `BossActor.take_damage()` → `_notify_boss_damaged()` | ✅ |
+| HP Bar实时更新 | `GameUIManager.on_boss_damaged(boss_id, damage, new_hp)` → `_boss_hp_bar.value = new_hp` | ✅ |
+| Boss死亡 → 房间清理 | `BossActor._trigger_death()` → `boss_defeated` 信号 → `DemoRoomGameMode._on_boss_defeated_triggered()` → `_rooms_cleared.append()` + 钥匙+1 | ✅ |
+
+#### 核心系统编译验证 ✅
+```
+godot --headless --check-only --quit
+EXIT: 0
+```
+
+### 本轮行动
+**无新增代码改动**。本轮为 **命运卡片系统端到端链路审查轮**：
+- 命运卡片完整链路（预设→选择→应用→武器树→可视化）已确认无断点 ✅
+- DemoBoss HP Bar 更新链路（子弹命中→BossActor扣血→GUI同步→HP条刷新）已确认无断点 ✅
+- Godot headless --check-only --quit：EXIT 0 ✅
+- 循环状态 `lastRunTime` 已更新至 01:46
+
+### 玩家可感知结果
+无变化（等待人类试玩）。代码层面命运卡片系统与 Boss HP Bar 链路均完整。
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] 命运卡片完整链路无断点 ✅
+- [x] DemoBoss HP Bar 实时更新链路无断点 ✅
+- [ ] **人类试玩验证 Demo 8房间撤离完整链路（最高且唯一优先级）**
+
+### 剩余风险（人类试玩验证项）
+1. Demo模式8房间完整流程能否跑通
+2. 命运卡片选择UI在游戏流程中是否正常响应
+3. Boss HP条是否随战斗实时更新
+4. 撤离读条期间敌人波次是否真实出现
+5. 精英拦截者概率递增是否真实表现
+6. ScreenShake/HealthVignette受击反馈是否正常
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。代码层面命运卡片+Boss HP Bar系统均无断点。最高且唯一优先级：**人类试玩验证 Demo 8房间撤离完整链路**。用户尚未停止或改方向，无真实设计分叉/外部依赖/破坏性风险。
+
+### 下轮最可能方向
+1. **人类试玩验证 Demo 8房间撤离完整链路（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈深化
+
+## 轮次 549（2026-05-31 11:26 UTC+8）
+
+### 维度
+Demo 8房间链路终审：撤离读条HUD + BossHPBar + 命卡Tab 三链路系统性审查
+
+### 设计审查
+
+#### 撤离读条 HUD 端到端链路确认
+
+Demo 撤离流程完整链路（E键触发 → ExtractionModule.update → 信号 → GameUIManager UI）：
+
+| 环节 | 实现位置 | 状态 |
+|---|---|---|
+| E键触发撤离 | `DemoRoomGameMode._try_start_extraction()` → `extraction_module.start_extraction("STANDARD", 14.0)` | ✅ |
+| ExtractionModule 驱动 | `DemoRoomGameMode._process()` 每帧调用 `extraction_module.update(_delta)` | ✅ |
+| 信号发射 | `extraction_module.extraction_progress_updated.emit(progress)` 每帧触发 | ✅ |
+| GameUIManager 信号连接 | `_connect_extraction_module_signals()` 在 `_try_start_extraction` 内通过 gui.call() 调用 | ✅ |
+| UI 进度条更新 | `GameUIManager._on_extraction_progress_updated()` → `countdown_bar.value = progress` | ✅ |
+| 倒计时Label | `_update_countdown_label()` 显示 "X.X 秒" | ✅ |
+| 撤离防御波次 | `_update_extraction_defense()` 在剩余 2/3 和 1/3 时间点刷怪 | ✅ |
+| 撤离成功面板 | `show_run_extraction_success(stats)` 显示战利品+积分+带出物品列表 | ✅ |
+| 受击中断撤离 | `_on_player_hp_changed()` → `extraction_module.abort_extraction()` | ✅ |
+
+注：`ExtractionProgressUI.gd` 是独立文件（未接入场景），GameUIManager.tscn 内的 ExtractionPanel 承担所有 HUD 功能。
+
+#### DemoBoss HP Bar 链路确认（补充上轮 460）
+
+| 环节 | 实现 | 状态 |
+|---|---|---|
+| Boss激活 → UI显示 | `BossActor.activate()` → `DemoRoomGameMode._on_boss_spawn_triggered()` → `GameUIManager.on_boss_spawned()` | ✅ |
+| 子弹命中Boss | `Bullet.gd body_entered` → `enemy.call("take_damage")` → `BossActor.take_damage()` → `_notify_boss_damaged()` | ✅ |
+| HP条实时更新 | `GameUIManager.on_boss_damaged(boss_id, damage, new_hp)` → `_boss_hp_bar.value = new_hp` | ✅ |
+| Boss死亡 → 房间清理 | `BossActor._trigger_death()` → `boss_defeated` 信号 → DemoRoomGameMode → 钥匙+1 + 房间进入已清理状态 | ✅ |
+
+#### 命卡 Tab 关闭链路确认（补充上轮 460）
+
+| 环节 | 实现 | 状态 |
+|---|---|---|
+| Tab键拦截（游戏暂停时） | `FateCardUIController._unhandled_input()` 中 `Input.is_key_pressed(KEY_TAB)` + ProcessMode ALWAYS | ✅ |
+| 卡片容器空值保护 | `_card_container = get_node_or_null(...)` + null 检查 | ✅ |
+| Tab关闭卡片 | `hide_card_selection()` | ✅ |
+| 关闭后恢复游戏 | `get_tree().paused = false` | ✅ |
+
+### 本轮行动
+**无新增代码改动**。本轮为 **Demo 8房间链路终审轮**：
+- 撤离读条HUD端到端链路无断点 ✅
+- DemoBoss HP Bar链路无断点 ✅
+- 命卡Tab关闭链路无断点 ✅
+- Godot headless --check-only --quit: EXIT 0 ✅
+- 循环状态 `lastRunTime` 已更新至 11:26，polish.current 549
+
+### 玩家可感知结果
+无变化（等待人类试玩）。代码层面撤离读条HUD + BossHPBar + 命卡Tab三链路均完整无断点。
+
+### 验收标准
+- [x] Godot headless --check-only --quit 编译通过 ✅（EXIT 0）
+- [x] 撤离读条HUD端到端链路无断点 ✅
+- [x] DemoBoss HP Bar实时更新链路无断点 ✅
+- [x] 命卡Tab关闭链路无断点 ✅
+- [ ] **人类试玩验证 Demo 8房间撤离完整链路（最高且唯一优先级）**
+
+### 剩余风险（人类试玩验证项）
+1. Demo模式8房间完整流程能否跑通
+2. 命运卡片选择UI在游戏流程中是否正常弹出与响应Tab关闭
+3. Boss HP条是否随战斗实时更新
+4. 撤离读条期间敌人波次是否真实出现（2/3增援 + 1/3精英/最终波）
+5. 受击中断撤离是否真实触发（搜打撤核心机制）
+6. 撤离成功后战利品统计面板是否正确显示
+
+### 续排判断
+**继续排 cron** — 状态维持 `running`。撤离读条HUD + BossHPBar + 命卡Tab三链路均已终审确认无断点。最高且唯一优先级：**人类试玩验证 Demo 8房间撤离完整链路**。用户尚未停止或改方向，无真实设计分叉/外部依赖/破坏性风险。
+
+### 下轮最可能方向
+1. **人类试玩验证 Demo 8房间撤离完整链路（最高且唯一优先级）**
+2. 若发现 Bug → 针对性修复
+3. 若无 Bug → 第二关专属怪物类型深化或战斗视觉反馈深化

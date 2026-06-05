@@ -44,6 +44,8 @@ var summon_interval: float = 5.0
 var explosion_radius: float = 82.0
 var explosion_damage: int = 25
 var trigger_radius: float = 120.0
+var has_shield: bool = false
+var shield_rate: float = 0.0
 
 var _shoot_timer: float = 0.0
 var _summon_timer: float = 0.0
@@ -56,6 +58,7 @@ var _ranged_flank_dir: int = 1          # 1=右侧翼绕后, -1=左侧翼绕后
 var _ranged_flank_timer: float = 0.0    # 侧翼切换倒计时
 var _ranged_flank_interval: float = 3.8  # 默认3.8秒切换一次侧翼方向
 var _ranged_tangent_dir: int = 1        # 切向移动方向（每次绕圈后反转）
+var _ranged_tangent_speed_bonus: float = 1.0
 var _ranged_minion_spawn_timer: float = 0.0  # 远程召唤型小怪生成计时（独立于summon_interval）
 var _is_dead: bool = false
 var _knockback_velocity: Vector2 = Vector2.ZERO
@@ -68,6 +71,20 @@ var _elite_bullet_modules: Array[Dictionary] = []  # 精英偷取的Bullet模块
 var _elite_attachment_modules: Array[Dictionary] = []  # 精英偷取的Attachment模块（用于修饰射击参数）
 var _elite_shoot_timer: float = 0.0   # 精英挂枪射击计时器
 var _elite_shoot_interval: float = 1.8  # 精英挂枪射击间隔（秒）
+var _charge_immune: bool = false
+var _shield_reflect_active: bool = false
+var _shield_reflect_chance: float = 0.0
+var _shield_wall_active: bool = false
+var _shield_wall_effectiveness: float = 0.0
+var _barrier_active: bool = false
+var _barrier_until: float = 0.0
+var _enraged: bool = false
+var _rally_speed_base: float = 0.0
+var _rally_speed: float = 0.0
+var _rally_damage_base: int = 0
+var _rally_damage: int = 0
+var _rally_buff_until: float = 0.0
+var counter_strike_until: float = 0.0
 var regional_controller_ref: Node = null
 var _base_emoji: String = "👾"
 var _base_color: Color = Color.WHITE
@@ -530,15 +547,8 @@ func _dispatch_behavior(delta: float) -> void:
 			_behavior_trapper(delta)
 		_:
 			_behavior_chase(delta)
-	#精英主动技能组件每帧Tick（awareness_enabled=false时由_dispatch_behavior返回前驱动）
-	#用 has_signal 判断：只有真正挂载了 EliteActiveSkillComponent 的节点才会触发 tick
-	for child in get_children():
-		if child.has_method("tick") and child.has_signal("elite_skill_triggered"):
-			child.tick(delta)
-	# EnemySkillComponent（基础怪物主动技能）也走同样的 tick 流程，确保当 awareness_enabled=false 时也能触发
-	for child in get_children():
-		if child.has_method("tick") and child.has_signal("skill_triggered"):
-			child.tick(delta)
+	# 旧 AI 分支也统一驱动技能组件，每帧只 tick 一次。
+	_tick_skill_components(delta)
 	velocity += _separation_velocity()
 	velocity += _knockback_velocity
 	_knockback_velocity = _knockback_velocity.move_toward(Vector2.ZERO, 900.0 * delta)
@@ -577,7 +587,7 @@ func _behavior_ranged(delta: float) -> void:
 	if tangent.length_squared() < 0.01:
 		tangent = Vector2.LEFT * _ranged_tangent_dir  # fallback 水平向
 	# 限制 tangent 的最大侧向速度比例，避免纯侧向运动（让敌人始终有朝向玩家的分量）
-	var tangent_speed_ratio: float = 0.72  # 侧翼时 tangent 最大占比
+	var tangent_speed_ratio: float = 0.72 * _ranged_tangent_speed_bonus  # 侧翼时 tangent 最大占比
 	if dist > preferred_dist + 120.0:
 		# 远离时，朝向玩家为主（tangent 只占 25%）
 		tangent_speed_ratio = 0.25
@@ -699,6 +709,20 @@ func _trigger_explosion() -> void:
 func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.ZERO) -> void:
 	if _is_dead:
 		return
+	if _barrier_active:
+		if Time.get_ticks_msec() * 0.001 <= _barrier_until:
+			_barrier_active = false
+			_barrier_until = 0.0
+			_spawn_block_effect()
+			return
+		_barrier_active = false
+		_barrier_until = 0.0
+	if _shield_wall_active and randf() < _shield_wall_effectiveness:
+		_spawn_block_effect()
+		return
+	if _shield_reflect_active and randf() < _shield_reflect_chance:
+		_spawn_block_effect()
+		return
 	# === 护盾格挡（Tank类精英/护盾型敌人）===
 	var shield_rate_val: float = 0.0
 	var shield_rate_variant = get("shield_rate")
@@ -710,7 +734,7 @@ func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.
 	# 记录是否刚跨过低血线
 	var was_above_low_hp := float(current_hp) / maxf(1.0, float(max_hp)) > 0.4
 	current_hp = max(0, current_hp - amount)
-	if hit_dir.length_squared() > 0.0001:
+	if not _charge_immune and hit_dir.length_squared() > 0.0001:
 		_knockback_velocity += hit_dir.normalized() * (95.0 if not is_crit else 150.0)
 	_update_hp_bar()
 	flash_damage(is_crit)
@@ -1228,7 +1252,7 @@ func inject_basic_skill_for_kind(kind: String) -> void:
 
 	if comp:
 		add_child(comp)
-		comp.set_owner(self)
+		comp.set_component_owner(self)
 
 ## 设置伤害倍率（由环境命运触发器的 CURSE_ROOM_ENEMIES 调用）
 ## multiplier=1.15 表示伤害+15%
@@ -1237,7 +1261,8 @@ func apply_damage_multiplier(multiplier: float) -> void:
 	print("[EnemyBase] 伤害倍率设置为 %.2f（触发来源：环境命运-诅咒降临）" % multiplier)
 
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool = false) -> void:
-	get_tree().call_group("game_ui", "show_damage_popup", world_pos, dmg, is_crit)
+	# 使用 DamageNumbers 静态方法，获得更好的视觉表现（字号/颜色分档 + 弹出动画 + 暴击震屏）
+	DamageNumbers.spawn(world_pos, dmg, is_crit)
 	return
 
 ## 治疗（由召唤者光环等调用）

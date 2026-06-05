@@ -38,6 +38,9 @@ func _process(delta: float) -> void:
 
 func _is_gameplay_input_blocked() -> bool:
 	if player != null and is_instance_valid(player):
+		var combat_enabled = player.get("combat_enabled")
+		if combat_enabled is bool and not combat_enabled:
+			return true
 		var locked = player.get("input_locked")
 		if locked is bool and locked:
 			return true
@@ -102,17 +105,23 @@ func _find_bullet_node_in_tree() -> AssemblyNode:
 			return node
 	return null
 
-## 换弹爆炸命运卡片：当检测到子弹有 explode_on_reload 标记时触发爆炸
+## 换弹爆炸命运卡片：触发换弹爆炸（由外部事件调用）
+## 参数 bullet_global_pos 用于定位爆炸中心；实际爆炸参数从 weapon_tree 当前子弹节点读取
 func trigger_explosion_on_reload(bullet_damage: int, bullet_global_pos: Vector2) -> void:
-	if _pending_explode == null:
+	if weapon_tree == null:
 		return
-	var radius: float = _pending_explode.get("radius", 150.0)
-	var damage_scale: float = _pending_explode.get("damage_scale", 0.8)
+	var bullet_node: AssemblyNode = _find_bullet_node_in_tree()
+	if bullet_node == null:
+		return
+	var stats: Dictionary = bullet_node.get_base_stats()
+	if not stats.get("explode_on_reload", false):
+		return
+	var radius: float = stats.get("explosion_radius", 150.0)
+	var damage_scale: float = stats.get("explosion_damage_scale", 0.8)
 	var explosion_damage: int = int(float(bullet_damage) * damage_scale)
 	_explode_at(bullet_global_pos, explosion_damage, radius)
-	_pending_explode.clear()
 
-var _pending_explode: Dictionary = {}  # 爆炸参数缓存（每次 fire 后从 weapon_tree 读取）
+var _pending_explode: Dictionary = {}  ## 预留（暂无外部写入方，保留以备将来外部事件触发爆炸用）
 
 func _explode_at(pos: Vector2, dmg: int, radius: float) -> void:
 	var enemies: Array[Node] = get_tree().get_nodes_in_group("enemy")

@@ -700,7 +700,11 @@ var _turret_fire_interval: float = 0.25
 func _spawn_fate_turret() -> void:
 	# 炮台用自己的 Bullet.tscn 实例，位置固定，通过 _process_turret_loop 持续射击
 	var turret: Node = preload("res://scenes/Bullet.tscn").instantiate()
-	get_tree().current_scene.add_child(turret)
+	var parent: Node = get_tree().current_scene if get_tree().current_scene != null else get_parent()
+	if parent == null:
+		turret.free()
+		return
+	parent.add_child(turret)
 	turret.global_position = global_position
 	turret.set("speed", 0.0)
 	turret.set("max_lifetime", _fate_turret_duration)

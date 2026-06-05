@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MapThemeProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/map/MapThemeProfile.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "spore_depths"
+display_name = "孢子深层"
+fantasy = "异化菌群占据的地下研究区。搜刮点丰富，但召唤与伏击会让战斗持续扩散。"
+difficulty_rank = 3
+visual_floor = 3
+layout_rules = {"pattern": "resource_web", "path_length": 8, "branch_chance": 0.74, "basement_chance": 0.55, "upper_chance": 0.25, "sequence_variation_chance": 0.18, "path_sequence": ["SCAVENGE", "COMBAT", "EVENT", "ELITE"], "vertical_room_weights": {"SCAVENGE": 4.0, "STORAGE": 3.0, "ELITE": 2.0, "EVENT": 2.0}}
+path_room_weights = {"SCAVENGE": 3.0, "COMBAT": 4.0, "EVENT": 2.0, "ELITE": 2.0}
+branch_room_weights = {"SCAVENGE": 3.0, "STORAGE": 3.0, "EVENT": 2.0, "MERCHANT": 2.0, "TRAP": 1.0}
+required_branch_types = Array[String](["MERCHANT", "STORAGE"])
+enemy_rules = {"enemy_pool": ["summoner", "summoner", "ranged_caster", "ambusher", "exploder"], "hp_multiplier": 1.06, "damage_multiplier": 1.08, "speed_multiplier": 1.02, "name_prefix": "孢化", "boss_name": "母巢培育体"}
+content_rules = {"container_bonus": 2, "event_pool": ["blessing", "curse", "ambush", "gamble"]}
+npc_rules = Array[Dictionary]([{"id": "spore_researcher", "name": "孢子研究员", "role": "生态观察", "text": "别只杀母巢，先切断它周围的召唤链。", "room_types": ["EVENT"], "chance": 0.8, "position": Vector2(0, 115), "color": Color(0.58, 0.38, 0.85, 1)}, {"id": "spore_trader", "name": "面罩采集商", "role": "异化样本交易", "text": "越深的样本越值钱，但撤离路线不会等你。", "room_types": ["MERCHANT"], "chance": 1.0, "position": Vector2(105, 80), "color": Color(0.65, 0.75, 0.3, 1)}])

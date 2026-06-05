@@ -256,6 +256,21 @@ static func _apply_attach_gun_to_bullet(
 		result.message = "Bullet mount slot already occupied"
 		return result
 
+	# 同步子弹的视觉标签到挂载枪
+	# 这样当 primary bullet 调用 set_attached_gun 时，_attached_gun 上的视觉标签也被同步
+	# （AttachedGun 的 base_stats 不会包含这些标签，但直接读取 bullet_node 的 base_stats 传播）
+	var bstats: Dictionary = bullet_node.get_base_stats()
+	var gstats: Dictionary = attached_gun.get_base_stats()
+	if bstats.has("fate_scale"):
+		gstats["fate_scale"] = bstats.get("fate_scale")
+	if bstats.has("visual_has_eyes"):
+		gstats["visual_has_eyes"] = true
+		gstats["visual_eyes"] = bstats.get("visual_eyes", 2)
+	if bstats.has("visual_has_legs"):
+		gstats["visual_has_legs"] = true
+		gstats["visual_legs"] = bstats.get("visual_legs", 4)
+	attached_gun.set_base_stats(gstats)
+
 	var ok: bool = tree.mount(bullet_node, AssemblyNode.SlotType.MOUNT, attached_gun)
 	if not ok:
 		result.error = ApplyError.APPLY_FAILED
@@ -590,6 +605,26 @@ static func _apply_mutate_to_living(
 	target.set_base_stats(stats)
 	target.tags.append("Fate.Turret")
 	tree.refresh_stats()
+
+	# Apply visual enhancements from card.visual (e.g. AddEyes/AddLegs for "活过来")
+	if card.visual.has("action"):
+		var visual_action: String = str(card.visual.get("action", ""))
+		if visual_action == "AddEyes":
+			var eye_count: int = int(card.visual.get("eye_count", 2))
+			var vstats: Dictionary = target.get_base_stats()
+			vstats["visual_eyes"] = eye_count
+			vstats["visual_has_eyes"] = true
+			target.set_base_stats(vstats)
+			target.tags.append("Fate.Visual.HasEyes")
+			target.node_name += " 👁"
+		elif visual_action == "AddLegs":
+			var leg_count: int = int(card.visual.get("leg_count", 4))
+			var vstats: Dictionary = target.get_base_stats()
+			vstats["visual_legs"] = leg_count
+			vstats["visual_has_legs"] = true
+			target.set_base_stats(vstats)
+			target.tags.append("Fate.Visual.HasLegs")
+			target.node_name += " 🦵"
 
 	result.success = true
 	_fate_audio_card_applied()

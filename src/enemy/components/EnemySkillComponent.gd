@@ -22,6 +22,7 @@ var _passive_skills: Array[Dictionary] = []
 var _triggered_skills: Array[Dictionary] = []
 var _owner: Node = null
 var _is_enabled: bool = true
+var _passive_states: Dictionary = {}
 
 func _init(p_owner: Node = null):
 	_owner = p_owner
@@ -96,14 +97,15 @@ func _evaluate_passive_skills(_delta: float) -> void:
 		# berserker_rage：低血量时移速+40%
 		if skill["id"] == "berserker_rage":
 			var threshold: float = cfg.get("hp_threshold", 0.4)
-			if current_hp_ratio <= threshold:
+			if current_hp_ratio <= threshold and not _passive_states.get("berserker_rage", false):
 				var mult: float = cfg.get("speed_mult", 1.4)
-				var cur_speed: float = float(_owner.get("speed", 80.0))
+				var cur_speed: float = float(_owner.get("speed"))
 				_owner.set("speed", cur_speed * mult)
+				_passive_states["berserker_rage"] = true
 		# counter_strike：buff仍在生效时由EnemyBase.take_damage读取并乘算伤害
 		if skill["id"] == "counter_strike":
 			var key_until: String = "counter_strike_until"
-			var until: float = _owner.get(key_until, 0.0)
+			var until: float = _owner.get(key_until)
 			var now: float = Time.get_ticks_msec() * 0.001
 			if now >= until:
 				# buff已过期（仅供监控，不需要主动清除，时间戳自动失效）
@@ -599,13 +601,22 @@ func _exec_ranged_escape_cloud(cfg: Dictionary) -> void:
 	if _owner == null:
 		return
 	var speed_boost: float = cfg.get("speed_boost", 2.0)
+	var cur_speed: float = float(_owner.get("speed"))
 	var duration: float = cfg.get("duration", 1.5)
-	var cur_speed: float = float(_owner.get("speed", 50.0))
 	_owner.set("speed", cur_speed * speed_boost)
 	_spawn_heal_aura_effect(90.0)
 	await _owner.get_tree().create_timer(duration).timeout
 	if is_instance_valid(_owner):
 		_owner.set("speed", cur_speed)
+
+## 【Ranged】侧翼预判：调整远程 AI 的绕行节奏和侧向速度
+func _exec_ranged_flank_anticipation(cfg: Dictionary) -> void:
+	if _owner == null or not is_instance_valid(_owner):
+		return
+	var interval: float = cfg.get("flank_interval", 3.8)
+	_owner.set("_ranged_flank_interval", interval)
+	_owner.set("_ranged_flank_timer", interval)
+	_owner.set("_ranged_tangent_speed_bonus", cfg.get("tangent_speed_bonus", 1.0))
 
 ## 【Summoner】集会号令：提升范围内友军移速
 func _exec_summoner_rally(cfg: Dictionary) -> void:
@@ -613,7 +624,9 @@ func _exec_summoner_rally(cfg: Dictionary) -> void:
 		return
 	var radius: float = cfg.get("radius", 150.0)
 	var speed_mult: float = cfg.get("speed_mult_allies", 1.25)
+	var duration: float = cfg.get("duration", 3.0)
 	var done: bool = false
+	var buffed_allies: Array[Dictionary] = []
 	for other in _owner.get_tree().get_nodes_in_group("enemy"):
 		if other == _owner or not is_instance_valid(other):
 			continue
@@ -621,11 +634,17 @@ func _exec_summoner_rally(cfg: Dictionary) -> void:
 			if other.has_method("heal"):
 				other.heal(1)
 				done = true
-			var cur_spd: float = float(other.get("speed", 80.0))
+			var cur_spd: float = float(other.get("speed"))
 			other.set("speed", cur_spd * speed_mult)
+			buffed_allies.append({"enemy": other, "base_speed": cur_spd, "buffed_speed": cur_spd * speed_mult})
 			done = true
 	if done:
 		_spawn_heal_aura_effect(radius)
+		await _owner.get_tree().create_timer(duration).timeout
+		for ally_data in buffed_allies:
+			var ally: Node = ally_data.get("enemy")
+			if is_instance_valid(ally) and is_equal_approx(float(ally.get("speed")), ally_data.get("buffed_speed")):
+				ally.set("speed", ally_data.get("base_speed"))
 
 ## 【Summoner】连锁闪电：弹跳攻击最多3个邻近敌人
 func _exec_summoner_chain_lightning(cfg: Dictionary) -> void:
@@ -700,7 +719,7 @@ func _exec_summoner_barrier(cfg: Dictionary) -> void:
 		if other == _owner or not is_instance_valid(other):
 			continue
 		if _owner.global_position.distance_to(other.global_position) <= barrier_radius:
-			var hp: float = float(other.get("current_hp", INF))
+			var hp: float = float(other.get("current_hp"))
 			if hp < min_hp:
 				min_hp = hp
 				best = other

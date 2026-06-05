@@ -86,13 +86,15 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		elif fate_panel.find_child("FateModal", true, false) == null:
 			failures.append("Fate card panel is visible but has no selectable modal")
 		else:
-			var before_damage: int = mode.player.get_weapon_tree().bullet_damage
-			mode.call("_on_fate_card_button_pressed", FateCardPresets.armor_pierce())
-			await get_tree().process_frame
-			if mode.player.get_weapon_tree().bullet_damage <= before_damage:
-				failures.append("Choosing a door fate upgrade did not increase live bullet damage")
+				var before_damage: int = mode.player.get_weapon_tree().get_computed_stats().get("damage", 0)
+				mode.call("_on_fate_card_button_pressed", FateCardPresets.armor_pierce())
+				await get_tree().process_frame
+				var after_damage: int = mode.player.get_weapon_tree().get_computed_stats().get("damage", 0)
+				if after_damage <= before_damage:
+					failures.append("Choosing a door fate upgrade did not increase live weapon damage")
 
 	var before_currency := GameManager.currency
+	var expected_elite_bounty := before_currency + 13
 	var before_items := _inventory_item_count(mode.inventory_module)
 	(
 		mode
@@ -119,8 +121,8 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		failures.append(
 			"Enemy item loot entered backpack immediately instead of waiting for pickup"
 		)
-	if GameManager.currency != before_currency:
-		failures.append("Enemy soul reward was added instantly instead of waiting for pickup")
+	if GameManager.currency != expected_elite_bounty:
+		failures.append("Elite bounty was not added immediately after the kill")
 	if item_pickup != null:
 		mode.player.global_position = item_pickup.global_position
 		for i in range(4):
@@ -131,7 +133,7 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		mode.player.global_position = orb.global_position
 		for i in range(10):
 			await get_tree().process_frame
-		if GameManager.currency <= before_currency:
+		if GameManager.currency <= expected_elite_bounty:
 			failures.append("Soul orb was not collectable by walking over it")
 
 	main.queue_free()

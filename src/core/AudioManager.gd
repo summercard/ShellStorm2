@@ -45,6 +45,7 @@ func _init_synth() -> void:
 func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
 	var path: String = SFX.get(sfx_name, "")
 	if path.is_empty():
+		_play_fallback_sfx(sfx_name)
 		return
 	if not FileAccess.file_exists(path):
 		# 音效文件不存在 → 降级到程序化合成

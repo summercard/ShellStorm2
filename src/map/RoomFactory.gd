@@ -3,6 +3,7 @@ extends RefCounted
 ## 房间工厂 — 将 RoomData 实例化为游戏场景节点
 
 const WALL_OCCLUDER_SCRIPT := preload("res://src/map/WallOccluderComponent.gd")
+const THEMED_NPC_SCENE: PackedScene = preload("res://scenes/ThemedNPC.tscn")
 
 ## 场景预制件映射（未来会从外部配置加载）
 ## 目前先用占位符场景名称
@@ -25,6 +26,11 @@ const SCENE_MAP := {
 }
 
 var _scene_cache: Dictionary = {}
+var _theme_profile: Resource = null
+
+
+func set_theme_profile(profile: Resource) -> void:
+	_theme_profile = profile
 
 
 ## 创建房间实例
@@ -54,6 +60,8 @@ func create_room(
 
 	if parent != null:
 		parent.add_child(room_instance)
+	if room_instance.has_method("configure_room_data"):
+		room_instance.call("configure_room_data", room_data)
 
 	# 在主要探索房间中生成可搜索容器；战斗房清完后仍可回来搜刮。
 	if (
@@ -79,6 +87,7 @@ func create_room(
 	if room_data.room_type == RoomData.RoomType.MERCHANT:
 		_bind_merchant_npc(room_instance, room_data, inventory)
 
+	_spawn_theme_npcs_for_room(room_instance, room_data)
 	_bind_existing_interactables(room_instance, inventory)
 
 	return room_instance
@@ -155,7 +164,9 @@ func _spawn_containers_for_room(
 
 	# 实例化每个容器
 	for config in interactables:
-		if str(config.get("type", "")) == "extraction_point":
+		if str(config.get("type", "")) not in [
+			"chest", "crate", "locker", "hidden_cache"
+		]:
 			continue
 		var container: Node2D = _create_container_from_config(config, room_data.floor)
 		if container != null:
@@ -200,6 +211,23 @@ func _create_container_from_config(config: Dictionary, floor: int) -> Node2D:
 			ci.guaranteed_items.append(str(item_id))
 
 	return container
+
+
+func _spawn_theme_npcs_for_room(room_instance: Node2D, room_data: RoomData) -> void:
+	var content_config := room_data.get_content_config()
+	for raw_config in content_config.get("interactables", []):
+		if not raw_config is Dictionary:
+			continue
+		var config: Dictionary = raw_config
+		if str(config.get("type", "")) != "themed_npc":
+			continue
+		var npc := THEMED_NPC_SCENE.instantiate() as Node2D
+		if npc == null:
+			continue
+		npc.position = config.get("position", Vector2(0, 110))
+		room_instance.add_child(npc)
+		if npc.has_method("configure"):
+			npc.call("configure", config)
 
 
 ## 获取房间默认容器配置

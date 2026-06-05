@@ -29,6 +29,7 @@ var _current_floor: int = 1
 var _instantiated_rooms: Dictionary = {}  # node_id -> Node2D
 var _spawned_enemies: Dictionary = {}  # room_id -> Array[Dictionary]
 var _player_ref: Node2D = null  ## 玩家引用（小地图绘制用）
+var _theme_profile: Resource = null
 
 func _init():
 	map_generator = MapGenerator.new()
@@ -47,11 +48,26 @@ func _init():
 
 	path_director.set_graph(null)
 
+
+func set_theme_profile(profile: Resource) -> void:
+	_theme_profile = profile
+	map_generator.set_theme_profile(profile)
+	content_injector.set_theme_profile(profile)
+	monster_injector.set_theme_profile(profile)
+	room_factory.set_theme_profile(profile)
+
+
+func get_theme_profile() -> Resource:
+	return _theme_profile
+
 ## 生成地图
 func generate_map(floor: int, seed_value: int = -1) -> NodeGraph:
 	_current_floor = floor
 	_spawned_enemies.clear()
-	_current_graph = map_generator.generate(floor, seed_value)
+	var resolved_seed := seed_value if seed_value >= 0 else Time.get_ticks_msec()
+	content_injector.set_seed(resolved_seed + 101)
+	monster_injector.set_seed(resolved_seed + 202)
+	_current_graph = map_generator.generate(floor, resolved_seed)
 	path_director.clear()
 	path_director.set_graph(_current_graph)
 
@@ -69,6 +85,12 @@ func generate_map(floor: int, seed_value: int = -1) -> NodeGraph:
 
 	map_generated.emit(_current_graph)
 	return _current_graph
+
+
+func generate_themed_map(profile: Resource, seed_value: int = -1) -> NodeGraph:
+	set_theme_profile(profile)
+	var floor: int = int(profile.get("difficulty_rank")) if profile != null else 1
+	return generate_map(floor, seed_value)
 
 ## 添加所有房间的路径连接
 func _add_all_connections() -> void:
@@ -135,10 +157,6 @@ func instantiate_map(parent: Node2D) -> void:
 		var room_instance: Node2D = room_factory.create_room(node.room_data, parent)
 		_instantiated_rooms[node.id] = room_instance
 
-		# 注入内容
-		var content_config: ContentInjector.ContentConfig = content_injector.inject(node.room_data)
-		_spawned_enemies[node.id] = _spawn_enemies_from_config(content_config, node)
-
 ## 从配置生成敌人
 func _spawn_enemies_from_config(config: ContentInjector.ContentConfig, node) -> Array[Dictionary]:
 	var spawned: Array[Dictionary] = []
@@ -177,13 +195,13 @@ func enter_room(node_id: int) -> RoomData:
 ## 切换到相邻垂直楼层的房间
 ## target_vertical: RoomData.VerticalLevel
 ## 返回值：目标房间的 RoomData，null 表示没有可用的相邻房间
-func enter_vertical_room(target_vertical: RoomData.VerticalLevel) -> RoomData:
+func find_vertical_room_id(target_vertical: RoomData.VerticalLevel) -> int:
 	if _current_graph == null:
-		return null
+		return -1
 
 	var current_node := _current_graph.get_node(_current_room_id)
 	if current_node == null:
-		return null
+		return -1
 
 	# 找到当前房间的楼梯/电梯相邻的目标垂直层房间
 	var best_target: NodeGraph.RoomNode = null
@@ -201,11 +219,12 @@ func enter_vertical_room(target_vertical: RoomData.VerticalLevel) -> RoomData:
 
 	if best_target == null:
 		push_warning("[MapManager] No vertical room found for level %s" % target_vertical)
-		return null
+		return -1
+	return best_target.id
 
-	# 找到楼梯房（当前房间的连接中去找楼梯类型的房间作为中介）
-	# 但实际上，玩家应该在楼梯房间触发，所以这里直接进入目标层房间
-	return enter_room(best_target.id)
+func enter_vertical_room(target_vertical: RoomData.VerticalLevel) -> RoomData:
+	var target_id := find_vertical_room_id(target_vertical)
+	return enter_room(target_id) if target_id >= 0 else null
 
 ## 离开房间
 func exit_room() -> void:
@@ -247,6 +266,13 @@ func get_current_room_enemy_plan() -> Array[Dictionary]:
 		return []
 	var result: Array[Dictionary] = []
 	for enemy_data in _spawned_enemies.get(_current_room_id, []):
+		if enemy_data is Dictionary:
+			result.append(enemy_data.duplicate(true))
+	return result
+
+func get_room_enemy_plan(room_id: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for enemy_data in _spawned_enemies.get(room_id, []):
 		if enemy_data is Dictionary:
 			result.append(enemy_data.duplicate(true))
 	return result

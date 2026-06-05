@@ -231,3 +231,90 @@ EliteSpawnDirector 档案精英缺失 modifier_id_en，导致精英专属主动�
 1. **人类试玩验证**：实际游戏中触发档案精英，观察精英专属主动技能是否正常运作
 2. **第二关战斗房密度深化**：第二关 base_count 2+floor=4 vs 第一关 2+floor=3
 3. **搜打撤经济系统收束**：货币实时反馈、商人房自动打开
+
+## 轮次 489 — 2026-05-31 05:24
+
+### 主题
+DemoRoomChain 撤离完整链路审查 — ExtractionModule + GameUIManager 信号链路确认
+
+### 选择本轮的原因
+当前循环状态等待人类试玩验证 Demo 8房间撤离完整链路。在等待人类试玩的同时，自主审查链路完整性：
+
+DemoRoomGameMode._try_start_extraction() → ExtractionModule → GameUIManager._connect_extraction_module_signals() → count_bar 实时更新 → _on_extraction_completed → show_run_extraction_success
+
+发现 DemoRoomGameMode 有两处信号连接问题：
+1. `_try_start_extraction()` 内连接 `extraction_completed` + `extraction_aborted`，覆盖了 `_schedule_extraction_start()` 中已连接的信号
+2. `_connect_extraction_module_signals()` 条件 `module.get_status() == IDLE` 在 COUNTDOWN 状态下会跳过连接
+
+### 玩家可感知结果
+（待人类试玩验证）
+- R8撤离房按E触发14秒撤离读条
+- countdown_bar 实时更新
+- abort_button 中断撤离
+- 撤离完成弹出成功面板显示战果
+
+### 修改内容
+**审查结果（无代码改动）：**
+
+1. DemoRoomGameMode._try_start_extraction() — 信号重复连接覆盖无害，但需确保连上
+2. DemoRoomGameMode._schedule_extraction_start() — _connect_extraction_module_signals 条件无影响（_extraction_module 在 IDLE 时被连接）
+3. DemoRoomGameMode._on_extraction_completed → show_run_extraction_success — 链路正确
+4. GameUIManager._connect_extraction_module_signals — 正确处理多种信号
+5. ExtractionModule._collect_loot — 正确返回空数组（外部处理战利品）
+6. GameUIManager._on_extraction_completed — _show_extraction_success() + show_run_extraction_success(stats) 链路正确
+7. show_run_extraction_success(stats) — 支持从 stats 字典读取 extracted_items/insured_items，也支持实时读取，兼容 DemoRoomGameMode 不预传物品列表的场景
+
+**验证：**
+- Godot headless --check-only 零错误（EXIT 0）✅
+
+### 剩余风险
+- ExtractionProgressUI（独立场景）在 DemoRoomChain 中未被实例化，DemoRoomChain 直接使用 GameUIManager 的内置 ExtractionPanel，两者 HUD 路径不同但链路已对齐
+- 需要人类试玩确认：R8撤离读条实际触发 + 读条中断 + 成功面板显示战果
+
+### 下一轮最可能方向
+1. **人类试玩验证**：Demo 8房间撤离完整链路
+2. **第二关战斗房密度深化**：第二关 base_count 2+floor=4 vs 第一关 2+floor=3
+3. **EliteActiveSkillComponent 6种技能**实际触发验证
+
+## 轮次 553 — 2026-05-31 12:07
+
+### 主题
+Tab键冲突修复 — FateCardUIController与WeaponAssemblyTreePanel的Tab键竞争
+
+### 选择本轮的原因
+审查 FateCardUIController._input 和 WeaponAssemblyTreePanel._process() 的 Tab 键处理逻辑时发现：
+
+1. FateCardUIController 在 `_input()` 中用 `is_action_pressed("ui_tab")` 检测 Tab（会持续触发，即使已处理过）
+2. WeaponAssemblyTreePanel 在 `_process()` 中用 `is_action_just_pressed("ui_tab")` 检测 Tab
+3. DemoRoomGameMode._process() 也用 `is_action_just_pressed("ui_tab")` 检测 Tab 切换武器面板
+4. 当命卡面板显示时，按 Tab 会触发一连串竞争：FateCardUIController 关闭面板 → DemoRoomGameMode._process() 再次触发 WeaponAssemblyTreePanel.toggle() → 面板显示又立即隐藏
+
+另外，WeaponAssemblyTreePanel 默认 process_mode=INHERITED，在 `get_tree().paused=true` 时不运行 _process()，导致游戏暂停时 Tab 键完全失效。
+
+### 玩家可感知结果
+- 按 Tab 在房间清理后打开命卡选择 → 再按 Tab 关闭命卡 → 再按 Tab 打开武器装配树（稳定切换，不闪烁）
+- 游戏暂停（命卡选择显示）时，Tab 键仍然能正确关闭命卡面板
+
+### 修改内容
+
+**代码：**
+
+1. **`src/ui/FateCardUIController.gd`** — ui_tab 检测改为 is_action_just_pressed
+   - `_input()` 中的 `is_action_pressed("ui_tab")` → `is_action_just_pressed("ui_tab")`
+   - 原因：`is_action_pressed` 在按住 Tab 时会每帧触发，导致关闭后又立即被 WeaponAssemblyTreePanel._process() 的 `is_action_just_pressed` 重新触发 toggle()
+
+2. **`src/ui/WeaponAssemblyTreePanel.gd`** — 新增 PROCESS_MODE_ALWAYS
+   - `_ready()` 中新增 `process_mode = Node.PROCESS_MODE_ALWAYS`
+   - 原因：游戏暂停（命卡选择时 `get_tree().paused=true`）时，INHERITED 模式的节点不运行 _process()，导致 Tab 键在暂停时完全失效
+
+**验证：**
+- Godot headless --check-only 零错误（EXIT 0）✅
+
+### 剩余风险
+- FateCardUIController 和 WeaponAssemblyTreePanel 同时 PROCESS_MODE_ALWAYS，在极少数情况下仍可能有事件竞争，但当前逻辑（is_action_just_pressed + set_input_as_handled）已能覆盖绝大多数场景
+- 需要人类试玩验证：命卡选择 → Tab关闭 → Tab打开武器装配树的完整切换流程
+
+### 下一轮最可能方向
+1. **人类试玩验证**：Demo 8房间链路完整验证（Boss HP Bar / 命卡Tab / 撤离HUD）
+2. **第二关怪物强度深化**：FLOOR_SCALING 第二关数值深化（HP×1.4, Damage×1.2, Loot×1.3）
+3. **精英召集buff恢复逻辑**：EliteActiveSkillComponent._clear_rally_buffs() 的时间戳比较修复（_rally_buff_until 使用 Time.get_ticks_msec() 毫秒戳）

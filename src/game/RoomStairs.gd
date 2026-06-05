@@ -4,6 +4,7 @@ extends Node2D
 ## room_type 决定方向：STAIRS_DOWN=下楼, STAIRS_UP=上楼, ELEVATOR=双向
 
 @onready var stairs_area: Area2D = $StairsArea
+var _runtime_room_type: int = -1
 
 func _ready() -> void:
 	_configure_stairs_direction()
@@ -13,13 +14,20 @@ func _ready() -> void:
 func _configure_stairs_direction() -> void:
 	if stairs_area == null:
 		return
-	# 从 Visualizer 读取 room_type（Visualizer 的 room_type 在编辑器设置）
+	var room_type := _runtime_room_type
+	# 编辑器预览仍可从 Visualizer 读取默认类型。
 	var visualizer: Node = get_node_or_null("Visualizer")
-	if visualizer != null and visualizer.has_method("get_room_type"):
-		var rt: int = visualizer.get_room_type()
-		var stairs_interaction: Node = stairs_area.get_child(0) if stairs_area.get_child_count() > 0 else null
-		if stairs_interaction != null and stairs_interaction is StairsInteraction:
-			_match_direction_to_room_type(rt, stairs_interaction)
+	if room_type < 0 and visualizer != null and visualizer.has_method("get_room_type"):
+		room_type = visualizer.get_room_type()
+	var stairs_interaction: Node = stairs_area.get_child(0) if stairs_area.get_child_count() > 0 else null
+	if stairs_interaction != null and stairs_interaction is StairsInteraction:
+		_match_direction_to_room_type(room_type, stairs_interaction)
+
+func configure_room_data(room_data: RoomData) -> void:
+	if room_data == null:
+		return
+	_runtime_room_type = room_data.room_type
+	_configure_stairs_direction()
 
 func _match_direction_to_room_type(room_type: int, stairs: StairsInteraction) -> void:
 	# RoomData.RoomType 枚举值

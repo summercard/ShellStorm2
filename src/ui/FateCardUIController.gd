@@ -20,6 +20,9 @@ var _ui_manager: Node = null
 
 
 func _ready() -> void:
+	# 必须设置为 ALWAYS，保证游戏暂停时也能接收 Tab 输入
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	# 查找 GameUIManager（可能位于根节点的不同层级）
 	_ui_manager = get_tree().get_first_node_in_group("game_ui")
 	if _ui_manager == null:
@@ -43,9 +46,9 @@ func _ready() -> void:
 		instruction_label = fate_card_panel.get_node_or_null("VBox/InstructionLabel") as Label
 	else:
 		# 兜底：在本节点内查找
-		card_panel = get_node_or_null(".") as Panel
-		card_container = get_node_or_null("VBox/CardOptions") as HBoxContainer
-		instruction_label = get_node_or_null("VBox/InstructionLabel") as Label
+		card_panel = get_node_or_null("FateCardPanel") as Panel
+		card_container = get_node_or_null("FateCardPanel/VBox/CardOptions") as HBoxContainer
+		instruction_label = get_node_or_null("FateCardPanel/VBox/InstructionLabel") as Label
 
 	if card_panel != null:
 		card_panel.hide()
@@ -54,10 +57,13 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and is_visible:
 		hide_card_selection()
-	elif event.is_action_pressed("ui_tab") and not is_visible:
-		# 只在卡片面板和容器都就绪时才拦截 Tab，否则让 Tab 被 WeaponAssemblyTreePanel 消费
-		if card_panel != null and card_container != null:
-			show_card_selection()
+	elif event.is_action_just_pressed("ui_tab"):
+		# 只在卡片面板已显示且容器就绪时才拦截 Tab 关闭（防止竞争）
+		if is_visible and card_panel != null and card_container != null:
+			hide_card_selection()
+			# 阻止事件继续传播，避免 DemoRoomGameMode._process() 再次触发 panel.toggle()
+			get_tree().root.set_input_as_handled()
+		# 卡片隐藏时让 WeaponAssemblyTreePanel 处理 Tab 切换
 
 
 ## 显示卡片选择界面（从预设中随机抽 3 张）
@@ -89,7 +95,7 @@ func show_card_selection() -> void:
 	if card_panel != null:
 		card_panel.show()
 	is_visible = true
-	get_tree().paused = true
+	Global.acquire_pause("fate_card")
 
 
 ## 隐藏卡片选择界面
@@ -97,7 +103,11 @@ func hide_card_selection() -> void:
 	if card_panel != null:
 		card_panel.hide()
 	is_visible = false
-	get_tree().paused = false
+	Global.release_pause("fate_card")
+	if _ui_manager != null:
+		var room_mode = _ui_manager.get("_room_game_mode")
+		if room_mode != null and room_mode.has_method("_on_fate_card_controller_hidden"):
+			room_mode.call("_on_fate_card_controller_hidden")
 
 
 ## 创建一张卡片按钮

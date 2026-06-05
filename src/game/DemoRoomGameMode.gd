@@ -8,10 +8,26 @@ extends Node2D
 ## 撤离模块（直接实例化，ExtractionModule extends RefCounted 不能作为 Node child）
 var _extraction_module: ExtractionModule = null
 
+## 撤离防御波次系统（接入 RoomGameMode 逻辑）
+var _extraction_defense_active := false
+var _extraction_mid_wave_spawned := false
+var _extraction_elite_wave_spawned := false
+var _current_wave_spawner: Node = null
+
+## 撤离常量（与 RoomGameMode 一致）
+const EXTRACTION_MID_WAVE_REMAINING := 9.0
+const EXTRACTION_FINAL_WAVE_REMAINING := 5.0
+
 func _get_extraction_module() -> ExtractionModule:
 	if _extraction_module == null:
 		_extraction_module = ExtractionModule.new()
+		_connect_extraction_ui_signals(_extraction_module)
 	return _extraction_module
+
+func _connect_extraction_ui_signals(module: ExtractionModule) -> void:
+	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+	if gui != null and gui.has_method("set_extraction_module"):
+		gui.call("set_extraction_module", module)
 
 ## 背包模块（直接实例化，InventoryModule extends RefCounted 不能作为 Node child）
 var _inventory_module: InventoryModule = null
@@ -50,14 +66,20 @@ func _get_weapon_panel() -> Control:
 		_weapon_panel = panel
 	return _weapon_panel
 
+## 命运卡片UI实例（_spawn_fate_card_ui 时赋值，供 _get_fate_card_controller 使用）
+var _fate_card_ui_instance: Control = null
+
 ## 状态
 var _current_room_id: int = 0
 var _room_key_count: int = 1
 var _player: Node2D = null
+var _camera: Camera2D = null
+var _last_player_hp: int = -1
 var _room_instances: Dictionary = {}
 var _enemies_remaining: int = 0
 var _rooms_cleared: Array[int] = []
 var _extraction_started: bool = false
+var _door_fate_selection_active: bool = false
 
 ## 门交互状态（修复：改用 _process 轮询检测，避免帧同步问题）
 var _near_door: Dictionary = {}  # door_area → {from_id, to_id, label}
@@ -159,6 +181,7 @@ var _ui_label: Label = null
 func _ready() -> void:
 	_setup_ui()
 	_spawn_player()
+	_bind_game_ui()
 	_instantiate_demo_rooms()
 	_enter_room(0)
 	_setup_key_input()
@@ -170,7 +193,7 @@ func _setup_ui() -> void:
 	
 	var label := Label.new()
 	label.name = "InfoLabel"
-	label.position = Vector2(20, 20)
+	label.position = Vector2(20, 120)
 	label.add_theme_font_size_override("font_size", 18)
 	label.text = "DemoRoomChain 演示：8房间搜打撤链\nR1-R2(战斗) → R3(搜刮) → R4(商人) → R5(改造) → R6(BOSS) → R7(精英) → R8(撤离)\n按 [WASD] 移动，靠近门按 [E] 开门"
 	canvas.add_child(label)
@@ -277,13 +300,13 @@ func _spawn_player() -> void:
 	add_child(_player)
 	
 	# 设置相机
-	var camera := Camera2D.new()
-	camera.name = "Camera2D"
-	camera.position_smoothing_enabled = true
-	camera.position_smoothing_speed = 8.0
-	camera.enabled = true
-	add_child(camera)
-	camera.make_current()
+	_camera = Camera2D.new()
+	_camera.name = "Camera2D"
+	_camera.position_smoothing_enabled = true
+	_camera.position_smoothing_speed = 8.0
+	_camera.enabled = true
+	_player.add_child(_camera)
+	_camera.make_current()
 	
 	# 实例化命运卡片 UI 控制器（Tab 键呼出卡片选择）
 	_spawn_fate_card_ui()
@@ -291,6 +314,14 @@ func _spawn_player() -> void:
 	# 连接玩家受伤信号（用于撤离读条中断）
 	if _player.has_signal("hp_changed"):
 		_player.hp_changed.connect(_on_player_hp_changed)
+	_last_player_hp = int(_player.get("current_hp"))
+
+	# 绑定 HealthVignette 到 Player（低血量红边效果，与 CoreCombatMode 一致）
+	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+	if gui != null:
+		var hv = gui.get("_health_vignette") as Control
+		if hv and hv.has_method("set_player_ref"):
+			hv.call("set_player_ref", _player)
 
 ## 实例化命运卡片 UI 控制器
 func _spawn_fate_card_ui() -> void:
@@ -299,7 +330,48 @@ func _spawn_fate_card_ui() -> void:
 		var fate_ui: Control = fate_ui_scene.instantiate() as Control
 		if fate_ui != null:
 			add_child(fate_ui)
+			_fate_card_ui_instance = fate_ui
 			print("[DemoRoomGameMode] FateCardUIController 已实例化")
+
+func _bind_game_ui() -> void:
+	var gui: Node = get_node_or_null("GameUIManager")
+	if gui == null:
+		gui = get_tree().root.find_child("GameUIManager", true, false)
+	if gui == null:
+		return
+	if gui.has_method("set_room_game_mode"):
+		gui.call("set_room_game_mode", self)
+	if gui.has_method("set_player"):
+		gui.call("set_player", _player)
+	if gui.has_method("set_inventory_module"):
+		gui.call("set_inventory_module", _get_inventory_module())
+	if gui.has_method("set_extraction_module"):
+		gui.call("set_extraction_module", _get_extraction_module())
+	var minimap := gui.get_node_or_null("GameHUD/MiniMapPanel") as Control
+	if minimap != null:
+		minimap.visible = false
+
+## 获取命运卡片 UI 控制器（GameUIManager 调用接口，兼容 RoomGameMode API）
+func _get_fate_card_controller() -> Control:
+	return _fate_card_ui_instance
+
+func get_player() -> Node2D:
+	return _player
+
+func get_inventory() -> InventoryModule:
+	return _get_inventory_module()
+
+func get_extraction_module() -> ExtractionModule:
+	return _get_extraction_module()
+
+## 显示房间清理后的命运卡片选择（与 RoomGameMode._show_fate_cards_in_panel 一致）
+func _show_fate_cards_in_panel() -> void:
+	if _fate_card_ui_instance != null and _fate_card_ui_instance.has_method("show_card_selection"):
+		_door_fate_selection_active = true
+		_fate_card_ui_instance.show_card_selection()
+
+func _on_fate_card_controller_hidden() -> void:
+	_door_fate_selection_active = false
 
 ## 实例化所有Demo房间
 func _instantiate_demo_rooms() -> void:
@@ -538,8 +610,8 @@ func _refresh_door_visual(door_area: Area2D, from_id: int, to_id: int, label: La
 
 ## 门交互检测（_process 轮询，解决帧同步问题）
 func _process(_delta: float) -> void:
-	# Tab键切换武器装配树面板显示/隐藏
-	if Input.is_action_just_pressed("ui_tab"):
+	# 无统一 HUD 时保留独立武器面板回退；正常 Demo 由 GameUIManager 处理 Tab。
+	if Input.is_action_just_pressed("ui_tab") and get_node_or_null("GameUIManager") == null:
 		var panel: Control = _get_weapon_panel()
 		if panel != null:
 			panel.toggle()
@@ -552,6 +624,7 @@ func _process(_delta: float) -> void:
 		# 更新撤离读条进度
 		if _extraction_module != null and _extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
 			_extraction_module.update(_delta)
+			_update_extraction_defense()
 			var rem: float = _extraction_module.get_remaining_time()
 			var prog: float = _extraction_module.get_progress()
 			_update_label("=== 撤离读条中 ===\n%.1f秒 remaining...\n[======%.0f%%==]" % [rem, prog * 100.0])
@@ -621,6 +694,8 @@ func _on_waves_cleared(room_id: int) -> void:
 	_room_key_count += 1
 	# 清怪后刷新所有门的锁定状态（门板颜色+标签文字）
 	_refresh_all_doors()
+	# 显示命运卡片选择（与 RoomGameMode 一致）
+	_show_fate_cards_in_panel()
 
 ## 刷新所有已存在门的锁定视觉
 func _refresh_all_doors() -> void:
@@ -676,13 +751,10 @@ func _on_boss_spawn_triggered(boss_data: Dictionary) -> void:
 		if boss_actor != null and boss_actor.has_method("activate"):
 			boss_actor.call("activate")
 			print("[DemoRoomGameMode] 激活 BossActor")
-	# 通知 GameUIManager 显示 Boss HP
-	var boss_logic: Node = room_instance.get_node_or_null("BossRoomLogic") if room_instance != null else null
-	if boss_logic != null and boss_logic.has_method("get_boss_data"):
-		var bd: Dictionary = boss_logic.get_boss_data()
-		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
-		if gui != null and gui.has_method("on_boss_spawned"):
-			gui.call("on_boss_spawned", bd)
+	# 通知 GameUIManager 显示 Boss HP（直接用 boss_data，不走 boss_logic.get_boss_data() — 该方法在 BossRoomLogic 未主动 setup 时返回空字典）
+	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+	if gui != null and gui.has_method("on_boss_spawned"):
+		gui.call("on_boss_spawned", boss_data)
 
 ## BOSS房：Boss击败回调 — 标记房间已清理，自动给钥匙
 func _on_boss_defeated_triggered() -> void:
@@ -700,6 +772,7 @@ func _schedule_extraction_start() -> void:
 	# 1秒后允许触发撤离（给玩家时间到达房间中央）
 	await get_tree().create_timer(1.0).timeout
 	_extraction_started = true
+	_connect_extraction_ui_signals(_get_extraction_module())
 
 ## 撤离房：E键触发撤离读条
 func _try_start_extraction() -> bool:
@@ -711,18 +784,54 @@ func _try_start_extraction() -> bool:
 	if _rooms_cleared.has(_current_room_id):
 		return false  # 已清理的房间不需要撤离
 	
-	var ok: bool = _extraction_module.start_extraction("STANDARD", 5.0)
+	# 激活撤离防御波次系统
+	_extraction_defense_active = true
+	_extraction_mid_wave_spawned = false
+	_extraction_elite_wave_spawned = false
+	# 获取撤离房 WaveSpawner 以便 _spawn_extraction_attackers 使用
+	# 注意：RoomExtraction.tscn 没有 WaveSpawner 子节点，必须创建一个临时波次生成器
+	# 来处理撤离防御刷怪（近玩家位置生成，而非房间预设位置）
+	var extraction_room_instance: Node2D = _room_instances[_current_room_id] as Node2D
+	if extraction_room_instance != null:
+		if _current_wave_spawner != null and is_instance_valid(_current_wave_spawner):
+			_current_wave_spawner.queue_free()
+		var wave_spawner := RoomWaveSpawner.new()
+		wave_spawner.name = "ExtractionWaveSpawner"
+		extraction_room_instance.add_child(wave_spawner)
+		wave_spawner.configure(
+			[],
+			extraction_room_instance,
+			_player,
+			1,
+			RoomData.FloorLevel.SHALLOW,
+			self
+		)
+		# 配置：_spawn_next_wave 不会自动调用（_enemy_count_per_wave 为空）
+		# 但 set_enemy_pool + trigger_extra_spawn 可以独立触发额外刷怪
+		_current_wave_spawner = wave_spawner
+
+	var ok: bool = _extraction_module.start_extraction("STANDARD", 14.0)
 	if ok:
-		_update_label("=== 撤离读条中 ===\n5秒后完成撤离！\n（此Demo到此结束）")
+		_update_label("=== 撤离读条中 ===\n14秒后完成撤离！\n（此Demo到此结束）")
 		# 连接撤离完成/中断信号
 		if not _extraction_module.extraction_completed.is_connected(_on_extraction_completed):
 			_extraction_module.extraction_completed.connect(_on_extraction_completed)
 		if not _extraction_module.extraction_aborted.is_connected(_on_extraction_aborted):
 			_extraction_module.extraction_aborted.connect(_on_extraction_aborted)
+		# 同步启动 GameUIManager 撤离读条 HUD（countdown_bar + 倒计时Label + 中断按钮）
+		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+		if gui != null:
+			if gui.has_method("show_extraction_room_countdown"):
+				gui.call("show_extraction_room_countdown", 14.0)
+			# 将 DemoRoomGameMode 的 ExtractionModule 接入 GameUIManager 的信号处理器
+			# 以便 countdown_bar 实时更新 + abort_button 正确响应中断
+			if gui.has_method("_connect_extraction_module_signals"):
+				gui.call("_connect_extraction_module_signals", _extraction_module)
 	return ok
 
 ## 撤离完成回调
 func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
+	_extraction_defense_active = false
 	if success:
 		# 通知 GameUIManager 显示撤离成功面板（完整战局统计 HUD）
 		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
@@ -749,14 +858,17 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 
 ## 撤离中断回调（玩家在撤离读条期间受伤）
 func _on_extraction_aborted() -> void:
+	_extraction_defense_active = false
 	_update_label("=== 撤离已中断 ===\n你在读条期间受到了攻击！\n请重新按 [E] 开启撤离")
 
 ## 玩家受伤时中断撤离读条（搜打撤核心机制）
-func _on_player_hp_changed(current: int, maximum: int) -> void:
+func _on_player_hp_changed(current: int, _maximum: int) -> void:
+	var took_damage := _last_player_hp >= 0 and current < _last_player_hp
+	_last_player_hp = current
 	if _extraction_module == null:
 		return
 	# 仅在撤离读条进行中时响应（不是在IDLE或已完成状态）
-	if _extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
+	if took_damage and _extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
 		_extraction_module.abort_extraction()
 		_update_label("=== 撤离已中断 ===\n受到攻击！请重新按 [E] 撤离")
 
@@ -764,6 +876,81 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 func _update_label(text: String) -> void:
 	if _ui_label != null:
 		_ui_label.text = text
+
+## 撤离防御波次更新（与 RoomGameMode._update_extraction_defense 一致的逻辑）
+func _update_extraction_defense() -> void:
+	if not _extraction_defense_active or _extraction_module == null:
+		return
+	var remaining := _extraction_module.get_remaining_time()
+	if not _extraction_mid_wave_spawned and remaining <= EXTRACTION_MID_WAVE_REMAINING and remaining > EXTRACTION_FINAL_WAVE_REMAINING:
+		_extraction_mid_wave_spawned = true
+		_update_label("撤离信号 2/3：增援逼近！")
+		_spawn_extraction_attackers(
+			[
+				{
+					"enemy_type": "melee_chaser",
+					"hp": 32,
+					"damage": 7,
+					"speed": 105.0,
+					"currency_value": 9
+				},
+				{
+					"enemy_type": "ranged_caster",
+					"hp": 25,
+					"damage": 8,
+					"speed": 100.0,
+					"currency_value": 10
+				},
+			]
+		)
+	elif not _extraction_elite_wave_spawned and remaining <= EXTRACTION_FINAL_WAVE_REMAINING:
+		_extraction_elite_wave_spawned = true
+		_spawn_extraction_final_wave()
+
+## 撤离最终波：精英或最后一波
+func _spawn_extraction_final_wave() -> void:
+	var elite_chance := minf(1.0, 0.30 + float(_rooms_cleared.size()) * 0.12)
+	if randf() < elite_chance:
+		_update_label("撤离信号即将锁定：精英拦截者出现！")
+		_spawn_extraction_attackers(
+			[
+				{
+					"enemy_type": "melee_chaser",
+					"hp": 85,
+					"damage": 11,
+					"speed": 100.0,
+					"currency_value": 35,
+					"is_elite": true,
+				}
+			]
+		)
+	else:
+		_update_label("撤离信号即将锁定：最后一波追兵！")
+		_spawn_extraction_attackers(
+			[
+				{
+					"enemy_type": "ranged_caster",
+					"hp": 34,
+					"damage": 8,
+					"speed": 88.0,
+					"currency_value": 10
+				},
+				{
+					"enemy_type": "melee_chaser",
+					"hp": 36,
+					"damage": 8,
+					"speed": 108.0,
+					"currency_value": 10
+				},
+			]
+		)
+
+## 生成撤离攻击波次
+func _spawn_extraction_attackers(enemy_plan: Array[Dictionary]) -> void:
+	if _current_wave_spawner == null or not is_instance_valid(_current_wave_spawner):
+		return
+	_current_wave_spawner.set_enemy_pool(enemy_plan)
+	_current_wave_spawner.trigger_extra_spawn(enemy_plan.size())
 
 ## 创建占位符房间（场景不存在时的回退）
 func _create_placeholder_room(room_data: Dictionary) -> Node2D:

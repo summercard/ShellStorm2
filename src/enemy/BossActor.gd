@@ -464,7 +464,7 @@ func _trigger_hit_screen_shake(damage: float, is_crit: bool) -> void:
 func _notify_boss_damaged(damage: float) -> void:
 	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
 	if gui != null and gui.has_method("on_boss_damaged"):
-		gui.call("on_boss_damaged", boss_id, damage, _current_hp, max_hp)
+		gui.call("on_boss_damaged", boss_id, damage, _current_hp)
 
 
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool) -> void:

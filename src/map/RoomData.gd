@@ -61,6 +61,8 @@ var floor_level: FloorLevel = FloorLevel.SHALLOW
 var room_id: String = ""
 var room_number: int = -1
 var floor: int = 1  # 所在层（关卡层，如第1关、第2关）
+var theme_id: String = "default"
+var visual_floor: int = 1
 var vertical_level: VerticalLevel = VerticalLevel.MAIN  # 垂直楼层（地下室、主层、二楼）
 var position: Vector2 = Vector2.ZERO  # 在节点图中的坐标
 var tags: Array[String] = []  # 房间标签，用于内容注入
@@ -178,6 +180,13 @@ static func get_type_name(t: RoomType) -> String:
 			return "电梯"
 		_:
 			return "未知"
+
+
+static func get_type_id_name(t: RoomType) -> String:
+	for key in RoomType:
+		if int(RoomType[key]) == int(t):
+			return str(key)
+	return "INVALID"
 
 
 ## 层级名称

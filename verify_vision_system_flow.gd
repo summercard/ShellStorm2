@@ -71,8 +71,7 @@ func _verify_runtime_lighting_nodes(failures: Array[String]) -> void:
 	var room := RoomData.new(RoomData.RoomType.COMBAT, 1)
 	room.size = Vector2(960.0, 768.0)
 	layout.configure(0, room, [])
-	var occluders := layout.get_node_or_null("LayoutOccluders")
-	if occluders == null or occluders.get_child_count() < 4:
+	if _count_light_occluders(layout) < 4:
 		failures.append("Runtime room walls do not create light occluders")
 	layout.queue_free()
 
@@ -93,3 +92,10 @@ func _verify_runtime_lighting_nodes(failures: Array[String]) -> void:
 	else:
 		if not authored_light.shadow_enabled:
 			failures.append("Room fixtures must cast shadows")
+
+
+func _count_light_occluders(node: Node) -> int:
+	var count := 1 if node is LightOccluder2D else 0
+	for child in node.get_children():
+		count += _count_light_occluders(child)
+	return count

@@ -307,22 +307,17 @@ func get_active_count() -> int:
 
 
 func _load_archive() -> void:
-	if not FileAccess.file_exists(SAVE_PATH):
-		# 首次运行：播种新手引导型精英怪，让玩家从第一局就感受到精英威胁
+	var data: Variant = AtomicJsonStore.load_dictionary(SAVE_PATH)
+	if not data is Dictionary:
+		# 首次运行或主备份均不可读：播种新手引导型精英怪。
 		_seed_starter_elites()
 		return
-	var f = FileAccess.open(SAVE_PATH, FileAccess.READ)
-	if not f:
-		_seed_starter_elites()
-		return
-	var data = JSON.parse_string(f.get_as_text())
-	if typeof(data) == TYPE_DICTIONARY:
-		archive.clear()
-		var records = data.get("elites", [])
-		for d in records:
-			var rec = EliteRecord.from_dict(d)
-			archive[rec.elite_id] = rec
-		_next_id = data.get("next_id", 0)
+	archive.clear()
+	var records = data.get("elites", [])
+	for d in records:
+		var rec = EliteRecord.from_dict(d)
+		archive[rec.elite_id] = rec
+	_next_id = data.get("next_id", 0)
 	# 防止存档损坏导致空池：再次检查，为空则播种
 	if archive.is_empty():
 		_seed_starter_elites()
@@ -390,9 +385,7 @@ func save_archive() -> void:
 		"elites": records,
 		"next_id": _next_id
 	}
-	var f = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(data))
+	AtomicJsonStore.save_dictionary(SAVE_PATH, data)
 
 
 func _exit_tree() -> void:

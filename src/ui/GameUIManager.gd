@@ -822,6 +822,9 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 
 	# 绘制连接线
 	for node_data in _minimap_nodes:
+		# 防御: _minimap_nodes 元素缺字段时跳过,避免 node_data["pos"] 抛 KeyError
+		if not (node_data is Dictionary and node_data.has("pos") and node_data.has("connections")):
+			continue
 		var pos: Vector2 = node_data["pos"]
 		for conn_id in node_data["connections"]:
 			var conn_pos: Vector2 = _get_node_pos_by_id(conn_id)
@@ -831,6 +834,9 @@ func _draw_minimap_rserver(canvas: RID) -> void:
 
 	# 绘制房间节点（未揭示的房间降低透明度）
 	for node_data in _minimap_nodes:
+		# 防御: 缺 pos/color/is_current 字段时跳过,避免 KeyError
+		if not (node_data is Dictionary and node_data.has("pos") and node_data.has("color") and node_data.has("is_current")):
+			continue
 		var pos: Vector2 = node_data["pos"]
 		var color: Color = node_data["color"]
 		var is_current: bool = node_data["is_current"]
@@ -898,8 +904,8 @@ func _on_room_cleared(room_data) -> void:
 	if room_info_label:
 		room_info_label.text = "房间清理完成！"
 	clearing_progress.visible = false
-	# 显示命运卡片提示
-	_show_fate_card_notification()
+	# 显示命运卡片选择界面（而非仅显示文字提示）
+	_show_fate_card_selection_ui()
 	# 波次完成庆祝：飘字 + 震屏（Boss 房显示"Boss 已击败！"）
 	var room_type_val: int = -1
 	if room_data is RoomData:
@@ -907,6 +913,19 @@ func _on_room_cleared(room_data) -> void:
 	elif room_data is Dictionary and room_data.has("room_type"):
 		room_type_val = int(room_data.get("room_type", -1))
 	_show_wave_complete_celebration(room_type_val)
+
+
+## 显示命运卡片选择界面（通过 room_game_mode 获取 FateCardUIController 并调用 show_card_selection）
+func _show_fate_card_selection_ui() -> void:
+	if _room_game_mode == null or not is_instance_valid(_room_game_mode):
+		return
+	# 从 RoomGameMode/DemoRoomGameMode 获取已实例化的 FateCardUIController
+	var fate_ui: Control = _room_game_mode._get_fate_card_controller()
+	if fate_ui != null and fate_ui.has_method("show_card_selection"):
+		fate_ui.call("show_card_selection")
+	else:
+		# 兜底：仍显示文字提示
+		_show_fate_card_notification()
 
 
 ## 波次完成庆祝飘字（金色大字，居中屏幕）
@@ -978,13 +997,37 @@ func _show_wave_complete_celebration(room_type: int = -1) -> void:
 
 
 ## — Boss 事件处理器（由 RoomGameMode 调用）—
-## Boss 出现时回调（显示 Boss HP UI）
+## Boss 出现时回调（显示 Boss HP UI + 出场公告）
 func on_boss_spawned(boss_data: Dictionary) -> void:
-	room_info_label.text = "Boss 出现了！"
 	var boss_name: String = boss_data.get("boss_id", "BOSS")
 	var max_hp: float = boss_data.get("max_hp", 500.0)
 	var current_hp: float = max_hp
+	# 出场公告：先闪白提示 Boss 名称（0.6秒），再显示血条
+	_flashte_boss_name_label(boss_name)
 	show_boss_hp(boss_name, max_hp, current_hp)
+
+
+## Boss 出场时名字闪烁公告（先白闪提示，再切回 room_info_label）
+func _flashte_boss_name_label(boss_name: String) -> void:
+	if room_info_label == null:
+		return
+	# 记录原始文字，恢复后用
+	var original_text: String = room_info_label.text
+	var original_color: Color = room_info_label.get_theme_color("font_color")
+	# 白闪烁公告
+	room_info_label.text = "⚔ %s 出现了！" % boss_name
+	room_info_label.add_theme_color_override("font_color", Color(1.0, 1.0, 0.95, 1.0))
+	# 0.7 秒后恢复 room_info_label 原始颜色和文字
+	var t := create_tween()
+	t.tween_interval(0.7)
+	t.tween_callback(_restore_room_info_label.bind(original_text, original_color))
+
+
+func _restore_room_info_label(original_text: String, original_color: Color) -> void:
+	if room_info_label == null:
+		return
+	room_info_label.text = original_text
+	room_info_label.add_theme_color_override("font_color", original_color)
 
 
 ## Boss 受伤时回调（更新 Boss HP 条）
@@ -1137,7 +1180,16 @@ func show_boss_hp(boss_name: String, max_hp: float, current_hp: float) -> void:
 	_boss_hp_bar.max_value = max_hp
 	_boss_hp_bar.value = current_hp
 	_update_boss_hp_label()
+	# 先重置到屏幕外上方（offset_top 为负 = 在可见区上方），然后播放滑入+淡入动画
+	_boss_hp_panel.offset_top = -80.0
+	_boss_hp_panel.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	_boss_hp_panel.visible = true
+	var tween := create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(_boss_hp_panel, "offset_top", 16.0, 0.35)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(_boss_hp_panel, "modulate:a", 1.0, 0.3)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
 ## 更新 Boss HP 数值显示
@@ -1372,7 +1424,7 @@ func _on_game_over(reason: String = "未知原因") -> void:
 		retry_button.process_mode = Node.PROCESS_MODE_ALWAYS
 	if menu_button:
 		menu_button.process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
+	Global.acquire_pause("game_over")
 
 
 ## 设置死亡统计（房间模式调用）
@@ -1477,18 +1529,18 @@ func _make_outline(main_label: Label) -> Label:
 
 
 func _on_retry_pressed() -> void:
-	get_tree().paused = false
+	Global.clear_pause_reasons()
 	death_overlay.visible = false
 	game_over_panel.visible = false
 	get_tree().reload_current_scene()
 
 
 func _on_menu_pressed() -> void:
-	get_tree().paused = false
+	Global.clear_pause_reasons()
 	death_overlay.visible = false
 	game_over_panel.visible = false
 	# 返回基地主界面（而非直接重新开始游戏）
-	get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
+	get_tree().change_scene_to_file("res://scenes/BaseWorld.tscn")
 
 
 ## 楼层变化
@@ -1680,8 +1732,7 @@ func _show_extraction_success() -> void:
 	if _screen_shake and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 3.5, 0.12)
 
-	Global.is_paused = true
-	get_tree().paused = true
+	Global.acquire_pause("extraction_success")
 
 
 func _ensure_extraction_success_modal() -> void:
@@ -1759,13 +1810,19 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 		# 如果 stats 中带了本局带出的真实物品列表（在背包清空前读取），直接渲染
 		# 否则回退到实时读取（适用于 CoreCombatMode 等没有提前传入 extracted_items 的场景）
 		var extracted_slots: Array[Dictionary] = []
-		var passed_extracted: Array[Dictionary] = stats.get("extracted_items", [])
+		var passed_extracted: Array[Dictionary] = []
+		for slot_data in stats.get("extracted_items", []):
+			if slot_data is Dictionary:
+				passed_extracted.append(slot_data)
 		if not passed_extracted.is_empty():
 			extracted_slots = passed_extracted
 		elif _inventory_module and _inventory_module.has_method("get_occupied_slots"):
 			extracted_slots = _inventory_module.get_occupied_slots()
 		var insured_slots: Array[Dictionary] = []
-		var passed_insured: Array[Dictionary] = stats.get("insured_items", [])
+		var passed_insured: Array[Dictionary] = []
+		for slot_data in stats.get("insured_items", []):
+			if slot_data is Dictionary:
+				passed_insured.append(slot_data)
 		if not passed_insured.is_empty():
 			insured_slots = passed_insured
 		elif _insurance_module and _insurance_module.has_method("get_all_insured_items"):
@@ -1811,8 +1868,7 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 
 ## 继续按钮 — 返回基地主界面
 func _on_continue_pressed() -> void:
-	Global.is_paused = false
-	get_tree().paused = false
+	Global.clear_pause_reasons()
 	_extraction_success_shown = false
 	if _extraction_success_backdrop:
 		_extraction_success_backdrop.visible = false
@@ -1823,7 +1879,7 @@ func _on_continue_pressed() -> void:
 	if death_overlay:
 		death_overlay.visible = false
 	# 返回基地主界面
-	var change_error := get_tree().change_scene_to_file("res://scenes/BaseMenu.tscn")
+	var change_error := get_tree().change_scene_to_file("res://scenes/BaseWorld.tscn")
 	if change_error != OK:
 		push_error("返回基地场景切换失败：%s" % error_string(change_error))
 
@@ -2202,6 +2258,11 @@ func _on_reload_started() -> void:
 	else:
 		_reload_duration = 2.0
 	_reload_progress = 0.0
+	# 换弹时将 ammo_bar 切换为显示"换弹进度"（而不是弹药量）
+	if ammo_bar:
+		ammo_bar.max_value = _reload_duration
+		ammo_bar.value = 0.0
+		ammo_bar.modulate = Color(0.45, 0.8, 1.0, 1.0)  # 蓝色表示换弹中
 
 
 ## 换弹完成
@@ -2212,6 +2273,9 @@ func _on_weapon_reloaded() -> void:
 		reload_indicator.visible = false
 	if ammo_label:
 		ammo_label.modulate = Color.WHITE
+	# 换弹完成后恢复 ammo_bar 为弹药量显示（根据当前弹药量设置颜色）
+	if ammo_bar:
+		ammo_bar.modulate = Color(0.45, 1.0, 0.55, 1.0)  # 绿色正常
 
 
 ## 获取武器装配树引用
@@ -3012,8 +3076,19 @@ func _input(event: InputEvent) -> void:
 		event is InputEventKey
 		and event.pressed
 		and not event.echo
-		and event.keycode in [KEY_K, KEY_TAB]
 	):
-		if _weapon_panel != null and _weapon_panel.has_method("toggle"):
-			_weapon_panel.call("toggle")
+		if event.keycode == KEY_K:
+			if _weapon_panel != null and _weapon_panel.has_method("toggle"):
+				_weapon_panel.call("toggle")
+			get_viewport().set_input_as_handled()
+		elif event.keycode == KEY_TAB:
+			# 门后命卡选择期间不劫持Tab（让 FateCardUIController 消费关闭事件）
+			var door_fate_active := false
+			if _room_game_mode != null and is_instance_valid(_room_game_mode):
+				var prop = _room_game_mode.get("_door_fate_selection_active")
+				if prop != null:
+					door_fate_active = bool(prop)
+			if not door_fate_active:
+				if _weapon_panel != null and _weapon_panel.has_method("toggle"):
+					_weapon_panel.call("toggle")
 			get_viewport().set_input_as_handled()

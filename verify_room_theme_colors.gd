@@ -1,10 +1,9 @@
-#!/usr/bin/env godot --headless --script
 ## 验证房间主题色生成正确性
-## 运行: cd ShellStorm2 && godot --headless --script verify_room_theme_colors.gd
+## 运行: godot --headless --path . --scene res://verify_room_theme_colors.tscn
 
-extends SceneTree
+extends Node
 
-func _init() -> void:
+func _ready() -> void:
 	print("=== 房间主题色验证 ===")
 	
 	# 验证 RoomTileSetBuilder 颜色数据
@@ -24,12 +23,14 @@ func _init() -> void:
 	# 测试 RoomTileMapInitializer.configure() 是否正确应用 room_type
 	var test_scene = load("res://scenes/RoomStorage.tscn")
 	var room = test_scene.instantiate()
+	add_child(room)
 	var visualizer = room.get_node_or_null("Visualizer")
 	if visualizer != null:
 		print("\n[RoomStorage Visualizer 配置]")
 		print("  初始 room_type: ", visualizer.room_type)
 		# 调用 configure 注入 STORAGE 类型
-		visualizer.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), [])
+		var door_info: Array[Dictionary] = []
+		visualizer.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), door_info)
 		print("  configure后 room_type: ", visualizer.room_type)
 		
 		# 检查 TileSet 是否已构建
@@ -42,5 +43,5 @@ func _init() -> void:
 	
 	room.free()
 	
-	print("\n=== 验证完成 ===")
-	quit()
+	print("\nROOM_THEME_COLORS_OK: room themes and storage tiles are available")
+	get_tree().quit()

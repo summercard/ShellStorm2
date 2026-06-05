@@ -19,10 +19,10 @@ func _verify_turret_cleanup(failures: Array[String]) -> void:
 	var bullet_scene: PackedScene = load("res://scenes/Bullet.tscn") as PackedScene
 	var source: Area2D = bullet_scene.instantiate() as Area2D
 	add_child(source)
-	source.set("_fate_spawn_turret_on_land", true)
-	source.set("_fate_turret_duration", 0.08)
 	source.set("max_distance", 0.0)
 	source.call("fire", Vector2.ZERO, Vector2.RIGHT, 1.0, 10, false)
+	source.set("_fate_spawn_turret_on_land", true)
+	source.set("_fate_turret_duration", 0.08)
 	await get_tree().process_frame
 	await get_tree().process_frame
 

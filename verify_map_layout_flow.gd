@@ -28,9 +28,9 @@ func _ready() -> void:
 		if layout == null:
 			failures.append("Room %d has no RoomLayout" % node.id)
 			continue
-		var collision: StaticBody2D = layout.get_node_or_null("WallCollision") as StaticBody2D
-		if collision == null or collision.get_child_count() < 4:
-			failures.append("Room %d has no usable wall collision" % node.id)
+			var walls: Node = layout.get_node_or_null("Walls")
+			if walls == null or walls.get_child_count() < 4:
+				failures.append("Room %d has no usable wall collision" % node.id)
 		for neighbor_id in graph.get_neighbors(node.id):
 			if neighbor_id <= node.id:
 				continue
@@ -83,21 +83,17 @@ func _ready() -> void:
 		var start_room: Node2D = mode.map_manager.get_instantiated_room(0)
 		var start_layout: Node = start_room.get_node_or_null("RoomLayout")
 		if start_layout != null:
-			var before_collision: StaticBody2D = (
-				start_layout.get_node_or_null("WallCollision") as StaticBody2D
-			)
-			if before_collision != null:
-				before_count = before_collision.get_child_count()
+				var before_walls: Node = start_layout.get_node_or_null("Walls")
+				if before_walls != null:
+					before_count = before_walls.get_child_count()
 		mode.map_manager.path_director.open_door(0, first_neighbor)
 		mode._apply_open_doors_to_room(0)
 		await get_tree().process_frame
 		var open_count := 0
 		if start_layout != null:
-			var wall_collision: StaticBody2D = (
-				start_layout.get_node_or_null("WallCollision") as StaticBody2D
-			)
-			if wall_collision != null:
-				open_count = wall_collision.get_child_count()
+				var walls: Node = start_layout.get_node_or_null("Walls")
+				if walls != null:
+					open_count = walls.get_child_count()
 		if open_count <= before_count:
 			failures.append("Opening a door did not rebuild wall segments around an open aperture")
 

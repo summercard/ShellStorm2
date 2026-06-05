@@ -1,10 +1,12 @@
 class_name BaseMenu
 extends CanvasLayer
 
-## 基地主界面 - 游戏入口 Hub
-## 显示玩家长期进度、建筑解锁状态，提供开始任务按钮
+## 基地管理终端兼容界面
+## 显示长期进度与建筑状态；副本只能从固定大世界中的建筑入口进入。
 ##
 ## BaseManager 通过 Autoload 直接访问（已在 project.godot 注册）
+
+@export var overlay_mode := false
 
 @onready var runs_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/RunsLabel
 @onready var extractions_label: Label = $VBox/HSplit/RightPanel/StatsPanel/VBox/ExtractionsLabel
@@ -17,6 +19,7 @@ extends CanvasLayer
 @onready var building_archive: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingArchive
 @onready var building_fate_card_collection: Button = $VBox/HSplit/RightPanel/BuildingsGrid/BuildingFateCardCollection
 @onready var level_select_button: Button = $VBox/LevelSelectButton
+@onready var close_overlay_button: Button = $VBox/CloseOverlayButton
 
 ## 战利品面板
 var _loot_panel: PanelContainer
@@ -72,15 +75,22 @@ func _ready() -> void:
 	_set_building_enabled_style(building_fate_card_collection)
 	building_fate_card_collection.pressed.connect(_on_building_fate_card_collection_pressed)
 
-	# 关卡选择按钮
+	# 副本入口属于固定大世界，不允许从管理菜单绕过野外路线。
 	if level_select_button:
-		level_select_button.pressed.connect(_on_level_select_pressed)
+		level_select_button.text = "副本入口位于基地外的野外道路"
+		level_select_button.disabled = true
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color(0.18, 0.22, 0.35, 0.9)
 		style.set_border_width_all(1)
 		style.set_border_color(Color(0.4, 0.55, 0.9, 0.7))
 		style.set_corner_radius_all(6)
 		level_select_button.add_theme_stylebox_override("normal", style)
+	if start_button:
+		start_button.text = "返回基地与荒野"
+
+	if close_overlay_button:
+		close_overlay_button.visible = overlay_mode
+		close_overlay_button.pressed.connect(_on_close_overlay_pressed)
 
 	# 显示玩家数据
 	_refresh_stats()
@@ -373,14 +383,18 @@ func _open_menu_scene(scene_path: String) -> void:
 		get_tree().get_root().add_child(menu)
 
 func _on_level_select_pressed() -> void:
-	var menu_scene: PackedScene = load("res://scenes/LevelSelectMenu.tscn")
-	if menu_scene:
-		var menu: CanvasLayer = menu_scene.instantiate() as CanvasLayer
-		get_tree().get_root().add_child(menu)
+	return
 
 func _on_start_pressed() -> void:
-	# 清理基地界面，过渡到游戏主场景
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+	if overlay_mode:
+		queue_free()
+		return
+	get_tree().change_scene_to_file("res://scenes/BaseWorld.tscn")
+
+
+func _on_close_overlay_pressed() -> void:
+	if overlay_mode:
+		queue_free()
 
 ## ——— 建筑升级面板 ———
 

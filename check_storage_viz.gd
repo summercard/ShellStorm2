@@ -1,13 +1,12 @@
-#!/usr/bin/env godot --headless --script
 ## 诊断：验证 RoomStorage 的 Visualizer configure() 是否正确
-extends SceneTree
+extends Node
 
-func _init() -> void:
+func _ready() -> void:
 	print("=== RoomStorage Visualizer 诊断 ===")
 	
 	var scene = load("res://scenes/RoomStorage.tscn")
 	var room = scene.instantiate()
-	root.add_child(room)
+	add_child(room)
 	
 	var viz = room.get_node_or_null("Visualizer")
 	print("Visualizer: ", viz)
@@ -17,7 +16,8 @@ func _init() -> void:
 		print("  初始 room_type (int): ", int(viz.room_type))
 		
 		# 调用 configure
-		viz.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), [])
+		var door_info: Array[Dictionary] = []
+		viz.configure(RoomData.RoomType.STORAGE, Vector2(960, 768), door_info)
 		print("  configure后 room_type: ", viz.room_type)
 		print("  configure后 room_type (int): ", int(viz.room_type))
 		
@@ -27,5 +27,5 @@ func _init() -> void:
 			print("  FloorLayer.tile_set: ", tilemap.tile_set)
 	
 	room.free()
-	print("=== 完成 ===")
-	quit()
+	print("CHECK_STORAGE_VIZ_OK: storage visualizer accepts runtime configuration")
+	get_tree().quit()

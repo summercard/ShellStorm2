@@ -1,8 +1,8 @@
 ## beacon_drop_test - 在项目上下文中测试信标掉落
-## 用法: godot --headless --script test_beacon_drop.gd
-extends SceneTree
+## 用法: godot --headless --path . --scene res://test_beacon_drop.tscn
+extends Node
 
-func _init():
+func _ready() -> void:
 	# 等待 autoload 就绪
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -25,5 +25,5 @@ func _init():
 		total_beacons += beacons_in_table
 		print("Table %s: %d/%d rolls had a beacon" % [t, beacons_in_table, rolls])
 	
-	print("Overall: %d/%d (%s) rolls had a beacon" % [total_beacons, total_rolls, str(snapped(100.0*total_beacons/total_rolls, 0.1)) + "%"])
-	quit()
+	print("BEACON_DROP_TEST_OK: %d/%d (%s) rolls had a beacon" % [total_beacons, total_rolls, str(snapped(100.0*total_beacons/total_rolls, 0.1)) + "%"])
+	get_tree().quit()

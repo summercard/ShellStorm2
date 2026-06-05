@@ -20,7 +20,7 @@ func _init(owner: Node = null, tier: int = 1):
 	_owner = owner
 	_elite_tier = tier
 
-func set_owner(owner: Node) -> void:
+func set_component_owner(owner: Node) -> void:
 	_owner = owner
 
 func set_elite_tier(tier: int) -> void:
@@ -42,6 +42,8 @@ func register_elite_skill(skill_id: String, cooldown: float, config: Dictionary)
 func tick(delta: float) -> void:
 	if not _is_enabled or _owner == null or not is_instance_valid(_owner):
 		return
+	# 每帧清理已过期的召集buff
+	_clear_rally_buffs()
 	_evaluate_elite_skills(delta)
 
 func _evaluate_elite_skills(delta: float) -> void:
@@ -131,13 +133,19 @@ func _exec_elite_rally(cfg: Dictionary) -> void:
 		if other == _owner or not is_instance_valid(other):
 			continue
 		if _owner.global_position.distance_to(other.global_position) <= radius:
-			# 移速buff
-			var cur_speed: float = float(other.get("speed", 80.0))
+			# 移速buff（保存原始值用于恢复）
+			var cur_speed: float = float(other.get("speed"))
+			if float(other.get("_rally_speed_base")) == 0.0:
+				other.set("_rally_speed_base", cur_speed)
+			other.set("_rally_speed", cur_speed)
 			other.set("speed", cur_speed * speed_mult)
-			# 伤害buff
-			var cur_dmg: int = int(other.get("damage", 10))
+			# 伤害buff（保存原始值用于恢复）
+			var cur_dmg: int = int(other.get("damage"))
+			if int(other.get("_rally_damage_base")) == 0:
+				other.set("_rally_damage_base", cur_dmg)
+			other.set("_rally_damage", cur_dmg)
 			other.set("damage", int(cur_dmg * damage_mult))
-			# 记录buff结束时间（简单用时间戳）
+			# 记录buff结束时间
 			var until: float = Time.get_ticks_msec() * 0.001 + duration
 			other.set("_rally_buff_until", until)
 			rally_count += 1
@@ -151,12 +159,12 @@ func _exec_elite_enrage(cfg: Dictionary) -> void:
 	if _owner == null or not is_instance_valid(_owner):
 		return
 	# 检查是否已狂暴化
-	if _owner.get("_enraged", false):
+	if bool(_owner.get("_enraged")):
 		return
 	var speed_mult: float = cfg.get("speed_mult", 1.5) + (_elite_tier - 1) * 0.15
 	var damage_mult: float = cfg.get("damage_mult", 1.4) + (_elite_tier - 1) * 0.1
-	var cur_speed: float = float(_owner.get("speed", 80.0))
-	var cur_dmg: int = int(_owner.get("damage", 15))
+	var cur_speed: float = float(_owner.get("speed"))
+	var cur_dmg: int = int(_owner.get("damage"))
 	_owner.set("speed", cur_speed * speed_mult)
 	_owner.set("damage", int(cur_dmg * damage_mult))
 	_owner.set("_enraged", true)
@@ -206,7 +214,20 @@ func _exec_elite_teleportstrike(cfg: Dictionary) -> void:
 	_do_aoe_damage(target_pos, aoe_radius, damage)
 	elite_skill_triggered.emit("elite_teleportstrike", _owner)
 
-## ========== 事件入口（被攻击时 / 死亡时）==========
+## ========== 事件入口（被攻击时 / 低血量时 / 死亡时）==========
+
+## 低血量触发（由 EnemyBase 在 HP <= 40% 时调用）
+func on_low_hp() -> void:
+	# elite_enrage 是低血量触发型技能，检查是否已狂暴化
+	if _owner == null or not is_instance_valid(_owner):
+		return
+	if bool(_owner.get("_enraged")):
+		return
+	# 查找并执行 enrage 技能
+	for skill in _active_skills:
+		if skill["id"] == "elite_enrage":
+			_exec_elite_enrage(skill["config"])
+			return
 
 ## 被攻击时触发（由 EnemyBase 调用）
 func on_taken_damage(damage: int, attacker_pos: Vector2) -> void:
@@ -302,10 +323,21 @@ func _clear_rally_buffs() -> void:
 	for other in _owner.get_tree().get_nodes_in_group("enemy"):
 		if not is_instance_valid(other):
 			continue
-		var until: float = other.get("_rally_buff_until", 0.0)
-		if until > now:
-			# 恢复原始移速（简化处理，实际应存原始值）
-			other.set("speed", float(other.get("speed", 80.0)) * 0.8)
+		var until: float = float(other.get("_rally_buff_until"))
+		if until > 0.0 and until <= now:
+			# 恢复原始移速（从保存的 base 值）
+			var base_speed: float = float(other.get("_rally_speed_base"))
+			if base_speed > 0.0:
+				other.set("speed", base_speed)
+				other.set("_rally_speed_base", 0.0)
+				other.set("_rally_speed", 0.0)
+			# 恢复原始伤害
+			var base_dmg: int = int(other.get("_rally_damage_base"))
+			if base_dmg > 0:
+				other.set("damage", base_dmg)
+				other.set("_rally_damage_base", 0)
+				other.set("_rally_damage", 0)
+			other.set("_rally_buff_until", 0.0)
 
 ## ========== 技能工厂（由 EliteSpawnDirector 调用）==========
 
@@ -314,9 +346,9 @@ func _clear_rally_buffs() -> void:
 ## tier: 精英等级（1-3）
 static func inject_elite_skills(enemy: Node, modifier_id: String, tier: int) -> EliteActiveSkillComponent:
 	var comp := EliteActiveSkillComponent.new(enemy, tier)
-	comp.set_owner(enemy)
+	comp.set_component_owner(enemy)
 	enemy.add_child(comp)
-	comp.set_owner(enemy)  # re-set after add_child
+	comp.set_component_owner(enemy)  # re-set after add_child
 
 	match modifier_id:
 		"Elite.Huge":

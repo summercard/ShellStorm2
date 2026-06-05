@@ -46,10 +46,18 @@ const FLOOR_SCALING := {
 }
 
 var _rng: RandomNumberGenerator
+var _theme_profile: Resource = null
 
 func _init():
 	_rng = RandomNumberGenerator.new()
 	_rng.seed = Time.get_ticks_msec()
+
+func set_seed(seed_value: int) -> void:
+	_rng.seed = seed_value
+
+
+func set_theme_profile(profile: Resource) -> void:
+	_theme_profile = profile
 
 ## 根据配置生成怪物列表
 func generate_enemies(config: Dictionary) -> Array[Dictionary]:
@@ -69,8 +77,10 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 			enemies = _generate_minion_pack(floor, floor_level)
 		"guard":
 			enemies.append(_generate_guard(floor, floor_level))
+		"ambush":
+			enemies = _generate_ambush_pack(floor, floor_level, int(config.get("count", 2)))
 		_:
-			enemies.append(_generate_basic_enemy("melee_chaser", floor, floor_level))
+			enemies.append(_generate_basic_enemy(_get_theme_fallback_enemy(), floor, floor_level))
 	
 	return enemies
 
@@ -92,6 +102,13 @@ func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]
 ## floor_level: RoomData.FloorLevel 进度层级（SHALLOW/MEDIUM/DEEP/ABYSS）
 ## floor: 实际楼层数字（1-4），影响同进度层级下的怪物池大小
 func _get_available_types_for_level(floor_level: int, floor: int = 1) -> Array[String]:
+	if _theme_profile != null:
+		var themed_pool: Array = _theme_profile.get_enemy_rule("enemy_pool", [])
+		if not themed_pool.is_empty():
+			var result: Array[String] = []
+			for enemy_type in themed_pool:
+				result.append(str(enemy_type))
+			return result
 	match floor_level:
 		RoomData.FloorLevel.SHALLOW:
 			# 第一层：3种基础怪物（新手熟悉）
@@ -120,8 +137,12 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 	var hp: float = base["hp_base"] * scaling["hp_mult"]
 	var damage: float = base["damage_base"] * scaling["damage_mult"]
 	var speed: float = base["speed"]
+	if _theme_profile != null:
+		hp *= float(_theme_profile.get_enemy_rule("hp_multiplier", 1.0))
+		damage *= float(_theme_profile.get_enemy_rule("damage_multiplier", 1.0))
+		speed *= float(_theme_profile.get_enemy_rule("speed_multiplier", 1.0))
 	
-	return {
+	var result := {
 		"enemy_type": enemy_type,
 		"name": base["name"],
 		"hp": int(hp),
@@ -135,10 +156,16 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 		"loot_table": _get_loot_table(floor_level),
 		"xp_value": 10 + floor * 5
 	}
+	if _theme_profile != null:
+		var prefix := str(_theme_profile.get_enemy_rule("name_prefix", ""))
+		if not prefix.is_empty():
+			result["name"] = "%s%s" % [prefix, result["name"]]
+		result["theme_id"] = _theme_profile.theme_id
+	return result
 
 ## 生成精英敌人
 func _generate_elite(floor: int, floor_level: int) -> Dictionary:
-	var base: Dictionary = _generate_basic_enemy("shielded", floor, floor_level)
+	var base: Dictionary = _generate_basic_enemy(_get_theme_fallback_enemy("shielded"), floor, floor_level)
 	base["is_elite"] = true
 	base["hp"] = int(base["hp"] * 1.5)
 	base["max_hp"] = base["hp"]
@@ -167,12 +194,13 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
 	var hp: float = 200.0 * scaling["hp_mult"]
 	
-	# 第二关 Boss 体型更大（boss_scale=1.5），HP 按体型缩放同步放大
+	# 第二关Boss体型按策划案要求为1.5x（PH11规范）
+	# 第三关1.6，第四关1.75，后续按+0.15递增
 	var boss_scale: float = 1.0
 	if floor >= 2:
-		boss_scale = 1.3 + (floor - 2) * 0.15  # floor=2→1.3, floor=3→1.45, floor=4→1.6
+		boss_scale = 1.5 + (floor - 2) * 0.15  # floor=2→1.5, floor=3→1.65, floor=4→1.8
 	
-	return {
+	var result := {
 		"enemy_type": "boss",
 		"name": "Boss 第%d层" % [floor],
 		"hp": int(hp * boss_scale),  # boss_scale 同步放大 HP（与 BossActor._apply_shape_scale 联动）
@@ -181,7 +209,7 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 		"speed": 60,
 		"emoji": ENEMY_PRESENTATION["boss"]["emoji"],
 		"color": ENEMY_PRESENTATION["boss"]["color"],
-		"scale": 1.45 * boss_scale,  # 视觉效果同步放大
+		"scale": 1.5 * boss_scale,  # 视觉效果同步放大（与碰撞体 boss_scale 成比例）
 		"boss_scale": boss_scale,   # BossActor 读取此字段并应用到碰撞体形状大小
 		"ai_type": ENEMY_PRESENTATION["boss"]["ai_type"],
 		"floor": floor,
@@ -191,6 +219,20 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 		"xp_value": 200 + floor * 50,
 		"bounty_tier": floor + 1
 	}
+	if _theme_profile != null:
+		result["hp"] = int(result["hp"] * float(_theme_profile.get_enemy_rule("hp_multiplier", 1.0)))
+		result["max_hp"] = result["hp"]
+		result["damage"] = int(result["damage"] * float(
+			_theme_profile.get_enemy_rule("damage_multiplier", 1.0)
+		))
+		result["speed"] = float(result["speed"]) * float(
+			_theme_profile.get_enemy_rule("speed_multiplier", 1.0)
+		)
+		result["name"] = str(_theme_profile.get_enemy_rule(
+			"boss_name", "%s首领" % _theme_profile.display_name
+		))
+		result["theme_id"] = _theme_profile.theme_id
+	return result
 
 ## 生成小怪群
 func _generate_minion_pack(floor: int, floor_level: int) -> Array[Dictionary]:
@@ -198,7 +240,7 @@ func _generate_minion_pack(floor: int, floor_level: int) -> Array[Dictionary]:
 	var minions: Array[Dictionary] = []
 	
 	for i in range(count):
-		var minion := _generate_basic_enemy("exploder", floor, floor_level)
+		var minion := _generate_basic_enemy(_get_theme_fallback_enemy("exploder"), floor, floor_level)
 		minion["hp"] = int(minion["hp"] * 0.5)
 		minion["max_hp"] = minion["hp"]
 		minions.append(minion)
@@ -207,11 +249,29 @@ func _generate_minion_pack(floor: int, floor_level: int) -> Array[Dictionary]:
 
 ## 生成守卫
 func _generate_guard(floor: int, floor_level: int) -> Dictionary:
-	var guard := _generate_basic_enemy("shielded", floor, floor_level)
+	var guard := _generate_basic_enemy(_get_theme_fallback_enemy("shielded"), floor, floor_level)
 	guard["name"] = "商人护卫"
 	guard["is_guard"] = true
 	guard["xp_value"] = 15 + floor * 5
 	return guard
+
+
+func _generate_ambush_pack(floor: int, floor_level: int, count: int) -> Array[Dictionary]:
+	var enemies: Array[Dictionary] = []
+	var pool := _get_available_types_for_level(floor_level, floor)
+	for i in range(maxi(1, count)):
+		var enemy_type := pool[_rng.randi() % pool.size()]
+		enemies.append(_generate_basic_enemy(enemy_type, floor, floor_level))
+	return enemies
+
+
+func _get_theme_fallback_enemy(default_enemy: String = "melee_chaser") -> String:
+	if _theme_profile == null:
+		return default_enemy
+	var pool: Array = _theme_profile.get_enemy_rule("enemy_pool", [])
+	if pool.is_empty():
+		return default_enemy
+	return str(pool[0])
 
 ## 获取掉落表名称
 func _get_loot_table(floor_level: int) -> String:

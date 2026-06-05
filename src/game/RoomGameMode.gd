@@ -20,12 +20,14 @@ const VISION_SYSTEM_SCRIPT := preload("res://src/game/VisionSystem.gd")
 const ROOM_LIGHTING_SCRIPT := preload("res://src/fx/RoomLightingSystem.gd")
 const ELITE_ARCHIVE_MODULE_SCRIPT := preload("res://src/enemy/EliteArchiveModule.gd")
 const ELITE_SPAWN_DIRECTOR_SCRIPT := preload("res://src/enemy/EliteSpawnDirector.gd")
+const ELITE_ENCOUNTER_BRIDGE_SCRIPT := preload("res://src/game/EliteEncounterBridge.gd")
 const EXTRACTION_DEFENSE_DURATION := 14.0
 const EXTRACTION_MID_WAVE_REMAINING := 9.0
 const EXTRACTION_FINAL_WAVE_REMAINING := 5.0
 
 @export var initial_floor: int = 1
 @export var map_seed: int = -1
+@export var theme_profile: Resource
 
 ## 核心管理器
 var map_manager: MapManager
@@ -46,6 +48,8 @@ var vision_system: Variant = VISION_SYSTEM_SCRIPT.new()
 
 ## 精英怪档案（PH06 精英成长链路）
 var _elite_archive: Node = null
+## 精英怪遭遇结算桥接器（轮次437）
+var _elite_encounter_bridge: Node = null
 
 ## 事件房处理器
 var _current_event_handler: Node = null
@@ -96,6 +100,7 @@ var _reserved_door_fate_card: FateCard = null
 var _extraction_defense_active := false
 var _extraction_mid_wave_spawned := false
 var _extraction_elite_wave_spawned := false
+var _last_observed_hp: int = -1
 ## 风险等级（已清理房间数，每清1间+1，用于敌人压力缩放）
 var _run_risk: int = 0
 
@@ -238,6 +243,8 @@ func _setup_elite_archive() -> void:
 	add_child(_elite_archive)
 	_elite_spawn_director = ELITE_SPAWN_DIRECTOR_SCRIPT.new()
 	add_child(_elite_spawn_director)
+	_elite_encounter_bridge = ELITE_ENCOUNTER_BRIDGE_SCRIPT.new()
+	add_child(_elite_encounter_bridge)
 	print("[RoomGameMode] EliteArchiveModule 已初始化（当前存档: %d 精英）" % _elite_archive.get_total_count())
 
 
@@ -249,6 +256,7 @@ func _on_elite_spawn_recorded(elite_id: String) -> void:
 
 
 ## PH06: 成功撤离时结算精英逃脱成长（对所有本局遭遇但未击杀的精英）
+## 轮次437: 使用 EliteEncounterBridge.resolve_extraction() 替代硬编码数据
 func _resolve_elite_encounters_for_extraction() -> void:
 	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
 		return
@@ -259,13 +267,15 @@ func _resolve_elite_encounters_for_extraction() -> void:
 			escaped_ids.append(eid)
 	if escaped_ids.is_empty():
 		return
-	var growth_data: Dictionary = {"hp_gain": 0.05, "damage_gain": 0.0, "speed_gain": 0.03, "level_up": 0}
+	var biome_level: int = current_floor if current_floor > 0 else 1
 	for eid in escaped_ids:
-		_elite_archive.on_encounter_result(eid, "PlayerExtracted", growth_data.duplicate(true))
-		print("[RoomGameMode] 精英逃脱成长已结算: %s" % eid)
+		var growth_data: Dictionary = _elite_encounter_bridge.resolve_extraction(eid, biome_level)
+		_elite_archive.on_encounter_result(eid, "PlayerExtracted", growth_data)
+		print("[RoomGameMode] 精英逃脱成长已结算: %s (biome_level=%d)" % [eid, biome_level])
 
 
 ## PH06: 玩家死亡时结算精英击杀玩家成长（精英获得"击杀玩家"标记并变强）
+## 轮次437: 使用 EliteEncounterBridge.resolve_death() 替代硬编码数据
 func _resolve_elite_encounters_for_death() -> void:
 	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
 		return
@@ -276,10 +286,17 @@ func _resolve_elite_encounters_for_death() -> void:
 			survivor_ids.append(eid)
 	if survivor_ids.is_empty():
 		return
-	var growth_data: Dictionary = {"hp_gain": 0.15, "damage_gain": 0.20, "speed_gain": 0.05, "level_up": 1}
 	for eid in survivor_ids:
-		_elite_archive.on_encounter_result(eid, "PlayerDied", growth_data.duplicate(true))
-		print("[RoomGameMode] 精英击杀玩家成长已结算: %s" % eid)
+		# 计算 level_diff（精英等级 - 1，假设玩家等级基准为1）
+		var elite_level: int = 1
+		if _elite_archive != null and _elite_archive.has_method("get_elite"):
+			var elite_rec = _elite_archive.get_elite(eid)
+			if elite_rec != null:
+				elite_level = elite_rec.level if "level" in elite_rec else 1
+		var level_diff: int = maxi(0, elite_level - 1)
+		var growth_data: Dictionary = _elite_encounter_bridge.resolve_death(eid, level_diff)
+		_elite_archive.on_encounter_result(eid, "PlayerDied", growth_data)
+		print("[RoomGameMode] 精英击杀玩家成长已结算: %s (level_diff=%d)" % [eid, level_diff])
 
 
 func _apply_pending_loadout() -> void:
@@ -332,8 +349,7 @@ func _setup_stairs_detection() -> void:
 	var room_node: Node = _get_current_room_instance()
 	if room_node == null:
 		return
-	for child in room_node.get_children():
-		var stairs: StairsInteraction = child as StairsInteraction
+	for stairs in _get_stairs_interactions(room_node):
 		if stairs != null and stairs.has_signal("vertical_transition_requested"):
 			if not stairs.vertical_transition_requested.is_connected(_on_vertical_transition_requested):
 				stairs.vertical_transition_requested.connect(_on_vertical_transition_requested)
@@ -353,13 +369,23 @@ func _on_vertical_transition_requested(from_level: int, to_level: int, direction
 			target_vertical = RoomData.VerticalLevel.MAIN
 		_:
 			target_vertical = RoomData.VerticalLevel.MAIN
-	var result: RoomData = map_manager.enter_vertical_room(target_vertical)
-	if result != null:
+	var from_room_id := map_manager.get_current_room_id()
+	var target_room_id := map_manager.find_vertical_room_id(target_vertical)
+	if target_room_id >= 0:
 		print("[RoomGameMode] 垂直切换: %s -> %s (%s)" % [from_level, target_vertical, direction])
-		# 触发房间进入逻辑
-		_enter_room_by_id(map_manager.get_current_room_id(), map_manager.get_current_room_id())
+		_enter_room_by_id(target_room_id, from_room_id)
 	else:
 		print("[RoomGameMode] 垂直切换失败: target_vertical=%s" % target_vertical)
+
+func _get_stairs_interactions(root: Node) -> Array[StairsInteraction]:
+	var result: Array[StairsInteraction] = []
+	if root == null:
+		return result
+	if root is StairsInteraction:
+		result.append(root as StairsInteraction)
+	for child in root.get_children():
+		result.append_array(_get_stairs_interactions(child))
+	return result
 
 
 func _get_container_interactions(root: Node) -> Array[ContainerInteraction]:
@@ -426,6 +452,7 @@ func _spawn_player() -> void:
 	_sync_camera_to_player(true)
 	if player.has_signal("hp_changed"):
 		player.hp_changed.connect(_on_hp_changed)
+	_last_observed_hp = int(player.get("current_hp"))
 	if FateCardGameBridge.has_method("set_player"):
 		FateCardGameBridge.set_player(player)
 	# 同步玩家引用到 MapManager（小地图绘制用）
@@ -450,8 +477,14 @@ func _start_game() -> void:
 		start_floor = LevelSelect.selected_floor
 		LevelSelect.selection_made = false  # 重置，避免污染下次普通进入
 
-	# 生成第一层地图
-	map_manager.generate_map(start_floor, map_seed)
+	# 每个独立关卡场景可以提供主题资源；未提供时保持旧楼层生成兼容。
+	current_floor = start_floor
+	if theme_profile != null:
+		start_floor = theme_profile.difficulty_rank
+		current_floor = start_floor
+		map_manager.generate_themed_map(theme_profile, map_seed)
+	else:
+		map_manager.generate_map(start_floor, map_seed)
 	_room_key_count = 1 + _inventory_room_key_snapshot
 	_cleared_room_ids[0] = true
 	_set_room_revealed(0, true)
@@ -1243,7 +1276,7 @@ func _build_adjacent_enemies_for_controller(room_data: RoomData) -> void:
 	var graph: NodeGraph = map_manager.get_graph()
 	if graph == null:
 		return
-	var current_room_id: int = map_manager._current_room_id
+	var current_room_id: int = map_manager.get_current_room_id()
 	var neighbor_ids: Array[int] = graph.get_neighbors(current_room_id)
 	var adjacent_enemies: Dictionary = {}
 	for neighbor_id in neighbor_ids:
@@ -1317,7 +1350,7 @@ func _on_enemy_entered_chase_wrapper(enemy: Node, last_known_pos: Vector2) -> vo
 func _get_current_room_instance() -> Node2D:
 	if map_manager == null:
 		return self
-	var room_id: int = map_manager._current_room_id
+	var room_id: int = map_manager.get_current_room_id()
 	var instance: Node2D = map_manager.get_instantiated_room(room_id)
 	if instance != null:
 		return instance
@@ -1335,10 +1368,10 @@ func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
 		if (
 			map_manager != null
 			and map_manager.path_director != null
-			and map_manager._current_room_id >= 0
+			and map_manager.get_current_room_id() >= 0
 		):
-			door_info = map_manager.path_director.get_open_door_info(map_manager._current_room_id)
-		visualizer.configure(room_data.room_type, room_data.size, door_info, current_floor)
+			door_info = map_manager.path_director.get_open_door_info(map_manager.get_current_room_id())
+		visualizer.configure(room_data.room_type, room_data.size, door_info, room_data.visual_floor)
 		print(
 			(
 				"[RoomGameMode] 房间视觉化已配置: %s size=%s"
@@ -1452,7 +1485,7 @@ func _enter_first_combat_room() -> void:
 	var graph: NodeGraph = map_manager.get_graph()
 	if graph == null:
 		return
-	var target_id: int = _find_first_combat_room_id(graph, map_manager._current_room_id)
+	var target_id: int = _find_first_combat_room_id(graph, map_manager.get_current_room_id())
 	if target_id < 0:
 		return
 
@@ -1505,8 +1538,8 @@ func _get_fate_card_controller() -> Control:
 ## 自动打开商人交易面板（商人房进入时自动触发）
 func _auto_open_merchant(room_data: RoomData) -> void:
 	var room_instance: Node2D = null
-	if map_manager != null and map_manager._current_room_id >= 0:
-		room_instance = map_manager.get_instantiated_room(map_manager._current_room_id)
+	if map_manager != null and map_manager.get_current_room_id() >= 0:
+		room_instance = map_manager.get_instantiated_room(map_manager.get_current_room_id())
 
 	if room_instance == null:
 		push_warning(
@@ -1672,7 +1705,6 @@ func _show_fate_cards_in_panel() -> void:
 
 
 func _prepare_fate_modal_panel(panel: Control) -> void:
-	get_tree().paused = false
 	panel.process_mode = Node.PROCESS_MODE_ALWAYS
 	panel.set_anchors_preset(Control.PRESET_FULL_RECT)
 	panel.offset_left = 0
@@ -1756,7 +1788,6 @@ func _on_fate_card_button_pressed(card: FateCard) -> void:
 	var panel: Control = _get_or_create_fate_card_panel()
 	if panel:
 		panel.visible = false
-	get_tree().paused = false
 	_set_player_input_locked(false)
 	if _ui_manager != null:
 		_ui_manager.layer = 1
@@ -2244,7 +2275,7 @@ func _check_map_completion() -> void:
 
 	var boss_node: NodeGraph.RoomNode = graph.get_deepest_node()
 	if boss_node != null and boss_node.room_data.room_type == RoomData.RoomType.BOSS:
-		if map_manager._current_room_id == boss_node.id:
+		if map_manager.get_current_room_id() == boss_node.id:
 			# 当前在Boss房，击败Boss后可进入下一层
 			_update_room_info_label("Boss已击败！前往下一层或撤离...")
 
@@ -2516,7 +2547,7 @@ func get_current_room_elite_count() -> int:
 func get_room_elite_count(room_id: int) -> int:
 	if map_manager == null:
 		return 0
-	var enemies: Array[Dictionary] = map_manager._spawned_enemies.get(room_id, [])
+	var enemies: Array[Dictionary] = map_manager.get_room_enemy_plan(room_id)
 	var elite_count: int = 0
 	for e in enemies:
 		if e.get("is_elite", false):
@@ -2683,8 +2714,15 @@ func _on_hp_changed(current: int, maximum: int) -> void:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
 
+	var took_damage := _last_observed_hp >= 0 and current < _last_observed_hp
+	_last_observed_hp = current
+
 	# 撤离读条期间受击 → 中断撤离（只有正在读条时才中断）
-	if extraction_module != null and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN:
+	if (
+		took_damage
+		and extraction_module != null
+		and extraction_module.get_status() == ExtractionModule.ExtractionStatus.COUNTDOWN
+	):
 		extraction_module.abort_extraction()
 		_call_ui_manager_method("show_fate_card_notification", "撤离中断：受到攻击！")
 

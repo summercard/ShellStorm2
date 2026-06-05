@@ -39,15 +39,12 @@ func _connect_enemy_signals(enemy: Node) -> void:
 
 func _on_enemy_hit(_hit_from: Vector2, damage: int, is_crit: bool) -> void:
 	if _screen_shake:
-		# 震动强度根据伤害和暴击动态调整
-		var intensity := 5.0
-		if damage >= 20:
-			intensity = 10.0
-		elif damage >= 10:
-			intensity = 7.0
+		# 震屏强度基于伤害值动态计算（上限20，暴击×1.5）
+		var intensity := clampf(damage * 0.8, 5.0, 20.0)
+		var duration := clampf(0.06 + damage * 0.004, 0.06, 0.25)
 		if is_crit:
 			intensity *= 1.5
-		var duration := 0.12 if not is_crit else 0.18
+			duration = clampf(duration * 1.3, 0.08, 0.30)
 		_screen_shake.trigger(intensity, duration)
 
 	# 命中音效：暴击用暴击音效

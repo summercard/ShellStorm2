@@ -4,10 +4,10 @@ extends CanvasLayer
 @onready var level_buttons_container: VBoxContainer = $Panel/VBox/LevelButtonsContainer
 
 const FLOOR_INFO = {
-	1: { "name": "第一关", "desc": "新手区 · 敌人较弱", "color": Color(0.4, 0.8, 0.4, 1.0) },
-	2: { "name": "第二关", "desc": "危险区 · 精英出现", "color": Color(1.0, 0.7, 0.2, 1.0) },
-	3: { "name": "第三关", "desc": "深渊区 · 怪物密集", "color": Color(1.0, 0.4, 0.3, 1.0) },
-	4: { "name": "第四关", "desc": "噩梦区 · 极限挑战", "color": Color(0.7, 0.2, 1.0, 1.0) },
+	1: { "name": "冷钢边境", "desc": "稳定巡逻路线 · 基础搜打撤", "color": Color(0.4, 0.8, 0.9, 1.0), "scene": "res://scenes/levels/IronFrontier.tscn", "theme": "iron_frontier" },
+	2: { "name": "锈蚀铸造厂", "desc": "高压生产线 · 陷阱与改造", "color": Color(1.0, 0.55, 0.2, 1.0), "scene": "res://scenes/levels/RustFoundry.tscn", "theme": "rust_foundry" },
+	3: { "name": "孢子深层", "desc": "资源网络 · 召唤与伏击", "color": Color(0.72, 0.4, 1.0, 1.0), "scene": "res://scenes/levels/SporeDepths.tscn", "theme": "spore_depths" },
+	4: { "name": "深渊档案库", "desc": "精英连战 · 终局构筑", "color": Color(1.0, 0.3, 0.55, 1.0), "scene": "res://scenes/levels/AbyssArchive.tscn", "theme": "abyss_archive" },
 }
 
 func _ready() -> void:
@@ -55,7 +55,15 @@ func _on_level_button_pressed(floor: int) -> void:
 	# 切换场景并指定初始楼层
 	LevelSelect.selected_floor = floor
 	LevelSelect.selection_made = true
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+	var scene_path := get_map_scene_path(floor)
+	var change_error := get_tree().change_scene_to_file(scene_path)
+	if change_error != OK:
+		push_error("关卡场景切换失败：%s" % error_string(change_error))
 
 func _on_close_pressed() -> void:
 	queue_free()
+
+
+func get_map_scene_path(floor: int) -> String:
+	var info: Dictionary = FLOOR_INFO.get(floor, FLOOR_INFO[1])
+	return str(info.get("scene", "res://scenes/Main.tscn"))

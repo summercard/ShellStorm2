@@ -37,7 +37,13 @@ layout_mode = 2
 [node name="LevelSelectButton" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(840, 60)
 layout_mode = 2
-text = "关卡选择"
+text = "副本入口位于基地外的野外道路"
+
+[node name="CloseOverlayButton" type="Button" parent="VBox"]
+visible = false
+custom_minimum_size = Vector2(840, 42)
+layout_mode = 2
+text = "返回自由基地"
 
 [node name="HSplit" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
@@ -48,7 +54,7 @@ custom_minimum_size = Vector2(200, 200)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "进入任务"
+text = "返回基地与荒野"
 
 [node name="RightPanel" type="VBoxContainer" parent="VBox/HSplit"]
 layout_mode = 2
@@ -133,5 +139,5 @@ layout_mode = 2
 
 [node name="FooterLabel" type="Label" parent="VBox"]
 layout_mode = 2
-text = "按 [进入任务] 开始冒险"
+text = "走出基地，沿道路寻找副本入口建筑"
 horizontal_alignment = 1
