@@ -94,23 +94,20 @@ func _input(event: InputEvent) -> void:
 
 ## 设置面板样式
 func _set_panel_styling() -> void:
-	var bg := StyleBoxFlat.new()
-	bg.bg_color = Color(0.08, 0.09, 0.13, 0.97)
-	bg.set_border_width_all(2)
-	bg.set_border_color(Color(0.85, 0.75, 0.25, 0.9))
-	bg.set_corner_radius_all(8)
+	var bg := UIStyleFactory.make_panel_with_border(0, UIPalette.TEXT_GOLD, 8, 2)
+	bg.bg_color = UIPalette.BG_DEEPEST
 	add_theme_stylebox_override("panel", bg)
-	
+
 	_affordable_style = StyleBoxFlat.new()
-	_affordable_style.bg_color = Color(0.2, 0.22, 0.28, 0.9)
+	_affordable_style.bg_color = UIPalette.BG_SLOT
 	_affordable_style.set_border_width_all(1)
-	_affordable_style.set_border_color(Color(0.4, 0.9, 0.4, 0.6))
+	_affordable_style.set_border_color(UIPalette.STATUS_OK)
 	_affordable_style.set_corner_radius_all(4)
-	
+
 	_unaffordable_style = StyleBoxFlat.new()
 	_unaffordable_style.bg_color = Color(0.18, 0.15, 0.15, 0.9)
 	_unaffordable_style.set_border_width_all(1)
-	_unaffordable_style.set_border_color(Color(0.5, 0.2, 0.2, 0.5))
+	_unaffordable_style.set_border_color(UIPalette.STATUS_NO)
 	_unaffordable_style.set_corner_radius_all(4)
 
 ## 创建商品网格
@@ -151,6 +148,8 @@ func _build_shop_grid() -> void:
 	close_btn.text = "X"
 	close_btn.custom_minimum_size = Vector2(30, 30)
 	close_btn.pressed.connect(hide_merchant)
+	var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+	UIStyleFactory.apply_button_style(close_btn, close_styles)
 	title_hbox.add_child(close_btn)
 	
 	vbox.add_child(title_hbox)
@@ -261,10 +260,10 @@ func _refresh_affordability() -> void:
 			var style: StyleBoxFlat
 			if affordable:
 				style = _affordable_style.duplicate()
-				style.set_border_color(Color(0.2, 0.9, 0.2, 0.7))
+				style.set_border_color(UIPalette.STATUS_OK)
 			else:
 				style = _unaffordable_style.duplicate()
-				style.set_border_color(Color(0.9, 0.2, 0.2, 0.5))
+				style.set_border_color(UIPalette.STATUS_NO)
 			panel.add_theme_stylebox_override("panel", style)
 		
 		# 更新价格标签颜色
@@ -274,7 +273,10 @@ func _refresh_affordability() -> void:
 		elif slot.has_node("VBox/PriceLabel"):
 			price_lbl = slot.get_node("VBox/PriceLabel") as Label
 		if price_lbl != null:
-			price_lbl.add_theme_color_override("font_color", Color(0.3, 1.0, 0.3, 1.0) if affordable else Color(1.0, 0.3, 0.3, 1.0))
+			price_lbl.add_theme_color_override(
+				"font_color",
+				Color(0.3, 1.0, 0.3, 1.0) if affordable else UIPalette.HP_LOW,
+			)
 
 ## 设置显示/隐藏（内部用，不再直接设置 visible_ratio）
 func _set_panel_visibility(visible: bool) -> void:

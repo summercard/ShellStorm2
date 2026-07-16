@@ -15,6 +15,8 @@ signal boss_defeated()
 signal boss_phase_changed(boss_id: String, phase: int)
 signal boss_skill_executed(skill_id: String)
 
+const BOSS_AVATAR_RENDERER_SCRIPT := preload("res://src/enemy/BossAvatarRenderer.gd")
+
 ## Boss 配置
 @export var boss_id: String = "boss_actor_01"
 @export var max_hp: float = 800.0
@@ -29,6 +31,8 @@ signal boss_skill_executed(skill_id: String)
 @onready var hp_bar: ProgressBar = $HPBarBG/HPBar as ProgressBar
 @onready var boss_name_label: Label = $BossNameLabel as Label
 @onready var _phase_director: Node = $BossPhaseDirector as Node
+@onready var collision_shape: CollisionShape2D = $CollisionShape2D as CollisionShape2D
+var avatar_renderer: Node = null
 
 var _current_hp: float = 800.0
 var _damage_cooldown_timer: float = 0.0
@@ -40,21 +44,32 @@ var _room_bounds: Rect2 = Rect2(-400, -300, 800, 600)
 ## 外置 boss_scale 覆盖（由 MonsterInjector._generate_boss 根据楼层计算，RoomGameMode 注入）
 ## 在 _ready() 之后通过 set_boss_scale_override() 注入，用于实现第二关体型显著增大
 var _boss_scale_override: float = -1.0
-var _base_max_hp: float = 800.0  ## 原始 base HP（用于 override 时的反推）
+var _base_max_hp: float = 800.0
+var _completion_notified := false
 
 func set_boss_scale_override(scale: float) -> void:
-	## 外部注入 boss_scale 时重新应用 HP 缩放和碰撞体形状
-	## 在 _ready() 之后调用（BossActor 已完成初始化），安全地重新缩放
+	## 体型只影响轮廓、碰撞和技能范围。最终 HP 由 BossRoomDirector
+	## 在 configure_encounter() 中给出，不能在这里再乘一次倍率。
 	_boss_scale_override = scale
-	_current_scale = scale
-	# 重新计算 HP（使用 _base_max_hp 原始值）
-	var new_scaled_hp: float = _base_max_hp * _current_scale
-	max_hp = int(new_scaled_hp)
-	_current_hp = new_scaled_hp
-	current_hp = new_scaled_hp
+	_current_scale = maxf(0.75, scale)
 	_apply_shape_scale()
 	_setup_hp_bar()
-	print("[BossActor] boss_scale override applied: %.2f → HP: %d/%d" % [_current_scale, max_hp, int(_current_hp)])
+
+
+func configure_encounter(encounter: Dictionary) -> void:
+	## Map progress owns final HP/rewards; this actor owns collision and feedback.
+	## Keeping the values identical is what makes "hit → defeat → extraction" atomic.
+	boss_id = str(encounter.get("boss_id", boss_id))
+	_current_scale = maxf(0.75, float(encounter.get("boss_scale", boss_scale)))
+	_base_max_hp = maxf(1.0, float(encounter.get("base_max_hp", encounter.get("max_hp", max_hp))))
+	max_hp = maxf(1.0, float(encounter.get("max_hp", max_hp)))
+	_current_hp = max_hp
+	current_hp = max_hp
+	_damage_cooldown_timer = 0.0
+	_is_dead = false
+	_completion_notified = false
+	_apply_shape_scale()
+	_setup_hp_bar()
 
 func _ready() -> void:
 	collision_layer = 4
@@ -62,19 +77,16 @@ func _ready() -> void:
 	add_to_group("enemy")
 	add_to_group("boss")
 	
-	_base_max_hp = max_hp  # 记录原始 base HP（用于外置 override 反推）
+	_base_max_hp = max_hp
 	_current_hp = max_hp
 	current_hp = max_hp
 	_current_scale = boss_scale
-	# Scale HP based on boss_scale (larger boss = more HP)
-	var scaled_max_hp: float = max_hp * _current_scale
-	max_hp = int(scaled_max_hp)
-	_current_hp = scaled_max_hp
-	current_hp = scaled_max_hp
 	_setup_hp_bar()
 	_connect_phase_signals()
 	_apply_shape_scale()
+	_ensure_avatar_renderer()
 	z_index = 100
+	_init_state_machine()
 	print("[BossActor] Ready - HP: %d/%d scale: %.1f" % [_current_hp, max_hp, _current_scale])
 
 
@@ -96,7 +108,10 @@ func configure_phases(skill_trees: Dictionary) -> void:
 func activate() -> void:
 	if _activated:
 		return
-	_activated = true
+	if _state_machine and _state_machine_initialized:
+		_state_machine.transition_to("combat")
+	else:
+		_activated = true
 	_notify_game_ui_spawn()
 
 
@@ -111,6 +126,8 @@ func _on_phase_started(b_id: String, phase: int) -> void:
 	print("[BossActor] 阶段切换 -> Phase %d" % phase)
 	# 阶段切换时触发视觉反馈：Boss 闪烁
 	_flash_phase_change(phase)
+	if avatar_renderer != null and avatar_renderer.has_method("set_phase"):
+		avatar_renderer.call("set_phase", phase)
 	# 阶段切换时触发全屏震屏（Boss 威压感）
 	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
 	if shake != null and shake.has_method("trigger"):
@@ -372,20 +389,42 @@ func _setup_hp_bar() -> void:
 
 
 func _apply_shape_scale() -> void:
-	if shape == null:
-		return
 	var base_size: float = 110.0
 	var scaled_size: float = base_size * _current_scale
-	shape.custom_minimum_size = Vector2(scaled_size, scaled_size)
-	shape.offset_left = -scaled_size * 0.5
-	shape.offset_top = -scaled_size * 0.5
-	shape.offset_right = scaled_size * 0.5
-	shape.offset_bottom = scaled_size * 0.5
-	shape.scale = Vector2.ONE
+	if shape != null:
+		shape.custom_minimum_size = Vector2(scaled_size, scaled_size)
+		shape.offset_left = -scaled_size * 0.5
+		shape.offset_top = -scaled_size * 0.5
+		shape.offset_right = scaled_size * 0.5
+		shape.offset_bottom = scaled_size * 0.5
+		shape.scale = Vector2.ONE
+	if collision_shape != null and collision_shape.shape is CircleShape2D:
+		(collision_shape.shape as CircleShape2D).radius = scaled_size * 0.38
+	if avatar_renderer != null and avatar_renderer.has_method("set_presentation_scale"):
+		avatar_renderer.call("set_presentation_scale", _current_scale)
+
+
+func _ensure_avatar_renderer() -> void:
+	if avatar_renderer == null:
+		avatar_renderer = get_node_or_null("AvatarRenderer") as Node
+	if avatar_renderer == null:
+		avatar_renderer = BOSS_AVATAR_RENDERER_SCRIPT.new() as Node
+		avatar_renderer.name = "AvatarRenderer"
+		add_child(avatar_renderer)
+	if avatar_renderer.has_method("set_presentation_scale"):
+		avatar_renderer.call("set_presentation_scale", _current_scale)
+	# Scene Shape remains as an invisible backwards-compatible asset anchor.
+	if shape != null:
+		shape.visible = false
 
 
 func _notify_game_ui_spawn() -> void:
-	await get_tree().create_timer(0.1).timeout
+	if get_tree().get_first_node_in_group("room_game_mode") != null:
+		return
+	call_deferred("_notify_game_ui_spawn_deferred")
+
+
+func _notify_game_ui_spawn_deferred() -> void:
 	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
 	if gui != null and gui.has_method("on_boss_spawned"):
 		gui.call("on_boss_spawned", {
@@ -400,20 +439,23 @@ func _notify_game_ui_spawn() -> void:
 ## ================================================
 
 func _process(delta: float) -> void:
-	if _is_dead:
+	# 转发给状态机，由当前状态决定每帧逻辑
+	if _state_machine and _state_machine_initialized:
+		_state_machine.physics_update(delta)
+
+
+func take_damage(
+	damage: float, is_crit: bool = false, _hit_direction: Vector2 = Vector2.ZERO
+) -> void:
+	## Match EnemyBase' public hit contract.  Player bullets always provide the
+	## hit direction, even when this Boss currently only uses it for future
+	## directional hit reactions.
+	# 转发给状态机，由 combat 状态处理
+	if _state_machine and _state_machine_initialized:
+		_state_machine.dispatch_event("take_damage", {"damage": damage, "is_crit": is_crit})
+		print("[BossActor] took %.0f damage, HP: %.0f/%d" % [damage, _current_hp, max_hp])
 		return
-	if _damage_cooldown_timer > 0:
-		_damage_cooldown_timer -= delta
-	# 阶段 Director tick（更新技能冷却）
-	if _phase_director and _phase_director.has_method("tick"):
-		_phase_director.tick(delta)
-	# 检查 HP 阈值触发阶段切换
-	var hp_pct: float = _current_hp / max_hp
-	if _phase_director and _phase_director.has_method("check_hp_threshold"):
-		_phase_director.check_hp_threshold(hp_pct)
-
-
-func take_damage(damage: float, is_crit: bool = false) -> void:
+	# 状态机未启动：兜底用原逻辑
 	if _is_dead or _invulnerable:
 		return
 	if _damage_cooldown_timer > 0:
@@ -427,7 +469,6 @@ func take_damage(damage: float, is_crit: bool = false) -> void:
 	_spawn_damage_number(global_position, int(damage), is_crit)
 	_trigger_hit_screen_shake(damage, is_crit)
 	_notify_boss_damaged(damage)
-	# HitStop：命中停顿感
 	Global.trigger_hitstop(is_crit)
 	if _current_hp <= 0:
 		_trigger_death()
@@ -435,6 +476,8 @@ func take_damage(damage: float, is_crit: bool = false) -> void:
 
 
 func _take_damage_feedback(is_crit: bool) -> void:
+	if avatar_renderer != null and avatar_renderer.has_method("flash_hit"):
+		avatar_renderer.call("flash_hit", is_crit)
 	if shape == null:
 		return
 	var original_color := shape.color
@@ -462,9 +505,13 @@ func _trigger_hit_screen_shake(damage: float, is_crit: bool) -> void:
 
 
 func _notify_boss_damaged(damage: float) -> void:
-	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
-	if gui != null and gui.has_method("on_boss_damaged"):
-		gui.call("on_boss_damaged", boss_id, damage, _current_hp)
+	boss_damaged.emit(boss_id, damage, maxf(0.0, _current_hp), max_hp)
+	# RoomGameMode forwards this event to BossRoomDirector.  The standalone demo
+	# has no room mode, so it keeps a direct UI fallback for scene-level previews.
+	if get_tree().get_first_node_in_group("room_game_mode") == null:
+		var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
+		if gui != null and gui.has_method("on_boss_damaged"):
+			gui.call("on_boss_damaged", boss_id, damage, _current_hp)
 
 
 func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool) -> void:
@@ -472,14 +519,24 @@ func _spawn_damage_number(world_pos: Vector2, dmg: int, is_crit: bool) -> void:
 
 
 func _trigger_death() -> void:
-	if _is_dead:
+	# Public compatibility entry.  The state owns the one-time completion signal.
+	if _state_machine and _state_machine_initialized:
+		_state_machine.transition_to("dead", true)
+	else:
+		_complete_death()
+
+
+func _complete_death() -> void:
+	if _completion_notified:
 		return
+	_completion_notified = true
 	_is_dead = true
+	_current_hp = 0.0
+	current_hp = 0.0
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	boss_defeated.emit()
-	print("[BossActor] DEFEATED!")
-	# 震屏 + 全屏白闪
+	print("[BossActor] DEFEATED: %s" % boss_id)
 	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
 	if shake != null:
 		if shake.has_method("screen_shake_death"):
@@ -487,22 +544,23 @@ func _trigger_death() -> void:
 		elif shake.has_method("trigger"):
 			shake.call("trigger", 24.0, 0.5)
 		if shake.has_method("screen_flash"):
-			shake.call("screen_flash", Color(1.0, 1.0, 1.0, 0.8), 0.2)
+			shake.call("screen_flash", Color(0.85, 0.94, 1.0, 0.75), 0.18)
+	_play_death_presentation()
+
+
+func _play_death_presentation() -> void:
+	# Cosmetic work is intentionally separate from the progress signal: a slow
+	# tween can never hold hostage extraction, rewards, or room completion.
+	var boss_color: Color = shape.color if shape else Color(0.9, 0.12, 0.12, 1.0)
+	SparkParticles.spawn_death_burst(global_position, boss_color, true)
 	_spawn_death_particles()
+	if avatar_renderer != null and avatar_renderer.has_method("play_defeat"):
+		avatar_renderer.call("play_defeat")
 	if shape:
 		var tween := create_tween()
 		tween.set_parallel(true)
 		tween.tween_property(shape, "modulate:a", 0.0, 0.5)
 		tween.tween_property(shape, "scale", Vector2(1.6, 1.6), 0.5)
-		await tween.finished
-	# 通知 BossRoomLogic
-	var boss_logic: Node = get_parent().get_node_or_null("BossRoomLogic") as Node
-	if boss_logic != null and boss_logic.has_method("trigger_boss_defeated"):
-		boss_logic.call("trigger_boss_defeated")
-	# 通知 GameUIManager
-	var gui: Node = get_tree().root.find_child("GameUIManager", true, false)
-	if gui != null and gui.has_method("on_boss_defeated"):
-		gui.call("on_boss_defeated", boss_id, {})
 
 
 func _spawn_death_particles() -> void:
@@ -511,7 +569,9 @@ func _spawn_death_particles() -> void:
 	var boss_pos: Vector2 = shape.global_position
 	var particle_count: int = 20
 	var particle_parent: Node = shape.get_parent()
-	var particles: Array[Node] = []
+	var host := Node2D.new()
+	host.name = "BossDeathParticleHost"
+	particle_parent.add_child(host)
 	for i in range(particle_count):
 		var angle: float = TAU * i / particle_count
 		var particle := ColorRect.new()
@@ -522,19 +582,16 @@ func _spawn_death_particles() -> void:
 		particle.z_index = 150
 		var start_pos: Vector2 = boss_pos + Vector2(cos(angle) * 22.0, sin(angle) * 22.0)
 		particle.global_position = start_pos
-		particle_parent.add_child(particle)
-		particles.append(particle)
-		var tween := create_tween()
+		host.add_child(particle)
+		var tween := particle.create_tween()
 		tween.set_parallel(true)
 		var end_pos: Vector2 = boss_pos + Vector2(cos(angle) * 110.0, sin(angle) * 110.0)
 		tween.tween_property(particle, "global_position", end_pos, 0.38)
 		tween.tween_property(particle, "modulate:a", 0.0, 0.38)
 		tween.tween_property(particle, "size", Vector2(4, 4), 0.38)
-	var cleanup := func() -> void:
-		for p in particles:
-			if is_instance_valid(p):
-				p.queue_free()
-	get_tree().create_timer(0.45).timeout.connect(cleanup)
+	var cleanup_tween := host.create_tween()
+	cleanup_tween.tween_interval(0.45)
+	cleanup_tween.tween_callback(host.queue_free)
 
 
 ## ================================================
@@ -559,3 +616,36 @@ func set_room_bounds(bounds: Rect2) -> void:
 
 func get_room_bounds() -> Rect2:
 	return _room_bounds
+
+
+# ========== 状态机改造 (2026-06-10 PHxx 通用状态机框架接入 - BossActor) ==========
+## 3 个状态（idle/combat/dead）已拆为独立 State 子类：
+##   src/enemy/states/boss/BossIdleState.gd / BossCombatState.gd / BossDeadState.gd
+##
+## 战斗阶段（phase1/2/3）由 BossPhaseDirector 独立管理，不纳入顶层状态机。
+##
+## 对外行为兼容：
+## - _is_dead / _invulnerable / _activated 字段保留并由各 State.enter() 同步
+## - activate() / take_damage() / _trigger_death() 外部调用不需改
+
+## 状态机节点（_ready 末尾挂上）
+var _state_machine: StateMachine = null
+
+## 状态机启动标志
+var _state_machine_initialized: bool = false
+
+## 初始化状态机
+func _init_state_machine() -> void:
+	if _state_machine_initialized:
+		return
+	_state_machine = StateMachine.new()
+	_state_machine.name = "StateMachine"
+	_state_machine.owner_node = self
+	add_child(_state_machine)
+	# 注册 3 个状态
+	_state_machine.register("idle", BossIdleState.new())
+	_state_machine.register("combat", BossCombatState.new())
+	_state_machine.register("dead", BossDeadState.new())
+	# 启动到 idle（默认未激活）
+	_state_machine.start("idle")
+	_state_machine_initialized = true

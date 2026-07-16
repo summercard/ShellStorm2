@@ -61,6 +61,13 @@ func _init(root_node: AssemblyNode = null) -> void:
 	tree_changed.connect(_on_tree_changed)
 
 
+func _exit_tree() -> void:
+	## AssemblyNode is intentionally a data-only Node (it never enters the
+	## SceneTree), so Godot will not free its mounted descendants for us.  Release
+	## the ownership graph explicitly whenever a run/player weapon tree ends.
+	clear_assembly(false)
+
+
 ## 设置根节点（主枪身）
 func set_root(new_root: AssemblyNode) -> bool:
 	if new_root == null:
@@ -70,7 +77,7 @@ func set_root(new_root: AssemblyNode) -> bool:
 		push_error("[WeaponAssemblyTree] Root must be a GUN_BODY node")
 		return false
 	if root != null:
-		_unregister_all()
+		clear_assembly(false)
 	root = new_root
 	root.depth = 0
 	_register_node(root)
@@ -117,6 +124,44 @@ func unmount(node: AssemblyNode) -> bool:
 	tree_changed.emit()
 	stats_changed.emit(root.get_computed_stats() if root != null else {})
 	return true
+
+
+func clear_assembly(notify: bool = true) -> void:
+	## Public lifecycle boundary for a whole weapon tree.  Do not use this for a
+	## regular unmount: callers may transfer the detached node to a new root.
+	var old_root := root
+	root = null
+	_node_registry.clear()
+	_cached_bullet_attached_gun = null
+	_fire_cooldown = 0.0
+	_is_reloading = false
+	_fire_count = 0
+	fire_rate = 0.0
+	reload_time = 0.0
+	magazine_size = 0
+	current_ammo = 0
+	projectile_count = 0
+	spread = 0.0
+	bullet_speed = 1.0
+	bullet_damage = 0
+	_overheat_penalty = 1.0
+	if old_root != null and is_instance_valid(old_root):
+		_free_assembly_subtree(old_root)
+	if notify:
+		tree_changed.emit()
+		stats_changed.emit({})
+		ammo_changed.emit(0, 0)
+
+
+func _free_assembly_subtree(node: AssemblyNode) -> void:
+	for slot_type in node.slots.keys():
+		var child: AssemblyNode = node.slots[slot_type] as AssemblyNode
+		node.slots[slot_type] = null
+		if child != null and is_instance_valid(child):
+			child.parent_node = null
+			_free_assembly_subtree(child)
+	node.parent_node = null
+	node.free()
 
 
 ## 获取整棵树的根

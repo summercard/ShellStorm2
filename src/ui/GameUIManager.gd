@@ -11,7 +11,26 @@ const _WEAPON_PANEL_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTre
 
 ## — 游戏状态 UI —
 @onready var hp_bar: ProgressBar = $GameHUD/HPBarBG/HPBar
+@onready var hp_bar_trail: ProgressBar = $GameHUD/HPBarBG/HPBarTrail
+@onready var player_state_panel: PanelContainer = $GameHUD/PlayerStatePanel
+@onready var player_state_accent: ColorRect = $GameHUD/PlayerStatePanel/HBox/StateAccent
+@onready var player_state_label: Label = $GameHUD/PlayerStatePanel/HBox/VBox/StateLabel
+@onready var player_status_label: Label = $GameHUD/PlayerStatePanel/HBox/VBox/StatusLabel
+
+## HP 尾迹跟随 tween（用 meta 持有，避免被 GC 回收）
+var _hp_trail_tween: Tween = null
+var _hp_readout: Label = null
+var _bound_player: Node = null
+var _player_state_id := "idle"
+var _player_low_health := false
+var _player_hp_ratio := 1.0
+var _player_status_effects: Dictionary = {}
+var _player_state_pulse := 0.0
+var _player_state_tween: Tween = null
+var _hp_damage_tween: Tween = null
+## 标记：是否正在追尾（避免在 _process 中重复触发）
 @onready var dash_cooldown_bar: ProgressBar = $GameHUD/DashCooldownBG/DashCooldownBar
+@onready var dash_label: Label = $GameHUD/DashCooldownBG/DashLabel
 @onready var score_label: Label = $GameHUD/TopRightPanel/VBox/ScoreLabel
 @onready var wave_label: Label = $GameHUD/TopRightPanel/VBox/WaveLabel
 @onready var currency_label: Label = $GameHUD/CurrencyLabel
@@ -20,7 +39,7 @@ const _WEAPON_PANEL_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTre
 @onready var room_info_label: Label = $GameHUD/RoomInfoLabel
 @onready var clearing_progress: ProgressBar = $GameHUD/ClearingProgress
 @onready var minimap_panel: PanelContainer = $GameHUD/MiniMapPanel
-@onready var minimap_view: ReferenceRect = $GameHUD/MiniMapPanel/MiniMapView
+@onready var minimap_view: MinimapView = $GameHUD/MiniMapPanel/MiniMapView
 
 ## — 弹药 UI —
 @onready var ammo_panel: PanelContainer = $GameHUD/AmmoPanel
@@ -105,7 +124,7 @@ var _run_choice_kind: String = ""
 
 ## — 小地图 UI（PH11）—
 var _minimap_panel: PanelContainer = null
-var _minimap_view: ReferenceRect = null
+var _minimap_view: MinimapView = null
 var _minimap_dirty: bool = false  ## 标记需要重绘
 var _minimap_nodes: Array[Dictionary] = []  ## 当前地图节点缓存
 var _minimap_player_node_id: int = -1  ## 玩家所在节点ID
@@ -143,7 +162,10 @@ signal extraction_choice_selected(choice_id: String)
 func _ready() -> void:
 	# 注册为 game_ui 组（供 ContainerInteraction 等通过 group call 触发 UI 方法）
 	add_to_group("game_ui")
+	# HUD is deliberately above optional fog and world-space effects.
+	layer = 30
 	_ensure_hud_layout()
+	_apply_combat_hud_presentation()
 
 	# 延迟获取子节点（避免 CanvasLayer @onready 路径问题）
 	death_overlay = get_node_or_null("DeathOverlay")
@@ -230,6 +252,91 @@ func _ensure_hud_layout() -> void:
 	hud.offset_bottom = 0
 
 
+func _apply_combat_hud_presentation() -> void:
+	## A restrained command-console treatment: consistent surface hierarchy,
+	## strong numeric readability and no dependency on a raster UI skin.
+	for panel_path in [
+		"GameHUD/TopRightPanel", "GameHUD/HPBarBG", "GameHUD/DashCooldownBG",
+		"GameHUD/AmmoPanel", "GameHUD/FireRatePanel", "GameHUD/MiniMapPanel",
+	]:
+		var panel := get_node_or_null(panel_path) as PanelContainer
+		if panel == null:
+			continue
+		var style := UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1)
+		style.content_margin_left = 8.0
+		style.content_margin_top = 4.0
+		style.content_margin_right = 8.0
+		style.content_margin_bottom = 4.0
+		panel.add_theme_stylebox_override("panel", style)
+
+	for label in [score_label, wave_label, currency_label, risk_label, crit_label, room_info_label]:
+		_style_hud_label(label, 15, UIPalette.TEXT_PRIMARY)
+	_style_hud_label(score_label, 17, UIPalette.TEXT_GOLD)
+	_style_hud_label(wave_label, 14, UIPalette.TEXT_SECONDARY)
+	_style_hud_label(room_info_label, 16, UIPalette.TEXT_PRIMARY)
+	if room_info_label != null:
+		room_info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+
+	if hp_bar != null:
+		hp_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(UIPalette.BG_SLOT))
+	if hp_bar_trail != null:
+		hp_bar_trail.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(UIPalette.BG_SLOT))
+	if dash_cooldown_bar != null:
+		dash_cooldown_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(UIPalette.BG_SLOT))
+		dash_cooldown_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(UIPalette.BORDER_FOCUS))
+	if ammo_bar != null:
+		ammo_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(UIPalette.BG_SLOT))
+	if fire_rate_bar != null:
+		fire_rate_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_fill(UIPalette.BG_SLOT))
+		fire_rate_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(UIPalette.TEXT_GOLD))
+	_style_hud_label(dash_label, 13, UIPalette.TEXT_PRIMARY)
+	_style_hud_label(ammo_label, 14, UIPalette.TEXT_PRIMARY)
+	_style_hud_label(fire_rate_label, 13, UIPalette.TEXT_SECONDARY)
+	_style_hud_label(reload_indicator, 14, UIPalette.TEXT_GOLD)
+	if dash_label != null:
+		dash_label.text = "机动  READY"
+	if fire_rate_label != null:
+		fire_rate_label.text = "火力  READY"
+	_ensure_hp_readout()
+	_refresh_player_state_panel(false)
+
+
+func _style_hud_label(label: Label, font_size: int, color: Color) -> void:
+	if label == null:
+		return
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.82))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 2)
+
+
+func _ensure_hp_readout() -> void:
+	if hp_bar == null:
+		return
+	_hp_readout = hp_bar.get_node_or_null("Readout") as Label
+	if _hp_readout == null:
+		_hp_readout = Label.new()
+		_hp_readout.name = "Readout"
+		_hp_readout.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_hp_readout.set_anchors_preset(Control.PRESET_FULL_RECT)
+		_hp_readout.offset_left = 0.0
+		_hp_readout.offset_top = 0.0
+		_hp_readout.offset_right = 0.0
+		_hp_readout.offset_bottom = 0.0
+		_hp_readout.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_hp_readout.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		_hp_readout.z_index = 8
+		hp_bar.add_child(_hp_readout)
+	_style_hud_label(_hp_readout, 13, UIPalette.TEXT_PRIMARY)
+	_update_hp_readout(int(hp_bar.value), int(hp_bar.max_value))
+
+
+func _update_hp_readout(current: int, maximum: int) -> void:
+	if _hp_readout != null:
+		_hp_readout.text = "生命  %d / %d" % [current, maximum]
+
+
 ## 绑定房间游戏模式
 func set_room_game_mode(mode: Node) -> void:
 	_room_game_mode = mode
@@ -277,6 +384,14 @@ func set_room_game_mode(mode: Node) -> void:
 
 ## 绑定玩家（用于闪避冷却条等）
 func set_player(player: Node) -> void:
+	_disconnect_bound_player()
+	_bound_player = player
+	if player == null or not is_instance_valid(player):
+		_player_state_id = "offline"
+		_player_low_health = false
+		_player_status_effects.clear()
+		_refresh_player_state_panel(false)
+		return
 	if (
 		player
 		and player.has_signal("dash_cooldown_changed")
@@ -289,6 +404,21 @@ func set_player(player: Node) -> void:
 		and not player.dash_started.is_connected(_on_dash_started)
 	):
 		player.dash_started.connect(_on_dash_started)
+	_connect_player_signal(player, "hp_changed", update_hp)
+	_connect_player_signal(player, "presentation_state_changed", _on_player_presentation_state_changed)
+	_connect_player_signal(player, "low_health_changed", _on_player_low_health_changed)
+	_connect_player_signal(player, "damage_taken", _on_player_damage_taken)
+	_connect_player_signal(player, "status_effect_changed", _on_player_status_effect_changed)
+	if player.has_method("get_presentation_state"):
+		_player_state_id = str(player.call("get_presentation_state"))
+	if player.has_method("is_low_health"):
+		_player_low_health = bool(player.call("is_low_health"))
+	_player_status_effects["silenced"] = bool(player.get("_is_silenced"))
+	var maximum := maxi(1, int(player.get("max_hp")))
+	var current := clampi(int(player.get("current_hp")), 0, maximum)
+	_player_hp_ratio = float(current) / float(maximum)
+	update_hp(current, maximum)
+	_refresh_player_state_panel(false)
 	# 让低血量 Vignette 直接监听玩家 HP 信号
 	if _health_vignette and _health_vignette.has_method("set_player_ref"):
 		_health_vignette.set_player_ref(player)
@@ -296,6 +426,166 @@ func set_player(player: Node) -> void:
 	_bind_weapon_signals(player)
 	_bind_weapon_panel(player)
 	_update_equipped_weapon_slot()
+
+
+func _connect_player_signal(player: Node, signal_name: StringName, callback: Callable) -> void:
+	if player.has_signal(signal_name) and not player.is_connected(signal_name, callback):
+		player.connect(signal_name, callback)
+
+
+func _disconnect_bound_player() -> void:
+	if _bound_player == null or not is_instance_valid(_bound_player):
+		return
+	var bindings: Array = [
+		["dash_cooldown_changed", _on_dash_cooldown_changed],
+		["dash_started", _on_dash_started],
+		["hp_changed", update_hp],
+		["presentation_state_changed", _on_player_presentation_state_changed],
+		["low_health_changed", _on_player_low_health_changed],
+		["damage_taken", _on_player_damage_taken],
+		["status_effect_changed", _on_player_status_effect_changed],
+	]
+	for binding in bindings:
+		var signal_name := StringName(binding[0])
+		var callback := Callable(binding[1])
+		if _bound_player.has_signal(signal_name) and _bound_player.is_connected(signal_name, callback):
+			_bound_player.disconnect(signal_name, callback)
+
+
+func _on_player_presentation_state_changed(state_id: String, _context: Dictionary) -> void:
+	_player_state_id = state_id
+	_refresh_player_state_panel(true)
+
+
+func _on_player_low_health_changed(active: bool, hp_ratio: float) -> void:
+	_player_low_health = active
+	_player_hp_ratio = clampf(hp_ratio, 0.0, 1.0)
+	_refresh_player_state_panel(true)
+
+
+func _on_player_damage_taken(_amount: int, current: int, maximum: int) -> void:
+	update_hp(current, maximum)
+	_play_hp_damage_feedback()
+
+
+func _on_player_status_effect_changed(effect_id: String, active: bool, _duration: float) -> void:
+	_player_status_effects[effect_id] = active
+	_refresh_player_state_panel(true)
+
+
+func _refresh_player_state_panel(animate: bool = true) -> void:
+	if player_state_panel == null:
+		return
+	var profile := _player_state_profile(_player_state_id)
+	var accent: Color = profile.get("color", UIPalette.BORDER_NORMAL)
+	if _player_low_health:
+		accent = UIPalette.HP_LOW
+	elif bool(_player_status_effects.get("silenced", false)):
+		accent = Color(0.72, 0.38, 1.0, 1.0)
+	var urgent := _player_low_health or _player_state_id in ["hurt", "dead"]
+	var style := UIStyleFactory.make_panel_with_border(1, accent, 6, 2 if urgent else 1)
+	style.content_margin_left = 8.0
+	style.content_margin_top = 5.0
+	style.content_margin_right = 8.0
+	style.content_margin_bottom = 5.0
+	if _player_state_id == "dead":
+		style.bg_color = Color(0.11, 0.025, 0.035, 0.96)
+	player_state_panel.add_theme_stylebox_override("panel", style)
+	if player_state_accent != null:
+		player_state_accent.color = accent
+	if player_state_label != null:
+		player_state_label.text = str(profile.get("label", "姿态 · 未知"))
+		player_state_label.add_theme_color_override("font_color", accent.lightened(0.24))
+		_style_hud_label(player_state_label, 14, accent.lightened(0.24))
+	if player_status_label != null:
+		_style_hud_label(player_status_label, 11, UIPalette.TEXT_SECONDARY)
+	_update_player_status_text(profile)
+	if animate:
+		_pulse_player_state_panel()
+
+
+func _player_state_profile(state_id: String) -> Dictionary:
+	match state_id:
+		"idle":
+			return {"label": "姿态 · 待命", "detail": "生命维持系统稳定", "color": Color(0.38, 0.70, 0.82)}
+		"moving":
+			return {"label": "姿态 · 机动", "detail": "地形辅助接合", "color": Color(0.28, 0.86, 0.92)}
+		"dashing":
+			return {"label": "姿态 · 突进", "detail": "推进器瞬时过载", "color": Color(0.50, 0.90, 1.0)}
+		"hurt":
+			return {"label": "姿态 · 受创", "detail": "装甲正在吸收冲击", "color": Color(1.0, 0.34, 0.28)}
+		"locked":
+			return {"label": "姿态 · 交互锁定", "detail": "武器保险已接合", "color": Color(0.96, 0.72, 0.24)}
+		"dead":
+			return {"label": "生命终止", "detail": "生命维持系统离线", "color": Color(0.82, 0.16, 0.19)}
+		"offline":
+			return {"label": "状态链路离线", "detail": "等待作战单位接入", "color": UIPalette.TEXT_DISABLED}
+		_:
+			return {"label": "姿态 · 未知", "detail": "状态遥测异常", "color": UIPalette.BORDER_NORMAL}
+
+
+func _update_player_status_text(profile: Dictionary = {}) -> void:
+	if player_status_label == null:
+		return
+	var alerts: Array[String] = []
+	if _player_low_health:
+		alerts.append("CRITICAL %02d%%" % roundi(_player_hp_ratio * 100.0))
+	if bool(_player_status_effects.get("silenced", false)):
+		var remaining := 0.0
+		if _bound_player != null and is_instance_valid(_bound_player):
+			remaining = maxf(0.0, float(_bound_player.get("_silence_timer")))
+		alerts.append("JAMMED %.1fs" % remaining)
+	if alerts.is_empty():
+		if profile.is_empty():
+			profile = _player_state_profile(_player_state_id)
+		player_status_label.text = str(profile.get("detail", "状态同步"))
+	else:
+		player_status_label.text = "  /  ".join(alerts)
+
+
+func _pulse_player_state_panel() -> void:
+	if player_state_panel == null:
+		return
+	if _player_state_tween != null and is_instance_valid(_player_state_tween):
+		_player_state_tween.kill()
+	player_state_panel.pivot_offset = player_state_panel.size * 0.5
+	player_state_panel.scale = Vector2(1.055, 0.94)
+	player_state_panel.modulate = Color(1.22, 1.22, 1.22, 1.0)
+	_player_state_tween = player_state_panel.create_tween()
+	_player_state_tween.set_parallel(true)
+	_player_state_tween.tween_property(player_state_panel, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_player_state_tween.tween_property(player_state_panel, "modulate", Color.WHITE, 0.20).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+func _play_hp_damage_feedback() -> void:
+	var hp_panel := get_node_or_null("GameHUD/HPBarBG") as Control
+	if hp_panel == null:
+		return
+	if _hp_damage_tween != null and is_instance_valid(_hp_damage_tween):
+		_hp_damage_tween.kill()
+	hp_panel.pivot_offset = hp_panel.size * 0.5
+	hp_panel.scale = Vector2(1.06, 0.88)
+	hp_panel.rotation = -0.018
+	if _hp_readout != null:
+		_hp_readout.add_theme_color_override("font_color", Color(1.0, 0.66, 0.58))
+	_hp_damage_tween = hp_panel.create_tween()
+	_hp_damage_tween.set_parallel(true)
+	_hp_damage_tween.tween_property(hp_panel, "scale", Vector2.ONE, 0.22).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	_hp_damage_tween.tween_property(hp_panel, "rotation", 0.0, 0.16).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	if _hp_readout != null:
+		_hp_damage_tween.tween_callback(func() -> void: _style_hud_label(_hp_readout, 13, UIPalette.TEXT_PRIMARY)).set_delay(0.18)
+
+
+func get_player_state_widget_snapshot() -> Dictionary:
+	return {
+		"visible": player_state_panel != null and player_state_panel.visible,
+		"state": _player_state_id,
+		"low_health": _player_low_health,
+		"silenced": bool(_player_status_effects.get("silenced", false)),
+		"state_text": player_state_label.text if player_state_label != null else "",
+		"status_text": player_status_label.text if player_status_label != null else "",
+		"rect": player_state_panel.get_global_rect() if player_state_panel != null else Rect2(),
+	}
 
 
 func _bind_weapon_signals(player: Node) -> void:
@@ -314,10 +604,13 @@ func _bind_weapon_signals(player: Node) -> void:
 		if not wt.tree_changed.is_connected(_update_equipped_weapon_slot):
 			wt.tree_changed.connect(_update_equipped_weapon_slot)
 	else:
-		# Player 还没准备好，等一下再试
-		await get_tree().create_timer(0.5).timeout
-		if player and is_instance_valid(player) and player.has_method("get_weapon_tree"):
-			_bind_weapon_signals(player)
+		# Player 还没准备好时下一空闲帧重试；UI 销毁后 deferred 调用自动失效。
+		call_deferred("_retry_bind_weapon_signals", player)
+
+
+func _retry_bind_weapon_signals(player: Node) -> void:
+	if player and is_instance_valid(player) and player.has_method("get_weapon_tree"):
+		_bind_weapon_signals(player)
 
 
 func _bind_weapon_panel(player: Node) -> void:
@@ -374,15 +667,56 @@ func set_extraction_module(module: Object) -> void:
 
 ## 更新 HP 显示
 func update_hp(current: int, maximum: int) -> void:
+	_player_hp_ratio = float(current) / maxf(1.0, float(maximum))
 	if hp_bar:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
+		# 尾迹：只在 HP 下降时追尾（不追上当前值）
+		if hp_bar_trail:
+			hp_bar_trail.max_value = maximum
+			if hp_bar_trail.value > float(current):
+				_start_hp_trail_catchup(float(current))
+		_update_hp_bar_color()
+	_update_hp_readout(current, maximum)
+
+
+## 启动 HP 尾迹追尾动画（0.4s 追上当前 HP 值）
+func _start_hp_trail_catchup(target_value: float) -> void:
+	if hp_bar_trail == null:
+		return
+	if _hp_trail_tween != null and is_instance_valid(_hp_trail_tween):
+		_hp_trail_tween.kill()
+	_hp_trail_tween = hp_bar_trail.create_tween()
+	_hp_trail_tween.tween_property(
+		hp_bar_trail, "value", target_value, 0.4,
+	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+
+
+## 根据 HP 比例设置 fill 颜色（绿/黄/红阶梯）
+var _last_hp_color_ratio: float = -1.0  ## 上次刷新的 HP 比例（带 0.1 deadzone 防抖）
+func _update_hp_bar_color() -> void:
+	if hp_bar == null or hp_bar.max_value <= 0.0:
+		return
+	var ratio: float = hp_bar.value / hp_bar.max_value
+	# 0.1 阈值 deadzone，避免每帧抖动
+	if absf(ratio - _last_hp_color_ratio) < 0.1 and _last_hp_color_ratio >= 0.0:
+		return
+	_last_hp_color_ratio = ratio
+	var fill_color: Color = UIPalette.hp_color_for_ratio(ratio)
+	hp_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(fill_color))
+	# 尾迹颜色：始终是比当前色暗一档的同色（看起来像褪色的尾）
+	var trail_color: Color = fill_color
+	trail_color.r *= 0.55
+	trail_color.g *= 0.55
+	trail_color.b *= 0.55
+	hp_bar_trail.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(trail_color))
 
 
 ## 更新分数（带跳动动画 + 描边）
 func update_score(score_val: int) -> void:
 	if score_label:
-		score_label.text = "Score: %d" % score_val
+		score_label.text = "战绩  %06d" % score_val
+		score_label.set_meta("score_value", score_val)
 		_bounce_label(score_label)
 		_sync_score_outline()
 
@@ -487,9 +821,7 @@ func show_currency_popup(amount: int, world_pos: Vector2) -> void:
 		. set_ease(Tween.EASE_OUT)
 	)
 	tween.chain().tween_property(popup_label, "modulate:a", 0.0, 0.5).set_delay(1.0)
-	await tween.finished
-	if popup_label and is_instance_valid(popup_label):
-		popup_label.queue_free()
+	tween.chain().tween_callback(popup_label.queue_free)
 
 
 func show_damage_popup(world_pos: Vector2, damage: int, is_crit: bool = false) -> void:
@@ -584,9 +916,8 @@ func _on_container_loot_granted(
 		popup_label.global_position = canvas_pos
 		add_child(popup_label)
 		_fly_and_fade(popup_label, canvas_pos)
-		# 后续物品依次偏移飘出
+		# 后续物品用 Tween 延迟依次飘出，不创建跨场景 SceneTreeTimer 协程。
 		for i in range(min(items.size(), 5)):
-			await get_tree().create_timer(0.18 + i * 0.12).timeout
 			var item_data: Dictionary = items[i]
 			var item_name: String = item_data.get("name", item_data.get("id", "?"))
 			var count: int = item_data.get("count", 1)
@@ -594,11 +925,11 @@ func _on_container_loot_granted(
 			var item_label := Label.new()
 			item_label.z_index = 200
 			item_label.add_theme_font_size_override("font_size", 12)
-			item_label.modulate = Color(0.8, 0.8, 0.6, 0.9)
+			item_label.modulate = Color(0.8, 0.8, 0.6, 0.0)
 			item_label.text = "+%s x%d" % [item_name, count] if count > 1 else "+%s" % item_name
 			item_label.global_position = offset_pos
 			add_child(item_label)
-			_fly_and_fade(item_label, offset_pos)
+			_fly_and_fade(item_label, offset_pos, 0.18 + i * 0.12, 0.9)
 
 
 ## 小地图刷新信号处理
@@ -658,25 +989,21 @@ func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
 
 
 ## 飘字动画：Y 上浮 + 淡出消失
-func _fly_and_fade(label: Label, start_pos: Vector2) -> void:
+func _fly_and_fade(label: Label, start_pos: Vector2, delay: float = 0.0, target_alpha: float = 1.0) -> void:
 	var tween := label.create_tween()
-	tween.set_parallel(true)
-	(
-		tween
-		. tween_property(label, "position:y", start_pos.y - 50, 1.2)
-		. set_trans(Tween.TRANS_QUAD)
-		. set_ease(Tween.EASE_OUT)
-	)
-	tween.chain().tween_property(label, "modulate:a", 0.0, 0.5).set_delay(0.7)
-	await tween.finished
-	if label and is_instance_valid(label):
-		label.queue_free()
+	if delay > 0.0:
+		tween.tween_interval(delay)
+		tween.tween_property(label, "modulate:a", target_alpha, 0.05)
+	tween.tween_property(label, "position:y", start_pos.y - 50, 1.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 0.5).set_delay(0.7)
+	tween.chain().tween_callback(label.queue_free)
 
 
 ## 更新楼层
 func update_floor(floor: int) -> void:
 	if wave_label:
-		wave_label.text = "Floor: %d" % floor
+		wave_label.text = "深度  %02d" % floor
+		wave_label.set_meta("floor_value", floor)
 		_bounce_label(wave_label)
 		_sync_wave_outline()
 
@@ -698,205 +1025,146 @@ func _refresh_minimap_nodes() -> void:
 	_minimap_nodes.clear()
 	_minimap_player_node_id = -1
 	if _room_game_mode == null or not _room_game_mode.has_method("get_map_manager"):
+		_push_minimap_data()
 		return
 	var mm = _room_game_mode.get_map_manager()
 	var graph: NodeGraph = mm.get_graph() if mm else null
 	if graph == null:
+		_push_minimap_data()
 		return
 	var nodes: Array = graph.get_all_nodes()
 	var current_room_id: int = (
 		mm.get_current_room_id() if mm.has_method("get_current_room_id") else -1
 	)
-	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
-	var map_rect: Rect2 = _calc_map_bounds(nodes)
 
-	# 获取玩家世界位置（用于计算小地图玩家点偏移）
+	# 玩家世界位置
 	var player_world_pos: Vector2 = Vector2.ZERO
 	var player_ref: Node = mm.get_player() if mm.has_method("get_player") else null
 	if player_ref and is_instance_valid(player_ref):
 		player_world_pos = player_ref.global_position
 
+	# 缓存房间世界坐标（用于连接线绘制和玩家相对偏移）
+	var node_pos_by_id: Dictionary = {}
+	for node in nodes:
+		node_pos_by_id[node.id] = node.position
+
+	# 收集节点数据
 	for node in nodes:
 		var rd: RoomData = node.room_data
-		var color: Color = _get_room_color(rd.room_type)
-		var pos: Vector2
-		if map_rect.size.x > 0 and map_rect.size.y > 0:
-			var norm: Vector2 = (node.position - map_rect.position) / map_rect.size
-			pos = Vector2(norm.x * view_size.x, norm.y * view_size.y)
-		else:
-			pos = Vector2(view_size.x * 0.5, view_size.y * 0.5)
-		(
-			_minimap_nodes
-			. append(
-				{
-					"id": node.id,
-					"pos": pos,
-					"node_pos": node.position,  # 房间世界坐标（计算玩家相对偏移用）
-					"color": color,
-					"type": rd.room_type,
-					"is_current": node.id == current_room_id,
-					"connections": node.connections.duplicate(),
-					"revealed": rd.get_meta("revealed") if rd.has_meta("revealed") else false,
-				}
-			)
+		_minimap_nodes.append(
+			{
+				"id": node.id,
+				"node_pos": node.position,
+				"type": rd.room_type,
+				"is_current": node.id == current_room_id,
+				"is_revealed": rd.get_meta("revealed") if rd.has_meta("revealed") else true,
+			}
 		)
+
+	# 收集门连接（含开闭状态 + 门类型）
+	var connections: Array[Dictionary] = []
+	var pd = mm.path_director if mm else null
+	if pd != null:
+		for node in nodes:
+			var open_info: Array[Dictionary] = pd.get_open_door_info(node.id)
+			for info in open_info:
+				var from_id: int = info.get("from_id", -1)
+				var to_id: int = info.get("to_id", -1)
+				var from_pos: Vector2 = node_pos_by_id.get(from_id, Vector2.ZERO)
+				var to_pos: Vector2 = node_pos_by_id.get(to_id, Vector2.ZERO)
+				connections.append(
+					{
+						"from_pos": from_pos,
+						"to_pos": to_pos,
+						"is_open": info.get("is_open", false),
+						"door_type": info.get("door_type", "normal"),
+					}
+				)
+			# 未开启的门（PathDirector 暂未暴露 list_closed_doors，遍历 connections）
+			for conn_id in node.connections:
+				if pd.are_connected(node.id, conn_id):
+					continue  # 已开门
+				# 闭合门：补充虚线
+				connections.append(
+					{
+						"from_pos": node_pos_by_id.get(node.id, Vector2.ZERO),
+						"to_pos": node_pos_by_id.get(conn_id, Vector2.ZERO),
+						"is_open": false,
+						"door_type": "normal",
+					}
+				)
+
+	# 当前房间世界坐标（用于玩家点偏移）
+	var current_node_pos: Vector2 = node_pos_by_id.get(current_room_id, Vector2.ZERO)
+	_minimap_player_node_id = current_room_id
+
+	# 推送给 MinimapView
 	_minimap_dirty = true
+	_push_minimap_data(true)
 
 
-func _calc_map_bounds(nodes: Array) -> Rect2:
-	if nodes.is_empty():
-		return Rect2(0, 0, 1, 1)
-	var min_x := INF
-	var min_y := INF
-	var max_x := -INF
-	var max_y := -INF
-	for node in nodes:
-		min_x = minf(min_x, node.position.x)
-		min_y = minf(min_y, node.position.y)
-		max_x = maxf(max_x, node.position.x)
-		max_y = maxf(max_y, node.position.y)
-	var pad := 50.0
-	return Rect2(min_x - pad, min_y - pad, (max_x - min_x) + pad * 2, (max_y - min_y) + pad * 2)
-
-
-func _get_room_color(room_type: int) -> Color:
-	match room_type:
-		0:
-			return Color(0.5, 1.0, 0.5, 0.9)
-		1:
-			return Color(1.0, 0.3, 0.3, 0.9)
-		2:
-			return Color(1.0, 0.6, 0.1, 0.9)
-		3:
-			return Color(0.3, 0.8, 1.0, 0.9)
-		4:
-			return Color(1.0, 0.85, 0.2, 0.9)
-		5:
-			return Color(0.6, 0.4, 1.0, 0.9)
-		6:
-			return Color(0.9, 0.3, 0.9, 0.9)
-		7:
-			return Color(0.2, 1.0, 0.6, 0.9)
-		8:
-			return Color(1.0, 0.1, 0.1, 1.0)
-		_:
-			return Color(0.7, 0.7, 0.7, 0.9)
-
-
-func _draw_minimap_rserver(canvas: RID) -> void:
-	if _minimap_nodes.is_empty():
+## 推数据到 MinimapView（自身决定如何 set_data）
+func _push_minimap_data(force: bool = false) -> void:
+	if _minimap_view == null:
 		return
-	var view_size: Vector2 = _minimap_view.size if _minimap_view else Vector2(164, 164)
-	RenderingServer.canvas_item_add_rect(
-		canvas, Rect2(Vector2.ZERO, view_size), Color(0.07, 0.07, 0.12, 0.95)
-	)
+	if _minimap_nodes.is_empty():
+		_minimap_view.clear()
+		return
+	if not force and not _minimap_dirty:
+		return
+	_minimap_dirty = false
 
-	# 计算玩家当前房间的相对偏移（用于在当前房间节点上显示玩家位置）
-	var player_local_offset: Vector2 = Vector2.ZERO
-	var player_node_pos: Vector2 = Vector2.ZERO  # 当前房间节点的世界坐标
-	var map_rect: Rect2 = _calc_map_bounds(_minimap_nodes)
-
-	# 获取玩家世界坐标
+	# 玩家世界位置（实时）
 	var player_world_pos: Vector2 = Vector2.ZERO
+	var player_node_pos: Vector2 = Vector2.ZERO
 	if _room_game_mode and _room_game_mode.has_method("get_player"):
 		var p: Node = _room_game_mode.get_player()
 		if p and is_instance_valid(p):
 			player_world_pos = p.global_position
-
-	# 找到当前房间节点（is_current=true）的世界坐标
+	# 找当前房间世界坐标
 	for nd in _minimap_nodes:
 		if nd.get("is_current", false):
 			player_node_pos = nd.get("node_pos", Vector2.ZERO)
 			break
 
-	# 计算玩家在当前房间内的相对偏移（归一化到小地图视图内）
-	if map_rect.size.x > 0 and map_rect.size.y > 0 and player_node_pos != Vector2.ZERO:
-		var rel: Vector2 = (player_world_pos - player_node_pos) / map_rect.size
-		# 限制最大偏移不超过房间节点大小的2倍
-		var max_offset: float = minf(view_size.x, view_size.y) * 0.25
-		player_local_offset = rel * maxf(view_size.x, view_size.y) * 0.5
-		player_local_offset = Vector2(
-			clamp(player_local_offset.x, -max_offset, max_offset),
-			clamp(player_local_offset.y, -max_offset, max_offset)
-		)
+	# 收集 connections（与 _refresh_minimap_nodes 同步）
+	var connections: Array[Dictionary] = []
+	if _room_game_mode and _room_game_mode.has_method("get_map_manager"):
+		var mm = _room_game_mode.get_map_manager()
+		var pd = mm.path_director if mm else null
+		var graph: NodeGraph = mm.get_graph() if mm else null
+		if pd != null and graph != null:
+			var node_pos_by_id: Dictionary = {}
+			for node in graph.get_all_nodes():
+				node_pos_by_id[node.id] = node.position
+			for node in graph.get_all_nodes():
+				for info in pd.get_open_door_info(node.id):
+					connections.append(
+						{
+							"from_pos": node_pos_by_id.get(info.get("from_id", -1), Vector2.ZERO),
+							"to_pos": node_pos_by_id.get(info.get("to_id", -1), Vector2.ZERO),
+							"is_open": info.get("is_open", false),
+							"door_type": info.get("door_type", "normal"),
+						}
+					)
+				for conn_id in node.connections:
+					if pd.are_connected(node.id, conn_id):
+						continue
+					connections.append(
+						{
+							"from_pos": node_pos_by_id.get(node.id, Vector2.ZERO),
+							"to_pos": node_pos_by_id.get(conn_id, Vector2.ZERO),
+							"is_open": false,
+							"door_type": "normal",
+						}
+					)
 
-	# 绘制连接线
-	for node_data in _minimap_nodes:
-		# 防御: _minimap_nodes 元素缺字段时跳过,避免 node_data["pos"] 抛 KeyError
-		if not (node_data is Dictionary and node_data.has("pos") and node_data.has("connections")):
-			continue
-		var pos: Vector2 = node_data["pos"]
-		for conn_id in node_data["connections"]:
-			var conn_pos: Vector2 = _get_node_pos_by_id(conn_id)
-			RenderingServer.canvas_item_add_line(
-				canvas, pos, conn_pos, Color(0.3, 0.3, 0.4, 0.7), 1.0
-			)
-
-	# 绘制房间节点（未揭示的房间降低透明度）
-	for node_data in _minimap_nodes:
-		# 防御: 缺 pos/color/is_current 字段时跳过,避免 KeyError
-		if not (node_data is Dictionary and node_data.has("pos") and node_data.has("color") and node_data.has("is_current")):
-			continue
-		var pos: Vector2 = node_data["pos"]
-		var color: Color = node_data["color"]
-		var is_current: bool = node_data["is_current"]
-		var is_revealed: bool = node_data.get("revealed", false)
-		# 未揭示且非当前房间：降低透明度并缩小
-		if not is_revealed and not is_current:
-			color.a = 0.25
-		var node_size := 8.0
-		if is_current:
-			node_size = 12.0
-			RenderingServer.canvas_item_add_rect(
-				canvas,
-				Rect2(
-					pos - Vector2(node_size + 3, node_size + 3),
-					Vector2((node_size + 3) * 2, (node_size + 3) * 2)
-				),
-				Color(1.0, 1.0, 1.0, 0.35)
-			)
-		RenderingServer.canvas_item_add_rect(
-			canvas,
-			Rect2(pos - Vector2(node_size, node_size), Vector2(node_size * 2, node_size * 2)),
-			color
-		)
-
-	# 绘制玩家位置点（白色小圆点，跟随玩家在当前房间内的实际位置偏移）
-	var current_node_pos: Vector2 = Vector2.ZERO
-	for nd in _minimap_nodes:
-		if nd.get("is_current", false):
-			current_node_pos = nd.get("pos", Vector2.ZERO)
-			break
-	if current_node_pos != Vector2.ZERO:
-		var player_dot_pos: Vector2 = current_node_pos + player_local_offset
-		# 玩家点：白色填充圆（用小矩形模拟点）
-		RenderingServer.canvas_item_add_rect(
-			canvas,
-			Rect2(player_dot_pos - Vector2(2.5, 2.5), Vector2(5, 5)),
-			Color(1.0, 1.0, 1.0, 1.0)
-		)
-		# 外圈高亮（表示玩家）
-		RenderingServer.canvas_item_add_rect(
-			canvas, Rect2(player_dot_pos - Vector2(4, 4), Vector2(8, 8)), Color(0.4, 0.8, 1.0, 0.4)
-		)
-
-
-func _get_node_pos_by_id(node_id: int) -> Vector2:
-	for nd in _minimap_nodes:
-		if nd.get("id") == node_id:
-			return nd.get("pos")
-	return Vector2.ZERO
+	_minimap_view.set_data(_minimap_nodes, connections, player_world_pos, player_node_pos)
 
 
 func refresh_minimap() -> void:
 	_minimap_dirty = true
-
-
-func _draw() -> void:
-	if _minimap_view == null or _minimap_nodes.is_empty():
-		return
-	# ReferenceRect/Control 本身才有可绘制的 CanvasItem RID；避免调用不存在的 get_top_level_rc()。
-	_draw_minimap_rserver(_minimap_view.get_canvas_item())
+	_push_minimap_data(true)
 
 
 ## 房间清理完成
@@ -1021,6 +1289,70 @@ func _flashte_boss_name_label(boss_name: String) -> void:
 	var t := create_tween()
 	t.tween_interval(0.7)
 	t.tween_callback(_restore_room_info_label.bind(original_text, original_color))
+	# 演出：大横幅 + 屏幕震动 + 屏幕白闪
+	_play_boss_intro_animation(boss_name)
+
+
+## Boss 出场大横幅演出
+## 1. 屏幕震动 (0.4s)
+## 2. 全屏白闪 (0.3s)
+## 3. 居中大横幅 (0.7s, 1.0x scale->1.15x->1.0x, 淡入淡出)
+func _play_boss_intro_animation(boss_name: String) -> void:
+	# 屏幕震动
+	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
+	if shake != null and shake.has_method("trigger"):
+		shake.call("trigger", 14.0, 0.4)
+	# 全屏白闪
+	var flash := ColorRect.new()
+	flash.name = "BossIntroFlash"
+	flash.color = Color(1.0, 1.0, 1.0, 0.0)
+	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	flash.z_index = 450
+	add_child(flash)
+	var flash_tween := flash.create_tween()
+	flash_tween.tween_property(flash, "color:a", 0.5, 0.06)
+	flash_tween.tween_property(flash, "color:a", 0.0, 0.30)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	flash_tween.tween_callback(flash.queue_free)
+	# 居中大横幅
+	_show_boss_intro_banner(boss_name)
+
+
+## Boss 出场大横幅 (label + 阴影，1.7s 自动消失)
+func _show_boss_intro_banner(boss_name: String) -> void:
+	var banner := Label.new()
+	banner.name = "BossIntroBanner"
+	banner.text = "⚔ %s ⚔" % boss_name
+	banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	banner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	banner.add_theme_font_size_override("font_size", 56)
+	banner.add_theme_color_override("font_color", UIPalette.TEXT_GOLD)
+	# 描边
+	banner.add_theme_constant_override("shadow_offset_x", 3)
+	banner.add_theme_constant_override("shadow_offset_y", 3)
+	banner.add_theme_color_override("font_shadow_color", Color(0.4, 0.0, 0.0, 0.95))
+	banner.modulate = Color(1, 1, 1, 0)
+	banner.set_anchors_preset(Control.PRESET_CENTER)
+	banner.custom_minimum_size = Vector2(800, 80)
+	banner.pivot_offset = Vector2(400, 40)
+	banner.scale = Vector2(0.7, 0.7)
+	banner.z_index = 460
+	banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(banner)
+	var t := banner.create_tween()
+	# 弹入（0.7 -> 1.15 -> 1.0）
+	t.tween_property(banner, "modulate:a", 1.0, 0.18)
+	t.tween_property(banner, "scale", Vector2(1.15, 1.15), 0.18)\
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	t.tween_property(banner, "scale", Vector2(1.0, 1.0), 0.10)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	# 停留 0.7s
+	t.tween_interval(0.7)
+	# 淡出
+	t.tween_property(banner, "modulate:a", 0.0, 0.40)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	t.tween_callback(banner.queue_free)
 
 
 func _restore_room_info_label(original_text: String, original_color: Color) -> void:
@@ -1065,15 +1397,12 @@ func _show_boss_defeated_victory() -> void:
 	victory_label.z_index = 2000
 	add_child(victory_label)
 
-	var tween := create_tween()
+	var tween := victory_label.create_tween()
 	tween.set_parallel(true)
 	tween.tween_property(victory_label, "modulate:a", 1.0, 0.2)
 	tween.tween_property(victory_label, "position:y", 350.0, 0.5)
-	await tween.finished
-	tween = create_tween()
-	tween.tween_property(victory_label, "modulate:a", 0.0, 0.6)
-	await tween.finished
-	victory_label.queue_free()
+	tween.chain().tween_property(victory_label, "modulate:a", 0.0, 0.6)
+	tween.chain().tween_callback(victory_label.queue_free)
 
 
 ## Boss击败时的屏幕震动+白闪特效（通过 ScreenShake）
@@ -1157,12 +1486,8 @@ func _init_boss_hp_ui() -> void:
 
 ## 创建 Boss HP 背景样式
 func _make_boss_hp_bg_style() -> StyleBox:
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.15, 0.05, 0.05, 0.85)
-	style.corner_radius_top_left = 4.0
-	style.corner_radius_top_right = 4.0
-	style.corner_radius_bottom_right = 4.0
-	style.corner_radius_bottom_left = 4.0
+	# Boss HP 背景使用偏暗红背景
+	var style := UIStyleFactory.make_panel_with_border(0, Color(0.45, 0.20, 0.20, 0.85), 4, 0)
 	style.content_margin_left = 4.0
 	style.content_margin_top = 4.0
 	style.content_margin_right = 4.0
@@ -1391,16 +1716,17 @@ func _hide_fate_card_notification() -> void:
 	# 淡出动画
 	var tween: Tween = _fate_card_notification_label.create_tween()
 	tween.tween_property(_fate_card_notification_label, "modulate:a", 0.0, 0.3)
-	await tween.finished
-	if _fate_card_notification_label:
-		_fate_card_notification_label.visible = false
+	tween.tween_callback(func() -> void:
+		if _fate_card_notification_label != null and is_instance_valid(_fate_card_notification_label):
+			_fate_card_notification_label.visible = false
+	)
 
 
 ## 游戏结束
 func _on_game_over(reason: String = "未知原因") -> void:
 	# 构建死亡统计
-	_death_stats["score"] = int(score_label.text.replace("Score: ", "")) if score_label else 0
-	_death_stats["floor"] = int(wave_label.text.replace("Floor: ", "")) if wave_label else 1
+	_death_stats["score"] = int(score_label.get_meta("score_value", 0)) if score_label else 0
+	_death_stats["floor"] = int(wave_label.get_meta("floor_value", 1)) if wave_label else 1
 
 	if death_title:
 		death_title.text = "你已倒下"
@@ -1453,79 +1779,32 @@ func _bounce_label(label: Label) -> void:
 
 ## 同步 ScoreLabel 描边
 func _sync_score_outline() -> void:
-	if score_label == null:
-		return
+	# HUD 标签统一使用主题 font_shadow；旧的 Label 副本会被 VBox 当成正式内容
+	# 参与布局，导致楼层文字被推入生命条区域。
 	if _score_outline_label != null:
 		_score_outline_label.queue_free()
 		_score_outline_label = null
-	_score_outline_label = _make_outline(score_label)
-	if _score_outline_label != null:
-		var parent: Node = score_label.get_parent()
-		if parent:
-			parent.add_child(_score_outline_label)
-			parent.move_child(_score_outline_label, score_label.get_index())
 
 
 ## 同步 CurrencyLabel 描边
 func _sync_currency_outline() -> void:
-	if currency_label == null:
-		return
 	if _currency_outline_label != null:
 		_currency_outline_label.queue_free()
 		_currency_outline_label = null
-	_currency_outline_label = _make_outline(currency_label)
-	if _currency_outline_label != null:
-		var parent: Node = currency_label.get_parent()
-		if parent:
-			parent.add_child(_currency_outline_label)
-			parent.move_child(_currency_outline_label, currency_label.get_index())
 
 
 ## 同步弹药描边（与 ammo_label 配合，弹药数值变化时同步描边副本）
 func _sync_ammo_outline() -> void:
-	if ammo_label == null:
-		return
 	if _ammo_outline_label != null:
 		_ammo_outline_label.queue_free()
 		_ammo_outline_label = null
-	_ammo_outline_label = _make_outline(ammo_label)
-	if _ammo_outline_label != null:
-		var parent: Node = ammo_label.get_parent()
-		if parent:
-			parent.add_child(_ammo_outline_label)
-			parent.move_child(_ammo_outline_label, ammo_label.get_index())
 
 
 ## 同步 WaveLabel 描边
 func _sync_wave_outline() -> void:
-	if wave_label == null:
-		return
 	if _wave_num_outline_label != null:
 		_wave_num_outline_label.queue_free()
 		_wave_num_outline_label = null
-	_wave_num_outline_label = _make_outline(wave_label)
-	if _wave_num_outline_label != null:
-		var parent: Node = wave_label.get_parent()
-		if parent:
-			parent.add_child(_wave_num_outline_label)
-			parent.move_child(_wave_num_outline_label, wave_label.get_index())
-
-
-## 创建一个标签的描边副本（偏移2px，黑色60%透明度）
-func _make_outline(main_label: Label) -> Label:
-	if main_label == null:
-		return null
-	var ol := Label.new()
-	ol.text = main_label.text
-	ol.position = main_label.position + Vector2(2, 2)
-	ol.modulate = Color(0.0, 0.0, 0.0, 0.6)
-	ol.z_index = main_label.z_index - 1
-	ol.horizontal_alignment = main_label.horizontal_alignment
-	ol.vertical_alignment = main_label.vertical_alignment
-	if main_label.has_theme_font_size("font_size"):
-		ol.add_theme_font_size_override("font_size", main_label.get_theme_font_size("font_size"))
-	ol.scale = main_label.scale
-	return ol
 
 
 func _on_retry_pressed() -> void:
@@ -1579,6 +1858,8 @@ func _on_dash_cooldown_changed(cooldown_ratio: float) -> void:
 	if dash_cooldown_bar:
 		# value=1 就绪，value=0 冷却中（进度条反向）
 		dash_cooldown_bar.value = 1.0 - cooldown_ratio
+	if dash_label != null:
+		dash_label.text = "机动  READY" if cooldown_ratio <= 0.02 else "机动  %02d%%" % int((1.0 - cooldown_ratio) * 100.0)
 
 
 ## 闪避启动时高亮
@@ -1594,6 +1875,8 @@ func _on_dash_started() -> void:
 func _on_fire_cooldown_changed(cooldown_ratio: float) -> void:
 	if fire_rate_bar:
 		fire_rate_bar.value = cooldown_ratio
+	if fire_rate_label != null:
+		fire_rate_label.text = "火力  READY" if cooldown_ratio >= 0.98 else "火力  %02d%%" % int(cooldown_ratio * 100.0)
 
 
 ## 波次进度更新（显示波次击杀状态 + 平滑动画）
@@ -2223,7 +2506,7 @@ func _on_ammo_changed(current: int, maximum: int) -> void:
 		ammo_bar.max_value = maximum
 		ammo_bar.value = current
 	if ammo_label:
-		ammo_label.text = "%d/%d" % [current, maximum]
+		ammo_label.text = "弹匣  %d / %d" % [current, maximum]
 		_sync_ammo_outline()
 		# 弹药紧张时改变颜色
 		var ratio := float(current) / float(maximum) if maximum > 0 else 0.0
@@ -2288,11 +2571,25 @@ func _get_weapon_tree():
 
 
 func _process(delta: float) -> void:
-	# 小地图脏标记驱动重绘
+	_player_state_pulse += delta
+	if player_state_panel != null:
+		var urgent := _player_low_health or bool(_player_status_effects.get("silenced", false))
+		var pulse_alpha := 1.0
+		if urgent:
+			pulse_alpha = 0.72 + (sin(_player_state_pulse * TAU * 2.2) * 0.5 + 0.5) * 0.28
+		if player_state_accent != null:
+			player_state_accent.modulate = Color(1.0, 1.0, 1.0, pulse_alpha)
+		if urgent:
+			_update_player_status_text()
+	# 小地图脏标记驱动：节点/门数据变化时整批重推
 	if _minimap_dirty:
 		_minimap_dirty = false
-		if _minimap_view:
-			_minimap_view.queue_redraw()
+		_push_minimap_data(true)
+	# 玩家位置每帧轻量更新（仅改一个 Vector2）
+	if _minimap_view and _minimap_view.has_active_player():
+		var p: Node = _room_game_mode.get_player() if _room_game_mode and _room_game_mode.has_method("get_player") else null
+		if p and is_instance_valid(p):
+			_minimap_view.update_player_position(p.global_position)
 	if _is_reloading and _reload_duration > 0:
 		_reload_progress = min(_reload_progress + delta, _reload_duration)
 		if ammo_bar:
@@ -2306,6 +2603,8 @@ func _process(delta: float) -> void:
 			_hide_fate_card_notification()
 	if _item_hover_card != null and _item_hover_card.visible:
 		_position_item_hover_card()
+	# HP bar 颜色刷新（每帧尝试，内部有 0.1 deadzone 抑制抖动）
+	_update_hp_bar_color()
 
 
 func blocks_gameplay_input() -> bool:
@@ -2363,11 +2662,7 @@ func _ensure_equipped_weapon_widget() -> void:
 	panel.offset_top = 18
 	panel.offset_right = 182
 	panel.offset_bottom = 92
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.055, 0.065, 0.085, 0.92)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.42, 0.50, 0.62, 0.85))
-	style.set_corner_radius_all(6)
+	var style := UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1)
 	panel.add_theme_stylebox_override("panel", style)
 	hud.add_child(panel)
 
@@ -2395,12 +2690,10 @@ func _style_inventory_panel(panel: PanelContainer, title: String) -> void:
 	if panel == null:
 		return
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.055, 0.06, 0.078, 0.96)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.36, 0.44, 0.58, 0.9))
-	style.set_corner_radius_all(6)
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_ACCENT, 6, 1),
+	)
 	panel.tooltip_text = "%s: 拖动面板空白处移动。左键使用/装备，Shift+左键存保险，右键同样可操作；保险箱左键取回。" % title
 
 
@@ -2442,18 +2735,8 @@ func _create_slot() -> Control:
 		tr.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		tr.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		slot = tr
-	var normal_style := StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.12, 0.14, 0.18, 0.9)
-	normal_style.set_border_width_all(1)
-	normal_style.set_border_color(Color(0.3, 0.33, 0.4, 0.6))
-	normal_style.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", normal_style)
-	var hover_style := StyleBoxFlat.new()
-	hover_style.bg_color = Color(0.2, 0.25, 0.35, 0.9)
-	hover_style.set_border_width_all(1)
-	hover_style.set_border_color(Color(0.5, 0.6, 0.8, 0.8))
-	hover_style.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("hover", hover_style)
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
+	slot.add_theme_stylebox_override("hover", UIStyleFactory.make_slot_style(true))
 	return slot
 
 
@@ -2537,12 +2820,7 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 			cl.visible = true
 		else:
 			cl.visible = false
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.2, 0.22, 0.28, 0.95)
-	style_box.set_border_width_all(2)
-	style_box.set_border_color(Color(0.6, 0.7, 0.9, 0.7))
-	style_box.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", style_box)
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_filled_style())
 
 
 func _clear_slot(slot: Control) -> void:
@@ -2559,12 +2837,7 @@ func _clear_slot(slot: Control) -> void:
 	if slot.has_node("CountLabel"):
 		var cl: Label = slot.get_node("CountLabel") as Label
 		cl.visible = false
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.12, 0.14, 0.18, 0.9)
-	style_box.set_border_width_all(1)
-	style_box.set_border_color(Color(0.3, 0.33, 0.4, 0.6))
-	style_box.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", style_box)
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
 
 
 func _highlight_selected_slots() -> void:
@@ -2578,10 +2851,10 @@ func _apply_slot_selection(slot: Control, selected: bool) -> void:
 	if slot == null:
 		return
 	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.18, 0.20, 0.27, 0.96) if selected else Color(0.12, 0.14, 0.18, 0.9)
+	style_box.bg_color = Color(0.18, 0.20, 0.27, 0.96) if selected else UIPalette.BG_SLOT
 	style_box.set_border_width_all(2 if selected else 1)
 	style_box.set_border_color(
-		Color(1.0, 0.82, 0.35, 0.95) if selected else Color(0.3, 0.33, 0.4, 0.6)
+		Color(1.0, 0.82, 0.35, 0.95) if selected else UIPalette.BORDER_SUBTLE
 	)
 	style_box.set_corner_radius_all(4)
 	slot.add_theme_stylebox_override("normal", style_box)
@@ -2656,11 +2929,7 @@ func _ensure_item_hover_card() -> void:
 	_item_hover_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_item_hover_card.z_index = 2600
 	_item_hover_card.visible = false
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.035, 0.04, 0.055, 0.97)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.55, 0.64, 0.78, 0.95))
-	style.set_corner_radius_all(6)
+	var style := UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_FOCUS, 6, 1)
 	style.set_content_margin_all(10)
 	_item_hover_card.add_theme_stylebox_override("panel", style)
 	_item_hover_label = Label.new()

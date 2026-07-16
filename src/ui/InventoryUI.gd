@@ -43,34 +43,33 @@ func _ready() -> void:
 func _setup_standalone_panels() -> void:
 	inventory_panel = PanelContainer.new()
 	inventory_panel.name = "InventoryPanel"
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.1, 0.12, 0.18, 0.95)
-	style_box.set_border_width_all(1)
-	style_box.set_border_color(Color(0.3, 0.35, 0.5, 0.8))
-	style_box.set_corner_radius_all(6)
-	inventory_panel.add_theme_stylebox_override("panel", style_box)
+	inventory_panel.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
+	)
 	add_child(inventory_panel)
-	
+
 	var vbox := VBoxContainer.new()
 	vbox.name = "VBox"
 	inventory_panel.add_child(vbox)
-	
+
 	capacity_label = Label.new()
 	capacity_label.name = "CapacityLabel"
 	capacity_label.text = "背包 0/12"
 	vbox.add_child(capacity_label)
-	
+
 	inventory_grid = GridContainer.new()
 	inventory_grid.name = "InventoryGrid"
 	inventory_grid.columns = 4
 	vbox.add_child(inventory_grid)
-	
+
 	insurance_panel = PanelContainer.new()
 	insurance_panel.name = "InsurancePanel"
+	# 保险格使用金色调，区别于普通背包
 	var ins_style := StyleBoxFlat.new()
-	ins_style.bg_color = Color(0.12, 0.1, 0.15, 0.95)
+	ins_style.bg_color = UIPalette.BG_DARK
 	ins_style.set_border_width_all(1)
-	ins_style.set_border_color(Color(0.5, 0.4, 0.2, 0.8))
+	ins_style.set_border_color(UIPalette.TEXT_GOLD)
 	ins_style.set_corner_radius_all(6)
 	insurance_panel.add_theme_stylebox_override("panel", ins_style)
 	add_child(insurance_panel)
@@ -153,23 +152,13 @@ func _create_slot() -> Control:
 		slot.custom_minimum_size = Vector2(SLOT_SIZE, SLOT_SIZE)
 		slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	
+
 	# 背景色：空格子深色，有物品稍亮
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.12, 0.14, 0.18, 0.9)
-	style_box.set_border_width_all(1)
-	style_box.set_border_color(Color(0.3, 0.33, 0.4, 0.6))
-	style_box.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", style_box)
-	
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
+
 	# 悬停高亮
-	var hover_style := StyleBoxFlat.new()
-	hover_style.bg_color = Color(0.2, 0.25, 0.35, 0.9)
-	hover_style.set_border_width_all(1)
-	hover_style.set_border_color(Color(0.5, 0.6, 0.8, 0.8))
-	hover_style.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("hover", hover_style)
-	
+	slot.add_theme_stylebox_override("hover", UIStyleFactory.make_slot_style(true))
+
 	return slot
 
 ## 设置面板位置（右上角）
@@ -269,12 +258,7 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 			cl.visible = false
 	
 	# 高亮边框表示有物品
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.2, 0.22, 0.28, 0.95)
-	style_box.set_border_width_all(2)
-	style_box.set_border_color(Color(0.6, 0.7, 0.9, 0.7))
-	style_box.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", style_box)
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_filled_style())
 
 ## 清空格子
 func _clear_slot(slot: Control) -> void:
@@ -283,12 +267,7 @@ func _clear_slot(slot: Control) -> void:
 	if slot.has_node("CountLabel"):
 		var cl: Label = slot.get_node("CountLabel") as Label
 		cl.visible = false
-	var style_box := StyleBoxFlat.new()
-	style_box.bg_color = Color(0.12, 0.14, 0.18, 0.9)
-	style_box.set_border_width_all(1)
-	style_box.set_border_color(Color(0.3, 0.33, 0.4, 0.6))
-	style_box.set_corner_radius_all(4)
-	slot.add_theme_stylebox_override("normal", style_box)
+	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
 
 ## 信号回调
 func _on_inventory_changed() -> void:

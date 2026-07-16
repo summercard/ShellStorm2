@@ -7,6 +7,7 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	await _verify_main_chapter_loop(failures)
 	await _verify_bullet_wall_contract(failures)
+	await get_tree().process_frame
 	_finish(failures)
 
 
@@ -137,6 +138,9 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 			failures.append("Soul orb was not collectable by walking over it")
 
 	main.queue_free()
+	await get_tree().process_frame
+	await VerificationClock.wait(self, 0.45)
+	await get_tree().process_frame
 
 
 func _verify_bullet_wall_contract(failures: Array[String]) -> void:
@@ -153,6 +157,7 @@ func _verify_bullet_wall_contract(failures: Array[String]) -> void:
 	if is_instance_valid(bullet) and not bullet.is_queued_for_deletion():
 		failures.append("Player bullet does not despawn when hitting wall body")
 	wall.queue_free()
+	await get_tree().process_frame
 
 
 func _find_container(root: Node) -> ContainerInteraction:
@@ -217,8 +222,8 @@ func _finish(failures: Array[String]) -> void:
 		print(
 			"CH1_DIRECTOR_LOOP_OK: starter shotgun, fate upgrade, ground loot pickup, guaranteed soul drop, and wall-blocked bullets are playable"
 		)
-		get_tree().quit(0)
+		VerificationQuitter.schedule(self, 0)
 	else:
 		for failure in failures:
 			push_error(failure)
-		get_tree().quit(1)
+		VerificationQuitter.schedule(self, 1)

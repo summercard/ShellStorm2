@@ -18,6 +18,9 @@ func _ready() -> void:
 	close_button = get_node_or_null("Panel/VBox/CloseButton")
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
+		# 关闭按钮统一样式
+		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_build_vault_view()
 
 func _get_vault_capacity() -> int:
@@ -112,12 +115,8 @@ func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 			border_color = FateCard.rarity_color(rarity_val as FateCard.CardRarity)
 		else:
 			border_color = Color.WHITE
-	elif item_type == "Weapon" or item_type == "GunBody":
-		border_color = Color("F59E0B")  # 金色
-	elif item_type == "Bullet":
-		border_color = Color("4A9EFF")   # 蓝色
 	else:
-		border_color = Color("888888")   # 灰色
+		border_color = UIPalette.item_border_color(item_type)
 	panel.add_theme_stylebox_override("panel", _make_rarity_border_style(border_color))
 
 	var name_lbl := Label.new()
@@ -131,19 +130,20 @@ func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 
 	var take_btn := Button.new()
 	take_btn.text = "带入"
+	take_btn.custom_minimum_size = Vector2(80, 32)
 	take_btn.pressed.connect(_on_take_pressed.bind(index))
+	var take_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
+	UIStyleFactory.apply_button_style(take_btn, take_styles)
 	hbox.add_child(take_btn)
 
 	return panel
 
 func _make_rarity_border_style(color: Color) -> StyleBoxFlat:
+	# 委托给 UIStyleFactory（保留 3px 全边以维持原视觉）
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.1, 0.1, 0.1, 0.9)
 	style.border_color = color
-	style.border_width_left = 3
-	style.border_width_top = 3
-	style.border_width_right = 3
-	style.border_width_bottom = 3
+	style.set_border_width_all(3)
 	style.corner_radius_top_left = 4
 	style.corner_radius_top_right = 4
 	style.corner_radius_bottom_left = 4
@@ -167,7 +167,10 @@ func _make_loadout_item_row(index: int, item_dict: Dictionary) -> PanelContainer
 
 	var cancel_btn := Button.new()
 	cancel_btn.text = "取消"
+	cancel_btn.custom_minimum_size = Vector2(80, 32)
 	cancel_btn.pressed.connect(_on_cancel_loadout_pressed.bind(index))
+	var cancel_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+	UIStyleFactory.apply_button_style(cancel_btn, cancel_styles)
 	hbox.add_child(cancel_btn)
 	return panel
 
@@ -184,6 +187,9 @@ func _make_deposit_row(slot_index: int, slot_data: Dictionary, used: int, capaci
 	hbox.add_child(name_lbl)
 
 	var deposit_btn := Button.new()
+	deposit_btn.custom_minimum_size = Vector2(80, 32)
+	var deposit_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.STATUS_OK)
+	UIStyleFactory.apply_button_style(deposit_btn, deposit_styles)
 
 	if used >= capacity:
 		deposit_btn.disabled = true

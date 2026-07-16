@@ -118,10 +118,19 @@ func _on_player_enter_room(body: Node2D) -> void:
 func _show_warning() -> void:
 	if _warning_label != null:
 		_warning_label.visible = true
-		# 2秒后自动隐藏警告
-		await get_tree().create_timer(2.0).timeout
-		if is_instance_valid(_warning_label):
-			_warning_label.visible = false
+		var warning_timer := get_node_or_null("WarningHideTimer") as Timer
+		if warning_timer == null:
+			warning_timer = Timer.new()
+			warning_timer.name = "WarningHideTimer"
+			warning_timer.one_shot = true
+			warning_timer.timeout.connect(_hide_warning)
+			add_child(warning_timer)
+		warning_timer.start(2.0)
+
+
+func _hide_warning() -> void:
+	if is_instance_valid(_warning_label):
+		_warning_label.visible = false
 
 func _trigger_poison_fog() -> void:
 	_state = TrapState.TRIGGERED
@@ -225,17 +234,28 @@ func _on_falling_rocks_damage_start() -> void:
 	_rocks_falling = true
 	# 落石窗口 2 秒（与 trap_timer 同步），期间每 0.3 秒随机检测一次
 	print("[TrapRoomLogic] 落石开始！2 秒伤害窗口")
-	var damage_timer: Timer = Timer.new()
-	damage_timer.one_shot = false
-	damage_timer.wait_time = 0.3
-	damage_timer.timeout.connect(_check_falling_rocks_hit)
-	add_child(damage_timer)
+	var damage_timer := get_node_or_null("RocksDamageTimer") as Timer
+	if damage_timer == null:
+		damage_timer = Timer.new()
+		damage_timer.name = "RocksDamageTimer"
+		damage_timer.wait_time = 0.3
+		damage_timer.timeout.connect(_check_falling_rocks_hit)
+		add_child(damage_timer)
 	damage_timer.start()
-	# 2 秒后自动停止
-	await get_tree().create_timer(2.0).timeout
-	if is_instance_valid(damage_timer):
+	var stop_timer := get_node_or_null("RocksStopTimer") as Timer
+	if stop_timer == null:
+		stop_timer = Timer.new()
+		stop_timer.name = "RocksStopTimer"
+		stop_timer.one_shot = true
+		stop_timer.timeout.connect(_stop_falling_rocks)
+		add_child(stop_timer)
+	stop_timer.start(2.0)
+
+
+func _stop_falling_rocks() -> void:
+	var damage_timer := get_node_or_null("RocksDamageTimer") as Timer
+	if damage_timer != null:
 		damage_timer.stop()
-		damage_timer.queue_free()
 	_rocks_falling = false
 
 func _check_falling_rocks_hit() -> void:

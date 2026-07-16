@@ -104,6 +104,10 @@ func _ready() -> void:
 		if fate_panel == null or not fate_panel.visible:
 			failures.append("Opening a later door with a key did not trigger fate card choice")
 
+	main.queue_free()
+	await get_tree().process_frame
+	await get_tree().create_timer(0.35).timeout
+	await get_tree().process_frame
 	_finish(failures)
 
 

@@ -31,13 +31,22 @@ func _ready() -> void:
 	if not boss_room.has_method("is_boss_spawned") or not bool(boss_room.call("is_boss_spawned")):
 		failures.append("Boss setup no longer triggers boss spawn")
 
+	for _i in 20:
+		if not bool(mode.get("_is_transitioning")):
+			break
+		await VerificationClock.wait(self, 0.05)
+	mode.queue_free()
+	boss_room.queue_free()
+	await get_tree().process_frame
+	await VerificationClock.wait(self, 0.2)
+	await get_tree().process_frame
 	_finish(failures)
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
 		print("P1_BOSS_SIGNAL_FLOW_OK: Boss room setup connects root logic once and still spawns")
-		get_tree().quit(0)
+		VerificationQuitter.schedule(self, 0)
 	else:
 		for failure in failures:
 			push_error(failure)
-		get_tree().quit(1)
+		VerificationQuitter.schedule(self, 1)

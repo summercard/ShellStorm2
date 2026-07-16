@@ -33,6 +33,9 @@ func _ready() -> void:
 
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
+		# 关闭按钮统一样式
+		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+		UIStyleFactory.apply_button_style(close_button, close_styles)
 
 	_build_transform_button()
 	_build_weapon_options()
@@ -43,18 +46,12 @@ func _build_transform_button() -> void:
 	_transform_button.text = "🔮 命运改造 [T]"
 	_transform_button.custom_minimum_size = Vector2(260, 36)
 	_transform_button.add_theme_font_size_override("font_size", 14)
-	var normal_style := StyleBoxFlat.new()
-	normal_style.bg_color = Color(0.12, 0.15, 0.22, 0.95)
-	normal_style.set_border_width_all(1)
-	normal_style.set_border_color(Color(0.35, 0.30, 0.55, 0.9))
-	normal_style.set_corner_radius_all(5)
-	_transform_button.add_theme_stylebox_override("normal", normal_style)
-	var hover_style := StyleBoxFlat.new()
-	hover_style.bg_color = Color(0.18, 0.15, 0.30, 0.95)
-	hover_style.set_border_width_all(1)
-	hover_style.set_border_color(Color(0.70, 0.55, 0.90, 0.9))
-	hover_style.set_corner_radius_all(5)
-	_transform_button.add_theme_stylebox_override("hover", hover_style)
+	# 命运按钮使用紫色 accent
+	var transform_styles := UIStyleFactory.make_button_style(
+		UIStyleFactory.make_panel_with_border(2, UIPalette.ITEM_FATE_CARD, 5, 1).bg_color,
+		UIPalette.ITEM_FATE_CARD,
+	)
+	UIStyleFactory.apply_button_style(_transform_button, transform_styles)
 	_transform_button.pressed.connect(_on_transform_toggle)
 	# 添加到 gunbody panel 标题下面
 	if gunbody_options != null:
@@ -175,7 +172,11 @@ func _populate_gunbody_options(tier: int) -> void:
 	for entry in available:
 		var btn := Button.new()
 		btn.text = "[Tier %d] %s" % [entry["tier"], entry["display_name"]]
+		btn.custom_minimum_size = Vector2(220, 32)
 		btn.pressed.connect(_on_gunbody_selected.bind(entry["item_id"]))
+		# 枪身选项用 BORDER_FOCUS 蓝
+		var gunbody_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
+		UIStyleFactory.apply_button_style(btn, gunbody_styles)
 		gunbody_options.add_child(btn)
 
 
@@ -203,7 +204,11 @@ func _populate_bullet_options(tier: int) -> void:
 	for entry in available:
 		var btn := Button.new()
 		btn.text = "[Tier %d] %s" % [entry["tier"], entry["display_name"]]
+		btn.custom_minimum_size = Vector2(220, 32)
 		btn.pressed.connect(_on_bullet_selected.bind(entry["item_id"]))
+		# 子弹选项用 ITEM_BULLET 蓝色
+		var bullet_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.ITEM_BULLET)
+		UIStyleFactory.apply_button_style(btn, bullet_styles)
 		bullet_options.add_child(btn)
 
 
@@ -267,18 +272,13 @@ func _show_fate_card_options() -> void:
 		)
 		btn.custom_minimum_size = Vector2(240, 80)
 		btn.tooltip_text = card.description
-		var normal_style := StyleBoxFlat.new()
-		normal_style.bg_color = Color(0.10, 0.12, 0.18, 0.95)
-		normal_style.set_border_width_all(2)
-		normal_style.set_border_color(rarity_color)
-		normal_style.set_corner_radius_all(6)
-		btn.add_theme_stylebox_override("normal", normal_style)
-		var hover_style := StyleBoxFlat.new()
-		hover_style.bg_color = Color(0.15, 0.18, 0.28, 0.95)
-		hover_style.set_border_width_all(2)
-		hover_style.set_border_color(Color(1.0, 1.0, 1.0, 0.8))
-		hover_style.set_corner_radius_all(6)
-		btn.add_theme_stylebox_override("hover", hover_style)
+		# 稀有边框：normal = 稀有色，hover = 白色高亮
+		var card_normal := UIStyleFactory.make_panel_with_border(2, rarity_color, 6, 2)
+		card_normal.bg_color = UIPalette.BG_DARK
+		var card_hover := UIStyleFactory.make_panel_with_border(2, Color(1.0, 1.0, 1.0, 0.8), 6, 2)
+		card_hover.bg_color = UIPalette.BG_MID
+		btn.add_theme_stylebox_override("normal", card_normal)
+		btn.add_theme_stylebox_override("hover", card_hover)
 		btn.add_theme_color_override("font_color", rarity_color)
 		btn.add_theme_font_size_override("font_size", 13)
 		btn.pressed.connect(_on_fate_card_selected.bind(card))

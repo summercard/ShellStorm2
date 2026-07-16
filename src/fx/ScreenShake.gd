@@ -51,19 +51,18 @@ func screen_flash(hex_color: Color = Color(1.0, 1.0, 1.0, 0.7), duration: float 
 	flash.custom_minimum_size = Vector2(9999, 9999)
 	flash.size = Vector2(9999, 9999)
 	flash.color = hex_color
-	flash.z_index = 9999
+	# CanvasItem is capped at RenderingServer::CANVAS_ITEM_Z_MAX (4096).  The
+	# old 9999 value logged an engine error precisely on Boss death and could
+	# suppress the intended feedback.  Keep the flash at the highest valid layer.
+	flash.z_index = 4095
 	flash.modulate.a = 0.0
 	_camera.add_child(flash)
 	
 	# 白闪动画：快速亮起 → 快速淡出
-	var tween := create_tween()
-	tween.set_parallel(true)
+	var tween := flash.create_tween()
 	tween.tween_property(flash, "modulate:a", hex_color.a, duration * 0.3)
-	await tween.finished
-	tween = create_tween()
 	tween.tween_property(flash, "modulate:a", 0.0, duration * 0.7)
-	await tween.finished
-	flash.queue_free()
+	tween.tween_callback(flash.queue_free)
 
 ## Boss死亡专用的强烈震屏（全屏震动 + 震幅衰减）
 func screen_shake_death() -> void:

@@ -42,6 +42,11 @@ var _monster_injector: MonsterInjector
 var _rng: RandomNumberGenerator
 var _current_regional_controller: Node = null  # 区域刷怪控制器引用（由 RoomGameMode 注入）
 var _pending_elite_spawn: Dictionary = {}      # 待注入的精英生成数据（一次只注入一个）
+var _wave_spawn_timer: Timer = null
+var _extra_spawn_timer: Timer = null
+var _pending_wave_positions: Array[Vector2] = []
+var _pending_wave_spawn_total := 0
+var _pending_extra_spawns: Array[Dictionary] = []
 const ENEMY_TYPES_SCRIPT := preload("res://src/enemy/EnemyTypes.gd")
 
 
@@ -86,7 +91,10 @@ func configure(
 	_all_spawned = false
 	_enemy_pool.clear()
 	_spawned_enemies.clear()
+	_pending_wave_positions.clear()
+	_pending_extra_spawns.clear()
 	_spawning_enabled = true
+	_ensure_spawn_timers()
 	if room_size_override != Vector2.ZERO:
 		room_size = room_size_override
 
@@ -111,6 +119,12 @@ func start() -> void:
 func stop() -> void:
 	_active = false
 	_spawning_enabled = false
+	_pending_wave_positions.clear()
+	_pending_extra_spawns.clear()
+	if _wave_spawn_timer != null:
+		_wave_spawn_timer.stop()
+	if _extra_spawn_timer != null:
+		_extra_spawn_timer.stop()
 
 
 ## 埋伏怪物生成（由 TrapRoomLogic / StorageRoomLogic 调用）
@@ -156,23 +170,31 @@ func trigger_extra_spawn(count: int = 5) -> void:
 			attempts += 1
 		spawn_positions.append(spawn_pos)
 
+	for spawn_pos in spawn_positions:
+		_pending_extra_spawns.append({
+			"position": spawn_pos,
+			"regional": _current_regional_controller,
+			"data": _generate_enemy_data(),
+		})
 	# 命运增援可能由 body_entered/死亡回调触发；推迟到物理查询刷新结束后再挂载碰撞体。
-	call_deferred("_spawn_extra_enemies_async", spawn_positions, _current_regional_controller)
+	call_deferred("_drain_extra_spawn_queue")
 
 
-func _spawn_extra_enemies_async(
-	positions: Array[Vector2], regional_controller: Node = null
-) -> void:
-	# 在额外的协程中逐个生成（不在主循环阻塞）
-	for spawn_pos in positions:
-		if not is_instance_valid(self) or not _spawning_enabled:
-			return
-		var enemy_data: Dictionary = _generate_enemy_data()
-		_spawn_enemy_instance(enemy_data, spawn_pos, regional_controller)
-		# 额外敌人生成时也发出进度更新（让UI感知到增量）
-		_spawn_extra_enemy_progress()
-		enemy_spawned.emit(1)
-		await get_tree().create_timer(0.12).timeout
+func _drain_extra_spawn_queue() -> void:
+	if not _spawning_enabled or _pending_extra_spawns.is_empty():
+		return
+	_ensure_spawn_timers()
+	if not _extra_spawn_timer.is_stopped():
+		return
+	var request: Dictionary = _pending_extra_spawns.pop_front()
+	var enemy_data: Dictionary = request.get("data", {})
+	if enemy_data.is_empty():
+		enemy_data = _generate_enemy_data()
+	_spawn_enemy_instance(enemy_data, request.get("position", Vector2.ZERO), request.get("regional"))
+	_spawn_extra_enemy_progress()
+	enemy_spawned.emit(1)
+	if not _pending_extra_spawns.is_empty():
+		_extra_spawn_timer.start(0.12)
 
 
 ## 更新额外敌人生成时的进度条（extra enemy 不在 _enemy_count_per_wave 内，需要独立追踪）
@@ -275,19 +297,44 @@ func _spawn_next_wave() -> void:
 			attempts += 1
 		spawn_positions.append(spawn_pos)
 
-		var enemy_data: Dictionary = _generate_enemy_data()
-		# PH06: 第一波第一只如果有待注入精英数据，用精英替换
-		if _current_wave == 0 and i == 0 and not _pending_elite_spawn.is_empty():
-			enemy_data = _pending_elite_spawn.duplicate(true)
-			_pending_elite_spawn.clear()
-		_spawn_enemy_instance(enemy_data, spawn_pos)
-		enemy_spawned.emit(1)
-		# 每只间隔一点
-		if i < count - 1:
-			await get_tree().create_timer(0.15).timeout
+	_pending_wave_positions = spawn_positions
+	_pending_wave_spawn_total = count
+	_spawn_next_wave_enemy()
 
+
+func _spawn_next_wave_enemy() -> void:
+	if not _spawning_enabled or _pending_wave_positions.is_empty():
+		return
+	var spawn_pos: Vector2 = _pending_wave_positions.pop_front()
+	var spawned_index := _pending_wave_spawn_total - _pending_wave_positions.size() - 1
+	var enemy_data: Dictionary = _generate_enemy_data()
+	# PH06: 第一波第一只如果有待注入精英数据，用精英替换。
+	if _current_wave == 0 and spawned_index == 0 and not _pending_elite_spawn.is_empty():
+		enemy_data = _pending_elite_spawn.duplicate(true)
+		_pending_elite_spawn.clear()
+	_spawn_enemy_instance(enemy_data, spawn_pos)
+	enemy_spawned.emit(1)
+	if not _pending_wave_positions.is_empty():
+		_ensure_spawn_timers()
+		_wave_spawn_timer.start(0.15)
+		return
 	_all_spawned = _current_wave >= _total_waves - 1
-	wave_enemies_spawned.emit(_current_wave + 1, count)
+	wave_enemies_spawned.emit(_current_wave + 1, _pending_wave_spawn_total)
+
+
+func _ensure_spawn_timers() -> void:
+	if _wave_spawn_timer == null or not is_instance_valid(_wave_spawn_timer):
+		_wave_spawn_timer = Timer.new()
+		_wave_spawn_timer.name = "WaveSpawnCadence"
+		_wave_spawn_timer.one_shot = true
+		_wave_spawn_timer.timeout.connect(_spawn_next_wave_enemy)
+		add_child(_wave_spawn_timer)
+	if _extra_spawn_timer == null or not is_instance_valid(_extra_spawn_timer):
+		_extra_spawn_timer = Timer.new()
+		_extra_spawn_timer.name = "ExtraSpawnCadence"
+		_extra_spawn_timer.one_shot = true
+		_extra_spawn_timer.timeout.connect(_drain_extra_spawn_queue)
+		add_child(_extra_spawn_timer)
 
 
 func _get_spawn_position(center: Vector2) -> Vector2:

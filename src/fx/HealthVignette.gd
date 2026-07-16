@@ -31,9 +31,15 @@ func _ready() -> void:
 
 ## 设置玩家引用（供外部调用以获取 hp 信号连接）
 func set_player_ref(player: Node) -> void:
+	if _player != null and is_instance_valid(_player) and _player.has_signal("hp_changed"):
+		var old_callback := Callable(self, "_on_hp_changed")
+		if _player.is_connected("hp_changed", old_callback):
+			_player.disconnect("hp_changed", old_callback)
 	_player = player
-	if player and player.has_signal("hp_changed") and not player.hp_changed.is_connected(_on_hp_changed):
-		player.hp_changed.connect(_on_hp_changed.bind())
+	if player and player.has_signal("hp_changed"):
+		var callback := Callable(self, "_on_hp_changed")
+		if not player.is_connected("hp_changed", callback):
+			player.connect("hp_changed", callback)
 
 ## 监听 Player hp_changed 信号（格式：current_hp, max_hp）
 func _on_hp_changed(current: int, maximum: int) -> void:

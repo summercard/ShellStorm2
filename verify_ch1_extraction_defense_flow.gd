@@ -75,7 +75,7 @@ func _ready() -> void:
 			mode.set("_run_risk", 10)
 			mode.extraction_module.update(5.0)
 			mode.call("_update_extraction_defense")
-			await get_tree().process_frame
+			await VerificationClock.wait(self, 0.75)
 			if not _has_elite(extraction_room):
 				failures.append("Late extraction defense phase never produces an elite threat")
 
@@ -88,7 +88,7 @@ func _ready() -> void:
 				failures.append(
 					"Extraction settlement does not enter a consistent paused result state"
 				)
-			await get_tree().create_timer(0.5, true).timeout
+			await VerificationClock.wait(self, 0.5)
 			if success_panel != null and success_panel.modulate.a < 0.95:
 				failures.append(
 					"Extraction settlement remains visually frozen until pause is toggled"
@@ -140,6 +140,10 @@ func _ready() -> void:
 
 	Global.is_paused = false
 	get_tree().paused = false
+	main.queue_free()
+	await get_tree().process_frame
+	await VerificationClock.wait(self, 0.75)
+	await get_tree().process_frame
 	_finish(failures)
 
 
@@ -211,8 +215,8 @@ func _finish(failures: Array[String]) -> void:
 		print(
 			"CH1_EXTRACTION_DEFENSE_OK: dedicated extraction switch starts timed defense, elite pressure, and survival settlement"
 		)
-		get_tree().quit(0)
+		VerificationQuitter.schedule(self, 0)
 	else:
 		for failure in failures:
 			push_error(failure)
-		get_tree().quit(1)
+		VerificationQuitter.schedule(self, 1)

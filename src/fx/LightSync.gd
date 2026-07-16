@@ -42,7 +42,9 @@ func _ensure_vision_nodes(main: Node) -> void:
 		darkness = CanvasModulate.new()
 		darkness.name = "VisionDarkness"
 		main.add_child(darkness)
-	darkness.color = Color(0.0, 0.0, 0.0, 1.0)
+	# Preserve tension without erasing the level.  Pure black made navigation,
+	# enemy silhouettes and authored replacement assets disappear outside the cone.
+	darkness.color = Color(0.24, 0.30, 0.42, 1.0)
 
 	var stale_near_light: PointLight2D = main.get_node_or_null("PlayerNearLight") as PointLight2D
 	if stale_near_light != null:
@@ -60,7 +62,8 @@ func _ensure_vision_nodes(main: Node) -> void:
 	if _tracked_light == null:
 		_tracked_light = VISIBILITY_LIGHT_SCRIPT.new() as PointLight2D
 		_tracked_light.name = "PlayerVisionLight"
-		_tracked_light.energy = 1.0
+		_tracked_light.energy = 0.92
+		_tracked_light.color = Color(0.72, 0.90, 1.0, 1.0)
 		_tracked_light.call(
 			"configure_flashlight",
 			VISION_SYSTEM_SCRIPT.DEFAULT_VIEW_RADIUS,
@@ -76,7 +79,8 @@ func _ensure_vision_nodes(main: Node) -> void:
 		_tracked_light.get_parent().remove_child(_tracked_light)
 		player.add_child(_tracked_light)
 	_tracked_light.position = Vector2.ZERO
-	_tracked_light.energy = 1.0
+	_tracked_light.energy = 0.92
+	_tracked_light.color = Color(0.72, 0.90, 1.0, 1.0)
 	if not created_light and _tracked_light.has_method("configure_flashlight"):
 		_tracked_light.call(
 			"configure_flashlight",

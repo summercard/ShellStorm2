@@ -1,10 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://base_world_scene"]
+[gd_scene load_steps=13 format=3 uid="uid://base_world_scene"]
 
 [ext_resource type="Script" path="res://src/base/BaseWorld.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/BaseFacility.tscn" id="3_facility"]
 [ext_resource type="Script" path="res://src/fx/CameraController.gd" id="4_camera"]
 [ext_resource type="PackedScene" path="res://scenes/DungeonEntrance.tscn" id="5_entrance"]
+[ext_resource type="Script" path="res://src/base/BaseWorldAtmosphere.gd" id="6_atmosphere"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal"]
 size = Vector2(9400, 40)
@@ -43,6 +44,9 @@ script = ExtResource("1_world")
 z_index = -20
 polygon = PackedVector2Array(-1800, -1600, 7600, -1600, 7600, 1600, -1800, 1600)
 color = Color(0.075, 0.105, 0.09, 1)
+
+[node name="Atmosphere" type="Node2D" parent="."]
+script = ExtResource("6_atmosphere")
 
 [node name="BaseDistrict" type="Polygon2D" parent="Ground"]
 polygon = PackedVector2Array(-1650, -950, 550, -950, 550, 950, -1650, 950)
@@ -126,6 +130,14 @@ display_name = "远征情报室"
 description = "查看野外道路情报；副本必须从对应建筑入口进入"
 activation_type = 2
 facility_color = Color(0.88, 0.48, 0.18, 1)
+
+[node name="TrainingRange" parent="Facilities" instance=ExtResource("3_facility")]
+position = Vector2(-1000, -790)
+display_name = "地下训练靶场"
+description = "隔离测试全部枪身、弹药与组合；离场不保留测试配置"
+activation_type = 1
+target_scene_path = "res://scenes/TrainingRange.tscn"
+facility_color = Color(0.28, 0.76, 0.7, 1)
 
 [node name="Workshop" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector2(-1450, -260)
@@ -224,6 +236,7 @@ limit_bottom = 1600
 script = ExtResource("4_camera")
 
 [node name="HUD" type="CanvasLayer" parent="."]
+layer = 20
 
 [node name="TitleLabel" type="Label" parent="HUD"]
 offset_left = 24.0

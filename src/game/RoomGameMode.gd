@@ -41,7 +41,7 @@ var extraction_module: ExtractionModule
 var death_settlement_module: DeathSettlementModule
 
 ## 视野系统
-var vision_system: Variant = VISION_SYSTEM_SCRIPT.new()
+var vision_system: VisionSystem = VISION_SYSTEM_SCRIPT.new()
 
 ## 迷雾层引用（用于向 FogOfWarLayer 推送墙体几何）
 @onready var fog_layer: Node = get_node_or_null("../FogOfWarLayer")
@@ -320,9 +320,25 @@ func _apply_pending_loadout() -> void:
 func _setup_signals() -> void:
 	Global.start_game()
 	Global.game_over.connect(_on_global_game_over)
-
-	GameManager.hp_changed.connect(_on_hp_changed)
 	GameManager.currency_changed.connect(_on_currency_changed)
+
+
+func _exit_tree() -> void:
+	## RoomGameMode owns run-scoped signal bindings and transient combat helpers.
+	## Disconnect explicitly so scene reloads cannot retain callbacks into a dead run.
+	if Global.game_over.is_connected(_on_global_game_over):
+		Global.game_over.disconnect(_on_global_game_over)
+	if GameManager.currency_changed.is_connected(_on_currency_changed):
+		GameManager.currency_changed.disconnect(_on_currency_changed)
+	if player != null and is_instance_valid(player) and player.hp_changed.is_connected(_on_hp_changed):
+		player.hp_changed.disconnect(_on_hp_changed)
+	if is_instance_valid(_bless_dead_timer) and _bless_dead_timer.timeout.is_connected(_on_bless_dead_survive_timeout):
+		_bless_dead_timer.timeout.disconnect(_on_bless_dead_survive_timeout)
+	_stop_current_room_spawner()
+	if _current_event_handler != null and is_instance_valid(_current_event_handler):
+		_current_event_handler.queue_free()
+	if vision_system != null:
+		vision_system.reset()
 
 
 ## 设置开箱后命运触发回调（连接 ContainerInteraction -> MapFateTriggers）
@@ -491,10 +507,10 @@ func _start_game() -> void:
 	_place_player_in_room(0, Vector2.ZERO)
 	map_manager.enter_room(0)
 
-	# 设置 UI
-	if hp_bar:
-		hp_bar.max_value = GameManager.max_hp
-		hp_bar.value = GameManager.current_hp
+	# Player is the sole in-run health authority.  Feed the first value through
+	# the same path as damage/healing so UI and extraction interruption agree.
+	if player != null and is_instance_valid(player):
+		_on_hp_changed(player.current_hp, player.max_hp)
 	_update_ui()
 
 
@@ -2405,6 +2421,9 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 	var boss_room := _get_current_room_instance()
 	var boss_actor: Node = boss_room.get_node_or_null("BossActor") if boss_room != null else null
 	if boss_actor != null and boss_actor.has_method("configure_phases"):
+		if boss_actor.has_method("configure_encounter"):
+			boss_actor.call("configure_encounter", boss_data)
+		_connect_runtime_boss_actor(boss_actor)
 		# 先把房间边界传给 BossActor，让冲刺限制在真实房间范围内
 		var boss_room_instance: Node2D = _get_current_room_instance()
 		if boss_actor.has_method("set_room_bounds") and boss_room_instance != null:
@@ -2413,14 +2432,14 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 				var boss_room_bounds: Rect2 = _calculate_room_bounds_for_spawn_controller(boss_room_instance, current_room_data)
 				boss_actor.call("set_room_bounds", boss_room_bounds)
 				print("[RoomGameMode] 为 BossActor 设置房间边界: %s" % str(boss_room_bounds))
-		# 注入 boss_scale（由 MonsterInjector._generate_boss 根据楼层计算）
-		# 必须在 configure_phases 前设置，让 BossActor._ready() 正确应用 HP 缩放
+		# 兼容旧 Actor：新版 configure_encounter 已经同步 HP 与体型，
+		# 此调用只会更新视觉/碰撞体型，不会再二次放大 HP。
 		if boss_actor.has_method("set_boss_scale_override"):
 			var incoming_scale: float = boss_data.get("boss_scale", 1.0)
 			boss_actor.call("set_boss_scale_override", incoming_scale)
 			print("[RoomGameMode] 为 BossActor 注入 boss_scale=%.2f" % incoming_scale)
 		# 从 boss_data 中提取 phases（实际字段名），用于确定技能树阶段数
-		var max_phases: int = boss_data.get("phases", 3)
+		var max_phases: int = boss_data.get("max_phases", 3)
 		# 构建技能树配置（3个阶段，每个阶段有对应技能）
 		var skill_trees: Dictionary = {
 			1: [
@@ -2440,6 +2459,42 @@ func _on_boss_spawned(boss_data: Dictionary) -> void:
 		}
 		boss_actor.call("configure_phases", skill_trees)
 		print("[RoomGameMode] 为 BossActor 配置了 %d 阶段的技能树" % max_phases)
+
+
+func _connect_runtime_boss_actor(actor: Node) -> void:
+	if actor == null:
+		return
+	if actor.has_signal("boss_damaged"):
+		var damage_signal := Signal(actor, "boss_damaged")
+		if not damage_signal.is_connected(_on_runtime_boss_damage_confirmed):
+			damage_signal.connect(_on_runtime_boss_damage_confirmed)
+	if actor.has_signal("boss_defeated"):
+		var defeated_signal := Signal(actor, "boss_defeated")
+		if not defeated_signal.is_connected(_on_runtime_boss_defeated):
+			defeated_signal.connect(_on_runtime_boss_defeated)
+
+
+func _on_runtime_boss_damage_confirmed(
+	boss_id: String, damage: float, _runtime_hp: float, _runtime_max_hp: float
+) -> void:
+	if map_manager == null or map_manager.boss_director == null:
+		return
+	var tracked: Dictionary = map_manager.boss_director.get_current_boss()
+	if tracked.is_empty() or str(tracked.get("boss_id", "")) != boss_id:
+		return
+	map_manager.boss_director.damage_boss(damage)
+
+
+func _on_runtime_boss_defeated() -> void:
+	## A scripted instant-kill can bypass a regular damage event.  Settle the
+	## remaining tracked HP once so map progression never depends on the visual.
+	if map_manager == null or map_manager.boss_director == null:
+		return
+	if map_manager.boss_director.is_boss_defeated():
+		return
+	var tracked: Dictionary = map_manager.boss_director.get_current_boss()
+	if not tracked.is_empty():
+		map_manager.boss_director.damage_boss(float(tracked.get("hp", 0.0)))
 
 
 func _on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
@@ -2713,6 +2768,8 @@ func _on_hp_changed(current: int, maximum: int) -> void:
 	if hp_bar:
 		hp_bar.max_value = maximum
 		hp_bar.value = current
+	if _ui_manager != null and _ui_manager.has_method("update_hp"):
+		_ui_manager.call("update_hp", current, maximum)
 
 	var took_damage := _last_observed_hp >= 0 and current < _last_observed_hp
 	_last_observed_hp = current
@@ -2749,10 +2806,14 @@ func _on_crit_stacks_changed(new_count: int) -> void:
 
 ## 更新基础UI
 func _update_ui() -> void:
-	if score_label:
-		score_label.text = "Score: %d" % score
-	if wave_label:
-		wave_label.text = "Floor: %d" % current_floor
+	if _ui_manager != null and _ui_manager.has_method("update_score"):
+		_ui_manager.call("update_score", score)
+	elif score_label:
+		score_label.text = "战绩  %06d" % score
+	if _ui_manager != null and _ui_manager.has_method("update_floor"):
+		_ui_manager.call("update_floor", current_floor)
+	elif wave_label:
+		wave_label.text = "深度  %02d" % current_floor
 	if currency_label:
 		currency_label.text = "魂: %d" % GameManager.currency
 
@@ -2838,8 +2899,12 @@ func apply_bless_dead(hp_threshold: float, survive_duration: float, damage_bonus
 		"damage_bonus": damage_bonus,
 		"active": false,
 	}
-	if not GameManager.hp_changed.is_connected(_on_bless_dead_hp_check):
-		GameManager.hp_changed.connect(_on_bless_dead_hp_check)
+	if player == null or not is_instance_valid(player):
+		push_warning("[RoomGameMode] BLESS_DEAD ignored because the player is unavailable")
+		return
+	if not player.hp_changed.is_connected(_on_bless_dead_hp_check):
+		player.hp_changed.connect(_on_bless_dead_hp_check)
+	_on_bless_dead_hp_check(player.current_hp, player.max_hp)
 
 
 var _bless_dead_config: Dictionary = {}

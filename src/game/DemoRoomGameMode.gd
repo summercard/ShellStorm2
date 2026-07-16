@@ -217,34 +217,26 @@ func _setup_transition_canvas() -> void:
 	_transition_overlay.modulate.a = 0.0
 	_transition_canvas.add_child(_transition_overlay)
 
-## 淡出→切换房间→淡入（非阻塞，协程）
+## 淡出→切换房间→淡入。使用单一回调链，切场景时不会遗留等待 Tween 的协程。
 func _fade_out_in(room_id: int) -> void:
 	if _is_transitioning:
 		return
 	_is_transitioning = true
-	
-	# 淡出（屏幕变黑）
-	await _fade_to_black()
-	
-	# 执行房间切换
-	_do_enter_room(room_id)
-	
-	# 淡入（屏幕恢复）
-	await _fade_to_clear()
-	
-	_is_transitioning = false
+	var tween := _transition_overlay.create_tween()
+	tween.tween_property(_transition_overlay, "modulate:a", 1.0, FADE_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_callback(_do_enter_room.bind(room_id))
+	tween.tween_property(_transition_overlay, "modulate:a", 0.0, FADE_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(func() -> void: _is_transitioning = false)
 
 ## 淡出到纯黑
 func _fade_to_black() -> void:
 	var tween := create_tween()
 	tween.tween_property(_transition_overlay, "modulate:a", 1.0, FADE_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	await tween.finished
 
 ## 淡入到透明
 func _fade_to_clear() -> void:
 	var tween := create_tween()
 	tween.tween_property(_transition_overlay, "modulate:a", 0.0, FADE_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	await tween.finished
 
 ## 执行实际房间切换（_enter_room 的核心逻辑，供 fade 协程调用）
 func _do_enter_room(room_id: int) -> void:

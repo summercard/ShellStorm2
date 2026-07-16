@@ -670,10 +670,12 @@ func _update_hp_bar(current: int, maximum: int) -> void:
 		ui_layer.call("update_hp", current, maximum)
 
 func _update_ui() -> void:
-	if score_label:
-		score_label.text = "Score: %d" % score
+	if ui_layer != null and ui_layer.has_method("update_score"):
+		ui_layer.call("update_score", score)
+	elif score_label:
+		score_label.text = "战绩  %06d" % score
 	if wave_label:
-		wave_label.text = "Floor: 1  Wave: %d" % max(1, current_wave)
+		wave_label.text = "深度  01 · 波次 %02d" % max(1, current_wave)
 	if currency_label:
 		currency_label.text = "魂: %d" % GameManager.currency
 	if clearing_progress:

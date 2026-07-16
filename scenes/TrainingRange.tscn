@@ -1,0 +1,78 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://src/training/TrainingRange.gd" id="1_range"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal"]
+size = Vector2(1800, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vertical"]
+size = Vector2(60, 1080)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(120, 240)
+
+[node name="TrainingRange" type="Node2D"]
+script = ExtResource("1_range")
+
+[node name="WorldTone" type="CanvasModulate" parent="."]
+color = Color(0.44, 0.5, 0.52, 1)
+
+[node name="Walls" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, -540)
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls"]
+position = Vector2(0, 540)
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="Left" type="CollisionShape2D" parent="Walls"]
+position = Vector2(-900, 0)
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="Right" type="CollisionShape2D" parent="Walls"]
+position = Vector2(900, 0)
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="Targets" type="Node2D" parent="."]
+
+[node name="ExitDoor" type="Area2D" parent="."]
+position = Vector2(-820, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor"]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="ExitPrompt" type="Label" parent="ExitDoor"]
+z_index = 30
+offset_left = 50.0
+offset_top = -23.0
+offset_right = 270.0
+offset_bottom = 23.0
+text = "[E] 消毒并返回基地"
+theme_override_colors/font_color = Color(0.62, 0.94, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.08, 0.1, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(-620, 0)
+combat_enabled = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(0.82, 0.82)
+position_smoothing_enabled = true
+position_smoothing_speed = 9.0
+limit_left = -900
+limit_top = -540
+limit_right = 900
+limit_bottom = 540
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 20

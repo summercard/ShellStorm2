@@ -44,7 +44,18 @@ func _setup_boss_room() -> void:
 			_boss_markers.append(marker)
 
 func _connect_signals() -> void:
-	pass
+	var actor: Node = get_node_or_null("BossActor")
+	if actor == null or not actor.has_signal("boss_defeated"):
+		return
+	var defeated_signal := Signal(actor, "boss_defeated")
+	if not defeated_signal.is_connected(_on_boss_actor_defeated):
+		defeated_signal.connect(_on_boss_actor_defeated)
+
+
+func _on_boss_actor_defeated() -> void:
+	## Scene-local consequences are independent from map progression; RoomGameMode
+	## forwards the same actor event into BossRoomDirector for rewards/extraction.
+	trigger_boss_defeated()
 
 ## 设置 Boss 房（由 RoomGameMode 调用，进入后立即激活）
 func setup(boss_data: Dictionary = {}) -> void:

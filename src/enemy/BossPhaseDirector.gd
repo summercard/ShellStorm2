@@ -16,6 +16,7 @@ var _skill_trees: Dictionary = {}  # phase -> [skill_config]
 var _active_skills: Array[String] = []
 var _cooldowns: Dictionary = {}
 var _hp_thresholds: Array[float] = [0.66, 0.33, 0.0]
+var _global_skill_cooldown := 0.0
 
 func _init(b_id: String = ""):
 	boss_id = b_id
@@ -29,6 +30,8 @@ func _process(delta: float) -> void:
 
 func _auto_trigger_time_skills() -> void:
 	"""检查当前阶段所有技能，对 TIME 模式的技能在冷却结束后自动触发"""
+	if _global_skill_cooldown > 0.0:
+		return
 	var phase_skills = _skill_trees.get(current_phase, [])
 	for skill_config in phase_skills:
 		var trigger_mode = skill_config.get("trigger", "time")
@@ -39,6 +42,8 @@ func _auto_trigger_time_skills() -> void:
 			continue
 		# 冷却已就绪，触发技能
 		trigger_skill(skill_id)
+		_global_skill_cooldown = 0.65
+		return
 
 func configure(max_phases: int, skill_trees: Dictionary) -> void:
 	"""配置 Boss 阶段和技能树
@@ -51,6 +56,9 @@ func configure(max_phases: int, skill_trees: Dictionary) -> void:
 	"""
 	max_phase = max_phases
 	_skill_trees = skill_trees
+	current_phase = 1
+	_cooldowns.clear()
+	_prime_phase_cooldowns(current_phase)
 
 func set_phase(new_phase: int) -> void:
 	if new_phase == current_phase:
@@ -58,7 +66,22 @@ func set_phase(new_phase: int) -> void:
 	phase_ended.emit(boss_id, current_phase)
 	current_phase = new_phase
 	_active_skills.clear()
+	_prime_phase_cooldowns(new_phase)
 	phase_started.emit(boss_id, new_phase)
+
+
+func _prime_phase_cooldowns(phase: int) -> void:
+	var time_skill_index := 0
+	for skill_config in _skill_trees.get(phase, []):
+		if str(skill_config.get("trigger", "time")) != "time":
+			continue
+		var skill_id := str(skill_config.get("id", ""))
+		if skill_id.is_empty():
+			continue
+		var configured := float(skill_config.get("cooldown", 5.0))
+		_cooldowns[skill_id] = minf(configured, 0.9 + float(time_skill_index) * 0.65)
+		time_skill_index += 1
+	_global_skill_cooldown = 0.45
 
 func check_hp_threshold(hp_percent: float) -> void:
 	"""检查血量阈值并触发阶段切换"""
@@ -101,6 +124,7 @@ func is_on_cooldown(skill_id: String) -> bool:
 
 func tick(delta: float) -> void:
 	"""每帧更新冷却时间"""
+	_global_skill_cooldown = maxf(0.0, _global_skill_cooldown - delta)
 	var to_clear: Array[String] = []
 	for skill_id in _cooldowns:
 		_cooldowns[skill_id] -= delta

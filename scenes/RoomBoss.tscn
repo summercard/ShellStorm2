@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://room_boss_001"]
+[gd_scene load_steps=10 format=3 uid="uid://room_boss_001"]
 
 [ext_resource type="Script" path="res://src/game/BossRoomLogic.gd" id="1_boss_logic"]
 [ext_resource type="Script" path="res://src/map/RoomWaveSpawner.gd" id="2_spawner"]
@@ -10,6 +10,9 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boss"]
 size = Vector2(800, 600)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_boss_actor"]
+radius = 41.8
 
 ; BOSS 房间 — 玩家挑战 Boss 的专用场景
 ; 风格：深红/纯黑主题，中央 Boss 站位光圈，四角暗角
@@ -163,6 +166,9 @@ offset_right = 55.0
 offset_bottom = 55.0
 color = Color(0.75, 0.12, 0.12, 1.0)
 z_index = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossActor"]
+shape = SubResource("CircleShape2D_boss_actor")
 
 [node name="HPBarBG" type="PanelContainer" parent="BossActor"]
 anchors_preset = 8

@@ -23,6 +23,13 @@ func _ready() -> void:
 	_setup_ghost_container()
 	_setup_dash_signals()
 
+
+func _exit_tree() -> void:
+	# The container lives at the scene root for world-space ghosts, so it is not
+	# automatically freed with the Player.  Clean it up on run reload.
+	if _ghost_container != null and is_instance_valid(_ghost_container):
+		_ghost_container.queue_free()
+
 ## 残影容器节点
 func _setup_ghost_container() -> void:
 	_ghost_container = Node2D.new()
@@ -63,8 +70,11 @@ func _spawn_ghost() -> void:
 	if not player:
 		return
 	
-	# 优先复制程序 emoji；没有 emoji 时再退回 ColorRect 占位形状。
-	var source: CanvasItem = player.get_node_or_null("Body/Emoji") as CanvasItem
+	# Prefer the semantic avatar renderer; legacy placeholders stay as fallback
+	# for old scenes and external asset experiments.
+	var source: CanvasItem = player.get_node_or_null("Components/Body/AvatarRenderer") as CanvasItem
+	if source == null:
+		source = player.get_node_or_null("Body/Emoji") as CanvasItem
 	if source == null:
 		source = player.get_node_or_null("Body/Shape") as CanvasItem
 	if source == null:
@@ -76,6 +86,7 @@ func _spawn_ghost() -> void:
 	ghost.name = "GhostVisual"
 	ghost.modulate = Color(1.0, 1.0, 1.0, GHOST_ALPHA)
 	ghost.z_index = player.z_index - 1
+	ghost.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	_ghost_container.add_child(ghost)
 	ghost.global_position = source.global_position

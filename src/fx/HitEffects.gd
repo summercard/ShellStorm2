@@ -37,7 +37,7 @@ func _connect_enemy_signals(enemy: Node) -> void:
 		if not enemy.enemy_hit.is_connected(_on_enemy_hit):
 			enemy.enemy_hit.connect(_on_enemy_hit)
 
-func _on_enemy_hit(_hit_from: Vector2, damage: int, is_crit: bool) -> void:
+func _on_enemy_hit(hit_from: Vector2, damage: int, is_crit: bool) -> void:
 	if _screen_shake:
 		# 震屏强度基于伤害值动态计算（上限20，暴击×1.5）
 		var intensity := clampf(damage * 0.8, 5.0, 20.0)
@@ -53,3 +53,6 @@ func _on_enemy_hit(_hit_from: Vector2, damage: int, is_crit: bool) -> void:
 			_audio.call("play_crit_sfx")
 		elif _audio.has_method("play_enemy_hit_sfx"):
 			_audio.call("play_enemy_hit_sfx")
+
+	# 击中火花（8 颗，暴击金色，普通白色）
+	SparkParticles.spawn_hit_spark(hit_from, is_crit, "")

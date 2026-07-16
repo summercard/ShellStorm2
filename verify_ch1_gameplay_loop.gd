@@ -106,6 +106,7 @@ func _verify_main_scene_loop(failures: Array[String]) -> void:
 				failures.append(
 					"Inventory attachment slot does not show an operable weapon-part marker"
 				)
+			preview_slot.queue_free()
 
 			_click_inventory_slot(ui, slot_index, MOUSE_BUTTON_LEFT)
 			await get_tree().process_frame
@@ -121,6 +122,7 @@ func _verify_main_scene_loop(failures: Array[String]) -> void:
 				failures.append("Installed weapon part was not consumed from inventory")
 
 	main.queue_free()
+	await get_tree().process_frame
 
 
 func _contains_id(items: Array[Dictionary], item_id: String) -> bool:

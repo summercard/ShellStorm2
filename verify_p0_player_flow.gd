@@ -10,7 +10,7 @@ func _ready() -> void:
 		add_child(demo)
 		await get_tree().process_frame
 		await get_tree().process_frame
-		await get_tree().create_timer(0.7).timeout
+		await VerificationClock.wait(self, 0.7)
 		await _validate_demo_flow(demo, failures)
 		demo.queue_free()
 		await get_tree().process_frame
@@ -28,13 +28,15 @@ func _ready() -> void:
 			failures.append("Main flow does not instantiate a readable Boss encounter")
 		main.queue_free()
 		await get_tree().process_frame
+	await VerificationClock.wait(self, 0.45)
+	await get_tree().process_frame
 
 	if failures.is_empty():
 		print("P0_PLAYER_FLOW_OK: Demo chain starts, door flow advances, Boss encounter loads")
 	else:
 		for failure in failures:
 			push_error(failure)
-	get_tree().quit(1 if not failures.is_empty() else 0)
+	VerificationQuitter.schedule(self, 1 if not failures.is_empty() else 0)
 
 func _validate_demo_flow(demo: Node, failures: Array[String]) -> void:
 	await _wait_for_demo_transition(demo)
@@ -83,6 +85,6 @@ func _validate_demo_flow(demo: Node, failures: Array[String]) -> void:
 
 func _wait_for_demo_transition(demo: Node) -> void:
 	for i in range(40):
-		await get_tree().create_timer(0.05).timeout
+		await VerificationClock.wait(self, 0.05)
 		if not bool(demo.get("_is_transitioning")):
 			return

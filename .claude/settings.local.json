@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc:*)",
+      "Bash(godot:*)",
+      "Bash(gtimeout 60 godot:*)"
+    ]
+  }
+}

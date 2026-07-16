@@ -16,6 +16,7 @@ static func spawn_chaser(pos: Vector2) -> CharacterBody2D:
 	enemy.max_hp = 20
 	enemy.speed = 120.0
 	enemy.damage = 12
+	enemy.enemy_shape = EnemyShape.ShapeType.CHASER
 	enemy.get_node("Shape").color = Color(0.6, 1.0, 0.4, 1.0)  # 绿色
 	var skill_comp := EnemySkillComponent.inject_chaser_skill(enemy)
 	enemy.add_child(skill_comp)
@@ -30,6 +31,7 @@ static func spawn_ranged(pos: Vector2) -> CharacterBody2D:
 	enemy.max_hp = 25
 	enemy.speed = 50.0
 	enemy.damage = 8
+	enemy.enemy_shape = EnemyShape.ShapeType.RANGED
 	enemy.get_node("Shape").color = Color(0.9, 0.5, 0.9, 1.0)  # 紫色
 	# 添加远程行为组件
 	enemy.set("ai_type", "ranged")
@@ -47,6 +49,7 @@ static func spawn_summoner(pos: Vector2) -> CharacterBody2D:
 	enemy.max_hp = 40
 	enemy.speed = 30.0
 	enemy.damage = 5
+	enemy.enemy_shape = EnemyShape.ShapeType.SUMMONER
 	enemy.get_node("Shape").color = Color(0.8, 0.7, 0.2, 1.0)  # 黄色
 	enemy.set("ai_type", "summoner")
 	enemy.set("summon_interval", 5.0)
@@ -63,6 +66,7 @@ static func spawn_tank(pos: Vector2) -> CharacterBody2D:
 	enemy.max_hp = 60
 	enemy.speed = 40.0
 	enemy.damage = 15
+	enemy.enemy_shape = EnemyShape.ShapeType.TANK
 	enemy.get_node("Shape").color = Color(0.4, 0.5, 0.8, 1.0)  # 蓝色
 	enemy.set("has_shield", true)
 	enemy.set("shield_rate", 0.3)  # 30% 概率格挡
@@ -79,6 +83,7 @@ static func spawn_bomber(pos: Vector2) -> CharacterBody2D:
 	enemy.max_hp = 12
 	enemy.speed = 90.0
 	enemy.damage = 0  # 爆炸伤害不体现在此
+	enemy.enemy_shape = EnemyShape.ShapeType.BOMBER
 	enemy.get_node("Shape").color = Color(1.0, 0.3, 0.3, 1.0)  # 红色
 	enemy.set("ai_type", "bomber")
 	enemy.set("explosion_radius", 80.0)
@@ -94,8 +99,9 @@ static func spawn_bomber(pos: Vector2) -> CharacterBody2D:
 static func spawn_trapper(pos: Vector2) -> CharacterBody2D:
 	var enemy := _spawn_base(pos)
 	enemy.max_hp = 15
-	enemy.speed = 0.0  # 默认静止
+	enemy.speed = 58.0  # 未触发时行为保持静止；破土后需要真实扑击速度
 	enemy.damage = 20
+	enemy.enemy_shape = EnemyShape.ShapeType.TRAPPER
 	enemy.get_node("Shape").color = Color(0.5, 0.3, 0.2, 1.0)  # 棕色
 	enemy.set("ai_type", "trapper")
 	enemy.set("trigger_radius", 100.0)

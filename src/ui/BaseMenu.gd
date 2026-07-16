@@ -79,11 +79,7 @@ func _ready() -> void:
 	if level_select_button:
 		level_select_button.text = "副本入口位于基地外的野外道路"
 		level_select_button.disabled = true
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color(0.18, 0.22, 0.35, 0.9)
-		style.set_border_width_all(1)
-		style.set_border_color(Color(0.4, 0.55, 0.9, 0.7))
-		style.set_corner_radius_all(6)
+		var style := UIStyleFactory.make_panel_with_border(2, UIPalette.BORDER_ACCENT, 6, 1)
 		level_select_button.add_theme_stylebox_override("normal", style)
 	if start_button:
 		start_button.text = "返回基地与荒野"
@@ -146,11 +142,7 @@ func _show_extraction_loot_panel() -> void:
 	_loot_panel.offset_bottom = 200
 	_loot_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.12, 0.13, 0.18, 0.98)
-	style.set_border_width_all(2)
-	style.set_border_color(Color(0.4, 0.55, 0.9, 0.8))
-	style.set_corner_radius_all(8)
+	var style := UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_FOCUS, 8, 2)
 	_loot_panel.add_theme_stylebox_override("panel", style)
 
 	_loot_content = VBoxContainer.new()
@@ -209,12 +201,16 @@ func _build_loot_panel_content() -> void:
 	deposit_all_btn.text = "一键存入仓库"
 	deposit_all_btn.custom_minimum_size = Vector2(160, 44)
 	deposit_all_btn.pressed.connect(_on_deposit_all_loot_pressed)
+	var deposit_all_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.STATUS_OK)
+	UIStyleFactory.apply_button_style(deposit_all_btn, deposit_all_styles)
 	btn_box.add_child(deposit_all_btn)
 
 	var discard_all_btn := Button.new()
 	discard_all_btn.text = "全部丢弃"
 	discard_all_btn.custom_minimum_size = Vector2(120, 44)
 	discard_all_btn.pressed.connect(_on_discard_all_loot_pressed)
+	var discard_all_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+	UIStyleFactory.apply_button_style(discard_all_btn, discard_all_styles)
 	btn_box.add_child(discard_all_btn)
 
 	_loot_content.add_child(btn_box)
@@ -227,28 +223,12 @@ func _make_loot_item_row(index: int, item: Dictionary) -> PanelContainer:
 	panel.add_child(hbox)
 
 	var item_type: String = item.get("type", "")
-	var border_color: Color
-	if item_type == "FateCard":
-		border_color = Color(0.6, 0.4, 0.8, 1.0)
-	elif item_type == "Weapon" or item_type == "GunBody":
-		border_color = Color(0.96, 0.62, 0.04, 1.0)
-	elif item_type == "Bullet":
-		border_color = Color(0.29, 0.62, 1.0, 1.0)
-	else:
-		border_color = Color(0.5, 0.5, 0.5, 1.0)
+	var border_color := UIPalette.item_border_color(item_type)
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.1, 0.1, 0.12, 0.9)
-	style.border_color = border_color
-	style.border_width_left = 3
-	style.border_width_top = 3
-	style.border_width_right = 3
-	style.border_width_bottom = 3
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
-	panel.add_theme_stylebox_override("panel", style)
+	panel.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_item_row_style(item_type, Color(0.1, 0.1, 0.12, 0.9), true, 3),
+	)
 
 	var name_lbl := Label.new()
 	name_lbl.text = item.get("name", "?")
@@ -264,11 +244,15 @@ func _make_loot_item_row(index: int, item: Dictionary) -> PanelContainer:
 	var deposit_btn := Button.new()
 	deposit_btn.text = "存入"
 	deposit_btn.pressed.connect(_on_deposit_loot_item_pressed.bind(index))
+	var deposit_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.STATUS_OK)
+	UIStyleFactory.apply_button_style(deposit_btn, deposit_styles)
 	hbox.add_child(deposit_btn)
 
 	var discard_btn := Button.new()
 	discard_btn.text = "丢弃"
 	discard_btn.pressed.connect(_on_discard_loot_item_pressed.bind(index))
+	var discard_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+	UIStyleFactory.apply_button_style(discard_btn, discard_styles)
 	hbox.add_child(discard_btn)
 
 	return panel
@@ -325,11 +309,7 @@ func _set_building_disabled(btn: Button, name: String) -> void:
 		var desc: Label = btn.get_node("DescLabel") as Label
 		desc.text = name + "\n[功能开发中]"
 	# 降低可见度表示不可用
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.15, 0.15, 0.18, 0.8)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.3, 0.3, 0.35, 0.5))
-	style.set_corner_radius_all(6)
+	var style := UIStyleFactory.make_panel_with_border(2, Color(0.3, 0.3, 0.35, 0.5), 6, 1)
 	btn.add_theme_stylebox_override("normal", style)
 
 func _set_building_disabled_placeholder(btn: Button, name: String) -> void:
@@ -340,22 +320,14 @@ func _set_building_enabled(btn: Button, name: String) -> void:
 	if btn == null:
 		return
 	btn.disabled = false
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.18, 0.22, 0.35, 0.9)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.4, 0.55, 0.9, 0.7))
-	style.set_corner_radius_all(6)
+	var style := UIStyleFactory.make_panel_with_border(2, Color(0.4, 0.55, 0.9, 0.7), 6, 1)
 	btn.add_theme_stylebox_override("normal", style)
 
 func _set_building_enabled_style(btn: Button) -> void:
 	if btn == null:
 		return
 	btn.disabled = false
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.18, 0.22, 0.35, 0.9)
-	style.set_border_width_all(1)
-	style.set_border_color(Color(0.4, 0.55, 0.9, 0.7))
-	style.set_corner_radius_all(6)
+	var style := UIStyleFactory.make_panel_with_border(2, Color(0.4, 0.55, 0.9, 0.7), 6, 1)
 	btn.add_theme_stylebox_override("normal", style)
 
 func _on_building_divination_pressed() -> void:
@@ -427,11 +399,7 @@ func _show_building_panel(building_type: int) -> void:
 	_building_panel.offset_bottom = 140
 	_building_panel.process_mode = Node.PROCESS_MODE_ALWAYS
 
-	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.10, 0.11, 0.16, 0.98)
-	style.set_border_width_all(2)
-	style.set_border_color(Color(0.45, 0.60, 0.95, 0.8))
-	style.set_corner_radius_all(8)
+	var style := UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_FOCUS, 8, 2)
 	_building_panel.add_theme_stylebox_override("panel", style)
 
 	add_child(_building_panel)
@@ -500,10 +468,14 @@ func _refresh_building_panel() -> void:
 		enter_btn.custom_minimum_size = Vector2(110, 44)
 		enter_btn.text = "进入功能"
 		enter_btn.pressed.connect(_on_enter_building_feature_pressed)
+		var enter_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
+		UIStyleFactory.apply_button_style(enter_btn, enter_styles)
 		btn_box.add_child(enter_btn)
 
 	var upgrade_btn := Button.new()
 	upgrade_btn.custom_minimum_size = Vector2(140, 44)
+	var upgrade_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.TEXT_GOLD)
+	UIStyleFactory.apply_button_style(upgrade_btn, upgrade_styles)
 	if current_points < cost:
 		upgrade_btn.text = "资源不足"
 		upgrade_btn.disabled = true
@@ -516,6 +488,8 @@ func _refresh_building_panel() -> void:
 	close_btn.custom_minimum_size = Vector2(80, 44)
 	close_btn.text = "关闭"
 	close_btn.pressed.connect(_hide_building_panel)
+	var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+	UIStyleFactory.apply_button_style(close_btn, close_styles)
 	btn_box.add_child(close_btn)
 
 	vbox.add_child(btn_box)

@@ -22,6 +22,7 @@ enum ActivationType {
 @onready var _name_label: Label = $NameLabel
 @onready var _description_label: Label = $DescriptionLabel
 @onready var _prompt_label: Label = $PromptLabel
+@onready var _facade: Node2D = $Facade
 
 var _player_in_range := false
 
@@ -47,6 +48,12 @@ func _refresh_presentation() -> void:
 	_prompt_label.visible = _player_in_range
 	_outer_visual.color = facility_color
 	_inner_visual.color = facility_color.lightened(0.22)
+	_description_label.visible = _player_in_range
+	_name_label.add_theme_color_override("font_color", facility_color.lightened(0.50))
+	if _facade != null and _facade.has_method("configure"):
+		_facade.call("configure", facility_color)
+	if _facade != null and _facade.has_method("set_active"):
+		_facade.call("set_active", _player_in_range)
 
 
 func _on_body_entered(body: Node2D) -> void:
@@ -54,6 +61,9 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	_player_in_range = true
 	_prompt_label.visible = true
+	_description_label.visible = true
+	if _facade != null and _facade.has_method("set_active"):
+		_facade.call("set_active", true)
 
 
 func _on_body_exited(body: Node2D) -> void:
@@ -61,3 +71,6 @@ func _on_body_exited(body: Node2D) -> void:
 		return
 	_player_in_range = false
 	_prompt_label.visible = false
+	_description_label.visible = false
+	if _facade != null and _facade.has_method("set_active"):
+		_facade.call("set_active", false)

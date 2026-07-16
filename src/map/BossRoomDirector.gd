@@ -48,13 +48,10 @@ func spawn_boss(room_id: String, floor: int, config: Dictionary = {}) -> Diction
 	boss_data["is_active"] = true
 	boss_data["spawned_at"] = Time.get_ticks_msec()
 	
-	# 计算Boss属性
+	# 计算 Boss 属性。BossRoomDirector 是局内进度的唯一 HP 权威；
+	# BossActor 只显示并回报已经确认的命中。因此这里直接给出运行时
+	# 实体必须使用的最终 HP，避免两套缩放公式逐渐漂移。
 	var scaling := _get_boss_scaling(floor)
-	boss_data["max_hp"] = int(200.0 * scaling["hp_mult"])
-	boss_data["hp"] = boss_data["max_hp"]
-	boss_data["damage"] = int(20.0 * scaling["damage_mult"])
-	boss_data["max_phases"] = 2 + floor / 3
-	boss_data["phase"] = 1
 
 	# 计算 Boss 体型缩放（与 MonsterInjector._generate_boss 保持一致）
 	# 第二关 1.5x，第三关 1.65，第四关 1.8，后续按 +0.15 递增
@@ -62,6 +59,12 @@ func spawn_boss(room_id: String, floor: int, config: Dictionary = {}) -> Diction
 	if floor >= 2:
 		boss_scale = 1.5 + (floor - 2) * 0.15
 	boss_data["boss_scale"] = boss_scale
+	boss_data["base_max_hp"] = int(800.0 * scaling["hp_mult"])
+	boss_data["max_hp"] = int(float(boss_data["base_max_hp"]) * boss_scale)
+	boss_data["hp"] = boss_data["max_hp"]
+	boss_data["damage"] = int(20.0 * scaling["damage_mult"])
+	boss_data["max_phases"] = 2 + floor / 3
+	boss_data["phase"] = 1
 
 	_current_boss = boss_data
 	boss_spawned.emit(boss_data)
@@ -92,8 +95,10 @@ func _get_boss_scaling(floor: int) -> Dictionary:
 
 ## 对Boss造成伤害
 func damage_boss(damage: float) -> Dictionary:
-	if _current_boss.size() == 0:
+	if _current_boss.size() == 0 or _current_boss.get("is_defeated", false):
 		return {}
+	if damage <= 0.0:
+		return _current_boss.duplicate(true)
 	
 	_current_boss["hp"] -= damage
 	boss_damaged.emit(_current_boss["boss_id"], damage, _current_boss["hp"])

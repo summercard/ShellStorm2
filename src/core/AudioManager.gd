@@ -43,6 +43,12 @@ func _init_synth() -> void:
 	_synth = synth_node
 
 func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
+	# Headless validation has no audible consumer. Avoid transient WAV/playback
+	# resources outliving an intentionally short verification scene.
+	if DisplayServer.get_name() == "headless":
+		var synth_script := _synth.get_script() as Script if _synth != null else null
+		if synth_script == null or synth_script.resource_path == "res://src/core/SynthSfx.gd":
+			return
 	var path: String = SFX.get(sfx_name, "")
 	if path.is_empty():
 		_play_fallback_sfx(sfx_name)

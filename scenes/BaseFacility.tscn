@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://base_facility_scene"]
+[gd_scene load_steps=4 format=3 uid="uid://base_facility_scene"]
 
 [ext_resource type="Script" path="res://src/base/BaseFacility.gd" id="1_facility"]
+[ext_resource type="Script" path="res://src/base/BaseFacilityRenderer.gd" id="2_renderer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_facility"]
 size = Vector2(230, 150)
@@ -11,12 +12,16 @@ collision_mask = 2
 script = ExtResource("1_facility")
 
 [node name="Visual" type="Polygon2D" parent="."]
+visible = false
 polygon = PackedVector2Array(-115, -75, 115, -75, 115, 75, -115, 75)
 color = Color(0.28, 0.55, 0.78, 1)
 
 [node name="Inner" type="Polygon2D" parent="Visual"]
 polygon = PackedVector2Array(-99, -59, 99, -59, 99, 59, -99, 59)
 color = Color(0.48, 0.71, 0.88, 1)
+
+[node name="Facade" type="Node2D" parent="."]
+script = ExtResource("2_renderer")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_facility")
@@ -30,9 +35,13 @@ text = "基地设施"
 horizontal_alignment = 1
 vertical_alignment = 1
 theme_override_colors/font_color = Color(0.05, 0.07, 0.1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 20
 
 [node name="DescriptionLabel" type="Label" parent="."]
+visible = false
 offset_left = -105.0
 offset_top = 0.0
 offset_right = 105.0
@@ -41,7 +50,8 @@ text = "设施说明"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
-theme_override_colors/font_color = Color(0.09, 0.11, 0.16, 1)
+theme_override_colors/font_color = Color(0.78, 0.84, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.92)
 theme_override_font_sizes/font_size = 12
 
 [node name="PromptLabel" type="Label" parent="."]

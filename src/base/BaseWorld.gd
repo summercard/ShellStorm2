@@ -16,6 +16,9 @@ var _active_menu: CanvasLayer = null
 func _ready() -> void:
 	Global.clear_pause_reasons()
 	player.set_combat_enabled(false)
+	var base_avatar := player.get_node_or_null("Components/Body/AvatarRenderer") as Node2D
+	if base_avatar != null:
+		base_avatar.scale = Vector2.ONE * 1.28
 	camera.reparent(player)
 	camera.position = Vector2.ZERO
 	camera.make_current()

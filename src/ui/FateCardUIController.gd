@@ -140,18 +140,12 @@ func _create_card_button(card: FateCard) -> Button:
 	if card.short_description != "":
 		display_text += "\n" + card.short_description
 	btn.text = display_text
-	var bg_style := StyleBoxFlat.new()
-	bg_style.bg_color = Color(0.12, 0.13, 0.18, 0.95)
-	bg_style.set_border_width_all(2)
-	bg_style.set_border_color(rarity_color)
-	bg_style.set_corner_radius_all(6)
+	var bg_style := UIStyleFactory.make_panel_with_border(1, rarity_color, 6, 2)
+	bg_style.bg_color = UIPalette.BG_DARK
 	btn.add_theme_stylebox_override("normal", bg_style)
 
-	var hover_style := StyleBoxFlat.new()
-	hover_style.bg_color = Color(0.2, 0.22, 0.3, 0.95)
-	hover_style.set_border_width_all(2)
-	hover_style.set_border_color(Color(1.0, 1.0, 1.0, 0.8))
-	hover_style.set_corner_radius_all(6)
+	var hover_style := UIStyleFactory.make_panel_with_border(2, Color(1.0, 1.0, 1.0, 0.8), 6, 2)
+	hover_style.bg_color = UIPalette.BG_MID
 	btn.add_theme_stylebox_override("hover", hover_style)
 
 	btn.add_theme_color_override("font_color", rarity_color)

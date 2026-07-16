@@ -39,6 +39,10 @@ var player_ref: Node2D = null
 var ai_type: String = "chase"       # chase / ranged / summoner / bomber / trapper
 var use_default_chase: bool = true
 
+## 形状类型（0=三角/chaser, 1=菱形/ranged, 2=五角星/summoner, 3=六边形/tank, 4=圆形/bomber, 5=倒三角/trapper）
+## 在 _ready() 中根据 enemy_shape 渲染 Polygon2D
+var enemy_shape: int = 0
+
 var shoot_interval: float = 1.7
 var summon_interval: float = 5.0
 var explosion_radius: float = 82.0
@@ -52,6 +56,12 @@ var _summon_timer: float = 0.0
 var _contact_timer: float = 0.0
 var _triggered: bool = false
 var _exploded: bool = false
+var _bomber_charging: bool = false
+var _bomber_charge_timer: float = 0.0
+var _trapper_revealing: bool = false
+var _trapper_reveal_timer: float = 0.0
+var _ranged_windup_active: bool = false
+var _summon_telegraph_active: bool = false
 
 ## 远程敌人侧翼机动（PH06强化）
 var _ranged_flank_dir: int = 1          # 1=右侧翼绕后, -1=左侧翼绕后
@@ -127,15 +137,22 @@ var _patrol_cooldown: float = 0.0            # 巡逻冷却（防止频繁重新
 ## 声音累积衰减（每帧减少）
 const _NOISE_DECAY_RATE: float = 15.0       # 声音累积每秒衰减量
 
-@onready var shape: ColorRect = $Shape
+@onready var shape: Polygon2D = $Shape
 @onready var emoji_label: Label = get_node_or_null("Emoji") as Label
 @onready var hp_bar: ProgressBar = get_node_or_null("HPBarBG/HPBar") as ProgressBar
+@onready var avatar_renderer: EnemyAvatarRenderer = get_node_or_null("AvatarRenderer") as EnemyAvatarRenderer
 
 func set_enemy_data(data: Dictionary) -> void:
 	_enemy_data = data.duplicate(true)
 	_is_elite = data.get("is_elite", false)
+	enemy_shape = EnemyShape.shape_for_kind(str(data.get("enemy_type", "")), str(data.get("ai_type", ai_type)))
+	if enemy_shape == EnemyShape.ShapeType.TANK:
+		has_shield = true
+		shield_rate = maxf(shield_rate, 0.18)
 	if data.has("emoji") or data.has("color"):
 		set_visuals(data.get("emoji", "👾"), data.get("color", Color(1.0, 0.25, 0.25, 1.0)), float(data.get("scale", 1.0)))
+	if is_node_ready():
+		_apply_enemy_shape()
 	_set_elite_name_label(data)
 	_set_elite_equipment_visual(data)
 
@@ -174,10 +191,54 @@ func _ready() -> void:
 	current_hp = max_hp
 	add_to_group("enemy")
 	z_as_relative = false
+	if not _enemy_data.is_empty():
+		_base_emoji = str(_enemy_data.get("emoji", _base_emoji))
+		_base_color = _enemy_data.get("color", shape.color) as Color
+		_base_scale = float(_enemy_data.get("scale", _base_scale))
+		_current_scale = _base_scale
+		shape.color = _base_color
+	elif shape != null:
+		_base_color = shape.color
+	if shape != null:
+		shape.visible = false
+	if emoji_label != null:
+		emoji_label.visible = false
 	_ensure_state_marker()
+	_apply_enemy_shape()
 	_fire_timers()
 	_update_hp_bar(true)
 	_update_z_index()
+	_init_state_machine()
+
+
+## 应用 enemy_shape 到 shape Polygon2D
+func _apply_enemy_shape() -> void:
+	if shape == null:
+		return
+	shape.polygon = EnemyShape.make_polygon(enemy_shape, 18.0)
+	shape.visible = false
+	if emoji_label != null:
+		emoji_label.visible = false
+	if avatar_renderer != null:
+		avatar_renderer.configure(enemy_shape, shape.color, _current_scale)
+	_apply_collision_profile()
+
+
+func _apply_collision_profile() -> void:
+	var profile := EnemyShape.get_profile(enemy_shape)
+	var collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision != null and collision.shape is CircleShape2D:
+		(collision.shape as CircleShape2D).radius = float(profile.get("collision_radius", 20.0)) * _current_scale
+	contact_radius = float(profile.get("contact_radius", 31.0)) * _current_scale
+	var extent := float(profile.get("visual_extent", 32.0)) * _current_scale
+	_state_marker_offset_y = -(extent + 24.0)
+	var hp_background := get_node_or_null("HPBarBG") as Control
+	if hp_background != null:
+		var half_width := maxf(24.0, extent * 0.72)
+		hp_background.offset_left = -half_width
+		hp_background.offset_right = half_width
+		hp_background.offset_top = -(extent + 14.0)
+		hp_background.offset_bottom = -(extent + 5.0)
 
 func _fire_timers() -> void:
 	_shoot_timer = randf_range(0.25, shoot_interval)
@@ -226,9 +287,7 @@ func _physics_process(delta: float) -> void:
 			_frozen = false
 			if shape:
 				shape.modulate = _freeze_original_modulate
-				var base_shape: Node = shape
-				if base_shape is ColorRect:
-					base_shape.scale = Vector2.ONE
+				shape.scale = Vector2.ONE
 	# === 常规逻辑 ===
 	if _contact_timer > 0.0:
 		_contact_timer -= delta
@@ -262,107 +321,74 @@ func _physics_process(delta: float) -> void:
 	_try_contact_damage()
 	_update_z_index()
 
-## AI状态机主循环
+## AI状态机主循环（2026-06-10 改造：通用状态机框架接入）
+## 原硬编码 5 状态逻辑已拆到 src/enemy/states/ 下 5 个独立 State 类。
+## 这里只保留共享逻辑（声音衰减 + 累积 + 转发到状态机）。
 func _ai_tick(delta: float) -> void:
-	var dist_to_player: float = global_position.distance_to(player_ref.global_position)
-	var can_see_player: bool = _line_of_sight_check(global_position, player_ref.global_position)
-	var can_hear_player: bool = dist_to_player <= hearing_range
+	if _state_machine == null or not _state_machine_initialized:
+		return
 
 	# 声音衰减（所有状态共享）
 	_noise_accumulator = maxf(0.0, _noise_accumulator - _NOISE_DECAY_RATE * delta)
 
 	# 声音累积：玩家移动时持续增加
 	var player_moving: bool = false
-	if player_ref.has_method("is_moving"):
-		player_moving = bool(player_ref.call("is_moving"))
-	else:
-		var player_velocity = player_ref.get("velocity")
-		if player_velocity is Vector2:
-			player_moving = player_velocity.length() > 10.0
-	if player_moving:
-		_noise_accumulator = min(_noise_accumulator + delta * 30.0, hearing_range)
+	if player_ref and is_instance_valid(player_ref):
+		if player_ref.has_method("is_moving"):
+			player_moving = bool(player_ref.call("is_moving"))
+		else:
+			var player_velocity = player_ref.get("velocity")
+			if player_velocity is Vector2:
+				player_moving = player_velocity.length() > 10.0
+		if player_moving:
+			_noise_accumulator = min(_noise_accumulator + delta * 30.0, hearing_range)
 
-	match _ai_state:
-		AIState.IDLE:
-			velocity = Vector2.ZERO
-			_update_emoji_display("👾", Color.WHITE)
-			if can_see_player:
-				_transition_to(AIState.ALERT)
-			elif can_hear_player and _noise_accumulator > hearing_range * 0.6:
-				_transition_to(AIState.SEARCH)
-			else:
-				_idle_wander(delta)
+	# 转发给状态机，由当前状态决定具体行为和切换
+	_state_machine.physics_update(delta)
 
-		AIState.ALERT:
-			velocity = Vector2.ZERO  # 停止，原地警戒
-			_update_emoji_display("❓", Color(1.0, 0.85, 0.0, 1.0))  # 黄色问号
-			_alert_timer -= delta
-			if can_see_player:
-				_alert_timer = alert_duration  # 持续看到目标，重置计时
-			if _alert_timer <= 0.0:
-				if can_see_player:
-					_transition_to(AIState.CHASE)
-				else:
-					_last_known_player_pos = player_ref.global_position
-					_transition_to(AIState.SEARCH)
-
-		AIState.CHASE:
-			var dir: Vector2 = (player_ref.global_position - global_position).normalized()
-			# PH11 P3: 房间边界拦截——靠近边界时减速并折返，不冲出去
-			velocity = _apply_boundary_on_dir(dir, speed)
-			_update_emoji_display("❗", Color(1.0, 0.15, 0.15, 1.0))  # 红色感叹号
-			if not can_see_player:
-				_last_known_player_pos = player_ref.global_position
-				_transition_to(AIState.SEARCH)
-
-		AIState.SEARCH:
-			var to_last: Vector2 = _last_known_player_pos - global_position
-			if to_last.length() > 15.0:
-				velocity = _apply_boundary_on_dir(to_last.normalized(), speed * 0.6)
-			else:
-				velocity = Vector2.ZERO
-			_update_emoji_display("❓", Color(0.9, 0.75, 0.0, 1.0))  # 暗黄色
-			_search_timer -= delta
-			if can_see_player:
-				_transition_to(AIState.CHASE)
-			elif _search_timer <= 0.0:
-				_transition_to(AIState.PATROL)
-
-		AIState.PATROL:
-			# 声音衰减（每帧独立衰减）
-			_noise_accumulator = maxf(0.0, _noise_accumulator - _NOISE_DECAY_RATE * delta)
-			_patrol_cooldown -= delta
-			_update_emoji_display("👾", Color(0.6, 0.6, 0.6, 1.0))  # 灰白色
-			# 在房间边界内巡逻
-			_patrol_tick(delta)
-			# 检测玩家：看到就进入ALERT
-			if can_see_player:
-				_transition_to(AIState.ALERT)
-			elif can_hear_player and _noise_accumulator > hearing_range * 0.5:
-				_last_known_player_pos = player_ref.global_position
-				_transition_to(AIState.SEARCH)
-
-## 状态转换
+## 状态转换（2026-06-10 改造：转发到状态机）
+## 保留这个函数是让外部调用（比如 force_alert）不需改：
+##   _transition_to(AIState.ALERT) 还是会调，底层走状态机
 func _transition_to(new_state: AIState) -> void:
-	var was_chasing: bool = _ai_state == AIState.CHASE
-	_ai_state = new_state
-	match new_state:
-		AIState.ALERT:
-			_alert_timer = alert_duration
-		AIState.SEARCH:
-			_search_timer = search_duration
-		AIState.IDLE:
-			_noise_accumulator = 0.0
-		AIState.PATROL:
-			_noise_accumulator = 0.0
-		AIState.CHASE:
-			# PH11 P1: 追击时向区域刷怪控制器发送警觉信号（相邻房间增援）
-			if not was_chasing:
-				enemy_entered_chase.emit(self, _last_known_player_pos)
-				_notify_skill_components("on_engaged")
-			# PH11 P2: 精英怪进入追击时触发相邻房间 AI 联动
-			if _is_elite and not was_chasing:
-				elite_entered_chase.emit(self, _last_known_player_pos)
+	if _state_machine == null or not _state_machine_initialized:
+		# 状态机未启动：降级到原来的直接赋值，保留 1:1 行为
+		_ai_state = new_state
+		match new_state:
+			AIState.ALERT: _alert_timer = alert_duration
+			AIState.SEARCH: _search_timer = search_duration
+			AIState.IDLE: _noise_accumulator = 0.0
+			AIState.PATROL: _noise_accumulator = 0.0
+		return
+	_state_machine.transition_to(_state_name_for(new_state))
+
+## AIState 枚举到状态机字符串的双向映射（兼容旧调用）
+func _state_name_for(s: AIState) -> String:
+	match s:
+		AIState.IDLE: return "idle"
+		AIState.ALERT: return "alert"
+		AIState.CHASE: return "chase"
+		AIState.SEARCH: return "search"
+		AIState.PATROL: return "patrol"
+	return "idle"  # fallback
+
+## 初始化状态机（_ready 末尾调一次）
+func _init_state_machine() -> void:
+	if _state_machine_initialized:
+		return
+	_state_machine = StateMachine.new()
+	_state_machine.name = "StateMachine"
+	_state_machine.owner_node = self
+	add_child(_state_machine)
+	# 注册 5 个状态
+	_state_machine.register("idle", EnemyIdleState.new())
+	_state_machine.register("alert", EnemyAlertState.new())
+	_state_machine.register("chase", EnemyChaseState.new())
+	_state_machine.register("search", EnemySearchState.new())
+	_state_machine.register("patrol", EnemyPatrolState.new())
+	# 启动到 IDLE（保留原默认行为）
+	_state_machine.start("idle")
+	_state_machine_initialized = true
+
 
 ## IDLE状态：原地轻微徘徊（每帧微小随机位移）
 func _idle_wander(_delta: float) -> void:
@@ -406,6 +432,26 @@ func _update_emoji_display(text: String, color: Color) -> void:
 		emoji_label.modulate = Color.WHITE if text == "👾" else color
 	if _state_marker_label:
 		_state_marker_label.visible = false
+
+## ========== 状态机改造 (2026-06-10 PHxx 通用状态机框架接入) ==========
+## 5 个状态（IDLE/ALERT/CHASE/SEARCH/PATROL）已拆为独立 State 子类：
+##   src/enemy/states/EnemyIdleState.gd / EnemyAlertState.gd / EnemyChaseState.gd
+##   / EnemySearchState.gd / EnemyPatrolState.gd
+## 状态机本体：
+##   src/core/StateMachine.gd
+## 状态基类：
+##   src/core/State.gd
+##
+## 对外行为完全不变，emoji、计时器、警觉信号、精英联动全部按原逻辑搬迁。
+## _ai_state 字段保留并由各 State.enter() 同步更新，兼容旧代码里的判断。
+## _transition_to() 保留为薄包装，转发到 _state_machine.transition_to()，
+## 让外部调用（比如 force_alert()）不用改。
+
+## 状态机节点（_ready 里 add_child 挂上）
+var _state_machine: StateMachine = null
+
+## 状态机启动标志（防止重复 init）
+var _state_machine_initialized: bool = false
 
 ## ========== 房间边界 & 巡逻系统（PH11 区域AI核心）==========
 
@@ -623,30 +669,53 @@ func _behavior_summoner(delta: float) -> void:
 	var direction := (player_ref.global_position - global_position).normalized()
 	velocity = direction * speed * 0.65
 	_summon_timer -= delta
+	if _summon_timer <= 0.62 and not _summon_telegraph_active:
+		_summon_telegraph_active = true
+		play_combat_telegraph("summon", 0.62, 74.0)
 	if _summon_timer <= 0.0:
 		_summon_timer = summon_interval
+		_summon_telegraph_active = false
 		_spawn_minion()
 
-func _behavior_bomber(_delta: float) -> void:
+func _behavior_bomber(delta: float) -> void:
 	if _exploded:
 		return
 	var to_player := player_ref.global_position - global_position
 	var dist := to_player.length()
 	var dir := to_player.normalized()
+	if _bomber_charging:
+		velocity = Vector2.ZERO
+		_bomber_charge_timer -= delta
+		if _bomber_charge_timer <= 0.0:
+			_exploded = true
+			_bomber_charging = false
+			_trigger_explosion()
+		return
 	velocity = dir * speed
-	if dist < 28.0:
-		_exploded = true
-		_trigger_explosion()
+	if dist < 62.0:
+		_bomber_charging = true
+		_bomber_charge_timer = 0.62
+		velocity = Vector2.ZERO
+		play_combat_telegraph("bomber_detonate", 0.62, explosion_radius)
 
-func _behavior_trapper(_delta: float) -> void:
+func _behavior_trapper(delta: float) -> void:
+	if _trapper_revealing:
+		velocity = Vector2.ZERO
+		_trapper_reveal_timer -= delta
+		if _trapper_reveal_timer <= 0.0:
+			_trapper_revealing = false
+			_triggered = true
+		return
 	if _triggered:
 		var direction := (player_ref.global_position - global_position).normalized()
 		velocity = direction * speed * 2.6
 		return
 	var to_player := player_ref.global_position - global_position
 	if to_player.length() < trigger_radius:
-		_triggered = true
-		velocity = to_player.normalized() * speed * 2.6
+		_trapper_revealing = true
+		_trapper_reveal_timer = 0.38
+		velocity = Vector2.ZERO
+		play_combat_telegraph("trapper_emerge", 0.38, trigger_radius)
 	else:
 		velocity = Vector2.ZERO
 
@@ -676,12 +745,41 @@ func _try_contact_damage() -> void:
 		_contact_timer = contact_damage_interval
 
 func _ranged_shoot(dir: Vector2) -> void:
+	if _ranged_windup_active:
+		return
+	_ranged_windup_active = true
+	play_combat_telegraph("ranged_shot", 0.28, 0.0)
+	await get_tree().create_timer(0.22).timeout
+	if _is_dead or not is_instance_valid(self):
+		return
+	if player_ref != null and is_instance_valid(player_ref):
+		dir = (player_ref.global_position - global_position).normalized()
 	var projectile: Node = ENEMY_PROJECTILE_SCENE.instantiate()
 	var parent := get_tree().current_scene if get_tree().current_scene != null else get_tree().root
 	parent.add_child(projectile)
 	var spawn_pos := global_position + dir * 28.0
 	if projectile.has_method("launch"):
 		projectile.launch(spawn_pos, dir, 315.0, int(float(damage) * _damage_multiplier))
+	_ranged_windup_active = false
+
+
+func play_combat_telegraph(kind: String, duration: float, radius: float = 0.0) -> void:
+	if avatar_renderer != null:
+		avatar_renderer.play_telegraph(kind, duration, radius)
+
+
+func get_visual_profile() -> Dictionary:
+	return EnemyShape.get_profile(enemy_shape)
+
+
+func get_attack_windup_state() -> Dictionary:
+	return {
+		"ranged": _ranged_windup_active,
+		"bomber": _bomber_charging,
+		"bomber_remaining": _bomber_charge_timer,
+		"trapper": _trapper_revealing,
+		"trapper_remaining": _trapper_reveal_timer,
+	}
 
 func _spawn_minion() -> void:
 	# Load at summon time; preloading this script's own scene creates a cyclic editor load.
@@ -737,6 +835,8 @@ func take_damage(amount: int, is_crit: bool = false, hit_dir: Vector2 = Vector2.
 	if not _charge_immune and hit_dir.length_squared() > 0.0001:
 		_knockback_velocity += hit_dir.normalized() * (95.0 if not is_crit else 150.0)
 	_update_hp_bar()
+	if avatar_renderer != null:
+		avatar_renderer.play_hit(is_crit, hit_dir)
 	flash_damage(is_crit)
 	enemy_hit.emit(global_position, amount, is_crit)
 	_spawn_damage_number(global_position, amount, is_crit)
@@ -809,23 +909,30 @@ func apply_freeze(freeze_dur: float) -> void:
 	if shape:
 		shape.modulate = Color(0.5, 0.8, 1.0, 0.85)
 		# 冰晶效果用缩放表现（稍微放大）
-		var base_shape: Node = shape
-		if base_shape is ColorRect:
-			base_shape.scale = Vector2.ONE * _current_scale * 1.15
+		shape.scale = Vector2.ONE * _current_scale * 1.15
 
 func die() -> void:
 	if _is_dead:
 		return
 	_notify_skill_components("on_death")
 	_is_dead = true
+	if avatar_renderer != null:
+		avatar_renderer.play_death()
 	set_deferred("collision_layer", 0)
 	set_deferred("collision_mask", 0)
 	enemy_died.emit()
 	_spawn_death_flash()
+	_spawn_death_spark_burst()
 	emit_death_screen_effect()
 	if hp_bar:
 		hp_bar.visible = false
-	var target: CanvasItem = emoji_label if emoji_label != null else shape
+
+
+## 死亡时迸发火花
+func _spawn_death_spark_burst() -> void:
+	var burst_color: Color = shape.color if shape else Color(1.0, 0.4, 0.4, 1.0)
+	SparkParticles.spawn_death_burst(global_position, burst_color, false)
+	var target: CanvasItem = avatar_renderer if avatar_renderer != null else shape
 	if target:
 		var tween := create_tween()
 		tween.set_parallel(true)
@@ -843,9 +950,14 @@ func set_visuals(emoji: String, color: Color, scale_mult: float = 1.0) -> void:
 	if emoji_label:
 		emoji_label.text = emoji
 		emoji_label.scale = Vector2.ONE * scale_mult
+		emoji_label.visible = false
 	if shape:
 		shape.color = color
 		shape.scale = Vector2.ONE * scale_mult
+		shape.visible = false
+	if avatar_renderer:
+		avatar_renderer.configure(enemy_shape, color, scale_mult)
+	_apply_collision_profile()
 	_update_hp_bar(true)
 
 func _set_elite_name_label(data: Dictionary) -> void:
@@ -942,6 +1054,10 @@ func apply_scale_factor(new_scale: float) -> void:
 		emoji_label.scale = Vector2.ONE * _current_scale
 	if shape:
 		shape.scale = Vector2.ONE * _current_scale
+		shape.visible = false
+	if avatar_renderer:
+		avatar_renderer.configure(enemy_shape, shape.color if shape else _base_color, _current_scale)
+	_apply_collision_profile()
 	# 装备标记也放大
 	var gun_badge: Node = find_child("GunBadge", false, false)
 	if gun_badge:
@@ -951,10 +1067,11 @@ func apply_scale_factor(new_scale: float) -> void:
 		_state_marker_label.scale = Vector2.ONE * _current_scale
 	# HP条放大（但保持文字可读）
 	if hp_bar:
-		hp_bar.scale = Vector2.ONE * _current_scale
+		hp_bar.scale = Vector2.ONE
 
 	print("[EnemyBase] apply_scale: %.2f (was %.2f), contact_radius=%.1f, room_bounds=%s"
 		% [_current_scale, old_scale, contact_radius, _room_bounds])
+
 
 ## 执行精英偷来的枪身模块射击
 ## 精英用 Bullet.tscn 发射子弹，从偷来的 GunBody 模块获取伤害参数
@@ -1143,7 +1260,7 @@ func emit_death_screen_effect() -> void:
 			intensity = 7.0
 		shake.trigger(intensity, 0.12)
 	var audio: Node = get_node_or_null("/root/AudioManager") as Node
-	if audio and audio.has_method("play_enemy_die_sfx"):
+	if DisplayServer.get_name() != "headless" and audio and audio.has_method("play_enemy_die_sfx"):
 		audio.play_enemy_die_sfx()
 
 func _update_hp_bar(force: bool = false) -> void:
@@ -1164,14 +1281,18 @@ func flash_damage(is_crit: bool = false) -> void:
 			# 暴击：更亮、更久、伴随缩放脉冲
 			flash_color = Color(1.0, 0.98, 0.6, 1.0)   # 亮黄白（暴击感）
 			flash_duration = 0.10
-			scale_target = Vector2(1.12, 1.12)          # 轻微放大脉冲
+			scale_target = Vector2(1.18, 1.18)         # 加大暴击脉冲
+		else:
+			# 普通命中：轻微缩放脉冲（让每次命中都有"弹性"）
+			scale_target = Vector2(1.06, 1.06)
 		shape.color = flash_color
-		# 缩放脉冲（暴击时更明显）
-		if scale_target != Vector2(1.0, 1.0):
+		# 缩放脉冲
+		if scale_target != Vector2.ONE:
 			var orig_scale := shape.scale
 			shape.scale = scale_target
 			var scale_tween := create_tween()
-			scale_tween.tween_property(shape, "scale", orig_scale, flash_duration * 1.2).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+			scale_tween.tween_property(shape, "scale", orig_scale, flash_duration * 1.5)\
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		await get_tree().create_timer(flash_duration).timeout
 		if shape and not _is_dead:
 			shape.color = original

@@ -51,6 +51,14 @@ func _ready() -> void:
 	if storage_logic != null:
 		print("R3 StorageRoomLogic: ", storage_logic.get_script().resource_path)
 	
-	demo.free()
+	# Demo starts through an async fade coroutine; wait before teardown so the
+	# verifier does not strand a GDScriptFunctionState at process exit.
+	for _i in 20:
+		if not bool(demo.get("_is_transitioning")):
+			break
+		await VerificationClock.wait(self, 0.05)
+	demo.queue_free()
+	await get_tree().process_frame
+	await get_tree().process_frame
 	print("DEMO_STORAGE_OK: storage tiles and visualizer are available")
-	get_tree().quit()
+	VerificationQuitter.schedule(self, 0)

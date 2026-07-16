@@ -22,8 +22,8 @@ func _ready() -> void:
 	var node_count := _count_nodes(base_world)
 	if node_count > 220:
 		failures.append("BaseWorld first slice is unexpectedly heavy: %d nodes" % node_count)
-	if base_world.get_facility_count() != 7:
-		failures.append("BaseWorld does not expose all seven current lobby functions")
+	if base_world.get_facility_count() != 8:
+		failures.append("BaseWorld does not expose seven lobby functions plus the training range")
 	if base_world.player == null or base_world.player.combat_enabled:
 		failures.append("BaseWorld player is missing or can shoot inside the hub")
 	if base_world.camera.get_parent() != base_world.player:
@@ -32,9 +32,28 @@ func _ready() -> void:
 		failures.append("BaseWorld does not include a continuous explorable wilderness")
 	if base_world.get_dungeon_entrance_count() != 4:
 		failures.append("BaseWorld does not expose four roadside dungeon entrances")
+	var atmosphere := base_world.get_node_or_null("Atmosphere") as BaseWorldAtmosphere
+	if atmosphere == null:
+		failures.append("BaseWorld has no isolated apocalypse atmosphere layer")
+	else:
+		if atmosphere.get_sparse_light_count() < 8:
+			failures.append("BaseWorld apocalypse pass has too few sparse navigation lights")
+		if atmosphere.get_zone_light_colors().size() < 4:
+			failures.append("BaseWorld dungeon districts do not have distinct light colors")
+		if not atmosphere.has_screen_atmosphere():
+			failures.append("BaseWorld has no non-interactive screen atmosphere overlay")
+		var details := atmosphere.get_detail_counts()
+		if int(details.get("cracks", 0)) < 24 or int(details.get("ruins", 0)) < 6:
+			failures.append("BaseWorld apocalypse pass lacks road damage or ruin silhouettes")
+		if int(details.get("wrecks", 0)) < 2 or int(details.get("barriers", 0)) < 2:
+			failures.append("BaseWorld roadside story props are incomplete")
+	var base_hud := base_world.get_node_or_null("HUD") as CanvasLayer
+	if base_hud == null or base_hud.layer <= 5:
+		failures.append("BaseWorld HUD is not protected above the screen atmosphere layer")
 
 	var mission_room := base_world.get_node_or_null("Facilities/MissionOperations")
 	var base_console := base_world.get_node_or_null("Facilities/BaseConsole")
+	var training_range := base_world.get_node_or_null("Facilities/TrainingRange")
 	if (
 		mission_room == null
 		or int(mission_room.get("activation_type")) != BaseFacility.ActivationType.SHOW_INFO
@@ -43,6 +62,13 @@ func _ready() -> void:
 		failures.append("Mission room still bypasses wilderness dungeon entrances")
 	if base_console == null or str(base_console.get("menu_scene_path")) != "res://scenes/BaseMenu.tscn":
 		failures.append("Base management terminal does not preserve the current lobby functions")
+	if (
+		training_range == null
+		or int(training_range.get("activation_type")) != BaseFacility.ActivationType.LOAD_SCENE
+		or str(training_range.get("target_scene_path")) != "res://scenes/TrainingRange.tscn"
+		or not ResourceLoader.exists(str(training_range.get("target_scene_path")), "PackedScene")
+	):
+		failures.append("Base training facility does not route to an independent training scene")
 
 	var entrance_ids: Dictionary = {}
 	for entrance in get_tree().get_nodes_in_group("dungeon_entrance"):

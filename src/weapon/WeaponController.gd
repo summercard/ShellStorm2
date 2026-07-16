@@ -12,6 +12,9 @@ var _recoil: Node = null
 var _audio: AudioManager = null
 var _audio_ready: bool = false
 
+## MuzzleFlash 闪白覆盖层（用于在 muzzle 位置临时显示白色矩形）
+var _muzzle_white_flash: ColorRect = null
+
 func _ready() -> void:
 	_refresh_weapon_tree()
 	_muzzle_flash = get_node_or_null("../MuzzleFlash")
@@ -186,15 +189,72 @@ func fire() -> void:
 			_recoil.trigger(root_tags)
 
 func _trigger_muzzle_flash() -> void:
+	var muzzle_pos: Vector2 = player.global_position + player.get_aim_direction() * 38.0
 	if _muzzle_flash:
 		_muzzle_flash.visible = true
-		_muzzle_flash.global_position = player.global_position + player.get_aim_direction() * 38.0
+		_muzzle_flash.global_position = muzzle_pos
 		var tween := _muzzle_flash.create_tween()
 		tween.tween_interval(0.055)
 		tween.tween_callback(func():
 			if _muzzle_flash and is_instance_valid(_muzzle_flash):
 				_muzzle_flash.visible = false
 		)
+	# 闪白覆盖层（仅在 WeaponController 自己的子树中生成，避免污染 Player 场景）
+	_spawn_white_flash(muzzle_pos)
+
+
+## 在 muzzle 位置生成 0.04s 闪白覆盖矩形
+func _spawn_white_flash(muzzle_pos: Vector2) -> void:
+	if _muzzle_white_flash != null and is_instance_valid(_muzzle_white_flash):
+		_muzzle_white_flash.queue_free()
+	_muzzle_white_flash = ColorRect.new()
+	_muzzle_white_flash.color = Color(1.0, 1.0, 1.0, 0.85)
+	_muzzle_white_flash.size = Vector2(18, 18)
+	_muzzle_white_flash.position = muzzle_pos - Vector2(9, 9)
+	_muzzle_white_flash.z_index = 960
+	_muzzle_white_flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# 挂到当前场景的根节点（避免跟随 Player 移动）
+	var host := get_tree().current_scene
+	if host != null:
+		host.add_child(_muzzle_white_flash)
+	else:
+		add_child(_muzzle_white_flash)
+	var tween := _muzzle_white_flash.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(_muzzle_white_flash, "modulate:a", 0.0, 0.04)
+	tween.chain().tween_callback(_muzzle_white_flash.queue_free)
+	# 烟雾粒子
+	_spawn_muzzle_smoke(muzzle_pos)
+
+
+## 在 muzzle 位置生成 4-5 颗灰色烟雾粒子（向外扩散并淡出）
+func _spawn_muzzle_smoke(muzzle_pos: Vector2) -> void:
+	var aim_dir: Vector2 = player.get_aim_direction() if player and player.has_method("get_aim_direction") else Vector2.RIGHT
+	var host := get_tree().current_scene
+	if host == null:
+		return
+	for i in 5:
+		var smoke := Polygon2D.new()
+		smoke.color = Color(0.7, 0.7, 0.72, 0.55)
+		smoke.polygon = PackedVector2Array([
+			Vector2(0, -3),
+			Vector2(2.5, 1.5),
+			Vector2(-2.5, 1.5),
+		])
+		smoke.position = muzzle_pos
+		smoke.z_index = 955
+		host.add_child(smoke)
+		# 沿射击方向 + 横向散开
+		var spread_angle: float = randf_range(-PI / 4.0, PI / 4.0)
+		var vel: Vector2 = aim_dir.rotated(spread_angle) * randf_range(60.0, 110.0)
+		var t := smoke.create_tween()
+		t.set_parallel(true)
+		t.tween_property(smoke, "position", muzzle_pos + vel * 0.35, 0.35)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		t.tween_property(smoke, "scale", Vector2(1.8, 1.8), 0.35)
+		t.tween_property(smoke, "modulate:a", 0.0, 0.35)\
+			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		t.chain().tween_callback(smoke.queue_free)
 
 func get_fire_rate() -> float:
 	if weapon_tree:

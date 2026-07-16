@@ -27,6 +27,9 @@ func _build_level_buttons() -> void:
 		btn.custom_minimum_size = Vector2(500, 70)
 		btn.text = ""
 		btn.pressed.connect(_on_level_button_pressed.bind(floor))
+		# 关卡按钮用各自的 FLOOR_INFO 颜色作为 accent
+		var floor_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, info["color"])
+		UIStyleFactory.apply_button_style(btn, floor_styles)
 
 		var hbox := HBoxContainer.new()
 		hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -39,7 +42,7 @@ func _build_level_buttons() -> void:
 
 		var desc_lbl := Label.new()
 		desc_lbl.text = info["desc"]
-		desc_lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.7, 1.0))
+		desc_lbl.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 		hbox.add_child(desc_lbl)
 
 		btn.add_child(hbox)

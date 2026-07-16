@@ -20,6 +20,9 @@ func _ready() -> void:
 	scroll_container = get_node_or_null("Panel/VBox/ScrollContainer")
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
+		# 关闭按钮统一样式
+		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_find_elite_archive()
 	_build_archive_view()
 

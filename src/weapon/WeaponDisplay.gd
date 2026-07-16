@@ -167,9 +167,8 @@ var _is_muzzle_flashing: bool = false
 
 func _ready() -> void:
 	_setup_nodes()
-	# 延迟获取 weapon_tree（等待 Player 初始化完成）
-	await get_tree().create_timer(0.05).timeout
-	_refresh_weapon_from_player()
+	# 下一空闲帧获取 weapon_tree；节点销毁时 deferred 调用会自动失效。
+	call_deferred("_refresh_weapon_from_player")
 
 ## 初始化枪身和枪口火焰多边形节点
 func _setup_nodes() -> void:
@@ -217,8 +216,20 @@ func _refresh_weapon_from_player() -> void:
 
 ## weapon_tree 树结构变化时回调（命运卡片改造武器后触发）
 func _on_tree_changed_by_fate() -> void:
-	if _weapon_tree and _weapon_tree.get_root():
-		_refresh_fate_visual()
+	if _weapon_tree == null or _body == null:
+		return
+	var root := _weapon_tree.get_root()
+	if root == null:
+		_current_gun_name = ""
+		_body.visible = false
+		_muzzle.visible = false
+		_clear_fate_children(_eyes)
+		_clear_fate_children(_legs)
+		return
+	_current_gun_name = root.node_name
+	_body.visible = true
+	_apply_shape(GUN_SHAPES.get(_current_gun_name, DEFAULT_SHAPE))
+	_refresh_fate_visual()
 
 ## 从 weapon_tree 读取命运卡片视觉标签（fate_scale / eyes / legs），应用到对应节点
 ## 在 _update_gun_display 后调用，或在 tree_changed 信号触发时调用

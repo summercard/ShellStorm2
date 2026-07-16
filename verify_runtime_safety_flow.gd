@@ -6,13 +6,15 @@ func _ready() -> void:
 	await _verify_turret_cleanup(failures)
 	await _verify_trap_teardown(failures)
 	await _verify_reinforcement_spawn_from_physics_signal(failures)
+	await VerificationClock.wait(self, 0.55)
+	await get_tree().process_frame
 	if failures.is_empty():
 		print("RUNTIME_SAFETY_FLOW_OK: turret lifetime, trap teardown, and deferred reinforcement spawning are safe")
-		get_tree().quit(0)
+		VerificationQuitter.schedule(self, 0)
 	else:
 		for failure in failures:
 			push_error(failure)
-		get_tree().quit(1)
+		VerificationQuitter.schedule(self, 1)
 
 
 func _verify_turret_cleanup(failures: Array[String]) -> void:
@@ -34,7 +36,7 @@ func _verify_turret_cleanup(failures: Array[String]) -> void:
 	if turret == null:
 		failures.append("Turret-on-land did not create a turret instance")
 		return
-	await get_tree().create_timer(0.12).timeout
+	await VerificationClock.wait(self, 0.12)
 	await get_tree().process_frame
 	if is_instance_valid(turret) and not turret.is_queued_for_deletion():
 		failures.append("Turret remains active after its configured lifetime")
@@ -49,7 +51,7 @@ func _verify_trap_teardown(failures: Array[String]) -> void:
 	await get_tree().process_frame
 	trap.queue_free()
 	await get_tree().process_frame
-	await get_tree().create_timer(2.1).timeout
+	await VerificationClock.wait(self, 2.1)
 	if is_instance_valid(trap):
 		failures.append("Trap room instance was not released after teardown")
 

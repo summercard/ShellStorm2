@@ -15,6 +15,9 @@ func _ready() -> void:
 	close_button = get_node_or_null("Panel/VBox/CloseButton")
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
+		# 关闭按钮统一样式
+		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_build_blueprint_list()
 
 ## 蓝图解锁阶段定义
@@ -103,13 +106,16 @@ func _make_category_panel(cat_id: String, cat: Dictionary, current_tier: int) ->
 		var btn := Button.new()
 		btn.text = "解锁下一Tier（消耗 %d 资源）" % next_cost
 		btn.pressed.connect(_on_unlock_pressed.bind(cat_id, current_tier, next_cost))
-		
+		# 解锁按钮使用金色 accent（与蓝图/解锁主题一致）
+		var unlock_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.TEXT_GOLD)
+		UIStyleFactory.apply_button_style(btn, unlock_styles)
+
 		# 资源不足时禁用
 		var player_points: int = BaseManager.get_extraction_points()
 		if player_points < next_cost:
 			btn.disabled = true
 			btn.text = "资源不足（需要 %d，当前 %d）" % [next_cost, player_points]
-		
+
 		vbox.add_child(btn)
 	else:
 		var done_lbl := Label.new()

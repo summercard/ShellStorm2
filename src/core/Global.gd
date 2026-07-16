@@ -7,8 +7,6 @@ signal wave_started(wave: int)
 var is_paused: bool = false
 var _pause_reasons: Dictionary = {}
 var current_wave: int = 0
-var player_hp: int = 100
-var player_max_hp: int = 100
 
 ## HitStop — 命中停顿（2-4帧短停顿，增强打击感）
 ## 正常游戏运行在 time_scale=1.0，命中时短暂降至0（几帧后恢复）
@@ -71,7 +69,6 @@ func _sync_pause_state() -> void:
 
 func start_game() -> void:
 	current_wave = 0
-	player_hp = player_max_hp
 	hitstop_timer = 0.0
 	_hitstop_until_msec = 0
 	Engine.time_scale = HITSTOP_NORMAL

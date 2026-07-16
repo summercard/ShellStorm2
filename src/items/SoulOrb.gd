@@ -19,6 +19,8 @@ var amount: int = 5
 var _player: Node2D = null
 var _orb_body: Polygon2D
 var _orb_glow: Polygon2D
+var _pulse_ring: Polygon2D  ## 呼吸光圈
+var _pulse_tween: Tween = null
 var _amount_label: Label
 var _base_y: float = 0.0
 var _time: float = 0.0
@@ -38,6 +40,15 @@ func _ready() -> void:
 
 ## 构建视觉：绿色发光球体 + 魂数量
 func _setup_visuals() -> void:
+	# 呼吸光圈（持续脉动，让魂更容易被注意到）
+	_pulse_ring = Polygon2D.new()
+	_pulse_ring.name = "PulseRing"
+	_pulse_ring.color = Color(0.3, 1.0, 0.5, 0.45)
+	_pulse_ring.polygon = _make_circle_polygon(10.0)
+	_pulse_ring.z_index = z_index - 2
+	add_child(_pulse_ring)
+	_start_pulse_animation()
+
 	# 外发光圈
 	_orb_glow = Polygon2D.new()
 	_orb_glow.name = "OrbGlow"
@@ -116,6 +127,8 @@ func _collect() -> void:
 	if _collected:
 		return
 	_collected = true
+	# 拾取涟漪（魂用紫色）
+	SparkParticles.spawn_pickup_ripple(global_position, "soul")
 	collected.emit(amount, self)
 	# 收集动画：快速缩小+淡出
 	var t := create_tween()
@@ -129,3 +142,22 @@ func set_amount(val: int) -> void:
 	amount = val
 	if _amount_label:
 		_amount_label.text = "+%d" % amount
+
+
+## 启动呼吸光圈动画（0.8s 循环：scale 0.9->1.5, alpha 0.6->0）
+func _start_pulse_animation() -> void:
+	if _pulse_ring == null:
+		return
+	_pulse_ring.scale = Vector2(0.9, 0.9)
+	_pulse_ring.modulate = Color(1, 1, 1, 0.7)
+	_pulse_tween = create_tween().set_loops()
+	_pulse_tween.set_parallel(true)
+	_pulse_tween.tween_property(_pulse_ring, "scale", Vector2(1.6, 1.6), 0.8)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_pulse_tween.tween_property(_pulse_ring, "modulate:a", 0.0, 0.8)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_pulse_tween.chain().tween_callback(func():
+		if _pulse_ring and is_instance_valid(_pulse_ring):
+			_pulse_ring.scale = Vector2(0.9, 0.9)
+			_pulse_ring.modulate = Color(1, 1, 1, 0.7)
+	)

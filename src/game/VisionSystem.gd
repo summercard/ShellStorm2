@@ -1,7 +1,9 @@
-extends Node
+extends RefCounted
 class_name VisionSystem
 ## VisionSystem — 传统视野系统
-## 负责：房间障碍几何构建 + 基于射线检测的可见性判断
+## 负责：房间障碍几何构建 + 基于射线检测的可见性判断。
+## 这是纯计算服务，不进入 SceneTree；使用 RefCounted 让局结束时自动释放，
+## 避免 RoomGameMode 重载后残留孤立 Node。
 ## 
 ## 工作流程：
 ## 1. build_room_occlusion() — 由 RoomGameMode 在进入房间时调用，收集房间内所有墙体遮挡几何

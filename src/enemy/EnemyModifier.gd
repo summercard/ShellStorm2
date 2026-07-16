@@ -28,9 +28,11 @@ class HugeModifier:
 
 	func apply(enemy_node: Node) -> void:
 		var scale_factor := 1.5 + tier * 0.25
-		# 调用 enemy_node.apply_scale() — 会同步放大碰撞半径和房间边界
-		if enemy_node.has_method("apply_scale"):
-			enemy_node.apply_scale(scale_factor)
+		# Node2D 自带 apply_scale(Vector2)，不能用同名浮点入口。
+		# 统一走 EnemyBase 的视觉/碰撞同步契约。
+		if enemy_node.has_method("apply_scale_factor"):
+			var current := float(enemy_node.get("_current_scale"))
+			enemy_node.call("apply_scale_factor", current * scale_factor)
 		# 也更新 HP（当前值随当前缩放重新基准）
 		var hp_value = enemy_node.get("max_hp")
 		if hp_value != null:

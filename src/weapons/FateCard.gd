@@ -1,9 +1,10 @@
-extends Node
+extends RefCounted
 class_name FateCard
 
-# FateCard.gd — 命运卡片节点
+# FateCard.gd — 命运卡片数据对象
 # 命运卡片系统的基础数据结构
-# 一张卡 = 类型 + 品质 + 标签 + 效果 + 可选视觉改造
+# 一张卡 = 类型 + 品质 + 标签 + 效果 + 可选视觉改造。
+# 它从不进入 SceneTree；使用 RefCounted 避免每次生成卡池都遗留孤立 Node。
 
 ## 卡片类型枚举
 enum CardType {

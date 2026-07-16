@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://gameui001"]
+[gd_scene load_steps=2 format=3 uid="uid://gameui001"]
 
 [ext_resource type="Script" path="res://src/ui/GameUIManager.gd" id="1_gameui"]
+[ext_resource type="Script" path="res://src/ui/MinimapView.gd" id="2_minimap_view"]
 
 [node name="GameUIManager" type="CanvasLayer"]
 script = ExtResource("1_gameui")
@@ -42,6 +43,12 @@ offset_top = 110.0
 offset_right = -16.0
 offset_bottom = 138.0
 grow_horizontal = 0
+
+[node name="HPBarTrail" type="ProgressBar" parent="GameHUD/HPBarBG"]
+z_index = -1
+max_value = 100.0
+value = 100.0
+show_percentage = false
 
 [node name="HPBar" type="ProgressBar" parent="GameHUD/HPBarBG"]
 max_value = 100.0
@@ -115,6 +122,41 @@ layout_mode = 2
 text = "射速"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PlayerStatePanel" type="PanelContainer" parent="GameHUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 238.0
+offset_right = -16.0
+offset_bottom = 290.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="HBox" type="HBoxContainer" parent="GameHUD/PlayerStatePanel"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StateAccent" type="ColorRect" parent="GameHUD/PlayerStatePanel/HBox"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
+mouse_filter = 2
+color = Color(0.38, 0.72, 0.88, 1)
+
+[node name="VBox" type="VBoxContainer" parent="GameHUD/PlayerStatePanel/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = -2
+
+[node name="StateLabel" type="Label" parent="GameHUD/PlayerStatePanel/HBox/VBox"]
+layout_mode = 2
+text = "姿态 · 待命"
+
+[node name="StatusLabel" type="Label" parent="GameHUD/PlayerStatePanel/HBox/VBox"]
+layout_mode = 2
+text = "生命维持系统稳定"
+text_overrun_behavior = 3
 
 [node name="RiskLabel" type="Label" parent="GameHUD"]
 anchors_preset = 2
@@ -202,14 +244,12 @@ layout_mode = 2
 text = "小地图"
 horizontal_alignment = 1
 
-[node name="MiniMapView" type="ReferenceRect" parent="GameHUD/MiniMapPanel"]
+[node name="MiniMapView" type="Control" parent="GameHUD/MiniMapPanel"]
+custom_minimum_size = Vector2(140, 110)
 layout_mode = 2
 size_flags_vertical = 3
-border_color = Color(0.4, 0.4, 0.5, 0.8)
-corner_radius_top_left = 4.0
-corner_radius_top_right = 4.0
-corner_radius_bottom_right = 4.0
-corner_radius_bottom_left = 4.0
+mouse_filter = 2
+script = ExtResource("2_minimap_view")
 
 [node name="ClearingProgress" type="ProgressBar" parent="GameHUD"]
 anchors_preset = 3

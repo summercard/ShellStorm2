@@ -29,6 +29,9 @@ func _ready() -> void:
 	countdown_bar.value = 0.0
 	if abort_button:
 		abort_button.pressed.connect(_on_abort_pressed)
+		# 中断按钮使用红色 accent 区分
+		var abort_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+		UIStyleFactory.apply_button_style(abort_button, abort_styles)
 
 ## 绑定 extraction director 和 module
 func set_extraction_director(director: Node) -> void:
@@ -60,11 +63,15 @@ func hide_extraction_panel() -> void:
 func _build_extraction_buttons() -> void:
 	for child in extraction_buttons_container.get_children():
 		child.queue_free()
-	
+
 	for etype in extraction_types:
 		var btn := Button.new()
 		btn.text = _get_extraction_button_text(etype)
+		btn.custom_minimum_size = Vector2(220, 36)
 		btn.pressed.connect(_on_extraction_type_button_pressed.bind(etype))
+		# 撤离类型按钮统一使用 BORDER_FOCUS 蓝色高亮
+		var styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
+		UIStyleFactory.apply_button_style(btn, styles)
 		extraction_buttons_container.add_child(btn)
 
 func _get_extraction_button_text(etype: String) -> String:

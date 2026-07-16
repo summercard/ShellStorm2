@@ -16,8 +16,7 @@ var _player_weapon_tree: WeaponAssemblyTree = null
 
 func _ready() -> void:
 	add_to_group("fate_cards")
-	await get_tree().create_timer(0.1).timeout
-	_connect_to_player()
+	call_deferred("_connect_to_player")
 
 func _connect_to_player() -> void:
 	# 正确路径：/root/Main/Player（Player.gd 在 _ready 中 add_to_group("player")）

@@ -15,6 +15,8 @@ var _collected := false
 var _body: Polygon2D
 var _label: Label
 var _count_label: Label
+var _pulse_ring: Polygon2D  ## 呼吸光圈（持续脉动）
+var _pulse_tween: Tween = null
 
 
 func setup(game_mode: Node, data: Dictionary) -> void:
@@ -59,6 +61,8 @@ func _try_collect() -> void:
 		item_data["count"] = remaining
 		_update_count_label()
 		return
+	# 拾取涟漪（根据物品类型选颜色）
+	_pickup_ripple()
 	_collected = true
 	var tween := create_tween()
 	tween.set_parallel(true)
@@ -67,8 +71,26 @@ func _try_collect() -> void:
 	tween.chain().tween_callback(queue_free)
 
 
+## 拾取时生成涟漪
+func _pickup_ripple() -> void:
+	var pickup_type: String = "item"
+	match str(item_data.get("type", "")):
+		"weapon": pickup_type = "gold"  # 武器用金色
+		"key": pickup_type = "gold"
+	SparkParticles.spawn_pickup_ripple(global_position, pickup_type)
+
+
 func _build_visuals() -> void:
 	var accent := _item_color()
+	# 呼吸光圈（持续脉动，让物品更显眼）
+	_pulse_ring = Polygon2D.new()
+	_pulse_ring.color = Color(accent.r, accent.g, accent.b, 0.35)
+	_pulse_ring.polygon = _make_diamond(15.0)
+	_pulse_ring.z_index = z_index - 1
+	add_child(_pulse_ring)
+	# 启动呼吸动画
+	_start_pulse_animation()
+
 	var glow := Polygon2D.new()
 	glow.color = Color(accent.r, accent.g, accent.b, 0.25)
 	glow.polygon = _make_diamond(18.0)
@@ -115,6 +137,28 @@ func _update_count_label() -> void:
 		return
 	var count := int(item_data.get("count", 1))
 	_count_label.text = "x%d" % count if count > 1 else ""
+
+
+## 启动呼吸光圈动画（0.9s 循环：scale 0.8->1.3, alpha 0.5->0）
+func _start_pulse_animation() -> void:
+	if _pulse_ring == null:
+		return
+	_pulse_ring.scale = Vector2(0.8, 0.8)
+	_pulse_ring.modulate = Color(1, 1, 1, 0.7)
+	_pulse_tween = create_tween().set_loops()
+	_pulse_tween.set_parallel(true)
+	_pulse_tween.tween_property(_pulse_ring, "scale", Vector2(1.4, 1.4), 0.9)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_pulse_tween.tween_property(_pulse_ring, "modulate:a", 0.0, 0.9)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_pulse_tween.chain().tween_callback(_reset_pulse)
+
+
+func _reset_pulse() -> void:
+	if _pulse_ring == null:
+		return
+	_pulse_ring.scale = Vector2(0.8, 0.8)
+	_pulse_ring.modulate = Color(1, 1, 1, 0.7)
 
 
 func _item_color() -> Color:

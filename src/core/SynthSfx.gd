@@ -13,6 +13,14 @@ func _ready() -> void:
 	_stream_player.bus = "SFX"
 	add_child(_stream_player)
 
+
+func _exit_tree() -> void:
+	# 合成 WAV 是运行时资源；显式断开播放句柄，避免快速切场景/无头验证
+	# 在 AudioServer 回收前仍保留 AudioStreamPlaybackWAV 引用。
+	if _stream_player != null and is_instance_valid(_stream_player):
+		_stream_player.stop()
+		_stream_player.stream = null
+
 ## 播放射击音效
 func play_shoot(fire_rate: float, projectile_count: int) -> void:
 	var freq := 220.0 if fire_rate < 5.0 else (280.0 if fire_rate < 10.0 else 350.0)
@@ -84,6 +92,10 @@ func play_dash() -> void:
 func _play_stream(stream: AudioStream) -> void:
 	if _stream_player == null or not is_instance_valid(_stream_player):
 		return
+	# 单通道合成器以最新战斗提示为准；先断开旧播放实例，避免高频状态切换时
+	# 旧 WAV playback 继续持有运行时资源。
+	_stream_player.stop()
+	_stream_player.stream = null
 	_stream_player.stream = stream
 	_stream_player.pitch_scale = 1.0 + randf_range(-0.04, 0.04)
 	_stream_player.play()

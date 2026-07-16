@@ -6,12 +6,18 @@ signal enemy_killed()
 signal dash_started()
 signal dash_ended()
 signal dash_cooldown_changed(cooldown_ratio: float)
+signal presentation_state_changed(state_id: String, context: Dictionary)
+signal low_health_changed(active: bool, hp_ratio: float)
+signal damage_taken(amount: int, current: int, maximum: int)
+signal input_lock_changed(locked: bool)
+signal status_effect_changed(effect_id: String, active: bool, duration: float)
 
 const SPEED: float = 350.0
 const DASH_SPEED: float = 820.0
 const DASH_DURATION: float = 0.15
 const DASH_COOLDOWN: float = 2.2
 const INVINCIBLE_DURATION: float = 0.22
+const PLAYER_AVATAR_RENDERER_SCRIPT := preload("res://src/player/PlayerAvatarRenderer.gd")
 
 @export var max_hp: int = 100
 @export var armor: int = 0
@@ -26,6 +32,9 @@ var last_move_direction: Vector2 = Vector2.RIGHT
 var dash_direction: Vector2 = Vector2.RIGHT
 var input_locked: bool = false
 var _damage_multiplier: float = 1.0  # 伤害倍率（由命运触发器/祝福效果设置，如 BLESS_DEAD）
+var _presentation_state := "idle"
+var _low_health_active := false
+var _last_damage_amount := 0
 
 ## 沉默状态（被精英"抢枪"词缀 skill_countershot 命中时生效）
 var _is_silenced: bool = false
@@ -37,6 +46,10 @@ var _audio: AudioManager = null
 @onready var weapon_anchor: Marker2D = $WeaponAnchor
 @onready var invincible_timer: Timer = $InvincibleTimer
 @onready var body_visuals: Node = get_node_or_null("Body")
+
+## 角色组件系统（2026-06-10 PHxx 通用组件框架接入）
+## 集中管理 body/head/hand 三个组件 + 武器挂载 + 反馈广播
+var components: CharacterComponents = null
 
 ## 玩家武器装配树（由命运卡片系统使用）
 var weapon_tree: WeaponAssemblyTree
@@ -59,6 +72,9 @@ func _ready() -> void:
 	add_to_group("player")
 	set_combat_enabled(combat_enabled)
 	hp_changed.emit(current_hp, max_hp)
+	_init_state_machine()
+	_init_components()
+	_update_low_health_state()
 
 	# 连接移动端控制信号
 	var mobile := get_node_or_null("/root/MobileControls")
@@ -92,26 +108,15 @@ func _ensure_weapon_tree() -> void:
 		add_child(weapon_tree)
 
 func _physics_process(delta: float) -> void:
-	_handle_movement(delta)
-	_handle_dash_cooldown(delta)
+	# 沉默是叠加标志（不进入独立状态），由 _handle_silence 单独推进
 	_handle_silence(delta)
-
-func _handle_movement(_delta: float) -> void:
-	if input_locked:
-		velocity = Vector2.ZERO
-		move_and_slide()
-		return
-	var input_direction := _get_input_direction()
-	if input_direction != Vector2.ZERO:
-		last_move_direction = input_direction
-	
-	if is_dashing:
-		velocity = dash_direction * DASH_SPEED
-		move_and_slide()
-		return
-	
-	velocity = input_direction * SPEED
-	move_and_slide()
+	# 移动 + 冲刺 + 冷却 都交给状态机调度
+	if _state_machine and _state_machine_initialized:
+		_state_machine.physics_update(delta)
+	# 组件摆动动画（待机上下浮动 + 移动左右倾斜 + 头手跟随）
+	if components != null:
+		var animation_direction := velocity.normalized() if velocity.length_squared() > 100.0 else Vector2.ZERO
+		components.tick_animations(delta, animation_direction)
 
 func _get_input_direction() -> Vector2:
 	var direction := Vector2.ZERO
@@ -215,44 +220,113 @@ func _print_collision_debug() -> void:
 
 	_debug_label.text = msg
 
-func _handle_dash_cooldown(delta: float) -> void:
-	if input_locked:
-		dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0) if dash_cooldown_timer > 0.0 else 0.0)
-		return
-	if dash_cooldown_timer > 0.0:
-		dash_cooldown_timer = max(0.0, dash_cooldown_timer - delta)
-		dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
-	else:
-		dash_cooldown_changed.emit(0.0)
-	
-	if Input.is_action_just_pressed("dash") and dash_cooldown_timer <= 0.0 and not is_dashing:
-		_start_dash()
-
 func _start_dash() -> void:
-	dash_started.emit()
-	if _audio:
-		_audio.play_dash_sfx()
-	is_dashing = true
-	is_invincible = true
-	dash_cooldown_timer = DASH_COOLDOWN
-	var input_direction := _get_input_direction()
-	dash_direction = input_direction if input_direction != Vector2.ZERO else aim_direction
-	if dash_direction == Vector2.ZERO:
-		dash_direction = last_move_direction
-	invincible_timer.start(INVINCIBLE_DURATION)
-	await get_tree().create_timer(DASH_DURATION).timeout
-	is_dashing = false
-	dash_ended.emit()
+	# 由 idle 状态机内部实际处理（看 PlayerIdleState._start_dash）
+	# 这里保留作为外部入口（移动端 dash 按钮调用），转发到状态机
+	if _state_machine and _state_machine_initialized:
+		_state_machine.dispatch_event("request_dash", null)
+	else:
+		# 状态机未启动：保留原行为作为兜底
+		dash_started.emit()
+		if _audio and DisplayServer.get_name() != "headless":
+			_audio.play_dash_sfx()
+		is_dashing = true
+		is_invincible = true
+		dash_cooldown_timer = DASH_COOLDOWN
+		var input_direction := _get_input_direction()
+		dash_direction = input_direction if input_direction != Vector2.ZERO else aim_direction
+		if dash_direction == Vector2.ZERO:
+			dash_direction = last_move_direction
+		invincible_timer.start(INVINCIBLE_DURATION)
+		await get_tree().create_timer(DASH_DURATION).timeout
+		is_dashing = false
+		dash_ended.emit()
 
 func _on_invincible_timeout() -> void:
 	if not is_dashing:
 		is_invincible = false
 
+
+func _tick_dash_cooldown(delta: float) -> void:
+	if dash_cooldown_timer > 0.0:
+		dash_cooldown_timer = maxf(0.0, dash_cooldown_timer - delta)
+	dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
+
+
+func _begin_dash() -> bool:
+	if input_locked or current_hp <= 0 or is_dashing or dash_cooldown_timer > 0.0:
+		return false
+	var direction := _get_input_direction()
+	var target_direction := direction if direction != Vector2.ZERO else aim_direction
+	if target_direction == Vector2.ZERO:
+		target_direction = last_move_direction
+	dash_direction = target_direction.normalized()
+	is_dashing = true
+	is_invincible = true
+	dash_cooldown_timer = DASH_COOLDOWN
+	if invincible_timer:
+		invincible_timer.start(INVINCIBLE_DURATION)
+	dash_started.emit()
+	if _audio and DisplayServer.get_name() != "headless":
+		_audio.play_dash_sfx()
+	if _state_machine and _state_machine_initialized:
+		_state_machine.transition_to("dashing")
+	return true
+
+
+func _transition_to_locomotion() -> void:
+	if _state_machine == null or not _state_machine_initialized or current_hp <= 0:
+		return
+	if input_locked:
+		_state_machine.transition_to("locked")
+	elif _get_input_direction() != Vector2.ZERO:
+		_state_machine.transition_to("moving")
+	else:
+		_state_machine.transition_to("idle")
+
+
+func _set_presentation_state(state_id: String, context: Dictionary = {}) -> void:
+	var changed := _presentation_state != state_id
+	_presentation_state = state_id
+	if changed or not context.is_empty():
+		presentation_state_changed.emit(state_id, context.duplicate(true))
+
+
+func get_presentation_state() -> String:
+	return _presentation_state
+
+
+func get_state_machine_state() -> String:
+	return _state_machine.current_state_name if _state_machine != null else ""
+
+
+func get_registered_player_states() -> Array:
+	return _state_machine.get_state_names() if _state_machine != null else []
+
+
+func _update_low_health_state() -> void:
+	var ratio := float(current_hp) / maxf(1.0, float(max_hp))
+	var active := current_hp > 0 and ratio <= 0.30
+	if active != _low_health_active:
+		_low_health_active = active
+		low_health_changed.emit(active, ratio)
+
+
+func is_low_health() -> bool:
+	return _low_health_active
+
 func set_input_locked(locked: bool) -> void:
+	if input_locked == locked:
+		return
 	input_locked = locked
 	if locked:
 		is_dashing = false
 		velocity = Vector2.ZERO
+		if current_hp > 0 and _state_machine and _state_machine_initialized:
+			_state_machine.transition_to("locked")
+	elif current_hp > 0:
+		_transition_to_locomotion()
+	input_lock_changed.emit(locked)
 
 
 func set_combat_enabled(enabled: bool) -> void:
@@ -275,6 +349,7 @@ func apply_silence(duration: float) -> void:
 	_is_silenced = true
 	_silence_duration = duration
 	_silence_timer = duration
+	status_effect_changed.emit("silenced", true, duration)
 	print("[Player] 被沉默 %.1f 秒" % duration)
 
 func _handle_silence(delta: float) -> void:
@@ -284,9 +359,10 @@ func _handle_silence(delta: float) -> void:
 	if _silence_timer <= 0.0:
 		_is_silenced = false
 		_silence_timer = 0.0
+		status_effect_changed.emit("silenced", false, 0.0)
 		print("[Player] 沉默解除")
 
-func take_damage(amount: int) -> void:
+func take_damage(amount: int, hit_dir: Vector2 = Vector2.ZERO) -> void:
 	if is_invincible or current_hp <= 0:
 		return
 	# 获取武器树超频惩罚（每次射击叠加效果，超频命卡写入 overheat_penalty>1）
@@ -294,31 +370,80 @@ func take_damage(amount: int) -> void:
 	if weapon_tree != null and weapon_tree.has_method("get_overheat_penalty"):
 		overheat_mult = weapon_tree.call("get_overheat_penalty")
 	var final_damage: int = maxi(1, int(float(amount - armor) * overheat_mult))
+	_last_damage_amount = final_damage
 	current_hp = max(0, current_hp - final_damage)
 	hp_changed.emit(current_hp, max_hp)
+	damage_taken.emit(final_damage, current_hp, max_hp)
+	_update_low_health_state()
+	if hit_dir.length_squared() > 0.0001:
+		velocity += hit_dir.normalized() * 90.0
 	_flash_damage()
 	_play_damage_sfx()
 	is_invincible = true
 	if invincible_timer:
 		invincible_timer.start(INVINCIBLE_DURATION)
 	if current_hp <= 0:
+		if _state_machine and _state_machine_initialized:
+			_state_machine.transition_to("dead", true)
 		Global.trigger_game_over()
+	elif _state_machine and _state_machine_initialized:
+		_state_machine.transition_to("hurt", true)
 
 func heal(amount: int) -> void:
 	if current_hp <= 0:
 		return
 	current_hp = min(max_hp, current_hp + amount)
 	hp_changed.emit(current_hp, max_hp)
+	_update_low_health_state()
 	if body_visuals and body_visuals.has_method("flash_heal"):
 		body_visuals.call("flash_heal")
+	var renderer := get_node_or_null("Components/Body/AvatarRenderer") as Node
+	if renderer != null and renderer.has_method("flash_heal"):
+		renderer.call("flash_heal")
 
 
 func _flash_damage() -> void:
 	if body_visuals and body_visuals.has_method("flash_damage"):
 		body_visuals.call("flash_damage")
+	var renderer := get_node_or_null("Components/Body/AvatarRenderer") as Node
+	if renderer != null and renderer.has_method("flash_damage"):
+		renderer.call("flash_damage")
+	# 全屏红闪（0.15s 衰减）— 强化受击反馈
+	_spawn_damage_red_flash()
+
+
+## 生成全屏红闪（半透明 ColorRect 覆盖整个视口，0.15s 衰减）
+func _spawn_damage_red_flash() -> void:
+	var tree := get_tree()
+	if tree == null or tree.current_scene == null:
+		return
+	var flash := ColorRect.new()
+	flash.name = "DamageRedFlash"
+	flash.color = Color(0.95, 0.15, 0.15, 0.0)
+	flash.set_anchors_preset(Control.PRESET_FULL_RECT)
+	flash.offset_left = 0
+	flash.offset_top = 0
+	flash.offset_right = 0
+	flash.offset_bottom = 0
+	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	flash.z_index = 500
+	# 找到合适的 CanvasLayer 挂载（优先 HUD 层，避免被 3D 覆盖）
+	var host: Node = tree.root
+	var canvas: CanvasLayer = host.get_node_or_null("GameUI") as CanvasLayer
+	if canvas != null:
+		canvas.add_child(flash)
+	else:
+		host.add_child(flash)
+	# 快速闪红后衰减
+	var tween := flash.create_tween()
+	tween.tween_property(flash, "color:a", 0.42, 0.04)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(flash, "color:a", 0.0, 0.15)\
+		.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_callback(flash.queue_free)
 
 func _play_damage_sfx() -> void:
-	if _audio:
+	if _audio and DisplayServer.get_name() != "headless":
 		_audio.play_player_hit_sfx()
 	# 受伤震屏（通过 HitEffects 或直接找 ScreenShake）
 	var shake: Node = get_tree().root.find_child("ScreenShake", true, false)
@@ -339,6 +464,9 @@ func get_aim_direction() -> Vector2:
 func set_aim_direction(dir: Vector2) -> void:
 	if dir.length_squared() > 0.0001:
 		aim_direction = dir.normalized()
+		# 同步给手部组件：手应该跟瞄准方向旋转（让武器挂点朝向敌人）
+		if components != null and components.hand != null:
+			components.hand.set_aim_direction(aim_direction)
 
 func get_weapon_tree() -> WeaponAssemblyTree:
 	_ensure_weapon_tree()
@@ -383,3 +511,90 @@ func _apply_named_multipliers() -> void:
 	_damage_multiplier = final_mult
 	if weapon_tree != null and weapon_tree.has_method("apply_damage_multiplier"):
 		weapon_tree.apply_damage_multiplier(_damage_multiplier)
+
+# ========== 玩家顶层状态机 ==========
+## 6 个互斥状态（idle/moving/dashing/hurt/locked/dead）均为独立 State 子类。
+##
+## 沉默（silenced）和无敌（invincible）不是顶层状态：
+## - 沉默：_is_silenced 叠加标志，与任何状态共存
+## - 无敌：dashing 副作用 + take_damage 后短暂无敌，由 InvincibleTimer 唯一解除
+##
+## 对外行为兼容：
+## - is_dashing / is_invincible / input_locked 字段保留并由各 State.enter/exit 同步
+## - set_input_locked() / _start_dash() / take_damage() 外部调用不需改
+
+## 状态机节点（_ready 末尾挂上）
+var _state_machine: StateMachine = null
+
+## 状态机启动标志（防止重复 init）
+var _state_machine_initialized: bool = false
+
+## 初始化状态机（_ready 末尾调一次）
+func _init_state_machine() -> void:
+	if _state_machine_initialized:
+		return
+	_state_machine = StateMachine.new()
+	_state_machine.name = "StateMachine"
+	_state_machine.owner_node = self
+	add_child(_state_machine)
+	# 顶层互斥状态；低血/沉默/无敌作为叠加状态。
+	_state_machine.register("idle", PlayerIdleState.new())
+	_state_machine.register("moving", PlayerMovingState.new())
+	_state_machine.register("dashing", PlayerDashingState.new())
+	_state_machine.register("hurt", PlayerHurtState.new())
+	_state_machine.register("locked", PlayerLockedState.new())
+	_state_machine.register("dead", PlayerDeadState.new())
+	# 启动到 idle
+	_state_machine.start("idle")
+	_state_machine_initialized = true
+
+
+# ========== 组件系统接入 (2026-06-10) ==========
+## 挂 CharacterComponents 节点 + 用现有场景里的 Body/WeaponAnchor 作为组件引用的目标
+## 不创建新视觉节点，保留 PlayerVisuals.gd 的现有 flash_damage/flash_heal 实现
+func _init_components() -> void:
+	if components != null:
+		return
+	components = CharacterComponents.new()
+	components.name = "Components"
+	add_child(components)
+	# 让组件自己创建临时占位资产（emoji 头部 / 方块身体 / 长方形武器挂在 emoji 手上）
+	# 不传任何视觉路径 —— 组件 _ready 会自建。
+	# 同时把场景里旧的 Body / WeaponAnchor / Shape / Emoji 隐藏掉（避免新旧重叠）
+	components.create_default_layout(NodePath(""), NodePath(""), NodePath(""))
+	_install_avatar_renderer()
+	_hide_legacy_visuals()
+	# Components 现在是 Node2D，body 是它的子 Node2D，相对 (0,0) 即 Player 中心
+	# 旧的 legacy_body.position 也是 (0, 0)，不需要再设
+	var has_body: bool = components.get("body") != null
+	var has_head: bool = components.get("head") != null
+	var has_hand: bool = components.get("hand") != null
+	print("[Player] 组件系统已挂载: body=%s head=%s hand=%s" % [has_body, has_head, has_hand])
+
+
+func _install_avatar_renderer() -> void:
+	if components == null or components.body == null:
+		return
+	var renderer := components.body.get_node_or_null("AvatarRenderer") as Node
+	if renderer == null:
+		renderer = PLAYER_AVATAR_RENDERER_SCRIPT.new() as Node
+		renderer.name = "AvatarRenderer"
+		components.body.add_child(renderer)
+	# Keep component transforms for aiming/bob feedback, but hide their temporary
+	# emoji/rectangle assets behind the semantic, replaceable renderer.
+	for path in ["BodyShape", "Head/Emoji", "Head/Hand/Emoji", "Head/Hand/WeaponAnchor/WeaponDisplay"]:
+		var placeholder := components.body.get_node_or_null(path)
+		if placeholder is CanvasItem:
+			(placeholder as CanvasItem).visible = false
+	if weapon_anchor != null:
+		weapon_anchor.z_index = 6
+
+## 隐藏场景里旧的视觉节点（Shape / Emoji / WeaponAnchor / WeaponDisplay / MuzzleFlash 等）
+## 组件系统会自己生成新的；旧的留着不删，方便回退
+func _hide_legacy_visuals() -> void:
+	# 只隐藏 Body（因为我们用 Components/Body 替代它）
+	# 注意：不能隐藏 WeaponAnchor 及其子节点 —— 组件系统的 WeaponAnchor 是新建的，
+	#       Player 根下的这个是 WeaponDisplay + 武器的渲染位置，必须保持可见
+	var n: Node = get_node_or_null("Body")
+	if n is CanvasItem:
+		(n as CanvasItem).visible = false
