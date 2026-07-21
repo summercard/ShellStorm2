@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="DungeonTheme3D" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/DungeonTheme3D.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "rust_foundry"
+display_name = "锈蚀铸造厂"
+fantasy = "失控生产线仍在运作；焦黑钢板反射故障钠灯，熔渣在地沟里提供危险暖光。"
+difficulty_rank = 2
+floor_color = Color(0.16, 0.095, 0.055, 1)
+wall_color = Color(0.23, 0.115, 0.055, 1)
+trim_color = Color(0.48, 0.225, 0.075, 1)
+accent_color = Color(1.0, 0.39, 0.09, 1)
+hazard_color = Color(1.0, 0.15, 0.025, 1)
+prop_color = Color(0.25, 0.18, 0.12, 1)
+ambient_color = Color(0.35, 0.20, 0.12, 1)
+fog_color = Color(0.095, 0.035, 0.018, 1)
+key_light_color = Color(1.0, 0.49, 0.17, 1)
+fog_density = 0.014
+ambient_energy = 0.52
+fixture_energy = 3.2
+fixture_range = 8.0
+enemy_pool = Array[String](["shielded", "exploder", "ranged_caster", "melee_chaser"])
+room_sequence = Array[String](["COMBAT", "TRAP", "COMBAT", "ELITE"])
+furniture_bias = Array[String](["generator", "tank", "crate", "workbench"])

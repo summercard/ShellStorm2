@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/ExtractionBeacon3D.gd" id="1_beacon"]
+
+[node name="ExtractionBeacon3D" type="Area3D"]
+script = ExtResource("1_beacon")

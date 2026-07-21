@@ -1819,7 +1819,7 @@ func _on_menu_pressed() -> void:
 	death_overlay.visible = false
 	game_over_panel.visible = false
 	# 返回基地主界面（而非直接重新开始游戏）
-	get_tree().change_scene_to_file("res://scenes/BaseWorld.tscn")
+	get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
 
 
 ## 楼层变化
@@ -2162,7 +2162,7 @@ func _on_continue_pressed() -> void:
 	if death_overlay:
 		death_overlay.visible = false
 	# 返回基地主界面
-	var change_error := get_tree().change_scene_to_file("res://scenes/BaseWorld.tscn")
+	var change_error := get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
 	if change_error != OK:
 		push_error("返回基地场景切换失败：%s" % error_string(change_error))
 

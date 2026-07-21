@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/training3d/TrainingRange3D.gd" id="1_range"]
+[ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/training_range_3d/env_training_range_kit_top3d_v001.tscn" id="3_env"]
+
+[node name="TrainingRange3D" type="Node3D"]
+script = ExtResource("1_range")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-56, -24, 0)
+light_color = Color(0.74, 0.66, 0.54, 1)
+light_energy = 0.68
+shadow_enabled = true
+
+[node name="EnvironmentKit" parent="." instance=ExtResource("3_env")]
+
+[node name="Racks" type="Node3D" parent="."]
+
+[node name="Targets" type="Node3D" parent="."]
+
+[node name="Services" type="Node3D" parent="."]
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+position = Vector3(0, 0.05, 1.5)
+combat_enabled = true
+start_with_weapon = false
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="PanelContainer" parent="HUD"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 1120.0
+offset_bottom = 68.0
+
+[node name="Margin" type="MarginContainer" parent="HUD/TopBar"]
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
+
+[node name="HBox" type="HBoxContainer" parent="HUD/TopBar/Margin"]
+theme_override_constants/separation = 30
+
+[node name="Title" type="Label" parent="HUD/TopBar/Margin/HBox"]
+text = "3D废土靶场"
+
+[node name="LoadoutLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
+text = "未装配武器"
+
+[node name="AmmoLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
+text = "AMMO 0/0"
+
+[node name="StatsLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
+text = "命中 0 · 伤害 0 · 击破 0"
+
+[node name="StatusPanel" type="PanelContainer" parent="HUD"]
+offset_left = 18.0
+offset_top = 78.0
+offset_right = 700.0
+offset_bottom = 126.0
+
+[node name="Margin" type="MarginContainer" parent="HUD/StatusPanel"]
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="StatusLabel" type="Label" parent="HUD/StatusPanel/Margin"]
+text = "正在装载靶场……"

@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/player3d/Player3D.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="2_avatar"]
+
+[sub_resource type="CapsuleShape3D" id="ShapePlayer"]
+radius = 0.55
+height = 1.65
+
+[sub_resource type="StandardMaterial3D" id="MatCursor"]
+transparency = 1
+albedo_color = Color(0.28, 0.88, 1, 0.72)
+emission_enabled = true
+emission = Color(0.12, 0.72, 1, 1)
+emission_energy_multiplier = 1.8
+shading_mode = 0
+
+[sub_resource type="TorusMesh" id="MeshCursor"]
+material = SubResource("MatCursor")
+inner_radius = 0.16
+outer_radius = 0.21
+rings = 20
+ring_segments = 6
+
+[sub_resource type="StandardMaterial3D" id="MatCursorDot"]
+albedo_color = Color(0.72, 0.96, 1, 1)
+emission_enabled = true
+emission = Color(0.32, 0.86, 1, 1)
+emission_energy_multiplier = 1.6
+
+[sub_resource type="CylinderMesh" id="MeshCursorDot"]
+material = SubResource("MatCursorDot")
+top_radius = 0.035
+bottom_radius = 0.035
+height = 0.025
+radial_segments = 12
+
+[node name="Player3D" type="CharacterBody3D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.88, 0)
+shape = SubResource("ShapePlayer")
+
+[node name="Avatar3D" parent="." instance=ExtResource("2_avatar")]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(0, 17.5, 13.0)
+rotation = Vector3(-0.907571, 0, 0)
+current = true
+fov = 43.0
+near = 0.1
+far = 130.0
+
+[node name="AimCursor" type="Node3D" parent="."]
+top_level = true
+
+[node name="Ring" type="MeshInstance3D" parent="AimCursor"]
+mesh = SubResource("MeshCursor")
+cast_shadow = 0
+
+[node name="Dot" type="MeshInstance3D" parent="AimCursor"]
+mesh = SubResource("MeshCursorDot")
+cast_shadow = 0

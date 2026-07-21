@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="DungeonTheme3D" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/DungeonTheme3D.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "abyss_archive"
+display_name = "深渊档案库"
+fantasy = "封存失败实验与精英档案的禁区；紫红警戒光被黑色镜面钢板切成狭窄光带。"
+difficulty_rank = 4
+floor_color = Color(0.085, 0.055, 0.105, 1)
+wall_color = Color(0.13, 0.075, 0.17, 1)
+trim_color = Color(0.38, 0.18, 0.47, 1)
+accent_color = Color(0.88, 0.22, 0.77, 1)
+hazard_color = Color(1.0, 0.08, 0.28, 1)
+prop_color = Color(0.17, 0.12, 0.20, 1)
+ambient_color = Color(0.28, 0.16, 0.34, 1)
+fog_color = Color(0.055, 0.025, 0.075, 1)
+key_light_color = Color(0.86, 0.39, 0.95, 1)
+fog_density = 0.021
+ambient_energy = 0.46
+fixture_energy = 3.4
+fixture_range = 7.4
+enemy_pool = Array[String](["shielded", "summoner", "ambusher", "ranged_caster", "exploder"])
+room_sequence = Array[String](["COMBAT", "ELITE", "EVENT", "TRAP"])
+furniture_bias = Array[String](["archive", "locker", "console", "tank"])

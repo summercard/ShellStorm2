@@ -1,0 +1,9 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/Dungeon3D.tscn" id="1_base"]
+[ext_resource type="Resource" path="res://data/map_themes/rust_foundry.tres" id="2_gameplay"]
+[ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_rust_foundry_kit_top3d_v001.tres" id="3_visual"]
+
+[node name="RustFoundry3D" instance=ExtResource("1_base")]
+gameplay_theme = ExtResource("2_gameplay")
+visual_theme = ExtResource("3_visual")

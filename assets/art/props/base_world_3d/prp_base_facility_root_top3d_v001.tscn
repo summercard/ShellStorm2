@@ -1,0 +1,87 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_facility"]
+
+[sub_resource type="BoxShape3D" id="ShapeArea"]
+size = Vector3(4.5, 3.0, 4.5)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(2.9, 1.8, 2.7)
+
+[sub_resource type="BoxMesh" id="MeshBase"]
+size = Vector3(2.9, 1.8, 2.7)
+
+[sub_resource type="BoxMesh" id="MeshRoof"]
+size = Vector3(3.25, 0.35, 3.05)
+
+[sub_resource type="CylinderMesh" id="MeshBeacon"]
+top_radius = 0.24
+bottom_radius = 0.34
+height = 0.52
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="MeshDoor"]
+size = Vector3(0.95, 1.35, 0.16)
+
+[sub_resource type="StandardMaterial3D" id="MatDoor"]
+albedo_color = Color(0.035, 0.045, 0.05, 1)
+metallic = 0.62
+roughness = 0.46
+
+[node name="BaseFacility3D" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_facility")
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.25, 0)
+shape = SubResource("ShapeArea")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Base" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.9, 0)
+mesh = SubResource("MeshBase")
+
+[node name="Roof" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 1.92, 0)
+mesh = SubResource("MeshRoof")
+
+[node name="Door" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.72, -1.43)
+mesh = SubResource("MeshDoor")
+material_override = SubResource("MatDoor")
+
+[node name="Beacon" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 2.38, 0)
+mesh = SubResource("MeshBeacon")
+
+[node name="BeaconLight" type="OmniLight3D" parent="Visual"]
+position = Vector3(0, 2.55, 0)
+omni_range = 4.2
+shadow_enabled = false
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.9, 0)
+billboard = 1
+text = "基地设施"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.92, 0.98, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 2.55, 0)
+billboard = 1
+text = "[E] 使用"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

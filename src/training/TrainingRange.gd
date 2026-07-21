@@ -1,7 +1,7 @@
 class_name TrainingRange
 extends Node2D
 
-const BASE_SCENE := "res://scenes/BaseWorld.tscn"
+const BASE_SCENE := "res://scenes/BaseWorld3D.tscn"
 const ALL_BLUEPRINT_TIER := 99
 const RACK_COLUMNS := 4
 const RACK_SPACING := Vector2(190.0, 130.0)

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="DungeonTheme3D" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/DungeonTheme3D.gd" id="1_theme"]
+
+[resource]
+script = ExtResource("1_theme")
+theme_id = "spore_depths"
+display_name = "孢子深层"
+fantasy = "菌群侵入地下研究区；病绿色生物光从裂缝、培养槽和孢子囊下方渗出。"
+difficulty_rank = 3
+floor_color = Color(0.075, 0.13, 0.085, 1)
+wall_color = Color(0.10, 0.18, 0.105, 1)
+trim_color = Color(0.28, 0.42, 0.18, 1)
+accent_color = Color(0.49, 0.91, 0.25, 1)
+hazard_color = Color(0.72, 0.24, 0.83, 1)
+prop_color = Color(0.17, 0.24, 0.15, 1)
+ambient_color = Color(0.21, 0.35, 0.18, 1)
+fog_color = Color(0.035, 0.075, 0.035, 1)
+key_light_color = Color(0.61, 0.95, 0.38, 1)
+fog_density = 0.018
+ambient_energy = 0.50
+fixture_energy = 2.9
+fixture_range = 7.5
+enemy_pool = Array[String](["summoner", "ranged_caster", "ambusher", "exploder"])
+room_sequence = Array[String](["SCAVENGE", "COMBAT", "EVENT", "ELITE"])
+furniture_bias = Array[String](["vat", "shelf", "locker", "crate"])
