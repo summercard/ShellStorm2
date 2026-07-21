@@ -16,6 +16,9 @@ extends CharacterComponentBase
 @export var visual_node_path: NodePath
 
 var head: HeadComponent = null
+var left_hand: HandComponent = null
+var right_hand: HandComponent = null
+## 兼容旧调用：hand 始终指向主手（右手）。
 var hand: HandComponent = null
 
 func _ready() -> void:
@@ -23,7 +26,12 @@ func _ready() -> void:
 		if child is HeadComponent:
 			head = child
 		elif child is HandComponent:
-			hand = child
+			var hand_child := child as HandComponent
+			if hand_child.name == "HandL":
+				left_hand = hand_child
+			else:
+				right_hand = hand_child
+				hand = hand_child
 	# 如果没有外部传入视觉节点，就创建一个方块占位
 	if visual_node_path.is_empty() and get_visual_node() == null:
 		var rect: ColorRect = ColorRect.new()
@@ -50,12 +58,16 @@ func attach_head(h: HeadComponent) -> void:
 	head.name = "Head"
 	add_child(h)
 
-func attach_hand(h: HandComponent) -> void:
-	if hand != null:
-		hand.queue_free()
-	hand = h
-	hand.name = "Hand"
-	if head != null:
-		head.add_child(h)
+func attach_hand(h: HandComponent, side: String = "right") -> void:
+	if side == "left":
+		if left_hand != null:
+			left_hand.queue_free()
+		left_hand = h
+		h.name = "HandL"
 	else:
-		add_child(h)
+		if right_hand != null:
+			right_hand.queue_free()
+		right_hand = h
+		hand = h
+		h.name = "HandR"
+	add_child(h)

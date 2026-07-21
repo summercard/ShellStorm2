@@ -33,8 +33,46 @@ func _ready() -> void:
 		failures.append("Training console does not list every registered gun body")
 	if training.get_bullet_selector_count() != bullets.size():
 		failures.append("Training console does not list every registered bullet module")
+	if training.get_gun_rack_count() != guns.size():
+		failures.append("Physical gun racks do not display every registered gun body")
+	if training.get_ammo_rack_count() != bullets.size():
+		failures.append("Physical ammo wall does not display every registered bullet module")
+	var rack_ids: Dictionary = {}
+	var rack_positions: Dictionary = {}
+	for station in training.get_rack_stations():
+		if rack_ids.has(station.item_id):
+			failures.append("Training rack duplicates item %s" % station.item_id)
+		rack_ids[station.item_id] = true
+		var interaction_zone := station.get_node_or_null("InteractionZone") as CollisionShape2D
+		if interaction_zone == null or interaction_zone.shape == null or station.collision_mask != 2:
+			failures.append("Training rack item %s has no player interaction zone" % station.item_id)
+		var position_key := "%d:%d" % [int(station.position.x), int(station.position.y)]
+		if rack_positions.has(position_key):
+			failures.append("Training rack items overlap at %s" % position_key)
+		rack_positions[position_key] = true
 	if training.get_target_count() < 4:
 		failures.append("Training range does not expose a useful target suite")
+
+	if not guns.is_empty() and not bullets.is_empty():
+		var rack_gun_id := str(guns[0]["item_id"])
+		var rack_bullet_id := str(bullets[bullets.size() - 1]["item_id"])
+		if not training.activate_rack_item(rack_gun_id, TrainingRackItem.ItemKind.GUN):
+			failures.append("Physical gun rack cannot equip a test weapon")
+		elif training.is_empty_loadout():
+			failures.append("Physical gun rack does not auto-pair a default ammo module")
+		if not training.activate_rack_item(rack_bullet_id, TrainingRackItem.ItemKind.AMMO):
+			failures.append("Physical ammo wall cannot replace the current ammo module")
+		else:
+			var rack_root := tree.get_root()
+			var rack_bullet: AssemblyNode = null
+			if rack_root != null:
+				rack_bullet = rack_root.slots[AssemblyNode.SlotType.BULLET] as AssemblyNode
+			var expected_rack_bullet := BlueprintRegistry.create_assembly_node(rack_bullet_id)
+			var expected_rack_bullet_name := expected_rack_bullet.node_name if expected_rack_bullet != null else ""
+			if expected_rack_bullet != null:
+				expected_rack_bullet.free()
+			if rack_bullet == null or rack_bullet.node_name != expected_rack_bullet_name:
+				failures.append("Physical ammo wall equips the wrong bullet module")
 
 	var combinations_checked := 0
 	for gun_entry in guns:
@@ -135,7 +173,7 @@ func _ready() -> void:
 func _finish(failures: Array[String], combinations := 0) -> void:
 	if failures.is_empty():
 		print(
-			"TRAINING_RANGE_FLOW_OK: empty isolated entry, %d gun/ammo combinations, three target behaviors, live metrics, and clean exit"
+			"TRAINING_RANGE_FLOW_OK: physical racks, isolated entry, %d gun/ammo combinations, three target behaviors, live metrics, and clean exit"
 			% combinations
 		)
 		get_tree().quit(0)

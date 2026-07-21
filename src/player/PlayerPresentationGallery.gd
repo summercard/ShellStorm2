@@ -1,15 +1,15 @@
 class_name PlayerPresentationGallery
 extends Node2D
-## 玩家六态与叠加状态的代码原生验收板；正式资产可直接替换 AvatarRenderer。
+## 模块化像素玩家的六态与叠加状态验收板。
 
 const PLAYER_SCENE := preload("res://scenes/Player.tscn")
 const CASES: Array[Dictionary] = [
-	{"state": "idle", "title": "IDLE · 待命", "note": "呼吸 / 稳定核心", "position": Vector2(220, 235)},
-	{"state": "moving", "title": "MOVING · 机动", "note": "方向倾斜 / 两步步态", "position": Vector2(640, 235)},
-	{"state": "dashing", "title": "DASHING · 突进", "note": "轮廓拉伸 / 推进尾迹", "position": Vector2(1060, 235)},
+	{"state": "idle", "title": "IDLE · 待命", "note": "低频呼吸 / 单手随向镜像", "position": Vector2(220, 235)},
+	{"state": "moving", "title": "MOVING · 机动", "note": "胶囊弹性 / 枪械独立瞄准", "position": Vector2(640, 235)},
+	{"state": "dashing", "title": "DASHING · 突进", "note": "横向压缩 / 推进尾迹", "position": Vector2(1060, 235)},
 	{"state": "hurt", "title": "HURT · 受创", "note": "冲击压缩 / CRITICAL", "position": Vector2(220, 520), "low": true},
-	{"state": "locked", "title": "LOCKED · 交互锁定", "note": "保险圆环 / JAMMED", "position": Vector2(640, 520), "silenced": true},
-	{"state": "dead", "title": "DEAD · 生命终止", "note": "倾倒 / 面罩熄灭", "position": Vector2(1060, 520)},
+	{"state": "locked", "title": "LOCKED · 交互锁定", "note": "镜像握持 / JAMMED", "position": Vector2(640, 520), "silenced": true},
+	{"state": "dead", "title": "DEAD · 生命终止", "note": "倾倒 / 传感器熄灭", "position": Vector2(1060, 520)},
 ]
 
 var _players: Array[Player] = []

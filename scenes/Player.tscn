@@ -72,7 +72,7 @@ rotation = 1.5708
 shape = SubResource("CircleShape2D_body")
 
 [node name="WeaponAnchor" type="Marker2D" parent="."]
-position = Vector2(30, 0)
+position = Vector2(24, 0)
 
 [node name="WeaponDisplay" type="Node2D" parent="WeaponAnchor"]
 script = ExtResource("6_display")

@@ -1,66 +1,38 @@
-## StateMachine - 通用状态机
+## StateMachine - 通用、可审计的有限状态机
 ##
-## 这是状态机框架的零件2：调度器。
-## 它挂在任何角色身上，统一管理这个角色有哪些状态、当前在哪个状态、
-## 状态之间怎么切换。
-##
-## 状态本身继承 State 类。
-## 状态机本身继承 Node，挂到角色身上（add_child）即可使用。
-##
-## 使用示例：
-##   # 1. 在角色 _ready 里挂上状态机
-##   var sm = StateMachine.new()
-##   sm.name = "StateMachine"
-##   add_child(sm)
-##   sm.owner_node = self  # 把角色自己传给状态机
-##
-##   # 2. 注册所有可能的状态
-##   sm.register("idle", EnemyIdleState.new())
-##   sm.register("alert", EnemyAlertState.new())
-##   sm.register("chase", EnemyChaseState.new())
-##   sm.register("search", EnemySearchState.new())
-##   sm.register("patrol", EnemyPatrolState.new())
-##
-##   # 3. 指定起始状态（状态机会自动调用 enter）
-##   sm.start("idle")
-##
-##   # 4. 切换状态
-##   sm.transition_to("chase")
-##
-##   # 5. 发送事件给当前状态
-##   sm.dispatch_event("see_player", player_ref)
-##
-##   # 6. 读取当前状态
-##   sm.current_state_name  # "chase"
-##   sm.current_state       # EnemyChaseState 实例
-##
-## 状态切换的安全保证：
-## - 切换时自动调用旧状态的 exit() 和新状态的 enter()
-## - 同一状态重复切换不会触发多余 enter/exit（除非显式 force=true）
-## - 切换是安全的，可以在任何时刻调用（不会打断正在运行的 update）
+## 默认保持“任意已注册状态可互转”，兼容敌人/Boss 旧调用；调用
+## configure_transition_map() 后启用显式转移白名单。切换期间再次请求切换时，
+## 请求会进入队列，避免 enter/exit 重入破坏 current_state。
 
 class_name StateMachine
 extends Node
 
-## 当前正在运行的状态名称
-var current_state_name: String = ""
-
-## 当前正在运行的状态对象
-var current_state: State = null
-
-## 拥有这个状态机的角色节点（状态会通过 owner 访问角色数据）
-var owner_node: Node = null
-
-## 已注册的状态字典 {name: State 实例}
-var _states: Dictionary = {}
-
-## 状态切换信号（外部可监听）
+signal state_changing(from: String, to: String)
 signal state_changed(from: String, to: String)
+signal transition_rejected(from: String, to: String, reason: String)
+signal machine_started(initial_state: String)
+signal machine_stopped(previous_state: String)
 
-## 注册一个状态
-## state_name: 状态唯一标识
-## state: State 实例（可以是任何继承 State 的类的实例）
+var current_state_name: String = ""
+var previous_state_name: String = ""
+var current_state: State = null
+var owner_node: Node = null
+var state_elapsed: float = 0.0
+var transition_count: int = 0
+
+var _states: Dictionary = {}
+var _allowed_transitions: Dictionary = {}
+var _transition_queue: Array[Dictionary] = []
+var _is_transitioning: bool = false
+var _rules_enabled: bool = false
+
+const MAX_QUEUED_TRANSITIONS := 16
+
+
 func register(state_name: String, state: State) -> void:
+	if state_name.is_empty():
+		push_error("StateMachine.register: 状态名称为空")
+		return
 	if state == null:
 		push_error("StateMachine.register: 状态对象为空")
 		return
@@ -68,67 +40,181 @@ func register(state_name: String, state: State) -> void:
 	state.owner = owner_node
 	_states[state_name] = state
 
-## 设置起始状态（自动调用 enter）
-## 只能在状态机生命周期开始时调用一次
-func start(state_name: String) -> void:
+
+## 启用转移白名单。格式：{"idle": ["moving", "dead"], "dead": []}
+func configure_transition_map(transition_map: Dictionary) -> void:
+	_allowed_transitions.clear()
+	for from_key in transition_map:
+		var from_state := str(from_key)
+		var target_set: Dictionary = {}
+		var targets = transition_map[from_key]
+		if targets is Array:
+			for target in targets:
+				target_set[str(target)] = true
+		_allowed_transitions[from_state] = target_set
+	_rules_enabled = true
+
+
+func clear_transition_rules() -> void:
+	_allowed_transitions.clear()
+	_rules_enabled = false
+
+
+func start(state_name: String) -> bool:
 	if not _states.has(state_name):
-		push_error("StateMachine.start: 未注册的状态 '%s'" % state_name)
-		return
+		_reject("", state_name, "unregistered_state")
+		return false
 	if current_state != null:
-		push_warning("StateMachine.start: 已经在运行状态 '%s'，忽略 start('%s')" % [current_state_name, state_name])
-		return
+		_reject(current_state_name, state_name, "already_started")
+		return false
+	_rebind_owner()
 	current_state_name = state_name
+	previous_state_name = ""
 	current_state = _states[state_name]
+	state_elapsed = 0.0
+	transition_count = 1
+	_is_transitioning = true
 	current_state.enter()
+	machine_started.emit(state_name)
 	state_changed.emit("", state_name)
+	_is_transitioning = false
+	_drain_transition_queue()
+	return true
 
-## 切换到指定状态
-## 自动调用旧状态的 exit() 和新状态的 enter()
-## force=true 时即使目标状态与当前状态相同也强制重启（重新调用 exit + enter）
-func transition_to(state_name: String, force: bool = false) -> void:
-	if not _states.has(state_name):
-		push_error("StateMachine.transition_to: 未注册的状态 '%s'" % state_name)
-		return
+
+func stop() -> void:
 	if current_state == null:
-		push_error("StateMachine.transition_to: 状态机还没启动，请先调 start()")
 		return
-	if state_name == current_state_name and not force:
-		return  # 已经在目标状态了，不做切换
-	
-	var from_state: State = current_state
-	var from_name: String = current_state_name
-	
-	# 退出旧状态
-	from_state.exit()
-	
-	# 进入新状态
-	current_state_name = state_name
-	current_state = _states[state_name]
-	current_state.enter()
-	
-	state_changed.emit(from_name, state_name)
+	var stopped_state := current_state_name
+	current_state.exit()
+	previous_state_name = stopped_state
+	current_state_name = ""
+	current_state = null
+	state_elapsed = 0.0
+	_transition_queue.clear()
+	_is_transitioning = false
+	machine_stopped.emit(stopped_state)
 
-## 发送事件给当前状态
-## 当前状态可以在 handle_event 里决定如何响应
+
+func transition_to(state_name: String, force: bool = false) -> bool:
+	var reason := get_transition_rejection_reason(state_name, force)
+	if not reason.is_empty():
+		_reject(current_state_name, state_name, reason)
+		return false
+	if state_name == current_state_name and not force:
+		return false
+	if _is_transitioning:
+		if _transition_queue.size() >= MAX_QUEUED_TRANSITIONS:
+			_reject(current_state_name, state_name, "transition_queue_overflow")
+			return false
+		_transition_queue.append({"state": state_name, "force": force})
+		return true
+	_perform_transition(state_name)
+	_drain_transition_queue()
+	return true
+
+
+func can_transition_to(state_name: String, force: bool = false) -> bool:
+	return get_transition_rejection_reason(state_name, force).is_empty()
+
+
+func get_transition_rejection_reason(state_name: String, force: bool = false) -> String:
+	if not _states.has(state_name):
+		return "unregistered_state"
+	if current_state == null:
+		return "machine_not_started"
+	if state_name == current_state_name:
+		return "" if force else "same_state"
+	if not _rules_enabled:
+		return ""
+	var targets: Dictionary = _allowed_transitions.get(current_state_name, {})
+	if not targets.has(state_name):
+		return "transition_not_allowed"
+	return ""
+
+
 func dispatch_event(event_name: String, data = null) -> void:
 	if current_state == null:
 		return
-	current_state.handle_event(event_name, data)
+	var active_state := current_state
+	active_state.handle_event(event_name, data)
 
-## 每物理帧调用（由 owner 在 _physics_process 里转发）
+
 func physics_update(delta: float) -> void:
 	if current_state == null:
 		return
-	current_state.physics_update(delta)
+	state_elapsed += maxf(0.0, delta)
+	var active_state := current_state
+	active_state.physics_update(delta)
 
-## 检查某个状态是否已注册
+
 func has_state(state_name: String) -> bool:
 	return _states.has(state_name)
 
-## 获取已注册的状态数量
+
 func get_state_count() -> int:
 	return _states.size()
 
-## 获取所有已注册的状态名称
+
 func get_state_names() -> Array:
-	return _states.keys()
+	var names: Array = _states.keys()
+	names.sort()
+	return names
+
+
+func is_running() -> bool:
+	return current_state != null
+
+
+func get_snapshot() -> Dictionary:
+	return {
+		"current": current_state_name,
+		"previous": previous_state_name,
+		"elapsed": state_elapsed,
+		"transition_count": transition_count,
+		"queued_transitions": _transition_queue.size(),
+		"rules_enabled": _rules_enabled,
+		"states": get_state_names(),
+	}
+
+
+func _perform_transition(state_name: String) -> void:
+	_is_transitioning = true
+	var from_name := current_state_name
+	var from_state := current_state
+	state_changing.emit(from_name, state_name)
+	from_state.exit()
+	previous_state_name = from_name
+	current_state_name = state_name
+	current_state = _states[state_name]
+	state_elapsed = 0.0
+	transition_count += 1
+	current_state.enter()
+	state_changed.emit(from_name, state_name)
+	_is_transitioning = false
+
+
+func _drain_transition_queue() -> void:
+	var processed := 0
+	while not _transition_queue.is_empty() and processed < MAX_QUEUED_TRANSITIONS:
+		var request: Dictionary = _transition_queue.pop_front()
+		var target := str(request.get("state", ""))
+		var force := bool(request.get("force", false))
+		var reason := get_transition_rejection_reason(target, force)
+		if reason.is_empty() and (target != current_state_name or force):
+			_perform_transition(target)
+		elif reason != "same_state":
+			_reject(current_state_name, target, reason)
+		processed += 1
+	if not _transition_queue.is_empty():
+		_transition_queue.clear()
+		_reject(current_state_name, "", "transition_queue_overflow")
+
+
+func _rebind_owner() -> void:
+	for state in _states.values():
+		(state as State).owner = owner_node
+
+
+func _reject(from_state: String, to_state: String, reason: String) -> void:
+	transition_rejected.emit(from_state, to_state, reason)

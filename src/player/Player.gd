@@ -17,6 +17,8 @@ const DASH_SPEED: float = 820.0
 const DASH_DURATION: float = 0.15
 const DASH_COOLDOWN: float = 2.2
 const INVINCIBLE_DURATION: float = 0.22
+const VISUAL_FACING_DEADZONE: float = 0.15
+const WEAPON_SOCKET_X: float = 24.0
 const PLAYER_AVATAR_RENDERER_SCRIPT := preload("res://src/player/PlayerAvatarRenderer.gd")
 
 @export var max_hp: int = 100
@@ -28,6 +30,7 @@ var is_invincible: bool = false
 var is_dashing: bool = false
 var dash_cooldown_timer: float = 0.0
 var aim_direction: Vector2 = Vector2.RIGHT
+var visual_facing_sign: float = 1.0
 var last_move_direction: Vector2 = Vector2.RIGHT
 var dash_direction: Vector2 = Vector2.RIGHT
 var input_locked: bool = false
@@ -304,6 +307,18 @@ func get_registered_player_states() -> Array:
 	return _state_machine.get_state_names() if _state_machine != null else []
 
 
+func get_state_machine_snapshot() -> Dictionary:
+	if _state_machine == null:
+		return {}
+	var snapshot := _state_machine.get_snapshot()
+	snapshot["overlays"] = {
+		"low_health": _low_health_active,
+		"silenced": _is_silenced,
+		"invincible": is_invincible,
+	}
+	return snapshot
+
+
 func _update_low_health_state() -> void:
 	var ratio := float(current_hp) / maxf(1.0, float(max_hp))
 	var active := current_hp > 0 and ratio <= 0.30
@@ -461,12 +476,21 @@ func get_weapon_anchor() -> Marker2D:
 func get_aim_direction() -> Vector2:
 	return aim_direction
 
+func get_visual_facing_sign() -> float:
+	return visual_facing_sign
+
 func set_aim_direction(dir: Vector2) -> void:
 	if dir.length_squared() > 0.0001:
 		aim_direction = dir.normalized()
-		# 同步给手部组件：手应该跟瞄准方向旋转（让武器挂点朝向敌人）
-		if components != null and components.hand != null:
-			components.hand.set_aim_direction(aim_direction)
+		# 身体与握持手只做离散左右换边；接近正上/正下时保留上一次朝向，
+		# 避免鼠标跨过垂直中线时手和枪械挂点反复抖动。
+		if absf(aim_direction.x) > VISUAL_FACING_DEADZONE:
+			visual_facing_sign = -1.0 if aim_direction.x < 0.0 else 1.0
+		if weapon_anchor != null:
+			weapon_anchor.position = Vector2(WEAPON_SOCKET_X * visual_facing_sign, 0.0)
+		# 可见手不连续旋转；枪械视觉仍读取完整 aim_direction 独立瞄准。
+		if components != null:
+			components.set_aim_direction(aim_direction)
 
 func get_weapon_tree() -> WeaponAssemblyTree:
 	_ensure_weapon_tree()
@@ -544,6 +568,15 @@ func _init_state_machine() -> void:
 	_state_machine.register("hurt", PlayerHurtState.new())
 	_state_machine.register("locked", PlayerLockedState.new())
 	_state_machine.register("dead", PlayerDeadState.new())
+	# 玩家使用显式白名单；dead 为终态，非法跳转会被拒绝而非悄悄改写状态。
+	_state_machine.configure_transition_map({
+		"idle": ["moving", "dashing", "hurt", "locked", "dead"],
+		"moving": ["idle", "dashing", "hurt", "locked", "dead"],
+		"dashing": ["idle", "moving", "hurt", "locked", "dead"],
+		"hurt": ["idle", "moving", "locked", "dead"],
+		"locked": ["idle", "moving", "hurt", "dead"],
+		"dead": [],
+	})
 	# 启动到 idle
 	_state_machine.start("idle")
 	_state_machine_initialized = true
@@ -582,7 +615,7 @@ func _install_avatar_renderer() -> void:
 		components.body.add_child(renderer)
 	# Keep component transforms for aiming/bob feedback, but hide their temporary
 	# emoji/rectangle assets behind the semantic, replaceable renderer.
-	for path in ["BodyShape", "Head/Emoji", "Head/Hand/Emoji", "Head/Hand/WeaponAnchor/WeaponDisplay"]:
+	for path in ["BodyShape", "Head/Emoji", "HandL/Emoji", "HandL/WeaponAnchor/WeaponDisplay", "HandR/Emoji", "HandR/WeaponAnchor/WeaponDisplay"]:
 		var placeholder := components.body.get_node_or_null(path)
 		if placeholder is CanvasItem:
 			(placeholder as CanvasItem).visible = false

@@ -3,7 +3,7 @@
 ## 一个角色持有一个 CharacterComponents 实例，集中管理：
 ## - body 组件（必须）
 ## - head 组件（可选，但实际角色一般都有）
-## - hand 组件（可选）
+## - hand / right_hand 主手组件（默认创建）；left_hand 仅供明确需要双手的角色选配
 ##
 ## 提供：
 ## - 统一构造：在角色 _ready 里 create_default_layout() 一次性建好 body/head/hand
@@ -14,12 +14,18 @@
 class_name CharacterComponents
 extends Node2D
 
+const HAND_SOCKET_X := 19.0
+const FACING_DEADZONE := 0.15
+
 ## 身体组件（构造后自动有）
 var body: BodyComponent = null
 ## 头部组件
 var head: HeadComponent = null
 ## 手部组件
 var hand: HandComponent = null
+var left_hand: HandComponent = null
+var right_hand: HandComponent = null
+var _visual_facing_sign: float = 1.0
 
 ## 构造默认布局：body 包含 head 包含 hand
 ## body_visual_path: 身体视觉节点的路径（相对 body 组件，例 NodePath("Shape")）
@@ -36,11 +42,12 @@ func create_default_layout(body_visual_path: NodePath, head_visual_path: NodePat
 		head.name = "Head"
 		head.visual_node_path = head_visual_path
 		body.add_child(head)
-	if hand == null:
-		hand = HandComponent.new()
-		hand.name = "Hand"
-		hand.visual_node_path = hand_visual_path
-		body.attach_hand(hand)
+	if right_hand == null:
+		right_hand = HandComponent.new()
+		right_hand.name = "HandR"
+		right_hand.visual_node_path = hand_visual_path
+		body.attach_hand(right_hand, "right")
+		hand = right_hand
 
 ## 只构造身体和头部（不构造手）—— 给没有手的角色用（例：怪物）
 func create_layout_no_hand(body_visual_path: NodePath, head_visual_path: NodePath) -> void:
@@ -56,12 +63,21 @@ func create_layout_no_hand(body_visual_path: NodePath, head_visual_path: NodePat
 		body.add_child(head)
 
 ## 武器挂到手上（手组件必须存在）
-func attach_weapon_to_hand(weapon_node: Node) -> bool:
-	if hand == null:
+func attach_weapon_to_hand(weapon_node: Node, side: String = "right") -> bool:
+	var target_hand := left_hand if side == "left" else right_hand
+	if target_hand == null:
 		push_warning("CharacterComponents.attach_weapon_to_hand: 角色没有手组件")
 		return false
-	hand.attach_weapon(weapon_node)
+	target_hand.attach_weapon(weapon_node)
 	return true
+
+
+func set_aim_direction(direction: Vector2) -> void:
+	if absf(direction.x) > FACING_DEADZONE:
+		_visual_facing_sign = -1.0 if direction.x < 0.0 else 1.0
+	if right_hand != null:
+		right_hand.position.x = HAND_SOCKET_X * _visual_facing_sign
+		right_hand.set_aim_direction(direction)
 
 ## 广播反馈事件给所有组件（同时播放）
 func apply_feedback_all(feedback_type: int, duration: float = 0.15, intensity: float = 1.0) -> void:
@@ -71,6 +87,8 @@ func apply_feedback_all(feedback_type: int, duration: float = 0.15, intensity: f
 		head.call("apply_feedback", feedback_type, duration, intensity)
 	if hand != null:
 		hand.call("apply_feedback", feedback_type, duration, intensity)
+	if left_hand != null:
+		left_hand.call("apply_feedback", feedback_type, duration, intensity)
 
 ## 广播反馈给指定组件
 func apply_feedback_to(target: String, feedback_type: int, duration: float = 0.15, intensity: float = 1.0) -> void:
@@ -82,6 +100,10 @@ func apply_feedback_to(target: String, feedback_type: int, duration: float = 0.1
 			if head != null: head.call("apply_feedback", feedback_type, duration, intensity)
 		"hand":
 			if hand != null: hand.call("apply_feedback", feedback_type, duration, intensity)
+		"hand_l", "left_hand":
+			if left_hand != null: left_hand.call("apply_feedback", feedback_type, duration, intensity)
+		"hand_r", "right_hand":
+			if right_hand != null: right_hand.call("apply_feedback", feedback_type, duration, intensity)
 		_:
 			push_warning("CharacterComponents.apply_feedback_to: 未知目标 '%s'" % target)
 
@@ -90,12 +112,14 @@ func tick_feedbacks(delta: float) -> void:
 	if body != null: body.call("tick_feedback", delta)
 	if head != null: head.call("tick_feedback", delta)
 	if hand != null: hand.call("tick_feedback", delta)
+	if left_hand != null: left_hand.call("tick_feedback", delta)
 
 ## 强制清空所有反馈
 func reset_feedbacks() -> void:
 	if body != null: body.call("reset")
 	if head != null: head.call("reset")
 	if hand != null: hand.call("reset")
+	if left_hand != null: left_hand.call("reset")
 # ========== 组件摆动动画 (2026-06-10) ==========
 ## 待机时身体轻微上下浮动；移动时身体轻微左右倾斜 + 头/手跟随
 ## 由 Player._physics_process 在末尾调一次
@@ -138,12 +162,17 @@ func tick_animations(delta: float, move_dir: Vector2) -> void:
 		head.position = Vector2(0, head_offset.y)
 		# 头倾斜略小于身体
 		head.rotation = body_tilt * 0.6
-	# 手：跟随 body 浮动 + 反向倾斜（让手像甩出去）
-	if hand != null:
+	# 默认主手随身体朝向在左右固定插槽换边；只有武器挂点读取完整瞄准方向。
+	if right_hand != null:
 		var hand_phase: float = _anim_phase - hand_phase_offset / max(0.5, idle_bob_frequency)
 		var hand_offset: Vector2 = _compute_body_offset_at(hand_phase, body_offset)
-		hand.position = Vector2(0, hand_offset.y)
-		hand.rotation = -body_tilt * 0.7
+		right_hand.position = Vector2(HAND_SOCKET_X * _visual_facing_sign, hand_offset.y * 0.55)
+		right_hand.rotation = 0.0
+	if left_hand != null:
+		var left_phase: float = _anim_phase - (hand_phase_offset + 0.2) / max(0.5, idle_bob_frequency)
+		var left_offset: Vector2 = _compute_body_offset_at(left_phase, body_offset)
+		left_hand.position = Vector2(-HAND_SOCKET_X * _visual_facing_sign, left_offset.y * 0.55)
+		left_hand.rotation = 0.0
 
 ## 计算身体的偏移
 func _compute_body_offset() -> Vector2:
