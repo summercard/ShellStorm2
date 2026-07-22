@@ -1,0 +1,68 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/ui/PauseMenu3D.gd" id="1_pause"]
+
+[node name="PauseOverlay" type="Control"]
+process_mode = 3
+z_index = 1000
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_pause")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.008, 0.012, 0.018, 0.82)
+mouse_filter = 0
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(430, 260)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 26
+
+[node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "行动暂停"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 30
+
+[node name="Info" type="Label" parent="Center/Panel/Margin/VBox"]
+layout_mode = 2
+text = "当前地图、敌人AI和所有计时均已停止\n再次按 Esc 或点击按钮继续"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.76, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="ResumeButton" type="Button" parent="Center/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(260, 48)
+layout_mode = 2
+text = "继续行动  [Esc]"
+theme_override_font_sizes/font_size = 17

@@ -89,6 +89,7 @@ func _build_loot() -> Dictionary:
 	var choices: Array = names.get(size_class, names["medium"])
 	var index: int = absi(prop_id.hash()) % choices.size() if not prop_id.is_empty() else randi() % choices.size()
 	return {
+		"prop_id": prop_id,
 		"item_id": "loot_3d_%s_%s" % [size_class, furniture_type],
 		"name": str(choices[index]),
 		"count": 1,

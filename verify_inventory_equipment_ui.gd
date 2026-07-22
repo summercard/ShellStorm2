@@ -31,6 +31,9 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 
 	var medkit := ItemRegistry.get_instance().get_item("item_health_potion")
 	mode.inventory_module.add_item(medkit, 1)
+	var player := mode.get_player()
+	if player != null:
+		player.current_hp = maxi(1, player.max_hp - 25)
 	await get_tree().process_frame
 	var medkit_slot := _find_inventory_slot(mode.inventory_module, "item_health_potion")
 	if medkit_slot < 0:
@@ -79,7 +82,7 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 		insurance_panel.visible = true
 		if not ui.call("blocks_gameplay_input"):
 			failures.append("Open inventory panels do not block gameplay input")
-		var player := mode.get_player()
+		player = mode.get_player()
 		var weapon_controller := (
 			player.get_node_or_null("WeaponController") if player != null else null
 		)

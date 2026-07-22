@@ -50,6 +50,11 @@ func _apply_heal(item: Dictionary, context: Dictionary) -> bool:
 	if player == null or not player.has_method("heal"):
 		print("[ItemUseHandler] heal failed: player not found or has no heal method")
 		return false
+	var current_hp = player.get("current_hp")
+	var max_hp = player.get("max_hp")
+	if current_hp != null and max_hp != null and int(current_hp) >= int(max_hp):
+		print("[ItemUseHandler] heal skipped: player is already at full health")
+		return false
 	
 	player.heal(heal_amount)
 	print("[ItemUseHandler] Applied heal: %d HP" % heal_amount)
@@ -58,6 +63,8 @@ func _apply_heal(item: Dictionary, context: Dictionary) -> bool:
 ## 弹药补给（触发一次换弹）
 func _apply_refill_ammo(item: Dictionary, context: Dictionary) -> bool:
 	var player: Node = _resolve_player(context)
+	if player != null and player.has_method("refill_ammo"):
+		return bool(player.call("refill_ammo"))
 	if player == null or not player.has_method("get_weapon_tree"):
 		print("[ItemUseHandler] refill_ammo failed: player not found or has no weapon_tree")
 		return false

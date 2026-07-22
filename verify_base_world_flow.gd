@@ -2,6 +2,7 @@ extends Node
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var failures: Array[String] = []
 	var main_scene_path := str(ProjectSettings.get_setting("application/run/main_scene", ""))
 	if main_scene_path != "res://scenes/BaseWorld3D.tscn":
@@ -86,10 +87,22 @@ func _ready() -> void:
 		else:
 			if not console_menu.overlay_mode or not console_menu.close_overlay_button.visible:
 				failures.append("3D base management overlay cannot return to the world")
-			console_menu.queue_free()
+			await _tap_action("pause")
 			await get_tree().process_frame
+			if base_world.get_active_menu() != null or get_tree().paused:
+				failures.append("Esc does not close the base facility menu before pausing")
 		if base_world.player.input_locked:
 			failures.append("Closing a 3D facility menu leaves player input locked")
+	var pause_overlay := base_world.get_node_or_null("HUD/PauseOverlay") as PauseMenu3D
+	if pause_overlay == null:
+		failures.append("BaseWorld3D has no reusable visible pause overlay")
+	else:
+		await _tap_action("pause")
+		if not get_tree().paused or not pause_overlay.is_pause_open():
+			failures.append("BaseWorld3D Esc does not open a visible real pause")
+		await _tap_action("pause")
+		if get_tree().paused or pause_overlay.is_pause_open():
+			failures.append("BaseWorld3D second Esc does not resume")
 
 	# 六态动态契约：移动、突进、锁定、受创与死亡都由同一个 StateMachine 驱动表现。
 	base_world.player.set_test_move_direction(Vector3.RIGHT)
@@ -137,6 +150,19 @@ func _count_nodes(root: Node) -> int:
 	for child in root.get_children():
 		count += _count_nodes(child)
 	return count
+
+
+func _tap_action(action: StringName) -> void:
+	var pressed := InputEventAction.new()
+	pressed.action = action
+	pressed.pressed = true
+	Input.parse_input_event(pressed)
+	await get_tree().process_frame
+	var released := InputEventAction.new()
+	released.action = action
+	released.pressed = false
+	Input.parse_input_event(released)
+	await get_tree().process_frame
 
 
 func _finish(failures: Array[String], node_count: int) -> void:

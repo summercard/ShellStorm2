@@ -1174,6 +1174,7 @@ static func _apply_out_of_control(
 	stats["uncontrolled_damage_scale"] = damage_scale
 	bullet_node.set_base_stats(stats)
 	bullet_node.tags.append("Fate.Uncontrolled")
+	tree.refresh_stats()
 
 	result.success = true
 	_fate_audio_card_applied()
@@ -1218,6 +1219,7 @@ static func _apply_size_growth(
 	stats["max_fate_scale"] = max_scale
 	bullet_node.set_base_stats(stats)
 	bullet_node.tags.append("Fate.SizeGrowth")
+	tree.refresh_stats()
 
 	result.success = true
 	_fate_audio_card_applied()

@@ -7,6 +7,7 @@ class_name SynthSfx
 # 无需外部音频文件，纯程序生成
 
 var _stream_player: AudioStreamPlayer = null
+var _stream_cache: Dictionary = {}
 
 func _ready() -> void:
 	_stream_player = AudioStreamPlayer.new()
@@ -25,67 +26,81 @@ func _exit_tree() -> void:
 func play_shoot(fire_rate: float, projectile_count: int) -> void:
 	var freq := 220.0 if fire_rate < 5.0 else (280.0 if fire_rate < 10.0 else 350.0)
 	var duration := 0.05 if projectile_count < 5 else 0.09
-	var stream := _make_square_wave(freq, duration, -6.0)
+	var key := "shoot_%d_%d" % [int(freq), 1 if projectile_count < 5 else 5]
+	var stream := _cached_stream(key, func(): return _make_square_wave(freq, duration, -6.0))
 	_play_stream(stream)
 
 ## 播放击中音效
 func play_hit() -> void:
-	var stream := _make_noise_burst(0.07, -10.0, 1200.0, 150.0)
+	var stream := _cached_stream("hit", func(): return _make_noise_burst(0.07, -10.0, 1200.0, 150.0))
 	_play_stream(stream)
 
 ## 播放暴击音效
 func play_crit() -> void:
-	var s1 := _make_square_wave(880.0, 0.08, -4.0)
-	var s2 := _make_noise_burst(0.12, -6.0, 3000.0, 300.0)
-	var mixed := _mix_two(s1, s2, 0.7, 0.5)
+	var mixed := _cached_stream("crit", func():
+		var s1 := _make_square_wave(880.0, 0.08, -4.0)
+		var s2 := _make_noise_burst(0.12, -6.0, 3000.0, 300.0)
+		return _mix_two(s1, s2, 0.7, 0.5)
+	)
 	_play_stream(mixed)
 
 ## 播放命运卡片应用音效
 ## 上升琶音 + 和声，暗示"命运降临、力量改变"
 func play_fate_card() -> void:
 	var notes := [261.63, 329.63, 392.0, 523.25, 659.25]
-	var stream := _make_arpeggio_up(notes, 0.10, -6.0)
+	var stream := _cached_stream("fate_card", func(): return _make_arpeggio_up(notes, 0.10, -6.0))
 	_play_stream(stream)
 
 ## 播放换弹音效
 func play_reload() -> void:
-	var stream := _make_metallic(0.22, -8.0)
+	var stream := _cached_stream("reload", func(): return _make_metallic(0.22, -8.0))
 	_play_stream(stream)
 
 ## 播放撤离开始音效
 func play_extraction_start() -> void:
-	var s1 := _make_square_wave(110.0, 0.35, -6.0)
-	var s2 := _make_square_wave(165.0, 0.35, -8.0)
-	var mixed := _mix_two(s1, s2, 0.8, 0.6)
+	var mixed := _cached_stream("extraction_start", func():
+		var s1 := _make_square_wave(110.0, 0.35, -6.0)
+		var s2 := _make_square_wave(165.0, 0.35, -8.0)
+		return _mix_two(s1, s2, 0.8, 0.6)
+	)
 	_play_stream(mixed)
 
 ## 播放撤离成功音效
 func play_extraction_done() -> void:
 	var notes := [261.63, 329.63, 392.0, 523.25]
-	var stream := _make_arpeggio(notes, 0.12, -4.0)
+	var stream := _cached_stream("extraction_done", func(): return _make_arpeggio(notes, 0.12, -4.0))
 	_play_stream(stream)
 
 ## 播放撤离中断音效
 ## 短促降频噪声：下降的嘣声，表示"被打断"
 func play_extraction_abort() -> void:
-	var stream := _make_noise_burst(0.16, -8.0, 900.0, 60.0)
+	var stream := _cached_stream("extraction_abort", func(): return _make_noise_burst(0.16, -8.0, 900.0, 60.0))
 	_play_stream(stream)
 
 ## 播放敌人死亡音效
 func play_enemy_die() -> void:
-	var stream := _make_noise_burst(0.14, -8.0, 2000.0, 80.0)
+	var stream := _cached_stream("enemy_die", func(): return _make_noise_burst(0.14, -8.0, 2000.0, 80.0))
 	_play_stream(stream)
 
 ## 播放玩家受伤音效
 func play_player_hit() -> void:
-	var stream := _make_noise_burst(0.09, -7.0, 800.0, 60.0)
+	var stream := _cached_stream("player_hit", func(): return _make_noise_burst(0.09, -7.0, 800.0, 60.0))
 	_play_stream(stream)
 
 ## 播放闪避音效
 func play_dash() -> void:
-	var freq := 500.0 + randf_range(-80.0, 80.0)
-	var stream := _make_square_wave(freq, 0.07, -12.0)
+	var stream := _cached_stream("dash", func(): return _make_square_wave(500.0, 0.07, -12.0))
 	_play_stream(stream)
+
+
+func _cached_stream(key: String, builder: Callable) -> AudioStream:
+	if not _stream_cache.has(key):
+		_stream_cache[key] = builder.call()
+	return _stream_cache[key] as AudioStream
+
+
+func get_cache_snapshot() -> Dictionary:
+	return {"count": _stream_cache.size(), "keys": _stream_cache.keys()}
 
 ## ========== 核心合成器 ==========
 

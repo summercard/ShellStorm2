@@ -13,6 +13,17 @@ const COLORS := {
 	"boss": Color(0.37, 0.12, 0.09),
 }
 
+# 与实际模块化模型的最大横向轮廓同源；Enemy3D 直接读取该表生成受击/物理体积。
+const FOOTPRINT_PROFILES := {
+	"melee_chaser": {"radius": 1.02, "height": 1.30},
+	"ranged_caster": {"radius": 1.10, "height": 1.62},
+	"summoner": {"radius": 1.22, "height": 1.82},
+	"shielded": {"radius": 0.98, "height": 1.42},
+	"exploder": {"radius": 0.88, "height": 1.28},
+	"ambusher": {"radius": 1.22, "height": 0.86},
+	"boss": {"radius": 1.92, "height": 2.30},
+}
+
 var enemy_kind := "melee_chaser"
 var ai_state := "idle"
 var _elapsed := 0.0
@@ -24,6 +35,7 @@ var _tell_ring: MeshInstance3D
 var _base_color := Color.WHITE
 var _core_material: StandardMaterial3D
 var _shell_material: StandardMaterial3D
+var _ambush_revealed := true
 
 
 func configure(kind: String) -> void:
@@ -33,6 +45,14 @@ func configure(kind: String) -> void:
 
 func set_ai_state(state_id: String) -> void:
 	ai_state = state_id
+
+
+func set_ambush_revealed(revealed: bool) -> void:
+	_ambush_revealed = revealed
+
+
+static func get_footprint_profile(kind: String) -> Dictionary:
+	return (FOOTPRINT_PROFILES.get(kind, FOOTPRINT_PROFILES["melee_chaser"]) as Dictionary).duplicate()
 
 
 func flash_hit() -> void:
@@ -46,6 +66,8 @@ func get_component_snapshot() -> Dictionary:
 		"ai_state": ai_state,
 		"components": ["core", "shell", "appendages", "state_vfx"],
 		"component_count": 4,
+		"footprint": get_footprint_profile(enemy_kind),
+		"ambush_revealed": _ambush_revealed,
 		"is_3d": true,
 	}
 
@@ -55,7 +77,10 @@ func _process(delta: float) -> void:
 	if _root == null:
 		return
 	var bob := sin(_elapsed * 3.3 + float(get_instance_id() % 11)) * 0.07
-	_root.position.y = bob
+	var hidden_offset := -0.58 if enemy_kind == "ambusher" and not _ambush_revealed else 0.0
+	_root.position.y = lerpf(_root.position.y, bob + hidden_offset, minf(1.0, delta * 12.0))
+	var target_scale := Vector3(1.0, 0.24, 1.0) if enemy_kind == "ambusher" and not _ambush_revealed else Vector3.ONE
+	_root.scale = _root.scale.lerp(target_scale, minf(1.0, delta * 14.0))
 	_appendages.rotation.y += delta * (1.5 if ai_state == "attack" else 0.35)
 	_tell_ring.visible = ai_state == "telegraph"
 	if _tell_ring.visible:

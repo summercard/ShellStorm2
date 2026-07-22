@@ -39,6 +39,9 @@ var _invincible_remaining := 0.0
 var _state_machine: StateMachine = null
 var _test_move_direction: Variant = null
 var weapon: WeaponModel3D = null
+var weapon_tree: WeaponAssemblyTree = null
+var _silence_remaining := 0.0
+var _named_damage_multipliers: Dictionary = {}
 
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
@@ -50,14 +53,17 @@ func _ready() -> void:
 	add_to_group("player")
 	add_to_group("player_3d")
 	_init_state_machine()
+	_ensure_weapon_tree()
 	if start_with_weapon:
-		equip_weapon(default_gun_id, default_bullet_id)
+		_ensure_weapon_model()
+		_sync_weapon_from_tree()
 	hp_changed.emit(current_hp, max_hp)
 	_update_aim_from_mouse()
 
 
 func _physics_process(delta: float) -> void:
 	_update_invincibility(delta)
+	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
 	_update_combat_input()
 	if _state_machine != null:
@@ -80,6 +86,8 @@ func set_input_locked(locked: bool) -> void:
 	if input_locked == locked or current_hp <= 0:
 		return
 	input_locked = locked
+	if locked and weapon != null:
+		weapon.cancel_charge()
 	input_lock_changed.emit(locked)
 	if _state_machine == null:
 		return
@@ -124,8 +132,11 @@ func is_low_health() -> bool:
 func take_damage(amount: int, _critical := false, _hit_direction := Vector3.ZERO) -> void:
 	if current_hp <= 0 or is_invincible:
 		return
-	_last_damage_amount = maxi(1, amount)
+	var overheat_multiplier := weapon_tree.get_overheat_penalty() if weapon_tree != null else 1.0
+	_last_damage_amount = maxi(1, int(amount * overheat_multiplier))
 	current_hp = maxi(0, current_hp - _last_damage_amount)
+	if AudioManager != null:
+		AudioManager.play_player_hit_sfx()
 	hp_changed.emit(current_hp, max_hp)
 	is_invincible = true
 	_invincible_remaining = INVINCIBLE_DURATION
@@ -148,20 +159,108 @@ func request_dash() -> void:
 
 
 func equip_weapon(gun_id: String, bullet_id: String) -> bool:
-	if avatar == null or avatar.weapon_socket == null:
+	_ensure_weapon_tree()
+	var gun := BlueprintRegistry.create_assembly_node(gun_id)
+	var bullet := BlueprintRegistry.create_assembly_node(bullet_id)
+	if gun == null or bullet == null:
+		if gun != null:
+			gun.free()
+		if bullet != null:
+			bullet.free()
 		return false
+	weapon_tree.clear_assembly(false)
+	if not weapon_tree.set_root(gun):
+		gun.free()
+		bullet.free()
+		return false
+	if not weapon_tree.mount(gun, AssemblyNode.SlotType.BULLET, bullet):
+		bullet.free()
+		return false
+	_ensure_weapon_model()
+	_sync_weapon_from_tree()
+	return true
+
+
+func _ensure_weapon_model() -> void:
+	if avatar == null or avatar.weapon_socket == null:
+		return
 	if weapon == null or not is_instance_valid(weapon):
 		var scene := load("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn") as PackedScene
 		if scene == null:
-			return false
+			return
 		weapon = scene.instantiate() as WeaponModel3D
+		weapon.gun_id = ""
 		avatar.weapon_socket.add_child(weapon)
 		weapon.ammo_changed.connect(_on_weapon_ammo_changed)
 		weapon.loadout_changed.connect(_on_weapon_loadout_changed)
-	return weapon.configure(gun_id, bullet_id)
+
+
+func _ensure_weapon_tree() -> void:
+	if weapon_tree == null:
+		weapon_tree = BlueprintRegistry.get_starting_weapon_tree()
+	if weapon_tree == null:
+		weapon_tree = WeaponAssemblyTree.new()
+	if weapon_tree.get_parent() == null:
+		weapon_tree.name = "WeaponAssemblyTree"
+		add_child(weapon_tree)
+	if not weapon_tree.tree_changed.is_connected(_sync_weapon_from_tree):
+		weapon_tree.tree_changed.connect(_sync_weapon_from_tree)
+	if not weapon_tree.stats_changed.is_connected(_on_weapon_tree_stats_changed):
+		weapon_tree.stats_changed.connect(_on_weapon_tree_stats_changed)
+
+
+func _sync_weapon_from_tree() -> void:
+	if weapon_tree == null:
+		return
+	_ensure_weapon_model()
+	if weapon != null:
+		weapon.configure_from_tree(weapon_tree)
+		_apply_named_damage_multipliers()
+
+
+func _on_weapon_tree_stats_changed(_stats: Dictionary) -> void:
+	_sync_weapon_from_tree()
+
+
+func get_weapon_tree() -> WeaponAssemblyTree:
+	_ensure_weapon_tree()
+	return weapon_tree
+
+
+func refill_ammo() -> bool:
+	return weapon != null and weapon.refill_ammo()
+
+
+func set_damage_multiplier(source: String, multiplier: float) -> void:
+	_named_damage_multipliers[source] = maxf(0.1, multiplier)
+	_apply_named_damage_multipliers()
+
+
+func apply_damage_buff(source: String, bonus: float) -> void:
+	_named_damage_multipliers[source] = 1.0 + bonus
+	_apply_named_damage_multipliers()
+
+
+func remove_damage_buff(source: String) -> void:
+	_named_damage_multipliers.erase(source)
+	_apply_named_damage_multipliers()
+
+
+func _apply_named_damage_multipliers() -> void:
+	var final_multiplier := 1.0
+	for value in _named_damage_multipliers.values():
+		final_multiplier = maxf(final_multiplier, float(value))
+	if weapon != null:
+		weapon.set_damage_multiplier(final_multiplier)
+
+
+func apply_silence(duration: float) -> void:
+	_silence_remaining = maxf(_silence_remaining, duration)
 
 
 func clear_weapon() -> void:
+	if weapon_tree != null:
+		weapon_tree.clear_assembly()
 	if weapon != null and is_instance_valid(weapon):
 		weapon.clear_weapon()
 
@@ -181,7 +280,11 @@ func _on_weapon_loadout_changed(gun_id: String, bullet_id: String) -> void:
 
 
 func _update_combat_input() -> void:
-	if not combat_enabled or input_locked or current_hp <= 0 or weapon == null:
+	if weapon != null and Input.is_action_just_released("shoot"):
+		weapon.release_charge()
+	if not combat_enabled or input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0:
+		if weapon != null:
+			weapon.cancel_charge()
 		return
 	if Input.is_action_pressed("shoot"):
 		weapon.try_fire(aim_direction, self)

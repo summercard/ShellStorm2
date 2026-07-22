@@ -2,6 +2,7 @@ extends Node
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	var failures: Array[String] = []
 	var scene := load("res://scenes/TrainingRange3D.tscn") as PackedScene
 	if scene == null:
@@ -26,6 +27,19 @@ func _ready() -> void:
 		failures.append("3D training environment is incomplete")
 	if not bool(snapshot.get("has_reset_station", false)) or not bool(snapshot.get("has_exit", false)):
 		failures.append("3D training reset/exit lifecycle is incomplete")
+	var control_hint := training.get_node_or_null("HUD/ControlHint") as Label
+	if control_hint == null or "Shift 冲刺" not in control_hint.text or "Esc 暂停" not in control_hint.text:
+		failures.append("3D training HUD does not teach the actual combat controls")
+	var pause_overlay := training.get_node_or_null("HUD/PauseOverlay") as PauseMenu3D
+	if pause_overlay == null:
+		failures.append("TrainingRange3D has no reusable visible pause overlay")
+	else:
+		await _tap_action("pause")
+		if not get_tree().paused or not pause_overlay.is_pause_open():
+			failures.append("TrainingRange3D Esc does not open a visible real pause")
+		await _tap_action("pause")
+		if get_tree().paused or pause_overlay.is_pause_open():
+			failures.append("TrainingRange3D second Esc does not resume")
 	var rack_ids: Dictionary = {}
 	for rack in get_tree().get_nodes_in_group("training_rack_3d"):
 		if not training.is_ancestor_of(rack):
@@ -76,3 +90,16 @@ func _finish(failures: Array[String], combinations: int) -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _tap_action(action: StringName) -> void:
+	var pressed := InputEventAction.new()
+	pressed.action = action
+	pressed.pressed = true
+	Input.parse_input_event(pressed)
+	await get_tree().process_frame
+	var released := InputEventAction.new()
+	released.action = action
+	released.pressed = false
+	Input.parse_input_event(released)
+	await get_tree().process_frame

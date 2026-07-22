@@ -83,6 +83,8 @@ func _is_key_just_pressed(event: InputEvent, key: Key) -> bool:
 
 func set_player(player: Node) -> void:
 	_player = player
+	if is_node_ready():
+		_build_weapon_options()
 
 
 func set_workbench_ref(ref: Node) -> void:
@@ -333,7 +335,13 @@ func _apply_selection() -> void:
 		if new_bullet != null:
 			var root: Node = tree.get_root()
 			if root != null:
-				root.mount(AssemblyNode.SlotType.BULLET, new_bullet)
+				var old_bullet: Node = root.slots.get(AssemblyNode.SlotType.BULLET)
+				if old_bullet != null:
+					tree.unmount(old_bullet)
+					old_bullet.free()
+				# 必须走 WeaponAssemblyTree.mount，才能触发数值、3D 模型和 HUD 同步。
+				if not tree.mount(root, AssemblyNode.SlotType.BULLET, new_bullet):
+					new_bullet.free()
 
 	_current_selection.clear()
 	_update_weapon_tree_display()

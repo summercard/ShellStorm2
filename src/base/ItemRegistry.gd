@@ -94,7 +94,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_pistol",
 			"assembly_id": "bp_pistol",
 			"name": "豌豆手枪",
-			"description": "可靠的基础半自动武器。右键装备为当前主武器。",
+			"description": "可靠的基础半自动武器。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "common",
@@ -113,7 +113,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_shotgun",
 			"assembly_id": "bp_shotgun",
 			"name": "散射喷壶",
-			"description": "近距离多弹丸散射武器。右键装备为当前主武器。",
+			"description": "近距离多弹丸散射武器。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "uncommon",
@@ -133,7 +133,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_rifle",
 			"assembly_id": "bp_rifle",
 			"name": "步枪",
-			"description": "稳定连发的中距离武器。右键装备为当前主武器。",
+			"description": "稳定连发的中距离武器。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "rare",
@@ -162,7 +162,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_machinegun",
 			"assembly_id": "bp_machinegun",
 			"name": "蜂窝机枪",
-			"description": "高射速压制武器，适合清群怪。右键装备为当前主武器。",
+			"description": "高射速压制武器，适合清群怪。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "uncommon",
@@ -191,7 +191,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_sniper",
 			"assembly_id": "bp_sniper",
 			"name": "弹弓狙击",
-			"description": "低射速高伤害，穿透力强，适合精准打击。右键装备为当前主武器。",
+			"description": "低射速高伤害，穿透力强，适合精准打击。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "rare",
@@ -218,7 +218,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_launcher",
 			"assembly_id": "bp_launcher",
 			"name": "反胃榴弹筒",
-			"description": "发射爆炸弹，抛物线弹道，大范围AOE。右键装备为当前主武器。",
+			"description": "发射爆炸弹，抛物线弹道，大范围AOE。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "rare",
@@ -245,7 +245,7 @@ func _register_weapon_drops() -> void:
 			"id": "weapon_charge",
 			"assembly_id": "bp_charge",
 			"name": "蓄力萝卜炮",
-			"description": "蓄力时间越长伤害越高，超蓄力后弹体变大并附带穿透。右键装备为当前主武器。",
+			"description": "蓄力时间越长伤害越高，超蓄力后弹体变大并附带穿透。左键装备为当前主武器。",
 			"type": "weapon",
 			"subtype": "gun_body",
 			"rarity": "epic",
@@ -867,7 +867,11 @@ func has_item(item_id: String) -> bool:
 
 ## 获取所有物品列表
 func get_all_items() -> Array[Dictionary]:
-	return _items.values()
+	var result: Array[Dictionary] = []
+	for item in _items.values():
+		if item is Dictionary:
+			result.append((item as Dictionary).duplicate(true))
+	return result
 
 ## 按类型获取物品
 func get_items_by_type(item_type: String) -> Array[Dictionary]:

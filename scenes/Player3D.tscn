@@ -1,7 +1,9 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/Player3D.gd" id="1_player"]
 [ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="2_avatar"]
+[ext_resource type="Script" path="res://src/player3d/PlayerVision3D.gd" id="3_vision"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn" id="4_flashlight"]
 
 [sub_resource type="CapsuleShape3D" id="ShapePlayer"]
 radius = 0.55
@@ -45,6 +47,11 @@ position = Vector3(0, 0.88, 0)
 shape = SubResource("ShapePlayer")
 
 [node name="Avatar3D" parent="." instance=ExtResource("2_avatar")]
+
+[node name="PlayerFlashlight3D" parent="." instance=ExtResource("4_flashlight")]
+
+[node name="PlayerVision3D" type="Node3D" parent="."]
+script = ExtResource("3_vision")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 position = Vector3(0, 17.5, 13.0)

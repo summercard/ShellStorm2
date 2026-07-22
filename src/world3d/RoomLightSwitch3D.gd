@@ -1,0 +1,153 @@
+class_name RoomLightSwitch3D
+extends Area3D
+## 房间墙面灯开关。只控制真实房间灯，不参与 PlayerVision3D 的玩法显隐。
+
+signal light_toggled(is_on: bool)
+
+const INTERACTION_RANGE := 2.2
+
+var _controlled_light: WastelandLight3D
+var _player_in_range := false
+var _prompt: Label3D
+var _indicator_material: StandardMaterial3D
+
+
+func configure(controlled_light: WastelandLight3D, starts_on := false) -> void:
+	_controlled_light = controlled_light
+	if _controlled_light != null:
+		_controlled_light.set_light_enabled(starts_on)
+	_update_state_visual()
+
+
+func _ready() -> void:
+	add_to_group("room_light_switch_3d")
+	collision_layer = 0
+	collision_mask = 1
+	monitoring = true
+	monitorable = true
+	_build_visual()
+	body_entered.connect(_on_body_entered)
+	body_exited.connect(_on_body_exited)
+	_update_state_visual()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _player_in_range or not event.is_action_pressed("interact"):
+		return
+	toggle_light()
+	get_viewport().set_input_as_handled()
+
+
+func toggle_light() -> bool:
+	if _controlled_light == null or not is_instance_valid(_controlled_light):
+		return false
+	_controlled_light.set_light_enabled(not _controlled_light.is_light_enabled())
+	_update_state_visual()
+	light_toggled.emit(_controlled_light.is_light_enabled())
+	return true
+
+
+func is_light_on() -> bool:
+	return _controlled_light != null and is_instance_valid(_controlled_light) and _controlled_light.is_light_enabled()
+
+
+func set_prompt_visible(visible_state: bool) -> void:
+	if _prompt != null:
+		_prompt.visible = visible_state
+
+
+func get_snapshot() -> Dictionary:
+	return {
+		"light_on": is_light_on(),
+		"player_in_range": _player_in_range,
+		"has_prompt": _prompt != null,
+		"is_3d": true,
+	}
+
+
+func _build_visual() -> void:
+	if get_node_or_null("SwitchPlate") != null:
+		return
+	var metal := _material(Color(0.10, 0.12, 0.13), 0.72, 0.34)
+	var plate_mesh := BoxMesh.new()
+	plate_mesh.size = Vector3(0.54, 0.72, 0.14)
+	plate_mesh.material = metal
+	var plate := MeshInstance3D.new()
+	plate.name = "SwitchPlate"
+	plate.position.y = 1.0
+	plate.mesh = plate_mesh
+	add_child(plate)
+
+	_indicator_material = _material(Color(0.70, 0.14, 0.10), 0.12, 0.30, true)
+	var indicator_mesh := SphereMesh.new()
+	indicator_mesh.radius = 0.075
+	indicator_mesh.height = 0.15
+	indicator_mesh.radial_segments = 10
+	indicator_mesh.rings = 5
+	indicator_mesh.material = _indicator_material
+	var indicator := MeshInstance3D.new()
+	indicator.name = "Indicator"
+	indicator.position = Vector3(0, 1.17, -0.11)
+	indicator.mesh = indicator_mesh
+	add_child(indicator)
+
+	var lever_mesh := BoxMesh.new()
+	lever_mesh.size = Vector3(0.10, 0.28, 0.10)
+	lever_mesh.material = _material(Color(0.66, 0.68, 0.65), 0.84, 0.24)
+	var lever := MeshInstance3D.new()
+	lever.name = "Lever"
+	lever.position = Vector3(0, 0.91, -0.12)
+	lever.mesh = lever_mesh
+	add_child(lever)
+
+	var shape := SphereShape3D.new()
+	shape.radius = INTERACTION_RANGE
+	var collision := CollisionShape3D.new()
+	collision.position.y = 0.9
+	collision.shape = shape
+	add_child(collision)
+
+	_prompt = Label3D.new()
+	_prompt.name = "InteractLabel"
+	_prompt.position = Vector3(0, 1.75, 0)
+	_prompt.font_size = 34
+	_prompt.pixel_size = 0.010
+	_prompt.outline_size = 8
+	_prompt.modulate = Color(0.88, 0.94, 0.90)
+	_prompt.no_depth_test = true
+	_prompt.visible = false
+	add_child(_prompt)
+
+
+func _update_state_visual() -> void:
+	var enabled := is_light_on()
+	if _prompt != null:
+		_prompt.text = "[E] 关闭中央灯" if enabled else "[E] 开启中央灯"
+	if _indicator_material != null:
+		var color := Color(0.26, 0.92, 0.50) if enabled else Color(0.78, 0.16, 0.10)
+		_indicator_material.albedo_color = color
+		_indicator_material.emission = color
+
+
+func _on_body_entered(body: Node3D) -> void:
+	if body.is_in_group("player_3d"):
+		_player_in_range = true
+		set_prompt_visible(true)
+
+
+func _on_body_exited(body: Node3D) -> void:
+	if body.is_in_group("player_3d"):
+		_player_in_range = false
+		set_prompt_visible(false)
+
+
+func _material(color: Color, metallic: float, roughness: float, emission := false) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.metallic = metallic
+	material.roughness = roughness
+	if emission:
+		material.emission_enabled = true
+		material.emission = color
+		material.emission_energy_multiplier = 1.8
+	return material

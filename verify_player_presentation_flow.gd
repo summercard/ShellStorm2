@@ -52,14 +52,17 @@ func _ready() -> void:
 		_expect_state(player, ui, "dashing", failures)
 		if not player.is_invincible or not player.is_dashing:
 			failures.append("Dash does not enable movement and invincibility flags")
-	for _i in 11:
+	var dash_frames := 0
+	while player.get_state_machine_state() == "dashing" and dash_frames < 20:
 		await get_tree().physics_frame
+		dash_frames += 1
 	if player.get_state_machine_state() != "idle" or player.is_dashing:
 		failures.append("Dash does not resolve back to locomotion after its duration")
 	if not player.is_invincible:
 		failures.append("Dash exit clears invincibility before InvincibleTimer expires")
-	for _i in 5:
-		await get_tree().physics_frame
+	if player.invincible_timer.time_left > 0.0:
+		await player.invincible_timer.timeout
+	await get_tree().process_frame
 	if player.is_invincible:
 		failures.append("Dash invincibility does not end after its independent timer")
 

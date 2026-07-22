@@ -88,9 +88,10 @@ func _on_hide_animation_finished() -> void:
 
 ## 关闭按钮 + Esc 关闭
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
 		if visible:
 			hide_merchant()
+			get_viewport().set_input_as_handled()
 
 ## 设置面板样式
 func _set_panel_styling() -> void:
@@ -223,6 +224,9 @@ func _on_slot_clicked(slot_index: int) -> void:
 		return
 	var item: Dictionary = _items[slot_index]
 	var price: int = item.get("price", 0)
+	if _inventory_module != null and not _inventory_module.has_space():
+		print("[MerchantUI] 背包已满，无法购买: %s" % item.get("name", "?"))
+		return
 	if GameManager.spend_currency(price):
 		if _inventory_module != null:
 			_inventory_module.add_item(item.duplicate(), 1)

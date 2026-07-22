@@ -10,6 +10,8 @@ func enter() -> void:
 	player.set("is_dashing", true)
 	player.set("is_invincible", true)
 	_remaining = float(player.call("get_dash_duration"))
+	if AudioManager != null:
+		AudioManager.play_dash_sfx()
 	if player.has_signal("dash_started"):
 		player.emit_signal("dash_started")
 

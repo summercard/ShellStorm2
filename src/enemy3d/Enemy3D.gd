@@ -5,18 +5,20 @@ extends CharacterBody3D
 signal killed(enemy: Enemy3D, loot: Dictionary)
 signal summon_requested(enemy: Enemy3D, count: int)
 signal state_changed(previous: String, current: String)
+signal boss_phase_changed(enemy: Enemy3D, phase: int)
+signal health_changed(enemy: Enemy3D, current: int, maximum: int)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
-const VALID_STATES := ["idle", "alert", "chase", "telegraph", "attack", "stagger", "dead"]
+const VALID_STATES := ["idle", "patrol", "alert", "chase", "search", "telegraph", "attack", "stagger", "dead"]
 
 const PROFILES := {
-	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.35, "cooldown": 1.05},
+	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
 	"ranged_caster": {"hp": 46, "speed": 2.25, "damage": 10, "range": 8.8, "cooldown": 1.8},
 	"summoner": {"hp": 72, "speed": 1.65, "damage": 8, "range": 7.2, "cooldown": 4.8},
-	"shielded": {"hp": 112, "speed": 2.0, "damage": 17, "range": 1.55, "cooldown": 1.55},
-	"exploder": {"hp": 42, "speed": 3.1, "damage": 30, "range": 2.45, "cooldown": 3.0},
-	"ambusher": {"hp": 50, "speed": 4.65, "damage": 18, "range": 1.65, "cooldown": 1.9},
+	"shielded": {"hp": 112, "speed": 2.0, "damage": 17, "range": 2.05, "cooldown": 1.55},
+	"exploder": {"hp": 42, "speed": 3.1, "damage": 30, "range": 2.85, "cooldown": 3.0},
+	"ambusher": {"hp": 50, "speed": 4.65, "damage": 18, "range": 2.15, "cooldown": 1.9},
 	"boss": {"hp": 520, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
 }
 
@@ -42,6 +44,18 @@ var _external_timer := 0.0
 var _dot_damage := 0
 var _dot_remaining := 0.0
 var _dot_tick := 0.0
+var enemy_data: Dictionary = {}
+var _lost_sight_time := 0.0
+var _last_known_target_position := Vector3.ZERO
+var _home_position := Vector3.ZERO
+var _home_initialized := false
+var _patrol_target := Vector3.ZERO
+var elite_modifier_id := ""
+var _absorb_cooldown := 0.0
+var boss_phase := 1
+var _ambush_triggered := false
+var _strafe_sign := 1.0
+var _bypass_shield_once := false
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -66,18 +80,60 @@ func apply_profile(kind: String) -> void:
 	attack_range = float(profile["range"])
 	attack_cooldown = float(profile["cooldown"])
 	if collision_shape != null:
-		var shape := collision_shape.shape as CapsuleShape3D
-		shape = shape.duplicate() as CapsuleShape3D
-		shape.radius = 1.05 if enemy_kind == "boss" else 0.56
-		shape.height = 2.1 if enemy_kind == "boss" else 1.2
+		var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
+		var shape := CylinderShape3D.new()
+		shape.radius = float(footprint.get("radius", 0.8))
+		shape.height = float(footprint.get("height", 1.2))
 		collision_shape.shape = shape
 		collision_shape.position.y = shape.height * 0.5
 	if avatar != null:
 		avatar.configure(enemy_kind)
+		avatar.set_ambush_revealed(enemy_kind != "ambusher" or _ambush_triggered)
+	_strafe_sign = -1.0 if get_instance_id() % 2 == 0 else 1.0
+
+
+func configure_from_enemy_data(data: Dictionary) -> void:
+	enemy_data = data.duplicate(true)
+	apply_profile(str(data.get("enemy_type", enemy_kind)))
+	max_hp = maxi(1, int(data.get("max_hp", data.get("hp", max_hp))))
+	current_hp = maxi(1, int(data.get("hp", max_hp)))
+	contact_damage = maxi(0, int(data.get("damage", contact_damage)))
+	# 2D px/s 按 24 px/m 适配到 3D，并保留各形态的最低可辨速度。
+	move_speed = maxf(1.2, float(data.get("speed", move_speed * 24.0)) / 24.0)
+	if bool(data.get("is_elite", false)):
+		elite_modifier_id = str(data.get("modifier_id_en", "Elite.Huge"))
+		var modifier_data := data.get("modifier_data", {}) as Dictionary
+		if elite_modifier_id == "Elite.Huge":
+			var hp_mult := float(modifier_data.get("hp_mult", 2.0))
+			max_hp = int(max_hp * hp_mult)
+			current_hp = max_hp
+			move_speed *= float(modifier_data.get("speed_mult", 0.8))
+			scale *= float(modifier_data.get("scale_mult", 1.5))
+		else:
+			scale *= 1.16
+	if enemy_kind == "boss":
+		scale *= float(data.get("boss_scale", 1.0))
+	health_changed.emit(self, current_hp, max_hp)
+
+
+func get_enemy_data() -> Dictionary:
+	var result := enemy_data.duplicate(true)
+	if result.is_empty():
+		result = {"enemy_type": enemy_kind, "floor": 1, "loot_table": "loot_floor_1_2"}
+	return result
+
+
+func set_runtime_active(active: bool) -> void:
+	visible = active
+	process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
 
 
 func _physics_process(delta: float) -> void:
+	if not _home_initialized:
+		_home_position = global_position
+		_home_initialized = true
 	_state_time += delta
+	_absorb_cooldown = maxf(0.0, _absorb_cooldown - delta)
 	_attack_timer = maxf(0.0, _attack_timer - delta)
 	_slow_timer = maxf(0.0, _slow_timer - delta)
 	_external_timer = maxf(0.0, _external_timer - delta)
@@ -92,20 +148,50 @@ func _physics_process(delta: float) -> void:
 	if _target == null or not is_instance_valid(_target) or _target.get("current_hp") <= 0:
 		_target = _find_target()
 	if _target == null:
-		transition_to("idle")
-		velocity = velocity.move_toward(Vector3.ZERO, delta * 10.0)
-		move_and_slide()
+		if ai_state == "idle" and _state_time > 2.2:
+			transition_to("patrol")
+		if ai_state == "patrol":
+			_tick_patrol(delta)
+		else:
+			transition_to("idle")
+			velocity = velocity.move_toward(Vector3.ZERO, delta * 10.0)
+			move_and_slide()
 		return
 	var to_target := _target.global_position - global_position
 	to_target.y = 0.0
 	var distance := to_target.length()
-	if distance < 13.5 and ai_state == "idle":
+	var target_visible := _has_line_of_sight(_target)
+	if enemy_kind == "ambusher" and not _ambush_triggered:
+		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
+		avatar.set_ambush_revealed(false)
+		if distance <= 4.4 or current_hp < max_hp:
+			_ambush_triggered = true
+			avatar.set_ambush_revealed(true)
+			transition_to("telegraph")
+		else:
+			move_and_slide()
+			return
+	if target_visible:
+		_last_known_target_position = _target.global_position
+		_lost_sight_time = 0.0
+	else:
+		_lost_sight_time += delta
+		if ai_state == "idle" and _state_time > 2.2:
+			transition_to("patrol")
+	if distance < 13.5 and ai_state in ["idle", "patrol", "search"] and target_visible:
 		transition_to("alert")
 	if ai_state == "alert" and _state_time > 0.28:
 		transition_to("chase")
 	match ai_state:
 		"chase":
-			_tick_chase(to_target, distance, delta)
+			if _lost_sight_time > 1.15:
+				transition_to("search")
+			else:
+				_tick_chase(to_target, distance, delta)
+		"search":
+			_tick_search(delta)
+		"patrol":
+			_tick_patrol(delta)
 		"telegraph":
 			velocity = velocity.move_toward(Vector3.ZERO, delta * 18.0) + _external_velocity
 			move_and_slide()
@@ -128,43 +214,137 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 		transition_to("telegraph")
 		return
 	var desired := to_target.normalized() * move_speed * _slow_factor
-	if enemy_kind in ["ranged_caster", "summoner", "boss"] and distance < attack_range * 0.58:
-		desired = -to_target.normalized() * move_speed * 0.64
+	if enemy_kind in ["ranged_caster", "summoner", "boss"]:
+		var radial := to_target.normalized()
+		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
+		var ideal_distance := attack_range * (0.78 if enemy_kind != "summoner" else 0.86)
+		var radial_weight := clampf((distance - ideal_distance) / maxf(1.0, ideal_distance), -1.0, 1.0)
+		desired = (tangent * 0.78 + radial * radial_weight).normalized() * move_speed * _slow_factor
+		if distance < attack_range * 0.52:
+			desired = (-radial * 0.82 + tangent * 0.35).normalized() * move_speed * _slow_factor
 	velocity = velocity.lerp(desired, minf(1.0, delta * 5.5)) + _external_velocity
 	move_and_slide()
+
+
+func _tick_search(delta: float) -> void:
+	var offset := _last_known_target_position - global_position
+	offset.y = 0.0
+	if offset.length() > 0.65:
+		velocity = velocity.lerp(offset.normalized() * move_speed * 0.72, minf(1.0, delta * 4.0))
+		move_and_slide()
+	else:
+		velocity = velocity.move_toward(Vector3.ZERO, delta * 8.0)
+		move_and_slide()
+	if _state_time > 2.4:
+		_target = null
+		transition_to("patrol")
+
+
+func _tick_patrol(delta: float) -> void:
+	if _patrol_target == Vector3.ZERO or global_position.distance_to(_patrol_target) < 0.55:
+		var angle := fmod(float(get_instance_id() % 97) * 0.73 + Time.get_ticks_msec() * 0.0003, TAU)
+		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
+	var offset := _patrol_target - global_position
+	offset.y = 0.0
+	velocity = velocity.lerp(offset.normalized() * move_speed * 0.32, minf(1.0, delta * 3.2))
+	move_and_slide()
+
+
+func _has_line_of_sight(target: Node3D) -> bool:
+	if target == null or not is_instance_valid(target):
+		return false
+	var query := PhysicsRayQueryParameters3D.create(
+		global_position + Vector3(0, 0.72, 0),
+		target.global_position + Vector3(0, 0.72, 0),
+		1,
+		[get_rid()]
+	)
+	query.collide_with_areas = false
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 
 func _perform_attack(to_target: Vector3, distance: float) -> void:
 	_attack_timer = attack_cooldown
 	match enemy_kind:
 		"ranged_caster":
-			_fire_projectile(to_target, contact_damage, Color(0.20, 0.82, 0.92))
+			_fire_projectile_volley(to_target, contact_damage, Color(0.20, 0.82, 0.92), 3, 0.18)
 		"summoner":
 			_summon_count += 1
 			summon_requested.emit(self, 2 if _summon_count % 2 == 1 else 1)
+			_heal_nearby_allies()
 		"exploder":
 			_explode()
 		"boss":
-			_fire_projectile(to_target, contact_damage, Color(1.0, 0.20, 0.08), true)
+			_fire_projectile_volley(to_target, contact_damage, Color(1.0, 0.20, 0.08), 3 if boss_phase >= 2 else 1, 0.14, true)
 			if _summon_count % 3 == 2:
 				summon_requested.emit(self, 2)
 			_summon_count += 1
+		"melee_chaser":
+			_external_velocity = to_target.normalized() * 7.2
+			_external_timer = 0.16
+			if distance <= attack_range + 0.65 and _target.has_method("take_damage"):
+				_target.call("take_damage", contact_damage, false, to_target.normalized())
+		"ambusher":
+			_external_velocity = to_target.normalized() * 9.4
+			_external_timer = 0.28
+			if distance <= attack_range + 1.0 and _target.has_method("take_damage"):
+				_target.call("take_damage", contact_damage, false, to_target.normalized())
 		_:
 			if distance <= attack_range + 0.65 and _target.has_method("take_damage"):
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
+	if elite_modifier_id == "Elite.WeaponParasite" and _target != null and _target.has_method("apply_silence"):
+		_target.call("apply_silence", 1.8)
 
 
 func _fire_projectile(to_target: Vector3, amount: int, color: Color, explosive := false) -> void:
 	if get_tree().current_scene == null:
 		return
-	var projectile := PROJECTILE_SCRIPT.new() as Projectile3D
-	projectile.configure({
+	var config := {
 		"direction": to_target.normalized(), "speed": 11.5, "damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
 		"color": color, "shooter": self,
-	})
-	get_tree().current_scene.add_child(projectile)
-	projectile.global_position = global_position + Vector3(0, 0.92, 0) + to_target.normalized() * 0.72
+	}
+	var world_position := global_position + Vector3(0, 0.92, 0) + to_target.normalized() * 0.72
+	var pools := get_tree().get_nodes_in_group("projectile_pool_3d")
+	if not pools.is_empty() and pools[0] is ProjectilePool3D:
+		(pools[0] as ProjectilePool3D).acquire(config, world_position)
+	else:
+		var projectile := PROJECTILE_SCRIPT.new() as Projectile3D
+		projectile.configure(config)
+		get_tree().current_scene.add_child(projectile)
+		projectile.global_position = world_position
+
+
+func _fire_projectile_volley(
+	to_target: Vector3,
+	amount: int,
+	color: Color,
+	count: int,
+	spread_radians: float,
+	explosive := false
+) -> void:
+	var shot_count := maxi(1, count)
+	for index in range(shot_count):
+		var ratio := 0.5 if shot_count == 1 else float(index) / float(shot_count - 1)
+		var angle := lerpf(-spread_radians, spread_radians, ratio)
+		_fire_projectile(to_target.rotated(Vector3.UP, angle), amount, color, explosive)
+
+
+func _heal_nearby_allies() -> void:
+	for value in get_tree().get_nodes_in_group("enemy_3d"):
+		var ally := value as Enemy3D
+		if ally == null or ally == self or ally.room_id != room_id or ally.ai_state == "dead":
+			continue
+		if global_position.distance_to(ally.global_position) <= 6.5:
+			ally.receive_healing(maxi(2, int(ally.max_hp * 0.08)))
+
+
+func receive_healing(amount: int) -> void:
+	if ai_state == "dead" or current_hp >= max_hp:
+		return
+	current_hp = mini(max_hp, current_hp + maxi(0, amount))
+	health_changed.emit(self, current_hp, max_hp)
+	_spawn_effect("damage", 0.52)
 
 
 func _explode() -> void:
@@ -179,18 +359,49 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO) 
 	if ai_state == "dead":
 		return
 	var applied := maxi(1, amount)
-	if enemy_kind == "shielded" and hit_direction.dot(-global_basis.z) < -0.15:
+	if elite_modifier_id == "Elite.Ricochet" and randf() < 0.30:
+		applied = maxi(1, int(applied * 0.5))
+		if _target != null and _target.has_method("take_damage"):
+			_target.call("take_damage", maxi(1, int(amount * 0.35)), false, -hit_direction)
+	if enemy_kind == "shielded" and not _bypass_shield_once and hit_direction.dot(-global_basis.z) < -0.15:
+		if randf() < 0.15:
+			avatar.flash_hit()
+			_spawn_effect("impact", 0.82)
+			return
 		applied = maxi(1, int(applied * 0.32))
 	if critical:
 		applied = maxi(1, int(applied * 1.5))
 	current_hp = maxi(0, current_hp - applied)
+	health_changed.emit(self, current_hp, max_hp)
+	_update_boss_phase()
 	_last_hit_direction = hit_direction
 	avatar.flash_hit()
 	_spawn_effect("damage", 0.72)
 	if current_hp <= 0:
 		_die()
 	else:
+		if AudioManager != null:
+			if critical:
+				AudioManager.play_crit_sfx()
+			else:
+				AudioManager.play_enemy_hit_sfx()
 		transition_to("stagger")
+
+
+func take_projectile_damage(
+	amount: int,
+	critical := false,
+	hit_direction := Vector3.ZERO,
+	tags: Array[String] = [],
+	behavior: Dictionary = {}
+) -> void:
+	_bypass_shield_once = (
+		"armor" in tags
+		or "piercing" in tags
+		or bool(behavior.get("pierce_shield", false))
+	)
+	take_damage(amount, critical, hit_direction)
+	_bypass_shield_once = false
 
 
 func apply_slow(factor: float, duration: float) -> void:
@@ -222,6 +433,7 @@ func _tick_damage_over_time(delta: float) -> void:
 		return
 	_dot_tick = 0.5
 	current_hp = maxi(0, current_hp - maxi(1, int(ceil(float(_dot_damage) * 0.2))))
+	health_changed.emit(self, current_hp, max_hp)
 	avatar.flash_hit()
 	if current_hp <= 0:
 		_die()
@@ -242,16 +454,38 @@ func transition_to(state_id: String) -> bool:
 
 
 func get_state_snapshot() -> Dictionary:
+	var shape_snapshot := {}
+	if collision_shape != null and collision_shape.shape is CylinderShape3D:
+		var cylinder := collision_shape.shape as CylinderShape3D
+		shape_snapshot = {"radius": cylinder.radius, "height": cylinder.height}
 	return {
 		"enemy_kind": enemy_kind, "state": ai_state, "valid_states": VALID_STATES.duplicate(),
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
+		"elite_modifier_id": elite_modifier_id, "boss_phase": boss_phase,
+		"collision_profile": shape_snapshot,
+		"ambush_triggered": _ambush_triggered,
+		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
 	}
+
+
+func _behavior_role() -> String:
+	return str({
+		"melee_chaser": "rush_melee",
+		"ranged_caster": "strafe_three_shot_volley",
+		"summoner": "summon_and_heal_support",
+		"shielded": "frontal_block_tank",
+		"exploder": "proximity_charge_and_fragments",
+		"ambusher": "buried_trigger_and_lunge",
+		"boss": "phased_volley_and_summon",
+	}.get(enemy_kind, "rush_melee"))
 
 
 func _telegraph_duration() -> float:
 	if enemy_kind == "exploder":
 		return 0.9
+	if enemy_kind == "ambusher":
+		return 0.46
 	if enemy_kind == "boss":
 		return 0.62
 	return 0.38
@@ -274,19 +508,92 @@ func _die() -> void:
 	if ai_state == "dead":
 		return
 	transition_to("dead")
+	if AudioManager != null:
+		AudioManager.play_enemy_die_sfx()
+	if elite_modifier_id == "Elite.SpawnOnDeath":
+		summon_requested.emit(self, 3)
+	elif elite_modifier_id == "Elite.Parasite":
+		_strengthen_nearest_enemy()
+	if enemy_kind == "exploder":
+		_spawn_death_fragments()
 	collision_layer = 0
 	collision_mask = 0
 	_spawn_effect("explosion" if enemy_kind == "boss" else "impact", 1.4 if enemy_kind == "boss" else 0.8)
-	killed.emit(self, {"scrap": 12 if enemy_kind == "boss" else 2, "kind": enemy_kind})
+	killed.emit(self, get_enemy_data())
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
 	tween.tween_callback(queue_free)
 
 
+func _spawn_death_fragments() -> void:
+	for index in range(8):
+		var direction := Vector3.FORWARD.rotated(Vector3.UP, TAU * float(index) / 8.0)
+		_fire_projectile(direction, maxi(3, int(contact_damage * 0.28)), Color(1.0, 0.42, 0.10))
+
+
+func can_absorb_projectile(_tags: Array[String]) -> bool:
+	return elite_modifier_id == "Elite.BulletEater" and _absorb_cooldown <= 0.0
+
+
+func on_projectile_absorbed(absorbed_damage: int) -> void:
+	_absorb_cooldown = 0.75
+	if _target != null:
+		_fire_projectile(
+			_target.global_position - global_position,
+			maxi(4, absorbed_damage / 2),
+			Color(0.78, 0.28, 0.94)
+		)
+
+
+func apply_elite_boon(multiplier: float) -> void:
+	max_hp = int(max_hp * multiplier)
+	current_hp = mini(max_hp, int(current_hp * multiplier + max_hp * 0.15))
+	contact_damage = int(contact_damage * multiplier)
+	move_speed *= minf(1.2, multiplier)
+	scale *= 1.08
+
+
+func _strengthen_nearest_enemy() -> void:
+	var best: Enemy3D = null
+	var best_distance := 12.0
+	for value in get_tree().get_nodes_in_group("enemy_3d"):
+		var candidate := value as Enemy3D
+		if candidate == null or candidate == self or candidate.ai_state == "dead":
+			continue
+		var distance := global_position.distance_to(candidate.global_position)
+		if distance < best_distance:
+			best = candidate
+			best_distance = distance
+	if best != null:
+		best.apply_elite_boon(1.3)
+
+
+func _update_boss_phase() -> void:
+	if enemy_kind != "boss" or max_hp <= 0:
+		return
+	var ratio := float(current_hp) / float(max_hp)
+	var next_phase := 3 if ratio <= 0.30 else 2 if ratio <= 0.65 else 1
+	if next_phase <= boss_phase:
+		return
+	boss_phase = next_phase
+	attack_cooldown *= 0.82
+	move_speed *= 1.10
+	if boss_phase == 3:
+		summon_requested.emit(self, 3)
+	boss_phase_changed.emit(self, boss_phase)
+
+
 func _spawn_effect(kind: String, size: float) -> void:
 	if get_tree().current_scene == null:
+		return
+	var world_position := global_position + Vector3(0, 0.65, 0)
+	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
+	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
+		(pools[0] as CombatEffectPool3D).acquire(
+			kind, EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE), size, world_position
+		)
 		return
 	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
 	effect.configure(kind, EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE), size)
 	get_tree().current_scene.add_child(effect)
-	effect.global_position = global_position + Vector3(0, 0.65, 0)
+	effect.global_position = world_position

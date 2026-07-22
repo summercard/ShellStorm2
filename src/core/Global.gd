@@ -30,9 +30,15 @@ func _process(_delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause"):
+		for guard in get_tree().get_nodes_in_group("pause_input_guard"):
+			if guard != null and guard.has_method("try_consume_pause_input"):
+				if bool(guard.call("try_consume_pause_input")):
+					get_viewport().set_input_as_handled()
+					return
 		if not _pause_reasons.is_empty() and not has_pause_reason("manual"):
 			return
 		toggle_pause()
+		get_viewport().set_input_as_handled()
 
 func toggle_pause() -> void:
 	if has_pause_reason("manual"):

@@ -106,6 +106,13 @@ func _on_active_menu_closed() -> void:
 	_refresh_base_status()
 
 
+func try_close_modal_for_pause() -> bool:
+	if _active_menu == null or not is_instance_valid(_active_menu):
+		return false
+	_active_menu.queue_free()
+	return true
+
+
 func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
 	var labels := {
 		"idle": "待命",

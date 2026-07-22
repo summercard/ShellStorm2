@@ -8,6 +8,7 @@ signal extraction_completed
 
 @export var accent_color := Color(0.32, 0.88, 1.0)
 @export_range(1.0, 10.0, 0.25) var duration := 4.0
+@export var beacon_type := "BOSS_KILL"
 
 var locked := true
 var _player_in_range := false
@@ -17,9 +18,10 @@ var _prompt: Label3D
 var _light: OmniLight3D
 
 
-func configure(color: Color, p_duration: float) -> void:
+func configure(color: Color, p_duration: float, p_beacon_type := "BOSS_KILL") -> void:
 	accent_color = color
 	duration = p_duration
+	beacon_type = p_beacon_type
 
 
 func _ready() -> void:
@@ -74,6 +76,28 @@ func force_complete_for_test() -> void:
 	extraction_completed.emit()
 
 
+func force_start_for_test() -> bool:
+	if locked or _active:
+		return false
+	_player_in_range = true
+	_active = true
+	_remaining = duration
+	extraction_started.emit(duration)
+	return true
+
+
+func abort_extraction() -> void:
+	if _active:
+		_cancel()
+
+
+func get_snapshot() -> Dictionary:
+	return {
+		"type": beacon_type, "locked": locked, "active": _active,
+		"remaining": _remaining, "duration": duration, "player_in_range": _player_in_range,
+	}
+
+
 func _cancel() -> void:
 	_active = false
 	_remaining = 0.0
@@ -97,7 +121,11 @@ func _on_body_exited(body: Node3D) -> void:
 func _refresh_prompt() -> void:
 	if _prompt == null:
 		return
-	_prompt.text = "信号锁定 · 先击败 Boss" if locked else "[E] 启动撤离同步"
+	var type_name: String = {
+		"STANDARD": "固定", "ELITE_KILL": "精英", "BOSS_KILL": "Boss",
+		"BEACON": "信标", "TRADE": "交易",
+	}.get(beacon_type, "未知")
+	_prompt.text = "%s撤离未解锁" % type_name if locked else "[E] 启动%s撤离" % type_name
 
 
 func _build_visual() -> void:
