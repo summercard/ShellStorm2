@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/PlayerAvatar3D.gd" id="1_avatar"]
 
@@ -128,6 +128,31 @@ outer_radius = 0.91
 rings = 24
 ring_segments = 8
 
+[sub_resource type="StandardMaterial3D" id="MatReloadTrack"]
+transparency = 1
+albedo_color = Color(0.018, 0.028, 0.032, 0.88)
+shading_mode = 0
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="MeshReloadTrack"]
+material = SubResource("MatReloadTrack")
+size = Vector2(1.20, 0.18)
+
+[sub_resource type="StandardMaterial3D" id="MatReloadFill"]
+transparency = 1
+albedo_color = Color(0.22, 0.92, 0.76, 0.98)
+emission_enabled = true
+emission = Color(0.08, 0.58, 0.48, 1)
+emission_energy_multiplier = 1.25
+shading_mode = 0
+billboard_mode = 1
+billboard_keep_scale = true
+
+[sub_resource type="QuadMesh" id="MeshReloadFill"]
+material = SubResource("MatReloadFill")
+size = Vector2(1.06, 0.09)
+
 [node name="CapsuleAvatar3D" type="Node3D"]
 script = ExtResource("1_avatar")
 
@@ -196,4 +221,18 @@ cast_shadow = 0
 visible = false
 position = Vector3(0, 0.12, 0)
 mesh = SubResource("MeshLowHealth")
+cast_shadow = 0
+
+[node name="ReloadProgress3D" type="Node3D" parent="."]
+visible = false
+position = Vector3(0, 2.72, 0.06)
+
+[node name="Track" type="MeshInstance3D" parent="ReloadProgress3D"]
+mesh = SubResource("MeshReloadTrack")
+cast_shadow = 0
+
+[node name="Fill" type="MeshInstance3D" parent="ReloadProgress3D"]
+position = Vector3(-0.53, 0, 0.012)
+scale = Vector3(0, 1, 1)
+mesh = SubResource("MeshReloadFill")
 cast_shadow = 0

@@ -11,6 +11,9 @@ signal presentation_state_changed(state_id: String, context: Dictionary)
 signal input_lock_changed(locked: bool)
 signal weapon_changed(gun_id: String, bullet_id: String)
 signal ammo_changed(current: int, maximum: int)
+signal reload_started(duration: float)
+signal reload_progress_changed(progress: float, remaining: float)
+signal reload_ended(completed: bool)
 
 const SPEED := 7.0
 const DASH_SPEED := 16.5
@@ -122,7 +125,18 @@ func get_state_machine_state() -> String:
 
 
 func get_state_machine_snapshot() -> Dictionary:
-	return _state_machine.get_snapshot() if _state_machine != null else {}
+	if _state_machine == null:
+		return {}
+	var snapshot := _state_machine.get_snapshot()
+	var reload_snapshot := get_reload_snapshot()
+	snapshot["overlays"] = {
+		"low_health": is_low_health(),
+		"silenced": _silence_remaining > 0.0,
+		"invincible": is_invincible,
+		"reloading": bool(reload_snapshot.get("active", false)),
+	}
+	snapshot["reload"] = reload_snapshot
+	return snapshot
 
 
 func is_low_health() -> bool:
@@ -141,6 +155,8 @@ func take_damage(amount: int, _critical := false, _hit_direction := Vector3.ZERO
 	is_invincible = true
 	_invincible_remaining = INVINCIBLE_DURATION
 	if current_hp <= 0:
+		if weapon != null:
+			weapon.cancel_reload()
 		_state_machine.transition_to("dead", true)
 	else:
 		_state_machine.transition_to("hurt", true)
@@ -190,9 +206,13 @@ func _ensure_weapon_model() -> void:
 			return
 		weapon = scene.instantiate() as WeaponModel3D
 		weapon.gun_id = ""
+		weapon.render_layers = 2
 		avatar.weapon_socket.add_child(weapon)
 		weapon.ammo_changed.connect(_on_weapon_ammo_changed)
 		weapon.loadout_changed.connect(_on_weapon_loadout_changed)
+		weapon.reload_started.connect(_on_weapon_reload_started)
+		weapon.reload_progress_changed.connect(_on_weapon_reload_progress_changed)
+		weapon.reload_ended.connect(_on_weapon_reload_ended)
 
 
 func _ensure_weapon_tree() -> void:
@@ -271,12 +291,41 @@ func get_weapon_snapshot() -> Dictionary:
 	}
 
 
+func is_reloading() -> bool:
+	return weapon != null and is_instance_valid(weapon) and weapon.is_reloading()
+
+
+func get_reload_progress() -> float:
+	return weapon.get_reload_progress() if weapon != null and is_instance_valid(weapon) else 0.0
+
+
+func get_reload_snapshot() -> Dictionary:
+	return weapon.get_reload_snapshot() if weapon != null and is_instance_valid(weapon) else {
+		"active": false,
+		"progress": 0.0,
+		"remaining": 0.0,
+		"duration": 0.0,
+	}
+
+
 func _on_weapon_ammo_changed(current: int, maximum: int) -> void:
 	ammo_changed.emit(current, maximum)
 
 
 func _on_weapon_loadout_changed(gun_id: String, bullet_id: String) -> void:
 	weapon_changed.emit(gun_id, bullet_id)
+
+
+func _on_weapon_reload_started(duration: float) -> void:
+	reload_started.emit(duration)
+
+
+func _on_weapon_reload_progress_changed(progress: float, remaining: float) -> void:
+	reload_progress_changed.emit(progress, remaining)
+
+
+func _on_weapon_reload_ended(completed: bool) -> void:
+	reload_ended.emit(completed)
 
 
 func _update_combat_input() -> void:

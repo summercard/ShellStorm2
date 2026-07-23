@@ -1,7 +1,7 @@
 class_name PlayerVision3D
 extends Node3D
 ## 独立于灯光的 3D 单位视野。
-## 同一批物理射线同时驱动目标显隐与地面视野场，场景灯永远不参与玩法判定。
+## 目标显隐使用 360° 逐目标遮挡；定向射线只驱动地面目光场，灯光不参与玩法判定。
 
 @export_range(6.0, 40.0, 0.5) var vision_range := 21.0
 @export_range(30.0, 160.0, 1.0) var vision_angle_degrees := 96.0
@@ -16,6 +16,7 @@ const VISION_TARGET_GROUPS := [
 	&"hazard_3d", &"service_station_3d", &"extraction_beacon_3d",
 ]
 const VISION_PLANE_HEIGHT := 0.82
+const GAMEPLAY_ANGLE_DEGREES := 360.0
 const SURFACE_HEIGHT_OFFSET := 0.14
 const HIT_EDGE_PADDING := 0.08
 const EDGE_FEATHER_WIDTH := 1.85
@@ -77,17 +78,10 @@ func is_position_visible(world_position: Vector3) -> bool:
 	var offset := world_position - _player.global_position
 	offset.y = 0.0
 	var distance := offset.length()
-	if distance <= proximity_reveal:
-		return not _is_occluded(world_position)
-	if distance > vision_range or distance <= 0.001:
+	if distance > vision_range:
 		return false
-	var aim := _player.aim_direction
-	aim.y = 0.0
-	if aim.length_squared() <= 0.0001:
-		return false
-	var angle := rad_to_deg(acos(clampf(aim.normalized().dot(offset.normalized()), -1.0, 1.0)))
-	if angle > vision_angle_degrees * 0.5:
-		return false
+	if distance <= 0.001:
+		return true
 	return not _is_occluded(world_position)
 
 
@@ -95,7 +89,13 @@ func get_snapshot() -> Dictionary:
 	var light_snapshot := _flashlight.get_snapshot() if _flashlight != null else {}
 	return {
 		"range": vision_range,
+		# 兼容旧诊断字段；新代码应显式读取 gameplay/presentation 两个角度。
 		"angle_degrees": vision_angle_degrees,
+		"gameplay_angle_degrees": GAMEPLAY_ANGLE_DEGREES,
+		"presentation_angle_degrees": vision_angle_degrees,
+		"gameplay_omnidirectional": true,
+		"visibility_mode": "omnidirectional_range_with_physical_occlusion",
+		"presentation_mode": "directional_gaze_and_flashlight",
 		"proximity_reveal": proximity_reveal,
 		"visibility_interval": visibility_interval,
 		"visible_targets": _visible_target_count,
@@ -105,6 +105,7 @@ func get_snapshot() -> Dictionary:
 		"presentation_light_count": int(light_snapshot.get("real_light_count", 0)),
 		"spotlight_count": int(light_snapshot.get("spotlight_count", 0)),
 		"spill_light_count": int(light_snapshot.get("spill_light_count", 0)),
+		"front_fill_light_count": int(light_snapshot.get("front_fill_light_count", 0)),
 		"flashlight_real_lighting": not light_snapshot.is_empty(),
 		"flashlight_aim_alignment": float(light_snapshot.get("aim_alignment", 0.0)),
 		"flashlight_beam_energy": float(light_snapshot.get("beam_energy", 0.0)),

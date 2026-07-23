@@ -22,6 +22,17 @@ const PROFILES := {
 	"boss": {"hp": 520, "speed": 1.72, "damage": 24, "range": 9.5, "cooldown": 1.45},
 }
 
+# MonsterInjector 的旧 2D 基线只用于还原楼层、主题、精英与小怪倍率；
+# 实际 3D TTK 必须建立在上面的 PROFILES 上，避免 10–40 HP 覆盖 3D 战斗基线。
+const SOURCE_HP_BASE := {
+	"melee_chaser": 25.0, "ranged_caster": 15.0, "summoner": 30.0,
+	"shielded": 40.0, "exploder": 10.0, "ambusher": 18.0, "boss": 200.0,
+}
+const SOURCE_DAMAGE_BASE := {
+	"melee_chaser": 5.0, "ranged_caster": 8.0, "summoner": 0.0,
+	"shielded": 3.0, "exploder": 15.0, "ambusher": 7.0, "boss": 20.0,
+}
+
 @export_enum("melee_chaser", "ranged_caster", "summoner", "shielded", "exploder", "ambusher", "boss") var enemy_kind := "melee_chaser"
 @export var room_id := ""
 
@@ -56,6 +67,8 @@ var boss_phase := 1
 var _ambush_triggered := false
 var _strafe_sign := 1.0
 var _bypass_shield_once := false
+var _source_hp_scale := 1.0
+var _source_damage_scale := 1.0
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -95,9 +108,22 @@ func apply_profile(kind: String) -> void:
 func configure_from_enemy_data(data: Dictionary) -> void:
 	enemy_data = data.duplicate(true)
 	apply_profile(str(data.get("enemy_type", enemy_kind)))
-	max_hp = maxi(1, int(data.get("max_hp", data.get("hp", max_hp))))
-	current_hp = maxi(1, int(data.get("hp", max_hp)))
-	contact_damage = maxi(0, int(data.get("damage", contact_damage)))
+	var profile_hp := max_hp
+	var profile_damage := contact_damage
+	var source_hp_base := float(SOURCE_HP_BASE.get(enemy_kind, profile_hp))
+	var source_max_hp := maxf(1.0, float(data.get("max_hp", data.get("hp", source_hp_base))))
+	var source_current_hp := clampf(float(data.get("hp", source_max_hp)), 0.0, source_max_hp)
+	_source_hp_scale = maxf(0.05, source_max_hp / maxf(1.0, source_hp_base))
+	max_hp = maxi(1, int(round(float(profile_hp) * _source_hp_scale)))
+	current_hp = clampi(int(round(float(max_hp) * source_current_hp / source_max_hp)), 1, max_hp)
+	var source_damage_base := float(SOURCE_DAMAGE_BASE.get(enemy_kind, profile_damage))
+	var source_damage := float(data.get("damage", source_damage_base))
+	_source_damage_scale = (
+		maxf(0.0, source_damage / source_damage_base)
+		if source_damage_base > 0.0
+		else 1.0
+	)
+	contact_damage = maxi(0, int(round(float(profile_damage) * _source_damage_scale)))
 	# 2D px/s 按 24 px/m 适配到 3D，并保留各形态的最低可辨速度。
 	move_speed = maxf(1.2, float(data.get("speed", move_speed * 24.0)) / 24.0)
 	if bool(data.get("is_elite", false)):
@@ -260,7 +286,11 @@ func _has_line_of_sight(target: Node3D) -> bool:
 		[get_rid()]
 	)
 	query.collide_with_areas = false
-	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+	var hit := get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return true
+	var collider := hit.get("collider") as Node
+	return collider == target or (collider != null and target.is_ancestor_of(collider))
 
 
 func _perform_attack(to_target: Vector3, distance: float) -> void:
@@ -462,6 +492,7 @@ func get_state_snapshot() -> Dictionary:
 		"enemy_kind": enemy_kind, "state": ai_state, "valid_states": VALID_STATES.duplicate(),
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
 		"elite_modifier_id": elite_modifier_id, "boss_phase": boss_phase,
+		"source_hp_scale": _source_hp_scale, "source_damage_scale": _source_damage_scale,
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
 		"behavior_role": _behavior_role(),

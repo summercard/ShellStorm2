@@ -6,6 +6,9 @@ signal shot_fired(projectile_count: int)
 signal projectile_spawned(projectile: Projectile3D)
 signal ammo_changed(current: int, maximum: int)
 signal loadout_changed(gun_id: String, bullet_id: String)
+signal reload_started(duration: float)
+signal reload_progress_changed(progress: float, remaining: float)
+signal reload_ended(completed: bool)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
@@ -34,6 +37,7 @@ const BULLET_COLORS := {
 @export var gun_id := "bp_pistol"
 @export var bullet_id := "mod_bullet_standard"
 @export var display_only := false
+@export_flags_3d_render var render_layers := 1
 
 var damage := 20
 var fire_rate := 3.5
@@ -58,6 +62,7 @@ var _fire_sequence := 0
 
 var _cooldown := 0.0
 var _reload_remaining := 0.0
+var _active_reload_duration := 0.0
 var _recoil := 0.0
 var _charge_active := false
 var _charge_elapsed := 0.0
@@ -90,17 +95,26 @@ func _process(delta: float) -> void:
 	if _reload_remaining > 0.0:
 		_reload_remaining = maxf(0.0, _reload_remaining - delta)
 		if _reload_remaining <= 0.0:
-			current_ammo = magazine_size
-			ammo_changed.emit(current_ammo, magazine_size)
+			_finish_reload()
+		else:
+			reload_progress_changed.emit(get_reload_progress(), _reload_remaining)
 	if _charge_active:
 		_charge_elapsed = minf(charge_time, _charge_elapsed + delta)
 	_recoil = lerpf(_recoil, 0.0, minf(1.0, delta * 15.0))
 	if _visual_root != null:
-		_visual_root.position.z = _recoil
-		_visual_root.rotation.x = _recoil * 0.22
+		var reload_progress := get_reload_progress()
+		var reload_arch := sin(reload_progress * PI) if is_reloading() else 0.0
+		var service_tick := sin(reload_progress * TAU * 2.0) * reload_arch
+		_visual_root.position = Vector3(0.0, -0.025 * reload_arch, _recoil + 0.04 * reload_arch)
+		_visual_root.rotation = Vector3(
+			_recoil * 0.22 + reload_arch * 0.24,
+			0.0,
+			-reload_arch * 0.16 + service_tick * 0.035
+		)
 
 
 func configure(p_gun_id: String, p_bullet_id: String) -> bool:
+	cancel_reload()
 	var gun_node := BlueprintRegistry.create_assembly_node(p_gun_id)
 	var bullet_node := BlueprintRegistry.create_assembly_node(p_bullet_id)
 	if gun_node == null or bullet_node == null:
@@ -141,6 +155,7 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 
 
 func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
+	cancel_reload()
 	if tree == null or tree.get_root() == null:
 		clear_weapon()
 		return false
@@ -202,6 +217,7 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 
 
 func clear_weapon() -> void:
+	cancel_reload()
 	cancel_charge()
 	gun_id = ""
 	bullet_id = ""
@@ -438,20 +454,33 @@ func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector
 func request_reload() -> bool:
 	if display_only or gun_id.is_empty() or _reload_remaining > 0.0 or current_ammo >= magazine_size:
 		return false
-	_reload_remaining = reload_time
+	_active_reload_duration = maxf(0.01, reload_time)
+	_reload_remaining = _active_reload_duration
 	cancel_charge()
 	_perform_reload_explosion()
 	if AudioManager != null:
 		AudioManager.play_reload_sfx()
+	reload_started.emit(_active_reload_duration)
+	reload_progress_changed.emit(0.0, _reload_remaining)
 	return true
 
 
 func refill_ammo() -> bool:
 	if display_only or gun_id.is_empty():
 		return false
-	_reload_remaining = 0.0
+	cancel_reload()
 	current_ammo = magazine_size
 	ammo_changed.emit(current_ammo, magazine_size)
+	return true
+
+
+func cancel_reload() -> bool:
+	if not is_reloading():
+		return false
+	_reload_remaining = 0.0
+	_active_reload_duration = 0.0
+	reload_progress_changed.emit(0.0, 0.0)
+	reload_ended.emit(false)
 	return true
 
 
@@ -464,6 +493,21 @@ func is_reloading() -> bool:
 	return _reload_remaining > 0.0
 
 
+func get_reload_progress() -> float:
+	if not is_reloading() or _active_reload_duration <= 0.0:
+		return 0.0
+	return clampf(1.0 - _reload_remaining / _active_reload_duration, 0.0, 1.0)
+
+
+func get_reload_snapshot() -> Dictionary:
+	return {
+		"active": is_reloading(),
+		"progress": get_reload_progress(),
+		"remaining": _reload_remaining,
+		"duration": _active_reload_duration if is_reloading() else reload_time,
+	}
+
+
 func get_snapshot() -> Dictionary:
 	return {
 		"gun_id": gun_id,
@@ -473,6 +517,10 @@ func get_snapshot() -> Dictionary:
 		"projectile_count": projectile_count,
 		"magazine_size": magazine_size,
 		"current_ammo": current_ammo,
+		"reloading": is_reloading(),
+		"reload_progress": get_reload_progress(),
+		"reload_remaining": _reload_remaining,
+		"reload_duration": _active_reload_duration if is_reloading() else reload_time,
 		"bullet_tags": bullet_tags.duplicate(),
 		"charge_time": charge_time,
 		"charge_active": _charge_active,
@@ -482,8 +530,18 @@ func get_snapshot() -> Dictionary:
 		"fate_behavior": _projectile_behavior.duplicate(true),
 		"secondary_gun_count": _secondary_guns.size(),
 		"has_model": _visual_root != null,
+		"render_layers": render_layers,
 		"is_3d": true,
 	}
+
+
+func _finish_reload() -> void:
+	current_ammo = magazine_size
+	_reload_remaining = 0.0
+	reload_progress_changed.emit(1.0, 0.0)
+	_active_reload_duration = 0.0
+	ammo_changed.emit(current_ammo, magazine_size)
+	reload_ended.emit(true)
 
 
 func _perform_reload_explosion() -> void:
@@ -569,6 +627,7 @@ func _add_box(node_name: String, position: Vector3, size: Vector3, material: Sta
 	instance.name = node_name
 	instance.position = position
 	instance.mesh = mesh
+	instance.layers = render_layers
 	_visual_root.add_child(instance)
 
 
@@ -584,6 +643,7 @@ func _add_cylinder(node_name: String, position: Vector3, radius: float, length: 
 	instance.position = position
 	instance.rotation_degrees.x = 90.0
 	instance.mesh = mesh
+	instance.layers = render_layers
 	_visual_root.add_child(instance)
 
 

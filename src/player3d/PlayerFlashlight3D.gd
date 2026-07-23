@@ -1,7 +1,10 @@
 class_name PlayerFlashlight3D
 extends Node3D
 ## 与玩法视野完全解耦的真实玩家灯光。
-## 聚光灯照亮前方并投影，近身补光模拟灯具溢光以照亮角色和手持枪。
+## 主聚光与近身溢光只照环境；角色正面柔光只照角色和手持枪，避免头顶亮斑。
+
+const ENVIRONMENT_RENDER_LAYER := 1
+const AVATAR_RENDER_LAYER := 2
 
 @export_group("Beam")
 @export var beam_color := Color(0.86, 0.96, 0.93)
@@ -18,15 +21,26 @@ extends Node3D
 @export_range(1.0, 24.0, 0.25) var target_forward := 11.0
 @export_range(0.0, 2.0, 0.05) var target_height := 0.38
 
-@export_group("Character Spill")
+@export_group("Environment Spill")
 @export var spill_color := Color(0.68, 0.88, 0.84)
-@export_range(0.0, 8.0, 0.05) var spill_energy := 2.15
+@export_range(0.0, 8.0, 0.05) var spill_energy := 2.0
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 1.35
+
+@export_group("Avatar Front Fill")
+@export var front_fill_color := Color(0.70, 0.90, 0.86)
+@export_range(0.0, 4.0, 0.05) var front_fill_energy := 0.95
+@export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
+@export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
+@export_range(0.1, 3.0, 0.05) var front_fill_attenuation := 1.15
+@export_range(0.2, 3.0, 0.05) var front_fill_forward := 1.45
+@export_range(0.5, 3.0, 0.05) var front_fill_height := 1.55
+@export_range(0.2, 2.5, 0.05) var avatar_target_height := 1.08
 
 var _player: Player3D
 var _beam: SpotLight3D
 var _spill: OmniLight3D
+var _front_fill: SpotLight3D
 var _enabled := true
 
 
@@ -44,7 +58,7 @@ func _process(_delta: float) -> void:
 func force_sync() -> void:
 	if _player == null or not is_instance_valid(_player):
 		_player = get_parent() as Player3D
-	if _player == null or _beam == null or _spill == null:
+	if _player == null or _beam == null or _spill == null or _front_fill == null:
 		return
 	var aim := _player.aim_direction
 	aim.y = 0.0
@@ -54,7 +68,9 @@ func force_sync() -> void:
 	_beam.global_position = _player.global_position + Vector3.UP * mount_height + aim * mount_forward
 	var beam_target := _player.global_position + aim * target_forward + Vector3.UP * target_height
 	_beam.look_at(beam_target, Vector3.UP)
-	_spill.global_position = _player.global_position + Vector3.UP * (mount_height + 0.18) - aim * 0.18
+	_spill.global_position = _player.global_position + Vector3.UP * 1.28 - aim * 0.12
+	_front_fill.global_position = _player.global_position + aim * front_fill_forward + Vector3.UP * front_fill_height
+	_front_fill.look_at(_player.global_position + Vector3.UP * avatar_target_height, Vector3.UP)
 
 
 func set_light_enabled(enabled: bool) -> void:
@@ -63,6 +79,8 @@ func set_light_enabled(enabled: bool) -> void:
 		_beam.visible = enabled
 	if _spill != null:
 		_spill.visible = enabled
+	if _front_fill != null:
+		_front_fill.visible = enabled
 
 
 func apply_configuration() -> void:
@@ -83,15 +101,21 @@ func get_snapshot() -> Dictionary:
 		aim_alignment = Vector2(aim.x, aim.z).normalized().dot(Vector2(beam_forward.x, beam_forward.z).normalized())
 	return {
 		"enabled": _enabled,
-		"real_light_count": 2,
-		"spotlight_count": 1,
+		"real_light_count": 3,
+		"spotlight_count": 2,
 		"spill_light_count": 1,
+		"front_fill_light_count": 1,
 		"shadow_light_count": 1 if beam_shadows else 0,
 		"beam_energy": beam_energy,
 		"beam_range": beam_range,
 		"beam_angle_degrees": beam_angle_degrees,
 		"spill_energy": spill_energy,
 		"spill_range": spill_range,
+		"front_fill_energy": front_fill_energy,
+		"environment_light_cull_mask": ENVIRONMENT_RENDER_LAYER,
+		"avatar_light_cull_mask": AVATAR_RENDER_LAYER,
+		"environment_spill_affects_avatar": false,
+		"front_fill_affects_avatar": true,
 		"aim_alignment": aim_alignment,
 		"gameplay_light_dependent": false,
 		"configurable": true,
@@ -104,9 +128,13 @@ func _build_lights() -> void:
 	_beam.top_level = true
 	add_child(_beam)
 	_spill = OmniLight3D.new()
-	_spill.name = "CharacterSpill"
+	_spill.name = "EnvironmentSpill"
 	_spill.top_level = true
 	add_child(_spill)
+	_front_fill = SpotLight3D.new()
+	_front_fill.name = "AvatarFrontFill"
+	_front_fill.top_level = true
+	add_child(_front_fill)
 
 
 func _apply_configuration() -> void:
@@ -119,6 +147,7 @@ func _apply_configuration() -> void:
 		_beam.spot_angle_attenuation = beam_edge_attenuation
 		_beam.shadow_enabled = beam_shadows
 		_beam.shadow_bias = 0.055
+		_beam.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 		_beam.visible = _enabled
 	if _spill != null:
 		_spill.light_color = spill_color
@@ -126,4 +155,15 @@ func _apply_configuration() -> void:
 		_spill.omni_range = spill_range
 		_spill.omni_attenuation = spill_attenuation
 		_spill.shadow_enabled = false
+		_spill.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 		_spill.visible = _enabled
+	if _front_fill != null:
+		_front_fill.light_color = front_fill_color
+		_front_fill.light_energy = front_fill_energy
+		_front_fill.spot_range = front_fill_range
+		_front_fill.spot_angle = front_fill_angle_degrees
+		_front_fill.spot_attenuation = front_fill_attenuation
+		_front_fill.spot_angle_attenuation = 1.35
+		_front_fill.shadow_enabled = false
+		_front_fill.light_cull_mask = AVATAR_RENDER_LAYER
+		_front_fill.visible = _enabled

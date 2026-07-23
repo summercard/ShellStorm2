@@ -110,7 +110,21 @@ func _ready() -> void:
 	await get_tree().process_frame
 	if base_world.player.get_state_machine_state() != "moving":
 		failures.append("Player3D does not enter moving from 3D input")
+	var moving_before := base_world.player.avatar.get_component_snapshot()
+	await get_tree().create_timer(0.14).timeout
+	var moving_after := base_world.player.avatar.get_component_snapshot()
+	if (
+		not bool(moving_after.get("moving_animation_active", false))
+		or is_equal_approx(float(moving_before.get("locomotion_cycle", 0.0)), float(moving_after.get("locomotion_cycle", 0.0)))
+		or (moving_before.get("body_scale", Vector3.ONE) as Vector3).distance_to(moving_after.get("body_scale", Vector3.ONE) as Vector3) < 0.005
+	):
+		failures.append("Player3D moving state has no independent locomotion animation cycle")
+	var hand_to_socket_before := (moving_before.get("hand_position", Vector3.ZERO) as Vector3) - (moving_before.get("weapon_socket_position", Vector3.ZERO) as Vector3)
+	var hand_to_socket_after := (moving_after.get("hand_position", Vector3.ZERO) as Vector3) - (moving_after.get("weapon_socket_position", Vector3.ZERO) as Vector3)
+	if hand_to_socket_before.distance_to(hand_to_socket_after) > 0.01:
+		failures.append("Locomotion animation breaks the fixed hand/weapon-socket relationship")
 	base_world.player.request_dash()
+	await get_tree().process_frame
 	await get_tree().process_frame
 	if base_world.player.get_state_machine_state() != "dashing" or not base_world.player.avatar.get_component_snapshot().get("dash_trail_visible", false):
 		failures.append("Player3D dash state does not drive the 3D trail")

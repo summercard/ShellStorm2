@@ -156,12 +156,16 @@ func _verify_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	dungeon.player.aim_direction = Vector3(0, 0, -1)
 	dungeon.player.aim_yaw = 0.0
 	if not vision.is_position_visible(Vector3(0, 0.7, -8.0)):
-		failures.append("Clear point inside the vision cone is not visible")
+		failures.append("Clear point inside the presentation cone is not visible")
 	if vision.is_position_visible(Vector3(0, 0.7, -18.0)):
 		failures.append("North wall failed to occlude a point behind it")
 	var snapshot := vision.get_snapshot()
-	if float(snapshot.get("angle_degrees", 0)) <= 0 or not bool(snapshot.get("wall_occlusion_enabled", false)):
-		failures.append("Vision angle/occlusion contract missing")
+	if (
+		not is_equal_approx(float(snapshot.get("gameplay_angle_degrees", 0.0)), 360.0)
+		or float(snapshot.get("presentation_angle_degrees", 0.0)) <= 0.0
+		or not bool(snapshot.get("wall_occlusion_enabled", false))
+	):
+		failures.append("360 gameplay / directional presentation vision contract missing")
 
 
 func _verify_pools(dungeon: Dungeon3D, failures: Array[String]) -> void:
@@ -220,10 +224,10 @@ func _verify_elite_and_boss_runtime(dungeon: Dungeon3D, failures: Array[String])
 	var boss_panel := dungeon.get_node_or_null("HUD/BossHUD3D") as PanelContainer
 	if boss_panel == null or not boss_panel.visible:
 		failures.append("Boss 3D health/phase HUD did not appear")
-	boss.take_damage(120, false, Vector3.FORWARD)
+	boss.take_damage(int(ceil(float(boss.max_hp) * 0.36)), false, Vector3.FORWARD)
 	if boss.boss_phase < 2:
 		failures.append("Boss did not enter phase 2 at the original health threshold")
-	boss.take_damage(100, false, Vector3.FORWARD)
+	boss.take_damage(int(ceil(float(boss.max_hp) * 0.36)), false, Vector3.FORWARD)
 	if boss.boss_phase < 3:
 		failures.append("Boss did not enter phase 3 at the original health threshold")
 	dungeon.call("_hide_boss_hud")

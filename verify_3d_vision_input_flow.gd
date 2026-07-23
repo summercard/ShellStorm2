@@ -18,7 +18,7 @@ func _ready() -> void:
 	await _verify_true_vision(dungeon, failures)
 
 	if failures.is_empty():
-		print("3D_VISION_INPUT_FLOW_OK: soft stable FOV, independent real flashlight rig, occlusion, I/Tab inventory lock and recoverable pause pass")
+		print("3D_VISION_INPUT_FLOW_OK: 360 occlusion gameplay vision, directional presentation, independent real flashlight, I/Tab inventory lock and recoverable pause pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -99,12 +99,20 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	await get_tree().physics_frame
 	vision.force_refresh()
 	if not vision.is_position_visible(Vector3(0, 0.7, -2.0)):
-		failures.append("Clear point inside the gameplay cone is not visible")
+		failures.append("Clear point inside the presentation cone is not visible")
 	if vision.is_position_visible(Vector3(0, 0.7, -8.0)):
 		failures.append("Physical wall does not block gameplay vision")
-	if vision.is_position_visible(Vector3(8.0, 0.7, 0.0)):
-		failures.append("Point outside the 96-degree cone is logically visible")
+	if not vision.is_position_visible(Vector3(0, 0.7, 3.0)):
+		failures.append("Clear point behind the player is hidden by presentation direction")
 	var snapshot := vision.get_snapshot()
+	if (
+		not is_equal_approx(float(snapshot.get("gameplay_angle_degrees", 0.0)), 360.0)
+		or not is_equal_approx(float(snapshot.get("presentation_angle_degrees", 0.0)), 96.0)
+		or not bool(snapshot.get("gameplay_omnidirectional", false))
+	):
+		failures.append("Vision snapshot does not separate 360-degree gameplay from 96-degree presentation")
+	if str(snapshot.get("visibility_mode", "")) != "omnidirectional_range_with_physical_occlusion":
+		failures.append("Vision snapshot does not declare the occlusion-only omnidirectional contract")
 	if bool(snapshot.get("gameplay_light_dependent", true)):
 		failures.append("Gameplay visibility still depends on lighting")
 	if str(snapshot.get("visual_mode", "")) != "soft_raycast_field_with_real_flashlight_rig":
@@ -114,12 +122,13 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	if not bool(snapshot.get("surface_no_depth_test", false)):
 		failures.append("Vision GUI can still be depth-sorted below room floors")
 	if (
-		int(snapshot.get("presentation_light_count", 0)) != 2
-		or int(snapshot.get("spotlight_count", 0)) != 1
+		int(snapshot.get("presentation_light_count", 0)) != 3
+		or int(snapshot.get("spotlight_count", 0)) != 2
 		or int(snapshot.get("spill_light_count", 0)) != 1
+		or int(snapshot.get("front_fill_light_count", 0)) != 1
 		or int(snapshot.get("shadow_light_count", 0)) != 1
 	):
-		failures.append("Real flashlight must contain one shadow beam and one no-shadow character spill")
+		failures.append("Real flashlight must contain an environment beam/spill and an avatar-only front fill")
 	var flashlight := dungeon.player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
 	if flashlight == null:
 		failures.append("Independent PlayerFlashlight3D rig is missing")
@@ -127,11 +136,23 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		flashlight.force_sync()
 		var flashlight_snapshot := flashlight.get_snapshot()
 		var beam := flashlight.get_node_or_null("ForwardBeam") as SpotLight3D
-		var spill := flashlight.get_node_or_null("CharacterSpill") as OmniLight3D
+		var spill := flashlight.get_node_or_null("EnvironmentSpill") as OmniLight3D
+		var front_fill := flashlight.get_node_or_null("AvatarFrontFill") as SpotLight3D
 		if beam == null or not beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
 			failures.append("Forward flashlight is not a sufficiently bright real shadow-casting SpotLight3D")
 		if spill == null or spill.shadow_enabled or spill.light_energy < 1.5 or spill.omni_range < 4.0:
-			failures.append("Character/weapon spill light is missing or incorrectly configured")
+			failures.append("Environment spill light is missing or incorrectly configured")
+		if (
+			front_fill == null
+			or front_fill.shadow_enabled
+			or front_fill.light_energy > 1.2
+			or front_fill.light_cull_mask != 2
+			or beam.light_cull_mask != 1
+			or spill.light_cull_mask != 1
+		):
+			failures.append("Avatar front fill is not a subtle layer-2-only light, or environment lights leak onto the avatar")
+		if bool(flashlight_snapshot.get("environment_spill_affects_avatar", true)) or not bool(flashlight_snapshot.get("front_fill_affects_avatar", false)):
+			failures.append("Flashlight snapshot does not preserve environment/avatar light isolation")
 		if float(flashlight_snapshot.get("aim_alignment", 0.0)) < 0.99:
 			failures.append("Real flashlight beam does not follow the player's aim direction")
 		if not bool(flashlight_snapshot.get("configurable", false)):
@@ -161,6 +182,28 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	vision.force_refresh()
 	if not hidden_target.visible:
 		failures.append("A target inside clear gameplay vision remained hidden")
+	hidden_target.position = Vector3(0, 0.2, 3.0)
+	vision.force_refresh()
+	if not hidden_target.visible:
+		failures.append("A real ground-loot target behind the player is hidden without an occluder")
+	var rear_blocker := StaticBody3D.new()
+	rear_blocker.name = "RearVisionAcceptanceWall"
+	rear_blocker.collision_layer = 1
+	rear_blocker.collision_mask = 0
+	rear_blocker.position = Vector3(0, 1.0, 4.0)
+	var rear_shape_node := CollisionShape3D.new()
+	var rear_shape := BoxShape3D.new()
+	rear_shape.size = Vector3(3.2, 2.0, 0.5)
+	rear_shape_node.shape = rear_shape
+	rear_blocker.add_child(rear_shape_node)
+	dungeon.add_child(rear_blocker)
+	await get_tree().physics_frame
+	if vision.is_position_visible(Vector3(0, 0.7, 8.0)):
+		failures.append("Physical wall behind the player does not block 360-degree gameplay vision")
+	hidden_target.position = Vector3(0, 0.2, 8.0)
+	vision.force_refresh()
+	if hidden_target.visible:
+		failures.append("A real ground-loot target behind a rear wall remains visible")
 
 
 func _tap_action(action: StringName) -> void:

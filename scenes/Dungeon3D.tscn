@@ -74,7 +74,7 @@ offset_top = -36.0
 offset_right = 760.0
 offset_bottom = -14.0
 grow_vertical = 0
-text = "真实视野 96° / 21m · 墙、关闭门和实体家具会阻挡 · 灯光不参与单位可见判定"
+text = "逻辑视野 360° / 21m · 当前扇形表示目光与探照灯 · 任意方向的实体遮挡都会隐藏目标"
 theme_override_colors/font_color = Color(0.36, 0.78, 0.9, 0.92)
 theme_override_font_sizes/font_size = 13
 

@@ -7,6 +7,9 @@ signal collected(room_id: String)
 var room_id := ""
 var _picked := false
 var _visual: Node3D
+var _label: Label3D
+
+const PICKUP_ANIMATION_DURATION := 0.32
 
 
 func configure(p_room_id: String) -> void:
@@ -23,7 +26,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if _visual != null:
+	if not _picked and _visual != null:
 		_visual.rotation.y += delta * 1.8
 		_visual.position.y = 0.72 + sin(Time.get_ticks_msec() * 0.004) * 0.10
 
@@ -32,8 +35,25 @@ func _on_body_entered(body: Node3D) -> void:
 	if _picked or not body.is_in_group("player_3d"):
 		return
 	_picked = true
+	monitoring = false
+	collision_mask = 0
+	for child in find_children("*", "CollisionShape3D", true, false):
+		(child as CollisionShape3D).set_deferred("disabled", true)
 	collected.emit(room_id)
-	queue_free()
+	if _visual == null:
+		queue_free()
+		return
+	var start_scale := _visual.scale
+	var motion := create_tween().set_parallel(true)
+	motion.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	motion.tween_property(_visual, "position", _visual.position + Vector3(0, 1.24, 0), PICKUP_ANIMATION_DURATION)
+	motion.tween_property(_visual, "rotation:y", _visual.rotation.y + TAU * 1.8, PICKUP_ANIMATION_DURATION)
+	if _label != null:
+		motion.tween_property(_label, "modulate:a", 0.0, PICKUP_ANIMATION_DURATION * 0.72)
+	var scale_tween := create_tween()
+	scale_tween.tween_property(_visual, "scale", start_scale * 1.20, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	scale_tween.tween_property(_visual, "scale", start_scale * 0.04, PICKUP_ANIMATION_DURATION - 0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	scale_tween.tween_callback(queue_free)
 
 
 func _build_visual() -> void:
@@ -78,11 +98,20 @@ func _build_visual() -> void:
 	collision.position.y = 0.72
 	collision.shape = shape
 	add_child(collision)
-	var label := Label3D.new()
-	label.position = Vector3(0.35, 1.35, 0)
-	label.text = "房间钥匙"
-	label.font_size = 34
-	label.pixel_size = 0.011
-	label.outline_size = 8
-	label.modulate = Color(1.0, 0.84, 0.32)
-	add_child(label)
+	_label = Label3D.new()
+	_label.position = Vector3(0.35, 1.35, 0)
+	_label.text = "房间钥匙"
+	_label.font_size = 34
+	_label.pixel_size = 0.011
+	_label.outline_size = 8
+	_label.modulate = Color(1.0, 0.84, 0.32)
+	add_child(_label)
+
+
+func get_pickup_snapshot() -> Dictionary:
+	return {
+		"room_id": room_id,
+		"picked": _picked,
+		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
+		"monitoring": monitoring,
+	}

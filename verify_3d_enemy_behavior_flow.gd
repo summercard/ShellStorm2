@@ -13,6 +13,7 @@ func _ready() -> void:
 	player.position = Vector3.ZERO
 	add_child(player)
 	await get_tree().process_frame
+	await _verify_ai_visibility_and_hp(player, failures)
 	await _verify_hit_profiles(failures)
 	await _verify_ambusher(player, failures)
 	await _verify_ranged_volley(failures)
@@ -23,12 +24,63 @@ func _ready() -> void:
 		if child is Projectile3D or child is Enemy3D:
 			child.queue_free()
 	if failures.is_empty():
-		print("3D_ENEMY_BEHAVIOR_FLOW_OK: matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield and death fragments pass")
+		print("3D_ENEMY_BEHAVIOR_FLOW_OK: line-of-sight AI, scaled 3D HP, matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield and death fragments pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> void:
+	player.position = Vector3.ZERO
+	var source_hp := {
+		"melee_chaser": 25, "ranged_caster": 15, "summoner": 30,
+		"shielded": 40, "exploder": 10, "ambusher": 18, "boss": 200,
+	}
+	var source_damage := {
+		"melee_chaser": 5, "ranged_caster": 8, "summoner": 0,
+		"shielded": 3, "exploder": 15, "ambusher": 7, "boss": 20,
+	}
+	for kind in source_hp.keys():
+		var enemy := _make_enemy(str(kind), Vector3(70 + source_hp.keys().find(kind) * 2, 0, 70))
+		await get_tree().process_frame
+		enemy.configure_from_enemy_data({
+			"enemy_type": kind, "hp": source_hp[kind], "max_hp": source_hp[kind],
+			"damage": source_damage[kind], "speed": 60,
+		})
+		var expected_hp := int(Enemy3D.PROFILES[kind]["hp"])
+		if enemy.max_hp < expected_hp:
+			failures.append("3D HP baseline was overwritten by legacy data: %s=%d" % [kind, enemy.max_hp])
+		enemy.take_damage(26, false, Vector3.RIGHT)
+		if enemy.ai_state == "dead":
+			failures.append("Full-health 3D enemy is still one-shot by the starting pistol: %s" % kind)
+		enemy.queue_free()
+		await get_tree().process_frame
+
+	var seeker := _make_enemy("melee_chaser", Vector3(0, 0, -6))
+	await get_tree().physics_frame
+	if not bool(seeker.call("_has_line_of_sight", player)):
+		failures.append("Enemy ray treats the player collider as an occluding wall")
+	await get_tree().create_timer(0.36).timeout
+	if seeker.ai_state not in ["alert", "chase", "telegraph", "attack"]:
+		failures.append("Enemy with a clear target does not leave idle/patrol for combat")
+	var blocker := StaticBody3D.new()
+	blocker.collision_layer = 1
+	blocker.collision_mask = 0
+	blocker.position = Vector3(0, 0.9, -3.0)
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(3.0, 2.0, 0.35)
+	collision.shape = shape
+	blocker.add_child(collision)
+	add_child(blocker)
+	await get_tree().physics_frame
+	if bool(seeker.call("_has_line_of_sight", player)):
+		failures.append("Enemy line-of-sight ignores a physical layer-1 wall")
+	seeker.queue_free()
+	blocker.queue_free()
+	await get_tree().process_frame
 
 
 func _verify_hit_profiles(failures: Array[String]) -> void:

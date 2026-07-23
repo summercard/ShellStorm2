@@ -581,6 +581,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	_update_room_streaming(room.room_id)
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
 	if _spawned_rooms.has(room.room_id):
+		_ensure_room_key_reward(room)
 		status_label.text = "返回已探索房间 · %s" % ("已肃清" if room.cleared else "战斗未结束")
 		return
 	_spawned_rooms[room.room_id] = true
@@ -1099,18 +1100,44 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	if not was_cleared:
 		room_cleared.emit(room)
 	if spawn_key and not was_cleared:
-		call_deferred("_spawn_room_key", room)
+		call_deferred("_ensure_room_key_reward", room)
+
+
+func _ensure_room_key_reward(room: DungeonRoom3D) -> void:
+	if (
+		room == null
+		or not is_instance_valid(room)
+		or not room.cleared
+		or room.room_type in ["START", "EXTRACTION"]
+		or _spawned_key_rooms.has(room.room_id)
+	):
+		return
+	_spawn_room_key(room)
 
 
 func _spawn_room_key(room: DungeonRoom3D) -> void:
-	if _spawned_key_rooms.has(room.room_id):
+	if room == null or not is_instance_valid(room) or _spawned_key_rooms.has(room.room_id):
 		return
-	_spawned_key_rooms[room.room_id] = true
 	var key := KEY_SCRIPT.new() as RoomKeyPickup3D
 	key.configure(room.room_id)
 	room.add_child(key)
-	key.position = Vector3(0, 0.05, -2.0)
+	var spawn_position := Vector3(0, 0.05, -2.2)
+	if player != null and is_instance_valid(player) and _current_room_id == room.room_id:
+		var player_local := room.to_local(player.global_position)
+		player_local.y = 0.05
+		var toward_center := Vector3(-player_local.x, 0, -player_local.z)
+		if toward_center.length_squared() <= 0.001:
+			var fallback_angle := fmod(float(room.room_seed) * 0.731, TAU)
+			toward_center = Vector3(cos(fallback_angle), 0, sin(fallback_angle))
+		spawn_position = player_local + toward_center.normalized() * 2.2
+	var dimensions := room.get_dimensions()
+	var safe_half_x := maxf(1.0, dimensions.x * 0.5 - 2.1)
+	var safe_half_z := maxf(1.0, dimensions.y * 0.5 - 2.1)
+	spawn_position.x = clampf(spawn_position.x, -safe_half_x, safe_half_x)
+	spawn_position.z = clampf(spawn_position.z, -safe_half_z, safe_half_z)
+	key.position = spawn_position
 	key.collected.connect(_on_room_key_collected)
+	_spawned_key_rooms[room.room_id] = true
 
 
 func _on_room_key_collected(_room_id: String) -> void:
@@ -1767,11 +1794,16 @@ func get_runtime_snapshot() -> Dictionary:
 	var projectile_pool := get_node_or_null("ProjectilePool3D") as ProjectilePool3D
 	var effect_pool := get_node_or_null("CombatEffectPool3D") as CombatEffectPool3D
 	var vision := player.get_node_or_null("PlayerVision3D") as PlayerVision3D
+	var unclaimed_key_count := 0
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if value is RoomKeyPickup3D and is_ancestor_of(value):
+			unclaimed_key_count += 1
 	return {
 		"current_room_id": _current_room_id, "active_rooms": active_rooms, "built_shells": built_shells,
 		"detailed_rooms": detailed_rooms, "total_rooms": _rooms.size(),
 		"active_lights": active_lights, "active_ai": active_ai,
 		"keys": _get_total_room_keys(), "inventory_used": _inventory.get_used_slots(),
+		"spawned_key_room_count": _spawned_key_rooms.size(), "unclaimed_key_count": unclaimed_key_count,
 		"open_edges": _open_edges.values().count(true), "total_edges": _open_edges.size(),
 		"edge_states": _open_edges.duplicate(true),
 		"wave_numbers": _room_wave_numbers.duplicate(true),

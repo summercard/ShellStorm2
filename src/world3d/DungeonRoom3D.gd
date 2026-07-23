@@ -237,7 +237,7 @@ func _build_content() -> void:
 	_central_light.position = Vector3.ZERO
 	_central_light.configure(
 		theme.key_light_color,
-		theme.fixture_energy * (2.65 if size_class in ["large", "arena"] else 2.25),
+		theme.fixture_energy * (3.25 if size_class in ["large", "arena"] else 2.75),
 		maxf(theme.fixture_range * 1.32, minf(dimensions.x, dimensions.y) * 0.78),
 		room_seed,
 		true,
