@@ -1,54 +1,86 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=32 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/PlayerAvatar3D.gd" id="1_avatar"]
 
 [sub_resource type="StandardMaterial3D" id="MatBody"]
-albedo_color = Color(0.46, 0.49, 0.31, 1)
-metallic = 0.18
-roughness = 0.78
+albedo_color = Color(0.96, 0.48, 0.10, 1)
+metallic = 0.10
+roughness = 0.66
 
-[sub_resource type="CapsuleMesh" id="MeshBody"]
+[sub_resource type="BoxMesh" id="MeshBody"]
 material = SubResource("MatBody")
-radius = 0.58
-height = 1.55
-radial_segments = 18
-rings = 6
+size = Vector3(0.94, 1.08, 0.76)
 
-[sub_resource type="StandardMaterial3D" id="MatPanel"]
-albedo_color = Color(0.13, 0.18, 0.19, 1)
-metallic = 0.46
-roughness = 0.62
-
-[sub_resource type="BoxMesh" id="MeshPanel"]
-material = SubResource("MatPanel")
-size = Vector3(0.68, 0.72, 0.16)
-
-[sub_resource type="StandardMaterial3D" id="MatHead"]
-albedo_color = Color(0.56, 0.56, 0.30, 1)
-metallic = 0.20
+[sub_resource type="StandardMaterial3D" id="MatBelly"]
+albedo_color = Color(1, 0.67, 0.28, 1)
+metallic = 0.04
 roughness = 0.74
 
-[sub_resource type="SphereMesh" id="MeshHead"]
+[sub_resource type="BoxMesh" id="MeshBelly"]
+material = SubResource("MatBelly")
+size = Vector3(0.54, 0.66, 0.10)
+
+[sub_resource type="StandardMaterial3D" id="MatHead"]
+albedo_color = Color(1, 0.56, 0.12, 1)
+metallic = 0.08
+roughness = 0.62
+
+[sub_resource type="BoxMesh" id="MeshHead"]
 material = SubResource("MatHead")
-radius = 0.49
-height = 0.90
-radial_segments = 18
-rings = 10
+size = Vector3(1.34, 0.92, 0.88)
 
-[sub_resource type="StandardMaterial3D" id="MatSensor"]
-albedo_color = Color(0.26, 0.82, 0.88, 1)
-emission_enabled = true
-emission = Color(0.12, 0.72, 0.86, 1)
-emission_energy_multiplier = 2.2
-metallic = 0.65
-roughness = 0.26
+[sub_resource type="StandardMaterial3D" id="MatEye"]
+albedo_color = Color(0.045, 0.018, 0.024, 1)
+metallic = 0.18
+roughness = 0.22
 
-[sub_resource type="SphereMesh" id="MeshSensor"]
-material = SubResource("MatSensor")
-radius = 0.105
-height = 0.18
-radial_segments = 12
-rings = 6
+[sub_resource type="BoxMesh" id="MeshEye"]
+material = SubResource("MatEye")
+size = Vector3(0.15, 0.29, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="MatEar"]
+albedo_color = Color(0.98, 0.47, 0.09, 1)
+metallic = 0.06
+roughness = 0.68
+
+[sub_resource type="CylinderMesh" id="MeshEar"]
+material = SubResource("MatEar")
+top_radius = 0.0
+bottom_radius = 0.28
+height = 0.52
+radial_segments = 3
+
+[sub_resource type="StandardMaterial3D" id="MatInnerEar"]
+albedo_color = Color(1, 0.28, 0.16, 1)
+roughness = 0.72
+
+[sub_resource type="CylinderMesh" id="MeshInnerEar"]
+material = SubResource("MatInnerEar")
+top_radius = 0.0
+bottom_radius = 0.16
+height = 0.33
+radial_segments = 3
+
+[sub_resource type="StandardMaterial3D" id="MatFoot"]
+albedo_color = Color(0.88, 0.35, 0.055, 1)
+metallic = 0.06
+roughness = 0.76
+
+[sub_resource type="BoxMesh" id="MeshFoot"]
+material = SubResource("MatFoot")
+size = Vector3(0.43, 0.30, 0.48)
+
+[sub_resource type="StandardMaterial3D" id="MatTailStub"]
+albedo_color = Color(0.92, 0.39, 0.06, 1)
+metallic = 0.05
+roughness = 0.74
+
+[sub_resource type="SphereMesh" id="MeshTailStub"]
+material = SubResource("MatTailStub")
+radius = 0.28
+height = 0.48
+radial_segments = 14
+rings = 7
 
 [sub_resource type="StandardMaterial3D" id="MatScarf"]
 albedo_color = Color(0.66, 0.055, 0.045, 1)
@@ -66,16 +98,13 @@ material = SubResource("MatScarf")
 size = Vector3(0.30, 0.48, 0.12)
 
 [sub_resource type="StandardMaterial3D" id="MatHand"]
-albedo_color = Color(0.56, 0.51, 0.27, 1)
-metallic = 0.14
-roughness = 0.82
+albedo_color = Color(0.93, 0.40, 0.07, 1)
+metallic = 0.08
+roughness = 0.76
 
-[sub_resource type="SphereMesh" id="MeshHand"]
+[sub_resource type="BoxMesh" id="MeshHand"]
 material = SubResource("MatHand")
-radius = 0.24
-height = 0.38
-radial_segments = 14
-rings = 7
+size = Vector3(0.34, 0.52, 0.34)
 
 [sub_resource type="StandardMaterial3D" id="MatWeapon"]
 albedo_color = Color(0.12, 0.15, 0.14, 1)
@@ -159,27 +188,69 @@ script = ExtResource("1_avatar")
 [node name="VisualRoot" type="Node3D" parent="."]
 
 [node name="Body" type="Node3D" parent="VisualRoot"]
-position = Vector3(0, 0.88, 0)
+position = Vector3(0, 0.76, 0.02)
 
 [node name="BodyShell" type="MeshInstance3D" parent="VisualRoot/Body"]
 mesh = SubResource("MeshBody")
 
-[node name="ChestPanel" type="MeshInstance3D" parent="VisualRoot/Body"]
-position = Vector3(0, -0.04, -0.54)
-mesh = SubResource("MeshPanel")
+[node name="BellyPatch" type="MeshInstance3D" parent="VisualRoot/Body"]
+position = Vector3(0, -0.02, -0.43)
+mesh = SubResource("MeshBelly")
+cast_shadow = 0
+
+[node name="TailStub" type="MeshInstance3D" parent="VisualRoot/Body"]
+position = Vector3(-0.51, -0.02, 0.24)
+scale = Vector3(0.92, 0.92, 0.92)
+mesh = SubResource("MeshTailStub")
 
 [node name="Head" type="Node3D" parent="VisualRoot"]
-position = Vector3(0, 1.84, -0.01)
+position = Vector3(0, 1.72, -0.08)
 
 [node name="HeadShell" type="MeshInstance3D" parent="VisualRoot/Head"]
 mesh = SubResource("MeshHead")
 
-[node name="Sensor" type="MeshInstance3D" parent="VisualRoot/Head"]
-position = Vector3(-0.16, 0.04, -0.45)
-mesh = SubResource("MeshSensor")
+[node name="Eyes" type="Node3D" parent="VisualRoot/Head"]
+position = Vector3(0, -0.03, -0.56)
+
+[node name="EyeL" type="MeshInstance3D" parent="VisualRoot/Head/Eyes"]
+position = Vector3(-0.25, 0, 0)
+mesh = SubResource("MeshEye")
+cast_shadow = 0
+
+[node name="EyeR" type="MeshInstance3D" parent="VisualRoot/Head/Eyes"]
+position = Vector3(0.25, 0, 0)
+mesh = SubResource("MeshEye")
+cast_shadow = 0
+
+[node name="Ears" type="Node3D" parent="VisualRoot/Head"]
+
+[node name="EarL" type="MeshInstance3D" parent="VisualRoot/Head/Ears"]
+position = Vector3(-0.39, 0.52, -0.03)
+rotation = Vector3(0, 0, 0.10)
+mesh = SubResource("MeshEar")
+cast_shadow = 0
+
+[node name="Inner" type="MeshInstance3D" parent="VisualRoot/Head/Ears/EarL"]
+position = Vector3(0, -0.025, -0.15)
+scale = Vector3(0.75, 0.72, 0.42)
+mesh = SubResource("MeshInnerEar")
+cast_shadow = 0
+
+[node name="EarR" type="MeshInstance3D" parent="VisualRoot/Head/Ears"]
+position = Vector3(0.39, 0.52, -0.03)
+rotation = Vector3(0, 0, -0.10)
+mesh = SubResource("MeshEar")
+cast_shadow = 0
+
+[node name="Inner" type="MeshInstance3D" parent="VisualRoot/Head/Ears/EarR"]
+position = Vector3(0, -0.025, -0.15)
+scale = Vector3(0.75, 0.72, 0.42)
+mesh = SubResource("MeshInnerEar")
+cast_shadow = 0
 
 [node name="Scarf" type="Node3D" parent="VisualRoot"]
-position = Vector3(0, 1.43, 0)
+visible = false
+position = Vector3(0, 1.32, 0)
 
 [node name="Collar" type="MeshInstance3D" parent="VisualRoot/Scarf"]
 mesh = SubResource("MeshCollar")
@@ -190,13 +261,24 @@ rotation = Vector3(0.18, -0.35, -0.62)
 mesh = SubResource("MeshScarfTail")
 
 [node name="Hand" type="Node3D" parent="VisualRoot"]
-position = Vector3(0.72, 1.22, -0.18)
+position = Vector3(0.60, 1.10, -0.30)
 
 [node name="Glove" type="MeshInstance3D" parent="VisualRoot/Hand"]
 mesh = SubResource("MeshHand")
 
+[node name="Feet" type="Node3D" parent="VisualRoot"]
+position = Vector3(0, 0.22, -0.02)
+
+[node name="FootL" type="MeshInstance3D" parent="VisualRoot/Feet"]
+position = Vector3(-0.29, 0, -0.08)
+mesh = SubResource("MeshFoot")
+
+[node name="FootR" type="MeshInstance3D" parent="VisualRoot/Feet"]
+position = Vector3(0.29, 0, -0.08)
+mesh = SubResource("MeshFoot")
+
 [node name="WeaponSocket" type="Marker3D" parent="VisualRoot"]
-position = Vector3(0.72, 1.24, -0.34)
+position = Vector3(0.60, 1.15, -0.42)
 
 [node name="Weapon" type="MeshInstance3D" parent="VisualRoot/WeaponSocket"]
 visible = false
@@ -225,7 +307,7 @@ cast_shadow = 0
 
 [node name="ReloadProgress3D" type="Node3D" parent="."]
 visible = false
-position = Vector3(0, 2.72, 0.06)
+position = Vector3(0, 2.92, 0.06)
 
 [node name="Track" type="MeshInstance3D" parent="ReloadProgress3D"]
 mesh = SubResource("MeshReloadTrack")

@@ -115,6 +115,9 @@ func _process(delta: float) -> void:
 
 func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	cancel_reload()
+	cancel_charge()
+	_cooldown = 0.0
+	_recoil = 0.0
 	var gun_node := BlueprintRegistry.create_assembly_node(p_gun_id)
 	var bullet_node := BlueprintRegistry.create_assembly_node(p_bullet_id)
 	if gun_node == null or bullet_node == null:
@@ -156,6 +159,9 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 
 func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	cancel_reload()
+	cancel_charge()
+	_cooldown = 0.0
+	_recoil = 0.0
 	if tree == null or tree.get_root() == null:
 		clear_weapon()
 		return false
@@ -628,6 +634,8 @@ func _add_box(node_name: String, position: Vector3, size: Vector3, material: Sta
 	instance.position = position
 	instance.mesh = mesh
 	instance.layers = render_layers
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	_visual_root.add_child(instance)
 
 
@@ -644,6 +652,8 @@ func _add_cylinder(node_name: String, position: Vector3, radius: float, length: 
 	instance.rotation_degrees.x = 90.0
 	instance.mesh = mesh
 	instance.layers = render_layers
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	_visual_root.add_child(instance)
 
 

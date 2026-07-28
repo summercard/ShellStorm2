@@ -14,12 +14,17 @@ signal ammo_changed(current: int, maximum: int)
 signal reload_started(duration: float)
 signal reload_progress_changed(progress: float, remaining: float)
 signal reload_ended(completed: bool)
+signal action_overlay_changed(snapshot: Dictionary)
+signal avatar_customization_changed(loadout: Dictionary)
 
 const SPEED := 7.0
 const DASH_SPEED := 16.5
 const DASH_DURATION := 0.17
 const DASH_COOLDOWN := 2.2
 const INVINCIBLE_DURATION := 0.24
+const FIRE_ANIMATION_DURATION := 0.14
+const KNOCKBACK_MIN_DURATION := 0.16
+const KNOCKBACK_MAX_DURATION := 0.42
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -45,6 +50,14 @@ var weapon: WeaponModel3D = null
 var weapon_tree: WeaponAssemblyTree = null
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
+var _fire_animation_remaining := 0.0
+var _fire_animation_duration := FIRE_ANIMATION_DURATION
+var _fire_animation_intensity := 0.0
+var _knockback_remaining := 0.0
+var _knockback_duration := 0.0
+var _knockback_strength := 0.0
+var _knockback_direction := Vector3.ZERO
+var _avatar_customization := PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate()
 
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
@@ -60,12 +73,15 @@ func _ready() -> void:
 	if start_with_weapon:
 		_ensure_weapon_model()
 		_sync_weapon_from_tree()
+	if avatar != null:
+		avatar.set_customization(_avatar_customization)
 	hp_changed.emit(current_hp, max_hp)
 	_update_aim_from_mouse()
 
 
 func _physics_process(delta: float) -> void:
 	_update_invincibility(delta)
+	_tick_action_overlays(delta)
 	_silence_remaining = maxf(0.0, _silence_remaining - delta)
 	_update_aim_from_mouse()
 	_update_combat_input()
@@ -108,6 +124,35 @@ func get_presentation_state() -> String:
 	return _presentation_state
 
 
+## 外观装配是纯表现数据；不改碰撞、武器树、伤害或六态逻辑。
+func set_avatar_customization(slot_id: String, variant_id: String) -> bool:
+	if not PlayerAvatar3D.has_customization_variant(slot_id, variant_id):
+		return false
+	_avatar_customization[slot_id] = variant_id
+	if avatar != null:
+		avatar.set_customization(_avatar_customization)
+	avatar_customization_changed.emit(get_avatar_customization())
+	return true
+
+
+func set_avatar_customization_loadout(loadout: Dictionary) -> void:
+	for slot_id in loadout:
+		var variant_id := str(loadout[slot_id])
+		if PlayerAvatar3D.has_customization_variant(str(slot_id), variant_id):
+			_avatar_customization[str(slot_id)] = variant_id
+	if avatar != null:
+		avatar.set_customization(_avatar_customization)
+	avatar_customization_changed.emit(get_avatar_customization())
+
+
+func get_avatar_customization() -> Dictionary:
+	return _avatar_customization.duplicate()
+
+
+func get_avatar_customization_options() -> Dictionary:
+	return PlayerAvatar3D.CUSTOMIZATION_OPTIONS.duplicate(true)
+
+
 func get_move_speed() -> float:
 	return SPEED
 
@@ -134,8 +179,12 @@ func get_state_machine_snapshot() -> Dictionary:
 		"silenced": _silence_remaining > 0.0,
 		"invincible": is_invincible,
 		"reloading": bool(reload_snapshot.get("active", false)),
+		"firing": _fire_animation_remaining > 0.0,
+		"charging": bool(get_action_snapshot().get("charging", false)),
+		"knockback": _knockback_remaining > 0.0,
 	}
 	snapshot["reload"] = reload_snapshot
+	snapshot["actions"] = get_action_snapshot()
 	return snapshot
 
 
@@ -143,7 +192,7 @@ func is_low_health() -> bool:
 	return current_hp > 0 and float(current_hp) / float(maxi(1, max_hp)) <= 0.30
 
 
-func take_damage(amount: int, _critical := false, _hit_direction := Vector3.ZERO) -> void:
+func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO) -> void:
 	if current_hp <= 0 or is_invincible:
 		return
 	var overheat_multiplier := weapon_tree.get_overheat_penalty() if weapon_tree != null else 1.0
@@ -152,11 +201,21 @@ func take_damage(amount: int, _critical := false, _hit_direction := Vector3.ZERO
 	if AudioManager != null:
 		AudioManager.play_player_hit_sfx()
 	hp_changed.emit(current_hp, max_hp)
+	var recoil_direction := hit_direction
+	if recoil_direction.length_squared() <= 0.001:
+		recoil_direction = -aim_direction
+	apply_knockback(
+		recoil_direction,
+		clampf(3.2 + float(_last_damage_amount) * 0.11, 3.2, 7.4),
+		clampf(0.16 + float(_last_damage_amount) * 0.004, KNOCKBACK_MIN_DURATION, KNOCKBACK_MAX_DURATION),
+		false,
+	)
 	is_invincible = true
 	_invincible_remaining = INVINCIBLE_DURATION
 	if current_hp <= 0:
 		if weapon != null:
 			weapon.cancel_reload()
+		_clear_action_overlays()
 		_state_machine.transition_to("dead", true)
 	else:
 		_state_machine.transition_to("hurt", true)
@@ -172,6 +231,57 @@ func heal(amount: int) -> void:
 func request_dash() -> void:
 	if _state_machine != null:
 		_state_machine.dispatch_event("request_dash")
+
+
+## 受击击退是短时动作覆盖层；它让 hurt 状态延长到冲量结束，但不增加第七个顶层状态。
+func apply_knockback(direction: Vector3, strength := 5.4, duration := 0.24, trigger_hurt := true) -> bool:
+	if current_hp <= 0:
+		return false
+	var planar_direction := direction
+	planar_direction.y = 0.0
+	if planar_direction.length_squared() <= 0.001:
+		planar_direction = -aim_direction
+	planar_direction = planar_direction.normalized()
+	_knockback_direction = planar_direction
+	_knockback_strength = clampf(strength, 0.5, 10.0)
+	_knockback_duration = clampf(duration, KNOCKBACK_MIN_DURATION, KNOCKBACK_MAX_DURATION)
+	_knockback_remaining = _knockback_duration
+	if trigger_hurt and _state_machine != null and _state_machine.current_state_name != "dead":
+		_state_machine.transition_to("hurt", true)
+	action_overlay_changed.emit(get_action_snapshot())
+	return true
+
+
+func consume_knockback_velocity(delta: float) -> Vector3:
+	if _knockback_remaining <= 0.0 or _knockback_direction == Vector3.ZERO:
+		return Vector3.ZERO
+	var ratio := clampf(_knockback_remaining / maxf(0.01, _knockback_duration), 0.0, 1.0)
+	var impulse := _knockback_direction * _knockback_strength * pow(ratio, 0.62)
+	_knockback_remaining = maxf(0.0, _knockback_remaining - delta)
+	if _knockback_remaining <= 0.0:
+		_knockback_strength = 0.0
+		action_overlay_changed.emit(get_action_snapshot())
+	return impulse
+
+
+func get_hurt_recovery_duration() -> float:
+	return maxf(0.14, _knockback_remaining)
+
+
+func get_action_snapshot() -> Dictionary:
+	var weapon_snapshot := get_weapon_snapshot()
+	var charge_active := bool(weapon_snapshot.get("charge_active", false))
+	return {
+		"firing": _fire_animation_remaining > 0.0,
+		"fire_progress": clampf(1.0 - _fire_animation_remaining / maxf(0.01, _fire_animation_duration), 0.0, 1.0),
+		"fire_intensity": _fire_animation_intensity,
+		"charging": charge_active,
+		"charge_progress": float(weapon_snapshot.get("charge_ratio", 0.0)),
+		"knockback": _knockback_remaining > 0.0,
+		"knockback_progress": clampf(1.0 - _knockback_remaining / maxf(0.01, _knockback_duration), 0.0, 1.0),
+		"knockback_direction": _knockback_direction,
+		"knockback_strength": _knockback_strength,
+	}
 
 
 func equip_weapon(gun_id: String, bullet_id: String) -> bool:
@@ -213,6 +323,7 @@ func _ensure_weapon_model() -> void:
 		weapon.reload_started.connect(_on_weapon_reload_started)
 		weapon.reload_progress_changed.connect(_on_weapon_reload_progress_changed)
 		weapon.reload_ended.connect(_on_weapon_reload_ended)
+		weapon.shot_fired.connect(_on_weapon_shot_fired)
 
 
 func _ensure_weapon_tree() -> void:
@@ -328,12 +439,22 @@ func _on_weapon_reload_ended(completed: bool) -> void:
 	reload_ended.emit(completed)
 
 
+func _on_weapon_shot_fired(projectile_count: int) -> void:
+	_fire_animation_duration = FIRE_ANIMATION_DURATION
+	_fire_animation_remaining = _fire_animation_duration
+	_fire_animation_intensity = clampf(0.72 + float(projectile_count) * 0.12, 0.72, 1.35)
+	action_overlay_changed.emit(get_action_snapshot())
+
+
 func _update_combat_input() -> void:
 	if weapon != null and Input.is_action_just_released("shoot"):
 		weapon.release_charge()
-	if not combat_enabled or input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0:
+	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0:
 		if weapon != null:
 			weapon.cancel_charge()
+		return
+	# 禁用玩家输入不应打断脚本、测试场或 AI 显式启动的蓄力；只有真实输入读取被跳过。
+	if not combat_enabled:
 		return
 	if Input.is_action_pressed("shoot"):
 		weapon.try_fire(aim_direction, self)
@@ -358,6 +479,25 @@ func _tick_dash_cooldown(delta: float) -> void:
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer = maxf(0.0, dash_cooldown_timer - delta)
 	dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
+
+
+func _tick_action_overlays(delta: float) -> void:
+	if _fire_animation_remaining <= 0.0:
+		return
+	_fire_animation_remaining = maxf(0.0, _fire_animation_remaining - delta)
+	if _fire_animation_remaining <= 0.0:
+		_fire_animation_intensity = 0.0
+		action_overlay_changed.emit(get_action_snapshot())
+
+
+func _clear_action_overlays() -> void:
+	_fire_animation_remaining = 0.0
+	_fire_animation_intensity = 0.0
+	_knockback_remaining = 0.0
+	_knockback_duration = 0.0
+	_knockback_strength = 0.0
+	_knockback_direction = Vector3.ZERO
+	action_overlay_changed.emit(get_action_snapshot())
 
 
 func _transition_to_locomotion() -> void:

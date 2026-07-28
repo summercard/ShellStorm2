@@ -1,0 +1,95 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://src/player3d/Player3DStateGallery.gd" id="1_gallery"]
+[ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="2_player"]
+
+[sub_resource type="Environment" id="Environment_preview"]
+background_mode = 1
+background_color = Color(0.018, 0.035, 0.050, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.36, 0.52, 0.62, 1)
+ambient_light_energy = 0.58
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.78
+fog_enabled = true
+fog_light_color = Color(0.08, 0.17, 0.22, 1)
+fog_light_energy = 0.55
+fog_density = 0.006
+
+[sub_resource type="StandardMaterial3D" id="Material_ground"]
+albedo_color = Color(0.055, 0.105, 0.125, 1)
+metallic = 0.28
+roughness = 0.74
+
+[sub_resource type="PlaneMesh" id="Plane_stage"]
+material = SubResource("Material_ground")
+size = Vector2(24, 19)
+
+[sub_resource type="StandardMaterial3D" id="Material_ring"]
+albedo_color = Color(0.12, 0.70, 0.88, 0.56)
+emission_enabled = true
+emission = Color(0.05, 0.58, 0.90, 1)
+emission_energy_multiplier = 1.6
+transparency = 1
+
+[sub_resource type="TorusMesh" id="Torus_stage"]
+material = SubResource("Material_ring")
+inner_radius = 1.62
+outer_radius = 1.69
+rings = 32
+ring_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="Material_enemy_ring"]
+albedo_color = Color(0.92, 0.28, 0.12, 0.54)
+emission_enabled = true
+emission = Color(1, 0.16, 0.04, 1)
+emission_energy_multiplier = 1.4
+transparency = 1
+
+[sub_resource type="TorusMesh" id="Torus_enemy"]
+material = SubResource("Material_enemy_ring")
+inner_radius = 1.20
+outer_radius = 1.27
+rings = 32
+ring_segments = 8
+
+[node name="Player3DStateGallery" type="Node3D"]
+script = ExtResource("1_gallery")
+
+[node name="PreviewEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_preview")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-58, -28, 0)
+light_color = Color(0.58, 0.78, 0.92, 1)
+light_energy = 1.45
+shadow_enabled = true
+
+[node name="WarmFill" type="OmniLight3D" parent="."]
+position = Vector3(0, 5.2, 2.6)
+light_color = Color(1, 0.47, 0.20, 1)
+light_energy = 7.5
+omni_range = 13.0
+
+[node name="Stage" type="Node3D" parent="."]
+
+[node name="Ground" type="MeshInstance3D" parent="Stage"]
+mesh = SubResource("Plane_stage")
+
+[node name="PlayerRing" type="MeshInstance3D" parent="Stage"]
+position = Vector3(0, 0.025, 0)
+mesh = SubResource("Torus_stage")
+cast_shadow = 0
+
+[node name="EnemyRing" type="MeshInstance3D" parent="Stage"]
+position = Vector3(5.2, 0.025, -1)
+mesh = SubResource("Torus_enemy")
+cast_shadow = 0
+
+[node name="Actors" type="Node3D" parent="."]
+
+[node name="Player3D" parent="." instance=ExtResource("2_player")]
+combat_enabled = false
+

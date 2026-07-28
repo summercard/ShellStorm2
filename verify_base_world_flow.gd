@@ -22,7 +22,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	var node_count := _count_nodes(base_world)
-	if node_count > 340:
+	# PH33 square-cat avatar adds explicit Eyes/Ears/Feet/TailStub nodes.
+	# Keep a small, deliberate ceiling above the measured 365-node baseline.
+	if node_count > 375:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
 	if base_world.get_facility_count() != 8:
 		failures.append("BaseWorld3D does not expose seven lobby functions plus the training range")

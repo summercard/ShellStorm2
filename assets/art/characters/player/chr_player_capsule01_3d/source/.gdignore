@@ -1,0 +1,1 @@
+# Blender master files are production sources only. Godot imports the versioned GLB from ../runtime/.
