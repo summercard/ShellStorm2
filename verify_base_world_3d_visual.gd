@@ -24,14 +24,14 @@ func _ready() -> void:
 		if save_error != OK:
 			failures.append("BaseWorld3D preview cannot be saved")
 	var snapshot := world.player.avatar.get_component_snapshot()
-	if int(snapshot.get("component_count", 0)) != 4 or int(snapshot.get("visible_hand_count", 0)) != 1:
-		failures.append("3D preview does not use the modular capsule avatar")
+	if int(snapshot.get("component_count", 0)) != 4 or int(snapshot.get("visible_hand_count", 0)) != 2:
+		failures.append("3D preview does not use the modular bunny avatar")
 	_finish(failures)
 
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BASE_WORLD_3D_VISUAL_OK: 1280x720 preview saved with modular capsule avatar and 3D apocalypse hub")
+		print("BASE_WORLD_3D_VISUAL_OK: 1280x720 preview saved with modular bunny avatar and 3D apocalypse hub")
 		get_tree().quit(0)
 		return
 	for failure in failures:

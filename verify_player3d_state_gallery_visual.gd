@@ -36,10 +36,10 @@ func _ready() -> void:
 	if not bool((snapshot.get("player", {}).get("overlays", {}) as Dictionary).get("charging", false)):
 		failures.append("Player3DStateGallery visual test cannot show charge overlay")
 	var avatar_snapshot := gallery.player.avatar.get_component_snapshot()
-	if int(avatar_snapshot.get("eye_count", 0)) != 2 or int(avatar_snapshot.get("visible_foot_count", 0)) != 2:
-		failures.append("Player3DStateGallery visual test cannot show the cat eyes/feet modules")
-	if str(avatar_snapshot.get("tail_style", "")) != "round_stub":
-		failures.append("Player3DStateGallery visual test cannot show the round tail stub")
+	if int(avatar_snapshot.get("visible_foot_count", 0)) != 2:
+		failures.append("Player3DStateGallery visual test cannot show the bunny feet modules")
+	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01" or int(avatar_snapshot.get("ear_socket_count", 0)) != 2:
+		failures.append("Player3DStateGallery visual test cannot show bunny head-ear accessory sockets")
 	_finish(failures)
 
 

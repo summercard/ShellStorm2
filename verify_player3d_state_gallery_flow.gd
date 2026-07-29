@@ -39,7 +39,6 @@ func _ready() -> void:
 	var overlays := player_snapshot.get("overlays", {}) as Dictionary
 	if not bool(overlays.get("reloading", false)) or int((player_snapshot.get("states", []) as Array).size()) != 6:
 		failures.append("Reload is not a Player3D overlay in the gallery")
-	var baseline_components := gallery.player.avatar.get_component_snapshot()
 	if not gallery.request_preview_fire():
 		failures.append("Fire button cannot drive the real weapon shot event")
 	await get_tree().physics_frame
@@ -52,8 +51,12 @@ func _ready() -> void:
 		failures.append("Weapon shot does not activate the player firing overlay")
 	if (firing_components.get("action_rotation", Vector3.ZERO) as Vector3).length() <= 0.001:
 		failures.append("Firing overlay does not produce a component recoil transform")
-	if not (firing_components.get("hand_socket_offset", Vector3.ZERO) as Vector3).is_equal_approx(baseline_components.get("hand_socket_offset", Vector3.ZERO) as Vector3):
-		failures.append("Firing overlay separates the hand and weapon socket")
+	if (
+		str(firing_components.get("weapon_pose_state", "")) != "sidearm_fire"
+		or int(firing_components.get("active_grip_hand_count", 0)) != 1
+		or float(firing_components.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
+	):
+		failures.append("Firing overlay does not preserve the pistol's single right grip")
 	var charge_started := gallery.begin_preview_charge()
 	if not charge_started:
 		failures.append("Charge button cannot start the real charge weapon")

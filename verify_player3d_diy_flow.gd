@@ -36,31 +36,45 @@ func _ready() -> void:
 	if int(avatar_snapshot.get("wearable_count", 0)) < 8:
 		failures.append("Hat/glasses wearable nodes were not constructed")
 	if int(avatar_snapshot.get("component_count", 0)) != 4:
-		failures.append("Cat avatar does not expose head/body/hand/feet as four primary modules")
-	if int(avatar_snapshot.get("eye_count", 0)) != 2 or int(avatar_snapshot.get("ear_count", 0)) != 2:
-		failures.append("Cat head does not expose two eyes and two ears")
+		failures.append("Bunny avatar does not expose head/body/hand/feet as four primary modules")
+	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01":
+		failures.append("Player3D does not load the registered bunny01 avatar profile")
+	if str(avatar_snapshot.get("assembly_version", "")) != "v004" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
+		failures.append("Bunny v004 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
+	if int(avatar_snapshot.get("ear_count", 0)) != 2 or int(avatar_snapshot.get("ear_socket_count", 0)) != 2 or not bool(avatar_snapshot.get("ears_parented_to_head", false)):
+		failures.append("Bunny ears are not two head-parented accessories on named sockets")
 	if int(avatar_snapshot.get("visible_foot_count", 0)) != 2:
-		failures.append("Cat feet module does not expose two short feet")
-	if str(avatar_snapshot.get("tail_style", "")) != "round_stub":
-		failures.append("Cat body does not expose the round tail stub")
+		failures.append("Bunny feet module does not expose two independent feet")
+	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("independent_hand_animation", false)):
+		failures.append("Bunny hands are not exported as two independently animated visual parts")
+	if absf(float(avatar_snapshot.get("authored_scale_m", 0.0)) - 2.475) > 0.001:
+		failures.append("Bunny v004 does not retain the approved 1.5x authored scale")
+	if (
+		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 90
+		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+X"
+		or str(avatar_snapshot.get("runtime_forward_godot", "")) != "-Z"
+		or not bool(avatar_snapshot.get("forward_contract_pass", false))
+	):
+		failures.append("Bunny v004 does not enforce the Blender +X to Godot -Z forward-axis contract")
+	if str(avatar_snapshot.get("tail_style", "")) != "none":
+		failures.append("Bunny source unexpectedly retains the legacy cat tail")
 	for required_path in [
-		"VisualRoot/Head/Eyes/EyeL",
-		"VisualRoot/Head/Eyes/EyeR",
-		"VisualRoot/Head/Ears/EarL",
-		"VisualRoot/Head/Ears/EarR",
-		"VisualRoot/Body/TailStub",
-		"VisualRoot/Feet/FootL",
-		"VisualRoot/Feet/FootR",
+		"VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL",
+		"VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR",
+		"VisualRoot/BunnyRig/HandRoot/HandJointL",
+		"VisualRoot/BunnyRig/HandRoot/HandJointR",
+		"VisualRoot/BunnyRig/FeetRoot/FootJointL",
+		"VisualRoot/BunnyRig/FeetRoot/FootJointR",
 	]:
 		if not gallery.player.avatar.has_node(required_path):
-			failures.append("Cat modular node is missing: %s" % required_path)
-	if not gallery.player.avatar.get_node("VisualRoot/Head/Wearables/HatHardHat").visible:
+			failures.append("Bunny modular node is missing: %s" % required_path)
+	if not gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/HatHardHat").visible:
 		failures.append("Selected hard hat is not visible")
-	if not gallery.player.avatar.get_node("VisualRoot/Head/Wearables/GlassesDualGoggles").visible:
+	if not gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/GlassesDualGoggles").visible:
 		failures.append("Selected goggles are not visible")
 	for wearable_path in [
-		"VisualRoot/Head/Wearables/HatHardHat",
-		"VisualRoot/Head/Wearables/GlassesDualGoggles",
+		"VisualRoot/BunnyRig/HeadJoint/Wearables/HatHardHat",
+		"VisualRoot/BunnyRig/HeadJoint/Wearables/GlassesDualGoggles",
 	]:
 		var wearable := gallery.player.avatar.get_node(wearable_path) as Node3D
 		for mesh in wearable.find_children("*", "MeshInstance3D", true, false):
@@ -83,7 +97,15 @@ func _ready() -> void:
 			failures.append("Avatar mesh can inject indirect lighting: %s" % avatar_mesh.get_path())
 	if avatar_mesh_count <= 0 or int(avatar_snapshot.get("avatar_shadow_caster_count", -1)) != 0:
 		failures.append("Avatar lighting isolation did not disable every model self-shadow")
-	var idle_offset := avatar_snapshot.get("hand_socket_offset", Vector3.ZERO) as Vector3
+	if not bool(avatar_snapshot.get("weapon_grip_pose_active", false)):
+		failures.append("Bunny weapon grip pose is not active with an equipped gun")
+	if (
+		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_hold"
+		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
+		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.31
+		or float(avatar_snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.55
+	):
+		failures.append("Bunny pistol pose does not preserve the right grip and free left hand")
 	if float(avatar_snapshot.get("hand_position", Vector3.ZERO).x) >= 0.65:
 		failures.append("DIY grip hand did not use the improved inward weapon hold position")
 	gallery.run_player_action("moving")
@@ -91,10 +113,13 @@ func _ready() -> void:
 	await get_tree().process_frame
 	gallery.player.avatar.call("_process", 0.016)
 	var moving_snapshot := gallery.player.avatar.get_component_snapshot()
-	if not (moving_snapshot.get("hand_socket_offset", Vector3.ZERO) as Vector3).is_equal_approx(idle_offset):
-		failures.append("Moving animation separates the hand and weapon socket")
+	if (
+		str(moving_snapshot.get("weapon_pose_state", "")) != "sidearm_run"
+		or float(moving_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.34
+	):
+		failures.append("Moving animation does not preserve the independent sidearm run grip")
 	if absf((moving_snapshot.get("foot_l_position", Vector3.ZERO) as Vector3).y - (moving_snapshot.get("foot_r_position", Vector3.ZERO) as Vector3).y) <= 0.001:
-		failures.append("Cat feet do not alternate during the moving animation")
+		failures.append("Bunny feet do not alternate during the moving animation")
 	if not gallery.request_preview_fire():
 		failures.append("DIY player cannot fire the real equipped weapon")
 	await get_tree().physics_frame
@@ -103,15 +128,19 @@ func _ready() -> void:
 	avatar_snapshot = gallery.player.avatar.get_component_snapshot()
 	if not bool(avatar_snapshot.get("firing_animation_active", false)) or (avatar_snapshot.get("action_rotation", Vector3.ZERO) as Vector3).length() <= 0.001:
 		failures.append("DIY avatar does not preserve expressive firing animation")
-	if not (avatar_snapshot.get("hand_socket_offset", Vector3.ZERO) as Vector3).is_equal_approx(idle_offset):
-		failures.append("Firing animation separates the hand and weapon socket")
+	if (
+		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_fire"
+		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
+		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
+	):
+		failures.append("Firing animation does not preserve the pistol's single right grip")
 	gallery.reset_preview_customization()
 	if gallery.player.get_avatar_customization() != PlayerAvatar3D.DEFAULT_CUSTOMIZATION:
 		failures.append("DIY reset did not restore the default modular loadout")
 	gallery.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("PLAYER3D_DIY_FLOW_OK: cat head/body/hand/feet, eyes/ears/round tail, grip socket, and expressive actions pass")
+		print("PLAYER3D_DIY_FLOW_OK: bunny parts, head-parented ear sockets, weapon-class grip FSM, and expressive actions pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

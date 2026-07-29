@@ -21,7 +21,7 @@ func _ready() -> void:
 
 	player.avatar.call("_process", 0.2)
 	var base_avatar := player.avatar.get_component_snapshot()
-	var base_hand_socket_offset := base_avatar.get("hand_socket_offset", Vector3.ZERO) as Vector3
+	var base_right_grip_distance := float(base_avatar.get("hand_r_to_socket_global_distance", 999.0))
 	var magazine_size := player.weapon.magazine_size
 	player.weapon.current_ammo = maxi(0, magazine_size - 4)
 	if not player.weapon.request_reload():
@@ -65,9 +65,14 @@ func _ready() -> void:
 		failures.append("Reload overlay has no readable hand/weapon displacement")
 	if (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() < 0.12:
 		failures.append("Reload overlay has no readable hand/weapon rotation")
-	var mid_hand_socket_offset := avatar_snapshot.get("hand_socket_offset", Vector3.ZERO) as Vector3
-	if mid_hand_socket_offset.distance_to(base_hand_socket_offset) > 0.001:
-		failures.append("Reload animation detached the one hand from the weapon socket")
+	var mid_right_grip_distance := float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0))
+	if (
+		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_reload"
+		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
+		or mid_right_grip_distance > 0.31
+		or absf(mid_right_grip_distance - base_right_grip_distance) > 0.10
+	):
+		failures.append("Reload animation detached the pistol's single right grip from the weapon")
 
 	player.weapon.call("_process", reload_duration)
 	player.avatar.call("_process", 0.2)
@@ -133,7 +138,7 @@ func _ready() -> void:
 	player.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, one-hand animation, head-top progress bar, completion and cancellation pass")
+		print("3D_RELOAD_STATE_FLOW_OK: reload overlay, real timer, weapon-class grip animation, head-top progress bar, completion and cancellation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

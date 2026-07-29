@@ -1,0 +1,101 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v001.glb" id="2_body"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v001.glb" id="3_head"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_l_top3d_v001.glb" id="4_ear_l"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_r_top3d_v001.glb" id="5_ear_r"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_hand_top3d_v001.glb" id="6_hand"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v001.glb" id="7_foot_l"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v001.glb" id="8_foot_r"]
+
+[node name="CapsuleAvatar3D" instance=ExtResource("1_base")]
+
+[node name="Body" parent="VisualRoot" index="0"]
+position = Vector3(0, 0, 0)
+
+[node name="BodyShell" parent="VisualRoot/Body" index="0"]
+mesh = null
+
+[node name="BellyPatch" parent="VisualRoot/Body" index="0"]
+mesh = null
+
+[node name="TailStub" parent="VisualRoot/Body" index="0"]
+mesh = null
+
+[node name="BunnyBody" type="Node3D" parent="VisualRoot/Body"]
+
+[node name="Model" parent="VisualRoot/Body/BunnyBody" instance=ExtResource("2_body")]
+
+[node name="Head" parent="VisualRoot" index="0"]
+position = Vector3(0, 0, 0)
+
+[node name="HeadShell" parent="VisualRoot/Head" index="0"]
+mesh = null
+
+[node name="EyeL" parent="VisualRoot/Head/Eyes" index="0"]
+mesh = null
+
+[node name="EyeR" parent="VisualRoot/Head/Eyes" index="0"]
+mesh = null
+
+[node name="BunnyHead" type="Node3D" parent="VisualRoot/Head"]
+
+[node name="Model" parent="VisualRoot/Head/BunnyHead" instance=ExtResource("3_head")]
+
+[node name="EarL" parent="VisualRoot/Head/Ears" index="0"]
+position = Vector3(0, 0, 0)
+mesh = null
+
+[node name="Inner" parent="VisualRoot/Head/Ears/EarL" index="0"]
+mesh = null
+
+[node name="EarR" parent="VisualRoot/Head/Ears" index="0"]
+position = Vector3(0, 0, 0)
+mesh = null
+
+[node name="Inner" parent="VisualRoot/Head/Ears/EarR" index="0"]
+mesh = null
+
+[node name="EarSocketL" type="Node3D" parent="VisualRoot/Head/Ears"]
+
+[node name="EarAccessory" parent="VisualRoot/Head/Ears/EarSocketL" instance=ExtResource("4_ear_l")]
+
+[node name="EarSocketR" type="Node3D" parent="VisualRoot/Head/Ears"]
+
+[node name="EarAccessory" parent="VisualRoot/Head/Ears/EarSocketR" instance=ExtResource("5_ear_r")]
+
+[node name="Hand" parent="VisualRoot" index="0"]
+position = Vector3(0, 0, 0)
+
+[node name="Glove" parent="VisualRoot/Hand" index="0"]
+mesh = null
+
+[node name="BunnyHands" type="Node3D" parent="VisualRoot/Hand"]
+
+[node name="Model" parent="VisualRoot/Hand/BunnyHands" instance=ExtResource("6_hand")]
+
+[node name="Feet" parent="VisualRoot" index="0"]
+position = Vector3(0, 0, 0)
+
+[node name="FootL" parent="VisualRoot/Feet" index="0"]
+position = Vector3(0, 0, 0)
+mesh = null
+
+[node name="BunnyFootL" type="Node3D" parent="VisualRoot/Feet/FootL"]
+
+[node name="Model" parent="VisualRoot/Feet/FootL/BunnyFootL" instance=ExtResource("7_foot_l")]
+
+[node name="FootR" parent="VisualRoot/Feet" index="0"]
+position = Vector3(0, 0, 0)
+mesh = null
+
+[node name="BunnyFootR" type="Node3D" parent="VisualRoot/Feet/FootR"]
+
+[node name="Model" parent="VisualRoot/Feet/FootR/BunnyFootR" instance=ExtResource("8_foot_r")]
+
+[node name="WeaponSocket" parent="VisualRoot" index="0"]
+position = Vector3(0.24, 0.54, -0.32)
+
+[node name="ReloadProgress3D" parent="." index="0"]
+position = Vector3(0, 1.83, 0.06)

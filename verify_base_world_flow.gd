@@ -22,9 +22,9 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	var node_count := _count_nodes(base_world)
-	# PH33 square-cat avatar adds explicit Eyes/Ears/Feet/TailStub nodes.
-	# Keep a small, deliberate ceiling above the measured 365-node baseline.
-	if node_count > 375:
+	# Bunny01 v002 adds evaluated left/right hands, two ear sockets and independent feet.
+	# Keep a small, deliberate ceiling above the measured 391-node baseline.
+	if node_count > 405:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
 	if base_world.get_facility_count() != 8:
 		failures.append("BaseWorld3D does not expose seven lobby functions plus the training range")
@@ -55,8 +55,8 @@ func _ready() -> void:
 	var avatar_snapshot := base_world.player.avatar.get_component_snapshot()
 	if int(avatar_snapshot.get("component_count", 0)) != 4:
 		failures.append("Player3D avatar does not preserve four modular visual components")
-	if int(avatar_snapshot.get("visible_hand_count", 0)) != 1 or not bool(avatar_snapshot.get("has_weapon_socket", false)):
-		failures.append("Player3D avatar does not preserve the one-hand/weapon-socket contract")
+	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("has_weapon_socket", false)):
+		failures.append("Player3D avatar does not preserve the two-hand/weapon-socket contract")
 
 	var return_gate := base_world.get_node_or_null("DungeonEntrances/Dungeon03") as DungeonEntrance3D
 	if return_gate == null or base_world.player.global_position.distance_to(return_gate.global_position + Vector3(0, 0, 2.8)) > 0.05:
@@ -121,10 +121,13 @@ func _ready() -> void:
 		or (moving_before.get("body_scale", Vector3.ONE) as Vector3).distance_to(moving_after.get("body_scale", Vector3.ONE) as Vector3) < 0.005
 	):
 		failures.append("Player3D moving state has no independent locomotion animation cycle")
-	var hand_to_socket_before := (moving_before.get("hand_position", Vector3.ZERO) as Vector3) - (moving_before.get("weapon_socket_position", Vector3.ZERO) as Vector3)
-	var hand_to_socket_after := (moving_after.get("hand_position", Vector3.ZERO) as Vector3) - (moving_after.get("weapon_socket_position", Vector3.ZERO) as Vector3)
-	if hand_to_socket_before.distance_to(hand_to_socket_after) > 0.01:
-		failures.append("Locomotion animation breaks the fixed hand/weapon-socket relationship")
+	if (
+		str(moving_after.get("weapon_pose_state", "")) != "sidearm_run"
+		or int(moving_after.get("active_grip_hand_count", 0)) != 1
+		or float(moving_before.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
+		or float(moving_after.get("hand_r_to_socket_global_distance", 999.0)) > 0.36
+	):
+		failures.append("Locomotion animation breaks the pistol's independent right-hand run grip")
 	base_world.player.request_dash()
 	await get_tree().process_frame
 	await get_tree().process_frame

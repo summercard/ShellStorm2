@@ -1,13 +1,12 @@
 [gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/Player3D.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="2_avatar"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v004.tscn" id="2_avatar"]
 [ext_resource type="Script" path="res://src/player3d/PlayerVision3D.gd" id="3_vision"]
 [ext_resource type="PackedScene" path="res://assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn" id="4_flashlight"]
 
-[sub_resource type="CapsuleShape3D" id="ShapePlayer"]
-radius = 0.55
-height = 1.65
+[sub_resource type="BoxShape3D" id="ShapePlayer"]
+size = Vector3(0.86, 1.8, 0.72)
 
 [sub_resource type="StandardMaterial3D" id="MatCursor"]
 transparency = 1
@@ -42,9 +41,12 @@ collision_layer = 1
 collision_mask = 1
 script = ExtResource("1_player")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-position = Vector3(0, 0.88, 0)
+[node name="VirtualCollisionBox" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
 shape = SubResource("ShapePlayer")
+metadata/collision_contract = "invisible_gameplay_box_excludes_model_and_ears"
+metadata/head_top_without_ears_m = 1.820592
+metadata/top_safety_margin_m = 0.020592
 
 [node name="Avatar3D" parent="." instance=ExtResource("2_avatar")]
 

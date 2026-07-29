@@ -255,8 +255,8 @@ func _verify_weapon_matrix(failures: Array[String]) -> void:
 		failures.append("Projectile visual/trail orientation does not match travel direction")
 	orientation_probe.queue_free()
 	var avatar_snapshot := test_player.avatar.get_component_snapshot()
-	if int(avatar_snapshot.get("visible_hand_count", 0)) != 1 or not bool(avatar_snapshot.get("has_weapon_socket", false)):
-		failures.append("Player one-hand modular weapon contract regressed")
+	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("has_weapon_socket", false)):
+		failures.append("Player two-hand modular weapon contract regressed")
 	var state_snapshot := test_player.get_state_machine_snapshot()
 	var expected_states := ["dashing", "dead", "hurt", "idle", "locked", "moving"]
 	if state_snapshot.get("states", []) != expected_states or not bool(state_snapshot.get("rules_enabled", false)):
