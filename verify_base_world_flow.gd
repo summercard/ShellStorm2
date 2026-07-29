@@ -5,8 +5,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var failures: Array[String] = []
 	var main_scene_path := str(ProjectSettings.get_setting("application/run/main_scene", ""))
-	if main_scene_path != "res://scenes/BaseWorld3D.tscn":
-		failures.append("Project entry is not the BaseWorld3D scene")
+	if main_scene_path != "res://scenes/TowerDescent3D.tscn":
+		failures.append("Project entry is not the PH34 tower-descent scene")
 
 	var base_scene := load("res://scenes/BaseWorld3D.tscn") as PackedScene
 	if base_scene == null:
@@ -186,7 +186,7 @@ func _tap_action(action: StringName) -> void:
 
 func _finish(failures: Array[String], node_count: int) -> void:
 	if failures.is_empty():
-		print("BASE_WORLD_3D_FLOW_OK: entry map, modular environment, four-component player, six-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
+		print("BASE_WORLD_3D_FLOW_OK: compatibility hub, modular environment, four-component player, six-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
 		get_tree().quit(0)
 		return
 	for failure in failures:

@@ -20,12 +20,12 @@ func physics_update(delta: float) -> void:
 		return
 	var direction := _input_direction()
 	if direction == Vector3.ZERO:
-		player.set("velocity", Vector3.ZERO)
+		player.set("velocity", _grounded_velocity(Vector3.ZERO))
 		player.call("move_and_slide")
 		_go("idle")
 		return
 	player.set("last_move_direction", direction)
-	player.set("velocity", direction * float(player.call("get_move_speed")))
+	player.set("velocity", _grounded_velocity(direction * float(player.call("get_move_speed"))))
 	player.call("move_and_slide")
 
 

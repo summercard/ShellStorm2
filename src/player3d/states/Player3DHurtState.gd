@@ -21,7 +21,7 @@ func physics_update(delta: float) -> void:
 	velocity = velocity.move_toward(Vector3.ZERO, float(player.call("get_move_speed")) * 7.0 * delta)
 	var knockback_velocity := player.call("consume_knockback_velocity", delta) as Vector3
 	velocity += knockback_velocity
-	player.set("velocity", velocity)
+	player.set("velocity", _grounded_velocity(velocity))
 	player.call("move_and_slide")
 	_remaining -= delta
 	if _remaining <= 0.0:

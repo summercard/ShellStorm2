@@ -7,6 +7,7 @@ var _edges: Dictionary = {}
 var _revealed: Dictionary = {}
 var _current_room_id := ""
 var _position_by_id: Dictionary = {}
+var _vertical_stack_mode := false
 
 
 func _ready() -> void:
@@ -18,8 +19,23 @@ func configure(records: Array[Dictionary], edge_states: Dictionary) -> void:
 	_records = records.duplicate(true)
 	_edges = edge_states.duplicate(true)
 	_position_by_id.clear()
+	var min_planar := Vector2(INF, INF)
+	var max_planar := Vector2(-INF, -INF)
+	var min_height := INF
+	var max_height := -INF
 	for record in _records:
-		_position_by_id[str(record.get("id", ""))] = record.get("position", Vector3.ZERO)
+		var position := record.get("position", Vector3.ZERO) as Vector3
+		_position_by_id[str(record.get("id", ""))] = position
+		min_planar.x = minf(min_planar.x, position.x)
+		min_planar.y = minf(min_planar.y, position.z)
+		max_planar.x = maxf(max_planar.x, position.x)
+		max_planar.y = maxf(max_planar.y, position.z)
+		min_height = minf(min_height, position.y)
+		max_height = maxf(max_height, position.y)
+	_vertical_stack_mode = (
+		max_planar.distance_to(min_planar) < 1.0
+		and max_height - min_height > 1.0
+	)
 	queue_redraw()
 
 
@@ -45,6 +61,7 @@ func get_snapshot() -> Dictionary:
 	return {
 		"revealed_count": _revealed.size(), "current_room_id": _current_room_id,
 		"open_edge_count": _edges.values().count(true), "room_count": _records.size(),
+		"projection_mode": "vertical_stack" if _vertical_stack_mode else "planar",
 	}
 
 
@@ -80,26 +97,35 @@ func _bounds() -> Rect2:
 	var max_pos := Vector2(-INF, -INF)
 	for record in _records:
 		var p := record.get("position", Vector3.ZERO) as Vector3
-		min_pos.x = minf(min_pos.x, p.x)
-		min_pos.y = minf(min_pos.y, p.z)
-		max_pos.x = maxf(max_pos.x, p.x)
-		max_pos.y = maxf(max_pos.y, p.z)
+		var projected := _project_world_position(p)
+		min_pos.x = minf(min_pos.x, projected.x)
+		min_pos.y = minf(min_pos.y, projected.y)
+		max_pos.x = maxf(max_pos.x, projected.x)
+		max_pos.y = maxf(max_pos.y, projected.y)
 	return Rect2(min_pos, max_pos - min_pos)
 
 
 func _map_position(world_position: Vector3, bounds: Rect2) -> Vector2:
 	var padding := 16.0
 	var usable := size - Vector2.ONE * padding * 2.0
+	var projected := _project_world_position(world_position)
 	var normalized := Vector2(
-		(world_position.x - bounds.position.x) / maxf(1.0, bounds.size.x),
-		(world_position.z - bounds.position.y) / maxf(1.0, bounds.size.y)
+		(projected.x - bounds.position.x) / maxf(1.0, bounds.size.x),
+		(projected.y - bounds.position.y) / maxf(1.0, bounds.size.y)
 	)
 	return Vector2(padding, padding) + normalized * usable
+
+
+func _project_world_position(world_position: Vector3) -> Vector2:
+	if _vertical_stack_mode:
+		return Vector2(0.0, -world_position.y)
+	return Vector2(world_position.x, world_position.z)
 
 
 func _room_color(type_id: String) -> Color:
 	return {
 		"START": Color(0.35, 0.75, 1.0), "COMBAT": Color(0.92, 0.30, 0.24),
+		"FACILITY": Color(0.30, 0.88, 0.76),
 		"ELITE": Color(0.90, 0.32, 0.88), "BOSS": Color(1.0, 0.12, 0.06),
 		"EXTRACTION": Color(0.30, 1.0, 0.62), "SCAVENGE": Color(0.90, 0.72, 0.24),
 		"STORAGE": Color(0.64, 0.54, 0.32), "MERCHANT": Color(0.36, 0.88, 0.84),

@@ -22,6 +22,7 @@ const EXTRACTION_FINAL_PROGRESS := 0.70
 @export var visual_theme: DungeonTheme3D
 @export var run_seed_override := -1
 @export var test_mode := false
+@export_file("*.tscn") var return_scene_path := "res://scenes/BaseWorld3D.tscn"
 
 @onready var player: Player3D = $Player3D
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
@@ -489,9 +490,17 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	var body := StaticBody3D.new()
 	body.name = "Corridor_%02d" % index
 	body.position = center + Vector3(0, -0.12, 0)
-	if not horizontal and absf(end.y - start.y) > 0.01:
+	var is_vertical_connector := absf(end.y - start.y) > 0.01
+	if horizontal and is_vertical_connector:
+		var dx := end.x - start.x
+		body.rotation.z = atan((end.y - start.y) / dx) if absf(dx) > 0.01 else 0.0
+	elif not horizontal and is_vertical_connector:
 		var dz := end.z - start.z
 		body.rotation.x = -atan((end.y - start.y) / dz) if absf(dz) > 0.01 else 0.0
+	body.set_meta("is_vertical_connector", is_vertical_connector)
+	body.set_meta("from_room_id", from_room.room_id)
+	body.set_meta("to_room_id", to_room.room_id)
+	body.set_meta("height_delta", to.y - from.y)
 	body.collision_layer = 1
 	body.collision_mask = 0
 	$GeneratedCorridors.add_child(body)
@@ -537,6 +546,39 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 		wall_collision.shape = wall_shape
 		wall_collision.disabled = true
 		body.add_child(wall_collision)
+	if is_vertical_connector:
+		# 封闭楼梯间顶部与墙共同阻挡视线；台阶只做可读表现，连续斜坡承担移动碰撞。
+		var ceiling_size := Vector3(length, 0.22, 3.8) if horizontal else Vector3(3.8, 0.22, length)
+		var ceiling_mesh := BoxMesh.new()
+		ceiling_mesh.size = ceiling_size
+		ceiling_mesh.material = wall_material
+		var ceiling_instance := MeshInstance3D.new()
+		ceiling_instance.name = "StairwellCeiling"
+		ceiling_instance.position.y = 2.38
+		ceiling_instance.mesh = ceiling_mesh
+		body.add_child(ceiling_instance)
+		var ceiling_shape := BoxShape3D.new()
+		ceiling_shape.size = ceiling_size
+		var ceiling_collision := CollisionShape3D.new()
+		ceiling_collision.position.y = 2.38
+		ceiling_collision.shape = ceiling_shape
+		ceiling_collision.disabled = true
+		body.add_child(ceiling_collision)
+		var step_count := maxi(5, int(length / 0.85))
+		for step_index in range(step_count):
+			var ratio := (float(step_index) + 0.5) / float(step_count)
+			var tread_mesh := BoxMesh.new()
+			tread_mesh.size = Vector3(length / float(step_count) * 0.82, 0.07, 3.46) if horizontal else Vector3(3.46, 0.07, length / float(step_count) * 0.82)
+			tread_mesh.material = wall_material
+			var tread := MeshInstance3D.new()
+			tread.name = "StairTread_%02d" % step_index
+			tread.position = Vector3(
+				lerpf(-length * 0.5, length * 0.5, ratio) if horizontal else 0.0,
+				0.075,
+				0.0 if horizontal else lerpf(-length * 0.5, length * 0.5, ratio)
+			)
+			tread.mesh = tread_mesh
+			body.add_child(tread)
 
 
 func _create_extraction() -> void:
@@ -1326,7 +1368,7 @@ func _update_corridor_streaming(current_id: String) -> void:
 		corridor.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
 		for child in corridor.get_children():
 			if child is CollisionShape3D:
-				(child as CollisionShape3D).disabled = not active
+				(child as CollisionShape3D).set_deferred("disabled", not active)
 
 
 func _on_insure_item_requested(slot_index: int) -> void:
@@ -1690,7 +1732,7 @@ func _finish_run(success: bool) -> void:
 	run_completed.emit(success, summary)
 	if not test_mode:
 		await get_tree().create_timer(1.6).timeout
-		get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
+		get_tree().change_scene_to_file(return_scene_path)
 
 
 func _collect_extracted_items() -> Array[Dictionary]:

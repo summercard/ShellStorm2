@@ -14,6 +14,12 @@ func _input_direction() -> Vector3:
 	return Vector3.ZERO
 
 
+func _grounded_velocity(planar_velocity: Vector3) -> Vector3:
+	if player != null and player.has_method("get_grounded_velocity"):
+		return player.call("get_grounded_velocity", planar_velocity) as Vector3
+	return planar_velocity
+
+
 func _announce(state_id: String, context: Dictionary = {}) -> void:
 	if player != null and player.has_method("_set_presentation_state"):
 		player.call("_set_presentation_state", state_id, context)

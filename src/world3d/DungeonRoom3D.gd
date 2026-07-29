@@ -13,6 +13,8 @@ const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp
 const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn")
 const HAZARD_SCENE: PackedScene = preload("res://assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn")
 const DOOR_SCRIPT := preload("res://src/world3d/RoomDoor3D.gd")
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
+const ROOFTOP_FACADE_HEIGHT := 6.0
 
 const ROOM_DIMENSIONS := {
 	# 约按 2D RoomData 的 0.034 m/px 映射，保留四档真实战斗尺度。
@@ -20,6 +22,9 @@ const ROOM_DIMENSIONS := {
 	"medium": Vector2(32.0, 26.0),
 	"large": Vector2(44.0, 34.0),
 	"arena": Vector2(56.0, 42.0),
+	# PH34 塔楼入口使用固定真实尺度；不改变既有四档房间契约。
+	"floor": Vector2(30.0, 30.0),
+	"rooftop": Vector2(50.0, 50.0),
 }
 
 var room_id := "room_00"
@@ -80,6 +85,8 @@ func get_room_snapshot() -> Dictionary:
 		"central_light": _central_light != null,
 		"room_light_on": _central_light != null and _central_light.is_light_enabled(),
 		"light_switch": _light_switch != null,
+		"support_collision_persistent": _has_enabled_support_collision(),
+		"door_snapshots": _get_door_snapshots(),
 		"is_3d": true,
 	}
 
@@ -117,7 +124,9 @@ func set_stream_state(state: int) -> void:
 			call_deferred("_prewarm_detail_if_streamed")
 	visible = _stream_state > 0
 	process_mode = Node.PROCESS_MODE_INHERIT if _stream_state > 0 else Node.PROCESS_MODE_DISABLED
-	_set_collision_enabled(self, _stream_state > 0)
+	# 远层只卸载通行/交互碰撞，承重楼板永久保留。否则隐藏楼层时，
+	# 仍驻留的掉落或冻结实体可能穿过已卸载楼板坠向更深层。
+	_set_collision_enabled(self, _stream_state > 0, true)
 	if _stream_state > 0:
 		for value in _door_nodes.values():
 			var door := value as RoomDoor3D
@@ -179,6 +188,9 @@ func _build_shell() -> void:
 	_add_box("FloorInset", Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.36, 0.84))
 	for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
 		_add_box("FloorSeam", Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
+	if size_class == "rooftop":
+		_build_rooftop_shell(dimensions)
+		return
 	_build_wall("north", Vector3(0, 1.4, -dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0))
 	_build_wall("south", Vector3(0, 1.4, dimensions.y * 0.5), dimensions.x, Vector3(1, 0, 0))
 	_build_wall("west", Vector3(-dimensions.x * 0.5, 1.4, 0), dimensions.y, Vector3(0, 0, 1))
@@ -192,6 +204,162 @@ func _build_shell() -> void:
 		Vector3(dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
 	]:
 		_add_static_box("CornerPost", corner, Vector3(0.42, 2.9, 0.42), _trim_material)
+	if size_class == "floor":
+		_build_floor_partitions(dimensions)
+
+
+func _build_rooftop_shell(dimensions: Vector2) -> void:
+	for direction in ["north", "south", "west", "east"]:
+		_build_rooftop_exterior_wall(direction, dimensions)
+		_build_rooftop_railing(direction, dimensions)
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	var access_direction := doors[0] if not doors.is_empty() else "west"
+	var access_center := Vector3.ZERO
+	match access_direction:
+		"west":
+			access_center = Vector3(-dimensions.x * 0.5, 1.45, 0)
+		"east":
+			access_center = Vector3(dimensions.x * 0.5, 1.45, 0)
+		"north":
+			access_center = Vector3(0, 1.45, -dimensions.y * 0.5)
+		_:
+			access_center = Vector3(0, 1.45, dimensions.y * 0.5)
+	var frame_axis_x := access_direction in ["north", "south"]
+	for side in [-1.0, 1.0]:
+		var frame_half_width := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + 0.22
+		var post_offset := Vector3(side * frame_half_width, 0, 0) if frame_axis_x else Vector3(0, 0, side * frame_half_width)
+		_add_static_box("RooftopStairFramePost", access_center + post_offset, Vector3(0.34, 2.9, 0.34), _wall_material)
+	var frame_span := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M + 0.78
+	var lintel_size := Vector3(frame_span, 0.38, 0.34) if frame_axis_x else Vector3(0.34, 0.38, frame_span)
+	_add_static_box("RooftopStairFrameLintel", access_center + Vector3(0, 1.24, 0), lintel_size, _wall_material)
+	# 楼梯头顶部做缺口标识；真正通行口仍由公共 RoomDoor3D 阻挡与开启。
+	var marker := Label3D.new()
+	marker.name = "RooftopDescentMarker"
+	marker.position = access_center + Vector3(0, 1.9, 0)
+	marker.text = "下行楼梯"
+	marker.font_size = 40
+	marker.pixel_size = 0.012
+	marker.modulate = theme.accent_color.lightened(0.18)
+	marker.outline_size = 8
+	add_child(marker)
+
+
+func _build_rooftop_exterior_wall(direction: String, dimensions: Vector2) -> void:
+	var horizontal := direction in ["north", "south"]
+	var length := dimensions.x if horizontal else dimensions.y
+	var has_door := doors.has(direction)
+	var facade_material := _material(theme.wall_color.lightened(0.14), 0.54, 0.68)
+	var facade_band_material := _material(theme.trim_color.lightened(0.10), 0.70, 0.42)
+	facade_material.emission_enabled = true
+	facade_material.emission = theme.wall_color.lightened(0.24)
+	facade_material.emission_energy_multiplier = 0.28
+	facade_band_material.emission_enabled = true
+	facade_band_material.emission = theme.trim_color.lightened(0.18)
+	facade_band_material.emission_energy_multiplier = 0.46
+	# 立面门洞贯穿本层高度，让上下两端都沿同一门轴进入楼梯间。
+	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M if has_door else 0.0
+	var segment_length := (length - opening) * 0.5 if has_door else length
+	var centers: Array[float] = [0.0]
+	if has_door:
+		centers = [
+			-(opening * 0.5 + segment_length * 0.5),
+			opening * 0.5 + segment_length * 0.5,
+		]
+	for segment_center in centers:
+		var center := Vector3.ZERO
+		if horizontal:
+			center = Vector3(
+				segment_center,
+				-ROOFTOP_FACADE_HEIGHT * 0.5,
+				-dimensions.y * 0.5 if direction == "north" else dimensions.y * 0.5
+			)
+		else:
+			center = Vector3(
+				-dimensions.x * 0.5 if direction == "west" else dimensions.x * 0.5,
+				-ROOFTOP_FACADE_HEIGHT * 0.5,
+				segment_center
+			)
+		var size := (
+			Vector3(segment_length, ROOFTOP_FACADE_HEIGHT, 0.54)
+			if horizontal
+			else Vector3(0.54, ROOFTOP_FACADE_HEIGHT, segment_length)
+		)
+		# 立面是视觉楼体；屋顶边界、门和楼梯间各自承担真实碰撞，避免重复墙体卡人。
+		_add_box("RooftopExteriorWall_%s" % direction, center, size, facade_material)
+		for band_y in [-0.72, -5.28]:
+			var band_center := Vector3(center.x, band_y, center.z)
+			var band_size := (
+				Vector3(segment_length, 0.18, 0.62)
+				if horizontal
+				else Vector3(0.62, 0.18, segment_length)
+			)
+			_add_box("RooftopExteriorBand_%s" % direction, band_center, band_size, facade_band_material)
+
+
+func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
+	var horizontal := direction in ["north", "south"]
+	var length := dimensions.x if horizontal else dimensions.y
+	var has_door := doors.has(direction)
+	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M if has_door else 0.0
+	var segment_length := (length - opening) * 0.5 if has_door else length
+	var centers: Array[float] = [0.0]
+	if has_door:
+		centers = [
+			-(opening * 0.5 + segment_length * 0.5),
+			opening * 0.5 + segment_length * 0.5,
+		]
+	for segment_center in centers:
+		var center := Vector3.ZERO
+		if horizontal:
+			center = Vector3(segment_center, 0.62, -dimensions.y * 0.5 if direction == "north" else dimensions.y * 0.5)
+		else:
+			center = Vector3(-dimensions.x * 0.5 if direction == "west" else dimensions.x * 0.5, 0.62, segment_center)
+		var rail_size := Vector3(segment_length, 0.12, 0.18) if horizontal else Vector3(0.18, 0.12, segment_length)
+		_add_static_box("RooftopRailLower_%s" % direction, center, rail_size, _trim_material)
+		_add_static_box("RooftopRailUpper_%s" % direction, center + Vector3(0, 0.62, 0), rail_size, _trim_material)
+		var post_count := maxi(2, int(segment_length / 4.0) + 1)
+		for post_index in range(post_count):
+			var ratio := float(post_index) / float(maxi(1, post_count - 1))
+			var offset := lerpf(-segment_length * 0.5, segment_length * 0.5, ratio)
+			var post_position := center
+			if horizontal:
+				post_position.x += offset
+			else:
+				post_position.z += offset
+			post_position.y = 0.66
+			_add_static_box("RooftopRailPost_%s" % direction, post_position, Vector3(0.16, 1.32, 0.16), _trim_material)
+
+
+func _build_floor_partitions(dimensions: Vector2) -> void:
+	var mirror := -1.0 if absi(room_seed) % 2 == 0 else 1.0
+	if room_type == "FACILITY":
+		# 右侧约 6m 宽的连续通道；中段留门洞通向主空间。
+		var corridor_x := dimensions.x * 0.5 - 6.0
+		for z in [-8.8, 8.8]:
+			_add_static_box(
+				"FacilityCorridorWall",
+				Vector3(corridor_x, 1.4, z),
+				Vector3(0.28, 2.8, 8.4),
+				_wall_material
+			)
+		return
+	var partition_x := mirror * 4.8
+	for z in [-8.0, 7.5]:
+		_add_static_box(
+			"FloorPartitionVertical",
+			Vector3(partition_x, 1.4, z),
+			Vector3(0.28, 2.8, 8.0),
+			_wall_material
+		)
+	var partition_z := mirror * 6.2
+	for x in [-8.2, 8.2]:
+		_add_static_box(
+			"FloorPartitionHorizontal",
+			Vector3(x, 1.4, partition_z),
+			Vector3(8.0, 2.8, 0.28),
+			_wall_material
+		)
 
 
 func _build_wall(direction: String, center: Vector3, length: float, axis: Vector3) -> void:
@@ -202,7 +370,7 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 		var size := Vector3(length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, length)
 		_add_static_box("Wall_%s" % direction, center, size, _wall_material)
 		return
-	var opening := 3.8
+	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	var segment_length := (length - opening) * 0.5
 	for side in [-1.0, 1.0]:
 		var offset: Vector3 = axis * float(side) * (opening * 0.5 + segment_length * 0.5)
@@ -254,14 +422,20 @@ func _build_content() -> void:
 	_light_switch.configure(_central_light, false)
 	add_child(_light_switch)
 
-	var prop_count := 3 if size_class == "small" else 5 if size_class == "medium" else 7 if size_class == "large" else 9
+	var prop_count := 3 if size_class == "small" else 5 if size_class == "medium" else 7 if size_class in ["large", "floor"] else 9
+	if size_class == "rooftop":
+		prop_count = 3
+	if room_type == "FACILITY":
+		prop_count = 0
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
 	for index in range(prop_count):
 		var is_search := (
 			room_type in ["STORAGE", "SCAVENGE", "EVENT", "BASEMENT"]
 			and index < maxi(1, prop_count / 2)
-		) or room_type in ["START", "EXTRACTION"] and index == 0
+		) or room_type in ["START", "EXTRACTION"] and index == 0 or (
+			size_class == "floor" and room_type != "FACILITY" and index < 2
+		)
 		var prop := (SEARCH_SCENE if is_search else FURNITURE_SCENE).instantiate() as RoomFurniture3D
 		var type_options: Array[String] = theme.furniture_bias.duplicate()
 		if room_type == "STORAGE":
@@ -377,6 +551,20 @@ func _build_spawn_points() -> void:
 func _on_room_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("player_3d"):
 		return
+	call_deferred("_emit_player_entered_if_present", body)
+
+
+func _emit_player_entered_if_present(body: Node3D) -> void:
+	if body == null or not is_instance_valid(body) or not body.is_in_group("player_3d"):
+		return
+	var local_position := to_local(body.global_position)
+	var dimensions := get_dimensions()
+	if (
+		absf(local_position.x) > dimensions.x * 0.42
+		or absf(local_position.z) > dimensions.y * 0.42
+		or absf(local_position.y) > 1.8
+	):
+		return
 	if not visited:
 		visited = true
 	player_entered.emit(self)
@@ -430,8 +618,29 @@ func _material(color: Color, metallic: float, roughness: float) -> StandardMater
 	return material
 
 
-func _set_collision_enabled(root: Node, enabled: bool) -> void:
+func _set_collision_enabled(root: Node, enabled: bool, preserve_support := false) -> void:
 	if root is CollisionShape3D:
-		(root as CollisionShape3D).disabled = not enabled
+		var collision := root as CollisionShape3D
+		var is_support := collision.get_parent() != null and collision.get_parent().name == "FloorBody"
+		collision.set_deferred("disabled", false if preserve_support and is_support else not enabled)
 	for child in root.get_children():
-		_set_collision_enabled(child, enabled)
+		_set_collision_enabled(child, enabled, preserve_support)
+
+
+func _has_enabled_support_collision() -> bool:
+	var floor_body := get_node_or_null("FloorBody") as StaticBody3D
+	if floor_body == null:
+		return false
+	for child in floor_body.get_children():
+		if child is CollisionShape3D and not (child as CollisionShape3D).disabled:
+			return true
+	return false
+
+
+func _get_door_snapshots() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for value in _door_nodes.values():
+		var door := value as RoomDoor3D
+		if door != null:
+			result.append(door.get_snapshot())
+	return result

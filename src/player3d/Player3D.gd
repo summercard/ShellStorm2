@@ -66,6 +66,11 @@ var _avatar_customization := PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate()
 
 func _ready() -> void:
 	current_hp = max_hp
+	# PH34 楼梯间使用连续斜坡承担真实高度变化；启用向下贴地，
+	# 保持既有 XZ 输入的同时让 CharacterBody3D 能沿坡下行而不悬空。
+	floor_snap_length = 0.85
+	floor_max_angle = deg_to_rad(44.0)
+	floor_stop_on_slope = true
 	add_to_group("player")
 	add_to_group("player_3d")
 	_init_state_machine()
@@ -155,6 +160,12 @@ func get_avatar_customization_options() -> Dictionary:
 
 func get_move_speed() -> float:
 	return SPEED
+
+
+func get_grounded_velocity(planar_velocity: Vector3) -> Vector3:
+	var result := planar_velocity
+	result.y = -3.2
+	return result
 
 
 func get_dash_speed() -> float:
