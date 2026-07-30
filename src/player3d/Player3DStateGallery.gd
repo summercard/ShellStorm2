@@ -131,6 +131,20 @@ func run_player_action(action: String) -> void:
 		"locked":
 			_player_motion = "idle"
 			player.set_input_locked(true)
+		"falling":
+			player.set_input_locked(false)
+			_player_motion = "idle"
+			player.velocity = Vector3(0.0, -8.0, 0.0)
+			player.set("_fall_start_y", player.global_position.y)
+			machine.transition_to("falling", true)
+		"landing":
+			player.set_input_locked(false)
+			_player_motion = "idle"
+			if machine.current_state_name != "falling":
+				machine.transition_to("falling")
+			player.set("_last_impact_speed", 10.0)
+			player.set("_landing_duration", 0.22)
+			machine.transition_to("landing")
 		"dead":
 			player.set("is_invincible", false)
 			player.set("_invincible_remaining", 0.0)
@@ -374,7 +388,7 @@ func _build_interface() -> void:
 	root.add_child(player_panel)
 	var player_box := VBoxContainer.new()
 	player_panel.add_child(player_box)
-	_add_section_label(player_box, "玩家状态机 · 六态")
+	_add_section_label(player_box, "玩家状态机 · 八态")
 	var state_grid := GridContainer.new()
 	state_grid.columns = 2
 	player_box.add_child(state_grid)
@@ -383,6 +397,8 @@ func _build_interface() -> void:
 	_add_button(state_grid, "StateDashing", "突进", func(): run_player_action("dashing"))
 	_add_button(state_grid, "StateHurt", "受创", func(): run_player_action("hurt"))
 	_add_button(state_grid, "StateLocked", "锁定", func(): run_player_action("locked"))
+	_add_button(state_grid, "StateFalling", "下落", func(): run_player_action("falling"))
+	_add_button(state_grid, "StateLanding", "落地", func(): run_player_action("landing"))
 	_add_button(state_grid, "StateDead", "死亡", func(): run_player_action("dead"))
 	_add_button(player_box, "ResetPlayer", "重置玩家", func(): run_player_action("reset"))
 	_add_section_label(player_box, "叠加层与武器")

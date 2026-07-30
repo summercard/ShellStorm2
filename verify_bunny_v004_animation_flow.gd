@@ -15,20 +15,20 @@ func _ready() -> void:
 
 	gallery.player.avatar.call("_process", 0.10)
 	var snapshot := gallery.player.avatar.get_component_snapshot()
-	if str(snapshot.get("assembly_version", "")) != "v004":
-		failures.append("Bunny v004 is not the active Player3D asset")
+	if str(snapshot.get("assembly_version", "")) != "v006":
+		failures.append("Bunny v006 is not the active Player3D asset")
 	if (
 		gallery.player.get_state_machine_state() != "idle"
 		or not bool(snapshot.get("idle_animation_active", false))
 		or not bool(snapshot.get("idle_state_machine_owned", false))
 	):
-		failures.append("Bunny v004 idle state does not own the standing animation")
+		failures.append("Bunny v005 idle state does not own the standing animation")
 	if (
 		not bool(snapshot.get("weapon_grip_pose_active", false))
 		or str(snapshot.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(snapshot.get("active_grip_hand_count", 0)) != 1
-		or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.31
-		or float(snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.55
+			or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
+			or float(snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.330
 	):
 		failures.append("Pistol does not keep its one-hand right-side grip and free left hand")
 	if not gallery.player.equip_weapon("bp_rifle", "mod_bullet_standard"):
@@ -39,8 +39,8 @@ func _ready() -> void:
 		if (
 			str(snapshot.get("weapon_pose_state", "")) != "longgun_hold"
 			or int(snapshot.get("active_grip_hand_count", 0)) != 2
-			or float(snapshot.get("hand_l_to_socket_global_distance", 999.0)) > 0.42
-			or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.31
+				or float(snapshot.get("hand_l_to_socket_global_distance", 999.0)) > 0.255
+				or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
 		):
 			failures.append("Rifle does not converge on right grip plus left support")
 
@@ -76,7 +76,7 @@ func _ready() -> void:
 	gallery.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_V004_ANIMATION_FLOW_OK: idle standing loop, forward contract, one/two-hand grip, dash roll, and exaggerated hurt key poses pass")
+		print("BUNNY_V006_ANIMATION_FLOW_OK: baked 1.5 m scale, idle standing loop, forward contract, one/two-hand grip, dash roll, and hurt key poses pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

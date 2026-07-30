@@ -8,19 +8,71 @@
 
 ## 新尺寸冻结
 
-“面积增加 5 倍”按面积严格乘 5 计算，而不是边长乘 5：
+2026-07-30 用户复核后进一步明确：“长、宽分别乘 5”指**整座楼层的可走楼板与建筑外壳一起扩大**，不能只在旧外墙外补一圈地板。现有功能核心、室内墙、门、设施和楼梯仍不缩放。
 
-| 模块 | 旧尺寸 | 新尺寸 | 新面积 |
-|---|---:|---:|---:|
-| 楼顶 | 50×50m | 111.803×111.803m | 12,500㎡ |
-| 基地层 | 30×30m | 67.082×67.082m | 4,500㎡ |
-| 战斗层 | 30×30m | 67.082×67.082m | 4,500㎡ |
+2026-07-30 模块化要求再次覆盖小数尺寸：为了让 Blender 母版能直接拆成 Godot 拼装组件，楼板、外墙、核心墙、室内墙和门洞统一使用 **5m 网格单位**。禁止保留单块 335m 楼板、整边 335m 外墙或任意长度墙段。
+
+| 区域 | 当前尺寸 | 本轮尺寸 | 处理方式 |
+|---|---:|---:|---|
+| 楼层总占地/建筑外轮廓 | 335.410×335.410m | 335×335m | 67×67 块 5×5m 地砖拼接 |
+| 基地/战斗功能核心 | 67.082×67.082m | 65×65m | 13×13 网格；约 1.041m/侧的接口归整 |
+| 楼顶既有核心屋面 | 111.803×111.803m | 不再作为尺寸边界 | 楼顶同样按整层 67×67 地砖装配，楼梯开口按格跳过 |
+
+- 旧版 12 块大面积外围补板全部取消。每层由 `67×67=4489` 个 5×5m 地砖实例拼接；楼顶楼梯开口对应的地砖实例跳过，不允许用一块隐藏大板盖住。
+- 三层的建筑外边界统一为 `X/Y=±167.5m`。楼顶女儿墙、基地外墙和战斗层外墙每边使用 67 个 5m 墙段，形成完整 `335×335m` 封闭楼层。
+- 基地层和战斗层外墙从各自可走楼板向上延伸完整 9m；楼顶总边界增加 1.5m 女儿墙。外墙厚度 0.30m，外表面与总楼板边缘齐平。
+- 基地核心不能再使用低围栏，必须由 9m 高模块墙完整围合；东西楼梯接口各使用一个 5m 门墙模块，净门宽 4m。
+- 战斗层中央 65m 核心外壳、内部隔墙和门同样只能使用 5m 实墙模块与 5m 门墙模块；随机布局只改变模块坐标和旋转，不产生新尺寸墙段。
+- 两套楼梯 ROOT 从旧 `X=±33.541m` 归整到核心网格边界 `X=±32.5m`，仅整体移动约 1.041m；楼梯内部踏步、平台、特殊墙高和 9m 高差不重做。
+- 核心区仍位于 335m 总楼板中央；楼梯不再依赖整张地图外边缘。
+- 外围区域本轮保持室内空白，只承担整层占地、后续扩展和评审比例，不新增怪物房、设施或装饰。
 
 - 层高由 6m 提高 50% 至 9m。
 - 楼板厚度原型统一为 0.30m；墙厚统一为 0.30m。
 - 楼梯、门厅和折角走道净宽统一为 6m，避免角色、武器模型和镜头剖切状态在接缝处互相挤压。
 
-## 标准楼梯间组件
+## 5m 模块资产与命名
+
+本轮模块母版仍属于 `ENV-TOWER-DESCENT-KIT-3D`，不因装配实例数量创建重复根资产。四个组件使用稳定子 ID：
+
+| 子 ID | Blender 母版集合 | 尺寸 | 用途 |
+|---|---|---:|---|
+| `ENV-TOWER-FLOOR-TILE-5M` | `10A_MOD_FLOOR_TILE_5M_U01` | 5×5×0.30m | 三层通用地砖 |
+| `ENV-TOWER-WALL-SOLID-5M` | `10B_MOD_WALL_SOLID_5M_U01` | 5×0.30×9m | 外墙、核心墙、室内实墙 |
+| `ENV-TOWER-WALL-PARAPET-5M` | `10C_MOD_WALL_PARAPET_5M_U01` | 5×0.30×1.50m | 楼顶女儿墙 |
+| `ENV-TOWER-WALL-DOOR-5M` | `10D_MOD_WALL_DOOR_5M_U01` | 5×0.30×9m | 4m 净宽门墙，门扇保持独立子物体 |
+
+- `U01` 表示一个 5m 网格单位；组件原点位于底面中心，墙段沿本地 +X 延伸，正面朝本地 +Y。
+- 母版对象名称使用 `MOD_*`；可编辑装配实例名称使用 `ASM_<LEVEL>_<ZONE>_<MODULE>_<SIDE/LINE>_I###`。基地核心墙、战斗内墙和门逐段保存，实例共享母版 Mesh。
+- 规则重复的整层地砖与四边外墙使用未应用的 Array 装配，名称使用 `ASM_<LEVEL>_<ZONE>_<MODULE>_<SIDE>_ARRAY`；阵列固定偏移 5m，并记录起始格、数量和虚拟模块数。禁止应用阵列后合并成大 Mesh。
+- 墙和门实例记录 `grid_index/rotation_step_90`；所有实例与阵列基元缩放必须为 `(1,1,1)`。
+- 门墙模块由左右墙柱、上部过梁、独立门框和独立门扇组成。门扇不能与墙体合并，后续在 Godot 中作为可交互节点。
+- Blender 完整三层装配态用于布局评审；Godot 导入时优先导出四个母版组件并由关卡数据实例化，不直接把一万多个装配实例烘焙成唯一大网格。
+
+## 楼梯间细化原则
+
+本轮不把踏步、平台、墙体拆成独立展示组件；优先整理用户已经手工调整的两套完整楼梯间总成。
+
+### 两套总成
+
+1. `STAIR_SPECIAL_ROOFTOP_TO_FACILITY`
+   - 对应左侧楼顶下行楼梯。
+   - 保留用户手工调整后的三面墙高度差，不用通用版墙高覆盖。
+   - 与通用版保持同样的梯跑、折角和净宽，只修正整体漂移、接缝、门口标记和命名。
+   - 当前设计是通用版旋转 180° 后连接楼顶，但楼顶端墙高和收口属于特殊覆盖。
+2. `STAIR_GENERIC_ROTATABLE`
+   - 对应右侧基地层到战斗层楼梯。
+   - 作为后续普通楼层复用基准。
+   - 总成原点位于上层新开口中心，所有楼梯网格、墙、平台和上下门 Socket 必须挂在同一个 ROOT 下。
+   - 复用只允许移动 ROOT 和绕 Z 轴旋转 90° 的整数倍；禁止对子对象逐个平移补缝。
+
+### 当前手改场景的对齐基准
+
+- 用户手工版已经把开口从旧版的楼层侧向接口改为新方向，因此旧的 `ROOT` 和 `SOCKET_UPPER/LOWER_DOOR` 坐标失效，必须根据当前平台边缘重新定位。
+- 特殊版相对通用版的手工复制存在统一漂移，检测值约为 `X +0.8029m / Y +0.5218m / Z -0.5984m`；本轮只消除这组整体漂移，不重做梯形。
+- 特殊版对齐后与通用版满足 180° 旋转关系和 9m 层高关系；墙体高度差、额外收口墙和加宽的下层平台作为特殊设计保留。
+- 平台可走顶面分别对齐 `Z=0/-9/-18m`，允许的接缝误差不超过 0.01m；墙体中心、围栏端点和门框坐标采用 0.01m 网格。
+- 新开口方向以 Socket 朝向为准，不再根据对象名称里的 `West/East` 推断。
 
 ### 1. 门口走道 `MODULE_DOOR_LANDING`
 
@@ -59,25 +111,26 @@
 - 总高差：9m；两跑各下降 4.5m。
 - 计划占地包络：27×14m；门口上下平台规格完全一致。
 - 所有组件只能在接口点相接，不允许平台穿过坡道中段，也不允许用非整米位移补缝。
+- 以上尺寸继续作为总成内部检查基准，但本轮不单独导出这些组件。
 
 ## 三类楼层 Blender 原型
 
 ### 楼顶 `FLOOR_ROOFTOP`
 
-- 111.803×111.803m 楼板。
-- 四周连续女儿墙/护栏，楼梯门洞与标准 6m 门口走道对齐。
+- 总楼板与女儿墙外轮廓为 335×335m；地砖为 67×67 网格，楼梯开口对应格不生成。
+- 四周连续女儿墙/护栏位于 `X/Y=±167.5m`；核心楼梯门洞与现有楼梯门口走道对齐。
 - 外立面向下延伸完整 9m，保证俯视镜头能读出建筑体量。
 
 ### 基地层 `FLOOR_FACILITY`
 
-- 67.082×67.082m 室内壳体。
+- 335×335m 室内壳体，中央使用 65×65m 模块墙围合功能核心。
 - 设施沿墙分区，中部保留至少 12m 主通道。
-- 上下楼梯门口分别占用固定的 6m 对齐带，任何设施不得进入门口走道和楼梯接口净空。
+- 东西楼梯接口各使用一个 5m 门墙模块；任何设施不得进入门口走道和楼梯接口净空。
 
 ### 战斗层 `FLOOR_COMBAT`
 
-- 67.082×67.082m 室内壳体。
-- 隔间使用可替换墙段，保留至少 12m 环形/中央战斗通道。
+- 335×335m 室内壳体，中央保留 65×65m 模块隔间核心。
+- 核心外壳、隔间和门全部使用 5m 组件，保留至少 10m 环形/中央战斗通道。
 - 上下楼梯口随机位置只改变总成挂接方向，不改变楼梯组件尺寸、坡度或接口。
 
 ## 光标与跨层遮挡验收规则
@@ -95,17 +148,53 @@
 
 ## Blender 文件与命名
 
-- 源文件：`assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v001.blend`
-- 可复现脚本：`assets/art/environments/tower_descent_3d/source/build_env_tower_descent_kit_top3d_v001.py`
+- 用户手工现场快照：`assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v003.blend`
+- 用户楼梯细化与楼板扩大基线：`assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v004.blend`
+- 整层楼板与外墙共同扩大的修正版：`assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v005.blend`
+- 5m 模块母版与三层装配评审版：`assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v006.blend`
+- 用户手工版到本轮评审版的可复现细化脚本：`assets/art/environments/tower_descent_3d/source/refine_env_tower_descent_kit_top3d_v004.py`
+- 外墙修正脚本：`assets/art/environments/tower_descent_3d/source/expand_env_tower_descent_kit_top3d_v005.py`
+- 5m 模块化脚本：`assets/art/environments/tower_descent_3d/source/modularize_env_tower_descent_kit_top3d_v006.py`
+- 本轮 QA：`assets/art/environments/tower_descent_3d/source/validate_env_tower_descent_kit_top3d_v006.py`
+- `build_env_tower_descent_kit_top3d_v002.py` 仅用于重建旧生成基线，禁止对 `v003/v004/v005/v006` 运行后覆盖用户手工结构。
+- 旧 `v001` 仅保留为横向组件评审板，不再作为三层建筑验收依据。
 - 资产根：`ENV-TOWER-DESCENT-KIT-3D`
-- Blender 集合：
-  - `01_MODULE_DOOR_LANDING`
-  - `02_MODULE_STAIR_FLIGHT`
-  - `03_MODULE_TURN_LANDING`
-  - `04_ASSEMBLY_STAIRWELL`
-  - `05_FLOOR_ROOFTOP`
-  - `06_FLOOR_FACILITY`
-  - `07_FLOOR_COMBAT`
-  - `90_REVIEW_GUIDES`
+- `v006` 保留三层完整装配态，并增加 5m 母版库。楼梯仍使用原父子集合；每层按地砖、外墙、核心墙、室内墙拆分装配集合：
+  - `00_BUILDING_GUIDES`
+  - `01_FLOOR_ROOFTOP_Z000`
+    - `01B_TILE_GRID_5M`
+    - `01C_OUTER_PARAPET_GRID_5M`
+  - `02_STAIRWELLS`
+    - `02A_STAIR_SPECIAL_ROOFTOP_TO_FACILITY`
+    - `02B_STAIR_GENERIC_ROTATABLE`
+  - `03_FLOOR_FACILITY_ZNEG009`
+    - `03B_TILE_GRID_5M`
+    - `03C_OUTER_WALL_GRID_5M`
+    - `03D_CORE_WALL_GRID_5M`
+    - `03E_INTERIOR_WALL_GRID_5M`
+  - `05_FLOOR_COMBAT_ZNEG018`
+    - `05B_TILE_GRID_5M`
+    - `05C_OUTER_WALL_GRID_5M`
+    - `05D_CORE_WALL_GRID_5M`
+    - `05E_INTERIOR_WALL_GRID_5M`
+  - `10_MODULE_LIBRARY_5M`
+    - `10A_MOD_FLOOR_TILE_5M_U01`
+    - `10B_MOD_WALL_SOLID_5M_U01`
+    - `10C_MOD_WALL_PARAPET_5M_U01`
+    - `10D_MOD_WALL_DOOR_5M_U01`
+  - `90_LIGHTS_CAMERAS`
+- 三层使用同一 XY 建筑基准，楼顶、基地层、战斗层可走顶面分别位于 `Z=0m / -9m / -18m`。
+- 特殊楼梯挂在 65m 功能核心西侧，连接楼顶与基地层；通用楼梯挂在核心东侧，连接基地层与战斗层。二者都位于 335m 总楼板中央区域。
+- 两段楼梯的新开口方向由用户当前手工结构决定；上下门 Socket 位于实际平台出入口，并携带朝向，不能继续沿用旧版 `(-33.541,0)` / `(33.541,0)` 的无旋转空节点。
+- 楼顶左侧为真实楼梯开口，不再用完整楼板盖住下行梯；楼梯墙、护栏和门框不得侵入 6m 角色净宽。
+- QA 检查母版尺寸与原点、共享 Mesh、实例命名、三层地砖数量、楼顶开口、每边 67 段外墙、65m 核心封闭、门扇独立性、战斗层模块墙门、楼梯 ROOT 接口、应用缩放和 `±167.5m` 总边界。
 
-确认前不生成 `components/*.glb`；确认后再按同名集合分别导出并接入 Godot。
+确认前不生成 `components/*.glb`；确认后再按楼层和实际楼梯集合分别导出并接入 Godot。
+
+> PH36 接入结果（2026-07-30）：用户已确认进入引擎拼装，以上“确认前”限制已经解除。四个5m子资产现已导出到 `assets/art/environments/tower_descent_3d/components/`，由 `TowerFloorStage3D`、`DungeonRoom3D` 和 `RoomDoor3D` 接入楼顶、99层基地与98—95层首批关卡。运行时规格与验收见 `docs/PH36_塔楼五米模块Godot关卡Demo.md`。
+
+### 同名文件覆盖说明
+
+- Blender 已打开的文件不会因为后台脚本重写磁盘文件而自动刷新；标题带 `*` 表示当前窗口还有未保存的内存修改。
+- 旧 `v001` 窗口与后台生成文件曾共用同一路径，后续保存旧窗口会把磁盘上的新场景重新覆盖，导致截图和打开内容不一致。
+- 从 `v002` 开始禁止用已打开的旧版本路径覆盖评审文件；每次结构性调整递增版本号，并在台账中明确当前评审版本。

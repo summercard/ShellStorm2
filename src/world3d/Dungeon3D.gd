@@ -114,6 +114,7 @@ func _ready() -> void:
 	_map_fate_triggers = MapFateTriggers.new()
 	_map_fate_triggers.name = "MapFateTriggers3D"
 	add_child(_map_fate_triggers)
+	_install_holographic_hud_style()
 	_configure_environment()
 	_generate_layout()
 	player.set_combat_enabled(true)
@@ -145,6 +146,11 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
+	if minimap != null and player != null:
+		minimap.set_player_state(
+			player.global_position,
+			player.aim_direction
+		)
 	_door_prompt_accumulator += delta
 	if _door_prompt_accumulator < 0.08:
 		return
@@ -191,6 +197,67 @@ func _setup_run_modules() -> void:
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
 	_inventory_ui.inventory_open_changed.connect(_on_inventory_open_changed)
+
+
+func _install_holographic_hud_style() -> void:
+	var top_bar := $HUD/TopBar as PanelContainer
+	var top_style := StyleBoxFlat.new()
+	top_style.bg_color = Color(0.008, 0.025, 0.038, 0.92)
+	top_style.border_color = Color(0.14, 0.74, 0.86, 0.82)
+	top_style.border_width_left = 2
+	top_style.border_width_top = 1
+	top_style.border_width_right = 2
+	top_style.border_width_bottom = 3
+	top_style.corner_radius_top_left = 5
+	top_style.corner_radius_top_right = 5
+	top_style.corner_radius_bottom_left = 5
+	top_style.corner_radius_bottom_right = 5
+	top_style.shadow_color = Color(0.0, 0.28, 0.38, 0.38)
+	top_style.shadow_size = 8
+	top_bar.add_theme_stylebox_override("panel", top_style)
+
+	var status_panel := $HUD/StatusPanel as PanelContainer
+	var status_style := top_style.duplicate() as StyleBoxFlat
+	status_style.bg_color = Color(0.018, 0.030, 0.038, 0.88)
+	status_style.border_color = Color(0.92, 0.55, 0.18, 0.72)
+	status_style.border_width_left = 4
+	status_style.border_width_bottom = 1
+	status_style.shadow_color = Color(0.40, 0.16, 0.02, 0.24)
+	status_panel.add_theme_stylebox_override("panel", status_style)
+
+	var extraction_style := top_style.duplicate() as StyleBoxFlat
+	extraction_style.bg_color = Color(0.008, 0.044, 0.046, 0.94)
+	extraction_style.border_color = Color(0.22, 1.0, 0.66, 0.88)
+	extraction_panel.add_theme_stylebox_override("panel", extraction_style)
+
+	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_color_override("font_color", Color(0.46, 0.96, 1.0))
+	seed_label.add_theme_color_override("font_color", Color(0.46, 0.62, 0.70))
+	hp_label.add_theme_color_override("font_color", Color(0.36, 1.0, 0.62))
+	ammo_label.add_theme_color_override("font_color", Color(0.40, 0.84, 1.0))
+	room_label.add_theme_color_override("font_color", Color(0.72, 0.88, 0.94))
+	loot_label.add_theme_color_override("font_color", Color(1.0, 0.76, 0.28))
+	status_label.add_theme_color_override("font_color", Color(0.92, 0.92, 0.84))
+	for label in [seed_label, hp_label, ammo_label, room_label, loot_label]:
+		(label as Label).add_theme_font_size_override("font_size", 14)
+
+	var progress_background := StyleBoxFlat.new()
+	progress_background.bg_color = Color(0.012, 0.08, 0.075, 0.92)
+	progress_background.set_corner_radius_all(3)
+	extraction_bar.add_theme_stylebox_override("background", progress_background)
+	var progress_fill := StyleBoxFlat.new()
+	progress_fill.bg_color = Color(0.18, 0.96, 0.62)
+	progress_fill.set_corner_radius_all(3)
+	progress_fill.shadow_color = Color(0.10, 0.88, 0.54, 0.45)
+	progress_fill.shadow_size = 5
+	extraction_bar.add_theme_stylebox_override("fill", progress_fill)
+
+	var control_hint := $HUD/ControlHint as Label
+	var vision_hint := $HUD/VisionHint as Label
+	control_hint.add_theme_color_override("font_outline_color", Color(0.0, 0.05, 0.08, 0.92))
+	control_hint.add_theme_constant_override("outline_size", 4)
+	vision_hint.add_theme_color_override("font_outline_color", Color(0.0, 0.05, 0.08, 0.92))
+	vision_hint.add_theme_constant_override("outline_size", 4)
 
 
 func _on_inventory_open_changed(opened: bool) -> void:
@@ -275,7 +342,11 @@ func _generate_layout() -> void:
 		room.configure({
 			"room_id": record["id"], "room_type": record["type"], "size_class": record["size"],
 			"doors": record["doors"], "door_targets": record.get("door_targets", {}), "theme": visual_theme,
+			"door_policies": _door_policies_for_record(record),
 			"seed": run_seed + int(record["index"]) * 104729, "is_main_path": record["main"],
+			"custom_dimensions": record.get("custom_dimensions", Vector2.ZERO),
+			"tower_module_shell": bool(record.get("tower_module_shell", false)),
+			"open_wall_directions": record.get("open_wall_directions", []),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)
@@ -439,6 +510,26 @@ func _build_topology() -> void:
 
 func _edge_key(a: String, b: String) -> String:
 	return "%s|%s" % [a, b] if a < b else "%s|%s" % [b, a]
+
+
+func _door_policy_for_edge(_from_room_id: String, _target_room_id: String) -> Dictionary:
+	return {
+		"requires_clear": true,
+		"requires_key": true,
+		"triggers_fate": true,
+	}
+
+
+func _door_policies_for_record(record: Dictionary) -> Dictionary:
+	var policies := {}
+	var room_id := str(record.get("id", ""))
+	var targets := record.get("door_targets", {}) as Dictionary
+	for direction in targets.keys():
+		policies[str(direction)] = _door_policy_for_edge(
+			room_id,
+			str(targets[direction])
+		)
+	return policies
 
 
 func _direction_between(from: Vector3, to: Vector3) -> String:
@@ -636,7 +727,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		status_label.text = "事件房：使用异常信号终端决定本房命运"
 	else:
 		status_label.text = _room_status(room.room_type)
-		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION"])
+		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
 
 
 func _spawn_room_enemies(room: DungeonRoom3D) -> void:
@@ -807,7 +898,16 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		return
 	_mark_room_cleared(room, true)
 	status_label.text = "房间肃清 · 钥匙已掉落，可继续搜索或推进"
-	if enemy.room_id == "boss" and _extraction != null:
+	if (
+		_extraction != null
+		and (
+			enemy.room_id == "boss"
+			or (
+				room != null
+				and room.room_type == "BOSS"
+			)
+		)
+	):
 		_extraction.set_locked(false)
 		_hide_boss_hud()
 		status_label.text = "Boss 已清除 · 撤离信标已解锁"
@@ -913,7 +1013,14 @@ func _spawn_loot_items(room: DungeonRoom3D, items: Array[Dictionary], world_posi
 		pickup.configure(item, color)
 		room.add_child(pickup)
 		var angle := float(index) * 2.1 + 0.45
-		pickup.global_position = world_position + Vector3(cos(angle), 0.08, sin(angle)) * (0.7 + index * 0.18)
+		var requested_position := (
+			world_position
+			+ Vector3(cos(angle), 0.0, sin(angle)) * (0.7 + index * 0.18)
+		)
+		pickup.global_position = _find_supported_spawn_position(
+			requested_position,
+			room.global_position
+		)
 		pickup.pickup_requested.connect(_on_ground_loot_requested)
 
 
@@ -1150,7 +1257,7 @@ func _ensure_room_key_reward(room: DungeonRoom3D) -> void:
 		room == null
 		or not is_instance_valid(room)
 		or not room.cleared
-		or room.room_type in ["START", "EXTRACTION"]
+		or room.room_type in ["START", "EXTRACTION", "FACILITY", "ELEVATOR"]
 		or _spawned_key_rooms.has(room.room_id)
 	):
 		return
@@ -1177,9 +1284,38 @@ func _spawn_room_key(room: DungeonRoom3D) -> void:
 	var safe_half_z := maxf(1.0, dimensions.y * 0.5 - 2.1)
 	spawn_position.x = clampf(spawn_position.x, -safe_half_x, safe_half_x)
 	spawn_position.z = clampf(spawn_position.z, -safe_half_z, safe_half_z)
-	key.position = spawn_position
+	key.global_position = _find_supported_spawn_position(
+		room.to_global(spawn_position),
+		room.global_position
+	)
 	key.collected.connect(_on_room_key_collected)
 	_spawned_key_rooms[room.room_id] = true
+
+
+func _find_supported_spawn_position(
+	requested_world_position: Vector3,
+	fallback_world_position: Vector3
+) -> Vector3:
+	var world := get_world_3d()
+	if world == null:
+		return requested_world_position
+	for candidate in [requested_world_position, fallback_world_position]:
+		var query := PhysicsRayQueryParameters3D.create(
+			candidate + Vector3.UP * 3.0,
+			candidate + Vector3.DOWN * 4.0,
+			1
+		)
+		query.collide_with_areas = false
+		query.hit_back_faces = true
+		if player != null and is_instance_valid(player):
+			query.exclude = [player.get_rid()]
+		var hit := world.direct_space_state.intersect_ray(query)
+		if (
+			not hit.is_empty()
+			and (hit.get("normal", Vector3.ZERO) as Vector3).y >= 0.55
+		):
+			return (hit.get("position", candidate) as Vector3) + Vector3.UP * 0.05
+	return fallback_world_position + Vector3.UP * 0.05
 
 
 func _on_room_key_collected(_room_id: String) -> void:
@@ -1195,24 +1331,34 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		status_label.text = "先选择当前命运卡片，再开启下一扇门"
 		return false
 	var edge := _edge_key(_current_room_id, target_room_id)
+	var policy := _door_policy_for_edge(_current_room_id, target_room_id)
 	if bool(_open_edges.get(edge, false)):
 		status_label.text = "通道已经开启"
 		return true
 	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if current == null or not current.cleared:
+	if current == null:
+		return false
+	if bool(policy.get("requires_clear", true)) and not current.cleared:
 		status_label.text = "先清理当前房间，才能开启房门"
 		return false
-	if _get_total_room_keys() <= 0:
+	var requires_key := bool(policy.get("requires_key", true))
+	if requires_key and _get_total_room_keys() <= 0:
 		status_label.text = "需要房间钥匙"
 		return false
-	_consume_room_key()
+	if requires_key:
+		_consume_room_key()
 	_open_edges[edge] = true
 	minimap.set_edge_open(_current_room_id, target_room_id, true)
 	_update_room_streaming(_current_room_id)
 	_refresh_edge_visuals(_current_room_id, target_room_id, true)
-	status_label.text = "房门已开启 · 剩余钥匙 %d" % _get_total_room_keys()
+	status_label.text = (
+		"房门已开启 · 剩余钥匙 %d" % _get_total_room_keys()
+		if requires_key
+		else "通行门已开启 · 未消耗钥匙"
+	)
 	_refresh_loot_label()
-	call_deferred("_show_door_fate_choices")
+	if bool(policy.get("triggers_fate", true)):
+		call_deferred("_show_door_fate_choices")
 	return true
 
 
@@ -1784,6 +1930,12 @@ func get_generation_snapshot() -> Dictionary:
 			"id": record["id"], "type": record["type"], "size": record["size"],
 			"position": record["position"], "main": record["main"], "parent": record["parent"],
 			"index": record["index"], "vertical_level": record.get("vertical_level", 0),
+			"custom_dimensions": record.get("custom_dimensions", Vector2.ZERO),
+			"tower_role": record.get("tower_role", ""),
+			"doors": (record.get("doors", []) as Array).duplicate(),
+			"door_targets": (
+				record.get("door_targets", {}) as Dictionary
+			).duplicate(),
 		})
 	return {
 		"theme_id": gameplay_theme.theme_id, "visual_theme_id": visual_theme.theme_id, "seed": run_seed,
@@ -1794,6 +1946,7 @@ func get_generation_snapshot() -> Dictionary:
 		"locked_edge_count": _open_edges.size(), "initial_room_keys": 1,
 		"inventory_capacity": 12, "insurance_capacity": 2,
 		"streaming_policy": "current_plus_open_neighbors",
+		"minimap": minimap.get_snapshot() if minimap != null else {},
 	}
 
 

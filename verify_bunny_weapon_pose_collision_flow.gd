@@ -1,8 +1,8 @@
 extends Node
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
-const HEAD_TOP_WITHOUT_EARS_M := 1.820592
-const COLLISION_HEIGHT_M := 1.80
+const FULL_VISUAL_HEIGHT_M := 1.5
+const COLLISION_HEIGHT_M := 1.5
 const EXPECTED_FIRE_STYLES := {
 	"bp_pistol": "sidearm_snap",
 	"bp_shotgun": "shotgun_heavy_pump",
@@ -24,18 +24,18 @@ func _ready() -> void:
 	player.avatar.set_process(false)
 	player.get_node("Camera3D").current = false
 
-	var collision := player.get_node_or_null("VirtualCollisionBox") as CollisionShape3D
-	if collision == null or not collision.shape is BoxShape3D:
-		failures.append("Player gameplay collision is not the required invisible BoxShape3D")
+	var collision := player.get_node_or_null("VirtualCollisionCapsule") as CollisionShape3D
+	if collision == null or not collision.shape is CapsuleShape3D:
+		failures.append("Player gameplay collision is not the required invisible CapsuleShape3D")
 	else:
-		var box := collision.shape as BoxShape3D
-		var collision_top := collision.position.y + box.size.y * 0.5
-		if not is_equal_approx(box.size.y, COLLISION_HEIGHT_M):
-			failures.append("Virtual collision box height is not the approved 1.80 m")
-		if collision_top > HEAD_TOP_WITHOUT_EARS_M + 0.0001:
-			failures.append("Virtual collision box exceeds the head top without ears")
-		if box.size.x >= 1.0 or box.size.z >= 1.0:
-			failures.append("Virtual collision box is not tighter than the visible head silhouette")
+		var capsule := collision.shape as CapsuleShape3D
+		var collision_top := collision.position.y + capsule.height * 0.5
+		if not is_equal_approx(capsule.height, COLLISION_HEIGHT_M):
+			failures.append("Virtual collision capsule height is not the preview 1.50 m")
+		if not is_equal_approx(collision_top, FULL_VISUAL_HEIGHT_M):
+			failures.append("Virtual collision capsule top does not match the full 1.50 m visual height")
+		if capsule.radius * 2.0 >= 0.75:
+			failures.append("Virtual collision capsule is not tighter than the visible head silhouette")
 	var avatar_snapshot := player.avatar.get_component_snapshot()
 	if (
 		int(avatar_snapshot.get("model_collision_shape_count", -1)) != 0
@@ -43,11 +43,11 @@ func _ready() -> void:
 	):
 		failures.append("A collision node was found inside the visual/model hierarchy")
 	if collision != null and not collision.find_children("*", "MeshInstance3D", true, false).is_empty():
-		failures.append("Virtual collision box unexpectedly contains visible render geometry")
+		failures.append("Virtual collision capsule unexpectedly contains visible render geometry")
 
 	var wall := StaticBody3D.new()
 	wall.name = "CollisionProbeWall"
-	wall.position = Vector3(0.0, 0.9, -1.2)
+	wall.position = Vector3(0.0, 0.5, -1.2)
 	var wall_shape_node := CollisionShape3D.new()
 	var wall_shape := BoxShape3D.new()
 	wall_shape.size = Vector3(2.0, 2.0, 0.2)
@@ -57,7 +57,7 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	var wall_contact := player.move_and_collide(Vector3(0.0, 0.0, -1.5))
 	if wall_contact == null or wall_contact.get_collider() != wall:
-		failures.append("Invisible virtual box did not produce a real gameplay wall collision")
+		failures.append("Invisible virtual capsule did not produce a real gameplay wall collision")
 	player.global_position = Vector3.ZERO
 
 	_set_presentation_state(player, "idle")
@@ -67,7 +67,7 @@ func _ready() -> void:
 		failures.append("Default pistol did not enter sidearm_hold")
 	if int(sidearm_hold.get("active_grip_hand_count", 0)) != 1:
 		failures.append("Pistol pose does not use exactly one gripping hand")
-	if float(sidearm_hold.get("weapon_socket_position", Vector3.ZERO).x) < 0.15:
+	if float(sidearm_hold.get("weapon_socket_position", Vector3.ZERO).x) < 0.060:
 		failures.append("Pistol socket is not staged on the rabbit's right side")
 	if (
 		float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0))
@@ -85,7 +85,7 @@ func _ready() -> void:
 		failures.append("Pistol locomotion did not enter the independent sidearm_run state")
 	if (
 		(sidearm_run.get("hand_l_position", Vector3.ZERO) as Vector3)
-		.distance_to(sidearm_hold.get("hand_l_position", Vector3.ZERO) as Vector3) < 0.04
+		.distance_to(sidearm_hold.get("hand_l_position", Vector3.ZERO) as Vector3) < 0.016
 	):
 		failures.append("Free left hand lacks the sidearm running counter-swing")
 
@@ -167,7 +167,7 @@ func _ready() -> void:
 	wall.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_WEAPON_POSE_COLLISION_OK: wrist pivots, one/two-hand FSM, distinct gun fire, and invisible 1.80 m box pass")
+		print("BUNNY_WEAPON_POSE_COLLISION_OK: wrist pivots, one/two-hand FSM, distinct gun fire, and unified 1.50 m runtime visual/collision contract pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

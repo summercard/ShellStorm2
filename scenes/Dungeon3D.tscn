@@ -45,10 +45,10 @@ combat_enabled = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -258.0
+offset_left = -328.0
 offset_top = 82.0
 offset_right = -18.0
-offset_bottom = 262.0
+offset_bottom = 312.0
 grow_horizontal = 0
 script = ExtResource("5_minimap")
 
@@ -61,7 +61,7 @@ offset_top = -62.0
 offset_right = 930.0
 offset_bottom = -38.0
 grow_vertical = 0
-text = "WASD 移动 · 鼠标瞄准 / 左键射击 · R 换弹 · Shift 冲刺 · E 交互 · I / Tab 背包 · Esc 暂停"
+text = "WASD 移动 · 鼠标瞄准 / 左键射击 · R 换弹 · F 探照灯 · Shift 冲刺 · E 交互 · I / Tab 背包 · Esc 暂停"
 theme_override_colors/font_color = Color(0.72, 0.82, 0.88, 1)
 theme_override_font_sizes/font_size = 14
 
@@ -74,7 +74,7 @@ offset_top = -36.0
 offset_right = 760.0
 offset_bottom = -14.0
 grow_vertical = 0
-text = "逻辑视野 360° / 21m · 当前扇形表示目光与探照灯 · 任意方向的实体遮挡都会隐藏目标"
+text = "逻辑视野 360° / 21m · F 手动开关探照灯 · 当前扇形仅表示目光方向 · 实体遮挡仍会隐藏目标"
 theme_override_colors/font_color = Color(0.36, 0.78, 0.9, 0.92)
 theme_override_font_sizes/font_size = 13
 

@@ -20,6 +20,14 @@ func _grounded_velocity(planar_velocity: Vector3) -> Vector3:
 	return planar_velocity
 
 
+func _move_grounded(planar_velocity: Vector3, delta: float, allow_fall_transition := true) -> bool:
+	if player != null and player.has_method("move_grounded"):
+		return bool(player.call("move_grounded", planar_velocity, delta, allow_fall_transition))
+	player.set("velocity", _grounded_velocity(planar_velocity))
+	player.call("move_and_slide")
+	return false
+
+
 func _announce(state_id: String, context: Dictionary = {}) -> void:
 	if player != null and player.has_method("_set_presentation_state"):
 		player.call("_set_presentation_state", state_id, context)

@@ -1,7 +1,7 @@
 extends Node
 
 const PLAYER := preload("res://scenes/Player3D.tscn")
-const OUTPUT := "res://outputs/019f8417-e7f4-7bc3-aded-c62dfd1d1462/bunny_v004_weapon_grip.png"
+const OUTPUT := "res://outputs/019facd3-bb17-7462-8504-0210c0919463/bunny_v006_baked_1p5m_weapon_grip.png"
 
 
 func _ready() -> void:
@@ -36,24 +36,28 @@ func _ready() -> void:
 	stage.add_child(fill)
 
 	var sidearm_player := PLAYER.instantiate() as Player3D
-	sidearm_player.position.x = -1.28
+	sidearm_player.position.x = -0.72
 	stage.add_child(sidearm_player)
+	sidearm_player.set_process(false)
+	sidearm_player.set_physics_process(false)
+	sidearm_player.avatar.set_process(false)
+	sidearm_player.get_node("Camera3D").current = false
 	var rifle_player := PLAYER.instantiate() as Player3D
-	rifle_player.position.x = 1.28
+	rifle_player.position.x = 0.72
 	stage.add_child(rifle_player)
+	rifle_player.set_process(false)
+	rifle_player.set_physics_process(false)
+	rifle_player.avatar.set_process(false)
+	rifle_player.get_node("Camera3D").current = false
 	await get_tree().process_frame
 	await get_tree().process_frame
 	for player in [sidearm_player, rifle_player]:
-		player.set_process(false)
-		player.set_physics_process(false)
-		player.avatar.set_process(false)
 		player.aim_direction = Vector3(0, 0, -1)
 		player.aim_yaw = 0.0
 		player.avatar.visual_root.rotation.y = 0.0
-		player.get_node("Camera3D").current = false
 		player.get_node("AimCursor").visible = false
 	if not rifle_player.equip_weapon("bp_rifle", "mod_bullet_standard"):
-		push_error("Cannot equip rifle for Bunny v004 two-hand preview")
+		push_error("Cannot equip rifle for Bunny v006 two-hand preview")
 		get_tree().quit(1)
 		return
 	await get_tree().process_frame
@@ -62,9 +66,9 @@ func _ready() -> void:
 		rifle_player.avatar.call("_process", 0.10)
 
 	var camera := Camera3D.new()
-	camera.position = Vector3(0.0, 3.55, -7.8)
-	camera.look_at_from_position(camera.position, Vector3(0.0, 1.02, -0.20), Vector3.UP)
-	camera.fov = 34.0
+	camera.position = Vector3(0.0, 2.25, -5.6)
+	camera.look_at_from_position(camera.position, Vector3(0.0, 0.72, -0.12), Vector3.UP)
+	camera.fov = 28.0
 	camera.current = true
 	stage.add_child(camera)
 	await get_tree().process_frame
@@ -74,8 +78,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 	var image := get_viewport().get_texture().get_image()
 	if image == null or image.is_empty() or image.save_png(OUTPUT) != OK:
-		push_error("Cannot save Bunny v004 weapon grip preview")
+		push_error("Cannot save Bunny v006 weapon grip preview")
 		get_tree().quit(1)
 		return
-	print("BUNNY_V004_WEAPON_GRIP_VISUAL_OK: right-side one-hand pistol and two-hand rifle comparison saved")
+	print("BUNNY_V006_WEAPON_GRIP_VISUAL_OK: baked 1.5 m right-side pistol and two-hand rifle comparison saved")
 	get_tree().quit(0)

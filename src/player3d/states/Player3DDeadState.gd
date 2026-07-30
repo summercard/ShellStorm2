@@ -7,13 +7,11 @@ func enter() -> void:
 	_announce("dead")
 	player.set("input_locked", true)
 	player.call("set_combat_enabled", false)
-	player.set("velocity", _grounded_velocity(Vector3.ZERO))
-	player.call("move_and_slide")
+	player.set("velocity", Vector3.ZERO)
 
 
-func physics_update(_delta: float) -> void:
-	player.set("velocity", _grounded_velocity(Vector3.ZERO))
-	player.call("move_and_slide")
+func physics_update(delta: float) -> void:
+	_move_grounded(Vector3.ZERO, delta, false)
 
 
 func exit() -> void:

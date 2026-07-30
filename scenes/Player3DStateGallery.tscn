@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/Player3DStateGallery.gd" id="1_gallery"]
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="2_player"]
@@ -26,6 +26,9 @@ roughness = 0.74
 [sub_resource type="PlaneMesh" id="Plane_stage"]
 material = SubResource("Material_ground")
 size = Vector2(24, 19)
+
+[sub_resource type="BoxShape3D" id="Shape_stage_support"]
+size = Vector3(24, 0.2, 19)
 
 [sub_resource type="StandardMaterial3D" id="Material_ring"]
 albedo_color = Color(0.12, 0.70, 0.88, 0.56)
@@ -78,6 +81,14 @@ omni_range = 13.0
 [node name="Ground" type="MeshInstance3D" parent="Stage"]
 mesh = SubResource("Plane_stage")
 
+[node name="GroundCollision" type="StaticBody3D" parent="Stage"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stage/GroundCollision"]
+position = Vector3(0, -0.1, 0)
+shape = SubResource("Shape_stage_support")
+
 [node name="PlayerRing" type="MeshInstance3D" parent="Stage"]
 position = Vector3(0, 0.025, 0)
 mesh = SubResource("Torus_stage")
@@ -92,4 +103,3 @@ cast_shadow = 0
 
 [node name="Player3D" parent="." instance=ExtResource("2_player")]
 combat_enabled = false
-

@@ -48,8 +48,8 @@ func _ready() -> void:
 		failures.append("BaseWorld3D lacks sparse navigation lights")
 
 	var player_snapshot := base_world.player.get_state_machine_snapshot()
-	if int(player_snapshot.get("states", []).size()) != 6:
-		failures.append("Player3D state machine does not expose six top-level states")
+	if int(player_snapshot.get("states", []).size()) != 8:
+		failures.append("Player3D state machine does not expose eight top-level states")
 	if not bool(player_snapshot.get("rules_enabled", false)):
 		failures.append("Player3D state machine does not use explicit transition rules")
 	var avatar_snapshot := base_world.player.avatar.get_component_snapshot()
@@ -106,7 +106,7 @@ func _ready() -> void:
 		if get_tree().paused or pause_overlay.is_pause_open():
 			failures.append("BaseWorld3D second Esc does not resume")
 
-	# 六态动态契约：移动、突进、锁定、受创与死亡都由同一个 StateMachine 驱动表现。
+	# 八态动态契约：地面动作、下落、落地与死亡都由同一个 StateMachine 驱动表现。
 	base_world.player.set_test_move_direction(Vector3.RIGHT)
 	await get_tree().physics_frame
 	await get_tree().process_frame
@@ -186,7 +186,7 @@ func _tap_action(action: StringName) -> void:
 
 func _finish(failures: Array[String], node_count: int) -> void:
 	if failures.is_empty():
-		print("BASE_WORLD_3D_FLOW_OK: compatibility hub, modular environment, four-component player, six-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
+		print("BASE_WORLD_3D_FLOW_OK: compatibility hub, modular environment, four-component player, eight-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
 		get_tree().quit(0)
 		return
 	for failure in failures:

@@ -18,7 +18,7 @@ func _ready() -> void:
 	await _verify_true_vision(dungeon, failures)
 
 	if failures.is_empty():
-		print("3D_VISION_INPUT_FLOW_OK: 360 occlusion gameplay vision, directional presentation, independent real flashlight, I/Tab inventory lock and recoverable pause pass")
+		print("3D_VISION_INPUT_FLOW_OK: 360 occlusion vision, manual F flashlight, I/Tab inventory lock and recoverable pause pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -55,6 +55,8 @@ func _verify_inventory_shortcuts(dungeon: Dungeon3D, failures: Array[String]) ->
 	var control_hint := dungeon.get_node_or_null("HUD/ControlHint") as Label
 	if control_hint == null or "I / Tab 背包" not in control_hint.text:
 		failures.append("HUD does not teach the inventory shortcut")
+	if control_hint == null or "F 探照灯" not in control_hint.text:
+		failures.append("HUD does not teach the manual flashlight shortcut")
 
 
 func _verify_pause_priority(dungeon: Dungeon3D, failures: Array[String]) -> void:
@@ -138,6 +140,30 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		var beam := flashlight.get_node_or_null("ForwardBeam") as SpotLight3D
 		var spill := flashlight.get_node_or_null("EnvironmentSpill") as OmniLight3D
 		var front_fill := flashlight.get_node_or_null("AvatarFrontFill") as SpotLight3D
+		if flashlight.is_light_enabled() or bool(flashlight_snapshot.get("start_enabled", true)):
+			failures.append("探照灯没有以手动关闭状态进入战局")
+		if (
+			not bool(flashlight_snapshot.get("manual_toggle", false))
+			or str(flashlight_snapshot.get("toggle_action", "")) != "toggle_flashlight"
+			or not InputMap.has_action("toggle_flashlight")
+		):
+			failures.append("探照灯没有登记独立手动输入动作")
+		await _tap_action("toggle_flashlight")
+		if not flashlight.is_light_enabled():
+			failures.append("toggle_flashlight动作没有打开探照灯")
+		await _tap_key(KEY_F)
+		if flashlight.is_light_enabled():
+			failures.append("物理F键没有关闭探照灯")
+		# 输入事件会跨过若干处理帧；重新固定本专项的正北测试朝向，
+		# 避免无窗口鼠标位置改变扇形采样方向。
+		dungeon.player.aim_direction = Vector3(0, 0, -1)
+		dungeon.player.aim_yaw = 0.0
+		flashlight.force_sync()
+		vision.force_refresh()
+		if flashlight.mount_height > 1.5 or flashlight.mount_height < 1.0:
+			failures.append("1.5m角色探照灯安装点没有落在胸口/武器高度")
+		if flashlight.front_fill_height > 1.5 or flashlight.avatar_target_height > 1.2:
+			failures.append("角色补光仍沿用高于1.5m角色的旧坐标")
 		if beam == null or not beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
 			failures.append("Forward flashlight is not a sufficiently bright real shadow-casting SpotLight3D")
 		if spill == null or spill.shadow_enabled or spill.light_energy < 1.5 or spill.omni_range < 4.0:

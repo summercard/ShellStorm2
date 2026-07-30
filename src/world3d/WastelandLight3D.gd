@@ -4,7 +4,7 @@ extends Node3D
 
 @export var light_color := Color(0.34, 0.75, 1.0)
 @export_range(0.2, 14.0, 0.1) var energy := 4.6
-@export_range(2.0, 32.0, 0.5) var light_range := 12.0
+@export_range(2.0, 64.0, 0.5) var light_range := 12.0
 @export var failing := true
 @export var flicker_seed := 1
 @export var cast_shadow := false

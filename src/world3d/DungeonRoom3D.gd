@@ -14,7 +14,18 @@ const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/pr
 const HAZARD_SCENE: PackedScene = preload("res://assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn")
 const DOOR_SCRIPT := preload("res://src/world3d/RoomDoor3D.gd")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
+const TOWER_WALL_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
+)
+const TOWER_DOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d_v002.glb"
+)
+const TOWER_FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
+)
 const ROOFTOP_FACADE_HEIGHT := 6.0
+static var _tower_solid_wall_mesh: Mesh
+static var _tower_floor_tile_mesh: Mesh
 
 const ROOM_DIMENSIONS := {
 	# 约按 2D RoomData 的 0.034 m/px 映射，保留四档真实战斗尺度。
@@ -23,8 +34,9 @@ const ROOM_DIMENSIONS := {
 	"large": Vector2(44.0, 34.0),
 	"arena": Vector2(56.0, 42.0),
 	# PH34 塔楼入口使用固定真实尺度；不改变既有四档房间契约。
-	"floor": Vector2(30.0, 30.0),
-	"rooftop": Vector2(50.0, 50.0),
+	"floor": Vector2(65.0, 65.0),
+	"rooftop": Vector2(65.0, 65.0),
+	"tower_cell": Vector2(15.0, 15.0),
 }
 
 var room_id := "room_00"
@@ -32,6 +44,7 @@ var room_type := "COMBAT"
 var size_class := "medium"
 var doors: Array[String] = []
 var door_targets: Dictionary = {}
+var door_policies: Dictionary = {}
 var theme: DungeonTheme3D
 var room_seed := 1
 var is_main_path := true
@@ -47,7 +60,11 @@ var _shell_built := false
 var _stream_state := -1
 var _door_nodes: Dictionary = {}
 var _central_light: WastelandLight3D
+var _room_lights: Array[WastelandLight3D] = []
 var _light_switch: RoomLightSwitch3D
+var custom_dimensions := Vector2.ZERO
+var tower_module_shell := false
+var open_wall_directions: Array[String] = []
 
 
 func configure(config: Dictionary) -> void:
@@ -56,9 +73,13 @@ func configure(config: Dictionary) -> void:
 	size_class = str(config.get("size_class", size_class))
 	doors.assign(config.get("doors", []))
 	door_targets = (config.get("door_targets", {}) as Dictionary).duplicate(true)
+	door_policies = (config.get("door_policies", {}) as Dictionary).duplicate(true)
 	theme = config.get("theme", theme) as DungeonTheme3D
 	room_seed = int(config.get("seed", room_seed))
 	is_main_path = bool(config.get("is_main_path", is_main_path))
+	custom_dimensions = config.get("custom_dimensions", custom_dimensions) as Vector2
+	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
+	open_wall_directions.assign(config.get("open_wall_directions", []))
 
 
 func _ready() -> void:
@@ -71,6 +92,8 @@ func _ready() -> void:
 
 
 func get_dimensions() -> Vector2:
+	if custom_dimensions.x > 0.0 and custom_dimensions.y > 0.0:
+		return custom_dimensions
 	return ROOM_DIMENSIONS.get(size_class, ROOM_DIMENSIONS["medium"])
 
 
@@ -83,8 +106,14 @@ func get_room_snapshot() -> Dictionary:
 		"furniture_count": get_tree().get_nodes_in_group("room_prop_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"light_count": get_tree().get_nodes_in_group("wasteland_light_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"central_light": _central_light != null,
-		"room_light_on": _central_light != null and _central_light.is_light_enabled(),
+		"room_light_on": _light_switch != null and _light_switch.is_light_on(),
 		"light_switch": _light_switch != null,
+		"controlled_light_count": _room_lights.size(),
+		"base_grid_dimensions": Vector2i(6, 6) if room_type == "FACILITY" else Vector2i.ZERO,
+		"base_grid_tile_count": 36 if room_type == "FACILITY" else 0,
+		"tower_module_shell": tower_module_shell,
+		"open_wall_directions": open_wall_directions.duplicate(),
+		"wall_height": TOWER_GEOMETRY.FLOOR_HEIGHT_M if tower_module_shell else 2.8,
 		"support_collision_persistent": _has_enabled_support_collision(),
 		"door_snapshots": _get_door_snapshots(),
 		"is_3d": true,
@@ -179,11 +208,18 @@ func hide_door_prompts() -> void:
 			door.set_prompt_visible(false)
 
 
+func get_door_node(direction: String) -> RoomDoor3D:
+	return _door_nodes.get(direction) as RoomDoor3D
+
+
 func _build_shell() -> void:
 	var dimensions := get_dimensions()
 	_floor_material = _material(theme.floor_color, 0.44, 0.72)
 	_wall_material = _material(theme.wall_color, 0.62, 0.62)
 	_trim_material = _material(theme.trim_color, 0.74, 0.38)
+	if tower_module_shell:
+		_build_tower_module_shell(dimensions)
+		return
 	_add_static_box("Floor", Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
 	_add_box("FloorInset", Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.36, 0.84))
 	for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
@@ -331,18 +367,363 @@ func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
 			_add_static_box("RooftopRailPost_%s" % direction, post_position, Vector3(0.16, 1.32, 0.16), _trim_material)
 
 
+func _build_tower_module_shell(dimensions: Vector2) -> void:
+	if (
+		room_type == "FACILITY"
+		and is_equal_approx(dimensions.x, 30.0)
+		and is_equal_approx(dimensions.y, 30.0)
+	):
+		_build_base_facility_shell(dimensions)
+		return
+	var wall_directions: Array[String] = ["north", "south", "west", "east"]
+	if size_class == "rooftop":
+		# 楼顶保持开放，只在特殊下行口周围形成三面满高楼梯头。
+		var access_direction := doors[0] if not doors.is_empty() else "west"
+		wall_directions.assign([access_direction])
+		if access_direction in ["west", "east"]:
+			wall_directions.append("north")
+			wall_directions.append("south")
+		else:
+			wall_directions.append("west")
+			wall_directions.append("east")
+	for open_direction in open_wall_directions:
+		wall_directions.erase(open_direction)
+	for direction in wall_directions:
+		_build_tower_wall_run(direction, dimensions)
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+
+
+func _build_base_facility_shell(dimensions: Vector2) -> void:
+	# 30m 基地使用 6×6 的 5m 美术地砖；下方 TowerFloorStage 继续承担整层
+	# 承重碰撞，因此这里的地砖只做轻微抬升的视觉层，避免重复碰撞。
+	var floor_mesh := _get_tower_floor_tile_mesh()
+	if floor_mesh != null:
+		var floor_multimesh := MultiMesh.new()
+		floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		floor_multimesh.mesh = floor_mesh
+		floor_multimesh.instance_count = 36
+		var tile_index := 0
+		for tile_z in range(6):
+			for tile_x in range(6):
+				floor_multimesh.set_instance_transform(
+					tile_index,
+					Transform3D(
+						Basis.IDENTITY,
+						Vector3(
+							-12.5 + float(tile_x) * TOWER_GEOMETRY.GRID_UNIT_M,
+							0.015,
+							-12.5 + float(tile_z) * TOWER_GEOMETRY.GRID_UNIT_M
+						)
+					)
+				)
+				tile_index += 1
+		var floor_grid := MultiMeshInstance3D.new()
+		floor_grid.name = "BaseFloorGrid6x6"
+		floor_grid.multimesh = floor_multimesh
+		floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
+		floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
+		add_child(floor_grid)
+	for direction in ["north", "south", "west", "east"]:
+		if direction in open_wall_directions:
+			continue
+		_build_base_facility_wall(direction, dimensions)
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+
+
+func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
+	var horizontal := direction in ["north", "south"]
+	var length := dimensions.x if horizontal else dimensions.y
+	var wall_center := Vector3.ZERO
+	match direction:
+		"north":
+			wall_center = Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -dimensions.y * 0.5)
+		"south":
+			wall_center = Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, dimensions.y * 0.5)
+		"west":
+			wall_center = Vector3(-dimensions.x * 0.5, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0)
+		_:
+			wall_center = Vector3(dimensions.x * 0.5, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0)
+	var thickness := 0.30
+	if direction not in doors:
+		_add_static_box(
+			"BaseWall_%s" % direction.capitalize(),
+			wall_center,
+			Vector3(length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
+			if horizontal
+			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, length),
+			_wall_material
+		)
+		return
+	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
+	var segment_length := (length - opening) * 0.5
+	for side in [-1.0, 1.0]:
+		var along: float = float(side) * (
+			opening * 0.5 + segment_length * 0.5
+		)
+		var segment_center := wall_center
+		if horizontal:
+			segment_center.x += along
+		else:
+			segment_center.z += along
+		_add_static_box(
+			"BaseWall_%s_Side" % direction.capitalize(),
+			segment_center,
+			Vector3(segment_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
+			if horizontal
+			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, segment_length),
+			_wall_material
+		)
+	var lintel_height := (
+		TOWER_GEOMETRY.FLOOR_HEIGHT_M
+		- TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
+	)
+	var lintel_center := wall_center
+	lintel_center.y = (
+		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + lintel_height * 0.5
+	)
+	_add_static_box(
+		"BaseWall_%s_Lintel" % direction.capitalize(),
+		lintel_center,
+		Vector3(opening, lintel_height, thickness)
+		if horizontal
+		else Vector3(thickness, lintel_height, opening),
+		_wall_material
+	)
+
+
+func _get_tower_floor_tile_mesh() -> Mesh:
+	if _tower_floor_tile_mesh != null:
+		return _tower_floor_tile_mesh
+	var source := TOWER_FLOOR_SCENE.instantiate()
+	_tower_floor_tile_mesh = _find_first_mesh(source)
+	source.free()
+	return _tower_floor_tile_mesh
+
+
+func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
+	var horizontal := direction in ["north", "south"]
+	var length := dimensions.x if horizontal else dimensions.y
+	var module_count := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
+	var has_door := doors.has(direction)
+	var door_index := module_count / 2
+	var wall_offset := dimensions.y * 0.5 if horizontal else dimensions.x * 0.5
+	var solid_transforms: Array[Transform3D] = []
+	for module_index in range(module_count):
+		var along := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
+		var module_position := Vector3.ZERO
+		var rotation_y := 0.0
+		match direction:
+			"north":
+				module_position = Vector3(along, 0.0, -wall_offset)
+			"south":
+				module_position = Vector3(-along, 0.0, wall_offset)
+				rotation_y = PI
+			"west":
+				module_position = Vector3(-wall_offset, 0.0, -along)
+				rotation_y = PI * 0.5
+			_:
+				module_position = Vector3(wall_offset, 0.0, along)
+				rotation_y = -PI * 0.5
+		var is_door_module := has_door and module_index == door_index
+		if is_door_module:
+			var module := TOWER_DOOR_SCENE.instantiate() as Node3D
+			module.name = "Imported_DoorWall5M_%s_I%02d" % [
+				direction.capitalize(),
+				module_index,
+			]
+			module.position = module_position
+			module.rotation.y = rotation_y
+			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
+			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+			module.set_meta("tower_wall_direction", direction)
+			_hide_imported_door_leaf(module)
+			add_child(module)
+			_add_tower_wall_collision(
+				direction,
+				module_position,
+				rotation_y,
+				true,
+				module_index
+			)
+		else:
+			solid_transforms.append(Transform3D(
+				Basis(Vector3.UP, rotation_y),
+				module_position
+			))
+	_build_tower_wall_multimesh(direction, solid_transforms)
+	_add_tower_solid_run_collision(
+		direction,
+		length,
+		module_count,
+		door_index,
+		has_door,
+		wall_offset
+	)
+
+
+func _build_tower_wall_multimesh(
+	direction: String,
+	transforms: Array[Transform3D]
+) -> void:
+	var mesh := _get_tower_solid_wall_mesh()
+	if mesh == null or transforms.is_empty():
+		return
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		multimesh.set_instance_transform(index, transforms[index])
+	var visual := MultiMeshInstance3D.new()
+	visual.name = "Imported_SolidWall5M_%s_Run" % direction.capitalize()
+	visual.multimesh = multimesh
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	visual.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	visual.set_meta("tower_wall_direction", direction)
+	add_child(visual)
+
+
+func _get_tower_solid_wall_mesh() -> Mesh:
+	if _tower_solid_wall_mesh != null:
+		return _tower_solid_wall_mesh
+	var source := TOWER_WALL_SCENE.instantiate()
+	_tower_solid_wall_mesh = _find_first_mesh(source)
+	source.free()
+	return _tower_solid_wall_mesh
+
+
+func _find_first_mesh(root: Node) -> Mesh:
+	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
+		return (root as MeshInstance3D).mesh
+	for child in root.get_children():
+		var found := _find_first_mesh(child)
+		if found != null:
+			return found
+	return null
+
+
+func _add_tower_solid_run_collision(
+	direction: String,
+	length: float,
+	module_count: int,
+	door_index: int,
+	has_door: bool,
+	wall_offset: float
+) -> void:
+	var body := StaticBody3D.new()
+	body.name = "TowerWallCollision_%s_Run" % direction.capitalize()
+	body.collision_layer = 1
+	body.collision_mask = 0
+	add_child(body)
+	var runs: Array[Vector2i] = []
+	if not has_door:
+		runs.append(Vector2i(0, module_count))
+	else:
+		if door_index > 0:
+			runs.append(Vector2i(0, door_index))
+		if door_index + 1 < module_count:
+			runs.append(Vector2i(door_index + 1, module_count - door_index - 1))
+	for run in runs:
+		var run_length := float(run.y) * TOWER_GEOMETRY.GRID_UNIT_M
+		var along := (
+			-length * 0.5
+			+ TOWER_GEOMETRY.GRID_UNIT_M * (float(run.x) + float(run.y) * 0.5)
+		)
+		var position := Vector3.ZERO
+		var size := Vector3.ZERO
+		match direction:
+			"north":
+				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -wall_offset)
+				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
+			"south":
+				position = Vector3(-along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
+				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
+			"west":
+				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -along)
+				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
+			_:
+				position = Vector3(wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
+				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
+		_add_collision_shape(body, position, size)
+
+
+func _hide_imported_door_leaf(root: Node) -> void:
+	if root is Node3D and str(root.name).contains("DoorLeaf"):
+		(root as Node3D).visible = false
+	for child in root.get_children():
+		_hide_imported_door_leaf(child)
+
+
+func _add_tower_wall_collision(
+	direction: String,
+	module_position: Vector3,
+	rotation_y: float,
+	is_door_module: bool,
+	module_index: int
+) -> void:
+	var body := StaticBody3D.new()
+	body.name = "TowerWallCollision_%s_I%02d" % [direction.capitalize(), module_index]
+	body.position = module_position
+	body.rotation.y = rotation_y
+	body.collision_layer = 1
+	body.collision_mask = 0
+	add_child(body)
+	if not is_door_module:
+		_add_collision_shape(
+			body,
+			Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0),
+			Vector3(
+				TOWER_GEOMETRY.GRID_UNIT_M,
+				TOWER_GEOMETRY.FLOOR_HEIGHT_M,
+				0.30
+			)
+		)
+		return
+	var pillar_width := (
+		TOWER_GEOMETRY.GRID_UNIT_M - TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
+	) * 0.5
+	var pillar_center := (
+		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + pillar_width * 0.5
+	)
+	for x in [-pillar_center, pillar_center]:
+		_add_collision_shape(
+			body,
+			Vector3(x, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0),
+			Vector3(pillar_width, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
+		)
+	_add_collision_shape(
+		body,
+		Vector3(
+			0.0,
+			TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
+			+ (TOWER_GEOMETRY.FLOOR_HEIGHT_M - TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M) * 0.5,
+			0.0
+		),
+		Vector3(
+			TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M - TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
+			0.30
+		)
+	)
+
+
+func _add_collision_shape(body: StaticBody3D, local_position: Vector3, size: Vector3) -> void:
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collision := CollisionShape3D.new()
+	collision.position = local_position
+	collision.shape = shape
+	body.add_child(collision)
+
+
 func _build_floor_partitions(dimensions: Vector2) -> void:
 	var mirror := -1.0 if absi(room_seed) % 2 == 0 else 1.0
 	if room_type == "FACILITY":
-		# 右侧约 6m 宽的连续通道；中段留门洞通向主空间。
-		var corridor_x := dimensions.x * 0.5 - 6.0
-		for z in [-8.8, 8.8]:
-			_add_static_box(
-				"FacilityCorridorWall",
-				Vector3(corridor_x, 1.4, z),
-				Vector3(0.28, 2.8, 8.4),
-				_wall_material
-			)
+		# PH49：30m基地中央必须保持通畅；设施全部沿墙摆放。
 		return
 	var partition_x := mirror * 4.8
 	for z in [-8.0, 7.5]:
@@ -383,6 +764,7 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
 	var door := DOOR_SCRIPT.new() as RoomDoor3D
 	door.configure(direction, target_room_id, theme.accent_color)
+	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	match direction:
 		"north":
 			door.position = Vector3(0, 0, -dimensions.y * 0.5)
@@ -398,34 +780,135 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	_door_nodes[direction] = door
 
 
+func _build_stair_lobby_markings(dimensions: Vector2) -> void:
+	var guide_material := _material(theme.accent_color, 0.20, 0.34)
+	guide_material.emission_enabled = true
+	guide_material.emission = theme.accent_color * 0.72
+	guide_material.emission_energy_multiplier = 1.25
+	var east_west_route := "east" in doors or "west" in doors
+	var guide_size := (
+		Vector3(dimensions.x - 2.0, 0.035, 1.20)
+		if east_west_route
+		else Vector3(1.20, 0.035, dimensions.y - 2.0)
+	)
+	_add_box(
+		"StairLobbyRouteGuide",
+		Vector3(0.0, 0.045, 0.0),
+		guide_size,
+		guide_material
+	)
+	var threshold_size := (
+		Vector3(0.26, 0.045, 4.2)
+		if east_west_route
+		else Vector3(4.2, 0.045, 0.26)
+	)
+	for threshold_index in range(2):
+		var direction_sign := -1.0 if threshold_index == 0 else 1.0
+		var threshold_position := Vector3.ZERO
+		if east_west_route:
+			threshold_position.x = direction_sign * (dimensions.x * 0.5 - 0.65)
+		else:
+			threshold_position.z = direction_sign * (dimensions.y * 0.5 - 0.65)
+		threshold_position.y = 0.055
+		_add_box(
+			"StairLobbyThresholdGuide_%s" % (
+				"A" if threshold_index == 0 else "B"
+			),
+			threshold_position,
+			threshold_size,
+			guide_material
+		)
+
+
 func _build_content() -> void:
 	var dimensions := get_dimensions()
-	_central_light = LIGHT_SCENE.instantiate() as WastelandLight3D
-	_central_light.name = "RoomCeilingLight"
-	_central_light.position = Vector3.ZERO
-	_central_light.configure(
-		theme.key_light_color,
-		theme.fixture_energy * (3.25 if size_class in ["large", "arena"] else 2.75),
-		maxf(theme.fixture_range * 1.32, minf(dimensions.x, dimensions.y) * 0.78),
-		room_seed,
-		true,
-		false,
-		"ceiling",
-	)
-	_central_light.set_light_enabled(false)
-	add_child(_central_light)
-	_central_light.add_to_group("wasteland_light_3d")
+	_room_lights.clear()
+	if room_type == "FACILITY":
+		for light_index in range(4):
+			var x_sign := -1.0 if light_index % 2 == 0 else 1.0
+			var z_sign := -1.0 if light_index < 2 else 1.0
+			var base_light := _create_room_light(
+				"BaseCeilingLight_%02d" % (light_index + 1),
+				Vector3(x_sign * 7.5, 0.0, z_sign * 7.5),
+				theme.fixture_energy * 5.0,
+				maxf(theme.fixture_range * 1.92, 26.0),
+				room_seed + light_index * 17,
+				false
+			)
+			var zone_color := Color(0.52, 0.84, 1.0).lerp(
+				Color(1.0, 0.72, 0.38),
+				0.58 if z_sign > 0.0 else 0.16
+			)
+			base_light.configure(
+				zone_color,
+				theme.fixture_energy * 5.0,
+				maxf(theme.fixture_range * 1.92, 26.0),
+				room_seed + light_index * 17,
+				false,
+				false,
+				"ceiling"
+			)
+			_room_lights.append(base_light)
+		_central_light = _room_lights[0]
+	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
+		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
+		# 四周都保持可读，同时仍由同一个墙边开关统一控制。
+		for light_index in range(4):
+			var x_sign := -1.0 if light_index % 2 == 0 else 1.0
+			var z_sign := -1.0 if light_index < 2 else 1.0
+			var arena_light := _create_room_light(
+				"ArenaCeilingLight_%02d" % (light_index + 1),
+				Vector3(
+					x_sign * dimensions.x * 0.24,
+					0.0,
+					z_sign * dimensions.y * 0.24
+				),
+				theme.fixture_energy * 4.85,
+				maxf(
+					theme.fixture_range * 1.72,
+					minf(dimensions.x, dimensions.y) * 0.58
+				),
+				room_seed + light_index * 19,
+				light_index == 0
+			)
+			_room_lights.append(arena_light)
+		_central_light = _room_lights[0]
+	else:
+		_central_light = _create_room_light(
+			"RoomCeilingLight",
+			Vector3.ZERO,
+			theme.fixture_energy * (
+				4.45 if size_class in ["large", "arena", "floor"] else 3.65
+			),
+			maxf(
+				theme.fixture_range * 1.72,
+				minf(dimensions.x, dimensions.y) * 0.94
+			),
+			room_seed,
+			true
+		)
+		_room_lights.append(_central_light)
 
 	_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
 	_light_switch.name = "RoomLightSwitch3D"
 	_place_light_switch(_light_switch, dimensions)
-	_light_switch.configure(_central_light, false)
+	var starts_on := room_type in ["FACILITY", "STAIR_LOBBY", "BOSS"]
+	_light_switch.configure_group(_room_lights, starts_on)
 	add_child(_light_switch)
+	if room_type == "STAIR_LOBBY":
+		_build_stair_lobby_markings(dimensions)
 
-	var prop_count := 3 if size_class == "small" else 5 if size_class == "medium" else 7 if size_class in ["large", "floor"] else 9
+	var prop_count := (
+		3 if size_class in ["small", "tower_cell"]
+		else 5 if size_class == "medium"
+		else 7 if size_class in ["large", "floor"]
+		else 9
+	)
 	if size_class == "rooftop":
 		prop_count = 3
 	if room_type == "FACILITY":
+		prop_count = 0
+	if room_type == "STAIR_LOBBY":
 		prop_count = 0
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
@@ -470,13 +953,46 @@ func _build_content() -> void:
 		station.position = Vector3(0, 0, -dimensions.y * 0.27)
 		add_child(station)
 		station.activated.connect(_on_service_activated)
-	if room_type in ["STAIRS_DOWN", "STAIRS_UP", "ELEVATOR"]:
+	if room_type in ["STAIRS_DOWN", "STAIRS_UP"]:
 		_build_vertical_access_marker(room_type)
 	if room_type == "TRAP":
 		var hazard := HAZARD_SCENE.instantiate() as HazardField3D
-		hazard.configure(theme.hazard_color, 3.2 if size_class in ["large", "arena"] else 2.6, 6 + theme.difficulty_rank * 2)
+		hazard.configure(
+			theme.hazard_color,
+			3.2 if size_class in ["large", "arena"] else 2.6,
+			6 + theme.difficulty_rank * 2
+		)
 		hazard.position = Vector3(0, 0.06, 0)
 		add_child(hazard)
+
+
+func _create_room_light(
+	node_name: String,
+	planar_position: Vector3,
+	p_energy: float,
+	p_range: float,
+	seed: int,
+	shadow: bool
+) -> WastelandLight3D:
+	var room_light := LIGHT_SCENE.instantiate() as WastelandLight3D
+	room_light.name = node_name
+	room_light.position = planar_position
+	room_light.configure(
+		theme.key_light_color,
+		p_energy,
+		p_range,
+		seed,
+		shadow,
+		false,
+		"ceiling",
+	)
+	if tower_module_shell:
+		# 灯具自身的顶装高度是 2.72m；整体抬升后与 9m 天花板贴合。
+		room_light.position.y = TOWER_GEOMETRY.FLOOR_HEIGHT_M - 2.72
+	room_light.set_light_enabled(false)
+	add_child(room_light)
+	room_light.add_to_group("wasteland_light_3d")
+	return room_light
 
 
 func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -> void:
@@ -542,7 +1058,13 @@ func _build_trigger() -> void:
 
 func _build_spawn_points() -> void:
 	var dimensions := get_dimensions()
-	var count := 3 if size_class == "small" else 5 if size_class == "medium" else 7 if size_class == "large" else 9
+	var count := (
+		4 if size_class == "tower_cell"
+		else 3 if size_class == "small"
+		else 5 if size_class == "medium"
+		else 7 if size_class == "large"
+		else 9
+	)
 	for index in range(count):
 		var angle := TAU * float(index) / float(count) + _rng.randf_range(-0.24, 0.24)
 		enemy_spawn_points.append(global_position + Vector3(cos(angle) * dimensions.x * 0.23, 0.0, sin(angle) * dimensions.y * 0.23))

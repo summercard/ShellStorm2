@@ -13,7 +13,7 @@ func physics_update(delta: float) -> void:
 		_go("dead")
 		return
 	_tick_dash_cooldown(delta)
-	player.set("velocity", _grounded_velocity(Vector3.ZERO))
-	player.call("move_and_slide")
+	if _move_grounded(Vector3.ZERO, delta):
+		return
 	if not bool(player.get("input_locked")):
 		player.call("_transition_to_locomotion")

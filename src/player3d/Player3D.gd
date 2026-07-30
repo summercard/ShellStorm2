@@ -1,7 +1,7 @@
 class_name Player3D
 extends CharacterBody3D
-## 首张 3D 地图使用的玩家外壳。复用六态 ID 与 StateMachine 契约，
-## 但把移动、鼠标射线与碰撞转换到 XZ 平面。
+## 首张 3D 地图使用的玩家外壳。八态状态机包含真实下落与落地，
+## 移动、鼠标射线与碰撞统一工作在 XZ 平面和世界 Y 重力轴。
 
 signal hp_changed(current: int, maximum: int)
 signal dash_started()
@@ -25,6 +25,15 @@ const INVINCIBLE_DURATION := 0.24
 const FIRE_ANIMATION_DURATION := 0.14
 const KNOCKBACK_MIN_DURATION := 0.16
 const KNOCKBACK_MAX_DURATION := 0.42
+const GRAVITY_MPS2 := 24.0
+const TERMINAL_FALL_SPEED_MPS := 32.0
+const AIRBORNE_GRACE_S := 0.10
+const FALL_STATE_SPEED_MPS := 2.0
+const AIR_CONTROL_ACCEL_MPS2 := 24.0
+const LANDING_MIN_DURATION_S := 0.12
+const LANDING_MAX_DURATION_S := 0.30
+const LANDING_FULL_IMPACT_MPS := 16.0
+const FALL_RECOVERY_DISTANCE_M := 15.0
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -58,6 +67,13 @@ var _knockback_duration := 0.0
 var _knockback_strength := 0.0
 var _knockback_direction := Vector3.ZERO
 var _avatar_customization := PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate()
+var _airborne_elapsed := 0.0
+var _fall_start_y := 0.0
+var _last_impact_speed := 0.0
+var _landing_duration := LANDING_MIN_DURATION_S
+var _last_safe_ground_position := Vector3.ZERO
+var _has_safe_ground_position := false
+var _fall_recovery_count := 0
 
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
@@ -66,11 +82,13 @@ var _avatar_customization := PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate()
 
 func _ready() -> void:
 	current_hp = max_hp
-	# PH34 楼梯间使用连续斜坡承担真实高度变化；启用向下贴地，
-	# 保持既有 XZ 输入的同时让 CharacterBody3D 能沿坡下行而不悬空。
-	floor_snap_length = 0.85
+	# PH43：坡面由真实承重盒负责。短距离吸附只跨越数厘米接缝，
+	# 不再用持续向下速度或世界坐标吸附模拟楼梯。
+	floor_snap_length = 0.32
 	floor_max_angle = deg_to_rad(44.0)
 	floor_stop_on_slope = true
+	floor_constant_speed = true
+	safe_margin = 0.035
 	add_to_group("player")
 	add_to_group("player_3d")
 	_init_state_machine()
@@ -129,7 +147,7 @@ func get_presentation_state() -> String:
 	return _presentation_state
 
 
-## 外观装配是纯表现数据；不改碰撞、武器树、伤害或六态逻辑。
+## 外观装配是纯表现数据；不改碰撞、武器树、伤害或八态逻辑。
 func set_avatar_customization(slot_id: String, variant_id: String) -> bool:
 	if not PlayerAvatar3D.has_customization_variant(slot_id, variant_id):
 		return false
@@ -164,8 +182,127 @@ func get_move_speed() -> float:
 
 func get_grounded_velocity(planar_velocity: Vector3) -> Vector3:
 	var result := planar_velocity
-	result.y = -3.2
+	result.y = 0.0
 	return result
+
+
+func move_grounded(planar_velocity: Vector3, delta: float, allow_fall_transition := true) -> bool:
+	var next_velocity := planar_velocity
+	if is_on_floor():
+		# 极小负值让 floor snap 保持接触，但不会把无输入角色沿斜坡推下。
+		next_velocity.y = -0.01
+	else:
+		next_velocity.y = maxf(
+			velocity.y - GRAVITY_MPS2 * maxf(delta, 0.0),
+			-TERMINAL_FALL_SPEED_MPS
+		)
+	velocity = next_velocity
+	move_and_slide()
+	if is_on_floor():
+		_airborne_elapsed = 0.0
+		_record_safe_ground_position()
+		return false
+	_airborne_elapsed += maxf(delta, 0.0)
+	if allow_fall_transition and _should_enter_falling():
+		_begin_fall()
+		return true
+	_recover_from_invalid_fall_if_needed()
+	return false
+
+
+func move_airborne(target_planar_velocity: Vector3, delta: float) -> bool:
+	var planar := Vector3(velocity.x, 0.0, velocity.z)
+	planar = planar.move_toward(
+		Vector3(target_planar_velocity.x, 0.0, target_planar_velocity.z),
+		AIR_CONTROL_ACCEL_MPS2 * maxf(delta, 0.0)
+	)
+	var impact_speed := maxf(0.0, -velocity.y)
+	velocity = Vector3(
+		planar.x,
+		maxf(velocity.y - GRAVITY_MPS2 * maxf(delta, 0.0), -TERMINAL_FALL_SPEED_MPS),
+		planar.z
+	)
+	move_and_slide()
+	if is_on_floor():
+		_last_impact_speed = impact_speed
+		_landing_duration = lerpf(
+			LANDING_MIN_DURATION_S,
+			LANDING_MAX_DURATION_S,
+			clampf(
+				(_last_impact_speed - FALL_STATE_SPEED_MPS)
+				/ (LANDING_FULL_IMPACT_MPS - FALL_STATE_SPEED_MPS),
+				0.0,
+				1.0
+			)
+		)
+		_airborne_elapsed = 0.0
+		_record_safe_ground_position()
+		return true
+	_airborne_elapsed += maxf(delta, 0.0)
+	_recover_from_invalid_fall_if_needed()
+	return false
+
+
+func get_landing_duration() -> float:
+	return _landing_duration
+
+
+func get_landing_impact_speed() -> float:
+	return _last_impact_speed
+
+
+func get_fall_speed_ratio() -> float:
+	return clampf(maxf(0.0, -velocity.y) / TERMINAL_FALL_SPEED_MPS, 0.0, 1.0)
+
+
+func get_vertical_physics_snapshot() -> Dictionary:
+	return {
+		"on_floor": is_on_floor(),
+		"airborne_elapsed_s": _airborne_elapsed,
+		"fall_start_y": _fall_start_y,
+		"impact_speed_mps": _last_impact_speed,
+		"landing_duration_s": _landing_duration,
+		"safe_ground_position": _last_safe_ground_position,
+		"has_safe_ground_position": _has_safe_ground_position,
+		"fall_recovery_count": _fall_recovery_count,
+		"gravity_mps2": GRAVITY_MPS2,
+		"terminal_speed_mps": TERMINAL_FALL_SPEED_MPS,
+	}
+
+
+func _should_enter_falling() -> bool:
+	return (
+		not is_on_floor()
+		and _airborne_elapsed >= AIRBORNE_GRACE_S
+		and velocity.y <= -FALL_STATE_SPEED_MPS
+	)
+
+
+func _begin_fall() -> void:
+	if _state_machine == null or _state_machine.current_state_name in ["falling", "dead"]:
+		return
+	_fall_start_y = global_position.y
+	_state_machine.transition_to("falling")
+
+
+func _record_safe_ground_position() -> void:
+	_last_safe_ground_position = global_position
+	_has_safe_ground_position = true
+
+
+func _recover_from_invalid_fall_if_needed() -> void:
+	if not _has_safe_ground_position:
+		return
+	if global_position.y >= _last_safe_ground_position.y - FALL_RECOVERY_DISTANCE_M:
+		return
+	global_position = _last_safe_ground_position + Vector3.UP * 0.08
+	velocity = Vector3.ZERO
+	_airborne_elapsed = 0.0
+	_fall_recovery_count += 1
+	if _state_machine != null and _state_machine.current_state_name == "falling":
+		_last_impact_speed = TERMINAL_FALL_SPEED_MPS
+		_landing_duration = LANDING_MAX_DURATION_S
+		_state_machine.transition_to("landing")
 
 
 func get_dash_speed() -> float:
@@ -474,7 +611,13 @@ func _update_combat_input() -> void:
 
 
 func _begin_dash() -> bool:
-	if input_locked or current_hp <= 0 or is_dashing or dash_cooldown_timer > 0.0:
+	if (
+		input_locked
+		or current_hp <= 0
+		or is_dashing
+		or dash_cooldown_timer > 0.0
+		or (_state_machine != null and _state_machine.current_state_name in ["falling", "landing"])
+	):
 		return false
 	var direction := _get_input_direction_3d()
 	dash_direction = direction if direction != Vector3.ZERO else aim_direction
@@ -514,6 +657,9 @@ func _clear_action_overlays() -> void:
 func _transition_to_locomotion() -> void:
 	if _state_machine == null or current_hp <= 0:
 		return
+	if _should_enter_falling():
+		_begin_fall()
+		return
 	if input_locked:
 		_state_machine.transition_to("locked")
 	elif _get_input_direction_3d() != Vector3.ZERO:
@@ -541,7 +687,9 @@ func _update_aim_from_mouse() -> void:
 	var mouse_position := get_viewport().get_mouse_position()
 	var ray_origin := camera.project_ray_origin(mouse_position)
 	var ray_direction := camera.project_ray_normal(mouse_position)
-	var intersection = Plane(Vector3.UP, 0.0).intersects_ray(ray_origin, ray_direction)
+	# 塔楼使用真实层高和连续楼梯坡面。瞄准平面必须跟随角色当前物理高度，
+	# 不能固定在世界 Y=0，否则下楼后光标会一直悬在楼顶。
+	var intersection = Plane(Vector3.UP, global_position.y).intersects_ray(ray_origin, ray_direction)
 	if not intersection is Vector3:
 		return
 	var target := intersection as Vector3
@@ -564,13 +712,17 @@ func _init_state_machine() -> void:
 	_state_machine.register("dashing", Player3DDashingState.new())
 	_state_machine.register("hurt", Player3DHurtState.new())
 	_state_machine.register("locked", Player3DLockedState.new())
+	_state_machine.register("falling", Player3DFallingState.new())
+	_state_machine.register("landing", Player3DLandingState.new())
 	_state_machine.register("dead", Player3DDeadState.new())
 	_state_machine.configure_transition_map({
-		"idle": ["moving", "dashing", "hurt", "locked", "dead"],
-		"moving": ["idle", "dashing", "hurt", "locked", "dead"],
-		"dashing": ["idle", "moving", "hurt", "locked", "dead"],
-		"hurt": ["idle", "moving", "locked", "dead"],
-		"locked": ["idle", "moving", "hurt", "dead"],
+		"idle": ["moving", "dashing", "hurt", "locked", "falling", "dead"],
+		"moving": ["idle", "dashing", "hurt", "locked", "falling", "dead"],
+		"dashing": ["idle", "moving", "hurt", "locked", "falling", "dead"],
+		"hurt": ["idle", "moving", "locked", "falling", "dead"],
+		"locked": ["idle", "moving", "hurt", "falling", "dead"],
+		"falling": ["landing", "hurt", "dead"],
+		"landing": ["idle", "moving", "hurt", "locked", "falling", "dead"],
 		"dead": [],
 	})
 	_state_machine.start("idle")

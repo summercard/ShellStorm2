@@ -258,9 +258,11 @@ func _verify_weapon_matrix(failures: Array[String]) -> void:
 	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("has_weapon_socket", false)):
 		failures.append("Player two-hand modular weapon contract regressed")
 	var state_snapshot := test_player.get_state_machine_snapshot()
-	var expected_states := ["dashing", "dead", "hurt", "idle", "locked", "moving"]
+	var expected_states := [
+		"dashing", "dead", "falling", "hurt", "idle", "landing", "locked", "moving",
+	]
 	if state_snapshot.get("states", []) != expected_states or not bool(state_snapshot.get("rules_enabled", false)):
-		failures.append("Player six-state whitelist contract regressed")
+		failures.append("Player eight-state whitelist contract regressed")
 	test_player.queue_free()
 	await get_tree().process_frame
 

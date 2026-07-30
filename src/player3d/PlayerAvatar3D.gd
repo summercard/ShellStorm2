@@ -92,6 +92,8 @@ var _action_offset := Vector3.ZERO
 var _action_rotation := Vector3.ZERO
 var _dash_animation_progress := 1.0
 var _hurt_animation_progress := 1.0
+var _fall_animation_progress := 0.0
+var _landing_animation_progress := 1.0
 var _idle_animation_active := false
 var _idle_cycle := 0.0
 var _idle_breath := 0.0
@@ -114,6 +116,7 @@ var _wearable_nodes: Dictionary = {}
 const RELOAD_FILL_WIDTH := 1.06
 const IDLE_LOOP_HZ := 0.42
 const IDLE_LOOP_DURATION := 1.0 / IDLE_LOOP_HZ
+const BUNNY_LINEAR_SCALE := 1.5 / 2.475
 const SIDEARM_SOCKET_OFFSET := Vector3(0.24, -0.01, 0.0)
 const SIDEARM_GRIP_HAND_R := Vector3(0.08, 0.56, -0.49)
 const SIDEARM_GRIP_ROTATION_R := Vector3(-0.12, PI * 0.46, -0.18)
@@ -186,6 +189,18 @@ func _resolve_rig_node(primary_path: NodePath, fallback_path: NodePath) -> Node3
 	return primary if primary != null else get_node(fallback_path) as Node3D
 
 
+func _motion_offset(value: Vector3) -> Vector3:
+	return value * (BUNNY_LINEAR_SCALE if _is_bunny_avatar() else 1.0)
+
+
+func _apply_bunny_attachment_scale() -> void:
+	if not _is_bunny_avatar():
+		return
+	var held_weapon := weapon_socket.get_node_or_null("WeaponModel3D") as Node3D
+	if held_weapon != null:
+		held_weapon.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
+
+
 func _ready() -> void:
 	_player = _find_player()
 	_base_positions = {
@@ -234,11 +249,20 @@ func _ready() -> void:
 	_set_avatar_render_layer(2)
 	_prepare_unique_materials()
 	_ensure_wearable_nodes()
+	if _is_bunny_avatar():
+		reload_progress_root.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
+		if _wearable_root != null:
+			_wearable_root.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
+		var state_vfx := get_node_or_null("VisualRoot/StateVFX") as Node3D
+		if state_vfx != null:
+			state_vfx.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
+		_apply_bunny_attachment_scale()
 	_apply_customization()
 
 
 func _process(delta: float) -> void:
 	_elapsed += delta
+	_apply_bunny_attachment_scale()
 	if _player == null or not is_instance_valid(_player):
 		_player = _find_player()
 	_read_player_state()
@@ -250,10 +274,12 @@ func _process(delta: float) -> void:
 
 func get_component_snapshot() -> Dictionary:
 	var is_bunny := _is_bunny_avatar()
+	var authored_height_m := 1.5 if is_bunny else 1.65
+	var runtime_scale_multiplier := scale.y
 	return {
 		"is_3d": true,
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
-		"assembly_version": "v004" if is_bunny else "v001",
+		"assembly_version": "v006" if is_bunny else "v001",
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
 		"component_space": "pivot_local" if is_bunny else "scene_local",
 		"rig_joint_count": 8 if is_bunny else 0,
@@ -273,7 +299,10 @@ func get_component_snapshot() -> Dictionary:
 		"tail_style": "none" if is_bunny else "round_stub",
 		"independent_foot_animation": true,
 		"independent_hand_animation": is_bunny,
-		"authored_scale_m": 2.475 if is_bunny else 1.65,
+		"authored_scale_m": authored_height_m,
+		"runtime_scale_multiplier": runtime_scale_multiplier,
+		"full_visual_height_m": authored_height_m * runtime_scale_multiplier,
+		"linear_scale_from_v004": BUNNY_LINEAR_SCALE if is_bunny else 1.0,
 		"authored_forward_correction_degrees": 90 if is_bunny else 0,
 		"raw_forward_blender": "+X" if is_bunny else "",
 		"runtime_forward_godot": "-Z" if is_bunny else "",
@@ -296,7 +325,7 @@ func get_component_snapshot() -> Dictionary:
 		"visual_pitch": visual_root.rotation.x,
 		"moving_animation_active": _moving_animation_active,
 		"locomotion_cycle": _locomotion_cycle,
-		"moving_bob_amplitude": 0.10,
+		"moving_bob_amplitude": 0.10 * (BUNNY_LINEAR_SCALE if is_bunny else 1.0),
 		"idle_animation_active": _idle_animation_active,
 		"idle_state_machine_owned": true,
 		"idle_cycle": _idle_cycle,
@@ -308,6 +337,10 @@ func get_component_snapshot() -> Dictionary:
 		"dash_roll_progress": _dash_animation_progress,
 		"hurt_keyframe_active": _state == "hurt",
 		"hurt_animation_progress": _hurt_animation_progress,
+		"fall_animation_active": _state == "falling",
+		"fall_animation_progress": _fall_animation_progress,
+		"landing_animation_active": _state == "landing",
+		"landing_animation_progress": _landing_animation_progress,
 		"reload_animation_active": _reload_animation_active,
 		"reload_progress": _reload_progress,
 		"reload_offset": _reload_offset,
@@ -395,6 +428,10 @@ func _read_player_state() -> void:
 			_dash_animation_progress = 0.0
 		if _state == "hurt":
 			_hurt_animation_progress = 0.0
+		if _state == "falling":
+			_fall_animation_progress = 0.0
+		if _state == "landing":
+			_landing_animation_progress = 0.0
 	if _player.has_method("get_reload_snapshot"):
 		var reload_snapshot := _player.call("get_reload_snapshot") as Dictionary
 		_reload_animation_active = bool(reload_snapshot.get("active", false)) and _state != "dead"
@@ -472,12 +509,15 @@ func _update_orientation(delta: float) -> void:
 
 
 func _update_state_motion(delta: float) -> void:
+	var linear_scale := BUNNY_LINEAR_SCALE if _is_bunny_avatar() else 1.0
 	var bob := 0.0
 	var move_wave := 0.0
 	var move_pulse := 0.0
 	var dash_arch := 0.0
 	var hurt_arch := 0.0
 	var hurt_overshoot := 0.0
+	var fall_arch := 0.0
+	var landing_arch := 0.0
 	var target_position := Vector3.ZERO
 	var target_scale := Vector3.ONE
 	var target_roll := 0.0
@@ -490,7 +530,7 @@ func _update_state_motion(delta: float) -> void:
 	match _state:
 		"idle":
 			# 正式站立循环：约 2.38 秒一次呼吸，重心换脚采用半速错相。
-			# 它由六态状态机的 idle 唯一驱动，移动输入出现后本帧立即退出。
+			# 它由八态状态机的 idle 唯一驱动，移动输入出现后本帧立即退出。
 			_idle_cycle = fmod(_idle_cycle + delta * TAU * IDLE_LOOP_HZ, TAU)
 			_idle_breath = sin(_idle_cycle)
 			_idle_weight_shift = sin(_idle_cycle * 0.5 - PI * 0.25)
@@ -562,6 +602,58 @@ func _update_state_motion(delta: float) -> void:
 			)
 			target_position = Vector3(hurt_overshoot * 0.12, hurt_arch * 0.12, hurt_arch * 0.10)
 			target_roll = hurt_overshoot * 0.34
+		"falling":
+			_fall_animation_progress += delta
+			var fall_speed_ratio := 0.35
+			if _player != null and _player.has_method("get_fall_speed_ratio"):
+				fall_speed_ratio = float(_player.call("get_fall_speed_ratio"))
+			fall_arch = clampf(
+				1.0 - exp(-_fall_animation_progress * 7.0),
+				0.0,
+				1.0
+			) * lerpf(0.55, 1.0, fall_speed_ratio)
+			target_position = Vector3(0.0, 0.05, 0.04) * fall_arch
+			target_scale = Vector3(
+				1.0 - fall_arch * 0.08,
+				1.0 + fall_arch * 0.13,
+				1.0 - fall_arch * 0.06
+			)
+			body_scale_target = _base_scales["body"] * Vector3(
+				1.0 - fall_arch * 0.07,
+				1.0 + fall_arch * 0.15,
+				1.0 - fall_arch * 0.05
+			)
+			head_scale_target = _base_scales["head"] * Vector3(
+				1.0 + fall_arch * 0.025,
+				1.0 - fall_arch * 0.035,
+				1.0 + fall_arch * 0.025
+			)
+		"landing":
+			var landing_duration := 0.18
+			if _player != null and _player.has_method("get_landing_duration"):
+				landing_duration = maxf(0.01, float(_player.call("get_landing_duration")))
+			_landing_animation_progress = clampf(
+				_landing_animation_progress + delta / landing_duration,
+				0.0,
+				1.0
+			)
+			landing_arch = sin(_landing_animation_progress * PI)
+			target_position = Vector3(0.0, -landing_arch * 0.10, 0.03 * landing_arch)
+			target_scale = Vector3(
+				1.0 + landing_arch * 0.22,
+				1.0 - landing_arch * 0.30,
+				1.0 + landing_arch * 0.18
+			)
+			body_scale_target = _base_scales["body"] * Vector3(
+				1.0 + landing_arch * 0.25,
+				1.0 - landing_arch * 0.35,
+				1.0 + landing_arch * 0.20
+			)
+			head_scale_target = _base_scales["head"] * Vector3(
+				1.0 + landing_arch * 0.08,
+				1.0 - landing_arch * 0.10,
+				1.0 + landing_arch * 0.08
+			)
 		"locked":
 			bob = sin(_elapsed * TAU * 0.8) * 0.012
 			target_scale = Vector3(0.97, 0.97, 0.97)
@@ -570,6 +662,8 @@ func _update_state_motion(delta: float) -> void:
 			target_position = Vector3(0.16, 0.36, 0.0)
 			target_scale = Vector3(0.92, 0.76, 0.92)
 			target_roll = 1.42
+	bob *= linear_scale
+	target_position *= linear_scale
 	_moving_animation_active = _state == "moving"
 	var reload_arch := sin(_reload_progress * PI) if _reload_animation_active else 0.0
 	var service_tick := sin(_reload_progress * TAU * 2.0) * reload_arch
@@ -577,7 +671,7 @@ func _update_state_motion(delta: float) -> void:
 		-reload_arch * 0.07,
 		-reload_arch * 0.16 + service_tick * 0.025,
 		reload_arch * 0.07
-	)
+	) * linear_scale
 	_reload_rotation = Vector3(
 		reload_arch * 0.20,
 		0.0,
@@ -627,6 +721,7 @@ func _update_state_motion(delta: float) -> void:
 			_weapon_socket_pose_rotation = Vector3(0.06, 0.0, -0.08)
 		"longgun_reload":
 			_weapon_socket_pose_rotation = Vector3(0.04, 0.0, -0.04)
+	_weapon_socket_pose_offset *= linear_scale
 	var local_knockback := Vector3.ZERO
 	if _knockback_animation_active and _knockback_direction.length_squared() > 0.001:
 		local_knockback = visual_root.global_basis.inverse() * _knockback_direction
@@ -636,21 +731,24 @@ func _update_state_motion(delta: float) -> void:
 		-fire_arch * weapon_roll * 0.08 + local_knockback.x * knockback_arch * 0.052,
 		fire_arch * weapon_lift - charge_arch * 0.032 + knockback_arch * 0.026,
 		fire_arch * 0.105 * weapon_kick + charge_arch * 0.052 + local_knockback.z * knockback_arch * 0.052
-	)
+	) * linear_scale
 	_action_rotation = Vector3(
 		fire_arch * weapon_pitch + charge_arch * 0.10,
 		charge_arch * 0.06,
 		fire_arch * weapon_roll + local_knockback.x * knockback_arch * 0.18
 	)
 	if _firing_animation_active:
-		target_position += Vector3(0.0, -fire_arch * 0.018, fire_arch * 0.045)
+		target_position += Vector3(0.0, -fire_arch * 0.018, fire_arch * 0.045) * linear_scale
 		target_scale *= Vector3(1.0 + fire_arch * 0.055, 1.0 - fire_arch * 0.075, 1.0 - fire_arch * 0.035)
 		body_scale_target *= Vector3(1.0 + fire_arch * 0.045, 1.0 - fire_arch * 0.08, 1.0 - fire_arch * 0.025)
 	if _charging_animation_active:
-		target_position += Vector3(0.0, -charge_arch * 0.026, 0.0)
+		target_position += Vector3(0.0, -charge_arch * 0.026, 0.0) * linear_scale
 		target_scale *= Vector3(1.0 - charge_arch * 0.035, 1.0 - charge_arch * 0.055, 1.0 - charge_arch * 0.035)
 	if _knockback_animation_active:
-		target_position += local_knockback * knockback_arch * 0.16 + Vector3(0.0, knockback_arch * 0.045, 0.0)
+		target_position += (
+			local_knockback * knockback_arch * 0.16
+			+ Vector3(0.0, knockback_arch * 0.045, 0.0)
+		) * linear_scale
 		target_scale *= Vector3(1.0 + knockback_arch * 0.10, 1.0 - knockback_arch * 0.13, 1.0 + knockback_arch * 0.07)
 		target_roll += local_knockback.x * knockback_arch * 0.18
 
@@ -661,22 +759,58 @@ func _update_state_motion(delta: float) -> void:
 	visual_root.rotation.x = smoothstep(0.0, 1.0, _dash_animation_progress) * TAU if _state == "dashing" else 0.0
 	visual_root.rotation.z = lerp_angle(visual_root.rotation.z, target_roll, minf(1.0, delta * 11.0))
 
-	body.position = body.position.lerp(_base_positions["body"] + Vector3(_idle_weight_shift * 0.018, bob - fire_arch * 0.016 - charge_arch * 0.018 - hurt_arch * 0.04, hurt_arch * 0.035), minf(1.0, delta * 18.0))
+	body.position = body.position.lerp(
+		_base_positions["body"] + Vector3(
+			_idle_weight_shift * 0.018 * linear_scale,
+			bob - (fire_arch * 0.016 + charge_arch * 0.018 + hurt_arch * 0.04) * linear_scale,
+			hurt_arch * 0.035 * linear_scale
+		),
+		minf(1.0, delta * 18.0)
+	)
 	body.scale = body.scale.lerp(body_scale_target * Vector3(1.0 + hurt_arch * 0.12, 1.0 - hurt_arch * 0.18, 1.0 + hurt_arch * 0.08), minf(1.0, delta * 21.0))
 	body.rotation = body.rotation.lerp(_base_rotations["body"] + Vector3(-hurt_arch * 0.28, 0.0, -move_wave * 0.034 + _idle_weight_shift * 0.026 + fire_arch * 0.035 + hurt_overshoot * 0.22), minf(1.0, delta * 17.0))
-	head.position = head.position.lerp(_base_positions["head"] + Vector3(-_idle_weight_shift * 0.010 + hurt_overshoot * 0.05, bob * (0.46 if _state == "moving" else 0.62) - fire_arch * 0.012 + hurt_arch * 0.10, fire_arch * 0.018 + hurt_arch * 0.09), minf(1.0, delta * 19.0))
+	head.position = head.position.lerp(
+		_base_positions["head"] + Vector3(
+			(-_idle_weight_shift * 0.010 + hurt_overshoot * 0.05) * linear_scale,
+			bob * (0.46 if _state == "moving" else 0.62)
+				+ (-fire_arch * 0.012 + hurt_arch * 0.10) * linear_scale,
+			(fire_arch * 0.018 + hurt_arch * 0.09) * linear_scale
+		),
+		minf(1.0, delta * 19.0)
+	)
 	head.scale = head.scale.lerp(head_scale_target * Vector3(1.0 - hurt_arch * 0.06, 1.0 + hurt_arch * 0.10, 1.0 - hurt_arch * 0.06), minf(1.0, delta * 19.0))
 	head.rotation = head.rotation.lerp(_base_rotations["head"] + Vector3(_idle_breath * 0.014 + fire_arch * 0.035 + hurt_arch * 0.46, 0.0, -_idle_weight_shift * 0.038 + move_wave * 0.048 - knockback_arch * local_knockback.x * 0.11 - hurt_overshoot * 0.38), minf(1.0, delta * 18.0))
-	scarf.position = scarf.position.lerp(_base_positions["scarf"] + Vector3(move_wave * (0.045 if _state == "moving" else 0.018), bob * 0.62, 0.02 + move_pulse * 0.035), minf(1.0, delta * 9.0))
+	scarf.position = scarf.position.lerp(
+		_base_positions["scarf"] + Vector3(
+			move_wave * (0.045 if _state == "moving" else 0.018) * linear_scale,
+			bob * 0.62,
+			(0.02 + move_pulse * 0.035) * linear_scale
+		),
+		minf(1.0, delta * 9.0)
+	)
 	scarf.rotation = scarf.rotation.lerp(_base_rotations["scarf"] + Vector3(move_wave * 0.06, 0.0, -move_wave * 0.08 - fire_arch * 0.04), minf(1.0, delta * 8.0))
 	feet.position = feet.position.lerp(_base_positions["feet"] + Vector3(0.0, bob * 0.18, 0.0), minf(1.0, delta * 18.0))
 	feet.rotation = feet.rotation.lerp(_base_rotations["feet"] + Vector3(0.0, 0.0, -move_wave * 0.022 + _idle_weight_shift * 0.010), minf(1.0, delta * 16.0))
-	var left_step := maxf(0.0, move_wave) * 0.105 if _state == "moving" else 0.0
-	var right_step := maxf(0.0, -move_wave) * 0.105 if _state == "moving" else 0.0
-	var idle_left_lift := maxf(0.0, -_idle_weight_shift) * 0.008
-	var idle_right_lift := maxf(0.0, _idle_weight_shift) * 0.008
-	foot_l.position = foot_l.position.lerp(_base_positions["foot_l"] + Vector3(-_idle_weight_shift * 0.006 - hurt_arch * 0.08, left_step + idle_left_lift + hurt_arch * 0.18, -left_step * 0.34 + hurt_arch * 0.10), minf(1.0, delta * 22.0))
-	foot_r.position = foot_r.position.lerp(_base_positions["foot_r"] + Vector3(-_idle_weight_shift * 0.006 + hurt_arch * 0.08, right_step + idle_right_lift + hurt_arch * 0.12, -right_step * 0.34 + hurt_arch * 0.06), minf(1.0, delta * 22.0))
+	var left_step := (maxf(0.0, move_wave) * 0.105 if _state == "moving" else 0.0) * linear_scale
+	var right_step := (maxf(0.0, -move_wave) * 0.105 if _state == "moving" else 0.0) * linear_scale
+	var idle_left_lift := maxf(0.0, -_idle_weight_shift) * 0.008 * linear_scale
+	var idle_right_lift := maxf(0.0, _idle_weight_shift) * 0.008 * linear_scale
+	foot_l.position = foot_l.position.lerp(
+		_base_positions["foot_l"] + Vector3(
+			(-_idle_weight_shift * 0.006 - hurt_arch * 0.08) * linear_scale,
+			left_step + idle_left_lift + (hurt_arch * 0.18 + fall_arch * 0.16) * linear_scale,
+			-left_step * 0.34 + (hurt_arch * 0.10 + fall_arch * 0.12) * linear_scale
+		),
+		minf(1.0, delta * 22.0)
+	)
+	foot_r.position = foot_r.position.lerp(
+		_base_positions["foot_r"] + Vector3(
+			(-_idle_weight_shift * 0.006 + hurt_arch * 0.08) * linear_scale,
+			right_step + idle_right_lift + (hurt_arch * 0.12 + fall_arch * 0.16) * linear_scale,
+			-right_step * 0.34 + (hurt_arch * 0.06 + fall_arch * 0.12) * linear_scale
+		),
+		minf(1.0, delta * 22.0)
+	)
 	foot_l.rotation = foot_l.rotation.lerp(_base_rotations["foot_l"] + Vector3(-move_wave * 0.18 - hurt_arch * 0.52, 0.0, move_wave * 0.035 + hurt_arch * 0.20), minf(1.0, delta * 20.0))
 	foot_r.rotation = foot_r.rotation.lerp(_base_rotations["foot_r"] + Vector3(move_wave * 0.18 - hurt_arch * 0.38, 0.0, move_wave * 0.035 - hurt_arch * 0.16), minf(1.0, delta * 20.0))
 	var tail_wag := sin(_elapsed * TAU * (2.0 if _state == "moving" else 0.75))
@@ -703,7 +837,16 @@ func _update_state_motion(delta: float) -> void:
 		_base_rotations["weapon_socket"] + _weapon_socket_pose_rotation + _reload_rotation + _action_rotation,
 		minf(1.0, delta * 20.0)
 	)
-	_animate_bunny_accessories(delta, move_wave, move_pulse, fire_arch, charge_arch, knockback_arch)
+	_animate_bunny_accessories(
+		delta,
+		move_wave,
+		move_pulse,
+		fire_arch,
+		charge_arch,
+		knockback_arch,
+		fall_arch,
+		landing_arch
+	)
 
 	dash_trail.visible = _state == "dashing"
 	dash_trail.scale.z = 1.0 + absf(sin(_elapsed * 18.0)) * 0.28
@@ -714,7 +857,16 @@ func _update_state_motion(delta: float) -> void:
 	low_health_ring.scale = Vector3.ONE * (1.0 + sin(_elapsed * TAU * 2.1) * 0.06)
 
 
-func _animate_bunny_accessories(delta: float, move_wave: float, move_pulse: float, fire_arch: float, charge_arch: float, knockback_arch: float) -> void:
+func _animate_bunny_accessories(
+	delta: float,
+	move_wave: float,
+	move_pulse: float,
+	fire_arch: float,
+	charge_arch: float,
+	knockback_arch: float,
+	fall_arch: float,
+	landing_arch: float
+) -> void:
 	if not _is_bunny_avatar():
 		return
 	# 兔耳承担动作的预备、跟随和收束；冲刺和受击使用明显的关键姿势，
@@ -729,13 +881,13 @@ func _animate_bunny_accessories(delta: float, move_wave: float, move_pulse: floa
 		# 待机时双耳错相呼吸，偶发的单耳轻弹打破机械循环。
 		ear_l_offset += Vector3(-_idle_breath * 0.038 + _idle_ear_flick * 0.15, _idle_weight_shift * 0.018, _idle_weight_shift * 0.030)
 		ear_r_offset += Vector3(-_idle_breath * 0.030 - _idle_ear_flick * 0.055, -_idle_weight_shift * 0.014, -_idle_weight_shift * 0.024)
-		ear_l_position += Vector3(0.0, _idle_breath * 0.008, 0.0)
-		ear_r_position += Vector3(0.0, _idle_breath * 0.006, 0.0)
+		ear_l_position += _motion_offset(Vector3(0.0, _idle_breath * 0.008, 0.0))
+		ear_r_position += _motion_offset(Vector3(0.0, _idle_breath * 0.006, 0.0))
 	elif _state == "moving":
 		ear_l_offset += Vector3(-move_pulse * 0.18, move_wave * 0.035, move_wave * 0.08)
 		ear_r_offset += Vector3(-move_pulse * 0.15, -move_wave * 0.030, -move_wave * 0.07)
-		ear_l_position += Vector3(0.0, move_pulse * 0.018, 0.0)
-		ear_r_position += Vector3(0.0, move_pulse * 0.014, 0.0)
+		ear_l_position += _motion_offset(Vector3(0.0, move_pulse * 0.018, 0.0))
+		ear_r_position += _motion_offset(Vector3(0.0, move_pulse * 0.014, 0.0))
 	elif _state == "dashing":
 		var dash_tuck := sin(_dash_animation_progress * PI)
 		ear_l_offset += Vector3(-0.62 * dash_tuck, 0.08, 0.24)
@@ -745,6 +897,12 @@ func _animate_bunny_accessories(delta: float, move_wave: float, move_pulse: floa
 		var hurt_whip := sin(_hurt_animation_progress * TAU) * (1.0 - _hurt_animation_progress)
 		ear_l_offset += Vector3(-0.68 * hurt_snap, 0.18 * hurt_whip, 0.34)
 		ear_r_offset += Vector3(-0.62 * hurt_snap, -0.16 * hurt_whip, -0.30)
+	elif _state == "falling":
+		ear_l_offset += Vector3(-0.52 * fall_arch, 0.07, 0.18)
+		ear_r_offset += Vector3(-0.48 * fall_arch, -0.07, -0.18)
+	elif _state == "landing":
+		ear_l_offset += Vector3(-0.38 * landing_arch, 0.10, 0.24)
+		ear_r_offset += Vector3(-0.35 * landing_arch, -0.10, -0.22)
 	elif _state == "locked":
 		ear_l_offset += Vector3(-0.22, 0.0, 0.08)
 		ear_r_offset += Vector3(-0.22, 0.0, -0.08)
@@ -773,48 +931,48 @@ func _animate_bunny_accessories(delta: float, move_wave: float, move_pulse: floa
 	var weapon_follow_offset := _weapon_socket_pose_offset + _reload_offset + _action_offset
 	var weapon_follow_rotation := _weapon_socket_pose_rotation + _reload_rotation + _action_rotation
 	if _weapon_class == "sidearm" and _weapon_grip_pose_active:
-		right_hand_target = SIDEARM_GRIP_HAND_R + weapon_follow_offset
+		right_hand_target = _motion_offset(SIDEARM_GRIP_HAND_R) + weapon_follow_offset
 		right_hand_rot += SIDEARM_GRIP_ROTATION_R + weapon_follow_rotation
 		# 自由左手保留明显的反向摆臂，强化单手武器跑姿的剪影。
 		if _state == "idle":
-			left_hand_target += Vector3(-_idle_weight_shift * 0.010, _idle_breath * 0.010, _idle_weight_shift * 0.022)
+			left_hand_target += _motion_offset(Vector3(-_idle_weight_shift * 0.010, _idle_breath * 0.010, _idle_weight_shift * 0.022))
 			left_hand_rot += Vector3(_idle_breath * 0.022, 0.0, -_idle_weight_shift * 0.045)
 		elif _state == "moving":
-			left_hand_target += Vector3(-move_wave * 0.025, move_pulse * 0.045, move_wave * 0.19)
+			left_hand_target += _motion_offset(Vector3(-move_wave * 0.025, move_pulse * 0.045, move_wave * 0.19))
 			left_hand_rot += Vector3(-move_wave * 0.62, 0.0, move_wave * 0.10)
-			right_hand_target += Vector3(0.0, move_pulse * 0.018, -move_wave * 0.022)
+			right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.018, -move_wave * 0.022))
 			right_hand_rot.z -= move_wave * 0.055
 	elif _weapon_class == "longgun" and _weapon_grip_pose_active:
-		left_hand_target = LONGGUN_GRIP_HAND_L + weapon_follow_offset
-		right_hand_target = LONGGUN_GRIP_HAND_R + weapon_follow_offset
+		left_hand_target = _motion_offset(LONGGUN_GRIP_HAND_L) + weapon_follow_offset
+		right_hand_target = _motion_offset(LONGGUN_GRIP_HAND_R) + weapon_follow_offset
 		left_hand_rot += LONGGUN_GRIP_ROTATION_L + weapon_follow_rotation
 		right_hand_rot += LONGGUN_GRIP_ROTATION_R + weapon_follow_rotation
 		if _state == "moving":
 			# 长枪跑步保持双手锁定，枪身收向胸前，只留紧凑有力的上下脉冲。
-			left_hand_target += Vector3(0.0, move_pulse * 0.018, move_wave * 0.018)
-			right_hand_target += Vector3(0.0, move_pulse * 0.014, move_wave * 0.018)
+			left_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.018, move_wave * 0.018))
+			right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.014, move_wave * 0.018))
 			left_hand_rot.z -= move_wave * 0.035
 			right_hand_rot.z -= move_wave * 0.035
 	elif _state == "moving":
-		left_hand_target += Vector3(0.0, move_pulse * 0.035, move_wave * 0.16)
-		right_hand_target += Vector3(0.0, move_pulse * 0.030, -move_wave * 0.16)
+		left_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.035, move_wave * 0.16))
+		right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.030, -move_wave * 0.16))
 		left_hand_rot.x -= move_wave * 0.56
 		right_hand_rot.x += move_wave * 0.56
 	if _firing_animation_active and _weapon_grip_pose_active:
 		if _weapon_class == "sidearm":
 			# 手枪使用单腕快速上挑；左手完全不继承枪械后坐。
-			right_hand_target += Vector3(fire_arch * 0.018, fire_arch * 0.030, fire_arch * 0.020)
+			right_hand_target += _motion_offset(Vector3(fire_arch * 0.018, fire_arch * 0.030, fire_arch * 0.020))
 			right_hand_rot += Vector3(fire_arch * 0.20, 0.0, -fire_arch * 0.12)
 		else:
 			# 长枪由双手和躯干共同吃后坐，腕部只做较小的刚性回弹。
-			left_hand_target.z += fire_arch * 0.030
-			right_hand_target.z += fire_arch * 0.030
+			left_hand_target.z += fire_arch * 0.030 * BUNNY_LINEAR_SCALE
+			right_hand_target.z += fire_arch * 0.030 * BUNNY_LINEAR_SCALE
 			left_hand_rot.x += fire_arch * 0.08
 			right_hand_rot.x += fire_arch * 0.10
 	if _charging_animation_active:
 		if _weapon_class == "longgun":
-			left_hand_target += Vector3(0.0, -charge_arch * 0.04, charge_arch * 0.08)
-			right_hand_target += Vector3(0.0, -charge_arch * 0.03, charge_arch * 0.06)
+			left_hand_target += _motion_offset(Vector3(0.0, -charge_arch * 0.04, charge_arch * 0.08))
+			right_hand_target += _motion_offset(Vector3(0.0, -charge_arch * 0.03, charge_arch * 0.06))
 			left_hand_rot.x -= charge_arch * 0.20
 			right_hand_rot.x -= charge_arch * 0.16
 	if _reload_animation_active:
@@ -822,18 +980,18 @@ func _animate_bunny_accessories(delta: float, move_wave: float, move_pulse: floa
 		var reload_tick := sin(_reload_progress * TAU * 2.0) * reload_arch
 		if _weapon_class == "longgun":
 			# 长枪左手离开护木完成服务动作；右手继续压住握把。
-			left_hand_target += Vector3(-reload_arch * 0.19, reload_arch * 0.13, reload_arch * 0.18 + reload_tick * 0.055)
+			left_hand_target += _motion_offset(Vector3(-reload_arch * 0.19, reload_arch * 0.13, reload_arch * 0.18 + reload_tick * 0.055))
 			left_hand_rot += Vector3(reload_arch * 0.36, -reload_arch * 0.18, reload_arch * 0.52)
 		else:
 			# 手枪仍保持右手单手持枪，左手只做近身取弹动作，不进入握持计数。
-			left_hand_target += Vector3(reload_arch * 0.12, reload_arch * 0.15, -reload_arch * 0.14 + reload_tick * 0.035)
+			left_hand_target += _motion_offset(Vector3(reload_arch * 0.12, reload_arch * 0.15, -reload_arch * 0.14 + reload_tick * 0.035))
 			left_hand_rot += Vector3(-reload_arch * 0.30, 0.0, -reload_arch * 0.34)
-		right_hand_target += Vector3(0.0, -reload_arch * 0.02, reload_arch * 0.02)
+		right_hand_target += _motion_offset(Vector3(0.0, -reload_arch * 0.02, reload_arch * 0.02))
 		right_hand_rot.x += reload_arch * 0.12
 	if _state == "hurt":
 		var hurt_snap := sin(_hurt_animation_progress * PI)
-		left_hand_target += Vector3(-hurt_snap * 0.09, hurt_snap * 0.08, hurt_snap * 0.05)
-		right_hand_target += Vector3(hurt_snap * 0.07, hurt_snap * 0.05, hurt_snap * 0.04)
+		left_hand_target += _motion_offset(Vector3(-hurt_snap * 0.09, hurt_snap * 0.08, hurt_snap * 0.05))
+		right_hand_target += _motion_offset(Vector3(hurt_snap * 0.07, hurt_snap * 0.05, hurt_snap * 0.04))
 		left_hand_rot.z += hurt_snap * 0.34
 		right_hand_rot.z -= hurt_snap * 0.30
 	bunny_hand_l.position = bunny_hand_l.position.lerp(left_hand_target, minf(1.0, delta * 22.0))

@@ -25,8 +25,11 @@ func physics_update(delta: float) -> void:
 		player.set("velocity", Vector3.ZERO)
 		_go("locked")
 		return
-	player.set("velocity", _grounded_velocity(player.get("dash_direction") * float(player.call("get_dash_speed"))))
-	player.call("move_and_slide")
+	if _move_grounded(
+		player.get("dash_direction") * float(player.call("get_dash_speed")),
+		delta
+	):
+		return
 	_remaining -= delta
 	if _remaining <= 0.0:
 		player.call("_transition_to_locomotion")

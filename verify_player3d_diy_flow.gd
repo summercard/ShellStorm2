@@ -39,23 +39,25 @@ func _ready() -> void:
 		failures.append("Bunny avatar does not expose head/body/hand/feet as four primary modules")
 	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01":
 		failures.append("Player3D does not load the registered bunny01 avatar profile")
-	if str(avatar_snapshot.get("assembly_version", "")) != "v004" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
-		failures.append("Bunny v004 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
+	if str(avatar_snapshot.get("assembly_version", "")) != "v006" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
+		failures.append("Bunny v006 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
 	if int(avatar_snapshot.get("ear_count", 0)) != 2 or int(avatar_snapshot.get("ear_socket_count", 0)) != 2 or not bool(avatar_snapshot.get("ears_parented_to_head", false)):
 		failures.append("Bunny ears are not two head-parented accessories on named sockets")
 	if int(avatar_snapshot.get("visible_foot_count", 0)) != 2:
 		failures.append("Bunny feet module does not expose two independent feet")
 	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("independent_hand_animation", false)):
 		failures.append("Bunny hands are not exported as two independently animated visual parts")
-	if absf(float(avatar_snapshot.get("authored_scale_m", 0.0)) - 2.475) > 0.001:
-		failures.append("Bunny v004 does not retain the approved 1.5x authored scale")
+	if absf(float(avatar_snapshot.get("authored_scale_m", 0.0)) - 1.5) > 0.001:
+		failures.append("Bunny v006 does not use the approved 1.50 m authored height")
+	if absf(float(avatar_snapshot.get("runtime_scale_multiplier", 0.0)) - 1.0) > 0.001:
+		failures.append("Bunny v006 still depends on a Godot runtime scale")
 	if (
 		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 90
 		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+X"
 		or str(avatar_snapshot.get("runtime_forward_godot", "")) != "-Z"
 		or not bool(avatar_snapshot.get("forward_contract_pass", false))
 	):
-		failures.append("Bunny v004 does not enforce the Blender +X to Godot -Z forward-axis contract")
+		failures.append("Bunny v006 does not enforce the Blender +X to Godot -Z forward-axis contract")
 	if str(avatar_snapshot.get("tail_style", "")) != "none":
 		failures.append("Bunny source unexpectedly retains the legacy cat tail")
 	for required_path in [
@@ -102,11 +104,11 @@ func _ready() -> void:
 	if (
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
-		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.31
-		or float(avatar_snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.55
+		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
+		or float(avatar_snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.330
 	):
 		failures.append("Bunny pistol pose does not preserve the right grip and free left hand")
-	if float(avatar_snapshot.get("hand_position", Vector3.ZERO).x) >= 0.65:
+	if float(avatar_snapshot.get("hand_position", Vector3.ZERO).x) >= 0.263:
 		failures.append("DIY grip hand did not use the improved inward weapon hold position")
 	gallery.run_player_action("moving")
 	await get_tree().physics_frame
@@ -115,7 +117,7 @@ func _ready() -> void:
 	var moving_snapshot := gallery.player.avatar.get_component_snapshot()
 	if (
 		str(moving_snapshot.get("weapon_pose_state", "")) != "sidearm_run"
-		or float(moving_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.34
+		or float(moving_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.207
 	):
 		failures.append("Moving animation does not preserve the independent sidearm run grip")
 	if absf((moving_snapshot.get("foot_l_position", Vector3.ZERO) as Vector3).y - (moving_snapshot.get("foot_r_position", Vector3.ZERO) as Vector3).y) <= 0.001:

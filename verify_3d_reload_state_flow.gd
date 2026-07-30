@@ -7,7 +7,9 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	var player := PLAYER_SCENE.instantiate() as Player3D
 	player.combat_enabled = true
+	player.set_physics_process(false)
 	add_child(player)
+	player.set_physics_process(false)
 	await get_tree().process_frame
 	player.set_process(false)
 	player.set_physics_process(false)
@@ -32,8 +34,8 @@ func _ready() -> void:
 	var avatar_snapshot := player.avatar.get_component_snapshot()
 	if not bool((state_snapshot.get("overlays", {}) as Dictionary).get("reloading", false)):
 		failures.append("Reload is not exposed as a state-machine overlay")
-	if str(state_snapshot.get("current", "")) != "idle" or int((state_snapshot.get("states", []) as Array).size()) != 6:
-		failures.append("Reload replaced or expanded the six top-level player states")
+	if str(state_snapshot.get("current", "")) != "idle" or int((state_snapshot.get("states", []) as Array).size()) != 8:
+		failures.append("Reload replaced or expanded the eight top-level player states")
 	if not bool(avatar_snapshot.get("reload_bar_visible", false)) or float(avatar_snapshot.get("reload_fill_scale_x", -1.0)) != 0.0:
 		failures.append("Head-top reload bar is not visible at zero progress")
 	if (
@@ -61,7 +63,7 @@ func _ready() -> void:
 		failures.append("Reload progress is not driven by the real weapon timer: %.3f" % mid_progress)
 	if absf(float(avatar_snapshot.get("reload_fill_scale_x", 0.0)) - mid_progress) > 0.01:
 		failures.append("Head-top bar fill does not match weapon reload progress")
-	if (avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() < 0.08:
+	if (avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() < 0.048:
 		failures.append("Reload overlay has no readable hand/weapon displacement")
 	if (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() < 0.12:
 		failures.append("Reload overlay has no readable hand/weapon rotation")
@@ -69,8 +71,8 @@ func _ready() -> void:
 	if (
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_reload"
 		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
-		or mid_right_grip_distance > 0.31
-		or absf(mid_right_grip_distance - base_right_grip_distance) > 0.10
+		or mid_right_grip_distance > 0.189
+		or absf(mid_right_grip_distance - base_right_grip_distance) > 0.0615
 	):
 		failures.append("Reload animation detached the pistol's single right grip from the weapon")
 

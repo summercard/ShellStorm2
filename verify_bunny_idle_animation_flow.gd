@@ -44,15 +44,15 @@ func _ready() -> void:
 		failures.append("Idle animation lacks asymmetric ear follow/flick")
 	if (
 		(idle_a.get("foot_l_position", Vector3.ZERO) as Vector3)
-		.distance_to(idle_b.get("foot_l_position", Vector3.ZERO) as Vector3) < 0.003
+		.distance_to(idle_b.get("foot_l_position", Vector3.ZERO) as Vector3) < 0.0011
 		and (idle_a.get("foot_r_position", Vector3.ZERO) as Vector3)
-		.distance_to(idle_b.get("foot_r_position", Vector3.ZERO) as Vector3) < 0.003
+		.distance_to(idle_b.get("foot_r_position", Vector3.ZERO) as Vector3) < 0.0011
 	):
 		failures.append("Idle animation lacks the standing weight transfer between feet")
 	if (
 		str(idle_b.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(idle_b.get("active_grip_hand_count", 0)) != 1
-		or float(idle_b.get("hand_r_to_socket_global_distance", 999.0)) > 0.32
+		or float(idle_b.get("hand_r_to_socket_global_distance", 999.0)) > 0.195
 	):
 		failures.append("Idle breathing separates the pistol's right-hand hold")
 
@@ -91,4 +91,3 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
-

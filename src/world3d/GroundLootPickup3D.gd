@@ -35,7 +35,7 @@ func accept_pickup() -> void:
 	if _accepted:
 		return
 	_accepted = true
-	monitoring = false
+	set_deferred("monitoring", false)
 	collision_mask = 0
 	for child in find_children("*", "CollisionShape3D", true, false):
 		(child as CollisionShape3D).set_deferred("disabled", true)

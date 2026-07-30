@@ -35,7 +35,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if _picked or not body.is_in_group("player_3d"):
 		return
 	_picked = true
-	monitoring = false
+	set_deferred("monitoring", false)
 	collision_mask = 0
 	for child in find_children("*", "CollisionShape3D", true, false):
 		(child as CollisionShape3D).set_deferred("disabled", true)

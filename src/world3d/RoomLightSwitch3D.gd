@@ -6,16 +6,28 @@ signal light_toggled(is_on: bool)
 
 const INTERACTION_RANGE := 2.2
 
-var _controlled_light: WastelandLight3D
+var _controlled_lights: Array[WastelandLight3D] = []
 var _player_in_range := false
 var _prompt: Label3D
 var _indicator_material: StandardMaterial3D
 
 
 func configure(controlled_light: WastelandLight3D, starts_on := false) -> void:
-	_controlled_light = controlled_light
-	if _controlled_light != null:
-		_controlled_light.set_light_enabled(starts_on)
+	var lights: Array[WastelandLight3D] = []
+	if controlled_light != null:
+		lights.append(controlled_light)
+	configure_group(lights, starts_on)
+
+
+func configure_group(
+	controlled_lights: Array[WastelandLight3D],
+	starts_on := false
+) -> void:
+	_controlled_lights.clear()
+	for light in controlled_lights:
+		if light != null and is_instance_valid(light):
+			_controlled_lights.append(light)
+			light.set_light_enabled(starts_on)
 	_update_state_visual()
 
 
@@ -39,16 +51,25 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func toggle_light() -> bool:
-	if _controlled_light == null or not is_instance_valid(_controlled_light):
+	_prune_invalid_lights()
+	if _controlled_lights.is_empty():
 		return false
-	_controlled_light.set_light_enabled(not _controlled_light.is_light_enabled())
+	var next_state := not is_light_on()
+	for light in _controlled_lights:
+		light.set_light_enabled(next_state)
 	_update_state_visual()
-	light_toggled.emit(_controlled_light.is_light_enabled())
+	light_toggled.emit(next_state)
 	return true
 
 
 func is_light_on() -> bool:
-	return _controlled_light != null and is_instance_valid(_controlled_light) and _controlled_light.is_light_enabled()
+	_prune_invalid_lights()
+	if _controlled_lights.is_empty():
+		return false
+	for light in _controlled_lights:
+		if not light.is_light_enabled():
+			return false
+	return true
 
 
 func set_prompt_visible(visible_state: bool) -> void:
@@ -61,8 +82,15 @@ func get_snapshot() -> Dictionary:
 		"light_on": is_light_on(),
 		"player_in_range": _player_in_range,
 		"has_prompt": _prompt != null,
+		"controlled_light_count": _controlled_lights.size(),
 		"is_3d": true,
 	}
+
+
+func _prune_invalid_lights() -> void:
+	for index in range(_controlled_lights.size() - 1, -1, -1):
+		if not is_instance_valid(_controlled_lights[index]):
+			_controlled_lights.remove_at(index)
 
 
 func _build_visual() -> void:
