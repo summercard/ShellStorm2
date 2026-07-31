@@ -3,7 +3,7 @@ extends Node3D
 ## 可复用废土灯具：支持室外路灯与室内中央顶灯两种装配。
 
 @export var light_color := Color(0.34, 0.75, 1.0)
-@export_range(0.2, 14.0, 0.1) var energy := 4.6
+@export_range(0.2, 48.0, 0.1) var energy := 4.6
 @export_range(2.0, 64.0, 0.5) var light_range := 12.0
 @export var failing := true
 @export var flicker_seed := 1

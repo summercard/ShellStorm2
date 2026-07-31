@@ -18,6 +18,9 @@ const WALL_SCENE: PackedScene = preload(
 const PARAPET_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_parapet_5m_top3d_v001.glb"
 )
+const FLOOR_TILE_MATERIAL: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
+)
 
 var floor_index := 0
 var floor_kind := "combat"
@@ -113,6 +116,7 @@ func _build_floor() -> void:
 	_floor_visual.name = "ImportedFloorTileGrid5M"
 	_floor_visual.multimesh = multimesh
 	_floor_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	_floor_visual.material_override = FLOOR_TILE_MATERIAL
 	add_child(_floor_visual)
 	_tile_count = transforms.size()
 

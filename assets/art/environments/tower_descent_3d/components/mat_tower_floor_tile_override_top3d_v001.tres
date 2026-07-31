@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; 塔楼 5m 地砖的运行时覆盖材质。
+; GLB 内置的 MAT_Rooftop (albedo 0.10/0.13/0.17, metallic 0.18, roughness 0.72) 在弱光
+; 场景里几乎不反光，Sun / EnvironmentSpill 都看不到效果。TowerFloorStage3D 与
+; DungeonRoom3D 都把本材质设为 MultiMeshInstance3D.material_override，
+; 数值直接在这里调即可。
+
+[resource]
+resource_name = "MAT_TowerFloorTileOverride"
+albedo_color = Color(0.34, 0.38, 0.44, 1)
+metallic = 0.55
+metallic_texture_channel = 0
+roughness = 0.42

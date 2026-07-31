@@ -7,6 +7,7 @@ signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
 signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
 
 const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn")
+const BASE_FACILITY_LIGHT_GRID_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_base_facility_light_grid_root_top3d_v001.tscn")
 const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d_v001.tscn")
 const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_furniture_root_top3d_v001.tscn")
 const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d_v001.tscn")
@@ -22,6 +23,9 @@ const TOWER_DOOR_SCENE: PackedScene = preload(
 )
 const TOWER_FLOOR_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
+)
+const FLOOR_TILE_MATERIAL: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
 )
 const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
@@ -422,6 +426,7 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 		floor_grid.name = "BaseFloorGrid6x6"
 		floor_grid.multimesh = floor_multimesh
 		floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		floor_grid.material_override = FLOOR_TILE_MATERIAL
 		floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
 		floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
 		add_child(floor_grid)
@@ -824,31 +829,7 @@ func _build_content() -> void:
 	var dimensions := get_dimensions()
 	_room_lights.clear()
 	if room_type == "FACILITY":
-		for light_index in range(4):
-			var x_sign := -1.0 if light_index % 2 == 0 else 1.0
-			var z_sign := -1.0 if light_index < 2 else 1.0
-			var base_light := _create_room_light(
-				"BaseCeilingLight_%02d" % (light_index + 1),
-				Vector3(x_sign * 7.5, 0.0, z_sign * 7.5),
-				theme.fixture_energy * 5.0,
-				maxf(theme.fixture_range * 1.92, 26.0),
-				room_seed + light_index * 17,
-				false
-			)
-			var zone_color := Color(0.52, 0.84, 1.0).lerp(
-				Color(1.0, 0.72, 0.38),
-				0.58 if z_sign > 0.0 else 0.16
-			)
-			base_light.configure(
-				zone_color,
-				theme.fixture_energy * 5.0,
-				maxf(theme.fixture_range * 1.92, 26.0),
-				room_seed + light_index * 17,
-				false,
-				false,
-				"ceiling"
-			)
-			_room_lights.append(base_light)
+		_build_base_facility_lights()
 		_central_light = _room_lights[0]
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
@@ -964,6 +945,25 @@ func _build_content() -> void:
 		)
 		hazard.position = Vector3(0, 0.06, 0)
 		add_child(hazard)
+
+
+func _build_base_facility_lights() -> void:
+	## 顶灯阵列的位置/颜色/强度/范围全部由
+	## prp_base_facility_light_grid_root_top3d_v001.tscn 决定，代码只负责实例化、
+	## 分配闪烁种子并接入墙面开关，方便在场景文件里直接调光。
+	var grid := BASE_FACILITY_LIGHT_GRID_SCENE.instantiate()
+	grid.name = "BaseFacilityLightGrid"
+	add_child(grid)
+	var light_index := 0
+	for child in grid.get_children():
+		var base_light := child as WastelandLight3D
+		if base_light == null:
+			continue
+		base_light.flicker_seed = room_seed + light_index * 17
+		base_light.set_light_enabled(false)
+		base_light.add_to_group("wasteland_light_3d")
+		_room_lights.append(base_light)
+		light_index += 1
 
 
 func _create_room_light(

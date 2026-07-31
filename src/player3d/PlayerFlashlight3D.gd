@@ -35,7 +35,7 @@ const AVATAR_RENDER_LAYER := 2
 
 @export_group("Avatar Front Fill")
 @export var front_fill_color := Color(0.70, 0.90, 0.86)
-@export_range(0.0, 4.0, 0.05) var front_fill_energy := 0.95
+@export_range(0.0, 16.0, 0.05) var front_fill_energy := 8.0
 @export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
 @export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
 @export_range(0.1, 3.0, 0.05) var front_fill_attenuation := 1.15

@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3]
+
+; PH49 基地(FACILITY)顶灯阵列：4 盏 5m 网格顶灯，位置/颜色/强度/范围全部在本场景内可调。
+; DungeonRoom3D._build_content() 只负责实例化与接入灯光开关，不再覆盖这些数值。
+
+[ext_resource type="PackedScene" path="res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn" id="1_light"]
+
+[node name="BaseFacilityLightGrid" type="Node3D"]
+
+[node name="BaseCeilingLight_01" parent="." instance=ExtResource("1_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 6.28, -7.5)
+light_color = Color(0.5968, 0.8208, 0.9008, 1)
+energy = 23.4
+light_range = 28.0
+failing = false
+cast_shadow = false
+fixture_style = "ceiling"
+
+[node name="BaseCeilingLight_02" parent="." instance=ExtResource("1_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 6.28, -7.5)
+light_color = Color(0.5968, 0.8208, 0.9008, 1)
+energy = 23.4
+light_range = 28.0
+failing = false
+cast_shadow = false
+fixture_style = "ceiling"
+
+[node name="BaseCeilingLight_03" parent="." instance=ExtResource("1_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 6.28, 7.5)
+light_color = Color(0.7984, 0.7704, 0.6404, 1)
+energy = 23.4
+light_range = 28.0
+failing = false
+cast_shadow = false
+fixture_style = "ceiling"
+
+[node name="BaseCeilingLight_04" parent="." instance=ExtResource("1_light")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 6.28, 7.5)
+light_color = Color(0.7984, 0.7704, 0.6404, 1)
+energy = 23.4
+light_range = 28.0
+failing = false
+cast_shadow = false
+fixture_style = "ceiling"
