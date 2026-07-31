@@ -49,6 +49,8 @@ func _build_environment() -> void:
 	environment.fog_enabled = true
 	environment.fog_light_color = TowerAtmosphere3D.FOG_LIGHT_COLOR
 	environment.fog_density = TowerAtmosphere3D.FOG_DENSITY
+	environment.fog_height = 0.0
+	environment.fog_height_density = 0.0  # 纯距离雾，关闭高度差异
 	world_environment.environment = environment
 	add_child(world_environment)
 

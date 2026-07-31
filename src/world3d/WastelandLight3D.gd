@@ -1,10 +1,6 @@
 class_name WastelandLight3D
 extends Node3D
 ## 可复用废土灯具：支持室外路灯与室内中央顶灯两种装配。
-## 灯只照环境层（Layer 1）；角色在 Layer 2，只由玩家自带的 AvatarFrontFill 补光，
-## 因此角色亮度不会随房间灯的开关和闪烁而变化。
-
-const ENVIRONMENT_RENDER_LAYER := 1
 
 @export var light_color := Color(0.34, 0.75, 1.0)
 @export_range(0.2, 48.0, 0.1) var energy := 4.6
@@ -110,8 +106,6 @@ func get_snapshot() -> Dictionary:
 		"illumination_active": _runtime_active and light_enabled,
 		"runtime_active": _runtime_active,
 		"runtime_flicker": _runtime_flicker,
-		"light_cull_mask": _light.light_cull_mask if _light != null else 0,
-		"affects_avatar": false,
 		"is_3d": true,
 	}
 
@@ -149,7 +143,7 @@ func _build_light_pool() -> void:
 	pool.name = "LightPool"
 	pool.position = Vector3(0.62, 0.025, 0)
 	pool.mesh = pool_mesh
-	pool.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	pool.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(pool)
 
 
@@ -159,7 +153,6 @@ func _apply_configuration() -> void:
 		_light.light_energy = energy
 		_light.omni_range = light_range
 		_light.shadow_enabled = cast_shadow
-		_light.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 	if _lens_material != null:
 		_lens_material.albedo_color = light_color
 		_lens_material.emission = light_color

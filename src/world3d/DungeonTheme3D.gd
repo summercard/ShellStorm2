@@ -19,7 +19,7 @@ extends Resource
 @export var ambient_color := Color(0.24, 0.32, 0.38)
 @export var fog_color := Color(0.045, 0.065, 0.075)
 @export var key_light_color := Color(0.56, 0.72, 0.84)
-@export_range(0.001, 0.06, 0.001) var fog_density := 0.012
+@export_range(0.001, 0.10, 0.001) var fog_density := 0.075
 @export_range(0.2, 3.0, 0.05) var ambient_energy := 0.58
 @export_range(1.0, 8.0, 0.1) var fixture_energy := 2.6
 @export_range(3.0, 16.0, 0.5) var fixture_range := 8.0

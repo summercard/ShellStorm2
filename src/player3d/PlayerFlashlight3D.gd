@@ -29,9 +29,10 @@ const AVATAR_RENDER_LAYER := 2
 
 @export_group("Environment Spill")
 @export var spill_color := Color(0.68, 0.88, 0.84)
-@export_range(0.0, 8.0, 0.05) var spill_energy := 4.55
+@export_range(0.0, 8.0, 0.05) var spill_energy := 2.30
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
+@export_range(0.2, 2.0, 0.05) var spill_height := 0.65
 
 @export_group("Avatar Front Fill")
 @export var front_fill_color := Color(0.70, 0.90, 0.86)
@@ -95,7 +96,7 @@ func force_sync() -> void:
 	_beam.global_position = _player.global_position + Vector3.UP * mount_height + aim * mount_forward
 	var beam_target := _player.global_position + aim * target_forward + Vector3.UP * target_height
 	_beam.look_at(beam_target, Vector3.UP)
-	_spill.global_position = _player.global_position + Vector3.UP * 0.90 - aim * 0.12
+	_spill.global_position = _player.global_position + Vector3.UP * spill_height - aim * 0.12
 	_front_fill.global_position = _player.global_position + aim * front_fill_forward + Vector3.UP * front_fill_height
 	_front_fill.look_at(_player.global_position + Vector3.UP * avatar_target_height, Vector3.UP)
 

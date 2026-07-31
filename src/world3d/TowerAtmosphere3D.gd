@@ -4,16 +4,13 @@ extends Node3D
 ## 室内明暗由楼板、墙、门的真实阴影以及局部灯具决定。
 ## 光照只负责表现，不参与 PlayerVision3D 的目标显隐判定。
 
-## 太阳与天空补光只照环境层（Layer 1）。角色在 Layer 2，只吃 AvatarFrontFill，
-## 这样第三盏角色补光的表现不会随楼层的自然光强弱而漂移。
-const ENVIRONMENT_RENDER_LAYER := 1
 const SUN_ENERGY := 0.85
 const SUN_COLOR := Color(1.0, 0.84, 0.62)
 const BACKGROUND_COLOR := Color(0.58, 0.62, 0.64)
 const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)
 const AMBIENT_ENERGY := 0.42
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
-const FOG_DENSITY := 0.0050
+const FOG_DENSITY := 0.040
 
 var _environment: Environment
 var _sun: DirectionalLight3D
@@ -50,7 +47,6 @@ func _apply_fixed_lighting() -> void:
 		_sun.light_energy = SUN_ENERGY
 		_sun.light_color = SUN_COLOR
 		_sun.shadow_enabled = true
-		_sun.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 	if _environment != null:
 		_environment.background_color = BACKGROUND_COLOR
 		_environment.ambient_light_color = AMBIENT_COLOR
@@ -75,11 +71,6 @@ func get_snapshot() -> Dictionary:
 		"sun_energy": _sun.light_energy if _sun != null else 0.0,
 		"sun_color": _sun.light_color if _sun != null else Color.BLACK,
 		"sun_shadow_enabled": _sun != null and _sun.shadow_enabled,
-		"sun_cull_mask": _sun.light_cull_mask if _sun != null else 0,
-		"sky_bounce_cull_mask": (
-			_rooftop_sky_bounce.light_cull_mask if _rooftop_sky_bounce != null else 0
-		),
-		"world_lights_affect_avatar": false,
 		"ambient_energy": _environment.ambient_light_energy if _environment != null else 0.0,
 		"ambient_color": (
 			_environment.ambient_light_color if _environment != null else Color.BLACK
@@ -128,7 +119,7 @@ func _build_city_silhouette() -> void:
 	var city := MultiMeshInstance3D.new()
 	city.name = "CityBuildingSilhouettes"
 	city.multimesh = multimesh
-	city.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	city.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	city.visibility_range_end = 520.0
 	_city_root.add_child(city)
 
@@ -146,5 +137,4 @@ func _build_rooftop_sky_bounce() -> void:
 	_rooftop_sky_bounce.omni_range = 52.0
 	_rooftop_sky_bounce.omni_attenuation = 1.35
 	_rooftop_sky_bounce.shadow_enabled = false
-	_rooftop_sky_bounce.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 	add_child(_rooftop_sky_bounce)
