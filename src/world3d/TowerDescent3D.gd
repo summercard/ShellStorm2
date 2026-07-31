@@ -29,7 +29,7 @@ const CAMERA_HEIGHT_M := 8.0
 const CAMERA_DEFAULT_TRAILING_M := 2.77
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
-const CAMERA_FOV_DEG := 55.0
+const CAMERA_FOV_DEG := 65.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 0.95
 const CAMERA_LOWER_WALL_PROBE_START_M := 0.42
 const CAMERA_LOWER_WALL_PROBE_LENGTH_M := 6.2
@@ -1673,7 +1673,7 @@ func _create_standalone_elevator(
 	pad.name = "ElevatorBayFloor"
 	pad.position = Vector3(0.0, 0.045, 0.0)
 	pad.mesh = pad_mesh
-	pad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	pad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	bay.add_child(pad)
 
 	var facility := FACILITY_SCENE.instantiate() as BaseFacility3D

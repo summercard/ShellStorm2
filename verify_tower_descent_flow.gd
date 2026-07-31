@@ -132,13 +132,13 @@ func _ready() -> void:
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("sun_energy", 0.0)), 0.78)
+		is_equal_approx(float(rooftop_atmosphere.get("sun_energy", 0.0)), 0.85)
 		and bool(rooftop_atmosphere.get("sun_shadow_enabled", false)),
 		"楼顶固定太阳能量或阴影状态错误",
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("ambient_energy", 0.0)), 0.22)
+		is_equal_approx(float(rooftop_atmosphere.get("ambient_energy", 0.0)), 0.42)
 		and bool(rooftop_atmosphere.get("rooftop_sky_bounce", false)),
 		"塔楼全局环境底光或固定天空补光错误",
 		failures

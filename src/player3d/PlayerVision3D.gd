@@ -21,33 +21,53 @@ const SURFACE_HEIGHT_OFFSET := 0.14
 const HIT_EDGE_PADDING := 0.08
 const EDGE_FEATHER_WIDTH := 1.85
 const DISTANCE_RELEASE_SPEED := 12.0
+# 手电表现层：真实 SpotLight3D 的地面贡献会与太阳、房间灯相加，各楼层对比度不同。
+# 这里额外画一层固定透明度、受同一套物理射线裁切的无光照扇形，
+# 让玩家在任何背景亮度下都能看到完全一致的手电范围。
+const FLASHLIGHT_OVERLAY_ALPHA := 0.15
+const FLASHLIGHT_OVERLAY_MAX_ANGLE := 150.0
+const FLASHLIGHT_OVERLAY_HEIGHT_OFFSET := 0.008
 var _player: Player3D
 var _cone_surface: MeshInstance3D
 var _proximity_surface: MeshInstance3D
+var _flashlight_surface: MeshInstance3D
 var _cone_mesh := ImmediateMesh.new()
 var _proximity_mesh := ImmediateMesh.new()
+var _flashlight_mesh := ImmediateMesh.new()
 var _fill_material: StandardMaterial3D
 var _near_fill_material: StandardMaterial3D
+var _flashlight_material: StandardMaterial3D
 var _flashlight: PlayerFlashlight3D
 var _accumulator := 0.0
 var _visible_target_count := 0
 var _occluded_target_count := 0
 var _last_cone_points := PackedVector3Array()
 var _last_proximity_points := PackedVector3Array()
+var _last_flashlight_points := PackedVector3Array()
 var _visual_refresh_count := 0
 var _mesh_redraw_count := 0
 var _target_cone_distances := PackedFloat32Array()
 var _target_proximity_distances := PackedFloat32Array()
+var _target_flashlight_distances := PackedFloat32Array()
 var _display_cone_distances := PackedFloat32Array()
 var _display_proximity_distances := PackedFloat32Array()
+var _display_flashlight_distances := PackedFloat32Array()
+var _flashlight_overlay_active := false
+var _flashlight_overlay_angle_degrees := 0.0
 var _geometry_dirty := true
 
 
 func _ready() -> void:
 	_player = get_parent() as Player3D
 	_flashlight = get_node_or_null("../PlayerFlashlight3D") as PlayerFlashlight3D
+	if _flashlight != null:
+		_flashlight.light_enabled_changed.connect(_on_flashlight_enabled_changed)
 	_build_visualization()
 	call_deferred("force_refresh")
+
+
+func _on_flashlight_enabled_changed(_enabled: bool) -> void:
+	_geometry_dirty = true
 
 
 func _process(delta: float) -> void:
@@ -120,6 +140,13 @@ func get_snapshot() -> Dictionary:
 		"proximity_ray_count": proximity_ray_count,
 		"cone_point_count": _last_cone_points.size(),
 		"proximity_point_count": _last_proximity_points.size(),
+		"flashlight_overlay_active": _flashlight_overlay_active,
+		"flashlight_overlay_wall_clipped": true,
+		"flashlight_overlay_unshaded": true,
+		"flashlight_overlay_alpha": FLASHLIGHT_OVERLAY_ALPHA,
+		"flashlight_overlay_angle_degrees": _flashlight_overlay_angle_degrees,
+		"flashlight_overlay_range": float(light_snapshot.get("beam_range", 0.0)),
+		"flashlight_overlay_point_count": _last_flashlight_points.size(),
 		"visual_refresh_count": _visual_refresh_count,
 		"mesh_redraw_count": _mesh_redraw_count,
 	}
@@ -153,13 +180,36 @@ func _refresh_vision_samples(snap: bool) -> void:
 		proximity_ray_count + 1,
 		proximity_reveal,
 	)
+	_refresh_flashlight_overlay_samples(aim)
 	if snap or _display_cone_distances.size() != _target_cone_distances.size():
 		_display_cone_distances = _target_cone_distances.duplicate()
 	if snap or _display_proximity_distances.size() != _target_proximity_distances.size():
 		_display_proximity_distances = _target_proximity_distances.duplicate()
+	if snap or _display_flashlight_distances.size() != _target_flashlight_distances.size():
+		_display_flashlight_distances = _target_flashlight_distances.duplicate()
 	if snap:
 		_geometry_dirty = true
 	_visual_refresh_count += 1
+
+
+func _refresh_flashlight_overlay_samples(aim: Vector3) -> void:
+	## 表现层直接读手电当前的开关、朝向、张角和射程，不复制任何调参数值。
+	_flashlight_overlay_active = _flashlight != null and _flashlight.is_light_enabled()
+	if not _flashlight_overlay_active:
+		_flashlight_overlay_angle_degrees = 0.0
+		_target_flashlight_distances = PackedFloat32Array()
+		return
+	# SpotLight3D.spot_angle 是与中轴的夹角，地面开口角是它的两倍。
+	_flashlight_overlay_angle_degrees = minf(
+		_flashlight.beam_angle_degrees * 2.0, FLASHLIGHT_OVERLAY_MAX_ANGLE
+	)
+	_target_flashlight_distances = _sample_arc_distances(
+		aim,
+		deg_to_rad(-_flashlight_overlay_angle_degrees * 0.5),
+		deg_to_rad(_flashlight_overlay_angle_degrees * 0.5),
+		cone_ray_count,
+		_flashlight.beam_range,
+	)
 
 
 func _sample_arc_distances(
@@ -188,12 +238,16 @@ func _smooth_and_draw_geometry(delta: float) -> void:
 		or _last_cone_points.is_empty()
 		or _distance_buffer_changed(_display_cone_distances, _target_cone_distances)
 		or _distance_buffer_changed(_display_proximity_distances, _target_proximity_distances)
+		or _distance_buffer_changed(_display_flashlight_distances, _target_flashlight_distances)
 	)
 	if not needs_redraw:
 		return
 	_display_cone_distances = _smooth_distance_buffer(_display_cone_distances, _target_cone_distances, delta)
 	_display_proximity_distances = _smooth_distance_buffer(
 		_display_proximity_distances, _target_proximity_distances, delta
+	)
+	_display_flashlight_distances = _smooth_distance_buffer(
+		_display_flashlight_distances, _target_flashlight_distances, delta
 	)
 	_last_cone_points = _points_from_distances(
 		_display_cone_distances,
@@ -208,15 +262,36 @@ func _smooth_and_draw_geometry(delta: float) -> void:
 		Color(0.13, 0.68, 0.84, 0.13),
 		false,
 	)
-	_draw_soft_fan(
-		_proximity_mesh,
-		_last_proximity_points,
-		_near_fill_material,
-		Color(0.28, 0.86, 0.92, 0.085),
-		true,
-	)
+	_draw_flashlight_overlay()
+	# Proximity disc disabled: 不再绘制贴身的 360° 圆盘，alpha 也归零。
+	# 保留 _proximity_surface 节点和缓冲区方便将来随时打开。
+	_proximity_mesh.clear_surfaces()
+	_proximity_surface.visible = false
 	_mesh_redraw_count += 1
 	_geometry_dirty = false
+
+
+func _draw_flashlight_overlay() -> void:
+	if not _flashlight_overlay_active or _display_flashlight_distances.size() < 2:
+		_flashlight_mesh.clear_surfaces()
+		_last_flashlight_points = PackedVector3Array()
+		_flashlight_surface.visible = false
+		return
+	_last_flashlight_points = _points_from_distances(
+		_display_flashlight_distances,
+		deg_to_rad(-_flashlight_overlay_angle_degrees * 0.5),
+		deg_to_rad(_flashlight_overlay_angle_degrees * 0.5),
+	)
+	var beam := _flashlight.beam_color
+	# alpha 固定，不随 beam_energy、太阳或房间灯变化：这正是"跨楼层一致"的部分。
+	_draw_soft_fan(
+		_flashlight_mesh,
+		_last_flashlight_points,
+		_flashlight_material,
+		Color(beam.r, beam.g, beam.b, FLASHLIGHT_OVERLAY_ALPHA),
+		false,
+	)
+	_flashlight_surface.visible = true
 
 
 func _distance_buffer_changed(current: PackedFloat32Array, target: PackedFloat32Array) -> bool:
@@ -340,6 +415,10 @@ func _update_visual_transforms() -> void:
 	_cone_surface.global_rotation = Vector3(0, _player.aim_yaw, 0)
 	_proximity_surface.global_position = surface_origin + Vector3(0, 0.004, 0)
 	_proximity_surface.global_rotation = Vector3.ZERO
+	_flashlight_surface.global_position = surface_origin + Vector3(
+		0, FLASHLIGHT_OVERLAY_HEIGHT_OFFSET, 0
+	)
+	_flashlight_surface.global_rotation = Vector3(0, _player.aim_yaw, 0)
 
 
 func _refresh_target_visibility() -> void:
@@ -417,8 +496,13 @@ func _raycast_distance(direction: Vector3, max_distance: float) -> float:
 func _build_visualization() -> void:
 	_fill_material = _make_material(1)
 	_near_fill_material = _make_material(2)
+	_flashlight_material = _make_material(3)
 	_cone_surface = _make_surface("VisionFieldSurface", _cone_mesh)
 	_proximity_surface = _make_surface("VisionProximitySurface", _proximity_mesh)
+	_flashlight_surface = _make_surface("FlashlightOverlaySurface", _flashlight_mesh)
+	_flashlight_surface.visible = false
+	if _flashlight != null:
+		_flashlight_surface.extra_cull_margin = _flashlight.beam_range + 3.0
 
 
 func _make_surface(node_name: String, mesh: ImmediateMesh) -> MeshInstance3D:

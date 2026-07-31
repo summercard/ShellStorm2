@@ -491,7 +491,7 @@ func _add_base_floor_grid(
 	var floor_grid := MultiMeshInstance3D.new()
 	floor_grid.name = node_name
 	floor_grid.multimesh = floor_multimesh
-	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	floor_grid.material_override = material
 	floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))

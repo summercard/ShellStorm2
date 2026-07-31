@@ -117,7 +117,7 @@ func _add_sphere(node_name: String, radius: float, color: Color, emission_energy
 	var instance := MeshInstance3D.new()
 	instance.name = node_name
 	instance.mesh = mesh
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(instance)
 
 
@@ -133,7 +133,7 @@ func _add_ring(node_name: String, radius: float, thickness: float, color: Color)
 	instance.name = node_name
 	instance.position.y = 0.04
 	instance.mesh = mesh
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(instance)
 
 

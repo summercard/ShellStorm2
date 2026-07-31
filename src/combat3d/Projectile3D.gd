@@ -304,7 +304,7 @@ func _build_visual() -> void:
 	mesh.material = _visual_material
 	_visual = MeshInstance3D.new()
 	_visual.mesh = mesh
-	_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(_visual)
 	var trail_mesh := BoxMesh.new()
 	trail_mesh.size = Vector3(0.035, 0.035, 0.65)
@@ -314,7 +314,7 @@ func _build_visual() -> void:
 	_trail = MeshInstance3D.new()
 	_trail.position = Vector3(0, 0, 0.34)
 	_trail.mesh = trail_mesh
-	_trail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_trail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(_trail)
 	var shape := SphereShape3D.new()
 	shape.radius = 0.12

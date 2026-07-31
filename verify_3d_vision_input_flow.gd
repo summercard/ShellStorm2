@@ -128,18 +128,18 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		or int(snapshot.get("spotlight_count", 0)) != 2
 		or int(snapshot.get("spill_light_count", 0)) != 1
 		or int(snapshot.get("front_fill_light_count", 0)) != 1
-		or int(snapshot.get("shadow_light_count", 0)) != 1
+		or int(snapshot.get("shadow_light_count", 0)) != 0
 	):
-		failures.append("Real flashlight must contain an environment beam/spill and an avatar-only front fill")
+		failures.append("Real flashlight must contain an environment beam/spill and an avatar-only front fill, all non-shadowing on the avatar")
 	var flashlight := dungeon.player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
 	if flashlight == null:
 		failures.append("Independent PlayerFlashlight3D rig is missing")
 	else:
 		flashlight.force_sync()
 		var flashlight_snapshot := flashlight.get_snapshot()
-		var beam := flashlight.get_node_or_null("ForwardBeam") as SpotLight3D
-		var spill := flashlight.get_node_or_null("EnvironmentSpill") as OmniLight3D
-		var front_fill := flashlight.get_node_or_null("AvatarFrontFill") as SpotLight3D
+		var beam := flashlight.get_node_or_null("FlashlightKit/ForwardBeam") as SpotLight3D
+		var spill := flashlight.get_node_or_null("FlashlightKit/EnvironmentSpill") as OmniLight3D
+		var front_fill := flashlight.get_node_or_null("FlashlightKit/AvatarFrontFill") as SpotLight3D
 		if flashlight.is_light_enabled() or bool(flashlight_snapshot.get("start_enabled", true)):
 			failures.append("探照灯没有以手动关闭状态进入战局")
 		if (
@@ -160,14 +160,21 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		dungeon.player.aim_yaw = 0.0
 		flashlight.force_sync()
 		vision.force_refresh()
+		# 关灯时 light_energy 会被归零，所以重新打开才能校验 export 值与 cull_mask。
+		flashlight.set_light_enabled(true)
+		beam = flashlight.get_node_or_null("FlashlightKit/ForwardBeam") as SpotLight3D
+		spill = flashlight.get_node_or_null("FlashlightKit/EnvironmentSpill") as OmniLight3D
+		front_fill = flashlight.get_node_or_null("FlashlightKit/AvatarFrontFill") as SpotLight3D
 		if flashlight.mount_height > 1.5 or flashlight.mount_height < 1.0:
 			failures.append("1.5m角色探照灯安装点没有落在胸口/武器高度")
 		if flashlight.front_fill_height > 1.5 or flashlight.avatar_target_height > 1.2:
 			failures.append("角色补光仍沿用高于1.5m角色的旧坐标")
-		if beam == null or not beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
-			failures.append("Forward flashlight is not a sufficiently bright real shadow-casting SpotLight3D")
+		if beam == null or beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
+			failures.append("Forward flashlight is not a sufficiently bright real environment SpotLight3D")
 		if spill == null or spill.shadow_enabled or spill.light_energy < 1.5 or spill.omni_range < 4.0:
 			failures.append("Environment spill light is missing or incorrectly configured")
+		# 完成后立刻关灯，保证后续视觉测试回到关灯基线。
+		flashlight.set_light_enabled(false)
 		if (
 			front_fill == null
 			or front_fill.shadow_enabled
@@ -177,6 +184,8 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 			or spill.light_cull_mask != 1
 		):
 			failures.append("Avatar front fill is not a subtle layer-2-only light, or environment lights leak onto the avatar")
+		if not bool(flashlight_snapshot.get("shadow_light_disabled_for_avatar", false)):
+			failures.append("Flashlight snapshot must report shadow_light_disabled_for_avatar=true")
 		if bool(flashlight_snapshot.get("environment_spill_affects_avatar", true)) or not bool(flashlight_snapshot.get("front_fill_affects_avatar", false)):
 			failures.append("Flashlight snapshot does not preserve environment/avatar light isolation")
 		if float(flashlight_snapshot.get("aim_alignment", 0.0)) < 0.99:

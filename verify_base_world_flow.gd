@@ -131,8 +131,8 @@ func _ready() -> void:
 	base_world.player.request_dash()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	if base_world.player.get_state_machine_state() != "dashing" or not base_world.player.avatar.get_component_snapshot().get("dash_trail_visible", false):
-		failures.append("Player3D dash state does not drive the 3D trail")
+	if base_world.player.get_state_machine_state() != "dashing" or not base_world.player.avatar.get_component_snapshot().get("dash_dust_emitting", false):
+		failures.append("Player3D dash state does not drive the 3D dust burst")
 	await get_tree().create_timer(0.24).timeout
 	base_world.player.set_test_move_direction(Vector3.ZERO)
 	await get_tree().physics_frame

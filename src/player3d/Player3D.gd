@@ -17,9 +17,9 @@ signal reload_ended(completed: bool)
 signal action_overlay_changed(snapshot: Dictionary)
 signal avatar_customization_changed(loadout: Dictionary)
 
-const SPEED := 7.0
+const SPEED := 5.0
 const DASH_SPEED := 16.5
-const DASH_DURATION := 0.17
+const DASH_DURATION := 0.204
 const DASH_COOLDOWN := 2.2
 const INVINCIBLE_DURATION := 0.24
 const FIRE_ANIMATION_DURATION := 0.14

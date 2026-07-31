@@ -38,27 +38,25 @@ func get_environment_snapshot() -> Dictionary:
 
 func _build_environment() -> void:
 	var world_environment := WorldEnvironment.new()
-	world_environment.name = "ApocalypseEnvironment"
+	world_environment.name = "UniversalAtmosphere"
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color(0.012, 0.018, 0.024)
+	environment.background_color = TowerAtmosphere3D.BACKGROUND_COLOR
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color(0.31, 0.42, 0.49)
-	environment.ambient_light_energy = 0.62
+	environment.ambient_light_color = TowerAtmosphere3D.AMBIENT_COLOR
+	environment.ambient_light_energy = TowerAtmosphere3D.AMBIENT_ENERGY
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment.fog_enabled = true
-	environment.fog_light_color = Color(0.055, 0.075, 0.085)
-	environment.fog_density = 0.009
-	environment.fog_height = 0.0
-	environment.fog_height_density = 0.08
+	environment.fog_light_color = TowerAtmosphere3D.FOG_LIGHT_COLOR
+	environment.fog_density = TowerAtmosphere3D.FOG_DENSITY
 	world_environment.environment = environment
 	add_child(world_environment)
 
 	var key_light := DirectionalLight3D.new()
-	key_light.name = "MoonKeyLight"
-	key_light.rotation_degrees = Vector3(-56.0, -28.0, 0.0)
-	key_light.light_color = Color(0.60, 0.73, 0.82)
-	key_light.light_energy = 0.86
+	key_light.name = "UniversalKeyLight"
+	key_light.rotation_degrees = Vector3(-60.0, -32.0, 0.0)
+	key_light.light_color = TowerAtmosphere3D.SUN_COLOR
+	key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
 	key_light.shadow_enabled = true
 	key_light.directional_shadow_max_distance = 90.0
 	add_child(key_light)

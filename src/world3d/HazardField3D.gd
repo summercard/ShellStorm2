@@ -59,5 +59,5 @@ func _build_visual() -> void:
 		var ring := MeshInstance3D.new()
 		ring.position.y = 0.05 + index * 0.025
 		ring.mesh = mesh
-		ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		add_child(ring)

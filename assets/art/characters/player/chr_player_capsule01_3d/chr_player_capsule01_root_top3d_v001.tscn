@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3]
+[gd_scene load_steps=34 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/PlayerAvatar3D.gd" id="1_avatar"]
 
@@ -115,18 +115,6 @@ roughness = 0.38
 material = SubResource("MatWeapon")
 size = Vector3(0.18, 0.18, 1.05)
 
-[sub_resource type="StandardMaterial3D" id="MatDash"]
-transparency = 1
-albedo_color = Color(0.18, 0.78, 1, 0.28)
-emission_enabled = true
-emission = Color(0.12, 0.62, 0.95, 1)
-emission_energy_multiplier = 1.7
-shading_mode = 0
-
-[sub_resource type="BoxMesh" id="MeshDash"]
-material = SubResource("MatDash")
-size = Vector3(0.72, 0.12, 2.3)
-
 [sub_resource type="StandardMaterial3D" id="MatLock"]
 transparency = 1
 albedo_color = Color(1, 0.58, 0.08, 0.72)
@@ -141,6 +129,35 @@ inner_radius = 0.72
 outer_radius = 0.78
 rings = 24
 ring_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="MatDust"]
+transparency = 1
+albedo_color = Color(0.78, 0.74, 0.66, 0.78)
+emission_enabled = true
+emission = Color(0.62, 0.58, 0.50, 1)
+emission_energy_multiplier = 0.55
+shading_mode = 0
+
+[sub_resource type="SphereMesh" id="MeshDustSphere"]
+material = SubResource("MatDust")
+radius = 0.07
+height = 0.14
+radial_segments = 10
+rings = 6
+
+[sub_resource type="ParticleProcessMaterial" id="DustProcessMaterial"]
+emission_shape = 1
+emission_sphere_radius = 0.45
+direction = Vector3(0, 1, 0)
+spread = 30.0
+flatness = 0.85
+gravity = Vector3(0, -2.4, 0)
+initial_velocity_min = 1.6
+initial_velocity_max = 3.4
+damping_min = 6.0
+damping_max = 8.5
+scale_min = 0.7
+scale_max = 1.15
 
 [sub_resource type="StandardMaterial3D" id="MatLowHealth"]
 transparency = 1
@@ -287,10 +304,19 @@ mesh = SubResource("MeshWeapon")
 
 [node name="StateVFX" type="Node3D" parent="VisualRoot"]
 
-[node name="DashTrail" type="MeshInstance3D" parent="VisualRoot/StateVFX"]
-visible = false
-position = Vector3(0, 0.82, 1.35)
-mesh = SubResource("MeshDash")
+[node name="DashDustBurst" type="GPUParticles3D" parent="VisualRoot/StateVFX"]
+emitting = false
+amount = 28
+lifetime = 0.55
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 0
+local_coords = false
+draw_order = 0
+visibility_aabb = AABB(-1.5, -0.5, -1.5, 3, 1.5, 3)
+process_material = SubResource("DustProcessMaterial")
+draw_pass_1 = SubResource("MeshDustSphere")
+position = Vector3(0, 0.10, 0)
 cast_shadow = 0
 
 [node name="LockRing" type="MeshInstance3D" parent="VisualRoot/StateVFX"]

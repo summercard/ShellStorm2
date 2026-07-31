@@ -70,8 +70,8 @@ top_level = true
 
 [node name="Ring" type="MeshInstance3D" parent="AimCursor"]
 mesh = SubResource("MeshCursor")
-cast_shadow = 0
+cast_shadow = 1
 
 [node name="Dot" type="MeshInstance3D" parent="AimCursor"]
 mesh = SubResource("MeshCursorDot")
-cast_shadow = 0
+cast_shadow = 1

@@ -17,7 +17,7 @@ extends Node3D
 @onready var bunny_hand_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR") as Node3D
 @onready var tail_stub: MeshInstance3D = $VisualRoot/Body/TailStub
 @onready var weapon_socket: Marker3D = _resolve_rig_node("VisualRoot/BunnyRig/WeaponSocket", "VisualRoot/WeaponSocket") as Marker3D
-@onready var dash_trail: MeshInstance3D = $VisualRoot/StateVFX/DashTrail
+@onready var dash_dust: GPUParticles3D = $VisualRoot/StateVFX/DashDustBurst
 @onready var lock_ring: MeshInstance3D = $VisualRoot/StateVFX/LockRing
 @onready var low_health_ring: MeshInstance3D = $VisualRoot/StateVFX/LowHealthRing
 @onready var reload_progress_root: Node3D = $ReloadProgress3D
@@ -248,6 +248,7 @@ func _ready() -> void:
 		_base_rotations["bunny_hand_r"] = bunny_hand_r.rotation
 	_set_avatar_render_layer(2)
 	_prepare_unique_materials()
+	_fix_left_ear_mirror_tangent_space()
 	_ensure_wearable_nodes()
 	if _is_bunny_avatar():
 		reload_progress_root.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
@@ -386,7 +387,7 @@ func get_component_snapshot() -> Dictionary:
 		"model_collision_object_count": visual_root.find_children("*", "CollisionObject3D", true, false).size(),
 		"render_layer": 2,
 		"avatar_shadow_caster_count": _get_avatar_shadow_caster_count(),
-		"dash_trail_visible": dash_trail.visible,
+		"dash_dust_emitting": _state == "dashing",
 		"lock_ring_visible": lock_ring.visible,
 		"low_health_ring_visible": low_health_ring.visible,
 	}
@@ -426,6 +427,8 @@ func _read_player_state() -> void:
 		_state = next_state
 		if _state == "dashing":
 			_dash_animation_progress = 0.0
+			if dash_dust != null:
+				dash_dust.restart()
 		if _state == "hurt":
 			_hurt_animation_progress = 0.0
 		if _state == "falling":
@@ -570,7 +573,13 @@ func _update_state_motion(delta: float) -> void:
 			var dash_duration := 0.18
 			if _player != null and _player.has_method("get_dash_duration"):
 				dash_duration = maxf(0.01, float(_player.call("get_dash_duration")))
-			_dash_animation_progress = clampf(_dash_animation_progress + delta / dash_duration, 0.0, 1.0)
+			# 动画播放速度比位移低 30%：动画周期 = dash_duration * 1.3，
+			# 实际冲刺 0.204s 时只跑完 1/1.3 ≈ 77% 的旋转帧，
+			# 视觉上角色翻滚明显慢于位移，比"身位始终贴末尾"更耐看。
+			var dash_animation_duration := dash_duration * 1.3
+			_dash_animation_progress = clampf(
+				_dash_animation_progress + delta / dash_animation_duration, 0.0, 1.0
+			)
 			dash_arch = sin(_dash_animation_progress * PI)
 			var dash_angle := _dash_animation_progress * TAU
 			var roll_pivot_height := 1.2375
@@ -848,8 +857,9 @@ func _update_state_motion(delta: float) -> void:
 		landing_arch
 	)
 
-	dash_trail.visible = _state == "dashing"
-	dash_trail.scale.z = 1.0 + absf(sin(_elapsed * 18.0)) * 0.28
+	# DashDustBurst 是 one-shot burst：状态机进入 dashing 时通过 restart() 触发一次；
+	# lifetime 0.55s 比 dash 持续时间长 0.34s，整段冲刺都能看见尘雾散开。
+	# 不在 _process 里每帧重写 emitting，否则会持续重置 burst。
 	lock_ring.visible = _state == "locked"
 	lock_ring.rotation.y += delta * 1.7
 	var low_health := bool(_player.call("is_low_health")) if _player != null and _player.has_method("is_low_health") else false
@@ -1123,7 +1133,7 @@ func _add_wearable_mesh(parent: Node3D, node_name: String, mesh: Mesh, color: Co
 	node.position = position
 	# 配件只接收角色前方柔光：不向场景、头壳或同组配件投射阴影，
 	# 也不参与 GI，避免安全帽/护目镜遮住角色自身的灯光表现。
-	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	node.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	node.material_override = _wearable_material(color, emissive)
 	parent.add_child(node)
@@ -1173,8 +1183,67 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
 		var mesh := mesh_instance as MeshInstance3D
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+
+
+func _fix_left_ear_mirror_tangent_space() -> void:
+	# 左耳用 scale = (-1, 1, 1) 复用右耳 GLB。负行列式变换会改变切线空间
+	# 的手性；顶点法线本身会由逆转置矩阵正确变换，不能再额外取反。这里只把
+	# tangent.w 反号，让法线贴图使用正确的副切线方向，并保留原 surface 材质。
+	var ear_socket := get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL")
+	if ear_socket == null:
+		return
+	var ear_root := ear_socket.get_node_or_null("EarAccessory")
+	if ear_root == null:
+		return
+	for child in ear_root.find_children("*", "MeshInstance3D", true, false):
+		var mi := child as MeshInstance3D
+		if mi == null:
+			continue
+		_flip_mirror_mesh_tangent_handedness(mi)
+		_disable_ear_backface_culling(mi)
+
+
+func _flip_mirror_mesh_tangent_handedness(mi: MeshInstance3D) -> void:
+	var source := mi.mesh
+	if source == null or not (source is ArrayMesh):
+		return
+	var src := source as ArrayMesh
+	var rebuilt := ArrayMesh.new()
+	var tangents_touched := false
+	for surface_index in range(src.get_surface_count()):
+		var arrays: Array = src.surface_get_arrays(surface_index)
+		if arrays == null or arrays.is_empty():
+			continue
+		var tangents := arrays[Mesh.ARRAY_TANGENT] as PackedFloat32Array
+		if tangents != null and tangents.size() >= 4 and tangents.size() % 4 == 0:
+			var corrected := tangents.duplicate()
+			for tangent_w_index in range(3, corrected.size(), 4):
+				corrected[tangent_w_index] = -corrected[tangent_w_index]
+			arrays[Mesh.ARRAY_TANGENT] = corrected
+			tangents_touched = true
+		var rebuilt_surface_index := rebuilt.get_surface_count()
+		rebuilt.add_surface_from_arrays(
+			src.surface_get_primitive_type(surface_index),
+			arrays
+		)
+		rebuilt.surface_set_material(rebuilt_surface_index, src.surface_get_material(surface_index))
+		rebuilt.surface_set_name(rebuilt_surface_index, src.surface_get_name(surface_index))
+	if tangents_touched:
+		mi.mesh = rebuilt
+
+
+func _disable_ear_backface_culling(mi: MeshInstance3D) -> void:
+	var material := mi.material_override
+	if material == null:
+		material = mi.get_active_material(0)
+	if material is StandardMaterial3D:
+		var std_mat := material as StandardMaterial3D
+		if mi.material_override == null:
+			std_mat = std_mat.duplicate() as StandardMaterial3D
+			mi.material_override = std_mat
+		std_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 
 
 func _set_avatar_render_layer(layer_mask: int) -> void:
@@ -1183,7 +1252,7 @@ func _set_avatar_render_layer(layer_mask: int) -> void:
 		# 角色只接收 AvatarFrontFill，绝不能让头、身、手、脚彼此投射阴影。
 		# 这也覆盖之后导入的 GLB 网格，避免正式模型带回 Blender 的默认投影设置。
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 
 

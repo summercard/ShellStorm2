@@ -151,7 +151,7 @@ func _rebuild() -> void:
 	_tell_ring.name = "StateVFX"
 	_tell_ring.position.y = 0.055
 	_tell_ring.mesh = ring_mesh
-	_tell_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_tell_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	_root.add_child(_tell_ring)
 
 
