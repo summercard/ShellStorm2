@@ -23,15 +23,15 @@ const AVATAR_RENDER_LAYER := 2
 
 @export_group("Mount")
 @export_range(0.5, 4.0, 0.05) var mount_height := 1.15
-@export_range(-1.0, 2.0, 0.05) var mount_forward := 0.42
+@export_range(-1.0, 2.0, 0.05) var mount_forward := -0.01
 @export_range(1.0, 24.0, 0.25) var target_forward := 11.0
 @export_range(0.0, 2.0, 0.05) var target_height := 0.38
 
 @export_group("Environment Spill")
 @export var spill_color := Color(0.68, 0.88, 0.84)
-@export_range(0.0, 8.0, 0.05) var spill_energy := 2.0
+@export_range(0.0, 8.0, 0.05) var spill_energy := 3.5
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
-@export_range(0.1, 4.0, 0.05) var spill_attenuation := 1.35
+@export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
 
 @export_group("Avatar Front Fill")
 @export var front_fill_color := Color(0.70, 0.90, 0.86)

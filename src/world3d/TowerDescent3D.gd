@@ -24,7 +24,9 @@ const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
 const STAIR_GUARD_HEIGHT := TOWER_GEOMETRY.GUARD_HEIGHT_M
 const CAMERA_HEIGHT_M := 8.0
-const CAMERA_TRAILING_OFFSET_M := 5.5
+# 镜头相对角色在无遮挡时的默认水平后移：tan(65°)=(8-0.45)/(trailing+0.75)
+# ⇒ trailing ≈ 7.55/2.1445 - 0.75 ≈ 2.77m，对应从水平面算起 65° 俯视角。
+const CAMERA_DEFAULT_TRAILING_M := 2.77
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 55.0
@@ -92,8 +94,8 @@ var _camera_lower_wall_detected := false
 var _camera_lower_wall_distance_m := -1.0
 var _camera_lift_target_m := 0.0
 var _camera_lift_current_m := 0.0
-var _camera_trailing_target_m := CAMERA_TRAILING_OFFSET_M
-var _camera_trailing_current_m := CAMERA_TRAILING_OFFSET_M
+var _camera_trailing_target_m := CAMERA_DEFAULT_TRAILING_M
+var _camera_trailing_current_m := CAMERA_DEFAULT_TRAILING_M
 var _camera_near_fade_candidates: Array[MeshInstance3D] = []
 var _camera_near_fade_states: Dictionary = {}
 var _camera_near_faded_count := 0
@@ -277,7 +279,7 @@ func _update_camera_lower_wall_lift(delta: float) -> void:
 	)
 	_camera_lower_wall_detected = _camera_lower_wall_distance_m >= 0.0
 	_camera_lift_target_m = 0.0
-	_camera_trailing_target_m = CAMERA_TRAILING_OFFSET_M
+	_camera_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
 	if _camera_lower_wall_detected:
 		var lift_ratio := clampf(
 			(
@@ -289,9 +291,9 @@ func _update_camera_lower_wall_lift(delta: float) -> void:
 		)
 		lift_ratio = smoothstep(0.0, 1.0, lift_ratio)
 		_camera_lift_target_m = CAMERA_LOWER_WALL_LIFT_MAX_M * lift_ratio
-		# 只退到墙内侧仍会让窄楼梯间的墙占满视锥。墙进入原始镜头通道后，
+		# 只退到墙内侧仍会让窄楼梯间的墙占满视锥。墙进入默认镜头通道后，
 		# 直接沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
-		if _camera_lower_wall_distance_m < CAMERA_TRAILING_OFFSET_M:
+		if _camera_lower_wall_distance_m < CAMERA_DEFAULT_TRAILING_M:
 			_camera_trailing_target_m = CAMERA_LOWER_WALL_MIN_TRAILING_M
 	var response_rate := (
 		CAMERA_LOWER_WALL_LIFT_RISE_RATE
@@ -386,6 +388,9 @@ func _is_camera_lower_wall(collider: Node) -> bool:
 	return (
 		collider_name.begins_with("TowerWallCollision_")
 		or collider_name.begins_with("BaseWall_")
+		or collider_name == "FacilityBaseWallBody"
+		or collider_name == "FacilityBaseWallSideBody"
+		or collider_name == "FacilityBaseWallLintelBody"
 		or collider_name.begins_with("CorridorWallCollision_")
 		or collider_name.begins_with("StairwellWall_")
 		or collider_name == "OuterBoundaryCollision"
@@ -1177,7 +1182,10 @@ func _build_stairwell_enclosure(
 				"StairwellWall_Lateral_%s" % ("A" if wall_index == 0 else "B"),
 				Vector3((min_x + max_x) * 0.5, center_y, z),
 				Vector3(max_x - min_x, FLOOR_HEIGHT, 0.30),
-				Vector3.ZERO
+				Vector3.ZERO,
+				false,
+				true,
+				true
 			)
 		var outer_x := max_x if outward.x > 0.0 else min_x
 		_add_connector_box(
@@ -1185,7 +1193,10 @@ func _build_stairwell_enclosure(
 			"StairwellWall_Outer",
 			Vector3(outer_x, center_y, (min_z + max_z) * 0.5),
 			Vector3(0.30, FLOOR_HEIGHT, max_z - min_z),
-			Vector3.ZERO
+			Vector3.ZERO,
+			false,
+			true,
+			true
 		)
 	else:
 		var lateral_x := [min_x, max_x]
@@ -1196,7 +1207,10 @@ func _build_stairwell_enclosure(
 				"StairwellWall_Lateral_%s" % ("A" if wall_index == 0 else "B"),
 				Vector3(x, center_y, (min_z + max_z) * 0.5),
 				Vector3(0.30, FLOOR_HEIGHT, max_z - min_z),
-				Vector3.ZERO
+				Vector3.ZERO,
+				false,
+				true,
+				true
 			)
 		var outer_z := max_z if outward.z > 0.0 else min_z
 		_add_connector_box(
@@ -1204,7 +1218,10 @@ func _build_stairwell_enclosure(
 			"StairwellWall_Outer",
 			Vector3((min_x + max_x) * 0.5, center_y, outer_z),
 			Vector3(max_x - min_x, FLOOR_HEIGHT, 0.30),
-			Vector3.ZERO
+			Vector3.ZERO,
+			false,
+			true,
+			true
 		)
 
 
@@ -1262,7 +1279,9 @@ func _add_connector_box(
 	position: Vector3,
 	size: Vector3,
 	rotation: Vector3,
-	is_support := false
+	is_support := false,
+	collision_enabled := false,
+	camera_lower_wall := false
 ) -> void:
 	var body := StaticBody3D.new()
 	body.name = "%sBody" % node_name
@@ -1276,8 +1295,12 @@ func _add_connector_box(
 	var collision := CollisionShape3D.new()
 	collision.name = "%sShape" % node_name
 	collision.shape = shape
-	collision.disabled = true
+	# 默认禁用（走廊墙/楼梯护栏/门楣都有视觉 prefab 自带碰撞），
+	# 楼梯间 3 面围护墙需要射线命中以触发近墙摄像机抬高。
+	collision.disabled = not collision_enabled
 	collision.set_meta("persistent_stair_support", is_support)
+	# 标记为始终启用的摄像机低墙：_set_connector_collision_enabled 会跳过它。
+	collision.set_meta("camera_lower_wall", camera_lower_wall)
 	body.add_child(collision)
 
 
@@ -1451,6 +1474,11 @@ func _set_connector_collision_enabled(
 ) -> void:
 	if root is CollisionShape3D:
 		var collision := root as CollisionShape3D
+		# StairwellWall 3 面围护墙：永远启用，使近墙摄像机探针在门未开时也能
+		# 命中并抬高收镜；玩家通行仍由门碰撞与 _open_edges 控制。
+		if bool(collision.get_meta("camera_lower_wall", false)):
+			collision.set_deferred("disabled", false)
+			return
 		var persistent_support := bool(collision.get_meta("persistent_stair_support", false))
 		collision.set_deferred(
 			"disabled",
@@ -2129,7 +2157,7 @@ func get_tower_snapshot() -> Dictionary:
 			0.0,
 			_camera_trailing_current_m
 		),
-		"camera_desired_trailing_offset_m": CAMERA_TRAILING_OFFSET_M,
+		"camera_desired_trailing_offset_m": CAMERA_DEFAULT_TRAILING_M,
 		"camera_look_height_m": CAMERA_LOOK_HEIGHT_M,
 		"camera_look_ahead_m": CAMERA_LOOK_AHEAD_M,
 		"camera_fov_deg": CAMERA_FOV_DEG,

@@ -15,10 +15,6 @@ const EXTRACTION_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d
 const KEY_SCRIPT := preload("res://src/world3d/RoomKeyPickup3D.gd")
 const GROUND_LOOT_SCRIPT := preload("res://src/world3d/GroundLootPickup3D.gd")
 const WORKBENCH_SCENE: PackedScene = preload("res://scenes/WorkbenchPanel.tscn")
-const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_floor_segment.tscn")
-const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_wall_segment.tscn")
-const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment.tscn")
-const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
 
@@ -581,6 +577,7 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	var end := to - direction * (to_half - 0.18)
 	var center := (start + end) * 0.5
 	var length := maxf(0.6, start.distance_to(end))
+	var size := Vector3(length, 0.26, 3.8) if horizontal else Vector3(3.8, 0.26, length)
 	var body := StaticBody3D.new()
 	body.name = "Corridor_%02d" % index
 	body.position = center + Vector3(0, -0.12, 0)
@@ -602,12 +599,22 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	_corridor_by_edge[edge] = body
 	body.visible = false
 	body.process_mode = Node.PROCESS_MODE_DISABLED
-	var floor_size := Vector3(length, 0.26, 3.8) if horizontal else Vector3(3.8, 0.26, length)
-	var floor_material := StandardMaterial3D.new()
-	floor_material.albedo_color = visual_theme.floor_color.lightened(0.055)
-	floor_material.metallic = 0.46
-	floor_material.roughness = 0.74
-	_spawn_corridor_piece(body, "CorridorFloor_%02d" % index, CORRIDOR_FLOOR_PREFAB, floor_size, Vector3.ZERO, floor_material)
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	var material := StandardMaterial3D.new()
+	material.albedo_color = visual_theme.floor_color.lightened(0.055)
+	material.metallic = 0.46
+	material.roughness = 0.74
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.mesh = mesh
+	body.add_child(instance)
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collision := CollisionShape3D.new()
+	collision.shape = shape
+	collision.disabled = true
+	body.add_child(collision)
 	var wall_material := StandardMaterial3D.new()
 	wall_material.albedo_color = visual_theme.wall_color.darkened(0.08)
 	wall_material.metallic = 0.62
@@ -615,53 +622,54 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	for side in [-1.0, 1.0]:
 		var wall_size := Vector3(length, 2.25, 0.25) if horizontal else Vector3(0.25, 2.25, length)
 		var wall_offset := Vector3(0, 1.25, side * 1.92) if horizontal else Vector3(side * 1.92, 1.25, 0)
-		var side_index := 0 if side < 0.0 else 1
-		_spawn_corridor_piece(body, "CorridorWall_%02d_%d" % [index, side_index], CORRIDOR_WALL_PREFAB, wall_size, wall_offset, wall_material)
+		var wall_mesh := BoxMesh.new()
+		wall_mesh.size = wall_size
+		wall_mesh.material = wall_material
+		var wall_instance := MeshInstance3D.new()
+		wall_instance.name = "CorridorWall"
+		wall_instance.position = wall_offset
+		wall_instance.mesh = wall_mesh
+		body.add_child(wall_instance)
+		var wall_shape := BoxShape3D.new()
+		wall_shape.size = wall_size
+		var wall_collision := CollisionShape3D.new()
+		wall_collision.position = wall_offset
+		wall_collision.shape = wall_shape
+		wall_collision.disabled = true
+		body.add_child(wall_collision)
 	if is_vertical_connector:
 		# 封闭楼梯间顶部与墙共同阻挡视线；台阶只做可读表现，连续斜坡承担移动碰撞。
 		var ceiling_size := Vector3(length, 0.22, 3.8) if horizontal else Vector3(3.8, 0.22, length)
-		_spawn_corridor_piece(body, "StairwellCeiling_%02d" % index, CORRIDOR_CEILING_PREFAB, ceiling_size, Vector3(0, 2.38, 0), wall_material)
+		var ceiling_mesh := BoxMesh.new()
+		ceiling_mesh.size = ceiling_size
+		ceiling_mesh.material = wall_material
+		var ceiling_instance := MeshInstance3D.new()
+		ceiling_instance.name = "StairwellCeiling"
+		ceiling_instance.position.y = 2.38
+		ceiling_instance.mesh = ceiling_mesh
+		body.add_child(ceiling_instance)
+		var ceiling_shape := BoxShape3D.new()
+		ceiling_shape.size = ceiling_size
+		var ceiling_collision := CollisionShape3D.new()
+		ceiling_collision.position.y = 2.38
+		ceiling_collision.shape = ceiling_shape
+		ceiling_collision.disabled = true
+		body.add_child(ceiling_collision)
 		var step_count := maxi(5, int(length / 0.85))
 		for step_index in range(step_count):
 			var ratio := (float(step_index) + 0.5) / float(step_count)
-			var tread_size := Vector3(length / float(step_count) * 0.82, 0.07, 3.46) if horizontal else Vector3(3.46, 0.07, length / float(step_count) * 0.82)
-			var tread_offset := Vector3(
+			var tread_mesh := BoxMesh.new()
+			tread_mesh.size = Vector3(length / float(step_count) * 0.82, 0.07, 3.46) if horizontal else Vector3(3.46, 0.07, length / float(step_count) * 0.82)
+			tread_mesh.material = wall_material
+			var tread := MeshInstance3D.new()
+			tread.name = "StairTread_%02d" % step_index
+			tread.position = Vector3(
 				lerpf(-length * 0.5, length * 0.5, ratio) if horizontal else 0.0,
 				0.075,
 				0.0 if horizontal else lerpf(-length * 0.5, length * 0.5, ratio)
 			)
-			_spawn_corridor_piece(body, "StairTread_%02d_%02d" % [index, step_index], CORRIDOR_STAIR_TREAD_PREFAB, tread_size, tread_offset, wall_material)
-
-
-func _spawn_corridor_piece(parent: Node3D, node_name: String, prefab: PackedScene, scale_vec: Vector3, local_position: Vector3, material: StandardMaterial3D) -> void:
-	if prefab == null:
-		push_error("Dungeon3D: missing corridor prefab for %s" % node_name)
-		return
-	var instance := prefab.instantiate() as Node3D
-	if instance == null:
-		return
-	instance.name = node_name
-	instance.position = local_position
-	instance.scale = scale_vec
-	_apply_corridor_material_override(instance, material)
-	_set_corridor_collisions_disabled(instance, true)
-	parent.add_child(instance)
-
-
-func _apply_corridor_material_override(root: Node, material: StandardMaterial3D) -> void:
-	if material == null:
-		return
-	if root is MeshInstance3D:
-		(root as MeshInstance3D).material_override = material
-	for child in root.get_children():
-		_apply_corridor_material_override(child, material)
-
-
-func _set_corridor_collisions_disabled(root: Node, disabled: bool) -> void:
-	if root is CollisionShape3D:
-		(root as CollisionShape3D).disabled = disabled
-	for child in root.get_children():
-		_set_corridor_collisions_disabled(child, disabled)
+			tread.mesh = tread_mesh
+			body.add_child(tread)
 
 
 func _create_extraction() -> void:
@@ -1504,7 +1512,9 @@ func _update_corridor_streaming(current_id: String) -> void:
 		var active := bool(_open_edges.get(edge, false)) and current_id in ids
 		corridor.visible = active
 		corridor.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
-		_set_corridor_collisions_disabled(corridor, not active)
+		for child in corridor.get_children():
+			if child is CollisionShape3D:
+				(child as CollisionShape3D).set_deferred("disabled", not active)
 
 
 func _on_insure_item_requested(slot_index: int) -> void:

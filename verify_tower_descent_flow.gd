@@ -186,14 +186,14 @@ func _ready() -> void:
 	await _validate_manual_flashlight(tower, failures)
 	_validate_combat_floor_layouts(generation, snapshot, failures)
 	_expect(
-		tower.player.camera.position.is_equal_approx(Vector3(0.0, 8.0, 5.5)),
-		"塔楼摄像机没有保持Y=8m、后移5.5m",
+		tower.player.camera.position.is_equal_approx(Vector3(0.0, 8.0, 2.77)),
+		"塔楼摄像机没有保持Y=8m、后移2.77m(65°俯视)",
 		failures
 	)
 	_expect(
-		tower.player.camera.rotation.x > -1.2
-		and tower.player.camera.rotation.x < -0.7,
-		"塔楼摄像机没有形成室内斜俯视角",
+		tower.player.camera.rotation.x > -1.25
+		and tower.player.camera.rotation.x < -1.05,
+		"塔楼摄像机没有形成室内65°斜俯视角",
 		failures
 	)
 	_expect(
@@ -1195,7 +1195,7 @@ func _validate_camera_lower_wall_lift(
 	blocker_visual.mesh = blocker_mesh
 	blocker.add_child(blocker_visual)
 	tower.add_child(blocker)
-	blocker.global_position = tower.player.global_position + Vector3(0.0, 4.5, 2.4)
+	blocker.global_position = tower.player.global_position + Vector3(0.0, 4.5, 2.0)
 	var expected_yaw := tower.player.camera.rotation.y
 	var expected_roll := tower.player.camera.rotation.z
 	tower.player.camera.position = Vector3(2.0, 6.0, 3.0)
@@ -1262,7 +1262,7 @@ func _validate_camera_lower_wall_lift(
 			break
 	_expect(
 		retract_is_smooth
-		and trailing_samples[0] - trailing_samples[trailing_samples.size() - 1] > 2.5,
+		and trailing_samples[0] - trailing_samples[trailing_samples.size() - 1] > 2.4,
 		"下方墙镜头收拢不是连续平滑过程",
 		failures
 	)
@@ -1285,7 +1285,7 @@ func _validate_camera_lower_wall_lift(
 		and not bool(recovered_snapshot.get("camera_lower_wall_detected", true))
 		and not bool(recovered_snapshot.get("camera_collision_adjusted", true))
 		and absf(tower.player.camera.position.y - 8.0) <= 0.02
-		and absf(tower.player.camera.position.z - 5.5) <= 0.03,
+		and absf(tower.player.camera.position.z - 2.77) <= 0.03,
 		"下方墙移除后镜头或角色轮廓没有平滑恢复",
 		failures
 	)
@@ -1309,7 +1309,7 @@ func _validate_camera_lower_wall_lift(
 		not bool(side_snapshot.get("camera_lower_wall_detected", true))
 		and not bool(side_snapshot.get("camera_collision_adjusted", true))
 		and absf(tower.player.camera.position.y - 8.0) <= 0.02
-		and absf(tower.player.camera.position.z - 5.5) <= 0.03,
+		and absf(tower.player.camera.position.z - 2.77) <= 0.03,
 		"左右墙错误触发了下方墙镜头抬升",
 		failures
 	)
@@ -1329,7 +1329,7 @@ func _validate_camera_lower_wall_lift(
 			and not bool(door_snapshot.get("camera_lower_wall_detected", true))
 			and int(door_snapshot.get("camera_near_faded_mesh_count", -1)) == 0
 			and absf(tower.player.camera.position.y - 8.0) <= 0.01
-			and absf(tower.player.camera.position.z - 5.5) <= 0.03
+			and absf(tower.player.camera.position.z - 2.77) <= 0.03
 			and absf(tower.player.camera.position.x) <= 0.001,
 			"关闭门错误启用了门槛旁路，或改变了固定镜头",
 			failures

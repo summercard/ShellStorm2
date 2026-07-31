@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3]
+
+; 5m 矮墙带门洞 - 自包含独立模块
+; 5m 宽 × 1.5m 高 × 0.3m 厚；中间留 2m 宽 × 1.5m 高门洞可通行
+; 节点命名规则：MeshInstance3D = ParapetDoor_Left / ParapetDoor_Right
+; CollisionShape3D = CollisionLeft / CollisionRight
+; 美术可在此直接替换 BoxMesh 为 GLB / 自定义网格（保持节点名不变）
+
+[sub_resource type="BoxMesh" id="BoxMesh_parapet_door_segment"]
+size = Vector3(1.5, 1.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_parapet_door"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_parapet_door_segment"]
+size = Vector3(1.5, 1.5, 0.3)
+
+[node name="PrpTowerWallParapetDoor5m" type="Node3D"]
+
+; 门洞居中（local x: -1.0 ~ +1.0，共 2m 宽）
+; 左侧矮墙段（local x: -2.5 ~ -1.0，中心 x=-1.75）
+[node name="ParapetDoor_Left" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.75, 0)
+mesh = SubResource("BoxMesh_parapet_door_segment")
+material_override = SubResource("StandardMaterial3D_parapet_door")
+
+; 右侧矮墙段（local x: +1.0 ~ +2.5，中心 x=+1.75）
+[node name="ParapetDoor_Right" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.75, 0)
+mesh = SubResource("BoxMesh_parapet_door_segment")
+material_override = SubResource("StandardMaterial3D_parapet_door")
+
+[node name="ParapetDoorCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionLeft" type="CollisionShape3D" parent="ParapetDoorCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.75, 0.75, 0)
+shape = SubResource("BoxShape3D_parapet_door_segment")
+
+[node name="CollisionRight" type="CollisionShape3D" parent="ParapetDoorCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 0.75, 0)
+shape = SubResource("BoxShape3D_parapet_door_segment")

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+; 房间角柱 - 1×1×1，脚本设 scale = (0.42, 2.9, 0.42)，4 个角各放一个
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_post"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_corner_post"]
+albedo_color = Color(0.48, 0.48, 0.5, 1)
+metallic = 0.4
+metallic_specular = 0.7
+roughness = 0.4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_post"]
+size = Vector3(1, 1, 1)
+
+[node name="PrpRoomCornerPost" type="Node3D"]
+
+[node name="CornerPost" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_corner_post")
+material_override = SubResource("StandardMaterial3D_corner_post")
+
+[node name="CornerPostBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CornerPostBody"]
+shape = SubResource("BoxShape3D_corner_post")

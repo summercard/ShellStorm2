@@ -61,6 +61,14 @@ func _ready() -> void:
 		tower.player.global_position = (
 			(points[4] as Vector3) + Vector3.UP * 0.04
 		)
+		# 把角色向楼梯平台围护墙再推 1.2m，确保墙进入 65° 俯视默认镜头管（2.77m）。
+		var facing := tower.player.global_basis.z
+		facing.y = 0.0
+		if facing.length_squared() > 0.0001:
+			facing = facing.normalized()
+		else:
+			facing = Vector3.BACK
+		tower.player.global_position += facing * 1.2
 		await _settle(45)
 		var stair_wall_snapshot := tower.get_tower_snapshot()
 		print("PH48_REAL_STAIR_WALL_CAMERA ", {
@@ -140,7 +148,7 @@ func _expect_real_door_bypass(
 		failures.append("%s仍在淡出门板或门楣" % label)
 	if (
 		absf(tower.player.camera.position.y - 8.0) > 0.01
-		or absf(tower.player.camera.position.z - 5.5) > 0.03
+		or absf(tower.player.camera.position.z - 2.77) > 0.03
 		or absf(tower.player.camera.position.x) > 0.001
 	):
 		failures.append(

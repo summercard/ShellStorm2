@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+; 5m 楼顶矮墙（parapet）- 自包含独立模块
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_parapet_5m"]
+size = Vector3(5, 1.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_parapet"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_parapet_5m"]
+size = Vector3(5, 1.5, 0.3)
+
+[node name="PrpTowerWallParapet5m" type="Node3D"]
+
+[node name="WallParapet_5m" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_wall_parapet_5m")
+material_override = SubResource("StandardMaterial3D_parapet")
+
+[node name="WallCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallCollision"]
+shape = SubResource("BoxShape3D_wall_parapet_5m")

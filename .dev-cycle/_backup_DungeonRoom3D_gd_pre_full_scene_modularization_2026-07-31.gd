@@ -1,7 +1,6 @@
 class_name DungeonRoom3D
 extends Node3D
 ## 3D 房间构造器：房型、大小、门、家具、搜索点、服务点和灯具都通过配置组合。
-## 几何全部由 prefab .tscn 提供；脚本只做"找 prefab → 实例化 → 设位置/缩放/材质"。
 
 signal player_entered(room: DungeonRoom3D)
 signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
@@ -16,50 +15,17 @@ const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/pr
 const HAZARD_SCENE: PackedScene = preload("res://assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn")
 const DOOR_SCRIPT := preload("res://src/world3d/RoomDoor3D.gd")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
-
-# —— 5m 塔楼模块 prefab（A 节）
-const TOWER_WALL_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
+const TOWER_WALL_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
 )
-const TOWER_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn"
+const TOWER_DOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d_v002.glb"
 )
-const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
+const TOWER_FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
 )
-# —— 房间壳体原子件 prefab（B 节）
-const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor.tscn")
-const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset.tscn")
-const FLOOR_SEAM_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_seam_strip.tscn")
-const WALL_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_segment.tscn")
-const WALL_DOOR_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_door_segment.tscn")
-const DOOR_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_lintel.tscn")
-const CORNER_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_corner_post.tscn")
-const PARTITION_VERTICAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_vertical.tscn")
-const PARTITION_HORIZONTAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_horizontal.tscn")
-# —— 楼顶/楼梯厅装饰 prefab（C 节）
-const ROOFTOP_FACADE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade.tscn")
-const ROOFTOP_FACADE_BAND_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade_band.tscn")
-const ROOFTOP_RAIL_LOWER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_lower.tscn")
-const ROOFTOP_RAIL_UPPER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_upper.tscn")
-const ROOFTOP_RAIL_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_rail_post.tscn")
-const ROOFTOP_STAIR_FRAME_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_post.tscn")
-const ROOFTOP_STAIR_FRAME_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_lintel.tscn")
-const ROOFTOP_DESCENT_MARKER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_descent_marker.tscn")
-const STAIR_LOBBY_ROUTE_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_route_guide.tscn")
-const STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_threshold_guide.tscn")
-const ACCESS_STEP_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_access_step.tscn")
-const VERTICAL_ACCESS_LABEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_vertical_access_marker_label.tscn")
-# —— 30×30 设施层墙 prefab（D 节）
-const FACILITY_BASE_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall.tscn")
-const FACILITY_BASE_WALL_DOOR_SIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall_door_side.tscn")
-const FACILITY_BASE_WALL_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall_lintel.tscn")
-
-const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
+const FLOOR_TILE_MATERIAL: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
-)
-const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
-	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
 )
 const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
@@ -149,9 +115,6 @@ func get_room_snapshot() -> Dictionary:
 		"controlled_light_count": _room_lights.size(),
 		"base_grid_dimensions": Vector2i(6, 6) if room_type == "FACILITY" else Vector2i.ZERO,
 		"base_grid_tile_count": 36 if room_type == "FACILITY" else 0,
-		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
-		"base_grid_tile_count_dark": 18 if room_type == "FACILITY" else 0,
-		"base_grid_checkerboard_pattern": room_type == "FACILITY",
 		"tower_module_shell": tower_module_shell,
 		"open_wall_directions": open_wall_directions.duplicate(),
 		"wall_height": TOWER_GEOMETRY.FLOOR_HEIGHT_M if tower_module_shell else 2.8,
@@ -261,11 +224,10 @@ func _build_shell() -> void:
 	if tower_module_shell:
 		_build_tower_module_shell(dimensions)
 		return
-	# Floor：1×1×1 prefab + scale = (dim.x, 0.36, dim.y)
-	_spawn_prefab("Floor", FLOOR_PREFAB, Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
-	_spawn_prefab("FloorInset", FLOOR_INSET_PREFAB, Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.36, 0.84))
+	_add_static_box("Floor", Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
+	_add_box("FloorInset", Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.36, 0.84))
 	for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
-		_spawn_prefab("FloorSeam", FLOOR_SEAM_PREFAB, Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
+		_add_box("FloorSeam", Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
 	if size_class == "rooftop":
 		_build_rooftop_shell(dimensions)
 		return
@@ -281,7 +243,7 @@ func _build_shell() -> void:
 		Vector3(-dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
 		Vector3(dimensions.x * 0.5, 1.45, dimensions.y * 0.5),
 	]:
-		_spawn_prefab("CornerPost", CORNER_POST_PREFAB, corner, Vector3(0.42, 2.9, 0.42), _trim_material)
+		_add_static_box("CornerPost", corner, Vector3(0.42, 2.9, 0.42), _trim_material)
 	if size_class == "floor":
 		_build_floor_partitions(dimensions)
 
@@ -307,18 +269,19 @@ func _build_rooftop_shell(dimensions: Vector2) -> void:
 	for side in [-1.0, 1.0]:
 		var frame_half_width := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + 0.22
 		var post_offset := Vector3(side * frame_half_width, 0, 0) if frame_axis_x else Vector3(0, 0, side * frame_half_width)
-		_spawn_prefab("RooftopStairFramePost", ROOFTOP_STAIR_FRAME_POST_PREFAB, access_center + post_offset, Vector3(0.34, 2.9, 0.34), _wall_material)
+		_add_static_box("RooftopStairFramePost", access_center + post_offset, Vector3(0.34, 2.9, 0.34), _wall_material)
 	var frame_span := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M + 0.78
 	var lintel_size := Vector3(frame_span, 0.38, 0.34) if frame_axis_x else Vector3(0.34, 0.38, frame_span)
-	_spawn_prefab("RooftopStairFrameLintel", ROOFTOP_STAIR_FRAME_LINTEL_PREFAB, access_center + Vector3(0, 1.24, 0), lintel_size, _wall_material)
+	_add_static_box("RooftopStairFrameLintel", access_center + Vector3(0, 1.24, 0), lintel_size, _wall_material)
 	# 楼梯头顶部做缺口标识；真正通行口仍由公共 RoomDoor3D 阻挡与开启。
-	var marker := ROOFTOP_DESCENT_MARKER_PREFAB.instantiate() as Node3D
+	var marker := Label3D.new()
 	marker.name = "RooftopDescentMarker"
 	marker.position = access_center + Vector3(0, 1.9, 0)
-	var label3d := marker.get_node("RooftopDescentMarker") as Label3D
-	if label3d != null:
-		label3d.text = "下行楼梯"
-		label3d.modulate = theme.accent_color.lightened(0.18)
+	marker.text = "下行楼梯"
+	marker.font_size = 40
+	marker.pixel_size = 0.012
+	marker.modulate = theme.accent_color.lightened(0.18)
+	marker.outline_size = 8
 	add_child(marker)
 
 
@@ -363,7 +326,7 @@ func _build_rooftop_exterior_wall(direction: String, dimensions: Vector2) -> voi
 			else Vector3(0.54, ROOFTOP_FACADE_HEIGHT, segment_length)
 		)
 		# 立面是视觉楼体；屋顶边界、门和楼梯间各自承担真实碰撞，避免重复墙体卡人。
-		_spawn_prefab("RooftopExteriorWall_%s" % direction, ROOFTOP_FACADE_PREFAB, center, size, facade_material)
+		_add_box("RooftopExteriorWall_%s" % direction, center, size, facade_material)
 		for band_y in [-0.72, -5.28]:
 			var band_center := Vector3(center.x, band_y, center.z)
 			var band_size := (
@@ -371,7 +334,7 @@ func _build_rooftop_exterior_wall(direction: String, dimensions: Vector2) -> voi
 				if horizontal
 				else Vector3(0.62, 0.18, segment_length)
 			)
-			_spawn_prefab("RooftopExteriorBand_%s" % direction, ROOFTOP_FACADE_BAND_PREFAB, band_center, band_size, facade_band_material)
+			_add_box("RooftopExteriorBand_%s" % direction, band_center, band_size, facade_band_material)
 
 
 func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
@@ -393,8 +356,8 @@ func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
 		else:
 			center = Vector3(-dimensions.x * 0.5 if direction == "west" else dimensions.x * 0.5, 0.62, segment_center)
 		var rail_size := Vector3(segment_length, 0.12, 0.18) if horizontal else Vector3(0.18, 0.12, segment_length)
-		_spawn_prefab("RooftopRailLower_%s" % direction, ROOFTOP_RAIL_LOWER_PREFAB, center, rail_size, _trim_material)
-		_spawn_prefab("RooftopRailUpper_%s" % direction, ROOFTOP_RAIL_UPPER_PREFAB, center + Vector3(0, 0.62, 0), rail_size, _trim_material)
+		_add_static_box("RooftopRailLower_%s" % direction, center, rail_size, _trim_material)
+		_add_static_box("RooftopRailUpper_%s" % direction, center + Vector3(0, 0.62, 0), rail_size, _trim_material)
 		var post_count := maxi(2, int(segment_length / 4.0) + 1)
 		for post_index in range(post_count):
 			var ratio := float(post_index) / float(maxi(1, post_count - 1))
@@ -405,7 +368,7 @@ func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
 			else:
 				post_position.z += offset
 			post_position.y = 0.66
-			_spawn_prefab("RooftopRailPost_%s" % direction, ROOFTOP_RAIL_POST_PREFAB, post_position, Vector3(0.16, 1.32, 0.16), _trim_material)
+			_add_static_box("RooftopRailPost_%s" % direction, post_position, Vector3(0.16, 1.32, 0.16), _trim_material)
 
 
 func _build_tower_module_shell(dimensions: Vector2) -> void:
@@ -440,62 +403,39 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 	# 承重碰撞，因此这里的地砖只做轻微抬升的视觉层，避免重复碰撞。
 	var floor_mesh := _get_tower_floor_tile_mesh()
 	if floor_mesh != null:
-		var light_transforms: Array[Transform3D] = []
-		var dark_transforms: Array[Transform3D] = []
+		var floor_multimesh := MultiMesh.new()
+		floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		floor_multimesh.mesh = floor_mesh
+		floor_multimesh.instance_count = 36
+		var tile_index := 0
 		for tile_z in range(6):
 			for tile_x in range(6):
-				var transform := Transform3D(
-					Basis.IDENTITY,
-					Vector3(
-						-12.5 + float(tile_x) * TOWER_GEOMETRY.GRID_UNIT_M,
-						0.015,
-						-12.5 + float(tile_z) * TOWER_GEOMETRY.GRID_UNIT_M
+				floor_multimesh.set_instance_transform(
+					tile_index,
+					Transform3D(
+						Basis.IDENTITY,
+						Vector3(
+							-12.5 + float(tile_x) * TOWER_GEOMETRY.GRID_UNIT_M,
+							0.015,
+							-12.5 + float(tile_z) * TOWER_GEOMETRY.GRID_UNIT_M
+						)
 					)
 				)
-				if (tile_x + tile_z) % 2 == 0:
-					light_transforms.append(transform)
-				else:
-					dark_transforms.append(transform)
-		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Light",
-			floor_mesh,
-			light_transforms,
-			FLOOR_TILE_MATERIAL_LIGHT
-		)
-		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Dark",
-			floor_mesh,
-			dark_transforms,
-			FLOOR_TILE_MATERIAL_DARK
-		)
+				tile_index += 1
+		var floor_grid := MultiMeshInstance3D.new()
+		floor_grid.name = "BaseFloorGrid6x6"
+		floor_grid.multimesh = floor_multimesh
+		floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		floor_grid.material_override = FLOOR_TILE_MATERIAL
+		floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
+		floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
+		add_child(floor_grid)
 	for direction in ["north", "south", "west", "east"]:
 		if direction in open_wall_directions:
 			continue
 		_build_base_facility_wall(direction, dimensions)
 	for direction in doors:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
-
-
-func _add_base_floor_grid(
-	node_name: String,
-	floor_mesh: Mesh,
-	transforms: Array[Transform3D],
-	material: StandardMaterial3D
-) -> void:
-	var floor_multimesh := MultiMesh.new()
-	floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	floor_multimesh.mesh = floor_mesh
-	floor_multimesh.instance_count = transforms.size()
-	for index in range(transforms.size()):
-		floor_multimesh.set_instance_transform(index, transforms[index])
-	var floor_grid := MultiMeshInstance3D.new()
-	floor_grid.name = node_name
-	floor_grid.multimesh = floor_multimesh
-	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	floor_grid.material_override = material
-	floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
-	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
-	add_child(floor_grid)
 
 
 func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
@@ -513,12 +453,14 @@ func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
 			wall_center = Vector3(dimensions.x * 0.5, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0)
 	var thickness := 0.30
 	if direction not in doors:
-		var size := (
+		_add_static_box(
+			"BaseWall_%s" % direction.capitalize(),
+			wall_center,
 			Vector3(length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
 			if horizontal
-			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, length)
+			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, length),
+			_wall_material
 		)
-		_spawn_prefab("BaseWall_%s" % direction.capitalize(), FACILITY_BASE_WALL_PREFAB, wall_center, size, _wall_material)
 		return
 	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	var segment_length := (length - opening) * 0.5
@@ -531,12 +473,14 @@ func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
 			segment_center.x += along
 		else:
 			segment_center.z += along
-		var segment_size := (
+		_add_static_box(
+			"BaseWall_%s_Side" % direction.capitalize(),
+			segment_center,
 			Vector3(segment_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
 			if horizontal
-			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, segment_length)
+			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, segment_length),
+			_wall_material
 		)
-		_spawn_prefab("BaseWall_%s_Side" % direction.capitalize(), FACILITY_BASE_WALL_DOOR_SIDE_PREFAB, segment_center, segment_size, _wall_material)
 	var lintel_height := (
 		TOWER_GEOMETRY.FLOOR_HEIGHT_M
 		- TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
@@ -545,18 +489,20 @@ func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
 	lintel_center.y = (
 		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + lintel_height * 0.5
 	)
-	var lintel_size := (
+	_add_static_box(
+		"BaseWall_%s_Lintel" % direction.capitalize(),
+		lintel_center,
 		Vector3(opening, lintel_height, thickness)
 		if horizontal
-		else Vector3(thickness, lintel_height, opening)
+		else Vector3(thickness, lintel_height, opening),
+		_wall_material
 	)
-	_spawn_prefab("BaseWall_%s_Lintel" % direction.capitalize(), FACILITY_BASE_WALL_LINTEL_PREFAB, lintel_center, lintel_size, _wall_material)
 
 
 func _get_tower_floor_tile_mesh() -> Mesh:
 	if _tower_floor_tile_mesh != null:
 		return _tower_floor_tile_mesh
-	var source := TOWER_FLOOR_TILE_PREFAB.instantiate()
+	var source := TOWER_FLOOR_SCENE.instantiate()
 	_tower_floor_tile_mesh = _find_first_mesh(source)
 	source.free()
 	return _tower_floor_tile_mesh
@@ -588,7 +534,7 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 				rotation_y = -PI * 0.5
 		var is_door_module := has_door and module_index == door_index
 		if is_door_module:
-			var module := TOWER_DOOR_PREFAB.instantiate() as Node3D
+			var module := TOWER_DOOR_SCENE.instantiate() as Node3D
 			module.name = "Imported_DoorWall5M_%s_I%02d" % [
 				direction.capitalize(),
 				module_index,
@@ -598,6 +544,7 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
+			_hide_imported_door_leaf(module)
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -648,7 +595,7 @@ func _build_tower_wall_multimesh(
 func _get_tower_solid_wall_mesh() -> Mesh:
 	if _tower_solid_wall_mesh != null:
 		return _tower_solid_wall_mesh
-	var source := TOWER_WALL_PREFAB.instantiate()
+	var source := TOWER_WALL_SCENE.instantiate()
 	_tower_solid_wall_mesh = _find_first_mesh(source)
 	source.free()
 	return _tower_solid_wall_mesh
@@ -672,7 +619,6 @@ func _add_tower_solid_run_collision(
 	has_door: bool,
 	wall_offset: float
 ) -> void:
-	# 5m 实心墙 prefab 自带 WallCollision，这里只用于门洞跨度的可视化标记。
 	var body := StaticBody3D.new()
 	body.name = "TowerWallCollision_%s_Run" % direction.capitalize()
 	body.collision_layer = 1
@@ -710,6 +656,13 @@ func _add_tower_solid_run_collision(
 		_add_collision_shape(body, position, size)
 
 
+func _hide_imported_door_leaf(root: Node) -> void:
+	if root is Node3D and str(root.name).contains("DoorLeaf"):
+		(root as Node3D).visible = false
+	for child in root.get_children():
+		_hide_imported_door_leaf(child)
+
+
 func _add_tower_wall_collision(
 	direction: String,
 	module_position: Vector3,
@@ -717,7 +670,6 @@ func _add_tower_wall_collision(
 	is_door_module: bool,
 	module_index: int
 ) -> void:
-	# 5m 带门墙 prefab 自带 WallCollision；这里用 BoxShape3D 调整门洞两侧门柱+门楣的精确阻挡。
 	var body := StaticBody3D.new()
 	body.name = "TowerWallCollision_%s_I%02d" % [direction.capitalize(), module_index]
 	body.position = module_position
@@ -780,18 +732,16 @@ func _build_floor_partitions(dimensions: Vector2) -> void:
 		return
 	var partition_x := mirror * 4.8
 	for z in [-8.0, 7.5]:
-		_spawn_prefab(
+		_add_static_box(
 			"FloorPartitionVertical",
-			PARTITION_VERTICAL_PREFAB,
 			Vector3(partition_x, 1.4, z),
 			Vector3(0.28, 2.8, 8.0),
 			_wall_material
 		)
 	var partition_z := mirror * 6.2
 	for x in [-8.2, 8.2]:
-		_spawn_prefab(
+		_add_static_box(
 			"FloorPartitionHorizontal",
-			PARTITION_HORIZONTAL_PREFAB,
 			Vector3(x, 1.4, partition_z),
 			Vector3(8.0, 2.8, 0.28),
 			_wall_material
@@ -804,16 +754,16 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 	var height := 2.8
 	if not has_door:
 		var size := Vector3(length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, length)
-		_spawn_prefab("Wall_%s" % direction, WALL_SEGMENT_PREFAB, center, size, _wall_material)
+		_add_static_box("Wall_%s" % direction, center, size, _wall_material)
 		return
 	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	var segment_length := (length - opening) * 0.5
 	for side in [-1.0, 1.0]:
 		var offset: Vector3 = axis * float(side) * (opening * 0.5 + segment_length * 0.5)
 		var segment_size := Vector3(segment_length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, segment_length)
-		_spawn_prefab("Wall_%s" % direction, WALL_DOOR_SEGMENT_PREFAB, center + offset, segment_size, _wall_material)
+		_add_static_box("Wall_%s" % direction, center + offset, segment_size, _wall_material)
 	var lintel_size := Vector3(opening, 0.45, thickness * 1.28) if axis.x > 0.0 else Vector3(thickness * 1.28, 0.45, opening)
-	_spawn_prefab("DoorLintel_%s" % direction, DOOR_LINTEL_PREFAB, center + Vector3(0, 1.18, 0), lintel_size, _trim_material)
+	_add_static_box("DoorLintel_%s" % direction, center + Vector3(0, 1.18, 0), lintel_size, _trim_material)
 
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
@@ -846,9 +796,8 @@ func _build_stair_lobby_markings(dimensions: Vector2) -> void:
 		if east_west_route
 		else Vector3(1.20, 0.035, dimensions.y - 2.0)
 	)
-	_spawn_prefab(
+	_add_box(
 		"StairLobbyRouteGuide",
-		STAIR_LOBBY_ROUTE_GUIDE_PREFAB,
 		Vector3(0.0, 0.045, 0.0),
 		guide_size,
 		guide_material
@@ -866,11 +815,10 @@ func _build_stair_lobby_markings(dimensions: Vector2) -> void:
 		else:
 			threshold_position.z = direction_sign * (dimensions.y * 0.5 - 0.65)
 		threshold_position.y = 0.055
-		_spawn_prefab(
+		_add_box(
 			"StairLobbyThresholdGuide_%s" % (
 				"A" if threshold_index == 0 else "B"
 			),
-			STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB,
 			threshold_position,
 			threshold_size,
 			guide_material
@@ -1071,15 +1019,15 @@ func _build_vertical_access_marker(type_id: String) -> void:
 	var step_material := _material(theme.trim_color.lightened(0.08), 0.68, 0.48)
 	for index in range(6):
 		var step_height := 0.12 + index * 0.13 if up else 0.77 - index * 0.13
-		_spawn_prefab("AccessStep", ACCESS_STEP_PREFAB, Vector3(0, step_height * 0.5, -2.2 + index * 0.75), Vector3(3.0, step_height, 0.72), step_material)
-	var label_instance := VERTICAL_ACCESS_LABEL_PREFAB.instantiate() as Node3D
-	label_instance.name = "VerticalAccessMarkerLabel"
-	label_instance.position = Vector3(0, 2.2, 0)
-	var label3d := label_instance.get_node("VerticalAccessLabel") as Label3D
-	if label3d != null:
-		label3d.text = "电梯 / 垂直层" if type_id == "ELEVATOR" else "上层" if up else "地下层"
-		label3d.modulate = theme.accent_color.lightened(0.18)
-	add_child(label_instance)
+		_add_box("AccessStep", Vector3(0, step_height * 0.5, -2.2 + index * 0.75), Vector3(3.0, step_height, 0.72), step_material)
+	var label := Label3D.new()
+	label.position = Vector3(0, 2.2, 0)
+	label.text = "电梯 / 垂直层" if type_id == "ELEVATOR" else "上层" if up else "地下层"
+	label.font_size = 42
+	label.pixel_size = 0.012
+	label.modulate = theme.accent_color.lightened(0.18)
+	label.outline_size = 8
+	add_child(label)
 
 
 func _choose_prop_size(index: int) -> String:
@@ -1152,29 +1100,36 @@ func _on_service_activated(station: ServiceStation3D) -> void:
 	service_activated.emit(self, station)
 
 
-# —— prefab 通用入口：实例化 + 设位置/缩放/材质
-# 预制体内部 mesh/collision 已经是 1×1×1 或真实参考尺寸，scale 整体传递到子节点。
-func _spawn_prefab(node_name: String, prefab: PackedScene, position: Vector3, scale_vec: Vector3, material: StandardMaterial3D) -> void:
-	if prefab == null:
-		push_error("DungeonRoom3D: missing prefab for %s" % node_name)
-		return
-	var instance := prefab.instantiate() as Node3D
-	if instance == null:
-		return
+func _add_static_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:
+	var body := StaticBody3D.new()
+	body.name = "%sBody" % node_name
+	body.collision_layer = 1
+	body.collision_mask = 0
+	body.position = position
+	add_child(body)
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.name = node_name
+	instance.mesh = mesh
+	body.add_child(instance)
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collision := CollisionShape3D.new()
+	collision.shape = shape
+	body.add_child(collision)
+
+
+func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	mesh.material = material
+	var instance := MeshInstance3D.new()
 	instance.name = node_name
 	instance.position = position
-	instance.scale = scale_vec
-	_apply_material_override(instance, material)
+	instance.mesh = mesh
 	add_child(instance)
-
-
-func _apply_material_override(root: Node, material: StandardMaterial3D) -> void:
-	if material == null:
-		return
-	for child in root.get_children():
-		if child is MeshInstance3D:
-			(child as MeshInstance3D).material_override = material
-		_apply_material_override(child, material)
 
 
 func _material(color: Color, metallic: float, roughness: float) -> StandardMaterial3D:
@@ -1195,17 +1150,11 @@ func _set_collision_enabled(root: Node, enabled: bool, preserve_support := false
 
 
 func _has_enabled_support_collision() -> bool:
-	# FloorBody 可能嵌套在 prefab 根节点下，递归查找。
-	return _find_floor_body_enabled(self)
-
-
-func _find_floor_body_enabled(root: Node) -> bool:
-	if root is StaticBody3D and root.name == "FloorBody":
-		for child in root.get_children():
-			if child is CollisionShape3D and not (child as CollisionShape3D).disabled:
-				return true
-	for child in root.get_children():
-		if _find_floor_body_enabled(child):
+	var floor_body := get_node_or_null("FloorBody") as StaticBody3D
+	if floor_body == null:
+		return false
+	for child in floor_body.get_children():
+		if child is CollisionShape3D and not (child as CollisionShape3D).disabled:
 			return true
 	return false
 

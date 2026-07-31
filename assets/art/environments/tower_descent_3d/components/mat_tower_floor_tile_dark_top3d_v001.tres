@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; 塔楼棋盘格地砖的深色变体 - 与 MAT_TowerFloorTileOverride 配套做国际象棋棋盘。
+; 数值与浅色一致，靠 albedo 区分；浅色 albedo (0.42,0.46,0.52)，深色取 (0.10,0.13,0.17)。
+
+[resource]
+resource_name = "MAT_TowerFloorTileDark"
+albedo_color = Color(0.10, 0.13, 0.17, 1)
+metallic = 0.55
+metallic_texture_channel = 0
+roughness = 0.42

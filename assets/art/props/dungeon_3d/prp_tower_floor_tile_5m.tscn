@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+; 5m × 5m 楼板砖 - 自包含独立模块
+; 美术可在此直接替换 MeshInstance3D 内的 mesh 为 GLB/自定义网格
+; 节点命名 FloorTile_5m 与 TowerFloorStage3D 脚本中 _mesh_from_scene 调用兼容
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor_tile_5m"]
+size = Vector3(5, 0.3, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.18, 0.20, 0.22, 1)
+metallic = 0.1
+metallic_specular = 0.5
+roughness = 0.85
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor_tile_5m"]
+size = Vector3(5, 0.3, 5)
+
+[node name="PrpTowerFloorTile5m" type="Node3D"]
+
+[node name="FloorTile_5m" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_floor_tile_5m")
+material_override = SubResource("StandardMaterial3D_floor")
+
+[node name="FloorTileCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorTileCollision"]
+shape = SubResource("BoxShape3D_floor_tile_5m")

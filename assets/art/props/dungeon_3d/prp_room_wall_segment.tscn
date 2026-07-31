@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+; 房间整段墙（无门洞）- 1×1×1，脚本设 scale = (length, 2.8, 0.28) 或旋转版本
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_segment"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall_segment"]
+albedo_color = Color(0.34, 0.36, 0.38, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_segment"]
+size = Vector3(1, 1, 1)
+
+[node name="PrpRoomWallSegment" type="Node3D"]
+
+[node name="WallSegment" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_wall_segment")
+material_override = SubResource("StandardMaterial3D_wall_segment")
+
+[node name="WallSegmentBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallSegmentBody"]
+shape = SubResource("BoxShape3D_wall_segment")

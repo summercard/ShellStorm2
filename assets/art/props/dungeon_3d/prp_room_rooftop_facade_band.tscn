@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+; 楼顶外立面横条带 - 1×1×1，自发光
+
+[sub_resource type="BoxMesh" id="BoxMesh_rooftop_facade_band"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rooftop_facade_band"]
+albedo_color = Color(0.55, 0.55, 0.6, 1)
+metallic = 0.3
+metallic_specular = 0.6
+roughness = 0.4
+emission_enabled = true
+emission = Color(0.6, 0.65, 0.7, 1)
+emission_energy_multiplier = 0.46
+
+[node name="PrpRoomRooftopFacadeBand" type="Node3D"]
+
+[node name="RooftopFacadeBand" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_rooftop_facade_band")
+material_override = SubResource("StandardMaterial3D_rooftop_facade_band")

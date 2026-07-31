@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3]
+
+; 走廊天花板段（楼梯间用）- 1×1×1
+
+[sub_resource type="BoxMesh" id="BoxMesh_corridor_ceiling"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_corridor_ceiling"]
+albedo_color = Color(0.30, 0.32, 0.34, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.8
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corridor_ceiling"]
+size = Vector3(1, 1, 1)
+
+[node name="PrpCorridorCeilingSegment" type="Node3D"]
+
+[node name="CorridorCeiling" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_corridor_ceiling")
+material_override = SubResource("StandardMaterial3D_corridor_ceiling")
+
+[node name="CorridorCeilingBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CorridorCeilingBody"]
+shape = SubResource("BoxShape3D_corridor_ceiling")

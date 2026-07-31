@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3]
+
+; 楼顶 9m 楼梯间 - 复用已导入的 GLB 资产
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v001.glb" id="1_stairwell"]
+
+[node name="PrpTowerStairwellRooftop9m" type="Node3D"]
+
+[node name="Stairwell" parent="." instance=ExtResource("1_stairwell")]
