@@ -86,8 +86,8 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 
 ## 生成随机敌人
 func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]:
-	# 怪物数量随楼层增加：2-4个（第二层比第一层更多）
-	var count: int = 1 + floor / 2
+	# 怪物数量随楼层增加：每房 baseline 3-5 只（floor=1 -> 3, floor=2 -> 4, floor=4 -> 6）
+	var count: int = 2 + floor
 	var enemies: Array[Dictionary] = []
 	
 	var available_types: Array = _get_available_types_for_level(floor_level, floor)

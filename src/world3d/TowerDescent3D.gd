@@ -650,7 +650,7 @@ func _build_records() -> void:
 					"dimensions",
 					Vector2(
 						TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
-						TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M
+						TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
 					)
 				) as Vector2,
 				spec_data.get("open_wall_directions", []) as Array
@@ -807,7 +807,7 @@ func _append_tower_record(
 		if size in ["floor", "rooftop"]
 		else Vector2(
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
-			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M
+			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
 		)
 	)
 	record["tower_module_shell"] = true
@@ -898,7 +898,13 @@ func _build_topology() -> void:
 		var child := _find_record(child_id)
 		(_room_neighbors[parent_id] as Array).append(child_id)
 		(_room_neighbors[child_id] as Array).append(parent_id)
-		_open_edges[edge] = false
+		# 楼顶↔99层基地↔98层入口：免费 vertical edge 默认开启，玩家出生后可直接下楼。
+		# 后续通过 _open_edges 状态控制其他房门与命运。
+		var opens_by_default := str(declaration["kind"]) == "vertical" and edge in [
+			_edge_key("start", "facility"),
+			_edge_key("facility", "floor_01_entry"),
+		]
+		_open_edges[edge] = opens_by_default
 		if str(declaration["kind"]) == "vertical":
 			_vertical_arrival_open[edge] = false
 			var parent_side := str(declaration.get("a_door_side", declaration["side"]))
@@ -1100,7 +1106,13 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	}.get(side, Vector3(-1, 0, 0)) as Vector3
 	var dimensions := room.get_dimensions()
 	var half_extent := dimensions.y * 0.5 if side in ["north", "south"] else dimensions.x * 0.5
-	return room.global_position + outward * half_extent
+	# 如果是塔楼房间，门偏到沿墙最近模块位置（5m 偶数段会偏 ±2.5m）。
+	var door_offset_along := 0.0
+	if room.has_meta("tower_wall_door_offset_%s" % side):
+		door_offset_along = float(room.get_meta("tower_wall_door_offset_%s" % side))
+	var along_axis := Vector3(1, 0, 0) if side in ["north", "south"] else Vector3(0, 0, 1)
+	var along_sign := -1.0 if side == "south" else 1.0
+	return room.global_position + outward * half_extent + along_axis * along_sign * door_offset_along
 
 
 func _build_tower_horizontal_corridor(
@@ -2098,7 +2110,7 @@ func get_tower_snapshot() -> Dictionary:
 		"logical_combat_room_count": _rooms.size() - 2,
 		"combat_room_size": Vector2(
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
-			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M
+			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
 		),
 		"combat_stair_lobby_size": Vector2(
 			TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,

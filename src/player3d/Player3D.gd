@@ -340,7 +340,7 @@ func is_low_health() -> bool:
 	return current_hp > 0 and float(current_hp) / float(maxi(1, max_hp)) <= 0.30
 
 
-func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO) -> void:
+func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO, knockback_override := false, knockback_strength := 0.0) -> void:
 	if current_hp <= 0 or is_invincible:
 		return
 	var overheat_multiplier := weapon_tree.get_overheat_penalty() if weapon_tree != null else 1.0
@@ -349,15 +349,14 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO)
 	if AudioManager != null:
 		AudioManager.play_player_hit_sfx()
 	hp_changed.emit(current_hp, max_hp)
-	var recoil_direction := hit_direction
-	if recoil_direction.length_squared() <= 0.001:
-		recoil_direction = -aim_direction
-	apply_knockback(
-		recoil_direction,
-		clampf(3.2 + float(_last_damage_amount) * 0.11, 3.2, 7.4),
-		clampf(0.16 + float(_last_damage_amount) * 0.004, KNOCKBACK_MIN_DURATION, KNOCKBACK_MAX_DURATION),
-		false,
-	)
+	# 普通受击不击退；只有特殊攻击 (knockback_override=true) 才推角色。
+	if knockback_override:
+		var recoil_direction := hit_direction
+		if recoil_direction.length_squared() <= 0.001:
+			recoil_direction = -aim_direction
+		var strength := knockback_strength if knockback_strength > 0.0 else clampf(3.2 + float(_last_damage_amount) * 0.11, 3.2, 7.4)
+		var duration := clampf(0.16 + float(_last_damage_amount) * 0.004, KNOCKBACK_MIN_DURATION, KNOCKBACK_MAX_DURATION)
+		apply_knockback(recoil_direction, strength, duration, false)
 	is_invincible = true
 	_invincible_remaining = INVINCIBLE_DURATION
 	if current_hp <= 0:

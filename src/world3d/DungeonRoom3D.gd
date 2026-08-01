@@ -24,6 +24,25 @@ const TOWER_WALL_PREFAB: PackedScene = preload(
 const TOWER_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn"
 )
+const TOWER_PARAPET_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn"
+)
+const TOWER_PARAPET_DOOR_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m.tscn"
+)
+# 4 拐角模块
+const TOWER_CORNER_L_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_corner_L_5m.tscn"
+)
+const TOWER_CORNER_T_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_corner_T_5m.tscn"
+)
+const TOWER_CORNER_X_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_corner_X_5m.tscn"
+)
+const TOWER_CORNER_L_PARAPET_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_corner_L_parapet_5m.tscn"
+)
 const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
 )
@@ -60,6 +79,19 @@ const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 )
 const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
+)
+# PH49 v2 拼接交替材质（A/B 微差异版）
+const FLOOR_TILE_MATERIAL_A: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_a_v001.tres"
+)
+const FLOOR_TILE_MATERIAL_B: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_b_v001.tres"
+)
+const WALL_SOLID_MATERIAL_A: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_a_v001.tres"
+)
+const WALL_SOLID_MATERIAL_B: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_b_v001.tres"
 )
 const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
@@ -416,23 +448,8 @@ func _build_tower_module_shell(dimensions: Vector2) -> void:
 	):
 		_build_base_facility_shell(dimensions)
 		return
-	var wall_directions: Array[String] = ["north", "south", "west", "east"]
-	if size_class == "rooftop":
-		# 楼顶保持开放，只在特殊下行口周围形成三面满高楼梯头。
-		var access_direction := doors[0] if not doors.is_empty() else "west"
-		wall_directions.assign([access_direction])
-		if access_direction in ["west", "east"]:
-			wall_directions.append("north")
-			wall_directions.append("south")
-		else:
-			wall_directions.append("west")
-			wall_directions.append("east")
-	for open_direction in open_wall_directions:
-		wall_directions.erase(open_direction)
-	for direction in wall_directions:
-		_build_tower_wall_run(direction, dimensions)
-	for direction in doors:
-		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	# PH49 v2：4 拐角 + 边墙拟合 + 门洞
+	_build_tower_wall_v2(dimensions)
 
 
 func _build_base_facility_shell(dimensions: Vector2) -> void:
@@ -457,16 +474,16 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 				else:
 					dark_transforms.append(transform)
 		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Light",
+			"BaseFloorGrid6x6_A",
 			floor_mesh,
 			light_transforms,
-			FLOOR_TILE_MATERIAL_LIGHT
+			FLOOR_TILE_MATERIAL_A
 		)
 		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Dark",
+			"BaseFloorGrid6x6_B",
 			floor_mesh,
 			dark_transforms,
-			FLOOR_TILE_MATERIAL_DARK
+			FLOOR_TILE_MATERIAL_B
 		)
 	for direction in ["north", "south", "west", "east"]:
 		if direction in open_wall_directions:
@@ -567,7 +584,16 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 	var length := dimensions.x if horizontal else dimensions.y
 	var module_count := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
 	var has_door := doors.has(direction)
-	var door_index := module_count / 2
+	# 门模块位置：选择最接近沿墙中心的模块；6 段选择 2 或 3，哪个离 0 近选哪个。
+	var door_index := 0
+	if has_door:
+		var candidate_a := int(floor((module_count - 1) / 2.0))
+		var candidate_b := int(ceil((module_count - 1) / 2.0))
+		var pos_a := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(candidate_a) + 0.5)
+		var pos_b := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(candidate_b) + 0.5)
+		door_index = candidate_a if absf(pos_a) <= absf(pos_b) else candidate_b
+		var door_offset_along := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(door_index) + 0.5)
+		set_meta("tower_wall_door_offset_%s" % direction, door_offset_along)
 	var wall_offset := dimensions.y * 0.5 if horizontal else dimensions.x * 0.5
 	var solid_transforms: Array[Transform3D] = []
 	for module_index in range(module_count):
@@ -611,7 +637,7 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 				Basis(Vector3.UP, rotation_y),
 				module_position
 			))
-	_build_tower_wall_multimesh(direction, solid_transforms)
+	_spawn_solid_wall_visual_instances(direction, solid_transforms)
 	_add_tower_solid_run_collision(
 		direction,
 		length,
@@ -645,6 +671,35 @@ func _build_tower_wall_multimesh(
 	add_child(visual)
 
 
+## PH49 v2 拼接交替装饰：每段 5m 实例一个 MeshInstance3D，偶奇 index 分 A/B 两色。
+## 墙同一段与地砖同步节奏（同一房间内统一定义）。
+func _spawn_solid_wall_visual_instances(direction: String, transforms: Array[Transform3D]) -> void:
+	var mesh := _get_tower_solid_wall_mesh()
+	if mesh == null or transforms.is_empty():
+		return
+	var container := Node3D.new()
+	container.name = "Imported_SolidWall5M_%s_Run" % direction.capitalize()
+	container.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+	container.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	container.set_meta("tower_wall_direction", direction)
+	add_child(container)
+	for index in range(transforms.size()):
+		# 根据实例 x 或 z 坐标反推“绝对 5m 段 index”，保证与地砖 (tile_x+tile_z) % 2 对齐
+		# 墙刷x方向：x ∈ [-length/2, length/2]，tile_x = int(x + length/2) / 5
+		var origin := transforms[index].origin
+		var abs_segment_index := int(round((origin.x + 12.5) / 5.0)) if direction in ["north", "south"] else int(round((origin.z + 12.5) / 5.0))
+		var visual := MeshInstance3D.new()
+		visual.mesh = mesh
+		visual.material_override = WALL_SOLID_MATERIAL_A if abs_segment_index % 2 == 0 else WALL_SOLID_MATERIAL_B
+		visual.transform = transforms[index]
+		visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		visual.name = "Imported_SolidWall5M_%s_I%02d" % [
+			direction.capitalize(),
+			index,
+		]
+		container.add_child(visual)
+
+
 func _get_tower_solid_wall_mesh() -> Mesh:
 	if _tower_solid_wall_mesh != null:
 		return _tower_solid_wall_mesh
@@ -662,6 +717,224 @@ func _find_first_mesh(root: Node) -> Mesh:
 		if found != null:
 			return found
 	return null
+
+
+## PH49 v2 模块化墙拼装：4 拐角 + 边墙 + 门洞
+## 以门的世界坐标为锥点：拿到门 world pos → 拆为沿墙距离 → 取最近 5m 段作门洞。
+## 拼装规则：
+##   1. 4 拐角 L 形各布于房间四角原点，2.5m 双向覆盖
+##   2. 4 边墙剔除两端 2.5m 后用 5m 单元填：门洞取距 door world pos 最近的 5m 段
+##   3. 门洞剩余部分仍走 _build_door 独立挂门
+func _build_tower_wall_v2(dimensions: Vector2) -> void:
+	var wall_directions: Array[String] = ["north", "south", "west", "east"]
+	if size_class == "rooftop":
+		var access_direction := doors[0] if not doors.is_empty() else "west"
+		wall_directions.assign([access_direction])
+		if access_direction in ["west", "east"]:
+			wall_directions.append("north")
+			wall_directions.append("south")
+		else:
+			wall_directions.append("west")
+			wall_directions.append("east")
+	for open_direction in open_wall_directions:
+		wall_directions.erase(open_direction)
+	# 1. 拼 4 拐角 L 型（房间四角）
+	if size_class != "rooftop":
+		_spawn_room_corner(Vector2(-dimensions.x * 0.5, -dimensions.y * 0.5), "NW")
+		_spawn_room_corner(Vector2(dimensions.x * 0.5, -dimensions.y * 0.5), "NE")
+		_spawn_room_corner(Vector2(-dimensions.x * 0.5, dimensions.y * 0.5), "SW")
+		_spawn_room_corner(Vector2(dimensions.x * 0.5, dimensions.y * 0.5), "SE")
+	# 2. 每条边跳过两端 2.5m，用 5m 单元填。门洞位置由门 world pos 准动计算。
+	for direction in wall_directions:
+		_build_corner_aware_wall_run(direction, dimensions)
+	# 3. 门洞仍走原 _build_door
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+
+
+## 将房间门 world pos 折算为“沿墙距离”（沿该边从负端点量起的米数）
+func _local_along_from_door_world(direction: String, door_world: Vector3, dimensions: Vector2) -> float:
+	var horizontal := direction in ["north", "south"]
+	var wall_offset := dimensions.y * 0.5 if horizontal else dimensions.x * 0.5
+	var center := global_position
+	var local := door_world - center
+	# 沿墙轴的投影分量：n/s 门走 ±x，w/e 门走 ±z
+	var along_local: float
+	if horizontal:
+		along_local = local.x
+		if direction == "south":
+			along_local = -along_local
+	else:
+		along_local = local.z
+		if direction == "east":
+			along_local = -along_local
+	# local 中已含“沿墙距离 = 门 world 距房中心”在墙面投影后的位置
+	# （world_x - center_x）与 wall_offset 无关，该偏移是横向墙厚
+	return along_local
+
+
+## 拼接一条边墙：剔除两端 5m（跨过拐角覆盖区）后用 5m 单元填
+## 边墙与地砖严格对齐同 5m 网格：地砖 6×6 的房间，边墙 6 段总数中 2 端被拐角覆盖，中间 4 段拼接。
+func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> void:
+	var horizontal := direction in ["north", "south"]
+	var length := dimensions.x if horizontal else dimensions.y
+	var wall_offset := dimensions.y * 0.5 if horizontal else dimensions.x * 0.5
+	# 门预留：直接读 _plan_room_layout 写入的 meta “tower_wall_door_offset_<dir>”
+	var has_door := doors.has(direction)
+	var door_index := -1
+	if has_door:
+		var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+		# 反推 door_index：6 段 30m 房，段中心 = -length/2 + 5*(index+0.5)
+		var module_count_full := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
+		for module_index in range(module_count_full):
+			var segment_center := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
+			if absf(segment_center - door_offset_along) < 0.01:
+				door_index = module_index
+				break
+	# 墙段范围：从段 1 开始（跳过段 0 拐角覆盖）到段 module_count-2 结束（跳过末段拐角）
+	var module_count := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
+	var start_index := 1
+	var end_index := module_count - 2
+	if end_index < start_index:
+		return
+	var middle_module_count := end_index - start_index + 1
+	var solid_transforms: Array[Transform3D] = []
+	for module_index in range(start_index, end_index + 1):
+		var along := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
+		var is_door_module := has_door and module_index == door_index
+		var module_position := Vector3.ZERO
+		var rotation_y := 0.0
+		match direction:
+			"north":
+				module_position = Vector3(along, 0.0, -wall_offset)
+			"south":
+				module_position = Vector3(-along, 0.0, wall_offset)
+				rotation_y = PI
+			"west":
+				module_position = Vector3(-wall_offset, 0.0, -along)
+				rotation_y = PI * 0.5
+			_:
+				module_position = Vector3(wall_offset, 0.0, along)
+				rotation_y = -PI * 0.5
+		if is_door_module:
+			var module := TOWER_DOOR_PREFAB.instantiate() as Node3D
+			module.name = "Imported_DoorWall5M_%s_I%02d" % [
+				direction.capitalize(),
+				module_index,
+			]
+			module.position = module_position
+			module.rotation.y = rotation_y
+			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
+			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+			module.set_meta("tower_wall_direction", direction)
+			add_child(module)
+			_add_tower_wall_collision(
+				direction,
+				module_position,
+				rotation_y,
+				true,
+				module_index
+			)
+		else:
+			solid_transforms.append(Transform3D(
+				Basis(Vector3.UP, rotation_y),
+				module_position
+			))
+	_spawn_solid_wall_visual_instances(direction, solid_transforms)
+	var collision_start := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * float(start_index)
+	var collision_end := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * float(end_index + 1)
+	_add_corner_aware_solid_run_collision(
+		direction,
+		wall_offset,
+		collision_start,
+		collision_end,
+		has_door,
+		door_index
+	)
+
+
+## 拐角 L 拼装。从 4 个角位置以合适的 rotation 报入。
+## corner_id: "NW" / "NE" / "SW" / "SE"
+func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
+	var module := TOWER_CORNER_L_PREFAB.instantiate() as Node3D
+	module.name = "Imported_CornerL5M_%s" % corner_id
+	module.position = Vector3(corner_pos.x, 0.0, corner_pos.y)
+	# L 默认 long=+X, short=-Z
+	# NW 角：需 long=+X(东), short=+Z(南) → rotation_y = -PI/2
+	# NE 角：需 long=-X(西), short=+Z(南) → rotation_y = PI
+	# SW 角：需 long=+X(东), short=-Z(北) → rotation_y = 0
+	# SE 角：需 long=-X(西), short=-Z(北) → rotation_y = PI/2
+	match corner_id:
+		"NW": module.rotation.y = -PI * 0.5
+		"NE": module.rotation.y = PI
+		"SW": module.rotation.y = 0.0
+		"SE": module.rotation.y = PI * 0.5
+	module.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
+	module.set_meta("tower_wall_corner", corner_id)
+	add_child(module)
+
+
+## 拐角 L 拼装：中间段碰撞（跳过两端拐角 + 门洞 span）
+func _add_corner_aware_solid_run_collision(
+	direction: String,
+	wall_offset: float,
+	inner_start: float,
+	inner_end: float,
+	has_door: bool,
+	door_index: int
+) -> void:
+	var body := StaticBody3D.new()
+	body.name = "TowerWallCollision_%s_Run" % direction.capitalize()
+	body.collision_layer = 1
+	body.collision_mask = 0
+	add_child(body)
+	var inner_length := inner_end - inner_start
+	if inner_length <= 0.0:
+		return
+	# 以 5m 网格从 inner_start 到 inner_end 划成连续段，门洞位置拆为左右两段
+	var segments: Array[Vector2] = []
+	segments.append(Vector2(inner_start, inner_end))
+	if has_door:
+		var door_offset_meta := "tower_wall_door_offset_%s" % direction
+		if has_meta(door_offset_meta):
+			var door_along := float(get_meta(door_offset_meta))
+			var door_left := door_along - TOWER_GEOMETRY.GRID_UNIT_M * 0.5
+			var door_right := door_along + TOWER_GEOMETRY.GRID_UNIT_M * 0.5
+			var new_segments: Array[Vector2] = []
+			for seg in segments:
+				var seg_start: float = seg.x
+				var seg_end: float = seg.y
+				if door_left < seg_end and door_right > seg_start:
+					if door_left > seg_start:
+						new_segments.append(Vector2(seg_start, minf(door_left, seg_end)))
+					if door_right < seg_end:
+						new_segments.append(Vector2(maxf(door_right, seg_start), seg_end))
+				else:
+					new_segments.append(seg)
+			segments = new_segments
+	for seg in segments:
+		var seg_start: float = seg.x
+		var seg_end: float = seg.y
+		if seg_end <= seg_start:
+			continue
+		var run_length := seg_end - seg_start
+		var along := (seg_start + seg_end) * 0.5
+		var position := Vector3.ZERO
+		var size := Vector3.ZERO
+		match direction:
+			"north":
+				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -wall_offset)
+				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
+			"south":
+				position = Vector3(-along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
+				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
+			"west":
+				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -along)
+				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
+			_:
+				position = Vector3(wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
+				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
+		_add_collision_shape(body, position, size)
 
 
 func _add_tower_solid_run_collision(
@@ -820,16 +1093,18 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	var door := DOOR_SCRIPT.new() as RoomDoor3D
 	door.configure(direction, target_room_id, theme.accent_color)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
+	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
+	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
 	match direction:
 		"north":
-			door.position = Vector3(0, 0, -dimensions.y * 0.5)
+			door.position = Vector3(door_offset_along, 0, -dimensions.y * 0.5)
 		"south":
-			door.position = Vector3(0, 0, dimensions.y * 0.5)
+			door.position = Vector3(-door_offset_along, 0, dimensions.y * 0.5)
 		"west":
-			door.position = Vector3(-dimensions.x * 0.5, 0, 0)
+			door.position = Vector3(-dimensions.x * 0.5, 0, door_offset_along)
 			door.rotation.y = PI * 0.5
 		"east":
-			door.position = Vector3(dimensions.x * 0.5, 0, 0)
+			door.position = Vector3(dimensions.x * 0.5, 0, door_offset_along)
 			door.rotation.y = PI * 0.5
 	add_child(door)
 	_door_nodes[direction] = door

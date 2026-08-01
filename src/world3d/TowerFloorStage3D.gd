@@ -27,6 +27,13 @@ const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
 )
+# PH49 v2 拼接交替材质（A/B 微差异版）
+const FLOOR_TILE_MATERIAL_A: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_a_v001.tres"
+)
+const FLOOR_TILE_MATERIAL_B: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_b_v001.tres"
+)
 const WALL_DOOR_GAP_HALF_WIDTH := 5.0
 
 var floor_index := 0
@@ -126,11 +133,11 @@ func _build_floor() -> void:
 			else:
 				dark_transforms.append(transform)
 	_floor_visual_light = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_Light", mesh, light_transforms, FLOOR_TILE_MATERIAL_LIGHT
+		"ImportedFloorTileGrid5M_A", mesh, light_transforms, FLOOR_TILE_MATERIAL_A
 	)
 	add_child(_floor_visual_light)
 	_floor_visual_dark = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_Dark", mesh, dark_transforms, FLOOR_TILE_MATERIAL_DARK
+		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, FLOOR_TILE_MATERIAL_B
 	)
 	add_child(_floor_visual_dark)
 	_tile_count = light_transforms.size() + dark_transforms.size()
@@ -247,16 +254,22 @@ func _wall_module_position(side: String, index: int) -> Vector3:
 
 
 func _stair_hole_center(side: String) -> Vector3:
+	# 楼板洞口中心必须严格落在 5m 网格上（GRID_UNIT = 5.0），
+	# 这样 5m 宽的墙体模块和 5m 宽的地砖 1:1 对齐，缺口落在地砖接缝处。
+	# 网格中心：5 * (n + 0.5)，例如 ±2.5, ±7.5, ±12.5, ±17.5, …
+	# 洞口 沿墙面方向的中心 选择离墙面中心（x=0 或 z=0）最近的 5m 网格点，
+	# 从而让四面墙的缺口 都靠近各自墙面的中央。
+	# 沿垂直墙面方向 = 楼板洞的深度方向（取值与原始 Rect2 接近）。
 	var hole_rect := Rect2()
 	match side:
 		"west":
-			hole_rect = Rect2(-45.0, 0.0, 15.0, 30.0)
+			hole_rect = Rect2(-45.0, -2.5, 15.0, 30.0)
 		"east":
-			hole_rect = Rect2(35.0, -25.0, 15.0, 30.0)
+			hole_rect = Rect2(35.0, -17.5, 15.0, 30.0)
 		"north":
-			hole_rect = Rect2(-25.0, -45.0, 30.0, 15.0)
+			hole_rect = Rect2(-17.5, -45.0, 30.0, 15.0)
 		"south":
-			hole_rect = Rect2(0.0, 35.0, 30.0, 15.0)
+			hole_rect = Rect2(2.5, 35.0, 30.0, 15.0)
 	return Vector3(
 		hole_rect.position.x + hole_rect.size.x * 0.5,
 		0.0,

@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; 塔楼 5m 实心墙 - A 变体（与 B 配套做相邻两段交替）。
+; 取 prp_tower_wall_solid_5m 默认 albedo (0.28/0.30/0.32) 作为 A 基色。
+; 与 B 差异控制在 8% albedo，节奏工整但不跳眼。
+
+[resource]
+resource_name = "MAT_TowerWallSolidA"
+albedo_color = Color(0.28, 0.30, 0.32, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.75

@@ -11,7 +11,8 @@ const CORE_SIZE_M := 65.0
 # 50×50 偶数格整层与13×13奇数格核心无法同时以世界原点为格线中心；
 # 核心平移半格后，65m边界、楼梯洞口与250m地砖边界重新严格对齐。
 const CORE_CENTER_XZ := Vector2(2.5, 2.5)
-const COMBAT_ROOM_SIZE_M := 45.0
+const COMBAT_ROOM_SIZE_M := 30.0
+const COMBAT_ROOM_SIZE_Y_M := 25.0
 const COMBAT_STAIR_LOBBY_SIZE_M := 15.0
 const BOSS_ARENA_SIZE_M := 90.0
 const COMBAT_GRID_CENTERS_M := [-77.5, -27.5, 27.5, 77.5]

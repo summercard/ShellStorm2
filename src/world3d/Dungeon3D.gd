@@ -61,6 +61,8 @@ var _conditional_extractions: Dictionary = {}
 var _active_extraction_beacon: ExtractionBeacon3D = null
 var _extraction_defense_active := false
 var _extraction_mid_wave_spawned := false
+var _extraction_wave_2_spawned := false
+var _extraction_wave_3_spawned := false
 var _extraction_final_wave_spawned := false
 var _last_player_hp := -1
 var _current_room_id := ""
@@ -68,7 +70,7 @@ var _room_neighbors: Dictionary = {}
 var _open_edges: Dictionary = {}
 var _corridor_by_edge: Dictionary = {}
 var _spawned_key_rooms: Dictionary = {}
-var _room_key_count := 1
+var _room_key_count := 6
 var _enemy_nodes_by_room: Dictionary = {}
 var _room_wave_queues: Dictionary = {}
 var _room_wave_numbers: Dictionary = {}
@@ -277,9 +279,10 @@ func _on_inventory_open_changed(opened: bool) -> void:
 
 
 func _has_exclusive_modal() -> bool:
+	# 撤离不再锁定输入：玩家可以自由移动/开枪/翻滚；
+	# _extraction_defense_active 仅作为“撤离进行中”标记存在。
 	return (
 		_completed
-		or _extraction_defense_active
 		or _door_fate_active
 		or (_workbench_panel != null and is_instance_valid(_workbench_panel))
 		or (_merchant_ui != null and is_instance_valid(_merchant_ui) and _merchant_ui.visible)
@@ -359,6 +362,7 @@ func _generate_layout() -> void:
 		room.player_entered.connect(_on_room_entered)
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
+	_plan_room_layout()
 	for record in _records:
 		if str(record.get("parent", "")).is_empty():
 			continue
@@ -664,22 +668,82 @@ func _set_corridor_collisions_disabled(root: Node, disabled: bool) -> void:
 		_set_corridor_collisions_disabled(child, disabled)
 
 
+## PH49 v2 房间布局规划阶段
+## 遍历所有房与门，根据门 world pos 预存 “room_door_world_<dir>” meta。
+## 拼墙阶段 (_build_corner_aware_wall_run) 读这个 meta 以门 world pos 作锥点拼门洞。
+func _plan_room_layout() -> void:
+	for room in _rooms:
+		if room == null:
+			continue
+		var dimensions := room.get_dimensions()
+		# 1. 为每扇门算 door_offset_along（距 0 最近的 5m 段中心点），写 meta
+		for direction in room.doors:
+			var horizontal := direction in ["north", "south"]
+			var length := dimensions.x if horizontal else dimensions.y
+			if length <= 0.0:
+				continue
+			var module_count := maxi(1, int(round(length / 5.0)))
+			# 默认门位于沿墙中心：选距 0 最近的 5m 段。
+			var best_module := -1
+			var best_dist := 1e9
+			for module_index in range(module_count):
+				var segment_center := -length * 0.5 + 5.0 * (float(module_index) + 0.5)
+				var d := absf(segment_center)
+				if d < best_dist:
+					best_dist = d
+					best_module = module_index
+			var door_offset_along := -length * 0.5 + 5.0 * (float(best_module) + 0.5)
+			room.set_meta("tower_wall_door_offset_%s" % direction, door_offset_along)
+		# 2. meta 写完后，门 world pos 重新算（读完刚写入的 meta）→ 存 room_door_world_<dir>
+		for direction in room.doors:
+			var door_world: Vector3 = _room_door_world_position(room, direction)
+			room.set_meta("room_door_world_%s" % direction, door_world)
+
+
+## 房间门 world 位置（基类实现，默认门位于房间中心偏门所在墙中点）。
+## TowerDescent3D 会重写以支持楼梯特殊情况。
+func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
+	var outward := {
+		"north": Vector3(0, 0, -1),
+		"south": Vector3(0, 0, 1),
+		"west": Vector3(-1, 0, 0),
+		"east": Vector3(1, 0, 0),
+	}.get(side, Vector3(-1, 0, 0)) as Vector3
+	var dimensions := room.get_dimensions()
+	var half_extent := dimensions.y * 0.5 if side in ["north", "south"] else dimensions.x * 0.5
+	var along_axis := Vector3(1, 0, 0) if side in ["north", "south"] else Vector3(0, 0, 1)
+	var along_sign := -1.0 if side == "south" else 1.0
+	# 默认门距 0：门位于沿墙中心位置 (0 + 0)
+	var door_offset_along := 0.0
+	return room.global_position + outward * half_extent + along_axis * along_sign * door_offset_along
+
+
 func _create_extraction() -> void:
 	var room: DungeonRoom3D = _room_by_id.get("extraction") as DungeonRoom3D
 	if room == null:
 		return
-	_extraction = _create_extraction_beacon(room, "BOSS_KILL", 8.0, true, Vector3.ZERO)
+	_extraction = _create_extraction_beacon(room, "BOSS_KILL", 30.0, true, Vector3.ZERO)
 	_conditional_extractions["BOSS_KILL"] = _extraction
 	var fixed_candidates: Array[String] = []
 	for record in _records:
 		var candidate_id := str(record.get("id", ""))
-		if candidate_id.begins_with("main_") and int(record.get("index", 0)) >= 2:
+		var candidate_role := str(record.get("role", ""))
+		# TowerDescent3D 把战斗房 id 写成 floor_NN_main_XX，
+		# 早期手写关卡才是 main_XX；两种 id 格式都要兼容。
+		if (candidate_id.begins_with("main_") or candidate_role == "main") and int(record.get("index", 0)) >= 2:
 			fixed_candidates.append(candidate_id)
+	# 1. facility（99 层基地）：玩家随时撤离的兑底点，locally 始终存在。
+	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+	if facility_room != null:
+		_standard_extraction = _create_extraction_beacon(facility_room, "STANDARD", 30.0, false, Vector3(-4.2, 0.0, 3.2))
+		_conditional_extractions["STANDARD"] = _standard_extraction
+	# 2. 随机战斗房：随机放置一个额外的 STANDARD 撤离点。
 	if not fixed_candidates.is_empty():
 		var fixed_id := fixed_candidates[_rng.randi_range(0, fixed_candidates.size() - 1)]
 		var fixed_room := _room_by_id.get(fixed_id) as DungeonRoom3D
-		_standard_extraction = _create_extraction_beacon(fixed_room, "STANDARD", 7.0, false, Vector3(-4.2, 0.0, 3.2))
-		_conditional_extractions["STANDARD"] = _standard_extraction
+		if fixed_room != null:
+			var extra := _create_extraction_beacon(fixed_room, "STANDARD", 30.0, false, Vector3(-4.2, 0.0, 3.2))
+			_conditional_extractions["STANDARD_BONUS"] = extra
 
 
 func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: float, locked: bool, local_position: Vector3) -> ExtractionBeacon3D:
@@ -712,7 +776,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	_spawned_rooms[room.room_id] = true
 	if room.room_type == "START":
 		call_deferred("_spawn_starter_weapon_pickup", room)
-	if room.room_type in ["COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT"]:
+	if room.room_type in ["COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE"]:
 		_spawn_room_enemies(room)
 	elif room.room_type == "EVENT":
 		room.cleared = false
@@ -739,7 +803,7 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> void:
 			enemy_configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": maxi(RoomData.FloorLevel.MEDIUM, floor_level)}))
 		_:
 			enemy_configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-			var desired := 2 + floor / 2 + (2 if room.size_class == "large" else 4 if room.size_class == "arena" else 0)
+			var desired := 4 + floor * 2 + (2 if room.size_class == "large" else 4 if room.size_class == "arena" else 0)
 			while enemy_configs.size() < desired:
 				enemy_configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
 	var wave_count := 1
@@ -967,7 +1031,7 @@ func _ensure_conditional_extraction(type_id: String, room: DungeonRoom3D, local_
 	if existing != null and is_instance_valid(existing):
 		existing.set_locked(false)
 		return existing
-	var duration := 8.0 if type_id == "ELITE_KILL" else 7.0
+	var duration := 30.0 if type_id == "ELITE_KILL" else 30.0
 	var beacon := _create_extraction_beacon(room, type_id, duration, false, local_position)
 	_conditional_extractions[type_id] = beacon
 	minimap.reveal_room(room.room_id)
@@ -1325,6 +1389,9 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	var edge := _edge_key(_current_room_id, target_room_id)
 	var policy := _door_policy_for_edge(_current_room_id, target_room_id)
 	if bool(_open_edges.get(edge, false)):
+		# 边已开启也要刷新门视觉：默认开的 vertical edge
+		# （如成顶↔99层基地）会在首次走到门附近时同时勾起门。
+		_refresh_edge_visuals(_current_room_id, target_room_id, true)
 		status_label.text = "通道已经开启"
 		return true
 	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
@@ -1724,7 +1791,7 @@ func summon_beacon_extraction() -> bool:
 	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if room == null:
 		return false
-	_emergency_extraction = _create_extraction_beacon(room, "BEACON", 10.0, false, Vector3.ZERO)
+	_emergency_extraction = _create_extraction_beacon(room, "BEACON", 30.0, false, Vector3.ZERO)
 	_emergency_extraction.global_position = player.global_position + player.aim_direction * 2.2
 	status_label.text = "紧急撤离信标已部署 · 读条期间不得离开范围"
 	return true
@@ -1746,6 +1813,8 @@ func _on_extraction_started(_duration: float, beacon: ExtractionBeacon3D) -> voi
 	_active_extraction_beacon = beacon
 	_extraction_defense_active = true
 	_extraction_mid_wave_spawned = false
+	_extraction_wave_2_spawned = false
+	_extraction_wave_3_spawned = false
 	_extraction_final_wave_spawned = false
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -1754,21 +1823,36 @@ func _on_extraction_started(_duration: float, beacon: ExtractionBeacon3D) -> voi
 	extraction_panel.visible = true
 	extraction_bar.value = 0.0
 	_spawn_extraction_attackers(0)
-	status_label.text = "%s 撤离同步开始 · 移动锁定，受击会中断" % beacon.beacon_type
+	# 自由撤离：玩家可移动、可射击，30 秒读条中只会越过阈值才离开。
+	status_label.text = "撤离启动 · 30秒后安全返航，行动自由" % beacon.beacon_type
 
 
 func _on_extraction_progress(progress: float, beacon: ExtractionBeacon3D) -> void:
 	if beacon != _active_extraction_beacon:
 		return
 	extraction_bar.value = progress * 100.0
-	if not _extraction_mid_wave_spawned and progress >= EXTRACTION_MID_PROGRESS:
+	# 5 阶段友驻点进场。阶段阈值划分：
+	# stage 0：0%    (随机 4)
+	# stage 1：18%   (伏击 5)
+	# stage 2：36%   (伏击 6)
+	# stage 3：58%   (精英 + 随机 3)
+	# stage 4：78%   (精英 2 + 伏击 4)
+	if not _extraction_mid_wave_spawned and progress >= 0.18:
 		_extraction_mid_wave_spawned = true
 		_spawn_extraction_attackers(1)
-		status_label.text = "撤离信号 2/3 · 增援逼近"
-	elif not _extraction_final_wave_spawned and progress >= EXTRACTION_FINAL_PROGRESS:
-		_extraction_final_wave_spawned = true
+		status_label.text = "撤离信号 1/4 · 第一波增援逼近"
+	elif progress >= 0.36 and not _extraction_wave_2_spawned:
+		_extraction_wave_2_spawned = true
 		_spawn_extraction_attackers(2)
-		status_label.text = "撤离信号即将锁定 · 精英拦截者出现"
+		status_label.text = "撤离信号 2/4 · 第二波增援逼近"
+	elif progress >= 0.58 and not _extraction_wave_3_spawned:
+		_extraction_wave_3_spawned = true
+		_spawn_extraction_attackers(3)
+		status_label.text = "撤离信号 3/4 · 精英拦截者出现"
+	elif progress >= 0.78 and not _extraction_final_wave_spawned:
+		_extraction_final_wave_spawned = true
+		_spawn_extraction_attackers(4)
+		status_label.text = "撤离信号即将锁定 · 最后一波拦截"
 
 
 func _on_extraction_cancelled(beacon: ExtractionBeacon3D) -> void:
@@ -1800,14 +1884,30 @@ func _spawn_extraction_attackers(stage: int) -> void:
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(_record_index(room.room_id) / 3, 0, 3)
 	var configs: Array[Dictionary] = []
-	if stage == 2:
-		configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
-	elif stage == 1:
-		configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 2, "floor": floor, "floor_level": floor_level}))
-	else:
-		configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
-		if configs.size() > 2:
-			configs.resize(2)
+	# 撤离现在是 30 秒长读条：5 阶段，每阶段 4-6 只。
+	# 阶段 0：随机 4 只
+	# 阶段 1：伏击 5 只
+	# 阶段 2：伏击 6 只
+	# 阶段 3：精英 + 随机 3 只
+	# 阶段 4：精英 2 只 + 伏击 4 只
+	match stage:
+		0:
+			configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
+			while configs.size() < 4:
+				configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
+		1:
+			configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 5, "floor": floor, "floor_level": floor_level}))
+		2:
+			configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 6, "floor": floor, "floor_level": floor_level}))
+		3:
+			configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
+			configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
+			while configs.size() < 4:
+				configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
+		_:
+			configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
+			configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
+			configs.append_array(_monster_injector.generate_enemies({"type": "ambush", "count": 4, "floor": floor, "floor_level": floor_level}))
 	_spawn_enemy_batch(room, configs, true)
 
 
@@ -1824,8 +1924,8 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	)
 	var took_damage := _last_player_hp >= 0 and current < _last_player_hp
 	_last_player_hp = current
-	if took_damage and _extraction_defense_active and _active_extraction_beacon != null:
-		_active_extraction_beacon.abort_extraction()
+	# 自由撤离：玩家可以被打但不被中断。
+	# 只要 HP 不归零就读条继续。
 	if current <= 0:
 		_finish_run(false)
 

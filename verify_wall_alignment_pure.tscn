@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://djk7ecbda4fci"]
+
+[ext_resource type="Script" path="res://verify_wall_alignment_pure.gd" id="1_wall_align_pure"]
+
+[node name="VerifyWallAlignmentPure" type="Node"]
+script = ExtResource("1_wall_align_pure")

@@ -40,9 +40,7 @@ func _process(delta: float) -> void:
 		_light.light_energy = 2.2 + sin(Time.get_ticks_msec() * 0.004) * 0.35
 	if not _active:
 		return
-	if not _player_in_range:
-		_cancel()
-		return
+	# 自由撤离：玩家可以离开 beacon 范围（可以逃跑、拖怪），不能被中断。
 	_remaining = maxf(0.0, _remaining - delta)
 	extraction_progress.emit(1.0 - _remaining / maxf(0.01, duration))
 	_prompt.text = "撤离同步 %.1fs" % _remaining
