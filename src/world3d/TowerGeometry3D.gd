@@ -13,6 +13,8 @@ const CORE_SIZE_M := 65.0
 const CORE_CENTER_XZ := Vector2(2.5, 2.5)
 const COMBAT_ROOM_SIZE_M := 30.0
 const COMBAT_ROOM_SIZE_Y_M := 25.0
+const COMBAT_ROOM_GRID := Vector2i(6, 5)
+const ROOM_CORRIDOR_GAP_M := GRID_UNIT_M
 const COMBAT_STAIR_LOBBY_SIZE_M := 15.0
 const BOSS_ARENA_SIZE_M := 90.0
 const COMBAT_GRID_CENTERS_M := [-77.5, -27.5, 27.5, 77.5]
@@ -32,3 +34,12 @@ const GUARD_HEIGHT_M := 1.2
 const GUARD_END_CLEARANCE_M := 4.0
 const FLOOR_THICKNESS_M := 0.30
 const FLOOR_HEIGHT_M := 9.0
+
+
+static func snap_component_axis(center_m: float, size_m: float) -> float:
+	# 组件边界落在 5m 格线上，奇数格组件中心自然落在半格，偶数格落在整格。
+	return snappedf(center_m - size_m * 0.5, GRID_UNIT_M) + size_m * 0.5
+
+
+static func is_component_axis_aligned(center_m: float, size_m: float) -> bool:
+	return is_equal_approx(center_m, snap_component_axis(center_m, size_m))

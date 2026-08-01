@@ -254,22 +254,8 @@ func _wall_module_position(side: String, index: int) -> Vector3:
 
 
 func _stair_hole_center(side: String) -> Vector3:
-	# 楼板洞口中心必须严格落在 5m 网格上（GRID_UNIT = 5.0），
-	# 这样 5m 宽的墙体模块和 5m 宽的地砖 1:1 对齐，缺口落在地砖接缝处。
-	# 网格中心：5 * (n + 0.5)，例如 ±2.5, ±7.5, ±12.5, ±17.5, …
-	# 洞口 沿墙面方向的中心 选择离墙面中心（x=0 或 z=0）最近的 5m 网格点，
-	# 从而让四面墙的缺口 都靠近各自墙面的中央。
-	# 沿垂直墙面方向 = 楼板洞的深度方向（取值与原始 Rect2 接近）。
-	var hole_rect := Rect2()
-	match side:
-		"west":
-			hole_rect = Rect2(-45.0, -2.5, 15.0, 30.0)
-		"east":
-			hole_rect = Rect2(35.0, -17.5, 15.0, 30.0)
-		"north":
-			hole_rect = Rect2(-17.5, -45.0, 30.0, 15.0)
-		"south":
-			hole_rect = Rect2(2.5, 35.0, 30.0, 15.0)
+	# 外墙缺口、楼板视觉和承重碰撞必须引用同一个洞口矩形。
+	var hole_rect := _stair_hole_world_rect(side)
 	return Vector3(
 		hole_rect.position.x + hole_rect.size.x * 0.5,
 		0.0,
@@ -385,18 +371,22 @@ func _build_support() -> void:
 func _hole_rects() -> Array[Rect2i]:
 	var holes: Array[Rect2i] = []
 	for side in stair_hole_sides:
-		match side:
-			"west":
-				# 楼梯两条6m跑道总外廓约15×27m；洞口按5m模块取
-				# 15×30m。核心偏移半格后洞口边界仍与250m整层格线对齐。
-				holes.append(_world_rect_to_grid(Rect2(-45.0, 0.0, 15.0, 30.0)))
-			"east":
-				holes.append(_world_rect_to_grid(Rect2(35.0, -25.0, 15.0, 30.0)))
-			"north":
-				holes.append(_world_rect_to_grid(Rect2(-25.0, -45.0, 30.0, 15.0)))
-			"south":
-				holes.append(_world_rect_to_grid(Rect2(0.0, 35.0, 30.0, 15.0)))
+		holes.append(_world_rect_to_grid(_stair_hole_world_rect(side)))
 	return holes
+
+
+func _stair_hole_world_rect(side: String) -> Rect2:
+	# 两条楼梯跑道的外廓按 5m 单元取整，边界全部落在整格线上。
+	match side:
+		"west":
+			return Rect2(-45.0, 0.0, 15.0, 30.0)
+		"east":
+			return Rect2(35.0, -25.0, 15.0, 30.0)
+		"north":
+			return Rect2(-25.0, -45.0, 30.0, 15.0)
+		"south":
+			return Rect2(0.0, 35.0, 30.0, 15.0)
+	return Rect2()
 
 
 func _world_rect_to_grid(world_rect: Rect2) -> Rect2i:

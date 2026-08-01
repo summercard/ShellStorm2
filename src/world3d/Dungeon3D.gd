@@ -70,7 +70,7 @@ var _room_neighbors: Dictionary = {}
 var _open_edges: Dictionary = {}
 var _corridor_by_edge: Dictionary = {}
 var _spawned_key_rooms: Dictionary = {}
-var _room_key_count := 6
+var _room_key_count := 1
 var _enemy_nodes_by_room: Dictionary = {}
 var _room_wave_queues: Dictionary = {}
 var _room_wave_numbers: Dictionary = {}
@@ -712,10 +712,9 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	var dimensions := room.get_dimensions()
 	var half_extent := dimensions.y * 0.5 if side in ["north", "south"] else dimensions.x * 0.5
 	var along_axis := Vector3(1, 0, 0) if side in ["north", "south"] else Vector3(0, 0, 1)
-	var along_sign := -1.0 if side == "south" else 1.0
 	# 默认门距 0：门位于沿墙中心位置 (0 + 0)
 	var door_offset_along := 0.0
-	return room.global_position + outward * half_extent + along_axis * along_sign * door_offset_along
+	return room.global_position + outward * half_extent + along_axis * door_offset_along
 
 
 func _create_extraction() -> void:
@@ -743,7 +742,13 @@ func _create_extraction() -> void:
 		var fixed_room := _room_by_id.get(fixed_id) as DungeonRoom3D
 		if fixed_room != null:
 			var extra := _create_extraction_beacon(fixed_room, "STANDARD", 30.0, false, Vector3(-4.2, 0.0, 3.2))
-			_conditional_extractions["STANDARD_BONUS"] = extra
+			# 非塔楼行动区没有 facility：此时随机战斗房就是唯一 STANDARD，
+			# 仍需写入标准键并保存主引用，不能只登记成 BONUS 后失去测试/交互入口。
+			if _standard_extraction == null:
+				_standard_extraction = extra
+				_conditional_extractions["STANDARD"] = extra
+			else:
+				_conditional_extractions["STANDARD_BONUS"] = extra
 
 
 func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: float, locked: bool, local_position: Vector3) -> ExtractionBeacon3D:
@@ -1809,7 +1814,7 @@ func get_last_killed_enemy() -> Dictionary:
 	return last_killed_enemy_data.duplicate(true)
 
 
-func _on_extraction_started(_duration: float, beacon: ExtractionBeacon3D) -> void:
+func _on_extraction_started(start_duration: float, beacon: ExtractionBeacon3D) -> void:
 	_active_extraction_beacon = beacon
 	_extraction_defense_active = true
 	_extraction_mid_wave_spawned = false
@@ -1824,7 +1829,10 @@ func _on_extraction_started(_duration: float, beacon: ExtractionBeacon3D) -> voi
 	extraction_bar.value = 0.0
 	_spawn_extraction_attackers(0)
 	# 自由撤离：玩家可移动、可射击，30 秒读条中只会越过阈值才离开。
-	status_label.text = "撤离启动 · 30秒后安全返航，行动自由" % beacon.beacon_type
+	status_label.text = "%s撤离启动 · %.0f秒后安全返航，行动自由" % [
+		beacon.beacon_type,
+		start_duration,
+	]
 
 
 func _on_extraction_progress(progress: float, beacon: ExtractionBeacon3D) -> void:

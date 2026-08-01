@@ -13,7 +13,7 @@ light_color = Color(0.5968, 0.8208, 0.9008, 1)
 energy = 23.4
 light_range = 28.0
 failing = false
-cast_shadow = false
+cast_shadow = true
 fixture_style = "ceiling"
 
 [node name="BaseCeilingLight_02" parent="." instance=ExtResource("1_light")]

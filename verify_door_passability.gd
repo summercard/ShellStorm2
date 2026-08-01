@@ -154,7 +154,7 @@ func _ready() -> void:
 		# 状态 4: 打开
 		test_door.set_open(true, true)
 		prompts_seen.append(test_door._prompt.text)
-		print("  提示序列: %s" % prompts_seen)
+		print("  提示序列: %s" % [prompts_seen])
 		var expected := [
 			"[E] 使用房间钥匙",
 			"[E] 开启入口 · 选择命运",
@@ -165,7 +165,7 @@ func _ready() -> void:
 			print("  ✅ 4 种状态文案全部正确切换")
 			tests_passed += 1
 		else:
-			print("  ❌ 文案不匹配 期望 %s" % expected)
+			print("  ❌ 文案不匹配 期望 %s" % [expected])
 			tests_failed += 1
 
 	# ============================================================

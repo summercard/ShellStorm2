@@ -209,6 +209,8 @@ func _mesh_instance(node_name: String, position: Vector3, mesh: PrimitiveMesh, p
 	instance.name = node_name
 	instance.position = position
 	instance.mesh = mesh
+	instance.layers = 1
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	parent.add_child(instance)
 	return instance
 

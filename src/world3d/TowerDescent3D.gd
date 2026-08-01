@@ -158,12 +158,10 @@ func _build_floor_stages() -> void:
 		var upper_id := str(declaration["a"])
 		var lower_id := str(declaration["b"])
 		var side := str(declaration["side"])
-		for floor_index in [
-			int(_room_floor_index.get(upper_id, 0)),
-			int(_room_floor_index.get(lower_id, 0)),
-		]:
-			if side not in (hole_sides_by_floor[floor_index] as Array):
-				(hole_sides_by_floor[floor_index] as Array).append(side)
+		# 楼梯只穿过上层楼板；下层是落地平台，不能重复挖洞。
+		var upper_floor_index := int(_room_floor_index.get(upper_id, 0))
+		if side not in (hole_sides_by_floor[upper_floor_index] as Array):
+			(hole_sides_by_floor[upper_floor_index] as Array).append(side)
 	for floor_index in range(COMBAT_FLOOR_COUNT + 2):
 		var kind := "rooftop" if floor_index == 0 else "facility" if floor_index == 1 else "combat"
 		var stage = FLOOR_STAGE_SCRIPT.new()
@@ -606,7 +604,7 @@ func _build_records() -> void:
 	)
 	_append_tower_record(
 		"facility", "FACILITY", "floor",
-		core_center + Vector3.DOWN * FLOOR_HEIGHT,
+		Vector3(0.0, -FLOOR_HEIGHT, 5.0),
 		"start", 1, "facility", Vector2(30.0, 30.0)
 	)
 	_declare_edge("start", "facility", "vertical", "west", "west", "west")
@@ -624,9 +622,9 @@ func _build_records() -> void:
 			else _normal_floor_specs(floor_number, layout_rng)
 		)
 		_floor_layout_templates[physical_floor_index] = (
-			"boss_90m_inward_entry"
+			"boss_90m_compact_6x5"
 			if floor_number == COMBAT_FLOOR_COUNT
-			else "inward_arrival_ring_12_%s" % (
+			else "compact_6x5_ring_12_%s" % (
 				"east_west" if floor_number % 2 == 1 else "west_east"
 			)
 		)
@@ -692,18 +690,22 @@ func _normal_floor_specs(
 		# PH49：东侧楼梯下接口为(35, 2.5)，入口大厅在门的左侧/
 		# 核心内侧，东门精确落在接口；不再把关卡刷到门外右侧。
 		"entry": Vector2(27.5, 2.5),
-		"hub": Vector2(27.5, -32.5),
-		"main_02": Vector2(77.5, -32.5),
-		"main_03": Vector2(77.5, -82.5),
-		"main_04": Vector2(27.5, -82.5),
-		"main_05": Vector2(-22.5, -82.5),
-		"main_06": Vector2(-22.5, -32.5),
+		# 30×25m 房间按 6×5 个 5m 模块重排。纵向中心距 30m、
+		# 横向中心距 35m，普通相邻房之间正好保留一个 5m 走廊格。
+		"hub": Vector2(30.0, -22.5),
+		"main_02": Vector2(65.0, -22.5),
+		"main_03": Vector2(65.0, -52.5),
+		"main_04": Vector2(30.0, -52.5),
+		# 为了让固定西侧楼梯接口仍落在 x=-30m，回环西段保留一条
+		# 20m 战术走廊，其余主路/支路均为 5m。
+		"main_05": Vector2(-20.0, -52.5),
+		"main_06": Vector2(-20.0, -22.5),
 		# 15m出口大厅西门落在核心西接口(-30, 2.5)。
 		"exit": Vector2(-22.5, 2.5),
-		"branch_01": Vector2(77.5, 17.5),
-		"branch_02": Vector2(77.5, 67.5),
-		"branch_03": Vector2(27.5, 67.5),
-		"elevator": Vector2(-22.5, 67.5),
+		"branch_01": Vector2(65.0, 7.5),
+		"branch_02": Vector2(65.0, 37.5),
+		"branch_03": Vector2(30.0, 37.5),
+		"elevator": Vector2(-5.0, 37.5),
 	}
 	var content_types: Array[String] = [
 		"COMBAT", "COMBAT", "EVENT", "STORAGE", "SCAVENGE", "ELITE", "TRAP"
@@ -743,14 +745,6 @@ func _normal_floor_specs(
 	]
 	for spec in raw_specs:
 		var key := str(spec["key"])
-		if key == "entry":
-			spec["open_wall_directions"] = [
-				"north" if rotation_steps == 0 else "south"
-			]
-		elif key == "exit":
-			spec["open_wall_directions"] = [
-				"south" if rotation_steps == 0 else "north"
-			]
 		spec["position"] = _rotate_floor_point(positions[key] as Vector2, rotation_steps)
 	return raw_specs
 
@@ -765,24 +759,23 @@ func _boss_floor_specs(floor_number: int) -> Array[Dictionary]:
 				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,
 				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M
 			),
-			"open_wall_directions": ["north"],
 		},
-		{"key": "hub", "id": "floor_%02d_hub" % floor_number, "type": "ELITE", "role": "hub", "parent_key": "entry", "position": Vector2(-22.5, -32.5)},
-		{"key": "main_02", "id": "floor_%02d_main_02" % floor_number, "type": "COMBAT", "role": "main", "parent_key": "hub", "position": Vector2(-72.5, -32.5)},
-		{"key": "prep", "id": "floor_%02d_boss_prep" % floor_number, "type": "UPGRADE", "role": "boss_prep", "parent_key": "main_02", "position": Vector2(-72.5, 52.5)},
+		{"key": "hub", "id": "floor_%02d_hub" % floor_number, "type": "ELITE", "role": "hub", "parent_key": "entry", "position": Vector2(-20.0, -22.5)},
+		{"key": "main_02", "id": "floor_%02d_main_02" % floor_number, "type": "COMBAT", "role": "main", "parent_key": "hub", "position": Vector2(-55.0, -22.5)},
+		{"key": "prep", "id": "floor_%02d_boss_prep" % floor_number, "type": "UPGRADE", "role": "boss_prep", "parent_key": "main_02", "position": Vector2(-55.0, 42.5)},
 		{
 			"key": "exit", "id": "extraction", "type": "BOSS", "role": "boss",
-			"parent_key": "prep", "position": Vector2(27.5, 52.5),
+			"parent_key": "prep", "position": Vector2(10.0, 45.0),
 			"dimensions": Vector2(
 				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M,
 				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M
 			),
 		},
-		{"key": "branch_01", "id": "floor_%02d_branch_01" % floor_number, "type": "EVENT", "role": "branch", "parent_key": "hub", "position": Vector2(27.5, -32.5)},
-		{"key": "branch_02", "id": "floor_%02d_branch_02" % floor_number, "type": "COMBAT", "role": "branch", "parent_key": "branch_01", "position": Vector2(77.5, -32.5)},
-		{"key": "branch_03", "id": "floor_%02d_branch_03" % floor_number, "type": "STORAGE", "role": "branch", "parent_key": "branch_02", "position": Vector2(77.5, -82.5)},
-		{"key": "branch_04", "id": "floor_%02d_branch_04" % floor_number, "type": "TRAP", "role": "branch", "parent_key": "branch_03", "position": Vector2(27.5, -82.5)},
-		{"key": "elevator", "id": "floor_%02d_elevator" % floor_number, "type": "SCAVENGE", "role": "elevator_access", "parent_key": "branch_04", "position": Vector2(-22.5, -82.5)},
+		{"key": "branch_01", "id": "floor_%02d_branch_01" % floor_number, "type": "EVENT", "role": "branch", "parent_key": "hub", "position": Vector2(15.0, -22.5)},
+		{"key": "branch_02", "id": "floor_%02d_branch_02" % floor_number, "type": "COMBAT", "role": "branch", "parent_key": "branch_01", "position": Vector2(50.0, -22.5)},
+		{"key": "branch_03", "id": "floor_%02d_branch_03" % floor_number, "type": "STORAGE", "role": "branch", "parent_key": "branch_02", "position": Vector2(50.0, -52.5)},
+		{"key": "branch_04", "id": "floor_%02d_branch_04" % floor_number, "type": "TRAP", "role": "branch", "parent_key": "branch_03", "position": Vector2(15.0, -52.5)},
+		{"key": "elevator", "id": "floor_%02d_elevator" % floor_number, "type": "SCAVENGE", "role": "elevator_access", "parent_key": "branch_04", "position": Vector2(-20.0, -52.5)},
 	]
 
 
@@ -797,10 +790,7 @@ func _append_tower_record(
 	dimensions := Vector2.ZERO,
 	open_wall_directions: Array = []
 ) -> void:
-	var record := _record(
-		id, type_id, size, position, [], true, parent, _records.size(), -floor_index
-	)
-	record["custom_dimensions"] = (
+	var resolved_dimensions := (
 		dimensions
 		if dimensions.x > 0.0 and dimensions.y > 0.0
 		else Vector2(TOWER_GEOMETRY.CORE_SIZE_M, TOWER_GEOMETRY.CORE_SIZE_M)
@@ -810,6 +800,18 @@ func _append_tower_record(
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
 		)
 	)
+	var snapped_position := position
+	snapped_position.x = TOWER_GEOMETRY.snap_component_axis(
+		position.x, resolved_dimensions.x
+	)
+	snapped_position.z = TOWER_GEOMETRY.snap_component_axis(
+		position.z, resolved_dimensions.y
+	)
+	var record := _record(
+		id, type_id, size, snapped_position, [], true, parent, _records.size(), -floor_index
+	)
+	record["custom_dimensions"] = resolved_dimensions
+	record["grid_position_adjusted"] = not snapped_position.is_equal_approx(position)
 	record["tower_module_shell"] = true
 	record["floor_index"] = floor_index
 	record["tower_role"] = role
@@ -1097,6 +1099,101 @@ func _add_imported_stair_collisions(root: Node) -> int:
 	return walkable_count
 
 
+func _plan_room_layout() -> void:
+	# 门槽由连接两端的真实 5m 墙组件求交，不再各自选择“离房间中心最近”的槽。
+	# 这保证房间旋转或奇偶格尺寸混接时，两扇门仍落在同一条 5m 通道中心线上。
+	for room in _rooms:
+		if room == null:
+			continue
+		for side in room.doors:
+			var target_id := str(room.door_targets.get(side, ""))
+			var target := _room_by_id.get(target_id) as DungeonRoom3D
+			var target_side := _find_reciprocal_door_side(target, room.room_id)
+			var shared_along := _shared_door_lane(room, side, target, target_side)
+			var room_axis_center := (
+				room.global_position.x
+				if side in ["north", "south"]
+				else room.global_position.z
+			)
+			room.set_meta(
+				"tower_wall_door_offset_%s" % side,
+				shared_along - room_axis_center
+			)
+	for room in _rooms:
+		if room == null:
+			continue
+		for side in room.doors:
+			room.set_meta(
+				"room_door_world_%s" % side,
+				_room_door_world_position(room, side)
+			)
+
+
+func _find_reciprocal_door_side(room: DungeonRoom3D, target_room_id: String) -> String:
+	if room == null:
+		return ""
+	for side in room.doors:
+		if str(room.door_targets.get(side, "")) == target_room_id:
+			return side
+	return ""
+
+
+func _shared_door_lane(
+	room: DungeonRoom3D,
+	side: String,
+	target: DungeonRoom3D,
+	target_side: String
+) -> float:
+	var room_lanes := _door_lane_candidates(room, side)
+	if room_lanes.is_empty():
+		return room.global_position.x if side in ["north", "south"] else room.global_position.z
+	var target_lanes := _door_lane_candidates(target, target_side)
+	var desired := (
+		(
+			(room.global_position.x + target.global_position.x) * 0.5
+			if side in ["north", "south"]
+			else (room.global_position.z + target.global_position.z) * 0.5
+		)
+		if target != null
+		else room_lanes[0]
+	)
+	var shared: Array[float] = []
+	for lane in room_lanes:
+		for target_lane in target_lanes:
+			if is_equal_approx(lane, target_lane):
+				shared.append(lane)
+				break
+	var candidates := shared if not shared.is_empty() else room_lanes
+	var best := float(candidates[0])
+	for candidate in candidates:
+		if absf(float(candidate) - desired) < absf(best - desired):
+			best = float(candidate)
+	return best
+
+
+func _door_lane_candidates(room: DungeonRoom3D, side: String) -> Array[float]:
+	var lanes: Array[float] = []
+	if room == null or side.is_empty():
+		return lanes
+	var dimensions := room.get_dimensions()
+	var length := dimensions.x if side in ["north", "south"] else dimensions.y
+	var module_count := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
+	var first_index := 1 if module_count >= 3 else 0
+	var last_index := module_count - 2 if module_count >= 3 else module_count - 1
+	var axis_center := (
+		room.global_position.x
+		if side in ["north", "south"]
+		else room.global_position.z
+	)
+	for module_index in range(first_index, last_index + 1):
+		lanes.append(
+			axis_center
+			+ -length * 0.5
+			+ TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
+		)
+	return lanes
+
+
 func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	var outward := {
 		"north": Vector3(0, 0, -1),
@@ -1111,8 +1208,7 @@ func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:
 	if room.has_meta("tower_wall_door_offset_%s" % side):
 		door_offset_along = float(room.get_meta("tower_wall_door_offset_%s" % side))
 	var along_axis := Vector3(1, 0, 0) if side in ["north", "south"] else Vector3(0, 0, 1)
-	var along_sign := -1.0 if side == "south" else 1.0
-	return room.global_position + outward * half_extent + along_axis * along_sign * door_offset_along
+	return room.global_position + outward * half_extent + along_axis * door_offset_along
 
 
 func _build_tower_horizontal_corridor(
@@ -1124,10 +1220,18 @@ func _build_tower_horizontal_corridor(
 	var delta := to_room.global_position - from_room.global_position
 	var horizontal_x := absf(delta.x) >= absf(delta.z)
 	var direction := Vector3(signf(delta.x), 0.0, 0.0) if horizontal_x else Vector3(0.0, 0.0, signf(delta.z))
-	var from_half := from_room.get_dimensions().x * 0.5 if horizontal_x else from_room.get_dimensions().y * 0.5
-	var to_half := to_room.get_dimensions().x * 0.5 if horizontal_x else to_room.get_dimensions().y * 0.5
-	var start := from_room.global_position + direction * from_half
-	var end := to_room.global_position - direction * to_half
+	var from_side := "east" if direction.x > 0.0 else "west" if direction.x < 0.0 else "south" if direction.z > 0.0 else "north"
+	var to_side := _opposite_direction(from_side)
+	# 走廊端点必须取真实门组件坐标；房间中心只负责判断方向，不能再代替门位。
+	var start := _room_door_world_position(from_room, from_side)
+	var end := _room_door_world_position(to_room, to_side)
+	var tangent_error := absf(start.z - end.z) if horizontal_x else absf(start.x - end.x)
+	if tangent_error > 0.01:
+		push_error(
+			"Tower corridor %s door modules are off the 5m lane by %.3fm" % [
+				edge, tangent_error,
+			]
+		)
 	var center := (start + end) * 0.5
 	var length := start.distance_to(end)
 	var connector := Node3D.new()
@@ -1136,6 +1240,9 @@ func _build_tower_horizontal_corridor(
 	connector.set_meta("from_room_id", from_room.room_id)
 	connector.set_meta("to_room_id", to_room.room_id)
 	connector.set_meta("passage_width", TOWER_GEOMETRY.GRID_UNIT_M)
+	connector.set_meta("start_door_position", start)
+	connector.set_meta("end_door_position", end)
+	connector.set_meta("door_tangent_error_m", tangent_error)
 	connector.visible = false
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
 	$GeneratedCorridors.add_child(connector)
@@ -2112,6 +2219,8 @@ func get_tower_snapshot() -> Dictionary:
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
 		),
+		"combat_room_grid": TOWER_GEOMETRY.COMBAT_ROOM_GRID,
+		"room_corridor_gap_m": TOWER_GEOMETRY.ROOM_CORRIDOR_GAP_M,
 		"combat_stair_lobby_size": Vector2(
 			TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,
 			TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M
@@ -2128,7 +2237,7 @@ func get_tower_snapshot() -> Dictionary:
 		"facility_grid_dimensions": Vector2i(6, 6),
 		"facility_grid_tile_count": 36,
 		"base_to_stair_corridor_length_m": (
-			TOWER_GEOMETRY.CORE_SIZE_M * 0.5 - 15.0
+			15.0
 		),
 		"facility_count": get_facility_count(),
 		"has_base_elevator": _elevator_facility != null,

@@ -1,8 +1,8 @@
 class_name PlayerFlashlight3D
 extends Node3D
 ## 与玩法视野完全解耦的真实玩家灯光。
-## 三盏灯都关闭投影，避免头/手/枪在自身投出黑色阴影盖住 AvatarFrontFill 的柔光。
-## cull_mask 也确保环境光不进角色层、角色光不进环境层，互不污染。
+## 前向环境主灯投影；近身溢光与角色柔光不投影。
+## cull_mask 确保主灯只照环境/怪物层，不会让角色组件彼此自遮挡。
 
 signal light_enabled_changed(enabled: bool)
 
@@ -174,7 +174,7 @@ func get_snapshot() -> Dictionary:
 		"spotlight_count": 2,
 		"spill_light_count": 1,
 		"front_fill_light_count": 1,
-		"shadow_light_count": 0,
+		"shadow_light_count": 1,
 		"shadow_light_disabled_for_avatar": true,
 		"beam_energy": beam_energy,
 		"beam_range": beam_range,
@@ -223,9 +223,9 @@ func _apply_configuration() -> void:
 		_beam.spot_angle = beam_angle_degrees
 		_beam.spot_attenuation = beam_attenuation
 		_beam.spot_angle_attenuation = beam_edge_attenuation
-		# 玩家身上的灯一律不投影：避免头/手/枪在自身投出黑色阴影盖住柔光。
-		# 实际墙体的阴影由 DirectionalLight3D 太阳和场景灯承担。
-		_beam.shadow_enabled = false
+		# 主聚光只影响环境层，因此可以投射墙体/怪物阴影，且不会让
+		# 角色头、手、枪彼此自遮挡。
+		_beam.shadow_enabled = true
 		_beam.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 	if _spill != null:
 		_spill.light_color = spill_color

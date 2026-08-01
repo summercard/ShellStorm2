@@ -128,9 +128,9 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		or int(snapshot.get("spotlight_count", 0)) != 2
 		or int(snapshot.get("spill_light_count", 0)) != 1
 		or int(snapshot.get("front_fill_light_count", 0)) != 1
-		or int(snapshot.get("shadow_light_count", 0)) != 0
+		or int(snapshot.get("shadow_light_count", 0)) != 1
 	):
-		failures.append("Real flashlight must contain an environment beam/spill and an avatar-only front fill, all non-shadowing on the avatar")
+		failures.append("Real flashlight must contain one shadowing environment beam plus non-shadow spill/front fill")
 	var flashlight := dungeon.player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
 	if flashlight == null:
 		failures.append("Independent PlayerFlashlight3D rig is missing")
@@ -169,7 +169,7 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 			failures.append("1.5m角色探照灯安装点没有落在胸口/武器高度")
 		if flashlight.front_fill_height > 1.5 or flashlight.avatar_target_height > 1.2:
 			failures.append("角色补光仍沿用高于1.5m角色的旧坐标")
-		if beam == null or beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
+		if beam == null or not beam.shadow_enabled or beam.light_energy < 12.0 or beam.spot_range < 20.0:
 			failures.append("Forward flashlight is not a sufficiently bright real environment SpotLight3D")
 		if spill == null or spill.shadow_enabled or spill.light_energy < 1.5 or spill.omni_range < 4.0:
 			failures.append("Environment spill light is missing or incorrectly configured")

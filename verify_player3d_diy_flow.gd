@@ -84,7 +84,7 @@ func _ready() -> void:
 			if mesh_instance.layers != 2:
 				failures.append("DIY wearable left the avatar-only light layer: %s" % wearable_path)
 			if mesh_instance.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
-				failures.append("DIY wearable can block the avatar light: %s" % wearable_path)
+				failures.append("DIY wearable can cast a player-mounted-light self shadow: %s" % wearable_path)
 			if mesh_instance.gi_mode != GeometryInstance3D.GI_MODE_DISABLED:
 				failures.append("DIY wearable can inject indirect light: %s" % wearable_path)
 	var avatar_mesh_count := 0
@@ -94,11 +94,14 @@ func _ready() -> void:
 		if avatar_mesh.layers != 2:
 			failures.append("Avatar mesh left the avatar-only fill-light layer: %s" % avatar_mesh.get_path())
 		if avatar_mesh.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
-			failures.append("Avatar mesh can self-shadow the head/body front lighting: %s" % avatar_mesh.get_path())
+			failures.append("Avatar mesh can cast a player-mounted-light self shadow: %s" % avatar_mesh.get_path())
 		if avatar_mesh.gi_mode != GeometryInstance3D.GI_MODE_DISABLED:
 			failures.append("Avatar mesh can inject indirect lighting: %s" % avatar_mesh.get_path())
-	if avatar_mesh_count <= 0 or int(avatar_snapshot.get("avatar_shadow_caster_count", -1)) != 0:
-		failures.append("Avatar lighting isolation did not disable every model self-shadow")
+	if (
+		avatar_mesh_count <= 0
+		or int(avatar_snapshot.get("avatar_shadow_caster_count", -1)) != 0
+	):
+		failures.append("Avatar self-shadow caster contract is not fully disabled")
 	if not bool(avatar_snapshot.get("weapon_grip_pose_active", false)):
 		failures.append("Bunny weapon grip pose is not active with an equipped gun")
 	if (

@@ -47,6 +47,7 @@ func _apply_fixed_lighting() -> void:
 		_sun.light_energy = SUN_ENERGY
 		_sun.light_color = SUN_COLOR
 		_sun.shadow_enabled = true
+		_sun.light_cull_mask = 3
 	if _environment != null:
 		_environment.background_color = BACKGROUND_COLOR
 		_environment.ambient_light_color = AMBIENT_COLOR

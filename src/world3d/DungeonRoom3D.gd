@@ -69,11 +69,6 @@ const STAIR_LOBBY_ROUTE_GUIDE_PREFAB: PackedScene = preload("res://assets/art/pr
 const STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_threshold_guide.tscn")
 const ACCESS_STEP_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_access_step.tscn")
 const VERTICAL_ACCESS_LABEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_vertical_access_marker_label.tscn")
-# —— 30×30 设施层墙 prefab（D 节）
-const FACILITY_BASE_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall.tscn")
-const FACILITY_BASE_WALL_DOOR_SIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall_door_side.tscn")
-const FACILITY_BASE_WALL_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_facility_base_wall_lintel.tscn")
-
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
 )
@@ -179,11 +174,19 @@ func get_room_snapshot() -> Dictionary:
 		"room_light_on": _light_switch != null and _light_switch.is_light_on(),
 		"light_switch": _light_switch != null,
 		"controlled_light_count": _room_lights.size(),
+		"shadow_capable_light_count": _count_shadow_capable_lights(),
+		"active_shadow_light_count": _count_active_shadow_lights(),
+		"room_light_cull_mask": 3,
 		"base_grid_dimensions": Vector2i(6, 6) if room_type == "FACILITY" else Vector2i.ZERO,
 		"base_grid_tile_count": 36 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_dark": 18 if room_type == "FACILITY" else 0,
 		"base_grid_checkerboard_pattern": room_type == "FACILITY",
+		"tower_wall_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M"),
+		"tower_door_wall_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M"),
+		"tower_corner_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-CORNER-L-5M"),
+		"wall_material_variant_a_count": _count_nodes_with_meta(self, "material_variant", "A"),
+		"wall_material_variant_b_count": _count_nodes_with_meta(self, "material_variant", "B"),
 		"tower_module_shell": tower_module_shell,
 		"open_wall_directions": open_wall_directions.duplicate(),
 		"wall_height": TOWER_GEOMETRY.FLOOR_HEIGHT_M if tower_module_shell else 2.8,
@@ -198,6 +201,7 @@ func ensure_detail_built() -> void:
 		return
 	_detail_built = true
 	_build_content()
+	_set_room_light_runtime_state(self)
 
 
 func ensure_shell_built() -> void:
@@ -234,11 +238,17 @@ func set_stream_state(state: int) -> void:
 			var door := value as RoomDoor3D
 			if door != null:
 				door.set_open(door.is_open, true)
-	for child in get_children():
+	_set_room_light_runtime_state(self)
+
+
+func _set_room_light_runtime_state(root: Node) -> void:
+	for child in root.get_children():
 		if child is WastelandLight3D:
 			(child as WastelandLight3D).set_runtime_active(
 				_stream_state > 0, _stream_state == 2, _stream_state == 2
 			)
+		else:
+			_set_room_light_runtime_state(child)
 
 
 func set_door_open(direction: String, opened: bool, immediate := false) -> void:
@@ -485,12 +495,9 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 			dark_transforms,
 			FLOOR_TILE_MATERIAL_B
 		)
-	for direction in ["north", "south", "west", "east"]:
-		if direction in open_wall_directions:
-			continue
-		_build_base_facility_wall(direction, dimensions)
-	for direction in doors:
-		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	# 基地与楼顶/战斗房统一复用 5m 实墙、门墙和独立拐角组件。
+	# 不再用整条 Box 拉伸成墙，门洞表现、碰撞和 RoomDoor3D 触发保持同源。
+	_build_tower_wall_v2(dimensions)
 
 
 func _add_base_floor_grid(
@@ -513,61 +520,6 @@ func _add_base_floor_grid(
 	floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
 	add_child(floor_grid)
-
-
-func _build_base_facility_wall(direction: String, dimensions: Vector2) -> void:
-	var horizontal := direction in ["north", "south"]
-	var length := dimensions.x if horizontal else dimensions.y
-	var wall_center := Vector3.ZERO
-	match direction:
-		"north":
-			wall_center = Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -dimensions.y * 0.5)
-		"south":
-			wall_center = Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, dimensions.y * 0.5)
-		"west":
-			wall_center = Vector3(-dimensions.x * 0.5, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0)
-		_:
-			wall_center = Vector3(dimensions.x * 0.5, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0)
-	var thickness := 0.30
-	if direction not in doors:
-		var size := (
-			Vector3(length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
-			if horizontal
-			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, length)
-		)
-		_spawn_prefab("BaseWall_%s" % direction.capitalize(), FACILITY_BASE_WALL_PREFAB, wall_center, size, _wall_material)
-		return
-	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
-	var segment_length := (length - opening) * 0.5
-	for side in [-1.0, 1.0]:
-		var along: float = float(side) * (
-			opening * 0.5 + segment_length * 0.5
-		)
-		var segment_center := wall_center
-		if horizontal:
-			segment_center.x += along
-		else:
-			segment_center.z += along
-		var segment_size := (
-			Vector3(segment_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, thickness)
-			if horizontal
-			else Vector3(thickness, TOWER_GEOMETRY.FLOOR_HEIGHT_M, segment_length)
-		)
-		_spawn_prefab("BaseWall_%s_Side" % direction.capitalize(), FACILITY_BASE_WALL_DOOR_SIDE_PREFAB, segment_center, segment_size, _wall_material)
-	var lintel_height := (
-		TOWER_GEOMETRY.FLOOR_HEIGHT_M
-		- TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M
-	)
-	var lintel_center := wall_center
-	lintel_center.y = (
-		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + lintel_height * 0.5
-	)
-	var lintel_size := (
-		Vector3(opening, lintel_height, thickness)
-		if horizontal
-		else Vector3(thickness, lintel_height, opening)
-	)
-	_spawn_prefab("BaseWall_%s_Lintel" % direction.capitalize(), FACILITY_BASE_WALL_LINTEL_PREFAB, lintel_center, lintel_size, _wall_material)
 
 
 func _get_tower_floor_tile_mesh() -> Mesh:
@@ -604,10 +556,10 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 			"north":
 				module_position = Vector3(along, 0.0, -wall_offset)
 			"south":
-				module_position = Vector3(-along, 0.0, wall_offset)
+				module_position = Vector3(along, 0.0, wall_offset)
 				rotation_y = PI
 			"west":
-				module_position = Vector3(-wall_offset, 0.0, -along)
+				module_position = Vector3(-wall_offset, 0.0, along)
 				rotation_y = PI * 0.5
 			_:
 				module_position = Vector3(wall_offset, 0.0, along)
@@ -673,7 +625,11 @@ func _build_tower_wall_multimesh(
 
 ## PH49 v2 拼接交替装饰：每段 5m 实例一个 MeshInstance3D，偶奇 index 分 A/B 两色。
 ## 墙同一段与地砖同步节奏（同一房间内统一定义）。
-func _spawn_solid_wall_visual_instances(direction: String, transforms: Array[Transform3D]) -> void:
+func _spawn_solid_wall_visual_instances(
+	direction: String,
+	transforms: Array[Transform3D],
+	segment_indices: Array[int] = []
+) -> void:
 	var mesh := _get_tower_solid_wall_mesh()
 	if mesh == null or transforms.is_empty():
 		return
@@ -684,10 +640,11 @@ func _spawn_solid_wall_visual_instances(direction: String, transforms: Array[Tra
 	container.set_meta("tower_wall_direction", direction)
 	add_child(container)
 	for index in range(transforms.size()):
-		# 根据实例 x 或 z 坐标反推“绝对 5m 段 index”，保证与地砖 (tile_x+tile_z) % 2 对齐
-		# 墙刷x方向：x ∈ [-length/2, length/2]，tile_x = int(x + length/2) / 5
-		var origin := transforms[index].origin
-		var abs_segment_index := int(round((origin.x + 12.5) / 5.0)) if direction in ["north", "south"] else int(round((origin.z + 12.5) / 5.0))
+		var abs_segment_index := (
+			segment_indices[index]
+			if index < segment_indices.size()
+			else index
+		)
 		var visual := MeshInstance3D.new()
 		visual.mesh = mesh
 		visual.material_override = WALL_SOLID_MATERIAL_A if abs_segment_index % 2 == 0 else WALL_SOLID_MATERIAL_B
@@ -695,8 +652,11 @@ func _spawn_solid_wall_visual_instances(direction: String, transforms: Array[Tra
 		visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		visual.name = "Imported_SolidWall5M_%s_I%02d" % [
 			direction.capitalize(),
-			index,
+			abs_segment_index,
 		]
+		visual.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+		visual.set_meta("segment_index", abs_segment_index)
+		visual.set_meta("material_variant", "A" if abs_segment_index % 2 == 0 else "B")
 		container.add_child(visual)
 
 
@@ -799,6 +759,7 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 		return
 	var middle_module_count := end_index - start_index + 1
 	var solid_transforms: Array[Transform3D] = []
+	var solid_segment_indices: Array[int] = []
 	for module_index in range(start_index, end_index + 1):
 		var along := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
 		var is_door_module := has_door and module_index == door_index
@@ -808,10 +769,10 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 			"north":
 				module_position = Vector3(along, 0.0, -wall_offset)
 			"south":
-				module_position = Vector3(-along, 0.0, wall_offset)
+				module_position = Vector3(along, 0.0, wall_offset)
 				rotation_y = PI
 			"west":
-				module_position = Vector3(-wall_offset, 0.0, -along)
+				module_position = Vector3(-wall_offset, 0.0, along)
 				rotation_y = PI * 0.5
 			_:
 				module_position = Vector3(wall_offset, 0.0, along)
@@ -827,6 +788,7 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
+			_apply_module_material_variant(module, module_index)
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -840,7 +802,12 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 				Basis(Vector3.UP, rotation_y),
 				module_position
 			))
-	_spawn_solid_wall_visual_instances(direction, solid_transforms)
+			solid_segment_indices.append(module_index)
+	_spawn_solid_wall_visual_instances(
+		direction,
+		solid_transforms,
+		solid_segment_indices
+	)
 	var collision_start := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * float(start_index)
 	var collision_end := -length * 0.5 + TOWER_GEOMETRY.GRID_UNIT_M * float(end_index + 1)
 	_add_corner_aware_solid_run_collision(
@@ -871,7 +838,57 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 		"SE": module.rotation.y = PI * 0.5
 	module.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
 	module.set_meta("tower_wall_corner", corner_id)
+	var corner_variant_index := 0 if corner_id in ["NW", "SE"] else 1
+	_apply_module_material_variant(module, corner_variant_index)
 	add_child(module)
+
+
+func _apply_module_material_variant(module: Node, segment_index: int) -> void:
+	var variant := "A" if segment_index % 2 == 0 else "B"
+	var material := (
+		WALL_SOLID_MATERIAL_A
+		if variant == "A"
+		else WALL_SOLID_MATERIAL_B
+	)
+	module.set_meta("segment_index", segment_index)
+	module.set_meta("material_variant", variant)
+	if module is MeshInstance3D:
+		(module as MeshInstance3D).material_override = material
+	for child in module.get_children():
+		_apply_module_material_override(child, material)
+
+
+func _apply_module_material_override(root: Node, material: Material) -> void:
+	if root is MeshInstance3D:
+		(root as MeshInstance3D).material_override = material
+	for child in root.get_children():
+		_apply_module_material_override(child, material)
+
+
+func _count_nodes_with_meta(root: Node, key: String, value: Variant) -> int:
+	var count := 1 if root.has_meta(key) and root.get_meta(key) == value else 0
+	for child in root.get_children():
+		count += _count_nodes_with_meta(child, key, value)
+	return count
+
+
+func _count_shadow_capable_lights() -> int:
+	var count := 0
+	for room_light in _room_lights:
+		if room_light != null and room_light.cast_shadow:
+			count += 1
+	return count
+
+
+func _count_active_shadow_lights() -> int:
+	var count := 0
+	for room_light in _room_lights:
+		if room_light == null:
+			continue
+		var snapshot := room_light.get_snapshot()
+		if bool(snapshot.get("shadow_enabled", false)):
+			count += 1
+	return count
 
 
 ## 拐角 L 拼装：中间段碰撞（跳过两端拐角 + 门洞 span）
@@ -926,10 +943,10 @@ func _add_corner_aware_solid_run_collision(
 				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -wall_offset)
 				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
 			"south":
-				position = Vector3(-along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
+				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
 				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
 			"west":
-				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -along)
+				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
 				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
 			_:
 				position = Vector3(wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
@@ -972,10 +989,10 @@ func _add_tower_solid_run_collision(
 				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -wall_offset)
 				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
 			"south":
-				position = Vector3(-along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
+				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
 				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
 			"west":
-				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -along)
+				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
 				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
 			_:
 				position = Vector3(wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
@@ -1099,7 +1116,7 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 		"north":
 			door.position = Vector3(door_offset_along, 0, -dimensions.y * 0.5)
 		"south":
-			door.position = Vector3(-door_offset_along, 0, dimensions.y * 0.5)
+			door.position = Vector3(door_offset_along, 0, dimensions.y * 0.5)
 		"west":
 			door.position = Vector3(-dimensions.x * 0.5, 0, door_offset_along)
 			door.rotation.y = PI * 0.5

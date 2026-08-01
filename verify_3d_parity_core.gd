@@ -277,13 +277,16 @@ func _verify_extraction_interruption(dungeon: Dungeon3D, failures: Array[String]
 		failures.append("Fixed extraction cannot begin its 3D countdown")
 		return
 	await get_tree().process_frame
-	if not dungeon.player.input_locked or not bool(dungeon.get_runtime_snapshot().get("extraction_defense_active", false)):
-		failures.append("Extraction countdown did not lock movement and start defense")
+	if dungeon.player.input_locked or not bool(dungeon.get_runtime_snapshot().get("extraction_defense_active", false)):
+		failures.append("Extraction countdown did not preserve movement while starting defense")
 	dungeon.player.is_invincible = false
 	dungeon.player.take_damage(1, false, Vector3.ZERO)
 	await get_tree().process_frame
-	if dungeon.player.input_locked or bool(dungeon.get_runtime_snapshot().get("extraction_defense_active", false)):
-		failures.append("Taking damage did not interrupt and unlock the extraction countdown")
+	if dungeon.player.input_locked or not bool(dungeon.get_runtime_snapshot().get("extraction_defense_active", false)):
+		failures.append("Taking damage interrupted the free-movement extraction countdown")
+	var beacon_snapshot := beacon.get_snapshot()
+	if not bool(beacon_snapshot.get("active", false)):
+		failures.append("Taking damage cancelled the extraction beacon")
 
 
 func _find_room(dungeon: Dungeon3D, room_id: String) -> DungeonRoom3D:

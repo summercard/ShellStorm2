@@ -8,6 +8,7 @@ extends Node3D
 @export var failing := true
 @export var flicker_seed := 1
 @export var cast_shadow := false
+@export_flags_3d_render var light_cull_mask := 3
 @export_enum("street", "ceiling") var fixture_style := "street"
 @export var light_enabled := true
 
@@ -18,6 +19,7 @@ var _elapsed := 0.0
 var _built := false
 var _runtime_active := true
 var _runtime_flicker := true
+var _runtime_shadow_allowed := true
 
 
 func configure(
@@ -70,6 +72,7 @@ func _process(delta: float) -> void:
 func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := true) -> void:
 	_runtime_active = active
 	_runtime_flicker = allow_flicker
+	_runtime_shadow_allowed = allow_shadow
 	set_process(active and allow_flicker)
 	visible = active
 	if _light != null:
@@ -85,7 +88,12 @@ func set_light_enabled(enabled: bool) -> void:
 	set_process(_runtime_active and _runtime_flicker and light_enabled)
 	if _light != null:
 		_light.visible = _runtime_active and light_enabled
-		_light.shadow_enabled = _runtime_active and light_enabled and cast_shadow
+		_light.shadow_enabled = (
+			_runtime_active
+			and light_enabled
+			and _runtime_shadow_allowed
+			and cast_shadow
+		)
 	_update_lens_state()
 
 
@@ -106,6 +114,10 @@ func get_snapshot() -> Dictionary:
 		"illumination_active": _runtime_active and light_enabled,
 		"runtime_active": _runtime_active,
 		"runtime_flicker": _runtime_flicker,
+		"runtime_shadow_allowed": _runtime_shadow_allowed,
+		"shadow_capable": cast_shadow,
+		"shadow_enabled": _light != null and _light.shadow_enabled,
+		"light_cull_mask": light_cull_mask,
 		"is_3d": true,
 	}
 
@@ -152,7 +164,13 @@ func _apply_configuration() -> void:
 		_light.light_color = light_color
 		_light.light_energy = energy
 		_light.omni_range = light_range
-		_light.shadow_enabled = cast_shadow
+		_light.shadow_enabled = (
+			_runtime_active
+			and light_enabled
+			and _runtime_shadow_allowed
+			and cast_shadow
+		)
+		_light.light_cull_mask = light_cull_mask
 	if _lens_material != null:
 		_lens_material.albedo_color = light_color
 		_lens_material.emission = light_color

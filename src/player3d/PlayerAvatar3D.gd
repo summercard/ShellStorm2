@@ -1131,9 +1131,9 @@ func _add_wearable_mesh(parent: Node3D, node_name: String, mesh: Mesh, color: Co
 	node.name = node_name
 	node.mesh = mesh
 	node.position = position
-	# 配件只接收角色前方柔光：不向场景、头壳或同组配件投射阴影，
-	# 也不参与 GI，避免安全帽/护目镜遮住角色自身的灯光表现。
-	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	# 玩家随身灯的 shadow map 不可靠地区分“只照环境”和“角色投影”；
+	# 所有玩家配件统一禁投影，避免手电前方出现自身放大阴影。
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	node.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	node.material_override = _wearable_material(color, emissive)
 	parent.add_child(node)
@@ -1183,7 +1183,7 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
 		var mesh := mesh_instance as MeshInstance3D
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 
 
@@ -1249,10 +1249,9 @@ func _disable_ear_backface_culling(mi: MeshInstance3D) -> void:
 func _set_avatar_render_layer(layer_mask: int) -> void:
 	for child in find_children("*", "MeshInstance3D", true, false):
 		var mesh := child as MeshInstance3D
-		# 角色只接收 AvatarFrontFill，绝不能让头、身、手、脚彼此投射阴影。
-		# 这也覆盖之后导入的 GLB 网格，避免正式模型带回 Blender 的默认投影设置。
+		# 角色位于 layer 2 接收专用柔光，但自身和装备不进入任何 shadow map。
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 
 

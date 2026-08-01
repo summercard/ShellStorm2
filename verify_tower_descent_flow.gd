@@ -44,9 +44,9 @@ func _ready() -> void:
 	_expect(
 		is_equal_approx(
 			float(snapshot.get("base_to_stair_corridor_length_m", 0.0)),
-			17.5
+			15.0
 		),
-		"99层缩小后没有保留到原楼梯接口的17.5m走廊",
+		"99层基地西门没有按5m组件边界保留15m入口走廊",
 		failures
 	)
 	_expect(is_equal_approx(float(snapshot.get("floor_height", 0.0)), 9.0), "层高不是9m", failures)
@@ -59,12 +59,13 @@ func _ready() -> void:
 	)
 	_expect(int(snapshot.get("logical_combat_room_count", 0)) == 46, "四层逻辑房间总数不是46", failures)
 	_expect(
-		(snapshot.get("combat_room_size", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(45.0, 45.0))
+		(snapshot.get("combat_room_size", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(30.0, 25.0))
+		and (snapshot.get("combat_room_grid", Vector2i.ZERO) as Vector2i) == Vector2i(6, 5)
 		and (
 			snapshot.get("combat_stair_lobby_size", Vector2.ZERO) as Vector2
 		).is_equal_approx(Vector2(15.0, 15.0))
 		and (snapshot.get("boss_arena_size", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(90.0, 90.0)),
-		"15m楼梯大厅、45m基础战斗房或90m Boss区尺寸错误",
+		"15m楼梯大厅、30×25m/6×5基础战斗房或90m Boss区尺寸错误",
 		failures
 	)
 	_expect(int(snapshot.get("vertical_connector_count", 0)) == 5, "楼顶至95层不是五段楼梯间", failures)
@@ -164,6 +165,21 @@ func _ready() -> void:
 		"99层基地没有默认点亮的四灯一控照明系统",
 		failures
 	)
+	_expect(
+		int(base_room_snapshot.get("tower_corner_module_count", 0)) == 4
+		and int(base_room_snapshot.get("tower_door_wall_module_count", 0)) == 2
+		and int(base_room_snapshot.get("tower_wall_module_count", 0)) >= 8
+		and int(base_room_snapshot.get("wall_material_variant_a_count", 0)) > 0
+		and int(base_room_snapshot.get("wall_material_variant_b_count", 0)) > 0,
+		"99层基地没有复用5m墙/门/拐角组件，或A/B墙材质没有交替",
+		failures
+	)
+	_expect(
+		int(base_room_snapshot.get("shadow_capable_light_count", 0)) == 1
+		and int(base_room_snapshot.get("room_light_cull_mask", 0)) == 3,
+		"99层基地没有配置一盏角色/怪物可投影主灯",
+		failures
+	)
 	var base_light_switch := base_room.get_node_or_null(
 		"RoomLightSwitch3D"
 	) as RoomLightSwitch3D
@@ -197,8 +213,8 @@ func _ready() -> void:
 		failures
 	)
 	_expect(
-		is_equal_approx(tower.player.camera.fov, 55.0),
-		"塔楼摄像机FOV不是55度",
+		is_equal_approx(tower.player.camera.fov, 65.0),
+		"塔楼摄像机FOV不是65度",
 		failures
 	)
 	_expect(
@@ -414,6 +430,12 @@ func _ready() -> void:
 	tower.force_enter_room_for_test("facility")
 	await get_tree().process_frame
 	_expect(not tower.player.combat_enabled, "99层基地仍允许战斗", failures)
+	var active_base_snapshot := facility.get_room_snapshot()
+	_expect(
+		int(active_base_snapshot.get("active_shadow_light_count", 0)) == 1,
+		"99层基地成为当前房间后，嵌套四灯组的投影主灯没有随流送激活",
+		failures
+	)
 
 	# 99层→98层同样免费且无命运；98入口→枢纽免费但必须弹一次命运。
 	var closed_base_door := false
@@ -906,8 +928,8 @@ func _validate_combat_floor_layouts(
 				)
 			else:
 				_expect(
-					dimensions.is_equal_approx(Vector2(45.0, 45.0)),
-					"第%d物理层存在不是45×45m的基础房间" % physical_floor,
+					dimensions.is_equal_approx(Vector2(30.0, 25.0)),
+					"第%d物理层存在不是30×25m的6×5基础房间" % physical_floor,
 					failures
 				)
 		_expect(
@@ -979,26 +1001,28 @@ func _validate_combat_floor_layouts(
 				(record_by_id[parent_id] as Dictionary).get("custom_dimensions", Vector2.ZERO)
 				as Vector2
 			)
-			var same_x := is_equal_approx(position.x, parent_position.x)
-			var same_z := is_equal_approx(position.z, parent_position.z)
+			var delta_x := absf(position.x - parent_position.x)
+			var delta_z := absf(position.z - parent_position.z)
+			var horizontal_x := delta_x >= delta_z
+			var tangent_error := delta_z if horizontal_x else delta_x
 			var corridor_gap := -1.0
-			if same_x:
+			if not horizontal_x:
 				corridor_gap = (
-					absf(position.z - parent_position.z)
+					delta_z
 					- dimensions.y * 0.5
 					- parent_dimensions.y * 0.5
 				)
-			elif same_z:
+			else:
 				corridor_gap = (
-					absf(position.x - parent_position.x)
+					delta_x
 					- dimensions.x * 0.5
 					- parent_dimensions.x * 0.5
 				)
 			_expect(
-				(same_x or same_z)
+				tangent_error <= 2.51
 				and corridor_gap >= 4.99
 				and corridor_gap <= 40.01,
-				"第%d物理层相邻房间没有留下5—40m正交走廊" % physical_floor,
+				"第%d物理层相邻组件没有留下5—40m门轴对齐走廊" % physical_floor,
 				failures
 			)
 		if physical_floor < 5:
@@ -1039,7 +1063,8 @@ func _validate_combat_floor_layouts(
 				) as Vector3
 			)
 			_expect(
-				is_equal_approx(hub_position.distance_to(entry_position), 35.0),
+				is_equal_approx(absf(hub_position.z - entry_position.z), 25.0)
+				and absf(hub_position.x - entry_position.x) <= 2.51,
 				"第%d物理层入口大厅到战斗枢纽不是一格5m直走廊" % physical_floor,
 				failures
 			)
@@ -1227,7 +1252,7 @@ func _validate_camera_lower_wall_lift(
 	_expect(
 		is_equal_approx(tower.player.camera.rotation.y, expected_yaw)
 		and is_equal_approx(tower.player.camera.rotation.z, expected_roll)
-		and is_equal_approx(tower.player.camera.fov, 55.0),
+		and is_equal_approx(tower.player.camera.fov, 65.0),
 		"下方墙抬升导致镜头左右旋转、侧倾或FOV变化",
 		failures
 	)
