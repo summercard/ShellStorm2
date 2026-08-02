@@ -576,7 +576,9 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
-			_set_camera_lower_wall_on_static_bodies(module, direction == "south")
+			_set_camera_lower_wall_on_static_bodies(
+				module, direction in ["north", "south"]
+			)
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -795,7 +797,9 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
 			_apply_module_material_variant(module, module_index)
-			_set_camera_lower_wall_on_static_bodies(module, direction == "south")
+			_set_camera_lower_wall_on_static_bodies(
+				module, direction in ["north", "south"]
+			)
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -914,7 +918,7 @@ func _add_corner_aware_solid_run_collision(
 	body.name = "TowerWallCollision_%s_Run" % direction.capitalize()
 	body.collision_layer = 1
 	body.collision_mask = 0
-	body.set_meta("camera_lower_wall", direction == "south")
+	body.set_meta("camera_lower_wall", direction in ["north", "south"])
 	add_child(body)
 	var inner_length := inner_end - inner_start
 	if inner_length <= 0.0:
@@ -1025,7 +1029,7 @@ func _add_tower_wall_collision(
 	body.rotation.y = rotation_y
 	body.collision_layer = 1
 	body.collision_mask = 0
-	body.set_meta("camera_lower_wall", direction == "south")
+	body.set_meta("camera_lower_wall", direction in ["north", "south"])
 	add_child(body)
 	if not is_door_module:
 		_add_collision_shape(
@@ -1038,8 +1042,10 @@ func _add_tower_wall_collision(
 			)
 		)
 		return
-	if direction == "south":
-		_add_camera_only_door_wall_proxy(body.position, body.rotation.y, module_index)
+	if direction in ["north", "south"]:
+		_add_camera_only_door_wall_proxy(
+			direction, body.position, body.rotation.y, module_index
+		)
 	var pillar_width := (
 		TOWER_GEOMETRY.GRID_UNIT_M - TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	) * 0.5
@@ -1069,6 +1075,7 @@ func _add_tower_wall_collision(
 
 
 func _add_camera_only_door_wall_proxy(
+	direction: String,
 	module_position: Vector3,
 	rotation_y: float,
 	module_index: int
@@ -1076,13 +1083,17 @@ func _add_camera_only_door_wall_proxy(
 	# 门洞打开后不能放置世界层实体碰撞，否则会挡住角色与子弹。使用独立
 	# camera-only层覆盖完整5m门墙，仅供TowerDescent3D的镜头探针命中。
 	var proxy := StaticBody3D.new()
-	proxy.name = "CameraOnlyDoorWall_South_I%02d" % module_index
+	proxy.name = "CameraOnlyDoorWall_%s_I%02d" % [
+		direction.capitalize(),
+		module_index,
+	]
 	proxy.position = module_position
 	proxy.rotation.y = rotation_y
 	proxy.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 	proxy.collision_mask = 0
 	proxy.set_meta("camera_lower_wall", true)
 	proxy.set_meta("camera_only_door_wall", true)
+	proxy.set_meta("tower_wall_direction", direction)
 	add_child(proxy)
 	_add_collision_shape(
 		proxy,
@@ -1140,23 +1151,47 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 	var height := 2.8
 	if not has_door:
 		var size := Vector3(length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, length)
-		_spawn_prefab("Wall_%s" % direction, WALL_SEGMENT_PREFAB, center, size, _wall_material)
+		var wall := _spawn_prefab(
+			"Wall_%s" % direction,
+			WALL_SEGMENT_PREFAB,
+			center,
+			size,
+			_wall_material
+		)
+		if wall != null and direction in ["north", "south"]:
+			_set_camera_lower_wall_on_static_bodies(wall, true)
 		return
 	var opening := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	var segment_length := (length - opening) * 0.5
 	for side in [-1.0, 1.0]:
 		var offset: Vector3 = axis * float(side) * (opening * 0.5 + segment_length * 0.5)
 		var segment_size := Vector3(segment_length, height, thickness) if axis.x > 0.0 else Vector3(thickness, height, segment_length)
-		_spawn_prefab("Wall_%s" % direction, WALL_DOOR_SEGMENT_PREFAB, center + offset, segment_size, _wall_material)
+		var wall_segment := _spawn_prefab(
+			"Wall_%s" % direction,
+			WALL_DOOR_SEGMENT_PREFAB,
+			center + offset,
+			segment_size,
+			_wall_material
+		)
+		if wall_segment != null and direction in ["north", "south"]:
+			_set_camera_lower_wall_on_static_bodies(wall_segment, true)
 	var lintel_size := Vector3(opening, 0.45, thickness * 1.28) if axis.x > 0.0 else Vector3(thickness * 1.28, 0.45, opening)
-	_spawn_prefab("DoorLintel_%s" % direction, DOOR_LINTEL_PREFAB, center + Vector3(0, 1.18, 0), lintel_size, _trim_material)
+	var lintel := _spawn_prefab(
+		"DoorLintel_%s" % direction,
+		DOOR_LINTEL_PREFAB,
+		center + Vector3(0, 1.18, 0),
+		lintel_size,
+		_trim_material
+	)
+	if lintel != null and direction in ["north", "south"]:
+		_set_camera_lower_wall_on_static_bodies(lintel, true)
 
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
 	var door := DOOR_SCRIPT.new() as RoomDoor3D
 	door.configure(direction, target_room_id, theme.accent_color)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
-	door.set_meta("camera_lower_wall", direction == "south")
+	door.set_meta("camera_lower_wall", direction in ["north", "south"])
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
 	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
 	match direction:
@@ -1187,6 +1222,8 @@ func _configure_corner_camera_collisions(module: Node, corner_id: String) -> voi
 		var enabled := (
 			(corner_id == "SW" and body.name == "WallCollisionLong")
 			or (corner_id == "SE" and body.name == "WallCollisionShort")
+			or (corner_id == "NW" and body.name == "WallCollisionShort")
+			or (corner_id == "NE" and body.name == "WallCollisionLong")
 		)
 		body.set_meta("camera_lower_wall", enabled)
 
@@ -1404,6 +1441,50 @@ func _create_room_light(
 
 
 func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -> void:
+	if room_type == "FACILITY":
+		var entry_direction := ""
+		for direction in doors:
+			if str(door_targets.get(direction, "")) == "start":
+				entry_direction = direction
+				break
+		if not entry_direction.is_empty():
+			var entry_door := _door_nodes.get(entry_direction) as RoomDoor3D
+			var entry_local := entry_door.position if entry_door != null else Vector3.ZERO
+			var clearance := 4.0
+			match entry_direction:
+				"west", "east":
+					var limit_z := dimensions.y * 0.5 - 1.5
+					var switch_z := entry_local.z + clearance
+					if switch_z > limit_z:
+						switch_z = entry_local.z - clearance
+					light_switch.position = Vector3(
+						-dimensions.x * 0.5 + 0.34
+						if entry_direction == "west"
+						else dimensions.x * 0.5 - 0.34,
+						0.0,
+						clampf(switch_z, -limit_z, limit_z)
+					)
+					light_switch.rotation.y = (
+						-PI * 0.5 if entry_direction == "west" else PI * 0.5
+					)
+				_:
+					var limit_x := dimensions.x * 0.5 - 1.5
+					var switch_x := entry_local.x + clearance
+					if switch_x > limit_x:
+						switch_x = entry_local.x - clearance
+					light_switch.position = Vector3(
+						clampf(switch_x, -limit_x, limit_x),
+						0.0,
+						-dimensions.y * 0.5 + 0.34
+						if entry_direction == "north"
+						else dimensions.y * 0.5 - 0.34
+					)
+					light_switch.rotation.y = (
+						0.0 if entry_direction == "north" else PI
+					)
+			light_switch.set_meta("facility_entry_switch_clearance_m", clearance)
+			light_switch.set_meta("facility_entry_direction", entry_direction)
+			return
 	var side: int = absi(room_seed) % 4
 	var x_margin := minf(4.2, dimensions.x * 0.22)
 	var z_margin := minf(4.2, dimensions.y * 0.22)

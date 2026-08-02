@@ -78,13 +78,13 @@ func _ready() -> void:
 	_expect(
 		is_equal_approx(
 			float(snapshot.get("camera_door_bypass_half_width_m", 0.0)),
-			2.15
+			0.0
 		)
 		and is_equal_approx(
 			float(snapshot.get("camera_door_bypass_half_depth_m", 0.0)),
-			0.90
+			0.0
 		),
-		"门洞镜头旁路仍不是窄门槛判定",
+		"开放门洞仍保留会全局跳过南墙的镜头旁路",
 		failures
 	)
 	_expect(
@@ -185,6 +185,14 @@ func _ready() -> void:
 	) as RoomLightSwitch3D
 	_expect(base_light_switch != null, "99层基地灯光总开关不存在", failures)
 	if base_light_switch != null:
+		var base_entry_door := base_room.get_door_node("west")
+		_expect(
+			base_entry_door != null
+			and base_light_switch.position.distance_to(base_entry_door.position) >= 3.8
+			and str(base_light_switch.get_meta("facility_entry_direction", "")) == "west",
+			"99层基地灯开关没有放在入口侧，或离开门交互区过近",
+			failures
+		)
 		base_light_switch.toggle_light()
 		_expect(
 			not base_light_switch.is_light_on(),
@@ -330,6 +338,11 @@ func _ready() -> void:
 			"楼顶没有使用Blender特殊楼梯资产",
 			failures
 		)
+		_expect(
+			int(first_stair.get_meta("stair_approach_lower_module_count", 0)) == 3,
+			"楼顶到99层基地入口缺少15m模块化走廊",
+			failures
+		)
 
 	# 楼顶→99层是免费交通门：仍阻挡通行与视线，但不消耗钥匙、不触发命运。
 	var rooftop := (tower.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
@@ -461,6 +474,12 @@ func _ready() -> void:
 	var entry98 := (tower.get("_room_by_id") as Dictionary).get("floor_01_entry") as DungeonRoom3D
 	var base_to_98_stair := _find_vertical_connector(tower, "facility", "floor_01_entry")
 	_expect(base_to_98_stair != null and base_to_98_stair.visible, "交通门开启后99层→98层楼梯没有显示", failures)
+	_expect(
+		base_to_98_stair != null
+		and int(base_to_98_stair.get_meta("stair_approach_upper_module_count", 0)) == 4,
+		"99层基地出口到98层楼梯接口缺少20m模块化走廊",
+		failures
+	)
 	_expect(
 		entry98.visible
 		and int(entry98.get_room_snapshot().get("stream_state", 0)) > 0

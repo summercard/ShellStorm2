@@ -18,14 +18,15 @@ func _ready() -> void:
 	_validate_light_layers(tower, failures)
 	_validate_floor_materials(failures)
 	_validate_wall_components(tower, failures)
-	_validate_close_wall_probes(tower, failures)
+	await _validate_close_wall_probes(tower, failures)
+	_validate_stair_camera_walls(tower, failures)
 	await _validate_internal_partition_camera_wall(tower, failures)
 	_validate_hidden_connector_collisions(tower, failures)
 	_validate_hostile_room_spawning(tower, failures)
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: external avatar shadows, matte floors, 9m walls, south-only camera walls, visible collision parity and hostile spawning pass")
+		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: external avatar shadows, matte floors, 9m walls, rear-facing horizontal camera walls, visible collision parity and hostile spawning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -135,6 +136,16 @@ func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -
 				failures.append("Wall component exceeds the 0-9m floor envelope: %s" % mesh.get_path())
 			elif world_aabb.size.y < 6.45 and "Lintel" not in mesh.name:
 				failures.append("Wall component is not full-height: %s height=%.2f" % [mesh.get_path(), world_aabb.size.y])
+			if not mesh.visible or mesh.transparency > 0.001:
+				failures.append("Wall component is hidden or transparent: %s" % mesh.get_path())
+			var wall_material := mesh.material_override as StandardMaterial3D
+			if wall_material == null and mesh.mesh != null and mesh.mesh.get_surface_count() > 0:
+				wall_material = mesh.get_active_material(0) as StandardMaterial3D
+			if wall_material != null and (
+				wall_material.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED
+				or wall_material.albedo_color.a < 0.999
+			):
+				failures.append("Wall material is not fully opaque: %s" % mesh.get_path())
 		for value in room.find_children("*", "StaticBody3D", true, false):
 			var body := value as StaticBody3D
 			var expectation := _camera_wall_expectation(body)
@@ -142,23 +153,27 @@ func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -
 				continue
 			var marked := bool(body.get_meta("camera_lower_wall", false))
 			if expectation == 1 and not marked:
-				failures.append("South-facing wall is missing camera interaction: %s" % body.get_path())
+				failures.append("Horizontal shared wall is missing camera interaction: %s" % body.get_path())
 			elif expectation == 0 and marked:
-				failures.append("Non-south wall has camera interaction enabled: %s" % body.get_path())
-		var south_door := room.get_door_node("south")
-		var camera_door_proxies := room.find_children(
-			"CameraOnlyDoorWall_South_*", "StaticBody3D", true, false
-		)
-		if south_door != null and camera_door_proxies.size() != 1:
-			failures.append("South door wall is missing its camera-only opening proxy: %s" % room.room_id)
-		for proxy_value in camera_door_proxies:
-			var proxy := proxy_value as StaticBody3D
-			if (
-				proxy.collision_layer != GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
-				or proxy.collision_mask != 0
-				or not bool(proxy.get_meta("camera_lower_wall", false))
-			):
-				failures.append("Door camera proxy can affect gameplay collision: %s" % proxy.get_path())
+				failures.append("Non-horizontal wall has camera interaction enabled: %s" % body.get_path())
+		for direction in ["north", "south"]:
+			var horizontal_door := room.get_door_node(direction)
+			var camera_door_proxies := room.find_children(
+				"CameraOnlyDoorWall_%s_*" % direction.capitalize(),
+				"StaticBody3D",
+				true,
+				false
+			)
+			if horizontal_door != null and camera_door_proxies.size() != 1:
+				failures.append("Horizontal door wall is missing its camera-only opening proxy: %s/%s" % [room.room_id, direction])
+			for proxy_value in camera_door_proxies:
+				var proxy := proxy_value as StaticBody3D
+				if (
+					proxy.collision_layer != GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+					or proxy.collision_mask != 0
+					or not bool(proxy.get_meta("camera_lower_wall", false))
+				):
+					failures.append("Door camera proxy can affect gameplay collision: %s" % proxy.get_path())
 
 
 func _validate_hidden_connector_collisions(tower: TowerDescent3D, failures: Array[String]) -> void:
@@ -177,29 +192,60 @@ func _validate_close_wall_probes(tower: TowerDescent3D, failures: Array[String])
 	for room in (tower.get("_rooms") as Array[DungeonRoom3D]):
 		if room == null or not is_instance_valid(room) or not room.tower_module_shell or room.size_class == "rooftop":
 			continue
+		tower.force_enter_room_for_test(room.room_id)
 		room.set_stream_state(1)
 		var dimensions := room.get_dimensions()
+		for direction in ["north", "south", "west", "east"]:
+			var door := room.get_door_node(direction)
+			if door != null:
+				door.set_open(true, true)
+		await get_tree().physics_frame
 		var module_count := maxi(3, int(round(dimensions.x / TowerGeometry3D.GRID_UNIT_M)))
-		var south_door := room.get_door_node("south")
-		var door_x := room.to_local(south_door.global_position).x if south_door != null else 0.0
-		var probe_x := 0.0
-		var best_door_clearance := -1.0
-		for module_index in range(1, module_count - 1):
-			var candidate_x := -dimensions.x * 0.5 + (float(module_index) + 0.5) * TowerGeometry3D.GRID_UNIT_M
-			var clearance := absf(candidate_x - door_x) if south_door != null else absf(candidate_x)
-			if clearance > best_door_clearance:
-				best_door_clearance = clearance
-				probe_x = candidate_x
-		# 角色中心距墙中心0.50m时，胶囊几乎贴住0.30m厚墙体；旧探针
-		# 从身后0.42m起射，恰好从墙内部开始并返回-1。
-		tower.player.global_position = room.global_position + Vector3(
-			probe_x,
-			0.05,
-			dimensions.y * 0.5 - 0.50
+		for module_index in range(module_count):
+			var probe_x := -dimensions.x * 0.5 + (float(module_index) + 0.5) * TowerGeometry3D.GRID_UNIT_M
+			tower.player.global_position = room.global_position + Vector3(
+				probe_x,
+				0.05,
+				dimensions.y * 0.5 - 0.50
+			)
+			tower.call("_update_camera_lower_wall_lift", 1.0)
+			var snapshot := tower.get_tower_snapshot()
+			var distance := float(snapshot.get("camera_lower_wall_distance_m", -1.0))
+			if distance < 0.0 or distance > 0.60:
+				failures.append("Open-door south wall probe missed in %s module %d: %.3fm" % [room.room_id, module_index, distance])
+				break
+			if bool(snapshot.get("camera_door_bypass_active", true)):
+				failures.append("Open door globally bypasses camera walls in %s" % room.room_id)
+				break
+		for direction in ["north", "south", "west", "east"]:
+			var door := room.get_door_node(direction)
+			if door != null:
+				door.set_open(false, true)
+
+
+func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]) -> void:
+	for value in (tower.get("_corridor_by_edge") as Dictionary).values():
+		var connector := value as Node3D
+		if connector == null or not bool(connector.get_meta("is_vertical_connector", false)):
+			continue
+		var outward := connector.get_meta("outward", Vector3.ZERO) as Vector3
+		var expected_name := (
+			"StairwellWall_Lateral_BBody"
+			if absf(outward.x) > 0.5
+			else "StairwellWall_OuterBody"
+			if outward.z > 0.5
+			else ""
 		)
-		var distance := float(tower.call("_find_lower_camera_wall_distance"))
-		if distance < 0.0 or distance > 0.60:
-			failures.append("Near-contact south wall probe missed in %s: %.3fm" % [room.room_id, distance])
+		var marked_count := 0
+		for body_value in connector.find_children("*", "StaticBody3D", true, false):
+			var body := body_value as StaticBody3D
+			if not bool(body.get_meta("camera_lower_wall", false)):
+				continue
+			marked_count += 1
+			if not expected_name.is_empty() and body.name != expected_name and not body.name.begins_with("StairApproachWall_"):
+				failures.append("Unexpected stair wall is marked for camera lift: %s" % body.get_path())
+		if marked_count <= 0:
+			failures.append("Stairwell has no south camera wall: %s" % connector.name)
 
 
 func _validate_internal_partition_camera_wall(
@@ -291,16 +337,18 @@ func _camera_wall_expectation(body: StaticBody3D) -> int:
 	if bool(body.get_meta("camera_only_door_wall", false)):
 		return 1
 	if body is RoomDoor3D:
-		return 1 if (body as RoomDoor3D).direction == "south" else 0
+		return 1 if (body as RoomDoor3D).direction in ["north", "south"] else 0
 	var direction := _ancestor_meta(body, "tower_wall_direction")
 	if not direction.is_empty():
-		return 1 if direction == "south" else 0
+		return 1 if direction in ["north", "south"] else 0
 	var corner := _ancestor_meta(body, "tower_wall_corner")
 	if not corner.is_empty():
 		return 1 if (
 			(corner == "SW" and body.name == "WallCollisionLong")
 			or (corner == "SE" and body.name == "WallCollisionShort")
+			or (corner == "NW" and body.name == "WallCollisionShort")
+			or (corner == "NE" and body.name == "WallCollisionLong")
 		) else 0
 	if str(body.name).begins_with("TowerWallCollision_"):
-		return 1 if "South" in str(body.name) else 0
+		return 1 if ("North" in str(body.name) or "South" in str(body.name)) else 0
 	return -1

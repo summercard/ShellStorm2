@@ -11,6 +11,9 @@ const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
 )
+const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
+)
 const STAIR_GENERIC_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v001.glb"
 )
@@ -47,13 +50,6 @@ const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
 const CAMERA_WALL_COLLISION_MASK := (
 	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 )
-const CAMERA_NEAR_FADE_ALPHA := 0.06
-const CAMERA_NEAR_FADE_MARGIN_M := 0.08
-const CAMERA_NEAR_FADE_IN_RATE := 14.0
-const CAMERA_NEAR_FADE_OUT_RATE := 7.0
-const CAMERA_DOOR_BYPASS_HALF_WIDTH_M := 2.15
-const CAMERA_DOOR_BYPASS_HALF_DEPTH_M := 0.90
-const CAMERA_DOOR_BYPASS_HEIGHT_M := 2.0
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
 const CAMERA_OCCLUSION_RAY_OFFSETS := [
 	Vector3.ZERO,
@@ -102,11 +98,6 @@ var _camera_lift_target_m := 0.0
 var _camera_lift_current_m := 0.0
 var _camera_trailing_target_m := CAMERA_DEFAULT_TRAILING_M
 var _camera_trailing_current_m := CAMERA_DEFAULT_TRAILING_M
-var _camera_near_fade_candidates: Array[MeshInstance3D] = []
-var _camera_near_fade_states: Dictionary = {}
-var _camera_near_faded_count := 0
-var _camera_door_bypass_nodes: Array[RoomDoor3D] = []
-var _camera_door_bypass_active := false
 var _vertical_arrival_open: Dictionary = {}
 var _stair_arrival_prompt_door: RoomDoor3D
 
@@ -275,12 +266,9 @@ func _apply_indoor_camera_pose() -> void:
 
 
 func _update_camera_lower_wall_lift(delta: float) -> void:
-	_camera_door_bypass_active = _is_player_in_camera_door_bypass()
-	_camera_lower_wall_distance_m = (
-		-1.0
-		if _camera_door_bypass_active
-		else _find_lower_camera_wall_distance()
-	)
+	# 开门只改变通行碰撞，不得全局跳过后墙探针；否则角色站在开放的
+	# 门附近时，同一小房间处于镜头后方的水平墙也会被错误忽略。
+	_camera_lower_wall_distance_m = _find_lower_camera_wall_distance()
 	_camera_lower_wall_detected = _camera_lower_wall_distance_m >= 0.0
 	_camera_lift_target_m = 0.0
 	_camera_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
@@ -304,8 +292,6 @@ func _update_camera_lower_wall_lift(delta: float) -> void:
 		if _camera_lift_target_m > _camera_lift_current_m
 		else CAMERA_LOWER_WALL_LIFT_FALL_RATE
 	)
-	if _camera_door_bypass_active:
-		response_rate = 8.0
 	var blend := 1.0 - exp(-response_rate * maxf(delta, 0.0))
 	_camera_lift_current_m = lerpf(
 		_camera_lift_current_m,
@@ -319,8 +305,6 @@ func _update_camera_lower_wall_lift(delta: float) -> void:
 		if _camera_trailing_target_m < _camera_trailing_current_m
 		else CAMERA_LOWER_WALL_EXTEND_RATE
 	)
-	if _camera_door_bypass_active:
-		trailing_rate = 8.0
 	var trailing_blend := 1.0 - exp(-trailing_rate * maxf(delta, 0.0))
 	_camera_trailing_current_m = lerpf(
 		_camera_trailing_current_m,
@@ -397,128 +381,10 @@ func _find_lower_camera_wall_distance() -> float:
 func _is_camera_lower_wall(collider: Node) -> bool:
 	if collider == null:
 		return false
-	# 不能再根据泛化名称把东西/北墙、楼梯护栏和走廊都当成南墙。
-	# 生成组件必须显式标记，摄像机只对南面朝北的墙作抬高/收镜。
+	# 不能再根据泛化名称把东西墙、楼梯护栏和走廊端面都当成后墙。
+	# 生成组件必须显式标记；射线方向随玩家朝向变化，因此南北共享墙
+	# 都可成为镜头后墙，东西墙则不参与抬高/收镜。
 	return bool(collider.get_meta("camera_lower_wall", false))
-
-
-func _install_camera_near_fade_candidates() -> void:
-	_camera_near_fade_candidates.clear()
-	_refresh_camera_door_bypass_nodes()
-	for node in find_children("*", "MeshInstance3D", true, false):
-		var mesh_instance := node as MeshInstance3D
-		if mesh_instance == null or mesh_instance.mesh == null:
-			continue
-		var mesh_name := str(mesh_instance.name)
-		if "EnclosureWall" in mesh_name:
-			_camera_near_fade_candidates.append(mesh_instance)
-
-
-func _refresh_camera_door_bypass_nodes() -> void:
-	_camera_door_bypass_nodes.clear()
-	for node in find_children("*", "RoomDoor3D", true, false):
-		var door := node as RoomDoor3D
-		if door != null:
-			_camera_door_bypass_nodes.append(door)
-
-
-func _is_player_in_camera_door_bypass() -> bool:
-	if player == null:
-		return false
-	for door in _camera_door_bypass_nodes:
-		if (
-			not is_instance_valid(door)
-			or not door.is_inside_tree()
-			or not door.is_open
-			or door.direction == "south"
-		):
-			continue
-		var local_offset := door.to_local(player.global_position)
-		if (
-			absf(local_offset.y) <= CAMERA_DOOR_BYPASS_HEIGHT_M
-			and absf(local_offset.x) <= CAMERA_DOOR_BYPASS_HALF_WIDTH_M
-			and absf(local_offset.z) <= CAMERA_DOOR_BYPASS_HALF_DEPTH_M
-		):
-			return true
-	return false
-
-
-func _update_camera_near_occluder_fade(delta: float) -> void:
-	if player == null or player.camera == null:
-		return
-	var camera_position := player.camera.global_position
-	var player_view_target := player.global_position + Vector3.UP * 0.75
-	var active_candidates: Dictionary = {}
-	if _camera_lower_wall_detected:
-		for candidate in _camera_near_fade_candidates:
-			if not is_instance_valid(candidate) or not candidate.visible:
-				continue
-			var global_aabb: AABB = candidate.global_transform * candidate.get_aabb()
-			var expanded_aabb := global_aabb.grow(CAMERA_NEAR_FADE_MARGIN_M)
-			if (
-				expanded_aabb.has_point(camera_position)
-				or expanded_aabb.intersects_segment(
-					camera_position,
-					player_view_target
-				) != null
-			):
-				active_candidates[candidate] = true
-				_ensure_camera_near_fade_state(candidate)
-	var fading_meshes: Array = _camera_near_fade_states.keys()
-	_camera_near_faded_count = 0
-	for mesh_value in fading_meshes:
-		var mesh_instance := mesh_value as MeshInstance3D
-		if not is_instance_valid(mesh_instance):
-			_camera_near_fade_states.erase(mesh_value)
-			continue
-		var state := _camera_near_fade_states.get(mesh_instance, {}) as Dictionary
-		var active := bool(active_candidates.get(mesh_instance, false))
-		var target_alpha := CAMERA_NEAR_FADE_ALPHA if active else 1.0
-		var current_alpha := float(state.get("alpha", 1.0))
-		var response_rate := (
-			CAMERA_NEAR_FADE_IN_RATE if active else CAMERA_NEAR_FADE_OUT_RATE
-		)
-		var blend := 1.0 - exp(-response_rate * maxf(delta, 0.0))
-		current_alpha = lerpf(current_alpha, target_alpha, blend)
-		if absf(current_alpha - target_alpha) <= 0.002:
-			current_alpha = target_alpha
-		var fade_material := state.get("fade_material") as StandardMaterial3D
-		if fade_material != null:
-			var fade_color := fade_material.albedo_color
-			fade_color.a = current_alpha
-			fade_material.albedo_color = fade_color
-		state["alpha"] = current_alpha
-		_camera_near_fade_states[mesh_instance] = state
-		if current_alpha < 0.95:
-			_camera_near_faded_count += 1
-		if not active and current_alpha >= 0.999:
-			mesh_instance.material_override = state.get("original_override") as Material
-			_camera_near_fade_states.erase(mesh_instance)
-
-
-func _ensure_camera_near_fade_state(mesh_instance: MeshInstance3D) -> void:
-	if _camera_near_fade_states.has(mesh_instance):
-		return
-	var original_override := mesh_instance.material_override
-	var source_material := original_override as StandardMaterial3D
-	if source_material == null and mesh_instance.mesh.get_surface_count() > 0:
-		source_material = mesh_instance.get_active_material(0) as StandardMaterial3D
-	var fade_material := (
-		source_material.duplicate() as StandardMaterial3D
-		if source_material != null
-		else StandardMaterial3D.new()
-	)
-	if source_material == null:
-		fade_material.albedo_color = Color(0.08, 0.10, 0.11, 1.0)
-		fade_material.roughness = 0.72
-	fade_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	fade_material.depth_draw_mode = BaseMaterial3D.DEPTH_DRAW_OPAQUE_ONLY
-	mesh_instance.material_override = fade_material
-	_camera_near_fade_states[mesh_instance] = {
-		"original_override": original_override,
-		"fade_material": fade_material,
-		"alpha": 1.0,
-	}
 
 
 func _install_player_occlusion_silhouette() -> void:
@@ -1039,6 +905,13 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 			point_index
 		)
 	_build_stairwell_enclosure(connector, points, outward, lower_y)
+	_build_stair_approach_corridor(
+		connector, upper_door, upper_interface, "Upper"
+	)
+	_build_stair_approach_corridor(
+		connector, lower_interface, lower_door, "Lower"
+	)
+	_configure_stairwell_camera_walls(connector, outward)
 
 
 func _add_imported_stairwell_visual(
@@ -1348,6 +1221,117 @@ func _build_stairwell_enclosure(
 		)
 
 
+func _build_stair_approach_corridor(
+	connector: Node3D,
+	start: Vector3,
+	end: Vector3,
+	label: String
+) -> void:
+	var delta := end - start
+	delta.y = 0.0
+	var length := delta.length()
+	if length <= 0.05:
+		return
+	var along_x := absf(delta.x) >= absf(delta.z)
+	var module_count := maxi(
+		1,
+		int(round(length / TOWER_GEOMETRY.GRID_UNIT_M))
+	)
+	var direction := delta.normalized()
+	var center := (start + end) * 0.5
+	center.y = start.y
+	var perpendicular := (
+		Vector3(0.0, 0.0, 1.0)
+		if along_x
+		else Vector3(1.0, 0.0, 0.0)
+	)
+	var wall_rotation_y := 0.0 if along_x else PI * 0.5
+	for module_index in range(module_count):
+		var module_center := (
+			start
+			+ direction * TOWER_GEOMETRY.GRID_UNIT_M
+			* (float(module_index) + 0.5)
+		)
+		var floor_tile := TOWER_FLOOR_TILE_SCENE.instantiate() as Node3D
+		floor_tile.name = "StairApproachFloor_%s_I%02d" % [
+			label,
+			module_index,
+		]
+		floor_tile.position = module_center + Vector3.UP * 0.015
+		floor_tile.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
+		floor_tile.set_meta("stair_approach_corridor", true)
+		connector.add_child(floor_tile)
+		for side_sign in [-1.0, 1.0]:
+			var wall := TOWER_WALL_SCENE.instantiate() as Node3D
+			wall.name = "StairApproachWall_%s_%s_I%02d" % [
+				label,
+				"A" if side_sign < 0.0 else "B",
+				module_index,
+			]
+			wall.position = (
+				module_center
+				+ perpendicular * side_sign
+				* (TOWER_GEOMETRY.PASSAGE_WIDTH_M * 0.5)
+			)
+			wall.rotation.y = wall_rotation_y
+			wall.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+			wall.set_meta("stair_approach_corridor", true)
+			connector.add_child(wall)
+	for side_sign in [-1.0, 1.0]:
+		var side_name := (
+			("North" if side_sign < 0.0 else "South")
+			if along_x
+			else ("West" if side_sign < 0.0 else "East")
+		)
+		_add_connector_box(
+			connector,
+			"StairApproachWall_%s_%s" % [label, side_name],
+			center
+			+ perpendicular * side_sign
+			* (TOWER_GEOMETRY.PASSAGE_WIDTH_M * 0.5)
+			+ Vector3.UP * (FLOOR_HEIGHT * 0.5),
+			(
+				Vector3(length, FLOOR_HEIGHT, 0.30)
+				if along_x
+				else Vector3(0.30, FLOOR_HEIGHT, length)
+			),
+			Vector3.ZERO,
+			false,
+			true,
+			along_x and side_sign > 0.0
+		)
+	connector.set_meta(
+		"stair_approach_%s_module_count" % label.to_lower(),
+		module_count
+	)
+
+
+func _configure_stairwell_camera_walls(
+	connector: Node3D,
+	outward: Vector3
+) -> void:
+	# 楼梯间同样遵循世界南侧朝北墙契约。当前东西向楼梯的南墙是
+	# Lateral_B；未来南向楼梯由Outer承担，北向楼梯则由导入Inner承担。
+	for value in connector.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		if body == null:
+			continue
+		var is_stair_enclosure := (
+			body.name.begins_with("StairwellWall_")
+			or "EnclosureWall_Inner" in body.name
+		)
+		if not is_stair_enclosure:
+			continue
+		var enabled := false
+		if absf(outward.x) > 0.5:
+			enabled = body.name == "StairwellWall_Lateral_BBody"
+		elif outward.z > 0.5:
+			enabled = body.name == "StairwellWall_OuterBody"
+		elif outward.z < -0.5:
+			enabled = "EnclosureWall_Inner" in body.name
+		body.set_meta("camera_lower_wall", enabled)
+
+
 func _add_stair_segment(
 	root: Node3D,
 	start: Vector3,
@@ -1560,7 +1544,6 @@ func _try_open_nearby_stair_arrival() -> bool:
 	status_label.text = "%d层入口门已开启 · 安全大厅已激活" % (
 		_floor_number_from_index(floor_index)
 	)
-	_refresh_camera_door_bypass_nodes()
 	return true
 
 
@@ -1653,7 +1636,6 @@ func _is_locked_stair_arrival_room(room_id: String) -> bool:
 
 func _update_room_streaming(current_id: String) -> void:
 	super(current_id)
-	_refresh_camera_door_bypass_nodes()
 	_update_floor_visibility_state()
 	_refresh_facility_runtime()
 
@@ -2289,10 +2271,10 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_near_faded_mesh_count": 0,
 		"camera_near_fade_alpha": 1.0,
 		"camera_wall_material_mutation_enabled": false,
-		"camera_door_bypass_active": _camera_door_bypass_active,
-		"camera_door_bypass_half_width_m": CAMERA_DOOR_BYPASS_HALF_WIDTH_M,
-		"camera_door_bypass_half_depth_m": CAMERA_DOOR_BYPASS_HALF_DEPTH_M,
-		"camera_door_bypass_node_count": _camera_door_bypass_nodes.size(),
+		"camera_door_bypass_active": false,
+		"camera_door_bypass_half_width_m": 0.0,
+		"camera_door_bypass_half_depth_m": 0.0,
+		"camera_door_bypass_node_count": 0,
 		"vertical_arrival_gate_count": _vertical_arrival_open.size(),
 		"vertical_arrival_open_count": vertical_arrival_open_count,
 		"stair_arrival_interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,

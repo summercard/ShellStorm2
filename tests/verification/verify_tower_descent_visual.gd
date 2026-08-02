@@ -11,8 +11,10 @@ const COMBAT_DARK_PATH := OUTPUT_DIR + "/tower_godot_floor98_flashlight_only_ph4
 const COMBAT_LIT_PATH := OUTPUT_DIR + "/tower_godot_floor98_room_light_on_ph49.png"
 const CAMERA_CLOSE_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_close_south_wall_ph49.png"
 const CAMERA_OPEN_SOUTH_DOOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_open_south_door_ph49.png"
+const ENTRY_NORTH_SHARED_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_entry_north_shared_wall_ph50.png"
 const ELEVATOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_standalone_elevator_ph49.png"
 const STAIR_PATH := OUTPUT_DIR + "/tower_godot_stairwell_global_light_ph49.png"
+const BASE_ENTRY_CORRIDOR_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_entry_corridor_ph50.png"
 const BOSS_PATH := OUTPUT_DIR + "/tower_godot_floor95_boss_ph49.png"
 
 
@@ -76,6 +78,19 @@ func _ready() -> void:
 	_capture(ENTRY_PATH, "98层楼梯入口大厅画面采样失败", failures)
 
 	tower.force_open_edge_for_test("floor_01_entry", "floor_01_hub")
+	var entry_north_door := entry.get_door_node("north")
+	if entry_north_door != null:
+		entry_north_door.set_open(true, true)
+		tower.player.global_position = entry_north_door.global_position + Vector3(0.0, 0.05, -0.50)
+		await _settle()
+		var entry_shared_wall_snapshot := tower.get_tower_snapshot()
+		if (
+			not bool(entry_shared_wall_snapshot.get("camera_lower_wall_detected", false))
+			or tower.player.camera.position.y <= 8.15
+			or tower.player.camera.position.z >= 0.40
+		):
+			failures.append("98层安全房北门外首个连接格没有触发共享南墙镜头")
+		_capture(ENTRY_NORTH_SHARED_WALL_PATH, "98层安全房北门外镜头采样失败", failures)
 	var hub := (tower.get("_room_by_id") as Dictionary).get("floor_01_hub") as DungeonRoom3D
 	tower.player.global_position = hub.global_position + Vector3(0.0, 0.05, 3.5)
 	tower.force_enter_room_for_test("floor_01_hub")
@@ -154,6 +169,11 @@ func _ready() -> void:
 		tower.force_enter_room_for_test("facility")
 		var points: Array = stair.get_meta("path_points", [])
 		if points.size() >= 4:
+			if points.size() >= 11:
+				tower.force_enter_room_for_test("facility")
+				tower.player.global_position = (points[9] as Vector3).lerp(points[10] as Vector3, 0.5) + Vector3.UP * 0.05
+				await _settle()
+				_capture(BASE_ENTRY_CORRIDOR_PATH, "99层楼梯到基地入口走廊采样失败", failures)
 			# 在上半段向下行进的位置采样：既能验收门厅衔接，也能看到
 			# 第一跑楼梯与护栏，不让下层楼板占满整个预览画面。
 			tower.player.global_position = (points[2] as Vector3).lerp(points[3] as Vector3, 0.5) + Vector3.UP * 0.05

@@ -1,5 +1,5 @@
 extends Node
-## 真实场景专项：只有房间南面朝北的墙响应镜头；楼梯/侧墙不触发抬升。
+## 真实场景专项：固定镜头后方的水平墙响应抬升；覆盖共享门墙、房间与楼梯间。
 
 
 func _ready() -> void:
@@ -46,7 +46,7 @@ func _ready() -> void:
 		failures.append("98层枢纽缺少南侧门墙，无法验收镜头碰撞")
 	else:
 		tower.player.global_position = south_door.global_position + Vector3(0.0, 0.05, -1.2)
-		await _settle(45)
+		await _settle(90)
 		_expect_real_wall_cleared(
 			"98层枢纽南侧门墙", tower, tower.get_tower_snapshot(), failures
 		)
@@ -80,13 +80,37 @@ func _ready() -> void:
 		"98层枢纽角色贴墙状态", tower, tower.get_tower_snapshot(), failures
 	)
 
+	# 用户实际动线：从98层安全入口房向北开门，站到门外第一个5m连接格。
+	# 这时安全房的north墙在角色世界南侧，必须按共享墙面触发镜头。
+	var entry := (
+		(tower.get("_room_by_id") as Dictionary).get("floor_01_entry")
+		as DungeonRoom3D
+	)
+	tower.force_open_edge_for_test("floor_01_entry", "floor_01_hub")
+	tower.force_enter_room_for_test("floor_01_entry")
+	var entry_north_door := entry.get_door_node("north")
+	if entry_north_door == null:
+		failures.append("98层安全房缺少通向首个连接格的北门")
+	else:
+		entry_north_door.set_open(true, true)
+		tower.player.global_position = (
+			entry_north_door.global_position + Vector3(0.0, 0.05, -0.50)
+		)
+		await _settle(45)
+		_expect_real_wall_cleared(
+			"98层安全房北门外首个连接格南墙",
+			tower,
+			tower.get_tower_snapshot(),
+			failures
+		)
+
 	tower.force_open_edge_for_test("start", "facility")
 	tower.force_enter_room_for_test("start")
 	var stair := _find_vertical_connector(tower, "start", "facility")
 	if stair != null:
 		var points: Array = stair.get_meta("path_points", [])
 		tower.player.global_position = (points[1] as Vector3) + Vector3.UP * 0.04
-		await _settle(45)
+		await _settle(90)
 		var stair_snapshot := tower.get_tower_snapshot()
 		print("v0.1_REAL_STAIR_CAMERA ", {
 			"player": tower.player.global_position,
@@ -99,23 +123,26 @@ func _ready() -> void:
 			"near_faded": stair_snapshot.get("camera_near_faded_mesh_count"),
 			"door_bypass": stair_snapshot.get("camera_door_bypass_active"),
 		})
-		_expect_real_door_bypass(
-			"楼顶特殊楼梯已开启门槛",
+		_expect_non_south_wall_ignored(
+			"楼顶特殊楼梯已开启西侧门槛",
 			tower,
 			stair_snapshot,
 			failures
 		)
-		tower.player.global_position = (
-			(points[4] as Vector3) + Vector3.UP * 0.04
-		)
-		# 把角色向楼梯平台围护墙再推 1.2m，确保墙进入 65° 俯视默认镜头管（2.77m）。
-		var facing := tower.player.global_basis.z
-		facing.y = 0.0
-		if facing.length_squared() > 0.0001:
-			facing = facing.normalized()
+		var stair_south_wall := stair.get_node_or_null(
+			"StairwellWall_Lateral_BBody"
+		) as StaticBody3D
+		if stair_south_wall == null:
+			failures.append("楼梯间缺少南侧围护墙碰撞")
 		else:
-			facing = Vector3.BACK
-		tower.player.global_position += facing * 1.2
+			var lower_y := INF
+			for point_value in points:
+				lower_y = minf(lower_y, (point_value as Vector3).y)
+			tower.player.global_position = Vector3(
+				stair_south_wall.global_position.x,
+				lower_y + 0.05,
+				stair_south_wall.global_position.z - 0.50
+			)
 		await _settle(45)
 		var stair_wall_snapshot := tower.get_tower_snapshot()
 		print("v0.1_REAL_STAIR_WALL_CAMERA ", {
@@ -125,10 +152,8 @@ func _ready() -> void:
 			"distance": stair_wall_snapshot.get("camera_lower_wall_distance_m"),
 			"door_bypass": stair_wall_snapshot.get("camera_door_bypass_active"),
 		})
-		if bool(stair_wall_snapshot.get("camera_door_bypass_active", true)):
-			failures.append("离开窄门槛后楼梯平台仍错误保持门洞旁路")
-		_expect_non_south_wall_ignored(
-			"楼梯平台StairwellWall围护墙", tower, stair_wall_snapshot, failures
+		_expect_real_wall_cleared(
+			"楼梯间南侧围护墙", tower, stair_wall_snapshot, failures
 		)
 	else:
 		failures.append("没有找到楼顶到基地的真实楼梯连接器")
@@ -191,29 +216,6 @@ func _expect_non_south_wall_ignored(
 		or absf(tower.player.camera.position.z - 2.77) > 0.03
 	):
 		failures.append("%s错误改变了固定镜头位置：%s" % [label, tower.player.camera.position])
-
-
-func _expect_real_door_bypass(
-	label: String,
-	tower: TowerDescent3D,
-	snapshot: Dictionary,
-	failures: Array[String]
-) -> void:
-	if not bool(snapshot.get("camera_door_bypass_active", false)):
-		failures.append("%s没有进入门洞镜头旁路" % label)
-	if bool(snapshot.get("camera_lower_wall_detected", true)):
-		failures.append("%s仍触发了下方墙探测" % label)
-	if int(snapshot.get("camera_near_faded_mesh_count", -1)) != 0:
-		failures.append("%s仍在淡出门板或门楣" % label)
-	if (
-		absf(tower.player.camera.position.y - 8.0) > 0.01
-		or absf(tower.player.camera.position.z - 2.77) > 0.03
-		or absf(tower.player.camera.position.x) > 0.001
-	):
-		failures.append(
-			"%s没有以固定镜头过门：%s"
-			% [label, str(tower.player.camera.position)]
-		)
 
 
 func _settle(frames: int) -> void:
