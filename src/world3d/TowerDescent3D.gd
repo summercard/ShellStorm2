@@ -380,23 +380,9 @@ func _find_lower_camera_wall_distance() -> float:
 func _is_camera_lower_wall(collider: Node) -> bool:
 	if collider == null:
 		return false
-	if bool(collider.get_meta("camera_lower_wall", false)):
-		return true
-	var collider_name := str(collider.name)
-	return (
-		collider_name.begins_with("TowerWallCollision_")
-		or collider_name.begins_with("BaseWall_")
-		or collider_name == "FacilityBaseWallBody"
-		or collider_name == "FacilityBaseWallSideBody"
-		or collider_name == "FacilityBaseWallLintelBody"
-		or collider_name.begins_with("CorridorWallCollision_")
-		or collider_name.begins_with("StairwellWall_")
-		or collider_name == "OuterBoundaryCollision"
-		or (
-			"EnclosureWall" in collider_name
-			and "CollisionBody" in collider_name
-		)
-	)
+	# 不能再根据泛化名称把东西/北墙、楼梯护栏和走廊都当成南墙。
+	# 生成组件必须显式标记，摄像机只对南面朝北的墙作抬高/收镜。
+	return bool(collider.get_meta("camera_lower_wall", false))
 
 
 func _install_camera_near_fade_candidates() -> void:
@@ -1304,7 +1290,7 @@ func _build_stairwell_enclosure(
 				Vector3.ZERO,
 				false,
 				true,
-				true
+				false
 			)
 		var outer_x := max_x if outward.x > 0.0 else min_x
 		_add_connector_box(
@@ -1315,7 +1301,7 @@ func _build_stairwell_enclosure(
 			Vector3.ZERO,
 			false,
 			true,
-			true
+			false
 		)
 	else:
 		var lateral_x := [min_x, max_x]
@@ -1329,7 +1315,7 @@ func _build_stairwell_enclosure(
 				Vector3.ZERO,
 				false,
 				true,
-				true
+				false
 			)
 		var outer_z := max_z if outward.z > 0.0 else min_z
 		_add_connector_box(
@@ -1340,7 +1326,7 @@ func _build_stairwell_enclosure(
 			Vector3.ZERO,
 			false,
 			true,
-			true
+			false
 		)
 
 
@@ -1414,12 +1400,11 @@ func _add_connector_box(
 	var collision := CollisionShape3D.new()
 	collision.name = "%sShape" % node_name
 	collision.shape = shape
-	# 默认禁用（走廊墙/楼梯护栏/门楣都有视觉 prefab 自带碰撞），
-	# 楼梯间 3 面围护墙需要射线命中以触发近墙摄像机抬高。
+	# 默认禁用（走廊墙/楼梯护栏/门楣都有视觉 prefab 自带碰撞）。
+	# 楼梯围护碰撞只在连接器可见且开放时启用，不能留下隐藏阻挡。
 	collision.disabled = not collision_enabled
 	collision.set_meta("persistent_stair_support", is_support)
-	# 标记为始终启用的摄像机低墙：_set_connector_collision_enabled 会跳过它。
-	collision.set_meta("camera_lower_wall", camera_lower_wall)
+	body.set_meta("camera_lower_wall", camera_lower_wall)
 	body.add_child(collision)
 
 
@@ -1572,18 +1557,10 @@ func _update_corridor_streaming(current_id: String) -> void:
 			continue
 		var ids := str(edge).split("|")
 		var active := bool(_open_edges.get(edge, false)) and current_id in ids
-		var is_vertical := bool(connector.get_meta("is_vertical_connector", false))
-		var support_loaded := false
-		if is_vertical:
-			var upper_floor := int(connector.get_meta("upper_floor_index", -999))
-			var lower_floor := int(connector.get_meta("lower_floor_index", -999))
-			support_loaded = (
-				upper_floor in _loaded_floor_indices
-				or lower_floor in _loaded_floor_indices
-			)
 		connector.visible = active
 		connector.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
-		_set_connector_collision_enabled(connector, active, support_loaded)
+		# 连接器隐藏时所有碰撞一并卸载；不能保留看不见但仍挡角色/子弹的楼梯面。
+		_set_connector_collision_enabled(connector, active, false)
 
 
 func _set_connector_collision_enabled(
@@ -1593,15 +1570,10 @@ func _set_connector_collision_enabled(
 ) -> void:
 	if root is CollisionShape3D:
 		var collision := root as CollisionShape3D
-		# StairwellWall 3 面围护墙：永远启用，使近墙摄像机探针在门未开时也能
-		# 命中并抬高收镜；玩家通行仍由门碰撞与 _open_edges 控制。
-		if bool(collision.get_meta("camera_lower_wall", false)):
-			collision.set_deferred("disabled", false)
-			return
 		var persistent_support := bool(collision.get_meta("persistent_stair_support", false))
 		collision.set_deferred(
 			"disabled",
-			not (support_enabled if persistent_support else enabled)
+			not ((enabled or support_enabled) if persistent_support else enabled)
 		)
 	for child in root.get_children():
 		_set_connector_collision_enabled(child, enabled, support_enabled)

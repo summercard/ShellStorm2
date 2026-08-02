@@ -18,6 +18,7 @@ size = Vector3(5, 9, 0.3)
 [node name="PrpTowerWallSolid5m" type="Node3D"]
 
 [node name="WallSolid_5m" type="MeshInstance3D" parent="."]
+position = Vector3(0, 4.5, 0)
 mesh = SubResource("BoxMesh_wall_solid_5m")
 material_override = SubResource("StandardMaterial3D_wall")
 
@@ -26,4 +27,5 @@ collision_layer = 1
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WallCollision"]
+position = Vector3(0, 4.5, 0)
 shape = SubResource("BoxShape3D_wall_solid_5m")

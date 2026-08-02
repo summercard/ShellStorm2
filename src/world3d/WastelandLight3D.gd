@@ -207,7 +207,8 @@ func _material(color: Color, metallic: float, roughness: float, emission := fals
 	if emission:
 		material.emission_enabled = true
 		material.emission = Color(color.r, color.g, color.b, 1.0)
-		material.emission_energy_multiplier = 1.7
+		# 灯罩只负责可读性，不再用高发光值把附近地砖推成过曝色块。
+		material.emission_energy_multiplier = 0.72
 	if unshaded:
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	return material

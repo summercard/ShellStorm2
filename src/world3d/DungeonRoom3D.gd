@@ -297,7 +297,7 @@ func get_door_node(direction: String) -> RoomDoor3D:
 
 func _build_shell() -> void:
 	var dimensions := get_dimensions()
-	_floor_material = _material(theme.floor_color, 0.44, 0.72)
+	_floor_material = _material(theme.floor_color, 0.08, 0.90)
 	_wall_material = _material(theme.wall_color, 0.62, 0.62)
 	_trim_material = _material(theme.trim_color, 0.74, 0.38)
 	if tower_module_shell:
@@ -305,7 +305,7 @@ func _build_shell() -> void:
 		return
 	# Floor：1×1×1 prefab + scale = (dim.x, 0.36, dim.y)
 	_spawn_prefab("Floor", FLOOR_PREFAB, Vector3(0, -0.18, 0), Vector3(dimensions.x, 0.36, dimensions.y), _floor_material)
-	_spawn_prefab("FloorInset", FLOOR_INSET_PREFAB, Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.36, 0.84))
+	_spawn_prefab("FloorInset", FLOOR_INSET_PREFAB, Vector3(0, 0.012, 0), Vector3(dimensions.x * 0.80, 0.025, dimensions.y * 0.80), _material(theme.floor_color.lightened(0.055), 0.04, 0.94))
 	for x in range(-int(dimensions.x * 0.4), int(dimensions.x * 0.4), 3):
 		_spawn_prefab("FloorSeam", FLOOR_SEAM_PREFAB, Vector3(float(x), 0.03, 0), Vector3(0.025, 0.018, dimensions.y * 0.76), _trim_material)
 	if size_class == "rooftop":
@@ -576,6 +576,7 @@ func _build_tower_wall_run(direction: String, dimensions: Vector2) -> void:
 			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
+			_set_camera_lower_wall_on_static_bodies(module, direction == "south")
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -612,7 +613,9 @@ func _build_tower_wall_multimesh(
 	multimesh.mesh = mesh
 	multimesh.instance_count = transforms.size()
 	for index in range(transforms.size()):
-		multimesh.set_instance_transform(index, transforms[index])
+		var wall_transform := transforms[index]
+		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
+		multimesh.set_instance_transform(index, wall_transform)
 	var visual := MultiMeshInstance3D.new()
 	visual.name = "Imported_SolidWall5M_%s_Run" % direction.capitalize()
 	visual.multimesh = multimesh
@@ -648,7 +651,10 @@ func _spawn_solid_wall_visual_instances(
 		var visual := MeshInstance3D.new()
 		visual.mesh = mesh
 		visual.material_override = WALL_SOLID_MATERIAL_A if abs_segment_index % 2 == 0 else WALL_SOLID_MATERIAL_B
-		visual.transform = transforms[index]
+		var wall_transform := transforms[index]
+		# BoxMesh 原点在几何中心；抬高半层后才是从地面到 9m，而不是 -4.5~+4.5m。
+		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
+		visual.transform = wall_transform
 		visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		visual.name = "Imported_SolidWall5M_%s_I%02d" % [
 			direction.capitalize(),
@@ -838,6 +844,8 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 		"SE": module.rotation.y = PI * 0.5
 	module.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
 	module.set_meta("tower_wall_corner", corner_id)
+	# 只有房间南边朝北的墙参与近墙摄像机交互；南侧两个拐角属于该边。
+	_set_camera_lower_wall_on_static_bodies(module, corner_id in ["SW", "SE"])
 	var corner_variant_index := 0 if corner_id in ["NW", "SE"] else 1
 	_apply_module_material_variant(module, corner_variant_index)
 	add_child(module)
@@ -904,6 +912,7 @@ func _add_corner_aware_solid_run_collision(
 	body.name = "TowerWallCollision_%s_Run" % direction.capitalize()
 	body.collision_layer = 1
 	body.collision_mask = 0
+	body.set_meta("camera_lower_wall", direction == "south")
 	add_child(body)
 	var inner_length := inner_end - inner_start
 	if inner_length <= 0.0:
@@ -1014,6 +1023,7 @@ func _add_tower_wall_collision(
 	body.rotation.y = rotation_y
 	body.collision_layer = 1
 	body.collision_mask = 0
+	body.set_meta("camera_lower_wall", direction == "south")
 	add_child(body)
 	if not is_door_module:
 		_add_collision_shape(
@@ -1110,6 +1120,7 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	var door := DOOR_SCRIPT.new() as RoomDoor3D
 	door.configure(direction, target_room_id, theme.accent_color)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
+	door.set_meta("camera_lower_wall", direction == "south")
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
 	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
 	match direction:
@@ -1125,6 +1136,13 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 			door.rotation.y = PI * 0.5
 	add_child(door)
 	_door_nodes[direction] = door
+
+
+func _set_camera_lower_wall_on_static_bodies(root: Node, enabled: bool) -> void:
+	if root is StaticBody3D:
+		(root as StaticBody3D).set_meta("camera_lower_wall", enabled)
+	for child in root.get_children():
+		_set_camera_lower_wall_on_static_bodies(child, enabled)
 
 
 func _build_stair_lobby_markings(dimensions: Vector2) -> void:
@@ -1188,7 +1206,7 @@ func _build_content() -> void:
 					0.0,
 					z_sign * dimensions.y * 0.24
 				),
-				theme.fixture_energy * 4.85,
+				theme.fixture_energy * 2.40,
 				maxf(
 					theme.fixture_range * 1.72,
 					minf(dimensions.x, dimensions.y) * 0.58
@@ -1203,7 +1221,7 @@ func _build_content() -> void:
 			"RoomCeilingLight",
 			Vector3.ZERO,
 			theme.fixture_energy * (
-				4.45 if size_class in ["large", "arena", "floor"] else 3.65
+				2.20 if size_class in ["large", "arena", "floor"] else 1.85
 			),
 			maxf(
 				theme.fixture_range * 1.72,

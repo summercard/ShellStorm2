@@ -174,19 +174,19 @@ func _build_outer_shell() -> void:
 	for index in range(GRID_COUNT):
 		var offset := -MAP_HALF + GRID_UNIT * (float(index) + 0.5)
 		if not _is_in_wall_door_gap("north", index):
-			transforms.append(Transform3D(Basis.IDENTITY, Vector3(offset, 0.0, -boundary)))
+			transforms.append(Transform3D(Basis.IDENTITY, Vector3(offset, 4.5, -boundary)))
 		else:
 			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset, 0.0, -boundary)))
 		if not _is_in_wall_door_gap("south", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, PI), Vector3(-offset, 0.0, boundary)))
+			transforms.append(Transform3D(Basis(Vector3.UP, PI), Vector3(-offset, 4.5, boundary)))
 		else:
 			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(-offset, 0.0, boundary)))
 		if not _is_in_wall_door_gap("west", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, 0.0, -offset)))
+			transforms.append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, 4.5, -offset)))
 		else:
 			door_transforms["west"].append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, 0.0, -offset)))
 		if not _is_in_wall_door_gap("east", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, 0.0, offset)))
+			transforms.append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, 4.5, offset)))
 		else:
 			door_transforms["east"].append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, 0.0, offset)))
 	var multimesh := MultiMesh.new()
@@ -214,16 +214,16 @@ func _build_outer_shell() -> void:
 				door_instance.transform = door_transform
 				add_child(door_instance)
 
-	var body := StaticBody3D.new()
-	body.name = "OuterBoundaryCollision"
-	body.collision_layer = 1
-	body.collision_mask = 0
-	add_child(body)
 	var height := 1.5 if floor_kind == "rooftop" else 9.0
-	_add_wall_collision(body, "north", height, boundary)
-	_add_wall_collision(body, "south", height, boundary)
-	_add_wall_collision(body, "west", height, boundary)
-	_add_wall_collision(body, "east", height, boundary)
+	# 每一边使用独立碰撞体，避免一个共享 body 让摄像机无法判断命中方向。
+	for side in ["north", "south", "west", "east"]:
+		var body := StaticBody3D.new()
+		body.name = "OuterBoundaryCollision_%s" % side.capitalize()
+		body.collision_layer = 1
+		body.collision_mask = 0
+		body.set_meta("camera_lower_wall", side == "south")
+		add_child(body)
+		_add_wall_collision(body, side, height, boundary)
 
 
 func _is_in_wall_door_gap(side: String, index: int) -> bool:

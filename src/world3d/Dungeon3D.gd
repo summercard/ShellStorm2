@@ -21,6 +21,10 @@ const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dun
 const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
+const HOSTILE_ROOM_TYPES: Array[String] = [
+	"COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE",
+]
+const ENEMY_FILL_ATTEMPT_LIMIT := 4
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -337,6 +341,8 @@ func _configure_environment() -> void:
 	world_environment.environment = environment
 	key_light.light_color = visual_theme.key_light_color.lerp(Color(1.0, 0.54, 0.24), 0.18)
 	key_light.light_energy = 0.10
+	key_light.shadow_enabled = true
+	key_light.light_cull_mask = 3
 
 
 func _generate_layout() -> void:
@@ -609,8 +615,8 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	var floor_size := Vector3(length, 0.26, 3.8) if horizontal else Vector3(3.8, 0.26, length)
 	var floor_material := StandardMaterial3D.new()
 	floor_material.albedo_color = visual_theme.floor_color.lightened(0.055)
-	floor_material.metallic = 0.46
-	floor_material.roughness = 0.74
+	floor_material.metallic = 0.08
+	floor_material.roughness = 0.90
 	_spawn_corridor_piece(body, "CorridorFloor_%02d" % index, CORRIDOR_FLOOR_PREFAB, floor_size, Vector3.ZERO, floor_material)
 	var wall_material := StandardMaterial3D.new()
 	wall_material.albedo_color = visual_theme.wall_color.darkened(0.08)
@@ -776,12 +782,13 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
 	if _spawned_rooms.has(room.room_id):
 		_ensure_room_key_reward(room)
+		_repair_hostile_room_progress(room)
 		status_label.text = "返回已探索房间 · %s" % ("已肃清" if room.cleared else "战斗未结束")
 		return
 	_spawned_rooms[room.room_id] = true
 	if room.room_type == "START":
 		call_deferred("_spawn_starter_weapon_pickup", room)
-	if room.room_type in ["COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE"]:
+	if room.room_type in HOSTILE_ROOM_TYPES:
 		_spawn_room_enemies(room)
 	elif room.room_type == "EVENT":
 		room.cleared = false
@@ -791,7 +798,9 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
 
 
-func _spawn_room_enemies(room: DungeonRoom3D) -> void:
+func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0), 0, 3)
 	var enemy_configs: Array[Dictionary] = []
@@ -809,8 +818,30 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> void:
 		_:
 			enemy_configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
 			var desired := 4 + floor * 2 + (2 if room.size_class == "large" else 4 if room.size_class == "arena" else 0)
+			var attempts := 0
+			while enemy_configs.size() < desired and attempts < ENEMY_FILL_ATTEMPT_LIMIT:
+				attempts += 1
+				var generated := _monster_injector.generate_enemies({
+					"type": "random", "floor": floor, "floor_level": floor_level,
+				})
+				if generated.is_empty():
+					continue
+				enemy_configs.append_array(generated)
+			# 主题怪物池损坏时也不能无限循环或留下未清空的锁房。
 			while enemy_configs.size() < desired:
-				enemy_configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
+				var fallback := _monster_injector.generate_enemies({
+					"type": "safe_fallback", "floor": floor, "floor_level": floor_level,
+				})
+				if fallback.is_empty():
+					break
+				enemy_configs.append(fallback[0])
+	if enemy_configs.is_empty():
+		push_error("Hostile room %s generated no enemies; unlocking room to prevent a soft lock" % room.room_id)
+		_alive_by_room[room.room_id] = 0
+		_room_wave_queues[room.room_id] = []
+		_mark_room_cleared(room, true)
+		status_label.text = "敌群生成失败，房间已安全解锁"
+		return false
 	var wave_count := 1
 	if room.room_type == "COMBAT":
 		wave_count = [1, 2, 2, 3][floor_level]
@@ -830,8 +861,15 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> void:
 	_room_wave_numbers[room.room_id] = 1
 	_room_wave_totals[room.room_id] = wave_count
 	_enemy_nodes_by_room[room.room_id] = []
-	_spawn_enemy_batch(room, first_wave, false)
-	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [wave_count, first_wave.size()]
+	var spawned := _spawn_enemy_batch(room, first_wave, false)
+	if spawned <= 0:
+		push_error("Hostile room %s failed to instantiate its first wave; unlocking room" % room.room_id)
+		_room_wave_queues[room.room_id] = []
+		_mark_room_cleared(room, true)
+		status_label.text = "敌群载入失败，房间已安全解锁"
+		return false
+	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [wave_count, spawned]
+	return true
 
 
 func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
@@ -845,15 +883,16 @@ func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 	status_label.text = "起始补给：拾取霰弹枪后按 I 打开背包并点击装备 · 墙边 E 可开中央灯"
 
 
-func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false) -> void:
+func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false) -> int:
 	if room == null or enemy_configs.is_empty():
-		return
+		return 0
 	if not _enemy_nodes_by_room.has(room.room_id):
 		_enemy_nodes_by_room[room.room_id] = []
-	if not count_reserved:
-		_alive_by_room[room.room_id] = int(_alive_by_room.get(room.room_id, 0)) + enemy_configs.size() if additive else enemy_configs.size()
+	var spawned_count := 0
 	for index in range(enemy_configs.size()):
 		var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+		if enemy == null:
+			continue
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
 		enemy.configure_from_enemy_data(enemy_configs[index])
@@ -864,9 +903,50 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 		enemy.health_changed.connect(_on_enemy_health_changed)
 		(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
+		spawned_count += 1
 		enemy.set_runtime_active(room.room_id == _current_room_id)
 		if enemy.enemy_kind == "boss":
 			_show_boss_hud(enemy)
+	if not count_reserved:
+		_alive_by_room[room.room_id] = (
+			int(_alive_by_room.get(room.room_id, 0)) + spawned_count
+			if additive
+			else spawned_count
+		)
+	elif spawned_count < enemy_configs.size():
+		_alive_by_room[room.room_id] = maxi(
+			0,
+			int(_alive_by_room.get(room.room_id, 0))
+			- (enemy_configs.size() - spawned_count)
+		)
+	return spawned_count
+
+
+func _repair_hostile_room_progress(room: DungeonRoom3D) -> void:
+	if room == null or room.cleared or room.room_type not in HOSTILE_ROOM_TYPES:
+		return
+	var live_count := 0
+	var live_references: Array = []
+	for value in _enemy_nodes_by_room.get(room.room_id, []):
+		var enemy := value as Enemy3D
+		if enemy == null or not is_instance_valid(enemy) or enemy.ai_state == "dead":
+			continue
+		live_references.append(enemy)
+		live_count += 1
+	_enemy_nodes_by_room[room.room_id] = live_references
+	if live_count > 0:
+		_alive_by_room[room.room_id] = live_count
+		return
+	_alive_by_room[room.room_id] = 0
+	if _wave_spawn_pending.has(room.room_id):
+		return
+	var pending_waves := _room_wave_queues.get(room.room_id, []) as Array
+	if not pending_waves.is_empty():
+		_spawn_next_room_wave(room.room_id)
+		return
+	# 已记录“访问过”但没有任何活体/待刷波次时，重新建立该房战斗；
+	# 若配置仍然失败，_spawn_room_enemies 会主动清房，绝不永久锁门。
+	_spawn_room_enemies(room)
 
 
 func _spawn_next_room_wave(room_id: String) -> void:
@@ -879,9 +959,17 @@ func _spawn_next_room_wave(room_id: String) -> void:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	var batch: Array[Dictionary] = queue.pop_front() as Array[Dictionary]
 	_room_wave_numbers[room_id] = int(_room_wave_numbers.get(room_id, 1)) + 1
-	_spawn_enemy_batch(room, batch, false)
+	var spawned := _spawn_enemy_batch(room, batch, false)
+	if spawned <= 0:
+		push_error("Hostile room %s failed to instantiate a later wave; unlocking room" % room_id)
+		_room_wave_queues[room_id] = []
+		_alive_by_room[room_id] = 0
+		if room != null:
+			_mark_room_cleared(room, true)
+		status_label.text = "增援载入失败，房间已安全解锁"
+		return
 	status_label.text = "增援抵达：波次 %d/%d · %d 个敌对信号" % [
-		int(_room_wave_numbers[room_id]), int(_room_wave_totals.get(room_id, 1)), batch.size(),
+		int(_room_wave_numbers[room_id]), int(_room_wave_totals.get(room_id, 1)), spawned,
 	]
 
 

@@ -634,7 +634,8 @@ func _add_box(node_name: String, position: Vector3, size: Vector3, material: Sta
 	instance.position = position
 	instance.mesh = mesh
 	instance.layers = render_layers
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 手持武器与角色相同：允许太阳/房间灯投影；玩家灯通过层遮罩避开 layer 2。
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	_visual_root.add_child(instance)
 
@@ -652,7 +653,7 @@ func _add_cylinder(node_name: String, position: Vector3, radius: float, length: 
 	instance.rotation_degrees.x = 90.0
 	instance.mesh = mesh
 	instance.layers = render_layers
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	_visual_root.add_child(instance)
 

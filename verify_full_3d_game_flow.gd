@@ -67,8 +67,8 @@ func _ready() -> void:
 			var light_snapshot := (lights[0] as WastelandLight3D).get_snapshot()
 			if str(light_snapshot.get("fixture_style", "")) != "ceiling" or bool(light_snapshot.get("has_light_pool", true)):
 				failures.append("Room still uses a streetlight/light-pool instead of one central ceiling fixture")
-			if float(light_snapshot.get("energy", 0.0)) < 5.5 or float(light_snapshot.get("range", 0.0)) < 13.5:
-				failures.append("Central ceiling light is too weak to illuminate the larger 3D room")
+			if float(light_snapshot.get("energy", 0.0)) < 4.8 or float(light_snapshot.get("range", 0.0)) < 13.5:
+				failures.append("Central ceiling light is outside the balanced room-light envelope")
 			if bool(light_snapshot.get("light_enabled", true)):
 				failures.append("Room ceiling light must start switched off")
 		var switches := dungeon.get_tree().get_nodes_in_group("room_light_switch_3d").filter(func(node): return dungeon.is_ancestor_of(node))

@@ -133,7 +133,7 @@ func _ready() -> void:
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("sun_energy", 0.0)), 0.85)
+		is_equal_approx(float(rooftop_atmosphere.get("sun_energy", 0.0)), 0.58)
 		and bool(rooftop_atmosphere.get("sun_shadow_enabled", false)),
 		"楼顶固定太阳能量或阴影状态错误",
 		failures
@@ -1208,6 +1208,7 @@ func _validate_camera_lower_wall_lift(
 	blocker.name = "TowerWallCollision_CameraLowerTest"
 	blocker.collision_layer = 1
 	blocker.collision_mask = 0
+	blocker.set_meta("camera_lower_wall", true)
 	var collision := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(4.0, 9.0, 0.4)

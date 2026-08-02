@@ -1131,9 +1131,9 @@ func _add_wearable_mesh(parent: Node3D, node_name: String, mesh: Mesh, color: Co
 	node.name = node_name
 	node.mesh = mesh
 	node.position = position
-	# 玩家随身灯的 shadow map 不可靠地区分“只照环境”和“角色投影”；
-	# 所有玩家配件统一禁投影，避免手电前方出现自身放大阴影。
-	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 玩家网格保留外部灯光投影能力。玩家随身三盏灯通过 light_cull_mask
+	# 避开角色层，因此不会产生手电自身阴影；太阳和房间灯仍能投射角色阴影。
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	node.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 	node.material_override = _wearable_material(color, emissive)
 	parent.add_child(node)
@@ -1183,7 +1183,7 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 	for mesh_instance in root.find_children("*", "MeshInstance3D", true, false):
 		var mesh := mesh_instance as MeshInstance3D
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 
 
@@ -1249,9 +1249,10 @@ func _disable_ear_backface_culling(mi: MeshInstance3D) -> void:
 func _set_avatar_render_layer(layer_mask: int) -> void:
 	for child in find_children("*", "MeshInstance3D", true, false):
 		var mesh := child as MeshInstance3D
-		# 角色位于 layer 2 接收专用柔光，但自身和装备不进入任何 shadow map。
+		# 角色位于 layer 2；玩家灯的环境光仅照 layer 1，角色柔光不投影。
+		# 太阳和房间灯照 layer 1|2，因此角色仍会留下符合场景方向的阴影。
 		mesh.layers = layer_mask
-		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
 
 

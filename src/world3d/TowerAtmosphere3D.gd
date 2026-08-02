@@ -4,7 +4,7 @@ extends Node3D
 ## 室内明暗由楼板、墙、门的真实阴影以及局部灯具决定。
 ## 光照只负责表现，不参与 PlayerVision3D 的目标显隐判定。
 
-const SUN_ENERGY := 0.85
+const SUN_ENERGY := 0.58
 const SUN_COLOR := Color(1.0, 0.84, 0.62)
 const BACKGROUND_COLOR := Color(0.58, 0.62, 0.64)
 const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)

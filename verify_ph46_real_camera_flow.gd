@@ -1,5 +1,5 @@
 extends Node
-## PH48真实场景专项：普通墙和楼梯墙保留响应，仅已开启门的窄门槛固定镜头。
+## 真实场景专项：只有房间南面朝北的墙响应镜头；楼梯/侧墙不触发抬升。
 
 
 func _ready() -> void:
@@ -80,11 +80,8 @@ func _ready() -> void:
 		})
 		if bool(stair_wall_snapshot.get("camera_door_bypass_active", true)):
 			failures.append("离开窄门槛后楼梯平台仍错误保持门洞旁路")
-		_expect_real_wall_cleared(
-			"楼梯平台StairwellWall围护墙",
-			tower,
-			stair_wall_snapshot,
-			failures
+		_expect_non_south_wall_ignored(
+			"楼梯平台StairwellWall围护墙", tower, stair_wall_snapshot, failures
 		)
 	else:
 		failures.append("没有找到楼顶到基地的真实楼梯连接器")
@@ -132,6 +129,21 @@ func _expect_real_wall_cleared(
 			!= "lower_wall_lift_and_retract_arc"
 	):
 		failures.append("%s没有保持固定视角抬升收拢契约" % label)
+
+
+func _expect_non_south_wall_ignored(
+	label: String,
+	tower: TowerDescent3D,
+	snapshot: Dictionary,
+	failures: Array[String]
+) -> void:
+	if bool(snapshot.get("camera_lower_wall_detected", true)):
+		failures.append("%s错误触发了仅限南墙的镜头交互" % label)
+	if (
+		absf(tower.player.camera.position.y - 8.0) > 0.02
+		or absf(tower.player.camera.position.z - 2.77) > 0.03
+	):
+		failures.append("%s错误改变了固定镜头位置：%s" % [label, tower.player.camera.position])
 
 
 func _expect_real_door_bypass(

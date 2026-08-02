@@ -15,7 +15,7 @@ func _ready() -> void:
 	dungeon.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("3D_COMBAT_PROGRESSION_FLOW_OK: brighter central light, near-player room keys, missing-key recovery, dedupe and pickup pop-spin feedback pass")
+		print("3D_COMBAT_PROGRESSION_FLOW_OK: balanced central light, near-player room keys, missing-key recovery, dedupe and pickup pop-spin feedback pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -32,9 +32,9 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	target.ensure_detail_built()
 	await get_tree().process_frame
 	var central_light := target.get("_central_light") as WastelandLight3D
-	var expected_multiplier := 3.25 if target.size_class in ["large", "arena"] else 2.75
-	if central_light == null or central_light.energy < target.theme.fixture_energy * expected_multiplier - 0.01:
-		failures.append("Room central light did not receive the PH28 brightness increase")
+	var expected_multiplier := 2.20 if target.size_class in ["large", "arena", "floor"] else 1.85
+	if central_light == null or not is_equal_approx(central_light.energy, target.theme.fixture_energy * expected_multiplier):
+		failures.append("Room central light does not use the reduced non-overexposed energy")
 
 	dungeon.set("_current_room_id", target.room_id)
 	dungeon.call("_update_room_streaming", target.room_id)

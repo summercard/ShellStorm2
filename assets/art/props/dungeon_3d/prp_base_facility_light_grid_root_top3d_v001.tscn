@@ -10,8 +10,8 @@
 [node name="BaseCeilingLight_01" parent="." instance=ExtResource("1_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 6.28, -7.5)
 light_color = Color(0.5968, 0.8208, 0.9008, 1)
-energy = 23.4
-light_range = 28.0
+energy = 5.6
+light_range = 18.0
 failing = false
 cast_shadow = true
 fixture_style = "ceiling"
@@ -19,8 +19,8 @@ fixture_style = "ceiling"
 [node name="BaseCeilingLight_02" parent="." instance=ExtResource("1_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 6.28, -7.5)
 light_color = Color(0.5968, 0.8208, 0.9008, 1)
-energy = 23.4
-light_range = 28.0
+energy = 5.6
+light_range = 18.0
 failing = false
 cast_shadow = false
 fixture_style = "ceiling"
@@ -28,8 +28,8 @@ fixture_style = "ceiling"
 [node name="BaseCeilingLight_03" parent="." instance=ExtResource("1_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 6.28, 7.5)
 light_color = Color(0.7984, 0.7704, 0.6404, 1)
-energy = 23.4
-light_range = 28.0
+energy = 5.6
+light_range = 18.0
 failing = false
 cast_shadow = false
 fixture_style = "ceiling"
@@ -37,8 +37,8 @@ fixture_style = "ceiling"
 [node name="BaseCeilingLight_04" parent="." instance=ExtResource("1_light")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 6.28, 7.5)
 light_color = Color(0.7984, 0.7704, 0.6404, 1)
-energy = 23.4
-light_range = 28.0
+energy = 5.6
+light_range = 18.0
 failing = false
 cast_shadow = false
 fixture_style = "ceiling"

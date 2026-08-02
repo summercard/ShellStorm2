@@ -60,6 +60,7 @@ func _build_environment() -> void:
 	key_light.light_color = TowerAtmosphere3D.SUN_COLOR
 	key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
 	key_light.shadow_enabled = true
+	key_light.light_cull_mask = 3
 	key_light.directional_shadow_max_distance = 90.0
 	add_child(key_light)
 

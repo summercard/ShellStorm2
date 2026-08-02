@@ -2,7 +2,8 @@ class_name PlayerFlashlight3D
 extends Node3D
 ## 与玩法视野完全解耦的真实玩家灯光。
 ## 前向环境主灯投影；近身溢光与角色柔光不投影。
-## cull_mask 确保主灯只照环境/怪物层，不会让角色组件彼此自遮挡。
+## 三盏随身灯都不会对角色自身投影：环境灯只照 layer 1，角色柔光不启用阴影。
+## 角色网格本身仍可被太阳和房间灯（layer 1|2）投射到环境上。
 
 signal light_enabled_changed(enabled: bool)
 

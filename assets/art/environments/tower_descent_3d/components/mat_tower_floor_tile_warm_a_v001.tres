@@ -7,6 +7,7 @@
 [resource]
 resource_name = "MAT_TowerFloorTileWarmA"
 albedo_color = Color(0.34, 0.38, 0.44, 1)
-metallic = 0.55
+metallic = 0.08
+metallic_specular = 0.28
 metallic_texture_channel = 0
-roughness = 0.42
+roughness = 0.90
