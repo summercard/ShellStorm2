@@ -61,6 +61,7 @@ func _build_environment() -> void:
 	key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
 	key_light.shadow_enabled = true
 	key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	key_light.directional_shadow_max_distance = 90.0
 	add_child(key_light)
 

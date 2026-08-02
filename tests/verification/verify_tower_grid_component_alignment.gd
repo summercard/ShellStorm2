@@ -140,11 +140,15 @@ func _validate_player_light_shadow_separation(player: Player3D, failures: Array[
 	var snapshot := flashlight.get_snapshot()
 	if (
 		int(snapshot.get("environment_light_cull_mask", 0)) != 1
+		or int(snapshot.get("environment_shadow_caster_mask", 0)) != 1
 		or int(snapshot.get("avatar_light_cull_mask", 0)) != 2
 		or int(snapshot.get("shadow_light_count", 0)) != 1
 		or not bool(snapshot.get("shadow_light_disabled_for_avatar", false))
 	):
 		failures.append("player-mounted three-light rig can still self-shadow the avatar")
+	var beam := flashlight.get_node_or_null("FlashlightKit/ForwardBeam") as SpotLight3D
+	if beam == null or beam.shadow_caster_mask != 1:
+		failures.append("forward beam shadow map still includes the player render layer")
 
 
 func _finish(failures: Array[String]) -> void:

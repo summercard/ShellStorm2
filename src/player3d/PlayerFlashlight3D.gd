@@ -16,7 +16,7 @@ const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
 
 @export_group("Beam")
 @export var beam_color := Color(0.86, 0.96, 0.93)
-@export_range(0.0, 32.0, 0.1) var beam_energy := 20.15
+@export_range(0.0, 32.0, 0.1) var beam_energy := 7.2
 @export_range(4.0, 40.0, 0.5) var beam_range := 25.0
 @export_range(20.0, 110.0, 1.0) var beam_angle_degrees := 66.0
 @export_range(0.1, 2.0, 0.05) var beam_attenuation := 0.48
@@ -30,14 +30,14 @@ const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
 
 @export_group("Environment Spill")
 @export var spill_color := Color(0.68, 0.88, 0.84)
-@export_range(0.0, 8.0, 0.05) var spill_energy := 2.30
+@export_range(0.0, 8.0, 0.05) var spill_energy := 0.7
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
 @export_range(0.2, 2.0, 0.05) var spill_height := 0.65
 
 @export_group("Avatar Front Fill")
 @export var front_fill_color := Color(0.70, 0.90, 0.86)
-@export_range(0.0, 16.0, 0.05) var front_fill_energy := 10.4
+@export_range(0.0, 16.0, 0.05) var front_fill_energy := 2.8
 @export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
 @export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
 @export_range(0.1, 3.0, 0.05) var front_fill_attenuation := 1.15
@@ -136,7 +136,7 @@ func set_light_enabled(enabled: bool) -> void:
 	if _front_fill != null:
 		_front_fill.light_energy = fill_target
 	# 缓存"开灯时的活跃能量"，后续 apply_configuration / toggle 可读此值
-	# 防止 _apply_configuration 在能量为 0 的瞬间又被覆盖写回 export 值。
+# 防止 _apply_configuration 在能量为 0 的瞬间又被覆盖写回 export 值。
 	_beam_energy_active = beam_energy
 	_spill_energy_active = spill_energy
 	_front_fill_energy_active = front_fill_energy
@@ -184,6 +184,7 @@ func get_snapshot() -> Dictionary:
 		"spill_range": spill_range,
 		"front_fill_energy": front_fill_energy,
 		"environment_light_cull_mask": ENVIRONMENT_RENDER_LAYER,
+		"environment_shadow_caster_mask": GameDesignConfig.SHADOW_MASK_WORLD_ONLY,
 		"avatar_light_cull_mask": AVATAR_RENDER_LAYER,
 		"environment_spill_affects_avatar": false,
 		"front_fill_affects_avatar": true,
@@ -228,6 +229,10 @@ func _apply_configuration() -> void:
 		# 角色头、手、枪彼此自遮挡。
 		_beam.shadow_enabled = true
 		_beam.light_cull_mask = ENVIRONMENT_RENDER_LAYER
+		# Godot 的 light_cull_mask 只隔离受光对象；阴影图有独立的
+		# shadow_caster_mask。这里必须明确排除 layer 2，角色与手持枪才不会
+		# 在自己前向灯的光锥里留下黑影，同时外部灯仍可使用 layer 2 投影。
+		_beam.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_ONLY
 	if _spill != null:
 		_spill.light_color = spill_color
 		_spill.light_energy = spill_energy if _enabled else 0.0
@@ -235,6 +240,7 @@ func _apply_configuration() -> void:
 		_spill.omni_attenuation = spill_attenuation
 		_spill.shadow_enabled = false
 		_spill.light_cull_mask = ENVIRONMENT_RENDER_LAYER
+		_spill.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_ONLY
 	if _front_fill != null:
 		_front_fill.light_color = front_fill_color
 		_front_fill.light_energy = front_fill_energy if _enabled else 0.0
@@ -244,6 +250,7 @@ func _apply_configuration() -> void:
 		_front_fill.spot_angle_attenuation = 1.35
 		_front_fill.shadow_enabled = false
 		_front_fill.light_cull_mask = AVATAR_RENDER_LAYER
+		_front_fill.shadow_caster_mask = GameDesignConfig.RENDER_LAYER_PLAYER
 	# 缓存开灯时的活跃能量：用于 set_light_enabled 反复切换时不会丢 export 值。
 	_beam_energy_active = beam_energy
 	_spill_energy_active = spill_energy

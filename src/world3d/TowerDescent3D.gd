@@ -31,8 +31,11 @@ const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
 const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 0.95
-const CAMERA_LOWER_WALL_PROBE_START_M := 0.42
+# 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
+# 角色贴墙时起点会落入0.30m厚的墙体，射线便可能漏掉“从内部出发”的墙。
+const CAMERA_LOWER_WALL_PROBE_START_M := -0.40
 const CAMERA_LOWER_WALL_PROBE_LENGTH_M := 6.2
+const CAMERA_LOWER_WALL_PROBE_LATERAL_OFFSETS_M := [-0.28, 0.0, 0.28]
 const CAMERA_LOWER_WALL_LIFT_MAX_M := 0.30
 const CAMERA_LOWER_WALL_LIFT_BLEND_DISTANCE_M := 1.2
 const CAMERA_LOWER_WALL_LIFT_RISE_RATE := 8.0
@@ -41,6 +44,9 @@ const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
 const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
+const CAMERA_WALL_COLLISION_MASK := (
+	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+)
 const CAMERA_NEAR_FADE_ALPHA := 0.06
 const CAMERA_NEAR_FADE_MARGIN_M := 0.08
 const CAMERA_NEAR_FADE_IN_RATE := 14.0
@@ -336,45 +342,56 @@ func _find_lower_camera_wall_distance() -> float:
 	if trailing.length_squared() <= 0.0001:
 		trailing = Vector3.BACK
 	trailing = trailing.normalized()
-	var probe_origin := (
-		player.global_position
-		+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
-		+ trailing * CAMERA_LOWER_WALL_PROBE_START_M
-	)
-	var probe_end := (
-		player.global_position
-		+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
-		+ trailing * CAMERA_LOWER_WALL_PROBE_LENGTH_M
-	)
-	var ray_from := probe_origin
-	var excluded: Array[RID] = []
-	if player is CollisionObject3D:
-		excluded.append((player as CollisionObject3D).get_rid())
+	var lateral := Vector3.UP.cross(trailing).normalized()
 	var space_state := get_world_3d().direct_space_state
-	for _hit_index in range(CAMERA_LOWER_WALL_MAX_RAY_HITS):
-		var query := PhysicsRayQueryParameters3D.create(
-			ray_from,
-			probe_end,
-			1,
-			excluded
+	var nearest_distance := INF
+	for lateral_offset_value in CAMERA_LOWER_WALL_PROBE_LATERAL_OFFSETS_M:
+		var lateral_offset := lateral * float(lateral_offset_value)
+		var probe_origin := (
+			player.global_position
+			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
+			+ trailing * CAMERA_LOWER_WALL_PROBE_START_M
+			+ lateral_offset
 		)
-		query.collide_with_areas = false
-		var hit := space_state.intersect_ray(query)
-		if hit.is_empty():
-			return -1.0
-		var collider := hit.get("collider") as Node
-		var hit_position := hit.get("position", ray_from) as Vector3
-		if _is_camera_lower_wall(collider):
-			var planar_offset := hit_position - player.global_position
-			planar_offset.y = 0.0
-			return planar_offset.length()
-		if collider is CollisionObject3D:
-			excluded.append((collider as CollisionObject3D).get_rid())
-		var remaining_direction := ray_from.direction_to(probe_end)
-		if remaining_direction.is_zero_approx():
-			return -1.0
-		ray_from = hit_position + remaining_direction * 0.03
-	return -1.0
+		var probe_end := (
+			player.global_position
+			+ Vector3.UP * CAMERA_LOWER_WALL_PROBE_HEIGHT_M
+			+ trailing * CAMERA_LOWER_WALL_PROBE_LENGTH_M
+			+ lateral_offset
+		)
+		var ray_from := probe_origin
+		var excluded: Array[RID] = []
+		if player is CollisionObject3D:
+			excluded.append((player as CollisionObject3D).get_rid())
+		for _hit_index in range(CAMERA_LOWER_WALL_MAX_RAY_HITS):
+			var query := PhysicsRayQueryParameters3D.create(
+				ray_from,
+				probe_end,
+				CAMERA_WALL_COLLISION_MASK,
+				excluded
+			)
+			query.collide_with_areas = false
+			query.hit_from_inside = true
+			var hit := space_state.intersect_ray(query)
+			if hit.is_empty():
+				break
+			var collider := hit.get("collider") as Node
+			var hit_position := hit.get("position", ray_from) as Vector3
+			if _is_camera_lower_wall(collider):
+				var planar_offset := hit_position - player.global_position
+				planar_offset.y = 0.0
+				nearest_distance = minf(
+					nearest_distance,
+					maxf(0.0, planar_offset.dot(trailing))
+				)
+				break
+			if collider is CollisionObject3D:
+				excluded.append((collider as CollisionObject3D).get_rid())
+			var remaining_direction := ray_from.direction_to(probe_end)
+			if remaining_direction.is_zero_approx():
+				break
+			ray_from = hit_position + remaining_direction * 0.03
+	return nearest_distance if is_finite(nearest_distance) else -1.0
 
 
 func _is_camera_lower_wall(collider: Node) -> bool:
@@ -413,6 +430,7 @@ func _is_player_in_camera_door_bypass() -> bool:
 			not is_instance_valid(door)
 			or not door.is_inside_tree()
 			or not door.is_open
+			or door.direction == "south"
 		):
 			continue
 		var local_offset := door.to_local(player.global_position)

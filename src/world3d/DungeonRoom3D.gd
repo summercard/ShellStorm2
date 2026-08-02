@@ -795,6 +795,7 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
 			_apply_module_material_variant(module, module_index)
+			_set_camera_lower_wall_on_static_bodies(module, direction == "south")
 			add_child(module)
 			_add_tower_wall_collision(
 				direction,
@@ -844,8 +845,9 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 		"SE": module.rotation.y = PI * 0.5
 	module.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
 	module.set_meta("tower_wall_corner", corner_id)
-	# 只有房间南边朝北的墙参与近墙摄像机交互；南侧两个拐角属于该边。
-	_set_camera_lower_wall_on_static_bodies(module, corner_id in ["SW", "SE"])
+	# 拐角两条墙臂使用独立碰撞：SW 的长臂、SE 的短臂才属于南墙。
+	# 不能把整个 L 角标记为南墙，否则西/东侧臂也会错误推动摄像机。
+	_configure_corner_camera_collisions(module, corner_id)
 	var corner_variant_index := 0 if corner_id in ["NW", "SE"] else 1
 	_apply_module_material_variant(module, corner_variant_index)
 	add_child(module)
@@ -1036,6 +1038,8 @@ func _add_tower_wall_collision(
 			)
 		)
 		return
+	if direction == "south":
+		_add_camera_only_door_wall_proxy(body.position, body.rotation.y, module_index)
 	var pillar_width := (
 		TOWER_GEOMETRY.GRID_UNIT_M - TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M
 	) * 0.5
@@ -1060,6 +1064,33 @@ func _add_tower_wall_collision(
 			TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
 			TOWER_GEOMETRY.FLOOR_HEIGHT_M - TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
 			0.30
+		)
+	)
+
+
+func _add_camera_only_door_wall_proxy(
+	module_position: Vector3,
+	rotation_y: float,
+	module_index: int
+) -> void:
+	# 门洞打开后不能放置世界层实体碰撞，否则会挡住角色与子弹。使用独立
+	# camera-only层覆盖完整5m门墙，仅供TowerDescent3D的镜头探针命中。
+	var proxy := StaticBody3D.new()
+	proxy.name = "CameraOnlyDoorWall_South_I%02d" % module_index
+	proxy.position = module_position
+	proxy.rotation.y = rotation_y
+	proxy.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+	proxy.collision_mask = 0
+	proxy.set_meta("camera_lower_wall", true)
+	proxy.set_meta("camera_only_door_wall", true)
+	add_child(proxy)
+	_add_collision_shape(
+		proxy,
+		Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0),
+		Vector3(
+			TOWER_GEOMETRY.GRID_UNIT_M,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M,
+			0.08
 		)
 	)
 
@@ -1089,13 +1120,18 @@ func _build_floor_partitions(dimensions: Vector2) -> void:
 		)
 	var partition_z := mirror * 6.2
 	for x in [-8.2, 8.2]:
-		_spawn_prefab(
+		var horizontal_partition := _spawn_prefab(
 			"FloorPartitionHorizontal",
 			PARTITION_HORIZONTAL_PREFAB,
 			Vector3(x, 1.4, partition_z),
 			Vector3(8.0, 2.8, 0.28),
 			_wall_material
 		)
+		# 内部横向隔墙没有north/south资产朝向；只要它位于角色与固定
+		# 后方镜头之间，就应与外围南墙执行同一套抬升收镜逻辑。
+		if horizontal_partition != null:
+			horizontal_partition.set_meta("camera_lower_wall_component", true)
+			_set_camera_lower_wall_on_static_bodies(horizontal_partition, true)
 
 
 func _build_wall(direction: String, center: Vector3, length: float, axis: Vector3) -> void:
@@ -1143,6 +1179,16 @@ func _set_camera_lower_wall_on_static_bodies(root: Node, enabled: bool) -> void:
 		(root as StaticBody3D).set_meta("camera_lower_wall", enabled)
 	for child in root.get_children():
 		_set_camera_lower_wall_on_static_bodies(child, enabled)
+
+
+func _configure_corner_camera_collisions(module: Node, corner_id: String) -> void:
+	for value in module.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		var enabled := (
+			(corner_id == "SW" and body.name == "WallCollisionLong")
+			or (corner_id == "SE" and body.name == "WallCollisionShort")
+		)
+		body.set_meta("camera_lower_wall", enabled)
 
 
 func _build_stair_lobby_markings(dimensions: Vector2) -> void:
@@ -1464,18 +1510,19 @@ func _on_service_activated(station: ServiceStation3D) -> void:
 
 # —— prefab 通用入口：实例化 + 设位置/缩放/材质
 # 预制体内部 mesh/collision 已经是 1×1×1 或真实参考尺寸，scale 整体传递到子节点。
-func _spawn_prefab(node_name: String, prefab: PackedScene, position: Vector3, scale_vec: Vector3, material: StandardMaterial3D) -> void:
+func _spawn_prefab(node_name: String, prefab: PackedScene, position: Vector3, scale_vec: Vector3, material: StandardMaterial3D) -> Node3D:
 	if prefab == null:
 		push_error("DungeonRoom3D: missing prefab for %s" % node_name)
-		return
+		return null
 	var instance := prefab.instantiate() as Node3D
 	if instance == null:
-		return
+		return null
 	instance.name = node_name
 	instance.position = position
 	instance.scale = scale_vec
 	_apply_material_override(instance, material)
 	add_child(instance)
+	return instance
 
 
 func _apply_material_override(root: Node, material: StandardMaterial3D) -> void:

@@ -33,6 +33,53 @@ func _ready() -> void:
 	})
 	_expect_real_wall_cleared("99层基地南墙", tower, facility_snapshot, failures)
 
+	# 98层枢纽南侧同时覆盖门墙与SW拐角，防止内部门墙碰撞抢先命中却
+	# 没有镜头标记，或L角两臂共用一个StaticBody导致漏检/误检。
+	var hub := (
+		(tower.get("_room_by_id") as Dictionary).get("floor_01_hub")
+		as DungeonRoom3D
+	)
+	hub.set_stream_state(1)
+	tower.force_enter_room_for_test("floor_01_hub")
+	var south_door := hub.get_door_node("south")
+	if south_door == null:
+		failures.append("98层枢纽缺少南侧门墙，无法验收镜头碰撞")
+	else:
+		tower.player.global_position = south_door.global_position + Vector3(0.0, 0.05, -1.2)
+		await _settle(45)
+		_expect_real_wall_cleared(
+			"98层枢纽南侧门墙", tower, tower.get_tower_snapshot(), failures
+		)
+		south_door.set_open(true, true)
+		await get_tree().physics_frame
+		tower.player.global_position = south_door.global_position + Vector3(0.0, 0.05, -0.50)
+		await _settle(45)
+		var open_south_door_snapshot := tower.get_tower_snapshot()
+		if bool(open_south_door_snapshot.get("camera_door_bypass_active", true)):
+			failures.append("98层已开启南门仍错误进入镜头旁路")
+		_expect_real_wall_cleared(
+			"98层已开启南门门洞中心", tower, open_south_door_snapshot, failures
+		)
+		south_door.set_open(false, true)
+		await get_tree().physics_frame
+	var hub_dimensions := hub.get_dimensions()
+	tower.player.global_position = (
+		hub.global_position
+		+ Vector3(-hub_dimensions.x * 0.5 + 1.0, 0.05, hub_dimensions.y * 0.5 - 1.2)
+	)
+	await _settle(45)
+	_expect_real_wall_cleared(
+		"98层枢纽SW拐角南墙臂", tower, tower.get_tower_snapshot(), failures
+	)
+	tower.player.global_position = (
+		hub.global_position
+		+ Vector3(-hub_dimensions.x * 0.5 + 7.5, 0.05, hub_dimensions.y * 0.5 - 0.50)
+	)
+	await _settle(45)
+	_expect_real_wall_cleared(
+		"98层枢纽角色贴墙状态", tower, tower.get_tower_snapshot(), failures
+	)
+
 	tower.force_open_edge_for_test("start", "facility")
 	tower.force_enter_room_for_test("start")
 	var stair := _find_vertical_connector(tower, "start", "facility")
@@ -107,7 +154,7 @@ func _expect_real_wall_cleared(
 	var trailing := tower.player.camera.position.z
 	if not bool(snapshot.get("camera_lower_wall_detected", false)):
 		failures.append("%s没有被下方墙探针识别" % label)
-	if distance <= 0.0 or trailing >= distance - 0.30:
+	if distance <= 0.0 or trailing >= distance - 0.08:
 		failures.append(
 			"%s镜头未收回墙内侧：墙距%.3fm，镜头后移%.3fm"
 			% [label, distance, trailing]

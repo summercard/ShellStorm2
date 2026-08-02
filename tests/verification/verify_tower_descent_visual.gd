@@ -9,6 +9,8 @@ const ENTRY_GATE_PATH := OUTPUT_DIR + "/tower_godot_floor98_stair_gate_closed_ph
 const ENTRY_PATH := OUTPUT_DIR + "/tower_godot_floor98_inward_entry_ph49.png"
 const COMBAT_DARK_PATH := OUTPUT_DIR + "/tower_godot_floor98_flashlight_only_ph49.png"
 const COMBAT_LIT_PATH := OUTPUT_DIR + "/tower_godot_floor98_room_light_on_ph49.png"
+const CAMERA_CLOSE_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_close_south_wall_ph49.png"
+const CAMERA_OPEN_SOUTH_DOOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_open_south_door_ph49.png"
 const ELEVATOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_standalone_elevator_ph49.png"
 const STAIR_PATH := OUTPUT_DIR + "/tower_godot_stairwell_global_light_ph49.png"
 const BOSS_PATH := OUTPUT_DIR + "/tower_godot_floor95_boss_ph49.png"
@@ -90,6 +92,37 @@ func _ready() -> void:
 		flashlight.set_light_enabled(false)
 	await _settle()
 	_capture(COMBAT_LIT_PATH, "98层房间开灯画面采样失败", failures)
+	var hub_dimensions := hub.get_dimensions()
+	tower.player.global_position = (
+		hub.global_position
+		+ Vector3(-hub_dimensions.x * 0.5 + 7.5, 0.05, hub_dimensions.y * 0.5 - 0.50)
+	)
+	await _settle()
+	var close_wall_snapshot := tower.get_tower_snapshot()
+	if (
+		not bool(close_wall_snapshot.get("camera_lower_wall_detected", false))
+		or tower.player.camera.position.y <= 8.15
+		or tower.player.camera.position.z >= 0.40
+	):
+		failures.append("98层角色贴南墙时镜头未抬升收回")
+	_capture(CAMERA_CLOSE_WALL_PATH, "98层贴南墙镜头画面采样失败", failures)
+	var hub_south_door := hub.get_door_node("south")
+	if hub_south_door != null:
+		hub_south_door.set_open(true, true)
+		await get_tree().physics_frame
+		tower.player.global_position = hub_south_door.global_position + Vector3(0.0, 0.05, -0.50)
+		await _settle()
+		var open_south_door_snapshot := tower.get_tower_snapshot()
+		if (
+			not bool(open_south_door_snapshot.get("camera_lower_wall_detected", false))
+			or bool(open_south_door_snapshot.get("camera_door_bypass_active", true))
+			or tower.player.camera.position.y <= 8.15
+			or tower.player.camera.position.z >= 0.40
+		):
+			failures.append("98层已开启南门门洞中心未触发镜头抬升收回")
+		_capture(CAMERA_OPEN_SOUTH_DOOR_PATH, "98层已开启南门镜头画面采样失败", failures)
+		hub_south_door.set_open(false, true)
+		await get_tree().physics_frame
 
 	var elevator_room := (tower.get("_room_by_id") as Dictionary).get(
 		"floor_01_elevator"

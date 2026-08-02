@@ -341,6 +341,7 @@ func _configure_environment() -> void:
 	key_light.light_energy = 0.10
 	key_light.shadow_enabled = true
 	key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 
 
 func _generate_layout() -> void:

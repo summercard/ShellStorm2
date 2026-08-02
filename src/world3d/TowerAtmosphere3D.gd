@@ -48,6 +48,7 @@ func _apply_fixed_lighting() -> void:
 		_sun.light_color = SUN_COLOR
 		_sun.shadow_enabled = true
 		_sun.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+		_sun.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	if _environment != null:
 		_environment.background_color = BACKGROUND_COLOR
 		_environment.ambient_light_color = AMBIENT_COLOR

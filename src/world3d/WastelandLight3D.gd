@@ -118,6 +118,7 @@ func get_snapshot() -> Dictionary:
 		"shadow_capable": cast_shadow,
 		"shadow_enabled": _light != null and _light.shadow_enabled,
 		"light_cull_mask": light_cull_mask,
+		"shadow_caster_mask": _light.shadow_caster_mask if _light != null else 0,
 		"is_3d": true,
 	}
 
@@ -171,6 +172,7 @@ func _apply_configuration() -> void:
 			and cast_shadow
 		)
 		_light.light_cull_mask = light_cull_mask
+		_light.shadow_caster_mask = light_cull_mask
 	if _lens_material != null:
 		_lens_material.albedo_color = light_color
 		_lens_material.emission = light_color

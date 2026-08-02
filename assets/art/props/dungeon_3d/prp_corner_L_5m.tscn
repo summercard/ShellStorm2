@@ -4,7 +4,7 @@
 ; 默认朝向：+X 方向走 +Z 方向（L 角指向 -X / -Z 外侧为房间内）
 ; 用法：实例化时 rotation 决定 L 朝向（4 种）
 ; 节点命名：Wall_Long / Wall_Short（视觉上 L 形两臂）
-; 碰撞：合并到 WallCollision 一组 collision_shape
+; 碰撞：两条墙臂拆成独立 StaticBody3D，摄像机可只标记真正属于南墙的一臂
 
 [sub_resource type="BoxMesh" id="BoxMesh_corner_L_long"]
 size = Vector3(5, 9, 0.3)
@@ -40,14 +40,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -2.5)
 mesh = SubResource("BoxMesh_corner_L_short")
 material_override = SubResource("StandardMaterial3D_corner")
 
-[node name="WallCollision" type="StaticBody3D" parent="."]
+[node name="WallCollisionLong" type="StaticBody3D" parent="."]
 collision_layer = 1
 collision_mask = 0
 
-[node name="CollisionLong" type="CollisionShape3D" parent="WallCollision"]
+[node name="CollisionLong" type="CollisionShape3D" parent="WallCollisionLong"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4.5, 0)
 shape = SubResource("BoxShape3D_corner_L_long")
 
-[node name="CollisionShort" type="CollisionShape3D" parent="WallCollision"]
+[node name="WallCollisionShort" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShort" type="CollisionShape3D" parent="WallCollisionShort"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -2.5)
 shape = SubResource("BoxShape3D_corner_L_short")
