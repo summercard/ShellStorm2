@@ -21,16 +21,14 @@ const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dun
 const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
-const HOSTILE_ROOM_TYPES: Array[String] = [
-	"COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE",
-]
+const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
 @export var run_seed_override := -1
 @export var test_mode := false
-@export_file("*.tscn") var return_scene_path := "res://scenes/BaseWorld3D.tscn"
+@export_file("*.tscn") var return_scene_path := GameDesignConfig.BASE_SCENE_3D
 
 @onready var player: Player3D = $Player3D
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
@@ -342,7 +340,7 @@ func _configure_environment() -> void:
 	key_light.light_color = visual_theme.key_light_color.lerp(Color(1.0, 0.54, 0.24), 0.18)
 	key_light.light_energy = 0.10
 	key_light.shadow_enabled = true
-	key_light.light_cull_mask = 3
+	key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
 
 
 func _generate_layout() -> void:
@@ -674,7 +672,7 @@ func _set_corridor_collisions_disabled(root: Node, disabled: bool) -> void:
 		_set_corridor_collisions_disabled(child, disabled)
 
 
-## PH49 v2 房间布局规划阶段
+## v0.1 v2 房间布局规划阶段
 ## 遍历所有房与门，根据门 world pos 预存 “room_door_world_<dir>” meta。
 ## 拼墙阶段 (_build_corner_aware_wall_run) 读这个 meta 以门 world pos 作锥点拼门洞。
 func _plan_room_layout() -> void:

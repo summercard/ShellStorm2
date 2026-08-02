@@ -75,7 +75,7 @@ const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
 )
-# PH49 v2 拼接交替材质（A/B 微差异版）
+# v0.1 v2 拼接交替材质（A/B 微差异版）
 const FLOOR_TILE_MATERIAL_A: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_a_v001.tres"
 )
@@ -98,7 +98,7 @@ const ROOM_DIMENSIONS := {
 	"medium": Vector2(32.0, 26.0),
 	"large": Vector2(44.0, 34.0),
 	"arena": Vector2(56.0, 42.0),
-	# PH34 塔楼入口使用固定真实尺度；不改变既有四档房间契约。
+	# v0.1 塔楼入口使用固定真实尺度；不改变既有四档房间契约。
 	"floor": Vector2(65.0, 65.0),
 	"rooftop": Vector2(65.0, 65.0),
 	"tower_cell": Vector2(15.0, 15.0),
@@ -176,7 +176,7 @@ func get_room_snapshot() -> Dictionary:
 		"controlled_light_count": _room_lights.size(),
 		"shadow_capable_light_count": _count_shadow_capable_lights(),
 		"active_shadow_light_count": _count_active_shadow_lights(),
-		"room_light_cull_mask": 3,
+		"room_light_cull_mask": GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER,
 		"base_grid_dimensions": Vector2i(6, 6) if room_type == "FACILITY" else Vector2i.ZERO,
 		"base_grid_tile_count": 36 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
@@ -458,7 +458,7 @@ func _build_tower_module_shell(dimensions: Vector2) -> void:
 	):
 		_build_base_facility_shell(dimensions)
 		return
-	# PH49 v2：4 拐角 + 边墙拟合 + 门洞
+	# v0.1 v2：4 拐角 + 边墙拟合 + 门洞
 	_build_tower_wall_v2(dimensions)
 
 
@@ -626,7 +626,7 @@ func _build_tower_wall_multimesh(
 	add_child(visual)
 
 
-## PH49 v2 拼接交替装饰：每段 5m 实例一个 MeshInstance3D，偶奇 index 分 A/B 两色。
+## v0.1 v2 拼接交替装饰：每段 5m 实例一个 MeshInstance3D，偶奇 index 分 A/B 两色。
 ## 墙同一段与地砖同步节奏（同一房间内统一定义）。
 func _spawn_solid_wall_visual_instances(
 	direction: String,
@@ -685,7 +685,7 @@ func _find_first_mesh(root: Node) -> Mesh:
 	return null
 
 
-## PH49 v2 模块化墙拼装：4 拐角 + 边墙 + 门洞
+## v0.1 v2 模块化墙拼装：4 拐角 + 边墙 + 门洞
 ## 以门的世界坐标为锥点：拿到门 world pos → 拆为沿墙距离 → 取最近 5m 段作门洞。
 ## 拼装规则：
 ##   1. 4 拐角 L 形各布于房间四角原点，2.5m 双向覆盖
@@ -1076,7 +1076,7 @@ func _add_collision_shape(body: StaticBody3D, local_position: Vector3, size: Vec
 func _build_floor_partitions(dimensions: Vector2) -> void:
 	var mirror := -1.0 if absi(room_seed) % 2 == 0 else 1.0
 	if room_type == "FACILITY":
-		# PH49：30m基地中央必须保持通畅；设施全部沿墙摆放。
+		# v0.1：30m基地中央必须保持通畅；设施全部沿墙摆放。
 		return
 	var partition_x := mirror * 4.8
 	for z in [-8.0, 7.5]:

@@ -10,7 +10,7 @@ extends EnemyStateBase
 func enter() -> void:
 	super.enter()
 	enemy._ai_state = enemy.AIState.CHASE
-	# PH11 P1+P2：追击时向房间刷怪控制器发警觉信号 + 触发精英联动
+	# v0.1 P1+P2：追击时向房间刷怪控制器发警觉信号 + 触发精英联动
 	enemy.enemy_entered_chase.emit(enemy, enemy._last_known_player_pos)
 	if enemy.has_method("_notify_skill_components"):
 		enemy._notify_skill_components("on_engaged")

@@ -82,7 +82,7 @@ var _fall_recovery_count := 0
 
 func _ready() -> void:
 	current_hp = max_hp
-	# PH43：坡面由真实承重盒负责。短距离吸附只跨越数厘米接缝，
+	# v0.1：坡面由真实承重盒负责。短距离吸附只跨越数厘米接缝，
 	# 不再用持续向下速度或世界坐标吸附模拟楼梯。
 	floor_snap_length = 0.32
 	floor_max_angle = deg_to_rad(44.0)

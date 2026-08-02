@@ -1,6 +1,6 @@
 class_name TowerDescent3D
 extends Dungeon3D
-## PH49 塔楼入口：楼顶、30m基地与98—95层探索区共用 Dungeon3D
+## v0.1 塔楼入口：楼顶、30m基地与98—95层探索区共用 Dungeon3D
 ## 战斗/命运/掉落管线；这里只定义垂直拓扑、电梯、五层流送、固定镜头
 ## 下方墙平滑抬升收拢、双端楼梯门、独立墙边电梯与全局固定环境光。
 
@@ -243,10 +243,10 @@ func _update_floor_visibility_state() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
-	# PH46：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
+	# v0.1：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
 	_update_camera_lower_wall_lift(delta)
 	_apply_indoor_camera_pose()
-	# PH49：墙体透明淡化会在摄像机碰撞时留下概率性消失状态。
+	# v0.1：墙体透明淡化会在摄像机碰撞时留下概率性消失状态。
 	# 摄像机现在只沿固定轴缩短距离，墙材质永不被运行时改写。
 	_update_floor_visibility_state()
 	_update_camera_occlusion_silhouette()
@@ -642,7 +642,7 @@ func _build_records() -> void:
 		var entry_id := str(ids_by_key["entry"])
 		var exit_id := str(ids_by_key["exit"])
 		var stair_side := "east" if floor_number % 2 == 1 else "west"
-		# PH49：上下两端都把房间放在核心内侧，因此同一楼梯的两扇门
+		# v0.1：上下两端都把房间放在核心内侧，因此同一楼梯的两扇门
 		# 使用相同世界侧向；不再靠“反向门 + 房间刷在外侧”对齐。
 		var upper_door_side := stair_side
 		_declare_edge(
@@ -673,7 +673,7 @@ func _normal_floor_specs(
 ) -> Array[Dictionary]:
 	var rotation_steps := 0 if floor_number % 2 == 1 else 2
 	var positions := {
-		# PH49：东侧楼梯下接口为(35, 2.5)，入口大厅在门的左侧/
+		# v0.1：东侧楼梯下接口为(35, 2.5)，入口大厅在门的左侧/
 		# 核心内侧，东门精确落在接口；不再把关卡刷到门外右侧。
 		"entry": Vector2(27.5, 2.5),
 		# 30×25m 房间按 6×5 个 5m 模块重排。纵向中心距 30m、

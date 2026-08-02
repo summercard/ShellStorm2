@@ -194,7 +194,7 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
 	var hp: float = 200.0 * scaling["hp_mult"]
 	
-	# 第二关Boss体型按策划案要求为1.5x（PH11规范）
+	# 第二关Boss体型按策划案要求为1.5x（v0.1规范）
 	# 第三关1.6，第四关1.75，后续按+0.15递增
 	var boss_scale: float = 1.0
 	if floor >= 2:

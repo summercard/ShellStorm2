@@ -8,7 +8,7 @@ extends Node3D
 @export var failing := true
 @export var flicker_seed := 1
 @export var cast_shadow := false
-@export_flags_3d_render var light_cull_mask := 3
+@export_flags_3d_render var light_cull_mask := GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
 @export_enum("street", "ceiling") var fixture_style := "street"
 @export var light_enabled := true
 

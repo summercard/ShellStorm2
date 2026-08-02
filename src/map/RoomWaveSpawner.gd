@@ -6,7 +6,7 @@ extends Node
 signal wave_started(wave: int, total: int)
 signal wave_enemies_spawned(wave: int, spawned: int)
 signal enemy_spawned(count: int)
-signal elite_spawn_recorded(elite_id: String)  # PH06: 记录精英遭遇
+signal elite_spawn_recorded(elite_id: String)  # v0.1: 记录精英遭遇
 signal wave_progress_updated(killed: int, total: int, wave: int)
 signal all_waves_cleared
 signal wave_cleared(wave: int)
@@ -308,7 +308,7 @@ func _spawn_next_wave_enemy() -> void:
 	var spawn_pos: Vector2 = _pending_wave_positions.pop_front()
 	var spawned_index := _pending_wave_spawn_total - _pending_wave_positions.size() - 1
 	var enemy_data: Dictionary = _generate_enemy_data()
-	# PH06: 第一波第一只如果有待注入精英数据，用精英替换。
+	# v0.1: 第一波第一只如果有待注入精英数据，用精英替换。
 	if _current_wave == 0 and spawned_index == 0 and not _pending_elite_spawn.is_empty():
 		enemy_data = _pending_elite_spawn.duplicate(true)
 		_pending_elite_spawn.clear()
@@ -414,13 +414,13 @@ func _spawn_enemy_instance(
 	# 房间模式先使用明确的 ai_type 行为，避免警觉状态机把远程/召唤/自爆怪都退化成普通追击。
 	enemy.awareness_enabled = false
 	if data.get("is_elite"):
-		enemy._is_elite = true  # PH11 P2: 设置精英标志，使 elite_entered_chase 信号能正确触发相邻房间AI联动
+		enemy._is_elite = true  # v0.1 P2: 设置精英标志，使 elite_entered_chase 信号能正确触发相邻房间AI联动
 		var elite_id: String = data.get("elite_id", "")
 		if not elite_id.is_empty():
-			elite_spawn_recorded.emit(elite_id)  # PH06: 通知 RoomGameMode 记录精英遭遇
+			elite_spawn_recorded.emit(elite_id)  # v0.1: 通知 RoomGameMode 记录精英遭遇
 	if data.get("modifier"):
 		enemy.add_modifier(data["modifier"], 1)
-	# 精英主动技能注入（PH06: 词缀→主动技能映射，tier影响强度）
+	# 精英主动技能注入（v0.1: 词缀→主动技能映射，tier影响强度）
 	# 使用 modifier_id_en（英文）来匹配 EliteActiveSkillComponent.inject_elite_skills() 的路由表
 	if data.get("is_elite") and data.get("modifier_id_en"):
 		var skill_tier: int = data.get("tier", 1)
@@ -452,7 +452,7 @@ func _spawn_enemy_instance(
 	_spawned_enemies.append(enemy)
 	enemy.tree_exited.connect(_on_enemy_removed_from_tree.bind(enemy))
 
-	# 设置房间边界（PH11 区域AI：敌人不会游走出房间）
+	# 设置房间边界（v0.1 区域AI：敌人不会游走出房间）
 	if enemy.has_method("set_room_bounds"):
 		var room_center: Vector2 = Vector2.ZERO
 		if is_instance_valid(_room):
@@ -465,7 +465,7 @@ func _spawn_enemy_instance(
 		var bounds: Rect2 = Rect2(room_center - half_size, room_size)
 		enemy.set_room_bounds(bounds)
 
-	# 连接敌人 CHASE 信号 → 触发区域增援（PH11 警觉AI联动）
+	# 连接敌人 CHASE 信号 → 触发区域增援（v0.1 警觉AI联动）
 	_connect_chase_signal(
 		enemy, regional_controller if regional_controller != null else _current_regional_controller
 	)
@@ -481,7 +481,7 @@ func _spawn_enemy_instance(
 		wave_progress_updated.emit(killed, wave_total, _current_wave + 1)
 
 
-## 连接敌人CHASE信号 → 触发区域增援（PH11 警觉AI联动）
+## 连接敌人CHASE信号 → 触发区域增援（v0.1 警觉AI联动）
 func _connect_chase_signal(enemy: CharacterBody2D, regional_controller: Node = null) -> void:
 	if enemy == null or not is_instance_valid(enemy):
 		return

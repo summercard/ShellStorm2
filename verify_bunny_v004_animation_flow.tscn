@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://verify_bunny_v004_animation_flow.gd" id="1_verify"]
-
-[node name="VerifyBunnyV004AnimationFlow" type="Node"]
-script = ExtResource("1_verify")

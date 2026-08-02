@@ -1,4 +1,7 @@
-"""Validate the PH49 tower runtime-sync Blender source."""
+"""Validate the v0.1 tower runtime-sync Blender source.
+
+Legacy PH-prefixed Blender collection names are retained as source-file identifiers.
+"""
 
 from pathlib import Path
 

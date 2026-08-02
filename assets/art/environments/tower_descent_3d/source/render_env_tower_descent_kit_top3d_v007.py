@@ -1,4 +1,4 @@
-"""Render PH49 base and stacked-floor review previews from v007."""
+"""Render the current v0.1 base and stacked-floor review previews from v007."""
 
 from pathlib import Path
 
@@ -9,8 +9,8 @@ from mathutils import Vector
 SOURCE_DIR = Path(__file__).resolve().parent
 SOURCE_BLEND = SOURCE_DIR / "env_tower_descent_kit_top3d_v007.blend"
 OUTPUT_DIR = (
-    Path("/Users/summercards/ShellStorm2")
-    / "outputs/019fb2a5-6bc8-7d10-a214-90288a5f7e80/previews"
+    SOURCE_DIR.parents[4]
+    / "outputs/verification/tower_source"
 )
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

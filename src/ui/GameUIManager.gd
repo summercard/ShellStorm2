@@ -122,7 +122,7 @@ var _extraction_director: Node = null  ## ExtractionDirector 引用（用于信�
 var _run_choice_overlay: Control = null
 var _run_choice_kind: String = ""
 
-## — 小地图 UI（PH11）—
+## — 小地图 UI（v0.1）—
 var _minimap_panel: PanelContainer = null
 var _minimap_view: MinimapView = null
 var _minimap_dirty: bool = false  ## 标记需要重绘
@@ -1008,7 +1008,7 @@ func update_floor(floor: int) -> void:
 		_sync_wave_outline()
 
 
-## — 小地图绘制（PH11 P1）—
+## — 小地图绘制（v0.1 P1）—
 func _init_minimap() -> void:
 	_minimap_panel = minimap_panel
 	_minimap_view = minimap_view
@@ -1819,7 +1819,7 @@ func _on_menu_pressed() -> void:
 	death_overlay.visible = false
 	game_over_panel.visible = false
 	# 返回基地主界面（而非直接重新开始游戏）
-	get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
+	get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
 
 
 ## 楼层变化
@@ -2162,7 +2162,7 @@ func _on_continue_pressed() -> void:
 	if death_overlay:
 		death_overlay.visible = false
 	# 返回基地主界面
-	var change_error := get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
+	var change_error := get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
 	if change_error != OK:
 		push_error("返回基地场景切换失败：%s" % error_string(change_error))
 

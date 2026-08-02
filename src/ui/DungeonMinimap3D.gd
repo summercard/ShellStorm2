@@ -1,6 +1,6 @@
 class_name DungeonMinimap3D
 extends Control
-## PH49 实时战术小地图：当前楼层平面投影、玩家位置/朝向、扫描波束与楼层索引。
+## v0.1 实时战术小地图：当前楼层平面投影、玩家位置/朝向、扫描波束与楼层索引。
 
 const REDRAW_INTERVAL := 1.0 / 20.0
 const HEADER_HEIGHT := 28.0

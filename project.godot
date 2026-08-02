@@ -12,6 +12,7 @@ config_version=5
 
 config/name="弹壳风暴2"
 config/description="顶视角射击搜打撤肉鸽游戏"
+config/version="0.1.0"
 run/main_scene="res://scenes/TowerDescent3D.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"

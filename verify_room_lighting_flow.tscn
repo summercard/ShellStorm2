@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://verify_room_lighting_flow.gd" id="1_test"]
-
-[node name="VerifyRoomLightingFlow" type="Node"]
-script = ExtResource("1_test")

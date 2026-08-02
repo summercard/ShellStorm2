@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bjj7r3rjsdx41"]
-
-[ext_resource type="Script" path="res://verify_rooftop_door.gd" id="1_rooftop"]
-
-[node name="VerifyRooftopDoor" type="Node"]
-script = ExtResource("1_rooftop")

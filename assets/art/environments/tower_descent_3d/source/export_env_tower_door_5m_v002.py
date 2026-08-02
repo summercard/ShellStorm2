@@ -1,4 +1,4 @@
-"""Export the PH49 2.2 m x 2.5 m tower door module from v007."""
+"""Export the v0.1 2.2 m x 2.5 m tower door module from v007."""
 
 from pathlib import Path
 

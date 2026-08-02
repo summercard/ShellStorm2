@@ -1,6 +1,6 @@
 class_name RegionalSpawnController
 extends Node
-## PH11 P1 区域刷怪控制器 + P2 精英警觉增援
+## v0.1 P1 区域刷怪控制器 + P2 精英警觉增援
 ## 挂载在每个房间节点（RoomCombat/RoomElite）上，监听本房间敌人追击状态，
 ## 当敌人进入 CHASE 时触发区域增援，在相邻房间（或本房间）生成额外敌人。
 ## P2: 精英怪进入 CHASE 时还会通知相邻房间敌人进入 ALERT（跨房间AI联动）。

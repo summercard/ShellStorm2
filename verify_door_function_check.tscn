@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bjj7d3rva5mgk"]
-
-[ext_resource type="Script" path="res://verify_door_function_check.gd" id="1_door_check"]
-
-[node name="VerifyDoorFunctionCheck" type="Node"]
-script = ExtResource("1_door_check")

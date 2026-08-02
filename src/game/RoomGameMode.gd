@@ -46,7 +46,7 @@ var vision_system: VisionSystem = VISION_SYSTEM_SCRIPT.new()
 ## 迷雾层引用（用于向 FogOfWarLayer 推送墙体几何）
 @onready var fog_layer: Node = get_node_or_null("../FogOfWarLayer")
 
-## 精英怪档案（PH06 精英成长链路）
+## 精英怪档案（v0.1 精英成长链路）
 var _elite_archive: Node = null
 ## 精英怪遭遇结算桥接器（轮次437）
 var _elite_encounter_bridge: Node = null
@@ -108,7 +108,7 @@ var _run_risk: int = 0
 var _current_wave_spawner: RoomWaveSpawner = null
 ## 区域刷怪控制器（当前房间）
 var _current_regional_controller: RegionalSpawnController = null
-## 精英怪出现调度器（PH06）
+## 精英怪出现调度器（v0.1）
 var _elite_spawn_director: Node
 ## 当前房间遭遇的所有精英 elite_id（用于遭遇结果记录）
 var _encountered_elite_ids_this_room: Array[String] = []
@@ -209,7 +209,7 @@ func _setup_map_manager() -> void:
 	map_manager.room_exited.connect(_on_room_exited)
 	map_manager.floor_changed.connect(_on_floor_changed)
 	map_manager.all_rooms_cleared.connect(_on_all_rooms_cleared)
-	# PH11 P1: REVEAL事件 -> 小地图刷新（RoomEventHandler -> MapManager -> 此处 -> GameUIManager）
+	# v0.1 P1: REVEAL事件 -> 小地图刷新（RoomEventHandler -> MapManager -> 此处 -> GameUIManager）
 	if map_manager.has_signal("adjacent_rooms_revealed"):
 		map_manager.adjacent_rooms_revealed.connect(_on_adjacent_rooms_revealed)
 	# Boss 事件穿透信号订阅（Boss 刷新 → UI 更新）
@@ -237,7 +237,7 @@ func _setup_extraction_modules() -> void:
 	death_settlement_module.death_settlement_processed.connect(_on_death_settlement_processed)
 
 
-## 初始化精英怪档案模块（PH06 精英成长链路）
+## 初始化精英怪档案模块（v0.1 精英成长链路）
 func _setup_elite_archive() -> void:
 	_elite_archive = ELITE_ARCHIVE_MODULE_SCRIPT.new()
 	add_child(_elite_archive)
@@ -249,13 +249,13 @@ func _setup_elite_archive() -> void:
 
 
 func _on_elite_spawn_recorded(elite_id: String) -> void:
-	# PH06: 精英生成时记录遭遇结果（玩家撤离/死亡时统一结算）
+	# v0.1: 精英生成时记录遭遇结果（玩家撤离/死亡时统一结算）
 	if not elite_id.is_empty() and elite_id not in _encountered_elite_ids_this_room:
 		_encountered_elite_ids_this_room.append(elite_id)
 		print("[RoomGameMode] 精英遭遇已记录: %s" % elite_id)
 
 
-## PH06: 成功撤离时结算精英逃脱成长（对所有本局遭遇但未击杀的精英）
+## v0.1: 成功撤离时结算精英逃脱成长（对所有本局遭遇但未击杀的精英）
 ## 轮次437: 使用 EliteEncounterBridge.resolve_extraction() 替代硬编码数据
 func _resolve_elite_encounters_for_extraction() -> void:
 	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
@@ -274,7 +274,7 @@ func _resolve_elite_encounters_for_extraction() -> void:
 		print("[RoomGameMode] 精英逃脱成长已结算: %s (biome_level=%d)" % [eid, biome_level])
 
 
-## PH06: 玩家死亡时结算精英击杀玩家成长（精英获得"击杀玩家"标记并变强）
+## v0.1: 玩家死亡时结算精英击杀玩家成长（精英获得"击杀玩家"标记并变强）
 ## 轮次437: 使用 EliteEncounterBridge.resolve_death() 替代硬编码数据
 func _resolve_elite_encounters_for_death() -> void:
 	if _elite_archive == null or _encountered_elite_ids_this_room.is_empty():
@@ -570,7 +570,7 @@ func _on_room_entered(room_data: RoomData) -> void:
 	room_entered.emit(room_data)
 	var current_id: int = map_manager.get_current_room_id() if map_manager != null else -1
 	_room_cleared_flag = _cleared_room_ids.has(current_id)
-	# PH06: 进入新房间时清空本局精英遭遇记录（每房间独立结算）
+	# v0.1: 进入新房间时清空本局精英遭遇记录（每房间独立结算）
 	_encountered_elite_ids_this_room.clear()
 	_killed_elite_ids_this_room.clear()
 	_update_room_info_label(
@@ -660,7 +660,7 @@ func _on_all_rooms_cleared() -> void:
 	extraction_ready.emit()
 
 
-## PH11 P1: REVEAL事件触发后刷新小地图
+## v0.1 P1: REVEAL事件触发后刷新小地图
 func _on_adjacent_rooms_revealed(room_id: String, revealed_count: int) -> void:
 	print("[RoomGameMode] REVEAL事件: 揭示 %d 个相邻房间 from room %s" % [revealed_count, room_id])
 	# 通知 GameUIManager 小地图需要重建节点（读取 MapManager 中已更新的 revealed 元数据）
@@ -674,7 +674,7 @@ func _on_global_game_over() -> void:
 	if extraction_module != null:
 		extraction_module.abort_extraction()
 	_stop_current_room_spawner()
-	# PH06: 玩家死亡时结算所有遭遇精英的击杀玩家成长（精英吃掉玩家）
+	# v0.1: 玩家死亡时结算所有遭遇精英的击杀玩家成长（精英吃掉玩家）
 	_resolve_elite_encounters_for_death()
 	# 触发死亡结算
 	if death_settlement_module != null and inventory_module != null:
@@ -754,7 +754,7 @@ func _on_extraction_completed(success: bool, loot: Array[Dictionary]) -> void:
 	if success:
 		_set_player_input_locked(true)
 		_clear_extraction_room_attackers()
-		# PH06: 成功撤离时结算所有遭遇精英的逃脱成长
+		# v0.1: 成功撤离时结算所有遭遇精英的逃脱成长
 		_resolve_elite_encounters_for_extraction()
 		var extracted: int = death_settlement_module.process_extraction_settlement(
 			inventory_module, insurance_module
@@ -1117,7 +1117,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	_current_wave_spawner = RoomWaveSpawner.new()
 	add_child(_current_wave_spawner)
 
-	# 创建区域刷怪控制器（PH11 P1: 房间级刷怪管理 + 区域增援）
+	# 创建区域刷怪控制器（v0.1 P1: 房间级刷怪管理 + 区域增援）
 	_setup_regional_spawn_controller(room_data)
 
 	# 将区域控制器注入波次生成器（敌人CHASE -> 触发增援）
@@ -1128,12 +1128,12 @@ func _start_combat_waves(room_data: RoomData) -> void:
 	_current_wave_spawner.wave_started.connect(_on_wave_started)
 	_current_wave_spawner.all_waves_cleared.connect(_on_all_waves_cleared)
 	_current_wave_spawner.wave_progress_updated.connect(_on_wave_progress_updated)
-	_current_wave_spawner.elite_spawn_recorded.connect(_on_elite_spawn_recorded)  # PH06: 记录精英遭遇
+	_current_wave_spawner.elite_spawn_recorded.connect(_on_elite_spawn_recorded)  # v0.1: 记录精英遭遇
 
 	# 查找当前房间实例（用于获取房间节点引用）
 	var current_room_node: Node2D = _get_current_room_instance()
 
-	# PH12: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
+	# v0.1: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
 	_configure_room_visualizer(current_room_node, room_data)
 
 	# 启动生成
@@ -1146,7 +1146,7 @@ func _start_combat_waves(room_data: RoomData) -> void:
 		self,
 		room_data.size
 	)
-	# PH06: 从 EliteSpawnDirector 抽取精英并注入到波次生成器
+	# v0.1: 从 EliteSpawnDirector 抽取精英并注入到波次生成器
 	if _elite_spawn_director != null and _elite_spawn_director.has_method("try_select_elite"):
 		var elite_spawn_data: Dictionary = _elite_spawn_director.try_select_elite(current_floor, _run_risk)
 		if not elite_spawn_data.is_empty():
@@ -1243,7 +1243,7 @@ func _stop_current_room_spawner() -> void:
 	_current_regional_controller = null
 
 
-## 设置区域刷怪控制器（PH11 P1: 房间级刷怪管理 + 区域增援）
+## 设置区域刷怪控制器（v0.1 P1: 房间级刷怪管理 + 区域增援）
 func _setup_regional_spawn_controller(room_data: RoomData) -> void:
 	_current_regional_controller = RegionalSpawnController.new()
 	add_child(_current_regional_controller)
@@ -1266,7 +1266,7 @@ func _setup_regional_spawn_controller(room_data: RoomData) -> void:
 	# 初始化
 	_current_regional_controller.setup(room_instance, room_data, room_bounds, self)
 
-	# PH11 P2: 构建相邻房间敌人字典，注入到控制器
+	# v0.1 P2: 构建相邻房间敌人字典，注入到控制器
 	_build_adjacent_enemies_for_controller(room_data)
 
 	# 连接区域增援信号 -> 触发额外刷怪
@@ -1279,12 +1279,12 @@ func _setup_regional_spawn_controller(room_data: RoomData) -> void:
 	# 连接敌人追击信号 -> 触发增援判断
 	_connect_enemy_chase_signals()
 
-	# PH11 P2: 延迟注册当前房间敌人（等敌人真正生成到场景后）
+	# v0.1 P2: 延迟注册当前房间敌人（等敌人真正生成到场景后）
 	# 连接精英怪 elite_entered_chase -> 相邻房间AI联动
 	_call_deferred_register_adjacent_enemies()
 
 
-## PH11 P2: 构建相邻房间敌人字典并注入到控制器
+## v0.1 P2: 构建相邻房间敌人字典并注入到控制器
 ## 获取当前房间的相邻房间ID -> 收集每个相邻房间内的敌人节点
 func _build_adjacent_enemies_for_controller(room_data: RoomData) -> void:
 	if map_manager == null or _current_regional_controller == null:
@@ -1307,7 +1307,7 @@ func _build_adjacent_enemies_for_controller(room_data: RoomData) -> void:
 	print("[RoomGameMode] P2相邻房间敌人已注入: %s" % adjacent_enemies)
 
 
-## PH11 P2: 延迟注册当前房间敌人并连接 elite_entered_chase 信号
+## v0.1 P2: 延迟注册当前房间敌人并连接 elite_entered_chase 信号
 func _call_deferred_register_adjacent_enemies() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -1373,7 +1373,7 @@ func _get_current_room_instance() -> Node2D:
 	return self  # Fallback
 
 
-## PH12: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
+## v0.1: 配置房间视觉化（TileMap地面/墙体 + 氛围装饰）
 func _configure_room_visualizer(room_node: Node2D, room_data: RoomData) -> void:
 	if room_node == null or not is_instance_valid(room_node):
 		return
@@ -1848,7 +1848,7 @@ func _process(delta: float) -> void:
 	if player != null and is_instance_valid(player):
 		_do_update_enemy_visibility()
 
-	# 更新区域刷怪控制器（PH11 P1: 冷却计时）
+	# 更新区域刷怪控制器（v0.1 P1: 冷却计时）
 	if _current_regional_controller != null and is_instance_valid(_current_regional_controller):
 		_current_regional_controller.tick(delta)
 
@@ -2326,7 +2326,7 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 	if enemy_data.get("is_elite", false):
 		if map_manager != null:
 			map_manager.extraction_director.unlock_elite_extraction()
-		# PH06: 通知 EliteArchiveModule 精英被击杀
+		# v0.1: 通知 EliteArchiveModule 精英被击杀
 		var elite_id: String = enemy_data.get("elite_id", "")
 		if not elite_id.is_empty() and _elite_archive != null:
 			_elite_archive.kill_elite(elite_id)

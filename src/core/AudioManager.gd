@@ -10,24 +10,25 @@ var music_volume: float = 0.8
 ## 程序化音效降级（无音频文件时的备选）
 var _synth = null  # SynthSfx, typed lazily
 
-# 音效映射（骨架，后续替换真实音频文件）
+# v0.1 默认使用程序化合成。只有真实音频资产完成并登记后才填写 res:// 路径，
+# 空路径是显式的合成契约，不再保留指向不存在文件的占位引用。
 const SFX: Dictionary = {
-	"pistol_fire":    "res://assets/audio/sfx/pistol_fire.wav",
-	"rifle_fire":     "res://assets/audio/sfx/rifle_fire.wav",
-	"shotgun_fire":   "res://assets/audio/sfx/shotgun_fire.wav",
-	"smg_fire":       "res://assets/audio/sfx/smg_fire.wav",
-	"sniper_fire":    "res://assets/audio/sfx/sniper_fire.wav",
-	"laser_fire":     "res://assets/audio/sfx/laser_fire.wav",
-	"enemy_hit":      "res://assets/audio/sfx/enemy_hit.wav",
-	"enemy_die":      "res://assets/audio/sfx/enemy_die.wav",
-	"player_hit":     "res://assets/audio/sfx/player_hit.wav",
-	"player_dash":    "res://assets/audio/sfx/player_dash.wav",
-	"reload":         "res://assets/audio/sfx/reload.wav",
-	"crit_hit":       "res://assets/audio/sfx/crit_hit.wav",
-	"fate_card":      "",  # 程序化合成，无文件时自动降级到 SynthSfx.play_fate_card
-	"extraction_start": "res://assets/audio/sfx/extraction_start.wav",
-	"extraction_done":  "res://assets/audio/sfx/extraction_done.wav",
-	"extraction_abort": "",  # 程序化合成，无文件时自动降级到 SynthSfx.play_extraction_abort
+	"pistol_fire": "",
+	"rifle_fire": "",
+	"shotgun_fire": "",
+	"smg_fire": "",
+	"sniper_fire": "",
+	"laser_fire": "",
+	"enemy_hit": "",
+	"enemy_die": "",
+	"player_hit": "",
+	"player_dash": "",
+	"reload": "",
+	"crit_hit": "",
+	"fate_card": "",
+	"extraction_start": "",
+	"extraction_done": "",
+	"extraction_abort": "",
 }
 
 func _ready() -> void:
@@ -73,7 +74,7 @@ func _play_fallback_sfx(sfx_name: String) -> void:
 	if _synth == null:
 		return
 	match sfx_name:
-		"pistol_fire", "rifle_fire", "shotgun_fire", "smg_fire", "sniper_fire":
+		"pistol_fire", "rifle_fire", "shotgun_fire", "smg_fire", "sniper_fire", "laser_fire":
 			_synth.play_shoot(5.0, 1)
 		"enemy_hit":
 			_synth.play_hit()

@@ -2,6 +2,7 @@
 .godot/
 *.import
 *.translation
+*.inspect.ndjson
 *.bak
 *.backup
 
@@ -14,6 +15,10 @@
 
 # Build outputs
 bin/
+outputs/
+.codex-tmp/
+.dev-cycle/
+*.blend1
 *.pck
 *.exe
 *.dmg

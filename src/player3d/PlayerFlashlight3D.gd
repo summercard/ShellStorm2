@@ -7,8 +7,8 @@ extends Node3D
 
 signal light_enabled_changed(enabled: bool)
 
-const ENVIRONMENT_RENDER_LAYER := 1
-const AVATAR_RENDER_LAYER := 2
+const ENVIRONMENT_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_WORLD
+const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
 
 @export_group("Input")
 @export var toggle_action := "toggle_flashlight"

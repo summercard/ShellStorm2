@@ -1,4 +1,4 @@
-"""Export the two user-authored v006 stairwell assemblies for Godot.
+"""Export the two approved v0.1 stairwell assemblies for Godot.
 
 The Blender review file stores each stairwell at its real floor position.
 Runtime assets instead use a normalized contract:

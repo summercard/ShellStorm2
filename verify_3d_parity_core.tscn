@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://verify_3d_parity_core.gd" id="1"]
-
-[node name="Verify3DParityCore" type="Node"]
-script = ExtResource("1")

@@ -8,10 +8,10 @@ signal enemy_died()
 signal enemy_hit(hit_from: Vector2, damage: int, is_crit: bool)
 ## 当敌人进入 CHASE 追击状态时，向房间的区域刷怪控制器发送警觉信号
 signal enemy_entered_chase(enemy: Node, last_known_pos: Vector2)
-## 精英怪专属：进入 CHASE 时触发相邻房间 AI 联动（PH11 P2）
+## 精英怪专属：进入 CHASE 时触发相邻房间 AI 联动（v0.1 P2）
 signal elite_entered_chase(enemy: Node, last_known_pos: Vector2)
 
-## AI状态机枚举（PH11 警觉AI核心）
+## AI状态机枚举（v0.1 警觉AI核心）
 enum AIState {
 	IDLE = 0,    # 空闲：原地小范围移动，不主动攻击，眼睛正常
 	ALERT = 1,   # 警觉：停止、看向玩家方向、头上出现 ❓，计时中
@@ -63,7 +63,7 @@ var _trapper_reveal_timer: float = 0.0
 var _ranged_windup_active: bool = false
 var _summon_telegraph_active: bool = false
 
-## 远程敌人侧翼机动（PH06强化）
+## 远程敌人侧翼机动（v0.1强化）
 var _ranged_flank_dir: int = 1          # 1=右侧翼绕后, -1=左侧翼绕后
 var _ranged_flank_timer: float = 0.0    # 侧翼切换倒计时
 var _ranged_flank_interval: float = 3.8  # 默认3.8秒切换一次侧翼方向
@@ -75,7 +75,7 @@ var _knockback_velocity: Vector2 = Vector2.ZERO
 var _modifiers: Array = []
 var _enemy_data: Dictionary = {}
 var _damage_multiplier: float = 1.0  # 伤害倍率（由环境命运触发器设置）
-var _is_elite: bool = false          # 是否为精英怪（PH11 P2: 精英进入CHASE时触发相邻房间AI联动）
+var _is_elite: bool = false          # 是否为精英怪（v0.1 P2: 精英进入CHASE时触发相邻房间AI联动）
 var _elite_gun_modules: Array[Dictionary] = []   # 精英偷取的GunBody模块（用于挂枪射击）
 var _elite_bullet_modules: Array[Dictionary] = []  # 精英偷取的Bullet模块（用于子弹行为）
 var _elite_attachment_modules: Array[Dictionary] = []  # 精英偷取的Attachment模块（用于修饰射击参数）
@@ -124,7 +124,7 @@ var _search_timer: float = 0.0       # SEARCH状态剩余时间
 var _last_known_player_pos: Vector2 = Vector2.ZERO  # 玩家最后被看到的位置
 var _noise_accumulator: float = 0.0  # 声音累积（玩家移动/射击时增加）
 
-## 巡逻变量（PH11 区域AI核心）
+## 巡逻变量（v0.1 区域AI核心）
 var _patrol_waypoints: Array[Vector2] = []  # 当前巡逻路径点列表
 var _current_patrol_idx: int = 0             # 当前目标路径点索引
 var _patrol_reach_threshold: float = 28.0   # 到达路径点的判定距离
@@ -453,7 +453,7 @@ var _state_machine: StateMachine = null
 ## 状态机启动标志（防止重复 init）
 var _state_machine_initialized: bool = false
 
-## ========== 房间边界 & 巡逻系统（PH11 区域AI核心）==========
+## ========== 房间边界 & 巡逻系统（v0.1 区域AI核心）==========
 
 ## 设置所属房间的边界（由 RoomWaveSpawner 在生成敌人时调用）
 ## bounds: Rect2 — 房间矩形区域（世界坐标）
@@ -464,11 +464,11 @@ func set_room_bounds(bounds: Rect2) -> void:
 func get_room_bounds() -> Rect2:
 	return _room_bounds
 
-## PH11 P2: 查询是否为精英怪
+## v0.1 P2: 查询是否为精英怪
 func is_elite() -> bool:
 	return _is_elite
 
-## PH11 P2: 强制唤醒敌人进入 ALERT 状态（由相邻房间精英触发）
+## v0.1 P2: 强制唤醒敌人进入 ALERT 状态（由相邻房间精英触发）
 ## pos: 玩家最后被看到的位置（作为 SEARCH 的起点）
 func force_alert(pos: Vector2) -> void:
 	if _ai_state == AIState.CHASE:
@@ -542,7 +542,7 @@ func _apply_room_bounds() -> void:
 		pushback.y = ( (_room_bounds.position.y + _room_bounds.size.y - margin) - pos.y ) * 8.0
 	velocity += pushback
 
-## PH11 P3: 房间边界方向拦截+减速
+## v0.1 P3: 房间边界方向拦截+减速
 ## 给定方向向量和速度，在即将撞墙时折返而非被推回
 ## 返回值：安全的速度向量
 func _apply_boundary_on_dir(base_dir: Vector2, base_speed: float) -> Vector2:
@@ -604,7 +604,7 @@ func _dispatch_behavior(delta: float) -> void:
 
 func _behavior_chase(_delta: float) -> void:
 	var direction := (player_ref.global_position - global_position).normalized()
-	# PH06: elite chase 略微带侧翼感（不是直线追，略有弧线）
+	# v0.1: elite chase 略微带侧翼感（不是直线追，略有弧线）
 	if _is_elite:
 		var tangent := Vector2(-direction.y, direction.x) * _ranged_flank_dir * 0.25
 		velocity = (direction + tangent) * speed
@@ -617,7 +617,7 @@ func _behavior_ranged(delta: float) -> void:
 	var dir := to_player.normalized()
 	var preferred_dist := 310.0
 
-	# --- 侧翼机动增强（PH06强化） ---
+	# --- 侧翼机动增强（v0.1强化） ---
 	# 远程敌人不是简单切向移动，而是主动绕到玩家侧后方
 	# 侧翼方向 _ranged_flank_dir 控制绕向哪一侧
 	# 绕到一定角度后切入，保持与玩家间距，同时造成压迫感

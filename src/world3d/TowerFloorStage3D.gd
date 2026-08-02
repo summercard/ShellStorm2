@@ -27,7 +27,7 @@ const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
 )
-# PH49 v2 拼接交替材质（A/B 微差异版）
+# v0.1 v2 拼接交替材质（A/B 微差异版）
 const FLOOR_TILE_MATERIAL_A: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_a_v001.tres"
 )

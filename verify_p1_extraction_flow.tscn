@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://verify_p1_extraction_flow.gd" id="1_verify_p1_extraction"]
-
-[node name="VerifyP1ExtractionFlow" type="Node"]
-script = ExtResource("1_verify_p1_extraction")

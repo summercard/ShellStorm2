@@ -149,7 +149,7 @@ func _on_exit_requested() -> void:
 	if test_mode:
 		status_label.text = "测试模式：已验证返回入口"
 		return
-	get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
+	get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
 
 
 func get_training_snapshot() -> Dictionary:

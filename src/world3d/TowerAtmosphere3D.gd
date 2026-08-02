@@ -1,6 +1,6 @@
 class_name TowerAtmosphere3D
 extends Node3D
-## PH42 全塔统一自然光控制器。太阳与环境参数不随楼层变化；
+## v0.1 全塔统一自然光控制器。太阳与环境参数不随楼层变化；
 ## 室内明暗由楼板、墙、门的真实阴影以及局部灯具决定。
 ## 光照只负责表现，不参与 PlayerVision3D 的目标显隐判定。
 
@@ -37,7 +37,7 @@ func set_floor_number(floor_number: int) -> void:
 	if _city_root != null:
 		_city_root.visible = rooftop
 	if _rooftop_sky_bounce != null:
-		# PH49：补光属于全塔固定环境的一部分，不能随玩家所在楼层闪断。
+		# v0.1：补光属于全塔固定环境的一部分，不能随玩家所在楼层闪断。
 		_rooftop_sky_bounce.visible = true
 	_apply_fixed_lighting()
 
@@ -47,7 +47,7 @@ func _apply_fixed_lighting() -> void:
 		_sun.light_energy = SUN_ENERGY
 		_sun.light_color = SUN_COLOR
 		_sun.shadow_enabled = true
-		_sun.light_cull_mask = 3
+		_sun.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
 	if _environment != null:
 		_environment.background_color = BACKGROUND_COLOR
 		_environment.ambient_light_color = AMBIENT_COLOR

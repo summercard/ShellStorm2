@@ -63,7 +63,7 @@ var _event_library: Array[GameEvent] = []
 func _ready() -> void:
 	_initialize_event_library()
 
-## 初始化事件库（根据 PH11 设计配置）
+## 初始化事件库（根据 v0.1 设计配置）
 func _initialize_event_library() -> void:
 	_event_library.clear()
 	

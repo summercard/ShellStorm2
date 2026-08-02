@@ -361,7 +361,7 @@ func _on_start_pressed() -> void:
 	if overlay_mode:
 		queue_free()
 		return
-	get_tree().change_scene_to_file("res://scenes/BaseWorld3D.tscn")
+	get_tree().change_scene_to_file(GameDesignConfig.BASE_SCENE_3D)
 
 
 func _on_close_overlay_pressed() -> void:
