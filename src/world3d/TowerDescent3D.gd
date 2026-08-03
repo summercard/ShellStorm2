@@ -51,6 +51,10 @@ const CAMERA_WALL_COLLISION_MASK := (
 	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 )
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
+# 楼梯资产位于65m核心外侧：沿外法线预留20m、沿折返方向预留30m。
+# 该占位参与整层布局规划，普通/随机房间不得进入；楼梯大厅自身作为接口例外。
+const STAIR_PLAN_OUTWARD_DEPTH_M := 20.0
+const STAIR_PLAN_TANGENT_LENGTH_M := 30.0
 const CAMERA_OCCLUSION_RAY_OFFSETS := [
 	Vector3.ZERO,
 	Vector3(-0.48, 0.30, 0.0),
@@ -87,6 +91,8 @@ var _tower_target_label: Label
 var _tower_elevator_label: Label
 var _tower_hp_bar: ProgressBar
 var _loaded_floor_indices: Array[int] = []
+var _generated_floor_indices: Array[int] = []
+var _floor_layout_plan_conflicts: Array[String] = []
 var _player_occlusion_meshes: Array[GeometryInstance3D] = []
 var _player_original_overlays: Dictionary = {}
 var _player_occlusion_material: StandardMaterial3D
@@ -100,6 +106,8 @@ var _camera_trailing_target_m := CAMERA_DEFAULT_TRAILING_M
 var _camera_trailing_current_m := CAMERA_DEFAULT_TRAILING_M
 var _vertical_arrival_open: Dictionary = {}
 var _stair_arrival_prompt_door: RoomDoor3D
+var _corridor_floor_module_mesh: Mesh
+var _corridor_wall_module_mesh: Mesh
 
 
 func _ready() -> void:
@@ -463,6 +471,8 @@ func _build_records() -> void:
 	_floor_room_ids.clear()
 	_floor_layout_templates.clear()
 	_vertical_arrival_open.clear()
+	_generated_floor_indices.clear()
+	_floor_layout_plan_conflicts.clear()
 
 	var core_center := Vector3(
 		TOWER_GEOMETRY.CORE_CENTER_XZ.x,
@@ -549,6 +559,7 @@ func _build_records() -> void:
 			)
 		_descent_side_sequence.append(stair_side)
 		previous_exit_id = exit_id
+	_validate_floor_layout_plans()
 
 
 func _normal_floor_specs(
@@ -560,22 +571,24 @@ func _normal_floor_specs(
 		# v0.1：东侧楼梯下接口为(35, 2.5)，入口大厅在门的左侧/
 		# 核心内侧，东门精确落在接口；不再把关卡刷到门外右侧。
 		"entry": Vector2(27.5, 2.5),
-		# 30×25m 房间按 6×5 个 5m 模块重排。纵向中心距 30m、
-		# 横向中心距 35m，普通相邻房之间正好保留一个 5m 走廊格。
-		"hub": Vector2(30.0, -22.5),
-		"main_02": Vector2(65.0, -22.5),
-		"main_03": Vector2(65.0, -52.5),
-		"main_04": Vector2(30.0, -52.5),
+		# 30×25m 房间按 6×5 个 5m 模块重排。入口后的主环向北退出
+		# 东侧楼梯折返占位；入口大厅到枢纽保留25m模块化直走廊。
+		"hub": Vector2(30.0, -42.5),
+		"main_02": Vector2(65.0, -42.5),
+		"main_03": Vector2(65.0, -72.5),
+		"main_04": Vector2(30.0, -72.5),
 		# 为了让固定西侧楼梯接口仍落在 x=-30m，回环西段保留一条
 		# 20m 战术走廊，其余主路/支路均为 5m。
-		"main_05": Vector2(-20.0, -52.5),
-		"main_06": Vector2(-20.0, -22.5),
+		"main_05": Vector2(-20.0, -72.5),
+		"main_06": Vector2(-20.0, -42.5),
 		# 15m出口大厅西门落在核心西接口(-30, 2.5)。
 		"exit": Vector2(-22.5, 2.5),
-		"branch_01": Vector2(65.0, 7.5),
-		"branch_02": Vector2(65.0, 37.5),
-		"branch_03": Vector2(30.0, 37.5),
-		"elevator": Vector2(-5.0, 37.5),
+		# 支路从主路东端继续向核心外缘展开。旧布局把 branch_01 放在
+		# (65, 7.5)，会侵入东侧楼梯间的折返围护；房间延迟显现后才暴露穿模。
+		"branch_01": Vector2(100.0, -42.5),
+		"branch_02": Vector2(100.0, -12.5),
+		"branch_03": Vector2(100.0, 37.5),
+		"elevator": Vector2(65.0, 37.5),
 	}
 	var content_types: Array[String] = [
 		"COMBAT", "COMBAT", "EVENT", "STORAGE", "SCAVENGE", "ELITE", "TRAP"
@@ -635,7 +648,8 @@ func _boss_floor_specs(floor_number: int) -> Array[Dictionary]:
 		{"key": "prep", "id": "floor_%02d_boss_prep" % floor_number, "type": "UPGRADE", "role": "boss_prep", "parent_key": "main_02", "position": Vector2(-55.0, 42.5)},
 		{
 			"key": "exit", "id": "extraction", "type": "BOSS", "role": "boss",
-			"parent_key": "prep", "position": Vector2(10.0, 45.0),
+			# 90m Boss区向东移开西侧入层楼梯的保留占位。
+			"parent_key": "prep", "position": Vector2(35.0, 45.0),
 			"dimensions": Vector2(
 				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M,
 				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M
@@ -691,6 +705,100 @@ func _append_tower_record(
 	if not _floor_room_ids.has(floor_index):
 		_floor_room_ids[floor_index] = []
 	(_floor_room_ids[floor_index] as Array).append(id)
+
+
+func _validate_floor_layout_plans() -> void:
+	_floor_layout_plan_conflicts.clear()
+	var records_by_floor: Dictionary = {}
+	for record_value in _records:
+		var record := record_value as Dictionary
+		var floor_index := int(record.get("floor_index", -1))
+		if not records_by_floor.has(floor_index):
+			records_by_floor[floor_index] = []
+		(records_by_floor[floor_index] as Array).append(record)
+	for floor_value in records_by_floor.keys():
+		var floor_index := int(floor_value)
+		var floor_records := records_by_floor[floor_index] as Array
+		for first_index in range(floor_records.size()):
+			var first := floor_records[first_index] as Dictionary
+			var first_rect := _record_plan_rect(first)
+			for second_index in range(first_index + 1, floor_records.size()):
+				var second := floor_records[second_index] as Dictionary
+				if first_rect.intersection(_record_plan_rect(second)).get_area() > 0.01:
+					_floor_layout_plan_conflicts.append(
+						"floor %d room %s overlaps room %s" % [
+							floor_index,
+							str(first.get("id", "")),
+							str(second.get("id", "")),
+						]
+					)
+	for declaration_value in _declared_edges:
+		var declaration := declaration_value as Dictionary
+		if str(declaration.get("kind", "")) != "vertical":
+			continue
+		var side := str(declaration.get("side", "west"))
+		var reservation := _stair_plan_rect(side)
+		for endpoint_key in ["a", "b"]:
+			var endpoint_id := str(declaration.get(endpoint_key, ""))
+			var floor_index := int(_room_floor_index.get(endpoint_id, -1))
+			for record_value in records_by_floor.get(floor_index, []):
+				var record := record_value as Dictionary
+				if str(record.get("id", "")) == endpoint_id:
+					continue
+				if reservation.intersection(_record_plan_rect(record)).get_area() <= 0.01:
+					continue
+				_floor_layout_plan_conflicts.append(
+					"floor %d room %s overlaps %s stair reservation" % [
+						floor_index,
+						str(record.get("id", "")),
+						side,
+					]
+				)
+	if not _floor_layout_plan_conflicts.is_empty():
+		push_error(
+			"Tower floor plan rejected before scene generation: %s"
+			% "; ".join(_floor_layout_plan_conflicts)
+		)
+
+
+func _record_plan_rect(record: Dictionary) -> Rect2:
+	var position := record.get("position", Vector3.ZERO) as Vector3
+	var dimensions := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+	return Rect2(
+		Vector2(position.x, position.z) - dimensions * 0.5,
+		dimensions
+	)
+
+
+func _stair_plan_rect(side: String) -> Rect2:
+	var outward := {
+		"north": Vector2(0.0, -1.0),
+		"south": Vector2(0.0, 1.0),
+		"west": Vector2(-1.0, 0.0),
+		"east": Vector2(1.0, 0.0),
+	}.get(side, Vector2.LEFT) as Vector2
+	var tangent := Vector2(outward.y, -outward.x)
+	var interface := (
+		TOWER_GEOMETRY.CORE_CENTER_XZ
+		+ outward * (TOWER_GEOMETRY.CORE_SIZE_M * 0.5)
+	)
+	var corners: Array[Vector2] = []
+	for outward_distance in [0.0, STAIR_PLAN_OUTWARD_DEPTH_M]:
+		for tangent_distance in [
+			-STAIR_PLAN_TANGENT_LENGTH_M * 0.10,
+			STAIR_PLAN_TANGENT_LENGTH_M * 0.90,
+		]:
+			corners.append(
+				interface
+				+ outward * float(outward_distance)
+				+ tangent * float(tangent_distance)
+			)
+	var minimum := corners[0]
+	var maximum := corners[0]
+	for corner in corners:
+		minimum = minimum.min(corner)
+		maximum = maximum.max(corner)
+	return Rect2(minimum, maximum - minimum)
 
 
 func _declare_edge(
@@ -1127,20 +1235,71 @@ func _build_tower_horizontal_corridor(
 	connector.set_meta("start_door_position", start)
 	connector.set_meta("end_door_position", end)
 	connector.set_meta("door_tangent_error_m", tangent_error)
+	var module_count := maxi(
+		1,
+		int(round(length / TOWER_GEOMETRY.GRID_UNIT_M))
+	)
+	connector.set_meta("module_count", module_count)
+	connector.set_meta("floor_module_count", module_count)
+	connector.set_meta("wall_module_count", module_count * 2)
+	connector.set_meta(
+		"module_coverage_length_m",
+		float(module_count) * TOWER_GEOMETRY.GRID_UNIT_M
+	)
 	connector.visible = false
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
 	$GeneratedCorridors.add_child(connector)
 	_corridor_by_edge[edge] = connector
 
-	# 房间之间固定留一个5m走廊格；两侧使用导入的9m满高墙模块。
+	# 门到门距离始终是5m网格的整数倍。地面与双侧墙按实际长度逐格排布，
+	# 但重复模块由 MultiMesh 批量提交，避免随机层一次生成后节点数随通道长度暴涨。
+	# 不能只在中点放一块5m墙、再用整段碰撞补齐，否则长通道会形成空气墙。
 	var perpendicular := Vector3(0.0, 0.0, 1.0) if horizontal_x else Vector3(1.0, 0.0, 0.0)
+	var direction_from_start := start.direction_to(end)
+	var floor_transforms: Array[Transform3D] = []
+	var wall_transforms: Array[Transform3D] = []
+	var wall_basis := Basis.IDENTITY if horizontal_x else Basis(Vector3.UP, PI * 0.5)
+	var wall_mesh := _get_corridor_wall_module_mesh()
+	# 当前实墙 GLB 的几何范围为 Y=0..9m，不能像碰撞盒那样把实例原点
+	# 放在半层高。按 Mesh 底面反算偏移，确保以后原点调整后仍贴住楼面。
+	var wall_floor_offset_y := -wall_mesh.get_aabb().position.y if wall_mesh != null else 0.0
+	for module_index in range(module_count):
+		var module_center := (
+			start
+			+ direction_from_start * TOWER_GEOMETRY.GRID_UNIT_M
+			* (float(module_index) + 0.5)
+		)
+		floor_transforms.append(
+			Transform3D(Basis.IDENTITY, module_center + Vector3.UP * 0.015)
+		)
+		for side_sign in [-1.0, 1.0]:
+			wall_transforms.append(
+				Transform3D(
+					wall_basis,
+					module_center
+					+ perpendicular * side_sign
+					* (TOWER_GEOMETRY.GRID_UNIT_M * 0.5)
+					+ Vector3.UP * wall_floor_offset_y
+				)
+			)
+	_add_horizontal_corridor_multimesh(
+		connector,
+		"ImportedCorridorFloorGrid5M",
+		_get_corridor_floor_module_mesh(),
+		floor_transforms,
+		"ENV-TOWER-FLOOR-TILE-5M",
+		"floor"
+	)
+	_add_horizontal_corridor_multimesh(
+		connector,
+		"ImportedCorridorWallGrid5M",
+		wall_mesh,
+		wall_transforms,
+		"ENV-TOWER-WALL-SOLID-5M",
+		"wall"
+	)
+	# 两侧碰撞保持整段连续盒体，不在5m拼缝处分割，避免角色和子弹卡缝。
 	for side_sign in [-1.0, 1.0]:
-		var wall := TOWER_WALL_SCENE.instantiate() as Node3D
-		wall.name = "ImportedCorridorWall5M_%s" % ("L" if side_sign < 0.0 else "R")
-		wall.position = center + perpendicular * side_sign * (TOWER_GEOMETRY.GRID_UNIT_M * 0.5)
-		wall.rotation.y = 0.0 if horizontal_x else PI * 0.5
-		wall.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
-		connector.add_child(wall)
 		var wall_size := (
 			Vector3(length, FLOOR_HEIGHT, 0.30)
 			if horizontal_x
@@ -1151,8 +1310,82 @@ func _build_tower_horizontal_corridor(
 			"CorridorWallCollision_%s" % ("L" if side_sign < 0.0 else "R"),
 			center + perpendicular * side_sign * (TOWER_GEOMETRY.GRID_UNIT_M * 0.5) + Vector3.UP * (FLOOR_HEIGHT * 0.5),
 			wall_size,
-			Vector3.ZERO
+			Vector3.ZERO,
+			false,
+			true,
+			# 只让东西向通道世界南侧的实墙参与固定镜头抬升；
+			# 南北向通道的两侧是东/西墙，不应触发。
+			horizontal_x and side_sign > 0.0
 		)
+	connector.set_meta(
+		"south_camera_wall_count",
+		1 if horizontal_x else 0
+	)
+
+
+func _add_horizontal_corridor_multimesh(
+	connector: Node3D,
+	node_name: String,
+	mesh: Mesh,
+	transforms: Array[Transform3D],
+	asset_id: String,
+	module_kind: String
+) -> void:
+	if mesh == null or transforms.is_empty():
+		push_error("Tower corridor %s mesh is unavailable" % module_kind)
+		return
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		multimesh.set_instance_transform(index, transforms[index])
+	var visual := MultiMeshInstance3D.new()
+	visual.name = node_name
+	visual.multimesh = multimesh
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	visual.set_meta("asset_id", asset_id)
+	visual.set_meta("horizontal_corridor_module_batch", true)
+	visual.set_meta("corridor_module_kind", module_kind)
+	visual.set_meta("corridor_module_instance_count", transforms.size())
+	var module_origins := PackedVector3Array()
+	for module_transform in transforms:
+		module_origins.append(module_transform.origin)
+	# Dummy/headless 渲染器不会回读 MultiMesh transform buffer；保留生成坐标清单，
+	# 让网格、覆盖范围和随机种子回归仍可精确验证。
+	visual.set_meta("corridor_module_origins", module_origins)
+	connector.add_child(visual)
+
+
+func _get_corridor_floor_module_mesh() -> Mesh:
+	if _corridor_floor_module_mesh == null:
+		_corridor_floor_module_mesh = _mesh_from_packed_scene(TOWER_FLOOR_TILE_SCENE)
+	return _corridor_floor_module_mesh
+
+
+func _get_corridor_wall_module_mesh() -> Mesh:
+	if _corridor_wall_module_mesh == null:
+		_corridor_wall_module_mesh = _mesh_from_packed_scene(TOWER_WALL_SCENE)
+	return _corridor_wall_module_mesh
+
+
+func _mesh_from_packed_scene(scene: PackedScene) -> Mesh:
+	if scene == null:
+		return null
+	var instance := scene.instantiate()
+	var mesh := _find_first_imported_mesh(instance)
+	instance.free()
+	return mesh
+
+
+func _find_first_imported_mesh(root: Node) -> Mesh:
+	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
+		return (root as MeshInstance3D).mesh
+	for child in root.get_children():
+		var mesh := _find_first_imported_mesh(child)
+		if mesh != null:
+			return mesh
+	return null
 
 func _build_stair_approach_corridor(
 	connector: Node3D,
@@ -1566,9 +1799,40 @@ func _is_locked_stair_arrival_room(room_id: String) -> bool:
 
 
 func _update_room_streaming(current_id: String) -> void:
+	_ensure_floor_generated(int(_room_floor_index.get(current_id, -1)))
 	super(current_id)
 	_update_floor_visibility_state()
 	_refresh_facility_runtime()
+
+
+func _ensure_floor_generated(floor_index: int) -> void:
+	if floor_index < 0 or floor_index in _generated_floor_indices:
+		return
+	# 楼层首次触发时，以整层为最小布局事务：一次冻结全部房间组件坐标、
+	# 门轴、水平通道及上下楼梯接口。Mesh实体仍按当前房/已开启邻房流送，
+	# 避免四层全部常驻造成节点预算失控；流送绝不能再改动布局坐标。
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
+		if room == null:
+			continue
+		room.set_meta("floor_plan_generated", true)
+		room.set_meta("floor_plan_position", room.position)
+		room.set_meta("floor_plan_dimensions", room.get_dimensions())
+	for edge_value in _corridor_by_edge.keys():
+		var edge := str(edge_value)
+		var connector := _corridor_by_edge.get(edge) as Node3D
+		if connector == null:
+			continue
+		var from_id := str(connector.get_meta("from_room_id", ""))
+		var to_id := str(connector.get_meta("to_room_id", ""))
+		if (
+			int(_room_floor_index.get(from_id, -2)) != floor_index
+			and int(_room_floor_index.get(to_id, -2)) != floor_index
+		):
+			continue
+		connector.set_meta("floor_plan_generated_%d" % floor_index, true)
+	_generated_floor_indices.append(floor_index)
+	_generated_floor_indices.sort()
 
 
 func _install_facilities() -> void:
@@ -2154,6 +2418,17 @@ func get_tower_snapshot() -> Dictionary:
 		"rendered_floor_count": rendered_floor_count,
 		"loaded_floor_count": _loaded_floor_indices.size(),
 		"loaded_floor_indices": _loaded_floor_indices.duplicate(),
+		"floor_generation_mode": "triggered_atomic_floor_plan",
+		"generated_floor_count": _generated_floor_indices.size(),
+		"generated_floor_indices": _generated_floor_indices.duplicate(),
+		"floor_layout_plan_valid": _floor_layout_plan_conflicts.is_empty(),
+		"floor_layout_plan_conflicts": _floor_layout_plan_conflicts.duplicate(),
+		"stair_plan_reservations": {
+			"north": _stair_plan_rect("north"),
+			"south": _stair_plan_rect("south"),
+			"west": _stair_plan_rect("west"),
+			"east": _stair_plan_rect("east"),
+		},
 		"floor_stages": floor_stage_snapshots,
 		"closed_door_count": closed_door_count,
 		"visible_room_ids": visible_room_ids,

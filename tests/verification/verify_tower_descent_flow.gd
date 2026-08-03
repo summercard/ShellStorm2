@@ -32,6 +32,15 @@ func _ready() -> void:
 	_expect(int(snapshot.get("core_size", 0)) == 65, "核心区不是65m", failures)
 	_expect(int(snapshot.get("grid_unit", 0)) == 5, "模块网格不是5m", failures)
 	_expect(
+		str(snapshot.get("floor_generation_mode", ""))
+			== "triggered_atomic_floor_plan"
+		and bool(snapshot.get("floor_layout_plan_valid", false))
+		and (snapshot.get("floor_layout_plan_conflicts", []) as Array).is_empty()
+		and (snapshot.get("generated_floor_indices", []) as Array) == [0],
+		"塔楼没有使用首触发整层生成，或初始布局已与楼梯占位重叠",
+		failures
+	)
+	_expect(
 		(snapshot.get("facility_dimensions", Vector2.ZERO) as Vector2)
 			.is_equal_approx(Vector2(30.0, 30.0))
 		and (
@@ -209,6 +218,7 @@ func _ready() -> void:
 	await _validate_floor_search_and_loot(tower, failures)
 	await _validate_manual_flashlight(tower, failures)
 	_validate_combat_floor_layouts(generation, snapshot, failures)
+	_validate_stair_room_clearance(tower, failures)
 	_expect(
 		tower.player.camera.position.is_equal_approx(Vector3(0.0, 8.0, 2.77)),
 		"塔楼摄像机没有保持Y=8m、后移2.77m(65°俯视)",
@@ -592,6 +602,7 @@ func _ready() -> void:
 	tower.player.global_position = entry98.global_position + Vector3(0, 0.05, 0)
 	tower.force_enter_room_for_test("floor_01_entry")
 	await get_tree().process_frame
+	_validate_atomic_floor_generation(tower, 2, failures)
 	var entry_light := entry98.get_node_or_null("RoomCeilingLight") as WastelandLight3D
 	_expect(
 		not tower.player.combat_enabled
@@ -960,6 +971,21 @@ func _validate_combat_floor_layouts(
 			"第%d物理层存在房间重叠" % physical_floor,
 			failures
 		)
+		for first_index in range(floor_records.size()):
+			var first_record := floor_records[first_index] as Dictionary
+			var first_rect := _record_rect(first_record)
+			for second_index in range(first_index + 1, floor_records.size()):
+				var second_record := floor_records[second_index] as Dictionary
+				_expect(
+					first_rect.intersection(_record_rect(second_record)).get_area()
+						<= 0.01,
+					"第%d物理层的%s与%s实际占地重叠" % [
+						physical_floor,
+						str(first_record.get("id", "")),
+						str(second_record.get("id", "")),
+					],
+					failures
+				)
 		var floor_types: Array[String] = []
 		var elevator_access_count := 0
 		for record in floor_records:
@@ -1086,11 +1112,154 @@ func _validate_combat_floor_layouts(
 				) as Vector3
 			)
 			_expect(
-				is_equal_approx(absf(hub_position.z - entry_position.z), 25.0)
+				is_equal_approx(absf(hub_position.z - entry_position.z), 45.0)
 				and absf(hub_position.x - entry_position.x) <= 2.51,
-				"第%d物理层入口大厅到战斗枢纽不是一格5m直走廊" % physical_floor,
+				"第%d物理层入口大厅到战斗枢纽没有以25m直走廊避开楼梯占位" % physical_floor,
 				failures
 			)
+
+
+func _validate_atomic_floor_generation(
+	tower: TowerDescent3D,
+	floor_index: int,
+	failures: Array[String]
+) -> void:
+	var snapshot := tower.get_tower_snapshot()
+	_expect(
+		floor_index in (snapshot.get("generated_floor_indices", []) as Array),
+		"第%d物理层首次进入后没有登记为整层生成" % floor_index,
+		failures
+	)
+	var floor_room_ids: Array = []
+	for floor_value in snapshot.get("combat_floors", []):
+		var floor_data := floor_value as Dictionary
+		if is_equal_approx(
+			float(floor_data.get("height", INF)),
+			-9.0 * float(floor_index)
+		):
+			floor_room_ids = floor_data.get("room_ids", []) as Array
+			break
+	var hidden_streamed_room_count := 0
+	for room_id_value in floor_room_ids:
+		var room := (
+			(tower.get("_room_by_id") as Dictionary).get(str(room_id_value))
+			as DungeonRoom3D
+		)
+		if room == null:
+			failures.append("整层生成清单引用了不存在的房间：%s" % room_id_value)
+			continue
+		_expect(
+			bool(room.get_meta("floor_plan_generated", false))
+			and (room.get_meta("floor_plan_position", Vector3.INF) as Vector3)
+				.is_equal_approx(room.position)
+			and (room.get_meta("floor_plan_dimensions", Vector2.ZERO) as Vector2)
+				.is_equal_approx(room.get_dimensions()),
+			"第%d物理层的%s没有在楼层触发时冻结组件坐标" % [
+				floor_index,
+				str(room_id_value),
+			],
+			failures
+		)
+		var room_snapshot := room.get_room_snapshot()
+		if int(room_snapshot.get("stream_state", 0)) == 0 and not room.visible:
+			hidden_streamed_room_count += 1
+	_expect(
+		hidden_streamed_room_count > 0,
+		"整层布局事务错误地同时激活了所有房间表现/碰撞",
+		failures
+	)
+	var room_floor_index := tower.get("_room_floor_index") as Dictionary
+	for edge_value in (tower.get("_corridor_by_edge") as Dictionary).keys():
+		var connector := (
+			(tower.get("_corridor_by_edge") as Dictionary).get(edge_value)
+			as Node3D
+		)
+		if connector == null:
+			continue
+		var from_floor := int(room_floor_index.get(
+			str(connector.get_meta("from_room_id", "")), -1
+		))
+		var to_floor := int(room_floor_index.get(
+			str(connector.get_meta("to_room_id", "")), -1
+		))
+		if floor_index not in [from_floor, to_floor]:
+			continue
+		_expect(
+			bool(connector.get_meta("floor_plan_generated_%d" % floor_index, false)),
+			"第%d物理层的房间连接或楼梯间没有纳入同一生成事务" % floor_index,
+			failures
+		)
+
+
+func _validate_stair_room_clearance(
+	tower: TowerDescent3D,
+	failures: Array[String]
+) -> void:
+	var room_floor_index := tower.get("_room_floor_index") as Dictionary
+	var rooms := tower.get("_rooms") as Array
+	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
+		var connector := connector_value as Node3D
+		if connector == null or not bool(
+			connector.get_meta("is_vertical_connector", false)
+		):
+			continue
+		var imported: Node3D = null
+		for child_value in connector.get_children():
+			var child := child_value as Node3D
+			if child != null and child.name.begins_with("ImportedStairwell"):
+				imported = child
+				break
+		if imported == null:
+			failures.append("%s缺少可用于占位验收的导入楼梯Mesh" % connector.name)
+			continue
+		var stair_rect := Rect2()
+		var has_rect := false
+		for mesh_value in imported.find_children("*", "MeshInstance3D", true, false):
+			var mesh := mesh_value as MeshInstance3D
+			if mesh == null or mesh.mesh == null:
+				continue
+			var world_aabb := mesh.global_transform * mesh.get_aabb()
+			var mesh_rect := Rect2(
+				Vector2(world_aabb.position.x, world_aabb.position.z),
+				Vector2(world_aabb.size.x, world_aabb.size.z)
+			)
+			stair_rect = mesh_rect if not has_rect else stair_rect.merge(mesh_rect)
+			has_rect = true
+		if not has_rect:
+			failures.append("%s导入楼梯没有有效Mesh占地" % connector.name)
+			continue
+		var from_id := str(connector.get_meta("from_room_id", ""))
+		var to_id := str(connector.get_meta("to_room_id", ""))
+		var endpoint_floors := [
+			int(room_floor_index.get(from_id, -1)),
+			int(room_floor_index.get(to_id, -1)),
+		]
+		for room_value in rooms:
+			var room := room_value as DungeonRoom3D
+			if (
+				room == null
+				or room.room_id in [from_id, to_id]
+				or int(room_floor_index.get(room.room_id, -2)) not in endpoint_floors
+			):
+				continue
+			var room_rect := Rect2(
+				Vector2(room.position.x, room.position.z) - room.get_dimensions() * 0.5,
+				room.get_dimensions()
+			)
+			_expect(
+				stair_rect.intersection(room_rect).get_area() <= 0.01,
+				"%s真实Mesh占地与%s房间重叠" % [connector.name, room.room_id],
+				failures
+			)
+
+
+func _record_rect(record: Dictionary) -> Rect2:
+	var position := record.get("position", Vector3.ZERO) as Vector3
+	var dimensions := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+	return Rect2(
+		Vector2(position.x, position.z) - dimensions * 0.5,
+		dimensions
+	)
 
 
 func _layout_signature(generation: Dictionary, snapshot: Dictionary) -> String:

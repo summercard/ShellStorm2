@@ -34,6 +34,7 @@ func _ready() -> void:
 			_validate_room_door(room, side, failures)
 
 	var horizontal_count := 0
+	var entry_hub_dynamic_corridor_verified := false
 	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
 		var connector := connector_value as Node3D
 		if connector == null or bool(connector.get_meta("is_vertical_connector", false)):
@@ -47,14 +48,27 @@ func _ready() -> void:
 		var length := start.distance_to(end)
 		if not is_equal_approx(length, snappedf(length, TowerGeometry3D.GRID_UNIT_M)):
 			failures.append("%s corridor length %.3fm is not a 5m component multiple" % [connector.name, length])
+		_validate_horizontal_corridor_modules(connector, start, end, failures)
+		var endpoint_ids := [
+			str(connector.get_meta("from_room_id", "")),
+			str(connector.get_meta("to_room_id", "")),
+		]
+		if "floor_01_entry" in endpoint_ids and "floor_01_hub" in endpoint_ids:
+			entry_hub_dynamic_corridor_verified = (
+				is_equal_approx(length, 25.0)
+				and int(connector.get_meta("floor_module_count", -1)) == 5
+				and int(connector.get_meta("wall_module_count", -1)) == 10
+			)
 	if horizontal_count != 42:
 		failures.append("expected 42 horizontal component corridors, got %d" % horizontal_count)
+	if not entry_hub_dynamic_corridor_verified:
+		failures.append("98F safe-room north corridor is not a complete 25m/5-module passage")
 
 	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -9.0, 2.5), failures)
 	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -9.0, 2.5), failures)
 	_validate_key_door(room_by_id, "floor_01_entry", "east", Vector3(35.0, -18.0, 2.5), failures)
 	_validate_key_door(room_by_id, "floor_01_entry", "north", Vector3(27.5, -18.0, -5.0), failures)
-	_validate_key_door(room_by_id, "floor_01_hub", "south", Vector3(27.5, -18.0, -10.0), failures)
+	_validate_key_door(room_by_id, "floor_01_hub", "south", Vector3(27.5, -18.0, -30.0), failures)
 
 	var floor_stages := tower.get_tower_snapshot().get("floor_stages", []) as Array
 	var expected_holes := [1, 1, 1, 1, 1, 0]
@@ -72,6 +86,115 @@ func _ready() -> void:
 
 	_validate_player_light_shadow_separation(tower.player, failures)
 	_finish(failures)
+
+
+func _validate_horizontal_corridor_modules(
+	connector: Node3D,
+	start: Vector3,
+	end: Vector3,
+	failures: Array[String]
+) -> void:
+	var length := start.distance_to(end)
+	var expected_modules := maxi(
+		1,
+		int(round(length / TowerGeometry3D.GRID_UNIT_M))
+	)
+	var floor_batch: MultiMeshInstance3D = null
+	var wall_batch: MultiMeshInstance3D = null
+	var collision_bodies: Array[StaticBody3D] = []
+	for child_value in connector.get_children():
+		var child := child_value as Node3D
+		if child == null:
+			continue
+		if child is MultiMeshInstance3D and bool(child.get_meta("horizontal_corridor_module_batch", false)):
+			match str(child.get_meta("asset_id", "")):
+				"ENV-TOWER-FLOOR-TILE-5M":
+					floor_batch = child as MultiMeshInstance3D
+				"ENV-TOWER-WALL-SOLID-5M":
+					wall_batch = child as MultiMeshInstance3D
+		if child is StaticBody3D and child.name.begins_with("CorridorWallCollision_"):
+			collision_bodies.append(child as StaticBody3D)
+	var floor_instance_count := (
+		floor_batch.multimesh.instance_count
+		if floor_batch != null and floor_batch.multimesh != null
+		else -1
+	)
+	var wall_instance_count := (
+		wall_batch.multimesh.instance_count
+		if wall_batch != null and wall_batch.multimesh != null
+		else -1
+	)
+	if (
+		int(connector.get_meta("module_count", -1)) != expected_modules
+		or int(connector.get_meta("floor_module_count", -1)) != expected_modules
+		or int(connector.get_meta("wall_module_count", -1)) != expected_modules * 2
+		or floor_instance_count != expected_modules
+		or wall_instance_count != expected_modules * 2
+		or not is_equal_approx(
+			float(connector.get_meta("module_coverage_length_m", -1.0)),
+			length
+		)
+	):
+		failures.append(
+			"%s %.1fm corridor visual coverage is not %d floors + %d walls" % [
+				connector.name,
+				length,
+				expected_modules,
+				expected_modules * 2,
+			]
+		)
+	var along_x := absf(end.x - start.x) >= absf(end.z - start.z)
+	var floor_origins := (
+		floor_batch.get_meta("corridor_module_origins", PackedVector3Array())
+		if floor_batch != null
+		else PackedVector3Array()
+	) as PackedVector3Array
+	var wall_origins := (
+		wall_batch.get_meta("corridor_module_origins", PackedVector3Array())
+		if wall_batch != null
+		else PackedVector3Array()
+	) as PackedVector3Array
+	if floor_origins.size() != expected_modules or wall_origins.size() != expected_modules * 2:
+		failures.append("%s does not retain its generated module coordinates" % connector.name)
+	for origin in floor_origins:
+		if (
+			not TowerGeometry3D.is_component_axis_aligned(origin.x, 5.0)
+			or not TowerGeometry3D.is_component_axis_aligned(origin.z, 5.0)
+		):
+			failures.append("%s floor module is off the 5m grid: %s" % [connector.name, origin])
+	for origin in wall_origins:
+		var along_position := origin.x if along_x else origin.z
+		if not TowerGeometry3D.is_component_axis_aligned(along_position, 5.0):
+			failures.append("%s wall module is off the 5m lane: %s" % [connector.name, origin])
+		var wall_aabb := (
+			wall_batch.multimesh.mesh.get_aabb()
+			if wall_batch != null
+			and wall_batch.multimesh != null
+			and wall_batch.multimesh.mesh != null
+			else AABB()
+		)
+		var wall_bottom_y := origin.y + wall_aabb.position.y
+		if not is_equal_approx(wall_bottom_y, start.y):
+			failures.append(
+				"%s wall module floats %.3fm above its floor" % [
+					connector.name,
+					wall_bottom_y - start.y,
+				]
+			)
+		if not is_equal_approx(wall_aabb.size.y, TowerGeometry3D.FLOOR_HEIGHT_M):
+			failures.append("%s wall module is not 9m high" % connector.name)
+	if collision_bodies.size() != 2:
+		failures.append("%s must keep exactly two continuous side-wall colliders" % connector.name)
+	for body in collision_bodies:
+		var collision := body.get_child(0) as CollisionShape3D if body.get_child_count() > 0 else null
+		var shape := collision.shape as BoxShape3D if collision != null else null
+		var collision_length := (
+			shape.size.x if shape != null and along_x
+			else shape.size.z if shape != null
+			else -1.0
+		)
+		if not is_equal_approx(collision_length, length):
+			failures.append("%s visible modules and collision length differ" % connector.name)
 
 
 func _validate_room_door(room: DungeonRoom3D, side: String, failures: Array[String]) -> void:

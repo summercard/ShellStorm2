@@ -104,6 +104,30 @@ func _ready() -> void:
 			failures
 		)
 
+	# 98层侧门后的东西向5m小通道：南侧是没有门的整墙，必须由通道
+	# 自己的碰撞体触发抬镜，不能依赖任一房间门墙代偿。
+	tower.force_open_edge_for_test("floor_01_hub", "floor_01_main_02")
+	tower.force_enter_room_for_test("floor_01_hub")
+	var side_connector := _find_connector(
+		tower, "floor_01_hub", "floor_01_main_02", false
+	)
+	var connector_south_wall := _find_connector_camera_wall(side_connector)
+	if connector_south_wall == null:
+		failures.append("98层侧门小通道的无门南墙缺少相机碰撞标记")
+	else:
+		tower.player.global_position = Vector3(
+			connector_south_wall.global_position.x,
+			hub.global_position.y + 0.05,
+			connector_south_wall.global_position.z - 0.50
+		)
+		await _settle(45)
+		_expect_real_wall_cleared(
+			"98层侧门小通道无门南墙",
+			tower,
+			tower.get_tower_snapshot(),
+			failures
+		)
+
 	tower.force_open_edge_for_test("start", "facility")
 	tower.force_enter_room_for_test("start")
 	var stair := _find_vertical_connector(tower, "start", "facility")
@@ -179,6 +203,16 @@ func _find_stair_south_camera_wall(connector: Node3D) -> StaticBody3D:
 	return null
 
 
+func _find_connector_camera_wall(connector: Node3D) -> StaticBody3D:
+	if connector == null:
+		return null
+	for value in connector.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		if body != null and bool(body.get_meta("camera_lower_wall", false)):
+			return body
+	return null
+
+
 func _expect_real_wall_cleared(
 	label: String,
 	tower: TowerDescent3D,
@@ -244,6 +278,27 @@ func _find_vertical_connector(
 		if connector == null or not bool(
 			connector.get_meta("is_vertical_connector", false)
 		):
+			continue
+		var ids := [
+			str(connector.get_meta("from_room_id", "")),
+			str(connector.get_meta("to_room_id", "")),
+		]
+		if a in ids and b in ids:
+			return connector
+	return null
+
+
+func _find_connector(
+	tower: TowerDescent3D,
+	a: String,
+	b: String,
+	vertical: bool
+) -> Node3D:
+	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
+		var connector := connector_value as Node3D
+		if connector == null:
+			continue
+		if bool(connector.get_meta("is_vertical_connector", false)) != vertical:
 			continue
 		var ids := [
 			str(connector.get_meta("from_room_id", "")),
