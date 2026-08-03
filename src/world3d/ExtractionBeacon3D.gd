@@ -37,7 +37,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	rotation.y += delta * 0.36
 	if _light != null:
-		_light.light_energy = 2.2 + sin(Time.get_ticks_msec() * 0.004) * 0.35
+		# 待机信标不能周期性改写基地地板亮度，否则玩家操作独立的房灯
+		# 开关后会误以为房灯没有恢复。只在真正撤离同步时保留能量脉冲。
+		_light.light_energy = (
+			2.2 + sin(Time.get_ticks_msec() * 0.004) * 0.35
+			if _active
+			else 2.2
+		)
 	if not _active:
 		return
 	# 自由撤离：玩家可以离开 beacon 范围（可以逃跑、拖怪），不能被中断。
@@ -93,6 +99,8 @@ func get_snapshot() -> Dictionary:
 	return {
 		"type": beacon_type, "locked": locked, "active": _active,
 		"remaining": _remaining, "duration": duration, "player_in_range": _player_in_range,
+		"idle_light_stable": not _active,
+		"light_energy": _light.light_energy if _light != null else 0.0,
 	}
 
 

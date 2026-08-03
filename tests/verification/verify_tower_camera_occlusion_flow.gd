@@ -129,18 +129,16 @@ func _ready() -> void:
 			stair_snapshot,
 			failures
 		)
-		var stair_south_wall := stair.get_node_or_null(
-			"StairwellWall_Lateral_BBody"
-		) as StaticBody3D
+		var stair_south_wall := _find_stair_south_camera_wall(stair)
 		if stair_south_wall == null:
 			failures.append("楼梯间缺少南侧围护墙碰撞")
 		else:
-			var lower_y := INF
+			var upper_y := -INF
 			for point_value in points:
-				lower_y = minf(lower_y, (point_value as Vector3).y)
+				upper_y = maxf(upper_y, (point_value as Vector3).y)
 			tower.player.global_position = Vector3(
 				stair_south_wall.global_position.x,
-				lower_y + 0.05,
+				upper_y + 0.05,
 				stair_south_wall.global_position.z - 0.50
 			)
 		await _settle(45)
@@ -166,7 +164,19 @@ func _ready() -> void:
 		return
 	for failure in failures:
 		push_error("v0.1_REAL_CAMERA_FLOW_FAIL: %s" % failure)
-	get_tree().quit(1)
+		get_tree().quit(1)
+
+
+func _find_stair_south_camera_wall(connector: Node3D) -> StaticBody3D:
+	for value in connector.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		if (
+			body != null
+			and bool(body.get_meta("stair_enclosure_collision", false))
+			and bool(body.get_meta("camera_lower_wall", false))
+		):
+			return body
+	return null
 
 
 func _expect_real_wall_cleared(

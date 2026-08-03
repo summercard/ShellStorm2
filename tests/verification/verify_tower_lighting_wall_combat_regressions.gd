@@ -15,13 +15,14 @@ func _ready() -> void:
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
-	_validate_light_layers(tower, failures)
+	await _validate_light_layers(tower, failures)
 	_validate_floor_materials(failures)
 	_validate_wall_components(tower, failures)
 	await _validate_close_wall_probes(tower, failures)
 	_validate_stair_camera_walls(tower, failures)
 	await _validate_internal_partition_camera_wall(tower, failures)
 	_validate_hidden_connector_collisions(tower, failures)
+	await _validate_target_room_airwall_clearance(tower, failures)
 	_validate_hostile_room_spawning(tower, failures)
 	tower.queue_free()
 	await get_tree().process_frame
@@ -93,16 +94,56 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 	var room_lights := facility.get("_room_lights") as Array[WastelandLight3D]
 	var shadow_room_light_found := false
 	for light in room_lights:
+		if light.failing:
+			failures.append("Facility stable light is incorrectly configured as failing: %s" % light.name)
+		if light.is_processing():
+			failures.append("Facility stable light still runs brightness modulation: %s" % light.name)
 		if (
 			light != null
 			and light.light_cull_mask == 3
 			and light.cast_shadow
+			and bool(light.get_snapshot().get("shadow_enabled", false))
 			and int(light.get_snapshot().get("shadow_caster_mask", 0)) == 3
 		):
 			shadow_room_light_found = true
 			break
 	if not shadow_room_light_found:
 		failures.append("Indoor lights cannot cast avatar shadows on render layer 2")
+	var base_switch := facility.get_node_or_null("RoomLightSwitch3D") as RoomLightSwitch3D
+	if base_switch == null:
+		failures.append("Facility light switch is missing for relight validation")
+		return
+	if base_switch.is_light_on():
+		base_switch.toggle_light()
+	for light in room_lights:
+		var lamp := light.get_node_or_null("LampLight") as OmniLight3D
+		if lamp == null or not lamp.is_visible_in_tree() or lamp.light_energy > 0.001:
+			failures.append("Facility light did not fully turn off: %s" % light.name)
+	base_switch.toggle_light()
+	await get_tree().process_frame
+	await get_tree().create_timer(0.36).timeout
+	for light in room_lights:
+		var lamp := light.get_node_or_null("LampLight") as OmniLight3D
+		if (
+			lamp == null
+			or not lamp.visible
+			or not is_equal_approx(lamp.light_energy, light.energy)
+			or lamp.omni_range < light.light_range * 0.99
+			or light.is_processing()
+			or (light.cast_shadow and not lamp.shadow_enabled)
+		):
+			failures.append(
+				"Facility light did not restore stable floor illumination: %s (%.4f/%.4f)"
+				% [light.name, lamp.light_energy if lamp != null else -1.0, light.energy]
+			)
+	var standard_beacon := facility.get_node_or_null("ExtractionBeacon3D") as ExtractionBeacon3D
+	if standard_beacon != null:
+		var beacon_snapshot := standard_beacon.get_snapshot()
+		if (
+			not bool(beacon_snapshot.get("idle_light_stable", false))
+			or not is_equal_approx(float(beacon_snapshot.get("light_energy", 0.0)), 2.2)
+		):
+			failures.append("Facility idle extraction beacon still modulates floor illumination")
 
 
 func _validate_floor_materials(failures: Array[String]) -> void:
@@ -228,24 +269,73 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 		var connector := value as Node3D
 		if connector == null or not bool(connector.get_meta("is_vertical_connector", false)):
 			continue
-		var outward := connector.get_meta("outward", Vector3.ZERO) as Vector3
-		var expected_name := (
-			"StairwellWall_Lateral_BBody"
-			if absf(outward.x) > 0.5
-			else "StairwellWall_OuterBody"
-			if outward.z > 0.5
-			else ""
-		)
-		var marked_count := 0
+		var enclosure_count := 0
+		var marked_enclosure_count := 0
+		var south_z := -INF
+		var marked_z := -INF
 		for body_value in connector.find_children("*", "StaticBody3D", true, false):
 			var body := body_value as StaticBody3D
-			if not bool(body.get_meta("camera_lower_wall", false)):
+			if body.name.begins_with("StairwellWall_"):
+				failures.append("Legacy invisible stair enclosure box remains: %s" % body.get_path())
+			if not bool(body.get_meta("stair_enclosure_collision", false)):
 				continue
-			marked_count += 1
-			if not expected_name.is_empty() and body.name != expected_name and not body.name.begins_with("StairApproachWall_"):
-				failures.append("Unexpected stair wall is marked for camera lift: %s" % body.get_path())
-		if marked_count <= 0:
-			failures.append("Stairwell has no south camera wall: %s" % connector.name)
+			enclosure_count += 1
+			var visual := body.get_parent() as MeshInstance3D
+			if visual == null or visual.mesh == null:
+				failures.append("Stair enclosure collision has no matching visible mesh: %s" % body.get_path())
+				continue
+			var world_aabb := visual.global_transform * visual.get_aabb()
+			if world_aabb.size.x > world_aabb.size.z:
+				south_z = maxf(south_z, world_aabb.get_center().z)
+				if bool(body.get_meta("camera_lower_wall", false)):
+					marked_enclosure_count += 1
+					marked_z = world_aabb.get_center().z
+		if enclosure_count != 4:
+			failures.append("Stairwell does not have four mesh-matched enclosure colliders: %s" % connector.name)
+		if marked_enclosure_count != 1 or not is_equal_approx(marked_z, south_z):
+			failures.append("Stairwell south visible wall is not the sole camera wall: %s" % connector.name)
+
+
+func _validate_target_room_airwall_clearance(
+	tower: TowerDescent3D,
+	failures: Array[String]
+) -> void:
+	tower.force_open_edge_for_test("start", "facility")
+	tower.force_enter_room_for_test("facility")
+	await get_tree().physics_frame
+	_validate_clear_lane(
+		tower,
+		Vector3(-14.0, -7.2, 2.5),
+		Vector3(-14.0, -7.2, -9.4),
+		"Base north lane still has an invisible blocker",
+		failures
+	)
+	tower.force_open_edge_for_test("facility", "floor_01_entry")
+	tower.force_enter_room_for_test("floor_01_entry")
+	await get_tree().physics_frame
+	_validate_clear_lane(
+		tower,
+		Vector3(34.0, -16.2, 2.5),
+		Vector3(34.0, -16.2, 9.4),
+		"Floor 98 safe-room south lane still has an invisible blocker",
+		failures
+	)
+
+
+func _validate_clear_lane(
+	tower: TowerDescent3D,
+	from: Vector3,
+	to: Vector3,
+	failure: String,
+	failures: Array[String]
+) -> void:
+	var query := PhysicsRayQueryParameters3D.create(from, to, 1)
+	query.collide_with_areas = false
+	if tower.player is CollisionObject3D:
+		query.exclude = [(tower.player as CollisionObject3D).get_rid()]
+	var hit := tower.get_world_3d().direct_space_state.intersect_ray(query)
+	if not hit.is_empty():
+		failures.append("%s: %s" % [failure, (hit.get("collider") as Node).get_path()])
 
 
 func _validate_internal_partition_camera_wall(

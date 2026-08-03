@@ -40,30 +40,36 @@ func configure(
 	fixture_style = p_fixture_style if p_fixture_style in ["street", "ceiling"] else "street"
 	if _built:
 		_apply_configuration()
+		_refresh_process_state()
 
 
 func _ready() -> void:
 	_build_fixture()
 	_apply_configuration()
 	_built = true
+	_refresh_process_state()
 
 
 func _process(delta: float) -> void:
-	if not _runtime_active:
+	if not _runtime_active or not _runtime_flicker or not failing:
+		if _light != null:
+			_light.light_energy = energy if _runtime_active and light_enabled else 0.0
+		_refresh_process_state()
 		return
 	_elapsed += delta
 	if _light == null:
 		return
 	if not light_enabled:
-		_light.visible = false
+		# 开关只归零能量，不把 Light3D 从 Compatibility 渲染器的光源列表摘除。
+		_light.visible = _runtime_active
+		_light.light_energy = 0.0
 		return
 	var slow_wave := sin(_elapsed * (1.15 + float(flicker_seed % 5) * 0.08) + float(flicker_seed)) * 0.07
 	var micro_wave := sin(_elapsed * 7.3 + float(flicker_seed) * 1.71) * 0.025
 	var factor := 1.0 + slow_wave + micro_wave
-	if failing:
-		var cycle := fmod(_elapsed + float(flicker_seed) * 0.73, 7.6 + float(flicker_seed % 4) * 0.9)
-		if cycle > 7.15 and cycle < 7.42:
-			factor = 0.10
+	var cycle := fmod(_elapsed + float(flicker_seed) * 0.73, 7.6 + float(flicker_seed % 4) * 0.9)
+	if cycle > 7.15 and cycle < 7.42:
+		factor = 0.10
 	_light.light_energy = energy * factor
 	if _pool_material != null:
 		_pool_material.albedo_color.a = 0.12 + clampf(factor, 0.0, 1.2) * 0.07
@@ -73,21 +79,24 @@ func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := tr
 	_runtime_active = active
 	_runtime_flicker = allow_flicker
 	_runtime_shadow_allowed = allow_shadow
-	set_process(active and allow_flicker)
+	_refresh_process_state()
 	visible = active
 	if _light != null:
-		_light.visible = active and light_enabled
+		_light.visible = active
+		_light.light_energy = energy if active and light_enabled else 0.0
 		_light.shadow_enabled = active and light_enabled and allow_shadow and cast_shadow
-		if active and light_enabled and not allow_flicker:
-			_light.light_energy = energy
 	_update_lens_state()
 
 
 func set_light_enabled(enabled: bool) -> void:
 	light_enabled = enabled
-	set_process(_runtime_active and _runtime_flicker and light_enabled)
+	_refresh_process_state()
 	if _light != null:
-		_light.visible = _runtime_active and light_enabled
+		# 房间加载期间保留 Light3D 的渲染实例，只通过能量控制开关。
+		# Compatibility 后端若先 visible=false 再恢复，属性虽然变回 5.6，
+		# 渲染输出仍可能停留在关灯帧。
+		_light.visible = _runtime_active
+		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			_runtime_active
 			and light_enabled
@@ -114,13 +123,21 @@ func get_snapshot() -> Dictionary:
 		"illumination_active": _runtime_active and light_enabled,
 		"runtime_active": _runtime_active,
 		"runtime_flicker": _runtime_flicker,
+		"brightness_modulating": is_processing() and failing,
 		"runtime_shadow_allowed": _runtime_shadow_allowed,
 		"shadow_capable": cast_shadow,
 		"shadow_enabled": _light != null and _light.shadow_enabled,
+		"current_energy": _light.light_energy if _light != null else 0.0,
 		"light_cull_mask": light_cull_mask,
 		"shadow_caster_mask": _light.shadow_caster_mask if _light != null else 0,
 		"is_3d": true,
 	}
+
+
+func _refresh_process_state() -> void:
+	# failing=false 表示生产环境中的稳定灯，不允许进入任何慢波/微波调制。
+	# 这样初始开灯与墙面开关重开都严格回到资产配置能量，而不是不同相位。
+	set_process(_runtime_active and _runtime_flicker and light_enabled and failing)
 
 
 func _build_fixture() -> void:
@@ -163,7 +180,8 @@ func _build_light_pool() -> void:
 func _apply_configuration() -> void:
 	if _light != null:
 		_light.light_color = light_color
-		_light.light_energy = energy
+		_light.visible = _runtime_active
+		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.omni_range = light_range
 		_light.shadow_enabled = (
 			_runtime_active

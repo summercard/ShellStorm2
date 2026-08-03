@@ -5,6 +5,7 @@ const OUTPUT_DIR := "res://outputs/verification"
 const ROOF_PATH := OUTPUT_DIR + "/tower_godot_rooftop_global_light_ph49.png"
 const BASE_LIT_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_lights_on_ph49.png"
 const BASE_DARK_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_lights_off_ph49.png"
+const BASE_RELIT_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_lights_restored_ph51.png"
 const ENTRY_GATE_PATH := OUTPUT_DIR + "/tower_godot_floor98_stair_gate_closed_ph49.png"
 const ENTRY_PATH := OUTPUT_DIR + "/tower_godot_floor98_inward_entry_ph49.png"
 const COMBAT_DARK_PATH := OUTPUT_DIR + "/tower_godot_floor98_flashlight_only_ph49.png"
@@ -36,11 +37,17 @@ func _ready() -> void:
 	_capture(ROOF_PATH, "楼顶画面采样失败", failures)
 
 	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
-	tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+	var base_player_position := facility.global_position + Vector3(0.0, 0.05, 0.0)
+	tower.player.global_position = base_player_position
 	tower.force_enter_room_for_test("facility")
 	facility.ensure_detail_built()
+	# 基地开关验收只比较固定室内灯：排除随角色朝向变化的三盏玩家灯。
+	if flashlight != null:
+		flashlight.set_light_enabled(false)
 	await _settle()
-	_capture(BASE_LIT_PATH, "99层基地开灯画面采样失败", failures)
+	var base_lit_image := _capture_image(
+		BASE_LIT_PATH, "99层基地开灯画面采样失败", failures
+	)
 	var base_switch := facility.get_node_or_null(
 		"RoomLightSwitch3D"
 	) as RoomLightSwitch3D
@@ -49,6 +56,27 @@ func _ready() -> void:
 		await _settle()
 		_capture(BASE_DARK_PATH, "99层基地关灯画面采样失败", failures)
 		base_switch.toggle_light()
+		tower.player.global_position = base_player_position
+		if flashlight != null:
+			flashlight.set_light_enabled(false)
+		await _settle()
+		var base_relit_image := _capture_image(
+			BASE_RELIT_PATH, "99层基地重新开灯画面采样失败", failures
+		)
+		if base_lit_image != null and base_relit_image != null:
+			var floor_difference := _mean_rgb_difference(
+				base_lit_image,
+				base_relit_image,
+				[
+					Rect2i(330, 330, 180, 180),
+					Rect2i(770, 330, 180, 180),
+				]
+			)
+			if floor_difference > 0.015:
+				failures.append(
+					"99层基地初始开灯与重开后的固定地面亮度不一致: %.4f"
+					% floor_difference
+				)
 
 	tower.force_open_edge_for_test("facility", "floor_01_entry")
 	var entry := (tower.get("_room_by_id") as Dictionary).get(
@@ -211,9 +239,31 @@ func _settle() -> void:
 
 
 func _capture(path: String, failure: String, failures: Array[String]) -> void:
+	_capture_image(path, failure, failures)
+
+
+func _capture_image(path: String, failure: String, failures: Array[String]) -> Image:
 	var image := get_viewport().get_texture().get_image()
 	if image == null or image.is_empty() or image.save_png(path) != OK:
 		failures.append(failure)
+		return null
+	return image
+
+
+func _mean_rgb_difference(first: Image, second: Image, regions: Array) -> float:
+	if first.get_size() != second.get_size():
+		return INF
+	var difference := 0.0
+	var sample_count := 0
+	for value in regions:
+		var region := (value as Rect2i).intersection(Rect2i(Vector2i.ZERO, first.get_size()))
+		for y in range(region.position.y, region.end.y):
+			for x in range(region.position.x, region.end.x):
+				var a := first.get_pixel(x, y)
+				var b := second.get_pixel(x, y)
+				difference += absf(a.r - b.r) + absf(a.g - b.g) + absf(a.b - b.b)
+				sample_count += 3
+	return difference / float(maxi(sample_count, 1))
 
 
 func _find_vertical_connector(tower: TowerDescent3D, a: String, b: String) -> Node3D:

@@ -904,14 +904,13 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 			points[point_index + 1],
 			point_index
 		)
-	_build_stairwell_enclosure(connector, points, outward, lower_y)
 	_build_stair_approach_corridor(
 		connector, upper_door, upper_interface, "Upper"
 	)
 	_build_stair_approach_corridor(
 		connector, lower_interface, lower_door, "Lower"
 	)
-	_configure_stairwell_camera_walls(connector, outward)
+	_configure_stairwell_camera_walls(connector)
 
 
 func _add_imported_stairwell_visual(
@@ -940,20 +939,26 @@ func _add_imported_stairwell_visual(
 	connector.add_child(visual)
 	var walkable_collision_count := _add_imported_stair_collisions(visual)
 	connector.set_meta("walkable_collision_count", walkable_collision_count)
+	var enclosure_collision_count := 0
+	for body_value in visual.find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body != null and bool(body.get_meta("stair_enclosure_collision", false)):
+			enclosure_collision_count += 1
+	connector.set_meta("enclosure_collision_count", enclosure_collision_count)
 	_stair_support_surface_count += walkable_collision_count
 
 
 func _add_imported_stair_collisions(root: Node) -> int:
 	var walkable_count := 0
-	# 门侧、远端、外侧三面围护由规则盒体统一承担。Blender还包含一块
-	# 带门厅缺口的内侧墙，只为这块恢复同形碰撞；若把四块导入墙全部
-	# 转为三角网格，门侧整墙会再次封死上下层出口。
+	# 可走楼板和四面围护都直接从同一个可视Mesh生成同形碰撞。不能再用
+	# 整段路径包围盒估算楼梯墙，否则包围盒会跨过接驳走廊伸进相邻房间，
+	# 形成没有视觉组件对应的空气墙。
 	var is_walkable := root is MeshInstance3D and "Walkable" in root.name
-	var is_inner_wall := (
+	var is_enclosure_wall := (
 		root is MeshInstance3D
-		and "EnclosureWall_Inner" in root.name
+		and "EnclosureWall_" in root.name
 	)
-	if is_walkable or is_inner_wall:
+	if is_walkable or is_enclosure_wall:
 		var mesh_instance := root as MeshInstance3D
 		if mesh_instance.mesh != null:
 			var shape := mesh_instance.mesh.create_trimesh_shape()
@@ -962,6 +967,8 @@ func _add_imported_stair_collisions(root: Node) -> int:
 				body.name = "%sCollisionBody" % mesh_instance.name
 				body.collision_layer = 1
 				body.collision_mask = 0
+				body.set_meta("stair_enclosure_collision", is_enclosure_wall)
+				body.set_meta("source_visual_name", mesh_instance.name)
 				mesh_instance.add_child(body)
 				var collision := CollisionShape3D.new()
 				collision.name = "%sCollisionShape" % mesh_instance.name
@@ -1147,80 +1154,6 @@ func _build_tower_horizontal_corridor(
 			Vector3.ZERO
 		)
 
-
-func _build_stairwell_enclosure(
-	connector: Node3D,
-	points: Array[Vector3],
-	outward: Vector3,
-	lower_y: float
-) -> void:
-	var min_x := INF
-	var max_x := -INF
-	var min_z := INF
-	var max_z := -INF
-	for point in points:
-		min_x = minf(min_x, point.x)
-		max_x = maxf(max_x, point.x)
-		min_z = minf(min_z, point.z)
-		max_z = maxf(max_z, point.z)
-	var padding := STAIR_WIDTH * 0.5 + 0.18
-	min_x -= padding
-	max_x += padding
-	min_z -= padding
-	max_z += padding
-	var center_y := lower_y + FLOOR_HEIGHT * 0.5
-	if absf(outward.x) > 0.5:
-		var lateral_z := [min_z, max_z]
-		for wall_index in range(lateral_z.size()):
-			var z := float(lateral_z[wall_index])
-			_add_connector_box(
-				connector,
-				"StairwellWall_Lateral_%s" % ("A" if wall_index == 0 else "B"),
-				Vector3((min_x + max_x) * 0.5, center_y, z),
-				Vector3(max_x - min_x, FLOOR_HEIGHT, 0.30),
-				Vector3.ZERO,
-				false,
-				true,
-				false
-			)
-		var outer_x := max_x if outward.x > 0.0 else min_x
-		_add_connector_box(
-			connector,
-			"StairwellWall_Outer",
-			Vector3(outer_x, center_y, (min_z + max_z) * 0.5),
-			Vector3(0.30, FLOOR_HEIGHT, max_z - min_z),
-			Vector3.ZERO,
-			false,
-			true,
-			false
-		)
-	else:
-		var lateral_x := [min_x, max_x]
-		for wall_index in range(lateral_x.size()):
-			var x := float(lateral_x[wall_index])
-			_add_connector_box(
-				connector,
-				"StairwellWall_Lateral_%s" % ("A" if wall_index == 0 else "B"),
-				Vector3(x, center_y, (min_z + max_z) * 0.5),
-				Vector3(0.30, FLOOR_HEIGHT, max_z - min_z),
-				Vector3.ZERO,
-				false,
-				true,
-				false
-			)
-		var outer_z := max_z if outward.z > 0.0 else min_z
-		_add_connector_box(
-			connector,
-			"StairwellWall_Outer",
-			Vector3((min_x + max_x) * 0.5, center_y, outer_z),
-			Vector3(max_x - min_x, FLOOR_HEIGHT, 0.30),
-			Vector3.ZERO,
-			false,
-			true,
-			false
-		)
-
-
 func _build_stair_approach_corridor(
 	connector: Node3D,
 	start: Vector3,
@@ -1306,30 +1239,28 @@ func _build_stair_approach_corridor(
 	)
 
 
-func _configure_stairwell_camera_walls(
-	connector: Node3D,
-	outward: Vector3
-) -> void:
-	# 楼梯间同样遵循世界南侧朝北墙契约。当前东西向楼梯的南墙是
-	# Lateral_B；未来南向楼梯由Outer承担，北向楼梯则由导入Inner承担。
+func _configure_stairwell_camera_walls(connector: Node3D) -> void:
+	# 楼梯间同样只让世界南侧朝北的可视墙触发抬镜。直接依据导入墙体的
+	# 世界AABB选择最南侧水平墙，避免组件旋转后依赖不稳定的本地名称。
+	var south_body: StaticBody3D = null
+	var south_z := -INF
 	for value in connector.find_children("*", "StaticBody3D", true, false):
 		var body := value as StaticBody3D
-		if body == null:
+		if body == null or not bool(body.get_meta("stair_enclosure_collision", false)):
 			continue
-		var is_stair_enclosure := (
-			body.name.begins_with("StairwellWall_")
-			or "EnclosureWall_Inner" in body.name
-		)
-		if not is_stair_enclosure:
+		body.set_meta("camera_lower_wall", false)
+		var visual := body.get_parent() as MeshInstance3D
+		if visual == null or visual.mesh == null:
 			continue
-		var enabled := false
-		if absf(outward.x) > 0.5:
-			enabled = body.name == "StairwellWall_Lateral_BBody"
-		elif outward.z > 0.5:
-			enabled = body.name == "StairwellWall_OuterBody"
-		elif outward.z < -0.5:
-			enabled = "EnclosureWall_Inner" in body.name
-		body.set_meta("camera_lower_wall", enabled)
+		var world_aabb := visual.global_transform * visual.get_aabb()
+		if world_aabb.size.x <= world_aabb.size.z:
+			continue
+		var center_z := world_aabb.get_center().z
+		if center_z > south_z:
+			south_z = center_z
+			south_body = body
+	if south_body != null:
+		south_body.set_meta("camera_lower_wall", true)
 
 
 func _add_stair_segment(

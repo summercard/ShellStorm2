@@ -301,7 +301,11 @@ func _ready() -> void:
 		_expect(is_equal_approx(float(connector.get_meta("passage_width", 0.0)), 6.0), "%s 通行宽度不是6m" % connector.name, failures)
 		_expect(is_equal_approx(float(connector.get_meta("approach_outset", 0.0)), 6.0), "%s 门厅不是6m" % connector.name, failures)
 		_expect(is_equal_approx(float(connector.get_meta("lane_spacing", 0.0)), 8.0), "%s 折返走道不是8m" % connector.name, failures)
-		_expect(_count_named_nodes(connector, "StairwellWall") >= 3, "%s 楼梯间缺少三面满高墙" % connector.name, failures)
+		_expect(
+			int(connector.get_meta("enclosure_collision_count", 0)) == 4,
+			"%s 没有为四面可视围护墙生成同形碰撞" % connector.name,
+			failures
+		)
 		_expect(
 			int(connector.get_meta("walkable_collision_count", 0)) >= 6,
 			"%s 没有为六块Blender Walkable楼板生成碰撞" % connector.name,
@@ -1156,36 +1160,25 @@ func _validate_stair_wall_collisions(
 	failures: Array[String]
 ) -> void:
 	var wall_count := 0
-	var blocking_ray_count := 0
-	var space_state := connector.get_world_3d().direct_space_state
-	for child in connector.get_children():
-		var body := child as StaticBody3D
-		if body == null or not str(body.name).begins_with("StairwellWall_"):
+	var enabled_collision_count := 0
+	for child_value in connector.find_children("*", "StaticBody3D", true, false):
+		var body := child_value as StaticBody3D
+		if body == null or not bool(body.get_meta("stair_enclosure_collision", false)):
 			continue
 		wall_count += 1
 		var collision := body.get_child(0) as CollisionShape3D
-		if collision == null or collision.disabled:
-			continue
-		var box := collision.shape as BoxShape3D
-		if box == null:
-			continue
-		var normal := (
-			body.global_basis.x.normalized()
-			if box.size.x < box.size.z
-			else body.global_basis.z.normalized()
-		)
-		var query := PhysicsRayQueryParameters3D.create(
-			body.global_position - normal,
-			body.global_position + normal,
-			1
-		)
-		query.collide_with_areas = false
-		var hit := space_state.intersect_ray(query)
-		if hit.get("collider") == body:
-			blocking_ray_count += 1
+		var visual := body.get_parent() as MeshInstance3D
+		if (
+			collision != null
+			and not collision.disabled
+			and collision.shape is ConcavePolygonShape3D
+			and visual != null
+			and visual.mesh != null
+		):
+			enabled_collision_count += 1
 	_expect(
-		wall_count == 3 and blocking_ray_count == 3,
-		"楼梯间三面围护墙没有全部启用实体碰撞，仍可穿透",
+		wall_count == 4 and enabled_collision_count == 4,
+		"楼梯间四面可视围护墙没有全部启用同形实体碰撞",
 		failures
 	)
 
