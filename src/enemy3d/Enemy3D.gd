@@ -60,6 +60,7 @@ var _lost_sight_time := 0.0
 var _last_known_target_position := Vector3.ZERO
 var _home_position := Vector3.ZERO
 var _home_initialized := false
+var _runtime_ai_active := true
 var _patrol_target := Vector3.ZERO
 var elite_modifier_id := ""
 var _absorb_cooldown := 0.0
@@ -149,9 +150,23 @@ func get_enemy_data() -> Dictionary:
 	return result
 
 
-func set_runtime_active(active: bool) -> void:
+func set_runtime_active(active: bool, presentation_ready_when_inactive := false) -> void:
+	# 已开启门后的邻房会预先显示敌人，但在玩家正式进入前暂停 AI。
+	# process_mode 不能在可见邻房设为 DISABLED：PlayerVision3D 会把它解释为
+	# 未加载目标并强制隐藏。改为单独暂停物理 AI，让视野系统仍可正常判定显隐。
+	_runtime_ai_active = active
+	# 邻房目标先交给 PlayerVision3D 做距离/遮挡判定，避免刚生成的一帧穿墙闪现。
 	visible = active
-	process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
+	process_mode = (
+		Node.PROCESS_MODE_INHERIT
+		if active or presentation_ready_when_inactive
+		else Node.PROCESS_MODE_DISABLED
+	)
+	set_physics_process(active)
+
+
+func is_runtime_ai_active() -> bool:
+	return _runtime_ai_active
 
 
 func _physics_process(delta: float) -> void:

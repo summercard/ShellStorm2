@@ -9,6 +9,7 @@ const BASE_RELIT_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_lights_restored
 const ENTRY_GATE_PATH := OUTPUT_DIR + "/tower_godot_floor98_stair_gate_closed_ph49.png"
 const ENTRY_PATH := OUTPUT_DIR + "/tower_godot_floor98_inward_entry_ph49.png"
 const COMBAT_DARK_PATH := OUTPUT_DIR + "/tower_godot_floor98_flashlight_only_ph49.png"
+const FLASHLIGHT_FAR_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_flashlight_far_wall_ph52.png"
 const COMBAT_LIT_PATH := OUTPUT_DIR + "/tower_godot_floor98_room_light_on_ph49.png"
 const CAMERA_CLOSE_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_close_south_wall_ph49.png"
 const CAMERA_OPEN_SOUTH_DOOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_open_south_door_ph49.png"
@@ -129,6 +130,13 @@ func _ready() -> void:
 		flashlight.set_light_enabled(true)
 	await _settle()
 	_capture(COMBAT_DARK_PATH, "98层暗室与探照灯画面采样失败", failures)
+	# 在约25m极限距离以小角度照墙，验收 Compatibility 阴影贴图不再出现横纹。
+	tower.player.global_position = hub.global_position + Vector3(-10.0, 0.05, 0.0)
+	tower.player.aim_direction = Vector3.RIGHT
+	if flashlight != null:
+		flashlight.force_sync()
+	await _settle()
+	_capture(FLASHLIGHT_FAR_WALL_PATH, "98层探照灯远墙采样失败", failures)
 	if room_light != null:
 		room_light.set_light_enabled(true)
 	if flashlight != null:

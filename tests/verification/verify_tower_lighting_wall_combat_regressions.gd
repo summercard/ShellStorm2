@@ -23,11 +23,12 @@ func _ready() -> void:
 	await _validate_internal_partition_camera_wall(tower, failures)
 	_validate_hidden_connector_collisions(tower, failures)
 	await _validate_target_room_airwall_clearance(tower, failures)
+	await _validate_revealed_room_enemy_prewarm(failures)
 	_validate_hostile_room_spawning(tower, failures)
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: external avatar shadows, matte floors, 9m walls, rear-facing horizontal camera walls, visible collision parity and hostile spawning pass")
+		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: flashlight shadow stability, external avatar shadows, matte floors, 9m walls, visible collision parity and reveal-time hostile spawning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -78,6 +79,13 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 		or fill == null or fill.light_energy > 2.85
 	):
 		failures.append("Player flashlight exposure exceeds the accepted v0.1 energy budget")
+	if (
+		beam == null
+		or beam.shadow_bias < 0.17
+		or beam.shadow_normal_bias < 1.5
+		or beam.shadow_blur < 1.1
+	):
+		failures.append("Player forward beam does not suppress far-wall shadow acne")
 	if beam != null:
 		for value in tower.player.find_children("*", "GeometryInstance3D", true, false):
 			var geometry := value as GeometryInstance3D
@@ -156,6 +164,82 @@ func _validate_floor_materials(failures: Array[String]) -> void:
 		var material := load(path) as StandardMaterial3D
 		if material == null or material.metallic > 0.10 or material.roughness < 0.88:
 			failures.append("Floor material remains too reflective: %s" % path)
+
+
+func _validate_revealed_room_enemy_prewarm(
+	failures: Array[String]
+) -> void:
+	# 使用独立塔楼实例，避免墙/门专项主动遍历房间后污染“首次开门”状态。
+	var tower := TOWER_SCENE.instantiate() as TowerDescent3D
+	tower.test_mode = true
+	tower.run_seed_override = 990095
+	add_child(tower)
+	await get_tree().process_frame
+	await get_tree().physics_frame
+	tower.force_open_edge_for_test("facility", "floor_01_entry")
+	tower.force_enter_room_for_test("floor_01_entry")
+	var hub := (tower.get("_room_by_id") as Dictionary).get(
+		"floor_01_hub"
+	) as DungeonRoom3D
+	if hub == null:
+		failures.append("98F hub is unavailable for reveal-time spawn validation")
+		tower.queue_free()
+		await get_tree().process_frame
+		return
+	var spawned_rooms := tower.get("_spawned_rooms") as Dictionary
+	if spawned_rooms.has(hub.room_id):
+		failures.append("98F hub spawned before its connecting door opened")
+		tower.queue_free()
+		await get_tree().process_frame
+		return
+	tower.force_open_edge_for_test("floor_01_entry", hub.room_id)
+	await get_tree().process_frame
+	var enemy_nodes := (tower.get("_enemy_nodes_by_room") as Dictionary).get(
+		hub.room_id, []
+	) as Array
+	var alive := int((tower.get("_alive_by_room") as Dictionary).get(hub.room_id, 0))
+	if not spawned_rooms.has(hub.room_id) or alive <= 0 or enemy_nodes.is_empty():
+		failures.append("Opening the 98F hub door does not create its first enemy wave")
+		tower.queue_free()
+		await get_tree().process_frame
+		return
+	var instance_ids: Array[int] = []
+	for value in enemy_nodes:
+		var enemy := value as Enemy3D
+		if enemy == null or not is_instance_valid(enemy):
+			failures.append("Reveal-time enemy reference is invalid")
+			continue
+		instance_ids.append(enemy.get_instance_id())
+		if enemy.process_mode == Node.PROCESS_MODE_DISABLED or enemy.is_runtime_ai_active():
+			failures.append("Revealed-room enemy is not presentation-ready with paused AI")
+	tower.force_enter_room_for_test(hub.room_id)
+	await get_tree().process_frame
+	var entered_nodes := (tower.get("_enemy_nodes_by_room") as Dictionary).get(
+		hub.room_id, []
+	) as Array
+	if entered_nodes.size() != enemy_nodes.size():
+		failures.append("Entering a revealed hostile room spawned a duplicate first wave")
+	for value in entered_nodes:
+		var enemy := value as Enemy3D
+		if (
+			enemy == null
+			or enemy.get_instance_id() not in instance_ids
+			or not enemy.is_runtime_ai_active()
+		):
+			failures.append(
+				"Entering the revealed room did not activate the prewarmed enemy: "
+				+ "id=%s retained=%s visible=%s process_mode=%s current=%s"
+				% [
+					enemy.get_instance_id() if enemy != null else -1,
+					enemy != null and enemy.get_instance_id() in instance_ids,
+					enemy.visible if enemy != null else false,
+					enemy.process_mode if enemy != null else -1,
+					str(tower.get("_current_room_id")),
+				]
+			)
+			break
+	tower.queue_free()
+	await get_tree().process_frame
 
 
 func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -> void:
@@ -382,7 +466,9 @@ func _validate_hostile_room_spawning(tower: TowerDescent3D, failures: Array[Stri
 			failures.append("Hostile room representative was freed: %s" % room_type)
 			continue
 		room.set_stream_state(2)
-		var spawned := bool(tower.call("_spawn_room_enemies", room))
+		var spawned := true
+		if not (tower.get("_spawned_rooms") as Dictionary).has(room.room_id):
+			spawned = bool(tower.call("_prepare_revealed_hostile_room", room))
 		var alive := int((tower.get("_alive_by_room") as Dictionary).get(room.room_id, 0))
 		if not spawned or alive <= 0:
 			failures.append("Hostile room type %s cannot spawn a first wave" % room_type)

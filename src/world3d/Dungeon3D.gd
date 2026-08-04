@@ -871,6 +871,20 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	return true
 
 
+func _prepare_revealed_hostile_room(room: DungeonRoom3D) -> bool:
+	if (
+		room == null
+		or room.room_type not in HOSTILE_ROOM_TYPES
+		or _spawned_rooms.has(room.room_id)
+	):
+		return false
+	# 房门开启后目标房间已经进入可见流送状态；首波必须在这一刻存在，
+	# 不能等角色靠近触发 RoomArea 后才突然生成。AI 是否运行仍由当前房控制。
+	_spawned_rooms[room.room_id] = true
+	room.cleared = false
+	return _spawn_room_enemies(room)
+
+
 func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 	if room == null or _starter_cache_opened:
 		return
@@ -903,7 +917,8 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.health_changed.connect(_on_enemy_health_changed)
 		(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
 		spawned_count += 1
-		enemy.set_runtime_active(room.room_id == _current_room_id)
+		var room_visible := int(room.get_room_snapshot().get("stream_state", 0)) > 0
+		enemy.set_runtime_active(room.room_id == _current_room_id, room_visible)
 		if enemy.enemy_kind == "boss":
 			_show_boss_hud(enemy)
 	if not count_reserved:
@@ -1641,6 +1656,8 @@ func _update_room_streaming(current_id: String) -> void:
 			if bool(_open_edges.get(_edge_key(current_id, room.room_id), false)):
 				state = 1
 		room.set_stream_state(state)
+		if state > 0:
+			_prepare_revealed_hostile_room(room)
 	_update_corridor_streaming(current_id)
 	for room_id in _enemy_nodes_by_room.keys():
 		var live_references: Array = []
@@ -1650,7 +1667,12 @@ func _update_room_streaming(current_id: String) -> void:
 			var enemy := value as Enemy3D
 			if enemy != null and is_instance_valid(enemy):
 				live_references.append(enemy)
-				enemy.set_runtime_active(str(room_id) == current_id)
+				var enemy_room := _room_by_id.get(str(room_id)) as DungeonRoom3D
+				var room_visible := (
+					enemy_room != null
+					and int(enemy_room.get_room_snapshot().get("stream_state", 0)) > 0
+				)
+				enemy.set_runtime_active(str(room_id) == current_id, room_visible)
 		_enemy_nodes_by_room[room_id] = live_references
 
 
@@ -2169,7 +2191,7 @@ func get_runtime_snapshot() -> Dictionary:
 		if light is WastelandLight3D and bool((light as WastelandLight3D).get_snapshot().get("illumination_active", false)):
 			active_lights += 1
 	for value in get_tree().get_nodes_in_group("enemy_3d"):
-		if value is Enemy3D and (value as Enemy3D).process_mode != Node.PROCESS_MODE_DISABLED:
+		if value is Enemy3D and (value as Enemy3D).is_runtime_ai_active():
 			active_ai += 1
 	var projectile_pool := get_node_or_null("ProjectilePool3D") as ProjectilePool3D
 	var effect_pool := get_node_or_null("CombatEffectPool3D") as CombatEffectPool3D

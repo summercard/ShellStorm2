@@ -21,6 +21,12 @@ const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
 @export_range(20.0, 110.0, 1.0) var beam_angle_degrees := 66.0
 @export_range(0.1, 2.0, 0.05) var beam_attenuation := 0.48
 @export_range(0.1, 4.0, 0.05) var beam_edge_attenuation := 1.15
+@export_group("Beam Shadow")
+# Compatibility 渲染器下，远处墙面被聚光以小角度照射时，默认阴影偏移会
+# 出现规则横纹（shadow acne）。只调整阴影采样，不改变能量、范围或灯光层。
+@export_range(0.0, 1.0, 0.01) var beam_shadow_bias := 0.18
+@export_range(0.0, 8.0, 0.1) var beam_shadow_normal_bias := 1.6
+@export_range(0.1, 4.0, 0.1) var beam_shadow_blur := 1.2
 
 @export_group("Mount")
 @export_range(0.5, 4.0, 0.05) var mount_height := 1.15
@@ -180,6 +186,9 @@ func get_snapshot() -> Dictionary:
 		"beam_energy": beam_energy,
 		"beam_range": beam_range,
 		"beam_angle_degrees": beam_angle_degrees,
+		"beam_shadow_bias": beam_shadow_bias,
+		"beam_shadow_normal_bias": beam_shadow_normal_bias,
+		"beam_shadow_blur": beam_shadow_blur,
 		"spill_energy": spill_energy,
 		"spill_range": spill_range,
 		"front_fill_energy": front_fill_energy,
@@ -228,6 +237,9 @@ func _apply_configuration() -> void:
 		# 主聚光只影响环境层，因此可以投射墙体/怪物阴影，且不会让
 		# 角色头、手、枪彼此自遮挡。
 		_beam.shadow_enabled = true
+		_beam.shadow_bias = beam_shadow_bias
+		_beam.shadow_normal_bias = beam_shadow_normal_bias
+		_beam.shadow_blur = beam_shadow_blur
 		_beam.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 		# Godot 的 light_cull_mask 只隔离受光对象；阴影图有独立的
 		# shadow_caster_mask。这里必须明确排除 layer 2，角色与手持枪才不会
