@@ -36,6 +36,8 @@ acceptance_case
 
 关卡提交 `EncounterRequest`：房间 ID、楼层深度、房间类型、主题、预算、生成槽、随机流。怪物系统返回不可变 `EncounterPlan`：敌人内容 ID、修饰器、槽位、出现时点和合法空计划原因。
 
+<span style="color:#1565C0">**[用户设计｜未实装]** 关卡生成后的内容房尺寸不小于 30×25m，但房型可为标准、宽型、纵深型、中型、大型或竞技场。`EncounterRequest` 读取的是已提交房间的净可战区、生成槽与楼层战斗预算，不得用房间面积直接按比例无上限增怪。</span>
+
 <span style="color:#EF6C00">**[Codex补充]** 房间不能在循环中自行随机敌人；否则重载、开门、进入房间可能得到不同列表并破坏清房条件。</span>
 
 ## 5. 12 只唯一精英
@@ -80,6 +82,7 @@ SelectEligibleElite(seed, floor, history)
 ## 6. Boss 与下行解锁
 
 - <span style="color:#2E7D32">**[已实装]** 当前 Boss 具有独立 HUD、阶段变化、召唤/远程等行为和清房结果。</span>
+- <span style="color:#1565C0">**[用户设计｜未实装]** 显示楼层号每逢 5 的整数倍（95F、90F、85F……）必然生成一个位于主路最后阶段、不可绕过的 Boss 房；当前 95F 作为首个正式节点。</span>
 - <span style="color:#1565C0">**[用户设计]** Boss 死亡后必须产生专用下行钥匙，作为下一层路线的唯一权限来源。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss 系统只发出一次 `boss_defeated` 与奖励清单；关卡系统根据事件签发钥匙并解锁门资格，Boss 脚本不直接寻找门节点。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss 内容表应逐步从单一通用模板扩展为每个 Boss 楼层的独立内容 ID、技能阶段和资产。</span>
@@ -103,5 +106,6 @@ SelectEligibleElite(seed, floor, history)
 - [ ] 精英成长与夺取枪械可跨局保存并在正式 3D 再现。
 - [ ] 旧精英档案能够迁移，失败时保留备份且不生成重复精英。
 - [ ] Boss 死亡事件只触发一次，专用钥匙只签发一次。
+- [ ] 95F、90F、85F……必然生成不可绕过 Boss 遭遇，普通层不误生成 Boss。
 - [ ] 普通钥匙不能开启 Boss 下行门，专用钥匙不能开启普通门。
 - [ ] 更换敌人 Mesh/动画不改变 AI、碰撞、生命、技能与掉落。
