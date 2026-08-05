@@ -63,11 +63,12 @@ func generate_loot(table_name: String, count: int = 3) -> Array[Dictionary]:
 		var selected: Dictionary = _weighted_random_select(usable)
 		if not selected.is_empty():
 			# 复制物品数据，生成实际数量
-			var entry: Dictionary = selected.duplicate()
+			var entry: Dictionary = selected.duplicate(true)
 			entry.erase("loot_weight")
+			entry = WeaponInstance.ensure_weapon_item(entry)
 			# 堆叠数量：模块类物品可堆叠
 			var stack: int = entry.get("stack_max", 1)
-			entry["count"] = _rng.randi() % stack + 1
+			entry["count"] = 1 if str(entry.get("type", "")) == "weapon" else _rng.randi() % stack + 1
 			result.append(entry)
 
 	return result
@@ -145,8 +146,9 @@ func generate_merchant_goods(tier: int, count: int = 6) -> Array[Dictionary]:
 	candidates.shuffle()
 	var result: Array[Dictionary] = []
 	for i in range(min(count, candidates.size())):
-		var item: Dictionary = candidates[i].duplicate()
+		var item: Dictionary = candidates[i].duplicate(true)
 		item.erase("merchant_tier")
+		item = WeaponInstance.ensure_weapon_item(item)
 		# 商人价格可能有溢价/折扣
 		var base_price: int = item.get("price", 10)
 		item["price"] = int(base_price * (0.9 + _rng.randf() * 0.2))  # ±10%

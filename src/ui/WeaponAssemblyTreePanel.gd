@@ -26,8 +26,8 @@ const SLOT_COLOR_MAGAZINE: Color = Color(0.40, 0.35, 0.50, 0.9)
 const SLOT_COLOR_BULLET: Color = Color(0.35, 0.50, 0.35, 0.9)
 
 ## 面板尺寸
-const PANEL_WIDTH: float = 380.0
-const PANEL_HEIGHT: float = 520.0
+const PANEL_WIDTH: float = 520.0
+const PANEL_HEIGHT: float = 620.0
 
 ## 节点图标（枪身/子弹/配件）
 const NODE_ICONS: Dictionary = {
@@ -40,6 +40,9 @@ const NODE_ICONS: Dictionary = {
 var _tree_container: VBoxContainer = null
 var _stats_container: HBoxContainer = null
 var _title_label: Label = null
+var _identity_label: Label = null
+var _fate_track_label: Label = null
+var _weapon_owner: Node = null
 
 ## 节点点击详情弹窗
 var _detail_popup: Panel = null
@@ -79,12 +82,28 @@ func _build_panel() -> void:
 
 	# 标题栏
 	_title_label = Label.new()
-	_title_label.text = "武器装配树"
+	_title_label.text = "武器表现页"
 	_title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title_label.add_theme_font_size_override("font_size", 20)
 	_title_label.add_theme_color_override("font_color", Color(0.9, 0.85, 0.70, 1.0))
 	_title_label.custom_minimum_size = Vector2(PANEL_WIDTH, 32)
 	vbox.add_child(_title_label)
+
+	_identity_label = Label.new()
+	_identity_label.text = "未绑定枪械实例"
+	_identity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_identity_label.add_theme_font_size_override("font_size", 13)
+	_identity_label.add_theme_color_override("font_color", Color(0.40, 0.90, 1.0))
+	_identity_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(_identity_label)
+
+	_fate_track_label = Label.new()
+	_fate_track_label.text = "命运永久 0/0"
+	_fate_track_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_fate_track_label.add_theme_font_size_override("font_size", 13)
+	_fate_track_label.add_theme_color_override("font_color", Color(0.78, 0.48, 1.0))
+	_fate_track_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(_fate_track_label)
 
 	# 属性总览（Horizontal）
 	_stats_container = HBoxContainer.new()
@@ -99,7 +118,7 @@ func _build_panel() -> void:
 
 	# 树状结构容器
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(PANEL_WIDTH, PANEL_HEIGHT - 80)
+	scroll.custom_minimum_size = Vector2(PANEL_WIDTH, PANEL_HEIGHT - 150)
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	vbox.add_child(scroll)
 
@@ -109,7 +128,7 @@ func _build_panel() -> void:
 
 	# 底部说明
 	var hint := Label.new()
-	hint.text = "按 [Tab] 关闭 | 点击节点查看详情"
+	hint.text = "命运槽永久不可拆 · 装配可更换且不占槽 | 点击节点查看来源 | [K/Tab] 关闭"
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint.add_theme_font_size_override("font_size", 12)
 	hint.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.7))
@@ -217,6 +236,19 @@ func set_weapon_tree(wt: WeaponAssemblyTree) -> void:
 		_weapon_tree.stats_changed.connect(_on_stats_changed)
 		_refresh()
 
+
+func set_weapon_owner(owner: Node) -> void:
+	if _weapon_owner != null and is_instance_valid(_weapon_owner) and _weapon_owner.has_signal(
+		"weapon_instance_changed"
+	):
+		if _weapon_owner.weapon_instance_changed.is_connected(_on_weapon_instance_changed):
+			_weapon_owner.weapon_instance_changed.disconnect(_on_weapon_instance_changed)
+	_weapon_owner = owner
+	if _weapon_owner != null and _weapon_owner.has_signal("weapon_instance_changed"):
+		if not _weapon_owner.weapon_instance_changed.is_connected(_on_weapon_instance_changed):
+			_weapon_owner.weapon_instance_changed.connect(_on_weapon_instance_changed)
+	_refresh()
+
 ## 信号回调：树结构变化
 func _on_tree_changed() -> void:
 	var prev_path := ""
@@ -231,13 +263,45 @@ func _on_tree_changed() -> void:
 func _on_stats_changed(_stats: Dictionary) -> void:
 	_refresh()
 
+
+func _on_weapon_instance_changed(_snapshot: Dictionary) -> void:
+	_refresh()
+
 ## 刷新整个面板
 func _refresh() -> void:
 	if not _is_visible or _weapon_tree == null:
 		return
 
 	_refresh_stats()
+	_refresh_presentation_snapshot()
 	_refresh_tree()
+
+
+func _refresh_presentation_snapshot() -> void:
+	if _identity_label == null or _fate_track_label == null:
+		return
+	if _weapon_owner == null or not is_instance_valid(_weapon_owner) or not _weapon_owner.has_method(
+		"get_weapon_presentation_snapshot"
+	):
+		_identity_label.text = "兼容装配树视图 · 尚未绑定枪械实例"
+		_fate_track_label.text = "命运永久槽：实例数据不可用"
+		return
+	var snapshot := _weapon_owner.call("get_weapon_presentation_snapshot") as Dictionary
+	var used := int(snapshot.get("fate_slot_used", 0))
+	var capacity := int(snapshot.get("fate_slot_capacity", 0))
+	_identity_label.text = "%s · %s · #%s · %s" % [
+		snapshot.get("display_name", "武器"), str(snapshot.get("rarity", "common")).to_upper(),
+		snapshot.get("instance_suffix", "------"), snapshot.get("owner_location", ""),
+	]
+	var slots: Array[String] = []
+	for index in range(1, capacity + 1):
+		if index <= used:
+			slots.append("%02d◆🔒" % index)
+		elif index == used + 1:
+			slots.append("%02d◇" % index)
+		else:
+			slots.append("%02d·" % index)
+	_fate_track_label.text = "命运永久 %d/%d  %s" % [used, capacity, " ".join(slots)]
 
 ## 刷新属性总览（横向排列关键属性）
 func _refresh_stats() -> void:
@@ -287,7 +351,7 @@ func _refresh_tree() -> void:
 	# 更新标题
 	var root_name: String = _weapon_tree.get_root().node_name
 	var depth: int = _weapon_tree.get_max_depth()
-	_title_label.text = "⚔ %s (深度%d)" % [root_name, depth]
+	_title_label.text = "武器表现页 · %s (装配深度%d)" % [root_name, depth]
 
 	# 递归绘制树
 	_draw_node(_weapon_tree.get_root(), _tree_container, 0)

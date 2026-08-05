@@ -20,6 +20,9 @@ core_scenes=(
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
+  verify_3d_fate_weapon_flow
+  verify_3d_inventory_weapon_flow
+  verify_weapon_instance_fate_ownership_flow
   verify_door_passability
   verify_tower_descent_flow
   verify_3d_performance_budget

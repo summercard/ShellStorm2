@@ -22,7 +22,7 @@ class InventorySlot:
 		count = 0
 	
 	func set_item(itm: Dictionary, n: int) -> void:
-		item = itm.duplicate()
+		item = itm.duplicate(true)
 		count = n
 	
 	func get_item_id() -> String:
@@ -76,16 +76,23 @@ func can_add(num_items: int = 1) -> bool:
 func add_item(item: Dictionary, count: int = 1) -> int:
 	if item.is_empty() or count <= 0:
 		return 0
+	# 一个枪械字典只代表一个真实实例；禁止用 count 复制同一实例 ID。
+	if str(item.get("type", "")) == "weapon" and count != 1:
+		return 0
+	item = WeaponInstance.ensure_weapon_item(item)
 	
 	var item_id: String = item.get("id", "")
 	if item_id.is_empty():
 		return 0
 	
 	var remaining: int = count
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	if not instance_id.is_empty() and has_weapon_instance(instance_id):
+		return 0
 	
 	# 先尝试堆叠到已有格子
 	for slot in _slots:
-		if not slot.is_empty() and slot.get_item_id() == item_id:
+		if not slot.is_empty() and _items_can_stack(slot.item, item):
 			var stack_max: int = item.get("stack_max", 1)
 			if slot.count < stack_max:
 				var can_put: int = min(stack_max - slot.count, remaining)
@@ -93,7 +100,7 @@ func add_item(item: Dictionary, count: int = 1) -> int:
 				remaining -= can_put
 				if remaining <= 0:
 					inventory_changed.emit()
-					slot.item = item.duplicate()
+					slot.item = item.duplicate(true)
 					return count
 	
 	# 再找空格子放剩余的
@@ -104,7 +111,7 @@ func add_item(item: Dictionary, count: int = 1) -> int:
 		var stack_max: int = item.get("stack_max", 1)
 		var can_put: int = min(stack_max, remaining)
 		_slots[empty_idx].set_item(item, can_put)
-		_slots[empty_idx].item = item.duplicate()
+		_slots[empty_idx].item = item.duplicate(true)
 		remaining -= can_put
 		item_added.emit(empty_idx, item)
 	
@@ -140,7 +147,7 @@ func get_slot(slot_index: int) -> Dictionary:
 	if slot.is_empty():
 		return {}
 	return {
-		"item": slot.item.duplicate(),
+		"item": slot.item.duplicate(true),
 		"count": slot.count,
 		"slot": slot_index
 	}
@@ -221,6 +228,38 @@ func get_item_count(item_id: String) -> int:
 func has_item(item_id: String) -> bool:
 	return get_item_count(item_id) > 0
 
+
+func has_weapon_instance(weapon_instance_id: String) -> bool:
+	if weapon_instance_id.is_empty():
+		return false
+	for slot in _slots:
+		if not slot.is_empty() and str(slot.item.get("weapon_instance_id", "")) == weapon_instance_id:
+			return true
+	return false
+
+
+func find_weapon_instance_slot(weapon_instance_id: String) -> int:
+	if weapon_instance_id.is_empty():
+		return -1
+	for i in _slots.size():
+		if not _slots[i].is_empty() and str(_slots[i].item.get("weapon_instance_id", "")) == weapon_instance_id:
+			return i
+	return -1
+
+
+func replace_item_in_slot(slot_index: int, item: Dictionary) -> bool:
+	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty():
+		return false
+	var normalized := WeaponInstance.ensure_weapon_item(item)
+	var instance_id := str(normalized.get("weapon_instance_id", ""))
+	var existing_index := find_weapon_instance_slot(instance_id)
+	if not instance_id.is_empty() and existing_index >= 0 and existing_index != slot_index:
+		return false
+	_slots[slot_index].set_item(normalized, 1)
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+	return true
+
 ## 消耗物品（用于撤离消耗品）
 func consume_item(item_id: String, count: int = 1) -> bool:
 	var total_needed := count
@@ -245,6 +284,16 @@ func _find_empty_slot() -> int:
 		if _slots[i].is_empty():
 			return i
 	return -1
+
+
+func _items_can_stack(existing: Dictionary, incoming: Dictionary) -> bool:
+	if str(existing.get("id", "")) != str(incoming.get("id", "")):
+		return false
+	if str(existing.get("type", "")) == "weapon" or str(incoming.get("type", "")) == "weapon":
+		return false
+	return str(existing.get("weapon_instance_id", "")).is_empty() and str(
+		incoming.get("weapon_instance_id", "")
+	).is_empty()
 
 ## 调试状态
 func debug_status() -> String:

@@ -16,6 +16,7 @@ signal reload_progress_changed(progress: float, remaining: float)
 signal reload_ended(completed: bool)
 signal action_overlay_changed(snapshot: Dictionary)
 signal avatar_customization_changed(loadout: Dictionary)
+signal weapon_instance_changed(snapshot: Dictionary)
 
 const SPEED := 5.0
 const DASH_SPEED := 16.5
@@ -57,6 +58,8 @@ var _state_machine: StateMachine = null
 var _test_move_direction: Variant = null
 var weapon: WeaponModel3D = null
 var weapon_tree: WeaponAssemblyTree = null
+var equipped_weapon_instance: WeaponInstance = null
+var _loading_weapon_instance := false
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
@@ -451,6 +454,9 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 		return false
 	_ensure_weapon_model()
 	_sync_weapon_from_tree()
+	equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
+	_sync_equipped_weapon_instance()
+	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
 	return true
 
 
@@ -485,6 +491,8 @@ func _ensure_weapon_tree() -> void:
 		weapon_tree.tree_changed.connect(_sync_weapon_from_tree)
 	if not weapon_tree.stats_changed.is_connected(_on_weapon_tree_stats_changed):
 		weapon_tree.stats_changed.connect(_on_weapon_tree_stats_changed)
+	if equipped_weapon_instance == null and weapon_tree.get_root() != null:
+		equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
 
 
 func _sync_weapon_from_tree() -> void:
@@ -492,8 +500,14 @@ func _sync_weapon_from_tree() -> void:
 		return
 	_ensure_weapon_model()
 	if weapon != null:
+		weapon.set_meta(
+			"fate_slot_used",
+			equipped_weapon_instance.fate_upgrades.size()
+			if equipped_weapon_instance != null else 0,
+		)
 		weapon.configure_from_tree(weapon_tree)
 		_apply_named_damage_multipliers()
+	_sync_equipped_weapon_instance()
 
 
 func _on_weapon_tree_stats_changed(_stats: Dictionary) -> void:
@@ -503,6 +517,82 @@ func _on_weapon_tree_stats_changed(_stats: Dictionary) -> void:
 func get_weapon_tree() -> WeaponAssemblyTree:
 	_ensure_weapon_tree()
 	return weapon_tree
+
+
+func get_equipped_weapon_instance() -> WeaponInstance:
+	_ensure_weapon_tree()
+	_sync_equipped_weapon_instance()
+	return equipped_weapon_instance
+
+
+func get_equipped_weapon_item() -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	return instance.to_item_dictionary() if instance != null else {}
+
+
+func get_equipped_weapon_instance_id() -> String:
+	var instance := get_equipped_weapon_instance()
+	return instance.weapon_instance_id if instance != null else ""
+
+
+func get_weapon_presentation_snapshot() -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	return instance.get_presentation_snapshot(weapon_tree, "已装备") if instance != null else {}
+
+
+func equip_weapon_item(item: Dictionary) -> Dictionary:
+	_ensure_weapon_tree()
+	var candidate := WeaponInstance.from_item(item)
+	if candidate == null:
+		return {"success": false, "reason": "武器实例无效"}
+	if equipped_weapon_instance != null and (
+		candidate.weapon_instance_id == equipped_weapon_instance.weapon_instance_id
+	):
+		return {"success": false, "reason": "该武器实例已装备"}
+	_sync_equipped_weapon_instance()
+	var old_item: Dictionary = (
+		equipped_weapon_instance.to_item_dictionary()
+		if equipped_weapon_instance != null else {}
+	)
+	_loading_weapon_instance = true
+	var loaded := candidate.load_into_runtime_tree(weapon_tree)
+	_loading_weapon_instance = false
+	if not loaded:
+		return {"success": false, "reason": "武器构筑快照无法加载"}
+	equipped_weapon_instance = candidate
+	_sync_weapon_from_tree()
+	if weapon != null and candidate.current_ammo >= 0:
+		weapon.current_ammo = clampi(candidate.current_ammo, 0, weapon.magazine_size)
+		weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
+	_sync_equipped_weapon_instance()
+	var snapshot := get_weapon_presentation_snapshot()
+	weapon_instance_changed.emit(snapshot)
+	return {
+		"success": true,
+		"old_item": old_item,
+		"new_item": equipped_weapon_instance.to_item_dictionary(),
+		"snapshot": snapshot,
+	}
+
+
+func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	if instance == null:
+		return {"success": false, "reason": "当前没有装备枪械"}
+	var result := instance.append_fate_upgrade(card, transaction_id)
+	if bool(result.get("success", false)):
+		_sync_equipped_weapon_instance()
+		_sync_weapon_from_tree()
+		weapon_instance_changed.emit(get_weapon_presentation_snapshot())
+	return result
+
+
+func _sync_equipped_weapon_instance() -> void:
+	if _loading_weapon_instance or equipped_weapon_instance == null or weapon_tree == null:
+		return
+	equipped_weapon_instance.capture_runtime_tree(weapon_tree)
+	if weapon != null and is_instance_valid(weapon):
+		equipped_weapon_instance.current_ammo = weapon.current_ammo
 
 
 func refill_ammo() -> bool:
@@ -567,6 +657,9 @@ func get_reload_snapshot() -> Dictionary:
 
 
 func _on_weapon_ammo_changed(current: int, maximum: int) -> void:
+	if equipped_weapon_instance != null and not _loading_weapon_instance:
+		equipped_weapon_instance.current_ammo = current
+		weapon_instance_changed.emit(get_weapon_presentation_snapshot())
 	ammo_changed.emit(current, maximum)
 
 

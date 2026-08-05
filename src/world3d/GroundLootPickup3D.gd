@@ -13,7 +13,7 @@ const PICKUP_ANIMATION_DURATION := 0.32
 
 
 func configure(data: Dictionary, color := Color(0.38, 0.88, 0.72)) -> void:
-	item_data = data.duplicate(true)
+	item_data = WeaponInstance.ensure_weapon_item(data)
 	_build_visual(color)
 
 
@@ -75,6 +75,14 @@ func _build_visual(color: Color) -> void:
 	_label = Label3D.new()
 	_label.position = Vector3(0, 1.05, 0)
 	_label.text = str(item_data.get("name", item_data.get("id", "物资")))
+	if str(item_data.get("type", "")) == "weapon":
+		var upgrades: Variant = item_data.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		_label.text += " #%s · 构筑 %d/%d" % [
+			str(item_data.get("weapon_instance_id", "")).right(6).to_upper(),
+			used,
+			int(item_data.get("fate_slot_capacity", 8)),
+		]
 	_label.font_size = 30
 	_label.pixel_size = 0.010
 	_label.outline_size = 8

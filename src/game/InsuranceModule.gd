@@ -22,7 +22,7 @@ class InsuranceSlot:
 		insured_at = 0
 	
 	func set_item(itm: Dictionary) -> void:
-		item = itm.duplicate()
+		item = WeaponInstance.ensure_weapon_item(itm).duplicate(true)
 		insured_at = Time.get_unix_time_from_system()
 
 var _insurance_slots: Array[InsuranceSlot] = []
@@ -78,6 +78,9 @@ func insure_item(inventory: InventoryModule, slot_index: int) -> bool:
 	var slot_data: Dictionary = inventory.get_slot(slot_index)
 	if slot_data.is_empty():
 		return false
+	var instance_id := str((slot_data.get("item", {}) as Dictionary).get("weapon_instance_id", ""))
+	if not instance_id.is_empty() and has_weapon_instance(instance_id):
+		return false
 	
 	var empty_idx := _find_empty_slot()
 	if empty_idx < 0:
@@ -95,6 +98,9 @@ func insure_item_direct(item: Dictionary) -> bool:
 	if item.is_empty():
 		return false
 	
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	if not instance_id.is_empty() and has_weapon_instance(instance_id):
+		return false
 	if not has_space():
 		insurance_full.emit()
 		return false
@@ -117,7 +123,7 @@ func claim_item(slot_index: int) -> Dictionary:
 	if slot.is_empty():
 		return {}
 	
-	var item: Dictionary = slot.item.duplicate()
+	var item: Dictionary = slot.item.duplicate(true)
 	slot.clear()
 	insurance_changed.emit()
 	item_claimed.emit(item)
@@ -128,7 +134,7 @@ func claim_all() -> Array[Dictionary]:
 	var claimed: Array[Dictionary] = []
 	for slot in _insurance_slots:
 		if not slot.is_empty():
-			claimed.append(slot.item.duplicate())
+			claimed.append(slot.item.duplicate(true))
 			slot.clear()
 	insurance_changed.emit()
 	return claimed
@@ -152,7 +158,7 @@ func get_all_insured_items() -> Array[Dictionary]:
 	for i in _insurance_slots.size():
 		if not _insurance_slots[i].is_empty():
 			var d: Dictionary = {
-				"item": _insurance_slots[i].item.duplicate(),
+				"item": _insurance_slots[i].item.duplicate(true),
 				"count": 1,
 				"insurance_slot": i  # 与 GameUIManager._refresh_insurance_ui() 的 key 对齐
 			}
@@ -167,6 +173,15 @@ func get_occupied_slots() -> Array[Dictionary]:
 func has_item(item_id: String) -> bool:
 	for slot in _insurance_slots:
 		if not slot.is_empty() and slot.item.get("id", "") == item_id:
+			return true
+	return false
+
+
+func has_weapon_instance(weapon_instance_id: String) -> bool:
+	if weapon_instance_id.is_empty():
+		return false
+	for slot in _insurance_slots:
+		if not slot.is_empty() and str(slot.item.get("weapon_instance_id", "")) == weapon_instance_id:
 			return true
 	return false
 

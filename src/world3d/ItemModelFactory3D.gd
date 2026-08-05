@@ -72,6 +72,10 @@ static func _build_weapon(root: Node3D, item: Dictionary) -> void:
 	weapon.display_only = true
 	weapon.gun_id = str(item.get("assembly_id", "bp_pistol"))
 	weapon.bullet_id = "mod_bullet_standard"
+	if str(item.get("type", "")) == "weapon":
+		weapon.set_meta("weapon_item_data", item.duplicate(true))
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		weapon.set_meta("fate_slot_used", upgrades.size() if upgrades is Array else 0)
 	weapon.rotation_degrees = Vector3(-12.0, -32.0, 0.0)
 	weapon.scale = Vector3.ONE * 0.88
 	root.add_child(weapon)

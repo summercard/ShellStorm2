@@ -120,13 +120,24 @@ func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
 	panel.add_theme_stylebox_override("panel", _make_rarity_border_style(border_color))
 
 	var name_lbl := Label.new()
-	name_lbl.text = item_dict.get("name", "?")
+	name_lbl.text = _item_display_name(item_dict)
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(name_lbl)
 
 	var count_lbl := Label.new()
 	count_lbl.text = "×%d" % item_dict.get("count", 1)
 	hbox.add_child(count_lbl)
+
+	if str(item_dict.get("type", "")) == "weapon":
+		var sell_btn := Button.new()
+		sell_btn.text = "出售"
+		sell_btn.custom_minimum_size = Vector2(82, 32)
+		var instance_id := str(item_dict.get("weapon_instance_id", ""))
+		sell_btn.tooltip_text = "出售完整实例 #%s；命运升级与配件将一并永久离开" % instance_id.right(6).to_upper()
+		sell_btn.pressed.connect(_on_sell_weapon_pressed.bind(instance_id, sell_btn))
+		var sell_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
+		UIStyleFactory.apply_button_style(sell_btn, sell_styles)
+		hbox.add_child(sell_btn)
 
 	var take_btn := Button.new()
 	take_btn.text = "带入"
@@ -157,7 +168,7 @@ func _make_loadout_item_row(index: int, item_dict: Dictionary) -> PanelContainer
 	panel.add_child(hbox)
 
 	var name_lbl := Label.new()
-	name_lbl.text = item_dict.get("name", "?")
+	name_lbl.text = _item_display_name(item_dict)
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(name_lbl)
 
@@ -234,3 +245,33 @@ func _update_status(msg: String) -> void:
 
 func _on_close_pressed() -> void:
 	queue_free()
+
+
+func _on_sell_weapon_pressed(instance_id: String, button: Button) -> void:
+	if button == null:
+		return
+	if not bool(button.get_meta("confirm_sell", false)):
+		button.set_meta("confirm_sell", true)
+		button.text = "确认出售"
+		_update_status("再次点击确认：完整枪械 #%s 将永久离开" % instance_id.right(6).to_upper())
+		return
+	var result := BaseManager.sell_vault_weapon(instance_id) as Dictionary
+	if not bool(result.get("success", false)):
+		_update_status("出售失败：%s" % result.get("reason", "未知原因"))
+		return
+	_update_status("已出售枪械 #%s，获得 %d 资源点" % [
+		instance_id.right(6).to_upper(), int(result.get("value", 0)),
+	])
+	_build_vault_view()
+
+
+func _item_display_name(item: Dictionary) -> String:
+	var display := str(item.get("name", "?"))
+	if str(item.get("type", "")) != "weapon":
+		return display
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	var upgrades: Variant = item.get("fate_upgrades", [])
+	var used: int = upgrades.size() if upgrades is Array else 0
+	return "%s #%s · 命运 %d/%d" % [
+		display, instance_id.right(6).to_upper(), used, int(item.get("fate_slot_capacity", 8)),
+	]

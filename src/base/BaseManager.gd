@@ -14,6 +14,7 @@ func load_base() -> void:
 		if save_version != BaseData.SAVE_VERSION:
 			push_warning("[BaseManager] Loading compatible save version %s" % save_version)
 		data = BaseData.from_dict(json)
+		_migrate_weapon_items()
 		return
 	data = BaseData.new()
 
@@ -174,17 +175,25 @@ func get_vault_items() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for item in data.vault_items:
 		if item is Dictionary:
-			result.append(item)
+			result.append((item as Dictionary).duplicate(true))
 	return result
 
 func set_vault_items(items: Array[Dictionary]) -> void:
-	data.vault_items = items
+	data.vault_items = []
+	for item in items:
+		data.vault_items.append(WeaponInstance.ensure_weapon_item(item))
 	save_base()
 
 func add_vault_item(item: Dictionary) -> bool:
 	if data.vault_items.size() >= _get_vault_capacity():
 		return false
-	data.vault_items.append(item.duplicate())
+	var normalized := WeaponInstance.ensure_weapon_item(item)
+	var instance_id := str(normalized.get("weapon_instance_id", ""))
+	if not instance_id.is_empty():
+		for existing in data.vault_items:
+			if existing is Dictionary and str(existing.get("weapon_instance_id", "")) == instance_id:
+				return false
+	data.vault_items.append(normalized.duplicate(true))
 	save_base()
 	return true
 
@@ -219,18 +228,29 @@ func stage_vault_item_for_loadout(vault_index: int) -> bool:
 	if item.is_empty():
 		return false
 	data.pending_loadout_items.append(item.duplicate(true))
+	data.vault_items.remove_at(vault_index)
 	save_base()
 	return true
 
 func remove_pending_loadout_item(loadout_index: int) -> bool:
 	if loadout_index < 0 or loadout_index >= data.pending_loadout_items.size():
 		return false
+	if data.vault_items.size() >= _get_vault_capacity():
+		return false
+	var item := (data.pending_loadout_items[loadout_index] as Dictionary).duplicate(true)
 	data.pending_loadout_items.remove_at(loadout_index)
+	data.vault_items.append(item)
 	save_base()
 	return true
 
 func clear_pending_loadout() -> void:
-	data.pending_loadout_items.clear()
+	var not_restored: Array = []
+	for item in data.pending_loadout_items:
+		if item is Dictionary and data.vault_items.size() < _get_vault_capacity():
+			data.vault_items.append((item as Dictionary).duplicate(true))
+		elif item is Dictionary:
+			not_restored.append((item as Dictionary).duplicate(true))
+	data.pending_loadout_items = not_restored
 	save_base()
 
 func consume_pending_loadout() -> Array[Dictionary]:
@@ -238,18 +258,20 @@ func consume_pending_loadout() -> Array[Dictionary]:
 	for staged in data.pending_loadout_items:
 		if not (staged is Dictionary):
 			continue
-		var vault_index := _find_matching_vault_item(staged)
-		if vault_index < 0:
-			continue
-		var item: Dictionary = data.vault_items[vault_index]
-		consumed.append(item.duplicate(true))
-		data.vault_items.remove_at(vault_index)
+		consumed.append((staged as Dictionary).duplicate(true))
 	data.pending_loadout_items.clear()
 	save_base()
 	return consumed
 
 func _find_matching_vault_item(target: Dictionary) -> int:
+	var target_instance_id := str(target.get("weapon_instance_id", ""))
 	var target_id: String = target.get("id", "")
+	if not target_instance_id.is_empty():
+		for i in data.vault_items.size():
+			var candidate: Dictionary = data.vault_items[i]
+			if str(candidate.get("weapon_instance_id", "")) == target_instance_id:
+				return i
+		return -1
 	for i in data.vault_items.size():
 		var item: Dictionary = data.vault_items[i]
 		if target_id != "" and item.get("id", "") == target_id:
@@ -257,6 +279,39 @@ func _find_matching_vault_item(target: Dictionary) -> int:
 		if item == target:
 			return i
 	return -1
+
+
+func sell_vault_weapon(weapon_instance_id: String) -> Dictionary:
+	if weapon_instance_id.is_empty():
+		return {"success": false, "reason": "缺少枪械实例ID"}
+	for index in data.vault_items.size():
+		var item := data.vault_items[index] as Dictionary
+		if str(item.get("weapon_instance_id", "")) != weapon_instance_id:
+			continue
+		var value := maxi(1, int(item.get("price", 1)))
+		var sold := item.duplicate(true)
+		data.vault_items.remove_at(index)
+		data.extraction_points += value
+		save_base()
+		return {
+			"success": true,
+			"value": value,
+			"weapon_instance_id": weapon_instance_id,
+			"sold_item": sold,
+		}
+	return {"success": false, "reason": "保险柜中不存在该枪械实例"}
+
+
+func _migrate_weapon_items() -> void:
+	if data == null:
+		return
+	for collection_name in ["vault_items", "pending_loadout_items", "extraction_loot"]:
+		var source: Array = data.get(collection_name)
+		var migrated: Array = []
+		for raw_item in source:
+			if raw_item is Dictionary:
+				migrated.append(WeaponInstance.ensure_weapon_item(raw_item as Dictionary))
+		data.set(collection_name, migrated)
 
 ## — 撤离战利品管理（返回大厅后待存入仓库）—
 func get_extraction_loot() -> Array[Dictionary]:
@@ -267,7 +322,12 @@ func get_extraction_loot() -> Array[Dictionary]:
 	return result
 
 func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
-	var new_item: Dictionary = item.duplicate(true)
+	var new_item := WeaponInstance.ensure_weapon_item(item)
+	var instance_id := str(new_item.get("weapon_instance_id", ""))
+	if not instance_id.is_empty():
+		for existing in data.extraction_loot:
+			if existing is Dictionary and str(existing.get("weapon_instance_id", "")) == instance_id:
+				return
 	new_item["count"] = count
 	data.extraction_loot.append(new_item)
 	save_base()

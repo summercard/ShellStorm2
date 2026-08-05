@@ -27,6 +27,48 @@ enum CardRarity {
 	MYSTIC,    # 红色：诅咒或失控型效果，极强但危险
 }
 
+enum Scope {
+	WEAPON,
+	CHARACTER,
+	WORLD,
+}
+
+const STABLE_ID_BY_NAME := {
+	"变大了": "fate_scale_node",
+	"超频": "fate_overclock",
+	"穿甲强化": "fate_armor_pierce",
+	"子弹背枪": "fate_bullet_carry_gun",
+	"枪上加枪": "fate_gun_on_gun",
+	"配件寄生": "fate_attachment_parasite",
+	"活过来": "fate_living_bullet",
+	"落地炮台": "fate_turret_on_land",
+	"回家看看": "fate_home_on_land",
+	"子弹折返": "fate_bullet_return",
+	"连锁闪电": "fate_chain_lightning",
+	"弹跳弹": "fate_bounce_bullet",
+	"弹幕模式": "fate_barrage_copy",
+	"火焰子弹": "fate_fuse_fire",
+	"冰霜子弹": "fate_fuse_frost",
+	"剧毒子弹": "fate_fuse_poison",
+	"管不住了": "fate_out_of_control",
+	"火力暴食": "fate_gluttony",
+	"换弹爆炸": "fate_explode_reload",
+	"每第七发": "fate_every_seventh",
+	"致命一击": "fate_crit_kill",
+	"巨大化": "fate_huge_scale",
+	"敌增援": "fate_reinforce",
+	"命运标记": "fate_mark_enemy",
+	"幸运发现": "fate_lucky_chest",
+	"额外掉落": "fate_extra_loot",
+	"诅咒降临": "fate_curse_map",
+	"亡者祝福": "fate_bless_dead",
+}
+
+const CHARACTER_SCOPE_IDS := ["fate_mark_enemy", "fate_bless_dead"]
+const WORLD_SCOPE_IDS := [
+	"fate_reinforce", "fate_lucky_chest", "fate_extra_loot", "fate_curse_map",
+]
+
 ## 效果动作枚举（Effect.action 的可能值）
 enum EffectAction {
 	# 组合类
@@ -86,6 +128,7 @@ enum EffectAction {
 
 ## 元数据
 var card_id: String = ""
+var stable_card_id: String = ""
 var card_name: String = ""
 var description: String = ""          # 完整说明（可选，UI可显示简化版）
 var short_description: String = ""     # 简化版单行说明（用于UI显示）
@@ -94,6 +137,7 @@ var icon_emoji: String = ""           # 物品图标emoji（用于UI显示）
 ## 类型与品质
 var card_type: CardType = CardType.ENHANCE
 var card_rarity: CardRarity = CardRarity.COMMON
+var scope: Scope = Scope.WEAPON
 
 ## 标签（用于规则检查）
 var tags: Array[String] = []
@@ -112,10 +156,17 @@ var visual: Dictionary = {}
 static var _id_counter: int = 0
 
 func _init(p_name: String = "", p_type: CardType = CardType.ENHANCE, p_rarity: CardRarity = CardRarity.COMMON) -> void:
-	card_id = _generate_id()
 	card_name = p_name
 	card_type = p_type
 	card_rarity = p_rarity
+	stable_card_id = str(STABLE_ID_BY_NAME.get(p_name, ""))
+	card_id = stable_card_id if not stable_card_id.is_empty() else _generate_id()
+	if stable_card_id in CHARACTER_SCOPE_IDS:
+		scope = Scope.CHARACTER
+	elif stable_card_id in WORLD_SCOPE_IDS:
+		scope = Scope.WORLD
+	else:
+		scope = Scope.WEAPON
 
 static func _generate_id() -> String:
 	_id_counter += 1
@@ -144,6 +195,22 @@ static func type_name(t: CardType) -> String:
 		CardType.VISUAL: return "视觉"
 	return "未知"
 
+
+static func scope_name(value: Scope) -> String:
+	match value:
+		Scope.WEAPON: return "WEAPON"
+		Scope.CHARACTER: return "CHARACTER"
+		Scope.WORLD: return "WORLD"
+	return "UNKNOWN"
+
+
+func get_stable_card_id() -> String:
+	return stable_card_id if not stable_card_id.is_empty() else card_id
+
+
+func occupies_weapon_slot() -> bool:
+	return scope == Scope.WEAPON
+
 ## 获取品质颜色（用于 UI）
 static func rarity_color(r: CardRarity) -> Color:
 	match r:
@@ -158,6 +225,8 @@ static func rarity_color(r: CardRarity) -> Color:
 func get_debug_info() -> Dictionary:
 	return {
 		"card_id": card_id,
+		"stable_card_id": get_stable_card_id(),
+		"scope": scope_name(scope),
 		"name": card_name,
 		"type": type_name(card_type),
 		"rarity": rarity_name(card_rarity),

@@ -7,12 +7,16 @@ extends Node
 ## 信号
 signal card_applied(card: FateCard, success: bool, message: String)
 signal card_list_changed()
+signal scope_state_changed(scope: String, stable_card_id: String)
 
 ## 玩家已应用的卡片列表
 var applied_cards: Array[FateCard] = []
+var character_card_ids: Array[String] = []
+var world_card_ids: Array[String] = []
 
 ## 玩家武器装配树（由 Player 初始化后注入）
 var _player_weapon_tree: WeaponAssemblyTree = null
+var _player: Node = null
 
 func _ready() -> void:
 	add_to_group("fate_cards")
@@ -35,6 +39,7 @@ func _connect_to_player() -> void:
 func set_player(player: Node) -> void:
 	if player == null or not player.has_method("get_weapon_tree"):
 		return
+	_player = player
 	var weapon_tree: WeaponAssemblyTree = player.get_weapon_tree()
 	if weapon_tree == null:
 		return
@@ -49,8 +54,30 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 	if card == null:
 		return {"success": false, "message": "Card is null"}
 
+	if _player == null or not is_instance_valid(_player):
+		_connect_to_player()
 	if _player_weapon_tree == null:
 		return {"success": false, "message": "Player weapon tree not initialized"}
+
+	var scope_name := FateCard.scope_name(card.scope)
+	var target_snapshot: Dictionary = {}
+	if card.scope == FateCard.Scope.WEAPON:
+		if _player == null or not _player.has_method("get_weapon_presentation_snapshot"):
+			return {"success": false, "message": "当前枪械实例不可用", "scope": scope_name}
+		target_snapshot = _player.call("get_weapon_presentation_snapshot") as Dictionary
+		if target_snapshot.is_empty():
+			return {"success": false, "message": "当前没有装备枪械", "scope": scope_name}
+		var used := int(target_snapshot.get("fate_slot_used", 0))
+		var capacity := int(target_snapshot.get("fate_slot_capacity", 0))
+		if used >= capacity:
+			return {
+				"success": false,
+				"message": "枪械命运槽已满 %d/%d；卡片未消耗" % [used, capacity],
+				"scope": scope_name,
+				"weapon_instance_id": target_snapshot.get("weapon_instance_id", ""),
+				"slot_used": used,
+				"slot_capacity": capacity,
+			}
 
 	# 委托给 FateCardEngine 执行完整效果（支持所有 EffectAction）
 	# 使用 GDScript preload 避免 class_name 加载顺序问题
@@ -61,8 +88,31 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 	var result_dict: Dictionary = {
 		"success": engine_result.success,
 		"message": engine_result.message,
+		"scope": scope_name,
 	}
 	if engine_result.success:
+		if card.scope == FateCard.Scope.WEAPON:
+			var transaction_id := "fate:%s:%s" % [
+				target_snapshot.get("weapon_instance_id", ""), card.get_stable_card_id(),
+			]
+			var slot_result := _player.call(
+				"append_equipped_fate_upgrade", card, transaction_id
+			) as Dictionary
+			if not bool(slot_result.get("success", false)):
+				result_dict["success"] = false
+				result_dict["message"] = str(slot_result.get("reason", "命运槽提交失败"))
+				card_applied.emit(card, false, result_dict["message"])
+				return result_dict
+			var record := slot_result.get("record", {}) as Dictionary
+			result_dict["weapon_instance_id"] = target_snapshot.get("weapon_instance_id", "")
+			result_dict["slot_index"] = record.get("slot_index", 0)
+			result_dict["slot_capacity"] = target_snapshot.get("fate_slot_capacity", 0)
+		elif card.scope == FateCard.Scope.CHARACTER:
+			character_card_ids.append(card.get_stable_card_id())
+			scope_state_changed.emit(scope_name, card.get_stable_card_id())
+		else:
+			world_card_ids.append(card.get_stable_card_id())
+			scope_state_changed.emit(scope_name, card.get_stable_card_id())
 		applied_cards.append(card)
 		card_applied.emit(card, true, engine_result.message)
 		card_list_changed.emit()
@@ -70,6 +120,23 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 		card_applied.emit(card, false, engine_result.message)
 
 	return result_dict
+
+
+func get_target_summary(card: FateCard = null) -> Dictionary:
+	if card == null:
+		return {}
+	var result := {
+		"scope": FateCard.scope_name(card.scope),
+		"occupies_weapon_slot": card.occupies_weapon_slot(),
+		"stable_card_id": card.get_stable_card_id(),
+	}
+	if card.scope == FateCard.Scope.WEAPON and _player != null and _player.has_method(
+		"get_weapon_presentation_snapshot"
+	):
+		var snapshot := _player.call("get_weapon_presentation_snapshot") as Dictionary
+		result.merge(snapshot, true)
+		result["next_slot_index"] = int(snapshot.get("fate_slot_used", 0)) + 1
+	return result
 
 ## 应用一张命运卡片（静态方法，供外部调用）
 static func apply_card(card: FateCard) -> Dictionary:

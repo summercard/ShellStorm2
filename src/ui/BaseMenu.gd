@@ -232,6 +232,14 @@ func _make_loot_item_row(index: int, item: Dictionary) -> PanelContainer:
 
 	var name_lbl := Label.new()
 	name_lbl.text = item.get("name", "?")
+	if str(item.get("type", "")) == "weapon":
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		name_lbl.text += " #%s · 命运 %d/%d" % [
+			str(item.get("weapon_instance_id", "")).right(6).to_upper(),
+			used,
+			int(item.get("fate_slot_capacity", 8)),
+		]
 	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_lbl.add_theme_color_override("font_color", border_color)
 	hbox.add_child(name_lbl)

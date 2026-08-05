@@ -409,6 +409,7 @@ func set_player(player: Node) -> void:
 	_connect_player_signal(player, "low_health_changed", _on_player_low_health_changed)
 	_connect_player_signal(player, "damage_taken", _on_player_damage_taken)
 	_connect_player_signal(player, "status_effect_changed", _on_player_status_effect_changed)
+	_connect_player_signal(player, "weapon_instance_changed", _on_weapon_instance_changed)
 	if player.has_method("get_presentation_state"):
 		_player_state_id = str(player.call("get_presentation_state"))
 	if player.has_method("is_low_health"):
@@ -444,6 +445,7 @@ func _disconnect_bound_player() -> void:
 		["low_health_changed", _on_player_low_health_changed],
 		["damage_taken", _on_player_damage_taken],
 		["status_effect_changed", _on_player_status_effect_changed],
+		["weapon_instance_changed", _on_weapon_instance_changed],
 	]
 	for binding in bindings:
 		var signal_name := StringName(binding[0])
@@ -624,6 +626,8 @@ func _bind_weapon_panel(player: Node) -> void:
 	var wt = player.get_weapon_tree()
 	if wt != null and _weapon_panel.has_method("set_weapon_tree"):
 		_weapon_panel.call("set_weapon_tree", wt)
+	if _weapon_panel.has_method("set_weapon_owner"):
+		_weapon_panel.call("set_weapon_owner", player)
 
 
 ## 绑定背包模块
@@ -2956,11 +2960,20 @@ func _show_item_hover_card(item: Dictionary, count: int) -> void:
 		action = "左键: 装配"
 	elif not str(item.get("use_action", "")).is_empty():
 		action = "左键: 使用"
-	_item_hover_label.text = "%s x%d\n%s / %s\n%s\n%s  |  Shift+左键: 存保险" % [
+	var build_text := ""
+	if str(item.get("type", "")) == "weapon":
+		var instance_id := str(item.get("weapon_instance_id", ""))
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		build_text = "\n实例 #%s · 命运永久 %d/%d\n配件可更换且不占命运槽" % [
+			instance_id.right(6).to_upper(), used, int(item.get("fate_slot_capacity", 8)),
+		]
+	_item_hover_label.text = "%s x%d\n%s / %s%s\n%s\n%s  |  Shift+左键: 存保险" % [
 		name,
 		count,
 		type_text,
 		rarity,
+		build_text,
 		desc,
 		action,
 	]
@@ -3016,18 +3029,35 @@ func _update_equipped_weapon_slot() -> void:
 		return
 	_equipped_weapon_slot.texture = _make_item_icon(item)
 	_update_slot_text(_equipped_weapon_slot, item)
-	_equipped_weapon_slot.tooltip_text = "当前装备: %s" % item.get("name", "武器")
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	var upgrades: Variant = item.get("fate_upgrades", [])
+	var used: int = upgrades.size() if upgrades is Array else 0
+	var capacity := int(item.get("fate_slot_capacity", 8))
+	_equipped_weapon_slot.tooltip_text = "当前装备: %s #%s\n命运永久 %d/%d" % [
+		item.get("name", "武器"), instance_id.right(6).to_upper(), used, capacity,
+	]
 	if _equipped_weapon_label != null:
-		_equipped_weapon_label.text = "主武器\n%s" % item.get("name", "武器")
+		_equipped_weapon_label.text = "主武器\n%s #%s · %d/%d" % [
+			item.get("name", "武器"), instance_id.right(6).to_upper(), used, capacity,
+		]
 
 
 func _current_equipped_weapon_item(player: Node) -> Dictionary:
-	if player == null or not player.has_method("get_weapon_tree"):
+	if player == null:
+		return {}
+	if player.has_method("get_equipped_weapon_item"):
+		return player.call("get_equipped_weapon_item") as Dictionary
+	if not player.has_method("get_weapon_tree"):
 		return {}
 	var wt: WeaponAssemblyTree = player.get_weapon_tree() as WeaponAssemblyTree
 	if wt == null:
 		return {}
 	return _item_for_weapon_root(wt.get_root())
+
+
+func _on_weapon_instance_changed(_snapshot: Dictionary) -> void:
+	_update_equipped_weapon_slot()
+	_refresh_inventory_ui()
 
 
 func _on_insurance_changed() -> void:
@@ -3214,35 +3244,36 @@ func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
 	if _inventory_module == null:
 		return false
 	var player := _get_player_reference()
-	if player == null or not player.has_method("get_weapon_tree"):
+	if player == null or not player.has_method("equip_weapon_item"):
 		return false
-	var wt: WeaponAssemblyTree = player.get_weapon_tree() as WeaponAssemblyTree
-	if wt == null or wt.get_root() == null:
-		return false
-	var assembly_id := str(item.get("assembly_id", item.get("id", "")))
-	var new_root: AssemblyNode = BlueprintRegistry.create_assembly_node(assembly_id)
-	if new_root == null:
+	var incoming := WeaponInstance.ensure_weapon_item(item)
+	if incoming.is_empty():
 		show_fate_card_notification("无法装备: %s" % item.get("name", "武器"))
 		return false
-	var old_root := wt.get_root()
-	var old_weapon_item := _item_for_weapon_root(old_root)
-	if old_weapon_item.get("id", "") == item.get("id", ""):
+	var incoming_id := str(incoming.get("weapon_instance_id", ""))
+	if incoming_id == str(player.call("get_equipped_weapon_instance_id")):
 		show_fate_card_notification("已经装备: %s" % item.get("name", "武器"))
 		return false
-	var old_bullet: AssemblyNode = (
-		old_root.slots.get(AssemblyNode.SlotType.BULLET) if old_root != null else null
-	)
-	if old_bullet != null:
-		wt.unmount(old_bullet)
-	wt.set_root(new_root)
-	if old_bullet != null:
-		wt.mount(new_root, AssemblyNode.SlotType.BULLET, old_bullet)
-	_inventory_module.remove_from_slot(slot_index, 1)
+	if not _inventory_module.remove_from_slot(slot_index, 1):
+		return false
+	var result := player.call("equip_weapon_item", incoming) as Dictionary
+	if not bool(result.get("success", false)):
+		_inventory_module.add_item(incoming, 1)
+		show_fate_card_notification("装备失败: %s" % result.get("reason", "武器实例无效"))
+		return false
+	var old_weapon_item := result.get("old_item", {}) as Dictionary
 	if not old_weapon_item.is_empty():
-		_inventory_module.add_item(old_weapon_item, 1)
+		if _inventory_module.add_item(old_weapon_item, 1) != 1:
+			# 原武器无法入包时回滚，避免整枪及其构筑丢失。
+			player.call("equip_weapon_item", old_weapon_item)
+			_inventory_module.add_item(incoming, 1)
+			show_fate_card_notification("背包无空位，无法替换武器")
+			return false
 	_bind_weapon_panel(player)
 	_update_equipped_weapon_slot()
-	show_fate_card_notification("已装备: %s；原武器已放回背包" % item.get("name", item.get("id", "武器")))
+	show_fate_card_notification("已装备: %s #%s；原武器及其完整构筑已放回背包" % [
+		incoming.get("name", incoming.get("id", "武器")), incoming_id.right(6).to_upper(),
+	])
 	return true
 
 

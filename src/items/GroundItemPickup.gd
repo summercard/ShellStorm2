@@ -21,7 +21,10 @@ var _pulse_tween: Tween = null
 
 func setup(game_mode: Node, data: Dictionary) -> void:
 	_game_mode = game_mode
-	item_data = data.duplicate(true)
+	if str(data.get("type", "")) == "weapon":
+		item_data = WeaponInstance.ensure_weapon_item(data)
+	else:
+		item_data = data.duplicate(true)
 
 
 func _ready() -> void:
@@ -115,6 +118,11 @@ func _build_visuals() -> void:
 
 	var name_label := Label.new()
 	name_label.text = str(item_data.get("name", "战利品"))
+	if str(item_data.get("type", "")) == "weapon":
+		var instance_id := str(item_data.get("weapon_instance_id", ""))
+		var used := int((item_data.get("fate_upgrades", []) as Array).size())
+		var capacity := int(item_data.get("fate_slot_capacity", 8))
+		name_label.text += " #%s · %d/%d" % [instance_id.right(6).to_upper(), used, capacity]
 	name_label.position = Vector2(-48, -40)
 	name_label.size = Vector2(96, 18)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

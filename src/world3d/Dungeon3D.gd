@@ -15,6 +15,7 @@ const EXTRACTION_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d
 const KEY_SCRIPT := preload("res://src/world3d/RoomKeyPickup3D.gd")
 const GROUND_LOOT_SCRIPT := preload("res://src/world3d/GroundLootPickup3D.gd")
 const WORKBENCH_SCENE: PackedScene = preload("res://scenes/WorkbenchPanel.tscn")
+const WEAPON_PRESENTATION_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTreePanel.tscn")
 const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_floor_segment.tscn")
 const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_wall_segment.tscn")
 const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment.tscn")
@@ -84,6 +85,7 @@ var _inventory: InventoryModule
 var _insurance: InsuranceModule
 var _death_settlement: DeathSettlementModule
 var _inventory_ui: InventoryUI
+var _weapon_panel: WeaponAssemblyTreePanel
 var _workbench_panel: WorkbenchPanel
 var _merchant_ui: MerchantUI
 var _trade_extraction_unlocked := false
@@ -143,6 +145,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_K:
+		if _weapon_panel != null:
+			_weapon_panel.toggle()
+			get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("interact") and not _completed:
 		var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 		if room != null:
@@ -201,10 +208,19 @@ func _setup_run_modules() -> void:
 	_inventory_ui.set_inventory_module(_inventory)
 	_inventory_ui.set_insurance_module(_insurance)
 	_inventory_ui.set_weapon_tree(player.get_weapon_tree())
+	_inventory_ui.set_weapon_owner(player)
 	_inventory_ui.item_to_insurance_requested.connect(_on_insure_item_requested)
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
 	_inventory_ui.inventory_open_changed.connect(_on_inventory_open_changed)
+	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
+	if _weapon_panel != null:
+		_weapon_panel.name = "WeaponPresentationPage3D"
+		_weapon_panel.position = Vector2(28, 86)
+		_weapon_panel.z_index = 420
+		$HUD.add_child(_weapon_panel)
+		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
+		_weapon_panel.set_weapon_owner(player)
 
 
 func _install_holographic_hud_style() -> void:
@@ -1731,45 +1747,34 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 
 
 func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
-	var tree := player.get_weapon_tree()
-	if tree == null or tree.get_root() == null:
+	if player == null or not player.has_method("equip_weapon_item"):
 		return false
-	var new_root := BlueprintRegistry.create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
-	if new_root == null:
+	var incoming := WeaponInstance.ensure_weapon_item(item)
+	var incoming_id := str(incoming.get("weapon_instance_id", ""))
+	if incoming_id == str(player.call("get_equipped_weapon_instance_id")):
+		status_label.text = "当前已经装备该枪械实例 #%s" % incoming_id.right(6).to_upper()
 		return false
-	var old_root := tree.get_root()
-	var old_item := _item_for_weapon_root(old_root)
-	if old_item.get("id", "") == item.get("id", ""):
-		new_root.free()
-		status_label.text = "当前已经装备 %s" % item.get("name", "武器")
+	if not _inventory.remove_from_slot(slot_index, 1):
 		return false
-	var detached_modules: Dictionary = {}
-	for slot_type in old_root.slots.keys():
-		var child := old_root.slots.get(slot_type) as AssemblyNode
-		if child != null:
-			tree.unmount(child)
-			detached_modules[slot_type] = child
-	_inventory.remove_from_slot(slot_index, 1)
-	if not tree.set_root(new_root):
-		for slot_type in detached_modules.keys():
-			tree.mount(old_root, int(slot_type), detached_modules[slot_type] as AssemblyNode)
-		_inventory.add_item(item, 1)
-		new_root.free()
+	var equip_result := player.call("equip_weapon_item", incoming) as Dictionary
+	if not bool(equip_result.get("success", false)):
+		_inventory.add_item(incoming, 1)
+		status_label.text = str(equip_result.get("message", "换枪失败"))
 		return false
-	var transferred := 0
-	for slot_type in detached_modules.keys():
-		var module := detached_modules[slot_type] as AssemblyNode
-		if tree.mount(new_root, int(slot_type), module):
-			transferred += 1
-			continue
-		var module_item := _item_for_assembly_node(module)
-		if module_item.is_empty() or _inventory.add_item(module_item, 1) <= 0:
-			push_error("[Dungeon3D] Detached module cannot be transferred or returned: %s" % module.node_name)
-		module.free()
-	if not old_item.is_empty():
-		_inventory.add_item(old_item, 1)
-	status_label.text = "已装备 %s · 原武器放回背包 · 保留 %d 个模块" % [
-		item.get("name", "武器"), transferred,
+	var old_item := equip_result.get("old_item", {}) as Dictionary
+	if not old_item.is_empty() and _inventory.add_item(old_item, 1) <= 0:
+		# 理论上来源槽已经释放；若仍失败则恢复旧枪，避免完整实例丢失。
+		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		if bool(rollback.get("success", false)):
+			_inventory.add_item(incoming, 1)
+		status_label.text = "换枪失败：原武器无法放回背包，已完整回滚"
+		return false
+	var snapshot := equip_result.get("snapshot", {}) as Dictionary
+	status_label.text = "已装备 %s #%s · 构筑 %d/%d · 原武器完整放回背包" % [
+		snapshot.get("display_name", item.get("name", "武器")),
+		snapshot.get("instance_suffix", "------"),
+		snapshot.get("fate_slot_used", 0),
+		snapshot.get("fate_slot_capacity", 0),
 	]
 	return true
 
@@ -2048,7 +2053,15 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
-	ammo_label.text = "AMMO %d/%d" % [current, maximum]
+	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
+	ammo_label.text = "AMMO %d/%d · %s #%s · 命运 %d/%d · [K]详情" % [
+		current,
+		maximum,
+		snapshot.get("display_name", "武器"),
+		snapshot.get("instance_suffix", "------"),
+		snapshot.get("fate_slot_used", 0),
+		snapshot.get("fate_slot_capacity", 0),
+	]
 
 
 func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
@@ -2063,13 +2076,13 @@ func _finish_run(success: bool) -> void:
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	extraction_panel.visible = false
-	_run_loot = _collect_extracted_items()
+	_run_loot = _collect_extracted_items(success)
 	var settlement: Dictionary = {}
 	if success:
 		_death_settlement.process_extraction_settlement(_inventory, _insurance)
 	else:
 		settlement = _death_settlement.process_death_settlement(_inventory, _insurance)
-		_run_loot = _collect_extracted_items()
+		_run_loot = _collect_extracted_items(false)
 	var summary := {
 		"success": success, "kills": _kills, "value": _run_value,
 		"loot": _run_loot.duplicate(true), "seed": run_seed,
@@ -2088,8 +2101,13 @@ func _finish_run(success: bool) -> void:
 		get_tree().change_scene_to_file(return_scene_path)
 
 
-func _collect_extracted_items() -> Array[Dictionary]:
+func _collect_extracted_items(include_equipped_weapon := false) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
+	if include_equipped_weapon and player != null and player.has_method("get_equipped_weapon_item"):
+		var equipped := player.call("get_equipped_weapon_item") as Dictionary
+		if not equipped.is_empty():
+			equipped["count"] = 1
+			result.append(equipped)
 	for slot in _inventory.get_occupied_slots():
 		var item := (slot.get("item", {}) as Dictionary).duplicate(true)
 		if item.is_empty():

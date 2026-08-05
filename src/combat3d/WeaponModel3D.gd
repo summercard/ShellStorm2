@@ -86,6 +86,15 @@ const BULLET_NAME_TO_ID := {
 
 
 func _ready() -> void:
+	var weapon_item: Variant = get_meta("weapon_item_data", {})
+	if display_only and weapon_item is Dictionary and not (weapon_item as Dictionary).is_empty():
+		var instance := WeaponInstance.from_item(weapon_item as Dictionary)
+		var preview_tree := instance.build_runtime_tree() if instance != null else null
+		if preview_tree != null:
+			preview_tree.name = "PreviewAssemblyTree"
+			add_child(preview_tree)
+			configure_from_tree(preview_tree)
+			return
 	if not gun_id.is_empty():
 		configure(gun_id, bullet_id)
 
@@ -606,6 +615,24 @@ func _rebuild_visual() -> void:
 	if gun_id == "bp_charge":
 		for side in [-1.0, 1.0]:
 			_add_cylinder("ChargeCoil", Vector3(width * side, 0, -length * 0.72), width * 0.18, length * 0.52, accent_material)
+	if _source_tree != null and _source_tree.get_root() != null:
+		var source_root := _source_tree.get_root()
+		if source_root.slots.get(AssemblyNode.SlotType.MUZZLE) != null:
+			_add_cylinder("InstalledMuzzle", Vector3(0, 0.01, -length - barrel * 0.96), width * 0.34, barrel * 0.44, accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MAGAZINE) != null:
+			_add_box("InstalledMagazine", Vector3(0, -height * 0.80, -length * 0.48), Vector3(width * 0.82, height * 1.10, length * 0.26), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
+			_add_box("InstalledMount", Vector3(0, height * 0.78, -length * 0.48), Vector3(width * 0.60, height * 0.32, length * 0.30), accent_material)
+	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))
+	for fate_index in mini(fate_used, 8):
+		var row := fate_index / 4
+		var column := fate_index % 4
+		_add_box(
+			"FateRune%02d" % (fate_index + 1),
+			Vector3(width * (-0.66 + float(column) * 0.44), height * (0.52 - float(row) * 0.34), -length * 0.42),
+			Vector3(width * 0.12, height * 0.12, length * 0.08),
+			accent_material,
+		)
 	_muzzle = Marker3D.new()
 	_muzzle.name = "Muzzle"
 	_muzzle.position = Vector3(0, 0, -length - barrel)

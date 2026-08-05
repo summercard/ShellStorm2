@@ -42,7 +42,9 @@ var _tween_duration: float = 0.25
 
 ## 启用面板（商人房进入时调用）
 func show_merchant(goods: Array[Dictionary]) -> void:
-	_items = goods
+	_items.clear()
+	for raw_item in goods:
+		_items.append(WeaponInstance.ensure_weapon_item(raw_item))
 	_build_shop_grid()
 	_refresh_affordability()
 	# 停止旧动画并显示面板（动画版本自动处理打断）
@@ -195,6 +197,14 @@ func _create_shop_slot(item: Dictionary, slot_index: int) -> Control:
 	var name_lbl := Label.new()
 	name_lbl.name = "NameLabel"
 	name_lbl.text = item.get("name", "?")
+	if str(item.get("type", "")) == "weapon":
+		var instance_id := str(item.get("weapon_instance_id", ""))
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		name_lbl.text += "\n#%s · 命运 %d/%d" % [
+			instance_id.right(6).to_upper(), used, int(item.get("fate_slot_capacity", 8)),
+		]
+		panel.tooltip_text = "商店独立枪械实例 #%s\n命运升级永久；配件可更换且不占命运槽" % instance_id.right(6).to_upper()
 	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
 	vbox.add_child(name_lbl)
@@ -229,9 +239,14 @@ func _on_slot_clicked(slot_index: int) -> void:
 		return
 	if GameManager.spend_currency(price):
 		if _inventory_module != null:
-			_inventory_module.add_item(item.duplicate(), 1)
+			if _inventory_module.add_item(item.duplicate(true), 1) != 1:
+				GameManager.add_currency(price)
+				print("[MerchantUI] 购买事务回滚: 无法转移商品实例")
+				return
 		purchase_requested.emit(item, slot_index)
-		# 刷新可用性
+		# 商店武器是唯一实例；任何商品成交后都离开本次库存，不能重复购买。
+		_items.remove_at(slot_index)
+		_build_shop_grid()
 		_refresh_affordability()
 	else:
 		print("[MerchantUI] 魂不足，无法购买: %s (需要 %d)" % [item.get("name", "?"), price])

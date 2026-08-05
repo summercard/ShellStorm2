@@ -62,6 +62,7 @@ func _get_weapon_panel() -> Control:
 			var wt = _player.get_weapon_tree()
 			if wt:
 				(panel as WeaponAssemblyTreePanel).set_weapon_tree(wt)
+				(panel as WeaponAssemblyTreePanel).set_weapon_owner(_player)
 		add_child(panel)
 		_weapon_panel = panel
 	return _weapon_panel

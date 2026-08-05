@@ -11,6 +11,7 @@ signal low_health_changed(active: bool, hp_ratio: float)
 signal damage_taken(amount: int, current: int, maximum: int)
 signal input_lock_changed(locked: bool)
 signal status_effect_changed(effect_id: String, active: bool, duration: float)
+signal weapon_instance_changed(snapshot: Dictionary)
 
 const SPEED: float = 350.0
 const DASH_SPEED: float = 820.0
@@ -56,6 +57,8 @@ var components: CharacterComponents = null
 
 ## 玩家武器装配树（由命运卡片系统使用）
 var weapon_tree: WeaponAssemblyTree
+var equipped_weapon_instance: WeaponInstance = null
+var _loading_weapon_instance := false
 
 ## 调试用标签（屏幕显示）
 var _debug_label: Label = null
@@ -109,6 +112,13 @@ func _ensure_weapon_tree() -> void:
 	if weapon_tree != null and weapon_tree.get_parent() == null:
 		weapon_tree.name = "WeaponAssemblyTree"
 		add_child(weapon_tree)
+	if weapon_tree != null:
+		if not weapon_tree.tree_changed.is_connected(_on_weapon_runtime_changed):
+			weapon_tree.tree_changed.connect(_on_weapon_runtime_changed)
+		if not weapon_tree.ammo_changed.is_connected(_on_weapon_ammo_changed):
+			weapon_tree.ammo_changed.connect(_on_weapon_ammo_changed)
+	if equipped_weapon_instance == null and weapon_tree != null and weapon_tree.get_root() != null:
+		equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
 
 func _physics_process(delta: float) -> void:
 	# 沉默是叠加标志（不进入独立状态），由 _handle_silence 单独推进
@@ -495,6 +505,91 @@ func set_aim_direction(dir: Vector2) -> void:
 func get_weapon_tree() -> WeaponAssemblyTree:
 	_ensure_weapon_tree()
 	return weapon_tree
+
+
+func get_equipped_weapon_instance() -> WeaponInstance:
+	_ensure_weapon_tree()
+	_sync_equipped_weapon_instance()
+	return equipped_weapon_instance
+
+
+func get_equipped_weapon_item() -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	return instance.to_item_dictionary() if instance != null else {}
+
+
+func get_equipped_weapon_instance_id() -> String:
+	var instance := get_equipped_weapon_instance()
+	return instance.weapon_instance_id if instance != null else ""
+
+
+func get_weapon_presentation_snapshot() -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	return instance.get_presentation_snapshot(weapon_tree, "已装备") if instance != null else {}
+
+
+func equip_weapon_item(item: Dictionary) -> Dictionary:
+	if str(item.get("type", "")) != "weapon":
+		return {"success": false, "message": "目标不是枪械"}
+	_ensure_weapon_tree()
+	var candidate := WeaponInstance.from_item(item)
+	if candidate == null:
+		return {"success": false, "message": "枪械实例数据无效"}
+	if equipped_weapon_instance != null and (
+		candidate.weapon_instance_id == equipped_weapon_instance.weapon_instance_id
+	):
+		return {"success": false, "message": "当前已经装备该枪械实例"}
+	_sync_equipped_weapon_instance()
+	var old_item: Dictionary = {}
+	if equipped_weapon_instance != null:
+		old_item = equipped_weapon_instance.to_item_dictionary()
+	_loading_weapon_instance = true
+	var loaded := candidate.load_into_runtime_tree(weapon_tree)
+	_loading_weapon_instance = false
+	if not loaded:
+		return {"success": false, "message": "枪械构筑快照无法恢复"}
+	equipped_weapon_instance = candidate
+	_sync_equipped_weapon_instance()
+	var snapshot := get_weapon_presentation_snapshot()
+	weapon_instance_changed.emit(snapshot)
+	return {
+		"success": true,
+		"message": "已装备 %s #%s" % [
+			snapshot.get("display_name", "武器"), snapshot.get("instance_suffix", "")
+		],
+		"old_item": old_item,
+		"new_item": equipped_weapon_instance.to_item_dictionary(),
+		"snapshot": snapshot,
+	}
+
+
+func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
+	var instance := get_equipped_weapon_instance()
+	if instance == null:
+		return {"success": false, "reason": "当前没有装备枪械"}
+	var result := instance.append_fate_upgrade(card, transaction_id)
+	if bool(result.get("success", false)):
+		instance.capture_runtime_tree(weapon_tree)
+		weapon_instance_changed.emit(get_weapon_presentation_snapshot())
+	return result
+
+
+func _sync_equipped_weapon_instance() -> void:
+	if _loading_weapon_instance or equipped_weapon_instance == null or weapon_tree == null:
+		return
+	equipped_weapon_instance.capture_runtime_tree(weapon_tree)
+
+
+func _on_weapon_runtime_changed() -> void:
+	_sync_equipped_weapon_instance()
+	if equipped_weapon_instance != null:
+		weapon_instance_changed.emit(equipped_weapon_instance.get_presentation_snapshot(
+			weapon_tree, "已装备"
+		))
+
+
+func _on_weapon_ammo_changed(_current: int, _maximum: int) -> void:
+	_sync_equipped_weapon_instance()
 
 
 ## 设置玩家伤害倍率（由命运触发器/祝福效果调用，如 BLESS_DEAD）

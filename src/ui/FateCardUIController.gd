@@ -113,6 +113,10 @@ func hide_card_selection() -> void:
 ## 创建一张卡片按钮
 func _create_card_button(card: FateCard) -> Button:
 	var btn := Button.new()
+	var bridge := get_node_or_null("/root/FateCardGameBridge")
+	var target_summary: Dictionary = {}
+	if bridge != null and bridge.has_method("get_target_summary"):
+		target_summary = bridge.get_target_summary(card)
 
 	var rarity_color = FateCard.rarity_color(card.card_rarity)
 	var color_hex = (
@@ -132,13 +136,30 @@ func _create_card_button(card: FateCard) -> Button:
 	btn.custom_minimum_size = Vector2(200, 110)
 	btn.tooltip_text = card.description
 
-	# 简化版UI显示：emoji + 名称 + 一行说明
+	# 卡面必须在选择前说明作用域、所有者、是否占槽和不可逆结果。
 	var display_text := ""
 	if card.icon_emoji != "":
 		display_text += card.icon_emoji + " "
 	display_text += card.card_name
 	if card.short_description != "":
 		display_text += "\n" + card.short_description
+	var scope_name := FateCard.scope_name(card.scope)
+	display_text += "\n[%s]" % scope_name
+	if card.scope == FateCard.Scope.WEAPON:
+		var used := int(target_summary.get("fate_slot_used", 0))
+		var capacity := int(target_summary.get("fate_slot_capacity", 0))
+		display_text += "  永久槽 %d/%d → %02d" % [used, capacity, used + 1]
+		display_text += "\n目标：%s #%s｜不可逆" % [
+			target_summary.get("display_name", "当前枪械"),
+			target_summary.get("instance_suffix", "------"),
+		]
+		if used >= capacity:
+			btn.disabled = true
+			btn.tooltip_text = "枪械命运槽已满；该卡不会被消耗"
+	elif card.scope == FateCard.Scope.CHARACTER:
+		display_text += "  角色本局效果｜不占武器槽"
+	else:
+		display_text += "  世界/房间规则｜不占武器槽"
 	btn.text = display_text
 	var bg_style := UIStyleFactory.make_panel_with_border(1, rarity_color, 6, 2)
 	bg_style.bg_color = UIPalette.BG_DARK
@@ -163,13 +184,23 @@ func _on_card_selected(card: FateCard) -> void:
 		print("[FateCardUI] 应用卡片成功: %s — %s" % [card.card_name, result.message])
 		# 通知 UI 显示应用成功
 		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
-			_ui_manager.show_fate_card_notification("✓ %s 已应用！" % card.card_name)
+			var detail := "✓ %s [%s] 已应用" % [card.card_name, result.get("scope", "")]
+			if result.has("slot_index"):
+				detail += " · 永久槽 %02d/%d" % [
+					result.get("slot_index", 0), result.get("slot_capacity", 0),
+				]
+			_ui_manager.show_fate_card_notification(detail)
+		hide_card_selection()
 	else:
 		print("[FateCardUI] 应用卡片失败: %s — %s" % [card.card_name, result.message])
 		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
-			_ui_manager.show_fate_card_notification("✗ %s 应用失败" % card.card_name)
-
-	hide_card_selection()
+			_ui_manager.show_fate_card_notification("✗ %s：%s" % [
+				card.card_name, result.get("message", "应用失败"),
+			])
+		if instruction_label != null:
+			instruction_label.text = "未应用：%s｜请选择其他卡或关闭" % result.get(
+				"message", "未知原因"
+			)
 
 
 ## 获取当前选项（用于调试）

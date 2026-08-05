@@ -22,6 +22,7 @@ signal inventory_open_changed(opened: bool)
 var _inventory_module = null
 var _insurance_module = null
 var _weapon_tree: WeaponAssemblyTree = null
+var _weapon_owner: Node = null
 var _slots: Array[Control] = []
 var _insurance_slots: Array[Control] = []
 
@@ -138,6 +139,19 @@ func set_weapon_tree(tree: WeaponAssemblyTree) -> void:
 	_weapon_tree = tree
 	if _weapon_tree != null and not _weapon_tree.tree_changed.is_connected(_on_weapon_tree_changed):
 		_weapon_tree.tree_changed.connect(_on_weapon_tree_changed)
+	_refresh_inventory_ui()
+
+
+func set_weapon_owner(owner: Node) -> void:
+	if _weapon_owner != null and is_instance_valid(_weapon_owner) and _weapon_owner.has_signal(
+		"weapon_instance_changed"
+	):
+		if _weapon_owner.weapon_instance_changed.is_connected(_on_equipped_weapon_instance_changed):
+			_weapon_owner.weapon_instance_changed.disconnect(_on_equipped_weapon_instance_changed)
+	_weapon_owner = owner
+	if _weapon_owner != null and _weapon_owner.has_signal("weapon_instance_changed"):
+		if not _weapon_owner.weapon_instance_changed.is_connected(_on_equipped_weapon_instance_changed):
+			_weapon_owner.weapon_instance_changed.connect(_on_equipped_weapon_instance_changed)
 	_refresh_inventory_ui()
 
 ## 显示/隐藏背包面板
@@ -344,9 +358,22 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 		glyph.text = _item_glyph(item)
 	var equipped_label := _ensure_equipped_label(slot)
 	equipped_label.visible = _is_equipped_weapon(item)
-	slot.tooltip_text = "%s x%d\n%s\n左键使用/装备 · 右键存保险" % [
-		item.get("name", item_id), count, item.get("description", "")
-	]
+	var build_label := _ensure_build_label(slot)
+	build_label.visible = str(item.get("type", "")) == "weapon"
+	if build_label.visible:
+		var instance_id := str(item.get("weapon_instance_id", ""))
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		var capacity := int(item.get("fate_slot_capacity", 8))
+		build_label.text = "%d/%d · #%s" % [used, capacity, instance_id.right(6).to_upper()]
+		slot.tooltip_text = "%s #%s\n命运构筑 %d/%d（永久）\n%s\n左键装备完整实例 · 右键存保险" % [
+			item.get("name", item_id), instance_id.right(6).to_upper(), used, capacity,
+			item.get("description", ""),
+		]
+	else:
+		slot.tooltip_text = "%s x%d\n%s\n左键使用/装备 · 右键存保险" % [
+			item.get("name", item_id), count, item.get("description", "")
+		]
 
 ## 清空格子
 func _clear_slot(slot: Control) -> void:
@@ -364,6 +391,9 @@ func _clear_slot(slot: Control) -> void:
 	var equipped_label := slot.get_node_or_null("EquippedLabel") as Label
 	if equipped_label != null:
 		equipped_label.visible = false
+	var build_label := slot.get_node_or_null("WeaponBuildLabel") as Label
+	if build_label != null:
+		build_label.visible = false
 	slot.tooltip_text = ""
 	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
 
@@ -432,7 +462,34 @@ func _ensure_equipped_label(slot: Control) -> Label:
 	return label
 
 
+func _ensure_build_label(slot: Control) -> Label:
+	var existing := slot.get_node_or_null("WeaponBuildLabel") as Label
+	if existing != null:
+		return existing
+	var label := Label.new()
+	label.name = "WeaponBuildLabel"
+	label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
+	label.offset_top = -17.0
+	label.offset_bottom = -1.0
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", 9)
+	label.add_theme_color_override("font_color", Color(0.40, 0.92, 1.0))
+	label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.95))
+	label.add_theme_constant_override("shadow_offset_x", 1)
+	label.add_theme_constant_override("shadow_offset_y", 1)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	slot.add_child(label)
+	return label
+
+
 func _is_equipped_weapon(item: Dictionary) -> bool:
+	if _weapon_owner != null and is_instance_valid(_weapon_owner) and _weapon_owner.has_method(
+		"get_equipped_weapon_instance_id"
+	):
+		var equipped_id := str(_weapon_owner.call("get_equipped_weapon_instance_id"))
+		var item_instance_id := str(item.get("weapon_instance_id", ""))
+		if not equipped_id.is_empty() and not item_instance_id.is_empty():
+			return equipped_id == item_instance_id
 	if _weapon_tree == null or _weapon_tree.get_root() == null:
 		return false
 	if str(item.get("type", "")) != "weapon":
@@ -460,6 +517,10 @@ func _on_insurance_changed() -> void:
 
 
 func _on_weapon_tree_changed() -> void:
+	_refresh_inventory_ui()
+
+
+func _on_equipped_weapon_instance_changed(_snapshot: Dictionary) -> void:
 	_refresh_inventory_ui()
 
 ## 格子左键点击（显示物品操作菜单/存入保险）

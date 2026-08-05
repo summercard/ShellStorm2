@@ -17,7 +17,7 @@ func _ready() -> void:
 	_verify_module_swap_is_atomic(dungeon, inventory, tree, failures)
 	_verify_blueprint_and_consumable_routing(dungeon, inventory, tree, failures)
 	if failures.is_empty():
-		print("3D_INVENTORY_WEAPON_FLOW_OK: real slot-click equip, shared 3D item projections, weapon build transfer, atomic module swap and item routing pass")
+		print("3D_INVENTORY_WEAPON_FLOW_OK: real slot-click equip, shared 3D item projections, per-instance build ownership, atomic module swap and item routing pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -111,18 +111,34 @@ func _verify_weapon_swap_preserves_build(
 			expected_names[slot_type] = installed.node_name
 	var shotgun := ItemRegistry.get_instance().get_item("weapon_shotgun")
 	inventory.add_item(shotgun, 1)
+	var shotgun_slot_before := _find_slot(inventory, "weapon_shotgun")
+	var shotgun_item_before := (inventory.get_slot(shotgun_slot_before).get("item", {}) as Dictionary)
+	var shotgun_instance_id := str(shotgun_item_before.get("weapon_instance_id", ""))
 	var shotgun_slot := _find_slot(inventory, "weapon_shotgun")
 	dungeon.call("_on_inventory_item_clicked", shotgun_slot, {})
 	var new_root := tree.get_root()
 	if new_root == null or new_root.node_name != "GunBody_Shotgun":
 		failures.append("Inventory weapon click did not equip the selected gun body")
-	else:
-		for slot_type in expected_names.keys():
-			var transferred := new_root.slots.get(slot_type) as AssemblyNode
-			if transferred == null or transferred.node_name != expected_names[slot_type]:
-				failures.append("Switching gun body deleted installed module in slot %s" % slot_type)
+	elif dungeon.player.get_equipped_weapon_instance_id() != shotgun_instance_id:
+		failures.append("Inventory weapon click did not equip the selected unique instance")
 	if not inventory.has_item("weapon_pistol"):
 		failures.append("Switching gun body did not return the old weapon to inventory")
+	else:
+		var pistol_slot := _find_slot(inventory, "weapon_pistol")
+		var pistol_item := inventory.get_slot(pistol_slot).get("item", {}) as Dictionary
+		var pistol_instance := WeaponInstance.from_item(pistol_item)
+		var stored_tree := pistol_instance.build_runtime_tree() if pistol_instance != null else null
+		if stored_tree == null or stored_tree.get_root() == null:
+			failures.append("Old weapon instance lost its stored assembly snapshot")
+		else:
+			for slot_type in expected_names.keys():
+				var stored := stored_tree.get_root().slots.get(slot_type) as AssemblyNode
+				if stored == null or stored.node_name != expected_names[slot_type]:
+					failures.append("Old weapon instance lost installed module in slot %s" % slot_type)
+			stored_tree.free()
+	for slot_type in [AssemblyNode.SlotType.MUZZLE, AssemblyNode.SlotType.MAGAZINE, AssemblyNode.SlotType.MOUNT]:
+		if new_root.slots.get(slot_type) != null:
+			failures.append("New gun incorrectly inherited old gun module in slot %s" % slot_type)
 
 
 func _verify_module_swap_is_atomic(

@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.1"
+const SAVE_VERSION := "1.2"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
