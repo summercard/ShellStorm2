@@ -3,8 +3,8 @@ extends Control
 ## 实时战术小地图：真实房间矩形、玩家房内位置/朝向、存活敌人红点与楼层索引。
 
 const REDRAW_INTERVAL := 1.0 / 20.0
-const HEADER_HEIGHT := 28.0
-const MAP_PADDING := Vector2(18.0, 38.0)
+const HEADER_HEIGHT := 24.0
+const MAP_PADDING := Vector2(45.0, 45.0)
 const FLOOR_EPSILON_M := 0.45
 
 var _records: Array[Dictionary] = []
@@ -124,7 +124,10 @@ func get_snapshot() -> Dictionary:
 
 func _draw() -> void:
 	var full_rect := Rect2(Vector2.ZERO, size)
-	draw_style_box(_panel_style(), full_rect)
+	var center := full_rect.get_center()
+	var radius := maxf(4.0, minf(size.x, size.y) * 0.5 - 7.0)
+	draw_circle(center, radius + 4.0, Color(0.0, 0.02, 0.035, 0.42))
+	draw_circle(center, radius, Color(0.006, 0.020, 0.034, 0.86))
 	_draw_frame(full_rect)
 	_draw_header()
 	if _records.is_empty():
@@ -145,58 +148,36 @@ func _draw_header() -> void:
 	var font := ThemeDB.fallback_font
 	draw_string(
 		font,
-		Vector2(15.0, 20.0),
-		"战术地图 / %s" % _floor_label(),
-		HORIZONTAL_ALIGNMENT_LEFT,
-		-1.0,
-		13,
-		Color(0.42, 0.96, 1.0, 0.96)
-	)
-	draw_circle(
-		Vector2(size.x - 17.0, 15.0),
-		3.0,
-		Color(0.34, 1.0, 0.74, 0.92)
+		Vector2(0.0, 23.0),
+		"TACTICAL / %s" % _floor_label(),
+		HORIZONTAL_ALIGNMENT_CENTER,
+		size.x,
+		12,
+		Color(0.48, 0.94, 1.0, 0.84)
 	)
 
 
 func _draw_frame(rect: Rect2) -> void:
-	var cyan := Color(0.18, 0.88, 1.0, 0.76)
-	var corner := 13.0
-	for corner_data in [
-		[rect.position + Vector2(5.0, 5.0), Vector2.RIGHT, Vector2.DOWN],
-		[Vector2(rect.end.x - 5.0, rect.position.y + 5.0), Vector2.LEFT, Vector2.DOWN],
-		[Vector2(rect.position.x + 5.0, rect.end.y - 5.0), Vector2.RIGHT, Vector2.UP],
-		[rect.end - Vector2(5.0, 5.0), Vector2.LEFT, Vector2.UP],
-	]:
-		var origin := corner_data[0] as Vector2
-		draw_line(origin, origin + (corner_data[1] as Vector2) * corner, cyan, 2.0)
-		draw_line(origin, origin + (corner_data[2] as Vector2) * corner, cyan, 2.0)
+	var center := rect.get_center()
+	var radius := maxf(4.0, minf(rect.size.x, rect.size.y) * 0.5 - 7.0)
+	draw_arc(center, radius, 0.0, TAU, 96, Color(0.10, 0.72, 0.88, 0.12), 8.0, true)
+	draw_arc(center, radius, 0.0, TAU, 96, Color(0.62, 0.92, 1.0, 0.86), 1.4, true)
+	draw_arc(center, radius - 5.0, -0.72, 0.72, 22, Color(0.24, 0.92, 1.0, 0.72), 2.2, true)
+	draw_arc(center, radius - 5.0, PI - 0.72, PI + 0.72, 22, Color(0.24, 0.92, 1.0, 0.46), 1.6, true)
+	for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
+		var outer := center + Vector2.from_angle(angle) * (radius + 4.0)
+		var inner := center + Vector2.from_angle(angle) * (radius - 7.0)
+		draw_line(inner, outer, Color(0.55, 0.96, 1.0, 0.92), 2.0, true)
 
 
 func _draw_holographic_grid(map_rect: Rect2) -> void:
 	var grid_color := Color(0.10, 0.62, 0.72, 0.13)
-	for index in range(1, 8):
-		var ratio := float(index) / 8.0
-		var y := lerpf(map_rect.position.y, map_rect.end.y, ratio)
-		var inset := absf(ratio - 0.5) * 14.0
-		draw_line(
-			Vector2(map_rect.position.x + inset, y),
-			Vector2(map_rect.end.x - inset, y),
-			grid_color,
-			1.0
-		)
-	for index in range(1, 8):
-		var ratio := float(index) / 8.0
-		var x := lerpf(map_rect.position.x, map_rect.end.x, ratio)
-		draw_line(
-			Vector2(x, map_rect.position.y + 3.0),
-			Vector2(
-				lerpf(map_rect.get_center().x, x, 0.78),
-				map_rect.end.y
-			),
-			grid_color,
-			1.0
-		)
+	var center := map_rect.get_center()
+	var radius := minf(map_rect.size.x, map_rect.size.y) * 0.5
+	for index in range(1, 4):
+		draw_arc(center, radius * float(index) / 3.0, 0.0, TAU, 48, grid_color, 1.0, true)
+	draw_line(Vector2(center.x - radius, center.y), Vector2(center.x + radius, center.y), grid_color, 1.0)
+	draw_line(Vector2(center.x, center.y - radius), Vector2(center.x, center.y + radius), grid_color, 1.0)
 
 
 func _draw_scan_field(map_rect: Rect2, bounds: Rect2) -> void:
@@ -404,13 +385,12 @@ func get_player_screen_position() -> Vector2:
 
 
 func _content_map_rect() -> Rect2:
-	return Rect2(
-		MAP_PADDING,
-		Vector2(
-			maxf(1.0, size.x - MAP_PADDING.x - 30.0),
-			maxf(1.0, size.y - MAP_PADDING.y - 16.0)
-		)
-	)
+	var side := maxf(1.0, minf(size.x, size.y) - MAP_PADDING.x * 2.0)
+	return Rect2(size * 0.5 - Vector2.ONE * side * 0.5, Vector2.ONE * side)
+
+
+func get_floor_label() -> String:
+	return _floor_label()
 
 
 func _map_world_size(world_size: Vector2, bounds: Rect2, map_rect: Rect2) -> Vector2:

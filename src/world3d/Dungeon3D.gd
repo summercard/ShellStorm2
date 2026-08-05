@@ -20,6 +20,10 @@ const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dunge
 const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_wall_segment.tscn")
 const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment.tscn")
 const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
+const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
+const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
+const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const HUD_UI_SCALE := 0.80
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
@@ -94,6 +98,7 @@ var _door_prompt_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
 var _fate_overlay: Control
+var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
 var last_killed_enemy_data: Dictionary = {}
 var _resolved_event_rooms: Dictionary = {}
@@ -120,6 +125,14 @@ var _boss_panel: PanelContainer = null
 var _boss_label: Label = null
 var _boss_bar: ProgressBar = null
 var _active_boss: Enemy3D = null
+var _reference_hud_root: Control = null
+var _hud_weapon_meta_label: Label = null
+var _hud_weapon_fate_label: Label = null
+var _hud_weapon_model_icon: ItemModelIcon3D = null
+var _hud_weapon_model_instance_id := ""
+var _hud_floor_label: Label = null
+var _hud_timer_label: Label = null
+var _hud_run_elapsed := 0.0
 
 
 func _ready() -> void:
@@ -147,6 +160,8 @@ func _ready() -> void:
 	player.hp_changed.connect(_on_player_hp_changed)
 	player.ammo_changed.connect(_on_ammo_changed)
 	player.presentation_state_changed.connect(_on_player_state_changed)
+	if not player.weapon_instance_changed.is_connected(_on_hud_weapon_instance_changed):
+		player.weapon_instance_changed.connect(_on_hud_weapon_instance_changed)
 	player.global_position = Vector3(0, 0.05, 0)
 	_on_room_entered(_room_by_id.get("start") as DungeonRoom3D)
 	_on_player_hp_changed(player.current_hp, player.max_hp)
@@ -176,6 +191,12 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
+	_hud_run_elapsed += delta
+	if _hud_timer_label != null:
+		var elapsed_seconds := int(_hud_run_elapsed)
+		_hud_timer_label.text = "%02d:%02d" % [elapsed_seconds / 60, elapsed_seconds % 60]
+	if _hud_floor_label != null and minimap != null:
+		_hud_floor_label.text = "高塔外层 · %s" % minimap.get_floor_label()
 	if minimap != null and player != null:
 		minimap.set_player_state(
 			player.global_position,
@@ -243,47 +264,17 @@ func _setup_run_modules() -> void:
 
 
 func _install_holographic_hud_style() -> void:
-	var top_bar := $HUD/TopBar as PanelContainer
-	var top_style := StyleBoxFlat.new()
-	top_style.bg_color = Color(0.008, 0.025, 0.038, 0.92)
-	top_style.border_color = Color(0.14, 0.74, 0.86, 0.82)
-	top_style.border_width_left = 2
-	top_style.border_width_top = 1
-	top_style.border_width_right = 2
-	top_style.border_width_bottom = 3
-	top_style.corner_radius_top_left = 5
-	top_style.corner_radius_top_right = 5
-	top_style.corner_radius_bottom_left = 5
-	top_style.corner_radius_bottom_right = 5
-	top_style.shadow_color = Color(0.0, 0.28, 0.38, 0.38)
-	top_style.shadow_size = 8
-	top_bar.add_theme_stylebox_override("panel", top_style)
+	# 原节点路径仍由自动化读取；视觉层改由独立锚点控件承载。
+	($HUD/TopBar as Control).visible = false
+	($HUD/StatusPanel as Control).visible = false
+	($HUD/ControlHint as Control).visible = false
+	($HUD/VisionHint as Control).visible = false
+	_build_reference_main_hud()
 
-	var status_panel := $HUD/StatusPanel as PanelContainer
-	var status_style := top_style.duplicate() as StyleBoxFlat
-	status_style.bg_color = Color(0.018, 0.030, 0.038, 0.88)
-	status_style.border_color = Color(0.92, 0.55, 0.18, 0.72)
-	status_style.border_width_left = 4
-	status_style.border_width_bottom = 1
-	status_style.shadow_color = Color(0.40, 0.16, 0.02, 0.24)
-	status_panel.add_theme_stylebox_override("panel", status_style)
-
-	var extraction_style := top_style.duplicate() as StyleBoxFlat
-	extraction_style.bg_color = Color(0.008, 0.044, 0.046, 0.94)
-	extraction_style.border_color = Color(0.22, 1.0, 0.66, 0.88)
+	var extraction_style := _make_hud_style(Color(0.22, 1.0, 0.66), Color(0.008, 0.044, 0.046, 0.94), 2)
 	extraction_panel.add_theme_stylebox_override("panel", extraction_style)
-
-	title_label.add_theme_font_size_override("font_size", 18)
-	title_label.add_theme_color_override("font_color", Color(0.46, 0.96, 1.0))
-	seed_label.add_theme_color_override("font_color", Color(0.46, 0.62, 0.70))
-	hp_label.add_theme_color_override("font_color", Color(0.36, 1.0, 0.62))
-	ammo_label.add_theme_color_override("font_color", Color(0.40, 0.84, 1.0))
-	room_label.add_theme_color_override("font_color", Color(0.72, 0.88, 0.94))
-	loot_label.add_theme_color_override("font_color", Color(1.0, 0.76, 0.28))
-	status_label.add_theme_color_override("font_color", Color(0.92, 0.92, 0.84))
-	for label in [seed_label, hp_label, ammo_label, room_label, loot_label]:
-		(label as Label).add_theme_font_size_override("font_size", 14)
-
+	_anchor_control(extraction_panel, 0.5, 1.0, 0.5, 1.0, -250, -252, 250, -184)
+	extraction_bar.custom_minimum_size = _hud_size(Vector2(460, 22))
 	var progress_background := StyleBoxFlat.new()
 	progress_background.bg_color = Color(0.012, 0.08, 0.075, 0.92)
 	progress_background.set_corner_radius_all(3)
@@ -295,12 +286,244 @@ func _install_holographic_hud_style() -> void:
 	progress_fill.shadow_size = 5
 	extraction_bar.add_theme_stylebox_override("fill", progress_fill)
 
-	var control_hint := $HUD/ControlHint as Label
-	var vision_hint := $HUD/VisionHint as Label
-	control_hint.add_theme_color_override("font_outline_color", Color(0.0, 0.05, 0.08, 0.92))
-	control_hint.add_theme_constant_override("outline_size", 4)
-	vision_hint.add_theme_color_override("font_outline_color", Color(0.0, 0.05, 0.08, 0.92))
-	vision_hint.add_theme_constant_override("outline_size", 4)
+
+func _build_reference_main_hud() -> void:
+	_reference_hud_root = Control.new()
+	_reference_hud_root.name = "ReferenceCombatHUD"
+	_reference_hud_root.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_reference_hud_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reference_hud_root.z_index = 100
+	$HUD.add_child(_reference_hud_root)
+
+	var cyan := Color(0.23, 0.88, 1.0)
+	var subdued := Color(0.62, 0.74, 0.82)
+	var identity := _make_hud_label("弹壳风暴 2  |  COMBAT / WEAPON / FATE-CARD", 15, Color(0.86, 0.92, 0.96))
+	_anchor_control(identity, 0.0, 0.0, 0.0, 0.0, 18, 10, 520, 36)
+	_reference_hud_root.add_child(identity)
+
+	room_label = _make_hud_label("ROOM", 14, Color(0.60, 0.90, 1.0))
+	room_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(room_label, 0.5, 0.0, 0.5, 0.0, -220, 14, 220, 38)
+	_reference_hud_root.add_child(room_label)
+
+	var player_panel := _make_hud_panel(cyan, Color(0.006, 0.018, 0.030, 0.88))
+	player_panel.name = "PlayerStatusBlock"
+	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 46, 360, 178)
+	_reference_hud_root.add_child(player_panel)
+	_add_neon_frame(player_panel, cyan, 0.72, true)
+	var player_margin := _make_margin(12, 10, 12, 10)
+	player_panel.add_child(player_margin)
+	var player_row := HBoxContainer.new()
+	player_row.add_theme_constant_override("separation", _hud_int(12))
+	player_margin.add_child(player_row)
+	var portrait := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
+	portrait.custom_minimum_size = _hud_size(Vector2(82, 82))
+	portrait.configure("robot", Color(1.0, 0.25, 0.84))
+	player_row.add_child(portrait)
+	var stat_vbox := VBoxContainer.new()
+	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	stat_vbox.add_theme_constant_override("separation", _hud_int(5))
+	player_row.add_child(stat_vbox)
+	hp_label = _make_hud_label("230 / 230", 17, Color.WHITE)
+	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	stat_vbox.add_child(hp_label)
+	hp_bar = ProgressBar.new()
+	hp_bar.custom_minimum_size = _hud_size(Vector2(220, 22))
+	hp_bar.show_percentage = false
+	hp_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.12, 0.02, 0.04), 4))
+	var hp_fill := _make_bar_style(Color(0.93, 0.055, 0.12), 4)
+	hp_fill.shadow_color = Color(0.95, 0.02, 0.12, 0.42)
+	hp_fill.shadow_size = 5
+	hp_bar.add_theme_stylebox_override("fill", hp_fill)
+	stat_vbox.add_child(hp_bar)
+	var energy := HBoxContainer.new()
+	energy.add_theme_constant_override("separation", _hud_int(6))
+	stat_vbox.add_child(energy)
+	for index in range(3):
+		var pip := Panel.new()
+		pip.custom_minimum_size = _hud_size(Vector2(34, 9))
+		pip.add_theme_stylebox_override("panel", _make_hud_style(cyan, Color(cyan, 0.72), 1))
+		energy.add_child(pip)
+	loot_label = _make_hud_label("背包 0/12 · 钥匙 1 · 魂 0", 13, Color(1.0, 0.76, 0.26))
+	stat_vbox.add_child(loot_label)
+
+	seed_label = _make_hud_label("SEED", 12, subdued)
+	_anchor_control(seed_label, 0.0, 0.0, 0.0, 0.0, 22, 180, 360, 202)
+	_reference_hud_root.add_child(seed_label)
+
+	# 圆形小地图沿用真实房间/玩家/敌人数据，只替换视觉外壳。
+	minimap.z_index = 105
+	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -292, 44, -18, 318)
+	_hud_floor_label = _make_hud_label("高塔外层", 15, Color(0.90, 0.94, 0.96))
+	_hud_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(_hud_floor_label, 1.0, 0.0, 1.0, 0.0, -300, 12, -12, 38)
+	_reference_hud_root.add_child(_hud_floor_label)
+	var timer_panel := _make_hud_panel(cyan, Color(0.006, 0.016, 0.026, 0.88))
+	_anchor_control(timer_panel, 1.0, 0.0, 1.0, 0.0, -214, 318, -18, 358)
+	_reference_hud_root.add_child(timer_panel)
+	var timer_row := HBoxContainer.new()
+	timer_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	timer_row.add_theme_constant_override("separation", _hud_int(16))
+	timer_panel.add_child(timer_row)
+	var timer_caption := _make_hud_label("◷", 18, Color.WHITE)
+	timer_row.add_child(timer_caption)
+	_hud_timer_label = _make_hud_label("00:00", 17, Color.WHITE)
+	timer_row.add_child(_hud_timer_label)
+	var pause_icon := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
+	pause_icon.custom_minimum_size = _hud_size(Vector2(30, 30))
+	pause_icon.configure("pause", Color(0.84, 0.90, 0.96))
+	timer_row.add_child(pause_icon)
+
+	var info_panel := _make_hud_panel(cyan, Color(0.008, 0.035, 0.052, 0.90))
+	info_panel.name = "CurrentInfoPanel"
+	_anchor_control(info_panel, 0.5, 1.0, 0.5, 1.0, -290, -184, 290, -126)
+	_reference_hud_root.add_child(info_panel)
+	_add_neon_frame(info_panel, cyan, 0.58, false)
+	var info_margin := _make_margin(18, 8, 18, 8)
+	info_panel.add_child(info_margin)
+	status_label = _make_hud_label("正在建立行动区……", 14, Color(0.76, 0.91, 0.98))
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_margin.add_child(status_label)
+
+	var weapon_panel := _make_hud_panel(Color(0.56, 0.78, 0.88), Color(0.006, 0.012, 0.020, 0.94))
+	weapon_panel.name = "CurrentWeaponPanel"
+	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -260, -118, 260, -20)
+	_reference_hud_root.add_child(weapon_panel)
+	_add_neon_frame(weapon_panel, cyan, 0.36, false)
+	var weapon_margin := _make_margin(14, 10, 14, 8)
+	weapon_panel.add_child(weapon_margin)
+	var weapon_row := HBoxContainer.new()
+	weapon_row.add_theme_constant_override("separation", _hud_int(12))
+	weapon_margin.add_child(weapon_row)
+	_hud_weapon_model_icon = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
+	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
+	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(96, 68))
+	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	_hud_weapon_model_icon.set_camera_size_multiplier(0.52)
+	weapon_row.add_child(_hud_weapon_model_icon)
+	_refresh_hud_weapon_model(true)
+	var weapon_text := VBoxContainer.new()
+	weapon_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	weapon_text.add_theme_constant_override("separation", _hud_int(2))
+	weapon_row.add_child(weapon_text)
+	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 15, Color(0.92, 0.95, 0.98))
+	weapon_text.add_child(_hud_weapon_meta_label)
+	_hud_weapon_fate_label = _make_hud_label("实例 ------ · 命运 0/0 · K 详情", 12, Color(0.48, 0.84, 0.94))
+	weapon_text.add_child(_hud_weapon_fate_label)
+	ammo_label = _make_hud_label("0 / 0", 29, Color.WHITE)
+	ammo_label.custom_minimum_size = _hud_size(Vector2(112, 62))
+	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	weapon_row.add_child(ammo_label)
+
+	var actions := HBoxContainer.new()
+	actions.name = "ActionKeyStrip"
+	actions.alignment = BoxContainer.ALIGNMENT_END
+	actions.add_theme_constant_override("separation", _hud_int(8))
+	_anchor_control(actions, 1.0, 1.0, 1.0, 1.0, -374, -108, -18, -18)
+	_reference_hud_root.add_child(actions)
+	for data in [
+		["reload", "R", "换弹"], ["dash", "SHIFT", "冲刺"],
+		["shield", "F", "探照"], ["interact", "E", "交互"],
+	]:
+		actions.add_child(_make_action_key(str(data[0]), str(data[1]), str(data[2]), cyan))
+
+
+func _make_action_key(kind: String, key_text: String, caption: String, accent: Color) -> PanelContainer:
+	var panel := _make_hud_panel(Color(accent, 0.72), Color(0.006, 0.014, 0.024, 0.88))
+	panel.custom_minimum_size = _hud_size(Vector2(78, 82))
+	var margin := _make_margin(6, 4, 6, 3)
+	panel.add_child(margin)
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 0)
+	margin.add_child(vbox)
+	var icon := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
+	icon.custom_minimum_size = _hud_size(Vector2(52, 46))
+	icon.configure(kind, Color(0.90, 0.96, 1.0))
+	vbox.add_child(icon)
+	var key_label := _make_hud_label("%s · %s" % [key_text, caption], 10, Color(0.86, 0.90, 0.94))
+	key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(key_label)
+	return panel
+
+
+func _make_hud_panel(accent: Color, background: Color) -> PanelContainer:
+	var panel := PanelContainer.new()
+	panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	panel.add_theme_stylebox_override("panel", _make_hud_style(accent, background, 1))
+	return panel
+
+
+func _make_hud_style(accent: Color, background: Color, border_width: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = accent
+	style.set_border_width_all(border_width)
+	style.set_corner_radius_all(5)
+	style.shadow_color = Color(accent, 0.22)
+	style.shadow_size = 7
+	return style
+
+
+func _make_bar_style(color: Color, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = color
+	style.set_corner_radius_all(radius)
+	return style
+
+
+func _make_hud_label(text_value: String, font_size: int, color: Color) -> Label:
+	var label := Label.new()
+	label.text = text_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_size_override("font_size", _hud_int(font_size))
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color(0.0, 0.025, 0.045, 0.94))
+	label.add_theme_constant_override("outline_size", 3)
+	return label
+
+
+func _make_margin(left: int, top: int, right: int, bottom: int) -> MarginContainer:
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", _hud_int(left))
+	margin.add_theme_constant_override("margin_top", _hud_int(top))
+	margin.add_theme_constant_override("margin_right", _hud_int(right))
+	margin.add_theme_constant_override("margin_bottom", _hud_int(bottom))
+	return margin
+
+
+func _add_neon_frame(parent: Control, accent: Color, glow: float, scan_lines: bool) -> void:
+	var frame := NEON_FRAME_SCRIPT.new() as NeonFrameControl
+	frame.set_anchors_preset(Control.PRESET_FULL_RECT)
+	frame.configure(accent, glow, scan_lines)
+	parent.add_child(frame)
+	parent.move_child(frame, parent.get_child_count() - 1)
+
+
+func _anchor_control(
+	control: Control,
+	anchor_left: float, anchor_top: float, anchor_right: float, anchor_bottom: float,
+	offset_left: float, offset_top: float, offset_right: float, offset_bottom: float
+) -> void:
+	control.anchor_left = anchor_left
+	control.anchor_top = anchor_top
+	control.anchor_right = anchor_right
+	control.anchor_bottom = anchor_bottom
+	control.offset_left = offset_left * HUD_UI_SCALE
+	control.offset_top = offset_top * HUD_UI_SCALE
+	control.offset_right = offset_right * HUD_UI_SCALE
+	control.offset_bottom = offset_bottom * HUD_UI_SCALE
+
+
+func _hud_size(value: Vector2) -> Vector2:
+	return value * HUD_UI_SCALE
+
+
+func _hud_int(value: int) -> int:
+	return maxi(1, int(round(float(value) * HUD_UI_SCALE)))
 
 
 func _on_inventory_open_changed(opened: bool) -> void:
@@ -1718,6 +1941,11 @@ func _show_door_fate_choices() -> void:
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
+	_build_door_fate_overlay()
+	status_label.text = "门已开启 · 选择命运卡片后继续行动"
+
+
+func _build_door_fate_overlay() -> void:
 	_fate_overlay = Control.new()
 	_fate_overlay.name = "DoorFateOverlay3D"
 	_fate_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -1726,49 +1954,165 @@ func _show_door_fate_choices() -> void:
 	_fate_overlay.z_index = 900
 	$HUD.add_child(_fate_overlay)
 	var dim := ColorRect.new()
-	dim.color = Color(0.015, 0.02, 0.03, 0.82)
+	dim.color = Color(0.002, 0.008, 0.016, 0.62)
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_fate_overlay.add_child(center)
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(820, 360)
-	center.add_child(panel)
-	var margin := MarginContainer.new()
-	for side in ["margin_left", "margin_top", "margin_right", "margin_bottom"]:
-		margin.add_theme_constant_override(side, 22)
-	panel.add_child(margin)
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 14)
-	margin.add_child(vbox)
+
+	var protocol := _make_hud_label("FATE PROTOCOL / SELECT ONE", 12, Color(0.38, 0.74, 0.86))
+	protocol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(protocol, 0.5, 0.0, 0.5, 0.0, -280, 44, 280, 66)
+	_fate_overlay.add_child(protocol)
 	var title := Label.new()
-	title.text = "门后命运 · 选择一项命运"
+	title.text = "《  命 运 卡 三 选 一  》"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 24)
-	title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
-	vbox.add_child(title)
+	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", _hud_int(36))
+	title.add_theme_color_override("font_color", Color(0.46, 0.94, 1.0))
+	title.add_theme_color_override("font_outline_color", Color(0.0, 0.48, 0.70, 0.70))
+	title.add_theme_constant_override("outline_size", _hud_int(7))
+	_anchor_control(title, 0.5, 0.0, 0.5, 0.0, -430, 64, 430, 124)
+	_fate_overlay.add_child(title)
+
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", 12)
-	vbox.add_child(row)
+	row.add_theme_constant_override("separation", _hud_int(24))
+	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -420, 128, 420, 508)
+	_fate_overlay.add_child(row)
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
-		var button := Button.new()
-		button.custom_minimum_size = Vector2(240, 220)
-		button.text = _get_fate_choice_text(card)
-		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		button.add_theme_color_override("font_color", FateCard.scope_color(card.scope))
-		button.add_theme_color_override("font_hover_color", FateCard.scope_color(card.scope).lightened(0.18))
-		var card_style := StyleBoxFlat.new()
-		card_style.bg_color = Color(0.025, 0.035, 0.055, 0.98)
-		card_style.border_color = FateCard.scope_color(card.scope)
-		card_style.set_border_width_all(2)
-		card_style.set_corner_radius_all(8)
-		button.add_theme_stylebox_override("normal", card_style)
-		button.pressed.connect(_on_door_fate_selected.bind(choice_index))
-		row.add_child(button)
-	status_label.text = "门已开启 · 选择命运卡片后继续行动"
+		row.add_child(_create_reference_fate_card(card, choice_index))
+
+	var info_panel := _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.006, 0.036, 0.055, 0.94))
+	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -310, 520, 310, 594)
+	_fate_overlay.add_child(info_panel)
+	_add_neon_frame(info_panel, Color(0.23, 0.88, 1.0), 0.52, false)
+	var info_margin := _make_margin(18, 8, 18, 8)
+	info_panel.add_child(info_margin)
+	_fate_feedback_label = _make_hud_label(
+		"当前信息\n请选择一张命运卡强化本次行动 · 选择后立即生效",
+		13,
+		Color(0.72, 0.91, 0.98),
+	)
+	_fate_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_fate_feedback_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	info_margin.add_child(_fate_feedback_label)
+
+
+func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
+	var accent := FateCard.scope_color(card.scope)
+	var button := Button.new()
+	button.name = "FateChoiceCard_%d" % choice_index
+	button.custom_minimum_size = _hud_size(Vector2(248, 378))
+	button.text = ""
+	button.clip_contents = false
+	button.focus_mode = Control.FOCUS_ALL
+	button.tooltip_text = card.description
+	var normal := _make_hud_style(Color(accent, 0.82), Color(0.008, 0.014, 0.034, 0.97), 2)
+	normal.set_corner_radius_all(8)
+	normal.shadow_color = Color(accent, 0.36)
+	normal.shadow_size = 10
+	var hover := normal.duplicate() as StyleBoxFlat
+	hover.bg_color = Color(0.018, 0.028, 0.060, 0.99)
+	hover.border_color = accent.lightened(0.20)
+	hover.set_border_width_all(3)
+	hover.shadow_color = Color(accent, 0.66)
+	hover.shadow_size = 16
+	var pressed := hover.duplicate() as StyleBoxFlat
+	pressed.bg_color = Color(accent, 0.18)
+	button.add_theme_stylebox_override("normal", normal)
+	button.add_theme_stylebox_override("hover", hover)
+	button.add_theme_stylebox_override("focus", hover)
+	button.add_theme_stylebox_override("pressed", pressed)
+
+	var margin := _make_margin(18, 16, 18, 16)
+	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	button.add_child(margin)
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", _hud_int(5))
+	margin.add_child(vbox)
+	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 15, accent)
+	scope_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(scope_label)
+	var symbol := _make_hud_label(FateCard.scope_symbol(card.scope), 66, accent.lightened(0.10))
+	symbol.custom_minimum_size = _hud_size(Vector2(0, 70))
+	symbol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	vbox.add_child(symbol)
+	var card_name := _make_hud_label(card.card_name, 21, Color(0.94, 0.96, 1.0))
+	card_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(card_name)
+	var rarity := _make_hud_label(
+		"%s · %s" % [FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type)],
+		13,
+		_rarity_color(card.card_rarity),
+	)
+	rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(rarity)
+	var rule := HSeparator.new()
+	rule.add_theme_constant_override("separation", _hud_int(2))
+	vbox.add_child(rule)
+	var target := _make_hud_label(_get_fate_target_preview(card), 12, Color(0.62, 0.84, 0.92))
+	target.custom_minimum_size = _hud_size(Vector2(206, 40))
+	target.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	target.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	target.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(target)
+	var effect_text := card.short_description if not card.short_description.is_empty() else card.description
+	var effect := _make_hud_label(effect_text, 14, Color(0.91, 0.93, 0.96))
+	effect.custom_minimum_size = _hud_size(Vector2(206, 55))
+	effect.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	vbox.add_child(effect)
+	var footer := _make_hud_label(
+		"永久刻印 · 不可逆" if card.scope == FateCard.Scope.WEAPON else "本局生效 · 不占枪槽",
+		11,
+		Color(accent, 0.86),
+	)
+	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(footer)
+	_add_neon_frame(button, accent, 1.0, true)
+	button.resized.connect(_center_control_pivot.bind(button))
+	button.mouse_entered.connect(_on_reference_fate_card_hover.bind(button, true))
+	button.mouse_exited.connect(_on_reference_fate_card_hover.bind(button, false))
+	button.pressed.connect(_on_door_fate_selected.bind(choice_index))
+	return button
+
+
+func _get_fate_target_preview(card: FateCard) -> String:
+	if card.scope != FateCard.Scope.WEAPON:
+		return FateCard.scope_target_text(card.scope)
+	var target := FateCardGameBridge.get_target_summary(card)
+	var used := int(target.get("fate_slot_used", 0))
+	var capacity := int(target.get("fate_slot_capacity", 0))
+	return "当前枪 #%s\n下一槽 %d / %d" % [
+		target.get("instance_suffix", str(target.get("weapon_instance_id", "")).right(6).to_upper()),
+		mini(used + 1, capacity),
+		capacity,
+	]
+
+
+func _center_control_pivot(control: Control) -> void:
+	control.pivot_offset = control.size * 0.5
+
+
+func _on_reference_fate_card_hover(control: Control, hovered: bool) -> void:
+	if control == null or not is_instance_valid(control):
+		return
+	var tween := control.create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(control, "scale", Vector2.ONE * (1.025 if hovered else 1.0), 0.12)
+
+
+func _rarity_color(rarity: FateCard.CardRarity) -> Color:
+	match rarity:
+		FateCard.CardRarity.COMMON: return Color(0.76, 0.82, 0.88)
+		FateCard.CardRarity.RARE: return Color(0.24, 0.72, 1.0)
+		FateCard.CardRarity.EPIC: return Color(0.78, 0.36, 1.0)
+		FateCard.CardRarity.LEGENDARY: return Color(1.0, 0.70, 0.22)
+		FateCard.CardRarity.MYSTIC: return Color(1.0, 0.22, 0.28)
+	return Color.WHITE
 
 
 func _get_fate_choice_text(card: FateCard) -> String:
@@ -1794,17 +2138,42 @@ func _on_door_fate_selected(choice_index: int) -> void:
 	var card := _door_fate_choices[choice_index]
 	var result := FateCardGameBridge.apply_card(card)
 	if not bool(result.get("success", false)):
-		status_label.text = "当前装配无法承载 %s，请选择其他卡片" % card.card_name
+		var failure := str(result.get("reason", result.get("message", "当前目标无法承载该命运")))
+		status_label.text = "%s：%s" % [card.card_name, failure]
+		if _fate_feedback_label != null:
+			_fate_feedback_label.text = "应用失败 · %s\n%s · 请改选其他命运" % [card.card_name, failure]
+			_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.40, 0.30))
 		return
 	_door_fate_active = false
 	_door_fate_choices.clear()
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		_fate_overlay.queue_free()
 	_fate_overlay = null
+	_fate_feedback_label = null
 	_sync_player_input_lock()
 	if AudioManager != null:
 		AudioManager.play_fate_card_sfx()
 	status_label.text = "命运生效：%s · %s" % [card.card_name, result.get("message", "")]
+
+
+func show_reference_fate_overlay_for_test() -> bool:
+	if _door_fate_active:
+		return false
+	var pool := FateCardPresets.door_reward_presets()
+	_door_fate_choices.clear()
+	for wanted_scope in [FateCard.Scope.WEAPON, FateCard.Scope.WORLD, FateCard.Scope.CHARACTER]:
+		for card in pool:
+			if card.scope == wanted_scope:
+				_door_fate_choices.append(card)
+				break
+	if _door_fate_choices.size() != 3:
+		return false
+	_door_fate_active = true
+	_close_inventory_for_modal()
+	_sync_player_input_lock()
+	_build_door_fate_overlay()
+	status_label.text = "视觉验收 · 命运卡三选一"
+	return true
 
 
 func resolve_fate_choice_for_test(choice_index := 0) -> void:
@@ -2256,7 +2625,7 @@ func _spawn_extraction_attackers(stage: int) -> void:
 
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
-	hp_label.text = "HP %d/%d" % [current, maximum]
+	hp_label.text = "%d / %d" % [current, maximum]
 	hp_bar.max_value = maxi(1, maximum)
 	hp_bar.value = clampi(current, 0, maximum)
 	var hp_ratio := float(current) / float(maxi(1, maximum))
@@ -2278,14 +2647,43 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
 	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
-	ammo_label.text = "AMMO %d/%d · %s #%s · 命运 %d/%d · [K]详情" % [
-		current,
-		maximum,
-		snapshot.get("display_name", "武器"),
-		snapshot.get("instance_suffix", "------"),
-		snapshot.get("fate_slot_used", 0),
-		snapshot.get("fate_slot_capacity", 0),
-	]
+	ammo_label.text = "%d / %d" % [current, maximum]
+	if _hud_weapon_meta_label != null:
+		_hud_weapon_meta_label.text = "%s · 当前枪械" % snapshot.get("display_name", "未装备武器")
+	if _hud_weapon_fate_label != null:
+		_hud_weapon_fate_label.text = "实例 #%s · 命运 %d/%d · K 详情" % [
+			snapshot.get("instance_suffix", "------"),
+			snapshot.get("fate_slot_used", 0),
+			snapshot.get("fate_slot_capacity", 0),
+		]
+
+
+func _on_hud_weapon_instance_changed(_snapshot: Dictionary) -> void:
+	_refresh_hud_weapon_model(true)
+	var weapon_snapshot := player.get_weapon_snapshot() if player != null else {}
+	_on_ammo_changed(
+		int(weapon_snapshot.get("current_ammo", 0)),
+		int(weapon_snapshot.get("magazine_size", 0)),
+	)
+
+
+func _refresh_hud_weapon_model(force := false) -> void:
+	if _hud_weapon_model_icon == null or player == null:
+		return
+	var item := player.get_equipped_weapon_item()
+	var instance_id := str(item.get("weapon_instance_id", ""))
+	if item.is_empty():
+		_hud_weapon_model_instance_id = ""
+		_hud_weapon_model_icon.clear_model()
+		return
+	if not force and instance_id == _hud_weapon_model_instance_id:
+		return
+	_hud_weapon_model_instance_id = instance_id
+	_hud_weapon_model_icon.configure(item)
+
+
+func get_hud_weapon_model_snapshot() -> Dictionary:
+	return _hud_weapon_model_icon.get_snapshot() if _hud_weapon_model_icon != null else {}
 
 
 func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
@@ -2350,8 +2748,8 @@ func _collect_extracted_items(include_equipped_weapon := false) -> Array[Diction
 func _refresh_loot_label() -> void:
 	if loot_label == null or _inventory == null:
 		return
-	loot_label.text = "背包 %d/12 · 保险 %d/2 · 钥匙 %d · 魂 %d" % [
-		_inventory.get_used_slots(), _insurance.get_used_slots(), _get_total_room_keys(), _run_value
+	loot_label.text = "背包 %d/12 · 钥匙 %d · 魂 %d" % [
+		_inventory.get_used_slots(), _get_total_room_keys(), _run_value
 	]
 
 

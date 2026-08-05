@@ -89,7 +89,6 @@ var _elevator_access_room_by_floor: Dictionary = {}
 var _tower_floor_label: Label
 var _tower_target_label: Label
 var _tower_elevator_label: Label
-var _tower_hp_bar: ProgressBar
 var _loaded_floor_indices: Array[int] = []
 var _generated_floor_indices: Array[int] = []
 var _floor_layout_plan_conflicts: Array[String] = []
@@ -2053,12 +2052,12 @@ func _install_tower_hud() -> void:
 	if _tower_floor_label != null:
 		return
 	var margin := MarginContainer.new()
-	margin.name = "TowerStatusHUD"
+	margin.name = "TowerCurrentInfoHUD"
 	margin.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	margin.offset_left = 18.0
-	margin.offset_top = 134.0
-	margin.offset_right = 338.0
-	margin.offset_bottom = 274.0
+	margin.offset_left = 14.0
+	margin.offset_top = 176.0
+	margin.offset_right = 270.0
+	margin.offset_bottom = 270.0
 	$HUD.add_child(margin)
 	var panel := PanelContainer.new()
 	margin.add_child(panel)
@@ -2070,29 +2069,26 @@ func _install_tower_hud() -> void:
 	style.corner_radius_top_right = 8
 	style.corner_radius_bottom_left = 8
 	style.corner_radius_bottom_right = 8
-	style.content_margin_left = 14.0
-	style.content_margin_right = 14.0
-	style.content_margin_top = 10.0
-	style.content_margin_bottom = 10.0
+	style.content_margin_left = 11.0
+	style.content_margin_right = 11.0
+	style.content_margin_top = 8.0
+	style.content_margin_bottom = 8.0
 	panel.add_theme_stylebox_override("panel", style)
 	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override("separation", 3)
+	vbox.add_theme_constant_override("separation", 2)
 	panel.add_child(vbox)
 	_tower_floor_label = Label.new()
-	_tower_floor_label.add_theme_font_size_override("font_size", 24)
+	_tower_floor_label.add_theme_font_size_override("font_size", 19)
 	_tower_floor_label.add_theme_color_override("font_color", Color(0.56, 0.93, 1.0))
 	vbox.add_child(_tower_floor_label)
 	_tower_target_label = Label.new()
-	_tower_target_label.add_theme_font_size_override("font_size", 15)
+	_tower_target_label.add_theme_font_size_override("font_size", 12)
+	_tower_target_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(_tower_target_label)
 	_tower_elevator_label = Label.new()
-	_tower_elevator_label.add_theme_font_size_override("font_size", 14)
+	_tower_elevator_label.add_theme_font_size_override("font_size", 11)
 	_tower_elevator_label.add_theme_color_override("font_color", Color(0.72, 0.82, 0.88))
 	vbox.add_child(_tower_elevator_label)
-	_tower_hp_bar = ProgressBar.new()
-	_tower_hp_bar.custom_minimum_size = Vector2(280.0, 13.0)
-	_tower_hp_bar.show_percentage = false
-	vbox.add_child(_tower_hp_bar)
 
 
 func _refresh_tower_hud() -> void:
@@ -2117,15 +2113,6 @@ func _refresh_tower_hud() -> void:
 			func(value): return "%dF" % int(value)
 		))
 	)
-	_tower_hp_bar.max_value = player.max_hp
-	_tower_hp_bar.value = player.current_hp
-
-
-func _on_player_hp_changed(current: int, maximum: int) -> void:
-	super(current, maximum)
-	if _tower_hp_bar != null:
-		_tower_hp_bar.max_value = maximum
-		_tower_hp_bar.value = current
 
 
 func _on_service_activated(room: DungeonRoom3D, station: ServiceStation3D) -> void:

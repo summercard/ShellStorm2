@@ -43,6 +43,7 @@ visual_scenes=(
   verify_tower_stair_fall_visual
   verify_training_range_3d_visual
   verify_tactical_inventory_minimap_visual
+  verify_reference_hud_fate_visual
   verify_wall_alignment_overlay
   verify_wall_alignment_pure
   verify_wall_alignment_visual

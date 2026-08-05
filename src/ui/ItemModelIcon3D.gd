@@ -11,6 +11,8 @@ var _camera: Camera3D
 var _model_anchor: Node3D
 var _model: Node3D
 var _configured := false
+var _camera_size_multiplier := 1.0
+var _rebuild_count := 0
 
 
 func _ready() -> void:
@@ -25,6 +27,13 @@ func configure(item: Dictionary) -> void:
 	_configured = true
 	if is_node_ready():
 		_rebuild_model()
+
+
+func set_camera_size_multiplier(multiplier: float) -> void:
+	_camera_size_multiplier = clampf(multiplier, 0.45, 1.5)
+	if _camera != null and not _item_data.is_empty():
+		_apply_camera_size(ItemModelFactory3D.get_model_kind(_item_data))
+		_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func clear_model() -> void:
@@ -43,6 +52,8 @@ func get_snapshot() -> Dictionary:
 		"mesh_count": ItemModelFactory3D.count_mesh_instances(_model) if _model != null else 0,
 		"viewport_size": _viewport.size if _viewport != null else Vector2i.ZERO,
 		"camera_size": _camera.size if _camera != null else 0.0,
+		"camera_size_multiplier": _camera_size_multiplier,
+		"rebuild_count": _rebuild_count,
 		"update_once": _viewport != null and _viewport.render_target_update_mode == SubViewport.UPDATE_ONCE,
 		"uses_world_model_factory": true,
 	}
@@ -117,15 +128,22 @@ func _rebuild_model() -> void:
 	if _item_data.is_empty():
 		visible = false
 		return
+	_rebuild_count += 1
 	_model = ItemModelFactory3D.create_model(_item_data, _item_tint(_item_data))
 	_model.name = "ProjectedItemModel"
 	_model_anchor.add_child(_model)
 	var kind := ItemModelFactory3D.get_model_kind(_item_data)
 	# 图标槽只有 56px，模型应占据大部分轮廓，避免“有3D模型但看不清”。
-	_camera.size = 1.82 if kind == "weapon" else 1.62
+	_apply_camera_size(kind)
 	_model.position = Vector3(0, 0.05 if kind == "weapon" else 0.0, 0)
 	visible = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+
+
+func _apply_camera_size(kind: String) -> void:
+	if _camera == null:
+		return
+	_camera.size = (1.82 if kind == "weapon" else 1.62) * _camera_size_multiplier
 
 
 func _item_tint(item: Dictionary) -> Color:
