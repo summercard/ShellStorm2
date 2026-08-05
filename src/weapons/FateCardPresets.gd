@@ -507,6 +507,113 @@ static func fate_bless_dead() -> FateCard:
 	return card
 
 
+## ========== 月亮命运：角色本局规则（不占武器槽）==========
+
+static func _scoped_modifier_card(
+	card_name: String,
+	card_type: FateCard.CardType,
+	rarity: FateCard.CardRarity,
+	icon: String,
+	short_text: String,
+	full_text: String,
+	modifier: String,
+	params: Dictionary
+) -> FateCard:
+	var card := FateCard.new(card_name, card_type, rarity)
+	card.icon_emoji = icon
+	card.short_description = short_text
+	card.description = full_text
+	card.tags = ["Fate.ScopedModifier", "Fate.%s" % FateCard.scope_name(card.scope)]
+	card.effect = {
+		"action": FateCard.EffectAction.APPLY_SCOPED_MODIFIER,
+		"modifier": modifier,
+	}
+	card.effect.merge(params, true)
+	return card
+
+
+static func moon_vitality() -> FateCard:
+	return _scoped_modifier_card("月相增生", FateCard.CardType.ENHANCE, RARITY_RARE, "🌕", "生命上限+20", "最大生命提升 20，并立即恢复 20 生命", "max_hp", {"amount": 20})
+
+
+static func moon_stride() -> FateCard:
+	return _scoped_modifier_card("月影疾行", FateCard.CardType.ENHANCE, RARITY_RARE, "🌙", "移速+12%", "本局角色移动速度提升 12%", "move_speed", {"multiplier": 1.12})
+
+
+static func moon_dash() -> FateCard:
+	return _scoped_modifier_card("新月回转", FateCard.CardType.RULE, RARITY_EPIC, "🌘", "冲刺冷却-20%", "本局冲刺冷却时间缩短 20%", "dash_cooldown", {"multiplier": 0.80})
+
+
+static func moon_guard() -> FateCard:
+	return _scoped_modifier_card("银月护体", FateCard.CardType.ENHANCE, RARITY_EPIC, "🛡", "受伤-12%", "本局角色受到的伤害降低 12%", "damage_taken", {"multiplier": 0.88})
+
+
+static func moon_power() -> FateCard:
+	return _scoped_modifier_card("月刃共鸣", FateCard.CardType.ENHANCE, RARITY_EPIC, "🌒", "枪伤+12%", "本局角色造成的枪械伤害提升 12%", "weapon_damage", {"multiplier": 1.12})
+
+
+static func moon_room_heal() -> FateCard:
+	return _scoped_modifier_card("潮汐疗愈", FateCard.CardType.RULE, RARITY_RARE, "🌊", "进新房回血6", "首次进入房间时恢复 6 生命", "room_heal", {"amount": 6})
+
+
+static func moon_elite_heal() -> FateCard:
+	return _scoped_modifier_card("猎月回响", FateCard.CardType.RULE, RARITY_EPIC, "🏹", "杀精英回血20", "击杀精英或首领时恢复 20 生命", "elite_heal", {"amount": 20})
+
+
+static func moon_first_hit() -> FateCard:
+	return _scoped_modifier_card("静夜屏障", FateCard.CardType.RULE, RARITY_LEGENDARY, "🌌", "首次受伤减半", "每个房间第一次受到的伤害降低 50%", "first_hit_guard", {"multiplier": 0.50})
+
+
+static func moon_last_stand() -> FateCard:
+	return _scoped_modifier_card("残月不灭", FateCard.CardType.RULE, RARITY_LEGENDARY, "🌗", "致命伤保留1血", "致命伤改为保留 1 生命；每张牌提供 1 次", "last_stand", {"charges": 1})
+
+
+static func moon_ammo() -> FateCard:
+	return _scoped_modifier_card("月华装填", FateCard.CardType.RULE, RARITY_RARE, "🌔", "进新房补弹20%", "首次进入房间时补充弹匣容量的 20%", "room_ammo", {"ratio": 0.20})
+
+
+## ========== 太阳命运：世界/房间规则（不占武器槽）==========
+
+static func sun_quality() -> FateCard:
+	return _scoped_modifier_card("晨曦宝库", FateCard.CardType.RULE, RARITY_RARE, "🌅", "下箱品质+1", "下一个开启容器的物品品质提升 1 级", "next_chest_quality", {"tiers": 1})
+
+
+static func sun_extra_loot() -> FateCard:
+	return _scoped_modifier_card("丰收日", FateCard.CardType.RULE, RARITY_EPIC, "🌾", "下箱额外2件", "下一个开启容器额外掉落 2 件物品", "next_chest_extra", {"count": 2})
+
+
+static func sun_reinforce() -> FateCard:
+	return _scoped_modifier_card("日冕增援", FateCard.CardType.RULE, RARITY_EPIC, "☀", "下房敌人+3", "下一个敌对房间额外出现 3 名敌人", "next_room_enemy_count", {"count": 3})
+
+
+static func sun_reveal() -> FateCard:
+	return _scoped_modifier_card("曙光测绘", FateCard.CardType.RULE, RARITY_RARE, "🗺", "揭示周围2层", "立即揭示当前房间周围 2 层相邻房间", "reveal_rooms", {"radius": 2})
+
+
+static func sun_key() -> FateCard:
+	return _scoped_modifier_card("太阳钥印", FateCard.CardType.ENHANCE, RARITY_RARE, "🔑", "获得房间钥匙", "立即获得 1 把普通房间钥匙", "grant_room_key", {"count": 1})
+
+
+static func sun_currency() -> FateCard:
+	return _scoped_modifier_card("黄金潮汐", FateCard.CardType.ENHANCE, RARITY_EPIC, "🪙", "魂获取+30%", "本局之后获得的魂数量提升 30%", "currency_gain", {"multiplier": 1.30})
+
+
+static func sun_scorch() -> FateCard:
+	return _scoped_modifier_card("天火灼地", FateCard.CardType.RULE, RARITY_EPIC, "🔥", "下房敌血-20%", "下一个敌对房间的敌人最大生命降低 20%", "next_room_enemy_hp", {"multiplier": 0.80})
+
+
+static func sun_trial() -> FateCard:
+	return _scoped_modifier_card("烈日试炼", FateCard.CardType.CURSE, RARITY_LEGENDARY, "🌞", "强敌双倍魂", "下一个敌对房间敌人伤害提升 25%，其魂掉落翻倍", "next_room_trial", {"damage_multiplier": 1.25, "currency_multiplier": 2.0})
+
+
+static func sun_bounty() -> FateCard:
+	return _scoped_modifier_card("长昼赏金", FateCard.CardType.RULE, RARITY_EPIC, "🏆", "三房各奖35魂", "接下来 3 个敌对房间肃清时各获得 35 魂", "room_clear_bounty", {"rooms": 3, "amount": 35})
+
+
+static func sun_extraction() -> FateCard:
+	return _scoped_modifier_card("日落捷径", FateCard.CardType.RULE, RARITY_LEGENDARY, "🌇", "撤离时间-20%", "本局所有撤离同步时间缩短 20%", "extraction_time", {"multiplier": 0.80})
+
+
 ## ========== 总汇 ==========
 
 ## 所有预设卡片（含不可直接获得的 MAP_TRIGGER 类）
@@ -540,6 +647,10 @@ static func all_presets() -> Array[FateCard]:
 		fate_extra_loot(),
 		fate_curse_map(),
 		fate_bless_dead(),
+		moon_vitality(), moon_stride(), moon_dash(), moon_guard(), moon_power(),
+		moon_room_heal(), moon_elite_heal(), moon_first_hit(), moon_last_stand(), moon_ammo(),
+		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(), sun_key(),
+		sun_currency(), sun_scorch(), sun_trial(), sun_bounty(), sun_extraction(),
 	]
 
 
@@ -575,6 +686,10 @@ static func playable_presets() -> Array[FateCard]:
 		fate_extra_loot(),  # 📤 额外掉落（下一箱额外一件）
 		fate_curse_map(),   # 💀 诅咒降临（房间敌人伤害+15%）
 		fate_bless_dead(),  # ✨ 亡者祝福（低血存活伤害+10%）
+		moon_vitality(), moon_stride(), moon_dash(), moon_guard(), moon_power(),
+		moon_room_heal(), moon_elite_heal(), moon_first_hit(), moon_last_stand(), moon_ammo(),
+		sun_quality(), sun_extra_loot(), sun_reinforce(), sun_reveal(), sun_key(),
+		sun_currency(), sun_scorch(), sun_trial(), sun_bounty(), sun_extraction(),
 	]
 
 

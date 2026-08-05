@@ -62,11 +62,39 @@ const STABLE_ID_BY_NAME := {
 	"额外掉落": "fate_extra_loot",
 	"诅咒降临": "fate_curse_map",
 	"亡者祝福": "fate_bless_dead",
+	"月相增生": "fate_moon_vitality",
+	"月影疾行": "fate_moon_stride",
+	"新月回转": "fate_moon_dash",
+	"银月护体": "fate_moon_guard",
+	"月刃共鸣": "fate_moon_power",
+	"潮汐疗愈": "fate_moon_room_heal",
+	"猎月回响": "fate_moon_elite_heal",
+	"静夜屏障": "fate_moon_first_hit",
+	"残月不灭": "fate_moon_last_stand",
+	"月华装填": "fate_moon_ammo",
+	"晨曦宝库": "fate_sun_quality",
+	"丰收日": "fate_sun_extra_loot",
+	"日冕增援": "fate_sun_reinforce",
+	"曙光测绘": "fate_sun_reveal",
+	"太阳钥印": "fate_sun_key",
+	"黄金潮汐": "fate_sun_currency",
+	"天火灼地": "fate_sun_scorch",
+	"烈日试炼": "fate_sun_trial",
+	"长昼赏金": "fate_sun_bounty",
+	"日落捷径": "fate_sun_extraction",
 }
 
-const CHARACTER_SCOPE_IDS := ["fate_mark_enemy", "fate_bless_dead"]
+const CHARACTER_SCOPE_IDS := [
+	"fate_mark_enemy", "fate_bless_dead",
+	"fate_moon_vitality", "fate_moon_stride", "fate_moon_dash", "fate_moon_guard",
+	"fate_moon_power", "fate_moon_room_heal", "fate_moon_elite_heal",
+	"fate_moon_first_hit", "fate_moon_last_stand", "fate_moon_ammo",
+]
 const WORLD_SCOPE_IDS := [
 	"fate_reinforce", "fate_lucky_chest", "fate_extra_loot", "fate_curse_map",
+	"fate_sun_quality", "fate_sun_extra_loot", "fate_sun_reinforce",
+	"fate_sun_reveal", "fate_sun_key", "fate_sun_currency", "fate_sun_scorch",
+	"fate_sun_trial", "fate_sun_bounty", "fate_sun_extraction",
 ]
 
 ## 效果动作枚举（Effect.action 的可能值）
@@ -124,6 +152,7 @@ enum EffectAction {
 	EXTRA_LOOT,               # 下次开箱额外掉落
 	CURSE_ROOM_ENEMIES,       # 当前房间敌人伤害提升（诅咒）
 	BLESS_DEAD,               # 低血量存活后获得伤害加成（祝福）
+	APPLY_SCOPED_MODIFIER,    # 角色/月亮与世界/太阳的通用局内规则
 }
 
 ## 元数据
@@ -202,6 +231,42 @@ static func scope_name(value: Scope) -> String:
 		Scope.CHARACTER: return "CHARACTER"
 		Scope.WORLD: return "WORLD"
 	return "UNKNOWN"
+
+
+static func scope_special_name(value: Scope) -> String:
+	match value:
+		Scope.WORLD: return "太阳命运"
+		Scope.CHARACTER: return "月亮命运"
+		Scope.WEAPON: return "星星命运"
+	return "未知命运"
+
+
+static func scope_symbol(value: Scope) -> String:
+	match value:
+		Scope.WORLD: return "☀"
+		Scope.CHARACTER: return "☾"
+		Scope.WEAPON: return "★"
+	return "?"
+
+
+static func scope_display_name(value: Scope) -> String:
+	return "%s %s" % [scope_symbol(value), scope_special_name(value)]
+
+
+static func scope_target_text(value: Scope) -> String:
+	match value:
+		Scope.WORLD: return "世界规则 · 不占武器槽"
+		Scope.CHARACTER: return "本局角色 · 不占武器槽"
+		Scope.WEAPON: return "当前枪械 · 永久占用1格"
+	return "目标未知"
+
+
+static func scope_color(value: Scope) -> Color:
+	match value:
+		Scope.WORLD: return Color("F6B94A")
+		Scope.CHARACTER: return Color("9FC7FF")
+		Scope.WEAPON: return Color("C99BFF")
+	return Color.WHITE
 
 
 func get_stable_card_id() -> String:

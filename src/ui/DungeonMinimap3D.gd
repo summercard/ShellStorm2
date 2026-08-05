@@ -1,6 +1,6 @@
 class_name DungeonMinimap3D
 extends Control
-## v0.1 实时战术小地图：当前楼层平面投影、玩家位置/朝向、扫描波束与楼层索引。
+## 实时战术小地图：真实房间矩形、玩家房内位置/朝向、存活敌人红点与楼层索引。
 
 const REDRAW_INTERVAL := 1.0 / 20.0
 const HEADER_HEIGHT := 28.0
@@ -13,6 +13,7 @@ var _revealed: Dictionary = {}
 var _current_room_id := ""
 var _position_by_id: Dictionary = {}
 var _record_by_id: Dictionary = {}
+var _dimensions_by_id: Dictionary = {}
 var _floor_heights: Array[float] = []
 var _has_multiple_floors := false
 var _current_floor_y := 0.0
@@ -22,6 +23,7 @@ var _scan_phase := 0.0
 var _pulse_phase := 0.0
 var _redraw_accumulator := 0.0
 var _has_realtime_player_state := false
+var _enemy_world_positions: Array[Vector3] = []
 
 
 func _ready() -> void:
@@ -44,12 +46,14 @@ func configure(records: Array[Dictionary], edge_states: Dictionary) -> void:
 	_edges = edge_states.duplicate(true)
 	_position_by_id.clear()
 	_record_by_id.clear()
+	_dimensions_by_id.clear()
 	_floor_heights.clear()
 	for record in _records:
 		var room_id := str(record.get("id", ""))
 		var position := record.get("position", Vector3.ZERO) as Vector3
 		_position_by_id[room_id] = position
 		_record_by_id[room_id] = record
+		_dimensions_by_id[room_id] = _room_dimensions(record)
 		var floor_y := snappedf(position.y, 0.01)
 		if not _contains_floor_height(floor_y):
 			_floor_heights.append(floor_y)
@@ -81,6 +85,10 @@ func set_player_state(
 	_has_realtime_player_state = true
 
 
+func set_enemy_positions(world_positions: Array[Vector3]) -> void:
+	_enemy_world_positions.assign(world_positions)
+
+
 func set_edge_open(a: String, b: String, opened: bool) -> void:
 	_edges[_edge_key(a, b)] = opened
 	if opened:
@@ -106,6 +114,9 @@ func get_snapshot() -> Dictionary:
 		"realtime_update_hz": int(round(1.0 / REDRAW_INTERVAL)),
 		"player_marker": true,
 		"player_heading": true,
+		"true_room_dimensions": true,
+		"enemy_marker_count": _enemy_world_positions.size(),
+		"enemy_markers": true,
 		"holographic_scan": true,
 		"floor_stack_index": _has_multiple_floors,
 	}
@@ -118,18 +129,13 @@ func _draw() -> void:
 	_draw_header()
 	if _records.is_empty():
 		return
-	var map_rect := Rect2(
-		MAP_PADDING,
-		Vector2(
-			maxf(1.0, size.x - MAP_PADDING.x - 30.0),
-			maxf(1.0, size.y - MAP_PADDING.y - 16.0)
-		)
-	)
+	var map_rect := _content_map_rect()
 	_draw_holographic_grid(map_rect)
 	var bounds := _bounds_for_current_floor()
 	_draw_scan_field(map_rect, bounds)
 	_draw_edges(bounds, map_rect)
 	_draw_rooms(bounds, map_rect)
+	_draw_enemies(bounds, map_rect)
 	_draw_player(bounds, map_rect)
 	if _has_multiple_floors:
 		_draw_floor_stack()
@@ -140,7 +146,7 @@ func _draw_header() -> void:
 	draw_string(
 		font,
 		Vector2(15.0, 20.0),
-		"TACTICAL HOLO / %s" % _floor_label(),
+		"战术地图 / %s" % _floor_label(),
 		HORIZONTAL_ALIGNMENT_LEFT,
 		-1.0,
 		13,
@@ -231,8 +237,12 @@ func _draw_edges(bounds: Rect2, map_rect: Rect2) -> void:
 		var to_world := _position_by_id.get(ids[1], Vector3.ZERO) as Vector3
 		if not _is_current_floor_y(from_world.y) or not _is_current_floor_y(to_world.y):
 			continue
-		var from := _map_position(from_world, bounds, map_rect)
-		var to := _map_position(to_world, bounds, map_rect)
+		var from_dim := _dimensions_by_id.get(ids[0], Vector2(20.0, 20.0)) as Vector2
+		var to_dim := _dimensions_by_id.get(ids[1], Vector2(20.0, 20.0)) as Vector2
+		var from_edge := _room_edge_world(from_world, to_world, from_dim)
+		var to_edge := _room_edge_world(to_world, from_world, to_dim)
+		var from := _map_position(from_edge, bounds, map_rect)
+		var to := _map_position(to_edge, bounds, map_rect)
 		var opened := bool(_edges[edge_key])
 		var color := (
 			Color(0.24, 0.98, 0.78, 0.88)
@@ -252,25 +262,30 @@ func _draw_rooms(bounds: Rect2, map_rect: Rect2) -> void:
 		if not _is_current_floor_y(world_position.y):
 			continue
 		var center := _map_position(world_position, bounds, map_rect)
+		var dimensions := _dimensions_by_id.get(room_id, Vector2(22.0, 18.0)) as Vector2
+		var room_size := _map_world_size(dimensions, bounds, map_rect)
+		room_size.x = maxf(room_size.x, 10.0)
+		room_size.y = maxf(room_size.y, 8.0)
+		var room_rect := Rect2(center - room_size * 0.5, room_size)
 		var color := _room_color(str(record.get("type", "")))
-		var radius := (
-			7.0
-			if str(record.get("size", "")) in ["large", "arena"]
-			else 5.2
-		)
-		draw_circle(center, radius + 3.5, Color(color, 0.14))
-		draw_circle(center, radius, Color(color, 0.80))
-		draw_arc(center, radius + 1.5, 0.0, TAU, 20, color, 1.2)
+		draw_rect(room_rect.grow(2.5), Color(color, 0.12), true)
+		draw_rect(room_rect, Color(color, 0.28 if room_id != _current_room_id else 0.44), true)
+		draw_rect(room_rect, color, false, 1.4)
 		if room_id == _current_room_id:
-			draw_arc(
-				center,
-				radius + 7.0 + sin(_pulse_phase * TAU) * 1.5,
-				0.0,
-				TAU,
-				28,
-				Color(1.0, 0.88, 0.30, 0.92),
-				2.0
+			draw_rect(
+				room_rect.grow(3.5 + sin(_pulse_phase * TAU) * 0.8),
+				Color(1.0, 0.88, 0.30, 0.92), false, 2.0
 			)
+
+
+func _draw_enemies(bounds: Rect2, map_rect: Rect2) -> void:
+	for world_position in _enemy_world_positions:
+		if not _is_current_floor_y(world_position.y):
+			continue
+		var center := _map_position(world_position, bounds, map_rect)
+		draw_circle(center, 4.6, Color(0.20, 0.0, 0.0, 0.82))
+		draw_circle(center, 3.0, Color(1.0, 0.08, 0.08, 1.0))
+		draw_arc(center, 5.3, 0.0, TAU, 16, Color(1.0, 0.34, 0.26, 0.72), 1.0)
 
 
 func _draw_player(bounds: Rect2, map_rect: Rect2) -> void:
@@ -336,10 +351,12 @@ func _bounds_for_current_floor() -> Rect2:
 		if not _is_current_floor_y(position.y):
 			continue
 		var projected := Vector2(position.x, position.z)
-		min_pos.x = minf(min_pos.x, projected.x)
-		min_pos.y = minf(min_pos.y, projected.y)
-		max_pos.x = maxf(max_pos.x, projected.x)
-		max_pos.y = maxf(max_pos.y, projected.y)
+		var dimensions := _room_dimensions(record)
+		var half := dimensions * 0.5
+		min_pos.x = minf(min_pos.x, projected.x - half.x)
+		min_pos.y = minf(min_pos.y, projected.y - half.y)
+		max_pos.x = maxf(max_pos.x, projected.x + half.x)
+		max_pos.y = maxf(max_pos.y, projected.y + half.y)
 	if min_pos.x == INF:
 		min_pos = Vector2(-1.0, -1.0)
 		max_pos = Vector2(1.0, 1.0)
@@ -362,11 +379,70 @@ func _map_position(
 	map_rect: Rect2
 ) -> Vector2:
 	var projected := Vector2(world_position.x, world_position.z)
-	var normalized := Vector2(
-		(projected.x - bounds.position.x) / maxf(1.0, bounds.size.x),
-		(projected.y - bounds.position.y) / maxf(1.0, bounds.size.y)
+	var scale := _map_scale(bounds, map_rect)
+	var used_size := bounds.size * scale
+	var origin := map_rect.get_center() - used_size * 0.5
+	return origin + (projected - bounds.position) * scale
+
+
+func get_room_screen_rect(room_id: String) -> Rect2:
+	if not _record_by_id.has(room_id):
+		return Rect2()
+	var record := _record_by_id[room_id] as Dictionary
+	var world_position := record.get("position", Vector3.ZERO) as Vector3
+	if not _is_current_floor_y(world_position.y):
+		return Rect2()
+	var bounds := _bounds_for_current_floor()
+	var map_rect := _content_map_rect()
+	var center := _map_position(world_position, bounds, map_rect)
+	var room_size := _map_world_size(_room_dimensions(record), bounds, map_rect)
+	return Rect2(center - room_size * 0.5, room_size)
+
+
+func get_player_screen_position() -> Vector2:
+	return _map_position(_player_world_position, _bounds_for_current_floor(), _content_map_rect())
+
+
+func _content_map_rect() -> Rect2:
+	return Rect2(
+		MAP_PADDING,
+		Vector2(
+			maxf(1.0, size.x - MAP_PADDING.x - 30.0),
+			maxf(1.0, size.y - MAP_PADDING.y - 16.0)
+		)
 	)
-	return map_rect.position + normalized * map_rect.size
+
+
+func _map_world_size(world_size: Vector2, bounds: Rect2, map_rect: Rect2) -> Vector2:
+	return world_size * _map_scale(bounds, map_rect)
+
+
+func _map_scale(bounds: Rect2, map_rect: Rect2) -> float:
+	return minf(
+		map_rect.size.x / maxf(1.0, bounds.size.x),
+		map_rect.size.y / maxf(1.0, bounds.size.y)
+	)
+
+
+func _room_dimensions(record: Dictionary) -> Vector2:
+	var custom := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+	if custom.x > 0.0 and custom.y > 0.0:
+		return custom
+	return DungeonRoom3D.ROOM_DIMENSIONS.get(
+		str(record.get("size", "medium")), DungeonRoom3D.ROOM_DIMENSIONS["medium"]
+	) as Vector2
+
+
+func _room_edge_world(from: Vector3, to: Vector3, dimensions: Vector2) -> Vector3:
+	var delta := Vector2(to.x - from.x, to.z - from.z)
+	if delta.length_squared() <= 0.0001:
+		return from
+	var direction := delta.normalized()
+	var half := dimensions * 0.5
+	var scale_x := half.x / maxf(0.0001, absf(direction.x))
+	var scale_y := half.y / maxf(0.0001, absf(direction.y))
+	var distance := minf(scale_x, scale_y)
+	return from + Vector3(direction.x * distance, 0.0, direction.y * distance)
 
 
 func _is_current_floor_y(value: float) -> bool:

@@ -143,8 +143,7 @@ func _create_card_button(card: FateCard) -> Button:
 	display_text += card.card_name
 	if card.short_description != "":
 		display_text += "\n" + card.short_description
-	var scope_name := FateCard.scope_name(card.scope)
-	display_text += "\n[%s]" % scope_name
+	display_text += "\n%s" % FateCard.scope_display_name(card.scope)
 	if card.scope == FateCard.Scope.WEAPON:
 		var used := int(target_summary.get("fate_slot_used", 0))
 		var capacity := int(target_summary.get("fate_slot_capacity", 0))
@@ -157,9 +156,9 @@ func _create_card_button(card: FateCard) -> Button:
 			btn.disabled = true
 			btn.tooltip_text = "枪械命运槽已满；该卡不会被消耗"
 	elif card.scope == FateCard.Scope.CHARACTER:
-		display_text += "  角色本局效果｜不占武器槽"
+		display_text += "  本局角色｜不占武器槽"
 	else:
-		display_text += "  世界/房间规则｜不占武器槽"
+		display_text += "  世界规则｜不占武器槽"
 	btn.text = display_text
 	var bg_style := UIStyleFactory.make_panel_with_border(1, rarity_color, 6, 2)
 	bg_style.bg_color = UIPalette.BG_DARK
@@ -169,7 +168,7 @@ func _create_card_button(card: FateCard) -> Button:
 	hover_style.bg_color = UIPalette.BG_MID
 	btn.add_theme_stylebox_override("hover", hover_style)
 
-	btn.add_theme_color_override("font_color", rarity_color)
+	btn.add_theme_color_override("font_color", FateCard.scope_color(card.scope))
 	btn.add_theme_font_size_override("font_size", 13)
 
 	btn.pressed.connect(_on_card_selected.bind(card))
@@ -184,7 +183,7 @@ func _on_card_selected(card: FateCard) -> void:
 		print("[FateCardUI] 应用卡片成功: %s — %s" % [card.card_name, result.message])
 		# 通知 UI 显示应用成功
 		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
-			var detail := "✓ %s [%s] 已应用" % [card.card_name, result.get("scope", "")]
+			var detail := "✓ %s · %s 已应用" % [FateCard.scope_display_name(card.scope), card.card_name]
 			if result.has("slot_index"):
 				detail += " · 永久槽 %02d/%d" % [
 					result.get("slot_index", 0), result.get("slot_capacity", 0),

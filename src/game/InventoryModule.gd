@@ -260,6 +260,68 @@ func replace_item_in_slot(slot_index: int, item: Dictionary) -> bool:
 	capacity_changed.emit(get_used_slots(), _capacity)
 	return true
 
+
+## 将一个完整物品写入指定空格。装备位卸装使用该接口，禁止覆盖已有物品。
+func put_item_in_empty_slot(slot_index: int, item: Dictionary, count: int = 1) -> bool:
+	if slot_index < 0 or slot_index >= _slots.size() or item.is_empty() or count <= 0:
+		return false
+	if not _slots[slot_index].is_empty():
+		return false
+	var normalized := WeaponInstance.ensure_weapon_item(item)
+	if str(normalized.get("type", "")) == "weapon" and count != 1:
+		return false
+	var instance_id := str(normalized.get("weapon_instance_id", ""))
+	if not instance_id.is_empty() and has_weapon_instance(instance_id):
+		return false
+	_slots[slot_index].set_item(normalized, count)
+	item_added.emit(slot_index, normalized)
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+	return true
+
+
+## 背包内拖拽移动/交换。枪械字典整体换位，不重新生成实例或构筑。
+func move_or_swap_slots(from_index: int, to_index: int) -> bool:
+	if from_index < 0 or from_index >= _slots.size():
+		return false
+	if to_index < 0 or to_index >= _slots.size() or from_index == to_index:
+		return false
+	var source := _slots[from_index]
+	if source.is_empty():
+		return false
+	var source_item := source.item.duplicate(true)
+	var source_count := source.count
+	var target := _slots[to_index]
+	var target_item := target.item.duplicate(true)
+	var target_count := target.count
+	target.set_item(source_item, source_count)
+	if target_item.is_empty() or target_count <= 0:
+		source.clear()
+	else:
+		source.set_item(target_item, target_count)
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+	return true
+
+
+## 稳定整理：类型 → 稀有度 → 名称 → 枪械实例 ID；只改变格位。
+func sort_items() -> void:
+	var packed: Array[Dictionary] = get_occupied_slots()
+	packed.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_item := a.get("item", {}) as Dictionary
+		var b_item := b.get("item", {}) as Dictionary
+		var a_key := _sort_key(a_item)
+		var b_key := _sort_key(b_item)
+		return a_key.naturalnocasecmp_to(b_key) < 0
+	)
+	for slot in _slots:
+		slot.clear()
+	for index in packed.size():
+		var entry := packed[index]
+		_slots[index].set_item(entry.get("item", {}), int(entry.get("count", 1)))
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+
 ## 消耗物品（用于撤离消耗品）
 func consume_item(item_id: String, count: int = 1) -> bool:
 	var total_needed := count
@@ -294,6 +356,23 @@ func _items_can_stack(existing: Dictionary, incoming: Dictionary) -> bool:
 	return str(existing.get("weapon_instance_id", "")).is_empty() and str(
 		incoming.get("weapon_instance_id", "")
 	).is_empty()
+
+
+func _sort_key(item: Dictionary) -> String:
+	var type_rank: String = str({
+		"weapon": "00", "module": "10", "attachment": "11",
+		"consumable": "20", "key": "30", "currency": "40",
+	}.get(str(item.get("type", "")), "90"))
+	var rarity_rank: String = str({
+		"legendary": "00", "epic": "10", "rare": "20", "uncommon": "30", "common": "40",
+	}.get(str(item.get("rarity", "common")).to_lower(), "50"))
+	return "%s|%s|%s|%s|%s" % [
+		type_rank,
+		rarity_rank,
+		str(item.get("name", "")),
+		str(item.get("weapon_instance_id", "")),
+		str(item.get("id", "")),
+	]
 
 ## 调试状态
 func debug_status() -> String:

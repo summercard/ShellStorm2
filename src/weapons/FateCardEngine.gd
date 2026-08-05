@@ -64,17 +64,18 @@ static func apply_card(
 		result.message = "card or tree is null"
 		return result
 
-	if target_nodes.is_empty():
+	var action: int = int(card.effect.get("action", -1))
+	var needs_weapon_target := card.scope == FateCard.Scope.WEAPON
+	if target_nodes.is_empty() and needs_weapon_target:
 		# 尝试自动选择目标
 		target_nodes = _auto_select_targets(card, tree)
 
-	if target_nodes.is_empty():
+	if target_nodes.is_empty() and needs_weapon_target:
 		result.error = ApplyError.NO_TARGET
 		result.message = "No valid target found for card: %s" % card.card_name
 		return result
 
 	# 根据 EffectAction 执行
-	var action: int = int(card.effect.get("action", -1))
 	match action:
 		-1:
 			result.error = ApplyError.APPLY_FAILED
@@ -137,11 +138,27 @@ static func apply_card(
 			result = _apply_size_growth(card, tree, target_nodes)
 		FateCard.EffectAction.BLESS_DEAD:
 			result = _apply_bless_dead(card, tree, target_nodes)
+		FateCard.EffectAction.APPLY_SCOPED_MODIFIER:
+			result = _apply_scoped_modifier(card)
 		_:
 			result.error = ApplyError.APPLY_FAILED
 			result.message = "Unsupported effect action: %d" % action
 			return result
 
+	return result
+
+
+## 月亮/太阳命运的实际所有者在 Player3D 与 Dungeon3D；引擎只完成作用域事务验收。
+static func _apply_scoped_modifier(card: FateCard) -> ApplyResult:
+	var result := ApplyResult.new()
+	if card.scope == FateCard.Scope.WEAPON:
+		result.error = ApplyError.TARGET_INVALID
+		result.message = "Scoped modifier cannot target a weapon"
+		return result
+	result.success = true
+	result.effect_value = card.effect.duplicate(true)
+	result.message = "%s已生效：%s" % [FateCard.scope_special_name(card.scope), card.short_description]
+	_fate_audio_card_applied()
 	return result
 
 

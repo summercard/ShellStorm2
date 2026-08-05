@@ -696,7 +696,7 @@ func _start_hp_trail_catchup(target_value: float) -> void:
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
-## 根据 HP 比例设置 fill 颜色（绿/黄/红阶梯）
+## 根据 HP 比例调整红色生命条亮度
 var _last_hp_color_ratio: float = -1.0  ## 上次刷新的 HP 比例（带 0.1 deadzone 防抖）
 func _update_hp_bar_color() -> void:
 	if hp_bar == null or hp_bar.max_value <= 0.0:
@@ -706,7 +706,10 @@ func _update_hp_bar_color() -> void:
 	if absf(ratio - _last_hp_color_ratio) < 0.1 and _last_hp_color_ratio >= 0.0:
 		return
 	_last_hp_color_ratio = ratio
-	var fill_color: Color = UIPalette.hp_color_for_ratio(ratio)
+	# 生命条始终使用红色生命语义；危险程度由亮度、抖动与暗红拖尾表达。
+	var fill_color := Color(0.92, 0.08, 0.10, 1.0).lerp(
+		Color(1.0, 0.24, 0.20, 1.0), 1.0 - ratio
+	)
 	hp_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(fill_color))
 	# 尾迹颜色：始终是比当前色暗一档的同色（看起来像褪色的尾）
 	var trail_color: Color = fill_color

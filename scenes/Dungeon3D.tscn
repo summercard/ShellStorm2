@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://src/world3d/Dungeon3D.gd" id="1_dungeon"]
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="2_player"]
@@ -13,6 +13,20 @@ code = "shader_type canvas_item;\nrender_mode unshaded;\nuniform float intensity
 [sub_resource type="ShaderMaterial" id="MaterialLowHealth"]
 shader = SubResource("ShaderLowHealth")
 shader_parameter/intensity = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleHPBackground"]
+bg_color = Color(0.12, 0.025, 0.035, 0.96)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[sub_resource type="StyleBoxFlat" id="StyleHPFill"]
+bg_color = Color(0.9, 0.075, 0.09, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
 
 [node name="Dungeon3D" type="Node3D"]
 script = ExtResource("1_dungeon")
@@ -48,7 +62,7 @@ anchor_right = 1.0
 offset_left = -328.0
 offset_top = 82.0
 offset_right = -18.0
-offset_bottom = 312.0
+offset_bottom = 352.0
 grow_horizontal = 0
 script = ExtResource("5_minimap")
 
@@ -101,7 +115,7 @@ theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 8
 
 [node name="HBox" type="HBoxContainer" parent="HUD/TopBar/Margin"]
-theme_override_constants/separation = 24
+theme_override_constants/separation = 14
 
 [node name="TitleLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
 text = "3D行动区"
@@ -111,6 +125,16 @@ text = "SEED"
 
 [node name="HPLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
 text = "HP"
+theme_override_colors/font_color = Color(1, 0.52, 0.52, 1)
+
+[node name="HPBar" type="ProgressBar" parent="HUD/TopBar/Margin/HBox"]
+custom_minimum_size = Vector2(150, 18)
+layout_mode = 2
+max_value = 100.0
+value = 100.0
+show_percentage = false
+theme_override_styles/background = SubResource("StyleHPBackground")
+theme_override_styles/fill = SubResource("StyleHPFill")
 
 [node name="AmmoLabel" type="Label" parent="HUD/TopBar/Margin/HBox"]
 text = "AMMO"

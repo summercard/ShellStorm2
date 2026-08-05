@@ -37,6 +37,7 @@ const ENEMY_FILL_ATTEMPT_LIMIT := 4
 @onready var title_label: Label = $HUD/TopBar/Margin/HBox/TitleLabel
 @onready var seed_label: Label = $HUD/TopBar/Margin/HBox/SeedLabel
 @onready var hp_label: Label = $HUD/TopBar/Margin/HBox/HPLabel
+@onready var hp_bar: ProgressBar = $HUD/TopBar/Margin/HBox/HPBar
 @onready var ammo_label: Label = $HUD/TopBar/Margin/HBox/AmmoLabel
 @onready var room_label: Label = $HUD/TopBar/Margin/HBox/RoomLabel
 @onready var loot_label: Label = $HUD/TopBar/Margin/HBox/LootLabel
@@ -97,7 +98,18 @@ var _map_fate_triggers: MapFateTriggers
 var last_killed_enemy_data: Dictionary = {}
 var _resolved_event_rooms: Dictionary = {}
 var _next_chest_quality_boost := 0
-var _extra_loot_next_chest := false
+var _extra_loot_next_chest_count := 0
+var _next_room_enemy_count := 0
+var _next_room_enemy_hp_multiplier := 1.0
+var _next_room_enemy_damage_multiplier := 1.0
+var _next_room_currency_multiplier := 1.0
+var _room_enemy_hp_multipliers: Dictionary = {}
+var _room_enemy_damage_multipliers: Dictionary = {}
+var _room_currency_multipliers: Dictionary = {}
+var _world_currency_multiplier := 1.0
+var _room_clear_bounty_rooms := 0
+var _room_clear_bounty_amount := 0
+var _extraction_time_multiplier := 1.0
 var _bless_dead_active := false
 var _bless_dead_threshold := 0.30
 var _bless_dead_remaining := 0.0
@@ -128,7 +140,10 @@ func _ready() -> void:
 	_configure_environment()
 	_generate_layout()
 	player.set_combat_enabled(true)
+	FateCardGameBridge.reset_run_state()
 	FateCardGameBridge.set_player(player)
+	if not FateCardGameBridge.scope_state_changed.is_connected(_on_fate_scope_state_changed):
+		FateCardGameBridge.scope_state_changed.connect(_on_fate_scope_state_changed)
 	player.hp_changed.connect(_on_player_hp_changed)
 	player.ammo_changed.connect(_on_ammo_changed)
 	player.presentation_state_changed.connect(_on_player_state_changed)
@@ -166,6 +181,7 @@ func _process(delta: float) -> void:
 			player.global_position,
 			player.aim_direction
 		)
+		minimap.set_enemy_positions(_get_minimap_enemy_positions())
 	_door_prompt_accumulator += delta
 	if _door_prompt_accumulator < 0.08:
 		return
@@ -209,10 +225,13 @@ func _setup_run_modules() -> void:
 	_inventory_ui.set_insurance_module(_insurance)
 	_inventory_ui.set_weapon_tree(player.get_weapon_tree())
 	_inventory_ui.set_weapon_owner(player)
+	_inventory_ui.set_world_drop_handler(_drop_inventory_item_to_world)
 	_inventory_ui.item_to_insurance_requested.connect(_on_insure_item_requested)
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
 	_inventory_ui.inventory_open_changed.connect(_on_inventory_open_changed)
+	_inventory_ui.equipped_weapon_to_inventory_requested.connect(_on_equipped_weapon_to_inventory_requested)
+	_inventory_ui.equipped_weapon_drop_requested.connect(_on_equipped_weapon_drop_requested)
 	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
@@ -776,7 +795,7 @@ func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: 
 	if room == null:
 		return null
 	var beacon := EXTRACTION_SCENE.instantiate() as ExtractionBeacon3D
-	beacon.configure(visual_theme.accent_color, countdown, type_id)
+	beacon.configure(visual_theme.accent_color, countdown * _extraction_time_multiplier, type_id)
 	room.add_child(beacon)
 	beacon.position = local_position
 	beacon.set_locked(locked)
@@ -795,6 +814,9 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	minimap.set_current_room(room.room_id)
 	_update_room_streaming(room.room_id)
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
+	var first_visit := not _spawned_rooms.has(room.room_id)
+	if first_visit and player.has_method("on_fate_room_entered"):
+		player.call("on_fate_room_entered")
 	if _spawned_rooms.has(room.room_id):
 		_ensure_room_key_reward(room)
 		_repair_hostile_room_progress(room)
@@ -850,6 +872,19 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 				if fallback.is_empty():
 					break
 				enemy_configs.append(fallback[0])
+	if _next_room_enemy_count > 0:
+		var reinforcements := _monster_injector.generate_enemies({
+			"type": "ambush", "count": _next_room_enemy_count, "floor": floor,
+			"floor_level": floor_level,
+		})
+		enemy_configs.append_array(reinforcements)
+		_next_room_enemy_count = 0
+	_room_enemy_hp_multipliers[room.room_id] = _next_room_enemy_hp_multiplier
+	_room_enemy_damage_multipliers[room.room_id] = _next_room_enemy_damage_multiplier
+	_room_currency_multipliers[room.room_id] = _next_room_currency_multiplier
+	_next_room_enemy_hp_multiplier = 1.0
+	_next_room_enemy_damage_multiplier = 1.0
+	_next_room_currency_multiplier = 1.0
 	if enemy_configs.is_empty():
 		push_error("Hostile room %s generated no enemies; unlocking room to prevent a soft lock" % room.room_id)
 		_alive_by_room[room.room_id] = 0
@@ -925,6 +960,13 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
 		enemy.configure_from_enemy_data(enemy_configs[index])
+		var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
+		if not is_equal_approx(hp_multiplier, 1.0):
+			enemy.max_hp = maxi(1, int(round(float(enemy.max_hp) * hp_multiplier)))
+			enemy.current_hp = mini(enemy.current_hp, enemy.max_hp)
+		var damage_multiplier := float(_room_enemy_damage_multipliers.get(room.room_id, 1.0))
+		if not is_equal_approx(damage_multiplier, 1.0):
+			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
 		var points := room.enemy_spawn_points
 		enemy.global_position = points[index % points.size()] if not points.is_empty() else room.global_position
 		enemy.killed.connect(_on_enemy_killed)
@@ -1055,6 +1097,13 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 			has_currency = true
 	if not has_currency:
 		drops.append({"id": "__currency__", "name": "魂", "type": "currency", "count": 2 + int(enemy_data.get("floor", 1)), "is_currency": true})
+	# 房间试炼先写进掉落物；全局黄金潮汐在真正拾取/结算魂时统一应用，避免重复倍率。
+	var currency_multiplier := float(_room_currency_multipliers.get(enemy.room_id, 1.0))
+	for item in drops:
+		if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
+			item["count"] = maxi(1, int(round(float(item.get("count", 1)) * currency_multiplier)))
+	if enemy.enemy_kind in ["elite", "boss"] and player.has_method("on_fate_elite_killed"):
+		player.call("on_fate_elite_killed")
 	var loot_room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
 	if loot_room != null:
 		call_deferred("_spawn_loot_items", loot_room, drops, enemy.global_position)
@@ -1172,11 +1221,12 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 		if not boosted.is_empty():
 			drops.append(boosted[0])
 		_next_chest_quality_boost = 0
-	if _extra_loot_next_chest:
-		var extra := _loot_module.generate_container_loot(container_type, maxi(1, visual_theme.difficulty_rank))
-		if not extra.is_empty():
-			drops.append(extra[0])
-		_extra_loot_next_chest = false
+	if _extra_loot_next_chest_count > 0:
+		for _extra_index in range(_extra_loot_next_chest_count):
+			var extra := _loot_module.generate_container_loot(container_type, maxi(1, visual_theme.difficulty_rank))
+			if not extra.is_empty():
+				drops.append(extra[0])
+		_extra_loot_next_chest_count = 0
 	if drops.is_empty():
 		status_label.text = "容器为空"
 		return
@@ -1205,11 +1255,11 @@ func _spawn_loot_items(room: DungeonRoom3D, items: Array[Dictionary], world_posi
 
 func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> void:
 	if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
-		GameManager.add_currency(int(item.get("count", 1)))
+		var granted := _grant_run_currency(int(item.get("count", 1)))
 		if _map_fate_triggers != null:
-			_map_fate_triggers.on_currency_collected(int(item.get("count", 1)))
+			_map_fate_triggers.on_currency_collected(granted)
 		pickup.accept_pickup()
-		status_label.text = "取得 %d 魂" % int(item.get("count", 1))
+		status_label.text = "取得 %d 魂" % granted
 		_refresh_loot_label()
 		return
 	var requested := maxi(1, int(item.get("count", 1)))
@@ -1227,6 +1277,51 @@ func _on_ground_loot_requested(pickup: GroundLootPickup3D, item: Dictionary) -> 
 		" · 按 I 打开背包，左键装备" if str(item.get("type", "")) == "weapon" else "",
 	]
 	_refresh_loot_label()
+
+
+func _grant_run_currency(amount: int) -> int:
+	var granted := maxi(0, int(round(float(maxi(0, amount)) * _world_currency_multiplier)))
+	if granted > 0:
+		GameManager.add_currency(granted)
+	return granted
+
+
+func _drop_inventory_item_to_world(item: Dictionary, count: int) -> bool:
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or player == null or item.is_empty():
+		return false
+	var dropped := item.duplicate(true)
+	dropped["count"] = maxi(1, count)
+	_spawn_loot_items(
+		room,
+		[dropped],
+		player.global_position + player.aim_direction * 1.55 + Vector3(0.0, 0.08, 0.0)
+	)
+	var identity := ""
+	if str(dropped.get("type", "")) == "weapon":
+		identity = " #%s" % str(dropped.get("weapon_instance_id", "")).right(6).to_upper()
+	status_label.text = "已丢弃 %s%s x%d · 完整物品留在当前房间" % [
+		dropped.get("name", dropped.get("id", "物品")), identity, maxi(1, count),
+	]
+	return true
+
+
+func _get_minimap_enemy_positions() -> Array[Vector3]:
+	var result: Array[Vector3] = []
+	var live_enemies: Array = []
+	for value in _enemy_nodes_by_room.get(_current_room_id, []):
+		# 已释放对象不能先做类型转换；先验证实例，避免 Godot 的 freed-object cast 报错。
+		if value == null or not is_instance_valid(value):
+			continue
+		var enemy := value as Enemy3D
+		if enemy == null or enemy.is_queued_for_deletion():
+			continue
+		if enemy.current_hp <= 0:
+			continue
+		live_enemies.append(enemy)
+		result.append(enemy.global_position)
+	_enemy_nodes_by_room[_current_room_id] = live_enemies
+	return result
 
 
 func _on_service_activated(_room: DungeonRoom3D, station: ServiceStation3D) -> void:
@@ -1317,8 +1412,8 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 		"TRADE":
 			if FateCardGameBridge.get_card_count() > 0:
 				var reward := _rng.randi_range(30, 80)
-				GameManager.add_currency(reward)
-				status_label.text = "命运交易完成：获得 %d 魂" % reward
+				var granted := _grant_run_currency(reward)
+				status_label.text = "命运交易完成：获得 %d 魂" % granted
 			else:
 				status_label.text = "命运交易取消：尚无已应用卡片"
 		"GAMBLE":
@@ -1329,8 +1424,8 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 				GameManager.spend_currency(bet)
 				if _rng.randf() < 0.5:
 					var multiplier := _rng.randi_range(2, 5)
-					GameManager.add_currency(bet * multiplier)
-					status_label.text = "赌局胜利：投入 %d，倍率 ×%d" % [bet, multiplier]
+					var granted := _grant_run_currency(bet * multiplier)
+					status_label.text = "赌局胜利：投入 %d，获得 %d 魂" % [bet, granted]
 				else:
 					status_label.text = "赌局失败：损失 %d 魂" % bet
 		"REVEAL":
@@ -1379,7 +1474,62 @@ func set_next_chest_quality_boost(boost: int) -> void:
 
 
 func set_extra_loot_next_chest(enabled: bool) -> void:
-	_extra_loot_next_chest = enabled
+	_extra_loot_next_chest_count = maxi(_extra_loot_next_chest_count, 1 if enabled else 0)
+
+
+func _on_fate_scope_state_changed(scope: String, stable_card_id: String) -> void:
+	if scope != FateCard.scope_name(FateCard.Scope.WORLD):
+		return
+	var card := FateCardPresets.get_by_card_id(stable_card_id)
+	if card == null:
+		return
+	var modifier := str(card.effect.get("modifier", ""))
+	match modifier:
+		"next_chest_quality":
+			_next_chest_quality_boost += maxi(0, int(card.effect.get("tiers", 1)))
+		"next_chest_extra":
+			_extra_loot_next_chest_count += maxi(0, int(card.effect.get("count", 1)))
+		"next_room_enemy_count":
+			_next_room_enemy_count += maxi(0, int(card.effect.get("count", 0)))
+		"reveal_rooms":
+			_reveal_nearby_rooms(_current_room_id, int(card.effect.get("radius", 1)))
+		"grant_room_key":
+			_room_key_count += maxi(0, int(card.effect.get("count", 1)))
+			_refresh_loot_label()
+		"currency_gain":
+			_world_currency_multiplier *= maxf(1.0, float(card.effect.get("multiplier", 1.0)))
+		"next_room_enemy_hp":
+			_next_room_enemy_hp_multiplier *= clampf(float(card.effect.get("multiplier", 1.0)), 0.1, 3.0)
+		"next_room_trial":
+			_next_room_enemy_damage_multiplier *= maxf(1.0, float(card.effect.get("damage_multiplier", 1.0)))
+			_next_room_currency_multiplier *= maxf(1.0, float(card.effect.get("currency_multiplier", 1.0)))
+		"room_clear_bounty":
+			_room_clear_bounty_rooms += maxi(0, int(card.effect.get("rooms", 0)))
+			_room_clear_bounty_amount = maxi(_room_clear_bounty_amount, int(card.effect.get("amount", 0)))
+		"extraction_time":
+			var multiplier := clampf(float(card.effect.get("multiplier", 1.0)), 0.1, 1.0)
+			_extraction_time_multiplier *= multiplier
+			for beacon_value in get_tree().get_nodes_in_group("extraction_beacon_3d"):
+				var beacon := beacon_value as ExtractionBeacon3D
+				if beacon != null and is_instance_valid(beacon):
+					beacon.duration *= multiplier
+		_:
+			return
+
+
+func get_world_fate_snapshot() -> Dictionary:
+	return {
+		"next_chest_quality": _next_chest_quality_boost,
+		"next_chest_extra": _extra_loot_next_chest_count,
+		"next_room_enemy_count": _next_room_enemy_count,
+		"next_room_enemy_hp_multiplier": _next_room_enemy_hp_multiplier,
+		"next_room_enemy_damage_multiplier": _next_room_enemy_damage_multiplier,
+		"next_room_currency_multiplier": _next_room_currency_multiplier,
+		"currency_multiplier": _world_currency_multiplier,
+		"bounty_rooms": _room_clear_bounty_rooms,
+		"bounty_amount": _room_clear_bounty_amount,
+		"extraction_time_multiplier": _extraction_time_multiplier,
+	}
 
 
 func apply_curse_to_current_room(damage_multiplier: float) -> void:
@@ -1427,6 +1577,10 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 	room.cleared = true
 	if not was_cleared:
 		room_cleared.emit(room)
+	if not was_cleared and room.room_type in HOSTILE_ROOM_TYPES and _room_clear_bounty_rooms > 0:
+		_grant_run_currency(_room_clear_bounty_amount)
+		_room_clear_bounty_rooms -= 1
+		_refresh_loot_label()
 	if spawn_key and not was_cleared:
 		call_deferred("_ensure_room_key_reward", room)
 
@@ -1589,7 +1743,7 @@ func _show_door_fate_choices() -> void:
 	vbox.add_theme_constant_override("separation", 14)
 	margin.add_child(vbox)
 	var title := Label.new()
-	title.text = "门后命运 · 选择一项装配改造"
+	title.text = "门后命运 · 选择一项命运"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 24)
 	title.add_theme_color_override("font_color", Color(1.0, 0.88, 0.48))
@@ -1602,15 +1756,36 @@ func _show_door_fate_choices() -> void:
 		var card := _door_fate_choices[choice_index]
 		var button := Button.new()
 		button.custom_minimum_size = Vector2(240, 220)
-		button.text = "[%s] %s\n%s\n\n%s" % [
-			FateCard.rarity_name(card.card_rarity), card.card_name,
-			FateCard.type_name(card.card_type), card.description,
-		]
+		button.text = _get_fate_choice_text(card)
 		button.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		button.tooltip_text = card.description
+		button.add_theme_color_override("font_color", FateCard.scope_color(card.scope))
+		button.add_theme_color_override("font_hover_color", FateCard.scope_color(card.scope).lightened(0.18))
+		var card_style := StyleBoxFlat.new()
+		card_style.bg_color = Color(0.025, 0.035, 0.055, 0.98)
+		card_style.border_color = FateCard.scope_color(card.scope)
+		card_style.set_border_width_all(2)
+		card_style.set_corner_radius_all(8)
+		button.add_theme_stylebox_override("normal", card_style)
 		button.pressed.connect(_on_door_fate_selected.bind(choice_index))
 		row.add_child(button)
 	status_label.text = "门已开启 · 选择命运卡片后继续行动"
+
+
+func _get_fate_choice_text(card: FateCard) -> String:
+	var target_text := FateCard.scope_target_text(card.scope)
+	if card.scope == FateCard.Scope.WEAPON:
+		var target := FateCardGameBridge.get_target_summary(card)
+		var instance_tail := str(target.get("weapon_instance_id", "")).right(6).to_upper()
+		var used := int(target.get("fate_slot_used", 0))
+		var capacity := int(target.get("fate_slot_capacity", 0))
+		target_text = "当前枪 #%s · 下一槽 %d/%d\n永久刻印，不可逆" % [
+			instance_tail, mini(used + 1, capacity), capacity,
+		]
+	return "%s\n[%s · %s] %s\n%s\n\n%s" % [
+		FateCard.scope_display_name(card.scope),
+		FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type),
+		card.card_name, target_text, card.description,
+	]
 
 
 func _on_door_fate_selected(choice_index: int) -> void:
@@ -1777,6 +1952,53 @@ func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
 		snapshot.get("fate_slot_capacity", 0),
 	]
 	return true
+
+
+func _on_equipped_weapon_to_inventory_requested(target_slot_index: int) -> void:
+	if player == null or not player.has_method("unequip_weapon_item"):
+		return
+	if not _inventory.get_slot(target_slot_index).is_empty():
+		status_label.text = "卸装失败：目标背包格已有物品"
+		return
+	var result := player.call("unequip_weapon_item") as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "卸装失败"))
+		return
+	var old_item := result.get("old_item", {}) as Dictionary
+	if not _inventory.put_item_in_empty_slot(target_slot_index, old_item, 1):
+		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		status_label.text = (
+			"卸装失败：背包写入失败，已恢复原武器"
+			if bool(rollback.get("success", false))
+			else "卸装事务异常：原武器恢复失败"
+		)
+		return
+	status_label.text = "已卸下 %s #%s · 完整构筑进入背包" % [
+		old_item.get("name", "武器"),
+		str(old_item.get("weapon_instance_id", "")).right(6).to_upper(),
+	]
+
+
+func _on_equipped_weapon_drop_requested() -> void:
+	if player == null or not player.has_method("unequip_weapon_item"):
+		return
+	var result := player.call("unequip_weapon_item") as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "卸装失败"))
+		return
+	var old_item := result.get("old_item", {}) as Dictionary
+	if not _drop_inventory_item_to_world(old_item, 1):
+		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		status_label.text = (
+			"丢弃失败：已恢复原武器"
+			if bool(rollback.get("success", false))
+			else "丢弃事务异常：原武器恢复失败"
+		)
+		return
+	status_label.text = "已卸下并丢弃 %s #%s" % [
+		old_item.get("name", "武器"),
+		str(old_item.get("weapon_instance_id", "")).right(6).to_upper(),
+	]
 
 
 func _install_weapon_module_from_item(item: Dictionary) -> bool:
@@ -2035,6 +2257,8 @@ func _spawn_extraction_attackers(stage: int) -> void:
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
 	hp_label.text = "HP %d/%d" % [current, maximum]
+	hp_bar.max_value = maxi(1, maximum)
+	hp_bar.value = clampi(current, 0, maximum)
 	var hp_ratio := float(current) / float(maxi(1, maximum))
 	var vignette_intensity := clampf((0.34 - hp_ratio) / 0.34, 0.0, 1.0)
 	var vignette_material := low_health_vignette.material as ShaderMaterial

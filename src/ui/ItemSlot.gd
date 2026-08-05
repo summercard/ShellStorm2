@@ -6,9 +6,19 @@ extends TextureRect
 
 signal slot_clicked(slot_index: int)
 signal slot_right_clicked(slot_index: int)
+signal slot_drop_received(source_index: int, target_index: int, source_kind: String, target_kind: String)
+signal slot_drag_ended_outside(source_index: int, source_kind: String)
+signal slot_drag_started(source_index: int, source_kind: String, item: Dictionary)
+signal slot_drag_finished(source_index: int, source_kind: String, successful: bool)
 
 var slot_index: int = -1
 var _hovered: bool = false
+var _drag_started := false
+var _left_pressed := false
+var _suppress_click_release := false
+var _drag_feedback_active := false
+var _drag_feedback_source := false
+var _drag_feedback_valid := false
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
@@ -24,13 +34,102 @@ func set_slot_index(idx: int) -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.pressed:
-			if event.button_index == MOUSE_BUTTON_LEFT:
-				slot_clicked.emit(slot_index)
-				accept_event()
-			elif event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_left_pressed = true
+			else:
+				if _left_pressed and not _suppress_click_release:
+					slot_clicked.emit(slot_index)
+				_left_pressed = false
+				_suppress_click_release = false
+			accept_event()
+		elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 				slot_right_clicked.emit(slot_index)
 				accept_event()
+
+
+func _get_drag_data(_at_position: Vector2) -> Variant:
+	if not has_meta("drag_payload"):
+		return null
+	var payload := (get_meta("drag_payload") as Dictionary).duplicate(true)
+	if payload.is_empty():
+		return null
+	payload["inventory_drag"] = true
+	payload["source_index"] = slot_index
+	payload["source_kind"] = str(get_meta("slot_kind", "inventory"))
+	var item := payload.get("item", {}) as Dictionary
+	var preview := PanelContainer.new()
+	preview.name = "InventoryDragPreview"
+	preview.custom_minimum_size = Vector2(220, 66)
+	preview.add_theme_stylebox_override(
+		"panel", UIStyleFactory.make_panel_with_border(2, UIPalette.BORDER_FOCUS, 5, 2)
+	)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_top", 7)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_bottom", 7)
+	preview.add_child(margin)
+	var text_box := VBoxContainer.new()
+	margin.add_child(text_box)
+	var title := Label.new()
+	title.text = "正在拖拽 · %s" % str(item.get("name", "物品"))
+	title.add_theme_color_override("font_color", Color(0.50, 0.94, 1.0))
+	text_box.add_child(title)
+	var hint := Label.new()
+	hint.text = "释放到高亮格位 · 红区丢弃"
+	hint.add_theme_font_size_override("font_size", 11)
+	hint.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+	text_box.add_child(hint)
+	set_drag_preview(preview)
+	_drag_started = true
+	_suppress_click_release = true
+	slot_drag_started.emit(slot_index, str(get_meta("slot_kind", "inventory")), item.duplicate(true))
+	return payload
+
+
+func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
+	if not data is Dictionary or not bool((data as Dictionary).get("inventory_drag", false)):
+		return false
+	var target_kind := str(get_meta("slot_kind", "inventory"))
+	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
+	var item := (data as Dictionary).get("item", {}) as Dictionary
+	if target_kind == "equipment":
+		return source_kind == "inventory" and str(item.get("type", "")) == "weapon"
+	if target_kind == "inventory" and source_kind == "equipment":
+		return not has_meta("slot_item")
+	return target_kind in ["inventory", "drop"]
+
+
+func _drop_data(_at_position: Vector2, data: Variant) -> void:
+	if not data is Dictionary:
+		return
+	var source_index := int((data as Dictionary).get("source_index", -1))
+	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
+	var target_kind := str(get_meta("slot_kind", "inventory"))
+	slot_drop_received.emit(source_index, slot_index, source_kind, target_kind)
+
+
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_DRAG_END or not _drag_started:
+		return
+	_drag_started = false
+	var successful := get_viewport().gui_is_drag_successful()
+	slot_drag_finished.emit(slot_index, str(get_meta("slot_kind", "inventory")), successful)
+	if not successful:
+		slot_drag_ended_outside.emit(slot_index, str(get_meta("slot_kind", "inventory")))
+
+
+func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary = {}, source_kind := "inventory") -> void:
+	_drag_feedback_active = active
+	_drag_feedback_source = active and is_source
+	var target_kind := str(get_meta("slot_kind", "inventory"))
+	_drag_feedback_valid = active and (
+		target_kind == "drop"
+		or target_kind == "inventory" and (source_kind != "equipment" or not has_meta("slot_item"))
+		or target_kind == "equipment" and source_kind == "inventory" and str(dragged_item.get("type", "")) == "weapon"
+	)
+	queue_redraw()
 
 
 func _on_mouse_entered() -> void:
@@ -45,7 +144,19 @@ func _on_mouse_exited() -> void:
 
 func _draw() -> void:
 	var border_color := Color(0.34, 0.39, 0.48, 0.75)
+	var border_width := 1.0
+	if _drag_feedback_active:
+		if _drag_feedback_source:
+			draw_rect(Rect2(Vector2.ZERO, size), Color(1.0, 0.76, 0.20, 0.14), true)
+			border_color = Color(1.0, 0.76, 0.20, 1.0)
+			border_width = 3.0
+		elif _drag_feedback_valid:
+			var target_kind := str(get_meta("slot_kind", "inventory"))
+			border_color = Color(1.0, 0.25, 0.22, 1.0) if target_kind == "drop" else Color(0.25, 0.95, 0.72, 1.0) if target_kind == "equipment" else Color(0.30, 0.86, 1.0, 0.95)
+			draw_rect(Rect2(Vector2.ZERO, size), Color(border_color.r, border_color.g, border_color.b, 0.10), true)
+			border_width = 2.0
 	if _hovered:
 		draw_rect(Rect2(Vector2.ZERO, size), Color(0.45, 0.56, 0.82, 0.18), true)
 		border_color = Color(0.72, 0.82, 1.0, 1.0)
-	draw_rect(Rect2(Vector2.ZERO, size), border_color, false, 2.0 if _hovered else 1.0)
+		border_width = maxf(border_width, 2.0)
+	draw_rect(Rect2(Vector2.ZERO, size), border_color, false, border_width)

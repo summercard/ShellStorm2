@@ -563,6 +563,21 @@ func equip_weapon_item(item: Dictionary) -> Dictionary:
 	}
 
 
+func unequip_weapon_item() -> Dictionary:
+	var current := get_equipped_weapon_instance()
+	if current == null:
+		return {"success": false, "reason": "当前没有装备枪械"}
+	_sync_equipped_weapon_instance()
+	var old_item := current.to_item_dictionary()
+	_loading_weapon_instance = true
+	if weapon_tree != null:
+		weapon_tree.clear_assembly(false)
+	equipped_weapon_instance = null
+	_loading_weapon_instance = false
+	weapon_instance_changed.emit({})
+	return {"success": true, "old_item": old_item}
+
+
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	if instance == null:

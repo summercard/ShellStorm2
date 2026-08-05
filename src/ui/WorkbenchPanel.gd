@@ -265,15 +265,16 @@ func _show_fate_card_options() -> void:
 			% [int(rarity_color.r * 255), int(rarity_color.g * 255), int(rarity_color.b * 255)]
 		)
 		btn.text = (
-			"[%s] %s\n%s"
+			"%s · [%s]\n%s\n%s"
 			% [
+				FateCard.scope_display_name(card.scope),
 				FateCard.rarity_name(card.card_rarity),
 				card.card_name,
 				FateCard.type_name(card.card_type),
 			]
 		)
 		btn.custom_minimum_size = Vector2(240, 80)
-		btn.tooltip_text = card.description
+		btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
 		# 稀有边框：normal = 稀有色，hover = 白色高亮
 		var card_normal := UIStyleFactory.make_panel_with_border(2, rarity_color, 6, 2)
 		card_normal.bg_color = UIPalette.BG_DARK

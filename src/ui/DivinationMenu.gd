@@ -63,11 +63,11 @@ func _create_card_button(card: FateCard) -> Button:
 		% [int(rarity_color.r * 255), int(rarity_color.g * 255), int(rarity_color.b * 255)]
 	)
 
-	# 多行文本：品质/名称/类型/描述
+	# 卡面先显示天体作用域专名，再显示品质/名称/效果类型。
 	var type_str := FateCard.type_name(card.card_type)
 	btn.text = (
-		"[%s]\n%s\n%s"
-		% [FateCard.rarity_name(card.card_rarity), card.card_name, type_str]
+		"%s\n[%s] %s\n%s"
+		% [FateCard.scope_display_name(card.scope), FateCard.rarity_name(card.card_rarity), card.card_name, type_str]
 	)
 	btn.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -78,7 +78,7 @@ func _create_card_button(card: FateCard) -> Button:
 	btn.pressed.connect(_on_card_button_pressed.bind(card))
 
 	# Tooltip
-	btn.tooltip_text = card.description
+	btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
 
 	# 卡片背景色 — 稀有色边框
 	var bg_style := UIStyleFactory.make_panel_with_border(1, rarity_color, 6, 2)

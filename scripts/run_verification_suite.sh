@@ -23,6 +23,8 @@ core_scenes=(
   verify_3d_fate_weapon_flow
   verify_3d_inventory_weapon_flow
   verify_weapon_instance_fate_ownership_flow
+  verify_celestial_fate_scope_flow
+  verify_tactical_inventory_minimap_flow
   verify_door_passability
   verify_tower_descent_flow
   verify_3d_performance_budget
@@ -40,6 +42,7 @@ visual_scenes=(
   verify_tower_descent_visual
   verify_tower_stair_fall_visual
   verify_training_range_3d_visual
+  verify_tactical_inventory_minimap_visual
   verify_wall_alignment_overlay
   verify_wall_alignment_pure
   verify_wall_alignment_visual

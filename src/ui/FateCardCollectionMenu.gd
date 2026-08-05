@@ -130,6 +130,13 @@ func _create_card_ui(card: FateCard) -> Control:
 	name_lbl.custom_minimum_size.y = 32
 	vbox.add_child(name_lbl)
 
+	var scope_lbl := Label.new()
+	scope_lbl.text = FateCard.scope_display_name(card.scope)
+	scope_lbl.add_theme_color_override("font_color", FateCard.scope_color(card.scope))
+	scope_lbl.add_theme_font_size_override("font_size", 10)
+	scope_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(scope_lbl)
+
 	# 分隔线
 	var divider := HSeparator.new()
 	divider.add_theme_constant_override("custom_minimum_size", 0)
@@ -154,7 +161,7 @@ func _create_card_ui(card: FateCard) -> Control:
 	rarity_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(rarity_badge)
 
-	panel.tooltip_text = card.description
+	panel.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
 	return panel
 
 func _add_close_hint() -> void:

@@ -49,6 +49,13 @@ func set_player(player: Node) -> void:
 	if not _player_weapon_tree.tree_changed.is_connected(_on_tree_changed):
 		_player_weapon_tree.tree_changed.connect(_on_tree_changed)
 
+
+func reset_run_state() -> void:
+	applied_cards.clear()
+	character_card_ids.clear()
+	world_card_ids.clear()
+	card_list_changed.emit()
+
 ## 实例方法：实际应用卡片
 func apply_card_instance(card: FateCard) -> Dictionary:
 	if card == null:
@@ -89,6 +96,8 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 		"success": engine_result.success,
 		"message": engine_result.message,
 		"scope": scope_name,
+		"scope_special_name": FateCard.scope_special_name(card.scope),
+		"scope_display_name": FateCard.scope_display_name(card.scope),
 	}
 	if engine_result.success:
 		if card.scope == FateCard.Scope.WEAPON:
@@ -108,6 +117,18 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 			result_dict["slot_index"] = record.get("slot_index", 0)
 			result_dict["slot_capacity"] = target_snapshot.get("fate_slot_capacity", 0)
 		elif card.scope == FateCard.Scope.CHARACTER:
+			if int(card.effect.get("action", -1)) == FateCard.EffectAction.APPLY_SCOPED_MODIFIER:
+				if _player == null or not _player.has_method("apply_character_fate_modifier"):
+					result_dict["success"] = false
+					result_dict["message"] = "角色命运所有者不可用；卡片未消耗"
+					card_applied.emit(card, false, result_dict["message"])
+					return result_dict
+				var character_result := _player.call("apply_character_fate_modifier", card.effect) as Dictionary
+				if not bool(character_result.get("success", false)):
+					result_dict["success"] = false
+					result_dict["message"] = str(character_result.get("message", "角色命运应用失败"))
+					card_applied.emit(card, false, result_dict["message"])
+					return result_dict
 			character_card_ids.append(card.get_stable_card_id())
 			scope_state_changed.emit(scope_name, card.get_stable_card_id())
 		else:
@@ -127,6 +148,8 @@ func get_target_summary(card: FateCard = null) -> Dictionary:
 		return {}
 	var result := {
 		"scope": FateCard.scope_name(card.scope),
+		"scope_special_name": FateCard.scope_special_name(card.scope),
+		"scope_display_name": FateCard.scope_display_name(card.scope),
 		"occupies_weapon_slot": card.occupies_weapon_slot(),
 		"stable_card_id": card.get_stable_card_id(),
 	}
@@ -181,6 +204,34 @@ func get_card_count() -> int:
 
 func get_cards() -> Array[FateCard]:
 	return applied_cards.duplicate()
+
+
+func get_scope_cards(scope: FateCard.Scope) -> Array[FateCard]:
+	var cards: Array[FateCard] = []
+	for card in applied_cards:
+		if card != null and card.scope == scope:
+			cards.append(card)
+	return cards
+
+
+func get_scope_state_snapshot() -> Dictionary:
+	var character_cards: Array[Dictionary] = []
+	var world_cards: Array[Dictionary] = []
+	for card in applied_cards:
+		if card == null or card.scope == FateCard.Scope.WEAPON:
+			continue
+		var entry := {
+			"stable_card_id": card.get_stable_card_id(),
+			"name": card.card_name,
+			"short_description": card.short_description,
+			"scope": FateCard.scope_name(card.scope),
+			"scope_display_name": FateCard.scope_display_name(card.scope),
+		}
+		if card.scope == FateCard.Scope.CHARACTER:
+			character_cards.append(entry)
+		else:
+			world_cards.append(entry)
+	return {"character": character_cards, "world": world_cards}
 
 ## 给予随机命运卡片（由环境命运触发器调用，通过 FateCardEngine 间接触发）
 func grant_random_card_from_trigger() -> void:

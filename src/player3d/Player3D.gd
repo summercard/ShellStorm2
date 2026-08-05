@@ -77,6 +77,18 @@ var _landing_duration := LANDING_MIN_DURATION_S
 var _last_safe_ground_position := Vector3.ZERO
 var _has_safe_ground_position := false
 var _fall_recovery_count := 0
+var _character_fate := {
+	"move_speed_multiplier": 1.0,
+	"dash_cooldown_multiplier": 1.0,
+	"damage_taken_multiplier": 1.0,
+	"weapon_damage_multiplier": 1.0,
+	"room_heal": 0,
+	"elite_heal": 0,
+	"first_hit_multiplier": 1.0,
+	"first_hit_ready": false,
+	"last_stand_charges": 0,
+	"room_ammo_ratio": 0.0,
+}
 
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
@@ -180,7 +192,11 @@ func get_avatar_customization_options() -> Dictionary:
 
 
 func get_move_speed() -> float:
-	return SPEED
+	return SPEED * float(_character_fate.get("move_speed_multiplier", 1.0))
+
+
+func get_dash_cooldown_duration() -> float:
+	return DASH_COOLDOWN * float(_character_fate.get("dash_cooldown_multiplier", 1.0))
 
 
 func get_grounded_velocity(planar_velocity: Vector3) -> Vector3:
@@ -347,8 +363,16 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 	if current_hp <= 0 or is_invincible:
 		return
 	var overheat_multiplier := weapon_tree.get_overheat_penalty() if weapon_tree != null else 1.0
-	_last_damage_amount = maxi(1, int(amount * overheat_multiplier))
-	current_hp = maxi(0, current_hp - _last_damage_amount)
+	var fate_multiplier := float(_character_fate.get("damage_taken_multiplier", 1.0))
+	if bool(_character_fate.get("first_hit_ready", false)):
+		fate_multiplier *= float(_character_fate.get("first_hit_multiplier", 1.0))
+		_character_fate["first_hit_ready"] = false
+	_last_damage_amount = maxi(1, int(round(float(amount) * overheat_multiplier * fate_multiplier)))
+	var next_hp := current_hp - _last_damage_amount
+	if next_hp <= 0 and int(_character_fate.get("last_stand_charges", 0)) > 0:
+		_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) - 1
+		next_hp = 1
+	current_hp = maxi(0, next_hp)
 	if AudioManager != null:
 		AudioManager.play_player_hit_sfx()
 	hp_changed.emit(current_hp, max_hp)
@@ -376,6 +400,64 @@ func heal(amount: int) -> void:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
 	hp_changed.emit(current_hp, max_hp)
+
+
+func apply_character_fate_modifier(effect: Dictionary) -> Dictionary:
+	var modifier := str(effect.get("modifier", ""))
+	match modifier:
+		"max_hp":
+			var amount := maxi(0, int(effect.get("amount", 0)))
+			max_hp += amount
+			current_hp = mini(max_hp, current_hp + amount)
+			hp_changed.emit(current_hp, max_hp)
+		"move_speed":
+			_character_fate["move_speed_multiplier"] = float(_character_fate["move_speed_multiplier"]) * float(effect.get("multiplier", 1.0))
+		"dash_cooldown":
+			_character_fate["dash_cooldown_multiplier"] = float(_character_fate["dash_cooldown_multiplier"]) * float(effect.get("multiplier", 1.0))
+		"damage_taken":
+			_character_fate["damage_taken_multiplier"] = float(_character_fate["damage_taken_multiplier"]) * float(effect.get("multiplier", 1.0))
+		"weapon_damage":
+			_character_fate["weapon_damage_multiplier"] = float(_character_fate["weapon_damage_multiplier"]) * float(effect.get("multiplier", 1.0))
+			set_damage_multiplier("fate_moon_power", float(_character_fate["weapon_damage_multiplier"]))
+		"room_heal":
+			_character_fate["room_heal"] = int(_character_fate["room_heal"]) + int(effect.get("amount", 0))
+		"elite_heal":
+			_character_fate["elite_heal"] = int(_character_fate["elite_heal"]) + int(effect.get("amount", 0))
+		"first_hit_guard":
+			_character_fate["first_hit_multiplier"] = float(_character_fate["first_hit_multiplier"]) * float(effect.get("multiplier", 1.0))
+			_character_fate["first_hit_ready"] = true
+		"last_stand":
+			_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) + int(effect.get("charges", 1))
+		"room_ammo":
+			_character_fate["room_ammo_ratio"] = float(_character_fate["room_ammo_ratio"]) + float(effect.get("ratio", 0.0))
+		_:
+			return {"success": false, "message": "未知月亮命运效果：" + modifier}
+	return {"success": true, "message": "月亮命运已写入角色本局状态"}
+
+
+func on_fate_room_entered() -> Dictionary:
+	_character_fate["first_hit_ready"] = float(_character_fate.get("first_hit_multiplier", 1.0)) < 1.0
+	var healed := int(_character_fate.get("room_heal", 0))
+	if healed > 0:
+		heal(healed)
+	var ammo_added := 0
+	if weapon != null and is_instance_valid(weapon):
+		ammo_added = int(ceil(float(weapon.magazine_size) * float(_character_fate.get("room_ammo_ratio", 0.0))))
+		if ammo_added > 0:
+			weapon.current_ammo = mini(weapon.magazine_size, weapon.current_ammo + ammo_added)
+			weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
+	return {"healed": healed, "ammo_added": ammo_added}
+
+
+func on_fate_elite_killed() -> int:
+	var amount := int(_character_fate.get("elite_heal", 0))
+	if amount > 0:
+		heal(amount)
+	return amount
+
+
+func get_character_fate_snapshot() -> Dictionary:
+	return _character_fate.duplicate(true)
 
 
 func request_dash() -> void:
@@ -575,6 +657,25 @@ func equip_weapon_item(item: Dictionary) -> Dictionary:
 	}
 
 
+func unequip_weapon_item() -> Dictionary:
+	var current := get_equipped_weapon_instance()
+	if current == null:
+		return {"success": false, "reason": "当前没有装备枪械"}
+	_sync_equipped_weapon_instance()
+	var old_item := current.to_item_dictionary()
+	_loading_weapon_instance = true
+	if weapon_tree != null:
+		weapon_tree.clear_assembly(false)
+	if weapon != null and is_instance_valid(weapon):
+		weapon.clear_weapon()
+	equipped_weapon_instance = null
+	_loading_weapon_instance = false
+	weapon_instance_changed.emit({})
+	weapon_changed.emit("", "")
+	ammo_changed.emit(0, 0)
+	return {"success": true, "old_item": old_item}
+
+
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	if instance == null:
@@ -716,7 +817,7 @@ func _begin_dash() -> bool:
 	if dash_direction == Vector3.ZERO:
 		dash_direction = last_move_direction
 	dash_direction = dash_direction.normalized()
-	dash_cooldown_timer = DASH_COOLDOWN
+	dash_cooldown_timer = get_dash_cooldown_duration()
 	_state_machine.transition_to("dashing")
 	return true
 
@@ -724,7 +825,7 @@ func _begin_dash() -> bool:
 func _tick_dash_cooldown(delta: float) -> void:
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer = maxf(0.0, dash_cooldown_timer - delta)
-	dash_cooldown_changed.emit(clampf(dash_cooldown_timer / DASH_COOLDOWN, 0.0, 1.0))
+	dash_cooldown_changed.emit(clampf(dash_cooldown_timer / maxf(0.01, get_dash_cooldown_duration()), 0.0, 1.0))
 
 
 func _tick_action_overlays(delta: float) -> void:
