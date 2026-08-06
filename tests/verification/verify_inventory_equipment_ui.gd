@@ -52,10 +52,14 @@ func _verify_inventory_ui(failures: Array[String]) -> void:
 			var count_label := slot_node.get_node_or_null("CountLabel") as Control
 			if count_label != null and count_label.mouse_filter != Control.MOUSE_FILTER_IGNORE:
 				failures.append("Inventory count label intercepts clicks intended for its item slot")
-			var click := InputEventMouseButton.new()
-			click.button_index = MOUSE_BUTTON_LEFT
-			click.pressed = true
-			slot_node.call("_on_gui_input", click)
+			var pressed := InputEventMouseButton.new()
+			pressed.button_index = MOUSE_BUTTON_LEFT
+			pressed.pressed = true
+			slot_node.call("_on_gui_input", pressed)
+			var released := InputEventMouseButton.new()
+			released.button_index = MOUSE_BUTTON_LEFT
+			released.pressed = false
+			slot_node.call("_on_gui_input", released)
 		await get_tree().process_frame
 		if mode.insurance_module.get_used_slots() != 0:
 			failures.append("Plain left-click moved an actionable item into insurance")

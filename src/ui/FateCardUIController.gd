@@ -14,6 +14,8 @@ var current_options: Array[FateCard] = []
 
 ## 是否正在显示选卡界面
 var is_visible: bool = false
+var _pending_currency_card_id := ""
+const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
 
 ## 来自 GameUIManager 的引用
 var _ui_manager: Node = null
@@ -73,24 +75,25 @@ func show_card_selection() -> void:
 
 	# 清空旧选项
 	current_options.clear()
+	_pending_currency_card_id = ""
 	if card_container != null:
 		for child in card_container.get_children():
 			child.queue_free()
 
-	# 从预设中随机抽取 3 张
-	var all_cards = FateCardPresets.playable_presets()
-	all_cards.shuffle()
-	current_options = all_cards.slice(0, 3)
+	# 从共享塔罗卡池无重复抽取3张，并独立判定正/逆位。
+	current_options = FateCardPresets.draw_offer(3)
 
 	# 创建卡片按钮
 	if card_container != null:
-		for card in current_options:
+		for choice_index in range(current_options.size()):
+			var card := current_options[choice_index]
 			var btn = _create_card_button(card)
 			card_container.add_child(btn)
+			_play_tarot_flip(btn, card, choice_index)
 
 	# 更新提示文字
 	if instruction_label != null:
-		instruction_label.text = "选择一张命运卡片（Tab关闭）"
+		instruction_label.text = "选择一张命运卡片（Esc / Tab关闭）"
 
 	if card_panel != null:
 		card_panel.show()
@@ -98,11 +101,23 @@ func show_card_selection() -> void:
 	Global.acquire_pause("fate_card")
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if not is_visible:
+		return
+	var key_event := event as InputEventKey
+	if key_event != null and key_event.pressed and not key_event.echo and (
+		key_event.keycode == KEY_ESCAPE or key_event.physical_keycode == KEY_ESCAPE
+	):
+		hide_card_selection()
+		get_viewport().set_input_as_handled()
+
+
 ## 隐藏卡片选择界面
 func hide_card_selection() -> void:
 	if card_panel != null:
 		card_panel.hide()
 	is_visible = false
+	_pending_currency_card_id = ""
 	Global.release_pause("fate_card")
 	if _ui_manager != null:
 		var room_mode = _ui_manager.get("_room_game_mode")
@@ -141,6 +156,7 @@ func _create_card_button(card: FateCard) -> Button:
 	if card.icon_emoji != "":
 		display_text += card.icon_emoji + " "
 	display_text += card.card_name
+	display_text += "\n%s %s" % [card.orientation_symbol(), card.orientation_name()]
 	if card.short_description != "":
 		display_text += "\n" + card.short_description
 	display_text += "\n%s" % FateCard.scope_display_name(card.scope)
@@ -153,8 +169,8 @@ func _create_card_button(card: FateCard) -> Button:
 			target_summary.get("instance_suffix", "------"),
 		]
 		if used >= capacity:
-			btn.disabled = true
-			btn.tooltip_text = "枪械命运槽已满；该卡不会被消耗"
+			display_text += "\n命运槽已满 · 再次点击兑魂%d" % int(FATE_CURRENCY_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_CURRENCY_BY_RARITY.size() - 1)])
+			btn.tooltip_text = "首次点击确认，第二次点击同一卡片转换为货币"
 	elif card.scope == FateCard.Scope.CHARACTER:
 		display_text += "  本局角色｜不占武器槽"
 	else:
@@ -172,11 +188,65 @@ func _create_card_button(card: FateCard) -> Button:
 	btn.add_theme_font_size_override("font_size", 13)
 
 	btn.pressed.connect(_on_card_selected.bind(card))
+	btn.set_meta("tarot_face_ready", false)
 	return btn
+
+
+func _play_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
+	if button == null:
+		return
+	var face_text := button.text
+	button.disabled = true
+	button.text = "✦\n命运塔罗\nFATE"
+	button.scale = Vector2.ONE
+	button.pivot_offset = button.size * 0.5
+	var reduce_motion := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if reduce_motion:
+		button.modulate.a = 0.0
+		button.text = face_text
+		button.rotation = PI if card.is_reversed() else 0.0
+		tween.tween_property(button, "modulate:a", 1.0, 0.15)
+	else:
+		tween.tween_interval(0.10 + float(choice_index) * 0.08)
+		tween.tween_property(button, "scale:x", 0.04, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tween.tween_callback(func() -> void:
+			button.text = face_text
+			button.rotation = PI if card.is_reversed() else 0.0
+		)
+		tween.tween_property(button, "scale:x", 1.0, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(_finish_tarot_flip.bind(button, card))
+
+
+func _finish_tarot_flip(button: Button, card: FateCard) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	button.disabled = false
+	button.set_meta("tarot_face_ready", true)
+	button.set_meta("tarot_orientation", card.orientation_name())
+	button.set_meta("tarot_face_rotation", button.rotation)
 
 
 ## 玩家选中了一张卡片
 func _on_card_selected(card: FateCard) -> void:
+	if card.scope == FateCard.Scope.WEAPON:
+		var target := FateCardGameBridge.get_target_summary(card)
+		var capacity := int(target.get("fate_slot_capacity", 0))
+		if capacity > 0 and int(target.get("fate_slot_used", 0)) >= capacity:
+			var stable_id := card.get_stable_card_id()
+			var value := int(FATE_CURRENCY_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_CURRENCY_BY_RARITY.size() - 1)])
+			if _pending_currency_card_id != stable_id:
+				_pending_currency_card_id = stable_id
+				if instruction_label != null:
+					instruction_label.text = "再次点击%s，转换为%d魂；Esc取消" % [card.card_name, value]
+				return
+			GameManager.add_currency(value)
+			if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
+				_ui_manager.show_fate_card_notification("命运转化：%s → %d魂" % [card.card_name, value])
+			hide_card_selection()
+			return
+	_pending_currency_card_id = ""
 	var result = FateCardGameBridge.apply_card(card)
 
 	if result.success:

@@ -246,10 +246,8 @@ func _show_fate_card_options() -> void:
 	header.add_theme_color_override("font_color", Color(0.8, 0.5, 1.0, 1.0))
 	gunbody_options.add_child(header)
 
-	# 随机抽 3 张
-	var all_cards: Array[FateCard] = FateCardPresets.playable_presets()
-	all_cards.shuffle()
-	var choices: Array[FateCard] = all_cards.slice(0, 3)
+	# 共享塔罗抽牌：无重复，正/逆位各50%。
+	var choices := FateCardPresets.draw_offer(3)
 
 	if choices.is_empty():
 		var empty_lbl := Label.new()
@@ -257,7 +255,8 @@ func _show_fate_card_options() -> void:
 		gunbody_options.add_child(empty_lbl)
 		return
 
-	for card in choices:
+	for choice_index in range(choices.size()):
+		var card := choices[choice_index]
 		var btn := Button.new()
 		var rarity_color: Color = FateCard.rarity_color(card.card_rarity)
 		var color_hex := (
@@ -265,11 +264,13 @@ func _show_fate_card_options() -> void:
 			% [int(rarity_color.r * 255), int(rarity_color.g * 255), int(rarity_color.b * 255)]
 		)
 		btn.text = (
-			"%s · [%s]\n%s\n%s"
+			"%s · [%s]\n%s\n%s %s · %s"
 			% [
 				FateCard.scope_display_name(card.scope),
 				FateCard.rarity_name(card.card_rarity),
 				card.card_name,
+				card.orientation_symbol(),
+				card.orientation_name(),
 				FateCard.type_name(card.card_type),
 			]
 		)
@@ -286,6 +287,7 @@ func _show_fate_card_options() -> void:
 		btn.add_theme_font_size_override("font_size", 13)
 		btn.pressed.connect(_on_fate_card_selected.bind(card))
 		gunbody_options.add_child(btn)
+		_play_workbench_tarot_flip(btn, card, choice_index)
 
 	# 右侧显示说明
 	var desc := Label.new()
@@ -295,6 +297,34 @@ func _show_fate_card_options() -> void:
 	desc.autowrap_mode = TextServer.AUTOWRAP_WORD
 	desc.custom_minimum_size = Vector2(200, 100)
 	bullet_options.add_child(desc)
+
+
+func _play_workbench_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
+	var face_text := button.text
+	button.disabled = true
+	button.text = "✦ 命运塔罗"
+	button.set_meta("tarot_face_ready", false)
+	button.pivot_offset = button.size * 0.5
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		button.modulate.a = 0.0
+		button.text = face_text
+		button.rotation = PI if card.is_reversed() else 0.0
+		tween.tween_property(button, "modulate:a", 1.0, 0.15)
+	else:
+		tween.tween_interval(0.10 + float(choice_index) * 0.08)
+		tween.tween_property(button, "scale:x", 0.04, 0.14)
+		tween.tween_callback(func() -> void:
+			button.text = face_text
+			button.rotation = PI if card.is_reversed() else 0.0
+		)
+		tween.tween_property(button, "scale:x", 1.0, 0.18)
+	tween.tween_callback(func() -> void:
+		button.disabled = false
+		button.set_meta("tarot_face_ready", true)
+		button.set_meta("tarot_face_rotation", button.rotation)
+	)
 
 
 func _clear_gunbody_options() -> void:

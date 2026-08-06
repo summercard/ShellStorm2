@@ -33,6 +33,11 @@ enum Scope {
 	WORLD,
 }
 
+enum Orientation {
+	UPRIGHT,
+	REVERSED,
+}
+
 const STABLE_ID_BY_NAME := {
 	"变大了": "fate_scale_node",
 	"超频": "fate_overclock",
@@ -159,9 +164,22 @@ enum EffectAction {
 var card_id: String = ""
 var stable_card_id: String = ""
 var card_name: String = ""
+var legacy_card_name: String = ""
 var description: String = ""          # 完整说明（可选，UI可显示简化版）
 var short_description: String = ""     # 简化版单行说明（用于UI显示）
 var icon_emoji: String = ""           # 物品图标emoji（用于UI显示）
+var tarot_arcana: String = ""
+var tarot_suit: String = ""
+var tarot_number: String = ""
+var orientation: int = Orientation.UPRIGHT
+var orientation_roll: float = 0.0
+var _orientation_payload_ready := false
+var _upright_description := ""
+var _upright_short_description := ""
+var _upright_effect: Dictionary = {}
+var _reversed_description := ""
+var _reversed_short_description := ""
+var _reversed_effect: Dictionary = {}
 
 ## 类型与品质
 var card_type: CardType = CardType.ENHANCE
@@ -185,11 +203,16 @@ var visual: Dictionary = {}
 static var _id_counter: int = 0
 
 func _init(p_name: String = "", p_type: CardType = CardType.ENHANCE, p_rarity: CardRarity = CardRarity.COMMON) -> void:
-	card_name = p_name
+	legacy_card_name = p_name
 	card_type = p_type
 	card_rarity = p_rarity
 	stable_card_id = str(STABLE_ID_BY_NAME.get(p_name, ""))
 	card_id = stable_card_id if not stable_card_id.is_empty() else _generate_id()
+	var tarot_definition := TarotFateCatalog.get_definition(stable_card_id)
+	card_name = str(tarot_definition.get("name", p_name))
+	tarot_arcana = str(tarot_definition.get("arcana", ""))
+	tarot_suit = str(tarot_definition.get("suit", ""))
+	tarot_number = str(tarot_definition.get("number", ""))
 	if stable_card_id in CHARACTER_SCOPE_IDS:
 		scope = Scope.CHARACTER
 	elif stable_card_id in WORLD_SCOPE_IDS:
@@ -276,6 +299,65 @@ func get_stable_card_id() -> String:
 func occupies_weapon_slot() -> bool:
 	return scope == Scope.WEAPON
 
+
+func set_orientation(value: int, roll := -1.0) -> void:
+	_ensure_orientation_payloads()
+	orientation = value
+	if roll >= 0.0:
+		orientation_roll = clampf(roll, 0.0, 1.0)
+	if orientation == Orientation.REVERSED:
+		description = _reversed_description
+		short_description = _reversed_short_description
+		effect = _reversed_effect.duplicate(true)
+	else:
+		description = _upright_description
+		short_description = _upright_short_description
+		effect = _upright_effect.duplicate(true)
+
+
+func roll_orientation(roll: float) -> int:
+	var normalized_roll := clampf(roll, 0.0, 0.999999)
+	set_orientation(Orientation.REVERSED if normalized_roll >= 0.5 else Orientation.UPRIGHT, normalized_roll)
+	return orientation
+
+
+func orientation_name() -> String:
+	return "逆位" if orientation == Orientation.REVERSED else "正位"
+
+
+func orientation_symbol() -> String:
+	return "▽" if orientation == Orientation.REVERSED else "△"
+
+
+func is_reversed() -> bool:
+	return orientation == Orientation.REVERSED
+
+
+func get_orientation_snapshot() -> Dictionary:
+	_ensure_orientation_payloads()
+	return {
+		"orientation": "REVERSED" if is_reversed() else "UPRIGHT",
+		"orientation_name": orientation_name(),
+		"orientation_roll": orientation_roll,
+		"effect_params_snapshot": effect.duplicate(true),
+	}
+
+
+func _ensure_orientation_payloads() -> void:
+	if _orientation_payload_ready:
+		return
+	_orientation_payload_ready = true
+	_upright_description = description
+	_upright_short_description = short_description
+	_upright_effect = effect.duplicate(true)
+	var definition := TarotFateCatalog.get_definition(get_stable_card_id())
+	_reversed_description = str(definition.get("reversed_description", description))
+	_reversed_short_description = str(definition.get("reversed_short", short_description))
+	_reversed_effect = _upright_effect.duplicate(true)
+	_reversed_effect.merge(definition.get("reversed_effect_patch", {}) as Dictionary, true)
+	_reversed_effect["orientation"] = "REVERSED"
+	_upright_effect["orientation"] = "UPRIGHT"
+
 ## 获取品质颜色（用于 UI）
 static func rarity_color(r: CardRarity) -> Color:
 	match r:
@@ -293,6 +375,12 @@ func get_debug_info() -> Dictionary:
 		"stable_card_id": get_stable_card_id(),
 		"scope": scope_name(scope),
 		"name": card_name,
+		"legacy_name": legacy_card_name,
+		"tarot_arcana": tarot_arcana,
+		"tarot_suit": tarot_suit,
+		"tarot_number": tarot_number,
+		"orientation": orientation_name(),
+		"orientation_roll": orientation_roll,
 		"type": type_name(card_type),
 		"rarity": rarity_name(card_rarity),
 		"tags": tags,

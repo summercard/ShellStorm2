@@ -344,7 +344,7 @@ static func _apply_attach_to_mount(
 		return result
 
 	# 配件寄生：标记命中触发效果，供 Bullet 运行时检测
-	if card.card_name == "配件寄生" or card.effect.get("trigger_on_hit", false):
+	if card.get_stable_card_id() == "fate_attachment_parasite" or card.effect.get("trigger_on_hit", false):
 		var attach_stats: Dictionary = child_node.get_base_stats()
 		attach_stats["fate_attachment_hit_trigger"] = true
 		attach_stats["trigger_on_hit"] = true

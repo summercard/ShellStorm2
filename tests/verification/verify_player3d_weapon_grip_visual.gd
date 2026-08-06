@@ -2,6 +2,7 @@ extends Node
 
 const PLAYER := preload("res://scenes/Player3D.tscn")
 const OUTPUT := "res://outputs/verification/player3d_weapon_grip.png"
+const BACK_SOCKETS_OUTPUT := "res://outputs/verification/player3d_back_weapon_sockets.png"
 
 
 func _ready() -> void:
@@ -82,5 +83,33 @@ func _ready() -> void:
 		push_error("Cannot save Bunny v006 weapon grip preview")
 		get_tree().quit(1)
 		return
-	print("BUNNY_V006_WEAPON_GRIP_VISUAL_OK: baked 1.5 m right-side pistol and two-hand rifle comparison saved")
+
+	# Back-socket presentation: active primary leaves secondary on the avatar-right
+	# socket; active secondary leaves primary on the avatar-left socket. Both gun
+	# models use local -Z as muzzle-forward, rotated by the socket to world-down.
+	var shotgun_item := WeaponInstance.ensure_weapon_item(
+		ItemRegistry.get_instance().get_item("weapon_shotgun")
+	)
+	var charge_item := WeaponInstance.ensure_weapon_item(
+		ItemRegistry.get_instance().get_item("weapon_charge")
+	)
+	if (
+		not bool(sidearm_player.equip_weapon_item_to_slot(shotgun_item, 1).get("success", false))
+		or not bool(rifle_player.equip_weapon_item_to_slot(charge_item, 1).get("success", false))
+		or not bool(rifle_player.switch_weapon_slot(1).get("success", false))
+	):
+		push_error("Cannot prepare main/secondary back-socket preview")
+		get_tree().quit(1)
+		return
+	await get_tree().process_frame
+	await get_tree().process_frame
+	camera.position = Vector3(0.0, 2.25, 5.6)
+	camera.look_at_from_position(camera.position, Vector3(0.0, 0.72, 0.12), Vector3.UP)
+	await get_tree().process_frame
+	var back_image := get_viewport().get_texture().get_image()
+	if back_image == null or back_image.is_empty() or back_image.save_png(BACK_SOCKETS_OUTPUT) != OK:
+		push_error("Cannot save Bunny main/secondary back-socket preview")
+		get_tree().quit(1)
+		return
+	print("BUNNY_V006_WEAPON_GRIP_VISUAL_OK: held grips and left-primary/right-secondary muzzle-down back sockets saved")
 	get_tree().quit(0)

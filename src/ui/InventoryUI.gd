@@ -10,8 +10,10 @@ signal item_extraction_requested(slot_index: int)
 signal item_dropped_to_world(item: Dictionary, count: int)
 signal inventory_changed()  ## 背包变化时发出（供 GameUIManager 绑定）
 signal inventory_open_changed(opened: bool)
-signal equipped_weapon_to_inventory_requested(target_slot_index: int)
-signal equipped_weapon_drop_requested()
+signal weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: int)
+signal equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slot_index: int)
+signal equipped_weapon_drop_requested(weapon_slot_index: int)
+signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
 
 @export var inventory_capacity: int = 12
 @export var insurance_capacity: int = 2
@@ -38,6 +40,10 @@ var inventory_shell: PanelContainer
 var equipment_panel: PanelContainer
 var equipment_weapon_slot: Control
 var equipment_weapon_label: Label
+var equipment_weapon_slots: Array[Control] = []
+var equipment_weapon_labels: Array[Label] = []
+var quick_item_slots: Array[Control] = []
+var quick_item_ids: Array[String] = ["", ""]
 var equipment_hp_bar: ProgressBar
 var equipment_hp_label: Label
 var equipment_fate_label: Label
@@ -182,22 +188,59 @@ func _setup_standalone_panels() -> void:
 	equipment_hp_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(Color(0.90, 0.10, 0.12)))
 	equipment_vbox.add_child(equipment_hp_bar)
 	var weapon_title := Label.new()
-	weapon_title.text = "主武器 · 拖入枪械可整枪换装"
+	weapon_title.text = "武器栏 · 左主武器 / 右副武器"
 	weapon_title.add_theme_color_override("font_color", UIPalette.TEXT_GOLD)
 	equipment_vbox.add_child(weapon_title)
-	equipment_weapon_slot = _create_slot()
-	equipment_weapon_slot.name = "MainWeaponEquipmentSlot"
-	equipment_weapon_slot.custom_minimum_size = Vector2(150, 92)
-	if equipment_weapon_slot.has_method("set_slot_index"):
-		equipment_weapon_slot.call("set_slot_index", -1)
-	equipment_weapon_slot.set_meta("slot_kind", "equipment")
-	_connect_slot_signals(equipment_weapon_slot, -1, false)
-	equipment_vbox.add_child(equipment_weapon_slot)
-	equipment_weapon_label = Label.new()
-	equipment_weapon_label.name = "MainWeaponEquipmentLabel"
-	equipment_weapon_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	equipment_weapon_label.text = "未装备"
-	equipment_vbox.add_child(equipment_weapon_label)
+	var weapon_slots_row := HBoxContainer.new()
+	weapon_slots_row.add_theme_constant_override("separation", 10)
+	equipment_vbox.add_child(weapon_slots_row)
+	for weapon_slot_index in range(2):
+		var slot_box := VBoxContainer.new()
+		slot_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		weapon_slots_row.add_child(slot_box)
+		var slot_caption := Label.new()
+		slot_caption.text = "[1] 主武器" if weapon_slot_index == 0 else "[2] 副武器"
+		slot_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		slot_caption.add_theme_font_size_override("font_size", 12)
+		slot_box.add_child(slot_caption)
+		var weapon_slot := _create_slot()
+		weapon_slot.name = "MainWeaponEquipmentSlot" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentSlot"
+		weapon_slot.custom_minimum_size = Vector2(138, 86)
+		if weapon_slot.has_method("set_slot_index"):
+			weapon_slot.call("set_slot_index", weapon_slot_index)
+		weapon_slot.set_meta("slot_kind", "weapon_%d" % weapon_slot_index)
+		weapon_slot.set_meta("weapon_slot_index", weapon_slot_index)
+		_connect_slot_signals(weapon_slot, weapon_slot_index, false)
+		slot_box.add_child(weapon_slot)
+		equipment_weapon_slots.append(weapon_slot)
+		var weapon_label := Label.new()
+		weapon_label.name = "MainWeaponEquipmentLabel" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentLabel"
+		weapon_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		weapon_label.add_theme_font_size_override("font_size", 11)
+		weapon_label.text = "未装备"
+		slot_box.add_child(weapon_label)
+		equipment_weapon_labels.append(weapon_label)
+	equipment_weapon_slot = equipment_weapon_slots[0]
+	equipment_weapon_label = equipment_weapon_labels[0]
+	var quick_title := Label.new()
+	quick_title.text = "物品快捷栏 · 从背包拖入可主动使用物品"
+	quick_title.add_theme_color_override("font_color", Color(0.44, 0.90, 0.76))
+	quick_title.add_theme_font_size_override("font_size", 12)
+	equipment_vbox.add_child(quick_title)
+	var quick_row := HBoxContainer.new()
+	quick_row.add_theme_constant_override("separation", 10)
+	equipment_vbox.add_child(quick_row)
+	for quick_index in range(2):
+		var quick_slot := _create_slot()
+		quick_slot.name = "QuickItemSlot_%d" % quick_index
+		quick_slot.custom_minimum_size = Vector2(88, 64)
+		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
+		quick_slot.set_meta("drag_disabled", true)
+		if quick_slot.has_method("set_slot_index"):
+			quick_slot.call("set_slot_index", quick_index)
+		_connect_slot_signals(quick_slot, quick_index, false)
+		quick_row.add_child(quick_slot)
+		quick_item_slots.append(quick_slot)
 	var reserved := Label.new()
 	reserved.text = "防具槽　— 未开放\n战术槽　— 未开放\n护符槽　— 未开放"
 	reserved.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
@@ -406,6 +449,12 @@ func set_weapon_owner(owner: Node) -> void:
 func set_world_drop_handler(handler: Callable) -> void:
 	_world_drop_handler = handler
 
+
+func set_quick_item_assignments(item_ids: Array[String]) -> void:
+	for index in range(2):
+		quick_item_ids[index] = item_ids[index] if index < item_ids.size() else ""
+	_refresh_quick_item_ui()
+
 ## 显示/隐藏背包面板
 func _set_inventory_panel_visibility(visible: bool) -> void:
 	var was_visible := is_inventory_open()
@@ -586,8 +635,12 @@ func _input(event: InputEvent) -> void:
 		return
 	if get_tree().paused:
 		return
-	var inventory_pressed := event.is_action_pressed("ui_inventory")
 	var key_event := event as InputEventKey
+	# A held I/Tab key emits echo events. Treating those as fresh actions can open
+	# the inventory and immediately close it again before the player sees it.
+	if key_event != null and key_event.echo:
+		return
+	var inventory_pressed := event.is_action_pressed("ui_inventory")
 	if key_event != null and key_event.pressed and not key_event.echo:
 		inventory_pressed = inventory_pressed or key_event.keycode == KEY_I or key_event.physical_keycode == KEY_I
 		if accept_tab_shortcut:
@@ -722,10 +775,13 @@ func _weapon_hover_text(item: Dictionary) -> String:
 			var upgrade := raw_upgrade as Dictionary
 			var stable_id := str(upgrade.get("stable_card_id", ""))
 			var card := FateCardPresets.get_by_card_id(stable_id)
+			if card != null and str(upgrade.get("orientation", "UPRIGHT")) == "REVERSED":
+				card.set_orientation(FateCard.Orientation.REVERSED, float(upgrade.get("orientation_roll", 0.75)))
 			var card_name := card.card_name if card != null else stable_id
 			var summary := _fate_summary(card.short_description if card != null else "效果已刻印")
-			lines.append("%02d　★ %s｜%s" % [
-				int(upgrade.get("slot_index", lines.size() - 2)), card_name, summary,
+			var orientation_text := card.orientation_name() if card != null else str(upgrade.get("orientation", "UPRIGHT"))
+			lines.append("%02d　★ %s·%s｜%s" % [
+				int(upgrade.get("slot_index", lines.size() - 2)), card_name, orientation_text, summary,
 			])
 	lines.append("装配可更换，不占命运槽")
 	lines.append("拖到左侧装备 · 拖到红区或面板外丢弃")
@@ -825,6 +881,7 @@ func _is_equipped_weapon(item: Dictionary) -> bool:
 ## 信号回调
 func _on_inventory_changed() -> void:
 	_refresh_inventory_ui()
+	_refresh_quick_item_ui()
 	inventory_changed.emit()
 
 func _on_capacity_changed(current: int, maximum: int) -> void:
@@ -855,26 +912,51 @@ func _on_owner_hp_changed(current: int, maximum: int) -> void:
 
 func _refresh_equipment_ui() -> void:
 	_refresh_run_fate_ui()
-	if equipment_weapon_slot == null or _weapon_owner == null or not is_instance_valid(_weapon_owner):
+	if equipment_weapon_slots.is_empty() or _weapon_owner == null or not is_instance_valid(_weapon_owner):
 		return
-	if not _weapon_owner.has_method("get_equipped_weapon_item"):
-		return
-	var item := _weapon_owner.call("get_equipped_weapon_item") as Dictionary
-	if item.is_empty():
-		_clear_slot(equipment_weapon_slot)
-		if equipment_weapon_label != null:
-			equipment_weapon_label.text = "主武器未装备"
-		return
-	_update_slot_with_item(equipment_weapon_slot, {"item": item, "count": 1, "slot": -1})
-	# 当前装备位同时是拖入目标和拖出来源；卸装事务由正式场景负责回滚。
-	var instance_id := str(item.get("weapon_instance_id", ""))
-	var upgrades: Variant = item.get("fate_upgrades", [])
-	var used: int = upgrades.size() if upgrades is Array else 0
-	if equipment_weapon_label != null:
-		equipment_weapon_label.text = "%s　#%s\n命运 %d/%d · 装配随枪保存" % [
-			item.get("name", "主武器"), instance_id.right(6).to_upper(),
-			used, int(item.get("fate_slot_capacity", 8)),
+	var active_slot := int(_weapon_owner.call("get_active_weapon_slot")) if _weapon_owner.has_method("get_active_weapon_slot") else 0
+	for weapon_slot_index in range(equipment_weapon_slots.size()):
+		var slot := equipment_weapon_slots[weapon_slot_index]
+		var item: Dictionary = {}
+		if _weapon_owner.has_method("get_equipped_weapon_item_for_slot"):
+			item = _weapon_owner.call("get_equipped_weapon_item_for_slot", weapon_slot_index) as Dictionary
+		elif weapon_slot_index == 0 and _weapon_owner.has_method("get_equipped_weapon_item"):
+			item = _weapon_owner.call("get_equipped_weapon_item") as Dictionary
+		if item.is_empty():
+			_clear_slot(slot)
+			equipment_weapon_labels[weapon_slot_index].text = "%s未装备" % ("主武器" if weapon_slot_index == 0 else "副武器")
+			continue
+		_update_slot_with_item(slot, {"item": item, "count": 1, "slot": weapon_slot_index})
+		var instance_id := str(item.get("weapon_instance_id", ""))
+		var upgrades: Variant = item.get("fate_upgrades", [])
+		var used: int = upgrades.size() if upgrades is Array else 0
+		equipment_weapon_labels[weapon_slot_index].text = "%s%s\n#%s · 命运%d/%d" % [
+			"▶ " if weapon_slot_index == active_slot else "",
+			item.get("name", "武器"), instance_id.right(6).to_upper(), used,
+			int(item.get("fate_slot_capacity", 8)),
 		]
+	_refresh_quick_item_ui()
+
+
+func _refresh_quick_item_ui() -> void:
+	if quick_item_slots.is_empty():
+		return
+	var registry := ItemRegistry.get_instance()
+	for quick_index in range(quick_item_slots.size()):
+		var item_id := quick_item_ids[quick_index]
+		if item_id.is_empty():
+			_clear_slot(quick_item_slots[quick_index])
+			continue
+		var item := registry.get_item(item_id)
+		if item.is_empty() or str(item.get("use_action", "")).is_empty():
+			quick_item_ids[quick_index] = ""
+			_clear_slot(quick_item_slots[quick_index])
+			continue
+		var count: int = int(_inventory_module.get_item_count(item_id)) if _inventory_module != null else 0
+		_update_slot_with_item(quick_item_slots[quick_index], {
+			"item": item, "count": count, "slot": quick_index,
+		})
+		quick_item_slots[quick_index].set_meta("drag_disabled", true)
 
 
 func _refresh_run_fate_ui() -> void:
@@ -898,7 +980,7 @@ func _format_run_fate_cards(cards: Array) -> Array[String]:
 	var lines: Array[String] = []
 	for index in range(mini(cards.size(), 4)):
 		var card := cards[index] as Dictionary
-		lines.append("  %s｜%s" % [card.get("name", "未知"), card.get("short_description", "")])
+		lines.append("  %s·%s｜%s" % [card.get("name", "未知"), card.get("orientation", "正位"), card.get("short_description", "")])
 	if cards.size() > 4:
 		lines.append("  另有 %d 张…" % (cards.size() - 4))
 	return lines
@@ -978,7 +1060,7 @@ func _position_item_hover_card() -> void:
 
 
 func _on_slot_drag_started(source_index: int, source_kind: String, item: Dictionary) -> void:
-	if source_kind not in ["inventory", "equipment"]:
+	if source_kind != "inventory" and not source_kind.begins_with("weapon_"):
 		return
 	_drag_feedback_active = true
 	_hovered_item_slot = null
@@ -986,13 +1068,13 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	for index in _slots.size():
 		if _slots[index].has_method("set_drag_feedback"):
 			_slots[index].call("set_drag_feedback", true, source_kind == "inventory" and index == source_index, item, source_kind)
-	for target in [equipment_weapon_slot, drop_zone]:
+	for target in equipment_weapon_slots + quick_item_slots + [drop_zone]:
 		if target != null and target.has_method("set_drag_feedback"):
-			target.call("set_drag_feedback", true, source_kind == "equipment" and target == equipment_weapon_slot, item, source_kind)
+			target.call("set_drag_feedback", true, source_kind.begins_with("weapon_") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
 	if drag_status_panel != null and drag_status_label != null:
 		drag_status_label.text = (
 			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
-			if source_kind == "equipment"
+			if source_kind.begins_with("weapon_")
 			else "正在拖拽「%s」　蓝框换位 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
@@ -1004,7 +1086,7 @@ func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successfu
 	for slot in _slots:
 		if slot.has_method("set_drag_feedback"):
 			slot.call("set_drag_feedback", false, false, {}, "inventory")
-	for target in [equipment_weapon_slot, drop_zone]:
+	for target in equipment_weapon_slots + quick_item_slots + [drop_zone]:
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", false, false, {}, "inventory")
 	if drag_status_panel != null:
@@ -1017,24 +1099,30 @@ func _on_slot_drop_received(
 	source_kind: String,
 	target_kind: String
 ) -> void:
-	if source_kind not in ["inventory", "equipment"] or _inventory_module == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_")) or _inventory_module == null:
 		return
-	if source_kind == "equipment":
+	if source_kind.begins_with("weapon_"):
+		var weapon_slot_index := int(source_kind.trim_prefix("weapon_"))
 		match target_kind:
 			"inventory":
-				equipped_weapon_to_inventory_requested.emit(target_index)
+				equipped_weapon_to_inventory_requested.emit(weapon_slot_index, target_index)
 			"drop":
-				equipped_weapon_drop_requested.emit()
+				equipped_weapon_drop_requested.emit(weapon_slot_index)
 		_refresh_inventory_ui()
 		_refresh_equipment_ui()
 		return
 	match target_kind:
 		"inventory":
 			_inventory_module.move_or_swap_slots(source_index, target_index)
-		"equipment":
+		"weapon_0", "weapon_1":
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			if not source.is_empty() and str((source.get("item", {}) as Dictionary).get("type", "")) == "weapon":
-				item_clicked.emit(source_index, source.get("item", {}))
+				weapon_slot_equip_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
+		"quick_0", "quick_1":
+			var source: Dictionary = _inventory_module.get_slot(source_index)
+			var item := source.get("item", {}) as Dictionary
+			if not item.is_empty() and not str(item.get("use_action", "")).is_empty():
+				quick_item_assignment_requested.emit(int(target_kind.trim_prefix("quick_")), str(item.get("id", "")))
 		"drop":
 			_drop_inventory_slot_to_world(source_index)
 	_refresh_inventory_ui()
@@ -1042,12 +1130,12 @@ func _on_slot_drop_received(
 
 
 func _on_slot_drag_ended_outside(source_index: int, source_kind: String) -> void:
-	if source_kind not in ["inventory", "equipment"] or inventory_shell == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_")) or inventory_shell == null:
 		return
 	if inventory_shell.get_global_rect().has_point(get_viewport().get_mouse_position()):
 		return
-	if source_kind == "equipment":
-		equipped_weapon_drop_requested.emit()
+	if source_kind.begins_with("weapon_"):
+		equipped_weapon_drop_requested.emit(int(source_kind.trim_prefix("weapon_")))
 	else:
 		_drop_inventory_slot_to_world(source_index)
 

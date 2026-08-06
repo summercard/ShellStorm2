@@ -24,7 +24,13 @@ func _ready() -> void:
 	_check(ui.inventory_panel != null and ui.inventory_grid.columns == 6, "Right backpack grid is not orderly 6-column layout", failures)
 	_check(ui.drop_zone != null and str(ui.drop_zone.get_meta("slot_kind", "")) == "drop", "World drop zone is missing", failures)
 	_check(ui.sort_button != null, "Backpack sort button is missing", failures)
-	_check(ui.equipment_weapon_slot != null and str(ui.equipment_weapon_slot.get_meta("slot_kind", "")) == "equipment", "Main weapon equipment target is missing", failures)
+	_check(
+		ui.equipment_weapon_slots.size() == 2
+		and str(ui.equipment_weapon_slots[0].get_meta("slot_kind", "")) == "weapon_0"
+		and str(ui.equipment_weapon_slots[1].get_meta("slot_kind", "")) == "weapon_1",
+		"Main/secondary weapon equipment targets are missing", failures
+	)
+	_check(ui.quick_item_slots.size() == 2, "Two inventory quick-item targets are missing", failures)
 
 	var hp_bar := dungeon.get_node("HUD/TopBar/Margin/HBox/HPBar") as ProgressBar
 	var hp_fill := hp_bar.get_theme_stylebox("fill") as StyleBoxFlat
@@ -52,7 +58,7 @@ func _ready() -> void:
 		ui.call("_show_item_hover_card", weapon_item, 1)
 		var hover_text := ui.item_hover_body.text if ui.item_hover_body != null else ""
 		_check(ui.item_hover_card != null and ui.item_hover_card.visible, "Independent weapon hover card is not visible", failures)
-		_check("超频" in hover_text and "连锁闪电" in hover_text, "Visible weapon hover card does not list installed fate card names", failures)
+		_check("权杖·二" in hover_text and "权杖·七" in hover_text, "Visible weapon hover card does not list installed tarot names", failures)
 		for line in hover_text.split("\n"):
 			if "｜" not in line:
 				continue

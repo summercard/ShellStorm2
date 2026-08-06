@@ -23,9 +23,10 @@ func _ready() -> void:
 	inventory.add_item(weapon.to_item_dictionary(), 1)
 	inventory.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 2)
 	inventory.add_item(ItemRegistry.get_instance().get_item("attach_big_mag"), 1)
-	ui.set_inventory_panel_open(true)
+	await _press_key(KEY_I)
 	for _frame in 4:
 		await get_tree().process_frame
+	interaction_ok = ui.is_inventory_open() and dungeon.player.input_locked and interaction_ok
 	capture_ok = _capture("tactical_inventory_ui.png") and capture_ok
 
 	var weapon_slot_index := inventory.find_weapon_instance_slot(weapon.weapon_instance_id)
@@ -117,7 +118,8 @@ func _ready() -> void:
 		if not interaction_ok:
 			print("TACTICAL_INTERACTION_DEBUG hover=%s single=%s clear=%s drag=%s move=%s equip=%s unequip=%s discard=%s source=%d target=%d" % [hover_visible, hover_single, hover_clear, drag_visible, moved_ok, equip_ok, unequip_ok, discard_ok, weapon_slot_index, target_index])
 
-	ui.set_inventory_panel_open(false)
+	await _press_key(KEY_I)
+	interaction_ok = not ui.is_inventory_open() and not dungeon.player.input_locked and interaction_ok
 	dungeon.force_enter_room_for_test("main_01")
 	for _frame in 8:
 		await get_tree().process_frame
@@ -166,6 +168,21 @@ func _send_hover_motion(position: Vector2) -> void:
 	event.relative = Vector2.ZERO
 	event.button_mask = 0
 	Input.parse_input_event(event)
+
+
+func _press_key(keycode: Key) -> void:
+	var pressed := InputEventKey.new()
+	pressed.keycode = keycode
+	pressed.physical_keycode = keycode
+	pressed.pressed = true
+	Input.parse_input_event(pressed)
+	await get_tree().process_frame
+	var released := InputEventKey.new()
+	released.keycode = keycode
+	released.physical_keycode = keycode
+	released.pressed = false
+	Input.parse_input_event(released)
+	await get_tree().process_frame
 
 
 func _find_item_slot(inventory: InventoryModule, item_id: String) -> int:

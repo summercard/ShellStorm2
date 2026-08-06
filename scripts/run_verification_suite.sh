@@ -47,6 +47,8 @@ core_scenes=(
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
   verify_tactical_inventory_minimap_flow
+	verify_dual_weapon_quick_map_fate_flow
+	verify_tarot_fate_runtime
   verify_door_passability
   verify_tower_descent_flow
   verify_3d_performance_budget

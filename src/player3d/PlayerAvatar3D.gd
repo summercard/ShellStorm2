@@ -17,6 +17,14 @@ extends Node3D
 @onready var bunny_hand_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR") as Node3D
 @onready var tail_stub: MeshInstance3D = $VisualRoot/Body/TailStub
 @onready var weapon_socket: Marker3D = _resolve_rig_node("VisualRoot/BunnyRig/WeaponSocket", "VisualRoot/WeaponSocket") as Marker3D
+@onready var stowed_weapon_socket_primary: Marker3D = _resolve_rig_node(
+	"VisualRoot/BunnyRig/StowedWeaponSocketPrimary",
+	"VisualRoot/StowedWeaponSocketPrimary"
+) as Marker3D
+@onready var stowed_weapon_socket_secondary: Marker3D = _resolve_rig_node(
+	"VisualRoot/BunnyRig/StowedWeaponSocketSecondary",
+	"VisualRoot/StowedWeaponSocketSecondary"
+) as Marker3D
 @onready var dash_dust: GPUParticles3D = $VisualRoot/StateVFX/DashDustBurst
 @onready var lock_ring: MeshInstance3D = $VisualRoot/StateVFX/LockRing
 @onready var low_health_ring: MeshInstance3D = $VisualRoot/StateVFX/LowHealthRing
@@ -187,6 +195,14 @@ const WEAPON_ANIMATION_PROFILES := {
 func _resolve_rig_node(primary_path: NodePath, fallback_path: NodePath) -> Node3D:
 	var primary := get_node_or_null(primary_path) as Node3D
 	return primary if primary != null else get_node(fallback_path) as Node3D
+
+
+func get_stowed_weapon_socket(weapon_slot_index: int) -> Marker3D:
+	return (
+		stowed_weapon_socket_primary
+		if weapon_slot_index == 0
+		else stowed_weapon_socket_secondary
+	)
 
 
 func _motion_offset(value: Vector3) -> Vector3:

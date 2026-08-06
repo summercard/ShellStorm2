@@ -1479,8 +1479,16 @@ func _reconstruct_fate_card_from_dict(d: Dictionary) -> FateCard:
 	# card_id / card_name / card_type / card_rarity / description / tags / effect / visual
 	if d.is_empty() or not d.has("card_name"):
 		return null
+	var stable_id := str(d.get("stable_card_id", d.get("card_id", "")))
+	var preset := FateCardPresets.get_by_card_id(stable_id)
+	if preset != null:
+		preset.set_orientation(
+			int(d.get("orientation", FateCard.Orientation.UPRIGHT)),
+			float(d.get("orientation_roll", 0.0)),
+		)
+		return preset
 	var card: FateCard = FateCard.new(
-		str(d.get("card_name", "Unknown")), int(d.get("card_type", 0)), int(d.get("card_rarity", 0))
+		str(d.get("legacy_card_name", d.get("card_name", "Unknown"))), int(d.get("card_type", 0)), int(d.get("card_rarity", 0))
 	)
 	card.card_id = d.get("card_id", "")
 	card.description = d.get("description", "")
@@ -1689,9 +1697,8 @@ func _show_fate_cards_in_panel() -> void:
 	for child in cards_container.get_children():
 		child.queue_free()
 
-	# 随机抽取 3 张
-	var all_cards: Array[FateCard] = FateCardPresets.door_reward_presets()
-	all_cards.shuffle()
+	# 共享塔罗卡池无重复抽牌，并为每张独立判定正/逆位。
+	var all_cards := FateCardPresets.draw_offer(3)
 	var options: Array[FateCard] = []
 	if _reserved_door_fate_card != null:
 		options.append(_reserved_door_fate_card)
@@ -1701,15 +1708,17 @@ func _show_fate_cards_in_panel() -> void:
 			break
 		var is_duplicate := false
 		for selected_card in options:
-			if selected_card.card_name == card.card_name:
+			if selected_card.get_stable_card_id() == card.get_stable_card_id():
 				is_duplicate = true
 				break
 		if not is_duplicate:
 			options.append(card)
 
-	for card in options:
+	for choice_index in range(options.size()):
+		var card := options[choice_index]
 		var btn := _create_fate_card_button(card)
 		cards_container.add_child(btn)
+		_play_room_tarot_flip(btn, card, choice_index)
 
 	# 显示面板
 	panel.visible = true
@@ -1772,13 +1781,41 @@ func _create_fate_card_button(card: FateCard) -> Button:
 	# 多行文本按钮标签
 	var type_str := FateCard.type_name(card.card_type)
 	btn.text = (
-		"[%s] %s\n%s\n%s"
-		% [FateCard.rarity_name(card.card_rarity), card.card_name, type_str, card.description]
+		"[%s] %s\n%s %s · %s\n%s"
+		% [FateCard.rarity_name(card.card_rarity), card.card_name, card.orientation_symbol(), card.orientation_name(), type_str, card.description]
 	)
 	btn.set_meta("fate_card", card)
+	btn.set_meta("tarot_face_ready", false)
 	btn.pressed.connect(_on_fate_card_button_pressed.bind(card))
 
 	return btn
+
+
+func _play_room_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
+	var face_text := button.text
+	button.disabled = true
+	button.text = "✦\n命运塔罗\nFATE"
+	button.pivot_offset = button.size * 0.5
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		button.modulate.a = 0.0
+		button.text = face_text
+		button.rotation = PI if card.is_reversed() else 0.0
+		tween.tween_property(button, "modulate:a", 1.0, 0.15)
+	else:
+		tween.tween_interval(0.10 + float(choice_index) * 0.08)
+		tween.tween_property(button, "scale:x", 0.04, 0.14)
+		tween.tween_callback(func() -> void:
+			button.text = face_text
+			button.rotation = PI if card.is_reversed() else 0.0
+		)
+		tween.tween_property(button, "scale:x", 1.0, 0.18)
+	tween.tween_callback(func() -> void:
+		button.disabled = false
+		button.set_meta("tarot_face_ready", true)
+		button.set_meta("tarot_face_rotation", button.rotation)
+	)
 
 
 ## 玩家点击了命运卡片按钮

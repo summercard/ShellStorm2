@@ -29,6 +29,7 @@ const EXTRACTION_FINAL_PROGRESS := 0.70
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
+const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -98,6 +99,7 @@ var _trade_extraction_unlocked := false
 var _door_prompt_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
+var _pending_fate_currency_choice := -1
 var _fate_overlay: Control
 var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
@@ -132,6 +134,12 @@ var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
 var _hud_weapon_model_instance_id := ""
+var _hud_quick_item_icons: Array = [null, null]
+var _hud_quick_item_icon_hosts: Array[Control] = []
+var _hud_quick_item_labels: Array[Label] = []
+var _quick_item_ids: Array[String] = ["", ""]
+var _full_map_overlay: Control = null
+var _full_map_control: DungeonMinimap3D = null
 var _hud_floor_label: Label = null
 var _hud_timer_label: Label = null
 var _hud_run_elapsed := 0.0
@@ -179,7 +187,26 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_K:
+	var key_event := event as InputEventKey
+	if key_event != null and key_event.pressed and not key_event.echo:
+		var key := key_event.keycode if key_event.keycode != 0 else key_event.physical_keycode
+		if key == KEY_ESCAPE and _door_fate_active:
+			_cancel_door_fate_selection()
+			get_viewport().set_input_as_handled()
+			return
+		if key == KEY_M:
+			_toggle_full_map()
+			get_viewport().set_input_as_handled()
+			return
+		if key in [KEY_1, KEY_2] and not _has_exclusive_modal() and not (_inventory_ui != null and _inventory_ui.is_inventory_open()):
+			_select_weapon_slot(0 if key == KEY_1 else 1)
+			get_viewport().set_input_as_handled()
+			return
+		if key in [KEY_3, KEY_4] and not _has_exclusive_modal() and not (_inventory_ui != null and _inventory_ui.is_inventory_open()):
+			_use_quick_item(0 if key == KEY_3 else 1)
+			get_viewport().set_input_as_handled()
+			return
+	if key_event != null and key_event.pressed and not key_event.echo and (key_event.keycode == KEY_K or key_event.physical_keycode == KEY_K):
 		if _weapon_panel != null:
 			_weapon_panel.toggle()
 			get_viewport().set_input_as_handled()
@@ -215,6 +242,8 @@ func _process(delta: float) -> void:
 				player.aim_direction
 			)
 			minimap.set_enemy_positions(_get_minimap_enemy_positions())
+			if _full_map_control != null and is_instance_valid(_full_map_control):
+				_full_map_control.copy_state_from(minimap)
 	_door_prompt_accumulator += delta
 	if _door_prompt_accumulator < 0.08:
 		return
@@ -260,14 +289,18 @@ func _setup_run_modules() -> void:
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
 	_inventory_ui.inventory_open_changed.connect(_on_inventory_open_changed)
+	_inventory_ui.weapon_slot_equip_requested.connect(_on_weapon_slot_equip_requested)
 	_inventory_ui.equipped_weapon_to_inventory_requested.connect(_on_equipped_weapon_to_inventory_requested)
 	_inventory_ui.equipped_weapon_drop_requested.connect(_on_equipped_weapon_drop_requested)
+	_inventory_ui.quick_item_assignment_requested.connect(_on_quick_item_assignment_requested)
+	_inventory_ui.set_quick_item_assignments(_quick_item_ids)
 	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
-		_weapon_panel.position = Vector2(28, 86)
-		_weapon_panel.z_index = 420
 		$HUD.add_child(_weapon_panel)
+		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
+		_weapon_panel.position = Vector2(-260, -310)
+		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
 
@@ -426,6 +459,26 @@ func _build_reference_main_hud() -> void:
 	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	weapon_row.add_child(ammo_label)
+	for quick_index in range(2):
+		var quick_panel := _make_hud_panel(Color(0.30, 0.86, 0.72), Color(0.006, 0.020, 0.026, 0.94))
+		quick_panel.name = "QuickItemHUD_%d" % quick_index
+		var left := -372.0 if quick_index == 0 else 276.0
+		var right := -276.0 if quick_index == 0 else 372.0
+		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -112, right, -20)
+		_reference_hud_root.add_child(quick_panel)
+		var quick_box := VBoxContainer.new()
+		quick_box.alignment = BoxContainer.ALIGNMENT_CENTER
+		quick_panel.add_child(quick_box)
+		var quick_icon_host := Control.new()
+		quick_icon_host.name = "QuickItemIconHost_%d" % quick_index
+		quick_icon_host.custom_minimum_size = _hud_size(Vector2(80, 58))
+		quick_box.add_child(quick_icon_host)
+		_hud_quick_item_icon_hosts.append(quick_icon_host)
+		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 11, Color(0.66, 0.94, 0.84))
+		quick_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		quick_box.add_child(quick_label)
+		_hud_quick_item_labels.append(quick_label)
+	_refresh_quick_item_hud()
 
 	var actions := HBoxContainer.new()
 	actions.name = "ActionKeyStrip"
@@ -553,6 +606,7 @@ func _has_exclusive_modal() -> bool:
 	return (
 		_completed
 		or _door_fate_active
+		or (_full_map_overlay != null and is_instance_valid(_full_map_overlay))
 		or (_workbench_panel != null and is_instance_valid(_workbench_panel))
 		or (_merchant_ui != null and is_instance_valid(_merchant_ui) and _merchant_ui.visible)
 	)
@@ -571,6 +625,9 @@ func _close_inventory_for_modal() -> void:
 
 
 func try_close_modal_for_pause() -> bool:
+	if _full_map_overlay != null and is_instance_valid(_full_map_overlay):
+		_close_full_map()
+		return true
 	if _inventory_ui != null and _inventory_ui.is_inventory_open():
 		_inventory_ui.set_inventory_panel_open(false)
 		return true
@@ -581,9 +638,54 @@ func try_close_modal_for_pause() -> bool:
 		_merchant_ui.hide_merchant()
 		return true
 	if _door_fate_active:
-		status_label.text = "必须先选择一张门后命运卡片"
+		_cancel_door_fate_selection()
 		return true
 	return false
+
+
+func _toggle_full_map() -> void:
+	if _full_map_overlay != null and is_instance_valid(_full_map_overlay):
+		_close_full_map()
+		return
+	if _has_exclusive_modal():
+		status_label.text = "先完成当前交互，再打开楼层大地图"
+		return
+	_close_inventory_for_modal()
+	_full_map_overlay = Control.new()
+	_full_map_overlay.name = "ExploredFloorMapOverlay"
+	_full_map_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_full_map_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_full_map_overlay.z_index = 850
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.0, 0.004, 0.010, 0.84)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	_full_map_overlay.add_child(dim)
+	_full_map_control = DungeonMinimap3D.new()
+	_full_map_control.name = "FullFloorMap3D"
+	_full_map_control.set_anchors_preset(Control.PRESET_CENTER)
+	_full_map_control.position = Vector2(-470, -300)
+	_full_map_control.size = Vector2(940, 600)
+	_full_map_control.custom_minimum_size = Vector2(940, 600)
+	_full_map_control.set_full_map_mode(true)
+	_full_map_control.copy_state_from(minimap)
+	_full_map_overlay.add_child(_full_map_control)
+	var hint := _make_hud_label("M / ESC 关闭 · 仅显示本层已探索房间与当前位置", 14, Color(0.62, 0.90, 0.96))
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(hint, 0.5, 1.0, 0.5, 1.0, -360, -44, 360, -16)
+	_full_map_overlay.add_child(hint)
+	$HUD.add_child(_full_map_overlay)
+	_sync_player_input_lock()
+	status_label.text = "楼层大地图已打开 · 仅展示已探索区域"
+
+
+func _close_full_map() -> void:
+	if _full_map_overlay != null and is_instance_valid(_full_map_overlay):
+		_full_map_overlay.queue_free()
+	_full_map_overlay = null
+	_full_map_control = null
+	_sync_player_input_lock()
+	status_label.text = "楼层大地图已关闭"
 
 
 func _configure_environment() -> void:
@@ -1770,7 +1872,9 @@ func set_extra_loot_next_chest(enabled: bool) -> void:
 func _on_fate_scope_state_changed(scope: String, stable_card_id: String) -> void:
 	if scope != FateCard.scope_name(FateCard.Scope.WORLD):
 		return
-	var card := FateCardPresets.get_by_card_id(stable_card_id)
+	var card := FateCardGameBridge.get_latest_applied_card(stable_card_id)
+	if card == null:
+		card = FateCardPresets.get_by_card_id(stable_card_id)
 	if card == null:
 		return
 	var modifier := str(card.effect.get("modifier", ""))
@@ -2003,16 +2107,12 @@ func try_open_room_door(target_room_id: String) -> bool:
 func _show_door_fate_choices() -> void:
 	if _door_fate_active:
 		return
-	var pool := FateCardPresets.door_reward_presets()
-	if pool.is_empty():
+	var offer := FateCardPresets.draw_offer(3, _rng)
+	if offer.is_empty():
 		return
 	_door_fate_choices.clear()
-	var indices: Array[int] = []
-	while indices.size() < mini(3, pool.size()):
-		var index := _rng.randi_range(0, pool.size() - 1)
-		if index not in indices:
-			indices.append(index)
-			_door_fate_choices.append(pool[index])
+	_pending_fate_currency_choice = -1
+	_door_fate_choices.assign(offer)
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -2055,7 +2155,9 @@ func _build_door_fate_overlay() -> void:
 	_fate_overlay.add_child(row)
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
-		row.add_child(_create_reference_fate_card(card, choice_index))
+		var card_button := _create_reference_fate_card(card, choice_index)
+		row.add_child(card_button)
+		_play_reference_tarot_flip(card_button, card, choice_index)
 
 	var info_panel := _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.006, 0.036, 0.055, 0.94))
 	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -310, 520, 310, 594)
@@ -2064,7 +2166,7 @@ func _build_door_fate_overlay() -> void:
 	var info_margin := _make_margin(18, 8, 18, 8)
 	info_panel.add_child(info_margin)
 	_fate_feedback_label = _make_hud_label(
-		"当前信息\n请选择一张命运卡强化本次行动 · 选择后立即生效",
+		"当前信息\n请选择一张命运卡强化本次行动 · ESC 可放弃本次选择",
 		13,
 		Color(0.72, 0.91, 0.98),
 	)
@@ -2081,7 +2183,10 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	button.text = ""
 	button.clip_contents = false
 	button.focus_mode = Control.FOCUS_ALL
-	button.tooltip_text = card.description
+	button.tooltip_text = "%s · %s\n%s" % [card.card_name, card.orientation_name(), card.description]
+	button.disabled = true
+	button.set_meta("tarot_face_ready", false)
+	button.set_meta("tarot_orientation", card.orientation_name())
 	var normal := _make_hud_style(Color(accent, 0.82), Color(0.008, 0.014, 0.034, 0.97), 2)
 	normal.set_corner_radius_all(8)
 	normal.shadow_color = Color(accent, 0.36)
@@ -2101,6 +2206,8 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 
 	var margin := _make_margin(18, 16, 18, 16)
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
+	margin.name = "TarotFaceText"
+	margin.visible = false
 	button.add_child(margin)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -2109,14 +2216,37 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 15, accent)
 	scope_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(scope_label)
+	var ornament_holder := Control.new()
+	ornament_holder.custom_minimum_size = _hud_size(Vector2(0, 76))
+	ornament_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	vbox.add_child(ornament_holder)
+	var ornament := Control.new()
+	ornament.name = "TarotOrientationOrnament"
+	ornament.set_anchors_preset(Control.PRESET_FULL_RECT)
+	ornament.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ornament_holder.add_child(ornament)
 	var symbol := _make_hud_label(FateCard.scope_symbol(card.scope), 66, accent.lightened(0.10))
+	symbol.set_anchors_preset(Control.PRESET_FULL_RECT)
 	symbol.custom_minimum_size = _hud_size(Vector2(0, 70))
 	symbol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	vbox.add_child(symbol)
+	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ornament.add_child(symbol)
+	var direction_mark := _make_hud_label("▲", 11, Color(accent, 0.82))
+	direction_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_anchor_control(direction_mark, 0.5, 0.0, 0.5, 0.0, -18, 0, 18, 16)
+	ornament.add_child(direction_mark)
 	var card_name := _make_hud_label(card.card_name, 21, Color(0.94, 0.96, 1.0))
 	card_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(card_name)
+	var orientation_label := _make_hud_label(
+		"%s %s" % [card.orientation_symbol(), card.orientation_name()],
+		13,
+		Color(1.0, 0.72, 0.34) if card.is_reversed() else Color(0.62, 0.94, 1.0),
+	)
+	orientation_label.name = "TarotOrientationLabel"
+	orientation_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(orientation_label)
 	var rarity := _make_hud_label(
 		"%s · %s" % [FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type)],
 		13,
@@ -2140,19 +2270,89 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(effect)
+	var footer_text := "本局生效 · 不占枪槽"
+	if card.scope == FateCard.Scope.WEAPON:
+		footer_text = (
+			"命运槽已满 · 再次点击兑魂"
+			if _is_weapon_fate_target_full(card)
+			else "永久刻印 · 不可逆"
+		)
 	var footer := _make_hud_label(
-		"永久刻印 · 不可逆" if card.scope == FateCard.Scope.WEAPON else "本局生效 · 不占枪槽",
+		footer_text,
 		11,
 		Color(accent, 0.86),
 	)
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(footer)
 	_add_neon_frame(button, accent, 1.0, true)
+	var back := Panel.new()
+	back.name = "TarotCardBack"
+	back.set_anchors_preset(Control.PRESET_FULL_RECT)
+	back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var back_style := _make_hud_style(Color(accent, 0.92), Color(0.006, 0.012, 0.030, 0.99), 3)
+	back_style.set_corner_radius_all(8)
+	back.add_theme_stylebox_override("panel", back_style)
+	button.add_child(back)
+	var back_glyph := _make_hud_label("✦\n命运塔罗\nFATE", 22, Color(accent, 0.92))
+	back_glyph.set_anchors_preset(Control.PRESET_FULL_RECT)
+	back_glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	back_glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	back_glyph.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	back.add_child(back_glyph)
+	button.move_child(back, button.get_child_count() - 1)
+	button.set_meta("tarot_face_node", margin)
+	button.set_meta("tarot_back_node", back)
 	button.resized.connect(_center_control_pivot.bind(button))
 	button.mouse_entered.connect(_on_reference_fate_card_hover.bind(button, true))
 	button.mouse_exited.connect(_on_reference_fate_card_hover.bind(button, false))
 	button.pressed.connect(_on_door_fate_selected.bind(choice_index))
 	return button
+
+
+func _play_reference_tarot_flip(button: Button, card: FateCard, choice_index: int) -> void:
+	if button == null:
+		return
+	button.scale = Vector2.ONE
+	button.pivot_offset = button.size * 0.5
+	var face := button.get_meta("tarot_face_node") as Control
+	var back := button.get_meta("tarot_back_node") as Control
+	var reduce_motion := bool(ProjectSettings.get_setting("accessibility/reduce_motion", false))
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if reduce_motion:
+		button.rotation = PI if card.is_reversed() else 0.0
+		if back != null:
+			back.visible = false
+		if face != null:
+			face.visible = true
+		button.modulate.a = 0.0
+		tween.tween_property(button, "modulate:a", 1.0, 0.15)
+	else:
+		tween.tween_interval(0.10 + float(choice_index) * 0.08)
+		tween.tween_property(button, "scale:x", 0.04, 0.14).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		tween.tween_callback(_reveal_reference_tarot_face.bind(button, face, back, card.is_reversed()))
+		tween.tween_property(button, "scale:x", 1.0, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(_finish_reference_tarot_flip.bind(button, card))
+
+
+func _reveal_reference_tarot_face(button: Control, face: Control, back: Control, is_reversed: bool) -> void:
+	# 逆位是整张实体卡面旋转180°：边框、名称、天体、数值和说明共同倒置。
+	# 描述内容已由 FateCard 的逆位效果快照替换，不再保留独立正向文字层。
+	if button != null and is_instance_valid(button):
+		button.rotation = PI if is_reversed else 0.0
+	if back != null and is_instance_valid(back):
+		back.visible = false
+	if face != null and is_instance_valid(face):
+		face.visible = true
+
+
+func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
+	if button == null or not is_instance_valid(button):
+		return
+	button.disabled = false
+	button.set_meta("tarot_face_ready", true)
+	button.set_meta("tarot_orientation", card.orientation_name())
+	button.set_meta("tarot_face_rotation", button.rotation)
 
 
 func _get_fate_target_preview(card: FateCard) -> String:
@@ -2161,6 +2361,11 @@ func _get_fate_target_preview(card: FateCard) -> String:
 	var target := FateCardGameBridge.get_target_summary(card)
 	var used := int(target.get("fate_slot_used", 0))
 	var capacity := int(target.get("fate_slot_capacity", 0))
+	if capacity > 0 and used >= capacity:
+		return "当前枪 #%s\n命运槽已满 %d / %d · 可兑魂%d" % [
+			target.get("instance_suffix", str(target.get("weapon_instance_id", "")).right(6).to_upper()),
+			used, capacity, _fate_currency_value(card),
+		]
 	return "当前枪 #%s\n下一槽 %d / %d" % [
 		target.get("instance_suffix", str(target.get("weapon_instance_id", "")).right(6).to_upper()),
 		mini(used + 1, capacity),
@@ -2211,6 +2416,20 @@ func _on_door_fate_selected(choice_index: int) -> void:
 	if not _door_fate_active or choice_index < 0 or choice_index >= _door_fate_choices.size():
 		return
 	var card := _door_fate_choices[choice_index]
+	if _is_weapon_fate_target_full(card):
+		var currency_value := _fate_currency_value(card)
+		if _pending_fate_currency_choice != choice_index:
+			_pending_fate_currency_choice = choice_index
+			status_label.text = "%s：命运槽已满，再次点击转换为%d魂" % [card.card_name, currency_value]
+			if _fate_feedback_label != null:
+				_fate_feedback_label.text = "转换确认 · %s\n再次点击同一张卡：放弃刻印并获得 %d 魂" % [card.card_name, currency_value]
+				_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
+			return
+		GameManager.add_currency(currency_value)
+		_close_door_fate_overlay()
+		status_label.text = "命运转化：%s → %d魂" % [card.card_name, currency_value]
+		return
+	_pending_fate_currency_choice = -1
 	var result := FateCardGameBridge.apply_card(card)
 	if not bool(result.get("success", false)):
 		var failure := str(result.get("reason", result.get("message", "当前目标无法承载该命运")))
@@ -2219,16 +2438,42 @@ func _on_door_fate_selected(choice_index: int) -> void:
 			_fate_feedback_label.text = "应用失败 · %s\n%s · 请改选其他命运" % [card.card_name, failure]
 			_fate_feedback_label.add_theme_color_override("font_color", Color(1.0, 0.40, 0.30))
 		return
+	_close_door_fate_overlay()
+	if AudioManager != null:
+		AudioManager.play_fate_card_sfx()
+	status_label.text = "命运生效：%s · %s" % [card.card_name, result.get("message", "")]
+
+
+func _is_weapon_fate_target_full(card: FateCard) -> bool:
+	if card == null or card.scope != FateCard.Scope.WEAPON:
+		return false
+	var target := FateCardGameBridge.get_target_summary(card)
+	var capacity := int(target.get("fate_slot_capacity", 0))
+	return capacity > 0 and int(target.get("fate_slot_used", 0)) >= capacity
+
+
+func _fate_currency_value(card: FateCard) -> int:
+	if card == null:
+		return 0
+	return int(FATE_CURRENCY_BY_RARITY[clampi(int(card.card_rarity), 0, FATE_CURRENCY_BY_RARITY.size() - 1)])
+
+
+func _close_door_fate_overlay() -> void:
 	_door_fate_active = false
 	_door_fate_choices.clear()
+	_pending_fate_currency_choice = -1
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
 		_fate_overlay.queue_free()
 	_fate_overlay = null
 	_fate_feedback_label = null
 	_sync_player_input_lock()
-	if AudioManager != null:
-		AudioManager.play_fate_card_sfx()
-	status_label.text = "命运生效：%s · %s" % [card.card_name, result.get("message", "")]
+
+
+func _cancel_door_fate_selection() -> void:
+	if not _door_fate_active:
+		return
+	_close_door_fate_overlay()
+	status_label.text = "已放弃本次命运选择 · 行动继续"
 
 
 func show_reference_fate_overlay_for_test() -> bool:
@@ -2236,6 +2481,7 @@ func show_reference_fate_overlay_for_test() -> bool:
 		return false
 	var pool := FateCardPresets.door_reward_presets()
 	_door_fate_choices.clear()
+	_pending_fate_currency_choice = -1
 	for wanted_scope in [FateCard.Scope.WEAPON, FateCard.Scope.WORLD, FateCard.Scope.CHARACTER]:
 		for card in pool:
 			if card.scope == wanted_scope:
@@ -2243,6 +2489,9 @@ func show_reference_fate_overlay_for_test() -> bool:
 				break
 	if _door_fate_choices.size() != 3:
 		return false
+	_door_fate_choices[0].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
+	_door_fate_choices[1].set_orientation(FateCard.Orientation.REVERSED, 0.75)
+	_door_fate_choices[2].set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
 	_door_fate_active = true
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
@@ -2365,17 +2614,119 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 		status_label.text = "%s 当前无法使用" % item.get("name", "物品")
 
 
-func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
+func _on_weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: int) -> void:
+	var slot := _inventory.get_slot(source_slot_index)
+	if slot.is_empty():
+		return
+	var item := slot.get("item", {}) as Dictionary
+	if str(item.get("type", "")) != "weapon":
+		status_label.text = "只能把枪械拖入主/副武器栏"
+		return
+	_equip_weapon_from_inventory(source_slot_index, item, weapon_slot_index)
+
+
+func _on_quick_item_assignment_requested(quick_slot_index: int, item_id: String) -> void:
+	if quick_slot_index < 0 or quick_slot_index >= _quick_item_ids.size():
+		return
+	var item := ItemRegistry.get_instance().get_item(item_id)
+	if item.is_empty() or str(item.get("use_action", "")).is_empty():
+		status_label.text = "该物品不能主动使用，无法放入快捷栏"
+		return
+	_quick_item_ids[quick_slot_index] = item_id
+	_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+	_refresh_quick_item_hud()
+	status_label.text = "已将%s绑定到快捷键%d" % [item.get("name", item_id), quick_slot_index + 3]
+
+
+func _use_quick_item(quick_slot_index: int) -> bool:
+	if quick_slot_index < 0 or quick_slot_index >= _quick_item_ids.size():
+		return false
+	var item_id := _quick_item_ids[quick_slot_index]
+	if item_id.is_empty():
+		status_label.text = "快捷栏%d尚未绑定物品" % (quick_slot_index + 3)
+		return false
+	if _inventory.get_item_count(item_id) <= 0:
+		status_label.text = "快捷栏%d物品已用完" % (quick_slot_index + 3)
+		return false
+	var item := ItemRegistry.get_instance().get_item(item_id)
+	var handler := ItemUseHandler.new()
+	var applied := handler.apply(item, {"player": player, "extraction_director": self})
+	handler.free()
+	if not applied:
+		status_label.text = "%s当前无法使用" % item.get("name", "物品")
+		return false
+	_inventory.consume_item(item_id, 1)
+	_refresh_quick_item_hud()
+	status_label.text = "[%d] 已使用%s" % [quick_slot_index + 3, item.get("name", "物品")]
+	return true
+
+
+func _refresh_quick_item_hud() -> void:
+	if _hud_quick_item_icons.size() < 2 or _hud_quick_item_labels.size() < 2:
+		return
+	for quick_index in range(2):
+		var item_id := _quick_item_ids[quick_index]
+		var count := _inventory.get_item_count(item_id) if _inventory != null and not item_id.is_empty() else 0
+		if item_id.is_empty():
+			var empty_icon := _hud_quick_item_icons[quick_index] as ItemModelIcon3D
+			if empty_icon != null:
+				empty_icon.clear_model()
+			_hud_quick_item_labels[quick_index].text = "[%d] 空" % (quick_index + 3)
+			continue
+		var item := ItemRegistry.get_instance().get_item(item_id)
+		var quick_icon := _ensure_hud_quick_item_icon(quick_index)
+		if quick_icon != null:
+			quick_icon.configure(item)
+		_hud_quick_item_labels[quick_index].text = "[%d] %s ×%d" % [
+			quick_index + 3, item.get("name", item_id), count,
+		]
+
+
+func _ensure_hud_quick_item_icon(quick_index: int) -> ItemModelIcon3D:
+	if quick_index < 0 or quick_index >= _hud_quick_item_icons.size() or quick_index >= _hud_quick_item_icon_hosts.size():
+		return null
+	var existing := _hud_quick_item_icons[quick_index] as ItemModelIcon3D
+	if existing != null and is_instance_valid(existing):
+		return existing
+	var icon := ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
+	icon.name = "QuickItemModelIcon3D_%d" % quick_index
+	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	icon.set_camera_size_multiplier(0.68)
+	_hud_quick_item_icon_hosts[quick_index].add_child(icon)
+	_hud_quick_item_icons[quick_index] = icon
+	return icon
+
+
+func _select_weapon_slot(slot_index: int) -> bool:
+	if player == null or not player.has_method("switch_weapon_slot"):
+		return false
+	var result := player.call("switch_weapon_slot", slot_index) as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "武器切换失败"))
+		return false
+	var snapshot := result.get("snapshot", player.get_weapon_presentation_snapshot()) as Dictionary
+	status_label.text = "已切换至[%d] %s #%s" % [
+		slot_index + 1, snapshot.get("display_name", "武器"), snapshot.get("instance_suffix", "------"),
+	]
+	return true
+
+
+func _equip_weapon_from_inventory(slot_index: int, item: Dictionary, target_weapon_slot := -1) -> bool:
 	if player == null or not player.has_method("equip_weapon_item"):
 		return false
 	var incoming := WeaponInstance.ensure_weapon_item(item)
 	var incoming_id := str(incoming.get("weapon_instance_id", ""))
-	if incoming_id == str(player.call("get_equipped_weapon_instance_id")):
-		status_label.text = "当前已经装备该枪械实例 #%s" % incoming_id.right(6).to_upper()
-		return false
+	for equipped_slot in range(2):
+		if player.has_method("get_equipped_weapon_instance_id_for_slot") and incoming_id == str(player.call("get_equipped_weapon_instance_id_for_slot", equipped_slot)):
+			status_label.text = "该枪械实例已在%s #%s" % ["主武器栏" if equipped_slot == 0 else "副武器栏", incoming_id.right(6).to_upper()]
+			return false
 	if not _inventory.remove_from_slot(slot_index, 1):
 		return false
-	var equip_result := player.call("equip_weapon_item", incoming) as Dictionary
+	var equip_result := (
+		player.call("equip_weapon_item_to_slot", incoming, target_weapon_slot) as Dictionary
+		if target_weapon_slot >= 0 and player.has_method("equip_weapon_item_to_slot")
+		else player.call("equip_weapon_item", incoming) as Dictionary
+	)
 	if not bool(equip_result.get("success", false)):
 		_inventory.add_item(incoming, 1)
 		status_label.text = str(equip_result.get("message", "换枪失败"))
@@ -2383,13 +2734,18 @@ func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
 	var old_item := equip_result.get("old_item", {}) as Dictionary
 	if not old_item.is_empty() and _inventory.add_item(old_item, 1) <= 0:
 		# 理论上来源槽已经释放；若仍失败则恢复旧枪，避免完整实例丢失。
-		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		var rollback := (
+			player.call("equip_weapon_item_to_slot", old_item, int(equip_result.get("slot_index", target_weapon_slot))) as Dictionary
+			if target_weapon_slot >= 0 and player.has_method("equip_weapon_item_to_slot")
+			else player.call("equip_weapon_item", old_item) as Dictionary
+		)
 		if bool(rollback.get("success", false)):
 			_inventory.add_item(incoming, 1)
 		status_label.text = "换枪失败：原武器无法放回背包，已完整回滚"
 		return false
 	var snapshot := equip_result.get("snapshot", {}) as Dictionary
-	status_label.text = "已装备 %s #%s · 构筑 %d/%d · 原武器完整放回背包" % [
+	status_label.text = "已装备到%s：%s #%s · 构筑 %d/%d · 原武器完整放回背包" % [
+		"当前栏" if target_weapon_slot < 0 else "主武器栏" if target_weapon_slot == 0 else "副武器栏",
 		snapshot.get("display_name", item.get("name", "武器")),
 		snapshot.get("instance_suffix", "------"),
 		snapshot.get("fate_slot_used", 0),
@@ -2398,19 +2754,19 @@ func _equip_weapon_from_inventory(slot_index: int, item: Dictionary) -> bool:
 	return true
 
 
-func _on_equipped_weapon_to_inventory_requested(target_slot_index: int) -> void:
-	if player == null or not player.has_method("unequip_weapon_item"):
+func _on_equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slot_index: int) -> void:
+	if player == null or not player.has_method("unequip_weapon_item_from_slot"):
 		return
 	if not _inventory.get_slot(target_slot_index).is_empty():
 		status_label.text = "卸装失败：目标背包格已有物品"
 		return
-	var result := player.call("unequip_weapon_item") as Dictionary
+	var result := player.call("unequip_weapon_item_from_slot", weapon_slot_index) as Dictionary
 	if not bool(result.get("success", false)):
 		status_label.text = str(result.get("reason", "卸装失败"))
 		return
 	var old_item := result.get("old_item", {}) as Dictionary
 	if not _inventory.put_item_in_empty_slot(target_slot_index, old_item, 1):
-		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		var rollback := player.call("equip_weapon_item_to_slot", old_item, weapon_slot_index) as Dictionary
 		status_label.text = (
 			"卸装失败：背包写入失败，已恢复原武器"
 			if bool(rollback.get("success", false))
@@ -2423,16 +2779,16 @@ func _on_equipped_weapon_to_inventory_requested(target_slot_index: int) -> void:
 	]
 
 
-func _on_equipped_weapon_drop_requested() -> void:
-	if player == null or not player.has_method("unequip_weapon_item"):
+func _on_equipped_weapon_drop_requested(weapon_slot_index: int) -> void:
+	if player == null or not player.has_method("unequip_weapon_item_from_slot"):
 		return
-	var result := player.call("unequip_weapon_item") as Dictionary
+	var result := player.call("unequip_weapon_item_from_slot", weapon_slot_index) as Dictionary
 	if not bool(result.get("success", false)):
 		status_label.text = str(result.get("reason", "卸装失败"))
 		return
 	var old_item := result.get("old_item", {}) as Dictionary
 	if not _drop_inventory_item_to_world(old_item, 1):
-		var rollback := player.call("equip_weapon_item", old_item) as Dictionary
+		var rollback := player.call("equip_weapon_item_to_slot", old_item, weapon_slot_index) as Dictionary
 		status_label.text = (
 			"丢弃失败：已恢复原武器"
 			if bool(rollback.get("success", false))
@@ -2724,7 +3080,11 @@ func _on_ammo_changed(current: int, maximum: int) -> void:
 	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
 	ammo_label.text = "%d / %d" % [current, maximum]
 	if _hud_weapon_meta_label != null:
-		_hud_weapon_meta_label.text = "%s · 当前枪械" % snapshot.get("display_name", "未装备武器")
+		var active_slot := player.get_active_weapon_slot() if player != null and player.has_method("get_active_weapon_slot") else 0
+		_hud_weapon_meta_label.text = "[%d] %s · %s" % [
+			active_slot + 1, snapshot.get("display_name", "未装备武器"),
+			"主武器" if active_slot == 0 else "副武器",
+		]
 	if _hud_weapon_fate_label != null:
 		_hud_weapon_fate_label.text = "实例 #%s · 命运 %d/%d · K 详情" % [
 			snapshot.get("instance_suffix", "------"),
@@ -2800,11 +3160,18 @@ func _finish_run(success: bool) -> void:
 
 func _collect_extracted_items(include_equipped_weapon := false) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	if include_equipped_weapon and player != null and player.has_method("get_equipped_weapon_item"):
-		var equipped := player.call("get_equipped_weapon_item") as Dictionary
-		if not equipped.is_empty():
-			equipped["count"] = 1
-			result.append(equipped)
+	if include_equipped_weapon and player != null:
+		if player.has_method("get_equipped_weapon_item_for_slot"):
+			for weapon_slot_index in range(2):
+				var equipped := player.call("get_equipped_weapon_item_for_slot", weapon_slot_index) as Dictionary
+				if not equipped.is_empty():
+					equipped["count"] = 1
+					result.append(equipped)
+		elif player.has_method("get_equipped_weapon_item"):
+			var equipped := player.call("get_equipped_weapon_item") as Dictionary
+			if not equipped.is_empty():
+				equipped["count"] = 1
+				result.append(equipped)
 	for slot in _inventory.get_occupied_slots():
 		var item := (slot.get("item", {}) as Dictionary).duplicate(true)
 		if item.is_empty():
@@ -2826,6 +3193,7 @@ func _refresh_loot_label() -> void:
 	loot_label.text = "背包 %d/12 · 钥匙 %d · 魂 %d" % [
 		_inventory.get_used_slots(), _get_total_room_keys(), _run_value
 	]
+	_refresh_quick_item_hud()
 
 
 func _room_status(type_id: String) -> String:

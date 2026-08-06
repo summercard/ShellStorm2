@@ -130,11 +130,11 @@ func apply_card_instance(card: FateCard) -> Dictionary:
 					card_applied.emit(card, false, result_dict["message"])
 					return result_dict
 			character_card_ids.append(card.get_stable_card_id())
-			scope_state_changed.emit(scope_name, card.get_stable_card_id())
 		else:
 			world_card_ids.append(card.get_stable_card_id())
-			scope_state_changed.emit(scope_name, card.get_stable_card_id())
 		applied_cards.append(card)
+		if card.scope != FateCard.Scope.WEAPON:
+			scope_state_changed.emit(scope_name, card.get_stable_card_id())
 		card_applied.emit(card, true, engine_result.message)
 		card_list_changed.emit()
 	else:
@@ -226,12 +226,22 @@ func get_scope_state_snapshot() -> Dictionary:
 			"short_description": card.short_description,
 			"scope": FateCard.scope_name(card.scope),
 			"scope_display_name": FateCard.scope_display_name(card.scope),
+			"orientation": card.orientation_name(),
+			"orientation_symbol": card.orientation_symbol(),
 		}
 		if card.scope == FateCard.Scope.CHARACTER:
 			character_cards.append(entry)
 		else:
 			world_cards.append(entry)
 	return {"character": character_cards, "world": world_cards}
+
+
+func get_latest_applied_card(stable_card_id: String) -> FateCard:
+	for index in range(applied_cards.size() - 1, -1, -1):
+		var card := applied_cards[index]
+		if card != null and card.get_stable_card_id() == stable_card_id:
+			return card
+	return null
 
 ## 给予随机命运卡片（由环境命运触发器调用，通过 FateCardEngine 间接触发）
 func grant_random_card_from_trigger() -> void:

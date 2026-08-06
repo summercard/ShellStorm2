@@ -33,7 +33,7 @@ func _build_collection_view() -> void:
 	content.add_child(title)
 
 	var subtitle := Label.new()
-	subtitle.text = "全部已解锁卡牌"
+	subtitle.text = "命运塔罗图鉴 · 48张可玩 / 78张设计"
 	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	subtitle.add_theme_color_override("font_color", Color(0.55, 0.6, 0.7))
 	content.add_child(subtitle)
@@ -143,14 +143,18 @@ func _create_card_ui(card: FateCard) -> Control:
 	divider.add_theme_color_override("line_color", Color(1, 1, 1, 0.1))
 	vbox.add_child(divider)
 
-	# 效果描述
+	# 图鉴同时展示同一张牌的正位与逆位，不把逆位拆成第二张收藏卡。
 	var desc_lbl := Label.new()
-	desc_lbl.text = card.short_description
+	var tarot_definition := TarotFateCatalog.get_definition(card.get_stable_card_id())
+	desc_lbl.text = "正位｜%s\n逆位｜%s" % [
+		card.short_description,
+		str(tarot_definition.get("reversed_short", "尚未施工")),
+	]
 	desc_lbl.add_theme_color_override("font_color", Color(0.65, 0.65, 0.7))
 	desc_lbl.add_theme_font_size_override("font_size", 10)
 	desc_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD
-	desc_lbl.custom_minimum_size.y = 36
+	desc_lbl.custom_minimum_size.y = 48
 	vbox.add_child(desc_lbl)
 
 	# 底部品质角标
@@ -161,7 +165,7 @@ func _create_card_ui(card: FateCard) -> Control:
 	rarity_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(rarity_badge)
 
-	panel.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
+	panel.tooltip_text = "%s\n%s\n正位：%s\n逆位：%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description, str(tarot_definition.get("reversed_description", "尚未施工"))]
 	return panel
 
 func _add_close_hint() -> void:

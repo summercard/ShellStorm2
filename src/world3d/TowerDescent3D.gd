@@ -135,6 +135,9 @@ var _vertical_arrival_open: Dictionary = {}
 var _stair_arrival_prompt_door: RoomDoor3D
 var _corridor_floor_module_mesh: Mesh
 var _corridor_wall_module_mesh: Mesh
+var _initial_loop_gate_armed := false
+var _initial_loop_gate_sealed := false
+var _initial_loop_retreat_overlay: Control = null
 
 
 func _ready() -> void:
@@ -161,6 +164,9 @@ func _ready() -> void:
 	_update_floor_visibility_state()
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
+	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
+	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
+		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -820,6 +826,13 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 
 func _try_open_room_door(target_room_id: String) -> bool:
 	var edge := _edge_key(_current_room_id, target_room_id)
+	if (
+		edge == _edge_key("facility", "floor_01_entry")
+		and _current_room_id == "floor_01_entry"
+		and _initial_loop_gate_sealed
+	):
+		_show_initial_loop_retreat_warning()
+		return true
 	if _airlock_front_edges.has(edge) and _current_room_id == _active_airlock_room_id:
 		_finalize_airlock_commit(int(_airlock_front_edges[edge]))
 	if _boss_descent_gate_edges.has(edge) and not bool(_open_edges.get(edge, false)):
@@ -1722,6 +1735,8 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 		return true
 	_vertical_arrival_open[edge] = true
 	lower_door.set_open(true)
+	if edge == _edge_key("facility", "floor_01_entry"):
+		_initial_loop_gate_armed = true
 	_on_room_entered(lower_room)
 	if bundle_floor_index >= 0:
 		var plan := _floor_plan_snapshots.get(bundle_floor_index, {}) as Dictionary
@@ -1730,10 +1745,107 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 			int(plan.get("main_path_content_count", 0)),
 			int(plan.get("branch_count", 0)),
 		]
-		call_deferred("_show_door_fate_choices")
 	else:
 		status_label.text = "%d层交通门已开启 · 未触发关卡生成" % _floor_number_from_index(floor_index)
 	return true
+
+
+func _on_initial_loop_entry_physically_entered(room: DungeonRoom3D) -> void:
+	if room == null or room.room_id != "floor_01_entry" or not _initial_loop_gate_armed or _initial_loop_gate_sealed:
+		return
+	var edge := _edge_key("facility", room.room_id)
+	_open_edges[edge] = false
+	minimap.set_edge_open("facility", room.room_id, false)
+	_refresh_edge_visuals("facility", room.room_id, false)
+	_initial_loop_gate_sealed = true
+	status_label.text = "98–95F Boss大循环已开始 · 身后入口已封闭 · 反向开门将视为撤退"
+
+
+func _show_initial_loop_retreat_warning() -> void:
+	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
+		return
+	var overlay := Control.new()
+	overlay.name = "InitialLoopRetreatWarning"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 920
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.01, 0.0, 0.0, 0.78)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.add_child(dim)
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.position = Vector2(-310, -145)
+	panel.custom_minimum_size = Vector2(620, 290)
+	panel.add_theme_stylebox_override("panel", _make_hud_style(Color(1.0, 0.24, 0.18), Color(0.05, 0.008, 0.010, 0.98), 3))
+	overlay.add_child(panel)
+	var margin := _make_margin(24, 22, 24, 22)
+	panel.add_child(margin)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 14)
+	margin.add_child(box)
+	var title := _make_hud_label("放弃 98–95F Boss 大循环？", 24, Color(1.0, 0.36, 0.28))
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(title)
+	var detail := _make_hud_label("确认撤退后，背包内全部物品以及主武器、副武器都会永久丢失。\n保险格按保险规则保留；此操作不可撤销。", 15, Color(0.94, 0.88, 0.86))
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(detail)
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 18)
+	box.add_child(buttons)
+	var cancel := Button.new()
+	cancel.text = "取消 · 留在98F"
+	cancel.custom_minimum_size = Vector2(190, 48)
+	cancel.pressed.connect(_cancel_initial_loop_retreat)
+	buttons.add_child(cancel)
+	var confirm := Button.new()
+	confirm.text = "确认撤退 · 全部丢失"
+	confirm.custom_minimum_size = Vector2(220, 48)
+	confirm.pressed.connect(_confirm_initial_loop_retreat)
+	buttons.add_child(confirm)
+	$HUD.add_child(overlay)
+	_initial_loop_retreat_overlay = overlay
+	cancel.grab_focus()
+	_sync_player_input_lock()
+
+
+func _cancel_initial_loop_retreat() -> void:
+	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
+		_initial_loop_retreat_overlay.queue_free()
+	_initial_loop_retreat_overlay = null
+	_sync_player_input_lock()
+	status_label.text = "已取消撤退 · 入口继续封闭"
+
+
+func _confirm_initial_loop_retreat() -> void:
+	var discarded_inventory := _inventory.get_occupied_slots().size() if _inventory != null else 0
+	if _inventory != null:
+		_inventory.clear_all()
+	var discarded_weapons: Array[Dictionary] = []
+	if player != null and player.has_method("clear_all_equipped_weapons"):
+		discarded_weapons = player.call("clear_all_equipped_weapons") as Array[Dictionary]
+	_quick_item_ids = ["", ""]
+	if _inventory_ui != null:
+		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+	_refresh_quick_item_hud()
+	FateCardGameBridge.reset_run_state()
+	_cancel_initial_loop_retreat()
+	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+	if facility_room != null:
+		player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 2.7)
+		player.velocity = Vector3.ZERO
+		_on_room_entered(facility_room)
+	var edge := _edge_key("facility", "floor_01_entry")
+	_open_edges[edge] = false
+	_refresh_edge_visuals("facility", "floor_01_entry", false)
+	status_label.text = "已撤退至99F基地 · 丢失背包%d格、装备武器%d把" % [discarded_inventory, discarded_weapons.size()]
+
+
+func confirm_initial_loop_retreat_for_test() -> void:
+	_confirm_initial_loop_retreat()
 
 
 func try_open_stair_arrival_for_test() -> bool:
@@ -2665,11 +2777,15 @@ func _has_exclusive_modal() -> bool:
 	return (
 		(_active_facility_menu != null and is_instance_valid(_active_facility_menu))
 		or (_elevator_overlay != null and is_instance_valid(_elevator_overlay))
+		or (_initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay))
 		or super()
 	)
 
 
 func try_close_modal_for_pause() -> bool:
+	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
+		_cancel_initial_loop_retreat()
+		return true
 	if _elevator_overlay != null and is_instance_valid(_elevator_overlay):
 		_close_elevator_panel()
 		return true

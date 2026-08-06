@@ -14,7 +14,7 @@ const COMBAT_LIT_PATH := OUTPUT_DIR + "/tower_godot_floor98_room_light_on_ph49.p
 const CAMERA_CLOSE_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_close_south_wall_ph49.png"
 const CAMERA_OPEN_SOUTH_DOOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_camera_open_south_door_ph49.png"
 const ENTRY_NORTH_SHARED_WALL_PATH := OUTPUT_DIR + "/tower_godot_floor98_entry_north_shared_wall_ph50.png"
-const ELEVATOR_PATH := OUTPUT_DIR + "/tower_godot_floor98_standalone_elevator_ph49.png"
+const ELEVATOR_PATH := OUTPUT_DIR + "/tower_godot_floor95_stair_elevator_ph49.png"
 const STAIR_PATH := OUTPUT_DIR + "/tower_godot_stairwell_global_light_ph49.png"
 const BASE_ENTRY_CORRIDOR_PATH := OUTPUT_DIR + "/tower_godot_floor99_base_entry_corridor_ph50.png"
 const BOSS_PATH := OUTPUT_DIR + "/tower_godot_floor95_boss_ph49.png"
@@ -79,7 +79,6 @@ func _ready() -> void:
 					% floor_difference
 				)
 
-	tower.force_open_edge_for_test("facility", "floor_01_entry")
 	var entry := (tower.get("_room_by_id") as Dictionary).get(
 		"floor_01_entry"
 	) as DungeonRoom3D
@@ -97,7 +96,13 @@ func _ready() -> void:
 			flashlight.set_light_enabled(true)
 		await _settle()
 		_capture(ENTRY_GATE_PATH, "98层楼梯下端关闭门画面采样失败", failures)
-		tower.try_open_stair_arrival_for_test()
+	if not tower.activate_arrival_between_for_test("facility", "floor_01_entry"):
+		failures.append("98层到达门未能提交楼层，后续视觉验收无效")
+		for failure in failures:
+			push_error(failure)
+		get_tree().quit(1)
+		return
+	await _settle()
 	# 入口房位于东侧楼梯门的左侧/核心内侧；靠近北向枢纽门采样。
 	tower.player.global_position = entry.global_position + Vector3(0.0, 0.05, -3.6)
 	tower.force_enter_room_for_test("floor_01_entry")
@@ -143,9 +148,14 @@ func _ready() -> void:
 		flashlight.set_light_enabled(false)
 	await _settle()
 	_capture(COMBAT_LIT_PATH, "98层房间开灯画面采样失败", failures)
-	var hub_dimensions := hub.get_dimensions()
+	var camera_room := _find_room_with_door_direction(tower, "floor_01_", "south")
+	if camera_room == null:
+		camera_room = hub
+	camera_room.set_stream_state(1)
+	tower.force_enter_room_for_test(camera_room.room_id)
+	var hub_dimensions := camera_room.get_dimensions()
 	tower.player.global_position = (
-		hub.global_position
+		camera_room.global_position
 		+ Vector3(-hub_dimensions.x * 0.5 + 7.5, 0.05, hub_dimensions.y * 0.5 - 0.50)
 	)
 	await _settle()
@@ -157,7 +167,7 @@ func _ready() -> void:
 	):
 		failures.append("98层角色贴南墙时镜头未抬升收回")
 	_capture(CAMERA_CLOSE_WALL_PATH, "98层贴南墙镜头画面采样失败", failures)
-	var hub_south_door := hub.get_door_node("south")
+	var hub_south_door := camera_room.get_door_node("south")
 	if hub_south_door != null:
 		hub_south_door.set_open(true, true)
 		await get_tree().physics_frame
@@ -175,27 +185,33 @@ func _ready() -> void:
 		hub_south_door.set_open(false, true)
 		await get_tree().physics_frame
 
+	if not tower.generate_through_floor_for_test(95):
+		failures.append("无法生成至95层，Boss与唯一电梯视觉验收无效")
+	await _settle()
+	var elevator_access_id := str(
+		(tower.get("_elevator_access_room_by_floor") as Dictionary).get(95, "")
+	)
 	var elevator_room := (tower.get("_room_by_id") as Dictionary).get(
-		"floor_01_elevator"
+		elevator_access_id
 	) as DungeonRoom3D
 	var elevator_facility := (
-		(tower.get("_elevator_facilities_by_floor") as Dictionary).get(98)
+		(tower.get("_elevator_facilities_by_floor") as Dictionary).get(95)
 		as BaseFacility3D
 	)
-	tower.player.global_position = (
+	if elevator_room == null or elevator_facility == null:
+		failures.append("95→94楼梯间缺少唯一电梯设施")
+	else:
+		tower.player.global_position = (
 		elevator_facility.global_position
 		+ elevator_facility.global_basis.z * 2.7
 		+ Vector3.UP * 0.05
-		if elevator_facility != null
-		else elevator_room.global_position + Vector3(0.0, 0.05, 15.0)
-	)
-	tower.force_enter_room_for_test("floor_01_elevator")
-	if elevator_facility != null:
+		)
+		tower.force_enter_room_for_test(elevator_access_id)
 		tower.player.look_at(elevator_facility.global_position, Vector3.UP)
 	if flashlight != null:
 		flashlight.set_light_enabled(true)
 	await _settle()
-	_capture(ELEVATOR_PATH, "98层独立墙边电梯画面采样失败", failures)
+	_capture(ELEVATOR_PATH, "95→94楼梯间唯一电梯画面采样失败", failures)
 
 	var stair := _find_vertical_connector(tower, "facility", "floor_01_entry")
 	if stair == null:
@@ -272,6 +288,21 @@ func _mean_rgb_difference(first: Image, second: Image, regions: Array) -> float:
 				difference += absf(a.r - b.r) + absf(a.g - b.g) + absf(a.b - b.b)
 				sample_count += 3
 	return difference / float(maxi(sample_count, 1))
+
+
+func _find_room_with_door_direction(
+	tower: TowerDescent3D,
+	room_id_prefix: String,
+	direction: String
+) -> DungeonRoom3D:
+	for room_value in (tower.get("_room_by_id") as Dictionary).values():
+		var room := room_value as DungeonRoom3D
+		if room == null or not room.room_id.begins_with(room_id_prefix):
+			continue
+		room.ensure_shell_built()
+		if room.get_door_node(direction) != null:
+			return room
+	return null
 
 
 func _find_vertical_connector(tower: TowerDescent3D, a: String, b: String) -> Node3D:

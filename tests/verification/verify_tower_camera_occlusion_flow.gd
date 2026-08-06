@@ -33,17 +33,32 @@ func _ready() -> void:
 	})
 	_expect_real_wall_cleared("99层基地南墙", tower, facility_snapshot, failures)
 
+	# Combat floors are now committed atomically when the stair arrival door is
+	# opened. The camera test must follow that real lifecycle before asking for
+	# 98F rooms; otherwise the hub correctly does not exist yet.
+	if not tower.activate_arrival_between_for_test("facility", "floor_01_entry"):
+		failures.append("无法通过真实到达门提交98层，镜头验收无法继续")
+		tower.queue_free()
+		for failure in failures:
+			push_error(failure)
+		get_tree().quit(1)
+		return
+	await _settle(3)
+
 	# 98层枢纽南侧同时覆盖门墙与SW拐角，防止内部门墙碰撞抢先命中却
 	# 没有镜头标记，或L角两臂共用一个StaticBody导致漏检/误检。
 	var hub := (
 		(tower.get("_room_by_id") as Dictionary).get("floor_01_hub")
 		as DungeonRoom3D
 	)
-	hub.set_stream_state(1)
-	tower.force_enter_room_for_test("floor_01_hub")
-	var south_door := hub.get_door_node("south")
+	var camera_room := _find_room_with_door_direction(tower, "floor_01_", "south")
+	if camera_room == null:
+		camera_room = hub
+	camera_room.set_stream_state(1)
+	tower.force_enter_room_for_test(camera_room.room_id)
+	var south_door := camera_room.get_door_node("south")
 	if south_door == null:
-		failures.append("98层枢纽缺少南侧门墙，无法验收镜头碰撞")
+		failures.append("98层随机布局中没有可用于镜头验收的南侧门墙")
 	else:
 		tower.player.global_position = south_door.global_position + Vector3(0.0, 0.05, -1.2)
 		await _settle(90)
@@ -62,9 +77,9 @@ func _ready() -> void:
 		)
 		south_door.set_open(false, true)
 		await get_tree().physics_frame
-	var hub_dimensions := hub.get_dimensions()
+	var hub_dimensions := camera_room.get_dimensions()
 	tower.player.global_position = (
-		hub.global_position
+		camera_room.global_position
 		+ Vector3(-hub_dimensions.x * 0.5 + 1.0, 0.05, hub_dimensions.y * 0.5 - 1.2)
 	)
 	await _settle(45)
@@ -72,7 +87,7 @@ func _ready() -> void:
 		"98层枢纽SW拐角南墙臂", tower, tower.get_tower_snapshot(), failures
 	)
 	tower.player.global_position = (
-		hub.global_position
+		camera_room.global_position
 		+ Vector3(-hub_dimensions.x * 0.5 + 7.5, 0.05, hub_dimensions.y * 0.5 - 0.50)
 	)
 	await _settle(45)
@@ -88,10 +103,14 @@ func _ready() -> void:
 	)
 	tower.force_open_edge_for_test("floor_01_entry", "floor_01_hub")
 	tower.force_enter_room_for_test("floor_01_entry")
-	var entry_north_door := entry.get_door_node("north")
+	var entry_north_door: RoomDoor3D = null
+	for side_value in entry.door_targets.keys():
+		if str(entry.door_targets[side_value]) == "floor_01_hub":
+			entry_north_door = entry.get_door_node(str(side_value))
+			break
 	if entry_north_door == null:
-		failures.append("98层安全房缺少通向首个连接格的北门")
-	else:
+		failures.append("98层安全房缺少通向首个连接格的实体门")
+	elif str(entry_north_door.direction) == "north":
 		entry_north_door.set_open(true, true)
 		tower.player.global_position = (
 			entry_north_door.global_position + Vector3(0.0, 0.05, -0.50)
@@ -200,6 +219,21 @@ func _find_stair_south_camera_wall(connector: Node3D) -> StaticBody3D:
 			and bool(body.get_meta("camera_lower_wall", false))
 		):
 			return body
+	return null
+
+
+func _find_room_with_door_direction(
+	tower: TowerDescent3D,
+	room_id_prefix: String,
+	direction: String
+) -> DungeonRoom3D:
+	for room_value in (tower.get("_room_by_id") as Dictionary).values():
+		var room := room_value as DungeonRoom3D
+		if room == null or not room.room_id.begins_with(room_id_prefix):
+			continue
+		room.ensure_shell_built()
+		if room.get_door_node(direction) != null:
+			return room
 	return null
 
 

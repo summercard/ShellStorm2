@@ -68,7 +68,7 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		await get_tree().process_frame
 		var root: AssemblyNode = mode.player.get_weapon_tree().get_root()
 		if root == null or root.node_name != "GunBody_Shotgun":
-			failures.append("Right-clicking shotgun did not switch the player's main weapon")
+			failures.append("Clicking shotgun did not switch the player's main weapon")
 		if mode.inventory_module.get_item_count("weapon_shotgun") != shotgun_count_before - 1:
 			failures.append("Equipping shotgun did not remove exactly one weapon from the backpack")
 		if not mode.inventory_module.has_item("weapon_pistol"):
@@ -184,10 +184,14 @@ func _click_inventory_slot(ui: CanvasLayer, slot_index: int, button_index: Mouse
 	var slot := ui.get_node_or_null("InventoryPanel/VBox/InventoryGrid/InvSlot_%d" % slot_index)
 	if slot == null:
 		return
-	var event := InputEventMouseButton.new()
-	event.button_index = button_index
-	event.pressed = true
-	slot.call("_on_gui_input", event)
+	var pressed := InputEventMouseButton.new()
+	pressed.button_index = button_index
+	pressed.pressed = true
+	slot.call("_on_gui_input", pressed)
+	var released := InputEventMouseButton.new()
+	released.button_index = button_index
+	released.pressed = false
+	slot.call("_on_gui_input", released)
 
 
 func _find_soul_orb(root: Node) -> SoulOrb:

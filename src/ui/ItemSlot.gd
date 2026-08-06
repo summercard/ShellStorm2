@@ -49,7 +49,7 @@ func _on_gui_input(event: InputEvent) -> void:
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
-	if not has_meta("drag_payload"):
+	if bool(get_meta("drag_disabled", false)) or not has_meta("drag_payload"):
 		return null
 	var payload := (get_meta("drag_payload") as Dictionary).duplicate(true)
 	if payload.is_empty():
@@ -94,9 +94,11 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var target_kind := str(get_meta("slot_kind", "inventory"))
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var item := (data as Dictionary).get("item", {}) as Dictionary
-	if target_kind == "equipment":
+	if target_kind.begins_with("weapon_"):
 		return source_kind == "inventory" and str(item.get("type", "")) == "weapon"
-	if target_kind == "inventory" and source_kind == "equipment":
+	if target_kind.begins_with("quick_"):
+		return source_kind == "inventory" and not str(item.get("use_action", "")).is_empty()
+	if target_kind == "inventory" and source_kind.begins_with("weapon_"):
 		return not has_meta("slot_item")
 	return target_kind in ["inventory", "drop"]
 
@@ -126,8 +128,9 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 	var target_kind := str(get_meta("slot_kind", "inventory"))
 	_drag_feedback_valid = active and (
 		target_kind == "drop"
-		or target_kind == "inventory" and (source_kind != "equipment" or not has_meta("slot_item"))
-		or target_kind == "equipment" and source_kind == "inventory" and str(dragged_item.get("type", "")) == "weapon"
+		or target_kind == "inventory" and (not source_kind.begins_with("weapon_") or not has_meta("slot_item"))
+		or target_kind.begins_with("weapon_") and source_kind == "inventory" and str(dragged_item.get("type", "")) == "weapon"
+		or target_kind.begins_with("quick_") and source_kind == "inventory" and not str(dragged_item.get("use_action", "")).is_empty()
 	)
 	queue_redraw()
 
@@ -152,7 +155,7 @@ func _draw() -> void:
 			border_width = 3.0
 		elif _drag_feedback_valid:
 			var target_kind := str(get_meta("slot_kind", "inventory"))
-			border_color = Color(1.0, 0.25, 0.22, 1.0) if target_kind == "drop" else Color(0.25, 0.95, 0.72, 1.0) if target_kind == "equipment" else Color(0.30, 0.86, 1.0, 0.95)
+			border_color = Color(1.0, 0.25, 0.22, 1.0) if target_kind == "drop" else Color(0.25, 0.95, 0.72, 1.0) if target_kind.begins_with("weapon_") or target_kind.begins_with("quick_") else Color(0.30, 0.86, 1.0, 0.95)
 			draw_rect(Rect2(Vector2.ZERO, size), Color(border_color.r, border_color.g, border_color.b, 0.10), true)
 			border_width = 2.0
 	if _hovered:

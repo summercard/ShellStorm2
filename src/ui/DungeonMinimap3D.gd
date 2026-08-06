@@ -28,6 +28,7 @@ var _pulse_phase := 0.0
 var _redraw_accumulator := 0.0
 var _has_realtime_player_state := false
 var _enemy_world_positions: Array[Vector3] = []
+var _full_map_mode := false
 
 
 func _ready() -> void:
@@ -63,6 +64,32 @@ func configure(records: Array[Dictionary], edge_states: Dictionary) -> void:
 			_floor_heights.append(floor_y)
 	_floor_heights.sort()
 	_has_multiple_floors = _floor_heights.size() > 1
+	queue_redraw()
+
+
+func set_full_map_mode(enabled: bool) -> void:
+	_full_map_mode = enabled
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	queue_redraw()
+
+
+func copy_state_from(source: DungeonMinimap3D) -> void:
+	if source == null:
+		return
+	_records = source._records.duplicate(true)
+	_edges = source._edges.duplicate(true)
+	_revealed = source._revealed.duplicate(true)
+	_current_room_id = source._current_room_id
+	_position_by_id = source._position_by_id.duplicate(true)
+	_record_by_id = source._record_by_id.duplicate(true)
+	_dimensions_by_id = source._dimensions_by_id.duplicate(true)
+	_floor_heights = source._floor_heights.duplicate()
+	_has_multiple_floors = source._has_multiple_floors
+	_current_floor_y = source._current_floor_y
+	_player_world_position = source._player_world_position
+	_player_aim_direction = source._player_aim_direction
+	_has_realtime_player_state = source._has_realtime_player_state
+	_enemy_world_positions.assign(source._enemy_world_positions)
 	queue_redraw()
 
 
@@ -129,6 +156,7 @@ func get_snapshot() -> Dictionary:
 		"holographic_scan": true,
 		"scan_beam_line": false,
 		"floor_stack_index": _has_multiple_floors,
+		"full_map_mode": _full_map_mode,
 	}
 
 
@@ -136,9 +164,14 @@ func _draw() -> void:
 	var full_rect := Rect2(Vector2.ZERO, size)
 	var center := full_rect.get_center()
 	var radius := maxf(4.0, minf(size.x, size.y) * 0.5 - 7.0)
-	draw_circle(center, radius + 4.0, Color(0.0, 0.02, 0.035, 0.42))
-	draw_circle(center, radius, Color(0.006, 0.020, 0.034, 0.86))
-	_draw_frame(full_rect)
+	if _full_map_mode:
+		draw_rect(full_rect, Color(0.002, 0.012, 0.022, 0.97), true)
+		draw_rect(full_rect.grow(-3.0), Color(0.24, 0.88, 1.0, 0.82), false, 2.0)
+		draw_rect(full_rect.grow(-10.0), Color(0.12, 0.46, 0.62, 0.62), false, 1.0)
+	else:
+		draw_circle(center, radius + 4.0, Color(0.0, 0.02, 0.035, 0.42))
+		draw_circle(center, radius, Color(0.006, 0.020, 0.034, 0.86))
+		_draw_frame(full_rect)
 	_draw_header()
 	if _records.is_empty():
 		return
@@ -159,7 +192,7 @@ func _draw_header() -> void:
 	draw_string(
 		font,
 		Vector2(0.0, 23.0),
-		"TACTICAL / %s" % _floor_label(),
+		("EXPLORED FLOOR MAP / %s" if _full_map_mode else "TACTICAL / %s") % _floor_label(),
 		HORIZONTAL_ALIGNMENT_CENTER,
 		size.x,
 		12,
@@ -225,11 +258,12 @@ func _draw_edges(bounds: Rect2, map_rect: Rect2) -> void:
 		var to_edge := _room_edge_world(to_world, from_world, to_dim)
 		var from := _map_position(from_edge, bounds, map_rect)
 		var to := _map_position(to_edge, bounds, map_rect)
-		var clipped := _clip_segment_to_radar(from, to, 3.0)
-		if clipped.size() != 2:
-			continue
-		from = clipped[0]
-		to = clipped[1]
+		if not _full_map_mode:
+			var clipped := _clip_segment_to_radar(from, to, 3.0)
+			if clipped.size() != 2:
+				continue
+			from = clipped[0]
+			to = clipped[1]
 		var opened := bool(_edges[edge_key])
 		var color := (
 			Color(0.24, 0.98, 0.78, 0.88)
@@ -254,7 +288,7 @@ func _draw_rooms(bounds: Rect2, map_rect: Rect2) -> void:
 		room_size.x = maxf(room_size.x, 10.0)
 		room_size.y = maxf(room_size.y, 8.0)
 		var room_rect := Rect2(center - room_size * 0.5, room_size)
-		if not _rect_fully_inside_radar(room_rect.grow(4.0)):
+		if not _full_map_mode and not _rect_fully_inside_radar(room_rect.grow(4.0)):
 			continue
 		var color := _room_color(str(record.get("type", "")))
 		draw_rect(room_rect.grow(2.5), Color(color, 0.12), true)
@@ -272,7 +306,7 @@ func _draw_enemies(bounds: Rect2, map_rect: Rect2) -> void:
 		if not _is_current_floor_y(world_position.y):
 			continue
 		var center := _map_position(world_position, bounds, map_rect)
-		if not _point_inside_radar(center, 6.0):
+		if not _full_map_mode and not _point_inside_radar(center, 6.0):
 			continue
 		draw_circle(center, 4.6, Color(0.20, 0.0, 0.0, 0.82))
 		draw_circle(center, 3.0, Color(1.0, 0.08, 0.08, 1.0))
@@ -365,7 +399,7 @@ func _map_position(
 ) -> Vector2:
 	var projected := Vector2(world_position.x, world_position.z)
 	var scale := _map_scale(bounds, map_rect)
-	if _has_realtime_player_state:
+	if _has_realtime_player_state and not _full_map_mode:
 		var player_projected := Vector2(_player_world_position.x, _player_world_position.z)
 		return map_rect.get_center() + (projected - player_projected) * scale
 	var used_size := bounds.size * scale
@@ -392,6 +426,8 @@ func get_player_screen_position() -> Vector2:
 
 
 func _content_map_rect() -> Rect2:
+	if _full_map_mode:
+		return Rect2(Vector2(64.0, 62.0), Vector2(maxf(1.0, size.x - 128.0), maxf(1.0, size.y - 112.0)))
 	var side := maxf(1.0, minf(size.x, size.y) - MAP_PADDING.x * 2.0)
 	return Rect2(size * 0.5 - Vector2.ONE * side * 0.5, Vector2.ONE * side)
 
@@ -405,7 +441,7 @@ func _map_world_size(world_size: Vector2, bounds: Rect2, map_rect: Rect2) -> Vec
 
 
 func _map_scale(bounds: Rect2, map_rect: Rect2) -> float:
-	if _has_realtime_player_state:
+	if _has_realtime_player_state and not _full_map_mode:
 		return minf(map_rect.size.x, map_rect.size.y) / RADAR_WORLD_DIAMETER_M
 	return minf(
 		map_rect.size.x / maxf(1.0, bounds.size.x),

@@ -30,10 +30,11 @@ func _ready() -> void:
 		_check(player_status != null, "Player status block is missing", failures)
 		_check(player_status != null and player_status.size.x <= 280.0, "Reference HUD was not reduced to 80% scale", failures)
 		_check(hud.find_child("CurrentWeaponPanel", true, false) != null, "Bottom weapon panel is missing", failures)
+		_check(hud.find_child("QuickItemHUD_0", true, false) != null and hud.find_child("QuickItemHUD_1", true, false) != null, "Two HUD quick-item panels are missing", failures)
 		_check(hud.find_child("ActionKeyStrip", true, false) != null, "Action key strip is missing", failures)
 		var projected_textures := hud.find_children("ProjectedTexture", "TextureRect", true, false)
 		var all_textures := hud.find_children("*", "TextureRect", true, false)
-		_check(all_textures.size() == 1 and projected_textures.size() == 1, "HUD contains a bitmap texture outside the shared 3D weapon projection", failures)
+		_check(all_textures.size() == projected_textures.size() and projected_textures.size() >= 1 and projected_textures.size() <= 3, "HUD weapon/quick slots do not exclusively use lazy shared 3D projections", failures)
 	var weapon_model := dungeon.get_hud_weapon_model_snapshot()
 	_check(bool(weapon_model.get("uses_world_model_factory", false)), "HUD weapon does not reuse the backpack 3D model factory", failures)
 	_check(str(weapon_model.get("model_kind", "")) == "weapon" and int(weapon_model.get("mesh_count", 0)) > 0, "HUD weapon 3D projection is empty", failures)
@@ -43,24 +44,48 @@ func _ready() -> void:
 	_check(absf(minimap.size.x - minimap.size.y) <= 2.0 and minimap.size.x <= 225.0, "Tactical minimap is not circular or 80% scale", failures)
 	_check(minimap.get_snapshot().get("enemy_marker_count", 0) == 2, "Minimap enemy dots are not fed by runtime data", failures)
 	_check(_capture("reference_combat_hud.png"), "Could not capture reference combat HUD", failures)
+	dungeon.call("_toggle_full_map")
+	for _frame in 3:
+		await get_tree().process_frame
+	var full_map := dungeon.get("_full_map_control") as DungeonMinimap3D
+	_check(full_map != null and bool(full_map.get_snapshot().get("full_map_mode", false)), "M full-floor map overlay is missing", failures)
+	_check(_capture("full_floor_explored_map.png"), "Could not capture full-floor map", failures)
+	dungeon.call("_close_full_map")
 
 	_check(dungeon.show_reference_fate_overlay_for_test(), "Could not open deterministic fate overlay", failures)
-	for _frame in 6:
+	for _frame in 2:
 		await get_tree().process_frame
 	var overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
 	_check(overlay != null, "Fate overlay is missing", failures)
 	if overlay != null:
 		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 		_check(cards.size() == 3, "Fate overlay does not show three vertical cards", failures)
+		for card_node in cards:
+			var flip_card := card_node as Button
+			_check(flip_card.disabled, "Tarot card is clickable before flip completes", failures)
+			_check(flip_card.find_child("TarotCardBack", true, false) != null, "Tarot card back is missing", failures)
+	for _frame in 48:
+		await get_tree().process_frame
+	if overlay != null:
+		var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
 		_check(overlay.find_children("*", "TextureRect", true, false).is_empty(), "Fate overlay uses a bitmap TextureRect", failures)
 		var all_text := _collect_label_text(overlay)
-		for required in ["星星命运", "太阳命运", "月亮命运", "当前信息", "命 运 卡 三 选 一"]:
+		for required in ["星星命运", "太阳命运", "月亮命运", "当前信息", "命 运 卡 三 选 一", "权杖·王牌", "星币·王牌", "愚者", "正位", "逆位"]:
 			_check(required in all_text, "Fate overlay is missing text: %s" % required, failures)
 		for card in cards:
 			var card_control := card as Control
+			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
+			_check(not (card_control as Button).disabled, "Tarot card stayed disabled after flip", failures)
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
 			_check(card_control.size.x <= 205.0 and card_control.size.y <= 305.0, "Fate card was not reduced to 80% scale", failures)
-	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference fate overlay", failures)
+		var reversed_cards := cards.filter(func(value: Node) -> bool: return str(value.get_meta("tarot_orientation", "")) == "逆位")
+		_check(reversed_cards.size() == 1, "Deterministic visual offer does not contain exactly one reversed card", failures)
+		if reversed_cards.size() == 1:
+			var reversed_card := reversed_cards[0] as Control
+			var ornament := reversed_card.find_child("TarotOrientationOrnament", true, false) as Control
+			_check(absf(absf(reversed_card.rotation) - PI) < 0.01, "Reversed card face is not wholly upside down", failures)
+			_check(ornament != null and absf(ornament.rotation) < 0.01, "Reversed card still rotates only the ornament layer", failures)
+	_check(_capture("reference_fate_three_choice.png"), "Could not capture reference tarot overlay", failures)
 
 	dungeon.queue_free()
 	await get_tree().process_frame
@@ -79,7 +104,7 @@ func _ready() -> void:
 	_check(_capture("reference_tower_hud_compact.png"), "Could not capture compact tower HUD", failures)
 
 	if failures.is_empty():
-		print("REFERENCE_HUD_FATE_VISUAL_OK: 80% HUD, separated tower info, shared 3D weapon model and three celestial fate cards render")
+		print("REFERENCE_HUD_FATE_VISUAL_OK: three celestial cards flip from code backs and reversed cards rotate the complete face with reversed effect text")
 		get_tree().quit(0)
 		return
 	for failure in failures:

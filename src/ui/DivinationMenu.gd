@@ -37,14 +37,14 @@ func _draw_cards() -> void:
 		child.queue_free()
 	_pending_card_reset()
 
-	# 从预设中随机抽取 3 张（不重复）
-	var all_cards := FateCardPresets.playable_presets()
-	all_cards.shuffle()
-	var options: Array[FateCard] = all_cards.slice(0, 3)
+	# 从共享塔罗卡池无重复抽取，并为每张牌独立判定正/逆位。
+	var options := FateCardPresets.draw_offer(3)
 
-	for card in options:
+	for choice_index in range(options.size()):
+		var card := options[choice_index]
 		var btn := _create_card_button(card)
 		card_options_container.add_child(btn)
+		_play_card_flip(btn, card, choice_index)
 
 	# 更新说明
 	if instruction_label:
@@ -66,8 +66,8 @@ func _create_card_button(card: FateCard) -> Button:
 	# 卡面先显示天体作用域专名，再显示品质/名称/效果类型。
 	var type_str := FateCard.type_name(card.card_type)
 	btn.text = (
-		"%s\n[%s] %s\n%s"
-		% [FateCard.scope_display_name(card.scope), FateCard.rarity_name(card.card_rarity), card.card_name, type_str]
+		"%s\n[%s] %s\n%s %s\n%s"
+		% [FateCard.scope_display_name(card.scope), FateCard.rarity_name(card.card_rarity), card.card_name, card.orientation_symbol(), card.orientation_name(), type_str]
 	)
 	btn.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
 	btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -76,6 +76,7 @@ func _create_card_button(card: FateCard) -> Button:
 	btn.add_theme_font_size_override("normal", 12)
 	btn.set_meta("card", card)
 	btn.pressed.connect(_on_card_button_pressed.bind(card))
+	btn.set_meta("tarot_face_ready", false)
 
 	# Tooltip
 	btn.tooltip_text = "%s\n%s\n%s" % [FateCard.scope_display_name(card.scope), FateCard.scope_target_text(card.scope), card.description]
@@ -92,6 +93,33 @@ func _create_card_button(card: FateCard) -> Button:
 	return btn
 
 
+func _play_card_flip(button: Button, card: FateCard, choice_index: int) -> void:
+	var face_text := button.text
+	button.disabled = true
+	button.text = "✦\n命运塔罗\nFATE"
+	button.pivot_offset = button.size * 0.5
+	var tween := button.create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if bool(ProjectSettings.get_setting("accessibility/reduce_motion", false)):
+		button.modulate.a = 0.0
+		button.text = face_text
+		button.rotation = PI if card.is_reversed() else 0.0
+		tween.tween_property(button, "modulate:a", 1.0, 0.15)
+	else:
+		tween.tween_interval(0.10 + float(choice_index) * 0.08)
+		tween.tween_property(button, "scale:x", 0.04, 0.14)
+		tween.tween_callback(func() -> void:
+			button.text = face_text
+			button.rotation = PI if card.is_reversed() else 0.0
+		)
+		tween.tween_property(button, "scale:x", 1.0, 0.18)
+	tween.tween_callback(func() -> void:
+		button.disabled = false
+		button.set_meta("tarot_face_ready", true)
+		button.set_meta("tarot_face_rotation", button.rotation)
+	)
+
+
 ## 选中了一张卡片
 func _on_card_button_pressed(card: FateCard) -> void:
 	pending_card = card
@@ -101,7 +129,11 @@ func _on_card_button_pressed(card: FateCard) -> void:
 	BaseManager.set_pending_fate_card(
 		{
 			"card_id": card.card_id,
+			"stable_card_id": card.get_stable_card_id(),
 			"card_name": card.card_name,
+			"legacy_card_name": card.legacy_card_name,
+			"orientation": card.orientation,
+			"orientation_roll": card.orientation_roll,
 			"card_type": card.card_type,
 			"card_rarity": card.card_rarity,
 			"description": card.description,
@@ -123,7 +155,7 @@ func _update_selected_label(card: FateCard) -> void:
 	var color := FateCard.rarity_color(card.card_rarity)
 	var hex: String = "#%02X%02X%02X" % [int(color.r * 255), int(color.g * 255), int(color.b * 255)]
 	selected_card_label.text = (
-		"已选: [%s] %s" % [FateCard.rarity_name(card.card_rarity), card.card_name]
+		"已选: [%s] %s · %s" % [FateCard.rarity_name(card.card_rarity), card.card_name, card.orientation_name()]
 	)
 	selected_card_label.add_theme_color_override("font_color", color)
 	selected_card_label.visible = true

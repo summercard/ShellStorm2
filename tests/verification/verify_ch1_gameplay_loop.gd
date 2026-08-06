@@ -115,7 +115,7 @@ func _verify_main_scene_loop(failures: Array[String]) -> void:
 				(
 					failures
 					. append(
-						"Right-clicking an inventory attachment does not install it into the weapon tree"
+						"Clicking an inventory attachment does not install it into the weapon tree"
 					)
 				)
 			if mode.inventory_module.has_item("attach_triple_muzzle"):
@@ -158,10 +158,14 @@ func _click_inventory_slot(ui: CanvasLayer, slot_index: int, button_index: Mouse
 	var slot := ui.get_node_or_null("InventoryPanel/VBox/InventoryGrid/InvSlot_%d" % slot_index)
 	if slot == null:
 		return
-	var event := InputEventMouseButton.new()
-	event.button_index = button_index
-	event.pressed = true
-	slot.call("_on_gui_input", event)
+	var pressed := InputEventMouseButton.new()
+	pressed.button_index = button_index
+	pressed.pressed = true
+	slot.call("_on_gui_input", pressed)
+	var released := InputEventMouseButton.new()
+	released.button_index = button_index
+	released.pressed = false
+	slot.call("_on_gui_input", released)
 
 
 func _finish(failures: Array[String]) -> void:

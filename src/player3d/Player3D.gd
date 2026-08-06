@@ -17,6 +17,7 @@ signal reload_ended(completed: bool)
 signal action_overlay_changed(snapshot: Dictionary)
 signal avatar_customization_changed(loadout: Dictionary)
 signal weapon_instance_changed(snapshot: Dictionary)
+signal weapon_loadout_changed(snapshot: Dictionary)
 
 const SPEED := 5.0
 const DASH_SPEED := 16.5
@@ -59,7 +60,11 @@ var _test_move_direction: Variant = null
 var weapon: WeaponModel3D = null
 var weapon_tree: WeaponAssemblyTree = null
 var equipped_weapon_instance: WeaponInstance = null
+var equipped_weapon_slots: Array = [null, null]
+var active_weapon_slot := 0
 var _loading_weapon_instance := false
+var _stowed_weapon_model: WeaponModel3D = null
+var _stowed_weapon_instance_id := ""
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
@@ -111,10 +116,14 @@ func _ready() -> void:
 	if start_with_weapon:
 		_ensure_weapon_model()
 		_sync_weapon_from_tree()
+	_refresh_stowed_weapon_model(true)
 	if avatar != null:
 		avatar.set_customization(_avatar_customization)
 	hp_changed.emit(current_hp, max_hp)
-	_update_aim_from_mouse()
+	# 嵌入式运行窗口在首个 _ready 帧里可能尚未完成 Viewport/Camera 投影初始化。
+	# 此时 project_ray_* 会返回非有限向量；若直接写入 top_level 的准星，
+	# RenderingServer 会在之后每帧反复报告 instance_set_transform 并拖死编辑器。
+	call_deferred("_update_aim_from_mouse")
 
 
 func _physics_process(delta: float) -> void:
@@ -537,8 +546,10 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 	_ensure_weapon_model()
 	_sync_weapon_from_tree()
 	equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
+	equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
 	_sync_equipped_weapon_instance()
 	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
 	return true
 
 
@@ -575,6 +586,7 @@ func _ensure_weapon_tree() -> void:
 		weapon_tree.stats_changed.connect(_on_weapon_tree_stats_changed)
 	if equipped_weapon_instance == null and weapon_tree.get_root() != null:
 		equipped_weapon_instance = WeaponInstance.from_runtime_tree(weapon_tree)
+		equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
 
 
 func _sync_weapon_from_tree() -> void:
@@ -617,52 +629,163 @@ func get_equipped_weapon_instance_id() -> String:
 	return instance.weapon_instance_id if instance != null else ""
 
 
+func get_active_weapon_slot() -> int:
+	return active_weapon_slot
+
+
+func get_equipped_weapon_instance_for_slot(slot_index: int) -> WeaponInstance:
+	if slot_index < 0 or slot_index >= equipped_weapon_slots.size():
+		return null
+	if slot_index == active_weapon_slot:
+		_sync_equipped_weapon_instance()
+	return equipped_weapon_slots[slot_index] as WeaponInstance
+
+
+func get_equipped_weapon_item_for_slot(slot_index: int) -> Dictionary:
+	var instance := get_equipped_weapon_instance_for_slot(slot_index)
+	return instance.to_item_dictionary() if instance != null else {}
+
+
+func get_equipped_weapon_instance_id_for_slot(slot_index: int) -> String:
+	var instance := get_equipped_weapon_instance_for_slot(slot_index)
+	return instance.weapon_instance_id if instance != null else ""
+
+
+func get_weapon_loadout_snapshot() -> Dictionary:
+	var slots: Array[Dictionary] = []
+	for slot_index in range(2):
+		var instance := get_equipped_weapon_instance_for_slot(slot_index)
+		var presentation := (
+			instance.get_presentation_snapshot(
+				weapon_tree if slot_index == active_weapon_slot else null,
+				"主武器" if slot_index == 0 else "副武器"
+			)
+			if instance != null else {}
+		)
+		presentation["slot_index"] = slot_index
+		presentation["slot_name"] = "主武器" if slot_index == 0 else "副武器"
+		presentation["active"] = slot_index == active_weapon_slot
+		slots.append(presentation)
+	var stowed_visible := _stowed_weapon_model != null and is_instance_valid(_stowed_weapon_model)
+	var stowed_slot := 1 - active_weapon_slot if stowed_visible else -1
+	var stowed_socket: Marker3D = null
+	if stowed_visible and avatar != null:
+		stowed_socket = avatar.get_stowed_weapon_socket(stowed_slot)
+	return {
+		"active_slot": active_weapon_slot,
+		"slots": slots,
+		"stowed_visible": stowed_visible,
+		"stowed_instance_id": _stowed_weapon_instance_id,
+		"stowed_slot": stowed_slot,
+		"stowed_socket_name": stowed_socket.name if stowed_socket != null else "",
+		"stowed_socket_position": stowed_socket.position if stowed_socket != null else Vector3.ZERO,
+		"stowed_muzzle_direction": -stowed_socket.global_basis.z.normalized() if stowed_socket != null else Vector3.ZERO,
+	}
+
+
 func get_weapon_presentation_snapshot() -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	return instance.get_presentation_snapshot(weapon_tree, "已装备") if instance != null else {}
 
 
 func equip_weapon_item(item: Dictionary) -> Dictionary:
+	return equip_weapon_item_to_slot(item, active_weapon_slot)
+
+
+func equip_weapon_item_to_slot(item: Dictionary, slot_index: int) -> Dictionary:
+	if slot_index < 0 or slot_index >= equipped_weapon_slots.size():
+		return {"success": false, "reason": "武器槽无效"}
 	_ensure_weapon_tree()
 	var candidate := WeaponInstance.from_item(item)
 	if candidate == null:
 		return {"success": false, "reason": "武器实例无效"}
-	if equipped_weapon_instance != null and (
-		candidate.weapon_instance_id == equipped_weapon_instance.weapon_instance_id
-	):
-		return {"success": false, "reason": "该武器实例已装备"}
+	for equipped_value in equipped_weapon_slots:
+		var equipped := equipped_value as WeaponInstance
+		if equipped != null and candidate.weapon_instance_id == equipped.weapon_instance_id:
+			return {"success": false, "reason": "该武器实例已在主/副武器栏"}
 	_sync_equipped_weapon_instance()
-	var old_item: Dictionary = (
-		equipped_weapon_instance.to_item_dictionary()
-		if equipped_weapon_instance != null else {}
-	)
-	_loading_weapon_instance = true
-	var loaded := candidate.load_into_runtime_tree(weapon_tree)
-	_loading_weapon_instance = false
-	if not loaded:
+	var old_instance := equipped_weapon_slots[slot_index] as WeaponInstance
+	var old_item := old_instance.to_item_dictionary() if old_instance != null else {}
+	equipped_weapon_slots[slot_index] = candidate
+	if slot_index == active_weapon_slot and not _load_active_weapon_instance(candidate):
+		equipped_weapon_slots[slot_index] = old_instance
+		if old_instance != null:
+			_load_active_weapon_instance(old_instance)
 		return {"success": false, "reason": "武器构筑快照无法加载"}
-	equipped_weapon_instance = candidate
-	_sync_weapon_from_tree()
-	if weapon != null and candidate.current_ammo >= 0:
-		weapon.current_ammo = clampi(candidate.current_ammo, 0, weapon.magazine_size)
-		weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
-	_sync_equipped_weapon_instance()
-	var snapshot := get_weapon_presentation_snapshot()
-	weapon_instance_changed.emit(snapshot)
+	_refresh_stowed_weapon_model(true)
+	var snapshot := (
+		get_weapon_presentation_snapshot()
+		if slot_index == active_weapon_slot
+		else candidate.get_presentation_snapshot(null, "副武器" if slot_index == 1 else "主武器")
+	)
+	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
 	return {
 		"success": true,
 		"old_item": old_item,
-		"new_item": equipped_weapon_instance.to_item_dictionary(),
+		"new_item": candidate.to_item_dictionary(),
 		"snapshot": snapshot,
+		"slot_index": slot_index,
 	}
 
 
 func unequip_weapon_item() -> Dictionary:
-	var current := get_equipped_weapon_instance()
+	return unequip_weapon_item_from_slot(active_weapon_slot)
+
+
+func unequip_weapon_item_from_slot(slot_index: int) -> Dictionary:
+	var current := get_equipped_weapon_instance_for_slot(slot_index)
 	if current == null:
-		return {"success": false, "reason": "当前没有装备枪械"}
+		return {"success": false, "reason": "该装备槽没有枪械"}
 	_sync_equipped_weapon_instance()
 	var old_item := current.to_item_dictionary()
+	equipped_weapon_slots[slot_index] = null
+	if slot_index == active_weapon_slot:
+		_loading_weapon_instance = true
+		if weapon_tree != null:
+			weapon_tree.clear_assembly(false)
+		if weapon != null and is_instance_valid(weapon):
+			weapon.clear_weapon()
+		equipped_weapon_instance = null
+		_loading_weapon_instance = false
+		weapon_instance_changed.emit({})
+		weapon_changed.emit("", "")
+		ammo_changed.emit(0, 0)
+	_refresh_stowed_weapon_model(true)
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
+	return {"success": true, "old_item": old_item, "slot_index": slot_index}
+
+
+func switch_weapon_slot(slot_index: int) -> Dictionary:
+	if slot_index < 0 or slot_index >= equipped_weapon_slots.size():
+		return {"success": false, "reason": "武器槽无效"}
+	if slot_index == active_weapon_slot:
+		return {"success": true, "unchanged": true, "slot_index": slot_index}
+	var target := equipped_weapon_slots[slot_index] as WeaponInstance
+	if target == null:
+		return {"success": false, "reason": "%s未装备" % ("主武器" if slot_index == 0 else "副武器")}
+	_sync_equipped_weapon_instance()
+	var previous_slot := active_weapon_slot
+	active_weapon_slot = slot_index
+	if not _load_active_weapon_instance(target):
+		active_weapon_slot = previous_slot
+		_load_active_weapon_instance(equipped_weapon_slots[previous_slot] as WeaponInstance)
+		return {"success": false, "reason": "目标武器构筑无法加载"}
+	_refresh_stowed_weapon_model(true)
+	var snapshot := get_weapon_presentation_snapshot()
+	weapon_instance_changed.emit(snapshot)
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
+	return {"success": true, "slot_index": slot_index, "snapshot": snapshot}
+
+
+func clear_all_equipped_weapons() -> Array[Dictionary]:
+	_sync_equipped_weapon_instance()
+	var removed: Array[Dictionary] = []
+	for slot_index in range(equipped_weapon_slots.size()):
+		var instance := equipped_weapon_slots[slot_index] as WeaponInstance
+		if instance != null:
+			removed.append(instance.to_item_dictionary())
+		equipped_weapon_slots[slot_index] = null
 	_loading_weapon_instance = true
 	if weapon_tree != null:
 		weapon_tree.clear_assembly(false)
@@ -670,10 +793,61 @@ func unequip_weapon_item() -> Dictionary:
 		weapon.clear_weapon()
 	equipped_weapon_instance = null
 	_loading_weapon_instance = false
+	_refresh_stowed_weapon_model(true)
 	weapon_instance_changed.emit({})
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
 	weapon_changed.emit("", "")
 	ammo_changed.emit(0, 0)
-	return {"success": true, "old_item": old_item}
+	return removed
+
+
+func _load_active_weapon_instance(instance: WeaponInstance) -> bool:
+	if instance == null:
+		return false
+	_ensure_weapon_tree()
+	_loading_weapon_instance = true
+	var loaded := instance.load_into_runtime_tree(weapon_tree)
+	_loading_weapon_instance = false
+	if not loaded:
+		return false
+	equipped_weapon_instance = instance
+	equipped_weapon_slots[active_weapon_slot] = instance
+	_sync_weapon_from_tree()
+	if weapon != null and instance.current_ammo >= 0:
+		weapon.current_ammo = clampi(instance.current_ammo, 0, weapon.magazine_size)
+		weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
+	_sync_equipped_weapon_instance()
+	return true
+
+
+func _refresh_stowed_weapon_model(force := false) -> void:
+	var stowed_slot := 1 - active_weapon_slot
+	var stowed := equipped_weapon_slots[stowed_slot] as WeaponInstance
+	var instance_id := stowed.weapon_instance_id if stowed != null else ""
+	if not force and instance_id == _stowed_weapon_instance_id:
+		return
+	if _stowed_weapon_model != null and is_instance_valid(_stowed_weapon_model):
+		_stowed_weapon_model.queue_free()
+	_stowed_weapon_model = null
+	_stowed_weapon_instance_id = instance_id
+	if stowed == null or avatar == null or avatar.visual_root == null:
+		return
+	var stowed_socket := avatar.get_stowed_weapon_socket(stowed_slot)
+	if stowed_socket == null:
+		return
+	var scene := load("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn") as PackedScene
+	if scene == null:
+		return
+	_stowed_weapon_model = scene.instantiate() as WeaponModel3D
+	_stowed_weapon_model.name = "StowedPrimaryWeaponModel3D" if stowed_slot == 0 else "StowedSecondaryWeaponModel3D"
+	_stowed_weapon_model.display_only = true
+	_stowed_weapon_model.render_layers = 2
+	_stowed_weapon_model.set_meta("weapon_item_data", stowed.to_item_dictionary())
+	_stowed_weapon_model.set_meta("weapon_slot_index", stowed_slot)
+	stowed_socket.add_child(_stowed_weapon_model)
+	_stowed_weapon_model.position = Vector3.ZERO
+	_stowed_weapon_model.rotation = Vector3.ZERO
+	_stowed_weapon_model.scale = Vector3.ONE * 0.52
 
 
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
@@ -692,6 +866,7 @@ func _sync_equipped_weapon_instance() -> void:
 	if _loading_weapon_instance or equipped_weapon_instance == null or weapon_tree == null:
 		return
 	equipped_weapon_instance.capture_runtime_tree(weapon_tree)
+	equipped_weapon_slots[active_weapon_slot] = equipped_weapon_instance
 	if weapon != null and is_instance_valid(weapon):
 		equipped_weapon_instance.current_ammo = weapon.current_ammo
 
@@ -877,22 +1052,53 @@ func _update_invincibility(delta: float) -> void:
 func _update_aim_from_mouse() -> void:
 	if camera == null or not camera.is_inside_tree():
 		return
-	var mouse_position := get_viewport().get_mouse_position()
+	var viewport := get_viewport()
+	if viewport == null:
+		return
+	var viewport_size := viewport.get_visible_rect().size
+	if (
+		not viewport_size.is_finite()
+		or viewport_size.x <= 1.0
+		or viewport_size.y <= 1.0
+		or not global_position.is_finite()
+	):
+		return
+	var mouse_position := viewport.get_mouse_position()
+	if not mouse_position.is_finite():
+		return
 	var ray_origin := camera.project_ray_origin(mouse_position)
 	var ray_direction := camera.project_ray_normal(mouse_position)
+	if (
+		not ray_origin.is_finite()
+		or not ray_direction.is_finite()
+		or ray_direction.length_squared() <= 0.000001
+		or absf(ray_direction.y) <= 0.000001
+	):
+		return
 	# 塔楼使用真实层高和连续楼梯坡面。瞄准平面必须跟随角色当前物理高度，
 	# 不能固定在世界 Y=0，否则下楼后光标会一直悬在楼顶。
 	var intersection = Plane(Vector3.UP, global_position.y).intersects_ray(ray_origin, ray_direction)
 	if not intersection is Vector3:
 		return
 	var target := intersection as Vector3
+	if not target.is_finite():
+		return
 	var flat_direction := target - global_position
 	flat_direction.y = 0.0
-	if flat_direction.length_squared() <= 0.0001:
+	if not flat_direction.is_finite() or flat_direction.length_squared() <= 0.0001:
 		return
-	aim_direction = flat_direction.normalized()
-	aim_yaw = atan2(-aim_direction.x, -aim_direction.z)
-	aim_cursor.global_position = target + Vector3(0, 0.035, 0)
+	var next_aim_direction := flat_direction.normalized()
+	var next_aim_yaw := atan2(-next_aim_direction.x, -next_aim_direction.z)
+	var next_cursor_position := target + Vector3(0, 0.035, 0)
+	if (
+		not next_aim_direction.is_finite()
+		or not is_finite(next_aim_yaw)
+		or not next_cursor_position.is_finite()
+	):
+		return
+	aim_direction = next_aim_direction
+	aim_yaw = next_aim_yaw
+	aim_cursor.global_position = next_cursor_position
 
 
 func _init_state_machine() -> void:

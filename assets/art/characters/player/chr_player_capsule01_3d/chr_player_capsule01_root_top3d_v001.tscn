@@ -297,6 +297,14 @@ mesh = SubResource("MeshFoot")
 [node name="WeaponSocket" type="Marker3D" parent="VisualRoot"]
 position = Vector3(0.60, 1.15, -0.42)
 
+[node name="StowedWeaponSocketPrimary" type="Marker3D" parent="VisualRoot"]
+position = Vector3(-0.70, 2.20, 0.38)
+rotation = Vector3(-1.5708, 0, 0)
+
+[node name="StowedWeaponSocketSecondary" type="Marker3D" parent="VisualRoot"]
+position = Vector3(0.70, 2.20, 0.38)
+rotation = Vector3(-1.5708, 0, 0)
+
 [node name="Weapon" type="MeshInstance3D" parent="VisualRoot/WeaponSocket"]
 visible = false
 position = Vector3(0, 0, -0.54)

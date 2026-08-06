@@ -10,6 +10,15 @@ func _ready() -> void:
 	tower.run_seed_override = 980095
 	add_child(tower)
 	await get_tree().process_frame
+	var inventory_ui := tower.get("_inventory_ui") as InventoryUI
+	_expect(inventory_ui != null, "塔楼没有创建战术背包界面", failures)
+	if inventory_ui != null:
+		await _press_key(KEY_I)
+		_expect(inventory_ui.is_inventory_open(), "塔楼内按I没有打开背包", failures)
+		_expect(tower.player.input_locked, "塔楼背包打开后没有锁定玩家输入", failures)
+		await _press_key(KEY_I)
+		_expect(not inventory_ui.is_inventory_open(), "塔楼内再次按I没有关闭背包", failures)
+		_expect(not tower.player.input_locked, "塔楼背包关闭后没有恢复玩家输入", failures)
 	var initial := tower.get_tower_snapshot()
 	_expect(
 		str(initial.get("floor_generation_mode", "")) == "arrival_gate_atomic_floor_bundle",
@@ -54,9 +63,33 @@ func _ready() -> void:
 	var after_arrival := tower.get_tower_snapshot()
 	_expect(2 in (after_arrival.get("generated_floor_indices", []) as Array), "到达门开启前没有提交98层", failures)
 	await get_tree().process_frame
-	if bool(tower.get("_door_fate_active")):
-		tower.resolve_fate_choice_for_test(0)
-		await get_tree().process_frame
+	_expect(not bool(tower.get("_door_fate_active")), "安全屋到达门错误触发命运卡选择", failures)
+	# 实际进入98F安全屋后，首门在身后封闭；反向开启必须走撤退确认并清空随身物。
+	tower.call("_on_initial_loop_entry_physically_entered", entry_room)
+	var first_edge := tower.call("_edge_key", "facility", "floor_01_entry") as String
+	_expect(
+		bool(tower.get("_initial_loop_gate_sealed"))
+		and not bool((tower.get("_open_edges") as Dictionary).get(first_edge, true)),
+		"98F大循环首门没有在角色进入后关闭", failures
+	)
+	var carried := tower.get_inventory_module()
+	carried.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 1)
+	var secondary := WeaponInstance.ensure_weapon_item(ItemRegistry.get_instance().get_item("weapon_shotgun"))
+	var secondary_result := tower.player.equip_weapon_item_to_slot(secondary, 1)
+	_expect(bool(secondary_result.get("success", false)), "无法准备撤退时的副武器", failures)
+	tower.call("_show_initial_loop_retreat_warning")
+	_expect(tower.get("_initial_loop_retreat_overlay") != null, "反向开启98F首门没有显示撤退确认", failures)
+	tower.call("_cancel_initial_loop_retreat")
+	_expect(carried.has_item("item_health_potion"), "取消撤退错误清除了物品", failures)
+	tower.call("_show_initial_loop_retreat_warning")
+	tower.confirm_initial_loop_retreat_for_test()
+	_expect(
+		carried.get_used_slots() == 0
+		and tower.player.get_equipped_weapon_instance_for_slot(0) == null
+		and tower.player.get_equipped_weapon_instance_for_slot(1) == null,
+		"确认撤退没有清空背包及主/副武器", failures
+	)
+	_expect(str(tower.get_tower_snapshot().get("current_room_id", "")) == "facility", "确认撤退没有返回99F基地", failures)
 
 	_expect(tower.generate_through_floor_for_test(95), "98—95 FloorBundle提交失败", failures)
 	await get_tree().process_frame
@@ -129,3 +162,18 @@ func _ready() -> void:
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(message)
+
+
+func _press_key(keycode: Key) -> void:
+	var pressed := InputEventKey.new()
+	pressed.keycode = keycode
+	pressed.physical_keycode = keycode
+	pressed.pressed = true
+	Input.parse_input_event(pressed)
+	await get_tree().process_frame
+	var released := InputEventKey.new()
+	released.keycode = keycode
+	released.physical_keycode = keycode
+	released.pressed = false
+	Input.parse_input_event(released)
+	await get_tree().process_frame

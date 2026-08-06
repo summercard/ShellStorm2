@@ -157,7 +157,10 @@ func append_fate_upgrade(card: FateCard, transaction_id: String = "") -> Diction
 	var record: Dictionary = {
 		"slot_index": next_fate_slot_index(),
 		"stable_card_id": stable_id,
-		"effect_version": 1,
+		"tarot_name": card.card_name,
+		"orientation": "REVERSED" if card.is_reversed() else "UPRIGHT",
+		"orientation_roll": card.orientation_roll,
+		"effect_version": 2,
 		"effect_params_snapshot": card.effect.duplicate(true),
 		"applied_transaction_id": transaction_id if not transaction_id.is_empty()
 			else "fate:%s:%02d" % [weapon_instance_id, next_fate_slot_index()],
