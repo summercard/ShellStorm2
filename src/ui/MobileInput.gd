@@ -19,6 +19,8 @@ signal aim_direction(aim: Vector2)
 signal aim_cancel()
 signal shoot_pressed
 signal shoot_released
+# 合并后的面朝方向：右摇杆优先，没有右摇杆时用左摇杆
+signal face_direction(direction: Vector2)
 
 @export var enabled: bool = false
 @export var show_visual: bool = true
@@ -35,15 +37,14 @@ var _joystick_knob: Vector2 = Vector2.ZERO
 var _joystick_vector: Vector2 = Vector2.ZERO
 var _joystick_touch_index: int = -1
 
-# 瞄准运行时数据
-var _aim_zone_touch_index: int = -1
-var _aim_zone_start: Vector2 = Vector2.ZERO
-var _aim_last_emitted: Vector2 = Vector2.ZERO
+# 右摇杆（按住 = 进入射击状态，拖动 = 瞄准方向）
+var _aim_joystick_active: bool = false
+var _aim_joystick_touch_index: int = -1
+var _aim_joystick_center: Vector2 = Vector2.ZERO
+var _aim_joystick_vector: Vector2 = Vector2.ZERO
+# face_direction 缓存：避免重复 emit
+var _face_direction: Vector2 = Vector2.ZERO
 
-# 按钮布局：只留第一位需要持按的游戏拼护键 SHOOT。R / SHIFT / F / E 四位动作按钮
-# 已被上位到 Dungeon3D 的 ActionKeyStrip，用户在主界面右下角点击即可触发对应的 input action。
-var _shoot_pos: Vector2 = Vector2.ZERO
-var _shoot_radius: float = 36.0
 
 # 触摸状态
 var _active_touches: Dictionary = {}
@@ -90,13 +91,14 @@ func _widget_draw() -> void:
 	_widget.draw_circle(_joystick_center, _joystick_radius, base_color)
 	_widget.draw_arc(_joystick_center, _joystick_radius, 0, TAU, 32, Color(1.0, 1.0, 1.0, 0.18), 2.0)
 	_widget.draw_circle(_joystick_center + _joystick_knob, _joystick_radius * 0.38, active_color)
-	if _aim_zone_touch_index >= 0:
-		_widget.draw_arc(_aim_zone_start, 22.0, 0, TAU, 20, Color(0.4, 0.7, 1.0, 0.6), 2.5)
-		var aim_dir := _aim_last_emitted
+		# 右摇杆按下时画瞄准圈 + 拖动方向线
+	if _aim_joystick_active:
+		var aim_dir := _aim_joystick_vector
+		_widget.draw_circle(_aim_joystick_center, _joystick_radius, Color(0.4, 0.7, 1.0, 0.10))
+		_widget.draw_arc(_aim_joystick_center, _joystick_radius, 0, TAU, 32, Color(0.4, 0.7, 1.0, 0.55), 2.0)
+		_widget.draw_circle(_aim_joystick_center + aim_dir * _joystick_radius * 0.7, 16.0, Color(0.4, 0.7, 1.0, 0.32))
 		if aim_dir.length() > 0.001:
-			_widget.draw_line(_aim_zone_start, _aim_zone_start + aim_dir * 60.0, Color(0.4, 0.7, 1.0, 0.8), 3.0)
-	# 只留主要射击按钮：SHOOT 。其他四位动作按钮已进入 HUD
-	_draw_button_on(_widget, _shoot_pos, _shoot_radius, Color(1.0, 0.3, 0.3, 0.7), font, "SHOOT", 14)
+			_widget.draw_line(_aim_joystick_center, _aim_joystick_center + aim_dir * _joystick_radius, Color(0.4, 0.7, 1.0, 0.85), 3.0)
 
 
 func _draw_button_on(canvas: Control, center: Vector2, radius: float, ring: Color, font: Font, text: String, font_size: int) -> void:
@@ -121,7 +123,7 @@ func _process(_delta: float) -> void:
 	if _controls_blocked():
 		_clear_input_state()
 		return
-	if _joystick_active or _aim_zone_touch_index >= 0 or _active_touches.size() > 0:
+	if _joystick_active or _aim_joystick_active or _active_touches.size() > 0:
 		_widget.queue_redraw()
 
 
@@ -129,7 +131,6 @@ func _recalc_layout() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	if viewport_size == Vector2.ZERO:
 		return
-	_shoot_pos = Vector2(viewport_size.x * 0.89, viewport_size.y * 0.78)
 	_joystick_center = Vector2(viewport_size.x * 0.13, viewport_size.y * 0.78)
 	_joystick_radius = maxf(48.0, viewport_size.y * 0.10)
 	if _widget != null:
@@ -155,18 +156,12 @@ func _handle_screen_drag(event: InputEventScreenDrag) -> void:
 	_active_touches[index] = pos
 	if index == _joystick_touch_index:
 		_update_joystick(pos)
-	elif index == _aim_zone_touch_index:
-		_update_aim(pos)
+	elif index == _aim_joystick_touch_index:
+		_update_aim_joystick(pos)
 
 
 func _touch_down(pos: Vector2, index: int) -> void:
-	# 只有 SHOOT 按钮作为独立绘制的手按区。R / SHIFT / F / E 四位动作
-	# 已移到 Dungeon3D 的 ActionKeyStrip，直接接入 Input.parse_input_event。
-	if pos.distance_to(_shoot_pos) < _shoot_radius:
-		_touched_buttons[index] = "shoot"
-		shoot_pressed.emit()
-		return
-	# 左下半屏为摇杆
+	# 按命中顺序：左摇杆 → 右摇杆
 	if _is_in_joystick_zone(pos):
 		_joystick_touch_index = index
 		_joystick_active = true
@@ -174,27 +169,24 @@ func _touch_down(pos: Vector2, index: int) -> void:
 		_joystick_knob = Vector2.ZERO
 		_joystick_vector = Vector2.ZERO
 		return
-	# 右半屏视为瞄准
 	if _is_in_aim_zone(pos):
-		_aim_zone_touch_index = index
-		_aim_zone_start = pos
-		_aim_last_emitted = Vector2.ZERO
+		# 右摇杆按下 = 进入射击状态 + 起始瞄准
+		_aim_joystick_touch_index = index
+		_aim_joystick_active = true
+		_aim_joystick_center = pos
+		_aim_joystick_vector = Vector2.ZERO
+		shoot_pressed.emit()
+		aim_direction.emit(Vector2.ZERO)
+		_emit_face_direction()
 		return
-
 
 func _touch_up(index: int) -> void:
-	if _touched_buttons.has(index):
-		var btn: String = _touched_buttons[index]
-		_touched_buttons.erase(index)
-		if btn == "shoot":
-			shoot_released.emit()
-		return
 	if index == _joystick_touch_index:
 		_joystick_touch_index = -1
 		_joystick_active = false
 		_joystick_knob = Vector2.ZERO
 		_joystick_vector = Vector2.ZERO
-		# 检查是否还有别的在摇杆区
+		# 检查是否还有别的触摸落在左摇杆区，有就接管
 		for other_index in _active_touches.keys():
 			var other_pos: Vector2 = _active_touches[other_index]
 			if _is_in_joystick_zone(other_pos):
@@ -203,15 +195,18 @@ func _touch_up(index: int) -> void:
 				_update_joystick(other_pos)
 				return
 		move_direction.emit(Vector2.ZERO)
+		_emit_face_direction()
 		_widget.queue_redraw()
 		return
-	if index == _aim_zone_touch_index:
-		_aim_zone_touch_index = -1
-		_aim_last_emitted = Vector2.ZERO
+	if index == _aim_joystick_touch_index:
+		# 右摇杆松开 = 退出射击状态 + 清空瞄准
+		_aim_joystick_touch_index = -1
+		_aim_joystick_active = false
+		_aim_joystick_vector = Vector2.ZERO
+		shoot_released.emit()
 		aim_cancel.emit()
+		_emit_face_direction()
 		_widget.queue_redraw()
-
-
 func _update_joystick(touch_pos: Vector2) -> void:
 	var delta := touch_pos - _joystick_center
 	var dist: float = delta.length()
@@ -225,16 +220,34 @@ func _update_joystick(touch_pos: Vector2) -> void:
 	else:
 		_joystick_vector = normalized.normalized() * ((normalized.length() - 0.15) / 0.85)
 	move_direction.emit(_joystick_vector)
+	_emit_face_direction()
 
 
-func _update_aim(touch_pos: Vector2) -> void:
-	var delta := touch_pos - _aim_zone_start
-	if delta.length() < 16.0:
-		_aim_last_emitted = Vector2.ZERO
-		aim_direction.emit(Vector2.ZERO)
-		return
-	_aim_last_emitted = delta.normalized()
-	aim_direction.emit(_aim_last_emitted)
+func _update_aim_joystick(touch_pos: Vector2) -> void:
+	var delta := touch_pos - _aim_joystick_center
+	var dist: float = delta.length()
+	if dist > _joystick_radius:
+		delta = delta.normalized() * _joystick_radius
+		dist = _joystick_radius
+	var normalized := delta / _joystick_radius
+	if normalized.length() < 0.15:
+		_aim_joystick_vector = Vector2.ZERO
+	else:
+		_aim_joystick_vector = normalized.normalized() * ((normalized.length() - 0.15) / 0.85)
+	aim_direction.emit(_aim_joystick_vector)
+	_emit_face_direction()
+
+func _emit_face_direction() -> void:
+	# 右摇杆优先级最高：它一旦激活就用它的方向
+	# 右摇杆空载时退回左摇杆（让移动和面朝一致）
+	var face: Vector2 = Vector2.ZERO
+	if _aim_joystick_active and _aim_joystick_vector.length_squared() > 0.0025:
+		face = _aim_joystick_vector
+	elif _joystick_active and _joystick_vector.length_squared() > 0.0025:
+		face = _joystick_vector
+	if face != _face_direction:
+		_face_direction = face
+		face_direction.emit(face)
 
 
 func _is_in_joystick_zone(pos: Vector2) -> bool:
@@ -268,19 +281,21 @@ func _controls_blocked() -> bool:
 
 
 func _clear_input_state() -> void:
-	var had_shoot := _touched_buttons.values().has("shoot")
+	var had_shoot := _aim_joystick_active
 	_joystick_active = false
 	_joystick_touch_index = -1
 	_joystick_vector = Vector2.ZERO
 	_joystick_knob = Vector2.ZERO
-	_aim_zone_touch_index = -1
-	_aim_last_emitted = Vector2.ZERO
+	_aim_joystick_active = false
+	_aim_joystick_touch_index = -1
+	_aim_joystick_vector = Vector2.ZERO
 	_active_touches.clear()
-	_touched_buttons.clear()
 	move_direction.emit(Vector2.ZERO)
 	aim_cancel.emit()
 	if had_shoot:
 		shoot_released.emit()
+	_face_direction = Vector2.ZERO
+	face_direction.emit(Vector2.ZERO)
 	if _widget != null:
 		_widget.queue_redraw()
 
