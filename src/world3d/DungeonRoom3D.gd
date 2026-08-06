@@ -191,9 +191,21 @@ func get_room_snapshot() -> Dictionary:
 		"open_wall_directions": open_wall_directions.duplicate(),
 		"wall_height": TOWER_GEOMETRY.FLOOR_HEIGHT_M if tower_module_shell else 2.8,
 		"support_collision_persistent": _has_enabled_support_collision(),
+		"service_station_count": _get_service_stations().size(),
+		"event_objective_ready": get_service_station("event") != null,
 		"door_snapshots": _get_door_snapshots(),
 		"is_3d": true,
 	}
+
+
+## 正式运行时 O(1) 读取。完整 get_room_snapshot() 会扫描节点组和递归统计
+## 组件，只允许验收/调试低频调用，禁止在 _process/_physics_process 中使用。
+func get_stream_state() -> int:
+	return _stream_state
+
+
+func is_streamed() -> bool:
+	return _stream_state > 0
 
 
 func ensure_detail_built() -> void:
@@ -293,6 +305,32 @@ func hide_door_prompts() -> void:
 
 func get_door_node(direction: String) -> RoomDoor3D:
 	return _door_nodes.get(direction) as RoomDoor3D
+
+
+func get_service_station(type_id := "") -> ServiceStation3D:
+	for station in _get_service_stations():
+		if type_id.is_empty() or station.station_type == type_id:
+			return station
+	return null
+
+
+func ensure_required_service_station() -> ServiceStation3D:
+	if room_type not in ["MERCHANT", "UPGRADE", "EVENT"]:
+		return null
+	ensure_detail_built()
+	var type_id := room_type.to_lower()
+	var existing := get_service_station(type_id)
+	if existing != null:
+		return existing
+	return _create_service_station(type_id, get_dimensions())
+
+
+func _get_service_stations() -> Array[ServiceStation3D]:
+	var result: Array[ServiceStation3D] = []
+	for child in get_children():
+		if child is ServiceStation3D:
+			result.append(child as ServiceStation3D)
+	return result
 
 
 func _build_shell() -> void:
@@ -1372,13 +1410,7 @@ func _build_content() -> void:
 			prop.searched.connect(_on_prop_searched)
 
 	if room_type in ["MERCHANT", "UPGRADE", "EVENT"]:
-		var station := SERVICE_SCENE.instantiate() as ServiceStation3D
-		var type_id := room_type.to_lower()
-		var title: String = str({"merchant": "拾荒商终端", "upgrade": "武器改造台", "event": "异常信号终端"}.get(type_id, "废土终端"))
-		station.configure(type_id, title, theme.accent_color)
-		station.position = Vector3(0, 0, -dimensions.y * 0.27)
-		add_child(station)
-		station.activated.connect(_on_service_activated)
+		_create_service_station(room_type.to_lower(), dimensions)
 	if room_type in ["STAIRS_DOWN", "STAIRS_UP"]:
 		_build_vertical_access_marker(room_type)
 	if room_type == "TRAP":
@@ -1390,6 +1422,27 @@ func _build_content() -> void:
 		)
 		hazard.position = Vector3(0, 0.06, 0)
 		add_child(hazard)
+
+
+func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceStation3D:
+	var station := SERVICE_SCENE.instantiate() as ServiceStation3D
+	if station == null:
+		push_error("DungeonRoom3D: failed to instantiate required %s station in %s" % [type_id, room_id])
+		return null
+	var title: String = str({
+		"merchant": "拾荒商终端",
+		"upgrade": "武器改造台",
+		"event": "异常信号终端",
+	}.get(type_id, "废土终端"))
+	station.configure(type_id, title, theme.accent_color)
+	# 必做目标不能贴在镜头会裁切的北墙。事件终端放到房间中部安全区，
+	# 同时避开出生点圆环和两侧家具，保证所有 30×25m 以上房型都可接近。
+	var forward_offset := minf(4.5, dimensions.y * 0.18)
+	station.position = Vector3(0, 0, -forward_offset)
+	station.set_meta("required_room_objective", type_id == "event")
+	add_child(station)
+	station.activated.connect(_on_service_activated)
+	return station
 
 
 func _build_base_facility_lights() -> void:

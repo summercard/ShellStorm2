@@ -2,10 +2,14 @@ class_name DungeonMinimap3D
 extends Control
 ## 实时战术小地图：真实房间矩形、玩家房内位置/朝向、存活敌人红点与楼层索引。
 
-const REDRAW_INTERVAL := 1.0 / 20.0
+# 战术信息不参与瞄准判定；15Hz 足以保持移动/红点连续，同时避免空闲时
+# 每秒额外重绘 5 次整张圆形地图。
+const REDRAW_INTERVAL := 1.0 / 15.0
 const HEADER_HEIGHT := 24.0
 const MAP_PADDING := Vector2(45.0, 45.0)
 const FLOOR_EPSILON_M := 0.45
+const RADAR_WORLD_DIAMETER_M := 125.0
+const RADAR_CONTENT_MARGIN_PX := 10.0
 
 var _records: Array[Dictionary] = []
 var _edges: Dictionary = {}
@@ -114,10 +118,16 @@ func get_snapshot() -> Dictionary:
 		"realtime_update_hz": int(round(1.0 / REDRAW_INTERVAL)),
 		"player_marker": true,
 		"player_heading": true,
+		"player_heading_line": false,
+		"player_centered": true,
+		"map_moves_with_player": true,
+		"circular_content_clip": true,
+		"radar_world_diameter_m": RADAR_WORLD_DIAMETER_M,
 		"true_room_dimensions": true,
 		"enemy_marker_count": _enemy_world_positions.size(),
 		"enemy_markers": true,
 		"holographic_scan": true,
+		"scan_beam_line": false,
 		"floor_stack_index": _has_multiple_floors,
 	}
 
@@ -186,15 +196,6 @@ func _draw_scan_field(map_rect: Rect2, bounds: Rect2) -> void:
 		if _has_realtime_player_state
 		else map_rect.get_center()
 	)
-	var angle := _scan_phase * TAU - PI * 0.5
-	var radius := maxf(map_rect.size.x, map_rect.size.y) * 0.62
-	var beam_tip := origin + Vector2.from_angle(angle) * radius
-	var beam_left := origin + Vector2.from_angle(angle - 0.16) * radius
-	draw_colored_polygon(
-		PackedVector2Array([origin, beam_left, beam_tip]),
-		Color(0.08, 0.86, 0.94, 0.045)
-	)
-	draw_line(origin, beam_tip, Color(0.25, 0.95, 1.0, 0.42), 1.4)
 	var pulse_radius := 7.0 + _pulse_phase * 46.0
 	draw_arc(
 		origin,
@@ -224,6 +225,11 @@ func _draw_edges(bounds: Rect2, map_rect: Rect2) -> void:
 		var to_edge := _room_edge_world(to_world, from_world, to_dim)
 		var from := _map_position(from_edge, bounds, map_rect)
 		var to := _map_position(to_edge, bounds, map_rect)
+		var clipped := _clip_segment_to_radar(from, to, 3.0)
+		if clipped.size() != 2:
+			continue
+		from = clipped[0]
+		to = clipped[1]
 		var opened := bool(_edges[edge_key])
 		var color := (
 			Color(0.24, 0.98, 0.78, 0.88)
@@ -248,6 +254,8 @@ func _draw_rooms(bounds: Rect2, map_rect: Rect2) -> void:
 		room_size.x = maxf(room_size.x, 10.0)
 		room_size.y = maxf(room_size.y, 8.0)
 		var room_rect := Rect2(center - room_size * 0.5, room_size)
+		if not _rect_fully_inside_radar(room_rect.grow(4.0)):
+			continue
 		var color := _room_color(str(record.get("type", "")))
 		draw_rect(room_rect.grow(2.5), Color(color, 0.12), true)
 		draw_rect(room_rect, Color(color, 0.28 if room_id != _current_room_id else 0.44), true)
@@ -264,6 +272,8 @@ func _draw_enemies(bounds: Rect2, map_rect: Rect2) -> void:
 		if not _is_current_floor_y(world_position.y):
 			continue
 		var center := _map_position(world_position, bounds, map_rect)
+		if not _point_inside_radar(center, 6.0):
+			continue
 		draw_circle(center, 4.6, Color(0.20, 0.0, 0.0, 0.82))
 		draw_circle(center, 3.0, Color(1.0, 0.08, 0.08, 1.0))
 		draw_arc(center, 5.3, 0.0, TAU, 16, Color(1.0, 0.34, 0.26, 0.72), 1.0)
@@ -290,12 +300,6 @@ func _draw_player(bounds: Rect2, map_rect: Rect2) -> void:
 		PackedVector2Array([points[0], points[1], points[2], points[0]]),
 		Color(0.12, 0.78, 0.92),
 		1.4
-	)
-	draw_line(
-		center,
-		center + heading * 22.0,
-		Color(0.50, 0.98, 1.0, 0.54),
-		1.2
 	)
 
 
@@ -361,6 +365,9 @@ func _map_position(
 ) -> Vector2:
 	var projected := Vector2(world_position.x, world_position.z)
 	var scale := _map_scale(bounds, map_rect)
+	if _has_realtime_player_state:
+		var player_projected := Vector2(_player_world_position.x, _player_world_position.z)
+		return map_rect.get_center() + (projected - player_projected) * scale
 	var used_size := bounds.size * scale
 	var origin := map_rect.get_center() - used_size * 0.5
 	return origin + (projected - bounds.position) * scale
@@ -398,10 +405,70 @@ func _map_world_size(world_size: Vector2, bounds: Rect2, map_rect: Rect2) -> Vec
 
 
 func _map_scale(bounds: Rect2, map_rect: Rect2) -> float:
+	if _has_realtime_player_state:
+		return minf(map_rect.size.x, map_rect.size.y) / RADAR_WORLD_DIAMETER_M
 	return minf(
 		map_rect.size.x / maxf(1.0, bounds.size.x),
 		map_rect.size.y / maxf(1.0, bounds.size.y)
 	)
+
+
+func _radar_center() -> Vector2:
+	return size * 0.5
+
+
+func _radar_radius(margin := 0.0) -> float:
+	return maxf(1.0, minf(size.x, size.y) * 0.5 - 7.0 - RADAR_CONTENT_MARGIN_PX - margin)
+
+
+func _point_inside_radar(point: Vector2, margin := 0.0) -> bool:
+	return point.distance_to(_radar_center()) <= _radar_radius(margin)
+
+
+func _rect_fully_inside_radar(rect: Rect2) -> bool:
+	for point in [
+		rect.position,
+		Vector2(rect.end.x, rect.position.y),
+		rect.end,
+		Vector2(rect.position.x, rect.end.y),
+	]:
+		if not _point_inside_radar(point):
+			return false
+	return true
+
+
+func _clip_segment_to_radar(from: Vector2, to: Vector2, margin := 0.0) -> PackedVector2Array:
+	var center := _radar_center()
+	var radius := _radar_radius(margin)
+	var from_inside := from.distance_squared_to(center) <= radius * radius
+	var to_inside := to.distance_squared_to(center) <= radius * radius
+	if from_inside and to_inside:
+		return PackedVector2Array([from, to])
+	var direction := to - from
+	var a := direction.dot(direction)
+	if a <= 0.000001:
+		return PackedVector2Array()
+	var relative := from - center
+	var b := 2.0 * relative.dot(direction)
+	var c := relative.dot(relative) - radius * radius
+	var discriminant := b * b - 4.0 * a * c
+	if discriminant < 0.0:
+		return PackedVector2Array()
+	var root := sqrt(discriminant)
+	var intersections: Array[float] = []
+	for value in [(-b - root) / (2.0 * a), (-b + root) / (2.0 * a)]:
+		if value >= 0.0 and value <= 1.0:
+			intersections.append(value)
+	intersections.sort()
+	var clipped_from: Vector2 = from if from_inside else (
+		from + direction * intersections[0] if not intersections.is_empty() else Vector2.INF
+	)
+	var clipped_to: Vector2 = to if to_inside else (
+		from + direction * intersections.back() if not intersections.is_empty() else Vector2.INF
+	)
+	if clipped_from == Vector2.INF or clipped_to == Vector2.INF:
+		return PackedVector2Array()
+	return PackedVector2Array([clipped_from, clipped_to])
 
 
 func _room_dimensions(record: Dictionary) -> Vector2:

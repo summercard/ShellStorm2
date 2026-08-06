@@ -11,6 +11,11 @@ signal health_changed(enemy: Enemy3D, current: int, maximum: int)
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
 const VALID_STATES := ["idle", "patrol", "alert", "chase", "search", "telegraph", "attack", "stagger", "dead"]
+const NORMAL_HP_MULTIPLIER := 3.0
+const BOSS_HP_MULTIPLIER := 10.0
+const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
+const BOSS_SIZE_MULTIPLIER := 2.0
+const BOSS_HEALTH_BAR_SIZE := Vector2(3.4, 0.28)
 
 const PROFILES := {
 	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
@@ -70,6 +75,8 @@ var _strafe_sign := 1.0
 var _bypass_shield_once := false
 var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
+var _overhead_health_root: Node3D
+var _overhead_health_fill: MeshInstance3D
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -81,15 +88,17 @@ func _ready() -> void:
 	collision_layer = 4
 	collision_mask = 1
 	apply_profile(enemy_kind)
+	health_changed.connect(_on_self_health_changed)
 	transition_to("idle")
 
 
 func apply_profile(kind: String) -> void:
 	enemy_kind = kind if PROFILES.has(kind) else "melee_chaser"
 	var profile: Dictionary = PROFILES[enemy_kind]
-	max_hp = int(profile["hp"])
+	var hp_multiplier := BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER
+	max_hp = int(round(float(profile["hp"]) * hp_multiplier))
 	current_hp = max_hp
-	move_speed = float(profile["speed"])
+	move_speed = float(profile["speed"]) * GLOBAL_MOVE_SPEED_MULTIPLIER
 	contact_damage = int(profile["damage"])
 	attack_range = float(profile["range"])
 	attack_cooldown = float(profile["cooldown"])
@@ -125,8 +134,10 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		else 1.0
 	)
 	contact_damage = maxi(0, int(round(float(profile_damage) * _source_damage_scale)))
-	# 2D px/s 按 24 px/m 适配到 3D，并保留各形态的最低可辨速度。
-	move_speed = maxf(1.2, float(data.get("speed", move_speed * 24.0)) / 24.0)
+	# 2D px/s 按24 px/m适配到3D，再统一降到旧速度的70%。使用原始Profile
+	# 作为缺省值，避免apply_profile已经降速后被重复乘0.7。
+	var source_speed := float(data.get("speed", float(PROFILES[enemy_kind]["speed"]) * 24.0))
+	move_speed = maxf(0.35, source_speed / 24.0 * GLOBAL_MOVE_SPEED_MULTIPLIER)
 	if bool(data.get("is_elite", false)):
 		elite_modifier_id = str(data.get("modifier_id_en", "Elite.Huge"))
 		var modifier_data := data.get("modifier_data", {}) as Dictionary
@@ -139,8 +150,56 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		else:
 			scale *= 1.16
 	if enemy_kind == "boss":
-		scale *= float(data.get("boss_scale", 1.0))
+		scale *= float(data.get("boss_scale", 1.0)) * BOSS_SIZE_MULTIPLIER
+		_ensure_boss_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
+
+
+func _ensure_boss_overhead_health_bar() -> void:
+	if enemy_kind != "boss" or _overhead_health_root != null:
+		return
+	_overhead_health_root = Node3D.new()
+	_overhead_health_root.name = "BossOverheadHealthBar"
+	add_child(_overhead_health_root)
+	var parent_scale := maxf(0.01, maxf(scale.x, maxf(scale.y, scale.z)))
+	var footprint := EnemyAvatar3D.get_footprint_profile("boss")
+	_overhead_health_root.position.y = float(footprint.get("height", 2.3)) + 0.62 / parent_scale
+	_overhead_health_root.scale = Vector3.ONE / parent_scale
+	var background := _create_health_bar_quad(
+		"Background", BOSS_HEALTH_BAR_SIZE + Vector2(0.18, 0.14), Color(0.035, 0.015, 0.018, 0.94)
+	)
+	background.position.z = 0.01
+	_overhead_health_root.add_child(background)
+	_overhead_health_fill = _create_health_bar_quad(
+		"HealthFill", BOSS_HEALTH_BAR_SIZE, Color(0.96, 0.055, 0.07, 1.0)
+	)
+	_overhead_health_fill.position.z = -0.01
+	_overhead_health_root.add_child(_overhead_health_fill)
+	_on_self_health_changed(self, current_hp, max_hp)
+
+
+func _create_health_bar_quad(node_name: String, quad_size: Vector2, color: Color) -> MeshInstance3D:
+	var material := StandardMaterial3D.new()
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	material.no_depth_test = true
+	material.albedo_color = color
+	var mesh := QuadMesh.new()
+	mesh.size = quad_size
+	mesh.material = material
+	var instance := MeshInstance3D.new()
+	instance.name = node_name
+	instance.mesh = mesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return instance
+
+
+func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> void:
+	if _overhead_health_fill == null:
+		return
+	var ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
+	_overhead_health_fill.scale.x = ratio
+	_overhead_health_fill.position.x = -BOSS_HEALTH_BAR_SIZE.x * (1.0 - ratio) * 0.5
 
 
 func get_enemy_data() -> Dictionary:
@@ -508,6 +567,11 @@ func get_state_snapshot() -> Dictionary:
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
 		"elite_modifier_id": elite_modifier_id, "boss_phase": boss_phase,
 		"source_hp_scale": _source_hp_scale, "source_damage_scale": _source_damage_scale,
+		"hp_balance_multiplier": BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER,
+		"move_speed_multiplier": GLOBAL_MOVE_SPEED_MULTIPLIER,
+		"boss_size_multiplier": BOSS_SIZE_MULTIPLIER if enemy_kind == "boss" else 1.0,
+		"world_collision_radius": float(shape_snapshot.get("radius", 0.0)) * scale.x,
+		"overhead_health_bar": _overhead_health_root != null,
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
 		"behavior_role": _behavior_role(),

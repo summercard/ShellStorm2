@@ -21,6 +21,9 @@ const SURFACE_HEIGHT_OFFSET := 0.14
 const HIT_EDGE_PADDING := 0.08
 const EDGE_FEATHER_WIDTH := 1.85
 const DISTANCE_RELEASE_SPEED := 12.0
+# 目标显隐仍保持25Hz；只有地面视野扇形的物理采样降至15Hz，绘制和平滑
+# 继续逐帧执行，因此不会改变敌人判定，也不会产生可见的跳动。
+const GEOMETRY_SAMPLE_INTERVAL := 1.0 / 15.0
 # 手电表现层：真实 SpotLight3D 的地面贡献会与太阳、房间灯相加，各楼层对比度不同。
 # 这里额外画一层固定透明度、受同一套物理射线裁切的无光照扇形，
 # 让玩家在任何背景亮度下都能看到完全一致的手电范围。
@@ -39,6 +42,7 @@ var _near_fill_material: StandardMaterial3D
 var _flashlight_material: StandardMaterial3D
 var _flashlight: PlayerFlashlight3D
 var _accumulator := 0.0
+var _geometry_sample_accumulator := GEOMETRY_SAMPLE_INTERVAL
 var _visible_target_count := 0
 var _occluded_target_count := 0
 var _last_cone_points := PackedVector3Array()
@@ -75,11 +79,16 @@ func _process(delta: float) -> void:
 		return
 	_update_visual_transforms()
 	_smooth_and_draw_geometry(delta)
+	_geometry_sample_accumulator += delta
+	if _geometry_sample_accumulator + 0.0001 >= GEOMETRY_SAMPLE_INTERVAL:
+		_geometry_sample_accumulator = fmod(
+			_geometry_sample_accumulator, GEOMETRY_SAMPLE_INTERVAL
+		)
+		_refresh_vision_samples(false)
 	_accumulator += delta
 	if _accumulator < visibility_interval:
 		return
 	_accumulator = fmod(_accumulator, visibility_interval)
-	_refresh_vision_samples(false)
 	_refresh_target_visibility()
 
 
@@ -118,6 +127,9 @@ func get_snapshot() -> Dictionary:
 		"presentation_mode": "directional_gaze_and_flashlight",
 		"proximity_reveal": proximity_reveal,
 		"visibility_interval": visibility_interval,
+		"geometry_sample_interval": GEOMETRY_SAMPLE_INTERVAL,
+		"geometry_sample_hz": 1.0 / GEOMETRY_SAMPLE_INTERVAL,
+		"target_visibility_hz": 1.0 / visibility_interval,
 		"visible_targets": _visible_target_count,
 		"occluded_targets": _occluded_target_count,
 		"visible_enemies": _count_visible_enemies(),
@@ -138,6 +150,7 @@ func get_snapshot() -> Dictionary:
 		"wall_occlusion_enabled": true,
 		"cone_ray_count": cone_ray_count,
 		"proximity_ray_count": proximity_ray_count,
+		"proximity_geometry_raycast_enabled": false,
 		"cone_point_count": _last_cone_points.size(),
 		"proximity_point_count": _last_proximity_points.size(),
 		"flashlight_overlay_active": _flashlight_overlay_active,
@@ -173,13 +186,10 @@ func _refresh_vision_samples(snap: bool) -> void:
 		cone_ray_count,
 		vision_range,
 	)
-	_target_proximity_distances = _sample_arc_distances(
-		Vector3.FORWARD,
-		-PI,
-		PI,
-		proximity_ray_count + 1,
-		proximity_reveal,
-	)
+	# 贴身圆盘早已不绘制，玩法近距可见性也走逐目标直线遮挡；继续发29条
+	# 环形射线不会改变任何画面或判定，因此保留兼容点阵但不做物理查询。
+	_target_proximity_distances.resize(proximity_ray_count + 1)
+	_target_proximity_distances.fill(proximity_reveal)
 	_refresh_flashlight_overlay_samples(aim)
 	if snap or _display_cone_distances.size() != _target_cone_distances.size():
 		_display_cone_distances = _target_cone_distances.duplicate()

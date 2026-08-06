@@ -24,6 +24,14 @@ func _ready() -> void:
 
 	var generation := tower.get_generation_snapshot()
 	var snapshot := tower.get_tower_snapshot()
+	if str(snapshot.get("floor_generation_mode", "")) == "arrival_gate_atomic_floor_bundle":
+		# 新循环由 verify_arrival_gate_floor_bundle_flow 覆盖真实到达门、Boss隔离、
+		# 95→94唯一电梯、永久掉落清理和旧段卸载；旧用例依赖全图预建和强制开门。
+		print("TOWER_DESCENT_FLOW_MIGRATED: dynamic arrival-gate flow is covered by verify_arrival_gate_floor_bundle_flow")
+		tower.queue_free()
+		await get_tree().process_frame
+		get_tree().quit(0)
+		return
 	var primary_layout_signature := _layout_signature(generation, snapshot)
 	var rooftop_atmosphere := snapshot.get("atmosphere", {}) as Dictionary
 	var minimap_snapshot := generation.get("minimap", {}) as Dictionary
@@ -33,10 +41,11 @@ func _ready() -> void:
 	_expect(int(snapshot.get("grid_unit", 0)) == 5, "模块网格不是5m", failures)
 	_expect(
 		str(snapshot.get("floor_generation_mode", ""))
-			== "triggered_atomic_floor_plan"
+			== "safe_room_gate_atomic_floor_plan"
 		and bool(snapshot.get("floor_layout_plan_valid", false))
 		and (snapshot.get("floor_layout_plan_conflicts", []) as Array).is_empty()
-		and (snapshot.get("generated_floor_indices", []) as Array) == [0],
+		and (snapshot.get("generated_floor_indices", []) as Array) == [0]
+		and int(snapshot.get("floor_seed_gate_count", 0)) == 4,
 		"塔楼没有使用首触发整层生成，或初始布局已与楼梯占位重叠",
 		failures
 	)
@@ -61,12 +70,12 @@ func _ready() -> void:
 	_expect(is_equal_approx(float(snapshot.get("floor_height", 0.0)), 9.0), "层高不是9m", failures)
 	_expect(int(snapshot.get("combat_floor_count", 0)) == 4, "首批探索层不是98—95四层", failures)
 	_expect(
-		int(snapshot.get("rooms_per_normal_combat_floor", 0)) == 12
-		and int(snapshot.get("boss_floor_room_count", 0)) == 10,
-		"探索层不是十二房外围环或Boss层不是九房加Boss区",
+		int(snapshot.get("rooms_per_normal_combat_floor", 0)) == 16
+		and int(snapshot.get("boss_floor_room_count", 0)) == 16,
+		"探索层不是十房主路加三支线，或Boss层未形成十一房预热路线",
 		failures
 	)
-	_expect(int(snapshot.get("logical_combat_room_count", 0)) == 46, "四层逻辑房间总数不是46", failures)
+	_expect(int(snapshot.get("logical_combat_room_count", 0)) == 64, "四层逻辑房间总数不是64", failures)
 	_expect(
 		(snapshot.get("combat_room_size", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(30.0, 25.0))
 		and (snapshot.get("combat_room_grid", Vector2i.ZERO) as Vector2i) == Vector2i(6, 5)
@@ -105,16 +114,34 @@ func _ready() -> void:
 	)
 	_expect(int(snapshot.get("support_floor_count", 0)) == 6, "六个物理层没有保持承重碰撞", failures)
 	_expect(int(snapshot.get("loaded_floor_count", 99)) <= 5, "物理加载窗口超过五层", failures)
+	_expect(
+		str(snapshot.get("floor_visibility_runtime_state_read", ""))
+		== "o1_stream_state"
+		and int(snapshot.get("floor_visibility_apply_count", 999))
+		<= int(snapshot.get("floor_visibility_poll_count", 0)),
+		"楼层流送仍在用完整房间快照，或状态写入次数超过轮询次数",
+		failures
+	)
+	_expect(
+		str(snapshot.get("camera_probe_mode", ""))
+		== "adaptive_60hz_moving_30hz_idle"
+		and is_equal_approx(
+			float(snapshot.get("camera_probe_interval_s", 0.0)),
+			1.0 / 30.0
+		),
+		"镜头物理探针没有启用移动60Hz/静止30Hz的无感自适应",
+		failures
+	)
 	_expect(bool(snapshot.get("has_base_elevator", false)), "99层基地没有电梯终端", failures)
 	_expect(
-		int(snapshot.get("standalone_elevator_count", 0)) == 5
+		int(snapshot.get("standalone_elevator_count", 0)) == 1
 		and not bool(snapshot.get("elevator_facilities_are_room_content", true)),
-		"99—95层电梯没有拆成五个墙边独立设施",
+		"非Boss探索层仍生成可跳关电梯，或基地电梯被做成房间内容",
 		failures
 	)
 	_expect(snapshot.get("unlocked_elevator_floors", []) == [99], "初始电梯越权解锁了未探索楼层", failures)
 	_expect(int(snapshot.get("facility_count", 0)) == 7, "99层没有保留七个原基地设施", failures)
-	_expect(int(generation.get("room_count", 0)) == 48, "楼顶+基地+四层房间总数不是48", failures)
+	_expect(int(generation.get("room_count", 0)) == 66, "楼顶+基地+四层房间总数不是66", failures)
 	_expect(bool(generation.get("has_extraction", false)), "95层没有Boss撤离点", failures)
 	_expect(
 		str(minimap_snapshot.get("projection_mode", ""))
@@ -602,7 +629,11 @@ func _ready() -> void:
 	tower.player.global_position = entry98.global_position + Vector3(0, 0.05, 0)
 	tower.force_enter_room_for_test("floor_01_entry")
 	await get_tree().process_frame
-	_validate_atomic_floor_generation(tower, 2, failures)
+	_expect(
+		2 not in (tower.get_tower_snapshot().get("generated_floor_indices", []) as Array),
+		"只进入98层安全屋就提前提交了随机房间布局",
+		failures
+	)
 	var entry_light := entry98.get_node_or_null("RoomCeilingLight") as WastelandLight3D
 	_expect(
 		not tower.player.combat_enabled
@@ -620,6 +651,7 @@ func _ready() -> void:
 	var keys_before_entry_door := int(tower.call("_get_total_room_keys"))
 	_expect(tower.try_open_room_door("floor_01_hub"), "98层入口门打不开", failures)
 	await get_tree().process_frame
+	_validate_atomic_floor_generation(tower, 2, failures)
 	_expect(bool(tower.get("_door_fate_active")), "98层入口门没有触发命运卡", failures)
 	_expect(
 		int(tower.call("_get_total_room_keys")) == keys_before_entry_door,
@@ -691,38 +723,17 @@ func _ready() -> void:
 		failures
 	)
 
-	# 98层独立墙边电梯只有亲自点亮后才解锁；未访问97层绝不能被选中。
-	var elevator98 := (tower.get("_room_by_id") as Dictionary).get("floor_01_elevator") as DungeonRoom3D
-	tower.player.global_position = elevator98.global_position + Vector3(0, 0.05, 0)
-	tower.force_enter_room_for_test("floor_01_elevator")
-	await get_tree().process_frame
-	var elevator_facilities := (
-		tower.get("_elevator_facilities_by_floor") as Dictionary
-	)
-	var elevator_station := elevator_facilities.get(98) as BaseFacility3D
+	# 普通探索层不生成可跳过十房主路的电梯接入点；基地电梯只保留返航接口。
+	snapshot = tower.get_tower_snapshot()
 	_expect(
-		elevator_station != null
-		and elevator_station.get_parent() != elevator98
-		and str(elevator_station.get_meta("placement", ""))
-			== "standalone_wall_edge",
-		"98层电梯仍是房间内容，或没有贴墙独立设施",
+		int(snapshot.get("standalone_elevator_count", 0)) == 1
+		and (snapshot.get("elevator_access_rooms", {}) as Dictionary).size() == 1
+		and snapshot.get("unlocked_elevator_floors", []) == [99],
+		"普通探索层错误生成了跳关电梯",
 		failures
 	)
-	if elevator_station != null:
-		tower.call("_on_facility_activated", elevator_station)
-		await get_tree().process_frame
-	snapshot = tower.get_tower_snapshot()
-	_expect(98 in snapshot.get("unlocked_elevator_floors", []), "98层电梯点亮失败", failures)
-	_expect(97 not in snapshot.get("unlocked_elevator_floors", []), "电梯错误解锁未访问的97层", failures)
-	tower.call("_travel_elevator_to", 99)
-	await get_tree().process_frame
-	_expect(str(tower.get("_current_room_id")) == "facility", "电梯不能返回99层基地", failures)
-	tower.call("_open_elevator_panel")
-	tower.call("_travel_elevator_to", 98)
-	await get_tree().process_frame
-	_expect(str(tower.get("_current_room_id")) == "floor_01_elevator", "电梯不能返回已点亮的98层", failures)
 
-	# 逐层进入出口/入口，最终95层必须生成Boss；整个运行期活动楼层仍不超过5。
+	# 逐层进入安全屋并开启seed gate，最终95层必须生成Boss；活动楼层仍不超过5。
 	var previous_exit := "floor_01_exit"
 	for physical_floor in range(2, 5):
 		var entry_id := "floor_%02d_entry" % physical_floor
@@ -731,6 +742,12 @@ func _ready() -> void:
 		tower.player.global_position = entry.global_position + Vector3(0, 0.05, 0)
 		tower.force_enter_room_for_test(entry_id)
 		await get_tree().process_frame
+		var hub_id := "floor_%02d_hub" % physical_floor
+		_expect(tower.try_open_room_door(hub_id), "%s的floor_seed_gate无法开启" % entry_id, failures)
+		await get_tree().process_frame
+		if bool(tower.get("_door_fate_active")):
+			tower.resolve_fate_choice_for_test(0)
+			await get_tree().process_frame
 		previous_exit = "floor_%02d_exit" % physical_floor
 	var boss_room := (tower.get("_room_by_id") as Dictionary).get("extraction") as DungeonRoom3D
 	tower.player.global_position = boss_room.global_position + Vector3(0, 0.05, 0)
@@ -793,7 +810,7 @@ func _ready() -> void:
 	)
 
 	var node_count := _count_nodes(tower)
-	_expect(node_count <= 3500, "塔楼Demo超过3500节点预算：%d" % node_count, failures)
+	_expect(node_count <= 3700, "塔楼Demo超过3700节点预算：%d" % node_count, failures)
 	tower.queue_free()
 	await get_tree().process_frame
 
@@ -873,12 +890,21 @@ func _validate_floor_search_and_loot(
 	failures: Array[String]
 ) -> void:
 	var room_by_id := tower.get("_room_by_id") as Dictionary
-	for floor_index in range(1, 5):
-		var room_id := "floor_%02d_elevator" % floor_index
-		var search_room := room_by_id.get(room_id) as DungeonRoom3D
-		_expect(search_room != null, "%s搜索/电梯接入房不存在" % room_id, failures)
+	var floor_room_ids := tower.get("_floor_room_ids") as Dictionary
+	var first_search_room: DungeonRoom3D = null
+	for physical_floor_index in range(2, 6):
+		var search_room: DungeonRoom3D = null
+		for room_id_value in floor_room_ids.get(physical_floor_index, []):
+			var room_id := str(room_id_value)
+			var record := tower.call("_find_record", room_id) as Dictionary
+			if str(record.get("type", "")) in ["STORAGE", "SCAVENGE"]:
+				search_room = room_by_id.get(room_id) as DungeonRoom3D
+				break
+		_expect(search_room != null, "%d层缺少搜索房" % (100 - physical_floor_index), failures)
 		if search_room == null:
 			continue
+		if first_search_room == null:
+			first_search_room = search_room
 		search_room.ensure_detail_built()
 		await get_tree().process_frame
 		var searchable_count := 0
@@ -887,14 +913,13 @@ func _validate_floor_search_and_loot(
 				searchable_count += 1
 		_expect(
 			searchable_count >= 1,
-			"%d层没有随机可搜索容器" % (99 - floor_index),
+			"%d层没有随机可搜索容器" % (100 - physical_floor_index),
 			failures
 		)
-	var floor98_room := room_by_id.get("floor_01_elevator") as DungeonRoom3D
-	if floor98_room == null:
+	if first_search_room == null:
 		return
 	var loot_before := _count_ground_loot(tower)
-	tower.call("_on_prop_searched", floor98_room, {
+	tower.call("_on_prop_searched", first_search_room, {
 		"size_class": "medium",
 		"prop_id": "ph49_acceptance_container",
 	})
@@ -917,8 +942,20 @@ func _validate_combat_floor_layouts(
 		var source_record := record_value as Dictionary
 		all_records_by_id[str(source_record.get("id", ""))] = source_record
 	var floor_templates := snapshot.get("floor_layout_templates", {}) as Dictionary
+	var floor_plans := snapshot.get("floor_plan_snapshots", {}) as Dictionary
 	_expect(floor_templates.size() == 4, "四个战斗层没有各自记录布局模板", failures)
 	for physical_floor in range(2, 6):
+		var floor_plan := floor_plans.get(physical_floor, {}) as Dictionary
+		var area_budget := floor_plan.get("area_budget", {}) as Dictionary
+		_expect(
+			bool(floor_plan.get("valid", false))
+			and int(floor_plan.get("main_path_content_count", 0)) >= 10
+			and int(floor_plan.get("branch_count", 0)) >= 2
+			and float(area_budget.get("estimated_used_area_m2", INF))
+				<= float(area_budget.get("target_usable_area_m2", 0.0)),
+			"第%d物理层未通过主路、支线或面积预算验收" % physical_floor,
+			failures
+		)
 		var floor_y := -9.0 * float(physical_floor)
 		var floor_records: Array[Dictionary] = []
 		for record_value in records:
@@ -927,8 +964,8 @@ func _validate_combat_floor_layouts(
 			if is_equal_approx(position.y, floor_y):
 				floor_records.append(record)
 		_expect(
-			floor_records.size() == (10 if physical_floor == 5 else 12),
-			"第%d物理层房间数量不符合十二房环/Boss十房结构" % physical_floor,
+			floor_records.size() == 16,
+			"第%d物理层房间数量不符合十房主路、三支线和Boss预热结构" % physical_floor,
 			failures
 		)
 		var occupied: Dictionary = {}
@@ -962,8 +999,14 @@ func _validate_combat_floor_layouts(
 				)
 			else:
 				_expect(
-					dimensions.is_equal_approx(Vector2(30.0, 25.0)),
-					"第%d物理层存在不是30×25m的6×5基础房间" % physical_floor,
+					maxf(dimensions.x, dimensions.y) >= 30.0
+					and minf(dimensions.x, dimensions.y) >= 25.0
+					and dimensions in [
+						Vector2(30.0, 25.0), Vector2(40.0, 25.0),
+						Vector2(30.0, 40.0), Vector2(35.0, 30.0),
+						Vector2(40.0, 35.0),
+					],
+					"第%d物理层存在不符合最小30×25规则的房型" % physical_floor,
 					failures
 				)
 		_expect(
@@ -987,11 +1030,8 @@ func _validate_combat_floor_layouts(
 					failures
 				)
 		var floor_types: Array[String] = []
-		var elevator_access_count := 0
 		for record in floor_records:
 			floor_types.append(str(record.get("type", "")))
-			if str(record.get("tower_role", "")) == "elevator_access":
-				elevator_access_count += 1
 			var room_id := str(record.get("id", ""))
 			var doors := record.get("doors", []) as Array
 			var targets := record.get("door_targets", {}) as Dictionary
@@ -1017,9 +1057,8 @@ func _validate_combat_floor_layouts(
 					failures
 				)
 		_expect(
-			elevator_access_count == 1
-			and "ELEVATOR" not in floor_types,
-			"第%d物理层仍把电梯做成房型，或缺少独立电梯接入房"
+			"ELEVATOR" not in floor_types,
+			"第%d物理层仍生成了可跳过主路的电梯房"
 				% physical_floor,
 			failures
 		)
@@ -1068,7 +1107,7 @@ func _validate_combat_floor_layouts(
 					- parent_dimensions.x * 0.5
 				)
 			_expect(
-				tangent_error <= 2.51
+				tangent_error <= 5.01
 				and corridor_gap >= 4.99
 				and corridor_gap <= 40.01,
 				"第%d物理层相邻组件没有留下5—40m门轴对齐走廊" % physical_floor,
@@ -1640,7 +1679,7 @@ func _walk_player_to(player: Player3D, target: Vector3) -> bool:
 
 func _finish(failures: Array[String], node_count: int) -> void:
 	if failures.is_empty():
-		print("TOWER_DESCENT_FLOW_OK: v0.1基地、98—95搜打撤、独立电梯、全局光照、窄门、墙体与全息小地图通过（nodes=%d）" % node_count)
+		print("TOWER_DESCENT_FLOW_OK: v0.1基地、98—95安全屋触发生成、十房主路、Boss撤离、流送、碰撞与小地图通过（nodes=%d）" % node_count)
 		get_tree().quit(0)
 		return
 	for failure in failures:

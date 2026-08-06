@@ -73,6 +73,9 @@ func _ready() -> void:
 	_build_lights()
 	_apply_configuration()
 	force_sync()
+	# 关闭时三盏灯均不可见，不需要每帧重写三组全局变换；开启瞬间先同步，
+	# 开启期间再恢复逐帧跟随，因此按F后的方向与移动表现不变。
+	set_process(_enabled)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -112,6 +115,9 @@ func set_light_enabled(enabled: bool) -> void:
 	if _enabled == enabled:
 		return
 	_enabled = enabled
+	set_process(enabled)
+	if enabled:
+		force_sync()
 	# 通过 kit 节点统一显隐：把三盏灯打包，F 一次切换整组，
 	# 后续再加灯只要挂到 _light_kit 下就会自动跟随。
 	if _light_kit != null:

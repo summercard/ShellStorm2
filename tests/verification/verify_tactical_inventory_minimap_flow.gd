@@ -82,12 +82,22 @@ func _ready() -> void:
 	minimap.set_current_room("start")
 	minimap.set_player_state(Vector3.ZERO, Vector3.RIGHT)
 	var player_before := minimap.get_player_screen_position()
+	var start_before := minimap.get_room_screen_rect("start").get_center()
 	minimap.set_player_state(Vector3(8.0, 0.0, 0.0), Vector3.RIGHT)
 	var player_after := minimap.get_player_screen_position()
-	_check(player_after.x > player_before.x, "Minimap player marker does not follow room-local movement", failures)
+	var start_after := minimap.get_room_screen_rect("start").get_center()
+	_check(player_after.is_equal_approx(player_before), "Minimap player marker is not fixed at radar center", failures)
+	_check(start_after.x < start_before.x, "Minimap map does not move opposite to player movement", failures)
 	minimap.set_enemy_positions([Vector3(3.0, 0.0, 2.0), Vector3(-4.0, 0.0, -2.0)])
 	var map_snapshot := minimap.get_snapshot()
 	_check(bool(map_snapshot.get("true_room_dimensions", false)), "Minimap snapshot does not declare true room dimensions", failures)
+	_check(
+		bool(map_snapshot.get("player_centered", false))
+		and bool(map_snapshot.get("map_moves_with_player", false))
+		and bool(map_snapshot.get("circular_content_clip", false))
+		and not bool(map_snapshot.get("player_heading_line", true)),
+		"Minimap is not player-centered/circular-clipped or still exposes the heading line", failures
+	)
 	_check(int(map_snapshot.get("enemy_marker_count", 0)) == 2, "Minimap does not expose enemy red-dot count", failures)
 	var start_rect := minimap.get_room_screen_rect("start")
 	var boss_rect := minimap.get_room_screen_rect("boss")

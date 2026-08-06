@@ -3,6 +3,10 @@ extends Node
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	if int(ProjectSettings.get_setting("application/run/max_fps", 0)) != 60:
+		failures.append("Formal runtime does not enforce the 60 FPS thermal budget")
+	if int(ProjectSettings.get_setting("display/window/vsync/vsync_mode", 0)) != 1:
+		failures.append("Formal runtime does not explicitly enable VSync")
 	var scene := load("res://scenes/levels3d/AbyssArchive3D.tscn") as PackedScene
 	var started := Time.get_ticks_usec()
 	var dungeon := scene.instantiate() as Dungeon3D
@@ -105,8 +109,11 @@ func _ready() -> void:
 	var stable_redraw_end := int(vision.get_snapshot().get("mesh_redraw_count", 0)) if vision != null else 999
 	if stable_redraw_end - stable_redraw_start > 3:
 		failures.append("Stable vision mesh still rebuilds every frame: %d redraws" % (stable_redraw_end - stable_redraw_start))
-	if sustained_ms_per_frame > 16.0:
-		failures.append("Sustained 3D runtime exceeded 16ms script/physics budget: %.2fms" % sustained_ms_per_frame)
+	# 此处测的是 await process_frame 的墙钟帧间隔，会包含项目主动设置的
+	# 16.67ms/60FPS节拍，而不是纯脚本CPU时间；18ms给调度误差留余量，仍以
+	# 55.5FPS为硬下限，不能通过移除60FPS限帧来“跑快”测试。
+	if sustained_ms_per_frame > 18.0:
+		failures.append("Sustained 60 FPS frame pacing exceeded 18ms: %.2fms" % sustained_ms_per_frame)
 
 	if failures.is_empty():
 		print("3D_PERFORMANCE_BUDGET_OK: generation_ms=%.1f max_room_build_ms=%.1f initial_nodes=%d initial_world=%d hud_shell=%d hud_3d_preview=%d hud_total=%d explored_nodes=%d explored_world=%d max_active_rooms=%d max_active_lights=%d projectile_stress_ms=%.1f sustained_ms=%.2f stable_vision_redraws=%d" % [

@@ -11,6 +11,8 @@ func _ready() -> void:
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	if not tower.generate_through_floor_for_test(95):
+		failures.append("98—95结构验收准备失败")
 
 	var generation := tower.get_generation_snapshot()
 	var room_by_id := tower.get("_room_by_id") as Dictionary
@@ -59,19 +61,41 @@ func _ready() -> void:
 				and int(connector.get_meta("floor_module_count", -1)) == 5
 				and int(connector.get_meta("wall_module_count", -1)) == 10
 			)
-	if horizontal_count != 42:
-		failures.append("expected 42 horizontal component corridors, got %d" % horizontal_count)
+	if horizontal_count != 62:
+		failures.append("expected 62 generated horizontal component corridors including Boss exit and airlock, got %d" % horizontal_count)
 	if not entry_hub_dynamic_corridor_verified:
 		failures.append("98F safe-room north corridor is not a complete 25m/5-module passage")
 
 	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -9.0, 2.5), failures)
 	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -9.0, 2.5), failures)
 	_validate_key_door(room_by_id, "floor_01_entry", "east", Vector3(35.0, -18.0, 2.5), failures)
-	_validate_key_door(room_by_id, "floor_01_entry", "north", Vector3(27.5, -18.0, -5.0), failures)
-	_validate_key_door(room_by_id, "floor_01_hub", "south", Vector3(27.5, -18.0, -30.0), failures)
+	var entry98 := room_by_id.get("floor_01_entry") as DungeonRoom3D
+	var hub98 := room_by_id.get("floor_01_hub") as DungeonRoom3D
+	var hub_is_north := hub98.position.z < entry98.position.z
+	var entry_hub_side := "north" if hub_is_north else "south"
+	var hub_entry_side := "south" if hub_is_north else "north"
+	var z_sign := -1.0 if hub_is_north else 1.0
+	_validate_key_door(
+		room_by_id,
+		"floor_01_entry",
+		entry_hub_side,
+		Vector3(entry98.position.x, -18.0, entry98.position.z + z_sign * 7.5),
+		failures
+	)
+	_validate_key_door(
+		room_by_id,
+		"floor_01_hub",
+		hub_entry_side,
+		Vector3(
+			entry98.position.x,
+			-18.0,
+			hub98.position.z - z_sign * hub98.get_dimensions().y * 0.5
+		),
+		failures
+	)
 
 	var floor_stages := tower.get_tower_snapshot().get("floor_stages", []) as Array
-	var expected_holes := [1, 1, 1, 1, 1, 0]
+	var expected_holes := [1, 1, 1, 1, 1, 1, 0]
 	for stage_value in floor_stages:
 		var stage := stage_value as Dictionary
 		var index := int(stage.get("floor_index", -1))
@@ -95,6 +119,14 @@ func _validate_horizontal_corridor_modules(
 	failures: Array[String]
 ) -> void:
 	var length := start.distance_to(end)
+	if length <= 0.05:
+		if (
+			int(connector.get_meta("module_count", -1)) != 0
+			or int(connector.get_meta("floor_module_count", -1)) != 0
+			or int(connector.get_meta("wall_module_count", -1)) != 0
+		):
+			failures.append("%s shared-wall connector created zero-length collision modules" % connector.name)
+		return
 	var expected_modules := maxi(
 		1,
 		int(round(length / TowerGeometry3D.GRID_UNIT_M))

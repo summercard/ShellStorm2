@@ -28,6 +28,7 @@ const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
+const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -102,6 +103,7 @@ var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
 var last_killed_enemy_data: Dictionary = {}
 var _resolved_event_rooms: Dictionary = {}
+var _event_combat_rooms: Dictionary = {}
 var _next_chest_quality_boost := 0
 var _extra_loot_next_chest_count := 0
 var _next_room_enemy_count := 0
@@ -133,6 +135,8 @@ var _hud_weapon_model_instance_id := ""
 var _hud_floor_label: Label = null
 var _hud_timer_label: Label = null
 var _hud_run_elapsed := 0.0
+var _hud_last_elapsed_second := -1
+var _minimap_runtime_accumulator := 0.0
 
 
 func _ready() -> void:
@@ -192,24 +196,29 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
 	_hud_run_elapsed += delta
-	if _hud_timer_label != null:
-		var elapsed_seconds := int(_hud_run_elapsed)
+	var elapsed_seconds := int(_hud_run_elapsed)
+	if _hud_timer_label != null and elapsed_seconds != _hud_last_elapsed_second:
+		_hud_last_elapsed_second = elapsed_seconds
 		_hud_timer_label.text = "%02d:%02d" % [elapsed_seconds / 60, elapsed_seconds % 60]
-	if _hud_floor_label != null and minimap != null:
-		_hud_floor_label.text = "高塔外层 · %s" % minimap.get_floor_label()
-	if minimap != null and player != null:
-		minimap.set_player_state(
-			player.global_position,
-			player.aim_direction
+	_minimap_runtime_accumulator += delta
+	if _minimap_runtime_accumulator >= MINIMAP_RUNTIME_INTERVAL:
+		_minimap_runtime_accumulator = fmod(
+			_minimap_runtime_accumulator, MINIMAP_RUNTIME_INTERVAL
 		)
-		minimap.set_enemy_positions(_get_minimap_enemy_positions())
+		if _hud_floor_label != null and minimap != null:
+			var next_floor_text := "高塔外层 · %s" % minimap.get_floor_label()
+			if _hud_floor_label.text != next_floor_text:
+				_hud_floor_label.text = next_floor_text
+		if minimap != null and player != null:
+			minimap.set_player_state(
+				player.global_position,
+				player.aim_direction
+			)
+			minimap.set_enemy_positions(_get_minimap_enemy_positions())
 	_door_prompt_accumulator += delta
 	if _door_prompt_accumulator < 0.08:
 		return
 	_door_prompt_accumulator = 0.0
-	for room in _rooms:
-		if room.room_id != _current_room_id:
-			room.hide_door_prompts()
 	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if current != null and player != null:
 		current.get_nearest_door(player.global_position)
@@ -1032,6 +1041,10 @@ func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: 
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room == null:
 		return
+	if not _current_room_id.is_empty() and _current_room_id != room.room_id:
+		var previous_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+		if previous_room != null:
+			previous_room.hide_door_prompts()
 	_current_room_id = room.room_id
 	room_entered.emit(room)
 	minimap.set_current_room(room.room_id)
@@ -1042,8 +1055,8 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		player.call("on_fate_room_entered")
 	if _spawned_rooms.has(room.room_id):
 		_ensure_room_key_reward(room)
-		_repair_hostile_room_progress(room)
-		status_label.text = "返回已探索房间 · %s" % ("已肃清" if room.cleared else "战斗未结束")
+		_repair_room_progress(room)
+		status_label.text = _return_room_status(room)
 		return
 	_spawned_rooms[room.room_id] = true
 	if room.room_type == "START":
@@ -1052,7 +1065,8 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		_spawn_room_enemies(room)
 	elif room.room_type == "EVENT":
 		room.cleared = false
-		status_label.text = "事件房：使用异常信号终端决定本房命运"
+		if _ensure_event_room_objective(room):
+			status_label.text = "事件房：前往紫色光柱，按 E 使用异常信号终端"
 	else:
 		status_label.text = _room_status(room.room_type)
 		_mark_room_cleared(room, room.room_type not in ["START", "EXTRACTION", "ELEVATOR"])
@@ -1198,7 +1212,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.health_changed.connect(_on_enemy_health_changed)
 		(_enemy_nodes_by_room[room.room_id] as Array).append(enemy)
 		spawned_count += 1
-		var room_visible := int(room.get_room_snapshot().get("stream_state", 0)) > 0
+		var room_visible := room.is_streamed()
 		enemy.set_runtime_active(room.room_id == _current_room_id, room_visible)
 		if enemy.enemy_kind == "boss":
 			_show_boss_hud(enemy)
@@ -1217,8 +1231,56 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 	return spawned_count
 
 
-func _repair_hostile_room_progress(room: DungeonRoom3D) -> void:
-	if room == null or room.cleared or room.room_type not in HOSTILE_ROOM_TYPES:
+func _repair_room_progress(room: DungeonRoom3D) -> void:
+	if room == null or room.cleared:
+		return
+	if room.room_type in HOSTILE_ROOM_TYPES:
+		_repair_hostile_room_progress(room)
+		return
+	if room.room_type != "EVENT":
+		return
+	if not _resolved_event_rooms.has(room.room_id):
+		_ensure_event_room_objective(room)
+		return
+	if _event_combat_rooms.has(room.room_id):
+		_repair_hostile_room_progress(room, true)
+		return
+	# 非战斗事件一经记录为已结算就不应继续锁门；这是热重载/旧存档兜底。
+	_mark_room_cleared(room, true)
+
+
+func _return_room_status(room: DungeonRoom3D) -> String:
+	if room == null:
+		return "返回已探索房间"
+	if room.cleared:
+		return "返回已探索房间 · 已肃清"
+	if room.room_type == "EVENT":
+		if _event_combat_rooms.has(room.room_id):
+			return "返回事件房 · 异常敌群尚未肃清"
+		return "返回事件房 · 前往紫色光柱，按 E 结算事件"
+	return "返回已探索房间 · 战斗未结束"
+
+
+func _ensure_event_room_objective(room: DungeonRoom3D) -> bool:
+	if room == null or room.room_type != "EVENT":
+		return false
+	var station := room.ensure_required_service_station()
+	if station != null:
+		return true
+	# 必做交互物实例化失败时，优先保住流程，绝不让一局永久卡死。
+	push_error("Event room %s has no event station; unlocking room to prevent a soft lock" % room.room_id)
+	_resolved_event_rooms[room.room_id] = true
+	_mark_room_cleared(room, true)
+	status_label.text = "事件终端载入失败，房间已安全解锁"
+	return false
+
+
+func _repair_hostile_room_progress(room: DungeonRoom3D, allow_event_combat := false) -> void:
+	if (
+		room == null
+		or room.cleared
+		or (room.room_type not in HOSTILE_ROOM_TYPES and not allow_event_combat)
+	):
 		return
 	var live_count := 0
 	var live_references: Array = []
@@ -1618,10 +1680,14 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 		status_label.text = "本房事件已经结算"
 		return
 	_resolved_event_rooms[room.room_id] = true
+	var event_station := room.get_service_station("event")
+	if event_station != null:
+		event_station.set_objective_resolved()
 	var event_id: String = ["CURSE", "BLESSING", "TRADE", "GAMBLE", "REVEAL", "SUMMON"][_rng.randi_range(0, 5)]
 	match event_id:
 		"CURSE":
 			room.cleared = false
+			_event_combat_rooms[room.room_id] = true
 			_spawn_room_enemies(room)
 			for value in _enemy_nodes_by_room.get(room.room_id, []):
 				if is_instance_valid(value) and value is Enemy3D:
@@ -1656,6 +1722,7 @@ func _resolve_event_room(room: DungeonRoom3D) -> void:
 			status_label.text = "地图揭示：周围房间类型已标记"
 		"SUMMON":
 			room.cleared = false
+			_event_combat_rooms[room.room_id] = true
 			_spawn_room_enemies(room)
 			status_label.text = "亡者召唤：额外敌群出现，击杀后获得掉落"
 			return
@@ -1897,8 +1964,16 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if current == null:
 		return false
+	_repair_room_progress(current)
 	if bool(policy.get("requires_clear", true)) and not current.cleared:
-		status_label.text = "先清理当前房间，才能开启房门"
+		if current.room_type == "EVENT":
+			status_label.text = (
+				"先清除事件召唤的敌群，才能开启房门"
+				if _event_combat_rooms.has(current.room_id)
+				else "先前往紫色光柱，按 E 结算房间事件"
+			)
+		else:
+			status_label.text = "先清理当前房间，才能开启房门"
 		return false
 	var requires_key := bool(policy.get("requires_key", true))
 	if requires_key and _get_total_room_keys() <= 0:
@@ -2230,7 +2305,7 @@ func _update_room_streaming(current_id: String) -> void:
 				var enemy_room := _room_by_id.get(str(room_id)) as DungeonRoom3D
 				var room_visible := (
 					enemy_room != null
-					and int(enemy_room.get_room_snapshot().get("stream_state", 0)) > 0
+					and enemy_room.is_streamed()
 				)
 				enemy.set_runtime_active(str(room_id) == current_id, room_visible)
 		_enemy_nodes_by_room[room_id] = live_references
@@ -2850,6 +2925,8 @@ func get_runtime_snapshot() -> Dictionary:
 		"edge_states": _open_edges.duplicate(true),
 		"wave_numbers": _room_wave_numbers.duplicate(true),
 		"wave_totals": _room_wave_totals.duplicate(true),
+		"resolved_event_rooms": _resolved_event_rooms.keys(),
+		"event_combat_rooms": _event_combat_rooms.keys(),
 		"extraction_types": _conditional_extractions.keys(),
 		"extraction_defense_active": _extraction_defense_active,
 		"projectile_pool": projectile_pool.get_snapshot() if projectile_pool != null else {},

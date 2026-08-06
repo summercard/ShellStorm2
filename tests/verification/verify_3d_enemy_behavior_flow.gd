@@ -52,9 +52,21 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 			"enemy_type": kind, "hp": source_hp[kind], "max_hp": source_hp[kind],
 			"damage": source_damage[kind], "speed": 60,
 		})
-		var expected_hp := int(Enemy3D.PROFILES[kind]["hp"])
-		if enemy.max_hp < expected_hp:
-			failures.append("3D HP baseline was overwritten by legacy data: %s=%d" % [kind, enemy.max_hp])
+		var expected_multiplier := Enemy3D.BOSS_HP_MULTIPLIER if kind == "boss" else Enemy3D.NORMAL_HP_MULTIPLIER
+		var expected_hp := int(round(float(Enemy3D.PROFILES[kind]["hp"]) * expected_multiplier))
+		if enemy.max_hp != expected_hp:
+			failures.append("3D HP balance multiplier mismatch: %s=%d expected=%d" % [kind, enemy.max_hp, expected_hp])
+		var expected_speed := 60.0 / 24.0 * Enemy3D.GLOBAL_MOVE_SPEED_MULTIPLIER
+		if not is_equal_approx(enemy.move_speed, expected_speed):
+			failures.append("3D enemy speed is not 70%% baseline: %s=%.3f" % [kind, enemy.move_speed])
+		var state := enemy.get_state_snapshot()
+		if kind == "boss":
+			if (
+				not is_equal_approx(enemy.scale.x, Enemy3D.BOSS_SIZE_MULTIPLIER)
+				or not bool(state.get("overhead_health_bar", false))
+				or float(state.get("world_collision_radius", 0.0)) < 3.8
+			):
+				failures.append("Boss does not have 2x volume, matched collision and overhead HP bar")
 		enemy.take_damage(26, false, Vector3.RIGHT)
 		if enemy.ai_state == "dead":
 			failures.append("Full-health 3D enemy is still one-shot by the starting pistol: %s" % kind)

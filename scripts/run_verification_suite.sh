@@ -5,6 +5,26 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
+test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
+active_godot_pid=""
+active_watchdog_pid=""
+
+cleanup_active_test() {
+  if [[ -n "${active_watchdog_pid}" ]] && kill -0 "${active_watchdog_pid}" 2>/dev/null; then
+    kill -TERM "${active_watchdog_pid}" 2>/dev/null || true
+    wait "${active_watchdog_pid}" 2>/dev/null || true
+  fi
+  active_watchdog_pid=""
+  if [[ -n "${active_godot_pid}" ]] && kill -0 "${active_godot_pid}" 2>/dev/null; then
+    kill -TERM "${active_godot_pid}" 2>/dev/null || true
+    wait "${active_godot_pid}" 2>/dev/null || true
+  fi
+  active_godot_pid=""
+}
+
+trap cleanup_active_test EXIT
+trap 'cleanup_active_test; exit 130' INT
+trap 'cleanup_active_test; exit 143' TERM
 
 smoke_scenes=(
   verify_framework_health_flow
@@ -16,6 +36,8 @@ smoke_scenes=(
 
 core_scenes=(
   "${smoke_scenes[@]}"
+  verify_floor_plan_generator
+  verify_arrival_gate_floor_bundle_flow
   verify_player3d_animation_flow
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
@@ -63,12 +85,37 @@ is_visual_scene() {
 run_scene() {
   local scene_name="$1"
   local scene_path="res://tests/verification/${scene_name}.tscn"
+  local scene_result=0
   printf '\n[%s] %s\n' "${suite}" "${scene_name}"
   if is_visual_scene "${scene_name}"; then
-    "${godot_bin}" --path "${project_root}" --scene "${scene_path}"
+    "${godot_bin}" --path "${project_root}" --scene "${scene_path}" &
   else
-    "${godot_bin}" --headless --path "${project_root}" --scene "${scene_path}"
+    "${godot_bin}" --headless --path "${project_root}" --scene "${scene_path}" &
   fi
+  active_godot_pid="$!"
+  (
+    sleep "${test_timeout_seconds}"
+    if kill -0 "${active_godot_pid}" 2>/dev/null; then
+      printf '\nTIMEOUT %s after %ss; terminating PID %s\n' \
+        "${scene_name}" "${test_timeout_seconds}" "${active_godot_pid}" >&2
+      kill -TERM "${active_godot_pid}" 2>/dev/null || true
+      sleep 2
+      kill -KILL "${active_godot_pid}" 2>/dev/null || true
+    fi
+  ) &
+  active_watchdog_pid="$!"
+  if wait "${active_godot_pid}"; then
+    scene_result=0
+  else
+    scene_result=$?
+  fi
+  active_godot_pid=""
+  if kill -0 "${active_watchdog_pid}" 2>/dev/null; then
+    kill -TERM "${active_watchdog_pid}" 2>/dev/null || true
+  fi
+  wait "${active_watchdog_pid}" 2>/dev/null || true
+  active_watchdog_pid=""
+  return "${scene_result}"
 }
 
 case "${suite}" in

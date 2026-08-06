@@ -6,8 +6,10 @@ extends Dungeon3D
 
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
+const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
+const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
 )
@@ -21,6 +23,7 @@ const STAIR_ROOFTOP_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v001.glb"
 )
 const COMBAT_FLOOR_COUNT := 4
+const DEEPEST_PLANNED_FLOOR := 85
 const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
 const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
@@ -62,6 +65,10 @@ const CAMERA_OCCLUSION_RAY_OFFSETS := [
 	Vector3(0.0, 0.72, 0.0),
 ]
 const CAMERA_OCCLUSION_MIN_BLOCKED_RAYS := 2
+# 玩家移动时仍按物理帧刷新，保证贴墙镜头没有额外延迟；站立时降至30Hz，
+# 只削减肉眼不可见的重复物理查询，镜头位置和平滑仍保持每物理帧更新。
+const CAMERA_PROBE_MOVING_INTERVAL := 1.0 / 60.0
+const CAMERA_PROBE_IDLE_INTERVAL := 1.0 / 30.0
 
 var _active_facility_menu: CanvasLayer = null
 var _facility_nodes: Array[BaseFacility3D] = []
@@ -75,6 +82,8 @@ var _edge_kind_by_key: Dictionary = {}
 var _room_floor_index: Dictionary = {}
 var _floor_room_ids: Dictionary = {}
 var _floor_layout_templates: Dictionary = {}
+var _floor_plan_snapshots: Dictionary = {}
+var _floor_seed_gate_edges: Dictionary = {}
 var _floor_stages: Dictionary = {}
 var _active_transition_edge := ""
 var _transition_upper_floor := -1
@@ -90,13 +99,32 @@ var _tower_floor_label: Label
 var _tower_target_label: Label
 var _tower_elevator_label: Label
 var _loaded_floor_indices: Array[int] = []
+var _floor_visibility_poll_count := 0
+var _floor_visibility_apply_count := 0
 var _generated_floor_indices: Array[int] = []
+var _floor_plan_commit_reasons: Dictionary = {}
 var _floor_layout_plan_conflicts: Array[String] = []
+var _planned_floor_indices: Array[int] = []
+var _boss_descent_gate_edges: Dictionary = {}
+var _airlock_front_edges: Dictionary = {}
+var _boss_descent_key_count := 0
+var _level_elevator_edge := ""
+var _last_bundle_room_count := 0
+var _last_bundle_corridor_count := 0
+var _airlock_warning_overlay: Control
+var _pending_airlock_candidate: Dictionary = {}
+var _active_airlock_room_id := ""
+var _unloaded_segment_floor_indices: Array[int] = []
+var _last_unloaded_room_count := 0
+var _last_destroyed_world_loot_count := 0
 var _player_occlusion_meshes: Array[GeometryInstance3D] = []
 var _player_original_overlays: Dictionary = {}
 var _player_occlusion_material: StandardMaterial3D
 var _player_occluded := false
 var _camera_blocked_ray_count := 0
+var _camera_probe_accumulator := CAMERA_PROBE_IDLE_INTERVAL
+var _camera_probe_refresh_count := 0
+var _camera_probe_interval_s := CAMERA_PROBE_IDLE_INTERVAL
 var _camera_lower_wall_detected := false
 var _camera_lower_wall_distance_m := -1.0
 var _camera_lift_target_m := 0.0
@@ -112,6 +140,7 @@ var _corridor_wall_module_mesh: Mesh
 func _ready() -> void:
 	process_physics_priority = 100
 	super()
+	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
 	player.global_position = Vector3(
 		TOWER_GEOMETRY.CORE_CENTER_XZ.x - 20.0,
@@ -151,39 +180,38 @@ func _process(delta: float) -> void:
 
 
 func _build_floor_stages() -> void:
-	if not _floor_stages.is_empty():
-		return
-	var hole_sides_by_floor: Dictionary = {}
-	for floor_index in range(COMBAT_FLOOR_COUNT + 2):
-		hole_sides_by_floor[floor_index] = []
+	for floor_value in _floor_room_ids.keys():
+		_rebuild_floor_stage(int(floor_value))
+
+
+func _rebuild_floor_stage(floor_index: int) -> void:
+	var hole_sides: Array[String] = []
 	for declaration in _declared_edges:
 		if str(declaration.get("kind", "")) != "vertical":
 			continue
-		var upper_id := str(declaration["a"])
-		var lower_id := str(declaration["b"])
-		var side := str(declaration["side"])
-		# 楼梯只穿过上层楼板；下层是落地平台，不能重复挖洞。
-		var upper_floor_index := int(_room_floor_index.get(upper_id, 0))
-		if side not in (hole_sides_by_floor[upper_floor_index] as Array):
-			(hole_sides_by_floor[upper_floor_index] as Array).append(side)
-	for floor_index in range(COMBAT_FLOOR_COUNT + 2):
-		var kind := "rooftop" if floor_index == 0 else "facility" if floor_index == 1 else "combat"
-		var stage = FLOOR_STAGE_SCRIPT.new()
-		var typed_hole_sides: Array[String] = []
-		for hole_side in hole_sides_by_floor[floor_index]:
-			typed_hole_sides.append(str(hole_side))
-		stage.call("configure", floor_index, kind, typed_hole_sides)
-		stage.position.y = -FLOOR_HEIGHT * float(floor_index)
-		$GeneratedRooms.add_child(stage)
-		_floor_stages[floor_index] = stage
+		if int(_room_floor_index.get(str(declaration["a"]), -1)) != floor_index:
+			continue
+		var side := str(declaration.get("side", "west"))
+		if side not in hole_sides:
+			hole_sides.append(side)
+	var previous = _floor_stages.get(floor_index)
+	if previous != null and is_instance_valid(previous):
+		previous.queue_free()
+	var kind := "rooftop" if floor_index == 0 else "facility" if floor_index == 1 else "combat"
+	var stage = FLOOR_STAGE_SCRIPT.new()
+	stage.call("configure", floor_index, kind, hole_sides)
+	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
+	$GeneratedRooms.add_child(stage)
+	_floor_stages[floor_index] = stage
 
 
 func _update_floor_visibility_state() -> void:
 	if _floor_stages.is_empty() or player == null:
 		return
+	_floor_visibility_poll_count += 1
 	var current_floor := int(_room_floor_index.get(
 		_current_room_id,
-		clampi(int(round(-player.global_position.y / FLOOR_HEIGHT)), 0, COMBAT_FLOOR_COUNT + 1)
+		maxi(0, int(round(-player.global_position.y / FLOOR_HEIGHT)))
 	))
 	var active_connector: Node3D = null
 	var active_edge := ""
@@ -212,10 +240,17 @@ func _update_floor_visibility_state() -> void:
 			if _transition_progress < 0.5
 			else _transition_lower_floor
 		)
-	_loaded_floor_indices.clear()
-	for candidate_index in range(COMBAT_FLOOR_COUNT + 2):
+	var next_loaded_floor_indices: Array[int] = []
+	for candidate_value in _floor_stages.keys():
+		var candidate_index := int(candidate_value)
 		if absi(candidate_index - stream_center) <= 2:
-			_loaded_floor_indices.append(candidate_index)
+			next_loaded_floor_indices.append(candidate_index)
+	# 楼梯过渡值仍可每帧更新，但只有加载集合真正改变时才重写所有楼层、
+	# 66个房间和设施的 visible/process_mode。普通站立不再重复全表施工。
+	if next_loaded_floor_indices == _loaded_floor_indices:
+		return
+	_loaded_floor_indices.assign(next_loaded_floor_indices)
+	_floor_visibility_apply_count += 1
 
 	for floor_index in _floor_stages.keys():
 		var stage = _floor_stages[floor_index]
@@ -232,7 +267,7 @@ func _update_floor_visibility_state() -> void:
 
 	for room in _rooms:
 		var room_floor := int(_room_floor_index.get(room.room_id, current_floor))
-		var streamed := int(room.get_room_snapshot().get("stream_state", 0)) > 0
+		var streamed := room.is_streamed()
 		var loaded := room_floor in _loaded_floor_indices
 		if not loaded:
 			room.visible = false
@@ -247,13 +282,30 @@ func _update_floor_visibility_state() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
+	var planar_velocity := Vector2(player.velocity.x, player.velocity.z)
+	var player_is_moving := planar_velocity.length_squared() > 0.01
+	_camera_probe_interval_s = (
+		CAMERA_PROBE_MOVING_INTERVAL
+		if player_is_moving
+		else CAMERA_PROBE_IDLE_INTERVAL
+	)
+	_camera_probe_accumulator += delta
+	var refresh_camera_probes := (
+		_camera_probe_accumulator + 0.0001 >= _camera_probe_interval_s
+	)
+	if refresh_camera_probes:
+		_camera_probe_accumulator = fmod(
+		_camera_probe_accumulator, _camera_probe_interval_s
+		)
+		_camera_probe_refresh_count += 1
 	# v0.1：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
-	_update_camera_lower_wall_lift(delta)
+	_update_camera_lower_wall_lift(delta, refresh_camera_probes)
 	_apply_indoor_camera_pose()
 	# v0.1：墙体透明淡化会在摄像机碰撞时留下概率性消失状态。
 	# 摄像机现在只沿固定轴缩短距离，墙材质永不被运行时改写。
 	_update_floor_visibility_state()
-	_update_camera_occlusion_silhouette()
+	if refresh_camera_probes:
+		_update_camera_occlusion_silhouette()
 
 
 func _apply_indoor_camera_pose() -> void:
@@ -272,11 +324,12 @@ func _apply_indoor_camera_pose() -> void:
 	player.camera.look_at(look_target, Vector3.UP)
 
 
-func _update_camera_lower_wall_lift(delta: float) -> void:
+func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) -> void:
 	# 开门只改变通行碰撞，不得全局跳过后墙探针；否则角色站在开放的
 	# 门附近时，同一小房间处于镜头后方的水平墙也会被错误忽略。
-	_camera_lower_wall_distance_m = _find_lower_camera_wall_distance()
-	_camera_lower_wall_detected = _camera_lower_wall_distance_m >= 0.0
+	if refresh_probe:
+		_camera_lower_wall_distance_m = _find_lower_camera_wall_distance()
+		_camera_lower_wall_detected = _camera_lower_wall_distance_m >= 0.0
 	_camera_lift_target_m = 0.0
 	_camera_trailing_target_m = CAMERA_DEFAULT_TRAILING_M
 	if _camera_lower_wall_detected:
@@ -469,9 +522,16 @@ func _build_records() -> void:
 	_room_floor_index.clear()
 	_floor_room_ids.clear()
 	_floor_layout_templates.clear()
+	_floor_plan_snapshots.clear()
+	_floor_seed_gate_edges.clear()
 	_vertical_arrival_open.clear()
 	_generated_floor_indices.clear()
+	_floor_plan_commit_reasons.clear()
 	_floor_layout_plan_conflicts.clear()
+	_planned_floor_indices.clear()
+	_boss_descent_gate_edges.clear()
+	_airlock_front_edges.clear()
+	_level_elevator_edge = ""
 
 	var core_center := Vector3(
 		TOWER_GEOMETRY.CORE_CENTER_XZ.x,
@@ -489,177 +549,73 @@ func _build_records() -> void:
 	_declare_edge("start", "facility", "vertical", "west", "west", "west")
 	_descent_side_sequence.append("west")
 
-	var layout_rng := RandomNumberGenerator.new()
-	layout_rng.seed = run_seed ^ 0x544F5745
-	var previous_exit_id := "facility"
-	for floor_number in range(1, COMBAT_FLOOR_COUNT + 1):
-		var physical_floor_index := floor_number + 1
-		var floor_y := -FLOOR_HEIGHT * float(physical_floor_index)
-		var specs := (
-			_boss_floor_specs(floor_number)
-			if floor_number == COMBAT_FLOOR_COUNT
-			else _normal_floor_specs(floor_number, layout_rng)
-		)
-		_floor_layout_templates[physical_floor_index] = (
-			"boss_90m_compact_6x5"
-			if floor_number == COMBAT_FLOOR_COUNT
-			else "compact_6x5_ring_12_%s" % (
-				"east_west" if floor_number % 2 == 1 else "west_east"
-			)
-		)
-		var ids_by_key: Dictionary = {}
-		for spec in specs:
-			var spec_data := spec as Dictionary
-			var id := str(spec_data["id"])
-			ids_by_key[str(spec_data["key"])] = id
-			var planar := spec_data["position"] as Vector2
-			var parent_key := str(spec_data.get("parent_key", ""))
-			var parent_id := previous_exit_id if parent_key.is_empty() else str(ids_by_key[parent_key])
-			_append_tower_record(
-				id,
-				str(spec_data["type"]),
-				"tower_cell",
-				Vector3(planar.x, floor_y, planar.y),
-				parent_id,
-				physical_floor_index,
-				str(spec_data["role"]),
-				spec_data.get(
-					"dimensions",
-					Vector2(
-						TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
-						TOWER_GEOMETRY.COMBAT_ROOM_SIZE_Y_M
-					)
-				) as Vector2,
-				spec_data.get("open_wall_directions", []) as Array
-			)
-		var entry_id := str(ids_by_key["entry"])
-		var exit_id := str(ids_by_key["exit"])
-		var stair_side := "east" if floor_number % 2 == 1 else "west"
-		# v0.1：上下两端都把房间放在核心内侧，因此同一楼梯的两扇门
-		# 使用相同世界侧向；不再靠“反向门 + 房间刷在外侧”对齐。
-		var upper_door_side := stair_side
-		_declare_edge(
-			previous_exit_id,
-			entry_id,
-			"vertical",
-			stair_side,
-			upper_door_side,
-			stair_side
-		)
-		for spec in specs:
-			var spec_data := spec as Dictionary
-			var parent_key := str(spec_data.get("parent_key", ""))
-			if parent_key.is_empty():
-				continue
-			_declare_edge(
-				str(ids_by_key[parent_key]),
-				str(spec_data["id"]),
-				"horizontal"
-			)
-		_descent_side_sequence.append(stair_side)
-		previous_exit_id = exit_id
+	# 纯数据规划可提前计算和存档；场景节点只保留99层与98层入口壳。
+	# 其余房间、走廊和下一段楼梯均由下端到达门原子提交。
+	for displayed_floor_number in range(98, DEEPEST_PLANNED_FLOOR - 1, -1):
+		var sequence_index := 99 - displayed_floor_number
+		var physical_floor_index := sequence_index + 1
+		var stair_side := "east" if sequence_index % 2 == 1 else "west"
+		var plan := FLOOR_PLAN_GENERATOR.generate({
+			"run_seed": run_seed,
+			"floor_number": displayed_floor_number,
+			"floor_index": physical_floor_index,
+			"sequence_index": sequence_index,
+			"entry_side": stair_side,
+			"boss_floor": displayed_floor_number % 5 == 0,
+		})
+		_floor_plan_snapshots[physical_floor_index] = plan.duplicate(true)
+		_floor_layout_templates[physical_floor_index] = str(plan.get("layout_id", ""))
+		_planned_floor_indices.append(physical_floor_index)
+		if not bool(plan.get("valid", false)):
+			for error_value in plan.get("validation_errors", []):
+				_floor_layout_plan_conflicts.append(
+					"floor %d generator: %s" % [physical_floor_index, str(error_value)]
+				)
+	# 初始只创建98层15×15入口安全屋。预置前门目标，保证壳体生成时门洞完整，
+	# 但Hub节点和通道在到达门打开之前都不存在。
+	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
+	var first_entry := _plan_spec(first_plan, "entry")
+	var first_hub := _plan_spec(first_plan, "hub")
+	_append_plan_room_record(first_plan, first_entry, "facility")
+	var entry_record := _find_record(str(first_entry.get("id", "")))
+	var front_direction := _direction_between(
+		entry_record.get("position", Vector3.ZERO) as Vector3,
+		_plan_world_position(first_plan, first_hub)
+	)
+	(entry_record["doors"] as Array).append(front_direction)
+	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_hub.get("id", ""))
+	var first_vertical_edge := _edge_key("facility", str(first_entry.get("id", "")))
+	_declare_edge("facility", str(first_entry.get("id", "")), "vertical", "east", "east", "east")
+	_floor_seed_gate_edges[first_vertical_edge] = 2
+	_descent_side_sequence.append("east")
 	_validate_floor_layout_plans()
 
 
-func _normal_floor_specs(
-	floor_number: int,
-	layout_rng: RandomNumberGenerator
-) -> Array[Dictionary]:
-	var rotation_steps := 0 if floor_number % 2 == 1 else 2
-	var positions := {
-		# v0.1：东侧楼梯下接口为(35, 2.5)，入口大厅在门的左侧/
-		# 核心内侧，东门精确落在接口；不再把关卡刷到门外右侧。
-		"entry": Vector2(27.5, 2.5),
-		# 30×25m 房间按 6×5 个 5m 模块重排。入口后的主环向北退出
-		# 东侧楼梯折返占位；入口大厅到枢纽保留25m模块化直走廊。
-		"hub": Vector2(30.0, -42.5),
-		"main_02": Vector2(65.0, -42.5),
-		"main_03": Vector2(65.0, -72.5),
-		"main_04": Vector2(30.0, -72.5),
-		# 为了让固定西侧楼梯接口仍落在 x=-30m，回环西段保留一条
-		# 20m 战术走廊，其余主路/支路均为 5m。
-		"main_05": Vector2(-20.0, -72.5),
-		"main_06": Vector2(-20.0, -42.5),
-		# 15m出口大厅西门落在核心西接口(-30, 2.5)。
-		"exit": Vector2(-22.5, 2.5),
-		# 支路从主路东端继续向核心外缘展开。旧布局把 branch_01 放在
-		# (65, 7.5)，会侵入东侧楼梯间的折返围护；房间延迟显现后才暴露穿模。
-		"branch_01": Vector2(100.0, -42.5),
-		"branch_02": Vector2(100.0, -12.5),
-		"branch_03": Vector2(100.0, 37.5),
-		"elevator": Vector2(65.0, 37.5),
-	}
-	var content_types: Array[String] = [
-		"COMBAT", "COMBAT", "EVENT", "STORAGE", "SCAVENGE", "ELITE", "TRAP"
-	]
-	for shuffle_index in range(content_types.size() - 1, 0, -1):
-		var swap_index := layout_rng.randi_range(0, shuffle_index)
-		var temporary := content_types[shuffle_index]
-		content_types[shuffle_index] = content_types[swap_index]
-		content_types[swap_index] = temporary
-	var raw_specs: Array[Dictionary] = [
-		{
-			"key": "entry", "id": "floor_%02d_entry" % floor_number,
-			"type": "STAIR_LOBBY", "role": "stair_entry",
-			"dimensions": Vector2(
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M
-			),
-		},
-		{"key": "hub", "id": "floor_%02d_hub" % floor_number, "type": "COMBAT", "role": "hub", "parent_key": "entry"},
-		{"key": "main_02", "id": "floor_%02d_main_02" % floor_number, "type": content_types[0], "role": "main", "parent_key": "hub"},
-		{"key": "main_03", "id": "floor_%02d_main_03" % floor_number, "type": content_types[1], "role": "main", "parent_key": "main_02"},
-		{"key": "main_04", "id": "floor_%02d_main_04" % floor_number, "type": content_types[2], "role": "main", "parent_key": "main_03"},
-		{"key": "main_05", "id": "floor_%02d_main_05" % floor_number, "type": content_types[3], "role": "main", "parent_key": "main_04"},
-		{"key": "main_06", "id": "floor_%02d_main_06" % floor_number, "type": content_types[4], "role": "main", "parent_key": "main_05"},
-		{
-			"key": "exit", "id": "floor_%02d_exit" % floor_number,
-			"type": "STAIR_LOBBY", "role": "stair_exit", "parent_key": "main_06",
-			"dimensions": Vector2(
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M
-			),
-		},
-		{"key": "branch_01", "id": "floor_%02d_branch_01" % floor_number, "type": content_types[5], "role": "branch", "parent_key": "main_02"},
-		{"key": "branch_02", "id": "floor_%02d_branch_02" % floor_number, "type": content_types[6], "role": "branch", "parent_key": "branch_01"},
-		{"key": "branch_03", "id": "floor_%02d_branch_03" % floor_number, "type": "STORAGE", "role": "branch", "parent_key": "branch_02"},
-		{"key": "elevator", "id": "floor_%02d_elevator" % floor_number, "type": "SCAVENGE", "role": "elevator_access", "parent_key": "branch_03"},
-	]
-	for spec in raw_specs:
-		var key := str(spec["key"])
-		spec["position"] = _rotate_floor_point(positions[key] as Vector2, rotation_steps)
-	return raw_specs
+func _plan_spec(plan: Dictionary, key: String) -> Dictionary:
+	for value in plan.get("rooms", []):
+		var spec := value as Dictionary
+		if str(spec.get("key", "")) == key:
+			return spec
+	return {}
 
 
-func _boss_floor_specs(floor_number: int) -> Array[Dictionary]:
-	return [
-		{
-			"key": "entry", "id": "floor_%02d_entry" % floor_number,
-			"type": "STAIR_LOBBY", "role": "stair_entry",
-			"position": Vector2(-22.5, 2.5),
-			"dimensions": Vector2(
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M,
-				TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M
-			),
-		},
-		{"key": "hub", "id": "floor_%02d_hub" % floor_number, "type": "ELITE", "role": "hub", "parent_key": "entry", "position": Vector2(-20.0, -22.5)},
-		{"key": "main_02", "id": "floor_%02d_main_02" % floor_number, "type": "COMBAT", "role": "main", "parent_key": "hub", "position": Vector2(-55.0, -22.5)},
-		{"key": "prep", "id": "floor_%02d_boss_prep" % floor_number, "type": "UPGRADE", "role": "boss_prep", "parent_key": "main_02", "position": Vector2(-55.0, 42.5)},
-		{
-			"key": "exit", "id": "extraction", "type": "BOSS", "role": "boss",
-			# 90m Boss区向东移开西侧入层楼梯的保留占位。
-			"parent_key": "prep", "position": Vector2(35.0, 45.0),
-			"dimensions": Vector2(
-				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M,
-				TOWER_GEOMETRY.BOSS_ARENA_SIZE_M
-			),
-		},
-		{"key": "branch_01", "id": "floor_%02d_branch_01" % floor_number, "type": "EVENT", "role": "branch", "parent_key": "hub", "position": Vector2(15.0, -22.5)},
-		{"key": "branch_02", "id": "floor_%02d_branch_02" % floor_number, "type": "COMBAT", "role": "branch", "parent_key": "branch_01", "position": Vector2(50.0, -22.5)},
-		{"key": "branch_03", "id": "floor_%02d_branch_03" % floor_number, "type": "STORAGE", "role": "branch", "parent_key": "branch_02", "position": Vector2(50.0, -52.5)},
-		{"key": "branch_04", "id": "floor_%02d_branch_04" % floor_number, "type": "TRAP", "role": "branch", "parent_key": "branch_03", "position": Vector2(15.0, -52.5)},
-		{"key": "elevator", "id": "floor_%02d_elevator" % floor_number, "type": "SCAVENGE", "role": "elevator_access", "parent_key": "branch_04", "position": Vector2(-20.0, -52.5)},
-	]
+func _plan_world_position(plan: Dictionary, spec: Dictionary) -> Vector3:
+	var planar := spec.get("position", Vector2.ZERO) as Vector2
+	return Vector3(planar.x, -FLOOR_HEIGHT * float(int(plan.get("floor_index", 2))), planar.y)
+
+
+func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: String) -> void:
+	_append_tower_record(
+		str(spec.get("id", "")), str(spec.get("type", "COMBAT")), "tower_cell",
+		_plan_world_position(plan, spec), parent_id, int(plan.get("floor_index", 2)),
+		str(spec.get("role", "room")),
+		spec.get("dimensions", Vector2(30.0, 25.0)) as Vector2,
+		spec.get("open_wall_directions", []) as Array
+	)
+	var record := _records.back() as Dictionary
+	record["floor_layout_id"] = str(plan.get("layout_id", ""))
+	record["floor_plan_key"] = str(spec.get("key", ""))
+	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
 
 
 func _append_tower_record(
@@ -707,7 +663,6 @@ func _append_tower_record(
 
 
 func _validate_floor_layout_plans() -> void:
-	_floor_layout_plan_conflicts.clear()
 	var records_by_floor: Dictionary = {}
 	for record_value in _records:
 		var record := record_value as Dictionary
@@ -839,29 +794,74 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 			"requires_key": false,
 			"triggers_fate": false,
 		}
-	# 98层入口→第一战斗枢纽是本局第一次正式探索门：免费开启，
-	# 但保留一次命运选择，建立“下楼—定本层构筑方向”的节奏。
-	if edge == _edge_key("floor_01_entry", "floor_01_hub"):
+	if _boss_descent_gate_edges.has(edge):
 		return {
-			"requires_clear": true,
+			"requires_clear": false,
 			"requires_key": false,
-			"triggers_fate": true,
+			"triggers_fate": false,
+		}
+	if _airlock_front_edges.has(edge):
+		return {
+			"requires_clear": false,
+			"requires_key": false,
+			"triggers_fate": false,
+		}
+	# 每层入口安全屋的前门都是 floor_seed_gate：免费开启，并在成功交互后
+	# 原子提交该层规划。命运选择在下端到达门真正提交后触发，不能在楼梯
+	# 上端门先触发或提前把下一层标成已生成。
+	if _floor_seed_gate_edges.has(edge):
+		return {
+			"requires_clear": false,
+			"requires_key": false,
+			"triggers_fate": false,
 		}
 	return super(from_room_id, target_room_id)
 
 
-func _rotate_floor_point(point: Vector2, rotation_steps: int) -> Vector2:
-	var center := TOWER_GEOMETRY.CORE_CENTER_XZ
-	var result := point - center
-	for _step in range(posmod(rotation_steps, 4)):
-		result = Vector2(-result.y, result.x)
-	return result + center
+func _try_open_room_door(target_room_id: String) -> bool:
+	var edge := _edge_key(_current_room_id, target_room_id)
+	if _airlock_front_edges.has(edge) and _current_room_id == _active_airlock_room_id:
+		_finalize_airlock_commit(int(_airlock_front_edges[edge]))
+	if _boss_descent_gate_edges.has(edge) and not bool(_open_edges.get(edge, false)):
+		if _boss_descent_key_count <= 0:
+			status_label.text = "需要击败本段Boss并取得下行权限"
+			return false
+	var opened := super(target_room_id)
+	if opened and _boss_descent_gate_edges.has(edge):
+		_boss_descent_key_count = maxi(0, _boss_descent_key_count - 1)
+	return opened
 
 
-func _side_for_point(point: Vector2) -> String:
-	if absf(point.x) >= absf(point.y):
-		return "east" if point.x > 0.0 else "west"
-	return "south" if point.y > 0.0 else "north"
+func _door_function_for_edge(a: String, b: String) -> String:
+	var edge := _edge_key(a, b)
+	if edge == _edge_key("start", "facility"):
+		return "base_transit"
+	if _boss_descent_gate_edges.has(edge):
+		return "boss_descent"
+	if _airlock_front_edges.has(edge):
+		return "airlock_exit"
+	if _floor_seed_gate_edges.has(edge):
+		return "floor_arrival"
+	if str(_edge_kind_by_key.get(edge, "horizontal")) == "vertical":
+		return "vertical_transit"
+	return "room_progression"
+
+
+func _door_function_counts() -> Dictionary:
+	var counts := {
+		"base_transit": 0,
+		"floor_arrival": 0,
+		"room_progression": 0,
+		"boss_descent": 0,
+		"airlock_exit": 0,
+		"vertical_transit": 0,
+	}
+	for declaration in _declared_edges:
+		var function_id := _door_function_for_edge(
+			str(declaration.get("a", "")), str(declaration.get("b", ""))
+		)
+		counts[function_id] = int(counts.get(function_id, 0)) + 1
+	return counts
 
 
 func _build_topology() -> void:
@@ -1249,6 +1249,14 @@ func _build_tower_horizontal_corridor(
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
 	$GeneratedCorridors.add_child(connector)
 	_corridor_by_edge[edge] = connector
+	# Boss竞技场与下行大厅共墙，两个门洞重合即构成通道；保留连接器状态节点，
+	# 但不生成零长度地板或墙碰撞，避免透明阻挡。
+	if length <= 0.05:
+		connector.set_meta("module_count", 0)
+		connector.set_meta("floor_module_count", 0)
+		connector.set_meta("wall_module_count", 0)
+		connector.set_meta("module_coverage_length_m", 0.0)
+		return
 
 	# 门到门距离始终是5m网格的整数倍。地面与双侧墙按实际长度逐格排布，
 	# 但重复模块由 MultiMesh 批量提交，避免随机层一次生成后节点数随通道长度暴涨。
@@ -1695,23 +1703,128 @@ func _try_open_nearby_stair_arrival() -> bool:
 	var candidate := _find_nearby_stair_arrival()
 	if candidate.is_empty():
 		return false
+	return _activate_stair_arrival(candidate)
+
+
+func _activate_stair_arrival(candidate: Dictionary) -> bool:
 	var edge := str(candidate.get("edge", ""))
 	var lower_room := candidate.get("lower_room") as DungeonRoom3D
 	var lower_door := candidate.get("lower_door") as RoomDoor3D
 	if edge.is_empty() or lower_room == null or lower_door == null:
 		return false
+	if _boss_descent_gate_edges.has(edge):
+		_pending_airlock_candidate = candidate.duplicate()
+		_show_airlock_warning()
+		return true
+	var floor_index := int(_room_floor_index.get(lower_room.room_id, 0))
+	var bundle_floor_index := int(_floor_seed_gate_edges.get(edge, -1))
+	if bundle_floor_index >= 0 and not _commit_floor_bundle(bundle_floor_index, "arrival_gate"):
+		return true
 	_vertical_arrival_open[edge] = true
 	lower_door.set_open(true)
 	_on_room_entered(lower_room)
-	var floor_index := int(_room_floor_index.get(lower_room.room_id, 0))
-	status_label.text = "%d层入口门已开启 · 安全大厅已激活" % (
-		_floor_number_from_index(floor_index)
-	)
+	if bundle_floor_index >= 0:
+		var plan := _floor_plan_snapshots.get(bundle_floor_index, {}) as Dictionary
+		status_label.text = "%d层已建立 · 主路%d房 · 支线%d条" % [
+			int(plan.get("floor_number", _floor_number_from_index(bundle_floor_index))),
+			int(plan.get("main_path_content_count", 0)),
+			int(plan.get("branch_count", 0)),
+		]
+		call_deferred("_show_door_fate_choices")
+	else:
+		status_label.text = "%d层交通门已开启 · 未触发关卡生成" % _floor_number_from_index(floor_index)
 	return true
 
 
 func try_open_stair_arrival_for_test() -> bool:
 	return _try_open_nearby_stair_arrival()
+
+
+func activate_arrival_between_for_test(upper_room_id: String, lower_room_id: String) -> bool:
+	var edge := _edge_key(upper_room_id, lower_room_id)
+	var connector := _corridor_by_edge.get(edge) as Node3D
+	var lower_room := _room_by_id.get(lower_room_id) as DungeonRoom3D
+	if connector == null or lower_room == null:
+		return false
+	lower_room.ensure_shell_built()
+	var door_sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
+	var lower_side := str(door_sides.get(lower_room_id, connector.get_meta("lower_door_side", "west")))
+	var lower_door := lower_room.get_door_node(lower_side)
+	if lower_door == null:
+		return false
+	return _activate_stair_arrival({
+		"edge": edge,
+		"connector": connector,
+		"lower_room": lower_room,
+		"lower_door": lower_door,
+		"lower_room_id": lower_room_id,
+	})
+
+
+func _show_airlock_warning() -> void:
+	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
+		return
+	var panel := PanelContainer.new()
+	panel.name = "SegmentAirlockWarning"
+	panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	panel.custom_minimum_size = Vector2(520.0, 220.0)
+	var box := VBoxContainer.new()
+	panel.add_child(box)
+	var title := Label.new()
+	title.text = "跨段隔离确认"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(title)
+	var detail := Label.new()
+	detail.text = "进入隔离间后，未拾取物将永久丢失；旧段房间、敌人和碰撞将卸载。\n默认取消，确认后才打开下端门。"
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(detail)
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	box.add_child(buttons)
+	var cancel_button := Button.new()
+	cancel_button.text = "取消"
+	cancel_button.pressed.connect(cancel_airlock_transition)
+	buttons.add_child(cancel_button)
+	var confirm_button := Button.new()
+	confirm_button.text = "确认进入"
+	confirm_button.pressed.connect(confirm_airlock_transition)
+	buttons.add_child(confirm_button)
+	$HUD.add_child(panel)
+	_airlock_warning_overlay = panel
+	cancel_button.grab_focus()
+
+
+func cancel_airlock_transition() -> void:
+	_pending_airlock_candidate.clear()
+	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
+		_airlock_warning_overlay.queue_free()
+	_airlock_warning_overlay = null
+	status_label.text = "已取消跨段，下端门保持关闭"
+
+
+func confirm_airlock_transition() -> bool:
+	if _pending_airlock_candidate.is_empty():
+		return false
+	var candidate := _pending_airlock_candidate.duplicate()
+	_pending_airlock_candidate.clear()
+	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
+		_airlock_warning_overlay.queue_free()
+	_airlock_warning_overlay = null
+	var edge := str(candidate.get("edge", ""))
+	var lower_room := candidate.get("lower_room") as DungeonRoom3D
+	var lower_door := candidate.get("lower_door") as RoomDoor3D
+	if edge.is_empty() or lower_room == null or lower_door == null:
+		return false
+	var floor_index := int(_room_floor_index.get(lower_room.room_id, 0))
+	if not _commit_floor_bundle(floor_index, "boss_airlock_confirm"):
+		return false
+	_vertical_arrival_open[edge] = true
+	lower_door.set_open(true)
+	_active_airlock_room_id = lower_room.room_id
+	_on_room_entered(lower_room)
+	status_label.text = "隔离间已开启 · 穿过后旧段未拾取物永久丢失"
+	return true
 
 
 func _update_corridor_streaming(current_id: String) -> void:
@@ -1798,13 +1911,12 @@ func _is_locked_stair_arrival_room(room_id: String) -> bool:
 
 
 func _update_room_streaming(current_id: String) -> void:
-	_ensure_floor_generated(int(_room_floor_index.get(current_id, -1)))
 	super(current_id)
 	_update_floor_visibility_state()
 	_refresh_facility_runtime()
 
 
-func _ensure_floor_generated(floor_index: int) -> void:
+func _ensure_floor_generated(floor_index: int, reason := "runtime") -> void:
 	if floor_index < 0 or floor_index in _generated_floor_indices:
 		return
 	# 楼层首次触发时，以整层为最小布局事务：一次冻结全部房间组件坐标、
@@ -1815,6 +1927,11 @@ func _ensure_floor_generated(floor_index: int) -> void:
 		if room == null:
 			continue
 		room.set_meta("floor_plan_generated", true)
+		room.set_meta("floor_plan_commit_reason", reason)
+		room.set_meta(
+			"floor_layout_id",
+			str((_floor_plan_snapshots.get(floor_index, {}) as Dictionary).get("layout_id", ""))
+		)
 		room.set_meta("floor_plan_position", room.position)
 		room.set_meta("floor_plan_dimensions", room.get_dimensions())
 	for edge_value in _corridor_by_edge.keys():
@@ -1832,6 +1949,310 @@ func _ensure_floor_generated(floor_index: int) -> void:
 		connector.set_meta("floor_plan_generated_%d" % floor_index, true)
 	_generated_floor_indices.append(floor_index)
 	_generated_floor_indices.sort()
+	_floor_plan_commit_reasons[floor_index] = reason
+
+
+func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
+	if floor_index in _generated_floor_indices:
+		return true
+	var plan := _floor_plan_snapshots.get(floor_index, {}) as Dictionary
+	if plan.is_empty() or not bool(plan.get("valid", false)):
+		status_label.text = "楼层规划校验失败，入口门保持关闭"
+		return false
+	var before_rooms := _rooms.size()
+	var before_corridors := _corridor_by_edge.size()
+	var ids_by_key: Dictionary = {}
+	for value in plan.get("rooms", []):
+		var spec := value as Dictionary
+		ids_by_key[str(spec.get("key", ""))] = str(spec.get("id", ""))
+	# 入口壳已由上一层事务创建；本次只补齐其余房间。
+	for value in plan.get("rooms", []):
+		var spec := value as Dictionary
+		if str(spec.get("key", "")) == "entry":
+			continue
+		var parent_key := str(spec.get("parent_key", ""))
+		_append_plan_room_record(plan, spec, str(ids_by_key.get(parent_key, "")))
+	for value in plan.get("rooms", []):
+		var spec := value as Dictionary
+		var parent_key := str(spec.get("parent_key", ""))
+		if parent_key.is_empty():
+			continue
+		_declare_and_register_edge(
+			str(ids_by_key.get(parent_key, "")), str(spec.get("id", "")), "horizontal"
+		)
+
+	var current_exit_id := str(ids_by_key.get("exit", ""))
+	var next_floor_index := floor_index + 1
+	var next_plan := _floor_plan_snapshots.get(next_floor_index, {}) as Dictionary
+	if not next_plan.is_empty():
+		_append_next_arrival_shell(plan, current_exit_id, next_plan)
+
+	# 记录、拓扑全部有效后才实例化，避免半层节点留在场景树中。
+	for record in _records:
+		var room_id := str(record.get("id", ""))
+		if not _room_by_id.has(room_id):
+			_instantiate_dynamic_room(record)
+	_plan_room_layout()
+	for declaration in _declared_edges:
+		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
+		if _corridor_by_edge.has(edge):
+			continue
+		var parent := _room_by_id.get(str(declaration["a"])) as DungeonRoom3D
+		var child := _room_by_id.get(str(declaration["b"])) as DungeonRoom3D
+		if parent != null and child != null:
+			_build_corridor(parent, child, _corridor_by_edge.size())
+	minimap.configure(_records, _open_edges)
+	_rebuild_floor_stage(floor_index)
+	if _floor_room_ids.has(next_floor_index):
+		_rebuild_floor_stage(next_floor_index)
+	_ensure_floor_generated(floor_index, reason)
+	_last_bundle_room_count = _rooms.size() - before_rooms
+	_last_bundle_corridor_count = _corridor_by_edge.size() - before_corridors
+	if bool(plan.get("boss_floor", false)) and _extraction == null:
+		var boss_room := _room_by_id.get("extraction") as DungeonRoom3D
+		if boss_room != null:
+			_extraction = _create_extraction_beacon(boss_room, "BOSS_KILL", 30.0, true, Vector3.ZERO)
+			_conditional_extractions["BOSS_KILL"] = _extraction
+	if int(plan.get("floor_number", 0)) == 95 and not _elevator_facilities_by_floor.has(95):
+		var exit_room := _room_by_id.get(current_exit_id) as DungeonRoom3D
+		if exit_room != null:
+			var pose := _elevator_wall_pose(exit_room)
+			var level_elevator := _create_standalone_elevator(
+				95, current_exit_id, pose["position"] as Vector3, float(pose["rotation_y"])
+			)
+			level_elevator.set_meta("unique_level_elevator", true)
+	_update_floor_visibility_state()
+	return true
+
+
+func _append_next_arrival_shell(
+	current_plan: Dictionary, current_exit_id: String, next_plan: Dictionary
+) -> void:
+	var next_entry := (_plan_spec(next_plan, "entry") as Dictionary).duplicate(true)
+	var next_hub := _plan_spec(next_plan, "hub")
+	var upper_floor_number := int(current_plan.get("floor_number", 98))
+	var next_floor_index := int(next_plan.get("floor_index", 3))
+	var lower_endpoint_id := str(next_entry.get("id", ""))
+	if upper_floor_number % 5 == 0:
+		var original_position := next_entry.get("position", Vector2.ZERO) as Vector2
+		var hub_position := next_hub.get("position", Vector2.ZERO) as Vector2
+		var toward_hub := (hub_position - original_position).normalized()
+		next_entry["position"] = original_position + toward_hub * 20.0
+		lower_endpoint_id = "airlock_%d_%d" % [upper_floor_number, upper_floor_number - 1]
+		_append_tower_record(
+			lower_endpoint_id, "STAIR_LOBBY", "tower_cell",
+			Vector3(original_position.x, -FLOOR_HEIGHT * float(next_floor_index), original_position.y),
+			current_exit_id, next_floor_index, "segment_airlock", Vector2(15.0, 15.0)
+		)
+	_append_plan_room_record(next_plan, next_entry, lower_endpoint_id)
+	var next_entry_id := str(next_entry.get("id", ""))
+	var entry_record := _find_record(next_entry_id)
+	var front_direction := _direction_between(
+		entry_record.get("position", Vector3.ZERO) as Vector3,
+		_plan_world_position(next_plan, next_hub)
+	)
+	(entry_record["doors"] as Array).append(front_direction)
+	(entry_record["door_targets"] as Dictionary)[front_direction] = str(next_hub.get("id", ""))
+	if lower_endpoint_id != next_entry_id:
+		_declare_and_register_edge(lower_endpoint_id, next_entry_id, "horizontal")
+		_airlock_front_edges[_edge_key(lower_endpoint_id, next_entry_id)] = next_floor_index
+	var side := str(current_plan.get("exit_side", "west"))
+	_declare_and_register_edge(current_exit_id, lower_endpoint_id, "vertical", side, side, side)
+	var vertical_edge := _edge_key(current_exit_id, lower_endpoint_id)
+	_floor_seed_gate_edges[vertical_edge] = next_floor_index
+	_descent_side_sequence.append(side)
+	if upper_floor_number % 5 == 0:
+		_boss_descent_gate_edges[vertical_edge] = next_floor_index
+	if upper_floor_number == 95:
+		_level_elevator_edge = vertical_edge
+
+
+func _declare_and_register_edge(
+	a: String, b: String, kind: String, side := "", a_door_side := "", b_door_side := ""
+) -> void:
+	var edge := _edge_key(a, b)
+	if not _edge_kind_by_key.has(edge):
+		_declare_edge(a, b, kind, side, a_door_side, b_door_side)
+	_register_edge_topology(a, b, kind, side, a_door_side, b_door_side)
+
+
+func _register_edge_topology(
+	a: String, b: String, kind: String, side := "", a_door_side := "", b_door_side := ""
+) -> void:
+	if not _room_neighbors.has(a):
+		_room_neighbors[a] = []
+	if not _room_neighbors.has(b):
+		_room_neighbors[b] = []
+	if b not in (_room_neighbors[a] as Array):
+		(_room_neighbors[a] as Array).append(b)
+	if a not in (_room_neighbors[b] as Array):
+		(_room_neighbors[b] as Array).append(a)
+	var edge := _edge_key(a, b)
+	if not _open_edges.has(edge):
+		_open_edges[edge] = false
+	var a_record := _find_record(a)
+	var b_record := _find_record(b)
+	if a_record.is_empty() or b_record.is_empty():
+		return
+	var a_side := a_door_side
+	var b_side := b_door_side
+	if kind == "vertical":
+		a_side = side if a_side.is_empty() else a_side
+		b_side = side if b_side.is_empty() else b_side
+		_vertical_arrival_open[edge] = false
+	else:
+		a_side = _direction_between(a_record["position"], b_record["position"])
+		b_side = _opposite_direction(a_side)
+	for pair in [[a_record, a_side, b], [b_record, b_side, a]]:
+		var record := pair[0] as Dictionary
+		var direction := str(pair[1])
+		if direction not in (record["doors"] as Array):
+			(record["doors"] as Array).append(direction)
+		(record["door_targets"] as Dictionary)[direction] = str(pair[2])
+
+
+func _instantiate_dynamic_room(record: Dictionary) -> void:
+	var room := DYNAMIC_ROOM_SCENE.instantiate() as DungeonRoom3D
+	room.configure({
+		"room_id": record["id"], "room_type": record["type"], "size_class": record["size"],
+		"doors": record["doors"], "door_targets": record.get("door_targets", {}), "theme": visual_theme,
+		"door_policies": _door_policies_for_record(record),
+		"seed": run_seed + int(record["index"]) * 104729, "is_main_path": record["main"],
+		"custom_dimensions": record.get("custom_dimensions", Vector2.ZERO),
+		"tower_module_shell": bool(record.get("tower_module_shell", false)),
+		"open_wall_directions": record.get("open_wall_directions", []),
+	})
+	room.position = record["position"]
+	$GeneratedRooms.add_child(room)
+	_rooms.append(room)
+	_room_by_id[room.room_id] = room
+	room.player_entered.connect(_on_room_entered)
+	room.prop_searched.connect(_on_prop_searched)
+	room.service_activated.connect(_on_service_activated)
+
+
+func generate_through_floor_for_test(target_floor_number: int) -> bool:
+	var target_index := 100 - target_floor_number
+	for floor_index in range(2, target_index + 1):
+		if not _commit_floor_bundle(floor_index, "verification"):
+			return false
+	return true
+
+
+func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
+	var was_cleared := room != null and room.cleared
+	super(room, spawn_key)
+	if room != null and room.room_type == "BOSS" and not was_cleared:
+		_boss_descent_key_count += 1
+		status_label.text = "Boss已击败 · 获得本段下行权限"
+
+
+func _finalize_airlock_commit(lower_floor_index: int) -> void:
+	if _active_airlock_room_id.is_empty():
+		return
+	# 双门隔离：先锁后门，再清掉旧段；前门由调用者随后开启。
+	for edge_value in _boss_descent_gate_edges.keys():
+		var edge := str(edge_value)
+		if int(_boss_descent_gate_edges[edge]) != lower_floor_index:
+			continue
+		_open_edges[edge] = false
+		_vertical_arrival_open[edge] = false
+		var ids := edge.split("|")
+		for room_id_value in ids:
+			var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
+			if room != null:
+				_refresh_edge_visuals(room.room_id, _active_airlock_room_id, false)
+	_unload_completed_segment(lower_floor_index)
+	_active_airlock_room_id = ""
+	status_label.text = "旧段已卸载 · 未拾取物永久丢失"
+
+
+func commit_active_airlock_for_test(lower_floor_index: int) -> void:
+	_finalize_airlock_commit(lower_floor_index)
+
+
+func _unload_completed_segment(lower_floor_index: int) -> void:
+	var first_floor := 2 if lower_floor_index == 6 else lower_floor_index - 5
+	var removed_ids: Array[String] = []
+	_last_unloaded_room_count = 0
+	_last_destroyed_world_loot_count = 0
+	for floor_index in range(first_floor, lower_floor_index):
+		if floor_index not in _unloaded_segment_floor_indices:
+			_unloaded_segment_floor_indices.append(floor_index)
+		for room_id_value in (_floor_room_ids.get(floor_index, []) as Array).duplicate():
+			var room_id := str(room_id_value)
+			removed_ids.append(room_id)
+			var room := _room_by_id.get(room_id) as DungeonRoom3D
+			if room != null and is_instance_valid(room):
+				_last_destroyed_world_loot_count += _count_group_in_subtree(room, "ground_loot_3d")
+				_rooms.erase(room)
+				room.queue_free()
+				_last_unloaded_room_count += 1
+			_room_by_id.erase(room_id)
+			if room_id == "extraction":
+				_extraction = null
+				_conditional_extractions.erase("BOSS_KILL")
+			_clear_room_runtime_caches(room_id)
+		_floor_room_ids.erase(floor_index)
+		var stage = _floor_stages.get(floor_index)
+		if stage != null and is_instance_valid(stage):
+			stage.queue_free()
+		_floor_stages.erase(floor_index)
+		var elevator := _elevator_facilities_by_floor.get(_floor_number_from_index(floor_index)) as BaseFacility3D
+		if elevator != null and is_instance_valid(elevator):
+			var bay := elevator.get_parent()
+			if bay != null:
+				bay.queue_free()
+			_elevator_facilities_by_floor.erase(_floor_number_from_index(floor_index))
+			_elevator_access_room_by_floor.erase(_floor_number_from_index(floor_index))
+	for edge_value in _corridor_by_edge.keys().duplicate():
+		var edge := str(edge_value)
+		var connector := _corridor_by_edge.get(edge) as Node3D
+		if connector == null:
+			continue
+		if (
+			str(connector.get_meta("from_room_id", "")) in removed_ids
+			or str(connector.get_meta("to_room_id", "")) in removed_ids
+		):
+			connector.queue_free()
+			_corridor_by_edge.erase(edge)
+			_open_edges.erase(edge)
+			_vertical_arrival_open.erase(edge)
+			_edge_kind_by_key.erase(edge)
+			_edge_side_by_key.erase(edge)
+			_edge_door_sides_by_key.erase(edge)
+	for index in range(_declared_edges.size() - 1, -1, -1):
+		var declaration := _declared_edges[index] as Dictionary
+		if str(declaration.get("a", "")) in removed_ids or str(declaration.get("b", "")) in removed_ids:
+			_declared_edges.remove_at(index)
+	for index in range(_records.size() - 1, -1, -1):
+		if str(_records[index].get("id", "")) in removed_ids:
+			_records.remove_at(index)
+	for room_id in removed_ids:
+		_room_floor_index.erase(room_id)
+		_room_neighbors.erase(room_id)
+	for neighbors_value in _room_neighbors.values():
+		for room_id in removed_ids:
+			(neighbors_value as Array).erase(room_id)
+	minimap.configure(_records, _open_edges)
+	_unloaded_segment_floor_indices.sort()
+
+
+func _clear_room_runtime_caches(room_id: String) -> void:
+	for cache in [
+		_alive_by_room, _spawned_rooms, _spawned_key_rooms, _enemy_nodes_by_room,
+		_room_wave_queues, _room_wave_numbers, _room_wave_totals, _wave_spawn_pending,
+		_resolved_event_rooms, _event_combat_rooms, _room_enemy_hp_multipliers,
+		_room_enemy_damage_multipliers, _room_currency_multipliers,
+	]:
+		(cache as Dictionary).erase(room_id)
+
+
+func _count_group_in_subtree(root: Node, group_name: String) -> int:
+	var count := 1 if root.is_in_group(group_name) else 0
+	for child in root.get_children():
+		count += _count_group_in_subtree(child, group_name)
+	return count
 
 
 func _install_facilities() -> void:
@@ -2224,14 +2645,12 @@ func _travel_elevator_to(floor_number: int) -> void:
 
 
 func _floor_number_from_index(floor_index: int) -> int:
-	return 100 - clampi(floor_index, 0, COMBAT_FLOOR_COUNT + 1)
+	return 100 - maxi(0, floor_index)
 
 
 func _current_floor_number() -> int:
-	var fallback_index := clampi(
-		int(round(-player.global_position.y / FLOOR_HEIGHT)) if player != null else 0,
-		0,
-		COMBAT_FLOOR_COUNT + 1
+	var fallback_index := maxi(
+		0, int(round(-player.global_position.y / FLOOR_HEIGHT)) if player != null else 0
 	)
 	return _floor_number_from_index(int(_room_floor_index.get(_current_room_id, fallback_index)))
 
@@ -2318,7 +2737,10 @@ func get_tower_snapshot() -> Dictionary:
 	var support_floor_count := 0
 	var rendered_floor_count := 0
 	var floor_stage_snapshots: Array[Dictionary] = []
-	for floor_index in range(COMBAT_FLOOR_COUNT + 2):
+	var stage_indices: Array = _floor_stages.keys()
+	stage_indices.sort()
+	for floor_value in stage_indices:
+		var floor_index := int(floor_value)
 		floor_heights.append(-FLOOR_HEIGHT * float(floor_index))
 		var stage = _floor_stages.get(floor_index)
 		if stage != null:
@@ -2330,14 +2752,22 @@ func get_tower_snapshot() -> Dictionary:
 				rendered_floor_count += 1
 	for combat_floor in range(1, COMBAT_FLOOR_COUNT + 1):
 		var physical_index := combat_floor + 1
+		var plan := _floor_plan_snapshots.get(physical_index, {}) as Dictionary
 		combat_floor_records.append({
 			"id": "floor_%02d" % combat_floor,
-			"type": "BOSS" if combat_floor == COMBAT_FLOOR_COUNT else "COMBAT",
+			"floor_number": int(plan.get("floor_number", 99 - combat_floor)),
+			"type": "BOSS" if bool(plan.get("boss_floor", false)) else "COMBAT",
 			"layout_template": str(_floor_layout_templates.get(physical_index, "")),
+			"layout_id": str(plan.get("layout_id", "")),
 			"dimensions": Vector2(TOWER_GEOMETRY.MAP_SIZE_M, TOWER_GEOMETRY.MAP_SIZE_M),
 			"height": -FLOOR_HEIGHT * float(physical_index),
 			"room_ids": (_floor_room_ids.get(physical_index, []) as Array).duplicate(),
 			"room_count": (_floor_room_ids.get(physical_index, []) as Array).size(),
+			"planned_room_count": (plan.get("rooms", []) as Array).size(),
+			"main_path_content_count": int(plan.get("main_path_content_count", 0)),
+			"branch_count": int(plan.get("branch_count", 0)),
+			"area_budget": (plan.get("area_budget", {}) as Dictionary).duplicate(true),
+			"seed_gate_committed": physical_index in _generated_floor_indices,
 		})
 	var vertical_connector_count := 0
 	var closed_door_count := 0
@@ -2366,8 +2796,9 @@ func get_tower_snapshot() -> Dictionary:
 		"combat_floor_count": combat_floor_records.size(),
 		"combat_floors": combat_floor_records,
 		"floor_layout_templates": _floor_layout_templates.duplicate(),
-		"rooms_per_normal_combat_floor": 12,
-		"boss_floor_room_count": 10,
+		"floor_plan_snapshots": _floor_plan_snapshots.duplicate(true),
+		"rooms_per_normal_combat_floor": ((_floor_plan_snapshots.get(2, {}) as Dictionary).get("rooms", []) as Array).size(),
+		"boss_floor_room_count": ((_floor_plan_snapshots.get(COMBAT_FLOOR_COUNT + 1, {}) as Dictionary).get("rooms", []) as Array).size(),
 		"logical_combat_room_count": _rooms.size() - 2,
 		"combat_room_size": Vector2(
 			TOWER_GEOMETRY.COMBAT_ROOM_SIZE_M,
@@ -2396,6 +2827,8 @@ func get_tower_snapshot() -> Dictionary:
 		"facility_count": get_facility_count(),
 		"has_base_elevator": _elevator_facility != null,
 		"standalone_elevator_count": _elevator_facilities_by_floor.size(),
+		"level_elevator_count": 1 if _elevator_facilities_by_floor.has(95) else 0,
+		"level_elevator_floor": 95 if _elevator_facilities_by_floor.has(95) else -1,
 		"elevator_facilities_are_room_content": false,
 		"elevator_access_rooms": _elevator_access_room_by_floor.duplicate(),
 		"unlocked_elevator_floors": _sorted_unlocked_elevator_floors(),
@@ -2405,9 +2838,25 @@ func get_tower_snapshot() -> Dictionary:
 		"rendered_floor_count": rendered_floor_count,
 		"loaded_floor_count": _loaded_floor_indices.size(),
 		"loaded_floor_indices": _loaded_floor_indices.duplicate(),
-		"floor_generation_mode": "triggered_atomic_floor_plan",
+		"floor_visibility_poll_count": _floor_visibility_poll_count,
+		"floor_visibility_apply_count": _floor_visibility_apply_count,
+		"floor_visibility_runtime_state_read": "o1_stream_state",
+		"floor_generation_mode": "arrival_gate_atomic_floor_bundle",
+		"planned_floor_count": _planned_floor_indices.size(),
+		"planned_floor_indices": _planned_floor_indices.duplicate(),
+		"instantiated_room_count": _rooms.size(),
+		"last_bundle_room_count": _last_bundle_room_count,
+		"last_bundle_corridor_count": _last_bundle_corridor_count,
+		"floor_seed_gate_count": _floor_seed_gate_edges.size(),
+		"floor_seed_gate_edges": _floor_seed_gate_edges.duplicate(),
+		"door_function_counts": _door_function_counts(),
+		"door_function_taxonomy": [
+			"base_transit", "floor_arrival", "room_progression",
+			"boss_descent", "airlock_exit", "vertical_transit",
+		],
 		"generated_floor_count": _generated_floor_indices.size(),
 		"generated_floor_indices": _generated_floor_indices.duplicate(),
+		"floor_plan_commit_reasons": _floor_plan_commit_reasons.duplicate(),
 		"floor_layout_plan_valid": _floor_layout_plan_conflicts.is_empty(),
 		"floor_layout_plan_conflicts": _floor_layout_plan_conflicts.duplicate(),
 		"stair_plan_reservations": {
@@ -2459,6 +2908,9 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_occlusion_silhouette_enabled": true,
 		"camera_occluded_player": _player_occluded,
 		"camera_occlusion_blocked_ray_count": _camera_blocked_ray_count,
+		"camera_probe_mode": "adaptive_60hz_moving_30hz_idle",
+		"camera_probe_interval_s": _camera_probe_interval_s,
+		"camera_probe_refresh_count": _camera_probe_refresh_count,
 		"camera_silhouette_mesh_count": _player_occlusion_meshes.size(),
 		"camera_near_fade_candidate_count": 0,
 		"camera_near_faded_mesh_count": 0,
@@ -2470,6 +2922,13 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_door_bypass_node_count": 0,
 		"vertical_arrival_gate_count": _vertical_arrival_open.size(),
 		"vertical_arrival_open_count": vertical_arrival_open_count,
+		"boss_descent_gate_count": _boss_descent_gate_edges.size(),
+		"boss_descent_key_count": _boss_descent_key_count,
+		"airlock_front_gate_count": _airlock_front_edges.size(),
+		"airlock_warning_active": _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay),
+		"unloaded_segment_floor_indices": _unloaded_segment_floor_indices.duplicate(),
+		"last_unloaded_room_count": _last_unloaded_room_count,
+		"last_destroyed_world_loot_count": _last_destroyed_world_loot_count,
 		"stair_arrival_interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
 		"physical_occlusion_only": true,
 		"transition_edge": _active_transition_edge,

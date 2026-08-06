@@ -15,6 +15,8 @@ func _ready() -> void:
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	if not tower.generate_through_floor_for_test(95):
+		failures.append("98—95结构验收准备失败")
 	await _validate_light_layers(tower, failures)
 	_validate_floor_materials(failures)
 	_validate_wall_components(tower, failures)
@@ -176,7 +178,14 @@ func _validate_revealed_room_enemy_prewarm(
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame
+	if not tower.generate_through_floor_for_test(98):
+		failures.append("98F reveal-time validation generation failed")
 	tower.force_open_edge_for_test("facility", "floor_01_entry")
+	var entry := (tower.get("_room_by_id") as Dictionary).get(
+		"floor_01_entry"
+	) as DungeonRoom3D
+	if entry != null:
+		tower.player.global_position = entry.global_position + Vector3(0.0, 0.05, 0.0)
 	tower.force_enter_room_for_test("floor_01_entry")
 	var hub := (tower.get("_room_by_id") as Dictionary).get(
 		"floor_01_hub"
@@ -211,7 +220,12 @@ func _validate_revealed_room_enemy_prewarm(
 			continue
 		instance_ids.append(enemy.get_instance_id())
 		if enemy.process_mode == Node.PROCESS_MODE_DISABLED or enemy.is_runtime_ai_active():
-			failures.append("Revealed-room enemy is not presentation-ready with paused AI")
+			failures.append(
+				"Revealed-room enemy is not presentation-ready with paused AI "
+				+ "(process_mode=%d ai_active=%s room_stream=%d)"
+				% [enemy.process_mode, enemy.is_runtime_ai_active(), hub.get_stream_state()]
+			)
+	tower.player.global_position = hub.global_position + Vector3(0.0, 0.05, 0.0)
 	tower.force_enter_room_for_test(hub.room_id)
 	await get_tree().process_frame
 	var entered_nodes := (tower.get("_enemy_nodes_by_room") as Dictionary).get(

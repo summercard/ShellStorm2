@@ -9,6 +9,8 @@ signal activated(station: ServiceStation3D)
 
 var _player_in_range := false
 var _prompt: Label3D
+var _objective_label: Label3D
+var _physical_collision: CollisionShape3D
 
 
 func configure(type_id: String, title: String, color: Color) -> void:
@@ -54,16 +56,20 @@ func _build_visual() -> void:
 	screen.rotation_degrees.x = -12.0
 	_add_box("Trim", Vector3(0, 0.28, -0.47), Vector3(1.22, 0.10, 0.07), trim)
 
-	var body := StaticBody3D.new()
-	body.collision_layer = 1
-	body.collision_mask = 0
-	add_child(body)
-	var collision := CollisionShape3D.new()
-	var shape := BoxShape3D.new()
-	shape.size = Vector3(1.45, 1.1, 0.85)
-	collision.position = Vector3(0, 0.55, 0)
-	collision.shape = shape
-	body.add_child(collision)
+	# 事件终端是房间必做目标，不能因为镜头裁切或模型载入异常留下“透明阻挡”。
+	# 商店/改造台保留实体体积；事件终端只用交互 Area，不阻断角色移动。
+	if station_type != "event":
+		var body := StaticBody3D.new()
+		body.name = "StationBody"
+		body.collision_layer = 1
+		body.collision_mask = 0
+		add_child(body)
+		_physical_collision = CollisionShape3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(1.45, 1.1, 0.85)
+		_physical_collision.position = Vector3(0, 0.55, 0)
+		_physical_collision.shape = shape
+		body.add_child(_physical_collision)
 	var interaction := CollisionShape3D.new()
 	var interaction_shape := BoxShape3D.new()
 	interaction_shape.size = Vector3(2.8, 2.2, 2.2)
@@ -73,13 +79,78 @@ func _build_visual() -> void:
 
 	_prompt = Label3D.new()
 	_prompt.position = Vector3(0, 1.92, 0)
-	_prompt.text = "[E] %s" % display_name
+	_prompt.text = (
+		"[E] 结算房间事件"
+		if station_type == "event"
+		else "[E] %s" % display_name
+	)
 	_prompt.font_size = 38
 	_prompt.pixel_size = 0.012
 	_prompt.modulate = accent_color.lightened(0.22)
 	_prompt.outline_size = 8
 	_prompt.visible = false
 	add_child(_prompt)
+	if station_type == "event":
+		_build_event_objective_marker(glow)
+
+
+func get_snapshot() -> Dictionary:
+	return {
+		"station_type": station_type,
+		"display_name": display_name,
+		"player_in_range": _player_in_range,
+		"prompt_visible": _prompt != null and _prompt.visible,
+		"objective_marker_visible": _objective_label != null and _objective_label.visible,
+		"blocks_player": _physical_collision != null and not _physical_collision.disabled,
+		"required_room_objective": bool(get_meta("required_room_objective", false)),
+	}
+
+
+func set_objective_resolved() -> void:
+	if station_type != "event":
+		return
+	_player_in_range = false
+	if _prompt != null:
+		_prompt.visible = false
+	for node_name in ["EventObjectiveFloorMarker", "EventObjectiveBeacon", "EventObjectiveLabel"]:
+		var marker := get_node_or_null(node_name) as Node3D
+		if marker != null:
+			marker.visible = false
+	set_deferred("monitoring", false)
+
+
+func _build_event_objective_marker(glow: StandardMaterial3D) -> void:
+	var marker_mesh := CylinderMesh.new()
+	marker_mesh.top_radius = 1.75
+	marker_mesh.bottom_radius = 1.75
+	marker_mesh.height = 0.035
+	marker_mesh.radial_segments = 32
+	marker_mesh.material = glow
+	var marker := MeshInstance3D.new()
+	marker.name = "EventObjectiveFloorMarker"
+	marker.position = Vector3(0, 0.025, 0)
+	marker.mesh = marker_mesh
+	add_child(marker)
+
+	var beacon_mesh := BoxMesh.new()
+	beacon_mesh.size = Vector3(0.08, 2.4, 0.08)
+	beacon_mesh.material = glow
+	var beacon := MeshInstance3D.new()
+	beacon.name = "EventObjectiveBeacon"
+	beacon.position = Vector3(0, 1.55, 0)
+	beacon.mesh = beacon_mesh
+	add_child(beacon)
+
+	_objective_label = Label3D.new()
+	_objective_label.name = "EventObjectiveLabel"
+	_objective_label.position = Vector3(0, 2.85, 0)
+	_objective_label.text = "事件目标 · 异常信号终端"
+	_objective_label.font_size = 34
+	_objective_label.pixel_size = 0.012
+	_objective_label.modulate = accent_color.lightened(0.30)
+	_objective_label.outline_size = 8
+	_objective_label.no_depth_test = true
+	add_child(_objective_label)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> MeshInstance3D:

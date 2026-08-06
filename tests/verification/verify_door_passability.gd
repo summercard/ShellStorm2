@@ -13,6 +13,8 @@ func _ready() -> void:
 	tower.run_seed_override = 990095
 	add_child(tower)
 	await _settle_long()
+	tower.generate_through_floor_for_test(95)
+	await _settle_long()
 	tower.force_enter_room_for_test("start")
 	await _settle_long()
 
@@ -357,6 +359,76 @@ func _ready() -> void:
 			print("  ⚠️  rooftop 没有 west 门")
 	else:
 		print("  ⚠️  找不到 start 房间")
+
+	# ============================================================
+	# 测试 9: EVENT 空房目标、透明阻挡与软锁修复
+	# ============================================================
+	print("\n=== 测试 9: EVENT 房目标可见、无透明阻挡、不会空房锁门 ===")
+	var event_room: DungeonRoom3D = null
+	for value in room_by_id.values():
+		var candidate := value as DungeonRoom3D
+		if candidate != null and candidate.room_type == "EVENT":
+			event_room = candidate
+			break
+	if event_room == null:
+		print("  ❌ 找不到 EVENT 测试房")
+		tests_failed += 1
+	else:
+		event_room.ensure_detail_built()
+		await _settle_short()
+		var event_station := event_room.ensure_required_service_station()
+		var station_snapshot := event_station.get_snapshot() if event_station != null else {}
+		if (
+			event_station != null
+			and bool(station_snapshot.get("objective_marker_visible", false))
+			and bool(station_snapshot.get("required_room_objective", false))
+			and not bool(station_snapshot.get("blocks_player", true))
+			and absf(event_station.position.z) <= 4.51
+		):
+			print("  ✅ 事件终端在房间中部有常驻光柱，且不产生透明实体阻挡")
+			tests_passed += 1
+		else:
+			print("  ❌ 事件终端表现/碰撞契约错误: %s position=%s" % [station_snapshot, event_station.position if event_station != null else Vector3.ZERO])
+			tests_failed += 1
+
+		# 模拟旧局：房间已访问、无怪、事件尚未结算。返回房间时必须提示终端，
+		# 不能继续显示“战斗未结束”。
+		tower._spawned_rooms[event_room.room_id] = true
+		tower._resolved_event_rooms.erase(event_room.room_id)
+		tower._event_combat_rooms.erase(event_room.room_id)
+		event_room.cleared = false
+		tower.force_enter_room_for_test(event_room.room_id)
+		await _settle_short()
+		if "紫色光柱" in tower.status_label.text and "战斗未结束" not in tower.status_label.text:
+			print("  ✅ 空 EVENT 房返回提示指向终端，不再伪报漏怪")
+			tests_passed += 1
+		else:
+			print("  ❌ EVENT 返回提示错误: %s" % tower.status_label.text)
+			tests_failed += 1
+
+		# 模拟必做终端节点意外丢失：下一次进房必须原位重建目标。
+		if event_station != null:
+			event_station.free()
+		var repaired_station := event_room.ensure_required_service_station()
+		await _settle_short()
+		if repaired_station != null and not bool(repaired_station.get_snapshot().get("blocks_player", true)):
+			print("  ✅ 丢失的事件终端可自动重建，房间不会永久软锁")
+			tests_passed += 1
+		else:
+			print("  ❌ 事件终端丢失后未能重建")
+			tests_failed += 1
+
+		# 旧状态中若非战斗事件已经记为结算，清场标记缺失也必须自愈。
+		tower._resolved_event_rooms[event_room.room_id] = true
+		tower._event_combat_rooms.erase(event_room.room_id)
+		event_room.cleared = false
+		tower._repair_room_progress(event_room)
+		if event_room.cleared:
+			print("  ✅ 已结算的非战斗 EVENT 状态可自愈并解除门锁")
+			tests_passed += 1
+		else:
+			print("  ❌ 已结算 EVENT 仍然锁门")
+			tests_failed += 1
 
 	# 汇总
 	print("\n=== 汇总 ===")
