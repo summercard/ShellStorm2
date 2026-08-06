@@ -2587,7 +2587,10 @@ func _on_claim_insurance_requested(slot_index: int) -> void:
 	var item := _insurance.claim_item(slot_index)
 	if item.is_empty():
 		return
-	if _inventory.add_item(item, 1) <= 0:
+	var count := maxi(1, int(item.get("count", 1)))
+	var inventory_before := _inventory.get_slots_snapshot()
+	if _inventory.add_item(item, count) != count:
+		_inventory.restore_slots_snapshot(inventory_before)
 		_insurance.insure_item_direct(item)
 		status_label.text = "背包已满，保险物品未取出"
 
@@ -3287,6 +3290,14 @@ func _finish_run(success: bool) -> void:
 		if success:
 			BaseManager.add_extraction_points(_run_value)
 			BaseManager.add_extraction_loot_items(_run_loot)
+		else:
+			var insurance_saved := settlement.get("insurance_saved", []) as Array
+			if not insurance_saved.is_empty():
+				var insurance_return := BaseManager.store_insurance_return_items(
+					insurance_saved, BaseShopService.generate_transaction_id("death_insurance")
+				) as Dictionary
+				if bool(insurance_return.get("success", false)):
+					_insurance.clear_all()
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:

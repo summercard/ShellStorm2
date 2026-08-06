@@ -677,8 +677,9 @@ func _on_global_game_over() -> void:
 	# v0.1: 玩家死亡时结算所有遭遇精英的击杀玩家成长（精英吃掉玩家）
 	_resolve_elite_encounters_for_death()
 	# 触发死亡结算
+	var settlement_result: Dictionary = {}
 	if death_settlement_module != null and inventory_module != null:
-		var settlement_result: Dictionary = death_settlement_module.process_death_settlement(
+		settlement_result = death_settlement_module.process_death_settlement(
 			inventory_module, insurance_module
 		)
 		_print_death_settlement(settlement_result)
@@ -692,6 +693,11 @@ func _on_global_game_over() -> void:
 	# 记录基地数据（死亡）
 	var base_manager: BaseManager = _get_base_manager()
 	if base_manager != null:
+		var insurance_saved := settlement_result.get("insurance_saved", []) as Array
+		if not insurance_saved.is_empty():
+			var insurance_return := base_manager.store_insurance_return_items(insurance_saved) as Dictionary
+			if bool(insurance_return.get("success", false)) and insurance_module != null:
+				insurance_module.clear_all()
 		base_manager.record_run(false, _get_kill_count())
 	game_over.emit("玩家死亡")
 

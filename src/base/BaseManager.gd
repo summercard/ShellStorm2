@@ -678,6 +678,37 @@ func get_extraction_loot() -> Array[Dictionary]:
 			result.append(item.duplicate(true))
 	return result
 
+func store_insurance_return_items(entries: Array, transaction_id: String = "") -> Dictionary:
+	_ensure_data()
+	var effective_transaction_id := transaction_id if not transaction_id.is_empty() else ShopService.generate_transaction_id("insurance_return")
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
+	var old_loot := data.extraction_loot.duplicate(true)
+	var returned := 0
+	for raw_entry in entries:
+		if not raw_entry is Dictionary:
+			continue
+		var entry := raw_entry as Dictionary
+		var item := (entry.get("item", entry) as Dictionary).duplicate(true)
+		if item.is_empty():
+			continue
+		item["count"] = maxi(1, int(entry.get("count", item.get("count", 1))))
+		item["returned_by_insurance"] = true
+		var add_result := _try_add_owned_item(data.extraction_loot, item, 1000000)
+		if not bool(add_result.get("success", false)):
+			continue
+		data.extraction_loot = add_result.get("items", []) as Array
+		returned += 1
+	if returned <= 0 and not entries.is_empty():
+		data.extraction_loot = old_loot
+		return {"success": false, "reason": "保险返还物无法写入待领取集合"}
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("insurance_return"):
+		return {"success": true, "returned_count": returned, "transaction_id": effective_transaction_id}
+	data.extraction_loot = old_loot
+	data.completed_transaction_ids.erase(effective_transaction_id)
+	return {"success": false, "reason": "存档失败，保险返还已回滚"}
+
 func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
 	var new_item := ShopService.ensure_item_instance(item)
 	var instance_id := str(new_item.get("weapon_instance_id", ""))

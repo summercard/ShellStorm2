@@ -3336,8 +3336,11 @@ func _on_item_extraction_requested(slot_index: int) -> void:
 	var item: Dictionary = _insurance_module.claim_item(slot_index)
 	if item.is_empty():
 		return
-	var added: int = _inventory_module.add_item(item, item.get("count", 1))
-	if added <= 0:
+	var count := maxi(1, int(item.get("count", 1)))
+	var inventory_before: Array[Dictionary] = _inventory_module.get_slots_snapshot()
+	var added: int = _inventory_module.add_item(item, count)
+	if added != count:
+		_inventory_module.restore_slots_snapshot(inventory_before)
 		if _insurance_module.has_method("insure_item_direct"):
 			_insurance_module.insure_item_direct(item)
 		show_fate_card_notification("背包已满，无法取回保险物品")

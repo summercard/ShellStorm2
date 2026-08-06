@@ -636,6 +636,10 @@ func _trigger_game_over(reason: String) -> void:
 		var result: Dictionary = death_mod.process_death_settlement(inventory_module, insurance_module)
 		var saved_count: int = result.get("insurance_saved", []).size()
 		var lost_count: int = result.get("total_lost", 0)
+		if _base_manager != null and _base_manager.has_method("store_insurance_return_items"):
+			var insurance_return := _base_manager.call("store_insurance_return_items", result.get("insurance_saved", [])) as Dictionary
+			if bool(insurance_return.get("success", false)):
+				insurance_module.clear_all()
 		print("[CoreCombatMode] 死亡结算：掉落 %d 件，保险保住 %d 件" % [lost_count, saved_count])
 		if ui_layer != null:
 			if ui_layer.has_method("set_loot_info"):

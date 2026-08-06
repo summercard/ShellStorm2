@@ -187,6 +187,70 @@ func _process(delta: float) -> void:
 	_update_stair_arrival_prompt()
 
 
+func _finish_run(success: bool) -> void:
+	# 塔楼成功撤离是“带物返航99F”，不是重新加载塔楼。父类的成功路径会把
+	# 战利品复制到待处理集合后重载本场景，导致玩家回100F且I键背包为空。
+	if not success:
+		super(success)
+		return
+	if _completed:
+		return
+	_completed = true
+	_close_inventory_for_modal()
+	_sync_player_input_lock()
+	extraction_panel.visible = false
+	_run_loot = _collect_extracted_items(true)
+	var extracted_count := _death_settlement.process_extraction_settlement(_inventory, _insurance)
+	var summary := {
+		"success": true,
+		"kills": _kills,
+		"value": _run_value,
+		"loot": _run_loot.duplicate(true),
+		"seed": run_seed,
+		"theme_id": gameplay_theme.theme_id,
+		"settlement": {"retained": true, "extracted_count": extracted_count},
+		"inventory_capacity": _inventory.get_capacity(),
+		"insurance_capacity": _insurance.get_max_slots(),
+		"return_room_id": "facility",
+	}
+	if not test_mode:
+		BaseManager.record_run(true, _kills)
+		BaseManager.add_extraction_points(_run_value)
+		BaseManager.clear_active_run_checkpoint("successful_extraction_to_99f")
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
+	run_completed.emit(true, summary)
+	if not test_mode:
+		await get_tree().create_timer(0.8).timeout
+	_return_successful_extraction_to_facility()
+
+
+func _return_successful_extraction_to_facility() -> void:
+	var retained_loot_count := _run_loot.size()
+	# 只复用世界复位部分；与98F撤退不同，这里绝不清背包、武器、背包装备、
+	# 快捷栏或保险格，也不写入extraction_loot，避免同一实例同时存在两份。
+	_reset_initial_loop_world_after_retreat()
+	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+	if facility_room != null and player != null:
+		player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 2.7)
+		player.velocity = Vector3.ZERO
+		# 系统返航不是穿越关闭的到达门；清除旧房间上下文，避免楼梯门防穿越
+		# 校验把这次合法传送误判为从上一个房间越过锁门。
+		_current_room_id = ""
+		_on_room_entered(facility_room)
+	_completed = false
+	_extraction_defense_active = false
+	_active_extraction_beacon = null
+	_kills = 0
+	_run_value = 0
+	GameManager.currency = 0
+	GameManager.currency_changed.emit(0)
+	FateCardGameBridge.reset_run_state()
+	_refresh_loot_label()
+	_refresh_tower_hud()
+	_sync_player_input_lock()
+	status_label.text = "已成功返航99F基地 · %d件战利品、装备与保险物全部保留" % retained_loot_count
+
+
 func _build_floor_stages() -> void:
 	for floor_value in _floor_room_ids.keys():
 		_rebuild_floor_stage(int(floor_value))

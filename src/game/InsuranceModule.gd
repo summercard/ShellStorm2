@@ -12,6 +12,7 @@ const DEFAULT_INSURANCE_SLOTS: int = 2  # 默认2个保险格
 
 class InsuranceSlot:
 	var item: Dictionary = {}
+	var count: int = 0
 	var insured_at: int = 0  # 时间戳
 	
 	func is_empty() -> bool:
@@ -19,10 +20,13 @@ class InsuranceSlot:
 	
 	func clear() -> void:
 		item.clear()
+		count = 0
 		insured_at = 0
 	
-	func set_item(itm: Dictionary) -> void:
+	func set_item(itm: Dictionary, amount: int = 1) -> void:
 		item = WeaponInstance.ensure_weapon_item(itm).duplicate(true)
+		item.erase("count")
+		count = maxi(1, amount)
 		insured_at = Time.get_unix_time_from_system()
 
 var _insurance_slots: Array[InsuranceSlot] = []
@@ -86,7 +90,7 @@ func insure_item(inventory: InventoryModule, slot_index: int) -> bool:
 	if empty_idx < 0:
 		return false
 	
-	_insurance_slots[empty_idx].set_item(slot_data["item"])
+	_insurance_slots[empty_idx].set_item(slot_data["item"], int(slot_data.get("count", 1)))
 	inventory.remove_from_slot(slot_index, slot_data["count"])
 	
 	insurance_changed.emit()
@@ -109,7 +113,10 @@ func insure_item_direct(item: Dictionary) -> bool:
 	if empty_idx < 0:
 		return false
 	
-	_insurance_slots[empty_idx].set_item(item)
+	var count := maxi(1, int(item.get("count", 1)))
+	if str(item.get("type", "")) == "weapon":
+		count = 1
+	_insurance_slots[empty_idx].set_item(item, count)
 	insurance_changed.emit()
 	item_insured.emit(empty_idx, item)
 	return true
@@ -124,6 +131,7 @@ func claim_item(slot_index: int) -> Dictionary:
 		return {}
 	
 	var item: Dictionary = slot.item.duplicate(true)
+	item["count"] = maxi(1, slot.count)
 	slot.clear()
 	insurance_changed.emit()
 	item_claimed.emit(item)
@@ -134,7 +142,9 @@ func claim_all() -> Array[Dictionary]:
 	var claimed: Array[Dictionary] = []
 	for slot in _insurance_slots:
 		if not slot.is_empty():
-			claimed.append(slot.item.duplicate(true))
+			var item := slot.item.duplicate(true)
+			item["count"] = maxi(1, slot.count)
+			claimed.append(item)
 			slot.clear()
 	insurance_changed.emit()
 	return claimed
@@ -159,7 +169,7 @@ func get_all_insured_items() -> Array[Dictionary]:
 		if not _insurance_slots[i].is_empty():
 			var d: Dictionary = {
 				"item": _insurance_slots[i].item.duplicate(true),
-				"count": 1,
+				"count": maxi(1, _insurance_slots[i].count),
 				"insurance_slot": i  # 与 GameUIManager._refresh_insurance_ui() 的 key 对齐
 			}
 			result.append(d)
@@ -196,5 +206,5 @@ func debug_status() -> String:
 	var lines: Array[String] = ["InsuranceModule [%d/%d]" % [get_used_slots(), _max_slots]]
 	for i in _insurance_slots.size():
 		if not _insurance_slots[i].is_empty():
-			lines.append("  [%d] %s (insured at %d)" % [i, _insurance_slots[i].item.get("id", ""), _insurance_slots[i].insured_at])
+			lines.append("  [%d] %s ×%d (insured at %d)" % [i, _insurance_slots[i].item.get("id", ""), _insurance_slots[i].count, _insurance_slots[i].insured_at])
 	return "\n".join(lines)

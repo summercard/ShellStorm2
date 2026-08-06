@@ -51,6 +51,7 @@ core_scenes=(
   verify_base_facility_framework
   verify_base_shop_save_flow
   verify_tower_facility_inventory_binding
+  verify_tower_extraction_return_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow
   verify_tarot_fate_runtime
