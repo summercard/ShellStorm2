@@ -90,6 +90,75 @@ func _ready() -> void:
 		"确认撤退没有清空背包及主/副武器", failures
 	)
 	_expect(str(tower.get_tower_snapshot().get("current_room_id", "")) == "facility", "确认撤退没有返回99F基地", failures)
+	for _frame in 2:
+		await get_tree().process_frame
+	var reset_snapshot := tower.get_tower_snapshot()
+	_expect(
+		(reset_snapshot.get("generated_floor_indices", []) as Array) == [0]
+		and int(reset_snapshot.get("instantiated_room_count", -1)) == 3
+		and int(reset_snapshot.get("vertical_connector_count", -1)) == 2,
+		"撤退后没有销毁首门生成的关卡并恢复初始3房/2楼梯状态", failures
+	)
+	_expect(
+		not bool(tower.get("_initial_loop_gate_armed"))
+		and not bool(tower.get("_initial_loop_gate_sealed"))
+		and not bool((tower.get("_vertical_arrival_open") as Dictionary).get(first_edge, true)),
+		"撤退后98F首门事务标志或下端到达门状态没有复位", failures
+	)
+	var reset_entry := tower.get("_room_by_id").get("floor_01_entry") as DungeonRoom3D
+	var reset_arrival_door: RoomDoor3D = null
+	if reset_entry != null:
+		reset_entry.ensure_shell_built()
+		for side_value in reset_entry.door_targets.keys():
+			if str(reset_entry.door_targets[side_value]) == "facility":
+				reset_arrival_door = reset_entry.get_door_node(str(side_value))
+				break
+	_expect(reset_arrival_door != null and not reset_arrival_door.is_open, "撤退后重新返回时98F安全屋入口门不是关闭状态", failures)
+	var reset_connector := (tower.get("_corridor_by_edge") as Dictionary).get(first_edge) as Node3D
+	_expect(reset_connector != null, "撤退重建后基地→98F楼梯连接器不存在", failures)
+	if reset_connector != null and reset_arrival_door != null:
+		var rebuilt_lower_door := reset_connector.get_meta("lower_door_position", Vector3.ZERO) as Vector3
+		_expect(
+			rebuilt_lower_door.distance_to(reset_arrival_door.global_position) <= 0.01,
+			"撤退重建后楼梯接驳点与98F门洞错位，可能产生空气墙", failures
+		)
+	_expect(
+		tower.activate_arrival_between_for_test("facility", "floor_01_entry"),
+		"撤退后无法重新开启98F到达门并开始新循环", failures
+	)
+	# 门碰撞采用deferred切换，等待物理帧后直接射线穿过门洞；这项检查
+	# 会同时捕获门碰撞、错位墙模块以及旧楼梯围护碰撞残留。
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	if reset_arrival_door != null and reset_connector != null:
+		var outward := reset_connector.get_meta("outward", Vector3.RIGHT) as Vector3
+		var doorway_center := reset_arrival_door.global_position + Vector3.UP * 0.9
+		var exclusions: Array[RID] = []
+		if tower.player is CollisionObject3D:
+			exclusions.append(tower.player.get_rid())
+		var query := PhysicsRayQueryParameters3D.create(
+			doorway_center - outward * 1.0,
+			doorway_center + outward * 1.0,
+			1,
+			exclusions
+		)
+		query.collide_with_areas = false
+		var doorway_hit := tower.get_world_3d().direct_space_state.intersect_ray(query)
+		_expect(
+			doorway_hit.is_empty(),
+			"撤退后二次开启98F门仍有物理阻挡：%s" % str(doorway_hit.get("collider", null)),
+			failures
+		)
+	_expect(
+		2 in (tower.get_tower_snapshot().get("generated_floor_indices", []) as Array),
+		"撤退后再次开门没有重新生成98F FloorBundle", failures
+	)
+	tower.call("_on_initial_loop_entry_physically_entered", reset_entry)
+	_expect(
+		bool(tower.get("_initial_loop_gate_sealed"))
+		and not bool((tower.get("_open_edges") as Dictionary).get(first_edge, true)),
+		"撤退后新循环首次进入98F时入口门没有再次关闭", failures
+	)
 
 	_expect(tower.generate_through_floor_for_test(95), "98—95 FloorBundle提交失败", failures)
 	await get_tree().process_frame

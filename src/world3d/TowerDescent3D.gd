@@ -1838,10 +1838,73 @@ func _confirm_initial_loop_retreat() -> void:
 		player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 2.7)
 		player.velocity = Vector3.ZERO
 		_on_room_entered(facility_room)
-	var edge := _edge_key("facility", "floor_01_entry")
-	_open_edges[edge] = false
-	_refresh_edge_visuals("facility", "floor_01_entry", false)
+	_reset_initial_loop_world_after_retreat()
 	status_label.text = "已撤退至99F基地 · 丢失背包%d格、装备武器%d把" % [discarded_inventory, discarded_weapons.size()]
+
+
+func _reset_initial_loop_world_after_retreat() -> void:
+	# 撤退不是一次普通跨房传送，而是放弃98–95F整个行动事务。必须销毁
+	# 首门开启后提交的全部楼层、门状态与运行缓存，再恢复为新场景的3房壳体。
+	# 若只把edge关上，残留的_vertical_arrival_open和sealed标志会让玩家
+	# 再次从基地下来时看到下端门常开，并跳过“首次进入后封门”的循环。
+	_unload_completed_segment(6)
+	_generated_floor_indices.assign([0])
+	for floor_value in _floor_plan_commit_reasons.keys().duplicate():
+		if int(floor_value) >= 2:
+			_floor_plan_commit_reasons.erase(floor_value)
+	_unloaded_segment_floor_indices.clear()
+	_floor_seed_gate_edges.clear()
+	_boss_descent_gate_edges.clear()
+	_airlock_front_edges.clear()
+	_pending_airlock_candidate.clear()
+	_active_airlock_room_id = ""
+	_boss_descent_key_count = 0
+	_level_elevator_edge = ""
+	_unlocked_elevator_floors = {99: true}
+	_last_bundle_room_count = 0
+	_last_bundle_corridor_count = 0
+	_last_unloaded_room_count = 0
+	_last_destroyed_world_loot_count = 0
+	_initial_loop_gate_armed = false
+	_initial_loop_gate_sealed = false
+	_descent_side_sequence.assign(["west"])
+
+	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
+	var first_entry := _plan_spec(first_plan, "entry")
+	var first_hub := _plan_spec(first_plan, "hub")
+	_append_plan_room_record(first_plan, first_entry, "facility")
+	var entry_id := str(first_entry.get("id", "floor_01_entry"))
+	var entry_record := _find_record(entry_id)
+	var front_direction := _direction_between(
+		entry_record.get("position", Vector3.ZERO) as Vector3,
+		_plan_world_position(first_plan, first_hub)
+	)
+	(entry_record["doors"] as Array).append(front_direction)
+	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_hub.get("id", ""))
+	var edge := _edge_key("facility", entry_id)
+	_declare_and_register_edge("facility", entry_id, "vertical", "east", "east", "east")
+	_floor_seed_gate_edges[edge] = 2
+	_descent_side_sequence.append("east")
+	# 与首次加载一致：基地侧楼梯可通行，但98F下端到达门保持关闭，
+	# 只有再次交互并成功提交98层FloorBundle后才会打开。
+	_open_edges[edge] = true
+	_vertical_arrival_open[edge] = false
+	_instantiate_dynamic_room(entry_record)
+	# 撤退重建也必须遵循正常 FloorBundle 的顺序：先让连接两端共同计算
+	# 5m 门槽，再生成房间壳体与楼梯接驳。否则新入口会按默认 0 偏移
+	# 开门，而旧基地门及连接器仍位于规划门槽，表现为门已打开但墙体
+	# 碰撞留在通道中的“空气墙”。
+	_plan_room_layout()
+	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
+	var base_room := _room_by_id.get("facility") as DungeonRoom3D
+	if base_room != null and entry_room != null:
+		_build_corridor(base_room, entry_room, _corridor_by_edge.size())
+		if not entry_room.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
+			entry_room.player_entered.connect(_on_initial_loop_entry_physically_entered)
+	_rebuild_floor_stage(2)
+	_refresh_edge_visuals("facility", entry_id, true)
+	minimap.configure(_records, _open_edges)
+	_update_room_streaming("facility")
 
 
 func confirm_initial_loop_retreat_for_test() -> void:
