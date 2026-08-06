@@ -271,7 +271,7 @@ text = "总击杀: 0"
 
 [node name="PointsLabel" type="Label" parent="HUD/InfoPanel/VBox"]
 layout_mode = 2
-text = "基地资源: 0"
+text = "基地币: ◈ 0"
 
 [node name="LootLabel" type="Label" parent="HUD/InfoPanel/VBox"]
 layout_mode = 2

@@ -24,6 +24,39 @@ func _register_all_items() -> void:
 	_register_backpack_equipment()
 	_register_weapon_modules()
 	_register_consumables()
+	_apply_base_shop_catalog()
+
+
+## 与内容数据库“基地商店”工作表一致的运行时投影。
+## price 是通用价值；基地成交只读取 base_buy_price/base_sell_price。
+func _apply_base_shop_catalog() -> void:
+	for item_id in _items.keys():
+		var definition := _items[item_id] as Dictionary
+		var generic_price := maxi(0, int(definition.get("price", 0)))
+		definition["base_buy_price"] = generic_price
+		definition["base_sell_price"] = roundi(float(generic_price) * 0.5) if generic_price > 0 else 0
+		definition["base_shop_enabled"] = false
+		definition["base_stock_rule"] = "not_listed"
+		definition["base_shelf_order"] = 0
+	var catalog := {
+		"weapon_pistol": [70, 35, 1, "base_stock_pistol"],
+		"weapon_shotgun": [110, 55, 2, "base_stock_shotgun"],
+		"weapon_rifle": [150, 75, 3, "base_stock_rifle"],
+		"equipment_backpack_2": [55, 28, 4, "base_stock_backpack_2"],
+		"item_health_potion": [40, 20, 5, "base_stock_health_potion"],
+	}
+	for item_id in catalog.keys():
+		if not _items.has(item_id):
+			push_error("[ItemRegistry] Base shop item missing: %s" % item_id)
+			continue
+		var values: Array = catalog[item_id]
+		var definition := _items[item_id] as Dictionary
+		definition["base_buy_price"] = int(values[0])
+		definition["base_sell_price"] = int(values[1])
+		definition["base_shop_enabled"] = true
+		definition["base_stock_rule"] = "unlimited"
+		definition["base_shelf_order"] = int(values[2])
+		definition["base_shop_entry_id"] = str(values[3])
 
 ## 注册信标道具
 func _register_beacon_item() -> void:
@@ -986,6 +1019,23 @@ func get_merchant_goods(tier: int) -> Array[Dictionary]:
 	for item in _items.values():
 		if item.get("merchant_tier", 0) <= tier and item.get("price", 0) > 0:
 			result.append(item.duplicate())
+	return result
+
+
+func get_base_shop_goods() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for item in _items.values():
+		if not item is Dictionary:
+			continue
+		var definition := item as Dictionary
+		if not bool(definition.get("base_shop_enabled", false)):
+			continue
+		if int(definition.get("base_buy_price", 0)) <= 0:
+			continue
+		result.append(definition.duplicate(true))
+	result.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return int(a.get("base_shelf_order", 0)) < int(b.get("base_shelf_order", 0))
+	)
 	return result
 
 ## 调试：打印注册的所有物品

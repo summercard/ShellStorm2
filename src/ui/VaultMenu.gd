@@ -1,277 +1,182 @@
 class_name VaultMenu
 extends CanvasLayer
+## 格子化基地仓储：左侧长期保险柜，右侧12格随身背包（下局带入）。
 
-## 保险柜 — 基地建筑界面
-## 保险柜中的物品跨局持久化（存储在 BaseManager），死亡不丢失，撤离成功自动转入
-## 界面支持：查看已存物品、从背包存入、从保险柜取出
+const STORAGE_SLOT := preload("res://src/ui/BaseStorageSlot.gd")
 
-@onready var content: VBoxContainer
-@onready var status_label: Label
-@onready var close_button: Button
+var _inventory_module: InventoryModule
 
-## 保险柜基础容量
-const BASE_CAPACITY := 2
+@onready var content: VBoxContainer = $Panel/VBox/Content
+@onready var status_label: Label = $Panel/VBox/StatusLabel
+@onready var close_button: Button = $Panel/VBox/CloseButton
+
 
 func _ready() -> void:
-	content = get_node_or_null("Panel/VBox/Content")
-	status_label = get_node_or_null("Panel/VBox/StatusLabel")
-	close_button = get_node_or_null("Panel/VBox/CloseButton")
-	if close_button:
-		close_button.pressed.connect(_on_close_pressed)
-		# 关闭按钮统一样式
-		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
-		UIStyleFactory.apply_button_style(close_button, close_styles)
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	$Background.color = Color(0.008, 0.014, 0.020, 1.0)
+	$Panel.add_theme_stylebox_override("panel", _column_style())
+	$Panel/VBox/TitleLabel.add_theme_font_size_override("font_size", 24)
+	$Panel/VBox/TitleLabel.add_theme_color_override("font_color", Color(0.46, 0.94, 1.0))
+	close_button.pressed.connect(_on_close_pressed)
+	var styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
+	UIStyleFactory.apply_button_style(close_button, styles)
 	_build_vault_view()
 
-func _get_vault_capacity() -> int:
-	var vault_lvl: int = 0
-	if BaseManager != null:
-		vault_lvl = BaseManager.get_level(4)  # building type 4 = vault
-	return BASE_CAPACITY + vault_lvl
 
-func _get_vault_items() -> Array[Dictionary]:
-	if BaseManager != null:
-		return BaseManager.get_vault_items()
-	return []
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause"):
+		get_viewport().set_input_as_handled()
+		queue_free()
+
+
+func set_inventory_module(module: InventoryModule) -> void:
+	_inventory_module = module
+	if is_node_ready():
+		_build_vault_view()
+
 
 func _build_vault_view() -> void:
-	if content == null:
-		return
 	for child in content.get_children():
+		content.remove_child(child)
 		child.queue_free()
+	var vault_items := BaseManager.get_vault_items()
+	var backpack_items := _get_backpack_slot_items()
+	var backpack_capacity := _inventory_module.get_capacity() if _inventory_module != null else BaseManager.get_pending_loadout_capacity()
+	var backpack_used := _inventory_module.get_used_slots() if _inventory_module != null else BaseManager.get_pending_loadout_items().size()
+	var backpack_owner := "inventory" if _inventory_module != null else "loadout"
+	var backpack_title := "当前背包（与I键一致）" if _inventory_module != null else "随身背包（下局带入）"
+	var backpack_hint := "即时同步I键背包 · 容量随装备背包变化" if _inventory_module != null else "开局进入局内背包 · 固定12格"
+	var guide := Label.new()
+	guide.text = "单击物品自动移到另一侧；也可拖拽物品到另一栏任意格。右侧内容与I键背包使用同一数据源。" if _inventory_module != null else "单击或拖拽可准备下局带入物品；进入行动后将转为I键背包。"
+	guide.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	guide.add_theme_color_override("font_color", Color(0.60, 0.82, 0.88))
+	content.add_child(guide)
+	var columns := HBoxContainer.new()
+	columns.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	columns.add_theme_constant_override("separation", 18)
+	content.add_child(columns)
+	columns.add_child(_make_storage_column(
+		"长期保险柜", "跨局保存 · 不自动带入", "vault", _compact_to_slots(vault_items, BaseManager.get_vault_capacity()), vault_items.size(), BaseManager.get_vault_capacity(), 3
+	))
+	var arrow := Label.new()
+	arrow.text = "⇄"
+	arrow.custom_minimum_size.x = 44
+	arrow.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	arrow.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	arrow.add_theme_font_size_override("font_size", 30)
+	arrow.add_theme_color_override("font_color", Color(0.28, 0.84, 0.94))
+	columns.add_child(arrow)
+	columns.add_child(_make_storage_column(
+		backpack_title, backpack_hint, backpack_owner, backpack_items, backpack_used, backpack_capacity, 4
+	))
+	status_label.text = "当前：保险柜 %d/%d ｜ %s %d/%d" % [
+		vault_items.size(), BaseManager.get_vault_capacity(),
+		"当前背包" if _inventory_module != null else "下局带入", backpack_used, backpack_capacity,
+	]
 
-	var capacity: int = _get_vault_capacity()
-	var vault_items: Array[Dictionary] = _get_vault_items()
-	var loadout_items: Array[Dictionary] = BaseManager.get_pending_loadout_items() if BaseManager != null else []
-	var used: int = vault_items.size()
 
-	var title := Label.new()
-	title.text = "保险柜"
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(title)
-
-	var summary := Label.new()
-	summary.text = "保险格: %d / %d （存入的物品跨局保留，死亡不丢失）" % [used, capacity]
-	summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(summary)
-
-	content.add_child(_make_hsep())
-
-	# 已存入物品
-	if vault_items.is_empty():
-		var empty_lbl := Label.new()
-		empty_lbl.text = "当前无存入物品"
-		empty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(empty_lbl)
-	else:
-		var hdr := Label.new()
-		hdr.text = "—— 已存入物品 ——"
-		hdr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(hdr)
-		for i in vault_items.size():
-			content.add_child(_make_vault_item_row(i, vault_items[i]))
-
-	content.add_child(_make_hsep())
-
-	if loadout_items.is_empty():
-		var loadout_empty := Label.new()
-		loadout_empty.text = "下局带入: 无"
-		loadout_empty.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(loadout_empty)
-	else:
-		var loadout_hdr := Label.new()
-		loadout_hdr.text = "—— 下局带入 ——"
-		loadout_hdr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		content.add_child(loadout_hdr)
-		for i in loadout_items.size():
-			content.add_child(_make_loadout_item_row(i, loadout_items[i]))
-
-	content.add_child(_make_hsep())
-
-	var vault_hint := Label.new()
-	vault_hint.text = "撤离成功会把背包与保险格物品存回这里"
-	vault_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	content.add_child(vault_hint)
-
-	content.add_child(_make_hsep())
-
-	var upgrade_lbl := Label.new()
-	upgrade_lbl.text = "升级保险柜建筑可增加容量（当前 %d 格）" % capacity
-	content.add_child(upgrade_lbl)
-
-func _make_vault_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
+func _make_storage_column(title_text: String, hint_text: String, owner: String, items: Array[Dictionary], used: int, capacity: int, columns_count: int) -> PanelContainer:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(560, 44)
-	var hbox := HBoxContainer.new()
-	panel.add_child(hbox)
-
-	# 品质边框颜色（根据物品类型推断）
-	var item_type: String = item_dict.get("type", "")
-	var border_color: Color
-	if item_type == "FateCard":
-		var rarity_str: String = item_dict.get("rarity", "COMMON")
-		var rarity_val: int = FateCard.CardRarity.get(rarity_str, -1)
-		if rarity_val >= 0:
-			border_color = FateCard.rarity_color(rarity_val as FateCard.CardRarity)
-		else:
-			border_color = Color.WHITE
-	else:
-		border_color = UIPalette.item_border_color(item_type)
-	panel.add_theme_stylebox_override("panel", _make_rarity_border_style(border_color))
-
-	var name_lbl := Label.new()
-	name_lbl.text = _item_display_name(item_dict)
-	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(name_lbl)
-
-	var count_lbl := Label.new()
-	count_lbl.text = "×%d" % item_dict.get("count", 1)
-	hbox.add_child(count_lbl)
-
-	if str(item_dict.get("type", "")) == "weapon":
-		var sell_btn := Button.new()
-		sell_btn.text = "出售"
-		sell_btn.custom_minimum_size = Vector2(82, 32)
-		var instance_id := str(item_dict.get("weapon_instance_id", ""))
-		sell_btn.tooltip_text = "出售完整实例 #%s；命运升级与配件将一并永久离开" % instance_id.right(6).to_upper()
-		sell_btn.pressed.connect(_on_sell_weapon_pressed.bind(instance_id, sell_btn))
-		var sell_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
-		UIStyleFactory.apply_button_style(sell_btn, sell_styles)
-		hbox.add_child(sell_btn)
-
-	var take_btn := Button.new()
-	take_btn.text = "带入"
-	take_btn.custom_minimum_size = Vector2(80, 32)
-	take_btn.pressed.connect(_on_take_pressed.bind(index))
-	var take_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_FOCUS)
-	UIStyleFactory.apply_button_style(take_btn, take_styles)
-	hbox.add_child(take_btn)
-
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.add_theme_stylebox_override("panel", _column_style())
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 6)
+	panel.add_child(box)
+	var title := Label.new()
+	title.text = "%s   %d / %d" % [title_text, used, capacity]
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 20)
+	title.add_theme_color_override("font_color", Color(0.42, 0.92, 1.0))
+	box.add_child(title)
+	var hint := Label.new()
+	hint.text = hint_text
+	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	hint.add_theme_color_override("font_color", Color(0.44, 0.64, 0.69))
+	box.add_child(hint)
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	box.add_child(scroll)
+	var grid := GridContainer.new()
+	grid.columns = columns_count
+	grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	grid.add_theme_constant_override("h_separation", 6)
+	grid.add_theme_constant_override("v_separation", 6)
+	scroll.add_child(grid)
+	for index in capacity:
+		var slot := STORAGE_SLOT.new() as BaseStorageSlot
+		var slot_item: Dictionary = items[index] if index < items.size() else {}
+		slot.configure(owner, index if not slot_item.is_empty() else -1, slot_item, index)
+		slot.item_clicked.connect(_on_slot_clicked)
+		slot.item_drop_requested.connect(_on_item_drop_requested)
+		grid.add_child(slot)
 	return panel
 
-func _make_rarity_border_style(color: Color) -> StyleBoxFlat:
-	# 委托给 UIStyleFactory（保留 3px 全边以维持原视觉）
+
+func _on_slot_clicked(owner: String, source_index: int) -> void:
+	var target := ("inventory" if _inventory_module != null else "loadout") if owner == "vault" else "vault"
+	_transfer(owner, source_index, target, "点击")
+
+
+func _on_item_drop_requested(source_owner: String, source_index: int, target_owner: String) -> void:
+	_transfer(source_owner, source_index, target_owner, "拖拽")
+
+
+func _transfer(source_owner: String, source_index: int, target_owner: String, method: String) -> void:
+	var result: Dictionary
+	if _inventory_module != null and (source_owner == "inventory" or target_owner == "inventory"):
+		result = BaseManager.transfer_runtime_inventory_item(source_owner, source_index, _inventory_module)
+	else:
+		result = BaseManager.transfer_base_storage_item(source_owner, source_index, target_owner)
+	if not bool(result.get("success", false)):
+		status_label.text = "%s转移失败：%s" % [method, str(result.get("reason", "未知原因"))]
+		return
+	var item := result.get("item", {}) as Dictionary
+	var target_name := "当前I键背包" if target_owner == "inventory" else ("下局带入" if target_owner == "loadout" else "长期保险柜")
+	status_label.text = "%s成功：%s → %s%s" % [
+		method, str(item.get("name", "物品")), target_name,
+		"（已合并堆叠）" if bool(result.get("merged", false)) else "",
+	]
+	_build_vault_view()
+
+
+func _get_backpack_slot_items() -> Array[Dictionary]:
+	if _inventory_module == null:
+		return _compact_to_slots(BaseManager.get_pending_loadout_items(), BaseManager.get_pending_loadout_capacity())
+	var result: Array[Dictionary] = []
+	for index in _inventory_module.get_capacity():
+		var slot_data := _inventory_module.get_slot(index)
+		if slot_data.is_empty():
+			result.append({})
+			continue
+		var item := (slot_data.get("item", {}) as Dictionary).duplicate(true)
+		item["count"] = int(slot_data.get("count", 1))
+		result.append(item)
+	return result
+
+
+func _compact_to_slots(items: Array[Dictionary], capacity: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for index in capacity:
+		result.append(items[index].duplicate(true) if index < items.size() else {})
+	return result
+
+
+func _column_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.1, 0.1, 0.1, 0.9)
-	style.border_color = color
-	style.set_border_width_all(3)
-	style.corner_radius_top_left = 4
-	style.corner_radius_top_right = 4
-	style.corner_radius_bottom_left = 4
-	style.corner_radius_bottom_right = 4
+	style.bg_color = Color(0.012, 0.030, 0.040, 0.96)
+	style.border_color = Color(0.10, 0.44, 0.52)
+	style.set_border_width_all(1)
+	style.corner_radius_top_left = 7
+	style.corner_radius_top_right = 7
+	style.corner_radius_bottom_left = 7
+	style.corner_radius_bottom_right = 7
+	style.content_margin_left = 10
+	style.content_margin_right = 10
+	style.content_margin_top = 8
+	style.content_margin_bottom = 8
 	return style
 
-func _make_loadout_item_row(index: int, item_dict: Dictionary) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(560, 40)
-	var hbox := HBoxContainer.new()
-	panel.add_child(hbox)
-
-	var name_lbl := Label.new()
-	name_lbl.text = _item_display_name(item_dict)
-	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(name_lbl)
-
-	var count_lbl := Label.new()
-	count_lbl.text = "×%d" % item_dict.get("count", 1)
-	hbox.add_child(count_lbl)
-
-	var cancel_btn := Button.new()
-	cancel_btn.text = "取消"
-	cancel_btn.custom_minimum_size = Vector2(80, 32)
-	cancel_btn.pressed.connect(_on_cancel_loadout_pressed.bind(index))
-	var cancel_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
-	UIStyleFactory.apply_button_style(cancel_btn, cancel_styles)
-	hbox.add_child(cancel_btn)
-	return panel
-
-func _make_deposit_row(slot_index: int, slot_data: Dictionary, used: int, capacity: int) -> PanelContainer:
-	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(560, 44)
-	var hbox := HBoxContainer.new()
-	panel.add_child(hbox)
-
-	var item: Dictionary = slot_data.get("item", {})
-	var name_lbl := Label.new()
-	name_lbl.text = "%s ×%d" % [item.get("name", "?"), slot_data.get("count", 1)]
-	name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(name_lbl)
-
-	var deposit_btn := Button.new()
-	deposit_btn.custom_minimum_size = Vector2(80, 32)
-	var deposit_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.STATUS_OK)
-	UIStyleFactory.apply_button_style(deposit_btn, deposit_styles)
-
-	if used >= capacity:
-		deposit_btn.disabled = true
-		deposit_btn.text = "格满"
-	else:
-		deposit_btn.text = "存入"
-		deposit_btn.pressed.connect(_on_deposit_pressed.bind(slot_index))
-
-	hbox.add_child(deposit_btn)
-	return panel
-
-func _make_hsep() -> HSeparator:
-	var sep := HSeparator.new()
-	sep.custom_minimum_size = Vector2(0, 6)
-	return sep
-
-func _on_deposit_pressed(slot_index: int) -> void:
-	_update_status("局内背包存入将在撤离结算后处理")
-
-func _on_take_pressed(vault_index: int) -> void:
-	var vault_items: Array[Dictionary] = _get_vault_items()
-	if vault_index < 0 or vault_index >= vault_items.size():
-		_update_status("取出失败")
-		return
-
-	if BaseManager.stage_vault_item_for_loadout(vault_index):
-		_update_status("已加入下局带入")
-		_build_vault_view()
-	else:
-		_update_status("加入带入失败")
-
-func _on_cancel_loadout_pressed(loadout_index: int) -> void:
-	if BaseManager.remove_pending_loadout_item(loadout_index):
-		_update_status("已取消带入")
-		_build_vault_view()
-	else:
-		_update_status("取消失败")
-
-func _update_status(msg: String) -> void:
-	if status_label:
-		status_label.text = msg
 
 func _on_close_pressed() -> void:
 	queue_free()
-
-
-func _on_sell_weapon_pressed(instance_id: String, button: Button) -> void:
-	if button == null:
-		return
-	if not bool(button.get_meta("confirm_sell", false)):
-		button.set_meta("confirm_sell", true)
-		button.text = "确认出售"
-		_update_status("再次点击确认：完整枪械 #%s 将永久离开" % instance_id.right(6).to_upper())
-		return
-	var result := BaseManager.sell_vault_weapon(instance_id) as Dictionary
-	if not bool(result.get("success", false)):
-		_update_status("出售失败：%s" % result.get("reason", "未知原因"))
-		return
-	_update_status("已出售枪械 #%s，获得 %d 资源点" % [
-		instance_id.right(6).to_upper(), int(result.get("value", 0)),
-	])
-	_build_vault_view()
-
-
-func _item_display_name(item: Dictionary) -> String:
-	var display := str(item.get("name", "?"))
-	if str(item.get("type", "")) != "weapon":
-		return display
-	var instance_id := str(item.get("weapon_instance_id", ""))
-	var upgrades: Variant = item.get("fate_upgrades", [])
-	var used: int = upgrades.size() if upgrades is Array else 0
-	return "%s #%s · 命运 %d/%d" % [
-		display, instance_id.right(6).to_upper(), used, int(item.get("fate_slot_capacity", 8)),
-	]

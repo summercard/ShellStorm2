@@ -27,7 +27,7 @@ grow_vertical = 2
 
 [node name="TitleLabel" type="Label" parent="VBox"]
 layout_mode = 2
-text = "弹壳风暴2"
+text = "基地管理终端"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -98,41 +98,6 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 columns = 2
-
-[node name="BuildingWorkshop" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "枪械工坊"
-
-[node name="BuildingDivination" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "命运占卜屋"
-
-[node name="BuildingVault" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "保险柜"
-
-[node name="BuildingArchive" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "怪物档案室"
-
-[node name="BuildingFateCardCollection" type="Button" parent="VBox/HSplit/RightPanel/BuildingsGrid"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-text = "命运卡牌"
 
 [node name="HSeparator2" type="HSeparator" parent="VBox"]
 layout_mode = 2

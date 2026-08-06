@@ -1,30 +1,130 @@
 extends Node
 
 const SAVE_PATH := "user://base_save.json"
+const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
+const FacilityService = preload("res://src/base/BaseFacilityService.gd")
+const SaveService = preload("res://src/base/ProfileSaveService.gd")
+const ShopService = preload("res://src/base/BaseShopService.gd")
+const BASE_LOADOUT_CAPACITY := 12
 
 var data: BaseData
+var save_path: String = SAVE_PATH
+var force_save_failure_for_test := false
 
 func _ready() -> void:
 	load_base()
 
 func load_base() -> void:
-	var json: Variant = AtomicJsonStore.load_dictionary(SAVE_PATH)
+	var json: Variant = AtomicJsonStore.load_dictionary(
+		save_path, Callable(self, "_is_supported_save_candidate")
+	)
 	if json is Dictionary:
-		var save_version := str(json.get("save_version", "legacy"))
+		var unpacked := SaveService.unpack(json as Dictionary)
+		if not bool(unpacked.get("success", false)):
+			push_error("[BaseManager] Save envelope validation failed")
+			data = BaseData.new()
+			return
+		var payload := unpacked.get("payload", {}) as Dictionary
+		var save_version := str(payload.get("save_version", "legacy"))
 		if save_version != BaseData.SAVE_VERSION:
 			push_warning("[BaseManager] Loading compatible save version %s" % save_version)
-		data = BaseData.from_dict(json)
-		_migrate_weapon_items()
+		data = BaseData.from_dict(payload)
+		data.save_revision = maxi(data.save_revision, int(unpacked.get("revision", 0)))
+		data.last_saved_at_unix = maxi(data.last_saved_at_unix, int(unpacked.get("saved_at_unix", 0)))
+		if data.last_save_reason.is_empty():
+			data.last_save_reason = str(unpacked.get("reason", ""))
+		_migrate_owned_item_instances()
+		if bool(unpacked.get("legacy", false)):
+			save_base("migrate_legacy_profile")
 		return
 	data = BaseData.new()
+
+
+func _is_supported_save_candidate(candidate: Dictionary) -> bool:
+	var unpacked := SaveService.unpack(candidate)
+	return bool(unpacked.get("success", false))
 
 func _ensure_data() -> void:
 	if data == null:
 		load_base()
 
-func save_base() -> void:
+func save_base(reason: String = "base_mutation") -> bool:
 	_ensure_data()
-	AtomicJsonStore.save_dictionary(SAVE_PATH, data._to_dict())
+	var old_revision := data.save_revision
+	var old_time := data.last_saved_at_unix
+	var old_reason := data.last_save_reason
+	data.save_revision = old_revision + 1
+	data.last_saved_at_unix = int(Time.get_unix_time_from_system())
+	data.last_save_reason = reason if not reason.is_empty() else "base_mutation"
+	var payload := data._to_dict()
+	var envelope := SaveService.build_envelope(payload, data.save_revision, data.last_save_reason)
+	if not force_save_failure_for_test and AtomicJsonStore.save_dictionary(save_path, envelope):
+		return true
+	data.save_revision = old_revision
+	data.last_saved_at_unix = old_time
+	data.last_save_reason = old_reason
+	return false
+
+
+func set_active_run_checkpoint(snapshot: Dictionary, reason: String) -> bool:
+	_ensure_data()
+	if snapshot.is_empty() or not bool(snapshot.get("valid", false)):
+		return false
+	if str(snapshot.get("checkpoint_id", snapshot.get("layout_id", ""))).is_empty():
+		return false
+	var previous := data.active_run_snapshot.duplicate(true)
+	data.active_run_snapshot = snapshot.duplicate(true)
+	if save_base("active_run_checkpoint:%s" % reason):
+		return true
+	data.active_run_snapshot = previous
+	return false
+
+
+func get_active_run_checkpoint() -> Dictionary:
+	_ensure_data()
+	return data.active_run_snapshot.duplicate(true)
+
+
+func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
+	_ensure_data()
+	var previous := data.active_run_snapshot.duplicate(true)
+	data.active_run_snapshot.clear()
+	if save_base("active_run_clear:%s" % reason):
+		return true
+	data.active_run_snapshot = previous
+	return false
+
+
+func get_facility_definitions() -> Array[Dictionary]:
+	return FacilityCatalog.all_definitions()
+
+
+func get_facility_snapshot(facility_id: String) -> Dictionary:
+	_ensure_data()
+	return FacilityService.get_snapshot(facility_id, data)
+
+
+func get_facility_snapshots() -> Array[Dictionary]:
+	_ensure_data()
+	return FacilityService.get_all_snapshots(data)
+
+
+func upgrade_facility(facility_id: String) -> Dictionary:
+	_ensure_data()
+	var definition: Dictionary = FacilityCatalog.get_definition(facility_id)
+	if definition.is_empty():
+		return {"success": false, "reason": "未知设施"}
+	var building_type := int(definition.get("legacy_building_type", -1))
+	if building_type < 0:
+		return {"success": false, "reason": "该设施没有等级升级"}
+	var cost := get_upgrade_cost(building_type)
+	var result: Dictionary = FacilityService.apply_upgrade(facility_id, data, cost)
+	if not bool(result.get("success", false)):
+		return result
+	if save_base():
+		return result
+	FacilityService.rollback_upgrade(result, data)
+	return {"success": false, "reason": "存档失败，资源与等级已回滚"}
 
 func record_run(success: bool, kills: int) -> void:
 	data.record_run(success, kills)
@@ -181,21 +281,19 @@ func get_vault_items() -> Array[Dictionary]:
 func set_vault_items(items: Array[Dictionary]) -> void:
 	data.vault_items = []
 	for item in items:
-		data.vault_items.append(WeaponInstance.ensure_weapon_item(item))
+		data.vault_items.append(ShopService.ensure_item_instance(item))
 	save_base()
 
 func add_vault_item(item: Dictionary) -> bool:
-	if data.vault_items.size() >= _get_vault_capacity():
+	var previous := data.vault_items.duplicate(true)
+	var result := _try_add_owned_item(data.vault_items, item, _get_vault_capacity())
+	if not bool(result.get("success", false)):
 		return false
-	var normalized := WeaponInstance.ensure_weapon_item(item)
-	var instance_id := str(normalized.get("weapon_instance_id", ""))
-	if not instance_id.is_empty():
-		for existing in data.vault_items:
-			if existing is Dictionary and str(existing.get("weapon_instance_id", "")) == instance_id:
-				return false
-	data.vault_items.append(normalized.duplicate(true))
-	save_base()
-	return true
+	data.vault_items = result.get("items", []) as Array
+	if save_base("vault_add"):
+		return true
+	data.vault_items = previous
+	return false
 
 func remove_vault_item(index: int) -> bool:
 	if index < 0 or index >= data.vault_items.size():
@@ -214,6 +312,105 @@ func get_vault_capacity() -> int:
 func get_vault_free_slots() -> int:
 	return max(0, _get_vault_capacity() - data.vault_items.size())
 
+
+## — 基地自动贩卖机 —
+func get_base_shop_goods() -> Array[Dictionary]:
+	return ShopService.get_goods()
+
+
+func purchase_base_shop_item(item_id: String, transaction_id: String = "", target_owner: String = "loadout") -> Dictionary:
+	_ensure_data()
+	var effective_transaction_id := transaction_id
+	if effective_transaction_id.is_empty():
+		effective_transaction_id = ShopService.generate_transaction_id("buy")
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
+	var definition := ItemRegistry.get_instance().get_item(item_id)
+	if definition.is_empty() or not bool(definition.get("base_shop_enabled", false)):
+		return {"success": false, "reason": "商品未在基地货架上"}
+	var price := int(definition.get("base_buy_price", 0))
+	if price <= 0:
+		return {"success": false, "reason": "商品购买价配置无效"}
+	if data.extraction_points < price:
+		return {"success": false, "reason": "基地币不足"}
+	if target_owner not in ["loadout", "vault"]:
+		return {"success": false, "reason": "购买目标无效"}
+
+	var purchased := ShopService.make_item_instance(definition, effective_transaction_id)
+	var target_items: Array = data.pending_loadout_items if target_owner == "loadout" else data.vault_items
+	var target_capacity := BASE_LOADOUT_CAPACITY if target_owner == "loadout" else _get_vault_capacity()
+	var add_result := _try_add_owned_item(target_items, purchased, target_capacity)
+	if not bool(add_result.get("success", false)):
+		return {"success": false, "reason": str(add_result.get("reason", "目标空间不足"))}
+	var old_points := data.extraction_points
+	var old_target := target_items.duplicate(true)
+	data.extraction_points -= price
+	if target_owner == "loadout":
+		data.pending_loadout_items = add_result.get("items", []) as Array
+	else:
+		data.vault_items = add_result.get("items", []) as Array
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("shop_buy:%s" % item_id):
+		return {
+			"success": true,
+			"transaction_id": effective_transaction_id,
+			"price": price,
+			"item": purchased.duplicate(true),
+			"target_owner": target_owner,
+			"slot_index": int(add_result.get("slot_index", -1)),
+			"merged": bool(add_result.get("merged", false)),
+		}
+	data.extraction_points = old_points
+	if target_owner == "loadout":
+		data.pending_loadout_items = old_target
+	else:
+		data.vault_items = old_target
+	data.completed_transaction_ids.erase(effective_transaction_id)
+	return {"success": false, "reason": "存档失败，购买已回滚"}
+
+
+func sell_base_shop_item(item_instance_id: String, transaction_id: String = "", source_owner: String = "vault") -> Dictionary:
+	_ensure_data()
+	var effective_transaction_id := transaction_id
+	if effective_transaction_id.is_empty():
+		effective_transaction_id = ShopService.generate_transaction_id("sell")
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
+	if source_owner not in ["loadout", "vault"]:
+		return {"success": false, "reason": "出售来源无效"}
+	var source_items: Array = data.pending_loadout_items if source_owner == "loadout" else data.vault_items
+	var index := ShopService.find_vault_item_index(source_items, item_instance_id)
+	if index < 0:
+		return {"success": false, "reason": "%s中不存在该物品实例" % ("随身背包" if source_owner == "loadout" else "保险柜")}
+	var sold := (source_items[index] as Dictionary).duplicate(true)
+	var sell_price := ShopService.get_sell_price(sold) * maxi(1, int(sold.get("count", 1)))
+	if sell_price <= 0:
+		return {"success": false, "reason": "该物品不在自动贩卖机收购清单"}
+
+	var old_points := data.extraction_points
+	var old_source := source_items.duplicate(true)
+	source_items.remove_at(index)
+	if source_owner == "loadout":
+		data.pending_loadout_items = source_items
+	else:
+		data.vault_items = source_items
+	data.extraction_points += sell_price
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("shop_sell:%s" % str(sold.get("id", "unknown"))):
+		return {
+			"success": true,
+			"transaction_id": effective_transaction_id,
+			"value": sell_price,
+			"sold_item": sold,
+		}
+	data.extraction_points = old_points
+	if source_owner == "loadout":
+		data.pending_loadout_items = old_source
+	else:
+		data.vault_items = old_source
+	data.completed_transaction_ids.erase(effective_transaction_id)
+	return {"success": false, "reason": "存档失败，出售已回滚"}
+
 func get_pending_loadout_items() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for item in data.pending_loadout_items:
@@ -221,27 +418,197 @@ func get_pending_loadout_items() -> Array[Dictionary]:
 			result.append(item.duplicate(true))
 	return result
 
+func get_pending_loadout_capacity() -> int:
+	return BASE_LOADOUT_CAPACITY
+
+func get_pending_loadout_free_slots() -> int:
+	return maxi(0, BASE_LOADOUT_CAPACITY - data.pending_loadout_items.size())
+
+func transfer_base_storage_item(source_owner: String, source_index: int, target_owner: String) -> Dictionary:
+	_ensure_data()
+	if source_owner == target_owner or source_owner not in ["vault", "loadout"] or target_owner not in ["vault", "loadout"]:
+		return {"success": false, "reason": "请选择另一侧作为目标"}
+	var source: Array = data.vault_items if source_owner == "vault" else data.pending_loadout_items
+	var target: Array = data.vault_items if target_owner == "vault" else data.pending_loadout_items
+	if source_index < 0 or source_index >= source.size() or not source[source_index] is Dictionary:
+		return {"success": false, "reason": "来源格已变化，请重试"}
+	var moved := (source[source_index] as Dictionary).duplicate(true)
+	var target_capacity := _get_vault_capacity() if target_owner == "vault" else BASE_LOADOUT_CAPACITY
+	var add_result := _try_add_owned_item(target, moved, target_capacity)
+	if not bool(add_result.get("success", false)):
+		return add_result
+	var old_vault := data.vault_items.duplicate(true)
+	var old_loadout := data.pending_loadout_items.duplicate(true)
+	source.remove_at(source_index)
+	if source_owner == "vault":
+		data.vault_items = source
+		data.pending_loadout_items = add_result.get("items", []) as Array
+	else:
+		data.pending_loadout_items = source
+		data.vault_items = add_result.get("items", []) as Array
+	if save_base("storage_transfer:%s_to_%s" % [source_owner, target_owner]):
+		return {
+			"success": true,
+			"item": moved,
+			"source_owner": source_owner,
+			"target_owner": target_owner,
+			"slot_index": int(add_result.get("slot_index", -1)),
+			"merged": bool(add_result.get("merged", false)),
+		}
+	data.vault_items = old_vault
+	data.pending_loadout_items = old_loadout
+	return {"success": false, "reason": "存档失败，转移已回滚"}
+
+func transfer_runtime_inventory_item(source_owner: String, source_index: int, inventory: InventoryModule) -> Dictionary:
+	_ensure_data()
+	if inventory == null or source_owner not in ["vault", "inventory"]:
+		return {"success": false, "reason": "当前背包未连接"}
+	var old_vault := data.vault_items.duplicate(true)
+	var old_inventory := inventory.get_slots_snapshot()
+	var moved: Dictionary
+	var merged := false
+	if source_owner == "inventory":
+		var slot_data := inventory.get_slot(source_index)
+		if slot_data.is_empty():
+			return {"success": false, "reason": "I键背包中的来源格已变化"}
+		moved = (slot_data.get("item", {}) as Dictionary).duplicate(true)
+		moved["count"] = int(slot_data.get("count", 1))
+		var add_result := _try_add_owned_item(data.vault_items, moved, _get_vault_capacity())
+		if not bool(add_result.get("success", false)):
+			return add_result
+		if not inventory.remove_from_slot(source_index, int(moved.get("count", 1))):
+			return {"success": false, "reason": "I键背包物品已变化，请重试"}
+		data.vault_items = add_result.get("items", []) as Array
+		merged = bool(add_result.get("merged", false))
+	else:
+		if source_index < 0 or source_index >= data.vault_items.size() or not data.vault_items[source_index] is Dictionary:
+			return {"success": false, "reason": "保险柜来源格已变化"}
+		moved = (data.vault_items[source_index] as Dictionary).duplicate(true)
+		var requested := maxi(1, int(moved.get("count", 1)))
+		if inventory.add_item(moved, requested) != requested:
+			inventory.restore_slots_snapshot(old_inventory)
+			return {"success": false, "reason": "当前I键背包空间不足"}
+		data.vault_items.remove_at(source_index)
+	if save_base("storage_transfer:%s_to_%s" % [source_owner, "vault" if source_owner == "inventory" else "inventory"]):
+		return {"success": true, "item": moved, "source_owner": source_owner, "merged": merged}
+	data.vault_items = old_vault
+	inventory.restore_slots_snapshot(old_inventory)
+	return {"success": false, "reason": "存档失败，I键背包与保险柜已同时回滚"}
+
+func purchase_base_shop_item_to_inventory(item_id: String, inventory: InventoryModule, transaction_id: String = "") -> Dictionary:
+	_ensure_data()
+	if inventory == null:
+		return {"success": false, "reason": "当前I键背包未连接"}
+	var effective_transaction_id := transaction_id if not transaction_id.is_empty() else ShopService.generate_transaction_id("buy")
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
+	var definition := ItemRegistry.get_instance().get_item(item_id)
+	if definition.is_empty() or not bool(definition.get("base_shop_enabled", false)):
+		return {"success": false, "reason": "商品未在基地货架上"}
+	var price := int(definition.get("base_buy_price", 0))
+	if price <= 0 or data.extraction_points < price:
+		return {"success": false, "reason": "基地币不足" if price > 0 else "商品购买价配置无效"}
+	var purchased := ShopService.make_item_instance(definition, effective_transaction_id)
+	var old_inventory := inventory.get_slots_snapshot()
+	if inventory.add_item(purchased, 1) != 1:
+		inventory.restore_slots_snapshot(old_inventory)
+		return {"success": false, "reason": "当前I键背包空间不足"}
+	var old_points := data.extraction_points
+	data.extraction_points -= price
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("shop_buy_runtime:%s" % item_id):
+		return {"success": true, "transaction_id": effective_transaction_id, "price": price, "item": purchased, "target_owner": "inventory"}
+	data.extraction_points = old_points
+	data.completed_transaction_ids.erase(effective_transaction_id)
+	inventory.restore_slots_snapshot(old_inventory)
+	return {"success": false, "reason": "存档失败，购买已回滚"}
+
+func sell_runtime_inventory_item(inventory: InventoryModule, slot_index: int, transaction_id: String = "") -> Dictionary:
+	_ensure_data()
+	if inventory == null:
+		return {"success": false, "reason": "当前I键背包未连接"}
+	var effective_transaction_id := transaction_id if not transaction_id.is_empty() else ShopService.generate_transaction_id("sell")
+	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
+	var slot_data := inventory.get_slot(slot_index)
+	if slot_data.is_empty():
+		return {"success": false, "reason": "I键背包中的物品已变化"}
+	var sold := (slot_data.get("item", {}) as Dictionary).duplicate(true)
+	var count := maxi(1, int(slot_data.get("count", 1)))
+	sold["count"] = count
+	var sell_value := ShopService.get_sell_price(sold) * count
+	if sell_value <= 0:
+		return {"success": false, "reason": "该物品不在自动贩卖机收购清单"}
+	var old_inventory := inventory.get_slots_snapshot()
+	if not inventory.remove_from_slot(slot_index, count):
+		return {"success": false, "reason": "I键背包中的物品已变化"}
+	var old_points := data.extraction_points
+	data.extraction_points += sell_value
+	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
+	if save_base("shop_sell_runtime:%s" % str(sold.get("id", "unknown"))):
+		return {"success": true, "transaction_id": effective_transaction_id, "value": sell_value, "sold_item": sold}
+	data.extraction_points = old_points
+	data.completed_transaction_ids.erase(effective_transaction_id)
+	inventory.restore_slots_snapshot(old_inventory)
+	return {"success": false, "reason": "存档失败，出售已回滚"}
+
 func stage_vault_item_for_loadout(vault_index: int) -> bool:
-	if vault_index < 0 or vault_index >= data.vault_items.size():
-		return false
-	var item: Dictionary = data.vault_items[vault_index]
-	if item.is_empty():
-		return false
-	data.pending_loadout_items.append(item.duplicate(true))
-	data.vault_items.remove_at(vault_index)
-	save_base()
-	return true
+	return bool(transfer_base_storage_item("vault", vault_index, "loadout").get("success", false))
 
 func remove_pending_loadout_item(loadout_index: int) -> bool:
-	if loadout_index < 0 or loadout_index >= data.pending_loadout_items.size():
-		return false
-	if data.vault_items.size() >= _get_vault_capacity():
-		return false
-	var item := (data.pending_loadout_items[loadout_index] as Dictionary).duplicate(true)
-	data.pending_loadout_items.remove_at(loadout_index)
-	data.vault_items.append(item)
-	save_base()
-	return true
+	return bool(transfer_base_storage_item("loadout", loadout_index, "vault").get("success", false))
+
+func _try_add_owned_item(items: Array, incoming: Dictionary, capacity: int) -> Dictionary:
+	var updated := items.duplicate(true)
+	var normalized := ShopService.ensure_item_instance(incoming)
+	var incoming_item_instance := str(normalized.get("item_instance_id", ""))
+	var incoming_weapon_instance := str(normalized.get("weapon_instance_id", ""))
+	for raw_existing in updated:
+		if not raw_existing is Dictionary:
+			continue
+		var owned_existing := raw_existing as Dictionary
+		if not incoming_item_instance.is_empty() and str(owned_existing.get("item_instance_id", "")) == incoming_item_instance:
+			return {"success": false, "reason": "目标中已存在同一物品实例"}
+		if not incoming_weapon_instance.is_empty() and str(owned_existing.get("weapon_instance_id", "")) == incoming_weapon_instance:
+			return {"success": false, "reason": "目标中已存在同一枪械实例"}
+	var remaining := maxi(1, int(normalized.get("count", 1)))
+	var stack_max := maxi(1, int(normalized.get("stack_max", 1)))
+	var content_id := str(normalized.get("id", normalized.get("weapon_content_id", "")))
+	var first_slot := -1
+	var merged := false
+	if stack_max > 1 and not content_id.is_empty():
+		for index in updated.size():
+			if not updated[index] is Dictionary:
+				continue
+			var existing := updated[index] as Dictionary
+			if str(existing.get("id", existing.get("weapon_content_id", ""))) != content_id:
+				continue
+			var existing_count := maxi(1, int(existing.get("count", 1)))
+			var room := maxi(0, maxi(1, int(existing.get("stack_max", stack_max))) - existing_count)
+			if room <= 0:
+				continue
+			var amount := mini(room, remaining)
+			existing["count"] = existing_count + amount
+			updated[index] = existing
+			remaining -= amount
+			first_slot = index if first_slot < 0 else first_slot
+			merged = true
+			if remaining <= 0:
+				break
+	while remaining > 0:
+		if updated.size() >= capacity:
+			return {"success": false, "reason": "%s空间不足" % ("随身背包" if capacity == BASE_LOADOUT_CAPACITY else "保险柜")}
+		var stack := normalized.duplicate(true)
+		stack["count"] = mini(stack_max, remaining)
+		if first_slot >= 0:
+			stack.erase("item_instance_id")
+			stack.erase("weapon_instance_id")
+			stack = ShopService.ensure_item_instance(stack)
+		updated.append(stack)
+		if first_slot < 0:
+			first_slot = updated.size() - 1
+		remaining -= int(stack.get("count", 1))
+	return {"success": true, "items": updated, "slot_index": first_slot, "merged": merged}
 
 func clear_pending_loadout() -> void:
 	var not_restored: Array = []
@@ -284,25 +651,15 @@ func _find_matching_vault_item(target: Dictionary) -> int:
 func sell_vault_weapon(weapon_instance_id: String) -> Dictionary:
 	if weapon_instance_id.is_empty():
 		return {"success": false, "reason": "缺少枪械实例ID"}
-	for index in data.vault_items.size():
-		var item := data.vault_items[index] as Dictionary
-		if str(item.get("weapon_instance_id", "")) != weapon_instance_id:
-			continue
-		var value := maxi(1, int(item.get("price", 1)))
-		var sold := item.duplicate(true)
-		data.vault_items.remove_at(index)
-		data.extraction_points += value
-		save_base()
-		return {
-			"success": true,
-			"value": value,
-			"weapon_instance_id": weapon_instance_id,
-			"sold_item": sold,
-		}
-	return {"success": false, "reason": "保险柜中不存在该枪械实例"}
+	var result := sell_base_shop_item(
+		weapon_instance_id, ShopService.generate_transaction_id("vault_sell")
+	)
+	if bool(result.get("success", false)):
+		result["weapon_instance_id"] = weapon_instance_id
+	return result
 
 
-func _migrate_weapon_items() -> void:
+func _migrate_owned_item_instances() -> void:
 	if data == null:
 		return
 	for collection_name in ["vault_items", "pending_loadout_items", "extraction_loot"]:
@@ -310,7 +667,7 @@ func _migrate_weapon_items() -> void:
 		var migrated: Array = []
 		for raw_item in source:
 			if raw_item is Dictionary:
-				migrated.append(WeaponInstance.ensure_weapon_item(raw_item as Dictionary))
+				migrated.append(ShopService.ensure_item_instance(raw_item as Dictionary))
 		data.set(collection_name, migrated)
 
 ## — 撤离战利品管理（返回大厅后待存入仓库）—
@@ -322,7 +679,7 @@ func get_extraction_loot() -> Array[Dictionary]:
 	return result
 
 func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
-	var new_item := WeaponInstance.ensure_weapon_item(item)
+	var new_item := ShopService.ensure_item_instance(item)
 	var instance_id := str(new_item.get("weapon_instance_id", ""))
 	if not instance_id.is_empty():
 		for existing in data.extraction_loot:

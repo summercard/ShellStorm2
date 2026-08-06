@@ -5,6 +5,7 @@ extends Dungeon3D
 ## 下方墙平滑抬升收拢、双端楼梯门、独立墙边电梯与全局固定环境光。
 
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn")
+const VENDING_FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d_v001.tscn")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
@@ -98,6 +99,7 @@ var _elevator_access_room_by_floor: Dictionary = {}
 var _tower_floor_label: Label
 var _tower_target_label: Label
 var _tower_elevator_label: Label
+var _tower_base_currency_label: Label
 var _loaded_floor_indices: Array[int] = []
 var _floor_visibility_poll_count := 0
 var _floor_visibility_apply_count := 0
@@ -2443,45 +2445,55 @@ func _install_facilities() -> void:
 		return
 	var definitions := [
 		{
-			"name": "MissionOperations", "position": Vector3(-9.0, 0, -11.6),
+			"name": "MissionOperations", "facility_id": "mission_operations", "position": Vector3(-9.0, 0, -11.6),
 			"display": "远征情报终端", "description": "查看本轮楼层与下行规则",
 			"menu": "", "color": Color(0.88, 0.48, 0.18),
 		},
 		{
-			"name": "Workshop", "position": Vector3(-3.0, 0, -11.6),
+			"name": "Workshop", "facility_id": "weapon_workshop", "position": Vector3(-3.0, 0, -11.6),
 			"display": "枪械工坊", "description": "解锁枪身、弹药与配件蓝图",
 			"menu": "res://scenes/WorkshopMenu.tscn", "color": Color(0.75, 0.42, 0.16),
 		},
 		{
-			"name": "Divination", "position": Vector3(3.0, 0, -11.6),
+			"name": "Divination", "facility_id": "fate_divination", "position": Vector3(3.0, 0, -11.6),
 			"display": "命运占卜台", "description": "为下一次深入准备命运预兆",
 			"menu": "res://scenes/DivinationMenu.tscn", "color": Color(0.55, 0.31, 0.78),
 		},
 		{
-			"name": "Vault", "position": Vector3(-9.0, 0, 11.6),
+			"name": "Vault", "facility_id": "vault", "position": Vector3(-9.0, 0, 11.6),
 			"display": "保险柜", "description": "管理撤离物资与下局带入",
 			"menu": "res://scenes/VaultMenu.tscn", "color": Color(0.24, 0.58, 0.72),
 		},
 		{
-			"name": "Archive", "position": Vector3(-3.0, 0, 11.6),
+			"name": "Archive", "facility_id": "monster_archive", "position": Vector3(-3.0, 0, 11.6),
 			"display": "怪物档案台", "description": "查看成长中的精英与悬赏情报",
 			"menu": "res://scenes/MonsterArchiveMenu.tscn", "color": Color(0.48, 0.65, 0.26),
 		},
 		{
-			"name": "FateCollection", "position": Vector3(3.0, 0, 11.6),
+			"name": "FateCollection", "facility_id": "fate_collection", "position": Vector3(3.0, 0, 11.6),
 			"display": "命运卡收藏台", "description": "浏览已发现的命运卡片",
 			"menu": "res://scenes/FateCardCollectionMenu.tscn", "color": Color(0.72, 0.28, 0.58),
 		},
 		{
-			"name": "BaseConsole", "position": Vector3(9.0, 0, -11.6),
+			"name": "BaseConsole", "facility_id": "base_console", "position": Vector3(9.0, 0, -11.6),
 			"display": "基地管理终端", "description": "处理战利品、升级建筑与查看总览",
 			"menu": "res://scenes/BaseMenu.tscn", "color": Color(0.28, 0.52, 0.68),
 		},
+		{
+			"name": "BaseVending", "facility_id": "base_vending", "position": Vector3(11.6, 0, 5.6),
+			"rotation_y": PI * 0.5,
+			"display": "自动贩卖机", "description": "购买基础装备与药水；出售保险柜物品",
+			"menu": "res://scenes/BaseVendingMenu.tscn", "color": Color(0.16, 0.78, 0.88),
+			"scene": VENDING_FACILITY_SCENE,
+		},
 	]
 	for definition in definitions:
-		var facility := FACILITY_SCENE.instantiate() as BaseFacility3D
+		var facility_scene := definition.get("scene", FACILITY_SCENE) as PackedScene
+		var facility := facility_scene.instantiate() as BaseFacility3D
 		facility.name = str(definition["name"])
+		facility.facility_id = str(definition["facility_id"])
 		facility.position = definition["position"] as Vector3
+		facility.rotation.y = float(definition.get("rotation_y", 0.0))
 		facility.display_name = str(definition["display"])
 		facility.description = str(definition["description"])
 		facility.facility_color = definition["color"] as Color
@@ -2630,6 +2642,8 @@ func _open_facility_menu(scene_path: String) -> void:
 		return
 	if menu is BaseMenu:
 		menu.overlay_mode = true
+	if menu.has_method("set_inventory_module"):
+		menu.call("set_inventory_module", get_inventory_module())
 	_active_facility_menu = menu
 	add_child(menu)
 	menu.tree_exited.connect(_on_active_facility_menu_closed)
@@ -2660,7 +2674,7 @@ func _install_tower_hud() -> void:
 	margin.offset_left = 14.0
 	margin.offset_top = 176.0
 	margin.offset_right = 270.0
-	margin.offset_bottom = 270.0
+	margin.offset_bottom = 290.0
 	$HUD.add_child(margin)
 	var panel := PanelContainer.new()
 	margin.add_child(panel)
@@ -2692,6 +2706,10 @@ func _install_tower_hud() -> void:
 	_tower_elevator_label.add_theme_font_size_override("font_size", 11)
 	_tower_elevator_label.add_theme_color_override("font_color", Color(0.72, 0.82, 0.88))
 	vbox.add_child(_tower_elevator_label)
+	_tower_base_currency_label = Label.new()
+	_tower_base_currency_label.add_theme_font_size_override("font_size", 12)
+	_tower_base_currency_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
+	vbox.add_child(_tower_base_currency_label)
 
 
 func _refresh_tower_hud() -> void:
@@ -2716,6 +2734,7 @@ func _refresh_tower_hud() -> void:
 			func(value): return "%dF" % int(value)
 		))
 	)
+	_tower_base_currency_label.text = "基地币：◈ %d" % BaseManager.get_extraction_points()
 
 
 func _on_service_activated(room: DungeonRoom3D, station: ServiceStation3D) -> void:

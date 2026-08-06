@@ -1,0 +1,148 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_facility"]
+
+[sub_resource type="BoxShape3D" id="ShapeArea"]
+size = Vector3(3.6, 3.8, 3.2)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(2.5, 3.35, 1.35)
+
+[sub_resource type="BoxMesh" id="MeshCabinet"]
+size = Vector3(2.5, 3.35, 1.35)
+
+[sub_resource type="BoxMesh" id="MeshTop"]
+size = Vector3(2.62, 0.22, 1.48)
+
+[sub_resource type="CylinderMesh" id="MeshBeacon"]
+top_radius = 0.15
+bottom_radius = 0.22
+height = 0.28
+radial_segments = 10
+
+[sub_resource type="BoxMesh" id="MeshWindow"]
+size = Vector3(1.72, 1.48, 0.08)
+
+[sub_resource type="BoxMesh" id="MeshScreen"]
+size = Vector3(0.42, 0.62, 0.07)
+
+[sub_resource type="BoxMesh" id="MeshSlot"]
+size = Vector3(0.92, 0.18, 0.09)
+
+[sub_resource type="BoxMesh" id="MeshShelf"]
+size = Vector3(1.56, 0.07, 0.28)
+
+[sub_resource type="StandardMaterial3D" id="MatWindow"]
+albedo_color = Color(0.018, 0.08, 0.105, 1)
+metallic = 0.38
+roughness = 0.26
+emission_enabled = true
+emission = Color(0.02, 0.32, 0.42, 1)
+emission_energy_multiplier = 0.72
+
+[sub_resource type="StandardMaterial3D" id="MatScreen"]
+albedo_color = Color(0.03, 0.52, 0.64, 1)
+metallic = 0.16
+roughness = 0.30
+emission_enabled = true
+emission = Color(0.04, 0.82, 0.96, 1)
+emission_energy_multiplier = 1.9
+
+[sub_resource type="StandardMaterial3D" id="MatSlot"]
+albedo_color = Color(0.38, 0.14, 0.025, 1)
+metallic = 0.48
+roughness = 0.40
+emission_enabled = true
+emission = Color(1, 0.31, 0.035, 1)
+emission_energy_multiplier = 1.45
+
+[sub_resource type="StandardMaterial3D" id="MatShelf"]
+albedo_color = Color(0.11, 0.48, 0.55, 1)
+metallic = 0.62
+roughness = 0.32
+emission_enabled = true
+emission = Color(0.02, 0.52, 0.62, 1)
+emission_energy_multiplier = 0.75
+
+[node name="BaseVendingMachine3D" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_facility")
+facility_id = "base_vending"
+display_name = "自动贩卖机"
+description = "购买基础装备与药水；出售保险柜物品"
+menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
+facility_color = Color(0.16, 0.78, 0.88, 1)
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0, 1.8, -1.15)
+shape = SubResource("ShapeArea")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0, 1.675, 0)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Base" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 1.675, 0)
+mesh = SubResource("MeshCabinet")
+
+[node name="Roof" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 3.38, 0)
+mesh = SubResource("MeshTop")
+
+[node name="ProductWindow" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.24, 2.19, -0.704)
+mesh = SubResource("MeshWindow")
+material_override = SubResource("MatWindow")
+
+[node name="ControlScreen" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0.92, 2.18, -0.712)
+mesh = SubResource("MeshScreen")
+material_override = SubResource("MatScreen")
+
+[node name="DeliverySlot" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 0.55, -0.715)
+mesh = SubResource("MeshSlot")
+material_override = SubResource("MatSlot")
+
+[node name="ShelfA" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.24, 1.82, -0.75)
+mesh = SubResource("MeshShelf")
+material_override = SubResource("MatShelf")
+
+[node name="ShelfB" type="MeshInstance3D" parent="Visual"]
+position = Vector3(-0.24, 2.28, -0.75)
+mesh = SubResource("MeshShelf")
+material_override = SubResource("MatShelf")
+
+[node name="Beacon" type="MeshInstance3D" parent="Visual"]
+position = Vector3(0, 3.65, 0)
+mesh = SubResource("MeshBeacon")
+
+[node name="BeaconLight" type="OmniLight3D" parent="Visual"]
+position = Vector3(0, 3.35, -0.55)
+omni_range = 4.5
+shadow_enabled = false
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 3.95, 0)
+billboard = 1
+text = "自动贩卖机"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 3.58, -0.25)
+billboard = 1
+text = "[E] 打开自动贩卖机"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

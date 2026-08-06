@@ -185,6 +185,28 @@ func get_occupied_slots() -> Array[Dictionary]:
 			result.append(get_slot(i))
 	return result
 
+## 事务用完整格位快照。保留空格和原索引，供基地仓储/商店失败时精确回滚。
+func get_slots_snapshot() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for index in _slots.size():
+		result.append(get_slot(index))
+	return result
+
+func restore_slots_snapshot(snapshot: Array) -> void:
+	for slot in _slots:
+		slot.clear()
+	for index in mini(snapshot.size(), _slots.size()):
+		if not snapshot[index] is Dictionary:
+			continue
+		var entry := snapshot[index] as Dictionary
+		var item := entry.get("item", {}) as Dictionary
+		var count := int(entry.get("count", 0))
+		if item.is_empty() or count <= 0:
+			continue
+		_slots[index].set_item(item, count)
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+
 ## 清空指定格子
 func clear_slot(slot_index: int) -> bool:
 	if slot_index < 0 or slot_index >= _slots.size():

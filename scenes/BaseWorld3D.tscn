@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseWorld3D.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_world_3d/env_base_world_kit_top3d_v001.tscn" id="2_environment"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_dungeon_gate_root_top3d_v001.tscn" id="4_gate"]
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="5_player"]
 [ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn" id="6_pause"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d_v001.tscn" id="7_vending"]
 
 [sub_resource type="StyleBoxFlat" id="StyleInfo"]
 bg_color = Color(0.025, 0.045, 0.058, 0.90)
@@ -40,6 +41,7 @@ script = ExtResource("1_world")
 
 [node name="MissionOperations" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-10, 0, -4.3)
+facility_id = "mission_operations"
 display_name = "远征情报室"
 description = "查看野外道路情报；副本必须从对应建筑入口进入"
 activation_type = 2
@@ -47,6 +49,7 @@ facility_color = Color(0.88, 0.48, 0.18, 1)
 
 [node name="TrainingRange" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-10, 0, -7.9)
+facility_id = "training_range"
 display_name = "地下训练靶场"
 description = "隔离测试全部枪身、弹药与组合；离场不保留测试配置"
 activation_type = 1
@@ -55,6 +58,7 @@ facility_color = Color(0.28, 0.76, 0.70, 1)
 
 [node name="Workshop" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-14.5, 0, -2.6)
+facility_id = "weapon_workshop"
 display_name = "枪械工坊"
 description = "解锁枪身、弹药与配件蓝图"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
@@ -62,6 +66,7 @@ facility_color = Color(0.75, 0.42, 0.16, 1)
 
 [node name="Divination" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-5.5, 0, -2.6)
+facility_id = "fate_divination"
 display_name = "命运占卜屋"
 description = "为下一次任务准备命运预兆"
 menu_scene_path = "res://scenes/DivinationMenu.tscn"
@@ -69,6 +74,7 @@ facility_color = Color(0.55, 0.31, 0.78, 1)
 
 [node name="Vault" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-14.5, 0, 2.6)
+facility_id = "vault"
 display_name = "保险柜"
 description = "管理撤离物资与下局带入"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
@@ -76,6 +82,7 @@ facility_color = Color(0.24, 0.58, 0.72, 1)
 
 [node name="Archive" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-5.5, 0, 2.6)
+facility_id = "monster_archive"
 display_name = "怪物档案室"
 description = "查看成长中的精英与悬赏情报"
 menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
@@ -83,6 +90,7 @@ facility_color = Color(0.48, 0.65, 0.26, 1)
 
 [node name="FateCollection" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-12.2, 0, 6.2)
+facility_id = "fate_collection"
 display_name = "命运卡牌收藏室"
 description = "浏览已发现的命运卡片"
 menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
@@ -90,10 +98,15 @@ facility_color = Color(0.72, 0.28, 0.58, 1)
 
 [node name="BaseConsole" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-7.8, 0, 6.2)
+facility_id = "base_console"
 display_name = "基地管理终端"
 description = "处理战利品、升级建筑与查看总览"
 menu_scene_path = "res://scenes/BaseMenu.tscn"
 facility_color = Color(0.28, 0.52, 0.68, 1)
+
+[node name="BaseVending" parent="Facilities" instance=ExtResource("7_vending")]
+position = Vector3(2.4, 0, 7.7)
+facility_id = "base_vending"
 
 [node name="DungeonEntrances" type="Node3D" parent="."]
 
@@ -173,7 +186,7 @@ text = "总击杀: 0"
 
 [node name="PointsLabel" type="Label" parent="HUD/InfoPanel/VBox"]
 layout_mode = 2
-text = "基地资源: 0"
+text = "基地币: ◈ 0"
 
 [node name="LootLabel" type="Label" parent="HUD/InfoPanel/VBox"]
 layout_mode = 2

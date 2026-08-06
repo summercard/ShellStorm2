@@ -2,7 +2,7 @@ class_name AtomicJsonStore
 extends RefCounted
 ## JSON 存储工具：临时写入、备份旧文件，再提升为主文件。
 
-static func load_dictionary(path: String) -> Variant:
+static func load_dictionary(path: String, validator: Callable = Callable()) -> Variant:
 	for candidate in [path, path + ".bak"]:
 		if not FileAccess.file_exists(candidate):
 			continue
@@ -13,7 +13,11 @@ static func load_dictionary(path: String) -> Variant:
 		var parse_error := parser.parse(file.get_as_text())
 		file.close()
 		if parse_error == OK and parser.data is Dictionary:
-			return parser.data
+			var dictionary := parser.data as Dictionary
+			if validator.is_valid() and not bool(validator.call(dictionary)):
+				push_warning("[AtomicJsonStore] Rejected invalid save candidate: %s" % candidate)
+				continue
+			return dictionary
 	return null
 
 static func save_dictionary(path: String, data: Dictionary) -> bool:

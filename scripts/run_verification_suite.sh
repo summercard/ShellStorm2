@@ -48,6 +48,10 @@ core_scenes=(
   verify_celestial_fate_scope_flow
   verify_tactical_inventory_minimap_flow
   verify_backpack_equipment_flow
+  verify_base_facility_framework
+  verify_base_shop_save_flow
+  verify_tower_facility_inventory_binding
+  verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow
   verify_tarot_fate_runtime
   verify_door_passability
@@ -59,6 +63,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_base_vending_visual
   verify_base_world_3d_visual
   verify_full_3d_visual
   verify_player3d_state_gallery_visual

@@ -3,6 +3,8 @@ extends Node3D
 ## 游戏入口的首张 3D 地图。沿用 2D BaseWorld 的设施、入口和返回契约，
 ## 只替换空间、角色、相机与表现层；战斗副本继续作为独立场景按需加载。
 
+const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
+
 @onready var player: Player3D = $Player3D
 @onready var environment_kit: BaseWorld3DEnvironment = $EnvironmentKit
 @onready var runs_label: Label = $HUD/InfoPanel/VBox/RunsLabel
@@ -27,6 +29,7 @@ func _ready() -> void:
 		if entrance is DungeonEntrance3D and is_ancestor_of(entrance):
 			entrance.activated.connect(_on_dungeon_entrance_activated)
 	_refresh_base_status()
+	_refresh_facilities()
 	_restore_world_position()
 	_on_player_state_changed(player.get_presentation_state(), {})
 
@@ -34,14 +37,25 @@ func _ready() -> void:
 func _on_facility_activated(facility: BaseFacility3D) -> void:
 	if _active_menu != null and is_instance_valid(_active_menu):
 		return
-	status_label.text = "%s：%s" % [facility.display_name, facility.description]
-	match facility.activation_type:
-		BaseFacility3D.ActivationType.OPEN_MENU:
-			_open_menu(facility.menu_scene_path)
-		BaseFacility3D.ActivationType.LOAD_SCENE:
-			_load_scene(facility.target_scene_path, facility.target_floor)
-		BaseFacility3D.ActivationType.SHOW_INFO:
-			pass
+	var snapshot := BaseManager.get_facility_snapshot(facility.facility_id)
+	if not bool(snapshot.get("available", false)):
+		status_label.text = "%s：%s" % [
+			facility.display_name,
+			str(snapshot.get("availability_reason", "设施不可用")),
+		]
+		return
+	status_label.text = "%s｜%s\n%s" % [
+		str(snapshot.get("display_name", facility.display_name)),
+		str(snapshot.get("summary", "")),
+		str(snapshot.get("description", facility.description)),
+	]
+	match str(snapshot.get("action_kind", FacilityCatalog.ACTION_INFO)):
+		FacilityCatalog.ACTION_MENU:
+			_open_menu(str(snapshot.get("action_path", "")))
+		FacilityCatalog.ACTION_SCENE:
+			_load_scene(str(snapshot.get("action_path", "")), facility.target_floor)
+		FacilityCatalog.ACTION_INFO:
+			status_label.text += "\n四条远征路线均从基地外道路进入；训练场不计入行动结算。"
 
 
 func _open_menu(scene_path: String) -> void:
@@ -58,6 +72,8 @@ func _open_menu(scene_path: String) -> void:
 		return
 	if menu is BaseMenu:
 		menu.overlay_mode = true
+	# 设施菜单必须覆盖基地 HUD，避免状态面板与菜单内容重叠。
+	menu.layer = 50
 	_active_menu = menu
 	player.set_input_locked(true)
 	add_child(menu)
@@ -103,7 +119,10 @@ func _on_active_menu_closed() -> void:
 	_active_menu = null
 	if player != null and is_instance_valid(player):
 		player.set_input_locked(false)
+	if not is_inside_tree():
+		return
 	_refresh_base_status()
+	_refresh_facilities()
 
 
 func try_close_modal_for_pause() -> bool:
@@ -132,11 +151,19 @@ func _refresh_base_status() -> void:
 	runs_label.text = "总局数: %d" % data.total_runs
 	extraction_label.text = "成功撤离: %d" % data.successful_extractions
 	kills_label.text = "总击杀: %d" % data.total_kills
-	points_label.text = "基地资源: %d" % BaseManager.get_extraction_points()
+	points_label.text = "基地币: ◈ %d" % BaseManager.get_extraction_points()
 	var loot_count := BaseManager.get_extraction_loot_count()
 	loot_label.text = "待处理战利品: %d" % loot_count
 	loot_label.modulate = Color(1.0, 0.78, 0.35) if loot_count > 0 else Color(0.65, 0.72, 0.78)
 	status_label.text = "3D 基地与荒野已接入；沿破败公路寻找四个副本入口。"
+
+
+func _refresh_facilities() -> void:
+	if BaseManager == null or not is_inside_tree():
+		return
+	for facility in get_tree().get_nodes_in_group("base_facility"):
+		if facility is BaseFacility3D and is_ancestor_of(facility):
+			facility.apply_snapshot(BaseManager.get_facility_snapshot(facility.facility_id))
 
 
 func get_facility_count() -> int:
@@ -161,3 +188,7 @@ func get_environment_snapshot() -> Dictionary:
 
 func get_active_menu() -> CanvasLayer:
 	return _active_menu
+
+
+func get_facility_snapshots() -> Array[Dictionary]:
+	return BaseManager.get_facility_snapshots() if BaseManager != null else []

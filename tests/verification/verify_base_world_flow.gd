@@ -23,11 +23,11 @@ func _ready() -> void:
 
 	var node_count := _count_nodes(base_world)
 	# Bunny01 v002 adds evaluated left/right hands, two ear sockets and independent feet.
-	# Keep a small, deliberate ceiling above the measured 391-node baseline.
-	if node_count > 405:
+	# 自动贩卖机独立货窗、屏幕与碰撞加入后实测420节点，保留5节点余量。
+	if node_count > 425:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
-	if base_world.get_facility_count() != 8:
-		failures.append("BaseWorld3D does not expose seven lobby functions plus the training range")
+	if base_world.get_facility_count() != 9:
+		failures.append("BaseWorld3D does not expose nine formal facilities")
 	if base_world.get_dungeon_entrance_count() != 4:
 		failures.append("BaseWorld3D does not expose four roadside dungeon entrances")
 	if base_world.player == null or base_world.player.combat_enabled:
