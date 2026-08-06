@@ -105,6 +105,9 @@ var _pending_fate_currency_choice := -1
 var _fate_overlay: Control
 var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
+# 模态浮窗（雷达 / 背包）的 ESC 关闭按钮
+var _radar_close_button: Button = null
+var _inventory_close_button: Button = null
 var last_killed_enemy_data: Dictionary = {}
 var _resolved_event_rooms: Dictionary = {}
 var _event_combat_rooms: Dictionary = {}
@@ -359,10 +362,16 @@ func _build_reference_main_hud() -> void:
 	_anchor_control(player_panel, 0.0, 0.0, 0.0, 0.0, 18, 46, 360, 178)
 	_reference_hud_root.add_child(player_panel)
 	_add_neon_frame(player_panel, cyan, 0.72, true)
+	# tap 头像 → 切换背包（键 I / Tab 等效）
+	player_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	player_panel.tooltip_text = "点击打开/关闭背包 [键 I / Tab]"
+	player_panel.gui_input.connect(_on_player_status_gui_input.bind(player_panel))
 	var player_margin := _make_margin(12, 10, 12, 10)
+	player_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_panel.add_child(player_margin)
 	var player_row := HBoxContainer.new()
 	player_row.add_theme_constant_override("separation", _hud_int(12))
+	player_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_margin.add_child(player_row)
 	var portrait := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
 	portrait.custom_minimum_size = _hud_size(Vector2(82, 82))
@@ -402,6 +411,10 @@ func _build_reference_main_hud() -> void:
 	# 圆形小地图沿用真实房间/玩家/敌人数据，只替换视觉外壳。
 	minimap.z_index = 105
 	_anchor_control(minimap, 1.0, 0.0, 1.0, 0.0, -292, 44, -18, 318)
+	# tap 小地图 → 切换全层地图（键 M 等效）
+	minimap.mouse_filter = Control.MOUSE_FILTER_STOP
+	minimap.tooltip_text = "点击打开/关闭全层地图 [键 M]"
+	minimap.gui_input.connect(_on_radar_gui_input.bind(minimap))
 	_hud_floor_label = _make_hud_label("高塔外层", 15, Color(0.90, 0.94, 0.96))
 	_hud_floor_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_anchor_control(_hud_floor_label, 1.0, 0.0, 1.0, 0.0, -300, 12, -12, 38)
@@ -440,30 +453,41 @@ func _build_reference_main_hud() -> void:
 	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -260, -118, 260, -20)
 	_reference_hud_root.add_child(weapon_panel)
 	_add_neon_frame(weapon_panel, cyan, 0.36, false)
+	# 中央武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
+	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	weapon_panel.tooltip_text = "点击切换主/副武器"
+	weapon_panel.gui_input.connect(_on_weapon_panel_gui_input.bind(weapon_panel))
 	var weapon_margin := _make_margin(14, 10, 14, 8)
+	weapon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_panel.add_child(weapon_margin)
 	var weapon_row := HBoxContainer.new()
 	weapon_row.add_theme_constant_override("separation", _hud_int(12))
+	weapon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_margin.add_child(weapon_row)
 	_hud_weapon_model_icon = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
 	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(96, 68))
 	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_hud_weapon_model_icon.set_camera_size_multiplier(0.52)
+	_hud_weapon_model_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_model_icon)
 	_refresh_hud_weapon_model(true)
 	var weapon_text := VBoxContainer.new()
 	weapon_text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	weapon_text.add_theme_constant_override("separation", _hud_int(2))
+	weapon_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(weapon_text)
 	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 15, Color(0.92, 0.95, 0.98))
+	_hud_weapon_meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_text.add_child(_hud_weapon_meta_label)
 	_hud_weapon_fate_label = _make_hud_label("实例 ------ · 命运 0/0 · K 详情", 12, Color(0.48, 0.84, 0.94))
+	_hud_weapon_fate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_text.add_child(_hud_weapon_fate_label)
 	ammo_label = _make_hud_label("0 / 0", 29, Color.WHITE)
 	ammo_label.custom_minimum_size = _hud_size(Vector2(112, 62))
 	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	ammo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(ammo_label)
 	for quick_index in range(2):
 		var quick_panel := _make_hud_panel(Color(0.30, 0.86, 0.72), Color(0.006, 0.020, 0.026, 0.94))
@@ -472,16 +496,23 @@ func _build_reference_main_hud() -> void:
 		var right := -276.0 if quick_index == 0 else 372.0
 		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -112, right, -20)
 		_reference_hud_root.add_child(quick_panel)
+		# 快捷物品槽：[3]/[4] 直接 tap 使用，对应键位 use_quick_item_1/2
+		quick_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+		quick_panel.tooltip_text = "点击使用快捷物品 [键%d]" % (quick_index + 3)
+		quick_panel.gui_input.connect(_on_quick_item_gui_input.bind(quick_index, quick_panel))
 		var quick_box := VBoxContainer.new()
 		quick_box.alignment = BoxContainer.ALIGNMENT_CENTER
+		quick_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_panel.add_child(quick_box)
 		var quick_icon_host := Control.new()
 		quick_icon_host.name = "QuickItemIconHost_%d" % quick_index
 		quick_icon_host.custom_minimum_size = _hud_size(Vector2(80, 58))
+		quick_icon_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_icon_host)
 		_hud_quick_item_icon_hosts.append(quick_icon_host)
 		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 11, Color(0.66, 0.94, 0.84))
 		quick_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		quick_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
 	_refresh_quick_item_hud()
@@ -492,30 +523,174 @@ func _build_reference_main_hud() -> void:
 	actions.add_theme_constant_override("separation", _hud_int(8))
 	_anchor_control(actions, 1.0, 1.0, 1.0, 1.0, -374, -108, -18, -18)
 	_reference_hud_root.add_child(actions)
+	# 4 个右下角动作按钮桥接到 input action：R 换弹 / SHIFT 冲刺 / F 探照 / E 交互。
+	# 同时供 PC 端和移动端使用：移动端直接 tap，PC 端鼠标点击也会触发 Input.parse_input_event。
 	for data in [
-		["reload", "R", "换弹"], ["dash", "SHIFT", "冲刺"],
-		["shield", "F", "探照"], ["interact", "E", "交互"],
+		["reload", "R", "换弹", "reload"],
+		["dash", "SHIFT", "冲刺", "dash"],
+		["shield", "F", "探照", "toggle_flashlight"],
+		["interact", "E", "交互", "interact"],
 	]:
-		actions.add_child(_make_action_key(str(data[0]), str(data[1]), str(data[2]), cyan))
+		actions.add_child(_make_action_key(str(data[0]), str(data[1]), str(data[2]), str(data[3]), cyan))
 
 
-func _make_action_key(kind: String, key_text: String, caption: String, accent: Color) -> PanelContainer:
+func _on_weapon_panel_gui_input(event: InputEvent, panel: PanelContainer) -> void:
+	# tap 在主/副武器槽之间循环：当前 0 → 切 1，当前 1 → 切 0。状态本身存于 Player3D.active_weapon_slot。
+	if not _is_panel_press(event):
+		return
+	if player == null:
+		return
+	var current_slot := 0
+	if player.has_method("get_active_weapon_slot"):
+		current_slot = int(player.call("get_active_weapon_slot"))
+	var next_slot := 1 if current_slot == 0 else 0
+	_select_weapon_slot(next_slot)
+	_flash_action_key(panel)
+	get_viewport().set_input_as_handled()
+
+func _on_quick_item_gui_input(event: InputEvent, quick_index: int, panel: PanelContainer) -> void:
+	# tap 使用快捷物品：对齐键位 3/4。空槽/物品耗尽时 _use_quick_item 会写 status_label 反馈。
+	if not _is_panel_press(event):
+		return
+	_use_quick_item(quick_index)
+	_flash_action_key(panel)
+	get_viewport().set_input_as_handled()
+
+func _is_panel_press(event: InputEvent) -> bool:
+	# 同时识别 PC 鼠标左键和移动端触屏按下；用 _on_action_key_gui_input 的同款判断
+	if event is InputEventMouseButton:
+		var mb := event as InputEventMouseButton
+		return mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed
+	if event is InputEventScreenTouch:
+		var st := event as InputEventScreenTouch
+		return st.pressed
+	return false
+
+func _on_radar_gui_input(event: InputEvent, panel: Control) -> void:
+	# tap 右上小地图 = M 键
+	if not _is_panel_press(event):
+		return
+	_toggle_full_map()
+	_flash_action_key(panel)
+	get_viewport().set_input_as_handled()
+
+func _on_player_status_gui_input(event: InputEvent, panel: PanelContainer) -> void:
+	# tap 头像面板 = I / Tab 键
+	if not _is_panel_press(event):
+		return
+	if _inventory_ui != null:
+		_inventory_ui.toggle_inventory_panel()
+	_flash_action_key(panel)
+	get_viewport().set_input_as_handled()
+
+func _build_modal_close_button(label: String, on_press: Callable) -> Button:
+	var btn := Button.new()
+	btn.text = label
+	btn.tooltip_text = label + "（对应 ESC 键）"
+	btn.focus_mode = Control.FOCUS_NONE
+	btn.custom_minimum_size = _hud_size(Vector2(150, 36))
+	btn.add_theme_font_size_override("font_size", _hud_int(13))
+	var styles := UIStyleFactory.make_button_style(
+		UIStyleFactory.make_panel_bg(2).bg_color,
+		Color(0.62, 0.90, 0.96)
+	)
+	UIStyleFactory.apply_button_style(btn, styles)
+	btn.pressed.connect(on_press)
+	return btn
+
+func _ensure_inventory_close_button() -> void:
+	# 背包打开时显示 ESC 关闭按钮
+	if _inventory_close_button != null and is_instance_valid(_inventory_close_button):
+		return
+	if _reference_hud_root == null:
+		return
+	var btn := _build_modal_close_button("关闭 · ESC", _close_inventory_via_button)
+	# inventory_shell 是 PanelContainer，会把子节点撑满成自己 970×650 的尺寸。放到 _reference_hud_root (Control) 下才能用锚点 + offsets 定位。
+	btn.z_index = 500
+	_anchor_control(btn, 1.0, 0.0, 1.0, 0.0, -180, 18, -18, 60)
+	_reference_hud_root.add_child(btn)
+	_inventory_close_button = btn
+
+func _teardown_inventory_close_button() -> void:
+	if _inventory_close_button != null and is_instance_valid(_inventory_close_button):
+		_inventory_close_button.queue_free()
+	_inventory_close_button = null
+
+func _close_inventory_via_button() -> void:
+	if _inventory_ui != null:
+		_inventory_ui.set_inventory_panel_open(false)
+
+
+func _make_action_key(kind: String, key_text: String, caption: String, action_name: String, accent: Color) -> PanelContainer:
 	var panel := _make_hud_panel(Color(accent, 0.72), Color(0.006, 0.014, 0.024, 0.88))
 	panel.custom_minimum_size = _hud_size(Vector2(78, 82))
+	# 关键：_make_hud_panel 默认 mouse_filter=IGNORE；动作键必须 STOP 才能收到 gui_input
+	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	panel.tooltip_text = "%s  ·  %s" % [key_text, caption]
+	panel.gui_input.connect(_on_action_key_gui_input.bind(action_name, panel, accent))
 	var margin := _make_margin(6, 4, 6, 3)
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	panel.add_child(margin)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", 0)
+	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_child(vbox)
 	var icon := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
 	icon.custom_minimum_size = _hud_size(Vector2(52, 46))
 	icon.configure(kind, Color(0.90, 0.96, 1.0))
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(icon)
 	var key_label := _make_hud_label("%s · %s" % [key_text, caption], 10, Color(0.86, 0.90, 0.94))
 	key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(key_label)
 	return panel
+
+
+func _on_action_key_gui_input(event: InputEvent, action_name: String, panel: PanelContainer, accent: Color) -> void:
+	# 同时处理鼠标（PC）和触屏（移动端）两种来源的按下事件
+	var should_press := false
+	if event is InputEventMouseButton:
+		var button_event := event as InputEventMouseButton
+		if button_event.button_index == MOUSE_BUTTON_LEFT and button_event.pressed:
+			should_press = true
+	elif event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			should_press = true
+	if not should_press:
+		return
+	_tap_input_action(action_name)
+	_flash_action_key(panel)
+	# 标记为已处理：避免被 MobileInput 的 _input / aim zone 重复触发
+	get_viewport().set_input_as_handled()
+
+
+func _flash_action_key(panel: Control) -> void:
+	if not is_instance_valid(panel):
+		return
+	var original_modulate := panel.modulate
+	panel.modulate = Color(1.55, 1.55, 1.55, 1.0)
+	var tween := create_tween()
+	tween.tween_interval(0.10)
+	tween.tween_callback(func():
+		if is_instance_valid(panel):
+			panel.modulate = original_modulate
+	)
+
+
+func _tap_input_action(action: StringName) -> void:
+	# 仿照 Player3D._tap_input_action：把一次性的 input action 注入 Input 单次队列。
+	# Player3D 端 _update_combat_input / PlayerFlashlight3D._unhandled_input / 状态机的
+	# is_action_just_pressed("dash") 都会在下一帧检测到。
+	var pressed_event := InputEventAction.new()
+	pressed_event.action = action
+	pressed_event.pressed = true
+	Input.parse_input_event(pressed_event)
+	var released_event := InputEventAction.new()
+	released_event.action = action
+	released_event.pressed = false
+	Input.parse_input_event(released_event)
 
 
 func _make_hud_panel(accent: Color, background: Color) -> PanelContainer:
@@ -602,8 +777,10 @@ func _on_inventory_open_changed(opened: bool) -> void:
 	_sync_player_input_lock()
 	if opened:
 		status_label.text = "背包已打开 · 左键使用/装备，右键存入保险格"
+		_ensure_inventory_close_button()
 	else:
 		status_label.text = "背包已关闭 · 继续搜索、战斗或撤离"
+		_teardown_inventory_close_button()
 
 
 func _has_exclusive_modal() -> bool:
@@ -682,6 +859,11 @@ func _toggle_full_map() -> void:
 	_full_map_overlay.add_child(hint)
 	$HUD.add_child(_full_map_overlay)
 	_sync_player_input_lock()
+	# tap 关闭按钮（ESC 等效）
+	var radar_close_btn := _build_modal_close_button("关闭 · ESC", _close_full_map)
+	_anchor_control(radar_close_btn, 1.0, 0.0, 1.0, 0.0, -180, 18, -18, 60)
+	_full_map_overlay.add_child(radar_close_btn)
+	_radar_close_button = radar_close_btn
 	status_label.text = "楼层大地图已打开 · 仅展示已探索区域"
 
 
@@ -690,6 +872,9 @@ func _close_full_map() -> void:
 		_full_map_overlay.queue_free()
 	_full_map_overlay = null
 	_full_map_control = null
+	if _radar_close_button != null and is_instance_valid(_radar_close_button):
+		_radar_close_button.queue_free()
+	_radar_close_button = null
 	_sync_player_input_lock()
 	status_label.text = "楼层大地图已关闭"
 

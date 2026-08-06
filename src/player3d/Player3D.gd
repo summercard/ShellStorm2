@@ -67,6 +67,15 @@ var _loading_weapon_instance := false
 var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
+
+# 移动端虚拟输入状态（来自 MobileInput autoload 的信号）。
+var _mobile_move_direction := Vector2.ZERO
+var _mobile_aim_direction := Vector2.ZERO
+var _mobile_aim_active := false
+var _mobile_shoot_active := false
+var _mobile_shoot_was_active := false
+var _mobile_input_available := false
+var _mobile_input: Node = null
 var _backpack_model: Node3D = null
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
@@ -123,6 +132,7 @@ func _ready() -> void:
 	if avatar != null:
 		avatar.set_customization(_avatar_customization)
 	hp_changed.emit(current_hp, max_hp)
+	_hook_mobile_input()
 	# 嵌入式运行窗口在首个 _ready 帧里可能尚未完成 Viewport/Camera 投影初始化。
 	# 此时 project_ray_* 会返回非有限向量；若直接写入 top_level 的准星，
 	# RenderingServer 会在之后每帧反复报告 instance_set_transform 并拖死编辑器。
@@ -139,12 +149,76 @@ func _physics_process(delta: float) -> void:
 		_state_machine.physics_update(delta)
 
 
+func _hook_mobile_input() -> void:
+	# 移动端 autoload 名为 MobileInput。autoload 加载顺序在 Player3D 之前。
+	# 找不到时（极端情况：autoload 没注册）静默退化，键盘鼠标照旧。
+	# v0.1 MobileInput 只暴露 move_direction / aim_direction / aim_cancel / shoot_pressed / shoot_released 。
+	# R/SHIFT/F/E 四位动作以 Dungeon3D 的 HUD 按钮为准，走 Input.parse_input_event 入口。
+	var mi: Node = get_node_or_null("/root/MobileInput")
+	if mi == null:
+		_mobile_input_available = false
+		return
+	_mobile_input = mi
+	_mobile_input_available = true
+	if not mi.move_direction.is_connected(_on_mobile_move_direction):
+		mi.move_direction.connect(_on_mobile_move_direction)
+	if not mi.aim_direction.is_connected(_on_mobile_aim_direction):
+		mi.aim_direction.connect(_on_mobile_aim_direction)
+	if not mi.aim_cancel.is_connected(_on_mobile_aim_cancel):
+		mi.aim_cancel.connect(_on_mobile_aim_cancel)
+	if not mi.shoot_pressed.is_connected(_on_mobile_shoot_pressed):
+		mi.shoot_pressed.connect(_on_mobile_shoot_pressed)
+	if not mi.shoot_released.is_connected(_on_mobile_shoot_released):
+		mi.shoot_released.connect(_on_mobile_shoot_released)
+
+
+func _on_mobile_move_direction(direction: Vector2) -> void:
+	_mobile_move_direction = direction
+
+
+func _on_mobile_aim_direction(aim: Vector2) -> void:
+	# aim: 正右、正下；_mobile_aim_direction 用于替换鼠标 aim；Vector2 → Vector3(x, 0, y)
+	_mobile_aim_direction = aim
+	_mobile_aim_active = aim.length_squared() > 0.05
+
+
+func _on_mobile_aim_cancel() -> void:
+	_mobile_aim_active = false
+	_mobile_aim_direction = Vector2.ZERO
+
+
+func _on_mobile_shoot_pressed() -> void:
+	_mobile_shoot_active = true
+
+
+func _on_mobile_shoot_released() -> void:
+	_mobile_shoot_active = false
+
+
+
+
+
 func _get_input_direction_3d() -> Vector3:
 	if _test_move_direction is Vector3:
 		return (_test_move_direction as Vector3).normalized()
+	# 移动端优先：在摇杆活动时使用虚拟摇杆
+	if _mobile_input_available and _mobile_move_direction.length_squared() > 0.0001:
+		var direction := Vector3(_mobile_move_direction.x, 0.0, _mobile_move_direction.y)
+		return direction.normalized() if direction.length_squared() > 0.0001 else Vector3.ZERO
 	var input_2d := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var direction := Vector3(input_2d.x, 0.0, input_2d.y)
 	return direction.normalized() if direction.length_squared() > 0.0001 else Vector3.ZERO
+
+
+func _get_mobile_aim_direction() -> Vector3:
+	if not _mobile_input_available or not _mobile_aim_active:
+		return Vector3.ZERO
+	# 屏幕坐标 → 世界空间：使用相机当前 yaw 投影，使右滑 = 玩家右转、上滑 = 玩家后退
+	var cam_basis := camera.global_basis if camera != null else global_basis
+	var forward_2d := -Vector2(cam_basis.z.x, cam_basis.z.z).normalized()
+	var right_2d := Vector2(forward_2d.y, -forward_2d.x)
+	var aim := right_2d * _mobile_aim_direction.x + forward_2d * (-_mobile_aim_direction.y)
+	return Vector3(aim.x, 0.0, aim.y).normalized() if aim.length_squared() > 0.0001 else Vector3.ZERO
 
 
 func set_test_move_direction(direction: Variant) -> void:
@@ -1035,7 +1109,16 @@ func _on_weapon_shot_fired(projectile_count: int) -> void:
 
 
 func _update_combat_input() -> void:
-	if weapon != null and Input.is_action_just_released("shoot"):
+	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
+	var shoot_released_here: bool = Input.is_action_just_released("shoot")
+	# 移动端：触屏按住优先级高于键盘鼠标
+	if _mobile_input_available:
+		if _mobile_shoot_active:
+			shoot_pressed_here = true
+		if not _mobile_shoot_active and _mobile_shoot_was_active:
+			shoot_released_here = true
+		_mobile_shoot_was_active = _mobile_shoot_active
+	if weapon != null and shoot_released_here:
 		weapon.release_charge()
 	if input_locked or current_hp <= 0 or weapon == null or _silence_remaining > 0.0:
 		if weapon != null:
@@ -1044,7 +1127,7 @@ func _update_combat_input() -> void:
 	# 禁用玩家输入不应打断脚本、测试场或 AI 显式启动的蓄力；只有真实输入读取被跳过。
 	if not combat_enabled:
 		return
-	if Input.is_action_pressed("shoot"):
+	if shoot_pressed_here:
 		weapon.try_fire(aim_direction, self)
 	if Input.is_action_just_pressed("reload"):
 		weapon.request_reload()
@@ -1124,6 +1207,15 @@ func _update_invincibility(delta: float) -> void:
 func _update_aim_from_mouse() -> void:
 	if camera == null or not camera.is_inside_tree():
 		return
+	# 移动端：触屏瞄准方向由摇杆控制时跳过鼠标射线
+	if _mobile_input_available and _mobile_aim_active:
+		var aim_dir_3d := _get_mobile_aim_direction()
+		if aim_dir_3d.length_squared() > 0.0001:
+			aim_direction = aim_dir_3d
+			aim_yaw = atan2(-aim_dir_3d.x, -aim_dir_3d.z)
+			var aim_cursor_distance := 3.2
+			aim_cursor.global_position = global_position + aim_dir_3d * aim_cursor_distance + Vector3.UP * 0.035
+			return
 	var viewport := get_viewport()
 	if viewport == null:
 		return
