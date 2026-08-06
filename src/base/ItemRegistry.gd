@@ -21,6 +21,7 @@ func _init() -> void:
 func _register_all_items() -> void:
 	_register_beacon_item()
 	_register_room_key_item()
+	_register_backpack_equipment()
 	_register_weapon_modules()
 	_register_consumables()
 
@@ -75,6 +76,79 @@ func _register_room_key_item() -> void:
 			"elite_floor_2": 1.0,
 		},
 	}
+
+
+func _register_backpack_equipment() -> void:
+	var backpacks: Array[Dictionary] = [
+		{
+			"id": "equipment_backpack_2",
+			"name": "轻型腰包",
+			"description": "装备后增加2个背包格。可从搜索容器或普通怪物身上获得。",
+			"type": "equipment",
+			"subtype": "backpack",
+			"rarity": "common",
+			"stack_max": 1,
+			"extra_slots": 2,
+			"tags": ["equipment", "backpack", "capacity"],
+			"floor_loot_weights": {
+				"loot_common": 0.22,
+				"loot_floor_1_2": 0.50,
+				"scavenge_floor_1": 1.20,
+				"scavenge_floor_2": 0.90,
+				"combat_floor_1": 0.28,
+				"combat_floor_2": 0.20,
+			},
+			"price": 55,
+			"merchant_tier": 1,
+		},
+		{
+			"id": "equipment_backpack_4",
+			"name": "战术背包",
+			"description": "装备后增加4个背包格。主要来自中层搜索与精英怪物。",
+			"type": "equipment",
+			"subtype": "backpack",
+			"rarity": "uncommon",
+			"stack_max": 1,
+			"extra_slots": 4,
+			"tags": ["equipment", "backpack", "capacity"],
+			"floor_loot_weights": {
+				"loot_floor_1_2": 0.16,
+				"loot_floor_3_4": 0.65,
+				"scavenge_floor_2": 0.35,
+				"scavenge_floor_3": 1.00,
+				"scavenge_floor_4": 0.80,
+				"elite_floor_1": 0.85,
+				"elite_floor_2": 0.55,
+				"combat_floor_3": 0.22,
+			},
+			"price": 120,
+			"merchant_tier": 2,
+		},
+		{
+			"id": "equipment_backpack_8",
+			"name": "远征背包",
+			"description": "装备后增加8个背包格。主要来自深层搜索、精英与Boss。",
+			"type": "equipment",
+			"subtype": "backpack",
+			"rarity": "rare",
+			"stack_max": 1,
+			"extra_slots": 8,
+			"tags": ["equipment", "backpack", "capacity"],
+			"floor_loot_weights": {
+				"loot_floor_5": 0.55,
+				"loot_abyss": 0.85,
+				"scavenge_floor_4": 0.25,
+				"scavenge_floor_5": 0.90,
+				"elite_floor_2": 0.75,
+				"boss_floor_1": 1.25,
+				"boss_floor_2": 1.80,
+			},
+			"price": 260,
+			"merchant_tier": 3,
+		},
+	]
+	for backpack in backpacks:
+		_items[str(backpack["id"])] = backpack
 
 ## 注册武器模块类（蓝图类，玩家获得后可在基地解锁）
 func _register_weapon_modules() -> void:

@@ -40,12 +40,37 @@ func _init(capacity: int = DEFAULT_CAPACITY) -> void:
 
 ## 设置容量
 func set_capacity(cap: int) -> void:
-	_capacity = max(1, cap)
+	var overflow := resize_capacity_collect_overflow(cap)
+	if not overflow.is_empty():
+		push_warning("[InventoryModule] set_capacity dropped overflow without a world owner; use resize_capacity_collect_overflow() for shrinking")
+
+
+## 原子调整容量并返回无法保留的完整格子。物品按原格位顺序稳定压缩，
+## 因此基础/低索引格优先保留，扩展区末尾物品先成为地面溢出候选。
+func resize_capacity_collect_overflow(cap: int) -> Array[Dictionary]:
+	var target_capacity := maxi(1, cap)
+	if target_capacity == _capacity:
+		return []
+	var packed := get_occupied_slots()
+	var overflow: Array[Dictionary] = []
+	if packed.size() > target_capacity:
+		for index in range(target_capacity, packed.size()):
+			overflow.append((packed[index] as Dictionary).duplicate(true))
+		packed.resize(target_capacity)
+	_capacity = target_capacity
+	_slots.clear()
 	_slots.resize(_capacity)
-	for i in range(_slots.size()):
-		if _slots[i] == null:
-			_slots[i] = InventorySlot.new()
-	capacity_changed.emit(_slots.size(), _capacity)
+	for index in range(_capacity):
+		_slots[index] = InventorySlot.new()
+	for index in range(packed.size()):
+		var entry := packed[index] as Dictionary
+		_slots[index].set_item(
+			entry.get("item", {}) as Dictionary,
+			int(entry.get("count", 1))
+		)
+	inventory_changed.emit()
+	capacity_changed.emit(get_used_slots(), _capacity)
+	return overflow
 
 ## 获取容量
 func get_capacity() -> int:

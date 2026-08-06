@@ -25,6 +25,10 @@ extends Node3D
 	"VisualRoot/BunnyRig/StowedWeaponSocketSecondary",
 	"VisualRoot/StowedWeaponSocketSecondary"
 ) as Marker3D
+@onready var backpack_socket: Marker3D = _resolve_rig_node(
+	"VisualRoot/BunnyRig/BackpackSocket",
+	"VisualRoot/BackpackSocket"
+) as Marker3D
 @onready var dash_dust: GPUParticles3D = $VisualRoot/StateVFX/DashDustBurst
 @onready var lock_ring: MeshInstance3D = $VisualRoot/StateVFX/LockRing
 @onready var low_health_ring: MeshInstance3D = $VisualRoot/StateVFX/LowHealthRing
@@ -203,6 +207,10 @@ func get_stowed_weapon_socket(weapon_slot_index: int) -> Marker3D:
 		if weapon_slot_index == 0
 		else stowed_weapon_socket_secondary
 	)
+
+
+func get_backpack_socket() -> Marker3D:
+	return backpack_socket
 
 
 func _motion_offset(value: Vector3) -> Vector3:

@@ -8,6 +8,7 @@ signal run_completed(success: bool, summary: Dictionary)
 signal kill_recorded()
 signal room_cleared(room_data)
 signal room_entered(room_data)
+signal backpack_equipment_changed(snapshot: Dictionary)
 
 const ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
@@ -30,6 +31,7 @@ const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTI
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
 const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
+const BASE_INVENTORY_CAPACITY := 12
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -256,7 +258,7 @@ func _process(delta: float) -> void:
 func _setup_run_modules() -> void:
 	GameManager.currency = 0
 	GameManager.currency_changed.emit(0)
-	_inventory = InventoryModule.new(12)
+	_inventory = InventoryModule.new(BASE_INVENTORY_CAPACITY)
 	_insurance = InsuranceModule.new(2)
 	_death_settlement = DeathSettlementModule.new()
 	_loot_module = LootModule.new()
@@ -284,6 +286,7 @@ func _setup_run_modules() -> void:
 	_inventory_ui.set_insurance_module(_insurance)
 	_inventory_ui.set_weapon_tree(player.get_weapon_tree())
 	_inventory_ui.set_weapon_owner(player)
+	_inventory_ui.set_backpack_owner(self)
 	_inventory_ui.set_world_drop_handler(_drop_inventory_item_to_world)
 	_inventory_ui.item_to_insurance_requested.connect(_on_insure_item_requested)
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
@@ -292,6 +295,9 @@ func _setup_run_modules() -> void:
 	_inventory_ui.weapon_slot_equip_requested.connect(_on_weapon_slot_equip_requested)
 	_inventory_ui.equipped_weapon_to_inventory_requested.connect(_on_equipped_weapon_to_inventory_requested)
 	_inventory_ui.equipped_weapon_drop_requested.connect(_on_equipped_weapon_drop_requested)
+	_inventory_ui.backpack_slot_equip_requested.connect(_on_backpack_slot_equip_requested)
+	_inventory_ui.equipped_backpack_to_inventory_requested.connect(_on_equipped_backpack_to_inventory_requested)
+	_inventory_ui.equipped_backpack_drop_requested.connect(_on_equipped_backpack_drop_requested)
 	_inventory_ui.quick_item_assignment_requested.connect(_on_quick_item_assignment_requested)
 	_inventory_ui.set_quick_item_assignments(_quick_item_ids)
 	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
@@ -2594,6 +2600,9 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 	if item.get("type", "") == "weapon":
 		_equip_weapon_from_inventory(slot_index, item)
 		return
+	if str(item.get("type", "")) == "equipment" and str(item.get("subtype", "")) == "backpack":
+		_equip_backpack_from_inventory(slot_index, item)
+		return
 	if item.get("type", "") in ["module", "attachment"]:
 		if _can_swap_installed_module(item, slot_index):
 			_inventory.remove_from_slot(slot_index, 1)
@@ -2623,6 +2632,133 @@ func _on_weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: 
 		status_label.text = "只能把枪械拖入主/副武器栏"
 		return
 	_equip_weapon_from_inventory(source_slot_index, item, weapon_slot_index)
+
+
+func get_equipped_backpack_item() -> Dictionary:
+	return player.get_equipped_backpack_item() if player != null and player.has_method("get_equipped_backpack_item") else {}
+
+
+func get_backpack_equipment_snapshot() -> Dictionary:
+	var snapshot := player.get_backpack_equipment_snapshot() if player != null and player.has_method("get_backpack_equipment_snapshot") else {}
+	snapshot["base_capacity"] = BASE_INVENTORY_CAPACITY
+	snapshot["inventory_capacity"] = _inventory.get_capacity() if _inventory != null else BASE_INVENTORY_CAPACITY
+	return snapshot
+
+
+func _on_backpack_slot_equip_requested(source_slot_index: int) -> void:
+	var slot := _inventory.get_slot(source_slot_index)
+	if slot.is_empty():
+		return
+	_equip_backpack_from_inventory(source_slot_index, slot.get("item", {}) as Dictionary)
+
+
+func _equip_backpack_from_inventory(slot_index: int, item: Dictionary) -> bool:
+	if player == null or not player.has_method("equip_backpack_item"):
+		return false
+	if str(item.get("type", "")) != "equipment" or str(item.get("subtype", "")) != "backpack":
+		status_label.text = "只能把背包装备拖入背包栏"
+		return false
+	var target_capacity := BASE_INVENTORY_CAPACITY + int(item.get("extra_slots", 0))
+	var old_item := get_equipped_backpack_item()
+	var predicted_used := _inventory.get_used_slots() - 1 + (0 if old_item.is_empty() else 1)
+	if predicted_used > target_capacity and not _can_spawn_overflow_in_current_room():
+		status_label.text = "更换背包失败：当前房间无法生成溢出物"
+		return false
+	if not _inventory.remove_from_slot(slot_index, 1):
+		return false
+	var equip_result := player.call("equip_backpack_item", item) as Dictionary
+	if not bool(equip_result.get("success", false)):
+		_inventory.put_item_in_empty_slot(slot_index, item, 1)
+		status_label.text = str(equip_result.get("reason", "背包装备失败"))
+		return false
+	if not old_item.is_empty() and not _inventory.put_item_in_empty_slot(slot_index, old_item, 1):
+		player.call("equip_backpack_item", old_item)
+		_inventory.put_item_in_empty_slot(slot_index, item, 1)
+		status_label.text = "更换背包失败：旧背包无法返回来源格，已回滚"
+		return false
+	var overflow := _inventory.resize_capacity_collect_overflow(target_capacity)
+	_drop_backpack_capacity_overflow(overflow)
+	_emit_backpack_equipment_changed()
+	status_label.text = "已装备%s · 背包容量%d格%s" % [
+		item.get("name", "背包"), target_capacity,
+		" · %d格物品已落地" % overflow.size() if not overflow.is_empty() else "",
+	]
+	return true
+
+
+func _on_equipped_backpack_to_inventory_requested(target_slot_index: int) -> void:
+	if player == null or not player.has_method("unequip_backpack_item"):
+		return
+	if target_slot_index < 0 or target_slot_index >= BASE_INVENTORY_CAPACITY:
+		status_label.text = "卸下背包时请选择基础12格内的空格"
+		return
+	if not _inventory.get_slot(target_slot_index).is_empty():
+		status_label.text = "卸下背包失败：目标格已有物品"
+		return
+	var predicted_used := _inventory.get_used_slots() + 1
+	if predicted_used > BASE_INVENTORY_CAPACITY and not _can_spawn_overflow_in_current_room():
+		status_label.text = "卸下背包失败：当前房间无法生成溢出物"
+		return
+	var result := player.call("unequip_backpack_item") as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "卸下背包失败"))
+		return
+	var old_item := result.get("old_item", {}) as Dictionary
+	if not _inventory.put_item_in_empty_slot(target_slot_index, old_item, 1):
+		player.call("equip_backpack_item", old_item)
+		status_label.text = "卸下背包失败：目标格写入失败，已回滚"
+		return
+	var overflow := _inventory.resize_capacity_collect_overflow(BASE_INVENTORY_CAPACITY)
+	_drop_backpack_capacity_overflow(overflow)
+	_emit_backpack_equipment_changed()
+	status_label.text = "已卸下%s%s" % [
+		old_item.get("name", "背包"),
+		" · %d格物品已落地" % overflow.size() if not overflow.is_empty() else "",
+	]
+
+
+func _on_equipped_backpack_drop_requested() -> void:
+	if player == null or not player.has_method("unequip_backpack_item"):
+		return
+	var current := get_equipped_backpack_item()
+	if current.is_empty():
+		return
+	var predicted_overflow := maxi(0, _inventory.get_used_slots() - BASE_INVENTORY_CAPACITY)
+	if predicted_overflow > 0 and not _can_spawn_overflow_in_current_room():
+		status_label.text = "丢弃背包失败：当前房间无法生成溢出物"
+		return
+	var result := player.call("unequip_backpack_item") as Dictionary
+	if not bool(result.get("success", false)):
+		return
+	var old_item := result.get("old_item", {}) as Dictionary
+	if not _drop_inventory_item_to_world(old_item, 1):
+		player.call("equip_backpack_item", old_item)
+		status_label.text = "丢弃背包失败：已恢复装备"
+		return
+	var overflow := _inventory.resize_capacity_collect_overflow(BASE_INVENTORY_CAPACITY)
+	_drop_backpack_capacity_overflow(overflow)
+	_emit_backpack_equipment_changed()
+	status_label.text = "已丢弃%s · 容量恢复%d格%s" % [
+		old_item.get("name", "背包"), BASE_INVENTORY_CAPACITY,
+		" · %d格物品同时落地" % overflow.size() if not overflow.is_empty() else "",
+	]
+
+
+func _can_spawn_overflow_in_current_room() -> bool:
+	return player != null and _room_by_id.get(_current_room_id) is DungeonRoom3D
+
+
+func _drop_backpack_capacity_overflow(overflow: Array[Dictionary]) -> void:
+	for entry in overflow:
+		var item := entry.get("item", {}) as Dictionary
+		var count := int(entry.get("count", 1))
+		_drop_inventory_item_to_world(item, count)
+
+
+func _emit_backpack_equipment_changed() -> void:
+	var snapshot := get_backpack_equipment_snapshot()
+	backpack_equipment_changed.emit(snapshot)
+	_refresh_loot_label()
 
 
 func _on_quick_item_assignment_requested(quick_slot_index: int, item_id: String) -> void:
@@ -3161,6 +3297,11 @@ func _finish_run(success: bool) -> void:
 func _collect_extracted_items(include_equipped_weapon := false) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	if include_equipped_weapon and player != null:
+		if player.has_method("get_equipped_backpack_item"):
+			var equipped_backpack := player.call("get_equipped_backpack_item") as Dictionary
+			if not equipped_backpack.is_empty():
+				equipped_backpack["count"] = 1
+				result.append(equipped_backpack)
 		if player.has_method("get_equipped_weapon_item_for_slot"):
 			for weapon_slot_index in range(2):
 				var equipped := player.call("get_equipped_weapon_item_for_slot", weapon_slot_index) as Dictionary
@@ -3190,8 +3331,8 @@ func _collect_extracted_items(include_equipped_weapon := false) -> Array[Diction
 func _refresh_loot_label() -> void:
 	if loot_label == null or _inventory == null:
 		return
-	loot_label.text = "背包 %d/12 · 钥匙 %d · 魂 %d" % [
-		_inventory.get_used_slots(), _get_total_room_keys(), _run_value
+	loot_label.text = "背包 %d/%d · 钥匙 %d · 魂 %d" % [
+		_inventory.get_used_slots(), _inventory.get_capacity(), _get_total_room_keys(), _run_value
 	]
 	_refresh_quick_item_hud()
 
@@ -3234,7 +3375,10 @@ func get_generation_snapshot() -> Dictionary:
 		"records": record_summary, "has_extraction": _extraction != null, "is_3d": true,
 		"room_dimensions": DungeonRoom3D.ROOM_DIMENSIONS.duplicate(true),
 		"locked_edge_count": _open_edges.size(), "initial_room_keys": 1,
-		"inventory_capacity": 12, "insurance_capacity": 2,
+		"inventory_capacity": _inventory.get_capacity() if _inventory != null else BASE_INVENTORY_CAPACITY,
+		"inventory_base_capacity": BASE_INVENTORY_CAPACITY,
+		"equipped_backpack": get_backpack_equipment_snapshot(),
+		"insurance_capacity": 2,
 		"streaming_policy": "current_plus_open_neighbors",
 		"minimap": minimap.get_snapshot() if minimap != null else {},
 	}
@@ -3288,6 +3432,8 @@ func get_runtime_snapshot() -> Dictionary:
 		"detailed_rooms": detailed_rooms, "total_rooms": _rooms.size(),
 		"active_lights": active_lights, "active_ai": active_ai,
 		"keys": _get_total_room_keys(), "inventory_used": _inventory.get_used_slots(),
+		"inventory_capacity": _inventory.get_capacity(),
+		"equipped_backpack": get_backpack_equipment_snapshot(),
 		"spawned_key_room_count": _spawned_key_rooms.size(), "unclaimed_key_count": unclaimed_key_count,
 		"open_edges": _open_edges.values().count(true), "total_edges": _open_edges.size(),
 		"edge_states": _open_edges.duplicate(true),

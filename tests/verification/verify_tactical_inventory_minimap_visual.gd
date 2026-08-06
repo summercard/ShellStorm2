@@ -23,6 +23,18 @@ func _ready() -> void:
 	inventory.add_item(weapon.to_item_dictionary(), 1)
 	inventory.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 2)
 	inventory.add_item(ItemRegistry.get_instance().get_item("attach_big_mag"), 1)
+	inventory.add_item(ItemRegistry.get_instance().get_item("equipment_backpack_4"), 1)
+	var backpack_slot_index := _find_item_slot(inventory, "equipment_backpack_4")
+	ui.call("_on_slot_clicked", backpack_slot_index, true)
+	await get_tree().process_frame
+	var backpack_snapshot := dungeon.get_backpack_equipment_snapshot()
+	interaction_ok = (
+		inventory.get_capacity() == 16
+		and ui._slots.size() == 16
+		and str(dungeon.get_equipped_backpack_item().get("id", "")) == "equipment_backpack_4"
+		and bool(backpack_snapshot.get("model_visible", false))
+		and interaction_ok
+	)
 	await _press_key(KEY_I)
 	for _frame in 4:
 		await get_tree().process_frame
@@ -128,7 +140,7 @@ func _ready() -> void:
 		push_error("TACTICAL_INVENTORY_MINIMAP_VISUAL_FAIL: real hover/drag interaction or viewport capture failed")
 		get_tree().quit(1)
 		return
-	print("TACTICAL_INVENTORY_MINIMAP_VISUAL_OK: single non-overlap hover card, slot move, weapon equip/unequip, world discard and minimap render pass")
+	print("TACTICAL_INVENTORY_MINIMAP_VISUAL_OK: equipped backpack slot/bonus grid/back mesh, single non-overlap hover card, weapon drag and minimap render pass")
 	get_tree().quit(0)
 
 

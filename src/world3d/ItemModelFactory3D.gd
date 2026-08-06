@@ -12,6 +12,8 @@ static func create_model(item: Dictionary, tint := Color(0.38, 0.88, 0.72)) -> N
 	match kind:
 		"weapon":
 			_build_weapon(root, item)
+		"backpack":
+			_build_backpack(root, item, tint)
 		"bullet":
 			_build_bullet(root, item, tint)
 		"attachment":
@@ -44,6 +46,8 @@ static func get_model_kind(item: Dictionary) -> String:
 		return "key"
 	if item_type == "weapon" or subtype == "gun_body":
 		return "weapon"
+	if item_type == "equipment" and subtype == "backpack":
+		return "backpack"
 	if subtype == "bullet":
 		return "bullet"
 	if item_type == "attachment" or subtype in ["muzzle", "magazine", "mount"]:
@@ -79,6 +83,41 @@ static func _build_weapon(root: Node3D, item: Dictionary) -> void:
 	weapon.rotation_degrees = Vector3(-12.0, -32.0, 0.0)
 	weapon.scale = Vector3.ONE * 0.88
 	root.add_child(weapon)
+
+
+static func _build_backpack(root: Node3D, item: Dictionary, tint: Color) -> void:
+	var extra_slots := clampi(int(item.get("extra_slots", 2)), 2, 8)
+	var size_by_slots := {
+		2: Vector3(0.56, 0.60, 0.28),
+		4: Vector3(0.66, 0.74, 0.33),
+		8: Vector3(0.76, 0.88, 0.38),
+	}
+	var body_size := size_by_slots.get(extra_slots, size_by_slots[2]) as Vector3
+	var shell := _material(tint.darkened(0.30), 0.18, 0.76)
+	var panel := _material(tint, 0.24, 0.62, 0.10)
+	var strap := _material(Color(0.06, 0.08, 0.09), 0.10, 0.90)
+	_add_box(root, "BackpackBody", Vector3.ZERO, body_size, shell)
+	_add_box(
+		root, "TopFlap",
+		Vector3(0, body_size.y * 0.34, -body_size.z * 0.54),
+		Vector3(body_size.x * 0.88, body_size.y * 0.24, body_size.z * 0.12), panel
+	)
+	for side in [-1.0, 1.0]:
+		_add_box(
+			root, "ShoulderStrapL" if side < 0.0 else "ShoulderStrapR",
+			Vector3(side * body_size.x * 0.31, 0.02, body_size.z * 0.56),
+			Vector3(body_size.x * 0.12, body_size.y * 0.92, body_size.z * 0.08), strap
+		)
+	var pocket_count := 1 if extra_slots == 2 else 2 if extra_slots == 4 else 3
+	for pocket_index in range(pocket_count):
+		var pocket_x := (float(pocket_index) - float(pocket_count - 1) * 0.5) * body_size.x * 0.31
+		_add_box(
+			root, "CapacityPocket_%d" % pocket_index,
+			Vector3(pocket_x, -body_size.y * 0.30, -body_size.z * 0.56),
+			Vector3(body_size.x * (0.48 if pocket_count == 1 else 0.27), body_size.y * 0.25, body_size.z * 0.18),
+			panel
+		)
+	root.set_meta("backpack_extra_slots", extra_slots)
 
 
 static func _build_bullet(root: Node3D, item: Dictionary, fallback: Color) -> void:

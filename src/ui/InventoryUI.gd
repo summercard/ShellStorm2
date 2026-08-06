@@ -14,6 +14,9 @@ signal weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: in
 signal equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slot_index: int)
 signal equipped_weapon_drop_requested(weapon_slot_index: int)
 signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
+signal backpack_slot_equip_requested(source_slot_index: int)
+signal equipped_backpack_to_inventory_requested(target_slot_index: int)
+signal equipped_backpack_drop_requested()
 
 @export var inventory_capacity: int = 12
 @export var insurance_capacity: int = 2
@@ -28,6 +31,7 @@ var _inventory_module = null
 var _insurance_module = null
 var _weapon_tree: WeaponAssemblyTree = null
 var _weapon_owner: Node = null
+var _backpack_owner: Node = null
 var _slots: Array[Control] = []
 var _insurance_slots: Array[Control] = []
 
@@ -42,6 +46,8 @@ var equipment_weapon_slot: Control
 var equipment_weapon_label: Label
 var equipment_weapon_slots: Array[Control] = []
 var equipment_weapon_labels: Array[Label] = []
+var equipment_backpack_slot: Control
+var equipment_backpack_label: Label
 var quick_item_slots: Array[Control] = []
 var quick_item_ids: Array[String] = ["", ""]
 var equipment_hp_bar: ProgressBar
@@ -64,6 +70,7 @@ var _drag_feedback_active := false
 var _hovered_item_slot: Control = null
 
 const SLOT_SIZE := 72
+const BASE_INVENTORY_CAPACITY := 12
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
 
@@ -129,8 +136,8 @@ func _setup_standalone_panels() -> void:
 	inventory_shell = PanelContainer.new()
 	inventory_shell.name = "CharacterInventoryShell"
 	inventory_shell.set_anchors_preset(Control.PRESET_CENTER)
-	inventory_shell.custom_minimum_size = Vector2(970, 590)
-	inventory_shell.position = Vector2(-485, -295)
+	inventory_shell.custom_minimum_size = Vector2(970, 650)
+	inventory_shell.position = Vector2(-485, -325)
 	inventory_shell.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_NORMAL, 8, 2)
 	)
@@ -222,6 +229,27 @@ func _setup_standalone_panels() -> void:
 		equipment_weapon_labels.append(weapon_label)
 	equipment_weapon_slot = equipment_weapon_slots[0]
 	equipment_weapon_label = equipment_weapon_labels[0]
+	var backpack_title := Label.new()
+	backpack_title.text = "背包装备 · 提供额外物品格"
+	backpack_title.add_theme_color_override("font_color", Color(0.52, 0.88, 1.0))
+	equipment_vbox.add_child(backpack_title)
+	var backpack_row := HBoxContainer.new()
+	backpack_row.add_theme_constant_override("separation", 10)
+	equipment_vbox.add_child(backpack_row)
+	equipment_backpack_slot = _create_slot()
+	equipment_backpack_slot.name = "BackpackEquipmentSlot"
+	equipment_backpack_slot.custom_minimum_size = Vector2(96, 70)
+	equipment_backpack_slot.set_meta("slot_kind", "backpack")
+	if equipment_backpack_slot.has_method("set_slot_index"):
+		equipment_backpack_slot.call("set_slot_index", 0)
+	_connect_slot_signals(equipment_backpack_slot, 0, false)
+	backpack_row.add_child(equipment_backpack_slot)
+	equipment_backpack_label = Label.new()
+	equipment_backpack_label.name = "BackpackEquipmentLabel"
+	equipment_backpack_label.text = "未装备\n基础容量 12格"
+	equipment_backpack_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	equipment_backpack_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	backpack_row.add_child(equipment_backpack_label)
 	var quick_title := Label.new()
 	quick_title.text = "物品快捷栏 · 从背包拖入可主动使用物品"
 	quick_title.add_theme_color_override("font_color", Color(0.44, 0.90, 0.76))
@@ -446,6 +474,19 @@ func set_weapon_owner(owner: Node) -> void:
 	_refresh_inventory_ui()
 
 
+func set_backpack_owner(owner: Node) -> void:
+	if _backpack_owner != null and is_instance_valid(_backpack_owner) and _backpack_owner.has_signal(
+		"backpack_equipment_changed"
+	):
+		if _backpack_owner.backpack_equipment_changed.is_connected(_on_backpack_equipment_changed):
+			_backpack_owner.backpack_equipment_changed.disconnect(_on_backpack_equipment_changed)
+	_backpack_owner = owner
+	if _backpack_owner != null and _backpack_owner.has_signal("backpack_equipment_changed"):
+		if not _backpack_owner.backpack_equipment_changed.is_connected(_on_backpack_equipment_changed):
+			_backpack_owner.backpack_equipment_changed.connect(_on_backpack_equipment_changed)
+	_refresh_backpack_equipment_ui()
+
+
 func set_world_drop_handler(handler: Callable) -> void:
 	_world_drop_handler = handler
 
@@ -492,21 +533,32 @@ func is_inventory_open() -> bool:
 
 ## 构建背包格子
 func _build_inventory_grid() -> void:
-	for child in inventory_grid.get_children():
-		child.queue_free()
-	if _slots.size() == inventory_capacity:
+	var target_capacity := (
+		int(_inventory_module.get_capacity())
+		if _inventory_module != null and _inventory_module.has_method("get_capacity")
+		else inventory_capacity
+	)
+	inventory_capacity = target_capacity
+	if _slots.size() == target_capacity:
 		for slot in _slots:
-			slot.reparent(inventory_grid)
+			if slot.get_parent() != inventory_grid:
+				slot.reparent(inventory_grid)
+			_apply_inventory_slot_frame(slot, bool(slot.has_meta("slot_item")))
 		return
+	for slot in _slots:
+		if slot != null and is_instance_valid(slot):
+			slot.queue_free()
 	_slots.clear()
 	
-	for i in inventory_capacity:
+	for i in target_capacity:
 		var slot := _create_slot()
 		slot.name = "InvSlot_%d" % i
 		slot.set_meta("slot_kind", "inventory")
+		slot.set_meta("backpack_bonus_slot", i >= BASE_INVENTORY_CAPACITY)
 		inventory_grid.add_child(slot)
 		_slots.append(slot)
 		_connect_slot_signals(slot, i, true)
+		_apply_inventory_slot_frame(slot, false)
 
 ## 构建保险格
 func _build_insurance_grid() -> void:
@@ -584,6 +636,9 @@ func _set_panel_positions() -> void:
 func _refresh_inventory_ui() -> void:
 	if _inventory_module == null or inventory_grid == null:
 		return
+	var cap: int = _inventory_module.get_capacity()
+	if _slots.size() != cap:
+		_build_inventory_grid()
 	
 	var occupied: Array[Dictionary] = _inventory_module.get_occupied_slots()
 	var slot_data: Dictionary = {}
@@ -602,8 +657,10 @@ func _refresh_inventory_ui() -> void:
 	
 	# 更新容量标签
 	var used: int = _inventory_module.get_used_slots()
-	var cap: int = _inventory_module.get_capacity()
-	capacity_label.text = "背包容量 %d / %d" % [used, cap]
+	var bonus := maxi(0, cap - BASE_INVENTORY_CAPACITY)
+	capacity_label.text = "背包容量 %d / %d　基础%d + 装备%d" % [
+		used, cap, BASE_INVENTORY_CAPACITY, bonus,
+	]
 
 ## 刷新保险格UI
 func _refresh_insurance_ui() -> void:
@@ -677,8 +734,8 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 		else:
 			cl.visible = false
 	
-	# 高亮边框表示有物品
-	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_filled_style())
+	# 高亮边框表示有物品；装备背包提供的扩展格始终保留青绿色识别框。
+	_apply_inventory_slot_frame(slot, true)
 	var glyph := slot.get_node_or_null("ItemGlyph") as Label
 	if glyph == null:
 		glyph = Label.new()
@@ -733,12 +790,33 @@ func _clear_slot(slot: Control) -> void:
 	if build_label != null:
 		build_label.visible = false
 	slot.tooltip_text = ""
-	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
+	_apply_inventory_slot_frame(slot, false)
+
+
+func _apply_inventory_slot_frame(slot: Control, filled: bool) -> void:
+	if slot == null:
+		return
+	if not bool(slot.get_meta("backpack_bonus_slot", false)):
+		slot.add_theme_stylebox_override(
+			"normal",
+			UIStyleFactory.make_slot_filled_style() if filled else UIStyleFactory.make_slot_style(false)
+		)
+		return
+	var style := UIStyleFactory.make_panel_with_border(
+		1 if filled else 0,
+		Color(0.26, 0.92, 0.72) if filled else Color(0.18, 0.68, 0.58),
+		4,
+		2
+	)
+	style.bg_color = Color(0.035, 0.12, 0.12, 0.96) if filled else Color(0.018, 0.075, 0.078, 0.92)
+	slot.add_theme_stylebox_override("normal", style)
 
 
 func _item_glyph(item: Dictionary) -> String:
 	if item.get("id", "") == "item_room_key":
 		return "KEY"
+	if item.get("type", "") == "equipment" and item.get("subtype", "") == "backpack":
+		return "BAG"
 	if item.get("type", "") == "weapon" or item.get("subtype", "") == "gun_body":
 		return "GUN"
 	if item.get("subtype", "") == "bullet":
@@ -902,6 +980,11 @@ func _on_equipped_weapon_instance_changed(_snapshot: Dictionary) -> void:
 	_refresh_equipment_ui()
 
 
+func _on_backpack_equipment_changed(_snapshot: Dictionary) -> void:
+	_refresh_inventory_ui()
+	_refresh_backpack_equipment_ui()
+
+
 func _on_owner_hp_changed(current: int, maximum: int) -> void:
 	if equipment_hp_bar != null:
 		equipment_hp_bar.max_value = maxi(1, maximum)
@@ -912,6 +995,7 @@ func _on_owner_hp_changed(current: int, maximum: int) -> void:
 
 func _refresh_equipment_ui() -> void:
 	_refresh_run_fate_ui()
+	_refresh_backpack_equipment_ui()
 	if equipment_weapon_slots.is_empty() or _weapon_owner == null or not is_instance_valid(_weapon_owner):
 		return
 	var active_slot := int(_weapon_owner.call("get_active_weapon_slot")) if _weapon_owner.has_method("get_active_weapon_slot") else 0
@@ -936,6 +1020,24 @@ func _refresh_equipment_ui() -> void:
 			int(item.get("fate_slot_capacity", 8)),
 		]
 	_refresh_quick_item_ui()
+
+
+func _refresh_backpack_equipment_ui() -> void:
+	if equipment_backpack_slot == null or equipment_backpack_label == null:
+		return
+	var item: Dictionary = {}
+	if _backpack_owner != null and is_instance_valid(_backpack_owner) and _backpack_owner.has_method(
+		"get_equipped_backpack_item"
+	):
+		item = _backpack_owner.call("get_equipped_backpack_item") as Dictionary
+	if item.is_empty():
+		_clear_slot(equipment_backpack_slot)
+		equipment_backpack_label.text = "未装备\n基础容量 %d格" % BASE_INVENTORY_CAPACITY
+		return
+	_update_slot_with_item(equipment_backpack_slot, {"item": item, "count": 1, "slot": 0})
+	equipment_backpack_label.text = "%s\n额外 +%d格" % [
+		item.get("name", "背包"), int(item.get("extra_slots", 0)),
+	]
 
 
 func _refresh_quick_item_ui() -> void:
@@ -1022,6 +1124,10 @@ func _show_item_hover_card(item: Dictionary, count: int = 1) -> void:
 	item_hover_title.text = "%s%s" % [item_name, " ×%d" % count if count > 1 else ""]
 	if str(item.get("type", "")) == "weapon":
 		item_hover_body.text = _weapon_hover_text(item)
+	elif str(item.get("type", "")) == "equipment" and str(item.get("subtype", "")) == "backpack":
+		item_hover_body.text = "背包装备 / %s\n装备后增加 %d 个物品格\n%s\n\n左键或拖入背包槽装备" % [
+			item.get("rarity", "common"), int(item.get("extra_slots", 0)), item.get("description", ""),
+		]
 	else:
 		item_hover_body.text = "%s / %s\n%s\n\n拖拽：换位或丢弃到地面" % [
 			item.get("type", "物品"), item.get("rarity", "common"), item.get("description", ""),
@@ -1060,7 +1166,7 @@ func _position_item_hover_card() -> void:
 
 
 func _on_slot_drag_started(source_index: int, source_kind: String, item: Dictionary) -> void:
-	if source_kind != "inventory" and not source_kind.begins_with("weapon_"):
+	if source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack":
 		return
 	_drag_feedback_active = true
 	_hovered_item_slot = null
@@ -1068,13 +1174,13 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	for index in _slots.size():
 		if _slots[index].has_method("set_drag_feedback"):
 			_slots[index].call("set_drag_feedback", true, source_kind == "inventory" and index == source_index, item, source_kind)
-	for target in equipment_weapon_slots + quick_item_slots + [drop_zone]:
+	for target in equipment_weapon_slots + [equipment_backpack_slot] + quick_item_slots + [drop_zone]:
 		if target != null and target.has_method("set_drag_feedback"):
-			target.call("set_drag_feedback", true, source_kind.begins_with("weapon_") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
+			target.call("set_drag_feedback", true, (source_kind.begins_with("weapon_") or source_kind == "backpack") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
 	if drag_status_panel != null and drag_status_label != null:
 		drag_status_label.text = (
 			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
-			if source_kind.begins_with("weapon_")
+			if source_kind.begins_with("weapon_") or source_kind == "backpack"
 			else "正在拖拽「%s」　蓝框换位 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
@@ -1086,7 +1192,7 @@ func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successfu
 	for slot in _slots:
 		if slot.has_method("set_drag_feedback"):
 			slot.call("set_drag_feedback", false, false, {}, "inventory")
-	for target in equipment_weapon_slots + quick_item_slots + [drop_zone]:
+	for target in equipment_weapon_slots + [equipment_backpack_slot] + quick_item_slots + [drop_zone]:
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", false, false, {}, "inventory")
 	if drag_status_panel != null:
@@ -1099,7 +1205,16 @@ func _on_slot_drop_received(
 	source_kind: String,
 	target_kind: String
 ) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_")) or _inventory_module == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack") or _inventory_module == null:
+		return
+	if source_kind == "backpack":
+		match target_kind:
+			"inventory":
+				equipped_backpack_to_inventory_requested.emit(target_index)
+			"drop":
+				equipped_backpack_drop_requested.emit()
+		_refresh_inventory_ui()
+		_refresh_backpack_equipment_ui()
 		return
 	if source_kind.begins_with("weapon_"):
 		var weapon_slot_index := int(source_kind.trim_prefix("weapon_"))
@@ -1118,6 +1233,11 @@ func _on_slot_drop_received(
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			if not source.is_empty() and str((source.get("item", {}) as Dictionary).get("type", "")) == "weapon":
 				weapon_slot_equip_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
+		"backpack":
+			var source: Dictionary = _inventory_module.get_slot(source_index)
+			var item := source.get("item", {}) as Dictionary
+			if str(item.get("type", "")) == "equipment" and str(item.get("subtype", "")) == "backpack":
+				backpack_slot_equip_requested.emit(source_index)
 		"quick_0", "quick_1":
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			var item := source.get("item", {}) as Dictionary
@@ -1130,12 +1250,14 @@ func _on_slot_drop_received(
 
 
 func _on_slot_drag_ended_outside(source_index: int, source_kind: String) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_")) or inventory_shell == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack") or inventory_shell == null:
 		return
 	if inventory_shell.get_global_rect().has_point(get_viewport().get_mouse_position()):
 		return
 	if source_kind.begins_with("weapon_"):
 		equipped_weapon_drop_requested.emit(int(source_kind.trim_prefix("weapon_")))
+	elif source_kind == "backpack":
+		equipped_backpack_drop_requested.emit()
 	else:
 		_drop_inventory_slot_to_world(source_index)
 

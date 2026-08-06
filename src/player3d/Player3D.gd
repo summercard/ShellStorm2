@@ -18,6 +18,7 @@ signal action_overlay_changed(snapshot: Dictionary)
 signal avatar_customization_changed(loadout: Dictionary)
 signal weapon_instance_changed(snapshot: Dictionary)
 signal weapon_loadout_changed(snapshot: Dictionary)
+signal backpack_equipment_changed(snapshot: Dictionary)
 
 const SPEED := 5.0
 const DASH_SPEED := 16.5
@@ -65,6 +66,8 @@ var active_weapon_slot := 0
 var _loading_weapon_instance := false
 var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
+var equipped_backpack_item: Dictionary = {}
+var _backpack_model: Node3D = null
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
 var _fire_animation_remaining := 0.0
@@ -686,6 +689,75 @@ func get_weapon_loadout_snapshot() -> Dictionary:
 func get_weapon_presentation_snapshot() -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	return instance.get_presentation_snapshot(weapon_tree, "已装备") if instance != null else {}
+
+
+func get_equipped_backpack_item() -> Dictionary:
+	return equipped_backpack_item.duplicate(true)
+
+
+func get_backpack_equipment_snapshot() -> Dictionary:
+	var socket := avatar.get_backpack_socket() if avatar != null else null
+	return {
+		"equipped": not equipped_backpack_item.is_empty(),
+		"item_id": str(equipped_backpack_item.get("id", "")),
+		"display_name": str(equipped_backpack_item.get("name", "")),
+		"extra_slots": int(equipped_backpack_item.get("extra_slots", 0)),
+		"socket_name": socket.name if socket != null else "",
+		"socket_position": socket.position if socket != null else Vector3.ZERO,
+		"model_visible": _backpack_model != null and is_instance_valid(_backpack_model),
+		"model_kind": "backpack" if _backpack_model != null else "",
+		"mesh_count": ItemModelFactory3D.count_mesh_instances(_backpack_model) if _backpack_model != null else 0,
+	}
+
+
+func equip_backpack_item(item: Dictionary) -> Dictionary:
+	if str(item.get("type", "")) != "equipment" or str(item.get("subtype", "")) != "backpack":
+		return {"success": false, "reason": "该物品不是背包装备"}
+	var extra_slots := int(item.get("extra_slots", 0))
+	if extra_slots not in [2, 4, 8]:
+		return {"success": false, "reason": "背包容量配置无效"}
+	var old_item := equipped_backpack_item.duplicate(true)
+	equipped_backpack_item = item.duplicate(true)
+	_refresh_backpack_model()
+	var snapshot := get_backpack_equipment_snapshot()
+	backpack_equipment_changed.emit(snapshot)
+	return {"success": true, "old_item": old_item, "new_item": get_equipped_backpack_item(), "snapshot": snapshot}
+
+
+func unequip_backpack_item() -> Dictionary:
+	if equipped_backpack_item.is_empty():
+		return {"success": false, "reason": "背包槽为空"}
+	var old_item := equipped_backpack_item.duplicate(true)
+	equipped_backpack_item.clear()
+	_refresh_backpack_model()
+	backpack_equipment_changed.emit(get_backpack_equipment_snapshot())
+	return {"success": true, "old_item": old_item}
+
+
+func clear_equipped_backpack() -> Dictionary:
+	if equipped_backpack_item.is_empty():
+		return {}
+	var removed := equipped_backpack_item.duplicate(true)
+	equipped_backpack_item.clear()
+	_refresh_backpack_model()
+	backpack_equipment_changed.emit(get_backpack_equipment_snapshot())
+	return removed
+
+
+func _refresh_backpack_model() -> void:
+	if _backpack_model != null and is_instance_valid(_backpack_model):
+		_backpack_model.queue_free()
+	_backpack_model = null
+	if equipped_backpack_item.is_empty() or avatar == null:
+		return
+	var socket := avatar.get_backpack_socket()
+	if socket == null:
+		return
+	_backpack_model = ItemModelFactory3D.create_model(equipped_backpack_item)
+	_backpack_model.name = "EquippedBackpackModel3D"
+	_backpack_model.set_meta("equipment_item_id", str(equipped_backpack_item.get("id", "")))
+	_backpack_model.set_meta("extra_slots", int(equipped_backpack_item.get("extra_slots", 0)))
+	socket.add_child(_backpack_model)
 
 
 func equip_weapon_item(item: Dictionary) -> Dictionary:

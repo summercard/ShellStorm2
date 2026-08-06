@@ -86,5 +86,8 @@ rotation = Vector3(-1.5708, 0, 0)
 position = Vector3(0.42, 1.12, 0.25)
 rotation = Vector3(-1.5708, 0, 0)
 
+[node name="BackpackSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0, 0.74, 0.30)
+
 [node name="ReloadProgress3D" parent="." index="0"]
 position = Vector3(0, 1.672727273, 0.036363636)

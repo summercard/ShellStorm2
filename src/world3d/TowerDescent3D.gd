@@ -1822,11 +1822,16 @@ func _cancel_initial_loop_retreat() -> void:
 
 func _confirm_initial_loop_retreat() -> void:
 	var discarded_inventory := _inventory.get_occupied_slots().size() if _inventory != null else 0
+	var discarded_backpack := player.get_equipped_backpack_item() if player != null and player.has_method("get_equipped_backpack_item") else {}
 	if _inventory != null:
 		_inventory.clear_all()
+		_inventory.resize_capacity_collect_overflow(BASE_INVENTORY_CAPACITY)
 	var discarded_weapons: Array[Dictionary] = []
 	if player != null and player.has_method("clear_all_equipped_weapons"):
 		discarded_weapons = player.call("clear_all_equipped_weapons") as Array[Dictionary]
+	if player != null and player.has_method("clear_equipped_backpack"):
+		player.call("clear_equipped_backpack")
+	_emit_backpack_equipment_changed()
 	_quick_item_ids = ["", ""]
 	if _inventory_ui != null:
 		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
@@ -1839,7 +1844,9 @@ func _confirm_initial_loop_retreat() -> void:
 		player.velocity = Vector3.ZERO
 		_on_room_entered(facility_room)
 	_reset_initial_loop_world_after_retreat()
-	status_label.text = "已撤退至99F基地 · 丢失背包%d格、装备武器%d把" % [discarded_inventory, discarded_weapons.size()]
+	status_label.text = "已撤退至99F基地 · 丢失物品%d格、装备武器%d把、背包%d个" % [
+		discarded_inventory, discarded_weapons.size(), 0 if discarded_backpack.is_empty() else 1,
+	]
 
 
 func _reset_initial_loop_world_after_retreat() -> void:
