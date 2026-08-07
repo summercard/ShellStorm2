@@ -7,16 +7,12 @@ extends CanvasLayer
 ## - 桌面 / 调试 → 默认隐藏，运行时按 F1 可切换可见（仅在编辑器中）
 ##
 ## 信号：
-##   move_direction(direction: Vector2)  摇杆移动；x = right, y = down
-##   aim_direction(aim: Vector2)        右半屏拖动；x = right, y = down
-##   aim_cancel()                       右半屏松手
-##   shoot_pressed / shoot_released
-## v0.1：R/SHIFT/F/E 四位动作在 Dungeon3D 的 HUD 按钮上被点击，直接走 Input.parse_input_event 入口，
-## 不再由 MobileInput 发射信号。
+##   move_direction(direction: Vector2)  左摇杆移动；x = right, y = down
+##   shoot_pressed / shoot_released       右摇杆按下 / 松开
+##   face_direction(direction: Vector2)   合并面朝方向：右摇杆优先，否则用左摇杆
+## v0.1：R/SHIFT/F/E 四位动作在 Dungeon3D 的 HUD 按钮上被点击，直接走 Input.parse_input_event 入口。
 
 signal move_direction(direction: Vector2)
-signal aim_direction(aim: Vector2)
-signal aim_cancel()
 signal shoot_pressed
 signal shoot_released
 # 合并后的面朝方向：右摇杆优先，没有右摇杆时用左摇杆
@@ -25,11 +21,12 @@ signal face_direction(direction: Vector2)
 @export var enabled: bool = false
 @export var show_visual: bool = true
 
-# 区域比例（按视口）
-var _joystick_zone_ratio := Rect2(0.0, 0.55, 0.45, 0.45)  # 左下半屏
-var _action_zone_ratio := Rect2(0.55, 0.30, 0.45, 0.70)    # 右半屏
+# 两枚固定圆心摇杆（屏幕左下 / 右下），命中区 = 可见圈 × 1.2
+var _left_joystick_base: Vector2 = Vector2.ZERO
+var _right_joystick_base: Vector2 = Vector2.ZERO
+var _joystick_hit_radius: float = 60.0
 
-# 摇杆运行时数据
+# 左摇杆运行时数据
 var _joystick_center: Vector2 = Vector2.ZERO
 var _joystick_radius: float = 60.0
 var _joystick_active: bool = false
@@ -85,21 +82,19 @@ func _put_widget() -> void:
 func _widget_draw() -> void:
 	if not enabled or not show_visual or _widget == null:
 		return
-	var font := ThemeDB.fallback_font
-	var base_color := Color(1.0, 1.0, 1.0, 0.10)
-	var active_color := Color(1.0, 1.0, 1.0, 0.22)
-	_widget.draw_circle(_joystick_center, _joystick_radius, base_color)
-	_widget.draw_arc(_joystick_center, _joystick_radius, 0, TAU, 32, Color(1.0, 1.0, 1.0, 0.18), 2.0)
-	_widget.draw_circle(_joystick_center + _joystick_knob, _joystick_radius * 0.38, active_color)
-		# 右摇杆按下时画瞄准圈 + 拖动方向线
+	# 左摇杆 base ring：固定位置、半透明底 + 描边 + knob
+	_widget.draw_circle(_left_joystick_base, _joystick_radius, Color(1.0, 1.0, 1.0, 0.10))
+	_widget.draw_arc(_left_joystick_base, _joystick_radius, 0, TAU, 32, Color(1.0, 1.0, 1.0, 0.18), 2.0)
+	if _joystick_active:
+		_widget.draw_circle(_left_joystick_base + _joystick_knob, _joystick_radius * 0.38, Color(1.0, 1.0, 1.0, 0.32))
+	# 右摇杆 base ring：固定位置，激活时画 knob + 拖动方向
+	_widget.draw_circle(_right_joystick_base, _joystick_radius, Color(0.4, 0.7, 1.0, 0.10))
+	_widget.draw_arc(_right_joystick_base, _joystick_radius, 0, TAU, 32, Color(0.4, 0.7, 1.0, 0.32), 2.0)
 	if _aim_joystick_active:
 		var aim_dir := _aim_joystick_vector
-		_widget.draw_circle(_aim_joystick_center, _joystick_radius, Color(0.4, 0.7, 1.0, 0.10))
-		_widget.draw_arc(_aim_joystick_center, _joystick_radius, 0, TAU, 32, Color(0.4, 0.7, 1.0, 0.55), 2.0)
-		_widget.draw_circle(_aim_joystick_center + aim_dir * _joystick_radius * 0.7, 16.0, Color(0.4, 0.7, 1.0, 0.32))
+		_widget.draw_circle(_right_joystick_base + aim_dir * _joystick_radius * 0.7, 16.0, Color(0.4, 0.7, 1.0, 0.32))
 		if aim_dir.length() > 0.001:
-			_widget.draw_line(_aim_joystick_center, _aim_joystick_center + aim_dir * _joystick_radius, Color(0.4, 0.7, 1.0, 0.85), 3.0)
-
+			_widget.draw_line(_right_joystick_base, _right_joystick_base + aim_dir * _joystick_radius, Color(0.4, 0.7, 1.0, 0.85), 3.0)
 
 func _draw_button_on(canvas: Control, center: Vector2, radius: float, ring: Color, font: Font, text: String, font_size: int) -> void:
 	canvas.draw_circle(center, radius, Color(1.0, 1.0, 1.0, 0.10))
@@ -131,11 +126,13 @@ func _recalc_layout() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 	if viewport_size == Vector2.ZERO:
 		return
-	_joystick_center = Vector2(viewport_size.x * 0.13, viewport_size.y * 0.78)
-	_joystick_radius = maxf(48.0, viewport_size.y * 0.10)
+	var radius := maxf(48.0, viewport_size.y * 0.10)
+	_joystick_radius = radius
+	_joystick_hit_radius = radius * 1.2
+	_left_joystick_base = Vector2(viewport_size.x * 0.13, viewport_size.y * 0.78)
+	_right_joystick_base = Vector2(viewport_size.x * 0.87, viewport_size.y * 0.78)
 	if _widget != null:
 		_widget.queue_redraw()
-
 
 func _handle_screen_touch(event: InputEventScreenTouch) -> void:
 	var pos: Vector2 = event.position
@@ -161,22 +158,22 @@ func _handle_screen_drag(event: InputEventScreenDrag) -> void:
 
 
 func _touch_down(pos: Vector2, index: int) -> void:
-	# 按命中顺序：左摇杆 → 右摇杆
-	if _is_in_joystick_zone(pos):
+	# 两枚固定摇杆：tap 命中区后把该摇杆归当前 touch index
+	var which := _pick_joystick(pos)
+	if which == 0:
 		_joystick_touch_index = index
 		_joystick_active = true
-		_joystick_center = pos
+		_joystick_center = _left_joystick_base
 		_joystick_knob = Vector2.ZERO
 		_joystick_vector = Vector2.ZERO
 		return
-	if _is_in_aim_zone(pos):
+	if which == 1:
 		# 右摇杆按下 = 进入射击状态 + 起始瞄准
 		_aim_joystick_touch_index = index
 		_aim_joystick_active = true
-		_aim_joystick_center = pos
+		_aim_joystick_center = _right_joystick_base
 		_aim_joystick_vector = Vector2.ZERO
 		shoot_pressed.emit()
-		aim_direction.emit(Vector2.ZERO)
 		_emit_face_direction()
 		return
 
@@ -186,12 +183,12 @@ func _touch_up(index: int) -> void:
 		_joystick_active = false
 		_joystick_knob = Vector2.ZERO
 		_joystick_vector = Vector2.ZERO
-		# 检查是否还有别的触摸落在左摇杆区，有就接管
+		# 看看还有没有别的触摸落在左摇杆命中区里，有就接管
 		for other_index in _active_touches.keys():
 			var other_pos: Vector2 = _active_touches[other_index]
-			if _is_in_joystick_zone(other_pos):
+			if _pick_joystick(other_pos) == 0:
 				_joystick_touch_index = int(other_index)
-				_joystick_center = other_pos
+				_joystick_center = _left_joystick_base
 				_update_joystick(other_pos)
 				return
 		move_direction.emit(Vector2.ZERO)
@@ -204,9 +201,9 @@ func _touch_up(index: int) -> void:
 		_aim_joystick_active = false
 		_aim_joystick_vector = Vector2.ZERO
 		shoot_released.emit()
-		aim_cancel.emit()
 		_emit_face_direction()
 		_widget.queue_redraw()
+
 func _update_joystick(touch_pos: Vector2) -> void:
 	var delta := touch_pos - _joystick_center
 	var dist: float = delta.length()
@@ -224,7 +221,7 @@ func _update_joystick(touch_pos: Vector2) -> void:
 
 
 func _update_aim_joystick(touch_pos: Vector2) -> void:
-	var delta := touch_pos - _aim_joystick_center
+	var delta := touch_pos - _right_joystick_base
 	var dist: float = delta.length()
 	if dist > _joystick_radius:
 		delta = delta.normalized() * _joystick_radius
@@ -234,7 +231,6 @@ func _update_aim_joystick(touch_pos: Vector2) -> void:
 		_aim_joystick_vector = Vector2.ZERO
 	else:
 		_aim_joystick_vector = normalized.normalized() * ((normalized.length() - 0.15) / 0.85)
-	aim_direction.emit(_aim_joystick_vector)
 	_emit_face_direction()
 
 func _emit_face_direction() -> void:
@@ -250,21 +246,17 @@ func _emit_face_direction() -> void:
 		face_direction.emit(face)
 
 
-func _is_in_joystick_zone(pos: Vector2) -> bool:
-	var viewport_size := get_viewport().get_visible_rect().size
-	if viewport_size == Vector2.ZERO:
-		return false
-	return _joystick_zone_ratio.has_point(pos / viewport_size)
-
-
-func _is_in_aim_zone(pos: Vector2) -> bool:
-	var viewport_size := get_viewport().get_visible_rect().size
-	if viewport_size == Vector2.ZERO:
-		return false
-	return _action_zone_ratio.has_point(pos / viewport_size)
-
-
 # 编程切换：编辑器强制启用/禁用
+
+
+func _pick_joystick(pos: Vector2) -> int:
+	# 返回 0 = 左摇杆，1 = 右摇杆，-1 = 都不在。命中区 = base ± hit_radius。
+	if pos.distance_to(_left_joystick_base) <= _joystick_hit_radius:
+		return 0
+	if pos.distance_to(_right_joystick_base) <= _joystick_hit_radius:
+		return 1
+	return -1
+
 func set_enabled(value: bool) -> void:
 	enabled = value
 	if not value:
@@ -291,7 +283,6 @@ func _clear_input_state() -> void:
 	_aim_joystick_vector = Vector2.ZERO
 	_active_touches.clear()
 	move_direction.emit(Vector2.ZERO)
-	aim_cancel.emit()
 	if had_shoot:
 		shoot_released.emit()
 	_face_direction = Vector2.ZERO

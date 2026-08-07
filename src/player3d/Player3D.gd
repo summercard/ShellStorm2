@@ -70,8 +70,8 @@ var equipped_backpack_item: Dictionary = {}
 
 # 移动端虚拟输入状态（来自 MobileInput autoload 的信号）。
 var _mobile_move_direction := Vector2.ZERO
-var _mobile_aim_direction := Vector2.ZERO
-var _mobile_aim_active := false
+var _mobile_face_direction := Vector2.ZERO
+var _mobile_face_active := false
 var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
 var _mobile_input_available := false
@@ -152,7 +152,7 @@ func _physics_process(delta: float) -> void:
 func _hook_mobile_input() -> void:
 	# 移动端 autoload 名为 MobileInput。autoload 加载顺序在 Player3D 之前。
 	# 找不到时（极端情况：autoload 没注册）静默退化，键盘鼠标照旧。
-	# v0.1 MobileInput 只暴露 move_direction / aim_direction / aim_cancel / shoot_pressed / shoot_released 。
+	# v0.1 MobileInput 只暴露 move_direction / shoot_pressed / shoot_released / face_direction 。
 	# R/SHIFT/F/E 四位动作以 Dungeon3D 的 HUD 按钮为准，走 Input.parse_input_event 入口。
 	var mi: Node = get_node_or_null("/root/MobileInput")
 	if mi == null:
@@ -162,10 +162,8 @@ func _hook_mobile_input() -> void:
 	_mobile_input_available = true
 	if not mi.move_direction.is_connected(_on_mobile_move_direction):
 		mi.move_direction.connect(_on_mobile_move_direction)
-	if not mi.aim_direction.is_connected(_on_mobile_aim_direction):
-		mi.aim_direction.connect(_on_mobile_aim_direction)
-	if not mi.aim_cancel.is_connected(_on_mobile_aim_cancel):
-		mi.aim_cancel.connect(_on_mobile_aim_cancel)
+	if not mi.face_direction.is_connected(_on_mobile_face_direction):
+		mi.face_direction.connect(_on_mobile_face_direction)
 	if not mi.shoot_pressed.is_connected(_on_mobile_shoot_pressed):
 		mi.shoot_pressed.connect(_on_mobile_shoot_pressed)
 	if not mi.shoot_released.is_connected(_on_mobile_shoot_released):
@@ -176,15 +174,11 @@ func _on_mobile_move_direction(direction: Vector2) -> void:
 	_mobile_move_direction = direction
 
 
-func _on_mobile_aim_direction(aim: Vector2) -> void:
-	# aim: 正右、正下；_mobile_aim_direction 用于替换鼠标 aim；Vector2 → Vector3(x, 0, y)
-	_mobile_aim_direction = aim
-	_mobile_aim_active = aim.length_squared() > 0.05
+func _on_mobile_face_direction(aim: Vector2) -> void:
+	# aim: 正右、正下；_mobile_face_direction 用于替换鼠标 aim；Vector2 → Vector3(x, 0, y)
+	_mobile_face_direction = aim
+	_mobile_face_active = aim.length_squared() > 0.05
 
-
-func _on_mobile_aim_cancel() -> void:
-	_mobile_aim_active = false
-	_mobile_aim_direction = Vector2.ZERO
 
 
 func _on_mobile_shoot_pressed() -> void:
@@ -210,14 +204,14 @@ func _get_input_direction_3d() -> Vector3:
 	return direction.normalized() if direction.length_squared() > 0.0001 else Vector3.ZERO
 
 
-func _get_mobile_aim_direction() -> Vector3:
-	if not _mobile_input_available or not _mobile_aim_active:
+func _get_mobile_face_direction() -> Vector3:
+	if not _mobile_input_available or not _mobile_face_active:
 		return Vector3.ZERO
 	# 屏幕坐标 → 世界空间：使用相机当前 yaw 投影，使右滑 = 玩家右转、上滑 = 玩家后退
 	var cam_basis := camera.global_basis if camera != null else global_basis
 	var forward_2d := -Vector2(cam_basis.z.x, cam_basis.z.z).normalized()
 	var right_2d := Vector2(forward_2d.y, -forward_2d.x)
-	var aim := right_2d * _mobile_aim_direction.x + forward_2d * (-_mobile_aim_direction.y)
+	var aim := right_2d * _mobile_face_direction.x + forward_2d * (-_mobile_face_direction.y)
 	return Vector3(aim.x, 0.0, aim.y).normalized() if aim.length_squared() > 0.0001 else Vector3.ZERO
 
 
@@ -1208,8 +1202,8 @@ func _update_aim_from_mouse() -> void:
 	if camera == null or not camera.is_inside_tree():
 		return
 	# 移动端：触屏瞄准方向由摇杆控制时跳过鼠标射线
-	if _mobile_input_available and _mobile_aim_active:
-		var aim_dir_3d := _get_mobile_aim_direction()
+	if _mobile_input_available and _mobile_face_active:
+		var aim_dir_3d := _get_mobile_face_direction()
 		if aim_dir_3d.length_squared() > 0.0001:
 			aim_direction = aim_dir_3d
 			aim_yaw = atan2(-aim_dir_3d.x, -aim_dir_3d.z)
