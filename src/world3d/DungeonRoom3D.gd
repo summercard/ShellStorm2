@@ -1377,12 +1377,9 @@ func _build_content() -> void:
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
 	for index in range(prop_count):
-		var is_search := (
-			room_type in ["STORAGE", "SCAVENGE", "EVENT", "BASEMENT"]
-			and index < maxi(1, prop_count / 2)
-		) or room_type in ["START", "EXTRACTION"] and index == 0 or (
-			size_class == "floor" and room_type != "FACILITY" and index < 2
-		)
+		# 可搜完全随机：每个 prop 独立 50/50。FACILITY / STAIR_LOBBY 在 prop_count=0
+		# 的分支里就已经退出，此处不再额外排除任何房间类型。
+		var is_search := _rng.randf() < 0.5
 		var prop := (SEARCH_SCENE if is_search else FURNITURE_SCENE).instantiate() as RoomFurniture3D
 		var type_options: Array[String] = theme.furniture_bias.duplicate()
 		if room_type == "STORAGE":
