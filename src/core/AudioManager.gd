@@ -10,26 +10,46 @@ var music_volume: float = 0.8
 ## 程序化音效降级（无音频文件时的备选）
 var _synth = null  # SynthSfx, typed lazily
 
-# v0.1 默认使用程序化合成。只有真实音频资产完成并登记后才填写 res:// 路径，
-# 空路径是显式的合成契约，不再保留指向不存在文件的占位引用。
+# 正式音效资产。键名保持原有调用契约不变；新增键可通过 play_sfx() 直接接入。
 const SFX: Dictionary = {
-	"pistol_fire": "",
-	"rifle_fire": "",
-	"shotgun_fire": "",
-	"smg_fire": "",
-	"sniper_fire": "",
-	"laser_fire": "",
-	"enemy_hit": "",
-	"enemy_die": "",
-	"player_hit": "",
-	"player_dash": "",
-	"reload": "",
-	"crit_hit": "",
-	"fate_card": "",
-	"extraction_start": "",
-	"extraction_done": "",
-	"extraction_abort": "",
+	# 现有战斗/流程事件
+	"pistol_fire": "res://src/assets/audio/sfx/pistol_fire.wav",
+	"rifle_fire": "res://src/assets/audio/sfx/rifle_fire.wav",
+	"shotgun_fire": "res://src/assets/audio/sfx/shotgun_fire.wav",
+	"smg_fire": "res://src/assets/audio/sfx/smg_fire.wav",
+	"sniper_fire": "res://src/assets/audio/sfx/sniper_fire.wav",
+	"laser_fire": "res://src/assets/audio/sfx/laser_fire.wav",
+	"enemy_hit": "res://src/assets/audio/sfx/enemy_hit.wav",
+	"enemy_die": "res://src/assets/audio/sfx/enemy_die.wav",
+	"player_hit": "res://src/assets/audio/sfx/player_hit.wav",
+	"player_dash": "res://src/assets/audio/sfx/player_dash.wav",
+	"reload": "res://src/assets/audio/sfx/reload.wav",
+	"crit_hit": "res://src/assets/audio/sfx/crit_hit.wav",
+	"fate_card": "res://src/assets/audio/sfx/fate_card.wav",
+	"extraction_start": "res://src/assets/audio/sfx/extraction_start.wav",
+	"extraction_done": "res://src/assets/audio/sfx/extraction_done.wav",
+	"extraction_abort": "res://src/assets/audio/sfx/extraction_abort.wav",
+
+	# 新增建议事件（接入点见《音效接入说明.md》）
+	"ui_hover": "res://src/assets/audio/sfx/ui_hover.wav",
+	"ui_click": "res://src/assets/audio/sfx/ui_click.wav",
+	"ui_error": "res://src/assets/audio/sfx/ui_error.wav",
+	"ammo_empty": "res://src/assets/audio/sfx/ammo_empty.wav",
+	"item_pickup": "res://src/assets/audio/sfx/item_pickup.wav",
+	"soul_pickup": "res://src/assets/audio/sfx/soul_pickup.wav",
+	"door_open": "res://src/assets/audio/sfx/door_open.wav",
+	"door_locked": "res://src/assets/audio/sfx/door_locked.wav",
+	"container_open": "res://src/assets/audio/sfx/container_open.wav",
+	"wave_start": "res://src/assets/audio/sfx/wave_start.wav",
+	"wave_clear": "res://src/assets/audio/sfx/wave_clear.wav",
+	"boss_intro": "res://src/assets/audio/sfx/boss_intro.wav",
+	"boss_phase": "res://src/assets/audio/sfx/boss_phase.wav",
+	"boss_defeat": "res://src/assets/audio/sfx/boss_defeat.wav",
+	"merchant_purchase": "res://src/assets/audio/sfx/merchant_purchase.wav",
 }
+
+# 缓存已加载的 AudioStream，避免自动武器连续射击时重复加载资源。
+var _stream_cache: Dictionary = {}
 
 func _ready() -> void:
 	load_audio_settings()
@@ -58,11 +78,15 @@ func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0
 		# 音效文件不存在 → 降级到程序化合成
 		_play_fallback_sfx(sfx_name)
 		return
-	var stream: AudioStream = load(path)
+	var stream: AudioStream = _stream_cache.get(path) as AudioStream
+	if stream == null:
+		stream = load(path) as AudioStream
+		if stream != null:
+			_stream_cache[path] = stream
 	if stream:
 		var player := AudioStreamPlayer.new()
 		player.stream = stream
-		player.volume_db = volume_db
+		player.volume_db = volume_db + linear_to_db(maxf(sfx_volume, 0.0001))
 		player.pitch_scale = pitch_scale
 		player.bus = "SFX"
 		add_child(player)
@@ -94,8 +118,16 @@ func _play_fallback_sfx(sfx_name: String) -> void:
 			_synth.play_extraction_start()
 		"extraction_done":
 			_synth.play_extraction_done()
-		"extraction_abort":
+		"extraction_abort", "ui_error", "door_locked":
 			_synth.play_extraction_abort()
+		"ui_hover", "ui_click", "item_pickup", "soul_pickup", "wave_clear", "merchant_purchase":
+			_synth.play_fate_card()
+		"ammo_empty", "container_open", "door_open":
+			_synth.play_reload()
+		"wave_start", "boss_intro", "boss_phase":
+			_synth.play_extraction_start()
+		"boss_defeat":
+			_synth.play_enemy_die()
 
 func play_music(music_name: String, volume_db: float = -6.0) -> void:
 	# 占位：后续接入背景音乐

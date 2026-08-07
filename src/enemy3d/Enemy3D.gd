@@ -10,12 +10,34 @@ signal health_changed(enemy: Enemy3D, current: int, maximum: int)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 const VALID_STATES := ["idle", "patrol", "alert", "chase", "search", "telegraph", "attack", "stagger", "dead"]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
-const BOSS_SIZE_MULTIPLIER := 2.0
-const BOSS_HEALTH_BAR_SIZE := Vector2(3.4, 0.28)
+const BOSS_SIZE_MULTIPLIER := 1.5
+const BODY_SCALE_BY_KIND := {
+	"exploder": 0.78,
+	"ranged_caster": 1.0,
+	"melee_chaser": 1.0,
+	"ambusher": 1.0,
+	"shielded": 1.2,
+	"summoner": 1.2,
+	"boss": BOSS_SIZE_MULTIPLIER,
+}
+const HEALTH_BAR_SIZE_BY_KIND := {
+	"exploder": Vector2(1.15, 0.14),
+	"ranged_caster": Vector2(1.38, 0.15),
+	"melee_chaser": Vector2(1.38, 0.15),
+	"ambusher": Vector2(1.38, 0.15),
+	"shielded": Vector2(1.55, 0.17),
+	"summoner": Vector2(1.55, 0.17),
+	"boss": Vector2(2.65, 0.24),
+}
+const HEALTH_BAR_FRAME_COLOR := Color(0.018, 0.055, 0.078, 0.96)
+const HEALTH_BAR_ACCENT_COLOR := Color(0.16, 0.78, 0.88, 0.92)
+const HEALTH_BAR_FULL_COLOR := Color(0.94, 0.16, 0.24, 1.0)
+const HEALTH_BAR_LOW_COLOR := Color(1.0, 0.54, 0.12, 1.0)
 
 const PROFILES := {
 	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
@@ -76,7 +98,11 @@ var _bypass_shield_once := false
 var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
-var _overhead_health_fill: MeshInstance3D
+var _overhead_health_fill: Node3D
+var _overhead_health_fill_materials: Array[StandardMaterial3D] = []
+var _overhead_health_size := Vector2.ZERO
+var _kind_scale_multiplier := 1.0
+var _variant_scale_multiplier := 1.0
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -89,11 +115,14 @@ func _ready() -> void:
 	collision_mask = 1
 	apply_profile(enemy_kind)
 	health_changed.connect(_on_self_health_changed)
+	_ensure_overhead_health_bar()
+	health_changed.emit(self, current_hp, max_hp)
 	transition_to("idle")
 
 
 func apply_profile(kind: String) -> void:
 	enemy_kind = kind if PROFILES.has(kind) else "melee_chaser"
+	_kind_scale_multiplier = float(BODY_SCALE_BY_KIND.get(enemy_kind, 1.0))
 	var profile: Dictionary = PROFILES[enemy_kind]
 	var hp_multiplier := BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER
 	max_hp = int(round(float(profile["hp"]) * hp_multiplier))
@@ -112,11 +141,15 @@ func apply_profile(kind: String) -> void:
 	if avatar != null:
 		avatar.configure(enemy_kind)
 		avatar.set_ambush_revealed(enemy_kind != "ambusher" or _ambush_triggered)
+	_apply_presentation_scale()
+	_ensure_overhead_health_bar()
 	_strafe_sign = -1.0 if get_instance_id() % 2 == 0 else 1.0
 
 
 func configure_from_enemy_data(data: Dictionary) -> void:
 	enemy_data = data.duplicate(true)
+	elite_modifier_id = ""
+	_variant_scale_multiplier = 1.0
 	apply_profile(str(data.get("enemy_type", enemy_kind)))
 	var profile_hp := max_hp
 	var profile_damage := contact_damage
@@ -146,52 +179,119 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			max_hp = int(max_hp * hp_mult)
 			current_hp = max_hp
 			move_speed *= float(modifier_data.get("speed_mult", 0.8))
-			scale *= float(modifier_data.get("scale_mult", 1.5))
+			_variant_scale_multiplier *= float(modifier_data.get("scale_mult", 1.5))
 		else:
-			scale *= 1.16
+			_variant_scale_multiplier *= 1.16
 	if enemy_kind == "boss":
-		scale *= float(data.get("boss_scale", 1.0)) * BOSS_SIZE_MULTIPLIER
-		_ensure_boss_overhead_health_bar()
+		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
+	_apply_presentation_scale()
+	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
 
 
-func _ensure_boss_overhead_health_bar() -> void:
-	if enemy_kind != "boss" or _overhead_health_root != null:
+func _apply_presentation_scale() -> void:
+	scale = Vector3.ONE * _kind_scale_multiplier * _variant_scale_multiplier
+	if _overhead_health_root != null:
+		_position_overhead_health_bar()
+
+
+func _ensure_overhead_health_bar() -> void:
+	if _overhead_health_root != null:
 		return
 	_overhead_health_root = Node3D.new()
-	_overhead_health_root.name = "BossOverheadHealthBar"
+	_overhead_health_root.name = "OverheadHealthBar"
+	_overhead_health_root.top_level = true
 	add_child(_overhead_health_root)
-	var parent_scale := maxf(0.01, maxf(scale.x, maxf(scale.y, scale.z)))
-	var footprint := EnemyAvatar3D.get_footprint_profile("boss")
-	_overhead_health_root.position.y = float(footprint.get("height", 2.3)) + 0.62 / parent_scale
-	_overhead_health_root.scale = Vector3.ONE / parent_scale
+	_overhead_health_size = HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)) as Vector2
+	_position_overhead_health_bar()
 	var background := _create_health_bar_quad(
-		"Background", BOSS_HEALTH_BAR_SIZE + Vector2(0.18, 0.14), Color(0.035, 0.015, 0.018, 0.94)
+		"Background", _overhead_health_size + Vector2(0.18, 0.14), HEALTH_BAR_FRAME_COLOR
 	)
 	background.position.z = 0.01
 	_overhead_health_root.add_child(background)
-	_overhead_health_fill = _create_health_bar_quad(
-		"HealthFill", BOSS_HEALTH_BAR_SIZE, Color(0.96, 0.055, 0.07, 1.0)
+	var accent := _create_health_bar_quad(
+		"AccentLine", Vector2(_overhead_health_size.x + 0.07, 0.035), HEALTH_BAR_ACCENT_COLOR
+	)
+	accent.position = Vector3(0.0, _overhead_health_size.y * 0.5 + 0.085, 0.015)
+	_overhead_health_root.add_child(accent)
+	_overhead_health_fill = _create_health_bar_capsule(
+		"HealthFill", _overhead_health_size, HEALTH_BAR_FULL_COLOR
 	)
 	_overhead_health_fill.position.z = -0.01
 	_overhead_health_root.add_child(_overhead_health_fill)
+	_overhead_health_fill_materials = _get_capsule_materials(_overhead_health_fill)
 	_on_self_health_changed(self, current_hp, max_hp)
 
 
-func _create_health_bar_quad(node_name: String, quad_size: Vector2, color: Color) -> MeshInstance3D:
+func _position_overhead_health_bar() -> void:
+	if _overhead_health_root == null:
+		return
+	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
+	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
+	_overhead_health_root.global_position = global_position + Vector3.UP * (world_height + 0.58)
+	# top_level 已阻断父节点旋转；显式归零可清除热重载或旧实例留下的朝向。
+	_overhead_health_root.global_rotation = Vector3.ZERO
+	_overhead_health_root.scale = Vector3.ONE
+
+
+func _create_health_bar_quad(node_name: String, quad_size: Vector2, color: Color) -> Node3D:
+	return _create_health_bar_capsule(node_name, quad_size, color)
+
+
+func _create_health_bar_capsule(node_name: String, bar_size: Vector2, color: Color) -> Node3D:
+	# 原生材质的 billboard 由渲染器在相机空间处理，避免父节点转向或手动
+	# look_at 造成的透视倾斜。单一的扁平圆角网格避免把 3D 球体误当作
+	# billboard 平面渲染，保证不会在怪物头顶生成彩色大球。
+	var root := Node3D.new()
+	root.name = node_name
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
 	material.no_depth_test = true
 	material.albedo_color = color
-	var mesh := QuadMesh.new()
-	mesh.size = quad_size
-	mesh.material = material
+	var mesh := _build_flat_capsule_mesh(bar_size, material)
 	var instance := MeshInstance3D.new()
-	instance.name = node_name
+	instance.name = "RoundedMesh"
 	instance.mesh = mesh
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	return instance
+	root.add_child(instance)
+	return root
+
+
+func _build_flat_capsule_mesh(bar_size: Vector2, material: StandardMaterial3D) -> ArrayMesh:
+	var radius := maxf(0.005, bar_size.y * 0.5)
+	var straight_half_width := maxf(0.005, bar_size.x * 0.5 - radius)
+	var outline: Array[Vector3] = []
+	const ROUND_SEGMENTS := 10
+	# 从右下沿圆弧到右上，再从左上沿圆弧回到左下，构成一个屏幕平面胶囊。
+	for index in range(ROUND_SEGMENTS + 1):
+		var angle := -PI * 0.5 + PI * float(index) / float(ROUND_SEGMENTS)
+		outline.append(Vector3(straight_half_width + cos(angle) * radius, sin(angle) * radius, 0.0))
+	for index in range(ROUND_SEGMENTS + 1):
+		var angle := PI * 0.5 + PI * float(index) / float(ROUND_SEGMENTS)
+		outline.append(Vector3(-straight_half_width + cos(angle) * radius, sin(angle) * radius, 0.0))
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for index in outline.size():
+		var next_index := (index + 1) % outline.size()
+		surface.add_vertex(Vector3.ZERO)
+		surface.add_vertex(outline[index])
+		surface.add_vertex(outline[next_index])
+	var mesh := surface.commit()
+	mesh.surface_set_material(0, material)
+	return mesh
+
+
+func _get_capsule_materials(root: Node3D) -> Array[StandardMaterial3D]:
+	var materials: Array[StandardMaterial3D] = []
+	for child in root.get_children():
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance == null or mesh_instance.mesh == null:
+			continue
+		var material := mesh_instance.mesh.surface_get_material(0) as StandardMaterial3D
+		if material != null and material not in materials:
+			materials.append(material)
+	return materials
 
 
 func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> void:
@@ -199,7 +299,10 @@ func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> voi
 		return
 	var ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
 	_overhead_health_fill.scale.x = ratio
-	_overhead_health_fill.position.x = -BOSS_HEALTH_BAR_SIZE.x * (1.0 - ratio) * 0.5
+	_overhead_health_fill.position.x = -_overhead_health_size.x * (1.0 - ratio) * 0.5
+	var fill_color := HEALTH_BAR_LOW_COLOR.lerp(HEALTH_BAR_FULL_COLOR, ratio)
+	for material in _overhead_health_fill_materials:
+		material.albedo_color = fill_color
 
 
 func get_enemy_data() -> Dictionary:
@@ -229,6 +332,7 @@ func is_runtime_ai_active() -> bool:
 
 
 func _physics_process(delta: float) -> void:
+	_position_overhead_health_bar()
 	if not _home_initialized:
 		_home_position = global_position
 		_home_initialized = true
@@ -481,6 +585,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO) 
 	_last_hit_direction = hit_direction
 	avatar.flash_hit()
 	_spawn_effect("damage", 0.72)
+	_spawn_damage_number(applied, critical)
 	if current_hp <= 0:
 		_die()
 	else:
@@ -536,9 +641,11 @@ func _tick_damage_over_time(delta: float) -> void:
 	if _dot_tick > 0.0:
 		return
 	_dot_tick = 0.5
-	current_hp = maxi(0, current_hp - maxi(1, int(ceil(float(_dot_damage) * 0.2))))
+	var applied := maxi(1, int(ceil(float(_dot_damage) * 0.2)))
+	current_hp = maxi(0, current_hp - applied)
 	health_changed.emit(self, current_hp, max_hp)
 	avatar.flash_hit()
+	_spawn_damage_number(applied, false)
 	if current_hp <= 0:
 		_die()
 
@@ -570,8 +677,11 @@ func get_state_snapshot() -> Dictionary:
 		"hp_balance_multiplier": BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER,
 		"move_speed_multiplier": GLOBAL_MOVE_SPEED_MULTIPLIER,
 		"boss_size_multiplier": BOSS_SIZE_MULTIPLIER if enemy_kind == "boss" else 1.0,
+		"presentation_scale_multiplier": _kind_scale_multiplier * _variant_scale_multiplier,
 		"world_collision_radius": float(shape_snapshot.get("radius", 0.0)) * scale.x,
 		"overhead_health_bar": _overhead_health_root != null,
+		"overhead_health_world_locked": _overhead_health_root != null and _overhead_health_root.top_level,
+		"overhead_health_bar_size": _overhead_health_size,
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
 		"behavior_role": _behavior_role(),
@@ -660,7 +770,9 @@ func apply_elite_boon(multiplier: float) -> void:
 	current_hp = mini(max_hp, int(current_hp * multiplier + max_hp * 0.15))
 	contact_damage = int(contact_damage * multiplier)
 	move_speed *= minf(1.2, multiplier)
-	scale *= 1.08
+	_variant_scale_multiplier *= 1.08
+	_apply_presentation_scale()
+	health_changed.emit(self, current_hp, max_hp)
 
 
 func _strengthen_nearest_enemy() -> void:
@@ -707,3 +819,15 @@ func _spawn_effect(kind: String, size: float) -> void:
 	effect.configure(kind, EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE), size)
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = world_position
+
+
+func _spawn_damage_number(amount: int, critical: bool) -> void:
+	if amount <= 0 or get_tree().current_scene == null:
+		return
+	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
+	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
+	var spawn_position := global_position + Vector3.UP * (world_height + 0.72)
+	var damage_number := DAMAGE_NUMBER_SCRIPT.new() as Node3D
+	get_tree().current_scene.add_child(damage_number)
+	damage_number.global_position = spawn_position
+	damage_number.call("configure", amount, critical)

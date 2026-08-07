@@ -8,7 +8,7 @@ const SUN_ENERGY := 0.58
 const SUN_COLOR := Color(1.0, 0.84, 0.62)
 const BACKGROUND_COLOR := Color(0.58, 0.62, 0.64)
 const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)
-const AMBIENT_ENERGY := 0.42
+const AMBIENT_ENERGY := 0.01
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
 const FOG_DENSITY := 0.040
 

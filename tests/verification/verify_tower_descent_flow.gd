@@ -175,7 +175,7 @@ func _ready() -> void:
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("ambient_energy", 0.0)), 0.42)
+		is_equal_approx(float(rooftop_atmosphere.get("ambient_energy", 0.0)), 0.01)
 		and bool(rooftop_atmosphere.get("rooftop_sky_bounce", false)),
 		"塔楼全局环境底光或固定天空补光错误",
 		failures

@@ -38,6 +38,54 @@ func _ready() -> void:
 		and str(after_base_arrival.get("current_room_id", "")) == "facility",
 		"基地交通门错误触发战斗楼层校验", failures
 	)
+	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	_expect(facility != null, "99层基地房间不存在", failures)
+	if facility != null:
+		facility.ensure_shell_built()
+		tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+		tower.call("_update_facility_combat_lock")
+		_expect(
+			tower.is_player_inside_facility() and not tower.player.combat_enabled,
+			"只有基地室内应锁定开火，但中心基地没有锁定", failures
+		)
+		for target_room_id in ["start", "floor_01_entry"]:
+			var edge := tower.call("_edge_key", "facility", target_room_id) as String
+			var side := "west" if target_room_id == "start" else "east"
+			var door := facility.get_door_node(side)
+			_expect(
+				door != null and tower.try_open_room_door(target_room_id),
+				"基地%s侧门无法按E开启" % side, failures
+			)
+			if door != null:
+				_expect(door.is_open, "基地%s侧门开启后没有播放开门状态" % side, failures)
+			var dimensions := facility.get_dimensions()
+			var outside_x := -(dimensions.x * 0.5 + 0.35) if side == "west" else dimensions.x * 0.5 + 0.35
+			tower.player.global_position = facility.to_global(Vector3(outside_x, 0.05, 0.0))
+			tower.call("_update_facility_combat_lock")
+			tower.call("_update_facility_door_auto_close")
+			_expect(
+				not tower.is_player_inside_facility() and tower.player.combat_enabled,
+				"离开基地屋体后仍然禁止开火", failures
+			)
+			_expect(
+				door != null and not door.is_open and bool((tower.get("_open_edges") as Dictionary).get(edge, false)),
+				"基地%s侧门离开后没有关闭，或错误撤销了楼梯路线授权" % side, failures
+			)
+			tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+			tower.force_enter_room_for_test("facility")
+			_expect(
+				tower.try_open_room_door(target_room_id) and door != null and door.is_open,
+				"基地%s侧门自动关闭后不能再次按E开启" % side, failures
+			)
+			await get_tree().process_frame
+			_expect(
+				door != null and door.is_open,
+				"基地%s侧门刚开启就被错误自动关闭" % side, failures
+			)
+			tower.player.global_position = facility.to_global(Vector3(outside_x, 0.05, 0.0))
+			tower.call("_update_facility_door_auto_close")
+			tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+			tower.force_enter_room_for_test("facility")
 
 	# 走实际的下端门交互，不调用force_open_edge：门开启前同步提交98层。
 	await get_tree().process_frame

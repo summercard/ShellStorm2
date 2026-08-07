@@ -77,7 +77,8 @@ func _ready() -> void:
 			_check(bool(card_control.get_meta("tarot_face_ready", false)), "Tarot face did not finish flipping", failures)
 			_check(not (card_control as Button).disabled, "Tarot card stayed disabled after flip", failures)
 			_check(card_control.size.y > card_control.size.x, "Fate choice is not a vertical card", failures)
-			_check(card_control.size.x <= 205.0 and card_control.size.y <= 305.0, "Fate card was not reduced to 80% scale", failures)
+			_check(card_control.size.x >= 250.0 and card_control.size.y >= 420.0, "Fate cards are too small to dominate the choice screen", failures)
+			_check(card_control.size.x <= 300.0 and card_control.size.y <= 500.0, "Fate card exceeds its 80%-scaled layout budget", failures)
 		var reversed_cards := cards.filter(func(value: Node) -> bool: return str(value.get_meta("tarot_orientation", "")) == "逆位")
 		_check(reversed_cards.size() == 1, "Deterministic visual offer does not contain exactly one reversed card", failures)
 		if reversed_cards.size() == 1:

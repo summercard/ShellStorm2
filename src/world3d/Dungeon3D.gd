@@ -2324,25 +2324,26 @@ func _build_door_fate_overlay() -> void:
 	dim.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_fate_overlay.add_child(dim)
 
-	var protocol := _make_hud_label("FATE PROTOCOL / SELECT ONE", 12, Color(0.38, 0.74, 0.86))
+	var protocol := _make_hud_label("FATE PROTOCOL / SELECT ONE", 13, Color(0.38, 0.74, 0.86))
 	protocol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_anchor_control(protocol, 0.5, 0.0, 0.5, 0.0, -280, 44, 280, 66)
+	_anchor_control(protocol, 0.5, 0.0, 0.5, 0.0, -320, 42, 320, 64)
 	_fate_overlay.add_child(protocol)
 	var title := Label.new()
 	title.text = "《  命 运 卡 三 选 一  》"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", _hud_int(36))
+	title.add_theme_font_size_override("font_size", _hud_int(40))
 	title.add_theme_color_override("font_color", Color(0.46, 0.94, 1.0))
 	title.add_theme_color_override("font_outline_color", Color(0.0, 0.48, 0.70, 0.70))
 	title.add_theme_constant_override("outline_size", _hud_int(7))
-	_anchor_control(title, 0.5, 0.0, 0.5, 0.0, -430, 64, 430, 124)
+	_anchor_control(title, 0.5, 0.0, 0.5, 0.0, -470, 32, 470, 90)
 	_fate_overlay.add_child(title)
 
+	# 三张卡是本弹窗的主体，占据标题与信息条之间的全部纵向空间。
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
-	row.add_theme_constant_override("separation", _hud_int(24))
-	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -420, 128, 420, 508)
+	row.add_theme_constant_override("separation", _hud_int(64))
+	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 134, 570, 706)
 	_fate_overlay.add_child(row)
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
@@ -2351,14 +2352,14 @@ func _build_door_fate_overlay() -> void:
 		_play_reference_tarot_flip(card_button, card, choice_index)
 
 	var info_panel := _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.006, 0.036, 0.055, 0.94))
-	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -310, 520, 310, 594)
+	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -380, 730, 380, 806)
 	_fate_overlay.add_child(info_panel)
 	_add_neon_frame(info_panel, Color(0.23, 0.88, 1.0), 0.52, false)
-	var info_margin := _make_margin(18, 8, 18, 8)
+	var info_margin := _make_margin(20, 10, 20, 10)
 	info_panel.add_child(info_margin)
 	_fate_feedback_label = _make_hud_label(
 		"当前信息\n请选择一张命运卡强化本次行动 · ESC 可放弃本次选择",
-		13,
+		15,
 		Color(0.72, 0.91, 0.98),
 	)
 	_fate_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2370,7 +2371,7 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	var accent := FateCard.scope_color(card.scope)
 	var button := Button.new()
 	button.name = "FateChoiceCard_%d" % choice_index
-	button.custom_minimum_size = _hud_size(Vector2(248, 378))
+	button.custom_minimum_size = _hud_size(Vector2(350, 552))
 	button.text = ""
 	button.clip_contents = false
 	button.focus_mode = Control.FOCUS_ALL
@@ -2395,20 +2396,20 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	button.add_theme_stylebox_override("focus", hover)
 	button.add_theme_stylebox_override("pressed", pressed)
 
-	var margin := _make_margin(18, 16, 18, 16)
+	var margin := _make_margin(22, 20, 22, 20)
 	margin.set_anchors_preset(Control.PRESET_FULL_RECT)
 	margin.name = "TarotFaceText"
 	margin.visible = false
 	button.add_child(margin)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", _hud_int(5))
+	vbox.add_theme_constant_override("separation", _hud_int(8))
 	margin.add_child(vbox)
-	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 15, accent)
+	var scope_label := _make_hud_label(FateCard.scope_display_name(card.scope), 20, accent)
 	scope_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(scope_label)
 	var ornament_holder := Control.new()
-	ornament_holder.custom_minimum_size = _hud_size(Vector2(0, 76))
+	ornament_holder.custom_minimum_size = _hud_size(Vector2(0, 112))
 	ornament_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(ornament_holder)
 	var ornament := Control.new()
@@ -2416,23 +2417,23 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	ornament.set_anchors_preset(Control.PRESET_FULL_RECT)
 	ornament.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ornament_holder.add_child(ornament)
-	var symbol := _make_hud_label(FateCard.scope_symbol(card.scope), 66, accent.lightened(0.10))
+	var symbol := _make_hud_label(FateCard.scope_symbol(card.scope), 88, accent.lightened(0.10))
 	symbol.set_anchors_preset(Control.PRESET_FULL_RECT)
-	symbol.custom_minimum_size = _hud_size(Vector2(0, 70))
+	symbol.custom_minimum_size = _hud_size(Vector2(0, 104))
 	symbol.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	symbol.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	symbol.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ornament.add_child(symbol)
-	var direction_mark := _make_hud_label("▲", 11, Color(accent, 0.82))
+	var direction_mark := _make_hud_label("▲", 14, Color(accent, 0.82))
 	direction_mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_anchor_control(direction_mark, 0.5, 0.0, 0.5, 0.0, -18, 0, 18, 16)
+	_anchor_control(direction_mark, 0.5, 0.0, 0.5, 0.0, -24, 0, 24, 20)
 	ornament.add_child(direction_mark)
-	var card_name := _make_hud_label(card.card_name, 21, Color(0.94, 0.96, 1.0))
+	var card_name := _make_hud_label(card.card_name, 28, Color(0.94, 0.96, 1.0))
 	card_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(card_name)
 	var orientation_label := _make_hud_label(
 		"%s %s" % [card.orientation_symbol(), card.orientation_name()],
-		13,
+		18,
 		Color(1.0, 0.72, 0.34) if card.is_reversed() else Color(0.62, 0.94, 1.0),
 	)
 	orientation_label.name = "TarotOrientationLabel"
@@ -2440,7 +2441,7 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	vbox.add_child(orientation_label)
 	var rarity := _make_hud_label(
 		"%s · %s" % [FateCard.rarity_name(card.card_rarity), FateCard.type_name(card.card_type)],
-		13,
+		17,
 		_rarity_color(card.card_rarity),
 	)
 	rarity.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2448,15 +2449,15 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	var rule := HSeparator.new()
 	rule.add_theme_constant_override("separation", _hud_int(2))
 	vbox.add_child(rule)
-	var target := _make_hud_label(_get_fate_target_preview(card), 12, Color(0.62, 0.84, 0.92))
-	target.custom_minimum_size = _hud_size(Vector2(206, 40))
+	var target := _make_hud_label(_get_fate_target_preview(card), 16, Color(0.62, 0.84, 0.92))
+	target.custom_minimum_size = _hud_size(Vector2(288, 50))
 	target.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	target.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	target.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox.add_child(target)
 	var effect_text := card.short_description if not card.short_description.is_empty() else card.description
-	var effect := _make_hud_label(effect_text, 14, Color(0.91, 0.93, 0.96))
-	effect.custom_minimum_size = _hud_size(Vector2(206, 55))
+	var effect := _make_hud_label(effect_text, 19, Color(0.91, 0.93, 0.96))
+	effect.custom_minimum_size = _hud_size(Vector2(288, 80))
 	effect.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	effect.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	effect.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -2470,7 +2471,7 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 		)
 	var footer := _make_hud_label(
 		footer_text,
-		11,
+		15,
 		Color(accent, 0.86),
 	)
 	footer.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -2484,7 +2485,7 @@ func _create_reference_fate_card(card: FateCard, choice_index: int) -> Button:
 	back_style.set_corner_radius_all(8)
 	back.add_theme_stylebox_override("panel", back_style)
 	button.add_child(back)
-	var back_glyph := _make_hud_label("✦\n命运塔罗\nFATE", 22, Color(accent, 0.92))
+	var back_glyph := _make_hud_label("✦\n命运塔罗\nFATE", 30, Color(accent, 0.92))
 	back_glyph.set_anchors_preset(Control.PRESET_FULL_RECT)
 	back_glyph.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	back_glyph.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

@@ -2,6 +2,7 @@ extends Node
 
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
+const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 
 var _summon_count := 0
 
@@ -23,8 +24,9 @@ func _ready() -> void:
 	await _verify_summoner_support(failures)
 	await _verify_shield_facing(failures)
 	await _verify_exploder_fragments(failures)
+	_verify_damage_number_presentation(failures)
 	for child in get_children():
-		if child is Projectile3D or child is Enemy3D:
+		if child is Projectile3D or child is Enemy3D or child.get_script() == DAMAGE_NUMBER_SCRIPT:
 			child.queue_free()
 	if failures.is_empty():
 		print("3D_ENEMY_BEHAVIOR_FLOW_OK: line-of-sight AI, scaled 3D HP, matched hit volumes, buried ambush, ranged volley, summon/heal support, frontal shield and death fragments pass")
@@ -45,6 +47,7 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 		"melee_chaser": 5, "ranged_caster": 8, "summoner": 0,
 		"shielded": 3, "exploder": 15, "ambusher": 7, "boss": 20,
 	}
+	var size_multipliers: Dictionary = {}
 	for kind in source_hp.keys():
 		var enemy := _make_enemy(str(kind), Vector3(70 + source_hp.keys().find(kind) * 2, 0, 70))
 		await get_tree().process_frame
@@ -60,18 +63,41 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 		if not is_equal_approx(enemy.move_speed, expected_speed):
 			failures.append("3D enemy speed is not 70%% baseline: %s=%.3f" % [kind, enemy.move_speed])
 		var state := enemy.get_state_snapshot()
+		var expected_size := float(Enemy3D.BODY_SCALE_BY_KIND.get(kind, 1.0))
+		size_multipliers[kind] = enemy.scale.x
+		if (
+			not is_equal_approx(enemy.scale.x, expected_size)
+			or not bool(state.get("overhead_health_bar", false))
+			or not bool(state.get("overhead_health_world_locked", false))
+			or (state.get("overhead_health_bar_size", Vector2.ZERO) as Vector2).x <= 1.0
+		):
+			failures.append("%s lacks readable species scale or world-locked overhead health bar" % kind)
+		var fill := enemy.get_node_or_null("OverheadHealthBar/HealthFill")
+		var fill_mesh := fill.get_node_or_null("RoundedMesh") as MeshInstance3D if fill != null else null
+		if fill_mesh == null or fill_mesh.mesh is SphereMesh:
+			failures.append("%s overhead health bar still contains a billboarded sphere cap" % kind)
 		if kind == "boss":
 			if (
 				not is_equal_approx(enemy.scale.x, Enemy3D.BOSS_SIZE_MULTIPLIER)
 				or not bool(state.get("overhead_health_bar", false))
-				or float(state.get("world_collision_radius", 0.0)) < 3.8
+				or float(state.get("world_collision_radius", 0.0)) < 2.85
 			):
-				failures.append("Boss does not have 2x volume, matched collision and overhead HP bar")
+				failures.append("Boss does not have its reduced large volume, matched collision and overhead HP bar")
+		var damage_numbers_before := _count_damage_numbers()
 		enemy.take_damage(26, false, Vector3.RIGHT)
+		await get_tree().process_frame
+		if _count_damage_numbers() <= damage_numbers_before:
+			failures.append("Enemy damage does not create a 3D floating number: %s" % kind)
 		if enemy.ai_state == "dead":
 			failures.append("Full-health 3D enemy is still one-shot by the starting pistol: %s" % kind)
 		enemy.queue_free()
 		await get_tree().process_frame
+	if (
+		float(size_multipliers.get("exploder", 1.0)) >= float(size_multipliers.get("melee_chaser", 1.0))
+		or float(size_multipliers.get("shielded", 1.0)) <= float(size_multipliers.get("melee_chaser", 1.0))
+		or float(size_multipliers.get("boss", 1.0)) <= float(size_multipliers.get("summoner", 1.0))
+	):
+		failures.append("Enemy species body scales do not create a readable small/standard/heavy/boss hierarchy")
 
 	var seeker := _make_enemy("melee_chaser", Vector3(0, 0, -6))
 	await get_tree().physics_frame
@@ -96,6 +122,35 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 	seeker.queue_free()
 	blocker.queue_free()
 	await get_tree().process_frame
+
+
+func _verify_damage_number_presentation(failures: Array[String]) -> void:
+	var normal := CombatDamageNumber3D.new()
+	add_child(normal)
+	normal.configure(12, false)
+	var heavy := CombatDamageNumber3D.new()
+	add_child(heavy)
+	heavy.configure(48, false)
+	var critical := CombatDamageNumber3D.new()
+	add_child(critical)
+	critical.configure(48, true)
+	for sample in [normal, heavy, critical]:
+		var label := sample.get_node_or_null("DamageText") as Label3D
+		if label == null or not label.font is SystemFont:
+			failures.append("3D damage number does not use the selected terminal-style system font")
+			continue
+		var system_font := label.font as SystemFont
+		if (
+			system_font.font_names != PackedStringArray(CombatDamageNumber3D.TECH_FONT_FAMILIES)
+			or system_font.font_weight != 700
+		):
+			failures.append("3D damage number terminal font configuration drifted")
+	if (
+		(normal.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.NORMAL_FONT_SIZE
+		or (heavy.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.HEAVY_FONT_SIZE
+		or (critical.get_node("DamageText") as Label3D).font_size != CombatDamageNumber3D.CRITICAL_FONT_SIZE
+	):
+		failures.append("3D damage number font sizes are not the requested 150%% scale")
 
 
 func _verify_hit_profiles(failures: Array[String]) -> void:
@@ -195,6 +250,14 @@ func _count_projectiles() -> int:
 	var count := 0
 	for child in get_children():
 		if child is Projectile3D:
+			count += 1
+	return count
+
+
+func _count_damage_numbers() -> int:
+	var count := 0
+	for child in get_children():
+		if child.get_script() == DAMAGE_NUMBER_SCRIPT:
 			count += 1
 	return count
 

@@ -134,6 +134,11 @@ func _build(accent: Color) -> void:
 	stripe.position = Vector3(0, 0, -0.17)
 	stripe.mesh = stripe_mesh
 	_panel.add_child(stripe)
+	var stripe_back := MeshInstance3D.new()
+	stripe_back.name = "LockStripeBack"
+	stripe_back.position = Vector3(0, 0, 0.17)
+	stripe_back.mesh = stripe_mesh
+	_panel.add_child(stripe_back)
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(
 		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,

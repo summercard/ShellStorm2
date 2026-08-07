@@ -1,0 +1,32 @@
+﻿key,file,status,usage,duration_sec,sample_rate_hz,channels,bit_depth,resource_path
+ammo_empty,ammo_empty.wav,新增建议事件,空仓扳机,0.160,44100,1,16,res://src/assets/audio/sfx/ammo_empty.wav
+boss_defeat,boss_defeat.wav,新增建议事件,Boss 击败,1.450,44100,1,16,res://src/assets/audio/sfx/boss_defeat.wav
+boss_intro,boss_intro.wav,新增建议事件,Boss 入场,1.550,44100,1,16,res://src/assets/audio/sfx/boss_intro.wav
+boss_phase,boss_phase.wav,新增建议事件,Boss 阶段切换,0.820,44100,1,16,res://src/assets/audio/sfx/boss_phase.wav
+container_open,container_open.wav,新增建议事件,容器开启,0.620,44100,1,16,res://src/assets/audio/sfx/container_open.wav
+crit_hit,crit_hit.wav,覆盖现有事件,暴击,0.340,44100,1,16,res://src/assets/audio/sfx/crit_hit.wav
+door_locked,door_locked.wav,新增建议事件,门锁定/条件不足,0.310,44100,1,16,res://src/assets/audio/sfx/door_locked.wav
+door_open,door_open.wav,新增建议事件,门开启,0.750,44100,1,16,res://src/assets/audio/sfx/door_open.wav
+enemy_die,enemy_die.wav,覆盖现有事件,敌人死亡,0.460,44100,1,16,res://src/assets/audio/sfx/enemy_die.wav
+enemy_hit,enemy_hit.wav,覆盖现有事件,敌人受击,0.130,44100,1,16,res://src/assets/audio/sfx/enemy_hit.wav
+extraction_abort,extraction_abort.wav,覆盖现有事件,撤离中断,0.620,44100,1,16,res://src/assets/audio/sfx/extraction_abort.wav
+extraction_done,extraction_done.wav,覆盖现有事件,撤离成功,1.050,44100,1,16,res://src/assets/audio/sfx/extraction_done.wav
+extraction_start,extraction_start.wav,覆盖现有事件,撤离开始,1.150,44100,1,16,res://src/assets/audio/sfx/extraction_start.wav
+fate_card,fate_card.wav,覆盖现有事件,命运卡生效,0.860,44100,1,16,res://src/assets/audio/sfx/fate_card.wav
+item_pickup,item_pickup.wav,新增建议事件,普通物品拾取,0.250,44100,1,16,res://src/assets/audio/sfx/item_pickup.wav
+laser_fire,laser_fire.wav,覆盖现有事件,能量武器射击,0.240,44100,1,16,res://src/assets/audio/sfx/laser_fire.wav
+merchant_purchase,merchant_purchase.wav,新增建议事件,购买成功,0.420,44100,1,16,res://src/assets/audio/sfx/merchant_purchase.wav
+pistol_fire,pistol_fire.wav,覆盖现有事件,手枪射击,0.190,44100,1,16,res://src/assets/audio/sfx/pistol_fire.wav
+player_dash,player_dash.wav,覆盖现有事件,玩家闪避,0.270,44100,1,16,res://src/assets/audio/sfx/player_dash.wav
+player_hit,player_hit.wav,覆盖现有事件,玩家受伤,0.240,44100,1,16,res://src/assets/audio/sfx/player_hit.wav
+reload,reload.wav,覆盖现有事件,换弹,0.580,44100,1,16,res://src/assets/audio/sfx/reload.wav
+rifle_fire,rifle_fire.wav,覆盖现有事件,步枪射击,0.160,44100,1,16,res://src/assets/audio/sfx/rifle_fire.wav
+shotgun_fire,shotgun_fire.wav,覆盖现有事件,霰弹枪射击,0.320,44100,1,16,res://src/assets/audio/sfx/shotgun_fire.wav
+smg_fire,smg_fire.wav,覆盖现有事件,冲锋枪射击,0.110,44100,1,16,res://src/assets/audio/sfx/smg_fire.wav
+sniper_fire,sniper_fire.wav,覆盖现有事件,狙击枪射击,0.480,44100,1,16,res://src/assets/audio/sfx/sniper_fire.wav
+soul_pickup,soul_pickup.wav,新增建议事件,魂魄拾取,0.370,44100,1,16,res://src/assets/audio/sfx/soul_pickup.wav
+ui_click,ui_click.wav,新增建议事件,按钮确认,0.110,44100,1,16,res://src/assets/audio/sfx/ui_click.wav
+ui_error,ui_error.wav,新增建议事件,操作失败,0.280,44100,1,16,res://src/assets/audio/sfx/ui_error.wav
+ui_hover,ui_hover.wav,新增建议事件,重要按钮悬停,0.075,44100,1,16,res://src/assets/audio/sfx/ui_hover.wav
+wave_clear,wave_clear.wav,新增建议事件,波次完成,0.620,44100,1,16,res://src/assets/audio/sfx/wave_clear.wav
+wave_start,wave_start.wav,新增建议事件,波次开始,0.640,44100,1,16,res://src/assets/audio/sfx/wave_start.wav
