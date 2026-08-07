@@ -307,8 +307,10 @@ func _setup_run_modules() -> void:
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
 		$HUD.add_child(_weapon_panel)
-		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
-		_weapon_panel.position = Vector2(-260, -310)
+		_weapon_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		# 左边缘对齐玩家状态块右边缘：player_panel 缩放后右边缘 = 360*0.80 = 288。
+		_weapon_panel.position = Vector2(288, 50)
+		_weapon_panel.size = Vector2(520, 620)
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
@@ -1492,8 +1494,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		enemy.configure_from_enemy_data(enemy_configs[index])
 		var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(hp_multiplier, 1.0):
-			enemy.max_hp = maxi(1, int(round(float(enemy.max_hp) * hp_multiplier)))
-			enemy.current_hp = mini(enemy.current_hp, enemy.max_hp)
+			enemy.apply_health_multiplier(hp_multiplier)
 		var damage_multiplier := float(_room_enemy_damage_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))

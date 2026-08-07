@@ -2300,30 +2300,23 @@ func _find_room_at_position(world_pos: Vector2) -> int:
 	return -1
 
 
-## 计算房间奖励
+## 计算房间结算文案。战斗获得的魂只会作为地面魂球掉落，清房本身不直接入账。
 func _calculate_room_reward(room_data: RoomData) -> String:
 	var xp: int = 0
-	var credits: int = 0
 
 	match room_data.room_type:
 		RoomData.RoomType.COMBAT:
 			xp = 10 + room_data.floor * 5
-			credits = 10 + room_data.floor * 5
 		RoomData.RoomType.ELITE:
 			xp = 50 + room_data.floor * 20
-			credits = 50 + room_data.floor * 10
 		RoomData.RoomType.BOSS:
 			xp = 200 + room_data.floor * 50
-			credits = 100 * room_data.floor
 		RoomData.RoomType.SCAVENGE:
 			xp = 5 + room_data.floor * 2
-			credits = 20 + room_data.floor * 10
 		_:
 			xp = 5
-			credits = 5
 
-	GameManager.add_currency(credits)
-	return "XP +%d | 魂 +%d" % [xp, credits]
+	return "XP +%d | 魂已掉落" % xp
 
 
 ## 检测地图是否完成
@@ -2354,7 +2347,7 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 		else:
 			ground_items.append(item_data)
 
-	# 基础击杀奖励 + 额外掉落货币
+	# 基础击杀奖励与额外掉落均装入地面魂球，击杀时不直接入账。
 	var base_reward: int = enemy_data.get("currency_value", 10)
 	currency_earned += base_reward
 
@@ -2375,12 +2368,10 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 			_elite_archive.kill_elite(elite_id)
 			_killed_elite_ids_this_room.append(elite_id)
 			print("[RoomGameMode] 精英击杀已记录: %s" % elite_id)
-		# 悬赏金即时到账并通知
+		# 精英悬赏同样进入地面魂球；只保留统计，不生成即时货币或黄色提示。
 		var bounty: int = enemy_data.get("currency_value", 10)
 		_elite_kill_bounty += bounty
-		GameManager.add_currency(bounty)
-		if _ui_manager != null and _ui_manager.has_method("show_fate_card_notification"):
-			_ui_manager.show_fate_card_notification("★ 精英击杀！+ %d 悬赏金" % bounty)
+		currency_earned += bounty
 
 	kill_recorded.emit()
 	_update_ui()
@@ -2391,7 +2382,7 @@ func _spawn_soul_orb(world_pos: Vector2, amount: int) -> void:
 		return
 	var orb: SoulOrb = SOUL_ORB_SCENE.instantiate() as SoulOrb
 	if orb == null:
-		GameManager.add_currency(amount)
+		push_error("魂球场景无法实例化；拒绝直接发放魂")
 		return
 	orb.amount = amount
 	orb.global_position = world_pos + Vector2(randf_range(-8.0, 8.0), randf_range(-8.0, 8.0))
@@ -2430,13 +2421,6 @@ func collect_ground_item(item_data: Dictionary) -> int:
 
 func _on_soul_orb_collected(amount: int, orb: SoulOrb) -> void:
 	GameManager.add_currency(amount)
-	if _ui_manager != null and _ui_manager.has_method("show_currency_popup"):
-		var pos := (
-			orb.global_position
-			if orb != null and is_instance_valid(orb)
-			else (player.global_position if player != null else Vector2.ZERO)
-		)
-		_ui_manager.call("show_currency_popup", amount, pos)
 
 
 func _consume_room_key() -> void:

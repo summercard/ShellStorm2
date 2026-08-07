@@ -64,18 +64,20 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 			failures.append("3D enemy speed is not 70%% baseline: %s=%.3f" % [kind, enemy.move_speed])
 		var state := enemy.get_state_snapshot()
 		var expected_size := float(Enemy3D.BODY_SCALE_BY_KIND.get(kind, 1.0))
+		var expected_bar_size := Enemy3D.HEALTH_BAR_SIZE_BY_KIND.get(kind, Vector2.ZERO) as Vector2
 		size_multipliers[kind] = enemy.scale.x
 		if (
 			not is_equal_approx(enemy.scale.x, expected_size)
 			or not bool(state.get("overhead_health_bar", false))
 			or not bool(state.get("overhead_health_world_locked", false))
-			or (state.get("overhead_health_bar_size", Vector2.ZERO) as Vector2).x <= 1.0
+			or not bool(state.get("overhead_health_camera_billboard", false))
+			or not (state.get("overhead_health_bar_size", Vector2.ZERO) as Vector2).is_equal_approx(expected_bar_size)
+			or not is_equal_approx(float(state.get("overhead_health_ratio", 0.0)), 1.0)
 		):
-			failures.append("%s lacks readable species scale or world-locked overhead health bar" % kind)
-		var fill := enemy.get_node_or_null("OverheadHealthBar/HealthFill")
-		var fill_mesh := fill.get_node_or_null("RoundedMesh") as MeshInstance3D if fill != null else null
-		if fill_mesh == null or fill_mesh.mesh is SphereMesh:
-			failures.append("%s overhead health bar still contains a billboarded sphere cap" % kind)
+			failures.append("%s lacks a correctly sized, full, camera-facing overhead health bar" % kind)
+		var health_sprite := enemy.get_node_or_null("OverheadHealthBar/HealthBarSprite") as Sprite3D
+		if health_sprite == null or health_sprite.texture == null:
+			failures.append("%s overhead health bar is not the single-texture HUD-style sprite" % kind)
 		if kind == "boss":
 			if (
 				not is_equal_approx(enemy.scale.x, Enemy3D.BOSS_SIZE_MULTIPLIER)
@@ -83,6 +85,18 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 				or float(state.get("world_collision_radius", 0.0)) < 2.85
 			):
 				failures.append("Boss does not have its reduced large volume, matched collision and overhead HP bar")
+		enemy.apply_health_multiplier(1.5)
+		health_sprite = enemy.get_node_or_null("OverheadHealthBar/HealthBarSprite") as Sprite3D
+		if enemy.current_hp != enemy.max_hp or health_sprite == null or not is_equal_approx(float(enemy.get_state_snapshot().get("overhead_health_ratio", 0.0)), 1.0):
+			failures.append("%s HP modifier did not keep actual HP and overhead bar synchronized" % kind)
+		enemy.rotation.y = 1.37
+		enemy.take_damage(maxi(1, enemy.max_hp / 2), false, Vector3.RIGHT)
+		state = enemy.get_state_snapshot()
+		if (
+			not is_equal_approx(float(state.get("overhead_health_ratio", 0.0)), float(enemy.current_hp) / float(enemy.max_hp))
+			or not is_zero_approx((enemy.get_node("OverheadHealthBar") as Node3D).global_rotation.length())
+		):
+			failures.append("%s rotated enemy has a desynchronized or inherited-rotation health bar" % kind)
 		var damage_numbers_before := _count_damage_numbers()
 		enemy.take_damage(26, false, Vector3.RIGHT)
 		await get_tree().process_frame

@@ -34,10 +34,13 @@ const HEALTH_BAR_SIZE_BY_KIND := {
 	"summoner": Vector2(1.55, 0.17),
 	"boss": Vector2(2.65, 0.24),
 }
-const HEALTH_BAR_FRAME_COLOR := Color(0.018, 0.055, 0.078, 0.96)
-const HEALTH_BAR_ACCENT_COLOR := Color(0.16, 0.78, 0.88, 0.92)
-const HEALTH_BAR_FULL_COLOR := Color(0.94, 0.16, 0.24, 1.0)
+const HEALTH_BAR_FRAME_COLOR := Color(0.12, 0.02, 0.04, 0.96)
+const HEALTH_BAR_EMPTY_COLOR := Color(0.018, 0.024, 0.034, 0.98)
+const HEALTH_BAR_FULL_COLOR := Color(0.93, 0.055, 0.12, 1.0)
 const HEALTH_BAR_LOW_COLOR := Color(1.0, 0.54, 0.12, 1.0)
+const HEALTH_BAR_TEXTURE_SIZE := Vector2i(200, 24)
+const HEALTH_BAR_BORDER_PX := 2
+const HEALTH_BAR_PIXEL_SIZE := 0.005
 
 const PROFILES := {
 	"melee_chaser": {"hp": 58, "speed": 3.7, "damage": 12, "range": 1.90, "cooldown": 1.05},
@@ -98,9 +101,11 @@ var _bypass_shield_once := false
 var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
-var _overhead_health_fill: Node3D
-var _overhead_health_fill_materials: Array[StandardMaterial3D] = []
+var _overhead_health_sprite: Sprite3D
+var _overhead_health_image: Image
+var _overhead_health_texture: ImageTexture
 var _overhead_health_size := Vector2.ZERO
+var _overhead_health_ratio := 1.0
 var _kind_scale_multiplier := 1.0
 var _variant_scale_multiplier := 1.0
 
@@ -189,6 +194,15 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	health_changed.emit(self, current_hp, max_hp)
 
 
+func apply_health_multiplier(multiplier: float) -> void:
+	# 关卡修饰器必须保留当前生命比例；生成时满血的敌人经加成后仍应满血，
+	# 同时立即将实际数值同步给头顶条，不能等到下一次受击才刷新。
+	var health_ratio := clampf(float(current_hp) / float(maxi(1, max_hp)), 0.0, 1.0)
+	max_hp = maxi(1, int(round(float(max_hp) * maxf(0.01, multiplier))))
+	current_hp = clampi(int(round(float(max_hp) * health_ratio)), 0, max_hp)
+	health_changed.emit(self, current_hp, max_hp)
+
+
 func _apply_presentation_scale() -> void:
 	scale = Vector3.ONE * _kind_scale_multiplier * _variant_scale_multiplier
 	if _overhead_health_root != null:
@@ -196,30 +210,41 @@ func _apply_presentation_scale() -> void:
 
 
 func _ensure_overhead_health_bar() -> void:
-	if _overhead_health_root != null:
-		return
+	var wanted_size := HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)) as Vector2
+	if _overhead_health_root != null and is_instance_valid(_overhead_health_root):
+		if _overhead_health_size.is_equal_approx(wanted_size):
+			return
+		# 场景节点先以默认种类 ready，随后才应用内容数据。种类发生变化时必须
+		# 原子重建，避免小怪/Boss 保留默认怪的条宽或旧材质状态。
+		if _overhead_health_root.get_parent() != null:
+			_overhead_health_root.get_parent().remove_child(_overhead_health_root)
+		_overhead_health_root.queue_free()
+		_overhead_health_root = null
+		_overhead_health_sprite = null
+		_overhead_health_image = null
+		_overhead_health_texture = null
 	_overhead_health_root = Node3D.new()
 	_overhead_health_root.name = "OverheadHealthBar"
 	_overhead_health_root.top_level = true
 	add_child(_overhead_health_root)
-	_overhead_health_size = HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)) as Vector2
+	_overhead_health_size = wanted_size
 	_position_overhead_health_bar()
-	var background := _create_health_bar_quad(
-		"Background", _overhead_health_size + Vector2(0.18, 0.14), HEALTH_BAR_FRAME_COLOR
+	_overhead_health_image = Image.create(
+		HEALTH_BAR_TEXTURE_SIZE.x, HEALTH_BAR_TEXTURE_SIZE.y, false, Image.FORMAT_RGBA8
 	)
-	background.position.z = 0.01
-	_overhead_health_root.add_child(background)
-	var accent := _create_health_bar_quad(
-		"AccentLine", Vector2(_overhead_health_size.x + 0.07, 0.035), HEALTH_BAR_ACCENT_COLOR
+	_overhead_health_texture = ImageTexture.create_from_image(_overhead_health_image)
+	_overhead_health_sprite = Sprite3D.new()
+	_overhead_health_sprite.name = "HealthBarSprite"
+	_overhead_health_sprite.texture = _overhead_health_texture
+	_overhead_health_sprite.pixel_size = HEALTH_BAR_PIXEL_SIZE
+	_overhead_health_sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_overhead_health_sprite.no_depth_test = true
+	_overhead_health_sprite.scale = Vector3(
+		_overhead_health_size.x / (float(HEALTH_BAR_TEXTURE_SIZE.x) * HEALTH_BAR_PIXEL_SIZE),
+		_overhead_health_size.y / (float(HEALTH_BAR_TEXTURE_SIZE.y) * HEALTH_BAR_PIXEL_SIZE),
+		1.0
 	)
-	accent.position = Vector3(0.0, _overhead_health_size.y * 0.5 + 0.085, 0.015)
-	_overhead_health_root.add_child(accent)
-	_overhead_health_fill = _create_health_bar_capsule(
-		"HealthFill", _overhead_health_size, HEALTH_BAR_FULL_COLOR
-	)
-	_overhead_health_fill.position.z = -0.01
-	_overhead_health_root.add_child(_overhead_health_fill)
-	_overhead_health_fill_materials = _get_capsule_materials(_overhead_health_fill)
+	_overhead_health_root.add_child(_overhead_health_sprite)
 	_on_self_health_changed(self, current_hp, max_hp)
 
 
@@ -234,75 +259,27 @@ func _position_overhead_health_bar() -> void:
 	_overhead_health_root.scale = Vector3.ONE
 
 
-func _create_health_bar_quad(node_name: String, quad_size: Vector2, color: Color) -> Node3D:
-	return _create_health_bar_capsule(node_name, quad_size, color)
-
-
-func _create_health_bar_capsule(node_name: String, bar_size: Vector2, color: Color) -> Node3D:
-	# 原生材质的 billboard 由渲染器在相机空间处理，避免父节点转向或手动
-	# look_at 造成的透视倾斜。单一的扁平圆角网格避免把 3D 球体误当作
-	# billboard 平面渲染，保证不会在怪物头顶生成彩色大球。
-	var root := Node3D.new()
-	root.name = node_name
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
-	material.no_depth_test = true
-	material.albedo_color = color
-	var mesh := _build_flat_capsule_mesh(bar_size, material)
-	var instance := MeshInstance3D.new()
-	instance.name = "RoundedMesh"
-	instance.mesh = mesh
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	root.add_child(instance)
-	return root
-
-
-func _build_flat_capsule_mesh(bar_size: Vector2, material: StandardMaterial3D) -> ArrayMesh:
-	var radius := maxf(0.005, bar_size.y * 0.5)
-	var straight_half_width := maxf(0.005, bar_size.x * 0.5 - radius)
-	var outline: Array[Vector3] = []
-	const ROUND_SEGMENTS := 10
-	# 从右下沿圆弧到右上，再从左上沿圆弧回到左下，构成一个屏幕平面胶囊。
-	for index in range(ROUND_SEGMENTS + 1):
-		var angle := -PI * 0.5 + PI * float(index) / float(ROUND_SEGMENTS)
-		outline.append(Vector3(straight_half_width + cos(angle) * radius, sin(angle) * radius, 0.0))
-	for index in range(ROUND_SEGMENTS + 1):
-		var angle := PI * 0.5 + PI * float(index) / float(ROUND_SEGMENTS)
-		outline.append(Vector3(-straight_half_width + cos(angle) * radius, sin(angle) * radius, 0.0))
-	var surface := SurfaceTool.new()
-	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
-	for index in outline.size():
-		var next_index := (index + 1) % outline.size()
-		surface.add_vertex(Vector3.ZERO)
-		surface.add_vertex(outline[index])
-		surface.add_vertex(outline[next_index])
-	var mesh := surface.commit()
-	mesh.surface_set_material(0, material)
-	return mesh
-
-
-func _get_capsule_materials(root: Node3D) -> Array[StandardMaterial3D]:
-	var materials: Array[StandardMaterial3D] = []
-	for child in root.get_children():
-		var mesh_instance := child as MeshInstance3D
-		if mesh_instance == null or mesh_instance.mesh == null:
-			continue
-		var material := mesh_instance.mesh.surface_get_material(0) as StandardMaterial3D
-		if material != null and material not in materials:
-			materials.append(material)
-	return materials
-
-
 func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> void:
-	if _overhead_health_fill == null:
+	if _overhead_health_sprite == null or _overhead_health_image == null or _overhead_health_texture == null:
 		return
-	var ratio := clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
-	_overhead_health_fill.scale.x = ratio
-	_overhead_health_fill.position.x = -_overhead_health_size.x * (1.0 - ratio) * 0.5
-	var fill_color := HEALTH_BAR_LOW_COLOR.lerp(HEALTH_BAR_FULL_COLOR, ratio)
-	for material in _overhead_health_fill_materials:
-		material.albedo_color = fill_color
+	_overhead_health_ratio = clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
+	# 单张 Sprite 纹理同时包含底框与填充。没有独立红色平面的平移/缩放，
+	# 所以在任意镜头角度下都不会跑出框外；Sprite3D 自身负责永久朝向摄像机。
+	_overhead_health_image.fill(HEALTH_BAR_FRAME_COLOR)
+	var inner_rect := Rect2i(
+		HEALTH_BAR_BORDER_PX,
+		HEALTH_BAR_BORDER_PX,
+		HEALTH_BAR_TEXTURE_SIZE.x - HEALTH_BAR_BORDER_PX * 2,
+		HEALTH_BAR_TEXTURE_SIZE.y - HEALTH_BAR_BORDER_PX * 2
+	)
+	_overhead_health_image.fill_rect(inner_rect, HEALTH_BAR_EMPTY_COLOR)
+	var fill_width := int(round(float(inner_rect.size.x) * _overhead_health_ratio))
+	if fill_width > 0:
+		var fill_color := HEALTH_BAR_LOW_COLOR.lerp(HEALTH_BAR_FULL_COLOR, _overhead_health_ratio)
+		_overhead_health_image.fill_rect(
+			Rect2i(inner_rect.position, Vector2i(fill_width, inner_rect.size.y)), fill_color
+		)
+	_overhead_health_texture.update(_overhead_health_image)
 
 
 func get_enemy_data() -> Dictionary:
@@ -682,6 +659,11 @@ func get_state_snapshot() -> Dictionary:
 		"overhead_health_bar": _overhead_health_root != null,
 		"overhead_health_world_locked": _overhead_health_root != null and _overhead_health_root.top_level,
 		"overhead_health_bar_size": _overhead_health_size,
+		"overhead_health_ratio": _overhead_health_ratio,
+		"overhead_health_camera_billboard": (
+			_overhead_health_sprite != null
+			and _overhead_health_sprite.billboard == BaseMaterial3D.BILLBOARD_ENABLED
+		),
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
 		"behavior_role": _behavior_role(),

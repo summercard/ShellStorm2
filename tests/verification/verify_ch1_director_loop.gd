@@ -95,7 +95,6 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 					failures.append("Choosing a door fate upgrade did not increase live weapon damage")
 
 	var before_currency := GameManager.currency
-	var expected_elite_bounty := before_currency + 13
 	var before_items := _inventory_item_count(mode.inventory_module)
 	(
 		mode
@@ -122,8 +121,8 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		failures.append(
 			"Enemy item loot entered backpack immediately instead of waiting for pickup"
 		)
-	if GameManager.currency != expected_elite_bounty:
-		failures.append("Elite bounty was not added immediately after the kill")
+	if GameManager.currency != before_currency:
+		failures.append("Enemy kill granted souls directly instead of leaving them in the ground orb")
 	if item_pickup != null:
 		mode.player.global_position = item_pickup.global_position
 		for i in range(4):
@@ -134,7 +133,7 @@ func _verify_main_chapter_loop(failures: Array[String]) -> void:
 		mode.player.global_position = orb.global_position
 		for i in range(10):
 			await get_tree().process_frame
-		if GameManager.currency <= expected_elite_bounty:
+		if GameManager.currency <= before_currency:
 			failures.append("Soul orb was not collectable by walking over it")
 
 	main.queue_free()

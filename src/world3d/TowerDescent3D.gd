@@ -2935,7 +2935,7 @@ func _refresh_tower_hud() -> void:
 			func(value): return "%dF" % int(value)
 		))
 	)
-	_tower_base_currency_label.text = "基地币：◈ %d" % BaseManager.get_extraction_points()
+	_tower_base_currency_label.text = "魂：◈ %d" % BaseManager.get_extraction_points()
 
 
 func _on_service_activated(room: DungeonRoom3D, station: ServiceStation3D) -> void:

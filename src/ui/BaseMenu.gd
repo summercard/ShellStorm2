@@ -65,7 +65,7 @@ func _refresh_stats() -> void:
 	if kills_label:
 		kills_label.text = "总击杀: %d" % d.total_kills
 	if points_label:
-		points_label.text = "基地币: ◈ %d" % BaseManager.get_extraction_points()
+		points_label.text = "魂: ◈ %d" % BaseManager.get_extraction_points()
 	# 检查撤离战利品
 	_check_and_show_extraction_loot()
 	_refresh_facility_directory()
@@ -392,7 +392,7 @@ func _refresh_building_panel() -> void:
 
 	# 当前资源点
 	var pts_lbl := Label.new()
-	pts_lbl.text = "当前基地币: ◈ %d" % current_points
+	pts_lbl.text = "当前魂: ◈ %d" % current_points
 	pts_lbl.add_theme_color_override("font_color", Color(0.7, 0.75, 1.0, 1.0))
 	vbox.add_child(pts_lbl)
 

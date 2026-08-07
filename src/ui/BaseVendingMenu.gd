@@ -93,7 +93,7 @@ func _build_interface() -> void:
 
 	_status_label = Label.new()
 	_status_label.custom_minimum_size.y = 38
-	_status_label.text = "请选择商品。购买默认进入随身背包，空间不足时不会扣除基地币。"
+	_status_label.text = "请选择商品。购买默认进入随身背包，空间不足时不会扣除魂。"
 	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_status_label.add_theme_color_override("font_color", Color(0.68, 0.86, 0.92))
@@ -131,7 +131,7 @@ func _make_column(title_text: String, hint_text: String) -> PanelContainer:
 
 
 func _refresh() -> void:
-	_points_label.text = "购买货币｜基地币  ◈ %d" % BaseManager.get_extraction_points()
+	_points_label.text = "购买货币｜魂  ◈ %d" % BaseManager.get_extraction_points()
 	_capacity_label.text = (
 		"当前背包(I)  %d / %d" % [_inventory_module.get_used_slots(), _inventory_module.get_capacity()]
 		if _inventory_module != null
@@ -276,7 +276,7 @@ func _on_sell_pressed(instance_id: String, item: Dictionary, source_owner: Strin
 		else BaseManager.sell_base_shop_item(instance_id, BaseShopService.generate_transaction_id("sell"), source_owner)
 	) as Dictionary
 	if bool(result.get("success", false)):
-		_status_label.text = "出售成功：%s，获得 %d 基地币。" % [str(item.get("name", "物品")), int(result.get("value", 0))]
+		_status_label.text = "出售成功：%s，获得 %d 魂。" % [str(item.get("name", "物品")), int(result.get("value", 0))]
 	else:
 		_status_label.text = "出售失败：%s" % str(result.get("reason", "未知原因"))
 	_refresh()

@@ -94,7 +94,7 @@ static func apply_upgrade(facility_id: String, data: BaseData, upgrade_cost: int
 	if upgrade_cost <= 0:
 		return {"success": false, "reason": "升级费用配置无效"}
 	if data.extraction_points < upgrade_cost:
-		return {"success": false, "reason": "基地币不足"}
+		return {"success": false, "reason": "魂不足"}
 
 	var old_level := int(data.get(level_property))
 	var old_points := data.extraction_points

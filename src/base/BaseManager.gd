@@ -332,7 +332,7 @@ func purchase_base_shop_item(item_id: String, transaction_id: String = "", targe
 	if price <= 0:
 		return {"success": false, "reason": "商品购买价配置无效"}
 	if data.extraction_points < price:
-		return {"success": false, "reason": "基地币不足"}
+		return {"success": false, "reason": "魂不足"}
 	if target_owner not in ["loadout", "vault"]:
 		return {"success": false, "reason": "购买目标无效"}
 
@@ -507,7 +507,7 @@ func purchase_base_shop_item_to_inventory(item_id: String, inventory: InventoryM
 		return {"success": false, "reason": "商品未在基地货架上"}
 	var price := int(definition.get("base_buy_price", 0))
 	if price <= 0 or data.extraction_points < price:
-		return {"success": false, "reason": "基地币不足" if price > 0 else "商品购买价配置无效"}
+		return {"success": false, "reason": "魂不足" if price > 0 else "商品购买价配置无效"}
 	var purchased := ShopService.make_item_instance(definition, effective_transaction_id)
 	var old_inventory := inventory.get_slots_snapshot()
 	if inventory.add_item(purchased, 1) != 1:

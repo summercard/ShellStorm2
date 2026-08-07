@@ -2080,14 +2080,14 @@ func show_run_extraction_success(stats: Dictionary) -> void:
 		kill_str += "  ★精英×%d(+%d)" % [elite_kills, elite_bounty]
 	if extracted_count_label:
 		extracted_count_label.text = (
-			"撤离成功  %s  魂 %d  基地币 %d" % [kill_str, int(stats.get("currency", 0)), ep_total]
+			"撤离成功  %s  本局魂 %d  带回魂 %d" % [kill_str, int(stats.get("currency", 0)), ep_total]
 		)
 	if extracted_items_vbox:
 		# 显示本局获得的积分（灵魂兑换）
 		var points_earned: int = int(stats.get("points_earned", 0))
 		if points_earned > 0:
 			var points_node := Label.new()
-			points_node.text = "▶ 本局获得基地币: +%d" % points_earned
+			points_node.text = "▶ 本局带回魂: +%d" % points_earned
 			points_node.modulate = Color(0.3, 1.0, 0.55, 1.0)
 			points_node.add_theme_font_size_override("font_size", 16)
 			extracted_items_vbox.add_child(points_node)
