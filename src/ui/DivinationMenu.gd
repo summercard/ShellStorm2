@@ -26,6 +26,7 @@ func _ready() -> void:
 		skip_button.pressed.connect(_on_skip_pressed)
 	_selected_card_label_reset()
 	_draw_cards()
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _draw_cards() -> void:
@@ -49,6 +50,7 @@ func _draw_cards() -> void:
 	# 更新说明
 	if instruction_label:
 		instruction_label.text = "选择一张命运预兆，它会保留到下一局首次开门选择"
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 ## 创建一张命运卡片按钮

@@ -51,6 +51,8 @@ func set_open(opened: bool, immediate := false) -> void:
 		var tween := create_tween()
 		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_property(_panel, "position:y", target_y, 0.24)
+		if opened and AudioManager != null:
+			AudioManager.play_sfx("door_open", -3.0)
 
 
 func set_prompt_visible(show_prompt: bool) -> void:

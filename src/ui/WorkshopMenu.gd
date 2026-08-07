@@ -19,6 +19,7 @@ func _ready() -> void:
 		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
 		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_build_blueprint_list()
+	UIStyleFactory.apply_tactical_tree(self)
 
 ## 蓝图解锁阶段定义
 ## 每个类别有多个Tier，每个Tier解锁后增加该类别在局内的可用变体数量

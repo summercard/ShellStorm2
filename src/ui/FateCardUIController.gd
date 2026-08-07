@@ -54,6 +54,7 @@ func _ready() -> void:
 
 	if card_panel != null:
 		card_panel.hide()
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _input(event: InputEvent) -> void:

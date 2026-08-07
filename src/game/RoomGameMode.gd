@@ -1423,6 +1423,8 @@ func _apply_extraction_visual_activation() -> void:
 func _on_wave_started(wave: int, total: int) -> void:
 	_update_room_info_label("第 %d/%d 波袭来！" % [wave, total])
 	_show_wave_announcement(wave, total)
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_start", -3.0)
 
 
 ## 显示波次公告（底部 WaveIndicatorLabel）
@@ -2351,13 +2353,6 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 	var base_reward: int = enemy_data.get("currency_value", 10)
 	currency_earned += base_reward
 
-	var enemy_pos: Vector2 = enemy_data.get(
-		"last_position", player.global_position if player != null else Vector2.ZERO
-	)
-	_spawn_soul_orb(enemy_pos, currency_earned)
-	if not ground_items.is_empty():
-		call_deferred("_spawn_enemy_item_pickups", enemy_pos, ground_items)
-
 	# 如果是精英怪，触发精英撤离点解锁并记录击杀
 	if enemy_data.get("is_elite", false):
 		if map_manager != null:
@@ -2372,6 +2367,13 @@ func notify_enemy_killed(enemy_data: Dictionary) -> void:
 		var bounty: int = enemy_data.get("currency_value", 10)
 		_elite_kill_bounty += bounty
 		currency_earned += bounty
+
+	var enemy_pos: Vector2 = enemy_data.get(
+		"last_position", player.global_position if player != null else Vector2.ZERO
+	)
+	_spawn_soul_orb(enemy_pos, currency_earned)
+	if not ground_items.is_empty():
+		call_deferred("_spawn_enemy_item_pickups", enemy_pos, ground_items)
 
 	kill_recorded.emit()
 	_update_ui()
@@ -2533,6 +2535,8 @@ func _on_boss_damaged(boss_id: String, damage: float, new_hp: float) -> void:
 func _on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
 	# Boss 阶段切换时显示提示
 	_update_room_info_label("Boss 进入阶段 %d！" % new_phase)
+	if AudioManager != null:
+		AudioManager.play_sfx("boss_phase", -2.0)
 	if _ui_manager != null and _ui_manager.has_method("on_boss_phase_changed"):
 		_ui_manager.call("on_boss_phase_changed", boss_id, new_phase)
 
@@ -2540,6 +2544,8 @@ func _on_boss_phase_changed(boss_id: String, new_phase: int) -> void:
 func _on_boss_defeated(boss_id: String, rewards: Dictionary) -> void:
 	# Boss 击败时触发强烈震屏 + 特殊庆祝文字
 	_update_room_info_label("Boss已击败！前往下一层或撤离...")
+	if AudioManager != null:
+		AudioManager.play_sfx("boss_defeat", -1.0)
 	# Boss 击败重震屏（boss_defeated 信号说明 BossRoomDirector 已解锁 BOSS_KILL 撤离点）
 	if _screen_shake != null and _screen_shake.has_method("trigger"):
 		_screen_shake.call("trigger", 12.0, 0.20)

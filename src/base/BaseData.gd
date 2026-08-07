@@ -1,11 +1,15 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.3"
+const SAVE_VERSION := "1.4"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
 var total_kills: int = 0
+
+# 100F 天台只属于新手引导。玩家第一次进入 99F 基地后永久置为 true，
+# 后续启动、死亡回城和普通返航都从基地中点开始。
+var tutorial_completed: bool = false
 
 # 建筑解锁状态
 var workshop_unlocked: bool = false
@@ -67,6 +71,7 @@ func _to_dict() -> Dictionary:
 		"total_runs": total_runs,
 		"successful_extractions": successful_extractions,
 		"total_kills": total_kills,
+		"tutorial_completed": tutorial_completed,
 		"workshop_unlocked": workshop_unlocked,
 		"greenhouse_unlocked": greenhouse_unlocked,
 		"scrapyard_unlocked": scrapyard_unlocked,
@@ -106,6 +111,17 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("total_runs"): data.total_runs = d["total_runs"]
 	if d.has("successful_extractions"): data.successful_extractions = d["successful_extractions"]
 	if d.has("total_kills"): data.total_kills = d["total_kills"]
+	if d.has("tutorial_completed"):
+		data.tutorial_completed = bool(d["tutorial_completed"])
+	else:
+		# 1.3 及更早的档没有显式新手字段。只有已经形成长期进度的旧档
+		# 才直接迁移为已完成，纯零进度档仍保留一次天台引导。
+		data.tutorial_completed = (
+			data.total_runs > 0
+			or data.successful_extractions > 0
+			or int(d.get("extraction_points", 0)) > 0
+			or bool(d.get("boss_defeated", false))
+		)
 	if d.has("workshop_unlocked"): data.workshop_unlocked = d["workshop_unlocked"]
 	if d.has("greenhouse_unlocked"): data.greenhouse_unlocked = d["greenhouse_unlocked"]
 	if d.has("scrapyard_unlocked"): data.scrapyard_unlocked = d["scrapyard_unlocked"]

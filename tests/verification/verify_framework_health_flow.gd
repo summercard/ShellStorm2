@@ -2,23 +2,13 @@ extends Node2D
 
 const PROBE_SAVE_PATH := "user://framework_health_probe.json"
 
-class FakeSynth:
-	extends Node
-	var calls: Array[String] = []
-
-	func play_fate_card() -> void:
-		calls.append("fate_card")
-
-	func play_extraction_abort() -> void:
-		calls.append("extraction_abort")
-
 func _ready() -> void:
 	var failures: Array[String] = []
 	_verify_pause_ownership(failures)
 	_verify_stairs_runtime_configuration(failures)
 	_verify_seeded_map_contract(failures)
 	_verify_atomic_json_recovery(failures)
-	_verify_synth_audio_fallback(failures)
+	_verify_mobile_audio_assets(failures)
 	_cleanup_probe_files()
 	await get_tree().process_frame
 	_finish(failures)
@@ -97,17 +87,15 @@ func _verify_atomic_json_recovery(failures: Array[String]) -> void:
 	if not recovered is Dictionary or int(recovered.get("generation", 0)) != 1:
 		failures.append("Atomic JSON store did not recover from its backup")
 
-func _verify_synth_audio_fallback(failures: Array[String]) -> void:
-	var original_synth = AudioManager.get("_synth")
-	var fake := FakeSynth.new()
-	add_child(fake)
-	AudioManager.set("_synth", fake)
-	AudioManager.play_sfx("fate_card")
-	AudioManager.play_sfx("extraction_abort")
-	if fake.calls != ["fate_card", "extraction_abort"]:
-		failures.append("Empty-path procedural SFX do not reach the synth fallback")
-	AudioManager.set("_synth", original_synth)
-	fake.queue_free()
+func _verify_mobile_audio_assets(failures: Array[String]) -> void:
+	var snapshot := AudioManager.validate_runtime_assets() as Dictionary
+	if (
+		int(snapshot.get("event_count", 0)) != 31
+		or not bool(snapshot.get("mobile_safe", false))
+		or not (snapshot.get("missing", []) as Array).is_empty()
+		or not (snapshot.get("non_ogg", []) as Array).is_empty()
+	):
+		failures.append("Versioned OGG runtime assets are incomplete or not mobile safe")
 
 func _cleanup_probe_files() -> void:
 	for path in [PROBE_SAVE_PATH, PROBE_SAVE_PATH + ".tmp", PROBE_SAVE_PATH + ".bak"]:
@@ -117,7 +105,7 @@ func _cleanup_probe_files() -> void:
 func _finish(failures: Array[String]) -> void:
 	Global.clear_pause_reasons()
 	if failures.is_empty():
-		print("FRAMEWORK_HEALTH_FLOW_OK: pause, stairs, seeded injection, atomic saves, and synth SFX fallback are coherent")
+		print("FRAMEWORK_HEALTH_FLOW_OK: pause, stairs, seeded injection, atomic saves, and versioned mobile OGG assets are coherent")
 		get_tree().quit(0)
 		return
 	for failure in failures:

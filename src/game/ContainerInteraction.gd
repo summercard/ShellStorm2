@@ -19,6 +19,7 @@ enum ContainerState {
 @export var floor: int = 1  # 当前楼层（影响掉落数量）
 @export var interaction_radius: float = 60.0  # 交互范围（像素）
 @export var open_animation: bool = true  # 是否播放开启动画
+@export_range(0.5, 5.0, 0.1) var search_duration: float = 1.6
 var guaranteed_items: Array[String] = []
 
 ## 状态
@@ -28,6 +29,9 @@ var _interact_label: Label = null
 var _opened: bool = false
 var _quality_boost: int = 0  ## 下次开箱品质提升（由环境命运触发器设置）
 var _extra_loot_enabled: bool = false  ## 下次开箱额外掉落（由环境命运触发器设置）
+var _searching := false
+var _search_elapsed := 0.0
+var _search_bar: ProgressBar = null
 
 ## 引用
 var _inventory_module: InventoryModule = null
@@ -36,6 +40,7 @@ var _loot_module: LootModule = null
 
 func _ready() -> void:
 	_setup_interaction_label()
+	_setup_search_progress()
 	_state = ContainerState.AVAILABLE
 	interaction_available.emit(false)
 
@@ -78,6 +83,7 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		_player_in_range = false
+		_cancel_search()
 		if _interact_label:
 			_interact_label.modulate = Color(1, 1, 1, 0)
 		interaction_available.emit(false)
@@ -87,6 +93,19 @@ func _on_body_exited(body: Node2D) -> void:
 func _process(delta: float) -> void:
 	if _opened:
 		return
+	if _searching:
+		if not _player_in_range:
+			_cancel_search()
+			return
+		_search_elapsed += maxf(0.0, delta)
+		var progress := clampf(_search_elapsed / maxf(0.1, search_duration), 0.0, 1.0)
+		if _search_bar != null:
+			_search_bar.value = progress * 100.0
+		if _interact_label != null:
+			_interact_label.text = "搜索中… %d%%" % int(round(progress * 100.0))
+		if progress >= 1.0:
+			_complete_open_container()
+		return
 
 	# 检测 E 键按下（Space）
 	if _player_in_range and Input.is_action_just_pressed("interact"):
@@ -95,10 +114,34 @@ func _process(delta: float) -> void:
 
 ## 尝试开启容器
 func _try_open_container() -> void:
-	if _opened:
+	if _opened or _searching:
 		return
 	if _state == ContainerState.LOCKED:
 		return
+	_searching = true
+	_search_elapsed = 0.0
+	if _search_bar != null:
+		_search_bar.value = 0.0
+		_search_bar.visible = true
+
+
+func _cancel_search() -> void:
+	if not _searching:
+		return
+	_searching = false
+	_search_elapsed = 0.0
+	if _search_bar != null:
+		_search_bar.visible = false
+	if _interact_label != null:
+		_interact_label.text = "[E] 搜索"
+
+
+func _complete_open_container() -> void:
+	if _opened:
+		return
+	_searching = false
+	if _search_bar != null:
+		_search_bar.visible = false
 
 	_opened = true
 	_state = ContainerState.OPENED
@@ -110,6 +153,8 @@ func _try_open_container() -> void:
 	# 播放开启动画（如果有）
 	if open_animation:
 		_play_open_animation()
+	if AudioManager != null:
+		AudioManager.play_sfx("container_open", -3.0)
 
 	# 生成掉落
 	var loot: Array[Dictionary] = _generate_loot()
@@ -144,26 +189,13 @@ func _generate_loot() -> Array[Dictionary]:
 
 	var loot: Array[Dictionary]
 
-	# 根据容器类型确定掉落数量
-	match container_type:
-		"chest":
-			# 宝箱：优质掉落，2-4件
-			loot = _loot_module.generate_loot(loot_table, 2 + floor / 2)
-		"crate":
-			loot = _loot_module.generate_loot(loot_table, 1 + floor / 3)
-		"locker":
-			loot = _loot_module.generate_loot(loot_table, 2)
-		"hidden_cache":
-			loot = _loot_module.generate_loot(loot_table, 3 + floor / 2)
-		_:
-			loot = _loot_module.generate_loot(loot_table, 1)
+	# 每次搜索只产出一个独立物品；容器档位只影响品质，不再影响数量。
+	loot = _loot_module.generate_loot(loot_table, 1)
 
 		# 应用命运效果：额外掉落（生成一件额外物品）
 	if _extra_loot_enabled and not loot.is_empty():
-		var extra: Array[Dictionary] = _loot_module.generate_loot(loot_table, 1)
-		for item in extra:
-			loot.append(item)
-		print("[ContainerInteraction] 命运效果：额外掉落已应用，+1件物品")
+		loot[0]["loot_table_tier"] = int(loot[0].get("loot_table_tier", 0)) + 1
+		print("[ContainerInteraction] 额外掉落效果已折算为单件物品品质 +1")
 
 	# 指定赠送的核心道具只出现一次，避免初始箱随机重复主武器。
 	for item_id in guaranteed_items:
@@ -172,8 +204,9 @@ func _generate_loot() -> Array[Dictionary]:
 	for item_id in guaranteed_items:
 		var guaranteed := ItemRegistry.get_instance().get_item(item_id)
 		if not guaranteed.is_empty():
-			guaranteed["count"] = max(1, int(guaranteed.get("count", 1)))
-			loot.append(guaranteed)
+			guaranteed["count"] = 1
+			loot = [guaranteed]
+			break
 
 	# 应用命运效果：品质提升（提升已生成物品的品质标签，过滤低品质）
 	# 逻辑：将所有物品的 loot_table_tier 提升 _quality_boost 级（仅影响显示，不改变实际数据）
@@ -192,6 +225,19 @@ func _generate_loot() -> Array[Dictionary]:
 	_reset_fate_effects()
 
 	return loot
+
+
+func _setup_search_progress() -> void:
+	_search_bar = ProgressBar.new()
+	_search_bar.name = "SearchProgress"
+	_search_bar.position = Vector2(-72, -48)
+	_search_bar.size = Vector2(144, 12)
+	_search_bar.show_percentage = false
+	_search_bar.visible = false
+	_search_bar.z_index = 110
+	_search_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_background())
+	_search_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(UIPalette.NEON_CYAN))
+	add_child(_search_bar)
 
 
 ## 将掉落加入背包（过滤掉货币条目）

@@ -66,6 +66,8 @@ var _run_loot: Array[Dictionary] = []
 var _run_value := 0
 var _kills := 0
 var _completed := false
+var _death_dialog: Control = null
+var _death_animation_ready := false
 var _extraction: ExtractionBeacon3D = null
 var _standard_extraction: ExtractionBeacon3D = null
 var _emergency_extraction: ExtractionBeacon3D = null
@@ -177,6 +179,7 @@ func _ready() -> void:
 	player.hp_changed.connect(_on_player_hp_changed)
 	player.ammo_changed.connect(_on_ammo_changed)
 	player.presentation_state_changed.connect(_on_player_state_changed)
+	player.death_animation_finished.connect(_on_player_death_animation_finished)
 	if not player.weapon_instance_changed.is_connected(_on_hud_weapon_instance_changed):
 		player.weapon_instance_changed.connect(_on_hud_weapon_instance_changed)
 	player.global_position = Vector3(0, 0.05, 0)
@@ -307,9 +310,9 @@ func _setup_run_modules() -> void:
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
 		$HUD.add_child(_weapon_panel)
-		_weapon_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		# 左边缘对齐玩家状态块右边缘：player_panel 缩放后右边缘 = 360*0.80 = 288。
-		_weapon_panel.position = Vector2(288, 50)
+		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
+		# 独立管理页居中覆盖战场，与背包/基地设施的模态信息架构一致。
+		_weapon_panel.position = Vector2(-260, -310)
 		_weapon_panel.size = Vector2(520, 620)
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
@@ -1622,6 +1625,8 @@ func _spawn_next_room_wave(room_id: String) -> void:
 	status_label.text = "增援抵达：波次 %d/%d · %d 个敌对信号" % [
 		int(_room_wave_numbers[room_id]), int(_room_wave_totals.get(room_id, 1)), spawned,
 	]
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_start", -3.0)
 
 
 func _record_index(room_id: String) -> int:
@@ -1705,6 +1710,8 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		return
 	_mark_room_cleared(room, true)
 	status_label.text = "房间肃清 · 钥匙已掉落，可继续搜索或推进"
+	if AudioManager != null:
+		AudioManager.play_sfx("wave_clear", -3.0)
 	if (
 		_extraction != null
 		and (
@@ -1717,6 +1724,8 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	):
 		_extraction.set_locked(false)
 		_hide_boss_hud()
+		if AudioManager != null:
+			AudioManager.play_sfx("boss_defeat", -1.0)
 		status_label.text = "Boss 已清除 · 撤离信标已解锁"
 	if bool(enemy_data.get("is_elite", false)) and room != null:
 		call_deferred("_ensure_conditional_extraction", "ELITE_KILL", room, Vector3(4.0, 0.0, 3.0))
@@ -1727,6 +1736,8 @@ func _on_boss_phase_changed(enemy: Enemy3D, phase: int) -> void:
 	if enemy == _active_boss and _boss_label != null:
 		_boss_label.text = "%s · 阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), phase]
 	status_label.text = "Boss 阶段 %d · 攻击节奏与增援强度提升" % phase
+	if AudioManager != null:
+		AudioManager.play_sfx("boss_phase", -2.0)
 
 
 func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> void:
@@ -1737,6 +1748,7 @@ func _on_enemy_health_changed(enemy: Enemy3D, current: int, maximum: int) -> voi
 
 
 func _show_boss_hud(enemy: Enemy3D) -> void:
+	var is_new_boss := enemy != _active_boss
 	_active_boss = enemy
 	if _boss_panel == null:
 		_boss_panel = PanelContainer.new()
@@ -1767,6 +1779,8 @@ func _show_boss_hud(enemy: Enemy3D) -> void:
 		_boss_bar.custom_minimum_size.y = 14
 		box.add_child(_boss_bar)
 	_boss_panel.visible = true
+	if is_new_boss and AudioManager != null:
+		AudioManager.play_sfx("boss_intro", -1.5)
 	_boss_label.text = "%s · 阶段 %d" % [enemy.get_enemy_data().get("name", "废土首领"), enemy.boss_phase]
 	_on_enemy_health_changed(enemy, enemy.current_hp, enemy.max_hp)
 
@@ -1798,26 +1812,38 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	if _next_chest_quality_boost > 0:
 		var boosted := _loot_module.generate_container_loot("hidden_cache", maxi(1, visual_theme.difficulty_rank + _next_chest_quality_boost))
 		if not boosted.is_empty():
-			drops.append(boosted[0])
+			drops = [boosted[0]]
 		_next_chest_quality_boost = 0
 	if _extra_loot_next_chest_count > 0:
+		var candidates: Array[Dictionary] = []
+		candidates.append_array(drops)
 		for _extra_index in range(_extra_loot_next_chest_count):
 			var extra := _loot_module.generate_container_loot(container_type, maxi(1, visual_theme.difficulty_rank))
 			if not extra.is_empty():
-				drops.append(extra[0])
+				candidates.append(extra[0])
+		if not candidates.is_empty():
+			candidates.sort_custom(
+				func(a: Dictionary, b: Dictionary) -> bool:
+					return int(a.get("loot_table_tier", 0)) > int(b.get("loot_table_tier", 0))
+			)
+			drops = [candidates[0]]
 		_extra_loot_next_chest_count = 0
 	if drops.is_empty():
 		status_label.text = "容器为空"
 		return
-	_spawn_loot_items(room, drops, player.global_position + player.aim_direction * 1.2)
-	status_label.text = "容器已打开 · %d 件物资落地" % drops.size()
+	var single_drop := drops[0].duplicate(true)
+	single_drop["count"] = 1
+	_spawn_loot_items(room, [single_drop], player.global_position + player.aim_direction * 1.2)
+	status_label.text = "搜索完成 · 1 件物资落地"
 
 
 func _spawn_loot_items(room: DungeonRoom3D, items: Array[Dictionary], world_position: Vector3) -> void:
 	for index in range(items.size()):
 		var item := items[index].duplicate(true)
+		if not bool(item.get("is_currency", false)):
+			item["count"] = 1
 		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
-		var color := Color(1.0, 0.76, 0.22) if bool(item.get("is_currency", false)) else Color(0.38, 0.88, 0.72)
+		var color := ItemModelFactory3D.get_item_color(item)
 		pickup.configure(item, color)
 		room.add_child(pickup)
 		var angle := float(index) * 2.1 + 0.45
@@ -3399,7 +3425,7 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	# 自由撤离：玩家可以被打但不被中断。
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
-		_finish_run(false)
+		status_label.text = "生命信号中断 · 正在确认防护体状态"
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
@@ -3452,6 +3478,80 @@ func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
 		status_label.text = "行动失败 · 防护体失去响应"
 
 
+func _on_player_death_animation_finished() -> void:
+	if _completed or _death_animation_ready:
+		return
+	_death_animation_ready = true
+	_show_death_confirmation_dialog()
+
+
+func _show_death_confirmation_dialog() -> void:
+	if _death_dialog != null and is_instance_valid(_death_dialog):
+		return
+	var overlay := Control.new()
+	overlay.name = "DeathConfirmationDialog"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 950
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.005, 0.010, 0.018, 0.78)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.add_child(dim)
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.position = Vector2(-260, -130)
+	panel.custom_minimum_size = Vector2(520, 260)
+	panel.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_panel_with_border(0, UIPalette.HP_LOW, 8, 2)
+	)
+	overlay.add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 26)
+	margin.add_theme_constant_override("margin_top", 24)
+	margin.add_theme_constant_override("margin_right", 26)
+	margin.add_theme_constant_override("margin_bottom", 22)
+	panel.add_child(margin)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 15)
+	margin.add_child(box)
+	var title := Label.new()
+	title.text = "行动人员已倒下"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.add_theme_font_size_override("font_size", 28)
+	title.add_theme_color_override("font_color", Color(1.0, 0.34, 0.28))
+	box.add_child(title)
+	var detail := Label.new()
+	detail.text = "未保险物资将按死亡规则结算。确认后返回 99F 基地中点。"
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	detail.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+	box.add_child(detail)
+	var confirm := Button.new()
+	confirm.text = "确认结算并返回基地"
+	confirm.custom_minimum_size = Vector2(0, 52)
+	UIStyleFactory.apply_button_style(
+		confirm,
+		UIStyleFactory.make_button_style(Color(0.15, 0.035, 0.045, 0.98), UIPalette.HP_LOW)
+	)
+	confirm.pressed.connect(_confirm_death_return)
+	box.add_child(confirm)
+	$HUD.add_child(overlay)
+	_death_dialog = overlay
+	confirm.grab_focus()
+	_sync_player_input_lock()
+
+
+func _confirm_death_return() -> void:
+	if _completed or not _death_animation_ready:
+		return
+	if _death_dialog != null and is_instance_valid(_death_dialog):
+		_death_dialog.queue_free()
+	_death_dialog = null
+	_finish_run(false)
+
+
 func _finish_run(success: bool) -> void:
 	if _completed:
 		return
@@ -3488,7 +3588,7 @@ func _finish_run(success: bool) -> void:
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
-		await get_tree().create_timer(1.6).timeout
+		await get_tree().create_timer(0.18 if not success else 1.6).timeout
 		get_tree().change_scene_to_file(return_scene_path)
 
 

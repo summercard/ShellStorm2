@@ -130,6 +130,26 @@ func record_run(success: bool, kills: int) -> void:
 	data.record_run(success, kills)
 	save_base()
 
+
+func is_tutorial_completed() -> bool:
+	_ensure_data()
+	return data.tutorial_completed
+
+
+func should_start_on_rooftop() -> bool:
+	return not is_tutorial_completed()
+
+
+func mark_tutorial_completed() -> bool:
+	_ensure_data()
+	if data.tutorial_completed:
+		return true
+	data.tutorial_completed = true
+	if save_base("tutorial_completed_on_99f_entry"):
+		return true
+	data.tutorial_completed = false
+	return false
+
 func unlock_building(type: int) -> bool:
 	match type:
 		0: data.workshop_unlocked = true

@@ -25,6 +25,7 @@ func _ready() -> void:
 		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_find_elite_archive()
 	_build_archive_view()
+	UIStyleFactory.apply_tactical_tree(self)
 
 func _find_elite_archive() -> void:
 	# 从场景树中查找 EliteArchiveModule（挂载在 RoomGameMode 下的子节点）

@@ -68,6 +68,7 @@ func _ready() -> void:
 
 	# 必须设置为 ALWAYS，保证游戏暂停时也能接收 Tab 输入
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	UIStyleFactory.apply_tactical_tree(self)
 
 ## 构建面板UI
 func _build_panel() -> void:
@@ -111,11 +112,6 @@ func _build_panel() -> void:
 	_stats_container.add_theme_constant_override("separation", 6)
 	vbox.add_child(_stats_container)
 
-	# 分隔线
-	var sep := HSeparator.new()
-	sep.custom_minimum_size = Vector2(PANEL_WIDTH, 2)
-	vbox.add_child(sep)
-
 	# 树状结构容器
 	var scroll := ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(PANEL_WIDTH, PANEL_HEIGHT - 150)
@@ -141,12 +137,10 @@ func _create_detail_popup() -> void:
 	_detail_popup.z_index = 1000
 	_detail_popup.custom_minimum_size = Vector2(260, 160)
 	_detail_popup.visible = false
-
-	# 半透明背景
-	var bg := ColorRect.new()
-	bg.color = Color(0.08, 0.10, 0.15, 0.97)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_detail_popup.add_child(bg)
+	_detail_popup.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_tactical_panel(UIPalette.NEON_CYAN, 1, 1, 6)
+	)
 
 	# 标题
 	var title := Label.new()

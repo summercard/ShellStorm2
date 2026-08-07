@@ -16,6 +16,7 @@ const SIZE_DIMENSIONS := {
 @export var accent_color := Color(0.34, 0.72, 0.84)
 @export var base_color := Color(0.18, 0.21, 0.21)
 @export_range(1, 99, 1) var loot_value := 8
+@export_range(0.5, 5.0, 0.1) var search_duration := 1.8
 
 var prop_id := ""
 var _searched := false
@@ -23,6 +24,11 @@ var _player_in_range := false
 var _visual_root: Node3D
 var _prompt: Label3D
 var _main_material: StandardMaterial3D
+var _searching := false
+var _search_elapsed := 0.0
+var _search_overlay: Control
+var _search_bar: ProgressBar
+var _search_label: Label
 
 
 func configure(config: Dictionary) -> void:
@@ -33,6 +39,7 @@ func configure(config: Dictionary) -> void:
 	accent_color = config.get("accent", accent_color) as Color
 	base_color = config.get("base_color", base_color) as Color
 	loot_value = int(config.get("loot_value", loot_value))
+	search_duration = float(config.get("search_duration", search_duration))
 
 
 func _ready() -> void:
@@ -48,10 +55,54 @@ func _ready() -> void:
 	_build_visual()
 
 
+func _process(delta: float) -> void:
+	if not _searching:
+		return
+	if not _player_in_range:
+		_cancel_search()
+		return
+	_search_elapsed += maxf(0.0, delta)
+	var progress := clampf(_search_elapsed / maxf(0.1, _effective_search_duration()), 0.0, 1.0)
+	_search_bar.value = progress * 100.0
+	_search_label.text = "正在搜索  %d%%" % int(round(progress * 100.0))
+	if progress >= 1.0:
+		_complete_search()
+
+
 func _unhandled_input(event: InputEvent) -> void:
-	if not searchable or _searched or not _player_in_range or not event.is_action_pressed("interact"):
+	if not searchable or _searched or _searching or not _player_in_range or not event.is_action_pressed("interact"):
 		return
 	get_viewport().set_input_as_handled()
+	_start_search()
+
+
+func _start_search() -> void:
+	# 搜索HUD按需创建，避免每个房间家具都常驻一套CanvasLayer和控件。
+	# 同一时间玩家只能搜索一个家具，因此懒加载不改变交互语义。
+	if _search_overlay == null:
+		_build_search_overlay()
+	_searching = true
+	_search_elapsed = 0.0
+	_prompt.text = "搜索中 · 请保持靠近"
+	_search_bar.value = 0.0
+	_search_overlay.visible = true
+
+
+func _cancel_search() -> void:
+	if not _searching:
+		return
+	_searching = false
+	_search_elapsed = 0.0
+	_search_overlay.visible = false
+	if not _searched:
+		_prompt.text = "[E] 搜索 · %s" % size_class.to_upper()
+
+
+func _complete_search() -> void:
+	if _searched:
+		return
+	_searching = false
+	_search_overlay.visible = false
 	_searched = true
 	_player_in_range = false
 	_prompt.text = "已搜索"
@@ -61,7 +112,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	var tween := create_tween()
 	tween.tween_property(_visual_root, "position:y", 0.18, 0.12)
 	tween.tween_property(_visual_root, "position:y", 0.0, 0.18)
+	if AudioManager != null:
+		AudioManager.play_sfx("container_open", -3.0)
 	searched.emit(self, _build_loot())
+
+
+func _effective_search_duration() -> float:
+	return search_duration * float({"small": 0.72, "medium": 1.0, "large": 1.34}.get(size_class, 1.0))
 
 
 func is_searched() -> bool:
@@ -76,6 +133,11 @@ func get_asset_snapshot() -> Dictionary:
 		"dimensions": SIZE_DIMENSIONS.get(size_class, SIZE_DIMENSIONS["medium"]),
 		"searchable": searchable,
 		"searched": _searched,
+		"searching": _searching,
+		"search_duration_s": _effective_search_duration(),
+		"search_progress": clampf(
+			_search_elapsed / maxf(0.1, _effective_search_duration()), 0.0, 1.0
+		),
 		"is_3d": true,
 	}
 
@@ -110,6 +172,7 @@ func _on_body_exited(body: Node3D) -> void:
 	if not body.is_in_group("player_3d"):
 		return
 	_player_in_range = false
+	_cancel_search()
 	if _prompt != null:
 		_prompt.visible = _searched
 
@@ -181,6 +244,48 @@ func _build_visual() -> void:
 	_prompt.outline_size = 8
 	_prompt.visible = false
 	add_child(_prompt)
+
+
+func _build_search_overlay() -> void:
+	var canvas := CanvasLayer.new()
+	canvas.name = "SearchProgressCanvas"
+	canvas.layer = 180
+	add_child(canvas)
+	_search_overlay = Control.new()
+	_search_overlay.name = "SearchProgressOverlay"
+	_search_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_search_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_search_overlay.visible = false
+	canvas.add_child(_search_overlay)
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	panel.position = Vector2(-210, -172)
+	panel.custom_minimum_size = Vector2(420, 78)
+	panel.add_theme_stylebox_override(
+		"panel",
+		UIStyleFactory.make_panel_with_border(0, UIPalette.NEON_CYAN, 7, 2)
+	)
+	_search_overlay.add_child(panel)
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 16)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 16)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	panel.add_child(margin)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 7)
+	margin.add_child(box)
+	_search_label = Label.new()
+	_search_label.text = "正在搜索  0%"
+	_search_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_search_label.add_theme_color_override("font_color", UIPalette.TEXT_PRIMARY)
+	box.add_child(_search_label)
+	_search_bar = ProgressBar.new()
+	_search_bar.show_percentage = false
+	_search_bar.custom_minimum_size.y = 14
+	_search_bar.add_theme_stylebox_override("background", UIStyleFactory.make_progress_background())
+	_search_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(UIPalette.NEON_CYAN))
+	box.add_child(_search_bar)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:

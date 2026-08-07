@@ -150,11 +150,6 @@ func _ready() -> void:
 	super()
 	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
-	player.global_position = Vector3(
-		TOWER_GEOMETRY.CORE_CENTER_XZ.x - 20.0,
-		0.05,
-		TOWER_GEOMETRY.CORE_CENTER_XZ.y
-	)
 	# 镜头固定在9m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
 	player.camera.fov = CAMERA_FOV_DEG
@@ -163,9 +158,28 @@ func _ready() -> void:
 	_install_elevator_facility()
 	_install_tower_hud()
 	_install_atmosphere()
+	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
+	var starts_on_rooftop := test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
+	if starts_on_rooftop:
+		player.global_position = Vector3(
+			TOWER_GEOMETRY.CORE_CENTER_XZ.x - 20.0,
+			0.05,
+			TOWER_GEOMETRY.CORE_CENTER_XZ.y
+		)
+	else:
+		var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+		if facility_room != null:
+			player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 0.0)
+			player.velocity = Vector3.ZERO
+			_current_room_id = ""
+			_on_room_entered(facility_room)
 	title_label.text = "弹壳风暴2 · 向下爬楼行动"
 	seed_label.text = "塔楼种子 %d" % run_seed
-	status_label.text = "楼顶出生点 · 西侧特殊楼梯门通向设施层"
+	status_label.text = (
+		"楼顶新手出生点 · 西侧特殊楼梯门通向99F基地"
+		if starts_on_rooftop
+		else "已从99F基地中点恢复 · 基地屋内禁射，跨出任一侧门即可开火"
+	)
 	_update_floor_visibility_state()
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
@@ -2144,6 +2158,8 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		room_label.text = "楼顶 · 250m整层 / 65m核心"
 	elif room.room_id == "facility":
 		room_label.text = "99层基地 · 30×30m / 6×6地砖 · 安全区"
+		if not test_mode and BaseManager != null:
+			BaseManager.mark_tutorial_completed()
 	else:
 		var role := str(_find_record(room.room_id).get("tower_role", "room"))
 		var floor_number := 100 - depth

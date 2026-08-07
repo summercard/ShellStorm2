@@ -203,7 +203,7 @@ func _get_effect_preview(fate_card_id: String) -> String:
 		"fate_reinforce": "敌增援触发！波次外额外刷怪",
 		"fate_mark_enemy": "命运标记！击杀第10敌获得随机卡片",
 		"fate_lucky_chest": "幸运发现！下一个箱子品质提升",
-		"fate_extra_loot": "额外掉落！开箱获得额外物品",
+		"fate_extra_loot": "额外抽取！开箱仍落一件并优先保留更优结果",
 		"fate_curse_map": "诅咒降临！本房间怪物伤害+15%",
 		"fate_bless_dead": "亡者祝福！HP<30%后获得30秒伤害加成",
 	}

@@ -5,19 +5,22 @@ extends RefCounted
 const WEAPON_SCENE: PackedScene = preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
 
 
-static func create_model(item: Dictionary, tint := Color(0.38, 0.88, 0.72)) -> Node3D:
+static func create_model(item: Dictionary, _tint := Color(0.38, 0.88, 0.72)) -> Node3D:
 	var root := Node3D.new()
 	root.name = "ItemModel3D"
 	var kind := get_model_kind(item)
+	var model_tint := get_item_color(item)
+	if item.has("display_color") and item["display_color"] is Color:
+		model_tint = item["display_color"] as Color
 	match kind:
 		"weapon":
 			_build_weapon(root, item)
 		"backpack":
-			_build_backpack(root, item, tint)
+			_build_backpack(root, item, model_tint)
 		"bullet":
-			_build_bullet(root, item, tint)
+			_build_bullet(root, item, model_tint)
 		"attachment":
-			_build_attachment(root, tint)
+			_build_attachment(root, model_tint)
 		"key":
 			_build_key(root)
 		"heal":
@@ -31,9 +34,33 @@ static func create_model(item: Dictionary, tint := Color(0.38, 0.88, 0.72)) -> N
 		"currency":
 			_build_currency(root)
 		_:
-			_build_crate(root, tint)
+			_build_crate(root, model_tint)
 	root.set_meta("model_kind", kind)
 	return root
+
+
+static func get_item_color(item: Dictionary) -> Color:
+	var kind := get_model_kind(item)
+	var type_color := {
+		"weapon": Color(0.96, 0.52, 0.12),
+		"backpack": Color(0.16, 0.78, 0.72),
+		"bullet": Color(0.26, 0.66, 1.0),
+		"attachment": Color(0.70, 0.40, 1.0),
+		"key": Color(1.0, 0.72, 0.16),
+		"heal": Color(0.24, 0.94, 0.50),
+		"ammo": Color(0.20, 0.68, 1.0),
+		"beacon": Color(1.0, 0.34, 0.10),
+		"blueprint": Color(0.20, 0.76, 1.0),
+		"currency": Color(1.0, 0.72, 0.12),
+		"crate": Color(0.80, 0.56, 0.22),
+	}.get(kind, Color(0.34, 0.86, 0.72)) as Color
+	var rarity_color := {
+		"uncommon": Color(0.28, 0.90, 0.48),
+		"rare": Color(0.22, 0.60, 1.0),
+		"epic": Color(0.68, 0.34, 1.0),
+		"legendary": Color(1.0, 0.48, 0.10),
+	}.get(str(item.get("rarity", "common")), type_color) as Color
+	return type_color.lerp(rarity_color, 0.42).lightened(0.08)
 
 
 static func get_model_kind(item: Dictionary) -> String:
@@ -93,9 +120,9 @@ static func _build_backpack(root: Node3D, item: Dictionary, tint: Color) -> void
 		8: Vector3(0.76, 0.88, 0.38),
 	}
 	var body_size := size_by_slots.get(extra_slots, size_by_slots[2]) as Vector3
-	var shell := _material(tint.darkened(0.30), 0.18, 0.76)
+	var shell := _material(tint.darkened(0.12), 0.18, 0.68)
 	var panel := _material(tint, 0.24, 0.62, 0.10)
-	var strap := _material(Color(0.06, 0.08, 0.09), 0.10, 0.90)
+	var strap := _material(tint.darkened(0.48), 0.10, 0.82)
 	_add_box(root, "BackpackBody", Vector3.ZERO, body_size, shell)
 	_add_box(
 		root, "TopFlap",
@@ -125,13 +152,13 @@ static func _build_bullet(root: Node3D, item: Dictionary, fallback: Color) -> vo
 	var assembly_id := str(item.get("assembly_id", item.get("id", "")))
 	if WeaponModel3D.BULLET_COLORS.has(assembly_id):
 		bullet_color = WeaponModel3D.BULLET_COLORS[assembly_id]
-	_add_cylinder(root, "Casing", Vector3(0, 0.12, 0), 0.16, 0.78, _material(Color(0.24, 0.27, 0.29), 0.82, 0.28))
+	_add_cylinder(root, "Casing", Vector3(0, 0.12, 0), 0.16, 0.78, _material(Color(0.68, 0.56, 0.30), 0.82, 0.28))
 	_add_sphere(root, "Tip", Vector3(0, 0.55, 0), Vector3(0.16, 0.24, 0.16), _material(bullet_color, 0.30, 0.32, 0.55))
 	root.rotation_degrees.z = -28.0
 
 
 static func _build_attachment(root: Node3D, tint: Color) -> void:
-	var metal := _material(Color(0.10, 0.13, 0.15), 0.86, 0.24)
+	var metal := _material(tint.darkened(0.32), 0.76, 0.28)
 	var accent := _material(tint, 0.42, 0.30, 0.32)
 	_add_box(root, "Mount", Vector3.ZERO, Vector3(0.62, 0.24, 0.34), metal)
 	_add_cylinder(root, "Optic", Vector3(0, 0.24, 0), 0.13, 0.64, accent, Vector3(90, 0, 0))
@@ -202,7 +229,7 @@ static func _build_currency(root: Node3D) -> void:
 
 
 static func _build_crate(root: Node3D, tint: Color) -> void:
-	var shell := _material(Color(0.12, 0.16, 0.17), 0.58, 0.52)
+	var shell := _material(tint.darkened(0.26), 0.48, 0.48)
 	var accent := _material(tint, 0.26, 0.36, 0.35)
 	_add_box(root, "Crate", Vector3.ZERO, Vector3(0.72, 0.62, 0.72), shell)
 	_add_box(root, "BandA", Vector3(0, 0, -0.37), Vector3(0.12, 0.66, 0.035), accent)

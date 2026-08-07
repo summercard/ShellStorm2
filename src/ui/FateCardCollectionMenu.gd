@@ -19,6 +19,7 @@ func _ready() -> void:
 	if close_button:
 		close_button.pressed.connect(_on_close_pressed)
 	_build_collection_view()
+	UIStyleFactory.apply_tactical_tree(self)
 
 func _build_collection_view() -> void:
 	if content == null:

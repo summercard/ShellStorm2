@@ -24,6 +24,7 @@ func _ready() -> void:
 	_build_shop_grid()
 	_hide_panel()
 	GameManager.currency_changed.connect(_on_currency_changed)
+	UIStyleFactory.apply_tactical_tree(self)
 
 ## 设置背包引用
 func set_inventory(inventory: InventoryModule) -> void:
@@ -47,6 +48,7 @@ func show_merchant(goods: Array[Dictionary]) -> void:
 		_items.append(WeaponInstance.ensure_weapon_item(raw_item))
 	_build_shop_grid()
 	_refresh_affordability()
+	UIStyleFactory.apply_tactical_tree(self)
 	# 停止旧动画并显示面板（动画版本自动处理打断）
 	_show_panel_animated()
 	# 获取输入焦点以接收 Esc

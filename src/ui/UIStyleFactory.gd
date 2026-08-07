@@ -98,9 +98,27 @@ static func apply_button_style(btn: Button, style_dict: Dictionary) -> void:
 	# 弹性缩放反馈（必须在 add_child 之后调用，否则 _ready 还没跑完）
 	if btn.is_inside_tree():
 		UIFX.attach_button_press(btn)
+		_bind_button_audio(btn)
 	else:
 		# 延迟到 _ready 后挂载
 		btn.ready.connect(UIFX.attach_button_press.bind(btn), CONNECT_ONE_SHOT)
+		btn.ready.connect(_bind_button_audio.bind(btn), CONNECT_ONE_SHOT)
+
+
+static func _bind_button_audio(btn: Button) -> void:
+	if btn == null or btn.has_meta("_tactical_audio_bound"):
+		return
+	btn.set_meta("_tactical_audio_bound", true)
+	btn.mouse_entered.connect(_play_button_audio.bind(btn, "ui_hover", -9.0))
+	btn.pressed.connect(_play_button_audio.bind(btn, "ui_click", -4.0))
+
+
+static func _play_button_audio(btn: Button, event_name: String, volume_db: float) -> void:
+	if btn == null or (btn.disabled and event_name == "ui_click") or not btn.is_inside_tree():
+		return
+	var audio := btn.get_node_or_null("/root/AudioManager")
+	if audio != null and audio.has_method("play_sfx"):
+		audio.call("play_sfx", event_name, volume_db)
 
 
 # ========== 格子 / 槽位样式 ==========
@@ -164,6 +182,74 @@ static func make_progress_fill(color: Color) -> StyleBoxFlat:
 	style.bg_color = color
 	style.set_corner_radius_all(3)
 	return style
+
+
+static func make_progress_background() -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.004, 0.020, 0.026, 0.98)
+	style.set_border_width_all(1)
+	style.border_color = UIPalette.BORDER_SUBTLE
+	style.set_corner_radius_all(3)
+	return style
+
+
+static func make_tactical_panel(
+	accent: Color = UIPalette.NEON_CYAN,
+	level: int = 1,
+	border_width: int = 2,
+	corner_radius: int = 7
+) -> StyleBoxFlat:
+	var style := make_panel_with_border(level, accent, corner_radius, border_width)
+	style.content_margin_left = 14.0
+	style.content_margin_right = 14.0
+	style.content_margin_top = 10.0
+	style.content_margin_bottom = 10.0
+	style.shadow_color = Color(accent.r, accent.g, accent.b, 0.18)
+	style.shadow_size = 5
+	return style
+
+
+static func apply_tactical_tree(root: Node) -> void:
+	if root == null:
+		return
+	if root is PanelContainer:
+		var panel := root as PanelContainer
+		var lowered := panel.name.to_lower()
+		var accent := UIPalette.NEON_CYAN
+		if "death" in lowered or "danger" in lowered or "drop" in lowered:
+			accent = UIPalette.DANGER_RED
+		elif "insurance" in lowered or "vault" in lowered or "backpack" in lowered:
+			accent = UIPalette.NEON_MINT
+		panel.add_theme_stylebox_override("panel", make_tactical_panel(accent, 1, 1))
+	elif root is Button:
+		var button := root as Button
+		var accent := UIPalette.NEON_CYAN
+		if "出售" in button.text or "丢弃" in button.text or "删除" in button.text or "确认撤退" in button.text:
+			accent = UIPalette.DANGER_RED
+		elif "购买" in button.text or "魂" in button.text:
+			accent = UIPalette.SOUL_GOLD
+		elif "保险" in button.text or "装备" in button.text:
+			accent = UIPalette.NEON_MINT
+		apply_button_style(button, make_button_style(UIPalette.BG_DARK, accent))
+		button.add_theme_font_size_override("font_size", maxi(14, button.get_theme_font_size("font_size")))
+	elif root is ProgressBar:
+		var bar := root as ProgressBar
+		var fill := UIPalette.NEON_CYAN
+		if "hp" in bar.name.to_lower() or "health" in bar.name.to_lower():
+			fill = UIPalette.DANGER_RED
+		bar.add_theme_stylebox_override("background", make_progress_background())
+		bar.add_theme_stylebox_override("fill", make_progress_fill(fill))
+	elif root is Label:
+		var label := root as Label
+		var lowered := (label.name + " " + label.text).to_lower()
+		if "title" in lowered or "标题" in lowered:
+			label.add_theme_color_override("font_color", UIPalette.NEON_CYAN)
+		elif "魂" in label.text or "价格" in label.text:
+			label.add_theme_color_override("font_color", UIPalette.SOUL_GOLD)
+		elif not label.has_theme_color_override("font_color"):
+			label.add_theme_color_override("font_color", UIPalette.TEXT_PRIMARY)
+	for child in root.get_children():
+		apply_tactical_tree(child)
 
 
 # ========== 描边文字 ==========

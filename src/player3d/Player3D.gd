@@ -19,6 +19,7 @@ signal avatar_customization_changed(loadout: Dictionary)
 signal weapon_instance_changed(snapshot: Dictionary)
 signal weapon_loadout_changed(snapshot: Dictionary)
 signal backpack_equipment_changed(snapshot: Dictionary)
+signal death_animation_finished()
 
 const SPEED := 5.0
 const DASH_SPEED := 16.5
@@ -55,6 +56,9 @@ var is_invincible := false
 var input_locked := false
 var _presentation_state := "idle"
 var _last_damage_amount := 0
+var _last_hit_direction := Vector3.ZERO
+var _death_animation_progress := 0.0
+var _death_animation_finished_emitted := false
 var _invincible_remaining := 0.0
 var _state_machine: StateMachine = null
 var _test_move_direction: Variant = null
@@ -448,6 +452,8 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 		fate_multiplier *= float(_character_fate.get("first_hit_multiplier", 1.0))
 		_character_fate["first_hit_ready"] = false
 	_last_damage_amount = maxi(1, int(round(float(amount) * overheat_multiplier * fate_multiplier)))
+	if hit_direction.length_squared() > 0.001:
+		_last_hit_direction = Vector3(hit_direction.x, 0.0, hit_direction.z).normalized()
 	var next_hp := current_hp - _last_damage_amount
 	if next_hp <= 0 and int(_character_fate.get("last_stand_charges", 0)) > 0:
 		_character_fate["last_stand_charges"] = int(_character_fate["last_stand_charges"]) - 1
@@ -470,6 +476,8 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 		if weapon != null:
 			weapon.cancel_reload()
 		_clear_action_overlays()
+		_death_animation_progress = 0.0
+		_death_animation_finished_emitted = false
 		_state_machine.transition_to("dead", true)
 	else:
 		_state_machine.transition_to("hurt", true)
@@ -1188,6 +1196,30 @@ func _transition_to_locomotion() -> void:
 func _set_presentation_state(state_id: String, context: Dictionary = {}) -> void:
 	_presentation_state = state_id
 	presentation_state_changed.emit(state_id, context)
+
+
+func get_death_launch_direction() -> Vector3:
+	if _last_hit_direction.length_squared() > 0.001:
+		return _last_hit_direction
+	var fallback := -aim_direction
+	fallback.y = 0.0
+	return fallback.normalized() if fallback.length_squared() > 0.001 else Vector3(0.0, 0.0, 1.0)
+
+
+func _set_death_animation_progress(progress: float) -> void:
+	_death_animation_progress = clampf(progress, 0.0, 1.0)
+
+
+func get_death_animation_progress() -> float:
+	return _death_animation_progress
+
+
+func _complete_death_animation() -> void:
+	if _death_animation_finished_emitted:
+		return
+	_death_animation_finished_emitted = true
+	_death_animation_progress = 1.0
+	death_animation_finished.emit()
 
 
 func _update_invincibility(delta: float) -> void:

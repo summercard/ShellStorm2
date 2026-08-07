@@ -9,7 +9,7 @@ static var DEFINITIONS := {
 	"fate_mark_enemy": _entry("愚者", "MAJOR", "MAJOR", "0", "十杀必得命运，失30魂", "每击杀10个敌人必得一张命运卡，同时失去30魂。", {"chance": 1.0, "currency_cost": 30}),
 	"fate_gun_on_gun": _entry("魔术师", "MAJOR", "MAJOR", "I", "主副枪交替，单发更强", "主副枪改为交替开火；单发威力提高，但主枪射速降低。", {"alternate_fire": true, "damage_scale": 1.25, "fire_rate_scale": 0.75}),
 	"fate_moon_vitality": _entry("女祭司", "MAJOR", "MAJOR", "II", "生命上限-10，恢复50", "最大生命降低10，并立即恢复50生命。", {"amount": -10, "heal": 50}),
-	"fate_sun_extra_loot": _entry("皇后", "MAJOR", "MAJOR", "III", "下箱额外4件，最高稀有", "下一个容器额外掉落4件，但物品品质最高为稀有。", {"count": 4, "max_rarity": "RARE"}),
+	"fate_sun_extra_loot": _entry("皇后", "MAJOR", "MAJOR", "III", "下箱追加4抽，保留最佳", "下一个容器追加4次候选抽取并保留最高品质结果，最高为稀有且地面仍只掉落1件。", {"count": 4, "max_rarity": "RARE"}),
 	"fate_sun_reinforce": _entry("皇帝", "MAJOR", "MAJOR", "IV", "下房增加精英，奖50魂", "下一个敌对房间增加1名精英；清理后额外获得50魂。", {"count": 1, "elite_count": 1, "clear_currency": 50}),
 	"fate_sun_key": _entry("教皇", "MAJOR", "MAJOR", "V", "获得2把本层临时钥匙", "获得2把临时钥匙，离开当前楼层时失效。", {"count": 2, "temporary_floor_only": true}),
 	"fate_moon_power": _entry("恋人", "MAJOR", "MAJOR", "VI", "枪伤-8%，暴击+15%", "枪械伤害降低8%，暴击率提高15%。", {"multiplier": 0.92, "crit_chance_bonus": 0.15}),
@@ -55,7 +55,7 @@ static var DEFINITIONS := {
 	# 星币：当前已实装7张太阳命运
 	"fate_reinforce": _entry("星币·王牌", "MINOR", "PENTACLES", "ACE", "五杀增援精英，额外奖魂", "5连杀后增援1名精英，击杀后额外获得50魂。", {"spawn_count": 1, "spawn_elite": true, "clear_currency": 50}),
 	"fate_lucky_chest": _entry("星币·二", "MINOR", "PENTACLES", "2", "下箱降品，但多2件", "下一个容器品质降低1级，但额外增加2件物品。", {"quality_boost": -1, "extra_count": 2}),
-	"fate_extra_loot": _entry("星币·三", "MINOR", "PENTACLES", "3", "下箱少1件，余物升品", "下一个容器减少1件物品，其余物品品质提高1级。", {"extra_count": -1, "quality_boost": 1}),
+	"fate_extra_loot": _entry("星币·三", "MINOR", "PENTACLES", "3", "下箱追加抽取，单件升品", "下一个容器追加一次候选抽取，保留结果品质提高1级，地面仍只掉落1件。", {"extra_count": 1, "quality_boost": 1}),
 	"fate_curse_map": _entry("星币·四", "MINOR", "PENTACLES", "4", "敌伤-10%，魂-30%", "当前房敌人伤害降低10%，但魂掉落降低30%。", {"enemy_damage_multiplier": 0.9, "currency_multiplier": 0.7}),
 	"fate_sun_quality": _entry("星币·五", "MINOR", "PENTACLES", "5", "下箱品质+2，数量-1", "下一个容器品质提高2级，但物品数量减少1件。", {"tiers": 2, "count_delta": -1}),
 	"fate_sun_reveal": _entry("星币·六", "MINOR", "PENTACLES", "6", "揭示4层，只见拓扑", "揭示周围4层拓扑，但隐藏房间类型。", {"radius": 4, "hide_room_types": true}),

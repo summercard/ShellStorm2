@@ -160,12 +160,6 @@ func _ready() -> void:
 	var damage_layer := get_tree().root.get_node_or_null("DamageNumbersLayer")
 	if damage_layer != null:
 		damage_layer.queue_free()
-	var synth = AudioManager.get("_synth") if AudioManager != null else null
-	if synth != null:
-		var stream_player = synth.get("_stream_player")
-		if stream_player is AudioStreamPlayer:
-			stream_player.stop()
-			stream_player.stream = null
 	await get_tree().process_frame
 	await get_tree().process_frame
 	_finish(failures)

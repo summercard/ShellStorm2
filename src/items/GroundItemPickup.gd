@@ -66,6 +66,8 @@ func _try_collect() -> void:
 		return
 	# 拾取涟漪（根据物品类型选颜色）
 	_pickup_ripple()
+	if AudioManager != null:
+		AudioManager.play_sfx("item_pickup", -4.0, randf_range(0.97, 1.03))
 	_collected = true
 	var tween := create_tween()
 	tween.set_parallel(true)

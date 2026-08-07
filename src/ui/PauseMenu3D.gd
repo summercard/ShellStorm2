@@ -18,6 +18,7 @@ func _ready() -> void:
 		Global.game_paused.connect(_on_global_pause_changed)
 	_apply_pause_visual(Global != null and Global.has_pause_reason("manual"))
 	resume_button.pressed.connect(resume_game)
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func try_consume_pause_input() -> bool:

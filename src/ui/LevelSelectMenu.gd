@@ -16,6 +16,7 @@ func _ready() -> void:
 	var close_btn: Button = $Panel/VBox/CloseButton
 	if close_btn:
 		close_btn.pressed.connect(_on_close_pressed)
+	UIStyleFactory.apply_tactical_tree(self)
 
 func _build_level_buttons() -> void:
 	for child in level_buttons_container.get_children():

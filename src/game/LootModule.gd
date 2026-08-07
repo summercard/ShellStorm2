@@ -66,9 +66,8 @@ func generate_loot(table_name: String, count: int = 3) -> Array[Dictionary]:
 			var entry: Dictionary = selected.duplicate(true)
 			entry.erase("loot_weight")
 			entry = WeaponInstance.ensure_weapon_item(entry)
-			# 堆叠数量：模块类物品可堆叠
-			var stack: int = entry.get("stack_max", 1)
-			entry["count"] = 1 if str(entry.get("type", "")) == "weapon" else _rng.randi() % stack + 1
+			# 地面掉落以单件为最小单位；堆叠只发生在拾取进入背包之后。
+			entry["count"] = 1
 			result.append(entry)
 
 	return result
@@ -162,20 +161,10 @@ func generate_merchant_goods(tier: int, count: int = 6) -> Array[Dictionary]:
 ## floor: 当前楼层
 func generate_container_loot(container_type: String, floor: int) -> Array[Dictionary]:
 	var table_name: String = "scavenge_floor_%d" % [min(5, floor)]
-	var base_count: int = 1
-
-	match container_type:
-		"crate":
-			base_count = 1 + floor / 3
-		"locker":
-			base_count = 2
-		"hidden_cache":
-			base_count = 3 + floor / 2
-
-	var loot := generate_loot(table_name, base_count)
+	var loot := generate_loot(table_name, 1)
 	if floor <= 1 and not _contains_item(loot, "item_room_key"):
 		var key := _item_registry.get_item("item_room_key")
-		if not key.is_empty() and _rng.randf() < 0.45:
+		if loot.is_empty() and not key.is_empty() and _rng.randf() < 0.45:
 			key["count"] = 1
 			loot.append(key)
 	return loot
@@ -194,20 +183,18 @@ func generate_enemy_loot(enemy_data: Dictionary) -> Array[Dictionary]:
 
 	# 普通怪以魂币为主，物品是低概率惊喜；精英/Boss 才稳定提供构筑收益。
 	var count: int = 1 if _rng.randf() < 0.26 else 0
-	if is_elite:
-		count = 1 + floor / 3
-	elif is_boss:
-		count = 3 + floor / 2
+	if is_elite or is_boss:
+		count = 1
 
 	var loot: Array[Dictionary] = generate_loot(loot_table, count)
-	if floor <= 1 and not is_boss and _rng.randf() < (0.20 if is_elite else 0.08):
+	if loot.is_empty() and floor <= 1 and not is_boss and _rng.randf() < (0.20 if is_elite else 0.08):
 		var key := _item_registry.get_item("item_room_key")
 		if not key.is_empty():
 			key["count"] = 1
 			loot.append(key)
 
-	# Boss/精英额外掉落货币
-	# 返回货币奖励数据供 RoomGameMode 调用 GameManager.add_currency()
+	# Boss/精英附加魂也只返回为掉落数据；玩法层必须把它合并到地面魂球，
+	# 禁止在击杀回调内直接调用 GameManager.add_currency()。
 	var currency_bonus: int = 0
 	if is_boss:
 		currency_bonus = 200 + floor * 20

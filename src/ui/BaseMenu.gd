@@ -52,6 +52,7 @@ func _ready() -> void:
 
 	# 显示玩家数据
 	_refresh_stats()
+	UIStyleFactory.apply_tactical_tree(self)
 
 func _refresh_stats() -> void:
 	# BaseManager 是 Autoload，通过全局名称访问
@@ -69,6 +70,7 @@ func _refresh_stats() -> void:
 	# 检查撤离战利品
 	_check_and_show_extraction_loot()
 	_refresh_facility_directory()
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _build_facility_directory() -> void:

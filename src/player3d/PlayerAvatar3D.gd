@@ -691,10 +691,26 @@ func _update_state_motion(delta: float) -> void:
 			bob = sin(_elapsed * TAU * 0.8) * 0.012
 			target_scale = Vector3(0.97, 0.97, 0.97)
 		"dead":
+			var death_progress := 1.0
+			if _player != null and _player.has_method("get_death_animation_progress"):
+				death_progress = float(_player.call("get_death_animation_progress"))
+			var launch_phase := clampf(death_progress / 0.38, 0.0, 1.0)
+			var bounce_phase := clampf((death_progress - 0.38) / 0.28, 0.0, 1.0)
+			var settle_phase := clampf((death_progress - 0.66) / 0.34, 0.0, 1.0)
+			var launch_arch := sin(launch_phase * PI)
+			var bounce_arch := sin(bounce_phase * PI) if death_progress >= 0.38 else 0.0
 			bob = 0.0
-			target_position = Vector3(0.16, 0.36, 0.0)
-			target_scale = Vector3(0.92, 0.76, 0.92)
-			target_roll = 1.42
+			target_position = Vector3(
+				0.14 * smoothstep(0.0, 1.0, death_progress),
+				launch_arch * 0.20 + bounce_arch * 0.08 + 0.12 * settle_phase,
+				0.10 * launch_arch
+			)
+			target_scale = Vector3(
+				1.0 + launch_arch * 0.08 + bounce_arch * 0.10,
+				1.0 - bounce_arch * 0.24 - settle_phase * 0.22,
+				1.0 + bounce_arch * 0.08 - settle_phase * 0.08
+			)
+			target_roll = lerpf(0.0, 1.50, smoothstep(0.08, 0.88, death_progress))
 	bob *= linear_scale
 	target_position *= linear_scale
 	_moving_animation_active = _state == "moving"

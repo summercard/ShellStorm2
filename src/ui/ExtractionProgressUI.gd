@@ -32,6 +32,7 @@ func _ready() -> void:
 		# 中断按钮使用红色 accent 区分
 		var abort_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.HP_LOW)
 		UIStyleFactory.apply_button_style(abort_button, abort_styles)
+	UIStyleFactory.apply_tactical_tree(self)
 
 ## 绑定 extraction director 和 module
 func set_extraction_director(director: Node) -> void:

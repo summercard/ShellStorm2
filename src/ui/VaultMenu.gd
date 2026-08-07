@@ -21,6 +21,7 @@ func _ready() -> void:
 	var styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
 	UIStyleFactory.apply_button_style(close_button, styles)
 	_build_vault_view()
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -73,6 +74,7 @@ func _build_vault_view() -> void:
 		vault_items.size(), BaseManager.get_vault_capacity(),
 		"当前背包" if _inventory_module != null else "下局带入", backpack_used, backpack_capacity,
 	]
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _make_storage_column(title_text: String, hint_text: String, owner: String, items: Array[Dictionary], used: int, capacity: int, columns_count: int) -> PanelContainer:

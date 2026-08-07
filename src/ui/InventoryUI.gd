@@ -69,7 +69,7 @@ var _standalone_ui_built := false
 var _drag_feedback_active := false
 var _hovered_item_slot: Control = null
 
-const SLOT_SIZE := 72
+const SLOT_SIZE := 78
 const BASE_INVENTORY_CAPACITY := 12
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
@@ -98,6 +98,7 @@ func _ensure_standalone_ui() -> void:
 	_build_inventory_grid()
 	_build_insurance_grid()
 	_setup_interaction_feedback()
+	UIStyleFactory.apply_tactical_tree(self)
 	_set_panel_positions()
 	_standalone_ui_built = true
 	_set_inventory_panel_visibility(false)
@@ -136,8 +137,8 @@ func _setup_standalone_panels() -> void:
 	inventory_shell = PanelContainer.new()
 	inventory_shell.name = "CharacterInventoryShell"
 	inventory_shell.set_anchors_preset(Control.PRESET_CENTER)
-	inventory_shell.custom_minimum_size = Vector2(970, 650)
-	inventory_shell.position = Vector2(-485, -325)
+	inventory_shell.custom_minimum_size = Vector2(1040, 690)
+	inventory_shell.position = Vector2(-520, -345)
 	inventory_shell.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_NORMAL, 8, 2)
 	)
@@ -157,7 +158,7 @@ func _setup_standalone_panels() -> void:
 
 	equipment_panel = PanelContainer.new()
 	equipment_panel.name = "CharacterEquipmentPanel"
-	equipment_panel.custom_minimum_size = Vector2(330, 0)
+	equipment_panel.custom_minimum_size = Vector2(360, 0)
 	equipment_panel.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(1, Color(0.32, 0.50, 0.68), 7, 1)
 	)
@@ -173,6 +174,7 @@ func _setup_standalone_panels() -> void:
 	equipment_vbox.add_theme_constant_override("separation", 10)
 	equipment_margin.add_child(equipment_vbox)
 	var equipment_title := Label.new()
+	equipment_title.name = "CharacterEquipmentTitle"
 	equipment_title.text = "角色装备"
 	equipment_title.add_theme_font_size_override("font_size", 22)
 	equipment_title.add_theme_color_override("font_color", Color(0.86, 0.94, 1.0))
@@ -212,7 +214,8 @@ func _setup_standalone_panels() -> void:
 		slot_box.add_child(slot_caption)
 		var weapon_slot := _create_slot()
 		weapon_slot.name = "MainWeaponEquipmentSlot" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentSlot"
-		weapon_slot.custom_minimum_size = Vector2(138, 86)
+		weapon_slot.custom_minimum_size = Vector2(104, 104)
+		weapon_slot.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		if weapon_slot.has_method("set_slot_index"):
 			weapon_slot.call("set_slot_index", weapon_slot_index)
 		weapon_slot.set_meta("slot_kind", "weapon_%d" % weapon_slot_index)
@@ -238,7 +241,7 @@ func _setup_standalone_panels() -> void:
 	equipment_vbox.add_child(backpack_row)
 	equipment_backpack_slot = _create_slot()
 	equipment_backpack_slot.name = "BackpackEquipmentSlot"
-	equipment_backpack_slot.custom_minimum_size = Vector2(96, 70)
+	equipment_backpack_slot.custom_minimum_size = Vector2(88, 88)
 	equipment_backpack_slot.set_meta("slot_kind", "backpack")
 	if equipment_backpack_slot.has_method("set_slot_index"):
 		equipment_backpack_slot.call("set_slot_index", 0)
@@ -261,7 +264,7 @@ func _setup_standalone_panels() -> void:
 	for quick_index in range(2):
 		var quick_slot := _create_slot()
 		quick_slot.name = "QuickItemSlot_%d" % quick_index
-		quick_slot.custom_minimum_size = Vector2(88, 64)
+		quick_slot.custom_minimum_size = Vector2(78, 78)
 		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
 		quick_slot.set_meta("drag_disabled", true)
 		if quick_slot.has_method("set_slot_index"):
@@ -288,7 +291,7 @@ func _setup_standalone_panels() -> void:
 		"panel",
 		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
 	)
-	inventory_panel.custom_minimum_size = Vector2(580, 0)
+	inventory_panel.custom_minimum_size = Vector2(620, 0)
 	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	columns.add_child(inventory_panel)
 
@@ -606,6 +609,7 @@ func _create_slot() -> Control:
 		slot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
+	slot.custom_minimum_size = Vector2(SLOT_SIZE, SLOT_SIZE)
 	# 背景色：空格子深色，有物品稍亮
 	slot.add_theme_stylebox_override("normal", UIStyleFactory.make_slot_style(false))
 

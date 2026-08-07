@@ -461,12 +461,12 @@ static func fate_lucky_chest() -> FateCard:
 	return card
 
 
-## 额外掉落：下一箱额外获得一件
+## 额外抽取：下一箱增加一次候选，但仍只落地一件
 static func fate_extra_loot() -> FateCard:
 	var card := FateCard.new("额外掉落", FateCard.CardType.RULE, RARITY_RARE)
 	card.icon_emoji = "📤"
-	card.short_description = "下一箱额外掉落一件物品"
-	card.description = "下一个开启的箱子额外掉落一件随机物品"
+	card.short_description = "下一箱追加抽取，仍落一件"
+	card.description = "下一个开启的箱子增加一次候选抽取并保留更优结果，地面仍只掉落一件物品"
 	card.tags = ["Fate.MapTrigger", "Fate.ExtraLoot"]
 	card.effect = {
 		"action": FateCard.EffectAction.EXTRA_LOOT,
@@ -579,7 +579,7 @@ static func sun_quality() -> FateCard:
 
 
 static func sun_extra_loot() -> FateCard:
-	return _scoped_modifier_card("丰收日", FateCard.CardType.RULE, RARITY_EPIC, "🌾", "下箱额外2件", "下一个开启容器额外掉落 2 件物品", "next_chest_extra", {"count": 2})
+	return _scoped_modifier_card("丰收日", FateCard.CardType.RULE, RARITY_EPIC, "🌾", "下箱追加2抽，保留最佳", "下一个容器追加2次候选抽取并保留最高品质结果，地面仍只掉落1件", "next_chest_extra", {"count": 2})
 
 
 static func sun_reinforce() -> FateCard:

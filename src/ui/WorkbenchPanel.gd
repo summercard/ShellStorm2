@@ -39,6 +39,7 @@ func _ready() -> void:
 
 	_build_transform_button()
 	_build_weapon_options()
+	UIStyleFactory.apply_tactical_tree(self)
 
 
 func _build_transform_button() -> void:

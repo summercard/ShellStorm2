@@ -129,6 +129,8 @@ func _collect() -> void:
 	_collected = true
 	# 拾取涟漪（魂用紫色）
 	SparkParticles.spawn_pickup_ripple(global_position, "soul")
+	if AudioManager != null:
+		AudioManager.play_sfx("soul_pickup", -4.0, randf_range(0.97, 1.03))
 	collected.emit(amount, self)
 	# 收集动画：快速缩小+淡出
 	var t := create_tween()
