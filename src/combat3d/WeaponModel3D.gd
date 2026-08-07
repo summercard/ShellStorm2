@@ -120,6 +120,14 @@ func _process(delta: float) -> void:
 			0.0,
 			-reload_arch * 0.16 + service_tick * 0.035
 		)
+	# 没有冷却/换弹/蓄力/明显后坐力时，整把枪没在动，关闭 process 节省 CPU。
+	if (
+		_cooldown <= 0.0
+		and _reload_remaining <= 0.0
+		and not _charge_active
+		and absf(_recoil) < 0.001
+	):
+		set_process(false)
 
 
 func configure(p_gun_id: String, p_bullet_id: String) -> bool:
@@ -261,6 +269,8 @@ func try_fire(aim_direction: Vector3, shooter: Node3D) -> bool:
 		if not _charge_active:
 			_charge_active = true
 			_charge_elapsed = 0.0
+			# 蓄力期间需要每帧更新，唤醒 process。
+			set_process(true)
 		return false
 	return _fire_now(aim_direction, shooter, 1.0)
 
@@ -294,6 +304,8 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	current_ammo -= 1
 	_fire_sequence += 1
 	_recoil = 0.16 if gun_id == "bp_shotgun" or gun_id == "bp_launcher" else 0.09
+	# 开火触发后坐力衰减，重新打开 process。
+	set_process(true)
 	var behavior := _projectile_behavior.duplicate(true)
 	var base_direction := aim_direction.normalized()
 	if bool(behavior.get("uncontrolled_gun", false)):
@@ -477,6 +489,8 @@ func request_reload() -> bool:
 		AudioManager.play_reload_sfx()
 	reload_started.emit(_active_reload_duration)
 	reload_progress_changed.emit(0.0, _reload_remaining)
+	# 换弹动画每帧更新，唤醒 process。
+	set_process(true)
 	return true
 
 

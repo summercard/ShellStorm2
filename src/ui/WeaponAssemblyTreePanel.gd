@@ -68,6 +68,8 @@ func _ready() -> void:
 
 	# 必须设置为 ALWAYS，保证游戏暂停时也能接收 Tab 输入
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# 面板不可见时关掉 process，仅靠 show() 时唤醒。
+	set_process(false)
 	UIStyleFactory.apply_tactical_tree(self)
 
 ## 构建面板UI
@@ -201,6 +203,8 @@ func _hide_immediately() -> void:
 func toggle() -> void:
 	_is_visible = not _is_visible
 	visible = _is_visible
+	# 面板可见时让 _process 监听 Tab/鼠标事件；不可见时挂起。
+	set_process(_is_visible)
 	if _is_visible:
 		_refresh()
 		panel_shown.emit()

@@ -59,6 +59,8 @@ func _ready() -> void:
 	# 自适应：真机自动启用，编辑器默认关闭
 	if OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios"):
 		enabled = true
+	# 非移动端：完全挂起 _process（编辑器/PC 上跑空函数就是浪费）。
+	set_process(enabled)
 	_put_widget()
 	get_viewport().size_changed.connect(_recalc_layout)
 
@@ -106,6 +108,8 @@ func _draw_button_on(canvas: Control, center: Vector2, radius: float, ring: Colo
 func _input(event: InputEvent) -> void:
 	if not enabled or _controls_blocked():
 		return
+	# 触摸开始时确保 _process 处于运行状态。
+	set_process(true)
 	if event is InputEventScreenTouch:
 		_handle_screen_touch(event as InputEventScreenTouch)
 	elif event is InputEventScreenDrag:
@@ -114,12 +118,16 @@ func _input(event: InputEvent) -> void:
 
 func _process(_delta: float) -> void:
 	if not enabled or _widget == null:
+		set_process(false)
 		return
 	if _controls_blocked():
 		_clear_input_state()
 		return
 	if _joystick_active or _aim_joystick_active or _active_touches.size() > 0:
 		_widget.queue_redraw()
+	else:
+		# 没有输入时挂起 _process；_handle_screen_touch 会再次唤醒。
+		set_process(false)
 
 
 func _recalc_layout() -> void:

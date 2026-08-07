@@ -7,7 +7,18 @@ class_name LightSync
 const VISION_SYSTEM_SCRIPT := preload("res://src/game/VisionSystem.gd")
 const VISIBILITY_LIGHT_SCRIPT := preload("res://src/fx/VisibilityLight2D.gd")
 
+# 玩家位置/朝向阈值；未超过阈值时跳过光照位置/角度写入。
+const POS_EPSILON_SQ := 0.0025
+const ANG_EPSILON := 0.005
+# 每 N 帧（按 60FPS ≈ 每秒 6 次）强制重写一次光源位置，保证长时间静止时
+# 灯仍能跟上世界状态变化。
+const FORCE_REFRESH_INTERVAL := 10
+
 var _tracked_light: PointLight2D = null
+var _last_player_pos := Vector2.ZERO
+var _last_player_aim := 0.0
+var _has_last_state := false
+var _frame_counter := 0
 
 
 func _ready() -> void:
@@ -17,6 +28,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	_frame_counter += 1
 	if _tracked_light == null or not is_instance_valid(_tracked_light):
 		var main: Node = get_tree().root.find_child("Main", true, false)
 		if main:
@@ -27,11 +39,28 @@ func _process(_delta: float) -> void:
 	var player: Node2D = _find_player()
 	if player == null or not is_instance_valid(player):
 		return
-	_tracked_light.global_position = player.global_position
+
+	var current_pos := player.global_position
+	# 玩家没移动、瞄准方向没变，且还没到强制刷新间隔时，跳过写入。
+	if _has_last_state and _frame_counter < FORCE_REFRESH_INTERVAL:
+		if current_pos.distance_squared_to(_last_player_pos) < POS_EPSILON_SQ:
+			var aim_direction: Vector2 = player.call("get_aim_direction") as Vector2
+			if (
+				aim_direction.length_squared() <= 0.0001
+				or absf(aim_direction.angle() - _last_player_aim) < ANG_EPSILON
+			):
+				return
+	_frame_counter = 0
+	_last_player_pos = current_pos
+	_has_last_state = true
+
+	_tracked_light.global_position = current_pos
 	if player.has_method("get_aim_direction"):
-		var aim_direction: Vector2 = player.call("get_aim_direction") as Vector2
-		if aim_direction.length_squared() > 0.0001:
-			_tracked_light.global_rotation = aim_direction.angle()
+		var aim_direction2: Vector2 = player.call("get_aim_direction") as Vector2
+		if aim_direction2.length_squared() > 0.0001:
+			var new_angle: float = aim_direction2.angle()
+			_tracked_light.global_rotation = new_angle
+			_last_player_aim = new_angle
 
 
 func _ensure_vision_nodes(main: Node) -> void:

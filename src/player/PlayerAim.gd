@@ -8,6 +8,12 @@ var aim_range: float = 200.0
 
 func _ready() -> void:
 	player = get_parent()
+	# 玩家节点若提供 input_lock_changed 信号，进入背包/暂停时挂起每帧瞄准。
+	if player != null and player.has_signal("input_lock_changed"):
+		player.input_lock_changed.connect(_on_input_lock_changed)
+
+func _on_input_lock_changed(locked: bool) -> void:
+	set_process(not locked)
 
 func _process(_delta: float) -> void:
 	_aim_at_mouse()

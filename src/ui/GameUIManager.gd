@@ -29,6 +29,9 @@ var _player_state_pulse := 0.0
 var _player_state_tween: Tween = null
 var _hp_damage_tween: Tween = null
 ## 标记：是否正在追尾（避免在 _process 中重复触发）
+## 复用的 HP 条 fill 样式 box；不在 _update_hp_bar_color 里每帧 new。
+var _hp_fill_style: StyleBoxFlat = null
+var _hp_trail_style: StyleBoxFlat = null
 @onready var dash_cooldown_bar: ProgressBar = $GameHUD/DashCooldownBG/DashCooldownBar
 @onready var dash_label: Label = $GameHUD/DashCooldownBG/DashLabel
 @onready var score_label: Label = $GameHUD/TopRightPanel/VBox/ScoreLabel
@@ -710,13 +713,22 @@ func _update_hp_bar_color() -> void:
 	var fill_color := Color(0.92, 0.08, 0.10, 1.0).lerp(
 		Color(1.0, 0.24, 0.20, 1.0), 1.0 - ratio
 	)
-	hp_bar.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(fill_color))
+	# 复用同一个 StyleBoxFlat，只改 bg_color；避免 _process 中每帧 new 资源造成泄漏。
+	if _hp_fill_style == null:
+		_hp_fill_style = StyleBoxFlat.new()
+		_hp_fill_style.set_corner_radius_all(3)
+		hp_bar.add_theme_stylebox_override("fill", _hp_fill_style)
+	_hp_fill_style.bg_color = fill_color
 	# 尾迹颜色：始终是比当前色暗一档的同色（看起来像褪色的尾）
 	var trail_color: Color = fill_color
 	trail_color.r *= 0.55
 	trail_color.g *= 0.55
 	trail_color.b *= 0.55
-	hp_bar_trail.add_theme_stylebox_override("fill", UIStyleFactory.make_progress_fill(trail_color))
+	if _hp_trail_style == null:
+		_hp_trail_style = StyleBoxFlat.new()
+		_hp_trail_style.set_corner_radius_all(3)
+		hp_bar_trail.add_theme_stylebox_override("fill", _hp_trail_style)
+	_hp_trail_style.bg_color = trail_color
 
 
 ## 更新分数（带跳动动画 + 描边）
@@ -2610,8 +2622,7 @@ func _process(delta: float) -> void:
 			_hide_fate_card_notification()
 	if _item_hover_card != null and _item_hover_card.visible:
 		_position_item_hover_card()
-	# HP bar 颜色刷新（每帧尝试，内部有 0.1 deadzone 抑制抖动）
-	_update_hp_bar_color()
+	# HP 条 fill style 现在由 hp_changed 信号 handler 驱动，不再每帧调用。
 
 
 func blocks_gameplay_input() -> bool:

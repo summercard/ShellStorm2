@@ -28,6 +28,9 @@ var _active_touches: Dictionary = {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	# PC/编辑器上没有触摸屏输入，_process 只会在没有触摸时跑空函数；
+	# 没有触摸时直接挂起，输入触发时再唤醒。
+	set_process(OS.has_feature("mobile") or OS.has_feature("android") or OS.has_feature("ios"))
 
 
 func _input(event: InputEvent) -> void:
@@ -53,6 +56,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _check_touch_down(pos: Vector2, touch_index: int) -> void:
+	# 触摸开始时唤醒 _process；松开后由 _process 自行挂起。
+	set_process(true)
 	# 检查射击按钮
 	if pos.distance_to(_shoot_pos) < _button_radius:
 		shoot_pressed.emit()
@@ -137,3 +142,6 @@ func _draw() -> void:
 func _process(_delta: float) -> void:
 	if _joystick_active or _active_touches.size() > 0:
 		queue_redraw()
+	else:
+		# 触摸结束后挂起 _process，避免空跑。
+		set_process(false)

@@ -107,6 +107,9 @@ func _ensure_standalone_ui() -> void:
 func _process(_delta: float) -> void:
 	if item_hover_card != null and item_hover_card.visible:
 		_position_item_hover_card()
+	# 没有可见的悬浮卡时让 _process 进入睡眠。
+	if item_hover_card == null or not item_hover_card.visible:
+		set_process(false)
 
 
 func _prepare_staged_inventory_slots() -> void:
@@ -508,6 +511,9 @@ func _set_inventory_panel_visibility(visible: bool) -> void:
 		inventory_shell.visible = visible
 	elif inventory_panel:
 		inventory_panel.visible = visible
+	# 物品悬浮卡位置更新只在背包打开且悬浮卡可见时才有意义。
+	# 关闭背包后立即关掉 _process，避免全屏常驻每帧跑空函数。
+	set_process(visible and item_hover_card != null and item_hover_card.visible)
 	if visible and inventory_shell:
 		inventory_shell.move_to_front()
 	if was_visible != visible:
@@ -1143,6 +1149,8 @@ func _show_item_hover_card(item: Dictionary, count: int = 1) -> void:
 	item_hover_card.size = Vector2(350, card_height)
 	item_hover_card.visible = true
 	item_hover_card.move_to_front()
+	# 悬浮卡可见后需要每帧跟随鼠标，恢复 _process。
+	set_process(true)
 	_position_item_hover_card()
 
 
