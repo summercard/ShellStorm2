@@ -8,7 +8,6 @@ signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
 signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
 
 const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn")
-const BASE_FACILITY_LIGHT_GRID_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_base_facility_light_grid_root_top3d_v001.tscn")
 const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d_v001.tscn")
 const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_furniture_root_top3d_v001.tscn")
 const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d_v001.tscn")
@@ -87,6 +86,20 @@ const WALL_SOLID_MATERIAL_A: StandardMaterial3D = preload(
 )
 const WALL_SOLID_MATERIAL_B: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_wall_solid_b_v001.tres"
+)
+# —— 基地专属材质（FACILITY 房间使用，不影响战斗房 / 屋顶 / 楼梯厅）。
+# 棋盘 A 格 = 深褐主色、B 格 = 亮深褐；墙 = 尘深蓝；装饰带 trim 与地板同色系。
+const FACILITY_FLOOR_TILE_A: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_facility_floor_tile_a_v001.tres"
+)
+const FACILITY_FLOOR_TILE_B: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_facility_floor_tile_b_v001.tres"
+)
+const FACILITY_WALL_MATERIAL: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_facility_wall_v001.tres"
+)
+const FACILITY_TRIM_MATERIAL: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_facility_trim_v001.tres"
 )
 const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
@@ -338,6 +351,10 @@ func _build_shell() -> void:
 	_floor_material = _material(theme.floor_color, 0.08, 0.90)
 	_wall_material = _material(theme.wall_color, 0.62, 0.62)
 	_trim_material = _material(theme.trim_color, 0.74, 0.38)
+	# 基地走专属材质：地板用 FACILITY_FLOOR_TILE_A/B（由 _build_base_facility_shell
+	# 单独覆盖），墙由 _get_wall_module_material 接管，trim 替换为深褐色装饰带。
+	if room_type == "FACILITY":
+		_trim_material = FACILITY_TRIM_MATERIAL
 	if tower_module_shell:
 		_build_tower_module_shell(dimensions)
 		return
@@ -525,13 +542,13 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 			"BaseFloorGrid6x6_A",
 			floor_mesh,
 			light_transforms,
-			FLOOR_TILE_MATERIAL_A
+			FACILITY_FLOOR_TILE_A
 		)
 		_add_base_floor_grid(
 			"BaseFloorGrid6x6_B",
 			floor_mesh,
 			dark_transforms,
-			FLOOR_TILE_MATERIAL_B
+			FACILITY_FLOOR_TILE_B
 		)
 	# 基地与楼顶/战斗房统一复用 5m 实墙、门墙和独立拐角组件。
 	# 不再用整条 Box 拉伸成墙，门洞表现、碰撞和 RoomDoor3D 触发保持同源。
@@ -690,7 +707,7 @@ func _spawn_solid_wall_visual_instances(
 		)
 		var visual := MeshInstance3D.new()
 		visual.mesh = mesh
-		visual.material_override = WALL_SOLID_MATERIAL_A if abs_segment_index % 2 == 0 else WALL_SOLID_MATERIAL_B
+		visual.material_override = _get_wall_module_material(abs_segment_index)
 		var wall_transform := transforms[index]
 		# BoxMesh 原点在几何中心；抬高半层后才是从地面到 9m，而不是 -4.5~+4.5m。
 		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
@@ -895,13 +912,17 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 	add_child(module)
 
 
+func _get_wall_module_material(segment_index: int) -> StandardMaterial3D:
+	# 基地走专属尘深蓝墙（不分 A/B 段交替，整墙统一色）。
+	# 其他房间沿用塔楼暖色 A/B 段交替，保留模块拼接节奏。
+	if room_type == "FACILITY":
+		return FACILITY_WALL_MATERIAL
+	return WALL_SOLID_MATERIAL_A if segment_index % 2 == 0 else WALL_SOLID_MATERIAL_B
+
+
 func _apply_module_material_variant(module: Node, segment_index: int) -> void:
 	var variant := "A" if segment_index % 2 == 0 else "B"
-	var material := (
-		WALL_SOLID_MATERIAL_A
-		if variant == "A"
-		else WALL_SOLID_MATERIAL_B
-	)
+	var material := _get_wall_module_material(segment_index)
 	module.set_meta("segment_index", segment_index)
 	module.set_meta("material_variant", variant)
 	if module is MeshInstance3D:
@@ -1312,8 +1333,26 @@ func _build_content() -> void:
 	var dimensions := get_dimensions()
 	_room_lights.clear()
 	if room_type == "FACILITY":
-		_build_base_facility_lights()
-		_central_light = _room_lights[0]
+		# 简单顶光：4 盏 ceiling 灯分布在四角 ±10m 处，统一受基地开关控制。
+		# 单灯 energy * 3.0、range * 2.8（整体亮度 ×2，比 BOSS 4 灯的 *2.4 更亮）。
+		_central_light = null
+		for light_index in range(4):
+			var x_sign := -1.0 if light_index % 2 == 0 else 1.0
+			var z_sign := -1.0 if light_index < 2 else 1.0
+			var facility_light := _create_room_light(
+				"FacilityCeilingLight_%02d" % (light_index + 1),
+				Vector3(x_sign * 10.0, 0.0, z_sign * 10.0),
+				theme.fixture_energy * 3.00,
+				maxf(
+					theme.fixture_range * 2.80,
+					minf(dimensions.x, dimensions.y) * 1.10
+				),
+				room_seed + light_index * 17,
+				true
+			)
+			if _central_light == null:
+				_central_light = facility_light
+			_room_lights.append(facility_light)
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
 		# 四周都保持可读，同时仍由同一个墙边开关统一控制。
@@ -1442,25 +1481,6 @@ func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceSta
 	return station
 
 
-func _build_base_facility_lights() -> void:
-	## 顶灯阵列的位置/颜色/强度/范围全部由
-	## prp_base_facility_light_grid_root_top3d_v001.tscn 决定，代码只负责实例化、
-	## 分配闪烁种子并接入墙面开关，方便在场景文件里直接调光。
-	var grid := BASE_FACILITY_LIGHT_GRID_SCENE.instantiate()
-	grid.name = "BaseFacilityLightGrid"
-	add_child(grid)
-	var light_index := 0
-	for child in grid.get_children():
-		var base_light := child as WastelandLight3D
-		if base_light == null:
-			continue
-		base_light.flicker_seed = room_seed + light_index * 17
-		base_light.set_light_enabled(false)
-		base_light.add_to_group("wasteland_light_3d")
-		_room_lights.append(base_light)
-		light_index += 1
-
-
 func _create_room_light(
 	node_name: String,
 	planar_position: Vector3,
@@ -1492,49 +1512,14 @@ func _create_room_light(
 
 func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -> void:
 	if room_type == "FACILITY":
-		var entry_direction := ""
-		for direction in doors:
-			if str(door_targets.get(direction, "")) == "start":
-				entry_direction = direction
-				break
-		if not entry_direction.is_empty():
-			var entry_door := _door_nodes.get(entry_direction) as RoomDoor3D
-			var entry_local := entry_door.position if entry_door != null else Vector3.ZERO
-			var clearance := 4.0
-			match entry_direction:
-				"west", "east":
-					var limit_z := dimensions.y * 0.5 - 1.5
-					var switch_z := entry_local.z + clearance
-					if switch_z > limit_z:
-						switch_z = entry_local.z - clearance
-					light_switch.position = Vector3(
-						-dimensions.x * 0.5 + 0.34
-						if entry_direction == "west"
-						else dimensions.x * 0.5 - 0.34,
-						0.0,
-						clampf(switch_z, -limit_z, limit_z)
-					)
-					light_switch.rotation.y = (
-						-PI * 0.5 if entry_direction == "west" else PI * 0.5
-					)
-				_:
-					var limit_x := dimensions.x * 0.5 - 1.5
-					var switch_x := entry_local.x + clearance
-					if switch_x > limit_x:
-						switch_x = entry_local.x - clearance
-					light_switch.position = Vector3(
-						clampf(switch_x, -limit_x, limit_x),
-						0.0,
-						-dimensions.y * 0.5 + 0.34
-						if entry_direction == "north"
-						else dimensions.y * 0.5 - 0.34
-					)
-					light_switch.rotation.y = (
-						0.0 if entry_direction == "north" else PI
-					)
-			light_switch.set_meta("facility_entry_switch_clearance_m", clearance)
-			light_switch.set_meta("facility_entry_direction", entry_direction)
-			return
+		# 找北墙（通往 100F 的方向）。
+		# 开关放在北墙内侧、门（默认 x=0）的西侧 5m 处，墙面朝南，朝房间内。
+		# 距离门 ~5m，不会误触发。
+		light_switch.position = Vector3(-5.0, 0.0, -dimensions.y * 0.5 + 0.34)
+		light_switch.rotation.y = 0.0
+		light_switch.set_meta("facility_entry_switch_clearance_m", 5.0)
+		light_switch.set_meta("facility_entry_direction", "north_wall_100f")
+		return
 	var side: int = absi(room_seed) % 4
 	var x_margin := minf(4.2, dimensions.x * 0.22)
 	var z_margin := minf(4.2, dimensions.y * 0.22)

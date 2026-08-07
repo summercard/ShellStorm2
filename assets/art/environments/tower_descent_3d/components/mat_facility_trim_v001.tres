@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; 基地装饰带（拐角、门柱、地砖接缝） - 略亮深褐。
+; 与地板 A 同色系，作为基地金属结构与墙之间的过渡色。
+
+[resource]
+resource_name = "MAT_FacilityTrim"
+albedo_color = Color(0.29, 0.245, 0.19, 1)
+metallic = 0.55
+metallic_specular = 0.42
+metallic_texture_channel = 0
+roughness = 0.55

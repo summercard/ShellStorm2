@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+; 基地 5m 地砖 - 棋盘 B 格（亮深褐主色）。
+; 与 mat_facility_floor_tile_a 配套做 6×6 棋盘交替。
+; 同色系提亮，饱和度同样压低，棋盘节奏工整但不跳眼。
+
+[resource]
+resource_name = "MAT_FacilityFloorTileB"
+albedo_color = Color(0.25, 0.215, 0.18, 1)
+metallic = 0.04
+metallic_specular = 0.20
+metallic_texture_channel = 0
+roughness = 0.92
