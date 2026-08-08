@@ -9,6 +9,16 @@ var content: VBoxContainer = null
 var status_label: Label = null
 var close_button: Button = null
 
+# 手电筒模块切换面板控件
+var _flashlight_module_panel: PanelContainer = null
+var _flashlight_module_buttons: Dictionary = {}
+
+const MODULE_PROFILES_DISPLAY := [
+	{"id": "basic",     "name": "基础模块",   "drain": "1.00×", "reveal": "1.00×"},
+	{"id": "advanced",  "name": "加强模块",   "drain": "0.7143×", "reveal": "1.20×"},
+	{"id": "efficient", "name": "节能模块",   "drain": "0.50×", "reveal": "0.85×"},
+]
+
 func _ready() -> void:
 	content = get_node_or_null("Panel/VBox/Content")
 	status_label = get_node_or_null("Panel/VBox/StatusLabel")
@@ -19,6 +29,8 @@ func _ready() -> void:
 		var close_styles := UIStyleFactory.make_button_style(UIStyleFactory.make_panel_bg(2).bg_color, UIPalette.BORDER_NORMAL)
 		UIStyleFactory.apply_button_style(close_button, close_styles)
 	_build_blueprint_list()
+	_build_flashlight_module_panel()
+	_refresh_flashlight_module_panel()
 	UIStyleFactory.apply_tactical_tree(self)
 
 ## 蓝图解锁阶段定义
@@ -151,3 +163,73 @@ func _update_status(msg: String) -> void:
 
 func _on_close_pressed() -> void:
 	queue_free()
+
+
+## — 手电筒模块切换面板 —
+
+func _build_flashlight_module_panel(parent: VBoxContainer = null) -> void:
+	var host := parent if parent != null else content
+	if host == null:
+		return
+	host.add_child(_make_hsep())
+	var title := Label.new()
+	title.text = "手电筒模块"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	host.add_child(title)
+	var info := Label.new()
+	info.text = "切换不同模块可改变耗电与揭示倍率。基础模块永远可用。节能与加强需解锁后切换。"
+	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	host.add_child(info)
+	_flashlight_module_panel = PanelContainer.new()
+	_flashlight_module_panel.custom_minimum_size = Vector2(560, 90)
+	host.add_child(_flashlight_module_panel)
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	_flashlight_module_panel.add_child(row)
+	for profile in MODULE_PROFILES_DISPLAY:
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(180, 60)
+		var profile_id: String = str(profile.get("id", ""))
+		btn.text = "%s\n耗电 %s · 揭示 %s" % [str(profile.get("name", profile_id)), str(profile.get("drain", "?")), str(profile.get("reveal", "?"))]
+		btn.pressed.connect(_on_flashlight_module_button_pressed.bind(profile_id))
+		row.add_child(btn)
+		_flashlight_module_buttons[profile_id] = btn
+
+
+func _refresh_flashlight_module_panel() -> void:
+	if _flashlight_module_panel == null:
+		return
+	var equipped := BaseManager.get_equipped_flashlight_module_id()
+	for profile in MODULE_PROFILES_DISPLAY:
+		var profile_id: String = str(profile.get("id", ""))
+		var btn: Button = _flashlight_module_buttons.get(profile_id, null)
+		if btn == null:
+			continue
+		var unlocked := BaseManager.is_flashlight_module_unlocked(profile_id)
+		btn.disabled = not unlocked
+		var prefix := "[已装备] " if profile_id == equipped else ""
+		var suffix := "" if unlocked else "  [未解锁]"
+		btn.text = "%s%s\n耗电 %s · 揭示 %s%s" % [prefix, str(profile.get("name", profile_id)), str(profile.get("drain", "?")), str(profile.get("reveal", "?")), suffix]
+
+
+func _on_flashlight_module_button_pressed(module_id: String) -> void:
+	if not BaseManager.is_flashlight_module_unlocked(module_id):
+		_update_status("该模块尚未解锁")
+		return
+	if not BaseManager.set_equipped_flashlight_module(module_id):
+		_update_status("切换失败")
+		return
+	# 同步推送到 Player3D(若在基地内)
+	var player: Node = get_tree().get_first_node_in_group("player_3d")
+	if player != null and player.has_method("equip_flashlight_module"):
+		var item := {
+			"id": "item_flashlight_%s" % module_id,
+			"module_id": module_id,
+			"type": "module",
+			"subtype": "flashlight_module",
+		}
+		player.equip_flashlight_module(item)
+	_update_status("已切换至 %s" % module_id)
+	_refresh_flashlight_module_panel()
+	if AudioManager != null:
+		AudioManager.play_sfx("ui_click")

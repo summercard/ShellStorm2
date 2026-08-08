@@ -95,6 +95,71 @@ func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
 	return false
 
 
+## — 手电筒模块与绑定电池持久化 —
+func set_equipped_flashlight_module(module_id: String) -> bool:
+	_ensure_data()
+	if module_id not in ["basic", "advanced", "efficient"]:
+		return false
+	if not is_flashlight_module_unlocked(module_id):
+		return false
+	var previous := data.equipped_flashlight_module_id
+	data.equipped_flashlight_module_id = module_id
+	if save_base("flashlight_module_equip:%s" % module_id):
+		return true
+	data.equipped_flashlight_module_id = previous
+	return false
+
+
+func get_equipped_flashlight_module_id() -> String:
+	_ensure_data()
+	return data.equipped_flashlight_module_id
+
+
+func is_flashlight_module_unlocked(module_id: String) -> bool:
+	_ensure_data()
+	match module_id:
+		"basic":
+			return true
+		"advanced":
+			return data.blueprint_attachment_tier >= 1
+		"efficient":
+			for item in data.vault_items:
+				if item is Dictionary and str(item.get("id", "")) == "item_flashlight_efficient":
+					return true
+			return false
+	return false
+
+
+func increment_bound_batteries(item_id: String, by: int = 1) -> bool:
+	_ensure_data()
+	if by == 0:
+		return true
+	match item_id:
+		"item_battery_s":
+			data.bound_battery_s_count = maxi(0, data.bound_battery_s_count + by)
+		"item_battery_l":
+			data.bound_battery_l_count = maxi(0, data.bound_battery_l_count + by)
+		"item_cell_pack":
+			data.bound_cell_pack_count = maxi(0, data.bound_cell_pack_count + by)
+		_:
+			return false
+	return save_base("bound_battery_inc:%s" % item_id)
+
+
+func consume_bound_batteries_for_run() -> Dictionary:
+	_ensure_data()
+	var result := {
+		"item_battery_s": data.bound_battery_s_count,
+		"item_battery_l": data.bound_battery_l_count,
+		"item_cell_pack": data.bound_cell_pack_count,
+	}
+	data.bound_battery_s_count = 0
+	data.bound_battery_l_count = 0
+	data.bound_cell_pack_count = 0
+	save_base("bound_battery_consume_for_run")
+	return result
+
+
 func get_facility_definitions() -> Array[Dictionary]:
 	return FacilityCatalog.all_definitions()
 

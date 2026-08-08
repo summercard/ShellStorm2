@@ -145,6 +145,16 @@ var _hud_quick_item_icons: Array = [null, null]
 var _hud_quick_item_icon_hosts: Array[Control] = []
 var _hud_quick_item_labels: Array[Label] = []
 var _quick_item_ids: Array[String] = ["", ""]
+
+# 手电筒电量 HUD 句柄与闪烁状态
+var _hud_battery_label: Label = null
+var _hud_battery_time_label: Label = null
+var _hud_battery_bar: ProgressBar = null
+var _hud_battery_glyph: CodeHUDGlyph = null
+var _hud_battery_panel: PanelContainer = null
+var _hud_battery_blink_accum := 0.0
+var _last_battery_tier := -1
+var _hud_battery_blink_visible := 1.0
 var _full_map_overlay: Control = null
 var _full_map_control: DungeonMinimap3D = null
 var _hud_floor_label: Label = null
@@ -182,6 +192,13 @@ func _ready() -> void:
 	player.death_animation_finished.connect(_on_player_death_animation_finished)
 	if not player.weapon_instance_changed.is_connected(_on_hud_weapon_instance_changed):
 		player.weapon_instance_changed.connect(_on_hud_weapon_instance_changed)
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight != null:
+		if not flashlight.charge_changed.is_connected(_on_flashlight_charge_changed):
+			flashlight.charge_changed.connect(_on_flashlight_charge_changed)
+		if not flashlight.state_changed.is_connected(_on_flashlight_state_changed):
+			flashlight.state_changed.connect(_on_flashlight_state_changed)
+		_update_battery_hud()
 	player.global_position = Vector3(0, 0.05, 0)
 	_on_room_entered(_room_by_id.get("start") as DungeonRoom3D)
 	_on_player_hp_changed(player.current_hp, player.max_hp)
@@ -230,6 +247,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
+	_tick_battery_blink(delta)
 	_hud_run_elapsed += delta
 	var elapsed_seconds := int(_hud_run_elapsed)
 	if _hud_timer_label != null and elapsed_seconds != _hud_last_elapsed_second:
@@ -521,6 +539,47 @@ func _build_reference_main_hud() -> void:
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
 	_refresh_quick_item_hud()
+
+	# 手电筒电量 HUD 面板:右上,timer 下方,ActionKeyStrip 上方
+	_hud_battery_panel = _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.012, 0.026, 0.034, 0.92))
+	_hud_battery_panel.name = "FlashlightBatteryPanel"
+	_anchor_control(_hud_battery_panel, 1.0, 0.0, 1.0, 0.0, -214, 340, -18, 432)
+	_reference_hud_root.add_child(_hud_battery_panel)
+	_add_neon_frame(_hud_battery_panel, Color(0.23, 0.88, 1.0), 0.72, false)
+	var battery_margin := _make_margin(10, 8, 12, 8)
+	battery_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hud_battery_panel.add_child(battery_margin)
+	var battery_row := HBoxContainer.new()
+	battery_row.add_theme_constant_override("separation", _hud_int(10))
+	battery_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	battery_margin.add_child(battery_row)
+	_hud_battery_glyph = CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
+	_hud_battery_glyph.custom_minimum_size = _hud_size(Vector2(46, 46))
+	_hud_battery_glyph.configure("battery", Color(0.94, 0.96, 0.42))
+	battery_row.add_child(_hud_battery_glyph)
+	var battery_vbox := VBoxContainer.new()
+	battery_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	battery_vbox.add_theme_constant_override("separation", _hud_int(3))
+	battery_vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	battery_row.add_child(battery_vbox)
+	_hud_battery_label = _make_hud_label("100%", 13, Color(0.94, 0.96, 0.42))
+	_hud_battery_label.name = "BatteryPercentageLabel"
+	_hud_battery_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	battery_vbox.add_child(_hud_battery_label)
+	_hud_battery_time_label = _make_hud_label("--:--", 11, Color(0.72, 0.86, 0.96))
+	_hud_battery_time_label.name = "BatteryTimeLabel"
+	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	battery_vbox.add_child(_hud_battery_time_label)
+	_hud_battery_bar = ProgressBar.new()
+	_hud_battery_bar.name = "BatteryProgressBar"
+	_hud_battery_bar.custom_minimum_size = _hud_size(Vector2(140, 14))
+	_hud_battery_bar.show_percentage = false
+	_hud_battery_bar.max_value = 1.0
+	_hud_battery_bar.min_value = 0.0
+	_hud_battery_bar.value = 1.0
+	_hud_battery_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.10, 0.12, 0.14), 3))
+	battery_vbox.add_child(_hud_battery_bar)
+	_apply_battery_fill_color(0)
 
 	var actions := HBoxContainer.new()
 	actions.name = "ActionKeyStrip"
@@ -3577,6 +3636,8 @@ func _finish_run(success: bool) -> void:
 		if success:
 			BaseManager.add_extraction_points(_run_value)
 			BaseManager.add_extraction_loot_items(_run_loot)
+			# 成功撤离:清理检查点(电量不补满)
+			BaseManager.clear_active_run_checkpoint("run_success")
 		else:
 			var insurance_saved := settlement.get("insurance_saved", []) as Array
 			if not insurance_saved.is_empty():
@@ -3585,6 +3646,7 @@ func _finish_run(success: bool) -> void:
 				) as Dictionary
 				if bool(insurance_return.get("success", false)):
 					_insurance.clear_all()
+			# 死亡:保留检查点(电量不动,允许续局)
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
@@ -3756,3 +3818,133 @@ func force_extract_for_test() -> void:
 	force_unlock_extraction_for_test()
 	if _extraction != null:
 		_extraction.force_complete_for_test()
+
+
+## — 手电筒电量 HUD —
+
+func _update_battery_hud() -> void:
+	if player == null:
+		return
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null or _hud_battery_bar == null or _hud_battery_label == null:
+		return
+	var ratio := clampf(float(flashlight.get_charge_ratio()), 0.0, 1.0)
+	var tier := int(flashlight.get_tier())
+	_hud_battery_bar.value = ratio
+	_hud_battery_label.text = "%d%%" % int(round(ratio * 100.0))
+	_apply_battery_fill_color(tier)
+	_apply_battery_label_color(tier)
+	_last_battery_tier = tier
+	_refresh_battery_time_label(flashlight)
+
+
+## 把"剩余秒数"格式化为 mm:ss 或 --:-- / OFF / FULL
+func _refresh_battery_time_label(flashlight: Node) -> void:
+	if _hud_battery_time_label == null:
+		return
+	if flashlight.is_in_facility():
+		_hud_battery_time_label.text = "FULL · 基地内"
+		return
+	var ratio := float(flashlight.get_charge_ratio())
+	if ratio <= 0.0:
+		_hud_battery_time_label.text = "00:00 · 耗尽"
+		return
+	if not flashlight.is_light_enabled():
+		_hud_battery_time_label.text = "OFF · %d%%" % int(round(ratio * 100.0))
+		return
+	var secs := float(flashlight.get_estimated_remaining_seconds())
+	if is_inf(secs) or secs <= 0.0:
+		_hud_battery_time_label.text = "FULL"
+		return
+	var total := int(ceil(secs))
+	var mm := total / 60
+	var ss := total % 60
+	_hud_battery_time_label.text = "%02d:%02d" % [mm, ss]
+
+
+func _apply_battery_fill_color(tier: int) -> void:
+	if _hud_battery_bar == null:
+		return
+	var color := Color(0.94, 0.96, 0.42)
+	match tier:
+		0:
+			color = Color(0.32, 0.92, 0.45)
+		1:
+			color = Color(0.94, 0.92, 0.34)
+		2:
+			color = Color(0.96, 0.62, 0.20)
+		3:
+			color = Color(0.96, 0.30, 0.18)
+		_:
+			color = Color(0.86, 0.20, 0.18)
+	var style := _make_bar_style(color, 3)
+	style.shadow_color = Color(color, 0.45)
+	style.shadow_size = 4
+	_hud_battery_bar.add_theme_stylebox_override("fill", style)
+
+
+func _apply_battery_label_color(tier: int) -> void:
+	if _hud_battery_label == null:
+		return
+	var color := Color(0.94, 0.96, 0.42)
+	match tier:
+		0:
+			color = Color(0.62, 0.96, 0.74)
+		1:
+			color = Color(0.96, 0.94, 0.58)
+		2:
+			color = Color(0.98, 0.74, 0.42)
+		3:
+			color = Color(0.98, 0.42, 0.32)
+		_:
+			color = Color(0.94, 0.30, 0.30)
+	_hud_battery_label.add_theme_color_override("font_color", color)
+
+
+func _on_flashlight_charge_changed(_ratio: float, _tier: int) -> void:
+	_update_battery_hud()
+
+
+func _on_flashlight_state_changed(state_id: String, context: Dictionary) -> void:
+	match state_id:
+		"depleted":
+			if status_label != null:
+				status_label.text = "手电已耗尽,返回基地补给"
+			if _hud_battery_panel != null:
+				_flash_action_key(_hud_battery_panel)
+			if AudioManager != null:
+				AudioManager.play_sfx("flashlight_depleted")
+		"restored":
+			if status_label != null:
+				var pct := int(round(float(context.get("amount", 0.0)) * 100.0))
+				status_label.text = "电量 +%d%%" % pct
+			if AudioManager != null:
+				AudioManager.play_sfx("flashlight_charge_up")
+		"consume_refused":
+			if status_label != null:
+				status_label.text = "电量耗尽,无法开启"
+
+
+## 物理 tick 推进电量闪烁 (低/临界/耗尽档 3Hz/5.5Hz)
+func _tick_battery_blink(delta: float) -> void:
+	if _hud_battery_panel == null:
+		return
+	_hud_battery_blink_accum += delta
+	# 默认无闪烁
+	var target_alpha := 1.0
+	if _last_battery_tier == 3:
+		# 3 Hz blink (0..1..0) on critical tier
+		var phase := fmod(_hud_battery_blink_accum, 1.0 / 3.0) * 3.0
+		target_alpha = 1.0 if phase < 0.5 else 0.45
+	elif _last_battery_tier >= 4:
+		# 5.5 Hz on depleted
+		var phase := fmod(_hud_battery_blink_accum, 1.0 / 5.5) * 5.5
+		target_alpha = 1.0 if phase < 0.5 else 0.30
+	_hud_battery_blink_visible = target_alpha
+	_hud_battery_panel.modulate.a = target_alpha
+	# 倒计时每秒变化一次,但 2% 一格的耗电模式会让秒数频繁跳。
+	# 这里用 process 帧频率刷新文本:消耗期间 mm:ss 走得很顺。
+	if player != null:
+		var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+		if flashlight != null:
+			_refresh_battery_time_label(flashlight)

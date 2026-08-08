@@ -96,6 +96,8 @@ var elite_modifier_id := ""
 var _absorb_cooldown := 0.0
 var boss_phase := 1
 var _ambush_triggered := false
+var _flashlight_reveal_radius := 4.4
+var _flashlight_reveal_multiplier := 1.0
 var _strafe_sign := 1.0
 var _bypass_shield_once := false
 var _source_hp_scale := 1.0
@@ -345,7 +347,15 @@ func _physics_process(delta: float) -> void:
 	if enemy_kind == "ambusher" and not _ambush_triggered:
 		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
 		avatar.set_ambush_revealed(false)
-		if distance <= 4.4 or current_hp < max_hp:
+		var reveal_radius := 4.4
+		if is_instance_valid(_target) and (_target as Node).has_node("PlayerFlashlight3D"):
+			var fl := (_target as Node).get_node("PlayerFlashlight3D")
+			if fl.is_light_enabled() and not fl.is_depleted():
+				var reveal_mult := float(fl.get_reveal_multiplier()) * 1.7
+				reveal_radius = 4.4 * reveal_mult
+		_flashlight_reveal_radius = reveal_radius
+		_flashlight_reveal_multiplier = reveal_radius / 4.4
+		if distance <= reveal_radius or current_hp < max_hp:
 			_ambush_triggered = true
 			avatar.set_ambush_revealed(true)
 			transition_to("telegraph")
@@ -666,6 +676,8 @@ func get_state_snapshot() -> Dictionary:
 		),
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
+		"flashlight_reveal_radius": _flashlight_reveal_radius,
+		"flashlight_reveal_multiplier": _flashlight_reveal_multiplier,
 		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
 	}

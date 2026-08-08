@@ -58,6 +58,7 @@ core_scenes=(
   verify_door_passability
   verify_tower_descent_flow
   verify_3d_performance_budget
+  verify_3d_flashlight_charge_flow
 )
 
 # These scenes read the viewport texture and therefore require a real renderer.

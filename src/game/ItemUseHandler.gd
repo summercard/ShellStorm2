@@ -17,6 +17,13 @@ static func get_instance() -> ItemUseHandler:
 ## 预加载脚本（供 GameUIManager 直接 new 使用）
 const _SCRIPT := preload("res://src/game/ItemUseHandler.gd")
 
+# 三类电池对应的恢复比例(与 ItemRegistry 物品定义一一对应)
+const FLASHLIGHT_RESTORE_MAP := {
+	"item_battery_s": 0.25,
+	"item_battery_l": 0.75,
+	"item_cell_pack": 1.0,
+}
+
 func _init() -> void:
 	pass
 
@@ -39,6 +46,10 @@ func apply(item: Dictionary, context: Dictionary = {}) -> bool:
 			return _apply_summon_beacon(item, context)
 		"unlock_blueprint":
 			return _apply_unlock_blueprint(item, context)
+		"restore_flashlight_charge":
+			return _apply_restore_flashlight_charge(item, context)
+		"equip_flashlight_module":
+			return _apply_equip_flashlight_module(item, context)
 		_:
 			print("[ItemUseHandler] Unknown use_action: %s" % use_action)
 			return false
@@ -116,6 +127,43 @@ func _apply_unlock_blueprint(item: Dictionary, context: Dictionary) -> bool:
 	BaseManager.add_extraction_points(ep_reward)
 	print("[ItemUseHandler] unlock_blueprint: awarded %d extraction_points" % ep_reward)
 	return true
+
+
+## 电池恢复手电筒电量。已满则拒绝,quick-slot 据此不消耗道具。
+func _apply_restore_flashlight_charge(item: Dictionary, context: Dictionary) -> bool:
+	var player: Node = _resolve_player(context)
+	if player == null:
+		print("[ItemUseHandler] restore_flashlight_charge failed: player not found")
+		return false
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null:
+		print("[ItemUseHandler] restore_flashlight_charge failed: flashlight node missing")
+		return false
+	var item_id: String = str(item.get("id", ""))
+	var amount: float = float(FLASHLIGHT_RESTORE_MAP.get(item_id, float(item.get("restore_amount", 0.25))))
+	if amount <= 0.0:
+		print("[ItemUseHandler] restore_flashlight_charge failed: unknown battery id %s" % item_id)
+		return false
+	if bool(flashlight.call("restore_charge", amount)):
+		print("[ItemUseHandler] Applied restore_flashlight_charge: +%d%% via %s" % [int(round(amount * 100.0)), item_id])
+		return true
+	print("[ItemUseHandler] restore_flashlight_charge skipped: flashlight already full")
+	return false
+
+
+## 装备手电筒模块(仅在基地生效)
+func _apply_equip_flashlight_module(item: Dictionary, context: Dictionary) -> bool:
+	var player: Node = _resolve_player(context)
+	if player == null or not player.has_method("equip_flashlight_module"):
+		print("[ItemUseHandler] equip_flashlight_module failed: player missing or not 3D")
+		return false
+	var result: Dictionary = player.equip_flashlight_module(item)
+	if bool(result.get("success", false)):
+		print("[ItemUseHandler] Applied equip_flashlight_module: %s" % str(item.get("id", "?")))
+		return true
+	print("[ItemUseHandler] equip_flashlight_module rejected: %s" % str(result.get("reason", "?")))
+	return false
+
 
 ## 解析 player 节点
 func _resolve_player(context: Dictionary) -> Node:

@@ -19,6 +19,7 @@ signal avatar_customization_changed(loadout: Dictionary)
 signal weapon_instance_changed(snapshot: Dictionary)
 signal weapon_loadout_changed(snapshot: Dictionary)
 signal backpack_equipment_changed(snapshot: Dictionary)
+signal flashlight_module_changed(snapshot: Dictionary)
 signal death_animation_finished()
 
 const SPEED := 5.0
@@ -71,6 +72,7 @@ var _loading_weapon_instance := false
 var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
+var equipped_flashlight_module: Dictionary = {}
 
 # 移动端虚拟输入状态（来自 MobileInput autoload 的信号）。
 var _mobile_move_direction := Vector2.ZERO
@@ -151,6 +153,9 @@ func _physics_process(delta: float) -> void:
 	_update_combat_input()
 	if _state_machine != null:
 		_state_machine.physics_update(delta)
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
+	if flashlight != null:
+		flashlight.set_in_facility(is_player_inside_facility())
 
 
 func _hook_mobile_input() -> void:
@@ -425,6 +430,7 @@ func get_state_machine_snapshot() -> Dictionary:
 		return {}
 	var snapshot := _state_machine.get_snapshot()
 	var reload_snapshot := get_reload_snapshot()
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	snapshot["overlays"] = {
 		"low_health": is_low_health(),
 		"silenced": _silence_remaining > 0.0,
@@ -433,6 +439,7 @@ func get_state_machine_snapshot() -> Dictionary:
 		"firing": _fire_animation_remaining > 0.0,
 		"charging": bool(get_action_snapshot().get("charging", false)),
 		"knockback": _knockback_remaining > 0.0,
+		"flashlight": flashlight.get_snapshot() if flashlight != null else {"enabled": false, "charge_ratio": 1.0, "depleted": false, "in_facility": false},
 	}
 	snapshot["reload"] = reload_snapshot
 	snapshot["actions"] = get_action_snapshot()
@@ -818,6 +825,67 @@ func clear_equipped_backpack() -> Dictionary:
 	_refresh_backpack_model()
 	backpack_equipment_changed.emit(get_backpack_equipment_snapshot())
 	return removed
+
+
+func equip_flashlight_module(item: Dictionary) -> Dictionary:
+	if str(item.get("type", "")) != "module" or str(item.get("subtype", "")) != "flashlight_module":
+		return {"success": false, "reason": "该物品不是手电筒模块"}
+	var raw_id: String = str(item.get("id", ""))
+	var module_id: String = str(item.get("module_id", ""))
+	if module_id.is_empty() and raw_id.begins_with("item_flashlight_"):
+		module_id = raw_id.substr(len("item_flashlight_"))
+	if module_id.is_empty():
+		module_id = "basic"
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null:
+		return {"success": false, "reason": "手电筒节点不存在"}
+	if not bool(flashlight.set_module(module_id)):
+		return {"success": false, "reason": "模块切换被拒绝(需在基地内)"}
+	var old_item := equipped_flashlight_module.duplicate(true)
+	equipped_flashlight_module = item.duplicate(true)
+	equipped_flashlight_module["module_id"] = module_id
+	var snapshot := get_flashlight_module_snapshot()
+	flashlight_module_changed.emit(snapshot)
+	return {"success": true, "old_item": old_item, "new_item": equipped_flashlight_module.duplicate(true), "snapshot": snapshot}
+
+
+func unequip_flashlight_module() -> Dictionary:
+	if equipped_flashlight_module.is_empty():
+		return {"success": false, "reason": "手电筒模块槽为空"}
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
+	if flashlight != null:
+		flashlight.set_module("basic")
+	var old_item := equipped_flashlight_module.duplicate(true)
+	equipped_flashlight_module.clear()
+	flashlight_module_changed.emit(get_flashlight_module_snapshot())
+	return {"success": true, "old_item": old_item}
+
+
+func clear_equipped_flashlight_module() -> Dictionary:
+	if equipped_flashlight_module.is_empty():
+		return {}
+	var removed := equipped_flashlight_module.duplicate(true)
+	equipped_flashlight_module.clear()
+	flashlight_module_changed.emit(get_flashlight_module_snapshot())
+	return removed
+
+
+func get_flashlight_module_snapshot() -> Dictionary:
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
+	return {
+		"equipped": not equipped_flashlight_module.is_empty(),
+		"module_id": str(equipped_flashlight_module.get("module_id", "basic")),
+		"item_id": str(equipped_flashlight_module.get("id", "")),
+		"drain_multiplier": flashlight.get_drain_multiplier() if flashlight != null else 1.0,
+		"reveal_multiplier": flashlight.get_reveal_multiplier() if flashlight != null else 1.0,
+	}
+
+
+func is_player_inside_facility() -> bool:
+	var parent_node := get_parent()
+	if parent_node != null and parent_node.has_method("is_player_inside_facility"):
+		return bool(parent_node.call("is_player_inside_facility"))
+	return false
 
 
 func _refresh_backpack_model() -> void:

@@ -2,7 +2,7 @@ class_name CodeHUDGlyph
 extends Control
 ## 纯代码 HUD 图标。避免 HUD 与命运卡依赖位图资源，并统一线宽、辉光与配色。
 
-@export_enum("robot", "weapon", "reload", "dash", "shield", "interact", "pause", "currency")
+@export_enum("robot", "weapon", "reload", "dash", "shield", "interact", "pause", "currency", "battery")
 var glyph_type := "robot":
 	set(value):
 		glyph_type = value
@@ -39,6 +39,7 @@ func _draw() -> void:
 		"interact": _draw_interact(center, scale)
 		"pause": _draw_pause(center, scale)
 		"currency": _draw_currency(center, scale)
+		"battery": _draw_battery(center, scale)
 		_: _draw_interact(center, scale)
 
 
@@ -147,3 +148,21 @@ func _rounded_box(border: Color, background: Color, radius: float) -> StyleBoxFl
 	style.set_border_width_all(maxi(1, int(round(radius * 0.25))))
 	style.set_corner_radius_all(maxi(1, int(round(radius))))
 	return style
+
+
+func _draw_battery(center: Vector2, scale: float) -> void:
+	var body := Rect2(center + Vector2(-12, -16) * scale, Vector2(24, 30) * scale)
+	draw_rect(body, Color(accent, 0.18), true)
+	_glow_polyline(PackedVector2Array([
+		body.position,
+		body.position + Vector2(body.size.x, 0),
+		body.position + Vector2(body.size.x, body.size.y),
+		body.position + Vector2(0, body.size.y),
+		body.position,
+	]), 2.0 * scale)
+	var cap := Rect2(center + Vector2(-4, -22) * scale, Vector2(8, 5) * scale)
+	draw_rect(cap, accent, true)
+	# 内部进度横线,2 段表示高电量档
+	_glow_line(center + Vector2(-9, -7) * scale, center + Vector2(9, -7) * scale, 1.4 * scale, Color(accent, 0.65))
+	_glow_line(center + Vector2(-9, 0) * scale, center + Vector2(9, 0) * scale, 1.4 * scale, Color(accent, 0.55))
+	_glow_line(center + Vector2(-9, 7) * scale, center + Vector2(9, 7) * scale, 1.4 * scale, Color(accent, 0.45))

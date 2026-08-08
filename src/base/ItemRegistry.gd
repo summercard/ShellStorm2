@@ -24,6 +24,7 @@ func _register_all_items() -> void:
 	_register_backpack_equipment()
 	_register_weapon_modules()
 	_register_consumables()
+	_register_flashlight_modules()
 	_apply_base_shop_catalog()
 
 
@@ -44,6 +45,7 @@ func _apply_base_shop_catalog() -> void:
 		"weapon_rifle": [150, 75, 3, "base_stock_rifle"],
 		"equipment_backpack_2": [55, 28, 4, "base_stock_backpack_2"],
 		"item_health_potion": [40, 20, 5, "base_stock_health_potion"],
+		"item_battery_s": [25, 12, 6, "base_stock_battery_s"],
 	}
 	for item_id in catalog.keys():
 		if not _items.has(item_id):
@@ -627,9 +629,128 @@ func _register_consumables() -> void:
 			},
 			"price": 30,
 		},
+		{
+			"id": "item_battery_s",
+			"name": "小型电池",
+			"description": "恢复手电筒 25% 电量。",
+			"type": "consumable",
+			"rarity": "common",
+			"stack_max": 5,
+			"tags": ["consumable", "flashlight", "battery"],
+			"use_action": "restore_flashlight_charge",
+			"restore_amount": 0.25,
+			"floor_loot_weights": {
+				"loot_common": 2.0,
+				"loot_floor_1_2": 2.5,
+				"spawn_starter": 2.0,
+				"combat_floor_1": 1.5,
+				"combat_floor_2": 1.5,
+				"combat_floor_3": 1.5,
+				"combat_floor_4": 1.5,
+				"combat_floor_5": 1.5,
+			},
+			"price": 25,
+			"merchant_tier": 1,
+		},
+		{
+			"id": "item_battery_l",
+			"name": "大型电池",
+			"description": "恢复手电筒 75% 电量。中深层掉落或精英包。",
+			"type": "consumable",
+			"rarity": "uncommon",
+			"stack_max": 5,
+			"tags": ["consumable", "flashlight", "battery"],
+			"use_action": "restore_flashlight_charge",
+			"restore_amount": 0.75,
+			"floor_loot_weights": {
+				"loot_floor_3_4": 1.2,
+				"scavenge_floor_3": 1.0,
+				"scavenge_floor_4": 1.0,
+				"scavenge_floor_5": 1.0,
+				"elite_floor_1": 0.8,
+				"elite_floor_2": 0.8,
+				"boss_floor_1": 1.5,
+			},
+			"price": 60,
+			"merchant_tier": 0,
+		},
+		{
+			"id": "item_cell_pack",
+			"name": "电芯包",
+			"description": "完全充满手电筒。稀有掉落。",
+			"type": "consumable",
+			"rarity": "rare",
+			"stack_max": 3,
+			"tags": ["consumable", "flashlight", "battery"],
+			"use_action": "restore_flashlight_charge",
+			"restore_amount": 1.0,
+			"floor_loot_weights": {
+				"loot_floor_5": 0.6,
+				"loot_abyss": 1.0,
+				"boss_floor_2": 1.5,
+			},
+			"price": 120,
+			"merchant_tier": 0,
+		},
 	]
 	for c in consumables:
 		_items[c["id"]] = c
+
+
+## 注册手电筒模块(基地工坊装备 / 精英掉落解锁)
+func _register_flashlight_modules() -> void:
+	var modules: Array = [
+		{
+			"id": "item_flashlight_basic",
+			"module_id": "basic",
+			"name": "基础模块",
+			"description": "默认手电筒模块。耗电 1.00×，揭示 1.00×。",
+			"type": "module",
+			"subtype": "flashlight_module",
+			"rarity": "common",
+			"stack_max": 1,
+			"tags": ["module", "flashlight_module", "basic"],
+			"use_action": "equip_flashlight_module",
+			"price": 0,
+		},
+		{
+			"id": "item_flashlight_advanced",
+			"module_id": "advanced",
+			"name": "加强模块",
+			"description": "耗电 0.7143×，揭示 1.20×。蓝图解锁后工坊可选。",
+			"type": "module",
+			"subtype": "flashlight_module",
+			"rarity": "uncommon",
+			"stack_max": 1,
+			"tags": ["module", "flashlight_module", "advanced"],
+			"use_action": "equip_flashlight_module",
+			"price": 0,
+			"blueprint_unlock_tier": 1,
+			"floor_loot_weights": {
+				"blueprint_attachment_unlock": 1.0,
+			},
+		},
+		{
+			"id": "item_flashlight_efficient",
+			"module_id": "efficient",
+			"name": "节能模块",
+			"description": "耗电 0.50×，揭示 0.85×。精英/Boss 掉落，工坊可选。",
+			"type": "module",
+			"subtype": "flashlight_module",
+			"rarity": "rare",
+			"stack_max": 1,
+			"tags": ["module", "flashlight_module", "efficient"],
+			"use_action": "equip_flashlight_module",
+			"price": 0,
+			"floor_loot_weights": {
+				"elite_floor_1": 0.6,
+				"elite_floor_2": 0.8,
+				"boss_floor_2": 1.0,
+			},
+		},
+	]
+	for m in modules:
+		_items[m["id"]] = m
 
 func _register_bullet_tier0() -> void:
 	var bullets: Array = [

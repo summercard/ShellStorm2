@@ -6,9 +6,22 @@ extends Node3D
 ## 角色网格本身仍可被太阳和房间灯（layer 1|2）投射到环境上。
 
 signal light_enabled_changed(enabled: bool)
+signal charge_changed(ratio: float, tier: int)
+signal reveal_multiplier_changed(multiplier: float)
+signal state_changed(state_id: String, context: Dictionary)
 
 const ENVIRONMENT_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_WORLD
 const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
+
+const FLASHLIGHT_CHARGE_DRAIN_PER_SECOND := 1.0 / 300.0  # 基础档满电 300s (5 分钟)
+const FLASHLIGHT_DRAIN_STEP := 0.02  # 每"格"消耗 2% 电量(基础档 6 秒一格)
+const FLASHLIGHT_MODULE_PROFILES := {
+	"basic":     {"drain": 1.00, "reveal": 1.00},       # 满电 300s (5 分钟)
+	"advanced":  {"drain": 5.0 / 7.0, "reveal": 1.20},  # 满电 420s (7 分钟,+2 分钟)
+	"efficient": {"drain": 0.50, "reveal": 0.85},       # 满电 600s (10 分钟,+5 分钟)
+}
+const FLASHLIGHT_REVEAL_BOOST_BASE := 1.7  # 开启(on 且未耗尽)时基础倍率
+const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 
 @export_group("Input")
 @export var toggle_action := "toggle_flashlight"
@@ -59,6 +72,13 @@ var _beam: SpotLight3D
 var _spill: OmniLight3D
 var _front_fill: SpotLight3D
 var _enabled := false
+var _charge_ratio := 1.0
+var _module_id := "basic"
+var _drain_multiplier := 1.0
+var _reveal_multiplier := 1.0
+var _in_facility := false
+var _tier := 0
+var _drain_accumulator := 0.0
 # 关灯时除了 visible=false 还要把 light_energy 临时归零，
 # 否则 DirectionalLight3D 太阳 / Ambient / 房间灯的 cull_mask 全开仍会照亮角色层，
 # 视觉上会觉得"还有一盏"；开启时用 _beam_energy_active 恢复，保证 +30% 调参不丢。
@@ -76,6 +96,9 @@ func _ready() -> void:
 	# 关闭时三盏灯均不可见，不需要每帧重写三组全局变换；开启瞬间先同步，
 	# 开启期间再恢复逐帧跟随，因此按F后的方向与移动表现不变。
 	set_process(_enabled)
+	set_physics_process(true)
+	_tier = _compute_tier(_charge_ratio)
+	charge_changed.emit(_charge_ratio, _tier)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -112,9 +135,14 @@ func force_sync() -> void:
 
 
 func set_light_enabled(enabled: bool) -> void:
+	# 拒绝打开：如果电量耗尽，吞掉请求并发 consume_refused
+	if enabled and not _enabled and _charge_ratio <= 0.0:
+		state_changed.emit("consume_refused", {"reason": "depleted"})
+		return
 	if _enabled == enabled:
 		return
 	_enabled = enabled
+	_drain_accumulator = 0.0  # 切换时清零,避免开/关瞬间累计错位
 	set_process(enabled)
 	if enabled:
 		force_sync()
@@ -158,6 +186,159 @@ func set_light_enabled(enabled: bool) -> void:
 func toggle_light() -> bool:
 	set_light_enabled(not _enabled)
 	return _enabled
+
+
+## 每物理 tick 由 Player3D 推送 facility 状态。
+## 基地内不消耗、且电量自动补满。基地外:每秒累计实际耗电量,
+## 每达到 2% ("一格") 触发一次 consume_charge。
+func _physics_process(delta: float) -> void:
+	if _in_facility:
+		if _charge_ratio < 1.0:
+			set_charge_ratio(1.0)
+		_drain_accumulator = 0.0
+		return
+	if _enabled and _charge_ratio > 0.0:
+		_drain_accumulator += FLASHLIGHT_CHARGE_DRAIN_PER_SECOND * _drain_multiplier * delta
+		while _drain_accumulator >= FLASHLIGHT_DRAIN_STEP and _charge_ratio > 0.0:
+			_drain_accumulator -= FLASHLIGHT_DRAIN_STEP
+			consume_charge(FLASHLIGHT_DRAIN_STEP)
+
+
+## 递减电量。跨 0 时自动关闭灯具并发 depleted。
+## 非耗尽分支每扣一格都广播 charge_changed,使 HUD 百分比 / 进度条随每个 2% 步进实时刷新。
+func consume_charge(amount: float) -> void:
+	if amount <= 0.0:
+		return
+	var was_enabled := _enabled
+	var new_ratio := _charge_ratio - amount
+	if new_ratio <= 0.0:
+		_charge_ratio = 0.0
+		_tier = _compute_tier(_charge_ratio)
+		charge_changed.emit(_charge_ratio, _tier)
+		if was_enabled:
+			_enabled = false
+			set_process(false)
+			if _light_kit != null:
+				_light_kit.visible = false
+			if _beam != null:
+				_beam.visible = false
+				_beam.light_energy = 0.0
+			if _spill != null:
+				_spill.visible = false
+				_spill.light_energy = 0.0
+			if _front_fill != null:
+				_front_fill.visible = false
+				_front_fill.light_energy = 0.0
+			state_changed.emit("depleted", {})
+			light_enabled_changed.emit(false)
+		return
+	_charge_ratio = new_ratio
+	_tier = _compute_tier(_charge_ratio)
+	# 每个 2% 步进都广播,避免 HUD 百分比 / 进度条只在跨 tier 时跳一次。
+	charge_changed.emit(_charge_ratio, _tier)
+
+
+func set_charge_ratio(ratio: float) -> void:
+	var clamped := clampf(ratio, 0.0, 1.0)
+	if is_equal_approx(_charge_ratio, clamped):
+		return
+	_charge_ratio = clamped
+	_tier = _compute_tier(_charge_ratio)
+	# 电量实际变化即广播:基地补满、存档恢复、测试设置同一 tier 内调整都要同步 HUD。
+	charge_changed.emit(_charge_ratio, _tier)
+
+
+## 加值返回 true。已满返回 false(quick-slot 据此决定是否消耗道具)。
+func restore_charge(amount: float) -> bool:
+	if amount <= 0.0:
+		return false
+	if _charge_ratio >= 1.0:
+		return false
+	var new_ratio := clampf(_charge_ratio + amount, 0.0, 1.0)
+	var old_tier := _tier
+	_charge_ratio = new_ratio
+	_tier = _compute_tier(_charge_ratio)
+	_drain_accumulator = 0.0  # 补电后清零,避免补到 100% 立刻又被扣一格
+	charge_changed.emit(_charge_ratio, _tier)
+	state_changed.emit("restored", {"amount": amount})
+	return true
+
+
+## 切换模块。基地外被拒(false)，基地内接受并更新 drain/reveal 倍率。
+func set_module(module_id: String) -> bool:
+	if not FLASHLIGHT_MODULE_PROFILES.has(module_id):
+		return false
+	if not _in_facility:
+		return false
+	_module_id = module_id
+	var profile: Dictionary = FLASHLIGHT_MODULE_PROFILES[module_id]
+	_drain_multiplier = float(profile.get("drain", 1.0))
+	_reveal_multiplier = float(profile.get("reveal", 1.0))
+	state_changed.emit("module_swapped", {"module_id": module_id})
+	reveal_multiplier_changed.emit(_reveal_multiplier)
+	return true
+
+
+func set_in_facility(flag: bool) -> void:
+	_in_facility = flag
+	if flag and _charge_ratio < 1.0:
+		set_charge_ratio(1.0)
+
+
+func get_charge_ratio() -> float:
+	return _charge_ratio
+
+
+func get_tier() -> int:
+	return _tier
+
+
+func get_drain_multiplier() -> float:
+	return _drain_multiplier
+
+
+func get_reveal_multiplier() -> float:
+	return _reveal_multiplier
+
+
+func is_depleted() -> bool:
+	return _charge_ratio <= 0.0
+
+
+func get_module_id() -> String:
+	return _module_id
+
+
+func is_in_facility() -> bool:
+	return _in_facility
+
+
+## 当前 drain 倍率下剩余时间(秒)。关闭、满电、耗尽时返回特殊值。
+## - _enabled == false: 0(关闭时不消耗,但保留语义给 HUD 显示"OFF · --%")
+## - _charge_ratio <= 0.0: 0
+## - _in_facility == true: INF(基地内不消耗)
+## - 其他: 把"已落到 _charge_ratio 的离散电量"与"物理帧间累计、尚未跨档的 _drain_accumulator"
+##   一起除以每秒实际耗电率,得到真正的剩余秒数。这样 _charge_ratio 每约 6 秒才掉一格,
+##   但剩余秒数会随 _drain_accumulator 在帧间连续递减,HUD 才能逐秒倒计时。
+func get_estimated_remaining_seconds() -> float:
+	if _in_facility:
+		return INF
+	if _charge_ratio <= 0.0:
+		return 0.0
+	if not _enabled:
+		return 0.0
+	var per_second := FLASHLIGHT_CHARGE_DRAIN_PER_SECOND * _drain_multiplier
+	if per_second <= 0.0:
+		return INF
+	return maxf(_charge_ratio - _drain_accumulator, 0.0) / per_second
+
+
+## 0=高、1=中、2=低、3=临界、4=耗尽。
+func _compute_tier(ratio: float) -> int:
+	for index in FLASHLIGHT_TIER_THRESHOLDS.size():
+		if ratio >= FLASHLIGHT_TIER_THRESHOLDS[index]:
+			return index
+	return FLASHLIGHT_TIER_THRESHOLDS.size()
 
 
 func apply_configuration() -> void:
@@ -206,6 +387,15 @@ func get_snapshot() -> Dictionary:
 		"aim_alignment": aim_alignment,
 		"gameplay_light_dependent": false,
 		"configurable": true,
+		"charge_ratio": _charge_ratio,
+		"drain_multiplier": _drain_multiplier,
+		"reveal_multiplier": _reveal_multiplier,
+		"module_id": _module_id,
+		"tier": _tier,
+		"depleted": _charge_ratio <= 0.0,
+		"in_facility": _in_facility,
+		"remaining_seconds": get_estimated_remaining_seconds(),
+		"drain_accumulator": _drain_accumulator,
 	}
 
 

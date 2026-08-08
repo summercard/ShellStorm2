@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.4"
+const SAVE_VERSION := "1.5"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -46,6 +46,14 @@ var extraction_points: int = 0
 
 # 保险柜物品数据（跨局持久化，格式：[{item, insured_at}, ...]）
 var vault_items: Array = []
+
+# 手电筒模块装备状态(跨局持久化)
+var equipped_flashlight_module_id: String = "basic"
+
+# 绑定到下一局的电池(死亡保留/成功撤离不补)
+var bound_battery_s_count: int = 0
+var bound_battery_l_count: int = 0
+var bound_cell_pack_count: int = 0
 
 # 下一局预选命运卡片（格式：{card_id, card_name, card_type, card_rarity, description, tags, effect, visual}）
 var pending_fate_card: Dictionary = {}
@@ -96,6 +104,10 @@ func _to_dict() -> Dictionary:
 		"blueprint_attachment_tier": blueprint_attachment_tier,
 		"extraction_points": extraction_points,
 		"vault_items": vault_items,
+		"equipped_flashlight_module_id": equipped_flashlight_module_id,
+		"bound_battery_s_count": bound_battery_s_count,
+		"bound_battery_l_count": bound_battery_l_count,
+		"bound_cell_pack_count": bound_cell_pack_count,
 		"pending_fate_card": pending_fate_card,
 		"pending_loadout_items": pending_loadout_items,
 		"extraction_loot": extraction_loot,
@@ -146,6 +158,11 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("blueprint_attachment_tier"): data.blueprint_attachment_tier = d["blueprint_attachment_tier"]
 	if d.has("extraction_points"): data.extraction_points = d["extraction_points"]
 	if d.has("vault_items") and d["vault_items"] is Array: data.vault_items = Array(d["vault_items"])
+	if d.has("equipped_flashlight_module_id"):
+		data.equipped_flashlight_module_id = str(d["equipped_flashlight_module_id"])
+	if d.has("bound_battery_s_count"): data.bound_battery_s_count = maxi(0, int(d["bound_battery_s_count"]))
+	if d.has("bound_battery_l_count"): data.bound_battery_l_count = maxi(0, int(d["bound_battery_l_count"]))
+	if d.has("bound_cell_pack_count"): data.bound_cell_pack_count = maxi(0, int(d["bound_cell_pack_count"]))
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
