@@ -177,7 +177,7 @@ func _build_flashlight_module_panel(parent: VBoxContainer = null) -> void:
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	host.add_child(title)
 	var info := Label.new()
-	info.text = "切换不同模块可改变耗电与揭示倍率。基础模块永远可用。节能与加强需解锁后切换。"
+	info.text = "切换不同模块可改变耗电、亮度、范围与揭示倍率。基础模块永远可用；节能模块需先带回99F安装一次。"
 	info.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	host.add_child(info)
 	_flashlight_module_panel = PanelContainer.new()

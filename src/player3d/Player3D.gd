@@ -849,6 +849,22 @@ func equip_flashlight_module(item: Dictionary) -> Dictionary:
 	return {"success": true, "old_item": old_item, "new_item": equipped_flashlight_module.duplicate(true), "snapshot": snapshot}
 
 
+## 从长期装备选择创建当前局的运行态。该入口不代表局内换装，因此绕过基地限制。
+func restore_flashlight_module(module_id: String) -> bool:
+	var flashlight := get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null or not flashlight.has_method("restore_module"):
+		return false
+	if not bool(flashlight.restore_module(module_id)):
+		return false
+	var item := ItemRegistry.get_instance().get_item("item_flashlight_%s" % module_id)
+	if item.is_empty():
+		item = {"id": "item_flashlight_%s" % module_id, "module_id": module_id}
+	equipped_flashlight_module = item.duplicate(true)
+	equipped_flashlight_module["module_id"] = module_id
+	flashlight_module_changed.emit(get_flashlight_module_snapshot())
+	return true
+
+
 func unequip_flashlight_module() -> Dictionary:
 	if equipped_flashlight_module.is_empty():
 		return {"success": false, "reason": "手电筒模块槽为空"}

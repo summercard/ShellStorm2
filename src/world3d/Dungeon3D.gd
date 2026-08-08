@@ -146,12 +146,10 @@ var _hud_quick_item_icon_hosts: Array[Control] = []
 var _hud_quick_item_labels: Array[Label] = []
 var _quick_item_ids: Array[String] = ["", ""]
 
-# 手电筒电量 HUD 句柄与闪烁状态
-var _hud_battery_label: Label = null
+# 手电筒电量 HUD 复用头像下方原本未接玩法的三格指示器。
 var _hud_battery_time_label: Label = null
-var _hud_battery_bar: ProgressBar = null
-var _hud_battery_glyph: CodeHUDGlyph = null
-var _hud_battery_panel: PanelContainer = null
+var _hud_battery_cells: Array[Panel] = []
+var _hud_battery_panel: Control = null
 var _hud_battery_blink_accum := 0.0
 var _last_battery_tier := -1
 var _hud_battery_blink_visible := 1.0
@@ -194,6 +192,7 @@ func _ready() -> void:
 		player.weapon_instance_changed.connect(_on_hud_weapon_instance_changed)
 	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
+		_apply_persisted_flashlight_module()
 		if not flashlight.charge_changed.is_connected(_on_flashlight_charge_changed):
 			flashlight.charge_changed.connect(_on_flashlight_charge_changed)
 		if not flashlight.state_changed.is_connected(_on_flashlight_state_changed):
@@ -209,6 +208,16 @@ func _ready() -> void:
 	status_label.text = "%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
+
+
+## 每局只在初始化时从 BaseData 注入模块；局内仍由 PlayerFlashlight3D 拒绝换装。
+func _apply_persisted_flashlight_module() -> void:
+	if player == null or not player.has_method("restore_flashlight_module"):
+		return
+	var module_id := BaseManager.get_equipped_flashlight_module_id()
+	if not BaseManager.is_flashlight_module_unlocked(module_id):
+		module_id = "basic"
+	player.restore_flashlight_module(module_id)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -417,13 +426,24 @@ func _build_reference_main_hud() -> void:
 	hp_bar.add_theme_stylebox_override("fill", hp_fill)
 	stat_vbox.add_child(hp_bar)
 	var energy := HBoxContainer.new()
+	energy.name = "FlashlightBatteryPanel"
+	energy.custom_minimum_size = _hud_size(Vector2(220, 14))
 	energy.add_theme_constant_override("separation", _hud_int(6))
+	energy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	stat_vbox.add_child(energy)
+	_hud_battery_panel = energy
 	for index in range(3):
 		var pip := Panel.new()
+		pip.name = "BatteryCell_%d" % index
 		pip.custom_minimum_size = _hud_size(Vector2(34, 9))
 		pip.add_theme_stylebox_override("panel", _make_hud_style(cyan, Color(cyan, 0.72), 1))
 		energy.add_child(pip)
+		_hud_battery_cells.append(pip)
+	_hud_battery_time_label = _make_hud_label("FULL · 基地内", 11, Color(0.72, 0.86, 0.96))
+	_hud_battery_time_label.name = "BatteryTimeLabel"
+	_hud_battery_time_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	energy.add_child(_hud_battery_time_label)
 	loot_label = _make_hud_label("背包 0/12 · 钥匙 1 · 魂 0", 13, Color(1.0, 0.76, 0.26))
 	stat_vbox.add_child(loot_label)
 
@@ -539,47 +559,6 @@ func _build_reference_main_hud() -> void:
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
 	_refresh_quick_item_hud()
-
-	# 手电筒电量 HUD 面板:右上,timer 下方,ActionKeyStrip 上方
-	_hud_battery_panel = _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.012, 0.026, 0.034, 0.92))
-	_hud_battery_panel.name = "FlashlightBatteryPanel"
-	_anchor_control(_hud_battery_panel, 1.0, 0.0, 1.0, 0.0, -214, 340, -18, 432)
-	_reference_hud_root.add_child(_hud_battery_panel)
-	_add_neon_frame(_hud_battery_panel, Color(0.23, 0.88, 1.0), 0.72, false)
-	var battery_margin := _make_margin(10, 8, 12, 8)
-	battery_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_hud_battery_panel.add_child(battery_margin)
-	var battery_row := HBoxContainer.new()
-	battery_row.add_theme_constant_override("separation", _hud_int(10))
-	battery_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	battery_margin.add_child(battery_row)
-	_hud_battery_glyph = CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
-	_hud_battery_glyph.custom_minimum_size = _hud_size(Vector2(46, 46))
-	_hud_battery_glyph.configure("battery", Color(0.94, 0.96, 0.42))
-	battery_row.add_child(_hud_battery_glyph)
-	var battery_vbox := VBoxContainer.new()
-	battery_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	battery_vbox.add_theme_constant_override("separation", _hud_int(3))
-	battery_vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	battery_row.add_child(battery_vbox)
-	_hud_battery_label = _make_hud_label("100%", 13, Color(0.94, 0.96, 0.42))
-	_hud_battery_label.name = "BatteryPercentageLabel"
-	_hud_battery_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	battery_vbox.add_child(_hud_battery_label)
-	_hud_battery_time_label = _make_hud_label("--:--", 11, Color(0.72, 0.86, 0.96))
-	_hud_battery_time_label.name = "BatteryTimeLabel"
-	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	battery_vbox.add_child(_hud_battery_time_label)
-	_hud_battery_bar = ProgressBar.new()
-	_hud_battery_bar.name = "BatteryProgressBar"
-	_hud_battery_bar.custom_minimum_size = _hud_size(Vector2(140, 14))
-	_hud_battery_bar.show_percentage = false
-	_hud_battery_bar.max_value = 1.0
-	_hud_battery_bar.min_value = 0.0
-	_hud_battery_bar.value = 1.0
-	_hud_battery_bar.add_theme_stylebox_override("background", _make_bar_style(Color(0.10, 0.12, 0.14), 3))
-	battery_vbox.add_child(_hud_battery_bar)
-	_apply_battery_fill_color(0)
 
 	var actions := HBoxContainer.new()
 	actions.name = "ActionKeyStrip"
@@ -2878,6 +2857,16 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 	if str(item.get("type", "")) == "equipment" and str(item.get("subtype", "")) == "backpack":
 		_equip_backpack_from_inventory(slot_index, item)
 		return
+	if str(item.get("subtype", "")) == "flashlight_module":
+		var flashlight_handler := ItemUseHandler.new()
+		var flashlight_applied := flashlight_handler.apply(item, {"player": player, "extraction_director": self})
+		flashlight_handler.free()
+		if flashlight_applied:
+			_inventory.remove_from_slot(slot_index, 1)
+			status_label.text = "已安装%s" % item.get("name", "手电筒模块")
+		else:
+			status_label.text = "%s只能在99F基地安装" % item.get("name", "手电筒模块")
+		return
 	if item.get("type", "") in ["module", "attachment"]:
 		if _can_swap_installed_module(item, slot_index):
 			_inventory.remove_from_slot(slot_index, 1)
@@ -3826,14 +3815,11 @@ func _update_battery_hud() -> void:
 	if player == null:
 		return
 	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
-	if flashlight == null or _hud_battery_bar == null or _hud_battery_label == null:
+	if flashlight == null or _hud_battery_cells.is_empty():
 		return
 	var ratio := clampf(float(flashlight.get_charge_ratio()), 0.0, 1.0)
 	var tier := int(flashlight.get_tier())
-	_hud_battery_bar.value = ratio
-	_hud_battery_label.text = "%d%%" % int(round(ratio * 100.0))
-	_apply_battery_fill_color(tier)
-	_apply_battery_label_color(tier)
+	_apply_battery_fill_color(tier, ratio)
 	_last_battery_tier = tier
 	_refresh_battery_time_label(flashlight)
 
@@ -3862,8 +3848,8 @@ func _refresh_battery_time_label(flashlight: Node) -> void:
 	_hud_battery_time_label.text = "%02d:%02d" % [mm, ss]
 
 
-func _apply_battery_fill_color(tier: int) -> void:
-	if _hud_battery_bar == null:
+func _apply_battery_fill_color(tier: int, ratio: float) -> void:
+	if _hud_battery_cells.is_empty():
 		return
 	var color := Color(0.94, 0.96, 0.42)
 	match tier:
@@ -3877,32 +3863,24 @@ func _apply_battery_fill_color(tier: int) -> void:
 			color = Color(0.96, 0.30, 0.18)
 		_:
 			color = Color(0.86, 0.20, 0.18)
-	var style := _make_bar_style(color, 3)
-	style.shadow_color = Color(color, 0.45)
-	style.shadow_size = 4
-	_hud_battery_bar.add_theme_stylebox_override("fill", style)
-
-
-func _apply_battery_label_color(tier: int) -> void:
-	if _hud_battery_label == null:
-		return
-	var color := Color(0.94, 0.96, 0.42)
-	match tier:
-		0:
-			color = Color(0.62, 0.96, 0.74)
-		1:
-			color = Color(0.96, 0.94, 0.58)
-		2:
-			color = Color(0.98, 0.74, 0.42)
-		3:
-			color = Color(0.98, 0.42, 0.32)
-		_:
-			color = Color(0.94, 0.30, 0.30)
-	_hud_battery_label.add_theme_color_override("font_color", color)
+	var active_cells := int(ceil(ratio * _hud_battery_cells.size())) if ratio > 0.0 else 0
+	for index in _hud_battery_cells.size():
+		var cell := _hud_battery_cells[index]
+		var filled := index < active_cells
+		var style := _make_hud_style(
+			Color(0.23, 0.88, 1.0) if not filled else color,
+			Color(0.23, 0.88, 1.0, 0.16) if not filled else Color(color, 0.82),
+			1,
+		)
+		if filled:
+			style.shadow_color = Color(color, 0.38)
+			style.shadow_size = 3
+		cell.add_theme_stylebox_override("panel", style)
 
 
 func _on_flashlight_charge_changed(_ratio: float, _tier: int) -> void:
 	_update_battery_hud()
+	_persist_flashlight_state_to_checkpoint()
 
 
 func _on_flashlight_state_changed(state_id: String, context: Dictionary) -> void:
@@ -3920,9 +3898,30 @@ func _on_flashlight_state_changed(state_id: String, context: Dictionary) -> void
 				status_label.text = "电量 +%d%%" % pct
 			if AudioManager != null:
 				AudioManager.play_sfx("flashlight_charge_up")
+		"facility_recharged":
+			if status_label != null:
+				status_label.text = "已回到99F基地 · 手电筒充满"
+			if AudioManager != null:
+				AudioManager.play_sfx("flashlight_charge_up")
 		"consume_refused":
 			if status_label != null:
 				status_label.text = "电量耗尽,无法开启"
+	_persist_flashlight_state_to_checkpoint()
+
+
+## 行动检查点由其它局内系统决定何时创建；本模块只在已有检查点上补写自身状态。
+func _persist_flashlight_state_to_checkpoint() -> void:
+	if player == null:
+		return
+	var snapshot := BaseManager.get_active_run_checkpoint()
+	if snapshot.is_empty() or not bool(snapshot.get("valid", false)):
+		return
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null:
+		return
+	snapshot["flashlight_charge_ratio"] = float(flashlight.get_charge_ratio())
+	snapshot["flashlight_module_id"] = str(flashlight.get_module_id())
+	BaseManager.set_active_run_checkpoint(snapshot, "flashlight_state")
 
 
 ## 物理 tick 推进电量闪烁 (低/临界/耗尽档 3Hz/5.5Hz)

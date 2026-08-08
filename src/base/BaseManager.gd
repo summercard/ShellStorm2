@@ -34,7 +34,8 @@ func load_base() -> void:
 		if data.last_save_reason.is_empty():
 			data.last_save_reason = str(unpacked.get("reason", ""))
 		_migrate_owned_item_instances()
-		if bool(unpacked.get("legacy", false)):
+		var flashlight_migrated := _migrate_flashlight_module_unlocks()
+		if bool(unpacked.get("legacy", false)) or flashlight_migrated:
 			save_base("migrate_legacy_profile")
 		return
 	data = BaseData.new()
@@ -95,10 +96,12 @@ func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
 	return false
 
 
-## — 手电筒模块与绑定电池持久化 —
+## — 手电筒模块持久化 —
+const FLASHLIGHT_MODULE_IDS := ["basic", "advanced", "efficient"]
+
 func set_equipped_flashlight_module(module_id: String) -> bool:
 	_ensure_data()
-	if module_id not in ["basic", "advanced", "efficient"]:
+	if module_id not in FLASHLIGHT_MODULE_IDS:
 		return false
 	if not is_flashlight_module_unlocked(module_id):
 		return false
@@ -121,43 +124,40 @@ func is_flashlight_module_unlocked(module_id: String) -> bool:
 		"basic":
 			return true
 		"advanced":
-			return data.blueprint_attachment_tier >= 1
+			return data.blueprint_attachment_tier >= 1 or "advanced" in data.unlocked_flashlight_modules
 		"efficient":
-			for item in data.vault_items:
-				if item is Dictionary and str(item.get("id", "")) == "item_flashlight_efficient":
-					return true
-			return false
+			return "efficient" in data.unlocked_flashlight_modules
 	return false
 
 
-func increment_bound_batteries(item_id: String, by: int = 1) -> bool:
+## 稀有模块实体在基地确认安装后转为永久解锁，不再要求把原物品留在保险柜。
+func unlock_flashlight_module(module_id: String) -> bool:
 	_ensure_data()
-	if by == 0:
+	if module_id not in FLASHLIGHT_MODULE_IDS:
+		return false
+	if module_id == "basic" or module_id in data.unlocked_flashlight_modules:
 		return true
-	match item_id:
-		"item_battery_s":
-			data.bound_battery_s_count = maxi(0, data.bound_battery_s_count + by)
-		"item_battery_l":
-			data.bound_battery_l_count = maxi(0, data.bound_battery_l_count + by)
-		"item_cell_pack":
-			data.bound_cell_pack_count = maxi(0, data.bound_cell_pack_count + by)
-		_:
-			return false
-	return save_base("bound_battery_inc:%s" % item_id)
+	data.unlocked_flashlight_modules.append(module_id)
+	if save_base("flashlight_module_unlock:%s" % module_id):
+		return true
+	data.unlocked_flashlight_modules.erase(module_id)
+	return false
 
 
-func consume_bound_batteries_for_run() -> Dictionary:
+func _migrate_flashlight_module_unlocks() -> bool:
 	_ensure_data()
-	var result := {
-		"item_battery_s": data.bound_battery_s_count,
-		"item_battery_l": data.bound_battery_l_count,
-		"item_cell_pack": data.bound_cell_pack_count,
-	}
-	data.bound_battery_s_count = 0
-	data.bound_battery_l_count = 0
-	data.bound_cell_pack_count = 0
-	save_base("bound_battery_consume_for_run")
-	return result
+	var migrated := false
+	for collection in [data.vault_items, data.pending_loadout_items]:
+		for item in collection:
+			if not (item is Dictionary):
+				continue
+			var module_id := str((item as Dictionary).get("module_id", ""))
+			if module_id.is_empty() and str((item as Dictionary).get("id", "")) == "item_flashlight_efficient":
+				module_id = "efficient"
+			if module_id == "efficient" and module_id not in data.unlocked_flashlight_modules:
+				data.unlocked_flashlight_modules.append(module_id)
+				migrated = true
+	return migrated
 
 
 func get_facility_definitions() -> Array[Dictionary]:

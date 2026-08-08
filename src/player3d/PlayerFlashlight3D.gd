@@ -16,9 +16,9 @@ const AVATAR_RENDER_LAYER := GameDesignConfig.RENDER_LAYER_PLAYER
 const FLASHLIGHT_CHARGE_DRAIN_PER_SECOND := 1.0 / 300.0  # 基础档满电 300s (5 分钟)
 const FLASHLIGHT_DRAIN_STEP := 0.02  # 每"格"消耗 2% 电量(基础档 6 秒一格)
 const FLASHLIGHT_MODULE_PROFILES := {
-	"basic":     {"drain": 1.00, "reveal": 1.00},       # 满电 300s (5 分钟)
-	"advanced":  {"drain": 5.0 / 7.0, "reveal": 1.20},  # 满电 420s (7 分钟,+2 分钟)
-	"efficient": {"drain": 0.50, "reveal": 0.85},       # 满电 600s (10 分钟,+5 分钟)
+	"basic":     {"drain": 1.00, "reveal": 1.00, "range": 1.00, "energy": 1.00}, # 300s
+	"advanced":  {"drain": 5.0 / 7.0, "reveal": 1.20, "range": 1.20, "energy": 1.10}, # 420s
+	"efficient": {"drain": 0.50, "reveal": 0.85, "range": 0.85, "energy": 0.90}, # 600s
 }
 const FLASHLIGHT_REVEAL_BOOST_BASE := 1.7  # 开启(on 且未耗尽)时基础倍率
 const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
@@ -76,6 +76,8 @@ var _charge_ratio := 1.0
 var _module_id := "basic"
 var _drain_multiplier := 1.0
 var _reveal_multiplier := 1.0
+var _range_multiplier := 1.0
+var _energy_multiplier := 1.0
 var _in_facility := false
 var _tier := 0
 var _drain_accumulator := 0.0
@@ -160,15 +162,9 @@ func set_light_enabled(enabled: bool) -> void:
 	# 关灯时把所有灯的 light_energy 全部归零。即便父节点的 visible 由于
 	# top_level=true 在某些渲染路径上没传播到子节点，energy=0 也保证灯具
 	# 不再发出任何光线；开灯时恢复 _apply_configuration 写入的能量。
-	var target_energy := (
-		beam_energy if enabled else 0.0
-	)
-	var spill_target := (
-		spill_energy if enabled else 0.0
-	)
-	var fill_target := (
-		front_fill_energy if enabled else 0.0
-	)
+	var target_energy := beam_energy * _energy_multiplier if enabled else 0.0
+	var spill_target := spill_energy * _energy_multiplier if enabled else 0.0
+	var fill_target := front_fill_energy * _energy_multiplier if enabled else 0.0
 	if _beam != null:
 		_beam.light_energy = target_energy
 	if _spill != null:
@@ -270,19 +266,37 @@ func set_module(module_id: String) -> bool:
 		return false
 	if not _in_facility:
 		return false
+	_apply_module(module_id, true)
+	return true
+
+
+## 仅供开局/续局从长期装备状态还原；不属于玩家在塔内换装。
+func restore_module(module_id: String) -> bool:
+	if not FLASHLIGHT_MODULE_PROFILES.has(module_id):
+		return false
+	_apply_module(module_id, false)
+	return true
+
+
+func _apply_module(module_id: String, announce: bool) -> void:
 	_module_id = module_id
 	var profile: Dictionary = FLASHLIGHT_MODULE_PROFILES[module_id]
 	_drain_multiplier = float(profile.get("drain", 1.0))
 	_reveal_multiplier = float(profile.get("reveal", 1.0))
-	state_changed.emit("module_swapped", {"module_id": module_id})
-	reveal_multiplier_changed.emit(_reveal_multiplier)
-	return true
+	_range_multiplier = float(profile.get("range", 1.0))
+	_energy_multiplier = float(profile.get("energy", 1.0))
+	_apply_configuration()
+	if announce:
+		state_changed.emit("module_swapped", {"module_id": module_id})
+		reveal_multiplier_changed.emit(_reveal_multiplier)
 
 
 func set_in_facility(flag: bool) -> void:
 	_in_facility = flag
 	if flag and _charge_ratio < 1.0:
 		set_charge_ratio(1.0)
+		_drain_accumulator = 0.0
+		state_changed.emit("facility_recharged", {})
 
 
 func get_charge_ratio() -> float:
@@ -299,6 +313,10 @@ func get_drain_multiplier() -> float:
 
 func get_reveal_multiplier() -> float:
 	return _reveal_multiplier
+
+
+func get_range_multiplier() -> float:
+	return _range_multiplier
 
 
 func is_depleted() -> bool:
@@ -390,6 +408,8 @@ func get_snapshot() -> Dictionary:
 		"charge_ratio": _charge_ratio,
 		"drain_multiplier": _drain_multiplier,
 		"reveal_multiplier": _reveal_multiplier,
+		"range_multiplier": _range_multiplier,
+		"energy_multiplier": _energy_multiplier,
 		"module_id": _module_id,
 		"tier": _tier,
 		"depleted": _charge_ratio <= 0.0,
@@ -425,8 +445,8 @@ func _apply_configuration() -> void:
 		_beam.light_color = beam_color
 		# 关灯时实际能量为 0，开灯时回到 export 值：避免 _apply_configuration
 		# 在灯具处于关闭状态时仍然把 export 值写回去，造成"按 F 后又有残留光"。
-		_beam.light_energy = beam_energy if _enabled else 0.0
-		_beam.spot_range = beam_range
+		_beam.light_energy = beam_energy * _energy_multiplier if _enabled else 0.0
+		_beam.spot_range = beam_range * _range_multiplier
 		_beam.spot_angle = beam_angle_degrees
 		_beam.spot_attenuation = beam_attenuation
 		_beam.spot_angle_attenuation = beam_edge_attenuation
@@ -443,16 +463,16 @@ func _apply_configuration() -> void:
 		_beam.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_ONLY
 	if _spill != null:
 		_spill.light_color = spill_color
-		_spill.light_energy = spill_energy if _enabled else 0.0
-		_spill.omni_range = spill_range
+		_spill.light_energy = spill_energy * _energy_multiplier if _enabled else 0.0
+		_spill.omni_range = spill_range * _range_multiplier
 		_spill.omni_attenuation = spill_attenuation
 		_spill.shadow_enabled = false
 		_spill.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 		_spill.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_ONLY
 	if _front_fill != null:
 		_front_fill.light_color = front_fill_color
-		_front_fill.light_energy = front_fill_energy if _enabled else 0.0
-		_front_fill.spot_range = front_fill_range
+		_front_fill.light_energy = front_fill_energy * _energy_multiplier if _enabled else 0.0
+		_front_fill.spot_range = front_fill_range * _range_multiplier
 		_front_fill.spot_angle = front_fill_angle_degrees
 		_front_fill.spot_attenuation = front_fill_attenuation
 		_front_fill.spot_angle_attenuation = 1.35

@@ -68,7 +68,7 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 			snapshot["attention"] = not data.extraction_loot.is_empty()
 		"base_vending":
 			var vending_capacity := 2 + data.vault_level
-			snapshot["summary"] = "5类常备货 · 仓储 %d/%d" % [
+			snapshot["summary"] = "6类常备货（含电池）· 仓储 %d/%d" % [
 				data.vault_items.size(), vending_capacity
 			]
 			snapshot["attention"] = data.vault_items.size() >= vending_capacity

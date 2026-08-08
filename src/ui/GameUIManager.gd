@@ -3114,6 +3114,16 @@ func _activate_inventory_slot(slot_index: int) -> bool:
 		if _equip_weapon_from_inventory(slot_index, item):
 			_refresh_inventory_ui()
 		return true
+	if item.get("subtype", "") == "flashlight_module":
+		var handler_script: GDScript = load(_ITEM_USE_HANDLER_PATH)
+		var handler: Object = handler_script.new()
+		var context: Dictionary = {"player": _get_player_reference()}
+		var ok: bool = handler.apply(item, context)
+		handler.free()
+		if ok:
+			_inventory_module.consume_item(item.get("id", ""), 1)
+		_refresh_inventory_ui()
+		return true
 	if item.get("type", "") in ["module", "attachment"]:
 		if _install_weapon_module_from_item(item):
 			_inventory_module.remove_from_slot(slot_index, 1)

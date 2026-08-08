@@ -734,7 +734,7 @@ func _register_flashlight_modules() -> void:
 			"id": "item_flashlight_efficient",
 			"module_id": "efficient",
 			"name": "节能模块",
-			"description": "耗电 0.50×，揭示 0.85×。精英/Boss 掉落，工坊可选。",
+			"description": "耗电 0.50×，范围/揭示 0.85×。带回99F安装后永久解锁。",
 			"type": "module",
 			"subtype": "flashlight_module",
 			"rarity": "rare",

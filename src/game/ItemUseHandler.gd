@@ -157,6 +157,28 @@ func _apply_equip_flashlight_module(item: Dictionary, context: Dictionary) -> bo
 	if player == null or not player.has_method("equip_flashlight_module"):
 		print("[ItemUseHandler] equip_flashlight_module failed: player missing or not 3D")
 		return false
+	var module_id := str(item.get("module_id", ""))
+	if module_id.is_empty():
+		module_id = str(item.get("id", "")).trim_prefix("item_flashlight_")
+	if module_id.is_empty() or not player.has_method("is_player_inside_facility") or not bool(player.is_player_inside_facility()):
+		print("[ItemUseHandler] equip_flashlight_module rejected: facility required")
+		return false
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null:
+		print("[ItemUseHandler] equip_flashlight_module rejected: flashlight missing")
+		return false
+	# 点击基地设施的同一帧就允许安装，不能依赖下一次 Player3D.physics_process 才刷新状态。
+	flashlight.set_in_facility(true)
+	# 稀有实体模块在基地确认安装后转为永久解锁；之后工坊只切长期装备选择。
+	if module_id == "efficient" and not BaseManager.unlock_flashlight_module(module_id):
+		print("[ItemUseHandler] equip_flashlight_module rejected: unlock save failed")
+		return false
+	if not BaseManager.is_flashlight_module_unlocked(module_id):
+		print("[ItemUseHandler] equip_flashlight_module rejected: module locked")
+		return false
+	if not BaseManager.set_equipped_flashlight_module(module_id):
+		print("[ItemUseHandler] equip_flashlight_module rejected: equip save failed")
+		return false
 	var result: Dictionary = player.equip_flashlight_module(item)
 	if bool(result.get("success", false)):
 		print("[ItemUseHandler] Applied equip_flashlight_module: %s" % str(item.get("id", "?")))

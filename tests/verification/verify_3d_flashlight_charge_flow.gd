@@ -3,7 +3,7 @@ extends Node
 ## 测试场景：Dungeon3D 实例化后,基础档满电 100%,用物理 tick / 信号连接验证。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
-const SAVE_VERSION_EXPECTED := "1.5"
+const SAVE_VERSION_EXPECTED := "1.6"
 
 var _depleted_signal_emitted := false
 var _restored_signal_emitted := false
@@ -15,6 +15,8 @@ var _last_charge_tier := 0
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	var failures: Array[String] = []
+	# 隔离长期档案：测试必须从基础模块开始，不能继承开发存档上一次的工坊选择。
+	BaseManager.set_equipped_flashlight_module("basic")
 	var dungeon := DUNGEON_SCENE.instantiate() as Dungeon3D
 	dungeon.test_mode = true
 	dungeon.run_seed_override = 240724
@@ -41,21 +43,23 @@ func _ready() -> void:
 	await _assert_batteries(flashlight, player, failures)
 	# 5. §10.6 #7 — 模块基地外被拒,基地内 advanced 切为 0.7143×/1.20×
 	await _assert_module_swap(flashlight, dungeon, failures)
-	# 6. §10.6 #5 — HUD 面板存在,5 档色 + 闪烁阈值
+	# 6. 长期装备选择会在新行动注入 PlayerFlashlight3D
+	_assert_persisted_module_hydration(dungeon, flashlight, failures)
+	# 7. §10.6 #5 — HUD 面板存在,5 档色 + 闪烁阈值
 	await _assert_hud_panel(dungeon, failures)
-	# 7. §10.6 #6 — 贩卖机 item_battery_s 在架 & base_shelf_order==6;battery_l/cell_pack 不在
+	# 8. §10.6 #6 — 贩卖机 item_battery_s 在架 & base_shelf_order==6;battery_l/cell_pack 不在
 	await _assert_shop_catalog(failures)
-	# 8. §10.6 #8 — BaseData.active_run_snapshot.flashlight_charge_ratio 写入并回读
+	# 9. §10.6 #8 — BaseData.active_run_snapshot.flashlight_charge_ratio 写入并回读
 	await _assert_active_run_snapshot(flashlight, failures)
-	# 9. §10.6 #7 — BaseData.equipped_flashlight_module_id 持久化
+	# 10. §10.6 #7 — BaseData.equipped_flashlight_module_id 持久化
 	await _assert_equipped_module_persist(failures)
-	# 10. §10.6 #8 — 死亡保留检查点,撤离后清检查点
+	# 11. §10.6 #8 — 死亡保留检查点,撤离后清检查点
 	await _assert_checkpoint_death_vs_extract(failures)
-	# 11. §10.6 #9 — 跨房间电量不变 + advanced 模块下揭示半径 ×1.20
+	# 12. §10.6 #9 — 跨房间电量不变 + advanced 模块下揭示半径 ×1.20
 	await _assert_reveal_multiplier(flashlight, dungeon, failures)
 
 	if failures.is_empty():
-		var summary := "11/11 OK: facility no-drain, drain/stop + per-second countdown + per-step HUD sync, depleted auto-off, batteries +25/+75/+100, advanced 5/7 drain x1.20 reveal, HUD panel + BatteryPercentageLabel/TimeLabel, shop shelf 6, checkpoint persist, module persist, death/extract checkpoint, reveal x1.20"
+		var summary := "12/12 OK: facility no-drain, drain/stop, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
 		print("VERIFY_3D_FLASHLIGHT_CHARGE_FLOW_OK: %s" % summary)
 		get_tree().quit(0)
 		return
@@ -121,17 +125,14 @@ func _assert_drain_and_stop(flashlight: PlayerFlashlight3D, dungeon: Dungeon3D, 
 	flashlight.set_in_facility(false)
 	flashlight.set_charge_ratio(1.0)
 	flashlight.set_light_enabled(true)
-	# 先拿 HUD 标签指针,后面要用它们断言"逐秒倒计时"和"百分比/进度条同步"。
-	var panel: PanelContainer = dungeon.get_node_or_null("HUD/ReferenceCombatHUD/FlashlightBatteryPanel") as PanelContainer
-	var bar: ProgressBar = null
-	var pct_label: Label = null
+	# 头像下方三格电芯 + 右侧时间文本；不再有右上独立电池面板。
+	var hud := dungeon.get_node_or_null("HUD/ReferenceCombatHUD")
+	var panel: Control = hud.find_child("FlashlightBatteryPanel", true, false) as Control if hud != null else null
 	var time_label: Label = null
 	if panel != null:
-		bar = panel.find_child("BatteryProgressBar", true, false) as ProgressBar
-		pct_label = panel.find_child("BatteryPercentageLabel", true, false) as Label
 		time_label = panel.find_child("BatteryTimeLabel", true, false) as Label
-	if pct_label == null or time_label == null:
-		failures.append("BatteryPercentageLabel / BatteryTimeLabel missing on HUD panel")
+	if panel == null or panel.find_children("BatteryCell_*", "Panel", false, false).size() != 3 or time_label == null:
+		failures.append("Avatar battery cells / BatteryTimeLabel missing")
 	# 让 _tick_battery_blink 至少跑一次,time label 才会从"FULL · 基地内"切到"05:00"。
 	await get_tree().process_frame
 	# 首个 2% 步进前采样剩余时间 / 时间文本,1 秒后再采样。
@@ -165,17 +166,11 @@ func _assert_drain_and_stop(flashlight: PlayerFlashlight3D, dungeon: Dungeon3D, 
 		ratio_before = current
 	if not saw_step:
 		failures.append("No 2%% drain step observed within 7 seconds")
-	# 信号 + HUD 同步:charge_changed 应在第一个步进时发,bar / 百分比文本应反映 0.98。
+	# 信号 + HUD 同步：charge_changed 应在第一个步进时发；三格电芯仍为满格。
 	if _charge_changed_count < 1:
 		failures.append("charge_changed not emitted after first 2%% drain step (count=%d)" % _charge_changed_count)
 	if not is_equal_approx(_last_charge_ratio, 0.98):
 		failures.append("First drain step ratio != 0.98 (got %f)" % _last_charge_ratio)
-	if bar != null and not is_equal_approx(bar.value, _last_charge_ratio):
-		failures.append("BatteryProgressBar.value (%f) != last ratio (%f)" % [bar.value, _last_charge_ratio])
-	if pct_label != null:
-		var expected_pct := "%d%%" % int(round(_last_charge_ratio * 100.0))
-		if pct_label.text != expected_pct:
-			failures.append("BatteryPercentageLabel.text ('%s') != expected ('%s')" % [pct_label.text, expected_pct])
 	# 倒计时在开启后应 > 0 且接近基础档剩余时长(小于 320 秒)
 	var secs := flashlight.get_estimated_remaining_seconds()
 	if secs <= 0.0 or secs >= 320.0:
@@ -264,6 +259,11 @@ func _assert_module_swap(flashlight: PlayerFlashlight3D, _dungeon: Dungeon3D, fa
 		failures.append("advanced drain != %f (got %f)" % [advanced_drain_expected, flashlight.get_drain_multiplier()])
 	if not is_equal_approx(flashlight.get_reveal_multiplier(), 1.20):
 		failures.append("advanced reveal != 1.20 (got %f)" % flashlight.get_reveal_multiplier())
+	if not is_equal_approx(flashlight.get_range_multiplier(), 1.20):
+		failures.append("advanced visual range != 1.20 (got %f)" % flashlight.get_range_multiplier())
+	var beam := flashlight.get_node_or_null("FlashlightKit/ForwardBeam") as SpotLight3D
+	if beam == null or not is_equal_approx(beam.spot_range, flashlight.beam_range * 1.20):
+		failures.append("advanced beam range was not applied to the real light")
 	# efficient 0.50 / 0.85
 	if not bool(flashlight.set_module("efficient")):
 		failures.append("efficient module swap was rejected inside facility")
@@ -273,29 +273,33 @@ func _assert_module_swap(flashlight: PlayerFlashlight3D, _dungeon: Dungeon3D, fa
 	flashlight.set_module("basic")
 
 
+# 6. 长期装备状态必须成为新局 PlayerFlashlight3D 的运行态，而不只是存档中的字符串。
+func _assert_persisted_module_hydration(dungeon: Dungeon3D, flashlight: PlayerFlashlight3D, failures: Array[String]) -> void:
+	BaseManager.set_blueprint_tier("attachment", 1)
+	if not BaseManager.set_equipped_flashlight_module("advanced"):
+		failures.append("Could not persist advanced flashlight module for hydration")
+		return
+	dungeon._apply_persisted_flashlight_module()
+	if flashlight.get_module_id() != "advanced" or not is_equal_approx(flashlight.get_drain_multiplier(), 5.0 / 7.0):
+		failures.append("Persisted advanced module did not hydrate PlayerFlashlight3D")
+	BaseManager.set_equipped_flashlight_module("basic")
+	dungeon._apply_persisted_flashlight_module()
+
+
 # 6. §10.6 #5
 func _assert_hud_panel(dungeon: Dungeon3D, failures: Array[String]) -> void:
-	var panel: PanelContainer = dungeon.get_node_or_null("HUD/ReferenceCombatHUD/FlashlightBatteryPanel") as PanelContainer
+	var hud := dungeon.get_node_or_null("HUD/ReferenceCombatHUD")
+	var panel: Control = hud.find_child("FlashlightBatteryPanel", true, false) as Control if hud != null else null
 	if panel == null:
-		failures.append("FlashlightBatteryPanel HUD panel missing")
+		failures.append("Avatar FlashlightBatteryPanel missing")
 		return
-	var bar: ProgressBar = panel.find_child("BatteryProgressBar", true, false) as ProgressBar
-	if bar == null:
-		failures.append("Battery ProgressBar missing on panel")
-	# 倒计时标签必须存在,且格式为 mm:ss 或 OFF / FULL
-	var time_labels := []
-	for child in panel.find_children("*", "Label", true, false):
-		if child is Label:
-			time_labels.append(child)
-	if time_labels.size() < 2:
-		failures.append("Battery HUD should have % (label) + time (label) — found %d" % time_labels.size())
-	# 稳定节点名:BatteryPercentageLabel / BatteryTimeLabel 用于验收测试直接读取用户实际看到的文本。
-	var pct_label: Label = panel.find_child("BatteryPercentageLabel", true, false) as Label
+	if panel.find_children("BatteryCell_*", "Panel", false, false).size() != 3:
+		failures.append("Battery HUD should reuse exactly three avatar cells")
 	var time_label: Label = panel.find_child("BatteryTimeLabel", true, false) as Label
-	if pct_label == null:
-		failures.append("BatteryPercentageLabel (named) missing on HUD panel")
 	if time_label == null:
-		failures.append("BatteryTimeLabel (named) missing on HUD panel")
+		failures.append("BatteryTimeLabel (named) missing beside avatar cells")
+	if panel.get_parent() == hud:
+		failures.append("Legacy right-side flashlight battery panel should be removed")
 	# 5 档: 60/30/10/1/0
 	var flashlight: PlayerFlashlight3D = dungeon.player.get_node("PlayerFlashlight3D")
 	flashlight.set_charge_ratio(0.65)
@@ -322,13 +326,7 @@ func _assert_hud_panel(dungeon: Dungeon3D, failures: Array[String]) -> void:
 		failures.append("Same-tier set_charge_ratio did not change ratio (both %f)" % ratio_same_tier_1)
 	if flashlight.get_tier() != 0:
 		failures.append("Same-tier set_charge_ratio changed tier (got %d)" % flashlight.get_tier())
-	if bar != null and not is_equal_approx(bar.value, 0.96):
-		failures.append("BatteryProgressBar not synced to 0.96 after same-tier set (got %f)" % bar.value)
-	if pct_label != null:
-		var expected_pct := "%d%%" % int(round(0.96 * 100.0))
-		if pct_label.text != expected_pct:
-			failures.append("BatteryPercentageLabel not synced to 96%% after same-tier set (got '%s')" % pct_label.text)
-	# 临界/耗尽档 panel.modulate.a 在 _process 后会被写为非 1.0
+	# 临界/耗尽档的三格电芯与时间文本整体闪烁。
 	flashlight.set_charge_ratio(0.0)
 	# 等多个 process + physics 帧,让 _tick_battery_blink 有机会切换 alpha
 	for _i in 30:
@@ -373,9 +371,13 @@ func _assert_active_run_snapshot(flashlight: PlayerFlashlight3D, failures: Array
 	}
 	if not BaseManager.set_active_run_checkpoint(snapshot, "test_charge"):
 		failures.append("set_active_run_checkpoint failed")
+	# 真实信号会把后续电量变化写回已有行动检查点，而不是只在测试中手写字典。
+	flashlight.set_charge_ratio(0.40)
 	var stored := BaseManager.get_active_run_checkpoint()
-	if not is_equal_approx(float(stored.get("flashlight_charge_ratio", -1.0)), 0.42):
-		failures.append("flashlight_charge_ratio not persisted (got %s)" % str(stored.get("flashlight_charge_ratio")))
+	if not is_equal_approx(float(stored.get("flashlight_charge_ratio", -1.0)), 0.40):
+		failures.append("flashlight_charge_ratio was not updated from the runtime signal (got %s)" % str(stored.get("flashlight_charge_ratio")))
+	if str(stored.get("flashlight_module_id", "")) != flashlight.get_module_id():
+		failures.append("flashlight_module_id was not updated from runtime state")
 
 
 # 9. §10.6 #7
