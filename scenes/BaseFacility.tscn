@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://base_facility_scene"]
+[gd_scene format=3 uid="uid://c4lrqmn2p1w1g"]
 
 [ext_resource type="Script" path="res://src/base/BaseFacility.gd" id="1_facility"]
 [ext_resource type="Script" path="res://src/base/BaseFacilityRenderer.gd" id="2_renderer"]
@@ -6,63 +6,62 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_facility"]
 size = Vector2(230, 150)
 
-[node name="BaseFacility" type="Area2D"]
+[node name="BaseFacility" type="Area2D" unique_id=193321545]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_facility")
 
-[node name="Visual" type="Polygon2D" parent="."]
+[node name="Visual" type="Polygon2D" parent="." unique_id=333530492]
 visible = false
-polygon = PackedVector2Array(-115, -75, 115, -75, 115, 75, -115, 75)
 color = Color(0.28, 0.55, 0.78, 1)
+polygon = PackedVector2Array(-115, -75, 115, -75, 115, 75, -115, 75)
 
-[node name="Inner" type="Polygon2D" parent="Visual"]
-polygon = PackedVector2Array(-99, -59, 99, -59, 99, 59, -99, 59)
+[node name="Inner" type="Polygon2D" parent="Visual" unique_id=909571625]
 color = Color(0.48, 0.71, 0.88, 1)
+polygon = PackedVector2Array(-99, -59, 99, -59, 99, 59, -99, 59)
 
-[node name="Facade" type="Node2D" parent="."]
+[node name="Facade" type="Node2D" parent="." unique_id=1812803944]
 script = ExtResource("2_renderer")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=909405252]
 shape = SubResource("RectangleShape2D_facility")
 
-[node name="NameLabel" type="Label" parent="."]
+[node name="NameLabel" type="Label" parent="." unique_id=1240836755]
 offset_left = -105.0
 offset_top = -38.0
 offset_right = 105.0
 offset_bottom = -10.0
-text = "基地设施"
-horizontal_alignment = 1
-vertical_alignment = 1
 theme_override_colors/font_color = Color(0.05, 0.07, 0.1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.9)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_font_sizes/font_size = 20
+text = "基地设施"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="DescriptionLabel" type="Label" parent="."]
+[node name="DescriptionLabel" type="Label" parent="." unique_id=1555471746]
 visible = false
 offset_left = -105.0
-offset_top = 0.0
 offset_right = 105.0
 offset_bottom = 42.0
+theme_override_colors/font_color = Color(0.78, 0.84, 0.88, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.92)
+theme_override_font_sizes/font_size = 12
 text = "设施说明"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
-theme_override_colors/font_color = Color(0.78, 0.84, 0.88, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.92)
-theme_override_font_sizes/font_size = 12
 
-[node name="PromptLabel" type="Label" parent="."]
+[node name="PromptLabel" type="Label" parent="." unique_id=1368743132]
 visible = false
 z_index = 20
 offset_left = -125.0
 offset_top = 86.0
 offset_right = 125.0
 offset_bottom = 116.0
+theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
+theme_override_font_sizes/font_size = 16
 text = "[E] 使用基地设施"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_colors/font_color = Color(1, 0.88, 0.45, 1)
-theme_override_font_sizes/font_size = 16

@@ -1,6 +1,6 @@
 class_name InventoryUI
 ## 背包UI — 显示格子容量、保险格、物品拖放
-## 支持独立Panel（InventoryUI.tscn）或内嵌Grid（GameUIManager.tscn内的VBox）
+## 支持独立 Panel（InventoryUI.tscn）或嵌入当前 3D HUD 的 Grid。
 
 extends Control
 
@@ -8,7 +8,7 @@ signal item_clicked(slot_index: int, item: Dictionary)
 signal item_to_insurance_requested(slot_index: int)
 signal item_extraction_requested(slot_index: int)
 signal item_dropped_to_world(item: Dictionary, count: int)
-signal inventory_changed()  ## 背包变化时发出（供 GameUIManager 绑定）
+signal inventory_changed()  ## 背包变化时发出（供 3D HUD 绑定）
 signal inventory_open_changed(opened: bool)
 signal weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: int)
 signal equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slot_index: int)
@@ -140,8 +140,8 @@ func _setup_standalone_panels() -> void:
 	inventory_shell = PanelContainer.new()
 	inventory_shell.name = "CharacterInventoryShell"
 	inventory_shell.set_anchors_preset(Control.PRESET_CENTER)
-	inventory_shell.custom_minimum_size = Vector2(1040, 690)
-	inventory_shell.position = Vector2(-520, -345)
+	inventory_shell.custom_minimum_size = Vector2(1000, 620)
+	inventory_shell.position = Vector2(-500, -310)
 	inventory_shell.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_NORMAL, 8, 2)
 	)
@@ -161,21 +161,30 @@ func _setup_standalone_panels() -> void:
 
 	equipment_panel = PanelContainer.new()
 	equipment_panel.name = "CharacterEquipmentPanel"
-	equipment_panel.custom_minimum_size = Vector2(360, 0)
+	equipment_panel.custom_minimum_size = Vector2(320, 0)
 	equipment_panel.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(1, Color(0.32, 0.50, 0.68), 7, 1)
 	)
 	columns.add_child(equipment_panel)
 	var equipment_margin := MarginContainer.new()
-	equipment_margin.add_theme_constant_override("margin_left", 14)
-	equipment_margin.add_theme_constant_override("margin_top", 12)
-	equipment_margin.add_theme_constant_override("margin_right", 14)
-	equipment_margin.add_theme_constant_override("margin_bottom", 12)
+	equipment_margin.add_theme_constant_override("margin_left", 12)
+	equipment_margin.add_theme_constant_override("margin_top", 10)
+	equipment_margin.add_theme_constant_override("margin_right", 12)
+	equipment_margin.add_theme_constant_override("margin_bottom", 10)
 	equipment_panel.add_child(equipment_margin)
+	# 左侧装备栏内容用 ScrollContainer 兜底：fate 描述变长或字号变化时允许滚动而不是溢出 shell。
+	var equipment_scroll := ScrollContainer.new()
+	equipment_scroll.name = "EquipmentScroll"
+	equipment_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	equipment_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	equipment_scroll.mouse_filter = Control.MOUSE_FILTER_PASS
+	equipment_margin.add_child(equipment_scroll)
 	var equipment_vbox := VBoxContainer.new()
 	equipment_vbox.name = "EquipmentVBox"
-	equipment_vbox.add_theme_constant_override("separation", 10)
-	equipment_margin.add_child(equipment_vbox)
+	equipment_vbox.add_theme_constant_override("separation", 8)
+	equipment_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	equipment_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	equipment_scroll.add_child(equipment_vbox)
 	var equipment_title := Label.new()
 	equipment_title.name = "CharacterEquipmentTitle"
 	equipment_title.text = "角色装备"
@@ -217,7 +226,7 @@ func _setup_standalone_panels() -> void:
 		slot_box.add_child(slot_caption)
 		var weapon_slot := _create_slot()
 		weapon_slot.name = "MainWeaponEquipmentSlot" if weapon_slot_index == 0 else "SecondaryWeaponEquipmentSlot"
-		weapon_slot.custom_minimum_size = Vector2(104, 104)
+		weapon_slot.custom_minimum_size = Vector2(88, 88)
 		weapon_slot.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 		if weapon_slot.has_method("set_slot_index"):
 			weapon_slot.call("set_slot_index", weapon_slot_index)
@@ -244,7 +253,7 @@ func _setup_standalone_panels() -> void:
 	equipment_vbox.add_child(backpack_row)
 	equipment_backpack_slot = _create_slot()
 	equipment_backpack_slot.name = "BackpackEquipmentSlot"
-	equipment_backpack_slot.custom_minimum_size = Vector2(88, 88)
+	equipment_backpack_slot.custom_minimum_size = Vector2(76, 76)
 	equipment_backpack_slot.set_meta("slot_kind", "backpack")
 	if equipment_backpack_slot.has_method("set_slot_index"):
 		equipment_backpack_slot.call("set_slot_index", 0)
@@ -267,7 +276,7 @@ func _setup_standalone_panels() -> void:
 	for quick_index in range(2):
 		var quick_slot := _create_slot()
 		quick_slot.name = "QuickItemSlot_%d" % quick_index
-		quick_slot.custom_minimum_size = Vector2(78, 78)
+		quick_slot.custom_minimum_size = Vector2(66, 66)
 		quick_slot.set_meta("slot_kind", "quick_%d" % quick_index)
 		quick_slot.set_meta("drag_disabled", true)
 		if quick_slot.has_method("set_slot_index"):
@@ -295,6 +304,7 @@ func _setup_standalone_panels() -> void:
 		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
 	)
 	inventory_panel.custom_minimum_size = Vector2(620, 0)
+	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	columns.add_child(inventory_panel)
 

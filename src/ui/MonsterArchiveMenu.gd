@@ -3,14 +3,14 @@ extends CanvasLayer
 
 ## 怪物档案室 — 基地建筑界面
 ## 展示玩家遭遇过的所有精英怪记录（名字/等级/状态/词缀/持有装备）
-## 精英怪档案由 EliteArchiveModule 管理，跨局持久化
+## 精英档案服务通过 elite_archive 组注入；当前 3D 版本尚未接入正式服务。
 
 @onready var content: VBoxContainer
 @onready var status_label: Label
 @onready var close_button: Button
 @onready var scroll_container: ScrollContainer
 
-## 档案引用（从 RoomGameMode 场景树中获取）
+## 档案服务引用
 var _elite_archive = null
 
 func _ready() -> void:
@@ -28,16 +28,9 @@ func _ready() -> void:
 	UIStyleFactory.apply_tactical_tree(self)
 
 func _find_elite_archive() -> void:
-	# 从场景树中查找 EliteArchiveModule（挂载在 RoomGameMode 下的子节点）
 	_elite_archive = get_tree().get_first_node_in_group("elite_archive")
 	if _elite_archive == null:
-		# fallback: 通过 root 场景查找
-		var root = get_tree().get_root()
-		var room_game = root.find_child("RoomGameMode", false, false)
-		if room_game and room_game.has_node("EliteArchive"):
-			_elite_archive = room_game.get_node("EliteArchive")
-	if _elite_archive == null:
-		print("[MonsterArchiveMenu] EliteArchiveModule not found — 使用空存档")
+		print("[MonsterArchiveMenu] 3D 精英档案服务尚未接入")
 
 func _build_archive_view() -> void:
 	if content == null:
@@ -53,7 +46,7 @@ func _build_archive_view() -> void:
 
 	if _elite_archive == null or not _elite_archive.has_method("get_all_elites"):
 		var no_data_lbl := Label.new()
-		no_data_lbl.text = "暂无精英怪记录"
+		no_data_lbl.text = "正式 3D 精英名册服务尚未接入"
 		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		content.add_child(no_data_lbl)
 		_add_close_hint()

@@ -376,7 +376,7 @@ static func _apply_attach_to_mount(
 ## ===== 效果执行：ATTACH_GUN_TO_GUN =====
 ## 枪上加枪：枪身挂枪身，主枪开火时副枪也跟随射击
 ## 实现：找到一个 GUN_BODY 节点作为主枪，在其 MOUNT 槽挂载一个副枪身
-## 副枪的射击通过 WeaponAssemblyTree._fire_co_mounted_gun() 实现
+## 副枪的实际射击由 WeaponModel3D 根据装配树标签实现。
 static func _apply_attach_gun_to_gun(
 	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
 ) -> ApplyResult:
@@ -1076,7 +1076,7 @@ static func _apply_grant_random_card(
 
 
 ## ===== 效果执行：LUCKY_CHEST（环境命运触发器）=====
-## 下次开箱品质提升 — 通过 RoomGameMode 设置标记
+## 下次开箱品质提升 — 通过当前 3D 局内运行时设置标记。
 static func _apply_lucky_chest(
 	card: FateCard, tree: WeaponAssemblyTree, targets: Array[AssemblyNode]
 ) -> ApplyResult:
@@ -1144,7 +1144,7 @@ static func _apply_bless_dead(
 			result.effect_value.damage_bonus * 100.0,
 		]
 	)
-	# 通过 RoomGameMode 设置祝福状态
+	# 通过当前 3D 局内运行时设置祝福状态。
 	var rgm: Node = _find_room_game_mode()
 	if rgm != null and rgm.has_method("apply_bless_dead"):
 		rgm.apply_bless_dead(
@@ -1255,25 +1255,14 @@ static func _find_player() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree == null or tree.get_root() == null:
 		return null
-	var player: Node = tree.get_first_node_in_group("player")
-	if player != null:
-		return player
-	var root: Node = tree.get_root()
-	player = root.get_node_or_null("Main/RoomGameMode/Player")
-	if player == null:
-		player = root.find_child("Player", true, false)
-	return player
+	return tree.get_first_node_in_group("player")
 
 
 static func _find_room_game_mode() -> Node:
 	var tree: SceneTree = Engine.get_main_loop() as SceneTree
 	if tree == null or tree.get_root() == null:
 		return null
-	var root: Node = tree.get_root()
-	var rgm: Node = root.get_node_or_null("Main/RoomGameMode")
-	if rgm == null:
-		rgm = root.find_child("RoomGameMode", false, false)
-	return rgm
+	return tree.get_first_node_in_group("room_game_mode")
 
 
 static func _find_fate_card_bridge() -> Node:

@@ -186,7 +186,7 @@ func _tap_action(action: StringName) -> void:
 
 func _finish(failures: Array[String], node_count: int) -> void:
 	if failures.is_empty():
-		print("BASE_WORLD_3D_FLOW_OK: compatibility hub, modular environment, four-component player, eight-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
+		print("BASE_WORLD_3D_FLOW_OK: formal 3D hub, modular environment, four-component player, eight-state contract, facilities, gates, and return flow pass (nodes=%d)" % node_count)
 		get_tree().quit(0)
 		return
 	for failure in failures:

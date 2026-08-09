@@ -4,8 +4,8 @@ class_name ItemUseHandler
 ## 配合 InventoryModule.consume_item 使用：consume_item 扣物品数量，handler 触发效果
 ## 
 ## 使用场景：
-##   1. GameUIManager 右键背包物品 → consume_item + ItemUseHandler.apply(player, item)
-##   2. ExtractionProgressUI BEACON 按钮 → ExtractionDirector.summon_beacon_extraction() (直接调用，无需 handler)
+##   1. 3D 背包界面使用物品 → consume_item + ItemUseHandler.apply(item, context)
+##   2. 3D 撤离信标由 Dungeon3D 流程直接处理，无需 handler
 
 ## 单例（延迟初始化）
 static var _instance: ItemUseHandler = null
@@ -14,7 +14,7 @@ static func get_instance() -> ItemUseHandler:
 		_instance = ItemUseHandler.new()
 	return _instance
 
-## 预加载脚本（供 GameUIManager 直接 new 使用）
+## 预加载脚本（供当前 UI/运行时直接 new 使用）
 const _SCRIPT := preload("res://src/game/ItemUseHandler.gd")
 
 # 三类电池对应的恢复比例(与 ItemRegistry 物品定义一一对应)

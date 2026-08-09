@@ -1,23 +1,19 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://de11ym4vx8js4"]
 
 [ext_resource type="Script" path="res://src/game/ContainerInteraction.gd" id="1_container"]
-
-; 容器场景 — 可开启的箱子/宝箱/补给箱
-; 挂在 Area2D 上检测玩家接近，按 interact 键开启
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_area"]
 radius = 45.0
 
-[node name="Container" type="Area2D"]
+[node name="Container" type="Area2D" unique_id=1684726182]
 collision_layer = 0
 collision_mask = 2
-monitorable = true
 script = ExtResource("1_container")
 
-[node name="InteractionArea" type="CollisionShape2D" parent="."]
+[node name="InteractionArea" type="CollisionShape2D" parent="." unique_id=1679945769]
 shape = SubResource("CircleShape2D_area")
 
-[node name="Sprite" type="ColorRect" parent="."]
+[node name="Sprite" type="ColorRect" parent="." unique_id=202607033]
 custom_minimum_size = Vector2(40, 40)
 offset_left = -20.0
 offset_top = -20.0
@@ -25,7 +21,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 color = Color(0.7, 0.6, 0.2, 0.85)
 
-[node name="InteractLabel" type="Label" parent="."]
+[node name="InteractLabel" type="Label" parent="." unique_id=539552712]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

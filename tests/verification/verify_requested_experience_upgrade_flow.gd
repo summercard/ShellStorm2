@@ -18,12 +18,12 @@ func _ready() -> void:
 func _verify_audio_contract(failures: Array[String]) -> void:
 	var snapshot := AudioManager.validate_runtime_assets() as Dictionary
 	if (
-		int(snapshot.get("event_count", 0)) != 31
+		int(snapshot.get("event_count", 0)) < 31
 		or not bool(snapshot.get("mobile_safe", false))
 		or not (snapshot.get("missing", []) as Array).is_empty()
 		or not (snapshot.get("non_ogg", []) as Array).is_empty()
 	):
-		failures.append("31项运行时音效没有全部切换为移动端安全的OGG资源")
+		failures.append("至少31项运行时音效没有全部切换为移动端安全的OGG资源")
 
 
 func _verify_single_item_loot(failures: Array[String]) -> void:

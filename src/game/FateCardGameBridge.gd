@@ -23,14 +23,8 @@ func _ready() -> void:
 	call_deferred("_connect_to_player")
 
 func _connect_to_player() -> void:
-	# 正确路径：/root/Main/Player（Player.gd 在 _ready 中 add_to_group("player")）
+	# Player3D 通过稳定组名注册；不要再依赖已退役的 2D 场景层级。
 	var player: Node = get_tree().get_first_node_in_group("player")
-	if player == null:
-		player = get_tree().get_root().get_node_or_null("Main/Player")
-	if player == null:
-		var main = get_tree().get_root().get_node_or_null("Main")
-		if main != null and main.has_node("Player"):
-			player = main.get_node("Player")
 	if player != null and player.has_method("get_weapon_tree"):
 		set_player(player)
 		if _player_weapon_tree == null:

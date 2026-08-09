@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://dmg001"]
+[gd_scene format=3 uid="uid://xtuuro5himok"]
 
-[node name="DamageNumber" type="Label"]
+[node name="DamageNumber" type="Label" unique_id=1013725053]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -15,4 +15,3 @@ grow_vertical = 2
 text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
-autowrap_mode = 0

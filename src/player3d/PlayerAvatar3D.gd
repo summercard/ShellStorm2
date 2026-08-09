@@ -29,6 +29,10 @@ extends Node3D
 	"VisualRoot/BunnyRig/BackpackSocket",
 	"VisualRoot/BackpackSocket"
 ) as Marker3D
+@onready var lower_body_socket: Marker3D = _resolve_rig_node(
+	"VisualRoot/BunnyRig/BodyJoint/LowerBodySocket",
+	"VisualRoot/Body/LowerBodySocket"
+) as Marker3D
 @onready var dash_dust: GPUParticles3D = $VisualRoot/StateVFX/DashDustBurst
 @onready var lock_ring: MeshInstance3D = $VisualRoot/StateVFX/LockRing
 @onready var low_health_ring: MeshInstance3D = $VisualRoot/StateVFX/LowHealthRing
@@ -37,40 +41,44 @@ extends Node3D
 @onready var reload_progress_fill: MeshInstance3D = $ReloadProgress3D/Fill
 
 const DEFAULT_CUSTOMIZATION := {
-	"body": "cat_orange",
-	"head": "cat_orange",
-	"hand": "cat_orange",
-	"feet": "cat_orange",
+	"body": "bunny_white",
+	"head": "bunny_white",
+	"hand": "bunny_white",
+	"feet": "bunny_white",
 	"hat": "none",
 	"glasses": "none",
 }
 const CUSTOMIZATION_OPTIONS := {
-	"body": ["cat_orange", "suit_olive", "suit_sand", "suit_cobalt"],
-	"head": ["cat_orange", "sensor_olive", "visor_cyan", "plated_amber"],
-	"hand": ["cat_orange", "grip_olive", "safety_orange", "gauntlet_teal"],
-	"feet": ["cat_orange", "boot_sand", "boot_cobalt", "boot_teal"],
+	"body": ["bunny_white", "cat_orange", "suit_olive", "suit_sand", "suit_cobalt"],
+	"head": ["bunny_white", "cat_orange", "sensor_olive", "visor_cyan", "plated_amber"],
+	"hand": ["bunny_white", "cat_orange", "grip_olive", "safety_orange", "gauntlet_teal"],
+	"feet": ["bunny_white", "cat_orange", "boot_sand", "boot_cobalt", "boot_teal"],
 	"hat": ["none", "field_cap", "hard_hat", "sealed_hood"],
 	"glasses": ["none", "mono_lens", "dual_goggles", "wide_visor"],
 }
 const BODY_COLORS := {
+	"bunny_white": Color.WHITE,
 	"cat_orange": Color(0.96, 0.48, 0.10),
 	"suit_olive": Color(0.46, 0.49, 0.31),
 	"suit_sand": Color(0.66, 0.50, 0.30),
 	"suit_cobalt": Color(0.20, 0.42, 0.56),
 }
 const HEAD_COLORS := {
+	"bunny_white": Color.WHITE,
 	"cat_orange": Color(1.0, 0.56, 0.12),
 	"sensor_olive": Color(0.56, 0.56, 0.30),
 	"visor_cyan": Color(0.22, 0.52, 0.56),
 	"plated_amber": Color(0.62, 0.39, 0.16),
 }
 const HAND_COLORS := {
+	"bunny_white": Color.WHITE,
 	"cat_orange": Color(0.93, 0.40, 0.07),
 	"grip_olive": Color(0.56, 0.51, 0.27),
 	"safety_orange": Color(0.78, 0.29, 0.09),
 	"gauntlet_teal": Color(0.10, 0.52, 0.50),
 }
 const FEET_COLORS := {
+	"bunny_white": Color.WHITE,
 	"cat_orange": Color(0.88, 0.35, 0.055),
 	"boot_sand": Color(0.54, 0.36, 0.19),
 	"boot_cobalt": Color(0.13, 0.30, 0.44),
@@ -213,6 +221,11 @@ func get_backpack_socket() -> Marker3D:
 	return backpack_socket
 
 
+## 腰线以下的纯表现挂点。裙摆、腰甲和下身饰件只挂这里，不进入碰撞或玩法树。
+func get_lower_body_socket() -> Marker3D:
+	return lower_body_socket
+
+
 func _motion_offset(value: Vector3) -> Vector3:
 	return value * (BUNNY_LINEAR_SCALE if _is_bunny_avatar() else 1.0)
 
@@ -311,10 +324,17 @@ func get_component_snapshot() -> Dictionary:
 		"state": _state,
 		"component_count": 4,
 		"components": ["body", "head", "hand", "feet"],
-		"subcomponents": ["ear_accessories", "ear_sockets", "hat", "glasses"],
+		"subcomponents": ["ear_accessories", "ear_sockets", "hat", "glasses", "lower_body_socket"],
 		"customization": get_customization(),
+		"customization_material_counts": _get_customization_material_counts(),
+		"customization_material_colors": _get_customization_material_colors(),
 		"wearable_count": _wearable_nodes.size(),
 		"has_weapon_socket": weapon_socket != null,
+		"has_lower_body_socket": lower_body_socket != null,
+		"lower_body_socket_path": str(lower_body_socket.get_path()) if lower_body_socket != null else "",
+		"lower_body_socket_position": lower_body_socket.position if lower_body_socket != null else Vector3.ZERO,
+		"lower_body_socket_global_position": lower_body_socket.global_position if lower_body_socket != null else Vector3.ZERO,
+		"lower_body_socket_parent_is_body": lower_body_socket != null and lower_body_socket.get_parent() == body,
 		"visible_hand_count": 2 if is_bunny else 1,
 		"visible_foot_count": 2,
 		"eye_count": 0 if is_bunny else 2,
@@ -1088,15 +1108,21 @@ func _ensure_wearable_nodes() -> void:
 func _apply_customization() -> void:
 	if _materials.is_empty():
 		return
-	_set_base_color("VisualRoot/Body/BodyShell", BODY_COLORS[_customization["body"]])
-	_set_base_color("VisualRoot/Body/BellyPatch", BODY_COLORS[_customization["body"]].lightened(0.24))
-	_set_base_color("VisualRoot/Body/TailStub", BODY_COLORS[_customization["body"]].darkened(0.06))
-	_set_base_color("VisualRoot/Head/HeadShell", HEAD_COLORS[_customization["head"]])
-	_set_base_color("VisualRoot/Head/Ears/EarL", HEAD_COLORS[_customization["head"]].darkened(0.04))
-	_set_base_color("VisualRoot/Head/Ears/EarR", HEAD_COLORS[_customization["head"]].darkened(0.04))
-	_set_base_color("VisualRoot/Hand/Glove", HAND_COLORS[_customization["hand"]])
-	_set_base_color("VisualRoot/Feet/FootL", FEET_COLORS[_customization["feet"]])
-	_set_base_color("VisualRoot/Feet/FootR", FEET_COLORS[_customization["feet"]])
+	if _is_bunny_avatar():
+		_set_slot_base_color("body", BODY_COLORS[_customization["body"]])
+		_set_slot_base_color("head", HEAD_COLORS[_customization["head"]])
+		_set_slot_base_color("hand", HAND_COLORS[_customization["hand"]])
+		_set_slot_base_color("feet", FEET_COLORS[_customization["feet"]])
+	else:
+		_set_base_color("VisualRoot/Body/BodyShell", BODY_COLORS[_customization["body"]])
+		_set_base_color("VisualRoot/Body/BellyPatch", BODY_COLORS[_customization["body"]].lightened(0.24))
+		_set_base_color("VisualRoot/Body/TailStub", BODY_COLORS[_customization["body"]].darkened(0.06))
+		_set_base_color("VisualRoot/Head/HeadShell", HEAD_COLORS[_customization["head"]])
+		_set_base_color("VisualRoot/Head/Ears/EarL", HEAD_COLORS[_customization["head"]].darkened(0.04))
+		_set_base_color("VisualRoot/Head/Ears/EarR", HEAD_COLORS[_customization["head"]].darkened(0.04))
+		_set_base_color("VisualRoot/Hand/Glove", HAND_COLORS[_customization["hand"]])
+		_set_base_color("VisualRoot/Feet/FootL", FEET_COLORS[_customization["feet"]])
+		_set_base_color("VisualRoot/Feet/FootR", FEET_COLORS[_customization["feet"]])
 	for wearable_id in _wearable_nodes:
 		if wearable_id.ends_with("_none"):
 			continue
@@ -1109,6 +1135,35 @@ func _set_base_color(material_path: String, color: Color) -> void:
 		return
 	_base_colors[material_path] = color
 	(_materials[material_path] as StandardMaterial3D).albedo_color = color
+
+
+func _set_slot_base_color(slot_id: String, color: Color) -> void:
+	var prefix := "bunny_slot/%s/" % slot_id
+	for material_key in _materials:
+		if not str(material_key).begins_with(prefix):
+			continue
+		_base_colors[material_key] = color
+		(_materials[material_key] as StandardMaterial3D).albedo_color = color
+
+
+func _get_customization_material_counts() -> Dictionary:
+	var counts := {"body": 0, "head": 0, "hand": 0, "feet": 0}
+	for material_key in _materials:
+		for slot_id in counts:
+			if str(material_key).begins_with("bunny_slot/%s/" % slot_id):
+				counts[slot_id] = int(counts[slot_id]) + 1
+	return counts
+
+
+func _get_customization_material_colors() -> Dictionary:
+	var colors := {}
+	for slot_id in ["body", "head", "hand", "feet"]:
+		var prefix := "bunny_slot/%s/" % slot_id
+		for material_key in _base_colors:
+			if str(material_key).begins_with(prefix):
+				colors[slot_id] = _base_colors[material_key]
+				break
+	return colors
 
 
 func _create_field_cap() -> Node3D:
@@ -1355,6 +1410,27 @@ func _prepare_unique_materials() -> void:
 		mesh_instance.material_override = material
 		_materials[path] = material
 		_base_colors[path] = material.albedo_color
+	if _is_bunny_avatar():
+		_register_bunny_slot_materials("body", body)
+		_register_bunny_slot_materials("head", head)
+		_register_bunny_slot_materials("hand", hand)
+		_register_bunny_slot_materials("feet", feet)
+
+
+func _register_bunny_slot_materials(slot_id: String, slot_root: Node) -> void:
+	for child in slot_root.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := child as MeshInstance3D
+		if mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var source := mesh_instance.get_active_material(surface_index) as StandardMaterial3D
+			if source == null:
+				continue
+			var material := source.duplicate() as StandardMaterial3D
+			mesh_instance.set_surface_override_material(surface_index, material)
+			var material_key := "bunny_slot/%s/%s/%d" % [slot_id, str(mesh_instance.get_path()), surface_index]
+			_materials[material_key] = material
+			_base_colors[material_key] = material.albedo_color
 
 
 func _find_player() -> Node:

@@ -2,7 +2,7 @@ class_name WeaponAssemblyTreePanel
 extends Control
 
 ## 武器装配树可视化面板
-## 挂载在 GameUIManager 下（standalone模式），或独立运行
+## 可挂载在当前 3D HUD 下，或独立运行。
 ## 按指定按键切换显示（如 Tab）
 ## 显示：树状结构 + 合成属性 + 节点详情
 ## 响应 WeaponAssemblyTree 的 tree_changed / stats_changed 信号

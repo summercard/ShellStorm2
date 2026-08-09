@@ -148,9 +148,10 @@ func _ready() -> void:
 
 	await _verify_enemy_ecosystem(failures)
 	await _verify_weapon_matrix(failures)
-	# 该用例会组合四主题和概率垂直支路；1250用于吸收合法支路数量波动。
+	# 该用例会组合四主题和概率垂直支路；1300用于吸收合法支路数量波动
+	# 以及正式角色表现挂点。硬预算仍由专项分账。
 	# 正式硬预算继续由 verify_3d_performance_budget 分账阻断，不能在此替代。
-	if node_peak > 1250:
+	if node_peak > 1300:
 		failures.append("3D level exceeds prototype node budget: %d" % node_peak)
 	_finish(failures, node_peak)
 

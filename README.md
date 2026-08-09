@@ -18,7 +18,7 @@ Godot 4.6 顶视角 3D 搜打撤肉鸽。当前项目版本为 `0.1.0`，正式�
 | `src/core/` | 全局基础设施、状态机、存储与音频 |
 | `src/world3d/` | 当前 3D 关卡、房间、门、撤离和塔楼生成 |
 | `src/player3d/` / `src/enemy3d/` | 当前 3D 角色与怪物运行时 |
-| `src/game/` | 可复用玩法模块；其中部分 2D 类属于兼容层 |
+| `src/game/` | 供正式 3D 运行时复用的维度无关玩法模块 |
 | `assets/art/` | 可替换美术资产及其源文件 |
 | `assets/registry/` | 美术资产唯一登记源 |
 | `tests/verification/` | 自动回归场景 |

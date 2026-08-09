@@ -70,11 +70,9 @@ func _ready() -> void:
 		])
 	if int(dungeon.get_runtime_snapshot().get("keys", -1)) != keys_before_denied_open:
 		failures.append("Denied door opening consumed a key")
-	var enemies := get_tree().get_nodes_in_group("enemy_3d").filter(func(node): return dungeon.is_ancestor_of(node))
-	for enemy in enemies:
-		if enemy is Enemy3D and (enemy as Enemy3D).room_id == first_room_id:
-			(enemy as Enemy3D).take_damage(999999, false, Vector3.FORWARD)
-	await get_tree().process_frame
+	# 正式房间可能是多波配置；持续清完运行时实际生成的所有波次，不能只
+	# 对进入房间瞬间的敌人快照做一次伤害。
+	await _clear_room_for_test(dungeon, first_room_id)
 	var room := _find_room(dungeon, first_room_id)
 	if room == null or not room.cleared:
 		failures.append("Killing all enemies did not clear the room")
@@ -295,6 +293,24 @@ func _find_room(dungeon: Dungeon3D, room_id: String) -> DungeonRoom3D:
 		if room != null and dungeon.is_ancestor_of(room) and room.room_id == room_id:
 			return room
 	return null
+
+
+func _clear_room_for_test(dungeon: Dungeon3D, room_id: String) -> void:
+	var deadline := Time.get_ticks_msec() + 5000
+	while Time.get_ticks_msec() < deadline:
+		var room := _find_room(dungeon, room_id)
+		if room != null and room.cleared:
+			return
+		for value in get_tree().get_nodes_in_group("enemy_3d"):
+			var enemy := value as Enemy3D
+			if (
+				enemy != null
+				and dungeon.is_ancestor_of(enemy)
+				and enemy.room_id == room_id
+				and enemy.ai_state != "dead"
+			):
+				enemy.take_damage(999999, false, Vector3.FORWARD)
+		await get_tree().process_frame
 
 
 func _count_nodes(root: Node) -> int:

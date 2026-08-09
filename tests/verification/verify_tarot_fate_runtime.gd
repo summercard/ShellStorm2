@@ -19,20 +19,20 @@ func _ready() -> void:
 		card.set_orientation(FateCard.Orientation.UPRIGHT, 0.25)
 		var upright_description := card.description
 		var upright_effect := card.effect.duplicate(true)
-		var upright_tree := WeaponPresets.build_rifle()
+		var upright_tree := BlueprintRegistry.build_weapon_tree("bp_rifle")
 		var upright_result := FateCardEngine.apply_card(card, upright_tree)
 		_check(upright_result.success, "%s upright failed: %s" % [tarot_name, upright_result.message], failures)
-		_free_tree_nodes(upright_tree.get_root())
+		upright_tree.clear_assembly(false)
 		upright_tree.free()
 		card.set_orientation(FateCard.Orientation.REVERSED, 0.75)
 		_check(card.card_name == tarot_name and card.scope == scope, "%s reversed changed identity or owner" % tarot_name, failures)
 		_check(card.description != upright_description, "%s reversed description is unchanged" % tarot_name, failures)
 		_check(card.effect != upright_effect, "%s reversed effect snapshot is unchanged" % tarot_name, failures)
 		_check(str(card.effect.get("orientation", "")) == "REVERSED", "%s reversed effect lacks orientation" % tarot_name, failures)
-		var reversed_tree := WeaponPresets.build_rifle()
+		var reversed_tree := BlueprintRegistry.build_weapon_tree("bp_rifle")
 		var reversed_result := FateCardEngine.apply_card(card, reversed_tree)
 		_check(reversed_result.success, "%s reversed failed: %s" % [tarot_name, reversed_result.message], failures)
-		_free_tree_nodes(reversed_tree.get_root())
+		reversed_tree.clear_assembly(false)
 		reversed_tree.free()
 
 	var rng := RandomNumberGenerator.new()
@@ -61,15 +61,6 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
-
-
-func _free_tree_nodes(node: AssemblyNode) -> void:
-	if node == null:
-		return
-	for slot_type in node.slots:
-		var child: AssemblyNode = node.slots[slot_type]
-		_free_tree_nodes(child)
-	node.free()
 
 
 func _check(condition: bool, message: String, failures: Array[String]) -> void:

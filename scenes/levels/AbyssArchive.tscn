@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://level_abyss_archive"]
-
-[ext_resource type="Script" path="res://src/game/ThemedLevelEntry.gd" id="1_entry"]
-[ext_resource type="Resource" path="res://data/map_themes/abyss_archive.tres" id="2_theme"]
-
-[node name="AbyssArchive" type="Node2D"]
-script = ExtResource("1_entry")
-theme_profile = ExtResource("2_theme")

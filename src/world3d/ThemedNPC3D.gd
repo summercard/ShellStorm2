@@ -1,7 +1,7 @@
 class_name ThemedNPC3D
 extends Area3D
 ## 3D 预览与基地复用的主题 NPC 适配层。
-## 保持 2D ThemedNPC 的配置和交互语义，视觉仍是可替换的程序化占位表现。
+## 当前 3D NPC 配置与交互入口；视觉仍是可替换的程序化占位表现。
 
 signal interaction_changed(visible: bool, text: String)
 signal configured(npc_id: String)
@@ -179,4 +179,3 @@ func _on_body_exited(body: Node3D) -> void:
 		_player_in_range = false
 		hide_dialogue()
 		_refresh_presentation()
-

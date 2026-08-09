@@ -170,7 +170,7 @@ func get_all_insured_items() -> Array[Dictionary]:
 			var d: Dictionary = {
 				"item": _insurance_slots[i].item.duplicate(true),
 				"count": maxi(1, _insurance_slots[i].count),
-				"insurance_slot": i  # 与 GameUIManager._refresh_insurance_ui() 的 key 对齐
+				"insurance_slot": i  # 供当前保险界面按槽位刷新。
 			}
 			result.append(d)
 	return result

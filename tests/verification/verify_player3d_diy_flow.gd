@@ -33,6 +33,21 @@ func _ready() -> void:
 	for slot_id in EXPECTED_LOADOUT:
 		if str(current_loadout.get(slot_id, "")) != str(EXPECTED_LOADOUT[slot_id]):
 			failures.append("DIY snapshot does not retain %s" % slot_id)
+	var material_counts := avatar_snapshot.get("customization_material_counts", {}) as Dictionary
+	var material_colors := avatar_snapshot.get("customization_material_colors", {}) as Dictionary
+	for slot_id in ["body", "head", "hand", "feet"]:
+		if int(material_counts.get(slot_id, 0)) <= 0:
+			failures.append("Bunny DIY slot has no live GLB material mapping: %s" % slot_id)
+	var expected_colors := {
+		"body": PlayerAvatar3D.BODY_COLORS[EXPECTED_LOADOUT["body"]],
+		"head": PlayerAvatar3D.HEAD_COLORS[EXPECTED_LOADOUT["head"]],
+		"hand": PlayerAvatar3D.HAND_COLORS[EXPECTED_LOADOUT["hand"]],
+		"feet": PlayerAvatar3D.FEET_COLORS[EXPECTED_LOADOUT["feet"]],
+	}
+	for slot_id in expected_colors:
+		var actual_color := material_colors.get(slot_id, Color.TRANSPARENT) as Color
+		if not actual_color.is_equal_approx(expected_colors[slot_id] as Color):
+			failures.append("Bunny DIY slot did not recolor the live GLB material: %s" % slot_id)
 	if int(avatar_snapshot.get("wearable_count", 0)) < 8:
 		failures.append("Hat/glasses wearable nodes were not constructed")
 	if int(avatar_snapshot.get("component_count", 0)) != 4:

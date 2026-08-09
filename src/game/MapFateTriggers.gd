@@ -34,7 +34,7 @@ var _counters: Dictionary = {}     # trigger_type → current count
 var _last_trigger_time: Dictionary = {}  # trigger_type → last trigger timestamp
 var _triggered_this_run: Dictionary = {}  # trigger_type → bool (for once_per_run)
 var _fate_card_bridge: Node = null
-var _room_game_mode: Node = null
+var _run_runtime: Node = null
 var _connected: bool = false
 
 ## 默认触发器配置
@@ -70,25 +70,23 @@ func _initialize_triggers() -> void:
 		cfg.enabled = true
 		_triggers.append(cfg)
 
-## 连接到 RoomGameMode 信号
+## 连接到当前 3D 局内运行时信号。
 func _connect_signals() -> void:
 	# 延迟连接，等场景树完全加载
 	await get_tree().process_frame
-	_room_game_mode = get_tree().get_first_node_in_group("room_game_mode")
-	if _room_game_mode == null:
-		_room_game_mode = get_node_or_null("/root/Main/RoomGameMode")
-	if _room_game_mode == null:
-		_room_game_mode = get_node_or_null("/root/RoomGameMode")
+	_run_runtime = get_tree().get_first_node_in_group("room_game_mode")
 	
-	if _room_game_mode != null:
-		var ok: bool = false
-		ok = _room_game_mode.kill_recorded.connect(_on_kill_recorded) == OK
-		ok = _room_game_mode.room_cleared.connect(_on_room_cleared) == OK
-		_room_game_mode.room_entered.connect(_on_room_entered)
+	if _run_runtime != null:
+		if not _run_runtime.kill_recorded.is_connected(_on_kill_recorded):
+			_run_runtime.kill_recorded.connect(_on_kill_recorded)
+		if not _run_runtime.room_cleared.is_connected(_on_room_cleared):
+			_run_runtime.room_cleared.connect(_on_room_cleared)
+		if not _run_runtime.room_entered.is_connected(_on_room_entered):
+			_run_runtime.room_entered.connect(_on_room_entered)
 		_connected = true
-		print("[MapFateTriggers] 已连接到 RoomGameMode")
+		print("[MapFateTriggers] 已连接到 3D 局内运行时")
 	else:
-		print("[MapFateTriggers] 警告：未找到 RoomGameMode，触发器仅被动计数")
+		print("[MapFateTriggers] 警告：未找到 3D 局内运行时，触发器仅被动计数")
 
 ## 重置计数器
 func _reset_counters() -> void:
@@ -106,8 +104,8 @@ func _reset_counters() -> void:
 func _on_kill_recorded() -> void:
 	_increment_counter(TriggerType.KILL_COUNT)
 	var enemy_data = null
-	if _room_game_mode != null and _room_game_mode.has_method("get_last_killed_enemy"):
-		enemy_data = _room_game_mode.get("last_killed_enemy_data")
+	if _run_runtime != null and _run_runtime.has_method("get_last_killed_enemy"):
+		enemy_data = _run_runtime.get("last_killed_enemy_data")
 	if enemy_data != null and enemy_data.get("is_elite", false):
 		_increment_counter(TriggerType.ELITE_KILL)
 
@@ -117,7 +115,7 @@ func _on_room_cleared(room_data) -> void:
 func _on_room_entered(room_data) -> void:
 	_increment_counter(TriggerType.ENTER_ROOM)
 
-## 外部调用：容器开启时调用（由 ContainerInteraction 信号或 RoomGameMode 桥接）
+## 外部调用：3D 容器开启时调用。
 func on_container_opened(container_type: String = "crate") -> void:
 	_increment_counter(TriggerType.OPEN_CHEST)
 
@@ -182,14 +180,6 @@ func _fire_trigger(cfg: TriggerConfig, current: int) -> void:
 			print("[MapFateTriggers] 命运效果已应用 → %s: %s" % [cfg.fate_card_id, result.get("message", "")])
 		else:
 			print("[MapFateTriggers] 命运效果应用失败 → %s: %s" % [cfg.fate_card_id, result.get("message", "")])
-	# 向 UI 发送通知（如果 GameUIManager 存在）
-	var ui: Node = _find_ui_manager()
-	if ui != null and ui.has_method("show_fate_trigger_notification"):
-		ui.show_fate_trigger_notification(
-			TriggerType.keys()[cfg.trigger_type],
-			cfg.threshold,
-			preview
-		)
 	print("[MapFateTriggers] 触发 %s ×%d → %s (%s)" % [
 		TriggerType.keys()[cfg.trigger_type],
 		cfg.threshold,
@@ -208,12 +198,6 @@ func _get_effect_preview(fate_card_id: String) -> String:
 		"fate_bless_dead": "亡者祝福！HP<30%后获得30秒伤害加成",
 	}
 	return previews.get(fate_card_id, "命运效果: %s" % fate_card_id)
-
-func _find_ui_manager() -> Node:
-	var ui: Node = get_node_or_null("/root/Main/GameUIManager")
-	if ui == null:
-		ui = get_node_or_null("/root/GameUIManager")
-	return ui
 
 func _get_fate_card_bridge() -> Node:
 	# 延迟获取（首次调用时场景树已就绪）

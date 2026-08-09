@@ -187,6 +187,6 @@ func _close() -> void:
 	queue_free()
 
 
-## 获取暂存的命运卡片（供 BaseMenu 开始游戏时传递到 RoomGameMode）
+## 获取暂存的命运卡片（供 BaseMenu 开始游戏时传递到 Dungeon3D）。
 func get_pending_card() -> FateCard:
 	return pending_card

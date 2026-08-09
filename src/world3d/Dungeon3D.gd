@@ -150,6 +150,7 @@ var _quick_item_ids: Array[String] = ["", ""]
 var _hud_battery_time_label: Label = null
 var _hud_battery_cells: Array[Panel] = []
 var _hud_battery_panel: Control = null
+var _hud_battery_cell_prev_filled: Array[bool] = []
 var _hud_battery_blink_accum := 0.0
 var _last_battery_tier := -1
 var _hud_battery_blink_visible := 1.0
@@ -3864,9 +3865,12 @@ func _apply_battery_fill_color(tier: int, ratio: float) -> void:
 		_:
 			color = Color(0.86, 0.20, 0.18)
 	var active_cells := int(ceil(ratio * _hud_battery_cells.size())) if ratio > 0.0 else 0
+	while _hud_battery_cell_prev_filled.size() < _hud_battery_cells.size():
+		_hud_battery_cell_prev_filled.append(false)
 	for index in _hud_battery_cells.size():
 		var cell := _hud_battery_cells[index]
 		var filled := index < active_cells
+		var was_filled := _hud_battery_cell_prev_filled[index]
 		var style := _make_hud_style(
 			Color(0.23, 0.88, 1.0) if not filled else color,
 			Color(0.23, 0.88, 1.0, 0.16) if not filled else Color(color, 0.82),
@@ -3876,6 +3880,34 @@ func _apply_battery_fill_color(tier: int, ratio: float) -> void:
 			style.shadow_color = Color(color, 0.38)
 			style.shadow_size = 3
 		cell.add_theme_stylebox_override("panel", style)
+		if filled != was_filled:
+			_animate_battery_cell_transition(cell, was_filled, filled, color, index)
+		_hud_battery_cell_prev_filled[index] = filled
+
+
+## 电量格状态切换的视觉反馈：充电时一格一格闪烁变出，放电时闪一下再变空。样式保持原样。
+func _animate_battery_cell_transition(cell: Panel, was_filled: bool, now_filled: bool, color: Color, position_index: int) -> void:
+	if cell.has_meta("battery_anim_tween"):
+		var old_tween: Variant = cell.get_meta("battery_anim_tween")
+		if old_tween is Tween and (old_tween as Tween).is_valid():
+			(old_tween as Tween).kill()
+	var tween := create_tween()
+	cell.set_meta("battery_anim_tween", tween)
+	if now_filled and not was_filled:
+		var stagger := float(position_index) * 0.12
+		cell.scale = Vector2(0.45, 0.45)
+		cell.modulate = Color(2.6, 2.6, 2.6, 1.0)
+		tween.tween_interval(stagger)
+		tween.tween_property(cell, "scale", Vector2(1.22, 1.22), 0.10)\
+			.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(cell, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.18)
+		tween.tween_property(cell, "scale", Vector2(1.0, 1.0), 0.10)
+	elif was_filled and not now_filled:
+		cell.modulate = Color(2.4, 2.4, 2.4, 1.0)
+		cell.scale = Vector2(1.0, 1.0)
+		tween.tween_property(cell, "modulate", Color(1.0, 1.0, 1.0, 1.0), 0.08)
+		tween.tween_property(cell, "scale", Vector2(0.86, 0.86), 0.10)
+		tween.tween_property(cell, "scale", Vector2(1.0, 1.0), 0.10)
 
 
 func _on_flashlight_charge_changed(_ratio: float, _tier: int) -> void:

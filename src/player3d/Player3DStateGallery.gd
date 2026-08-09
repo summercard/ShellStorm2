@@ -26,10 +26,10 @@ const NPC_CONFIGS := [
 	},
 ]
 const DIY_LABELS := {
-	"body": {"cat_orange": "橙色猫身", "suit_olive": "橄榄防护服", "suit_sand": "沙色防护服", "suit_cobalt": "钴蓝防护服"},
-	"head": {"cat_orange": "橙色猫头", "sensor_olive": "标准传感头", "visor_cyan": "青色面板头", "plated_amber": "琥珀装甲头"},
-	"hand": {"cat_orange": "橙色猫手", "grip_olive": "橄榄握持手", "safety_orange": "橙色安全手", "gauntlet_teal": "青绿护手"},
-	"feet": {"cat_orange": "橙色猫脚", "boot_sand": "沙色短靴", "boot_cobalt": "钴蓝短靴", "boot_teal": "青绿短靴"},
+	"body": {"bunny_white": "兔子白身", "cat_orange": "复古橙色", "suit_olive": "橄榄防护服", "suit_sand": "沙色防护服", "suit_cobalt": "钴蓝防护服"},
+	"head": {"bunny_white": "兔子白头", "cat_orange": "复古橙色", "sensor_olive": "标准传感头", "visor_cyan": "青色面板头", "plated_amber": "琥珀装甲头"},
+	"hand": {"bunny_white": "兔子白手", "cat_orange": "复古橙色", "grip_olive": "橄榄握持手", "safety_orange": "橙色安全手", "gauntlet_teal": "青绿护手"},
+	"feet": {"bunny_white": "兔子白脚", "cat_orange": "复古橙色", "boot_sand": "沙色短靴", "boot_cobalt": "钴蓝短靴", "boot_teal": "青绿短靴"},
 	"hat": {"none": "无帽子", "field_cap": "荒野软帽", "hard_hat": "工兵安全帽", "sealed_hood": "密封兜帽"},
 	"glasses": {"none": "无眼镜", "mono_lens": "单目镜", "dual_goggles": "双目护镜", "wide_visor": "宽面护目镜"},
 }
@@ -573,7 +573,15 @@ func _refresh_readout() -> void:
 	var overlays := player_snapshot.get("overlays", {}) as Dictionary
 	var active_overlays: Array[String] = []
 	for overlay_id in overlays:
-		if bool(overlays[overlay_id]):
+		var overlay_value: Variant = overlays[overlay_id]
+		var is_active := (
+			bool(overlay_value)
+			if overlay_value is bool
+			else bool((overlay_value as Dictionary).get("enabled", false))
+			if overlay_value is Dictionary
+			else false
+		)
+		if is_active:
 			active_overlays.append(str(overlay_id))
 	active_overlays.sort()
 	var weapon_snapshot := player.get_weapon_snapshot() if player != null and is_instance_valid(player) else {}

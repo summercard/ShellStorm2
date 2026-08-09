@@ -75,10 +75,14 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 		failures.append("Player spill light can affect/self-shadow the avatar")
 	if fill == null or fill.light_cull_mask != 2 or fill.shadow_enabled:
 		failures.append("Player avatar fill is not an avatar-only no-shadow light")
+	# 长期存档可能装备 advanced/efficient 模块；能量上限必须按该模块的
+	# 声明倍率校验，避免测试结果依赖本机 BaseData。
+	var flashlight_snapshot := flashlight.get_snapshot()
+	var energy_multiplier := float(flashlight_snapshot.get("energy_multiplier", 1.0))
 	if (
-		beam == null or beam.light_energy > 7.25
-		or spill == null or spill.light_energy > 0.75
-		or fill == null or fill.light_energy > 2.85
+		beam == null or beam.light_energy > 7.25 * energy_multiplier
+		or spill == null or spill.light_energy > 0.75 * energy_multiplier
+		or fill == null or fill.light_energy > 2.85 * energy_multiplier
 	):
 		failures.append("Player flashlight exposure exceeds the accepted v0.1 energy budget")
 	if (

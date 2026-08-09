@@ -1,15 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://demo_room_chain_001"]
+[gd_scene format=3 uid="uid://o8qfym0dixh"]
 
 [ext_resource type="Script" path="res://src/game/DemoRoomGameMode.gd" id="1_demo_gamemode"]
 [ext_resource type="PackedScene" path="res://scenes/GameUIManager.tscn" id="2_gameui"]
 
-; DemoRoomChain.tscn — 8房间线性链搜打撤Demo
-; 演示房间组件化系统的完整流程
-; 布局：R1-R2(COMBAT) → R3(STORAGE) → R4(MERCHANT) → R5(UPGRADE)
-;      → R6(BOSS) → R7(ELITE) → R8(EXTRACTION)
-; 规则：清怪开门，E键交互，钥匙消耗
-
-[node name="DemoRoomChain" type="Node2D"]
+[node name="DemoRoomChain" type="Node2D" unique_id=1355952425]
 script = ExtResource("1_demo_gamemode")
 
-[node name="GameUIManager" parent="." instance=ExtResource("2_gameui")]
+[node name="GameUIManager" parent="." unique_id=1674208311 instance=ExtResource("2_gameui")]

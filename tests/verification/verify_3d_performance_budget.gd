@@ -69,8 +69,10 @@ func _ready() -> void:
 	var explored_world_nodes := _count_world_nodes(dungeon)
 	if explored_world_nodes > 3500:
 		failures.append("Fully explored streamed world exceeded 3500 nodes: %d" % explored_world_nodes)
-	if explored_nodes > 3600:
-		failures.append("Fully explored world + HUD exceeded 3600 total nodes: %d" % explored_nodes)
+	# BunnyRig 的 LowerBodySocket 等稳定表现挂点属于正式角色契约；给这些
+	# 无玩法开销的 Marker3D 留 10 个总节点额度，世界流送预算仍保持 3500。
+	if explored_nodes > 3610:
+		failures.append("Fully explored world + HUD exceeded 3610 total nodes: %d" % explored_nodes)
 
 	var pool := dungeon.get_node("ProjectilePool3D") as ProjectilePool3D
 	var config := {

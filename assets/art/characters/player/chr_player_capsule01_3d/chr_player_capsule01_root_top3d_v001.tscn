@@ -220,6 +220,12 @@ position = Vector3(-0.51, -0.02, 0.24)
 scale = Vector3(0.92, 0.92, 0.92)
 mesh = SubResource("MeshTailStub")
 
+[node name="LowerBodySocket" type="Marker3D" parent="VisualRoot/Body"]
+position = Vector3(0, -0.36, 0)
+metadata/attachment_slot = "lower_body"
+metadata/attachment_examples = "skirt, waist_armor, lower_body_accessory"
+metadata/presentation_only = true
+
 [node name="Head" type="Node3D" parent="VisualRoot"]
 position = Vector3(0, 1.72, -0.08)
 

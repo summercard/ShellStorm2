@@ -385,20 +385,8 @@ func _on_fate_card_selected(card: FateCard) -> void:
 	if result.get("success", false):
 		_update_status("✓ %s 已应用！" % card.card_name)
 		_update_weapon_tree_display()
-		_show_fate_card_applied_notification(card)
 	else:
 		_update_status("✗ %s 失败: %s" % [card.card_name, result.get("message", "未知错误")])
-
-
-## 命运卡片应用成功后，发送全屏顶部通知让玩家确认改造效果
-func _show_fate_card_applied_notification(card: FateCard) -> void:
-	# 通过 game_ui 组广播（GameUIManager 订阅了 game_ui 组）
-	get_tree().call_group_flags(
-		SceneTree.GROUP_CALL_DEFAULT,
-		"game_ui",
-		"show_fate_card_notification",
-		"[%s] %s 已装备！" % [FateCard.rarity_name(card.card_rarity), card.card_name]
-	)
 
 
 func _update_status(msg: String) -> void:

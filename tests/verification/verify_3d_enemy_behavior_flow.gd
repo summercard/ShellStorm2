@@ -98,7 +98,9 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 		):
 			failures.append("%s rotated enemy has a desynchronized or inherited-rotation health bar" % kind)
 		var damage_numbers_before := _count_damage_numbers()
-		enemy.take_damage(26, false, Vector3.RIGHT)
+		# 这里只验证飘字，不验证护盾格挡；零方向避免 shielded 的 15% 随机
+		# 完全格挡让整套回归产生非确定性。
+		enemy.take_damage(26, false, Vector3.ZERO)
 		await get_tree().process_frame
 		if _count_damage_numbers() <= damage_numbers_before:
 			failures.append("Enemy damage does not create a 3D floating number: %s" % kind)

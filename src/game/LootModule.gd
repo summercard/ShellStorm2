@@ -172,7 +172,7 @@ func generate_container_loot(container_type: String, floor: int) -> Array[Dictio
 
 ## 生成怪物掉落
 ## enemy_data: 怪物配置数据（来自 MonsterInjector）
-## returns: Array[Dictionary] 死亡点可生成的概率物品列表；货币由 RoomGameMode 必定生成魂球
+## returns: Array[Dictionary] 死亡点可生成的概率物品列表；货币由当前 3D 局内运行时生成。
 func generate_enemy_loot(enemy_data: Dictionary) -> Array[Dictionary]:
 	var floor: int = enemy_data.get("floor", 1)
 	var loot_table: String = enemy_data.get(
@@ -263,9 +263,9 @@ func grant_loot_to_inventory(loot: Array[Dictionary], inventory: InventoryModule
 
 
 ## 同步信标数量到 ExtractionDirector
-## 在 RoomGameMode 地图生成时和每次获得物品后调用
+## 在 3D 地图生成时和每次获得物品后调用。
 func _sync_beacon_to_extraction_director(inventory: InventoryModule) -> void:
-	# 这个逻辑应该在 RoomGameMode 层面处理
+	# 这个逻辑应由 3D 局内运行时处理。
 	# 这里只提供辅助方法
 	pass
 

@@ -27,7 +27,7 @@ trap 'cleanup_active_test; exit 130' INT
 trap 'cleanup_active_test; exit 143' TERM
 
 smoke_scenes=(
-  verify_framework_health_flow
+  verify_3d_only_project_structure
   verify_player3d_avatar_bounds
   verify_tower_grid_component_alignment
   verify_tower_lighting_wall_combat_regressions
@@ -70,7 +70,6 @@ visual_scenes=(
   verify_full_3d_visual
   verify_player3d_state_gallery_visual
   verify_player3d_weapon_grip_visual
-  verify_player_pixel_art_flow
   verify_tower_descent_visual
   verify_tower_stair_fall_visual
   verify_training_range_3d_visual

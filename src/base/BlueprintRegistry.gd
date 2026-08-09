@@ -7,7 +7,7 @@ extends Node
 ##   2. WorkshopMenu 解锁 BlueprintTier
 ##   3. LootModule 根据 BlueprintTier 过滤掉落（已实现）
 ##   4. 玩家开始游戏时，BlueprintRegistry 根据 BlueprintTier 提供可用武器树
-##   5. Player.gd / RoomGameMode 使用 BlueprintRegistry 获取初始武器
+##   5. Player3D / Dungeon3D 使用 BlueprintRegistry 获取初始武器
 
 func _ready() -> void:
 	_build_registry()
@@ -266,19 +266,11 @@ func create_assembly_node(item_id: String) -> AssemblyNode:
 
 ## 构建一个完整武器树（枪身+子弹），根据蓝图Tier自动选择
 func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
-	var tree := WeaponAssemblyTree.new()
-
 	# 枪身：按优先级选一个可用的
 	var available_guns: Array[Dictionary] = get_available_gunbodies(blueprint_tier)
 	var gun_id: String = "bp_pistol"  # 默认
 	if not available_guns.is_empty():
 		gun_id = available_guns[0]["item_id"]
-
-	var gun_node: AssemblyNode = create_assembly_node(gun_id)
-	if gun_node == null:
-		gun_node = _create_gunbody_pistol()
-
-	tree.set_root(gun_node)
 
 	# 子弹：尝试挂一个同Tier可用的
 	var available_bullets: Array[Dictionary] = get_available_bullets(blueprint_tier)
@@ -288,10 +280,21 @@ func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
 			bullet_id = b["item_id"]
 			break
 
-	var bullet_node: AssemblyNode = create_assembly_node(bullet_id)
-	if bullet_node != null:
-		tree.mount(gun_node, AssemblyNode.SlotType.BULLET, bullet_node)
+	return build_weapon_tree(gun_id, bullet_id)
 
+
+## 按正式注册表 ID 构建指定枪身+子弹的装配树，供测试、预览与内容工具复用。
+func build_weapon_tree(
+	gunbody_item_id: String, bullet_item_id: String = "mod_bullet_standard"
+) -> WeaponAssemblyTree:
+	var tree := WeaponAssemblyTree.new()
+	var gun_node := create_assembly_node(gunbody_item_id)
+	if gun_node == null or gun_node.node_type != AssemblyNode.NodeType.GUN_BODY:
+		gun_node = _create_gunbody_pistol()
+	tree.set_root(gun_node)
+	var bullet_node := create_assembly_node(bullet_item_id)
+	if bullet_node != null and bullet_node.node_type == AssemblyNode.NodeType.BULLET:
+		tree.mount(gun_node, AssemblyNode.SlotType.BULLET, bullet_node)
 	return tree
 
 ## 获取默认初始武器（受蓝图Tier限制）

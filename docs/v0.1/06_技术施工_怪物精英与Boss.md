@@ -98,7 +98,7 @@ SelectEligibleElite(seed, floor, history)
 
 1. 固定 `EncounterRequest / EncounterPlan`，让正式 3D 成为唯一刷怪入口。
 2. 建立 12 行 `EliteDefinition` 并实现 `EliteRosterService`。
-3. 迁移两只原型和历史存档，清除对旧 `RoomGameMode` 的运行依赖。
+3. 以正式 3D 名册重新实现两只历史原型及存档迁移；旧 `RoomGameMode` 运行依赖已清除。
 4. 实现唯一预约、成长结算和夺械转译。
 5. <span style="color:#2E7D32">**[已完成首段]** Boss死亡签发一次性下行权限，并与95→94楼梯、唯一电梯、隔离提交和98–95F卸载完成专项联测；存档幂等恢复待补。</span>
 6. 为每种怪、每只精英和每个 Boss 建立自动化/场景验收。

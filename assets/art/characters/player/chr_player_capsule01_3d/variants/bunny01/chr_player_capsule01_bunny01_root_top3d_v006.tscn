@@ -33,6 +33,12 @@ position = Vector3(-0.000030303, 0.155021819, -0.000634545)
 
 [node name="Model" parent="VisualRoot/BunnyRig/BodyJoint" instance=ExtResource("2_body")]
 
+[node name="LowerBodySocket" type="Marker3D" parent="VisualRoot/BunnyRig/BodyJoint"]
+position = Vector3(0, 0.14, 0)
+metadata/attachment_slot = "lower_body"
+metadata/attachment_examples = "skirt, waist_armor, lower_body_accessory"
+metadata/presentation_only = true
+
 [node name="HeadJoint" type="Node3D" parent="VisualRoot/BunnyRig"]
 position = Vector3(-0.000027879, 0.477110303, 0.026430909)
 

@@ -10,10 +10,10 @@ func _ready() -> void:
 	var gallery := GALLERY_SCENE.instantiate() as Player3DStateGallery
 	add_child(gallery)
 	await get_tree().process_frame
-	gallery.set_preview_customization("body", "cat_orange")
-	gallery.set_preview_customization("head", "cat_orange")
-	gallery.set_preview_customization("hand", "cat_orange")
-	gallery.set_preview_customization("feet", "cat_orange")
+	gallery.set_preview_customization("body", "suit_cobalt")
+	gallery.set_preview_customization("head", "plated_amber")
+	gallery.set_preview_customization("hand", "gauntlet_teal")
+	gallery.set_preview_customization("feet", "boot_teal")
 	gallery.set_preview_customization("hat", "none")
 	gallery.set_preview_customization("glasses", "none")
 	gallery.run_player_action("moving")

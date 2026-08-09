@@ -1,6 +1,6 @@
 class_name MerchantUI
 ## 商人和商品面板 — 显示商人出售的物品，玩家可购买
-## 由 RoomGameMode 或 MerchantInteraction 在商人房激活时启用
+## 由当前 3D 商店/房间运行时激活。
 
 extends Control
 

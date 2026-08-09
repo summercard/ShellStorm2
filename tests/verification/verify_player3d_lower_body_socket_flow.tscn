@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_player3d_lower_body_socket_flow.gd" id="1_test"]
+
+[node name="VerifyPlayer3DLowerBodySocketFlow" type="Node"]
+script = ExtResource("1_test")

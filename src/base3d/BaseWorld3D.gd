@@ -1,6 +1,6 @@
 class_name BaseWorld3D
 extends Node3D
-## 游戏入口的首张 3D 地图。沿用 2D BaseWorld 的设施、入口和返回契约，
+## 游戏入口的正式 3D 基地地图。设施、入口和返回契约经共享服务层持有，
 ## 只替换空间、角色、相机与表现层；战斗副本继续作为独立场景按需加载。
 
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
