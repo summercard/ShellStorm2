@@ -8,16 +8,59 @@
 
 config_version=5
 
+[android]
+
+modules=""
+gradle_build/use_gradle_build=true
+gradle_build/gradle_version=""
+gradle_build/android_source_template=""
+gradle_build/compress_native_libraries=false
+gradle_build/export_format=0
+gradle_build/min_sdk=24
+gradle_build/target_sdk=34
+package/unique_name="org.shellstorm2.game"
+package/name="ShellStorm2"
+package/signed=true
+package/app_category=2
+version/code=1
+version/name="0.1.0"
+screen/immersive_mode=true
+screen/allow_secure_volume_controls=false
+screen/force_landscape=true
+screen/force_portrait=false
+screen/support_small=true
+screen/support_normal=true
+screen/support_large=true
+screen/support_xlarge=true
+permissions/access_network_state=true
+permissions/internet=true
+permissions/vibrate=true
+permissions/wake_lock=true
+permissions/keep_screen_on=true
+permissions/manage_external_storage=false
+permissions/read_external_storage=false
+permissions/write_external_storage=false
+permissions/camera=false
+permissions/microphone=false
+permissions/record_audio=false
+permissions/access_fine_location=false
+permissions/access_coarse_location=false
+permissions/access_background_location=false
+permissions/bluetooth=false
+permissions/bluetooth_admin=false
+permissions/modify_audio_settings=false
+permissions/post_notifications=false
+
 [application]
 
 config/name="弹壳风暴2"
 config/description="顶视角射击搜打撤肉鸽游戏"
 config/version="0.1.0"
 run/main_scene="res://scenes/TowerDescent3D.tscn"
+config/quit_on_go_back=false
 config/features=PackedStringArray("4.6", "Forward Plus")
 run/max_fps=60
 config/icon="res://icon.svg"
-config/quit_on_go_back=false
 
 [autoload]
 
@@ -39,6 +82,18 @@ window/stretch/aspect="expand"
 
 [input]
 
+ui_accept={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194310,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+ui_cancel={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194311,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
 move_up={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":87,"key_label":0,"unicode":119,"location":0,"echo":false,"script":null)
@@ -71,18 +126,6 @@ shoot={
 skill={
 "deadzone": 0.5,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
-]
-}
-ui_accept={
-"deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194310,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
-]
-}
-ui_cancel={
-"deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194311,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
 ]
 }
 dash={
@@ -158,46 +201,3 @@ renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
-
-[android]
-
-modules=""
-gradle_build/use_gradle_build=true
-gradle_build/gradle_version=""
-gradle_build/android_source_template=""
-gradle_build/compress_native_libraries=false
-gradle_build/export_format=0
-gradle_build/min_sdk=24
-gradle_build/target_sdk=34
-package/unique_name="org.shellstorm2.game"
-package/name="ShellStorm2"
-package/signed=true
-package/app_category=2
-version/code=1
-version/name="0.1.0"
-screen/immersive_mode=true
-screen/allow_secure_volume_controls=false
-screen/force_landscape=true
-screen/force_portrait=false
-screen/support_small=true
-screen/support_normal=true
-screen/support_large=true
-screen/support_xlarge=true
-permissions/access_network_state=true
-permissions/internet=true
-permissions/vibrate=true
-permissions/wake_lock=true
-permissions/keep_screen_on=true
-permissions/manage_external_storage=false
-permissions/read_external_storage=false
-permissions/write_external_storage=false
-permissions/camera=false
-permissions/microphone=false
-permissions/record_audio=false
-permissions/access_fine_location=false
-permissions/access_coarse_location=false
-permissions/access_background_location=false
-permissions/bluetooth=false
-permissions/bluetooth_admin=false
-permissions/modify_audio_settings=false
-permissions/post_notifications=false

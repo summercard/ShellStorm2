@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/workshop_stool/prp_base_workshop_stool_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="赛博维修圆凳" type="Node3D"]
+metadata/asset_name_cn = "赛博维修圆凳"
+metadata/asset_category = "decor_prop"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/workshop_stool/prp_base_workshop_stool_source_v001.blend"
+metadata/forward_axis = "-Z"
+metadata/interactive = false
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

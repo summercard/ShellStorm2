@@ -5,7 +5,9 @@ extends Dungeon3D
 ## 下方墙平滑抬升收拢、双端楼梯门、独立墙边电梯与全局固定环境光。
 
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn")
-const VENDING_FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d_v001.tscn")
+const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
+)
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
@@ -81,6 +83,8 @@ const CAMERA_PROBE_IDLE_INTERVAL := 1.0 / 30.0
 
 var _active_facility_menu: CanvasLayer = null
 var _facility_nodes: Array[BaseFacility3D] = []
+var _facility_decor_nodes: Array[Node3D] = []
+var _facility_art_layout: Node3D
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
 var _edge_door_sides_by_key: Dictionary = {}
@@ -159,6 +163,9 @@ var _initial_loop_retreat_overlay: Control = null
 
 func _ready() -> void:
 	process_physics_priority = 100
+	var editor_art_root := get_node_or_null("美术可编辑层") as Node3D
+	if editor_art_root != null:
+		editor_art_root.visible = false
 	super()
 	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
@@ -2801,69 +2808,37 @@ func _install_facilities() -> void:
 	var facility_floor := _room_by_id.get("facility") as DungeonRoom3D
 	if facility_floor == null or not _facility_nodes.is_empty():
 		return
-	var definitions := [
-		{
-			"name": "MissionOperations", "facility_id": "mission_operations", "position": Vector3(-9.0, 0, -11.6),
-			"display": "远征情报终端", "description": "查看本轮楼层与下行规则",
-			"menu": "", "color": Color(0.88, 0.48, 0.18),
-		},
-		{
-			"name": "Workshop", "facility_id": "weapon_workshop", "position": Vector3(-3.0, 0, -11.6),
-			"display": "枪械工坊", "description": "解锁枪身、弹药与配件蓝图",
-			"menu": "res://scenes/WorkshopMenu.tscn", "color": Color(0.75, 0.42, 0.16),
-		},
-		{
-			"name": "Divination", "facility_id": "fate_divination", "position": Vector3(3.0, 0, -11.6),
-			"display": "命运占卜台", "description": "为下一次深入准备命运预兆",
-			"menu": "res://scenes/DivinationMenu.tscn", "color": Color(0.55, 0.31, 0.78),
-		},
-		{
-			"name": "Vault", "facility_id": "vault", "position": Vector3(-9.0, 0, 11.6),
-			"display": "保险柜", "description": "管理撤离物资与下局带入",
-			"menu": "res://scenes/VaultMenu.tscn", "color": Color(0.24, 0.58, 0.72),
-		},
-		{
-			"name": "Archive", "facility_id": "monster_archive", "position": Vector3(-3.0, 0, 11.6),
-			"display": "怪物档案台", "description": "查看成长中的精英与悬赏情报",
-			"menu": "res://scenes/MonsterArchiveMenu.tscn", "color": Color(0.48, 0.65, 0.26),
-		},
-		{
-			"name": "FateCollection", "facility_id": "fate_collection", "position": Vector3(3.0, 0, 11.6),
-			"display": "命运卡收藏台", "description": "浏览已发现的命运卡片",
-			"menu": "res://scenes/FateCardCollectionMenu.tscn", "color": Color(0.72, 0.28, 0.58),
-		},
-		{
-			"name": "BaseConsole", "facility_id": "base_console", "position": Vector3(9.0, 0, -11.6),
-			"display": "基地管理终端", "description": "处理战利品、升级建筑与查看总览",
-			"menu": "res://scenes/BaseMenu.tscn", "color": Color(0.28, 0.52, 0.68),
-		},
-		{
-			"name": "BaseVending", "facility_id": "base_vending", "position": Vector3(11.6, 0, 5.6),
-			"rotation_y": PI * 0.5,
-			"display": "自动贩卖机", "description": "购买基础装备与药水；出售保险柜物品",
-			"menu": "res://scenes/BaseVendingMenu.tscn", "color": Color(0.16, 0.78, 0.88),
-			"scene": VENDING_FACILITY_SCENE,
-		},
-	]
-	for definition in definitions:
-		var facility_scene := definition.get("scene", FACILITY_SCENE) as PackedScene
-		var facility := facility_scene.instantiate() as BaseFacility3D
-		facility.name = str(definition["name"])
-		facility.facility_id = str(definition["facility_id"])
-		facility.position = definition["position"] as Vector3
-		facility.rotation.y = float(definition.get("rotation_y", 0.0))
-		facility.display_name = str(definition["display"])
-		facility.description = str(definition["description"])
-		facility.facility_color = definition["color"] as Color
-		var menu_path := str(definition["menu"])
-		if menu_path.is_empty():
-			facility.activation_type = BaseFacility3D.ActivationType.SHOW_INFO
-		else:
-			facility.activation_type = BaseFacility3D.ActivationType.OPEN_MENU
-			facility.menu_scene_path = menu_path
-		facility_floor.add_child(facility)
-		facility.activated.connect(_on_facility_activated)
-		_facility_nodes.append(facility)
+	_facility_art_layout = get_node_or_null("美术可编辑层/基地99层_美术布置层") as Node3D
+	if _facility_art_layout != null:
+		_facility_art_layout.reparent(facility_floor, false)
+		_facility_art_layout.transform = Transform3D.IDENTITY
+	else:
+		_facility_art_layout = BASE_FACILITY_ART_LAYOUT_SCENE.instantiate() as Node3D
+	if _facility_art_layout == null:
+		push_error("基地美术布置层实例化失败")
+		return
+	_facility_art_layout.name = "基地99层_美术布置层"
+	if _facility_art_layout.get_parent() == null:
+		facility_floor.add_child(_facility_art_layout)
+	_facility_art_layout.visible = true
+	var editor_guide := _facility_art_layout.get_node_or_null("编辑器参考_运行时自动隐藏") as Node3D
+	if editor_guide != null:
+		editor_guide.visible = false
+	_collect_facility_art_nodes(_facility_art_layout)
+	if _facility_nodes.size() != 8:
+		push_error("基地美术布置层应包含8个交互设施，当前为%d个" % _facility_nodes.size())
+
+
+func _collect_facility_art_nodes(root: Node) -> void:
+	for child in root.get_children():
+		if child is BaseFacility3D:
+			var facility := child as BaseFacility3D
+			if not facility.activated.is_connected(_on_facility_activated):
+				facility.activated.connect(_on_facility_activated)
+			_facility_nodes.append(facility)
+		elif child is Node3D and str(child.get_meta("placement_role", "")) == "基地墙边装饰":
+			_facility_decor_nodes.append(child as Node3D)
+		_collect_facility_art_nodes(child)
 
 
 func _install_elevator_facility() -> void:
@@ -2871,11 +2846,18 @@ func _install_elevator_facility() -> void:
 	if facility_floor == null or not _elevator_facilities_by_floor.is_empty():
 		return
 	# 电梯全部挂在塔楼的独立设施层级下；视觉贴墙，但不再是房间内容节点。
+	var elevator_position := facility_floor.position + Vector3(9.0, 0.0, 11.6)
+	var elevator_rotation := PI
+	if _facility_art_layout != null:
+		var elevator_anchor := _facility_art_layout.get_node_or_null("玩法锚点_只移动不删除/99层电梯锚点") as Marker3D
+		if elevator_anchor != null:
+			elevator_position = elevator_anchor.global_position
+			elevator_rotation = elevator_anchor.global_rotation.y
 	_elevator_facility = _create_standalone_elevator(
 		99,
 		"facility",
-		facility_floor.position + Vector3(9.0, 0.0, 11.6),
-		PI
+		elevator_position,
+		elevator_rotation
 	)
 	for floor_index in range(2, COMBAT_FLOOR_COUNT + 2):
 		var floor_number := _floor_number_from_index(floor_index)

@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/locker_station/prp_base_locker_station_visual_top3d_v002.glb" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(6.400000, 4.700928, 3.423913)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(5.000000, 3.900928, 1.623913)
+
+[node name="赛博储物站" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = ""
+display_name = "赛博储物站"
+description = "未开放设施资产；已入库，暂不绑定基地功能"
+metadata/asset_name_cn = "赛博储物站"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/locker_station/prp_base_locker_station_source_v002.blend"
+metadata/forward_axis = "-Z"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0.000000, 1.872446, -0.779478)
+shape = SubResource("ShapeInteraction")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0.000000, 1.950464, 0.001250)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.350928, 0)
+billboard = 1
+text = "赛博储物站"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 4.060928, -0.2)
+billboard = 1
+text = "[E] 使用 赛博储物站"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

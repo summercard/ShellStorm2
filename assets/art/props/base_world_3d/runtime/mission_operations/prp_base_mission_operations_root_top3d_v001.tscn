@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_operations/prp_base_mission_operations_visual_top3d_v003.glb" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(6.400000, 4.352326, 4.478988)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(5.000000, 3.552326, 2.678988)
+
+[node name="远征情报终端" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = "mission_operations"
+display_name = "远征情报终端"
+description = "查看本轮楼层、任务与下行规则"
+metadata/asset_name_cn = "战术情报指挥桌"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v003.blend"
+metadata/forward_axis = "-Z"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0.000000, 1.705117, -1.285914)
+shape = SubResource("ShapeInteraction")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0.000000, 1.776163, 0.000000)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.002326, 0)
+billboard = 1
+text = "远征情报终端"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 3.712326, -0.2)
+billboard = 1
+text = "[E] 使用 远征情报终端"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

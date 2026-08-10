@@ -1,0 +1,54 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v002.glb" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(6.385462, 5.620072, 5.101118)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(4.985462, 4.820072, 3.301118)
+
+[node name="复古游戏电视站" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = ""
+display_name = "复古游戏电视站"
+description = "未开放设施资产；已入库，暂不绑定基地功能"
+metadata/asset_name_cn = "复古游戏电视站"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v002.blend"
+metadata/forward_axis = "-Z"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0.000000, 2.313635, -1.584537)
+shape = SubResource("ShapeInteraction")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0.007269, 2.410036, 0.010490)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 5.270072, 0)
+billboard = 1
+text = "复古游戏电视站"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 4.980072, -0.2)
+billboard = 1
+text = "[E] 使用 复古游戏电视站"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

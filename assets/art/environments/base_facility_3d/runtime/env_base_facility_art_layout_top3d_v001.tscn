@@ -1,0 +1,168 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn" id="3_workshop"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn" id="4_vending"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/locker_station/prp_base_locker_station_visual_top3d_v002.glb" id="5_locker"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v002.glb" id="6_retro"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
+
+[sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
+transparency = 1
+albedo_color = Color(0.08, 0.28, 0.32, 0.26)
+shading_mode = 0
+
+[sub_resource type="PlaneMesh" id="MeshEditorFloor"]
+material = SubResource("MatEditorFloor")
+size = Vector2(30, 30)
+subdivide_width = 5
+subdivide_depth = 5
+
+[sub_resource type="StandardMaterial3D" id="MatEditorBoundary"]
+transparency = 1
+albedo_color = Color(0.7, 0.18, 0.72, 0.2)
+shading_mode = 0
+
+[sub_resource type="BoxMesh" id="MeshBoundaryNS"]
+material = SubResource("MatEditorBoundary")
+size = Vector3(30, 0.08, 0.12)
+
+[sub_resource type="BoxMesh" id="MeshBoundaryEW"]
+material = SubResource("MatEditorBoundary")
+size = Vector3(0.12, 0.08, 30)
+
+[node name="基地99层_美术布置层" type="Node3D"]
+metadata/layout_contract = "只编辑位置、旋转、灯光和美术装饰；设施ID与玩法由代码桥接"
+metadata/runtime_owner = "TowerDescent3D._install_facilities"
+
+[node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="."]
+metadata/editor_guide = true
+
+[node name="30米地面参考" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+mesh = SubResource("MeshEditorFloor")
+
+[node name="北墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+position = Vector3(0, 0.04, -15)
+mesh = SubResource("MeshBoundaryNS")
+
+[node name="南墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+position = Vector3(0, 0.04, 15)
+mesh = SubResource("MeshBoundaryNS")
+
+[node name="西墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+position = Vector3(-15, 0.04, 0)
+mesh = SubResource("MeshBoundaryEW")
+
+[node name="东墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
+position = Vector3(15, 0.04, 0)
+mesh = SubResource("MeshBoundaryEW")
+
+[node name="设施交互节点_可移动旋转" type="Node3D" parent="."]
+
+[node name="远征情报终端" parent="设施交互节点_可移动旋转" instance=ExtResource("2_mission")]
+position = Vector3(-9, 0, -11.6)
+rotation = Vector3(0, 3.141593, 0)
+facility_id = "mission_operations"
+
+[node name="枪械工坊" parent="设施交互节点_可移动旋转" instance=ExtResource("3_workshop")]
+position = Vector3(-3, 0, -11.6)
+rotation = Vector3(0, 3.141593, 0)
+facility_id = "weapon_workshop"
+menu_scene_path = "res://scenes/WorkshopMenu.tscn"
+
+[node name="命运占卜台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+position = Vector3(3, 0, -11.6)
+rotation = Vector3(0, 3.141593, 0)
+facility_id = "fate_divination"
+display_name = "命运占卜台"
+menu_scene_path = "res://scenes/DivinationMenu.tscn"
+
+[node name="基地管理终端" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+position = Vector3(9, 0, -11.6)
+rotation = Vector3(0, 3.141593, 0)
+facility_id = "base_console"
+display_name = "基地管理终端"
+menu_scene_path = "res://scenes/BaseMenu.tscn"
+
+[node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+position = Vector3(-9, 0, 11.6)
+facility_id = "vault"
+display_name = "保险柜"
+menu_scene_path = "res://scenes/VaultMenu.tscn"
+
+[node name="怪物档案台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+position = Vector3(-3, 0, 11.6)
+facility_id = "monster_archive"
+display_name = "怪物档案台"
+menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
+
+[node name="命运卡收藏台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+position = Vector3(3, 0, 11.6)
+facility_id = "fate_collection"
+display_name = "命运卡收藏台"
+menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
+
+[node name="自动贩卖机" parent="设施交互节点_可移动旋转" instance=ExtResource("4_vending")]
+position = Vector3(11.6, 0, 5.6)
+rotation = Vector3(0, 1.570796, 0)
+facility_id = "base_vending"
+menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
+
+[node name="场景装饰_可自由增删" type="Node3D" parent="."]
+metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"
+
+[node name="赛博储物站_墙边装饰" parent="场景装饰_可自由增删" instance=ExtResource("5_locker")]
+position = Vector3(-11.75, 0, -5.8)
+rotation = Vector3(0, -1.570796, 0)
+metadata/placement_role = "基地墙边装饰"
+metadata/interactive = false
+
+[node name="复古电视站_墙边装饰" parent="场景装饰_可自由增删" instance=ExtResource("6_retro")]
+position = Vector3(-11.75, 0, 4.7)
+rotation = Vector3(0, -1.570796, 0)
+metadata/placement_role = "基地墙边装饰"
+metadata/interactive = false
+
+[node name="维修圆凳_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("7_stool")]
+position = Vector3(-3, 0, -9.8)
+metadata/placement_role = "枪械工坊配套独立座椅"
+metadata/interactive = false
+
+[node name="战术指挥椅_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("8_chair")]
+position = Vector3(-9, 0, -9.8)
+metadata/placement_role = "远征情报终端配套独立座椅"
+metadata/interactive = false
+
+[node name="基地美术灯光_可编辑" type="Node3D" parent="."]
+metadata/usage = "可调整颜色、能量、范围、阴影；不要改塔楼全局环境"
+
+[node name="中央冷色主灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+position = Vector3(0, 5.5, 0)
+light_color = Color(0.42, 0.78, 1, 1)
+light_energy = 0.65
+shadow_enabled = true
+omni_range = 18.0
+omni_attenuation = 1.25
+
+[node name="西北紫色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+position = Vector3(-8.5, 3.4, -8.5)
+light_color = Color(0.75, 0.25, 1, 1)
+light_energy = 0.38
+shadow_enabled = true
+omni_range = 10.0
+
+[node name="东南暖色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+position = Vector3(8.5, 3.4, 8.5)
+light_color = Color(1, 0.46, 0.18, 1)
+light_energy = 0.32
+shadow_enabled = true
+omni_range = 10.0
+
+[node name="玩法锚点_只移动不删除" type="Node3D" parent="."]
+
+[node name="99层电梯锚点" type="Marker3D" parent="玩法锚点_只移动不删除"]
+position = Vector3(9, 0, 11.6)
+rotation = Vector3(0, 3.141593, 0)
+metadata/bridge_id = "elevator_99f"

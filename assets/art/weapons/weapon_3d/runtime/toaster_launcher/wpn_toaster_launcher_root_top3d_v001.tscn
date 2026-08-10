@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="烤面包机发射器" type="Node3D"]
+metadata/asset_name_cn = "烤面包机发射器"
+metadata/logic_id = "bp_launcher"
+metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v001.blend"
+metadata/grip_contract = "root origin"
+metadata/forward_axis = "-Z"
+
+[node name="VisualRoot" parent="." instance=ExtResource("1_visual")]
+
+[node name="GripSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 0.000000, 0.000000)
+[node name="SupportHandSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 0.220903, -0.600740)
+[node name="MuzzleSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 0.490895, -1.155270)
+[node name="MuzzleAttachmentSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 0.490895, -1.155270)
+[node name="ScopeSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 1.227238, -0.439003)
+[node name="MagazineSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, -0.047271, -0.323476)
+[node name="StockSocket" type="Marker3D" parent="."]
+position = Vector3(0.000000, 0.245448, 0.599730)
+[node name="TacticalSocket" type="Marker3D" parent="."]
+position = Vector3(0.311304, 0.306809, -0.554530)
+[node name="MutatorSocket" type="Marker3D" parent="."]
+position = Vector3(-0.311304, 0.306809, -0.392792)
+
+[node name="GroundPivot" type="Marker3D" parent="."]
+position = Vector3(0, -0.065655, 0)
+
+[node name="IconPivot" type="Marker3D" parent="."]
+position = Vector3(0, 0.580792, -0.277770)

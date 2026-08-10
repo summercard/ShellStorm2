@@ -17,6 +17,15 @@ const MELEE_VISUAL_SCENES := {
 	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
 	"bp_waraxe": preload("res://assets/art/weapons/melee_3d/wpn_melee_waraxe_root_top3d_v001.tscn"),
 }
+const GUN_VISUAL_SCENES := {
+	"bp_pistol": preload("res://assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn"),
+	"bp_shotgun": preload("res://assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn"),
+	"bp_rifle": preload("res://assets/art/weapons/weapon_3d/runtime/broom_rifle/wpn_broom_rifle_root_top3d_v001.tscn"),
+	"bp_machinegun": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn"),
+	"bp_sniper": preload("res://assets/art/weapons/weapon_3d/runtime/candy_sniper/wpn_candy_sniper_root_top3d_v001.tscn"),
+	"bp_launcher": preload("res://assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn"),
+	"bp_charge": preload("res://assets/art/weapons/weapon_3d/runtime/gumball_cannon/wpn_gumball_cannon_root_top3d_v001.tscn"),
+}
 
 const GUN_PROFILES := {
 	"bp_pistol": {"length": 0.72, "barrel": 0.32, "width": 0.18, "height": 0.22, "color": Color(0.28, 0.34, 0.34)},
@@ -706,6 +715,14 @@ func _rebuild_visual() -> void:
 	var body_material := _material(body_color, 0.72, 0.34)
 	var dark_material := _material(Color(0.055, 0.07, 0.07), 0.84, 0.28)
 	var accent_material := _material(bullet_color.darkened(0.14), 0.32, 0.30, true)
+	var imported_scene := GUN_VISUAL_SCENES.get(gun_id) as PackedScene
+	if imported_scene != null:
+		var imported_asset := imported_scene.instantiate() as Node3D
+		_visual_root.add_child(imported_asset)
+		_apply_render_layers_recursive(imported_asset)
+		_muzzle = imported_asset.get_node_or_null("MuzzleSocket") as Marker3D
+		_add_imported_attachment_visuals(imported_asset, accent_material)
+		return
 	_add_box("Receiver", Vector3(0, 0, -length * 0.42), Vector3(width, height, length), body_material)
 	_add_box("Stock", Vector3(0, -0.03, 0.14), Vector3(width * 0.82, height * 0.82, length * 0.34), dark_material)
 	_add_box("Grip", Vector3(0, -height * 0.55, -length * 0.30), Vector3(width * 0.48, height * 0.75, 0.18), dark_material)
@@ -747,6 +764,51 @@ func _rebuild_visual() -> void:
 	_muzzle.name = "Muzzle"
 	_muzzle.position = Vector3(0, 0, -length - barrel)
 	_visual_root.add_child(_muzzle)
+
+
+func _apply_render_layers_recursive(root: Node) -> void:
+	if root is MeshInstance3D:
+		var mesh_instance := root as MeshInstance3D
+		mesh_instance.layers = render_layers
+		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		mesh_instance.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+	for child in root.get_children():
+		_apply_render_layers_recursive(child)
+
+
+func _socket_position(asset: Node3D, socket_name: String, fallback: Vector3) -> Vector3:
+	var socket := asset.get_node_or_null(socket_name) as Marker3D
+	return socket.position if socket != null else fallback
+
+
+func _add_imported_attachment_visuals(asset: Node3D, accent_material: StandardMaterial3D) -> void:
+	if _source_tree != null and _source_tree.get_root() != null:
+		var source_root := _source_tree.get_root()
+		if source_root.slots.get(AssemblyNode.SlotType.MUZZLE) != null:
+			_add_cylinder("InstalledMuzzle", _socket_position(asset, "MuzzleAttachmentSocket", Vector3(0, 0, -0.75)), 0.055, 0.16, accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MAGAZINE) != null:
+			_add_box("InstalledMagazine", _socket_position(asset, "MagazineSocket", Vector3(0, -0.12, -0.20)), Vector3(0.14, 0.24, 0.18), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.SCOPE) != null:
+			_add_cylinder("InstalledScope", _socket_position(asset, "ScopeSocket", Vector3(0, 0.24, -0.35)), 0.045, 0.28, accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.STOCK) != null:
+			_add_box("InstalledStock", _socket_position(asset, "StockSocket", Vector3(0, 0.05, 0.25)), Vector3(0.22, 0.22, 0.32), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.TACTICAL) != null:
+			_add_box("InstalledTactical", _socket_position(asset, "TacticalSocket", Vector3(0.14, 0.02, -0.35)), Vector3(0.08, 0.08, 0.20), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MUTATOR) != null:
+			_add_box("InstalledMutator", _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.02, -0.30)), Vector3(0.06, 0.16, 0.16), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
+			_add_box("InstalledMount", _socket_position(asset, "ScopeSocket", Vector3(0, 0.24, -0.30)), Vector3(0.18, 0.08, 0.18), accent_material)
+	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))
+	var rune_origin := _socket_position(asset, "MutatorSocket", Vector3(-0.14, 0.06, -0.28))
+	for fate_index in mini(fate_used, 8):
+		var row := fate_index / 4
+		var column := fate_index % 4
+		_add_box(
+			"FateRune%02d" % (fate_index + 1),
+			rune_origin + Vector3(float(column) * 0.035, float(row) * -0.035, 0.0),
+			Vector3(0.024, 0.024, 0.045),
+			accent_material,
+		)
 
 
 func _spawn_muzzle_effect(world: Node) -> void:

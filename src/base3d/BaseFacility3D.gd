@@ -20,10 +20,10 @@ enum ActivationType {
 @export_range(0, 99, 1) var target_floor := 0
 @export var facility_color := Color(0.28, 0.55, 0.78)
 
-@onready var base_mesh: MeshInstance3D = $Visual/Base
-@onready var roof_mesh: MeshInstance3D = $Visual/Roof
-@onready var beacon_mesh: MeshInstance3D = $Visual/Beacon
-@onready var beacon_light: OmniLight3D = $Visual/BeaconLight
+@onready var base_mesh: MeshInstance3D = get_node_or_null("Visual/Base") as MeshInstance3D
+@onready var roof_mesh: MeshInstance3D = get_node_or_null("Visual/Roof") as MeshInstance3D
+@onready var beacon_mesh: MeshInstance3D = get_node_or_null("Visual/Beacon") as MeshInstance3D
+@onready var beacon_light: OmniLight3D = get_node_or_null("Visual/BeaconLight") as OmniLight3D
 @onready var name_label: Label3D = $NameLabel
 @onready var prompt_label: Label3D = $PromptLabel
 
@@ -41,18 +41,24 @@ func _ready() -> void:
 	name_label.font_size = 38
 	prompt_label.text = "[E] 使用 %s" % display_name
 	prompt_label.visible = false
-	_apply_material(base_mesh, facility_color.darkened(0.52), 0.58, 0.62)
-	_apply_material(roof_mesh, facility_color.darkened(0.20), 0.42, 0.70)
-	_apply_material(beacon_mesh, facility_color, 0.18, 0.38, true)
-	beacon_light.light_color = facility_color
-	beacon_light.light_energy = 1.15
+	if base_mesh != null:
+		_apply_material(base_mesh, facility_color.darkened(0.52), 0.58, 0.62)
+	if roof_mesh != null:
+		_apply_material(roof_mesh, facility_color.darkened(0.20), 0.42, 0.70)
+	if beacon_mesh != null:
+		_apply_material(beacon_mesh, facility_color, 0.18, 0.38, true)
+	if beacon_light != null:
+		beacon_light.light_color = facility_color
+		beacon_light.light_energy = 1.15
 	if not facility_id.is_empty() and BaseManager != null:
 		apply_snapshot(BaseManager.get_facility_snapshot(facility_id))
 
 
 func _process(delta: float) -> void:
-	$Visual/Beacon.rotation.y += delta * (1.8 if _player_in_range else 0.55)
-	beacon_light.light_energy = 2.1 if _player_in_range else 1.15 + sin(Time.get_ticks_msec() * 0.002) * 0.08
+	if beacon_mesh != null:
+		beacon_mesh.rotation.y += delta * (1.8 if _player_in_range else 0.55)
+	if beacon_light != null:
+		beacon_light.light_energy = 2.1 if _player_in_range else 1.15 + sin(Time.get_ticks_msec() * 0.002) * 0.08
 
 
 func _unhandled_input(event: InputEvent) -> void:

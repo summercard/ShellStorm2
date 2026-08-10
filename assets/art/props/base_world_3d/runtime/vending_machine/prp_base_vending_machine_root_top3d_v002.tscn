@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/vending_machine/prp_base_vending_machine_visual_top3d_v001.glb" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(5.739008, 4.400000, 3.345198)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(4.339008, 3.600000, 1.545198)
+
+[node name="自动贩卖机" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = "base_vending"
+display_name = "自动贩卖机"
+description = "购买基础装备与药水；出售保险柜物品"
+menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
+metadata/asset_name_cn = "科幻自动贩卖机"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/vending_machine/prp_base_vending_machine_source_v001.blend"
+metadata/forward_axis = "-Z"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(0.000000, 1.728000, -0.741695)
+shape = SubResource("ShapeInteraction")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0.000000, 1.800000, 0.000000)
+shape = SubResource("ShapeBody")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.050000, 0)
+billboard = 1
+text = "自动贩卖机"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 3.760000, -0.2)
+billboard = 1
+text = "[E] 使用 自动贩卖机"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)
