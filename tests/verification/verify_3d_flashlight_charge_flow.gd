@@ -37,29 +37,31 @@ func _ready() -> void:
 	await _assert_charge_no_drain_in_facility(flashlight, failures)
 	# 2. §10.6 #2 — 出基地开启后掉电,关闭立刻停止
 	await _assert_drain_and_stop(flashlight, dungeon, failures)
-	# 3. §10.6 #4 — 0% 自动关 + depleted 信号
+	# 3. 基地外短时使用后关灯再开,未满 2% 的耗电不能被退回
+	await _assert_toggle_preserves_partial_drain(flashlight, failures)
+	# 4. §10.6 #4 — 0% 自动关 + depleted 信号
 	await _assert_zero_auto_off(flashlight, failures)
-	# 4. §10.6 #6 — 三种电池 +25/+75/+100,满电时不被消耗
+	# 5. §10.6 #6 — 三种电池 +25/+75/+100,满电时不被消耗
 	await _assert_batteries(flashlight, player, failures)
-	# 5. §10.6 #7 — 模块基地外被拒,基地内 advanced 切为 0.7143×/1.20×
+	# 6. §10.6 #7 — 模块基地外被拒,基地内 advanced 切为 0.7143×/1.20×
 	await _assert_module_swap(flashlight, dungeon, failures)
-	# 6. 长期装备选择会在新行动注入 PlayerFlashlight3D
+	# 7. 长期装备选择会在新行动注入 PlayerFlashlight3D
 	_assert_persisted_module_hydration(dungeon, flashlight, failures)
-	# 7. §10.6 #5 — HUD 面板存在,5 档色 + 闪烁阈值
+	# 8. §10.6 #5 — HUD 面板存在,5 档色 + 闪烁阈值
 	await _assert_hud_panel(dungeon, failures)
-	# 8. §10.6 #6 — 贩卖机 item_battery_s 在架 & base_shelf_order==6;battery_l/cell_pack 不在
+	# 9. §10.6 #6 — 贩卖机 item_battery_s 在架 & base_shelf_order==7;battery_l/cell_pack 不在
 	await _assert_shop_catalog(failures)
-	# 9. §10.6 #8 — BaseData.active_run_snapshot.flashlight_charge_ratio 写入并回读
+	# 10. §10.6 #8 — BaseData.active_run_snapshot.flashlight_charge_ratio 写入并回读
 	await _assert_active_run_snapshot(flashlight, failures)
-	# 10. §10.6 #7 — BaseData.equipped_flashlight_module_id 持久化
+	# 11. §10.6 #7 — BaseData.equipped_flashlight_module_id 持久化
 	await _assert_equipped_module_persist(failures)
-	# 11. §10.6 #8 — 死亡保留检查点,撤离后清检查点
+	# 12. §10.6 #8 — 死亡保留检查点,撤离后清检查点
 	await _assert_checkpoint_death_vs_extract(failures)
-	# 12. §10.6 #9 — 跨房间电量不变 + advanced 模块下揭示半径 ×1.20
+	# 13. §10.6 #9 — 跨房间电量不变 + advanced 模块下揭示半径 ×1.20
 	await _assert_reveal_multiplier(flashlight, dungeon, failures)
 
 	if failures.is_empty():
-		var summary := "12/12 OK: facility no-drain, drain/stop, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
+		var summary := "13/13 OK: facility no-drain, drain/stop, toggle preservation, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
 		print("VERIFY_3D_FLASHLIGHT_CHARGE_FLOW_OK: %s" % summary)
 		get_tree().quit(0)
 		return
@@ -185,7 +187,31 @@ func _assert_drain_and_stop(flashlight: PlayerFlashlight3D, dungeon: Dungeon3D, 
 		failures.append("Flashlight continued draining after toggle off")
 
 
-# 3. §10.6 #4
+# 3. 基地外关灯再开不得退回已累计、但尚未到 2% 一格的耗电。
+func _assert_toggle_preserves_partial_drain(flashlight: PlayerFlashlight3D, failures: Array[String]) -> void:
+	# 通过一次基地补电入口清理上个用例留下的离散累计值，再回到基地外。
+	flashlight.set_charge_ratio(0.5)
+	flashlight.set_in_facility(true)
+	flashlight.set_in_facility(false)
+	flashlight.set_light_enabled(true)
+	await _wait_physics(1.0)
+	var seconds_before_toggle := flashlight.get_estimated_remaining_seconds()
+	var accumulated_before := float(flashlight.get_snapshot().get("drain_accumulator", 0.0))
+	if accumulated_before <= 0.0:
+		failures.append("Partial flashlight drain was not accumulated before toggle")
+	flashlight.set_light_enabled(false)
+	await _wait_physics(0.25)
+	flashlight.set_light_enabled(true)
+	var seconds_after_toggle := flashlight.get_estimated_remaining_seconds()
+	var accumulated_after := float(flashlight.get_snapshot().get("drain_accumulator", 0.0))
+	if accumulated_after + 0.000001 < accumulated_before:
+		failures.append("Flashlight toggle refunded partial drain (before=%f, after=%f)" % [accumulated_before, accumulated_after])
+	if seconds_after_toggle > seconds_before_toggle + 0.05:
+		failures.append("Flashlight remaining time jumped toward 100%% after off/on (before=%f, after=%f)" % [seconds_before_toggle, seconds_after_toggle])
+	flashlight.set_light_enabled(false)
+
+
+# 4. §10.6 #4
 func _assert_zero_auto_off(flashlight: PlayerFlashlight3D, failures: Array[String]) -> void:
 	_depleted_signal_emitted = false
 	flashlight.set_charge_ratio(1.0)
@@ -351,8 +377,8 @@ func _assert_shop_catalog(failures: Array[String]) -> void:
 		var item_id: String = str(g.get("id", ""))
 		if item_id == "item_battery_s":
 			found_s = true
-			if int(g.get("base_shelf_order", -1)) != 6:
-				failures.append("item_battery_s base_shelf_order != 6 (got %d)" % int(g.get("base_shelf_order", -1)))
+			if int(g.get("base_shelf_order", -1)) != 7:
+				failures.append("item_battery_s base_shelf_order != 7 (got %d)" % int(g.get("base_shelf_order", -1)))
 		if item_id == "item_battery_l" or item_id == "item_cell_pack":
 			failures.append("%s should NOT be in base shop" % item_id)
 	if not found_s:

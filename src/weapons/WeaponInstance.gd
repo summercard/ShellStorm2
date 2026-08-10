@@ -4,7 +4,7 @@ extends RefCounted
 ## 持久枪械实例。运行时 WeaponAssemblyTree 只是该实例的可执行投影；
 ## 背包、地面、保险、交易与存档统一传递 to_item_dictionary() 的纯数据结果。
 
-const SCHEMA_VERSION := 1
+const SCHEMA_VERSION := 2
 const DEFAULT_FATE_SLOT_CAPACITY := 8
 
 static var _id_sequence: int = 0
@@ -63,11 +63,12 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 	elif instance.assembly_snapshot.is_empty():
 		var root := BlueprintRegistry.create_assembly_node(instance.assembly_id)
 		if root != null:
-			# 新生成的成品枪拥有自己的标准子弹模块；换枪时绝不从旧枪搬运。
-			var bullet_id := str(item.get("bullet_module_id", "mod_bullet_standard"))
-			var bullet := BlueprintRegistry.create_assembly_node(bullet_id)
-			if bullet != null and not root.mount(AssemblyNode.SlotType.BULLET, bullet):
-				bullet.free()
+			# 远程成品枪拥有自己的标准子弹模块；近战根不伪装成零弹量枪械。
+			if "melee" not in root.tags:
+				var bullet_id := str(item.get("bullet_module_id", "mod_bullet_standard"))
+				var bullet := BlueprintRegistry.create_assembly_node(bullet_id)
+				if bullet != null and not root.mount(AssemblyNode.SlotType.BULLET, bullet):
+					bullet.free()
 			instance.assembly_snapshot = _serialize_node(root)
 			root.free()
 	return instance
@@ -114,6 +115,7 @@ func build_runtime_tree() -> WeaponAssemblyTree:
 		root = BlueprintRegistry.create_assembly_node(assembly_id)
 	if root == null:
 		return null
+	_hydrate_and_migrate_root(root)
 	var tree := WeaponAssemblyTree.new(root)
 	if current_ammo >= 0:
 		tree.current_ammo = clampi(current_ammo, 0, tree.magazine_size)
@@ -128,6 +130,8 @@ func load_into_runtime_tree(tree: WeaponAssemblyTree) -> bool:
 		root = _deserialize_node(assembly_snapshot)
 	if root == null:
 		root = BlueprintRegistry.create_assembly_node(assembly_id)
+	if root != null:
+		_hydrate_and_migrate_root(root)
 	if root == null or not tree.set_root(root):
 		if root != null:
 			root.free()
@@ -199,12 +203,15 @@ func to_item_dictionary() -> Dictionary:
 
 func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: String = "") -> Dictionary:
 	var stats := {}
+	var attachment_layout: Array[Dictionary] = []
 	if tree != null and tree.get_root() != null:
 		stats = tree.get_computed_stats()
+		attachment_layout = _build_attachment_layout(tree.get_root())
 	else:
 		var temp_tree := build_runtime_tree()
 		if temp_tree != null:
 			stats = temp_tree.get_computed_stats()
+			attachment_layout = _build_attachment_layout(temp_tree.get_root())
 			temp_tree.free()
 	return {
 		"weapon_instance_id": weapon_instance_id,
@@ -217,7 +224,8 @@ func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: 
 		"fate_slot_capacity": fate_slot_capacity,
 		"fate_slot_used": fate_upgrades.size(),
 		"fate_upgrades": fate_upgrades.duplicate(true),
-		"attachment_slots": _extract_attachment_slots(assembly_snapshot),
+		"attachment_slots": _attachment_layout_to_dictionary(attachment_layout),
+		"attachment_layout": attachment_layout,
 		"computed_stats": stats.duplicate(true),
 		"current_ammo": current_ammo,
 	}
@@ -234,6 +242,9 @@ static func content_id_for_root(root: AssemblyNode) -> String:
 		"GunBody_Sniper": "weapon_sniper",
 		"GunBody_Launcher": "weapon_launcher",
 		"GunBody_Charge": "weapon_charge",
+		"Melee_BaseballBat": "weapon_baseball_bat",
+		"Melee_Greatblade": "weapon_greatblade",
+		"Melee_Waraxe": "weapon_waraxe",
 	}.get(root.node_name, ""))
 
 
@@ -279,6 +290,47 @@ static func _deserialize_node(data: Dictionary) -> AssemblyNode:
 			if child != null and not node.mount(int(str(raw_slot)), child):
 				child.free()
 	return node
+
+
+static func _hydrate_and_migrate_root(root: AssemblyNode) -> void:
+	if root == null:
+		return
+	BlueprintRegistry.apply_runtime_contract(root)
+	# v1 把枪托/瞄具/战术/特性配件都塞在 MOUNT。v2 按声明槽位搬迁，
+	# 只动普通 Attachment，绝不碰命运系统的递归枪身挂载。
+	var legacy := root.slots.get(AssemblyNode.SlotType.MOUNT) as AssemblyNode
+	if legacy == null or legacy.node_type != AssemblyNode.NodeType.ATTACHMENT:
+		return
+	var declared_slot := legacy.get_attachment_slot_type()
+	if declared_slot < 0 or root.slots.get(declared_slot) != null:
+		return
+	root.unmount(AssemblyNode.SlotType.MOUNT)
+	if not root.mount(declared_slot, legacy):
+		root.mount(AssemblyNode.SlotType.MOUNT, legacy)
+
+
+static func _build_attachment_layout(root: AssemblyNode) -> Array[Dictionary]:
+	var layout: Array[Dictionary] = []
+	if root == null:
+		return layout
+	for slot_type in AssemblyNode.PUBLIC_ATTACHMENT_SLOTS:
+		var child := root.slots.get(slot_type) as AssemblyNode
+		layout.append({
+			"slot_type": slot_type,
+			"slot_key": AssemblyNode.get_attachment_slot_key(slot_type),
+			"display_name": AssemblyNode.get_attachment_slot_display_name(slot_type),
+			"supported": root.supports_attachment_slot(slot_type),
+			"installed_item_id": BlueprintRegistry.get_item_id_for_assembly_node(child),
+			"installed_node_name": child.node_name if child != null else "",
+		})
+	return layout
+
+
+static func _attachment_layout_to_dictionary(layout: Array[Dictionary]) -> Dictionary:
+	var result: Dictionary = {}
+	for entry in layout:
+		result[str(entry.get("slot_key", ""))] = str(entry.get("installed_item_id", ""))
+	return result
 
 
 static func _extract_attachment_slots(snapshot: Dictionary) -> Dictionary:

@@ -12,6 +12,11 @@ signal reload_ended(completed: bool)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const MELEE_VISUAL_SCENES := {
+	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
+	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
+	"bp_waraxe": preload("res://assets/art/weapons/melee_3d/wpn_melee_waraxe_root_top3d_v001.tscn"),
+}
 
 const GUN_PROFILES := {
 	"bp_pistol": {"length": 0.72, "barrel": 0.32, "width": 0.18, "height": 0.22, "color": Color(0.28, 0.34, 0.34)},
@@ -51,6 +56,8 @@ var bullet_tags: Array[String] = []
 var bullet_color := Color(0.76, 0.86, 0.92)
 var damage_multiplier := 1.0
 var charge_time := 0.0
+var weapon_kind := "ranged"
+var _melee_profile: Dictionary = {}
 var _base_damage := 20
 var _copy_chance := 0.0
 var _critical_chance := 0.10
@@ -76,6 +83,9 @@ const GUN_NAME_TO_ID := {
 	"GunBody_Rifle": "bp_rifle", "GunBody_Machinegun": "bp_machinegun",
 	"GunBody_Sniper": "bp_sniper", "GunBody_Launcher": "bp_launcher",
 	"GunBody_Charge": "bp_charge",
+	"Melee_BaseballBat": "bp_baseball_bat",
+	"Melee_Greatblade": "bp_greatblade",
+	"Melee_Waraxe": "bp_waraxe",
 }
 const BULLET_NAME_TO_ID := {
 	"Bullet_Standard": "mod_bullet_standard", "Bullet_Sticky": "mod_bullet_sticky",
@@ -136,38 +146,34 @@ func configure(p_gun_id: String, p_bullet_id: String) -> bool:
 	_cooldown = 0.0
 	_recoil = 0.0
 	var gun_node := BlueprintRegistry.create_assembly_node(p_gun_id)
-	var bullet_node := BlueprintRegistry.create_assembly_node(p_bullet_id)
-	if gun_node == null or bullet_node == null:
-		if gun_node != null:
-			gun_node.free()
-		if bullet_node != null:
-			bullet_node.free()
+	if gun_node == null:
 		return false
+	var is_melee := "melee" in gun_node.tags
+	var bullet_node: AssemblyNode = null
+	if not is_melee:
+		bullet_node = BlueprintRegistry.create_assembly_node(p_bullet_id)
+		if bullet_node == null:
+			gun_node.free()
+			return false
 	gun_id = p_gun_id
-	bullet_id = p_bullet_id
+	bullet_id = "" if is_melee else p_bullet_id
 	var gun_stats := gun_node.get_base_stats()
-	var bullet_stats := bullet_node.get_base_stats()
-	bullet_tags.assign(bullet_node.tags)
-	_base_damage = int(gun_stats.get("damage", 10)) + int(bullet_stats.get("bullet_damage", 5))
-	damage = maxi(1, int(_base_damage * damage_multiplier))
-	fire_rate = maxf(0.2, float(gun_stats.get("fire_rate", 3.0)))
-	projectile_count = maxi(1, int(gun_stats.get("bullet_count", 1)))
-	spread = maxf(0.0, float(gun_stats.get("spread", 0.0)))
-	reload_time = maxf(0.25, float(gun_stats.get("reload_time", 1.5)))
-	magazine_size = maxi(1, int(gun_stats.get("magazine_size", 12)))
-	current_ammo = magazine_size
-	bullet_speed = 23.0 * float(bullet_stats.get("bullet_speed", 1.0))
-	charge_time = maxf(0.0, float(gun_stats.get("charge_time", 0.0)))
+	var bullet_stats := bullet_node.get_base_stats() if bullet_node != null else {}
+	_configure_common_stats(gun_stats.merged(bullet_stats, true), is_melee)
+	bullet_tags.clear()
+	if bullet_node != null:
+		bullet_tags.assign(bullet_node.tags)
 	_copy_chance = 0.0
-	_critical_chance = 0.28 if gun_id == "bp_sniper" else 0.10
+	_critical_chance = 0.12 if is_melee else (0.28 if gun_id == "bp_sniper" else 0.10)
 	_critical_damage_multiplier = 1.5
 	_projectile_behavior = _extract_projectile_behavior(gun_stats.merged(bullet_stats, true))
 	_secondary_guns.clear()
 	_source_tree = null
 	_apply_gun_behavior_tags()
-	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.76, 0.86, 0.92))
+	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if is_melee else Color(0.76, 0.86, 0.92))
 	gun_node.free()
-	bullet_node.free()
+	if bullet_node != null:
+		bullet_node.free()
 	_rebuild_visual()
 	loadout_changed.emit(gun_id, bullet_id)
 	ammo_changed.emit(current_ammo, magazine_size)
@@ -190,20 +196,12 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 			bullet = node
 			break
 	gun_id = str(GUN_NAME_TO_ID.get(root.node_name, "bp_pistol"))
-	bullet_id = str(BULLET_NAME_TO_ID.get(bullet.node_name if bullet != null else "", "mod_bullet_standard"))
+	var root_is_melee := "melee" in root.tags
+	bullet_id = "" if root_is_melee else str(BULLET_NAME_TO_ID.get(bullet.node_name if bullet != null else "", "mod_bullet_standard"))
 	var stats := tree.get_computed_stats()
-	_base_damage = maxi(1, int(stats.get("damage", 0)) + int(stats.get("bullet_damage", 5)))
-	damage = maxi(1, int(_base_damage * damage_multiplier))
-	fire_rate = maxf(0.2, float(stats.get("fire_rate", 3.0)))
-	projectile_count = maxi(1, int(stats.get("bullet_count", 1)))
-	spread = maxf(0.0, float(stats.get("spread", 0.0)))
-	reload_time = maxf(0.25, float(stats.get("reload_time", 1.5)) + float(stats.get("reload_penalty", 0.0)))
-	magazine_size = maxi(1, int(stats.get("magazine_size", 12)))
-	current_ammo = magazine_size
-	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0))
-	charge_time = maxf(0.0, float(stats.get("charge_time", 0.0)))
+	_configure_common_stats(stats, root_is_melee)
 	_copy_chance = clampf(float(stats.get("copy_chance", 0.0)), 0.0, 1.0)
-	_critical_chance = 0.28 if gun_id == "bp_sniper" else 0.10
+	_critical_chance = 0.12 if root_is_melee else (0.28 if gun_id == "bp_sniper" else 0.10)
 	_critical_damage_multiplier = maxf(1.0, float(stats.get("crit_damage_multiplier", 1.5)))
 	_projectile_behavior = _extract_projectile_behavior(stats)
 	_secondary_guns.clear()
@@ -232,11 +230,62 @@ func configure_from_tree(tree: WeaponAssemblyTree) -> bool:
 	if "Fate.ArmorPierced" in bullet_tags:
 		_projectile_behavior["pierce_shield"] = true
 	_apply_gun_behavior_tags()
-	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.76, 0.86, 0.92))
+	bullet_color = BULLET_COLORS.get(bullet_id, Color(0.20, 0.84, 0.92) if root_is_melee else Color(0.76, 0.86, 0.92))
 	_rebuild_visual()
 	loadout_changed.emit(gun_id, bullet_id)
 	ammo_changed.emit(current_ammo, magazine_size)
 	return true
+
+
+func _configure_common_stats(stats: Dictionary, melee: bool) -> void:
+	weapon_kind = "melee" if melee else "ranged"
+	if melee:
+		_base_damage = maxi(1, int(stats.get("damage", 1)))
+		damage = maxi(1, int(_base_damage * damage_multiplier))
+		fire_rate = 0.0
+		projectile_count = 0
+		spread = 0.0
+		reload_time = 0.0
+		magazine_size = 0
+		current_ammo = 0
+		bullet_speed = 0.0
+		charge_time = 0.0
+		_melee_profile = _build_melee_profile(stats)
+		return
+	_melee_profile.clear()
+	_base_damage = maxi(1, int(stats.get("damage", 0)) + int(stats.get("bullet_damage", 5)))
+	damage = maxi(1, int(_base_damage * damage_multiplier))
+	fire_rate = maxf(0.2, float(stats.get("fire_rate", 3.0)))
+	projectile_count = maxi(1, int(stats.get("bullet_count", 1)))
+	spread = maxf(0.0, float(stats.get("spread", 0.0)))
+	reload_time = maxf(0.25, float(stats.get("reload_time", 1.5)) + float(stats.get("reload_penalty", 0.0)))
+	magazine_size = maxi(1, int(stats.get("magazine_size", 12)))
+	current_ammo = magazine_size
+	bullet_speed = 23.0 * float(stats.get("bullet_speed", 1.0))
+	charge_time = maxf(0.0, float(stats.get("charge_time", 0.0)))
+
+
+func _build_melee_profile(stats: Dictionary) -> Dictionary:
+	var steps: Array[Dictionary] = []
+	var combo_count := clampi(int(stats.get("melee_combo_count", 3)), 1, 3)
+	for index in range(1, combo_count + 1):
+		steps.append({
+			"damage_scale": float(stats.get("melee_%d_damage_scale" % index, 1.0)),
+			"windup_s": float(stats.get("melee_%d_windup_s" % index, 0.2)),
+			"active_s": float(stats.get("melee_%d_active_s" % index, 0.1)),
+			"recovery_s": float(stats.get("melee_%d_recovery_s" % index, 0.25)),
+			"knockback_scale": float(stats.get("melee_%d_knockback_scale" % index, 1.0)),
+			"pose_id": ["sweep_left", "sweep_right", "overhead_finisher"][index - 1],
+		})
+	return {
+		"content_id": gun_id.replace("bp_", "weapon_"),
+		"assembly_id": gun_id,
+		"reach": float(stats.get("melee_reach", 2.5)),
+		"arc_degrees": float(stats.get("melee_arc_degrees", 100.0)),
+		"knockback": float(stats.get("melee_knockback", 4.0)),
+		"combo_count": combo_count,
+		"combo_steps": steps,
+	}
 
 
 func clear_weapon() -> void:
@@ -246,6 +295,8 @@ func clear_weapon() -> void:
 	bullet_id = ""
 	current_ammo = 0
 	magazine_size = 0
+	weapon_kind = "ranged"
+	_melee_profile.clear()
 	if _visual_root != null:
 		_visual_root.queue_free()
 		_visual_root = null
@@ -258,7 +309,7 @@ func clear_weapon() -> void:
 
 
 func try_fire(aim_direction: Vector3, shooter: Node3D) -> bool:
-	if display_only or gun_id.is_empty() or _cooldown > 0.0 or _reload_remaining > 0.0:
+	if is_melee_weapon() or display_only or gun_id.is_empty() or _cooldown > 0.0 or _reload_remaining > 0.0:
 		return false
 	if current_ammo <= 0:
 		request_reload()
@@ -479,7 +530,7 @@ func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector
 
 
 func request_reload() -> bool:
-	if display_only or gun_id.is_empty() or _reload_remaining > 0.0 or current_ammo >= magazine_size:
+	if is_melee_weapon() or display_only or gun_id.is_empty() or _reload_remaining > 0.0 or current_ammo >= magazine_size:
 		return false
 	_active_reload_duration = maxf(0.01, reload_time)
 	_reload_remaining = _active_reload_duration
@@ -495,7 +546,7 @@ func request_reload() -> bool:
 
 
 func refill_ammo() -> bool:
-	if display_only or gun_id.is_empty():
+	if is_melee_weapon() or display_only or gun_id.is_empty():
 		return false
 	cancel_reload()
 	current_ammo = magazine_size
@@ -522,6 +573,29 @@ func is_reloading() -> bool:
 	return _reload_remaining > 0.0
 
 
+func is_melee_weapon() -> bool:
+	return weapon_kind == "melee" and not _melee_profile.is_empty()
+
+
+func get_melee_profile() -> Dictionary:
+	return _melee_profile.duplicate(true)
+
+
+func roll_melee_critical() -> bool:
+	return is_melee_weapon() and randf() < _critical_chance
+
+
+func get_visual_bounds_hint() -> Vector3:
+	if gun_id == "bp_baseball_bat":
+		return Vector3(0.28, 0.28, 1.48)
+	if gun_id == "bp_greatblade":
+		return Vector3(0.82, 0.30, 2.42)
+	if gun_id == "bp_waraxe":
+		return Vector3(1.18, 0.34, 2.62)
+	var ranged := GUN_PROFILES.get(gun_id, GUN_PROFILES["bp_pistol"]) as Dictionary
+	return Vector3(float(ranged.get("width", 0.2)), float(ranged.get("height", 0.2)), float(ranged.get("length", 0.8)))
+
+
 func get_reload_progress() -> float:
 	if not is_reloading() or _active_reload_duration <= 0.0:
 		return 0.0
@@ -541,6 +615,11 @@ func get_snapshot() -> Dictionary:
 	return {
 		"gun_id": gun_id,
 		"bullet_id": bullet_id,
+		"weapon_kind": weapon_kind,
+		"uses_ammo": not is_melee_weapon(),
+		"melee": is_melee_weapon(),
+		"melee_profile": get_melee_profile(),
+		"visual_bounds_hint": get_visual_bounds_hint(),
 		"damage": damage,
 		"fire_rate": fire_rate,
 		"projectile_count": projectile_count,
@@ -606,9 +685,18 @@ func _rebuild_visual() -> void:
 	if _visual_root != null:
 		_visual_root.queue_free()
 	_visual_root = Node3D.new()
-	_visual_root.name = "GunVisual"
+	_visual_root.name = "MeleeVisual" if is_melee_weapon() else "GunVisual"
 	add_child(_visual_root)
 	_visual_root.scale = Vector3.ONE * clampf(float(_projectile_behavior.get("fate_scale", 1.0)), 0.45, 2.5)
+	if is_melee_weapon():
+		var melee_scene := MELEE_VISUAL_SCENES.get(gun_id) as PackedScene
+		if melee_scene != null:
+			var melee_visual := melee_scene.instantiate() as Node3D
+			_visual_root.add_child(melee_visual)
+			if melee_visual.has_method("configure"):
+				melee_visual.call("configure", render_layers)
+		_muzzle = null
+		return
 	var profile: Dictionary = GUN_PROFILES.get(gun_id, GUN_PROFILES["bp_pistol"])
 	var length := float(profile["length"])
 	var barrel := float(profile["barrel"])
@@ -635,6 +723,14 @@ func _rebuild_visual() -> void:
 			_add_cylinder("InstalledMuzzle", Vector3(0, 0.01, -length - barrel * 0.96), width * 0.34, barrel * 0.44, accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.MAGAZINE) != null:
 			_add_box("InstalledMagazine", Vector3(0, -height * 0.80, -length * 0.48), Vector3(width * 0.82, height * 1.10, length * 0.26), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.SCOPE) != null:
+			_add_cylinder("InstalledScope", Vector3(0, height * 0.82, -length * 0.58), width * 0.22, length * 0.40, accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.STOCK) != null:
+			_add_box("InstalledStock", Vector3(0, -0.03, length * 0.30), Vector3(width * 0.92, height * 0.92, length * 0.42), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.TACTICAL) != null:
+			_add_box("InstalledTactical", Vector3(width * 0.70, -height * 0.06, -length * 0.62), Vector3(width * 0.32, height * 0.32, length * 0.28), accent_material)
+		if source_root.slots.get(AssemblyNode.SlotType.MUTATOR) != null:
+			_add_box("InstalledMutator", Vector3(-width * 0.56, height * 0.10, -length * 0.42), Vector3(width * 0.12, height * 0.54, length * 0.36), accent_material)
 		if source_root.slots.get(AssemblyNode.SlotType.MOUNT) != null:
 			_add_box("InstalledMount", Vector3(0, height * 0.78, -length * 0.48), Vector3(width * 0.60, height * 0.32, length * 0.30), accent_material)
 	var fate_used := maxi(0, int(get_meta("fate_slot_used", 0)))

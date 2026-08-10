@@ -4,7 +4,7 @@ extends Node3D
 
 signal retired(effect: CombatEffect3D)
 
-@export_enum("muzzle", "impact", "explosion", "damage", "heal") var effect_kind := "impact"
+@export_enum("muzzle", "impact", "explosion", "damage", "heal", "slash", "melee_impact") var effect_kind := "impact"
 @export var effect_color := Color(0.45, 0.88, 1.0)
 @export_range(0.1, 8.0, 0.1) var effect_size := 1.0
 @export var text_value := ""
@@ -15,23 +15,41 @@ var _materials: Array[StandardMaterial3D] = []
 var _active := true
 var _built := false
 var _value_label: Label3D
+var _context: Dictionary = {}
+var _swing_sign := 1.0
 
 
-func configure(kind: String, color: Color, size: float = 1.0, value := "") -> void:
+func configure(kind: String, color: Color, size: float = 1.0, value := "", context: Dictionary = {}) -> void:
 	effect_kind = kind
 	effect_color = color
 	effect_size = size
 	text_value = str(value)
+	_context = context.duplicate(true)
 	_elapsed = 0.0
 
 
-func activate(kind: String, color: Color, size: float, world_position: Vector3, value := "") -> void:
-	configure(kind, color, size, value)
+func activate(
+	kind: String,
+	color: Color,
+	size: float,
+	world_position: Vector3,
+	value := "",
+	context: Dictionary = {}
+) -> void:
+	configure(kind, color, size, value, context)
 	_active = true
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
 	global_position = world_position
+	rotation = Vector3.ZERO
 	scale = Vector3.ONE * effect_size
+	var forward := _context.get("forward", Vector3.FORWARD) as Vector3
+	forward.y = 0.0
+	if forward.length_squared() > 0.001:
+		forward = forward.normalized()
+		rotation.y = atan2(-forward.x, -forward.z)
+	var combo_step := int(_context.get("combo_step", 1))
+	_swing_sign = -1.0 if combo_step == 2 else 1.0
 	if _value_label != null:
 		_value_label.text = text_value
 		_value_label.modulate = effect_color
@@ -55,6 +73,12 @@ func _process(delta: float) -> void:
 			scale = Vector3.ONE * effect_size * lerpf(0.35, 1.75, ratio)
 		"explosion":
 			scale = Vector3.ONE * effect_size * lerpf(0.28, 2.8, ratio)
+		"slash":
+			var slash_scale := lerpf(0.72, 1.18, ratio)
+			scale = Vector3(_swing_sign * slash_scale, 1.0, slash_scale) * effect_size
+			position.y += delta * 0.12
+		"melee_impact":
+			scale = Vector3.ONE * effect_size * lerpf(0.45, 1.82, ratio)
 		"damage", "heal":
 			position.y += delta * 1.25
 		_:
@@ -78,6 +102,16 @@ func _build_effect() -> void:
 			_add_sphere("Core", 0.42, effect_color.lightened(0.28), 3.1)
 			_add_ring("Shockwave", 0.55, 0.08, effect_color)
 			_add_ring("OuterWave", 0.82, 0.055, effect_color.darkened(0.18))
+		"slash":
+			_lifetime = 0.28
+			_add_slash_arc()
+		"melee_impact":
+			_lifetime = 0.32
+			_add_sphere("MeleeImpactCore", 0.19, effect_color.lightened(0.30), 3.0)
+			_add_ring("MeleeImpactRing", 0.34, 0.065, effect_color)
+			_add_ring("MeleeImpactOuter", 0.52, 0.035, effect_color.darkened(0.18))
+			for index in range(6):
+				_add_impact_shard(index)
 		"damage", "heal":
 			_lifetime = 0.72
 			_value_label = Label3D.new()
@@ -134,6 +168,57 @@ func _add_ring(node_name: String, radius: float, thickness: float, color: Color)
 	instance.position.y = 0.04
 	instance.mesh = mesh
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	add_child(instance)
+
+
+func _add_slash_arc() -> void:
+	var surface := SurfaceTool.new()
+	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var inner_radius := 0.78
+	var outer_radius := 1.42
+	var start_angle := deg_to_rad(-72.0)
+	var end_angle := deg_to_rad(54.0)
+	var segments := 18
+	for index in range(segments):
+		var t0 := float(index) / float(segments)
+		var t1 := float(index + 1) / float(segments)
+		var a0 := lerpf(start_angle, end_angle, t0)
+		var a1 := lerpf(start_angle, end_angle, t1)
+		var fade0 := sin(t0 * PI)
+		var fade1 := sin(t1 * PI)
+		var p0_inner := Vector3(sin(a0) * inner_radius, 0.0, -cos(a0) * inner_radius)
+		var p0_outer := Vector3(sin(a0) * outer_radius, 0.0, -cos(a0) * outer_radius)
+		var p1_inner := Vector3(sin(a1) * inner_radius, 0.0, -cos(a1) * inner_radius)
+		var p1_outer := Vector3(sin(a1) * outer_radius, 0.0, -cos(a1) * outer_radius)
+		for vertex in [p0_inner, p0_outer, p1_outer, p0_inner, p1_outer, p1_inner]:
+			surface.set_normal(Vector3.UP)
+			var vertex_fade := fade0 if vertex == p0_inner or vertex == p0_outer else fade1
+			surface.set_color(Color(1.0, 1.0, 1.0, 0.42 + vertex_fade * 0.58))
+			surface.add_vertex(vertex)
+	var mesh := surface.commit()
+	var material := _effect_material(effect_color, 3.1)
+	material.vertex_color_use_as_albedo = true
+	material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	mesh.surface_set_material(0, material)
+	var instance := MeshInstance3D.new()
+	instance.name = "SlashArc"
+	instance.position.y = 0.035
+	instance.mesh = mesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(instance)
+
+
+func _add_impact_shard(index: int) -> void:
+	var angle := TAU * float(index) / 6.0
+	var mesh := BoxMesh.new()
+	mesh.size = Vector3(0.045, 0.035, 0.42)
+	mesh.material = _effect_material(effect_color.lightened(0.18), 2.8)
+	var instance := MeshInstance3D.new()
+	instance.name = "ImpactShard%02d" % index
+	instance.position = Vector3(sin(angle) * 0.31, 0.09, -cos(angle) * 0.31)
+	instance.rotation.y = angle
+	instance.mesh = mesh
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(instance)
 
 

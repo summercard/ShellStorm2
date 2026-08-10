@@ -15,6 +15,8 @@ extraction_start,extraction_start.wav,extraction_start_v001.ogg,正式接入,撤
 fate_card,fate_card.wav,fate_card_v001.ogg,正式接入,命运卡生效,0.860,44100,1,2,res://src/assets/audio/sfx/fate_card_v001.ogg
 item_pickup,item_pickup.wav,item_pickup_v001.ogg,正式接入,普通物品拾取,0.250,44100,1,2,res://src/assets/audio/sfx/item_pickup_v001.ogg
 laser_fire,laser_fire.wav,laser_fire_v001.ogg,正式接入,能量武器射击,0.240,44100,1,2,res://src/assets/audio/sfx/laser_fire_v001.ogg
+melee_impact,melee_impact.wav,melee_impact_v001.ogg,正式接入,近战命中主层,0.441,44100,1,2,res://src/assets/audio/sfx/melee_impact_v001.ogg
+melee_swing,melee_swing.wav,melee_swing_v001.ogg,正式接入,近战挥砍空气层,0.361,44100,1,2,res://src/assets/audio/sfx/melee_swing_v001.ogg
 merchant_purchase,merchant_purchase.wav,merchant_purchase_v001.ogg,正式接入,购买成功,0.420,44100,1,2,res://src/assets/audio/sfx/merchant_purchase_v001.ogg
 pistol_fire,pistol_fire.wav,pistol_fire_v001.ogg,正式接入,手枪射击,0.190,44100,1,2,res://src/assets/audio/sfx/pistol_fire_v001.ogg
 player_dash,player_dash.wav,player_dash_v001.ogg,正式接入,玩家闪避,0.270,44100,1,2,res://src/assets/audio/sfx/player_dash_v001.ogg

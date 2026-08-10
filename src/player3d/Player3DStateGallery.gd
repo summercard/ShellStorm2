@@ -175,6 +175,17 @@ func request_preview_fire() -> bool:
 	return fired
 
 
+func request_preview_melee(assembly_id: String) -> bool:
+	if not _ensure_living_player():
+		return false
+	if not player.equip_weapon(assembly_id, ""):
+		return false
+	player.combat_enabled = true
+	var started := player.request_melee_attack()
+	_refresh_readout()
+	return started
+
+
 func begin_preview_charge() -> bool:
 	if not _ensure_living_player():
 		return false
@@ -410,11 +421,13 @@ func _build_interface() -> void:
 	_add_button(overlay_grid, "Invincible", "无敌", toggle_invincible)
 	_add_button(overlay_grid, "Silenced", "沉默", toggle_silenced)
 	var weapon_grid := GridContainer.new()
-	weapon_grid.columns = 3
+	weapon_grid.columns = 2
 	player_box.add_child(weapon_grid)
 	_add_button(weapon_grid, "WeaponPistol", "手枪", func(): equip_preview_weapon("bp_pistol"))
 	_add_button(weapon_grid, "WeaponShotgun", "霰弹", func(): equip_preview_weapon("bp_shotgun"))
 	_add_button(weapon_grid, "WeaponRifle", "步枪", func(): equip_preview_weapon("bp_rifle"))
+	_add_button(weapon_grid, "WeaponGreatblade", "工业断刃", func(): equip_preview_weapon("bp_greatblade"))
+	_add_button(weapon_grid, "WeaponWaraxe", "裂甲斧", func(): equip_preview_weapon("bp_waraxe"))
 	_add_section_label(player_box, "动作覆盖层 · 真实武器/受击驱动")
 	var action_grid := GridContainer.new()
 	action_grid.columns = 2
@@ -423,6 +436,8 @@ func _build_interface() -> void:
 	_add_button(action_grid, "StartCharge", "开始蓄力", begin_preview_charge)
 	_add_button(action_grid, "ReleaseCharge", "释放蓄力", release_preview_charge)
 	_add_button(action_grid, "Knockback", "受击击飞", request_preview_knockback)
+	_add_button(action_grid, "MeleeGreatblade", "断刃三连", func(): request_preview_melee("bp_greatblade"))
+	_add_button(action_grid, "MeleeWaraxe", "战斧三连", func(): request_preview_melee("bp_waraxe"))
 
 	var diy_panel := _make_panel("DIYControls", Vector2(336, 88), Vector2(270, 310))
 	root.add_child(diy_panel)

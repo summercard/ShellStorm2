@@ -13,6 +13,8 @@ signal inventory_open_changed(opened: bool)
 signal weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: int)
 signal equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slot_index: int)
 signal equipped_weapon_drop_requested(weapon_slot_index: int)
+signal attachment_slot_install_requested(source_slot_index: int, weapon_slot_index: int, attachment_slot_type: int)
+signal attachment_slot_remove_requested(weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int)
 signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
 signal backpack_slot_equip_requested(source_slot_index: int)
 signal equipped_backpack_to_inventory_requested(target_slot_index: int)
@@ -46,6 +48,7 @@ var equipment_weapon_slot: Control
 var equipment_weapon_label: Label
 var equipment_weapon_slots: Array[Control] = []
 var equipment_weapon_labels: Array[Label] = []
+var equipment_attachment_slots: Array = []
 var equipment_backpack_slot: Control
 var equipment_backpack_label: Label
 var quick_item_slots: Array[Control] = []
@@ -242,6 +245,50 @@ func _setup_standalone_panels() -> void:
 		weapon_label.text = "未装备"
 		slot_box.add_child(weapon_label)
 		equipment_weapon_labels.append(weapon_label)
+		var attachment_title := Label.new()
+		attachment_title.text = "枪械配件 · 点击拆卸"
+		attachment_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		attachment_title.add_theme_font_size_override("font_size", 10)
+		attachment_title.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+		slot_box.add_child(attachment_title)
+		var attachment_grid := GridContainer.new()
+		attachment_grid.name = "WeaponAttachmentGrid_%d" % weapon_slot_index
+		attachment_grid.columns = 3
+		attachment_grid.add_theme_constant_override("h_separation", 4)
+		attachment_grid.add_theme_constant_override("v_separation", 4)
+		attachment_grid.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		slot_box.add_child(attachment_grid)
+		var weapon_attachment_slots: Array[Control] = []
+		for attachment_slot_type in AssemblyNode.PUBLIC_ATTACHMENT_SLOTS:
+			var attachment_slot := _create_slot()
+			attachment_slot.name = "Weapon%dAttachment_%s" % [
+				weapon_slot_index,
+				AssemblyNode.get_attachment_slot_key(attachment_slot_type).capitalize(),
+			]
+			attachment_slot.custom_minimum_size = Vector2(40, 40)
+			attachment_slot.set_meta("slot_kind", "attachment_%d_%d" % [weapon_slot_index, attachment_slot_type])
+			attachment_slot.set_meta("weapon_slot_index", weapon_slot_index)
+			attachment_slot.set_meta("attachment_slot_type", attachment_slot_type)
+			attachment_slot.set_meta("accepted_subtype", _attachment_item_subtype(attachment_slot_type))
+			if attachment_slot.has_method("set_slot_index"):
+				attachment_slot.call("set_slot_index", attachment_slot_type)
+			_connect_slot_signals(attachment_slot, attachment_slot_type, false)
+			if attachment_slot.has_signal("slot_clicked"):
+				attachment_slot.slot_clicked.connect(
+					_on_attachment_slot_clicked.bind(weapon_slot_index, attachment_slot_type)
+				)
+			var abbreviation := Label.new()
+			abbreviation.name = "AttachmentSlotCaption"
+			abbreviation.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			abbreviation.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			abbreviation.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			abbreviation.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			abbreviation.add_theme_font_size_override("font_size", 9)
+			abbreviation.text = AssemblyNode.get_attachment_slot_display_name(attachment_slot_type)
+			attachment_slot.add_child(abbreviation)
+			attachment_grid.add_child(attachment_slot)
+			weapon_attachment_slots.append(attachment_slot)
+		equipment_attachment_slots.append(weapon_attachment_slots)
 	equipment_weapon_slot = equipment_weapon_slots[0]
 	equipment_weapon_label = equipment_weapon_labels[0]
 	var backpack_title := Label.new()
@@ -525,6 +572,9 @@ func _set_inventory_panel_visibility(visible: bool) -> void:
 	# 关闭背包后立即关掉 _process，避免全屏常驻每帧跑空函数。
 	set_process(visible and item_hover_card != null and item_hover_card.visible)
 	if visible and inventory_shell:
+		# 战斗 HUD 会在背包之后动态创建。GUI 命中同样受同级节点顺序影响，
+		# 因此打开时提升整个背包根节点，避免底部丢弃区被 HUD 抢走拖拽事件。
+		move_to_front()
 		inventory_shell.move_to_front()
 	if was_visible != visible:
 		inventory_open_changed.emit(visible)
@@ -882,6 +932,15 @@ func _weapon_hover_text(item: Dictionary) -> String:
 				int(upgrade.get("slot_index", lines.size() - 2)), card_name, orientation_text, summary,
 			])
 	lines.append("装配可更换，不占命运槽")
+	var instance := WeaponInstance.from_item(item)
+	if instance != null:
+		var presentation := instance.get_presentation_snapshot()
+		var installed: Array[String] = []
+		for raw_entry in presentation.get("attachment_layout", []):
+			if raw_entry is Dictionary and not str((raw_entry as Dictionary).get("installed_item_id", "")).is_empty():
+				var attachment_item := ItemRegistry.get_instance().get_item(str((raw_entry as Dictionary).get("installed_item_id", "")))
+				installed.append("%s:%s" % [(raw_entry as Dictionary).get("display_name", "配件"), attachment_item.get("name", "未知")])
+		lines.append("枪械配件：%s" % ("无" if installed.is_empty() else " / ".join(installed)))
 	lines.append("拖到左侧装备 · 拖到红区或面板外丢弃")
 	return "\n".join(lines)
 
@@ -1029,6 +1088,7 @@ func _refresh_equipment_ui() -> void:
 		if item.is_empty():
 			_clear_slot(slot)
 			equipment_weapon_labels[weapon_slot_index].text = "%s未装备" % ("主武器" if weapon_slot_index == 0 else "副武器")
+			_refresh_weapon_attachment_slots(weapon_slot_index, [])
 			continue
 		_update_slot_with_item(slot, {"item": item, "count": 1, "slot": weapon_slot_index})
 		var instance_id := str(item.get("weapon_instance_id", ""))
@@ -1039,7 +1099,83 @@ func _refresh_equipment_ui() -> void:
 			item.get("name", "武器"), instance_id.right(6).to_upper(), used,
 			int(item.get("fate_slot_capacity", 8)),
 		]
+		var layout: Array[Dictionary] = []
+		if _weapon_owner.has_method("get_weapon_attachment_layout_for_slot"):
+			layout = _weapon_owner.call("get_weapon_attachment_layout_for_slot", weapon_slot_index) as Array[Dictionary]
+		_refresh_weapon_attachment_slots(weapon_slot_index, layout)
 	_refresh_quick_item_ui()
+
+
+func _refresh_weapon_attachment_slots(weapon_slot_index: int, layout: Array[Dictionary]) -> void:
+	if weapon_slot_index < 0 or weapon_slot_index >= equipment_attachment_slots.size():
+		return
+	var by_type: Dictionary = {}
+	for entry in layout:
+		by_type[int(entry.get("slot_type", -1))] = entry
+	var slots := equipment_attachment_slots[weapon_slot_index] as Array
+	for slot in slots:
+		var slot_type := int(slot.get_meta("attachment_slot_type", -1))
+		var entry := by_type.get(slot_type, {}) as Dictionary
+		var supported := bool(entry.get("supported", false))
+		var item_id := str(entry.get("installed_item_id", ""))
+		slot.set_meta("slot_disabled", not supported)
+		slot.set_meta("drag_disabled", item_id.is_empty())
+		var caption := slot.get_node_or_null("AttachmentSlotCaption") as Label
+		if not supported:
+			_clear_slot(slot)
+			slot.set_meta("slot_disabled", true)
+			slot.set_meta("drag_disabled", true)
+			if caption != null:
+				caption.visible = true
+				caption.text = "×%s" % AssemblyNode.get_attachment_slot_display_name(slot_type)
+				caption.add_theme_color_override("font_color", UIPalette.TEXT_DISABLED)
+			_apply_attachment_slot_frame(slot, false, true)
+			continue
+		if item_id.is_empty():
+			_clear_slot(slot)
+			slot.set_meta("slot_disabled", false)
+			slot.set_meta("drag_disabled", true)
+			if caption != null:
+				caption.visible = true
+				caption.text = AssemblyNode.get_attachment_slot_display_name(slot_type)
+				caption.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
+			_apply_attachment_slot_frame(slot, false, false)
+			continue
+		var item := ItemRegistry.get_instance().get_item(item_id)
+		_update_slot_with_item(slot, {"item": item, "count": 1, "slot": slot_type})
+		slot.set_meta("slot_disabled", false)
+		slot.set_meta("drag_disabled", false)
+		if caption != null:
+			caption.visible = false
+		_apply_attachment_slot_frame(slot, true, false)
+
+
+func _apply_attachment_slot_frame(slot: Control, filled: bool, disabled: bool) -> void:
+	var border := UIPalette.TEXT_DISABLED if disabled else Color(0.22, 0.82, 0.72) if filled else Color(0.30, 0.48, 0.58)
+	var style := UIStyleFactory.make_panel_with_border(0, border, 4, 1)
+	style.bg_color = Color(0.018, 0.024, 0.030, 0.72) if disabled else Color(0.025, 0.075, 0.080, 0.94)
+	slot.add_theme_stylebox_override("normal", style)
+
+
+func _attachment_item_subtype(slot_type: int) -> String:
+	return str({
+		AssemblyNode.SlotType.SCOPE: "scope",
+		AssemblyNode.SlotType.MUZZLE: "muzzle",
+		AssemblyNode.SlotType.MAGAZINE: "magazine",
+		AssemblyNode.SlotType.STOCK: "stock",
+		AssemblyNode.SlotType.TACTICAL: "external",
+		AssemblyNode.SlotType.MUTATOR: "mutator",
+	}.get(slot_type, ""))
+
+
+func _on_attachment_slot_clicked(_slot_index: int, weapon_slot_index: int, attachment_slot_type: int) -> void:
+	if weapon_slot_index >= equipment_attachment_slots.size():
+		return
+	var slots := equipment_attachment_slots[weapon_slot_index] as Array
+	for slot in slots:
+		if int(slot.get_meta("attachment_slot_type", -1)) == attachment_slot_type and slot.has_meta("slot_item"):
+			attachment_slot_remove_requested.emit(weapon_slot_index, attachment_slot_type, -1)
+			return
 
 
 func _refresh_backpack_equipment_ui() -> void:
@@ -1188,7 +1324,7 @@ func _position_item_hover_card() -> void:
 
 
 func _on_slot_drag_started(source_index: int, source_kind: String, item: Dictionary) -> void:
-	if source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack":
+	if source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack":
 		return
 	_drag_feedback_active = true
 	_hovered_item_slot = null
@@ -1196,13 +1332,13 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	for index in _slots.size():
 		if _slots[index].has_method("set_drag_feedback"):
 			_slots[index].call("set_drag_feedback", true, source_kind == "inventory" and index == source_index, item, source_kind)
-	for target in equipment_weapon_slots + [equipment_backpack_slot] + quick_item_slots + [drop_zone]:
+	for target in _equipment_drop_targets():
 		if target != null and target.has_method("set_drag_feedback"):
-			target.call("set_drag_feedback", true, (source_kind.begins_with("weapon_") or source_kind == "backpack") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
+			target.call("set_drag_feedback", true, (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
 	if drag_status_panel != null and drag_status_label != null:
 		drag_status_label.text = (
 			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
-			if source_kind.begins_with("weapon_") or source_kind == "backpack"
+			if source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack"
 			else "正在拖拽「%s」　蓝框换位 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
@@ -1214,7 +1350,7 @@ func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successfu
 	for slot in _slots:
 		if slot.has_method("set_drag_feedback"):
 			slot.call("set_drag_feedback", false, false, {}, "inventory")
-	for target in equipment_weapon_slots + [equipment_backpack_slot] + quick_item_slots + [drop_zone]:
+	for target in _equipment_drop_targets():
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", false, false, {}, "inventory")
 	if drag_status_panel != null:
@@ -1227,7 +1363,15 @@ func _on_slot_drop_received(
 	source_kind: String,
 	target_kind: String
 ) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack") or _inventory_module == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or _inventory_module == null:
+		return
+	if source_kind.begins_with("attachment_"):
+		if target_kind == "inventory":
+			var parts := source_kind.split("_")
+			if parts.size() >= 3:
+				attachment_slot_remove_requested.emit(int(parts[1]), int(parts[2]), target_index)
+		_refresh_inventory_ui()
+		_refresh_equipment_ui()
 		return
 	if source_kind == "backpack":
 		match target_kind:
@@ -1255,6 +1399,12 @@ func _on_slot_drop_received(
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			if not source.is_empty() and str((source.get("item", {}) as Dictionary).get("type", "")) == "weapon":
 				weapon_slot_equip_requested.emit(source_index, int(target_kind.trim_prefix("weapon_")))
+		_ when target_kind.begins_with("attachment_"):
+			var source: Dictionary = _inventory_module.get_slot(source_index)
+			var item := source.get("item", {}) as Dictionary
+			var parts := target_kind.split("_")
+			if str(item.get("type", "")) == "attachment" and parts.size() >= 3:
+				attachment_slot_install_requested.emit(source_index, int(parts[1]), int(parts[2]))
 		"backpack":
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			var item := source.get("item", {}) as Dictionary
@@ -1272,16 +1422,32 @@ func _on_slot_drop_received(
 
 
 func _on_slot_drag_ended_outside(source_index: int, source_kind: String) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and source_kind != "backpack") or inventory_shell == null:
+	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or inventory_shell == null:
 		return
 	if inventory_shell.get_global_rect().has_point(get_viewport().get_mouse_position()):
 		return
 	if source_kind.begins_with("weapon_"):
 		equipped_weapon_drop_requested.emit(int(source_kind.trim_prefix("weapon_")))
+	elif source_kind.begins_with("attachment_"):
+		return
 	elif source_kind == "backpack":
 		equipped_backpack_drop_requested.emit()
 	else:
 		_drop_inventory_slot_to_world(source_index)
+
+
+func _equipment_drop_targets() -> Array[Control]:
+	var targets: Array[Control] = []
+	targets.append_array(equipment_weapon_slots)
+	for weapon_slots in equipment_attachment_slots:
+		for slot in weapon_slots:
+			targets.append(slot as Control)
+	if equipment_backpack_slot != null:
+		targets.append(equipment_backpack_slot)
+	targets.append_array(quick_item_slots)
+	if drop_zone != null:
+		targets.append(drop_zone)
+	return targets
 
 
 func _drop_inventory_slot_to_world(slot_index: int) -> bool:

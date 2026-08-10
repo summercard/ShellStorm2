@@ -5,7 +5,8 @@ const REQUIRED_CONTROLS := [
 	"StateIdle", "StateMoving", "StateDashing", "StateHurt", "StateLocked",
 	"StateFalling", "StateLanding", "StateDead",
 	"Reload", "LowHealth", "Invincible", "Silenced", "WeaponPistol", "WeaponShotgun", "WeaponRifle",
-	"FireShot", "StartCharge", "ReleaseCharge", "Knockback",
+	"WeaponGreatblade", "WeaponWaraxe", "FireShot", "StartCharge", "ReleaseCharge", "Knockback",
+	"MeleeGreatblade", "MeleeWaraxe",
 	"SpawnEnemy", "SpawnBoss", "ToggleEnemyAI", "DamageEnemy", "EnemyIdle", "EnemyPatrol",
 	"EnemyTelegraph", "EnemyAttack", "AdvanceBossPhase", "InteractNPC", "ResetPlayer",
 ]

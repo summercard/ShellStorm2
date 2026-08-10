@@ -32,6 +32,44 @@ var _registry: Dictionary = {
 	"attachment": {}
 }
 
+## PUBG式统一槽位框架：界面位置固定，枪型只声明开放的槽位子集。
+const ROOT_ATTACHMENT_SUPPORT := {
+	"GunBody_Pistol": ["scope", "muzzle", "magazine", "mutator"],
+	"GunBody_Shotgun": ["muzzle", "magazine", "stock", "tactical", "mutator"],
+	"GunBody_Rifle": ["scope", "muzzle", "magazine", "stock", "tactical", "mutator"],
+	"GunBody_Machinegun": ["scope", "muzzle", "magazine", "stock", "tactical"],
+	"GunBody_Sniper": ["scope", "muzzle", "magazine", "stock", "mutator"],
+	"GunBody_Launcher": ["scope", "stock", "tactical", "mutator"],
+	"GunBody_Charge": ["scope", "stock", "tactical", "mutator"],
+}
+
+const ASSEMBLY_NODE_ITEM_IDS := {
+	"GunBody_Pistol": "weapon_pistol",
+	"GunBody_Shotgun": "weapon_shotgun",
+	"GunBody_Rifle": "weapon_rifle",
+	"GunBody_Machinegun": "weapon_machinegun",
+	"GunBody_Sniper": "weapon_sniper",
+	"GunBody_Launcher": "weapon_launcher",
+	"GunBody_Charge": "weapon_charge",
+	"Melee_BaseballBat": "weapon_baseball_bat",
+	"Melee_Greatblade": "weapon_greatblade",
+	"Melee_Waraxe": "weapon_waraxe",
+	"Bullet_Standard": "mod_bullet_standard",
+	"Bullet_Sticky": "mod_bullet_sticky",
+	"Bullet_Bounce": "mod_bullet_bounce",
+	"Bullet_Piercing": "mod_bullet_piercing",
+	"Bullet_Explosive": "mod_bullet_explosive",
+	"Bullet_Homing": "mod_bullet_homing",
+	"Bullet_Blackhole": "mod_bullet_blackhole",
+	"Bullet_Balloon": "mod_bullet_balloon",
+	"Att_TripleMuzzle": "attach_triple_muzzle",
+	"Att_RubberStock": "attach_rubber_stock",
+	"Att_Scope": "attach_scope",
+	"Att_BigMag": "attach_big_mag",
+	"Att_Fan": "attach_fan",
+	"Att_CopySticker": "attach_copy_sticker",
+}
+
 func _build_registry() -> void:
 	# ========== 枪身 ==========
 	_register_gunbody({
@@ -82,6 +120,27 @@ func _build_registry() -> void:
 		"factory": func(): return _create_gunbody_charge(),
 		"tags": ["charge", "蓄力", "high_damage"],
 		"display_name": "蓄力萝卜炮",
+	})
+	_register_gunbody({
+		"item_id": "bp_baseball_bat",
+		"tier": 0,
+		"factory": func(): return _create_melee_baseball_bat(),
+		"tags": ["weapon", "melee", "light_melee", "baseball_bat"],
+		"display_name": "废土棒球棍",
+	})
+	_register_gunbody({
+		"item_id": "bp_greatblade",
+		"tier": 0,
+		"factory": func(): return _create_melee_greatblade(),
+		"tags": ["weapon", "melee", "heavy_melee", "greatblade"],
+		"display_name": "巨型工业断刃",
+	})
+	_register_gunbody({
+		"item_id": "bp_waraxe",
+		"tier": 1,
+		"factory": func(): return _create_melee_waraxe(),
+		"tags": ["weapon", "melee", "heavy_melee", "waraxe"],
+		"display_name": "攻城裂甲斧",
 	})
 
 	# ========== 子弹 ==========
@@ -249,7 +308,9 @@ func create_assembly_node(item_id: String) -> AssemblyNode:
 	# 尝试枪身
 	var gun_entry: Dictionary = _registry["gunbody"].get(item_id, {})
 	if not gun_entry.is_empty():
-		return gun_entry["factory"].call() as AssemblyNode
+		var gun := gun_entry["factory"].call() as AssemblyNode
+		apply_runtime_contract(gun)
+		return gun
 
 	# 尝试子弹
 	var bullet_entry: Dictionary = _registry["bullet"].get(item_id, {})
@@ -259,10 +320,50 @@ func create_assembly_node(item_id: String) -> AssemblyNode:
 	# 尝试配件
 	var attach_entry: Dictionary = _registry["attachment"].get(item_id, {})
 	if not attach_entry.is_empty():
-		return attach_entry["factory"].call() as AssemblyNode
+		var attachment := attach_entry["factory"].call() as AssemblyNode
+		apply_runtime_contract(attachment)
+		return attachment
 
 	push_warning("[BlueprintRegistry] Unknown item_id: %s" % item_id)
 	return null
+
+
+## 旧存档水合入口：补齐后来加入的兼容标签，不改任何玩家数值或已装配节点。
+func apply_runtime_contract(node: AssemblyNode) -> void:
+	if node == null:
+		return
+	if node.node_type == AssemblyNode.NodeType.GUN_BODY:
+		for slot_key in ROOT_ATTACHMENT_SUPPORT.get(node.node_name, []):
+			var support_tag := "supports_%s" % str(slot_key)
+			if support_tag not in node.tags:
+				node.tags.append(support_tag)
+	elif node.node_type == AssemblyNode.NodeType.ATTACHMENT:
+		var slot_type := node.get_attachment_slot_type()
+		if slot_type >= 0:
+			var slot_tag := "attachment_slot_%s" % AssemblyNode.get_attachment_slot_key(slot_type)
+			if slot_tag not in node.tags:
+				node.tags.append(slot_tag)
+	for child in node.get_all_descendants():
+		if child.parent_node == node:
+			apply_runtime_contract(child)
+
+
+func get_item_id_for_assembly_node(node: AssemblyNode) -> String:
+	return str(ASSEMBLY_NODE_ITEM_IDS.get(node.node_name, "")) if node != null else ""
+
+
+func get_item_for_assembly_node(node: AssemblyNode) -> Dictionary:
+	var item_id := get_item_id_for_assembly_node(node)
+	return ItemRegistry.get_instance().get_item(item_id) if not item_id.is_empty() else {}
+
+
+func get_attachment_slot_type_for_item(item: Dictionary) -> int:
+	var node := create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
+	if node == null:
+		return -1
+	var result := node.get_attachment_slot_type()
+	node.free()
+	return result
 
 ## 构建一个完整武器树（枪身+子弹），根据蓝图Tier自动选择
 func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
@@ -292,6 +393,8 @@ func build_weapon_tree(
 	if gun_node == null or gun_node.node_type != AssemblyNode.NodeType.GUN_BODY:
 		gun_node = _create_gunbody_pistol()
 	tree.set_root(gun_node)
+	if "melee" in gun_node.tags:
+		return tree
 	var bullet_node := create_assembly_node(bullet_item_id)
 	if bullet_node != null and bullet_node.node_type == AssemblyNode.NodeType.BULLET:
 		tree.mount(gun_node, AssemblyNode.SlotType.BULLET, bullet_node)
@@ -324,6 +427,22 @@ func _create_gunbody_pistol() -> AssemblyNode:
 	node.set_base_stats({
 		"damage": 18, "fire_rate": 3.5, "bullet_count": 1,
 		"spread": 0.03, "reload_time": 1.5, "magazine_size": 12,
+	})
+	return node
+
+func _create_melee_baseball_bat() -> AssemblyNode:
+	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "Melee_BaseballBat")
+	node.tags = ["weapon", "melee", "light_melee", "baseball_bat", "starter_melee"]
+	node.set_base_stats({
+		"weapon_kind": "melee", "damage": 20,
+		"melee_reach": 2.05, "melee_arc_degrees": 105.0, "melee_knockback": 3.2,
+		"melee_combo_count": 3,
+		"melee_1_damage_scale": 0.88, "melee_1_windup_s": 0.13,
+		"melee_1_active_s": 0.08, "melee_1_recovery_s": 0.15, "melee_1_knockback_scale": 0.80,
+		"melee_2_damage_scale": 1.00, "melee_2_windup_s": 0.12,
+		"melee_2_active_s": 0.08, "melee_2_recovery_s": 0.16, "melee_2_knockback_scale": 1.00,
+		"melee_3_damage_scale": 1.28, "melee_3_windup_s": 0.22,
+		"melee_3_active_s": 0.11, "melee_3_recovery_s": 0.28, "melee_3_knockback_scale": 1.35,
 	})
 	return node
 
@@ -382,6 +501,38 @@ func _create_gunbody_charge() -> AssemblyNode:
 	})
 	return node
 
+func _create_melee_greatblade() -> AssemblyNode:
+	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "Melee_Greatblade")
+	node.tags = ["weapon", "melee", "heavy_melee", "greatblade", "wide_arc"]
+	node.set_base_stats({
+		"weapon_kind": "melee", "damage": 34,
+		"melee_reach": 2.65, "melee_arc_degrees": 115.0, "melee_knockback": 5.4,
+		"melee_combo_count": 3,
+		"melee_1_damage_scale": 0.82, "melee_1_windup_s": 0.20,
+		"melee_1_active_s": 0.10, "melee_1_recovery_s": 0.20, "melee_1_knockback_scale": 0.80,
+		"melee_2_damage_scale": 1.00, "melee_2_windup_s": 0.18,
+		"melee_2_active_s": 0.11, "melee_2_recovery_s": 0.23, "melee_2_knockback_scale": 1.00,
+		"melee_3_damage_scale": 1.48, "melee_3_windup_s": 0.32,
+		"melee_3_active_s": 0.14, "melee_3_recovery_s": 0.40, "melee_3_knockback_scale": 1.55,
+	})
+	return node
+
+func _create_melee_waraxe() -> AssemblyNode:
+	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "Melee_Waraxe")
+	node.tags = ["weapon", "melee", "heavy_melee", "waraxe", "high_knockback"]
+	node.set_base_stats({
+		"weapon_kind": "melee", "damage": 46,
+		"melee_reach": 2.85, "melee_arc_degrees": 100.0, "melee_knockback": 7.2,
+		"melee_combo_count": 3,
+		"melee_1_damage_scale": 0.78, "melee_1_windup_s": 0.28,
+		"melee_1_active_s": 0.12, "melee_1_recovery_s": 0.28, "melee_1_knockback_scale": 0.90,
+		"melee_2_damage_scale": 1.02, "melee_2_windup_s": 0.30,
+		"melee_2_active_s": 0.13, "melee_2_recovery_s": 0.32, "melee_2_knockback_scale": 1.10,
+		"melee_3_damage_scale": 1.62, "melee_3_windup_s": 0.46,
+		"melee_3_active_s": 0.16, "melee_3_recovery_s": 0.56, "melee_3_knockback_scale": 1.70,
+	})
+	return node
+
 ## ========== 子弹工厂方法 ==========
 
 func _create_bullet_standard() -> AssemblyNode:
@@ -436,37 +587,37 @@ func _create_bullet_balloon() -> AssemblyNode:
 
 func _create_attachment_triple_muzzle() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_TripleMuzzle")
-	node.tags = ["muzzle", "multi_shot"]
+	node.tags = ["muzzle", "multi_shot", "attachment_slot_muzzle"]
 	node.set_base_stats({ "bullet_count": 2, "spread": 0.08 })
 	return node
 
 func _create_attachment_rubber_stock() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_RubberStock")
-	node.tags = ["stock", "bounce"]
+	node.tags = ["stock", "bounce", "attachment_slot_stock"]
 	node.set_base_stats({ "spread": -0.04 })
 	return node
 
 func _create_attachment_scope() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_Scope")
-	node.tags = ["scope", "crit", "accuracy"]
+	node.tags = ["scope", "crit", "accuracy", "attachment_slot_scope"]
 	node.set_base_stats({ "spread": -0.05, "damage": 5 })
 	return node
 
 func _create_attachment_big_mag() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_BigMag")
-	node.tags = ["magazine", "heal", "capacity"]
+	node.tags = ["magazine", "heal", "capacity", "attachment_slot_magazine"]
 	node.set_base_stats({ "magazine_size": 15 })
 	return node
 
 func _create_attachment_fan() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_Fan")
-	node.tags = ["external", "pull", "wind"]
+	node.tags = ["external", "pull", "wind", "attachment_slot_tactical"]
 	node.set_base_stats({ "pull_strength": 0.5 })
 	return node
 
 func _create_attachment_copy_sticker() -> AssemblyNode:
 	var node := AssemblyNode.new(AssemblyNode.NodeType.ATTACHMENT, "Att_CopySticker")
-	node.tags = ["mutator", "copy", "duplicate"]
+	node.tags = ["mutator", "copy", "duplicate", "attachment_slot_mutator"]
 	node.set_base_stats({ "copy_chance": 0.25 })
 	return node
 

@@ -112,6 +112,10 @@ func _ready() -> void:
 		var discard_ok := discard_slot_index >= 0
 		if discard_ok:
 			var discard_slot := ui._slots[discard_slot_index] as Control
+			var discard_payload := discard_slot.get_meta("drag_payload", {}) as Dictionary
+			discard_payload["inventory_drag"] = true
+			discard_payload["source_kind"] = "inventory"
+			discard_payload["source_index"] = discard_slot_index
 			var discard_start := discard_slot.global_position + discard_slot.size * 0.5
 			var discard_target := ui.drop_zone.global_position + ui.drop_zone.size * 0.5
 			var ground_before := get_tree().get_nodes_in_group("ground_loot_3d").size()
@@ -125,7 +129,8 @@ func _ready() -> void:
 			_send_mouse_button(discard_target, false)
 			await get_tree().process_frame
 			await get_tree().process_frame
-			discard_ok = not inventory.has_item("attach_big_mag") and get_tree().get_nodes_in_group("ground_loot_3d").size() == ground_before + 1
+			var ground_after := get_tree().get_nodes_in_group("ground_loot_3d").size()
+			discard_ok = not inventory.has_item("attach_big_mag") and ground_after == ground_before + 1
 		interaction_ok = interaction_ok and discard_ok
 		if not interaction_ok:
 			print("TACTICAL_INTERACTION_DEBUG hover=%s single=%s clear=%s drag=%s move=%s equip=%s unequip=%s discard=%s source=%d target=%d" % [hover_visible, hover_single, hover_clear, drag_visible, moved_ok, equip_ok, unequip_ok, discard_ok, weapon_slot_index, target_index])

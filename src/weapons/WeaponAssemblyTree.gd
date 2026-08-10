@@ -52,6 +52,12 @@ func _exit_tree() -> void:
 	clear_assembly(false)
 
 
+func _notification(what: int) -> void:
+	# 临时预览/事务树不会进入 SceneTree；free() 时仍必须释放数据节点。
+	if what == NOTIFICATION_PREDELETE and root != null:
+		clear_assembly(false)
+
+
 ## 设置根节点（主枪身）
 func set_root(new_root: AssemblyNode) -> bool:
 	if new_root == null:
@@ -75,6 +81,32 @@ func set_root(new_root: AssemblyNode) -> bool:
 func mount(
 	parent_node: AssemblyNode, slot_type: AssemblyNode.SlotType, child: AssemblyNode
 ) -> bool:
+	if parent_node == null or child == null or root == null:
+		validation_failed.emit("装配节点无效")
+		return false
+	if root != null and "melee" in root.tags and (
+		slot_type == AssemblyNode.SlotType.BULLET
+		or child.node_type == AssemblyNode.NodeType.BULLET
+	):
+		validation_failed.emit("近战武器不接受子弹模块")
+		return false
+	if child.node_type == AssemblyNode.NodeType.ATTACHMENT:
+		var internal_fate_attachment := (
+			child.node_name.begins_with("FateAttachment_")
+			or "Fate.Combine" in child.tags
+			or "Fate.AddChildNode" in child.tags
+		)
+		var declared_slot := child.get_attachment_slot_type()
+		# FateAttachment 属于递归构筑内部节点，沿用卡牌指定槽，不套用枪械公开配件兼容表。
+		if not internal_fate_attachment and declared_slot < 0 and slot_type != AssemblyNode.SlotType.MOUNT:
+			validation_failed.emit("内部构筑配件只能进入递归挂载槽")
+			return false
+		if not internal_fate_attachment and declared_slot >= 0 and declared_slot != int(slot_type):
+			validation_failed.emit("配件类型与目标槽位不匹配")
+			return false
+		if not internal_fate_attachment and declared_slot >= 0 and (parent_node != root or not root.supports_attachment_slot(int(slot_type))):
+			validation_failed.emit("当前枪械未开放%s槽" % AssemblyNode.get_attachment_slot_display_name(int(slot_type)))
+			return false
 	# 深度检查
 	if _get_subtree_depth(child) + parent_node.depth > MAX_DEPTH:
 		validation_failed.emit("超过最大深度限制 (%d)" % MAX_DEPTH)
@@ -88,9 +120,13 @@ func mount(
 		validation_failed.emit("槽位挂载失败（可能已被占用）")
 		return false
 	_register_subtree(child)
+	var previous_ammo := current_ammo
 	_apply_stats(root.get_computed_stats())
+	if "melee" not in root.tags:
+		current_ammo = clampi(previous_ammo, 0, magazine_size)
 	tree_changed.emit()
 	stats_changed.emit(root.get_computed_stats())
+	ammo_changed.emit(current_ammo, magazine_size)
 	return true
 
 
@@ -104,8 +140,14 @@ func unmount(node: AssemblyNode) -> bool:
 		return false
 	_unregister_subtree(node)
 	parent.unmount(slot_type)
+	var previous_ammo := current_ammo
+	var stats := root.get_computed_stats() if root != null else {}
+	_apply_stats(stats)
+	if root != null and "melee" not in root.tags:
+		current_ammo = clampi(previous_ammo, 0, magazine_size)
 	tree_changed.emit()
-	stats_changed.emit(root.get_computed_stats() if root != null else {})
+	stats_changed.emit(stats)
+	ammo_changed.emit(current_ammo, magazine_size)
 	return true
 
 
@@ -232,6 +274,17 @@ func start_reload() -> void:
 
 ## 从 computed_stats 更新射击参数（每次树结构变化时调用）
 func _apply_stats(stats: Dictionary) -> void:
+	if str(stats.get("weapon_kind", "ranged")) == "melee":
+		fire_rate = 0.0
+		reload_time = 0.0
+		magazine_size = 0
+		projectile_count = 0
+		spread = 0.0
+		bullet_damage = 0
+		bullet_speed = 0.0
+		current_ammo = 0
+		_overheat_penalty = stats.get("overheat_penalty", 1.0)
+		return
 	fire_rate = stats.get("fire_rate", 4.0)
 	reload_time = stats.get("reload_time", 2.0)
 	magazine_size = stats.get("magazine_size", 30)

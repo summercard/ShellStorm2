@@ -484,17 +484,22 @@ func _draw_node(node: AssemblyNode, parent: VBoxContainer, indent_depth: int) ->
 
 	# 递归绘制子槽位（按槽位类型顺序：MOUNT > MUZZLE > MAGAZINE > BULLET）
 	var slot_order: Array[int] = [
-		AssemblyNode.SlotType.MOUNT,
+		AssemblyNode.SlotType.SCOPE,
 		AssemblyNode.SlotType.MUZZLE,
 		AssemblyNode.SlotType.MAGAZINE,
+		AssemblyNode.SlotType.STOCK,
+		AssemblyNode.SlotType.TACTICAL,
+		AssemblyNode.SlotType.MUTATOR,
 		AssemblyNode.SlotType.BULLET,
+		AssemblyNode.SlotType.MOUNT,
 	]
 	for slot_type in slot_order:
 		var child: AssemblyNode = node.slots[slot_type]
 		if child != null:
 			_draw_child_with_slot(child, parent, indent_depth + 1, slot_type)
 		else:
-			_draw_empty_slot(parent, indent_depth + 1, slot_type)
+			var unsupported := indent_depth == 0 and slot_type in AssemblyNode.PUBLIC_ATTACHMENT_SLOTS and not node.supports_attachment_slot(slot_type)
+			_draw_empty_slot(parent, indent_depth + 1, slot_type, unsupported)
 
 ## 绘制子节点（带槽位标签）
 func _draw_child_with_slot(child: AssemblyNode, parent: VBoxContainer, indent_depth: int, slot_type: AssemblyNode.SlotType) -> void:
@@ -516,7 +521,7 @@ func _draw_child_with_slot(child: AssemblyNode, parent: VBoxContainer, indent_de
 		child_row.add_child(slot_lbl)
 
 ## 绘制空槽位提示
-func _draw_empty_slot(parent: VBoxContainer, indent_depth: int, slot_type: AssemblyNode.SlotType) -> void:
+func _draw_empty_slot(parent: VBoxContainer, indent_depth: int, slot_type: AssemblyNode.SlotType, unsupported := false) -> void:
 	var slot_key: String = AssemblyNode.SlotType.keys()[slot_type]
 	var slot_colors: Dictionary = {
 		AssemblyNode.SlotType.MOUNT: SLOT_COLOR_MOUNT,
@@ -549,7 +554,7 @@ func _draw_empty_slot(parent: VBoxContainer, indent_depth: int, slot_type: Assem
 
 	# 空槽标签（虚线样式）
 	var empty_lbl := Label.new()
-	empty_lbl.text = "--- %s ---" % slot_key
+	empty_lbl.text = "--- %s%s ---" % [slot_key, "（该枪型不支持）" if unsupported else ""]
 	empty_lbl.add_theme_font_size_override("font_size", 12)
 	empty_lbl.add_theme_color_override("font_color", Color(slot_color.r, slot_color.g, slot_color.b, 0.45))
 	empty_lbl.position = Vector2(indent_depth * 18 + 30, 4)

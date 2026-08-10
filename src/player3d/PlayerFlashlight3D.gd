@@ -144,7 +144,9 @@ func set_light_enabled(enabled: bool) -> void:
 	if _enabled == enabled:
 		return
 	_enabled = enabled
-	_drain_accumulator = 0.0  # 切换时清零,避免开/关瞬间累计错位
+	# 普通开关必须保留尚未累计到 2% 一格的实际耗电。
+	# 否则用户只要在每次扣格前关灯再开，就会把这段耗电退回，
+	# 剩余时间也会错误跳回满电。累计值只在真正补电/进入基地时清零。
 	set_process(enabled)
 	if enabled:
 		force_sync()

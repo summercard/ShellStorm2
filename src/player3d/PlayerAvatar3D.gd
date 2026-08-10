@@ -108,6 +108,11 @@ var _charge_progress := 0.0
 var _knockback_animation_active := false
 var _knockback_progress := 0.0
 var _knockback_direction := Vector3.ZERO
+var _melee_animation_active := false
+var _melee_phase := "ready"
+var _melee_progress := 0.0
+var _melee_combo_step := 0
+var _melee_combo_count := 0
 var _action_offset := Vector3.ZERO
 var _action_rotation := Vector3.ZERO
 var _dash_animation_progress := 1.0
@@ -146,10 +151,12 @@ const LONGGUN_GRIP_ROTATION_L := Vector3(-0.10, -PI * 0.46, 0.24)
 const LONGGUN_GRIP_ROTATION_R := Vector3(-0.16, PI * 0.46, -0.20)
 const WRIST_ORIENTATION_CONTRACT := "ring_is_proximal_wrist_pivot_sphere_is_distal"
 const SIDEARM_GUNS := ["bp_pistol"]
+const HEAVY_MELEE_WEAPONS := ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"]
 const WEAPON_POSE_STATES := [
 	"unarmed",
 	"sidearm_hold", "sidearm_run", "sidearm_fire", "sidearm_reload", "sidearm_charge",
 	"longgun_hold", "longgun_run", "longgun_fire", "longgun_reload", "longgun_charge",
+	"heavy_melee_hold", "heavy_melee_run", "heavy_melee_windup", "heavy_melee_active", "heavy_melee_recovery",
 ]
 const WEAPON_ANIMATION_PROFILES := {
 	"bp_pistol": {
@@ -235,7 +242,8 @@ func _apply_bunny_attachment_scale() -> void:
 		return
 	var held_weapon := weapon_socket.get_node_or_null("WeaponModel3D") as Node3D
 	if held_weapon != null:
-		held_weapon.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
+		var held_scale := 0.78 if held_weapon.get("weapon_kind") == "melee" else BUNNY_LINEAR_SCALE
+		held_weapon.scale = Vector3.ONE * held_scale
 
 
 func _ready() -> void:
@@ -397,6 +405,11 @@ func get_component_snapshot() -> Dictionary:
 		"charge_progress": _charge_progress,
 		"knockback_animation_active": _knockback_animation_active,
 		"knockback_progress": _knockback_progress,
+		"melee_animation_active": _melee_animation_active,
+		"melee_phase": _melee_phase,
+		"melee_progress": _melee_progress,
+		"melee_combo_step": _melee_combo_step,
+		"melee_combo_count": _melee_combo_count,
 		"action_offset": _action_offset,
 		"action_rotation": _action_rotation,
 		"reload_bar_visible": reload_progress_root.visible,
@@ -496,10 +509,19 @@ func _read_player_state() -> void:
 		_knockback_animation_active = bool(action_snapshot.get("knockback", false)) and _state != "dead"
 		_knockback_progress = clampf(float(action_snapshot.get("knockback_progress", 0.0)), 0.0, 1.0)
 		_knockback_direction = action_snapshot.get("knockback_direction", Vector3.ZERO) as Vector3
+		_melee_animation_active = bool(action_snapshot.get("melee_active", false)) and _state != "dead"
+		_melee_phase = str(action_snapshot.get("melee_phase", "ready"))
+		_melee_progress = clampf(float(action_snapshot.get("melee_progress", 0.0)), 0.0, 1.0)
+		_melee_combo_step = int(action_snapshot.get("melee_combo_step", 0))
+		_melee_combo_count = int(action_snapshot.get("melee_combo_count", 0))
 	else:
 		_firing_animation_active = false
 		_charging_animation_active = false
 		_knockback_animation_active = false
+		_melee_animation_active = false
+		_melee_phase = "ready"
+		_melee_progress = 0.0
+		_melee_combo_step = 0
 	_refresh_weapon_pose_state()
 
 
@@ -509,15 +531,22 @@ func _refresh_weapon_pose_state() -> void:
 		weapon_snapshot = _player.call("get_weapon_snapshot") as Dictionary
 	_equipped_gun_id = str(weapon_snapshot.get("gun_id", ""))
 	var has_weapon := not _equipped_gun_id.is_empty() and weapon_socket.get_child_count() > 0 and _state != "dead"
-	_weapon_class = "sidearm" if _equipped_gun_id in SIDEARM_GUNS else ("longgun" if has_weapon else "unarmed")
+	_weapon_class = (
+		"heavy_melee" if _equipped_gun_id in HEAVY_MELEE_WEAPONS
+		else "sidearm" if _equipped_gun_id in SIDEARM_GUNS
+		else "longgun" if has_weapon
+		else "unarmed"
+	)
 	var profile := _get_weapon_animation_profile()
 	_weapon_fire_style = str(profile.get("fire_style", "none")) if has_weapon else "none"
-	_active_grip_hand_count = 1 if _weapon_class == "sidearm" else (2 if _weapon_class == "longgun" else 0)
+	_active_grip_hand_count = 1 if _weapon_class == "sidearm" else (2 if _weapon_class in ["longgun", "heavy_melee"] else 0)
 	_weapon_grip_pose_active = has_weapon
 	var next_pose_state := "unarmed"
 	if has_weapon:
 		var prefix := _weapon_class
-		if _reload_animation_active:
+		if _weapon_class == "heavy_melee" and _melee_animation_active:
+			next_pose_state = "%s_%s" % [prefix, _melee_phase]
+		elif _reload_animation_active:
 			next_pose_state = "%s_reload" % prefix
 		elif _firing_animation_active:
 			next_pose_state = "%s_fire" % prefix
@@ -790,6 +819,33 @@ func _update_state_motion(delta: float) -> void:
 			_weapon_socket_pose_rotation = Vector3(0.06, 0.0, -0.08)
 		"longgun_reload":
 			_weapon_socket_pose_rotation = Vector3(0.04, 0.0, -0.04)
+		"heavy_melee_hold":
+			_weapon_socket_pose_offset += Vector3(0.0, -0.05, 0.12)
+			_weapon_socket_pose_rotation = Vector3(-0.18, 0.0, 0.10)
+		"heavy_melee_run":
+			_weapon_socket_pose_offset += Vector3(0.0, -0.03 + move_pulse * 0.04, 0.17)
+			_weapon_socket_pose_rotation = Vector3(-0.26 + move_pulse * 0.08, 0.0, -move_wave * 0.06)
+		"heavy_melee_windup":
+			var windup_sign := -1.0 if _melee_combo_step == 1 else 1.0
+			_weapon_socket_pose_offset += Vector3(windup_sign * 0.16 * _melee_progress, 0.05, 0.12)
+			_weapon_socket_pose_rotation = (
+				Vector3(-1.02 * _melee_progress, 0.0, 0.0)
+				if _melee_combo_step == 3
+				else Vector3(-0.16, windup_sign * 1.12 * _melee_progress, windup_sign * 0.34 * _melee_progress)
+			)
+		"heavy_melee_active":
+			var swing_sign := -1.0 if _melee_combo_step == 1 else 1.0
+			var sweep := lerpf(-1.0, 1.0, smoothstep(0.0, 1.0, _melee_progress))
+			_weapon_socket_pose_offset += Vector3(-swing_sign * sweep * 0.20, 0.08, -0.03)
+			_weapon_socket_pose_rotation = (
+				Vector3(lerpf(-1.02, 0.82, _melee_progress), 0.0, 0.0)
+				if _melee_combo_step == 3
+				else Vector3(-0.12, swing_sign * sweep * 1.32, swing_sign * sweep * 0.40)
+			)
+		"heavy_melee_recovery":
+			var recovery_weight := 1.0 - smoothstep(0.0, 1.0, _melee_progress)
+			_weapon_socket_pose_offset += Vector3(0.0, 0.02, 0.10 * recovery_weight)
+			_weapon_socket_pose_rotation = Vector3(0.28 * recovery_weight, 0.0, -0.16 * recovery_weight)
 	_weapon_socket_pose_offset *= linear_scale
 	var local_knockback := Vector3.ZERO
 	if _knockback_animation_active and _knockback_direction.length_squared() > 0.001:
@@ -806,6 +862,12 @@ func _update_state_motion(delta: float) -> void:
 		charge_arch * 0.06,
 		fire_arch * weapon_roll + local_knockback.x * knockback_arch * 0.18
 	)
+	if _melee_animation_active:
+		var melee_body_arch := sin(_melee_progress * PI)
+		var melee_side := -1.0 if _melee_combo_step == 1 else 1.0
+		target_position += Vector3(-melee_side * melee_body_arch * 0.08, -melee_body_arch * 0.03, 0.04) * linear_scale
+		target_roll += melee_side * melee_body_arch * (0.16 if _melee_combo_step < 3 else 0.06)
+		body_scale_target *= Vector3(1.0 + melee_body_arch * 0.05, 1.0 - melee_body_arch * 0.04, 1.0 + melee_body_arch * 0.03)
 	if _firing_animation_active:
 		target_position += Vector3(0.0, -fire_arch * 0.018, fire_arch * 0.045) * linear_scale
 		target_scale *= Vector3(1.0 + fire_arch * 0.055, 1.0 - fire_arch * 0.075, 1.0 - fire_arch * 0.035)
@@ -1023,6 +1085,15 @@ func _animate_bunny_accessories(
 			right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.014, move_wave * 0.018))
 			left_hand_rot.z -= move_wave * 0.035
 			right_hand_rot.z -= move_wave * 0.035
+	elif _weapon_class == "heavy_melee" and _weapon_grip_pose_active:
+		# 大型近战双手沿长柄前后分开，整体跟随武器动作子状态机的挥砍姿势。
+		left_hand_target = _motion_offset(Vector3(0.12, 0.54, -0.67)) + weapon_follow_offset
+		right_hand_target = _motion_offset(Vector3(0.12, 0.55, -0.45)) + weapon_follow_offset
+		left_hand_rot += LONGGUN_GRIP_ROTATION_L + weapon_follow_rotation + Vector3(0.08, 0.0, -0.08)
+		right_hand_rot += LONGGUN_GRIP_ROTATION_R + weapon_follow_rotation + Vector3(0.10, 0.0, 0.06)
+		if _state == "moving" and not _melee_animation_active:
+			left_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.020, move_wave * 0.020))
+			right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.016, move_wave * 0.020))
 	elif _state == "moving":
 		left_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.035, move_wave * 0.16))
 		right_hand_target += _motion_offset(Vector3(0.0, move_pulse * 0.030, -move_wave * 0.16))

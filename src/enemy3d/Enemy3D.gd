@@ -614,6 +614,18 @@ func apply_pull(origin: Vector3, strength: float) -> void:
 	_external_timer = 0.32
 
 
+## 近战击退走敌人公开接口，不让玩家动作机直接写 AI 内部速度。
+func apply_melee_knockback(direction: Vector3, strength: float, duration := 0.20) -> void:
+	if ai_state == "dead":
+		return
+	var planar := direction
+	planar.y = 0.0
+	if planar.length_squared() <= 0.001:
+		return
+	_external_velocity = planar.normalized() * clampf(strength, 0.5, 10.5)
+	_external_timer = clampf(duration, 0.08, 0.42)
+
+
 func apply_damage_over_time(total_damage: int, duration: float) -> void:
 	_dot_damage = maxi(_dot_damage, maxi(1, total_damage))
 	_dot_remaining = maxf(_dot_remaining, maxf(0.5, duration))

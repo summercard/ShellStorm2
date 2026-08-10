@@ -9,13 +9,21 @@ var _inactive: Dictionary = {}
 var _active := 0
 var _created := 0
 var _peak_active := 0
+var _acquire_counts: Dictionary = {}
 
 
 func _ready() -> void:
 	add_to_group("combat_effect_pool_3d")
 
 
-func acquire(kind: String, color: Color, size: float, world_position: Vector3, value := "") -> CombatEffect3D:
+func acquire(
+	kind: String,
+	color: Color,
+	size: float,
+	world_position: Vector3,
+	value := "",
+	context: Dictionary = {}
+) -> CombatEffect3D:
 	var bucket: Array = _inactive.get(kind, [])
 	var effect: CombatEffect3D
 	if not bucket.is_empty():
@@ -29,7 +37,8 @@ func acquire(kind: String, color: Color, size: float, world_position: Vector3, v
 		_created += 1
 	_active += 1
 	_peak_active = maxi(_peak_active, _active)
-	effect.activate(kind, color, size, world_position, value)
+	_acquire_counts[kind] = int(_acquire_counts.get(kind, 0)) + 1
+	effect.activate(kind, color, size, world_position, value, context)
 	return effect
 
 
@@ -45,4 +54,10 @@ func _on_effect_retired(effect: CombatEffect3D) -> void:
 
 
 func get_snapshot() -> Dictionary:
-	return {"created": _created, "active": _active, "peak_active": _peak_active, "kinds": _inactive.keys()}
+	return {
+		"created": _created,
+		"active": _active,
+		"peak_active": _peak_active,
+		"kinds": _inactive.keys(),
+		"acquire_counts": _acquire_counts.duplicate(true),
+	}

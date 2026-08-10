@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://src/training3d/TrainingRange3D.gd" id="1_range"]
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/training_range_3d/env_training_range_kit_top3d_v001.tscn" id="3_env"]
 [ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn" id="4_pause"]
+[ext_resource type="Script" path="res://src/combat3d/CombatEffectPool3D.gd" id="5_fx_pool"]
 
 [node name="TrainingRange3D" type="Node3D"]
 script = ExtResource("1_range")
@@ -23,6 +24,9 @@ shadow_enabled = true
 [node name="Targets" type="Node3D" parent="."]
 
 [node name="Services" type="Node3D" parent="."]
+
+[node name="CombatEffectPool3D" type="Node3D" parent="."]
+script = ExtResource("5_fx_pool")
 
 [node name="Player3D" parent="." instance=ExtResource("2_player")]
 position = Vector3(0, 0.05, 1.5)

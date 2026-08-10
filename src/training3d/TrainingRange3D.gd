@@ -1,6 +1,7 @@
 class_name TrainingRange3D
 extends Node3D
-## 3D 靶场只读取 BlueprintRegistry，7枪×8弹的 56 种组合均在同一空间可测试；
+## 3D 靶场只读取 BlueprintRegistry：远程武器与弹药做笛卡尔组合，
+## 近战武器以无弹药单体组合计数；
 ## 不写入基地存档、局内战利品或长期统计。
 
 const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn")
@@ -21,6 +22,7 @@ var total_hits := 0
 var total_damage := 0
 var targets_destroyed := 0
 var _rack_count := {"gunbody": 0, "bullet": 0}
+var _weapon_kind_count := {"ranged": 0, "melee": 0}
 var _targets: Array[TrainingTarget3D] = []
 var _base_snapshot: Dictionary = {}
 
@@ -37,7 +39,7 @@ func _ready() -> void:
 	player.ammo_changed.connect(_on_ammo_changed)
 	_on_ammo_changed(0, 0)
 	_refresh_stats()
-	status_label.text = "选择一件枪身和一枚弹药模块；所有组合仅在靶场生效。"
+	status_label.text = "选择远程枪身+弹药，或直接选择近战武器；所有装备仅在靶场生效。"
 
 
 func _configure_environment() -> void:
@@ -59,6 +61,9 @@ func _build_racks() -> void:
 	var guns := BlueprintRegistry.get_available_gunbodies(99)
 	var bullets := BlueprintRegistry.get_available_bullets(99)
 	for index in range(guns.size()):
+		var tags := guns[index].get("tags", []) as Array
+		var kind := "melee" if "melee" in tags else "ranged"
+		_weapon_kind_count[kind] = int(_weapon_kind_count[kind]) + 1
 		_add_rack(guns[index], "gunbody", Vector3(-14.0 + index * 2.25, 0, 2.65))
 	for index in range(bullets.size()):
 		_add_rack(bullets[index], "bullet", Vector3(-14.0 + index * 2.15, 0, -0.25))
@@ -104,16 +109,17 @@ func _build_services() -> void:
 func _on_rack_selected(_rack: TrainingRack3D, item_id: String, category: String) -> void:
 	if category == "gunbody":
 		selected_gun_id = item_id
-		if selected_bullet_id.is_empty():
+		if _is_melee_gunbody(selected_gun_id):
+			selected_bullet_id = ""
+		elif selected_bullet_id.is_empty():
 			selected_bullet_id = "mod_bullet_standard"
 	else:
 		selected_bullet_id = item_id
-		if selected_gun_id.is_empty():
+		if selected_gun_id.is_empty() or _is_melee_gunbody(selected_gun_id):
 			selected_gun_id = "bp_pistol"
 	if player.equip_weapon(selected_gun_id, selected_bullet_id):
 		var snapshot := player.get_weapon_snapshot()
-		loadout_label.text = "%s + %s" % [selected_gun_id.trim_prefix("bp_"), selected_bullet_id.trim_prefix("mod_bullet_")]
-		status_label.text = "组合已装配 · 伤害 %d · 射速 %.1f · 弹丸 %d" % [snapshot["damage"], snapshot["fire_rate"], snapshot["projectile_count"]]
+		_refresh_loadout_feedback(snapshot)
 
 
 func _on_target_damaged(_target: TrainingTarget3D, applied: int, critical: bool) -> void:
@@ -138,7 +144,10 @@ func _on_reset_station(_station: ServiceStation3D) -> void:
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
-	ammo_label.text = "AMMO %d/%d" % [current, maximum]
+	if player != null and player.weapon != null and player.weapon.is_melee_weapon():
+		ammo_label.text = "MELEE · 三段"
+	else:
+		ammo_label.text = "AMMO %d/%d" % [current, maximum]
 
 
 func _refresh_stats() -> void:
@@ -153,9 +162,15 @@ func _on_exit_requested() -> void:
 
 
 func get_training_snapshot() -> Dictionary:
+	var combination_count := (
+		int(_weapon_kind_count["ranged"]) * int(_rack_count["bullet"])
+		+ int(_weapon_kind_count["melee"])
+	)
 	return {
 		"gun_count": int(_rack_count["gunbody"]), "bullet_count": int(_rack_count["bullet"]),
-		"combination_count": int(_rack_count["gunbody"]) * int(_rack_count["bullet"]),
+		"ranged_weapon_count": int(_weapon_kind_count["ranged"]),
+		"melee_weapon_count": int(_weapon_kind_count["melee"]),
+		"combination_count": combination_count,
 		"target_types": _targets.map(func(target): return target.target_type),
 		"has_reset_station": $Services.get_child_count() >= 1, "has_exit": $Services.get_child_count() >= 2,
 		"base_data_unchanged": is_base_data_unchanged(), "environment": environment_kit.get_snapshot(), "is_3d": true,
@@ -170,8 +185,36 @@ func is_base_data_unchanged() -> bool:
 
 func equip_combination_for_test(gun_id: String, bullet_id: String) -> bool:
 	selected_gun_id = gun_id
-	selected_bullet_id = bullet_id
-	var equipped := player.equip_weapon(gun_id, bullet_id)
+	selected_bullet_id = "" if _is_melee_gunbody(gun_id) else bullet_id
+	var equipped := player.equip_weapon(gun_id, selected_bullet_id)
 	if equipped:
-		loadout_label.text = "%s + %s" % [gun_id.trim_prefix("bp_"), bullet_id.trim_prefix("mod_bullet_")]
+		_refresh_loadout_feedback(player.get_weapon_snapshot())
 	return equipped
+
+
+func _is_melee_gunbody(gun_id: String) -> bool:
+	for entry in BlueprintRegistry.get_available_gunbodies(99):
+		if str(entry.get("item_id", "")) == gun_id:
+			return "melee" in (entry.get("tags", []) as Array)
+	return false
+
+
+func _refresh_loadout_feedback(snapshot: Dictionary) -> void:
+	var weapon_name := selected_gun_id.trim_prefix("bp_")
+	if bool(snapshot.get("melee", false)):
+		var profile := player.weapon.get_melee_profile()
+		loadout_label.text = "%s · 近战" % weapon_name
+		ammo_label.text = "MELEE · 三段"
+		status_label.text = "近战已装备 · 伤害 %d · 距离 %.2fm · %d 段" % [
+			int(snapshot.get("damage", 0)),
+			float(profile.get("reach", 0.0)),
+			int(profile.get("combo_count", 0)),
+		]
+		return
+	loadout_label.text = "%s + %s" % [weapon_name, selected_bullet_id.trim_prefix("mod_bullet_")]
+	ammo_label.text = "AMMO %d/%d" % [int(snapshot.get("current_ammo", 0)), int(snapshot.get("magazine_size", 0))]
+	status_label.text = "组合已装配 · 伤害 %d · 射速 %.1f · 弹丸 %d" % [
+		int(snapshot.get("damage", 0)),
+		float(snapshot.get("fire_rate", 0.0)),
+		int(snapshot.get("projectile_count", 0)),
+	]

@@ -22,6 +22,8 @@ const SFX: Dictionary = {
 	"player_dash": "res://src/assets/audio/sfx/player_dash_v001.ogg",
 	"reload": "res://src/assets/audio/sfx/reload_v001.ogg",
 	"crit_hit": "res://src/assets/audio/sfx/crit_hit_v001.ogg",
+	"melee_swing": "res://src/assets/audio/sfx/melee_swing_v001.ogg",
+	"melee_impact": "res://src/assets/audio/sfx/melee_impact_v001.ogg",
 	"fate_card": "res://src/assets/audio/sfx/fate_card_v001.ogg",
 	"extraction_start": "res://src/assets/audio/sfx/extraction_start_v001.ogg",
 	"extraction_done": "res://src/assets/audio/sfx/extraction_done_v001.ogg",
@@ -53,11 +55,19 @@ const SFX: Dictionary = {
 # 缓存已加载的 AudioStream，避免自动武器连续射击时重复加载资源。
 var _stream_cache: Dictionary = {}
 var _reported_missing_assets: Dictionary = {}
+var _feedback_request_counts: Dictionary = {}
+var _last_feedback_request: Dictionary = {}
 
 func _ready() -> void:
 	load_audio_settings()
 
 func play_sfx(sfx_name: String, volume_db: float = 0.0, pitch_scale: float = 1.0) -> void:
+	_feedback_request_counts[sfx_name] = int(_feedback_request_counts.get(sfx_name, 0)) + 1
+	_last_feedback_request = {
+		"event": sfx_name,
+		"volume_db": volume_db,
+		"pitch_scale": pitch_scale,
+	}
 	# Headless validation不创建播放器，但仍可通过 validate_runtime_assets() 校验文件。
 	if DisplayServer.get_name() == "headless":
 		return
@@ -171,3 +181,35 @@ func play_enemy_die_sfx() -> void:
 ## 怪物受伤音效（非暴击）
 func play_enemy_hit_sfx() -> void:
 	play_sfx("enemy_hit")
+
+
+## 近战挥空层：每段 active 只播放一次，连段与武器类型只改变播放参数。
+func play_melee_swing_sfx(weapon_content_id: String, combo_step: int) -> void:
+	var pitch: float = float([0.94, 1.03, 0.86][clampi(combo_step - 1, 0, 2)])
+	var volume_db: float = float([-1.0, 0.0, 1.8][clampi(combo_step - 1, 0, 2)])
+	if weapon_content_id == "weapon_waraxe":
+		pitch -= 0.08
+		volume_db += 0.8
+	play_sfx("melee_swing", volume_db, pitch)
+
+
+## 近战接触主层：一次挥砍命中多目标仍只播放一次，目标各自受击声由目标逻辑负责。
+func play_melee_impact_sfx(weapon_content_id: String, combo_step: int) -> void:
+	var pitch: float = float([0.98, 1.04, 0.88][clampi(combo_step - 1, 0, 2)])
+	var volume_db: float = float([0.0, 0.8, 2.4][clampi(combo_step - 1, 0, 2)])
+	if weapon_content_id == "weapon_waraxe":
+		pitch -= 0.10
+		volume_db += 1.0
+	play_sfx("melee_impact", volume_db, pitch)
+
+
+func reset_feedback_debug() -> void:
+	_feedback_request_counts.clear()
+	_last_feedback_request.clear()
+
+
+func get_feedback_debug_snapshot() -> Dictionary:
+	return {
+		"request_counts": _feedback_request_counts.duplicate(true),
+		"last_request": _last_feedback_request.duplicate(true),
+	}

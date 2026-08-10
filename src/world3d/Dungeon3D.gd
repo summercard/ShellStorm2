@@ -329,6 +329,8 @@ func _setup_run_modules() -> void:
 	_inventory_ui.weapon_slot_equip_requested.connect(_on_weapon_slot_equip_requested)
 	_inventory_ui.equipped_weapon_to_inventory_requested.connect(_on_equipped_weapon_to_inventory_requested)
 	_inventory_ui.equipped_weapon_drop_requested.connect(_on_equipped_weapon_drop_requested)
+	_inventory_ui.attachment_slot_install_requested.connect(_on_attachment_slot_install_requested)
+	_inventory_ui.attachment_slot_remove_requested.connect(_on_attachment_slot_remove_requested)
 	_inventory_ui.backpack_slot_equip_requested.connect(_on_backpack_slot_equip_requested)
 	_inventory_ui.equipped_backpack_to_inventory_requested.connect(_on_equipped_backpack_to_inventory_requested)
 	_inventory_ui.equipped_backpack_drop_requested.connect(_on_equipped_backpack_drop_requested)
@@ -1988,7 +1990,7 @@ func _open_workbench() -> void:
 	$HUD.add_child(_workbench_panel)
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
-	status_label.text = "改造台：7 枪身 × 8 弹药，使用同一装配树"
+	status_label.text = "改造台：7 远程 + 2 近战 · 8 弹药，使用同一装配树"
 
 
 func _open_merchant() -> void:
@@ -2868,7 +2870,10 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 		else:
 			status_label.text = "%s只能在99F基地安装" % item.get("name", "手电筒模块")
 		return
-	if item.get("type", "") in ["module", "attachment"]:
+	if item.get("type", "") == "attachment":
+		_install_attachment_from_inventory(slot_index, item, player.get_active_weapon_slot(), _slot_type_for_item(item))
+		return
+	if item.get("type", "") == "module":
 		if _can_swap_installed_module(item, slot_index):
 			_inventory.remove_from_slot(slot_index, 1)
 			if not _install_weapon_module_from_item(item):
@@ -2897,6 +2902,26 @@ func _on_weapon_slot_equip_requested(source_slot_index: int, weapon_slot_index: 
 		status_label.text = "只能把枪械拖入主/副武器栏"
 		return
 	_equip_weapon_from_inventory(source_slot_index, item, weapon_slot_index)
+
+
+func _on_attachment_slot_install_requested(
+	source_slot_index: int, weapon_slot_index: int, attachment_slot_type: int
+) -> void:
+	var source := _inventory.get_slot(source_slot_index)
+	if source.is_empty():
+		return
+	_install_attachment_from_inventory(
+		source_slot_index,
+		source.get("item", {}) as Dictionary,
+		weapon_slot_index,
+		attachment_slot_type
+	)
+
+
+func _on_attachment_slot_remove_requested(
+	weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int
+) -> void:
+	_remove_attachment_to_inventory(weapon_slot_index, attachment_slot_type, target_slot_index)
 
 
 func get_equipped_backpack_item() -> Dictionary:
@@ -3202,6 +3227,87 @@ func _on_equipped_weapon_drop_requested(weapon_slot_index: int) -> void:
 	]
 
 
+func _install_attachment_from_inventory(
+	source_slot_index: int,
+	item: Dictionary,
+	weapon_slot_index: int,
+	attachment_slot_type: int
+) -> bool:
+	if player == null or not player.has_method("install_attachment_item_to_weapon_slot"):
+		return false
+	if str(item.get("type", "")) != "attachment":
+		status_label.text = "只能把枪械配件拖入配件槽"
+		return false
+	var inventory_before := _inventory.get_slots_snapshot()
+	if not _inventory.remove_from_slot(source_slot_index, 1):
+		return false
+	var result := player.call(
+		"install_attachment_item_to_weapon_slot", item, weapon_slot_index, attachment_slot_type
+	) as Dictionary
+	if not bool(result.get("success", false)):
+		_inventory.restore_slots_snapshot(inventory_before)
+		status_label.text = str(result.get("reason", "配件安装失败"))
+		return false
+	var removed_item := result.get("removed_item", {}) as Dictionary
+	if not removed_item.is_empty() and _inventory.add_item(removed_item, 1) != 1:
+		# 背包写入异常时把旧配件重新装回，并精确恢复格位快照。
+		player.call(
+			"install_attachment_item_to_weapon_slot",
+			removed_item,
+			weapon_slot_index,
+			attachment_slot_type
+		)
+		_inventory.restore_slots_snapshot(inventory_before)
+		status_label.text = "配件交换失败：旧配件无法返回背包，已回滚"
+		return false
+	status_label.text = "已给%s安装%s%s" % [
+		"主武器" if weapon_slot_index == 0 else "副武器",
+		item.get("name", "配件"),
+		" · 旧配件已回到背包" if not removed_item.is_empty() else "",
+	]
+	return true
+
+
+func _remove_attachment_to_inventory(
+	weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int = -1
+) -> bool:
+	if player == null or not player.has_method("remove_attachment_from_weapon_slot"):
+		return false
+	if target_slot_index >= 0 and not _inventory.get_slot(target_slot_index).is_empty():
+		status_label.text = "拆卸失败：目标背包格已有物品"
+		return false
+	var result := player.call(
+		"remove_attachment_from_weapon_slot", weapon_slot_index, attachment_slot_type
+	) as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "配件拆卸失败"))
+		return false
+	var removed_item := result.get("removed_item", {}) as Dictionary
+	var stored := (
+		_inventory.put_item_in_empty_slot(target_slot_index, removed_item, 1)
+		if target_slot_index >= 0
+		else _inventory.add_item(removed_item, 1) == 1
+	)
+	if not stored:
+		var rollback := player.call(
+			"install_attachment_item_to_weapon_slot",
+			removed_item,
+			weapon_slot_index,
+			attachment_slot_type
+		) as Dictionary
+		status_label.text = (
+			"背包已满，配件已恢复到原枪"
+			if bool(rollback.get("success", false))
+			else "拆卸事务异常：配件恢复失败"
+		)
+		return false
+	status_label.text = "已从%s拆下%s" % [
+		"主武器" if weapon_slot_index == 0 else "副武器",
+		removed_item.get("name", AssemblyNode.get_attachment_slot_display_name(attachment_slot_type)),
+	]
+	return true
+
+
 func _install_weapon_module_from_item(item: Dictionary) -> bool:
 	var tree := player.get_weapon_tree()
 	if tree == null or tree.get_root() == null:
@@ -3285,46 +3391,28 @@ func _slot_type_for_item(item: Dictionary) -> int:
 			return AssemblyNode.SlotType.MUZZLE
 		"magazine":
 			return AssemblyNode.SlotType.MAGAZINE
+		"scope":
+			return AssemblyNode.SlotType.SCOPE
+		"stock":
+			return AssemblyNode.SlotType.STOCK
+		"external":
+			return AssemblyNode.SlotType.TACTICAL
+		"mutator":
+			return AssemblyNode.SlotType.MUTATOR
 		_:
 			return AssemblyNode.SlotType.MOUNT
 
 
 func _item_for_weapon_root(root: AssemblyNode) -> Dictionary:
-	if root == null:
-		return {}
-	var item_id: String = str({
-		"GunBody_Pistol": "weapon_pistol", "GunBody_Shotgun": "weapon_shotgun",
-		"GunBody_Rifle": "weapon_rifle", "GunBody_Machinegun": "weapon_machinegun",
-		"GunBody_Sniper": "weapon_sniper", "GunBody_Launcher": "weapon_launcher",
-		"GunBody_Charge": "weapon_charge",
-	}.get(root.node_name, ""))
-	return ItemRegistry.get_instance().get_item(item_id) if not item_id.is_empty() else {}
+	return BlueprintRegistry.get_item_for_assembly_node(root)
 
 
 func _item_for_assembly_node(node: AssemblyNode) -> Dictionary:
-	var item_id := _item_id_for_assembly_node(node)
-	return ItemRegistry.get_instance().get_item(item_id) if not item_id.is_empty() else {}
+	return BlueprintRegistry.get_item_for_assembly_node(node)
 
 
 func _item_id_for_assembly_node(node: AssemblyNode) -> String:
-	if node == null:
-		return ""
-	return str({
-		"Bullet_Standard": "mod_bullet_standard",
-		"Bullet_Sticky": "mod_bullet_sticky",
-		"Bullet_Bounce": "mod_bullet_bounce",
-		"Bullet_Piercing": "mod_bullet_piercing",
-		"Bullet_Explosive": "mod_bullet_explosive",
-		"Bullet_Homing": "mod_bullet_homing",
-		"Bullet_Blackhole": "mod_bullet_blackhole",
-		"Bullet_Balloon": "mod_bullet_balloon",
-		"Att_TripleMuzzle": "attach_triple_muzzle",
-		"Att_RubberStock": "attach_rubber_stock",
-		"Att_Scope": "attach_scope",
-		"Att_BigMag": "attach_big_mag",
-		"Att_Fan": "attach_fan",
-		"Att_CopySticker": "attach_copy_sticker",
-	}.get(node.node_name, ""))
+	return BlueprintRegistry.get_item_id_for_assembly_node(node)
 
 
 func summon_beacon_extraction() -> bool:
@@ -3479,7 +3567,8 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
 	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
-	ammo_label.text = "%d / %d" % [current, maximum]
+	var weapon_snapshot := player.get_weapon_snapshot() if player != null else {}
+	ammo_label.text = "近战 · 三段" if bool(weapon_snapshot.get("melee", false)) else "%d / %d" % [current, maximum]
 	if _hud_weapon_meta_label != null:
 		var active_slot := player.get_active_weapon_slot() if player != null and player.has_method("get_active_weapon_slot") else 0
 		_hud_weapon_meta_label.text = "[%d] %s · %s" % [

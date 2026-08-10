@@ -42,8 +42,12 @@ core_scenes=(
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
+  verify_3d_melee_combat_flow
+  verify_3d_melee_feedback_flow
+  verify_training_range_3d_flow
   verify_3d_fate_weapon_flow
   verify_3d_inventory_weapon_flow
+  verify_weapon_attachment_inventory_flow
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
   verify_tactical_inventory_minimap_flow
@@ -65,6 +69,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_3d_melee_combat_visual
   verify_base_vending_visual
   verify_base_world_3d_visual
   verify_full_3d_visual

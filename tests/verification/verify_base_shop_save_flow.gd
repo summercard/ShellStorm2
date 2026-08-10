@@ -19,9 +19,9 @@ func _ready() -> void:
 
 func _verify_catalog(failures: Array[String]) -> void:
 	var goods := ItemRegistry.get_instance().get_base_shop_goods()
-	var expected_ids := ["weapon_pistol", "weapon_shotgun", "weapon_rifle", "equipment_backpack_2", "item_health_potion", "item_battery_s"]
-	if goods.size() != 6:
-		failures.append("基地货架不是6类商品（含小型电池）")
+	var expected_ids := ["weapon_baseball_bat", "weapon_pistol", "weapon_shotgun", "weapon_rifle", "equipment_backpack_2", "item_health_potion", "item_battery_s"]
+	if goods.size() != 7:
+		failures.append("基地货架不是7类商品（含初级棒球棍与小型电池）")
 	for index in expected_ids.size():
 		if index >= goods.size() or str(goods[index].get("id", "")) != expected_ids[index]:
 			failures.append("基地货架顺序或ID与数据库不一致")
@@ -166,9 +166,9 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 	menu.set_inventory_module(runtime_inventory)
 	add_child(menu)
 	await get_tree().process_frame
-	if menu._buy_list == null or menu._buy_list.get_child_count() != 6:
-		failures.append("自动贩卖机界面没有展示6个固定货架条目（含小型电池）")
-	if menu.find_children("*", "ItemModelIcon3D", true, false).size() < 6:
+	if menu._buy_list == null or menu._buy_list.get_child_count() != 7:
+		failures.append("自动贩卖机界面没有展示7个固定货架条目（含初级棒球棍与小型电池）")
+	if menu.find_children("*", "ItemModelIcon3D", true, false).size() < 7:
 		failures.append("购买货架没有复用背包3D物品图标")
 	if "魂" not in menu._points_label.text or "当前背包" not in menu._capacity_label.text:
 		failures.append("贩卖机顶部没有明确显示购买货币与购买目标")

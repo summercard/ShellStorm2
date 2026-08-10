@@ -94,6 +94,13 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var target_kind := str(get_meta("slot_kind", "inventory"))
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var item := (data as Dictionary).get("item", {}) as Dictionary
+	if target_kind.begins_with("attachment_"):
+		return (
+			source_kind == "inventory"
+			and str(item.get("type", "")) == "attachment"
+			and not bool(get_meta("slot_disabled", false))
+			and str(item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
+		)
 	if target_kind.begins_with("weapon_"):
 		return source_kind == "inventory" and str(item.get("type", "")) == "weapon"
 	if target_kind == "backpack":
@@ -104,7 +111,11 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 		)
 	if target_kind.begins_with("quick_"):
 		return source_kind == "inventory" and not str(item.get("use_action", "")).is_empty()
-	if target_kind == "inventory" and (source_kind.begins_with("weapon_") or source_kind == "backpack"):
+	if target_kind == "inventory" and (
+		source_kind.begins_with("weapon_")
+		or source_kind.begins_with("attachment_")
+		or source_kind == "backpack"
+	):
 		return not has_meta("slot_item")
 	return target_kind in ["inventory", "drop"]
 
@@ -136,8 +147,9 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 		target_kind == "drop"
 		or target_kind == "inventory" and (
 			source_kind == "inventory"
-			or (source_kind.begins_with("weapon_") or source_kind == "backpack") and not has_meta("slot_item")
+			or (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and not has_meta("slot_item")
 		)
+		or target_kind.begins_with("attachment_") and source_kind == "inventory" and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
 		or target_kind.begins_with("weapon_") and source_kind == "inventory" and str(dragged_item.get("type", "")) == "weapon"
 		or target_kind == "backpack" and source_kind == "inventory" and str(dragged_item.get("type", "")) == "equipment" and str(dragged_item.get("subtype", "")) == "backpack"
 		or target_kind.begins_with("quick_") and source_kind == "inventory" and not str(dragged_item.get("use_action", "")).is_empty()

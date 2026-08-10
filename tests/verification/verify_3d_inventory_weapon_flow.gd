@@ -98,7 +98,7 @@ func _verify_weapon_swap_preserves_build(
 	var desired := {
 		AssemblyNode.SlotType.MUZZLE: "attach_triple_muzzle",
 		AssemblyNode.SlotType.MAGAZINE: "attach_big_mag",
-		AssemblyNode.SlotType.MOUNT: "attach_fan",
+		AssemblyNode.SlotType.MUTATOR: "attach_copy_sticker",
 	}
 	for slot_type in desired.keys():
 		var node := BlueprintRegistry.create_assembly_node(desired[slot_type])
@@ -136,7 +136,7 @@ func _verify_weapon_swap_preserves_build(
 				if stored == null or stored.node_name != expected_names[slot_type]:
 					failures.append("Old weapon instance lost installed module in slot %s" % slot_type)
 			stored_tree.free()
-	for slot_type in [AssemblyNode.SlotType.MUZZLE, AssemblyNode.SlotType.MAGAZINE, AssemblyNode.SlotType.MOUNT]:
+	for slot_type in [AssemblyNode.SlotType.MUZZLE, AssemblyNode.SlotType.MAGAZINE, AssemblyNode.SlotType.MUTATOR]:
 		if new_root.slots.get(slot_type) != null:
 			failures.append("New gun incorrectly inherited old gun module in slot %s" % slot_type)
 

@@ -15,6 +15,8 @@ signal reload_started(duration: float)
 signal reload_progress_changed(progress: float, remaining: float)
 signal reload_ended(completed: bool)
 signal action_overlay_changed(snapshot: Dictionary)
+signal melee_action_changed(snapshot: Dictionary)
+signal melee_hit_resolved(result: Dictionary)
 signal avatar_customization_changed(loadout: Dictionary)
 signal weapon_instance_changed(snapshot: Dictionary)
 signal weapon_loadout_changed(snapshot: Dictionary)
@@ -62,6 +64,7 @@ var _death_animation_progress := 0.0
 var _death_animation_finished_emitted := false
 var _invincible_remaining := 0.0
 var _state_machine: StateMachine = null
+var melee_combat: PlayerMeleeCombat3D = null
 var _test_move_direction: Variant = null
 var weapon: WeaponModel3D = null
 var weapon_tree: WeaponAssemblyTree = null
@@ -130,6 +133,7 @@ func _ready() -> void:
 	add_to_group("player")
 	add_to_group("player_3d")
 	_init_state_machine()
+	_init_melee_combat()
 	_ensure_weapon_tree()
 	if start_with_weapon:
 		_ensure_weapon_model()
@@ -153,6 +157,8 @@ func _physics_process(delta: float) -> void:
 	_update_combat_input()
 	if _state_machine != null:
 		_state_machine.physics_update(delta)
+	if melee_combat != null:
+		melee_combat.physics_update(delta)
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
 		flashlight.set_in_facility(is_player_inside_facility())
@@ -234,6 +240,8 @@ func set_input_locked(locked: bool) -> void:
 	input_locked = locked
 	if locked and weapon != null:
 		weapon.cancel_charge()
+	if locked and melee_combat != null:
+		melee_combat.cancel("input_locked")
 	input_lock_changed.emit(locked)
 	if _state_machine == null:
 		return
@@ -438,11 +446,13 @@ func get_state_machine_snapshot() -> Dictionary:
 		"reloading": bool(reload_snapshot.get("active", false)),
 		"firing": _fire_animation_remaining > 0.0,
 		"charging": bool(get_action_snapshot().get("charging", false)),
+		"melee": bool(get_action_snapshot().get("melee_active", false)),
 		"knockback": _knockback_remaining > 0.0,
 		"flashlight": flashlight.get_snapshot() if flashlight != null else {"enabled": false, "charge_ratio": 1.0, "depleted": false, "in_facility": false},
 	}
 	snapshot["reload"] = reload_snapshot
 	snapshot["actions"] = get_action_snapshot()
+	snapshot["melee_action_machine"] = melee_combat.get_snapshot() if melee_combat != null else {}
 	return snapshot
 
 
@@ -598,6 +608,11 @@ func get_hurt_recovery_duration() -> float:
 func get_action_snapshot() -> Dictionary:
 	var weapon_snapshot := get_weapon_snapshot()
 	var charge_active := bool(weapon_snapshot.get("charge_active", false))
+	var melee_snapshot := melee_combat.get_snapshot() if melee_combat != null else {
+		"active": false, "phase": "ready", "phase_progress": 0.0,
+		"combo_step": 0, "combo_count": 0, "queued_next": false,
+		"attack_instance_id": "",
+	}
 	return {
 		"firing": _fire_animation_remaining > 0.0,
 		"fire_progress": clampf(1.0 - _fire_animation_remaining / maxf(0.01, _fire_animation_duration), 0.0, 1.0),
@@ -608,14 +623,23 @@ func get_action_snapshot() -> Dictionary:
 		"knockback_progress": clampf(1.0 - _knockback_remaining / maxf(0.01, _knockback_duration), 0.0, 1.0),
 		"knockback_direction": _knockback_direction,
 		"knockback_strength": _knockback_strength,
+		"melee_active": bool(melee_snapshot.get("active", false)),
+		"melee_phase": str(melee_snapshot.get("phase", "ready")),
+		"melee_progress": float(melee_snapshot.get("phase_progress", 0.0)),
+		"melee_combo_step": int(melee_snapshot.get("combo_step", 0)),
+		"melee_combo_count": int(melee_snapshot.get("combo_count", 0)),
+		"melee_queued_next": bool(melee_snapshot.get("queued_next", false)),
+		"melee_attack_instance_id": str(melee_snapshot.get("attack_instance_id", "")),
+		"melee": melee_snapshot,
 	}
 
 
 func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 	_ensure_weapon_tree()
 	var gun := BlueprintRegistry.create_assembly_node(gun_id)
-	var bullet := BlueprintRegistry.create_assembly_node(bullet_id)
-	if gun == null or bullet == null:
+	var is_melee := gun != null and "melee" in gun.tags
+	var bullet := BlueprintRegistry.create_assembly_node(bullet_id) if not is_melee else null
+	if gun == null or (not is_melee and bullet == null):
 		if gun != null:
 			gun.free()
 		if bullet != null:
@@ -626,7 +650,7 @@ func equip_weapon(gun_id: String, bullet_id: String) -> bool:
 		gun.free()
 		bullet.free()
 		return false
-	if not weapon_tree.mount(gun, AssemblyNode.SlotType.BULLET, bullet):
+	if not is_melee and not weapon_tree.mount(gun, AssemblyNode.SlotType.BULLET, bullet):
 		bullet.free()
 		return false
 	_ensure_weapon_model()
@@ -678,6 +702,8 @@ func _ensure_weapon_tree() -> void:
 func _sync_weapon_from_tree() -> void:
 	if weapon_tree == null:
 		return
+	if melee_combat != null:
+		melee_combat.cancel("weapon_tree_changed")
 	_ensure_weapon_model()
 	if weapon != null:
 		weapon.set_meta(
@@ -772,6 +798,129 @@ func get_weapon_loadout_snapshot() -> Dictionary:
 func get_weapon_presentation_snapshot() -> Dictionary:
 	var instance := get_equipped_weapon_instance()
 	return instance.get_presentation_snapshot(weapon_tree, "已装备") if instance != null else {}
+
+
+func get_weapon_attachment_layout_for_slot(slot_index: int) -> Array[Dictionary]:
+	var instance := get_equipped_weapon_instance_for_slot(slot_index)
+	if instance == null:
+		return []
+	var presentation := instance.get_presentation_snapshot(
+		weapon_tree if slot_index == active_weapon_slot else null,
+		"主武器" if slot_index == 0 else "副武器"
+	)
+	var raw_layout: Variant = presentation.get("attachment_layout", [])
+	var layout: Array[Dictionary] = []
+	if raw_layout is Array:
+		for entry in raw_layout:
+			if entry is Dictionary:
+				layout.append((entry as Dictionary).duplicate(true))
+	return layout
+
+
+## 给指定主/副武器安装一个普通枪械配件。武器实例拥有完整装配树，因此切枪、
+## 整枪入包/落地/保险时配件天然随枪移动；单独拆装只在此事务边界发生。
+func install_attachment_item_to_weapon_slot(
+	item: Dictionary, weapon_slot_index: int, requested_slot_type := -1
+) -> Dictionary:
+	if weapon_slot_index < 0 or weapon_slot_index >= equipped_weapon_slots.size():
+		return {"success": false, "reason": "武器槽无效"}
+	if str(item.get("type", "")) != "attachment":
+		return {"success": false, "reason": "该物品不是枪械配件"}
+	var instance := get_equipped_weapon_instance_for_slot(weapon_slot_index)
+	if instance == null:
+		return {"success": false, "reason": "目标武器槽为空"}
+	var new_node := BlueprintRegistry.create_assembly_node(str(item.get("assembly_id", item.get("id", ""))))
+	if new_node == null or new_node.node_type != AssemblyNode.NodeType.ATTACHMENT:
+		if new_node != null:
+			new_node.free()
+		return {"success": false, "reason": "配件装配数据无效"}
+	var slot_type := new_node.get_attachment_slot_type()
+	if requested_slot_type >= 0 and slot_type != requested_slot_type:
+		new_node.free()
+		return {"success": false, "reason": "配件与目标槽位不匹配"}
+	var temp_tree := instance.build_runtime_tree()
+	if temp_tree == null or temp_tree.get_root() == null:
+		new_node.free()
+		if temp_tree != null:
+			temp_tree.free()
+		return {"success": false, "reason": "目标武器构筑无法读取"}
+	var root := temp_tree.get_root()
+	if not root.supports_attachment_slot(slot_type):
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "该枪械未开放%s槽" % AssemblyNode.get_attachment_slot_display_name(slot_type)}
+	var existing := root.slots.get(slot_type) as AssemblyNode
+	if existing != null and BlueprintRegistry.get_item_id_for_assembly_node(existing) == str(item.get("id", "")):
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "目标槽已安装同款配件"}
+	var removed_item := BlueprintRegistry.get_item_for_assembly_node(existing)
+	if existing != null:
+		temp_tree.unmount(existing)
+	if not temp_tree.mount(root, slot_type, new_node):
+		if existing != null:
+			temp_tree.mount(root, slot_type, existing)
+		new_node.free()
+		temp_tree.free()
+		return {"success": false, "reason": "配件安装规则校验失败"}
+	instance.capture_runtime_tree(temp_tree)
+	temp_tree.free()
+	if existing != null and is_instance_valid(existing):
+		existing.free()
+	if not _refresh_weapon_slot_after_instance_change(weapon_slot_index, instance):
+		return {"success": false, "reason": "配件已写入实例，但运行态刷新失败"}
+	return {
+		"success": true,
+		"slot_type": slot_type,
+		"slot_key": AssemblyNode.get_attachment_slot_key(slot_type),
+		"removed_item": removed_item,
+		"weapon_item": instance.to_item_dictionary(),
+	}
+
+
+func remove_attachment_from_weapon_slot(weapon_slot_index: int, slot_type: int) -> Dictionary:
+	if slot_type not in AssemblyNode.PUBLIC_ATTACHMENT_SLOTS:
+		return {"success": false, "reason": "配件槽无效"}
+	var instance := get_equipped_weapon_instance_for_slot(weapon_slot_index)
+	if instance == null:
+		return {"success": false, "reason": "目标武器槽为空"}
+	var temp_tree := instance.build_runtime_tree()
+	if temp_tree == null or temp_tree.get_root() == null:
+		if temp_tree != null:
+			temp_tree.free()
+		return {"success": false, "reason": "目标武器构筑无法读取"}
+	var existing := temp_tree.get_root().slots.get(slot_type) as AssemblyNode
+	if existing == null:
+		temp_tree.free()
+		return {"success": false, "reason": "该槽位没有配件"}
+	var removed_item := BlueprintRegistry.get_item_for_assembly_node(existing)
+	if removed_item.is_empty() or not temp_tree.unmount(existing):
+		temp_tree.free()
+		return {"success": false, "reason": "配件缺少物品映射，已阻止数据丢失"}
+	instance.capture_runtime_tree(temp_tree)
+	temp_tree.free()
+	if is_instance_valid(existing):
+		existing.free()
+	if not _refresh_weapon_slot_after_instance_change(weapon_slot_index, instance):
+		return {"success": false, "reason": "拆卸已写入实例，但运行态刷新失败"}
+	return {
+		"success": true,
+		"slot_type": slot_type,
+		"removed_item": removed_item,
+		"weapon_item": instance.to_item_dictionary(),
+	}
+
+
+func _refresh_weapon_slot_after_instance_change(slot_index: int, instance: WeaponInstance) -> bool:
+	equipped_weapon_slots[slot_index] = instance
+	if slot_index == active_weapon_slot:
+		if not _load_active_weapon_instance(instance):
+			return false
+	else:
+		_refresh_stowed_weapon_model(true)
+	weapon_instance_changed.emit(get_weapon_presentation_snapshot())
+	weapon_loadout_changed.emit(get_weapon_loadout_snapshot())
+	return true
 
 
 func get_equipped_backpack_item() -> Dictionary:
@@ -1079,7 +1228,7 @@ func _refresh_stowed_weapon_model(force := false) -> void:
 	stowed_socket.add_child(_stowed_weapon_model)
 	_stowed_weapon_model.position = Vector3.ZERO
 	_stowed_weapon_model.rotation = Vector3.ZERO
-	_stowed_weapon_model.scale = Vector3.ONE * 0.52
+	_stowed_weapon_model.scale = Vector3.ONE * (0.70 if stowed.assembly_id in ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"] else 0.52)
 
 
 func append_equipped_fate_upgrade(card: FateCard, transaction_id: String = "") -> Dictionary:
@@ -1194,11 +1343,27 @@ func _on_weapon_shot_fired(projectile_count: int) -> void:
 	action_overlay_changed.emit(get_action_snapshot())
 
 
+func _on_melee_action_changed(snapshot: Dictionary) -> void:
+	melee_action_changed.emit(snapshot)
+	action_overlay_changed.emit(get_action_snapshot())
+
+
+func _on_melee_hit_resolved(result: Dictionary) -> void:
+	melee_hit_resolved.emit(result)
+
+
+func request_melee_attack() -> bool:
+	return melee_combat != null and melee_combat.request_attack()
+
+
 func _update_combat_input() -> void:
 	var shoot_pressed_here: bool = Input.is_action_pressed("shoot")
+	var shoot_just_pressed_here: bool = Input.is_action_just_pressed("shoot")
 	var shoot_released_here: bool = Input.is_action_just_released("shoot")
 	# 移动端：触屏按住优先级高于键盘鼠标
 	if _mobile_input_available:
+		if _mobile_shoot_active and not _mobile_shoot_was_active:
+			shoot_just_pressed_here = true
 		if _mobile_shoot_active:
 			shoot_pressed_here = true
 		if not _mobile_shoot_active and _mobile_shoot_was_active:
@@ -1213,9 +1378,12 @@ func _update_combat_input() -> void:
 	# 禁用玩家输入不应打断脚本、测试场或 AI 显式启动的蓄力；只有真实输入读取被跳过。
 	if not combat_enabled:
 		return
-	if shoot_pressed_here:
+	if weapon.is_melee_weapon():
+		if shoot_just_pressed_here:
+			request_melee_attack()
+	elif shoot_pressed_here:
 		weapon.try_fire(aim_direction, self)
-	if Input.is_action_just_pressed("reload"):
+	if not weapon.is_melee_weapon() and Input.is_action_just_pressed("reload"):
 		weapon.request_reload()
 
 
@@ -1233,6 +1401,8 @@ func _begin_dash() -> bool:
 	if dash_direction == Vector3.ZERO:
 		dash_direction = last_move_direction
 	dash_direction = dash_direction.normalized()
+	if melee_combat != null:
+		melee_combat.cancel("dash_started")
 	dash_cooldown_timer = get_dash_cooldown_duration()
 	_state_machine.transition_to("dashing")
 	return true
@@ -1260,6 +1430,8 @@ func _clear_action_overlays() -> void:
 	_knockback_duration = 0.0
 	_knockback_strength = 0.0
 	_knockback_direction = Vector3.ZERO
+	if melee_combat != null:
+		melee_combat.cancel("action_overlays_cleared")
 	action_overlay_changed.emit(get_action_snapshot())
 
 
@@ -1399,3 +1571,12 @@ func _init_state_machine() -> void:
 		"dead": [],
 	})
 	_state_machine.start("idle")
+
+
+func _init_melee_combat() -> void:
+	melee_combat = PlayerMeleeCombat3D.new()
+	melee_combat.name = "MeleeCombat3D"
+	add_child(melee_combat)
+	melee_combat.configure(self)
+	melee_combat.action_changed.connect(_on_melee_action_changed)
+	melee_combat.hit_resolved.connect(_on_melee_hit_resolved)

@@ -14,10 +14,42 @@ enum NodeType {
 
 ## 装配槽位定义
 enum SlotType {
-	MOUNT,       # 挂载槽（可挂 GunBody 或 Attachment）
+	MOUNT,       # 内部递归挂载槽（命运构筑使用，不显示在常规枪械配件栏）
 	MUZZLE,      # 枪口槽
 	MAGAZINE,    # 弹匣槽
 	BULLET,      # 子弹槽
+	SCOPE,       # 瞄具槽
+	STOCK,       # 枪托槽
+	TACTICAL,    # 战术配件槽
+	MUTATOR,     # 特性配件槽
+}
+
+## 所有枪械共用一套公开配件位置；具体枪械通过 supports_<slot> 标签开放子集。
+const PUBLIC_ATTACHMENT_SLOTS: Array[int] = [
+	SlotType.SCOPE,
+	SlotType.MUZZLE,
+	SlotType.MAGAZINE,
+	SlotType.STOCK,
+	SlotType.TACTICAL,
+	SlotType.MUTATOR,
+]
+
+const ATTACHMENT_SLOT_KEYS := {
+	SlotType.SCOPE: "scope",
+	SlotType.MUZZLE: "muzzle",
+	SlotType.MAGAZINE: "magazine",
+	SlotType.STOCK: "stock",
+	SlotType.TACTICAL: "tactical",
+	SlotType.MUTATOR: "mutator",
+}
+
+const ATTACHMENT_SLOT_NAMES := {
+	SlotType.SCOPE: "瞄具",
+	SlotType.MUZZLE: "枪口",
+	SlotType.MAGAZINE: "弹匣",
+	SlotType.STOCK: "枪托",
+	SlotType.TACTICAL: "战术",
+	SlotType.MUTATOR: "特性",
 }
 
 ## 节点元数据
@@ -35,6 +67,10 @@ var slots: Dictionary = {
 	SlotType.MUZZLE: null,     # 枪口槽
 	SlotType.MAGAZINE: null,   # 弹匣槽
 	SlotType.BULLET: null,     # 子弹槽
+	SlotType.SCOPE: null,      # 瞄具槽
+	SlotType.STOCK: null,      # 枪托槽
+	SlotType.TACTICAL: null,   # 战术配件槽
+	SlotType.MUTATOR: null,    # 特性配件槽
 }
 
 ## 父节点引用（反向指针，构成双向树）
@@ -69,6 +105,50 @@ func set_base_stats(stats: Dictionary) -> void:
 ## 获取节点基础属性（只读副本）
 func get_base_stats() -> Dictionary:
 	return base_stats.duplicate()
+
+
+static func get_attachment_slot_key(slot_type: int) -> String:
+	return str(ATTACHMENT_SLOT_KEYS.get(slot_type, ""))
+
+
+static func get_attachment_slot_display_name(slot_type: int) -> String:
+	return str(ATTACHMENT_SLOT_NAMES.get(slot_type, "未知槽"))
+
+
+func get_attachment_slot_type() -> int:
+	if node_type != NodeType.ATTACHMENT:
+		return -1
+	for slot_type in PUBLIC_ATTACHMENT_SLOTS:
+		if "attachment_slot_%s" % get_attachment_slot_key(slot_type) in tags:
+			return slot_type
+	# 兼容旧存档：旧快照只有语义标签/稳定节点名，未记录独立槽位标签。
+	if "scope" in tags or node_name == "Att_Scope":
+		return SlotType.SCOPE
+	if "muzzle" in tags or node_name == "Att_TripleMuzzle":
+		return SlotType.MUZZLE
+	if "magazine" in tags or node_name == "Att_BigMag":
+		return SlotType.MAGAZINE
+	if "stock" in tags or node_name == "Att_RubberStock":
+		return SlotType.STOCK
+	if "external" in tags or node_name == "Att_Fan":
+		return SlotType.TACTICAL
+	if "mutator" in tags or node_name == "Att_CopySticker":
+		return SlotType.MUTATOR
+	return -1
+
+
+func get_supported_attachment_slots() -> Array[int]:
+	var result: Array[int] = []
+	if node_type != NodeType.GUN_BODY or "melee" in tags:
+		return result
+	for slot_type in PUBLIC_ATTACHMENT_SLOTS:
+		if "supports_%s" % get_attachment_slot_key(slot_type) in tags:
+			result.append(slot_type)
+	return result
+
+
+func supports_attachment_slot(slot_type: int) -> bool:
+	return slot_type in get_supported_attachment_slots()
 
 ## 计算当前节点及其所有子节点的合成属性（从叶子向根聚合）
 func get_computed_stats() -> Dictionary:
@@ -129,9 +209,12 @@ func mount(slot_type: SlotType, child: AssemblyNode) -> bool:
 		push_error("[AssemblyNode] Cannot mount: circular reference detected (node %s is ancestor of %s)" % [node_id, child.node_id])
 		return false
 
-	# 解除旧父节点引用
+	# 解除旧父节点引用；不能假定旧挂点一定是 MOUNT。
 	if child.parent_node != null:
-		child.parent_node.slots[SlotType.MOUNT] = null
+		for old_slot_type in child.parent_node.slots.keys():
+			if child.parent_node.slots[old_slot_type] == child:
+				child.parent_node.slots[old_slot_type] = null
+				break
 
 	# 建立连接
 	slots[slot_type] = child

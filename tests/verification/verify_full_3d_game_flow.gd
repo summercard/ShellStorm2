@@ -226,14 +226,27 @@ func _verify_weapon_matrix(failures: Array[String]) -> void:
 	var guns := BlueprintRegistry.get_available_gunbodies(99)
 	var bullets := BlueprintRegistry.get_available_bullets(99)
 	var combinations := 0
+	var expected_combinations := 0
 	for gun in guns:
+		if "melee" in (gun.get("tags", []) as Array):
+			expected_combinations += 1
+			if test_player.equip_weapon(str(gun["item_id"]), ""):
+				var melee_snapshot := test_player.get_weapon_snapshot()
+				if (
+					bool(melee_snapshot.get("has_model", false))
+					and bool(melee_snapshot.get("melee", false))
+					and not bool(melee_snapshot.get("uses_ammo", true))
+				):
+					combinations += 1
+			continue
 		for bullet in bullets:
+			expected_combinations += 1
 			if test_player.equip_weapon(str(gun["item_id"]), str(bullet["item_id"])):
 				var snapshot := test_player.get_weapon_snapshot()
 				if bool(snapshot.get("has_model", false)) and int(snapshot.get("magazine_size", 0)) > 0:
 					combinations += 1
-	if combinations != guns.size() * bullets.size():
-		failures.append("3D weapon model does not cover all gun/ammo combinations (%d/%d)" % [combinations, guns.size() * bullets.size()])
+	if combinations != expected_combinations:
+		failures.append("3D weapon model does not cover all valid ranged/melee combinations (%d/%d)" % [combinations, expected_combinations])
 	if not test_player.equip_weapon("bp_launcher", "mod_bullet_standard") or "explosive" not in test_player.get_weapon_snapshot().get("bullet_tags", []):
 		failures.append("Launcher gun-body behavior does not make standard ammunition explosive")
 	if not test_player.equip_weapon("bp_charge", "mod_bullet_standard"):
@@ -279,7 +292,7 @@ func _count_nodes(root: Node) -> int:
 
 func _finish(failures: Array[String], node_peak: int) -> void:
 	if failures.is_empty():
-		print("FULL_3D_GAME_FLOW_OK: four themes, seeded rooms including vertical levels, four sizes, streamed shells/lights/props, nine-state enemies, 56 weapon combinations, combat and extraction pass (peak_nodes=%d)" % node_peak)
+		print("FULL_3D_GAME_FLOW_OK: four themes, seeded rooms including vertical levels, four sizes, streamed shells/lights/props, nine-state enemies, 59 valid ranged/melee combinations, combat and extraction pass (peak_nodes=%d)" % node_peak)
 		get_tree().quit(0)
 		return
 	for failure in failures:
