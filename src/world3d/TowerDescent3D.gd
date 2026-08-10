@@ -54,6 +54,14 @@ const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
 const CAMERA_WALL_COLLISION_MASK := (
 	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 )
+# 楼梯的上下两跑斜楼板会把局部净高压到9m以下。只查询导入楼梯明确
+# 标记的两块Flight_Walkable，不让普通房间楼板或其他碰撞改变镜头体验。
+const CAMERA_STAIR_SLAB_PROBE_START_HEIGHT_M := 1.15
+const CAMERA_STAIR_SLAB_CLEARANCE_M := 0.28
+const CAMERA_STAIR_SLAB_MIN_HEIGHT_M := 1.25
+const CAMERA_STAIR_SLAB_RECOVER_RATE := 5.0
+const CAMERA_STAIR_SLAB_MAX_RAY_HITS := 8
+const CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M := [-0.24, 0.0, 0.24]
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
 # 楼梯资产位于65m核心外侧：沿外法线预留20m、沿折返方向预留30m。
 # 该占位参与整层布局规划，普通/随机房间不得进入；楼梯大厅自身作为接口例外。
@@ -133,6 +141,10 @@ var _camera_lift_target_m := 0.0
 var _camera_lift_current_m := 0.0
 var _camera_trailing_target_m := CAMERA_DEFAULT_TRAILING_M
 var _camera_trailing_current_m := CAMERA_DEFAULT_TRAILING_M
+var _camera_stair_slab_detected := false
+var _camera_stair_slab_clearance_height_m := -1.0
+var _camera_stair_slab_drop_target_m := 0.0
+var _camera_stair_slab_drop_current_m := 0.0
 var _vertical_arrival_open: Dictionary = {}
 var _stair_arrival_previous_room := ""
 var _stair_arrival_prompt_door: RoomDoor3D
@@ -391,6 +403,7 @@ func _physics_process(delta: float) -> void:
 		_camera_probe_refresh_count += 1
 	# v0.1：只允许画面下方墙体驱动固定后方轴上的抬升收拢；禁止侧移与旋转。
 	_update_camera_lower_wall_lift(delta, refresh_camera_probes)
+	_update_camera_stair_slab_drop(delta, refresh_camera_probes)
 	_apply_indoor_camera_pose()
 	# v0.1：墙体透明淡化会在摄像机碰撞时留下概率性消失状态。
 	# 摄像机现在只沿固定轴缩短距离，墙材质永不被运行时改写。
@@ -404,7 +417,7 @@ func _apply_indoor_camera_pose() -> void:
 		return
 	player.camera.position = Vector3(
 		0.0,
-		CAMERA_HEIGHT_M + _camera_lift_current_m,
+		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m,
 		_camera_trailing_current_m
 	)
 	var look_target := player.global_position + Vector3(
@@ -527,6 +540,121 @@ func _find_lower_camera_wall_distance() -> float:
 				break
 			ray_from = hit_position + remaining_direction * 0.03
 	return nearest_distance if is_finite(nearest_distance) else -1.0
+
+
+func _update_camera_stair_slab_drop(
+	delta: float,
+	refresh_probe: bool = true
+) -> void:
+	var desired_height_m := CAMERA_HEIGHT_M + _camera_lift_current_m
+	if refresh_probe:
+		_camera_stair_slab_clearance_height_m = (
+			_find_stair_slab_camera_clearance_height(desired_height_m)
+		)
+		_camera_stair_slab_detected = (
+			_camera_stair_slab_clearance_height_m >= 0.0
+		)
+	_camera_stair_slab_drop_target_m = 0.0
+	if _camera_stair_slab_detected:
+		_camera_stair_slab_drop_target_m = maxf(
+			0.0,
+			desired_height_m - _camera_stair_slab_clearance_height_m
+		)
+	# 进入楼板时立即向下夹紧，绝不让一帧平滑插值把镜头留在碰撞内部；
+	# 离开楼板后才缓慢恢复默认高度，避免楼梯出口处突然弹镜。
+	if _camera_stair_slab_drop_target_m > _camera_stair_slab_drop_current_m:
+		_camera_stair_slab_drop_current_m = _camera_stair_slab_drop_target_m
+	else:
+		var blend := 1.0 - exp(
+			-CAMERA_STAIR_SLAB_RECOVER_RATE * maxf(delta, 0.0)
+		)
+		_camera_stair_slab_drop_current_m = lerpf(
+			_camera_stair_slab_drop_current_m,
+			_camera_stair_slab_drop_target_m,
+			blend
+		)
+		if (
+			absf(
+				_camera_stair_slab_drop_current_m
+				- _camera_stair_slab_drop_target_m
+			) <= 0.001
+		):
+			_camera_stair_slab_drop_current_m = _camera_stair_slab_drop_target_m
+
+
+func _find_stair_slab_camera_clearance_height(
+	desired_height_m: float
+) -> float:
+	if player == null or not player.is_inside_tree():
+		return -1.0
+	var probe_start_y := (
+		player.global_position.y + CAMERA_STAIR_SLAB_PROBE_START_HEIGHT_M
+	)
+	var probe_end_y := player.global_position.y + desired_height_m
+	if probe_end_y <= probe_start_y + 0.01:
+		return -1.0
+	var camera_planar_position := player.to_global(
+		Vector3(0.0, 0.0, _camera_trailing_current_m)
+	)
+	var camera_right := player.global_basis.x
+	camera_right.y = 0.0
+	if camera_right.length_squared() <= 0.0001:
+		camera_right = Vector3.RIGHT
+	camera_right = camera_right.normalized()
+	var space_state := get_world_3d().direct_space_state
+	var allowed_height_m := INF
+	for offset_value in CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M:
+		var offset := camera_right * float(offset_value)
+		var probe_start := Vector3(
+			camera_planar_position.x + offset.x,
+			probe_start_y,
+			camera_planar_position.z + offset.z
+		)
+		var probe_end := Vector3(
+			probe_start.x,
+			probe_end_y,
+			probe_start.z
+		)
+		var ray_from := probe_start
+		var excluded: Array[RID] = []
+		if player is CollisionObject3D:
+			excluded.append((player as CollisionObject3D).get_rid())
+		for _hit_index in range(CAMERA_STAIR_SLAB_MAX_RAY_HITS):
+			var query := PhysicsRayQueryParameters3D.create(
+				ray_from,
+				probe_end,
+				CAMERA_WALL_COLLISION_MASK,
+				excluded
+			)
+			query.collide_with_areas = false
+			query.hit_back_faces = true
+			query.hit_from_inside = true
+			var hit := space_state.intersect_ray(query)
+			if hit.is_empty():
+				break
+			var collider := hit.get("collider") as Node
+			var hit_position := hit.get("position", ray_from) as Vector3
+			if collider != null and bool(
+				collider.get_meta("camera_stair_slab", false)
+			):
+				allowed_height_m = minf(
+					allowed_height_m,
+					clampf(
+						hit_position.y
+							- player.global_position.y
+							- CAMERA_STAIR_SLAB_CLEARANCE_M,
+						CAMERA_STAIR_SLAB_MIN_HEIGHT_M,
+						desired_height_m
+					)
+				)
+				break
+			if collider is CollisionObject3D:
+				excluded.append((collider as CollisionObject3D).get_rid())
+			var remaining_direction := ray_from.direction_to(probe_end)
+			if remaining_direction.is_zero_approx():
+				break
+			ray_from = hit_position + remaining_direction * 0.03
+	return allowed_height_m if is_finite(allowed_height_m) else -1.0
 
 
 func _is_camera_lower_wall(collider: Node) -> bool:
@@ -1171,6 +1299,13 @@ func _add_imported_stair_collisions(root: Node) -> int:
 	# 整段路径包围盒估算楼梯墙，否则包围盒会跨过接驳走廊伸进相邻房间，
 	# 形成没有视觉组件对应的空气墙。
 	var is_walkable := root is MeshInstance3D and "Walkable" in root.name
+	var is_camera_stair_slab := (
+		is_walkable
+		and (
+			"UpperFlight_Walkable" in root.name
+			or "LowerFlight_Walkable" in root.name
+		)
+	)
 	var is_enclosure_wall := (
 		root is MeshInstance3D
 		and "EnclosureWall_" in root.name
@@ -1185,6 +1320,12 @@ func _add_imported_stair_collisions(root: Node) -> int:
 				body.collision_layer = 1
 				body.collision_mask = 0
 				body.set_meta("stair_enclosure_collision", is_enclosure_wall)
+				body.set_meta("camera_stair_slab", is_camera_stair_slab)
+				if is_camera_stair_slab:
+					body.set_meta(
+						"camera_stair_slab_role",
+						"upper" if "UpperFlight_Walkable" in root.name else "lower"
+					)
 				body.set_meta("source_visual_name", mesh_instance.name)
 				mesh_instance.add_child(body)
 				var collision := CollisionShape3D.new()
@@ -3297,7 +3438,11 @@ func get_tower_snapshot() -> Dictionary:
 		"stair_surface_snap_enabled": false,
 		"stair_support_surface_count": _stair_support_surface_count,
 		"stair_support_mode": "imported_walkable_mesh_colliders",
-		"camera_height_m": CAMERA_HEIGHT_M + _camera_lift_current_m,
+		"camera_height_m": (
+			CAMERA_HEIGHT_M
+			+ _camera_lift_current_m
+			- _camera_stair_slab_drop_current_m
+		),
 		"camera_base_height_m": CAMERA_HEIGHT_M,
 		"camera_lift_current_m": _camera_lift_current_m,
 		"camera_lift_target_m": _camera_lift_target_m,
@@ -3308,6 +3453,11 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_lower_wall_detected": _camera_lower_wall_detected,
 		"camera_lower_wall_distance_m": _camera_lower_wall_distance_m,
 		"camera_collision_mode": "lower_wall_lift_and_retract_arc",
+		"camera_stair_slab_mode": "tagged_upper_lower_flight_vertical_clamp",
+		"camera_stair_slab_detected": _camera_stair_slab_detected,
+		"camera_stair_slab_clearance_height_m": _camera_stair_slab_clearance_height_m,
+		"camera_stair_slab_drop_current_m": _camera_stair_slab_drop_current_m,
+		"camera_stair_slab_drop_target_m": _camera_stair_slab_drop_target_m,
 		"camera_trailing_offset_m": _camera_trailing_current_m,
 		"camera_planar_offset": Vector3(
 			0.0,
@@ -3318,7 +3468,10 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_look_height_m": CAMERA_LOOK_HEIGHT_M,
 		"camera_look_ahead_m": CAMERA_LOOK_AHEAD_M,
 		"camera_fov_deg": CAMERA_FOV_DEG,
-		"camera_collision_adjusted": _camera_lift_current_m > 0.01,
+		"camera_collision_adjusted": (
+			_camera_lift_current_m > 0.01
+			or _camera_stair_slab_drop_current_m > 0.01
+		),
 		"camera_collision_enabled": true,
 		"camera_fixed_pose": false,
 		"camera_horizontal_pose_fixed": true,

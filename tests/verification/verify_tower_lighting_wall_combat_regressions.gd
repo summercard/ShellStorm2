@@ -22,6 +22,7 @@ func _ready() -> void:
 	_validate_wall_components(tower, failures)
 	await _validate_close_wall_probes(tower, failures)
 	_validate_stair_camera_walls(tower, failures)
+	await _validate_stair_slab_camera_drop(tower, failures)
 	await _validate_internal_partition_camera_wall(tower, failures)
 	_validate_hidden_connector_collisions(tower, failures)
 	await _validate_target_room_airwall_clearance(tower, failures)
@@ -30,7 +31,7 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: flashlight shadow stability, external avatar shadows, matte floors, 9m walls, visible collision parity and reveal-time hostile spawning pass")
+		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: flashlight shadows, 9m walls, tagged upper/lower stair slab camera clamp, ordinary-floor isolation and hostile spawning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -373,10 +374,17 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 			continue
 		var enclosure_count := 0
 		var marked_enclosure_count := 0
+		var camera_stair_slab_count := 0
+		var camera_stair_slab_roles: Dictionary = {}
 		var south_z := -INF
 		var marked_z := -INF
 		for body_value in connector.find_children("*", "StaticBody3D", true, false):
 			var body := body_value as StaticBody3D
+			if bool(body.get_meta("camera_stair_slab", false)):
+				camera_stair_slab_count += 1
+				camera_stair_slab_roles[str(
+					body.get_meta("camera_stair_slab_role", "")
+				)] = true
 			if body.name.begins_with("StairwellWall_"):
 				failures.append("Legacy invisible stair enclosure box remains: %s" % body.get_path())
 			if not bool(body.get_meta("stair_enclosure_collision", false)):
@@ -396,6 +404,90 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 			failures.append("Stairwell does not have four mesh-matched enclosure colliders: %s" % connector.name)
 		if marked_enclosure_count != 1 or not is_equal_approx(marked_z, south_z):
 			failures.append("Stairwell south visible wall is not the sole camera wall: %s" % connector.name)
+		if (
+			camera_stair_slab_count != 2
+			or not camera_stair_slab_roles.has("upper")
+			or not camera_stair_slab_roles.has("lower")
+		):
+			failures.append(
+				"Stairwell upper/lower flight camera slabs are incomplete: %s count=%d roles=%s"
+				% [connector.name, camera_stair_slab_count, camera_stair_slab_roles.keys()]
+			)
+
+
+func _validate_stair_slab_camera_drop(
+	tower: TowerDescent3D,
+	failures: Array[String]
+) -> void:
+	var start_room := (
+		(tower.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
+	)
+	tower.force_enter_room_for_test("start")
+	if start_room != null:
+		tower.player.global_position = start_room.global_position + Vector3.UP * 0.05
+	for _frame in range(75):
+		await get_tree().physics_frame
+
+	var slab := StaticBody3D.new()
+	slab.name = "CameraStairSlabFixture"
+	slab.collision_layer = 1
+	slab.collision_mask = 0
+	slab.set_meta("camera_stair_slab", true)
+	slab.set_meta("camera_stair_slab_role", "lower")
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(3.0, 0.40, 3.0)
+	collision.shape = shape
+	slab.add_child(collision)
+	tower.add_child(slab)
+	slab.global_position = tower.player.to_global(Vector3(0.0, 5.0, 2.77))
+	for _frame in range(4):
+		await get_tree().physics_frame
+	var blocked_snapshot := tower.get_tower_snapshot()
+	if (
+		not bool(blocked_snapshot.get("camera_stair_slab_detected", false))
+		or str(blocked_snapshot.get("camera_stair_slab_mode", ""))
+			!= "tagged_upper_lower_flight_vertical_clamp"
+		or float(blocked_snapshot.get("camera_stair_slab_drop_current_m", 0.0)) <= 3.3
+		or tower.player.camera.position.y > 4.53
+		or absf(tower.player.camera.position.z - 2.77) > 0.03
+	):
+		failures.append(
+			"Tagged stair slab did not clamp camera below collision without changing trailing offset: %s"
+			% blocked_snapshot
+		)
+	slab.queue_free()
+	for _frame in range(90):
+		await get_tree().physics_frame
+	var recovered_snapshot := tower.get_tower_snapshot()
+	if (
+		bool(recovered_snapshot.get("camera_stair_slab_detected", true))
+		or float(recovered_snapshot.get("camera_stair_slab_drop_current_m", 1.0)) > 0.02
+		or absf(tower.player.camera.position.y - 8.0) > 0.02
+	):
+		failures.append("Camera did not smoothly recover after leaving stair slab")
+
+	# 同样位置的普通楼板没有楼梯语义标记时必须完全忽略。
+	var ordinary_floor := StaticBody3D.new()
+	ordinary_floor.name = "OrdinaryFloorCameraIsolationFixture"
+	ordinary_floor.collision_layer = 1
+	ordinary_floor.collision_mask = 0
+	var ordinary_collision := CollisionShape3D.new()
+	ordinary_collision.shape = shape
+	ordinary_floor.add_child(ordinary_collision)
+	tower.add_child(ordinary_floor)
+	ordinary_floor.global_position = tower.player.to_global(Vector3(0.0, 5.0, 2.77))
+	for _frame in range(6):
+		await get_tree().physics_frame
+	var isolated_snapshot := tower.get_tower_snapshot()
+	if (
+		bool(isolated_snapshot.get("camera_stair_slab_detected", true))
+		or absf(tower.player.camera.position.y - 8.0) > 0.02
+		or absf(tower.player.camera.position.z - 2.77) > 0.03
+	):
+		failures.append("Untagged ordinary floor incorrectly triggered stair camera clamp")
+	ordinary_floor.queue_free()
+	await get_tree().physics_frame
 
 
 func _validate_target_room_airwall_clearance(
