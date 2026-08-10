@@ -286,6 +286,8 @@ func _return_successful_extraction_to_facility() -> void:
 	_refresh_loot_label()
 	_refresh_tower_hud()
 	_sync_player_input_lock()
+	if not test_mode and BaseManager != null:
+		BaseManager.flush_runtime_checkpoint("successful_extraction_base_state")
 	status_label.text = "已成功返航99F基地 · %d件战利品、装备与保险物全部保留" % retained_loot_count
 
 
@@ -3270,6 +3272,10 @@ func _room_status(type_id: String) -> String:
 
 func get_facility_count() -> int:
 	return _facility_nodes.size()
+
+
+func _runtime_current_floor_index() -> int:
+	return int(_room_floor_index.get(_current_room_id, 0))
 
 
 func get_active_facility_menu() -> CanvasLayer:

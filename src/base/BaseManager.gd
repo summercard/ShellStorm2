@@ -6,13 +6,28 @@ const FacilityService = preload("res://src/base/BaseFacilityService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BASE_LOADOUT_CAPACITY := 12
+const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
 
 var data: BaseData
 var save_path: String = SAVE_PATH
 var force_save_failure_for_test := false
+var _runtime_checkpoint_provider: WeakRef
+var _runtime_checkpoint_timer: Timer
+var _runtime_checkpoint_dirty := false
+var _pending_runtime_reason := ""
 
 func _ready() -> void:
+	_runtime_checkpoint_timer = Timer.new()
+	_runtime_checkpoint_timer.name = "RuntimeCheckpointDebounce"
+	_runtime_checkpoint_timer.one_shot = true
+	_runtime_checkpoint_timer.timeout.connect(_on_runtime_checkpoint_timer_timeout)
+	add_child(_runtime_checkpoint_timer)
 	load_base()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_WM_CLOSE_REQUEST]:
+		flush_runtime_checkpoint("application_boundary")
 
 func load_base() -> void:
 	var json: Variant = AtomicJsonStore.load_dictionary(
@@ -94,6 +109,77 @@ func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
 		return true
 	data.active_run_snapshot = previous
 	return false
+
+
+## 注册当前承载玩家背包和装备的场景。只保存 WeakRef，避免自动加载单例延长场景寿命。
+func register_runtime_checkpoint_provider(provider: Node) -> void:
+	if provider == null:
+		return
+	if _runtime_checkpoint_timer != null:
+		_runtime_checkpoint_timer.stop()
+	_runtime_checkpoint_dirty = false
+	_pending_runtime_reason = ""
+	_runtime_checkpoint_provider = weakref(provider)
+
+
+func unregister_runtime_checkpoint_provider(provider: Node, flush_before_unregister := true) -> void:
+	var current := _get_runtime_checkpoint_provider()
+	if current != provider:
+		return
+	if flush_before_unregister:
+		flush_runtime_checkpoint("scene_unload")
+	_runtime_checkpoint_provider = null
+	_runtime_checkpoint_dirty = false
+	_pending_runtime_reason = ""
+	if _runtime_checkpoint_timer != null:
+		_runtime_checkpoint_timer.stop()
+
+
+## 普通物品变化只标脏并重启短计时器；计时结束时才抓取一次完整快照并落盘。
+func queue_runtime_checkpoint(reason: String = "runtime_changed", delay_seconds := RUNTIME_SAVE_DEBOUNCE_SECONDS) -> void:
+	if _get_runtime_checkpoint_provider() == null:
+		return
+	_runtime_checkpoint_dirty = true
+	_pending_runtime_reason = reason
+	if _runtime_checkpoint_timer == null:
+		flush_runtime_checkpoint(reason)
+		return
+	_runtime_checkpoint_timer.start(maxf(0.01, delay_seconds))
+
+
+## 房门、暂停、退出等关键边界同步重新抓取，确保位置、格位和弹药都是最新值。
+func flush_runtime_checkpoint(reason: String = "runtime_flush") -> bool:
+	if _runtime_checkpoint_timer != null:
+		_runtime_checkpoint_timer.stop()
+	var snapshot := _capture_runtime_checkpoint()
+	if snapshot.is_empty():
+		return false
+	var saved := set_active_run_checkpoint(snapshot, reason)
+	_runtime_checkpoint_dirty = not saved
+	if saved:
+		_pending_runtime_reason = ""
+	return saved
+
+
+func _on_runtime_checkpoint_timer_timeout() -> void:
+	flush_runtime_checkpoint(
+		_pending_runtime_reason if not _pending_runtime_reason.is_empty() else "runtime_changed"
+	)
+
+
+func _capture_runtime_checkpoint() -> Dictionary:
+	var provider := _get_runtime_checkpoint_provider()
+	if provider == null or not provider.has_method("build_runtime_save_snapshot"):
+		return {}
+	var value: Variant = provider.call("build_runtime_save_snapshot")
+	return (value as Dictionary).duplicate(true) if value is Dictionary else {}
+
+
+func _get_runtime_checkpoint_provider() -> Node:
+	if _runtime_checkpoint_provider == null:
+		return null
+	var provider: Variant = _runtime_checkpoint_provider.get_ref()
+	return provider as Node if provider is Node and is_instance_valid(provider) else null
 
 
 ## — 手电筒模块持久化 —

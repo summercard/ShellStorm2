@@ -179,6 +179,39 @@ func get_all_insured_items() -> Array[Dictionary]:
 func get_occupied_slots() -> Array[Dictionary]:
 	return get_all_insured_items()
 
+
+## 存档用完整格位快照，保留空格和原始索引，避免恢复后 UI 槽位跳动。
+func get_slots_snapshot() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for index in _insurance_slots.size():
+		var slot := _insurance_slots[index]
+		if slot.is_empty():
+			result.append({})
+		else:
+			result.append({
+				"item": slot.item.duplicate(true),
+				"count": maxi(1, slot.count),
+				"insured_at": slot.insured_at,
+				"insurance_slot": index,
+			})
+	return result
+
+
+func restore_slots_snapshot(snapshot: Array) -> void:
+	for slot in _insurance_slots:
+		slot.clear()
+	for index in mini(snapshot.size(), _insurance_slots.size()):
+		if not snapshot[index] is Dictionary:
+			continue
+		var entry := snapshot[index] as Dictionary
+		var item := entry.get("item", {}) as Dictionary
+		if item.is_empty():
+			continue
+		_insurance_slots[index].item = WeaponInstance.ensure_weapon_item(item).duplicate(true)
+		_insurance_slots[index].count = maxi(1, int(entry.get("count", 1)))
+		_insurance_slots[index].insured_at = int(entry.get("insured_at", Time.get_unix_time_from_system()))
+	insurance_changed.emit()
+
 ## 是否有保险某物品
 func has_item(item_id: String) -> bool:
 	for slot in _insurance_slots:

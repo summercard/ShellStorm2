@@ -161,10 +161,17 @@ var _hud_timer_label: Label = null
 var _hud_run_elapsed := 0.0
 var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
+var _runtime_restore_snapshot: Dictionary = {}
+var _runtime_persistence_active := false
 
 
 func _ready() -> void:
 	add_to_group("room_game_mode")
+	if not test_mode and BaseManager != null:
+		var candidate := BaseManager.get_active_run_checkpoint()
+		if str(candidate.get("schema", "")) == "runtime_player_state_v1":
+			_runtime_restore_snapshot = candidate
+			run_seed_override = int(candidate.get("run_seed", run_seed_override))
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -209,6 +216,170 @@ func _ready() -> void:
 	status_label.text = "%s · 初始钥匙 1，把战利品安全带到撤离点" % gameplay_theme.fantasy
 	_refresh_loot_label()
 	generation_completed.emit(get_generation_snapshot())
+	call_deferred("_activate_runtime_persistence")
+
+
+func _exit_tree() -> void:
+	if not test_mode and BaseManager != null and _runtime_persistence_active:
+		BaseManager.unregister_runtime_checkpoint_provider(self, true)
+	_runtime_persistence_active = false
+
+
+func _activate_runtime_persistence() -> void:
+	if test_mode or BaseManager == null or not is_inside_tree():
+		return
+	if not _runtime_restore_snapshot.is_empty():
+		_restore_runtime_save_snapshot(_runtime_restore_snapshot)
+	_runtime_persistence_active = true
+	BaseManager.register_runtime_checkpoint_provider(self)
+	if _inventory != null and not _inventory.inventory_changed.is_connected(_on_runtime_inventory_changed):
+		_inventory.inventory_changed.connect(_on_runtime_inventory_changed)
+	if _insurance != null and not _insurance.insurance_changed.is_connected(_on_runtime_insurance_changed):
+		_insurance.insurance_changed.connect(_on_runtime_insurance_changed)
+	if player != null:
+		if not player.weapon_loadout_changed.is_connected(_on_runtime_weapon_changed):
+			player.weapon_loadout_changed.connect(_on_runtime_weapon_changed)
+		if not player.backpack_equipment_changed.is_connected(_on_runtime_backpack_changed):
+			player.backpack_equipment_changed.connect(_on_runtime_backpack_changed)
+	BaseManager.queue_runtime_checkpoint("runtime_ready", 0.1)
+
+
+func _on_runtime_inventory_changed() -> void:
+	_queue_runtime_autosave("inventory_changed")
+
+
+func _on_runtime_insurance_changed() -> void:
+	_queue_runtime_autosave("insurance_changed")
+
+
+func _on_runtime_weapon_changed(_snapshot: Dictionary) -> void:
+	_queue_runtime_autosave("weapon_changed")
+
+
+func _on_runtime_backpack_changed(_snapshot: Dictionary) -> void:
+	_queue_runtime_autosave("backpack_changed")
+
+
+func _queue_runtime_autosave(reason: String) -> void:
+	if _runtime_persistence_active and not _completed and BaseManager != null:
+		BaseManager.queue_runtime_checkpoint(reason)
+
+
+func build_runtime_save_snapshot() -> Dictionary:
+	if player == null or _inventory == null or _insurance == null:
+		return {}
+	var weapon_items: Array[Dictionary] = []
+	for slot_index in range(2):
+		weapon_items.append(player.get_equipped_weapon_item_for_slot(slot_index))
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	# 场景卸载时子节点可能已经离开 SceneTree；此时读取 global_position 会触发引擎错误。
+	# Tower 根节点没有运行时位移，因此本地 position 是安全的最终兜底。
+	var position := player.global_position if player.is_inside_tree() else player.position
+	return {
+		"valid": true,
+		"schema": "runtime_player_state_v1",
+		"checkpoint_id": "runtime_player_state_v1",
+		"layout_id": "runtime_player_state_v1",
+		"scope": "base" if _current_room_id == "facility" else "combat",
+		"saved_at_unix": int(Time.get_unix_time_from_system()),
+		"run_seed": run_seed,
+		"current_room_id": _current_room_id,
+		"current_floor_index": _runtime_current_floor_index(),
+		"player_position": [position.x, position.y, position.z],
+		"player_rotation_y": player.rotation.y,
+		"player_hp": player.current_hp,
+		"inventory_capacity": _inventory.get_capacity(),
+		"inventory_slots": _inventory.get_slots_snapshot(),
+		"insurance_capacity": _insurance.get_max_slots(),
+		"insurance_slots": _insurance.get_slots_snapshot(),
+		"equipped_weapon_items": weapon_items,
+		"active_weapon_slot": player.get_active_weapon_slot(),
+		"equipped_backpack_item": player.get_equipped_backpack_item(),
+		"flashlight_module_id": flashlight.get_module_id() if flashlight != null else "basic",
+		"flashlight_charge_ratio": flashlight.get_charge_ratio() if flashlight != null else 1.0,
+		"quick_item_ids": _quick_item_ids.duplicate(),
+		"room_key_count": _room_key_count,
+		"run_value": _run_value,
+		"kills": _kills,
+		"run_currency": GameManager.currency,
+		"edge_states": _open_edges.duplicate(true),
+	}
+
+
+func _runtime_current_floor_index() -> int:
+	return 0
+
+
+func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
+	var saved_floor_index := int(snapshot.get("current_floor_index", 0))
+	if saved_floor_index > 0 and has_method("_ensure_floor_generated"):
+		call("_ensure_floor_generated", saved_floor_index, "runtime_restore")
+	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
+	if player.has_method("clear_equipped_backpack"):
+		player.clear_equipped_backpack()
+	if not backpack.is_empty():
+		player.equip_backpack_item(backpack)
+	_inventory.set_capacity(maxi(1, int(snapshot.get("inventory_capacity", BASE_INVENTORY_CAPACITY))))
+	var inventory_slots: Variant = snapshot.get("inventory_slots", [])
+	if inventory_slots is Array:
+		_inventory.restore_slots_snapshot(inventory_slots as Array)
+	_insurance.set_max_slots(maxi(0, int(snapshot.get("insurance_capacity", _insurance.get_max_slots()))))
+	var insurance_slots: Variant = snapshot.get("insurance_slots", [])
+	if insurance_slots is Array:
+		_insurance.restore_slots_snapshot(insurance_slots as Array)
+	player.clear_all_equipped_weapons()
+	var weapon_items: Variant = snapshot.get("equipped_weapon_items", [])
+	if weapon_items is Array:
+		for slot_index in mini(2, (weapon_items as Array).size()):
+			var item: Variant = (weapon_items as Array)[slot_index]
+			if item is Dictionary and not (item as Dictionary).is_empty():
+				player.equip_weapon_item_to_slot(item as Dictionary, slot_index)
+	var active_slot := clampi(int(snapshot.get("active_weapon_slot", 0)), 0, 1)
+	if not player.get_equipped_weapon_item_for_slot(active_slot).is_empty():
+		player.switch_weapon_slot(active_slot)
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight != null:
+		player.restore_flashlight_module(str(snapshot.get("flashlight_module_id", "basic")))
+		flashlight.set_charge_ratio(float(snapshot.get("flashlight_charge_ratio", 1.0)))
+	_quick_item_ids.assign(snapshot.get("quick_item_ids", ["", ""]) as Array)
+	while _quick_item_ids.size() < 2:
+		_quick_item_ids.append("")
+	_quick_item_ids.resize(2)
+	_room_key_count = maxi(0, int(snapshot.get("room_key_count", 1)))
+	_run_value = maxi(0, int(snapshot.get("run_value", 0)))
+	_kills = maxi(0, int(snapshot.get("kills", 0)))
+	GameManager.currency = maxi(0, int(snapshot.get("run_currency", 0)))
+	GameManager.currency_changed.emit(GameManager.currency)
+	var edge_states: Variant = snapshot.get("edge_states", {})
+	if edge_states is Dictionary:
+		for edge_value in (edge_states as Dictionary).keys():
+			var edge := str(edge_value)
+			if _open_edges.has(edge):
+				var opened := bool((edge_states as Dictionary)[edge_value])
+				_open_edges[edge] = opened
+				var edge_rooms := edge.split("|", false, 1)
+				if edge_rooms.size() == 2:
+					_refresh_edge_visuals(edge_rooms[0], edge_rooms[1], opened)
+		minimap.configure(_records, _open_edges)
+	var room_id := str(snapshot.get("current_room_id", ""))
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room != null:
+		_current_room_id = ""
+		_on_room_entered(room)
+	var saved_position: Variant = snapshot.get("player_position", [])
+	if saved_position is Array and (saved_position as Array).size() >= 3:
+		player.global_position = Vector3(
+			float((saved_position as Array)[0]),
+			float((saved_position as Array)[1]),
+			float((saved_position as Array)[2]),
+		)
+	player.rotation.y = float(snapshot.get("player_rotation_y", player.rotation.y))
+	player.current_hp = clampi(int(snapshot.get("player_hp", player.current_hp)), 1, player.max_hp)
+	player.hp_changed.emit(player.current_hp, player.max_hp)
+	if _inventory_ui != null:
+		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+	_refresh_quick_item_hud()
+	_refresh_loot_label()
 
 
 ## 每局只在初始化时从 BaseData 注入模块；局内仍由 PlayerFlashlight3D 拒绝换装。
@@ -1386,6 +1557,8 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 			previous_room.hide_door_prompts()
 	_current_room_id = room.room_id
 	room_entered.emit(room)
+	if _runtime_persistence_active and BaseManager != null:
+		BaseManager.flush_runtime_checkpoint("room_transition")
 	minimap.set_current_room(room.room_id)
 	_update_room_streaming(room.room_id)
 	room_label.text = "%s · %s/%s" % [room.room_id, room.room_type, room.size_class.to_upper()]
@@ -2034,6 +2207,7 @@ func _on_merchant_closed() -> void:
 func _on_run_currency_changed(amount: int) -> void:
 	_run_value = amount
 	_refresh_loot_label()
+	_queue_runtime_autosave("currency_changed")
 
 
 func _resolve_event_room(room: DungeonRoom3D) -> void:
@@ -3545,6 +3719,7 @@ func _spawn_extraction_attackers(stage: int) -> void:
 
 
 func _on_player_hp_changed(current: int, maximum: int) -> void:
+	_queue_runtime_autosave("health_changed")
 	hp_label.text = "%d / %d" % [current, maximum]
 	hp_bar.max_value = maxi(1, maximum)
 	hp_bar.value = clampi(current, 0, maximum)
@@ -3566,6 +3741,7 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:
+	_queue_runtime_autosave("ammo_changed")
 	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
 	var weapon_snapshot := player.get_weapon_snapshot() if player != null else {}
 	ammo_label.text = "近战 · 三段" if bool(weapon_snapshot.get("melee", false)) else "%d / %d" % [current, maximum]
@@ -3725,7 +3901,11 @@ func _finish_run(success: bool) -> void:
 				) as Dictionary
 				if bool(insurance_return.get("success", false)):
 					_insurance.clear_all()
-			# 死亡:保留检查点(电量不动,允许续局)
+			# 玩家确认死亡后行动已经结算，不能再恢复到结算前的战斗房间。
+			BaseManager.clear_active_run_checkpoint("run_death_settled")
+		# 结算后的场景卸载不再回写旧运行态；保险/战利品已经进入长期事务。
+		BaseManager.unregister_runtime_checkpoint_provider(self, false)
+		_runtime_persistence_active = false
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
@@ -4032,17 +4212,7 @@ func _on_flashlight_state_changed(state_id: String, context: Dictionary) -> void
 
 ## 行动检查点由其它局内系统决定何时创建；本模块只在已有检查点上补写自身状态。
 func _persist_flashlight_state_to_checkpoint() -> void:
-	if player == null:
-		return
-	var snapshot := BaseManager.get_active_run_checkpoint()
-	if snapshot.is_empty() or not bool(snapshot.get("valid", false)):
-		return
-	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
-	if flashlight == null:
-		return
-	snapshot["flashlight_charge_ratio"] = float(flashlight.get_charge_ratio())
-	snapshot["flashlight_module_id"] = str(flashlight.get_module_id())
-	BaseManager.set_active_run_checkpoint(snapshot, "flashlight_state")
+	_queue_runtime_autosave("flashlight_state")
 
 
 ## 物理 tick 推进电量闪烁 (低/临界/耗尽档 3Hz/5.5Hz)
