@@ -3,7 +3,8 @@ extends Node
 const TOWER := preload("res://scenes/TowerDescent3D.tscn")
 const VENDING_OUTPUT := "res://outputs/verification/formal_vending_in_base.png"
 const FACILITY_ROW_OUTPUT := "res://outputs/verification/formal_mission_workshop_in_base.png"
-const DECOR_OUTPUT := "res://outputs/verification/formal_facility_wall_decor.png"
+const VAULT_OUTPUT := "res://outputs/verification/formal_vault_locker_station.png"
+const FATE_COLLECTION_OUTPUT := "res://outputs/verification/formal_fate_collection_retro_tv.png"
 
 
 func _ready() -> void:
@@ -16,13 +17,20 @@ func _ready() -> void:
 	var vending := _find_facility(world, "base_vending")
 	var mission := _find_facility(world, "mission_operations")
 	var workshop := _find_facility(world, "weapon_workshop")
-	var locker_decor := world.find_child("赛博储物站_墙边装饰", true, false) as Node3D
-	var retro_decor := world.find_child("复古电视站_墙边装饰", true, false) as Node3D
+	var vault := _find_facility(world, "vault")
+	var fate_collection := _find_facility(world, "fate_collection")
 	var workshop_stool := world.find_child("维修圆凳_独立装饰", true, false) as Node3D
 	var mission_chair := world.find_child("战术指挥椅_独立装饰", true, false) as Node3D
 	var art_layout := world.find_child("基地99层_美术布置层", true, false) as Node3D
-	_check(vending != null and mission != null and workshop != null, "三个正式基地设施未全部实例化", failures)
-	_check(locker_decor != null and retro_decor != null, "两个墙边装饰设施未全部实例化", failures)
+	_check(
+		vending != null and mission != null and workshop != null and vault != null and fate_collection != null,
+		"五个正式模型基地设施未全部实例化",
+		failures
+	)
+	if vault != null:
+		_check("locker_station" in str(vault.get_meta("asset_source", "")), "保险柜未使用储物站正式模型", failures)
+	if fate_collection != null:
+		_check("retro_tv_station" in str(fate_collection.get_meta("asset_source", "")), "命运卡收藏室未使用复古电视正式模型", failures)
 	_check(workshop_stool != null and mission_chair != null, "两把独立座椅未全部实例化", failures)
 	if workshop_stool != null:
 		_check(not workshop_stool.is_in_group("base_facility"), "维修圆凳不应绑定设施交互", failures)
@@ -41,7 +49,7 @@ func _ready() -> void:
 			for light_node in light_root.get_children():
 				if light_node is Light3D:
 					_check((light_node as Light3D).shadow_enabled, "%s 没有启用可编辑阴影" % light_node.name, failures)
-	for facility in [vending, mission, workshop]:
+	for facility in [vending, mission, workshop, vault, fate_collection]:
 		if facility != null:
 			_check(_faces_room(facility), "%s 正面没有朝向基地房间内部" % facility.facility_id, failures)
 	if vending != null:
@@ -53,18 +61,15 @@ func _ready() -> void:
 		_place_player_for_view(world, middle + _forward(mission) * 3.1)
 		await _settle()
 		_save(FACILITY_ROW_OUTPUT, "情报台/工作台基地实景验收图保存失败", failures)
-	if locker_decor != null and retro_decor != null:
-		_check(_faces_room_node(locker_decor), "储物站装饰正面没有朝向基地房间内部", failures)
-		_check(_faces_room_node(retro_decor), "电视站装饰正面没有朝向基地房间内部", failures)
-		_check(not locker_decor.is_in_group("base_facility"), "储物站装饰不应注册为交互设施", failures)
-		_check(not retro_decor.is_in_group("base_facility"), "电视站装饰不应注册为交互设施", failures)
-		var decor_middle := (locker_decor.global_position + retro_decor.global_position) * 0.5
-		_place_player_for_view(world, decor_middle + _forward_node(locker_decor) * 4.0)
-		world.player.look_at(decor_middle, Vector3.UP)
+	if vault != null and fate_collection != null:
+		_frame_facility(vault, 9.0)
 		await _settle()
-		_save(DECOR_OUTPUT, "墙边装饰设施验收图保存失败", failures)
+		_save(VAULT_OUTPUT, "储物站保险柜验收图保存失败", failures)
+		_frame_facility(fate_collection, 10.0)
+		await _settle()
+		_save(FATE_COLLECTION_OUTPUT, "电视站命运卡收藏室验收图保存失败", failures)
 	if failures.is_empty():
-		print("FORMAL_ASSET_PLACEMENT_VISUAL_OK: 三交互设施、两墙边装饰与两把独立座椅验收图已生成")
+		print("FORMAL_ASSET_PLACEMENT_VISUAL_OK: 储物站保险柜、电视收藏室、三既有模型设施与两把独立座椅验收图已生成")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -103,6 +108,19 @@ func _faces_room_node(node: Node3D) -> bool:
 func _place_player_for_view(world: TowerDescent3D, position: Vector3) -> void:
 	world.player.global_position = position
 	world.player.velocity = Vector3.ZERO
+
+
+func _frame_facility(facility: BaseFacility3D, distance: float) -> void:
+	var previous := get_node_or_null("FacilityAcceptanceCamera") as Camera3D
+	if previous != null:
+		previous.free()
+	var camera := Camera3D.new()
+	camera.name = "FacilityAcceptanceCamera"
+	add_child(camera)
+	camera.current = true
+	camera.fov = 55.0
+	camera.global_position = facility.global_position + _forward(facility) * distance + Vector3.UP * 6.0
+	camera.look_at(facility.global_position + Vector3.UP * 2.0, Vector3.UP)
 
 
 func _settle() -> void:

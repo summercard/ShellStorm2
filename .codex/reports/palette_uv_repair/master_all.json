@@ -1,0 +1,39 @@
+{
+  "blend": "C:\\Users\\zhuangmenghong\\Documents\\图片制作\\新建文件夹\\中文游戏资产成品\\风格统一重制V3\\00_六类游戏资产_风格统一总合集_v002.blend",
+  "passed": false,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": false,
+    "has_output_meshes": false,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_faces_at_cell_centers": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 0,
+  "polygon_count": 0,
+  "centered_polygon_count": 0,
+  "uv_reports": [],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/candy_sniper/wpn_candy_sniper_visual_top3d_v003.glb" id="1_visual"]
 
 [node name="糖果狙击枪" type="Node3D"]
 metadata/asset_name_cn = "糖果狙击枪"
 metadata/logic_id = "bp_sniper"
-metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v001.blend"
+metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/candy_sniper/wpn_candy_sniper_source_v003.blend"
 metadata/grip_contract = "root origin"
 metadata/forward_axis = "-Z"
 

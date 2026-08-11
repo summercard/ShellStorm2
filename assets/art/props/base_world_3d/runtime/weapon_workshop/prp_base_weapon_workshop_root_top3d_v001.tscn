@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/weapon_workshop/prp_base_weapon_workshop_visual_top3d_v003.glb" id="2_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/weapon_workshop/prp_base_weapon_workshop_visual_top3d_v005.glb" id="2_visual"]
 
 [sub_resource type="BoxShape3D" id="ShapeInteraction"]
 size = Vector3(6.382402, 4.080000, 4.800814)
@@ -18,7 +18,7 @@ display_name = "枪械工坊"
 description = "制作、升级与调整枪械"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
 metadata/asset_name_cn = "赛博维修工作台"
-metadata/asset_source = "res://assets/art/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v003.blend"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/weapon_workshop/prp_base_weapon_workshop_source_v005.blend"
 metadata/forward_axis = "-Z"
 
 [node name="InteractionShape" type="CollisionShape3D" parent="."]

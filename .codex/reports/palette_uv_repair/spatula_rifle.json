@@ -1,0 +1,54 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\weapons\\weapon_3d\\source\\spatula_rifle\\wpn_spatula_rifle_source_v002.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_faces_at_cell_centers": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 1,
+  "polygon_count": 3752,
+  "centered_polygon_count": 3752,
+  "uv_reports": [
+    {
+      "object": "锅铲步枪_主体_金属哑光反光",
+      "polygon_count": 3752,
+      "centered_polygon_count": 3752,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

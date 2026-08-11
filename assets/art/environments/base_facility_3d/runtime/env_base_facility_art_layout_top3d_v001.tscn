@@ -4,8 +4,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn" id="3_workshop"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn" id="4_vending"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/locker_station/prp_base_locker_station_visual_top3d_v002.glb" id="5_locker"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v002.glb" id="6_retro"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d_v001.tscn" id="5_locker"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn" id="6_retro"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
 
@@ -86,10 +86,11 @@ facility_id = "base_console"
 display_name = "基地管理终端"
 menu_scene_path = "res://scenes/BaseMenu.tscn"
 
-[node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+[node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("5_locker")]
 position = Vector3(-9, 0, 11.6)
 facility_id = "vault"
 display_name = "保险柜"
+description = "使用赛博储物站模型管理长期仓储与当前背包"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
 
 [node name="怪物档案台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
@@ -98,10 +99,11 @@ facility_id = "monster_archive"
 display_name = "怪物档案台"
 menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
 
-[node name="命运卡收藏台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
+[node name="命运卡收藏室" parent="设施交互节点_可移动旋转" instance=ExtResource("6_retro")]
 position = Vector3(3, 0, 11.6)
 facility_id = "fate_collection"
-display_name = "命运卡收藏台"
+display_name = "命运卡收藏室"
+description = "使用复古游戏电视站模型浏览已发现的命运卡片"
 menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
 
 [node name="自动贩卖机" parent="设施交互节点_可移动旋转" instance=ExtResource("4_vending")]
@@ -112,18 +114,6 @@ menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
 
 [node name="场景装饰_可自由增删" type="Node3D" parent="."]
 metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"
-
-[node name="赛博储物站_墙边装饰" parent="场景装饰_可自由增删" instance=ExtResource("5_locker")]
-position = Vector3(-11.75, 0, -5.8)
-rotation = Vector3(0, -1.570796, 0)
-metadata/placement_role = "基地墙边装饰"
-metadata/interactive = false
-
-[node name="复古电视站_墙边装饰" parent="场景装饰_可自由增删" instance=ExtResource("6_retro")]
-position = Vector3(-11.75, 0, 4.7)
-rotation = Vector3(0, -1.570796, 0)
-metadata/placement_role = "基地墙边装饰"
-metadata/interactive = false
 
 [node name="维修圆凳_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("7_stool")]
 position = Vector3(-3, 0, -9.8)

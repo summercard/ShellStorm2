@@ -85,11 +85,11 @@ position = Vector3(0.129002424, 0, -0.010887273)
 position = Vector3(0, 0.393939395, -0.218181818)
 
 [node name="StowedWeaponSocketPrimary" type="Marker3D" parent="VisualRoot/BunnyRig"]
-position = Vector3(-0.42, 1.12, 0.25)
+position = Vector3(-0.36, 0.82, 0.54)
 rotation = Vector3(-1.5708, 0, 0)
 
 [node name="StowedWeaponSocketSecondary" type="Marker3D" parent="VisualRoot/BunnyRig"]
-position = Vector3(0.42, 1.12, 0.25)
+position = Vector3(0.36, 0.82, 0.54)
 rotation = Vector3(-1.5708, 0, 0)
 
 [node name="BackpackSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]

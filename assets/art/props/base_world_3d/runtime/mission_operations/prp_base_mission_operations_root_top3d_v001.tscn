@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_operations/prp_base_mission_operations_visual_top3d_v003.glb" id="2_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/mission_operations/prp_base_mission_operations_visual_top3d_v005.glb" id="2_visual"]
 
 [sub_resource type="BoxShape3D" id="ShapeInteraction"]
 size = Vector3(6.400000, 4.352326, 4.478988)
@@ -17,7 +17,7 @@ facility_id = "mission_operations"
 display_name = "远征情报终端"
 description = "查看本轮楼层、任务与下行规则"
 metadata/asset_name_cn = "战术情报指挥桌"
-metadata/asset_source = "res://assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v003.blend"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/mission_operations/prp_base_mission_operations_source_v005.blend"
 metadata/forward_axis = "-Z"
 
 [node name="InteractionShape" type="CollisionShape3D" parent="."]

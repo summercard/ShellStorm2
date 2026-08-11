@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/water_tank_blaster/wpn_water_tank_blaster_visual_top3d_v003.glb" id="1_visual"]
 
 [node name="水箱爆能枪" type="Node3D"]
 metadata/asset_name_cn = "水箱爆能枪"
 metadata/logic_id = "bp_machinegun"
-metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v001.blend"
+metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/water_tank_blaster/wpn_water_tank_blaster_source_v003.blend"
 metadata/grip_contract = "root origin"
 metadata/forward_axis = "-Z"
 

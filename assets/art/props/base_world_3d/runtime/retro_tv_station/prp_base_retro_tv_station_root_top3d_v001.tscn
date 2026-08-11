@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v002.glb" id="2_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/components/retro_tv_station/prp_base_retro_tv_station_visual_top3d_v004.glb" id="2_visual"]
 
 [sub_resource type="BoxShape3D" id="ShapeInteraction"]
 size = Vector3(6.385462, 5.620072, 5.101118)
@@ -17,7 +17,7 @@ facility_id = ""
 display_name = "复古游戏电视站"
 description = "未开放设施资产；已入库，暂不绑定基地功能"
 metadata/asset_name_cn = "复古游戏电视站"
-metadata/asset_source = "res://assets/art/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v002.blend"
+metadata/asset_source = "res://assets/art/props/base_world_3d/source/retro_tv_station/prp_base_retro_tv_station_source_v004.blend"
 metadata/forward_axis = "-Z"
 
 [node name="InteractionShape" type="CollisionShape3D" parent="."]
@@ -33,6 +33,7 @@ position = Vector3(0.007269, 2.410036, 0.010490)
 shape = SubResource("ShapeBody")
 
 [node name="Visual" type="Node3D" parent="."]
+rotation = Vector3(0, 3.141593, 0)
 
 [node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
 

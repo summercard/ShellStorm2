@@ -286,7 +286,9 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"current_room_id": _current_room_id,
 		"current_floor_index": _runtime_current_floor_index(),
 		"player_position": [position.x, position.y, position.z],
-		"player_rotation_y": player.rotation.y,
+		# 玩家根节点同时是固定俯视相机的父节点，不能持久化角色朝向。
+		# 武器/角色朝向由 aim_yaw 与表现层单独管理；保留字段仅用于旧存档结构兼容。
+		"player_rotation_y": 0.0,
 		"player_hp": player.current_hp,
 		"inventory_capacity": _inventory.get_capacity(),
 		"inventory_slots": _inventory.get_slots_snapshot(),
@@ -373,7 +375,9 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 			float((saved_position as Array)[1]),
 			float((saved_position as Array)[2]),
 		)
-	player.rotation.y = float(snapshot.get("player_rotation_y", player.rotation.y))
+	# 旧存档曾写入约 +/-PI 的玩家根节点旋转，恢复后会连同子相机一起掉头，
+	# 造成整幅画面与输入的屏幕相对方向同时反转。固定相机项目中根节点必须归零。
+	player.rotation.y = 0.0
 	player.current_hp = clampi(int(snapshot.get("player_hp", player.current_hp)), 1, player.max_hp)
 	player.hp_changed.emit(player.current_hp, player.max_hp)
 	if _inventory_ui != null:

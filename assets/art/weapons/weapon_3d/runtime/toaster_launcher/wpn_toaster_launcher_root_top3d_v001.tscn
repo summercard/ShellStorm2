@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/weapons/weapon_3d/components/toaster_launcher/wpn_toaster_launcher_visual_top3d_v003.glb" id="1_visual"]
 
 [node name="烤面包机发射器" type="Node3D"]
 metadata/asset_name_cn = "烤面包机发射器"
 metadata/logic_id = "bp_launcher"
-metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v001.blend"
+metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/toaster_launcher/wpn_toaster_launcher_source_v003.blend"
 metadata/grip_contract = "root origin"
 metadata/forward_axis = "-Z"
 

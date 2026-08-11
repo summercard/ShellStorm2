@@ -142,9 +142,14 @@ func _setup_standalone_panels() -> void:
 
 	inventory_shell = PanelContainer.new()
 	inventory_shell.name = "CharacterInventoryShell"
-	inventory_shell.set_anchors_preset(Control.PRESET_CENTER)
-	inventory_shell.custom_minimum_size = Vector2(1000, 620)
-	inventory_shell.position = Vector2(-500, -310)
+	# 角色装备是核心管理界面，使用接近全屏的响应式区域，避免固定 1000x620
+	# 在窄窗口中裁切武器配件、背包装备和快捷栏。
+	inventory_shell.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	inventory_shell.offset_left = 14.0
+	inventory_shell.offset_top = 14.0
+	inventory_shell.offset_right = -14.0
+	inventory_shell.offset_bottom = -14.0
+	inventory_shell.custom_minimum_size = Vector2.ZERO
 	inventory_shell.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(0, UIPalette.BORDER_NORMAL, 8, 2)
 	)
@@ -152,10 +157,10 @@ func _setup_standalone_panels() -> void:
 	add_child(inventory_shell)
 
 	var shell_margin := MarginContainer.new()
-	shell_margin.add_theme_constant_override("margin_left", 18)
-	shell_margin.add_theme_constant_override("margin_top", 16)
-	shell_margin.add_theme_constant_override("margin_right", 18)
-	shell_margin.add_theme_constant_override("margin_bottom", 16)
+	shell_margin.add_theme_constant_override("margin_left", 20)
+	shell_margin.add_theme_constant_override("margin_top", 18)
+	shell_margin.add_theme_constant_override("margin_right", 20)
+	shell_margin.add_theme_constant_override("margin_bottom", 18)
 	inventory_shell.add_child(shell_margin)
 	var columns := HBoxContainer.new()
 	columns.name = "InventoryColumns"
@@ -164,7 +169,10 @@ func _setup_standalone_panels() -> void:
 
 	equipment_panel = PanelContainer.new()
 	equipment_panel.name = "CharacterEquipmentPanel"
-	equipment_panel.custom_minimum_size = Vector2(320, 0)
+	equipment_panel.custom_minimum_size = Vector2(420, 0)
+	equipment_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	equipment_panel.size_flags_stretch_ratio = 0.42
+	equipment_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	equipment_panel.add_theme_stylebox_override(
 		"panel", UIStyleFactory.make_panel_with_border(1, Color(0.32, 0.50, 0.68), 7, 1)
 	)
@@ -184,7 +192,7 @@ func _setup_standalone_panels() -> void:
 	equipment_margin.add_child(equipment_scroll)
 	var equipment_vbox := VBoxContainer.new()
 	equipment_vbox.name = "EquipmentVBox"
-	equipment_vbox.add_theme_constant_override("separation", 8)
+	equipment_vbox.add_theme_constant_override("separation", 6)
 	equipment_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	equipment_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	equipment_scroll.add_child(equipment_vbox)
@@ -291,13 +299,25 @@ func _setup_standalone_panels() -> void:
 		equipment_attachment_slots.append(weapon_attachment_slots)
 	equipment_weapon_slot = equipment_weapon_slots[0]
 	equipment_weapon_label = equipment_weapon_labels[0]
+	# 装备栏加宽后，将背包装备与快捷栏并排，避免底部内容被纵向裁切。
+	var equipment_support_row := HBoxContainer.new()
+	equipment_support_row.name = "EquipmentSupportRow"
+	equipment_support_row.add_theme_constant_override("separation", 18)
+	equipment_support_row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	equipment_vbox.add_child(equipment_support_row)
+	var backpack_section := VBoxContainer.new()
+	backpack_section.name = "BackpackEquipmentSection"
+	backpack_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	backpack_section.size_flags_stretch_ratio = 0.48
+	equipment_support_row.add_child(backpack_section)
 	var backpack_title := Label.new()
 	backpack_title.text = "背包装备 · 提供额外物品格"
 	backpack_title.add_theme_color_override("font_color", Color(0.52, 0.88, 1.0))
-	equipment_vbox.add_child(backpack_title)
+	backpack_title.add_theme_font_size_override("font_size", 12)
+	backpack_section.add_child(backpack_title)
 	var backpack_row := HBoxContainer.new()
 	backpack_row.add_theme_constant_override("separation", 10)
-	equipment_vbox.add_child(backpack_row)
+	backpack_section.add_child(backpack_row)
 	equipment_backpack_slot = _create_slot()
 	equipment_backpack_slot.name = "BackpackEquipmentSlot"
 	equipment_backpack_slot.custom_minimum_size = Vector2(76, 76)
@@ -312,14 +332,19 @@ func _setup_standalone_panels() -> void:
 	equipment_backpack_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	equipment_backpack_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	backpack_row.add_child(equipment_backpack_label)
+	var quick_section := VBoxContainer.new()
+	quick_section.name = "QuickItemEquipmentSection"
+	quick_section.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	quick_section.size_flags_stretch_ratio = 0.52
+	equipment_support_row.add_child(quick_section)
 	var quick_title := Label.new()
-	quick_title.text = "物品快捷栏 · 从背包拖入可主动使用物品"
+	quick_title.text = "物品快捷栏 · 从背包拖入"
 	quick_title.add_theme_color_override("font_color", Color(0.44, 0.90, 0.76))
 	quick_title.add_theme_font_size_override("font_size", 12)
-	equipment_vbox.add_child(quick_title)
+	quick_section.add_child(quick_title)
 	var quick_row := HBoxContainer.new()
 	quick_row.add_theme_constant_override("separation", 10)
-	equipment_vbox.add_child(quick_row)
+	quick_section.add_child(quick_row)
 	for quick_index in range(2):
 		var quick_slot := _create_slot()
 		quick_slot.name = "QuickItemSlot_%d" % quick_index
@@ -351,6 +376,8 @@ func _setup_standalone_panels() -> void:
 		UIStyleFactory.make_panel_with_border(1, UIPalette.BORDER_NORMAL, 6, 1),
 	)
 	inventory_panel.custom_minimum_size = Vector2(620, 0)
+	inventory_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inventory_panel.size_flags_stretch_ratio = 0.58
 	inventory_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	inventory_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	columns.add_child(inventory_panel)

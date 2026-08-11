@@ -1,8 +1,12 @@
 extends Node
 
 const PLAYER := preload("res://scenes/Player3D.tscn")
+const WEAPON_MODEL := preload("res://assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn")
 const OUTPUT := "res://outputs/verification/player3d_weapon_grip.png"
 const BACK_SOCKETS_OUTPUT := "res://outputs/verification/player3d_back_weapon_sockets.png"
+const BACK_SOCKETS_TOP_OUTPUT := "res://outputs/verification/player3d_back_weapon_sockets_top.png"
+const DUAL_NO_BACKPACK_OUTPUT := "res://outputs/verification/player3d_dual_back_weapons_no_backpack.png"
+const DUAL_NO_BACKPACK_TOP_OUTPUT := "res://outputs/verification/player3d_dual_back_weapons_no_backpack_top.png"
 
 
 func _ready() -> void:
@@ -101,6 +105,14 @@ func _ready() -> void:
 		push_error("Cannot prepare main/secondary back-socket preview")
 		get_tree().quit(1)
 		return
+	var largest_backpack := ItemRegistry.get_instance().get_item("equipment_backpack_8")
+	if (
+		not bool(sidearm_player.equip_backpack_item(largest_backpack).get("success", false))
+		or not bool(rifle_player.equip_backpack_item(largest_backpack).get("success", false))
+	):
+		push_error("Cannot prepare independent backpack/weapon socket clearance preview")
+		get_tree().quit(1)
+		return
 	await get_tree().process_frame
 	await get_tree().process_frame
 	camera.position = Vector3(0.0, 2.25, 5.6)
@@ -111,5 +123,51 @@ func _ready() -> void:
 		push_error("Cannot save Bunny main/secondary back-socket preview")
 		get_tree().quit(1)
 		return
-	print("BUNNY_V006_WEAPON_GRIP_VISUAL_OK: held grips and left-primary/right-secondary muzzle-down back sockets saved")
+	camera.position = Vector3(0.0, 5.8, 1.0)
+	camera.look_at_from_position(camera.position, Vector3(0.0, 0.70, 0.12), Vector3(0.0, 0.0, -1.0))
+	await get_tree().process_frame
+	var top_image := get_viewport().get_texture().get_image()
+	if top_image == null or top_image.is_empty() or top_image.save_png(BACK_SOCKETS_TOP_OUTPUT) != OK:
+		push_error("Cannot save Bunny top-down back-socket preview")
+		get_tree().quit(1)
+		return
+
+	# Art-only comparison: show both independent weapon sockets on one character
+	# with no backpack. Runtime still keeps one weapon active and one stowed.
+	sidearm_player.unequip_backpack_item()
+	sidearm_player.position.x = 0.0
+	rifle_player.visible = false
+	if sidearm_player.weapon != null:
+		sidearm_player.weapon.visible = false
+	var primary_preview := WEAPON_MODEL.instantiate() as WeaponModel3D
+	var primary_item := WeaponInstance.ensure_weapon_item(
+		ItemRegistry.get_instance().get_item("weapon_rifle")
+	)
+	primary_preview.name = "DualBackPrimaryPreview"
+	primary_preview.display_only = true
+	primary_preview.render_layers = 2
+	primary_preview.set_meta("weapon_item_data", primary_item)
+	sidearm_player.avatar.get_stowed_weapon_socket(0).add_child(primary_preview)
+	primary_preview.position = Vector3.ZERO
+	primary_preview.rotation = Vector3.ZERO
+	primary_preview.scale = Vector3.ONE * 0.52
+	await get_tree().process_frame
+	await get_tree().process_frame
+	camera.position = Vector3(0.0, 2.25, 5.6)
+	camera.look_at_from_position(camera.position, Vector3(0.0, 0.72, 0.12), Vector3.UP)
+	await get_tree().process_frame
+	var dual_back_image := get_viewport().get_texture().get_image()
+	if dual_back_image == null or dual_back_image.is_empty() or dual_back_image.save_png(DUAL_NO_BACKPACK_OUTPUT) != OK:
+		push_error("Cannot save Bunny dual back-weapons preview without backpack")
+		get_tree().quit(1)
+		return
+	camera.position = Vector3(0.0, 5.8, 1.0)
+	camera.look_at_from_position(camera.position, Vector3(0.0, 0.70, 0.12), Vector3(0.0, 0.0, -1.0))
+	await get_tree().process_frame
+	var dual_top_image := get_viewport().get_texture().get_image()
+	if dual_top_image == null or dual_top_image.is_empty() or dual_top_image.save_png(DUAL_NO_BACKPACK_TOP_OUTPUT) != OK:
+		push_error("Cannot save Bunny top-down dual back-weapons preview without backpack")
+		get_tree().quit(1)
+		return
+	print("BUNNY_V006_WEAPON_GRIP_VISUAL_OK: held grip, backpack clearance, and no-backpack dual vertical sockets saved")
 	get_tree().quit(0)

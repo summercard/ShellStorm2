@@ -1,0 +1,358 @@
+{
+  "blend": "C:\\Users\\zhuangmenghong\\Documents\\图片制作\\新建文件夹\\中文游戏资产成品\\风格统一重制V3\\01_正式版本_待验收\\00_六类游戏资产_风格统一总合集_v004.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 31,
+  "polygon_count": 247039,
+  "valid_island_polygon_count": 247039,
+  "uv_reports": [
+    {
+      "object": "01_水箱爆能枪_主体_金属哑光反光",
+      "polygon_count": 5072,
+      "valid_island_polygon_count": 5072,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "02_扩音器加农炮_主体_金属哑光反光",
+      "polygon_count": 5512,
+      "valid_island_polygon_count": 5512,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "03_吉他爆能枪_主体_金属哑光反光",
+      "polygon_count": 6640,
+      "valid_island_polygon_count": 6640,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "04_锅铲步枪_主体_金属哑光反光",
+      "polygon_count": 3752,
+      "valid_island_polygon_count": 3752,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05_平底锅加农炮_主体_金属哑光反光",
+      "polygon_count": 7444,
+      "valid_island_polygon_count": 7444,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05_科幻自动贩卖机_UI灯光_柔和自发光",
+      "polygon_count": 51942,
+      "valid_island_polygon_count": 51942,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "05_科幻自动贩卖机_主体_金属哑光反光",
+      "polygon_count": 12610,
+      "valid_island_polygon_count": 12610,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "06_烤面包机发射器_主体_金属哑光反光",
+      "polygon_count": 2512,
+      "valid_island_polygon_count": 2512,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "07_瞄准镜加农炮_主体_金属哑光反光",
+      "polygon_count": 7434,
+      "valid_island_polygon_count": 7434,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "08_爆米花爆能枪_主体_金属哑光反光",
+      "polygon_count": 11744,
+      "valid_island_polygon_count": 11744,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "09_口香糖机加农炮_主体_金属哑光反光",
+      "polygon_count": 14390,
+      "valid_island_polygon_count": 14390,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "10_双管炮_主体_金属哑光反光",
+      "polygon_count": 3328,
+      "valid_island_polygon_count": 3328,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "11_饮料管爆能枪_主体_金属哑光反光",
+      "polygon_count": 8062,
+      "valid_island_polygon_count": 8062,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "12_鳄鱼加农炮_主体_金属哑光反光",
+      "polygon_count": 3005,
+      "valid_island_polygon_count": 3005,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "13_糖果狙击枪_主体_金属哑光反光",
+      "polygon_count": 3732,
+      "valid_island_polygon_count": 3732,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "14_相机爆能枪_主体_金属哑光反光",
+      "polygon_count": 3840,
+      "valid_island_polygon_count": 3840,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "15_纸巾盒加农炮_主体_金属哑光反光",
+      "polygon_count": 7346,
+      "valid_island_polygon_count": 7346,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "16_扫帚步枪_主体_金属哑光反光",
+      "polygon_count": 6054,
+      "valid_island_polygon_count": 6054,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "17_风扇爆能枪_主体_金属哑光反光",
+      "polygon_count": 6380,
+      "valid_island_polygon_count": 6380,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "18_吹风机_主体_金属哑光反光",
+      "polygon_count": 4440,
+      "valid_island_polygon_count": 4440,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "复古游戏电视站_UI灯光_柔和自发光",
+      "polygon_count": 1206,
+      "valid_island_polygon_count": 1206,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "复古游戏电视站_主体_金属哑光反光",
+      "polygon_count": 12448,
+      "valid_island_polygon_count": 12448,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "战术指挥椅_主体_金属哑光反光",
+      "polygon_count": 2220,
+      "valid_island_polygon_count": 2220,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "枪械工坊_UI灯光_柔和自发光",
+      "polygon_count": 2420,
+      "valid_island_polygon_count": 2420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "枪械工坊_主体_金属哑光反光",
+      "polygon_count": 21390,
+      "valid_island_polygon_count": 21390,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "赛博储物站_UI灯光_柔和自发光",
+      "polygon_count": 622,
+      "valid_island_polygon_count": 622,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "赛博储物站_主体_金属哑光反光",
+      "polygon_count": 15150,
+      "valid_island_polygon_count": 15150,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "赛博维修圆凳_UI灯光_柔和自发光",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "赛博维修圆凳_主体_金属哑光反光",
+      "polygon_count": 2488,
+      "valid_island_polygon_count": 2488,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "远征情报终端_UI灯光_柔和自发光",
+      "polygon_count": 3168,
+      "valid_island_polygon_count": 3168,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "远征情报终端_主体_金属哑光反光",
+      "polygon_count": 10418,
+      "valid_island_polygon_count": 10418,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "设施_01_精工金属_紫色骨架",
+      "设施_02_细腻哑光_青绿大面",
+      "设施_03_清漆反光_紫粉点缀",
+      "设施_04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}
