@@ -128,8 +128,10 @@ func _physics_process(delta: float) -> void:
 			_retire()
 			return
 		if collider.has_method("take_projectile_damage"):
-			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior)
+			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter)
 		else:
+			if shooter != null and collider.has_method("notify_attacked_by"):
+				collider.call("notify_attacked_by", shooter)
 			collider.call("take_damage", damage, critical, direction)
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
@@ -229,7 +231,7 @@ func _apply_chain_lightning(first_target: Node) -> void:
 		if nearest == null:
 			break
 		chain_damage = maxi(1, int(chain_damage * chain_scale))
-		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, fate_behavior)
+		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, fate_behavior, shooter)
 		_spawn_effect("impact", nearest.global_position + Vector3(0, 0.6, 0), bullet_color, 0.72)
 		visited[nearest.get_instance_id()] = true
 		current = nearest

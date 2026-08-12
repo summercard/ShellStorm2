@@ -673,6 +673,7 @@ func _perform_reload_explosion() -> void:
 		var enemy := value as Enemy3D
 		if enemy == null or enemy.ai_state == "dead" or player.global_position.distance_to(enemy.global_position) > radius:
 			continue
+		enemy.notify_attacked_by(player)
 		enemy.take_damage(maxi(1, int(damage * damage_scale)), false, (enemy.global_position - player.global_position).normalized())
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:

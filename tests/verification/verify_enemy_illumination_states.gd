@@ -112,6 +112,8 @@ func _ready() -> void:
 	fixture.set_light_enabled(false)
 	_verify_state(enemy, EnemyIllumination3D.STATE_DARKNESS, "room fixture switch off", failures)
 	await _verify_player_flashlight_registration(failures)
+	await _verify_real_player_flashlight_hit(failures)
+	await _verify_player_spill_does_not_light_behind(failures)
 
 	sun_blocker.queue_free()
 	await get_tree().physics_frame
@@ -180,11 +182,63 @@ func _verify_player_flashlight_registration(failures: Array[String]) -> void:
 		or spill == null
 		or fill == null
 		or not beam.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
-		or not spill.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+		or spill.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
 		or fill.is_in_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
 		or str(beam.get_meta("gameplay_light_kind", "")) != "flashlight"
 	):
-		failures.append("Player flashlight gameplay registration does not include only environment beam/spill")
+		failures.append("Only the player's forward spotlight may register as gameplay illumination")
+	player.queue_free()
+
+
+func _verify_real_player_flashlight_hit(failures: Array[String]) -> void:
+	var player := PLAYER_SCENE.instantiate() as Player3D
+	player.start_with_weapon = false
+	player.position = Vector3(120.0, 0.0, -6.0)
+	add_child(player)
+	await get_tree().process_frame
+	player.set_physics_process(false)
+	player.aim_direction = Vector3.BACK
+	var target := _make_enemy("melee_chaser", Vector3(120.0, 0.0, 0.0))
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
+	if flashlight == null:
+		failures.append("Real player flashlight hit test cannot find PlayerFlashlight3D")
+		target.queue_free()
+		player.queue_free()
+		return
+	flashlight.set_light_enabled(true)
+	flashlight.force_sync()
+	await get_tree().physics_frame
+	target.force_refresh_illumination()
+	var illumination := target.get_state_snapshot().get("illumination", {}) as Dictionary
+	if (
+		target.get_illumination_state() != EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
+		or str(illumination.get("dominant_light_kind", "")) != "flashlight"
+	):
+		failures.append(
+			"Real player spotlight is blocked by its owner's collision or misses illumination: %s"
+			% str(illumination)
+		)
+	target.queue_free()
+	player.queue_free()
+
+
+func _verify_player_spill_does_not_light_behind(failures: Array[String]) -> void:
+	var player := PLAYER_SCENE.instantiate() as Player3D
+	player.start_with_weapon = false
+	player.position = Vector3(150.0, 0.0, 0.0)
+	add_child(player)
+	await get_tree().process_frame
+	player.set_physics_process(false)
+	player.aim_direction = Vector3.FORWARD
+	var target := _make_enemy("melee_chaser", Vector3(150.0, 0.0, 3.0))
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
+	flashlight.set_light_enabled(true)
+	flashlight.force_sync()
+	await get_tree().physics_frame
+	target.force_refresh_illumination()
+	if target.get_illumination_state() != EnemyIllumination3D.STATE_DARKNESS:
+		failures.append("Player environment spill incorrectly lights a monster behind the spotlight")
+	target.queue_free()
 	player.queue_free()
 
 

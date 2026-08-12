@@ -443,9 +443,8 @@ func _build_lights() -> void:
 	_spill.name = "EnvironmentSpill"
 	_spill.top_level = true
 	_light_kit.add_child(_spill)
-	_spill.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
-	_spill.set_meta("gameplay_light_kind", "flashlight")
-	_spill.set_meta("gameplay_light_owner_instance_id", _player.get_instance_id() if _player != null else 0)
+	# 环境泛光只负责角色周围的画面可读性，不属于怪物玩法光照。
+	# 怪物只能被真正的前向探照灯 ForwardBeam 照亮，避免身后目标误判为“亮”。
 	_front_fill = SpotLight3D.new()
 	_front_fill.name = "AvatarFrontFill"
 	_front_fill.top_level = true

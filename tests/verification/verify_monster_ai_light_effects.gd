@@ -16,6 +16,7 @@ func _ready() -> void:
 
 	await _verify_state_effects_and_ui(failures)
 	await _verify_vision(player, failures)
+	await _verify_proximity_and_damage_aggro(player, failures)
 	await _verify_flashlight_hunter(player, failures)
 	await _verify_darkness_seeker(player, failures)
 	await _verify_room_light_search_does_not_leak_player(player, failures)
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 	player.queue_free()
 	if failures.is_empty():
-		print("MONSTER_AI_LIGHT_EFFECTS_OK: 70% debuff, sunlight DOT, shared overhead marker, managed vision, flashlight pursuit, darkness seeking and room-light search pass")
+		print("MONSTER_AI_LIGHT_EFFECTS_OK: 40% lit-state multipliers, sunlight DOT, shared overhead marker, managed vision, flashlight pursuit, darkness seeking and room-light search pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -36,11 +37,15 @@ func _verify_state_effects_and_ui(failures: Array[String]) -> void:
 	await get_tree().physics_frame
 	enemy.force_refresh_illumination()
 	var dark := enemy.get_state_snapshot()
+	var status_label := enemy.get_node_or_null("OverheadHealthBar/IlluminationStatusText") as Label3D
 	if (
 		str(dark.get("illumination_state", "")) != EnemyIllumination3D.STATE_DARKNESS
 		or not is_equal_approx(float(dark.get("illumination_move_multiplier", 0.0)), 1.0)
 		or not is_equal_approx(float(dark.get("illumination_attack_frequency_multiplier", 0.0)), 1.0)
-		or int(dark.get("illumination_ui_segment_count", 0)) != 1
+		or str(dark.get("illumination_ui_text", "")) != "暗"
+		or not bool(dark.get("illumination_ui_before_health_bar", false))
+		or status_label == null
+		or status_label.text != "暗"
 	):
 		failures.append("Darkness does not preserve baseline combat values/UI: %s" % str(dark))
 
@@ -49,16 +54,16 @@ func _verify_state_effects_and_ui(failures: Array[String]) -> void:
 	var lit := enemy.get_state_snapshot()
 	if (
 		str(lit.get("illumination_state", "")) != EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
-		or not is_equal_approx(float(lit.get("illumination_move_multiplier", 0.0)), 0.70)
-		or not is_equal_approx(float(lit.get("illumination_attack_frequency_multiplier", 0.0)), 0.70)
-		or not is_equal_approx(enemy.get_effective_move_speed(), enemy.move_speed * 0.70)
-		or int(lit.get("illumination_ui_segment_count", 0)) != 2
+		or not is_equal_approx(float(lit.get("illumination_move_multiplier", 0.0)), 0.40)
+		or not is_equal_approx(float(lit.get("illumination_attack_frequency_multiplier", 0.0)), 0.40)
+		or not is_equal_approx(enemy.get_effective_move_speed(), enemy.move_speed * 0.40)
+		or str(lit.get("illumination_ui_text", "")) != "亮"
 	):
-		failures.append("Artificial light does not apply the exact 70%% movement/attack frequency debuff: %s" % str(lit))
+		failures.append("Artificial light does not apply the exact 40%% movement/attack frequency multipliers: %s" % str(lit))
 	enemy.set("_attack_timer", 1.0)
 	enemy.call("_physics_process", 1.0)
-	if not is_equal_approx(float(enemy.get("_attack_timer")), 0.30):
-		failures.append("Artificial light attack frequency does not advance a 1s timer by exactly 0.70")
+	if not is_equal_approx(float(enemy.get("_attack_timer")), 0.60):
+		failures.append("Artificial light attack frequency does not advance a 1s timer by exactly 0.40")
 	lamp.light_energy = 0.0
 	enemy.force_refresh_illumination()
 	if not is_equal_approx(enemy.get_effective_move_speed(), enemy.move_speed):
@@ -77,7 +82,7 @@ func _verify_state_effects_and_ui(failures: Array[String]) -> void:
 	if (
 		str(sun_snapshot.get("illumination_state", "")) != EnemyIllumination3D.STATE_SUNLIGHT
 		or enemy.current_hp != hp_before - expected_loss
-		or int(sun_snapshot.get("illumination_ui_segment_count", 0)) != 3
+		or str(sun_snapshot.get("illumination_ui_text", "")) != "太阳"
 	):
 		failures.append("Sunlight does not apply 2%% max-HP damage and the three-segment UI marker")
 	var blocker := _make_blocker("EffectSunShadow", Vector3(40.0, 1.0, 43.0), Vector3(5.0, 4.0, 0.7))
@@ -87,8 +92,6 @@ func _verify_state_effects_and_ui(failures: Array[String]) -> void:
 	enemy.call("_tick_illumination_effects", 1.1)
 	if enemy.current_hp != shadow_hp:
 		failures.append("Sunlight damage continues after the monster enters a physical shadow")
-	if enemy.get_child_count() > 3:
-		failures.append("Temporary illumination UI adds a new per-enemy scene node")
 	enemy.queue_free()
 	lamp.queue_free()
 	sun.queue_free()
@@ -134,6 +137,12 @@ func _verify_flashlight_hunter(player: Player3D, failures: Array[String]) -> voi
 		or str(decision.get("light_response_policy", "")) != "light_hunter"
 	):
 		failures.append("Light-hunter does not pursue the owner of a real flashlight hit: %s" % str(decision))
+	var before_distance := enemy.global_position.distance_to(player.global_position)
+	enemy.set_runtime_active(true, true)
+	await get_tree().create_timer(0.65).timeout
+	var after_distance := enemy.global_position.distance_to(player.global_position)
+	if after_distance >= before_distance - 0.05:
+		failures.append("Flashlight awareness exists but does not drive the hunter toward the player: %.3f -> %.3f" % [before_distance, after_distance])
 	beam.look_at(Vector3(0.0, 1.0, -15.0), Vector3.UP)
 	enemy.force_refresh_illumination()
 	var lost := MonsterAIManager.force_refresh_enemy(enemy)
@@ -141,6 +150,39 @@ func _verify_flashlight_hunter(player: Player3D, failures: Array[String]) -> voi
 		failures.append("Flashlight stimulus remains active after the beam turns away")
 	enemy.queue_free()
 	beam.queue_free()
+	await get_tree().process_frame
+
+
+func _verify_proximity_and_damage_aggro(player: Player3D, failures: Array[String]) -> void:
+	player.position = Vector3(0.0, 0.0, 0.0)
+	var nearby := _make_enemy("melee_chaser", Vector3(0.0, 0.0, -4.0))
+	nearby.rotation.y = PI
+	await get_tree().physics_frame
+	var proximity := MonsterAIManager.force_refresh_enemy(nearby)
+	if str(proximity.get("awareness", "")) != "visual_contact":
+		failures.append("A player within 4.8m does not trigger 360-degree proximity awareness: %s" % str(proximity))
+	var nearby_before := nearby.global_position.distance_to(player.global_position)
+	nearby.set_runtime_active(true, true)
+	await get_tree().create_timer(0.65).timeout
+	if nearby.global_position.distance_to(player.global_position) >= nearby_before - 0.05:
+		failures.append("Close-range awareness exists but does not make the monster approach the player")
+	nearby.queue_free()
+
+	player.position = Vector3(0.0, 0.0, 0.0)
+	var distant := _make_enemy("melee_chaser", Vector3(0.0, 0.0, -24.0))
+	distant.notify_attacked_by(player)
+	var damage_decision := MonsterAIManager.force_refresh_enemy(distant)
+	if (
+		str(damage_decision.get("awareness", "")) != "damage_contact"
+		or int(damage_decision.get("target_instance_id", 0)) != player.get_instance_id()
+	):
+		failures.append("A distant monster does not aggro the player who damaged it: %s" % str(damage_decision))
+	var distant_before := distant.global_position.distance_to(player.global_position)
+	distant.set_runtime_active(true, true)
+	await get_tree().create_timer(0.75).timeout
+	if distant.global_position.distance_to(player.global_position) >= distant_before - 0.05:
+		failures.append("Damage aggro exists but does not drive the distant monster toward its attacker")
+	distant.queue_free()
 	await get_tree().process_frame
 
 

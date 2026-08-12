@@ -178,7 +178,10 @@ func _evaluate_sunlight(samples: Array[Vector3]) -> Dictionary:
 
 func _evaluate_local_lights(samples: Array[Vector3]) -> Dictionary:
 	var candidates: Array[Dictionary] = []
-	for light in _local_lights:
+	for light_value in _local_lights:
+		if not is_instance_valid(light_value):
+			continue
+		var light := light_value as Light3D
 		if not _is_active_light(light):
 			continue
 		for sample in samples:
@@ -198,7 +201,11 @@ func _evaluate_local_lights(samples: Array[Vector3]) -> Dictionary:
 		var candidate := candidates[index]
 		var light := candidate["light"] as Light3D
 		last_local_raycast_count += 1
-		if light == null or not _ray_is_clear(candidate["sample"], light.global_position):
+		if light == null or not _ray_is_clear(
+			candidate["sample"],
+			light.global_position,
+			_light_owner_exclusion(light)
+		):
 			continue
 		return {
 			"contribution": candidate["contribution"],
@@ -243,12 +250,15 @@ func _is_active_light(light: Light3D) -> bool:
 	)
 
 
-func _ray_is_clear(from: Vector3, to: Vector3) -> bool:
+func _ray_is_clear(from: Vector3, to: Vector3, extra_exclude: Array[RID] = []) -> bool:
 	if from.distance_squared_to(to) <= 0.0001:
 		return true
 	var exclude: Array[RID] = []
 	if is_instance_valid(_enemy):
 		exclude.append(_enemy.get_rid())
+	for rid in extra_exclude:
+		if rid.is_valid() and rid not in exclude:
+			exclude.append(rid)
 	var direction := (to - from).normalized()
 	var query := PhysicsRayQueryParameters3D.create(
 		from + direction * 0.025,
@@ -259,6 +269,17 @@ func _ray_is_clear(from: Vector3, to: Vector3) -> bool:
 	query.collide_with_areas = false
 	query.collide_with_bodies = true
 	return _enemy.get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _light_owner_exclusion(light: Light3D) -> Array[RID]:
+	var result: Array[RID] = []
+	var owner_instance_id := int(light.get_meta("gameplay_light_owner_instance_id", 0))
+	if owner_instance_id <= 0:
+		return result
+	var owner_object := instance_from_id(owner_instance_id)
+	if owner_object is CollisionObject3D and is_instance_valid(owner_object):
+		result.append((owner_object as CollisionObject3D).get_rid())
+	return result
 
 
 func _body_sample_points() -> Array[Vector3]:

@@ -11,6 +11,14 @@ enum ActivationType {
 	SHOW_INFO,
 }
 
+const FRONT_INTERACTION_PROFILES := {
+	# 这三件大型设施贴墙摆放，交互区必须落在朝向房间中心的可站立区域，
+	# 不能继续沿用包住整个模型的中心方盒。
+	"mission_operations": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
+	"weapon_workshop": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
+	"base_vending": {"width": 5.0, "depth": 4.4, "height": 3.4, "overlap": 0.30},
+}
+
 @export var facility_id := ""
 @export var display_name := "基地设施"
 @export_multiline var description := ""
@@ -30,6 +38,46 @@ enum ActivationType {
 var _player_in_range := false
 var _available := true
 var _snapshot: Dictionary = {}
+
+
+func configure_front_interaction_toward(world_target: Vector3) -> bool:
+	var profile := FRONT_INTERACTION_PROFILES.get(facility_id, {}) as Dictionary
+	if profile.is_empty():
+		return false
+	var interaction_shape := get_node_or_null("InteractionShape") as CollisionShape3D
+	var body_shape_node := get_node_or_null("StaticBody3D/CollisionShape3D") as CollisionShape3D
+	if interaction_shape == null or body_shape_node == null:
+		push_warning("[BaseFacility3D] Missing interaction/body shape: %s" % facility_id)
+		return false
+	var body_box := body_shape_node.shape as BoxShape3D
+	if body_box == null:
+		push_warning("[BaseFacility3D] Front interaction requires BoxShape3D body: %s" % facility_id)
+		return false
+
+	var local_target := to_local(world_target)
+	var toward_target := Vector2(local_target.x, local_target.z)
+	if toward_target.length_squared() < 0.0001:
+		return false
+	var width := float(profile.get("width", 5.0))
+	var depth := float(profile.get("depth", 3.8))
+	var height := float(profile.get("height", 3.4))
+	var overlap := float(profile.get("overlap", 0.3))
+	var front_box := BoxShape3D.new()
+	var front_offset := Vector3.ZERO
+	if absf(toward_target.x) > absf(toward_target.y):
+		var side := signf(toward_target.x)
+		front_box.size = Vector3(depth, height, width)
+		front_offset.x = side * (body_box.size.x * 0.5 + depth * 0.5 - overlap)
+	else:
+		var side := signf(toward_target.y)
+		front_box.size = Vector3(width, height, depth)
+		front_offset.z = side * (body_box.size.z * 0.5 + depth * 0.5 - overlap)
+	front_offset.y = height * 0.5
+	interaction_shape.position = front_offset
+	interaction_shape.rotation = Vector3.ZERO
+	interaction_shape.shape = front_box
+	interaction_shape.set_meta("front_interaction_profile", facility_id)
+	return true
 
 
 func _ready() -> void:

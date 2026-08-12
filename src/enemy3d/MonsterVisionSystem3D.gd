@@ -4,6 +4,7 @@ extends RefCounted
 
 const DEFAULT_VISION_RANGE := 13.5
 const DEFAULT_VISION_ANGLE_DEGREES := 120.0
+const PROXIMITY_AWARENESS_RANGE := 4.8
 const OCCLUSION_MASK := 1
 
 
@@ -61,7 +62,8 @@ func evaluate_target(
 	forward = forward.normalized()
 	var direction := offset.normalized() if distance > 0.001 else forward
 	var minimum_dot := cos(deg_to_rad(vision_angle_degrees * 0.5))
-	var inside_view_cone := distance <= 1.6 or forward.dot(direction) >= minimum_dot
+	# 近距离使用360°听觉/存在感知，但仍必须通过墙体视线；较远才使用前向视锥。
+	var inside_view_cone := distance <= PROXIMITY_AWARENESS_RANGE or forward.dot(direction) >= minimum_dot
 	if not inside_view_cone:
 		return {
 			"visible": false, "distance": distance,

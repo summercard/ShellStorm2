@@ -27,6 +27,8 @@ const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventor
 const HUD_UI_SCALE := 0.80
 const EXTRACTION_MID_PROGRESS := 0.36
 const EXTRACTION_FINAL_PROGRESS := 0.70
+const ENEMY_PREACTIVATION_RANGE := 38.0
+const ENEMY_PREACTIVATION_INTERVAL := 0.12
 const HOSTILE_ROOM_TYPES: Array[String] = GameDesignConfig.ROOM_TYPES_WITH_HOSTILES
 const ENEMY_FILL_ATTEMPT_LIMIT := 4
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
@@ -101,6 +103,7 @@ var _workbench_panel: WorkbenchPanel
 var _merchant_ui: MerchantUI
 var _trade_extraction_unlocked := false
 var _door_prompt_accumulator := 0.0
+var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
 var _pending_fate_currency_choice := -1
@@ -169,7 +172,7 @@ func _ready() -> void:
 	add_to_group("room_game_mode")
 	if not test_mode and BaseManager != null:
 		var candidate := BaseManager.get_active_run_checkpoint()
-		if str(candidate.get("schema", "")) == "runtime_player_state_v1":
+		if str(candidate.get("schema", "")) in ["runtime_player_state_v1", "runtime_player_state_v2"]:
 			_runtime_restore_snapshot = candidate
 			run_seed_override = int(candidate.get("run_seed", run_seed_override))
 	if gameplay_theme == null:
@@ -275,16 +278,18 @@ func build_runtime_save_snapshot() -> Dictionary:
 	# 场景卸载时子节点可能已经离开 SceneTree；此时读取 global_position 会触发引擎错误。
 	# Tower 根节点没有运行时位移，因此本地 position 是安全的最终兜底。
 	var position := player.global_position if player.is_inside_tree() else player.position
-	return {
+	var runtime_room_id := _runtime_current_room_id_for_save()
+	var runtime_floor_index := _runtime_current_floor_index()
+	var snapshot := {
 		"valid": true,
-		"schema": "runtime_player_state_v1",
-		"checkpoint_id": "runtime_player_state_v1",
-		"layout_id": "runtime_player_state_v1",
-		"scope": "base" if _current_room_id == "facility" else "combat",
+		"schema": "runtime_player_state_v2",
+		"checkpoint_id": "runtime_player_state_v2",
+		"layout_id": "runtime_player_state_v2",
+		"scope": _runtime_scope_for_save(runtime_floor_index, runtime_room_id),
 		"saved_at_unix": int(Time.get_unix_time_from_system()),
 		"run_seed": run_seed,
-		"current_room_id": _current_room_id,
-		"current_floor_index": _runtime_current_floor_index(),
+		"current_room_id": runtime_room_id,
+		"current_floor_index": runtime_floor_index,
 		"player_position": [position.x, position.y, position.z],
 		# 玩家根节点同时是固定俯视相机的父节点，不能持久化角色朝向。
 		# 武器/角色朝向由 aim_yaw 与表现层单独管理；保留字段仅用于旧存档结构兼容。
@@ -306,16 +311,34 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"run_currency": GameManager.currency,
 		"edge_states": _open_edges.duplicate(true),
 	}
+	snapshot["world_state"] = _build_runtime_world_save_snapshot()
+	return snapshot
 
 
 func _runtime_current_floor_index() -> int:
 	return 0
 
 
+func _runtime_current_room_id_for_save() -> String:
+	return _current_room_id
+
+
+func _runtime_scope_for_save(_floor_index: int, room_id: String) -> String:
+	return "base" if room_id == "facility" else "combat"
+
+
+func _build_runtime_world_save_snapshot() -> Dictionary:
+	return {}
+
+
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
-	var saved_floor_index := int(snapshot.get("current_floor_index", 0))
-	if saved_floor_index > 0 and has_method("_ensure_floor_generated"):
-		call("_ensure_floor_generated", saved_floor_index, "runtime_restore")
+	if not _restore_runtime_world_save_snapshot(snapshot):
+		# 世界布局或版本校验失败时保留玩家所有权数据，但拒绝使用旧房间和坐标。
+		# 子类可据此回退基地/入口安全点，不能把角色投放进半生成世界。
+		snapshot = snapshot.duplicate(true)
+		snapshot["world_restore_failed"] = true
+		snapshot["current_room_id"] = ""
+		snapshot["player_position"] = []
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
 	if player.has_method("clear_equipped_backpack"):
 		player.clear_equipped_backpack()
@@ -363,18 +386,23 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 				if edge_rooms.size() == 2:
 					_refresh_edge_visuals(edge_rooms[0], edge_rooms[1], opened)
 		minimap.configure(_records, _open_edges)
-	var room_id := str(snapshot.get("current_room_id", ""))
-	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	var room := _resolve_runtime_restore_room(snapshot)
 	if room != null:
 		_current_room_id = ""
 		_on_room_entered(room)
 	var saved_position: Variant = snapshot.get("player_position", [])
+	var restore_position := room.global_position + Vector3.UP * 0.05 if room != null else Vector3.ZERO
 	if saved_position is Array and (saved_position as Array).size() >= 3:
-		player.global_position = Vector3(
+		var candidate_position := Vector3(
 			float((saved_position as Array)[0]),
 			float((saved_position as Array)[1]),
 			float((saved_position as Array)[2]),
 		)
+		if room != null and _is_runtime_restore_position_valid(room, candidate_position):
+			restore_position = candidate_position
+	if room != null:
+		player.global_position = restore_position
+		player.velocity = Vector3.ZERO
 	# 旧存档曾写入约 +/-PI 的玩家根节点旋转，恢复后会连同子相机一起掉头，
 	# 造成整幅画面与输入的屏幕相对方向同时反转。固定相机项目中根节点必须归零。
 	player.rotation.y = 0.0
@@ -384,6 +412,31 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
 	_refresh_quick_item_hud()
 	_refresh_loot_label()
+
+
+func _restore_runtime_world_save_snapshot(_snapshot: Dictionary) -> bool:
+	return true
+
+
+func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
+	return _room_by_id.get(str(snapshot.get("current_room_id", ""))) as DungeonRoom3D
+
+
+func _is_runtime_restore_position_valid(room: DungeonRoom3D, world_position: Vector3) -> bool:
+	if room == null or not world_position.is_finite():
+		return false
+	var local := (
+		room.to_local(world_position)
+		if room.is_inside_tree()
+		else world_position - room.position
+	)
+	var dimensions := room.get_dimensions()
+	return (
+		absf(local.x) <= dimensions.x * 0.5 + 2.0
+		and absf(local.z) <= dimensions.y * 0.5 + 2.0
+		and local.y >= -0.6
+		and local.y <= 2.5
+	)
 
 
 ## 每局只在初始化时从 BaseData 注入模块；局内仍由 PlayerFlashlight3D 拒绝换装。
@@ -433,6 +486,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	_tick_bless_dead(delta)
 	_tick_battery_blink(delta)
+	_tick_enemy_preactivation(delta)
 	_hud_run_elapsed += delta
 	var elapsed_seconds := int(_hud_run_elapsed)
 	if _hud_timer_label != null and elapsed_seconds != _hud_last_elapsed_second:
@@ -462,6 +516,22 @@ func _process(delta: float) -> void:
 	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
 	if current != null and player != null:
 		current.get_nearest_door(player.global_position)
+
+
+func _tick_enemy_preactivation(delta: float) -> void:
+	_enemy_preactivation_accumulator += delta
+	if _enemy_preactivation_accumulator < ENEMY_PREACTIVATION_INTERVAL:
+		return
+	_enemy_preactivation_accumulator = fmod(
+		_enemy_preactivation_accumulator, ENEMY_PREACTIVATION_INTERVAL
+	)
+	if player == null:
+		return
+	for room_enemies in _enemy_nodes_by_room.values():
+		for value in room_enemies as Array:
+			var enemy := value as Enemy3D
+			if enemy != null and is_instance_valid(enemy):
+				enemy.activate_from_player_proximity(player, ENEMY_PREACTIVATION_RANGE)
 
 
 func _setup_run_modules() -> void:

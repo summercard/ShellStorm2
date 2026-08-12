@@ -2826,21 +2826,22 @@ func _install_facilities() -> void:
 	var editor_guide := _facility_art_layout.get_node_or_null("编辑器参考_运行时自动隐藏") as Node3D
 	if editor_guide != null:
 		editor_guide.visible = false
-	_collect_facility_art_nodes(_facility_art_layout)
+	_collect_facility_art_nodes(_facility_art_layout, facility_floor.global_position)
 	if _facility_nodes.size() != 8:
 		push_error("基地美术布置层应包含8个交互设施，当前为%d个" % _facility_nodes.size())
 
 
-func _collect_facility_art_nodes(root: Node) -> void:
+func _collect_facility_art_nodes(root: Node, room_center: Vector3) -> void:
 	for child in root.get_children():
 		if child is BaseFacility3D:
 			var facility := child as BaseFacility3D
+			facility.configure_front_interaction_toward(room_center)
 			if not facility.activated.is_connected(_on_facility_activated):
 				facility.activated.connect(_on_facility_activated)
 			_facility_nodes.append(facility)
 		elif child is Node3D and str(child.get_meta("placement_role", "")) == "基地墙边装饰":
 			_facility_decor_nodes.append(child as Node3D)
-		_collect_facility_art_nodes(child)
+		_collect_facility_art_nodes(child, room_center)
 
 
 func _install_elevator_facility() -> void:
@@ -3275,7 +3276,157 @@ func get_facility_count() -> int:
 
 
 func _runtime_current_floor_index() -> int:
-	return int(_room_floor_index.get(_current_room_id, 0))
+	if player == null:
+		return int(_room_floor_index.get(_current_room_id, 0))
+	var position := player.global_position if player.is_inside_tree() else player.position
+	var physical_floor := maxi(0, int(round(-position.y / FLOOR_HEIGHT)))
+	var room_floor := int(_room_floor_index.get(_current_room_id, physical_floor))
+	# 楼梯/门槛处 Area 可能尚未切换 current_room_id；世界高度比旧房间标签更可信。
+	return physical_floor if absf(position.y + FLOOR_HEIGHT * room_floor) > FLOOR_HEIGHT * 0.45 else room_floor
+
+
+func _runtime_current_room_id_for_save() -> String:
+	if player == null:
+		return _current_room_id
+	var position := player.global_position if player.is_inside_tree() else player.position
+	# 先寻找真实包含角色的房间，避免楼梯边界沿用上一个房间 ID。
+	for room_value in _room_by_id.values():
+		var room := room_value as DungeonRoom3D
+		if room != null and _is_runtime_restore_position_valid(room, position):
+			return room.room_id
+	var floor_index := _runtime_current_floor_index()
+	var nearest_id := ""
+	var nearest_distance := INF
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
+		if room == null:
+			continue
+		var room_position := room.global_position if room.is_inside_tree() else room.position
+		var distance := Vector2(position.x, position.z).distance_to(Vector2(room_position.x, room_position.z))
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest_id = room.room_id
+	return nearest_id if not nearest_id.is_empty() else _current_room_id
+
+
+func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
+	return "base" if floor_index == 1 and room_id == "facility" else "combat"
+
+
+func _build_runtime_world_save_snapshot() -> Dictionary:
+	var layout_ids: Dictionary = {}
+	for floor_index in _generated_floor_indices:
+		layout_ids[str(floor_index)] = str(
+			(_floor_plan_snapshots.get(floor_index, {}) as Dictionary).get("layout_id", "bootstrap")
+		)
+	var room_progress: Dictionary = {}
+	for room_id_value in _room_by_id.keys():
+		var room_id := str(room_id_value)
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		room_progress[room_id] = {
+			"visited": room.visited,
+			"cleared": room.cleared,
+			"spawned": _spawned_rooms.has(room_id),
+			"key_spawned": _spawned_key_rooms.has(room_id),
+			"key_unclaimed": _has_unclaimed_room_key(room_id),
+			"event_resolved": _resolved_event_rooms.has(room_id),
+			"event_combat": _event_combat_rooms.has(room_id),
+		}
+	return {
+		"schema": "tower_world_state_v1",
+		"committed_floor_indices": _generated_floor_indices.duplicate(),
+		"floor_layout_ids": layout_ids,
+		"room_progress": room_progress,
+		"vertical_arrival_open": _vertical_arrival_open.duplicate(true),
+		"initial_loop_gate_armed": _initial_loop_gate_armed,
+		"initial_loop_gate_sealed": _initial_loop_gate_sealed,
+		"unloaded_segment_floor_indices": _unloaded_segment_floor_indices.duplicate(),
+	}
+
+
+func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
+	var world_state := snapshot.get("world_state", {}) as Dictionary
+	var committed_values: Array = []
+	if world_state.get("committed_floor_indices", []) is Array:
+		committed_values.assign(world_state.get("committed_floor_indices", []) as Array)
+	var saved_floor_index := int(snapshot.get("current_floor_index", 0))
+	if saved_floor_index > 1 and saved_floor_index not in committed_values:
+		committed_values.append(saved_floor_index)
+	var committed: Array[int] = []
+	for value in committed_values:
+		var floor_index := int(value)
+		if floor_index > 1 and floor_index not in committed:
+			committed.append(floor_index)
+	committed.sort()
+	var layout_ids := world_state.get("floor_layout_ids", {}) as Dictionary
+	for floor_index in committed:
+		var plan := _floor_plan_snapshots.get(floor_index, {}) as Dictionary
+		var expected_layout := str(layout_ids.get(str(floor_index), ""))
+		if not expected_layout.is_empty() and expected_layout != str(plan.get("layout_id", "")):
+			push_error("Runtime floor layout mismatch on floor index %d" % floor_index)
+			return false
+		if not _commit_floor_bundle(floor_index, "runtime_restore"):
+			return false
+	var room_progress := world_state.get("room_progress", {}) as Dictionary
+	for room_id_value in room_progress.keys():
+		var room_id := str(room_id_value)
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		var progress := room_progress.get(room_id_value, {}) as Dictionary
+		if room == null:
+			continue
+		room.visited = bool(progress.get("visited", false))
+		room.cleared = bool(progress.get("cleared", false))
+		if room.visited:
+			minimap.reveal_room(room_id)
+		if bool(progress.get("spawned", false)):
+			_spawned_rooms[room_id] = true
+		# 未拾取钥匙必须在恢复后重新生成；已领取过的钥匙才保留 spawned 标记。
+		if bool(progress.get("key_spawned", false)) and not bool(progress.get("key_unclaimed", false)):
+			_spawned_key_rooms[room_id] = true
+		if bool(progress.get("event_resolved", false)):
+			_resolved_event_rooms[room_id] = true
+		if bool(progress.get("event_combat", false)):
+			_event_combat_rooms[room_id] = true
+	var vertical_state: Variant = world_state.get("vertical_arrival_open", {})
+	if vertical_state is Dictionary:
+		for edge_value in (vertical_state as Dictionary).keys():
+			var edge := str(edge_value)
+			if _vertical_arrival_open.has(edge):
+				_vertical_arrival_open[edge] = bool((vertical_state as Dictionary)[edge_value])
+	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
+	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
+	return true
+
+
+func _has_unclaimed_room_key(room_id: String) -> bool:
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		var key := value as RoomKeyPickup3D
+		if key != null and key.room_id == room_id and not key.is_queued_for_deletion():
+			return true
+	return false
+
+
+func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
+	if bool(snapshot.get("world_restore_failed", false)):
+		return _room_by_id.get("facility") as DungeonRoom3D
+	var room_id := str(snapshot.get("current_room_id", ""))
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room != null:
+		return room
+	var floor_index := int(snapshot.get("current_floor_index", 1))
+	var preferred_role := "stair_entry" if floor_index > 1 else "facility"
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var candidate_id := str(room_id_value)
+		var candidate := _room_by_id.get(candidate_id) as DungeonRoom3D
+		if candidate == null:
+			continue
+		if floor_index == 1 and candidate_id == "facility":
+			return candidate
+		if str(_find_record(candidate_id).get("tower_role", "")) == preferred_role:
+			return candidate
+	return _room_by_id.get("facility") as DungeonRoom3D
 
 
 func get_active_facility_menu() -> CanvasLayer:

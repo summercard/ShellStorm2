@@ -6,6 +6,7 @@ signal decision_changed(enemy_instance_id: int, decision: Dictionary)
 const VISION_SCRIPT := preload("res://src/enemy3d/MonsterVisionSystem3D.gd")
 const UPDATE_INTERVAL_MSEC := 110
 const MEMORY_DURATION_MSEC := 1150
+const DAMAGE_AGGRO_DURATION_MSEC := 8000
 const LIGHT_HUNTER_KINDS := ["melee_chaser", "shielded", "exploder", "boss"]
 const DARKNESS_SEEKER_KINDS := ["ranged_caster", "summoner", "ambusher"]
 
@@ -49,6 +50,23 @@ func force_refresh_enemy(enemy: CharacterBody3D) -> Dictionary:
 	return evaluate_enemy(enemy, true)
 
 
+func notify_enemy_attacked(enemy: CharacterBody3D, attacker: Node3D) -> void:
+	if enemy == null or attacker == null or not is_instance_valid(enemy) or not is_instance_valid(attacker):
+		return
+	if not attacker.is_in_group("player_3d"):
+		return
+	var instance_id := enemy.get_instance_id()
+	if not _records.has(instance_id):
+		register_enemy(enemy)
+	var record: Dictionary = _records[instance_id]
+	record["forced_target_instance_id"] = attacker.get_instance_id()
+	record["forced_target_until_msec"] = Time.get_ticks_msec() + DAMAGE_AGGRO_DURATION_MSEC
+	record["last_known_target_position"] = attacker.global_position
+	record["last_contact_msec"] = Time.get_ticks_msec()
+	record["next_update_msec"] = 0
+	_records[instance_id] = record
+
+
 func get_enemy_snapshot(enemy: Node3D) -> Dictionary:
 	if enemy == null or not _records.has(enemy.get_instance_id()):
 		return _empty_decision()
@@ -58,6 +76,15 @@ func get_enemy_snapshot(enemy: Node3D) -> Dictionary:
 func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Dictionary:
 	var enemy_kind := str(enemy.get("enemy_kind"))
 	var policy := "darkness_seeker" if enemy_kind in DARKNESS_SEEKER_KINDS else "light_hunter"
+	var forced_target_id := int(record.get("forced_target_instance_id", 0))
+	if forced_target_id > 0 and now <= int(record.get("forced_target_until_msec", 0)):
+		var forced_target := instance_from_id(forced_target_id) as Node3D
+		if is_instance_valid(forced_target) and forced_target.is_in_group("player_3d") and float(forced_target.get("current_hp")) > 0.0:
+			record["last_known_target_position"] = forced_target.global_position
+			return _decision(
+				"damage_contact", forced_target_id, false, forced_target.global_position,
+				forced_target.global_position, "damage", policy, true
+			)
 	var players := enemy.get_tree().get_nodes_in_group("player_3d")
 	var vision_result := _vision.find_visible_player(enemy, players)
 	if bool(vision_result.get("visible", false)):
@@ -188,6 +215,8 @@ func _new_record(enemy: Node3D) -> Dictionary:
 		"last_illumination_state": "darkness",
 		"last_light_instance_id": 0,
 		"room_light_search_until_msec": 0,
+		"forced_target_instance_id": 0,
+		"forced_target_until_msec": 0,
 		"decision": _empty_decision(),
 	}
 

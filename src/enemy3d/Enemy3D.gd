@@ -18,8 +18,8 @@ const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
 const BOSS_SIZE_MULTIPLIER := 1.5
-const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.70
-const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 0.70
+const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.40
+const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 0.40
 const SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND := 0.02
 const ILLUMINATION_UI_COLORS := {
 	"darkness": Color(0.42, 0.20, 0.62, 1.0),
@@ -112,6 +112,7 @@ var _source_hp_scale := 1.0
 var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
 var _overhead_health_sprite: Sprite3D
+var _illumination_status_label: Label3D
 var _overhead_health_image: Image
 var _overhead_health_texture: ImageTexture
 var _overhead_health_size := Vector2.ZERO
@@ -241,6 +242,7 @@ func _ensure_overhead_health_bar() -> void:
 		_overhead_health_root.queue_free()
 		_overhead_health_root = null
 		_overhead_health_sprite = null
+		_illumination_status_label = null
 		_overhead_health_image = null
 		_overhead_health_texture = null
 	_overhead_health_root = Node3D.new()
@@ -265,6 +267,17 @@ func _ensure_overhead_health_bar() -> void:
 		1.0
 	)
 	_overhead_health_root.add_child(_overhead_health_sprite)
+	_illumination_status_label = Label3D.new()
+	_illumination_status_label.name = "IlluminationStatusText"
+	_illumination_status_label.font_size = 34
+	_illumination_status_label.pixel_size = 0.005
+	_illumination_status_label.outline_size = 8
+	_illumination_status_label.outline_modulate = Color(0.015, 0.02, 0.03, 0.96)
+	_illumination_status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_illumination_status_label.no_depth_test = true
+	_illumination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_illumination_status_label.position = Vector3(-_overhead_health_size.x * 0.62, 0.0, 0.01)
+	_overhead_health_root.add_child(_illumination_status_label)
 	_on_self_health_changed(self, current_hp, max_hp)
 
 
@@ -299,25 +312,16 @@ func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> voi
 		_overhead_health_image.fill_rect(
 			Rect2i(inner_rect.position, Vector2i(fill_width, inner_rect.size.y)), fill_color
 		)
-	_draw_illumination_status_on_health_bar()
+	_update_illumination_status_text()
 	_overhead_health_texture.update(_overhead_health_image)
 
 
-func _draw_illumination_status_on_health_bar() -> void:
-	if _overhead_health_image == null:
+func _update_illumination_status_text() -> void:
+	if _illumination_status_label == null:
 		return
 	var state := get_illumination_state()
-	var segment_count := _illumination_ui_segment_count(state)
-	var color := ILLUMINATION_UI_COLORS.get(state, ILLUMINATION_UI_COLORS["darkness"]) as Color
-	var segment_width := 10
-	var gap := 3
-	var total_width := segment_count * segment_width + (segment_count - 1) * gap
-	var start_x := (HEALTH_BAR_TEXTURE_SIZE.x - total_width) / 2
-	for index in range(segment_count):
-		_overhead_health_image.fill_rect(
-			Rect2i(start_x + index * (segment_width + gap), 0, segment_width, 4),
-			color
-		)
+	_illumination_status_label.text = _illumination_ui_text(state)
+	_illumination_status_label.modulate = ILLUMINATION_UI_COLORS.get(state, Color.WHITE) as Color
 
 
 func get_enemy_data() -> Dictionary:
@@ -344,6 +348,25 @@ func set_runtime_active(active: bool, presentation_ready_when_inactive := false)
 
 func is_runtime_ai_active() -> bool:
 	return _runtime_ai_active
+
+
+func _process(delta: float) -> void:
+	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
+	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
+	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
+		return
+	illumination_sensor.tick(delta)
+
+
+func activate_from_player_proximity(player_node: Node3D, activation_range: float) -> bool:
+	if _runtime_ai_active or player_node == null or not is_instance_valid(player_node):
+		return false
+	var offset := player_node.global_position - global_position
+	# 不跨楼板预激活；同层采用大于一个屏幕的平面距离。
+	if absf(offset.y) > 4.5 or Vector2(offset.x, offset.z).length() > activation_range:
+		return false
+	set_runtime_active(true)
+	return true
 
 
 func _physics_process(delta: float) -> void:
@@ -407,15 +430,18 @@ func _physics_process(delta: float) -> void:
 	to_target.y = 0.0
 	var distance := to_target.length()
 	var target_visible := bool(_ai_decision.get("target_visible", false))
-	var flashlight_tracking := str(_ai_decision.get("awareness", "")) == "flashlight_contact"
-	if target_visible or flashlight_tracking:
+	var awareness := str(_ai_decision.get("awareness", ""))
+	# 手电命中和受击仇恨都是有明确玩家来源的强刺激。它们不依赖当前视锥，
+	# 否则怪物转身或远距离中弹后的下一帧就会丢失目标，只停留在原地搜索。
+	var stimulus_tracking := awareness in ["flashlight_contact", "damage_contact"]
+	if target_visible or stimulus_tracking:
 		_last_known_target_position = _ai_decision.get("target_position", _target.global_position) as Vector3
 		_lost_sight_time = 0.0
 	else:
 		_lost_sight_time += delta
 		if ai_state == "idle" and _state_time > 2.2:
 			transition_to("patrol")
-	if (distance < 13.5 or flashlight_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or flashlight_tracking):
+	if (distance < 13.5 or stimulus_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or stimulus_tracking):
 		transition_to("alert")
 	if ai_state == "alert" and _state_time > 0.28:
 		transition_to("chase")
@@ -648,8 +674,11 @@ func take_projectile_damage(
 	critical := false,
 	hit_direction := Vector3.ZERO,
 	tags: Array[String] = [],
-	behavior: Dictionary = {}
+	behavior: Dictionary = {},
+	attacker: Node3D = null
 ) -> void:
+	if attacker != null:
+		notify_attacked_by(attacker)
 	_bypass_shield_once = (
 		"armor" in tags
 		or "piercing" in tags
@@ -657,6 +686,18 @@ func take_projectile_damage(
 	)
 	take_damage(amount, critical, hit_direction)
 	_bypass_shield_once = false
+
+
+func notify_attacked_by(attacker: Node3D) -> void:
+	if MonsterAIManager == null or attacker == null:
+		return
+	if not _runtime_ai_active:
+		set_runtime_active(true)
+	MonsterAIManager.notify_enemy_attacked(self, attacker)
+	_ai_decision = MonsterAIManager.force_refresh_enemy(self)
+	_apply_ai_decision(_ai_decision)
+	if _target != null and ai_state not in ["dead", "telegraph", "attack"]:
+		transition_to("alert")
 
 
 func apply_slow(factor: float, duration: float) -> void:
@@ -760,7 +801,8 @@ func get_state_snapshot() -> Dictionary:
 		"sunlight_damage_per_second": float(max_hp) * SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND,
 		"illumination_ui_state": get_illumination_state(),
 		"illumination_ui_color": ILLUMINATION_UI_COLORS.get(get_illumination_state(), Color.WHITE),
-		"illumination_ui_segment_count": _illumination_ui_segment_count(get_illumination_state()),
+		"illumination_ui_text": _illumination_ui_text(get_illumination_state()),
+		"illumination_ui_before_health_bar": _illumination_status_label != null,
 		"ai_decision": _ai_decision.duplicate(true),
 		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
@@ -778,6 +820,8 @@ func get_illumination_state() -> String:
 func force_refresh_illumination(commit_immediately := true) -> void:
 	if illumination_sensor != null:
 		illumination_sensor.force_refresh(commit_immediately)
+	if MonsterAIManager != null:
+		_ai_decision = MonsterAIManager.force_refresh_enemy(self)
 
 
 func get_illumination_snapshot() -> Dictionary:
@@ -830,12 +874,12 @@ func _tick_illumination_effects(delta: float) -> void:
 			_die()
 
 
-func _illumination_ui_segment_count(state: String) -> int:
+func _illumination_ui_text(state: String) -> String:
 	return {
-		EnemyIllumination3D.STATE_DARKNESS: 1,
-		EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT: 2,
-		EnemyIllumination3D.STATE_SUNLIGHT: 3,
-	}.get(state, 1)
+		EnemyIllumination3D.STATE_DARKNESS: "暗",
+		EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT: "亮",
+		EnemyIllumination3D.STATE_SUNLIGHT: "太阳",
+	}.get(state, "暗")
 
 
 func _apply_ai_decision(decision: Dictionary) -> void:
@@ -857,6 +901,8 @@ func _apply_ai_decision(decision: Dictionary) -> void:
 
 func _on_illumination_state_changed(previous: String, current: String, context: Dictionary) -> void:
 	_on_self_health_changed(self, current_hp, max_hp)
+	if not _runtime_ai_active and current != EnemyIllumination3D.STATE_DARKNESS:
+		set_runtime_active(true)
 	if MonsterAIManager != null:
 		_ai_decision = MonsterAIManager.force_refresh_enemy(self)
 	illumination_state_changed.emit(self, previous, current, context)
