@@ -3,6 +3,9 @@ extends RefCounted
 ## 怪物视野的纯感知模块：距离、水平视锥与静态世界遮挡，绝不执行移动或攻击。
 
 const DEFAULT_VISION_RANGE := 13.5
+const DARKNESS_VISION_RANGE := 8.5
+const ARTIFICIAL_LIGHT_VISION_RANGE := 13.5
+const SUNLIGHT_VISION_RANGE := 15.5
 const DEFAULT_VISION_ANGLE_DEGREES := 120.0
 const PROXIMITY_AWARENESS_RANGE := 4.8
 const OCCLUSION_MASK := 1
@@ -62,8 +65,8 @@ func evaluate_target(
 	forward = forward.normalized()
 	var direction := offset.normalized() if distance > 0.001 else forward
 	var minimum_dot := cos(deg_to_rad(vision_angle_degrees * 0.5))
-	# 近距离使用360°听觉/存在感知，但仍必须通过墙体视线；较远才使用前向视锥。
-	var inside_view_cone := distance <= PROXIMITY_AWARENESS_RANGE or forward.dot(direction) >= minimum_dot
+	# 视觉确认始终需要处于视锥内。近距离侧后方只产生警惕，不直接授权战斗目标。
+	var inside_view_cone := forward.dot(direction) >= minimum_dot
 	if not inside_view_cone:
 		return {
 			"visible": false, "distance": distance,
@@ -78,6 +81,36 @@ func evaluate_target(
 		"line_of_sight": line_of_sight,
 		"target_instance_id": target.get_instance_id(),
 		"target_position": target.global_position,
+	}
+
+
+func find_proximity_player(
+	enemy: CharacterBody3D,
+	candidates: Array[Node],
+	awareness_range := PROXIMITY_AWARENESS_RANGE
+) -> Dictionary:
+	var best: Node3D
+	var best_distance := INF
+	for candidate in candidates:
+		if not candidate is Node3D or not is_instance_valid(candidate):
+			continue
+		var player := candidate as Node3D
+		if float(player.get("current_hp")) <= 0.0:
+			continue
+		var offset := player.global_position - enemy.global_position
+		var distance := Vector2(offset.x, offset.z).length()
+		if distance > awareness_range or distance >= best_distance:
+			continue
+		if not _has_line_of_sight(enemy, player):
+			continue
+		best = player
+		best_distance = distance
+	if best == null:
+		return {"detected": false, "distance": INF, "stimulus_position": Vector3.ZERO}
+	return {
+		"detected": true,
+		"distance": best_distance,
+		"stimulus_position": best.global_position,
 	}
 
 

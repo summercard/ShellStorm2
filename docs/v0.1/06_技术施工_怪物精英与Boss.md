@@ -201,7 +201,8 @@ MonsterAIManager（全局登记、错峰调度、感知记录、策略选择）
 `MonsterAIManager` 只返回不可变决策快照，不直接写敌人 Transform、生命或攻击计时；`Enemy3D` 根据快照执行已有 `idle / patrol / alert / chase / search / telegraph / attack`。稳定感知字段至少包含：
 
 ```text
-awareness: unaware | visual_contact | flashlight_contact | room_light_search | seek_darkness | lost_contact
+awareness: unaware | proximity_contact | sound_contact | visual_contact | flashlight_contact | room_light_search | seek_darkness | lost_contact
+engagement: idle | alert | combat
 target_instance_id
 target_visible
 target_position
@@ -215,7 +216,9 @@ light_response_policy
 decision_age
 ```
 
-视野基线为13.5m、水平夹角120°；4.8m内使用360°近距离存在感知，但仍受墙体遮挡，解决玩家贴近怪物侧后方而怪物完全无反应的问题。4.8m外同时满足距离、朝向与静态世界物理遮挡才算看见玩家。已警觉怪物保留1.15秒最后已知位置记忆；未看见玩家时禁止直接把最近玩家世界坐标写入搜索目标。视野射线排除怪物自身，目标使用躯干采样点，墙体、关闭的门、楼板等静态碰撞可遮挡。
+视野水平夹角为120°，动态视距按怪物自身所处环境采用黑暗8.5m、人工灯13.5m、太阳15.5m。4.8m内侧后方接近只产生 `proximity_contact + alert`，仍受墙体遮挡且不授权玩家目标；玩家进入真实视锥并无遮挡后才产生 `visual_contact + combat`。已警觉怪物保留1.15秒最后已知位置记忆；未看见玩家时禁止直接把最近玩家世界坐标写入搜索目标。视野射线排除怪物自身，目标使用躯干采样点，墙体、关闭的门、楼板等静态碰撞可遮挡。
+
+动态进入战斗采用两层模型：房间灯光变化、近距存在、开门与开容器声音只进入 `alert`，怪物先停顿转向并调查事件位置；视觉确认、玩家前向探照灯真实命中或武器实际命中才进入 `combat`。门声半径6.5m、容器声半径8m，实墙后的有效范围缩减到45%；声音事件只传位置，不传玩家引用。未被灯光实际覆盖的怪物不因开灯响应。
 
 玩家武器造成实际命中时，投射物和范围武器必须把攻击者实例传给 `MonsterAIManager`。受击仇恨无视普通视距和视锥，持续8秒并锁定攻击玩家；不能只有伤害数值而丢失攻击来源。房间未激活时继续遵守关卡隔离暂停AI，不允许相邻未进入房间的怪物跨墙追击。
 
@@ -244,7 +247,9 @@ decision_age
 - [x] 三态头顶标识位于血条前方，显示`暗 / 亮 / 太阳`并与状态快照一致。
 - [x] `MonsterAIManager` 与 `MonsterVisionSystem3D` 独立存在，`Enemy3D` 不再自行扫描最近玩家作为未授权目标。
 - [x] 玩家位于视野范围、视锥且无遮挡时产生 `visual_contact`；背后、超距或隔墙时不可见。
-- [x] 玩家进入4.8m近距离时不受前向视锥限制，但隔墙仍不能触发；远距离命中怪物后8秒内锁定攻击者。
+- [x] 玩家进入4.8m侧后方时只触发警惕与调查且不泄露目标；进入真实视锥才升级战斗；远距离命中怪物后8秒内锁定攻击者。
+- [x] 黑暗/人工灯/太阳的动态视距分别为8.5m/13.5m/15.5m，切换光照后决策快照同步更新。
+- [x] 开门与开启容器广播有遮挡衰减的位置声音，范围内怪物进入警惕而非直接获得玩家目标。
 - [x] 手电真实命中后可追溯所属玩家；追光型朝玩家移动，背向、隔墙、关灯或耗尽不产生刺激。
 - [x] 避光型在灯光/太阳下优先选择真实黑暗候选点，不穿墙、不瞬移。
 - [x] 室内大灯开启只触发局部搜索，不泄露未看见玩家的位置；实际看见后才进入追击。

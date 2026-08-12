@@ -7,6 +7,7 @@ const VISION_SCRIPT := preload("res://src/enemy3d/MonsterVisionSystem3D.gd")
 const UPDATE_INTERVAL_MSEC := 110
 const MEMORY_DURATION_MSEC := 1150
 const DAMAGE_AGGRO_DURATION_MSEC := 8000
+const SOUND_MEMORY_DURATION_MSEC := 3200
 const LIGHT_HUNTER_KINDS := ["melee_chaser", "shielded", "exploder", "boss"]
 const DARKNESS_SEEKER_KINDS := ["ranged_caster", "summoner", "ambusher"]
 
@@ -67,6 +68,36 @@ func notify_enemy_attacked(enemy: CharacterBody3D, attacker: Node3D) -> void:
 	_records[instance_id] = record
 
 
+func broadcast_sound_stimulus(
+	world_position: Vector3,
+	radius: float,
+	stimulus_kind := "interaction",
+	_source: Node3D = null
+) -> int:
+	var alerted := 0
+	var now := Time.get_ticks_msec()
+	for instance_id in _records.keys():
+		var record: Dictionary = _records[instance_id]
+		var enemy := instance_from_id(int(instance_id)) as CharacterBody3D
+		if not is_instance_valid(enemy) or float(enemy.get("current_hp")) <= 0.0:
+			continue
+		var offset := world_position - enemy.global_position
+		var distance := Vector2(offset.x, offset.z).length()
+		if absf(offset.y) > 4.5 or distance > radius:
+			continue
+		if not _sound_reaches_enemy(enemy, world_position, radius, distance):
+			continue
+		record["sound_stimulus_position"] = world_position
+		record["sound_stimulus_kind"] = stimulus_kind
+		record["sound_until_msec"] = now + SOUND_MEMORY_DURATION_MSEC
+		record["next_update_msec"] = 0
+		_records[instance_id] = record
+		if enemy.has_method("activate_from_stimulus"):
+			enemy.call("activate_from_stimulus", world_position, stimulus_kind)
+		alerted += 1
+	return alerted
+
+
 func get_enemy_snapshot(enemy: Node3D) -> Dictionary:
 	if enemy == null or not _records.has(enemy.get_instance_id()):
 		return _empty_decision()
@@ -76,6 +107,11 @@ func get_enemy_snapshot(enemy: Node3D) -> Dictionary:
 func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Dictionary:
 	var enemy_kind := str(enemy.get("enemy_kind"))
 	var policy := "darkness_seeker" if enemy_kind in DARKNESS_SEEKER_KINDS else "light_hunter"
+	var illumination := {}
+	if enemy.has_method("get_illumination_snapshot"):
+		illumination = enemy.call("get_illumination_snapshot") as Dictionary
+	var light_state := str(illumination.get("illumination_state", "darkness"))
+	var vision_range := _vision_range_for_light_state(light_state)
 	var forced_target_id := int(record.get("forced_target_instance_id", 0))
 	if forced_target_id > 0 and now <= int(record.get("forced_target_until_msec", 0)):
 		var forced_target := instance_from_id(forced_target_id) as Node3D
@@ -83,10 +119,10 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 			record["last_known_target_position"] = forced_target.global_position
 			return _decision(
 				"damage_contact", forced_target_id, false, forced_target.global_position,
-				forced_target.global_position, "damage", policy, true
+				forced_target.global_position, "damage", policy, true, "combat", vision_range
 			)
 	var players := enemy.get_tree().get_nodes_in_group("player_3d")
-	var vision_result := _vision.find_visible_player(enemy, players)
+	var vision_result := _vision.find_visible_player(enemy, players, vision_range)
 	if bool(vision_result.get("visible", false)):
 		var visible_id := int(vision_result.get("target_instance_id", 0))
 		var visible_position := vision_result.get("target_position", enemy.global_position) as Vector3
@@ -94,13 +130,9 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 		record["last_contact_msec"] = now
 		return _decision(
 			"visual_contact", visible_id, true, visible_position, visible_position,
-			"vision", policy, true
+			"vision", policy, true, "combat", vision_range
 		)
 
-	var illumination := {}
-	if enemy.has_method("get_illumination_snapshot"):
-		illumination = enemy.call("get_illumination_snapshot") as Dictionary
-	var light_state := str(illumination.get("illumination_state", "darkness"))
 	var light_kind := str(illumination.get("dominant_light_kind", "none"))
 	var light_instance_id := int(illumination.get("dominant_light_instance_id", 0))
 	var light := instance_from_id(light_instance_id) as Light3D if light_instance_id > 0 else null
@@ -118,33 +150,48 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 				return _decision(
 					"flashlight_contact", owner_player.get_instance_id(), false,
 					owner_player.global_position, owner_player.global_position,
-					"flashlight", policy, true
+					"flashlight", policy, true, "combat", vision_range
 				)
 			var dark_position := _find_dark_position(enemy, light_position)
 			return _decision(
 				"seek_darkness", 0, false, Vector3.ZERO, dark_position,
-				"flashlight", policy, false
+				"flashlight", policy, false, "combat", vision_range
 			)
 
 	if light_state == "sunlight" and policy == "darkness_seeker":
 		return _decision(
 			"seek_darkness", 0, false, Vector3.ZERO,
-			_find_dark_position(enemy, light_position), "sun", policy, false
+			_find_dark_position(enemy, light_position), "sun", policy, false, "combat", vision_range
 		)
 	if light_state == "artificial_light" and light_kind != "flashlight" and policy == "darkness_seeker":
 		return _decision(
 			"seek_darkness", 0, false, Vector3.ZERO,
-			_find_dark_position(enemy, light_position), light_kind, policy, false
+			_find_dark_position(enemy, light_position), light_kind, policy, false, "alert", vision_range
+		)
+
+	# 接近和交互声比普通房间灯变化更具体，但仍只属于警惕层。
+	var proximity := _vision.find_proximity_player(enemy, players)
+	if bool(proximity.get("detected", false)):
+		return _decision(
+			"proximity_contact", 0, false, Vector3.ZERO,
+			proximity.get("stimulus_position", enemy.global_position) as Vector3,
+			"proximity", policy, false, "alert", vision_range
+		)
+	if now <= int(record.get("sound_until_msec", 0)):
+		return _decision(
+			"sound_contact", 0, false, Vector3.ZERO,
+			record.get("sound_stimulus_position", enemy.global_position) as Vector3,
+			str(record.get("sound_stimulus_kind", "interaction")), policy, false, "alert", vision_range
 		)
 	if light_state == "artificial_light" and light_kind != "flashlight":
 		if previous_light_state != "artificial_light" or previous_light_id != light_instance_id:
 			record["room_light_search_until_msec"] = now + 4000
 		if now >= int(record.get("room_light_search_until_msec", 0)):
-			return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", policy, false)
+			return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", policy, false, "idle", vision_range)
 		var search_position := _room_light_search_position(enemy, light_position)
 		return _decision(
 			"room_light_search", 0, false, Vector3.ZERO, search_position,
-			light_kind, policy, false
+			light_kind, policy, false, "alert", vision_range
 		)
 
 	var last_contact := int(record.get("last_contact_msec", -100000))
@@ -152,9 +199,37 @@ func _build_decision(enemy: CharacterBody3D, record: Dictionary, now: int) -> Di
 		var remembered := record.get("last_known_target_position", enemy.global_position) as Vector3
 		return _decision(
 			"lost_contact", 0, false, Vector3.ZERO, remembered,
-			"memory", policy, false
+			"memory", policy, false, "alert", vision_range
 		)
-	return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", policy, false)
+	return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", policy, false, "idle", vision_range)
+
+
+func _vision_range_for_light_state(light_state: String) -> float:
+	match light_state:
+		"sunlight":
+			return MonsterVisionSystem3D.SUNLIGHT_VISION_RANGE
+		"artificial_light":
+			return MonsterVisionSystem3D.ARTIFICIAL_LIGHT_VISION_RANGE
+		_:
+			return MonsterVisionSystem3D.DARKNESS_VISION_RANGE
+
+
+func _sound_reaches_enemy(enemy: CharacterBody3D, position: Vector3, radius: float, distance: float) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(
+		enemy.global_position + Vector3.UP * 0.55,
+		position + Vector3.UP * 0.55,
+		1,
+		[enemy.get_rid()]
+	)
+	query.collide_with_areas = false
+	var hit := enemy.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		return true
+	# 射线终点附近命中被开启的容器/门自身，不应误判成隔墙。
+	var hit_position := hit.get("position", enemy.global_position) as Vector3
+	if hit_position.distance_to(position + Vector3.UP * 0.55) <= 0.9:
+		return true
+	return distance <= radius * 0.45
 
 
 func _find_dark_position(enemy: CharacterBody3D, light_position: Vector3) -> Vector3:
@@ -215,6 +290,9 @@ func _new_record(enemy: Node3D) -> Dictionary:
 		"last_illumination_state": "darkness",
 		"last_light_instance_id": 0,
 		"room_light_search_until_msec": 0,
+		"sound_until_msec": 0,
+		"sound_stimulus_position": Vector3.ZERO,
+		"sound_stimulus_kind": "none",
 		"forced_target_instance_id": 0,
 		"forced_target_until_msec": 0,
 		"decision": _empty_decision(),
@@ -229,7 +307,9 @@ func _decision(
 	stimulus_position: Vector3,
 	stimulus_kind: String,
 	policy: String,
-	line_of_sight: bool
+	line_of_sight: bool,
+	engagement := "idle",
+	vision_range := MonsterVisionSystem3D.DEFAULT_VISION_RANGE
 ) -> Dictionary:
 	return {
 		"awareness": awareness,
@@ -239,13 +319,14 @@ func _decision(
 		"last_known_target_position": target_position,
 		"stimulus_position": stimulus_position,
 		"stimulus_kind": stimulus_kind,
-		"vision_range": MonsterVisionSystem3D.DEFAULT_VISION_RANGE,
+		"vision_range": vision_range,
 		"vision_angle_degrees": MonsterVisionSystem3D.DEFAULT_VISION_ANGLE_DEGREES,
 		"line_of_sight": line_of_sight,
 		"light_response_policy": policy,
+		"engagement": engagement,
 		"decision_age": 0.0,
 	}
 
 
 func _empty_decision() -> Dictionary:
-	return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", "light_hunter", false)
+	return _decision("unaware", 0, false, Vector3.ZERO, Vector3.ZERO, "none", "light_hunter", false, "idle")

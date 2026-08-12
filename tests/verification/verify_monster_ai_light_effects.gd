@@ -17,6 +17,7 @@ func _ready() -> void:
 	await _verify_state_effects_and_ui(failures)
 	await _verify_vision(player, failures)
 	await _verify_proximity_and_damage_aggro(player, failures)
+	await _verify_dynamic_vision_and_sound(player, failures)
 	await _verify_flashlight_hunter(player, failures)
 	await _verify_darkness_seeker(player, failures)
 	await _verify_room_light_search_does_not_leak_player(player, failures)
@@ -156,16 +157,21 @@ func _verify_flashlight_hunter(player: Player3D, failures: Array[String]) -> voi
 func _verify_proximity_and_damage_aggro(player: Player3D, failures: Array[String]) -> void:
 	player.position = Vector3(0.0, 0.0, 0.0)
 	var nearby := _make_enemy("melee_chaser", Vector3(0.0, 0.0, -4.0))
-	nearby.rotation.y = PI
+	# 默认朝-Z，玩家位于其+Z侧后方，验证接近不会伪装成视觉确认。
+	nearby.rotation.y = 0.0
 	await get_tree().physics_frame
 	var proximity := MonsterAIManager.force_refresh_enemy(nearby)
-	if str(proximity.get("awareness", "")) != "visual_contact":
-		failures.append("A player within 4.8m does not trigger 360-degree proximity awareness: %s" % str(proximity))
+	if (
+		str(proximity.get("awareness", "")) != "proximity_contact"
+		or str(proximity.get("engagement", "")) != "alert"
+		or int(proximity.get("target_instance_id", -1)) != 0
+	):
+		failures.append("Close rear proximity must alert without granting a combat target: %s" % str(proximity))
 	var nearby_before := nearby.global_position.distance_to(player.global_position)
 	nearby.set_runtime_active(true, true)
 	await get_tree().create_timer(0.65).timeout
-	if nearby.global_position.distance_to(player.global_position) >= nearby_before - 0.05:
-		failures.append("Close-range awareness exists but does not make the monster approach the player")
+	if nearby.global_position.distance_to(player.global_position) >= nearby_before - 0.02:
+		failures.append("Close-range alert does not investigate its stimulus position")
 	nearby.queue_free()
 
 	player.position = Vector3(0.0, 0.0, 0.0)
@@ -183,6 +189,48 @@ func _verify_proximity_and_damage_aggro(player: Player3D, failures: Array[String
 	if distant.global_position.distance_to(player.global_position) >= distant_before - 0.05:
 		failures.append("Damage aggro exists but does not drive the distant monster toward its attacker")
 	distant.queue_free()
+	await get_tree().process_frame
+
+
+func _verify_dynamic_vision_and_sound(player: Player3D, failures: Array[String]) -> void:
+	player.position = Vector3.ZERO
+	var enemy := _make_enemy("melee_chaser", Vector3(0.0, 0.0, -11.0))
+	enemy.look_at(player.global_position + Vector3.UP * 0.7, Vector3.UP)
+	await get_tree().physics_frame
+	var dark := MonsterAIManager.force_refresh_enemy(enemy)
+	if (
+		str(dark.get("awareness", "")) == "visual_contact"
+		or not is_equal_approx(float(dark.get("vision_range", 0.0)), MonsterVisionSystem3D.DARKNESS_VISION_RANGE)
+	):
+		failures.append("Dark-state vision must use the shorter 8.5m range: %s" % str(dark))
+	var lamp := _make_omni("VisionRangeLamp", enemy.global_position + Vector3.UP * 2.0, 5.0, 10.0, "omni")
+	enemy.force_refresh_illumination()
+	var lit := MonsterAIManager.force_refresh_enemy(enemy)
+	if (
+		str(lit.get("awareness", "")) != "visual_contact"
+		or str(lit.get("engagement", "")) != "combat"
+		or not is_equal_approx(float(lit.get("vision_range", 0.0)), MonsterVisionSystem3D.ARTIFICIAL_LIGHT_VISION_RANGE)
+	):
+		failures.append("Lit-state vision does not extend to 13.5m and confirm combat: %s" % str(lit))
+	enemy.queue_free()
+	lamp.queue_free()
+	await get_tree().process_frame
+
+	player.position = Vector3(30.0, 0.0, 30.0)
+	var listener := _make_enemy("melee_chaser", Vector3(0.0, 0.0, 0.0))
+	await get_tree().physics_frame
+	var sound_position := Vector3(5.0, 0.0, 0.0)
+	var alerted := MonsterAIManager.broadcast_sound_stimulus(sound_position, 8.0, "container_open", player)
+	var sound := MonsterAIManager.force_refresh_enemy(listener)
+	if (
+		alerted < 1
+		or str(sound.get("awareness", "")) != "sound_contact"
+		or str(sound.get("engagement", "")) != "alert"
+		or int(sound.get("target_instance_id", -1)) != 0
+		or not (sound.get("stimulus_position", Vector3.ZERO) as Vector3).is_equal_approx(sound_position)
+	):
+		failures.append("Interaction sound must alert toward the event without leaking a player target: %s" % str(sound))
+	listener.queue_free()
 	await get_tree().process_frame
 
 

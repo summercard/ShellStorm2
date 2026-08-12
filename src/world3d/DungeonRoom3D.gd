@@ -1621,7 +1621,9 @@ func _emit_player_entered_if_present(body: Node3D) -> void:
 
 
 func _on_prop_searched(_prop: RoomFurniture3D, loot: Dictionary) -> void:
-	prop_searched.emit(self, loot)
+	var event := loot.duplicate(true)
+	event["sound_position"] = _prop.global_position
+	prop_searched.emit(self, event)
 
 
 func _on_service_activated(station: ServiceStation3D) -> void:

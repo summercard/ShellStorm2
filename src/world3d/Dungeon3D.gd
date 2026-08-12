@@ -2094,6 +2094,13 @@ func _ensure_conditional_extraction(type_id: String, room: DungeonRoom3D, local_
 
 
 func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(
+			loot_hint.get("sound_position", room.global_position) as Vector3,
+			8.0,
+			"container_open",
+			player
+		)
 	if _map_fate_triggers != null:
 		_map_fate_triggers.on_container_opened(str(loot_hint.get("size_class", "crate")))
 	var size_class := str(loot_hint.get("size_class", "medium"))
@@ -2595,6 +2602,8 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	if requires_key:
 		_consume_room_key()
 	_open_edges[edge] = true
+	if MonsterAIManager != null and player != null:
+		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
 	minimap.set_edge_open(_current_room_id, target_room_id, true)
 	_update_room_streaming(_current_room_id)
 	_refresh_edge_visuals(_current_room_id, target_room_id, true)

@@ -369,6 +369,15 @@ func activate_from_player_proximity(player_node: Node3D, activation_range: float
 	return true
 
 
+func activate_from_stimulus(stimulus_position: Vector3, _stimulus_kind := "interaction") -> bool:
+	if ai_state == "dead":
+		return false
+	_last_known_target_position = stimulus_position
+	if not _runtime_ai_active:
+		set_runtime_active(true)
+	return true
+
+
 func _physics_process(delta: float) -> void:
 	if illumination_sensor != null:
 		illumination_sensor.tick(delta)
@@ -411,8 +420,18 @@ func _physics_process(delta: float) -> void:
 			return
 	if _target == null:
 		var awareness := str(_ai_decision.get("awareness", "unaware"))
-		if awareness in ["room_light_search", "seek_darkness", "lost_contact"]:
+		if awareness in ["room_light_search", "seek_darkness", "lost_contact", "proximity_contact", "sound_contact"]:
 			_last_known_target_position = _ai_decision.get("stimulus_position", global_position) as Vector3
+			if awareness in ["proximity_contact", "sound_contact"] and ai_state not in ["alert", "search", "telegraph", "attack", "stagger"]:
+				transition_to("alert")
+			if ai_state == "alert" and _state_time <= 0.42:
+				velocity = velocity.move_toward(Vector3.ZERO, delta * 12.0)
+				move_and_slide()
+				var face_stimulus := _last_known_target_position - global_position
+				face_stimulus.y = 0.0
+				if face_stimulus.length_squared() > 0.01:
+					rotation.y = lerp_angle(rotation.y, atan2(-face_stimulus.x, -face_stimulus.z), minf(1.0, delta * 9.0))
+				return
 			if ai_state not in ["search", "telegraph", "attack", "stagger"]:
 				transition_to("search")
 			_tick_search(delta)
