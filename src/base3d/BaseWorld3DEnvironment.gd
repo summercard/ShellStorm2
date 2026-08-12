@@ -64,6 +64,8 @@ func _build_environment() -> void:
 	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	key_light.directional_shadow_max_distance = 90.0
 	add_child(key_light)
+	key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
+	key_light.set_meta("gameplay_light_kind", "sun")
 
 
 func _build_ground_kit() -> void:
@@ -181,6 +183,8 @@ func _build_navigation_lights() -> void:
 		light.omni_range = 6.8 if index in [5, 7, 9, 11] else 4.6
 		light.shadow_enabled = false
 		add_child(light)
+		light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+		light.set_meta("gameplay_light_kind", "omni")
 		_light_count += 1
 
 

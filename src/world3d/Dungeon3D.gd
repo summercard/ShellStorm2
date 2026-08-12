@@ -1123,6 +1123,8 @@ func _configure_environment() -> void:
 	key_light.shadow_enabled = true
 	key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
 	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
+	key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
+	key_light.set_meta("gameplay_light_kind", "sun")
 
 
 func _generate_layout() -> void:

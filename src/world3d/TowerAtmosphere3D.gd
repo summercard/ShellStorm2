@@ -22,6 +22,9 @@ var _current_floor_number := 100
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
 	_sun = sun
+	if _sun != null:
+		_sun.add_to_group(EnemyIllumination3D.SUN_GROUP)
+		_sun.set_meta("gameplay_light_kind", "sun")
 	_apply_fixed_lighting()
 
 

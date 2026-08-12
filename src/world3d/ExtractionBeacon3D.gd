@@ -148,6 +148,8 @@ func _build_visual() -> void:
 	_light.omni_range = 7.0
 	_light.light_energy = 2.4
 	add_child(_light)
+	_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	_light.set_meta("gameplay_light_kind", "omni")
 	var shape := CylinderShape3D.new()
 	shape.radius = 2.0
 	shape.height = 2.5

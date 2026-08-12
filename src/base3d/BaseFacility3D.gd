@@ -50,6 +50,8 @@ func _ready() -> void:
 	if beacon_light != null:
 		beacon_light.light_color = facility_color
 		beacon_light.light_energy = 1.15
+		beacon_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+		beacon_light.set_meta("gameplay_light_kind", "omni")
 	if not facility_id.is_empty() and BaseManager != null:
 		apply_snapshot(BaseManager.get_facility_snapshot(facility_id))
 

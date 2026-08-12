@@ -42,6 +42,8 @@ core_scenes=(
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
+  verify_enemy_illumination_states
+  verify_monster_ai_light_effects
   verify_3d_melee_combat_flow
   verify_3d_melee_feedback_flow
   verify_training_range_3d_flow

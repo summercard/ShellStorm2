@@ -72,6 +72,7 @@ BlueprintRegistry="*res://src/base/BlueprintRegistry.gd"
 FateCardGameBridge="*res://src/game/FateCardGameBridge.gd"
 LevelSelect="*res://src/game/LevelSelectState.gd"
 MobileInput="*res://src/ui/MobileInput.gd"
+MonsterAIManager="*res://src/enemy3d/MonsterAIManager.gd"
 
 [display]
 

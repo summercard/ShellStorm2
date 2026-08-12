@@ -7,15 +7,25 @@ signal summon_requested(enemy: Enemy3D, count: int)
 signal state_changed(previous: String, current: String)
 signal boss_phase_changed(enemy: Enemy3D, phase: int)
 signal health_changed(enemy: Enemy3D, current: int, maximum: int)
+signal illumination_state_changed(enemy: Enemy3D, previous: String, current: String, context: Dictionary)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
+const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
 const VALID_STATES := ["idle", "patrol", "alert", "chase", "search", "telegraph", "attack", "stagger", "dead"]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
 const BOSS_SIZE_MULTIPLIER := 1.5
+const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.70
+const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 0.70
+const SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND := 0.02
+const ILLUMINATION_UI_COLORS := {
+	"darkness": Color(0.42, 0.20, 0.62, 1.0),
+	"artificial_light": Color(0.10, 0.78, 1.0, 1.0),
+	"sunlight": Color(1.0, 0.70, 0.10, 1.0),
+}
 const BODY_SCALE_BY_KIND := {
 	"exploder": 0.78,
 	"ranged_caster": 1.0,
@@ -96,8 +106,6 @@ var elite_modifier_id := ""
 var _absorb_cooldown := 0.0
 var boss_phase := 1
 var _ambush_triggered := false
-var _flashlight_reveal_radius := 4.4
-var _flashlight_reveal_multiplier := 1.0
 var _strafe_sign := 1.0
 var _bypass_shield_once := false
 var _source_hp_scale := 1.0
@@ -110,6 +118,9 @@ var _overhead_health_size := Vector2.ZERO
 var _overhead_health_ratio := 1.0
 var _kind_scale_multiplier := 1.0
 var _variant_scale_multiplier := 1.0
+var illumination_sensor: EnemyIllumination3D
+var _illumination_damage_accumulator := 0.0
+var _ai_decision: Dictionary = {}
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -120,7 +131,14 @@ func _ready() -> void:
 	add_to_group("damageable_3d")
 	collision_layer = 4
 	collision_mask = 1
+	illumination_sensor = ILLUMINATION_SCRIPT.new() as EnemyIllumination3D
+	illumination_sensor.configure(self)
+	illumination_sensor.illumination_state_changed.connect(_on_illumination_state_changed)
 	apply_profile(enemy_kind)
+	illumination_sensor.force_refresh(true)
+	if MonsterAIManager != null:
+		MonsterAIManager.register_enemy(self)
+	tree_exiting.connect(_on_tree_exiting)
 	health_changed.connect(_on_self_health_changed)
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
@@ -281,7 +299,25 @@ func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> voi
 		_overhead_health_image.fill_rect(
 			Rect2i(inner_rect.position, Vector2i(fill_width, inner_rect.size.y)), fill_color
 		)
+	_draw_illumination_status_on_health_bar()
 	_overhead_health_texture.update(_overhead_health_image)
+
+
+func _draw_illumination_status_on_health_bar() -> void:
+	if _overhead_health_image == null:
+		return
+	var state := get_illumination_state()
+	var segment_count := _illumination_ui_segment_count(state)
+	var color := ILLUMINATION_UI_COLORS.get(state, ILLUMINATION_UI_COLORS["darkness"]) as Color
+	var segment_width := 10
+	var gap := 3
+	var total_width := segment_count * segment_width + (segment_count - 1) * gap
+	var start_x := (HEALTH_BAR_TEXTURE_SIZE.x - total_width) / 2
+	for index in range(segment_count):
+		_overhead_health_image.fill_rect(
+			Rect2i(start_x + index * (segment_width + gap), 0, segment_width, 4),
+			color
+		)
 
 
 func get_enemy_data() -> Dictionary:
@@ -311,13 +347,16 @@ func is_runtime_ai_active() -> bool:
 
 
 func _physics_process(delta: float) -> void:
+	if illumination_sensor != null:
+		illumination_sensor.tick(delta)
+	_tick_illumination_effects(delta)
 	_position_overhead_health_bar()
 	if not _home_initialized:
 		_home_position = global_position
 		_home_initialized = true
 	_state_time += delta
 	_absorb_cooldown = maxf(0.0, _absorb_cooldown - delta)
-	_attack_timer = maxf(0.0, _attack_timer - delta)
+	_attack_timer = maxf(0.0, _attack_timer - delta * get_attack_frequency_multiplier())
 	_slow_timer = maxf(0.0, _slow_timer - delta)
 	_external_timer = maxf(0.0, _external_timer - delta)
 	if _external_timer <= 0.0:
@@ -328,9 +367,33 @@ func _physics_process(delta: float) -> void:
 	if ai_state == "dead":
 		velocity = Vector3.ZERO
 		return
-	if _target == null or not is_instance_valid(_target) or _target.get("current_hp") <= 0:
-		_target = _find_target()
+	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
+	_apply_ai_decision(_ai_decision)
+	if enemy_kind == "ambusher" and not _ambush_triggered:
+		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
+		avatar.set_ambush_revealed(false)
+		var exposed_to_light := (
+			illumination_sensor != null
+			and illumination_sensor.illumination_state != EnemyIllumination3D.STATE_DARKNESS
+		)
+		var proximity_player := _get_player_in_proximity(4.4)
+		if exposed_to_light or current_hp < max_hp or proximity_player != null:
+			_ambush_triggered = true
+			avatar.set_ambush_revealed(true)
+			if _target == null and proximity_player != null:
+				_target = proximity_player
+			transition_to("telegraph")
+		elif _target == null:
+			move_and_slide()
+			return
 	if _target == null:
+		var awareness := str(_ai_decision.get("awareness", "unaware"))
+		if awareness in ["room_light_search", "seek_darkness", "lost_contact"]:
+			_last_known_target_position = _ai_decision.get("stimulus_position", global_position) as Vector3
+			if ai_state not in ["search", "telegraph", "attack", "stagger"]:
+				transition_to("search")
+			_tick_search(delta)
+			return
 		if ai_state == "idle" and _state_time > 2.2:
 			transition_to("patrol")
 		if ai_state == "patrol":
@@ -343,33 +406,16 @@ func _physics_process(delta: float) -> void:
 	var to_target := _target.global_position - global_position
 	to_target.y = 0.0
 	var distance := to_target.length()
-	var target_visible := _has_line_of_sight(_target)
-	if enemy_kind == "ambusher" and not _ambush_triggered:
-		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
-		avatar.set_ambush_revealed(false)
-		var reveal_radius := 4.4
-		if is_instance_valid(_target) and (_target as Node).has_node("PlayerFlashlight3D"):
-			var fl := (_target as Node).get_node("PlayerFlashlight3D")
-			if fl.is_light_enabled() and not fl.is_depleted():
-				var reveal_mult := float(fl.get_reveal_multiplier()) * 1.7
-				reveal_radius = 4.4 * reveal_mult
-		_flashlight_reveal_radius = reveal_radius
-		_flashlight_reveal_multiplier = reveal_radius / 4.4
-		if distance <= reveal_radius or current_hp < max_hp:
-			_ambush_triggered = true
-			avatar.set_ambush_revealed(true)
-			transition_to("telegraph")
-		else:
-			move_and_slide()
-			return
-	if target_visible:
-		_last_known_target_position = _target.global_position
+	var target_visible := bool(_ai_decision.get("target_visible", false))
+	var flashlight_tracking := str(_ai_decision.get("awareness", "")) == "flashlight_contact"
+	if target_visible or flashlight_tracking:
+		_last_known_target_position = _ai_decision.get("target_position", _target.global_position) as Vector3
 		_lost_sight_time = 0.0
 	else:
 		_lost_sight_time += delta
 		if ai_state == "idle" and _state_time > 2.2:
 			transition_to("patrol")
-	if distance < 13.5 and ai_state in ["idle", "patrol", "search"] and target_visible:
+	if (distance < 13.5 or flashlight_tracking) and ai_state in ["idle", "patrol", "search"] and (target_visible or flashlight_tracking):
 		transition_to("alert")
 	if ai_state == "alert" and _state_time > 0.28:
 		transition_to("chase")
@@ -404,15 +450,16 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	if distance <= attack_range and _attack_timer <= 0.0:
 		transition_to("telegraph")
 		return
-	var desired := to_target.normalized() * move_speed * _slow_factor
+	var effective_move_speed := get_effective_move_speed()
+	var desired := to_target.normalized() * effective_move_speed * _slow_factor
 	if enemy_kind in ["ranged_caster", "summoner", "boss"]:
 		var radial := to_target.normalized()
 		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
 		var ideal_distance := attack_range * (0.78 if enemy_kind != "summoner" else 0.86)
 		var radial_weight := clampf((distance - ideal_distance) / maxf(1.0, ideal_distance), -1.0, 1.0)
-		desired = (tangent * 0.78 + radial * radial_weight).normalized() * move_speed * _slow_factor
+		desired = (tangent * 0.78 + radial * radial_weight).normalized() * effective_move_speed * _slow_factor
 		if distance < attack_range * 0.52:
-			desired = (-radial * 0.82 + tangent * 0.35).normalized() * move_speed * _slow_factor
+			desired = (-radial * 0.82 + tangent * 0.35).normalized() * effective_move_speed * _slow_factor
 	velocity = velocity.lerp(desired, minf(1.0, delta * 5.5)) + _external_velocity
 	move_and_slide()
 
@@ -421,7 +468,7 @@ func _tick_search(delta: float) -> void:
 	var offset := _last_known_target_position - global_position
 	offset.y = 0.0
 	if offset.length() > 0.65:
-		velocity = velocity.lerp(offset.normalized() * move_speed * 0.72, minf(1.0, delta * 4.0))
+		velocity = velocity.lerp(offset.normalized() * get_effective_move_speed() * 0.72, minf(1.0, delta * 4.0))
 		move_and_slide()
 	else:
 		velocity = velocity.move_toward(Vector3.ZERO, delta * 8.0)
@@ -437,7 +484,7 @@ func _tick_patrol(delta: float) -> void:
 		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
 	var offset := _patrol_target - global_position
 	offset.y = 0.0
-	velocity = velocity.lerp(offset.normalized() * move_speed * 0.32, minf(1.0, delta * 3.2))
+	velocity = velocity.lerp(offset.normalized() * get_effective_move_speed() * 0.32, minf(1.0, delta * 3.2))
 	move_and_slide()
 
 
@@ -456,6 +503,18 @@ func _has_line_of_sight(target: Node3D) -> bool:
 		return true
 	var collider := hit.get("collider") as Node
 	return collider == target or (collider != null and target.is_ancestor_of(collider))
+
+
+func _has_player_in_proximity(radius: float) -> bool:
+	return _get_player_in_proximity(radius) != null
+
+
+func _get_player_in_proximity(radius: float) -> Node3D:
+	var radius_squared := radius * radius
+	for candidate in get_tree().get_nodes_in_group("player_3d"):
+		if candidate is Node3D and global_position.distance_squared_to((candidate as Node3D).global_position) <= radius_squared:
+			return candidate as Node3D
+	return null
 
 
 func _perform_attack(to_target: Vector3, distance: float) -> void:
@@ -668,6 +727,12 @@ func get_state_snapshot() -> Dictionary:
 	if collision_shape != null and collision_shape.shape is CylinderShape3D:
 		var cylinder := collision_shape.shape as CylinderShape3D
 		shape_snapshot = {"radius": cylinder.radius, "height": cylinder.height}
+	var illumination_snapshot := (
+		illumination_sensor.get_snapshot() if illumination_sensor != null else {
+			"illumination_state": EnemyIllumination3D.STATE_DARKNESS,
+			"valid_illumination_states": EnemyIllumination3D.VALID_STATES.duplicate(),
+		}
+	)
 	return {
 		"enemy_kind": enemy_kind, "state": ai_state, "valid_states": VALID_STATES.duplicate(),
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
@@ -688,11 +753,118 @@ func get_state_snapshot() -> Dictionary:
 		),
 		"collision_profile": shape_snapshot,
 		"ambush_triggered": _ambush_triggered,
-		"flashlight_reveal_radius": _flashlight_reveal_radius,
-		"flashlight_reveal_multiplier": _flashlight_reveal_multiplier,
+		"illumination_state": illumination_snapshot.get("illumination_state", EnemyIllumination3D.STATE_DARKNESS),
+		"illumination": illumination_snapshot,
+		"illumination_move_multiplier": get_illumination_move_multiplier(),
+		"illumination_attack_frequency_multiplier": get_attack_frequency_multiplier(),
+		"sunlight_damage_per_second": float(max_hp) * SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND,
+		"illumination_ui_state": get_illumination_state(),
+		"illumination_ui_color": ILLUMINATION_UI_COLORS.get(get_illumination_state(), Color.WHITE),
+		"illumination_ui_segment_count": _illumination_ui_segment_count(get_illumination_state()),
+		"ai_decision": _ai_decision.duplicate(true),
 		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
 	}
+
+
+func get_illumination_state() -> String:
+	return (
+		illumination_sensor.illumination_state
+		if illumination_sensor != null
+		else EnemyIllumination3D.STATE_DARKNESS
+	)
+
+
+func force_refresh_illumination(commit_immediately := true) -> void:
+	if illumination_sensor != null:
+		illumination_sensor.force_refresh(commit_immediately)
+
+
+func get_illumination_snapshot() -> Dictionary:
+	return illumination_sensor.get_snapshot() if illumination_sensor != null else {}
+
+
+func find_nearby_dark_position(radius: float, candidate_count: int) -> Vector3:
+	return (
+		illumination_sensor.find_nearby_dark_position(radius, candidate_count)
+		if illumination_sensor != null
+		else Vector3.ZERO
+	)
+
+
+func get_illumination_move_multiplier() -> float:
+	return (
+		ARTIFICIAL_LIGHT_MOVE_MULTIPLIER
+		if get_illumination_state() == EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
+		else 1.0
+	)
+
+
+func get_effective_move_speed() -> float:
+	return move_speed * get_illumination_move_multiplier()
+
+
+func get_attack_frequency_multiplier() -> float:
+	return (
+		ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER
+		if get_illumination_state() == EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
+		else 1.0
+	)
+
+
+func _tick_illumination_effects(delta: float) -> void:
+	if ai_state == "dead":
+		return
+	if get_illumination_state() != EnemyIllumination3D.STATE_SUNLIGHT:
+		_illumination_damage_accumulator = 0.0
+		return
+	_illumination_damage_accumulator += delta
+	while _illumination_damage_accumulator >= 1.0 and ai_state != "dead":
+		_illumination_damage_accumulator -= 1.0
+		var applied := maxi(1, int(ceil(float(max_hp) * SUNLIGHT_MAX_HP_DAMAGE_PER_SECOND)))
+		current_hp = maxi(0, current_hp - applied)
+		health_changed.emit(self, current_hp, max_hp)
+		avatar.flash_hit()
+		_spawn_damage_number(applied, false)
+		if current_hp <= 0:
+			_die()
+
+
+func _illumination_ui_segment_count(state: String) -> int:
+	return {
+		EnemyIllumination3D.STATE_DARKNESS: 1,
+		EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT: 2,
+		EnemyIllumination3D.STATE_SUNLIGHT: 3,
+	}.get(state, 1)
+
+
+func _apply_ai_decision(decision: Dictionary) -> void:
+	var target_id := int(decision.get("target_instance_id", 0))
+	var resolved := instance_from_id(target_id) as Node3D if target_id > 0 else null
+	if is_instance_valid(resolved) and float(resolved.get("current_hp")) > 0.0:
+		_target = resolved
+	elif not (
+		enemy_kind == "ambusher"
+		and _ambush_triggered
+		and is_instance_valid(_target)
+		and global_position.distance_to(_target.global_position) <= 4.4
+	):
+		_target = null
+	var stimulus := decision.get("stimulus_position", Vector3.ZERO) as Vector3
+	if stimulus != Vector3.ZERO:
+		_last_known_target_position = stimulus
+
+
+func _on_illumination_state_changed(previous: String, current: String, context: Dictionary) -> void:
+	_on_self_health_changed(self, current_hp, max_hp)
+	if MonsterAIManager != null:
+		_ai_decision = MonsterAIManager.force_refresh_enemy(self)
+	illumination_state_changed.emit(self, previous, current, context)
+
+
+func _on_tree_exiting() -> void:
+	if MonsterAIManager != null:
+		MonsterAIManager.unregister_enemy(self)
 
 
 func _behavior_role() -> String:
@@ -715,19 +887,6 @@ func _telegraph_duration() -> float:
 	if enemy_kind == "boss":
 		return 0.62
 	return 0.38
-
-
-func _find_target() -> Node3D:
-	var nearest: Node3D = null
-	var nearest_distance := INF
-	for candidate in get_tree().get_nodes_in_group("player_3d"):
-		if not candidate is Node3D:
-			continue
-		var distance := global_position.distance_squared_to((candidate as Node3D).global_position)
-		if distance < nearest_distance:
-			nearest = candidate as Node3D
-			nearest_distance = distance
-	return nearest
 
 
 func _die() -> void:

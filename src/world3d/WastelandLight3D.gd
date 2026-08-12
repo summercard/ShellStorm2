@@ -86,6 +86,7 @@ func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := tr
 		_light.light_energy = energy if active and light_enabled else 0.0
 		_light.shadow_enabled = active and light_enabled and allow_shadow and cast_shadow
 	_update_lens_state()
+	_notify_illumination_sensors()
 
 
 func set_light_enabled(enabled: bool) -> void:
@@ -104,6 +105,7 @@ func set_light_enabled(enabled: bool) -> void:
 			and cast_shadow
 		)
 	_update_lens_state()
+	_notify_illumination_sensors()
 
 
 func is_light_enabled() -> bool:
@@ -158,6 +160,8 @@ func _build_fixture() -> void:
 		_light.position = Vector3(0.62, 2.12, 0)
 		_build_light_pool()
 	add_child(_light)
+	_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	_light.set_meta("gameplay_light_kind", "omni")
 
 
 func _build_light_pool() -> void:
@@ -205,6 +209,11 @@ func _update_lens_state() -> void:
 		return
 	_lens_material.emission_enabled = light_enabled and _runtime_active
 	_lens_material.albedo_color = light_color if light_enabled and _runtime_active else Color(0.10, 0.12, 0.12)
+
+
+func _notify_illumination_sensors() -> void:
+	if is_inside_tree():
+		get_tree().call_group(EnemyIllumination3D.RECEIVER_GROUP, "force_refresh_illumination", true)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> MeshInstance3D:

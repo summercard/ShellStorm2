@@ -31,6 +31,8 @@ func _ready() -> void:
 	_apply_material(door_mesh, entrance_color.darkened(0.70), 0.42, 0.62)
 	_apply_material(beacon_mesh, entrance_color, 0.18, 0.34, true)
 	beacon_light.light_color = entrance_color
+	beacon_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	beacon_light.set_meta("gameplay_light_kind", "omni")
 
 
 func _process(delta: float) -> void:

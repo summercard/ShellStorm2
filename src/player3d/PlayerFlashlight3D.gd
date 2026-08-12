@@ -179,6 +179,7 @@ func set_light_enabled(enabled: bool) -> void:
 	_spill_energy_active = spill_energy
 	_front_fill_energy_active = front_fill_energy
 	light_enabled_changed.emit(enabled)
+	_notify_illumination_sensors()
 
 
 func toggle_light() -> bool:
@@ -229,6 +230,7 @@ func consume_charge(amount: float) -> void:
 				_front_fill.light_energy = 0.0
 			state_changed.emit("depleted", {})
 			light_enabled_changed.emit(false)
+			_notify_illumination_sensors()
 		return
 	_charge_ratio = new_ratio
 	_tier = _compute_tier(_charge_ratio)
@@ -244,6 +246,8 @@ func set_charge_ratio(ratio: float) -> void:
 	_tier = _compute_tier(_charge_ratio)
 	# 电量实际变化即广播:基地补满、存档恢复、测试设置同一 tier 内调整都要同步 HUD。
 	charge_changed.emit(_charge_ratio, _tier)
+	if _charge_ratio <= 0.0 and _enabled:
+		set_light_enabled(false)
 
 
 ## 加值返回 true。已满返回 false(quick-slot 据此决定是否消耗道具)。
@@ -432,10 +436,16 @@ func _build_lights() -> void:
 	# top_level=true 让光的世界坐标脱离父链，每帧 force_sync 直接写入绝对位置。
 	_beam.top_level = true
 	_light_kit.add_child(_beam)
+	_beam.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	_beam.set_meta("gameplay_light_kind", "flashlight")
+	_beam.set_meta("gameplay_light_owner_instance_id", _player.get_instance_id() if _player != null else 0)
 	_spill = OmniLight3D.new()
 	_spill.name = "EnvironmentSpill"
 	_spill.top_level = true
 	_light_kit.add_child(_spill)
+	_spill.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+	_spill.set_meta("gameplay_light_kind", "flashlight")
+	_spill.set_meta("gameplay_light_owner_instance_id", _player.get_instance_id() if _player != null else 0)
 	_front_fill = SpotLight3D.new()
 	_front_fill.name = "AvatarFrontFill"
 	_front_fill.top_level = true
@@ -495,3 +505,9 @@ func _apply_configuration() -> void:
 		_spill.visible = _enabled
 	if _front_fill != null:
 		_front_fill.visible = _enabled
+	_notify_illumination_sensors()
+
+
+func _notify_illumination_sensors() -> void:
+	if is_inside_tree():
+		get_tree().call_group(EnemyIllumination3D.RECEIVER_GROUP, "force_refresh_illumination", true)

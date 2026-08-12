@@ -116,12 +116,14 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 		failures.append("Enemy species body scales do not create a readable small/standard/heavy/boss hierarchy")
 
 	var seeker := _make_enemy("melee_chaser", Vector3(0, 0, -6))
+	seeker.look_at(player.global_position + Vector3.UP * 0.7, Vector3.UP)
 	await get_tree().physics_frame
 	if not bool(seeker.call("_has_line_of_sight", player)):
 		failures.append("Enemy ray treats the player collider as an occluding wall")
 	await get_tree().create_timer(0.36).timeout
 	if seeker.ai_state not in ["alert", "chase", "telegraph", "attack"]:
-		failures.append("Enemy with a clear target does not leave idle/patrol for combat")
+		var vision_debug := MonsterVisionSystem3D.new().evaluate_target(seeker, player)
+		failures.append("Enemy with a clear target does not leave idle/patrol for combat: decision=%s vision=%s forward=%s players=%d" % [str(seeker.get_state_snapshot().get("ai_decision", {})), str(vision_debug), str(-seeker.global_transform.basis.z), get_tree().get_nodes_in_group("player_3d").size()])
 	var blocker := StaticBody3D.new()
 	blocker.collision_layer = 1
 	blocker.collision_mask = 0
@@ -196,7 +198,7 @@ func _verify_ambusher(player: Player3D, failures: Array[String]) -> void:
 	await get_tree().physics_frame
 	var triggered := enemy.get_state_snapshot()
 	if not bool(triggered.get("ambush_triggered", false)) or str(triggered.get("state", "")) not in ["telegraph", "attack", "chase"]:
-		failures.append("Ambusher does not reveal and enter its lunge telegraph near the player")
+		failures.append("Ambusher does not reveal and enter its lunge telegraph near the player: %s" % str(triggered))
 	enemy.queue_free()
 	await get_tree().process_frame
 
