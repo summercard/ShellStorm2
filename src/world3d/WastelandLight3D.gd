@@ -20,6 +20,7 @@ var _built := false
 var _runtime_active := true
 var _runtime_flicker := true
 var _runtime_shadow_allowed := true
+var _quality_shadow_allowed := true
 
 
 func configure(
@@ -48,6 +49,8 @@ func _ready() -> void:
 	_apply_configuration()
 	_built = true
 	_refresh_process_state()
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_light(self)
 
 
 func _process(delta: float) -> void:
@@ -60,8 +63,8 @@ func _process(delta: float) -> void:
 	if _light == null:
 		return
 	if not light_enabled:
-		# 开关只归零能量，不把 Light3D 从 Compatibility 渲染器的光源列表摘除。
-		_light.visible = _runtime_active
+		# 关闭灯具直接退出渲染光源列表，避免零能量 Light3D 仍参与维护。
+		_light.visible = false
 		_light.light_energy = 0.0
 		return
 	var slow_wave := sin(_elapsed * (1.15 + float(flicker_seed % 5) * 0.08) + float(flicker_seed)) * 0.07
@@ -82,9 +85,11 @@ func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := tr
 	_refresh_process_state()
 	visible = active
 	if _light != null:
-		_light.visible = active
+		_light.visible = active and light_enabled
 		_light.light_energy = energy if active and light_enabled else 0.0
-		_light.shadow_enabled = active and light_enabled and allow_shadow and cast_shadow
+		_light.shadow_enabled = (
+			active and light_enabled and allow_shadow and _quality_shadow_allowed and cast_shadow
+		)
 	_update_lens_state()
 	_notify_illumination_sensors()
 
@@ -93,15 +98,13 @@ func set_light_enabled(enabled: bool) -> void:
 	light_enabled = enabled
 	_refresh_process_state()
 	if _light != null:
-		# 房间加载期间保留 Light3D 的渲染实例，只通过能量控制开关。
-		# Compatibility 后端若先 visible=false 再恢复，属性虽然变回 5.6，
-		# 渲染输出仍可能停留在关灯帧。
-		_light.visible = _runtime_active
+		_light.visible = _runtime_active and light_enabled
 		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			_runtime_active
 			and light_enabled
 			and _runtime_shadow_allowed
+			and _quality_shadow_allowed
 			and cast_shadow
 		)
 	_update_lens_state()
@@ -127,6 +130,7 @@ func get_snapshot() -> Dictionary:
 		"runtime_flicker": _runtime_flicker,
 		"brightness_modulating": is_processing() and failing,
 		"runtime_shadow_allowed": _runtime_shadow_allowed,
+		"quality_shadow_allowed": _quality_shadow_allowed,
 		"shadow_capable": cast_shadow,
 		"shadow_enabled": _light != null and _light.shadow_enabled,
 		"current_energy": _light.light_energy if _light != null else 0.0,
@@ -134,6 +138,20 @@ func get_snapshot() -> Dictionary:
 		"shadow_caster_mask": _light.shadow_caster_mask if _light != null else 0,
 		"is_3d": true,
 	}
+
+
+func apply_performance_quality(profile: String) -> void:
+	# High: 太阳+手电+当前房主灯；Balanced: 太阳+手电；Low: 只保留手电。
+	_quality_shadow_allowed = profile == "high"
+	if _light != null:
+		_light.shadow_enabled = (
+			_runtime_active
+			and light_enabled
+			and _runtime_shadow_allowed
+			and _quality_shadow_allowed
+			and cast_shadow
+		)
+		_light.shadow_blur = 1.0 if profile == "high" else 0.75 if profile == "balanced" else 0.5
 
 
 func _refresh_process_state() -> void:
@@ -162,6 +180,13 @@ func _build_fixture() -> void:
 	add_child(_light)
 	_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
 	_light.set_meta("gameplay_light_kind", "omni")
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(
+			_light,
+			GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT,
+			_find_room_id()
+		)
+	_light.tree_exiting.connect(_unregister_gameplay_light.bind(_light))
 
 
 func _build_light_pool() -> void:
@@ -184,13 +209,14 @@ func _build_light_pool() -> void:
 func _apply_configuration() -> void:
 	if _light != null:
 		_light.light_color = light_color
-		_light.visible = _runtime_active
+		_light.visible = _runtime_active and light_enabled
 		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.omni_range = light_range
 		_light.shadow_enabled = (
 			_runtime_active
 			and light_enabled
 			and _runtime_shadow_allowed
+			and _quality_shadow_allowed
 			and cast_shadow
 		)
 		_light.light_cull_mask = light_cull_mask
@@ -214,6 +240,20 @@ func _update_lens_state() -> void:
 func _notify_illumination_sensors() -> void:
 	if is_inside_tree():
 		get_tree().call_group(EnemyIllumination3D.RECEIVER_GROUP, "force_refresh_illumination", true)
+
+
+func _find_room_id() -> String:
+	var cursor: Node = self
+	while cursor != null:
+		if cursor is DungeonRoom3D:
+			return (cursor as DungeonRoom3D).room_id
+		cursor = cursor.get_parent()
+	return ""
+
+
+func _unregister_gameplay_light(light: Light3D) -> void:
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.unregister_node(light)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> MeshInstance3D:

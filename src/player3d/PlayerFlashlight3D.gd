@@ -87,6 +87,7 @@ var _drain_accumulator := 0.0
 var _beam_energy_active := 0.0
 var _spill_energy_active := 0.0
 var _front_fill_energy_active := 0.0
+var _performance_profile := "high"
 
 
 func _ready() -> void:
@@ -94,6 +95,8 @@ func _ready() -> void:
 	_enabled = start_enabled
 	_build_lights()
 	_apply_configuration()
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_light(self)
 	force_sync()
 	# 关闭时三盏灯均不可见，不需要每帧重写三组全局变换；开启瞬间先同步，
 	# 开启期间再恢复逐帧跟随，因此按F后的方向与移动表现不变。
@@ -134,6 +137,8 @@ func force_sync() -> void:
 	_spill.global_position = _player.global_position + Vector3.UP * spill_height - aim * 0.12
 	_front_fill.global_position = _player.global_position + aim * front_fill_forward + Vector3.UP * front_fill_height
 	_front_fill.look_at(_player.global_position + Vector3.UP * avatar_target_height, Vector3.UP)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.update_node(_beam)
 
 
 func set_light_enabled(enabled: bool) -> void:
@@ -425,6 +430,19 @@ func get_snapshot() -> Dictionary:
 	}
 
 
+func apply_performance_quality(profile: String) -> void:
+	_performance_profile = profile if profile in ["high", "balanced", "low"] else "high"
+	if _beam != null:
+		_beam.shadow_enabled = true
+		_beam.shadow_blur = (
+			beam_shadow_blur
+			if _performance_profile == "high"
+			else minf(beam_shadow_blur, 0.9)
+			if _performance_profile == "balanced"
+			else minf(beam_shadow_blur, 0.65)
+		)
+
+
 func _build_lights() -> void:
 	# 三盏灯打包成一个 Node3D 子树：F 键直接切 _light_kit.visible，
 	# 后续要加灯只要继续挂到 _light_kit 下即可。
@@ -439,6 +457,12 @@ func _build_lights() -> void:
 	_beam.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
 	_beam.set_meta("gameplay_light_kind", "flashlight")
 	_beam.set_meta("gameplay_light_owner_instance_id", _player.get_instance_id() if _player != null else 0)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(
+			_beam,
+			GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT
+		)
+	_beam.tree_exiting.connect(_unregister_gameplay_beam)
 	_spill = OmniLight3D.new()
 	_spill.name = "EnvironmentSpill"
 	_spill.top_level = true
@@ -466,7 +490,13 @@ func _apply_configuration() -> void:
 		_beam.shadow_enabled = true
 		_beam.shadow_bias = beam_shadow_bias
 		_beam.shadow_normal_bias = beam_shadow_normal_bias
-		_beam.shadow_blur = beam_shadow_blur
+		_beam.shadow_blur = (
+			beam_shadow_blur
+			if _performance_profile == "high"
+			else minf(beam_shadow_blur, 0.9)
+			if _performance_profile == "balanced"
+			else minf(beam_shadow_blur, 0.65)
+		)
 		_beam.light_cull_mask = ENVIRONMENT_RENDER_LAYER
 		# Godot 的 light_cull_mask 只隔离受光对象；阴影图有独立的
 		# shadow_caster_mask。这里必须明确排除 layer 2，角色与手持枪才不会
@@ -510,3 +540,8 @@ func _apply_configuration() -> void:
 func _notify_illumination_sensors() -> void:
 	if is_inside_tree():
 		get_tree().call_group(EnemyIllumination3D.RECEIVER_GROUP, "force_refresh_illumination", true)
+
+
+func _unregister_gameplay_beam() -> void:
+	if GameplaySpatialRegistry3D != null and _beam != null:
+		GameplaySpatialRegistry3D.unregister_node(_beam)

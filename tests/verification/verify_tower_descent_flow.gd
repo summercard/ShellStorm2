@@ -634,7 +634,7 @@ func _ready() -> void:
 		"只进入98层安全屋就提前提交了随机房间布局",
 		failures
 	)
-	var entry_light := entry98.get_node_or_null("RoomCeilingLight") as WastelandLight3D
+	var entry_light := entry98.find_child("RoomCeilingLight", true, false) as WastelandLight3D
 	_expect(
 		not tower.player.combat_enabled
 		and entry_light != null

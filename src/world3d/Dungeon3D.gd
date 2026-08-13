@@ -166,6 +166,8 @@ var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
 var _runtime_restore_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
+var _segment_runtime_state: Dictionary = {}
+var _room_stream_state_cache: Dictionary = {}
 
 
 func _ready() -> void:
@@ -189,6 +191,8 @@ func _ready() -> void:
 	add_child(_map_fate_triggers)
 	_install_holographic_hud_style()
 	_configure_environment()
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_atmosphere(self)
 	_generate_layout()
 	player.set_combat_enabled(true)
 	FateCardGameBridge.reset_run_state()
@@ -328,7 +332,11 @@ func _runtime_scope_for_save(_floor_index: int, room_id: String) -> String:
 
 
 func _build_runtime_world_save_snapshot() -> Dictionary:
-	return {}
+	_capture_loaded_runtime_rooms()
+	return {
+		"schema": "dungeon_world_state_v1",
+		"segment_runtime_state": _segment_runtime_state.duplicate(true),
+	}
 
 
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
@@ -414,7 +422,11 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	_refresh_loot_label()
 
 
-func _restore_runtime_world_save_snapshot(_snapshot: Dictionary) -> bool:
+func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
+	var world_state := snapshot.get("world_state", {}) as Dictionary
+	var saved_segment_state: Variant = world_state.get("segment_runtime_state", {})
+	if saved_segment_state is Dictionary:
+		_segment_runtime_state = (saved_segment_state as Dictionary).duplicate(true)
 	return true
 
 
@@ -527,11 +539,19 @@ func _tick_enemy_preactivation(delta: float) -> void:
 	)
 	if player == null:
 		return
-	for room_enemies in _enemy_nodes_by_room.values():
-		for value in room_enemies as Array:
-			var enemy := value as Enemy3D
-			if enemy != null and is_instance_valid(enemy):
-				enemy.activate_from_player_proximity(player, ENEMY_PREACTIVATION_RANGE)
+	var candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			player.global_position,
+			ENEMY_PREACTIVATION_RANGE,
+			[GameplaySpatialRegistry3D.KIND_ENEMY]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	for value in candidates:
+		var enemy := value as Enemy3D
+		if enemy != null and is_instance_valid(enemy) and is_ancestor_of(enemy):
+			enemy.activate_from_player_proximity(player, ENEMY_PREACTIVATION_RANGE)
 
 
 func _setup_run_modules() -> void:
@@ -1195,6 +1215,21 @@ func _configure_environment() -> void:
 	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
 	key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
 	key_light.set_meta("gameplay_light_kind", "sun")
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(key_light, GameplaySpatialRegistry3D.KIND_SUN)
+		key_light.tree_exiting.connect(GameplaySpatialRegistry3D.unregister_node.bind(key_light))
+
+
+func apply_performance_quality(profile: String) -> void:
+	if world_environment.environment != null:
+		world_environment.environment.fog_enabled = profile != "low"
+		world_environment.environment.fog_density = (
+			visual_theme.fog_density
+			if profile == "high"
+			else visual_theme.fog_density * 0.72
+		)
+	key_light.shadow_enabled = profile != "low"
+	key_light.directional_shadow_max_distance = 96.0 if profile == "high" else 64.0 if profile == "balanced" else 36.0
 
 
 func _generate_layout() -> void:
@@ -1627,10 +1662,13 @@ func _create_extraction_beacon(room: DungeonRoom3D, type_id: String, countdown: 
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room == null:
 		return
+	var previous_runtime_room_id := _current_room_id
 	if not _current_room_id.is_empty() and _current_room_id != room.room_id:
 		var previous_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
 		if previous_room != null:
 			previous_room.hide_door_prompts()
+	if not previous_runtime_room_id.is_empty() and previous_runtime_room_id != room.room_id:
+		_capture_room_runtime_state(previous_runtime_room_id)
 	_current_room_id = room.room_id
 	room_entered.emit(room)
 	if _runtime_persistence_active and BaseManager != null:
@@ -1784,7 +1822,16 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			continue
 		enemy.room_id = room.room_id
 		$ActiveEnemies.add_child(enemy)
-		enemy.configure_from_enemy_data(enemy_configs[index])
+		var spawn_data := enemy_configs[index].duplicate(true)
+		if not spawn_data.has("spawn_index"):
+			spawn_data["spawn_index"] = index
+		if not spawn_data.has("persistent_id"):
+			spawn_data["persistent_id"] = "%s:wave_%d:%d" % [
+				room.room_id,
+				int(_room_wave_numbers.get(room.room_id, 1)),
+				index,
+			]
+		enemy.configure_from_enemy_data(spawn_data)
 		var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(hp_multiplier, 1.0):
 			enemy.apply_health_multiplier(hp_multiplier)
@@ -1929,7 +1976,13 @@ func _on_summon_requested(source: Enemy3D, count: int) -> void:
 		return
 	if source.ai_state == "dead" and source.elite_modifier_id != "Elite.SpawnOnDeath":
 		return
-	var reserved_count := mini(3, count)
+	var live_count := 0
+	for value in _enemy_nodes_by_room.get(source.room_id, []):
+		if is_instance_valid(value) and value is Enemy3D and (value as Enemy3D).ai_state != "dead":
+			live_count += 1
+	var reserved_count := mini(mini(3, count), maxi(0, 8 - live_count))
+	if reserved_count <= 0:
+		return
 	_alive_by_room[source.room_id] = int(_alive_by_room[source.room_id]) + reserved_count
 	call_deferred("_spawn_summoned_minions", source.room_id, source.global_position, reserved_count)
 
@@ -1943,7 +1996,10 @@ func _spawn_summoned_minions(room_id: String, origin: Vector3, count: int) -> vo
 		$ActiveEnemies.add_child(enemy)
 		var minion_data: Array[Dictionary] = _monster_injector.generate_enemies({"type": "minion", "floor": maxi(1, visual_theme.difficulty_rank), "floor_level": 1})
 		if not minion_data.is_empty():
-			enemy.configure_from_enemy_data(minion_data[index % minion_data.size()])
+			var spawn_data := minion_data[index % minion_data.size()].duplicate(true)
+			spawn_data["spawn_index"] = index
+			spawn_data["persistent_id"] = "%s:summon_%d:%d" % [room_id, Time.get_ticks_msec(), index]
+			enemy.configure_from_enemy_data(spawn_data)
 		enemy.global_position = origin + Vector3(cos(index * TAU / maxf(1.0, count)) * 1.8, 0, sin(index * TAU / maxf(1.0, count)) * 1.8)
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.summon_requested.connect(_on_summon_requested)
@@ -3054,18 +3110,24 @@ func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
 
 func _update_room_streaming(current_id: String) -> void:
 	for room in _rooms:
-		var state := 2 if room.room_id == current_id else 0
-		if state == 0 and _room_neighbors.has(current_id) and room.room_id in (_room_neighbors[current_id] as Array):
+		var state := DungeonRoom3D.STREAM_ACTIVE if room.room_id == current_id else DungeonRoom3D.STREAM_DATA_ONLY
+		if state == DungeonRoom3D.STREAM_DATA_ONLY and _room_neighbors.has(current_id) and room.room_id in (_room_neighbors[current_id] as Array):
 			if bool(_open_edges.get(_edge_key(current_id, room.room_id), false)):
-				state = 1
+				state = DungeonRoom3D.STREAM_SHELL_READY
+		var previous_state := int(_room_stream_state_cache.get(room.room_id, DungeonRoom3D.STREAM_DATA_ONLY))
+		if previous_state != state:
+			if state == DungeonRoom3D.STREAM_DATA_ONLY and previous_state != DungeonRoom3D.STREAM_DATA_ONLY:
+				_hibernate_room_entities(room.room_id)
+			_room_stream_state_cache[room.room_id] = state
 		room.set_stream_state(state)
 		if state > 0:
 			_prepare_revealed_hostile_room(room)
+			_restore_room_runtime_state(room.room_id)
 	_update_corridor_streaming(current_id)
 	for room_id in _enemy_nodes_by_room.keys():
 		var live_references: Array = []
 		for value in _enemy_nodes_by_room[room_id]:
-			if not is_instance_valid(value):
+			if not is_instance_valid(value) or (value as Node).is_queued_for_deletion():
 				continue
 			var enemy := value as Enemy3D
 			if enemy != null and is_instance_valid(enemy):
@@ -3077,6 +3139,202 @@ func _update_room_streaming(current_id: String) -> void:
 				)
 				enemy.set_runtime_active(str(room_id) == current_id, room_visible)
 		_enemy_nodes_by_room[room_id] = live_references
+
+
+func _hibernate_room_entities(room_id: String) -> void:
+	_capture_room_runtime_state(room_id)
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var enemy := value as Enemy3D
+		if MonsterAIManager != null:
+			MonsterAIManager.unregister_enemy(enemy)
+		enemy.queue_free()
+	_enemy_nodes_by_room[room_id] = []
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null:
+		return
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value):
+			(value as GroundLootPickup3D).queue_free()
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if value is RoomKeyPickup3D and room.is_ancestor_of(value):
+			(value as RoomKeyPickup3D).queue_free()
+
+
+func _capture_room_runtime_state(room_id: String) -> void:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	var enemy_states: Array[Dictionary] = []
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var enemy := value as Enemy3D
+		if enemy.ai_state == "dead":
+			continue
+		enemy_states.append(enemy.export_runtime_state())
+	var ground_items: Array[Dictionary] = []
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value):
+			var pickup := value as GroundLootPickup3D
+			ground_items.append({
+				"item_data": pickup.item_data.duplicate(true),
+				"position": [pickup.global_position.x, pickup.global_position.y, pickup.global_position.z],
+			})
+	var room_keys: Array[Dictionary] = []
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
+			var key := value as RoomKeyPickup3D
+			room_keys.append({
+				"room_id": key.room_id,
+				"position": [key.global_position.x, key.global_position.y, key.global_position.z],
+			})
+	var container_states: Dictionary = {}
+	for value in get_tree().get_nodes_in_group("room_prop_3d"):
+		if value is RoomFurniture3D and room.is_ancestor_of(value):
+			var prop := value as RoomFurniture3D
+			container_states[prop.prop_id] = prop.is_searched()
+	_segment_runtime_state[room_id] = {
+		"visited": room.visited,
+		"cleared": room.cleared,
+		"room_light_on": room.is_room_light_on(),
+		"enemies": enemy_states,
+		"ground_items": ground_items,
+		"room_keys": room_keys,
+		"containers": container_states,
+		"alive_count": int(_alive_by_room.get(room_id, enemy_states.size())),
+		"wave_queue": (_room_wave_queues.get(room_id, []) as Array).duplicate(true),
+		"wave_number": int(_room_wave_numbers.get(room_id, 1)),
+		"wave_total": int(_room_wave_totals.get(room_id, 1)),
+		"captured_at_msec": Time.get_ticks_msec(),
+	}
+
+
+func _restore_room_runtime_state(room_id: String) -> void:
+	if not _segment_runtime_state.has(room_id):
+		return
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or not is_instance_valid(room):
+		return
+	var state := _segment_runtime_state[room_id] as Dictionary
+	room.visited = bool(state.get("visited", room.visited))
+	room.cleared = bool(state.get("cleared", room.cleared))
+	_alive_by_room[room_id] = maxi(0, int(state.get("alive_count", _alive_by_room.get(room_id, 0))))
+	_room_wave_queues[room_id] = (state.get("wave_queue", []) as Array).duplicate(true)
+	_room_wave_numbers[room_id] = maxi(1, int(state.get("wave_number", 1)))
+	_room_wave_totals[room_id] = maxi(1, int(state.get("wave_total", 1)))
+	room.apply_runtime_detail_state({
+		"room_light_on": bool(state.get("room_light_on", false)),
+		"containers": (state.get("containers", {}) as Dictionary).duplicate(true),
+	})
+	var live_enemies: Array = []
+	for value in _enemy_nodes_by_room.get(room_id, []):
+		if is_instance_valid(value) and not (value as Node).is_queued_for_deletion() and value is Enemy3D:
+			live_enemies.append(value)
+			var persistent_id := (value as Enemy3D).get_persistent_id()
+			for runtime_value in state.get("enemies", []):
+				var enemy_state := runtime_value as Dictionary
+				if str(enemy_state.get("persistent_id", "")) == persistent_id:
+					(value as Enemy3D).import_runtime_state(enemy_state)
+					break
+	if live_enemies.is_empty() and not room.cleared:
+		for runtime_value in state.get("enemies", []):
+			var enemy_state := runtime_value as Dictionary
+			var enemy_data := (enemy_state.get("enemy_data", {}) as Dictionary).duplicate(true)
+			if enemy_data.is_empty():
+				enemy_data = {
+					"enemy_type": str(enemy_state.get("enemy_kind", "melee_chaser")),
+					"persistent_id": str(enemy_state.get("persistent_id", "")),
+					"floor": maxi(1, visual_theme.difficulty_rank),
+				}
+			var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+			if enemy == null:
+				continue
+			enemy.room_id = room_id
+			$ActiveEnemies.add_child(enemy)
+			enemy.configure_from_enemy_data(enemy_data)
+			enemy.killed.connect(_on_enemy_killed)
+			enemy.summon_requested.connect(_on_summon_requested)
+			enemy.boss_phase_changed.connect(_on_boss_phase_changed)
+			enemy.health_changed.connect(_on_enemy_health_changed)
+			enemy.import_runtime_state(enemy_state)
+			live_enemies.append(enemy)
+			if enemy.enemy_kind == "boss":
+				_show_boss_hud(enemy)
+	_enemy_nodes_by_room[room_id] = live_enemies
+	# 地面掉落只在当前 ACTIVE 房创建；邻房安全壳不承担可拾取物和预览模型成本。
+	if room_id != _current_room_id:
+		return
+	var has_live_ground_item := false
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		if value is GroundLootPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
+			has_live_ground_item = true
+			break
+	if not has_live_ground_item:
+		for runtime_value in state.get("ground_items", []):
+			var item_state := runtime_value as Dictionary
+			var item_data := (item_state.get("item_data", {}) as Dictionary).duplicate(true)
+			if item_data.is_empty():
+				continue
+			var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
+			pickup.configure(item_data, ItemModelFactory3D.get_item_color(item_data))
+			room.add_child(pickup)
+			var saved_position: Variant = item_state.get("position", room.global_position)
+			if saved_position is Vector3:
+				pickup.global_position = saved_position as Vector3
+			elif saved_position is Array and (saved_position as Array).size() >= 3:
+				pickup.global_position = Vector3(
+					float((saved_position as Array)[0]),
+					float((saved_position as Array)[1]),
+					float((saved_position as Array)[2])
+				)
+			pickup.pickup_requested.connect(_on_ground_loot_requested)
+	var has_live_room_key := false
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		if value is RoomKeyPickup3D and room.is_ancestor_of(value) and not value.is_queued_for_deletion():
+			has_live_room_key = true
+			break
+	if not has_live_room_key:
+		for runtime_value in state.get("room_keys", []):
+			var key_state := runtime_value as Dictionary
+			var key := KEY_SCRIPT.new() as RoomKeyPickup3D
+			key.configure(str(key_state.get("room_id", room_id)))
+			room.add_child(key)
+			var saved_position: Variant = key_state.get("position", room.global_position)
+			if saved_position is Array and (saved_position as Array).size() >= 3:
+				key.global_position = Vector3(
+					float((saved_position as Array)[0]),
+					float((saved_position as Array)[1]),
+					float((saved_position as Array)[2])
+				)
+			key.collected.connect(_on_room_key_collected)
+			_spawned_key_rooms[room_id] = true
+
+
+func get_segment_runtime_snapshot() -> Dictionary:
+	_capture_loaded_runtime_rooms()
+	return {
+		"schema": "segment_runtime_state_v2",
+		"current_room_id": _current_room_id,
+		"room_count": _segment_runtime_state.size(),
+		"rooms": _segment_runtime_state.duplicate(true),
+		"stream_states": _room_stream_state_cache.duplicate(),
+	}
+
+
+func _capture_loaded_runtime_rooms() -> void:
+	# 当前房及已预刷邻房都必须进快照。否则重启后会留下 spawned=true、
+	# 但没有可恢复敌人的锁房。
+	for room in _rooms:
+		if room == null or room.get_stream_state() == DungeonRoom3D.STREAM_DATA_ONLY:
+			continue
+		if (
+			room.room_id == _current_room_id
+			or _spawned_rooms.has(room.room_id)
+			or _segment_runtime_state.has(room.room_id)
+		):
+			_capture_room_runtime_state(room.room_id)
 
 
 func _update_corridor_streaming(current_id: String) -> void:
@@ -4297,6 +4555,12 @@ func _on_flashlight_state_changed(state_id: String, context: Dictionary) -> void
 
 ## 行动检查点由其它局内系统决定何时创建；本模块只在已有检查点上补写自身状态。
 func _persist_flashlight_state_to_checkpoint() -> void:
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D") if player != null else null
+	if BaseManager != null and flashlight != null:
+		BaseManager.patch_active_run_checkpoint({
+			"flashlight_charge_ratio": flashlight.get_charge_ratio(),
+			"flashlight_module_id": flashlight.get_module_id(),
+		})
 	_queue_runtime_autosave("flashlight_state")
 
 

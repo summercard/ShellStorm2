@@ -124,7 +124,7 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 			break
 	if not shadow_room_light_found:
 		failures.append("Indoor lights cannot cast avatar shadows on render layer 2")
-	var base_switch := facility.get_node_or_null("RoomLightSwitch3D") as RoomLightSwitch3D
+	var base_switch := facility.find_child("RoomLightSwitch3D", true, false) as RoomLightSwitch3D
 	if base_switch == null:
 		failures.append("Facility light switch is missing for relight validation")
 		return
@@ -132,7 +132,7 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 		base_switch.toggle_light()
 	for light in room_lights:
 		var lamp := light.get_node_or_null("LampLight") as OmniLight3D
-		if lamp == null or not lamp.is_visible_in_tree() or lamp.light_energy > 0.001:
+		if lamp == null or lamp.visible or lamp.light_energy > 0.001:
 			failures.append("Facility light did not fully turn off: %s" % light.name)
 	base_switch.toggle_light()
 	await get_tree().process_frame

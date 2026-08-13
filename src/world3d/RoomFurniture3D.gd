@@ -125,6 +125,18 @@ func is_searched() -> bool:
 	return _searched
 
 
+func restore_searched_state(searched_state: bool) -> void:
+	_searched = searched_state
+	_searching = false
+	_search_elapsed = 0.0
+	if _prompt != null:
+		_prompt.text = "已搜索" if _searched else "[E] 搜索 · %s" % size_class.to_upper()
+		_prompt.modulate = Color(0.55, 0.61, 0.62) if _searched else Color.WHITE
+		_prompt.visible = false
+	if _main_material != null and _searched:
+		_main_material.albedo_color = _main_material.albedo_color.darkened(0.28)
+
+
 func get_asset_snapshot() -> Dictionary:
 	return {
 		"prop_id": prop_id,

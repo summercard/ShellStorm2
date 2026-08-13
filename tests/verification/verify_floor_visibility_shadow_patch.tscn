@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource path="res://tests/verification/verify_floor_visibility_shadow_patch.gd" type="Script" id="1"]
+
+[node name="VerifyFloorVisibilityShadowPatch" type="Node"]
+script = ExtResource("1")

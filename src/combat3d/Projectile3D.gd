@@ -260,6 +260,10 @@ func _explode() -> void:
 	elif bullet_tags.has("balloon"):
 		radius = 3.6
 	_spawn_effect("explosion", global_position, bullet_color, radius * 0.42)
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(
+			global_position, maxf(12.0, radius * 4.0), "explosion", shooter
+		)
 	var group_name := "player_3d" if hostile else "enemy_3d"
 	for target in get_tree().get_nodes_in_group(group_name):
 		if target == shooter or not target is Node3D or not target.has_method("take_damage"):

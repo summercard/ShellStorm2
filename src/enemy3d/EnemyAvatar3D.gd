@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 	_root.position.y = lerpf(_root.position.y, bob + hidden_offset, minf(1.0, delta * 12.0))
 	var target_scale := Vector3(1.0, 0.24, 1.0) if enemy_kind == "ambusher" and not _ambush_revealed else Vector3.ONE
 	_root.scale = _root.scale.lerp(target_scale, minf(1.0, delta * 14.0))
-	_appendages.rotation.y += delta * (1.5 if ai_state == "attack" else 0.35)
+	_appendages.rotation.y += delta * (1.5 if ai_state == "attack" else 0.18 if ai_state == "recovery" else 0.35)
 	_tell_ring.visible = ai_state == "telegraph"
 	if _tell_ring.visible:
 		_tell_ring.scale = Vector3.ONE * (1.0 + sin(_elapsed * 8.0) * 0.14)

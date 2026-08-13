@@ -6,6 +6,9 @@ project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
+if [[ "${suite}" == "soak" && -z "${GODOT_TEST_TIMEOUT_SECONDS+x}" ]]; then
+	test_timeout_seconds=1900
+fi
 active_godot_pid=""
 active_watchdog_pid=""
 
@@ -38,12 +41,14 @@ core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
   verify_arrival_gate_floor_bundle_flow
+  verify_floor_visibility_shadow_patch
   verify_player3d_animation_flow
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
   verify_enemy_illumination_states
   verify_monster_ai_light_effects
+  verify_monster_ai_system_complete
   verify_3d_melee_combat_flow
   verify_3d_melee_feedback_flow
   verify_training_range_3d_flow
@@ -64,6 +69,7 @@ core_scenes=(
   verify_door_passability
   verify_tower_descent_flow
   verify_3d_performance_budget
+  verify_performance_runtime_complete
   verify_3d_flashlight_charge_flow
 )
 
@@ -85,13 +91,20 @@ visual_scenes=(
   verify_wall_alignment_overlay
   verify_wall_alignment_pure
   verify_wall_alignment_visual
+  verify_ai_performance_soak
 )
 
-is_visual_scene() {
+renderer_scenes=(
+  "${visual_scenes[@]}"
+  verify_formal_3d_asset_gallery_visual
+  verify_formal_asset_placement_visual
+)
+
+is_renderer_scene() {
   local scene_name="$1"
-  local visual_name
-  for visual_name in "${visual_scenes[@]}"; do
-    if [[ "${scene_name}" == "${visual_name}" ]]; then
+  local renderer_name
+  for renderer_name in "${renderer_scenes[@]}"; do
+    if [[ "${scene_name}" == "${renderer_name}" ]]; then
       return 0
     fi
   done
@@ -103,14 +116,25 @@ run_scene() {
   local scene_path="res://tests/verification/${scene_name}.tscn"
   local scene_result=0
   printf '\n[%s] %s\n' "${suite}" "${scene_name}"
-  if is_visual_scene "${scene_name}"; then
+  if is_renderer_scene "${scene_name}"; then
     "${godot_bin}" --path "${project_root}" --scene "${scene_path}" &
   else
     "${godot_bin}" --headless --path "${project_root}" --scene "${scene_path}" &
   fi
   active_godot_pid="$!"
   (
-    sleep "${test_timeout_seconds}"
+    watchdog_sleep_pid=""
+    cleanup_watchdog_sleep() {
+      if [[ -n "${watchdog_sleep_pid}" ]] && kill -0 "${watchdog_sleep_pid}" 2>/dev/null; then
+        kill -TERM "${watchdog_sleep_pid}" 2>/dev/null || true
+        wait "${watchdog_sleep_pid}" 2>/dev/null || true
+      fi
+    }
+    trap 'cleanup_watchdog_sleep; exit 0' TERM INT EXIT
+    sleep "${test_timeout_seconds}" &
+    watchdog_sleep_pid="$!"
+    wait "${watchdog_sleep_pid}" || exit 0
+    watchdog_sleep_pid=""
     if kill -0 "${active_godot_pid}" 2>/dev/null; then
       printf '\nTIMEOUT %s after %ss; terminating PID %s\n' \
         "${scene_name}" "${test_timeout_seconds}" "${active_godot_pid}" >&2
@@ -145,13 +169,21 @@ case "${suite}" in
     scenes=()
     while IFS= read -r scene_file; do
       scene_name="$(basename "${scene_file}" .tscn)"
-      if ! is_visual_scene "${scene_name}"; then
+      if ! is_renderer_scene "${scene_name}"; then
         scenes+=("${scene_name}")
       fi
     done < <(find "${project_root}/tests/verification" -maxdepth 1 -name 'verify_*.tscn' -print | sort)
     ;;
   visual)
-    scenes=("${visual_scenes[@]}")
+    scenes=()
+    for visual_name in "${visual_scenes[@]}"; do
+      if [[ "${visual_name}" != "verify_ai_performance_soak" ]]; then
+        scenes+=("${visual_name}")
+      fi
+    done
+    ;;
+  soak)
+    scenes=(verify_ai_performance_soak)
     ;;
   scene)
     if [[ $# -lt 2 ]]; then
@@ -161,7 +193,7 @@ case "${suite}" in
     scenes=("${2%.tscn}")
     ;;
   *)
-    echo "unknown suite: ${suite}; expected smoke, core, full, visual, or scene" >&2
+    echo "unknown suite: ${suite}; expected smoke, core, full, visual, soak, or scene" >&2
     exit 2
     ;;
 esac

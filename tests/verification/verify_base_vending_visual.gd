@@ -32,8 +32,8 @@ func _ready() -> void:
 		await get_tree().process_frame
 		await get_tree().create_timer(0.25).timeout
 		var menu := world.get_active_menu() as BaseVendingMenu
-		if menu == null or menu._buy_list.get_child_count() != 5:
-			failures.append("自动贩卖机菜单未打开或货架不是5项")
+		if menu == null or menu._buy_list.get_child_count() != 7:
+			failures.append("自动贩卖机菜单未打开或货架不是7项")
 		else:
 			menu.set_inventory_module(runtime_inventory)
 			await get_tree().process_frame

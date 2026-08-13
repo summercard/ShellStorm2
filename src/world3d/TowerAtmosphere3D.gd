@@ -25,6 +25,10 @@ func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	if _sun != null:
 		_sun.add_to_group(EnemyIllumination3D.SUN_GROUP)
 		_sun.set_meta("gameplay_light_kind", "sun")
+		if GameplaySpatialRegistry3D != null:
+			GameplaySpatialRegistry3D.register_node(_sun, GameplaySpatialRegistry3D.KIND_SUN)
+		if not _sun.tree_exiting.is_connected(_unregister_sun):
+			_sun.tree_exiting.connect(_unregister_sun)
 	_apply_fixed_lighting()
 
 
@@ -32,6 +36,8 @@ func _ready() -> void:
 	_build_city_silhouette()
 	_build_rooftop_sky_bounce()
 	set_floor_number(100)
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_atmosphere(self)
 
 
 func set_floor_number(floor_number: int) -> void:
@@ -82,6 +88,20 @@ func get_snapshot() -> Dictionary:
 		),
 		"fog_density": _environment.fog_density if _environment != null else 0.0,
 	}
+
+
+func apply_performance_quality(profile: String) -> void:
+	if _environment != null:
+		_environment.fog_enabled = profile != "low"
+		_environment.fog_density = FOG_DENSITY if profile == "high" else FOG_DENSITY * 0.72
+	if _sun != null:
+		_sun.shadow_enabled = profile != "low"
+		_sun.directional_shadow_max_distance = 120.0 if profile == "high" else 72.0 if profile == "balanced" else 42.0
+
+
+func _unregister_sun() -> void:
+	if GameplaySpatialRegistry3D != null and _sun != null:
+		GameplaySpatialRegistry3D.unregister_node(_sun)
 
 
 func _build_city_silhouette() -> void:

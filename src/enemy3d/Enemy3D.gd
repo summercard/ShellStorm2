@@ -13,7 +13,10 @@ const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
-const VALID_STATES := ["idle", "patrol", "alert", "chase", "search", "telegraph", "attack", "stagger", "dead"]
+const VALID_STATES := [
+	"dormant", "idle", "patrol", "alert", "chase", "search", "return",
+	"telegraph", "attack", "recovery", "stagger", "dead",
+]
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
@@ -122,6 +125,19 @@ var _variant_scale_multiplier := 1.0
 var illumination_sensor: EnemyIllumination3D
 var _illumination_damage_accumulator := 0.0
 var _ai_decision: Dictionary = {}
+var _navigation_agent: NavigationAgent3D
+var _stuck_time := 0.0
+var _stuck_recovery_count := 0
+var _avoidance_sign := 1.0
+var _last_motion_position := Vector3.ZERO
+var _patrol_step := 0
+var _boss_skill_bag: Array[String] = []
+var _boss_skill_index := 0
+var _last_attack_result := "none"
+var _last_state_reason := "spawned"
+var _ambush_reburrow_cooldown := 0.0
+var _ambush_unseen_time := 0.0
+var _active_explosion_committed := false
 
 @onready var avatar: EnemyAvatar3D = $Avatar
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
@@ -144,6 +160,7 @@ func _ready() -> void:
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
 	transition_to("idle")
+	_last_motion_position = global_position
 
 
 func apply_profile(kind: String) -> void:
@@ -331,6 +348,90 @@ func get_enemy_data() -> Dictionary:
 	return result
 
 
+func get_persistent_id() -> String:
+	return str(enemy_data.get(
+		"persistent_id",
+		"%s:%s:%d" % [room_id, enemy_kind, int(enemy_data.get("spawn_index", get_index()))]
+	))
+
+
+func export_runtime_state() -> Dictionary:
+	return {
+		"persistent_id": get_persistent_id(),
+		"enemy_kind": enemy_kind,
+		"enemy_data": enemy_data.duplicate(true),
+		"hp": current_hp,
+		"max_hp": max_hp,
+		"contact_damage": contact_damage,
+		"position": [global_position.x, global_position.y, global_position.z],
+		"rotation_y": rotation.y,
+		"ai_state": ai_state,
+		"state_time": _state_time,
+		"state_reason": _last_state_reason,
+		"last_known_target_position": [
+			_last_known_target_position.x,
+			_last_known_target_position.y,
+			_last_known_target_position.z,
+		],
+		"boss_phase": boss_phase,
+		"ambush_triggered": _ambush_triggered,
+		"elite_modifier_id": elite_modifier_id,
+		"attack_timer": _attack_timer,
+		"slow_factor": _slow_factor,
+		"slow_timer": _slow_timer,
+		"boss_skill_bag": _boss_skill_bag.duplicate(),
+		"boss_skill_index": _boss_skill_index,
+	}
+
+
+func import_runtime_state(state: Dictionary) -> bool:
+	if str(state.get("persistent_id", "")) != get_persistent_id():
+		return false
+	max_hp = maxi(1, int(state.get("max_hp", max_hp)))
+	current_hp = clampi(int(state.get("hp", current_hp)), 0, max_hp)
+	contact_damage = maxi(0, int(state.get("contact_damage", contact_damage)))
+	var saved_position: Variant = state.get("position", global_position)
+	if saved_position is Vector3:
+		global_position = saved_position as Vector3
+	elif saved_position is Array and (saved_position as Array).size() >= 3:
+		global_position = Vector3(
+			float((saved_position as Array)[0]),
+			float((saved_position as Array)[1]),
+			float((saved_position as Array)[2])
+		)
+	rotation.y = float(state.get("rotation_y", rotation.y))
+	var saved_known_position: Variant = state.get("last_known_target_position", [])
+	if saved_known_position is Array and (saved_known_position as Array).size() >= 3:
+		_last_known_target_position = Vector3(
+			float((saved_known_position as Array)[0]),
+			float((saved_known_position as Array)[1]),
+			float((saved_known_position as Array)[2])
+		)
+	boss_phase = clampi(int(state.get("boss_phase", boss_phase)), 1, 3)
+	_ambush_triggered = bool(state.get("ambush_triggered", _ambush_triggered))
+	_attack_timer = maxf(0.0, float(state.get("attack_timer", _attack_timer)))
+	_slow_factor = clampf(float(state.get("slow_factor", _slow_factor)), 0.25, 1.0)
+	_slow_timer = maxf(0.0, float(state.get("slow_timer", _slow_timer)))
+	var saved_bag: Variant = state.get("boss_skill_bag", [])
+	if saved_bag is Array:
+		_boss_skill_bag.clear()
+		for value in saved_bag as Array:
+			_boss_skill_bag.append(str(value))
+	_boss_skill_index = clampi(int(state.get("boss_skill_index", 0)), 0, _boss_skill_bag.size())
+	var saved_ai_state := str(state.get("ai_state", "idle"))
+	# 生效帧不能跨卸载边界继续伤害；重新进房时退回可读的警戒状态。
+	if saved_ai_state in ["telegraph", "attack", "recovery", "stagger"]:
+		saved_ai_state = "alert"
+	if saved_ai_state in VALID_STATES and saved_ai_state != "dead":
+		transition_to(saved_ai_state, "runtime_restore")
+		_state_time = maxf(0.0, float(state.get("state_time", 0.0)))
+	_last_state_reason = str(state.get("state_reason", _last_state_reason))
+	if avatar != null:
+		avatar.set_ambush_revealed(enemy_kind != "ambusher" or _ambush_triggered)
+	health_changed.emit(self, current_hp, max_hp)
+	return true
+
+
 func set_runtime_active(active: bool, presentation_ready_when_inactive := false) -> void:
 	# 已开启门后的邻房会预先显示敌人，但在玩家正式进入前暂停 AI。
 	# process_mode 不能在可见邻房设为 DISABLED：PlayerVision3D 会把它解释为
@@ -344,6 +445,10 @@ func set_runtime_active(active: bool, presentation_ready_when_inactive := false)
 		else Node.PROCESS_MODE_DISABLED
 	)
 	set_physics_process(active)
+	if active and ai_state == "dormant":
+		transition_to("idle")
+	elif not active and ai_state not in ["dead", "dormant"]:
+		transition_to("dormant")
 
 
 func is_runtime_ai_active() -> bool:
@@ -388,6 +493,7 @@ func _physics_process(delta: float) -> void:
 		_home_initialized = true
 	_state_time += delta
 	_absorb_cooldown = maxf(0.0, _absorb_cooldown - delta)
+	_ambush_reburrow_cooldown = maxf(0.0, _ambush_reburrow_cooldown - delta)
 	_attack_timer = maxf(0.0, _attack_timer - delta * get_attack_frequency_multiplier())
 	_slow_timer = maxf(0.0, _slow_timer - delta)
 	_external_timer = maxf(0.0, _external_timer - delta)
@@ -399,8 +505,27 @@ func _physics_process(delta: float) -> void:
 	if ai_state == "dead":
 		velocity = Vector3.ZERO
 		return
+	if MonsterAIManager != null:
+		MonsterAIManager.update_enemy_spatial(self)
 	_ai_decision = MonsterAIManager.evaluate_enemy(self) if MonsterAIManager != null else {}
 	_apply_ai_decision(_ai_decision)
+	if enemy_kind == "ambusher" and _ambush_triggered:
+		var target_distance := global_position.distance_to(_target.global_position) if _target != null and is_instance_valid(_target) else INF
+		if not bool(_ai_decision.get("target_visible", false)) and target_distance > 5.0:
+			_ambush_unseen_time += delta
+		else:
+			_ambush_unseen_time = 0.0
+		if (
+			_ambush_reburrow_cooldown <= 0.0
+			and _ambush_unseen_time >= 2.0
+			and get_illumination_state() == EnemyIllumination3D.STATE_DARKNESS
+			and ai_state not in ["telegraph", "attack", "recovery", "stagger"]
+		):
+			_ambush_triggered = false
+			_ambush_unseen_time = 0.0
+			_target = null
+			avatar.set_ambush_revealed(false)
+			transition_to("idle", "dark_reburrow_ready")
 	if enemy_kind == "ambusher" and not _ambush_triggered:
 		velocity = velocity.move_toward(Vector3.ZERO, delta * 16.0)
 		avatar.set_ambush_revealed(false)
@@ -411,6 +536,7 @@ func _physics_process(delta: float) -> void:
 		var proximity_player := _get_player_in_proximity(4.4)
 		if exposed_to_light or current_hp < max_hp or proximity_player != null:
 			_ambush_triggered = true
+			_ambush_reburrow_cooldown = 6.0
 			avatar.set_ambush_revealed(true)
 			if _target == null and proximity_player != null:
 				_target = proximity_player
@@ -435,6 +561,9 @@ func _physics_process(delta: float) -> void:
 			if ai_state not in ["search", "telegraph", "attack", "stagger"]:
 				transition_to("search")
 			_tick_search(delta)
+			return
+		if ai_state == "return":
+			_tick_return(delta)
 			return
 		if ai_state == "idle" and _state_time > 2.2:
 			transition_to("patrol")
@@ -481,7 +610,14 @@ func _physics_process(delta: float) -> void:
 				transition_to("attack")
 		"attack":
 			_perform_attack(to_target, distance)
-			transition_to("chase")
+			transition_to("recovery")
+		"recovery":
+			velocity = velocity.move_toward(Vector3.ZERO, delta * 18.0) + _external_velocity
+			move_and_slide()
+			if _state_time >= _recovery_duration():
+				if MonsterAIManager != null:
+					MonsterAIManager.release_attack_token(self)
+				transition_to("chase")
 		"stagger":
 			velocity = _last_hit_direction * 1.6
 			move_and_slide()
@@ -493,10 +629,15 @@ func _physics_process(delta: float) -> void:
 
 func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 	if distance <= attack_range and _attack_timer <= 0.0:
-		transition_to("telegraph")
-		return
+		var channel := "ranged" if enemy_kind in ["ranged_caster", "summoner", "boss"] else "melee"
+		if MonsterAIManager == null or MonsterAIManager.request_attack_token(self, _target, channel):
+			_last_attack_result = "token_granted"
+			transition_to("telegraph")
+			return
+		_last_attack_result = "token_wait"
 	var effective_move_speed := get_effective_move_speed()
-	var desired := to_target.normalized() * effective_move_speed * _slow_factor
+	var desired_direction := _navigation_direction(_target.global_position, to_target)
+	var desired := desired_direction * effective_move_speed * _slow_factor
 	if enemy_kind in ["ranged_caster", "summoner", "boss"]:
 		var radial := to_target.normalized()
 		var tangent := Vector3(-radial.z, 0, radial.x) * _strafe_sign
@@ -505,27 +646,55 @@ func _tick_chase(to_target: Vector3, distance: float, delta: float) -> void:
 		desired = (tangent * 0.78 + radial * radial_weight).normalized() * effective_move_speed * _slow_factor
 		if distance < attack_range * 0.52:
 			desired = (-radial * 0.82 + tangent * 0.35).normalized() * effective_move_speed * _slow_factor
+	desired = _apply_local_avoidance(desired, to_target)
 	velocity = velocity.lerp(desired, minf(1.0, delta * 5.5)) + _external_velocity
 	move_and_slide()
+	_track_stuck_recovery(delta, desired)
 
 
 func _tick_search(delta: float) -> void:
 	var offset := _last_known_target_position - global_position
 	offset.y = 0.0
 	if offset.length() > 0.65:
-		velocity = velocity.lerp(offset.normalized() * get_effective_move_speed() * 0.72, minf(1.0, delta * 4.0))
+		var search_direction := _navigation_direction(_last_known_target_position, offset)
+		var search_velocity := _apply_local_avoidance(
+			search_direction * get_effective_move_speed() * 0.72,
+			offset
+		)
+		velocity = velocity.lerp(search_velocity, minf(1.0, delta * 4.0))
 		move_and_slide()
+		_track_stuck_recovery(delta, search_velocity)
 	else:
 		velocity = velocity.move_toward(Vector3.ZERO, delta * 8.0)
 		move_and_slide()
 	if _state_time > 2.4:
 		_target = null
+		transition_to("return")
+
+
+func _tick_return(delta: float) -> void:
+	var offset := _home_position - global_position
+	offset.y = 0.0
+	if offset.length() <= 0.7:
+		velocity = Vector3.ZERO
 		transition_to("patrol")
+		return
+	var direction := _navigation_direction(_home_position, offset)
+	var desired := _apply_local_avoidance(
+		direction * get_effective_move_speed() * 0.64,
+		offset
+	)
+	velocity = velocity.lerp(desired, minf(1.0, delta * 4.0))
+	move_and_slide()
+	_track_stuck_recovery(delta, desired)
 
 
 func _tick_patrol(delta: float) -> void:
 	if _patrol_target == Vector3.ZERO or global_position.distance_to(_patrol_target) < 0.55:
-		var angle := fmod(float(get_instance_id() % 97) * 0.73 + Time.get_ticks_msec() * 0.0003, TAU)
+		# 只由稳定内容数据和步号决定；不读取墙钟，固定种子下可复现。
+		var stable_seed := room_id.hash() ^ enemy_kind.hash() ^ int(enemy_data.get("floor", 0))
+		var angle := fmod(float(absi(stable_seed) % 997) * 0.017 + float(_patrol_step) * 2.399963, TAU)
+		_patrol_step += 1
 		_patrol_target = _home_position + Vector3(cos(angle), 0, sin(angle)) * 1.7
 	var offset := _patrol_target - global_position
 	offset.y = 0.0
@@ -563,7 +732,10 @@ func _get_player_in_proximity(radius: float) -> Node3D:
 
 
 func _perform_attack(to_target: Vector3, distance: float) -> void:
+	# 自动化与技能预演允许传入显式方向而不绑定目标；实际近战命中仍要求
+	# 当前目标有效，避免悬空引用造成重复结算。
 	_attack_timer = attack_cooldown
+	_last_attack_result = "committed"
 	match enemy_kind:
 		"ranged_caster":
 			_fire_projectile_volley(to_target, contact_damage, Color(0.20, 0.82, 0.92), 3, 0.18)
@@ -574,22 +746,24 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 		"exploder":
 			_explode()
 		"boss":
-			_fire_projectile_volley(to_target, contact_damage, Color(1.0, 0.20, 0.08), 3 if boss_phase >= 2 else 1, 0.14, true)
-			if _summon_count % 3 == 2:
-				summon_requested.emit(self, 2)
-			_summon_count += 1
+			var boss_skill := _next_boss_skill()
+			if boss_skill == "summon":
+				summon_requested.emit(self, 2 if boss_phase < 3 else 3)
+			else:
+				var count := 5 if boss_skill == "burst" else 3 if boss_phase >= 2 else 1
+				_fire_projectile_volley(to_target, contact_damage, Color(1.0, 0.20, 0.08), count, 0.20 if boss_skill == "burst" else 0.14, true)
 		"melee_chaser":
 			_external_velocity = to_target.normalized() * 7.2
 			_external_timer = 0.16
-			if distance <= attack_range + 0.65 and _target.has_method("take_damage"):
+			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 		"ambusher":
 			_external_velocity = to_target.normalized() * 9.4
 			_external_timer = 0.28
-			if distance <= attack_range + 1.0 and _target.has_method("take_damage"):
+			if distance <= attack_range + 1.0 and is_instance_valid(_target) and _target.has_method("take_damage"):
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 		_:
-			if distance <= attack_range + 0.65 and _target.has_method("take_damage"):
+			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 	if elite_modifier_id == "Elite.WeaponParasite" and _target != null and _target.has_method("apply_silence"):
 		_target.call("apply_silence", 1.8)
@@ -630,12 +804,25 @@ func _fire_projectile_volley(
 
 
 func _heal_nearby_allies() -> void:
-	for value in get_tree().get_nodes_in_group("enemy_3d"):
+	var candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			global_position, 6.5, [GameplaySpatialRegistry3D.KIND_ENEMY], [room_id]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	var selected: Enemy3D = null
+	var lowest_ratio := 1.01
+	for value in candidates:
 		var ally := value as Enemy3D
 		if ally == null or ally == self or ally.room_id != room_id or ally.ai_state == "dead":
 			continue
-		if global_position.distance_to(ally.global_position) <= 6.5:
-			ally.receive_healing(maxi(2, int(ally.max_hp * 0.08)))
+		var health_ratio := float(ally.current_hp) / float(maxi(1, ally.max_hp))
+		if health_ratio < lowest_ratio:
+			selected = ally
+			lowest_ratio = health_ratio
+	if selected != null and lowest_ratio < 1.0:
+		selected.receive_healing(maxi(2, int(selected.max_hp * 0.08)))
 
 
 func receive_healing(amount: int) -> void:
@@ -647,7 +834,10 @@ func receive_healing(amount: int) -> void:
 
 
 func _explode() -> void:
+	_active_explosion_committed = true
 	_spawn_effect("explosion", 1.75)
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(global_position, 20.0, "explosion", self)
 	for player in get_tree().get_nodes_in_group("player_3d"):
 		if player is Node3D and global_position.distance_to((player as Node3D).global_position) <= 3.0 and player.has_method("take_damage"):
 			player.call("take_damage", contact_damage, false, ((player as Node3D).global_position - global_position).normalized())
@@ -768,13 +958,17 @@ func _tick_damage_over_time(delta: float) -> void:
 		_die()
 
 
-func transition_to(state_id: String) -> bool:
+func transition_to(state_id: String, reason := "") -> bool:
 	if not VALID_STATES.has(state_id) or ai_state == "dead" and state_id != "dead":
 		return false
 	if ai_state == state_id:
 		return true
 	var previous := ai_state
+	if previous in ["telegraph", "attack", "recovery"] and state_id not in ["telegraph", "attack", "recovery"]:
+		if MonsterAIManager != null:
+			MonsterAIManager.release_attack_token(self)
 	ai_state = state_id
+	_last_state_reason = reason if not reason.is_empty() else "%s_to_%s" % [previous, state_id]
 	_state_time = 0.0
 	if avatar != null:
 		avatar.set_ai_state(state_id)
@@ -823,6 +1017,14 @@ func get_state_snapshot() -> Dictionary:
 		"illumination_ui_text": _illumination_ui_text(get_illumination_state()),
 		"illumination_ui_before_health_bar": _illumination_status_label != null,
 		"ai_decision": _ai_decision.duplicate(true),
+		"ai_memory": MonsterAIManager.get_enemy_snapshot(self).get("memory", []) if MonsterAIManager != null else [],
+		"reason_code": str(_ai_decision.get("reason_code", "")),
+		"state_enter_reason": _last_state_reason,
+		"threat_score": float(_ai_decision.get("threat_score", 0.0)),
+		"last_attack_result": _last_attack_result,
+		"stuck_recovery_count": _stuck_recovery_count,
+		"navigation_agent_ready": _navigation_agent != null,
+		"attack_token_channel": str(MonsterAIManager.get_enemy_snapshot(self).get("attack_token_channel", "")) if MonsterAIManager != null else "",
 		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
 	}
@@ -840,7 +1042,7 @@ func force_refresh_illumination(commit_immediately := true) -> void:
 	if illumination_sensor != null:
 		illumination_sensor.force_refresh(commit_immediately)
 	if MonsterAIManager != null:
-		_ai_decision = MonsterAIManager.force_refresh_enemy(self)
+		MonsterAIManager.invalidate_enemy(self)
 
 
 func get_illumination_snapshot() -> Dictionary:
@@ -923,13 +1125,107 @@ func _on_illumination_state_changed(previous: String, current: String, context: 
 	if not _runtime_ai_active and current != EnemyIllumination3D.STATE_DARKNESS:
 		set_runtime_active(true)
 	if MonsterAIManager != null:
-		_ai_decision = MonsterAIManager.force_refresh_enemy(self)
+		MonsterAIManager.invalidate_enemy(self)
 	illumination_state_changed.emit(self, previous, current, context)
 
 
 func _on_tree_exiting() -> void:
 	if MonsterAIManager != null:
 		MonsterAIManager.unregister_enemy(self)
+
+
+func _ensure_navigation_agent() -> void:
+	if _navigation_agent != null:
+		return
+	_navigation_agent = NavigationAgent3D.new()
+	_navigation_agent.name = "NavigationAgent3D"
+	_navigation_agent.path_height_offset = 0.0
+	_navigation_agent.path_desired_distance = 0.35
+	_navigation_agent.target_desired_distance = 0.55
+	_navigation_agent.radius = float(EnemyAvatar3D.get_footprint_profile(enemy_kind).get("radius", 0.8)) * 0.72
+	_navigation_agent.avoidance_enabled = false
+	add_child(_navigation_agent)
+
+
+func _navigation_direction(target_position: Vector3, fallback_offset: Vector3) -> Vector3:
+	var fallback := fallback_offset
+	fallback.y = 0.0
+	# 未烘焙导航的房间不创建 Agent；导航图真正可用后再惰性实例化。
+	# 这样 30 只怪的常见房间不会凭空增加 30 个常驻节点。
+	var navigation_map := get_world_3d().navigation_map
+	if (
+		_navigation_agent == null
+		and NavigationServer3D.map_get_iteration_id(navigation_map) > 0
+		and not NavigationServer3D.map_get_regions(navigation_map).is_empty()
+	):
+		_ensure_navigation_agent()
+	if _navigation_agent == null or not _navigation_agent.is_inside_tree():
+		return fallback.normalized()
+	_navigation_agent.target_position = target_position
+	var map := get_world_3d().navigation_map
+	if NavigationServer3D.map_get_iteration_id(map) <= 0 or _navigation_agent.is_navigation_finished():
+		return fallback.normalized()
+	var next_position := _navigation_agent.get_next_path_position()
+	var path_offset := next_position - global_position
+	path_offset.y = 0.0
+	return path_offset.normalized() if path_offset.length_squared() > 0.001 else fallback.normalized()
+
+
+func _apply_local_avoidance(desired_velocity: Vector3, target_offset: Vector3) -> Vector3:
+	if desired_velocity.length_squared() <= 0.001 or get_world_3d() == null:
+		return desired_velocity
+	var direction := desired_velocity.normalized()
+	var query := PhysicsRayQueryParameters3D.create(
+		global_position + Vector3.UP * 0.45,
+		global_position + Vector3.UP * 0.45 + direction * 1.15,
+		1,
+		[get_rid()]
+	)
+	query.collide_with_areas = false
+	if get_world_3d().direct_space_state.intersect_ray(query).is_empty():
+		return desired_velocity
+	var tangent := Vector3(-direction.z, 0.0, direction.x) * _avoidance_sign
+	if _stuck_time > 0.38:
+		_avoidance_sign *= -1.0
+	var target_direction := target_offset.normalized()
+	return (tangent * 0.88 + target_direction * 0.22).normalized() * desired_velocity.length()
+
+
+func _track_stuck_recovery(delta: float, intended_velocity: Vector3) -> void:
+	var moved := global_position.distance_to(_last_motion_position)
+	_last_motion_position = global_position
+	if intended_velocity.length() < 0.2 or moved > 0.025:
+		_stuck_time = maxf(0.0, _stuck_time - delta * 2.0)
+		return
+	_stuck_time += delta
+	if _stuck_time < 0.8:
+		return
+	_stuck_time = 0.0
+	_stuck_recovery_count += 1
+	_avoidance_sign *= -1.0
+	velocity = Vector3(-intended_velocity.z, 0.0, intended_velocity.x).normalized() * get_effective_move_speed()
+
+
+func _recovery_duration() -> float:
+	return 0.62 if enemy_kind == "boss" else 0.48 if enemy_kind in ["shielded", "exploder"] else 0.34
+
+
+func _next_boss_skill() -> String:
+	if _boss_skill_bag.is_empty() or _boss_skill_index >= _boss_skill_bag.size():
+		_boss_skill_bag.clear()
+		_boss_skill_bag.assign(
+			["volley", "summon", "burst", "volley"]
+			if boss_phase >= 2
+			else ["volley", "summon", "volley"]
+		)
+		# 固定旋转量来自行动种子/实例数据，不连续重复同一高压技能。
+		var rotation := absi(int(enemy_data.get("floor", 0)) + room_id.hash()) % _boss_skill_bag.size()
+		for _index in range(rotation):
+			_boss_skill_bag.append(_boss_skill_bag.pop_front())
+		_boss_skill_index = 0
+	var result := _boss_skill_bag[_boss_skill_index]
+	_boss_skill_index += 1
+	return result
 
 
 func _behavior_role() -> String:
@@ -965,7 +1261,8 @@ func _die() -> void:
 	elif elite_modifier_id == "Elite.Parasite":
 		_strengthen_nearest_enemy()
 	if enemy_kind == "exploder":
-		_spawn_death_fragments()
+		if not _active_explosion_committed:
+			_spawn_death_fragments()
 	collision_layer = 0
 	collision_mask = 0
 	_spawn_effect("explosion" if enemy_kind == "boss" else "impact", 1.4 if enemy_kind == "boss" else 0.8)
@@ -1008,9 +1305,16 @@ func apply_elite_boon(multiplier: float) -> void:
 func _strengthen_nearest_enemy() -> void:
 	var best: Enemy3D = null
 	var best_distance := 12.0
-	for value in get_tree().get_nodes_in_group("enemy_3d"):
+	var candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			global_position, best_distance, [GameplaySpatialRegistry3D.KIND_ENEMY], [room_id]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	for value in candidates:
 		var candidate := value as Enemy3D
-		if candidate == null or candidate == self or candidate.ai_state == "dead":
+		if candidate == null or candidate == self or candidate.room_id != room_id or candidate.ai_state == "dead":
 			continue
 		var distance := global_position.distance_to(candidate.global_position)
 		if distance < best_distance:

@@ -128,7 +128,7 @@ func _ready() -> void:
 	var hub := (tower.get("_room_by_id") as Dictionary).get("floor_01_hub") as DungeonRoom3D
 	tower.player.global_position = hub.global_position + Vector3(0.0, 0.05, 3.5)
 	tower.force_enter_room_for_test("floor_01_hub")
-	var room_light := hub.get_node_or_null("RoomCeilingLight") as WastelandLight3D
+	var room_light := hub.find_child("RoomCeilingLight", true, false) as WastelandLight3D
 	if room_light != null:
 		room_light.set_light_enabled(false)
 	if flashlight != null:

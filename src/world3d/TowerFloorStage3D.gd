@@ -7,6 +7,8 @@ const GRID_UNIT := 5.0
 const GRID_COUNT := 50
 const MAP_SIZE := GRID_UNIT * GRID_COUNT
 const MAP_HALF := MAP_SIZE * 0.5
+const PROTECTED_FLOOR_PATCH_SIDE_M := 50.0
+const PROTECTED_FLOOR_PATCH_TILES_PER_SIDE := int(PROTECTED_FLOOR_PATCH_SIDE_M / GRID_UNIT)
 const FLOOR_THICKNESS := 0.30
 const WALL_THICKNESS := 0.30
 const FLOOR_SCENE: PackedScene = preload(
@@ -41,6 +43,8 @@ var floor_kind := "combat"
 var stair_hole_sides: Array[String] = []
 var _floor_visual_light: MultiMeshInstance3D
 var _floor_visual_dark: MultiMeshInstance3D
+var _protected_floor_visual_light: MultiMeshInstance3D
+var _protected_floor_visual_dark: MultiMeshInstance3D
 var _outer_visual: MultiMeshInstance3D
 var _support_root: StaticBody3D
 var _shell_visible := true
@@ -48,6 +52,9 @@ var _floor_visible := true
 var _outer_visible := true
 var _tile_count := 0
 var _support_rect_count := 0
+var _protected_floor_patch_enabled := false
+var _protected_floor_patch_grid_center := Vector2i(-1, -1)
+var _protected_floor_patch_tile_count := 0
 
 
 func configure(index: int, kind: String, holes: Array[String]) -> void:
@@ -78,6 +85,24 @@ func set_render_state(show_floor: bool, show_outer: bool) -> void:
 		_floor_visual_dark.visible = show_floor
 	if _outer_visual != null:
 		_outer_visual.visible = show_outer
+	_apply_protected_floor_patch_visibility()
+
+
+## 相邻物理层即使退出完整流送，也保留镜头地面投影附近50×50m楼板。
+## 这100块只承担视觉与阴影，不恢复远层房间、外墙、碰撞或处理逻辑。
+func set_protected_floor_patch(center_world_position: Vector3, enabled: bool) -> void:
+	_protected_floor_patch_enabled = enabled
+	if not enabled:
+		_apply_protected_floor_patch_visibility()
+		return
+	var local_center := to_local(center_world_position)
+	var grid_center := Vector2i(
+		clampi(floori((local_center.x + MAP_HALF) / GRID_UNIT), 0, GRID_COUNT - 1),
+		clampi(floori((local_center.z + MAP_HALF) / GRID_UNIT), 0, GRID_COUNT - 1)
+	)
+	if grid_center != _protected_floor_patch_grid_center:
+		_rebuild_protected_floor_patch(grid_center)
+	_apply_protected_floor_patch_visibility()
 
 
 func is_shell_visible() -> bool:
@@ -99,6 +124,22 @@ func get_snapshot() -> Dictionary:
 		"shell_visible": _shell_visible,
 		"floor_visible": _floor_visible,
 		"outer_visible": _outer_visible,
+		"protected_floor_patch_enabled": _protected_floor_patch_enabled,
+		"protected_floor_patch_visible": (
+			_protected_floor_patch_enabled and not _floor_visible
+		),
+		"protected_floor_patch_grid_center": _protected_floor_patch_grid_center,
+		"protected_floor_patch_tile_count": _protected_floor_patch_tile_count,
+		"protected_floor_patch_side_m": PROTECTED_FLOOR_PATCH_SIDE_M,
+		"protected_floor_patch_tiles_per_side": PROTECTED_FLOOR_PATCH_TILES_PER_SIDE,
+		"protected_floor_patch_casts_shadow": (
+			_protected_floor_visual_light != null
+			and _protected_floor_visual_dark != null
+			and _protected_floor_visual_light.cast_shadow
+				== GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			and _protected_floor_visual_dark.cast_shadow
+				== GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		),
 		"support_collision_persistent": _support_root != null,
 		"uses_imported_floor_mesh": _floor_visual_light != null and _floor_visual_light.multimesh != null,
 		"uses_imported_outer_mesh": _outer_visual != null and _outer_visual.multimesh != null,
@@ -140,7 +181,74 @@ func _build_floor() -> void:
 		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, FLOOR_TILE_MATERIAL_B
 	)
 	add_child(_floor_visual_dark)
+	var empty_transforms: Array[Transform3D] = []
+	_protected_floor_visual_light = _create_floor_multimesh(
+		"ProtectedFloorPatch5M_A", mesh, empty_transforms, FLOOR_TILE_MATERIAL_A
+	)
+	_protected_floor_visual_light.visible = false
+	add_child(_protected_floor_visual_light)
+	_protected_floor_visual_dark = _create_floor_multimesh(
+		"ProtectedFloorPatch5M_B", mesh, empty_transforms, FLOOR_TILE_MATERIAL_B
+	)
+	_protected_floor_visual_dark.visible = false
+	add_child(_protected_floor_visual_dark)
 	_tile_count = light_transforms.size() + dark_transforms.size()
+
+
+func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
+	_protected_floor_patch_grid_center = grid_center
+	var light_transforms: Array[Transform3D] = []
+	var dark_transforms: Array[Transform3D] = []
+	var holes := _hole_rects()
+	var patch_start_offset := -int(PROTECTED_FLOOR_PATCH_TILES_PER_SIDE / 2)
+	var patch_end_offset := patch_start_offset + PROTECTED_FLOOR_PATCH_TILES_PER_SIDE
+	for z_index in range(grid_center.y + patch_start_offset, grid_center.y + patch_end_offset):
+		if z_index < 0 or z_index >= GRID_COUNT:
+			continue
+		for x_index in range(grid_center.x + patch_start_offset, grid_center.x + patch_end_offset):
+			if x_index < 0 or x_index >= GRID_COUNT:
+				continue
+			var point := Vector2i(x_index, z_index)
+			var skipped := false
+			for hole in holes:
+				if (hole as Rect2i).has_point(point):
+					skipped = true
+					break
+			if skipped:
+				continue
+			var transform := Transform3D(
+				Basis.IDENTITY,
+				Vector3(
+					-MAP_HALF + GRID_UNIT * (float(x_index) + 0.5),
+					0.0,
+					-MAP_HALF + GRID_UNIT * (float(z_index) + 0.5)
+				)
+			)
+			if (x_index + z_index) % 2 == 0:
+				light_transforms.append(transform)
+			else:
+				dark_transforms.append(transform)
+	_update_floor_multimesh_transforms(_protected_floor_visual_light, light_transforms)
+	_update_floor_multimesh_transforms(_protected_floor_visual_dark, dark_transforms)
+	_protected_floor_patch_tile_count = light_transforms.size() + dark_transforms.size()
+
+
+func _update_floor_multimesh_transforms(
+	visual: MultiMeshInstance3D, transforms: Array[Transform3D]
+) -> void:
+	if visual == null or visual.multimesh == null:
+		return
+	visual.multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		visual.multimesh.set_instance_transform(index, transforms[index])
+
+
+func _apply_protected_floor_patch_visibility() -> void:
+	var patch_visible := _protected_floor_patch_enabled and not _floor_visible
+	if _protected_floor_visual_light != null:
+		_protected_floor_visual_light.visible = patch_visible
+	if _protected_floor_visual_dark != null:
+		_protected_floor_visual_dark.visible = patch_visible
 
 
 func _create_floor_multimesh(

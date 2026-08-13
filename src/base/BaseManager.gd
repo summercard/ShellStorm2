@@ -101,6 +101,17 @@ func get_active_run_checkpoint() -> Dictionary:
 	return data.active_run_snapshot.duplicate(true)
 
 
+## 高频运行时信号只更新内存镜像；统一防抖计时器/应用边界再把完整快照落盘。
+## 这样 HUD、恢复查询立即一致，同时避免手电每扣 2% 都同步写磁盘。
+func patch_active_run_checkpoint(fields: Dictionary) -> bool:
+	_ensure_data()
+	if data.active_run_snapshot.is_empty() or fields.is_empty():
+		return false
+	for key in fields.keys():
+		data.active_run_snapshot[key] = fields[key]
+	return true
+
+
 func clear_active_run_checkpoint(reason: String = "run_finished") -> bool:
 	_ensure_data()
 	var previous := data.active_run_snapshot.duplicate(true)

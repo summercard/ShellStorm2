@@ -430,6 +430,13 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 	_spawn_muzzle_effect(world)
 	if AudioManager != null:
 		AudioManager.play_fire_sfx(fire_rate, emitted_count)
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(
+			shooter.global_position if shooter != null else global_position,
+			20.0 if gun_id == "bp_launcher" else 14.0,
+			"weapon_fire",
+			shooter
+		)
 	shot_fired.emit(emitted_count)
 	ammo_changed.emit(current_ammo, magazine_size)
 	if current_ammo <= 0:

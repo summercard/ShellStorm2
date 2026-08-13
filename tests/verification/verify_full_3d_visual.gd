@@ -28,7 +28,7 @@ func _ready() -> void:
 	elif image.save_png(PREVIEW_PATH) != OK:
 		failures.append("Dungeon3D preview cannot be saved")
 	var current_room := dungeon.get("_room_by_id").get("main_01") as DungeonRoom3D
-	var switch := current_room.get_node_or_null("RoomLightSwitch3D") as RoomLightSwitch3D if current_room != null else null
+	var switch := current_room.find_child("RoomLightSwitch3D", true, false) as RoomLightSwitch3D if current_room != null else null
 	if switch == null or not switch.toggle_light():
 		failures.append("Dungeon3D visual check cannot enable the central room light")
 	else:

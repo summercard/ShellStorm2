@@ -113,6 +113,7 @@ var _tower_target_label: Label
 var _tower_elevator_label: Label
 var _tower_base_currency_label: Label
 var _loaded_floor_indices: Array[int] = []
+var _protected_floor_patch_center := Vector3.ZERO
 var _floor_visibility_poll_count := 0
 var _floor_visibility_apply_count := 0
 var _generated_floor_indices: Array[int] = []
@@ -327,13 +328,17 @@ func _update_floor_visibility_state() -> void:
 	))
 	var active_connector: Node3D = null
 	var active_edge := ""
-	for edge in _corridor_by_edge.keys():
-		if str(_edge_kind_by_key.get(edge, "")) != "vertical":
-			continue
-		var connector := _corridor_by_edge[edge] as Node3D
-		if connector != null and connector.visible and _is_player_on_connector(connector):
+	var connector_candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			player.global_position, 24.0, [GameplaySpatialRegistry3D.KIND_CONNECTOR]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	for connector in connector_candidates:
+		if bool(connector.get_meta("is_vertical_connector", false)) and connector.visible and _is_player_on_connector(connector):
 			active_connector = connector
-			active_edge = str(edge)
+			active_edge = str(connector.get_meta("edge_key", ""))
 			break
 	_active_transition_edge = active_edge
 	_transition_upper_floor = -1
@@ -345,18 +350,33 @@ func _update_floor_visibility_state() -> void:
 		var upper_y := -FLOOR_HEIGHT * float(_transition_upper_floor)
 		_transition_progress = clampf((upper_y - player.global_position.y) / FLOOR_HEIGHT, 0.0, 1.0)
 
-	var stream_center := current_floor
-	if active_connector != null:
-		stream_center = (
-			_transition_upper_floor
-			if _transition_progress < 0.5
-			else _transition_lower_floor
-		)
 	var next_loaded_floor_indices: Array[int] = []
-	for candidate_value in _floor_stages.keys():
-		var candidate_index := int(candidate_value)
-		if absi(candidate_index - stream_center) <= 2:
-			next_loaded_floor_indices.append(candidate_index)
+	if active_connector != null:
+		for transition_floor in [_transition_upper_floor, _transition_lower_floor]:
+			if _floor_stages.has(transition_floor) and transition_floor not in next_loaded_floor_indices:
+				next_loaded_floor_indices.append(transition_floor)
+	elif _floor_stages.has(current_floor):
+		next_loaded_floor_indices.append(current_floor)
+	next_loaded_floor_indices.sort()
+	# 完整流送窗口外仍保留镜头正上、正下相邻物理层的50×50m楼板，
+	# 防止整层视觉裁剪后太阳穿透。补丁随镜头5m格变化，最多200个阴影实例。
+	var floor_patch_center := (
+		player.camera.global_position
+		if player.camera != null and player.camera.is_inside_tree()
+		else player.global_position
+	)
+	_protected_floor_patch_center = floor_patch_center
+	for floor_index in _floor_stages.keys():
+		var protected_stage = _floor_stages[floor_index]
+		if protected_stage == null:
+			continue
+		var protected_stage_index := int(floor_index)
+		var fully_loaded := protected_stage_index in next_loaded_floor_indices
+		protected_stage.call(
+			"set_protected_floor_patch",
+			floor_patch_center,
+			not fully_loaded and abs(protected_stage_index - current_floor) == 1
+		)
 	# 楼梯过渡值仍可每帧更新，但只有加载集合真正改变时才重写所有楼层、
 	# 66个房间和设施的 visible/process_mode。普通站立不再重复全表施工。
 	if next_loaded_floor_indices == _loaded_floor_indices:
@@ -373,8 +393,8 @@ func _update_floor_visibility_state() -> void:
 		stage.process_mode = (
 			Node.PROCESS_MODE_INHERIT if loaded else Node.PROCESS_MODE_DISABLED
 		)
-		# 已加载物理层始终完整渲染。8m层内镜头、9m楼层与真实楼梯洞口
-		# 负责遮挡；只有超出五层流送窗口时才整体关闭表现。
+		# 非楼梯态只保留当前物理层；楼梯过渡只保留上下两层。
+		# 支撑碰撞仍由 FloorStage 内部契约维持，远层不再占用渲染预算。
 		stage.call("set_render_state", loaded, loaded)
 
 	for room in _rooms:
@@ -1245,6 +1265,10 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
 	$GeneratedCorridors.add_child(connector)
 	_corridor_by_edge[edge] = connector
+	connector.set_meta("edge_key", edge)
+	connector.set_meta("spatial_registry_position", (upper_door + lower_door) * 0.5)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(connector, GameplaySpatialRegistry3D.KIND_CONNECTOR)
 	_add_imported_stairwell_visual(
 		connector,
 		upper_interface,
@@ -1509,6 +1533,10 @@ func _build_tower_horizontal_corridor(
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
 	$GeneratedCorridors.add_child(connector)
 	_corridor_by_edge[edge] = connector
+	connector.set_meta("edge_key", edge)
+	connector.set_meta("spatial_registry_position", center)
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.register_node(connector, GameplaySpatialRegistry3D.KIND_CONNECTOR)
 	# Boss竞技场与下行大厅共墙，两个门洞重合即构成通道；保留连接器状态节点，
 	# 但不生成零长度地板或墙碰撞，避免透明阻挡。
 	if length <= 0.05:
@@ -2765,6 +2793,8 @@ func _unload_completed_segment(lower_floor_index: int) -> void:
 			str(connector.get_meta("from_room_id", "")) in removed_ids
 			or str(connector.get_meta("to_room_id", "")) in removed_ids
 		):
+			if GameplaySpatialRegistry3D != null:
+				GameplaySpatialRegistry3D.unregister_node(connector)
 			connector.queue_free()
 			_corridor_by_edge.erase(edge)
 			_open_edges.erase(edge)
@@ -3314,6 +3344,7 @@ func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
 
 
 func _build_runtime_world_save_snapshot() -> Dictionary:
+	_capture_loaded_runtime_rooms()
 	var layout_ids: Dictionary = {}
 	for floor_index in _generated_floor_indices:
 		layout_ids[str(floor_index)] = str(
@@ -3339,6 +3370,7 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 		"committed_floor_indices": _generated_floor_indices.duplicate(),
 		"floor_layout_ids": layout_ids,
 		"room_progress": room_progress,
+		"segment_runtime_state": _segment_runtime_state.duplicate(true),
 		"vertical_arrival_open": _vertical_arrival_open.duplicate(true),
 		"initial_loop_gate_armed": _initial_loop_gate_armed,
 		"initial_loop_gate_sealed": _initial_loop_gate_sealed,
@@ -3397,6 +3429,9 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 				_vertical_arrival_open[edge] = bool((vertical_state as Dictionary)[edge_value])
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
+	var saved_segment_state: Variant = world_state.get("segment_runtime_state", {})
+	if saved_segment_state is Dictionary:
+		_segment_runtime_state = (saved_segment_state as Dictionary).duplicate(true)
 	return true
 
 
@@ -3405,6 +3440,9 @@ func _has_unclaimed_room_key(room_id: String) -> bool:
 		var key := value as RoomKeyPickup3D
 		if key != null and key.room_id == room_id and not key.is_queued_for_deletion():
 			return true
+	var stored_room := _segment_runtime_state.get(room_id, {}) as Dictionary
+	if not (stored_room.get("room_keys", []) as Array).is_empty():
+		return true
 	return false
 
 
@@ -3438,6 +3476,9 @@ func get_tower_snapshot() -> Dictionary:
 	var floor_heights: Array[float] = []
 	var support_floor_count := 0
 	var rendered_floor_count := 0
+	var protected_floor_patch_stage_count := 0
+	var protected_floor_patch_tile_count := 0
+	var protected_floor_patch_indices: Array[int] = []
 	var floor_stage_snapshots: Array[Dictionary] = []
 	var stage_indices: Array = _floor_stages.keys()
 	stage_indices.sort()
@@ -3452,6 +3493,12 @@ func get_tower_snapshot() -> Dictionary:
 				support_floor_count += 1
 			if bool(stage_snapshot.get("shell_visible", false)):
 				rendered_floor_count += 1
+			if bool(stage_snapshot.get("protected_floor_patch_visible", false)):
+				protected_floor_patch_stage_count += 1
+				protected_floor_patch_tile_count += int(
+					stage_snapshot.get("protected_floor_patch_tile_count", 0)
+				)
+				protected_floor_patch_indices.append(floor_index)
 	for combat_floor in range(1, COMBAT_FLOOR_COUNT + 1):
 		var physical_index := combat_floor + 1
 		var plan := _floor_plan_snapshots.get(physical_index, {}) as Dictionary
@@ -3538,6 +3585,10 @@ func get_tower_snapshot() -> Dictionary:
 		"descent_sides": _descent_side_sequence.duplicate(),
 		"support_floor_count": support_floor_count,
 		"rendered_floor_count": rendered_floor_count,
+		"protected_floor_patch_stage_count": protected_floor_patch_stage_count,
+		"protected_floor_patch_tile_count": protected_floor_patch_tile_count,
+		"protected_floor_patch_indices": protected_floor_patch_indices,
+		"protected_floor_patch_center": _protected_floor_patch_center,
 		"loaded_floor_count": _loaded_floor_indices.size(),
 		"loaded_floor_indices": _loaded_floor_indices.duplicate(),
 		"floor_visibility_poll_count": _floor_visibility_poll_count,

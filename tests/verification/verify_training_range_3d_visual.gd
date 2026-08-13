@@ -21,7 +21,7 @@ func _ready() -> void:
 	elif image.save_png(PREVIEW_PATH) != OK:
 		failures.append("TrainingRange3D preview cannot be saved")
 	var snapshot := training.get_training_snapshot()
-	if int(snapshot.get("combination_count", 0)) != 56 or snapshot.get("target_types", []).size() != 3:
+	if int(snapshot.get("combination_count", 0)) != 59 or snapshot.get("target_types", []).size() != 3:
 		failures.append("TrainingRange3D preview scene is incomplete")
 	_finish(failures)
 

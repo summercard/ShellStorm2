@@ -252,8 +252,15 @@ func _verify_exploder_fragments(failures: Array[String]) -> void:
 	var before := _count_projectiles()
 	enemy.call("_explode")
 	await get_tree().process_frame
-	if _count_projectiles() - before < 8 or enemy.ai_state != "dead":
-		failures.append("Exploder does not detonate and emit its eight death fragments")
+	if _count_projectiles() != before or enemy.ai_state != "dead":
+		failures.append("Committed active explosion incorrectly reused the weaker death-fragment path")
+	var killed_enemy := _make_enemy("exploder", Vector3(54, 0, 50))
+	await get_tree().process_frame
+	before = _count_projectiles()
+	killed_enemy.take_damage(killed_enemy.max_hp + 1)
+	await get_tree().process_frame
+	if _count_projectiles() - before < 8:
+		failures.append("Killed exploder does not emit its distinct eight weaker death fragments")
 
 
 func _make_enemy(kind: String, position: Vector3) -> Enemy3D:

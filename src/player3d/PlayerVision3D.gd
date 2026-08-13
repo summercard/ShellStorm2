@@ -59,15 +59,29 @@ var _display_flashlight_distances := PackedFloat32Array()
 var _flashlight_overlay_active := false
 var _flashlight_overlay_angle_degrees := 0.0
 var _geometry_dirty := true
+var _tracked_enemy_ids: Dictionary = {}
 
 
 func _ready() -> void:
 	_player = get_parent() as Player3D
+	if GameplaySpatialRegistry3D != null:
+		GameplaySpatialRegistry3D.node_registered.connect(_on_spatial_node_registered)
+	# 玩家视野接管敌人显隐前先做一次初始化；后续新敌人由空间注册信号接管，
+	# 不需要在25Hz显隐循环里重新扫描整棵场景树。
+	for value in get_tree().get_nodes_in_group("enemy_3d"):
+		if value is Enemy3D:
+			(value as Enemy3D).visible = false
 	_flashlight = get_node_or_null("../PlayerFlashlight3D") as PlayerFlashlight3D
 	if _flashlight != null:
 		_flashlight.light_enabled_changed.connect(_on_flashlight_enabled_changed)
 	_build_visualization()
 	call_deferred("force_refresh")
+
+
+func _on_spatial_node_registered(node: Node3D, kind: String) -> void:
+	if kind == GameplaySpatialRegistry3D.KIND_ENEMY and node is Enemy3D:
+		# 默认不可见，直到下一次近场遮挡裁决明确放行。
+		(node as Enemy3D).visible = false
 
 
 func _on_flashlight_enabled_changed(_enabled: bool) -> void:
@@ -435,26 +449,57 @@ func _refresh_target_visibility() -> void:
 	_visible_target_count = 0
 	_occluded_target_count = 0
 	var visited: Dictionary = {}
+	# 敌人是数量最多且会移动的目标，走近场桶查询；掉落、钥匙与终端数量很少，
+	# 继续使用事件组可避免把一次性对象强行塞进高频移动注册表。
+	var nearby_enemies: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			_player.global_position,
+			vision_range + 1.5,
+			[GameplaySpatialRegistry3D.KIND_ENEMY]
+		)
+		if GameplaySpatialRegistry3D != null
+		else []
+	)
+	for target in nearby_enemies:
+		_refresh_one_target_visibility(target, visited)
+	var next_tracked_enemy_ids: Dictionary = {}
+	for enemy_target in nearby_enemies:
+		if enemy_target != null:
+			next_tracked_enemy_ids[enemy_target.get_instance_id()] = true
+	for previous_id_value in _tracked_enemy_ids.keys():
+		var previous_id := int(previous_id_value)
+		if next_tracked_enemy_ids.has(previous_id):
+			continue
+		var previous_enemy := instance_from_id(previous_id) as Enemy3D
+		if previous_enemy != null and is_instance_valid(previous_enemy):
+			previous_enemy.visible = false
+	_tracked_enemy_ids = next_tracked_enemy_ids
 	for group_name in VISION_TARGET_GROUPS:
+		if group_name == &"enemy_3d":
+			continue
 		for value in get_tree().get_nodes_in_group(group_name):
 			var target := value as Node3D
-			if target == null or visited.has(target.get_instance_id()):
-				continue
-			visited[target.get_instance_id()] = true
-			if target is Enemy3D:
-				var enemy := target as Enemy3D
-				if enemy.ai_state == "dead":
-					continue
-				if enemy.process_mode == Node.PROCESS_MODE_DISABLED:
-					enemy.visible = false
-					_occluded_target_count += 1
-					continue
-			var visible_to_player := is_position_visible(_get_target_sample_position(target))
-			target.visible = visible_to_player
-			if visible_to_player:
-				_visible_target_count += 1
-			else:
-				_occluded_target_count += 1
+			_refresh_one_target_visibility(target, visited)
+
+
+func _refresh_one_target_visibility(target: Node3D, visited: Dictionary) -> void:
+	if target == null or visited.has(target.get_instance_id()):
+		return
+	visited[target.get_instance_id()] = true
+	if target is Enemy3D:
+		var enemy := target as Enemy3D
+		if enemy.ai_state == "dead":
+			return
+		if enemy.process_mode == Node.PROCESS_MODE_DISABLED:
+			enemy.visible = false
+			_occluded_target_count += 1
+			return
+	var visible_to_player := is_position_visible(_get_target_sample_position(target))
+	target.visible = visible_to_player
+	if visible_to_player:
+		_visible_target_count += 1
+	else:
+		_occluded_target_count += 1
 
 
 func _get_target_sample_position(target: Node3D) -> Vector3:
@@ -540,7 +585,14 @@ func _make_material(render_priority: int) -> StandardMaterial3D:
 
 func _count_visible_enemies() -> int:
 	var count := 0
-	for value in get_tree().get_nodes_in_group("enemy_3d"):
+	var candidates: Array[Node3D] = (
+		GameplaySpatialRegistry3D.query_radius(
+			_player.global_position, vision_range + 1.5, [GameplaySpatialRegistry3D.KIND_ENEMY]
+		)
+		if GameplaySpatialRegistry3D != null and _player != null
+		else []
+	)
+	for value in candidates:
 		if value is Enemy3D and (value as Enemy3D).visible and (value as Enemy3D).ai_state != "dead":
 			count += 1
 	return count

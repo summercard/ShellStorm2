@@ -11,6 +11,7 @@ func _ready() -> void:
 	VerificationOutput.prepare()
 	var failures: Array[String] = []
 	var world := TOWER.instantiate() as TowerDescent3D
+	world.test_mode = true
 	add_child(world)
 	for _frame in 12:
 		await get_tree().process_frame

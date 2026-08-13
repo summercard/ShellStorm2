@@ -59,7 +59,7 @@ func tick(delta: float) -> void:
 func force_refresh(commit_immediately := true) -> void:
 	if not is_instance_valid(_enemy) or not _enemy.is_inside_tree():
 		return
-	_refresh_light_cache()
+	_refresh_light_cache(true)
 	_sample_and_submit(commit_immediately)
 
 
@@ -158,6 +158,10 @@ func _evaluate(samples: Array[Vector3]) -> Dictionary:
 
 func _evaluate_sunlight(samples: Array[Vector3]) -> Dictionary:
 	for sun in _sun_lights:
+		# Typed arrays can retain a freed Object placeholder until the next cache refresh.
+		# Validate before passing it to a typed helper or reading its transform.
+		if not is_instance_valid(sun):
+			continue
 		if not _is_active_light(sun):
 			continue
 		var toward_sun := sun.global_transform.basis.z.normalized()
@@ -323,13 +327,49 @@ func _commit_state(next_state: String) -> void:
 	illumination_state_changed.emit(previous, next_state, get_snapshot())
 
 
-func _refresh_light_cache() -> void:
+func _refresh_light_cache(discover_group_lights := false) -> void:
 	_sun_lights.clear()
 	_local_lights.clear()
-	for node in _enemy.get_tree().get_nodes_in_group(SUN_GROUP):
+	# 事件驱动的强制刷新兼容测试节点和第三方关卡：把新加入旧 group 的灯
+	# 一次迁入空间注册表。周期 tick 只查注册表，不再按怪物全场扫描。
+	if discover_group_lights and GameplaySpatialRegistry3D != null:
+		for node in _enemy.get_tree().get_nodes_in_group(SUN_GROUP):
+			if node is DirectionalLight3D:
+				GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_SUN)
+		for node in _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP):
+			if node is Light3D and not node is DirectionalLight3D:
+				GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)
+	var sun_candidates: Array = (
+		GameplaySpatialRegistry3D.query_kind(GameplaySpatialRegistry3D.KIND_SUN)
+		if GameplaySpatialRegistry3D != null
+		else _enemy.get_tree().get_nodes_in_group(SUN_GROUP)
+	)
+	var local_candidates: Array = (
+		GameplaySpatialRegistry3D.query_radius(
+			_enemy.global_position,
+			72.0,
+			[GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT]
+		)
+		if GameplaySpatialRegistry3D != null
+		else _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP)
+	)
+	# 无注册表的降级路径仍支持单文件场景。
+	if sun_candidates.is_empty():
+		sun_candidates = _enemy.get_tree().get_nodes_in_group(SUN_GROUP)
+		if GameplaySpatialRegistry3D != null:
+			for node in sun_candidates:
+				if node is DirectionalLight3D:
+					GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_SUN)
+	if local_candidates.is_empty():
+		local_candidates = _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP)
+		if GameplaySpatialRegistry3D != null:
+			for node in local_candidates:
+				if node is Light3D and not node is DirectionalLight3D:
+					GameplaySpatialRegistry3D.register_node(node, GameplaySpatialRegistry3D.KIND_LOCAL_LIGHT)
+	for node in sun_candidates:
 		if node is DirectionalLight3D:
 			_sun_lights.append(node as DirectionalLight3D)
-	for node in _enemy.get_tree().get_nodes_in_group(LOCAL_LIGHT_GROUP):
+	for node in local_candidates:
 		if node is Light3D and not node is DirectionalLight3D:
 			_local_lights.append(node as Light3D)
 	_cache_age = 0.0

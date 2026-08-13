@@ -117,6 +117,19 @@ const ROOM_DIMENSIONS := {
 	"tower_cell": Vector2(15.0, 15.0),
 }
 
+const STREAM_DATA_ONLY := 0
+const STREAM_SHELL_READY := 1
+const STREAM_ACTIVE := 2
+const STREAM_PREFETCHING := 3
+const STREAM_HIBERNATING := 4
+const STREAM_STATE_NAMES := {
+	STREAM_DATA_ONLY: "DATA_ONLY",
+	STREAM_SHELL_READY: "SHELL_READY",
+	STREAM_ACTIVE: "ACTIVE",
+	STREAM_PREFETCHING: "PREFETCHING",
+	STREAM_HIBERNATING: "HIBERNATING",
+}
+
 var room_id := "room_00"
 var room_type := "COMBAT"
 var size_class := "medium"
@@ -135,7 +148,12 @@ var _wall_material: StandardMaterial3D
 var _trim_material: StandardMaterial3D
 var _detail_built := false
 var _shell_built := false
+var _detail_root: Node3D
+var _building_detail := false
+var _pending_detail_runtime_state: Dictionary = {}
 var _stream_state := -1
+var _stream_transition_count := 0
+var _last_stream_transition_msec := 0
 var _door_nodes: Dictionary = {}
 var _central_light: WastelandLight3D
 var _room_lights: Array[WastelandLight3D] = []
@@ -175,16 +193,22 @@ func get_dimensions() -> Vector2:
 	return ROOM_DIMENSIONS.get(size_class, ROOM_DIMENSIONS["medium"])
 
 
+func is_room_light_on() -> bool:
+	return _light_switch != null and _light_switch.is_light_on()
+
+
 func get_room_snapshot() -> Dictionary:
 	return {
 		"room_id": room_id, "room_type": room_type, "size_class": size_class,
 		"dimensions": get_dimensions(), "doors": doors.duplicate(), "visited": visited,
 		"cleared": cleared, "is_main_path": is_main_path,
 		"shell_built": _shell_built, "detail_built": _detail_built, "stream_state": _stream_state,
+		"stream_state_name": get_stream_state_name(),
+		"stream_transition_count": _stream_transition_count,
 		"furniture_count": get_tree().get_nodes_in_group("room_prop_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"light_count": get_tree().get_nodes_in_group("wasteland_light_3d").filter(func(node): return is_ancestor_of(node)).size(),
 		"central_light": _central_light != null,
-		"room_light_on": _light_switch != null and _light_switch.is_light_on(),
+		"room_light_on": is_room_light_on(),
 		"light_switch": _light_switch != null,
 		"controlled_light_count": _room_lights.size(),
 		"shadow_capable_light_count": _count_shadow_capable_lights(),
@@ -218,14 +242,24 @@ func get_stream_state() -> int:
 
 
 func is_streamed() -> bool:
-	return _stream_state > 0
+	return _stream_state in [STREAM_SHELL_READY, STREAM_ACTIVE, STREAM_PREFETCHING]
+
+
+func get_stream_state_name() -> String:
+	return str(STREAM_STATE_NAMES.get(_stream_state, "DATA_ONLY"))
 
 
 func ensure_detail_built() -> void:
 	if _detail_built:
 		return
 	_detail_built = true
+	_detail_root = Node3D.new()
+	_detail_root.name = "RuntimeDetail"
+	add_child(_detail_root)
+	_building_detail = true
 	_build_content()
+	_building_detail = false
+	_apply_pending_detail_runtime_state()
 	_set_room_light_runtime_state(self)
 
 
@@ -237,28 +271,28 @@ func ensure_shell_built() -> void:
 	_build_trigger()
 
 
-func _prewarm_detail_if_streamed() -> void:
-	if _stream_state > 0:
-		ensure_detail_built()
-
-
 func set_stream_state(state: int) -> void:
-	var next_state := clampi(state, 0, 2)
+	var next_state := clampi(state, STREAM_DATA_ONLY, STREAM_HIBERNATING)
 	if next_state == _stream_state:
 		return
 	_stream_state = next_state
-	if _stream_state > 0:
+	_stream_transition_count += 1
+	_last_stream_transition_msec = Time.get_ticks_msec()
+	var presentation_ready := _stream_state in [STREAM_SHELL_READY, STREAM_ACTIVE, STREAM_PREFETCHING]
+	if presentation_ready:
 		ensure_shell_built()
-		if _stream_state == 2:
+		if _stream_state == STREAM_ACTIVE:
 			ensure_detail_built()
-		else:
-			call_deferred("_prewarm_detail_if_streamed")
-	visible = _stream_state > 0
-	process_mode = Node.PROCESS_MODE_INHERIT if _stream_state > 0 else Node.PROCESS_MODE_DISABLED
+		elif _stream_state == STREAM_PREFETCHING:
+			call_deferred("set_stream_state", STREAM_SHELL_READY)
+	elif _stream_state == STREAM_DATA_ONLY:
+		_unload_runtime_detail()
+	visible = presentation_ready
+	process_mode = Node.PROCESS_MODE_INHERIT if presentation_ready else Node.PROCESS_MODE_DISABLED
 	# 远层只卸载通行/交互碰撞，承重楼板永久保留。否则隐藏楼层时，
 	# 仍驻留的掉落或冻结实体可能穿过已卸载楼板坠向更深层。
-	_set_collision_enabled(self, _stream_state > 0, true)
-	if _stream_state > 0:
+	_set_collision_enabled(self, presentation_ready, true)
+	if presentation_ready:
 		for value in _door_nodes.values():
 			var door := value as RoomDoor3D
 			if door != null:
@@ -266,11 +300,51 @@ func set_stream_state(state: int) -> void:
 	_set_room_light_runtime_state(self)
 
 
+func apply_runtime_detail_state(state: Dictionary) -> void:
+	_pending_detail_runtime_state = state.duplicate(true)
+	if _detail_built:
+		_apply_pending_detail_runtime_state()
+
+
+func _apply_pending_detail_runtime_state() -> void:
+	if _pending_detail_runtime_state.is_empty() or not _detail_built:
+		return
+	var wanted_light_on := bool(_pending_detail_runtime_state.get("room_light_on", false))
+	if _light_switch != null and _light_switch.is_light_on() != wanted_light_on:
+		_light_switch.set_light_on(wanted_light_on)
+	var container_states := _pending_detail_runtime_state.get("containers", {}) as Dictionary
+	for value in get_tree().get_nodes_in_group("room_prop_3d"):
+		if value is RoomFurniture3D and _detail_root != null and _detail_root.is_ancestor_of(value):
+			var prop := value as RoomFurniture3D
+			if container_states.has(prop.prop_id):
+				prop.restore_searched_state(bool(container_states[prop.prop_id]))
+
+
+func _unload_runtime_detail() -> void:
+	if _detail_root != null and is_instance_valid(_detail_root):
+		remove_child(_detail_root)
+		_detail_root.queue_free()
+	_detail_root = null
+	_detail_built = false
+	_central_light = null
+	_light_switch = null
+	_room_lights.clear()
+
+
+func _add_runtime_detail_child(node: Node) -> void:
+	if _building_detail and _detail_root != null:
+		_detail_root.add_child(node)
+	else:
+		add_child(node)
+
+
 func _set_room_light_runtime_state(root: Node) -> void:
 	for child in root.get_children():
 		if child is WastelandLight3D:
 			(child as WastelandLight3D).set_runtime_active(
-				_stream_state > 0, _stream_state == 2, _stream_state == 2
+				_stream_state in [STREAM_SHELL_READY, STREAM_ACTIVE],
+				_stream_state == STREAM_ACTIVE,
+				_stream_state == STREAM_ACTIVE
 			)
 		else:
 			_set_room_light_runtime_state(child)
@@ -340,9 +414,9 @@ func ensure_required_service_station() -> ServiceStation3D:
 
 func _get_service_stations() -> Array[ServiceStation3D]:
 	var result: Array[ServiceStation3D] = []
-	for child in get_children():
-		if child is ServiceStation3D:
-			result.append(child as ServiceStation3D)
+	for value in find_children("*", "ServiceStation3D", true, false):
+		if value is ServiceStation3D:
+			result.append(value as ServiceStation3D)
 	return result
 
 
@@ -1330,7 +1404,10 @@ func _build_stair_lobby_markings(dimensions: Vector2) -> void:
 
 
 func _build_content() -> void:
+	# 内容生成使用独立稳定种子，卸载再载入后家具类型与搜索点不漂移。
+	_rng.seed = room_seed ^ 0x51A77E
 	var dimensions := get_dimensions()
+	_build_runtime_navigation_surface(dimensions)
 	_room_lights.clear()
 	if room_type == "FACILITY":
 		# 简单顶光：4 盏 ceiling 灯分布在四角 ±10m 处，统一受基地开关控制。
@@ -1397,7 +1474,7 @@ func _build_content() -> void:
 	_place_light_switch(_light_switch, dimensions)
 	var starts_on := room_type in ["FACILITY", "STAIR_LOBBY", "BOSS"]
 	_light_switch.configure_group(_room_lights, starts_on)
-	add_child(_light_switch)
+	_add_runtime_detail_child(_light_switch)
 	if room_type == "STAIR_LOBBY":
 		_build_stair_lobby_markings(dimensions)
 
@@ -1441,7 +1518,7 @@ func _build_content() -> void:
 		var x_factor := 0.18 if size_class in ["large", "arena"] and row % 3 == 2 else 0.34
 		prop.position = Vector3(side * dimensions.x * x_factor, 0, lerpf(-dimensions.y * 0.28, dimensions.y * 0.28, row_ratio))
 		prop.rotation.y = 0.12 * side + PI * (1.0 if side > 0.0 else 0.0)
-		add_child(prop)
+		_add_runtime_detail_child(prop)
 		if is_search:
 			prop.searched.connect(_on_prop_searched)
 
@@ -1457,7 +1534,28 @@ func _build_content() -> void:
 			6 + theme.difficulty_rank * 2
 		)
 		hazard.position = Vector3(0, 0.06, 0)
-		add_child(hazard)
+		_add_runtime_detail_child(hazard)
+
+
+func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
+	# 每个 ACTIVE 房只保留一块轻量导航面；正式门/跨房授权仍由房间系统拥有。
+	# 家具的短距避障交给 Enemy3D 射线兜底，避免运行时烘焙造成主线程尖峰。
+	var inset := 1.45
+	var half_x := maxf(1.0, dimensions.x * 0.5 - inset)
+	var half_z := maxf(1.0, dimensions.y * 0.5 - inset)
+	var navigation_mesh := NavigationMesh.new()
+	navigation_mesh.vertices = PackedVector3Array([
+		Vector3(-half_x, 0.08, -half_z),
+		Vector3(half_x, 0.08, -half_z),
+		Vector3(half_x, 0.08, half_z),
+		Vector3(-half_x, 0.08, half_z),
+	])
+	navigation_mesh.add_polygon(PackedInt32Array([0, 1, 2, 3]))
+	var region := NavigationRegion3D.new()
+	region.name = "RuntimeNavigationRegion3D"
+	region.use_edge_connections = false
+	region.navigation_mesh = navigation_mesh
+	_add_runtime_detail_child(region)
 
 
 func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceStation3D:
@@ -1476,7 +1574,7 @@ func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceSta
 	var forward_offset := minf(4.5, dimensions.y * 0.18)
 	station.position = Vector3(0, 0, -forward_offset)
 	station.set_meta("required_room_objective", type_id == "event")
-	add_child(station)
+	_add_runtime_detail_child(station)
 	station.activated.connect(_on_service_activated)
 	return station
 
@@ -1505,7 +1603,7 @@ func _create_room_light(
 		# 灯具自身的顶装高度是 2.72m；整体抬升后与 9m 天花板贴合。
 		room_light.position.y = TOWER_GEOMETRY.FLOOR_HEIGHT_M - 2.72
 	room_light.set_light_enabled(false)
-	add_child(room_light)
+	_add_runtime_detail_child(room_light)
 	room_light.add_to_group("wasteland_light_3d")
 	return room_light
 
@@ -1555,7 +1653,7 @@ func _build_vertical_access_marker(type_id: String) -> void:
 	if label3d != null:
 		label3d.text = "电梯 / 垂直层" if type_id == "ELEVATOR" else "上层" if up else "地下层"
 		label3d.modulate = theme.accent_color.lightened(0.18)
-	add_child(label_instance)
+	_add_runtime_detail_child(label_instance)
 
 
 func _choose_prop_size(index: int) -> String:
@@ -1643,7 +1741,7 @@ func _spawn_prefab(node_name: String, prefab: PackedScene, position: Vector3, sc
 	instance.position = position
 	instance.scale = scale_vec
 	_apply_material_override(instance, material)
-	add_child(instance)
+	_add_runtime_detail_child(instance)
 	return instance
 
 

@@ -103,6 +103,7 @@ var _landing_duration := LANDING_MIN_DURATION_S
 var _last_safe_ground_position := Vector3.ZERO
 var _has_safe_ground_position := false
 var _fall_recovery_count := 0
+var _footstep_sound_accumulator := 0.0
 var _character_fate := {
 	"move_speed_multiplier": 1.0,
 	"dash_cooldown_multiplier": 1.0,
@@ -159,6 +160,7 @@ func _physics_process(delta: float) -> void:
 		_state_machine.physics_update(delta)
 	if melee_combat != null:
 		melee_combat.physics_update(delta)
+	_tick_footstep_sound(delta)
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
 		flashlight.set_in_facility(is_player_inside_facility())
@@ -1404,8 +1406,22 @@ func _begin_dash() -> bool:
 	if melee_combat != null:
 		melee_combat.cancel("dash_started")
 	dash_cooldown_timer = get_dash_cooldown_duration()
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(global_position, 6.0, "dash", self)
 	_state_machine.transition_to("dashing")
 	return true
+
+
+func _tick_footstep_sound(delta: float) -> void:
+	if not is_on_floor() or Vector2(velocity.x, velocity.z).length() < 1.0 or is_dashing:
+		_footstep_sound_accumulator = 0.0
+		return
+	_footstep_sound_accumulator += delta
+	if _footstep_sound_accumulator < 0.55:
+		return
+	_footstep_sound_accumulator = fmod(_footstep_sound_accumulator, 0.55)
+	if MonsterAIManager != null:
+		MonsterAIManager.broadcast_sound_stimulus(global_position, 3.0, "footstep", self)
 
 
 func _tick_dash_cooldown(delta: float) -> void:

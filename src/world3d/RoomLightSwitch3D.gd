@@ -62,6 +62,16 @@ func toggle_light() -> bool:
 	return true
 
 
+func set_light_on(enabled: bool) -> bool:
+	_prune_invalid_lights()
+	if _controlled_lights.is_empty():
+		return false
+	for light in _controlled_lights:
+		light.set_light_enabled(enabled)
+	_update_state_visual()
+	return true
+
+
 func is_light_on() -> bool:
 	_prune_invalid_lights()
 	if _controlled_lights.is_empty():

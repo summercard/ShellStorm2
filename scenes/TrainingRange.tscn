@@ -1,0 +1,78 @@
+[gd_scene format=3 uid="uid://yjy1jw061m4"]
+
+[ext_resource type="Script" path="res://src/training/TrainingRange.gd" id="1_range"]
+[ext_resource type="PackedScene" path="res://scenes/Player.tscn" id="2_player"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_horizontal"]
+size = Vector2(2600, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vertical"]
+size = Vector2(60, 1500)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
+size = Vector2(120, 240)
+
+[node name="TrainingRange" type="Node2D" unique_id=1431403964]
+script = ExtResource("1_range")
+
+[node name="WorldTone" type="CanvasModulate" parent="." unique_id=72438701]
+color = Color(0.44, 0.5, 0.52, 1)
+
+[node name="Walls" type="StaticBody2D" parent="." unique_id=730069499]
+collision_mask = 0
+
+[node name="Top" type="CollisionShape2D" parent="Walls" unique_id=1773722895]
+position = Vector2(0, -750)
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="Bottom" type="CollisionShape2D" parent="Walls" unique_id=312346743]
+position = Vector2(0, 750)
+shape = SubResource("RectangleShape2D_horizontal")
+
+[node name="Left" type="CollisionShape2D" parent="Walls" unique_id=2121289483]
+position = Vector2(-1300, 0)
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="Right" type="CollisionShape2D" parent="Walls" unique_id=1034281931]
+position = Vector2(1300, 0)
+shape = SubResource("RectangleShape2D_vertical")
+
+[node name="EquipmentRacks" type="Node2D" parent="." unique_id=1165027161]
+
+[node name="Targets" type="Node2D" parent="." unique_id=1029482328]
+
+[node name="ExitDoor" type="Area2D" parent="." unique_id=651594137]
+position = Vector2(-1240, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDoor" unique_id=1992600610]
+shape = SubResource("RectangleShape2D_exit")
+
+[node name="ExitPrompt" type="Label" parent="ExitDoor" unique_id=839939475]
+z_index = 30
+offset_left = 50.0
+offset_top = -23.0
+offset_right = 270.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0.62, 0.94, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.08, 0.1, 0.9)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 18
+text = "[E] 消毒并返回基地"
+
+[node name="Player" parent="." unique_id=783675506 instance=ExtResource("2_player")]
+position = Vector2(-1050, 0)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=686917922]
+zoom = Vector2(0.82, 0.82)
+limit_left = -1300
+limit_top = -750
+limit_right = 1300
+limit_bottom = 750
+position_smoothing_enabled = true
+position_smoothing_speed = 9.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1688532840]
+layer = 20

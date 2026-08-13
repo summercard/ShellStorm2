@@ -28,10 +28,10 @@ const FRONT_INTERACTION_PROFILES := {
 @export_range(0, 99, 1) var target_floor := 0
 @export var facility_color := Color(0.28, 0.55, 0.78)
 
-@onready var base_mesh: MeshInstance3D = get_node_or_null("Visual/Base") as MeshInstance3D
-@onready var roof_mesh: MeshInstance3D = get_node_or_null("Visual/Roof") as MeshInstance3D
-@onready var beacon_mesh: MeshInstance3D = get_node_or_null("Visual/Beacon") as MeshInstance3D
-@onready var beacon_light: OmniLight3D = get_node_or_null("Visual/BeaconLight") as OmniLight3D
+@onready var base_mesh: MeshInstance3D = get_node_or_null("Base") as MeshInstance3D
+@onready var roof_mesh: MeshInstance3D = get_node_or_null("Roof") as MeshInstance3D
+@onready var beacon_mesh: MeshInstance3D = get_node_or_null("Beacon") as MeshInstance3D
+@onready var beacon_light: OmniLight3D = get_node_or_null("BeaconLight") as OmniLight3D
 @onready var name_label: Label3D = $NameLabel
 @onready var prompt_label: Label3D = $PromptLabel
 
