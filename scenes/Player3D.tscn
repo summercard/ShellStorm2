@@ -46,8 +46,10 @@ script = ExtResource("1_player")
 position = Vector3(0, 0.75, 0)
 shape = SubResource("ShapePlayer")
 metadata/collision_contract = "invisible_gameplay_capsule_matches_full_visual_height_including_ears"
-metadata/visual_top_with_ears_m = 1.5
-metadata/head_top_without_ears_m = 1.1033895
+metadata/authored_visual_top_with_ears_m = 1.5
+metadata/visual_top_with_ears_m = 1.05
+metadata/head_top_without_ears_m = 0.77237265
+metadata/default_base_size_multiplier = 0.7
 metadata/top_safety_margin_m = 0.0
 
 [node name="Avatar3D" parent="." instance=ExtResource("2_avatar")]

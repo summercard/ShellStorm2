@@ -1977,6 +1977,55 @@ func _find_nearby_stair_arrival() -> Dictionary:
 	return nearest
 
 
+func _find_nearby_stair_return() -> Dictionary:
+	# 下行到达门由上层房间上下文处理；反向爬楼时玩家在穿过上端门之前
+	# 仍属于下层房间，不能依赖当前房间的 get_nearest_door() 找到上端门。
+	# 对已授权的垂直路线显式查询上端门，保证楼梯内部不会形成单向陷阱。
+	if player == null or _current_room_id.is_empty():
+		return {}
+	var nearest_distance := STAIR_ARRIVAL_INTERACTION_DISTANCE_M
+	var nearest: Dictionary = {}
+	for edge_value in _corridor_by_edge.keys():
+		var edge := str(edge_value)
+		var connector := _corridor_by_edge.get(edge) as Node3D
+		if (
+			connector == null
+			or not bool(connector.get_meta("is_vertical_connector", false))
+			or not bool(_open_edges.get(edge, false))
+		):
+			continue
+		var upper_id := str(connector.get_meta("from_room_id", ""))
+		var lower_id := str(connector.get_meta("to_room_id", ""))
+		if _current_room_id != lower_id:
+			continue
+		var upper_room := _room_by_id.get(upper_id) as DungeonRoom3D
+		if upper_room == null or not upper_room.visible:
+			continue
+		var door_sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
+		var upper_side := str(
+			door_sides.get(
+				upper_id,
+				connector.get_meta("upper_door_side", "west")
+			)
+		)
+		var upper_door := upper_room.get_door_node(upper_side)
+		if upper_door == null or upper_door.is_open:
+			continue
+		var distance := player.global_position.distance_to(upper_door.global_position)
+		if distance > nearest_distance:
+			continue
+		nearest_distance = distance
+		nearest = {
+			"edge": edge,
+			"connector": connector,
+			"upper_room": upper_room,
+			"upper_door": upper_door,
+			"upper_room_id": upper_id,
+			"distance": distance,
+		}
+	return nearest
+
+
 func _update_stair_arrival_prompt() -> void:
 	if (
 		_stair_arrival_prompt_door != null
@@ -1986,17 +2035,33 @@ func _update_stair_arrival_prompt() -> void:
 	_stair_arrival_prompt_door = null
 	var candidate := _find_nearby_stair_arrival()
 	if candidate.is_empty():
+		candidate = _find_nearby_stair_return()
+	if candidate.is_empty():
 		return
-	_stair_arrival_prompt_door = candidate.get("lower_door") as RoomDoor3D
+	_stair_arrival_prompt_door = candidate.get(
+		"lower_door", candidate.get("upper_door")
+	) as RoomDoor3D
 	if _stair_arrival_prompt_door != null:
 		_stair_arrival_prompt_door.set_prompt_visible(true)
 
 
 func _try_open_nearby_stair_arrival() -> bool:
 	var candidate := _find_nearby_stair_arrival()
+	if not candidate.is_empty():
+		return _activate_stair_arrival(candidate)
+	candidate = _find_nearby_stair_return()
 	if candidate.is_empty():
 		return false
-	return _activate_stair_arrival(candidate)
+	var upper_door := candidate.get("upper_door") as RoomDoor3D
+	if upper_door == null:
+		return false
+	upper_door.set_open(true)
+	status_label.text = "上行交通门已开启"
+	if MonsterAIManager != null and player != null:
+		MonsterAIManager.broadcast_sound_stimulus(
+			player.global_position, 6.5, "door_open", player
+		)
+	return true
 
 
 func _activate_stair_arrival(candidate: Dictionary) -> bool:
@@ -2853,8 +2918,9 @@ func _install_facilities() -> void:
 		return
 	_facility_art_layout = get_node_or_null("美术可编辑层/基地99层_美术布置层") as Node3D
 	if _facility_art_layout != null:
+		# 美术布置层及其设施的position/rotation/scale是作者最终值。
+		# reparent(false)会保留局部Transform；禁止再归零或按房间中心校正。
 		_facility_art_layout.reparent(facility_floor, false)
-		_facility_art_layout.transform = Transform3D.IDENTITY
 	else:
 		_facility_art_layout = BASE_FACILITY_ART_LAYOUT_SCENE.instantiate() as Node3D
 	if _facility_art_layout == null:
@@ -2966,6 +3032,9 @@ func _create_standalone_elevator(
 	facility.description = "独立墙边设施 · 点亮本层后可往返已解锁楼层"
 	facility.facility_color = Color(0.22, 0.82, 0.88)
 	facility.activation_type = BaseFacility3D.ActivationType.SHOW_INFO
+	# 99F基地严格只保留房间中央一盏玩法顶灯；电梯仍用自发光材质表达状态。
+	if access_room_id == "facility":
+		facility.beacon_light_enabled = false
 	facility.set_meta("tower_elevator_floor", floor_number)
 	facility.set_meta("access_room_id", access_room_id)
 	facility.set_meta("placement", "standalone_wall_edge")

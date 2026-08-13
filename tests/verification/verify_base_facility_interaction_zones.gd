@@ -23,7 +23,7 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BASE_FACILITY_INTERACTION_ZONES_OK: vending range expanded and desk facilities interact from room-facing front")
+		print("BASE_FACILITY_INTERACTION_ZONES_OK: authored facility transforms preserved and interaction zones remain usable")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -57,6 +57,14 @@ func _verify_facility(
 		return
 	if str(interaction.get_meta("front_interaction_profile", "")) != facility_id:
 		failures.append("设施未应用正面交互配置：%s" % facility_id)
+	var size_snapshot := facility.get_size_contract_snapshot()
+	var expected_scale := Vector3.ONE * BaseFacility3D.DEFAULT_BASE_SIZE_MULTIPLIER
+	if not (size_snapshot.get("interaction_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE):
+		failures.append("设施70%%缩放错误影响了交互范围：%s" % facility_id)
+	if not (size_snapshot.get("body_scale", Vector3.ZERO) as Vector3).is_equal_approx(expected_scale):
+		failures.append("设施实体碰撞未缩小到70%%：%s" % facility_id)
+	if not (size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(expected_scale):
+		failures.append("设施视觉未缩小到70%%：%s" % facility_id)
 
 	var local_room_center := facility.to_local(facility_room.global_position)
 	var toward_room := Vector2(local_room_center.x, local_room_center.z).normalized()

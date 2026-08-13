@@ -71,6 +71,27 @@ func _ready() -> void:
 				door != null and not door.is_open and bool((tower.get("_open_edges") as Dictionary).get(edge, false)),
 				"基地%s侧门离开后没有关闭，或错误撤销了楼梯路线授权" % side, failures
 			)
+			if target_room_id == "start":
+				var rooftop := (tower.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
+				var rooftop_door := rooftop.get_door_node("west") if rooftop != null else null
+				_expect(
+					rooftop_door != null and not rooftop_door.is_open,
+					"基地出门自动关闭后，天台上端门状态不是关闭",
+					failures
+				)
+				if rooftop_door != null:
+					tower.player.global_position = rooftop_door.global_position
+					_expect(
+						str(tower.get("_current_room_id")) == "facility"
+						and tower.try_open_stair_arrival_for_test(),
+						"角色在楼梯内、房间上下文仍为99F时不能从内侧开启天台门",
+						failures
+					)
+					_expect(
+						rooftop_door.is_open and door != null and not door.is_open,
+						"内侧开启天台门错误联动打开了99F基地侧门",
+						failures
+					)
 			tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
 			tower.force_enter_room_for_test("facility")
 			_expect(
@@ -121,7 +142,12 @@ func _ready() -> void:
 		"98F大循环首门没有在角色进入后关闭", failures
 	)
 	var carried := tower.get_inventory_module()
+	var carried_insurance := tower.get_insurance_module()
 	carried.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 1)
+	_expect(
+		carried_insurance.insure_item_direct(ItemRegistry.get_instance().get_item("item_battery_s")),
+		"无法准备反向撤退保险物", failures
+	)
 	var secondary := WeaponInstance.ensure_weapon_item(ItemRegistry.get_instance().get_item("weapon_shotgun"))
 	var secondary_result := tower.player.equip_weapon_item_to_slot(secondary, 1)
 	_expect(bool(secondary_result.get("success", false)), "无法准备撤退时的副武器", failures)
@@ -129,6 +155,7 @@ func _ready() -> void:
 	_expect(tower.get("_initial_loop_retreat_overlay") != null, "反向开启98F首门没有显示撤退确认", failures)
 	tower.call("_cancel_initial_loop_retreat")
 	_expect(carried.has_item("item_health_potion"), "取消撤退错误清除了物品", failures)
+	_expect(carried_insurance.has_item("item_battery_s"), "取消撤退错误清除了保险物", failures)
 	tower.call("_show_initial_loop_retreat_warning")
 	tower.confirm_initial_loop_retreat_for_test()
 	_expect(
@@ -137,6 +164,7 @@ func _ready() -> void:
 		and tower.player.get_equipped_weapon_instance_for_slot(1) == null,
 		"确认撤退没有清空背包及主/副武器", failures
 	)
+	_expect(carried_insurance.has_item("item_battery_s"), "确认反向撤退错误清除了保险物", failures)
 	_expect(str(tower.get_tower_snapshot().get("current_room_id", "")) == "facility", "确认撤退没有返回99F基地", failures)
 	for _frame in 2:
 		await get_tree().process_frame

@@ -194,11 +194,11 @@ func _ready() -> void:
 	await get_tree().process_frame
 	var base_room_snapshot := base_room.get_room_snapshot()
 	_expect(
-		int(base_room_snapshot.get("light_count", 0)) == 4
-		and int(base_room_snapshot.get("controlled_light_count", 0)) == 4
+		int(base_room_snapshot.get("light_count", 0)) == 1
+		and int(base_room_snapshot.get("controlled_light_count", 0)) == 1
 		and bool(base_room_snapshot.get("light_switch", false))
 		and bool(base_room_snapshot.get("room_light_on", false)),
-		"99层基地没有默认点亮的四灯一控照明系统",
+		"99层基地没有默认点亮的单灯一控照明系统",
 		failures
 	)
 	_expect(
@@ -232,13 +232,13 @@ func _ready() -> void:
 		base_light_switch.toggle_light()
 		_expect(
 			not base_light_switch.is_light_on(),
-			"99层基地灯光总开关不能统一关闭四盏灯",
+			"99层基地灯光总开关不能关闭中央灯",
 			failures
 		)
 		base_light_switch.toggle_light()
 		_expect(
 			base_light_switch.is_light_on(),
-			"99层基地灯光总开关不能统一恢复四盏灯",
+			"99层基地灯光总开关不能恢复中央灯",
 			failures
 		)
 	await _validate_door_contract(tower, failures)
@@ -486,7 +486,7 @@ func _ready() -> void:
 	var active_base_snapshot := facility.get_room_snapshot()
 	_expect(
 		int(active_base_snapshot.get("active_shadow_light_count", 0)) == 1,
-		"99层基地成为当前房间后，嵌套四灯组的投影主灯没有随流送激活",
+		"99层基地成为当前房间后，中央单灯没有随流送激活",
 		failures
 	)
 

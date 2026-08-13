@@ -11,6 +11,11 @@ func _ready() -> void:
 	VerificationOutput.prepare()
 	var failures: Array[String] = []
 	var world := TOWER.instantiate() as TowerDescent3D
+	var authored_layout := world.get_node_or_null(
+		"美术可编辑层/基地99层_美术布置层"
+	) as Node3D
+	var authored_layout_transform := authored_layout.transform if authored_layout != null else Transform3D.IDENTITY
+	var authored_facility_transforms := _capture_facility_transforms(authored_layout)
 	world.test_mode = true
 	add_child(world)
 	for _frame in 12:
@@ -46,13 +51,30 @@ func _ready() -> void:
 		_check(light_root != null and light_root.get_child_count() >= 3, "基地可编辑灯组缺失", failures)
 		_check(elevator_anchor != null, "99层电梯可编辑锚点缺失", failures)
 		_check(_count_facilities(art_layout) == 8, "美术布置层没有保留8个交互设施桥接节点", failures)
+		_check(
+			art_layout.transform.is_equal_approx(authored_layout_transform),
+			"运行时重置了基地美术布置层的作者Transform",
+			failures
+		)
+		var runtime_facility_transforms := _capture_facility_transforms(art_layout)
+		for facility_id_value in authored_facility_transforms:
+			var facility_id := str(facility_id_value)
+			_check(
+				runtime_facility_transforms.has(facility_id)
+				and (runtime_facility_transforms[facility_id] as Transform3D).is_equal_approx(
+					authored_facility_transforms[facility_id] as Transform3D
+				),
+				"运行时覆盖了%s的作者位移/旋转/缩放" % facility_id,
+				failures
+			)
 		if light_root != null:
 			for light_node in light_root.get_children():
 				if light_node is Light3D:
-					_check((light_node as Light3D).shadow_enabled, "%s 没有启用可编辑阴影" % light_node.name, failures)
-	for facility in [vending, mission, workshop, vault, fate_collection]:
-		if facility != null:
-			_check(_faces_room(facility), "%s 正面没有朝向基地房间内部" % facility.facility_id, failures)
+					_check(
+						not (light_node as Light3D).visible,
+						"%s 在单灯基地契约下仍参与运行时照明" % light_node.name,
+						failures
+					)
 	if vending != null:
 		_place_player_for_view(world, vending.global_position + _forward(vending) * 2.2)
 		await _settle()
@@ -88,22 +110,24 @@ func _find_facility(world: TowerDescent3D, facility_id: String) -> BaseFacility3
 	return null
 
 
+func _capture_facility_transforms(root: Node) -> Dictionary:
+	var result := {}
+	if root == null:
+		return result
+	if root is BaseFacility3D:
+		var facility := root as BaseFacility3D
+		result[facility.facility_id] = facility.transform
+	for child in root.get_children():
+		result.merge(_capture_facility_transforms(child), true)
+	return result
+
+
 func _forward(facility: BaseFacility3D) -> Vector3:
 	return _forward_node(facility)
 
 
 func _forward_node(node: Node3D) -> Vector3:
 	return (node.global_basis * Vector3.FORWARD).normalized()
-
-
-func _faces_room(facility: BaseFacility3D) -> bool:
-	return _faces_room_node(facility)
-
-
-func _faces_room_node(node: Node3D) -> bool:
-	var room_center := node.get_parent_node_3d().global_position
-	var to_room := (room_center - node.global_position).normalized()
-	return _forward_node(node).dot(to_room) > 0.72
 
 
 func _place_player_for_view(world: TowerDescent3D, position: Vector3) -> void:

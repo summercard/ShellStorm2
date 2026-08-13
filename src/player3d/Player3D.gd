@@ -42,6 +42,7 @@ const LANDING_MIN_DURATION_S := 0.12
 const LANDING_MAX_DURATION_S := 0.30
 const LANDING_FULL_IMPACT_MPS := 16.0
 const FALL_RECOVERY_DISTANCE_M := 15.0
+const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const DEBUG_SCALE_STEP_RATIO := 0.10
 const DEBUG_SCALE_MIN_STEP := -9
 const DEBUG_SCALE_MAX_STEP := 20
@@ -191,15 +192,16 @@ func _is_debug_scale_down_key(event: InputEventKey) -> bool:
 
 
 func _initialize_debug_scale_contract() -> void:
-	_base_avatar_scale = avatar.scale
-	_base_collision_position = virtual_collision_capsule.position
+	# 旧资产尺寸的70%现在定义为角色的新100%基础尺寸。
+	_base_avatar_scale = avatar.scale * DEFAULT_BASE_SIZE_MULTIPLIER
+	_base_collision_position = virtual_collision_capsule.position * DEFAULT_BASE_SIZE_MULTIPLIER
 	if virtual_collision_capsule.shape != null:
 		# 运行时体型调试不得修改场景共享的Shape资源。
 		virtual_collision_capsule.shape = virtual_collision_capsule.shape.duplicate()
 	var capsule := virtual_collision_capsule.shape as CapsuleShape3D
 	if capsule != null:
-		_base_collision_radius = capsule.radius
-		_base_collision_height = capsule.height
+		_base_collision_radius = capsule.radius * DEFAULT_BASE_SIZE_MULTIPLIER
+		_base_collision_height = capsule.height * DEFAULT_BASE_SIZE_MULTIPLIER
 	_debug_scale_initialized = true
 	_apply_debug_scale()
 
@@ -229,6 +231,7 @@ func get_debug_scale_snapshot() -> Dictionary:
 	return {
 		"step": _debug_scale_step,
 		"step_percent": roundi(DEBUG_SCALE_STEP_RATIO * 100.0),
+		"base_size_multiplier": DEFAULT_BASE_SIZE_MULTIPLIER,
 		"scale_ratio": ratio,
 		"scale_percent": roundi(ratio * 100.0),
 		"minimum_percent": roundi((1.0 + DEBUG_SCALE_MIN_STEP * DEBUG_SCALE_STEP_RATIO) * 100.0),

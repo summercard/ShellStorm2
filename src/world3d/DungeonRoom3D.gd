@@ -1429,26 +1429,19 @@ func _build_content() -> void:
 	_build_runtime_navigation_surface(dimensions)
 	_room_lights.clear()
 	if room_type == "FACILITY":
-		# 简单顶光：4 盏 ceiling 灯分布在四角 ±10m 处，统一受基地开关控制。
-		# 单灯 energy * 3.0、range * 2.8（整体亮度 ×2，比 BOSS 4 灯的 *2.4 更亮）。
+		# 99F基地只保留一盏中央玩法顶灯。Compatibility默认每个Mesh最多
+		# 接收8盏OmniLight；旧四顶灯叠加美术灯和设施信标会超限，关后重开
+		# 可能重新排序并把主顶灯挤出地板灯表。28m范围覆盖30×30m主体区。
 		_central_light = null
-		for light_index in range(4):
-			var x_sign := -1.0 if light_index % 2 == 0 else 1.0
-			var z_sign := -1.0 if light_index < 2 else 1.0
-			var facility_light := _create_room_light(
-				"FacilityCeilingLight_%02d" % (light_index + 1),
-				Vector3(x_sign * 10.0, 0.0, z_sign * 10.0),
-				theme.fixture_energy * 3.00,
-				maxf(
-					theme.fixture_range * 2.80,
-					minf(dimensions.x, dimensions.y) * 1.10
-				),
-				room_seed + light_index * 17,
-				true
-			)
-			if _central_light == null:
-				_central_light = facility_light
-			_room_lights.append(facility_light)
+		_central_light = _create_room_light(
+			"FacilityCeilingLight_Main",
+			Vector3.ZERO,
+			theme.fixture_energy * 3.00,
+			maxf(theme.fixture_range * 3.30, 28.0),
+			room_seed,
+			true
+		)
+		_room_lights.append(_central_light)
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
 		# 四周都保持可读，同时仍由同一个墙边开关统一控制。

@@ -13,8 +13,9 @@ func _ready() -> void:
 
 	var ui := dungeon.get("_inventory_ui") as InventoryUI
 	var inventory := dungeon.get("_inventory") as InventoryModule
-	_check(ui != null and inventory != null, "Formal dungeon did not create tactical inventory UI", failures)
-	if ui == null or inventory == null:
+	var insurance := dungeon.get("_insurance") as InsuranceModule
+	_check(ui != null and inventory != null and insurance != null, "Formal dungeon did not create tactical inventory/insurance UI", failures)
+	if ui == null or inventory == null or insurance == null:
 		_finish(failures)
 		return
 	ui.set_inventory_panel_open(true)
@@ -74,6 +75,105 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_check(str((inventory.get_slot(0).get("item", {}) as Dictionary).get("type", "")) == "weapon", "Backpack sorting did not place weapon category first", failures)
 
+	var insured_item := ItemRegistry.get_instance().get_item("item_battery_l")
+	_check(inventory.add_item(insured_item, 1) == 1, "Cannot seed insurance drag item", failures)
+	var insured_source_slot := _find_item_slot(inventory, "item_battery_l")
+	await get_tree().process_frame
+	var inventory_to_insurance := {
+		"inventory_drag": true,
+		"source_index": insured_source_slot,
+		"source_kind": "inventory",
+		"item": insured_item,
+	}
+	_check(
+		insured_source_slot >= 0
+		and not ui._insurance_slots.is_empty()
+		and bool(ui._insurance_slots[0].call("_can_drop_data", Vector2.ZERO, inventory_to_insurance)),
+		"Empty insurance slot rejects backpack drag", failures
+	)
+	ui.call("_on_slot_drop_received", insured_source_slot, 0, "inventory", "insurance")
+	_check(insurance.has_item("item_battery_l") and not inventory.has_item("item_battery_l"), "Backpack drag did not transfer ownership into insurance", failures)
+
+	var insurance_to_inventory := {
+		"inventory_drag": true,
+		"source_index": 0,
+		"source_kind": "insurance",
+		"item": insured_item,
+	}
+	var empty_inventory_slot := _find_empty_slot(inventory)
+	_check(
+		empty_inventory_slot >= 0
+		and bool(ui._slots[empty_inventory_slot].call("_can_drop_data", Vector2.ZERO, insurance_to_inventory)),
+		"Empty backpack slot rejects insurance-item return drag", failures
+	)
+	ui.call("_on_slot_drop_received", 0, empty_inventory_slot, "insurance", "inventory")
+	_check(not insurance.has_item("item_battery_l") and inventory.has_item("item_battery_l"), "Insurance return drag lost or duplicated ownership", failures)
+
+	var battery_slot := _find_item_slot(inventory, "item_battery_l")
+	_check(insurance.insure_item(inventory, battery_slot), "Cannot return battery to insurance for world-drop routing", failures)
+	var insured_battery_payload := {
+		"inventory_drag": true,
+		"source_index": 0,
+		"source_kind": "insurance",
+		"item": insured_item,
+	}
+	var insurance_drop_room := dungeon.get("_room_by_id").get("start") as DungeonRoom3D
+	var insurance_pickups_before := insurance_drop_room.find_children("*", "GroundLootPickup3D", true, false).size()
+	_check(
+		bool(ui.drop_zone.call("_can_drop_data", Vector2.ZERO, insured_battery_payload)),
+		"Insurance item is incorrectly blocked from the world-drop zone", failures
+	)
+	ui.call("_on_slot_drop_received", 0, -1, "insurance", "drop")
+	await get_tree().process_frame
+	var insurance_pickups_after := insurance_drop_room.find_children("*", "GroundLootPickup3D", true, false).size()
+	_check(
+		not insurance.has_item("item_battery_l") and insurance_pickups_after == insurance_pickups_before + 1,
+		"Insurance item was not voluntarily moved into the current-room world drop", failures
+	)
+
+	var insured_weapon := ItemRegistry.get_instance().get_item("weapon_shotgun")
+	_check(insurance.insure_item_direct(insured_weapon), "Cannot seed insured weapon for equipment routing", failures)
+	var insured_weapon_entry := insurance.get_slots_snapshot()[0] as Dictionary
+	var insured_weapon_item := insured_weapon_entry.get("item", {}) as Dictionary
+	var insured_weapon_payload := {
+		"inventory_drag": true,
+		"source_index": 0,
+		"source_kind": "insurance",
+		"item": insured_weapon_item,
+	}
+	_check(
+		bool(ui.equipment_weapon_slots[1].call("_can_drop_data", Vector2.ZERO, insured_weapon_payload)),
+		"Compatible insured weapon is blocked from the equipment slot", failures
+	)
+	ui.call("_on_slot_drop_received", 0, 1, "insurance", "weapon_1")
+	var equipped_secondary := dungeon.player.get_equipped_weapon_instance_for_slot(1)
+	_check(
+		equipped_secondary != null
+		and equipped_secondary.weapon_instance_id == str(insured_weapon_item.get("weapon_instance_id", ""))
+		and insurance.get_used_slots() == 0,
+		"Insured weapon did not move into the requested equipment slot", failures
+	)
+
+	var insured_quick_item := ItemRegistry.get_instance().get_item("item_health_potion")
+	_check(insurance.insure_item_direct(insured_quick_item), "Cannot seed insured quick item", failures)
+	var insured_quick_payload := {
+		"inventory_drag": true,
+		"source_index": 0,
+		"source_kind": "insurance",
+		"item": insured_quick_item,
+	}
+	_check(
+		bool(ui.quick_item_slots[0].call("_can_drop_data", Vector2.ZERO, insured_quick_payload)),
+		"Usable insured item is blocked from the quick slot", failures
+	)
+	ui.call("_on_slot_drop_received", 0, 0, "insurance", "quick_0")
+	_check(
+		inventory.has_item("item_health_potion")
+		and str((dungeon.get("_quick_item_ids") as Array)[0]) == "item_health_potion"
+		and insurance.get_used_slots() == 0,
+		"Insured usable item did not enter backpack and bind to the quick slot", failures
+	)
+
 	var medkit := ItemRegistry.get_instance().get_item("item_health_potion")
 	_check(inventory.add_item(medkit, 1) == 1, "Cannot seed droppable item", failures)
 	var medkit_slot := _find_item_slot(inventory, "item_health_potion")
@@ -121,6 +221,13 @@ func _find_item_slot(inventory: InventoryModule, item_id: String) -> int:
 	return -1
 
 
+func _find_empty_slot(inventory: InventoryModule) -> int:
+	for index in inventory.get_capacity():
+		if inventory.get_slot(index).is_empty():
+			return index
+	return -1
+
+
 func _check(condition: bool, failure: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(failure)
@@ -128,7 +235,7 @@ func _check(condition: bool, failure: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("TACTICAL_INVENTORY_MINIMAP_OK: character equipment, explicit fate hover card, drag feedback contract, red HP, sort/drop, true room rectangles, player tracking and enemy dots pass")
+		print("TACTICAL_INVENTORY_MINIMAP_OK: character equipment, free insurance move/equip/quick/drop routing, explicit fate hover card, drag feedback contract, red HP, sort/drop, true room rectangles, player tracking and enemy dots pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

@@ -20,6 +20,7 @@ const VALID_STATES := [
 const NORMAL_HP_MULTIPLIER := 3.0
 const BOSS_HP_MULTIPLIER := 10.0
 const GLOBAL_MOVE_SPEED_MULTIPLIER := 0.70
+const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const BOSS_SIZE_MULTIPLIER := 1.5
 const ARTIFICIAL_LIGHT_MOVE_MULTIPLIER := 0.40
 const ARTIFICIAL_LIGHT_ATTACK_FREQUENCY_MULTIPLIER := 0.40
@@ -261,7 +262,14 @@ func apply_health_multiplier(multiplier: float) -> void:
 
 
 func _apply_presentation_scale() -> void:
-	scale = Vector3.ONE * _kind_scale_multiplier * _variant_scale_multiplier
+	# 全体怪物以旧资产尺寸的70%作为新基础；物种、精英和Boss差异继续叠加，
+	# 生命、速度、攻击距离与其他玩法数值不变。
+	scale = (
+		Vector3.ONE
+		* DEFAULT_BASE_SIZE_MULTIPLIER
+		* _kind_scale_multiplier
+		* _variant_scale_multiplier
+	)
 	if _overhead_health_root != null:
 		_position_overhead_health_bar()
 
@@ -1020,7 +1028,8 @@ func get_state_snapshot() -> Dictionary:
 		"hp_balance_multiplier": BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER,
 		"move_speed_multiplier": GLOBAL_MOVE_SPEED_MULTIPLIER,
 		"boss_size_multiplier": BOSS_SIZE_MULTIPLIER if enemy_kind == "boss" else 1.0,
-		"presentation_scale_multiplier": _kind_scale_multiplier * _variant_scale_multiplier,
+		"base_size_multiplier": DEFAULT_BASE_SIZE_MULTIPLIER,
+		"presentation_scale_multiplier": DEFAULT_BASE_SIZE_MULTIPLIER * _kind_scale_multiplier * _variant_scale_multiplier,
 		"world_collision_radius": float(shape_snapshot.get("radius", 0.0)) * scale.x,
 		"overhead_health_bar": _overhead_health_root != null,
 		"overhead_health_world_locked": _overhead_health_root != null and _overhead_health_root.top_level,

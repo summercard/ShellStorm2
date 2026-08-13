@@ -94,23 +94,30 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var target_kind := str(get_meta("slot_kind", "inventory"))
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var item := (data as Dictionary).get("item", {}) as Dictionary
+	var carried_source := source_kind in ["inventory", "insurance"]
 	if target_kind.begins_with("attachment_"):
 		return (
-			source_kind == "inventory"
+			carried_source
 			and str(item.get("type", "")) == "attachment"
 			and not bool(get_meta("slot_disabled", false))
 			and str(item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
 		)
 	if target_kind.begins_with("weapon_"):
-		return source_kind == "inventory" and str(item.get("type", "")) == "weapon"
+		return carried_source and str(item.get("type", "")) == "weapon"
 	if target_kind == "backpack":
 		return (
-			source_kind == "inventory"
+			carried_source
 			and str(item.get("type", "")) == "equipment"
 			and str(item.get("subtype", "")) == "backpack"
 		)
 	if target_kind.begins_with("quick_"):
-		return source_kind == "inventory" and not str(item.get("use_action", "")).is_empty()
+		return carried_source and not str(item.get("use_action", "")).is_empty()
+	# 保险只描述物品当前所在集合的离场保护，不是锁定。主动拖出后，
+	# 保险物与普通背包物一样可装备、绑定快捷栏或丢弃。
+	if source_kind == "insurance":
+		return target_kind == "drop" or target_kind == "inventory" and not has_meta("slot_item")
+	if target_kind == "insurance":
+		return source_kind == "inventory" and not has_meta("slot_item")
 	if target_kind == "inventory" and (
 		source_kind.begins_with("weapon_")
 		or source_kind.begins_with("attachment_")
@@ -147,12 +154,14 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 		target_kind == "drop"
 		or target_kind == "inventory" and (
 			source_kind == "inventory"
+			or source_kind == "insurance" and not has_meta("slot_item")
 			or (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and not has_meta("slot_item")
 		)
-		or target_kind.begins_with("attachment_") and source_kind == "inventory" and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
-		or target_kind.begins_with("weapon_") and source_kind == "inventory" and str(dragged_item.get("type", "")) == "weapon"
-		or target_kind == "backpack" and source_kind == "inventory" and str(dragged_item.get("type", "")) == "equipment" and str(dragged_item.get("subtype", "")) == "backpack"
-		or target_kind.begins_with("quick_") and source_kind == "inventory" and not str(dragged_item.get("use_action", "")).is_empty()
+		or target_kind == "insurance" and source_kind == "inventory" and not has_meta("slot_item")
+		or target_kind.begins_with("attachment_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
+		or target_kind.begins_with("weapon_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "weapon"
+		or target_kind == "backpack" and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "equipment" and str(dragged_item.get("subtype", "")) == "backpack"
+		or target_kind.begins_with("quick_") and source_kind in ["inventory", "insurance"] and not str(dragged_item.get("use_action", "")).is_empty()
 	)
 	queue_redraw()
 
@@ -177,7 +186,7 @@ func _draw() -> void:
 			border_width = 3.0
 		elif _drag_feedback_valid:
 			var target_kind := str(get_meta("slot_kind", "inventory"))
-			border_color = Color(1.0, 0.25, 0.22, 1.0) if target_kind == "drop" else Color(0.25, 0.95, 0.72, 1.0) if target_kind.begins_with("weapon_") or target_kind.begins_with("quick_") or target_kind == "backpack" else Color(0.30, 0.86, 1.0, 0.95)
+			border_color = Color(1.0, 0.25, 0.22, 1.0) if target_kind == "drop" else Color(1.0, 0.78, 0.25, 1.0) if target_kind == "insurance" else Color(0.25, 0.95, 0.72, 1.0) if target_kind.begins_with("weapon_") or target_kind.begins_with("quick_") or target_kind == "backpack" else Color(0.30, 0.86, 1.0, 0.95)
 			draw_rect(Rect2(Vector2.ZERO, size), Color(border_color.r, border_color.g, border_color.b, 0.10), true)
 			border_width = 2.0
 	if _hovered:

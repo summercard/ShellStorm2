@@ -78,6 +78,7 @@ rotation = Vector3(0, 3.141593, 0)
 facility_id = "fate_divination"
 display_name = "命运占卜台"
 menu_scene_path = "res://scenes/DivinationMenu.tscn"
+beacon_light_enabled = false
 
 [node name="基地管理终端" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
 position = Vector3(9, 0, -11.6)
@@ -85,6 +86,7 @@ rotation = Vector3(0, 3.141593, 0)
 facility_id = "base_console"
 display_name = "基地管理终端"
 menu_scene_path = "res://scenes/BaseMenu.tscn"
+beacon_light_enabled = false
 
 [node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("5_locker")]
 position = Vector3(-9, 0, 11.6)
@@ -98,6 +100,7 @@ position = Vector3(-3, 0, 11.6)
 facility_id = "monster_archive"
 display_name = "怪物档案台"
 menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
+beacon_light_enabled = false
 
 [node name="命运卡收藏室" parent="设施交互节点_可移动旋转" instance=ExtResource("6_retro")]
 position = Vector3(3, 0, 11.6)
@@ -129,6 +132,7 @@ metadata/interactive = false
 metadata/usage = "可调整颜色、能量、范围、阴影；不要改塔楼全局环境"
 
 [node name="中央冷色主灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+visible = false
 position = Vector3(0, 5.5, 0)
 light_color = Color(0.42, 0.78, 1, 1)
 light_energy = 0.65
@@ -137,6 +141,7 @@ omni_range = 18.0
 omni_attenuation = 1.25
 
 [node name="西北紫色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+visible = false
 position = Vector3(-8.5, 3.4, -8.5)
 light_color = Color(0.75, 0.25, 1, 1)
 light_energy = 0.38
@@ -144,6 +149,7 @@ shadow_enabled = true
 omni_range = 10.0
 
 [node name="东南暖色轮廓灯" type="OmniLight3D" parent="基地美术灯光_可编辑"]
+visible = false
 position = Vector3(8.5, 3.4, 8.5)
 light_color = Color(1, 0.46, 0.18, 1)
 light_energy = 0.32

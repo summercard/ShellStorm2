@@ -7,6 +7,7 @@ extends Control
 signal item_clicked(slot_index: int, item: Dictionary)
 signal item_to_insurance_requested(slot_index: int)
 signal item_extraction_requested(slot_index: int)
+signal insurance_item_move_requested(slot_index: int, target_index: int, target_kind: String)
 signal item_dropped_to_world(item: Dictionary, count: int)
 signal inventory_changed()  ## 背包变化时发出（供 3D HUD 绑定）
 signal inventory_open_changed(opened: bool)
@@ -408,7 +409,7 @@ func _setup_standalone_panels() -> void:
 	header.add_child(sort_button)
 	var shortcut_hint := Label.new()
 	shortcut_hint.name = "ShortcutHint"
-	shortcut_hint.text = "拖拽换位 · 枪械拖到左侧装备 · 拖出面板或拖到红区丢弃"
+	shortcut_hint.text = "拖拽换位 · 拖到金色保险格永久保留 · 拖出面板或拖到红区丢弃"
 	shortcut_hint.add_theme_font_size_override("font_size", 12)
 	shortcut_hint.add_theme_color_override("font_color", UIPalette.TEXT_SECONDARY)
 	vbox.add_child(shortcut_hint)
@@ -439,7 +440,7 @@ func _setup_standalone_panels() -> void:
 	
 	insurance_label = Label.new()
 	insurance_label.name = "InsuranceLabel"
-	insurance_label.text = "保险格 0/2"
+	insurance_label.text = "保险格 0/2 · 死亡/撤退均保留"
 	ins_vbox.add_child(insurance_label)
 	
 	insurance_grid = GridContainer.new()
@@ -527,6 +528,11 @@ func set_inventory_module(module) -> void:
 
 func set_insurance_module(module) -> void:
 	_insurance_module = module
+	if _insurance_module != null and _insurance_module.has_method("get_max_slots"):
+		var module_capacity := maxi(0, int(_insurance_module.call("get_max_slots")))
+		if insurance_capacity != module_capacity:
+			insurance_capacity = module_capacity
+			_build_insurance_grid()
 	if _insurance_module.has_signal("insurance_changed"):
 		_insurance_module.insurance_changed.connect(_on_insurance_changed)
 	_refresh_insurance_ui()
@@ -782,7 +788,7 @@ func _refresh_insurance_ui() -> void:
 			_clear_slot(slot)
 	
 	var used: int = occupied.size()
-	insurance_label.text = "保险格 %d/%d" % [used, insurance_capacity]
+	insurance_label.text = "保险格 %d/%d · 死亡/撤退均保留" % [used, insurance_capacity]
 
 func _input(event: InputEvent) -> void:
 	if not shortcut_enabled:
@@ -1351,7 +1357,7 @@ func _position_item_hover_card() -> void:
 
 
 func _on_slot_drag_started(source_index: int, source_kind: String, item: Dictionary) -> void:
-	if source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack":
+	if source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack":
 		return
 	_drag_feedback_active = true
 	_hovered_item_slot = null
@@ -1359,14 +1365,17 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	for index in _slots.size():
 		if _slots[index].has_method("set_drag_feedback"):
 			_slots[index].call("set_drag_feedback", true, source_kind == "inventory" and index == source_index, item, source_kind)
+	for index in _insurance_slots.size():
+		if _insurance_slots[index].has_method("set_drag_feedback"):
+			_insurance_slots[index].call("set_drag_feedback", true, source_kind == "insurance" and index == source_index, item, source_kind)
 	for target in _equipment_drop_targets():
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", true, (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
 	if drag_status_panel != null and drag_status_label != null:
-		drag_status_label.text = (
+		drag_status_label.text = "正在移动「%s」　蓝框入包 · 绿框装备 · 红框丢弃" % item.get("name", "保险物品") if source_kind == "insurance" else (
 			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
 			if source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack"
-			else "正在拖拽「%s」　蓝框换位 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
+			else "正在拖拽「%s」　蓝框换位 · 金框保险 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
 		)
 		drag_status_panel.visible = true
 		drag_status_panel.move_to_front()
@@ -1375,6 +1384,9 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successful: bool) -> void:
 	_drag_feedback_active = false
 	for slot in _slots:
+		if slot.has_method("set_drag_feedback"):
+			slot.call("set_drag_feedback", false, false, {}, "inventory")
+	for slot in _insurance_slots:
 		if slot.has_method("set_drag_feedback"):
 			slot.call("set_drag_feedback", false, false, {}, "inventory")
 	for target in _equipment_drop_targets():
@@ -1390,7 +1402,14 @@ func _on_slot_drop_received(
 	source_kind: String,
 	target_kind: String
 ) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or _inventory_module == null:
+	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or _inventory_module == null:
+		return
+	if source_kind == "insurance":
+		# 保险槽索引属于独立集合，交给玩法层完成带快照的所有权事务，
+		# 不能直接当成普通背包索引处理。
+		insurance_item_move_requested.emit(source_index, target_index, target_kind)
+		_refresh_inventory_ui()
+		_refresh_insurance_ui()
 		return
 	if source_kind.begins_with("attachment_"):
 		if target_kind == "inventory":
@@ -1442,6 +1461,8 @@ func _on_slot_drop_received(
 			var item := source.get("item", {}) as Dictionary
 			if not item.is_empty() and not str(item.get("use_action", "")).is_empty():
 				quick_item_assignment_requested.emit(int(target_kind.trim_prefix("quick_")), str(item.get("id", "")))
+		"insurance":
+			item_to_insurance_requested.emit(source_index)
 		"drop":
 			_drop_inventory_slot_to_world(source_index)
 	_refresh_inventory_ui()
@@ -1449,11 +1470,13 @@ func _on_slot_drop_received(
 
 
 func _on_slot_drag_ended_outside(source_index: int, source_kind: String) -> void:
-	if (source_kind != "inventory" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or inventory_shell == null:
+	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or inventory_shell == null:
 		return
 	if inventory_shell.get_global_rect().has_point(get_viewport().get_mouse_position()):
 		return
-	if source_kind.begins_with("weapon_"):
+	if source_kind == "insurance":
+		insurance_item_move_requested.emit(source_index, -1, "drop")
+	elif source_kind.begins_with("weapon_"):
 		equipped_weapon_drop_requested.emit(int(source_kind.trim_prefix("weapon_")))
 	elif source_kind.begins_with("attachment_"):
 		return

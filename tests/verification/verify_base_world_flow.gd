@@ -28,6 +28,18 @@ func _ready() -> void:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
 	if base_world.get_facility_count() != 9:
 		failures.append("BaseWorld3D does not expose nine formal facilities")
+	for facility_node in base_world.get_node("Facilities").get_children():
+		var facility := facility_node as BaseFacility3D
+		if facility == null:
+			continue
+		var size_snapshot := facility.get_size_contract_snapshot()
+		var expected_scale := Vector3.ONE * BaseFacility3D.DEFAULT_BASE_SIZE_MULTIPLIER
+		var body_scale := size_snapshot.get("body_scale", Vector3.ZERO) as Vector3
+		var visual_scale := size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3
+		if not body_scale.is_equal_approx(expected_scale):
+			failures.append("BaseWorld3D facility body is not at the 70%% base: %s" % facility.facility_id)
+		if not visual_scale.is_equal_approx(expected_scale):
+			failures.append("BaseWorld3D facility visual is not at the 70%% base: %s" % facility.facility_id)
 	if base_world.get_dungeon_entrance_count() != 4:
 		failures.append("BaseWorld3D does not expose four roadside dungeon entrances")
 	if base_world.player == null or base_world.player.combat_enabled:

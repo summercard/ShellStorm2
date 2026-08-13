@@ -64,7 +64,10 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 		if not is_equal_approx(enemy.move_speed, expected_speed):
 			failures.append("3D enemy speed is not 70%% baseline: %s=%.3f" % [kind, enemy.move_speed])
 		var state := enemy.get_state_snapshot()
-		var expected_size := float(Enemy3D.BODY_SCALE_BY_KIND.get(kind, 1.0))
+		var expected_size := (
+			Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER
+			* float(Enemy3D.BODY_SCALE_BY_KIND.get(kind, 1.0))
+		)
 		var expected_bar_size := Enemy3D.HEALTH_BAR_SIZE_BY_KIND.get(kind, Vector2.ZERO) as Vector2
 		size_multipliers[kind] = enemy.scale.x
 		if (
@@ -81,9 +84,9 @@ func _verify_ai_visibility_and_hp(player: Player3D, failures: Array[String]) -> 
 			failures.append("%s overhead health bar is not the single-texture HUD-style sprite" % kind)
 		if kind == "boss":
 			if (
-				not is_equal_approx(enemy.scale.x, Enemy3D.BOSS_SIZE_MULTIPLIER)
+				not is_equal_approx(enemy.scale.x, Enemy3D.DEFAULT_BASE_SIZE_MULTIPLIER * Enemy3D.BOSS_SIZE_MULTIPLIER)
 				or not bool(state.get("overhead_health_bar", false))
-				or float(state.get("world_collision_radius", 0.0)) < 2.85
+				or float(state.get("world_collision_radius", 0.0)) < 1.995
 			):
 				failures.append("Boss does not have its reduced large volume, matched collision and overhead HP bar")
 		enemy.apply_health_multiplier(1.5)

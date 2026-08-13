@@ -2,6 +2,7 @@ class_name BaseFacility3D
 extends Area3D
 
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
+const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 
 signal activated(facility: BaseFacility3D)
 
@@ -27,6 +28,7 @@ const FRONT_INTERACTION_PROFILES := {
 @export_file("*.tscn") var target_scene_path := ""
 @export_range(0, 99, 1) var target_floor := 0
 @export var facility_color := Color(0.28, 0.55, 0.78)
+@export var beacon_light_enabled := true
 
 @onready var base_mesh: MeshInstance3D = get_node_or_null("Base") as MeshInstance3D
 @onready var roof_mesh: MeshInstance3D = get_node_or_null("Roof") as MeshInstance3D
@@ -38,6 +40,7 @@ const FRONT_INTERACTION_PROFILES := {
 var _player_in_range := false
 var _available := true
 var _snapshot: Dictionary = {}
+var _base_size_applied := false
 
 
 func configure_front_interaction_toward(world_target: Vector3) -> bool:
@@ -84,6 +87,7 @@ func _ready() -> void:
 	add_to_group("base_facility")
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+	_apply_default_base_size()
 	_apply_catalog_definition()
 	name_label.text = display_name
 	name_label.font_size = 38
@@ -97,17 +101,56 @@ func _ready() -> void:
 		_apply_material(beacon_mesh, facility_color, 0.18, 0.38, true)
 	if beacon_light != null:
 		beacon_light.light_color = facility_color
-		beacon_light.light_energy = 1.15
-		beacon_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
-		beacon_light.set_meta("gameplay_light_kind", "omni")
+		beacon_light.visible = beacon_light_enabled
+		beacon_light.light_energy = 1.15 if beacon_light_enabled else 0.0
+		if beacon_light_enabled:
+			beacon_light.add_to_group(EnemyIllumination3D.LOCAL_LIGHT_GROUP)
+			beacon_light.set_meta("gameplay_light_kind", "omni")
 	if not facility_id.is_empty() and BaseManager != null:
 		apply_snapshot(BaseManager.get_facility_snapshot(facility_id))
+
+
+func _apply_default_base_size() -> void:
+	if _base_size_applied:
+		return
+	_base_size_applied = true
+	# 根节点和InteractionShape保持原尺寸，避免改变设施摆放与可用距离。
+	# 视觉、实体碰撞及其局部高度缩到旧资产的70%；标签只降低锚点，不缩字。
+	var interaction_shape := get_node_or_null("InteractionShape") as CollisionShape3D
+	for child in get_children():
+		if child == interaction_shape or not child is Node3D:
+			continue
+		var spatial := child as Node3D
+		spatial.position *= DEFAULT_BASE_SIZE_MULTIPLIER
+		if child is Label3D:
+			continue
+		spatial.scale *= DEFAULT_BASE_SIZE_MULTIPLIER
+	set_meta("base_size_multiplier", DEFAULT_BASE_SIZE_MULTIPLIER)
+
+
+func get_size_contract_snapshot() -> Dictionary:
+	var interaction := get_node_or_null("InteractionShape") as CollisionShape3D
+	var body := get_node_or_null("StaticBody3D") as StaticBody3D
+	var visual := get_node_or_null("Visual") as Node3D
+	var visual_scale := visual.scale if visual != null else Vector3.ZERO
+	if visual == null:
+		for child in get_children():
+			if child is GeometryInstance3D:
+				visual_scale = (child as GeometryInstance3D).scale
+				break
+	return {
+		"base_size_multiplier": DEFAULT_BASE_SIZE_MULTIPLIER,
+		"root_scale": scale,
+		"interaction_scale": interaction.scale if interaction != null else Vector3.ZERO,
+		"body_scale": body.scale if body != null else Vector3.ZERO,
+		"visual_scale": visual_scale,
+	}
 
 
 func _process(delta: float) -> void:
 	if beacon_mesh != null:
 		beacon_mesh.rotation.y += delta * (1.8 if _player_in_range else 0.55)
-	if beacon_light != null:
+	if beacon_light != null and beacon_light_enabled:
 		beacon_light.light_energy = 2.1 if _player_in_range else 1.15 + sin(Time.get_ticks_msec() * 0.002) * 0.08
 
 

@@ -590,6 +590,7 @@ func _setup_run_modules() -> void:
 	_inventory_ui.set_world_drop_handler(_drop_inventory_item_to_world)
 	_inventory_ui.item_to_insurance_requested.connect(_on_insure_item_requested)
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
+	_inventory_ui.insurance_item_move_requested.connect(_on_insurance_item_move_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
 	_inventory_ui.inventory_open_changed.connect(_on_inventory_open_changed)
 	_inventory_ui.weapon_slot_equip_requested.connect(_on_weapon_slot_equip_requested)
@@ -3383,6 +3384,56 @@ func _on_claim_insurance_requested(slot_index: int) -> void:
 		_inventory.restore_slots_snapshot(inventory_before)
 		_insurance.insure_item_direct(item)
 		status_label.text = "背包已满，保险物品未取出"
+
+
+func _on_insurance_item_move_requested(
+	insurance_slot_index: int, target_index: int, target_kind: String
+) -> void:
+	# 保险是“当前所在集合享受离场保留”，不是物品锁。转出采用背包与
+	# 保险双快照；目标操作失败时恢复两个集合，避免丢失或复制。
+	var inventory_before := _inventory.get_slots_snapshot()
+	var insurance_before := _insurance.get_slots_snapshot()
+	var item := _insurance.claim_item(insurance_slot_index)
+	if item.is_empty():
+		return
+	var count := maxi(1, int(item.get("count", 1)))
+	var moved := false
+	match target_kind:
+		"inventory":
+			moved = _inventory.put_item_in_empty_slot(target_index, item, count)
+		"drop":
+			moved = _drop_inventory_item_to_world(item, count)
+		"quick_0", "quick_1":
+			moved = _inventory.add_item(item, count) == count
+			if moved:
+				_on_quick_item_assignment_requested(int(target_kind.trim_prefix("quick_")), str(item.get("id", "")))
+		"weapon_0", "weapon_1", "backpack":
+			var staging_slot := _find_empty_inventory_slot()
+			if staging_slot >= 0 and _inventory.put_item_in_empty_slot(staging_slot, item, count):
+				moved = (
+					_equip_weapon_from_inventory(staging_slot, item, int(target_kind.trim_prefix("weapon_")))
+					if target_kind.begins_with("weapon_")
+					else _equip_backpack_from_inventory(staging_slot, item)
+				)
+		_ when target_kind.begins_with("attachment_"):
+			var staging_slot := _find_empty_inventory_slot()
+			var parts := target_kind.split("_")
+			if staging_slot >= 0 and parts.size() >= 3 and _inventory.put_item_in_empty_slot(staging_slot, item, count):
+				moved = _install_attachment_from_inventory(
+					staging_slot, item, int(parts[1]), int(parts[2])
+				)
+	if moved:
+		return
+	_inventory.restore_slots_snapshot(inventory_before)
+	_insurance.restore_slots_snapshot(insurance_before)
+	status_label.text = "移动失败，物品仍保留在保险格"
+
+
+func _find_empty_inventory_slot() -> int:
+	for index in _inventory.get_capacity():
+		if _inventory.get_slot(index).is_empty():
+			return index
+	return -1
 
 
 func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void:

@@ -63,8 +63,10 @@ func _process(delta: float) -> void:
 	if _light == null:
 		return
 	if not light_enabled:
-		# 关闭灯具直接退出渲染光源列表，避免零能量 Light3D 仍参与维护。
-		_light.visible = false
+		# Compatibility后端把动态Light3D设为不可见后，重新显示时可能只恢复
+		# 属性而没有重新进入实际光照集群。房间仍在运行时保留渲染实例，
+		# 只把能量归零；房间流送停用时才真正隐藏整个灯具。
+		_light.visible = _runtime_active
 		_light.light_energy = 0.0
 		return
 	var slow_wave := sin(_elapsed * (1.15 + float(flicker_seed % 5) * 0.08) + float(flicker_seed)) * 0.07
@@ -85,7 +87,7 @@ func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := tr
 	_refresh_process_state()
 	visible = active
 	if _light != null:
-		_light.visible = active and light_enabled
+		_light.visible = active
 		_light.light_energy = energy if active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			active and light_enabled and allow_shadow and _quality_shadow_allowed and cast_shadow
@@ -98,7 +100,8 @@ func set_light_enabled(enabled: bool) -> void:
 	light_enabled = enabled
 	_refresh_process_state()
 	if _light != null:
-		_light.visible = _runtime_active and light_enabled
+		# 用户开关不移除渲染实例，保证关后重开仍会真实照亮地板。
+		_light.visible = _runtime_active
 		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			_runtime_active
@@ -209,7 +212,7 @@ func _build_light_pool() -> void:
 func _apply_configuration() -> void:
 	if _light != null:
 		_light.light_color = light_color
-		_light.visible = _runtime_active and light_enabled
+		_light.visible = _runtime_active
 		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
 		_light.omni_range = light_range
 		_light.shadow_enabled = (

@@ -21,6 +21,10 @@ func _ready() -> void:
 	var base_height := capsule.height
 	var base_camera_transform := player.camera.transform
 	var base_root_scale := player.scale
+	if not base_avatar_scale.is_equal_approx(Vector3.ONE * Player3D.DEFAULT_BASE_SIZE_MULTIPLIER):
+		failures.append("Player default 100% is not based on the new 70% authored size")
+	if not is_equal_approx(float(player.get_debug_scale_snapshot().get("base_size_multiplier", 0.0)), 0.70):
+		failures.append("Player debug snapshot does not expose the 70% base-size contract")
 	var emitted_snapshots: Array[Dictionary] = []
 	player.debug_scale_changed.connect(func(snapshot: Dictionary) -> void:
 		emitted_snapshots.append(snapshot)
@@ -67,7 +71,7 @@ func _ready() -> void:
 		failures.append("Expected 7 non-echo scale change signals, got %d" % emitted_snapshots.size())
 
 	if failures.is_empty():
-		print("PLAYER3D_DEBUG_SCALE_FLOW_OK: additive=100/110/120 collision_synced=true bounds=10..300 camera_unchanged=true")
+		print("PLAYER3D_DEBUG_SCALE_FLOW_OK: base=70% additive=100/110/120 collision_synced=true bounds=10..300 camera_unchanged=true")
 		get_tree().quit(0)
 		return
 	for failure in failures:
