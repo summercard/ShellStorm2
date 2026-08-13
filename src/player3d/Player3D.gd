@@ -22,6 +22,7 @@ signal weapon_instance_changed(snapshot: Dictionary)
 signal weapon_loadout_changed(snapshot: Dictionary)
 signal backpack_equipment_changed(snapshot: Dictionary)
 signal flashlight_module_changed(snapshot: Dictionary)
+signal debug_scale_changed(snapshot: Dictionary)
 signal death_animation_finished()
 
 const SPEED := 5.0
@@ -41,6 +42,9 @@ const LANDING_MIN_DURATION_S := 0.12
 const LANDING_MAX_DURATION_S := 0.30
 const LANDING_FULL_IMPACT_MPS := 16.0
 const FALL_RECOVERY_DISTANCE_M := 15.0
+const DEBUG_SCALE_STEP_RATIO := 0.10
+const DEBUG_SCALE_MIN_STEP := -9
+const DEBUG_SCALE_MAX_STEP := 20
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -104,6 +108,12 @@ var _last_safe_ground_position := Vector3.ZERO
 var _has_safe_ground_position := false
 var _fall_recovery_count := 0
 var _footstep_sound_accumulator := 0.0
+var _debug_scale_step := 0
+var _base_avatar_scale := Vector3.ONE
+var _base_collision_position := Vector3.ZERO
+var _base_collision_radius := 0.0
+var _base_collision_height := 0.0
+var _debug_scale_initialized := false
 var _character_fate := {
 	"move_speed_multiplier": 1.0,
 	"dash_cooldown_multiplier": 1.0,
@@ -120,6 +130,7 @@ var _character_fate := {
 @onready var avatar: PlayerAvatar3D = $Avatar3D
 @onready var camera: Camera3D = $Camera3D
 @onready var aim_cursor: Node3D = $AimCursor
+@onready var virtual_collision_capsule: CollisionShape3D = $VirtualCollisionCapsule
 
 
 func _ready() -> void:
@@ -142,12 +153,108 @@ func _ready() -> void:
 	_refresh_stowed_weapon_model(true)
 	if avatar != null:
 		avatar.set_customization(_avatar_customization)
+	_initialize_debug_scale_contract()
 	hp_changed.emit(current_hp, max_hp)
 	_hook_mobile_input()
 	# 嵌入式运行窗口在首个 _ready 帧里可能尚未完成 Viewport/Camera 投影初始化。
 	# 此时 project_ray_* 会返回非有限向量；若直接写入 top_level 的准星，
 	# RenderingServer 会在之后每帧反复报告 instance_set_transform 并拖死编辑器。
 	call_deferred("_update_aim_from_mouse")
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	var key_event := event as InputEventKey
+	if key_event == null or not key_event.pressed or key_event.echo:
+		return
+	if _is_debug_scale_up_key(key_event):
+		adjust_debug_scale(1)
+		get_viewport().set_input_as_handled()
+	elif _is_debug_scale_down_key(key_event):
+		adjust_debug_scale(-1)
+		get_viewport().set_input_as_handled()
+
+
+func _is_debug_scale_up_key(event: InputEventKey) -> bool:
+	return (
+		event.unicode == 43
+		or event.keycode == KEY_KP_ADD
+		or (event.physical_keycode == KEY_EQUAL and event.shift_pressed)
+	)
+
+
+func _is_debug_scale_down_key(event: InputEventKey) -> bool:
+	return (
+		event.unicode == 45
+		or event.keycode == KEY_KP_SUBTRACT
+		or event.physical_keycode == KEY_MINUS
+	)
+
+
+func _initialize_debug_scale_contract() -> void:
+	_base_avatar_scale = avatar.scale
+	_base_collision_position = virtual_collision_capsule.position
+	if virtual_collision_capsule.shape != null:
+		# 运行时体型调试不得修改场景共享的Shape资源。
+		virtual_collision_capsule.shape = virtual_collision_capsule.shape.duplicate()
+	var capsule := virtual_collision_capsule.shape as CapsuleShape3D
+	if capsule != null:
+		_base_collision_radius = capsule.radius
+		_base_collision_height = capsule.height
+	_debug_scale_initialized = true
+	_apply_debug_scale()
+
+
+func adjust_debug_scale(step_delta: int) -> void:
+	set_debug_scale_step(_debug_scale_step + step_delta)
+
+
+func set_debug_scale_step(step: int) -> void:
+	if not _debug_scale_initialized:
+		_initialize_debug_scale_contract()
+	var clamped_step := clampi(step, DEBUG_SCALE_MIN_STEP, DEBUG_SCALE_MAX_STEP)
+	if clamped_step == _debug_scale_step:
+		return
+	_debug_scale_step = clamped_step
+	_apply_debug_scale()
+	debug_scale_changed.emit(get_debug_scale_snapshot())
+
+
+func reset_debug_scale() -> void:
+	set_debug_scale_step(0)
+
+
+func get_debug_scale_snapshot() -> Dictionary:
+	var ratio := _get_debug_scale_ratio()
+	var capsule := virtual_collision_capsule.shape as CapsuleShape3D
+	return {
+		"step": _debug_scale_step,
+		"step_percent": roundi(DEBUG_SCALE_STEP_RATIO * 100.0),
+		"scale_ratio": ratio,
+		"scale_percent": roundi(ratio * 100.0),
+		"minimum_percent": roundi((1.0 + DEBUG_SCALE_MIN_STEP * DEBUG_SCALE_STEP_RATIO) * 100.0),
+		"maximum_percent": roundi((1.0 + DEBUG_SCALE_MAX_STEP * DEBUG_SCALE_STEP_RATIO) * 100.0),
+		"avatar_scale": avatar.scale,
+		"collision_position": virtual_collision_capsule.position,
+		"collision_radius": capsule.radius if capsule != null else 0.0,
+		"collision_height": capsule.height if capsule != null else 0.0,
+	}
+
+
+func _get_debug_scale_ratio() -> float:
+	# 永远从初始尺寸做线性加减：第2档是120%，不是110%再乘110%。
+	return 1.0 + float(_debug_scale_step) * DEBUG_SCALE_STEP_RATIO
+
+
+func _apply_debug_scale() -> void:
+	if not _debug_scale_initialized:
+		return
+	var ratio := _get_debug_scale_ratio()
+	avatar.scale = _base_avatar_scale * ratio
+	virtual_collision_capsule.position = _base_collision_position * ratio
+	var capsule := virtual_collision_capsule.shape as CapsuleShape3D
+	if capsule != null:
+		capsule.radius = _base_collision_radius * ratio
+		capsule.height = _base_collision_height * ratio
 
 
 func _physics_process(delta: float) -> void:

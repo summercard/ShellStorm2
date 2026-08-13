@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_player3d_debug_scale_flow.gd" id="1_verify"]
+
+[node name="VerifyPlayer3DDebugScaleFlow" type="Node"]
+script = ExtResource("1_verify")

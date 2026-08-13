@@ -203,6 +203,7 @@ func _ready() -> void:
 	player.ammo_changed.connect(_on_ammo_changed)
 	player.presentation_state_changed.connect(_on_player_state_changed)
 	player.death_animation_finished.connect(_on_player_death_animation_finished)
+	player.debug_scale_changed.connect(_on_player_debug_scale_changed)
 	if not player.weapon_instance_changed.is_connected(_on_hud_weapon_instance_changed):
 		player.weapon_instance_changed.connect(_on_hud_weapon_instance_changed)
 	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
@@ -4099,6 +4100,12 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
 		status_label.text = "生命信号中断 · 正在确认防护体状态"
+
+
+func _on_player_debug_scale_changed(snapshot: Dictionary) -> void:
+	status_label.text = "角色调试尺寸：%d%% · 每档按基础尺寸增减10%%" % int(
+		snapshot.get("scale_percent", 100)
+	)
 
 
 func _on_ammo_changed(current: int, maximum: int) -> void:

@@ -43,6 +43,7 @@ core_scenes=(
   verify_arrival_gate_floor_bundle_flow
   verify_floor_visibility_shadow_patch
   verify_player3d_animation_flow
+  verify_player3d_debug_scale_flow
   verify_player3d_vertical_physics_flow
   verify_player3d_weapon_pose_collision_flow
   verify_3d_enemy_behavior_flow
