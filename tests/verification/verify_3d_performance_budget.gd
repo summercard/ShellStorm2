@@ -24,16 +24,18 @@ func _ready() -> void:
 	if generation_ms > 500.0:
 		failures.append("Worst-theme initial generation exceeded 500ms: %.1fms" % generation_ms)
 	# 固定 CanvasLayer HUD 与房间流送节点分账：HUD 不会随探索增长，但仍有独立上限和总量上限。
-	if initial_world_nodes > 800:
-		failures.append("Initial streamed world exceeded 800 nodes: %d" % initial_world_nodes)
+	# 结构代理永久驻留后，初始节点包含全部已生成房间的墙/地面/门框；
+	# 动态细节仍流送，持续帧节拍与完全探索上限保持原有硬门禁。
+	if initial_world_nodes > 2400:
+		failures.append("Permanent structural proxy world exceeded 2400 nodes: %d" % initial_world_nodes)
 	if hud_shell_nodes > 140:
 		failures.append("Formal HUD and modal shells exceeded 140 fixed UI nodes: %d" % hud_shell_nodes)
 	if hud_preview_nodes > 20:
 		failures.append("Shared HUD 3D item preview exceeded 20 fixed nodes: %d" % hud_preview_nodes)
 	if hud_nodes > 160:
 		failures.append("HUD shells + shared 3D preview exceeded 160 fixed nodes: %d" % hud_nodes)
-	if initial_nodes > 860:
-		failures.append("Initial world + HUD exceeded 860 total nodes: %d" % initial_nodes)
+	if initial_nodes > 2480:
+		failures.append("Permanent structural proxy world + HUD exceeded 2480 total nodes: %d" % initial_nodes)
 
 	var generation := dungeon.get_generation_snapshot()
 	var max_room_build_ms := 0.0

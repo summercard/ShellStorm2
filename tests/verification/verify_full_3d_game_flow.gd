@@ -58,8 +58,12 @@ func _ready() -> void:
 		if room_nodes.size() != int(snapshot.get("room_count", -1)):
 			failures.append("Generated room records/nodes disagree in %s" % definition["id"])
 		var runtime := dungeon.get_runtime_snapshot()
-		if int(runtime.get("detailed_rooms", 0)) != 1 or int(runtime.get("active_rooms", 0)) != 1 or int(runtime.get("built_shells", 0)) != 1:
-			failures.append("Room streaming must start with current room only: %s" % definition["id"])
+		if (
+			int(runtime.get("detailed_rooms", 0)) != 1
+			or int(runtime.get("active_rooms", 0)) != 1
+			or int(runtime.get("built_shells", 0)) != int(snapshot.get("room_count", -1))
+		):
+			failures.append("Runtime detail must start in one room while every structural shell remains resident: %s" % definition["id"])
 		var lights := dungeon.get_tree().get_nodes_in_group("wasteland_light_3d").filter(func(node): return dungeon.is_ancestor_of(node))
 		if lights.size() != 1:
 			failures.append("Initial streamed light budget invalid in %s: %d" % [definition["id"], lights.size()])
@@ -148,10 +152,9 @@ func _ready() -> void:
 
 	await _verify_enemy_ecosystem(failures)
 	await _verify_weapon_matrix(failures)
-	# 该用例会组合四主题和概率垂直支路；1300用于吸收合法支路数量波动
-	# 以及正式角色表现挂点。硬预算仍由专项分账。
-	# 正式硬预算继续由 verify_3d_performance_budget 分账阻断，不能在此替代。
-	if node_peak > 1300:
+	# 永久结构代理使所有房间的墙/地/门框从开局常驻；此处只拦截明显的重复
+	# 实例化，正式分账硬预算继续由 verify_3d_performance_budget 阻断。
+	if node_peak > 2700:
 		failures.append("3D level exceeds prototype node budget: %d" % node_peak)
 	_finish(failures, node_peak)
 

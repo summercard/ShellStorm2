@@ -358,8 +358,8 @@ func _update_floor_visibility_state() -> void:
 	elif _floor_stages.has(current_floor):
 		next_loaded_floor_indices.append(current_floor)
 	next_loaded_floor_indices.sort()
-	# 完整流送窗口外仍保留镜头正上、正下相邻物理层的50×50m楼板，
-	# 防止整层视觉裁剪后太阳穿透。补丁随镜头5m格变化，最多200个阴影实例。
+	# 结构遮光体采用永久驻留契约：楼板与塔楼外圈墙不再随流送隐藏。
+	# 旧50×50m局部补丁只保留兼容接口，正式运行时始终禁用。
 	var floor_patch_center := (
 		player.camera.global_position
 		if player.camera != null and player.camera.is_inside_tree()
@@ -372,11 +372,7 @@ func _update_floor_visibility_state() -> void:
 			continue
 		var protected_stage_index := int(floor_index)
 		var fully_loaded := protected_stage_index in next_loaded_floor_indices
-		protected_stage.call(
-			"set_protected_floor_patch",
-			floor_patch_center,
-			not fully_loaded and abs(protected_stage_index - current_floor) == 1
-		)
+		protected_stage.call("set_protected_floor_patch", floor_patch_center, false)
 	# 楼梯过渡值仍可每帧更新，但只有加载集合真正改变时才重写所有楼层、
 	# 66个房间和设施的 visible/process_mode。普通站立不再重复全表施工。
 	if next_loaded_floor_indices == _loaded_floor_indices:
@@ -393,22 +389,24 @@ func _update_floor_visibility_state() -> void:
 		stage.process_mode = (
 			Node.PROCESS_MODE_INHERIT if loaded else Node.PROCESS_MODE_DISABLED
 		)
-		# 非楼梯态只保留当前物理层；楼梯过渡只保留上下两层。
-		# 支撑碰撞仍由 FloorStage 内部契约维持，远层不再占用渲染预算。
-		stage.call("set_render_state", loaded, loaded)
+		# 楼板与塔楼外圈墙永久显示、持续投影；远层 stage 根只停用脚本继承。
+		# FloorSupport/OuterBoundaryCollision 自身使用 PROCESS_MODE_ALWAYS，不能
+		# 因父节点 Disabled 而退出物理空间，否则画面有阴影但太阳射线会穿透。
+		stage.call("set_render_state", true, true)
 
 	for room in _rooms:
 		var room_floor := int(_room_floor_index.get(room.room_id, current_floor))
 		var streamed := room.is_streamed()
 		var loaded := room_floor in _loaded_floor_indices
 		if not loaded:
-			room.visible = false
+			# 房间壳体（地面/墙/门框）永久显示；远层只停用处理和高成本细节。
+			room.visible = true
 			room.process_mode = Node.PROCESS_MODE_DISABLED
 			continue
 		room.process_mode = (
 			Node.PROCESS_MODE_INHERIT if streamed else Node.PROCESS_MODE_DISABLED
 		)
-		room.visible = streamed
+		room.visible = true
 
 
 func _physics_process(delta: float) -> void:
@@ -862,8 +860,15 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	)
 	var record := _records.back() as Dictionary
 	record["floor_layout_id"] = str(plan.get("layout_id", ""))
+	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
 	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
+	if str(spec.get("type", "")) == "BOSS":
+		var boss_profile := BossContentCatalog.get_for_floor(int(plan.get("floor_number", 0)))
+		if not boss_profile.is_empty():
+			record["boss_content_id"] = str(boss_profile["boss_content_id"])
+			record["arena_asset_id"] = str(boss_profile["arena_asset_id"])
+			record["arena_scene"] = str(boss_profile["arena_scene"])
 
 
 func _append_tower_record(
@@ -2179,6 +2184,7 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	# 开门，而旧基地门及连接器仍位于规划门槽，表现为门已打开但墙体
 	# 碰撞留在通道中的“空气墙”。
 	_plan_room_layout()
+	_ensure_structural_shells_resident()
 	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
 	var base_room := _room_by_id.get("facility") as DungeonRoom3D
 	if base_room != null and entry_room != null:
@@ -2572,6 +2578,7 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 		if not _room_by_id.has(room_id):
 			_instantiate_dynamic_room(record)
 	_plan_room_layout()
+	_ensure_structural_shells_resident()
 	for declaration in _declared_edges:
 		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
 		if _corridor_by_edge.has(edge):
@@ -2588,7 +2595,7 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 	_last_bundle_room_count = _rooms.size() - before_rooms
 	_last_bundle_corridor_count = _corridor_by_edge.size() - before_corridors
 	if bool(plan.get("boss_floor", false)) and _extraction == null:
-		var boss_room := _room_by_id.get("extraction") as DungeonRoom3D
+		var boss_room := _room_by_id.get(str(ids_by_key.get("boss", ""))) as DungeonRoom3D
 		if boss_room != null:
 			_extraction = _create_extraction_beacon(boss_room, "BOSS_KILL", 30.0, true, Vector3.ZERO)
 			_conditional_extractions["BOSS_KILL"] = _extraction
@@ -2702,6 +2709,10 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"open_wall_directions": record.get("open_wall_directions", []),
 	})
 	room.position = record["position"]
+	room.set_meta("floor_number", int(record.get("floor_number", _floor_number_from_index(int(record.get("floor_index", 0))))))
+	room.set_meta("boss_content_id", str(record.get("boss_content_id", "")))
+	room.set_meta("arena_asset_id", str(record.get("arena_asset_id", "")))
+	room.set_meta("arena_scene", str(record.get("arena_scene", "")))
 	$GeneratedRooms.add_child(room)
 	_rooms.append(room)
 	_room_by_id[room.room_id] = room
@@ -2763,14 +2774,14 @@ func _unload_completed_segment(lower_floor_index: int) -> void:
 			removed_ids.append(room_id)
 			var room := _room_by_id.get(room_id) as DungeonRoom3D
 			if room != null and is_instance_valid(room):
+				if _extraction != null and is_instance_valid(_extraction) and room.is_ancestor_of(_extraction):
+					_extraction = null
+					_conditional_extractions.erase("BOSS_KILL")
 				_last_destroyed_world_loot_count += _count_group_in_subtree(room, "ground_loot_3d")
 				_rooms.erase(room)
 				room.queue_free()
 				_last_unloaded_room_count += 1
 			_room_by_id.erase(room_id)
-			if room_id == "extraction":
-				_extraction = null
-				_conditional_extractions.erase("BOSS_KILL")
 			_clear_room_runtime_caches(room_id)
 		_floor_room_ids.erase(floor_index)
 		var stage = _floor_stages.get(floor_index)

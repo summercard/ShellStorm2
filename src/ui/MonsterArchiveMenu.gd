@@ -3,7 +3,7 @@ extends CanvasLayer
 
 ## 怪物档案室 — 基地建筑界面
 ## 展示玩家遭遇过的所有精英怪记录（名字/等级/状态/词缀/持有装备）
-## 精英档案服务通过 elite_archive 组注入；当前 3D 版本尚未接入正式服务。
+## 精英档案服务通过 elite_archive 组注入，展示正式12只跨局唯一名册。
 
 @onready var content: VBoxContainer
 @onready var status_label: Label
@@ -30,7 +30,7 @@ func _ready() -> void:
 func _find_elite_archive() -> void:
 	_elite_archive = get_tree().get_first_node_in_group("elite_archive")
 	if _elite_archive == null:
-		print("[MonsterArchiveMenu] 3D 精英档案服务尚未接入")
+		push_warning("[MonsterArchiveMenu] EliteRosterService 未注册")
 
 func _build_archive_view() -> void:
 	if content == null:
@@ -46,7 +46,7 @@ func _build_archive_view() -> void:
 
 	if _elite_archive == null or not _elite_archive.has_method("get_all_elites"):
 		var no_data_lbl := Label.new()
-		no_data_lbl.text = "正式 3D 精英名册服务尚未接入"
+		no_data_lbl.text = "精英名册服务暂不可用"
 		no_data_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		content.add_child(no_data_lbl)
 		_add_close_hint()

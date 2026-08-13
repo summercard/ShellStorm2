@@ -4,7 +4,7 @@
 上级设计：[游戏设计文档 §9](README.md#9-核心系统四怪物唯一精英与-boss)  
 内容表：[游戏内容数据库](data/ShellStorm2_游戏内容数据库_v010.xlsx) 的 `怪物与Boss`、`精英怪`
 
-怪物 AI 的完整目标设计、运行时实现边界和验收结果见：[怪物 AI 系统完整设计与验收](06A_怪物AI系统完整设计_评审稿.md)。文件名保留“评审稿”仅为兼容历史链接；P0/P1 AI 运行时已于2026-08-13实装，唯一精英跨局名册和逐五层独立 Boss 内容仍按本文件的未完成项管理。
+怪物 AI 的完整目标设计、运行时实现边界和验收结果见：[怪物 AI 系统完整设计与验收](06A_怪物AI系统完整设计_评审稿.md)。文件名保留“评审稿”仅为兼容历史链接；P0/P1 AI、12只唯一精英跨局名册，以及当前发布候选范围95/90/85层的逐五层独立Boss内容均已于2026-08-13实装。
 
 ## 1. 职责与边界
 
@@ -52,8 +52,8 @@ acceptance_case
 
 - <span style="color:#1565C0">**[用户设计]** 全游戏固定 12 只，每只有稳定 ID、独立名字、功能与档案。</span>
 - <span style="color:#1565C0">**[用户设计]** 精英可随机出现、成长、逃脱、获取玩家枪械；同一时间最多存在一只同名精英。</span>
-- <span style="color:#2E7D32">**[已实装原型]** 兼容链路已有独立 `elite_archive.dat`、成长阶段、逃脱/死亡结算、模块转技能和两只初始精英。</span>
-- <span style="color:#EF6C00">**[Codex补充]** 正式 3D 需要一个全局 `EliteRosterService` 迁移并拥有这些能力。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-08-13]** `EliteRosterService` 以 `BaseData 1.7` 为唯一事实源，固定12个稳定ID；预约、确认、死亡/逃脱/反生成结算均原子保存，同一名册成员不能同时进入两个遭遇，加载时会释放不属于有效行动的陈旧预约。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-08-13]** 12只精英分别绑定 `armed_rush / bullet_devourer / rotating_carapace / hive_network / renewing_mines / false_burrow_routes / mirror_sector / weapon_phase_swap / seven_attack_rule / attachment_echo / escape_route / three_crowns` 实时行为；逃脱提升等级、生命和伤害预算，夺械只保存稳定内容模块并转译为敌方技能，不保存玩家枪械实例ID。</span>
 
 ### 5.2 精英定义与档案分离
 
@@ -89,14 +89,14 @@ SelectEligibleElite(seed, floor, history)
 
 - <span style="color:#2E7D32">**[已实装]** 当前 Boss 具有独立 HUD、阶段变化、召唤/远程等行为和清房结果。</span>
 - <span style="color:#2E7D32">**[已实装]** Boss同时保留屏幕顶部总血条和头顶3D红色血条；头顶血条随当前/最大生命更新并保持面向镜头。</span>
-- <span style="color:#2E7D32">**[已实装｜首批]** `floor_number % 5 == 0` 已由纯数据规划器判定；95F在11个主路/整备内容房后生成不可绕过Boss。90F、85F场景内容尚未扩展。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-08-13]** `floor_number % 5 == 0` 由纯数据规划器判定；当前发布候选范围95F、90F、85F分别使用“深渊档案官 / 熔炉狱监 / 空洞合唱团”稳定内容ID、正式GLB、独立三阶段技能袋和独立竞技场GLB。场地随机家具关闭，改用8/6/5组与造型对应的掩体碰撞。</span>
 - <span style="color:#1565C0">**[用户设计]** Boss 死亡后必须产生专用下行钥匙，作为下一层路线的唯一权限来源。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss 系统只发出一次 `boss_defeated` 与奖励清单；关卡系统根据事件签发钥匙并解锁门资格，Boss 脚本不直接寻找门节点。</span>
 - <span style="color:#1565C0">**[用户设计]** 95F Boss 的专用门通向95→94真实楼梯间；全游戏关卡内唯一电梯固定在该楼梯间。电梯不是Boss房、普通楼层或随机房间内容。</span>
 - <span style="color:#1565C0">**[用户设计]** 玩家进入95→94楼梯后的隔离间前必须收到旧区段未拾取物永久丢失提示；Boss死亡本身不卸载98–95F。</span>
 - <span style="color:#EF6C00">**[Codex补充]** 90→89、85→84等后续Boss边界也使用隔离间释放上一Boss区段，但只有95→94楼梯间带电梯。</span>
 - <span style="color:#EF6C00">**[Codex补充]** Boss只提供死亡事实和一次性钥匙奖励，不拥有隔离门、区段提交或卸载权限。旧区段只能在玩家完整进入隔离间且后门锁定后由关卡生命周期服务释放。</span>
-- <span style="color:#EF6C00">**[Codex补充]** Boss 内容表应逐步从单一通用模板扩展为每个 Boss 楼层的独立内容 ID、技能阶段和资产。</span>
+- <span style="color:#2E7D32">**[已实装]** `BossContentCatalog` 是逐五层Boss内容映射；Boss表现根保留程序模板作低成本回退，正式内容加载后关闭程序外观并启用对应高模。未来85层以下继续按同一接口扩表，不复用当前三只的内容ID和场地资产。</span>
 
 ## 7. 怪物与 Boss 三态受光玩法
 

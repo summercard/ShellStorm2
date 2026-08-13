@@ -2,6 +2,9 @@ extends Node
 ## 灯光分层、9m墙、南墙摄像机标记、隐藏连接器碰撞和刷怪软锁综合回归。
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
+const ENEMY_SCENE: PackedScene = preload(
+	"res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn"
+)
 const HOSTILE_TYPES: Array[String] = [
 	"COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE",
 ]
@@ -18,6 +21,7 @@ func _ready() -> void:
 	if not tower.generate_through_floor_for_test(95):
 		failures.append("98—95结构验收准备失败")
 	await _validate_light_layers(tower, failures)
+	await _validate_enemy_under_upper_floor_has_no_sunlight(tower, failures)
 	_validate_floor_materials(failures)
 	_validate_wall_components(tower, failures)
 	await _validate_close_wall_probes(tower, failures)
@@ -37,6 +41,79 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _validate_enemy_under_upper_floor_has_no_sunlight(
+	tower: TowerDescent3D, failures: Array[String]
+) -> void:
+	# 必须先真实切到98层，让性能流送把99层stage根设为Disabled；旧测试停在
+	# 楼顶，会被更高处仍激活的碰撞兜底，无法发现紧邻楼板已退出物理空间。
+	var rooms := tower.get("_room_by_id") as Dictionary
+	var floor_indices := tower.get("_room_floor_index") as Dictionary
+	var target_room: DungeonRoom3D = null
+	var fallback_room: DungeonRoom3D = null
+	for room_id_value in rooms.keys():
+		var candidate_id := str(room_id_value)
+		var candidate := rooms[candidate_id] as DungeonRoom3D
+		if (
+			candidate != null
+			and int(floor_indices.get(candidate_id, -1)) == 2
+			and candidate.room_type not in ["STAIR_LOBBY", "STAIRS_UP", "STAIRS_DOWN"]
+		):
+			if fallback_room == null:
+				fallback_room = candidate
+			if candidate.room_type == "EVENT":
+				target_room = candidate
+				break
+	if target_room == null:
+		target_room = fallback_room
+	if target_room == null:
+		failures.append("98F has no enclosed room for upper-floor sunlight validation")
+		return
+	var previous_position := tower.player.global_position
+	var previous_room_id := str(tower.get("_current_room_id"))
+	tower.player.global_position = target_room.global_position + Vector3(0.0, 0.05, 0.0)
+	tower.force_enter_room_for_test(target_room.room_id)
+	tower.call("_update_floor_visibility_state")
+	await get_tree().process_frame
+	await get_tree().physics_frame
+
+	# 使用正式塔楼60°斜向太阳和紧邻99层完整承重碰撞复现。
+	var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+	enemy.enemy_kind = "melee_chaser"
+	tower.get_node("ActiveEnemies").add_child(enemy)
+	enemy.global_position = target_room.global_position + Vector3(0.0, 0.05, 0.0)
+	enemy.set_runtime_active(false, true)
+	await get_tree().physics_frame
+	enemy.force_refresh_illumination()
+	var illumination := enemy.get_state_snapshot().get("illumination", {}) as Dictionary
+	if (
+		enemy.get_illumination_state() == EnemyIllumination3D.STATE_SUNLIGHT
+		or float(illumination.get("sun_exposure_ratio", 0.0)) > 0.0
+	):
+		failures.append(
+			"Enemy below a streamed-out upper-floor slab is falsely classified as sunlight: %s"
+			% str(illumination)
+		)
+	var stages := tower.get("_floor_stages") as Dictionary
+	var upper_stage := stages.get(1) as TowerFloorStage3D
+	var upper_support := (
+		upper_stage.get_node_or_null("FloorSupport") as StaticBody3D
+		if upper_stage != null
+		else null
+	)
+	if (
+		upper_stage == null
+		or upper_stage.process_mode != Node.PROCESS_MODE_DISABLED
+		or upper_support == null
+		or upper_support.process_mode != Node.PROCESS_MODE_ALWAYS
+	):
+		failures.append("99F floor support does not stay physically active under disabled stage streaming")
+	enemy.queue_free()
+	await get_tree().process_frame
+	tower.player.global_position = previous_position
+	tower.set("_current_room_id", previous_room_id)
+	tower.call("_update_floor_visibility_state")
 
 
 func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> void:

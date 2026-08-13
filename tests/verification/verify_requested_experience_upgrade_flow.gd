@@ -18,12 +18,12 @@ func _ready() -> void:
 func _verify_audio_contract(failures: Array[String]) -> void:
 	var snapshot := AudioManager.validate_runtime_assets() as Dictionary
 	if (
-		int(snapshot.get("event_count", 0)) < 31
+		int(snapshot.get("event_count", 0)) != 36
 		or not bool(snapshot.get("mobile_safe", false))
 		or not (snapshot.get("missing", []) as Array).is_empty()
 		or not (snapshot.get("non_ogg", []) as Array).is_empty()
 	):
-		failures.append("至少31项运行时音效没有全部切换为移动端安全的OGG资源")
+		failures.append("36项运行时音效没有全部切换为移动端安全的OGG资源")
 
 
 func _verify_single_item_loot(failures: Array[String]) -> void:
@@ -145,7 +145,7 @@ func _verify_death_confirmation(failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("REQUESTED_EXPERIENCE_UPGRADE_OK: mobile OGG, single-item timed loot, readable item colors, tutorial spawn migration, physical death and click-to-return dialog pass")
+		print("REQUESTED_EXPERIENCE_UPGRADE_OK: 36 mobile OGG events, single-item timed loot, readable item colors, tutorial spawn migration, physical death and click-to-return dialog pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

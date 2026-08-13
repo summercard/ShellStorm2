@@ -1,5 +1,5 @@
 extends Node
-## 楼层裁剪遮光专项：相邻上下层保留镜头50×50m区域，远层不恢复。
+## 永久结构遮光专项：所有楼板与塔楼外圈墙均不参与显隐，局部补丁关闭。
 
 
 func _ready() -> void:
@@ -23,23 +23,10 @@ func _verify_stage_patch_contract(failures: Array[String]) -> void:
 	stage.set_render_state(false, false)
 	stage.set_protected_floor_patch(Vector3(2.5, -9.0, 2.5), true)
 	var snapshot := stage.get_snapshot()
-	_expect(bool(snapshot.get("protected_floor_patch_visible", false)), "隐藏层50m补丁没有显示", failures)
-	_expect(int(snapshot.get("protected_floor_patch_tile_count", 0)) == 100, "中心50m补丁不是100块", failures)
-	_expect(bool(snapshot.get("protected_floor_patch_casts_shadow", false)), "50m楼板没有开启投影", failures)
-	_expect(is_equal_approx(float(snapshot.get("protected_floor_patch_side_m", 0.0)), 50.0), "补丁边长不是50m", failures)
-	var first_center := snapshot.get("protected_floor_patch_grid_center", Vector2i(-1, -1)) as Vector2i
-	stage.set_protected_floor_patch(Vector3(7.5, -9.0, 2.5), true)
-	snapshot = stage.get_snapshot()
-	var second_center := snapshot.get("protected_floor_patch_grid_center", Vector2i(-1, -1)) as Vector2i
-	_expect(second_center == first_center + Vector2i.RIGHT, "镜头跨5m格后50m补丁没有移动一格", failures)
-	_expect(int(snapshot.get("protected_floor_patch_tile_count", 0)) == 100, "移动后50m补丁实例数改变", failures)
-	stage.set_render_state(true, true)
-	snapshot = stage.get_snapshot()
-	_expect(not bool(snapshot.get("protected_floor_patch_visible", true)), "完整楼板显示时50m补丁发生重叠", failures)
-	stage.set_render_state(false, false)
-	stage.set_protected_floor_patch(Vector3.ZERO, false)
-	snapshot = stage.get_snapshot()
-	_expect(not bool(snapshot.get("protected_floor_patch_visible", true)), "禁用后50m补丁仍可见", failures)
+	_expect(bool(snapshot.get("floor_visible", false)), "流送调用隐藏了完整楼板", failures)
+	_expect(bool(snapshot.get("outer_visible", false)), "流送调用隐藏了塔楼外圈墙", failures)
+	_expect(bool(snapshot.get("shell_visible", false)), "流送调用隐藏了结构壳体", failures)
+	_expect(not bool(snapshot.get("protected_floor_patch_visible", true)), "永久楼板模式仍启用了重复局部补丁", failures)
 	stage.queue_free()
 	await get_tree().process_frame
 
@@ -60,27 +47,61 @@ func _verify_tower_integration(failures: Array[String]) -> void:
 		tower.set("_current_room_id", "facility")
 		tower.call("_update_floor_visibility_state")
 		await get_tree().process_frame
+		# 主动压到最低流送状态，验证关卡生成墙不是“房间节点可见、子墙实际隐藏”的假通过。
+		facility.set_stream_state(DungeonRoom3D.STREAM_DATA_ONLY)
+		await get_tree().process_frame
+		_verify_room_structural_walls(facility, failures)
 		var snapshot := tower.get_tower_snapshot()
-		var patch_center := snapshot.get("protected_floor_patch_center", Vector3.INF) as Vector3
-		_expect(
-			patch_center.distance_to(tower.player.camera.global_position) < 0.01,
-			"上下层楼板补丁没有以镜头地面投影为中心",
-			failures
-		)
 		_expect((snapshot.get("loaded_floor_indices", []) as Array) == [1], "99层完整流送窗口不是单层", failures)
-		_expect((snapshot.get("protected_floor_patch_indices", []) as Array) == [0, 2], "99层上下相邻层未保留镜头50m区域", failures)
-		_expect(int(snapshot.get("protected_floor_patch_stage_count", 0)) == 2, "50m保护层数不是2", failures)
-		_expect(int(snapshot.get("protected_floor_patch_tile_count", 999)) <= 200, "两层50m补丁总实例超过200", failures)
+		_expect((snapshot.get("protected_floor_patch_indices", []) as Array).is_empty(), "永久楼板模式仍创建局部补丁", failures)
+		_expect(int(snapshot.get("protected_floor_patch_stage_count", -1)) == 0, "永久楼板模式仍报告保护补丁", failures)
 		for stage_data_value in snapshot.get("floor_stages", []):
 			var stage_data := stage_data_value as Dictionary
-			var floor_index := int(stage_data.get("floor_index", -1))
-			if floor_index not in [0, 2]:
-				continue
-			var tile_count := int(stage_data.get("protected_floor_patch_tile_count", 0))
-			_expect(bool(stage_data.get("protected_floor_patch_visible", false)), "相邻层50m补丁未显示", failures)
-			_expect(tile_count > 0 and tile_count <= 100, "相邻层50m补丁实例不在1至100范围", failures)
+			_expect(bool(stage_data.get("floor_visible", false)), "存在被隐藏的楼板", failures)
+			_expect(bool(stage_data.get("outer_visible", false)), "存在被隐藏的塔楼外圈墙", failures)
+			_expect(not bool(stage_data.get("protected_floor_patch_visible", true)), "完整楼板与局部补丁发生重叠", failures)
+		var stages := tower.get("_floor_stages") as Dictionary
+		for stage_value in stages.values():
+			var stage := stage_value as TowerFloorStage3D
+			var support := stage.get_node_or_null("FloorSupport") as StaticBody3D if stage != null else null
+			_expect(
+				support != null and support.process_mode == Node.PROCESS_MODE_ALWAYS,
+				"远层楼板承重/遮光碰撞会随stage处理窗口退出物理空间",
+				failures
+			)
 	tower.queue_free()
 	await get_tree().process_frame
+
+
+func _verify_room_structural_walls(room: DungeonRoom3D, failures: Array[String]) -> void:
+	var wall_visual_count := 0
+	var wall_collision_count := 0
+	var pending: Array[Node] = [room]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		for child in node.get_children():
+			pending.append(child)
+		if node is GeometryInstance3D and str(node.get_meta("asset_id", "")).contains("WALL"):
+			wall_visual_count += 1
+			var geometry := node as GeometryInstance3D
+			_expect(geometry.visible, "最低流送状态隐藏了关卡生成墙 Mesh", failures)
+			_expect(geometry.is_visible_in_tree(), "关卡生成墙受父级显隐影响而不可见", failures)
+			_expect(
+				geometry.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,
+				"关卡生成墙关闭了投影",
+				failures
+			)
+		if node is CollisionShape3D and str(node.get_parent().name).contains("WallCollision"):
+			wall_collision_count += 1
+			_expect(not (node as CollisionShape3D).disabled, "最低流送状态关闭了墙体碰撞", failures)
+			var wall_body := node.get_parent() as PhysicsBody3D
+			_expect(
+				wall_body != null and wall_body.process_mode == Node.PROCESS_MODE_ALWAYS,
+				"最低流送状态让墙体碰撞随房间父节点退出物理空间",
+				failures
+			)
+	_expect(wall_visual_count > 0, "验收场景未发现关卡生成墙 Mesh", failures)
+	_expect(wall_collision_count > 0, "验收场景未发现关卡生成墙碰撞", failures)
 
 
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:

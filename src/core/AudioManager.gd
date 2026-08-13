@@ -46,7 +46,7 @@ const SFX: Dictionary = {
 	"boss_defeat": "res://src/assets/audio/sfx/boss_defeat_v001.ogg",
 	"merchant_purchase": "res://src/assets/audio/sfx/merchant_purchase_v001.ogg",
 
-	# 手电筒电量事件(占位路径,正式 OGG 待接入;_report_missing_asset 首次报错后静默)
+	# 手电筒电量事件：44.1kHz OGG 运行资产，WAV仅保留为可追溯母版。
 	"flashlight_charge_up": "res://src/assets/audio/sfx/flashlight_charge_up_v001.ogg",
 	"flashlight_low_battery": "res://src/assets/audio/sfx/flashlight_low_battery_v001.ogg",
 	"flashlight_depleted": "res://src/assets/audio/sfx/flashlight_depleted_v001.ogg",

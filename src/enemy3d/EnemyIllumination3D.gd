@@ -75,6 +75,7 @@ func get_snapshot() -> Dictionary:
 		"last_sun_raycast_count": last_sun_raycast_count,
 		"last_local_raycast_count": last_local_raycast_count,
 		"sun_light_count": _sun_lights.size(),
+		"sunlight_required_sample_count": 2,
 		"local_light_count": _local_lights.size(),
 		"sample_interval": sample_interval,
 	}
@@ -168,11 +169,19 @@ func _evaluate_sunlight(samples: Array[Vector3]) -> Dictionary:
 		if toward_sun.is_zero_approx():
 			continue
 		var exposed := 0
-		for sample in samples:
+		var center_exposed := false
+		for sample_index in range(samples.size()):
+			var sample := samples[sample_index]
 			last_sun_raycast_count += 1
 			if _ray_is_clear(sample, sample + toward_sun * sunlight_ray_length):
 				exposed += 1
-		if exposed > 0:
+				if sample_index == 1:
+					center_exposed = true
+		# 单个头顶/脚边采样从楼梯洞、门缝或碰撞接缝漏出时，不把整只怪
+		# 判为太阳。身体中心必须直达太阳，且三点中至少两点暴露；窗户或
+		# 破墙形成的真实光束仍能正常触发。
+		var required_samples := mini(samples.size(), maxi(1, int(ceil(samples.size() * 2.0 / 3.0))))
+		if center_exposed and exposed >= required_samples:
 			return {
 				"ratio": float(exposed) / float(samples.size()),
 				"instance_id": sun.get_instance_id(),

@@ -7,7 +7,7 @@ godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
 if [[ "${suite}" == "soak" && -z "${GODOT_TEST_TIMEOUT_SECONDS+x}" ]]; then
-	test_timeout_seconds=1900
+	test_timeout_seconds=3700
 fi
 active_godot_pid=""
 active_watchdog_pid=""
@@ -49,6 +49,9 @@ core_scenes=(
   verify_enemy_illumination_states
   verify_monster_ai_light_effects
   verify_monster_ai_system_complete
+  verify_unique_elite_roster_flow
+  verify_unique_boss_content_flow
+  verify_three_segment_tower_generation_flow
   verify_3d_melee_combat_flow
   verify_3d_melee_feedback_flow
   verify_training_range_3d_flow
@@ -183,6 +186,7 @@ case "${suite}" in
     done
     ;;
   soak)
+	printf 'NOTICE: soak is a deferred release/CI job. Do not run it during interactive development acceptance.\n'
     scenes=(verify_ai_performance_soak)
     ;;
   scene)

@@ -1,0 +1,1 @@
+# DCC 源文件不参与 Godot 资源扫描；运行时仅使用 assets/art 下导出的 GLB。

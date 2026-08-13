@@ -75,10 +75,13 @@ func set_shell_visible(show_shell: bool) -> void:
 	set_render_state(show_shell, show_shell)
 
 
-func set_render_state(show_floor: bool, show_outer: bool) -> void:
-	_floor_visible = show_floor
-	_outer_visible = show_outer
-	_shell_visible = show_floor or show_outer
+func set_render_state(_show_floor: bool, _show_outer: bool) -> void:
+	# 结构壳体永久驻留：任何流送调用都不得隐藏楼板或塔楼外圈墙。
+	var show_floor := true
+	var show_outer := true
+	_floor_visible = true
+	_outer_visible = true
+	_shell_visible = true
 	if _floor_visual_light != null:
 		_floor_visual_light.visible = show_floor
 	if _floor_visual_dark != null:
@@ -88,20 +91,10 @@ func set_render_state(show_floor: bool, show_outer: bool) -> void:
 	_apply_protected_floor_patch_visibility()
 
 
-## 相邻物理层即使退出完整流送，也保留镜头地面投影附近50×50m楼板。
-## 这100块只承担视觉与阴影，不恢复远层房间、外墙、碰撞或处理逻辑。
-func set_protected_floor_patch(center_world_position: Vector3, enabled: bool) -> void:
-	_protected_floor_patch_enabled = enabled
-	if not enabled:
-		_apply_protected_floor_patch_visibility()
-		return
-	var local_center := to_local(center_world_position)
-	var grid_center := Vector2i(
-		clampi(floori((local_center.x + MAP_HALF) / GRID_UNIT), 0, GRID_COUNT - 1),
-		clampi(floori((local_center.z + MAP_HALF) / GRID_UNIT), 0, GRID_COUNT - 1)
-	)
-	if grid_center != _protected_floor_patch_grid_center:
-		_rebuild_protected_floor_patch(grid_center)
+## 兼容旧存档/测试入口。完整楼板已永久显示，局部补丁必须保持关闭，
+## 避免同位置重复渲染引发闪烁、阴影偏差或额外 draw call。
+func set_protected_floor_patch(_center_world_position: Vector3, _enabled: bool) -> void:
+	_protected_floor_patch_enabled = false
 	_apply_protected_floor_patch_visibility()
 
 
@@ -140,11 +133,28 @@ func get_snapshot() -> Dictionary:
 			and _protected_floor_visual_dark.cast_shadow
 				== GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		),
-		"support_collision_persistent": _support_root != null,
+		"support_collision_persistent": (
+			_support_root != null
+			and _support_root.process_mode == Node.PROCESS_MODE_ALWAYS
+			and _enabled_collision_shape_count(_support_root) > 0
+		),
+		"support_process_mode_always": (
+			_support_root != null
+			and _support_root.process_mode == Node.PROCESS_MODE_ALWAYS
+		),
 		"uses_imported_floor_mesh": _floor_visual_light != null and _floor_visual_light.multimesh != null,
 		"uses_imported_outer_mesh": _outer_visual != null and _outer_visual.multimesh != null,
 		"checkerboard_pattern": true,
 	}
+
+
+func _enabled_collision_shape_count(root: Node) -> int:
+	var count := 0
+	if root is CollisionShape3D and not (root as CollisionShape3D).disabled:
+		count += 1
+	for child in root.get_children():
+		count += _enabled_collision_shape_count(child)
+	return count
 
 
 func _build_floor() -> void:
@@ -327,6 +337,9 @@ func _build_outer_shell() -> void:
 	for side in ["north", "south", "west", "east"]:
 		var body := StaticBody3D.new()
 		body.name = "OuterBoundaryCollision_%s" % side.capitalize()
+		# 远层 stage 会停用脚本处理，但永久结构碰撞必须继续服务移动、子弹和
+		# 受光射线。显式 ALWAYS 可避免从禁用父节点继承物理停用状态。
+		body.process_mode = Node.PROCESS_MODE_ALWAYS
 		body.collision_layer = 1
 		body.collision_mask = 0
 		body.set_meta("camera_lower_wall", side == "south")
@@ -449,6 +462,8 @@ func _add_box_collision(body: StaticBody3D, position: Vector3, size: Vector3) ->
 func _build_support() -> void:
 	_support_root = StaticBody3D.new()
 	_support_root.name = "FloorSupport"
+	# 楼板是跨层太阳遮挡体，不能随当前楼层的处理窗口退出物理空间。
+	_support_root.process_mode = Node.PROCESS_MODE_ALWAYS
 	_support_root.collision_layer = 1
 	_support_root.collision_mask = 0
 	add_child(_support_root)

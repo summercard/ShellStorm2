@@ -1,9 +1,10 @@
 extends Node3D
-## 真实渲染长时门禁。默认 30 分钟；SHELLSTORM_SOAK_SECONDS 可缩短预检。
+## 发布候选真实渲染长时门禁。默认 60 分钟，连续覆盖98—95、94—90、89—85
+## 三个区段；SHELLSTORM_SOAK_SECONDS 仅用于开发预检，不可替代RC验收。
 
 const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
-const DEFAULT_DURATION_SECONDS := 1800.0
+const DEFAULT_DURATION_SECONDS := 3600.0
 const SAMPLE_INTERVAL_SECONDS := 1.0
 
 var _player: Player3D
@@ -37,10 +38,18 @@ func _ready() -> void:
 	var next_sample_seconds := SAMPLE_INTERVAL_SECONDS
 	var next_progress_seconds := 60.0
 	var last_stimulus_bucket := -1
+	var active_segment_index := -1
+	var visited_segments: Array[String] = []
 	while float(Time.get_ticks_usec() - started_usec) / 1000000.0 < duration:
 		await get_tree().process_frame
 		var now_usec := Time.get_ticks_usec()
 		var elapsed := float(now_usec - started_usec) / 1000000.0
+		var segment_index := mini(2, int(elapsed / maxf(1.0, duration / 3.0)))
+		if segment_index != active_segment_index:
+			active_segment_index = segment_index
+			_apply_segment_profile(segment_index)
+			visited_segments.append(["98-95", "94-90", "89-85"][segment_index])
+			print("AI_PERFORMANCE_SOAK_SEGMENT index=%d floors=%s" % [segment_index + 1, visited_segments.back()])
 		if now_usec >= sample_warmup_ends_usec:
 			frame_samples.append(float(now_usec - last_frame_usec) / 1000.0)
 		last_frame_usec = now_usec
@@ -68,6 +77,8 @@ func _ready() -> void:
 				int(MonsterAIManager.get_manager_snapshot().get("registered_enemy_count", -1)),
 			])
 			next_progress_seconds += 60.0
+	if visited_segments != ["98-95", "94-90", "89-85"]:
+		failures.append("RC soak did not continuously visit all three floor segments: %s" % str(visited_segments))
 	_evaluate_results(
 		duration, frame_samples, render_cpu_samples, render_gpu_samples,
 		draw_call_samples, memory_samples, node_samples, failures
@@ -87,14 +98,14 @@ func _ready() -> void:
 	var warmup_index := _stable_warmup_index(memory_samples.size(), duration)
 	var stable_memory: Array[float] = memory_samples.slice(warmup_index)
 	var stable_nodes: Array[float] = node_samples.slice(warmup_index)
-	print("AI_PERFORMANCE_SOAK_RESULT status=%s duration_s=%d frame_p95_ms=%.2f frame_max_ms=%.2f render_cpu_p95_ms=%.2f render_gpu_p95_ms=%.2f gpu_timing_available=%s draw_calls_p95=%.0f memory_start_mb=%.1f memory_end_mb=%.1f memory_total_span_mb=%.1f memory_stable_span_mb=%.1f node_total_span=%d node_stable_span=%d" % [
+	print("AI_PERFORMANCE_SOAK_RESULT status=%s duration_s=%d frame_p95_ms=%.2f frame_max_ms=%.2f render_cpu_p95_ms=%.2f render_gpu_p95_ms=%.2f gpu_timing_available=%s draw_calls_p95=%.0f memory_start_mb=%.1f memory_end_mb=%.1f memory_total_span_mb=%.1f memory_stable_span_mb=%.1f node_total_span=%d node_stable_span=%d node_segment_span=%d" % [
 		"pass" if failures.is_empty() else "fail", int(duration),
 		_percentile(frame_samples, 0.95), _max_value(frame_samples),
 		_percentile(render_cpu_samples, 0.95), _percentile(render_gpu_samples, 0.95),
 		str(_max_value(render_gpu_samples) > 0.0), _percentile(draw_call_samples, 0.95),
 		_first_value(memory_samples) / 1048576.0, _last_value(memory_samples) / 1048576.0,
 		_span(memory_samples) / 1048576.0, _span(stable_memory) / 1048576.0,
-		int(_span(node_samples)), int(_span(stable_nodes)),
+		int(_span(node_samples)), int(_span(stable_nodes)), int(_max_segment_span(node_samples)),
 	])
 	RuntimePerformanceManager.set_verification_frame_budget_override(0)
 	if failures.is_empty():
@@ -168,6 +179,34 @@ func _build_world() -> void:
 		_enemies.append(enemy)
 
 
+func _apply_segment_profile(segment_index: int) -> void:
+	var floor_numbers := [95, 90, 85]
+	var accent_colors := [Color(0.10, 0.86, 1.0), Color(1.0, 0.20, 0.035), Color(0.62, 0.16, 1.0)]
+	_lamp.configure(accent_colors[segment_index], 5.2, 18.0, 20260813 + segment_index, true, false, "ceiling")
+	for index in range(_enemies.size()):
+		var enemy := _enemies[index]
+		if not is_instance_valid(enemy) or index >= 2:
+			continue
+		var kind := "boss"
+		var data := {
+			"enemy_type": kind,
+			"persistent_id": "soak_segment_%d_enemy_%02d" % [segment_index, index],
+			"spawn_index": index, "floor": 5 + segment_index * 5,
+			"hp": 1000000, "max_hp": 1000000, "damage": 1, "speed": 70,
+		}
+		if kind == "boss":
+			var boss_profile := BossContentCatalog.get_for_floor(floor_numbers[segment_index])
+			data.merge({
+				"is_boss": true,
+				"boss_content_id": boss_profile.get("boss_content_id", ""),
+				"presentation_asset_id": boss_profile.get("presentation_asset_id", ""),
+				"arena_asset_id": boss_profile.get("arena_asset_id", ""),
+				"boss_phase_skill_bags": boss_profile.get("phase_skill_bags", {}),
+				"boss_accent": boss_profile.get("accent", accent_colors[segment_index]),
+			})
+		enemy.configure_from_enemy_data(data)
+
+
 func _evaluate_results(
 	duration: float,
 	frame_samples: Array[float],
@@ -185,6 +224,7 @@ func _evaluate_results(
 		failures.append("Real-renderer frame pacing P95 exceeded 22ms: %.2fms" % frame_p95)
 	var render_cpu_p95 := _percentile(render_cpu_samples, 0.95)
 	var render_gpu_p95 := _percentile(render_gpu_samples, 0.95)
+	var gpu_timing_available := _max_value(render_gpu_samples) > 0.0
 	if not is_finite(render_cpu_p95) or render_cpu_p95 <= 0.0:
 		failures.append("Renderer CPU telemetry produced no measurable sample")
 	elif render_cpu_p95 > 8.0:
@@ -192,6 +232,8 @@ func _evaluate_results(
 	# macOS 的 Compatibility-over-Metal 后端可能不提供 GPU 时间戳并固定返回0；
 	# 有有效样本时执行12ms硬门槛，无样本时在最终报告中保留0供人工识别，
 	# 不拿墙钟或CPU数值伪造GPU遥测。
+	if OS.get_environment("SHELLSTORM_REQUIRE_GPU_TIMING") == "1" and not gpu_timing_available:
+		failures.append("Target-device gate requires GPU timing, but renderer returned no GPU samples")
 	if is_finite(render_gpu_p95) and render_gpu_p95 > 12.0:
 		failures.append("Renderer GPU P95 exceeded 12ms: %.2fms" % render_gpu_p95)
 	if draw_call_samples.is_empty():
@@ -204,10 +246,11 @@ func _evaluate_results(
 	var warmup_index := _stable_warmup_index(memory_samples.size(), duration)
 	var stable_memory: Array[float] = memory_samples.slice(warmup_index)
 	var stable_nodes: Array[float] = node_samples.slice(warmup_index)
-	if _span(stable_memory) > 96.0 * 1024.0 * 1024.0:
+	if duration >= 120.0 and _span(stable_memory) > 96.0 * 1024.0 * 1024.0:
 		failures.append("Static memory drift exceeded 96MB after warmup: %.1fMB" % (_span(stable_memory) / 1048576.0))
-	if _span(stable_nodes) > 64.0:
-		failures.append("Node count drift exceeded 64 after warmup: %d" % int(_span(stable_nodes)))
+	var node_segment_span := _max_segment_span(node_samples)
+	if duration >= 120.0 and node_segment_span > 64.0:
+		failures.append("Node count drift exceeded 64 inside one content segment: %d" % int(node_segment_span))
 
 
 func _percentile(values: Array[float], ratio: float) -> float:
@@ -226,6 +269,19 @@ func _span(values: Array[float]) -> float:
 
 func _stable_warmup_index(sample_count: int, duration: float) -> int:
 	return mini(sample_count - 1, maxi(0, int(minf(60.0, duration * 0.2))))
+
+
+func _max_segment_span(values: Array[float]) -> float:
+	if values.is_empty():
+		return 0.0
+	var max_span := 0.0
+	for segment_index in range(3):
+		var start := int(floor(float(values.size()) * float(segment_index) / 3.0))
+		var finish := int(floor(float(values.size()) * float(segment_index + 1) / 3.0))
+		var warmup := mini(finish, start + mini(10, maxi(0, (finish - start) / 5)))
+		if finish > warmup:
+			max_span = maxf(max_span, _span(values.slice(warmup, finish)))
+	return max_span
 
 
 func _first_value(values: Array[float]) -> float:

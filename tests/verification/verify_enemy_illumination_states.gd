@@ -22,6 +22,23 @@ func _ready() -> void:
 	enemy.force_refresh_illumination()
 	_verify_state(enemy, EnemyIllumination3D.STATE_SUNLIGHT, "unoccluded sunlight", failures)
 
+	# 只让头顶一条采样漏光，模拟楼梯洞/门缝/碰撞接缝；不能把整只怪判为太阳。
+	var seam_blocker := _make_blocker("SunSeamBlocker", Vector3(0, 0.45, 3.0), Vector3(5.0, 0.90, 0.6))
+	await get_tree().physics_frame
+	enemy.force_refresh_illumination()
+	_verify_state(enemy, EnemyIllumination3D.STATE_DARKNESS, "single-sample sunlight seam", failures)
+	seam_blocker.queue_free()
+	await get_tree().physics_frame
+
+	# 挡住脚边、让身体中心与头部两条射线通过，模拟低层墙面开窗/破墙的
+	# 有效采光口；修复接缝误判时不能反过来封死真正进入室内的太阳。
+	var window_sill := _make_blocker("SunWindowSill", Vector3(0, 0.18, 3.0), Vector3(5.0, 0.36, 0.6))
+	await get_tree().physics_frame
+	enemy.force_refresh_illumination()
+	_verify_state(enemy, EnemyIllumination3D.STATE_SUNLIGHT, "two-sample window sunlight", failures)
+	window_sill.queue_free()
+	await get_tree().physics_frame
+
 	var sun_blocker := _make_blocker("SunBlocker", Vector3(0, 1.0, 3.0), Vector3(5.0, 4.0, 0.6))
 	await get_tree().physics_frame
 	enemy.force_refresh_illumination()
@@ -128,7 +145,7 @@ func _ready() -> void:
 
 	enemy.queue_free()
 	if failures.is_empty():
-		print("ENEMY_ILLUMINATION_STATES_OK: darkness, artificial light, sunlight, physical shadow, flashlight cone, priority, hysteresis and Boss isolation pass")
+		print("ENEMY_ILLUMINATION_STATES_OK: darkness, window sunlight, seam rejection, physical shadow, flashlight cone, priority, hysteresis and Boss isolation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

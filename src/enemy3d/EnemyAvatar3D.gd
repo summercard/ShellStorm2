@@ -36,11 +36,32 @@ var _base_color := Color.WHITE
 var _core_material: StandardMaterial3D
 var _shell_material: StandardMaterial3D
 var _ambush_revealed := true
+var _boss_content_id := ""
+var _formal_boss_root: Node3D
 
 
 func configure(kind: String) -> void:
 	enemy_kind = kind if COLORS.has(kind) else "melee_chaser"
 	_rebuild()
+
+
+func configure_boss_content(content_id: String) -> bool:
+	_boss_content_id = content_id
+	if enemy_kind != "boss" or content_id.is_empty() or _root == null:
+		return false
+	var profile := BossContentCatalog.get_by_content_id(content_id)
+	var scene := load(str(profile.get("presentation_scene", ""))) as PackedScene
+	if scene == null:
+		return false
+	if _formal_boss_root != null and is_instance_valid(_formal_boss_root):
+		_formal_boss_root.queue_free()
+	_formal_boss_root = scene.instantiate() as Node3D
+	_formal_boss_root.name = "FormalBoss_%s" % content_id
+	_root.add_child(_formal_boss_root)
+	_shell.visible = false
+	_core.visible = false
+	_appendages.visible = false
+	return true
 
 
 func set_ai_state(state_id: String) -> void:
@@ -68,6 +89,8 @@ func get_component_snapshot() -> Dictionary:
 		"component_count": 4,
 		"footprint": get_footprint_profile(enemy_kind),
 		"ambush_revealed": _ambush_revealed,
+		"boss_content_id": _boss_content_id,
+		"formal_boss_asset": _formal_boss_root != null,
 		"is_3d": true,
 	}
 
@@ -102,6 +125,7 @@ func _rebuild() -> void:
 	for child in get_children():
 		child.queue_free()
 	_root = Node3D.new()
+	_formal_boss_root = null
 	_root.name = "VisualRoot"
 	add_child(_root)
 	_base_color = COLORS[enemy_kind]

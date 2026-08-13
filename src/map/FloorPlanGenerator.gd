@@ -253,6 +253,9 @@ static func _normal_rooms(sequence_index: int) -> Array[Dictionary]:
 
 static func _boss_rooms(sequence_index: int) -> Array[Dictionary]:
 	var prefix := "floor_%02d" % sequence_index
+	# 95F保留历史稳定ID extraction；后续Boss必须使用逐层唯一ID，否则90/85F
+	# 会错误复用95F节点并把跨层走廊连到旧竞技场。
+	var boss_room_id := "extraction" if sequence_index == 4 else "%s_boss" % prefix
 	return [
 		_room("entry", "%s_entry" % prefix, "STAIR_LOBBY", "stair_entry", Vector2(-22.5, 2.5), SAFE_ROOM_SIZE),
 		_room("hub", "%s_hub" % prefix, "ELITE", "hub", Vector2(-20.0, -42.5), ROOM_SIZES.STANDARD, "entry"),
@@ -266,7 +269,7 @@ static func _boss_rooms(sequence_index: int) -> Array[Dictionary]:
 		_room("main_09", "%s_main_09" % prefix, "COMBAT", "main", Vector2(85.0, -77.5), ROOM_SIZES.STANDARD, "main_08"),
 		_room("main_10", "%s_main_10" % prefix, "EVENT", "main", Vector2(85.0, -42.5), ROOM_SIZES.STANDARD, "main_09"),
 		_room("prep", "%s_boss_prep" % prefix, "UPGRADE", "boss_prep", Vector2(85.0, -7.5), ROOM_SIZES.STANDARD, "main_10"),
-		_room("boss", "extraction", "BOSS", "boss", Vector2(80.0, 80.0), ROOM_SIZES.BOSS_ARENA, "prep"),
+		_room("boss", boss_room_id, "BOSS", "boss", Vector2(80.0, 80.0), ROOM_SIZES.BOSS_ARENA, "prep"),
 		# Boss房后仍需一个真实15×15m出口大厅，专用门先从Boss房进入大厅，
 		# 再由大厅接入B→B-1楼梯。大厅与Boss西边界共墙，不计入10房内容数。
 		_room("exit", "%s_exit" % prefix, "STAIR_LOBBY", "stair_exit", Vector2(27.5, 77.5), SAFE_ROOM_SIZE, "boss"),

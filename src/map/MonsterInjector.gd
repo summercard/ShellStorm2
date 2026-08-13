@@ -10,6 +10,7 @@ const BASE_ENEMY_TYPES := {
 	"shielded": { "name": "壳甲卫兵", "hp_base": 40, "damage_base": 3, "speed": 30 },
 	"exploder": { "name": "炸弹果", "hp_base": 10, "damage_base": 15, "speed": 70 },
 	"ambusher": { "name": "地刺虫", "hp_base": 18, "damage_base": 7, "speed": 90 },
+	"boss": { "name": "准首领", "hp_base": 100, "damage_base": 12, "speed": 42 },
 }
 
 const ENEMY_PRESENTATION := {
@@ -70,9 +71,9 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 		"random":
 			enemies = _generate_random_enemies(floor, floor_level)
 		"elite":
-			enemies.append(_generate_elite(floor, floor_level))
+			enemies.append(_generate_elite(floor, floor_level, config))
 		"boss":
-			enemies.append(_generate_boss(floor, floor_level))
+			enemies.append(_generate_boss(floor, floor_level, config))
 		"minion":
 			enemies = _generate_minion_pack(floor, floor_level)
 		"guard":
@@ -164,8 +165,22 @@ func _generate_basic_enemy(enemy_type: String, floor: int, floor_level: int) -> 
 	return result
 
 ## 生成精英敌人
-func _generate_elite(floor: int, floor_level: int) -> Dictionary:
-	var base: Dictionary = _generate_basic_enemy(_get_theme_fallback_enemy("shielded"), floor, floor_level)
+func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> Dictionary:
+	var encounter_id := str(request.get(
+		"encounter_id", "legacy:%d:%d:%d" % [_rng.seed, floor, _rng.randi()]
+	))
+	var elite_snapshot: Dictionary = {}
+	if EliteRosterService != null:
+		elite_snapshot = EliteRosterService.select_and_reserve(
+			int(request.get("seed", _rng.seed)),
+			int(request.get("floor_number", floor)),
+			encounter_id
+		)
+	var base_type := str(elite_snapshot.get(
+		"base_enemy_id", _get_theme_fallback_enemy("shielded")
+	))
+	# 无名王冠复用Boss轻量外观，但仍走精英结算而不是Boss路线解锁。
+	var base: Dictionary = _generate_basic_enemy(base_type, floor, floor_level)
 	base["is_elite"] = true
 	base["hp"] = int(base["hp"] * 1.5)
 	base["max_hp"] = base["hp"]
@@ -174,6 +189,11 @@ func _generate_elite(floor: int, floor_level: int) -> Dictionary:
 	# 随机词缀
 	var modifier_keys: Array = ELITE_MODIFIERS.keys()
 	var selected_modifier: String = modifier_keys[_rng.randi() % modifier_keys.size()]
+	var requested_modifier := str(elite_snapshot.get("modifier_id", ""))
+	for localized_name in modifier_keys:
+		if _map_modifier_to_english(str(localized_name)) == requested_modifier:
+			selected_modifier = str(localized_name)
+			break
 	var mod_data: Dictionary = ELITE_MODIFIERS[selected_modifier]
 	
 	base["modifier"] = selected_modifier
@@ -186,11 +206,12 @@ func _generate_elite(floor: int, floor_level: int) -> Dictionary:
 	# 精英怪使用专用掉落表（elite_floor_1 / elite_floor_2）
 	# 这样 ItemRegistry 中配置的 elite_floor_* 权重才能生效
 	base["loot_table"] = "elite_floor_1" if floor <= 2 else "elite_floor_2"
-	
+	if EliteRosterService != null and not elite_snapshot.is_empty():
+		base = EliteRosterService.apply_archive_to_enemy_config(base, elite_snapshot)
 	return base
 
 ## 生成Boss敌人
-func _generate_boss(floor: int, floor_level: int) -> Dictionary:
+func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> Dictionary:
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
 	var hp: float = 200.0 * scaling["hp_mult"]
 	
@@ -232,6 +253,18 @@ func _generate_boss(floor: int, floor_level: int) -> Dictionary:
 			"boss_name", "%s首领" % _theme_profile.display_name
 		))
 		result["theme_id"] = _theme_profile.theme_id
+	var floor_number := int(request.get("floor_number", 95))
+	var boss_profile := BossContentCatalog.get_for_floor(floor_number)
+	if not boss_profile.is_empty():
+		result["floor_number"] = floor_number
+		result["boss_content_id"] = str(boss_profile["boss_content_id"])
+		result["name"] = str(boss_profile["display_name"])
+		result["presentation_asset_id"] = str(boss_profile["presentation_asset_id"])
+		result["presentation_scene"] = str(boss_profile["presentation_scene"])
+		result["arena_asset_id"] = str(boss_profile["arena_asset_id"])
+		result["arena_scene"] = str(boss_profile["arena_scene"])
+		result["boss_accent"] = boss_profile.get("accent", Color(1.0, 0.2, 0.035))
+		result["boss_phase_skill_bags"] = (boss_profile["phase_skill_bags"] as Dictionary).duplicate(true)
 	return result
 
 ## 生成小怪群

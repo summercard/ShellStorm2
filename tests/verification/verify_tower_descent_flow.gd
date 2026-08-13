@@ -293,7 +293,7 @@ func _ready() -> void:
 		_expect(bool(stage_data.get("uses_imported_outer_mesh", false)), "外墙没有使用Blender导入模块", failures)
 		_expect(bool(stage_data.get("support_collision_persistent", false)), "隐藏楼层失去承重碰撞", failures)
 
-	# 已加载楼层保持完整渲染；楼顶地板与实体楼层关系自然遮住下层。
+	# 所有楼层结构永久渲染；玩法流送仅管理逻辑与高成本细节。
 	var roof_stage := _stage_snapshot(stage_snapshots, 0)
 	var base_stage := _stage_snapshot(stage_snapshots, 1)
 	_expect(bool(roof_stage.get("floor_visible", false)), "出生时楼顶地面不可见", failures)
@@ -302,11 +302,10 @@ func _ready() -> void:
 	for stage in stage_snapshots:
 		var stage_data := stage as Dictionary
 		var floor_index := int(stage_data.get("floor_index", -1))
-		var loaded: bool = floor_index in (snapshot.get("loaded_floor_indices", []) as Array)
 		_expect(
-			bool(stage_data.get("floor_visible", false)) == loaded
-			and bool(stage_data.get("outer_visible", false)) == loaded,
-			"第%d层没有遵循纯流送显隐" % floor_index,
+			bool(stage_data.get("floor_visible", false))
+			and bool(stage_data.get("outer_visible", false)),
+			"第%d层结构壳体被流送隐藏" % floor_index,
 			failures
 		)
 	_expect(
@@ -698,21 +697,14 @@ func _ready() -> void:
 		"战斗层运行时重新生成了假窗光",
 		failures
 	)
-	_expect(
-		int(snapshot.get("rendered_floor_count", 99))
-		== int(snapshot.get("loaded_floor_count", 0)),
-		"完整渲染层数与流送窗口不一致",
-		failures
-	)
+	_expect(int(snapshot.get("rendered_floor_count", 0)) == 6, "六层结构壳体没有全部驻留", failures)
 	for stage in snapshot.get("floor_stages", []):
 		var stage_data := stage as Dictionary
 		var stage_floor_index := int(stage_data.get("floor_index", -1))
-		var stage_loaded: bool = (
-			stage_floor_index in (snapshot.get("loaded_floor_indices", []) as Array)
-		)
 		_expect(
-			bool(stage_data.get("floor_visible", false)) == stage_loaded,
-			"98层状态下仍按摄像机而不是流送窗口隐藏楼板",
+			bool(stage_data.get("floor_visible", false))
+			and bool(stage_data.get("outer_visible", false)),
+			"98层状态下隐藏了第%d物理层结构" % stage_floor_index,
 			failures
 		)
 	tower.player.call("_update_aim_from_mouse")
@@ -804,8 +796,8 @@ func _ready() -> void:
 	_expect(int(snapshot.get("loaded_floor_count", 99)) <= 5, "抵达95层后流送窗口超过五层", failures)
 	_expect(int(snapshot.get("support_floor_count", 0)) == 6, "深层流送错误删除上层承重碰撞", failures)
 	_expect(
-		snapshot.get("visible_room_floor_indices", []) == [5],
-		"抵达95层后仍看得到其他楼层室内",
+		(snapshot.get("visible_room_floor_indices", []) as Array).size() >= 1,
+		"抵达95层后永久房间墙体壳体不可见",
 		failures
 	)
 
@@ -1200,11 +1192,11 @@ func _validate_atomic_floor_generation(
 			failures
 		)
 		var room_snapshot := room.get_room_snapshot()
-		if int(room_snapshot.get("stream_state", 0)) == 0 and not room.visible:
+		if int(room_snapshot.get("stream_state", 0)) == 0 and room.visible:
 			hidden_streamed_room_count += 1
 	_expect(
 		hidden_streamed_room_count > 0,
-		"整层布局事务错误地同时激活了所有房间表现/碰撞",
+		"整层布局事务没有保留DATA_ONLY房间的低成本墙体壳体",
 		failures
 	)
 	var room_floor_index := tower.get("_room_floor_index") as Dictionary

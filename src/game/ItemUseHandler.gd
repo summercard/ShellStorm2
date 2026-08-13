@@ -10,8 +10,13 @@ class_name ItemUseHandler
 ## 单例（延迟初始化）
 static var _instance: ItemUseHandler = null
 static func get_instance() -> ItemUseHandler:
-	if _instance == null:
+	if _instance == null or not is_instance_valid(_instance):
 		_instance = ItemUseHandler.new()
+		# Node型单例必须由SceneTree持有。仅保存在静态字段会成为未入树孤儿，
+		# 退出时留下ItemUseHandler脚本资源和ObjectDB实例。
+		var tree := Engine.get_main_loop() as SceneTree
+		if tree != null:
+			tree.root.add_child(_instance)
 	return _instance
 
 ## 预加载脚本（供当前 UI/运行时直接 new 使用）

@@ -1256,6 +1256,7 @@ func _generate_layout() -> void:
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
 	_plan_room_layout()
+	_ensure_structural_shells_resident()
 	for record in _records:
 		if str(record.get("parent", "")).is_empty():
 			continue
@@ -1264,6 +1265,14 @@ func _generate_layout() -> void:
 		if parent != null and child != null:
 			_build_corridor(parent, child, int(record["index"]))
 	_create_extraction()
+
+
+func _ensure_structural_shells_resident() -> void:
+	# 必须在门轴/最终房间坐标提交后构建，避免用未冻结拓扑生成错误门洞。
+	for room in _rooms:
+		if room != null and is_instance_valid(room):
+			room.ensure_shell_built()
+			room.visible = true
 
 
 func _build_records() -> void:
@@ -1706,14 +1715,14 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	var enemy_configs: Array[Dictionary] = []
 	match room.room_type:
 		"BOSS":
-			enemy_configs.assign(_monster_injector.generate_enemies({"type": "boss", "floor": floor, "floor_level": floor_level}))
-			enemy_configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
+			enemy_configs.assign(_monster_injector.generate_enemies({"type": "boss", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room)}))
+			enemy_configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
 		"ELITE":
-			enemy_configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level}))
+			enemy_configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
 		"TRAP":
 			enemy_configs.assign(_monster_injector.generate_enemies({"type": "ambush", "count": 3 + floor / 2, "floor": floor, "floor_level": floor_level}))
 		"BASEMENT":
-			enemy_configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": maxi(RoomData.FloorLevel.MEDIUM, floor_level)}))
+			enemy_configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": maxi(RoomData.FloorLevel.MEDIUM, floor_level), "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
 			enemy_configs.append_array(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": maxi(RoomData.FloorLevel.MEDIUM, floor_level)}))
 		_:
 			enemy_configs.assign(_monster_injector.generate_enemies({"type": "random", "floor": floor, "floor_level": floor_level}))
@@ -1783,6 +1792,15 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		return false
 	status_label.text = "区域警戒：波次 1/%d · %d 个敌对信号" % [wave_count, spawned]
 	return true
+
+
+func _elite_encounter_id(room: DungeonRoom3D) -> String:
+	var checkpoint_id := str(build_runtime_save_snapshot().get("checkpoint_id", "run:%d" % run_seed))
+	return "%s:%s:elite" % [checkpoint_id, room.room_id]
+
+
+func _elite_floor_number(room: DungeonRoom3D) -> int:
+	return maxi(1, int(room.get_meta("floor_number", visual_theme.difficulty_rank)))
 
 
 func _prepare_revealed_hostile_room(room: DungeonRoom3D) -> bool:

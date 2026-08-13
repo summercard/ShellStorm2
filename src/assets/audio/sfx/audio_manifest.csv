@@ -13,6 +13,9 @@ extraction_abort,extraction_abort.wav,extraction_abort_v001.ogg,正式接入,撤
 extraction_done,extraction_done.wav,extraction_done_v001.ogg,正式接入,撤离成功,1.050,44100,1,2,res://src/assets/audio/sfx/extraction_done_v001.ogg
 extraction_start,extraction_start.wav,extraction_start_v001.ogg,正式接入,撤离开始,1.150,44100,1,2,res://src/assets/audio/sfx/extraction_start_v001.ogg
 fate_card,fate_card.wav,fate_card_v001.ogg,正式接入,命运卡生效,0.860,44100,1,2,res://src/assets/audio/sfx/fate_card_v001.ogg
+flashlight_charge_up,flashlight_charge_up.wav,flashlight_charge_up_v001.ogg,正式接入,手电筒充能完成,0.950,44100,1,2,res://src/assets/audio/sfx/flashlight_charge_up_v001.ogg
+flashlight_depleted,flashlight_depleted.wav,flashlight_depleted_v001.ogg,正式接入,手电筒电量耗尽,0.850,44100,1,2,res://src/assets/audio/sfx/flashlight_depleted_v001.ogg
+flashlight_low_battery,flashlight_low_battery.wav,flashlight_low_battery_v001.ogg,正式接入,手电筒低电量警告,0.650,44100,1,2,res://src/assets/audio/sfx/flashlight_low_battery_v001.ogg
 item_pickup,item_pickup.wav,item_pickup_v001.ogg,正式接入,普通物品拾取,0.250,44100,1,2,res://src/assets/audio/sfx/item_pickup_v001.ogg
 laser_fire,laser_fire.wav,laser_fire_v001.ogg,正式接入,能量武器射击,0.240,44100,1,2,res://src/assets/audio/sfx/laser_fire_v001.ogg
 melee_impact,melee_impact.wav,melee_impact_v001.ogg,正式接入,近战命中主层,0.441,44100,1,2,res://src/assets/audio/sfx/melee_impact_v001.ogg

@@ -108,8 +108,8 @@ func _verify_registry_and_room_streaming(failures: Array[String]) -> void:
 		failures.append("ACTIVE room did not construct its navigation surface")
 	var active_nodes := _count_nodes(room)
 	room.set_stream_state(DungeonRoom3D.STREAM_HIBERNATING)
-	if room.visible or room.process_mode != Node.PROCESS_MODE_DISABLED:
-		failures.append("HIBERNATING room remained active")
+	if not room.visible or room.process_mode != Node.PROCESS_MODE_DISABLED:
+		failures.append("HIBERNATING room did not retain its visible shell while stopping logic")
 	room.set_stream_state(DungeonRoom3D.STREAM_DATA_ONLY)
 	await get_tree().process_frame
 	var data_nodes := _count_nodes(room)

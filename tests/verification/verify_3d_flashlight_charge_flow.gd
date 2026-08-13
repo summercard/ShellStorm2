@@ -3,7 +3,7 @@ extends Node
 ## 测试场景：Dungeon3D 实例化后,基础档满电 100%,用物理 tick / 信号连接验证。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
-const SAVE_VERSION_EXPECTED := "1.6"
+const SAVE_VERSION_EXPECTED := "1.7"
 
 var _depleted_signal_emitted := false
 var _restored_signal_emitted := false

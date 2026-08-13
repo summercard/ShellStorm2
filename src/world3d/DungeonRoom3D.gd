@@ -269,6 +269,7 @@ func ensure_shell_built() -> void:
 	_shell_built = true
 	_build_shell()
 	_build_trigger()
+	_keep_structural_physics_active(self)
 
 
 func set_stream_state(state: int) -> void:
@@ -287,11 +288,12 @@ func set_stream_state(state: int) -> void:
 			call_deferred("set_stream_state", STREAM_SHELL_READY)
 	elif _stream_state == STREAM_DATA_ONLY:
 		_unload_runtime_detail()
-	visible = presentation_ready
+	# 壳体永久可见，DATA_ONLY/HIBERNATING 只卸载或停用高成本运行时细节。
+	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT if presentation_ready else Node.PROCESS_MODE_DISABLED
-	# 远层只卸载通行/交互碰撞，承重楼板永久保留。否则隐藏楼层时，
-	# 仍驻留的掉落或冻结实体可能穿过已卸载楼板坠向更深层。
-	_set_collision_enabled(self, presentation_ready, true)
+	# 墙、门框和楼板碰撞与视觉壳体保持一致，避免受光、通行和掉落规则分叉。
+	# RuntimeDetail 在 DATA_ONLY 中已被释放，因此不会保留家具/交互碰撞。
+	_set_collision_enabled(self, true, true)
 	if presentation_ready:
 		for value in _door_nodes.values():
 			var door := value as RoomDoor3D
@@ -757,8 +759,8 @@ func _build_tower_wall_multimesh(
 	add_child(visual)
 
 
-## v0.1 v2 拼接交替装饰：每段 5m 实例一个 MeshInstance3D，偶奇 index 分 A/B 两色。
-## 墙同一段与地砖同步节奏（同一房间内统一定义）。
+## v0.1 v2 拼接交替装饰：按偶/奇段分成A/B两个MultiMesh。
+## 结构永久驻留后禁止再用“每5m一节点”；材质节奏、阴影和碰撞保持不变。
 func _spawn_solid_wall_visual_instances(
 	direction: String,
 	transforms: Array[Transform3D],
@@ -767,34 +769,51 @@ func _spawn_solid_wall_visual_instances(
 	var mesh := _get_tower_solid_wall_mesh()
 	if mesh == null or transforms.is_empty():
 		return
-	var container := Node3D.new()
-	container.name = "Imported_SolidWall5M_%s_Run" % direction.capitalize()
-	container.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
-	container.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
-	container.set_meta("tower_wall_direction", direction)
-	add_child(container)
+	var transforms_a: Array[Transform3D] = []
+	var transforms_b: Array[Transform3D] = []
 	for index in range(transforms.size()):
 		var abs_segment_index := (
 			segment_indices[index]
 			if index < segment_indices.size()
 			else index
 		)
-		var visual := MeshInstance3D.new()
-		visual.mesh = mesh
-		visual.material_override = _get_wall_module_material(abs_segment_index)
 		var wall_transform := transforms[index]
 		# BoxMesh 原点在几何中心；抬高半层后才是从地面到 9m，而不是 -4.5~+4.5m。
 		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
-		visual.transform = wall_transform
-		visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		visual.name = "Imported_SolidWall5M_%s_I%02d" % [
-			direction.capitalize(),
-			abs_segment_index,
-		]
-		visual.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
-		visual.set_meta("segment_index", abs_segment_index)
-		visual.set_meta("material_variant", "A" if abs_segment_index % 2 == 0 else "B")
-		container.add_child(visual)
+		if abs_segment_index % 2 == 0:
+			transforms_a.append(wall_transform)
+		else:
+			transforms_b.append(wall_transform)
+	_add_wall_multimesh_variant(direction, "A", mesh, transforms_a, _get_wall_module_material(0))
+	_add_wall_multimesh_variant(direction, "B", mesh, transforms_b, _get_wall_module_material(1))
+
+
+func _add_wall_multimesh_variant(
+	direction: String,
+	variant: String,
+	mesh: Mesh,
+	transforms: Array[Transform3D],
+	material: StandardMaterial3D
+) -> void:
+	if transforms.is_empty():
+		return
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		multimesh.set_instance_transform(index, transforms[index])
+	var visual := MultiMeshInstance3D.new()
+	visual.name = "Imported_SolidWall5M_%s_Run_%s" % [direction.capitalize(), variant]
+	visual.multimesh = multimesh
+	visual.material_override = material
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	visual.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	visual.set_meta("tower_wall_direction", direction)
+	visual.set_meta("material_variant", variant)
+	visual.set_meta("segment_count", transforms.size())
+	add_child(visual)
 
 
 func _get_tower_solid_wall_mesh() -> Mesh:
@@ -1477,6 +1496,8 @@ func _build_content() -> void:
 	_add_runtime_detail_child(_light_switch)
 	if room_type == "STAIR_LOBBY":
 		_build_stair_lobby_markings(dimensions)
+	elif room_type == "BOSS":
+		_build_boss_arena_dressing()
 
 	var prop_count := (
 		3 if size_class in ["small", "tower_cell"]
@@ -1489,6 +1510,9 @@ func _build_content() -> void:
 	if room_type == "FACILITY":
 		prop_count = 0
 	if room_type == "STAIR_LOBBY":
+		prop_count = 0
+	if room_type == "BOSS":
+		# Boss 场地资产自身已提供可辨识掩体；不叠加随机家具破坏走位与主题构图。
 		prop_count = 0
 	if room_type in ["STORAGE", "SCAVENGE", "BASEMENT"]:
 		prop_count += 2
@@ -1556,6 +1580,47 @@ func _build_runtime_navigation_surface(dimensions: Vector2) -> void:
 	region.use_edge_connections = false
 	region.navigation_mesh = navigation_mesh
 	_add_runtime_detail_child(region)
+
+
+func _build_boss_arena_dressing() -> void:
+	var arena_scene_path := str(get_meta("arena_scene", ""))
+	var arena_asset_id := str(get_meta("arena_asset_id", ""))
+	# 普通Dungeon3D仍允许使用无独立场地的通用Boss回退；只有已经声明正式
+	# 场地资产ID却缺路径时才是内容错误。
+	if arena_scene_path.is_empty() and arena_asset_id.is_empty():
+		return
+	if arena_scene_path.is_empty() or not ResourceLoader.exists(arena_scene_path):
+		push_warning("DungeonRoom3D: Boss room %s has no valid arena scene: %s" % [room_id, arena_scene_path])
+		return
+	var packed := load(arena_scene_path) as PackedScene
+	if packed == null:
+		push_error("DungeonRoom3D: failed to load Boss arena scene %s" % arena_scene_path)
+		return
+	var arena := packed.instantiate() as Node3D
+	if arena == null:
+		push_error("DungeonRoom3D: Boss arena root must be Node3D: %s" % arena_scene_path)
+		return
+	arena.name = "BossArenaDressing"
+	arena.set_meta("asset_id", str(get_meta("arena_asset_id", "")))
+	arena.set_meta("high_detail_streamable", true)
+	_add_runtime_detail_child(arena)
+
+	# 美术掩体随高模场地装饰一同流式装卸，但碰撞与造型位置逐件对应，避免
+	# 只看得到/撞不到或看不到/仍挡路。永久墙体碰撞不走这条高模流式路径。
+	var asset_id := arena_asset_id
+	var count := 8 if asset_id.ends_with("ARCHIVE-95") else 6 if asset_id.ends_with("FURNACE-90") else 5
+	var radius := 7.8 if count != 5 else 6.5
+	var phase_offset := 0.22 if count == 8 else 0.28 if count == 6 else 0.30
+	var cover_size := Vector3(3.6, 1.3, 1.1) if count == 8 else Vector3(4.4, 1.5, 0.84) if count == 6 else Vector3(3.2, 1.4, 0.96)
+	for index in range(count):
+		var angle := TAU * float(index) / float(count) + phase_offset
+		var body := StaticBody3D.new()
+		body.name = "BossArenaCoverCollision_%02d" % index
+		body.position = Vector3(cos(angle) * radius, cover_size.y * 0.5, sin(angle) * radius)
+		body.rotation.y = -TAU * float(index) / float(count)
+		body.set_meta("boss_arena_cover", true)
+		_add_collision_shape(body, Vector3.ZERO, cover_size)
+		_add_runtime_detail_child(body)
 
 
 func _create_service_station(type_id: String, dimensions: Vector2) -> ServiceStation3D:
@@ -1769,6 +1834,18 @@ func _set_collision_enabled(root: Node, enabled: bool, preserve_support := false
 		collision.set_deferred("disabled", false if preserve_support and is_support else not enabled)
 	for child in root.get_children():
 		_set_collision_enabled(child, enabled, preserve_support)
+
+
+func _keep_structural_physics_active(root: Node) -> void:
+	# RuntimeDetail 由流送状态独立管理；这里只固定房间壳体的墙、门框、门和
+	# 楼板碰撞。PROCESS_MODE_ALWAYS 使它们在房间父节点停用脚本时仍参与物理
+	# 查询，保证渲染阴影、角色通行和怪物受光使用同一套几何。
+	if root == _detail_root or root.name == "RuntimeDetail":
+		return
+	if root is PhysicsBody3D:
+		(root as PhysicsBody3D).process_mode = Node.PROCESS_MODE_ALWAYS
+	for child in root.get_children():
+		_keep_structural_physics_active(child)
 
 
 func _has_enabled_support_collision() -> bool:

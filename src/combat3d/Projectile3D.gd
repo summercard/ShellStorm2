@@ -32,6 +32,7 @@ var _turret_remaining := 0.0
 var _turret_shot_timer := 0.0
 var _attached_shot_timer := 0.0
 var _growth_stacks := 0
+var _tracked_collision_exceptions: Array[PhysicsBody3D] = []
 
 
 func configure(config: Dictionary) -> void:
@@ -61,10 +62,14 @@ func configure(config: Dictionary) -> void:
 func activate(config: Dictionary, world_position: Vector3) -> void:
 	configure(config)
 	collision_mask = 1 if hostile else 5
-	for exception in get_collision_exceptions():
-		remove_collision_exception_with(exception)
+	for exception in _tracked_collision_exceptions:
+		# 对象池保留的碰撞例外可能指向已死亡并释放的上一任发射者；Godot
+		# 会把服务端列表中的对象变成null占位，连枚举都会触发body=null报错。
+		if is_instance_valid(exception):
+			remove_collision_exception_with(exception)
+	_tracked_collision_exceptions.clear()
 	if shooter is PhysicsBody3D:
-		add_collision_exception_with(shooter as PhysicsBody3D)
+		_add_tracked_collision_exception(shooter as PhysicsBody3D)
 	_active = true
 	visible = true
 	process_mode = Node.PROCESS_MODE_INHERIT
@@ -81,7 +86,7 @@ func _ready() -> void:
 	collision_layer = 8
 	collision_mask = 1 if hostile else 5
 	if shooter is PhysicsBody3D:
-		add_collision_exception_with(shooter as PhysicsBody3D)
+		_add_tracked_collision_exception(shooter as PhysicsBody3D)
 	_build_visual()
 	_built = true
 	_apply_visual_configuration()
@@ -143,12 +148,12 @@ func _physics_process(delta: float) -> void:
 		if bool(fate_behavior.get("return_to_player", false)) or bool(fate_behavior.get("home_on_land", false)):
 			_begin_return()
 			if collider is PhysicsBody3D:
-				add_collision_exception_with(collider as PhysicsBody3D)
+				_add_tracked_collision_exception(collider as PhysicsBody3D)
 			return
 		if _pierces_left > 0:
 			_pierces_left -= 1
 			if collider is PhysicsBody3D:
-				add_collision_exception_with(collider as PhysicsBody3D)
+				_add_tracked_collision_exception(collider as PhysicsBody3D)
 			global_position += direction * 0.28
 			return
 		if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon"):
@@ -172,6 +177,13 @@ func _physics_process(delta: float) -> void:
 		_explode()
 	_spawn_effect("impact", global_position, bullet_color, 0.7)
 	_retire()
+
+
+func _add_tracked_collision_exception(body: PhysicsBody3D) -> void:
+	if not is_instance_valid(body) or body in _tracked_collision_exceptions:
+		return
+	add_collision_exception_with(body)
+	_tracked_collision_exceptions.append(body)
 
 
 func _apply_secondary_effect(target: Node) -> void:

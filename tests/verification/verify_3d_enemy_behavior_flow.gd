@@ -24,6 +24,7 @@ func _ready() -> void:
 	await _verify_summoner_support(failures)
 	await _verify_shield_facing(failures)
 	await _verify_exploder_fragments(failures)
+	await _verify_pool_reuse_after_shooter_freed(failures)
 	_verify_damage_number_presentation(failures)
 	for child in get_children():
 		if child is Projectile3D or child is Enemy3D or child.get_script() == DAMAGE_NUMBER_SCRIPT:
@@ -261,6 +262,32 @@ func _verify_exploder_fragments(failures: Array[String]) -> void:
 	await get_tree().process_frame
 	if _count_projectiles() - before < 8:
 		failures.append("Killed exploder does not emit its distinct eight weaker death fragments")
+
+
+func _verify_pool_reuse_after_shooter_freed(failures: Array[String]) -> void:
+	var pool := ProjectilePool3D.new()
+	add_child(pool)
+	var first_shooter := CharacterBody3D.new()
+	add_child(first_shooter)
+	var config := {
+		"direction": Vector3.FORWARD,
+		"hostile": true,
+		"shooter": first_shooter,
+	}
+	var projectile := pool.acquire(config, Vector3(80.0, 1.0, 80.0))
+	projectile.call("_retire")
+	first_shooter.queue_free()
+	await get_tree().process_frame
+	var second_shooter := CharacterBody3D.new()
+	add_child(second_shooter)
+	config["shooter"] = second_shooter
+	var reused := pool.acquire(config, Vector3(80.0, 1.0, 80.0))
+	if reused != projectile or int(pool.get_snapshot().get("active", -1)) != 1:
+		failures.append("Projectile pool did not safely reuse a projectile after its previous shooter was freed")
+	reused.call("_retire")
+	second_shooter.queue_free()
+	pool.queue_free()
+	await get_tree().process_frame
 
 
 func _make_enemy(kind: String, position: Vector3) -> Enemy3D:

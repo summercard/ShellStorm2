@@ -106,6 +106,12 @@ var _home_initialized := false
 var _runtime_ai_active := true
 var _patrol_target := Vector3.ZERO
 var elite_modifier_id := ""
+var elite_id := ""
+var elite_behavior_id := ""
+var elite_level := 0
+var elite_encounter_instance_id := ""
+var _elite_attack_counter := 0
+var _elite_behavior_trigger_count := 0
 var _absorb_cooldown := 0.0
 var boss_phase := 1
 var _ambush_triggered := false
@@ -192,6 +198,12 @@ func apply_profile(kind: String) -> void:
 func configure_from_enemy_data(data: Dictionary) -> void:
 	enemy_data = data.duplicate(true)
 	elite_modifier_id = ""
+	elite_id = str(data.get("elite_id", ""))
+	elite_behavior_id = str(data.get("elite_behavior_id", ""))
+	elite_level = int(data.get("elite_level", 0))
+	elite_encounter_instance_id = str(data.get("encounter_instance_id", ""))
+	_elite_attack_counter = 0
+	_elite_behavior_trigger_count = 0
 	_variant_scale_multiplier = 1.0
 	apply_profile(str(data.get("enemy_type", enemy_kind)))
 	var profile_hp := max_hp
@@ -225,8 +237,15 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 			_variant_scale_multiplier *= float(modifier_data.get("scale_mult", 1.5))
 		else:
 			_variant_scale_multiplier *= 1.16
+		max_hp = maxi(1, int(round(float(max_hp) * float(data.get("elite_growth_hp_mult", 1.0)))))
+		current_hp = max_hp
+		contact_damage = maxi(1, int(round(float(contact_damage) * float(data.get("elite_growth_damage_mult", 1.0)))))
+		if not elite_id.is_empty() and EliteRosterService != null:
+			EliteRosterService.confirm_reservation(elite_id, elite_encounter_instance_id)
 	if enemy_kind == "boss":
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
+		if avatar != null:
+			avatar.configure_boss_content(str(data.get("boss_content_id", "")))
 	_apply_presentation_scale()
 	_ensure_overhead_health_bar()
 	health_changed.emit(self, current_hp, max_hp)
@@ -747,11 +766,7 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 			_explode()
 		"boss":
 			var boss_skill := _next_boss_skill()
-			if boss_skill == "summon":
-				summon_requested.emit(self, 2 if boss_phase < 3 else 3)
-			else:
-				var count := 5 if boss_skill == "burst" else 3 if boss_phase >= 2 else 1
-				_fire_projectile_volley(to_target, contact_damage, Color(1.0, 0.20, 0.08), count, 0.20 if boss_skill == "burst" else 0.14, true)
+			_perform_boss_skill(boss_skill, to_target)
 		"melee_chaser":
 			_external_velocity = to_target.normalized() * 7.2
 			_external_timer = 0.16
@@ -765,6 +780,7 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 		_:
 			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
+	_apply_unique_elite_attack_behavior(to_target)
 	if elite_modifier_id == "Elite.WeaponParasite" and _target != null and _target.has_method("apply_silence"):
 		_target.call("apply_silence", 1.8)
 
@@ -991,6 +1007,15 @@ func get_state_snapshot() -> Dictionary:
 		"enemy_kind": enemy_kind, "state": ai_state, "valid_states": VALID_STATES.duplicate(),
 		"hp": current_hp, "max_hp": max_hp, "room_id": room_id, "is_3d": true,
 		"elite_modifier_id": elite_modifier_id, "boss_phase": boss_phase,
+		"boss_content_id": str(enemy_data.get("boss_content_id", "")),
+		"boss_presentation_asset_id": str(enemy_data.get("presentation_asset_id", "")),
+		"boss_arena_asset_id": str(enemy_data.get("arena_asset_id", "")),
+		"elite_id": elite_id,
+		"elite_behavior_id": elite_behavior_id,
+		"elite_level": elite_level,
+		"elite_attack_counter": _elite_attack_counter,
+		"elite_behavior_trigger_count": _elite_behavior_trigger_count,
+		"elite_encounter_instance_id": elite_encounter_instance_id,
 		"source_hp_scale": _source_hp_scale, "source_damage_scale": _source_damage_scale,
 		"hp_balance_multiplier": BOSS_HP_MULTIPLIER if enemy_kind == "boss" else NORMAL_HP_MULTIPLIER,
 		"move_speed_multiplier": GLOBAL_MOVE_SPEED_MULTIPLIER,
@@ -1213,11 +1238,15 @@ func _recovery_duration() -> float:
 func _next_boss_skill() -> String:
 	if _boss_skill_bag.is_empty() or _boss_skill_index >= _boss_skill_bag.size():
 		_boss_skill_bag.clear()
-		_boss_skill_bag.assign(
-			["volley", "summon", "burst", "volley"]
-			if boss_phase >= 2
-			else ["volley", "summon", "volley"]
-		)
+		var phase_bags := enemy_data.get("boss_phase_skill_bags", {}) as Dictionary
+		var configured_bag: Array = phase_bags.get(boss_phase, phase_bags.get(str(boss_phase), [])) as Array
+		if configured_bag.is_empty():
+			configured_bag = (
+				["volley", "summon", "burst", "volley"]
+				if boss_phase >= 2
+				else ["volley", "summon", "volley"]
+			)
+		_boss_skill_bag.assign(configured_bag)
 		# 固定旋转量来自行动种子/实例数据，不连续重复同一高压技能。
 		var rotation := absi(int(enemy_data.get("floor", 0)) + room_id.hash()) % _boss_skill_bag.size()
 		for _index in range(rotation):
@@ -1226,6 +1255,85 @@ func _next_boss_skill() -> String:
 	var result := _boss_skill_bag[_boss_skill_index]
 	_boss_skill_index += 1
 	return result
+
+
+func _perform_boss_skill(skill_id: String, to_target: Vector3) -> void:
+	var accent: Color = enemy_data.get("boss_accent", Color(1.0, 0.20, 0.08)) as Color
+	match skill_id:
+		"summon", "summon_scribes", "summon_cinders", "summon_echoes":
+			summon_requested.emit(self, 2 if boss_phase < 3 else 3)
+		"archive_fan":
+			_fire_projectile_volley(to_target, contact_damage, accent, 5, 0.16)
+		"index_beam":
+			_fire_projectile_volley(to_target, int(round(contact_damage * 1.35)), accent, 3, 0.055, true)
+		"archive_storm":
+			_fire_projectile_volley(to_target, int(round(contact_damage * 0.82)), accent, 9, 0.23, true)
+		"molten_volley":
+			_fire_projectile_volley(to_target, contact_damage, accent, 4, 0.13, true)
+		"hammer_drive":
+			_external_velocity = to_target.normalized() * 8.6
+			_external_timer = 0.30
+			if is_instance_valid(_target) and global_position.distance_to(_target.global_position) <= 3.6:
+				_target.call("take_damage", int(round(contact_damage * 1.55)), false, to_target.normalized())
+		"furnace_burst":
+			_fire_projectile_volley(to_target, int(round(contact_damage * 1.18)), accent, 8, 0.26, true)
+		"choir_wave":
+			_fire_projectile_volley(to_target, contact_damage, accent, 6, 0.20)
+		"silence_chord":
+			_fire_projectile_volley(to_target, int(round(contact_damage * 0.90)), accent, 3, 0.11, true)
+			if is_instance_valid(_target) and _target.has_method("apply_silence"):
+				_target.call("apply_silence", 2.2)
+		"echo_burst", "burst":
+			_fire_projectile_volley(to_target, contact_damage, accent, 7, 0.28, true)
+		_:
+			_fire_projectile_volley(to_target, contact_damage, accent, 3 if boss_phase >= 2 else 1, 0.14, true)
+
+
+func _apply_unique_elite_attack_behavior(to_target: Vector3) -> void:
+	if elite_behavior_id.is_empty():
+		return
+	_elite_attack_counter += 1
+	var level_scale := 1.0 + float(maxi(0, elite_level - 1)) * 0.04
+	match elite_behavior_id:
+		"armed_rush":
+			if _elite_attack_counter % 2 == 0:
+				_fire_projectile_volley(to_target, int(contact_damage * 0.55 * level_scale), Color(0.95, 0.56, 0.16), 2, 0.08)
+		"bullet_devourer":
+			if _elite_attack_counter % 3 == 0:
+				_fire_projectile_volley(to_target, int(contact_damage * 0.72 * level_scale), Color(0.78, 0.28, 0.94), 3, 0.16)
+		"rotating_carapace":
+			_external_velocity = Vector3(-to_target.z, 0.0, to_target.x).normalized() * 3.2
+			_external_timer = 0.22
+		"hive_network":
+			if _elite_attack_counter % 2 == 0:
+				summon_requested.emit(self, mini(4, 1 + elite_level / 4))
+		"renewing_mines":
+			_fire_projectile_volley(to_target, int(contact_damage * 0.45 * level_scale), Color(1.0, 0.34, 0.05), mini(7, 3 + elite_level / 3), 0.30, true)
+		"false_burrow_routes":
+			var feint_sign := -1.0 if _elite_attack_counter % 2 == 0 else 1.0
+			_external_velocity = Vector3(-to_target.z, 0.0, to_target.x).normalized() * 7.5 * feint_sign
+			_external_timer = 0.26
+		"mirror_sector":
+			if _elite_attack_counter % 2 == 1:
+				_fire_projectile_volley(to_target, int(contact_damage * 0.60), Color(0.66, 0.92, 1.0), 5, 0.22)
+		"weapon_phase_swap":
+			var phase_count: int = [1, 3, 5][_elite_attack_counter % 3]
+			_fire_projectile_volley(to_target, int(contact_damage * level_scale), Color(1.0, 0.22, 0.42), phase_count, 0.12, phase_count >= 5)
+		"seven_attack_rule":
+			if _elite_attack_counter % 7 == 0:
+				_fire_projectile_volley(to_target, int(contact_damage * 0.75 * level_scale), Color(0.98, 0.84, 0.18), 7, 0.24, true)
+		"attachment_echo":
+			if _elite_attack_counter % 2 == 0:
+				summon_requested.emit(self, 2)
+		"escape_route":
+			if _elite_attack_counter % 2 == 0:
+				_external_velocity = -to_target.normalized() * (7.0 + minf(2.0, elite_level * 0.2))
+				_external_timer = 0.34
+		"three_crowns":
+			_fire_projectile_volley(to_target, int(contact_damage * 0.68 * level_scale), Color(0.92, 0.75, 0.20), boss_phase * 2 + 1, 0.20, boss_phase >= 2)
+		_:
+			return
+	_elite_behavior_trigger_count += 1
 
 
 func _behavior_role() -> String:
@@ -1267,6 +1375,11 @@ func _die() -> void:
 	collision_mask = 0
 	_spawn_effect("explosion" if enemy_kind == "boss" else "impact", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
+	if not elite_id.is_empty() and EliteRosterService != null:
+		EliteRosterService.settle(elite_id, elite_encounter_instance_id, "killed", {
+			"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
+			"room_id": room_id,
+		})
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
 	tween.tween_callback(queue_free)
@@ -1332,6 +1445,8 @@ func _update_boss_phase() -> void:
 	if next_phase <= boss_phase:
 		return
 	boss_phase = next_phase
+	_boss_skill_bag.clear()
+	_boss_skill_index = 0
 	attack_cooldown *= 0.82
 	move_speed *= 1.10
 	if boss_phase == 3:

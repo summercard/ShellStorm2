@@ -70,7 +70,7 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 				if bullet != null and not root.mount(AssemblyNode.SlotType.BULLET, bullet):
 					bullet.free()
 			instance.assembly_snapshot = _serialize_node(root)
-			root.free()
+			_free_assembly_subtree(root)
 	return instance
 
 
@@ -134,12 +134,24 @@ func load_into_runtime_tree(tree: WeaponAssemblyTree) -> bool:
 		_hydrate_and_migrate_root(root)
 	if root == null or not tree.set_root(root):
 		if root != null:
-			root.free()
+			_free_assembly_subtree(root)
 		return false
 	if current_ammo >= 0:
 		tree.current_ammo = clampi(current_ammo, 0, tree.magazine_size)
 		tree.ammo_changed.emit(tree.current_ammo, tree.magazine_size)
 	return true
+
+
+static func _free_assembly_subtree(node: AssemblyNode) -> void:
+	if node == null:
+		return
+	for slot_type in node.slots.keys():
+		var child := node.slots.get(slot_type) as AssemblyNode
+		if child != null:
+			node.slots[slot_type] = null
+			child.parent_node = null
+			_free_assembly_subtree(child)
+	node.free()
 
 
 func has_free_fate_slot() -> bool:

@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.6"
+const SAVE_VERSION := "1.7"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -70,6 +70,10 @@ var completed_transaction_ids: Array[String] = []
 # 仅允许保存已经通过完整性校验的行动检查点；空字典表示当前不可续局。
 var active_run_snapshot: Dictionary = {}
 
+# 12只唯一精英的跨局档案。键为稳定elite_id，值只含JSON安全字段；
+# 当前场景节点与玩家weapon_instance_id不得进入此字典。
+var elite_archive_records: Dictionary = {}
+
 func _to_dict() -> Dictionary:
 	return {
 		"save_version": SAVE_VERSION,
@@ -111,6 +115,7 @@ func _to_dict() -> Dictionary:
 		"last_save_reason": last_save_reason,
 		"completed_transaction_ids": completed_transaction_ids,
 		"active_run_snapshot": active_run_snapshot,
+		"elite_archive_records": elite_archive_records,
 	}
 
 static func from_dict(d: Dictionary) -> BaseData:
@@ -171,6 +176,8 @@ static func from_dict(d: Dictionary) -> BaseData:
 			data.completed_transaction_ids.append(str(transaction_id))
 	if d.has("active_run_snapshot") and d["active_run_snapshot"] is Dictionary:
 		data.active_run_snapshot = (d["active_run_snapshot"] as Dictionary).duplicate(true)
+	if d.has("elite_archive_records") and d["elite_archive_records"] is Dictionary:
+		data.elite_archive_records = (d["elite_archive_records"] as Dictionary).duplicate(true)
 	return data
 
 func record_run(success: bool, kills: int) -> void:
