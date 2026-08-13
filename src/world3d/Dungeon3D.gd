@@ -96,6 +96,7 @@ var _loot_module: LootModule
 var _monster_injector: MonsterInjector
 var _inventory: InventoryModule
 var _insurance: InsuranceModule
+var _quick_inventory: InventoryModule
 var _death_settlement: DeathSettlementModule
 var _inventory_ui: InventoryUI
 var _weapon_panel: WeaponAssemblyTreePanel
@@ -166,6 +167,7 @@ var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
 var _runtime_restore_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
+var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
 var _room_stream_state_cache: Dictionary = {}
 
@@ -173,10 +175,17 @@ var _room_stream_state_cache: Dictionary = {}
 func _ready() -> void:
 	add_to_group("room_game_mode")
 	if not test_mode and BaseManager != null:
-		var candidate := BaseManager.get_active_run_checkpoint()
-		if str(candidate.get("schema", "")) in ["runtime_player_state_v1", "runtime_player_state_v2"]:
-			_runtime_restore_snapshot = candidate
-			run_seed_override = int(candidate.get("run_seed", run_seed_override))
+		# 死亡保险中转是已经完成结算的更高优先级边界。即使上一次清理
+		# 战斗检查点时写盘失败，也不能让旧战斗房快照覆盖保险返城数据。
+		var has_death_insurance_return := (
+			_accepts_pending_insurance_return_at_spawn()
+			and not BaseManager.get_pending_insurance_slots().is_empty()
+		)
+		if not has_death_insurance_return:
+			var candidate := BaseManager.get_active_run_checkpoint()
+			if str(candidate.get("schema", "")) in ["runtime_player_state_v1", "runtime_player_state_v2"]:
+				_runtime_restore_snapshot = candidate
+				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -238,12 +247,22 @@ func _activate_runtime_persistence() -> void:
 		return
 	if not _runtime_restore_snapshot.is_empty():
 		_restore_runtime_save_snapshot(_runtime_restore_snapshot)
+	if _pending_insurance_return_restore:
+		# 中转集合与当前基地检查点必须原子交接；失败时清掉内存投影，
+		# 长期中转仍在，下次进入基地可以安全重试且不会复制。
+		if BaseManager.commit_pending_insurance_to_runtime(build_runtime_save_snapshot()):
+			_pending_insurance_return_restore = false
+		else:
+			_insurance.clear_all()
+			push_error("[Dungeon3D] Failed to commit death-insurance return to the 99F runtime checkpoint")
 	_runtime_persistence_active = true
 	BaseManager.register_runtime_checkpoint_provider(self)
 	if _inventory != null and not _inventory.inventory_changed.is_connected(_on_runtime_inventory_changed):
 		_inventory.inventory_changed.connect(_on_runtime_inventory_changed)
 	if _insurance != null and not _insurance.insurance_changed.is_connected(_on_runtime_insurance_changed):
 		_insurance.insurance_changed.connect(_on_runtime_insurance_changed)
+	if _quick_inventory != null and not _quick_inventory.inventory_changed.is_connected(_on_runtime_quick_inventory_changed):
+		_quick_inventory.inventory_changed.connect(_on_runtime_quick_inventory_changed)
 	if player != null:
 		if not player.weapon_loadout_changed.is_connected(_on_runtime_weapon_changed):
 			player.weapon_loadout_changed.connect(_on_runtime_weapon_changed)
@@ -258,6 +277,10 @@ func _on_runtime_inventory_changed() -> void:
 
 func _on_runtime_insurance_changed() -> void:
 	_queue_runtime_autosave("insurance_changed")
+
+
+func _on_runtime_quick_inventory_changed() -> void:
+	_queue_runtime_autosave("quick_inventory_changed")
 
 
 func _on_runtime_weapon_changed(_snapshot: Dictionary) -> void:
@@ -309,6 +332,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"equipped_backpack_item": player.get_equipped_backpack_item(),
 		"flashlight_module_id": flashlight.get_module_id() if flashlight != null else "basic",
 		"flashlight_charge_ratio": flashlight.get_charge_ratio() if flashlight != null else 1.0,
+		"quick_item_slots": _quick_inventory.get_slots_snapshot(),
 		"quick_item_ids": _quick_item_ids.duplicate(),
 		"room_key_count": _room_key_count,
 		"run_value": _run_value,
@@ -375,10 +399,19 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	if flashlight != null:
 		player.restore_flashlight_module(str(snapshot.get("flashlight_module_id", "basic")))
 		flashlight.set_charge_ratio(float(snapshot.get("flashlight_charge_ratio", 1.0)))
-	_quick_item_ids.assign(snapshot.get("quick_item_ids", ["", ""]) as Array)
-	while _quick_item_ids.size() < 2:
-		_quick_item_ids.append("")
-	_quick_item_ids.resize(2)
+	var quick_slots: Variant = snapshot.get("quick_item_slots", [])
+	if quick_slots is Array and not (quick_slots as Array).is_empty():
+		_quick_inventory.restore_slots_snapshot(quick_slots as Array)
+	else:
+		# v2旧档的快捷栏只是背包物品ID引用。首次恢复时把对应整组物品
+		# 原子迁入真实快捷槽，避免新旧模型同时拥有同一件物品。
+		var legacy_quick_ids := snapshot.get("quick_item_ids", ["", ""]) as Array
+		for quick_index in mini(2, legacy_quick_ids.size()):
+			var item_id := str(legacy_quick_ids[quick_index])
+			var source_slot := _find_inventory_item_slot(item_id)
+			if source_slot >= 0:
+				_move_inventory_item_to_quick(source_slot, quick_index)
+	_sync_quick_item_ids()
 	_room_key_count = maxi(0, int(snapshot.get("room_key_count", 1)))
 	_run_value = maxi(0, int(snapshot.get("run_value", 0)))
 	_kills = maxi(0, int(snapshot.get("kills", 0)))
@@ -418,7 +451,7 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	player.current_hp = clampi(int(snapshot.get("player_hp", player.current_hp)), 1, player.max_hp)
 	player.hp_changed.emit(player.current_hp, player.max_hp)
 	if _inventory_ui != null:
-		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
 	_refresh_loot_label()
 
@@ -560,7 +593,26 @@ func _setup_run_modules() -> void:
 	GameManager.currency_changed.emit(0)
 	_inventory = InventoryModule.new(BASE_INVENTORY_CAPACITY)
 	_insurance = InsuranceModule.new(2)
+	_quick_inventory = InventoryModule.new(2)
 	_death_settlement = DeathSettlementModule.new()
+	if not test_mode and BaseManager != null and _accepts_pending_insurance_return_at_spawn():
+		var pending_insurance := BaseManager.get_pending_insurance_slots()
+		if not pending_insurance.is_empty():
+			var restored_slots: Array[Dictionary] = []
+			restored_slots.resize(_insurance.get_max_slots())
+			for index in restored_slots.size():
+				restored_slots[index] = {}
+			for entry in pending_insurance:
+				var target_index := clampi(
+					int(entry.get("insurance_slot", 0)), 0, restored_slots.size() - 1
+				)
+				if not restored_slots[target_index].is_empty():
+					target_index = restored_slots.find({})
+				if target_index < 0:
+					break
+				restored_slots[target_index] = (entry as Dictionary).duplicate(true)
+			_insurance.restore_slots_snapshot(restored_slots)
+			_pending_insurance_return_restore = _insurance.get_used_slots() > 0
 	_loot_module = LootModule.new()
 	_loot_module.set_seed(run_seed ^ 0x4C4F4F54)
 	_monster_injector = MonsterInjector.new()
@@ -584,11 +636,13 @@ func _setup_run_modules() -> void:
 	$HUD.add_child(_inventory_ui)
 	_inventory_ui.set_inventory_module(_inventory)
 	_inventory_ui.set_insurance_module(_insurance)
+	_inventory_ui.set_quick_item_module(_quick_inventory)
 	_inventory_ui.set_weapon_tree(player.get_weapon_tree())
 	_inventory_ui.set_weapon_owner(player)
 	_inventory_ui.set_backpack_owner(self)
 	_inventory_ui.set_world_drop_handler(_drop_inventory_item_to_world)
 	_inventory_ui.item_to_insurance_requested.connect(_on_insure_item_requested)
+	_inventory_ui.item_to_insurance_slot_requested.connect(_on_insure_item_to_slot_requested)
 	_inventory_ui.item_extraction_requested.connect(_on_claim_insurance_requested)
 	_inventory_ui.insurance_item_move_requested.connect(_on_insurance_item_move_requested)
 	_inventory_ui.item_clicked.connect(_on_inventory_item_clicked)
@@ -598,11 +652,15 @@ func _setup_run_modules() -> void:
 	_inventory_ui.equipped_weapon_drop_requested.connect(_on_equipped_weapon_drop_requested)
 	_inventory_ui.attachment_slot_install_requested.connect(_on_attachment_slot_install_requested)
 	_inventory_ui.attachment_slot_remove_requested.connect(_on_attachment_slot_remove_requested)
+	_inventory_ui.attachment_slot_drop_requested.connect(_on_attachment_slot_drop_requested)
 	_inventory_ui.backpack_slot_equip_requested.connect(_on_backpack_slot_equip_requested)
 	_inventory_ui.equipped_backpack_to_inventory_requested.connect(_on_equipped_backpack_to_inventory_requested)
 	_inventory_ui.equipped_backpack_drop_requested.connect(_on_equipped_backpack_drop_requested)
 	_inventory_ui.quick_item_assignment_requested.connect(_on_quick_item_assignment_requested)
-	_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+	_inventory_ui.inventory_item_to_quick_requested.connect(_on_inventory_item_to_quick_requested)
+	_inventory_ui.quick_item_move_requested.connect(_on_quick_item_move_requested)
+	_inventory_ui.quick_item_use_requested.connect(_use_quick_item)
+	_sync_quick_item_state()
 	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
@@ -614,6 +672,10 @@ func _setup_run_modules() -> void:
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
+
+
+func _accepts_pending_insurance_return_at_spawn() -> bool:
+	return false
 
 
 func _install_holographic_hud_style() -> void:
@@ -2210,7 +2272,12 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	status_label.text = "搜索完成 · 1 件物资落地"
 
 
-func _spawn_loot_items(room: DungeonRoom3D, items: Array[Dictionary], world_position: Vector3) -> void:
+func _spawn_loot_items(
+	room: DungeonRoom3D,
+	items: Array[Dictionary],
+	world_position: Vector3,
+	pickup_grace_seconds: float = 0.0
+) -> void:
 	for index in range(items.size()):
 		var item := items[index].duplicate(true)
 		if not bool(item.get("is_currency", false)):
@@ -2218,6 +2285,7 @@ func _spawn_loot_items(room: DungeonRoom3D, items: Array[Dictionary], world_posi
 		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
 		var color := ItemModelFactory3D.get_item_color(item)
 		pickup.configure(item, color)
+		pickup.set_pickup_grace_seconds(pickup_grace_seconds)
 		room.add_child(pickup)
 		var angle := float(index) * 2.1 + 0.45
 		var requested_position := (
@@ -2273,7 +2341,8 @@ func _drop_inventory_item_to_world(item: Dictionary, count: int) -> bool:
 	_spawn_loot_items(
 		room,
 		[dropped],
-		player.global_position + player.aim_direction * 1.55 + Vector3(0.0, 0.08, 0.0)
+		player.global_position + player.aim_direction * 1.55 + Vector3(0.0, 0.08, 0.0),
+		0.65
 	)
 	var identity := ""
 	if str(dropped.get("type", "")) == "weapon":
@@ -3374,6 +3443,11 @@ func _on_insure_item_requested(slot_index: int) -> void:
 		status_label.text = "保险格已满或物品无效"
 
 
+func _on_insure_item_to_slot_requested(source_slot_index: int, insurance_slot_index: int) -> void:
+	if not _insurance.insure_item_to_slot(_inventory, source_slot_index, insurance_slot_index):
+		status_label.text = "目标保险格不可用或物品无效"
+
+
 func _on_claim_insurance_requested(slot_index: int) -> void:
 	var item := _insurance.claim_item(slot_index)
 	if item.is_empty():
@@ -3393,6 +3467,7 @@ func _on_insurance_item_move_requested(
 	# 保险双快照；目标操作失败时恢复两个集合，避免丢失或复制。
 	var inventory_before := _inventory.get_slots_snapshot()
 	var insurance_before := _insurance.get_slots_snapshot()
+	var quick_before := _quick_inventory.get_slots_snapshot()
 	var item := _insurance.claim_item(insurance_slot_index)
 	if item.is_empty():
 		return
@@ -3404,9 +3479,17 @@ func _on_insurance_item_move_requested(
 		"drop":
 			moved = _drop_inventory_item_to_world(item, count)
 		"quick_0", "quick_1":
-			moved = _inventory.add_item(item, count) == count
-			if moved:
-				_on_quick_item_assignment_requested(int(target_kind.trim_prefix("quick_")), str(item.get("id", "")))
+			var quick_index := int(target_kind.trim_prefix("quick_"))
+			var previous := _quick_inventory.get_slot(quick_index)
+			if not previous.is_empty():
+				_quick_inventory.clear_slot(quick_index)
+			moved = _quick_inventory.put_item_in_empty_slot(quick_index, item, count)
+			if moved and not previous.is_empty():
+				moved = _insurance.insure_item_direct(
+					(previous.get("item", {}) as Dictionary).merged(
+						{"count": int(previous.get("count", 1))}, true
+					)
+				)
 		"weapon_0", "weapon_1", "backpack":
 			var staging_slot := _find_empty_inventory_slot()
 			if staging_slot >= 0 and _inventory.put_item_in_empty_slot(staging_slot, item, count):
@@ -3423,8 +3506,10 @@ func _on_insurance_item_move_requested(
 					staging_slot, item, int(parts[1]), int(parts[2])
 				)
 	if moved:
+		_sync_quick_item_state()
 		return
 	_inventory.restore_slots_snapshot(inventory_before)
+	_quick_inventory.restore_slots_snapshot(quick_before)
 	_insurance.restore_slots_snapshot(insurance_before)
 	status_label.text = "移动失败，物品仍保留在保险格"
 
@@ -3509,6 +3594,35 @@ func _on_attachment_slot_remove_requested(
 	weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int
 ) -> void:
 	_remove_attachment_to_inventory(weapon_slot_index, attachment_slot_type, target_slot_index)
+
+
+func _on_attachment_slot_drop_requested(weapon_slot_index: int, attachment_slot_type: int) -> void:
+	if player == null or not player.has_method("remove_attachment_from_weapon_slot"):
+		return
+	var result := player.call(
+		"remove_attachment_from_weapon_slot", weapon_slot_index, attachment_slot_type
+	) as Dictionary
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("reason", "配件拆卸失败"))
+		return
+	var removed_item := result.get("removed_item", {}) as Dictionary
+	if _drop_inventory_item_to_world(removed_item, 1):
+		status_label.text = "已从%s拆下并丢弃%s" % [
+			"主武器" if weapon_slot_index == 0 else "副武器",
+			removed_item.get("name", "配件"),
+		]
+		return
+	var rollback := player.call(
+		"install_attachment_item_to_weapon_slot",
+		removed_item,
+		weapon_slot_index,
+		attachment_slot_type
+	) as Dictionary
+	status_label.text = (
+		"丢弃失败，配件已恢复到原枪"
+		if bool(rollback.get("success", false))
+		else "配件丢弃事务异常：恢复失败"
+	)
 
 
 func get_equipped_backpack_item() -> Dictionary:
@@ -3639,37 +3753,133 @@ func _emit_backpack_equipment_changed() -> void:
 
 
 func _on_quick_item_assignment_requested(quick_slot_index: int, item_id: String) -> void:
-	if quick_slot_index < 0 or quick_slot_index >= _quick_item_ids.size():
-		return
-	var item := ItemRegistry.get_instance().get_item(item_id)
-	if item.is_empty() or str(item.get("use_action", "")).is_empty():
+	# 兼容旧调用与旧测试：ID引用不再作为正式所有权，只用于定位背包
+	# 中的真实物品组并迁入快捷槽。
+	var source_slot := _find_inventory_item_slot(item_id)
+	if source_slot < 0 or not _move_inventory_item_to_quick(source_slot, quick_slot_index):
+		status_label.text = "背包中没有可移动到快捷栏的%s" % item_id
+
+
+func _on_inventory_item_to_quick_requested(source_slot_index: int, quick_slot_index: int) -> void:
+	_move_inventory_item_to_quick(source_slot_index, quick_slot_index)
+
+
+func _move_inventory_item_to_quick(source_slot_index: int, quick_slot_index: int) -> bool:
+	if quick_slot_index < 0 or quick_slot_index >= _quick_inventory.get_capacity():
+		return false
+	var source := _inventory.get_slot(source_slot_index)
+	if source.is_empty():
+		return false
+	var item := source.get("item", {}) as Dictionary
+	if str(item.get("use_action", "")).is_empty():
 		status_label.text = "该物品不能主动使用，无法放入快捷栏"
+		return false
+	var inventory_before := _inventory.get_slots_snapshot()
+	var quick_before := _quick_inventory.get_slots_snapshot()
+	var previous := _quick_inventory.get_slot(quick_slot_index)
+	_inventory.clear_slot(source_slot_index)
+	if not previous.is_empty():
+		_quick_inventory.clear_slot(quick_slot_index)
+	var moved := _quick_inventory.put_item_in_empty_slot(
+		quick_slot_index, item, int(source.get("count", 1))
+	)
+	if moved and not previous.is_empty():
+		moved = _inventory.put_item_in_empty_slot(
+			source_slot_index,
+			previous.get("item", {}) as Dictionary,
+			int(previous.get("count", 1))
+		)
+	if not moved:
+		_inventory.restore_slots_snapshot(inventory_before)
+		_quick_inventory.restore_slots_snapshot(quick_before)
+		status_label.text = "快捷栏移动失败，物品已回滚"
+		return false
+	_sync_quick_item_state()
+	status_label.text = "已将%s移动到快捷键%d" % [item.get("name", "物品"), quick_slot_index + 3]
+	return true
+
+
+func _on_quick_item_move_requested(
+	source_quick_index: int, target_index: int, target_kind: String
+) -> void:
+	var source := _quick_inventory.get_slot(source_quick_index)
+	if source.is_empty():
 		return
-	_quick_item_ids[quick_slot_index] = item_id
-	_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+	var quick_before := _quick_inventory.get_slots_snapshot()
+	var inventory_before := _inventory.get_slots_snapshot()
+	var insurance_before := _insurance.get_slots_snapshot()
+	var item := source.get("item", {}) as Dictionary
+	var count := int(source.get("count", 1))
+	var moved := false
+	match target_kind:
+		"inventory":
+			if _inventory.get_slot(target_index).is_empty():
+				_quick_inventory.clear_slot(source_quick_index)
+				moved = _inventory.put_item_in_empty_slot(target_index, item, count)
+		"quick_0", "quick_1":
+			var target_quick_index := int(target_kind.trim_prefix("quick_"))
+			if target_quick_index == source_quick_index:
+				moved = true
+			else:
+				moved = _quick_inventory.move_or_swap_slots(source_quick_index, target_quick_index)
+		"insurance":
+			moved = _insurance.insure_item_to_slot(
+				_quick_inventory, source_quick_index, target_index
+			)
+		"drop":
+			_quick_inventory.clear_slot(source_quick_index)
+			moved = _drop_inventory_item_to_world(item, count)
+	if not moved:
+		_inventory.restore_slots_snapshot(inventory_before)
+		_quick_inventory.restore_slots_snapshot(quick_before)
+		_insurance.restore_slots_snapshot(insurance_before)
+		status_label.text = "快捷物品移动失败，已恢复原位置"
+		return
+	_sync_quick_item_state()
+
+
+func _sync_quick_item_ids() -> void:
+	_quick_item_ids = ["", ""]
+	for quick_index in range(2):
+		var slot := _quick_inventory.get_slot(quick_index)
+		if not slot.is_empty():
+			_quick_item_ids[quick_index] = str((slot.get("item", {}) as Dictionary).get("id", ""))
+
+
+func _sync_quick_item_state() -> void:
+	_sync_quick_item_ids()
+	if _inventory_ui != null:
+		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
-	status_label.text = "已将%s绑定到快捷键%d" % [item.get("name", item_id), quick_slot_index + 3]
+
+
+func _find_inventory_item_slot(item_id: String) -> int:
+	if item_id.is_empty():
+		return -1
+	for entry in _inventory.get_occupied_slots():
+		if str((entry.get("item", {}) as Dictionary).get("id", "")) == item_id:
+			return int(entry.get("slot", -1))
+	return -1
 
 
 func _use_quick_item(quick_slot_index: int) -> bool:
-	if quick_slot_index < 0 or quick_slot_index >= _quick_item_ids.size():
+	if quick_slot_index < 0 or quick_slot_index >= _quick_inventory.get_capacity():
 		return false
-	var item_id := _quick_item_ids[quick_slot_index]
-	if item_id.is_empty():
-		status_label.text = "快捷栏%d尚未绑定物品" % (quick_slot_index + 3)
+	var slot := _quick_inventory.get_slot(quick_slot_index)
+	if slot.is_empty():
+		status_label.text = "快捷栏%d没有物品" % (quick_slot_index + 3)
 		return false
-	if _inventory.get_item_count(item_id) <= 0:
-		status_label.text = "快捷栏%d物品已用完" % (quick_slot_index + 3)
-		return false
-	var item := ItemRegistry.get_instance().get_item(item_id)
+	var item := slot.get("item", {}) as Dictionary
 	var handler := ItemUseHandler.new()
 	var applied := handler.apply(item, {"player": player, "extraction_director": self})
 	handler.free()
 	if not applied:
 		status_label.text = "%s当前无法使用" % item.get("name", "物品")
 		return false
-	_inventory.consume_item(item_id, 1)
-	_refresh_quick_item_hud()
+	if not _quick_inventory.remove_from_slot(quick_slot_index, 1):
+		status_label.text = "使用结算失败，物品未扣除"
+		return false
+	_sync_quick_item_state()
 	status_label.text = "[%d] 已使用%s" % [quick_slot_index + 3, item.get("name", "物品")]
 	return true
 
@@ -3678,15 +3888,16 @@ func _refresh_quick_item_hud() -> void:
 	if _hud_quick_item_icons.size() < 2 or _hud_quick_item_labels.size() < 2:
 		return
 	for quick_index in range(2):
-		var item_id := _quick_item_ids[quick_index]
-		var count := _inventory.get_item_count(item_id) if _inventory != null and not item_id.is_empty() else 0
-		if item_id.is_empty():
+		var slot := _quick_inventory.get_slot(quick_index) if _quick_inventory != null else {}
+		if slot.is_empty():
 			var empty_icon := _hud_quick_item_icons[quick_index] as ItemModelIcon3D
 			if empty_icon != null:
 				empty_icon.clear_model()
 			_hud_quick_item_labels[quick_index].text = "[%d] 空" % (quick_index + 3)
 			continue
-		var item := ItemRegistry.get_instance().get_item(item_id)
+		var item := slot.get("item", {}) as Dictionary
+		var item_id := str(item.get("id", ""))
+		var count := int(slot.get("count", 1))
 		var quick_icon := _ensure_hud_quick_item_icon(quick_index)
 		if quick_icon != null:
 			quick_icon.configure(item)
@@ -4295,9 +4506,16 @@ func _finish_run(success: bool) -> void:
 	_run_loot = _collect_extracted_items(success)
 	var settlement: Dictionary = {}
 	if success:
-		_death_settlement.process_extraction_settlement(_inventory, _insurance)
+		_death_settlement.process_extraction_settlement(_inventory, _insurance, _quick_inventory)
 	else:
 		settlement = _death_settlement.process_death_settlement(_inventory, _insurance)
+		var quick_settlement := _death_settlement.process_death_settlement(_quick_inventory, null)
+		(settlement.get("dropped", []) as Array).append_array(
+			quick_settlement.get("dropped", []) as Array
+		)
+		settlement["total_lost"] = int(settlement.get("total_lost", 0)) + int(
+			quick_settlement.get("total_lost", 0)
+		)
 		_run_loot = _collect_extracted_items(false)
 	var summary := {
 		"success": success, "kills": _kills, "value": _run_value,
@@ -4357,6 +4575,12 @@ func _collect_extracted_items(include_equipped_weapon := false) -> Array[Diction
 			continue
 		item["count"] = int(slot.get("count", 1))
 		result.append(item)
+	for slot in _quick_inventory.get_occupied_slots():
+		var quick_item := (slot.get("item", {}) as Dictionary).duplicate(true)
+		if quick_item.is_empty():
+			continue
+		quick_item["count"] = int(slot.get("count", 1))
+		result.append(quick_item)
 	for slot in _insurance.get_occupied_slots():
 		var insured := (slot.get("item", {}) as Dictionary).duplicate(true)
 		if insured.is_empty():

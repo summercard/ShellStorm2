@@ -30,15 +30,19 @@ func _ready() -> void:
 	first.call("_on_room_entered", combat_room)
 	combat_room.cleared = true
 	(first.get("_spawned_rooms") as Dictionary)[combat_room.room_id] = true
-	var expected_position := first.player.global_position
 	var expected_layout_id := str(((first.get("_floor_plan_snapshots") as Dictionary).get(2, {}) as Dictionary).get("layout_id", ""))
 	await get_tree().physics_frame
+	# 物理帧会把角色从0.05m初始悬空位置贴到地面；快照保存的是贴地后
+	# 坐标，期望值也必须在同一边界采集。
+	var expected_position := first.player.global_position
 	var inventory := first.get_inventory_module()
 	inventory.clear_all()
 	var backpack := ItemRegistry.get_instance().get_item("equipment_backpack_2")
 	first.player.equip_backpack_item(backpack)
 	inventory.set_capacity(14)
 	inventory.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 2)
+	first.call("_on_quick_item_assignment_requested", 0, "item_health_potion")
+	inventory.add_item(ItemRegistry.get_instance().get_item("item_battery_l"), 2)
 	first.player.clear_all_equipped_weapons()
 	var pistol := ItemRegistry.get_instance().get_item("weapon_pistol")
 	var shotgun := ItemRegistry.get_instance().get_item("weapon_shotgun")
@@ -62,12 +66,25 @@ func _ready() -> void:
 	var second := scene.instantiate() as TowerDescent3D
 	second.test_mode = false
 	add_child(second)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
+	# FloorBundle重建和玩家快照恢复均为deferred链，固定等待3帧在连续
+	# 专项运行时会偶发早一帧取样。最多等待20帧，只等明确恢复条件。
+	for _frame in 20:
+		await get_tree().process_frame
+		if (
+			str(second.get("_current_room_id")) == combat_room_id
+			and _positions_restore_equivalent(second.player.global_position, expected_position)
+		):
+			break
 	var restored_inventory := second.get_inventory_module()
-	if restored_inventory.get_capacity() != 14 or restored_inventory.get_item_count("item_health_potion") != 2:
+	if restored_inventory.get_capacity() != 14 or restored_inventory.get_item_count("item_battery_l") != 2:
 		failures.append("重建塔楼后背包容量、格位或堆叠没有恢复")
+	var restored_quick := second.get("_quick_inventory") as InventoryModule
+	if (
+		restored_quick == null
+		or restored_quick.get_item_count("item_health_potion") != 2
+		or restored_inventory.has_item("item_health_potion")
+	):
+		failures.append("快捷栏真实物品、数量或与背包互斥所有权没有跨重启恢复")
 	if second.player.get_equipped_weapon_instance_id_for_slot(0) != expected_main_id:
 		failures.append("主武器稳定实例 ID 没有跨重启恢复")
 	if second.player.get_equipped_weapon_instance_id_for_slot(1) != expected_side_id:
@@ -86,8 +103,11 @@ func _ready() -> void:
 		failures.append("重启后没有按行动种子重新提交98F FloorBundle")
 	elif str(second.get("_current_room_id")) != combat_room_id:
 		failures.append("重启后没有回到保存时的战斗房")
-	elif second.player.global_position.distance_to(expected_position) > 0.05:
-		failures.append("重启后玩家没有恢复到战斗房合法位置")
+	elif not _positions_restore_equivalent(second.player.global_position, expected_position):
+		failures.append("重启后玩家没有恢复到战斗房合法位置 expected=%s actual=%s distance=%.3f" % [
+			str(expected_position), str(second.player.global_position),
+			second.player.global_position.distance_to(expected_position),
+		])
 	if restored_room != null and not restored_room.cleared:
 		failures.append("已清理房间进度没有跨重启恢复")
 	var restored_layout_id := str(((second.get("_floor_plan_snapshots") as Dictionary).get(2, {}) as Dictionary).get("layout_id", ""))
@@ -109,6 +129,15 @@ func _ready() -> void:
 	await _finish(second, original_path, original_data, failures)
 
 
+func _positions_restore_equivalent(actual: Vector3, expected: Vector3) -> bool:
+	# CharacterBody在恢复后的首个物理帧会再贴地约5cm；玩法要求锁定
+	# 水平房间坐标，并允许一个安全的贴地步长。
+	return (
+		Vector2(actual.x, actual.z).distance_to(Vector2(expected.x, expected.z)) <= 0.05
+		and absf(actual.y - expected.y) <= 0.10
+	)
+
+
 func _finish(scene: Node, original_path: String, original_data: BaseData, failures: Array[String]) -> void:
 	if scene != null and is_instance_valid(scene):
 		scene.queue_free()
@@ -117,7 +146,7 @@ func _finish(scene: Node, original_path: String, original_data: BaseData, failur
 	BaseManager.data = original_data
 	_cleanup()
 	if failures.is_empty():
-		print("TOWER_RUNTIME_RESTART_OK: seeded 98F world, room progress, position, inventory, equipment, insurance and flashlight survive restart")
+		print("TOWER_RUNTIME_RESTART_OK: seeded 98F world, room progress, position, inventory, real quick slots, equipment, insurance and flashlight survive restart")
 		get_tree().quit(0)
 		return
 	for failure in failures:

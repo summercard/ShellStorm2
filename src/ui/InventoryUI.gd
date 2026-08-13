@@ -6,6 +6,7 @@ extends Control
 
 signal item_clicked(slot_index: int, item: Dictionary)
 signal item_to_insurance_requested(slot_index: int)
+signal item_to_insurance_slot_requested(source_slot_index: int, insurance_slot_index: int)
 signal item_extraction_requested(slot_index: int)
 signal insurance_item_move_requested(slot_index: int, target_index: int, target_kind: String)
 signal item_dropped_to_world(item: Dictionary, count: int)
@@ -16,7 +17,11 @@ signal equipped_weapon_to_inventory_requested(weapon_slot_index: int, target_slo
 signal equipped_weapon_drop_requested(weapon_slot_index: int)
 signal attachment_slot_install_requested(source_slot_index: int, weapon_slot_index: int, attachment_slot_type: int)
 signal attachment_slot_remove_requested(weapon_slot_index: int, attachment_slot_type: int, target_slot_index: int)
+signal attachment_slot_drop_requested(weapon_slot_index: int, attachment_slot_type: int)
 signal quick_item_assignment_requested(quick_slot_index: int, item_id: String)
+signal inventory_item_to_quick_requested(source_slot_index: int, quick_slot_index: int)
+signal quick_item_move_requested(source_quick_index: int, target_index: int, target_kind: String)
+signal quick_item_use_requested(quick_slot_index: int)
 signal backpack_slot_equip_requested(source_slot_index: int)
 signal equipped_backpack_to_inventory_requested(target_slot_index: int)
 signal equipped_backpack_drop_requested()
@@ -32,6 +37,7 @@ signal equipped_backpack_drop_requested()
 # 两个运行模块均为 RefCounted；保留 Variant 也允许测试替身 Node 注入。
 var _inventory_module = null
 var _insurance_module = null
+var _quick_item_module = null
 var _weapon_tree: WeaponAssemblyTree = null
 var _weapon_owner: Node = null
 var _backpack_owner: Node = null
@@ -538,6 +544,16 @@ func set_insurance_module(module) -> void:
 	_refresh_insurance_ui()
 
 
+func set_quick_item_module(module) -> void:
+	if _quick_item_module != null and _quick_item_module.has_signal("inventory_changed"):
+		if _quick_item_module.inventory_changed.is_connected(_on_quick_item_module_changed):
+			_quick_item_module.inventory_changed.disconnect(_on_quick_item_module_changed)
+	_quick_item_module = module
+	if _quick_item_module != null and _quick_item_module.has_signal("inventory_changed"):
+		_quick_item_module.inventory_changed.connect(_on_quick_item_module_changed)
+	_refresh_quick_item_ui()
+
+
 func set_weapon_tree(tree: WeaponAssemblyTree) -> void:
 	if _weapon_tree != null and _weapon_tree.tree_changed.is_connected(_on_weapon_tree_changed):
 		_weapon_tree.tree_changed.disconnect(_on_weapon_tree_changed)
@@ -685,6 +701,8 @@ func _connect_slot_signals(slot: Control, idx: int, is_inventory: bool) -> void:
 		slot.slot_clicked.connect(_on_slot_clicked.bind(is_inventory))
 	if kind in ["inventory", "insurance"] and slot.has_signal("slot_right_clicked"):
 		slot.slot_right_clicked.connect(_on_slot_right_clicked.bind(is_inventory))
+	if kind.begins_with("quick_") and slot.has_signal("slot_clicked"):
+		slot.slot_clicked.connect(_on_quick_slot_clicked)
 	if slot.has_signal("slot_drop_received"):
 		slot.slot_drop_received.connect(_on_slot_drop_received)
 	if slot.has_signal("slot_drag_ended_outside"):
@@ -828,7 +846,13 @@ func _update_slot_with_item(slot: Control, slot_info: Dictionary) -> void:
 	
 	# 显示叠加数量标签（如果有 ItemSlot 子节点）
 	if slot.has_method("set_slot_index"):
-		slot.set_slot_index(slot_info.get("slot", 0))
+		# 普通背包/快捷/装备使用 slot，保险格使用
+		# insurance_slot。不能在刷新物品外观时把第二保险格
+		# 默认改成0，否则真实点击/拖拽会去操作空的第一格。
+		if slot_info.has("slot"):
+			slot.set_slot_index(int(slot_info.get("slot", 0)))
+		elif slot_info.has("insurance_slot"):
+			slot.set_slot_index(int(slot_info.get("insurance_slot", 0)))
 	if slot.has_node("CountLabel"):
 		var cl: Label = slot.get_node("CountLabel") as Label
 		if count > 1:
@@ -1082,6 +1106,11 @@ func _on_insurance_changed() -> void:
 	inventory_changed.emit()  ## 保险格变化也触发刷新通知
 
 
+func _on_quick_item_module_changed() -> void:
+	_refresh_quick_item_ui()
+	inventory_changed.emit()
+
+
 func _on_weapon_tree_changed() -> void:
 	_refresh_inventory_ui()
 	_refresh_equipment_ui()
@@ -1232,6 +1261,23 @@ func _refresh_backpack_equipment_ui() -> void:
 func _refresh_quick_item_ui() -> void:
 	if quick_item_slots.is_empty():
 		return
+	if _quick_item_module != null:
+		for quick_index in range(quick_item_slots.size()):
+			var slot_data := _quick_item_module.get_slot(quick_index) as Dictionary
+			if slot_data.is_empty():
+				quick_item_ids[quick_index] = ""
+				_clear_slot(quick_item_slots[quick_index])
+				quick_item_slots[quick_index].set_meta("drag_disabled", true)
+				continue
+			var item := slot_data.get("item", {}) as Dictionary
+			quick_item_ids[quick_index] = str(item.get("id", ""))
+			_update_slot_with_item(quick_item_slots[quick_index], {
+				"item": item,
+				"count": int(slot_data.get("count", 1)),
+				"slot": quick_index,
+			})
+			quick_item_slots[quick_index].set_meta("drag_disabled", false)
+		return
 	var registry := ItemRegistry.get_instance()
 	for quick_index in range(quick_item_slots.size()):
 		var item_id := quick_item_ids[quick_index]
@@ -1248,6 +1294,10 @@ func _refresh_quick_item_ui() -> void:
 			"item": item, "count": count, "slot": quick_index,
 		})
 		quick_item_slots[quick_index].set_meta("drag_disabled", true)
+
+
+func _on_quick_slot_clicked(slot_index: int) -> void:
+	quick_item_use_requested.emit(slot_index)
 
 
 func _refresh_run_fate_ui() -> void:
@@ -1357,7 +1407,7 @@ func _position_item_hover_card() -> void:
 
 
 func _on_slot_drag_started(source_index: int, source_kind: String, item: Dictionary) -> void:
-	if source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack":
+	if source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("quick_") and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack":
 		return
 	_drag_feedback_active = true
 	_hovered_item_slot = null
@@ -1368,11 +1418,14 @@ func _on_slot_drag_started(source_index: int, source_kind: String, item: Diction
 	for index in _insurance_slots.size():
 		if _insurance_slots[index].has_method("set_drag_feedback"):
 			_insurance_slots[index].call("set_drag_feedback", true, source_kind == "insurance" and index == source_index, item, source_kind)
+	for index in quick_item_slots.size():
+		if quick_item_slots[index].has_method("set_drag_feedback"):
+			quick_item_slots[index].call("set_drag_feedback", true, source_kind == "quick_%d" % index, item, source_kind)
 	for target in _equipment_drop_targets():
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", true, (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and str(target.get_meta("slot_kind", "")) == source_kind, item, source_kind)
 	if drag_status_panel != null and drag_status_label != null:
-		drag_status_label.text = "正在移动「%s」　蓝框入包 · 绿框装备 · 红框丢弃" % item.get("name", "保险物品") if source_kind == "insurance" else (
+		drag_status_label.text = "正在移动「%s」　蓝框入包 · 金框保险 · 红框丢弃" % item.get("name", "快捷物品") if source_kind.begins_with("quick_") else "正在移动「%s」　蓝框入包 · 绿框装备 · 红框丢弃" % item.get("name", "保险物品") if source_kind == "insurance" else (
 			"正在卸下「%s」　蓝框入包 · 红框丢弃" % item.get("name", "武器")
 			if source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack"
 			else "正在拖拽「%s」　蓝框换位 · 金框保险 · 绿框装备 · 红框丢弃" % item.get("name", "物品")
@@ -1389,6 +1442,9 @@ func _on_slot_drag_finished(_source_index: int, _source_kind: String, _successfu
 	for slot in _insurance_slots:
 		if slot.has_method("set_drag_feedback"):
 			slot.call("set_drag_feedback", false, false, {}, "inventory")
+	for slot in quick_item_slots:
+		if slot.has_method("set_drag_feedback"):
+			slot.call("set_drag_feedback", false, false, {}, "inventory")
 	for target in _equipment_drop_targets():
 		if target != null and target.has_method("set_drag_feedback"):
 			target.call("set_drag_feedback", false, false, {}, "inventory")
@@ -1402,7 +1458,13 @@ func _on_slot_drop_received(
 	source_kind: String,
 	target_kind: String
 ) -> void:
-	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or _inventory_module == null:
+	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("quick_") and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or _inventory_module == null:
+		return
+	if source_kind.begins_with("quick_"):
+		quick_item_move_requested.emit(int(source_kind.trim_prefix("quick_")), target_index, target_kind)
+		_refresh_inventory_ui()
+		_refresh_insurance_ui()
+		_refresh_quick_item_ui()
 		return
 	if source_kind == "insurance":
 		# 保险槽索引属于独立集合，交给玩法层完成带快照的所有权事务，
@@ -1416,6 +1478,10 @@ func _on_slot_drop_received(
 			var parts := source_kind.split("_")
 			if parts.size() >= 3:
 				attachment_slot_remove_requested.emit(int(parts[1]), int(parts[2]), target_index)
+		elif target_kind == "drop":
+			var parts := source_kind.split("_")
+			if parts.size() >= 3:
+				attachment_slot_drop_requested.emit(int(parts[1]), int(parts[2]))
 		_refresh_inventory_ui()
 		_refresh_equipment_ui()
 		return
@@ -1460,9 +1526,9 @@ func _on_slot_drop_received(
 			var source: Dictionary = _inventory_module.get_slot(source_index)
 			var item := source.get("item", {}) as Dictionary
 			if not item.is_empty() and not str(item.get("use_action", "")).is_empty():
-				quick_item_assignment_requested.emit(int(target_kind.trim_prefix("quick_")), str(item.get("id", "")))
+				inventory_item_to_quick_requested.emit(source_index, int(target_kind.trim_prefix("quick_")))
 		"insurance":
-			item_to_insurance_requested.emit(source_index)
+			item_to_insurance_slot_requested.emit(source_index, target_index)
 		"drop":
 			_drop_inventory_slot_to_world(source_index)
 	_refresh_inventory_ui()
@@ -1470,16 +1536,20 @@ func _on_slot_drop_received(
 
 
 func _on_slot_drag_ended_outside(source_index: int, source_kind: String) -> void:
-	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or inventory_shell == null:
+	if (source_kind != "inventory" and source_kind != "insurance" and not source_kind.begins_with("quick_") and not source_kind.begins_with("weapon_") and not source_kind.begins_with("attachment_") and source_kind != "backpack") or inventory_shell == null:
 		return
 	if inventory_shell.get_global_rect().has_point(get_viewport().get_mouse_position()):
 		return
 	if source_kind == "insurance":
 		insurance_item_move_requested.emit(source_index, -1, "drop")
+	elif source_kind.begins_with("quick_"):
+		quick_item_move_requested.emit(int(source_kind.trim_prefix("quick_")), -1, "drop")
 	elif source_kind.begins_with("weapon_"):
 		equipped_weapon_drop_requested.emit(int(source_kind.trim_prefix("weapon_")))
 	elif source_kind.begins_with("attachment_"):
-		return
+		var parts := source_kind.split("_")
+		if parts.size() >= 3:
+			attachment_slot_drop_requested.emit(int(parts[1]), int(parts[2]))
 	elif source_kind == "backpack":
 		equipped_backpack_drop_requested.emit()
 	else:
@@ -1494,7 +1564,6 @@ func _equipment_drop_targets() -> Array[Control]:
 			targets.append(slot as Control)
 	if equipment_backpack_slot != null:
 		targets.append(equipment_backpack_slot)
-	targets.append_array(quick_item_slots)
 	if drop_zone != null:
 		targets.append(drop_zone)
 	return targets

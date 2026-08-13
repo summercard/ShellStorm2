@@ -74,7 +74,9 @@ func process_death_settlement(inventory: InventoryModule, insurance: InsuranceMo
 ## 处理撤离成功结算
 ## 撤离成功后：背包所有物品安全带出，保险格物品也带出
 ## 返回带出的物品总数
-func process_extraction_settlement(inventory: InventoryModule, insurance: InsuranceModule) -> int:
+func process_extraction_settlement(
+	inventory: InventoryModule, insurance: InsuranceModule, quick_inventory: InventoryModule = null
+) -> int:
 	var extracted_count: int = 0
 	
 	if inventory != null:
@@ -82,6 +84,9 @@ func process_extraction_settlement(inventory: InventoryModule, insurance: Insura
 	
 	if insurance != null:
 		extracted_count += insurance.get_used_slots()
+
+	if quick_inventory != null:
+		extracted_count += quick_inventory.get_used_slots()
 	
 	return extracted_count
 

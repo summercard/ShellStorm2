@@ -214,6 +214,12 @@ func _verify_blueprint_and_consumable_routing(
 	dungeon.call("_on_inventory_item_clicked", _find_slot(inventory, "item_health_potion"), {})
 	if not inventory.has_item("item_health_potion"):
 		failures.append("Healing consumable was wasted while player HP was already full")
+	dungeon.player.current_hp = 40
+	dungeon.player.hp_changed.emit(40, dungeon.player.max_hp)
+	var potion_before := inventory.get_item_count("item_health_potion")
+	dungeon.call("_on_inventory_item_clicked", _find_slot(inventory, "item_health_potion"), {})
+	if dungeon.player.current_hp <= 40 or inventory.get_item_count("item_health_potion") != potion_before - 1:
+		failures.append("Successful backpack consumable use did not apply effect and consume exactly one item")
 
 
 func _find_slot(inventory: InventoryModule, item_id: String) -> int:

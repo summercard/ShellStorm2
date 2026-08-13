@@ -14,8 +14,9 @@ func _ready() -> void:
 	var ui := dungeon.get("_inventory_ui") as InventoryUI
 	var inventory := dungeon.get("_inventory") as InventoryModule
 	var insurance := dungeon.get("_insurance") as InsuranceModule
-	_check(ui != null and inventory != null and insurance != null, "Formal dungeon did not create tactical inventory/insurance UI", failures)
-	if ui == null or inventory == null or insurance == null:
+	var quick_inventory := dungeon.get("_quick_inventory") as InventoryModule
+	_check(ui != null and inventory != null and insurance != null and quick_inventory != null, "Formal dungeon did not create tactical inventory/insurance/quick UI", failures)
+	if ui == null or inventory == null or insurance == null or quick_inventory == null:
 		_finish(failures)
 		return
 	ui.set_inventory_panel_open(true)
@@ -32,6 +33,47 @@ func _ready() -> void:
 		"Main/secondary weapon equipment targets are missing", failures
 	)
 	_check(ui.quick_item_slots.size() == 2, "Two inventory quick-item targets are missing", failures)
+	_verify_ui_slot_index_contract(ui, failures)
+
+	# 真实玩家存档的小型电池位于第二保险格。这里不直接调
+	# Dungeon3D移动函数，而是使用真实ItemSlot保存的索引、
+	# drag_payload、_can_drop_data和_drop_data信号链，防止UI索引错误再被绕过。
+	var real_slot_battery := ItemRegistry.get_instance().get_item("item_battery_s")
+	_check(inventory.add_item(real_slot_battery, 1) == 1, "Cannot seed real-slot battery", failures)
+	var real_slot_source := _find_item_slot(inventory, "item_battery_s")
+	_check(
+		insurance.insure_item_to_slot(inventory, real_slot_source, 1),
+		"Cannot seed small battery into insurance slot 1", failures
+	)
+	await get_tree().process_frame
+	var real_slot_target := _find_empty_slot(inventory)
+	_check(
+		int(ui._insurance_slots[1].get("slot_index")) == 1,
+		"Insurance slot 1 UI was rewritten to slot 0 during refresh", failures
+	)
+	_check(
+		_drag_between_real_slots(ui._insurance_slots[1], ui._slots[real_slot_target]),
+		"Real insurance-slot-1 drag is rejected by the backpack target", failures
+	)
+	_check(
+		insurance.get_slots_snapshot()[1].is_empty()
+		and str((inventory.get_slot(real_slot_target).get("item", {}) as Dictionary).get("id", "")) == "item_battery_s",
+		"Small battery did not leave real insurance slot 1 for the selected backpack slot", failures
+	)
+	_check(
+		_drag_between_real_slots(ui._slots[real_slot_target], ui._insurance_slots[1]),
+		"Small battery could not be returned to real insurance slot 1", failures
+	)
+	ui._insurance_slots[1].emit_signal(
+		"slot_right_clicked", int(ui._insurance_slots[1].get("slot_index"))
+	)
+	_check(
+		insurance.get_slots_snapshot()[1].is_empty() and inventory.has_item("item_battery_s"),
+		"Right-click on real insurance slot 1 did not return the small battery", failures
+	)
+	var real_slot_cleanup := _find_item_slot(inventory, "item_battery_s")
+	if real_slot_cleanup >= 0:
+		inventory.clear_slot(real_slot_cleanup)
 
 	var hp_bar := dungeon.get_node("HUD/TopBar/Margin/HBox/HPBar") as ProgressBar
 	var hp_fill := hp_bar.get_theme_stylebox("fill") as StyleBoxFlat
@@ -91,7 +133,10 @@ func _ready() -> void:
 		and bool(ui._insurance_slots[0].call("_can_drop_data", Vector2.ZERO, inventory_to_insurance)),
 		"Empty insurance slot rejects backpack drag", failures
 	)
-	ui.call("_on_slot_drop_received", insured_source_slot, 0, "inventory", "insurance")
+	_check(
+		_drag_between_real_slots(ui._slots[insured_source_slot], ui._insurance_slots[0]),
+		"Real backpack-to-insurance drag signal was rejected", failures
+	)
 	_check(insurance.has_item("item_battery_l") and not inventory.has_item("item_battery_l"), "Backpack drag did not transfer ownership into insurance", failures)
 
 	var insurance_to_inventory := {
@@ -106,7 +151,10 @@ func _ready() -> void:
 		and bool(ui._slots[empty_inventory_slot].call("_can_drop_data", Vector2.ZERO, insurance_to_inventory)),
 		"Empty backpack slot rejects insurance-item return drag", failures
 	)
-	ui.call("_on_slot_drop_received", 0, empty_inventory_slot, "insurance", "inventory")
+	_check(
+		_drag_between_real_slots(ui._insurance_slots[0], ui._slots[empty_inventory_slot]),
+		"Real insurance-to-backpack drag signal was rejected", failures
+	)
 	_check(not insurance.has_item("item_battery_l") and inventory.has_item("item_battery_l"), "Insurance return drag lost or duplicated ownership", failures)
 
 	var battery_slot := _find_item_slot(inventory, "item_battery_l")
@@ -117,7 +165,7 @@ func _ready() -> void:
 		"source_kind": "insurance",
 		"item": insured_item,
 	}
-	var insurance_drop_room := dungeon.get("_room_by_id").get("start") as DungeonRoom3D
+	var insurance_drop_room := _get_current_room(dungeon)
 	var insurance_pickups_before := insurance_drop_room.find_children("*", "GroundLootPickup3D", true, false).size()
 	_check(
 		bool(ui.drop_zone.call("_can_drop_data", Vector2.ZERO, insured_battery_payload)),
@@ -145,7 +193,10 @@ func _ready() -> void:
 		bool(ui.equipment_weapon_slots[1].call("_can_drop_data", Vector2.ZERO, insured_weapon_payload)),
 		"Compatible insured weapon is blocked from the equipment slot", failures
 	)
-	ui.call("_on_slot_drop_received", 0, 1, "insurance", "weapon_1")
+	_check(
+		_drag_between_real_slots(ui._insurance_slots[0], ui.equipment_weapon_slots[1]),
+		"Real insurance-to-secondary-weapon drag signal was rejected", failures
+	)
 	var equipped_secondary := dungeon.player.get_equipped_weapon_instance_for_slot(1)
 	_check(
 		equipped_secondary != null
@@ -166,23 +217,148 @@ func _ready() -> void:
 		bool(ui.quick_item_slots[0].call("_can_drop_data", Vector2.ZERO, insured_quick_payload)),
 		"Usable insured item is blocked from the quick slot", failures
 	)
-	ui.call("_on_slot_drop_received", 0, 0, "insurance", "quick_0")
 	_check(
-		inventory.has_item("item_health_potion")
+		_drag_between_real_slots(ui._insurance_slots[0], ui.quick_item_slots[0]),
+		"Real insurance-to-quick drag signal was rejected", failures
+	)
+	_check(
+		str((quick_inventory.get_slot(0).get("item", {}) as Dictionary).get("id", "")) == "item_health_potion"
+		and not inventory.has_item("item_health_potion")
 		and str((dungeon.get("_quick_item_ids") as Array)[0]) == "item_health_potion"
 		and insurance.get_used_slots() == 0,
-		"Insured usable item did not enter backpack and bind to the quick slot", failures
+		"Insured usable item did not move into the exact quick slot", failures
+	)
+	dungeon.player.current_hp = 40
+	dungeon.player.hp_changed.emit(40, dungeon.player.max_hp)
+	ui.quick_item_slots[0].emit_signal("slot_clicked", 0)
+	_check(
+		dungeon.player.current_hp > 40 and quick_inventory.get_slot(0).is_empty(),
+		"Clicking the inventory quick slot did not apply and consume its real item", failures
 	)
 
-	var medkit := ItemRegistry.get_instance().get_item("item_health_potion")
-	_check(inventory.add_item(medkit, 1) == 1, "Cannot seed droppable item", failures)
-	var medkit_slot := _find_item_slot(inventory, "item_health_potion")
-	var room := dungeon.get("_room_by_id").get("start") as DungeonRoom3D
+	var quick_return_item := ItemRegistry.get_instance().get_item("item_battery_s")
+	_check(inventory.add_item(quick_return_item, 2) == 2, "Cannot seed quick return item", failures)
+	var quick_return_source := _find_item_slot(inventory, "item_battery_s")
+	_check(
+		_drag_between_real_slots(ui._slots[quick_return_source], ui.quick_item_slots[1]),
+		"Real backpack-to-quick drag signal was rejected", failures
+	)
+	_check(
+		str((quick_inventory.get_slot(1).get("item", {}) as Dictionary).get("id", "")) == "item_battery_s"
+		and int(quick_inventory.get_slot(1).get("count", 0)) == 2
+		and not inventory.has_item("item_battery_s"),
+		"Inventory item landed in the wrong quick slot or remained duplicated in backpack", failures
+	)
+	var quick_return_target := _find_empty_slot(inventory)
+	var quick_return_payload := {
+		"inventory_drag": true,
+		"source_index": 1,
+		"source_kind": "quick_1",
+		"item": quick_return_item,
+	}
+	_check(
+		bool(ui._slots[quick_return_target].call("_can_drop_data", Vector2.ZERO, quick_return_payload)),
+		"Quick item cannot be dragged back to an empty backpack slot", failures
+	)
+	_check(
+		_drag_between_real_slots(ui.quick_item_slots[1], ui._slots[quick_return_target]),
+		"Real quick-to-backpack drag signal was rejected", failures
+	)
+	_check(
+		quick_inventory.get_slot(1).is_empty()
+		and str((inventory.get_slot(quick_return_target).get("item", {}) as Dictionary).get("id", "")) == "item_battery_s"
+		and int(inventory.get_slot(quick_return_target).get("count", 0)) == 2,
+		"Quick item did not return to the requested backpack position with its full count", failures
+	)
+
+	_check(
+		_drag_between_real_slots(ui._slots[quick_return_target], ui.quick_item_slots[1]),
+		"Real backpack-to-quick return drag signal was rejected", failures
+	)
+	var quick_to_insurance_payload := {
+		"inventory_drag": true,
+		"source_index": 1,
+		"source_kind": "quick_1",
+		"item": quick_return_item,
+	}
+	_check(
+		bool(ui._insurance_slots[0].call("_can_drop_data", Vector2.ZERO, quick_to_insurance_payload)),
+		"Quick item cannot move into an empty insurance slot", failures
+	)
+	_check(
+		_drag_between_real_slots(ui.quick_item_slots[1], ui._insurance_slots[0]),
+		"Real quick-to-insurance drag signal was rejected", failures
+	)
+	_check(
+		quick_inventory.get_slot(1).is_empty()
+		and insurance.has_item("item_battery_s"),
+		"Quick item did not move into insurance with unique ownership", failures
+	)
+	_check(
+		_drag_between_real_slots(ui._insurance_slots[0], ui.quick_item_slots[0]),
+		"Real insurance-to-quick return drag signal was rejected", failures
+	)
+	var quick_drop_room := _get_current_room(dungeon)
+	var quick_drop_before := quick_drop_room.find_children("*", "GroundLootPickup3D", true, false).size()
+	_check(
+		_drag_between_real_slots(ui.quick_item_slots[0], ui.drop_zone),
+		"Real quick-to-world-drop signal was rejected", failures
+	)
+	var quick_drop_after := quick_drop_room.find_children("*", "GroundLootPickup3D", true, false).size()
+	_check(
+		quick_inventory.get_slot(0).is_empty()
+		and not insurance.has_item("item_battery_s")
+		and quick_drop_after == quick_drop_before + 1,
+		"Quick item did not leave the slot and become a current-room drop", failures
+	)
+
+	var targeted_insurance_item := ItemRegistry.get_instance().get_item("item_cell_pack")
+	_check(inventory.add_item(targeted_insurance_item, 1) == 1, "Cannot seed targeted insurance item", failures)
+	var targeted_insurance_source := _find_item_slot(inventory, "item_cell_pack")
+	_check(
+		_drag_between_real_slots(ui._slots[targeted_insurance_source], ui._insurance_slots[1]),
+		"Real backpack-to-exact-insurance-slot drag signal was rejected", failures
+	)
+	var targeted_insurance_snapshot := insurance.get_slots_snapshot()
+	_check(
+		targeted_insurance_snapshot[0].is_empty()
+		and str(((targeted_insurance_snapshot[1] as Dictionary).get("item", {}) as Dictionary).get("id", "")) == "item_cell_pack",
+		"Inventory item did not land in the exact insurance slot targeted by the drag", failures
+	)
+	var targeted_return_slot := _find_empty_slot(inventory)
+	_check(
+		_drag_between_real_slots(ui._insurance_slots[1], ui._slots[targeted_return_slot]),
+		"Real insurance-slot-1 return drag signal was rejected", failures
+	)
+
+	# 前面已用全内容表填包，正式治疗药可能仍有另一堆；这里使用唯一探针物，
+	# 避免“另一个同ID堆叠仍存在”被误判成世界丢弃没有移除来源格。
+	var drop_probe := {
+		"id": "test_tactical_drop_unique",
+		"name": "丢弃唯一探针",
+		"type": "resource",
+		"stack_max": 1,
+	}
+	_check(inventory.add_item(drop_probe, 1) == 1, "Cannot seed droppable item", failures)
+	var drop_probe_slot := _find_item_slot(inventory, "test_tactical_drop_unique")
+	# 该场景会持续运行房间检测；前面的多轮拖拽与 process_frame 可能让玩家
+	# 从初始房间边界切入相邻房间。世界丢弃的正式契约是落在“当前房间”，
+	# 因此这里读取运行时当前房间，不能继续把测试目标写死为 start。
+	var room := _get_current_room(dungeon)
 	var pickups_before := room.find_children("*", "GroundLootPickup3D", true, false).size()
-	_check(bool(ui.call("_drop_inventory_slot_to_world", medkit_slot)), "Dropping inventory item to world failed", failures)
+	var drop_probe_moved := bool(ui.call("_drop_inventory_slot_to_world", drop_probe_slot))
+	_check(drop_probe_slot >= 0, "Droppable probe did not occupy a backpack slot", failures)
+	_check(drop_probe_moved, "Dropping inventory item to world failed", failures)
 	await get_tree().process_frame
 	var pickups_after := room.find_children("*", "GroundLootPickup3D", true, false).size()
-	_check(not inventory.has_item("item_health_potion") and pickups_after == pickups_before + 1, "Dropped item was not moved from backpack to current room", failures)
+	_check(not inventory.has_item("test_tactical_drop_unique"), "Dropped item remained duplicated in backpack", failures)
+	_check(
+		pickups_after == pickups_before + 1,
+		"Current-room pickup count did not increase after world drop (%d -> %d, room=%s)" % [
+			pickups_before, pickups_after, str(dungeon.get("_current_room_id")),
+		],
+		failures
+	)
 
 	var minimap := dungeon.get_node("HUD/DungeonMinimap3D") as DungeonMinimap3D
 	minimap.set_current_room("start")
@@ -226,6 +402,50 @@ func _find_empty_slot(inventory: InventoryModule) -> int:
 		if inventory.get_slot(index).is_empty():
 			return index
 	return -1
+
+
+func _verify_ui_slot_index_contract(ui: InventoryUI, failures: Array[String]) -> void:
+	for index in ui._slots.size():
+		_check(int(ui._slots[index].get("slot_index")) == index, "Backpack UI slot index mismatch at %d" % index, failures)
+	for index in ui._insurance_slots.size():
+		_check(int(ui._insurance_slots[index].get("slot_index")) == index, "Insurance UI slot index mismatch at %d" % index, failures)
+	for index in ui.quick_item_slots.size():
+		_check(int(ui.quick_item_slots[index].get("slot_index")) == index, "Quick UI slot index mismatch at %d" % index, failures)
+	for index in ui.equipment_weapon_slots.size():
+		_check(int(ui.equipment_weapon_slots[index].get("slot_index")) == index, "Weapon UI slot index mismatch at %d" % index, failures)
+	_check(int(ui.equipment_backpack_slot.get("slot_index")) == 0, "Equipped-backpack UI slot index mismatch", failures)
+	_check(int(ui.drop_zone.get("slot_index")) == -1, "World-drop UI target index mismatch", failures)
+	for weapon_index in ui.equipment_attachment_slots.size():
+		for attachment_slot in ui.equipment_attachment_slots[weapon_index]:
+			_check(
+				int((attachment_slot as Control).get("slot_index"))
+				== int((attachment_slot as Control).get_meta("attachment_slot_type", -1)),
+				"Attachment UI slot index mismatch for weapon %d" % weapon_index,
+				failures
+			)
+
+
+func _drag_between_real_slots(source: Control, target: Control) -> bool:
+	if (
+		source == null
+		or target == null
+		or bool(source.get_meta("drag_disabled", false))
+		or not source.has_meta("drag_payload")
+	):
+		return false
+	var payload := (source.get_meta("drag_payload") as Dictionary).duplicate(true)
+	payload["inventory_drag"] = true
+	payload["source_index"] = int(source.get("slot_index"))
+	payload["source_kind"] = str(source.get_meta("slot_kind", "inventory"))
+	if not bool(target.call("_can_drop_data", Vector2.ZERO, payload)):
+		return false
+	target.call("_drop_data", Vector2.ZERO, payload)
+	return true
+
+
+func _get_current_room(dungeon: Dungeon3D) -> DungeonRoom3D:
+	var current_room_id := str(dungeon.get("_current_room_id"))
+	return (dungeon.get("_room_by_id") as Dictionary).get(current_room_id) as DungeonRoom3D
 
 
 func _check(condition: bool, failure: String, failures: Array[String]) -> void:

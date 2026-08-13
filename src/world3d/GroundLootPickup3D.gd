@@ -8,8 +8,14 @@ var item_data: Dictionary = {}
 var _visual: Node3D
 var _accepted := false
 var _label: Label3D
+var _pickup_grace_until_msec := 0
 
 const PICKUP_ANIMATION_DURATION := 0.32
+## entity_size_baseline_v2：旧资产的 70% 定义为当前世界道具的 100%。
+## 保留旧倍率用于迁移/回退，禁止把 0.70 直接烘进各物品类型的旧值。
+const CURRENT_BASE_SIZE_MULTIPLIER := 0.70
+const LEGACY_WEAPON_VISUAL_SCALE := 0.82
+const LEGACY_ITEM_VISUAL_SCALE := 0.72
 
 
 func configure(data: Dictionary, color := Color(0.38, 0.88, 0.72)) -> void:
@@ -23,6 +29,12 @@ func _ready() -> void:
 	collision_mask = 1
 	monitoring = true
 	body_entered.connect(_on_body_entered)
+
+
+## 玩家主动从物品栏丢到地面的物品需要短暂拾取保护，
+## 否则玩家胶囊与新掉落物同帧重叠时会立即自动拾回背包。
+func set_pickup_grace_seconds(seconds: float) -> void:
+	_pickup_grace_until_msec = Time.get_ticks_msec() + int(maxf(0.0, seconds) * 1000.0)
 
 
 func _process(delta: float) -> void:
@@ -62,7 +74,11 @@ func accept_pickup() -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if _accepted or not body.is_in_group("player_3d"):
+	if (
+		_accepted
+		or Time.get_ticks_msec() < _pickup_grace_until_msec
+		or not body.is_in_group("player_3d")
+	):
 		return
 	pickup_requested.emit(self, item_data.duplicate(true))
 
@@ -70,7 +86,12 @@ func _on_body_entered(body: Node3D) -> void:
 func _build_visual(color: Color) -> void:
 	_visual = ItemModelFactory3D.create_model(item_data, color)
 	_visual.name = "LootVisual"
-	_visual.scale = Vector3.ONE * (0.82 if str(item_data.get("type", "")) == "weapon" else 0.72)
+	var legacy_scale := (
+		LEGACY_WEAPON_VISUAL_SCALE
+		if str(item_data.get("type", "")) == "weapon"
+		else LEGACY_ITEM_VISUAL_SCALE
+	)
+	_visual.scale = Vector3.ONE * legacy_scale * CURRENT_BASE_SIZE_MULTIPLIER
 	add_child(_visual)
 	var shape := SphereShape3D.new()
 	shape.radius = 0.82
@@ -97,6 +118,11 @@ func _build_visual(color: Color) -> void:
 
 
 func get_model_snapshot() -> Dictionary:
+	var legacy_scale := (
+		LEGACY_WEAPON_VISUAL_SCALE
+		if str(item_data.get("type", "")) == "weapon"
+		else LEGACY_ITEM_VISUAL_SCALE
+	)
 	return {
 		"item_id": str(item_data.get("id", "")),
 		"model_kind": ItemModelFactory3D.get_model_kind(item_data),
@@ -104,4 +130,9 @@ func get_model_snapshot() -> Dictionary:
 		"uses_shared_model_factory": true,
 		"accepted": _accepted,
 		"pickup_animation_duration": PICKUP_ANIMATION_DURATION,
+		"pickup_grace_active": Time.get_ticks_msec() < _pickup_grace_until_msec,
+		"size_baseline_id": "entity_size_baseline_v2",
+		"legacy_visual_scale": legacy_scale,
+		"base_size_multiplier": CURRENT_BASE_SIZE_MULTIPLIER,
+		"visual_scale": _visual.scale if _visual != null else Vector3.ZERO,
 	}

@@ -25,6 +25,14 @@ func _ready() -> void:
 	ui.set_inventory_panel_open(true)
 	await get_tree().process_frame
 	_verify_unified_equipment_ui(ui, failures)
+	var weapon_drop_before := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	ui.call("_on_slot_drop_received", 1, -1, "weapon_1", "drop")
+	var weapon_drop_after := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	_check(
+		player.get_equipped_weapon_instance_for_slot(1) == null
+		and weapon_drop_after == weapon_drop_before + 1,
+		"副武器拖到红区后没有卸装并生成当前房间掉落", failures
+	)
 	_verify_legacy_snapshot_migration(failures)
 
 	dungeon.queue_free()
@@ -78,6 +86,23 @@ func _verify_install_detach_and_ownership(
 	_check(player.get_equipped_weapon_instance_id_for_slot(0) == rifle_id, "整枪重新装备时没有恢复原实例", failures)
 	var restored := player.get_weapon_attachment_layout_for_slot(0)
 	_check(_installed_id(restored, AssemblyNode.SlotType.SCOPE) == "attach_scope" and _installed_id(restored, AssemblyNode.SlotType.MAGAZINE) == "attach_big_mag", "整枪重新装备后配件树未恢复", failures)
+
+	var ground_before := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	var ui := dungeon.get("_inventory_ui") as InventoryUI
+	ui.call(
+		"_on_slot_drop_received",
+		AssemblyNode.SlotType.MAGAZINE,
+		-1,
+		"attachment_0_%d" % AssemblyNode.SlotType.MAGAZINE,
+		"drop"
+	)
+	var ground_after := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	var after_drop := player.get_weapon_attachment_layout_for_slot(0)
+	_check(
+		_installed_id(after_drop, AssemblyNode.SlotType.MAGAZINE).is_empty()
+		and ground_after == ground_before + 1,
+		"已装配件拖到红区后没有从武器移除并生成当前房间掉落", failures
+	)
 
 
 func _verify_unified_equipment_ui(ui: InventoryUI, failures: Array[String]) -> void:
@@ -161,7 +186,7 @@ func _check(condition: bool, message: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("WEAPON_ATTACHMENT_INVENTORY_FLOW_OK: baseball bat vending, unified six-slot equipment UI, compatibility, detach/replace, inactive weapon edits, legacy migration and whole-gun ownership pass")
+		print("WEAPON_ATTACHMENT_INVENTORY_FLOW_OK: baseball bat vending, unified six-slot equipment UI, compatibility, detach/replace/drop, inactive weapon edits, legacy migration and whole-gun ownership pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

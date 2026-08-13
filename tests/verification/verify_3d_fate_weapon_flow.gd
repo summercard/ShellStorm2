@@ -19,8 +19,9 @@ func _ready() -> void:
 	await _verify_secondary_gun(failures)
 	await _verify_attached_gun_and_uncontrolled(failures)
 	await _verify_numeric_cards(failures)
+	await _verify_relative_weapon_scale(failures)
 	if failures.is_empty():
-		print("3D_FATE_WEAPON_FLOW_OK: homing, bounce, chain, fuse/freeze, turret, return, growth, reload explosion, copy fire and mounted guns pass")
+		print("3D_FATE_WEAPON_FLOW_OK: behaviors pass and weapon fate scale remains relative to the current 70% mount baseline")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -82,6 +83,39 @@ func _verify_numeric_cards(failures: Array[String]) -> void:
 		failures.append("Overclock fate does not increase the 3D gun fire rate")
 	if player.get_weapon_tree().get_overheat_penalty() <= 1.0:
 		failures.append("Overclock fate does not preserve its 3D incoming-damage penalty")
+	await _discard_player(player)
+
+
+func _verify_relative_weapon_scale(failures: Array[String]) -> void:
+	var player := await _make_player()
+	await get_tree().process_frame
+	var before := player.get_weapon_snapshot()
+	var base_global_scale := before.get("visual_global_scale", Vector3.ZERO) as Vector3
+	var base_weapon_scale := player.weapon.scale
+	var result := FateCardGameBridge.apply_card(FateCardPresets.huge_scale())
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var after := player.get_weapon_snapshot()
+	var enlarged_global_scale := after.get("visual_global_scale", Vector3.ZERO) as Vector3
+	if not bool(result.get("success", false)):
+		failures.append("Huge-scale fate could not be applied for relative-size verification")
+	elif base_global_scale.x <= 0.0:
+		failures.append("Held weapon did not expose a valid current-baseline world scale")
+	else:
+		var world_ratio := enlarged_global_scale.x / base_global_scale.x
+		# 角色待机呼吸会在两个采样帧间给 VisualRoot 带来千分级变化；
+		# 命运本地倍率必须精确，最终世界倍率允许 1% 动画误差。
+		if not is_equal_approx(world_ratio, 2.0) and absf(world_ratio - 2.0) > 0.01:
+			failures.append(
+				"Huge-scale fate is not exactly 200%% of the current held-weapon baseline (before=%.4f after=%.4f ratio=%.4f local=%s)"
+				% [base_global_scale.x, enlarged_global_scale.x, world_ratio, str(after.get("visual_local_scale", Vector3.ZERO))]
+			)
+	if not player.weapon.scale.is_equal_approx(base_weapon_scale):
+		failures.append("Huge-scale fate overwrote the current weapon mount baseline")
+	if not is_equal_approx(float(after.get("fate_visual_multiplier", 0.0)), 2.0):
+		failures.append("Weapon snapshot does not preserve the relative 2.0 fate multiplier")
+	if not bool(after.get("fate_scale_is_relative_to_mount", false)):
+		failures.append("Weapon fate scaling is not declared relative to the current mount baseline")
 	await _discard_player(player)
 
 

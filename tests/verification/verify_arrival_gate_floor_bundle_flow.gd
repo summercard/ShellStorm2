@@ -143,7 +143,9 @@ func _ready() -> void:
 	)
 	var carried := tower.get_inventory_module()
 	var carried_insurance := tower.get_insurance_module()
+	carried.add_item(ItemRegistry.get_instance().get_item("item_battery_l"), 1)
 	carried.add_item(ItemRegistry.get_instance().get_item("item_health_potion"), 1)
+	tower.call("_on_quick_item_assignment_requested", 1, "item_health_potion")
 	_expect(
 		carried_insurance.insure_item_direct(ItemRegistry.get_instance().get_item("item_battery_s")),
 		"无法准备反向撤退保险物", failures
@@ -154,7 +156,11 @@ func _ready() -> void:
 	tower.call("_show_initial_loop_retreat_warning")
 	_expect(tower.get("_initial_loop_retreat_overlay") != null, "反向开启98F首门没有显示撤退确认", failures)
 	tower.call("_cancel_initial_loop_retreat")
-	_expect(carried.has_item("item_health_potion"), "取消撤退错误清除了物品", failures)
+	_expect(carried.has_item("item_battery_l"), "取消撤退错误清除了背包物品", failures)
+	_expect(
+		(tower.get("_quick_inventory") as InventoryModule).has_item("item_health_potion"),
+		"取消撤退错误清除了快捷物品", failures
+	)
 	_expect(carried_insurance.has_item("item_battery_s"), "取消撤退错误清除了保险物", failures)
 	tower.call("_show_initial_loop_retreat_warning")
 	tower.confirm_initial_loop_retreat_for_test()
@@ -165,6 +171,10 @@ func _ready() -> void:
 		"确认撤退没有清空背包及主/副武器", failures
 	)
 	_expect(carried_insurance.has_item("item_battery_s"), "确认反向撤退错误清除了保险物", failures)
+	_expect(
+		(tower.get("_quick_inventory") as InventoryModule).get_used_slots() == 0,
+		"确认反向撤退没有清空真实快捷物品槽", failures
+	)
 	_expect(str(tower.get_tower_snapshot().get("current_room_id", "")) == "facility", "确认撤退没有返回99F基地", failures)
 	for _frame in 2:
 		await get_tree().process_frame

@@ -258,7 +258,7 @@ v0.1 先建立触发框架和验收契约,不在本次文档中擅自重写主�
 
 ### 12.2 当前能力
 
-- <span style="color:#2E7D32">**[已实装]** `AtomicJsonStore` 使用临时文件、上一版备份和原子提升；`BaseData 1.4` 使用带revision、保存原因和SHA-256 payload校验的版本封套，支持1.2/1.3旧档迁移、新手完成标记与checksum失败回退。</span>
+- <span style="color:#2E7D32">**[已实装]** `AtomicJsonStore` 使用临时文件、上一版备份和原子提升；`BaseData 1.8` 使用带revision、保存原因和SHA-256 payload校验的版本封套，支持旧档迁移、新手完成标记、死亡保险格原位返城与checksum失败回退。</span>
 - <span style="color:#2E7D32">**[已实装]** 成功撤离可带回背包与保险物;死亡会保留保险格,并按当前规则处理未保险战利品损失。</span>
 - <span style="color:#2E7D32">**[已实装]** 长期数据包含局数、撤离、击杀、设施、蓝图、资源、保险柜、下局命运预选、带入物和待处理战利品。</span>
 - <span style="color:#2E7D32">**[已实装原型]** 精英档案已有独立文件,但尚未合并到正式 3D 的统一存档清单和迁移流程。</span>

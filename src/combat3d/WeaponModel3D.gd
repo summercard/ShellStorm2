@@ -48,6 +48,11 @@ const BULLET_COLORS := {
 	"mod_bullet_balloon": Color(0.98, 0.35, 0.72),
 }
 
+## 命运体型是相对当前挂点基础尺寸的倍率，不是旧资产空间中的绝对 scale。
+## 当前角色挂点随 entity_size_baseline_v2 继承旧资产 70%，所以命运 2.0
+## 的最终尺寸等于“新版 100% × 2”，即旧资产的 140%。
+const DEFAULT_FATE_VISUAL_MULTIPLIER := 1.0
+
 @export var gun_id := "bp_pistol"
 @export var bullet_id := "mod_bullet_standard"
 @export var display_only := false
@@ -86,6 +91,7 @@ var _charge_aim := Vector3.FORWARD
 var _charge_shooter: Node3D
 var _visual_root: Node3D
 var _muzzle: Marker3D
+var _fate_visual_multiplier := DEFAULT_FATE_VISUAL_MULTIPLIER
 
 const GUN_NAME_TO_ID := {
 	"GunBody_Pistol": "bp_pistol", "GunBody_Shotgun": "bp_shotgun",
@@ -654,6 +660,10 @@ func get_snapshot() -> Dictionary:
 		"fate_behavior": _projectile_behavior.duplicate(true),
 		"secondary_gun_count": _secondary_guns.size(),
 		"has_model": _visual_root != null,
+		"fate_visual_multiplier": _fate_visual_multiplier,
+		"visual_local_scale": _visual_root.scale if _visual_root != null else Vector3.ZERO,
+		"visual_global_scale": _visual_root.global_basis.get_scale() if _visual_root != null and _visual_root.is_inside_tree() else Vector3.ZERO,
+		"fate_scale_is_relative_to_mount": true,
 		"render_layers": render_layers,
 		"is_3d": true,
 	}
@@ -704,7 +714,14 @@ func _rebuild_visual() -> void:
 	_visual_root = Node3D.new()
 	_visual_root.name = "MeleeVisual" if is_melee_weapon() else "GunVisual"
 	add_child(_visual_root)
-	_visual_root.scale = Vector3.ONE * clampf(float(_projectile_behavior.get("fate_scale", 1.0)), 0.45, 2.5)
+	_fate_visual_multiplier = clampf(
+		float(_projectile_behavior.get("fate_scale", DEFAULT_FATE_VISUAL_MULTIPLIER)),
+		0.45,
+		2.5
+	)
+	# 只乘不可变的当前挂点基础，绝不把命运倍率写成旧资产绝对尺寸。
+	_visual_root.scale = Vector3.ONE * _fate_visual_multiplier
+	_visual_root.set_meta("fate_scale_space", "current_mount_baseline")
 	if is_melee_weapon():
 		var melee_scene := MELEE_VISUAL_SCENES.get(gun_id) as PackedScene
 		if melee_scene != null:

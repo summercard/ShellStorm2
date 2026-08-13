@@ -74,27 +74,34 @@ func get_free_slots() -> int:
 func insure_item(inventory: InventoryModule, slot_index: int) -> bool:
 	if inventory == null:
 		return false
-	
-	if not has_space():
+	return insure_item_to_slot(inventory, slot_index, _find_empty_slot())
+
+
+## 从背包/快捷栏移动到指定保险格。拖拽必须尊重玩家指向的实际格位；
+## 右键快捷存入仍由 insure_item() 选择第一个空格。
+func insure_item_to_slot(
+	inventory: InventoryModule, source_slot_index: int, insurance_slot_index: int
+) -> bool:
+	if inventory == null:
+		return false
+	if insurance_slot_index < 0 or insurance_slot_index >= _insurance_slots.size():
 		insurance_full.emit()
 		return false
-	
-	var slot_data: Dictionary = inventory.get_slot(slot_index)
+	if not _insurance_slots[insurance_slot_index].is_empty():
+		insurance_full.emit()
+		return false
+	var slot_data: Dictionary = inventory.get_slot(source_slot_index)
 	if slot_data.is_empty():
 		return false
 	var instance_id := str((slot_data.get("item", {}) as Dictionary).get("weapon_instance_id", ""))
 	if not instance_id.is_empty() and has_weapon_instance(instance_id):
 		return false
 	
-	var empty_idx := _find_empty_slot()
-	if empty_idx < 0:
-		return false
-	
-	_insurance_slots[empty_idx].set_item(slot_data["item"], int(slot_data.get("count", 1)))
-	inventory.remove_from_slot(slot_index, slot_data["count"])
+	_insurance_slots[insurance_slot_index].set_item(slot_data["item"], int(slot_data.get("count", 1)))
+	inventory.remove_from_slot(source_slot_index, slot_data["count"])
 	
 	insurance_changed.emit()
-	item_insured.emit(empty_idx, slot_data["item"])
+	item_insured.emit(insurance_slot_index, slot_data["item"])
 	return true
 
 ## 保险指定物品（直接传入物品数据）

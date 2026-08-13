@@ -383,6 +383,10 @@ func get_persistent_id() -> String:
 
 
 func export_runtime_state() -> Dictionary:
+	# 场景退出的同步存档可能发生在敌人已离开SceneTree之后；此时读取
+	# global_position会让Godot报错。本项目关卡根没有运行时Transform，
+	# 离树阶段使用本地position可保持同一恢复坐标。
+	var saved_position := global_position if is_inside_tree() else position
 	return {
 		"persistent_id": get_persistent_id(),
 		"enemy_kind": enemy_kind,
@@ -390,7 +394,7 @@ func export_runtime_state() -> Dictionary:
 		"hp": current_hp,
 		"max_hp": max_hp,
 		"contact_damage": contact_damage,
-		"position": [global_position.x, global_position.y, global_position.z],
+		"position": [saved_position.x, saved_position.y, saved_position.z],
 		"rotation_y": rotation.y,
 		"ai_state": ai_state,
 		"state_time": _state_time,

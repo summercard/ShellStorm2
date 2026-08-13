@@ -64,8 +64,11 @@ func _ready() -> void:
 		failures.append("Bunny hands are not exported as two independently animated visual parts")
 	if absf(float(avatar_snapshot.get("authored_scale_m", 0.0)) - 1.5) > 0.001:
 		failures.append("Bunny v006 does not use the approved 1.50 m authored height")
-	if absf(float(avatar_snapshot.get("runtime_scale_multiplier", 0.0)) - 1.0) > 0.001:
-		failures.append("Bunny v006 still depends on a Godot runtime scale")
+	if absf(
+		float(avatar_snapshot.get("runtime_scale_multiplier", 0.0))
+		- Player3D.DEFAULT_BASE_SIZE_MULTIPLIER
+	) > 0.001:
+		failures.append("Bunny v006 did not apply the approved 70% entity-size baseline")
 	if (
 		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 90
 		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+X"

@@ -66,7 +66,7 @@ acceptance_case
 
 - <span style="color:#1565C0">**[用户设计]** 全游戏固定 12 只，每只有稳定 ID、独立名字、功能与档案。</span>
 - <span style="color:#1565C0">**[用户设计]** 精英可随机出现、成长、逃脱、获取玩家枪械；同一时间最多存在一只同名精英。</span>
-- <span style="color:#2E7D32">**[已实装｜2026-08-13]** `EliteRosterService` 以 `BaseData 1.7` 为唯一事实源，固定12个稳定ID；预约、确认、死亡/逃脱/反生成结算均原子保存，同一名册成员不能同时进入两个遭遇，加载时会释放不属于有效行动的陈旧预约。</span>
+- <span style="color:#2E7D32">**[已实装｜2026-08-13]** `EliteRosterService` 以当前 `BaseData 1.8` 为唯一事实源，固定12个稳定ID；预约、确认、死亡/逃脱/反生成结算均原子保存，同一名册成员不能同时进入两个遭遇，加载时会释放不属于有效行动的陈旧预约。</span>
 - <span style="color:#2E7D32">**[已实装｜2026-08-13]** 12只精英分别绑定 `armed_rush / bullet_devourer / rotating_carapace / hive_network / renewing_mines / false_burrow_routes / mirror_sector / weapon_phase_swap / seven_attack_rule / attachment_echo / escape_route / three_crowns` 实时行为；逃脱提升等级、生命和伤害预算，夺械只保存稳定内容模块并转译为敌方技能，不保存玩家枪械实例ID。</span>
 
 ### 5.2 精英定义与档案分离

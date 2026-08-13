@@ -106,6 +106,17 @@ func _ready() -> void:
 	_check(ground_after_unequip - ground_before_unequip == 2, "卸下缩容没有把2个溢出格丢到地面", failures)
 	_check(not bool(dungeon.get_backpack_equipment_snapshot().get("model_visible", true)), "卸下后背部背包Mesh仍然存在", failures)
 
+	# 装备背包也可直接拖到红区；先重新装备来源格中的2格包，此时没有缩容溢出。
+	ui.call("_on_slot_drop_received", 0, 0, "inventory", "backpack")
+	var ground_before_backpack_drop := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	ui.call("_on_slot_drop_received", 0, -1, "backpack", "drop")
+	var ground_after_backpack_drop := get_tree().get_nodes_in_group("ground_loot_3d").size()
+	_check(
+		dungeon.get_equipped_backpack_item().is_empty()
+		and ground_after_backpack_drop == ground_before_backpack_drop + 1,
+		"装备背包拖到红区后没有卸装并生成当前房间掉落", failures
+	)
+
 	dungeon.queue_free()
 	_finish(failures)
 
@@ -138,7 +149,7 @@ func _check(condition: bool, message: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BACKPACK_EQUIPMENT_FLOW_OK: 2/4/8 loot, click/drag equip, colored bonus slots, back socket mesh, shrink overflow and item conservation pass")
+		print("BACKPACK_EQUIPMENT_FLOW_OK: 2/4/8 loot, click/drag equip/unequip/drop, colored bonus slots, back socket mesh, shrink overflow and item conservation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

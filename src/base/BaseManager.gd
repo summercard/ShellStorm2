@@ -49,8 +49,9 @@ func load_base() -> void:
 		if data.last_save_reason.is_empty():
 			data.last_save_reason = str(unpacked.get("reason", ""))
 		_migrate_owned_item_instances()
+		var insurance_return_migrated := _migrate_legacy_insurance_returns()
 		var flashlight_migrated := _migrate_flashlight_module_unlocks()
-		if bool(unpacked.get("legacy", false)) or flashlight_migrated:
+		if bool(unpacked.get("legacy", false)) or flashlight_migrated or insurance_return_migrated:
 			save_base("migrate_legacy_profile")
 		return
 	data = BaseData.new()
@@ -852,6 +853,37 @@ func _migrate_owned_item_instances() -> void:
 				migrated.append(ShopService.ensure_item_instance(raw_item as Dictionary))
 		data.set(collection_name, migrated)
 
+
+## 1.7曾把死亡保险物写进只有独立BaseMenu才显示的撤离待领取栏。
+## 99F实际会重载TowerDescent3D，因此把带旧标记的条目迁回专用原槽快照，
+## 让已有玩家存档中的“消失物品”也能在下次进入基地时恢复。
+func _migrate_legacy_insurance_returns() -> bool:
+	if data == null:
+		return false
+	var migrated := false
+	var retained_loot: Array = []
+	for raw_item in data.extraction_loot:
+		if not raw_item is Dictionary:
+			continue
+		var item := (raw_item as Dictionary).duplicate(true)
+		if not bool(item.get("returned_by_insurance", false)):
+			retained_loot.append(item)
+			continue
+		var slot_index := int(item.get("insurance_slot", data.pending_insurance_slots.size()))
+		var count := maxi(1, int(item.get("count", 1)))
+		item.erase("returned_by_insurance")
+		item.erase("insurance_slot")
+		item.erase("count")
+		data.pending_insurance_slots.append({
+			"item": item,
+			"count": count,
+			"insurance_slot": slot_index,
+		})
+		migrated = true
+	if migrated:
+		data.extraction_loot = retained_loot
+	return migrated
+
 ## — 撤离战利品管理（返回大厅后待存入仓库）—
 func get_extraction_loot() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -865,7 +897,7 @@ func store_insurance_return_items(entries: Array, transaction_id: String = "") -
 	var effective_transaction_id := transaction_id if not transaction_id.is_empty() else ShopService.generate_transaction_id("insurance_return")
 	if ShopService.has_completed(data.completed_transaction_ids, effective_transaction_id):
 		return {"success": true, "duplicate": true, "transaction_id": effective_transaction_id}
-	var old_loot := data.extraction_loot.duplicate(true)
+	var old_pending := data.pending_insurance_slots.duplicate(true)
 	var returned := 0
 	for raw_entry in entries:
 		if not raw_entry is Dictionary:
@@ -874,22 +906,79 @@ func store_insurance_return_items(entries: Array, transaction_id: String = "") -
 		var item := (entry.get("item", entry) as Dictionary).duplicate(true)
 		if item.is_empty():
 			continue
-		item["count"] = maxi(1, int(entry.get("count", item.get("count", 1))))
-		item["returned_by_insurance"] = true
-		var add_result := _try_add_owned_item(data.extraction_loot, item, 1000000)
-		if not bool(add_result.get("success", false)):
+		var count := maxi(1, int(entry.get("count", item.get("count", 1))))
+		item.erase("count")
+		var identity := _owned_item_identity(item)
+		if not identity.is_empty() and _insurance_return_contains_identity(identity):
 			continue
-		data.extraction_loot = add_result.get("items", []) as Array
+		data.pending_insurance_slots.append({
+			"item": ShopService.ensure_item_instance(item),
+			"count": count,
+			"insurance_slot": maxi(0, int(entry.get("insurance_slot", returned))),
+			"insured_at": int(entry.get("insured_at", Time.get_unix_time_from_system())),
+		})
 		returned += 1
 	if returned <= 0 and not entries.is_empty():
-		data.extraction_loot = old_loot
-		return {"success": false, "reason": "保险返还物无法写入待领取集合"}
+		data.pending_insurance_slots = old_pending
+		return {"success": false, "reason": "保险返还物无法写入基地保险格中转集合"}
 	ShopService.append_completed(data.completed_transaction_ids, effective_transaction_id)
 	if save_base("insurance_return"):
 		return {"success": true, "returned_count": returned, "transaction_id": effective_transaction_id}
-	data.extraction_loot = old_loot
+	data.pending_insurance_slots = old_pending
 	data.completed_transaction_ids.erase(effective_transaction_id)
 	return {"success": false, "reason": "存档失败，保险返还已回滚"}
+
+
+func get_pending_insurance_slots() -> Array[Dictionary]:
+	_ensure_data()
+	# 兼容本次修复前已在内存中生成、尚未重新load_base的1.7数据。
+	if _migrate_legacy_insurance_returns():
+		save_base("migrate_runtime_insurance_return")
+	var result: Array[Dictionary] = []
+	for entry in data.pending_insurance_slots:
+		if entry is Dictionary:
+			result.append((entry as Dictionary).duplicate(true))
+	return result
+
+
+## 将死亡中转物与99F基地运行态检查点在同一次原子写盘中交接。
+## 成功前不清中转集合，避免场景切换/断电窗口造成保险物永久丢失。
+func commit_pending_insurance_to_runtime(snapshot: Dictionary) -> bool:
+	_ensure_data()
+	if data.pending_insurance_slots.is_empty():
+		return true
+	if snapshot.is_empty() or not bool(snapshot.get("valid", false)):
+		return false
+	var old_pending := data.pending_insurance_slots.duplicate(true)
+	var old_checkpoint := data.active_run_snapshot.duplicate(true)
+	data.pending_insurance_slots.clear()
+	data.active_run_snapshot = snapshot.duplicate(true)
+	if save_base("death_insurance_restored_to_99f"):
+		return true
+	data.pending_insurance_slots = old_pending
+	data.active_run_snapshot = old_checkpoint
+	return false
+
+
+func _owned_item_identity(item: Dictionary) -> String:
+	var weapon_id := str(item.get("weapon_instance_id", ""))
+	if not weapon_id.is_empty():
+		return "weapon:" + weapon_id
+	var item_id := str(item.get("item_instance_id", ""))
+	if not item_id.is_empty():
+		return "item:" + item_id
+	return ""
+
+
+func _insurance_return_contains_identity(identity: String) -> bool:
+	for raw_entry in data.pending_insurance_slots:
+		if not raw_entry is Dictionary:
+			continue
+		var entry := raw_entry as Dictionary
+		var item := entry.get("item", entry) as Dictionary
+		if _owned_item_identity(item) == identity:
+			return true
+	return false
 
 func add_extraction_loot(item: Dictionary, count: int = 1) -> void:
 	var new_item := ShopService.ensure_item_instance(item)

@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.7"
+const SAVE_VERSION := "1.8"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -61,6 +61,10 @@ var pending_loadout_items: Array = []
 # 撤离后待存入仓库的战利品（返回大厅后显示，可一键存入或逐个存入）
 var extraction_loot: Array = []
 
+# 死亡时从随身保险格转存的原槽快照。它只跨越“死亡场景 → 99F基地场景”
+# 这一条边界；基地运行态检查点成功接管后会原子清空，不能混入撤离战利品。
+var pending_insurance_slots: Array = []
+
 # 存档封套元数据与有界事务幂等日志
 var save_revision: int = 0
 var last_saved_at_unix: int = 0
@@ -110,6 +114,7 @@ func _to_dict() -> Dictionary:
 		"pending_fate_card": pending_fate_card,
 		"pending_loadout_items": pending_loadout_items,
 		"extraction_loot": extraction_loot,
+		"pending_insurance_slots": pending_insurance_slots,
 		"save_revision": save_revision,
 		"last_saved_at_unix": last_saved_at_unix,
 		"last_save_reason": last_save_reason,
@@ -168,6 +173,7 @@ static func from_dict(d: Dictionary) -> BaseData:
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])
+	if d.has("pending_insurance_slots") and d["pending_insurance_slots"] is Array: data.pending_insurance_slots = Array(d["pending_insurance_slots"])
 	if d.has("save_revision"): data.save_revision = int(d["save_revision"])
 	if d.has("last_saved_at_unix"): data.last_saved_at_unix = int(d["last_saved_at_unix"])
 	if d.has("last_save_reason"): data.last_save_reason = str(d["last_save_reason"])

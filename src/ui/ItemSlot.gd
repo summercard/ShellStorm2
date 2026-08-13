@@ -95,6 +95,12 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	var source_kind := str((data as Dictionary).get("source_kind", "inventory"))
 	var item := (data as Dictionary).get("item", {}) as Dictionary
 	var carried_source := source_kind in ["inventory", "insurance"]
+	if source_kind.begins_with("quick_"):
+		if target_kind == "inventory":
+			return not has_meta("slot_item")
+		if target_kind == "insurance":
+			return not has_meta("slot_item")
+		return target_kind == "drop" or target_kind.begins_with("quick_")
 	if target_kind.begins_with("attachment_"):
 		return (
 			carried_source
@@ -117,7 +123,7 @@ func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if source_kind == "insurance":
 		return target_kind == "drop" or target_kind == "inventory" and not has_meta("slot_item")
 	if target_kind == "insurance":
-		return source_kind == "inventory" and not has_meta("slot_item")
+		return source_kind in ["inventory"] and not has_meta("slot_item")
 	if target_kind == "inventory" and (
 		source_kind.begins_with("weapon_")
 		or source_kind.begins_with("attachment_")
@@ -155,9 +161,11 @@ func set_drag_feedback(active: bool, is_source: bool, dragged_item: Dictionary =
 		or target_kind == "inventory" and (
 			source_kind == "inventory"
 			or source_kind == "insurance" and not has_meta("slot_item")
+			or source_kind.begins_with("quick_") and not has_meta("slot_item")
 			or (source_kind.begins_with("weapon_") or source_kind.begins_with("attachment_") or source_kind == "backpack") and not has_meta("slot_item")
 		)
-		or target_kind == "insurance" and source_kind == "inventory" and not has_meta("slot_item")
+		or target_kind == "insurance" and (source_kind == "inventory" or source_kind.begins_with("quick_")) and not has_meta("slot_item")
+		or target_kind.begins_with("quick_") and source_kind.begins_with("quick_")
 		or target_kind.begins_with("attachment_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "attachment" and not bool(get_meta("slot_disabled", false)) and str(dragged_item.get("subtype", "")) == str(get_meta("accepted_subtype", ""))
 		or target_kind.begins_with("weapon_") and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "weapon"
 		or target_kind == "backpack" and source_kind in ["inventory", "insurance"] and str(dragged_item.get("type", "")) == "equipment" and str(dragged_item.get("subtype", "")) == "backpack"

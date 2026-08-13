@@ -208,6 +208,12 @@ func _ready() -> void:
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
 
 
+func _accepts_pending_insurance_return_at_spawn() -> bool:
+	# 死亡的正式返城场景就是99F塔楼基地；保险物应回到原金色保险格，
+	# 而不是进入只有独立BaseMenu才能看见的撤离战利品面板。
+	return true
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	if (
 		event.is_action_pressed("interact")
@@ -239,7 +245,9 @@ func _finish_run(success: bool) -> void:
 	_sync_player_input_lock()
 	extraction_panel.visible = false
 	_run_loot = _collect_extracted_items(true)
-	var extracted_count := _death_settlement.process_extraction_settlement(_inventory, _insurance)
+	var extracted_count := _death_settlement.process_extraction_settlement(
+		_inventory, _insurance, _quick_inventory
+	)
 	var summary := {
 		"success": true,
 		"kills": _kills,
@@ -2179,9 +2187,10 @@ func _confirm_initial_loop_retreat() -> void:
 	if player != null and player.has_method("clear_equipped_backpack"):
 		player.call("clear_equipped_backpack")
 	_emit_backpack_equipment_changed()
+	_quick_inventory.clear_all()
 	_quick_item_ids = ["", ""]
 	if _inventory_ui != null:
-		_inventory_ui.set_quick_item_assignments(_quick_item_ids)
+		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
 	FateCardGameBridge.reset_run_state()
 	_cancel_initial_loop_retreat()

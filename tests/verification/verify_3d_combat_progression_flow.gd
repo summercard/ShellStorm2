@@ -85,6 +85,30 @@ func _verify_room_light_key_recovery_and_pickups(dungeon: Dungeon3D, failures: A
 	loot.configure(ItemRegistry.get_instance().get_item("item_health_potion"), Color(0.38, 0.88, 0.72))
 	dungeon.add_child(loot)
 	await get_tree().process_frame
+	var loot_size_snapshot := loot.get_model_snapshot()
+	var expected_item_scale := (
+		GroundLootPickup3D.LEGACY_ITEM_VISUAL_SCALE
+		* GroundLootPickup3D.CURRENT_BASE_SIZE_MULTIPLIER
+	)
+	if not (loot_size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_item_scale):
+		failures.append("Ground item did not migrate from the legacy visual scale to the current 70% baseline")
+	var weapon_loot := GroundLootPickup3D.new()
+	weapon_loot.configure({
+		"id": "weapon_pistol",
+		"name": "Test Pistol",
+		"type": "weapon",
+		"assembly_id": "bp_pistol",
+	})
+	dungeon.add_child(weapon_loot)
+	await get_tree().process_frame
+	var weapon_loot_snapshot := weapon_loot.get_model_snapshot()
+	var expected_weapon_scale := (
+		GroundLootPickup3D.LEGACY_WEAPON_VISUAL_SCALE
+		* GroundLootPickup3D.CURRENT_BASE_SIZE_MULTIPLIER
+	)
+	if not (weapon_loot_snapshot.get("visual_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE * expected_weapon_scale):
+		failures.append("Dropped weapon did not migrate from the legacy visual scale to the current 70% baseline")
+	weapon_loot.queue_free()
 	loot.accept_pickup()
 	var loot_snapshot := loot.get_model_snapshot()
 	if not bool(loot_snapshot.get("accepted", false)) or loot.is_queued_for_deletion():

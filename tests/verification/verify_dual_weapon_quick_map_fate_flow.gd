@@ -60,15 +60,30 @@ func _ready() -> void:
 	_expect(bool(dungeon.call("_select_weapon_slot", 0)), "Key-1 weapon switch contract failed", failures)
 	_expect(player.get_equipped_weapon_instance_id_for_slot(1) == secondary_id, "Weapon switch rebuilt or lost secondary instance", failures)
 
-	# Quick slots bind stable item IDs and consume only after a successful effect.
+	# Quick slots own the moved item stack and consume only after a successful effect.
 	var potion := ItemRegistry.get_instance().get_item("item_health_potion")
 	_expect(inventory.add_item(potion, 2) == 2, "Cannot seed quick-use potion", failures)
 	dungeon.call("_on_quick_item_assignment_requested", 0, "item_health_potion")
+	var quick_inventory := dungeon.get("_quick_inventory") as InventoryModule
+	_expect(
+		quick_inventory != null
+		and quick_inventory.get_item_count("item_health_potion") == 2
+		and inventory.get_item_count("item_health_potion") == 0,
+		"Quick assignment did not move the real stack out of backpack", failures
+	)
 	player.current_hp = 40
 	player.hp_changed.emit(player.current_hp, player.max_hp)
-	var potion_before := inventory.get_item_count("item_health_potion")
+	var potion_before := quick_inventory.get_item_count("item_health_potion")
 	_expect(bool(dungeon.call("_use_quick_item", 0)), "Quick slot 3 did not use the bound potion", failures)
-	_expect(player.current_hp > 40 and inventory.get_item_count("item_health_potion") == potion_before - 1, "Quick item effect/count transaction is not atomic", failures)
+	_expect(player.current_hp > 40 and quick_inventory.get_item_count("item_health_potion") == potion_before - 1, "Quick item effect/count transaction is not atomic", failures)
+	player.current_hp = player.max_hp
+	player.hp_changed.emit(player.current_hp, player.max_hp)
+	var potion_before_rejected_use := quick_inventory.get_item_count("item_health_potion")
+	_expect(not bool(dungeon.call("_use_quick_item", 0)), "Full-health quick potion was incorrectly accepted", failures)
+	_expect(
+		quick_inventory.get_item_count("item_health_potion") == potion_before_rejected_use,
+		"Rejected quick-item effect still consumed an item", failures
+	)
 	ui.set_inventory_panel_open(true)
 	await get_tree().process_frame
 	_expect(ui.quick_item_slots.size() == 2 and (dungeon.get("_hud_quick_item_icons") as Array).size() == 2, "Inventory/HUD quick slots are incomplete", failures)

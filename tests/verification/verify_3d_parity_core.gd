@@ -1,5 +1,10 @@
 extends Node
 
+## 本场景在验收末尾同时保留24发对象池弹体、真实快捷栏/保险格UI、
+## 双枪与新版Bunny挂件。1900是这些正式节点接入前的原型阈值；
+## 专用性能测试仍使用更细的ACTIVE/完全探索/帧节拍预算，不由此放宽。
+const STREAMED_PARITY_NODE_BUDGET := 2200
+
 
 func _ready() -> void:
 	var failures: Array[String] = []
@@ -92,8 +97,11 @@ func _ready() -> void:
 	await _verify_extraction_interruption(dungeon, failures)
 
 	var node_count := _count_nodes(dungeon)
-	if node_count > 1900:
-		failures.append("Streamed parity slice exceeds node budget: %d" % node_count)
+	if node_count > STREAMED_PARITY_NODE_BUDGET:
+		failures.append(
+			"Streamed parity slice exceeds node budget: %d/%d"
+			% [node_count, STREAMED_PARITY_NODE_BUDGET]
+		)
 	if generation_ms > 1500.0:
 		failures.append("Initial streamed generation is too slow: %.1fms" % generation_ms)
 	_finish(failures, generation_ms, node_count, dungeon.get_runtime_snapshot())
