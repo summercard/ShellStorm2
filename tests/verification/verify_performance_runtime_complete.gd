@@ -76,11 +76,11 @@ func _verify_registry_and_room_streaming(failures: Array[String]) -> void:
 	if not bool(light.get_snapshot().get("shadow_enabled", false)):
 		failures.append("ACTIVE high-quality light did not enable its allowed shadow")
 	RuntimePerformanceManager.set_quality_profile("low")
-	if bool(light.get_snapshot().get("shadow_enabled", true)):
-		failures.append("Low quality did not override the ACTIVE room shadow allowance")
+	if not bool(light.get_snapshot().get("shadow_enabled", false)):
+		failures.append("Low quality removed the ACTIVE room gameplay shadow")
 	RuntimePerformanceManager.set_quality_profile("high")
 	if not bool(light.get_snapshot().get("shadow_enabled", false)):
-		failures.append("High quality did not restore the still-active room shadow allowance")
+		failures.append("High quality did not preserve the still-active room shadow allowance")
 	light.queue_free()
 	await get_tree().process_frame
 

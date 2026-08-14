@@ -22,6 +22,8 @@ var _current_floor_number := 100
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
 	_sun = sun
+	if GraphicsSettingsManager != null and _environment != null:
+		GraphicsSettingsManager.register_environment(_environment)
 	if _sun != null:
 		_sun.add_to_group(EnemyIllumination3D.SUN_GROUP)
 		_sun.set_meta("gameplay_light_kind", "sun")
@@ -62,7 +64,7 @@ func _apply_fixed_lighting() -> void:
 		_environment.background_color = BACKGROUND_COLOR
 		_environment.ambient_light_color = AMBIENT_COLOR
 		_environment.ambient_light_energy = AMBIENT_ENERGY
-		_environment.fog_enabled = true
+		_environment.fog_enabled = GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog")
 		_environment.fog_light_color = FOG_LIGHT_COLOR
 		_environment.fog_density = FOG_DENSITY
 
@@ -92,10 +94,13 @@ func get_snapshot() -> Dictionary:
 
 func apply_performance_quality(profile: String) -> void:
 	if _environment != null:
-		_environment.fog_enabled = profile != "low"
+		_environment.fog_enabled = (
+			profile != "low"
+			and (GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog"))
+		)
 		_environment.fog_density = FOG_DENSITY if profile == "high" else FOG_DENSITY * 0.72
 	if _sun != null:
-		_sun.shadow_enabled = profile != "low"
+		_sun.shadow_enabled = true
 		_sun.directional_shadow_max_distance = 120.0 if profile == "high" else 72.0 if profile == "balanced" else 42.0
 
 

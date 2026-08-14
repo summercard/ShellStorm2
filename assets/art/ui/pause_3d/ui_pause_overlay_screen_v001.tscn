@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://src/ui/PauseMenu3D.gd" id="1_pause"]
+[ext_resource type="Script" path="res://src/ui/PerformanceOverlay.gd" id="2_perf"]
 
 [node name="PauseOverlay" type="Control"]
 process_mode = 3
@@ -32,7 +33,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="Center"]
-custom_minimum_size = Vector2(430, 260)
+custom_minimum_size = Vector2(900, 650)
 layout_mode = 2
 
 [node name="Margin" type="MarginContainer" parent="Center/Panel"]
@@ -42,27 +43,200 @@ theme_override_constants/margin_top = 26
 theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 26
 
-[node name="VBox" type="VBoxContainer" parent="Center/Panel/Margin"]
+[node name="MainPage" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Title" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Title" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
 text = "行动暂停"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
 theme_override_font_sizes/font_size = 30
 
-[node name="Info" type="Label" parent="Center/Panel/Margin/VBox"]
+[node name="Info" type="Label" parent="Center/Panel/Margin/MainPage"]
 layout_mode = 2
 text = "当前地图、敌人AI和所有计时均已停止\n再次按 Esc 或点击按钮继续"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.76, 0.82, 0.88, 1)
 theme_override_font_sizes/font_size = 16
 
-[node name="ResumeButton" type="Button" parent="Center/Panel/Margin/VBox"]
+[node name="SpacerTop" type="Control" parent="Center/Panel/Margin/MainPage"]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+
+[node name="GraphicsButton" type="Button" parent="Center/Panel/Margin/MainPage"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "画面设置"
+theme_override_font_sizes/font_size = 18
+
+[node name="ResumeButton" type="Button" parent="Center/Panel/Margin/MainPage"]
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2
+size_flags_horizontal = 4
 text = "继续行动  [Esc]"
 theme_override_font_sizes/font_size = 17
+
+[node name="PerformanceHint" type="Label" parent="Center/Panel/Margin/MainPage"]
+layout_mode = 2
+text = "游戏中按 0 随时显示 / 隐藏实时性能开销"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.46, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="GraphicsPage" type="VBoxContainer" parent="Center/Panel/Margin"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/GraphicsPage/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "画面设置  /  HIGH-END VISUALS"
+theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 26
+
+[node name="RendererLabel" type="Label" parent="Center/Panel/Margin/GraphicsPage/Header"]
+layout_mode = 2
+text = "Forward+"
+horizontal_alignment = 2
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.58, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Rule" type="HSeparator" parent="Center/Panel/Margin/GraphicsPage"]
+layout_mode = 2
+
+[node name="PresetRow" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="PresetLabel" type="Label" parent="Center/Panel/Margin/GraphicsPage/PresetRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "专业高档预设 · 清晰轮廓 / 克制辉光 / 电影层次"
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.78, 0.86, 0.91, 1)
+theme_override_font_sizes/font_size = 15
+
+[node name="HighDefaultsButton" type="Button" parent="Center/Panel/Margin/GraphicsPage/PresetRow"]
+custom_minimum_size = Vector2(190, 42)
+layout_mode = 2
+text = "恢复高档默认"
+
+[node name="AASection" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/GraphicsPage/AASection"]
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+text = "抗锯齿"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 17
+
+[node name="AAOption" type="OptionButton" parent="Center/Panel/Margin/GraphicsPage/AASection"]
+custom_minimum_size = Vector2(310, 44)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AAHint" type="Label" parent="Center/Panel/Margin/GraphicsPage/AASection"]
+custom_minimum_size = Vector2(240, 44)
+layout_mode = 2
+text = "高档推荐：TAA"
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.46, 0.76, 0.84, 1)
+
+[node name="Scroll" type="ScrollContainer" parent="Center/Panel/Margin/GraphicsPage"]
+custom_minimum_size = Vector2(0, 390)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Grid" type="GridContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 22
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="Bloom" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "辉光 / Bloom\n克制强化自发光、枪火与霓虹"
+
+[node name="SSAO" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "环境遮蔽 / SSAO\n增强墙角、接触面与结构厚度"
+
+[node name="SSIL" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "屏幕间接光 / SSIL\n补足动态物体的细微反弹光"
+
+[node name="SSR" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "屏幕空间反射 / SSR\n强化金属、湿地与光滑表面"
+
+[node name="SDFGI" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "动态全局光照 / SDFGI\n为程序关卡提供实时漫反射"
+
+[node name="VolumetricFog" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "体积雾\n表现灯束、空气层次与纵深"
+
+[node name="DistanceFog" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "距离雾\n控制远景融合与楼层氛围"
+
+[node name="Shadows" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 58)
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "动态阴影（玩法必需）\n太阳、手电与当前房主灯始终投影"
+vertical_alignment = 1
+
+[node name="ShadowOption" type="OptionButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows"]
+custom_minimum_size = Vector2(145, 44)
+layout_mode = 2
+
+[node name="ColorGrading" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "电影色彩分级\n轻微增强对比、饱和与白点"
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Status" type="Label" parent="Center/Panel/Margin/GraphicsPage/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "设置实时生效并自动保存"
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
+
+[node name="BackButton" type="Button" parent="Center/Panel/Margin/GraphicsPage/Footer"]
+custom_minimum_size = Vector2(200, 44)
+layout_mode = 2
+text = "返回  [Esc]"
+
+[node name="PerformanceOverlay" type="PanelContainer" parent="."]
+script = ExtResource("2_perf")

@@ -1272,6 +1272,8 @@ func _configure_environment() -> void:
 	environment.fog_height = 0.0
 	environment.fog_height_density = 0.0  # 纯距离雾，关闭高度差异
 	world_environment.environment = environment
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.register_environment(environment)
 	key_light.light_color = visual_theme.key_light_color.lerp(Color(1.0, 0.54, 0.24), 0.18)
 	key_light.light_energy = 0.10
 	key_light.shadow_enabled = true
@@ -1286,13 +1288,16 @@ func _configure_environment() -> void:
 
 func apply_performance_quality(profile: String) -> void:
 	if world_environment.environment != null:
-		world_environment.environment.fog_enabled = profile != "low"
+		world_environment.environment.fog_enabled = (
+			profile != "low"
+			and (GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog"))
+		)
 		world_environment.environment.fog_density = (
 			visual_theme.fog_density
 			if profile == "high"
 			else visual_theme.fog_density * 0.72
 		)
-	key_light.shadow_enabled = profile != "low"
+	key_light.shadow_enabled = true
 	key_light.directional_shadow_max_distance = 96.0 if profile == "high" else 64.0 if profile == "balanced" else 36.0
 
 

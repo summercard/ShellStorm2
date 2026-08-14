@@ -5,9 +5,26 @@ extends Control
 
 signal pause_changed(paused: bool)
 
-@onready var resume_button: Button = $Center/Panel/Margin/VBox/ResumeButton
+const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
+const AA_LABELS := ["关闭", "FXAA（快速）", "MSAA 2×", "MSAA 4×", "MSAA 8×", "TAA（高档推荐）"]
+const SHADOW_MODES := ["low", "medium", "high"]
+const SHADOW_LABELS := ["低 · 1024", "中 · 2048", "高 · 4096（当前）"]
+
+@onready var resume_button: Button = $Center/Panel/Margin/MainPage/ResumeButton
+@onready var graphics_button: Button = $Center/Panel/Margin/MainPage/GraphicsButton
+@onready var main_page: VBoxContainer = $Center/Panel/Margin/MainPage
+@onready var graphics_page: VBoxContainer = $Center/Panel/Margin/GraphicsPage
+@onready var renderer_label: Label = $Center/Panel/Margin/GraphicsPage/Header/RendererLabel
+@onready var aa_option: OptionButton = $Center/Panel/Margin/GraphicsPage/AASection/AAOption
+@onready var shadow_option: OptionButton = $Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows/ShadowOption
+@onready var high_defaults_button: Button = $Center/Panel/Margin/GraphicsPage/PresetRow/HighDefaultsButton
+@onready var back_button: Button = $Center/Panel/Margin/GraphicsPage/Footer/BackButton
+@onready var status_label: Label = $Center/Panel/Margin/GraphicsPage/Footer/Status
 @onready var dim: ColorRect = $Dim
 @onready var center: CenterContainer = $Center
+
+var _toggle_nodes: Dictionary = {}
+var _syncing_controls := false
 
 
 func _ready() -> void:
@@ -18,11 +35,18 @@ func _ready() -> void:
 		Global.game_paused.connect(_on_global_pause_changed)
 	_apply_pause_visual(Global != null and Global.has_pause_reason("manual"))
 	resume_button.pressed.connect(resume_game)
+	graphics_button.pressed.connect(_show_graphics_page)
+	back_button.pressed.connect(_show_main_page)
+	high_defaults_button.pressed.connect(_restore_high_defaults)
+	_setup_graphics_controls()
 	UIStyleFactory.apply_tactical_tree(self)
 
 
 func try_consume_pause_input() -> bool:
 	if Global != null and Global.has_pause_reason("manual"):
+		if graphics_page.visible:
+			_show_main_page()
+			return true
 		return false
 	var game_root := get_parent().get_parent()
 	return (
@@ -55,6 +79,7 @@ func _on_global_pause_changed(_paused: bool) -> void:
 	var manual_paused := Global != null and Global.has_pause_reason("manual")
 	_apply_pause_visual(manual_paused)
 	if manual_paused:
+		_show_main_page()
 		resume_button.grab_focus()
 	pause_changed.emit(manual_paused)
 
@@ -63,3 +88,84 @@ func _apply_pause_visual(paused: bool) -> void:
 	dim.visible = paused
 	center.visible = paused
 	mouse_filter = Control.MOUSE_FILTER_STOP if paused else Control.MOUSE_FILTER_IGNORE
+
+
+func _setup_graphics_controls() -> void:
+	_toggle_nodes = {
+		"bloom": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/Bloom,
+		"ssao": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSAO,
+		"ssil": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSIL,
+		"ssr": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSR,
+		"sdfgi": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SDFGI,
+		"volumetric_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/VolumetricFog,
+		"distance_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/DistanceFog,
+		"color_grading": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/ColorGrading,
+	}
+	for index in AA_LABELS.size():
+		aa_option.add_item(AA_LABELS[index], index)
+	aa_option.item_selected.connect(_on_aa_selected)
+	for index in SHADOW_LABELS.size():
+		shadow_option.add_item(SHADOW_LABELS[index], index)
+	shadow_option.item_selected.connect(_on_shadow_quality_selected)
+	for key in _toggle_nodes.keys():
+		(_toggle_nodes[key] as CheckButton).toggled.connect(_on_effect_toggled.bind(str(key)))
+	if not GraphicsSettingsManager.settings_changed.is_connected(_on_graphics_settings_changed):
+		GraphicsSettingsManager.settings_changed.connect(_on_graphics_settings_changed)
+	_sync_graphics_controls()
+
+
+func _show_graphics_page() -> void:
+	main_page.visible = false
+	graphics_page.visible = true
+	renderer_label.text = GraphicsSettingsManager.get_renderer_summary()
+	_sync_graphics_controls()
+	aa_option.grab_focus()
+
+
+func _show_main_page() -> void:
+	graphics_page.visible = false
+	main_page.visible = true
+	if center.visible:
+		graphics_button.grab_focus()
+
+
+func _restore_high_defaults() -> void:
+	GraphicsSettingsManager.apply_high_quality_defaults()
+	status_label.text = "高档默认已恢复 · 设置已保存"
+
+
+func _on_aa_selected(index: int) -> void:
+	if _syncing_controls or index < 0 or index >= AA_MODES.size():
+		return
+	GraphicsSettingsManager.set_value("anti_aliasing", AA_MODES[index])
+	status_label.text = "抗锯齿已切换为 %s · 设置已保存" % AA_LABELS[index]
+
+
+func _on_effect_toggled(enabled: bool, key: String) -> void:
+	if _syncing_controls:
+		return
+	GraphicsSettingsManager.set_value(key, enabled)
+	status_label.text = "%s · 设置已保存" % ("效果已开启" if enabled else "效果已关闭")
+
+
+func _on_shadow_quality_selected(index: int) -> void:
+	if _syncing_controls or index < 0 or index >= SHADOW_MODES.size():
+		return
+	GraphicsSettingsManager.set_value("shadow_quality", SHADOW_MODES[index])
+	status_label.text = "动态阴影已切换为%s · 投影功能保持完整" % SHADOW_LABELS[index]
+
+
+func _on_graphics_settings_changed(_settings: Dictionary) -> void:
+	_sync_graphics_controls()
+
+
+func _sync_graphics_controls() -> void:
+	_syncing_controls = true
+	var settings := GraphicsSettingsManager.get_settings_snapshot()
+	var aa_index := AA_MODES.find(str(settings.get("anti_aliasing", "taa")))
+	aa_option.select(maxi(0, aa_index))
+	var shadow_index := SHADOW_MODES.find(str(settings.get("shadow_quality", "high")))
+	shadow_option.select(maxi(0, shadow_index))
+	for key in _toggle_nodes.keys():
+		(_toggle_nodes[key] as CheckButton).button_pressed = bool(settings.get(key, true))
+	_syncing_controls = false

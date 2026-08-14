@@ -61,6 +61,10 @@ func set_quality_profile(profile: String) -> bool:
 	return true
 
 
+func refresh_registered_quality() -> void:
+	_apply_quality_to_registered()
+
+
 func register_atmosphere(atmosphere: Node) -> void:
 	_register_weak(_registered_atmospheres, atmosphere)
 	if atmosphere != null and atmosphere.has_method("apply_performance_quality"):
@@ -74,6 +78,7 @@ func register_light(light: Node) -> void:
 
 
 func get_shadow_light_limit() -> int:
+	# 阴影承担玩法反馈，不允许任何画质设置把投影灯预算降到0。
 	return 3 if quality_profile == PROFILE_HIGH else 2 if quality_profile == PROFILE_BALANCED else 1
 
 

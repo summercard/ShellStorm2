@@ -219,14 +219,14 @@ func _validate_light_layers(tower: TowerDescent3D, failures: Array[String]) -> v
 		if (
 			lamp == null
 			or not lamp.visible
-			or not is_equal_approx(lamp.light_energy, light.energy)
+			or not is_equal_approx(lamp.light_energy, light.get_expected_render_energy())
 			or lamp.omni_range < light.light_range * 0.99
 			or light.is_processing()
 			or (light.cast_shadow and not lamp.shadow_enabled)
 		):
 			failures.append(
 				"Facility light did not restore stable floor illumination: %s (%.4f/%.4f)"
-				% [light.name, lamp.light_energy if lamp != null else -1.0, light.energy]
+				% [light.name, lamp.light_energy if lamp != null else -1.0, light.get_expected_render_energy()]
 			)
 	var standard_beacon := facility.get_node_or_null("ExtractionBeacon3D") as ExtractionBeacon3D
 	if standard_beacon != null:

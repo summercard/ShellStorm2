@@ -14,10 +14,14 @@ var _module_count := 0
 var _ruin_count := 0
 var _barrier_count := 0
 var _light_count := 0
+var _world_environment: WorldEnvironment
+var _key_light: DirectionalLight3D
 
 
 func _ready() -> void:
 	_build_environment()
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_atmosphere(self)
 	_build_ground_kit()
 	_build_road_damage()
 	_build_ruins_and_barriers()
@@ -37,8 +41,8 @@ func get_environment_snapshot() -> Dictionary:
 
 
 func _build_environment() -> void:
-	var world_environment := WorldEnvironment.new()
-	world_environment.name = "UniversalAtmosphere"
+	_world_environment = WorldEnvironment.new()
+	_world_environment.name = "UniversalAtmosphere"
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = TowerAtmosphere3D.BACKGROUND_COLOR
@@ -51,21 +55,34 @@ func _build_environment() -> void:
 	environment.fog_density = TowerAtmosphere3D.FOG_DENSITY
 	environment.fog_height = 0.0
 	environment.fog_height_density = 0.0  # 纯距离雾，关闭高度差异
-	world_environment.environment = environment
-	add_child(world_environment)
+	_world_environment.environment = environment
+	add_child(_world_environment)
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.register_environment(environment)
 
-	var key_light := DirectionalLight3D.new()
-	key_light.name = "UniversalKeyLight"
-	key_light.rotation_degrees = Vector3(-60.0, -32.0, 0.0)
-	key_light.light_color = TowerAtmosphere3D.SUN_COLOR
-	key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
-	key_light.shadow_enabled = true
-	key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
-	key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
-	key_light.directional_shadow_max_distance = 90.0
-	add_child(key_light)
-	key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
-	key_light.set_meta("gameplay_light_kind", "sun")
+	_key_light = DirectionalLight3D.new()
+	_key_light.name = "UniversalKeyLight"
+	_key_light.rotation_degrees = Vector3(-60.0, -32.0, 0.0)
+	_key_light.light_color = TowerAtmosphere3D.SUN_COLOR
+	_key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
+	_key_light.shadow_enabled = true
+	_key_light.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
+	_key_light.shadow_caster_mask = GameDesignConfig.SHADOW_MASK_WORLD_AND_PLAYER
+	_key_light.directional_shadow_max_distance = 90.0
+	add_child(_key_light)
+	_key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
+	_key_light.set_meta("gameplay_light_kind", "sun")
+
+
+func apply_performance_quality(profile: String) -> void:
+	if _world_environment != null and _world_environment.environment != null:
+		_world_environment.environment.fog_enabled = (
+			profile != "low"
+			and (GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog"))
+		)
+	if _key_light != null:
+		_key_light.shadow_enabled = true
+		_key_light.directional_shadow_max_distance = 120.0 if profile == "high" else 72.0 if profile == "balanced" else 42.0
 
 
 func _build_ground_kit() -> void:

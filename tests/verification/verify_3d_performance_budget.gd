@@ -28,12 +28,14 @@ func _ready() -> void:
 	# 动态细节仍流送，持续帧节拍与完全探索上限保持原有硬门禁。
 	if initial_world_nodes > 2400:
 		failures.append("Permanent structural proxy world exceeded 2400 nodes: %d" % initial_world_nodes)
-	if hud_shell_nodes > 140:
-		failures.append("Formal HUD and modal shells exceeded 140 fixed UI nodes: %d" % hud_shell_nodes)
+	# ESC画面设置页与0键性能面板增加27个静态Control；均不随房间探索增长，
+	# 性能面板隐藏时也不采样。固定UI预算由140/160提高到170/190。
+	if hud_shell_nodes > 170:
+		failures.append("Formal HUD and modal shells exceeded 170 fixed UI nodes: %d" % hud_shell_nodes)
 	if hud_preview_nodes > 20:
 		failures.append("Shared HUD 3D item preview exceeded 20 fixed nodes: %d" % hud_preview_nodes)
-	if hud_nodes > 160:
-		failures.append("HUD shells + shared 3D preview exceeded 160 fixed nodes: %d" % hud_nodes)
+	if hud_nodes > 190:
+		failures.append("HUD shells + shared 3D preview exceeded 190 fixed nodes: %d" % hud_nodes)
 	if initial_nodes > 2480:
 		failures.append("Permanent structural proxy world + HUD exceeded 2480 total nodes: %d" % initial_nodes)
 

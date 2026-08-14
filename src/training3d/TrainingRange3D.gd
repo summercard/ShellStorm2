@@ -11,6 +11,7 @@ const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/pr
 @onready var player: Player3D = $Player3D
 @onready var environment_kit: TrainingRangeEnvironment3D = $EnvironmentKit
 @onready var world_environment: WorldEnvironment = $WorldEnvironment
+@onready var key_light: DirectionalLight3D = $DirectionalLight3D
 @onready var loadout_label: Label = $HUD/TopBar/Margin/HBox/LoadoutLabel
 @onready var ammo_label: Label = $HUD/TopBar/Margin/HBox/AmmoLabel
 @onready var stats_label: Label = $HUD/TopBar/Margin/HBox/StatsLabel
@@ -31,6 +32,8 @@ func _ready() -> void:
 	if BaseManager != null and BaseManager.data != null:
 		_base_snapshot = BaseManager.data._to_dict().duplicate(true)
 	_configure_environment()
+	if RuntimePerformanceManager != null:
+		RuntimePerformanceManager.register_atmosphere(self)
 	_build_racks()
 	_build_targets()
 	_build_services()
@@ -55,6 +58,18 @@ func _configure_environment() -> void:
 	environment.fog_light_color = Color(0.08, 0.10, 0.10)
 	environment.fog_density = 0.008
 	world_environment.environment = environment
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.register_environment(environment)
+
+
+func apply_performance_quality(profile: String) -> void:
+	if world_environment.environment != null:
+		world_environment.environment.fog_enabled = (
+			profile != "low"
+			and (GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog"))
+		)
+	key_light.shadow_enabled = true
+	key_light.directional_shadow_max_distance = 96.0 if profile == "high" else 64.0 if profile == "balanced" else 36.0
 
 
 func _build_racks() -> void:

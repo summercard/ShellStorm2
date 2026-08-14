@@ -74,6 +74,7 @@ core_scenes=(
   verify_tower_descent_flow
   verify_3d_performance_budget
   verify_performance_runtime_complete
+  verify_graphics_settings_ui_flow
   verify_3d_flashlight_charge_flow
 )
 
@@ -81,6 +82,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_graphics_settings_visual
   verify_facility_light_retoggle_visual
   verify_3d_melee_combat_visual
   verify_base_vending_visual

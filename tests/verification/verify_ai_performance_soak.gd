@@ -132,6 +132,7 @@ func _build_world() -> void:
 	environment.ambient_light_energy = 0.34
 	environment_node.environment = environment
 	add_child(environment_node)
+	GraphicsSettingsManager.register_environment(environment)
 	var floor_body := StaticBody3D.new()
 	var floor_mesh := MeshInstance3D.new()
 	var box := BoxMesh.new()

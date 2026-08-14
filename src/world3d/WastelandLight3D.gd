@@ -2,6 +2,8 @@ class_name WastelandLight3D
 extends Node3D
 ## 可复用废土灯具：支持室外路灯与室内中央顶灯两种装配。
 
+const FORWARD_PLUS_ENERGY_MULTIPLIER := 3.0
+
 @export var light_color := Color(0.34, 0.75, 1.0)
 @export_range(0.2, 48.0, 0.1) var energy := 4.6
 @export_range(2.0, 64.0, 0.5) var light_range := 12.0
@@ -56,7 +58,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not _runtime_active or not _runtime_flicker or not failing:
 		if _light != null:
-			_light.light_energy = energy if _runtime_active and light_enabled else 0.0
+			_light.light_energy = _get_render_energy() if _runtime_active and light_enabled else 0.0
 		_refresh_process_state()
 		return
 	_elapsed += delta
@@ -75,7 +77,7 @@ func _process(delta: float) -> void:
 	var cycle := fmod(_elapsed + float(flicker_seed) * 0.73, 7.6 + float(flicker_seed % 4) * 0.9)
 	if cycle > 7.15 and cycle < 7.42:
 		factor = 0.10
-	_light.light_energy = energy * factor
+	_light.light_energy = _get_render_energy() * factor
 	if _pool_material != null:
 		_pool_material.albedo_color.a = 0.12 + clampf(factor, 0.0, 1.2) * 0.07
 
@@ -88,7 +90,7 @@ func set_runtime_active(active: bool, allow_shadow := false, allow_flicker := tr
 	visible = active
 	if _light != null:
 		_light.visible = active
-		_light.light_energy = energy if active and light_enabled else 0.0
+		_light.light_energy = _get_render_energy() if active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			active and light_enabled and allow_shadow and _quality_shadow_allowed and cast_shadow
 		)
@@ -102,7 +104,7 @@ func set_light_enabled(enabled: bool) -> void:
 	if _light != null:
 		# 用户开关不移除渲染实例，保证关后重开仍会真实照亮地板。
 		_light.visible = _runtime_active
-		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
+		_light.light_energy = _get_render_energy() if _runtime_active and light_enabled else 0.0
 		_light.shadow_enabled = (
 			_runtime_active
 			and light_enabled
@@ -116,6 +118,10 @@ func set_light_enabled(enabled: bool) -> void:
 
 func is_light_enabled() -> bool:
 	return light_enabled
+
+
+func get_expected_render_energy() -> float:
+	return _get_render_energy()
 
 
 func get_snapshot() -> Dictionary:
@@ -137,6 +143,7 @@ func get_snapshot() -> Dictionary:
 		"shadow_capable": cast_shadow,
 		"shadow_enabled": _light != null and _light.shadow_enabled,
 		"current_energy": _light.light_energy if _light != null else 0.0,
+		"expected_render_energy": _get_render_energy(),
 		"light_cull_mask": light_cull_mask,
 		"shadow_caster_mask": _light.shadow_caster_mask if _light != null else 0,
 		"is_3d": true,
@@ -144,8 +151,8 @@ func get_snapshot() -> Dictionary:
 
 
 func apply_performance_quality(profile: String) -> void:
-	# High: 太阳+手电+当前房主灯；Balanced: 太阳+手电；Low: 只保留手电。
-	_quality_shadow_allowed = profile == "high"
+	# 当前房主灯投影是玩法信息；档位只改变阴影图集精度，不移除投影。
+	_quality_shadow_allowed = true
 	if _light != null:
 		_light.shadow_enabled = (
 			_runtime_active
@@ -213,7 +220,7 @@ func _apply_configuration() -> void:
 	if _light != null:
 		_light.light_color = light_color
 		_light.visible = _runtime_active
-		_light.light_energy = energy if _runtime_active and light_enabled else 0.0
+		_light.light_energy = _get_render_energy() if _runtime_active and light_enabled else 0.0
 		_light.omni_range = light_range
 		_light.shadow_enabled = (
 			_runtime_active
@@ -231,6 +238,16 @@ func _apply_configuration() -> void:
 		_pool_material.albedo_color = Color(light_color.r, light_color.g, light_color.b, 0.18)
 		_pool_material.emission = light_color.darkened(0.22)
 	_update_lens_state()
+
+
+func _get_render_energy() -> float:
+	# Compatibility与Forward+的点光衰减观感不同。现有内容表保留设计能量，
+	# 渲染层只在Forward+做统一曝光补偿，避免逐房复制两套数值。
+	return energy * (
+		FORWARD_PLUS_ENERGY_MULTIPLIER
+		if RenderingServer.get_current_rendering_method() == "forward_plus"
+		else 1.0
+	)
 
 
 func _update_lens_state() -> void:

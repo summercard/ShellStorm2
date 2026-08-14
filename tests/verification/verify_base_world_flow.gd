@@ -24,7 +24,9 @@ func _ready() -> void:
 	var node_count := _count_nodes(base_world)
 	# Bunny01 v002 adds evaluated left/right hands, two ear sockets and independent feet.
 	# 自动贩卖机独立货窗、屏幕与碰撞加入后实测420节点，保留5节点余量。
-	if node_count > 425:
+	# 共用暂停层新增画面设置页（9个效果开关、6档AA）与0键性能面板后，
+	# 正式基地静态UI预算由425调整为470；场景几何与设施预算不变。
+	if node_count > 470:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
 	if base_world.get_facility_count() != 9:
 		failures.append("BaseWorld3D does not expose nine formal facilities")
