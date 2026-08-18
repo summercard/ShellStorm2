@@ -14,6 +14,7 @@ collision_layer = 0
 collision_mask = 1
 script = ExtResource("1_script")
 facility_id = ""
+base_size_multiplier = 1.0
 display_name = "复古游戏电视站"
 description = "未开放设施资产；已入库，暂不绑定基地功能"
 metadata/asset_name_cn = "复古游戏电视站"

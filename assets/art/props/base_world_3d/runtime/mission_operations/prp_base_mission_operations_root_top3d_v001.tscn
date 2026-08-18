@@ -14,6 +14,7 @@ collision_layer = 0
 collision_mask = 1
 script = ExtResource("1_script")
 facility_id = "mission_operations"
+base_size_multiplier = 1.0
 display_name = "远征情报终端"
 description = "查看本轮楼层、任务与下行规则"
 metadata/asset_name_cn = "战术情报指挥桌"

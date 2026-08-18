@@ -29,6 +29,7 @@ const FRONT_INTERACTION_PROFILES := {
 @export_range(0, 99, 1) var target_floor := 0
 @export var facility_color := Color(0.28, 0.55, 0.78)
 @export var beacon_light_enabled := true
+@export_range(0.1, 2.0, 0.05) var base_size_multiplier := DEFAULT_BASE_SIZE_MULTIPLIER
 
 @onready var base_mesh: MeshInstance3D = get_node_or_null("Base") as MeshInstance3D
 @onready var roof_mesh: MeshInstance3D = get_node_or_null("Roof") as MeshInstance3D
@@ -121,11 +122,11 @@ func _apply_default_base_size() -> void:
 		if child == interaction_shape or not child is Node3D:
 			continue
 		var spatial := child as Node3D
-		spatial.position *= DEFAULT_BASE_SIZE_MULTIPLIER
+		spatial.position *= base_size_multiplier
 		if child is Label3D:
 			continue
-		spatial.scale *= DEFAULT_BASE_SIZE_MULTIPLIER
-	set_meta("base_size_multiplier", DEFAULT_BASE_SIZE_MULTIPLIER)
+		spatial.scale *= base_size_multiplier
+	set_meta("base_size_multiplier", base_size_multiplier)
 
 
 func get_size_contract_snapshot() -> Dictionary:
@@ -139,7 +140,7 @@ func get_size_contract_snapshot() -> Dictionary:
 				visual_scale = (child as GeometryInstance3D).scale
 				break
 	return {
-		"base_size_multiplier": DEFAULT_BASE_SIZE_MULTIPLIER,
+		"base_size_multiplier": base_size_multiplier,
 		"root_scale": scale,
 		"interaction_scale": interaction.scale if interaction != null else Vector3.ZERO,
 		"body_scale": body.scale if body != null else Vector3.ZERO,
