@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99WalkableModule3D.gd" id="2_collision"]
+
+[node name="基地99层二楼外门小楼梯H2米" type="Node3D"]
+script = ExtResource("2_collision")
+collision_role = "exterior_stair"
+metadata/asset_id = "ENV-BASE99-STAIR-EXTERIOR-H2"
+metadata/logic_id = "base99_stair_exterior_h2"
+metadata/asset_category = "environment_module"
+metadata/component = "stair_exterior"
+metadata/dimensions_m = Vector3(4.515, 2, 2.8)
+metadata/base_height_m = 7.0
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "editable_simplified_walkable_surface_and_camera_stair_slab"
+metadata/shadow_policy = "receive_light_no_cast"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

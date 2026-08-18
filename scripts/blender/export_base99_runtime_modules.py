@@ -9,18 +9,40 @@ origin only for export and is restored before the Blender process exits.
 """
 
 import bpy
+import bmesh
 import sys
 from pathlib import Path
 
 
 PROJECT_ROOT = Path("/Users/summercards/ShellStorm2")
 EXPORTS = {
+    "ENV-BASE99-FLOOR-RIVET-5M": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m"
+    / "env_base99_floor_rivet_5m_visual_top3d_v001.glb",
+    "ENV-BASE99-FLOOR-PLAIN-5M": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m"
+    / "env_base99_floor_plain_5m_visual_top3d_v001.glb",
+    "ENV-BASE99-DOOR-LIFT-22X25": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5"
+    / "env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb",
     "ENV-BASE99-WALL-PLAIN-5X9": PROJECT_ROOT
     / "assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x9"
     / "env_base99_wall_plain_5x9_visual_top3d_v001.glb",
     "ENV-BASE99-WALL-DOOR-5X9": PROJECT_ROOT
     / "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9"
     / "env_base99_wall_door_5x9_visual_top3d_v001.glb",
+    "ENV-BASE99-WALL-WINDOW-5X9": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_wall_window_5x9"
+    / "env_base99_wall_window_5x9_visual_top3d_v001.glb",
+    "ENV-BASE99-MEZZANINE-20X10-Z7": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z7"
+    / "env_base99_mezzanine_20x10_z7_visual_top3d_v001.glb",
+    "ENV-BASE99-STAIR-L-Z7": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z7"
+    / "env_base99_stair_l_z7_visual_top3d_v001.glb",
+    "ENV-BASE99-STAIR-EXTERIOR-H2": PROJECT_ROOT
+    / "assets/art/environments/base_facility_3d/components/env_base99_stair_exterior_h2"
+    / "env_base99_stair_exterior_h2_visual_top3d_v001.glb",
 }
 
 
@@ -45,6 +67,17 @@ def find_output_root(asset_id):
     return candidates[0]
 
 
+def triangulate_export_mesh(mesh_object):
+    """Triangulate the in-memory export copy without saving back to the clean .blend."""
+    mesh = mesh_object.data
+    bm = bmesh.new()
+    bm.from_mesh(mesh)
+    bmesh.ops.triangulate(bm, faces=list(bm.faces))
+    bm.to_mesh(mesh)
+    bm.free()
+    mesh.update()
+
+
 def export_asset(asset_id, output_path):
     root = find_output_root(asset_id)
     meshes = [obj for obj in descendants(root) if obj.type == "MESH"]
@@ -52,6 +85,8 @@ def export_asset(asset_id, output_path):
         raise RuntimeError(f"No output mesh below {root.name}")
     original_location = root.location.copy()
     try:
+        for mesh_object in meshes:
+            triangulate_export_mesh(mesh_object)
         root.location = (0.0, 0.0, 0.0)
         bpy.context.view_layer.update()
         bpy.ops.object.select_all(action="DESELECT")

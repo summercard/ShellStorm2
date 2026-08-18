@@ -50,6 +50,18 @@ const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
 const BASE99_WALL_PLAIN_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn"
 )
+const BASE99_FLOOR_PLAIN_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn"
+)
+const BASE99_FLOOR_RIVET_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn"
+)
+const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn"
+)
+const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+)
 # —— 房间壳体原子件 prefab（B 节）
 const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor.tscn")
 const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset.tscn")
@@ -110,6 +122,8 @@ const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
 static var _tower_floor_tile_mesh: Mesh
 static var _base99_solid_wall_mesh: Mesh
+static var _base99_floor_plain_mesh: Mesh
+static var _base99_floor_rivet_mesh: Mesh
 
 const ROOM_DIMENSIONS := {
 	# 约按 2D RoomData 的 0.034 m/px 映射，保留四档真实战斗尺度。
@@ -225,6 +239,12 @@ func get_room_snapshot() -> Dictionary:
 		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_dark": 18 if room_type == "FACILITY" else 0,
 		"base_grid_checkerboard_pattern": room_type == "FACILITY",
+		"base99_floor_plain_instance_count": _sum_int_meta_for_asset(
+			self, "ENV-BASE99-FLOOR-PLAIN-5M", "instance_count"
+		),
+		"base99_floor_rivet_instance_count": _sum_int_meta_for_asset(
+			self, "ENV-BASE99-FLOOR-RIVET-5M", "instance_count"
+		),
 		"tower_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M")
 			+ _count_nodes_with_meta(self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9")
@@ -235,7 +255,31 @@ func get_room_snapshot() -> Dictionary:
 		"base99_wall_plain_instance_count": _sum_int_meta_for_asset(
 			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count"
 		),
-		"tower_door_wall_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M"),
+		"base99_wall_window_instance_count": _sum_int_meta_for_asset(
+			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count"
+		),
+		"base99_wall_door_module_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9"
+		),
+		"base99_door_lift_count": _count_nodes_with_meta(
+			self, "visual_asset_id", "ENV-BASE99-DOOR-LIFT-22X25"
+		),
+		"base99_mezzanine_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE99-MEZZANINE-20X10-Z7"
+		),
+		"base99_stair_l_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE99-STAIR-L-Z7"
+		),
+		"base99_stair_exterior_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE99-STAIR-EXTERIOR-H2"
+		),
+		"base99_camera_stair_slab_count": _count_nodes_with_meta(
+			self, "camera_stair_slab", true
+		),
+		"tower_door_wall_module_count": (
+			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M")
+			+ _count_nodes_with_meta(self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9")
+		),
 		"tower_corner_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-CORNER-L-5M"),
 		"wall_material_variant_a_count": _count_nodes_with_meta(self, "material_variant", "A"),
 		"wall_material_variant_b_count": _count_nodes_with_meta(self, "material_variant", "B"),
@@ -611,8 +655,9 @@ func _build_tower_module_shell(dimensions: Vector2) -> void:
 func _build_base_facility_shell(dimensions: Vector2) -> void:
 	# 30m 基地使用 6×6 的 5m 美术地砖；下方 TowerFloorStage 继续承担整层
 	# 承重碰撞，因此这里的地砖只做轻微抬升的视觉层，避免重复碰撞。
-	var floor_mesh := _get_tower_floor_tile_mesh()
-	if floor_mesh != null:
+	var plain_floor_mesh := _get_base99_floor_mesh(BASE99_FLOOR_PLAIN_PREFAB, false)
+	var rivet_floor_mesh := _get_base99_floor_mesh(BASE99_FLOOR_RIVET_PREFAB, true)
+	if plain_floor_mesh != null and rivet_floor_mesh != null:
 		var light_transforms: Array[Transform3D] = []
 		var dark_transforms: Array[Transform3D] = []
 		for tile_z in range(6):
@@ -630,19 +675,18 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 				else:
 					dark_transforms.append(transform)
 		_add_base_floor_grid(
-			"BaseFloorGrid6x6_A",
-			floor_mesh,
+			"BaseFloorGrid6x6_Plain",
+			plain_floor_mesh,
 			light_transforms,
-			FACILITY_FLOOR_TILE_A
+			"ENV-BASE99-FLOOR-PLAIN-5M"
 		)
 		_add_base_floor_grid(
-			"BaseFloorGrid6x6_B",
-			floor_mesh,
+			"BaseFloorGrid6x6_Rivet",
+			rivet_floor_mesh,
 			dark_transforms,
-			FACILITY_FLOOR_TILE_B
+			"ENV-BASE99-FLOOR-RIVET-5M"
 		)
-	# 基地与楼顶/战斗房统一复用 5m 实墙、门墙和独立拐角组件。
-	# 不再用整条 Box 拉伸成墙，门洞表现、碰撞和 RoomDoor3D 触发保持同源。
+	# 99层外圈只使用普通墙和独立门墙；窗墙属于100层，不得混入本层。
 	_build_tower_wall_v2(dimensions)
 
 
@@ -650,7 +694,7 @@ func _add_base_floor_grid(
 	node_name: String,
 	floor_mesh: Mesh,
 	transforms: Array[Transform3D],
-	material: StandardMaterial3D
+	asset_id: String
 ) -> void:
 	var floor_multimesh := MultiMesh.new()
 	floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -661,11 +705,28 @@ func _add_base_floor_grid(
 	var floor_grid := MultiMeshInstance3D.new()
 	floor_grid.name = node_name
 	floor_grid.multimesh = floor_multimesh
-	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	floor_grid.material_override = material
-	floor_grid.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
+	# 基地结构表现接受灯光但不投射动态阴影；玩法阻挡由独立碰撞层负责。
+	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	floor_grid.set_meta("asset_id", asset_id)
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
+	floor_grid.set_meta("instance_count", transforms.size())
+	floor_grid.set_meta("shadow_policy", "receive_light_no_cast")
 	add_child(floor_grid)
+
+
+func _get_base99_floor_mesh(prefab: PackedScene, rivet: bool) -> Mesh:
+	if rivet and _base99_floor_rivet_mesh != null:
+		return _base99_floor_rivet_mesh
+	if not rivet and _base99_floor_plain_mesh != null:
+		return _base99_floor_plain_mesh
+	var source := prefab.instantiate()
+	var mesh := _find_first_mesh(source)
+	source.free()
+	if rivet:
+		_base99_floor_rivet_mesh = mesh
+	else:
+		_base99_floor_plain_mesh = mesh
+	return mesh
 
 
 func _get_tower_floor_tile_mesh() -> Mesh:
@@ -807,8 +868,17 @@ func _spawn_solid_wall_visual_instances(
 	if not uses_base99_visual:
 		material_a = _get_wall_module_material(0)
 		material_b = _get_wall_module_material(1)
-	_add_wall_multimesh_variant(direction, "A", mesh, transforms_a, material_a)
-	_add_wall_multimesh_variant(direction, "B", mesh, transforms_b, material_b)
+	var plain_asset_id := (
+		"ENV-BASE99-WALL-PLAIN-5X9"
+		if uses_base99_visual
+		else "ENV-TOWER-WALL-SOLID-5M"
+	)
+	_add_wall_multimesh_variant(
+		direction, "A", mesh, transforms_a, material_a, plain_asset_id
+	)
+	_add_wall_multimesh_variant(
+		direction, "B", mesh, transforms_b, material_b, plain_asset_id
+	)
 
 
 func _add_wall_multimesh_variant(
@@ -816,9 +886,10 @@ func _add_wall_multimesh_variant(
 	variant: String,
 	mesh: Mesh,
 	transforms: Array[Transform3D],
-	material: StandardMaterial3D
+	material: StandardMaterial3D,
+	asset_id: String
 ) -> void:
-	if transforms.is_empty():
+	if mesh == null or transforms.is_empty():
 		return
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -832,17 +903,22 @@ func _add_wall_multimesh_variant(
 	# 基地正式GLB保留自身PaletteUV多表面材质；旧通用墙才使用主题材质覆盖。
 	if material != null:
 		visual.material_override = material
-	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	visual.set_meta(
-		"asset_id",
-		"ENV-BASE99-WALL-PLAIN-5X9" if room_type == "FACILITY" else "ENV-TOWER-WALL-SOLID-5M"
+	visual.cast_shadow = (
+		GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		if room_type == "FACILITY"
+		else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	)
+	visual.set_meta("asset_id", asset_id)
 	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 	visual.set_meta("tower_wall_direction", direction)
 	visual.set_meta("material_variant", variant)
 	visual.set_meta("segment_count", transforms.size())
 	visual.set_meta("visual_only", room_type == "FACILITY")
 	visual.set_meta("collision_owner", "DungeonRoom3D")
+	visual.set_meta(
+		"shadow_policy",
+		"receive_light_no_cast" if room_type == "FACILITY" else "cast"
+	)
 	add_child(visual)
 
 
@@ -872,6 +948,17 @@ func _find_first_mesh(root: Node) -> Mesh:
 		if found != null:
 			return found
 	return null
+
+
+func _set_geometry_shadow_casting(root: Node, enabled: bool) -> void:
+	if root is GeometryInstance3D:
+		(root as GeometryInstance3D).cast_shadow = (
+			GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			if enabled
+			else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		)
+	for child in root.get_children():
+		_set_geometry_shadow_casting(child, enabled)
 
 
 ## v0.1 v2 模块化墙拼装：4 拐角 + 边墙 + 门洞
@@ -973,17 +1060,30 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 				module_position = Vector3(wall_offset, 0.0, along)
 				rotation_y = -PI * 0.5
 		if is_door_module:
-			var module := TOWER_DOOR_PREFAB.instantiate() as Node3D
+			var uses_base99_door := room_type == "FACILITY"
+			var module_scene := (
+				BASE99_WALL_DOOR_PREFAB if uses_base99_door else TOWER_DOOR_PREFAB
+			)
+			var module := module_scene.instantiate() as Node3D
 			module.name = "Imported_DoorWall5M_%s_I%02d" % [
 				direction.capitalize(),
 				module_index,
 			]
 			module.position = module_position
 			module.rotation.y = rotation_y
-			module.set_meta("asset_id", "ENV-TOWER-WALL-DOOR-5M")
+			module.set_meta(
+				"asset_id",
+				"ENV-BASE99-WALL-DOOR-5X9"
+				if uses_base99_door
+				else "ENV-TOWER-WALL-DOOR-5M"
+			)
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
-			_apply_module_material_variant(module, module_index)
+			if uses_base99_door:
+				_set_geometry_shadow_casting(module, false)
+				module.set_meta("shadow_policy", "receive_light_no_cast")
+			else:
+				_apply_module_material_variant(module, module_index)
 			_set_camera_lower_wall_on_static_bodies(
 				module, direction in ["north", "south"]
 			)
@@ -1389,7 +1489,12 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
 	var door := DOOR_SCRIPT.new() as RoomDoor3D
-	door.configure(direction, target_room_id, theme.accent_color)
+	door.configure(
+		direction,
+		target_room_id,
+		theme.accent_color,
+		BASE99_DOOR_LIFT_PREFAB if room_type == "FACILITY" else null
+	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
@@ -1780,9 +1885,14 @@ func _build_trigger() -> void:
 	area.collision_mask = 1
 	add_child(area)
 	var shape := BoxShape3D.new()
-	shape.size = Vector3(dimensions.x * 0.72, 2.2, dimensions.y * 0.72)
+	var trigger_height := 9.5 if room_type == "FACILITY" else 2.2
+	shape.size = Vector3(
+		dimensions.x * 0.72,
+		trigger_height,
+		dimensions.y * 0.72
+	)
 	var collision := CollisionShape3D.new()
-	collision.position.y = 0.9
+	collision.position.y = 4.5 if room_type == "FACILITY" else 0.9
 	collision.shape = shape
 	area.add_child(collision)
 	area.body_entered.connect(_on_room_body_entered)

@@ -37,6 +37,8 @@ const FLOOR_TILE_MATERIAL_B: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_b_v001.tres"
 )
 const WALL_DOOR_GAP_HALF_WIDTH := 5.0
+const BASE_99_100_ATRIUM_WORLD_RECT := Rect2(-15.0, -10.0, 30.0, 30.0)
+const BASE_99_100_ATRIUM_TILE_COUNT := 36
 
 var floor_index := 0
 var floor_kind := "combat"
@@ -145,6 +147,9 @@ func get_snapshot() -> Dictionary:
 		"uses_imported_floor_mesh": _floor_visual_light != null and _floor_visual_light.multimesh != null,
 		"uses_imported_outer_mesh": _outer_visual != null and _outer_visual.multimesh != null,
 		"checkerboard_pattern": true,
+		"base_99_100_atrium_enabled": floor_index == 0,
+		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if floor_index == 0 else 0,
+		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if floor_index == 0 else Rect2(),
 	}
 
 
@@ -493,6 +498,10 @@ func _build_support() -> void:
 
 func _hole_rects() -> Array[Rect2i]:
 	var holes: Array[Rect2i] = []
+	# 100层与99层基地打通：只从100层(stage 0)移除基地上方6×6地砖，
+	# 99层自身的36块地面仍由基地房间保留。
+	if floor_index == 0:
+		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	for side in stair_hole_sides:
 		holes.append(_world_rect_to_grid(_stair_hole_world_rect(side)))
 	return holes

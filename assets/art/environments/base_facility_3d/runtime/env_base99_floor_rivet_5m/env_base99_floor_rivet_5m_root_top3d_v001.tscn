@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="基地99层铆钉地板5x5米" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-FLOOR-RIVET-5M"
+metadata/logic_id = "base99_floor_rivet_5m"
+metadata/asset_category = "environment_module"
+metadata/component = "floor_rivet"
+metadata/grid_unit_m = 5.0
+metadata/dimensions_m = Vector3(5, 0.395, 5)
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "receive_light_no_cast"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="基地99层滑升门2.2x2.5米" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-DOOR-LIFT-22X25"
+metadata/logic_id = "base99_door_lift_2p2x2p5"
+metadata/asset_category = "facility_component"
+metadata/component = "door_leaf"
+metadata/dimensions_m = Vector3(2.2, 2.5, 0.325)
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "RoomDoor3D"
+metadata/shadow_policy = "receive_light_no_cast"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

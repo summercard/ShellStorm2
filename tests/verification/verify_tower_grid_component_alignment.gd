@@ -105,6 +105,13 @@ func _ready() -> void:
 		if hole_count != expected_holes[index]:
 			failures.append("floor stage %d has %d stair holes; expected %d upper-floor holes" % [index, hole_count, expected_holes[index]])
 		var expected_tiles := 2500 - hole_count * 18
+		if index == 0:
+			expected_tiles -= 36
+			if (
+				not bool(stage.get("base_99_100_atrium_enabled", false))
+				or int(stage.get("base_99_100_atrium_tile_count", 0)) != 36
+			):
+				failures.append("100层缺少基地99/100层6×6贯通中庭")
 		if int(stage.get("tile_count", -1)) != expected_tiles:
 			failures.append("floor stage %d tile coverage is incomplete" % index)
 
@@ -251,7 +258,10 @@ func _validate_room_door(room: DungeonRoom3D, side: String, failures: Array[Stri
 func _find_door_wall_module(root: Node, side: String) -> Node3D:
 	if (
 		root is Node3D
-		and str(root.get_meta("asset_id", "")) == "ENV-TOWER-WALL-DOOR-5M"
+		and str(root.get_meta("asset_id", "")) in [
+			"ENV-TOWER-WALL-DOOR-5M",
+			"ENV-BASE99-WALL-DOOR-5X9",
+		]
 		and str(root.get_meta("tower_wall_direction", "")) == side
 	):
 		return root as Node3D

@@ -13,14 +13,21 @@ var is_open := false
 var requires_key := true
 var requires_clear := true
 var triggers_fate := true
-var _panel: MeshInstance3D
+var _panel: Node3D
 var _collision: CollisionShape3D
 var _prompt: Label3D
+var _panel_visual_scene: PackedScene
 
 
-func configure(p_direction: String, p_target_room_id: String, accent: Color) -> void:
+func configure(
+	p_direction: String,
+	p_target_room_id: String,
+	accent: Color,
+	p_panel_visual_scene: PackedScene = null
+) -> void:
 	direction = p_direction
 	target_room_id = p_target_room_id
+	_panel_visual_scene = p_panel_visual_scene
 	_build(accent)
 
 
@@ -76,6 +83,7 @@ func get_snapshot() -> Dictionary:
 			TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
 			PANEL_THICKNESS_M
 		),
+		"visual_asset_id": str(get_meta("visual_asset_id", "")),
 		"is_3d": true,
 	}
 
@@ -103,44 +111,21 @@ func _build(accent: Color) -> void:
 	name = "Door_%s" % direction.capitalize()
 	collision_layer = 1
 	collision_mask = 0
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(0.11, 0.13, 0.13)
-	material.metallic = 0.78
-	material.roughness = 0.34
-	var panel_mesh := BoxMesh.new()
-	panel_mesh.size = Vector3(
-		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
-		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
-		PANEL_THICKNESS_M
-	)
-	panel_mesh.material = material
-	_panel = MeshInstance3D.new()
+	_panel = Node3D.new()
 	_panel.name = "DoorPanel"
 	_panel.position.y = TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 0.5
-	_panel.mesh = panel_mesh
 	add_child(_panel)
-	var stripe_material := StandardMaterial3D.new()
-	stripe_material.albedo_color = accent
-	stripe_material.emission_enabled = true
-	stripe_material.emission = accent
-	stripe_material.emission_energy_multiplier = 1.5
-	var stripe_mesh := BoxMesh.new()
-	stripe_mesh.size = Vector3(
-		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.72,
-		0.11,
-		0.035
-	)
-	stripe_mesh.material = stripe_material
-	var stripe := MeshInstance3D.new()
-	stripe.name = "LockStripe"
-	stripe.position = Vector3(0, 0, -0.17)
-	stripe.mesh = stripe_mesh
-	_panel.add_child(stripe)
-	var stripe_back := MeshInstance3D.new()
-	stripe_back.name = "LockStripeBack"
-	stripe_back.position = Vector3(0, 0, 0.17)
-	stripe_back.mesh = stripe_mesh
-	_panel.add_child(stripe_back)
+	if _panel_visual_scene != null:
+		var visual := _panel_visual_scene.instantiate() as Node3D
+		visual.name = "ImportedDoorVisual"
+		# 导入门以底边中心为原点；DoorPanel动画根仍以门中心为基准。
+		visual.position.y = -TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 0.5
+		_panel.add_child(visual)
+		_set_geometry_shadow_casting(visual, false)
+		set_meta("visual_asset_id", str(visual.get_meta("asset_id", "")))
+		set_meta("shadow_policy", "receive_light_no_cast")
+	else:
+		_build_procedural_panel(accent)
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(
 		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
@@ -166,3 +151,50 @@ func _build(accent: Color) -> void:
 	_prompt.visible = false
 	add_child(_prompt)
 	set_open(false, true)
+
+
+func _build_procedural_panel(accent: Color) -> void:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(0.11, 0.13, 0.13)
+	material.metallic = 0.78
+	material.roughness = 0.34
+	var panel_mesh := BoxMesh.new()
+	panel_mesh.size = Vector3(
+		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
+		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
+		PANEL_THICKNESS_M
+	)
+	panel_mesh.material = material
+	var panel_visual := MeshInstance3D.new()
+	panel_visual.name = "ProceduralDoorPanel"
+	panel_visual.mesh = panel_mesh
+	_panel.add_child(panel_visual)
+	var stripe_material := StandardMaterial3D.new()
+	stripe_material.albedo_color = accent
+	stripe_material.emission_enabled = true
+	stripe_material.emission = accent
+	stripe_material.emission_energy_multiplier = 1.5
+	var stripe_mesh := BoxMesh.new()
+	stripe_mesh.size = Vector3(
+		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.72,
+		0.11,
+		0.035
+	)
+	stripe_mesh.material = stripe_material
+	for z in [-0.17, 0.17]:
+		var stripe := MeshInstance3D.new()
+		stripe.name = "LockStripeFront" if z < 0.0 else "LockStripeBack"
+		stripe.position.z = z
+		stripe.mesh = stripe_mesh
+		_panel.add_child(stripe)
+
+
+func _set_geometry_shadow_casting(root: Node, enabled: bool) -> void:
+	if root is GeometryInstance3D:
+		(root as GeometryInstance3D).cast_shadow = (
+			GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			if enabled
+			else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		)
+	for child in root.get_children():
+		_set_geometry_shadow_casting(child, enabled)

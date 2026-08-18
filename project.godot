@@ -78,10 +78,6 @@ GameplaySpatialRegistry3D="*res://src/core/GameplaySpatialRegistry3D.gd"
 GraphicsSettingsManager="*res://src/core/GraphicsSettingsManager.gd"
 RuntimePerformanceManager="*res://src/core/RuntimePerformanceManager.gd"
 
-[performance]
-
-quality_profile="high"
-
 [display]
 
 window/size/viewport_width=1280
@@ -204,11 +200,12 @@ toggle_floor_map={
 ]
 }
 
+[performance]
+
+quality_profile="high"
+
 [rendering]
 
-renderer/rendering_method="forward_plus"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
-lights_and_shadows/directional_shadow/size=4096
-lights_and_shadows/positional_shadow/atlas_size=4096
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn" id="6_retro"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z7/env_base99_mezzanine_20x10_z7_root_top3d_v001.tscn" id="9_mezzanine"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z7/env_base99_stair_l_z7_root_top3d_v001.tscn" id="10_stair_l"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_root_top3d_v001.tscn" id="11_stair_exterior"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
@@ -58,6 +61,18 @@ mesh = SubResource("MeshBoundaryEW")
 [node name="东墙边界" type="MeshInstance3D" parent="编辑器参考_运行时自动隐藏"]
 position = Vector3(15, 0.04, 0)
 mesh = SubResource("MeshBoundaryEW")
+
+[node name="基地结构组件_可移动旋转" type="Node3D" parent="."]
+metadata/usage = "楼板和楼梯的初始位置来自Blender母版；可在此直接移动旋转，组件自带随动行走碰撞"
+
+[node name="二层楼中楼楼板_20x10米" parent="基地结构组件_可移动旋转" instance=ExtResource("9_mezzanine")]
+position = Vector3(5, 0, -10)
+
+[node name="L型楼梯_一楼至二楼" parent="基地结构组件_可移动旋转" instance=ExtResource("10_stair_l")]
+position = Vector3(-9.58, 0, -9.15)
+
+[node name="外门小楼梯_二楼至100层" parent="基地结构组件_可移动旋转" instance=ExtResource("11_stair_exterior")]
+position = Vector3(12.74, 7, -7.5)
 
 [node name="设施交互节点_可移动旋转" type="Node3D" parent="."]
 
