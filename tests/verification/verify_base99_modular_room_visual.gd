@@ -2,6 +2,7 @@ extends Node
 ## 基地99层九件模块整体布置的明亮验收视图；只用于可视回归，不参与玩法。
 
 const OUTPUT := "res://outputs/verification/base99_modular_room_integration.png"
+const UPPER_SHELL_OUTPUT := "res://outputs/verification/base100_upper_shell_roof_integration.png"
 
 
 func _ready() -> void:
@@ -45,5 +46,19 @@ func _ready() -> void:
 		push_error("BASE99_VISUAL_FAIL: cannot save preview")
 		get_tree().quit(1)
 		return
-	print("BASE99_MODULAR_ROOM_VISUAL_OK: nine-module integration preview saved")
+	# 从东南上方验证18米封顶和两层围护；这是独立验收图，不改变玩法相机。
+	camera.global_position = facility.global_position + Vector3(0.0, 25.0, -32.0)
+	camera.look_at(facility.global_position + Vector3(0.0, 10.0, 0.0), Vector3.UP)
+	for _frame in range(8):
+		await get_tree().process_frame
+	var upper_shell_image := get_viewport().get_texture().get_image()
+	if (
+		upper_shell_image == null
+		or upper_shell_image.is_empty()
+		or upper_shell_image.save_png(UPPER_SHELL_OUTPUT) != OK
+	):
+		push_error("BASE100_VISUAL_FAIL: cannot save upper shell/roof preview")
+		get_tree().quit(1)
+		return
+	print("BASE99_MODULAR_ROOM_VISUAL_OK: interior and upper-shell roof previews saved")
 	get_tree().quit(0)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z7/env_base99_mezzanine_20x10_z7_root_top3d_v001.tscn" id="9_mezzanine"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z7/env_base99_stair_l_z7_root_top3d_v001.tscn" id="10_stair_l"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_root_top3d_v001.tscn" id="11_stair_exterior"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h9/env_base100_upper_shell_30x30_h9_root_top3d_v001.tscn" id="12_upper_shell"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
@@ -73,6 +74,8 @@ position = Vector3(-9.58, 0, -9.15)
 
 [node name="外门小楼梯_二楼至100层" parent="基地结构组件_可移动旋转" instance=ExtResource("11_stair_exterior")]
 position = Vector3(12.74, 7, -7.5)
+
+[node name="100层上层围护与18米封顶" parent="基地结构组件_可移动旋转" instance=ExtResource("12_upper_shell")]
 
 [node name="设施交互节点_可移动旋转" type="Node3D" parent="."]
 

@@ -121,9 +121,9 @@ func _build(accent: Color) -> void:
 		# 导入门以底边中心为原点；DoorPanel动画根仍以门中心为基准。
 		visual.position.y = -TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 0.5
 		_panel.add_child(visual)
-		_set_geometry_shadow_casting(visual, false)
+		_set_geometry_shadow_casting(visual, true)
 		set_meta("visual_asset_id", str(visual.get_meta("asset_id", "")))
-		set_meta("shadow_policy", "receive_light_no_cast")
+		set_meta("shadow_policy", "cast_and_receive")
 	else:
 		_build_procedural_panel(accent)
 	var shape := BoxShape3D.new()

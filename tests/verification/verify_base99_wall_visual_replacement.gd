@@ -66,6 +66,18 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("99层错误放入了100层专用窗墙")
 		if int(snapshot.get("base99_wall_door_module_count", 0)) != 2:
 			failures.append("基地带门墙不是2个独立模块")
+		if int(snapshot.get("base100_upper_shell_count", 0)) != 1:
+			failures.append("基地缺少独立可编辑的100层上层围护与封顶Prefab")
+		if int(snapshot.get("base100_wall_plain_instance_count", 0)) != 19:
+			failures.append("100层上层围护普通墙不是19块")
+		if int(snapshot.get("base100_wall_window_instance_count", 0)) != 4:
+			failures.append("100层北墙窗墙不是中间4块")
+		if int(snapshot.get("base100_wall_door_instance_count", 0)) != 1:
+			failures.append("100层东墙侧向门墙不是1块")
+		if int(snapshot.get("base100_roof_tile_count", 0)) != 36:
+			failures.append("18米封顶不是6×6共36块5米模块")
+		if int(snapshot.get("base100_structure_collision_count", 0)) != 1:
+			failures.append("100层上层围护没有独立连续结构碰撞")
 		if int(snapshot.get("base99_door_lift_count", 0)) != 2:
 			failures.append("基地两个RoomDoor3D没有使用正式滑升门视觉")
 		if int(snapshot.get("base99_mezzanine_count", 0)) != 1:
@@ -82,7 +94,8 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("四个原有L型墙角被改变")
 		if (snapshot.get("door_snapshots", []) as Array).size() != 2:
 			failures.append("基地两个门的运行时快照数量被改变")
-		_validate_base99_shadow_policy(facility, failures)
+		_validate_base_scene_shadow_policy(facility, failures)
+		_validate_base100_upper_shell(facility, failures)
 		_validate_editable_component_layout(facility, failures)
 		_validate_base99_camera_collisions(facility, failures)
 		_validate_walkable_ramp_angles(facility, failures)
@@ -95,14 +108,22 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 	await get_tree().process_frame
 
 
-func _validate_base99_shadow_policy(root: Node, failures: Array[String]) -> void:
+func _validate_base_scene_shadow_policy(root: Node, failures: Array[String]) -> void:
 	var base_asset_roots: Array[Node] = []
 	_collect_base_asset_roots(root, base_asset_roots)
 	for asset_root in base_asset_roots:
-		for mesh_value in asset_root.find_children("*", "GeometryInstance3D", true, false):
-			var geometry := mesh_value as GeometryInstance3D
-			if geometry != null and geometry.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
-				failures.append("基地资产仍会投射阴影: %s/%s" % [asset_root.name, geometry.name])
+		for geometry_value in asset_root.find_children("*", "GeometryInstance3D", true, false):
+			var geometry := geometry_value as GeometryInstance3D
+			if geometry is Label3D:
+				continue
+			if geometry != null and geometry.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+				failures.append("基地场景组件没有产生投影: %s/%s" % [asset_root.name, geometry.name])
+	for facility_value in root.find_children("*", "BaseFacility3D", true, false):
+		var facility_component := facility_value as BaseFacility3D
+		for mesh_value in facility_component.find_children("*", "MeshInstance3D", true, false):
+			var mesh := mesh_value as MeshInstance3D
+			if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+				failures.append("基地设施组件模型没有产生投影: %s/%s" % [facility_component.name, mesh.name])
 
 
 func _collect_base_asset_roots(root: Node, result: Array[Node]) -> void:
@@ -112,6 +133,48 @@ func _collect_base_asset_roots(root: Node, result: Array[Node]) -> void:
 		return
 	for child in root.get_children():
 		_collect_base_asset_roots(child, result)
+
+
+func _validate_base100_upper_shell(facility: DungeonRoom3D, failures: Array[String]) -> void:
+	var shell := facility.get_node_or_null(
+		"基地99层_美术布置层/基地结构组件_可移动旋转/100层上层围护与18米封顶"
+	) as Node3D
+	if shell == null:
+		failures.append("可编辑布局tscn缺少100层上层围护与18米封顶")
+		return
+	var wall_group := shell.get_node_or_null("100层围护墙_可移动旋转")
+	var roof_group := shell.get_node_or_null("18米封顶_6x6地砖")
+	if wall_group == null or wall_group.get_child_count() != 24:
+		failures.append("100层围护墙不是24块独立可编辑模块")
+	if roof_group == null or roof_group.get_child_count() != 36:
+		failures.append("封顶不是36块独立可编辑地板模块")
+	if wall_group != null:
+		var north_windows := 0
+		for child in wall_group.get_children():
+			if str(child.name).begins_with("北墙_") and str(child.name).contains("窗墙"):
+				north_windows += 1
+				if not is_equal_approx((child as Node3D).position.z, -15.0):
+					failures.append("100层窗墙没有位于北侧z=-15")
+		if north_windows != 4:
+			failures.append("100层北侧窗墙节点数量不是4")
+	var collision_body := shell.get_node_or_null("UpperShellStructureCollision") as StaticBody3D
+	if collision_body == null:
+		failures.append("100层围护/屋顶结构碰撞体缺失")
+	else:
+		var shapes := collision_body.find_children("*", "CollisionShape3D", true, false)
+		if shapes.size() != 9:
+			failures.append("100层围护/屋顶结构碰撞片数量不是9: %d" % shapes.size())
+		var roof_collision_count := 0
+		for shape_value in shapes:
+			var shape := shape_value as CollisionShape3D
+			if str(shape.get_meta("base100_structure_role", "")) == "roof":
+				roof_collision_count += 1
+		if roof_collision_count != 1:
+			failures.append("18米封顶没有唯一屋顶碰撞")
+	for mesh_value in shell.find_children("*", "MeshInstance3D", true, false):
+		var mesh := mesh_value as MeshInstance3D
+		if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			failures.append("100层围护或封顶没有产生投影: %s" % mesh.name)
 
 
 func _validate_base99_camera_collisions(root: Node, failures: Array[String]) -> void:

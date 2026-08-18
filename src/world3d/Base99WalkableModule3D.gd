@@ -9,8 +9,8 @@ const COLLISION_THICKNESS := 0.18
 
 
 func _ready() -> void:
-	_set_shadow_casting(self, false)
-	set_meta("shadow_policy", "receive_light_no_cast")
+	_set_shadow_casting(self, true)
+	set_meta("shadow_policy", "cast_and_receive")
 	_build_walkable_collision()
 
 

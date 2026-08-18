@@ -239,27 +239,47 @@ func get_room_snapshot() -> Dictionary:
 		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_dark": 18 if room_type == "FACILITY" else 0,
 		"base_grid_checkerboard_pattern": room_type == "FACILITY",
-		"base99_floor_plain_instance_count": _sum_int_meta_for_asset(
-			self, "ENV-BASE99-FLOOR-PLAIN-5M", "instance_count"
+		"base99_floor_plain_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-FLOOR-PLAIN-5M", "instance_count", 99
 		),
-		"base99_floor_rivet_instance_count": _sum_int_meta_for_asset(
-			self, "ENV-BASE99-FLOOR-RIVET-5M", "instance_count"
+		"base99_floor_rivet_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-FLOOR-RIVET-5M", "instance_count", 99
 		),
 		"tower_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M")
-			+ _count_nodes_with_meta(self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9")
+			+ _count_nodes_with_meta_floor(
+				self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9", 99
+			)
 		),
-		"base99_wall_plain_module_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9"
+		"base99_wall_plain_module_count": _count_nodes_with_meta_floor(
+			self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9", 99
 		),
-		"base99_wall_plain_instance_count": _sum_int_meta_for_asset(
-			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count"
+		"base99_wall_plain_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count", 99
 		),
-		"base99_wall_window_instance_count": _sum_int_meta_for_asset(
-			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count"
+		"base99_wall_window_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count", 99
 		),
-		"base99_wall_door_module_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9"
+		"base99_wall_door_module_count": _count_nodes_with_meta_floor(
+			self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9", 99
+		),
+		"base100_upper_shell_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE100-UPPER-SHELL-30X30-H9"
+		),
+		"base100_wall_plain_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count", 100
+		),
+		"base100_wall_window_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count", 100
+		),
+		"base100_wall_door_instance_count": _sum_int_meta_for_asset_floor(
+			self, "ENV-BASE99-WALL-DOOR-5X9", "segment_count", 100
+		),
+		"base100_roof_tile_count": _sum_int_meta_for_asset(
+			self, "ENV-BASE100-UPPER-SHELL-30X30-H9", "roof_tile_count"
+		),
+		"base100_structure_collision_count": _count_nodes_with_meta(
+			self, "base100_upper_shell_collision", true
 		),
 		"base99_door_lift_count": _count_nodes_with_meta(
 			self, "visual_asset_id", "ENV-BASE99-DOOR-LIFT-22X25"
@@ -278,7 +298,9 @@ func get_room_snapshot() -> Dictionary:
 		),
 		"tower_door_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M")
-			+ _count_nodes_with_meta(self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9")
+			+ _count_nodes_with_meta_floor(
+				self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9", 99
+			)
 		),
 		"tower_corner_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-CORNER-L-5M"),
 		"wall_material_variant_a_count": _count_nodes_with_meta(self, "material_variant", "A"),
@@ -705,12 +727,13 @@ func _add_base_floor_grid(
 	var floor_grid := MultiMeshInstance3D.new()
 	floor_grid.name = node_name
 	floor_grid.multimesh = floor_multimesh
-	# 基地结构表现接受灯光但不投射动态阴影；玩法阻挡由独立碰撞层负责。
-	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 场景结构统一参与真实遮光；玩法阻挡仍由独立碰撞层负责。
+	floor_grid.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	floor_grid.set_meta("asset_id", asset_id)
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
 	floor_grid.set_meta("instance_count", transforms.size())
-	floor_grid.set_meta("shadow_policy", "receive_light_no_cast")
+	floor_grid.set_meta("floor_index", 99)
+	floor_grid.set_meta("shadow_policy", "cast_and_receive")
 	add_child(floor_grid)
 
 
@@ -903,21 +926,18 @@ func _add_wall_multimesh_variant(
 	# 基地正式GLB保留自身PaletteUV多表面材质；旧通用墙才使用主题材质覆盖。
 	if material != null:
 		visual.material_override = material
-	visual.cast_shadow = (
-		GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		if room_type == "FACILITY"
-		else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	)
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	visual.set_meta("asset_id", asset_id)
 	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 	visual.set_meta("tower_wall_direction", direction)
 	visual.set_meta("material_variant", variant)
 	visual.set_meta("segment_count", transforms.size())
+	visual.set_meta("floor_index", 99 if room_type == "FACILITY" else -1)
 	visual.set_meta("visual_only", room_type == "FACILITY")
 	visual.set_meta("collision_owner", "DungeonRoom3D")
 	visual.set_meta(
 		"shadow_policy",
-		"receive_light_no_cast" if room_type == "FACILITY" else "cast"
+		"cast_and_receive"
 	)
 	add_child(visual)
 
@@ -1080,8 +1100,9 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 			module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 			module.set_meta("tower_wall_direction", direction)
 			if uses_base99_door:
-				_set_geometry_shadow_casting(module, false)
-				module.set_meta("shadow_policy", "receive_light_no_cast")
+				_set_geometry_shadow_casting(module, true)
+				module.set_meta("shadow_policy", "cast_and_receive")
+				module.set_meta("floor_index", 99)
 			else:
 				_apply_module_material_variant(module, module_index)
 			_set_camera_lower_wall_on_static_bodies(
@@ -1183,6 +1204,35 @@ func _sum_int_meta_for_asset(root: Node, asset_id: String, key: String) -> int:
 		total += int(root.get_meta(key, 0))
 	for child in root.get_children():
 		total += _sum_int_meta_for_asset(child, asset_id, key)
+	return total
+
+
+func _count_nodes_with_meta_floor(
+	root: Node, key: String, value: Variant, floor_index: int
+) -> int:
+	var count := 0
+	if (
+		root.has_meta(key)
+		and root.get_meta(key) == value
+		and int(root.get_meta("floor_index", -1)) == floor_index
+	):
+		count = 1
+	for child in root.get_children():
+		count += _count_nodes_with_meta_floor(child, key, value, floor_index)
+	return count
+
+
+func _sum_int_meta_for_asset_floor(
+	root: Node, asset_id: String, key: String, floor_index: int
+) -> int:
+	var total := 0
+	if (
+		root.get_meta("asset_id", "") == asset_id
+		and int(root.get_meta("floor_index", -1)) == floor_index
+	):
+		total += int(root.get_meta(key, 0))
+	for child in root.get_children():
+		total += _sum_int_meta_for_asset_floor(child, asset_id, key, floor_index)
 	return total
 
 

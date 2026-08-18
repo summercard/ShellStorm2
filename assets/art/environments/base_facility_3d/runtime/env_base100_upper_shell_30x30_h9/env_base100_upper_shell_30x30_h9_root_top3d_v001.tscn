@@ -1,0 +1,348 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn" id="1_plain"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_window_5x9/env_base99_wall_window_5x9_root_top3d_v001.tscn" id="2_window"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn" id="4_floor_plain"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn" id="5_floor_rivet"]
+[ext_resource type="Script" path="res://src/world3d/Base100UpperShell3D.gd" id="6_shell"]
+
+[node name="基地100层上层围护与封顶" type="Node3D"]
+script = ExtResource("6_shell")
+metadata/asset_id = "ENV-BASE100-UPPER-SHELL-30X30-H9"
+metadata/logic_id = "base100_upper_shell_30x30_h9"
+metadata/asset_category = "environment_kit_3d"
+metadata/floor_index = 100
+metadata/plain_wall_count = 19
+metadata/window_wall_count = 4
+metadata/door_wall_count = 1
+metadata/roof_tile_count = 36
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_source_v001.blend"
+
+[node name="100层围护墙_可移动旋转" type="Node3D" parent="."]
+metadata/usage = "北侧中间四块窗墙；其余普通墙；东侧一块门墙。位置来自Blender母版。"
+
+[node name="北墙_00_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-12.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="北墙_01_窗墙" parent="100层围护墙_可移动旋转" instance=ExtResource("2_window")]
+position = Vector3(-7.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="北墙_02_窗墙" parent="100层围护墙_可移动旋转" instance=ExtResource("2_window")]
+position = Vector3(-2.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="北墙_03_窗墙" parent="100层围护墙_可移动旋转" instance=ExtResource("2_window")]
+position = Vector3(2.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="北墙_04_窗墙" parent="100层围护墙_可移动旋转" instance=ExtResource("2_window")]
+position = Vector3(7.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="北墙_05_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(12.5, 9, -15)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_00_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(12.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_01_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(7.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_02_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(2.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_03_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-2.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_04_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-7.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="南墙_05_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-12.5, 9, 15)
+rotation = Vector3(0, 3.14159265, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_00_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, -12.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_01_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, -7.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_02_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, -2.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_03_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, 2.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_04_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, 7.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="西墙_05_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(-15, 9, 12.5)
+rotation = Vector3(0, 1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_00_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(15, 9, -12.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_01_侧向门墙" parent="100层围护墙_可移动旋转" instance=ExtResource("3_door")]
+position = Vector3(15, 9, -7.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_02_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(15, 9, -2.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_03_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(15, 9, 2.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_04_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(15, 9, 7.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="东墙_05_普通墙" parent="100层围护墙_可移动旋转" instance=ExtResource("1_plain")]
+position = Vector3(15, 9, 12.5)
+rotation = Vector3(0, -1.57079633, 0)
+metadata/floor_index = 100
+metadata/segment_count = 1
+
+[node name="18米封顶_6x6地砖" type="Node3D" parent="."]
+metadata/usage = "复用基地5米地板模块封顶；参与真实遮光并产生投影。"
+metadata/floor_index = 101
+metadata/tile_count = 36
+
+[node name="封顶_00_00" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-12.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_00_01" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-7.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_00_02" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-2.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_00_03" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(2.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_00_04" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(7.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_00_05" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(12.5, 18, -12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_00" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-12.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_01" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-7.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_02" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-2.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_03" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(2.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_04" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(7.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_01_05" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(12.5, 18, -7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_00" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-12.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_01" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-7.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_02" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-2.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_03" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(2.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_04" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(7.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_02_05" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(12.5, 18, -2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_00" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-12.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_01" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-7.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_02" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-2.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_03" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(2.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_04" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(7.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_03_05" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(12.5, 18, 2.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_00" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-12.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_01" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-7.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_02" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-2.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_03" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(2.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_04" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(7.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_04_05" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(12.5, 18, 7.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_00" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-12.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_01" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(-7.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_02" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(-2.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_03" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(2.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_04" parent="18米封顶_6x6地砖" instance=ExtResource("5_floor_rivet")]
+position = Vector3(7.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+
+[node name="封顶_05_05" parent="18米封顶_6x6地砖" instance=ExtResource("4_floor_plain")]
+position = Vector3(12.5, 18, 12.5)
+metadata/floor_index = 101
+metadata/instance_count = 1
+

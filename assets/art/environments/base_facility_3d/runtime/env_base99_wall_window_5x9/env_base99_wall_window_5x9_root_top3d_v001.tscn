@@ -13,7 +13,7 @@ metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/visual_only = true
 metadata/collision_owner = "DungeonRoom3D"
-metadata/shadow_policy = "receive_light_no_cast"
+metadata/shadow_policy = "cast_and_receive"
 metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
