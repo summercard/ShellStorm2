@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="基地99层普通墙体5x9米" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-WALL-PLAIN-5X9"
+metadata/logic_id = "base99_wall_plain_5x9"
+metadata/asset_category = "environment_module"
+metadata/component = "wall_plain"
+metadata/grid_unit_m = 5.0
+metadata/dimensions_m = Vector3(5, 9, 0.36)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

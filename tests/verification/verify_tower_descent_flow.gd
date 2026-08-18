@@ -205,9 +205,11 @@ func _ready() -> void:
 		int(base_room_snapshot.get("tower_corner_module_count", 0)) == 4
 		and int(base_room_snapshot.get("tower_door_wall_module_count", 0)) == 2
 		and int(base_room_snapshot.get("tower_wall_module_count", 0)) >= 8
+		and int(base_room_snapshot.get("base99_wall_plain_module_count", 0)) >= 8
+		and int(base_room_snapshot.get("base99_wall_plain_instance_count", 0)) == 14
 		and int(base_room_snapshot.get("wall_material_variant_a_count", 0)) > 0
 		and int(base_room_snapshot.get("wall_material_variant_b_count", 0)) > 0,
-		"99层基地没有复用5m墙/门/拐角组件，或A/B墙材质没有交替",
+		"99层基地没有使用14段专属普通墙视觉，或5m门墙/拐角/A-B节奏被破坏",
 		failures
 	)
 	_expect(

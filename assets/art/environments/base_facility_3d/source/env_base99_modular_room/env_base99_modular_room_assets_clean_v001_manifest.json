@@ -1,0 +1,344 @@
+{
+  "asset_pack": "ENV-BASE99-MODULAR-ROOM",
+  "version": "v001",
+  "source": "/var/folders/ms/hcx6wtnj0cvb4xbkxcd0b7bm0000gn/T/env_base99_modular_room_source_v001_89360_autosave.blend",
+  "output_blend": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend",
+  "module_count": 9,
+  "shared_materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette": "/Users/summercards/ShellStorm2/assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "palette_packed": true,
+  "door_runtime_contract": {
+    "clear_width_m": 2.2,
+    "clear_height_m": 2.5,
+    "visual": "moving door leaf plus front/back emissive status strips",
+    "wall_owns_frame": true,
+    "godot_wrapper_owns_collision_prompt_and_motion": true
+  },
+  "modules": [
+    {
+      "index": 1,
+      "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+      "logic_id": "base99_floor_rivet_5m",
+      "display_name": "地板模块_5x5米_带铆钉铁皮带",
+      "source_object_count": 6,
+      "output_meshes": [
+        "带铆钉地板_主体_金属哑光反光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.5,
+        2.5,
+        0.395
+      ],
+      "local_dimensions": [
+        5.0,
+        5.0,
+        0.395
+      ],
+      "arrangement_offset": [
+        -28.0,
+        28.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 2,
+      "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+      "logic_id": "base99_floor_plain_5m",
+      "display_name": "地板模块_5x5米_无铆钉铁皮带",
+      "source_object_count": 1,
+      "output_meshes": [
+        "普通地板_主体_金属哑光反光"
+      ],
+      "materials": [
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.5,
+        -2.5,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.5,
+        2.5,
+        0.3
+      ],
+      "local_dimensions": [
+        5.0,
+        5.0,
+        0.3
+      ],
+      "arrangement_offset": [
+        0.0,
+        28.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 3,
+      "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+      "logic_id": "base99_door_lift_2p2x2p5",
+      "display_name": "滑升门模块_2.2x2.5米",
+      "source_object_count": 4,
+      "output_meshes": [
+        "滑升门_主体_金属哑光反光",
+        "滑升门_UI灯光_柔和自发光"
+      ],
+      "materials": [
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "local_bounds_min": [
+        -1.1,
+        -0.1625,
+        0.0
+      ],
+      "local_bounds_max": [
+        1.1,
+        0.1625,
+        2.5
+      ],
+      "local_dimensions": [
+        2.2,
+        0.325,
+        2.5
+      ],
+      "arrangement_offset": [
+        28.0,
+        28.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 4,
+      "asset_id": "ENV-BASE99-WALL-PLAIN-5X9",
+      "logic_id": "base99_wall_plain_5x9",
+      "display_name": "普通墙体模块_5x9米",
+      "source_object_count": 7,
+      "output_meshes": [
+        "普通墙体_主体_金属哑光反光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.5,
+        -0.18,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.5,
+        0.18,
+        9.0
+      ],
+      "local_dimensions": [
+        5.0,
+        0.36,
+        9.0
+      ],
+      "arrangement_offset": [
+        -28.0,
+        0.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 5,
+      "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+      "logic_id": "base99_wall_door_5x9",
+      "display_name": "带门墙体模块_5x9米",
+      "source_object_count": 14,
+      "output_meshes": [
+        "带门墙体_主体_金属哑光反光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.5,
+        -0.5856,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.5,
+        0.5856,
+        9.0
+      ],
+      "local_dimensions": [
+        5.0,
+        1.1712,
+        9.0
+      ],
+      "arrangement_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 6,
+      "asset_id": "ENV-BASE99-WALL-WINDOW-5X9",
+      "logic_id": "base99_wall_window_5x9",
+      "display_name": "带窗墙体模块_5x9米",
+      "source_object_count": 21,
+      "output_meshes": [
+        "带窗墙体_主体_金属哑光反光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.5,
+        -0.3,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.5,
+        0.3,
+        9.0
+      ],
+      "local_dimensions": [
+        5.0,
+        0.6,
+        9.0
+      ],
+      "arrangement_offset": [
+        28.0,
+        0.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 7,
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+      "logic_id": "base99_mezzanine_20x10_z7",
+      "display_name": "二层楼中楼楼板_20x10米_Z7米",
+      "source_object_count": 55,
+      "output_meshes": [
+        "二层楼板_主体_金属哑光反光",
+        "二层楼板_UI灯光_柔和自发光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "local_bounds_min": [
+        -10.12375,
+        -5.12375,
+        0.0
+      ],
+      "local_bounds_max": [
+        10.12375,
+        5.12375,
+        7.93
+      ],
+      "local_dimensions": [
+        20.2475,
+        10.2475,
+        7.93
+      ],
+      "arrangement_offset": [
+        -28.0,
+        -32.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 8,
+      "asset_id": "ENV-BASE99-STAIR-L-Z7",
+      "logic_id": "base99_stair_l_z7",
+      "display_name": "L型楼梯_地面至二层_Z7米",
+      "source_object_count": 95,
+      "output_meshes": [
+        "L型楼梯_主体_金属哑光反光",
+        "L型楼梯_UI灯光_柔和自发光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
+      "local_bounds_min": [
+        -4.6088,
+        -5.269,
+        0.0
+      ],
+      "local_bounds_max": [
+        4.6088,
+        5.269,
+        7.93838
+      ],
+      "local_dimensions": [
+        9.2176,
+        10.538,
+        7.93838
+      ],
+      "arrangement_offset": [
+        0.0,
+        -32.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    },
+    {
+      "index": 9,
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+      "logic_id": "base99_stair_exterior_h2",
+      "display_name": "二楼外门小楼梯_高差2米",
+      "source_object_count": 17,
+      "output_meshes": [
+        "外门小楼梯_主体_金属哑光反光"
+      ],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面"
+      ],
+      "local_bounds_min": [
+        -2.2575,
+        -1.4,
+        0.0
+      ],
+      "local_bounds_max": [
+        2.2575,
+        1.4,
+        2.0
+      ],
+      "local_dimensions": [
+        4.515,
+        2.8,
+        2.0
+      ],
+      "arrangement_offset": [
+        28.0,
+        -32.0,
+        0.0
+      ],
+      "forward": "Blender -Y / Godot -Z"
+    }
+  ]
+}

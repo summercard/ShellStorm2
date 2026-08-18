@@ -45,6 +45,11 @@ const TOWER_CORNER_L_PARAPET_PREFAB: PackedScene = preload(
 const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
 )
+# 基地99层专属普通墙视觉。该PackedScene/GLB不持有碰撞、门或交互逻辑；
+# 结构碰撞继续由本脚本的0.30m代理负责，避免美术替换影响玩法。
+const BASE99_WALL_PLAIN_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn"
+)
 # —— 房间壳体原子件 prefab（B 节）
 const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor.tscn")
 const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset.tscn")
@@ -104,6 +109,7 @@ const FACILITY_TRIM_MATERIAL: StandardMaterial3D = preload(
 const ROOFTOP_FACADE_HEIGHT := 6.0
 static var _tower_solid_wall_mesh: Mesh
 static var _tower_floor_tile_mesh: Mesh
+static var _base99_solid_wall_mesh: Mesh
 
 const ROOM_DIMENSIONS := {
 	# 约按 2D RoomData 的 0.034 m/px 映射，保留四档真实战斗尺度。
@@ -219,7 +225,16 @@ func get_room_snapshot() -> Dictionary:
 		"base_grid_tile_count_light": 18 if room_type == "FACILITY" else 0,
 		"base_grid_tile_count_dark": 18 if room_type == "FACILITY" else 0,
 		"base_grid_checkerboard_pattern": room_type == "FACILITY",
-		"tower_wall_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M"),
+		"tower_wall_module_count": (
+			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M")
+			+ _count_nodes_with_meta(self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9")
+		),
+		"base99_wall_plain_module_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9"
+		),
+		"base99_wall_plain_instance_count": _sum_int_meta_for_asset(
+			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count"
+		),
 		"tower_door_wall_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M"),
 		"tower_corner_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-CORNER-L-5M"),
 		"wall_material_variant_a_count": _count_nodes_with_meta(self, "material_variant", "A"),
@@ -766,7 +781,8 @@ func _spawn_solid_wall_visual_instances(
 	transforms: Array[Transform3D],
 	segment_indices: Array[int] = []
 ) -> void:
-	var mesh := _get_tower_solid_wall_mesh()
+	var uses_base99_visual := room_type == "FACILITY"
+	var mesh := _get_base99_solid_wall_mesh() if uses_base99_visual else _get_tower_solid_wall_mesh()
 	if mesh == null or transforms.is_empty():
 		return
 	var transforms_a: Array[Transform3D] = []
@@ -778,14 +794,21 @@ func _spawn_solid_wall_visual_instances(
 			else index
 		)
 		var wall_transform := transforms[index]
-		# BoxMesh 原点在几何中心；抬高半层后才是从地面到 9m，而不是 -4.5~+4.5m。
-		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
+		# 通用旧墙BoxMesh以几何中心为原点，需要抬高半层；基地99层正式GLB
+		# 已按底边中心为原点导出，保持y=0即可从地面延伸到9m。
+		if not uses_base99_visual:
+			wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
 		if abs_segment_index % 2 == 0:
 			transforms_a.append(wall_transform)
 		else:
 			transforms_b.append(wall_transform)
-	_add_wall_multimesh_variant(direction, "A", mesh, transforms_a, _get_wall_module_material(0))
-	_add_wall_multimesh_variant(direction, "B", mesh, transforms_b, _get_wall_module_material(1))
+	var material_a: StandardMaterial3D = null
+	var material_b: StandardMaterial3D = null
+	if not uses_base99_visual:
+		material_a = _get_wall_module_material(0)
+		material_b = _get_wall_module_material(1)
+	_add_wall_multimesh_variant(direction, "A", mesh, transforms_a, material_a)
+	_add_wall_multimesh_variant(direction, "B", mesh, transforms_b, material_b)
 
 
 func _add_wall_multimesh_variant(
@@ -806,13 +829,20 @@ func _add_wall_multimesh_variant(
 	var visual := MultiMeshInstance3D.new()
 	visual.name = "Imported_SolidWall5M_%s_Run_%s" % [direction.capitalize(), variant]
 	visual.multimesh = multimesh
-	visual.material_override = material
+	# 基地正式GLB保留自身PaletteUV多表面材质；旧通用墙才使用主题材质覆盖。
+	if material != null:
+		visual.material_override = material
 	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	visual.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
+	visual.set_meta(
+		"asset_id",
+		"ENV-BASE99-WALL-PLAIN-5X9" if room_type == "FACILITY" else "ENV-TOWER-WALL-SOLID-5M"
+	)
 	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
 	visual.set_meta("tower_wall_direction", direction)
 	visual.set_meta("material_variant", variant)
 	visual.set_meta("segment_count", transforms.size())
+	visual.set_meta("visual_only", room_type == "FACILITY")
+	visual.set_meta("collision_owner", "DungeonRoom3D")
 	add_child(visual)
 
 
@@ -823,6 +853,15 @@ func _get_tower_solid_wall_mesh() -> Mesh:
 	_tower_solid_wall_mesh = _find_first_mesh(source)
 	source.free()
 	return _tower_solid_wall_mesh
+
+
+func _get_base99_solid_wall_mesh() -> Mesh:
+	if _base99_solid_wall_mesh != null:
+		return _base99_solid_wall_mesh
+	var source := BASE99_WALL_PLAIN_PREFAB.instantiate()
+	_base99_solid_wall_mesh = _find_first_mesh(source)
+	source.free()
+	return _base99_solid_wall_mesh
 
 
 func _find_first_mesh(root: Node) -> Mesh:
@@ -1036,6 +1075,15 @@ func _count_nodes_with_meta(root: Node, key: String, value: Variant) -> int:
 	for child in root.get_children():
 		count += _count_nodes_with_meta(child, key, value)
 	return count
+
+
+func _sum_int_meta_for_asset(root: Node, asset_id: String, key: String) -> int:
+	var total := 0
+	if root.get_meta("asset_id", "") == asset_id:
+		total += int(root.get_meta(key, 0))
+	for child in root.get_children():
+		total += _sum_int_meta_for_asset(child, asset_id, key)
+	return total
 
 
 func _count_shadow_capable_lights() -> int:
