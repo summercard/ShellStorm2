@@ -18,6 +18,16 @@ var _city_root: Node3D
 var _rooftop_sky_bounce: OmniLight3D
 var _current_floor_number := 100
 
+## 游戏内时间系统（小时，0..24）。time_scale = 0 时不推进（默认），
+## time_scale = 1.0 = 1 真实秒 = 1 游戏秒 = 1 小时 / 3600 秒。
+## 当 time_scale > 0 时 _process 会按 delta 自增 time_of_day；
+## time_of_day 走过 24 点后折返到 0 点（不存日期）。
+@export_range(0.0, 24.0, 0.1) var time_of_day := 12.0
+@export_range(0.0, 360.0, 0.1) var time_scale := 0.0
+## 太阳方位角（yaw）— 与之前一致，主人手调过的值；时间系统只改 pitch（高度）
+## 与 light_energy，yaw 始终保持太阳方位不变。
+@export_range(-180.0, 180.0, 0.5) var sun_yaw := 32.0
+
 
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
@@ -40,6 +50,8 @@ func _ready() -> void:
 	set_floor_number(100)
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
+	add_to_group("time_system")
+	set_process(time_scale > 0.0)
 
 
 func set_floor_number(floor_number: int) -> void:
@@ -55,7 +67,6 @@ func set_floor_number(floor_number: int) -> void:
 
 func _apply_fixed_lighting() -> void:
 	if _sun != null:
-		_sun.light_energy = SUN_ENERGY
 		_sun.light_color = SUN_COLOR
 		_sun.shadow_enabled = true
 		_sun.light_cull_mask = GameDesignConfig.LIGHT_MASK_WORLD_AND_PLAYER
@@ -67,6 +78,66 @@ func _apply_fixed_lighting() -> void:
 		_environment.fog_enabled = GraphicsSettingsManager == null or GraphicsSettingsManager.is_enabled("distance_fog")
 		_environment.fog_light_color = FOG_LIGHT_COLOR
 		_environment.fog_density = FOG_DENSITY
+	_apply_time_of_day()
+	set_process(time_scale > 0.0)
+
+
+## 根据 time_of_day 重写太阳的仰角与能量。
+## 约定：6 点日出、12 点正午、18 点日落。太阳轨迹在半天空（从地平线以下
+## 升至顶 + 落回地平线以下）。夜裡能量 = 0，白天能量峰值 = SUN_ENERGY。
+func _apply_time_of_day() -> void:
+	if _sun == null:
+		return
+	# ——1. 仰角：0 点 = -90（地平线以下），6 点 = -90（升起点），12 点 = 0（正顶），18 点 = -90（落下），24 点 = -90
+	var sun_pitch := _compute_sun_pitch(time_of_day)
+	_sun.rotation_degrees = Vector3(sun_pitch, sun_yaw, 0.0)
+	# ——2. 能量：仅在白天太阳位于地平线上方时按仰角查表，夜里/日出日落附近=0
+	_sun.light_energy = _compute_sun_energy(time_of_day)
+
+
+func _compute_sun_pitch(hour: float) -> float:
+	# 以 6 点为中心（-180°）扫到 18 点（180°），保证12 点=0（正顶，仰角90°）
+	# 这里返回的是 Godot 的 pitch：负值表示光朝地面射（正值表示仰起来）
+	# 设计：6 点 / 18 点 时太阳刚好在地平线，pitch = -90°（光水平射），正午 pitch = -90° 时太阳在头顶
+	# 实际上希望正午太阳在“上方斜下60°”即目前 -60°，那么推 pitch = -（90 - elevation_deg）
+	var elevation_deg := ((hour - 12.0) / 12.0) * -90.0 # 6点=+90，12点=0，18点=-90
+	var pitch := -(90.0 - elevation_deg) # 6点 = -180（半夜），12 点 = -90（太阳头顶），18 点 = 0（水平）
+	# 上面公式会有 0 点 = pitch = -45（、太阳从侧面过来），不符合“夜裡太阳应在下方”。
+	# 重新推：设 6 点 = -90°（日出，太阳刚好地平线）、12 点 = -60°（正顶斜下 60°，即主人原定值）、18 点 = -90°（日落）
+	# 中间用余弦曲线从 -90 平滑到 -60 再回到 -90
+	# hour 0..6 与 18..24 都是 -90（夜晚太阳在地平线以下）
+	if hour < 6.0 or hour > 18.0:
+		return -90.0
+	var phase := (hour - 6.0) / 12.0 # 6点=0，12点=0.5，18点=1
+	var dip := cos(phase * PI) # 6点/18点=cos(0)=1，12点=cos(PI/2)=0 → 太阳从“-90°水平”上升到“-60°深低”再回到“-90°水平”
+	return lerpf(-90.0, -60.0, 1.0 - dip) # 6点/18点=-90，12点=-60
+
+
+func _compute_sun_energy(hour: float) -> float:
+	# 仅 6 点到 18 点有太阳能量，值为 0 到 1，中间凸起为二次曲线。
+	if hour < 6.0 or hour > 18.0:
+		return 0.0
+	var phase := (hour - 6.0) / 12.0 # 0..1
+	# 6/18点=0，12点=1。能量按 sin(phase * PI) 曲线，正午最高。
+	var factor := sin(phase * PI)
+	return SUN_ENERGY * factor
+
+
+func get_clock_string() -> String:
+	# 格式 HH:MM（0 点 = 00:00）。供 HUD 计时器区显示。
+	var hour := int(floor(time_of_day)) % 24
+	var minute := int(floor(fmod(time_of_day, 1.0) * 60.0))
+	return "%02d:%02d" % [hour, minute]
+
+
+func _process(delta: float) -> void:
+	if time_scale <= 0.0:
+		return
+	# time_scale 定义为“1 游戏小时 = 多少 真实秒”。
+	# 例如 time_scale = 60.0 表示 60 真实秒走 1 游戏小时。
+	# 那么 1 真实秒推进 1 / time_scale / 3600 游戏小时。
+	time_of_day = fmod(time_of_day + delta / 3600.0 / maxf(0.001, time_scale), 24.0)
+	_apply_time_of_day()
 
 
 func get_snapshot() -> Dictionary:

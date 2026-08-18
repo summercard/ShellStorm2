@@ -801,7 +801,7 @@ func _fire_projectile(to_target: Vector3, amount: int, color: Color, explosive :
 	if get_tree().current_scene == null:
 		return
 	var config := {
-		"direction": to_target.normalized(), "speed": 11.5, "damage": amount,
+		"direction": to_target.normalized(), "speed": 7, "damage": amount,
 		"hostile": true, "critical": false, "tags": ["explosive"] if explosive else [],
 		"color": color, "shooter": self,
 	}
