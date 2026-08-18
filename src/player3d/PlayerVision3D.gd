@@ -286,6 +286,10 @@ func _smooth_and_draw_geometry(delta: float) -> void:
 		Color(0.13, 0.68, 0.84, 0.13),
 		false,
 	)
+	# 主视野扇形与手电叠加层互斥：手电开时主扇形不画，关灯时主扇形恢复。
+	# 玩法判定（_refresh_target_visibility / is_position_visible）不受影响，
+	# 目标和遮挡逻辑继续按各自节奏跑，只是地面上不再叠两层视野色。
+	_cone_surface.visible = not _flashlight_overlay_active
 	_draw_flashlight_overlay()
 	# Proximity disc disabled: 不再绘制贴身的 360° 圆盘，alpha 也归零。
 	# 保留 _proximity_surface 节点和缓冲区方便将来随时打开。
