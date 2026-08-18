@@ -62,7 +62,7 @@ func _build_environment() -> void:
 
 	_key_light = DirectionalLight3D.new()
 	_key_light.name = "UniversalKeyLight"
-	_key_light.rotation_degrees = Vector3(-60.0, -32.0, 0.0)
+	_key_light.rotation_degrees = Vector3(-60.0, 32.0, 0.0)
 	_key_light.light_color = TowerAtmosphere3D.SUN_COLOR
 	_key_light.light_energy = TowerAtmosphere3D.SUN_ENERGY
 	_key_light.shadow_enabled = true

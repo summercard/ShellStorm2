@@ -30,9 +30,8 @@ return_scene_path = "res://scenes/TowerDescent3D.tscn"
 environment = SubResource("Environment_editor_runtime_match")
 
 [node name="DirectionalLight3D" parent="." index="1"]
-transform = Transform3D(0.8480481, 0.45892358, -0.2649596, 0, 0.49999997, 0.86602545, 0.52991927, -0.7344312, 0.42402402, 0, 0, 0)
-light_color = Color(1, 0.84, 0.62, 1)
-light_energy = 0.58
+rotation_degrees = Vector3(-60, 135, 0)
+shadow_enabled = true
 
 [node name="DungeonMinimap3D" parent="HUD" index="0"]
 layout_mode = 3
