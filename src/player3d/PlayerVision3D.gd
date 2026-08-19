@@ -283,7 +283,7 @@ func _smooth_and_draw_geometry(delta: float) -> void:
 		_cone_mesh,
 		_last_cone_points,
 		_fill_material,
-		Color(0.13, 0.68, 0.84, 0.13),
+		Color(0.13, 0.68, 0.84, 0.02),
 		false,
 	)
 	# 主视野扇形与手电叠加层互斥：手电开时主扇形不画，关灯时主扇形恢复。
