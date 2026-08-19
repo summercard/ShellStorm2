@@ -665,10 +665,17 @@ func _setup_run_modules() -> void:
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
 		$HUD.add_child(_weapon_panel)
-		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
 		# 独立管理页居中覆盖战场，与背包/基地设施的模态信息架构一致。
-		_weapon_panel.position = Vector2(-260, -310)
-		_weapon_panel.size = Vector2(520, 620)
+		# Godot 4 中 Control.position 当锐点都是 0.5 时会直接成为全局位置（不是相对父容器中心偏移），
+		# 所以需要从 viewport size 计算使面板中心 = 屏幕中心。
+		_weapon_panel.set_anchors_preset(Control.PRESET_CENTER)
+		var _vp_size: Vector2i = get_viewport().get_visible_rect().size
+		var _panel_size := Vector2(520.0, 620.0)
+		_weapon_panel.size = _panel_size
+		_weapon_panel.position = Vector2(
+			(_vp_size.x - _panel_size.x) * 0.5,
+			(_vp_size.y - _panel_size.y) * 0.5
+		)
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
