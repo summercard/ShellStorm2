@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_visual_top3d_v002.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99WalkableModule3D.gd" id="2_collision"]
+
+[node name="基地99层二楼外门小楼梯H4米" type="Node3D"]
+script = ExtResource("2_collision")
+collision_role = "exterior_stair"
+target_walkable_height_m = 4.0
+metadata/asset_id = "ENV-BASE99-STAIR-EXTERIOR-H4"
+metadata/logic_id = "base99_stair_exterior_h4"
+metadata/asset_category = "environment_module"
+metadata/component = "stair_exterior"
+metadata/dimensions_m = Vector3(8.515, 4.0, 2.8)
+metadata/base_height_m = 5.0
+metadata/target_height_m = 9.0
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "single_continuous_ramp_with_independent_guard_blockers"
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

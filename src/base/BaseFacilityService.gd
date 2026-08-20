@@ -3,6 +3,7 @@ extends RefCounted
 ## 无场景依赖的基地设施查询与命令规划。持久化仍由 BaseManager 统一提交。
 
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
+const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 
 
 static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
@@ -72,6 +73,19 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 				data.vault_items.size(), vending_capacity
 			]
 			snapshot["attention"] = data.vault_items.size() >= vending_capacity
+		"base_recovery":
+			var energy := EnergyService.get_snapshot(
+				data, data.world_time_elapsed_game_seconds
+			)
+			snapshot["summary"] = "基地电量 %.0f/%.0f · +%.0f/游戏时" % [
+				float(energy.get("current", 0.0)),
+				float(energy.get("capacity", 100.0)),
+				float(energy.get("regen_per_game_hour", 0.0)),
+			]
+			snapshot["attention"] = float(energy.get("ratio", 0.0)) <= 0.25
+		"avatar_wardrobe":
+			snapshot["summary"] = "6类外观组件 · 每类至少3款"
+			snapshot["attention"] = false
 		_:
 			snapshot["summary"] = str(snapshot.get("description", "设施可用"))
 	return snapshot

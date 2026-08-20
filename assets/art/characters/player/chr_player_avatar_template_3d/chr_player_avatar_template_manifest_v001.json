@@ -1,0 +1,72 @@
+{
+  "asset_id": "CHR-PLAYER-AVATAR-TEMPLATE-001",
+  "version": "v001",
+  "blend": "/Users/summercards/ShellStorm2/assets/art/characters/player/chr_player_avatar_template_3d/source/chr_player_avatar_template_source_v001.blend",
+  "preview": "/Users/summercards/ShellStorm2/assets/art/characters/player/chr_player_avatar_template_3d/previews/chr_player_avatar_template_overview_v001.png",
+  "unit": "meter",
+  "height_m": 1.5,
+  "origin": "ground_center_z0",
+  "forward": {
+    "blender": "-Y",
+    "godot": "-Z"
+  },
+  "runtime_root_scale": 1.0,
+  "slots": [
+    "body",
+    "head",
+    "hand",
+    "feet",
+    "hat",
+    "glasses",
+    "lower_body"
+  ],
+  "sockets": {
+    "SOCKET_Weapon": [
+      0.0,
+      -0.21818,
+      0.39394
+    ],
+    "SOCKET_StowedWeaponPrimary": [
+      -0.36,
+      -0.54,
+      0.82
+    ],
+    "SOCKET_StowedWeaponSecondary": [
+      0.36,
+      -0.54,
+      0.82
+    ],
+    "SOCKET_Backpack": [
+      0.0,
+      -0.3,
+      0.74
+    ],
+    "SOCKET_LowerBody": [
+      0.0,
+      0.0,
+      0.3
+    ],
+    "SOCKET_Hat": [
+      0.0,
+      -0.01,
+      1.36
+    ],
+    "SOCKET_Glasses": [
+      0.0,
+      -0.35,
+      1.1
+    ],
+    "SOCKET_EarL": [
+      -0.2,
+      -0.01,
+      1.3
+    ],
+    "SOCKET_EarR": [
+      0.2,
+      -0.01,
+      1.3
+    ]
+  },
+  "gameplay_collision_owner": "res://scenes/Player3D.tscn",
+  "source_reference": "chr_player_capsule01_bunny01_top3d_v006.blend audited at exact 1.5m"
+}

@@ -97,6 +97,26 @@ const DEFINITIONS: Array[Dictionary] = [
 		"level_property": "",
 		"color": Color(0.16, 0.78, 0.88),
 	},
+	{
+		"facility_id": "base_recovery",
+		"display_name": "状态恢复舱",
+		"description": "消耗基地电量恢复生命与手电电量",
+		"action_kind": ACTION_MENU,
+		"action_path": "res://scenes/BaseRecoveryMenu.tscn",
+		"legacy_building_type": -1,
+		"level_property": "",
+		"color": Color(0.22, 0.86, 0.62),
+	},
+	{
+		"facility_id": "avatar_wardrobe",
+		"display_name": "角色衣柜",
+		"description": "更换身体、头部、手部、脚部、帽子与眼镜外观",
+		"action_kind": ACTION_MENU,
+		"action_path": "res://scenes/ui/WardrobeMenu3D.tscn",
+		"legacy_building_type": -1,
+		"level_property": "",
+		"color": Color(0.14, 0.68, 0.82),
+	},
 ]
 
 

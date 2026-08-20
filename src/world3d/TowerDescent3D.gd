@@ -8,6 +8,9 @@ const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
 )
+const MAIN_ENTRY_SCREEN_SCENE: PackedScene = preload(
+	"res://scenes/ui/MainEntryScreen3D.tscn"
+)
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
@@ -112,6 +115,9 @@ var _tower_floor_label: Label
 var _tower_target_label: Label
 var _tower_elevator_label: Label
 var _tower_base_currency_label: Label
+var _world_time_label: Label
+var _main_entry_screen: CanvasLayer
+var _authoritative_floor_index := -999
 var _loaded_floor_indices: Array[int] = []
 var _protected_floor_patch_center := Vector3.ZERO
 var _floor_visibility_poll_count := 0
@@ -177,6 +183,7 @@ func _ready() -> void:
 	_install_facilities()
 	_install_elevator_facility()
 	_install_tower_hud()
+	_install_world_time_hud()
 	_install_atmosphere()
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
 	var starts_on_rooftop := test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
@@ -201,8 +208,10 @@ func _ready() -> void:
 		else "已从99F基地中点恢复 · 基地屋内禁射，跨出任一侧门即可开火"
 	)
 	_update_floor_visibility_state()
+	_refresh_physical_location_authority(true)
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
+	_install_main_entry_screen()
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
@@ -227,6 +236,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	super(delta)
+	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
 	_update_facility_door_auto_close()
 	_update_stair_arrival_prompt()
@@ -420,6 +430,8 @@ func _update_floor_visibility_state() -> void:
 func _physics_process(delta: float) -> void:
 	if player == null or not is_instance_valid(player):
 		return
+	if _has_camera_presentation_override():
+		return
 	var planar_velocity := Vector2(player.velocity.x, player.velocity.z)
 	var player_is_moving := planar_velocity.length_squared() > 0.01
 	_camera_probe_interval_s = (
@@ -461,6 +473,22 @@ func _apply_indoor_camera_pose() -> void:
 		-CAMERA_LOOK_AHEAD_M
 	)
 	player.camera.look_at(look_target, Vector3.UP)
+
+
+func _has_camera_presentation_override() -> bool:
+	if (
+		_main_entry_screen != null
+		and is_instance_valid(_main_entry_screen)
+		and _main_entry_screen.has_method("is_camera_override_active")
+		and bool(_main_entry_screen.call("is_camera_override_active"))
+	):
+		return true
+	return (
+		_active_facility_menu != null
+		and is_instance_valid(_active_facility_menu)
+		and _active_facility_menu.has_method("is_camera_override_active")
+		and bool(_active_facility_menu.call("is_camera_override_active"))
+	)
 
 
 func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) -> void:
@@ -2471,7 +2499,8 @@ func _is_player_inside_room(room: DungeonRoom3D) -> bool:
 
 
 func is_player_inside_facility() -> bool:
-	# 开火锁定只依赖基地室内的实际空间，不依赖房间触发器、门状态或路线状态。
+	# 基地安全区以建筑壳体为准，不再只认99层地面的房间触发器。这样从
+	# 99层平台走上100层阁楼/天台时，禁射与手电暂停耗电仍保持基地规则。
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
 	if facility == null or player == null:
 		return false
@@ -2480,7 +2509,22 @@ func is_player_inside_facility() -> bool:
 	return (
 		absf(local_pos.x) <= dimensions.x * 0.47
 		and absf(local_pos.z) <= dimensions.y * 0.47
-		and absf(local_pos.y) <= 1.8
+		and local_pos.y >= -1.0
+		and local_pos.y <= FLOOR_HEIGHT + 0.8
+	)
+
+
+func _is_player_on_facility_ground_level() -> bool:
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if facility == null or player == null:
+		return false
+	var local_pos := facility.to_local(player.global_position)
+	var dimensions := facility.get_dimensions()
+	return (
+		absf(local_pos.x) <= dimensions.x * 0.47
+		and absf(local_pos.z) <= dimensions.y * 0.47
+		and local_pos.y >= -1.0
+		and local_pos.y <= 2.2
 	)
 
 
@@ -2495,7 +2539,8 @@ func _is_player_within_facility_shell() -> bool:
 	return (
 		absf(local_pos.x) <= dimensions.x * 0.505
 		and absf(local_pos.z) <= dimensions.y * 0.505
-		and absf(local_pos.y) <= 2.2
+		and local_pos.y >= -1.0
+		and local_pos.y <= FLOOR_HEIGHT + 0.8
 	)
 
 
@@ -2943,8 +2988,8 @@ func _install_facilities() -> void:
 	if editor_guide != null:
 		editor_guide.visible = false
 	_collect_facility_art_nodes(_facility_art_layout, facility_floor.global_position)
-	if _facility_nodes.size() != 8:
-		push_error("基地美术布置层应包含8个交互设施，当前为%d个" % _facility_nodes.size())
+	if _facility_nodes.size() != 10:
+		push_error("基地美术布置层应包含10个交互设施，当前为%d个" % _facility_nodes.size())
 
 
 func _collect_facility_art_nodes(root: Node, room_center: Vector3) -> void:
@@ -3106,6 +3151,8 @@ func _open_facility_menu(scene_path: String) -> void:
 		menu.overlay_mode = true
 	if menu.has_method("set_inventory_module"):
 		menu.call("set_inventory_module", get_inventory_module())
+	if menu.has_method("set_player"):
+		menu.call("set_player", player)
 	_active_facility_menu = menu
 	add_child(menu)
 	menu.tree_exited.connect(_on_active_facility_menu_closed)
@@ -3172,6 +3219,55 @@ func _install_tower_hud() -> void:
 	_tower_base_currency_label.add_theme_font_size_override("font_size", 12)
 	_tower_base_currency_label.add_theme_color_override("font_color", Color(1.0, 0.78, 0.28))
 	vbox.add_child(_tower_base_currency_label)
+
+
+func _install_world_time_hud() -> void:
+	if _world_time_label != null:
+		return
+	var parent_control := _reference_hud_root if _reference_hud_root != null else $HUD
+	var panel := _make_hud_panel(
+		Color(0.18, 0.74, 0.82), Color(0.006, 0.016, 0.026, 0.90)
+	)
+	panel.name = "WorldDateTimeHUD"
+	_anchor_control(panel, 1.0, 0.0, 1.0, 0.0, -292, 366, -18, 416)
+	parent_control.add_child(panel)
+	_world_time_label = _make_hud_label(
+		"2075-01-01  17:00", 14, Color(0.72, 0.94, 1.0)
+	)
+	_world_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_world_time_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	panel.add_child(_world_time_label)
+	if (
+		GameTimeManager != null
+		and not GameTimeManager.minute_changed.is_connected(_on_world_time_minute_changed)
+	):
+		GameTimeManager.minute_changed.connect(_on_world_time_minute_changed)
+	_refresh_world_time_hud()
+
+
+func _on_world_time_minute_changed(snapshot: Dictionary) -> void:
+	_refresh_world_time_hud(snapshot)
+
+
+func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
+	if _world_time_label == null:
+		return
+	var current := snapshot
+	if current.is_empty() and GameTimeManager != null:
+		current = GameTimeManager.get_time_snapshot()
+	_world_time_label.text = str(current.get("display_text", "2075-01-01  17:00"))
+	_world_time_label.tooltip_text = "20个现实分钟推进一个游戏日"
+
+
+func _install_main_entry_screen() -> void:
+	# 自动化场景不展示启动页；正式运行始终覆盖在同一游戏世界和同一角色上。
+	if test_mode or DisplayServer.get_name() == "headless" or _main_entry_screen != null:
+		return
+	_main_entry_screen = MAIN_ENTRY_SCREEN_SCENE.instantiate() as CanvasLayer
+	if _main_entry_screen == null:
+		push_error("主页面实例化失败")
+		return
+	add_child(_main_entry_screen)
 
 
 func _refresh_tower_hud() -> void:
@@ -3311,11 +3407,94 @@ func _floor_number_from_index(floor_index: int) -> int:
 	return 100 - maxi(0, floor_index)
 
 
+func _physical_floor_index() -> int:
+	if player == null:
+		return maxi(0, int(_room_floor_index.get(_current_room_id, 0)))
+	var position := player.global_position if player.is_inside_tree() else player.position
+	return maxi(0, int(round(-position.y / FLOOR_HEIGHT)))
+
+
+func _refresh_physical_location_authority(force := false) -> void:
+	if player == null:
+		return
+	var floor_index := _physical_floor_index()
+	if not force and floor_index == _authoritative_floor_index:
+		return
+	_authoritative_floor_index = floor_index
+	var containing_room := _find_containing_room_on_floor(floor_index)
+	if containing_room != null and containing_room.room_id != _current_room_id:
+		var previous_id := _current_room_id
+		_on_room_entered(containing_room)
+		# 物理落层不能被只服务于门路由的到达锁拒绝。若角色已经真实落在
+		# 房间地面，至少同步位置权威和地图状态，后续房间逻辑仍走原链路。
+		if _current_room_id == previous_id:
+			_current_room_id = containing_room.room_id
+			minimap.set_current_room(containing_room.room_id)
+			minimap.reveal_room(containing_room.room_id)
+	_refresh_tower_hud()
+	_refresh_facility_runtime()
+	_update_facility_combat_lock()
+	if _atmosphere != null:
+		_atmosphere.call("set_floor_number", _floor_number_from_index(floor_index))
+
+
+func _find_containing_room_on_floor(floor_index: int) -> DungeonRoom3D:
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
+		if room != null and _is_runtime_restore_position_valid(room, player.global_position):
+			return room
+	return null
+
+
+func get_physical_location_snapshot() -> Dictionary:
+	return {
+		"floor_index": _physical_floor_index(),
+		"floor_number": _current_floor_number(),
+		"room_id": _current_room_id,
+		"inside_base_safe_volume": is_player_inside_facility(),
+		"on_facility_ground_level": _is_player_on_facility_ground_level(),
+		"route_trigger_independent": true,
+	}
+
+
 func _current_floor_number() -> int:
-	var fallback_index := maxi(
-		0, int(round(-player.global_position.y / FLOOR_HEIGHT)) if player != null else 0
+	return _floor_number_from_index(_physical_floor_index())
+
+
+func get_return_to_base_context() -> Dictionary:
+	var in_base_structure := is_player_inside_facility()
+	return {
+		"in_active_run": not in_base_structure,
+		"combat_active": not in_base_structure,
+		"transition_active": _active_transition_edge != "",
+		"base_center_available": _room_by_id.get("facility") != null,
+		"unavailable_reason": "战局中不可使用" if not in_base_structure else "",
+	}
+
+
+func can_return_player_to_base_center() -> bool:
+	return (
+		player != null
+		and is_player_inside_facility()
+		and _room_by_id.get("facility") != null
+		and _active_transition_edge.is_empty()
 	)
-	return _floor_number_from_index(int(_room_floor_index.get(_current_room_id, fallback_index)))
+
+
+func return_player_to_base_center_from_pause() -> Dictionary:
+	if not can_return_player_to_base_center():
+		return {"success": false, "reason": "战局中不可使用"}
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+	player.velocity = Vector3.ZERO
+	_authoritative_floor_index = -999
+	_on_room_entered(facility)
+	_refresh_physical_location_authority(true)
+	return {
+		"success": true,
+		"reason": "已返回99层基地中心",
+		"position": player.global_position,
+	}
 
 
 func _sorted_unlocked_elevator_floors() -> Array:
@@ -3347,7 +3526,8 @@ func try_close_modal_for_pause() -> bool:
 
 
 func _refresh_facility_runtime() -> void:
-	var active := _current_room_id == "facility"
+	# 设施只在99层地面交互，基地上层仍是安全区但不会隔着楼板触发设施。
+	var active := _is_player_on_facility_ground_level()
 	for facility in _facility_nodes:
 		if not is_instance_valid(facility):
 			continue

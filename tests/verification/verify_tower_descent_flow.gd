@@ -140,7 +140,7 @@ func _ready() -> void:
 		failures
 	)
 	_expect(snapshot.get("unlocked_elevator_floors", []) == [99], "初始电梯越权解锁了未探索楼层", failures)
-	_expect(int(snapshot.get("facility_count", 0)) == 7, "99层没有保留七个原基地设施", failures)
+	_expect(int(snapshot.get("facility_count", 0)) == 10, "99层没有绑定十个正式基地设施", failures)
 	_expect(int(generation.get("room_count", 0)) == 66, "楼顶+基地+四层房间总数不是66", failures)
 	_expect(bool(generation.get("has_extraction", false)), "95层没有Boss撤离点", failures)
 	_expect(

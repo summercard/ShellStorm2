@@ -198,9 +198,9 @@ func _validate_editable_component_layout(facility: DungeonRoom3D, failures: Arra
 		failures.append("基地结构组件没有进入可编辑美术布局tscn")
 		return
 	var expected := {
-		"二层楼中楼楼板_20x10米": Vector3(5.0, 0.0, -10.0),
-		"L型楼梯_一楼至二楼": Vector3(-9.58, 0.0, -9.15),
-		"外门小楼梯_二楼至100层": Vector3(12.74, 7.0, -7.5),
+		"二层楼中楼楼板_20x10米_Z5": Vector3(5.0, 0.0, -10.0),
+		"L型楼梯_一楼至二楼_Z5": Vector3(-9.58, 0.0, -9.15),
+		"外门小楼梯_二楼至100层_H4": Vector3(10.78, 5.0, -7.5),
 	}
 	for node_name in expected:
 		var component := layout.get_node_or_null(node_name) as Node3D
@@ -247,10 +247,11 @@ func _validate_l_stair_climb(tower: TowerDescent3D, facility: DungeonRoom3D, fai
 	tower.player.velocity = Vector3.ZERO
 	var waypoints := [
 		Vector3(-12.48, 0.10, -3.75),
-		Vector3(-12.48, 3.18, -10.90),
-		Vector3(-11.50, 3.52, -12.87),
-		Vector3(-5.20, 7.04, -12.87),
-		Vector3(-4.20, 7.06, -12.50),
+		Vector3(-12.48, 2.48, -10.50),
+		Vector3(-12.48, 2.52, -12.55),
+		Vector3(-11.76, 2.52, -12.87),
+		Vector3(-5.03, 5.04, -12.87),
+		Vector3(-4.20, 5.06, -12.50),
 	]
 	tower.player.global_position = facility.to_global(waypoints[0])
 	await get_tree().physics_frame
@@ -288,10 +289,10 @@ func _walk_player_to(player: Player3D, target: Vector3) -> bool:
 
 func _validate_exterior_stair_climb(tower: TowerDescent3D, facility: DungeonRoom3D, failures: Array[String]) -> void:
 	tower.player.velocity = Vector3.ZERO
-	tower.player.global_position = facility.to_global(Vector3(10.55, 7.08, -7.5))
+	tower.player.global_position = facility.to_global(Vector3(6.64, 5.08, -7.5))
 	await get_tree().physics_frame
-	if not await _walk_player_to(tower.player, facility.to_global(Vector3(14.55, 8.82, -7.5))):
-		failures.append("角色无法从7米楼板沿外门小楼梯走向9米门槛: %s" % tower.player.global_position)
+	if not await _walk_player_to(tower.player, facility.to_global(Vector3(14.85, 8.98, -7.5))):
+		failures.append("角色无法从5米楼板沿外门小楼梯走向9米门槛: %s" % tower.player.global_position)
 	tower.player.set_test_move_direction(Vector3.ZERO)
 
 
@@ -335,7 +336,7 @@ func _validate_base99_camera_clearance(
 ) -> void:
 	tower.force_enter_room_for_test("facility")
 	tower.player.velocity = Vector3.ZERO
-	# 镜头位于角色身后约2.77m；此点让三根垂直探针都落在7m楼板下。
+	# 镜头位于角色身后约2.77m；此点让三根垂直探针都落在5m楼板下。
 	tower.player.global_position = facility.to_global(Vector3(0.0, 0.08, -10.0))
 	for _frame in range(8):
 		await get_tree().physics_frame
@@ -343,7 +344,7 @@ func _validate_base99_camera_clearance(
 	if (
 		not bool(blocked.get("camera_stair_slab_detected", false))
 		or float(blocked.get("camera_stair_slab_drop_current_m", 0.0)) < 0.5
-		or tower.player.camera.position.y >= 7.0
+		or tower.player.camera.position.y >= 5.0
 	):
 		failures.append("角色位于基地楼板下方时，摄像机没有按99→98层规则降低: %s" % blocked)
 

@@ -25,23 +25,23 @@ func _ready() -> void:
 	# Bunny01 v002 adds evaluated left/right hands, two ear sockets and independent feet.
 	# 自动贩卖机独立货窗、屏幕与碰撞加入后实测420节点，保留5节点余量。
 	# 共用暂停层新增画面设置页（9个效果开关、6档AA）与0键性能面板后，
-	# 正式基地静态UI预算由425调整为470；场景几何与设施预算不变。
-	if node_count > 470:
+	# 新增恢复舱与角色衣柜后，正式基地静态节点实测483，保留17节点余量。
+	if node_count > 500:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
-	if base_world.get_facility_count() != 9:
-		failures.append("BaseWorld3D does not expose nine formal facilities")
+	if base_world.get_facility_count() != 11:
+		failures.append("BaseWorld3D does not expose eleven formal facilities")
 	for facility_node in base_world.get_node("Facilities").get_children():
 		var facility := facility_node as BaseFacility3D
 		if facility == null:
 			continue
 		var size_snapshot := facility.get_size_contract_snapshot()
-		var expected_scale := Vector3.ONE * BaseFacility3D.DEFAULT_BASE_SIZE_MULTIPLIER
+		var expected_scale := Vector3.ONE * facility.base_size_multiplier
 		var body_scale := size_snapshot.get("body_scale", Vector3.ZERO) as Vector3
 		var visual_scale := size_snapshot.get("visual_scale", Vector3.ZERO) as Vector3
 		if not body_scale.is_equal_approx(expected_scale):
-			failures.append("BaseWorld3D facility body is not at the 70%% base: %s" % facility.facility_id)
+			failures.append("BaseWorld3D facility body does not match its declared size multiplier: %s" % facility.facility_id)
 		if not visual_scale.is_equal_approx(expected_scale):
-			failures.append("BaseWorld3D facility visual is not at the 70%% base: %s" % facility.facility_id)
+			failures.append("BaseWorld3D facility visual does not match its declared size multiplier: %s" % facility.facility_id)
 	if base_world.get_dungeon_entrance_count() != 4:
 		failures.append("BaseWorld3D does not expose four roadside dungeon entrances")
 	if base_world.player == null or base_world.player.combat_enabled:

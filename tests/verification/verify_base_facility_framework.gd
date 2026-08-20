@@ -15,8 +15,8 @@ func _ready() -> void:
 
 func _verify_catalog(failures: Array[String]) -> void:
 	var definitions := FacilityCatalog.all_definitions()
-	if definitions.size() != 9:
-		failures.append("正式基地设施目录不是 9 项")
+	if definitions.size() != 11:
+		failures.append("正式基地设施目录不是 11 项")
 	var ids: Dictionary = {}
 	var all_text := ""
 	for definition in definitions:
@@ -44,8 +44,8 @@ func _verify_query_and_atomic_command(failures: Array[String]) -> void:
 	data.blueprint_bullet_tier = 2
 	data.blueprint_attachment_tier = 3
 	var snapshots := FacilityService.get_all_snapshots(data)
-	if snapshots.size() != 9:
-		failures.append("统一设施查询没有返回 9 个快照")
+	if snapshots.size() != 11:
+		failures.append("统一设施查询没有返回 11 个快照")
 	for snapshot in snapshots:
 		if str(snapshot.get("summary", "")).is_empty():
 			failures.append("设施缺少玩家可读摘要：%s" % str(snapshot.get("facility_id", "")))
@@ -78,8 +78,13 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 		var snapshot: Dictionary = facility.get_snapshot()
 		if str(snapshot.get("summary", "")).is_empty() or "\n" not in facility.name_label.text:
 			failures.append("3D 设施牌没有显示实时摘要：%s" % facility.facility_id)
-	if world_ids.size() != 9 or not world_ids.has("base_vending"):
-		failures.append("3D 基地没有绑定全部 9 个稳定设施 ID")
+	if (
+		world_ids.size() != 11
+		or not world_ids.has("base_vending")
+		or not world_ids.has("base_recovery")
+		or not world_ids.has("avatar_wardrobe")
+	):
+		failures.append("3D 基地没有绑定全部 11 个稳定设施 ID")
 
 	var menu_scene := load("res://scenes/BaseMenu.tscn") as PackedScene
 	var menu := menu_scene.instantiate() as BaseMenu
@@ -87,8 +92,8 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 	add_child(menu)
 	await get_tree().process_frame
 	var grid := menu.get_node_or_null("VBox/HSplit/RightPanel/BuildingsGrid") as GridContainer
-	if grid == null or grid.get_child_count() != 9:
-		failures.append("基地管理终端没有显示完整 9 设施目录")
+	if grid == null or grid.get_child_count() != 11:
+		failures.append("基地管理终端没有显示完整 11 设施目录")
 	else:
 		var terminal_text := ""
 		for child in grid.get_children():
@@ -122,7 +127,7 @@ func _collect_label_text(root: Node) -> String:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BASE_FACILITY_FRAMEWORK_OK: nine stable facilities, shared snapshots, visible status, terminal directory, and atomic upgrade planning pass")
+		print("BASE_FACILITY_FRAMEWORK_OK: eleven stable facilities, shared snapshots, visible status, terminal directory, and atomic upgrade planning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

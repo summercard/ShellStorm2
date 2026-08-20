@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseWorld3D.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_world_3d/env_base_world_kit_top3d_v001.tscn" id="2_environment"]
@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" path="res://scenes/Player3D.tscn" id="5_player"]
 [ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn" id="6_pause"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d_v001.tscn" id="7_vending"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn" id="8_recovery"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn" id="9_wardrobe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleInfo"]
 bg_color = Color(0.025, 0.045, 0.058, 0.90)
@@ -107,6 +109,14 @@ facility_color = Color(0.28, 0.52, 0.68, 1)
 [node name="BaseVending" parent="Facilities" instance=ExtResource("7_vending")]
 position = Vector3(2.4, 0, 7.7)
 facility_id = "base_vending"
+
+[node name="BaseRecovery" parent="Facilities" instance=ExtResource("8_recovery")]
+position = Vector3(2.4, 0, -7.7)
+base_size_multiplier = 1.0
+
+[node name="AvatarWardrobe" parent="Facilities" instance=ExtResource("9_wardrobe")]
+position = Vector3(-2.4, 0, 7.7)
+base_size_multiplier = 1.0
 
 [node name="DungeonEntrances" type="Node3D" parent="."]
 

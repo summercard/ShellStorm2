@@ -30,7 +30,7 @@ var _base_snapshot: Dictionary = {}
 
 func _ready() -> void:
 	if BaseManager != null and BaseManager.data != null:
-		_base_snapshot = BaseManager.data._to_dict().duplicate(true)
+		_base_snapshot = _get_training_owned_base_snapshot()
 	_configure_environment()
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
@@ -195,7 +195,21 @@ func get_training_snapshot() -> Dictionary:
 func is_base_data_unchanged() -> bool:
 	if _base_snapshot.is_empty() or BaseManager == null or BaseManager.data == null:
 		return true
-	return _base_snapshot == BaseManager.data._to_dict()
+	return _base_snapshot == _get_training_owned_base_snapshot()
+
+
+func _get_training_owned_base_snapshot() -> Dictionary:
+	var snapshot := BaseManager.data._to_dict().duplicate(true)
+	# 世界时钟与按世界时间恢复的基地能源属于常驻全局系统；它们在任何
+	# 可游玩场景中都会推进，不能被误判为靶场装备/目标写入了长期进度。
+	for global_key in [
+		"world_time_elapsed_game_seconds",
+		"base_energy_current",
+		"base_energy_capacity",
+		"base_energy_last_synced_game_seconds",
+	]:
+		snapshot.erase(global_key)
+	return snapshot
 
 
 func equip_combination_for_test(gun_id: String, bullet_id: String) -> bool:

@@ -72,6 +72,8 @@ func _open_menu(scene_path: String) -> void:
 		return
 	if menu is BaseMenu:
 		menu.overlay_mode = true
+	if menu.has_method("set_player"):
+		menu.call("set_player", player)
 	# 设施菜单必须覆盖基地 HUD，避免状态面板与菜单内容重叠。
 	menu.layer = 50
 	_active_menu = menu

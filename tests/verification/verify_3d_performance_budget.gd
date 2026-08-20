@@ -29,9 +29,9 @@ func _ready() -> void:
 	if initial_world_nodes > 2400:
 		failures.append("Permanent structural proxy world exceeded 2400 nodes: %d" % initial_world_nodes)
 	# ESC画面设置页与0键性能面板增加27个静态Control；均不随房间探索增长，
-	# 性能面板隐藏时也不采样。固定UI预算由140/160提高到170/190。
-	if hud_shell_nodes > 170:
-		failures.append("Formal HUD and modal shells exceeded 170 fixed UI nodes: %d" % hud_shell_nodes)
+	# 性能面板隐藏时也不采样。雷达下新增唯一世界时间Label，固定壳预算为171。
+	if hud_shell_nodes > 171:
+		failures.append("Formal HUD and modal shells exceeded 171 fixed UI nodes: %d" % hud_shell_nodes)
 	if hud_preview_nodes > 20:
 		failures.append("Shared HUD 3D item preview exceeded 20 fixed nodes: %d" % hud_preview_nodes)
 	if hud_nodes > 190:

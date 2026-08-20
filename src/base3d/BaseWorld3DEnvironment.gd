@@ -16,10 +16,12 @@ var _barrier_count := 0
 var _light_count := 0
 var _world_environment: WorldEnvironment
 var _key_light: DirectionalLight3D
+var _time_source: Node
 
 
 func _ready() -> void:
 	_build_environment()
+	_bind_world_time()
 	if RuntimePerformanceManager != null:
 		RuntimePerformanceManager.register_atmosphere(self)
 	_build_ground_kit()
@@ -72,6 +74,33 @@ func _build_environment() -> void:
 	add_child(_key_light)
 	_key_light.add_to_group(EnemyIllumination3D.SUN_GROUP)
 	_key_light.set_meta("gameplay_light_kind", "sun")
+	_apply_world_time_solar()
+
+
+func _bind_world_time() -> void:
+	_time_source = get_node_or_null("/root/GameTimeManager")
+	if _time_source == null or not _time_source.has_signal("solar_state_changed"):
+		return
+	if not _time_source.solar_state_changed.is_connected(_on_solar_state_changed):
+		_time_source.solar_state_changed.connect(_on_solar_state_changed)
+	_apply_world_time_solar()
+
+
+func _apply_world_time_solar() -> void:
+	if _time_source == null or not _time_source.has_method("get_solar_snapshot"):
+		return
+	_on_solar_state_changed(_time_source.call("get_solar_snapshot") as Dictionary)
+
+
+func _on_solar_state_changed(solar: Dictionary) -> void:
+	if _key_light != null:
+		_key_light.rotation_degrees = solar.get("rotation_degrees", Vector3(-60.0, 32.0, 0.0)) as Vector3
+		_key_light.light_energy = float(solar.get("energy", 0.0))
+	if _world_environment != null and _world_environment.environment != null:
+		var environment := _world_environment.environment
+		environment.background_color = solar.get("background_color", TowerAtmosphere3D.BACKGROUND_COLOR) as Color
+		environment.ambient_light_color = solar.get("ambient_color", TowerAtmosphere3D.AMBIENT_COLOR) as Color
+		environment.ambient_light_energy = float(solar.get("ambient_energy", TowerAtmosphere3D.AMBIENT_ENERGY))
 
 
 func apply_performance_quality(profile: String) -> void:

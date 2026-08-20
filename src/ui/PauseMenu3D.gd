@@ -4,6 +4,10 @@ extends Control
 ## 世界、AI、射弹和计时器继续遵守 Pausable，不会暗中推进。
 
 signal pause_changed(paused: bool)
+signal return_to_base_requested()
+signal return_to_base_resolved(result: Dictionary)
+
+const ReturnAction = preload("res://src/ui/unstuck/ReturnToBaseAction.gd")
 
 const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const AA_LABELS := ["关闭", "FXAA（快速）", "MSAA 2×", "MSAA 4×", "MSAA 8×", "TAA（高档推荐）"]
@@ -12,6 +16,8 @@ const SHADOW_LABELS := ["低 · 1024", "中 · 2048", "高 · 4096（当前）"]
 
 @onready var resume_button: Button = $Center/Panel/Margin/MainPage/ResumeButton
 @onready var graphics_button: Button = $Center/Panel/Margin/MainPage/GraphicsButton
+@onready var return_to_base_button: Button = $Center/Panel/Margin/MainPage/ReturnToBaseButton
+@onready var return_to_base_hint: Label = $Center/Panel/Margin/MainPage/ReturnToBaseHint
 @onready var main_page: VBoxContainer = $Center/Panel/Margin/MainPage
 @onready var graphics_page: VBoxContainer = $Center/Panel/Margin/GraphicsPage
 @onready var renderer_label: Label = $Center/Panel/Margin/GraphicsPage/Header/RendererLabel
@@ -36,6 +42,7 @@ func _ready() -> void:
 	_apply_pause_visual(Global != null and Global.has_pause_reason("manual"))
 	resume_button.pressed.connect(resume_game)
 	graphics_button.pressed.connect(_show_graphics_page)
+	return_to_base_button.pressed.connect(_request_return_to_base)
 	back_button.pressed.connect(_show_main_page)
 	high_defaults_button.pressed.connect(_restore_high_defaults)
 	_setup_graphics_controls()
@@ -80,6 +87,7 @@ func _on_global_pause_changed(_paused: bool) -> void:
 	_apply_pause_visual(manual_paused)
 	if manual_paused:
 		_show_main_page()
+		_refresh_return_to_base_action()
 		resume_button.grab_focus()
 	pause_changed.emit(manual_paused)
 
@@ -125,8 +133,40 @@ func _show_graphics_page() -> void:
 func _show_main_page() -> void:
 	graphics_page.visible = false
 	main_page.visible = true
+	_refresh_return_to_base_action()
 	if center.visible:
 		graphics_button.grab_focus()
+
+
+func get_return_to_base_availability() -> Dictionary:
+	return ReturnAction.get_availability(_get_game_root())
+
+
+func _request_return_to_base() -> void:
+	return_to_base_requested.emit()
+	var result := ReturnAction.request(_get_game_root())
+	return_to_base_resolved.emit(result)
+	if bool(result.get("success", false)):
+		resume_game()
+		return
+	return_to_base_hint.text = str(result.get("reason", "返回基地中心失败"))
+	return_to_base_hint.modulate = Color(1.0, 0.48, 0.34)
+
+
+func _refresh_return_to_base_action() -> void:
+	if return_to_base_button == null or return_to_base_hint == null:
+		return
+	var availability := get_return_to_base_availability()
+	var available := bool(availability.get("available", false))
+	return_to_base_button.disabled = not available
+	return_to_base_button.text = "返回基地中心" if available else "返回基地中心（不可用）"
+	return_to_base_hint.text = str(availability.get("reason", ""))
+	return_to_base_hint.modulate = Color(0.48, 0.84, 0.92) if available else Color(0.70, 0.58, 0.48)
+
+
+func _get_game_root() -> Node:
+	var hud := get_parent()
+	return hud.get_parent() if hud != null else null
 
 
 func _restore_high_defaults() -> void:

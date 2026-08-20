@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
@@ -8,10 +8,12 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn" id="6_retro"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z7/env_base99_mezzanine_20x10_z7_root_top3d_v001.tscn" id="9_mezzanine"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z7/env_base99_stair_l_z7_root_top3d_v001.tscn" id="10_stair_l"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_root_top3d_v001.tscn" id="11_stair_exterior"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v002.tscn" id="9_mezzanine"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v002.tscn" id="10_stair_l"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d_v002.tscn" id="11_stair_exterior"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h9/env_base100_upper_shell_30x30_h9_root_top3d_v001.tscn" id="12_upper_shell"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn" id="13_recovery"]
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn" id="14_wardrobe"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
@@ -66,14 +68,14 @@ mesh = SubResource("MeshBoundaryEW")
 [node name="基地结构组件_可移动旋转" type="Node3D" parent="."]
 metadata/usage = "楼板和楼梯的初始位置来自Blender母版；可在此直接移动旋转，组件自带随动行走碰撞"
 
-[node name="二层楼中楼楼板_20x10米" parent="基地结构组件_可移动旋转" instance=ExtResource("9_mezzanine")]
+[node name="二层楼中楼楼板_20x10米_Z5" parent="基地结构组件_可移动旋转" instance=ExtResource("9_mezzanine")]
 position = Vector3(5, 0, -10)
 
-[node name="L型楼梯_一楼至二楼" parent="基地结构组件_可移动旋转" instance=ExtResource("10_stair_l")]
+[node name="L型楼梯_一楼至二楼_Z5" parent="基地结构组件_可移动旋转" instance=ExtResource("10_stair_l")]
 position = Vector3(-9.58, 0, -9.15)
 
-[node name="外门小楼梯_二楼至100层" parent="基地结构组件_可移动旋转" instance=ExtResource("11_stair_exterior")]
-position = Vector3(12.74, 7, -7.5)
+[node name="外门小楼梯_二楼至100层_H4" parent="基地结构组件_可移动旋转" instance=ExtResource("11_stair_exterior")]
+position = Vector3(10.78, 5, -7.5)
 
 [node name="100层上层围护与18米封顶" parent="基地结构组件_可移动旋转" instance=ExtResource("12_upper_shell")]
 
@@ -83,12 +85,14 @@ position = Vector3(12.74, 7, -7.5)
 position = Vector3(-9, 0, -11.6)
 rotation = Vector3(0, 3.141593, 0)
 facility_id = "mission_operations"
+base_size_multiplier = 1.0
 
 [node name="枪械工坊" parent="设施交互节点_可移动旋转" instance=ExtResource("3_workshop")]
 position = Vector3(-3, 0, -11.6)
 rotation = Vector3(0, 3.141593, 0)
 facility_id = "weapon_workshop"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
+base_size_multiplier = 1.0
 
 [node name="命运占卜台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
 position = Vector3(3, 0, -11.6)
@@ -112,6 +116,7 @@ facility_id = "vault"
 display_name = "保险柜"
 description = "使用赛博储物站模型管理长期仓储与当前背包"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
+base_size_multiplier = 1.0
 
 [node name="怪物档案台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
 position = Vector3(-3, 0, 11.6)
@@ -126,12 +131,24 @@ facility_id = "fate_collection"
 display_name = "命运卡收藏室"
 description = "使用复古游戏电视站模型浏览已发现的命运卡片"
 menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
+base_size_multiplier = 1.0
 
 [node name="自动贩卖机" parent="设施交互节点_可移动旋转" instance=ExtResource("4_vending")]
 position = Vector3(11.6, 0, 5.6)
 rotation = Vector3(0, 1.570796, 0)
 facility_id = "base_vending"
 menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
+base_size_multiplier = 1.0
+
+[node name="状态恢复舱" parent="设施交互节点_可移动旋转" instance=ExtResource("13_recovery")]
+position = Vector3(11.6, 0, -3.4)
+rotation = Vector3(0, 1.570796, 0)
+base_size_multiplier = 1.0
+
+[node name="角色衣柜" parent="设施交互节点_可移动旋转" instance=ExtResource("14_wardrobe")]
+position = Vector3(-11.6, 0, 3.8)
+rotation = Vector3(0, -1.570796, 0)
+base_size_multiplier = 1.0
 
 [node name="场景装饰_可自由增删" type="Node3D" parent="."]
 metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"

@@ -119,7 +119,14 @@ func _ready() -> void:
 	_expect(not bool(dungeon.get("_door_fate_active")), "ESC fate cancellation contract did not close selection", failures)
 
 	var weapon_panel := dungeon.get("_weapon_panel") as WeaponAssemblyTreePanel
-	_expect(weapon_panel != null and is_equal_approx(weapon_panel.anchor_left, 0.5) and weapon_panel.position.x <= -250.0, "K weapon presentation page is not centered", failures)
+	var viewport_center := Vector2(dungeon.get_viewport().get_visible_rect().size) * 0.5
+	_expect(
+		weapon_panel != null
+		and is_equal_approx(weapon_panel.anchor_left, 0.5)
+		and weapon_panel.get_global_rect().get_center().distance_to(viewport_center) <= 1.0,
+		"K weapon presentation page is not centered",
+		failures
+	)
 
 	dungeon.queue_free()
 	_finish(failures)

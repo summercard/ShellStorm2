@@ -193,13 +193,11 @@ func toggle_light() -> bool:
 
 
 ## 每物理 tick 由 Player3D 推送 facility 状态。
-## 基地内不消耗、且电量自动补满。基地外:每秒累计实际耗电量,
+## 基地内只暂停消耗，不再自动补电；补电必须通过基地恢复设施或电池。
+## 基地外:每秒累计实际耗电量,
 ## 每达到 2% ("一格") 触发一次 consume_charge。
 func _physics_process(delta: float) -> void:
 	if _in_facility:
-		if _charge_ratio < 1.0:
-			set_charge_ratio(1.0)
-		_drain_accumulator = 0.0
 		return
 	if _enabled and _charge_ratio > 0.0:
 		_drain_accumulator += FLASHLIGHT_CHARGE_DRAIN_PER_SECOND * _drain_multiplier * delta
@@ -304,10 +302,9 @@ func _apply_module(module_id: String, announce: bool) -> void:
 
 func set_in_facility(flag: bool) -> void:
 	_in_facility = flag
-	if flag and _charge_ratio < 1.0:
-		set_charge_ratio(1.0)
-		_drain_accumulator = 0.0
-		state_changed.emit("facility_recharged", {})
+	# 场景切换不能改变电池电量或退回未跨2%档位的真实消耗。
+	# 基地恢复设施显式调用 restore_charge() 后才会清零耗电累计。
+	state_changed.emit("facility_state_changed", {"in_facility": flag})
 
 
 func get_charge_ratio() -> float:
@@ -345,7 +342,7 @@ func is_in_facility() -> bool:
 ## 当前 drain 倍率下剩余时间(秒)。关闭、满电、耗尽时返回特殊值。
 ## - _enabled == false: 0(关闭时不消耗,但保留语义给 HUD 显示"OFF · --%")
 ## - _charge_ratio <= 0.0: 0
-## - _in_facility == true: INF(基地内不消耗)
+## - _in_facility == true: INF(基地内不消耗，但不会自动补满)
 ## - 其他: 把"已落到 _charge_ratio 的离散电量"与"物理帧间累计、尚未跨档的 _drain_accumulator"
 ##   一起除以每秒实际耗电率,得到真正的剩余秒数。这样 _charge_ratio 每约 6 秒才掉一格,
 ##   但剩余秒数会随 _drain_accumulator 在帧间连续递减,HUD 才能逐秒倒计时。

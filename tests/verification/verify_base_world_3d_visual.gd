@@ -41,7 +41,7 @@ func _ready() -> void:
 			failures.append("Base facility terminal visual cannot be opened")
 		else:
 			var grid := menu.get_node_or_null("VBox/HSplit/RightPanel/BuildingsGrid") as GridContainer
-			if grid == null or grid.get_child_count() != 9:
+			if grid == null or grid.get_child_count() != 11:
 				failures.append("Base facility terminal visual does not contain nine entries")
 			var terminal_image := get_viewport().get_texture().get_image()
 			if terminal_image == null or terminal_image.is_empty() or terminal_image.save_png(TERMINAL_PREVIEW_PATH) != OK:

@@ -73,6 +73,21 @@ size_flags_horizontal = 4
 text = "画面设置"
 theme_override_font_sizes/font_size = 18
 
+[node name="ReturnToBaseButton" type="Button" parent="Center/Panel/Margin/MainPage"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "返回基地中心（不可用）"
+disabled = true
+theme_override_font_sizes/font_size = 18
+
+[node name="ReturnToBaseHint" type="Label" parent="Center/Panel/Margin/MainPage"]
+layout_mode = 2
+text = "战局中不可使用；仅在基地自由活动时提供脱困"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.7, 0.58, 0.48, 1)
+theme_override_font_sizes/font_size = 14
+
 [node name="ResumeButton" type="Button" parent="Center/Panel/Margin/MainPage"]
 custom_minimum_size = Vector2(260, 48)
 layout_mode = 2

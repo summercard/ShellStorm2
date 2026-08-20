@@ -82,6 +82,7 @@ core_scenes=(
 # Keep them out of headless logic suites so CI does not report dummy-renderer
 # texture failures as gameplay regressions.
 visual_scenes=(
+  verify_base99_modular_room_visual
   verify_graphics_settings_visual
   verify_facility_light_retoggle_visual
   verify_3d_melee_combat_visual

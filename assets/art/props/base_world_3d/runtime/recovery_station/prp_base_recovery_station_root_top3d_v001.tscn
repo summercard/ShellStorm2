@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_facility"]
+
+[node name="基地状态恢复舱" instance=ExtResource("1_facility")]
+facility_id = "base_recovery"
+display_name = "状态恢复舱"
+description = "消耗基地电量恢复生命与手电电量"
+beacon_light_enabled = false
+base_size_multiplier = 1.0
+metadata/asset_id = "PRP-BASE-RECOVERY-STATION-3D"
+metadata/model_component = "程序占位"
+metadata/forward_axis = "-Z"

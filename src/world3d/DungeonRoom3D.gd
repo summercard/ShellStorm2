@@ -285,13 +285,13 @@ func get_room_snapshot() -> Dictionary:
 			self, "visual_asset_id", "ENV-BASE99-DOOR-LIFT-22X25"
 		),
 		"base99_mezzanine_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE99-MEZZANINE-20X10-Z7"
+			self, "asset_id", "ENV-BASE99-MEZZANINE-20X10-Z5"
 		),
 		"base99_stair_l_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE99-STAIR-L-Z7"
+			self, "asset_id", "ENV-BASE99-STAIR-L-Z5"
 		),
 		"base99_stair_exterior_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE99-STAIR-EXTERIOR-H2"
+			self, "asset_id", "ENV-BASE99-STAIR-EXTERIOR-H4"
 		),
 		"base99_camera_stair_slab_count": _count_nodes_with_meta(
 			self, "camera_stair_slab", true

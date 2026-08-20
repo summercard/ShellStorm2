@@ -576,8 +576,10 @@ func _validate_target_room_airwall_clearance(
 	await get_tree().physics_frame
 	_validate_clear_lane(
 		tower,
-		Vector3(-14.0, -7.2, 2.5),
-		Vector3(-14.0, -7.2, -9.4),
+		# 旧x=-14通道现由正式L梯扶手占用；沿基地中线继续检查真正的
+		# 隐形连接器空气墙，不能把可见、应阻挡的栏杆当成回归。
+		Vector3(0.0, -7.2, 2.5),
+		Vector3(0.0, -7.2, -9.4),
 		"Base north lane still has an invisible blocker",
 		failures
 	)

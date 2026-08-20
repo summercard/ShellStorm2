@@ -1,7 +1,7 @@
 class_name BaseData
 extends Resource
 
-const SAVE_VERSION := "1.8"
+const SAVE_VERSION := "2.0"
 
 var total_runs: int = 0
 var successful_extractions: int = 0
@@ -51,6 +51,17 @@ var vault_items: Array = []
 # 电池始终作为普通库存物品通过保险柜/待带入栏跨局，不维护第二份计数。
 var unlocked_flashlight_modules: Array[String] = []
 var equipped_flashlight_module_id: String = "basic"
+
+# 权威世界时钟与基地能源。世界时钟保存的是从
+# 2075-01-01 17:00:00 起累计的“游戏秒”，不依赖设备本地时区。
+# 基地能源只随该游戏时间推进，不使用离线墙钟补偿。
+var world_time_elapsed_game_seconds: float = 0.0
+var base_energy_current: float = 100.0
+var base_energy_capacity: float = 100.0
+var base_energy_last_synced_game_seconds: float = 0.0
+
+# 角色外观只保存合法的表现层装配 ID；不保存碰撞、武器或战斗状态。
+var avatar_customization: Dictionary = {}
 
 # 下一局预选命运卡片（格式：{card_id, card_name, card_type, card_rarity, description, tags, effect, visual}）
 var pending_fate_card: Dictionary = {}
@@ -111,6 +122,11 @@ func _to_dict() -> Dictionary:
 		"vault_items": vault_items,
 		"unlocked_flashlight_modules": unlocked_flashlight_modules,
 		"equipped_flashlight_module_id": equipped_flashlight_module_id,
+		"world_time_elapsed_game_seconds": world_time_elapsed_game_seconds,
+		"base_energy_current": base_energy_current,
+		"base_energy_capacity": base_energy_capacity,
+		"base_energy_last_synced_game_seconds": base_energy_last_synced_game_seconds,
+		"avatar_customization": avatar_customization.duplicate(true),
 		"pending_fate_card": pending_fate_card,
 		"pending_loadout_items": pending_loadout_items,
 		"extraction_loot": extraction_loot,
@@ -170,6 +186,18 @@ static func from_dict(d: Dictionary) -> BaseData:
 				data.unlocked_flashlight_modules.append(normalized)
 	if d.has("equipped_flashlight_module_id"):
 		data.equipped_flashlight_module_id = str(d["equipped_flashlight_module_id"])
+	if d.has("world_time_elapsed_game_seconds"):
+		data.world_time_elapsed_game_seconds = maxf(0.0, float(d["world_time_elapsed_game_seconds"]))
+	if d.has("base_energy_capacity"):
+		data.base_energy_capacity = maxf(1.0, float(d["base_energy_capacity"]))
+	if d.has("base_energy_current"):
+		data.base_energy_current = clampf(float(d["base_energy_current"]), 0.0, data.base_energy_capacity)
+	if d.has("base_energy_last_synced_game_seconds"):
+		data.base_energy_last_synced_game_seconds = maxf(
+			0.0, float(d["base_energy_last_synced_game_seconds"])
+		)
+	if d.has("avatar_customization") and d["avatar_customization"] is Dictionary:
+		data.avatar_customization = (d["avatar_customization"] as Dictionary).duplicate(true)
 	if d.has("pending_fate_card"): data.pending_fate_card = d["pending_fate_card"]
 	if d.has("pending_loadout_items") and d["pending_loadout_items"] is Array: data.pending_loadout_items = Array(d["pending_loadout_items"])
 	if d.has("extraction_loot") and d["extraction_loot"] is Array: data.extraction_loot = Array(d["extraction_loot"])

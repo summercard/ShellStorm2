@@ -1,0 +1,82 @@
+{
+  "asset_pack": "ENV-BASE99-MODULAR-ROOM",
+  "version": "v002",
+  "source": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend",
+  "output_blend": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend",
+  "height_contract": {
+    "floor_99_m": 0.0,
+    "mezzanine_m": 5.0,
+    "floor_100_m": 9.0
+  },
+  "modules": [
+    {
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+      "logic_id": "base99_mezzanine_20x10_z5",
+      "mode": "mezzanine",
+      "local_bounds_min": [
+        -10.12375,
+        -5.12375,
+        0.0
+      ],
+      "local_bounds_max": [
+        10.12375,
+        5.12375,
+        5.93
+      ],
+      "local_dimensions": [
+        20.2475,
+        10.2475,
+        5.93
+      ],
+      "mesh_count": 2,
+      "forward": "Blender -Y / Godot -Z",
+      "origin": "xy_center_bottom_z0"
+    },
+    {
+      "asset_id": "ENV-BASE99-STAIR-L-Z5",
+      "logic_id": "base99_stair_l_z5",
+      "mode": "l_stair",
+      "local_bounds_min": [
+        -4.6088,
+        -5.269,
+        0.0
+      ],
+      "local_bounds_max": [
+        4.6088,
+        5.269,
+        5.91015
+      ],
+      "local_dimensions": [
+        9.2176,
+        10.538,
+        5.91015
+      ],
+      "mesh_count": 2,
+      "forward": "Blender -Y / Godot -Z",
+      "origin": "xy_center_bottom_z0"
+    },
+    {
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+      "logic_id": "base99_stair_exterior_h4",
+      "mode": "exterior_h4",
+      "local_bounds_min": [
+        -4.2575,
+        -1.4,
+        0.0
+      ],
+      "local_bounds_max": [
+        4.2575,
+        1.4,
+        4.0
+      ],
+      "local_dimensions": [
+        8.515,
+        2.8,
+        4.0
+      ],
+      "mesh_count": 2,
+      "forward": "Blender -Y / Godot -Z",
+      "origin": "xy_center_bottom_z0"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ extends Node
 const SAVE_PATH := "user://base_save.json"
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
 const FacilityService = preload("res://src/base/BaseFacilityService.gd")
+const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BASE_LOADOUT_CAPACITY := 12
@@ -270,6 +271,166 @@ func get_facility_snapshot(facility_id: String) -> Dictionary:
 func get_facility_snapshots() -> Array[Dictionary]:
 	_ensure_data()
 	return FacilityService.get_all_snapshots(data)
+
+
+## — 权威世界时钟 / 基地能源 —
+
+func get_world_time_elapsed_game_seconds() -> float:
+	_ensure_data()
+	return maxf(0.0, data.world_time_elapsed_game_seconds)
+
+
+func set_world_time_elapsed_game_seconds(value: float, persist := false) -> bool:
+	_ensure_data()
+	data.world_time_elapsed_game_seconds = maxf(0.0, value)
+	if persist:
+		return save_base("world_time_update")
+	return true
+
+
+func sync_base_energy_to_game_time(
+	elapsed_game_seconds: float = -1.0,
+	persist := false
+) -> Dictionary:
+	_ensure_data()
+	var now := elapsed_game_seconds
+	if now < 0.0:
+		now = data.world_time_elapsed_game_seconds
+	var restored := EnergyService.sync_to_game_time(data, now)
+	if persist and restored > 0.0001:
+		save_base("base_energy_regeneration")
+	var snapshot := EnergyService.get_snapshot(data, now)
+	snapshot["restored"] = restored
+	return snapshot
+
+
+func get_base_energy_snapshot(elapsed_game_seconds: float = -1.0) -> Dictionary:
+	_ensure_data()
+	var now := elapsed_game_seconds
+	if now < 0.0:
+		now = data.world_time_elapsed_game_seconds
+	return EnergyService.get_snapshot(data, now)
+
+
+func get_recovery_facility_snapshot(player: Node) -> Dictionary:
+	_ensure_data()
+	var energy := get_base_energy_snapshot()
+	var result := {
+		"available": false,
+		"reason": "未找到角色",
+		"energy": energy,
+		"plan": {},
+	}
+	if player == null or not is_instance_valid(player):
+		return result
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null or not flashlight.has_method("get_charge_ratio"):
+		result["reason"] = "手电恢复接口缺失"
+		return result
+	var current_hp := int(player.get("current_hp"))
+	var max_hp := int(player.get("max_hp"))
+	var plan := EnergyService.plan_recovery(
+		current_hp,
+		max_hp,
+		float(flashlight.call("get_charge_ratio")),
+		float(energy.get("current", 0.0))
+	)
+	result["plan"] = plan
+	result["current_hp"] = current_hp
+	result["max_hp"] = max_hp
+	result["flashlight_charge_ratio"] = float(flashlight.call("get_charge_ratio"))
+	result["available"] = (
+		current_hp > 0
+		and bool(plan.get("needed", false))
+		and bool(plan.get("affordable", false))
+	)
+	if current_hp <= 0:
+		result["reason"] = "倒地状态不能使用恢复设施"
+	elif not bool(plan.get("needed", false)):
+		result["reason"] = "生命与手电均已充满"
+	elif not bool(plan.get("affordable", false)):
+		result["reason"] = "基地电量不足，需要 %d" % int(plan.get("cost", 0))
+	else:
+		result["reason"] = "可恢复"
+	return result
+
+
+func consume_base_energy(amount: float, reason := "base_energy_consume") -> bool:
+	_ensure_data()
+	if amount <= 0.0:
+		return false
+	sync_base_energy_to_game_time(data.world_time_elapsed_game_seconds, false)
+	if data.base_energy_current + 0.0001 < amount:
+		return false
+	var previous := data.base_energy_current
+	data.base_energy_current = maxf(0.0, data.base_energy_current - amount)
+	if save_base(reason):
+		return true
+	data.base_energy_current = previous
+	return false
+
+
+func add_base_energy(amount: float, reason := "base_energy_restore") -> bool:
+	_ensure_data()
+	if amount <= 0.0 or data.base_energy_current >= data.base_energy_capacity:
+		return false
+	var previous := data.base_energy_current
+	data.base_energy_current = minf(
+		data.base_energy_capacity, data.base_energy_current + amount
+	)
+	if save_base(reason):
+		return true
+	data.base_energy_current = previous
+	return false
+
+
+## 恢复事务以 Prefab 功能入口为单位：先校验玩家/手电，随后原子保存能源，
+## 保存成功后才修改运行态 HP 与手电，避免存档失败时白扣或白送能源。
+func recover_player_state_at_facility(player: Node) -> Dictionary:
+	_ensure_data()
+	if player == null or not is_instance_valid(player):
+		return {"success": false, "reason": "未找到角色"}
+	if not player.has_method("heal"):
+		return {"success": false, "reason": "角色恢复接口缺失"}
+	var flashlight := player.get_node_or_null("PlayerFlashlight3D")
+	if flashlight == null or not flashlight.has_method("get_charge_ratio"):
+		return {"success": false, "reason": "手电恢复接口缺失"}
+	var current_hp := int(player.get("current_hp"))
+	var max_hp := int(player.get("max_hp"))
+	if current_hp <= 0:
+		return {"success": false, "reason": "倒地状态不能使用恢复设施"}
+	sync_base_energy_to_game_time(data.world_time_elapsed_game_seconds, false)
+	var plan := EnergyService.plan_recovery(
+		current_hp,
+		max_hp,
+		float(flashlight.call("get_charge_ratio")),
+		data.base_energy_current
+	)
+	if not bool(plan.get("needed", false)):
+		return {"success": false, "reason": "生命与手电均已充满", "plan": plan}
+	if not bool(plan.get("affordable", false)):
+		return {
+			"success": false,
+			"reason": "基地电量不足，需要 %d" % int(plan.get("cost", 0)),
+			"plan": plan,
+		}
+	var cost := float(plan.get("cost", 0))
+	var previous := data.base_energy_current
+	data.base_energy_current = maxf(0.0, data.base_energy_current - cost)
+	if not save_base("base_recovery_facility"):
+		data.base_energy_current = previous
+		return {"success": false, "reason": "存档失败，基地电量未扣除", "plan": plan}
+	player.call("heal", int(plan.get("missing_hp", 0)))
+	if flashlight.has_method("restore_charge"):
+		flashlight.call("restore_charge", float(plan.get("missing_flashlight_ratio", 0.0)))
+	return {
+		"success": true,
+		"energy_spent": int(cost),
+		"energy_remaining": data.base_energy_current,
+		"hp_restored": int(plan.get("missing_hp", 0)),
+		"flashlight_restored_ratio": float(plan.get("missing_flashlight_ratio", 0.0)),
+		"plan": plan,
+	}
 
 
 func upgrade_facility(facility_id: String) -> Dictionary:

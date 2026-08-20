@@ -1415,8 +1415,7 @@ func _disable_ear_backface_culling(mi: MeshInstance3D) -> void:
 func _set_avatar_render_layer(layer_mask: int) -> void:
 	for child in find_children("*", "MeshInstance3D", true, false):
 		var mesh := child as MeshInstance3D
-		# 角色位于 layer 2；玩家灯的环境光仅照 layer 1，角色柔光不投影。
-		# 太阳和房间灯照 layer 1|2，因此角色仍会留下符合场景方向的阴影。
+		# 角色位于layer 2；随身灯避开该层，太阳和房间灯仍可投射角色阴影。
 		mesh.layers = layer_mask
 		mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		mesh.gi_mode = GeometryInstance3D.GI_MODE_DISABLED

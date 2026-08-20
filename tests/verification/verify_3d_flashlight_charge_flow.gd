@@ -1,6 +1,6 @@
 extends Node
 ## 合同 §10.6 验收：手电筒电量 / 电池 / 模块 / 揭示倍率 / 存档 持久化 / HUD 阈值闪烁。
-## 测试场景：Dungeon3D 实例化后,基础档满电 100%,用物理 tick / 信号连接验证。
+## 测试场景：Dungeon3D实例化后，用物理tick/信号连接验证手电耗电、基地暂停与显式恢复。
 
 const DUNGEON_SCENE: PackedScene = preload("res://scenes/Dungeon3D.tscn")
 const SAVE_VERSION_EXPECTED := "1.7"
@@ -33,7 +33,7 @@ func _ready() -> void:
 	flashlight.charge_changed.connect(_on_charge_changed)
 	flashlight.state_changed.connect(_on_state_changed)
 
-	# 1. §10.6 #1 — 99F 基地内 charge_ratio == 1.0,2 秒不掉电
+	# 1. §10.6 #1 — 99F基地内保持进入时电量，2秒不掉电且不自动充电
 	await _assert_charge_no_drain_in_facility(flashlight, failures)
 	# 2. §10.6 #2 — 出基地开启后掉电,关闭立刻停止
 	await _assert_drain_and_stop(flashlight, dungeon, failures)
@@ -61,7 +61,7 @@ func _ready() -> void:
 	await _assert_reveal_multiplier(flashlight, dungeon, failures)
 
 	if failures.is_empty():
-		var summary := "13/13 OK: facility no-drain, drain/stop, toggle preservation, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
+		var summary := "13/13 OK: facility pause without auto-charge, drain/stop, toggle preservation, depleted, batteries, visual module profiles, persisted module hydration, HUD, shop, checkpoints, module persistence and reveal"
 		print("VERIFY_3D_FLASHLIGHT_CHARGE_FLOW_OK: %s" % summary)
 		get_tree().quit(0)
 		return
@@ -111,8 +111,8 @@ func _assert_charge_no_drain_in_facility(flashlight: PlayerFlashlight3D, failure
 	flashlight.set_charge_ratio(0.5)
 	flashlight.set_in_facility(true)
 	await _wait_physics(2.0)
-	if not is_equal_approx(flashlight.get_charge_ratio(), 1.0):
-		failures.append("Facility did not refill flashlight to 100%% within 2s")
+	if not is_equal_approx(flashlight.get_charge_ratio(), 0.5):
+		failures.append("Facility changed flashlight charge instead of only pausing drain")
 	# 注:_in_facility 由 Player3D._physics_process 每帧推送(Player.is_player_inside_facility),
 	# 在测试场景中可能瞬间被覆盖。剩余时间逻辑本身在开启+非基地时由 drain 速率推算,
 	# 在测试 2 单独验证。
@@ -189,7 +189,8 @@ func _assert_drain_and_stop(flashlight: PlayerFlashlight3D, dungeon: Dungeon3D, 
 
 # 3. 基地外关灯再开不得退回已累计、但尚未到 2% 一格的耗电。
 func _assert_toggle_preserves_partial_drain(flashlight: PlayerFlashlight3D, failures: Array[String]) -> void:
-	# 通过一次基地补电入口清理上个用例留下的离散累计值，再回到基地外。
+	# 通过显式恢复入口清理上个用例留下的离散累计值，再回到基地外。
+	flashlight.restore_charge(1.0)
 	flashlight.set_charge_ratio(0.5)
 	flashlight.set_in_facility(true)
 	flashlight.set_in_facility(false)

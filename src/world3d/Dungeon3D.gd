@@ -778,7 +778,7 @@ func _build_reference_main_hud() -> void:
 		pip.add_theme_stylebox_override("panel", _make_hud_style(cyan, Color(cyan, 0.72), 1))
 		energy.add_child(pip)
 		_hud_battery_cells.append(pip)
-	_hud_battery_time_label = _make_hud_label("FULL · 基地内", 11, Color(0.72, 0.86, 0.96))
+	_hud_battery_time_label = _make_hud_label("基地内暂停耗电 · 100%", 11, Color(0.72, 0.86, 0.96))
 	_hud_battery_time_label.name = "BatteryTimeLabel"
 	_hud_battery_time_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_hud_battery_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -4754,7 +4754,7 @@ func _refresh_battery_time_label(flashlight: Node) -> void:
 	if _hud_battery_time_label == null:
 		return
 	if flashlight.is_in_facility():
-		_hud_battery_time_label.text = "FULL · 基地内"
+		_hud_battery_time_label.text = "基地内暂停耗电 · %d%%" % int(round(float(flashlight.get_charge_ratio()) * 100.0))
 		return
 	var ratio := float(flashlight.get_charge_ratio())
 	if ratio <= 0.0:
