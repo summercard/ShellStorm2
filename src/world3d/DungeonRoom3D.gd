@@ -118,10 +118,12 @@ const FACILITY_WALL_MATERIAL: StandardMaterial3D = preload(
 const FACILITY_TRIM_MATERIAL: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_facility_trim_v001.tres"
 )
-# 99层正式GLB以底面为原点，普通板与铆钉板的AABB高度也不同。运行时抽取
-# Mesh做MultiMesh后必须按各自AABB顶面校正，不能共用固定Y，否则角色虽然
-# 正确站在TowerFloorStage承重面上，视觉上却会陷入较厚的铆钉地板。
-# 目标顶面与通用塔楼地砖顶面(0.15m)只错开1.5cm，避免完全共面闪烁。
+# 99层两种正式地板都以底面为原点，0.30m是共同的结构板顶面。铆钉板
+# AABB到0.395m，是因为铁皮压条和铆钉高出结构板；这些细节只负责表现，
+# 不能拿整个AABB最高点对齐，也不能生成额外阻挡。两种地板只按共同结构面
+# 对齐，承重碰撞继续完全由TowerFloorStage的统一平面负责。
+const BASE99_FLOOR_STRUCTURAL_TOP_Y_M := TOWER_GEOMETRY.FLOOR_THICKNESS_M
+# 结构板完成面与通用塔楼地砖顶面(0.15m)错开1.5cm，避免完全共面闪烁。
 const BASE99_FLOOR_TARGET_SURFACE_Y_M := TOWER_GEOMETRY.FLOOR_THICKNESS_M * 0.5 + 0.015
 const ROOFTOP_FACADE_HEIGHT := 6.0
 # 基地东侧阁楼门的外梯在接近墙面时仍处于上升坡面。99层普通墙的结构
@@ -730,8 +732,14 @@ func _add_base_floor_grid(
 	asset_id: String
 ) -> void:
 	var mesh_bounds := floor_mesh.get_aabb()
+	var mesh_bottom_y := mesh_bounds.position.y
 	var mesh_top_y := mesh_bounds.position.y + mesh_bounds.size.y
-	var visual_origin_y := BASE99_FLOOR_TARGET_SURFACE_Y_M - mesh_top_y
+	# 不使用mesh_top_y：铆钉、压条等突出几何属于纯表现。若按AABB最高点
+	# 对齐，会把整块铆钉地板下压并把原本可见的铁皮压进结构面。
+	var visual_origin_y := (
+		BASE99_FLOOR_TARGET_SURFACE_Y_M - BASE99_FLOOR_STRUCTURAL_TOP_Y_M
+	)
+	var decoration_top_y := visual_origin_y + mesh_top_y
 	var floor_multimesh := MultiMesh.new()
 	floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	floor_multimesh.mesh = floor_mesh
@@ -756,10 +764,14 @@ func _add_base_floor_grid(
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
 	floor_grid.set_meta("instance_count", transforms.size())
 	floor_grid.set_meta("floor_index", 99)
+	floor_grid.set_meta("visual_mesh_bottom_y_m", mesh_bottom_y)
 	floor_grid.set_meta("visual_mesh_top_y_m", mesh_top_y)
+	floor_grid.set_meta("visual_structural_top_local_y_m", BASE99_FLOOR_STRUCTURAL_TOP_Y_M)
 	floor_grid.set_meta("visual_origin_y_m", visual_origin_y)
 	floor_grid.set_meta("visual_surface_y_m", BASE99_FLOOR_TARGET_SURFACE_Y_M)
+	floor_grid.set_meta("visual_decoration_top_y_m", decoration_top_y)
 	floor_grid.set_meta("collision_surface_y_m", 0.0)
+	floor_grid.set_meta("collision_policy", "shared_flat_support_visual_protrusions_ignored")
 	floor_grid.set_meta("shadow_policy", "cast_and_receive")
 	add_child(floor_grid)
 

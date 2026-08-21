@@ -3079,6 +3079,7 @@ func _collect_facility_art_nodes(root: Node, room_center: Vector3) -> void:
 	for child in root.get_children():
 		if child is BaseFacility3D:
 			var facility := child as BaseFacility3D
+			_configure_persistent_base_facility(facility)
 			facility.configure_front_interaction_toward(room_center)
 			if not facility.activated.is_connected(_on_facility_activated):
 				facility.activated.connect(_on_facility_activated)
@@ -3086,6 +3087,24 @@ func _collect_facility_art_nodes(root: Node, room_center: Vector3) -> void:
 		elif child is Node3D and str(child.get_meta("placement_role", "")) == "基地墙边装饰":
 			_facility_decor_nodes.append(child as Node3D)
 		_collect_facility_art_nodes(child, room_center)
+
+
+func _configure_persistent_base_facility(facility: BaseFacility3D) -> void:
+	if facility == null:
+		return
+	# 99层只有固定数量的常驻基地设施。它们的模型由可见性系统处理，实体
+	# 碰撞与交互Area不再跟随房间/楼层整批启停；是否能使用只由各设施
+	# 自己的Area进入、E键和功能脚本决定。
+	facility.process_mode = Node.PROCESS_MODE_ALWAYS
+	facility.monitoring = true
+	facility.monitorable = true
+	facility.set_meta("runtime_activation_policy", "always_present_distance_interaction")
+	for body_value in facility.find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body == null:
+			continue
+		body.process_mode = Node.PROCESS_MODE_ALWAYS
+		body.set_meta("persistent_base_facility_collision", true)
 
 
 func _install_elevator_facility() -> void:
@@ -3626,14 +3645,8 @@ func try_close_modal_for_pause() -> bool:
 
 
 func _refresh_facility_runtime() -> void:
-	# 设施只在99层地面交互，基地上层仍是安全区但不会隔着楼板触发设施。
-	var active := _is_player_on_facility_ground_level()
-	for facility in _facility_nodes:
-		if not is_instance_valid(facility):
-			continue
-		facility.process_mode = Node.PROCESS_MODE_INHERIT if active else Node.PROCESS_MODE_DISABLED
-		facility.set_deferred("monitoring", active)
-		facility.set_deferred("monitorable", active)
+	# 普通基地设施始终保留自己的Area、E键逻辑和实体碰撞，不再参与房间
+	# 流送激活。此函数只继续维护真正跨楼层的电梯设施可用性。
 	for floor_number_value in _elevator_facilities_by_floor.keys():
 		var floor_number := int(floor_number_value)
 		var elevator := (

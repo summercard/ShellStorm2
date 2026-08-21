@@ -1,9 +1,10 @@
 extends Node
 ## 99层正式地板表现与TowerFloorStage承重面专项。
-## 防止底面原点GLB按固定Y摆放后，普通板/铆钉板顶面不一致并包住角色脚部。
+## 两种地板按共同0.30m结构面摆放；铆钉、压条可高出但不参与承重碰撞。
 
 const EXPECTED_BASE_SURFACE_Y_M := 0.165
 const MAX_SURFACE_DELTA_FROM_TOWER_M := 0.02
+const EXPECTED_RIVET_VISUAL_PROTRUSION_M := 0.095
 
 
 func _ready() -> void:
@@ -37,16 +38,43 @@ func _ready() -> void:
 	)
 	_expect(
 		absf(rivet_surface - EXPECTED_BASE_SURFACE_Y_M) <= 0.001,
-		"99层铆钉地板顶面没有校正到统一高度: surface=%.4f origin=%.4f mesh_top=%.4f" % [
+		"99层铆钉地板结构面没有校正到统一高度: surface=%.4f origin=%.4f structural_top=%.4f" % [
 			rivet_surface,
 			float(rivet.get_meta("visual_origin_y_m", INF)) if rivet != null else INF,
-			float(rivet.get_meta("visual_mesh_top_y_m", INF)) if rivet != null else INF,
+			float(rivet.get_meta("visual_structural_top_local_y_m", INF)) if rivet != null else INF,
 		],
 		failures
 	)
 	_expect(
 		absf(plain_surface - rivet_surface) <= 0.001,
 		"99层两种地板的角色接触视觉高度不一致",
+		failures
+	)
+	var plain_origin := float(plain.get_meta("visual_origin_y_m", INF)) if plain != null else INF
+	var rivet_origin := float(rivet.get_meta("visual_origin_y_m", INF)) if rivet != null else INF
+	_expect(
+		absf(plain_origin - rivet_origin) <= 0.001,
+		"普通板与铆钉板没有按同一结构基准摆放",
+		failures
+	)
+	var rivet_decoration_top := (
+		float(rivet.get_meta("visual_decoration_top_y_m", -INF)) if rivet != null else -INF
+	)
+	_expect(
+		absf(
+			rivet_decoration_top
+			- rivet_surface
+			- EXPECTED_RIVET_VISUAL_PROTRUSION_M
+		) <= 0.001,
+		"铆钉地板的铁皮/铆钉突出表现被压入结构面: decoration_top=%.4f surface=%.4f" % [
+			rivet_decoration_top, rivet_surface,
+		],
+		failures
+	)
+	_expect(
+		str(rivet.get_meta("collision_policy", ""))
+			== "shared_flat_support_visual_protrusions_ignored",
+		"铆钉地板没有登记突出表现不参与阻挡的规则",
 		failures
 	)
 	if RenderingServer.get_rendering_device() != null:
@@ -81,7 +109,7 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BASE99_FLOOR_PLAYER_COLLISION_OK: 99F plain/rivet surfaces align with 100F visual height and persistent support")
+		print("BASE99_FLOOR_PLAYER_COLLISION_OK: shared structural surface, visible rivet protrusions, and unchanged flat support pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -92,9 +120,9 @@ func _ready() -> void:
 func _surface_y(grid: MultiMeshInstance3D) -> float:
 	if grid == null or grid.multimesh == null or grid.multimesh.mesh == null:
 		return INF
-	var mesh_top := float(grid.get_meta("visual_mesh_top_y_m", INF))
+	var structural_top := float(grid.get_meta("visual_structural_top_local_y_m", INF))
 	var visual_origin := float(grid.get_meta("visual_origin_y_m", INF))
-	return visual_origin + mesh_top
+	return visual_origin + structural_top
 
 
 func _tower_visual_surface_y(stage: TowerFloorStage3D) -> float:
