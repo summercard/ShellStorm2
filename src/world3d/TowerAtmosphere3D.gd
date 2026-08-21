@@ -145,6 +145,7 @@ func _apply_solar_snapshot(solar: Dictionary) -> void:
 	if _sun != null:
 		_sun.rotation_degrees = solar.get("rotation_degrees", Vector3(-60.0, 32.0, 0.0)) as Vector3
 		_sun.light_energy = float(solar.get("energy", 0.0))
+		_sun.light_color = solar.get("sun_color", SUN_COLOR) as Color
 	if _environment != null:
 		_environment.background_color = solar.get("background_color", BACKGROUND_COLOR) as Color
 		_environment.ambient_light_color = solar.get("ambient_color", AMBIENT_COLOR) as Color

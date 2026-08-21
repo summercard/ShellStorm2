@@ -141,7 +141,7 @@ func _process(delta: float) -> void:
 		var service_tick := sin(reload_progress * TAU * 2.0) * reload_arch
 		_visual_root.position = Vector3(0.0, -0.025 * reload_arch, _recoil + 0.04 * reload_arch)
 		_visual_root.rotation = Vector3(
-			_recoil * 0.22 + reload_arch * 0.24,
+			reload_arch * 0.24,
 			0.0,
 			-reload_arch * 0.16 + service_tick * 0.035
 		)

@@ -68,6 +68,8 @@ position = Vector3(-0.285833334, 0.321772728, -0.014435151)
 position = Vector3(0.285833334, 0.321772728, -0.014435151)
 
 [node name="Model" parent="VisualRoot/BunnyRig/HandRoot/HandJointR" instance=ExtResource("6_hand_r")]
+position = Vector3(-0.135996, 0.038999, 0.018441)
+metadata/pivot_contract = "palm_sphere_center_at_HandJointR"
 
 [node name="FeetRoot" type="Node3D" parent="VisualRoot/BunnyRig"]
 

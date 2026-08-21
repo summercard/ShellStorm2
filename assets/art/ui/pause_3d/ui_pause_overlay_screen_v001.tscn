@@ -45,7 +45,7 @@ theme_override_constants/margin_bottom = 26
 
 [node name="MainPage" type="VBoxContainer" parent="Center/Panel/Margin"]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 14
 alignment = 1
 
 [node name="Title" type="Label" parent="Center/Panel/Margin/MainPage"]
@@ -63,7 +63,7 @@ theme_override_colors/font_color = Color(0.76, 0.82, 0.88, 1)
 theme_override_font_sizes/font_size = 16
 
 [node name="SpacerTop" type="Control" parent="Center/Panel/Margin/MainPage"]
-custom_minimum_size = Vector2(0, 90)
+custom_minimum_size = Vector2(0, 28)
 layout_mode = 2
 
 [node name="GraphicsButton" type="Button" parent="Center/Panel/Margin/MainPage"]
@@ -86,6 +86,21 @@ layout_mode = 2
 text = "战局中不可使用；仅在基地自由活动时提供脱困"
 horizontal_alignment = 1
 theme_override_colors/font_color = Color(0.7, 0.58, 0.48, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="ResetGameSaveButton" type="Button" parent="Center/Panel/Margin/MainPage"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "复位游戏存档"
+theme_override_colors/font_color = Color(1, 0.54, 0.42, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="ResetGameSaveHint" type="Label" parent="Center/Panel/Margin/MainPage"]
+layout_mode = 2
+text = "清除全部游戏进度与当前行动；画面设置保留"
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.82, 0.58, 0.50, 1)
 theme_override_font_sizes/font_size = 14
 
 [node name="ResumeButton" type="Button" parent="Center/Panel/Margin/MainPage"]
@@ -252,6 +267,16 @@ theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 text = "返回  [Esc]"
+
+[node name="ResetGameSaveDialog" type="ConfirmationDialog" parent="."]
+process_mode = 3
+title = "确认复位游戏存档"
+initial_position = 1
+size = Vector2i(590, 240)
+ok_button_text = "确认复位"
+cancel_button_text = "取消"
+dialog_text = "这会清除全部游戏进度与当前行动。\n画面设置会保留。"
+exclusive = true
 
 [node name="PerformanceOverlay" type="PanelContainer" parent="."]
 script = ExtResource("2_perf")

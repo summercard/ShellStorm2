@@ -224,7 +224,13 @@ static func apply_tactical_tree(root: Node) -> void:
 	elif root is Button:
 		var button := root as Button
 		var accent := UIPalette.NEON_CYAN
-		if "出售" in button.text or "丢弃" in button.text or "删除" in button.text or "确认撤退" in button.text:
+		if (
+			"出售" in button.text
+			or "丢弃" in button.text
+			or "删除" in button.text
+			or "复位" in button.text
+			or "确认撤退" in button.text
+		):
 			accent = UIPalette.DANGER_RED
 		elif "购买" in button.text or "魂" in button.text:
 			accent = UIPalette.SOUL_GOLD

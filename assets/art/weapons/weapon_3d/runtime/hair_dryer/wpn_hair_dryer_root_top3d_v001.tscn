@@ -6,32 +6,34 @@
 metadata/asset_name_cn = "吹风机"
 metadata/logic_id = "bp_pistol"
 metadata/source_blend = "res://assets/art/weapons/weapon_3d/source/hair_dryer/wpn_hair_dryer_source_v003.blend"
-metadata/grip_contract = "root origin"
+metadata/grip_contract = "root origin = HandJointR = palm sphere center; visible handle/trigger corrected around root"
+metadata/grip_visual_offset = Vector3(0, -0.122838, -0.168785)
 metadata/forward_axis = "-Z"
 
 [node name="VisualRoot" parent="." instance=ExtResource("1_visual")]
+position = Vector3(0, -0.122838, -0.168785)
 
 [node name="GripSocket" type="Marker3D" parent="."]
 position = Vector3(0.000000, 0.000000, 0.000000)
 [node name="SupportHandSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, 0.133539, -0.359195)
+position = Vector3(0.000000, 0.010701, -0.527980)
 [node name="MuzzleSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, 0.296752, -0.690760)
+position = Vector3(0.000000, 0.173914, -0.859545)
 [node name="MuzzleAttachmentSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, 0.296752, -0.690760)
+position = Vector3(0.000000, 0.173914, -0.859545)
 [node name="ScopeSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, 0.741881, -0.262489)
+position = Vector3(0.000000, 0.619043, -0.431274)
 [node name="MagazineSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, -0.105494, -0.193413)
+position = Vector3(0.000000, -0.228332, -0.362198)
 [node name="StockSocket" type="Marker3D" parent="."]
-position = Vector3(0.000000, 0.148376, 0.544240)
+position = Vector3(0.000000, 0.025538, 0.375455)
 [node name="TacticalSocket" type="Marker3D" parent="."]
-position = Vector3(0.247424, 0.185470, -0.331565)
+position = Vector3(0.247424, 0.062632, -0.500350)
 [node name="MutatorSocket" type="Marker3D" parent="."]
-position = Vector3(-0.247424, 0.185470, -0.234858)
+position = Vector3(-0.247424, 0.062632, -0.403643)
 
 [node name="GroundPivot" type="Marker3D" parent="."]
-position = Vector3(0, -0.146519, 0)
+position = Vector3(0, -0.269357, -0.168785)
 
 [node name="IconPivot" type="Marker3D" parent="."]
-position = Vector3(0, 0.297681, -0.073260)
+position = Vector3(0, 0.174843, -0.242045)

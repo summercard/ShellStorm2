@@ -2,6 +2,8 @@ extends Node
 ## 真实Forward+截图：高档画面设置页与0键性能面板。
 
 const OUTPUT_DIR := "res://outputs/verification"
+const PAUSE_MAIN_PATH := OUTPUT_DIR + "/pause_menu_profile_reset.png"
+const RESET_CONFIRM_PATH := OUTPUT_DIR + "/pause_menu_profile_reset_confirm.png"
 const SETTINGS_PATH := OUTPUT_DIR + "/graphics_settings_high_end.png"
 const PERFORMANCE_PATH := OUTPUT_DIR + "/performance_overlay_key0.png"
 const RANGE_SCENE: PackedScene = preload("res://scenes/TrainingRange3D.tscn")
@@ -17,6 +19,12 @@ func _ready() -> void:
 	await _settle()
 	var pause := range.get_node("HUD/PauseOverlay") as PauseMenu3D
 	pause.set_paused(true)
+	await _settle()
+	_capture(PAUSE_MAIN_PATH, "带存档复位的ESC暂停主页截图失败", failures)
+	pause.call("_request_game_save_reset")
+	await _settle()
+	_capture(RESET_CONFIRM_PATH, "存档复位二次确认截图失败", failures)
+	(pause.get_node("ResetGameSaveDialog") as ConfirmationDialog).hide()
 	pause.call("_show_graphics_page")
 	await _settle()
 	_capture(SETTINGS_PATH, "高档画面设置页截图失败", failures)

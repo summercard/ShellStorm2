@@ -1,5 +1,7 @@
 extends Node
 
+signal game_save_reset_completed(result: Dictionary)
+
 const SAVE_PATH := "user://base_save.json"
 const FacilityCatalog = preload("res://src/base/BaseFacilityCatalog.gd")
 const FacilityService = preload("res://src/base/BaseFacilityService.gd")
@@ -77,11 +79,75 @@ func save_base(reason: String = "base_mutation") -> bool:
 	var payload := data._to_dict()
 	var envelope := SaveService.build_envelope(payload, data.save_revision, data.last_save_reason)
 	if not force_save_failure_for_test and AtomicJsonStore.save_dictionary(save_path, envelope):
-		return true
+		var persisted: Variant = AtomicJsonStore.load_dictionary(
+			save_path, Callable(self, "_is_supported_save_candidate")
+		)
+		if persisted is Dictionary:
+			var unpacked := SaveService.unpack(persisted as Dictionary)
+			if (
+				bool(unpacked.get("success", false))
+				and int(unpacked.get("revision", -1)) == data.save_revision
+			):
+				return true
+		push_error("[BaseManager] Save write completed but read-back validation failed")
 	data.save_revision = old_revision
 	data.last_saved_at_unix = old_time
 	data.last_save_reason = old_reason
 	return false
+
+
+## 复位长期档和当前行动的唯一入口。先写入并回读一份合法的全新封套，
+## 成功后才清掉旧 `.bak`；同时断开运行态快照提供者，避免旧场景卸载时
+## 把刚清空的档案再次覆盖。画面设置使用独立 cfg，不属于本操作。
+func reset_game_save() -> Dictionary:
+	_ensure_data()
+	var previous_data := data
+	var previous_provider := _runtime_checkpoint_provider
+	var previous_dirty := _runtime_checkpoint_dirty
+	var previous_reason := _pending_runtime_reason
+	var previous_timer_time_left: float = (
+		_runtime_checkpoint_timer.time_left
+		if _runtime_checkpoint_timer != null else 0.0
+	)
+	if _runtime_checkpoint_timer != null:
+		_runtime_checkpoint_timer.stop()
+	_runtime_checkpoint_provider = null
+	_runtime_checkpoint_dirty = false
+	_pending_runtime_reason = ""
+	data = BaseData.new()
+	if not save_base("game_save_reset"):
+		data = previous_data
+		_runtime_checkpoint_provider = previous_provider
+		_runtime_checkpoint_dirty = previous_dirty
+		_pending_runtime_reason = previous_reason
+		if previous_dirty and _runtime_checkpoint_timer != null:
+			_runtime_checkpoint_timer.start(maxf(0.01, previous_timer_time_left))
+		return {
+			"success": false,
+			"reason": "新存档写入或回读校验失败，原存档未复位",
+			"save_path": save_path,
+		}
+	var backup_cleared := _remove_save_artifact(save_path + ".bak")
+	var temp_cleared := _remove_save_artifact(save_path + ".tmp")
+	var result: Dictionary = {
+		"success": true,
+		"reason": "游戏存档已复位",
+		"save_path": save_path,
+		"backup_cleared": backup_cleared,
+		"temp_cleared": temp_cleared,
+		"profile_schema": BaseData.SAVE_VERSION,
+		"graphics_settings_preserved": true,
+	}
+	if not backup_cleared or not temp_cleared:
+		push_warning("[BaseManager] Fresh profile is valid but stale save artifacts could not be removed")
+	game_save_reset_completed.emit(result.duplicate(true))
+	return result
+
+
+func _remove_save_artifact(path: String) -> bool:
+	if not FileAccess.file_exists(path):
+		return true
+	return DirAccess.remove_absolute(ProjectSettings.globalize_path(path)) == OK
 
 
 func set_active_run_checkpoint(snapshot: Dictionary, reason: String) -> bool:

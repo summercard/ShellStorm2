@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v004.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99WalkableModule3D.gd" id="2_collision"]
+
+[node name="基地99层L型楼梯Z5米" type="Node3D"]
+script = ExtResource("2_collision")
+collision_role = "l_stair"
+target_walkable_height_m = 5.0
+metadata/asset_id = "ENV-BASE99-STAIR-L-Z5"
+metadata/asset_version = "v004"
+metadata/logic_id = "base99_stair_l_z5"
+metadata/asset_category = "environment_module"
+metadata/component = "stair"
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "single_static_body_with_continuous_ramp_landing_ramp_shapes_and_independent_guard_blockers"
+metadata/railing_corner_contract = "stair_run_rails_end_before_platform_owned_l_guard"
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

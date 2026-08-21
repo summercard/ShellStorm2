@@ -52,24 +52,33 @@ func _build_walkable_collision() -> void:
 			)
 		"l_stair":
 			# Blender母版：下跑沿-Z升高，转角后上跑沿+X升高。
+			# 整段楼梯只使用一个StaticBody；两块斜坡和平台是它的三个形状。
 			# 坡脚向地面内延伸并略微下沉，避免CharacterBody先撞到斜盒端面。
 			var half_height := target_walkable_height_m * 0.5
 			var lower_start := Vector3(-2.90, -0.04, 5.35)
-			var lower_end := Vector3(-2.90, half_height - 0.02, -1.35)
-			var upper_start := Vector3(-2.18, half_height - 0.04, -3.72)
+			# 下跑末端和上跑起点分别伸入平台4cm，顶面均精确等于2.5m。
+			# 不再保留旧版0.45m断口，也不制造平台边缘竖向台阶。
+			var lower_end := Vector3(-2.90, half_height, -1.76)
+			var upper_start := Vector3(-1.34, half_height, -3.72)
 			var upper_end := Vector3(4.55, target_walkable_height_m + 0.02, -3.72)
-			_add_ramp_surface(
-				root, "LStairLowerRamp", lower_start, lower_end, 2.72,
-				"l_stair_lower"
+			var unified_walkable := _new_walkable_body(
+				"LStairUnifiedWalkable", "l_stair_unified"
+			)
+			unified_walkable.set_meta(
+				"collision_model", "single_body_ramp_landing_ramp"
+			)
+			root.add_child(unified_walkable)
+			_add_ramp_shape(
+				unified_walkable, "LStairLowerRamp", lower_start, lower_end, 2.72
 			)
 			# 斜坡顶面与平台顶面同高并轻微重叠，避免出现CharacterBody不可跨越的竖边。
-			_add_box_surface(
-				root, "LStairLanding", Vector3(-2.90, half_height - 0.18, -3.40),
-				Vector3(3.20, 0.32, 3.20), "l_stair_landing"
+			_add_box_shape(
+				unified_walkable, "LStairLanding",
+				Vector3(-2.90, half_height - 0.16, -3.40),
+				Vector3(3.20, 0.32, 3.20)
 			)
-			_add_ramp_surface(
-				root, "LStairUpperRamp", upper_start, upper_end, 2.72,
-				"l_stair_upper"
+			_add_ramp_shape(
+				unified_walkable, "LStairUpperRamp", upper_start, upper_end, 2.72
 			)
 			# 扶手只作为独立边缘阻挡；角色脚下始终只接触三块连续的
 			# 坡面/平台，杜绝逐级碰撞和扶手柱将胶囊体卡住。
@@ -102,10 +111,14 @@ func _build_walkable_collision() -> void:
 
 
 func _add_box_surface(parent: Node3D, node_name: String, center: Vector3, size: Vector3, camera_role: String) -> void:
-	var shape := BoxShape3D.new()
-	shape.size = size
 	var body := _new_walkable_body(node_name, camera_role)
 	parent.add_child(body)
+	_add_box_shape(body, node_name, center, size)
+
+
+func _add_box_shape(body: StaticBody3D, node_name: String, center: Vector3, size: Vector3) -> void:
+	var shape := BoxShape3D.new()
+	shape.size = size
 	var collision := CollisionShape3D.new()
 	collision.name = "%sShape" % node_name
 	collision.position = center
@@ -115,6 +128,12 @@ func _add_box_surface(parent: Node3D, node_name: String, center: Vector3, size: 
 
 
 func _add_ramp_surface(parent: Node3D, node_name: String, start_top: Vector3, end_top: Vector3, width: float, camera_role: String) -> void:
+	var body := _new_walkable_body(node_name, camera_role)
+	parent.add_child(body)
+	_add_ramp_shape(body, node_name, start_top, end_top, width)
+
+
+func _add_ramp_shape(body: StaticBody3D, node_name: String, start_top: Vector3, end_top: Vector3, width: float) -> void:
 	var direction := end_top - start_top
 	var forward := direction.normalized()
 	var right := Vector3.UP.cross(forward).normalized()
@@ -124,8 +143,6 @@ func _add_ramp_surface(parent: Node3D, node_name: String, start_top: Vector3, en
 		surface_up = -surface_up
 	var shape := BoxShape3D.new()
 	shape.size = Vector3(width, COLLISION_THICKNESS, direction.length())
-	var body := _new_walkable_body(node_name, camera_role)
-	parent.add_child(body)
 	var collision := CollisionShape3D.new()
 	collision.name = "%sShape" % node_name
 	collision.basis = Basis(right, surface_up, forward)

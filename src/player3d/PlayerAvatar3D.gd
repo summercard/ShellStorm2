@@ -15,6 +15,7 @@ extends Node3D
 @onready var ear_socket_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR") as Node3D
 @onready var bunny_hand_l: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointL") as Node3D
 @onready var bunny_hand_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR") as Node3D
+@onready var bunny_hand_r_model: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR/Model") as Node3D
 @onready var tail_stub: MeshInstance3D = $VisualRoot/Body/TailStub
 @onready var weapon_socket: Marker3D = _resolve_rig_node("VisualRoot/BunnyRig/WeaponSocket", "VisualRoot/WeaponSocket") as Marker3D
 @onready var stowed_weapon_socket_primary: Marker3D = _resolve_rig_node(
@@ -143,13 +144,18 @@ const IDLE_LOOP_HZ := 0.42
 const IDLE_LOOP_DURATION := 1.0 / IDLE_LOOP_HZ
 const BUNNY_LINEAR_SCALE := 1.5 / 2.475
 const SIDEARM_SOCKET_OFFSET := Vector3(0.24, -0.01, 0.0)
-const SIDEARM_GRIP_HAND_R := Vector3(0.08, 0.56, -0.49)
+const SIDEARM_HOLD_SOCKET_OFFSET := Vector3(0.12, -0.23, -0.22)
+const SIDEARM_HOLD_SOCKET_ROTATION := Vector3.ZERO
+const SIDEARM_READY_HAND_L := Vector3(-0.24, 0.55, -0.58)
+const SIDEARM_READY_ROTATION_L := Vector3(-0.08, -PI * 0.35, 0.18)
+const SIDEARM_GRIP_HAND_R := Vector3(0.0, 0.65, -0.36)
 const SIDEARM_GRIP_ROTATION_R := Vector3(-0.12, PI * 0.46, -0.18)
 const LONGGUN_GRIP_HAND_L := Vector3(0.20, 0.52, -0.64)
-const LONGGUN_GRIP_HAND_R := Vector3(0.13, 0.56, -0.49)
+const LONGGUN_GRIP_HAND_R := Vector3(0.0, 0.65, -0.36)
 const LONGGUN_GRIP_ROTATION_L := Vector3(-0.10, -PI * 0.46, 0.24)
 const LONGGUN_GRIP_ROTATION_R := Vector3(-0.16, PI * 0.46, -0.20)
-const WRIST_ORIENTATION_CONTRACT := "ring_is_proximal_wrist_pivot_sphere_is_distal"
+const RIGHT_HAND_SPHERE_CENTER_LOCAL := Vector3(0.135996, -0.038999, -0.018441)
+const RIGHT_HAND_PIVOT_CONTRACT := "palm_sphere_center_is_HandJointR_and_GripSocket"
 const SIDEARM_GUNS := ["bp_pistol"]
 const HEAVY_MELEE_WEAPONS := ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"]
 const WEAPON_POSE_STATES := [
@@ -369,6 +375,7 @@ func get_component_snapshot() -> Dictionary:
 		"foot_r_position": foot_r.position,
 		"tail_rotation": tail_stub.rotation,
 		"weapon_socket_position": weapon_socket.position,
+		"weapon_socket_rotation": weapon_socket.rotation,
 		"body_scale": body.scale,
 		"head_rotation": head.rotation,
 		"foot_l_rotation": foot_l.rotation,
@@ -427,8 +434,17 @@ func get_component_snapshot() -> Dictionary:
 		"equipped_gun_id": _equipped_gun_id,
 		"weapon_fire_style": _weapon_fire_style,
 		"active_grip_hand_count": _active_grip_hand_count,
-		"wrist_orientation_contract": WRIST_ORIENTATION_CONTRACT,
-		"wrist_ring_is_proximal": true,
+		"right_hand_pivot_contract": RIGHT_HAND_PIVOT_CONTRACT,
+		"right_hand_sphere_center_local": RIGHT_HAND_SPHERE_CENTER_LOCAL,
+		"right_hand_model_pivot_offset": bunny_hand_r_model.position if bunny_hand_r_model != null else Vector3.ZERO,
+		"right_hand_sphere_to_joint_global_distance": (
+			bunny_hand_r_model.to_global(RIGHT_HAND_SPHERE_CENTER_LOCAL).distance_to(bunny_hand_r.global_position)
+			if bunny_hand_r_model != null and bunny_hand_r != null else 999.0
+		),
+		"right_hand_sphere_to_grip_global_distance": (
+			bunny_hand_r_model.to_global(RIGHT_HAND_SPHERE_CENTER_LOCAL).distance_to(weapon_socket.global_position)
+			if bunny_hand_r_model != null and weapon_socket != null else 999.0
+		),
 		"hand_l_rotation": bunny_hand_l.rotation if bunny_hand_l != null else Vector3.ZERO,
 		"hand_r_rotation": bunny_hand_r.rotation if bunny_hand_r != null else Vector3.ZERO,
 		"ear_l_rotation": ear_socket_l.rotation if ear_socket_l != null else Vector3.ZERO,
@@ -788,16 +804,14 @@ func _update_state_motion(delta: float) -> void:
 	_weapon_socket_pose_rotation = Vector3.ZERO
 	match _weapon_pose_state:
 		"sidearm_hold":
-			_weapon_socket_pose_offset += Vector3(
+			# 待机保持低位警戒位置，但枪管 -Z 轴始终与真实 aim_direction 同向。
+			# 呼吸只做平移，禁止再次给整把枪叠加俯仰/偏航/侧滚。
+			_weapon_socket_pose_offset += SIDEARM_HOLD_SOCKET_OFFSET + Vector3(
 				_idle_weight_shift * 0.008,
 				_idle_breath * 0.010,
 				-_idle_breath * 0.006
 			)
-			_weapon_socket_pose_rotation = Vector3(
-				-_idle_breath * 0.018,
-				0.0,
-				-_idle_weight_shift * 0.020
-			)
+			_weapon_socket_pose_rotation = SIDEARM_HOLD_SOCKET_ROTATION
 		"longgun_hold":
 			_weapon_socket_pose_offset += Vector3(
 				_idle_weight_shift * 0.006,
@@ -964,8 +978,13 @@ func _update_state_motion(delta: float) -> void:
 	# 3D 瞄准由整个 VisualRoot 绕 Y 轴完成；HandRoot 不继承武器旋转，
 	# 单手/双手握持的跟随量由每只手的独立关键姿势决定。
 	hand.rotation = hand.rotation.lerp(_base_rotations["hand"], minf(1.0, delta * 20.0))
+	# 子弹方向由 aim_direction 唯一决定；开火时枪身只沿枪轴后坐，不再旋转离开射线。
+	# 换弹和蓄力仍保留原有服务角度，近战也继续使用动作子状态机旋转。
+	var weapon_action_rotation := _action_rotation
+	if _firing_animation_active and _weapon_class in ["sidearm", "longgun"]:
+		weapon_action_rotation = Vector3.ZERO
 	weapon_socket.rotation = weapon_socket.rotation.lerp(
-		_base_rotations["weapon_socket"] + _weapon_socket_pose_rotation + _reload_rotation + _action_rotation,
+		_base_rotations["weapon_socket"] + _weapon_socket_pose_rotation + _reload_rotation + weapon_action_rotation,
 		minf(1.0, delta * 20.0)
 	)
 	_animate_bunny_accessories(
@@ -1048,9 +1067,9 @@ func _animate_bunny_accessories(
 	ear_socket_l.rotation = ear_socket_l.rotation.lerp(ear_l_target + ear_l_offset, minf(1.0, delta * 15.0))
 	ear_socket_r.rotation = ear_socket_r.rotation.lerp(ear_r_target + ear_r_offset, minf(1.0, delta * 15.0))
 
-	# 圆环是每只手的近端手腕与旋转轴心，球体是远端手掌。右手的远端沿
-	# 本地 +X，因此绕 Y 轴正转朝向角色 -Z 前方；左手则从本地 -X 反向转。
-	# 手枪只让右手握持，左手保持自由；长枪右手握把、左手托护木。
+	# 右手模型在根场景中做了枢轴校正：大球中心就是 HandJointR；持枪时
+	# HandJointR 再与枪械 GripSocket 精确重合。圆环只表示近端腕部造型，
+	# 不再作为右手骨骼轴心。手枪只让右手握持，左手保持自由；长枪右手握把、左手托护木。
 	# 根场景热重载的单帧中手部子节点可能尚未完成实例化；此时保留耳朵动作并跳过该帧手部细节。
 	if bunny_hand_l == null or bunny_hand_r == null or not _base_positions.has("bunny_hand_l") or not _base_positions.has("bunny_hand_r"):
 		_weapon_grip_pose_active = false
@@ -1062,13 +1081,23 @@ func _animate_bunny_accessories(
 	var right_hand_rot: Vector3 = _base_rotations["bunny_hand_r"]
 	var weapon_follow_offset := _weapon_socket_pose_offset + _reload_offset + _action_offset
 	var weapon_follow_rotation := _weapon_socket_pose_rotation + _reload_rotation + _action_rotation
+	if _firing_animation_active and _weapon_class in ["sidearm", "longgun"]:
+		weapon_follow_rotation = _weapon_socket_pose_rotation + _reload_rotation
 	if _weapon_class == "sidearm" and _weapon_grip_pose_active:
 		right_hand_target = _motion_offset(SIDEARM_GRIP_HAND_R) + weapon_follow_offset
 		right_hand_rot += SIDEARM_GRIP_ROTATION_R + weapon_follow_rotation
-		# 自由左手保留明显的反向摆臂，强化单手武器跑姿的剪影。
+		# 手枪仍是右手单握；待机时自由左手前伸到胸前警戒位，不再垂在身体正下方。
 		if _state == "idle":
-			left_hand_target += _motion_offset(Vector3(-_idle_weight_shift * 0.010, _idle_breath * 0.010, _idle_weight_shift * 0.022))
-			left_hand_rot += Vector3(_idle_breath * 0.022, 0.0, -_idle_weight_shift * 0.045)
+			left_hand_target = _motion_offset(SIDEARM_READY_HAND_L) + _motion_offset(Vector3(
+				-_idle_weight_shift * 0.010,
+				_idle_breath * 0.010,
+				_idle_weight_shift * 0.022
+			))
+			left_hand_rot += SIDEARM_READY_ROTATION_L + Vector3(
+				_idle_breath * 0.022,
+				0.0,
+				-_idle_weight_shift * 0.045
+			)
 		elif _state == "moving":
 			left_hand_target += _motion_offset(Vector3(-move_wave * 0.025, move_pulse * 0.045, move_wave * 0.19))
 			left_hand_rot += Vector3(-move_wave * 0.62, 0.0, move_wave * 0.10)
@@ -1136,7 +1165,12 @@ func _animate_bunny_accessories(
 		left_hand_rot.z += hurt_snap * 0.34
 		right_hand_rot.z -= hurt_snap * 0.30
 	bunny_hand_l.position = bunny_hand_l.position.lerp(left_hand_target, minf(1.0, delta * 22.0))
-	bunny_hand_r.position = bunny_hand_r.position.lerp(right_hand_target, minf(1.0, delta * 22.0))
+	if _weapon_grip_pose_active and _weapon_class in ["sidearm", "longgun"]:
+		# HandRoot 与 WeaponSocket 分属兄弟层级；每帧将真实握把全局坐标换算回
+		# HandRoot 局部空间，可避免各自动画插值造成掌球与握把短暂分离。
+		bunny_hand_r.position = hand.to_local(weapon_socket.global_position)
+	else:
+		bunny_hand_r.position = bunny_hand_r.position.lerp(right_hand_target, minf(1.0, delta * 22.0))
 	bunny_hand_l.rotation = bunny_hand_l.rotation.lerp(left_hand_rot, minf(1.0, delta * 21.0))
 	bunny_hand_r.rotation = bunny_hand_r.rotation.lerp(right_hand_rot, minf(1.0, delta * 21.0))
 

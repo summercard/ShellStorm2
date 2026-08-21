@@ -118,7 +118,18 @@ const FACILITY_WALL_MATERIAL: StandardMaterial3D = preload(
 const FACILITY_TRIM_MATERIAL: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_facility_trim_v001.tres"
 )
+# 99层正式GLB以底面为原点，普通板与铆钉板的AABB高度也不同。运行时抽取
+# Mesh做MultiMesh后必须按各自AABB顶面校正，不能共用固定Y，否则角色虽然
+# 正确站在TowerFloorStage承重面上，视觉上却会陷入较厚的铆钉地板。
+# 目标顶面与通用塔楼地砖顶面(0.15m)只错开1.5cm，避免完全共面闪烁。
+const BASE99_FLOOR_TARGET_SURFACE_Y_M := TOWER_GEOMETRY.FLOOR_THICKNESS_M * 0.5 + 0.015
 const ROOFTOP_FACADE_HEIGHT := 6.0
+# 基地东侧阁楼门的外梯在接近墙面时仍处于上升坡面。99层普通墙的结构
+# 碰撞若完整顶到9m，角色胶囊会在门槛前先撞上墙体上沿。仅在上层门洞净宽
+# 内降低这段下层墙碰撞；门洞两侧继续保持完整9m阻挡，门扇仍由RoomDoor3D负责。
+const BASE_ROOFTOP_TRANSIT_DIRECTION := "east"
+const BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M := -7.5
+const BASE_ROOFTOP_TRANSIT_COLLISION_TOP_M := 8.45
 static var _tower_solid_wall_mesh: Mesh
 static var _tower_floor_tile_mesh: Mesh
 static var _base99_solid_wall_mesh: Mesh
@@ -688,7 +699,7 @@ func _build_base_facility_shell(dimensions: Vector2) -> void:
 					Basis.IDENTITY,
 					Vector3(
 						-12.5 + float(tile_x) * TOWER_GEOMETRY.GRID_UNIT_M,
-						0.015,
+						0.0,
 						-12.5 + float(tile_z) * TOWER_GEOMETRY.GRID_UNIT_M
 					)
 				)
@@ -718,12 +729,24 @@ func _add_base_floor_grid(
 	transforms: Array[Transform3D],
 	asset_id: String
 ) -> void:
+	var mesh_bounds := floor_mesh.get_aabb()
+	var mesh_top_y := mesh_bounds.position.y + mesh_bounds.size.y
+	var visual_origin_y := BASE99_FLOOR_TARGET_SURFACE_Y_M - mesh_top_y
 	var floor_multimesh := MultiMesh.new()
 	floor_multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	floor_multimesh.mesh = floor_mesh
 	floor_multimesh.instance_count = transforms.size()
 	for index in range(transforms.size()):
-		floor_multimesh.set_instance_transform(index, transforms[index])
+		var source_transform := transforms[index]
+		var aligned_transform := Transform3D(
+			source_transform.basis,
+			Vector3(
+				source_transform.origin.x,
+				visual_origin_y,
+				source_transform.origin.z
+			)
+		)
+		floor_multimesh.set_instance_transform(index, aligned_transform)
 	var floor_grid := MultiMeshInstance3D.new()
 	floor_grid.name = node_name
 	floor_grid.multimesh = floor_multimesh
@@ -733,6 +756,10 @@ func _add_base_floor_grid(
 	floor_grid.set_meta("grid_dimensions", Vector2i(6, 6))
 	floor_grid.set_meta("instance_count", transforms.size())
 	floor_grid.set_meta("floor_index", 99)
+	floor_grid.set_meta("visual_mesh_top_y_m", mesh_top_y)
+	floor_grid.set_meta("visual_origin_y_m", visual_origin_y)
+	floor_grid.set_meta("visual_surface_y_m", BASE99_FLOOR_TARGET_SURFACE_Y_M)
+	floor_grid.set_meta("collision_surface_y_m", 0.0)
 	floor_grid.set_meta("shadow_policy", "cast_and_receive")
 	add_child(floor_grid)
 
@@ -1299,24 +1326,79 @@ func _add_corner_aware_solid_run_collision(
 		var seg_end: float = seg.y
 		if seg_end <= seg_start:
 			continue
-		var run_length := seg_end - seg_start
-		var along := (seg_start + seg_end) * 0.5
-		var position := Vector3.ZERO
-		var size := Vector3.ZERO
-		match direction:
-			"north":
-				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, -wall_offset)
-				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
-			"south":
-				position = Vector3(along, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, wall_offset)
-				size = Vector3(run_length, TOWER_GEOMETRY.FLOOR_HEIGHT_M, 0.30)
-			"west":
-				position = Vector3(-wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
-				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
-			_:
-				position = Vector3(wall_offset, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, along)
-				size = Vector3(0.30, TOWER_GEOMETRY.FLOOR_HEIGHT_M, run_length)
-		_add_collision_shape(body, position, size)
+		_add_corner_aware_solid_segment_collision(
+			body, direction, wall_offset, seg_start, seg_end
+		)
+
+
+func _add_corner_aware_solid_segment_collision(
+	body: StaticBody3D,
+	direction: String,
+	wall_offset: float,
+	seg_start: float,
+	seg_end: float
+) -> void:
+	if room_type != "FACILITY" or direction != BASE_ROOFTOP_TRANSIT_DIRECTION:
+		_add_wall_run_box_collision(
+			body, direction, wall_offset, seg_start, seg_end,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M
+		)
+		return
+	var opening_half_width := TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5
+	var opening_start := BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M - opening_half_width
+	var opening_end := BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M + opening_half_width
+	var overlap_start := maxf(seg_start, opening_start)
+	var overlap_end := minf(seg_end, opening_end)
+	if overlap_end <= overlap_start:
+		_add_wall_run_box_collision(
+			body, direction, wall_offset, seg_start, seg_end,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M
+		)
+		return
+	if seg_start < overlap_start:
+		_add_wall_run_box_collision(
+			body, direction, wall_offset, seg_start, overlap_start,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M
+		)
+	_add_wall_run_box_collision(
+		body, direction, wall_offset, overlap_start, overlap_end,
+		BASE_ROOFTOP_TRANSIT_COLLISION_TOP_M
+	)
+	if overlap_end < seg_end:
+		_add_wall_run_box_collision(
+			body, direction, wall_offset, overlap_end, seg_end,
+			TOWER_GEOMETRY.FLOOR_HEIGHT_M
+		)
+
+
+func _add_wall_run_box_collision(
+	body: StaticBody3D,
+	direction: String,
+	wall_offset: float,
+	seg_start: float,
+	seg_end: float,
+	height: float
+) -> void:
+	var run_length := seg_end - seg_start
+	if run_length <= 0.0 or height <= 0.0:
+		return
+	var along := (seg_start + seg_end) * 0.5
+	var position := Vector3.ZERO
+	var size := Vector3.ZERO
+	match direction:
+		"north":
+			position = Vector3(along, height * 0.5, -wall_offset)
+			size = Vector3(run_length, height, 0.30)
+		"south":
+			position = Vector3(along, height * 0.5, wall_offset)
+			size = Vector3(run_length, height, 0.30)
+		"west":
+			position = Vector3(-wall_offset, height * 0.5, along)
+			size = Vector3(0.30, height, run_length)
+		_:
+			position = Vector3(wall_offset, height * 0.5, along)
+			size = Vector3(0.30, height, run_length)
+	_add_collision_shape(body, position, size)
 
 
 func _add_tower_solid_run_collision(

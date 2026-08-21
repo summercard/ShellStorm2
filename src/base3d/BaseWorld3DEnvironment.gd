@@ -96,6 +96,7 @@ func _on_solar_state_changed(solar: Dictionary) -> void:
 	if _key_light != null:
 		_key_light.rotation_degrees = solar.get("rotation_degrees", Vector3(-60.0, 32.0, 0.0)) as Vector3
 		_key_light.light_energy = float(solar.get("energy", 0.0))
+		_key_light.light_color = solar.get("sun_color", TowerAtmosphere3D.SUN_COLOR) as Color
 	if _world_environment != null and _world_environment.environment != null:
 		var environment := _world_environment.environment
 		environment.background_color = solar.get("background_color", TowerAtmosphere3D.BACKGROUND_COLOR) as Color

@@ -1,0 +1,20 @@
+{
+  "asset_id": "ENV-BASE99-STAIR-L-Z5",
+  "version": "v004",
+  "source": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v002.blend",
+  "output_blend": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend",
+  "glb": "/Users/summercards/ShellStorm2/assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v004.glb",
+  "rebuild_source_mesh_count": 91,
+  "output_mesh_count": 2,
+  "railing_corner_contract": "stair_run_rails_end_before_platform_owned_l_guard",
+  "local_bounds_min": [
+    -4.6088,
+    -5.269,
+    0.0
+  ],
+  "local_bounds_max": [
+    4.6088,
+    5.269,
+    5.91015
+  ]
+}

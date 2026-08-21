@@ -78,8 +78,11 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("18米封顶不是6×6共36块5米模块")
 		if int(snapshot.get("base100_structure_collision_count", 0)) != 1:
 			failures.append("100层上层围护没有独立连续结构碰撞")
-		if int(snapshot.get("base99_door_lift_count", 0)) != 2:
-			failures.append("基地两个RoomDoor3D没有使用正式滑升门视觉")
+		if int(snapshot.get("base99_door_lift_count", 0)) != 3:
+			failures.append("基地两扇原有门与阁楼天台门没有全部使用正式滑升门视觉")
+		var rooftop_door := facility.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
+		if rooftop_door == null or str(rooftop_door.get_meta("door_role", "")) != "base_rooftop_transit":
+			failures.append("100层东侧门洞没有组合既有Godot天台门")
 		if int(snapshot.get("base99_mezzanine_count", 0)) != 1:
 			failures.append("基地缺少二层楼中楼楼板")
 		if int(snapshot.get("base99_stair_l_count", 0)) != 1:
@@ -187,7 +190,9 @@ func _validate_base99_camera_collisions(root: Node, failures: Array[String]) -> 
 		var shapes := body.find_children("*", "CollisionShape3D", true, false)
 		if shapes.is_empty() or (shapes[0] as CollisionShape3D).disabled:
 			failures.append("摄像机净空碰撞未启用: %s" % body.name)
-	for required_role in ["mezzanine", "l_stair_lower", "l_stair_landing", "l_stair_upper", "exterior_stair"]:
+		if str(body.get_meta("camera_stair_slab_role", "")) == "l_stair_unified" and shapes.size() != 3:
+			failures.append("L型楼梯统一摄像机净空体不是三个连续形状")
+	for required_role in ["mezzanine", "l_stair_unified", "exterior_stair"]:
 		if not roles.has(required_role):
 			failures.append("缺少摄像机净空角色: %s" % required_role)
 

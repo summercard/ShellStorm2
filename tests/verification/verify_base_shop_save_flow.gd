@@ -9,6 +9,7 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	_verify_catalog(failures)
 	_verify_save_envelope_and_backup(failures)
+	_verify_avatar_save_with_numeric_weapon_slots(failures)
 	_verify_transactions_and_restart(failures)
 	_verify_save_failure_rollback(failures)
 	_verify_runtime_inventory_transactions(failures)
@@ -51,6 +52,155 @@ func _verify_save_envelope_and_backup(failures: Array[String]) -> void:
 	var recovered: Variant = AtomicJsonStore.load_dictionary(TEST_PATH, Callable(ProfileSaveService, "is_valid_envelope"))
 	if not recovered is Dictionary or int((recovered as Dictionary).get("revision", 0)) != 1:
 		failures.append("checksum损坏后没有回退到有效备份")
+
+
+func _verify_avatar_save_with_numeric_weapon_slots(failures: Array[String]) -> void:
+	_cleanup()
+	var expected_loadout := {
+		"body": "suit_cobalt",
+		"head": "plated_amber",
+		"hand": "gauntlet_teal",
+		"feet": "boot_teal",
+		"hat": "hard_hat",
+		"glasses": "wide_visor",
+	}
+	var numeric_slot_snapshot := {
+		"node_type": 0,
+		"node_name": "GunBody_Pistol",
+		"tags": ["weapon"],
+		"base_stats": {},
+		"slots": {
+			3: {
+				"node_type": 3,
+				"node_name": "Bullet_Sticky",
+				"tags": ["bullet"],
+				"base_stats": {},
+				"slots": {},
+			},
+		},
+	}
+	var manager := MANAGER_SCRIPT.new()
+	manager.save_path = TEST_PATH
+	manager.data = BaseData.new()
+	manager.data.avatar_customization = expected_loadout.duplicate(true)
+	manager.data.active_run_snapshot = {
+		"valid": true,
+		"checkpoint_id": "avatar_numeric_slot_probe",
+		"layout_id": "avatar_numeric_slot_probe",
+		"equipped_weapon_items": [{"assembly_snapshot": numeric_slot_snapshot}],
+	}
+	if not manager.save_base("avatar_numeric_slot_probe"):
+		failures.append("带整数武器槽位时换装总档没有通过写后回读校验")
+		manager.free()
+		return
+	var stored: Variant = AtomicJsonStore.load_dictionary(TEST_PATH)
+	if not stored is Dictionary:
+		failures.append("带整数武器槽位的换装总档无法读取")
+	else:
+		var envelope := stored as Dictionary
+		if str(envelope.get("payload_checksum_algorithm", "")) != ProfileSaveService.CHECKSUM_ALGORITHM:
+			failures.append("换装总档没有升级到当前校验算法")
+		var payload := envelope.get("payload", {}) as Dictionary
+		var weapon_items := (payload.get("active_run_snapshot", {}) as Dictionary).get("equipped_weapon_items", []) as Array
+		var slots := (((weapon_items[0] as Dictionary).get("assembly_snapshot", {}) as Dictionary).get("slots", {}) as Dictionary)
+		if not slots.has("3") or slots.has(3):
+			failures.append("武器装配枚举槽位没有在落盘前统一为JSON字符串键")
+	var restored := MANAGER_SCRIPT.new()
+	restored.save_path = TEST_PATH
+	restored.load_base()
+	if restored.data.avatar_customization != expected_loadout:
+		failures.append("换装与带整数槽位的武器快照共同保存后，模拟重启丢失外观")
+	manager.free()
+	restored.free()
+
+	# 精确模拟canonical_json_v2旧缺陷档：内存中整数槽位被旧算法按null摘要，
+	# JSON写盘后变成字符串键。新版本必须定向识别并自动重存为v3。
+	_cleanup()
+	var legacy_data := BaseData.new()
+	legacy_data.avatar_customization = expected_loadout.duplicate(true)
+	legacy_data.active_run_snapshot = {
+		"valid": true,
+		"checkpoint_id": "avatar_v2_migration_probe",
+		"layout_id": "avatar_v2_migration_probe",
+		"equipped_weapon_items": [{"assembly_snapshot": numeric_slot_snapshot}],
+	}
+	var legacy_payload := legacy_data._to_dict()
+	var legacy_envelope := {
+		"manifest_version": ProfileSaveService.MANIFEST_VERSION,
+		"profile_schema": BaseData.SAVE_VERSION,
+		"revision": 7,
+		"saved_at_unix": 1,
+		"reason": "active_run_checkpoint:legacy_numeric_slot",
+		"payload_checksum_algorithm": ProfileSaveService.LEGACY_CHECKSUM_ALGORITHM,
+		"payload_checksum": _legacy_v2_checksum(legacy_payload),
+		"payload": legacy_payload,
+	}
+	if not AtomicJsonStore.save_dictionary(TEST_PATH, legacy_envelope):
+		failures.append("无法建立旧整数槽位迁移测试档")
+		return
+	var migrated := MANAGER_SCRIPT.new()
+	migrated.save_path = TEST_PATH
+	migrated.load_base()
+	if migrated.data.avatar_customization != expected_loadout:
+		failures.append("canonical_json_v2整数槽位旧档迁移后丢失换装")
+	var migrated_file: Variant = AtomicJsonStore.load_dictionary(TEST_PATH)
+	if (
+		not migrated_file is Dictionary
+		or str((migrated_file as Dictionary).get("payload_checksum_algorithm", ""))
+		!= ProfileSaveService.CHECKSUM_ALGORITHM
+	):
+		failures.append("canonical_json_v2整数槽位旧档没有自动升级为v3")
+	migrated.free()
+
+	# 旧v2还可能因写前高精度Variant与JSON落盘形态不同而无法精确复算。
+	# 只有封套/载荷元数据完全互证时允许一次性升级。
+	_cleanup()
+	legacy_data.save_revision = 9
+	legacy_data.last_save_reason = "active_run_checkpoint:v2_json_representation"
+	legacy_data.last_saved_at_unix = 20750101
+	legacy_payload = legacy_data._to_dict()
+	legacy_envelope = {
+		"manifest_version": ProfileSaveService.MANIFEST_VERSION,
+		"profile_schema": BaseData.SAVE_VERSION,
+		"revision": legacy_data.save_revision,
+		"saved_at_unix": legacy_data.last_saved_at_unix,
+		"reason": legacy_data.last_save_reason,
+		"payload_checksum_algorithm": ProfileSaveService.LEGACY_CHECKSUM_ALGORITHM,
+		"payload_checksum": "a".repeat(64),
+		"payload": legacy_payload,
+	}
+	var structurally_recoverable := ProfileSaveService.unpack(legacy_envelope)
+	if not bool(structurally_recoverable.get("success", false)) or not bool(structurally_recoverable.get("legacy", false)):
+		failures.append("元数据互证的v2 JSON表示差异档不能进入一次性迁移")
+	var inconsistent := legacy_envelope.duplicate(true)
+	(inconsistent.get("payload", {}) as Dictionary)["last_save_reason"] = "mismatched_reason"
+	if bool(ProfileSaveService.unpack(inconsistent).get("success", false)):
+		failures.append("封套/载荷元数据不一致的v2损坏档被错误接受")
+
+
+func _legacy_v2_checksum(value: Variant) -> String:
+	return _legacy_v2_canonical_json(value).sha256_text()
+
+
+func _legacy_v2_canonical_json(value: Variant) -> String:
+	var value_type := typeof(value)
+	if value_type == TYPE_INT or value_type == TYPE_FLOAT:
+		return String.num(float(value), 12)
+	if value is Dictionary:
+		var keys: Array[String] = []
+		for raw_key in (value as Dictionary).keys():
+			keys.append(str(raw_key))
+		keys.sort()
+		var entries: Array[String] = []
+		for key in keys:
+			entries.append("%s:%s" % [JSON.stringify(key), _legacy_v2_canonical_json((value as Dictionary).get(key))])
+		return "{%s}" % ",".join(entries)
+	if value is Array:
+		var entries: Array[String] = []
+		for child in value as Array:
+			entries.append(_legacy_v2_canonical_json(child))
+		return "[%s]" % ",".join(entries)
+	return JSON.stringify(value)
 
 
 func _verify_transactions_and_restart(failures: Array[String]) -> void:

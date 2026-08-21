@@ -74,6 +74,18 @@ func _verify_weapons(failures: Array[String]) -> void:
 			_check(grip.position.is_equal_approx(Vector3.ZERO), "%s Grip不是根原点" % slug, failures)
 		if muzzle != null:
 			_check(muzzle.position.z < -0.35 and absf(muzzle.position.x) < 0.02, "%s 枪口未统一指向local -Z" % slug, failures)
+		if slug == "hair_dryer":
+			var visual_root := asset.get_node_or_null("VisualRoot") as Node3D
+			_check(
+				visual_root != null and visual_root.position.is_equal_approx(Vector3(0.0, -0.122838, -0.168785)),
+				"hair_dryer 可见握把/扳机未围绕根 GripSocket 完成下移校正",
+				failures
+			)
+			_check(
+				muzzle != null and muzzle.position.is_equal_approx(Vector3(0.0, 0.173914, -0.859545)),
+				"hair_dryer 枪口挂点没有随可见模型保持同位",
+				failures
+			)
 		var materials := {}
 		_collect_materials(asset, materials)
 		_check(materials.size() <= 3, "%s 材质数量超过3：%s" % [slug, materials.keys()], failures)

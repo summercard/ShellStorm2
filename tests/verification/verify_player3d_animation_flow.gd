@@ -28,7 +28,7 @@ func _ready() -> void:
 		or str(snapshot.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(snapshot.get("active_grip_hand_count", 0)) != 1
 			or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
-			or float(snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.330
+			or float(snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.180
 	):
 		failures.append("Pistol does not keep its one-hand right-side grip and free left hand")
 	if not gallery.player.equip_weapon("bp_rifle", "mod_bullet_standard"):

@@ -51,7 +51,7 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 		"assembly_snapshot", nested.get("assembly_snapshot", {})
 	)
 	if stored_snapshot is Dictionary:
-		instance.assembly_snapshot = (stored_snapshot as Dictionary).duplicate(true)
+		instance.assembly_snapshot = _normalize_assembly_snapshot(stored_snapshot as Dictionary)
 	instance.current_ammo = int(item.get("current_ammo", nested.get("current_ammo", -1)))
 	instance.created_transaction_id = str(item.get(
 		"created_transaction_id", nested.get("created_transaction_id", "")
@@ -187,6 +187,7 @@ func append_fate_upgrade(card: FateCard, transaction_id: String = "") -> Diction
 
 func to_item_dictionary() -> Dictionary:
 	var item := _base_item.duplicate(true)
+	var stored_assembly_snapshot := _normalize_assembly_snapshot(assembly_snapshot)
 	item["type"] = "weapon"
 	item["stack_max"] = 1
 	item["weapon_instance_id"] = weapon_instance_id
@@ -195,7 +196,7 @@ func to_item_dictionary() -> Dictionary:
 	item["rarity"] = rarity
 	item["fate_slot_capacity"] = fate_slot_capacity
 	item["fate_upgrades"] = fate_upgrades.duplicate(true)
-	item["assembly_snapshot"] = assembly_snapshot.duplicate(true)
+	item["assembly_snapshot"] = stored_assembly_snapshot.duplicate(true)
 	item["current_ammo"] = current_ammo
 	item["created_transaction_id"] = created_transaction_id
 	item["weapon_instance"] = {
@@ -206,7 +207,7 @@ func to_item_dictionary() -> Dictionary:
 		"rarity": rarity,
 		"fate_slot_capacity": fate_slot_capacity,
 		"fate_upgrades": fate_upgrades.duplicate(true),
-		"assembly_snapshot": assembly_snapshot.duplicate(true),
+		"assembly_snapshot": stored_assembly_snapshot.duplicate(true),
 		"current_ammo": current_ammo,
 		"created_transaction_id": created_transaction_id,
 	}
@@ -280,6 +281,23 @@ static func _serialize_node(node: AssemblyNode) -> Dictionary:
 		"base_stats": node.base_stats.duplicate(true),
 		"slots": slot_data,
 	}
+
+
+static func _normalize_assembly_snapshot(snapshot: Dictionary) -> Dictionary:
+	var normalized := snapshot.duplicate(true)
+	var stored_slots: Variant = snapshot.get("slots", {})
+	if not stored_slots is Dictionary:
+		return normalized
+	var normalized_slots: Dictionary = {}
+	for raw_slot_key in (stored_slots as Dictionary).keys():
+		var child: Variant = (stored_slots as Dictionary).get(raw_slot_key)
+		normalized_slots[str(raw_slot_key)] = (
+			_normalize_assembly_snapshot(child as Dictionary)
+			if child is Dictionary
+			else child
+		)
+	normalized["slots"] = normalized_slots
+	return normalized
 
 
 static func _deserialize_node(data: Dictionary) -> AssemblyNode:

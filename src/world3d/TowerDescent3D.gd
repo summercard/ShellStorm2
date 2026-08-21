@@ -8,6 +8,9 @@ const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
 )
+const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+)
 const MAIN_ENTRY_SCREEN_SCENE: PackedScene = preload(
 	"res://scenes/ui/MainEntryScreen3D.tscn"
 )
@@ -88,6 +91,7 @@ var _active_facility_menu: CanvasLayer = null
 var _facility_nodes: Array[BaseFacility3D] = []
 var _facility_decor_nodes: Array[Node3D] = []
 var _facility_art_layout: Node3D
+var _base_rooftop_transit_door: RoomDoor3D
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
 var _edge_door_sides_by_key: Dictionary = {}
@@ -227,6 +231,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if (
 		event.is_action_pressed("interact")
 		and not _completed
+		and _try_open_base_rooftop_transit_door()
+	):
+		get_viewport().set_input_as_handled()
+		return
+	if (
+		event.is_action_pressed("interact")
+		and not _completed
 		and _try_open_nearby_stair_arrival()
 	):
 		get_viewport().set_input_as_handled()
@@ -239,6 +250,7 @@ func _process(delta: float) -> void:
 	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
 	_update_facility_door_auto_close()
+	_update_base_rooftop_transit_door_prompt()
 	_update_stair_arrival_prompt()
 
 
@@ -2498,6 +2510,45 @@ func _is_player_inside_room(room: DungeonRoom3D) -> bool:
 	)
 
 
+func _is_player_near_base_rooftop_transit_door() -> bool:
+	return (
+		_base_rooftop_transit_door != null
+		and is_instance_valid(_base_rooftop_transit_door)
+		and player != null
+		and player.global_position.distance_to(_base_rooftop_transit_door.global_position) <= 2.35
+	)
+
+
+func _update_base_rooftop_transit_door_prompt() -> void:
+	if _base_rooftop_transit_door == null or not is_instance_valid(_base_rooftop_transit_door):
+		return
+	_base_rooftop_transit_door.set_prompt_visible(
+		_is_player_near_base_rooftop_transit_door()
+	)
+
+
+func _try_open_base_rooftop_transit_door() -> bool:
+	if not _is_player_near_base_rooftop_transit_door():
+		return false
+	var edge := _edge_key("start", "facility")
+	if not bool(_open_edges.get(edge, false)):
+		# 此门与旧天台—基地交通边共享授权，但自身仍是独立的Godot门实例。
+		# 这样不新增门状态机，也不会让Blender模型承担交互或碰撞职责。
+		_open_edges[edge] = true
+		minimap.set_edge_open("start", "facility", true)
+		_update_room_streaming("start")
+		_refresh_edge_visuals("start", "facility", true)
+		if MonsterAIManager != null and player != null:
+			MonsterAIManager.broadcast_sound_stimulus(
+				player.global_position, 6.5, "door_open", player
+			)
+		status_label.text = "基地阁楼天台门已开启"
+	else:
+		status_label.text = "天台通道已经开启"
+	_base_rooftop_transit_door.set_open(true)
+	return true
+
+
 func is_player_inside_facility() -> bool:
 	# 基地安全区以建筑壳体为准，不再只认99层地面的房间触发器。这样从
 	# 99层平台走上100层阁楼/天台时，禁射与手电暂停耗电仍保持基地规则。
@@ -2507,8 +2558,8 @@ func is_player_inside_facility() -> bool:
 	var local_pos := facility.to_local(player.global_position)
 	var dimensions := facility.get_dimensions()
 	return (
-		absf(local_pos.x) <= dimensions.x * 0.47
-		and absf(local_pos.z) <= dimensions.y * 0.47
+		absf(local_pos.x) <= dimensions.x * 0.505
+		and absf(local_pos.z) <= dimensions.y * 0.505
 		and local_pos.y >= -1.0
 		and local_pos.y <= FLOOR_HEIGHT + 0.8
 	)
@@ -2988,8 +3039,40 @@ func _install_facilities() -> void:
 	if editor_guide != null:
 		editor_guide.visible = false
 	_collect_facility_art_nodes(_facility_art_layout, facility_floor.global_position)
+	_install_base_rooftop_transit_door(facility_floor)
 	if _facility_nodes.size() != 10:
 		push_error("基地美术布置层应包含10个交互设施，当前为%d个" % _facility_nodes.size())
+
+
+func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:
+	if facility_floor == null or _base_rooftop_transit_door != null:
+		return
+	# 东侧上层门墙的洞口是新外梯唯一的100F接口。门扇、碰撞与提示继续
+	# 使用既有RoomDoor3D，而不是把玩法逻辑烘进上层围护GLB。
+	var door := RoomDoor3D.new()
+	door.name = "BaseRooftopTransitDoor"
+	door.configure(
+		"east_rooftop",
+		"start",
+		Color(0.42, 0.88, 1.0),
+		BASE99_DOOR_LIFT_PREFAB
+	)
+	door.name = "BaseRooftopTransitDoor"
+	door.set_access_policy({
+		"requires_clear": false,
+		"requires_key": false,
+		"triggers_fate": false,
+	})
+	# 与ENV-BASE100-UPPER-SHELL-30X30-H9的东侧门洞严格同位：本地
+	# (15, 9, -7.5)，底边处于100F门槛。RoomDoor3D的朝向沿X轴。
+	door.position = Vector3(15.0, FLOOR_HEIGHT, -7.5)
+	door.rotation.y = PI * 0.5
+	door.set_meta("asset_id", "ENV-BASE99-DOOR-LIFT-22X25")
+	door.set_meta("door_role", "base_rooftop_transit")
+	door.set_meta("edge_key", _edge_key("start", "facility"))
+	door.set_meta("shadow_policy", "cast_and_receive")
+	_facility_art_layout.add_child(door)
+	_base_rooftop_transit_door = door
 
 
 func _collect_facility_art_nodes(root: Node, room_center: Vector3) -> void:
@@ -3267,6 +3350,8 @@ func _install_main_entry_screen() -> void:
 	if _main_entry_screen == null:
 		push_error("主页面实例化失败")
 		return
+	if _main_entry_screen.has_method("prepare_gameplay_hud"):
+		_main_entry_screen.call("prepare_gameplay_hud", $HUD)
 	add_child(_main_entry_screen)
 
 
@@ -3411,6 +3496,21 @@ func _physical_floor_index() -> int:
 	if player == null:
 		return maxi(0, int(_room_floor_index.get(_current_room_id, 0)))
 	var position := player.global_position if player.is_inside_tree() else player.position
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if facility != null:
+		var local_pos := facility.to_local(position)
+		var dimensions := facility.get_dimensions()
+		# 基地阁楼、楼中楼和外梯内侧都是99F建筑体；100F只从东侧
+		# 门槛外的天台空间开始。这个体积判定不依赖经过哪一扇门，
+		# 也避免5m平台被全局9m网格错误标成100F。
+		if (
+			local_pos.x <= dimensions.x * 0.5 + 0.10
+			and local_pos.x >= -dimensions.x * 0.5 - 0.10
+			and absf(local_pos.z) <= dimensions.y * 0.5 + 0.10
+			and local_pos.y >= -1.0
+			and local_pos.y <= FLOOR_HEIGHT + 0.80
+		):
+			return 1
 	return maxi(0, int(round(-position.y / FLOOR_HEIGHT)))
 
 
@@ -3578,7 +3678,7 @@ func _runtime_current_floor_index() -> int:
 	if player == null:
 		return int(_room_floor_index.get(_current_room_id, 0))
 	var position := player.global_position if player.is_inside_tree() else player.position
-	var physical_floor := maxi(0, int(round(-position.y / FLOOR_HEIGHT)))
+	var physical_floor := _physical_floor_index()
 	var room_floor := int(_room_floor_index.get(_current_room_id, physical_floor))
 	# 楼梯/门槛处 Area 可能尚未切换 current_room_id；世界高度比旧房间标签更可信。
 	return physical_floor if absf(position.y + FLOOR_HEIGHT * room_floor) > FLOOR_HEIGHT * 0.45 else room_floor

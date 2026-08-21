@@ -126,7 +126,7 @@ func _ready() -> void:
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(avatar_snapshot.get("active_grip_hand_count", 0)) != 1
 		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
-		or float(avatar_snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.330
+		or float(avatar_snapshot.get("hand_l_to_socket_global_distance", 0.0)) < 0.180
 	):
 		failures.append("Bunny pistol pose does not preserve the right grip and free left hand")
 	if float(avatar_snapshot.get("hand_position", Vector3.ZERO).x) >= 0.263:

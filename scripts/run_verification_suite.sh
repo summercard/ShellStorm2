@@ -72,9 +72,11 @@ core_scenes=(
   verify_tarot_fate_runtime
   verify_door_passability
   verify_tower_descent_flow
+  verify_base99_floor_player_collision_flow
   verify_3d_performance_budget
   verify_performance_runtime_complete
   verify_graphics_settings_ui_flow
+  verify_pause_game_save_reset_flow
   verify_3d_flashlight_charge_flow
 )
 

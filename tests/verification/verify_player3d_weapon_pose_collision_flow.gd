@@ -69,14 +69,30 @@ func _ready() -> void:
 		failures.append("Pistol pose does not use exactly one gripping hand")
 	if float(sidearm_hold.get("weapon_socket_position", Vector3.ZERO).x) < 0.060:
 		failures.append("Pistol socket is not staged on the rabbit's right side")
+	var sidearm_socket_position := sidearm_hold.get("weapon_socket_position", Vector3.ZERO) as Vector3
+	if sidearm_socket_position.y > 0.27 or sidearm_socket_position.z > -0.33:
+		failures.append("Pistol idle hold is not lowered and extended clear of the rabbit's face")
+	var sidearm_socket_rotation := sidearm_hold.get("weapon_socket_rotation", Vector3.ZERO) as Vector3
+	if sidearm_socket_rotation.length() > 0.03:
+		failures.append("Pistol idle barrel is not aligned to the real aim direction")
+	_check_muzzle_alignment(player, "idle", failures)
+	var sidearm_left_position := sidearm_hold.get("hand_l_position", Vector3.ZERO) as Vector3
+	if sidearm_left_position.z > -0.24:
+		failures.append("Free left hand is not extended into the sidearm ready silhouette")
+	if float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0)) > 0.001:
+		failures.append("Pistol HandJointR is not exactly seated on GripSocket")
+	if float(sidearm_hold.get("right_hand_sphere_to_joint_global_distance", 999.0)) > 0.001:
+		failures.append("Right palm sphere center is not seated on HandJointR")
+	if float(sidearm_hold.get("right_hand_sphere_to_grip_global_distance", 999.0)) > 0.001:
+		failures.append("Right palm sphere center is not seated on GripSocket")
 	if (
 		float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0))
 		>= float(sidearm_hold.get("hand_l_to_socket_global_distance", 0.0))
 	):
 		failures.append("Pistol right hand is not closer to the weapon than the free left hand")
 	var sidearm_right_rotation := sidearm_hold.get("hand_r_rotation", Vector3.ZERO) as Vector3
-	if sidearm_right_rotation.y < 1.0 or not bool(sidearm_hold.get("wrist_ring_is_proximal", false)):
-		failures.append("Right wrist ring does not act as the proximal pivot toward forward -Z")
+	if sidearm_right_rotation.y < 1.0 or str(sidearm_hold.get("right_hand_pivot_contract", "")) != "palm_sphere_center_is_HandJointR_and_GripSocket":
+		failures.append("Right hand does not use the palm-sphere/HandJointR/GripSocket pivot contract")
 
 	_set_presentation_state(player, "moving")
 	_advance_avatar(player, 0.10, 2)
@@ -98,6 +114,9 @@ func _ready() -> void:
 	if str(sidearm_fire.get("weapon_fire_style", "")) != "sidearm_snap":
 		failures.append("Pistol did not select its weapon-specific fire style")
 	var sidearm_fire_rotation := sidearm_fire.get("action_rotation", Vector3.ZERO) as Vector3
+	player.weapon.set("_recoil", 0.09)
+	player.weapon.call("_process", 0.001)
+	_check_muzzle_alignment(player, "firing recoil", failures)
 
 	player.call("_clear_action_overlays")
 	_set_presentation_state(player, "idle")
@@ -110,10 +129,12 @@ func _ready() -> void:
 		failures.append("Rifle did not enter longgun_hold")
 	if int(longgun_hold.get("active_grip_hand_count", 0)) != 2:
 		failures.append("Rifle pose does not use right grip plus left support")
+	if float(longgun_hold.get("hand_r_to_socket_global_distance", 999.0)) > 0.001:
+		failures.append("Rifle HandJointR is not exactly seated on GripSocket")
 	var longgun_left_rotation := longgun_hold.get("hand_l_rotation", Vector3.ZERO) as Vector3
 	var longgun_right_rotation := longgun_hold.get("hand_r_rotation", Vector3.ZERO) as Vector3
 	if longgun_left_rotation.y > -1.0 or longgun_right_rotation.y < 1.0:
-		failures.append("Longgun wrist pivots do not face both distal palms toward -Z")
+		failures.append("Longgun hand rotations do not face both palms toward -Z")
 
 	_set_presentation_state(player, "moving")
 	_advance_avatar(player, 0.10, 2)
@@ -167,7 +188,7 @@ func _ready() -> void:
 	wall.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_WEAPON_POSE_COLLISION_OK: wrist pivots, one/two-hand FSM, distinct gun fire, and unified 1.05 m runtime visual/collision contract pass")
+		print("BUNNY_WEAPON_POSE_COLLISION_OK: palm/HandJointR/GripSocket alignment, one/two-hand FSM, distinct gun fire, and unified 1.05 m runtime visual/collision contract pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -182,3 +203,20 @@ func _set_presentation_state(player: Player3D, state_id: String) -> void:
 func _advance_avatar(player: Player3D, delta: float, steps: int) -> void:
 	for _index in range(steps):
 		player.avatar.call("_process", delta)
+
+
+func _check_muzzle_alignment(player: Player3D, context: String, failures: Array[String]) -> void:
+	var muzzle := player.weapon.find_child("MuzzleSocket", true, false) as Node3D
+	if muzzle == null:
+		failures.append("Pistol %s has no MuzzleSocket" % context)
+		return
+	var muzzle_forward := -muzzle.global_basis.z
+	muzzle_forward.y = 0.0
+	var projectile_direction := player.aim_direction
+	projectile_direction.y = 0.0
+	if muzzle_forward.length_squared() <= 0.000001 or projectile_direction.length_squared() <= 0.000001:
+		failures.append("Pistol %s has an invalid muzzle/aim vector" % context)
+		return
+	var angle_degrees := rad_to_deg(muzzle_forward.normalized().angle_to(projectile_direction.normalized()))
+	if angle_degrees > 0.5:
+		failures.append("Pistol %s muzzle differs from projectile direction by %.3f degrees" % [context, angle_degrees])

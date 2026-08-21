@@ -34,6 +34,8 @@ func _ready() -> void:
 		return
 	var primary_layout_signature := _layout_signature(generation, snapshot)
 	var rooftop_atmosphere := snapshot.get("atmosphere", {}) as Dictionary
+	var rooftop_time := rooftop_atmosphere.get("time", {}) as Dictionary
+	var rooftop_solar := rooftop_time.get("solar", {}) as Dictionary
 	var minimap_snapshot := generation.get("minimap", {}) as Dictionary
 	_expect(str(snapshot.get("mode", "")) == "tower_descent", "缺少塔楼模式快照", failures)
 	_expect(int(snapshot.get("map_size", 0)) == 250, "整层外壳不是250m", failures)
@@ -169,15 +171,21 @@ func _ready() -> void:
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("sun_energy", 0.0)), 0.58)
+		is_equal_approx(
+			float(rooftop_atmosphere.get("sun_energy", -1.0)),
+			float(rooftop_solar.get("energy", -2.0))
+		)
 		and bool(rooftop_atmosphere.get("sun_shadow_enabled", false)),
-		"楼顶固定太阳能量或阴影状态错误",
+		"楼顶太阳没有实时应用权威时间能量或阴影状态错误",
 		failures
 	)
 	_expect(
-		is_equal_approx(float(rooftop_atmosphere.get("ambient_energy", 0.0)), 0.01)
+		is_equal_approx(
+			float(rooftop_atmosphere.get("ambient_energy", -1.0)),
+			float(rooftop_solar.get("ambient_energy", -2.0))
+		)
 		and bool(rooftop_atmosphere.get("rooftop_sky_bounce", false)),
-		"塔楼全局环境底光或固定天空补光错误",
+		"塔楼环境底光没有实时应用权威时间或天空补光错误",
 		failures
 	)
 	_expect(
