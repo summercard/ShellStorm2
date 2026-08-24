@@ -13,6 +13,9 @@ extends Node3D
 @onready var foot_r: Node3D = _resolve_rig_node("VisualRoot/BunnyRig/FeetRoot/FootJointR", "VisualRoot/Feet/FootR")
 @onready var ear_socket_l: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL") as Node3D
 @onready var ear_socket_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR") as Node3D
+@onready var bunny_head_model: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Model") as Node3D
+@onready var bunny_ears: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears") as Node3D
+@onready var chibi_anime_head: Node3D = get_node_or_null("VisualRoot/BunnyRig/HeadJoint/HeadAccessoryChibiAnime") as Node3D
 @onready var bunny_hand_l: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointL") as Node3D
 @onready var bunny_hand_r: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR") as Node3D
 @onready var bunny_hand_r_model: Node3D = get_node_or_null("VisualRoot/BunnyRig/HandRoot/HandJointR/Model") as Node3D
@@ -46,15 +49,17 @@ const DEFAULT_CUSTOMIZATION := {
 	"head": "bunny_white",
 	"hand": "bunny_white",
 	"feet": "bunny_white",
-	"hat": "none",
+	"hat": "bunny_ears",
 	"glasses": "none",
 }
+const CHIBI_ANIME_HEAD_VARIANT := "chibi_anime"
+const BUNNY_EARS_HAT_VARIANT := "bunny_ears"
 const CUSTOMIZATION_OPTIONS := {
 	"body": ["bunny_white", "cat_orange", "suit_olive", "suit_sand", "suit_cobalt"],
-	"head": ["bunny_white", "cat_orange", "sensor_olive", "visor_cyan", "plated_amber"],
+	"head": ["bunny_white", "cat_orange", "sensor_olive", "visor_cyan", "plated_amber", CHIBI_ANIME_HEAD_VARIANT],
 	"hand": ["bunny_white", "cat_orange", "grip_olive", "safety_orange", "gauntlet_teal"],
 	"feet": ["bunny_white", "cat_orange", "boot_sand", "boot_cobalt", "boot_teal"],
-	"hat": ["none", "field_cap", "hard_hat", "sealed_hood"],
+	"hat": [BUNNY_EARS_HAT_VARIANT, "none", "field_cap", "hard_hat", "sealed_hood"],
 	"glasses": ["none", "mono_lens", "dual_goggles", "wide_visor"],
 }
 const BODY_COLORS := {
@@ -342,6 +347,10 @@ func get_component_snapshot() -> Dictionary:
 		"customization": get_customization(),
 		"customization_material_counts": _get_customization_material_counts(),
 		"customization_material_colors": _get_customization_material_colors(),
+		"chibi_anime_head_available": chibi_anime_head != null,
+		"chibi_anime_head_visible": chibi_anime_head != null and chibi_anime_head.visible,
+		"base_bunny_head_visible": bunny_head_model != null and bunny_head_model.visible,
+		"base_bunny_ears_visible": bunny_ears != null and bunny_ears.visible,
 		"wearable_count": _wearable_nodes.size(),
 		"has_weapon_socket": weapon_socket != null,
 		"has_lower_body_socket": lower_body_socket != null,
@@ -467,8 +476,7 @@ func get_component_snapshot() -> Dictionary:
 
 
 func _is_bunny_avatar() -> bool:
-	return get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL") != null \
-		and get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR") != null
+	return bunny_head_model != null and bunny_ears != null and bunny_hand_l != null and bunny_hand_r != null
 
 
 static func has_customization_variant(slot_id: String, variant_id: String) -> bool:
@@ -1193,6 +1201,14 @@ func _ensure_wearable_nodes() -> void:
 	_wearable_root = Node3D.new()
 	_wearable_root.name = "Wearables"
 	head.add_child(_wearable_root)
+	# 将原角色里的兔耳节点迁移到帽子槽位；保留原耳 socket 引用，动画继续驱动同一对挂点。
+	if bunny_ears != null:
+		bunny_ears.name = "HatBunnyEars"
+		bunny_ears.reparent(_wearable_root, false)
+		# Wearables 根为统一角色缩放；兔耳原本已在角色表现层下，抵消这一次额外缩放，
+		# 保持原 HeadJoint 锚点高度和耳朵尺寸，不让耳朵缩回头部。
+		bunny_ears.scale = Vector3.ONE / BUNNY_LINEAR_SCALE
+		_wearable_nodes["hat_bunny_ears"] = bunny_ears
 	_wearable_nodes["hat_none"] = _wearable_root
 	_wearable_nodes["hat_field_cap"] = _create_field_cap()
 	_wearable_nodes["hat_hard_hat"] = _create_hard_hat()
@@ -1213,26 +1229,50 @@ func _ensure_wearable_nodes() -> void:
 func _apply_customization() -> void:
 	if _materials.is_empty():
 		return
+	var uses_chibi_anime_head: bool = (
+		_is_bunny_avatar()
+		and _customization["head"] == CHIBI_ANIME_HEAD_VARIANT
+	)
 	if _is_bunny_avatar():
 		_set_slot_base_color("body", BODY_COLORS[_customization["body"]])
-		_set_slot_base_color("head", HEAD_COLORS[_customization["head"]])
+		if not uses_chibi_anime_head:
+			_set_slot_base_color("head", HEAD_COLORS[_customization["head"]])
 		_set_slot_base_color("hand", HAND_COLORS[_customization["hand"]])
 		_set_slot_base_color("feet", FEET_COLORS[_customization["feet"]])
 	else:
+		var fallback_head_color := HEAD_COLORS.get(
+			_customization["head"],
+			HEAD_COLORS[DEFAULT_CUSTOMIZATION["head"]]
+		) as Color
 		_set_base_color("VisualRoot/Body/BodyShell", BODY_COLORS[_customization["body"]])
 		_set_base_color("VisualRoot/Body/BellyPatch", BODY_COLORS[_customization["body"]].lightened(0.24))
 		_set_base_color("VisualRoot/Body/TailStub", BODY_COLORS[_customization["body"]].darkened(0.06))
-		_set_base_color("VisualRoot/Head/HeadShell", HEAD_COLORS[_customization["head"]])
-		_set_base_color("VisualRoot/Head/Ears/EarL", HEAD_COLORS[_customization["head"]].darkened(0.04))
-		_set_base_color("VisualRoot/Head/Ears/EarR", HEAD_COLORS[_customization["head"]].darkened(0.04))
+		_set_base_color("VisualRoot/Head/HeadShell", fallback_head_color)
+		_set_base_color("VisualRoot/Head/Ears/EarL", fallback_head_color.darkened(0.04))
+		_set_base_color("VisualRoot/Head/Ears/EarR", fallback_head_color.darkened(0.04))
 		_set_base_color("VisualRoot/Hand/Glove", HAND_COLORS[_customization["hand"]])
 		_set_base_color("VisualRoot/Feet/FootL", FEET_COLORS[_customization["feet"]])
 		_set_base_color("VisualRoot/Feet/FootR", FEET_COLORS[_customization["feet"]])
+	if bunny_head_model != null:
+		bunny_head_model.visible = not uses_chibi_anime_head
+	if bunny_ears != null:
+		bunny_ears.visible = false
+	if chibi_anime_head != null:
+		chibi_anime_head.visible = uses_chibi_anime_head
 	for wearable_id in _wearable_nodes:
 		if wearable_id.ends_with("_none"):
 			continue
 		var wearable := _wearable_nodes[wearable_id] as Node3D
-		wearable.visible = wearable_id == "hat_%s" % _customization["hat"] or wearable_id == "glasses_%s" % _customization["glasses"]
+		var selected_hat := str(_customization["hat"])
+		if selected_hat == "none" and _is_bunny_avatar():
+			selected_hat = BUNNY_EARS_HAT_VARIANT
+		var is_selected_hat: bool = wearable_id == "hat_%s" % selected_hat
+		var is_selected_glasses: bool = wearable_id == "glasses_%s" % _customization["glasses"]
+		# 女仆头与兔耳帽是两个独立表现槽位；其它帽子/眼镜仍避免穿插。
+		wearable.visible = (
+			is_selected_hat and (not uses_chibi_anime_head or selected_hat == BUNNY_EARS_HAT_VARIANT)
+			or is_selected_glasses and not uses_chibi_anime_head
+		)
 
 
 func _set_base_color(material_path: String, color: Color) -> void:
@@ -1391,7 +1431,7 @@ func _fix_left_ear_mirror_tangent_space() -> void:
 	# 左耳用 scale = (-1, 1, 1) 复用右耳 GLB。负行列式变换会改变切线空间
 	# 的手性；顶点法线本身会由逆转置矩阵正确变换，不能再额外取反。这里只把
 	# tangent.w 反号，让法线贴图使用正确的副切线方向，并保留原 surface 材质。
-	var ear_socket := get_node_or_null("VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL")
+	var ear_socket := ear_socket_l
 	if ear_socket == null:
 		return
 	var ear_root := ear_socket.get_node_or_null("EarAccessory")
@@ -1533,6 +1573,8 @@ func _register_bunny_slot_materials(slot_id: String, slot_root: Node) -> void:
 			var material := source.duplicate() as StandardMaterial3D
 			mesh_instance.set_surface_override_material(surface_index, material)
 			var material_key := "bunny_slot/%s/%s/%d" % [slot_id, str(mesh_instance.get_path()), surface_index]
+			if slot_id == "head" and str(mesh_instance.get_path()).contains("HeadAccessoryChibiAnime"):
+				material_key = "bunny_head_accessory/authored/%s/%d" % [str(mesh_instance.get_path()), surface_index]
 			_materials[material_key] = material
 			_base_colors[material_key] = material.albedo_color
 

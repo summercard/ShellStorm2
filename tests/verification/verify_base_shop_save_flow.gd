@@ -12,6 +12,7 @@ func _ready() -> void:
 	_verify_avatar_save_with_numeric_weapon_slots(failures)
 	_verify_transactions_and_restart(failures)
 	_verify_save_failure_rollback(failures)
+	_verify_stale_writer_guard(failures)
 	_verify_runtime_inventory_transactions(failures)
 	await _verify_interface_and_model(failures)
 	_cleanup()
@@ -256,6 +257,7 @@ func _verify_transactions_and_restart(failures: Array[String]) -> void:
 
 
 func _verify_save_failure_rollback(failures: Array[String]) -> void:
+	_cleanup()
 	var manager := MANAGER_SCRIPT.new()
 	manager.save_path = TEST_PATH
 	manager.force_save_failure_for_test = true
@@ -267,6 +269,31 @@ func _verify_save_failure_rollback(failures: Array[String]) -> void:
 		failures.append("写盘失败时购买没有完整回滚")
 	if "txn_must_rollback" in manager.data.completed_transaction_ids:
 		failures.append("失败交易被错误记入幂等日志")
+	manager.free()
+
+
+func _verify_stale_writer_guard(failures: Array[String]) -> void:
+	_cleanup()
+	var manager := MANAGER_SCRIPT.new()
+	manager.save_path = TEST_PATH
+	manager.data = BaseData.new()
+	manager.data.extraction_points = 10
+	if not manager.save_base("stale_guard_seed"):
+		failures.append("无法建立旧写入者保护测试档")
+		manager.free()
+		return
+	var newer_data := BaseData.new()
+	newer_data.extraction_points = 99
+	var newer := ProfileSaveService.build_envelope(newer_data._to_dict(), 5, "newer_writer")
+	if not AtomicJsonStore.save_dictionary(TEST_PATH, newer):
+		failures.append("无法建立高revision外部测试档")
+		manager.free()
+		return
+	manager.data.extraction_points = 11
+	if manager.save_base("stale_writer_attempt"):
+		failures.append("旧revision写入者错误覆盖了新存档")
+	if manager.data.extraction_points != 99 or manager.data.save_revision != 5:
+		failures.append("拒绝旧revision写入后没有重新加载磁盘权威档")
 	manager.free()
 
 

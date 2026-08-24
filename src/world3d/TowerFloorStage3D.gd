@@ -170,7 +170,7 @@ func _build_floor() -> void:
 	# 国际象棋棋盘式地砖：按 (x_index + z_index) % 2 分流到浅/深两套 MultiMesh。
 	var light_transforms: Array[Transform3D] = []
 	var dark_transforms: Array[Transform3D] = []
-	var holes := _hole_rects()
+	var holes := _floor_visual_hole_rects()
 	for z_index in range(GRID_COUNT):
 		for x_index in range(GRID_COUNT):
 			var point := Vector2i(x_index, z_index)
@@ -183,7 +183,11 @@ func _build_floor() -> void:
 				continue
 			var x := -MAP_HALF + GRID_UNIT * (float(x_index) + 0.5)
 			var z := -MAP_HALF + GRID_UNIT * (float(z_index) + 0.5)
-			var transform := Transform3D(Basis.IDENTITY, Vector3(x, 0.0, z))
+			# BoxMesh地砖以中心为原点；下移半个厚度，使可视顶面与承重面Y=0重合。
+			var transform := Transform3D(
+				Basis.IDENTITY,
+				Vector3(x, -FLOOR_THICKNESS * 0.5, z)
+			)
 			if (x_index + z_index) % 2 == 0:
 				light_transforms.append(transform)
 			else:
@@ -214,7 +218,7 @@ func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
 	_protected_floor_patch_grid_center = grid_center
 	var light_transforms: Array[Transform3D] = []
 	var dark_transforms: Array[Transform3D] = []
-	var holes := _hole_rects()
+	var holes := _floor_visual_hole_rects()
 	var patch_start_offset := -int(PROTECTED_FLOOR_PATCH_TILES_PER_SIDE / 2)
 	var patch_end_offset := patch_start_offset + PROTECTED_FLOOR_PATCH_TILES_PER_SIDE
 	for z_index in range(grid_center.y + patch_start_offset, grid_center.y + patch_end_offset):
@@ -235,7 +239,7 @@ func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
 				Basis.IDENTITY,
 				Vector3(
 					-MAP_HALF + GRID_UNIT * (float(x_index) + 0.5),
-					0.0,
+					-FLOOR_THICKNESS * 0.5,
 					-MAP_HALF + GRID_UNIT * (float(z_index) + 0.5)
 				)
 			)
@@ -504,6 +508,15 @@ func _hole_rects() -> Array[Rect2i]:
 		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	for side in stair_hole_sides:
 		holes.append(_world_rect_to_grid(_stair_hole_world_rect(side)))
+	return holes
+
+
+func _floor_visual_hole_rects() -> Array[Rect2i]:
+	var holes := _hole_rects()
+	# 99F的承重面仍由完整FloorSupport负责；这里只从通用可视地砖中挖出
+	# 基地地板区域，避免与两套正式基地地砖在Y=0处重叠闪烁。
+	if floor_index == 1:
+		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	return holes
 
 

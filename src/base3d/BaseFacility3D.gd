@@ -13,10 +13,11 @@ enum ActivationType {
 }
 
 const FRONT_INTERACTION_PROFILES := {
-	# 这三件大型设施贴墙摆放，交互区必须落在朝向房间中心的可站立区域，
+	# 这三件大型设施贴墙摆放，交互区必须落在模型正面可站立区域，
 	# 不能继续沿用包住整个模型的中心方盒。
-	"mission_operations": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
-	"weapon_workshop": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
+	# 情报终端和枪械工坊的视觉正面与旧的房间中心朝向约定相反，只翻转热区。
+	"mission_operations": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30, "front_side_multiplier": -1.0},
+	"weapon_workshop": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30, "front_side_multiplier": -1.0},
 	"base_vending": {"width": 5.0, "depth": 4.4, "height": 3.4, "overlap": 0.30},
 }
 
@@ -66,14 +67,15 @@ func configure_front_interaction_toward(world_target: Vector3) -> bool:
 	var depth := float(profile.get("depth", 3.8))
 	var height := float(profile.get("height", 3.4))
 	var overlap := float(profile.get("overlap", 0.3))
+	var front_side_multiplier := float(profile.get("front_side_multiplier", 1.0))
 	var front_box := BoxShape3D.new()
 	var front_offset := Vector3.ZERO
 	if absf(toward_target.x) > absf(toward_target.y):
-		var side := signf(toward_target.x)
+		var side := signf(toward_target.x) * front_side_multiplier
 		front_box.size = Vector3(depth, height, width)
 		front_offset.x = side * (body_box.size.x * 0.5 + depth * 0.5 - overlap)
 	else:
-		var side := signf(toward_target.y)
+		var side := signf(toward_target.y) * front_side_multiplier
 		front_box.size = Vector3(width, height, depth)
 		front_offset.z = side * (body_box.size.z * 0.5 + depth * 0.5 - overlap)
 	front_offset.y = height * 0.5
@@ -81,6 +83,7 @@ func configure_front_interaction_toward(world_target: Vector3) -> bool:
 	interaction_shape.rotation = Vector3.ZERO
 	interaction_shape.shape = front_box
 	interaction_shape.set_meta("front_interaction_profile", facility_id)
+	interaction_shape.set_meta("front_interaction_side_multiplier", front_side_multiplier)
 	return true
 
 

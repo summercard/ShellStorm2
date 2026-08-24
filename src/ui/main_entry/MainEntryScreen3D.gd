@@ -13,6 +13,9 @@ const CLOSEUP_DISTANCE_M := 3.10
 const CLOSEUP_FOV := 33.0
 const TRANSITION_DURATION_S := 1.15
 const INTRO_SPOTLIGHT_HEIGHT_M := 5.2
+const INTRO_FACE_FILL_ENERGY := 2.0
+const INTRO_FACE_FILL_RANGE_M := 2.6
+const PRESENTATION_SOUTH_DIRECTION := Vector3(0.0, 0.0, 1.0)
 
 @export var auto_present_when_player_found := true
 
@@ -31,6 +34,8 @@ var _closeup_transform := Transform3D.IDENTITY
 var _transition_start_transform := Transform3D.IDENTITY
 var _transition_start_fov := CLOSEUP_FOV
 var _previous_input_locked := false
+var _saved_aim_yaw := 0.0
+var _saved_visual_root_rotation := Vector3.ZERO
 var _presenting := false
 var _transitioning := false
 var _transition_elapsed := 0.0
@@ -38,6 +43,7 @@ var _gameplay_hud: CanvasLayer = null
 var _gameplay_hud_previous_visible := true
 var _gameplay_hud_prepared := false
 var _intro_spotlight: SpotLight3D = null
+var _intro_face_fill: OmniLight3D = null
 
 
 func _ready() -> void:
@@ -63,6 +69,7 @@ func _process(delta: float) -> void:
 		if ratio >= 1.0:
 			_finish_transition()
 		return
+	_set_player_presentation_facing()
 	_camera.transform = _closeup_transform
 	_camera.fov = CLOSEUP_FOV
 
@@ -77,9 +84,10 @@ func present(player: Player3D, gameplay_transform: Transform3D = Transform3D.IDE
 	_gameplay_camera_transform = gameplay_transform if gameplay_transform != Transform3D.IDENTITY else _camera.transform
 	_gameplay_fov = gameplay_fov if gameplay_fov > 0.0 else _camera.fov
 	_previous_input_locked = _player.input_locked
-	# 输入锁只禁止移动、战斗和交互；Player3D仍按视口鼠标位置刷新aim_yaw，
-	# 让开场近景中的真实角色继续跟随鼠标转向。
+	_saved_aim_yaw = _player.aim_yaw
+	_saved_visual_root_rotation = _player.avatar.visual_root.rotation
 	_player.set_input_locked(true)
+	_set_player_presentation_facing()
 	_place_camera_in_front_of_player()
 	_camera.fov = CLOSEUP_FOV
 	_closeup_transform = _camera.transform
@@ -132,8 +140,21 @@ func get_entry_snapshot() -> Dictionary:
 		"seamless_scene_change": true,
 		"gameplay_hud_hidden": _gameplay_hud != null and not _gameplay_hud.visible,
 		"intro_spotlight_active": _intro_spotlight != null and is_instance_valid(_intro_spotlight),
+		"intro_spotlight_player_only": _intro_spotlight != null \
+			and is_instance_valid(_intro_spotlight) \
+			and _intro_spotlight.light_cull_mask == GameDesignConfig.RENDER_LAYER_PLAYER,
+		"intro_spotlight_shadow_enabled": _intro_spotlight != null \
+			and is_instance_valid(_intro_spotlight) \
+			and _intro_spotlight.shadow_enabled,
+		"intro_face_fill_active": _intro_face_fill != null and is_instance_valid(_intro_face_fill),
+		"intro_face_fill_player_only": _intro_face_fill != null \
+			and is_instance_valid(_intro_face_fill) \
+			and _intro_face_fill.light_cull_mask == GameDesignConfig.RENDER_LAYER_PLAYER,
+		"intro_face_fill_energy": _intro_face_fill.light_energy if _intro_face_fill != null and is_instance_valid(_intro_face_fill) else 0.0,
 		"camera_on_avatar_front": _is_camera_on_avatar_front(),
-		"avatar_follows_mouse": true,
+		"presentation_facing_south": _is_player_facing_south(),
+		"camera_on_south_side": _is_camera_on_south_side(),
+		"avatar_follows_mouse": false,
 	}
 
 
@@ -159,6 +180,9 @@ func _finish_transition() -> void:
 		_camera.fov = _gameplay_fov
 	if _player != null and is_instance_valid(_player):
 		_player.set_input_locked(_previous_input_locked)
+		_player.aim_yaw = _saved_aim_yaw
+		if _player.avatar != null and _player.avatar.visual_root != null:
+			_player.avatar.visual_root.rotation = _saved_visual_root_rotation
 	_presenting = false
 	_transitioning = false
 	_remove_intro_spotlight()
@@ -177,21 +201,40 @@ func _exit_tree() -> void:
 func _place_camera_in_front_of_player() -> void:
 	if _player == null or _camera == null:
 		return
-	var front := _get_avatar_front_direction()
 	_camera.global_position = (
 		_player.global_position
 		+ Vector3.UP * CLOSEUP_HEIGHT_M
-		+ front * CLOSEUP_DISTANCE_M
+		+ PRESENTATION_SOUTH_DIRECTION * CLOSEUP_DISTANCE_M
 	)
 	_camera.look_at(_player.global_position + Vector3.UP * 0.70, Vector3.UP)
 
 
 func _get_avatar_front_direction() -> Vector3:
-	var front := Vector3(0.0, 0.0, -1.0)
-	if _player != null and _player.avatar != null and _player.avatar.visual_root != null:
-		front = -_player.avatar.visual_root.global_basis.z
-	front.y = 0.0
-	return front.normalized() if front.length_squared() > 0.0001 else Vector3(0.0, 0.0, -1.0)
+	return PRESENTATION_SOUTH_DIRECTION
+
+
+func _set_player_presentation_facing() -> void:
+	if _player == null or _player.avatar == null or _player.avatar.visual_root == null:
+		return
+	var yaw := atan2(-PRESENTATION_SOUTH_DIRECTION.x, -PRESENTATION_SOUTH_DIRECTION.z)
+	_player.aim_yaw = yaw
+	_player.avatar.visual_root.rotation.y = yaw
+
+
+func _is_player_facing_south() -> bool:
+	if _player == null or _player.avatar == null or _player.avatar.visual_root == null:
+		return false
+	var facing := -_player.avatar.visual_root.global_basis.z
+	facing.y = 0.0
+	return facing.length_squared() > 0.0001 and facing.normalized().dot(PRESENTATION_SOUTH_DIRECTION) >= 0.98
+
+
+func _is_camera_on_south_side() -> bool:
+	if _player == null or _camera == null:
+		return false
+	var offset := _camera.global_position - _player.global_position
+	offset.y = 0.0
+	return offset.length_squared() > 0.0001 and offset.normalized().dot(PRESENTATION_SOUTH_DIRECTION) >= 0.98
 
 
 func _is_camera_on_avatar_front() -> bool:
@@ -229,17 +272,35 @@ func _install_intro_spotlight() -> void:
 	_intro_spotlight.spot_range = 8.0
 	_intro_spotlight.spot_angle = 34.0
 	_intro_spotlight.spot_angle_attenuation = 1.4
-	_intro_spotlight.shadow_enabled = true
+	# 开场页的补光是展示专用：只照角色层，不污染基地/关卡，也不产生额外阴影。
+	_intro_spotlight.light_cull_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_intro_spotlight.shadow_caster_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_intro_spotlight.shadow_enabled = false
 	_intro_spotlight.set_meta("main_entry_only", true)
 	get_parent().add_child(_intro_spotlight)
 	_intro_spotlight.global_position = _player.global_position + Vector3.UP * INTRO_SPOTLIGHT_HEIGHT_M
 	_intro_spotlight.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+	_intro_face_fill = OmniLight3D.new()
+	_intro_face_fill.name = "MainEntryCharacterFaceFill"
+	_intro_face_fill.light_color = Color(1.0, 0.86, 0.72)
+	_intro_face_fill.light_energy = INTRO_FACE_FILL_ENERGY
+	_intro_face_fill.light_indirect_energy = 0.0
+	_intro_face_fill.omni_range = INTRO_FACE_FILL_RANGE_M
+	_intro_face_fill.shadow_enabled = false
+	_intro_face_fill.light_cull_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_intro_face_fill.shadow_caster_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_intro_face_fill.set_meta("main_entry_face_only", true)
+	get_parent().add_child(_intro_face_fill)
+	_intro_face_fill.global_position = _player.global_position + Vector3.UP * 0.84 + PRESENTATION_SOUTH_DIRECTION * 0.72
 
 
 func _remove_intro_spotlight() -> void:
 	if _intro_spotlight != null and is_instance_valid(_intro_spotlight):
 		_intro_spotlight.queue_free()
-	_intro_spotlight = null
+		_intro_spotlight = null
+	if _intro_face_fill != null and is_instance_valid(_intro_face_fill):
+		_intro_face_fill.queue_free()
+		_intro_face_fill = null
 
 
 func _refresh_player_status() -> void:

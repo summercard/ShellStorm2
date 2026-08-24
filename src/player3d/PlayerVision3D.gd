@@ -28,6 +28,7 @@ const GEOMETRY_SAMPLE_INTERVAL := 1.0 / 15.0
 # 这里额外画一层固定透明度、受同一套物理射线裁切的无光照扇形，
 # 让玩家在任何背景亮度下都能看到完全一致的手电范围。
 const FLASHLIGHT_OVERLAY_ALPHA := 0.15
+const PRESENTATION_CONE_ALPHA := 0.0
 const FLASHLIGHT_OVERLAY_MAX_ANGLE := 150.0
 const FLASHLIGHT_OVERLAY_HEIGHT_OFFSET := 0.008
 var _player: Player3D
@@ -171,6 +172,7 @@ func get_snapshot() -> Dictionary:
 		"flashlight_overlay_wall_clipped": true,
 		"flashlight_overlay_unshaded": true,
 		"flashlight_overlay_alpha": FLASHLIGHT_OVERLAY_ALPHA,
+		"presentation_cone_alpha": PRESENTATION_CONE_ALPHA,
 		"flashlight_overlay_angle_degrees": _flashlight_overlay_angle_degrees,
 		"flashlight_overlay_range": float(light_snapshot.get("beam_range", 0.0)),
 		"flashlight_overlay_point_count": _last_flashlight_points.size(),
@@ -283,7 +285,7 @@ func _smooth_and_draw_geometry(delta: float) -> void:
 		_cone_mesh,
 		_last_cone_points,
 		_fill_material,
-		Color(0.13, 0.68, 0.84, 0.02),
+		Color(0.13, 0.68, 0.84, PRESENTATION_CONE_ALPHA),
 		false,
 	)
 	# 主视野扇形与手电叠加层互斥：手电开时主扇形不画，关灯时主扇形恢复。
