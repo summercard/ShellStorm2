@@ -1,0 +1,4 @@
+interface:
+  display_name: "道具模型流程"
+  short_description: "制作、导出并导入可摆放、拾取、手持或掉落的道具"
+  default_prompt: "使用 $game-prop-model-pipeline 制作并导入一件独立道具。"

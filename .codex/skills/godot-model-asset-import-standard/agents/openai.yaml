@@ -1,4 +1,4 @@
 interface:
-  display_name: "Godot 模型资产导入规范"
-  short_description: "统一将模型规范导出、封装、登记并验收到Godot项目"
-  default_prompt: "使用 $godot-model-asset-import-standard 按项目规范导入并验收一份模型资产。"
+  display_name: "Godot 场景与设施导入规范"
+  short_description: "将场景、关卡组件和固定设施导入、封装并验收到Godot"
+  default_prompt: "使用 $godot-model-asset-import-standard 按项目规范导入并验收场景、关卡组件或固定设施。"

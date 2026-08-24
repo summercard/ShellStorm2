@@ -1,0 +1,4 @@
+interface:
+  display_name: "角色模型制作与导入"
+  short_description: "从项目和Blender源文件反推契约，制作并验收角色资产"
+  default_prompt: "使用 $game-character-model-pipeline 从当前项目契约制作并导入一名角色或角色外观。"

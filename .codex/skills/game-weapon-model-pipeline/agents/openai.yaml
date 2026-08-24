@@ -1,0 +1,4 @@
+interface:
+  display_name: "枪械与近战武器模型流程"
+  short_description: "制作、导出并导入带手持锚点和动画边界的武器"
+  default_prompt: "使用 $game-weapon-model-pipeline 制作并导入一件枪械或近战武器。"

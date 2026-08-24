@@ -1,4 +1,6 @@
-# Godot 模型资产导入验收清单
+# Godot 场景、关卡组件与设施导入验收清单
+
+不把枪械、近战武器、可拾取或可手持道具作为本清单的资产主体验收；它们分别按 `game-weapon-model-pipeline` 与 `game-prop-model-pipeline` 验收。
 
 ## 1. 输入确认
 

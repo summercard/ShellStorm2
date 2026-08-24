@@ -1,4 +1,4 @@
 interface:
-  display_name: "Blender 游戏资产制作规范"
-  short_description: "用中文流程制作、整理并验收可维护的Blender游戏资产"
-  default_prompt: "使用 $blender-game-prop-standard 按中文规范制作并验收一份Blender游戏资产。"
+  display_name: "Blender 场景与设施制作规范"
+  short_description: "制作、整理并验收场景、关卡组件和固定设施"
+  default_prompt: "使用 $blender-game-prop-standard 按规范制作并验收场景、关卡组件或固定设施。"
