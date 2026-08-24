@@ -2,7 +2,7 @@ extends Node
 ## 99层正式地板表现与TowerFloorStage承重面专项。
 ## 两种地板按共同0.30m结构面摆放；铆钉、压条可高出但不参与承重碰撞。
 
-const EXPECTED_BASE_SURFACE_Y_M := 0.165
+const EXPECTED_BASE_SURFACE_Y_M := 0.0
 const MAX_SURFACE_DELTA_FROM_TOWER_M := 0.02
 const EXPECTED_RIVET_VISUAL_PROTRUSION_M := 0.095
 
@@ -105,6 +105,15 @@ func _ready() -> void:
 			"99层基地中心下方没有启用的承重碰撞",
 			failures
 		)
+		var collision_surface := _support_surface_below_room_center(facility_stage, support)
+		_expect(
+			absf(plain_surface - collision_surface) <= 0.001
+			and absf(rivet_surface - collision_surface) <= 0.001,
+			"99层地板可视结构面与承重碰撞顶面不一致: plain=%.4f rivet=%.4f collision=%.4f" % [
+				plain_surface, rivet_surface, collision_surface,
+			],
+			failures
+		)
 
 	tower.queue_free()
 	await get_tree().process_frame
@@ -131,9 +140,9 @@ func _tower_visual_surface_y(stage: TowerFloorStage3D) -> float:
 		return INF
 	var bounds := grid.multimesh.mesh.get_aabb()
 	var mesh_top := bounds.position.y + bounds.size.y
-	# Headless RenderingServer不保留MultiMesh实例buffer的回读；塔楼地砖代码的
-	# 实例Y固定为0，因此这里直接使用Mesh顶面进行结构验收。
-	return mesh_top
+	# Headless RenderingServer不保留MultiMesh实例buffer的回读；塔楼地砖代码
+	# 统一下移半个板厚，所以直接按该稳定构造规则计算可视顶面。
+	return mesh_top - TowerFloorStage3D.FLOOR_THICKNESS * 0.5
 
 
 func _verify_runtime_transform_buffer(
@@ -155,8 +164,12 @@ func _verify_runtime_transform_buffer(
 
 
 func _has_support_below_room_center(stage: TowerFloorStage3D, support: StaticBody3D) -> bool:
+	return is_finite(_support_surface_below_room_center(stage, support))
+
+
+func _support_surface_below_room_center(stage: TowerFloorStage3D, support: StaticBody3D) -> float:
 	if support == null:
-		return false
+		return INF
 	# facility世界中心为(0,-9,5)，换算到stage局部后检查XZ是否落入某块承重盒。
 	var local_center := stage.to_local(Vector3(0.0, -9.0, 5.0))
 	for child in support.get_children():
@@ -170,10 +183,9 @@ func _has_support_below_room_center(stage: TowerFloorStage3D, support: StaticBod
 		if (
 			absf(local_center.x - collision.position.x) <= half.x
 			and absf(local_center.z - collision.position.z) <= half.z
-			and absf(collision.position.y + half.y) <= 0.001
 		):
-			return true
-	return false
+			return collision.position.y + half.y
+	return INF
 
 
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:

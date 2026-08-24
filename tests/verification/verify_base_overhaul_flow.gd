@@ -195,14 +195,20 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	_expect(bool(entry_snapshot.get("seamless_scene_change", false)) and bool(entry_snapshot.get("uses_live_player", false)), "主页面不是无缝实时角色方案", failures)
 	_expect(bool(entry_snapshot.get("gameplay_hud_hidden", false)), "主页面显示时玩法HUD没有隐藏", failures)
 	_expect(bool(entry_snapshot.get("intro_spotlight_active", false)), "主页面缺少角色头顶聚光灯", failures)
+	_expect(bool(entry_snapshot.get("intro_face_fill_active", false)), "主页面缺少面部补光", failures)
+	_expect(bool(entry_snapshot.get("intro_face_fill_player_only", false)), "主页面面部补光没有隔离到角色层", failures)
+	_expect(float(entry_snapshot.get("intro_face_fill_energy", 0.0)) >= 1.5, "主页面面部补光强度不足", failures)
 	_expect(bool(entry_snapshot.get("camera_on_avatar_front", false)), "主页面摄像机没有位于角色正面", failures)
+	_expect(bool(entry_snapshot.get("presentation_facing_south", false)), "主页面角色没有固定面向南方", failures)
+	_expect(bool(entry_snapshot.get("camera_on_south_side", false)), "主页面摄像机没有固定在角色南侧", failures)
 	var entry_mouse_yaw := tower.player.aim_yaw + 0.65
 	tower.player.aim_yaw = entry_mouse_yaw
 	entry.call("_process", 0.0)
 	_expect(
-		bool(entry_snapshot.get("avatar_follows_mouse", false))
-		and is_equal_approx(tower.player.aim_yaw, entry_mouse_yaw),
-		"主页面仍在每帧覆盖鼠标驱动的角色朝向",
+		not bool(entry_snapshot.get("avatar_follows_mouse", true))
+		and bool(entry.get_entry_snapshot().get("presentation_facing_south", false))
+		and not is_equal_approx(tower.player.aim_yaw, entry_mouse_yaw),
+		"主页面没有锁定角色南向展示朝向",
 		failures
 	)
 	entry.start_game()
@@ -223,7 +229,20 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	var wardrobe_snapshot := wardrobe.get_wardrobe_snapshot()
 	_expect(bool(wardrobe_snapshot.get("square_item_cells", false)), "衣柜物品框不是方形契约", failures)
 	_expect((wardrobe_snapshot.get("slot_order", []) as Array).size() == 6, "衣柜不是6个部件分类", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_fill_active", false)), "衣柜预览没有启用角色补光", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_fill_visible", false)), "衣柜预览补光节点不可见", failures)
+	_expect(float(wardrobe_snapshot.get("preview_fill_energy", 0.0)) >= 6.5, "衣柜预览补光强度不足", failures)
+	_expect(float(wardrobe_snapshot.get("preview_fill_distance_to_target", 0.0)) <= 3.0, "衣柜补光离角色过远", failures)
+	_expect(float(wardrobe_snapshot.get("preview_fill_aim_alignment", 0.0)) >= 0.999, "衣柜补光没有对准角色", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_fill_player_only", false)), "衣柜补光没有隔离为玩家专用层", failures)
+	_expect(not bool(wardrobe_snapshot.get("preview_fill_shadow_enabled", true)), "衣柜补光不应产生展示外阴影", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_face_fill_active", false)), "衣柜缺少面部补光", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_face_fill_visible", false)), "衣柜面部补光不可见", failures)
+	_expect(float(wardrobe_snapshot.get("preview_face_fill_energy", 0.0)) >= 1.5, "衣柜面部补光强度不足", failures)
+	_expect(bool(wardrobe_snapshot.get("preview_face_fill_player_only", false)), "衣柜面部补光没有隔离到角色层", failures)
+	_expect(bool(wardrobe_snapshot.get("presentation_facing_south", false)), "衣柜角色没有固定面向南方", failures)
 	wardrobe.request_close()
+	_expect(not bool(wardrobe.get_wardrobe_snapshot().get("preview_fill_active", true)), "关闭衣柜后角色补光没有移除", failures)
 	tower.queue_free()
 	await get_tree().process_frame
 

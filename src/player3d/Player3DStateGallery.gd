@@ -27,7 +27,7 @@ const NPC_CONFIGS := [
 ]
 const DIY_LABELS := {
 	"body": {"bunny_white": "兔子白身", "cat_orange": "复古橙色", "suit_olive": "橄榄防护服", "suit_sand": "沙色防护服", "suit_cobalt": "钴蓝防护服"},
-	"head": {"bunny_white": "兔子白头", "cat_orange": "复古橙色", "sensor_olive": "标准传感头", "visor_cyan": "青色面板头", "plated_amber": "琥珀装甲头"},
+	"head": {"bunny_white": "兔子白头", "cat_orange": "复古橙色", "sensor_olive": "标准传感头", "visor_cyan": "青色面板头", "plated_amber": "琥珀装甲头", "chibi_anime": "二次元女仆头"},
 	"hand": {"bunny_white": "兔子白手", "cat_orange": "复古橙色", "grip_olive": "橄榄握持手", "safety_orange": "橙色安全手", "gauntlet_teal": "青绿护手"},
 	"feet": {"bunny_white": "兔子白脚", "cat_orange": "复古橙色", "boot_sand": "沙色短靴", "boot_cobalt": "钴蓝短靴", "boot_teal": "青绿短靴"},
 	"hat": {"none": "无帽子", "field_cap": "荒野软帽", "hard_hat": "工兵安全帽", "sealed_hood": "密封兜帽"},

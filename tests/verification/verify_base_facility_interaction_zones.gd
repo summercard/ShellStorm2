@@ -1,6 +1,7 @@
 extends Node
 
 const TARGET_FACILITIES := ["mission_operations", "weapon_workshop", "base_vending"]
+const REVERSED_FRONT_FACILITIES := ["mission_operations", "weapon_workshop"]
 
 
 func _ready() -> void:
@@ -57,6 +58,9 @@ func _verify_facility(
 		return
 	if str(interaction.get_meta("front_interaction_profile", "")) != facility_id:
 		failures.append("设施未应用正面交互配置：%s" % facility_id)
+	var expected_side_multiplier := -1.0 if facility_id in REVERSED_FRONT_FACILITIES else 1.0
+	if not is_equal_approx(float(interaction.get_meta("front_interaction_side_multiplier", 0.0)), expected_side_multiplier):
+		failures.append("设施热区正面翻转配置错误：%s" % facility_id)
 	var size_snapshot := facility.get_size_contract_snapshot()
 	var expected_scale := Vector3.ONE * facility.base_size_multiplier
 	if not (size_snapshot.get("interaction_scale", Vector3.ZERO) as Vector3).is_equal_approx(Vector3.ONE):
@@ -69,8 +73,9 @@ func _verify_facility(
 	var local_room_center := facility.to_local(facility_room.global_position)
 	var toward_room := Vector2(local_room_center.x, local_room_center.z).normalized()
 	var interaction_offset := Vector2(interaction.position.x, interaction.position.z)
-	if interaction_offset.dot(toward_room) <= 0.0:
-		failures.append("交互盒没有朝向房间内侧：%s" % facility_id)
+	var expected_front_direction := toward_room * expected_side_multiplier
+	if interaction_offset.dot(expected_front_direction) <= 0.0:
+		failures.append("交互盒没有落在模型正面：%s" % facility_id)
 
 	var axis_is_x := absf(toward_room.x) > absf(toward_room.y)
 	var interaction_depth := interaction_box.size.x if axis_is_x else interaction_box.size.z

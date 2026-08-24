@@ -107,6 +107,8 @@ func _verify_true_vision(dungeon: Dungeon3D, failures: Array[String]) -> void:
 	if not vision.is_position_visible(Vector3(0, 0.7, 3.0)):
 		failures.append("Clear point behind the player is hidden by presentation direction")
 	var snapshot := vision.get_snapshot()
+	if not is_equal_approx(float(snapshot.get("presentation_cone_alpha", -1.0)), 0.0):
+		failures.append("主视野扇形显示透明度不是0: %s" % str(snapshot.get("presentation_cone_alpha", null)))
 	if (
 		not is_equal_approx(float(snapshot.get("gameplay_angle_degrees", 0.0)), 360.0)
 		or not is_equal_approx(float(snapshot.get("presentation_angle_degrees", 0.0)), 96.0)

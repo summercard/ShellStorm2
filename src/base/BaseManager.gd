@@ -70,6 +70,16 @@ func _ensure_data() -> void:
 
 func save_base(reason: String = "base_mutation") -> bool:
 	_ensure_data()
+	# 多个 Godot 实例（编辑器、游戏窗口、无头验收）可能共享同一 user:// 档案。
+	# 旧实例不能把较低 revision 的内存镜像覆盖到已经更新的正式档。
+	var disk_revision := _read_disk_revision()
+	if disk_revision > data.save_revision:
+		push_error(
+			"[BaseManager] Refusing stale save: memory revision %d < disk revision %d (%s)"
+			% [data.save_revision, disk_revision, reason]
+		)
+		load_base()
+		return false
 	var old_revision := data.save_revision
 	var old_time := data.last_saved_at_unix
 	var old_reason := data.last_save_reason
@@ -94,6 +104,16 @@ func save_base(reason: String = "base_mutation") -> bool:
 	data.last_saved_at_unix = old_time
 	data.last_save_reason = old_reason
 	return false
+
+
+func _read_disk_revision() -> int:
+	var stored: Variant = AtomicJsonStore.load_dictionary(
+		save_path, Callable(self, "_is_supported_save_candidate")
+	)
+	if not stored is Dictionary:
+		return -1
+	var unpacked := SaveService.unpack(stored as Dictionary)
+	return int(unpacked.get("revision", -1)) if bool(unpacked.get("success", false)) else -1
 
 
 ## 复位长期档和当前行动的唯一入口。先写入并回读一份合法的全新封套，

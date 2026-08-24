@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v001/runtime/chr_player_bunny01_head_chibi_anime_top3d_v001.glb" id="1_model"]
+
+[node name="ChibiAnimeHeadAccessory" type="Node3D"]
+metadata/asset_id = "chr_player_bunny01_head_chibi_anime_v001"
+metadata/attachment_slot = "head"
+metadata/attachment_anchor = "VisualRoot/BunnyRig/HeadJoint"
+metadata/authored_dimensions_m = Vector3(0.865809, 0.845477, 0.821756)
+metadata/blender_forward = "-Y"
+metadata/godot_forward = "-Z"
+metadata/presentation_only = true
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_model")]

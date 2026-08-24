@@ -79,8 +79,8 @@ func _ready() -> void:
 	if str(avatar_snapshot.get("tail_style", "")) != "none":
 		failures.append("Bunny source unexpectedly retains the legacy cat tail")
 	for required_path in [
-		"VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL",
-		"VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR",
+		"VisualRoot/BunnyRig/HeadJoint/Wearables/HatBunnyEars/EarSocketL",
+		"VisualRoot/BunnyRig/HeadJoint/Wearables/HatBunnyEars/EarSocketR",
 		"VisualRoot/BunnyRig/HandRoot/HandJointL",
 		"VisualRoot/BunnyRig/HandRoot/HandJointR",
 		"VisualRoot/BunnyRig/FeetRoot/FootJointL",
@@ -90,6 +90,14 @@ func _ready() -> void:
 			failures.append("Bunny modular node is missing: %s" % required_path)
 	if not gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/HatHardHat").visible:
 		failures.append("Selected hard hat is not visible")
+	var head_joint := gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint") as Node3D
+	var ear_socket_l := gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/HatBunnyEars/EarSocketL") as Node3D
+	var ear_socket_r := gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/HatBunnyEars/EarSocketR") as Node3D
+	if (
+		ear_socket_l.global_position.y <= head_joint.global_position.y + 0.28
+		or ear_socket_r.global_position.y <= head_joint.global_position.y + 0.28
+	):
+		failures.append("兔耳挂点高度不足，耳朵可能缩进角色头部")
 	if not gallery.player.avatar.get_node("VisualRoot/BunnyRig/HeadJoint/Wearables/GlassesDualGoggles").visible:
 		failures.append("Selected goggles are not visible")
 	for wearable_path in [

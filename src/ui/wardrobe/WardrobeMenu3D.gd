@@ -11,13 +11,29 @@ const Catalog = preload("res://src/player3d/customization/AvatarCustomizationCat
 const Persistence = preload("res://src/player3d/customization/AvatarCustomizationPersistence.gd")
 const CAMERA_CLOSEUP_LOCAL_POSITION := Vector3(0.0, 1.45, -3.15)
 const CAMERA_CLOSEUP_FOV := 34.0
+const PREVIEW_FILL_COLOR := Color(0.78, 0.92, 1.0)
+const PREVIEW_FILL_ENERGY := 7.0
+const PREVIEW_FILL_RANGE_M := 4.5
+const PREVIEW_FILL_TARGET_HEIGHT_M := 0.88
+const PREVIEW_FILL_FRONT_DISTANCE_M := 2.2
+const PREVIEW_FILL_SIDE_OFFSET_M := 0.45
+const PREVIEW_FILL_HEIGHT_OFFSET_M := 0.42
+const PREVIEW_FACE_FILL_ENERGY := 2.0
+const PREVIEW_FACE_FILL_RANGE_M := 2.4
+const PRESENTATION_SOUTH_DIRECTION := Vector3(0.0, 0.0, 1.0)
 
 var _player: Player3D = null
 var _camera: Camera3D = null
 var _saved_camera_transform := Transform3D.IDENTITY
 var _saved_camera_fov := 43.0
+var _saved_camera_top_level := false
 var _previous_input_locked := false
+var _saved_aim_yaw := 0.0
+var _saved_visual_root_rotation := Vector3.ZERO
+var _preview_front_direction := Vector3(0.0, 0.0, -1.0)
 var _camera_override_active := false
+var _preview_fill: OmniLight3D = null
+var _preview_face_fill: OmniLight3D = null
 var _selected_slot := "body"
 var _slot_buttons: Dictionary = {}
 var _current_labels: Dictionary = {}
@@ -37,12 +53,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if not _camera_override_active or _player == null or _camera == null:
 		return
-	_camera.position = _camera.position.lerp(
-		CAMERA_CLOSEUP_LOCAL_POSITION,
-		clampf(delta * 12.0, 0.0, 1.0)
-	)
+	var preview_position := _player.global_position + Vector3.UP * CAMERA_CLOSEUP_LOCAL_POSITION.y + _preview_front_direction * absf(CAMERA_CLOSEUP_LOCAL_POSITION.z)
+	_camera.global_position = preview_position
 	_camera.fov = lerpf(_camera.fov, CAMERA_CLOSEUP_FOV, clampf(delta * 10.0, 0.0, 1.0))
 	_camera.look_at(_player.global_position + Vector3.UP * 0.70, Vector3.UP)
+	_face_player_to_preview_camera()
+	_sync_preview_fill()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -96,12 +112,42 @@ func select_slot(slot_id: String) -> bool:
 
 
 func get_wardrobe_snapshot() -> Dictionary:
+	var fill_active := _preview_fill != null and is_instance_valid(_preview_fill)
+	var face_fill_active := _preview_face_fill != null and is_instance_valid(_preview_face_fill)
+	var fill_target := (
+		_player.global_position + Vector3.UP * PREVIEW_FILL_TARGET_HEIGHT_M
+		if _player != null and is_instance_valid(_player)
+		else Vector3.ZERO
+	)
+	var fill_to_target := (
+		fill_target - _preview_fill.global_position
+		if fill_active
+		else Vector3.ZERO
+	)
+	# OmniLight3D 没有方向锥体；只要在有效范围内即可覆盖目标。
+	var fill_aim_alignment := 1.0 if fill_active else 0.0
 	return {
 		"selected_slot": _selected_slot,
 		"slot_order": Catalog.SLOT_ORDER.duplicate(),
 		"options": PlayerAvatar3D.CUSTOMIZATION_OPTIONS.duplicate(true),
 		"loadout": _player.get_avatar_customization() if _player != null and is_instance_valid(_player) else {},
 		"camera_override_active": _camera_override_active,
+		"presentation_facing_south": _is_player_facing_south(),
+		"camera_on_south_side": _is_camera_on_south_side(),
+		"camera_south_dot": _camera_south_dot(),
+		"preview_fill_active": fill_active,
+		"preview_fill_visible": fill_active and _preview_fill.visible,
+		"preview_fill_energy": _preview_fill.light_energy if fill_active else 0.0,
+		"preview_fill_distance_to_target": fill_to_target.length() if fill_active else 0.0,
+		"preview_fill_aim_alignment": fill_aim_alignment,
+		"preview_fill_player_only": fill_active \
+			and _preview_fill.light_cull_mask == GameDesignConfig.RENDER_LAYER_PLAYER,
+		"preview_fill_shadow_enabled": fill_active and _preview_fill.shadow_enabled,
+		"preview_face_fill_active": face_fill_active,
+		"preview_face_fill_visible": face_fill_active and _preview_face_fill.visible,
+		"preview_face_fill_energy": _preview_face_fill.light_energy if face_fill_active else 0.0,
+		"preview_face_fill_player_only": face_fill_active \
+			and _preview_face_fill.light_cull_mask == GameDesignConfig.RENDER_LAYER_PLAYER,
 		"square_item_cells": true,
 		"persistence_field": Persistence.PROFILE_FIELD,
 	}
@@ -131,7 +177,16 @@ func _begin_preview() -> void:
 	if _camera != null:
 		_saved_camera_transform = _camera.transform
 		_saved_camera_fov = _camera.fov
+		_saved_camera_top_level = _camera.top_level
+		_preview_front_direction = PRESENTATION_SOUTH_DIRECTION
+		_saved_aim_yaw = _player.aim_yaw
+		_saved_visual_root_rotation = _player.avatar.visual_root.rotation if _player.avatar != null and _player.avatar.visual_root != null else Vector3.ZERO
+		_camera.top_level = true
+		_camera.global_position = _player.global_position + Vector3.UP * CAMERA_CLOSEUP_LOCAL_POSITION.y + _preview_front_direction * absf(CAMERA_CLOSEUP_LOCAL_POSITION.z)
+		_camera.look_at(_player.global_position + Vector3.UP * 0.70, Vector3.UP)
+		_face_player_to_preview_camera()
 		_camera_override_active = true
+		_install_preview_fill()
 		camera_override_changed.emit(true)
 	_refresh_current_loadout()
 	_refresh_category_buttons()
@@ -140,13 +195,106 @@ func _begin_preview() -> void:
 
 
 func _restore_camera_and_input() -> void:
+	_remove_preview_fill()
 	if _camera_override_active and _camera != null and is_instance_valid(_camera):
+		_camera.top_level = _saved_camera_top_level
 		_camera.transform = _saved_camera_transform
 		_camera.fov = _saved_camera_fov
 	_camera_override_active = false
 	camera_override_changed.emit(false)
 	if _player != null and is_instance_valid(_player):
+		_player.aim_yaw = _saved_aim_yaw
+		if _player.avatar != null and _player.avatar.visual_root != null:
+			_player.avatar.visual_root.rotation = _saved_visual_root_rotation
 		_player.set_input_locked(_previous_input_locked)
+
+
+func _face_player_to_preview_camera() -> void:
+	if _player == null or _camera == null or _player.avatar == null:
+		return
+	var to_camera := _camera.global_position - _player.global_position
+	to_camera.y = 0.0
+	if to_camera.length_squared() <= 0.0001:
+		return
+	var yaw := atan2(-to_camera.x, -to_camera.z)
+	_player.aim_yaw = yaw
+	_player.avatar.visual_root.rotation.y = yaw
+
+
+func _is_player_facing_south() -> bool:
+	if _player == null or _player.avatar == null or _player.avatar.visual_root == null:
+		return false
+	var facing := -_player.avatar.visual_root.global_basis.z
+	facing.y = 0.0
+	return facing.length_squared() > 0.0001 and facing.normalized().dot(PRESENTATION_SOUTH_DIRECTION) >= 0.98
+
+
+func _is_camera_on_south_side() -> bool:
+	return _camera_south_dot() >= 0.98
+
+
+func _camera_south_dot() -> float:
+	if _player == null or _camera == null:
+		return -1.0
+	var offset := _camera.global_position - _player.global_position
+	offset.y = 0.0
+	return offset.normalized().dot(PRESENTATION_SOUTH_DIRECTION) if offset.length_squared() > 0.0001 else -1.0
+
+
+func _install_preview_fill() -> void:
+	_remove_preview_fill()
+	if _player == null or not is_instance_valid(_player) or _camera == null or get_parent() == null:
+		return
+	_preview_fill = OmniLight3D.new()
+	_preview_fill.name = "WardrobeCharacterFill"
+	_preview_fill.light_color = PREVIEW_FILL_COLOR
+	_preview_fill.light_energy = PREVIEW_FILL_ENERGY
+	_preview_fill.light_indirect_energy = 0.0
+	_preview_fill.omni_range = PREVIEW_FILL_RANGE_M
+	_preview_fill.shadow_enabled = false
+	_preview_fill.light_cull_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_preview_fill.shadow_caster_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_preview_fill.set_meta("wardrobe_preview_only", true)
+	get_parent().add_child(_preview_fill)
+	_preview_face_fill = OmniLight3D.new()
+	_preview_face_fill.name = "WardrobeCharacterFaceFill"
+	_preview_face_fill.light_color = Color(1.0, 0.86, 0.72)
+	_preview_face_fill.light_energy = PREVIEW_FACE_FILL_ENERGY
+	_preview_face_fill.light_indirect_energy = 0.0
+	_preview_face_fill.omni_range = PREVIEW_FACE_FILL_RANGE_M
+	_preview_face_fill.shadow_enabled = false
+	_preview_face_fill.light_cull_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_preview_face_fill.shadow_caster_mask = GameDesignConfig.RENDER_LAYER_PLAYER
+	_preview_face_fill.set_meta("wardrobe_face_preview_only", true)
+	get_parent().add_child(_preview_face_fill)
+	_sync_preview_fill()
+
+
+func _remove_preview_fill() -> void:
+	if _preview_fill != null and is_instance_valid(_preview_fill):
+		_preview_fill.queue_free()
+		_preview_fill = null
+	if _preview_face_fill != null and is_instance_valid(_preview_face_fill):
+		_preview_face_fill.queue_free()
+		_preview_face_fill = null
+
+
+func _sync_preview_fill() -> void:
+	if _preview_fill == null or not is_instance_valid(_preview_fill) or _camera == null or _player == null:
+		return
+	# 衣柜专属近景灯固定在角色正面镜头侧，避免基地夜间环境光不足时角色变黑。
+	var target := _player.global_position + Vector3.UP * PREVIEW_FILL_TARGET_HEIGHT_M
+	var target_to_camera := _camera.global_position - target
+	if target_to_camera.length_squared() <= 0.0001:
+		target_to_camera = Vector3.BACK
+	_preview_fill.global_position = (
+		target
+		+ target_to_camera.normalized() * minf(PREVIEW_FILL_FRONT_DISTANCE_M, 1.35)
+		+ _camera.global_basis.x.normalized() * PREVIEW_FILL_SIDE_OFFSET_M
+		+ Vector3.UP * PREVIEW_FILL_HEIGHT_OFFSET_M
+	)
+	if _preview_face_fill != null and is_instance_valid(_preview_face_fill):
+		_preview_face_fill.global_position = target + target_to_camera.normalized() * 0.72 + Vector3.UP * 0.05
 
 
 func _build_interface() -> void:

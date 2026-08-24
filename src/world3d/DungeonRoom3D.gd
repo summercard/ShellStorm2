@@ -123,8 +123,9 @@ const FACILITY_TRIM_MATERIAL: StandardMaterial3D = preload(
 # 不能拿整个AABB最高点对齐，也不能生成额外阻挡。两种地板只按共同结构面
 # 对齐，承重碰撞继续完全由TowerFloorStage的统一平面负责。
 const BASE99_FLOOR_STRUCTURAL_TOP_Y_M := TOWER_GEOMETRY.FLOOR_THICKNESS_M
-# 结构板完成面与通用塔楼地砖顶面(0.15m)错开1.5cm，避免完全共面闪烁。
-const BASE99_FLOOR_TARGET_SURFACE_Y_M := TOWER_GEOMETRY.FLOOR_THICKNESS_M * 0.5 + 0.015
+# 可视结构板顶面必须与TowerFloorStage的承重面Y=0重合。通用地砖会在基地
+# 30x30m范围内让出可视网格，因此不再需要用抬高地板避开共面闪烁。
+const BASE99_FLOOR_TARGET_SURFACE_Y_M := 0.0
 const ROOFTOP_FACADE_HEIGHT := 6.0
 # 基地东侧阁楼门的外梯在接近墙面时仍处于上升坡面。99层普通墙的结构
 # 碰撞若完整顶到9m，角色胶囊会在门槛前先撞上墙体上沿。仅在上层门洞净宽
