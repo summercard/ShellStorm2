@@ -105,7 +105,7 @@ func _ready() -> void:
 		return
 
 	# Strict side-view rig proof. The yellow line is the rigid-node bone link;
-	# green marks HandJointR/palm-sphere center and cyan marks the weapon GripSocket.
+	# green marks HandJointR/cuff-ring center and cyan marks the weapon GripSocket.
 	# The two markers are concentric when the authored pivot contract is correct.
 	var rig_overlay := Node3D.new()
 	rig_overlay.name = "RightHandRigProof"
@@ -114,16 +114,16 @@ func _ready() -> void:
 	var hand_model_r := hand_joint_r.get_node("Model") as Node3D
 	var body_joint := sidearm_player.avatar.get_node("VisualRoot/BunnyRig/BodyJoint") as Node3D
 	var actual_grip_socket := sidearm_player.weapon.find_child("GripSocket", true, false) as Node3D
-	var palm_center := hand_model_r.to_global(PlayerAvatar3D.RIGHT_HAND_SPHERE_CENTER_LOCAL)
+	var ring_center := hand_model_r.to_global(PlayerAvatar3D.RIGHT_HAND_RING_CENTER_LOCAL)
 	var hand_joint_position := hand_joint_r.global_position
 	var grip_position := actual_grip_socket.global_position if actual_grip_socket != null else sidearm_player.avatar.weapon_socket.global_position
 	_add_debug_bone(rig_overlay, body_joint.global_position + Vector3(0.0, 0.08, 0.0), hand_joint_position, Color("ffd447"), 0.010)
 	_add_debug_sphere(rig_overlay, hand_joint_position, Color("78ff68"), 0.038)
 	_add_debug_torus(rig_overlay, grip_position, Color("38ddff"), 0.052)
 	var label := Label3D.new()
-	label.text = "RIG PROOF: HandJointR = Palm Center = GripSocket\nOffset %.2f mm / %.2f mm" % [
-		palm_center.distance_to(hand_joint_position) * 1000.0,
-		palm_center.distance_to(grip_position) * 1000.0,
+	label.text = "RIG PROOF: HandJointR = Cuff Ring Center = GripSocket\nOffset %.2f mm / %.2f mm" % [
+		ring_center.distance_to(hand_joint_position) * 1000.0,
+		ring_center.distance_to(grip_position) * 1000.0,
 	]
 	label.position = hand_joint_position + Vector3(0.0, 0.42, -0.20)
 	label.font_size = 34

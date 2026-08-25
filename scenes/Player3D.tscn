@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/player3d/Player3D.gd" id="1_player"]
-[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v006.tscn" id="2_avatar"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v008.tscn" id="2_avatar"]
 [ext_resource type="Script" path="res://src/player3d/PlayerVision3D.gd" id="3_vision"]
 [ext_resource type="PackedScene" path="res://assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn" id="4_flashlight"]
 

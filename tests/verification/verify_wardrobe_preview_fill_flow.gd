@@ -14,6 +14,9 @@ func _ready() -> void:
 
 	var player := PLAYER_SCENE.instantiate() as Player3D
 	add_child(player)
+	var gameplay_hud := CanvasLayer.new()
+	gameplay_hud.name = "HUD"
+	add_child(gameplay_hud)
 	player.set_physics_process(false)
 	player.camera.current = false
 	var original_player_position := player.global_position
@@ -23,6 +26,12 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	var snapshot := wardrobe.get_wardrobe_snapshot()
+	_check(not gameplay_hud.visible, "衣柜开启时主HUD没有隐藏", failures)
+	_check(bool(snapshot.get("gameplay_hud_hidden", false)), "衣柜快照没有记录主HUD隐藏状态", failures)
+	_check(bool(snapshot.get("category_buttons_on_left", false)), "衣柜分类按钮没有整合到左栏", failures)
+	_check(not bool(snapshot.get("duplicate_right_categories", true)), "衣柜右栏仍有重复分类按钮", failures)
+	_check(bool(snapshot.get("uses_3d_variant_icons", false)), "衣柜配件没有使用背包同源3D预览", failures)
+	_check(float(snapshot.get("right_panel_width", 999.0)) <= 400.0, "衣柜右栏仍然过宽", failures)
 	_check(player.global_position.is_equal_approx(original_player_position), "打开衣柜时角色世界坐标被移动", failures)
 	_check(player.camera.top_level, "衣柜展示相机没有脱离角色局部变换", failures)
 	var horizontal_camera_direction := player.camera.global_position - player.global_position
@@ -60,6 +69,7 @@ func _ready() -> void:
 	_check(bool(snapshot.get("camera_on_south_side", false)), "衣柜摄像机没有固定在角色南侧", failures)
 
 	wardrobe.request_close()
+	_check(gameplay_hud.visible, "关闭衣柜后主HUD没有恢复", failures)
 	_check(
 		not bool(wardrobe.get_wardrobe_snapshot().get("preview_fill_active", true)),
 		"关闭衣柜后专属补光没有立即移除",
@@ -71,6 +81,7 @@ func _ready() -> void:
 		failures
 	)
 	player.queue_free()
+	gameplay_hud.queue_free()
 	await get_tree().process_frame
 	_restore_profile_state(original_save_path, original_data, original_force_failure)
 

@@ -5,7 +5,7 @@
   "customization_variant": "chibi_anime",
   "source_blend": "source/chr_player_bunny01_head_chibi_anime_source_v001.blend",
   "source_fbx": "source/chr_player_bunny01_head_chibi_anime_raw_v001.fbx",
-  "character_source_blend": "../../../source/chr_player_capsule01_bunny01_top3d_v006.blend",
+  "character_source_blend": "../../../source/chr_player_capsule01_bunny01_top3d_v008.blend",
   "source_texture": "source/chr_player_bunny01_head_chibi_anime_basecolor_v001.jpg",
   "runtime_glb": "runtime/chr_player_bunny01_head_chibi_anime_top3d_v001.glb",
   "runtime_scene": "runtime/chr_player_bunny01_head_chibi_anime_root_top3d_v001.tscn",

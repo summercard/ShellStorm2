@@ -227,8 +227,14 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	tower.add_child(wardrobe)
 	await get_tree().process_frame
 	var wardrobe_snapshot := wardrobe.get_wardrobe_snapshot()
+	_expect(not (tower.get_node("HUD") as CanvasLayer).visible, "衣柜开启时塔内主HUD没有隐藏", failures)
+	_expect(bool(wardrobe_snapshot.get("gameplay_hud_hidden", false)), "衣柜没有记录主HUD隐藏状态", failures)
 	_expect(bool(wardrobe_snapshot.get("square_item_cells", false)), "衣柜物品框不是方形契约", failures)
 	_expect((wardrobe_snapshot.get("slot_order", []) as Array).size() == 6, "衣柜不是6个部件分类", failures)
+	_expect(bool(wardrobe_snapshot.get("category_buttons_on_left", false)), "衣柜分类按钮没有整合到左栏", failures)
+	_expect(not bool(wardrobe_snapshot.get("duplicate_right_categories", true)), "衣柜右栏仍有重复分类按钮", failures)
+	_expect(bool(wardrobe_snapshot.get("uses_3d_variant_icons", false)), "衣柜配件没有使用3D预览", failures)
+	_expect(float(wardrobe_snapshot.get("right_panel_width", 999.0)) <= 400.0, "衣柜右栏没有缩窄", failures)
 	_expect(bool(wardrobe_snapshot.get("preview_fill_active", false)), "衣柜预览没有启用角色补光", failures)
 	_expect(bool(wardrobe_snapshot.get("preview_fill_visible", false)), "衣柜预览补光节点不可见", failures)
 	_expect(float(wardrobe_snapshot.get("preview_fill_energy", 0.0)) >= 6.5, "衣柜预览补光强度不足", failures)
@@ -242,6 +248,7 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	_expect(bool(wardrobe_snapshot.get("preview_face_fill_player_only", false)), "衣柜面部补光没有隔离到角色层", failures)
 	_expect(bool(wardrobe_snapshot.get("presentation_facing_south", false)), "衣柜角色没有固定面向南方", failures)
 	wardrobe.request_close()
+	_expect((tower.get_node("HUD") as CanvasLayer).visible, "关闭衣柜后塔内主HUD没有恢复", failures)
 	_expect(not bool(wardrobe.get_wardrobe_snapshot().get("preview_fill_active", true)), "关闭衣柜后角色补光没有移除", failures)
 	tower.queue_free()
 	await get_tree().process_frame

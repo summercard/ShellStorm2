@@ -15,8 +15,18 @@ func _ready() -> void:
 
 	gallery.player.avatar.call("_process", 0.10)
 	var snapshot := gallery.player.avatar.get_component_snapshot()
-	if str(snapshot.get("assembly_version", "")) != "v006":
-		failures.append("Bunny v006 is not the active Player3D asset")
+	if str(snapshot.get("assembly_version", "")) != "v008":
+		failures.append("Bunny v008 is not the active Player3D asset")
+	if (
+		float(snapshot.get("left_hand_ring_to_joint_global_distance", 999.0)) > 0.001
+		or float(snapshot.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001
+	):
+		failures.append("HandJointL/R are not centered on their cuff rings")
+	if (
+		float(snapshot.get("ear_l_root_to_socket_global_distance", 999.0)) > 0.001
+		or float(snapshot.get("ear_r_root_to_socket_global_distance", 999.0)) > 0.001
+	):
+		failures.append("EarSocketL/R are not centered on the ear-base contact points")
 	if (
 		gallery.player.get_state_machine_state() != "idle"
 		or not bool(snapshot.get("idle_animation_active", false))
@@ -77,7 +87,7 @@ func _ready() -> void:
 	gallery.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_V006_ANIMATION_FLOW_OK: baked 1.5 m scale, idle standing loop, forward contract, one/two-hand grip, dash roll, and hurt key poses pass")
+		print("BUNNY_V008_ANIMATION_FLOW_OK: ring-centered hands, hood-contact-centered ears, idle, grip, dash, and hurt key poses pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

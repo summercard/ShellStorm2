@@ -9,6 +9,8 @@ signal camera_override_changed(active: bool)
 
 const Catalog = preload("res://src/player3d/customization/AvatarCustomizationCatalog.gd")
 const Persistence = preload("res://src/player3d/customization/AvatarCustomizationPersistence.gd")
+const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const AVATAR_PREVIEW_SCENE := preload("res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v008.tscn")
 const CAMERA_CLOSEUP_LOCAL_POSITION := Vector3(0.0, 1.45, -3.15)
 const CAMERA_CLOSEUP_FOV := 34.0
 const PREVIEW_FILL_COLOR := Color(0.78, 0.92, 1.0)
@@ -34,6 +36,8 @@ var _preview_front_direction := Vector3(0.0, 0.0, -1.0)
 var _camera_override_active := false
 var _preview_fill: OmniLight3D = null
 var _preview_face_fill: OmniLight3D = null
+var _gameplay_hud: CanvasLayer = null
+var _gameplay_hud_was_visible := true
 var _selected_slot := "body"
 var _slot_buttons: Dictionary = {}
 var _current_labels: Dictionary = {}
@@ -149,6 +153,11 @@ func get_wardrobe_snapshot() -> Dictionary:
 		"preview_face_fill_player_only": face_fill_active \
 			and _preview_face_fill.light_cull_mask == GameDesignConfig.RENDER_LAYER_PLAYER,
 		"square_item_cells": true,
+		"uses_3d_variant_icons": true,
+		"category_buttons_on_left": true,
+		"duplicate_right_categories": false,
+		"right_panel_width": 392.0,
+		"gameplay_hud_hidden": _gameplay_hud != null and not _gameplay_hud.visible,
 		"persistence_field": Persistence.PROFILE_FIELD,
 	}
 
@@ -174,6 +183,7 @@ func _begin_preview() -> void:
 	_camera = _player.camera
 	_previous_input_locked = _player.input_locked
 	_player.set_input_locked(true)
+	_hide_gameplay_hud()
 	if _camera != null:
 		_saved_camera_transform = _camera.transform
 		_saved_camera_fov = _camera.fov
@@ -196,6 +206,7 @@ func _begin_preview() -> void:
 
 func _restore_camera_and_input() -> void:
 	_remove_preview_fill()
+	_restore_gameplay_hud()
 	if _camera_override_active and _camera != null and is_instance_valid(_camera):
 		_camera.top_level = _saved_camera_top_level
 		_camera.transform = _saved_camera_transform
@@ -297,6 +308,25 @@ func _sync_preview_fill() -> void:
 		_preview_face_fill.global_position = target + target_to_camera.normalized() * 0.72 + Vector3.UP * 0.05
 
 
+func _hide_gameplay_hud() -> void:
+	if _gameplay_hud != null and is_instance_valid(_gameplay_hud):
+		return
+	var owner := get_parent()
+	if owner == null:
+		return
+	_gameplay_hud = owner.get_node_or_null("HUD") as CanvasLayer
+	if _gameplay_hud == null:
+		return
+	_gameplay_hud_was_visible = _gameplay_hud.visible
+	_gameplay_hud.visible = false
+
+
+func _restore_gameplay_hud() -> void:
+	if _gameplay_hud != null and is_instance_valid(_gameplay_hud):
+		_gameplay_hud.visible = _gameplay_hud_was_visible
+	_gameplay_hud = null
+
+
 func _build_interface() -> void:
 	var root := Control.new()
 	root.name = "WardrobeInterface"
@@ -350,15 +380,14 @@ func _build_interface() -> void:
 	current_title.add_theme_color_override("font_color", Color(0.44, 0.88, 0.98))
 	current_box.add_child(current_title)
 	for slot_id in Catalog.SLOT_ORDER:
-		var row := PanelContainer.new()
-		row.custom_minimum_size.y = 58.0
-		row.add_theme_stylebox_override("panel", _panel_style(Color(0.10, 0.30, 0.38), Color(0.025, 0.060, 0.075, 0.90), 1))
-		current_box.add_child(row)
-		var label := Label.new()
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.add_theme_font_size_override("font_size", 16)
-		row.add_child(label)
-		_current_labels[slot_id] = label
+		var category := Button.new()
+		category.custom_minimum_size.y = 70.0
+		category.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		category.add_theme_font_size_override("font_size", 16)
+		category.pressed.connect(select_slot.bind(slot_id))
+		current_box.add_child(category)
+		_slot_buttons[slot_id] = category
+		_current_labels[slot_id] = category
 
 	var center_hint := Label.new()
 	center_hint.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
@@ -375,7 +404,7 @@ func _build_interface() -> void:
 
 	var right := PanelContainer.new()
 	right.set_anchors_preset(Control.PRESET_RIGHT_WIDE)
-	right.offset_left = -554.0
+	right.offset_left = -420.0
 	right.offset_top = 104.0
 	right.offset_right = -28.0
 	right.offset_bottom = -30.0
@@ -389,18 +418,6 @@ func _build_interface() -> void:
 	_options_title.add_theme_font_size_override("font_size", 21)
 	_options_title.add_theme_color_override("font_color", Color(0.44, 0.92, 1.0))
 	options_box.add_child(_options_title)
-	var categories := GridContainer.new()
-	categories.columns = 3
-	categories.add_theme_constant_override("h_separation", 6)
-	categories.add_theme_constant_override("v_separation", 6)
-	options_box.add_child(categories)
-	for slot_id in Catalog.SLOT_ORDER:
-		var category := Button.new()
-		category.text = Catalog.get_slot_label(slot_id)
-		category.custom_minimum_size = Vector2(154, 42)
-		category.pressed.connect(select_slot.bind(slot_id))
-		categories.add_child(category)
-		_slot_buttons[slot_id] = category
 	var separator := HSeparator.new()
 	options_box.add_child(separator)
 	var scroll := ScrollContainer.new()
@@ -408,7 +425,7 @@ func _build_interface() -> void:
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	options_box.add_child(scroll)
 	_option_grid = GridContainer.new()
-	_option_grid.columns = 3
+	_option_grid.columns = 2
 	_option_grid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_option_grid.add_theme_constant_override("h_separation", 10)
 	_option_grid.add_theme_constant_override("v_separation", 10)
@@ -430,17 +447,27 @@ func _refresh_current_loadout() -> void:
 	var loadout := _player.get_avatar_customization()
 	for slot_id in Catalog.SLOT_ORDER:
 		var variant_id := str(loadout.get(slot_id, ""))
-		var label := _current_labels.get(slot_id) as Label
-		if label != null:
-			label.text = "  %s\n  %s" % [Catalog.get_slot_label(slot_id), Catalog.get_variant_label(variant_id)]
-			label.add_theme_color_override("font_color", Catalog.get_variant_color(variant_id).lightened(0.28))
+		var button := _current_labels.get(slot_id) as Button
+		if button != null:
+			button.text = "  %s\n  %s" % [Catalog.get_slot_label(slot_id), Catalog.get_variant_label(variant_id)]
+			button.add_theme_color_override("font_color", Catalog.get_variant_color(variant_id).lightened(0.28))
 
 
 func _refresh_category_buttons() -> void:
 	for slot_id in _slot_buttons:
 		var button := _slot_buttons[slot_id] as Button
-		button.disabled = str(slot_id) == _selected_slot
-		button.modulate = Color(0.70, 1.0, 1.0) if button.disabled else Color.WHITE
+		var selected := str(slot_id) == _selected_slot
+		button.disabled = selected
+		button.modulate = Color(0.82, 1.0, 1.0) if selected else Color.WHITE
+		button.add_theme_stylebox_override(
+			"normal",
+			_panel_style(
+				Color(0.42, 0.94, 1.0) if selected else Color(0.10, 0.30, 0.38),
+				Color(0.025, 0.080, 0.098, 0.96) if selected else Color(0.025, 0.060, 0.075, 0.90),
+				2 if selected else 1
+			)
+		)
+		button.add_theme_stylebox_override("disabled", button.get_theme_stylebox("normal"))
 
 
 func _refresh_option_grid() -> void:
@@ -455,10 +482,9 @@ func _refresh_option_grid() -> void:
 		current = str(_player.get_avatar_customization().get(_selected_slot, ""))
 	for variant_id in Catalog.get_options(_selected_slot):
 		var cell := Button.new()
-		cell.custom_minimum_size = Vector2(140, 140)
-		cell.text = "%s\n%s" % ["●" if variant_id == current else "○", Catalog.get_variant_label(variant_id)]
+		cell.custom_minimum_size = Vector2(174, 174)
+		cell.text = ""
 		cell.tooltip_text = variant_id
-		cell.add_theme_font_size_override("font_size", 15)
 		var selected := variant_id == current
 		cell.add_theme_stylebox_override(
 			"normal",
@@ -470,6 +496,39 @@ func _refresh_option_grid() -> void:
 		)
 		cell.pressed.connect(select_variant.bind(_selected_slot, variant_id))
 		_option_grid.add_child(cell)
+		var content := VBoxContainer.new()
+		content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 8)
+		content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		content.add_theme_constant_override("separation", 2)
+		cell.add_child(content)
+		var icon := ITEM_ICON_SCENE.instantiate() as ItemModelIcon3D
+		icon.custom_minimum_size = Vector2(118, 124)
+		icon.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		icon.configure_custom_model(
+			_create_variant_preview.bind(_selected_slot, variant_id),
+			"avatar_%s" % _selected_slot
+		)
+		content.add_child(icon)
+		var label := Label.new()
+		label.text = "%s %s" % ["●" if selected else "○", Catalog.get_variant_label(variant_id)]
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		label.add_theme_font_size_override("font_size", 14)
+		label.add_theme_color_override("font_color", Color(0.86, 0.96, 0.98))
+		content.add_child(label)
+
+
+func _create_variant_preview(slot_id: String, variant_id: String) -> Node3D:
+	var avatar := AVATAR_PREVIEW_SCENE.instantiate() as PlayerAvatar3D
+	if avatar == null:
+		return null
+	var loadout := PlayerAvatar3D.DEFAULT_CUSTOMIZATION.duplicate(true)
+	loadout[slot_id] = variant_id
+	avatar.set_customization(loadout)
+	avatar.set_process(false)
+	avatar.set_physics_process(false)
+	return avatar
 
 
 func _panel_style(border: Color, background: Color, width: int) -> StyleBoxFlat:
