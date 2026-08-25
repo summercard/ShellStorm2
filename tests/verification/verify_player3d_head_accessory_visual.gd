@@ -17,9 +17,15 @@ func _ready() -> void:
 	gallery.player.aim_direction = Vector3.BACK
 	gallery.player.aim_yaw = PI
 	gallery.player.avatar.visual_root.rotation.y = PI
-	gallery.player.camera.position = Vector3(0.0, 0.82, -2.0)
+	# Match WardrobeMenu3D: character faces south and the camera is south of it.
+	gallery.player.camera.position = Vector3(0.0, 0.82, 2.0)
 	gallery.player.camera.fov = 30.0
 	gallery.player.camera.look_at(gallery.player.global_position + Vector3.UP * 0.58, Vector3.UP)
+	var inspection_light := OmniLight3D.new()
+	inspection_light.light_energy = 2.0
+	inspection_light.omni_range = 4.0
+	inspection_light.position = Vector3(0.0, 1.05, 1.5)
+	add_child(inspection_light)
 	await get_tree().create_timer(0.32).timeout
 	var image := get_viewport().get_texture().get_image()
 	if image == null or image.is_empty():

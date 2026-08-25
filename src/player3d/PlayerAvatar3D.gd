@@ -159,8 +159,10 @@ const LONGGUN_GRIP_HAND_L := Vector3(0.20, 0.52, -0.64)
 const LONGGUN_GRIP_HAND_R := Vector3(0.0, 0.65, -0.36)
 const LONGGUN_GRIP_ROTATION_L := Vector3(-0.10, -PI * 0.46, 0.24)
 const LONGGUN_GRIP_ROTATION_R := Vector3(-0.16, PI * 0.46, -0.20)
-const RIGHT_HAND_SPHERE_CENTER_LOCAL := Vector3(0.135996, -0.038999, -0.018441)
-const RIGHT_HAND_PIVOT_CONTRACT := "palm_sphere_center_is_HandJointR_and_GripSocket"
+const RIGHT_HAND_RING_CENTER_LOCAL := Vector3(0.039783746, 0.030701667, 0.017969068)
+const LEFT_HAND_RING_CENTER_LOCAL := Vector3(-0.039783746, 0.030701667, 0.017969064)
+const EAR_ROOT_CENTER_LOCAL := Vector3(-0.048021823, 0.046667456, -0.001094951)
+const RIGHT_HAND_PIVOT_CONTRACT := "cuff_ring_center_is_HandJointR_and_GripSocket"
 const SIDEARM_GUNS := ["bp_pistol"]
 const HEAVY_MELEE_WEAPONS := ["bp_baseball_bat", "bp_greatblade", "bp_waraxe"]
 const WEAPON_POSE_STATES := [
@@ -336,7 +338,7 @@ func get_component_snapshot() -> Dictionary:
 	return {
 		"is_3d": true,
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
-		"assembly_version": "v006" if is_bunny else "v001",
+		"assembly_version": "v008" if is_bunny else "v001",
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
 		"component_space": "pivot_local" if is_bunny else "scene_local",
 		"rig_joint_count": 8 if is_bunny else 0,
@@ -444,15 +446,28 @@ func get_component_snapshot() -> Dictionary:
 		"weapon_fire_style": _weapon_fire_style,
 		"active_grip_hand_count": _active_grip_hand_count,
 		"right_hand_pivot_contract": RIGHT_HAND_PIVOT_CONTRACT,
-		"right_hand_sphere_center_local": RIGHT_HAND_SPHERE_CENTER_LOCAL,
+		"right_hand_ring_center_local": RIGHT_HAND_RING_CENTER_LOCAL,
+		"left_hand_ring_center_local": LEFT_HAND_RING_CENTER_LOCAL,
 		"right_hand_model_pivot_offset": bunny_hand_r_model.position if bunny_hand_r_model != null else Vector3.ZERO,
-		"right_hand_sphere_to_joint_global_distance": (
-			bunny_hand_r_model.to_global(RIGHT_HAND_SPHERE_CENTER_LOCAL).distance_to(bunny_hand_r.global_position)
+		"right_hand_ring_to_joint_global_distance": (
+			bunny_hand_r_model.to_global(RIGHT_HAND_RING_CENTER_LOCAL).distance_to(bunny_hand_r.global_position)
 			if bunny_hand_r_model != null and bunny_hand_r != null else 999.0
 		),
-		"right_hand_sphere_to_grip_global_distance": (
-			bunny_hand_r_model.to_global(RIGHT_HAND_SPHERE_CENTER_LOCAL).distance_to(weapon_socket.global_position)
+		"right_hand_ring_to_grip_global_distance": (
+			bunny_hand_r_model.to_global(RIGHT_HAND_RING_CENTER_LOCAL).distance_to(weapon_socket.global_position)
 			if bunny_hand_r_model != null and weapon_socket != null else 999.0
+		),
+		"left_hand_ring_to_joint_global_distance": (
+			(bunny_hand_l.get_node("Model") as Node3D).to_global(LEFT_HAND_RING_CENTER_LOCAL).distance_to(bunny_hand_l.global_position)
+			if bunny_hand_l != null and bunny_hand_l.get_node_or_null("Model") != null else 999.0
+		),
+		"ear_l_root_to_socket_global_distance": (
+			(ear_socket_l.get_node("EarAccessory") as Node3D).to_global(EAR_ROOT_CENTER_LOCAL).distance_to(ear_socket_l.global_position)
+			if ear_socket_l != null and ear_socket_l.get_node_or_null("EarAccessory") != null else 999.0
+		),
+		"ear_r_root_to_socket_global_distance": (
+			(ear_socket_r.get_node("EarAccessory") as Node3D).to_global(EAR_ROOT_CENTER_LOCAL).distance_to(ear_socket_r.global_position)
+			if ear_socket_r != null and ear_socket_r.get_node_or_null("EarAccessory") != null else 999.0
 		),
 		"hand_l_rotation": bunny_hand_l.rotation if bunny_hand_l != null else Vector3.ZERO,
 		"hand_r_rotation": bunny_hand_r.rotation if bunny_hand_r != null else Vector3.ZERO,
@@ -1075,9 +1090,8 @@ func _animate_bunny_accessories(
 	ear_socket_l.rotation = ear_socket_l.rotation.lerp(ear_l_target + ear_l_offset, minf(1.0, delta * 15.0))
 	ear_socket_r.rotation = ear_socket_r.rotation.lerp(ear_r_target + ear_r_offset, minf(1.0, delta * 15.0))
 
-	# 右手模型在根场景中做了枢轴校正：大球中心就是 HandJointR；持枪时
-	# HandJointR 再与枪械 GripSocket 精确重合。圆环只表示近端腕部造型，
-	# 不再作为右手骨骼轴心。手枪只让右手握持，左手保持自由；长枪右手握把、左手托护木。
+	# 左右手都以腕环中心为动画轴；持枪时 HandJointR 再与枪械 GripSocket 精确重合。
+	# 手枪只让右手握持，左手保持自由；长枪右手握把、左手托护木。
 	# 根场景热重载的单帧中手部子节点可能尚未完成实例化；此时保留耳朵动作并跳过该帧手部细节。
 	if bunny_hand_l == null or bunny_hand_r == null or not _base_positions.has("bunny_hand_l") or not _base_positions.has("bunny_hand_r"):
 		_weapon_grip_pose_active = false

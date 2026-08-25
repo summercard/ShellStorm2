@@ -12,6 +12,8 @@ var _model: Node3D
 var _configured := false
 var _camera_size_multiplier := 1.0
 var _rebuild_count := 0
+var _custom_model_factory := Callable()
+var _custom_model_kind := ""
 
 
 func _ready() -> void:
@@ -23,7 +25,18 @@ func _ready() -> void:
 
 func configure(item: Dictionary) -> void:
 	_item_data = item.duplicate(true)
+	_custom_model_factory = Callable()
+	_custom_model_kind = ""
 	_configured = true
+	if is_node_ready():
+		_rebuild_model()
+
+
+func configure_custom_model(factory: Callable, model_kind: String) -> void:
+	_item_data.clear()
+	_custom_model_factory = factory
+	_custom_model_kind = model_kind
+	_configured = factory.is_valid()
 	if is_node_ready():
 		_rebuild_model()
 
@@ -37,6 +50,8 @@ func set_camera_size_multiplier(multiplier: float) -> void:
 
 func clear_model() -> void:
 	_item_data.clear()
+	_custom_model_factory = Callable()
+	_custom_model_kind = ""
 	_configured = false
 	if _model != null and is_instance_valid(_model):
 		_model.queue_free()
@@ -47,7 +62,7 @@ func clear_model() -> void:
 func get_snapshot() -> Dictionary:
 	return {
 		"item_id": str(_item_data.get("id", "")),
-		"model_kind": ItemModelFactory3D.get_model_kind(_item_data) if not _item_data.is_empty() else "",
+		"model_kind": _resolved_model_kind(),
 		"mesh_count": ItemModelFactory3D.count_mesh_instances(_model) if _model != null else 0,
 		"viewport_size": _viewport.size if _viewport != null else Vector2i.ZERO,
 		"camera_size": _camera.size if _camera != null else 0.0,
@@ -99,19 +114,28 @@ func _rebuild_model() -> void:
 	if _model != null and is_instance_valid(_model):
 		_model.queue_free()
 	_model = null
-	if _item_data.is_empty():
+	if _item_data.is_empty() and not _custom_model_factory.is_valid():
 		visible = false
 		return
 	_rebuild_count += 1
-	_model = ItemModelFactory3D.create_model(_item_data, _item_tint(_item_data))
+	if _custom_model_factory.is_valid():
+		_model = _custom_model_factory.call() as Node3D
+	else:
+		_model = ItemModelFactory3D.create_model(_item_data, _item_tint(_item_data))
+	if _model == null:
+		visible = false
+		return
 	_model.name = "ProjectedItemModel"
-	_model.rotation_degrees = Vector3(-8, 18, 0)
+	var kind := _resolved_model_kind()
+	_model.rotation_degrees = Vector3(0, 180, 0) if kind.begins_with("avatar_") else Vector3(-8, 18, 0)
 	_viewport.add_child(_model)
-	_strip_preview_runtime_nodes(_model)
-	var kind := ItemModelFactory3D.get_model_kind(_item_data)
+	if kind.begins_with("avatar_"):
+		_model.process_mode = Node.PROCESS_MODE_DISABLED
+	else:
+		_strip_preview_runtime_nodes(_model)
 	# 图标槽只有 56px，模型应占据大部分轮廓，避免“有3D模型但看不清”。
 	_apply_camera_size(kind)
-	_model.position = Vector3(0, 0.05 if kind == "weapon" else 0.0, 0)
+	_model.position = _model_position(kind)
 	visible = true
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
@@ -130,7 +154,39 @@ func _strip_preview_runtime_nodes(root: Node) -> void:
 func _apply_camera_size(kind: String) -> void:
 	if _camera == null:
 		return
-	_camera.size = (1.82 if kind == "weapon" else 1.62) * _camera_size_multiplier
+	var authored_size := 1.62
+	match kind:
+		"weapon":
+			authored_size = 1.82
+		"avatar_body":
+			authored_size = 1.34
+		"avatar_head", "avatar_hat", "avatar_glasses":
+			authored_size = 0.92
+		"avatar_hand", "avatar_feet":
+			authored_size = 1.08
+	_camera.size = authored_size * _camera_size_multiplier
+
+
+func _model_position(kind: String) -> Vector3:
+	match kind:
+		"weapon":
+			return Vector3(0, 0.05, 0)
+		"avatar_head", "avatar_hat", "avatar_glasses":
+			return Vector3(0, -0.50, 0)
+		"avatar_hand":
+			return Vector3(0, -0.25, 0)
+		"avatar_feet":
+			return Vector3(0, 0.05, 0)
+		"avatar_body":
+			return Vector3(0, -0.42, 0)
+		_:
+			return Vector3.ZERO
+
+
+func _resolved_model_kind() -> String:
+	if not _custom_model_kind.is_empty():
+		return _custom_model_kind
+	return ItemModelFactory3D.get_model_kind(_item_data) if not _item_data.is_empty() else ""
 
 
 func _item_tint(item: Dictionary) -> Color:

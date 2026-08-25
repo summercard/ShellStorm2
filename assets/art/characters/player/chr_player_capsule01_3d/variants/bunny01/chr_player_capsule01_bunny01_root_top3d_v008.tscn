@@ -1,0 +1,111 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_body_top3d_v007.glb" id="2_body"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_head_top3d_v007.glb" id="3_head"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_ear_top3d_v007.glb" id="4_ear"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_hand_l_top3d_v007.glb" id="5_hand_l"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_hand_r_top3d_v007.glb" id="6_hand_r"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_l_top3d_v007.glb" id="7_foot_l"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/components/chr_player_capsule01_bunny01_foot_r_top3d_v007.glb" id="8_foot_r"]
+[ext_resource type="PackedScene" path="res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/accessories/head/chibi_anime_head_v002/runtime/chr_player_bunny01_head_chibi_anime_root_top3d_v002.tscn" id="9_chibi_head"]
+
+[node name="CapsuleAvatar3D" instance=ExtResource("1_base")]
+
+[node name="Body" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Head" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Scarf" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Hand" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="Feet" parent="VisualRoot" index="0"]
+visible = false
+
+[node name="BunnyRig" type="Node3D" parent="VisualRoot"]
+
+[node name="BodyJoint" type="Node3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.000030303, 0.155021819, -0.000634545)
+
+[node name="Model" parent="VisualRoot/BunnyRig/BodyJoint" instance=ExtResource("2_body")]
+
+[node name="LowerBodySocket" type="Marker3D" parent="VisualRoot/BunnyRig/BodyJoint"]
+position = Vector3(0, 0.14, 0)
+metadata/attachment_slot = "lower_body"
+metadata/attachment_examples = "skirt, waist_armor, lower_body_accessory"
+metadata/presentation_only = true
+
+[node name="HeadJoint" type="Node3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.000027879, 0.477110303, 0.026430909)
+
+[node name="Model" parent="VisualRoot/BunnyRig/HeadJoint" instance=ExtResource("3_head")]
+
+[node name="HeadAccessoryChibiAnime" parent="VisualRoot/BunnyRig/HeadJoint" instance=ExtResource("9_chibi_head")]
+visible = false
+
+[node name="Ears" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint"]
+
+[node name="EarSocketL" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint/Ears"]
+position = Vector3(-0.197034792, 0.546320044, -0.002765835)
+metadata/anchor_contract = "ear_hood_contact_center"
+
+[node name="EarAccessory" parent="VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketL" instance=ExtResource("4_ear")]
+position = Vector3(-0.048021823, -0.046667456, 0.001094951)
+scale = Vector3(-1, 1, 1)
+
+[node name="EarSocketR" type="Node3D" parent="VisualRoot/BunnyRig/HeadJoint/Ears"]
+position = Vector3(0.19709055, 0.546320044, -0.002765835)
+metadata/anchor_contract = "ear_hood_contact_center"
+
+[node name="EarAccessory" parent="VisualRoot/BunnyRig/HeadJoint/Ears/EarSocketR" instance=ExtResource("4_ear")]
+position = Vector3(0.048021823, -0.046667456, 0.001094951)
+
+[node name="HandRoot" type="Node3D" parent="VisualRoot/BunnyRig"]
+
+[node name="HandJointL" type="Node3D" parent="VisualRoot/BunnyRig/HandRoot"]
+position = Vector3(-0.325616986, 0.352474123, 0.003534162)
+metadata/pivot_contract = "cuff_ring_center"
+
+[node name="Model" parent="VisualRoot/BunnyRig/HandRoot/HandJointL" instance=ExtResource("5_hand_l")]
+position = Vector3(0.039783746, -0.030701667, -0.017969064)
+
+[node name="HandJointR" type="Node3D" parent="VisualRoot/BunnyRig/HandRoot"]
+position = Vector3(0.325616986, 0.352474123, 0.003534209)
+metadata/pivot_contract = "cuff_ring_center"
+
+[node name="Model" parent="VisualRoot/BunnyRig/HandRoot/HandJointR" instance=ExtResource("6_hand_r")]
+position = Vector3(-0.039783746, -0.030701667, -0.017969068)
+
+[node name="FeetRoot" type="Node3D" parent="VisualRoot/BunnyRig"]
+
+[node name="FootJointL" type="Node3D" parent="VisualRoot/BunnyRig/FeetRoot"]
+position = Vector3(-0.129002424, 0, -0.010887273)
+
+[node name="Model" parent="VisualRoot/BunnyRig/FeetRoot/FootJointL" instance=ExtResource("7_foot_l")]
+
+[node name="FootJointR" type="Node3D" parent="VisualRoot/BunnyRig/FeetRoot"]
+position = Vector3(0.129002424, 0, -0.010887273)
+
+[node name="Model" parent="VisualRoot/BunnyRig/FeetRoot/FootJointR" instance=ExtResource("8_foot_r")]
+
+[node name="WeaponSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0, 0.393939395, -0.218181818)
+
+[node name="StowedWeaponSocketPrimary" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(-0.36, 0.82, 0.54)
+rotation = Vector3(-1.5708, 0, 0)
+
+[node name="StowedWeaponSocketSecondary" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0.36, 0.82, 0.54)
+rotation = Vector3(-1.5708, 0, 0)
+
+[node name="BackpackSocket" type="Marker3D" parent="VisualRoot/BunnyRig"]
+position = Vector3(0, 0.74, 0.30)
+
+[node name="ReloadProgress3D" parent="." index="0"]
+position = Vector3(0, 1.672727273, 0.036363636)

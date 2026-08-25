@@ -54,8 +54,8 @@ func _ready() -> void:
 		failures.append("Bunny avatar does not expose head/body/hand/feet as four primary modules")
 	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01":
 		failures.append("Player3D does not load the registered bunny01 avatar profile")
-	if str(avatar_snapshot.get("assembly_version", "")) != "v006" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
-		failures.append("Bunny v006 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
+	if str(avatar_snapshot.get("assembly_version", "")) != "v008" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
+		failures.append("Bunny v008 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
 	if int(avatar_snapshot.get("ear_count", 0)) != 2 or int(avatar_snapshot.get("ear_socket_count", 0)) != 2 or not bool(avatar_snapshot.get("ears_parented_to_head", false)):
 		failures.append("Bunny ears are not two head-parented accessories on named sockets")
 	if int(avatar_snapshot.get("visible_foot_count", 0)) != 2:
@@ -63,19 +63,19 @@ func _ready() -> void:
 	if int(avatar_snapshot.get("visible_hand_count", 0)) != 2 or not bool(avatar_snapshot.get("independent_hand_animation", false)):
 		failures.append("Bunny hands are not exported as two independently animated visual parts")
 	if absf(float(avatar_snapshot.get("authored_scale_m", 0.0)) - 1.5) > 0.001:
-		failures.append("Bunny v006 does not use the approved 1.50 m authored height")
+		failures.append("Bunny v008 does not use the approved 1.50 m authored height")
 	if absf(
 		float(avatar_snapshot.get("runtime_scale_multiplier", 0.0))
 		- Player3D.DEFAULT_BASE_SIZE_MULTIPLIER
 	) > 0.001:
-		failures.append("Bunny v006 did not apply the approved 70% entity-size baseline")
+		failures.append("Bunny v008 did not apply the approved 70% entity-size baseline")
 	if (
 		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 90
 		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+X"
 		or str(avatar_snapshot.get("runtime_forward_godot", "")) != "-Z"
 		or not bool(avatar_snapshot.get("forward_contract_pass", false))
 	):
-		failures.append("Bunny v006 does not enforce the Blender +X to Godot -Z forward-axis contract")
+		failures.append("Bunny v008 does not enforce the Blender +X to Godot -Z forward-axis contract")
 	if str(avatar_snapshot.get("tail_style", "")) != "none":
 		failures.append("Bunny source unexpectedly retains the legacy cat tail")
 	for required_path in [

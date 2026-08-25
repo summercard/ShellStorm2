@@ -75,7 +75,7 @@ func _ready() -> void:
 		)
 
 	if failures.is_empty():
-		print("BUNNY_V006_BOUNDS_OK: mesh_count=%d low=%s high=%s height=%.6f" % [
+		print("BUNNY_V008_BOUNDS_OK: mesh_count=%d low=%s high=%s height=%.6f" % [
 			mesh_count,
 			low,
 			high,

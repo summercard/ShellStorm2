@@ -3,7 +3,6 @@ extends Node
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
 const Persistence = preload("res://src/player3d/customization/AvatarCustomizationPersistence.gd")
 const VARIANT_ID := "chibi_anime"
-const AUTHORED_HEIGHT_M := 0.8454768002
 const TEST_SAVE_PATH := "user://player3d_head_accessory_persistence_probe.json"
 
 
@@ -31,6 +30,12 @@ func _ready() -> void:
 	_check(accessory.scale.is_equal_approx(Vector3.ONE), "二次元头部包装根缩放不是1", failures)
 	_check(accessory.get_parent() == head_joint, "二次元头部没有直接挂在HeadJoint", failures)
 	_check(str(accessory.get_meta("godot_forward", "")) == "-Z", "二次元头部正面契约不是Godot -Z", failures)
+	_check(
+		str(accessory.get_meta("source_collection", ""))
+		== "头部配件/二次元头部配件_中文管理/01_制作组件_可编辑",
+		"二次元头部没有记录正式角色Blend中的制作集合",
+		failures
+	)
 
 	player.set_avatar_customization("hat", "hard_hat")
 	player.set_avatar_customization("glasses", "dual_goggles")
@@ -62,8 +67,8 @@ func _ready() -> void:
 	_check(not meshes.is_empty(), "二次元头部场景没有实际Mesh", failures)
 	_check(accessory.find_children("*", "CollisionObject3D", true, false).is_empty(), "头部配件错误携带玩法碰撞", failures)
 	_check(accessory.find_children("*", "CollisionShape3D", true, false).is_empty(), "头部配件错误携带碰撞形状", failures)
-	var low_y := INF
-	var high_y := -INF
+	var actual_min := Vector3(INF, INF, INF)
+	var actual_max := Vector3(-INF, -INF, -INF)
 	var has_base_color_texture := false
 	for value in meshes:
 		var mesh_instance := value as MeshInstance3D
@@ -74,21 +79,25 @@ func _ready() -> void:
 					var head_local_point := head_joint.to_local(
 						mesh_instance.to_global(Vector3(x, y, z))
 					)
-					low_y = minf(low_y, head_local_point.y)
-					high_y = maxf(high_y, head_local_point.y)
+					actual_min = actual_min.min(head_local_point)
+					actual_max = actual_max.max(head_local_point)
 		for surface_index in range(mesh_instance.mesh.get_surface_count()):
 			var material := mesh_instance.get_active_material(surface_index) as StandardMaterial3D
 			if material != null and material.albedo_texture != null:
 				has_base_color_texture = true
 	_check(has_base_color_texture, "二次元头部BaseColor贴图没有进入Godot材质", failures)
+	var expected_min := accessory.get_meta("authored_bounds_min_m", Vector3.ZERO) as Vector3
+	var expected_max := accessory.get_meta("authored_bounds_max_m", Vector3.ZERO) as Vector3
 	_check(
-		absf(low_y) <= 0.001,
-		"二次元头部底面没有与HeadJoint局部锚点对齐：bottom=%.6f" % low_y,
+		actual_min.is_equal_approx(expected_min),
+		"二次元头部局部包围盒下界与正式Blend输出不一致：actual=%s expected=%s"
+		% [actual_min, expected_min],
 		failures
 	)
 	_check(
-		absf((high_y - low_y) - AUTHORED_HEIGHT_M) <= 0.002,
-		"二次元头部局部高度与Blender源不一致：actual=%.6f expected=%.6f" % [high_y - low_y, AUTHORED_HEIGHT_M],
+		actual_max.is_equal_approx(expected_max),
+		"二次元头部局部包围盒上界与正式Blend输出不一致：actual=%s expected=%s"
+		% [actual_max, expected_max],
 		failures
 	)
 	_verify_restart_persistence(player, failures)

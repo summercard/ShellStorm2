@@ -81,18 +81,18 @@ func _ready() -> void:
 		failures.append("Free left hand is not extended into the sidearm ready silhouette")
 	if float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0)) > 0.001:
 		failures.append("Pistol HandJointR is not exactly seated on GripSocket")
-	if float(sidearm_hold.get("right_hand_sphere_to_joint_global_distance", 999.0)) > 0.001:
-		failures.append("Right palm sphere center is not seated on HandJointR")
-	if float(sidearm_hold.get("right_hand_sphere_to_grip_global_distance", 999.0)) > 0.001:
-		failures.append("Right palm sphere center is not seated on GripSocket")
+	if float(sidearm_hold.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001:
+		failures.append("Right cuff-ring center is not seated on HandJointR")
+	if float(sidearm_hold.get("right_hand_ring_to_grip_global_distance", 999.0)) > 0.001:
+		failures.append("Right cuff-ring center is not seated on GripSocket")
 	if (
 		float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0))
 		>= float(sidearm_hold.get("hand_l_to_socket_global_distance", 0.0))
 	):
 		failures.append("Pistol right hand is not closer to the weapon than the free left hand")
 	var sidearm_right_rotation := sidearm_hold.get("hand_r_rotation", Vector3.ZERO) as Vector3
-	if sidearm_right_rotation.y < 1.0 or str(sidearm_hold.get("right_hand_pivot_contract", "")) != "palm_sphere_center_is_HandJointR_and_GripSocket":
-		failures.append("Right hand does not use the palm-sphere/HandJointR/GripSocket pivot contract")
+	if sidearm_right_rotation.y < 1.0 or str(sidearm_hold.get("right_hand_pivot_contract", "")) != "cuff_ring_center_is_HandJointR_and_GripSocket":
+		failures.append("Right hand does not use the cuff-ring/HandJointR/GripSocket pivot contract")
 
 	_set_presentation_state(player, "moving")
 	_advance_avatar(player, 0.10, 2)
@@ -188,7 +188,7 @@ func _ready() -> void:
 	wall.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_WEAPON_POSE_COLLISION_OK: palm/HandJointR/GripSocket alignment, one/two-hand FSM, distinct gun fire, and unified 1.05 m runtime visual/collision contract pass")
+		print("BUNNY_WEAPON_POSE_COLLISION_OK: cuff-ring/HandJointR/GripSocket alignment, one/two-hand FSM, distinct gun fire, and unified 1.05 m runtime visual/collision contract pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
