@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/enemies/elite_3d/rift_boar_armed/components/enm_elite_rift_boar_armed_visual_top3d_v001.glb" id="1_model"]
+
+[node name="EliteRiftBoarArmedRoot" type="Node3D"]
+metadata/asset_id = "ENM-ELITE-RIFT-BOAR-ARMED-3D"
+metadata/content_id = "elite_rift_boar_armed"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_model")]
