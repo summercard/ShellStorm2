@@ -64,6 +64,21 @@ func set_floor_number(floor_number: int) -> void:
 		# v0.1：补光属于全塔固定环境的一部分，不能随玩家所在楼层闪断。
 		_rooftop_sky_bounce.visible = true
 	_apply_fixed_lighting()
+	_update_music_for_floor(floor_number, rooftop)
+
+
+func _update_music_for_floor(floor_number: int, rooftop: bool) -> void:
+	var mgr := get_node_or_null("/root/MusicManager")
+	if mgr == null:
+		return
+	if rooftop:
+		mgr.play("rooftop_relax")
+		return
+	# Boss 房判定：95/90/85 层或任意 floor % 5 == 0（与 plan.boss_floor 一致）
+	if floor_number > 0 and floor_number % 5 == 0:
+		mgr.push_and_play("boss_intense")
+		return
+	mgr.play("descent_suspense")
 
 
 func _apply_fixed_lighting() -> void:

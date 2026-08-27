@@ -78,6 +78,7 @@ EliteRosterService="*res://src/enemy3d/EliteRosterService.gd"
 GameplaySpatialRegistry3D="*res://src/core/GameplaySpatialRegistry3D.gd"
 GraphicsSettingsManager="*res://src/core/GraphicsSettingsManager.gd"
 RuntimePerformanceManager="*res://src/core/RuntimePerformanceManager.gd"
+MusicManager="*res://src/audio/MusicManager.gd"
 
 [display]
 
