@@ -1,5 +1,11 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-08-27｜屋顶栏杆浮空修复
+
+- **Bug**：100 楼屋顶边缘的栏杆浮空（`RooftopRailLower` 下沿在 Y=0.56，`RooftopRailUpper` 上沿在 Y=1.30，但地板面在 Y=0、`post` 顶部在 Y=1.32）
+- **原因**：`_build_rooftop_railing()` 使用了硬编码绝对坐标 `center.y = 0.62 / +0.62`，未与 `ROOFTOP_FACADE_HEIGHT` / `post_height` 联动
+- **修复**：以 `RAIL_THICKNESS=0.12` 与 `POST_HEIGHT=1.32` 为常量计算 `RAIL_LOWER_CENTER_Y=0.06`（底贴地板）、`RAIL_UPPER_CENTER_Y=1.26`（顶贴 post 顶），`POST_CENTER_Y=0.66`（底贴地板）；保证栏杆贴在地板面、顶到 post 顶
+
 ## 2026-08-27｜交响管弦配乐与音乐系统接入
 
 - Suno.cn 生成 4 首纯器乐交响（base_passion / rooftop_relax / descent_suspense / boss_intense），每首 A/B 两版，由 `MusicCatalog.selection_mode=random` 随机播放。

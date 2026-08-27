@@ -643,6 +643,12 @@ func _build_rooftop_exterior_wall(direction: String, dimensions: Vector2) -> voi
 
 
 func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
+	# v0.1：栏杆下梁底贴地板面 Y=0，上梁顶贴 post 顶 Y=1.32，消除“浮空”问问题。
+	const RAIL_THICKNESS := 0.12
+	const POST_HEIGHT := 1.32
+	const RAIL_LOWER_CENTER_Y := RAIL_THICKNESS * 0.5      # 0.06，底边贴地板
+	const RAIL_UPPER_CENTER_Y := POST_HEIGHT - RAIL_THICKNESS * 0.5  # 1.26，顶边贴 post 顶
+	const POST_CENTER_Y := POST_HEIGHT * 0.5                # 0.66，底边贴地板
 	var horizontal := direction in ["north", "south"]
 	var length := dimensions.x if horizontal else dimensions.y
 	var has_door := doors.has(direction)
@@ -657,12 +663,14 @@ func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
 	for segment_center in centers:
 		var center := Vector3.ZERO
 		if horizontal:
-			center = Vector3(segment_center, 0.62, -dimensions.y * 0.5 if direction == "north" else dimensions.y * 0.5)
+			center = Vector3(segment_center, RAIL_LOWER_CENTER_Y, -dimensions.y * 0.5 if direction == "north" else dimensions.y * 0.5)
 		else:
-			center = Vector3(-dimensions.x * 0.5 if direction == "west" else dimensions.x * 0.5, 0.62, segment_center)
-		var rail_size := Vector3(segment_length, 0.12, 0.18) if horizontal else Vector3(0.18, 0.12, segment_length)
+			center = Vector3(-dimensions.x * 0.5 if direction == "west" else dimensions.x * 0.5, RAIL_LOWER_CENTER_Y, segment_center)
+		var rail_size := Vector3(segment_length, RAIL_THICKNESS, 0.18) if horizontal else Vector3(0.18, RAIL_THICKNESS, segment_length)
 		_spawn_prefab("RooftopRailLower_%s" % direction, ROOFTOP_RAIL_LOWER_PREFAB, center, rail_size, _trim_material)
-		_spawn_prefab("RooftopRailUpper_%s" % direction, ROOFTOP_RAIL_UPPER_PREFAB, center + Vector3(0, 0.62, 0), rail_size, _trim_material)
+		var upper_center := center
+		upper_center.y = RAIL_UPPER_CENTER_Y
+		_spawn_prefab("RooftopRailUpper_%s" % direction, ROOFTOP_RAIL_UPPER_PREFAB, upper_center, rail_size, _trim_material)
 		var post_count := maxi(2, int(segment_length / 4.0) + 1)
 		for post_index in range(post_count):
 			var ratio := float(post_index) / float(maxi(1, post_count - 1))
@@ -672,8 +680,8 @@ func _build_rooftop_railing(direction: String, dimensions: Vector2) -> void:
 				post_position.x += offset
 			else:
 				post_position.z += offset
-			post_position.y = 0.66
-			_spawn_prefab("RooftopRailPost_%s" % direction, ROOFTOP_RAIL_POST_PREFAB, post_position, Vector3(0.16, 1.32, 0.16), _trim_material)
+			post_position.y = POST_CENTER_Y
+			_spawn_prefab("RooftopRailPost_%s" % direction, ROOFTOP_RAIL_POST_PREFAB, post_position, Vector3(0.16, POST_HEIGHT, 0.16), _trim_material)
 
 
 func _build_tower_module_shell(dimensions: Vector2) -> void:
