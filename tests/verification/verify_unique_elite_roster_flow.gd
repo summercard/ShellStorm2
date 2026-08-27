@@ -45,18 +45,19 @@ func _ready() -> void:
 			failures.append("Elite %s did not execute its unique live behavior" % elite_id)
 		behavior_enemy.queue_free()
 
-	var first := EliteRosterService.select_and_reserve(990095, 95, "verify_run:95:elite")
-	var repeated := EliteRosterService.select_and_reserve(123, 95, "verify_run:95:elite")
+	var first_seed := _seed_for_floor(98, 990000)
+	var first := EliteRosterService.select_and_reserve(first_seed, 98, "verify_run:98:elite")
+	var repeated := EliteRosterService.select_and_reserve(123, 98, "verify_run:98:elite")
 	var first_id := str(first.get("elite_id", ""))
 	if first_id.is_empty() or str(repeated.get("elite_id", "")) != first_id:
 		failures.append("Same encounter did not resolve to its existing unique reservation")
-	if EliteRosterService.reserve(first_id, "verify_run:other:elite", 94):
+	if EliteRosterService.reserve(first_id, "verify_run:other:elite", 97):
 		failures.append("One elite was reserved into two simultaneous encounters")
-	if not EliteRosterService.confirm_reservation(first_id, "verify_run:95:elite"):
+	if not EliteRosterService.confirm_reservation(first_id, "verify_run:98:elite"):
 		failures.append("Elite reservation could not be confirmed")
-	if not EliteRosterService.settle(first_id, "verify_run:95:elite", "escaped", {
-		"floor_number": 95,
-		"room_id": "boss_prep",
+	if not EliteRosterService.settle(first_id, "verify_run:98:elite", "escaped", {
+		"floor_number": 98,
+		"room_id": "elite_room",
 		"weapon_snapshot": {
 			"content_id": "weapon_rifle_standard",
 			"weapon_instance_id": "must_not_persist",
@@ -81,14 +82,17 @@ func _ready() -> void:
 	if not legacy.elite_archive_records.is_empty():
 		failures.append("Legacy BaseData migration fabricated archive records before service hydration")
 
-	var second := EliteRosterService.select_and_reserve(990096, 94, "verify_run:94:elite")
-	if str(second.get("elite_id", "")).is_empty() or str(second.get("elite_id", "")) == first_id:
-		failures.append("Concurrent selection reused an unavailable elite")
+	var second_seed := _seed_for_floor(97, 991000)
+	var second := EliteRosterService.select_and_reserve(second_seed, 97, "verify_run:97:elite")
+	if str(second.get("elite_id", "")) != first_id:
+		failures.append("The escaped first deployed elite did not remain eligible in its 98-96 window")
+	EliteRosterService.settle(first_id, "verify_run:97:elite", "despawned")
 	var injector := MonsterInjector.new()
-	injector.set_seed(445566)
+	var floor_96_seed := _seed_for_floor(96, 445500)
+	injector.set_seed(floor_96_seed)
 	var generated := injector.generate_enemies({
 		"type": "elite", "floor": 2, "floor_level": RoomData.FloorLevel.MEDIUM,
-		"floor_number": 93, "encounter_id": "verify_run:93:elite", "seed": 445566,
+		"floor_number": 96, "encounter_id": "verify_run:96:elite", "seed": floor_96_seed,
 	})
 	if generated.size() != 1:
 		failures.append("MonsterInjector did not return one unique elite config")
@@ -113,7 +117,7 @@ func _ready() -> void:
 
 	BaseManager.force_save_failure_for_test = true
 	var before_failed := EliteRosterService.get_all_elites()
-	if EliteRosterService.reserve(first_id, "verify_failed:elite", 92):
+	if EliteRosterService.reserve(first_id, "verify_failed:elite", 96):
 		failures.append("Reservation reported success after atomic profile save failure")
 	var after_failed := EliteRosterService.get_all_elites()
 	if str((after_failed[ids.find(first_id)] as Dictionary).get("reserved_encounter_id", "")) == "verify_failed:elite":
@@ -134,3 +138,10 @@ func _ready() -> void:
 	for failure in failures:
 		push_error(failure)
 	get_tree().quit(1)
+
+
+func _seed_for_floor(floor_number: int, start: int) -> int:
+	for seed_value in range(start, start + 100):
+		if EliteContentCatalog.get_selected_floor_for_seed("elite_rift_boar_armed", seed_value) == floor_number:
+			return seed_value
+	return start

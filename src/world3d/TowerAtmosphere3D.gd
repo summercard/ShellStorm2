@@ -6,7 +6,7 @@ extends Node3D
 
 const TimeDomain = preload("res://src/core/WorldTimeDomain.gd")
 
-const SUN_ENERGY := 1.0
+const SUN_ENERGY := 3.0
 const SUN_COLOR := Color(1.0, 0.84, 0.62)
 const BACKGROUND_COLOR := Color(0.58, 0.62, 0.64)
 const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)

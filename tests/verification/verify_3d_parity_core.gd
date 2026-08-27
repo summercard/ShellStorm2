@@ -195,9 +195,20 @@ func _verify_pools(dungeon: Dungeon3D, failures: Array[String]) -> void:
 
 
 func _verify_loot_contract(failures: Array[String]) -> void:
+	var original_path := BaseManager.save_path
+	var original_data := BaseManager.data
+	BaseManager.save_path = "user://verification_3d_parity_elite.json"
+	BaseManager.data = BaseData.new()
+	EliteRosterService.reset_roster_for_test()
 	var injector := MonsterInjector.new()
-	injector.set_seed(4242)
-	var elite := injector.generate_enemies({"type": "elite", "floor": 2, "floor_level": RoomData.FloorLevel.MEDIUM})
+	var elite_seed := 4242
+	while EliteContentCatalog.get_selected_floor_for_seed("elite_rift_boar_armed", elite_seed) != 98:
+		elite_seed += 1
+	injector.set_seed(elite_seed)
+	var elite := injector.generate_enemies({
+		"type":"elite", "floor":2, "floor_level":RoomData.FloorLevel.MEDIUM,
+		"floor_number":98, "encounter_id":"parity:98:elite", "seed":elite_seed,
+	})
 	var boss := injector.generate_enemies({"type": "boss", "floor": 2, "floor_level": RoomData.FloorLevel.DEEP})
 	var loot := LootModule.new()
 	loot.set_seed(4242)
@@ -205,6 +216,16 @@ func _verify_loot_contract(failures: Array[String]) -> void:
 		failures.append("Elite 3D configuration does not use the original stable drop table")
 	if boss.is_empty() or loot.generate_enemy_loot(boss[0]).is_empty():
 		failures.append("Boss 3D configuration does not use the original stable drop table")
+	if not elite.is_empty():
+		EliteRosterService.settle(
+			str(elite[0].get("elite_id", "")),
+			str(elite[0].get("encounter_instance_id", "")),
+			"despawned"
+		)
+	BaseManager.save_path = original_path
+	BaseManager.data = original_data
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://verification_3d_parity_elite.json"))
+	DirAccess.remove_absolute(ProjectSettings.globalize_path("user://verification_3d_parity_elite.json.bak"))
 
 
 func _verify_elite_and_boss_runtime(dungeon: Dungeon3D, failures: Array[String]) -> void:
