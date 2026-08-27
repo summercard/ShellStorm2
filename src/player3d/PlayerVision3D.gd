@@ -27,7 +27,7 @@ const GEOMETRY_SAMPLE_INTERVAL := 1.0 / 15.0
 # 手电表现层：真实 SpotLight3D 的地面贡献会与太阳、房间灯相加，各楼层对比度不同。
 # 这里额外画一层固定透明度、受同一套物理射线裁切的无光照扇形，
 # 让玩家在任何背景亮度下都能看到完全一致的手电范围。
-const FLASHLIGHT_OVERLAY_ALPHA := 0.15
+const FLASHLIGHT_OVERLAY_ALPHA := 0.0
 const PRESENTATION_CONE_ALPHA := 0.0
 const FLASHLIGHT_OVERLAY_MAX_ANGLE := 150.0
 const FLASHLIGHT_OVERLAY_HEIGHT_OFFSET := 0.008
