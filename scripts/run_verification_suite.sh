@@ -41,6 +41,8 @@ core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
   verify_arrival_gate_floor_bundle_flow
+  verify_tower_floor_room_authority
+  verify_base_rooftop_transit_door_motion
   verify_floor_visibility_shadow_patch
   verify_player3d_animation_flow
   verify_player3d_debug_scale_flow

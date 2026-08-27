@@ -83,7 +83,8 @@ func _refresh_metrics() -> void:
 		+ "显存             %s MB\n" % _metric_or_na(video_mb)
 		+ "渲染器           %s\n" % GraphicsSettingsManager.get_renderer_summary()
 		+ "画质 / 抗锯齿    %s / %s\n" % [RuntimePerformanceManager.quality_profile, aa]
-		+ "动态阴影         %s（始终开启）" % GraphicsSettingsManager.get_shadow_quality()
+		+ "动态阴影         %s（始终开启）\n" % GraphicsSettingsManager.get_shadow_quality()
+		+ "太阳间接漫反射   %s（始终开启）" % GraphicsSettingsManager.get_indirect_diffuse_quality()
 	)
 	_label.add_theme_color_override(
 		"font_color",

@@ -217,10 +217,20 @@ custom_minimum_size = Vector2(390, 50)
 layout_mode = 2
 text = "屏幕空间反射 / SSR\n强化金属、湿地与光滑表面"
 
-[node name="SDFGI" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
-custom_minimum_size = Vector2(390, 50)
+[node name="IndirectDiffuse" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 58)
 layout_mode = 2
-text = "动态全局光照 / SDFGI\n为程序关卡提供实时漫反射"
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid/IndirectDiffuse"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "太阳间接漫反射 / SDFGI\n三档始终开启，仅调整覆盖与精度"
+vertical_alignment = 1
+
+[node name="QualityOption" type="OptionButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid/IndirectDiffuse"]
+custom_minimum_size = Vector2(145, 44)
+layout_mode = 2
 
 [node name="VolumetricFog" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
 custom_minimum_size = Vector2(390, 50)

@@ -15,6 +15,8 @@ const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const AA_LABELS := ["关闭", "FXAA（快速）", "MSAA 2×", "MSAA 4×", "MSAA 8×", "TAA（高档推荐）"]
 const SHADOW_MODES := ["low", "medium", "high"]
 const SHADOW_LABELS := ["低 · 1024", "中 · 2048", "高 · 4096（当前）"]
+const INDIRECT_DIFFUSE_MODES := ["low", "medium", "high"]
+const INDIRECT_DIFFUSE_LABELS := ["低 · 近域", "中 · 平衡", "高 · 完整"]
 
 @onready var resume_button: Button = $Center/Panel/Margin/MainPage/ResumeButton
 @onready var graphics_button: Button = $Center/Panel/Margin/MainPage/GraphicsButton
@@ -28,6 +30,7 @@ const SHADOW_LABELS := ["低 · 1024", "中 · 2048", "高 · 4096（当前）"]
 @onready var renderer_label: Label = $Center/Panel/Margin/GraphicsPage/Header/RendererLabel
 @onready var aa_option: OptionButton = $Center/Panel/Margin/GraphicsPage/AASection/AAOption
 @onready var shadow_option: OptionButton = $Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows/ShadowOption
+@onready var indirect_diffuse_option: OptionButton = $Center/Panel/Margin/GraphicsPage/Scroll/Grid/IndirectDiffuse/QualityOption
 @onready var high_defaults_button: Button = $Center/Panel/Margin/GraphicsPage/PresetRow/HighDefaultsButton
 @onready var back_button: Button = $Center/Panel/Margin/GraphicsPage/Footer/BackButton
 @onready var status_label: Label = $Center/Panel/Margin/GraphicsPage/Footer/Status
@@ -118,7 +121,6 @@ func _setup_graphics_controls() -> void:
 		"ssao": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSAO,
 		"ssil": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSIL,
 		"ssr": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SSR,
-		"sdfgi": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SDFGI,
 		"volumetric_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/VolumetricFog,
 		"distance_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/DistanceFog,
 		"color_grading": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/ColorGrading,
@@ -129,6 +131,9 @@ func _setup_graphics_controls() -> void:
 	for index in SHADOW_LABELS.size():
 		shadow_option.add_item(SHADOW_LABELS[index], index)
 	shadow_option.item_selected.connect(_on_shadow_quality_selected)
+	for index in INDIRECT_DIFFUSE_LABELS.size():
+		indirect_diffuse_option.add_item(INDIRECT_DIFFUSE_LABELS[index], index)
+	indirect_diffuse_option.item_selected.connect(_on_indirect_diffuse_quality_selected)
 	for key in _toggle_nodes.keys():
 		(_toggle_nodes[key] as CheckButton).toggled.connect(_on_effect_toggled.bind(str(key)))
 	if not GraphicsSettingsManager.settings_changed.is_connected(_on_graphics_settings_changed):
@@ -271,6 +276,15 @@ func _on_shadow_quality_selected(index: int) -> void:
 	status_label.text = "动态阴影已切换为%s · 投影功能保持完整" % SHADOW_LABELS[index]
 
 
+func _on_indirect_diffuse_quality_selected(index: int) -> void:
+	if _syncing_controls or index < 0 or index >= INDIRECT_DIFFUSE_MODES.size():
+		return
+	GraphicsSettingsManager.set_value(
+		"indirect_diffuse_quality", INDIRECT_DIFFUSE_MODES[index]
+	)
+	status_label.text = "太阳间接漫反射已切换为%s · 功能保持开启" % INDIRECT_DIFFUSE_LABELS[index]
+
+
 func _on_graphics_settings_changed(_settings: Dictionary) -> void:
 	_sync_graphics_controls()
 
@@ -282,6 +296,10 @@ func _sync_graphics_controls() -> void:
 	aa_option.select(maxi(0, aa_index))
 	var shadow_index := SHADOW_MODES.find(str(settings.get("shadow_quality", "high")))
 	shadow_option.select(maxi(0, shadow_index))
+	var indirect_index := INDIRECT_DIFFUSE_MODES.find(
+		str(settings.get("indirect_diffuse_quality", "high"))
+	)
+	indirect_diffuse_option.select(maxi(0, indirect_index))
 	for key in _toggle_nodes.keys():
 		(_toggle_nodes[key] as CheckButton).button_pressed = bool(settings.get(key, true))
 	_syncing_controls = false

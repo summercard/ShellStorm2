@@ -11,7 +11,7 @@ const DEFAULT_SETTINGS := {
 	"ssao": true,
 	"ssil": true,
 	"ssr": true,
-	"sdfgi": true,
+	"indirect_diffuse_quality": "high",
 	"volumetric_fog": true,
 	"distance_fog": true,
 	"shadow_quality": "high",
@@ -19,6 +19,28 @@ const DEFAULT_SETTINGS := {
 }
 const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const SHADOW_QUALITY_MODES := ["low", "medium", "high"]
+const INDIRECT_DIFFUSE_QUALITY_MODES := ["low", "medium", "high"]
+const INDIRECT_DIFFUSE_PROFILES := {
+	"low": {
+		"cascades": 2,
+		"max_distance": 90.0,
+		"bounce_feedback": 0.24,
+		"energy": 0.72,
+	},
+	"medium": {
+		"cascades": 3,
+		"max_distance": 140.0,
+		"bounce_feedback": 0.36,
+		"energy": 0.82,
+	},
+	"high": {
+		# Godot原始高档基线：4级联、204.8米、自动得出0.2米最小体素。
+		"cascades": 4,
+		"max_distance": 204.8,
+		"bounce_feedback": 0.46,
+		"energy": 0.88,
+	},
+}
 const SHADOW_ATLAS_SIZES := {
 	"low": 1024,
 	"medium": 2048,
@@ -51,13 +73,18 @@ func get_value(key: String, fallback: Variant = null) -> Variant:
 
 func is_enabled(key: String) -> bool:
 	# 动态阴影承载太阳、手电和房间灯的玩法信息，不存在关闭档。
-	if key == "shadows":
+	# SDFGI 旧调用同样保持兼容：新三级档均开启太阳/天空间接漫反射。
+	if key == "shadows" or key == "sdfgi":
 		return true
 	return bool(_settings.get(key, false))
 
 
 func get_shadow_quality() -> String:
 	return str(_settings.get("shadow_quality", "high"))
+
+
+func get_indirect_diffuse_quality() -> String:
+	return str(_settings.get("indirect_diffuse_quality", "high"))
 
 
 func get_shadow_atlas_size() -> int:
@@ -117,6 +144,11 @@ func _load_settings() -> void:
 	# 旧版 shadows=false 不再迁移为关闭；玩法阴影统一进入当前高档基线。
 	if not config.has_section_key(SECTION, "shadow_quality"):
 		_settings["shadow_quality"] = "high"
+	# 旧版只有SDFGI开关：开启迁移为完整高档，关闭迁移为仍保留漫反射的低档。
+	if not config.has_section_key(SECTION, "indirect_diffuse_quality"):
+		_settings["indirect_diffuse_quality"] = (
+			"high" if bool(config.get_value(SECTION, "sdfgi", true)) else "low"
+		)
 
 
 func _save_settings() -> void:
@@ -133,6 +165,9 @@ func _sanitize_value(key: String, value: Variant) -> Variant:
 	if key == "shadow_quality":
 		var mode := str(value)
 		return mode if mode in SHADOW_QUALITY_MODES else DEFAULT_SETTINGS[key]
+	if key == "indirect_diffuse_quality":
+		var mode := str(value)
+		return mode if mode in INDIRECT_DIFFUSE_QUALITY_MODES else DEFAULT_SETTINGS[key]
 	return bool(value)
 
 
@@ -222,11 +257,19 @@ func _apply_environment(environment: Environment) -> void:
 	_set_property(environment, "ssr_fade_out", 2.4)
 	_set_property(environment, "ssr_depth_tolerance", 0.16)
 
-	_set_property(environment, "sdfgi_enabled", is_enabled("sdfgi"))
+	# 三档都保持太阳与天空的动态漫反射；档位只收缩体素覆盖和精度，
+	# 不再提供会使场景突然失去反弹光的关闭入口。
+	var indirect_profile: Dictionary = INDIRECT_DIFFUSE_PROFILES.get(
+		get_indirect_diffuse_quality(), INDIRECT_DIFFUSE_PROFILES["high"]
+	)
+	_set_property(environment, "sdfgi_enabled", true)
 	_set_property(environment, "sdfgi_use_occlusion", true)
 	_set_property(environment, "sdfgi_read_sky_light", true)
-	_set_property(environment, "sdfgi_bounce_feedback", 0.46)
-	_set_property(environment, "sdfgi_energy", 0.88)
+	_set_property(environment, "sdfgi_cascades", int(indirect_profile["cascades"]))
+	# max_distance会按级联数量自动重算min_cell_size，不能把两者作为独立值连写。
+	_set_property(environment, "sdfgi_max_distance", float(indirect_profile["max_distance"]))
+	_set_property(environment, "sdfgi_bounce_feedback", float(indirect_profile["bounce_feedback"]))
+	_set_property(environment, "sdfgi_energy", float(indirect_profile["energy"]))
 	_set_property(environment, "sdfgi_normal_bias", 1.1)
 	_set_property(environment, "sdfgi_probe_bias", 1.1)
 

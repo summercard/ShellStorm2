@@ -13,6 +13,16 @@ const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)
 const AMBIENT_ENERGY := 0.01
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
 const FOG_DENSITY := 0.040
+const SKY_BOUNCE_ENERGY_BY_QUALITY := {
+	"low": 0.54,
+	"medium": 0.72,
+	"high": 0.92,
+}
+const SKY_BOUNCE_RANGE_BY_QUALITY := {
+	"low": 36.0,
+	"medium": 44.0,
+	"high": 52.0,
+}
 
 var _environment: Environment
 var _sun: DirectionalLight3D
@@ -52,6 +62,11 @@ func _ready() -> void:
 		RuntimePerformanceManager.register_atmosphere(self)
 	add_to_group("time_system")
 	_bind_global_time_source()
+	if (
+		GraphicsSettingsManager != null
+		and not GraphicsSettingsManager.settings_changed.is_connected(_on_graphics_settings_changed)
+	):
+		GraphicsSettingsManager.settings_changed.connect(_on_graphics_settings_changed)
 	set_process(_time_source == null and time_scale > 0.0)
 
 
@@ -156,6 +171,10 @@ func _on_world_time_advanced(_delta_game_seconds: float, snapshot: Dictionary) -
 	_apply_time_of_day()
 
 
+func _on_graphics_settings_changed(_settings: Dictionary) -> void:
+	_apply_time_of_day()
+
+
 func _apply_solar_snapshot(solar: Dictionary) -> void:
 	if _sun != null:
 		_sun.rotation_degrees = solar.get("rotation_degrees", Vector3(-60.0, 32.0, 0.0)) as Vector3
@@ -166,8 +185,17 @@ func _apply_solar_snapshot(solar: Dictionary) -> void:
 		_environment.ambient_light_color = solar.get("ambient_color", AMBIENT_COLOR) as Color
 		_environment.ambient_light_energy = float(solar.get("ambient_energy", AMBIENT_ENERGY))
 	if _rooftop_sky_bounce != null:
+		var indirect_quality := (
+			GraphicsSettingsManager.get_indirect_diffuse_quality()
+			if GraphicsSettingsManager != null
+			else "high"
+		)
+		var peak_energy := float(SKY_BOUNCE_ENERGY_BY_QUALITY.get(indirect_quality, 0.92))
+		_rooftop_sky_bounce.omni_range = float(
+			SKY_BOUNCE_RANGE_BY_QUALITY.get(indirect_quality, 52.0)
+		)
 		_rooftop_sky_bounce.light_energy = lerpf(
-			0.06, 0.92, float(solar.get("daylight_factor", 0.0))
+			0.06, peak_energy, float(solar.get("daylight_factor", 0.0))
 		)
 
 
@@ -182,6 +210,14 @@ func get_snapshot() -> Dictionary:
 		"simulated_window_lighting": false,
 		"rooftop_sky_bounce": (
 			_rooftop_sky_bounce != null and _rooftop_sky_bounce.visible
+		),
+		"indirect_diffuse_quality": (
+			GraphicsSettingsManager.get_indirect_diffuse_quality()
+			if GraphicsSettingsManager != null
+			else "high"
+		),
+		"rooftop_sky_bounce_range": (
+			_rooftop_sky_bounce.omni_range if _rooftop_sky_bounce != null else 0.0
 		),
 		"sun_energy": _sun.light_energy if _sun != null else 0.0,
 		"sun_peak_energy": SUN_ENERGY,
@@ -261,9 +297,10 @@ func _build_city_silhouette() -> void:
 
 func _build_rooftop_sky_bounce() -> void:
 	# Compatibility 渲染器没有实时天空 GI；太阳背面的特殊楼梯墙会因此
-	# 压成纯黑。单个带阴影局部光放在特殊墙顶以上，只模拟楼顶开阔
+	# 压成纯黑。单个局部光放在特殊墙顶以上，只模拟楼顶开阔
 	# 天空的漫反射；太阳、环境参数和室内灯体系保持不变，楼板与墙仍
-	# 会阻止它泄漏到室内。
+	# 会阻止它泄漏到室内。Forward+也保留这盏局部补偿，确保三档切换
+	# 在屋顶立即可见；完整场景反弹仍由SDFGI负责。
 	_rooftop_sky_bounce = OmniLight3D.new()
 	_rooftop_sky_bounce.name = "RooftopSkyBounce"
 	_rooftop_sky_bounce.position = Vector3(-34.0, 16.0, 0.0)

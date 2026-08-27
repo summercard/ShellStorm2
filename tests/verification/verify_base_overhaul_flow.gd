@@ -148,17 +148,48 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 		tower.call("_refresh_physical_location_authority", true)
 		var upper := tower.get_physical_location_snapshot()
 		_expect(int(upper.get("floor_number", 0)) == 99, "基地阁楼内侧没有按基地壳体判定为99层", failures)
+		_expect(str(upper.get("room_id", "")) == "facility", "基地阁楼内侧楼层正确但房间仍停在100F start", failures)
+		_expect(tower.minimap.get_floor_label() == "99F", "基地阁楼内侧雷达楼层没有同步为99F", failures)
+		_expect(tower.room_label.text.begins_with("99层基地"), "基地阁楼内侧房间标签没有同步为99层基地", failures)
 		_expect(bool(upper.get("inside_base_safe_volume", false)) and not bool(upper.get("on_facility_ground_level", true)), "上层基地安全区或设施隔层规则错误", failures)
 		_expect(tower.can_return_player_to_base_center(), "基地上层脱困按钮不可用", failures)
+		# 复现历史缺陷：楼层索引已缓存为99F，但房间/雷达仍错误停在100F。
+		# 即便楼层没有再次变化，落到基地地面后也必须重新解析为facility。
+		tower.set("_authoritative_floor_index", 1)
+		tower.set("_current_room_id", "start")
+		tower.minimap.set_current_room("start")
+		tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+		tower.call("_refresh_physical_location_authority")
+		var same_floor_recovered := tower.get_physical_location_snapshot()
+		_expect(
+			str(same_floor_recovered.get("room_id", "")) == "facility"
+			and tower.minimap.get_floor_label() == "99F",
+			"同层位置权威提前返回，基地地面仍沿用100F房间/雷达状态",
+			failures
+		)
 		var rooftop_door := tower.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
 		_expect(rooftop_door != null, "阁楼通往天台的现有Godot门组件缺失", failures)
 		if rooftop_door != null:
 			tower.player.global_position = rooftop_door.global_position + Vector3(-0.6, 0.05, 0.0)
 			_expect(bool(tower.call("_try_open_base_rooftop_transit_door")), "阁楼天台门不能通过既有门链路开启", failures)
 			await get_tree().physics_frame
-			_expect(rooftop_door.is_open, "阁楼天台门没有打开表现", failures)
+			var opening_snapshot := rooftop_door.get_snapshot()
+			_expect(
+				rooftop_door.is_open
+				and bool(opening_snapshot.get("transitioning", false))
+				and bool(opening_snapshot.get("blocks_passage", false)),
+				"阁楼天台门没有以携带阻挡的升降动画开始开启",
+				failures
+			)
+			await get_tree().create_timer(0.78).timeout
+			await get_tree().physics_frame
 			var snapshot := rooftop_door.get_snapshot()
-			_expect(not bool(snapshot.get("blocks_passage", true)), "阁楼天台门打开后碰撞没有放行", failures)
+			_expect(
+				not bool(snapshot.get("transitioning", true))
+				and not bool(snapshot.get("blocks_passage", true)),
+				"阁楼天台门完成动画后碰撞没有放行",
+				failures
+			)
 			var doorway_from := facility.to_global(Vector3(14.0, 10.1, -7.5))
 			var doorway_to := facility.to_global(Vector3(16.0, 10.1, -7.5))
 			var doorway_query := PhysicsRayQueryParameters3D.create(doorway_from, doorway_to, 1)

@@ -6,6 +6,7 @@ const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const PANEL_THICKNESS_M := 0.18
 const COLLISION_DEPTH_M := 0.42
 const OPEN_LIFT_CLEARANCE_M := 0.32
+const DEFAULT_MOTION_DURATION_S := 0.24
 
 var direction := "east"
 var target_room_id := ""
@@ -17,6 +18,12 @@ var _panel: Node3D
 var _collision: CollisionShape3D
 var _prompt: Label3D
 var _panel_visual_scene: PackedScene
+var _motion_duration_s := DEFAULT_MOTION_DURATION_S
+var _collision_tracks_panel_motion := false
+var _manual_close_enabled := false
+var _motion_tween: Tween
+var _transitioning := false
+var _target_open := false
 
 
 func configure(
@@ -38,28 +45,99 @@ func set_access_policy(policy: Dictionary) -> void:
 	_refresh_prompt()
 
 
-func set_open(opened: bool, immediate := false) -> void:
-	var changed := is_open != opened
-	is_open = opened
-	if _collision != null:
-		_collision.set_deferred("disabled", opened)
+func set_motion_profile(duration_s: float, collision_tracks_panel := false) -> void:
+	_motion_duration_s = clampf(duration_s, 0.05, 2.0)
+	_collision_tracks_panel_motion = collision_tracks_panel
+	if _collision == null or _panel == null:
+		return
+	# CollisionShape3D必须保持为StaticBody3D的直接子节点才会参与物理。
+	# 同步模式通过并行动画保持其Y与门板一致，而不是把碰撞挂到视觉节点下。
+	if _collision_tracks_panel_motion:
+		_collision.position.y = _panel.position.y
+
+
+func set_manual_close_enabled(enabled: bool) -> void:
+	_manual_close_enabled = enabled
 	_refresh_prompt()
+
+
+func is_in_motion() -> bool:
+	return _transitioning
+
+
+func set_open(opened: bool, immediate := false) -> void:
+	if _transitioning and _target_open == opened and not immediate:
+		return
+	var changed := is_open != opened or (_transitioning and _target_open != opened)
+	is_open = opened
+	_target_open = opened
 	if _panel == null:
+		if _collision != null:
+			_collision.set_deferred("disabled", opened)
+		_transitioning = false
+		_refresh_prompt()
 		return
 	var closed_y := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 0.5
+	var open_y := TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 1.5 + OPEN_LIFT_CLEARANCE_M
 	var target_y := (
-		TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M * 1.5 + OPEN_LIFT_CLEARANCE_M
+		open_y
 		if opened
 		else closed_y
 	)
+	if _motion_tween != null and _motion_tween.is_valid():
+		_motion_tween.kill()
 	if immediate or not is_inside_tree() or not changed:
+		_transitioning = false
 		_panel.position.y = target_y
-	else:
-		var tween := create_tween()
-		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-		tween.tween_property(_panel, "position:y", target_y, 0.24)
-		if opened and AudioManager != null:
-			AudioManager.play_sfx("door_open", -3.0)
+		if _collision != null:
+			if _collision_tracks_panel_motion:
+				_collision.position.y = target_y
+			_collision.set_deferred("disabled", opened)
+		_refresh_prompt()
+		return
+	_transitioning = true
+	# 专用升降门的碰撞与门板同步运动；普通房门继续保持旧的即时放行合同，
+	# 避免改变既有战斗门节奏。
+	if _collision != null:
+		_collision.set_deferred(
+			"disabled",
+			false if _collision_tracks_panel_motion else opened
+		)
+	var full_travel := maxf(0.001, open_y - closed_y)
+	var travel_ratio := clampf(absf(target_y - _panel.position.y) / full_travel, 0.05, 1.0)
+	_motion_tween = create_tween()
+	_motion_tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	_motion_tween.set_parallel(_collision_tracks_panel_motion and _collision != null)
+	_motion_tween.tween_property(
+		_panel,
+		"position:y",
+		target_y,
+		_motion_duration_s * travel_ratio
+	)
+	if _collision_tracks_panel_motion and _collision != null:
+		_motion_tween.tween_property(
+			_collision,
+			"position:y",
+			target_y,
+			_motion_duration_s * travel_ratio
+		)
+	_motion_tween.finished.connect(_on_motion_finished.bind(opened, target_y))
+	_refresh_prompt()
+	if opened and AudioManager != null:
+		AudioManager.play_sfx("door_open", -3.0)
+
+
+func _on_motion_finished(opened: bool, target_y: float) -> void:
+	if _target_open != opened:
+		return
+	_transitioning = false
+	if _panel != null:
+		_panel.position.y = target_y
+	if _collision != null:
+		if _collision_tracks_panel_motion:
+			_collision.position.y = target_y
+		_collision.set_deferred("disabled", opened)
+	_refresh_prompt()
 
 
 func set_prompt_visible(show_prompt: bool) -> void:
@@ -76,6 +154,13 @@ func get_snapshot() -> Dictionary:
 		"requires_clear": requires_clear,
 		"triggers_fate": triggers_fate,
 		"blocks_passage": _collision != null and not _collision.disabled,
+		"transitioning": _transitioning,
+		"target_open": _target_open,
+		"motion_duration_s": _motion_duration_s,
+		"collision_tracks_panel_motion": _collision_tracks_panel_motion,
+		"collision_is_direct_body_child": _collision != null and _collision.get_parent() == self,
+		"panel_y": _panel.position.y if _panel != null else 0.0,
+		"collision_y": _collision.position.y if _collision != null else 0.0,
 		"clear_width_m": TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M,
 		"clear_height_m": TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M,
 		"panel_size": Vector3(
@@ -91,7 +176,13 @@ func get_snapshot() -> Dictionary:
 func _refresh_prompt() -> void:
 	if _prompt == null:
 		return
-	if is_open:
+	if _transitioning:
+		_prompt.text = "通道开启中…" if _target_open else "通道关闭中…"
+		_prompt.modulate = Color(0.52, 0.88, 1.0)
+	elif is_open and _manual_close_enabled:
+		_prompt.text = "[E] 关闭通道"
+		_prompt.modulate = Color(0.52, 0.88, 1.0)
+	elif is_open:
 		_prompt.text = "通道已开启"
 		_prompt.modulate = Color(0.42, 0.92, 0.68)
 	elif requires_key:

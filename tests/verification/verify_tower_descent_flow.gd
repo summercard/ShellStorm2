@@ -188,6 +188,21 @@ func _ready() -> void:
 		"塔楼环境底光没有实时应用权威时间或天空补光错误",
 		failures
 	)
+	var indirect_quality := str(rooftop_atmosphere.get("indirect_diffuse_quality", ""))
+	var expected_bounce_range: float = float({
+		"low": 36.0,
+		"medium": 44.0,
+		"high": 52.0,
+	}.get(indirect_quality, -1.0))
+	_expect(
+		indirect_quality in GraphicsSettingsManager.INDIRECT_DIFFUSE_QUALITY_MODES
+		and is_equal_approx(
+			float(rooftop_atmosphere.get("rooftop_sky_bounce_range", 0.0)),
+			float(expected_bounce_range)
+		),
+		"天台兼容补光没有应用太阳间接漫反射质量档位",
+		failures
+	)
 	_expect(
 		_count_named_nodes(tower, "TowerWindow_") == 0
 		and _count_named_nodes(tower, "TowerWindowNaturalLight") == 0,

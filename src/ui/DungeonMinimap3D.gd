@@ -105,6 +105,16 @@ func set_current_room(room_id: String) -> void:
 	reveal_room(room_id)
 
 
+func set_current_floor_height(world_y: float) -> void:
+	# 楼层显示由世界的位置权威直接同步，房间只负责当前房间和探索状态。
+	# 这样在楼梯、门槛或多层基地内，即使Area信号尚未切房，也不会沿用旧楼层。
+	var snapped_y := snappedf(world_y, 0.01)
+	if is_equal_approx(_current_floor_y, snapped_y):
+		return
+	_current_floor_y = snapped_y
+	queue_redraw()
+
+
 func set_player_state(
 	world_position: Vector3,
 	aim_direction: Vector3

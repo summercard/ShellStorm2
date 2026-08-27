@@ -71,6 +71,10 @@ const CAMERA_STAIR_SLAB_RECOVER_RATE := 5.0
 const CAMERA_STAIR_SLAB_MAX_RAY_HITS := 8
 const CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M := [-0.24, 0.0, 0.24]
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
+const BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M := 2.35
+const BASE_ROOFTOP_DOOR_AUTO_CLOSE_DISTANCE_M := 2.85
+const BASE_ROOFTOP_DOOR_AUTO_CLOSE_DELAY_S := 0.40
+const BASE_ROOFTOP_DOOR_MOTION_DURATION_S := 0.72
 # 楼梯资产位于65m核心外侧：沿外法线预留20m、沿折返方向预留30m。
 # 该占位参与整层布局规划，普通/随机房间不得进入；楼梯大厅自身作为接口例外。
 const STAIR_PLAN_OUTWARD_DEPTH_M := 20.0
@@ -92,6 +96,7 @@ var _facility_nodes: Array[BaseFacility3D] = []
 var _facility_decor_nodes: Array[Node3D] = []
 var _facility_art_layout: Node3D
 var _base_rooftop_transit_door: RoomDoor3D
+var _base_rooftop_door_clear_elapsed := 0.0
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
 var _edge_door_sides_by_key: Dictionary = {}
@@ -251,6 +256,7 @@ func _process(delta: float) -> void:
 	_update_facility_combat_lock()
 	_update_facility_door_auto_close()
 	_update_base_rooftop_transit_door_prompt()
+	_update_base_rooftop_transit_door_auto_close(delta)
 	_update_stair_arrival_prompt()
 
 
@@ -2515,7 +2521,8 @@ func _is_player_near_base_rooftop_transit_door() -> bool:
 		_base_rooftop_transit_door != null
 		and is_instance_valid(_base_rooftop_transit_door)
 		and player != null
-		and player.global_position.distance_to(_base_rooftop_transit_door.global_position) <= 2.35
+		and player.global_position.distance_to(_base_rooftop_transit_door.global_position)
+			<= BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M
 	)
 
 
@@ -2530,6 +2537,17 @@ func _update_base_rooftop_transit_door_prompt() -> void:
 func _try_open_base_rooftop_transit_door() -> bool:
 	if not _is_player_near_base_rooftop_transit_door():
 		return false
+	if _base_rooftop_transit_door.is_in_motion():
+		status_label.text = "阁楼天台门正在运动"
+		return true
+	if _base_rooftop_transit_door.is_open:
+		if _is_player_in_base_rooftop_doorway():
+			status_label.text = "门口被占用，无法关闭"
+			return true
+		_base_rooftop_transit_door.set_open(false)
+		_base_rooftop_door_clear_elapsed = 0.0
+		status_label.text = "阁楼天台门正在关闭"
+		return true
 	var edge := _edge_key("start", "facility")
 	if not bool(_open_edges.get(edge, false)):
 		# 此门与旧天台—基地交通边共享授权，但自身仍是独立的Godot门实例。
@@ -2542,11 +2560,47 @@ func _try_open_base_rooftop_transit_door() -> bool:
 			MonsterAIManager.broadcast_sound_stimulus(
 				player.global_position, 6.5, "door_open", player
 			)
-		status_label.text = "基地阁楼天台门已开启"
-	else:
-		status_label.text = "天台通道已经开启"
+	status_label.text = "基地阁楼天台门正在开启"
+	_base_rooftop_door_clear_elapsed = 0.0
 	_base_rooftop_transit_door.set_open(true)
 	return true
+
+
+func _is_player_in_base_rooftop_doorway() -> bool:
+	if _base_rooftop_transit_door == null or player == null:
+		return false
+	var local_pos := _base_rooftop_transit_door.to_local(player.global_position)
+	return (
+		absf(local_pos.x) <= TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + 0.35
+		and absf(local_pos.z) <= 0.72
+		and local_pos.y >= -0.4
+		and local_pos.y <= TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + 0.4
+	)
+
+
+func _update_base_rooftop_transit_door_auto_close(delta: float) -> void:
+	if (
+		_base_rooftop_transit_door == null
+		or not is_instance_valid(_base_rooftop_transit_door)
+		or player == null
+		or not _base_rooftop_transit_door.is_open
+		or _base_rooftop_transit_door.is_in_motion()
+	):
+		_base_rooftop_door_clear_elapsed = 0.0
+		return
+	if (
+		_is_player_in_base_rooftop_doorway()
+		or player.global_position.distance_to(_base_rooftop_transit_door.global_position)
+			<= BASE_ROOFTOP_DOOR_AUTO_CLOSE_DISTANCE_M
+	):
+		_base_rooftop_door_clear_elapsed = 0.0
+		return
+	_base_rooftop_door_clear_elapsed += delta
+	if _base_rooftop_door_clear_elapsed < BASE_ROOFTOP_DOOR_AUTO_CLOSE_DELAY_S:
+		return
+	_base_rooftop_door_clear_elapsed = 0.0
+	_base_rooftop_transit_door.set_open(false)
+	status_label.text = "阁楼天台门正在自动关闭"
 
 
 func is_player_inside_facility() -> bool:
@@ -3063,6 +3117,11 @@ func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:
 		"requires_key": false,
 		"triggers_fate": false,
 	})
+	door.set_motion_profile(BASE_ROOFTOP_DOOR_MOTION_DURATION_S, true)
+	door.set_manual_close_enabled(true)
+	# 门跨越100F/99F两套流送范围，必须独立常驻；否则玩家从100F靠近时
+	# 99F父房间尚未激活，门板可见但StaticBody碰撞不会进入物理空间。
+	door.process_mode = Node.PROCESS_MODE_ALWAYS
 	# 与ENV-BASE100-UPPER-SHELL-30X30-H9的东侧门洞严格同位：本地
 	# (15, 9, -7.5)，底边处于100F门槛。RoomDoor3D的朝向沿X轴。
 	door.position = Vector3(15.0, FLOOR_HEIGHT, -7.5)
@@ -3537,11 +3596,30 @@ func _refresh_physical_location_authority(force := false) -> void:
 	if player == null:
 		return
 	var floor_index := _physical_floor_index()
-	if not force and floor_index == _authoritative_floor_index:
+	# 雷达楼层直接跟随物理位置权威，不能依赖房间Area是否已经切换。
+	# set_current_floor_height内部会忽略未变化值，不会增加重复重绘。
+	if minimap != null:
+		minimap.set_current_floor_height(-FLOOR_HEIGHT * float(floor_index))
+	var floor_changed := floor_index != _authoritative_floor_index
+	# 楼层未变化时也必须复核房间归属。角色可能先从100F进入99F基地阁楼：
+	# 此时物理楼层已经是1，但旧房间仍可能是start；若只按楼层变化刷新，
+	# 后续走到99F地面也永远不会把小地图、房间标签和存档房间同步为facility。
+	var current_room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if (
+		not force
+		and not floor_changed
+		and _room_contains_player_on_floor(current_room, floor_index)
+	):
+		return
+	var containing_room := _find_containing_room_on_floor(floor_index)
+	var room_changed := (
+		containing_room != null
+		and containing_room.room_id != _current_room_id
+	)
+	if not force and not floor_changed and not room_changed:
 		return
 	_authoritative_floor_index = floor_index
-	var containing_room := _find_containing_room_on_floor(floor_index)
-	if containing_room != null and containing_room.room_id != _current_room_id:
+	if room_changed:
 		var previous_id := _current_room_id
 		_on_room_entered(containing_room)
 		# 物理落层不能被只服务于门路由的到达锁拒绝。若角色已经真实落在
@@ -3558,11 +3636,28 @@ func _refresh_physical_location_authority(force := false) -> void:
 
 
 func _find_containing_room_on_floor(floor_index: int) -> DungeonRoom3D:
+	# 99F基地是带阁楼、夹层和内梯的多层建筑体。它的房间归属必须与
+	# _physical_floor_index()/is_player_inside_facility()使用同一个体积合同，
+	# 否则会出现楼层已是99F、房间和雷达却仍停在100F start的分裂状态。
+	if floor_index == 1 and is_player_inside_facility():
+		var facility := _room_by_id.get("facility") as DungeonRoom3D
+		if facility != null:
+			return facility
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
-		if room != null and _is_runtime_restore_position_valid(room, player.global_position):
+		if _room_contains_player_on_floor(room, floor_index):
 			return room
 	return null
+
+
+func _room_contains_player_on_floor(room: DungeonRoom3D, floor_index: int) -> bool:
+	if room == null or player == null:
+		return false
+	if int(_room_floor_index.get(room.room_id, -1)) != floor_index:
+		return false
+	if room.room_id == "facility" and floor_index == 1:
+		return is_player_inside_facility()
+	return _is_runtime_restore_position_valid(room, player.global_position)
 
 
 func get_physical_location_snapshot() -> Dictionary:
