@@ -1,5 +1,15 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-08-27｜交响管弦配乐与音乐系统接入
+
+- Suno.cn 生成 4 首纯器乐交响（base_passion / rooftop_relax / descent_suspense / boss_intense），每首 A/B 两版，由 `MusicCatalog.selection_mode=random` 随机播放。
+- 新增 `src/audio/MusicCatalog.gd`（静态资产注册表）、`MusicManager.gd`（autoload 单例：play / push_and_play / restore / pause / stop）、`MusicTrigger.gd`（触发点组件）。音乐逻辑与场景代码完全解耦，新增曲目只需在 Catalog 加一行。
+- 接入触发点：BaseWorld3D 进入基地 → base_passion；TowerAtmosphere3D.set_floor_number(≥100) → rooftop_relax；普通楼层 → descent_suspense；95/90/85F Boss 房 → boss_intense（压栈）。
+- `MusicManager` 注册成 autoload：`project.godot` [autoload] 区段新增 `MusicManager="*res://src/audio/MusicManager.gd"`。
+- 8 个 mp3 由 Godot 自动 importer 生成 `.import` 文件与 `.godot/imported/` 产物。
+- 新增验收场景 `tests/verification/verify_music_system.tscn`：4 music_ids + A/B 资源加载 + autoload 接入 + 未知 music_id 拒绝。
+- 文档：`docs/v0.1/14.8_音乐系统与配乐资产.md`（架构、清单、触发点、扩展方式、已知限制）。
+
 ## 2026-08-27｜99层楼中楼下方工业仓库挡板
 
 - 新增独立环境组件`ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER`：Blender源文件、GLB、PackedScene、预览图、导入清单与美术资产台账均已登记。当前`v002`视觉为冷灰横向仓库分板、浅灰横向分隔条和规律的竖向钢架；保留`v001`紫色/青绿竖向波纹版本供回滚。
