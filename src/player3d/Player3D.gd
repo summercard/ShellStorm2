@@ -65,6 +65,8 @@ var input_locked := false
 var _presentation_state := "idle"
 var _last_damage_amount := 0
 var _last_hit_direction := Vector3.ZERO
+var _last_damage_source_snapshot: Dictionary = {}
+var _last_damage_source_at_msec := 0
 var _death_animation_progress := 0.0
 var _death_animation_finished_emitted := false
 var _invincible_remaining := 0.0
@@ -610,6 +612,26 @@ func take_damage(amount: int, _critical := false, hit_direction := Vector3.ZERO,
 		_state_machine.transition_to("dead", true)
 	else:
 		_state_machine.transition_to("hurt", true)
+
+
+func notify_attacked_by(source: Node3D) -> void:
+	_last_damage_source_snapshot.clear()
+	_last_damage_source_at_msec = Time.get_ticks_msec()
+	if source == null or not is_instance_valid(source) or not source.has_method("get_enemy_data"):
+		return
+	var source_data := source.call("get_enemy_data") as Dictionary
+	_last_damage_source_snapshot = {
+		"elite_id": str(source_data.get("elite_id", "")),
+		"encounter_instance_id": str(source_data.get("encounter_instance_id", "")),
+		"room_id": str(source.get("room_id")),
+		"floor_number": int(source_data.get("floor_number", source_data.get("floor", 0))),
+	}
+
+
+func get_last_damage_source_snapshot(max_age_msec := 2500) -> Dictionary:
+	if Time.get_ticks_msec() - _last_damage_source_at_msec > maxi(0, max_age_msec):
+		return {}
+	return _last_damage_source_snapshot.duplicate(true)
 
 
 func heal(amount: int) -> void:

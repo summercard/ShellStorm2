@@ -1,5 +1,6 @@
 extends Node
-## 12只唯一精英的跨局事实源：定义、档案、预约、成长、逃脱、死亡与夺械转译。
+## 12只唯一精英的跨局档案事实源：预约、成长、逃脱、死亡与夺械转译。
+## 静态身份、投放与表现配置由 EliteContentCatalog 独立持有。
 
 signal roster_changed(elite_id: String, record: Dictionary)
 signal elite_reserved(elite_id: String, encounter_id: String)
@@ -11,20 +12,7 @@ const VALID_STATES := [
 	"RegionalBoss", "QuasiBoss", "Killed",
 ]
 
-const DEFINITIONS: Array[Dictionary] = [
-	{"elite_id":"elite_rift_boar_armed","name":"背枪的裂口爬虫","base_enemy_id":"melee_chaser","behavior_id":"armed_rush","modifier_id":"Elite.WeaponParasite","growth":"副枪射击频率","translation":"gun_body_to_followup_shot"},
-	{"elite_id":"elite_spore_devourer","name":"吞弹者·孢子射手","base_enemy_id":"ranged_caster","behavior_id":"bullet_devourer","modifier_id":"Elite.BulletEater","growth":"吸收容量与反击弹数","translation":"bullet_to_counter_volley"},
-	{"elite_id":"elite_iron_carapace","name":"铁壁·壳甲统领","base_enemy_id":"shielded","behavior_id":"rotating_carapace","modifier_id":"Elite.Huge","growth":"护甲面与转向间隔","translation":"stock_magazine_to_guard_counter"},
-	{"elite_id":"elite_ninth_hive_queen","name":"蜂后“第九巢”","base_enemy_id":"summoner","behavior_id":"hive_network","modifier_id":"Elite.Parasite","growth":"巢数与节点协同","translation":"attachment_to_hive_modifier"},
-	{"elite_id":"elite_emberfruit","name":"焦雷果·余烬","base_enemy_id":"exploder","behavior_id":"renewing_mines","modifier_id":"Elite.SpawnOnDeath","growth":"连锁种子与燃烧区","translation":"explosive_round_to_mine_field"},
-	{"elite_id":"elite_blackneedle","name":"缝行者“黑针”","base_enemy_id":"ambusher","behavior_id":"false_burrow_routes","modifier_id":"Elite.Huge","growth":"假路线与二次突袭","translation":"piercing_optic_to_line_lunge"},
-	{"elite_id":"elite_mirror_shell","name":"反射者·镜壳","base_enemy_id":"shielded","behavior_id":"mirror_sector","modifier_id":"Elite.Ricochet","growth":"反射扇区与弱点窗口","translation":"ricochet_optic_to_reflect_sector"},
-	{"elite_id":"elite_arms_taker","name":"夺械者“收租人”","base_enemy_id":"ranged_caster","behavior_id":"weapon_phase_swap","modifier_id":"Elite.WeaponParasite","growth":"完整枪身阶段转译","translation":"gun_body_to_phase_skill"},
-	{"elite_id":"elite_seven_signs","name":"命运残响“七签”","base_enemy_id":"ranged_caster","behavior_id":"seven_attack_rule","modifier_id":"Elite.Ricochet","growth":"一至两条公开规则","translation":"fate_to_budgeted_rule"},
-	{"elite_id":"elite_echo_brood","name":"寄生母体“回声”","base_enemy_id":"summoner","behavior_id":"attachment_echo","modifier_id":"Elite.Parasite","growth":"双回声召唤修饰","translation":"attachment_to_summon_echo"},
-	{"elite_id":"elite_returning_king","name":"逃亡王“折返者”","base_enemy_id":"ambusher","behavior_id":"escape_route","modifier_id":"Elite.SpawnOnDeath","growth":"折返段与伏击次数","translation":"return_round_to_retreat_lunge"},
-	{"elite_id":"elite_nameless_crown","name":"准首领“无名王冠”","base_enemy_id":"boss","behavior_id":"three_crowns","modifier_id":"Elite.Huge","growth":"名册推进与三冠阶段","translation":"assembly_to_three_phase_bag"},
-]
+const DEFINITIONS := EliteContentCatalog.DEFINITIONS
 
 var _definitions_by_id: Dictionary = {}
 var _reservations_by_encounter: Dictionary = {}
@@ -61,6 +49,15 @@ func get_record(elite_id: String) -> Dictionary:
 	return merged
 
 
+func get_bounty_currency(elite_id: String) -> int:
+	var definition := get_definition(elite_id)
+	var record := _get_record(elite_id)
+	return _bounty_currency(
+		definition.get("growth_profile", {}) as Dictionary,
+		clampi(int(record.get("bounty_reward_level", 0)), 0, 5)
+	)
+
+
 func select_and_reserve(seed_value: int, floor_number: int, encounter_id: String) -> Dictionary:
 	_ensure_roster()
 	if encounter_id.is_empty():
@@ -68,7 +65,7 @@ func select_and_reserve(seed_value: int, floor_number: int, encounter_id: String
 	if _reservations_by_encounter.has(encounter_id):
 		return get_record(str(_reservations_by_encounter[encounter_id]))
 	var eligible: Array[String] = []
-	for definition in DEFINITIONS:
+	for definition in EliteContentCatalog.get_deployable_for_floor(floor_number, seed_value):
 		var elite_id := str(definition["elite_id"])
 		var record := _get_record(elite_id)
 		if str(record.get("state", "Newborn")) == "Killed":
@@ -144,7 +141,7 @@ func settle(elite_id: String, encounter_id: String, outcome: String, context: Di
 		record["escape_count"] = escape_count
 		record["level"] = level
 		record["state"] = _state_for_growth(level, escape_count)
-		record["bounty_reward_level"] = mini(5, 1 + escape_count / 2)
+		record["bounty_reward_level"] = mini(5, 1 + int(escape_count / 2))
 		_capture_stolen_module(record, context.get("weapon_snapshot", {}) as Dictionary)
 	else:
 		record["state"] = str(record.get("state", "Newborn"))
@@ -173,6 +170,8 @@ func apply_archive_to_enemy_config(config: Dictionary, elite_snapshot: Dictionar
 		return config
 	var result := config.duplicate(true)
 	var level := clampi(int(elite_snapshot.get("level", 1)), 1, 12)
+	var growth_profile := (elite_snapshot.get("growth_profile", {}) as Dictionary).duplicate(true)
+	var bounty_tier := clampi(int(elite_snapshot.get("bounty_reward_level", 0)), 0, 5)
 	result["is_elite"] = true
 	result["elite_id"] = str(elite_snapshot.get("elite_id", ""))
 	result["elite_behavior_id"] = str(elite_snapshot.get("behavior_id", ""))
@@ -181,9 +180,20 @@ func apply_archive_to_enemy_config(config: Dictionary, elite_snapshot: Dictionar
 	result["enemy_type"] = str(elite_snapshot.get("base_enemy_id", result.get("enemy_type", "melee_chaser")))
 	result["name"] = str(elite_snapshot.get("name", result.get("name", "唯一精英")))
 	result["modifier_id_en"] = str(elite_snapshot.get("modifier_id", "Elite.Huge"))
-	result["elite_growth_hp_mult"] = 1.0 + float(level - 1) * 0.08
-	result["elite_growth_damage_mult"] = 1.0 + float(level - 1) * 0.045
+	result["elite_growth_hp_mult"] = 1.0 + float(level - 1) * float(growth_profile.get("hp_per_level", 0.08))
+	result["elite_growth_damage_mult"] = 1.0 + float(level - 1) * float(growth_profile.get("damage_per_level", 0.045))
+	result["elite_growth_profile"] = growth_profile
+	result["elite_translation_id"] = str(elite_snapshot.get("translation", ""))
 	result["stolen_modules"] = (elite_snapshot.get("stolen_modules", []) as Array).duplicate(true)
+	result["elite_archive_state"] = str(elite_snapshot.get("state", "Newborn"))
+	result["elite_escape_count"] = int(elite_snapshot.get("escape_count", 0))
+	result["elite_bounty_tier"] = bounty_tier
+	result["elite_bounty_currency"] = _bounty_currency(growth_profile, bounty_tier)
+	result["presentation_asset_id"] = str(elite_snapshot.get("presentation_asset_id", ""))
+	result["presentation_scene"] = str(elite_snapshot.get("presentation_scene", ""))
+	result["elite_health_bar_profile"] = (elite_snapshot.get("health_bar_profile", {}) as Dictionary).duplicate(true)
+	result["elite_deployment_status"] = str(elite_snapshot.get("deployment_status", EliteContentCatalog.DESIGN_ONLY))
+	result["elite_eligible_floor_numbers"] = (elite_snapshot.get("eligible_floor_numbers", []) as Array).duplicate()
 	return result
 
 
@@ -271,14 +281,28 @@ func _state_for_growth(level: int, escape_count: int) -> String:
 func _capture_stolen_module(record: Dictionary, weapon_snapshot: Dictionary) -> void:
 	if weapon_snapshot.is_empty():
 		return
-	var content_id := str(weapon_snapshot.get("content_id", weapon_snapshot.get("weapon_id", "")))
+	var content_id := str(weapon_snapshot.get(
+		"content_id",
+		weapon_snapshot.get("weapon_id", weapon_snapshot.get("gun_id", ""))
+	))
 	if content_id.is_empty():
 		return
+	if content_id.begins_with("bp_"):
+		content_id = content_id.replace("bp_", "weapon_")
+	var safe_traits: Array[String] = []
+	for value in weapon_snapshot.get("bullet_tags", []) as Array:
+		var bullet_trait := str(value)
+		if bullet_trait in ["explosive", "piercing", "bounce", "homing"] and bullet_trait not in safe_traits:
+			safe_traits.append(bullet_trait)
+	var fire_rate := maxf(0.0, float(weapon_snapshot.get("fire_rate", 0.0)))
 	var module := {
 		"module_id": content_id,
-		"source_kind": str(weapon_snapshot.get("source_kind", "gun_body")),
+		"source_kind": str(weapon_snapshot.get("source_kind", weapon_snapshot.get("weapon_kind", "gun_body"))),
 		"content_version": int(weapon_snapshot.get("content_version", 1)),
 		"translated_skill_id": str(get_definition(str(record.get("elite_id", ""))).get("translation", "")),
+		"shot_count_budget": clampi(int(weapon_snapshot.get("projectile_count", 1)), 1, 3),
+		"fire_rate_band": "fast" if fire_rate >= 5.0 else "standard" if fire_rate >= 2.0 else "slow",
+		"bullet_traits": safe_traits,
 	}
 	var modules := (record.get("stolen_modules", []) as Array).duplicate(true)
 	for existing in modules:
@@ -290,6 +314,15 @@ func _capture_stolen_module(record: Dictionary, weapon_snapshot: Dictionary) -> 
 	record["stolen_modules"] = modules
 	if str(record.get("state", "")) not in ["RegionalBoss", "QuasiBoss"]:
 		record["state"] = "Equipped"
+
+
+func _bounty_currency(growth_profile: Dictionary, bounty_tier: int) -> int:
+	if bounty_tier <= 0:
+		return 0
+	var rewards := growth_profile.get("bounty_currency_by_tier", []) as Array
+	if rewards.is_empty():
+		return bounty_tier * 40
+	return maxi(0, int(rewards[mini(bounty_tier, rewards.size()) - 1]))
 
 
 func _sanitize_context(context: Dictionary) -> Dictionary:

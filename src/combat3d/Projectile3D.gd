@@ -287,6 +287,8 @@ func _explode() -> void:
 		var falloff := clampf(1.0 - distance / radius, 0.25, 1.0)
 		var hit_direction := (target_3d.global_position - global_position).normalized()
 		var explosion_scale := float(fate_behavior.get("explosion_damage_scale", 0.72))
+		if shooter != null and target.has_method("notify_attacked_by"):
+			target.call("notify_attacked_by", shooter)
 		target.call("take_damage", maxi(1, int(damage * falloff * explosion_scale)), false, hit_direction)
 		if bullet_tags.has("blackhole") and target.has_method("apply_pull"):
 			target.call("apply_pull", global_position, 3.0 + falloff * 5.0)

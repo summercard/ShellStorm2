@@ -71,7 +71,9 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 		"random":
 			enemies = _generate_random_enemies(floor, floor_level)
 		"elite":
-			enemies.append(_generate_elite(floor, floor_level, config))
+			var elite := _generate_elite(floor, floor_level, config)
+			if not elite.is_empty():
+				enemies.append(elite)
 		"boss":
 			enemies.append(_generate_boss(floor, floor_level, config))
 		"minion":
@@ -176,6 +178,8 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 			int(request.get("floor_number", floor)),
 			encounter_id
 		)
+	if elite_snapshot.is_empty() or bool(elite_snapshot.get("success", true)) == false:
+		return {}
 	var base_type := str(elite_snapshot.get(
 		"base_enemy_id", _get_theme_fallback_enemy("shielded")
 	))

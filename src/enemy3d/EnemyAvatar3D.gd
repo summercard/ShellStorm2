@@ -38,6 +38,9 @@ var _shell_material: StandardMaterial3D
 var _ambush_revealed := true
 var _boss_content_id := ""
 var _formal_boss_root: Node3D
+var _elite_content_id := ""
+var _elite_presentation_asset_id := ""
+var _formal_elite_root: Node3D
 
 
 func configure(kind: String) -> void:
@@ -58,6 +61,27 @@ func configure_boss_content(content_id: String) -> bool:
 	_formal_boss_root = scene.instantiate() as Node3D
 	_formal_boss_root.name = "FormalBoss_%s" % content_id
 	_root.add_child(_formal_boss_root)
+	_shell.visible = false
+	_core.visible = false
+	_appendages.visible = false
+	return true
+
+
+func configure_elite_content(content_id: String, asset_id: String, scene_path: String) -> bool:
+	_elite_content_id = content_id
+	_elite_presentation_asset_id = asset_id
+	if content_id.is_empty() or asset_id.is_empty() or scene_path.is_empty() or _root == null:
+		return false
+	var scene := load(scene_path) as PackedScene
+	if scene == null:
+		return false
+	if _formal_elite_root != null and is_instance_valid(_formal_elite_root):
+		_formal_elite_root.queue_free()
+	_formal_elite_root = scene.instantiate() as Node3D
+	if _formal_elite_root == null:
+		return false
+	_formal_elite_root.name = "FormalElite_%s" % content_id
+	_root.add_child(_formal_elite_root)
 	_shell.visible = false
 	_core.visible = false
 	_appendages.visible = false
@@ -91,6 +115,9 @@ func get_component_snapshot() -> Dictionary:
 		"ambush_revealed": _ambush_revealed,
 		"boss_content_id": _boss_content_id,
 		"formal_boss_asset": _formal_boss_root != null,
+		"elite_content_id": _elite_content_id,
+		"elite_presentation_asset_id": _elite_presentation_asset_id,
+		"formal_elite_asset": _formal_elite_root != null,
 		"is_3d": true,
 	}
 
@@ -126,6 +153,9 @@ func _rebuild() -> void:
 		child.queue_free()
 	_root = Node3D.new()
 	_formal_boss_root = null
+	_formal_elite_root = null
+	_elite_content_id = ""
+	_elite_presentation_asset_id = ""
 	_root.name = "VisualRoot"
 	add_child(_root)
 	_base_color = COLORS[enemy_kind]

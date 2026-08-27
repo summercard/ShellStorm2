@@ -3,6 +3,7 @@ extends CharacterBody3D
 ## 3D 敌人统一有限状态机。不同怪物只配置参数和攻击策略，不复制生命、寻路、受击或死亡逻辑。
 
 signal killed(enemy: Enemy3D, loot: Dictionary)
+signal escaped(enemy: Enemy3D, context: Dictionary)
 signal summon_requested(enemy: Enemy3D, count: int)
 signal state_changed(previous: String, current: String)
 signal boss_phase_changed(enemy: Enemy3D, phase: int)
@@ -111,6 +112,12 @@ var elite_id := ""
 var elite_behavior_id := ""
 var elite_level := 0
 var elite_encounter_instance_id := ""
+var elite_translation_id := ""
+var elite_stolen_modules: Array[Dictionary] = []
+var _elite_growth_profile: Dictionary = {}
+var _elite_escape_active := false
+var _elite_escape_elapsed := 0.0
+var _elite_escape_origin := Vector3.ZERO
 var _elite_attack_counter := 0
 var _elite_behavior_trigger_count := 0
 var _absorb_cooldown := 0.0
@@ -123,10 +130,12 @@ var _source_damage_scale := 1.0
 var _overhead_health_root: Node3D
 var _overhead_health_sprite: Sprite3D
 var _illumination_status_label: Label3D
+var _elite_name_label: Label3D
 var _overhead_health_image: Image
 var _overhead_health_texture: ImageTexture
 var _overhead_health_size := Vector2.ZERO
 var _overhead_health_ratio := 1.0
+var _elite_health_bar_profile: Dictionary = {}
 var _kind_scale_multiplier := 1.0
 var _variant_scale_multiplier := 1.0
 var illumination_sensor: EnemyIllumination3D
@@ -203,6 +212,15 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 	elite_behavior_id = str(data.get("elite_behavior_id", ""))
 	elite_level = int(data.get("elite_level", 0))
 	elite_encounter_instance_id = str(data.get("encounter_instance_id", ""))
+	elite_translation_id = str(data.get("elite_translation_id", ""))
+	elite_stolen_modules.clear()
+	for module in data.get("stolen_modules", []) as Array:
+		if module is Dictionary:
+			elite_stolen_modules.append((module as Dictionary).duplicate(true))
+	_elite_growth_profile = (data.get("elite_growth_profile", {}) as Dictionary).duplicate(true)
+	_elite_escape_active = false
+	_elite_escape_elapsed = 0.0
+	_elite_health_bar_profile = (data.get("elite_health_bar_profile", {}) as Dictionary).duplicate(true)
 	_elite_attack_counter = 0
 	_elite_behavior_trigger_count = 0
 	_variant_scale_multiplier = 1.0
@@ -243,6 +261,12 @@ func configure_from_enemy_data(data: Dictionary) -> void:
 		contact_damage = maxi(1, int(round(float(contact_damage) * float(data.get("elite_growth_damage_mult", 1.0)))))
 		if not elite_id.is_empty() and EliteRosterService != null:
 			EliteRosterService.confirm_reservation(elite_id, elite_encounter_instance_id)
+		if avatar != null:
+			avatar.configure_elite_content(
+				elite_id,
+				str(data.get("presentation_asset_id", "")),
+				str(data.get("presentation_scene", ""))
+			)
 	if enemy_kind == "boss":
 		_variant_scale_multiplier *= float(data.get("boss_scale", 1.0))
 		if avatar != null:
@@ -275,7 +299,10 @@ func _apply_presentation_scale() -> void:
 
 
 func _ensure_overhead_health_bar() -> void:
-	var wanted_size := HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)) as Vector2
+	var wanted_size := (
+		_elite_health_bar_profile.get("size", HEALTH_BAR_SIZE_BY_KIND.get(enemy_kind, Vector2(1.65, 0.16)))
+		as Vector2
+	)
 	if _overhead_health_root != null and is_instance_valid(_overhead_health_root):
 		if _overhead_health_size.is_equal_approx(wanted_size):
 			return
@@ -287,6 +314,7 @@ func _ensure_overhead_health_bar() -> void:
 		_overhead_health_root = null
 		_overhead_health_sprite = null
 		_illumination_status_label = null
+		_elite_name_label = null
 		_overhead_health_image = null
 		_overhead_health_texture = null
 	_overhead_health_root = Node3D.new()
@@ -311,6 +339,20 @@ func _ensure_overhead_health_bar() -> void:
 		1.0
 	)
 	_overhead_health_root.add_child(_overhead_health_sprite)
+	if not _elite_health_bar_profile.is_empty():
+		_elite_name_label = Label3D.new()
+		_elite_name_label.name = "EliteNameText"
+		_elite_name_label.text = str(_elite_health_bar_profile.get("display_name", enemy_data.get("name", "唯一精英")))
+		_elite_name_label.font_size = 40
+		_elite_name_label.pixel_size = 0.005
+		_elite_name_label.outline_size = 10
+		_elite_name_label.outline_modulate = Color(0.02, 0.008, 0.03, 0.98)
+		_elite_name_label.modulate = _elite_health_bar_profile.get("frame_color", Color(1.0, 0.62, 0.12)) as Color
+		_elite_name_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		_elite_name_label.no_depth_test = true
+		_elite_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_elite_name_label.position = Vector3(0.0, _overhead_health_size.y * 0.92, 0.02)
+		_overhead_health_root.add_child(_elite_name_label)
 	_illumination_status_label = Label3D.new()
 	_illumination_status_label.name = "IlluminationStatusText"
 	_illumination_status_label.font_size = 34
@@ -320,7 +362,11 @@ func _ensure_overhead_health_bar() -> void:
 	_illumination_status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_illumination_status_label.no_depth_test = true
 	_illumination_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_illumination_status_label.position = Vector3(-_overhead_health_size.x * 0.62, 0.0, 0.01)
+	_illumination_status_label.position = Vector3(
+		-_overhead_health_size.x * 0.38,
+		-maxf(0.34, _overhead_health_size.y * 1.6),
+		0.01
+	)
 	_overhead_health_root.add_child(_illumination_status_label)
 	_on_self_health_changed(self, current_hp, max_hp)
 
@@ -329,7 +375,11 @@ func _position_overhead_health_bar() -> void:
 	if _overhead_health_root == null:
 		return
 	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
-	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
+	var local_height := maxf(
+		float(footprint.get("height", 1.3)),
+		float(_elite_health_bar_profile.get("visual_height", 0.0))
+	)
+	var world_height := local_height * maxf(scale.y, 0.01)
 	_overhead_health_root.global_position = global_position + Vector3.UP * (world_height + 0.58)
 	# top_level 已阻断父节点旋转；显式归零可清除热重载或旧实例留下的朝向。
 	_overhead_health_root.global_rotation = Vector3.ZERO
@@ -342,17 +392,21 @@ func _on_self_health_changed(_enemy: Enemy3D, current: int, maximum: int) -> voi
 	_overhead_health_ratio = clampf(float(current) / float(maxi(1, maximum)), 0.0, 1.0)
 	# 单张 Sprite 纹理同时包含底框与填充。没有独立红色平面的平移/缩放，
 	# 所以在任意镜头角度下都不会跑出框外；Sprite3D 自身负责永久朝向摄像机。
-	_overhead_health_image.fill(HEALTH_BAR_FRAME_COLOR)
+	var frame_color := _elite_health_bar_profile.get("frame_color", HEALTH_BAR_FRAME_COLOR) as Color
+	var empty_color := _elite_health_bar_profile.get("empty_color", HEALTH_BAR_EMPTY_COLOR) as Color
+	var full_color := _elite_health_bar_profile.get("full_color", HEALTH_BAR_FULL_COLOR) as Color
+	var low_color := _elite_health_bar_profile.get("low_color", HEALTH_BAR_LOW_COLOR) as Color
+	_overhead_health_image.fill(frame_color)
 	var inner_rect := Rect2i(
 		HEALTH_BAR_BORDER_PX,
 		HEALTH_BAR_BORDER_PX,
 		HEALTH_BAR_TEXTURE_SIZE.x - HEALTH_BAR_BORDER_PX * 2,
 		HEALTH_BAR_TEXTURE_SIZE.y - HEALTH_BAR_BORDER_PX * 2
 	)
-	_overhead_health_image.fill_rect(inner_rect, HEALTH_BAR_EMPTY_COLOR)
+	_overhead_health_image.fill_rect(inner_rect, empty_color)
 	var fill_width := int(round(float(inner_rect.size.x) * _overhead_health_ratio))
 	if fill_width > 0:
-		var fill_color := HEALTH_BAR_LOW_COLOR.lerp(HEALTH_BAR_FULL_COLOR, _overhead_health_ratio)
+		var fill_color := low_color.lerp(full_color, _overhead_health_ratio)
 		_overhead_health_image.fill_rect(
 			Rect2i(inner_rect.position, Vector2i(fill_width, inner_rect.size.y)), fill_color
 		)
@@ -407,6 +461,9 @@ func export_runtime_state() -> Dictionary:
 		"boss_phase": boss_phase,
 		"ambush_triggered": _ambush_triggered,
 		"elite_modifier_id": elite_modifier_id,
+		"elite_escape_active": _elite_escape_active,
+		"elite_escape_elapsed": _elite_escape_elapsed,
+		"elite_escape_origin": [_elite_escape_origin.x, _elite_escape_origin.y, _elite_escape_origin.z],
 		"attack_timer": _attack_timer,
 		"slow_factor": _slow_factor,
 		"slow_timer": _slow_timer,
@@ -440,6 +497,15 @@ func import_runtime_state(state: Dictionary) -> bool:
 		)
 	boss_phase = clampi(int(state.get("boss_phase", boss_phase)), 1, 3)
 	_ambush_triggered = bool(state.get("ambush_triggered", _ambush_triggered))
+	_elite_escape_active = bool(state.get("elite_escape_active", false))
+	_elite_escape_elapsed = maxf(0.0, float(state.get("elite_escape_elapsed", 0.0)))
+	var saved_escape_origin: Variant = state.get("elite_escape_origin", [])
+	if saved_escape_origin is Array and (saved_escape_origin as Array).size() >= 3:
+		_elite_escape_origin = Vector3(
+			float((saved_escape_origin as Array)[0]),
+			float((saved_escape_origin as Array)[1]),
+			float((saved_escape_origin as Array)[2])
+		)
 	_attack_timer = maxf(0.0, float(state.get("attack_timer", _attack_timer)))
 	_slow_factor = clampf(float(state.get("slow_factor", _slow_factor)), 0.25, 1.0)
 	_slow_timer = maxf(0.0, float(state.get("slow_timer", _slow_timer)))
@@ -535,6 +601,9 @@ func _physics_process(delta: float) -> void:
 		_slow_factor = 1.0
 	if ai_state == "dead":
 		velocity = Vector3.ZERO
+		return
+	if _elite_escape_active:
+		_tick_elite_escape(delta)
 		return
 	if MonsterAIManager != null:
 		MonsterAIManager.update_enemy_spatial(self)
@@ -783,14 +852,20 @@ func _perform_attack(to_target: Vector3, distance: float) -> void:
 			_external_velocity = to_target.normalized() * 7.2
 			_external_timer = 0.16
 			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
+				if _target.has_method("notify_attacked_by"):
+					_target.call("notify_attacked_by", self)
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 		"ambusher":
 			_external_velocity = to_target.normalized() * 9.4
 			_external_timer = 0.28
 			if distance <= attack_range + 1.0 and is_instance_valid(_target) and _target.has_method("take_damage"):
+				if _target.has_method("notify_attacked_by"):
+					_target.call("notify_attacked_by", self)
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 		_:
 			if distance <= attack_range + 0.65 and is_instance_valid(_target) and _target.has_method("take_damage"):
+				if _target.has_method("notify_attacked_by"):
+					_target.call("notify_attacked_by", self)
 				_target.call("take_damage", contact_damage, false, to_target.normalized())
 	_apply_unique_elite_attack_behavior(to_target)
 	if elite_modifier_id == "Elite.WeaponParasite" and _target != null and _target.has_method("apply_silence"):
@@ -868,6 +943,8 @@ func _explode() -> void:
 		MonsterAIManager.broadcast_sound_stimulus(global_position, 20.0, "explosion", self)
 	for player in get_tree().get_nodes_in_group("player_3d"):
 		if player is Node3D and global_position.distance_to((player as Node3D).global_position) <= 3.0 and player.has_method("take_damage"):
+			if player.has_method("notify_attacked_by"):
+				player.call("notify_attacked_by", self)
 			player.call("take_damage", contact_damage, false, ((player as Node3D).global_position - global_position).normalized())
 	_die()
 
@@ -903,7 +980,10 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO) 
 				AudioManager.play_crit_sfx()
 			else:
 				AudioManager.play_enemy_hit_sfx()
-		transition_to("stagger")
+		if _should_begin_elite_escape():
+			_begin_elite_escape()
+		else:
+			transition_to("stagger")
 
 
 func take_projectile_damage(
@@ -1025,6 +1105,11 @@ func get_state_snapshot() -> Dictionary:
 		"elite_id": elite_id,
 		"elite_behavior_id": elite_behavior_id,
 		"elite_level": elite_level,
+		"elite_translation_id": elite_translation_id,
+		"elite_stolen_modules": elite_stolen_modules.duplicate(true),
+		"elite_escape_active": _elite_escape_active,
+		"elite_escape_elapsed": _elite_escape_elapsed,
+		"elite_sidearm_attack_interval": _elite_sidearm_attack_interval(),
 		"elite_attack_counter": _elite_attack_counter,
 		"elite_behavior_trigger_count": _elite_behavior_trigger_count,
 		"elite_encounter_instance_id": elite_encounter_instance_id,
@@ -1039,6 +1124,9 @@ func get_state_snapshot() -> Dictionary:
 		"overhead_health_world_locked": _overhead_health_root != null and _overhead_health_root.top_level,
 		"overhead_health_bar_size": _overhead_health_size,
 		"overhead_health_ratio": _overhead_health_ratio,
+		"elite_health_bar": not _elite_health_bar_profile.is_empty(),
+		"elite_health_bar_name": _elite_name_label.text if _elite_name_label != null else "",
+		"elite_health_bar_profile": _elite_health_bar_profile.duplicate(true),
 		"overhead_health_camera_billboard": (
 			_overhead_health_sprite != null
 			and _overhead_health_sprite.billboard == BaseMaterial3D.BILLBOARD_ENABLED
@@ -1066,6 +1154,13 @@ func get_state_snapshot() -> Dictionary:
 		"behavior_role": _behavior_role(),
 		"component_snapshot": avatar.get_component_snapshot() if avatar != null else {},
 	}
+
+
+func _elite_sidearm_attack_interval() -> int:
+	var base_interval := maxi(1, int(_elite_growth_profile.get("sidearm_base_attack_interval", 3)))
+	var step_levels := maxi(1, int(_elite_growth_profile.get("sidearm_interval_step_levels", 4)))
+	var minimum_interval := maxi(1, int(_elite_growth_profile.get("sidearm_min_attack_interval", 1)))
+	return maxi(minimum_interval, base_interval - int(maxi(0, elite_level - 1) / step_levels))
 
 
 func get_illumination_state() -> String:
@@ -1287,6 +1382,8 @@ func _perform_boss_skill(skill_id: String, to_target: Vector3) -> void:
 			_external_velocity = to_target.normalized() * 8.6
 			_external_timer = 0.30
 			if is_instance_valid(_target) and global_position.distance_to(_target.global_position) <= 3.6:
+				if _target.has_method("notify_attacked_by"):
+					_target.call("notify_attacked_by", self)
 				_target.call("take_damage", int(round(contact_damage * 1.55)), false, to_target.normalized())
 		"furnace_burst":
 			_fire_projectile_volley(to_target, int(round(contact_damage * 1.18)), accent, 8, 0.26, true)
@@ -1309,8 +1406,22 @@ func _apply_unique_elite_attack_behavior(to_target: Vector3) -> void:
 	var level_scale := 1.0 + float(maxi(0, elite_level - 1)) * 0.04
 	match elite_behavior_id:
 		"armed_rush":
-			if _elite_attack_counter % 2 == 0:
-				_fire_projectile_volley(to_target, int(contact_damage * 0.55 * level_scale), Color(0.95, 0.56, 0.16), 2, 0.08)
+			var base_interval := maxi(1, int(_elite_growth_profile.get("sidearm_base_attack_interval", 3)))
+			var step_levels := maxi(1, int(_elite_growth_profile.get("sidearm_interval_step_levels", 4)))
+			var minimum_interval := maxi(1, int(_elite_growth_profile.get("sidearm_min_attack_interval", 1)))
+			var interval := maxi(minimum_interval, base_interval - int(maxi(0, elite_level - 1) / step_levels))
+			if _elite_attack_counter % interval == 0:
+				var stolen: Dictionary = elite_stolen_modules.back() if not elite_stolen_modules.is_empty() else {}
+				var shot_count := 2 + int(stolen.get("shot_count_budget", 0))
+				var traits := stolen.get("bullet_traits", []) as Array
+				_fire_projectile_volley(
+					to_target,
+					int(contact_damage * 0.55 * level_scale),
+					Color(0.95, 0.56, 0.16),
+					clampi(shot_count, 2, 5),
+					0.08,
+					"explosive" in traits
+				)
 		"bullet_devourer":
 			if _elite_attack_counter % 3 == 0:
 				_fire_projectile_volley(to_target, int(contact_damage * 0.72 * level_scale), Color(0.78, 0.28, 0.94), 3, 0.16)
@@ -1396,6 +1507,89 @@ func _die() -> void:
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
 	tween.tween_callback(queue_free)
+
+
+func _should_begin_elite_escape() -> bool:
+	return (
+		not elite_id.is_empty()
+		and not _elite_escape_active
+		and bool(_elite_growth_profile.get("escape_enabled", false))
+		and current_hp > 0
+		and float(current_hp) / float(maxi(1, max_hp)) <= float(_elite_growth_profile.get("escape_health_ratio", 0.20))
+	)
+
+
+func _begin_elite_escape() -> void:
+	_elite_escape_active = true
+	_elite_escape_elapsed = 0.0
+	_elite_escape_origin = global_position
+	if MonsterAIManager != null:
+		MonsterAIManager.release_attack_token(self)
+	transition_to("return", "unique_elite_escape")
+	if _elite_name_label != null:
+		_elite_name_label.text = "%s · 撤离中" % str(_elite_health_bar_profile.get("display_name", enemy_data.get("name", "唯一精英")))
+
+
+func _tick_elite_escape(delta: float) -> void:
+	_elite_escape_elapsed += delta
+	var escape_direction := Vector3.FORWARD.rotated(Vector3.UP, rotation.y)
+	if _target != null and is_instance_valid(_target):
+		escape_direction = global_position - _target.global_position
+		escape_direction.y = 0.0
+	if escape_direction.length_squared() <= 0.01:
+		escape_direction = Vector3.FORWARD
+	escape_direction = escape_direction.normalized()
+	var speed_multiplier := maxf(1.0, float(_elite_growth_profile.get("escape_speed_multiplier", 1.55)))
+	velocity = velocity.lerp(escape_direction * get_effective_move_speed() * speed_multiplier, minf(1.0, delta * 7.0))
+	move_and_slide()
+	rotation.y = lerp_angle(rotation.y, atan2(-escape_direction.x, -escape_direction.z), minf(1.0, delta * 10.0))
+	if _elite_escape_elapsed >= maxf(0.5, float(_elite_growth_profile.get("escape_duration", 4.2))):
+		_complete_elite_escape()
+
+
+func _complete_elite_escape() -> void:
+	if not _elite_escape_active or ai_state == "dead":
+		return
+	var weapon_snapshot: Dictionary = {}
+	if _target != null and is_instance_valid(_target) and _target.has_method("get_weapon_snapshot"):
+		weapon_snapshot = _target.call("get_weapon_snapshot") as Dictionary
+	var context := {
+		"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
+		"room_id": room_id,
+		"weapon_snapshot": weapon_snapshot,
+		"distance_travelled": global_position.distance_to(_elite_escape_origin),
+	}
+	var settled: bool = (
+		EliteRosterService == null
+		or EliteRosterService.settle(elite_id, elite_encounter_instance_id, "escaped", context)
+	)
+	if not settled:
+		# 长期档案保存失败时精英不能从世界消失；保留撤离态并按短间隔重试，
+		# 让名册预约、场景事实和玩家看到的结果保持一致。
+		_elite_escape_elapsed = maxf(0.0, float(_elite_growth_profile.get("escape_duration", 4.2)) - 0.8)
+		return
+	_elite_escape_active = false
+	transition_to("dead", "unique_elite_escaped")
+	collision_layer = 0
+	collision_mask = 0
+	escaped.emit(self, context)
+	queue_free()
+
+
+func force_complete_elite_escape_for_test() -> void:
+	_complete_elite_escape()
+
+
+func complete_elite_escape_after_external_settlement(context: Dictionary) -> bool:
+	if ai_state == "dead" or elite_id.is_empty():
+		return false
+	_elite_escape_active = false
+	transition_to("dead", "unique_elite_escaped_after_player_kill")
+	collision_layer = 0
+	collision_mask = 0
+	escaped.emit(self, context.duplicate(true))
+	queue_free()
+	return true
 
 
 func _spawn_death_fragments() -> void:

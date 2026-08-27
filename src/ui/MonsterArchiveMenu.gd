@@ -168,7 +168,8 @@ func _make_elite_row(elite) -> PanelContainer:
 		var stolen_names: Array = []
 		for sm in stolen:
 			var mid: String = sm.get("module_id", "?") as String
-			stolen_names.append(_shorten_module_id(mid))
+			var translated := str(sm.get("translated_skill_id", ""))
+			stolen_names.append("%s→%s" % [_shorten_module_id(mid), _shorten_translation(translated)])
 		stolen_lbl.text = "持有: " + ", ".join(stolen_names.slice(0, 2))
 		stolen_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		right_vbox.add_child(stolen_lbl)
@@ -188,8 +189,9 @@ func _make_elite_row(elite) -> PanelContainer:
 	var bounty: int = elite.bounty_reward_level if "bounty_reward_level" in elite else 0
 	if bounty > 0:
 		var bounty_lbl := Label.new()
-		bounty_lbl.text = "悬赏%d" % bounty
-		bounty_lbl.custom_minimum_size = Vector2(60, 0)
+		var bounty_currency := EliteRosterService.get_bounty_currency(str(elite.get("elite_id", ""))) if EliteRosterService != null else 0
+		bounty_lbl.text = "悬赏%d\n%d魂" % [bounty, bounty_currency]
+		bounty_lbl.custom_minimum_size = Vector2(72, 0)
 		bounty_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		hbox.add_child(bounty_lbl)
 
@@ -204,6 +206,23 @@ func _shorten_modifier(mod: String) -> String:
 	if m.length() > 8:
 		return m.substr(0, 6) + ".."
 	return m
+
+
+func _shorten_translation(translation_id: String) -> String:
+	return str({
+		"gun_body_to_followup_shot": "副枪追射",
+		"bullet_to_counter_volley": "反击弹幕",
+		"stock_magazine_to_guard_counter": "格挡反击",
+		"attachment_to_hive_modifier": "蜂巢增幅",
+		"explosive_round_to_mine_field": "爆炸雷区",
+		"piercing_optic_to_line_lunge": "穿刺突袭",
+		"ricochet_optic_to_reflect_sector": "反射扇区",
+		"gun_body_to_phase_skill": "阶段枪技",
+		"fate_to_budgeted_rule": "命运规则",
+		"attachment_to_summon_echo": "召唤回声",
+		"return_round_to_retreat_lunge": "折返突袭",
+		"assembly_to_three_phase_bag": "三阶段技能",
+	}.get(translation_id, "未知转译"))
 
 func _shorten_module_id(module_id: String) -> String:
 	# 缩短模块ID用于UI显示

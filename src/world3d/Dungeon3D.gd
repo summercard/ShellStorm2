@@ -98,6 +98,7 @@ var _inventory: InventoryModule
 var _insurance: InsuranceModule
 var _quick_inventory: InventoryModule
 var _death_settlement: DeathSettlementModule
+var _player_killer_elite_settled := false
 var _inventory_ui: InventoryUI
 var _weapon_panel: WeaponAssemblyTreePanel
 var _workbench_panel: WorkbenchPanel
@@ -1820,6 +1821,12 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 				if fallback.is_empty():
 					break
 				enemy_configs.append(fallback[0])
+	# 未正式投放的精英不会以通用外壳混入游戏。精英/地下室房在当前楼层
+	# 没有可用内容时降级为普通战斗；Boss房则保持Boss单独出场。
+	if enemy_configs.is_empty() and room.room_type in ["ELITE", "BASEMENT"]:
+		enemy_configs.assign(_monster_injector.generate_enemies({
+			"type": "random", "floor": floor, "floor_level": floor_level,
+		}))
 	if _next_room_enemy_count > 0:
 		var reinforcements := _monster_injector.generate_enemies({
 			"type": "ambush", "count": _next_room_enemy_count, "floor": floor,
@@ -1935,6 +1942,7 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		var points := room.enemy_spawn_points
 		enemy.global_position = points[index % points.size()] if not points.is_empty() else room.global_position
 		enemy.killed.connect(_on_enemy_killed)
+		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 		enemy.health_changed.connect(_on_enemy_health_changed)
@@ -2096,6 +2104,7 @@ func _spawn_summoned_minions(room_id: String, origin: Vector3, count: int) -> vo
 			enemy.configure_from_enemy_data(spawn_data)
 		enemy.global_position = origin + Vector3(cos(index * TAU / maxf(1.0, count)) * 1.8, 0, sin(index * TAU / maxf(1.0, count)) * 1.8)
 		enemy.killed.connect(_on_enemy_killed)
+		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
 		enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 		enemy.health_changed.connect(_on_enemy_health_changed)
@@ -2115,6 +2124,12 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	last_killed_enemy_data = enemy_data.duplicate(true)
 	kill_recorded.emit()
 	var drops := _loot_module.generate_enemy_loot(enemy_data)
+	var elite_bounty_currency := maxi(0, int(enemy_data.get("elite_bounty_currency", 0)))
+	if elite_bounty_currency > 0:
+		drops.append({
+			"id": "__elite_bounty__", "name": "唯一精英悬赏", "type": "currency",
+			"count": elite_bounty_currency, "is_currency": true,
+		})
 	var has_currency := false
 	for item in drops:
 		if bool(item.get("is_currency", false)):
@@ -2126,11 +2141,21 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 	for item in drops:
 		if bool(item.get("is_currency", false)) or str(item.get("id", "")) == "__currency__":
 			item["count"] = maxi(1, int(round(float(item.get("count", 1)) * currency_multiplier)))
-	if enemy.enemy_kind in ["elite", "boss"] and player.has_method("on_fate_elite_killed"):
+	if (bool(enemy_data.get("is_elite", false)) or enemy.enemy_kind == "boss") and player.has_method("on_fate_elite_killed"):
 		player.call("on_fate_elite_killed")
 	var loot_room := _room_by_id.get(enemy.room_id) as DungeonRoom3D
 	if loot_room != null:
 		call_deferred("_spawn_loot_items", loot_room, drops, enemy.global_position)
+	_resolve_room_enemy_departure(enemy, false, enemy_data)
+
+
+func _on_enemy_escaped(enemy: Enemy3D, _context: Dictionary) -> void:
+	if _enemy_nodes_by_room.has(enemy.room_id):
+		(_enemy_nodes_by_room[enemy.room_id] as Array).erase(enemy)
+	_resolve_room_enemy_departure(enemy, true, enemy.get_enemy_data())
+
+
+func _resolve_room_enemy_departure(enemy: Enemy3D, did_escape: bool, enemy_data: Dictionary) -> void:
 	if not _alive_by_room.has(enemy.room_id):
 		return
 	_alive_by_room[enemy.room_id] = maxi(0, int(_alive_by_room[enemy.room_id]) - 1)
@@ -2149,7 +2174,11 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		status_label.text = "撤离拦截波已压制 · 信号仍在同步"
 		return
 	_mark_room_cleared(room, true)
-	status_label.text = "房间肃清 · 钥匙已掉落，可继续搜索或推进"
+	status_label.text = (
+		"精英已逃脱并记入跨局档案 · 房间通路恢复"
+		if did_escape
+		else "房间肃清 · 钥匙已掉落，可继续搜索或推进"
+	)
 	if AudioManager != null:
 		AudioManager.play_sfx("wave_clear", -3.0)
 	if (
@@ -2167,7 +2196,7 @@ func _on_enemy_killed(enemy: Enemy3D, enemy_data: Dictionary) -> void:
 		if AudioManager != null:
 			AudioManager.play_sfx("boss_defeat", -1.0)
 		status_label.text = "Boss 已清除 · 撤离信标已解锁"
-	if bool(enemy_data.get("is_elite", false)) and room != null:
+	if not did_escape and bool(enemy_data.get("is_elite", false)) and room != null:
 		call_deferred("_ensure_conditional_extraction", "ELITE_KILL", room, Vector3(4.0, 0.0, 3.0))
 	_refresh_loot_label()
 
@@ -3356,6 +3385,7 @@ func _restore_room_runtime_state(room_id: String) -> void:
 			$ActiveEnemies.add_child(enemy)
 			enemy.configure_from_enemy_data(enemy_data)
 			enemy.killed.connect(_on_enemy_killed)
+			enemy.escaped.connect(_on_enemy_escaped)
 			enemy.summon_requested.connect(_on_summon_requested)
 			enemy.boss_phase_changed.connect(_on_boss_phase_changed)
 			enemy.health_changed.connect(_on_enemy_health_changed)
@@ -4431,7 +4461,39 @@ func get_hud_weapon_model_snapshot() -> Dictionary:
 
 func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:
 	if state_id == "dead":
+		_settle_player_killer_elite()
 		status_label.text = "行动失败 · 防护体失去响应"
+
+
+func _settle_player_killer_elite() -> void:
+	if _player_killer_elite_settled or player == null or not player.has_method("get_last_damage_source_snapshot"):
+		return
+	var source := player.call("get_last_damage_source_snapshot") as Dictionary
+	var elite_id := str(source.get("elite_id", ""))
+	var encounter_id := str(source.get("encounter_instance_id", ""))
+	if elite_id.is_empty() or encounter_id.is_empty():
+		return
+	var settlement_context := {
+		"floor_number": int(source.get("floor_number", 0)),
+		"room_id": str(source.get("room_id", _current_room_id)),
+		"killed_player": true,
+		"weapon_snapshot": player.get_weapon_snapshot(),
+	}
+	_player_killer_elite_settled = EliteRosterService != null and EliteRosterService.settle(
+		elite_id,
+		encounter_id,
+		"escaped",
+		settlement_context
+	)
+	if not _player_killer_elite_settled:
+		return
+	for value in _enemy_nodes_by_room.get(str(source.get("room_id", _current_room_id)), []):
+		if not is_instance_valid(value) or not value is Enemy3D:
+			continue
+		var enemy := value as Enemy3D
+		if enemy.elite_id == elite_id and enemy.elite_encounter_instance_id == encounter_id:
+			enemy.complete_elite_escape_after_external_settlement(settlement_context)
+			break
 
 
 func _on_player_death_animation_finished() -> void:
