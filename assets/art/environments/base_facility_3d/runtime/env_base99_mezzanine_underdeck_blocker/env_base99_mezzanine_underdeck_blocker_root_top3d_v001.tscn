@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99MezzanineUnderdeckBlocker3D.gd" id="2_collision"]
+
+[node name="基地99层楼中楼下方工业仓库挡板" type="Node3D"]
+script = ExtResource("2_collision")
+metadata/asset_id = "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER"
+metadata/asset_version = "v001"
+metadata/logic_id = "base99_mezzanine_underdeck_blocker"
+metadata/asset_category = "environment_module"
+metadata/component = "underdeck_blocker"
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/frame_inset_m = 0.55
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "three_inset_permanent_solid_perimeter_blockers"
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v001.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,28 @@
+{
+  "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+  "display_name": "基地99层楼中楼下方工业仓库挡板",
+  "version": "v001",
+  "source": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v001.blend",
+  "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v001.glb",
+  "preview": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/previews/env_base99_mezzanine_underdeck_blocker_preview.png",
+  "origin": "xy_center_bottom_z0",
+  "forward": "Blender -Y / Godot -Z",
+  "frame_inset_m": 0.55,
+  "visual_bounds_min": [
+    -9.66,
+    -4.66,
+    0.0
+  ],
+  "visual_bounds_max": [
+    9.65,
+    4.45,
+    4.65
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "collision": "Godot PackedScene owns permanent perimeter blockers",
+  "usage": "Base99 mezzanine underside enclosure; no interaction"
+}

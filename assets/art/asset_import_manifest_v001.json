@@ -95,6 +95,26 @@
       "presentation_scale_multiplier": 1.6
     }
   },
+  "environment_modules": {
+    "base99_mezzanine_underdeck_blocker": {
+      "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+      "name_cn": "基地99层楼中楼下方工业仓库挡板",
+      "category": "environment_module",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v002.glb",
+      "source": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v002.blend",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_root_top3d_v002.tscn",
+      "bounds_min": [-9.66, 0.0, -4.66],
+      "bounds_max": [9.65, 4.65, 4.45],
+      "forward_axis": "-Z",
+      "version": "v002",
+      "materials": ["01_精工金属_冷灰骨架", "02_细腻哑光_中灰横向板", "03_清漆反光_浅灰边条"],
+      "frame_inset_m": 0.55,
+      "collision": "three permanent inset perimeter blockers; north side uses existing exterior wall",
+      "interactive": false,
+      "standalone": true,
+      "usage": "TowerDescent99F mezzanine underside enclosure"
+    }
+  },
   "weapons": {
     "water_tank_blaster": {
       "name_cn": "水箱爆能枪",
