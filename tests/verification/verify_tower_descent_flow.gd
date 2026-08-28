@@ -321,7 +321,9 @@ func _ready() -> void:
 	_expect(stage_snapshots.size() == 6, "没有生成六个模块化楼层外壳", failures)
 	for stage in stage_snapshots:
 		var stage_data := stage as Dictionary
-		_expect(int(stage_data.get("outer_module_count", 0)) == 200, "外墙没有按5m模块拼成250m周长", failures)
+		var stage_index := int(stage_data.get("floor_index", -1))
+		var expected_outer_modules := 64 if stage_index == 0 else 128 if stage_index == 1 else 200
+		_expect(int(stage_data.get("outer_module_count", 0)) == expected_outer_modules, "外墙5m模块数量与楼层轮廓不符", failures)
 		_expect(bool(stage_data.get("uses_imported_floor_mesh", false)), "楼板没有使用Blender导入模块", failures)
 		_expect(bool(stage_data.get("uses_imported_outer_mesh", false)), "外墙没有使用Blender导入模块", failures)
 		_expect(bool(stage_data.get("support_collision_persistent", false)), "隐藏楼层失去承重碰撞", failures)
@@ -342,9 +344,9 @@ func _ready() -> void:
 			failures
 		)
 	_expect(
-		int(roof_stage.get("outer_module_count", 0)) == 200
+		int(roof_stage.get("outer_module_count", 0)) == 64
 		and bool(roof_stage.get("uses_imported_outer_mesh", false)),
-		"楼顶外缘没有使用200块5m围栏模块",
+		"楼顶外缘没有使用64块5m围栏模块",
 		failures
 	)
 

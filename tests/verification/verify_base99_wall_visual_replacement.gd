@@ -239,7 +239,7 @@ func _validate_base_atrium(tower: TowerDescent3D, failures: Array[String]) -> vo
 		if (
 			not bool(stage.get("base_99_100_atrium_enabled", false))
 			or int(stage.get("base_99_100_atrium_tile_count", 0)) != 36
-			or int(stage.get("tile_count", 0)) != 2446
+			or int(stage.get("tile_count", 0)) != 208
 		):
 			failures.append("100层与99层之间没有正确移除36块地砖/承重碰撞: %s" % stage)
 		return

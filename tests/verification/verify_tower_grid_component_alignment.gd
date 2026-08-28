@@ -106,7 +106,7 @@ func _ready() -> void:
 			failures.append("floor stage %d has %d stair holes; expected %d upper-floor holes" % [index, hole_count, expected_holes[index]])
 		var expected_tiles := 2500 - hole_count * 18
 		if index == 0:
-			expected_tiles -= 36
+			expected_tiles = 16 * 16 - 12 - 36
 			if (
 				not bool(stage.get("base_99_100_atrium_enabled", false))
 				or int(stage.get("base_99_100_atrium_tile_count", 0)) != 36
