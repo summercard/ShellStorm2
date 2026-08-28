@@ -1,0 +1,48 @@
+{
+  "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+  "display_name": "基地99层二层楼中楼楼板20x10米Z5",
+  "version": "v003",
+  "input_blend": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v004.blend",
+  "source": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend",
+  "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v003.glb",
+  "preview": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/previews/env_base99_mezzanine_20x10_z5_preview_v003.png",
+  "deck_skin_bounds_before": [
+    [
+      -9.876251220703125,
+      -4.876250267028809,
+      4.599999904632568
+    ],
+    [
+      10.123748779296875,
+      5.123749732971191,
+      4.900000095367432
+    ]
+  ],
+  "deck_skin_bounds_after": [
+    [
+      -9.726251602172852,
+      -4.726250171661377,
+      4.78000020980835
+    ],
+    [
+      9.973749160766602,
+      4.97374963760376,
+      4.900000095367432
+    ]
+  ],
+  "visual_bounds_min": [
+    -10.12375,
+    -5.12375,
+    0.0
+  ],
+  "visual_bounds_max": [
+    10.12375,
+    5.12375,
+    5.93
+  ],
+  "coplanar_edge_face_count": 0,
+  "collision": "Godot PackedScene retains continuous deck and independent guards",
+  "status": "approved_runtime",
+  "source_sha256": "77fdd9b3de25d02616d6a34a67c1d8cd14c6fe6b8599bfedaba0beda04e061d0",
+  "glb_sha256": "227ab97da41da41aa26aaea2836f457a322740d4de42dfd70ce79e53e11e0a29"
+}

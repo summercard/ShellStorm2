@@ -54,7 +54,7 @@ func _verify_time_energy_and_persistence(failures: Array[String]) -> void:
 
 func _verify_structural_prefabs(failures: Array[String]) -> void:
 	var specs := [
-		["res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v002.tscn", "ENV-BASE99-MEZZANINE-20X10-Z5", 5.0, 3],
+		["res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v003.tscn", "ENV-BASE99-MEZZANINE-20X10-Z5", 5.0, 3],
 		["res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v004.tscn", "ENV-BASE99-STAIR-L-Z5", 5.0, 6],
 		["res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d_v002.tscn", "ENV-BASE99-STAIR-EXTERIOR-H4", 4.0, 2],
 	]

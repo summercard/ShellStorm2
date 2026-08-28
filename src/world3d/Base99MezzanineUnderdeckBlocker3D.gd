@@ -13,6 +13,7 @@ func _ready() -> void:
 	_set_shadow_casting(self)
 	set_meta("permanent_base99_collision", true)
 	set_meta("collision_policy", "underdeck_perimeter_blocker")
+	# v003在PackedScene中显式保存三块与横向门板对齐的碰撞；这里只为旧版场景保留兼容回退。
 	if get_node_or_null("UnderdeckBlockerCollision") == null:
 		_build_collision()
 

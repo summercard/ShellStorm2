@@ -3,6 +3,7 @@ extends Node
 
 const OUTPUT := "res://outputs/verification/base99_modular_room_integration.png"
 const UPPER_SHELL_OUTPUT := "res://outputs/verification/base100_upper_shell_roof_integration.png"
+const MEZZANINE_EDGE_OUTPUT := "res://outputs/verification/base99_mezzanine_v003_edge_closeup.png"
 
 
 func _ready() -> void:
@@ -46,6 +47,20 @@ func _ready() -> void:
 		push_error("BASE99_VISUAL_FAIL: cannot save preview")
 		get_tree().quit(1)
 		return
+	# 从南侧近距离同时验收平台外缘和下方横向门板；机位覆盖原闪面发生区域。
+	camera.global_position = facility.global_position + Vector3(1.5, 7.4, 2.0)
+	camera.look_at(facility.global_position + Vector3(5.0, 4.0, -6.8), Vector3.UP)
+	for _frame in range(8):
+		await get_tree().process_frame
+	var mezzanine_edge_image := get_viewport().get_texture().get_image()
+	if (
+		mezzanine_edge_image == null
+		or mezzanine_edge_image.is_empty()
+		or mezzanine_edge_image.save_png(MEZZANINE_EDGE_OUTPUT) != OK
+	):
+		push_error("BASE99_VISUAL_FAIL: cannot save mezzanine edge closeup")
+		get_tree().quit(1)
+		return
 	# 从东南上方验证18米封顶和两层围护；这是独立验收图，不改变玩法相机。
 	camera.global_position = facility.global_position + Vector3(0.0, 25.0, -32.0)
 	camera.look_at(facility.global_position + Vector3(0.0, 10.0, 0.0), Vector3.UP)
@@ -60,5 +75,5 @@ func _ready() -> void:
 		push_error("BASE100_VISUAL_FAIL: cannot save upper shell/roof preview")
 		get_tree().quit(1)
 		return
-	print("BASE99_MODULAR_ROOM_VISUAL_OK: interior and upper-shell roof previews saved")
+	print("BASE99_MODULAR_ROOM_VISUAL_OK: interior, mezzanine v003 edge and upper-shell roof previews saved")
 	get_tree().quit(0)

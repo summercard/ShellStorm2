@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v003.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99WalkableModule3D.gd" id="2_collision"]
+
+[node name="基地99层二层楼中楼楼板20x10米Z5" type="Node3D"]
+script = ExtResource("2_collision")
+collision_role = "mezzanine"
+target_walkable_height_m = 5.0
+metadata/asset_id = "ENV-BASE99-MEZZANINE-20X10-Z5"
+metadata/asset_version = "v003"
+metadata/logic_id = "base99_mezzanine_20x10_z5"
+metadata/asset_category = "environment_module"
+metadata/component = "platform"
+metadata/dimensions_m = Vector3(20.2475, 5.93, 10.2475)
+metadata/deck_height_m = 5.0
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "continuous_walkable_deck_with_independent_guard_blockers"
+metadata/geometry_contract = "inset_deck_skin_no_coplanar_edge_faces"
+metadata/coplanar_edge_face_count = 0
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

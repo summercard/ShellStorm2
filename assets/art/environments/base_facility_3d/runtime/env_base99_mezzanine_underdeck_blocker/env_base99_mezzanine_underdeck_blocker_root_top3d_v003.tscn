@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v003.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99MezzanineUnderdeckBlocker3D.gd" id="2_collision"]
+
+[sub_resource type="BoxShape3D" id="BoxSouth"]
+size = Vector3(19.2, 4.95, 0.44)
+
+[sub_resource type="BoxShape3D" id="BoxWest"]
+size = Vector3(0.44, 4.95, 9.16)
+
+[sub_resource type="BoxShape3D" id="BoxEast"]
+size = Vector3(0.44, 4.95, 9.16)
+
+[node name="基地99层楼中楼下方工业仓库挡板" type="Node3D"]
+script = ExtResource("2_collision")
+metadata/asset_id = "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER"
+metadata/asset_version = "v003"
+metadata/logic_id = "base99_mezzanine_underdeck_blocker"
+metadata/asset_category = "environment_module"
+metadata/component = "underdeck_blocker"
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/frame_inset_m = 0.55
+metadata/visual_only = true
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "three_authored_panel_aligned_permanent_blockers"
+metadata/collision_panel_count = 3
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="UnderdeckBlockerCollision" type="Node3D" parent="."]
+metadata/base99_underdeck_collision_root = true
+metadata/collision_source = "authored_v003_packed_scene"
+
+[node name="SouthWarehouseBlocker" type="StaticBody3D" parent="UnderdeckBlockerCollision"]
+process_mode = 3
+collision_layer = 1
+collision_mask = 0
+metadata/base99_underdeck_permanent_blocker = true
+metadata/collision_mode = "permanent_solid_warehouse_panel"
+metadata/authored_panel = "south"
+
+[node name="SouthWarehouseBlockerShape" type="CollisionShape3D" parent="UnderdeckBlockerCollision/SouthWarehouseBlocker"]
+position = Vector3(0, 2.475, -4.45)
+shape = SubResource("BoxSouth")
+
+[node name="WestWarehouseBlocker" type="StaticBody3D" parent="UnderdeckBlockerCollision"]
+process_mode = 3
+collision_layer = 1
+collision_mask = 0
+metadata/base99_underdeck_permanent_blocker = true
+metadata/collision_mode = "permanent_solid_warehouse_panel"
+metadata/authored_panel = "west"
+
+[node name="WestWarehouseBlockerShape" type="CollisionShape3D" parent="UnderdeckBlockerCollision/WestWarehouseBlocker"]
+position = Vector3(-9.45, 2.475, 0)
+shape = SubResource("BoxWest")
+
+[node name="EastWarehouseBlocker" type="StaticBody3D" parent="UnderdeckBlockerCollision"]
+process_mode = 3
+collision_layer = 1
+collision_mask = 0
+metadata/base99_underdeck_permanent_blocker = true
+metadata/collision_mode = "permanent_solid_warehouse_panel"
+metadata/authored_panel = "east"
+
+[node name="EastWarehouseBlockerShape" type="CollisionShape3D" parent="UnderdeckBlockerCollision/EastWarehouseBlocker"]
+position = Vector3(9.45, 2.475, 0)
+shape = SubResource("BoxEast")
