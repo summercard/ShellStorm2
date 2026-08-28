@@ -1,12 +1,16 @@
 class_name TowerFloorStage3D
 extends Node3D
-## 250m 塔楼物理层。重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；
-## 承重碰撞独立于渲染，楼梯开口按 5m 网格从楼板中剔除。
+## 常规层为250m塔楼物理层；100层使用独立的160m顶层轮廓。
+## 重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；承重碰撞独立于渲染。
 
 const GRID_UNIT := 5.0
 const GRID_COUNT := 50
 const MAP_SIZE := GRID_UNIT * GRID_COUNT
 const MAP_HALF := MAP_SIZE * 0.5
+const ROOFTOP_GRID_COUNT := 32
+const ROOFTOP_MAP_SIZE := GRID_UNIT * ROOFTOP_GRID_COUNT
+const ROOFTOP_MAP_HALF := ROOFTOP_MAP_SIZE * 0.5
+const ROOFTOP_PARAPET_HEIGHT := 0.75
 const PROTECTED_FLOOR_PATCH_SIDE_M := 50.0
 const PROTECTED_FLOOR_PATCH_TILES_PER_SIDE := int(PROTECTED_FLOOR_PATCH_SIDE_M / GRID_UNIT)
 const FLOOR_THICKNESS := 0.30
@@ -108,12 +112,16 @@ func get_snapshot() -> Dictionary:
 	return {
 		"floor_index": floor_index,
 		"floor_kind": floor_kind,
-		"map_size": MAP_SIZE,
+		"map_size": _floor_map_size(),
+		"grid_count": _floor_grid_count(),
 		"grid_unit": GRID_UNIT,
 		"tile_count": _tile_count,
 		"tile_count_light": _floor_visual_light.multimesh.instance_count if _floor_visual_light != null and _floor_visual_light.multimesh != null else 0,
 		"tile_count_dark": _floor_visual_dark.multimesh.instance_count if _floor_visual_dark != null and _floor_visual_dark.multimesh != null else 0,
-		"outer_module_count": GRID_COUNT * 4,
+		"outer_map_size": _outer_map_size(),
+		"outer_grid_count": _outer_grid_count(),
+		"outer_module_count": _outer_grid_count() * 4,
+		"outer_wall_height": _outer_wall_height(),
 		"support_rect_count": _support_rect_count,
 		"stair_hole_sides": stair_hole_sides.duplicate(),
 		"shell_visible": _shell_visible,
@@ -153,6 +161,35 @@ func get_snapshot() -> Dictionary:
 	}
 
 
+func _floor_grid_count() -> int:
+	return ROOFTOP_GRID_COUNT if floor_index == 0 else GRID_COUNT
+
+
+func _floor_map_size() -> float:
+	return ROOFTOP_MAP_SIZE if floor_index == 0 else MAP_SIZE
+
+
+func _floor_map_half() -> float:
+	return ROOFTOP_MAP_HALF if floor_index == 0 else MAP_HALF
+
+
+func _outer_grid_count() -> int:
+	# 99层保留完整250m楼板，但其外墙与上方天台同样收至160m边界。
+	return ROOFTOP_GRID_COUNT if floor_index in [0, 1] else GRID_COUNT
+
+
+func _outer_map_size() -> float:
+	return ROOFTOP_MAP_SIZE if floor_index in [0, 1] else MAP_SIZE
+
+
+func _outer_map_half() -> float:
+	return ROOFTOP_MAP_HALF if floor_index in [0, 1] else MAP_HALF
+
+
+func _outer_wall_height() -> float:
+	return ROOFTOP_PARAPET_HEIGHT if floor_index == 0 else 9.0
+
+
 func _enabled_collision_shape_count(root: Node) -> int:
 	var count := 0
 	if root is CollisionShape3D and not (root as CollisionShape3D).disabled:
@@ -171,8 +208,10 @@ func _build_floor() -> void:
 	var light_transforms: Array[Transform3D] = []
 	var dark_transforms: Array[Transform3D] = []
 	var holes := _floor_visual_hole_rects()
-	for z_index in range(GRID_COUNT):
-		for x_index in range(GRID_COUNT):
+	var grid_count := _floor_grid_count()
+	var map_half := _floor_map_half()
+	for z_index in range(grid_count):
+		for x_index in range(grid_count):
 			var point := Vector2i(x_index, z_index)
 			var skipped := false
 			for hole in holes:
@@ -181,8 +220,8 @@ func _build_floor() -> void:
 					break
 			if skipped:
 				continue
-			var x := -MAP_HALF + GRID_UNIT * (float(x_index) + 0.5)
-			var z := -MAP_HALF + GRID_UNIT * (float(z_index) + 0.5)
+			var x := -map_half + GRID_UNIT * (float(x_index) + 0.5)
+			var z := -map_half + GRID_UNIT * (float(z_index) + 0.5)
 			# BoxMesh地砖以中心为原点；下移半个厚度，使可视顶面与承重面Y=0重合。
 			var transform := Transform3D(
 				Basis.IDENTITY,
@@ -221,11 +260,13 @@ func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
 	var holes := _floor_visual_hole_rects()
 	var patch_start_offset := -int(PROTECTED_FLOOR_PATCH_TILES_PER_SIDE / 2)
 	var patch_end_offset := patch_start_offset + PROTECTED_FLOOR_PATCH_TILES_PER_SIDE
+	var grid_count := _floor_grid_count()
+	var map_half := _floor_map_half()
 	for z_index in range(grid_center.y + patch_start_offset, grid_center.y + patch_end_offset):
-		if z_index < 0 or z_index >= GRID_COUNT:
+		if z_index < 0 or z_index >= grid_count:
 			continue
 		for x_index in range(grid_center.x + patch_start_offset, grid_center.x + patch_end_offset):
-			if x_index < 0 or x_index >= GRID_COUNT:
+			if x_index < 0 or x_index >= grid_count:
 				continue
 			var point := Vector2i(x_index, z_index)
 			var skipped := false
@@ -238,9 +279,9 @@ func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
 			var transform := Transform3D(
 				Basis.IDENTITY,
 				Vector3(
-					-MAP_HALF + GRID_UNIT * (float(x_index) + 0.5),
+					-map_half + GRID_UNIT * (float(x_index) + 0.5),
 					-FLOOR_THICKNESS * 0.5,
-					-MAP_HALF + GRID_UNIT * (float(z_index) + 0.5)
+					-map_half + GRID_UNIT * (float(z_index) + 0.5)
 				)
 			)
 			if (x_index + z_index) % 2 == 0:
@@ -296,24 +337,27 @@ func _build_outer_shell() -> void:
 	# 楼梯口门洞：跳过门洞位置的实墙模块，碰撞盒也留缺口。
 	# 楼顶额外在缺口处摆放带门墙预制体（5m 宽组件含 2m 宽门洞），可通行。
 	var transforms: Array[Transform3D] = []
-	var boundary := MAP_HALF - WALL_THICKNESS * 0.5
+	var outer_grid_count := _outer_grid_count()
+	var outer_map_half := _outer_map_half()
+	var wall_height := _outer_wall_height()
+	var boundary := outer_map_half - WALL_THICKNESS * 0.5
 	var door_transforms: Dictionary = {"north": [], "south": [], "west": [], "east": []}
-	for index in range(GRID_COUNT):
-		var offset := -MAP_HALF + GRID_UNIT * (float(index) + 0.5)
+	for index in range(outer_grid_count):
+		var offset := -outer_map_half + GRID_UNIT * (float(index) + 0.5)
 		if not _is_in_wall_door_gap("north", index):
-			transforms.append(Transform3D(Basis.IDENTITY, Vector3(offset, 4.5, -boundary)))
+			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset, wall_height * 0.5, -boundary)))
 		else:
 			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset, 0.0, -boundary)))
 		if not _is_in_wall_door_gap("south", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, PI), Vector3(-offset, 4.5, boundary)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(-offset, wall_height * 0.5, boundary)))
 		else:
 			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(-offset, 0.0, boundary)))
 		if not _is_in_wall_door_gap("west", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, 4.5, -offset)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, wall_height * 0.5, -offset)))
 		else:
 			door_transforms["west"].append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(-boundary, 0.0, -offset)))
 		if not _is_in_wall_door_gap("east", index):
-			transforms.append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, 4.5, offset)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, wall_height * 0.5, offset)))
 		else:
 			door_transforms["east"].append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(boundary, 0.0, offset)))
 	var multimesh := MultiMesh.new()
@@ -339,9 +383,9 @@ func _build_outer_shell() -> void:
 					continue
 				door_instance.name = "ParapetDoorWall_%s" % side.capitalize()
 				door_instance.transform = door_transform
+				door_instance.scale = Vector3(1.0, 0.5, 1.0)
 				add_child(door_instance)
 
-	var height := 1.5 if floor_kind == "rooftop" else 9.0
 	# 每一边使用独立碰撞体，避免一个共享 body 让摄像机无法判断命中方向。
 	for side in ["north", "south", "west", "east"]:
 		var body := StaticBody3D.new()
@@ -353,7 +397,14 @@ func _build_outer_shell() -> void:
 		body.collision_mask = 0
 		body.set_meta("camera_lower_wall", side == "south")
 		add_child(body)
-		_add_wall_collision(body, side, height, boundary)
+		_add_wall_collision(body, side, wall_height, boundary)
+
+
+func _outer_visual_transform(basis: Basis, position: Vector3) -> Transform3D:
+	var visual_basis := basis
+	if floor_index == 0:
+		visual_basis = visual_basis.scaled(Vector3(1.0, 0.5, 1.0))
+	return Transform3D(visual_basis, position)
 
 
 func _is_in_wall_door_gap(side: String, index: int) -> bool:
@@ -369,8 +420,9 @@ func _is_in_wall_door_gap(side: String, index: int) -> bool:
 
 
 func _wall_module_position(side: String, index: int) -> Vector3:
-	var offset := -MAP_HALF + GRID_UNIT * (float(index) + 0.5)
-	var boundary := MAP_HALF - WALL_THICKNESS * 0.5
+	var outer_map_half := _outer_map_half()
+	var offset := -outer_map_half + GRID_UNIT * (float(index) + 0.5)
+	var boundary := outer_map_half - WALL_THICKNESS * 0.5
 	match side:
 		"north":
 			return Vector3(offset, 0.0, -boundary)
@@ -394,16 +446,18 @@ func _stair_hole_center(side: String) -> Vector3:
 
 
 func _add_wall_collision(body: StaticBody3D, side: String, height: float, boundary: float) -> void:
+	var outer_map_size := _outer_map_size()
+	var outer_map_half := _outer_map_half()
 	if not (side in stair_hole_sides):
 		match side:
 			"north":
-				_add_box_collision(body, Vector3(0.0, height * 0.5, -boundary), Vector3(MAP_SIZE, height, WALL_THICKNESS))
+				_add_box_collision(body, Vector3(0.0, height * 0.5, -boundary), Vector3(outer_map_size, height, WALL_THICKNESS))
 			"south":
-				_add_box_collision(body, Vector3(0.0, height * 0.5, boundary), Vector3(MAP_SIZE, height, WALL_THICKNESS))
+				_add_box_collision(body, Vector3(0.0, height * 0.5, boundary), Vector3(outer_map_size, height, WALL_THICKNESS))
 			"west":
-				_add_box_collision(body, Vector3(-boundary, height * 0.5, 0.0), Vector3(WALL_THICKNESS, height, MAP_SIZE))
+				_add_box_collision(body, Vector3(-boundary, height * 0.5, 0.0), Vector3(WALL_THICKNESS, height, outer_map_size))
 			"east":
-				_add_box_collision(body, Vector3(boundary, height * 0.5, 0.0), Vector3(WALL_THICKNESS, height, MAP_SIZE))
+				_add_box_collision(body, Vector3(boundary, height * 0.5, 0.0), Vector3(WALL_THICKNESS, height, outer_map_size))
 		return
 	var center := _stair_hole_center(side)
 	var gap_start := 0.0
@@ -428,12 +482,12 @@ func _add_wall_collision(body: StaticBody3D, side: String, height: float, bounda
 			axis_pos = boundary
 	match side:
 		"north", "south":
-			var left_size := gap_start + MAP_HALF
-			var right_size := MAP_HALF - gap_end
+			var left_size := gap_start + outer_map_half
+			var right_size := outer_map_half - gap_end
 			if left_size > 0.01:
 				_add_box_collision(
 					body,
-					Vector3(-MAP_HALF + left_size * 0.5, height * 0.5, axis_pos),
+					Vector3(-outer_map_half + left_size * 0.5, height * 0.5, axis_pos),
 					Vector3(left_size, height, WALL_THICKNESS)
 				)
 			if right_size > 0.01:
@@ -443,12 +497,12 @@ func _add_wall_collision(body: StaticBody3D, side: String, height: float, bounda
 					Vector3(right_size, height, WALL_THICKNESS)
 				)
 		"west", "east":
-			var left_size := gap_start + MAP_HALF
-			var right_size := MAP_HALF - gap_end
+			var left_size := gap_start + outer_map_half
+			var right_size := outer_map_half - gap_end
 			if left_size > 0.01:
 				_add_box_collision(
 					body,
-					Vector3(axis_pos, height * 0.5, -MAP_HALF + left_size * 0.5),
+					Vector3(axis_pos, height * 0.5, -outer_map_half + left_size * 0.5),
 					Vector3(WALL_THICKNESS, height, left_size)
 				)
 			if right_size > 0.01:
@@ -476,7 +530,9 @@ func _build_support() -> void:
 	_support_root.collision_layer = 1
 	_support_root.collision_mask = 0
 	add_child(_support_root)
-	var rectangles: Array[Rect2i] = [Rect2i(0, 0, GRID_COUNT, GRID_COUNT)]
+	var grid_count := _floor_grid_count()
+	var map_half := _floor_map_half()
+	var rectangles: Array[Rect2i] = [Rect2i(0, 0, grid_count, grid_count)]
 	for hole in _hole_rects():
 		rectangles = _subtract_hole(rectangles, hole)
 	for rect in rectangles:
@@ -491,9 +547,9 @@ func _build_support() -> void:
 		var collision := CollisionShape3D.new()
 		collision.name = "SupportRect_%02d" % _support_rect_count
 		collision.position = Vector3(
-			-MAP_HALF + (float(rect.position.x) + float(rect.size.x) * 0.5) * GRID_UNIT,
+			-map_half + (float(rect.position.x) + float(rect.size.x) * 0.5) * GRID_UNIT,
 			-FLOOR_THICKNESS * 0.5,
-			-MAP_HALF + (float(rect.position.y) + float(rect.size.y) * 0.5) * GRID_UNIT
+			-map_half + (float(rect.position.y) + float(rect.size.y) * 0.5) * GRID_UNIT
 		)
 		collision.shape = shape
 		_support_root.add_child(collision)
@@ -535,9 +591,10 @@ func _stair_hole_world_rect(side: String) -> Rect2:
 
 
 func _world_rect_to_grid(world_rect: Rect2) -> Rect2i:
+	var map_half := _floor_map_half()
 	return Rect2i(
-		int(round((world_rect.position.x + MAP_HALF) / GRID_UNIT)),
-		int(round((world_rect.position.y + MAP_HALF) / GRID_UNIT)),
+		int(round((world_rect.position.x + map_half) / GRID_UNIT)),
+		int(round((world_rect.position.y + map_half) / GRID_UNIT)),
 		int(round(world_rect.size.x / GRID_UNIT)),
 		int(round(world_rect.size.y / GRID_UNIT))
 	)

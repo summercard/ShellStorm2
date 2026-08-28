@@ -4051,7 +4051,14 @@ func get_tower_snapshot() -> Dictionary:
 				closed_door_count += 1
 	return {
 		"mode": "tower_descent",
-		"rooftop_dimensions": Vector2(TOWER_GEOMETRY.MAP_SIZE_M, TOWER_GEOMETRY.MAP_SIZE_M),
+		"rooftop_dimensions": Vector2(
+			TowerFloorStage3D.ROOFTOP_MAP_SIZE,
+			TowerFloorStage3D.ROOFTOP_MAP_SIZE
+		),
+		"rooftop_grid_dimensions": Vector2i(
+			TowerFloorStage3D.ROOFTOP_GRID_COUNT,
+			TowerFloorStage3D.ROOFTOP_GRID_COUNT
+		),
 		"facility_dimensions": (_room_by_id["facility"] as DungeonRoom3D).get_dimensions(),
 		"combat_floor_count": combat_floor_records.size(),
 		"combat_floors": combat_floor_records,
