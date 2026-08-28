@@ -32,14 +32,18 @@ func _ready() -> void:
 		tower.activate_arrival_between_for_test("start", "facility"),
 		"100→99基地交通门无法开启", failures
 	)
+	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	_expect(facility != null, "99层基地房间不存在", failures)
+	if facility != null:
+		# 开门本身不再伪造房间进入；模拟角色真正跨过基地墙体内沿。
+		tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+		tower.call("_refresh_physical_location_authority", true)
 	var after_base_arrival := tower.get_tower_snapshot()
 	_expect(
 		(after_base_arrival.get("generated_floor_indices", []) as Array) == [0]
 		and str(after_base_arrival.get("current_room_id", "")) == "facility",
 		"基地交通门错误触发战斗楼层校验", failures
 	)
-	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
-	_expect(facility != null, "99层基地房间不存在", failures)
 	if facility != null:
 		facility.ensure_shell_built()
 		tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
@@ -125,21 +129,67 @@ func _ready() -> void:
 				break
 	_expect(arrival_door != null, "98层下端到达门不存在 entry=%s targets=%s" % [str(entry_room), str(entry_room.door_targets if entry_room != null else {})], failures)
 	if arrival_door != null:
+		var arrival_edge := tower.call("_edge_key", "facility", "floor_01_entry") as String
+		var arrival_connector := (tower.get("_corridor_by_edge") as Dictionary).get(arrival_edge) as Node3D
+		var room_to_stair := arrival_door.global_position - entry_room.global_position
+		room_to_stair.y = 0.0
+		room_to_stair = room_to_stair.normalized()
+		# 真实动线：角色仍站在安全屋墙体外的楼梯平台。读档容错会接受这个
+		# 位置，但实时房间归属绝不能因此提前切换到98F安全屋。
+		tower.force_enter_room_for_test("facility")
+		tower.player.global_position = arrival_door.global_position + room_to_stair * 0.75 + Vector3.UP * 0.05
+		tower.call("_refresh_physical_location_authority", true)
 		_expect(
-			tower.activate_arrival_between_for_test("facility", "floor_01_entry"),
-			"98层真实到达门交互失败", failures
+			str(tower.get("_current_room_id")) == "facility"
+			and not entry_room.contains_world_position(tower.player.global_position),
+			"角色尚在98F安全屋门外却被提前识别为安全屋",
+			failures
 		)
+		var interact_event := InputEventAction.new()
+		interact_event.action = "interact"
+		interact_event.pressed = true
+		tower._unhandled_input(interact_event)
+		await get_tree().process_frame
+		await get_tree().physics_frame
+		_expect(
+			arrival_connector != null
+			and arrival_door.is_open
+			and not bool(arrival_door.get_snapshot().get("blocks_passage", true)),
+			"98层门外真实按E后门板或碰撞没有打开", failures
+		)
+		_expect(
+			str(tower.get("_current_room_id")) == "facility",
+			"只打开98F到达门就提前提交了安全屋房间归属", failures
+		)
+		# 只有角色中心真正跨过墙体内沿，当前房间才允许切换为安全屋。
+		tower.player.global_position = arrival_door.global_position - room_to_stair * 0.45 + Vector3.UP * 0.05
+		tower.call("_refresh_physical_location_authority", true)
+		_expect(
+			entry_room.contains_world_position(tower.player.global_position)
+			and str(tower.get("_current_room_id")) == "floor_01_entry",
+			"角色真正进入98F安全屋后没有提交正确房间归属", failures
+		)
+		await get_tree().physics_frame
+		await get_tree().process_frame
 	var after_arrival := tower.get_tower_snapshot()
 	_expect(2 in (after_arrival.get("generated_floor_indices", []) as Array), "到达门开启前没有提交98层", failures)
 	await get_tree().process_frame
 	_expect(not bool(tower.get("_door_fate_active")), "安全屋到达门错误触发命运卡选择", failures)
-	# 实际进入98F安全屋后，首门在身后封闭；反向开启必须走撤退确认并清空随身物。
-	tower.call("_on_initial_loop_entry_physically_entered", entry_room)
+	# 实际进入98F安全屋后，必须由真实房间触发器在身后封门；禁止手动调用
+	# _on_initial_loop_entry_physically_entered 掩盖实机触发缺失。
 	var first_edge := tower.call("_edge_key", "facility", "floor_01_entry") as String
 	_expect(
 		bool(tower.get("_initial_loop_gate_sealed"))
 		and not bool((tower.get("_open_edges") as Dictionary).get(first_edge, true)),
 		"98F大循环首门没有在角色进入后关闭", failures
+	)
+	var sealed_save := tower.build_runtime_save_snapshot()
+	var sealed_world := sealed_save.get("world_state", {}) as Dictionary
+	_expect(
+		not bool((sealed_save.get("edge_states", {}) as Dictionary).get(first_edge, true))
+		and bool(sealed_world.get("initial_loop_gate_sealed", false))
+		and bool((sealed_world.get("vertical_arrival_open", {}) as Dictionary).get(first_edge, false)),
+		"98F首门实体已关闭，但行动快照没有原子记录封门/到达状态", failures
 	)
 	var carried := tower.get_inventory_module()
 	var carried_insurance := tower.get_insurance_module()
@@ -239,7 +289,19 @@ func _ready() -> void:
 		2 in (tower.get_tower_snapshot().get("generated_floor_indices", []) as Array),
 		"撤退后再次开门没有重新生成98F FloorBundle", failures
 	)
-	tower.call("_on_initial_loop_entry_physically_entered", reset_entry)
+	# 第二轮也必须走真实的门外→门内物理动线。这里过去直接调用封门回调，
+	# 会掩盖撤退重建后RoomTrigger或门状态没有正确复位的回归。
+	if reset_entry != null and reset_arrival_door != null:
+		var reset_room_to_stair := reset_arrival_door.global_position - reset_entry.global_position
+		reset_room_to_stair.y = 0.0
+		reset_room_to_stair = reset_room_to_stair.normalized()
+		tower.player.global_position = reset_arrival_door.global_position + reset_room_to_stair * 0.75 + Vector3.UP * 0.05
+		tower.call("_refresh_physical_location_authority", true)
+		await get_tree().physics_frame
+		tower.player.global_position = reset_arrival_door.global_position - reset_room_to_stair * 0.45 + Vector3.UP * 0.05
+		tower.call("_refresh_physical_location_authority", true)
+		await get_tree().physics_frame
+		await get_tree().process_frame
 	_expect(
 		bool(tower.get("_initial_loop_gate_sealed"))
 		and not bool((tower.get("_open_edges") as Dictionary).get(first_edge, true)),
@@ -292,6 +354,12 @@ func _ready() -> void:
 	_expect(not bool(tower.get_tower_snapshot().get("airlock_warning_active", true)), "取消后警告或门状态没有复位", failures)
 	_expect(tower.activate_arrival_between_for_test("floor_04_exit", "airlock_95_94"), "第二次隔离门交互失败", failures)
 	_expect(tower.confirm_airlock_transition(), "确认进入隔离间失败", failures)
+	var active_airlock_id := str(tower.get("_active_airlock_room_id"))
+	var active_airlock := (tower.get("_room_by_id") as Dictionary).get(active_airlock_id) as DungeonRoom3D
+	if active_airlock != null:
+		# 确认只开门；角色真正进入隔离间后才取得该房间归属。
+		tower.player.global_position = active_airlock.global_position + Vector3(0.0, 0.05, 0.0)
+		tower.call("_refresh_physical_location_authority", true)
 	var keys_before_unload := int(tower.get_runtime_snapshot().get("keys", -1))
 	_expect(bool(tower.call("_try_open_room_door", "floor_05_entry")), "隔离间前门无法开启", failures)
 	await get_tree().process_frame

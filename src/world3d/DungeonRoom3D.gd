@@ -164,6 +164,12 @@ const STREAM_STATE_NAMES := {
 	STREAM_HIBERNATING: "HIBERNATING",
 }
 
+# 房间归属只在角色中心真正跨过墙体内沿后成立。读档恢复、交互距离、
+# 预加载和门洞防夹各自拥有独立容差，禁止复用到这个实时归属合同。
+const ROOM_OWNERSHIP_BOUNDARY_INSET_M := 0.08
+const ROOM_OWNERSHIP_MIN_LOCAL_Y_M := -0.40
+const ROOM_OWNERSHIP_MAX_LOCAL_Y_M := 2.50
+
 var room_id := "room_00"
 var room_type := "COMBAT"
 var size_class := "medium"
@@ -453,6 +459,23 @@ func set_door_open(direction: String, opened: bool, immediate := false) -> void:
 	var door := _door_nodes.get(direction) as RoomDoor3D
 	if door != null:
 		door.set_open(opened, immediate)
+
+
+func contains_world_position(
+	world_position: Vector3,
+	min_local_y := ROOM_OWNERSHIP_MIN_LOCAL_Y_M,
+	max_local_y := ROOM_OWNERSHIP_MAX_LOCAL_Y_M
+) -> bool:
+	var local_position := to_local(world_position) if is_inside_tree() else world_position - position
+	var dimensions := get_dimensions()
+	var half_x := maxf(0.0, dimensions.x * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
+	var half_z := maxf(0.0, dimensions.y * 0.5 - ROOM_OWNERSHIP_BOUNDARY_INSET_M)
+	return (
+		absf(local_position.x) < half_x
+		and absf(local_position.z) < half_z
+		and local_position.y >= min_local_y
+		and local_position.y <= max_local_y
+	)
 
 
 func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictionary:
@@ -2038,14 +2061,20 @@ func _build_trigger() -> void:
 	area.collision_mask = 1
 	add_child(area)
 	var shape := BoxShape3D.new()
-	var trigger_height := 9.5 if room_type == "FACILITY" else 2.2
+	var min_local_y := -1.0 if room_type == "FACILITY" else ROOM_OWNERSHIP_MIN_LOCAL_Y_M
+	var max_local_y := (
+		TOWER_GEOMETRY.FLOOR_HEIGHT_M + 0.8
+		if room_type == "FACILITY"
+		else ROOM_OWNERSHIP_MAX_LOCAL_Y_M
+	)
+	var trigger_height := max_local_y - min_local_y
 	shape.size = Vector3(
-		dimensions.x * 0.72,
+		maxf(0.01, dimensions.x - ROOM_OWNERSHIP_BOUNDARY_INSET_M * 2.0),
 		trigger_height,
-		dimensions.y * 0.72
+		maxf(0.01, dimensions.y - ROOM_OWNERSHIP_BOUNDARY_INSET_M * 2.0)
 	)
 	var collision := CollisionShape3D.new()
-	collision.position.y = 4.5 if room_type == "FACILITY" else 0.9
+	collision.position.y = (min_local_y + max_local_y) * 0.5
 	collision.shape = shape
 	area.add_child(collision)
 	area.body_entered.connect(_on_room_body_entered)
@@ -2074,13 +2103,12 @@ func _on_room_body_entered(body: Node3D) -> void:
 func _emit_player_entered_if_present(body: Node3D) -> void:
 	if body == null or not is_instance_valid(body) or not body.is_in_group("player_3d"):
 		return
-	var local_position := to_local(body.global_position)
-	var dimensions := get_dimensions()
-	if (
-		absf(local_position.x) > dimensions.x * 0.42
-		or absf(local_position.z) > dimensions.y * 0.42
-		or absf(local_position.y) > 1.8
-	):
+	var inside := (
+		contains_world_position(body.global_position, -1.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M + 0.8)
+		if room_type == "FACILITY"
+		else contains_world_position(body.global_position)
+	)
+	if not inside:
 		return
 	if not visited:
 		visited = true

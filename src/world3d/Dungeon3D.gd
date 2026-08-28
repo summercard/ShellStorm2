@@ -4621,7 +4621,23 @@ func _finish_run(success: bool) -> void:
 	run_completed.emit(success, summary)
 	if not test_mode:
 		await get_tree().create_timer(0.18 if not success else 1.6).timeout
-		get_tree().change_scene_to_file(return_scene_path)
+		var entry_request_id := _request_return_entry_context(success)
+		var change_error := get_tree().change_scene_to_file(return_scene_path)
+		if change_error != OK:
+			if entry_request_id > 0:
+				GameEntryFlow.cancel_request(entry_request_id)
+			push_error("行动结算后的场景返回失败：%s" % error_string(change_error))
+
+
+func _request_return_entry_context(success: bool) -> int:
+	if return_scene_path != GameDesignConfig.MAIN_SCENE:
+		return -1
+	var reason := (
+		GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F
+		if success
+		else GameEntryFlow.REASON_DEATH_RETURN_99F
+	)
+	return GameEntryFlow.request_gameplay_entry(reason, GameEntryFlow.SPAWN_BASE_99F)
 
 
 func _collect_extracted_items(include_equipped_weapon := false) -> Array[Dictionary]:

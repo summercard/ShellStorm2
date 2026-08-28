@@ -40,6 +40,7 @@ const INDIRECT_DIFFUSE_LABELS := ["低 · 近域", "中 · 平衡", "高 · 完�
 var _toggle_nodes: Dictionary = {}
 var _syncing_controls := false
 var _reset_in_progress := false
+var _main_entry_request_id := -1
 
 
 func _ready() -> void:
@@ -203,6 +204,7 @@ func _confirm_game_save_reset() -> void:
 	reset_game_save_hint.text = "存档已复位，正在重新开始……"
 	reset_game_save_hint.modulate = Color(0.44, 0.94, 0.72)
 	_reset_runtime_singletons_for_new_profile()
+	_main_entry_request_id = GameEntryFlow.request_main_entry(GameEntryFlow.REASON_NEW_GAME_RESET)
 	call_deferred("_restart_from_main_scene")
 
 
@@ -228,6 +230,9 @@ func _restart_from_main_scene() -> void:
 	)
 	if error == OK:
 		return
+	if _main_entry_request_id > 0:
+		GameEntryFlow.cancel_request(_main_entry_request_id)
+		_main_entry_request_id = -1
 	_reset_in_progress = false
 	reset_game_save_button.disabled = false
 	reset_game_save_hint.text = "存档已复位，但主场景重新载入失败：%s" % error_string(error)

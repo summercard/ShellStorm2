@@ -126,6 +126,7 @@ var _tower_elevator_label: Label
 var _tower_base_currency_label: Label
 var _world_time_label: Label
 var _main_entry_screen: CanvasLayer
+var _entry_context: Dictionary = {}
 var _authoritative_floor_index := -999
 var _loaded_floor_indices: Array[int] = []
 var _protected_floor_patch_center := Vector3.ZERO
@@ -179,6 +180,7 @@ var _initial_loop_retreat_overlay: Control = null
 
 func _ready() -> void:
 	process_physics_priority = 100
+	_entry_context = GameEntryFlow.consume_main_scene_entry()
 	var editor_art_root := get_node_or_null("美术可编辑层") as Node3D
 	if editor_art_root != null:
 		editor_art_root.visible = false
@@ -195,7 +197,7 @@ func _ready() -> void:
 	_install_world_time_hud()
 	_install_atmosphere()
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
-	var starts_on_rooftop := test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
+	var starts_on_rooftop := _should_start_on_rooftop_for_entry()
 	if starts_on_rooftop:
 		player.global_position = Vector3(
 			TOWER_GEOMETRY.CORE_CENTER_XZ.x - 20.0,
@@ -230,6 +232,17 @@ func _accepts_pending_insurance_return_at_spawn() -> bool:
 	# 死亡的正式返城场景就是99F塔楼基地；保险物应回到原金色保险格，
 	# 而不是进入只有独立BaseMenu才能看见的撤离战利品面板。
 	return true
+
+
+func get_entry_context_snapshot() -> Dictionary:
+	return _entry_context.duplicate(true)
+
+
+func _should_start_on_rooftop_for_entry() -> bool:
+	# 死亡结算已明确承诺返回99F，不得再被新手出生条件改送天台。
+	if str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F:
+		return false
+	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -2136,9 +2149,9 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 	lower_door.set_open(true)
 	if edge == _edge_key("facility", "floor_01_entry"):
 		_initial_loop_gate_armed = true
-	# 保留跨门之前的真实房间，避免 _on_room_entered 把它误当成"上一个房间"。
+	# 开门不等于进入房间。保留跨门前房间，直到角色中心真正越过墙体内沿，
+	# 再由严格RoomTrigger/物理位置权威提交房间切换和身后封门。
 	_stair_arrival_previous_room = _current_room_id
-	_on_room_entered(lower_room)
 	if bundle_floor_index >= 0:
 		var plan := _floor_plan_snapshots.get(bundle_floor_index, {}) as Dictionary
 		status_label.text = "%d层已建立 · 主路%d房 · 支线%d条" % [
@@ -2407,7 +2420,6 @@ func confirm_airlock_transition() -> bool:
 	_vertical_arrival_open[edge] = true
 	lower_door.set_open(true)
 	_active_airlock_room_id = lower_room.room_id
-	_on_room_entered(lower_room)
 	status_label.text = "隔离间已开启 · 穿过后旧段未拾取物永久丢失"
 	return true
 
@@ -2445,6 +2457,13 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room != null and _is_locked_stair_arrival_room(room.room_id):
 		return
 	var previous_room_id := _current_room_id
+	# 首循环封门属于“角色已被严格物理范围认定进入98F”的房间事务，不能只
+	# 依赖RoomTrigger的body_entered信号。撤退后房间会被销毁重建，而流送会在
+	# 房间切换时停用触发区，单靠该信号存在丢事件窗口。并且必须在super()的
+	# room_transition存档点之前提交封门状态，避免读档把已经关上的门恢复为开启。
+	var physically_inside := room != null and _is_player_inside_room(room)
+	if physically_inside:
+		_on_initial_loop_entry_physically_entered(room)
 	super(room)
 	if room == null:
 		return
@@ -2454,7 +2473,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	var seal_previous_room_id := previous_room_id
 	if not _stair_arrival_previous_room.is_empty():
 		seal_previous_room_id = _stair_arrival_previous_room
-	if _is_player_inside_room(room):
+	if physically_inside:
 		_seal_facility_doors_after_transition(seal_previous_room_id, room.room_id)
 		_stair_arrival_previous_room = ""
 	var depth := maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))
@@ -2505,14 +2524,10 @@ func _is_locked_stair_arrival_room(room_id: String) -> bool:
 
 
 func _is_player_inside_room(room: DungeonRoom3D) -> bool:
-	if room == null or player == null:
-		return false
-	var local_pos := room.to_local(player.global_position)
-	var dims := room.get_dimensions()
-	return (
-		absf(local_pos.x) <= dims.x * 0.42
-		and absf(local_pos.z) <= dims.y * 0.42
-		and absf(local_pos.y) <= 1.8
+	return room != null and player != null and _room_owns_world_position(
+		room,
+		int(_room_floor_index.get(room.room_id, _physical_floor_index())),
+		player.global_position
 	)
 
 
@@ -3421,7 +3436,9 @@ func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
 
 
 func _install_main_entry_screen() -> void:
-	# 自动化场景不展示启动页；正式运行始终覆盖在同一游戏世界和同一角色上。
+	# 启动页只属于冷启动/显式返回主页；死亡、撤离和场景恢复均直接进入玩法。
+	if not _entry_context_requests_main_entry():
+		return
 	if test_mode or DisplayServer.get_name() == "headless" or _main_entry_screen != null:
 		return
 	_main_entry_screen = MAIN_ENTRY_SCREEN_SCENE.instantiate() as CanvasLayer
@@ -3431,6 +3448,13 @@ func _install_main_entry_screen() -> void:
 	if _main_entry_screen.has_method("prepare_gameplay_hud"):
 		_main_entry_screen.call("prepare_gameplay_hud", $HUD)
 	add_child(_main_entry_screen)
+
+
+func _entry_context_requests_main_entry() -> bool:
+	return (
+		str(_entry_context.get("kind", "")) == GameEntryFlow.KIND_MAIN_ENTRY
+		and bool(_entry_context.get("show_main_entry", false))
+	)
 
 
 func _refresh_tower_hud() -> void:
@@ -3576,7 +3600,11 @@ func _physical_floor_index() -> int:
 	var position := player.global_position if player.is_inside_tree() else player.position
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
 	if facility != null:
-		var local_pos := facility.to_local(position)
+		var local_pos := (
+			facility.to_local(position)
+			if facility.is_inside_tree()
+			else position - facility.position
+		)
 		var dimensions := facility.get_dimensions()
 		# 基地阁楼、楼中楼和外梯内侧都是99F建筑体；100F只从东侧
 		# 门槛外的天台空间开始。这个体积判定不依赖经过哪一扇门，
@@ -3655,9 +3683,25 @@ func _room_contains_player_on_floor(room: DungeonRoom3D, floor_index: int) -> bo
 		return false
 	if int(_room_floor_index.get(room.room_id, -1)) != floor_index:
 		return false
+	return _room_owns_world_position(room, floor_index, player.global_position)
+
+
+func _room_owns_world_position(
+	room: DungeonRoom3D,
+	floor_index: int,
+	world_position: Vector3
+) -> bool:
+	if room == null:
+		return false
+	# 99F基地是同一房间内的多层建筑，只扩展垂直所有权；水平边界仍严格
+	# 位于墙体内沿，不能使用安全区/自动门的壳体余量代替房间归属。
 	if room.room_id == "facility" and floor_index == 1:
-		return is_player_inside_facility()
-	return _is_runtime_restore_position_valid(room, player.global_position)
+		return room.contains_world_position(
+			world_position,
+			-1.0,
+			FLOOR_HEIGHT + 0.8
+		)
+	return room.contains_world_position(world_position)
 
 
 func get_physical_location_snapshot() -> Dictionary:
@@ -3796,24 +3840,14 @@ func _runtime_current_room_id_for_save() -> String:
 	if player == null:
 		return _current_room_id
 	var position := player.global_position if player.is_inside_tree() else player.position
-	# 先寻找真实包含角色的房间，避免楼梯边界沿用上一个房间 ID。
-	for room_value in _room_by_id.values():
-		var room := room_value as DungeonRoom3D
-		if room != null and _is_runtime_restore_position_valid(room, position):
-			return room.room_id
 	var floor_index := _runtime_current_floor_index()
-	var nearest_id := ""
-	var nearest_distance := INF
+	# 保存归属与实时归属使用同一严格内部体积。楼梯和门槛不属于任何房间，
+	# 此时保留最后一个合法房间；禁止再用“最近房间”或读档2米容差猜测。
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
-		if room == null:
-			continue
-		var room_position := room.global_position if room.is_inside_tree() else room.position
-		var distance := Vector2(position.x, position.z).distance_to(Vector2(room_position.x, room_position.z))
-		if distance < nearest_distance:
-			nearest_distance = distance
-			nearest_id = room.room_id
-	return nearest_id if not nearest_id.is_empty() else _current_room_id
+		if _room_owns_world_position(room, floor_index, position):
+			return room.room_id
+	return _current_room_id
 
 
 func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:

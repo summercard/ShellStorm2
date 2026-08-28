@@ -65,6 +65,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://src/core/Global.gd"
+GameEntryFlow="*res://src/core/GameEntryFlow.gd"
 GameManager="*res://src/core/GameManager.gd"
 AudioManager="*res://src/core/AudioManager.gd"
 BaseManager="*res://src/base/BaseManager.gd"
