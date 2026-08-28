@@ -1685,7 +1685,9 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 		direction,
 		target_room_id,
 		theme.accent_color,
-		BASE99_DOOR_LIFT_PREFAB if room_type == "FACILITY" else null
+		BASE99_DOOR_LIFT_PREFAB
+		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility")
+		else null
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])

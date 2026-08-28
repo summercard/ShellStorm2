@@ -951,7 +951,7 @@ func _explode() -> void:
 	_die()
 
 
-func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0) -> void:
+func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0, interrupt_movement := true) -> void:
 	if ai_state == "dead":
 		return
 	var applied := maxi(1, amount)
@@ -985,7 +985,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 				AudioManager.play_enemy_hit_sfx()
 		if _should_begin_elite_escape():
 			_begin_elite_escape()
-		else:
+		elif interrupt_movement:
 			transition_to("stagger")
 
 
@@ -1005,7 +1005,7 @@ func take_projectile_damage(
 		or "piercing" in tags
 		or bool(behavior.get("pierce_shield", false))
 	)
-	take_damage(amount, critical, hit_direction, hit_knockback)
+	take_damage(amount, critical, hit_direction, hit_knockback, hit_knockback > 0.0)
 	_bypass_shield_once = false
 
 

@@ -63,10 +63,12 @@ func _ready() -> void:
 			if door != null:
 				_expect(door.is_open, "基地%s侧门开启后没有播放开门状态" % side, failures)
 			var dimensions := facility.get_dimensions()
-			var outside_x := -(dimensions.x * 0.5 + 0.35) if side == "west" else dimensions.x * 0.5 + 0.35
-			tower.player.global_position = facility.to_global(Vector3(outside_x, 0.05, 0.0))
+			var outside_x := -(dimensions.x * 0.5 + 4.0) if side == "west" else dimensions.x * 0.5 + 4.0
+			var door_local_z := facility.to_local(door.global_position).z if door != null else 0.0
+			tower.player.global_position = facility.to_global(Vector3(outside_x, 0.05, door_local_z))
 			tower.call("_update_facility_combat_lock")
-			tower.call("_update_facility_door_auto_close")
+			await get_tree().create_timer(1.25).timeout
+			await get_tree().physics_frame
 			_expect(
 				not tower.is_player_inside_facility() and tower.player.combat_enabled,
 				"离开基地屋体后仍然禁止开火", failures
@@ -108,7 +110,7 @@ func _ready() -> void:
 				"基地%s侧门刚开启就被错误自动关闭" % side, failures
 			)
 			tower.player.global_position = facility.to_global(Vector3(outside_x, 0.05, 0.0))
-			tower.call("_update_facility_door_auto_close")
+			await get_tree().create_timer(1.25).timeout
 			tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
 			tower.force_enter_room_for_test("facility")
 

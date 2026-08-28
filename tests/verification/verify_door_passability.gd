@@ -126,7 +126,11 @@ func _ready() -> void:
 		var initial_disabled := test_door._collision.disabled
 		# 强制打开
 		test_door.set_open(true)
-		await _settle_short()
+		if test_door.get_node_or_null("SimpleTransitDoor3D") != null:
+			await get_tree().create_timer(0.80).timeout
+			await get_tree().physics_frame
+		else:
+			await _settle_short()
 		if test_door.is_open and test_door._collision.disabled:
 			print("  ✅ 打开后 collision.disabled = true（放行）")
 			tests_passed += 1
@@ -134,7 +138,7 @@ func _ready() -> void:
 			print("  ❌ 打开后 is_open=%s collision.disabled=%s" % [test_door.is_open, test_door._collision.disabled])
 			tests_failed += 1
 		# 恢复
-		test_door.set_open(initial_open)
+		test_door.set_open(initial_open, true)
 		await _settle_short()
 
 	# ============================================================
@@ -346,7 +350,8 @@ func _ready() -> void:
 			])
 			# 调 try_open（该 edge 默认 true，会走 early-return path）
 			var opened_v := tower.try_open_room_door("facility")
-			await _settle_short()
+			await get_tree().create_timer(0.80).timeout
+			await get_tree().physics_frame
 			if opened_v and west_door.is_open and west_door._collision.disabled:
 				print("  ✅ 首次 E 后门 mesh 已打开 + collision 禁用")
 				tests_passed += 1

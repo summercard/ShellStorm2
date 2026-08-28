@@ -170,7 +170,8 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 		var rooftop_door := tower.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
 		_expect(rooftop_door != null, "阁楼通往天台的现有Godot门组件缺失", failures)
 		if rooftop_door != null:
-			tower.player.global_position = rooftop_door.global_position + Vector3(-0.6, 0.05, 0.0)
+			tower.player.global_position = rooftop_door.to_global(Vector3(0.0, 0.05, 1.5))
+			tower.player.velocity = Vector3.ZERO
 			_expect(bool(tower.call("_try_open_base_rooftop_transit_door")), "阁楼天台门不能通过既有门链路开启", failures)
 			await get_tree().physics_frame
 			var opening_snapshot := rooftop_door.get_snapshot()

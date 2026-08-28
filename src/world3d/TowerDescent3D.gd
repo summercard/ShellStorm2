@@ -20,6 +20,7 @@ const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
+const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
 )
@@ -72,10 +73,6 @@ const CAMERA_STAIR_SLAB_RECOVER_RATE := 5.0
 const CAMERA_STAIR_SLAB_MAX_RAY_HITS := 8
 const CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M := [-0.24, 0.0, 0.24]
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
-const BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M := 2.35
-const BASE_ROOFTOP_DOOR_AUTO_CLOSE_DISTANCE_M := 2.85
-const BASE_ROOFTOP_DOOR_AUTO_CLOSE_DELAY_S := 0.40
-const BASE_ROOFTOP_DOOR_MOTION_DURATION_S := 0.72
 # 楼梯资产位于65m核心外侧：沿外法线预留20m、沿折返方向预留30m。
 # 该占位参与整层布局规划，普通/随机房间不得进入；楼梯大厅自身作为接口例外。
 const STAIR_PLAN_OUTWARD_DEPTH_M := 20.0
@@ -97,7 +94,7 @@ var _facility_nodes: Array[BaseFacility3D] = []
 var _facility_decor_nodes: Array[Node3D] = []
 var _facility_art_layout: Node3D
 var _base_rooftop_transit_door: RoomDoor3D
-var _base_rooftop_door_clear_elapsed := 0.0
+var _simple_transit_door_components: Array[Node] = []
 var _descent_side_sequence: Array[String] = []
 var _edge_side_by_key: Dictionary = {}
 var _edge_door_sides_by_key: Dictionary = {}
@@ -168,10 +165,7 @@ var _camera_stair_slab_clearance_height_m := -1.0
 var _camera_stair_slab_drop_target_m := 0.0
 var _camera_stair_slab_drop_current_m := 0.0
 var _vertical_arrival_open: Dictionary = {}
-var _stair_arrival_previous_room := ""
 var _stair_arrival_prompt_door: RoomDoor3D
-var _facility_outbound_door_edge := ""
-var _facility_outbound_door_seen_inside := false
 var _corridor_floor_module_mesh: Mesh
 var _corridor_wall_module_mesh: Mesh
 var _initial_loop_gate_armed := false
@@ -193,6 +187,7 @@ func _ready() -> void:
 	player.camera.fov = CAMERA_FOV_DEG
 	_install_player_occlusion_silhouette()
 	_install_facilities()
+	_install_simple_transit_door_components()
 	_install_elevator_facility()
 	_install_tower_hud()
 	_install_world_time_hud()
@@ -268,9 +263,7 @@ func _process(delta: float) -> void:
 	super(delta)
 	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
-	_update_facility_door_auto_close()
 	_update_base_rooftop_transit_door_prompt()
-	_update_base_rooftop_transit_door_auto_close(delta)
 	_update_stair_arrival_prompt()
 
 
@@ -1154,24 +1147,38 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		if _boss_descent_key_count <= 0:
 			status_label.text = "需要击败本段Boss并取得下行权限"
 			return false
+	# 100/99F的三个房间端点门只负责普通交通。授权逻辑留在edge，实体只开
+	# 当前交互的这一扇，禁止刷新整条垂直边时远程联动另一端门。
+	if _is_facility_transit_edge(edge) and _current_room_id in ["start", "facility"]:
+		return _open_simple_room_edge_door(target_room_id, edge)
 	var opened := super(target_room_id)
-	# 基地门的物理开闭只负责通行表现；路线授权仍由 _open_edges 管理。
-	# 这样门在玩家离开基地后能关回去，而下端到达门仍可识别已授权的楼梯。
-	if opened and _current_room_id == "facility" and _is_facility_transit_edge(edge):
-		# 已授权的垂直路线第二次按E会走通用“刷新已开边”分支。那个分支会
-		# 保持下端到达门关闭，不能用于基地向外的可重复滑门；这里强制只打开
-		# 基地这一侧的物理门板，路线状态和另一端到达门仍各自独立。
-		var facility := _room_by_id.get("facility") as DungeonRoom3D
-		var door_sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
-		if facility != null:
-			facility.set_door_open(str(door_sides.get("facility", "")), true)
-		_facility_outbound_door_edge = edge
-		# 自动关门必须先观察到玩家确实在基地屋体内，避免楼梯门槛、传送
-		# 或房间事件的逻辑上下文把刚开启的门误判为“已从室内离开”。
-		_facility_outbound_door_seen_inside = _is_player_within_facility_shell()
 	if opened and _boss_descent_gate_edges.has(edge):
 		_boss_descent_key_count = maxi(0, _boss_descent_key_count - 1)
 	return opened
+
+
+func _open_simple_room_edge_door(target_room_id: String, edge: String) -> bool:
+	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if current == null:
+		return false
+	var door: RoomDoor3D = null
+	for side_value in current.door_targets.keys():
+		if str(current.door_targets[side_value]) == target_room_id:
+			door = current.get_door_node(str(side_value))
+			break
+	if door == null:
+		return false
+	# start|facility是永久结构，门交互不得读写它；其他路线继续按各自流程。
+	if edge != _edge_key("start", "facility") and not bool(_open_edges.get(edge, false)):
+		_open_edges[edge] = true
+		minimap.set_edge_open(_current_room_id, target_room_id, true)
+		_update_room_streaming(_current_room_id)
+	if not _request_simple_transit_door_open(door):
+		return false
+	if MonsterAIManager != null and player != null:
+		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
+	status_label.text = "普通交通门已开启"
+	return true
 
 
 func _door_function_for_edge(a: String, b: String) -> String:
@@ -1219,10 +1226,9 @@ func _build_topology() -> void:
 		var child := _find_record(child_id)
 		(_room_neighbors[parent_id] as Array).append(child_id)
 		(_room_neighbors[child_id] as Array).append(parent_id)
-		# 楼顶↔99层基地↔98层入口：默认关闭，需在基地内按 E 开门；
-		# 玩家通过后由 _on_room_entered 把门重新关回去，形成开关结构。
-		# 出生后门是关的，所以出生位置（楼顶西侧）不会被自动滑门挡住。
-		var opens_by_default := false
+		# 100F↔99F西侧楼梯是固定建筑结构，不存在玩法授权。路线永久连通，
+		# 四扇普通门只控制自己的门板；98F入口及更深路线仍按玩法状态开启。
+		var opens_by_default := edge == _edge_key("start", "facility")
 		_open_edges[edge] = opens_by_default
 		if str(declaration["kind"]) == "vertical":
 			_vertical_arrival_open[edge] = false
@@ -1998,14 +2004,17 @@ func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
 		return
 	# 打开当前楼层的上端门只启用楼梯；下端门保持独立关闭，直到玩家
 	# 真实走到下一层门槛并按E，避免在上层开门时远程跳过下一层入口。
-	upper_room.set_door_open(
-		str(door_sides.get(upper_id, side)),
-		opened
-	)
-	lower_room.set_door_open(
-		str(door_sides.get(lower_id, side)),
-		opened and bool(_vertical_arrival_open.get(edge, false))
-	)
+	var upper_door := upper_room.get_door_node(str(door_sides.get(upper_id, side)))
+	var lower_door := lower_room.get_door_node(str(door_sides.get(lower_id, side)))
+	# 普通交通门的实体开闭不再由路线edge驱动；否则读档恢复已授权路线时
+	# 会把本应自动关闭的100/99F门全部重新打开。非普通门继续遵守原规则。
+	if _simple_transit_component_for(upper_door) == null:
+		upper_room.set_door_open(str(door_sides.get(upper_id, side)), opened)
+	if _simple_transit_component_for(lower_door) == null:
+		lower_room.set_door_open(
+			str(door_sides.get(lower_id, side)),
+			opened and bool(_vertical_arrival_open.get(edge, false))
+		)
 
 
 func _find_nearby_stair_arrival() -> Dictionary:
@@ -2058,7 +2067,7 @@ func _find_nearby_stair_arrival() -> Dictionary:
 func _find_nearby_stair_return() -> Dictionary:
 	# 下行到达门由上层房间上下文处理；反向爬楼时玩家在穿过上端门之前
 	# 仍属于下层房间，不能依赖当前房间的 get_nearest_door() 找到上端门。
-	# 对已授权的垂直路线显式查询上端门，保证楼梯内部不会形成单向陷阱。
+	# 对永久基础楼梯或已开放的战局路线显式查询上端门，保证楼梯内部不会形成单向陷阱。
 	if player == null or _current_room_id.is_empty():
 		return {}
 	var nearest_distance := STAIR_ARRIVAL_INTERACTION_DISTANCE_M
@@ -2133,7 +2142,8 @@ func _try_open_nearby_stair_arrival() -> bool:
 	var upper_door := candidate.get("upper_door") as RoomDoor3D
 	if upper_door == null:
 		return false
-	upper_door.set_open(true)
+	if not _request_simple_transit_door_open(upper_door):
+		upper_door.set_open(true)
 	status_label.text = "上行交通门已开启"
 	if MonsterAIManager != null and player != null:
 		MonsterAIManager.broadcast_sound_stimulus(
@@ -2157,12 +2167,11 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 	if bundle_floor_index >= 0 and not _commit_floor_bundle(bundle_floor_index, "arrival_gate"):
 		return true
 	_vertical_arrival_open[edge] = true
-	lower_door.set_open(true)
+	if not _request_simple_transit_door_open(lower_door):
+		lower_door.set_open(true)
 	if edge == _edge_key("facility", "floor_01_entry"):
 		_initial_loop_gate_armed = true
-	# 开门不等于进入房间。保留跨门前房间，直到角色中心真正越过墙体内沿，
-	# 再由严格RoomTrigger/物理位置权威提交房间切换和身后封门。
-	_stair_arrival_previous_room = _current_room_id
+	# 开门不等于进入房间；严格RoomTrigger/物理位置权威仍负责提交切换。
 	if bundle_floor_index >= 0:
 		var plan := _floor_plan_snapshots.get(bundle_floor_index, {}) as Dictionary
 		status_label.text = "%d层已建立 · 主路%d房 · 支线%d条" % [
@@ -2370,14 +2379,10 @@ func _reset_base_doors_closed() -> void:
 		room_b.set_door_open(side_b, false, true)
 	if _base_rooftop_transit_door != null and is_instance_valid(_base_rooftop_transit_door):
 		_base_rooftop_transit_door.set_open(false, true)
-	_facility_outbound_door_edge = ""
-	_facility_outbound_door_seen_inside = false
-	_base_rooftop_door_clear_elapsed = 0.0
 	_active_transition_edge = ""
 	_transition_upper_floor = -1
 	_transition_lower_floor = -1
 	_transition_progress = 0.0
-	_stair_arrival_previous_room = ""
 	_stair_arrival_prompt_door = null
 	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
 		_airlock_warning_overlay.queue_free()
@@ -2512,7 +2517,6 @@ func _set_connector_collision_enabled(
 func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room != null and _is_locked_stair_arrival_room(room.room_id):
 		return
-	var previous_room_id := _current_room_id
 	# 首循环封门属于“角色已被严格物理范围认定进入98F”的房间事务，不能只
 	# 依赖RoomTrigger的body_entered信号。撤退后房间会被销毁重建，而流送会在
 	# 房间切换时停用触发区，单靠该信号存在丢事件窗口。并且必须在super()的
@@ -2523,15 +2527,6 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	super(room)
 	if room == null:
 		return
-	# 基地房门为开关结构：玩家跨过门后立刻把基地侧/邻房侧门一起关上。
-	# 仅当玩家确实走进新房间时才关门——_activate_stair_arrival 在开门瞬间会
-	# 触发一次虚拟 _on_room_entered，那时玩家还站在门外，避免误关。
-	var seal_previous_room_id := previous_room_id
-	if not _stair_arrival_previous_room.is_empty():
-		seal_previous_room_id = _stair_arrival_previous_room
-	if physically_inside:
-		_seal_facility_doors_after_transition(seal_previous_room_id, room.room_id)
-		_stair_arrival_previous_room = ""
 	var depth := maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))
 	if room.room_id == "start":
 		room_label.text = "楼顶 · 250m整层 / 65m核心"
@@ -2588,24 +2583,58 @@ func _is_player_inside_room(room: DungeonRoom3D) -> bool:
 
 
 func _is_player_near_base_rooftop_transit_door() -> bool:
-	return (
-		_base_rooftop_transit_door != null
-		and is_instance_valid(_base_rooftop_transit_door)
-		and player != null
-		and player.global_position.distance_to(_base_rooftop_transit_door.global_position)
-			<= BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M
-	)
+	var component: Node = _simple_transit_component_for(_base_rooftop_transit_door)
+	return component != null and bool(component.call("is_player_in_interaction_range"))
+
+
+func _install_simple_transit_door_components() -> void:
+	_simple_transit_door_components.clear()
+	var doors: Array[RoomDoor3D] = []
+	var rooftop := _room_by_id.get("start") as DungeonRoom3D
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if rooftop != null:
+		var rooftop_stair_door := rooftop.get_door_node("west")
+		if rooftop_stair_door != null:
+			doors.append(rooftop_stair_door)
+	if facility != null:
+		for side in ["west", "east"]:
+			var facility_door := facility.get_door_node(side)
+			if facility_door != null:
+				doors.append(facility_door)
+	if _base_rooftop_transit_door != null:
+		doors.append(_base_rooftop_transit_door)
+	for door in doors:
+		var existing: Node = door.get_node_or_null("SimpleTransitDoor3D")
+		var component: Node = existing
+		if component == null:
+			component = SIMPLE_TRANSIT_DOOR_SCRIPT.new() as Node
+			component.name = "SimpleTransitDoor3D"
+			door.add_child(component)
+		component.call("configure", door, player)
+		_simple_transit_door_components.append(component)
+
+
+func _simple_transit_component_for(door: RoomDoor3D) -> Node:
+	if door == null or not is_instance_valid(door):
+		return null
+	return door.get_node_or_null("SimpleTransitDoor3D")
+
+
+func _request_simple_transit_door_open(door: RoomDoor3D) -> bool:
+	var component: Node = _simple_transit_component_for(door)
+	return component != null and bool(component.call("request_open"))
 
 
 func _get_configured_base_door_bindings() -> Array[Dictionary]:
-	# 基地三个实体门共用同一交互入口；差异只放在绑定配置中。
+	# 基地三个可从房间侧直接交互的实体门共用同一入口；100F西侧上端门
+	# 继续由房间门/楼梯内侧查询找到，但四扇实体门都挂同一普通交通门组件。
 	# 98层入口安全房间的下端门不属于基地门集合，继续走战局专用流程。
 	var bindings: Array[Dictionary] = []
 	if _base_rooftop_transit_door != null and is_instance_valid(_base_rooftop_transit_door):
 		bindings.append({
 			"door": _base_rooftop_transit_door,
 			"mode": "rooftop_transit",
-			"interaction_distance_m": BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M,
+			"interaction_distance_m": float(SIMPLE_TRANSIT_DOOR_SCRIPT.INTERACTION_DISTANCE_M),
 		})
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
 	if facility == null:
@@ -2637,10 +2666,12 @@ func _try_interact_with_configured_base_door() -> bool:
 		var mode := str(binding.get("mode", "room_edge"))
 		if mode == "rooftop_transit":
 			return _try_open_base_rooftop_transit_door()
-		# 基地普通门保持原有合同：只在关闭状态响应开启，开门后的
-		# 自动关闭仍由统一的基地门状态更新处理。
-		if door.is_open:
-			return false
+		# 四扇门都只有E键开启；已开启时重复按E不切换关闭状态。
+		if door.is_open or (
+			door.is_in_motion()
+			and bool(door.get_snapshot().get("target_open", false))
+		):
+			return true
 		var target_room_id := str(binding.get("target_room_id", door.target_room_id))
 		return not target_room_id.is_empty() and _try_open_room_door(target_room_id)
 	return false
@@ -2657,70 +2688,9 @@ func _update_base_rooftop_transit_door_prompt() -> void:
 func _try_open_base_rooftop_transit_door() -> bool:
 	if not _is_player_near_base_rooftop_transit_door():
 		return false
-	if _base_rooftop_transit_door.is_in_motion():
-		status_label.text = "阁楼天台门正在运动"
-		return true
-	if _base_rooftop_transit_door.is_open:
-		if _is_player_in_base_rooftop_doorway():
-			status_label.text = "门口被占用，无法关闭"
-			return true
-		_base_rooftop_transit_door.set_open(false)
-		_base_rooftop_door_clear_elapsed = 0.0
-		status_label.text = "阁楼天台门正在关闭"
-		return true
-	var edge := _edge_key("start", "facility")
-	if not bool(_open_edges.get(edge, false)):
-		# 此门与旧天台—基地交通边共享授权，但自身仍是独立的Godot门实例。
-		# 这样不新增门状态机，也不会让Blender模型承担交互或碰撞职责。
-		_open_edges[edge] = true
-		minimap.set_edge_open("start", "facility", true)
-		_update_room_streaming("start")
-		_refresh_edge_visuals("start", "facility", true)
-		if MonsterAIManager != null and player != null:
-			MonsterAIManager.broadcast_sound_stimulus(
-				player.global_position, 6.5, "door_open", player
-			)
-	status_label.text = "基地阁楼天台门正在开启"
-	_base_rooftop_door_clear_elapsed = 0.0
-	_base_rooftop_transit_door.set_open(true)
-	return true
-
-
-func _is_player_in_base_rooftop_doorway() -> bool:
-	if _base_rooftop_transit_door == null or player == null:
-		return false
-	var local_pos := _base_rooftop_transit_door.to_local(player.global_position)
-	return (
-		absf(local_pos.x) <= TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.5 + 0.35
-		and absf(local_pos.z) <= 0.72
-		and local_pos.y >= -0.4
-		and local_pos.y <= TOWER_GEOMETRY.DOOR_CLEAR_HEIGHT_M + 0.4
-	)
-
-
-func _update_base_rooftop_transit_door_auto_close(delta: float) -> void:
-	if (
-		_base_rooftop_transit_door == null
-		or not is_instance_valid(_base_rooftop_transit_door)
-		or player == null
-		or not _base_rooftop_transit_door.is_open
-		or _base_rooftop_transit_door.is_in_motion()
-	):
-		_base_rooftop_door_clear_elapsed = 0.0
-		return
-	if (
-		_is_player_in_base_rooftop_doorway()
-		or player.global_position.distance_to(_base_rooftop_transit_door.global_position)
-			<= BASE_ROOFTOP_DOOR_AUTO_CLOSE_DISTANCE_M
-	):
-		_base_rooftop_door_clear_elapsed = 0.0
-		return
-	_base_rooftop_door_clear_elapsed += delta
-	if _base_rooftop_door_clear_elapsed < BASE_ROOFTOP_DOOR_AUTO_CLOSE_DELAY_S:
-		return
-	_base_rooftop_door_clear_elapsed = 0.0
-	_base_rooftop_transit_door.set_open(false)
-	status_label.text = "阁楼天台门正在自动关闭"
+	# 东侧阁楼门只控制自身，不写入西侧楼梯或任何拓扑状态。
+	status_label.text = "普通交通门已开启"
+	return _request_simple_transit_door_open(_base_rooftop_transit_door)
 
 
 func is_player_inside_facility() -> bool:
@@ -2753,22 +2723,6 @@ func _is_player_on_facility_ground_level() -> bool:
 	)
 
 
-func _is_player_within_facility_shell() -> bool:
-	# 自动门使用略大于禁射范围的建筑壳体，而不是同一个战斗边界；门口仍算
-	# 在屋内，直到角色真正跨过墙体外侧，才允许执行一次自动关闭。
-	var facility := _room_by_id.get("facility") as DungeonRoom3D
-	if facility == null or player == null:
-		return false
-	var local_pos := facility.to_local(player.global_position)
-	var dimensions := facility.get_dimensions()
-	return (
-		absf(local_pos.x) <= dimensions.x * 0.505
-		and absf(local_pos.z) <= dimensions.y * 0.505
-		and local_pos.y >= -1.0
-		and local_pos.y <= FLOOR_HEIGHT + 0.8
-	)
-
-
 func _update_facility_combat_lock() -> void:
 	if player == null:
 		return
@@ -2782,61 +2736,6 @@ func _is_facility_transit_edge(edge: String) -> bool:
 		_edge_key("start", "facility"),
 		_edge_key("facility", "floor_01_entry"),
 	]
-
-
-func _update_facility_door_auto_close() -> void:
-	if _facility_outbound_door_edge.is_empty() or player == null:
-		return
-	var door_sides := _edge_door_sides_by_key.get(_facility_outbound_door_edge, {}) as Dictionary
-	var facility_side := str(door_sides.get("facility", ""))
-	var facility := _room_by_id.get("facility") as DungeonRoom3D
-	if facility == null or facility_side.is_empty():
-		_facility_outbound_door_edge = ""
-		_facility_outbound_door_seen_inside = false
-		return
-	if _is_player_within_facility_shell():
-		_facility_outbound_door_seen_inside = true
-		return
-	if not _facility_outbound_door_seen_inside:
-		return
-	var local_pos := facility.to_local(player.global_position)
-	var dimensions := facility.get_dimensions()
-	var margin := 0.25
-	var has_left_through_opening := (
-		local_pos.x < -dimensions.x * 0.5 - margin if facility_side == "west"
-		else local_pos.x > dimensions.x * 0.5 + margin if facility_side == "east"
-		else local_pos.z < -dimensions.y * 0.5 - margin if facility_side == "north"
-		else local_pos.z > dimensions.y * 0.5 + margin if facility_side == "south"
-		else false
-	)
-	if not has_left_through_opening:
-		return
-	_set_facility_transit_door_visual(_facility_outbound_door_edge, false)
-	_facility_outbound_door_edge = ""
-	_facility_outbound_door_seen_inside = false
-
-
-func _set_facility_transit_door_visual(edge: String, opened: bool) -> void:
-	var endpoints := edge.split("|")
-	if endpoints.size() != 2:
-		return
-	_refresh_edge_visuals(str(endpoints[0]), str(endpoints[1]), opened)
-
-
-func _seal_facility_doors_after_transition(previous_room_id: String, new_room_id: String) -> void:
-	# 基地交通门跨过后只关闭物理门板。路线状态保持已授权，避免关闭上端门后
-	# 下端到达门失去楼梯授权；98F首门的不可逆封闭仍由专门流程处理。
-	if previous_room_id.is_empty() or previous_room_id == new_room_id:
-		return
-	if previous_room_id != "facility" and new_room_id != "facility":
-		return
-	var other_room_id := previous_room_id if new_room_id == "facility" else new_room_id
-	var edge := _edge_key("facility", other_room_id)
-	if not _is_facility_transit_edge(edge):
-		return
-	_set_facility_transit_door_visual(edge, false)
-	_facility_outbound_door_edge = ""
-	_facility_outbound_door_seen_inside = false
 
 
 func _update_room_streaming(current_id: String) -> void:
@@ -3240,8 +3139,6 @@ func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:
 		"requires_key": false,
 		"triggers_fate": false,
 	})
-	door.set_motion_profile(BASE_ROOFTOP_DOOR_MOTION_DURATION_S, true)
-	door.set_manual_close_enabled(true)
 	# 门跨越100F/99F两套流送范围，必须独立常驻；否则玩家从100F靠近时
 	# 99F父房间尚未激活，门板可见但StaticBody碰撞不会进入物理空间。
 	door.process_mode = Node.PROCESS_MODE_ALWAYS
@@ -3960,6 +3857,16 @@ func _runtime_current_room_id_for_save() -> String:
 
 func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
 	return "base" if floor_index == 1 and room_id == "facility" else "combat"
+
+
+func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
+	super(snapshot)
+	# 兼容旧档中尚未开启的start|facility edge。西侧楼梯现为永久建筑，
+	# 旧路线状态不得继续隐藏楼梯或让东侧普通门承担“授权”副作用。
+	var permanent_edge := _edge_key("start", "facility")
+	_open_edges[permanent_edge] = true
+	minimap.set_edge_open("start", "facility", true)
+	_update_corridor_streaming(_current_room_id)
 
 
 func _build_runtime_world_save_snapshot() -> Dictionary:

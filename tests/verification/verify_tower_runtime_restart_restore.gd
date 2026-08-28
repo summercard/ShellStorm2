@@ -20,6 +20,22 @@ func _ready() -> void:
 	await get_tree().process_frame
 	if not first.generate_through_floor_for_test(98):
 		failures.append("98F FloorBundle 初次提交失败")
+	# 普通交通门的物理开闭不属于行动进度。即使两条楼梯路线已经授权，
+	# 保存/恢复也不能把100/99F四扇自动门重新打开。
+	for pair in [["start", "facility"], ["facility", "floor_01_entry"]]:
+		var transit_edge := first.call("_edge_key", pair[0], pair[1]) as String
+		(first.get("_open_edges") as Dictionary)[transit_edge] = true
+		(first.get("_vertical_arrival_open") as Dictionary)[transit_edge] = true
+	var first_rooftop := (first.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
+	var first_facility := (first.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	if first_rooftop != null:
+		first_rooftop.set_door_open("west", false, true)
+	if first_facility != null:
+		first_facility.set_door_open("west", false, true)
+		first_facility.set_door_open("east", false, true)
+	var first_rooftop_extra := first.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
+	if first_rooftop_extra != null:
+		first_rooftop_extra.set_open(false, true)
 	var combat_room := (first.get("_room_by_id") as Dictionary).get("floor_01_main_02") as DungeonRoom3D
 	if combat_room == null:
 		failures.append("98F 战斗房没有生成")
@@ -115,6 +131,34 @@ func _ready() -> void:
 		failures.append("相同行动种子在重启后生成了不同的98F布局")
 	if 2 not in (second.get("_generated_floor_indices") as Array):
 		failures.append("恢复后的98F没有登记为已提交楼层")
+	var restored_simple_doors: Array[RoomDoor3D] = []
+	var second_rooftop := (second.get("_room_by_id") as Dictionary).get("start") as DungeonRoom3D
+	var second_facility := (second.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	if second_rooftop != null and second_rooftop.get_door_node("west") != null:
+		restored_simple_doors.append(second_rooftop.get_door_node("west"))
+	if second_facility != null:
+		for side in ["west", "east"]:
+			if second_facility.get_door_node(side) != null:
+				restored_simple_doors.append(second_facility.get_door_node(side))
+	var second_rooftop_extra := second.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
+	if second_rooftop_extra != null:
+		restored_simple_doors.append(second_rooftop_extra)
+	if restored_simple_doors.size() != 4:
+		failures.append("重启后100/99F四扇普通交通门不完整")
+	for restored_door in restored_simple_doors:
+		if restored_door.is_open or not bool(restored_door.get_snapshot().get("blocks_passage", false)):
+			failures.append("已授权路线读档后错误重开普通交通门：%s" % restored_door.name)
+	# 旧档可能把西侧楼梯edge保存为false；迁移后必须强制恢复永久结构，且
+	# 不能借此开启任何普通门实体。
+	var legacy_route_snapshot := second.build_runtime_save_snapshot()
+	var permanent_west_edge := second.call("_edge_key", "start", "facility") as String
+	(legacy_route_snapshot.get("edge_states", {}) as Dictionary)[permanent_west_edge] = false
+	second.call("_restore_runtime_save_snapshot", legacy_route_snapshot)
+	if not bool((second.get("_open_edges") as Dictionary).get(permanent_west_edge, false)):
+		failures.append("旧档中的西侧楼梯关闭标志没有迁移为永久结构")
+	for restored_door in restored_simple_doors:
+		if restored_door.is_open:
+			failures.append("旧西侧路线迁移错误打开普通交通门：%s" % restored_door.name)
 	# 模拟历史错误档：房间标签仍是99F，但坐标已落在98F/楼梯高度。
 	# 恢复必须拒绝把关卡坐标放进facility，并回退到99F合法中心。
 	var invalid_snapshot := second.build_runtime_save_snapshot()
