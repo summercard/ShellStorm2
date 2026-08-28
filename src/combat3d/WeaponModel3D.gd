@@ -405,6 +405,9 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			"color": bullet_color,
 			"shooter": shooter,
 			"behavior": behavior,
+			# 默认子弹不位移；霰弹枪给轻微击退（0.8 m/s × 0.16s ≈ 0.064m）。
+			# 后续若扩展其他武器的差异化击退，按 gun_id 在这里加分即可。
+			"hit_knockback": 0.8 if gun_id == "bp_shotgun" else 0.0,
 		}
 		var projectile := _acquire_projectile(
 			world, projectile_config, _muzzle.global_position if _muzzle != null else global_position

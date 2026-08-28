@@ -94,6 +94,8 @@ var _slow_factor := 1.0
 var _slow_timer := 0.0
 var _target: Node3D = null
 var _last_hit_direction := Vector3.ZERO
+# 命中击退强度（m/s）。子弹默认 0（不位移），霰弹=0.8（轻微），由 take_projectile_damage 写入。
+var _hit_knockback := 0.0
 var _summon_count := 0
 var _external_velocity := Vector3.ZERO
 var _external_timer := 0.0
@@ -719,7 +721,7 @@ func _physics_process(delta: float) -> void:
 					MonsterAIManager.release_attack_token(self)
 				transition_to("chase")
 		"stagger":
-			velocity = _last_hit_direction * 1.6
+			velocity = _last_hit_direction * _hit_knockback
 			move_and_slide()
 			if _state_time > 0.16:
 				transition_to("chase")
@@ -949,7 +951,7 @@ func _explode() -> void:
 	_die()
 
 
-func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO) -> void:
+func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, hit_knockback := 0.0) -> void:
 	if ai_state == "dead":
 		return
 	var applied := maxi(1, amount)
@@ -969,6 +971,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO) 
 	health_changed.emit(self, current_hp, max_hp)
 	_update_boss_phase()
 	_last_hit_direction = hit_direction
+	_hit_knockback = maxf(0.0, hit_knockback)
 	avatar.flash_hit()
 	_spawn_effect("damage", 0.72)
 	_spawn_damage_number(applied, critical)
@@ -992,7 +995,8 @@ func take_projectile_damage(
 	hit_direction := Vector3.ZERO,
 	tags: Array[String] = [],
 	behavior: Dictionary = {},
-	attacker: Node3D = null
+	attacker: Node3D = null,
+	hit_knockback := 0.0
 ) -> void:
 	if attacker != null:
 		notify_attacked_by(attacker)
@@ -1001,7 +1005,7 @@ func take_projectile_damage(
 		or "piercing" in tags
 		or bool(behavior.get("pierce_shield", false))
 	)
-	take_damage(amount, critical, hit_direction)
+	take_damage(amount, critical, hit_direction, hit_knockback)
 	_bypass_shield_once = false
 
 

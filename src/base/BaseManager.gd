@@ -122,6 +122,10 @@ func _read_disk_revision() -> int:
 func reset_game_save() -> Dictionary:
 	_ensure_data()
 	var previous_data := data
+	# “复位”清空的是档案内容，不是并发写保护使用的修订序列。若直接用
+	# BaseData.new() 的 revision=0，save_base() 会把它判为旧实例回写并拒绝，
+	# 导致任何已经保存过两次以上的正式档都无法通过ESC复位。
+	var reset_revision_baseline := maxi(previous_data.save_revision, _read_disk_revision())
 	var previous_provider := _runtime_checkpoint_provider
 	var previous_dirty := _runtime_checkpoint_dirty
 	var previous_reason := _pending_runtime_reason
@@ -135,6 +139,7 @@ func reset_game_save() -> Dictionary:
 	_runtime_checkpoint_dirty = false
 	_pending_runtime_reason = ""
 	data = BaseData.new()
+	data.save_revision = reset_revision_baseline
 	if not save_base("game_save_reset"):
 		data = previous_data
 		_runtime_checkpoint_provider = previous_provider

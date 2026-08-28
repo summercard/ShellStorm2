@@ -29,6 +29,7 @@ func _ready() -> void:
 		failures.append("不能建立复位专项测试档")
 	BaseManager.data.total_runs = 10
 	BaseManager.save_base("reset_probe_backup")
+	var revision_before_reset := BaseManager.data.save_revision
 	var reset_result := BaseManager.reset_game_save()
 	if not bool(reset_result.get("success", false)):
 		failures.append("BaseManager拒绝复位合法测试档：%s" % reset_result)
@@ -40,8 +41,9 @@ func _ready() -> void:
 		or not BaseManager.data.active_run_snapshot.is_empty()
 		or not is_zero_approx(BaseManager.data.world_time_elapsed_game_seconds)
 		or not is_equal_approx(BaseManager.data.base_energy_current, 100.0)
+		or BaseManager.data.save_revision <= revision_before_reset
 	):
-		failures.append("复位后内存BaseData不是全新默认值")
+		failures.append("复位后内存BaseData不是全新默认值，或修订号发生回退")
 	if not FileAccess.file_exists(TEST_PATH) or FileAccess.file_exists(TEST_PATH + ".bak"):
 		failures.append("复位后主档不存在或旧备份仍可回滚")
 	var persisted: Variant = AtomicJsonStore.load_dictionary(TEST_PATH)
@@ -56,8 +58,9 @@ func _ready() -> void:
 		or int(payload.get("total_runs", -1)) != 0
 		or bool(payload.get("tutorial_completed", true))
 		or not (payload.get("active_run_snapshot", {}) as Dictionary).is_empty()
+		or int(unpacked.get("revision", -1)) <= revision_before_reset
 	):
-		failures.append("磁盘中的新封套不是可回读的全新档案")
+		failures.append("磁盘中的新封套不是可回读且修订号单调递增的全新档案")
 
 	BaseManager.data.total_runs = 4
 	BaseManager.force_save_failure_for_test = true

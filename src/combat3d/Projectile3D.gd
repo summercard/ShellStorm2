@@ -16,6 +16,9 @@ var bullet_tags: Array[String] = []
 var bullet_color := Color(0.45, 0.88, 1.0)
 var shooter: Node3D = null
 var fate_behavior: Dictionary = {}
+# 命中击退强度（m/s）。默认 0 = 不让怪物位移；霰弹枪=0.8（轻微）。
+# 由 WeaponModel3D / 发射逻辑在 spawn 时赋值，命中时透传给 take_projectile_damage。
+var hit_knockback := 0.0
 var _lifetime := 0.0
 var _bounces_left := 0
 var _pierces_left := 0
@@ -45,6 +48,8 @@ func configure(config: Dictionary) -> void:
 	bullet_color = config.get("color", bullet_color) as Color
 	shooter = config.get("shooter", shooter) as Node3D
 	fate_behavior = (config.get("behavior", {}) as Dictionary).duplicate(true)
+	# 默认 0 = 不让怪物位移；霰弹枪在 WeaponModel3D 注入 0.8（轻微击退）。
+	hit_knockback = float(config.get("hit_knockback", hit_knockback))
 	_bounces_left = int(fate_behavior.get("bounce_count", 2 if bullet_tags.has("bounce") else 0))
 	_pierces_left = int(fate_behavior.get("pierce_level", 2 if bullet_tags.has("piercing") else 0))
 	_lifetime = 0.0
@@ -133,11 +138,11 @@ func _physics_process(delta: float) -> void:
 			_retire()
 			return
 		if collider.has_method("take_projectile_damage"):
-			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter)
+			collider.call("take_projectile_damage", damage, critical, direction, bullet_tags, fate_behavior, shooter, hit_knockback)
 		else:
 			if shooter != null and collider.has_method("notify_attacked_by"):
 				collider.call("notify_attacked_by", shooter)
-			collider.call("take_damage", damage, critical, direction)
+			collider.call("take_damage", damage, critical, direction, hit_knockback)
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
 		hit_confirmed.emit(collider, damage, critical)
