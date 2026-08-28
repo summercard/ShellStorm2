@@ -76,6 +76,7 @@ def export_asset(asset_id, output_path):
             export_normals=True,
             export_tangents=True,
             export_materials="EXPORT",
+            export_image_format="NONE",
             export_extras=True,
             export_cameras=False,
             export_lights=False,

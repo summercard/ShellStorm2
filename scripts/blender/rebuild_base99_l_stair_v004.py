@@ -224,6 +224,7 @@ def export_glb(root):
         export_normals=True,
         export_tangents=True,
         export_materials="EXPORT",
+        export_image_format="NONE",
         export_extras=True,
         export_cameras=False,
         export_lights=False,

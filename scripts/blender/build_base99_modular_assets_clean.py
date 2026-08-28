@@ -464,7 +464,8 @@ manifest = {
     "module_count": len(MODULES),
     "shared_materials": list(MATERIAL_NAMES),
     "palette": str(PALETTE_PATH),
-    "palette_packed": True,
+    "palette_packed": False,
+    "palette_policy": "single external scene/facility palette; GLB exports omit images",
     "door_runtime_contract": {
         "clear_width_m": 2.2,
         "clear_height_m": 2.5,

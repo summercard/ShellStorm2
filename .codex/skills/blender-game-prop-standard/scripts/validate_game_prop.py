@@ -22,6 +22,7 @@ def parse_args():
     parser.add_argument("--max-materials", type=int, default=12)
     parser.add_argument("--allow-extra-uv", action="store_true")
     parser.add_argument("--all-meshes", action="store_true", help="validate every mesh in a multi-asset showcase master")
+    parser.add_argument("--shared-palette", type=Path, help="require every palette image node to use this unpacked external file")
     parser.add_argument("--json", type=Path)
     return parser.parse_args(argv)
 
@@ -103,7 +104,7 @@ def audit_palette_uv(obj):
     return result
 
 
-def material_audit(meshes):
+def material_audit(meshes, shared_palette=None):
     used = {mat for obj in meshes for mat in obj.data.materials if mat}
     # A maintainable source may keep editable component collections whose
     # materials are not used by the integrated output object. They are not unused.
@@ -118,6 +119,9 @@ def material_audit(meshes):
     bad_uv_nodes = []
     bad_interpolation = []
     missing_uv_nodes = []
+    non_shared_palette_images = []
+    packed_palette_images = []
+    expected_palette = shared_palette.expanduser().resolve() if shared_palette else None
     for mat in sorted(used, key=lambda value: value.name):
         uv_nodes = []
         image_nodes = []
@@ -132,12 +136,20 @@ def material_audit(meshes):
         for node in image_nodes:
             if node.interpolation != "Closest":
                 bad_interpolation.append({"material": mat.name, "interpolation": node.interpolation})
+            if expected_palette is not None and node.image is not None:
+                actual = Path(bpy.path.abspath(node.image.filepath)).resolve()
+                if actual != expected_palette:
+                    non_shared_palette_images.append({"material": mat.name, "image": node.image.name, "path": str(actual)})
+                if node.image.packed_file is not None:
+                    packed_palette_images.append({"material": mat.name, "image": node.image.name})
     return {
         "used_materials": sorted(mat.name for mat in used),
         "unused_materials": unused,
         "bad_uv_map_nodes": bad_uv_nodes,
         "missing_uv_map_nodes": missing_uv_nodes,
         "bad_image_interpolation": bad_interpolation,
+        "non_shared_palette_images": non_shared_palette_images,
+        "packed_palette_images": packed_palette_images,
     }
 
 
@@ -145,7 +157,7 @@ def main():
     args = parse_args()
     meshes = output_meshes(args.all_meshes)
     uv_reports = [audit_palette_uv(obj) for obj in meshes]
-    material_report = material_audit(meshes)
+    material_report = material_audit(meshes, args.shared_palette)
     forbidden = sorted(o.name for o in bpy.data.objects if o.name in {"DISPLAY_Ground", "Display_Plinth"})
     mixed_emission = []
     bad_emissive_names = []
@@ -181,6 +193,11 @@ def main():
         "no_undeclared_extra_uv_layers": args.allow_extra_uv or not extra_uv,
         "materials_read_palette_uv": not material_report["bad_uv_map_nodes"] and not material_report["missing_uv_map_nodes"],
         "palette_images_use_closest": not material_report["bad_image_interpolation"],
+        "palette_images_use_single_external_shared_file": (
+            args.shared_palette is None
+            or not material_report["non_shared_palette_images"]
+            and not material_report["packed_palette_images"]
+        ),
         "no_display_ground_or_plinth": not forbidden,
         "emissive_not_mixed_with_body": not mixed_emission,
         "emissive_objects_clearly_named": not bad_emissive_names,

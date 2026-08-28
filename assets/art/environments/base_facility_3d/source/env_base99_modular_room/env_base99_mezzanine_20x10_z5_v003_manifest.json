@@ -43,6 +43,8 @@
   "coplanar_edge_face_count": 0,
   "collision": "Godot PackedScene retains continuous deck and independent guards",
   "status": "approved_runtime",
-  "source_sha256": "77fdd9b3de25d02616d6a34a67c1d8cd14c6fe6b8599bfedaba0beda04e061d0",
-  "glb_sha256": "227ab97da41da41aa26aaea2836f457a322740d4de42dfd70ce79e53e11e0a29"
+  "source_sha256": "8dc0bfc7c6aecc0932e873d1674ed95eca7f4cab29f78b9268239eed3aeb53a3",
+  "glb_sha256": "4bf7643c15b87d5f90955bc109eaca376334aab38f319a438b085adc8b162680",
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "palette_packed": false
 }

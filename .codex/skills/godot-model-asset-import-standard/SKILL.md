@@ -27,7 +27,7 @@ description: 将场景、关卡组件与固定设施从 Blender 或其他DCC规�
 4. 使用二进制 `.glb` 作为默认交换格式；保留 `.blend` 在 `source/`，GLB放在 `components/`，Godot包装场景放在 `runtime/`。
 5. 统一单位、原点和正面方向。设施通常底面贴地、局部正面朝 `-Z`；武器通常以握把为原点、枪口朝 `-Z`。若项目另有契约，按项目执行并写入元数据。
 6. 只对导出副本应用轴向转换、变换烘焙和三角化，不破坏可维护源文件。导出前确认法线、切线、UV和材质索引。
-7. 颜色贴图使用唯一渲染UV通道；色盘贴图采用最近邻采样。设施通常不超过四个材质角色，武器通常不超过三个非自发光材质。
+7. 颜色贴图使用唯一渲染UV通道；色盘贴图采用最近邻采样。ShellStorm2所有场景与固定设施统一使用`res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`，GLB不得内嵌图片；Godot导入设置`gltf/embedded_image_handling=0`并通过`res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd`把全部材质绑定到该唯一资源。承载这两项参数的场景/设施`*.glb.import`和公共色盘自身的`.png.import`属于可复现导入契约，必须通过项目`.gitignore`白名单进入版本控制，不得仅留在本机缓存。设施通常不超过四个材质角色，武器通常不超过三个非自发光材质。
 8. 为每个单位建立独立 PackedScene。根节点稳定，视觉模型置于明确的 `Visual` 或 `ImportedModel` 节点；碰撞、挂点、标签和交互脚本由包装场景拥有，不塞进GLB。
 9. 使用新版本文件并更新所有实际引用；保留旧版本用于回滚。禁止仅覆盖文件却遗漏包装场景、关卡布局、代码映射或测试路径。
 10. 更新资产清单、资产台账、来源、版本、哈希、包围盒、方向、用途和状态；同步相关设计文档。
@@ -72,7 +72,7 @@ assets/art/<类别>/
 
 - GLB内材质名称使用稳定语义角色，避免带Blender复制后缀。
 - 主体和自发光模型独立；自发光强度保持颜色可读，不允许泛白。
-- 检查贴图是否嵌入GLB或位于稳定项目路径；禁止引用临时目录和桌面路径。
+- 场景/设施GLB必须不含`images/textures`；导入后的每个`BaseMaterial3D.albedo_texture`必须指向唯一公共色盘，采样为最近邻且不重复。`components/`及单件`source/`目录出现色盘PNG即判定失败。
 - Godot导入后再次统计材质和表面数量，不能只相信Blender文件。
 
 ## PackedScene职责

@@ -199,7 +199,8 @@ def export_glb(path: Path, objects: list[bpy.types.Object]) -> None:
     bpy.context.view_layer.objects.active = objects[0]
     path.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.export_scene.gltf(
-        filepath=str(path), export_format="GLB", use_selection=True, export_yup=True, export_apply=True
+        filepath=str(path), export_format="GLB", use_selection=True, export_yup=True,
+        export_apply=True, export_image_format="NONE"
     )
 
 

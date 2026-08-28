@@ -11,7 +11,8 @@
     "04_柔和自发光_UI灯光"
   ],
   "palette": "/Users/summercards/ShellStorm2/assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
-  "palette_packed": true,
+  "palette_packed": false,
+  "palette_policy": "project-level external shared palette; GLB does not embed or copy the image",
   "door_runtime_contract": {
     "clear_width_m": 2.2,
     "clear_height_m": 2.5,

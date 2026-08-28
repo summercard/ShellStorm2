@@ -192,7 +192,7 @@ def export_glb(path: Path, objects: list[bpy.types.Object]) -> None:
         export_apply=True,
         export_yup=True,
         export_materials="EXPORT",
-        export_image_format="AUTO",
+        export_image_format="NONE",
         export_texcoords=True,
         export_normals=True,
         export_tangents=True,

@@ -1,4 +1,17 @@
 {
+  "shared_scene_facility_palette": {
+    "resource": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "sha256": "a6b1838fb80ad3ce7764e998bb1dfb70edf2b9315a4282da0fb2ae35ed266ce3",
+    "scope": "all environment modules, base facilities and fixed decor props",
+    "blender_policy": "external link only; never pack or copy into a model source directory",
+    "glb_policy": "no embedded images/textures; export_image_format=NONE",
+    "godot_post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
+    "managed_blend_sources": 35,
+    "managed_glbs": 44,
+    "source_controlled_glb_import_contracts": 44,
+    "source_controlled_palette_import_contracts": 1,
+    "deleted_duplicate_pngs": 51
+  },
   "facilities": {
     "locker_station": {
       "name_cn": "赛博储物站",

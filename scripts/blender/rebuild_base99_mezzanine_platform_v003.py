@@ -195,6 +195,7 @@ def export_glb(root: bpy.types.Object) -> None:
             filepath=str(OUTPUT_GLB), export_format="GLB", use_selection=True,
             export_yup=True, export_apply=True, export_texcoords=True,
             export_normals=True, export_tangents=True, export_materials="EXPORT",
+            export_image_format="NONE",
             export_extras=True, export_cameras=False, export_lights=False,
             export_animations=False,
         )

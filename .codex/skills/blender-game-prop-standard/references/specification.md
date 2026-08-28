@@ -22,6 +22,8 @@
 
 ## 2. 色盘与UV
 
+- ShellStorm2场景与设施的唯一运行/制作色盘路径为`assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png`。所有Blend材料节点必须外链此文件且`packed_file`为空；不得在`source/<资产>`、`components/<资产>`或GLB中保存副本。
+- 场景/设施导出GLB必须使用`export_image_format="NONE"`。GLB保留材质角色、PBR参数、UV和面材质索引，但`images/textures`必须为空；Godot导入阶段负责绑定公共色盘。
 - PNG尺寸：512×512。
 - 网格：10×10，共100个纯色格。
 - 每格允许51或52像素，以整数边界覆盖整张贴图。
@@ -102,7 +104,8 @@
 - 除资产台账明确登记的第二UV外，不存在活动的 `UVMap/UV贴图` 旧层。
 - 不存在 `DISPLAY_Ground`、`Display_Plinth`。
 - 主体和自发光网格独立。
-- 外部色盘已打包，同时PNG/PSD保留在交付目录。
+- 外部公共色盘未打包，所有色盘节点解析到唯一固定路径；资产私有目录不存在色盘PNG副本。
+- GLB不含`images/textures`，模型目录不会因Godot导入再次生成色盘PNG。
 - `.blend` 能用目标Blender版本后台打开。
 - 总合集所有交付集合默认可见。
 - 总合集必须对全部网格执行逐面色盘UV与材质检查，不能因为没有单一 `02_游戏输出` 集合而跳过验收。

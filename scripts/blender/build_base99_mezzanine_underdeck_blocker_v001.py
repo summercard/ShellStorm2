@@ -27,7 +27,7 @@ OUTPUT_GLB = (
 PREVIEW = SOURCE_DIR / "previews" / f"{ASSET_SLUG}_preview.png"
 MANIFEST = SOURCE_DIR / f"{ASSET_SLUG}_manifest_{VERSION}.json"
 PALETTE_PATH = (
-    ASSET_ROOT / "source/env_base99_modular_room/textures/多巴胺色盘_10x10_512.png"
+    PROJECT_ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 )
 
 INSET_M = 0.55
@@ -256,6 +256,7 @@ def export_glb(output_root: bpy.types.Object) -> None:
         filepath=str(OUTPUT_GLB), export_format="GLB", use_selection=True,
         export_yup=True, export_apply=True, export_texcoords=True,
         export_normals=True, export_tangents=True, export_materials="EXPORT",
+        export_image_format="NONE",
         export_extras=True, export_cameras=False, export_lights=False,
         export_animations=False,
     )
