@@ -352,6 +352,13 @@ func _build_outer_shell() -> void:
 	var outer_rect := _outer_world_rect()
 	var outer_max := outer_rect.end
 	var wall_height := _outer_wall_height()
+	# 普通墙视觉网格高8.9m且以中心为原点；按底面反算其中心高度。
+	# 屋顶矮墙继续使用0.75m运行时缩放后的中心高度。
+	var visual_wall_center_y := (
+		wall_height * 0.5
+		if floor_index == 0
+		else -mesh.get_aabb().position.y
+	)
 	var north_boundary := outer_rect.position.y + WALL_THICKNESS * 0.5
 	var south_boundary := outer_max.y - WALL_THICKNESS * 0.5
 	var west_boundary := outer_rect.position.x + WALL_THICKNESS * 0.5
@@ -361,19 +368,19 @@ func _build_outer_shell() -> void:
 		var offset_x := outer_rect.position.x + GRID_UNIT * (float(index) + 0.5)
 		var offset_z := outer_rect.position.y + GRID_UNIT * (float(index) + 0.5)
 		if not _is_in_wall_door_gap("north", index):
-			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, wall_height * 0.5, north_boundary)))
+			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
 		else:
 			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset_x, 0.0, north_boundary)))
 		if not _is_in_wall_door_gap("south", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, wall_height * 0.5, south_boundary)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, visual_wall_center_y, south_boundary)))
 		else:
 			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(offset_x, 0.0, south_boundary)))
 		if not _is_in_wall_door_gap("west", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, wall_height * 0.5, offset_z)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, visual_wall_center_y, offset_z)))
 		else:
 			door_transforms["west"].append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, 0.0, offset_z)))
 		if not _is_in_wall_door_gap("east", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, wall_height * 0.5, offset_z)))
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, visual_wall_center_y, offset_z)))
 		else:
 			door_transforms["east"].append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, 0.0, offset_z)))
 	var multimesh := MultiMesh.new()

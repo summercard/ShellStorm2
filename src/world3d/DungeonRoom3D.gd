@@ -13,7 +13,7 @@ const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/
 const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d_v001.tscn")
 const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn")
 const HAZARD_SCENE: PackedScene = preload("res://assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn")
-const DOOR_SCRIPT := preload("res://src/world3d/RoomDoor3D.gd")
+const DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 
 # —— 5m 塔楼模块 prefab（A 节）
@@ -915,9 +915,11 @@ func _build_tower_wall_multimesh(
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = mesh
 	multimesh.instance_count = transforms.size()
+	# 通用墙视觉网格为8.9m高；按包围盒底面反算偏移，继续贴合原Y=0基准。
+	var visual_floor_offset_y := -mesh.get_aabb().position.y
 	for index in range(transforms.size()):
 		var wall_transform := transforms[index]
-		wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
+		wall_transform.origin.y += visual_floor_offset_y
 		multimesh.set_instance_transform(index, wall_transform)
 	var visual := MultiMeshInstance3D.new()
 	visual.name = "Imported_SolidWall5M_%s_Run" % direction.capitalize()
@@ -950,9 +952,17 @@ func _spawn_solid_wall_visual_instances(
 		)
 		var wall_transform := transforms[index]
 		# 通用旧墙BoxMesh以几何中心为原点，需要抬高半层；基地99层正式GLB
-		# 已按底边中心为原点导出，保持y=0即可从地面延伸到9m。
-		if not uses_base99_visual:
-			wall_transform.origin.y += TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5
+		# 已按底边中心为原点导出。基地视觉墙也按8.9/9缩放，原碰撞不变。
+		var visual_scale_y := (
+			TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M / TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M
+			if uses_base99_visual
+			else 1.0
+		)
+		if uses_base99_visual:
+			wall_transform.basis = wall_transform.basis.scaled(
+				Vector3(1.0, visual_scale_y, 1.0)
+			)
+		wall_transform.origin.y += -mesh.get_aabb().position.y * visual_scale_y
 		if abs_segment_index % 2 == 0:
 			transforms_a.append(wall_transform)
 		else:
@@ -1000,6 +1010,9 @@ func _add_wall_multimesh_variant(
 	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	visual.set_meta("asset_id", asset_id)
 	visual.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	visual.set_meta("logical_height_m", TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M)
+	visual.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
+	visual.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
 	visual.set_meta("tower_wall_direction", direction)
 	visual.set_meta("material_variant", variant)
 	visual.set_meta("segment_count", transforms.size())
@@ -1664,7 +1677,10 @@ func _build_wall(direction: String, center: Vector3, length: float, axis: Vector
 
 
 func _build_door(direction: String, target_room_id: String, dimensions: Vector2) -> void:
-	var door := DOOR_SCRIPT.new() as RoomDoor3D
+	var door := DOOR_SCENE.instantiate() as RoomDoor3D
+	if door == null:
+		push_error("通用RoomDoor3D Prefab实例化失败")
+		return
 	door.configure(
 		direction,
 		target_room_id,

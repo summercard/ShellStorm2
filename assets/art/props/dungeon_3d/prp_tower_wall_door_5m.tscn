@@ -1,17 +1,17 @@
 [gd_scene load_steps=6 format=3]
 
 ; 5m 段带门墙 v2 - 自包含独立模块
-; 5m 宽 × 9m 高 × 0.3m 厚；中间留 2.2m 宽 × 2.5m 高门洞可通行
+; 逻辑/阻挡高9m；视觉墙体高8.9m，顶部预留0.1m；中间留 2.2m 宽 × 2.5m 高门洞可通行
 ; 门侧柱 1.4m 宽各自带碰撞，门洞镂空；玩家穿过门洞不会被撞
 ; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向
 ; 节点命名规则：MeshInstance3D = WallDoor_Left / WallDoor_Right / WallDoor_Lintel
 ;                CollisionShape3D = CollisionLeft / CollisionRight / CollisionLintel
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_door_pillar"]
-size = Vector3(1.4, 9, 0.3)
+size = Vector3(1.4, 8.9, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_door_lintel"]
-size = Vector3(2.2, 6.5, 0.3)
+size = Vector3(2.2, 6.4, 0.3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall_door"]
 albedo_color = Color(0.30, 0.32, 0.34, 1)
@@ -29,19 +29,19 @@ size = Vector3(2.2, 6.5, 0.3)
 
 ; 左侧门柱：local x: -2.5 ~ -1.1，中心 x=-1.8
 [node name="WallDoor_Left" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 4.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 4.45, 0)
 mesh = SubResource("BoxMesh_wall_door_pillar")
 material_override = SubResource("StandardMaterial3D_wall_door")
 
 ; 右侧门柱：local x: +1.1 ~ +2.5，中心 x=+1.8
 [node name="WallDoor_Right" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 4.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 4.45, 0)
 mesh = SubResource("BoxMesh_wall_door_pillar")
 material_override = SubResource("StandardMaterial3D_wall_door")
 
-; 门楣横梁：local x: -1.1 ~ +1.1，y 中心 y=5.75（门洞顶部 2.5m，上方 6.5m 总高）
+; 门楣横梁视觉：local x: -1.1 ~ +1.1，y 中心 y=5.7（门洞顶部2.5m，上方6.4m至8.9m）
 [node name="WallDoor_Lintel" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.7, 0)
 mesh = SubResource("BoxMesh_wall_door_lintel")
 material_override = SubResource("StandardMaterial3D_wall_door")
 

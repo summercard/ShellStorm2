@@ -58,6 +58,27 @@ func _verify_success_returns_inside_99f_with_items(failures: Array[String]) -> v
 	await get_tree().process_frame
 	if str(tower.get("_current_room_id")) != "facility":
 		failures.append("成功撤离没有返回99层基地房间")
+	var returned_facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
+	var returned_rooftop_door := tower.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
+	var returned_west_door := returned_facility.get_door_node("west") if returned_facility != null else null
+	var returned_east_door := returned_facility.get_door_node("east") if returned_facility != null else null
+	if (
+		returned_rooftop_door == null or returned_rooftop_door.is_open
+		or returned_west_door == null or returned_west_door.is_open
+		or returned_east_door == null or returned_east_door.is_open
+	):
+		failures.append("成功撤离返回基地后99F三扇门没有全部关闭")
+	var returned_world := tower.get_tower_snapshot()
+	if (
+		(returned_world.get("generated_floor_indices", []) as Array) != [0]
+		or int(returned_world.get("instantiated_room_count", -1)) != 3
+		or int(returned_world.get("boss_descent_gate_count", -1)) != 0
+		or int(returned_world.get("airlock_front_gate_count", -1)) != 0
+		or str(tower.get("_active_airlock_room_id")) != ""
+		or bool(tower.get("_initial_loop_gate_armed"))
+		or bool(tower.get("_initial_loop_gate_sealed"))
+	):
+		failures.append("成功撤离后战局没有销毁并恢复为未激活的初始状态")
 	if bool(tower.get("_completed")):
 		failures.append("成功返航后仍处于锁死的行动完成状态")
 	if not _same_inventory_instances(inventory_before, inventory.get_occupied_slots()):

@@ -212,7 +212,14 @@ func _validate_horizontal_corridor_modules(
 			and wall_batch.multimesh.mesh != null
 			else AABB()
 		)
-		var wall_bottom_y := origin.y + wall_aabb.position.y
+		var wall_visual_scale_y := (
+			wall_batch.multimesh.get_instance_transform(0).basis.y.length()
+			if wall_batch != null
+			and wall_batch.multimesh != null
+			and wall_batch.multimesh.instance_count > 0
+			else 1.0
+		)
+		var wall_bottom_y := origin.y + wall_aabb.position.y * wall_visual_scale_y
 		if not is_equal_approx(wall_bottom_y, start.y):
 			failures.append(
 				"%s wall module floats %.3fm above its floor" % [
@@ -220,8 +227,11 @@ func _validate_horizontal_corridor_modules(
 					wall_bottom_y - start.y,
 				]
 			)
-		if not is_equal_approx(wall_aabb.size.y, TowerGeometry3D.FLOOR_HEIGHT_M):
-			failures.append("%s wall module is not 9m high" % connector.name)
+		if not is_equal_approx(
+			wall_aabb.size.y * wall_visual_scale_y,
+			TowerGeometry3D.WALL_VISUAL_HEIGHT_M
+		):
+			failures.append("%s wall visual module is not 8.9m high" % connector.name)
 	if collision_bodies.size() != 2:
 		failures.append("%s must keep exactly two continuous side-wall colliders" % connector.name)
 	for body in collision_bodies:

@@ -30,8 +30,8 @@ func _validate_standalone_wall(failures: Array[String]) -> void:
 	else:
 		var mesh_instance := meshes[0] as MeshInstance3D
 		var bounds := mesh_instance.global_transform * mesh_instance.mesh.get_aabb()
-		if not bounds.size.is_equal_approx(Vector3(5.0, 9.0, 0.36)):
-			failures.append("普通墙Godot包围盒不是5×9×0.36m: %s" % bounds.size)
+		if not bounds.size.is_equal_approx(Vector3(5.0, 8.9, 0.36)):
+			failures.append("普通墙视觉包围盒不是5×8.9×0.36m: %s" % bounds.size)
 		if not is_equal_approx(bounds.position.y, 0.0):
 			failures.append("普通墙底部原点没有落在y=0: %s" % bounds.position.y)
 		if mesh_instance.mesh.get_surface_count() != 2:
@@ -83,6 +83,9 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 		var rooftop_door := facility.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
 		if rooftop_door == null or str(rooftop_door.get_meta("door_role", "")) != "base_rooftop_transit":
 			failures.append("100层东侧门洞没有组合既有Godot天台门")
+		var base_door_bindings := tower.call("_get_configured_base_door_bindings") as Array
+		if base_door_bindings.size() != 3:
+			failures.append("基地三个门没有统一注册到同一交互分发器")
 		if int(snapshot.get("base99_mezzanine_count", 0)) != 1:
 			failures.append("基地缺少二层楼中楼楼板")
 		if int(snapshot.get("base99_stair_l_count", 0)) != 1:

@@ -241,6 +241,15 @@ func _ready() -> void:
 		and not bool((tower.get("_vertical_arrival_open") as Dictionary).get(first_edge, true)),
 		"撤退后98F首门事务标志或下端到达门状态没有复位", failures
 	)
+	var reset_rooftop_door := tower.find_child("BaseRooftopTransitDoor", true, false) as RoomDoor3D
+	var reset_base_west_door := facility.get_door_node("west") if facility != null else null
+	var reset_base_east_door := facility.get_door_node("east") if facility != null else null
+	_expect(
+		reset_rooftop_door != null and not reset_rooftop_door.is_open and
+		reset_base_west_door != null and not reset_base_west_door.is_open and
+		reset_base_east_door != null and not reset_base_east_door.is_open,
+		"撤退后99F基地三扇门没有全部回到关闭状态", failures
+	)
 	var reset_entry := tower.get("_room_by_id").get("floor_01_entry") as DungeonRoom3D
 	var reset_arrival_door: RoomDoor3D = null
 	if reset_entry != null:

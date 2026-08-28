@@ -34,6 +34,10 @@ const GUARD_HEIGHT_M := 1.2
 const GUARD_END_CLEARANCE_M := 4.0
 const FLOOR_THICKNESS_M := 0.30
 const FLOOR_HEIGHT_M := 9.0
+# 墙体逻辑/阻挡仍覆盖完整层高；视觉网格顶部留0.1m，避免与上层地板共面。
+const WALL_LOGICAL_HEIGHT_M := 9.0
+const WALL_VISUAL_HEIGHT_M := 8.9
+const WALL_VISUAL_TOP_CLEARANCE_M := WALL_LOGICAL_HEIGHT_M - WALL_VISUAL_HEIGHT_M
 
 
 static func snap_component_axis(center_m: float, size_m: float) -> float:

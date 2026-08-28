@@ -19,6 +19,7 @@ const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
+const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
 )
@@ -249,7 +250,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if (
 		event.is_action_pressed("interact")
 		and not _completed
-		and _try_open_base_rooftop_transit_door()
+		and _try_interact_with_configured_base_door()
 	):
 		get_viewport().set_input_as_handled()
 		return
@@ -1627,9 +1628,15 @@ func _build_tower_horizontal_corridor(
 	var wall_transforms: Array[Transform3D] = []
 	var wall_basis := Basis.IDENTITY if horizontal_x else Basis(Vector3.UP, PI * 0.5)
 	var wall_mesh := _get_corridor_wall_module_mesh()
-	# 当前实墙 GLB 的几何范围为 Y=0..9m，不能像碰撞盒那样把实例原点
-	# 放在半层高。按 Mesh 底面反算偏移，确保以后原点调整后仍贴住楼面。
-	var wall_floor_offset_y := -wall_mesh.get_aabb().position.y if wall_mesh != null else 0.0
+	# 走廊视觉墙按8.9m显示，阻挡仍为完整9m。缩放沿墙体本地Y轴，
+	# 再按缩放后的Mesh底面反算偏移，确保原点和楼面基准不变。
+	var wall_visual_scale_y := TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M / TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M
+	wall_basis = wall_basis.scaled(Vector3(1.0, wall_visual_scale_y, 1.0))
+	var wall_floor_offset_y := (
+		-wall_mesh.get_aabb().position.y * wall_visual_scale_y
+		if wall_mesh != null
+		else 0.0
+	)
 	for module_index in range(module_count):
 		var module_center := (
 			start
@@ -1715,6 +1722,10 @@ func _add_horizontal_corridor_multimesh(
 	visual.set_meta("horizontal_corridor_module_batch", true)
 	visual.set_meta("corridor_module_kind", module_kind)
 	visual.set_meta("corridor_module_instance_count", transforms.size())
+	if module_kind == "wall":
+		visual.set_meta("logical_height_m", TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M)
+		visual.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
+		visual.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
 	var module_origins := PackedVector3Array()
 	for module_transform in transforms:
 		module_origins.append(module_transform.origin)
@@ -2259,6 +2270,10 @@ func _confirm_initial_loop_retreat() -> void:
 		player.velocity = Vector3.ZERO
 		_on_room_entered(facility_room)
 	_reset_initial_loop_world_after_retreat()
+	if not test_mode and BaseManager != null:
+		# 放弃战利品也是行动结算边界，不能让旧的深层战局检查点在
+		# 下一次进入主场景时被当作可恢复行动重新加载。
+		BaseManager.clear_active_run_checkpoint("initial_loop_retreat")
 	status_label.text = "已撤退至99F基地 · 丢失物品%d格、装备武器%d把、背包%d个" % [
 		discarded_inventory, discarded_weapons.size(), 0 if discarded_backpack.is_empty() else 1,
 	]
@@ -2328,6 +2343,47 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	_refresh_edge_visuals("facility", entry_id, true)
 	minimap.configure(_records, _open_edges)
 	_update_room_streaming("facility")
+	_reset_base_doors_closed()
+
+
+func _reset_base_doors_closed() -> void:
+	# 回到基地后只复位物理门板，不撤销路线授权。
+	# 这样下一轮仍可从基地开启98F入口，同时不会把上一次行动留下的
+	# 门板开合状态、自动关门上下文或100F天台门状态带回基地。
+	var base_edges: Array[String] = [
+		_edge_key("start", "facility"),
+		_edge_key("facility", "floor_01_entry"),
+	]
+	for edge in base_edges:
+		var endpoints: PackedStringArray = edge.split("|")
+		if endpoints.size() != 2:
+			continue
+		var room_a := _room_by_id.get(str(endpoints[0])) as DungeonRoom3D
+		var room_b := _room_by_id.get(str(endpoints[1])) as DungeonRoom3D
+		if room_a == null or room_b == null:
+			continue
+		var direction_a := _direction_between(room_a.global_position, room_b.global_position)
+		var door_sides := _edge_door_sides_by_key.get(edge, {}) as Dictionary
+		var side_a := str(door_sides.get(room_a.room_id, direction_a))
+		var side_b := str(door_sides.get(room_b.room_id, _opposite_direction(direction_a)))
+		room_a.set_door_open(side_a, false, true)
+		room_b.set_door_open(side_b, false, true)
+	if _base_rooftop_transit_door != null and is_instance_valid(_base_rooftop_transit_door):
+		_base_rooftop_transit_door.set_open(false, true)
+	_facility_outbound_door_edge = ""
+	_facility_outbound_door_seen_inside = false
+	_base_rooftop_door_clear_elapsed = 0.0
+	_active_transition_edge = ""
+	_transition_upper_floor = -1
+	_transition_lower_floor = -1
+	_transition_progress = 0.0
+	_stair_arrival_previous_room = ""
+	_stair_arrival_prompt_door = null
+	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
+		_airlock_warning_overlay.queue_free()
+	_airlock_warning_overlay = null
+	if _door_fate_active:
+		_close_door_fate_overlay()
 
 
 func confirm_initial_loop_retreat_for_test() -> void:
@@ -2539,6 +2595,55 @@ func _is_player_near_base_rooftop_transit_door() -> bool:
 		and player.global_position.distance_to(_base_rooftop_transit_door.global_position)
 			<= BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M
 	)
+
+
+func _get_configured_base_door_bindings() -> Array[Dictionary]:
+	# 基地三个实体门共用同一交互入口；差异只放在绑定配置中。
+	# 98层入口安全房间的下端门不属于基地门集合，继续走战局专用流程。
+	var bindings: Array[Dictionary] = []
+	if _base_rooftop_transit_door != null and is_instance_valid(_base_rooftop_transit_door):
+		bindings.append({
+			"door": _base_rooftop_transit_door,
+			"mode": "rooftop_transit",
+			"interaction_distance_m": BASE_ROOFTOP_DOOR_INTERACTION_DISTANCE_M,
+		})
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if facility == null:
+		return bindings
+	var facility_sides: Array[String] = ["west", "east"]
+	for side in facility_sides:
+		var door := facility.get_door_node(side)
+		if door == null or not is_instance_valid(door):
+			continue
+		bindings.append({
+			"door": door,
+			"mode": "room_edge",
+			"target_room_id": door.target_room_id,
+			"interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
+		})
+	return bindings
+
+
+func _try_interact_with_configured_base_door() -> bool:
+	if player == null:
+		return false
+	for binding in _get_configured_base_door_bindings():
+		var door := binding.get("door") as RoomDoor3D
+		if door == null or not is_instance_valid(door):
+			continue
+		var interaction_distance := float(binding.get("interaction_distance_m", STAIR_ARRIVAL_INTERACTION_DISTANCE_M))
+		if player.global_position.distance_to(door.global_position) > interaction_distance:
+			continue
+		var mode := str(binding.get("mode", "room_edge"))
+		if mode == "rooftop_transit":
+			return _try_open_base_rooftop_transit_door()
+		# 基地普通门保持原有合同：只在关闭状态响应开启，开门后的
+		# 自动关闭仍由统一的基地门状态更新处理。
+		if door.is_open:
+			return false
+		var target_room_id := str(binding.get("target_room_id", door.target_room_id))
+		return not target_room_id.is_empty() and _try_open_room_door(target_room_id)
+	return false
 
 
 func _update_base_rooftop_transit_door_prompt() -> void:
@@ -3118,7 +3223,10 @@ func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:
 		return
 	# 东侧上层门墙的洞口是新外梯唯一的100F接口。门扇、碰撞与提示继续
 	# 使用既有RoomDoor3D，而不是把玩法逻辑烘进上层围护GLB。
-	var door := RoomDoor3D.new()
+	var door := ROOM_DOOR_SCENE.instantiate() as RoomDoor3D
+	if door == null:
+		push_error("基地天台门的通用RoomDoor3D Prefab实例化失败")
+		return
 	door.name = "BaseRooftopTransitDoor"
 	door.configure(
 		"east_rooftop",

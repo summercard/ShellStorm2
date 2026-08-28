@@ -9,6 +9,8 @@ metadata/asset_category = "environment_module"
 metadata/component = "wall_plain"
 metadata/grid_unit_m = 5.0
 metadata/dimensions_m = Vector3(5, 9, 0.36)
+metadata/visual_height_m = 8.9
+metadata/visual_top_clearance_m = 0.1
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/visual_only = true
@@ -17,3 +19,4 @@ metadata/shadow_policy = "cast_and_receive"
 metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v001.blend"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+scale = Vector3(1, 0.9888889, 1)

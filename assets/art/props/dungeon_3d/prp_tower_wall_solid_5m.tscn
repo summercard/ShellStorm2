@@ -1,10 +1,11 @@
 [gd_scene load_steps=4 format=3]
 
 ; 5m 段实心外墙 - 自包含独立模块
+; 逻辑/阻挡高9m；视觉墙高8.9m，底部对齐原基准点，顶部预留0.1m。
 ; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向
 
 [sub_resource type="BoxMesh" id="BoxMesh_wall_solid_5m"]
-size = Vector3(5, 9, 0.3)
+size = Vector3(5, 8.9, 0.3)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
 albedo_color = Color(0.28, 0.30, 0.32, 1)
@@ -18,7 +19,7 @@ size = Vector3(5, 9, 0.3)
 [node name="PrpTowerWallSolid5m" type="Node3D"]
 
 [node name="WallSolid_5m" type="MeshInstance3D" parent="."]
-position = Vector3(0, 4.5, 0)
+position = Vector3(0, 4.45, 0)
 mesh = SubResource("BoxMesh_wall_solid_5m")
 material_override = SubResource("StandardMaterial3D_wall")
 
