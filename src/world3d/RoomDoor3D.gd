@@ -145,6 +145,10 @@ func set_prompt_visible(show_prompt: bool) -> void:
 		_prompt.visible = show_prompt
 
 
+func get_interaction_prompt_text() -> String:
+	return _prompt.text if _prompt != null else "[E] 开启通道"
+
+
 func get_snapshot() -> Dictionary:
 	return {
 		"direction": direction,

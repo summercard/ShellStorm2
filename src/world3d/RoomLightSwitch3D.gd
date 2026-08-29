@@ -33,6 +33,7 @@ func configure_group(
 
 func _ready() -> void:
 	add_to_group("room_light_switch_3d")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	collision_layer = 0
 	collision_mask = 1
 	monitoring = true
@@ -43,11 +44,24 @@ func _ready() -> void:
 	_update_state_visual()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_range or not event.is_action_pressed("interact"):
-		return
-	toggle_light()
-	get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range or _controlled_lights.is_empty():
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "room_light:%d" % get_instance_id(),
+		"position": global_position,
+		"priority": 50,
+		"prompt": _prompt.text if _prompt != null else "[E] 切换中央灯",
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	set_prompt_visible(focused and _player_in_range)
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	return _player_in_range and toggle_light()
 
 
 func toggle_light() -> bool:
@@ -170,7 +184,6 @@ func _update_state_visual() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player_3d"):
 		_player_in_range = true
-		set_prompt_visible(true)
 
 
 func _on_body_exited(body: Node3D) -> void:

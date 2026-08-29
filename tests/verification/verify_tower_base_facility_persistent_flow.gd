@@ -1,6 +1,6 @@
 extends Node
-## 复现阁楼入口先被判为99F、但facility房间尚未激活的路径。
-## 普通基地设施必须独立于房间流送，持续保留交互Area与实体碰撞。
+## 复现阁楼入口已归属99F基地、但地面细节流送仍可能切换的路径。
+## 普通基地设施必须独立于房间流送，持续保留统一交互协议与实体碰撞。
 
 
 func _ready() -> void:
@@ -19,15 +19,15 @@ func _ready() -> void:
 	var facilities := tower.get("_facility_nodes") as Array
 	_expect(facilities.size() == 10, "99层常驻设施数量异常: %d" % facilities.size(), failures)
 
-	# 先停在阁楼层：楼层权威已是99F，但房间包含检查还不能接受离地5米的位置。
+	# 先停在阁楼层：楼层与房间权威都必须归属99F基地。
 	if facility_room != null:
 		tower.set("_current_room_id", "start")
 		tower.set("_authoritative_floor_index", 0)
 		tower.player.global_position = facility_room.to_global(Vector3(0.0, 5.05, 0.0))
 		tower.call("_refresh_physical_location_authority")
 		_expect(
-			str(tower.get("_current_room_id")) == "start",
-			"复现场景没有保留阁楼入口的旧房间上下文",
+			str(tower.get("_current_room_id")) == "facility",
+			"阁楼入口没有归属99F基地房间上下文",
 			failures
 		)
 		# 再到一楼，但不强制刷新；旧缺陷会因floor_index仍为1而提前返回。
@@ -81,18 +81,19 @@ func _ready() -> void:
 					failures
 				)
 
-	# 设施自身的进入范围→E键→activated信号保持原链路，不由楼层管理器代替。
+	# 设施只实现统一候选/执行协议，不再自行读取E键。
 	var target := _find_facility(facilities, "mission_operations")
 	_expect(target != null, "缺少用于功能回归的远征情报终端", failures)
 	if target != null:
 		var activation_count := [0]
 		target.activated.connect(func(_facility: BaseFacility3D): activation_count[0] += 1)
 		target.call("_on_body_entered", tower.player)
-		var event := InputEventAction.new()
-		event.action = "interact"
-		event.pressed = true
-		target.call("_unhandled_input", event)
-		_expect(int(activation_count[0]) == 1, "设施自身的E键激活信号被破坏", failures)
+		_expect(
+			bool(target.perform_interaction(tower.player, target.get_interaction_candidate(tower.player))),
+			"设施没有实现统一交互协议",
+			failures
+		)
+		_expect(int(activation_count[0]) == 1, "设施统一交互激活信号被破坏", failures)
 		target.call("_on_body_exited", tower.player)
 		_expect(not bool(target.get("_player_in_range")), "离开设施后仍保持交互范围", failures)
 

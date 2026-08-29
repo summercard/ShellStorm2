@@ -19,6 +19,7 @@ var _name_label: Label3D
 var _role_label: Label3D
 var _prompt_label: Label3D
 var _dialogue_label: Label3D
+var _interaction_focused := false
 
 
 func _ready() -> void:
@@ -27,6 +28,7 @@ func _ready() -> void:
 	monitoring = true
 	monitorable = true
 	add_to_group("themed_npc_3d")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	_build_visuals()
@@ -71,10 +73,28 @@ func get_snapshot() -> Dictionary:
 	}
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if _player_in_range and event.is_action_pressed("interact"):
-		interact()
-		get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "themed_npc:%s:%d" % [npc_id, get_instance_id()],
+		"position": global_position,
+		"priority": 60,
+		"prompt": "[E] 交谈",
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	_interaction_focused = focused and _player_in_range
+	_refresh_presentation()
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range:
+		return false
+	interact()
+	return true
 
 
 func _build_visuals() -> void:
@@ -111,7 +131,8 @@ func _refresh_presentation() -> void:
 		_role_label.text = role
 		_role_label.modulate = accent_color.lightened(0.2)
 	if _prompt_label != null:
-		_prompt_label.text = "[E] 交谈" if _player_in_range else "预览实体"
+		_prompt_label.text = "[E] 交谈"
+		_prompt_label.visible = _interaction_focused
 	if _dialogue_label != null:
 		_dialogue_label.text = interaction_text
 		_dialogue_label.visible = _dialogue_visible
@@ -177,5 +198,6 @@ func _on_body_entered(body: Node3D) -> void:
 func _on_body_exited(body: Node3D) -> void:
 	if body.is_in_group("player_3d"):
 		_player_in_range = false
+		_interaction_focused = false
 		hide_dialogue()
 		_refresh_presentation()

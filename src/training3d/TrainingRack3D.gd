@@ -21,6 +21,7 @@ func configure(entry: Dictionary, category_id: String) -> void:
 
 func _ready() -> void:
 	add_to_group("training_rack_3d")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	collision_layer = 0
 	collision_mask = 1
 	body_entered.connect(_on_body_entered)
@@ -28,14 +29,31 @@ func _ready() -> void:
 	_build_visual()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_range or not event.is_action_pressed("interact"):
-		return
-	get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "training_rack:%s:%s" % [category, item_id],
+		"position": global_position,
+		"priority": 60,
+		"prompt": _prompt.text if _prompt != null else "[E] %s" % display_name,
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	if _prompt != null:
+		_prompt.visible = focused and _player_in_range
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range:
+		return false
 	selected.emit(self, item_id, category)
 	var tween := create_tween()
 	tween.tween_property(self, "scale", Vector3.ONE * 1.12, 0.08)
 	tween.tween_property(self, "scale", Vector3.ONE, 0.12)
+	return true
 
 
 func get_snapshot() -> Dictionary:
@@ -45,7 +63,6 @@ func get_snapshot() -> Dictionary:
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player_3d"):
 		_player_in_range = true
-		_prompt.visible = true
 
 
 func _on_body_exited(body: Node3D) -> void:

@@ -619,10 +619,7 @@ func _ready() -> void:
 			"98层入口门未开启前错误提前激活战斗层",
 			failures
 		)
-		var interact_event := InputEventAction.new()
-		interact_event.action = "interact"
-		interact_event.pressed = true
-		tower._unhandled_input(interact_event)
+		_expect(tower.player.request_interaction_for_test(), "统一交互控制器没有接收98层到达门请求", failures)
 		var opened_98_arrival := (
 			int(tower.get_tower_snapshot().get(
 				"vertical_arrival_open_count",

@@ -89,6 +89,7 @@ func configure_front_interaction_toward(world_target: Vector3) -> bool:
 
 func _ready() -> void:
 	add_to_group("base_facility")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	_apply_default_base_size()
@@ -158,20 +159,35 @@ func _process(delta: float) -> void:
 		beacon_light.light_energy = 2.1 if _player_in_range else 1.15 + sin(Time.get_ticks_msec() * 0.002) * 0.08
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_range or not event.is_action_pressed("interact"):
-		return
-	get_viewport().set_input_as_handled()
-	if not _available:
-		return
-	activated.emit(self)
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "base_facility:%s" % facility_id,
+		"position": global_position,
+		"priority": 60,
+		"prompt": prompt_label.text if prompt_label != null else "[E] 使用 %s" % display_name,
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	if prompt_label != null:
+		prompt_label.visible = focused and _player_in_range
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range:
+		return false
+	if _available:
+		activated.emit(self)
+	return true
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("player_3d"):
 		return
 	_player_in_range = true
-	prompt_label.visible = true
 
 
 func _on_body_exited(body: Node3D) -> void:

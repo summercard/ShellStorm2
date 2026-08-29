@@ -9,7 +9,7 @@ OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 EXPORTS = {
     "10A_MOD_FLOOR_TILE_5M_U01": "env_tower_floor_tile_5m_top3d_v001.glb",
-    "10B_MOD_WALL_SOLID_5M_U01": "env_tower_wall_solid_5m_top3d_v001.glb",
+    "10B_MOD_WALL_SOLID_5M_U01": "env_tower_wall_solid_5m_top3d_v002.glb",
     "10C_MOD_WALL_PARAPET_5M_U01": "env_tower_wall_parapet_5m_top3d_v001.glb",
     "10D_MOD_WALL_DOOR_5M_U01": "env_tower_wall_door_5m_top3d_v001.glb",
 }
@@ -49,6 +49,7 @@ def export_collection(collection_name: str, filename: str) -> None:
         export_yup=True,
         export_extras=True,
         export_materials="EXPORT",
+        export_image_format="NONE",
         export_cameras=False,
         export_lights=False,
         export_animations=False,

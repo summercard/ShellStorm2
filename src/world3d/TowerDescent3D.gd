@@ -22,7 +22,7 @@ const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/d
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v002.glb"
 )
 const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
@@ -165,7 +165,6 @@ var _camera_stair_slab_clearance_height_m := -1.0
 var _camera_stair_slab_drop_target_m := 0.0
 var _camera_stair_slab_drop_current_m := 0.0
 var _vertical_arrival_open: Dictionary = {}
-var _stair_arrival_prompt_door: RoomDoor3D
 var _corridor_floor_module_mesh: Mesh
 var _corridor_wall_module_mesh: Mesh
 var _initial_loop_gate_armed := false
@@ -241,30 +240,10 @@ func _should_start_on_rooftop_for_entry() -> bool:
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if (
-		event.is_action_pressed("interact")
-		and not _completed
-		and _try_interact_with_configured_base_door()
-	):
-		get_viewport().set_input_as_handled()
-		return
-	if (
-		event.is_action_pressed("interact")
-		and not _completed
-		and _try_open_nearby_stair_arrival()
-	):
-		get_viewport().set_input_as_handled()
-		return
-	super(event)
-
-
 func _process(delta: float) -> void:
 	super(delta)
 	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
-	_update_base_rooftop_transit_door_prompt()
-	_update_stair_arrival_prompt()
 
 
 func _finish_run(success: bool) -> void:
@@ -1168,11 +1147,24 @@ func _open_simple_room_edge_door(target_room_id: String, edge: String) -> bool:
 			break
 	if door == null:
 		return false
+	return _open_bound_simple_room_edge_door(
+		door, _current_room_id, target_room_id, edge
+	)
+
+
+func _open_bound_simple_room_edge_door(
+	door: RoomDoor3D,
+	owner_room_id: String,
+	target_room_id: String,
+	edge: String
+) -> bool:
+	if door == null or owner_room_id.is_empty() or target_room_id.is_empty():
+		return false
 	# start|facility是永久结构，门交互不得读写它；其他路线继续按各自流程。
 	if edge != _edge_key("start", "facility") and not bool(_open_edges.get(edge, false)):
 		_open_edges[edge] = true
-		minimap.set_edge_open(_current_room_id, target_room_id, true)
-		_update_room_streaming(_current_room_id)
+		minimap.set_edge_open(owner_room_id, target_room_id, true)
+		_update_room_streaming(owner_room_id)
 	if not _request_simple_transit_door_open(door):
 		return false
 	if MonsterAIManager != null and player != null:
@@ -1634,12 +1626,10 @@ func _build_tower_horizontal_corridor(
 	var wall_transforms: Array[Transform3D] = []
 	var wall_basis := Basis.IDENTITY if horizontal_x else Basis(Vector3.UP, PI * 0.5)
 	var wall_mesh := _get_corridor_wall_module_mesh()
-	# 走廊视觉墙按8.9m显示，阻挡仍为完整9m。缩放沿墙体本地Y轴，
-	# 再按缩放后的Mesh底面反算偏移，确保原点和楼面基准不变。
-	var wall_visual_scale_y := TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M / TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M
-	wall_basis = wall_basis.scaled(Vector3(1.0, wall_visual_scale_y, 1.0))
+	# v002墙源网格已原生制作成8.9m，底面保持Y=0；阻挡仍为完整9m。
+	# 水平走廊和楼梯接驳走廊必须共用该源资产，禁止再以运行时缩放凑高度。
 	var wall_floor_offset_y := (
-		-wall_mesh.get_aabb().position.y * wall_visual_scale_y
+		-wall_mesh.get_aabb().position.y
 		if wall_mesh != null
 		else 0.0
 	)
@@ -1732,6 +1722,7 @@ func _add_horizontal_corridor_multimesh(
 		visual.set_meta("logical_height_m", TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M)
 		visual.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
 		visual.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
+		visual.set_meta("uses_native_wall_visual_height", true)
 	var module_origins := PackedVector3Array()
 	for module_transform in transforms:
 		module_origins.append(module_transform.origin)
@@ -1826,6 +1817,11 @@ func _build_stair_approach_corridor(
 			wall.rotation.y = wall_rotation_y
 			wall.set_meta("asset_id", "ENV-TOWER-WALL-SOLID-5M")
 			wall.set_meta("stair_approach_corridor", true)
+			wall.set_meta("logical_height_m", TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M)
+			wall.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
+			wall.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
+			wall.set_meta("uses_native_wall_visual_height", true)
+			wall.set_meta("source_visual_version", "v002")
 			connector.add_child(wall)
 	for side_sign in [-1.0, 1.0]:
 		var side_name := (
@@ -2113,25 +2109,6 @@ func _find_nearby_stair_return() -> Dictionary:
 	return nearest
 
 
-func _update_stair_arrival_prompt() -> void:
-	if (
-		_stair_arrival_prompt_door != null
-		and is_instance_valid(_stair_arrival_prompt_door)
-	):
-		_stair_arrival_prompt_door.set_prompt_visible(false)
-	_stair_arrival_prompt_door = null
-	var candidate := _find_nearby_stair_arrival()
-	if candidate.is_empty():
-		candidate = _find_nearby_stair_return()
-	if candidate.is_empty():
-		return
-	_stair_arrival_prompt_door = candidate.get(
-		"lower_door", candidate.get("upper_door")
-	) as RoomDoor3D
-	if _stair_arrival_prompt_door != null:
-		_stair_arrival_prompt_door.set_prompt_visible(true)
-
-
 func _try_open_nearby_stair_arrival() -> bool:
 	var candidate := _find_nearby_stair_arrival()
 	if not candidate.is_empty():
@@ -2383,7 +2360,6 @@ func _reset_base_doors_closed() -> void:
 	_transition_upper_floor = -1
 	_transition_lower_floor = -1
 	_transition_progress = 0.0
-	_stair_arrival_prompt_door = null
 	if _airlock_warning_overlay != null and is_instance_valid(_airlock_warning_overlay):
 		_airlock_warning_overlay.queue_free()
 	_airlock_warning_overlay = null
@@ -2634,6 +2610,9 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 		bindings.append({
 			"door": _base_rooftop_transit_door,
 			"mode": "rooftop_transit",
+			"owner_room_id": "facility",
+			"target_room_id": "start",
+			"edge_key": _edge_key("start", "facility"),
 			"interaction_distance_m": float(SIMPLE_TRANSIT_DOOR_SCRIPT.INTERACTION_DISTANCE_M),
 		})
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
@@ -2647,42 +2626,130 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 		bindings.append({
 			"door": door,
 			"mode": "room_edge",
+			"owner_room_id": "facility",
 			"target_room_id": door.target_room_id,
+			"edge_key": _edge_key("facility", door.target_room_id),
 			"interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
 		})
 	return bindings
 
 
-func _try_interact_with_configured_base_door() -> bool:
-	if player == null:
-		return false
+func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
+	if _completed or interacting_player == null or interacting_player != player:
+		return {}
+	var candidates: Array[Dictionary] = []
 	for binding in _get_configured_base_door_bindings():
 		var door := binding.get("door") as RoomDoor3D
-		if door == null or not is_instance_valid(door):
+		if not _closed_door_is_in_range(
+			door,
+			float(binding.get("interaction_distance_m", STAIR_ARRIVAL_INTERACTION_DISTANCE_M))
+		):
 			continue
-		var interaction_distance := float(binding.get("interaction_distance_m", STAIR_ARRIVAL_INTERACTION_DISTANCE_M))
-		if player.global_position.distance_to(door.global_position) > interaction_distance:
-			continue
-		var mode := str(binding.get("mode", "room_edge"))
-		if mode == "rooftop_transit":
+		var candidate := _make_door_interaction_candidate(
+			door,
+			"configured_%s" % str(binding.get("mode", "room_edge")),
+			str(binding.get("target_room_id", door.target_room_id)),
+			95
+		)
+		candidate["owner_room_id"] = str(binding.get("owner_room_id", "facility"))
+		candidate["edge_key"] = str(binding.get("edge_key", ""))
+		candidates.append(candidate)
+	var arrival := _find_nearby_stair_arrival()
+	if not arrival.is_empty():
+		var lower_door := arrival.get("lower_door") as RoomDoor3D
+		var arrival_candidate := _make_door_interaction_candidate(
+			lower_door, "stair_arrival", str(arrival.get("lower_room_id", "")), 95
+		)
+		arrival_candidate["stair_candidate"] = arrival
+		candidates.append(arrival_candidate)
+	var stair_return := _find_nearby_stair_return()
+	if not stair_return.is_empty():
+		var upper_door := stair_return.get("upper_door") as RoomDoor3D
+		var return_candidate := _make_door_interaction_candidate(
+			upper_door, "stair_return", str(stair_return.get("upper_room_id", "")), 95
+		)
+		return_candidate["stair_candidate"] = stair_return
+		candidates.append(return_candidate)
+	var ordinary := super(interacting_player)
+	if not ordinary.is_empty():
+		candidates.append(ordinary)
+	return _select_nearest_priority_candidate(candidates)
+
+
+func perform_interaction(
+	interacting_player: Player3D,
+	candidate: Dictionary
+) -> bool:
+	if interacting_player == null or interacting_player != player or _completed:
+		return false
+	var mode := str(candidate.get("mode", "room_door"))
+	match mode:
+		"configured_rooftop_transit":
 			return _try_open_base_rooftop_transit_door()
-		# 四扇门都只有E键开启；已开启时重复按E不切换关闭状态。
-		if door.is_open or (
+		"configured_room_edge":
+			var door := candidate.get("door") as RoomDoor3D
+			return _open_bound_simple_room_edge_door(
+				door,
+				str(candidate.get("owner_room_id", "")),
+				str(candidate.get("target_room_id", "")),
+				str(candidate.get("edge_key", ""))
+			)
+		"stair_arrival":
+			return _activate_stair_arrival(
+				candidate.get("stair_candidate", {}) as Dictionary
+			)
+		"stair_return":
+			return _activate_stair_return_interaction(
+				candidate.get("stair_candidate", {}) as Dictionary
+			)
+	return super(interacting_player, candidate)
+
+
+func _activate_stair_return_interaction(candidate: Dictionary) -> bool:
+	var upper_door := candidate.get("upper_door") as RoomDoor3D
+	if upper_door == null:
+		return false
+	if not _request_simple_transit_door_open(upper_door):
+		upper_door.set_open(true)
+	status_label.text = "上行交通门已开启"
+	if MonsterAIManager != null and player != null:
+		MonsterAIManager.broadcast_sound_stimulus(
+			player.global_position, 6.5, "door_open", player
+		)
+	return true
+
+
+func _closed_door_is_in_range(door: RoomDoor3D, max_distance: float) -> bool:
+	return (
+		door != null
+		and is_instance_valid(door)
+		and not door.is_open
+		and not (
 			door.is_in_motion()
 			and bool(door.get_snapshot().get("target_open", false))
-		):
-			return true
-		var target_room_id := str(binding.get("target_room_id", door.target_room_id))
-		return not target_room_id.is_empty() and _try_open_room_door(target_room_id)
-	return false
-
-
-func _update_base_rooftop_transit_door_prompt() -> void:
-	if _base_rooftop_transit_door == null or not is_instance_valid(_base_rooftop_transit_door):
-		return
-	_base_rooftop_transit_door.set_prompt_visible(
-		_is_player_near_base_rooftop_transit_door()
+		)
+		and player.global_position.distance_to(door.global_position) <= max_distance
 	)
+
+
+func _select_nearest_priority_candidate(candidates: Array[Dictionary]) -> Dictionary:
+	var best: Dictionary = {}
+	for candidate in candidates:
+		if candidate.is_empty():
+			continue
+		var position := candidate.get("position", Vector3.INF) as Vector3
+		var distance := player.global_position.distance_to(position)
+		candidate["distance_m"] = distance
+		if (
+			best.is_empty()
+			or int(candidate.get("priority", 0)) > int(best.get("priority", 0))
+			or (
+				int(candidate.get("priority", 0)) == int(best.get("priority", 0))
+				and distance < float(best.get("distance_m", INF))
+			)
+		):
+			best = candidate
+	return best
 
 
 func _try_open_base_rooftop_transit_door() -> bool:
@@ -4066,14 +4133,8 @@ func get_tower_snapshot() -> Dictionary:
 				closed_door_count += 1
 	return {
 		"mode": "tower_descent",
-		"rooftop_dimensions": Vector2(
-			TowerFloorStage3D.ROOFTOP_MAP_SIZE,
-			TowerFloorStage3D.ROOFTOP_MAP_SIZE
-		),
-		"rooftop_grid_dimensions": Vector2i(
-			TowerFloorStage3D.ROOFTOP_GRID_COUNT,
-			TowerFloorStage3D.ROOFTOP_GRID_COUNT
-		),
+		"rooftop_dimensions": TowerFloorStage3D.ROOFTOP_MAP_DIMENSIONS,
+		"rooftop_grid_dimensions": TowerFloorStage3D.ROOFTOP_GRID_DIMENSIONS,
 		"facility_dimensions": (_room_by_id["facility"] as DungeonRoom3D).get_dimensions(),
 		"combat_floor_count": combat_floor_records.size(),
 		"combat_floors": combat_floor_records,

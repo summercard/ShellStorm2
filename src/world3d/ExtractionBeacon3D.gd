@@ -26,6 +26,7 @@ func configure(color: Color, p_duration: float, p_beacon_type := "BOSS_KILL") ->
 
 func _ready() -> void:
 	add_to_group("extraction_beacon_3d")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	collision_layer = 0
 	collision_mask = 1
 	body_entered.connect(_on_body_entered)
@@ -55,16 +56,33 @@ func _process(delta: float) -> void:
 		extraction_completed.emit()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_range or _active or not event.is_action_pressed("interact"):
-		return
-	get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range or _active:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "extraction_beacon:%d" % get_instance_id(),
+		"position": global_position,
+		"priority": 100,
+		"prompt": _prompt.text if _prompt != null else "[E] 启动撤离",
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	if _prompt != null:
+		_prompt.visible = focused and _player_in_range and not _active
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range or _active:
+		return false
 	if locked:
 		_prompt.text = "Boss 信号仍在干扰"
-		return
+		return true
 	_active = true
 	_remaining = duration
 	extraction_started.emit(duration)
+	return true
 
 
 func set_locked(value: bool) -> void:
@@ -114,7 +132,6 @@ func _cancel() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player_3d"):
 		_player_in_range = true
-		_prompt.visible = true
 		_refresh_prompt()
 
 

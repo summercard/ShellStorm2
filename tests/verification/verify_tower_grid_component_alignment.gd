@@ -36,10 +36,15 @@ func _ready() -> void:
 			_validate_room_door(room, side, failures)
 
 	var horizontal_count := 0
+	var vertical_count := 0
 	var entry_hub_dynamic_corridor_verified := false
 	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
 		var connector := connector_value as Node3D
-		if connector == null or bool(connector.get_meta("is_vertical_connector", false)):
+		if connector == null:
+			continue
+		if bool(connector.get_meta("is_vertical_connector", false)):
+			vertical_count += 1
+			_validate_stair_approach_wall_modules(connector, failures)
 			continue
 		horizontal_count += 1
 		var tangent_error := float(connector.get_meta("door_tangent_error_m", INF))
@@ -65,6 +70,8 @@ func _ready() -> void:
 		failures.append("expected 62 generated horizontal component corridors including Boss exit and airlock, got %d" % horizontal_count)
 	if not entry_hub_dynamic_corridor_verified:
 		failures.append("98F safe-room north corridor is not a complete 25m/5-module passage")
+	if vertical_count <= 0:
+		failures.append("tower generated no vertical connector for stair approach wall validation")
 
 	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -9.0, 2.5), failures)
 	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -9.0, 2.5), failures)
@@ -106,17 +113,80 @@ func _ready() -> void:
 			failures.append("floor stage %d has %d stair holes; expected %d upper-floor holes" % [index, hole_count, expected_holes[index]])
 		var expected_tiles := 2500 - hole_count * 18
 		if index == 0:
-			expected_tiles = 16 * 16 - 12 - 36
+			expected_tiles = 18 * 16 - 18 - 36
 			if (
 				not bool(stage.get("base_99_100_atrium_enabled", false))
 				or int(stage.get("base_99_100_atrium_tile_count", 0)) != 36
 			):
 				failures.append("100层缺少基地99/100层6×6贯通中庭")
+		elif index == 1:
+			# 99F通用可视地砖会避开基地正式地板，承重面仍完整保留。
+			expected_tiles -= 36
 		if int(stage.get("tile_count", -1)) != expected_tiles:
 			failures.append("floor stage %d tile coverage is incomplete" % index)
 
 	_validate_player_light_shadow_separation(tower.player, failures)
 	_finish(failures)
+
+
+func _validate_stair_approach_wall_modules(
+	connector: Node3D,
+	failures: Array[String]
+) -> void:
+	var visual_count := 0
+	var collision_count := 0
+	for node_value in connector.find_children("*", "Node3D", true, false):
+		var node := node_value as Node3D
+		if node == null:
+			continue
+		if (
+			str(node.get_meta("asset_id", "")) == "ENV-TOWER-WALL-SOLID-5M"
+			and bool(node.get_meta("stair_approach_corridor", false))
+		):
+			visual_count += 1
+			if (
+				not bool(node.get_meta("uses_native_wall_visual_height", false))
+				or str(node.get_meta("source_visual_version", "")) != "v002"
+			):
+				failures.append("%s stair approach wall does not use native v002 height" % node.name)
+			var mesh_instance := _find_first_mesh_instance(node)
+			if mesh_instance == null or mesh_instance.mesh == null:
+				failures.append("%s stair approach wall has no visual mesh" % node.name)
+				continue
+			var world_bounds := mesh_instance.global_transform * mesh_instance.mesh.get_aabb()
+			if not is_equal_approx(world_bounds.size.y, TowerGeometry3D.WALL_VISUAL_HEIGHT_M):
+				failures.append("%s stair approach visual is not 8.9m high" % node.name)
+			if not is_equal_approx(world_bounds.position.y, node.global_position.y):
+				failures.append("%s stair approach visual bottom left the floor datum" % node.name)
+			if (
+				int(connector.get_meta("upper_floor_index", -1)) == 0
+				and int(connector.get_meta("lower_floor_index", -1)) == 1
+				and "Lower" in node.name
+				and not is_equal_approx(world_bounds.end.y, -0.1)
+			):
+				failures.append("%s still shares Y=0 with the 100F floor" % node.name)
+		if node is StaticBody3D and node.name.begins_with("StairApproachWall_"):
+			var body := node as StaticBody3D
+			if body.get_child_count() <= 0:
+				continue
+			var collision := body.get_child(0) as CollisionShape3D
+			var shape := collision.shape as BoxShape3D if collision != null else null
+			if shape != null:
+				collision_count += 1
+				if not is_equal_approx(shape.size.y, TowerGeometry3D.WALL_LOGICAL_HEIGHT_M):
+					failures.append("%s stair approach collision is not 9m high" % node.name)
+	if visual_count > 0 and collision_count <= 0:
+		failures.append("%s stair approach lost its continuous 9m side-wall colliders" % connector.name)
+
+
+func _find_first_mesh_instance(root: Node) -> MeshInstance3D:
+	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
+		return root as MeshInstance3D
+	for child in root.get_children():
+		var found := _find_first_mesh_instance(child)
+		if found != null:
+			return found
+	return null
 
 
 func _validate_horizontal_corridor_modules(

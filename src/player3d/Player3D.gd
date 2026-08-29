@@ -46,6 +46,9 @@ const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const DEBUG_SCALE_STEP_RATIO := 0.10
 const DEBUG_SCALE_MIN_STEP := -9
 const DEBUG_SCALE_MAX_STEP := 20
+const INTERACTION_CONTROLLER_SCRIPT := preload(
+	"res://src/player3d/PlayerInteractionController3D.gd"
+)
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -83,6 +86,7 @@ var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
 var equipped_flashlight_module: Dictionary = {}
+var interaction_controller: PlayerInteractionController3D
 
 # 移动端虚拟输入状态（来自 MobileInput autoload 的信号）。
 var _mobile_move_direction := Vector2.ZERO
@@ -147,6 +151,10 @@ func _ready() -> void:
 	safe_margin = 0.035
 	add_to_group("player")
 	add_to_group("player_3d")
+	interaction_controller = INTERACTION_CONTROLLER_SCRIPT.new() as PlayerInteractionController3D
+	interaction_controller.name = "PlayerInteractionController3D"
+	add_child(interaction_controller)
+	interaction_controller.configure(self)
 	_init_state_machine()
 	_init_melee_combat()
 	_ensure_weapon_tree()
@@ -175,6 +183,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif _is_debug_scale_down_key(key_event):
 		adjust_debug_scale(-1)
 		get_viewport().set_input_as_handled()
+
+
+func request_interaction_for_test() -> bool:
+	return (
+		interaction_controller != null
+		and interaction_controller.request_interaction()
+	)
+
+
+func get_interaction_focus_snapshot() -> Dictionary:
+	return (
+		interaction_controller.get_focus_snapshot()
+		if interaction_controller != null
+		else {}
+	)
 
 
 func _is_debug_scale_up_key(event: InputEventKey) -> bool:

@@ -489,10 +489,6 @@ func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictiona
 		if distance < nearest_distance:
 			nearest_distance = distance
 			nearest = door
-	for value in _door_nodes.values():
-		var candidate := value as RoomDoor3D
-		if candidate != null:
-			candidate.set_prompt_visible(candidate == nearest)
 	if nearest == null:
 		return {}
 	return {
@@ -500,6 +496,7 @@ func get_nearest_door(player_position: Vector3, max_distance := 3.4) -> Dictiona
 		"target_room_id": nearest.target_room_id,
 		"is_open": nearest.is_open,
 		"distance": nearest_distance,
+		"door": nearest,
 	}
 
 

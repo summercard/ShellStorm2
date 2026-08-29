@@ -8,6 +8,7 @@ var _prompt: Label3D
 
 
 func _ready() -> void:
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	collision_layer = 0
 	collision_mask = 1
 	body_entered.connect(_on_body_entered)
@@ -15,16 +16,33 @@ func _ready() -> void:
 	_build_visual()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if _player_in_range and event.is_action_pressed("interact"):
-		get_viewport().set_input_as_handled()
-		exit_requested.emit()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "training_exit:%d" % get_instance_id(),
+		"position": global_position,
+		"priority": 90,
+		"prompt": _prompt.text if _prompt != null else "[E] 返回3D基地",
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	if _prompt != null:
+		_prompt.visible = focused and _player_in_range
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range:
+		return false
+	exit_requested.emit()
+	return true
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("player_3d"):
 		_player_in_range = true
-		_prompt.visible = true
 
 
 func _on_body_exited(body: Node3D) -> void:

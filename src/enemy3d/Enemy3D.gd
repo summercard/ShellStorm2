@@ -1017,7 +1017,11 @@ func notify_attacked_by(attacker: Node3D) -> void:
 	MonsterAIManager.notify_enemy_attacked(self, attacker)
 	_ai_decision = MonsterAIManager.force_refresh_enemy(self)
 	_apply_ai_decision(_ai_decision)
-	if _target != null and ai_state not in ["dead", "telegraph", "attack"]:
+	# 玩家已被作为目标后不再强制重跳 alert：alert 期间会按 0.42s 锁 velocity.move_toward(ZERO)、
+	# 造成“被打一下顿一下”的硬直。仇恨已由 notify_enemy_attacked 建立，此处仅保留 chase/telegraph/attack 的合法过渡。
+	# alert 路径仍然走（从 idle/patrol/search 发现玩家），由下一帧 physics_process 的 ai_state == "alert" && _state_time > 0.28 自动跳 chase。
+	var is_idle_like := ai_state in ["idle", "patrol", "search", "dormant"]
+	if _target != null and ai_state not in ["dead", "telegraph", "attack"] and is_idle_like:
 		transition_to("alert")
 
 

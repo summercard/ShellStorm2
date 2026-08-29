@@ -104,7 +104,6 @@ var _weapon_panel: WeaponAssemblyTreePanel
 var _workbench_panel: WorkbenchPanel
 var _merchant_ui: MerchantUI
 var _trade_extraction_unlocked := false
-var _door_prompt_accumulator := 0.0
 var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
@@ -175,6 +174,7 @@ var _room_stream_state_cache: Dictionary = {}
 
 func _ready() -> void:
 	add_to_group("room_game_mode")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	if not test_mode and BaseManager != null:
 		# 死亡保险中转是已经完成结算的更高优先级边界。即使上一次清理
 		# 战斗检查点时写盘失败，也不能让旧战斗房快照覆盖保险返城数据。
@@ -521,13 +521,62 @@ func _unhandled_input(event: InputEvent) -> void:
 			_weapon_panel.toggle()
 			get_viewport().set_input_as_handled()
 		return
-	if event.is_action_pressed("interact") and not _completed:
-		var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
-		if room != null:
-			var door_info := room.get_nearest_door(player.global_position)
-			if not door_info.is_empty() and not bool(door_info.get("is_open", false)):
-				get_viewport().set_input_as_handled()
-				_try_open_room_door(str(door_info.get("target_room_id", "")))
+
+
+func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
+	if _completed or interacting_player == null or interacting_player != player:
+		return {}
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null:
+		return {}
+	var door_info := room.get_nearest_door(player.global_position)
+	if door_info.is_empty() or bool(door_info.get("is_open", false)):
+		return {}
+	var door := door_info.get("door") as RoomDoor3D
+	if door == null:
+		return {}
+	return _make_door_interaction_candidate(
+		door,
+		"room_door",
+		str(door_info.get("target_room_id", "")),
+		80
+	)
+
+
+func set_interaction_focus(candidate: Dictionary, focused: bool) -> void:
+	var door := candidate.get("door") as RoomDoor3D
+	if door != null and is_instance_valid(door):
+		door.set_prompt_visible(focused)
+
+
+func perform_interaction(
+	interacting_player: Player3D,
+	candidate: Dictionary
+) -> bool:
+	if interacting_player == null or interacting_player != player or _completed:
+		return false
+	var target_room_id := str(candidate.get("target_room_id", ""))
+	return not target_room_id.is_empty() and _try_open_room_door(target_room_id)
+
+
+func _make_door_interaction_candidate(
+	door: RoomDoor3D,
+	mode: String,
+	target_room_id: String,
+	priority: int
+) -> Dictionary:
+	if door == null or not is_instance_valid(door):
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "door:%d:%s" % [door.get_instance_id(), mode],
+		"position": door.global_position,
+		"priority": priority,
+		"prompt": door.get_interaction_prompt_text(),
+		"mode": mode,
+		"door": door,
+		"target_room_id": target_room_id,
+	}
 
 
 func _process(delta: float) -> void:
@@ -556,13 +605,6 @@ func _process(delta: float) -> void:
 			minimap.set_enemy_positions(_get_minimap_enemy_positions())
 			if _full_map_control != null and is_instance_valid(_full_map_control):
 				_full_map_control.copy_state_from(minimap)
-	_door_prompt_accumulator += delta
-	if _door_prompt_accumulator < 0.08:
-		return
-	_door_prompt_accumulator = 0.0
-	var current := _room_by_id.get(_current_room_id) as DungeonRoom3D
-	if current != null and player != null:
-		current.get_nearest_door(player.global_position)
 
 
 func _tick_enemy_preactivation(delta: float) -> void:

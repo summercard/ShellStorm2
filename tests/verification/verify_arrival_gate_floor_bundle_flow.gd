@@ -147,10 +147,7 @@ func _ready() -> void:
 			"角色尚在98F安全屋门外却被提前识别为安全屋",
 			failures
 		)
-		var interact_event := InputEventAction.new()
-		interact_event.action = "interact"
-		interact_event.pressed = true
-		tower._unhandled_input(interact_event)
+		_expect(tower.player.request_interaction_for_test(), "统一交互控制器没有接收98层到达门请求", failures)
 		await get_tree().process_frame
 		await get_tree().physics_frame
 		_expect(

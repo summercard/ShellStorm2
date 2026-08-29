@@ -46,6 +46,7 @@ func _ready() -> void:
 	add_to_group("room_prop_3d")
 	if searchable:
 		add_to_group("searchable_prop_3d")
+		add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	collision_layer = 0
 	collision_mask = 1
 	monitoring = true
@@ -69,11 +70,28 @@ func _process(delta: float) -> void:
 		_complete_search()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not searchable or _searched or _searching or not _player_in_range or not event.is_action_pressed("interact"):
-		return
-	get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not searchable or _searched or _searching or not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "room_furniture:%s:%d" % [prop_id, get_instance_id()],
+		"position": global_position,
+		"priority": 40,
+		"prompt": _prompt.text if _prompt != null else "[E] 搜索",
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	if _prompt != null:
+		_prompt.visible = focused and _player_in_range and not _searched and not _searching
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not searchable or _searched or _searching or not _player_in_range:
+		return false
 	_start_search()
+	return true
 
 
 func _start_search() -> void:
@@ -176,8 +194,6 @@ func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("player_3d"):
 		return
 	_player_in_range = true
-	if searchable and not _searched:
-		_prompt.visible = true
 
 
 func _on_body_exited(body: Node3D) -> void:
@@ -186,7 +202,7 @@ func _on_body_exited(body: Node3D) -> void:
 	_player_in_range = false
 	_cancel_search()
 	if _prompt != null:
-		_prompt.visible = _searched
+		_prompt.visible = false
 
 
 func _build_visual() -> void:

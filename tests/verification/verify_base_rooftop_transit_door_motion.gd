@@ -57,10 +57,7 @@ func _ready() -> void:
 		_expect(_doorway_ray_hits_door(tower, door), "专用门关闭时物理射线可以穿过", failures)
 
 		# 玩家站在门外安全距离内，发送真实E键事件开启。
-		var interact_event := InputEventAction.new()
-		interact_event.action = "interact"
-		interact_event.pressed = true
-		tower._unhandled_input(interact_event)
+		_expect(tower.player.request_interaction_for_test(), "统一交互控制器没有接收普通门请求", failures)
 		_expect(door.is_open, "普通交通门没有响应真实E键开启", failures)
 		await get_tree().physics_frame
 		var opening := door.get_snapshot()
@@ -80,7 +77,7 @@ func _ready() -> void:
 		_expect(not _doorway_ray_hits_door(tower, door), "专用门完全打开后物理射线仍命中门板", failures)
 
 		# 重复按E不会切换关闭；四扇普通门都只在玩家离开后自动关闭。
-		tower._unhandled_input(interact_event)
+		tower.player.request_interaction_for_test()
 		_expect(door.is_open, "已开门重复E错误触发手动关闭", failures)
 		tower.player.global_position = door.to_global(Vector3(0.0, 0.05, 4.0))
 		await get_tree().create_timer(1.25).timeout

@@ -22,6 +22,7 @@ var _player_in_range := false
 
 func _ready() -> void:
 	add_to_group("dungeon_entrance")
+	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	name_label.text = display_name
@@ -40,18 +41,33 @@ func _process(delta: float) -> void:
 	beacon_light.light_energy = 3.0 if _player_in_range else 1.8 + sin(Time.get_ticks_msec() * 0.0023) * 0.14
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _player_in_range or not event.is_action_pressed("interact"):
-		return
-	get_viewport().set_input_as_handled()
+func get_interaction_candidate(_player: Player3D) -> Dictionary:
+	if not _player_in_range:
+		return {}
+	return {
+		"available": true,
+		"interaction_id": "dungeon_entrance:%s" % entrance_id,
+		"position": global_position,
+		"priority": 90,
+		"prompt": prompt_label.text,
+	}
+
+
+func set_interaction_focus(_candidate: Dictionary, focused: bool) -> void:
+	prompt_label.visible = focused and _player_in_range
+
+
+func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
+	if not _player_in_range:
+		return false
 	activated.emit(self)
+	return true
 
 
 func _on_body_entered(body: Node3D) -> void:
 	if not body.is_in_group("player_3d"):
 		return
 	_player_in_range = true
-	prompt_label.visible = true
 
 
 func _on_body_exited(body: Node3D) -> void:

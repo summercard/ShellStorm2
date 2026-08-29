@@ -1,16 +1,19 @@
 class_name TowerFloorStage3D
 extends Node3D
-## 常规层为250m塔楼物理层；100层使用独立的80m顶层轮廓。
+## 常规层为250m塔楼物理层；100层主区16×16格，西侧为楼梯净空扩展2格。
 ## 重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；承重碰撞独立于渲染。
 
 const GRID_UNIT := 5.0
 const GRID_COUNT := 50
 const MAP_SIZE := GRID_UNIT * GRID_COUNT
 const MAP_HALF := MAP_SIZE * 0.5
-const ROOFTOP_GRID_COUNT := 16
-const ROOFTOP_MAP_SIZE := GRID_UNIT * ROOFTOP_GRID_COUNT
-# 16×16主天台以99层基地中心(0, 5)居中；西侧楼梯多出的5m继续由其独立外壳承接。
-const ROOFTOP_WORLD_RECT := Rect2(-40.0, -35.0, ROOFTOP_MAP_SIZE, ROOFTOP_MAP_SIZE)
+# 原16×16主天台以99层基地中心(0, 5)居中；只向西追加2格（10m），
+# 东/南/北边界保持不变，为100→99西侧楼梯外廓留下完整栏杆净空。
+const ROOFTOP_GRID_DIMENSIONS := Vector2i(18, 16)
+const ROOFTOP_MAP_DIMENSIONS := Vector2(90.0, 80.0)
+const ROOFTOP_GRID_COUNT := ROOFTOP_GRID_DIMENSIONS.x
+const ROOFTOP_MAP_SIZE := ROOFTOP_MAP_DIMENSIONS.x
+const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
 const FACILITY_OUTER_GRID_COUNT := 32
 const FACILITY_OUTER_MAP_SIZE := GRID_UNIT * FACILITY_OUTER_GRID_COUNT
 const FACILITY_OUTER_WORLD_RECT := Rect2(
@@ -123,6 +126,8 @@ func get_snapshot() -> Dictionary:
 		"floor_kind": floor_kind,
 		"map_size": _floor_map_size(),
 		"grid_count": _floor_grid_count(),
+		"map_dimensions": _floor_map_dimensions(),
+		"grid_dimensions": _floor_grid_dimensions(),
 		"floor_world_rect": _floor_world_rect(),
 		"grid_unit": GRID_UNIT,
 		"tile_count": _tile_count,
@@ -130,8 +135,10 @@ func get_snapshot() -> Dictionary:
 		"tile_count_dark": _floor_visual_dark.multimesh.instance_count if _floor_visual_dark != null and _floor_visual_dark.multimesh != null else 0,
 		"outer_map_size": _outer_map_size(),
 		"outer_grid_count": _outer_grid_count(),
+		"outer_map_dimensions": _outer_map_dimensions(),
+		"outer_grid_dimensions": _outer_grid_dimensions(),
 		"outer_world_rect": _outer_world_rect(),
-		"outer_module_count": _outer_grid_count() * 4,
+		"outer_module_count": 2 * (_outer_grid_dimensions().x + _outer_grid_dimensions().y),
 		"outer_wall_height": _outer_wall_height(),
 		"support_rect_count": _support_rect_count,
 		"stair_hole_sides": stair_hole_sides.duplicate(),
@@ -173,11 +180,19 @@ func get_snapshot() -> Dictionary:
 
 
 func _floor_grid_count() -> int:
-	return ROOFTOP_GRID_COUNT if floor_index == 0 else GRID_COUNT
+	return _floor_grid_dimensions().x
+
+
+func _floor_grid_dimensions() -> Vector2i:
+	return ROOFTOP_GRID_DIMENSIONS if floor_index == 0 else Vector2i(GRID_COUNT, GRID_COUNT)
 
 
 func _floor_map_size() -> float:
-	return ROOFTOP_MAP_SIZE if floor_index == 0 else MAP_SIZE
+	return _floor_map_dimensions().x
+
+
+func _floor_map_dimensions() -> Vector2:
+	return ROOFTOP_MAP_DIMENSIONS if floor_index == 0 else Vector2(MAP_SIZE, MAP_SIZE)
 
 
 func _floor_world_rect() -> Rect2:
@@ -186,11 +201,31 @@ func _floor_world_rect() -> Rect2:
 
 func _outer_grid_count() -> int:
 	# 此次只收缩100层。99层外墙保持此前的160m轮廓，基地和设施不移动。
-	return ROOFTOP_GRID_COUNT if floor_index == 0 else FACILITY_OUTER_GRID_COUNT if floor_index == 1 else GRID_COUNT
+	return _outer_grid_dimensions().x
+
+
+func _outer_grid_dimensions() -> Vector2i:
+	return (
+		ROOFTOP_GRID_DIMENSIONS
+		if floor_index == 0
+		else Vector2i(FACILITY_OUTER_GRID_COUNT, FACILITY_OUTER_GRID_COUNT)
+		if floor_index == 1
+		else Vector2i(GRID_COUNT, GRID_COUNT)
+	)
 
 
 func _outer_map_size() -> float:
-	return ROOFTOP_MAP_SIZE if floor_index == 0 else FACILITY_OUTER_MAP_SIZE if floor_index == 1 else MAP_SIZE
+	return _outer_map_dimensions().x
+
+
+func _outer_map_dimensions() -> Vector2:
+	return (
+		ROOFTOP_MAP_DIMENSIONS
+		if floor_index == 0
+		else Vector2(FACILITY_OUTER_MAP_SIZE, FACILITY_OUTER_MAP_SIZE)
+		if floor_index == 1
+		else Vector2(MAP_SIZE, MAP_SIZE)
+	)
 
 
 func _outer_world_rect() -> Rect2:
@@ -219,10 +254,10 @@ func _build_floor() -> void:
 	var light_transforms: Array[Transform3D] = []
 	var dark_transforms: Array[Transform3D] = []
 	var holes := _floor_visual_hole_rects()
-	var grid_count := _floor_grid_count()
+	var grid_dimensions := _floor_grid_dimensions()
 	var floor_rect := _floor_world_rect()
-	for z_index in range(grid_count):
-		for x_index in range(grid_count):
+	for z_index in range(grid_dimensions.y):
+		for x_index in range(grid_dimensions.x):
 			var point := Vector2i(x_index, z_index)
 			var skipped := false
 			for hole in holes:
@@ -271,13 +306,13 @@ func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
 	var holes := _floor_visual_hole_rects()
 	var patch_start_offset := -int(PROTECTED_FLOOR_PATCH_TILES_PER_SIDE / 2)
 	var patch_end_offset := patch_start_offset + PROTECTED_FLOOR_PATCH_TILES_PER_SIDE
-	var grid_count := _floor_grid_count()
+	var grid_dimensions := _floor_grid_dimensions()
 	var floor_rect := _floor_world_rect()
 	for z_index in range(grid_center.y + patch_start_offset, grid_center.y + patch_end_offset):
-		if z_index < 0 or z_index >= grid_count:
+		if z_index < 0 or z_index >= grid_dimensions.y:
 			continue
 		for x_index in range(grid_center.x + patch_start_offset, grid_center.x + patch_end_offset):
-			if x_index < 0 or x_index >= grid_count:
+			if x_index < 0 or x_index >= grid_dimensions.x:
 				continue
 			var point := Vector2i(x_index, z_index)
 			var skipped := false
@@ -348,7 +383,7 @@ func _build_outer_shell() -> void:
 	# 楼梯口门洞：跳过门洞位置的实墙模块，碰撞盒也留缺口。
 	# 楼顶额外在缺口处摆放带门墙预制体（5m 宽组件含 2m 宽门洞），可通行。
 	var transforms: Array[Transform3D] = []
-	var outer_grid_count := _outer_grid_count()
+	var outer_grid_dimensions := _outer_grid_dimensions()
 	var outer_rect := _outer_world_rect()
 	var outer_max := outer_rect.end
 	var wall_height := _outer_wall_height()
@@ -364,9 +399,8 @@ func _build_outer_shell() -> void:
 	var west_boundary := outer_rect.position.x + WALL_THICKNESS * 0.5
 	var east_boundary := outer_max.x - WALL_THICKNESS * 0.5
 	var door_transforms: Dictionary = {"north": [], "south": [], "west": [], "east": []}
-	for index in range(outer_grid_count):
+	for index in range(outer_grid_dimensions.x):
 		var offset_x := outer_rect.position.x + GRID_UNIT * (float(index) + 0.5)
-		var offset_z := outer_rect.position.y + GRID_UNIT * (float(index) + 0.5)
 		if not _is_in_wall_door_gap("north", index):
 			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
 		else:
@@ -375,6 +409,8 @@ func _build_outer_shell() -> void:
 			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, visual_wall_center_y, south_boundary)))
 		else:
 			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(offset_x, 0.0, south_boundary)))
+	for index in range(outer_grid_dimensions.y):
+		var offset_z := outer_rect.position.y + GRID_UNIT * (float(index) + 0.5)
 		if not _is_in_wall_door_gap("west", index):
 			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, visual_wall_center_y, offset_z)))
 		else:
@@ -562,9 +598,9 @@ func _build_support() -> void:
 	_support_root.collision_layer = 1
 	_support_root.collision_mask = 0
 	add_child(_support_root)
-	var grid_count := _floor_grid_count()
+	var grid_dimensions := _floor_grid_dimensions()
 	var floor_rect := _floor_world_rect()
-	var rectangles: Array[Rect2i] = [Rect2i(0, 0, grid_count, grid_count)]
+	var rectangles: Array[Rect2i] = [Rect2i(Vector2i.ZERO, grid_dimensions)]
 	for hole in _hole_rects():
 		rectangles = _subtract_hole(rectangles, hole)
 	for rect in rectangles:
