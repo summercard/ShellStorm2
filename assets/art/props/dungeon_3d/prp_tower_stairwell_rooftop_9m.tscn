@@ -2,7 +2,7 @@
 
 ; 楼顶 9m 楼梯间 - 复用已导入的 GLB 资产
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v001.glb" id="1_stairwell"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v002.glb" id="1_stairwell"]
 
 [node name="PrpTowerStairwellRooftop9m" type="Node3D"]
 

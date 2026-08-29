@@ -3,7 +3,7 @@
 ; 通用 9m 楼梯间 - 复用已导入的 GLB 资产
 ; 美术可直接替换 mesh 资源为更精细的网格
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v001.glb" id="1_stairwell"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v002.glb" id="1_stairwell"]
 
 [node name="PrpTowerStairwellGeneric9m" type="Node3D"]
 

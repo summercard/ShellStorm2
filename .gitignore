@@ -3,6 +3,7 @@
 *.import
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 !assets/art/environments/base_facility_3d/components/**/*.glb.import
+!assets/art/environments/tower_descent_3d/components/**/*.glb.import
 !assets/art/props/base_world_3d/components/**/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
 *.translation

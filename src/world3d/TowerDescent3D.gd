@@ -28,10 +28,10 @@ const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v002.glb"
 )
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v002.glb"
 )
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85
@@ -1321,6 +1321,19 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	connector.set_meta("passage_width", STAIR_WIDTH)
 	connector.set_meta("approach_outset", TOWER_GEOMETRY.APPROACH_OUTSET_M)
 	connector.set_meta("guard_end_clearance", TOWER_GEOMETRY.GUARD_END_CLEARANCE_M)
+	connector.set_meta("stair_footprint_size_m", TOWER_GEOMETRY.STAIR_FOOTPRINT_SIZE_M)
+	connector.set_meta(
+		"stair_footprint_min_local_xz_m",
+		TOWER_GEOMETRY.STAIR_FOOTPRINT_MIN_LOCAL_XZ_M
+	)
+	connector.set_meta(
+		"stair_footprint_max_local_xz_m",
+		TOWER_GEOMETRY.STAIR_FOOTPRINT_MAX_LOCAL_XZ_M
+	)
+	connector.set_meta(
+		"stair_lower_landing_raise_m",
+		TOWER_GEOMETRY.STAIR_LOWER_LANDING_RAISE_M
+	)
 	connector.set_meta("outward", outward)
 	connector.set_meta("upper_door_position", upper_door)
 	connector.set_meta("lower_door_position", lower_door)
@@ -1384,7 +1397,8 @@ func _add_imported_stairwell_visual(
 		if rooftop_variant
 		else "ENV-TOWER-STAIRWELL-GENERIC-9M"
 	)
-	visual.set_meta("blender_source_version", "v006")
+	visual.set_meta("asset_version", "v002")
+	visual.set_meta("blender_source_version", "v009")
 	connector.add_child(visual)
 	var walkable_collision_count := _add_imported_stair_collisions(visual)
 	connector.set_meta("walkable_collision_count", walkable_collision_count)

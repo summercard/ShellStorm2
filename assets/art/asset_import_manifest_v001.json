@@ -7,8 +7,8 @@
     "glb_policy": "no embedded images/textures; export_image_format=NONE",
     "godot_post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
     "managed_blend_sources": 35,
-    "managed_glbs": 44,
-    "source_controlled_glb_import_contracts": 44,
+    "managed_glbs": 46,
+    "source_controlled_glb_import_contracts": 46,
     "source_controlled_palette_import_contracts": 1,
     "deleted_duplicate_pngs": 51
   },
@@ -109,6 +109,38 @@
     }
   },
   "environment_modules": {
+    "tower_stairwell_generic_9m": {
+      "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-9M",
+      "name_cn": "塔楼通用9米U形楼梯间",
+      "category": "environment_module",
+      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v002.glb",
+      "source": "assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v009.blend",
+      "runtime": "assets/art/props/dungeon_3d/prp_tower_stairwell_generic_9m.tscn",
+      "footprint_size_m": [15.0, 30.0],
+      "grid_unit_m": 5.0,
+      "upper_floor_m": 0.0,
+      "lower_floor_m": -9.0,
+      "lower_landing_top_m": -8.9,
+      "version": "v002",
+      "collision": "Godot generates trimesh collision from Walkable and four enclosure meshes",
+      "status": "approved_runtime"
+    },
+    "tower_stairwell_rooftop_9m": {
+      "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-9M",
+      "name_cn": "塔楼楼顶专用9米U形楼梯间",
+      "category": "environment_module",
+      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v002.glb",
+      "source": "assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v009.blend",
+      "runtime": "assets/art/props/dungeon_3d/prp_tower_stairwell_rooftop_9m.tscn",
+      "footprint_size_m": [15.0, 30.0],
+      "grid_unit_m": 5.0,
+      "upper_floor_m": 0.0,
+      "lower_floor_m": -9.0,
+      "lower_landing_top_m": -8.9,
+      "version": "v002",
+      "collision": "Godot generates trimesh collision from Walkable and four enclosure meshes",
+      "status": "approved_runtime"
+    },
     "base99_mezzanine_20x10_z5": {
       "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
       "name_cn": "基地99层二层楼中楼楼板20x10米Z5",

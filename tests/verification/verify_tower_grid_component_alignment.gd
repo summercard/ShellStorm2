@@ -45,6 +45,7 @@ func _ready() -> void:
 		if bool(connector.get_meta("is_vertical_connector", false)):
 			vertical_count += 1
 			_validate_stair_approach_wall_modules(connector, failures)
+			_validate_stairwell_5m_contract(connector, failures)
 			continue
 		horizontal_count += 1
 		var tangent_error := float(connector.get_meta("door_tangent_error_m", INF))
@@ -127,6 +128,73 @@ func _ready() -> void:
 
 	_validate_player_light_shadow_separation(tower.player, failures)
 	_finish(failures)
+
+
+func _validate_stairwell_5m_contract(
+	connector: Node3D,
+	failures: Array[String]
+) -> void:
+	if connector.get_meta("stair_footprint_size_m", Vector2.ZERO) != Vector2(15.0, 30.0):
+		failures.append("%s stair footprint contract is not 15x30m" % connector.name)
+	if not is_equal_approx(float(connector.get_meta("stair_lower_landing_raise_m", 0.0)), 0.1):
+		failures.append("%s lower landing clearance contract is not 0.1m" % connector.name)
+	var imported: Node3D = null
+	for child_value in connector.get_children():
+		var child := child_value as Node3D
+		if child != null and child.name.begins_with("ImportedStairwell"):
+			imported = child
+			break
+	if imported == null:
+		failures.append("%s has no imported stairwell v002" % connector.name)
+		return
+	if (
+		str(imported.get_meta("asset_version", "")) != "v002"
+		or str(imported.get_meta("blender_source_version", "")) != "v009"
+	):
+		failures.append("%s does not use Blender v009 / stair asset v002" % connector.name)
+
+	var lower_aabb := AABB()
+	var upper_aabb := AABB()
+	var has_lower := false
+	var has_upper := false
+	var enclosure_count := 0
+	var imported_inverse := imported.global_transform.affine_inverse()
+	for mesh_value in imported.find_children("*", "MeshInstance3D", true, false):
+		var mesh := mesh_value as MeshInstance3D
+		if mesh == null or mesh.mesh == null:
+			continue
+		var local_aabb := (imported_inverse * mesh.global_transform) * mesh.get_aabb()
+		if "LowerDoorLanding_Walkable" in mesh.name:
+			lower_aabb = local_aabb
+			has_lower = true
+		elif "UpperDoorLanding_Walkable" in mesh.name:
+			upper_aabb = local_aabb
+			has_upper = true
+		elif "EnclosureWall_" in mesh.name:
+			enclosure_count += 1
+			if (
+				absf(local_aabb.position.y + 9.0) > 0.001
+				or absf(local_aabb.end.y + 0.1) > 0.001
+			):
+				failures.append("%s enclosure wall is not the native -9.0..-0.1m visual" % mesh.name)
+	if not has_lower:
+		failures.append("%s normalized lower landing is missing" % connector.name)
+	elif (
+		absf(lower_aabb.size.x - 15.0) > 0.001
+		or absf(lower_aabb.size.z - 30.0) > 0.001
+		or absf(lower_aabb.end.y + 8.9) > 0.001
+	):
+		failures.append("%s lower landing is not 15x30m with top at -8.9m" % connector.name)
+	if not has_upper:
+		failures.append("%s unchanged upper landing is missing" % connector.name)
+	elif (
+		absf(upper_aabb.size.x - 14.0269) > 0.001
+		or absf(upper_aabb.size.z - 6.0) > 0.001
+		or absf(upper_aabb.end.y) > 0.001
+	):
+		failures.append("%s upper landing changed from the approved v008 geometry" % connector.name)
+	if enclosure_count != 4:
+		failures.append("%s normalized stairwell does not have four enclosure walls" % connector.name)
 
 
 func _validate_stair_approach_wall_modules(
