@@ -5,6 +5,7 @@ const ROOFTOP_TILE_COUNT_WITH_OPENINGS := 234
 const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
 const WEST_STAIR_WORLD_RECT := Rect2(-45.0, 0.0, 15.0, 30.0)
 const WEST_PARAPET_X := -49.85
+const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
 
 
 func _ready() -> void:
@@ -18,15 +19,25 @@ func _ready() -> void:
 	var combat := TowerFloorStage3D.new()
 	combat.configure(2, "combat", [])
 	add_child(combat)
+	var tower := TOWER_SCENE.instantiate() as TowerDescent3D
+	if tower != null:
+		tower.test_mode = true
+		tower.run_seed_override = 100990
+		add_child(tower)
+	await get_tree().process_frame
+	await get_tree().physics_frame
 	await get_tree().process_frame
 
 	_verify_rooftop(rooftop, failures)
 	_verify_facility(facility.get_snapshot(), failures)
 	_verify_combat_floor(combat.get_snapshot(), failures)
+	_verify_start_rooftop_shell(tower, failures)
 
 	rooftop.queue_free()
 	facility.queue_free()
 	combat.queue_free()
+	if tower != null:
+		tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
 		print("ROOFTOP_WEST_EXPANSION_CONTRACT_PASS")
@@ -85,6 +96,56 @@ func _verify_combat_floor(snapshot: Dictionary, failures: Array[String]) -> void
 	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 250.0), "普通楼层地板边长被错误修改", failures)
 	_expect(int(snapshot.get("outer_grid_count", -1)) == 50, "普通楼层外墙被错误收缩", failures)
 	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 250.0), "普通楼层外墙边长被错误修改", failures)
+
+
+func _verify_start_rooftop_shell(tower: TowerDescent3D, failures: Array[String]) -> void:
+	_expect(tower != null, "正式塔楼场景无法实例化", failures)
+	if tower == null:
+		return
+	var room_by_id := tower.get("_room_by_id") as Dictionary
+	var rooftop_room := room_by_id.get("start") as DungeonRoom3D
+	_expect(rooftop_room != null, "100层start房间缺失", failures)
+	if rooftop_room == null:
+		return
+	rooftop_room.ensure_shell_built()
+	var snapshot := rooftop_room.get_room_snapshot()
+	var open_directions := snapshot.get("open_wall_directions", []) as Array
+	for direction in ["north", "south", "east"]:
+		_expect(direction in open_directions, "100层start仍未开放%s侧旧房间墙" % direction, failures)
+	_expect(
+		_count_nodes_with_asset_id(rooftop_room, "ENV-TOWER-WALL-SOLID-5M") == 0,
+		"100层start仍生成65米旧房间墙视觉",
+		failures
+	)
+	_expect(
+		_count_nodes_with_suffix(rooftop_room, "_Run") == 0,
+		"100层start仍生成65米旧房间墙碰撞",
+		failures
+	)
+	_expect(
+		_count_nodes_with_asset_id(rooftop_room, "ENV-TOWER-WALL-DOOR-5M") == 1,
+		"移除旧房间墙时误删或重复生成了西侧5米门洞墙",
+		failures
+	)
+	_expect(
+		rooftop_room.get_door_node("west") != null,
+		"移除旧房间墙时误删了100层西侧楼梯门",
+		failures
+	)
+
+
+func _count_nodes_with_asset_id(root: Node, asset_id: String) -> int:
+	var count := 1 if str(root.get_meta("asset_id", "")) == asset_id else 0
+	for child in root.get_children():
+		count += _count_nodes_with_asset_id(child, asset_id)
+	return count
+
+
+func _count_nodes_with_suffix(root: Node, suffix: String) -> int:
+	var count := 1 if root.name.ends_with(suffix) else 0
+	for child in root.get_children():
+		count += _count_nodes_with_suffix(child, suffix)
+	return count
 
 
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:

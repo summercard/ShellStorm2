@@ -1088,8 +1088,11 @@ func _build_tower_wall_v2(dimensions: Vector2) -> void:
 		_spawn_room_corner(Vector2(-dimensions.x * 0.5, dimensions.y * 0.5), "SW")
 		_spawn_room_corner(Vector2(dimensions.x * 0.5, dimensions.y * 0.5), "SE")
 	# 2. 每条边跳过两端 2.5m，用 5m 单元填。门洞位置由门 world pos 准动计算。
+	# 天台边界由TowerFloorStage3D独立承担；start只保留楼梯口的5m门洞墙，
+	# 不再生成65m核心区连续实墙。
+	var include_solid_runs := size_class != "rooftop"
 	for direction in wall_directions:
-		_build_corner_aware_wall_run(direction, dimensions)
+		_build_corner_aware_wall_run(direction, dimensions, include_solid_runs)
 	# 3. 门洞仍走原 _build_door
 	for direction in doors:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
@@ -1118,7 +1121,9 @@ func _local_along_from_door_world(direction: String, door_world: Vector3, dimens
 
 ## 拼接一条边墙：剔除两端 5m（跨过拐角覆盖区）后用 5m 单元填
 ## 边墙与地砖严格对齐同 5m 网格：地砖 6×6 的房间，边墙 6 段总数中 2 端被拐角覆盖，中间 4 段拼接。
-func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> void:
+func _build_corner_aware_wall_run(
+	direction: String, dimensions: Vector2, include_solid_runs := true
+) -> void:
 	var horizontal := direction in ["north", "south"]
 	var length := dimensions.x if horizontal else dimensions.y
 	var wall_offset := dimensions.y * 0.5 if horizontal else dimensions.x * 0.5
@@ -1197,12 +1202,14 @@ func _build_corner_aware_wall_run(direction: String, dimensions: Vector2) -> voi
 				true,
 				module_index
 			)
-		else:
+		elif include_solid_runs:
 			solid_transforms.append(Transform3D(
 				Basis(Vector3.UP, rotation_y),
 				module_position
 			))
 			solid_segment_indices.append(module_index)
+	if not include_solid_runs:
+		return
 	_spawn_solid_wall_visual_instances(
 		direction,
 		solid_transforms,

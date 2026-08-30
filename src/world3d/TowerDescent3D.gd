@@ -825,7 +825,8 @@ func _build_records() -> void:
 		TOWER_GEOMETRY.CORE_CENTER_XZ.y
 	)
 	_append_tower_record(
-		"start", "START", "rooftop", core_center, "", 0, "rooftop"
+		"start", "START", "rooftop", core_center, "", 0, "rooftop",
+		Vector2.ZERO, ["north", "south", "east"]
 	)
 	_append_tower_record(
 		"facility", "FACILITY", "floor",
