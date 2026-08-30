@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3]
+; Stable AssetID: ENV-TOWER-CORNER-L-PARAPET-5M | normalized production path v001
+
+; 屋顶 L 型女儿墙拐角 v1 - 5m × 5m 双向覆盖 1.5m 高
+; 默认朝向：+X 方向走 -Z 方向
+; 用法：实例化时 rotation 决定 L 朝向（4 种）
+; 节点命名：Wall_Long / Wall_Short
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_L_parapet_long"]
+size = Vector3(5, 1.5, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_L_parapet_short"]
+size = Vector3(0.3, 1.5, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_corner_parapet"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_parapet_long"]
+size = Vector3(5, 1.5, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_parapet_short"]
+size = Vector3(0.3, 1.5, 5)
+
+[node name="PrpCornerLParapet5m" type="Node3D"]
+
+; 长臂沿 +X：中心 x=+2.5, y=0.75 (居中)
+[node name="Wall_Long" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.75, 0)
+mesh = SubResource("BoxMesh_corner_L_parapet_long")
+material_override = SubResource("StandardMaterial3D_corner_parapet")
+
+; 短臂沿 -Z：中心 z=-2.5, y=0.75
+[node name="Wall_Short" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -2.5)
+mesh = SubResource("BoxMesh_corner_L_parapet_short")
+material_override = SubResource("StandardMaterial3D_corner_parapet")
+
+[node name="WallCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionLong" type="CollisionShape3D" parent="WallCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.75, 0)
+shape = SubResource("BoxShape3D_corner_L_parapet_long")
+
+[node name="CollisionShort" type="CollisionShape3D" parent="WallCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, -2.5)
+shape = SubResource("BoxShape3D_corner_L_parapet_short")

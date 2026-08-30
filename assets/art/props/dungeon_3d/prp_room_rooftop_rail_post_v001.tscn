@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+; Stable AssetID: ENV-TOWER-ROOFTOP-RAIL-POST | normalized production path v001
+
+; 楼顶栏杆立柱 - 1×1×1，脚本设 scale = (0.16, 1.32, 0.16)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rail_post"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rail_post"]
+albedo_color = Color(0.42, 0.44, 0.46, 1)
+metallic = 0.4
+metallic_specular = 0.7
+roughness = 0.45
+
+[node name="PrpRoomRooftopRailPost" type="Node3D"]
+
+[node name="RailPost" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_rail_post")
+material_override = SubResource("StandardMaterial3D_rail_post")

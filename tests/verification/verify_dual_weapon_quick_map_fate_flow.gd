@@ -118,10 +118,13 @@ func _ready() -> void:
 	dungeon.call("_cancel_door_fate_selection")
 	_expect(not bool(dungeon.get("_door_fate_active")), "ESC fate cancellation contract did not close selection", failures)
 
+	_expect(dungeon.get("_weapon_panel") == null, "Hidden weapon presentation page was eagerly added to the fixed HUD shell", failures)
+	await _press_key(KEY_K)
 	var weapon_panel := dungeon.get("_weapon_panel") as WeaponAssemblyTreePanel
 	var viewport_center := Vector2(dungeon.get_viewport().get_visible_rect().size) * 0.5
 	_expect(
 		weapon_panel != null
+		and weapon_panel.visible
 		and is_equal_approx(weapon_panel.anchor_left, 0.5)
 		and weapon_panel.get_global_rect().get_center().distance_to(viewport_center) <= 1.0,
 		"K weapon presentation page is not centered",

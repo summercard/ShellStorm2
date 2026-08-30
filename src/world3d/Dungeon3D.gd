@@ -3,6 +3,11 @@ extends Node3D
 ## 四主题关卡共用的 3D 运行时。MapThemeProfile 保留原玩法配方，DungeonTheme3D 负责空间美术；
 ## 随机地图、房间内容、敌人、撤离和结算只有这一套实现。
 
+const EQUIPMENT_TRANSACTION_SERVICE = preload("res://src/game/EquipmentTransactionService.gd")
+const ROOM_GRAPH_RUNTIME_SCRIPT = preload("res://src/world3d/RoomGraphRuntime.gd")
+const RUN_PERSISTENCE_SERVICE = preload("res://src/world3d/RunPersistenceService.gd")
+const HUD_PRESENTER_SCRIPT = preload("res://src/ui/HUDPresenter3D.gd")
+
 signal generation_completed(snapshot: Dictionary)
 signal run_completed(success: bool, summary: Dictionary)
 signal kill_recorded()
@@ -17,10 +22,10 @@ const KEY_SCRIPT := preload("res://src/world3d/RoomKeyPickup3D.gd")
 const GROUND_LOOT_SCRIPT := preload("res://src/world3d/GroundLootPickup3D.gd")
 const WORKBENCH_SCENE: PackedScene = preload("res://scenes/WorkbenchPanel.tscn")
 const WEAPON_PRESENTATION_SCENE: PackedScene = preload("res://scenes/WeaponAssemblyTreePanel.tscn")
-const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_floor_segment.tscn")
-const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_wall_segment.tscn")
-const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment.tscn")
-const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread.tscn")
+const CORRIDOR_FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_floor_segment_v001.tscn")
+const CORRIDOR_WALL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_wall_segment_v001.tscn")
+const CORRIDOR_CEILING_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_ceiling_segment_v001.tscn")
+const CORRIDOR_STAIR_TREAD_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_corridor_stair_tread_v001.tscn")
 const CODE_HUD_GLYPH_SCRIPT := preload("res://src/ui/CodeHUDGlyph.gd")
 const NEON_FRAME_SCRIPT := preload("res://src/ui/NeonFrameControl.gd")
 const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
@@ -144,7 +149,7 @@ var _reference_hud_root: Control = null
 var _hud_weapon_meta_label: Label = null
 var _hud_weapon_fate_label: Label = null
 var _hud_weapon_model_icon: ItemModelIcon3D = null
-var _hud_weapon_model_instance_id := ""
+var _hud_presenter: HUDPresenter3D = HUD_PRESENTER_SCRIPT.new()
 var _hud_quick_item_icons: Array = [null, null]
 var _hud_quick_item_icon_hosts: Array[Control] = []
 var _hud_quick_item_labels: Array[Label] = []
@@ -169,10 +174,12 @@ var _runtime_restore_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
-var _room_stream_state_cache: Dictionary = {}
+var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
 
 
 func _ready() -> void:
+	if not _hud_presenter.weapon_hud_command_ready.is_connected(_apply_weapon_hud_command):
+		_hud_presenter.weapon_hud_command_ready.connect(_apply_weapon_hud_command)
 	add_to_group("room_game_mode")
 	add_to_group(PlayerInteractionController3D.PROVIDER_GROUP)
 	if not test_mode and BaseManager != null:
@@ -184,7 +191,7 @@ func _ready() -> void:
 		)
 		if not has_death_insurance_return:
 			var candidate := BaseManager.get_active_run_checkpoint()
-			if str(candidate.get("schema", "")) in ["runtime_player_state_v1", "runtime_player_state_v2"]:
+			if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(candidate):
 				_runtime_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 	if gameplay_theme == null:
@@ -342,7 +349,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"edge_states": _open_edges.duplicate(true),
 	}
 	snapshot["world_state"] = _build_runtime_world_save_snapshot()
-	return snapshot
+	return RUN_PERSISTENCE_SERVICE.finalize_runtime_snapshot(snapshot)
 
 
 func _runtime_current_floor_index() -> int:
@@ -359,10 +366,9 @@ func _runtime_scope_for_save(_floor_index: int, room_id: String) -> String:
 
 func _build_runtime_world_save_snapshot() -> Dictionary:
 	_capture_loaded_runtime_rooms()
-	return {
-		"schema": "dungeon_world_state_v1",
-		"segment_runtime_state": _segment_runtime_state.duplicate(true),
-	}
+	return RUN_PERSISTENCE_SERVICE.build_world_state(
+		"dungeon_world_state_v1", _segment_runtime_state
+	)
 
 
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
@@ -418,16 +424,17 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 	_kills = maxi(0, int(snapshot.get("kills", 0)))
 	GameManager.currency = maxi(0, int(snapshot.get("run_currency", 0)))
 	GameManager.currency_changed.emit(GameManager.currency)
-	var edge_states: Variant = snapshot.get("edge_states", {})
-	if edge_states is Dictionary:
-		for edge_value in (edge_states as Dictionary).keys():
-			var edge := str(edge_value)
-			if _open_edges.has(edge):
-				var opened := bool((edge_states as Dictionary)[edge_value])
-				_open_edges[edge] = opened
-				var edge_rooms := edge.split("|", false, 1)
-				if edge_rooms.size() == 2:
-					_refresh_edge_visuals(edge_rooms[0], edge_rooms[1], opened)
+	var restored_edges := RUN_PERSISTENCE_SERVICE.merge_known_edge_states(
+		_open_edges, snapshot.get("edge_states", {})
+	)
+	for edge_value in restored_edges.keys():
+		var edge := str(edge_value)
+		var opened := bool(restored_edges[edge_value])
+		_open_edges[edge] = opened
+		var edge_rooms := edge.split("|", false, 1)
+		if edge_rooms.size() == 2:
+			_refresh_edge_visuals(edge_rooms[0], edge_rooms[1], opened)
+	if not restored_edges.is_empty():
 		minimap.configure(_records, _open_edges)
 	var room := _resolve_runtime_restore_room(snapshot)
 	if room != null:
@@ -458,10 +465,7 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
-	var world_state := snapshot.get("world_state", {}) as Dictionary
-	var saved_segment_state: Variant = world_state.get("segment_runtime_state", {})
-	if saved_segment_state is Dictionary:
-		_segment_runtime_state = (saved_segment_state as Dictionary).duplicate(true)
+	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
 	return true
 
 
@@ -517,8 +521,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if key_event != null and key_event.pressed and not key_event.echo and (key_event.keycode == KEY_K or key_event.physical_keycode == KEY_K):
-		if _weapon_panel != null:
-			_weapon_panel.toggle()
+		var presentation_panel := _ensure_weapon_presentation_panel()
+		if presentation_panel != null:
+			presentation_panel.toggle()
 			get_viewport().set_input_as_handled()
 		return
 
@@ -704,6 +709,13 @@ func _setup_run_modules() -> void:
 	_inventory_ui.quick_item_move_requested.connect(_on_quick_item_move_requested)
 	_inventory_ui.quick_item_use_requested.connect(_use_quick_item)
 	_sync_quick_item_state()
+
+
+## 武器表现页只在玩家首次按 K 时创建。隐藏的完整树面板无需常驻 HUD，
+## 这既保持真实输入契约，也把固定 UI 壳节点留在性能预算内。
+func _ensure_weapon_presentation_panel() -> WeaponAssemblyTreePanel:
+	if _weapon_panel != null and is_instance_valid(_weapon_panel):
+		return _weapon_panel
 	_weapon_panel = WEAPON_PRESENTATION_SCENE.instantiate() as WeaponAssemblyTreePanel
 	if _weapon_panel != null:
 		_weapon_panel.name = "WeaponPresentationPage3D"
@@ -722,6 +734,7 @@ func _setup_run_modules() -> void:
 		_weapon_panel.z_index = 420
 		_weapon_panel.set_weapon_tree(player.get_weapon_tree())
 		_weapon_panel.set_weapon_owner(player)
+	return _weapon_panel
 
 
 func _accepts_pending_insurance_return_at_spawn() -> bool:
@@ -1535,6 +1548,7 @@ func _build_topology() -> void:
 		var child_direction := _opposite_direction(parent_direction)
 		(parent_record["door_targets"] as Dictionary)[parent_direction] = child_id
 		(record["door_targets"] as Dictionary)[child_direction] = parent_id
+	_room_graph_runtime.configure(_records, _room_neighbors, _open_edges)
 
 
 func _edge_key(a: String, b: String) -> String:
@@ -3281,16 +3295,21 @@ func _refresh_edge_visuals(a: String, b: String, opened: bool) -> void:
 
 
 func _update_room_streaming(current_id: String) -> void:
+	_room_graph_runtime.configure(_records, _room_neighbors, _open_edges)
 	for room in _rooms:
-		var state := DungeonRoom3D.STREAM_ACTIVE if room.room_id == current_id else DungeonRoom3D.STREAM_DATA_ONLY
-		if state == DungeonRoom3D.STREAM_DATA_ONLY and _room_neighbors.has(current_id) and room.room_id in (_room_neighbors[current_id] as Array):
-			if bool(_open_edges.get(_edge_key(current_id, room.room_id), false)):
-				state = DungeonRoom3D.STREAM_SHELL_READY
-		var previous_state := int(_room_stream_state_cache.get(room.room_id, DungeonRoom3D.STREAM_DATA_ONLY))
-		if previous_state != state:
-			if state == DungeonRoom3D.STREAM_DATA_ONLY and previous_state != DungeonRoom3D.STREAM_DATA_ONLY:
+		var state := _room_graph_runtime.resolve_stream_state(
+			room.room_id,
+			current_id,
+			DungeonRoom3D.STREAM_DATA_ONLY,
+			DungeonRoom3D.STREAM_SHELL_READY,
+			DungeonRoom3D.STREAM_ACTIVE
+		)
+		var transition := _room_graph_runtime.commit_stream_state(
+			room.room_id, state, DungeonRoom3D.STREAM_DATA_ONLY
+		)
+		if bool(transition.get("changed", false)):
+			if bool(transition.get("hibernate", false)):
 				_hibernate_room_entities(room.room_id)
-			_room_stream_state_cache[room.room_id] = state
 		room.set_stream_state(state)
 		if state > 0:
 			_prepare_revealed_hostile_room(room)
@@ -3492,7 +3511,7 @@ func get_segment_runtime_snapshot() -> Dictionary:
 		"current_room_id": _current_room_id,
 		"room_count": _segment_runtime_state.size(),
 		"rooms": _segment_runtime_state.duplicate(true),
-		"stream_states": _room_stream_state_cache.duplicate(),
+		"stream_states": _room_graph_runtime.get_stream_states_snapshot(),
 	}
 
 
@@ -4020,38 +4039,13 @@ func _select_weapon_slot(slot_index: int) -> bool:
 
 
 func _equip_weapon_from_inventory(slot_index: int, item: Dictionary, target_weapon_slot := -1) -> bool:
-	if player == null or not player.has_method("equip_weapon_item"):
-		return false
-	var incoming := WeaponInstance.ensure_weapon_item(item)
-	var incoming_id := str(incoming.get("weapon_instance_id", ""))
-	for equipped_slot in range(2):
-		if player.has_method("get_equipped_weapon_instance_id_for_slot") and incoming_id == str(player.call("get_equipped_weapon_instance_id_for_slot", equipped_slot)):
-			status_label.text = "该枪械实例已在%s #%s" % ["主武器栏" if equipped_slot == 0 else "副武器栏", incoming_id.right(6).to_upper()]
-			return false
-	if not _inventory.remove_from_slot(slot_index, 1):
-		return false
-	var equip_result := (
-		player.call("equip_weapon_item_to_slot", incoming, target_weapon_slot) as Dictionary
-		if target_weapon_slot >= 0 and player.has_method("equip_weapon_item_to_slot")
-		else player.call("equip_weapon_item", incoming) as Dictionary
+	var result: Dictionary = EQUIPMENT_TRANSACTION_SERVICE.equip_weapon_from_inventory(
+		_inventory, player, slot_index, item, target_weapon_slot
 	)
-	if not bool(equip_result.get("success", false)):
-		_inventory.add_item(incoming, 1)
-		status_label.text = str(equip_result.get("message", "换枪失败"))
+	if not bool(result.get("success", false)):
+		status_label.text = str(result.get("message", "换枪失败"))
 		return false
-	var old_item := equip_result.get("old_item", {}) as Dictionary
-	if not old_item.is_empty() and _inventory.add_item(old_item, 1) <= 0:
-		# 理论上来源槽已经释放；若仍失败则恢复旧枪，避免完整实例丢失。
-		var rollback := (
-			player.call("equip_weapon_item_to_slot", old_item, int(equip_result.get("slot_index", target_weapon_slot))) as Dictionary
-			if target_weapon_slot >= 0 and player.has_method("equip_weapon_item_to_slot")
-			else player.call("equip_weapon_item", old_item) as Dictionary
-		)
-		if bool(rollback.get("success", false)):
-			_inventory.add_item(incoming, 1)
-		status_label.text = "换枪失败：原武器无法放回背包，已完整回滚"
-		return false
-	var snapshot := equip_result.get("snapshot", {}) as Dictionary
+	var snapshot := result.get("snapshot", {}) as Dictionary
 	status_label.text = "已装备到%s：%s #%s · 构筑 %d/%d · 原武器完整放回背包" % [
 		"当前栏" if target_weapon_slot < 0 else "主武器栏" if target_weapon_slot == 0 else "副武器栏",
 		snapshot.get("display_name", item.get("name", "武器")),
@@ -4458,19 +4452,11 @@ func _on_ammo_changed(current: int, maximum: int) -> void:
 	_queue_runtime_autosave("ammo_changed")
 	var snapshot := player.get_weapon_presentation_snapshot() if player != null else {}
 	var weapon_snapshot := player.get_weapon_snapshot() if player != null else {}
-	ammo_label.text = "近战 · 三段" if bool(weapon_snapshot.get("melee", false)) else "%d / %d" % [current, maximum]
-	if _hud_weapon_meta_label != null:
-		var active_slot := player.get_active_weapon_slot() if player != null and player.has_method("get_active_weapon_slot") else 0
-		_hud_weapon_meta_label.text = "[%d] %s · %s" % [
-			active_slot + 1, snapshot.get("display_name", "未装备武器"),
-			"主武器" if active_slot == 0 else "副武器",
-		]
-	if _hud_weapon_fate_label != null:
-		_hud_weapon_fate_label.text = "实例 #%s · 命运 %d/%d · K 详情" % [
-			snapshot.get("instance_suffix", "------"),
-			snapshot.get("fate_slot_used", 0),
-			snapshot.get("fate_slot_capacity", 0),
-		]
+	var active_slot := player.get_active_weapon_slot() if player != null and player.has_method("get_active_weapon_slot") else 0
+	var weapon_item := player.get_equipped_weapon_item() if player != null else {}
+	_hud_presenter.present_weapon(
+		snapshot, weapon_snapshot, active_slot, current, maximum, weapon_item
+	)
 
 
 func _on_hud_weapon_instance_changed(_snapshot: Dictionary) -> void:
@@ -4483,18 +4469,35 @@ func _on_hud_weapon_instance_changed(_snapshot: Dictionary) -> void:
 
 
 func _refresh_hud_weapon_model(force := false) -> void:
-	if _hud_weapon_model_icon == null or player == null:
+	if player == null:
 		return
 	var item := player.get_equipped_weapon_item()
-	var instance_id := str(item.get("weapon_instance_id", ""))
-	if item.is_empty():
-		_hud_weapon_model_instance_id = ""
-		_hud_weapon_model_icon.clear_model()
+	var weapon_snapshot := player.get_weapon_snapshot()
+	_hud_presenter.present_weapon(
+		player.get_weapon_presentation_snapshot(),
+		weapon_snapshot,
+		player.get_active_weapon_slot(),
+		int(weapon_snapshot.get("current_ammo", 0)),
+		int(weapon_snapshot.get("magazine_size", 0)),
+		item,
+		force
+	)
+
+
+func _apply_weapon_hud_command(command: Dictionary) -> void:
+	if ammo_label != null:
+		ammo_label.text = str(command.get("ammo_text", "0 / 0"))
+	if _hud_weapon_meta_label != null:
+		_hud_weapon_meta_label.text = str(command.get("weapon_meta_text", "当前武器 · 未装备"))
+	if _hud_weapon_fate_label != null:
+		_hud_weapon_fate_label.text = str(command.get("weapon_fate_text", "实例 ------ · 命运 0/0 · K 详情"))
+	if _hud_weapon_model_icon == null:
 		return
-	if not force and instance_id == _hud_weapon_model_instance_id:
-		return
-	_hud_weapon_model_instance_id = instance_id
-	_hud_weapon_model_icon.configure(item)
+	match str(command.get("model_action", "keep")):
+		"clear":
+			_hud_weapon_model_icon.clear_model()
+		"replace":
+			_hud_weapon_model_icon.configure(command.get("weapon_item", {}) as Dictionary)
 
 
 func get_hud_weapon_model_snapshot() -> Dictionary:

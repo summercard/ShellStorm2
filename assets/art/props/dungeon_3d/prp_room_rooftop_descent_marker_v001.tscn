@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+; Stable AssetID: ENV-TOWER-ROOFTOP-DESCENT-MARKER | normalized production path v001
+
+; 楼顶下行楼梯标识 - Label3D 子节点，脚本实例化后写入文字与主题色
+
+[node name="PrpRoomRooftopDescentMarker" type="Node3D"]
+
+[node name="RooftopDescentMarker" type="Label3D" parent="."]
+font_size = 40
+pixel_size = 0.012
+outline_size = 8

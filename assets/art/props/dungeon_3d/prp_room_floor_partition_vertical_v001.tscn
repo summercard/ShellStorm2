@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+; Stable AssetID: ENV-DUNGEON-ROOM-FLOOR-PARTITION-V | normalized production path v001
+
+; 房间纵向隔断（floor type 房型专用）- 1×1×1
+; 脚本设 scale = (0.28, 2.8, 8.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_partition_vertical"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_partition_vertical"]
+albedo_color = Color(0.34, 0.36, 0.38, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.78
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_partition_vertical"]
+size = Vector3(1, 1, 1)
+
+[node name="PrpRoomFloorPartitionVertical" type="Node3D"]
+
+[node name="PartitionVertical" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_partition_vertical")
+material_override = SubResource("StandardMaterial3D_partition_vertical")
+
+[node name="PartitionVerticalBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PartitionVerticalBody"]
+shape = SubResource("BoxShape3D_partition_vertical")

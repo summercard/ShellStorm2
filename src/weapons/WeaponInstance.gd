@@ -38,6 +38,16 @@ static func from_item(item: Dictionary, runtime_tree: WeaponAssemblyTree = null)
 	instance.assembly_id = str(item.get(
 		"assembly_id", nested.get("assembly_id", item.get("id", ""))
 	))
+	# ItemRegistry/BlueprintRegistry 是稳定内容 ID 与装配 ID 的唯一映射来源。
+	# 兼容只保存 weapon_content_id 的旧物品，避免再次用 `weapon_*` 猜成蓝图 ID。
+	var canonical_item := ItemRegistry.get_instance().get_item(instance.weapon_content_id)
+	var canonical_assembly_id := str(canonical_item.get("assembly_id", ""))
+	if (
+		instance.assembly_id.is_empty()
+		or instance.assembly_id == instance.weapon_content_id
+		or not canonical_assembly_id.is_empty() and instance.assembly_id != canonical_assembly_id
+	):
+		instance.assembly_id = canonical_assembly_id
 	instance.rarity = str(item.get("rarity", nested.get("rarity", "common")))
 	instance.fate_slot_capacity = maxi(0, int(item.get(
 		"fate_slot_capacity", nested.get("fate_slot_capacity", DEFAULT_FATE_SLOT_CAPACITY)
@@ -245,25 +255,14 @@ func get_presentation_snapshot(tree: WeaponAssemblyTree = null, owner_location: 
 
 
 static func content_id_for_root(root: AssemblyNode) -> String:
-	if root == null:
-		return ""
-	return str({
-		"GunBody_Pistol": "weapon_pistol",
-		"GunBody_Shotgun": "weapon_shotgun",
-		"GunBody_Rifle": "weapon_rifle",
-		"GunBody_Machinegun": "weapon_machinegun",
-		"GunBody_Sniper": "weapon_sniper",
-		"GunBody_Launcher": "weapon_launcher",
-		"GunBody_Charge": "weapon_charge",
-		"Melee_BaseballBat": "weapon_baseball_bat",
-		"Melee_Greatblade": "weapon_greatblade",
-		"Melee_Waraxe": "weapon_waraxe",
-	}.get(root.node_name, ""))
+	return BlueprintRegistry.get_item_id_for_assembly_node(root)
 
 
 static func assembly_id_for_root(root: AssemblyNode) -> String:
 	var content_id := content_id_for_root(root)
-	return content_id.replace("weapon_", "bp_") if not content_id.is_empty() else ""
+	if content_id.is_empty():
+		return ""
+	return str(ItemRegistry.get_instance().get_item(content_id).get("assembly_id", ""))
 
 
 static func _serialize_node(node: AssemblyNode) -> Dictionary:
@@ -284,6 +283,11 @@ static func _serialize_node(node: AssemblyNode) -> Dictionary:
 
 
 static func _normalize_assembly_snapshot(snapshot: Dictionary) -> Dictionary:
+	# 空快照表示“尚未生成运行时装配”，必须保持为空。旧实现会把 `{}`
+	# 扩成 `{"slots": {}}`，使 from_item() 误以为已有有效快照并跳过
+	# BlueprintRegistry 构建，最终反序列化出 GunBody_Unknown。
+	if snapshot.is_empty():
+		return {}
 	var normalized := snapshot.duplicate(true)
 	var stored_slots: Variant = snapshot.get("slots", {})
 	if not stored_slots is Dictionary:

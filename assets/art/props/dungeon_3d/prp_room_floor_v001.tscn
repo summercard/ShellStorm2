@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+; Stable AssetID: ENV-DUNGEON-ROOM-FLOOR | normalized production path v001
+
+; 房间地板原子件 - 1×1×1，脚本按房间尺寸设 scale = (dim.x, 0.36, dim.y)
+; FloorBody 子节点名是硬约束，_set_collision_enabled / _has_enabled_support_collision 依赖
+
+[sub_resource type="BoxMesh" id="BoxMesh_room_floor"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_room"]
+albedo_color = Color(0.22, 0.24, 0.26, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.85
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_room_floor"]
+size = Vector3(1, 1, 1)
+
+[node name="PrpRoomFloor" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_room_floor")
+material_override = SubResource("StandardMaterial3D_floor_room")
+
+[node name="FloorBody" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorBody"]
+shape = SubResource("BoxShape3D_room_floor")

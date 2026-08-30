@@ -70,9 +70,9 @@
 ## 2026-08-28｜99F楼层权威、天台阁楼门与太阳间接漫反射
 
 - 修复从100F天台经阁楼门落到99F后，角色已站在99F基地地面但HUD/战术地图仍显示100F的问题。根因是物理高度已算出99F后，同层刷新因楼层索引未变化提前返回，遗留`current_room=start`；现在同层也会重新核对角色是否进入99F基地完整空间体积，并直接同步小地图楼层高度。该修复只校正塔楼的物理楼层、房间权威和地图显示，不改变设施自身交互、战斗层生成或跨层电梯规则。
-- 修复100F天台到99F阁楼的特殊滑升门一直保持开启、门板动画与实体阻挡不同步的问题。该门现以0.72秒完成开/关过程，门板与`CollisionShape3D`同步移动；支持E键再次关闭、角色占用门洞时拒绝夹闭，并在离开2.85米且持续0.40秒后自动关闭。门实体使用`PROCESS_MODE_ALWAYS`，不会再因99F房间尚未激活而失去阻挡。
+- 修复100F天台到99F阁楼的特殊滑升门一直保持开启、门板动画与实体阻挡不同步的问题。该门以0.72秒完成开/关过程，门板与`CollisionShape3D`同步移动；门实体使用`PROCESS_MODE_ALWAYS`，不会再因99F房间尚未激活而失去阻挡。**其中“门自身监听E键、再次按E关闭”的旧实现已在2026-08-29被`PlayerInteractionController3D + SimpleTransitDoor3D`替代；当前口径为统一交互选中后开启、离开2.85米且持续0.40秒后自动关闭。**
 - 太阳与天空的动态间接漫反射改为始终开启。视频设置将旧`SDFGI`开关替换为低/中/高三级质量：分别使用2/3/4级联与90/140/204.8米覆盖，高档保持原Godot基线；天台兼容补光同步使用36/44/52米范围。旧配置`sdfgi=true/false`自动迁移为高/低档，设置仍独立保存于`user://graphics_settings.cfg`，不影响玩法受光判定或存档。
-- 新增`verify_tower_floor_room_authority`和`verify_base_rooftop_transit_door_motion`，并扩展`verify_graphics_settings_ui_flow`、`verify_tower_descent_flow`：覆盖阁楼双向跨层、同层房间纠偏、小地图同步、门动画中间帧、碰撞同步、手动/自动关闭，以及间接漫反射三档始终开启和实际环境参数写入。
+- 新增`verify_tower_floor_room_authority`和`verify_base_rooftop_transit_door_motion`，并扩展`verify_graphics_settings_ui_flow`、`verify_tower_descent_flow`：覆盖阁楼双向跨层、同层房间纠偏、小地图同步、门动画中间帧、碰撞同步、开启过程与自动关闭，以及间接漫反射三档始终开启和实际环境参数写入。
 
 ## 2026-08-27｜屋顶栏杆浮空修复
 
@@ -111,9 +111,9 @@
 
 ## 2026-08-21｜99层设施取消房间激活依赖
 
-- 移除99层十个普通基地设施随“是否位于一楼地面”整批切换`process_mode / monitoring / monitorable`的全局判定；模型、交互Area和实体阻挡改为常驻，是否能使用继续由设施自身Area、E键、功能脚本及业务校验决定。
+- 移除99层十个普通基地设施随“是否位于一楼地面”整批切换`process_mode / monitoring / monitorable`的全局判定；模型、交互Area和实体阻挡改为常驻，是否能使用继续由设施自身Area、功能脚本及业务校验决定。**设施自身监听E键的历史描述已在2026-08-29统一交互改造后失效；当前仅由`PlayerInteractionController3D`读取`interact`。**
 - 实体`StaticBody3D`明确使用`PROCESS_MODE_ALWAYS`，避免角色从阁楼门进入时因99F房间尚未切为Active而穿过设施；跨楼层电梯保留原访问房间和楼层加载判定。
-- 新增`verify_tower_base_facility_persistent_flow`，复现“阁楼入口已显示99F但current_room仍为start”的稳定路径，并验证十个设施的Area、E键信号、全部实体碰撞及PhysicsServer注册不受房间流送影响。原设施框架、交互区域、商店存档、保险柜/背包绑定和角色DIY回归通过。
+- 新增`verify_tower_base_facility_persistent_flow`，复现“阁楼入口已显示99F但current_room仍为start”的稳定路径，并验证十个设施的Area、统一交互候选、全部实体碰撞及PhysicsServer注册不受房间流送影响。原设施框架、交互区域、商店存档、保险柜/背包绑定和角色DIY回归通过。
 
 ## 2026-08-21｜99层正式地板与角色承重面对齐
 

@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+; Stable AssetID: ENV-DUNGEON-ROOM-FLOOR-SEAM | normalized production path v001
+
+; 房间地板接缝条带 - 1×1×1，沿 z 轴布置
+; 脚本设 scale = (0.025, 0.018, dim.y*0.76)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor_seam"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_seam"]
+albedo_color = Color(0.4, 0.42, 0.44, 1)
+metallic = 0.2
+metallic_specular = 0.6
+roughness = 0.55
+
+[node name="PrpRoomFloorSeamStrip" type="Node3D"]
+
+[node name="FloorSeam" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_floor_seam")
+material_override = SubResource("StandardMaterial3D_floor_seam")

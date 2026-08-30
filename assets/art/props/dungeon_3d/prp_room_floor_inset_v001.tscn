@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+; Stable AssetID: ENV-DUNGEON-ROOM-FLOOR-INSET | normalized production path v001
+
+; 房间地板镶嵌 - 1×1×1，脚本设 scale = (dim.x*0.80, 0.025, dim.y*0.80)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor_inset"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor_inset"]
+albedo_color = Color(0.32, 0.34, 0.36, 1)
+metallic = 0.15
+metallic_specular = 0.6
+roughness = 0.6
+
+[node name="PrpRoomFloorInset" type="Node3D"]
+
+[node name="FloorInset" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_floor_inset")
+material_override = SubResource("StandardMaterial3D_floor_inset")

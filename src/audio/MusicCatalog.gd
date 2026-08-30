@@ -10,8 +10,8 @@ const ENTRIES: Array[Dictionary] = [
 		"scene": "BaseWorld3D",
 		"description": "基地大厅 / 备战室，配热血史诗管弦",
 		"tracks": [
-			"res://assets/audio/music/base_passion/base_passion_a.mp3",
-			"res://assets/audio/music/base_passion/base_passion_b.mp3",
+			"res://assets/audio/music/base_passion/base_passion_a_v001.ogg",
+			"res://assets/audio/music/base_passion/base_passion_b_v001.ogg",
 		],
 		"selection_mode": "random",   # random | sequential | first
 		"loop": true,
@@ -26,8 +26,8 @@ const ENTRIES: Array[Dictionary] = [
 		"scene": "Rooftop (floor_number>=100)",
 		"description": "楼顶休息区，配轻松浪漫管弦",
 		"tracks": [
-			"res://assets/audio/music/rooftop_relax/rooftop_relax_a.mp3",
-			"res://assets/audio/music/rooftop_relax/rooftop_relax_b.mp3",
+			"res://assets/audio/music/rooftop_relax/rooftop_relax_a_v001.ogg",
+			"res://assets/audio/music/rooftop_relax/rooftop_relax_b_v001.ogg",
 		],
 		"selection_mode": "random",
 		"loop": true,
@@ -42,8 +42,8 @@ const ENTRIES: Array[Dictionary] = [
 		"scene": "Dungeon3D / FloorEntry (99→98F)",
 		"description": "下塔探索，配紧张悬疑恐怖",
 		"tracks": [
-			"res://assets/audio/music/descent_suspense/descent_suspense_a.mp3",
-			"res://assets/audio/music/descent_suspense/descent_suspense_b.mp3",
+			"res://assets/audio/music/descent_suspense/descent_suspense_a_v001.ogg",
+			"res://assets/audio/music/descent_suspense/descent_suspense_b_v001.ogg",
 		],
 		"selection_mode": "random",
 		"loop": true,
@@ -58,8 +58,8 @@ const ENTRIES: Array[Dictionary] = [
 		"scene": "Boss 房（95/90/85F 触发）",
 		"description": "Boss 战 / 精英战，配激烈管弦",
 		"tracks": [
-			"res://assets/audio/music/boss_intense/boss_intense_a.mp3",
-			"res://assets/audio/music/boss_intense/boss_intense_b.mp3",
+			"res://assets/audio/music/boss_intense/boss_intense_a_v001.ogg",
+			"res://assets/audio/music/boss_intense/boss_intense_b_v001.ogg",
 		],
 		"selection_mode": "random",
 		"loop": true,

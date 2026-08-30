@@ -1,0 +1,67 @@
+[gd_scene load_steps=6 format=3]
+; Stable AssetID: ENV-TOWER-CORNER-T-5M | normalized production path v001
+
+; T 型房间拐角 v1 - 5m × 5m × 5m 三向覆盖9m逻辑高度；视觉高8.9m，顶部预留0.1m
+; 默认朝向：+X 走 / -X 走 / -Z 走 三条臂交汇在原点
+; 用法：实例化时 rotation 决定 T 朝向（4 种）
+; 节点命名：Wall_North / Wall_South / Wall_Top
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_T_north"]
+size = Vector3(0.3, 8.9, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_T_south"]
+size = Vector3(0.3, 8.9, 5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_corner_T_top"]
+size = Vector3(5, 8.9, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_corner_T"]
+albedo_color = Color(0.28, 0.30, 0.32, 1)
+metallic = 0.05
+metallic_specular = 0.5
+roughness = 0.75
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_T_north"]
+size = Vector3(0.3, 9, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_T_south"]
+size = Vector3(0.3, 9, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_T_top"]
+size = Vector3(5, 9, 0.3)
+
+[node name="PrpCornerT5m" type="Node3D"]
+
+; 北臂（沿 -Z）：中心 z=-2.5
+[node name="Wall_North" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.45, -2.5)
+mesh = SubResource("BoxMesh_corner_T_north")
+material_override = SubResource("StandardMaterial3D_corner_T")
+
+; 南臂（沿 +Z）：中心 z=+2.5
+[node name="Wall_South" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.45, 2.5)
+mesh = SubResource("BoxMesh_corner_T_south")
+material_override = SubResource("StandardMaterial3D_corner_T")
+
+; 顶部横臂（沿 +X）：中心 x=+2.5
+[node name="Wall_Top" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4.45, 0)
+mesh = SubResource("BoxMesh_corner_T_top")
+material_override = SubResource("StandardMaterial3D_corner_T")
+
+[node name="WallCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionNorth" type="CollisionShape3D" parent="WallCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -2.5)
+shape = SubResource("BoxShape3D_corner_T_north")
+
+[node name="CollisionSouth" type="CollisionShape3D" parent="WallCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 2.5)
+shape = SubResource("BoxShape3D_corner_T_south")
+
+[node name="CollisionTop" type="CollisionShape3D" parent="WallCollision"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 4.5, 0)
+shape = SubResource("BoxShape3D_corner_T_top")

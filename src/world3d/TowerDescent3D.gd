@@ -19,7 +19,7 @@ const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
-const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
+const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v002.glb"
@@ -3973,17 +3973,19 @@ func _build_runtime_world_save_snapshot() -> Dictionary:
 			"event_resolved": _resolved_event_rooms.has(room_id),
 			"event_combat": _event_combat_rooms.has(room_id),
 		}
-	return {
-		"schema": "tower_world_state_v1",
+	return RUN_PERSISTENCE_SERVICE.build_world_state(
+		"tower_world_state_v1",
+		_segment_runtime_state,
+		{
 		"committed_floor_indices": _generated_floor_indices.duplicate(),
 		"floor_layout_ids": layout_ids,
 		"room_progress": room_progress,
-		"segment_runtime_state": _segment_runtime_state.duplicate(true),
 		"vertical_arrival_open": _vertical_arrival_open.duplicate(true),
 		"initial_loop_gate_armed": _initial_loop_gate_armed,
 		"initial_loop_gate_sealed": _initial_loop_gate_sealed,
 		"unloaded_segment_floor_indices": _unloaded_segment_floor_indices.duplicate(),
-	}
+		}
+	)
 
 
 func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
@@ -4037,9 +4039,7 @@ func _restore_runtime_world_save_snapshot(snapshot: Dictionary) -> bool:
 				_vertical_arrival_open[edge] = bool((vertical_state as Dictionary)[edge_value])
 	_initial_loop_gate_armed = bool(world_state.get("initial_loop_gate_armed", false))
 	_initial_loop_gate_sealed = bool(world_state.get("initial_loop_gate_sealed", false))
-	var saved_segment_state: Variant = world_state.get("segment_runtime_state", {})
-	if saved_segment_state is Dictionary:
-		_segment_runtime_state = (saved_segment_state as Dictionary).duplicate(true)
+	_segment_runtime_state = RUN_PERSISTENCE_SERVICE.read_segment_runtime_state(snapshot)
 	return true
 
 

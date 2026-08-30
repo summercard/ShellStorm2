@@ -5,6 +5,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
+aggregate_mode=false
 test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
 if [[ "${suite}" == "soak" && -z "${GODOT_TEST_TIMEOUT_SECONDS+x}" ]]; then
 	test_timeout_seconds=3700
@@ -40,6 +41,8 @@ smoke_scenes=(
 core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
+  verify_room_graph_persistence_services
+  verify_hud_presenter_3d
   verify_arrival_gate_floor_bundle_flow
   verify_unified_player_interaction_flow
   verify_tower_floor_room_authority
@@ -61,6 +64,8 @@ core_scenes=(
   verify_training_range_3d_flow
   verify_3d_fate_weapon_flow
   verify_3d_inventory_weapon_flow
+  verify_weapon_instance_contract_matrix
+  verify_equipment_transaction_service
   verify_weapon_attachment_inventory_flow
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
@@ -133,6 +138,11 @@ run_scene() {
   local scene_path="res://tests/verification/${scene_name}.tscn"
   local scene_result=0
   printf '\n[%s] %s\n' "${suite}" "${scene_name}"
+  if ! "${godot_bin}" --headless --path "${project_root}" \
+    --script res://scripts/verify_scene_preflight.gd -- "${scene_path}"; then
+    printf 'LOAD_FAILURE %s\n' "${scene_name}" >&2
+    return 2
+  fi
   if is_renderer_scene "${scene_name}"; then
     "${godot_bin}" --path "${project_root}" --scene "${scene_path}" &
   else
@@ -182,6 +192,31 @@ case "${suite}" in
   core)
     scenes=("${core_scenes[@]}")
     ;;
+  aggregate)
+    aggregate_mode=true
+    aggregate_target="${2:-core}"
+    case "${aggregate_target}" in
+      smoke)
+        scenes=("${smoke_scenes[@]}")
+        ;;
+      core)
+        scenes=("${core_scenes[@]}")
+        ;;
+      full)
+        scenes=()
+        while IFS= read -r scene_file; do
+          scene_name="$(basename "${scene_file}" .tscn)"
+          if ! is_renderer_scene "${scene_name}"; then
+            scenes+=("${scene_name}")
+          fi
+        done < <(find "${project_root}/tests/verification" -maxdepth 1 -name 'verify_*.tscn' -print | sort)
+        ;;
+      *)
+        echo "unknown aggregate target: ${aggregate_target}; expected smoke, core, or full" >&2
+        exit 2
+        ;;
+    esac
+    ;;
   full)
     scenes=()
     while IFS= read -r scene_file; do
@@ -211,13 +246,29 @@ case "${suite}" in
     scenes=("${2%.tscn}")
     ;;
   *)
-    echo "unknown suite: ${suite}; expected smoke, core, full, visual, soak, or scene" >&2
+    echo "unknown suite: ${suite}; expected smoke, core, aggregate, full, visual, soak, or scene" >&2
     exit 2
     ;;
 esac
 
+failed_scenes=()
 for scene_name in "${scenes[@]}"; do
-  run_scene "${scene_name}"
+  if run_scene "${scene_name}"; then
+    continue
+  else
+    scene_result=$?
+  fi
+  if [[ "${aggregate_mode}" != "true" ]]; then
+    exit "${scene_result}"
+  fi
+  failed_scenes+=("${scene_name}:${scene_result}")
 done
+
+if (( ${#failed_scenes[@]} > 0 )); then
+  printf '\nVERIFICATION_SUITE_FAILED suite=%s count=%d failed=%d\n' \
+    "${suite}" "${#scenes[@]}" "${#failed_scenes[@]}" >&2
+  printf 'FAILED_SCENE %s\n' "${failed_scenes[@]}" >&2
+  exit 1
+fi
 
 printf '\nVERIFICATION_SUITE_OK suite=%s count=%d\n' "${suite}" "${#scenes[@]}"

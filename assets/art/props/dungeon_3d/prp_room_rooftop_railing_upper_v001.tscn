@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+; Stable AssetID: ENV-TOWER-ROOFTOP-RAILING-UPPER | normalized production path v001
+
+; 楼顶栏杆上梁 - 1×1×1，脚本按方向设 scale 和位置
+
+[sub_resource type="BoxMesh" id="BoxMesh_railing_upper"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_railing_upper"]
+albedo_color = Color(0.42, 0.44, 0.46, 1)
+metallic = 0.4
+metallic_specular = 0.7
+roughness = 0.45
+
+[node name="PrpRoomRooftopRailingUpper" type="Node3D"]
+
+[node name="RailingUpper" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_railing_upper")
+material_override = SubResource("StandardMaterial3D_railing_upper")

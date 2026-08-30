@@ -1,65 +1,72 @@
 extends Node3D
-## 屋顶栏杆 Y 坐标验收：扫描 100F 屋顶，校验所有 RooftopRail* 节点的 Y 是否贴地板 / 贴 post 顶。
+## 100F 正式房间栏杆验收：实例化 DungeonRoom3D 的 rooftop 壳，校验梁、立柱贴地与计数。
+
+const EXPECTED_RAIL_SEGMENTS := 5
+const EXPECTED_POSTS := 67
+const FLOOR_Y := 0.0
+const POST_TOP_Y := 1.32
+const POSITION_TOLERANCE := 0.015
+
 
 func _ready() -> void:
 	var failures: Array[String] = []
-	var expected_lower_min_y := 0.04   # 底边贴地板（带 0.02 公差避免 Z-fight）
-	var expected_lower_max_y := 0.10
-	var expected_upper_min_y := 1.18   # 顶边贴 post 顶 1.32（0.02 公差）
-	var expected_upper_max_y := 1.30
+	var rooftop := DungeonRoom3D.new()
+	rooftop.name = "FormalRooftopRoom"
+	rooftop.configure({
+		"room_id": "verification_rooftop",
+		"room_type": "START",
+		"size_class": "rooftop",
+		"doors": ["west"],
+		"door_targets": {"west": "facility"},
+		"seed": 100990,
+	})
+	add_child(rooftop)
+	await get_tree().process_frame
+	rooftop.ensure_shell_built()
+	await get_tree().physics_frame
 
-	var rail_lowers: Array[Node] = []
-	var rail_uppers: Array[Node] = []
-	var rail_posts: Array[Node] = []
+	var rail_lowers: Array[Node3D] = []
+	var rail_uppers: Array[Node3D] = []
+	var rail_posts: Array[Node3D] = []
+	_collect_by_prefix(rooftop, "RooftopRailLower_", rail_lowers)
+	_collect_by_prefix(rooftop, "RooftopRailUpper_", rail_uppers)
+	_collect_by_prefix(rooftop, "RooftopRailPost_", rail_posts)
 
-	for n in get_tree().get_nodes_in_group(""):
-		pass
+	_expect(rail_lowers.size() == EXPECTED_RAIL_SEGMENTS, "Rooftop lower-rail segment count is %d; expected %d" % [rail_lowers.size(), EXPECTED_RAIL_SEGMENTS], failures)
+	_expect(rail_uppers.size() == EXPECTED_RAIL_SEGMENTS, "Rooftop upper-rail segment count is %d; expected %d" % [rail_uppers.size(), EXPECTED_RAIL_SEGMENTS], failures)
+	_expect(rail_posts.size() == EXPECTED_POSTS, "Rooftop post count is %d; expected %d" % [rail_posts.size(), EXPECTED_POSTS], failures)
 
-	# 直接深度搜索
-	_collect_by_prefix(self, "RooftopRailLower_", rail_lowers)
-	_collect_by_prefix(self, "RooftopRailUpper_", rail_uppers)
-	_collect_by_prefix(self, "RooftopRailPost_", rail_posts)
+	for rail: Node3D in rail_lowers:
+		var bottom_y: float = rail.position.y - absf(rail.scale.y) * 0.5
+		_expect(absf(bottom_y - FLOOR_Y) <= POSITION_TOLERANCE, "%s lower edge is %.3f; expected floor %.3f" % [rail.name, bottom_y, FLOOR_Y], failures)
+	for rail: Node3D in rail_uppers:
+		var top_y: float = rail.position.y + absf(rail.scale.y) * 0.5
+		_expect(absf(top_y - POST_TOP_Y) <= POSITION_TOLERANCE, "%s upper edge is %.3f; expected post top %.3f" % [rail.name, top_y, POST_TOP_Y], failures)
+	for post: Node3D in rail_posts:
+		var bottom_y: float = post.position.y - absf(post.scale.y) * 0.5
+		var top_y: float = post.position.y + absf(post.scale.y) * 0.5
+		_expect(absf(bottom_y - FLOOR_Y) <= POSITION_TOLERANCE, "%s bottom is %.3f; expected floor %.3f" % [post.name, bottom_y, FLOOR_Y], failures)
+		_expect(absf(top_y - POST_TOP_Y) <= POSITION_TOLERANCE, "%s top is %.3f; expected %.3f" % [post.name, top_y, POST_TOP_Y], failures)
 
-	if rail_lowers.is_empty() and rail_uppers.is_empty():
-		print("RAILING_CHECK_SKIP: no railing nodes found (test should be run after generating 100F rooftop)")
-		get_tree().quit(0)
-		return
-
-	for node in rail_lowers:
-		var n = node as Node3D
-		if n == null:
-			continue
-		var center_y := n.position.y
-		var scale_y := 1.0
-		if n is Node3D:
-			scale_y = n.scale.y if n.scale.y > 0.0 else 1.0
-		var bottom_y := center_y - (0.12 * scale_y) * 0.5
-		if bottom_y > expected_lower_max_y or bottom_y < expected_lower_min_y - 0.1:
-			failures.append("RooftopRailLower bottom_y=%.3f (expect ~0.0)" % bottom_y)
-
-	for node in rail_uppers:
-		var n = node as Node3D
-		if n == null:
-			continue
-		var scale_y := 1.0
-		if n is Node3D:
-			scale_y = n.scale.y if n.scale.y > 0.0 else 1.0
-		var center_y := n.position.y
-		var top_y := center_y + (0.12 * scale_y) * 0.5
-		if top_y < expected_upper_min_y - 0.1 or top_y > expected_upper_max_y + 0.1:
-			failures.append("RooftopRailUpper top_y=%.3f (expect ~1.32)" % top_y)
-
+	rooftop.queue_free()
+	await get_tree().process_frame
 	if failures.is_empty():
-		print("RAILING_OK: %d lowers (bottom≈0), %d uppers (top≈1.32), %d posts" % [rail_lowers.size(), rail_uppers.size(), rail_posts.size()])
+		print("ROOFTOP_RAILING_OK: %d lower rails, %d upper rails and %d posts use the formal rooftop shell and align to Y %.2f..%.2f" % [rail_lowers.size(), rail_uppers.size(), rail_posts.size(), FLOOR_Y, POST_TOP_Y])
 		get_tree().quit(0)
 		return
-	for f in failures:
-		push_error(f)
+	for failure in failures:
+		push_error(failure)
 	get_tree().quit(1)
 
 
-func _collect_by_prefix(node: Node, prefix: String, out: Array[Node]) -> void:
-	for c in node.get_children():
-		if c.name.begins_with(prefix):
-			out.append(c)
-		_collect_by_prefix(c, prefix, out)
+func _collect_by_prefix(node: Node, prefix: String, output: Array[Node3D]) -> void:
+	for child: Node in node.get_children():
+		var child_3d := child as Node3D
+		if child_3d != null and child.name.begins_with(prefix):
+			output.append(child_3d)
+		_collect_by_prefix(child, prefix, output)
+
+
+func _expect(condition: bool, message: String, failures: Array[String]) -> void:
+	if not condition:
+		failures.append(message)

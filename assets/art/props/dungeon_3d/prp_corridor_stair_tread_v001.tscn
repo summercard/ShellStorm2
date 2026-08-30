@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3]
+; Stable AssetID: ENV-DUNGEON-CORRIDOR-STAIR-TREAD | normalized production path v001
+
+; 走廊台阶（楼梯间用）- 1×1×1
+
+[sub_resource type="BoxMesh" id="BoxMesh_stair_tread"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_stair_tread"]
+albedo_color = Color(0.45, 0.45, 0.48, 1)
+metallic = 0.15
+metallic_specular = 0.5
+roughness = 0.55
+
+[node name="PrpCorridorStairTread" type="Node3D"]
+
+[node name="StairTread" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_stair_tread")
+material_override = SubResource("StandardMaterial3D_stair_tread")
