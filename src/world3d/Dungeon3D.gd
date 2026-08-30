@@ -3313,7 +3313,16 @@ func _update_room_streaming(current_id: String) -> void:
 		room.set_stream_state(state)
 		if state > 0:
 			_prepare_revealed_hostile_room(room)
-			_restore_room_runtime_state(room.room_id)
+			# 运行快照只在房间从 DATA_ONLY 真正重新载入时回灌。开门会刷新
+			# 当前房和邻房的流送状态；若对仍处于 ACTIVE/SHELL_READY 的房间
+			# 无条件回灌，战斗中较早保存的快照会覆盖刚提交的 cleared、灯光和
+			# 敌人集合，表现为“清房后开门，当前房间又刷新”。
+			if (
+				bool(transition.get("changed", false))
+				and int(transition.get("previous", DungeonRoom3D.STREAM_DATA_ONLY))
+				== DungeonRoom3D.STREAM_DATA_ONLY
+			):
+				_restore_room_runtime_state(room.room_id)
 	_update_corridor_streaming(current_id)
 	for room_id in _enemy_nodes_by_room.keys():
 		var live_references: Array = []

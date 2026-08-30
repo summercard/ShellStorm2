@@ -836,28 +836,7 @@ func _build_records() -> void:
 	_declare_edge("start", "facility", "vertical", "west", "west", "west")
 	_descent_side_sequence.append("west")
 
-	# 纯数据规划可提前计算和存档；场景节点只保留99层与98层入口壳。
-	# 其余房间、走廊和下一段楼梯均由下端到达门原子提交。
-	for displayed_floor_number in range(98, DEEPEST_PLANNED_FLOOR - 1, -1):
-		var sequence_index := 99 - displayed_floor_number
-		var physical_floor_index := sequence_index + 1
-		var stair_side := "east" if sequence_index % 2 == 1 else "west"
-		var plan := FLOOR_PLAN_GENERATOR.generate({
-			"run_seed": run_seed,
-			"floor_number": displayed_floor_number,
-			"floor_index": physical_floor_index,
-			"sequence_index": sequence_index,
-			"entry_side": stair_side,
-			"boss_floor": displayed_floor_number % 5 == 0,
-		})
-		_floor_plan_snapshots[physical_floor_index] = plan.duplicate(true)
-		_floor_layout_templates[physical_floor_index] = str(plan.get("layout_id", ""))
-		_planned_floor_indices.append(physical_floor_index)
-		if not bool(plan.get("valid", false)):
-			for error_value in plan.get("validation_errors", []):
-				_floor_layout_plan_conflicts.append(
-					"floor %d generator: %s" % [physical_floor_index, str(error_value)]
-				)
+	_regenerate_floor_plans_for_current_seed()
 	# 初始只创建98层15×15入口安全屋。预置前门目标，保证壳体生成时门洞完整，
 	# 但Hub节点和通道在到达门打开之前都不存在。
 	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
@@ -878,6 +857,33 @@ func _build_records() -> void:
 	_validate_floor_layout_plans()
 
 
+func _regenerate_floor_plans_for_current_seed() -> void:
+	# 纯数据规划可提前计算和存档；场景节点只保留99层与98层入口壳。
+	# 新战局也走同一入口，确保 run_seed、layout_id 与实际路线同步换代。
+	_floor_plan_snapshots.clear()
+	_floor_layout_templates.clear()
+	_planned_floor_indices.clear()
+	_floor_layout_plan_conflicts.clear()
+	for displayed_floor_number in range(98, DEEPEST_PLANNED_FLOOR - 1, -1):
+		var sequence_index := 99 - displayed_floor_number
+		var physical_floor_index := sequence_index + 1
+		var stair_side := "east" if sequence_index % 2 == 1 else "west"
+		var plan := FLOOR_PLAN_GENERATOR.generate({
+			"run_seed": run_seed,
+			"floor_number": displayed_floor_number,
+			"floor_index": physical_floor_index,
+			"sequence_index": sequence_index,
+			"entry_side": stair_side,
+			"boss_floor": displayed_floor_number % 5 == 0,
+		})
+		_floor_plan_snapshots[physical_floor_index] = plan.duplicate(true)
+		_floor_layout_templates[physical_floor_index] = str(plan.get("layout_id", ""))
+		_planned_floor_indices.append(physical_floor_index)
+		if not bool(plan.get("valid", false)):
+			for error_value in plan.get("validation_errors", []):
+				_floor_layout_plan_conflicts.append(
+					"floor %d generator: %s" % [physical_floor_index, str(error_value)]
+				)
 func _plan_spec(plan: Dictionary, key: String) -> Dictionary:
 	for value in plan.get("rooms", []):
 		var spec := value as Dictionary
@@ -2286,6 +2292,7 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	# 若只把edge关上，残留的_vertical_arrival_open和sealed标志会让玩家
 	# 再次从基地下来时看到下端门常开，并跳过“首次进入后封门”的循环。
 	_unload_completed_segment(6)
+	_start_new_run_generation()
 	_generated_floor_indices.assign([0])
 	for floor_value in _floor_plan_commit_reasons.keys().duplicate():
 		if int(floor_value) >= 2:
@@ -2306,6 +2313,8 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	_initial_loop_gate_armed = false
 	_initial_loop_gate_sealed = false
 	_descent_side_sequence.assign(["west"])
+	if minimap != null:
+		minimap.reset_exploration_for_new_run()
 
 	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
 	var first_entry := _plan_spec(first_plan, "entry")
@@ -2323,6 +2332,7 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	_declare_and_register_edge("facility", entry_id, "vertical", "east", "east", "east")
 	_floor_seed_gate_edges[edge] = 2
 	_descent_side_sequence.append("east")
+	_validate_floor_layout_plans()
 	# 与首次加载一致：基地侧楼梯可通行，但98F下端到达门保持关闭，
 	# 只有再次交互并成功提交98层FloorBundle后才会打开。
 	_open_edges[edge] = true
@@ -2345,6 +2355,29 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	minimap.configure(_records, _open_edges)
 	_update_room_streaming("facility")
 	_reset_base_doors_closed()
+
+
+func _start_new_run_generation() -> void:
+	# 成功撤离和确认撤退都是上一行动的终结；保留玩家物品不等于保留战局。
+	# 以旧行动 RNG 的下一值派生新种子，保证同一进程内必定换代，同时让
+	# 自动化可以复现“给定旧种子 -> 给定新种子”的生命周期。
+	var previous_seed := run_seed
+	var next_seed := int(_rng.randi())
+	if next_seed == previous_seed:
+		next_seed = previous_seed + 1
+	run_seed = next_seed
+	run_seed_override = next_seed
+	_rng.seed = run_seed
+	if _loot_module != null:
+		_loot_module.set_seed(run_seed ^ 0x4C4F4F54)
+	if _monster_injector != null:
+		_monster_injector.set_seed(run_seed ^ 0x454E454D)
+	_regenerate_floor_plans_for_current_seed()
+	_hud_run_elapsed = 0.0
+	_hud_last_elapsed_second = -1
+	if _map_fate_triggers != null:
+		_map_fate_triggers.reset_for_new_run()
+	seed_label.text = "塔楼种子 %d" % run_seed
 
 
 func _reset_base_doors_closed() -> void:
@@ -3163,6 +3196,8 @@ func _clear_room_runtime_caches(room_id: String) -> void:
 		_room_enemy_damage_multipliers, _room_currency_multipliers,
 	]:
 		(cache as Dictionary).erase(room_id)
+	_segment_runtime_state.erase(room_id)
+	_room_graph_runtime.erase_stream_state(room_id)
 
 
 func _count_group_in_subtree(root: Node, group_name: String) -> int:

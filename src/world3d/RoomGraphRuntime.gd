@@ -65,6 +65,10 @@ func get_stream_states_snapshot() -> Dictionary:
 	return _stream_states.duplicate(true)
 
 
+func erase_stream_state(room_id: String) -> void:
+	_stream_states.erase(room_id)
+
+
 func get_topology_snapshot() -> Dictionary:
 	return {
 		"schema": "room_graph_runtime_v1",

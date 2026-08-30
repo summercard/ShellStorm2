@@ -6,13 +6,14 @@ const TEST_PATH := "user://tower_extraction_return_probe.json"
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	await _verify_cleared_room_is_not_restored_when_door_opens(failures)
 	await _verify_success_returns_inside_99f_with_items(failures)
 	_verify_death_insurance_persists(failures)
 	_verify_legacy_hidden_insurance_migrates(failures)
 	await _verify_real_99f_spawn_restores_insurance_slots(failures)
 	_cleanup()
 	if failures.is_empty():
-		print("TOWER_EXTRACTION_RETURN_OK: extraction retains ownership; death insurance atomically returns to its original 99F insurance slots")
+		print("TOWER_EXTRACTION_RETURN_OK: cleared rooms survive door streaming; extraction starts a fresh seeded route/minimap while retained ownership and death insurance return remain intact")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -20,13 +21,107 @@ func _ready() -> void:
 	get_tree().quit(1)
 
 
+func _verify_cleared_room_is_not_restored_when_door_opens(failures: Array[String]) -> void:
+	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
+	var tower := scene.instantiate() as TowerDescent3D
+	tower.test_mode = true
+	tower.run_seed_override = 937114
+	add_child(tower)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not tower.generate_through_floor_for_test(98):
+		failures.append("无法准备清房开门状态覆盖回归的98F")
+		tower.queue_free()
+		await get_tree().process_frame
+		return
+	var combat_room: DungeonRoom3D = null
+	var target_room_id := ""
+	for room_value in (tower.get("_rooms") as Array):
+		var candidate := room_value as DungeonRoom3D
+		if candidate == null or candidate.room_type not in Dungeon3D.HOSTILE_ROOM_TYPES:
+			continue
+		for target_value in candidate.door_targets.values():
+			var target_id := str(target_value)
+			if not target_id.is_empty():
+				combat_room = candidate
+				target_room_id = target_id
+				break
+		if combat_room != null:
+			break
+	if combat_room == null or target_room_id.is_empty():
+		failures.append("98F没有可用于清房开门状态覆盖回归的战斗房/门")
+		tower.queue_free()
+		await get_tree().process_frame
+		return
+	tower.call("_on_room_entered", combat_room)
+	for enemy_value in (tower.get("_enemy_nodes_by_room") as Dictionary).get(combat_room.room_id, []):
+		var enemy := enemy_value as Enemy3D
+		if enemy != null and is_instance_valid(enemy):
+			enemy.free()
+	(tower.get("_enemy_nodes_by_room") as Dictionary)[combat_room.room_id] = []
+	(tower.get("_alive_by_room") as Dictionary)[combat_room.room_id] = 0
+	combat_room.cleared = true
+	combat_room.ensure_detail_built()
+	var light_switch := combat_room.get("_light_switch") as RoomLightSwitch3D
+	if light_switch == null:
+		failures.append("清房开门回归房没有可控灯光")
+	else:
+		light_switch.set_light_on(true)
+	# 模拟战斗中较早一次自动存档留下的旧快照。开门只应刷新流送，
+	# 不得把这个旧快照重新写回仍处于 ACTIVE 的当前房。
+	(tower.get("_segment_runtime_state") as Dictionary)[combat_room.room_id] = {
+		"visited": true,
+		"cleared": false,
+		"room_light_on": false,
+		"enemies": [],
+		"ground_items": [],
+		"room_keys": [],
+		"containers": {},
+		"alive_count": 7,
+		"wave_queue": [],
+		"wave_number": 1,
+		"wave_total": 1,
+	}
+	tower.set("_room_key_count", 99)
+	if not tower.try_open_room_door(target_room_id):
+		failures.append("清房后无法开启下一扇门")
+	if not combat_room.cleared:
+		failures.append("开门流送把已清空房间覆盖回未清空状态")
+	if light_switch != null and not light_switch.is_light_on():
+		failures.append("开门流送把已开启的房间灯覆盖回关闭状态")
+	if int((tower.get("_alive_by_room") as Dictionary).get(combat_room.room_id, -1)) != 0:
+		failures.append("开门流送恢复了旧敌人计数")
+	tower.queue_free()
+	await get_tree().process_frame
+
+
 func _verify_success_returns_inside_99f_with_items(failures: Array[String]) -> void:
 	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
 	var tower := scene.instantiate() as TowerDescent3D
 	tower.test_mode = true
+	tower.run_seed_override = 937115
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().process_frame
+	if not tower.generate_through_floor_for_test(98):
+		failures.append("无法准备成功撤离后的新战局路线回归")
+	var previous_run_seed := int(tower.run_seed)
+	var previous_layout_id := str(
+		((tower.get("_floor_plan_snapshots") as Dictionary).get(2, {}) as Dictionary).get("layout_id", "")
+	)
+	var previous_combat_room_id := ""
+	for room_id_value in (tower.get("_floor_room_ids") as Dictionary).get(2, []):
+		var room_id := str(room_id_value)
+		if room_id != "floor_01_entry":
+			previous_combat_room_id = room_id
+			break
+	if not previous_combat_room_id.is_empty():
+		tower.minimap.reveal_room(previous_combat_room_id)
+		(tower.get("_segment_runtime_state") as Dictionary)[previous_combat_room_id] = {
+			"visited": true, "cleared": true, "room_light_on": true,
+			"enemies": [], "ground_items": [], "room_keys": [], "containers": {},
+			"alive_count": 0, "wave_queue": [], "wave_number": 1, "wave_total": 1,
+		}
 	var inventory := tower.get_inventory_module()
 	inventory.clear_all()
 	inventory.add_item(ItemRegistry.get_instance().get_item("weapon_shotgun"), 1)
@@ -81,6 +176,26 @@ func _verify_success_returns_inside_99f_with_items(failures: Array[String]) -> v
 		failures.append("成功撤离后战局没有销毁并恢复为未激活的初始状态")
 	if bool(tower.get("_completed")):
 		failures.append("成功返航后仍处于锁死的行动完成状态")
+	var next_layout_id := str(
+		((tower.get("_floor_plan_snapshots") as Dictionary).get(2, {}) as Dictionary).get("layout_id", "")
+	)
+	if int(tower.run_seed) == previous_run_seed:
+		failures.append("成功返航后新战局仍复用上一局run_seed")
+	if next_layout_id.is_empty() or next_layout_id == previous_layout_id:
+		failures.append("成功返航后98F仍复用上一局layout_id/路线")
+	var minimap_snapshot := tower.minimap.get_snapshot()
+	if (
+		int(minimap_snapshot.get("revealed_count", -1)) != 1
+		or str(minimap_snapshot.get("current_room_id", "")) != "facility"
+	):
+		failures.append("成功返航后小地图没有清除上一局探索路径：%s" % minimap_snapshot)
+	if (
+		not previous_combat_room_id.is_empty()
+		and (tower.get("_segment_runtime_state") as Dictionary).has(previous_combat_room_id)
+	):
+		failures.append("成功返航后仍残留上一局战斗房运行快照")
+	if tower.seed_label.text != "塔楼种子 %d" % int(tower.run_seed):
+		failures.append("成功返航后HUD仍显示上一局种子")
 	if not _same_inventory_instances(inventory_before, inventory.get_occupied_slots()):
 		failures.append("成功撤离改变或清空了I键背包战利品")
 	if not _same_insurance_instances(insured_before, insurance.get_all_insured_items()):

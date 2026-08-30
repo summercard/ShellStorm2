@@ -92,6 +92,17 @@ func configure(records: Array[Dictionary], edge_states: Dictionary) -> void:
 	queue_redraw()
 
 
+func reset_exploration_for_new_run() -> void:
+	# configure() 也用于同一战局内追加新楼层，不能在那里清 revealed。
+	# 只有明确的新战局边界才清掉上一局的探索路径和实时敌人投影。
+	_revealed.clear()
+	_current_room_id = ""
+	_enemy_world_positions.clear()
+	_has_realtime_player_state = false
+	_current_floor_y = 0.0
+	queue_redraw()
+
+
 func set_full_map_mode(enabled: bool) -> void:
 	_full_map_mode = enabled
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
