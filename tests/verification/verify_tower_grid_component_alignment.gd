@@ -145,13 +145,13 @@ func _validate_stairwell_5m_contract(
 			imported = child
 			break
 	if imported == null:
-		failures.append("%s has no imported stairwell v002" % connector.name)
+		failures.append("%s has no imported stairwell v003" % connector.name)
 		return
 	if (
-		str(imported.get_meta("asset_version", "")) != "v002"
-		or str(imported.get_meta("blender_source_version", "")) != "v009"
+		str(imported.get_meta("asset_version", "")) != "v003"
+		or str(imported.get_meta("blender_source_version", "")) != "v010"
 	):
-		failures.append("%s does not use Blender v009 / stair asset v002" % connector.name)
+		failures.append("%s does not use Blender v010 / stair asset v003" % connector.name)
 
 	var lower_aabb := AABB()
 	var upper_aabb := AABB()

@@ -28,10 +28,10 @@ const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v002.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v003.glb"
 )
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v002.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v003.glb"
 )
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85
@@ -1398,8 +1398,8 @@ func _add_imported_stairwell_visual(
 		if rooftop_variant
 		else "ENV-TOWER-STAIRWELL-GENERIC-9M"
 	)
-	visual.set_meta("asset_version", "v002")
-	visual.set_meta("blender_source_version", "v009")
+	visual.set_meta("asset_version", "v003")
+	visual.set_meta("blender_source_version", "v010")
 	connector.add_child(visual)
 	var walkable_collision_count := _add_imported_stair_collisions(visual)
 	connector.set_meta("walkable_collision_count", walkable_collision_count)
