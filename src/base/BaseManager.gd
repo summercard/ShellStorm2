@@ -9,6 +9,7 @@ const EnergyService = preload("res://src/base/BaseEnergyService.gd")
 const SaveService = preload("res://src/base/ProfileSaveService.gd")
 const ShopService = preload("res://src/base/BaseShopService.gd")
 const BASE_LOADOUT_CAPACITY := 12
+const BASE_VAULT_CAPACITY := 20
 const RUNTIME_SAVE_DEBOUNCE_SECONDS := 0.45
 
 var data: BaseData
@@ -738,8 +739,8 @@ func remove_vault_item(index: int) -> bool:
 	return true
 
 func _get_vault_capacity() -> int:
-	# 保险柜容量 = 默认2格 + vault_level增加
-	return 2 + data.vault_level
+	# 长期保险柜基础容量为20格，设施等级继续提供增量扩展。
+	return BASE_VAULT_CAPACITY + data.vault_level
 
 func get_vault_capacity() -> int:
 	return _get_vault_capacity()

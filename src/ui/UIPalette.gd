@@ -8,15 +8,15 @@ extends RefCounted
 
 # ========== 背景层级 (5 档深色) ==========
 ## 弹窗背板 / 模态层（最深）
-const BG_DEEPEST := Color(0.006, 0.018, 0.026, 0.98)
+const BG_DEEPEST := Color(0.006, 0.018, 0.026, 0.50)
 ## 主面板
-const BG_DARK := Color(0.012, 0.038, 0.052, 0.97)
+const BG_DARK := Color(0.012, 0.038, 0.052, 0.50)
 ## 子容器 / 分组
-const BG_MID := Color(0.020, 0.072, 0.090, 0.96)
+const BG_MID := Color(0.020, 0.072, 0.090, 0.50)
 ## 格子 / 槽位
-const BG_SLOT := Color(0.010, 0.030, 0.038, 0.98)
+const BG_SLOT := Color(0.010, 0.030, 0.038, 0.50)
 ## 格子悬停高亮
-const BG_SLOT_HOVER := Color(0.025, 0.145, 0.175, 0.98)
+const BG_SLOT_HOVER := Color(0.025, 0.145, 0.175, 0.50)
 
 
 # ========== 主界面战术设计语言 ==========

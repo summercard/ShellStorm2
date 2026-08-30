@@ -44,6 +44,7 @@ static func make_button_style(
 ) -> Dictionary:
 	# normal：暗背景 + subtle 边框
 	var normal := StyleBoxFlat.new()
+	fill_color.a = minf(fill_color.a, 0.50)
 	normal.bg_color = fill_color
 	normal.set_border_width_all(1)
 	normal.set_border_color(UIPalette.BORDER_SUBTLE)
@@ -141,7 +142,7 @@ static func make_slot_style(is_hover: bool = false) -> StyleBoxFlat:
 ## 创建已占用物品格子样式（边框更亮）
 static func make_slot_filled_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.2, 0.22, 0.28, 0.95)
+	style.bg_color = Color(0.2, 0.22, 0.28, 0.50)
 	style.set_border_width_all(2)
 	style.set_border_color(Color(0.6, 0.7, 0.9, 0.7))
 	style.set_corner_radius_all(4)
@@ -160,6 +161,7 @@ static func make_item_row_style(
 	border_width: int = 3,
 ) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
+	bg_color.a = minf(bg_color.a, 0.50)
 	style.bg_color = bg_color
 	style.border_color = UIPalette.item_border_color(item_type)
 	if full_border:

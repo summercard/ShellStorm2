@@ -7,6 +7,9 @@ const EQUIPMENT_TRANSACTION_SERVICE = preload("res://src/game/EquipmentTransacti
 const ROOM_GRAPH_RUNTIME_SCRIPT = preload("res://src/world3d/RoomGraphRuntime.gd")
 const RUN_PERSISTENCE_SERVICE = preload("res://src/world3d/RunPersistenceService.gd")
 const HUD_PRESENTER_SCRIPT = preload("res://src/ui/HUDPresenter3D.gd")
+const AVATAR_CUSTOMIZATION_PERSISTENCE = preload(
+	"res://src/player3d/customization/AvatarCustomizationPersistence.gd"
+)
 
 signal generation_completed(snapshot: Dictionary)
 signal run_completed(success: bool, summary: Dictionary)
@@ -113,6 +116,8 @@ var _enemy_preactivation_accumulator := 0.0
 var _door_fate_active := false
 var _door_fate_choices: Array[FateCard] = []
 var _pending_fate_currency_choice := -1
+var _pending_fate_door_from_id := ""
+var _pending_fate_door_target_id := ""
 var _fate_overlay: Control
 var _fate_feedback_label: Label = null
 var _map_fate_triggers: MapFateTriggers
@@ -203,6 +208,10 @@ func _ready() -> void:
 		run_seed = LevelSelect.selected_seed if LevelSelect != null and LevelSelect.selected_seed >= 0 else int(Time.get_unix_time_from_system()) ^ randi()
 	_rng.seed = run_seed
 	_setup_run_modules()
+	# 热返城不会重新创建主入口界面，因此玩法场景自身必须恢复已保存外观。
+	# test_mode 禁止读取开发者真实档案，专项测试可显式调用持久化服务。
+	if not test_mode:
+		AVATAR_CUSTOMIZATION_PERSISTENCE.apply_saved_to_player(player)
 	_map_fate_triggers = MapFateTriggers.new()
 	_map_fate_triggers.name = "MapFateTriggers3D"
 	add_child(_map_fate_triggers)
@@ -640,6 +649,7 @@ func _setup_run_modules() -> void:
 	GameManager.currency = 0
 	GameManager.currency_changed.emit(0)
 	_inventory = InventoryModule.new(BASE_INVENTORY_CAPACITY)
+	player.set_reload_ammo_provider(Callable(self, "_provide_reload_ammo"))
 	_insurance = InsuranceModule.new(2)
 	_quick_inventory = InventoryModule.new(2)
 	_death_settlement = DeathSettlementModule.new()
@@ -873,40 +883,41 @@ func _build_reference_main_hud() -> void:
 	pause_icon.configure("pause", Color(0.84, 0.90, 0.96))
 	timer_row.add_child(pause_icon)
 
-	var info_panel := _make_hud_panel(cyan, Color(0.008, 0.035, 0.052, 0.90))
+	var info_panel := _make_hud_panel(cyan, Color(0.008, 0.035, 0.052, 0.50))
 	info_panel.name = "CurrentInfoPanel"
-	_anchor_control(info_panel, 0.5, 1.0, 0.5, 1.0, -290, -184, 290, -126)
+	# 放到左侧目标卡下方，避免继续遮挡角色前方与中央战斗视野。
+	_anchor_control(info_panel, 0.0, 0.0, 0.0, 0.0, 18, 370, 338, 425)
 	_reference_hud_root.add_child(info_panel)
 	_add_neon_frame(info_panel, cyan, 0.58, false)
-	var info_margin := _make_margin(18, 8, 18, 8)
+	var info_margin := _make_margin(10, 5, 10, 5)
 	info_panel.add_child(info_margin)
-	status_label = _make_hud_label("正在建立行动区……", 14, Color(0.76, 0.91, 0.98))
-	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	status_label = _make_hud_label("正在建立行动区……", 11, Color(0.76, 0.91, 0.98))
+	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	status_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_margin.add_child(status_label)
 
-	var weapon_panel := _make_hud_panel(Color(0.56, 0.78, 0.88), Color(0.006, 0.012, 0.020, 0.94))
+	var weapon_panel := _make_hud_panel(Color(0.56, 0.78, 0.88), Color(0.006, 0.012, 0.020, 0.50))
 	weapon_panel.name = "CurrentWeaponPanel"
-	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -260, -118, 260, -20)
+	_anchor_control(weapon_panel, 0.5, 1.0, 0.5, 1.0, -156, -79, 156, -20)
 	_reference_hud_root.add_child(weapon_panel)
 	_add_neon_frame(weapon_panel, cyan, 0.36, false)
 	# 中央武器栏：tap 在主武器 / 副武器 之间切换（_on_ammo_changed 里 [N] 会自动反映新槽位）
 	weapon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	weapon_panel.tooltip_text = "点击切换主/副武器"
 	weapon_panel.gui_input.connect(_on_weapon_panel_gui_input.bind(weapon_panel))
-	var weapon_margin := _make_margin(14, 10, 14, 8)
+	var weapon_margin := _make_margin(8, 5, 8, 4)
 	weapon_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_panel.add_child(weapon_margin)
 	var weapon_row := HBoxContainer.new()
-	weapon_row.add_theme_constant_override("separation", _hud_int(12))
+	weapon_row.add_theme_constant_override("separation", _hud_int(7))
 	weapon_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_margin.add_child(weapon_row)
 	_hud_weapon_model_icon = ITEM_MODEL_ICON_SCENE.instantiate() as ItemModelIcon3D
 	_hud_weapon_model_icon.name = "CurrentWeaponModelIcon3D"
-	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(96, 68))
+	_hud_weapon_model_icon.custom_minimum_size = _hud_size(Vector2(58, 41))
 	_hud_weapon_model_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_hud_weapon_model_icon.set_camera_size_multiplier(0.52)
+	_hud_weapon_model_icon.set_camera_size_multiplier(0.34)
 	_hud_weapon_model_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(_hud_weapon_model_icon)
 	_refresh_hud_weapon_model(true)
@@ -915,24 +926,24 @@ func _build_reference_main_hud() -> void:
 	weapon_text.add_theme_constant_override("separation", _hud_int(2))
 	weapon_text.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(weapon_text)
-	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 15, Color(0.92, 0.95, 0.98))
+	_hud_weapon_meta_label = _make_hud_label("当前武器 · 未装备", 9, Color(0.92, 0.95, 0.98))
 	_hud_weapon_meta_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_text.add_child(_hud_weapon_meta_label)
-	_hud_weapon_fate_label = _make_hud_label("实例 ------ · 命运 0/0 · K 详情", 12, Color(0.48, 0.84, 0.94))
+	_hud_weapon_fate_label = _make_hud_label("实例 ------ · 命运 0/0 · K 详情", 7, Color(0.48, 0.84, 0.94))
 	_hud_weapon_fate_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_text.add_child(_hud_weapon_fate_label)
-	ammo_label = _make_hud_label("0 / 0", 29, Color.WHITE)
-	ammo_label.custom_minimum_size = _hud_size(Vector2(112, 62))
+	ammo_label = _make_hud_label("0 / 0", 17, Color.WHITE)
+	ammo_label.custom_minimum_size = _hud_size(Vector2(67, 37))
 	ammo_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	ammo_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	ammo_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	weapon_row.add_child(ammo_label)
 	for quick_index in range(2):
-		var quick_panel := _make_hud_panel(Color(0.30, 0.86, 0.72), Color(0.006, 0.020, 0.026, 0.94))
+		var quick_panel := _make_hud_panel(Color(0.30, 0.86, 0.72), Color(0.006, 0.020, 0.026, 0.50))
 		quick_panel.name = "QuickItemHUD_%d" % quick_index
-		var left := -372.0 if quick_index == 0 else 276.0
-		var right := -276.0 if quick_index == 0 else 372.0
-		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -112, right, -20)
+		var left := -220.0 if quick_index == 0 else 162.0
+		var right := -162.0 if quick_index == 0 else 220.0
+		_anchor_control(quick_panel, 0.5, 1.0, 0.5, 1.0, left, -75, right, -20)
 		_reference_hud_root.add_child(quick_panel)
 		# 快捷物品槽：[3]/[4] 直接 tap 使用，对应键位 use_quick_item_1/2
 		quick_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -944,11 +955,11 @@ func _build_reference_main_hud() -> void:
 		quick_panel.add_child(quick_box)
 		var quick_icon_host := Control.new()
 		quick_icon_host.name = "QuickItemIconHost_%d" % quick_index
-		quick_icon_host.custom_minimum_size = _hud_size(Vector2(80, 58))
+		quick_icon_host.custom_minimum_size = _hud_size(Vector2(48, 35))
 		quick_icon_host.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_icon_host)
 		_hud_quick_item_icon_hosts.append(quick_icon_host)
-		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 11, Color(0.66, 0.94, 0.84))
+		var quick_label := _make_hud_label("[%d] 空" % (quick_index + 3), 7, Color(0.66, 0.94, 0.84))
 		quick_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		quick_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		quick_box.add_child(quick_label)
@@ -1140,6 +1151,8 @@ func _make_hud_panel(accent: Color, background: Color) -> PanelContainer:
 
 func _make_hud_style(accent: Color, background: Color, border_width: int) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
+	# 战局 HUD 与其弹层统一采用约50%底色透明度；文字和描边保持清晰。
+	background.a = minf(background.a, 0.50)
 	style.bg_color = background
 	style.border_color = accent
 	style.set_border_width_all(border_width)
@@ -2377,8 +2390,8 @@ func _spawn_loot_items(
 ) -> void:
 	for index in range(items.size()):
 		var item := items[index].duplicate(true)
-		if not bool(item.get("is_currency", false)):
-			item["count"] = 1
+		# 堆叠数量是物品真实数量；尤其弹药必须以“发”为单位落地和拾取。
+		item["count"] = maxi(1, int(item.get("count", 1)))
 		var pickup := GROUND_LOOT_SCRIPT.new() as GroundLootPickup3D
 		var color := ItemModelFactory3D.get_item_color(item)
 		pickup.configure(item, color)
@@ -2847,7 +2860,6 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	if MonsterAIManager != null and player != null:
 		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
 	minimap.set_edge_open(_current_room_id, target_room_id, true)
-	_update_room_streaming(_current_room_id)
 	_refresh_edge_visuals(_current_room_id, target_room_id, true)
 	status_label.text = (
 		"房门已开启 · 剩余钥匙 %d" % _get_total_room_keys()
@@ -2856,7 +2868,13 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	)
 	_refresh_loot_label()
 	if bool(policy.get("triggers_fate", true)):
+		# 目标房敌人必须在选卡后生成，否则“下一个房间”类世界命运会错过
+		# 刚开启的房间，实际落到再下一间。
+		_pending_fate_door_from_id = _current_room_id
+		_pending_fate_door_target_id = target_room_id
 		call_deferred("_show_door_fate_choices")
+	else:
+		_update_room_streaming(_current_room_id)
 	return true
 
 
@@ -2869,6 +2887,7 @@ func _show_door_fate_choices() -> void:
 		return
 	var offer := FateCardPresets.draw_offer(3, _rng)
 	if offer.is_empty():
+		_commit_pending_fate_door_streaming()
 		return
 	_door_fate_choices.clear()
 	_pending_fate_currency_choice = -1
@@ -3227,7 +3246,17 @@ func _close_door_fate_overlay() -> void:
 		_fate_overlay.queue_free()
 	_fate_overlay = null
 	_fate_feedback_label = null
+	_commit_pending_fate_door_streaming()
 	_sync_player_input_lock()
+
+
+func _commit_pending_fate_door_streaming() -> void:
+	if _pending_fate_door_target_id.is_empty():
+		return
+	var source_id := _pending_fate_door_from_id
+	_pending_fate_door_from_id = ""
+	_pending_fate_door_target_id = ""
+	_update_room_streaming(source_id if not source_id.is_empty() else _current_room_id)
 
 
 func _cancel_door_fate_selection() -> void:
@@ -3638,6 +3667,13 @@ func _on_inventory_item_clicked(slot_index: int, _item_hint: Dictionary) -> void
 	if slot.is_empty():
 		return
 	var item := slot.get("item", {}) as Dictionary
+	if str(item.get("id", "")) == "item_ammo_pack":
+		status_label.text = (
+			"开始装填 · 完成后按弹匣缺口扣除备弹"
+			if player.request_reload()
+			else "无需装填或背包没有可用备弹"
+		)
+		return
 	if item.get("type", "") == "weapon":
 		_equip_weapon_from_inventory(slot_index, item)
 		return
@@ -3982,6 +4018,10 @@ func _use_quick_item(quick_slot_index: int) -> bool:
 		status_label.text = "快捷栏%d没有物品" % (quick_slot_index + 3)
 		return false
 	var item := slot.get("item", {}) as Dictionary
+	if str(item.get("id", "")) == "item_ammo_pack":
+		var reload_started := player.request_reload()
+		status_label.text = "开始装填 · 备弹将在完成时扣除" if reload_started else "无需装填或备弹不足"
+		return reload_started
 	var handler := ItemUseHandler.new()
 	var applied := handler.apply(item, {"player": player, "extraction_director": self})
 	handler.free()
@@ -4495,7 +4535,10 @@ func _refresh_hud_weapon_model(force := false) -> void:
 
 func _apply_weapon_hud_command(command: Dictionary) -> void:
 	if ammo_label != null:
-		ammo_label.text = str(command.get("ammo_text", "0 / 0"))
+		var ammo_text := str(command.get("ammo_text", "0 / 0"))
+		if _inventory != null and not ammo_text.begins_with("近战"):
+			ammo_text += " · %d备弹" % _get_reserve_ammo_count()
+		ammo_label.text = ammo_text
 	if _hud_weapon_meta_label != null:
 		_hud_weapon_meta_label.text = str(command.get("weapon_meta_text", "当前武器 · 未装备"))
 	if _hud_weapon_fate_label != null:
@@ -4511,6 +4554,34 @@ func _apply_weapon_hud_command(command: Dictionary) -> void:
 
 func get_hud_weapon_model_snapshot() -> Dictionary:
 	return _hud_weapon_model_icon.get_snapshot() if _hud_weapon_model_icon != null else {}
+
+
+func _provide_reload_ammo(requested_rounds: int) -> int:
+	if _inventory == null:
+		return 0
+	var backpack_available := _inventory.get_item_count("item_ammo_pack")
+	var available := _get_reserve_ammo_count()
+	if requested_rounds <= 0:
+		return available
+	var consumed := mini(available, requested_rounds)
+	var from_backpack := mini(backpack_available, consumed)
+	if from_backpack > 0 and not _inventory.consume_item("item_ammo_pack", from_backpack):
+		return 0
+	var from_quick := consumed - from_backpack
+	if from_quick > 0 and (
+		_quick_inventory == null
+		or not _quick_inventory.consume_item("item_ammo_pack", from_quick)
+	):
+		# 理论上查询与扣除在同一主线程帧；若快捷栏异常，退回主背包部分。
+		return from_backpack
+	return consumed
+
+
+func _get_reserve_ammo_count() -> int:
+	return (
+		(_inventory.get_item_count("item_ammo_pack") if _inventory != null else 0)
+		+ (_quick_inventory.get_item_count("item_ammo_pack") if _quick_inventory != null else 0)
+	)
 
 
 func _on_player_state_changed(state_id: String, _context: Dictionary) -> void:

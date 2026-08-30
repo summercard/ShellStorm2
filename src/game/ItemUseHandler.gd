@@ -79,6 +79,8 @@ func _apply_heal(item: Dictionary, context: Dictionary) -> bool:
 ## 弹药补给（触发一次换弹）
 func _apply_refill_ammo(item: Dictionary, context: Dictionary) -> bool:
 	var player: Node = _resolve_player(context)
+	if player != null and player.has_method("request_reload"):
+		return bool(player.call("request_reload"))
 	if player != null and player.has_method("refill_ammo"):
 		return bool(player.call("refill_ammo"))
 	if player == null or not player.has_method("get_weapon_tree"):

@@ -84,6 +84,7 @@ var _fire_sequence := 0
 var _cooldown := 0.0
 var _reload_remaining := 0.0
 var _active_reload_duration := 0.0
+var _reload_ammo_provider: Callable
 var _recoil := 0.0
 var _charge_active := false
 var _charge_elapsed := 0.0
@@ -557,6 +558,9 @@ func _acquire_projectile(world: Node, config: Dictionary, world_position: Vector
 func request_reload() -> bool:
 	if is_melee_weapon() or display_only or gun_id.is_empty() or _reload_remaining > 0.0 or current_ammo >= magazine_size:
 		return false
+	# 正式战局注入备弹提供者；无提供者的训练场/表现测试维持无限备弹。
+	if _reload_ammo_provider.is_valid() and int(_reload_ammo_provider.call(0)) <= 0:
+		return false
 	_active_reload_duration = maxf(0.01, reload_time)
 	_reload_remaining = _active_reload_duration
 	cancel_charge()
@@ -577,6 +581,10 @@ func refill_ammo() -> bool:
 	current_ammo = magazine_size
 	ammo_changed.emit(current_ammo, magazine_size)
 	return true
+
+
+func set_reload_ammo_provider(provider: Callable) -> void:
+	_reload_ammo_provider = provider
 
 
 func cancel_reload() -> bool:
@@ -673,12 +681,16 @@ func get_snapshot() -> Dictionary:
 
 
 func _finish_reload() -> void:
-	current_ammo = magazine_size
+	var missing := maxi(0, magazine_size - current_ammo)
+	var loaded := missing
+	if _reload_ammo_provider.is_valid():
+		loaded = clampi(int(_reload_ammo_provider.call(missing)), 0, missing)
+	current_ammo = mini(magazine_size, current_ammo + loaded)
 	_reload_remaining = 0.0
 	reload_progress_changed.emit(1.0, 0.0)
 	_active_reload_duration = 0.0
 	ammo_changed.emit(current_ammo, magazine_size)
-	reload_ended.emit(true)
+	reload_ended.emit(loaded > 0)
 
 
 func _perform_reload_explosion() -> void:

@@ -676,11 +676,11 @@ func _register_consumables() -> void:
 		},
 		{
 			"id": "item_ammo_pack",
-			"name": "弹药包",
-			"description": "额外弹药补给",
+			"name": "通用弹药",
+			"description": "每个堆叠单位代表1发备弹；换弹按实际弹匣缺口消耗。",
 			"type": "consumable",
 			"rarity": "common",
-			"stack_max": 5,
+			"stack_max": 999,
 			"tags": ["consumable", "ammo"],
 			"use_action": "refill_ammo",
 			"floor_loot_weights": {

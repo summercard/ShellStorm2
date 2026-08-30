@@ -13,7 +13,7 @@ var _inventory_module: InventoryModule
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	$Background.color = Color(0.008, 0.014, 0.020, 1.0)
+	$Background.color = Color(0.008, 0.014, 0.020, 0.50)
 	$Panel.add_theme_stylebox_override("panel", _column_style())
 	$Panel/VBox/TitleLabel.add_theme_font_size_override("font_size", 24)
 	$Panel/VBox/TitleLabel.add_theme_color_override("font_color", Color(0.46, 0.94, 1.0))
@@ -57,7 +57,7 @@ func _build_vault_view() -> void:
 	columns.add_theme_constant_override("separation", 18)
 	content.add_child(columns)
 	columns.add_child(_make_storage_column(
-		"长期保险柜", "跨局保存 · 不自动带入", "vault", _compact_to_slots(vault_items, BaseManager.get_vault_capacity()), vault_items.size(), BaseManager.get_vault_capacity(), 3
+		"长期保险柜", "跨局保存 · 基础20格 · 不自动带入", "vault", _compact_to_slots(vault_items, BaseManager.get_vault_capacity()), vault_items.size(), BaseManager.get_vault_capacity(), 4
 	))
 	var arrow := Label.new()
 	arrow.text = "⇄"
@@ -166,7 +166,7 @@ func _compact_to_slots(items: Array[Dictionary], capacity: int) -> Array[Diction
 
 func _column_style() -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.012, 0.030, 0.040, 0.96)
+	style.bg_color = Color(0.012, 0.030, 0.040, 0.50)
 	style.border_color = Color(0.10, 0.44, 0.52)
 	style.set_border_width_all(1)
 	style.corner_radius_top_left = 7

@@ -3486,7 +3486,7 @@ func _install_tower_hud() -> void:
 	var panel := PanelContainer.new()
 	margin.add_child(panel)
 	var style := StyleBoxFlat.new()
-	style.bg_color = Color(0.018, 0.035, 0.048, 0.90)
+	style.bg_color = Color(0.018, 0.035, 0.048, 0.50)
 	style.border_color = Color(0.18, 0.74, 0.82, 0.78)
 	style.set_border_width_all(2)
 	style.corner_radius_top_left = 8

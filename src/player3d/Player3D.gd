@@ -82,6 +82,7 @@ var equipped_weapon_instance: WeaponInstance = null
 var equipped_weapon_slots: Array = [null, null]
 var active_weapon_slot := 0
 var _loading_weapon_instance := false
+var _reload_ammo_provider: Callable
 var _stowed_weapon_model: WeaponModel3D = null
 var _stowed_weapon_instance_id := ""
 var equipped_backpack_item: Dictionary = {}
@@ -837,6 +838,8 @@ func _ensure_weapon_model() -> void:
 		weapon.reload_progress_changed.connect(_on_weapon_reload_progress_changed)
 		weapon.reload_ended.connect(_on_weapon_reload_ended)
 		weapon.shot_fired.connect(_on_weapon_shot_fired)
+		if _reload_ammo_provider.is_valid():
+			weapon.set_reload_ammo_provider(_reload_ammo_provider)
 
 
 func _ensure_weapon_tree() -> void:
@@ -1343,17 +1346,22 @@ func _load_active_weapon_instance(instance: WeaponInstance) -> bool:
 	if instance == null:
 		return false
 	_ensure_weapon_tree()
+	var stored_ammo := instance.current_ammo
 	_loading_weapon_instance = true
 	var loaded := instance.load_into_runtime_tree(weapon_tree)
-	_loading_weapon_instance = false
 	if not loaded:
+		_loading_weapon_instance = false
 		return false
 	equipped_weapon_instance = instance
 	equipped_weapon_slots[active_weapon_slot] = instance
+	# configure_from_tree 会短暂把模型设为满弹。整个投影加载必须保持原子，
+	# 不能让这个中间 ammo_changed 覆盖枪械实例保存的真实余弹。
 	_sync_weapon_from_tree()
-	if weapon != null and instance.current_ammo >= 0:
-		weapon.current_ammo = clampi(instance.current_ammo, 0, weapon.magazine_size)
+	if weapon != null and stored_ammo >= 0:
+		weapon.current_ammo = clampi(stored_ammo, 0, weapon.magazine_size)
+		instance.current_ammo = weapon.current_ammo
 		weapon.ammo_changed.emit(weapon.current_ammo, weapon.magazine_size)
+	_loading_weapon_instance = false
 	_sync_equipped_weapon_instance()
 	return true
 
@@ -1411,6 +1419,16 @@ func _sync_equipped_weapon_instance() -> void:
 
 func refill_ammo() -> bool:
 	return weapon != null and weapon.refill_ammo()
+
+
+func set_reload_ammo_provider(provider: Callable) -> void:
+	_reload_ammo_provider = provider
+	if weapon != null and is_instance_valid(weapon):
+		weapon.set_reload_ammo_provider(provider)
+
+
+func request_reload() -> bool:
+	return weapon != null and is_instance_valid(weapon) and weapon.request_reload()
 
 
 func set_damage_multiplier(source: String, multiplier: float) -> void:
@@ -1541,7 +1559,7 @@ func _update_combat_input() -> void:
 	elif shoot_pressed_here:
 		weapon.try_fire(aim_direction, self)
 	if not weapon.is_melee_weapon() and Input.is_action_just_pressed("reload"):
-		weapon.request_reload()
+		request_reload()
 
 
 func _begin_dash() -> bool:

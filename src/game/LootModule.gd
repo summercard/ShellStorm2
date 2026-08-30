@@ -187,6 +187,22 @@ func generate_enemy_loot(enemy_data: Dictionary) -> Array[Dictionary]:
 		count = 1
 
 	var loot: Array[Dictionary] = generate_loot(loot_table, count)
+	# 怪物具有独立、可验证的备弹产出，不再只依赖大掉落表偶然抽中。
+	var ammo_drop_chance := 1.0 if is_elite or is_boss else 0.34
+	if _rng.randf() < ammo_drop_chance:
+		var ammo_index := -1
+		for index in range(loot.size()):
+			if str(loot[index].get("id", "")) == "item_ammo_pack":
+				ammo_index = index
+				break
+		var ammo_count := _rng.randi_range(8, 16) if is_elite or is_boss else _rng.randi_range(3, 8)
+		if ammo_index >= 0:
+			loot[ammo_index]["count"] = ammo_count
+		else:
+			var ammo := _item_registry.get_item("item_ammo_pack")
+			if not ammo.is_empty():
+				ammo["count"] = ammo_count
+				loot.append(ammo)
 	if loot.is_empty() and floor <= 1 and not is_boss and _rng.randf() < (0.20 if is_elite else 0.08):
 		var key := _item_registry.get_item("item_room_key")
 		if not key.is_empty():
