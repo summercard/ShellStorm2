@@ -61,14 +61,28 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	_expect(int(snapshot.get("outer_module_count", -1)) == 68, "100层围栏模块周长计数不是68", failures)
 	_expect((snapshot.get("outer_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "100层围栏没有与扩展地板共用轮廓", failures)
 	_expect(is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 0.75), "100层围栏没有降低50%至0.75m", failures)
+	_expect(bool(snapshot.get("uses_formal_rooftop_art", false)), "100层正式运行时未接入天台v017设施", failures)
+	_expect(str(snapshot.get("formal_rooftop_art_version", "")) == "v017", "100层正式天台设施版本不是v017", failures)
+	_expect(int(snapshot.get("formal_rooftop_art_blocker_count", 0)) == 39, "100层正式天台美术没有带入39个细分阻挡组件", failures)
+	var facilities := rooftop.find_child("FormalRooftopFacilitiesV017", false, false) as Node3D
+	_expect(facilities != null, "100层Stage缺少v017正式设施实例", failures)
+	if facilities != null:
+		_expect(str(facilities.get_meta("runtime_scope", "")) == "facilities_only", "100层正式实例并非仅设施包装", failures)
+		_expect(facilities.get_node_or_null("BaseEnvironment") == null, "100层正式实例错误带入Blender地板或围护", failures)
 	var outer := rooftop.get("_outer_visual") as MultiMeshInstance3D
 	_expect(outer != null and outer.multimesh != null, "100层围栏MultiMesh缺失", failures)
+	_expect(outer != null and outer.visible, "100层原生围栏被设施导入隐藏", failures)
+	var floor_light := rooftop.get("_floor_visual_light") as MultiMeshInstance3D
+	var floor_dark := rooftop.get("_floor_visual_dark") as MultiMeshInstance3D
+	_expect(floor_light != null and floor_light.visible, "100层原生浅色地砖被设施导入隐藏", failures)
+	_expect(floor_dark != null and floor_dark.visible, "100层原生深色地砖被设施导入隐藏", failures)
 	if outer != null and outer.multimesh != null:
 		# 西侧门洞由2个独立预制体替代，因此MultiMesh应为68-2个实体模块。
 		_expect(outer.multimesh.instance_count == 66, "100层围栏实体模块数量不符合18×16周长和西门洞合同", failures)
 	var doorway := rooftop.find_child("ParapetDoorWall_West", false, false) as Node3D
 	_expect(doorway != null and is_equal_approx(doorway.scale.y, 0.5), "楼梯门洞旁围栏没有同步降低50%", failures)
 	if doorway != null:
+		_expect(doorway.visible, "100层原生西侧门洞围护被设施导入隐藏", failures)
 		_expect(is_equal_approx(doorway.position.x, WEST_PARAPET_X), "西侧楼梯门洞墙仍位于旧边界并插入楼梯间", failures)
 	var west_collision := rooftop.find_child("OuterBoundaryCollision_West", false, false) as StaticBody3D
 	_expect(west_collision != null, "100层西侧边界碰撞缺失", failures)

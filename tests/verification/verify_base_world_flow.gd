@@ -28,8 +28,8 @@ func _ready() -> void:
 	# 新增恢复舱与角色衣柜后，正式基地静态节点实测483，保留17节点余量。
 	if node_count > 500:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
-	if base_world.get_facility_count() != 11:
-		failures.append("BaseWorld3D does not expose eleven formal facilities")
+	if base_world.get_facility_count() != 9:
+		failures.append("BaseWorld3D does not expose nine formal facilities")
 	for facility_node in base_world.get_node("Facilities").get_children():
 		var facility := facility_node as BaseFacility3D
 		if facility == null:
@@ -91,24 +91,10 @@ func _ready() -> void:
 	var training_range := base_world.get_node_or_null("Facilities/TrainingRange") as BaseFacility3D
 	if training_range == null or training_range.activation_type != BaseFacility3D.ActivationType.LOAD_SCENE or training_range.target_scene_path != "res://scenes/TrainingRange3D.tscn":
 		failures.append("3D training facility does not point to the independent 3D training scene")
-	var base_console := base_world.get_node_or_null("Facilities/BaseConsole") as BaseFacility3D
-	if base_console == null:
-		failures.append("3D base management terminal is missing")
-	else:
-		base_world.call("_on_facility_activated", base_console)
-		await get_tree().process_frame
-		var console_menu := base_world.get_active_menu()
-		if console_menu == null or not console_menu is BaseMenu:
-			failures.append("3D base terminal does not open the existing management overlay")
-		else:
-			if not console_menu.overlay_mode or not console_menu.close_overlay_button.visible:
-				failures.append("3D base management overlay cannot return to the world")
-			await _tap_action("pause")
-			await get_tree().process_frame
-			if base_world.get_active_menu() != null or get_tree().paused:
-				failures.append("Esc does not close the base facility menu before pausing")
-		if base_world.player.input_locked:
-			failures.append("Closing a 3D facility menu leaves player input locked")
+	if base_world.get_node_or_null("Facilities/BaseConsole") != null:
+		failures.append("3D base management terminal was not removed")
+	if base_world.get_node_or_null("Facilities/Divination") != null:
+		failures.append("3D fate divination facility was not removed")
 	var pause_overlay := base_world.get_node_or_null("HUD/PauseOverlay") as PauseMenu3D
 	if pause_overlay == null:
 		failures.append("BaseWorld3D has no reusable visible pause overlay")

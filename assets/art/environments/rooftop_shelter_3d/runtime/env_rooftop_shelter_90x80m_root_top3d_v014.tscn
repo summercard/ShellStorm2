@@ -1,0 +1,395 @@
+[gd_scene load_steps=36 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v014.glb" id="1_rooftop"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_01"]
+size = Vector3(5.00000, 1.55000, 1.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_02"]
+size = Vector3(5.40000, 1.75000, 2.20000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_03"]
+size = Vector3(2.45000, 1.48000, 2.45000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_04"]
+size = Vector3(1.10000, 0.72000, 0.60000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_05"]
+size = Vector3(4.30000, 0.82000, 2.10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_06"]
+size = Vector3(1.25000, 1.65000, 1.25000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_07"]
+size = Vector3(4.90000, 1.45000, 1.45000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_08"]
+size = Vector3(4.10000, 0.65000, 0.55000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_09"]
+size = Vector3(4.10000, 0.65000, 0.55000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_10"]
+size = Vector3(1.50000, 0.62000, 1.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_11"]
+size = Vector3(7.15000, 3.20000, 0.45000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_12"]
+size = Vector3(4.60000, 1.35000, 1.30000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_13"]
+size = Vector3(3.40000, 2.65000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_14"]
+size = Vector3(1.05000, 1.75000, 0.85000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_15"]
+size = Vector3(1.05000, 1.75000, 0.85000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_16"]
+size = Vector3(1.05000, 1.75000, 0.85000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_17"]
+size = Vector3(4.50000, 5.25000, 4.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_18"]
+size = Vector3(2.60000, 3.45000, 2.60000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_19"]
+size = Vector3(2.60000, 3.45000, 2.60000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_20"]
+size = Vector3(3.00000, 3.85000, 3.00000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21"]
+size = Vector3(0.50000, 7.30000, 0.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_22"]
+size = Vector3(4.70000, 2.10000, 2.90000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_23"]
+size = Vector3(4.70000, 2.10000, 2.90000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
+size = Vector3(4.70000, 2.10000, 2.90000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25"]
+size = Vector3(4.70000, 2.10000, 2.90000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26"]
+size = Vector3(5.30000, 0.82000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27"]
+size = Vector3(5.30000, 0.82000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28"]
+size = Vector3(5.30000, 0.82000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
+size = Vector3(5.30000, 0.82000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(4.50000, 0.82000, 2.10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
+size = Vector3(4.30000, 1.05000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
+size = Vector3(8.30000, 4.85000, 6.10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_33"]
+size = Vector3(8.10000, 0.45000, 8.10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34"]
+size = Vector3(5.30000, 1.35000, 1.60000)
+
+[node name="末世天台生活聚落_90x80米_v014" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-SHELTER-90X80"
+metadata/version = "v014"
+metadata/grid_dimensions = Vector2i(18, 16)
+metadata/tile_size_m = 5.0
+metadata/tile_count = 234
+metadata/roof_world_rect = Rect2(-50, -35, 90, 80)
+metadata/base_atrium_world_rect = Rect2(-15, -10, 30, 30)
+metadata/west_stair_world_rect = Rect2(-45, 0, 15, 30)
+metadata/living_cluster_rect = Rect2(15.25, -31, 24, 67)
+metadata/layout_style = "东侧集中生活聚落：南部能源供水、中部棚屋餐食、北部种植通信"
+metadata/independent_blocker_count = 34
+metadata/collision_policy = "每个主要家具、设备与种植设施拥有独立StaticBody3D；地面和楼梯仍由TowerFloorStage3D持有"
+
+[node name="Visual" parent="." instance=ExtResource("1_rooftop")]
+
+[node name="IndependentBlockers" type="Node3D" parent="."]
+
+[node name="生活棚工作台_shelter_workbench" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 1.11500, -7.00000)
+metadata/component_id = "shelter_workbench"
+metadata/source_object = "COL_生活棚工作台"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/生活棚工作台_shelter_workbench"]
+shape = SubResource("BoxShape3D_01")
+
+[node name="双人沙发_lounge_sofa" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(29.00000, 1.21500, -4.30000)
+metadata/component_id = "lounge_sofa"
+metadata/source_object = "COL_双人沙发"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/双人沙发_lounge_sofa"]
+shape = SubResource("BoxShape3D_02")
+
+[node name="电缆卷筒圆桌_spool_table" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(29.10000, 1.08000, -1.00000)
+metadata/component_id = "spool_table"
+metadata/source_object = "COL_电缆卷筒圆桌"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/电缆卷筒圆桌_spool_table"]
+shape = SubResource("BoxShape3D_03")
+
+[node name="桌面老式收音机_table_radio" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(28.55000, 1.82000, -0.95000)
+metadata/component_id = "table_radio"
+metadata/source_object = "COL_桌面老式收音机"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/桌面老式收音机_table_radio"]
+shape = SubResource("BoxShape3D_04")
+
+[node name="简易床铺_camp_bed" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(21.00000, 0.75000, 1.80000)
+metadata/component_id = "camp_bed"
+metadata/source_object = "COL_简易床铺"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/简易床铺_camp_bed"]
+shape = SubResource("BoxShape3D_05")
+
+[node name="小型火炉_stove" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(25.50000, 1.16500, -6.20000)
+metadata/component_id = "stove"
+metadata/source_object = "COL_小型火炉"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/小型火炉_stove"]
+shape = SubResource("BoxShape3D_06")
+
+[node name="公共餐桌_dining_table" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(21.00000, 1.06500, -13.00000)
+metadata/component_id = "dining_table"
+metadata/source_object = "COL_公共餐桌"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/公共餐桌_dining_table"]
+shape = SubResource("BoxShape3D_07")
+
+[node name="公共餐桌南长凳_dining_bench_s" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(21.00000, 0.66500, -11.65000)
+metadata/component_id = "dining_bench_s"
+metadata/source_object = "COL_公共餐桌南长凳"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/公共餐桌南长凳_dining_bench_s"]
+shape = SubResource("BoxShape3D_08")
+
+[node name="公共餐桌北长凳_dining_bench_n" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(21.00000, 0.66500, -14.35000)
+metadata/component_id = "dining_bench_n"
+metadata/source_object = "COL_公共餐桌北长凳"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/公共餐桌北长凳_dining_bench_n"]
+shape = SubResource("BoxShape3D_09")
+
+[node name="生活洗衣盆_wash_basin" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(35.60000, 0.65000, 7.40000)
+metadata/component_id = "wash_basin"
+metadata/source_object = "COL_生活洗衣盆"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/生活洗衣盆_wash_basin"]
+shape = SubResource("BoxShape3D_10")
+
+[node name="香草晾晒架_herb_rack" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(32.50000, 1.94000, -12.00000)
+metadata/component_id = "herb_rack"
+metadata/source_object = "COL_香草晾晒架"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/香草晾晒架_herb_rack"]
+shape = SubResource("BoxShape3D_11")
+
+[node name="能源维修工作台_energy_bench" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(22.00000, 1.01500, 14.00000)
+metadata/component_id = "energy_bench"
+metadata/source_object = "COL_能源维修工作台"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/能源维修工作台_energy_bench"]
+shape = SubResource("BoxShape3D_12")
+
+[node name="柴油发电机_generator" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(31.00000, 1.66500, 18.00000)
+metadata/component_id = "generator"
+metadata/source_object = "COL_柴油发电机"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/柴油发电机_generator"]
+shape = SubResource("BoxShape3D_13")
+
+[node name="蓄电池柜0_battery_0" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(29.00000, 1.21500, 14.00000)
+metadata/component_id = "battery_0"
+metadata/source_object = "COL_蓄电池柜0"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/蓄电池柜0_battery_0"]
+shape = SubResource("BoxShape3D_14")
+
+[node name="蓄电池柜1_battery_1" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(30.15000, 1.21500, 14.00000)
+metadata/component_id = "battery_1"
+metadata/source_object = "COL_蓄电池柜1"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/蓄电池柜1_battery_1"]
+shape = SubResource("BoxShape3D_15")
+
+[node name="蓄电池柜2_battery_2" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(31.30000, 1.21500, 14.00000)
+metadata/component_id = "battery_2"
+metadata/source_object = "COL_蓄电池柜2"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/蓄电池柜2_battery_2"]
+shape = SubResource("BoxShape3D_16")
+
+[node name="储水罐0_water_tank_0" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(35.00000, 2.96500, 23.00000)
+metadata/component_id = "water_tank_0"
+metadata/source_object = "COL_储水罐0"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/储水罐0_water_tank_0"]
+shape = SubResource("BoxShape3D_17")
+
+[node name="储水罐1_water_tank_1" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(31.80000, 2.06500, 26.00000)
+metadata/component_id = "water_tank_1"
+metadata/source_object = "COL_储水罐1"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/储水罐1_water_tank_1"]
+shape = SubResource("BoxShape3D_18")
+
+[node name="储水罐2_water_tank_2" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(35.00000, 2.06500, 17.80000)
+metadata/component_id = "water_tank_2"
+metadata/source_object = "COL_储水罐2"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/储水罐2_water_tank_2"]
+shape = SubResource("BoxShape3D_19")
+
+[node name="储水罐3_water_tank_3" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(31.80000, 2.26500, 10.80000)
+metadata/component_id = "water_tank_3"
+metadata/source_object = "COL_储水罐3"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/储水罐3_water_tank_3"]
+shape = SubResource("BoxShape3D_20")
+
+[node name="风机塔杆_wind_mast" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(29.00000, 3.99000, 24.00000)
+metadata/component_id = "wind_mast"
+metadata/source_object = "COL_风机塔杆"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/风机塔杆_wind_mast"]
+shape = SubResource("BoxShape3D_21")
+
+[node name="太阳能板0_solar_0" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 1.55000, 22.00000)
+metadata/component_id = "solar_0"
+metadata/source_object = "COL_太阳能板0"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/太阳能板0_solar_0"]
+shape = SubResource("BoxShape3D_22")
+
+[node name="太阳能板1_solar_1" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(25.00000, 1.55000, 22.00000)
+metadata/component_id = "solar_1"
+metadata/source_object = "COL_太阳能板1"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/太阳能板1_solar_1"]
+shape = SubResource("BoxShape3D_23")
+
+[node name="太阳能板2_solar_2" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 1.55000, 26.00000)
+metadata/component_id = "solar_2"
+metadata/source_object = "COL_太阳能板2"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/太阳能板2_solar_2"]
+shape = SubResource("BoxShape3D_24")
+
+[node name="太阳能板3_solar_3" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(25.00000, 1.55000, 26.00000)
+metadata/component_id = "solar_3"
+metadata/source_object = "COL_太阳能板3"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/太阳能板3_solar_3"]
+shape = SubResource("BoxShape3D_25")
+
+[node name="种植池0_farm_planter_0" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 0.75000, -23.00000)
+metadata/component_id = "farm_planter_0"
+metadata/source_object = "COL_种植池0"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/种植池0_farm_planter_0"]
+shape = SubResource("BoxShape3D_26")
+
+[node name="种植池1_farm_planter_1" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(26.00000, 0.75000, -23.00000)
+metadata/component_id = "farm_planter_1"
+metadata/source_object = "COL_种植池1"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/种植池1_farm_planter_1"]
+shape = SubResource("BoxShape3D_27")
+
+[node name="种植池2_farm_planter_2" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 0.75000, -19.50000)
+metadata/component_id = "farm_planter_2"
+metadata/source_object = "COL_种植池2"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/种植池2_farm_planter_2"]
+shape = SubResource("BoxShape3D_28")
+
+[node name="种植池3_farm_planter_3" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(26.00000, 0.75000, -19.50000)
+metadata/component_id = "farm_planter_3"
+metadata/source_object = "COL_种植池3"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/种植池3_farm_planter_3"]
+shape = SubResource("BoxShape3D_29")
+
+[node name="种植池4_farm_planter_4" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(20.00000, 0.75000, -16.00000)
+metadata/component_id = "farm_planter_4"
+metadata/source_object = "COL_种植池4"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/种植池4_farm_planter_4"]
+shape = SubResource("BoxShape3D_30")
+
+[node name="浴缸种植池_bathtub_planter" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(26.00000, 0.86500, -16.00000)
+metadata/component_id = "bathtub_planter"
+metadata/source_object = "COL_浴缸种植池"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/浴缸种植池_bathtub_planter"]
+shape = SubResource("BoxShape3D_31")
+
+[node name="温室_greenhouse" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(22.00000, 2.76500, -29.40000)
+metadata/component_id = "greenhouse"
+metadata/source_object = "COL_温室"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/温室_greenhouse"]
+shape = SubResource("BoxShape3D_32")
+
+[node name="广播平台楼板_radio_platform" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(33.00000, 4.56500, -24.00000)
+metadata/component_id = "radio_platform"
+metadata/source_object = "COL_广播平台楼板"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/广播平台楼板_radio_platform"]
+shape = SubResource("BoxShape3D_33")
+
+[node name="广播控制桌_radio_console" type="StaticBody3D" parent="IndependentBlockers"]
+position = Vector3(33.00000, 5.39500, -25.80000)
+metadata/component_id = "radio_console"
+metadata/source_object = "COL_广播控制桌"
+
+[node name="Shape" type="CollisionShape3D" parent="IndependentBlockers/广播控制桌_radio_console"]
+shape = SubResource("BoxShape3D_34")

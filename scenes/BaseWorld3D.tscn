@@ -66,14 +66,6 @@ description = "解锁枪身、弹药与配件蓝图"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
 facility_color = Color(0.75, 0.42, 0.16, 1)
 
-[node name="Divination" parent="Facilities" instance=ExtResource("3_facility")]
-position = Vector3(-5.5, 0, -2.6)
-facility_id = "fate_divination"
-display_name = "命运占卜屋"
-description = "为下一次任务准备命运预兆"
-menu_scene_path = "res://scenes/DivinationMenu.tscn"
-facility_color = Color(0.55, 0.31, 0.78, 1)
-
 [node name="Vault" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-14.5, 0, 2.6)
 facility_id = "vault"
@@ -97,14 +89,6 @@ display_name = "命运卡牌收藏室"
 description = "浏览已发现的命运卡片"
 menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
 facility_color = Color(0.72, 0.28, 0.58, 1)
-
-[node name="BaseConsole" parent="Facilities" instance=ExtResource("3_facility")]
-position = Vector3(-7.8, 0, 6.2)
-facility_id = "base_console"
-display_name = "基地管理终端"
-description = "处理战利品、升级建筑与查看总览"
-menu_scene_path = "res://scenes/BaseMenu.tscn"
-facility_color = Color(0.28, 0.52, 0.68, 1)
 
 [node name="BaseVending" parent="Facilities" instance=ExtResource("7_vending")]
 position = Vector3(2.4, 0, 7.7)

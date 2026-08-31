@@ -3230,8 +3230,8 @@ func _install_facilities() -> void:
 		editor_guide.visible = false
 	_collect_facility_art_nodes(_facility_art_layout, facility_floor.global_position)
 	_install_base_rooftop_transit_door(facility_floor)
-	if _facility_nodes.size() != 10:
-		push_error("基地美术布置层应包含10个交互设施，当前为%d个" % _facility_nodes.size())
+	if _facility_nodes.size() != 8:
+		push_error("基地美术布置层应包含8个交互设施，当前为%d个" % _facility_nodes.size())
 
 
 func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:

@@ -1,0 +1,86 @@
+{
+  "blend": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v017.blend",
+  "passed": true,
+  "checks": {
+    "layout_validation": true,
+    "material_budget": true,
+    "runtime_tile_count_234": true,
+    "grid_contract_18x16": true,
+    "base_atrium_is_empty": true,
+    "west_stair_is_empty": true,
+    "marked_zones_match_reference": true,
+    "door_walkway_has_zero_blockers": true,
+    "component_folders_are_fine_grained": true,
+    "editable_component_count_68": true,
+    "independent_blocker_component_count_39": true,
+    "compound_collision_shape_count_refined": true,
+    "shelter_radio_do_not_overlap": true,
+    "palette_uv_on_all_output_meshes": true,
+    "shared_palette_external": true,
+    "runtime_facilities_only": true,
+    "native_floor_and_parapet_preserved": true
+  },
+  "layout": {
+    "passed": true,
+    "tile_count": 234,
+    "grid_dimensions": [
+      18,
+      16
+    ],
+    "roof_world_rect": [
+      -50.0,
+      -35.0,
+      90.0,
+      80.0
+    ],
+    "base_atrium_world_rect": [
+      -15.0,
+      -10.0,
+      30.0,
+      30.0
+    ],
+    "west_stair_world_rect": [
+      -45.0,
+      0.0,
+      15.0,
+      30.0
+    ],
+    "reserved_overlap_count": 0,
+    "living_cluster_rect": [
+      15.25,
+      -31.0,
+      24.0,
+      67.0
+    ],
+    "door_walkway_rect": [
+      15.25,
+      -6.0,
+      24.0,
+      20.0
+    ],
+    "door_walkway_blocker_count": 0,
+    "shelter_radio_overlap_count": 0,
+    "shelter_radio_clearance_m": 2.0,
+    "shelter_zone_rect": [
+      7.5,
+      27.5,
+      21.0,
+      17.5
+    ],
+    "farm_zone_rect": [
+      -24.0,
+      22.0,
+      12.5,
+      20.0
+    ],
+    "radio_zone_rect": [
+      30.5,
+      34.0,
+      9.5,
+      10.5
+    ],
+    "marked_zone_violation_count": 0
+  },
+  "output_mesh_count": 4360,
+  "material_count": 4
+}

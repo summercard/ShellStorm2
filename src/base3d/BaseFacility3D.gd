@@ -15,9 +15,9 @@ enum ActivationType {
 const FRONT_INTERACTION_PROFILES := {
 	# 这三件大型设施贴墙摆放，交互区必须落在模型正面可站立区域，
 	# 不能继续沿用包住整个模型的中心方盒。
-	# 情报终端和枪械工坊的视觉正面与旧的房间中心朝向约定相反，只翻转热区。
-	"mission_operations": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30, "front_side_multiplier": -1.0},
-	"weapon_workshop": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30, "front_side_multiplier": -1.0},
+	# 情报终端和枪械工坊的可操作面均朝向房间中心；只移动热区，禁止改设施Transform。
+	"mission_operations": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
+	"weapon_workshop": {"width": 5.4, "depth": 3.8, "height": 3.4, "overlap": 0.30},
 	"base_vending": {"width": 5.0, "depth": 4.4, "height": 3.4, "overlap": 0.30},
 }
 

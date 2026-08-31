@@ -1,0 +1,1399 @@
+[gd_scene load_steps=151 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_01_v017.glb" id="component_01"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_02_v017.glb" id="component_02"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_03_v017.glb" id="component_03"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_04_v017.glb" id="component_04"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_05_v017.glb" id="component_05"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_06_v017.glb" id="component_06"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_07_v017.glb" id="component_07"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_08_v017.glb" id="component_08"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_09_v017.glb" id="component_09"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_10_v017.glb" id="component_10"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_11_v017.glb" id="component_11"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_12_v017.glb" id="component_12"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_13_v017.glb" id="component_13"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_14_v017.glb" id="component_14"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_15_v017.glb" id="component_15"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_16_v017.glb" id="component_16"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_01_v017.glb" id="component_17"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_02_v017.glb" id="component_18"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_03_v017.glb" id="component_19"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_04_v017.glb" id="component_20"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_05_v017.glb" id="component_21"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_06_v017.glb" id="component_22"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_07_v017.glb" id="component_23"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_08_v017.glb" id="component_24"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_09_v017.glb" id="component_25"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_10_v017.glb" id="component_26"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_11_v017.glb" id="component_27"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_12_v017.glb" id="component_28"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_13_v017.glb" id="component_29"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_14_v017.glb" id="component_30"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_15_v017.glb" id="component_31"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_16_v017.glb" id="component_32"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_17_v017.glb" id="component_33"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_18_v017.glb" id="component_34"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_01_v017.glb" id="component_35"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_02_v017.glb" id="component_36"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_03_v017.glb" id="component_37"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_04_v017.glb" id="component_38"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_05_v017.glb" id="component_39"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_06_v017.glb" id="component_40"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_07_v017.glb" id="component_41"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_08_v017.glb" id="component_42"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_09_v017.glb" id="component_43"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_10_v017.glb" id="component_44"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_11_v017.glb" id="component_45"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_12_v017.glb" id="component_46"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_13_v017.glb" id="component_47"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_14_v017.glb" id="component_48"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_15_v017.glb" id="component_49"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_01_v017.glb" id="component_50"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_02_v017.glb" id="component_51"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_03_v017.glb" id="component_52"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_04_v017.glb" id="component_53"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_05_v017.glb" id="component_54"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_06_v017.glb" id="component_55"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_07_v017.glb" id="component_56"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_08_v017.glb" id="component_57"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_09_v017.glb" id="component_58"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_01_v017.glb" id="component_59"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_02_v017.glb" id="component_60"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_03_v017.glb" id="component_61"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_04_v017.glb" id="component_62"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_05_v017.glb" id="component_63"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_06_v017.glb" id="component_64"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_07_v017.glb" id="component_65"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_08_v017.glb" id="component_66"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_09_v017.glb" id="component_67"]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_10_v017.glb" id="component_68"]
+
+[sub_resource type="BoxShape3D" id="CollisionShape_001"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_002"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_003"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_004"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_005"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_006"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_007"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_008"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_009"]
+size = Vector3(0.20000, 3.60000, 5.80000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_010"]
+size = Vector3(0.20000, 2.90000, 3.10000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_011"]
+size = Vector3(0.20000, 3.30000, 4.50000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_012"]
+size = Vector3(0.20000, 2.50000, 3.00000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_013"]
+size = Vector3(5.00000, 3.30000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_014"]
+size = Vector3(4.80000, 2.70000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_015"]
+size = Vector3(6.00000, 3.50000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_016"]
+size = Vector3(20.70000, 0.50000, 15.70000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_017"]
+size = Vector3(3.20000, 0.16000, 1.72000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_018"]
+size = Vector3(5.00000, 0.18000, 1.50000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_019"]
+size = Vector3(0.22000, 1.40000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_020"]
+size = Vector3(0.22000, 1.40000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_021"]
+size = Vector3(5.00000, 2.80000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_022"]
+size = Vector3(5.20000, 0.45000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_023"]
+size = Vector3(4.25000, 1.30000, 0.55000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_024"]
+size = Vector3(0.55000, 0.95000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_025"]
+size = Vector3(0.55000, 0.95000, 2.00000)
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_026"]
+radius = 1.18000
+height = 0.18000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_027"]
+radius = 0.42000
+height = 0.75000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_028"]
+radius = 1.18000
+height = 0.16000
+
+[sub_resource type="BoxShape3D" id="CollisionShape_029"]
+size = Vector3(1.05000, 0.66000, 0.52000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_030"]
+size = Vector3(4.20000, 0.45000, 2.00000)
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_031"]
+radius = 0.60000
+height = 1.10000
+
+[sub_resource type="BoxShape3D" id="CollisionShape_032"]
+size = Vector3(4.80000, 0.18000, 1.35000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_033"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_034"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_035"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_036"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_037"]
+size = Vector3(4.00000, 0.42000, 0.48000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_038"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_039"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_040"]
+size = Vector3(4.00000, 0.42000, 0.48000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_041"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_042"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_043"]
+radius = 0.72000
+height = 0.28000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_044"]
+radius = 0.08000
+height = 3.00000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_045"]
+radius = 0.08000
+height = 3.00000
+
+[sub_resource type="BoxShape3D" id="CollisionShape_046"]
+size = Vector3(7.05000, 0.16000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_047"]
+size = Vector3(4.50000, 1.25000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_048"]
+size = Vector3(3.20000, 1.60000, 1.80000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_049"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_050"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_051"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_052"]
+radius = 2.20000
+height = 4.80000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_053"]
+radius = 1.25000
+height = 3.10000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_054"]
+radius = 1.25000
+height = 3.10000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_055"]
+radius = 1.45000
+height = 3.50000
+
+[sub_resource type="CylinderShape3D" id="CollisionShape_056"]
+radius = 0.18000
+height = 7.20000
+
+[sub_resource type="BoxShape3D" id="CollisionShape_057"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_058"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_059"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_060"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_061"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_062"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_063"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_064"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_065"]
+size = Vector3(4.40000, 0.65000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_066"]
+size = Vector3(4.20000, 0.85000, 1.90000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_067"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_068"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_069"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_070"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_071"]
+size = Vector3(8.00000, 0.38000, 8.00000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_072"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_073"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_074"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_075"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_076"]
+size = Vector3(2.30000, 0.22000, 5.38000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_077"]
+size = Vector3(0.18000, 1.20000, 7.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_078"]
+size = Vector3(0.18000, 1.20000, 7.40000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_079"]
+size = Vector3(7.40000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_080"]
+size = Vector3(2.10000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_081"]
+size = Vector3(2.10000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="CollisionShape_082"]
+size = Vector3(5.20000, 1.25000, 1.50000)
+
+[node name="末世天台生活聚落_90x80米_v017" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-SHELTER-90X80"
+metadata/version = "v017"
+metadata/runtime_scope = "facilities_only"
+metadata/native_floor_and_parapet_preserved = true
+metadata/facility_vertical_offset_m = -0.34
+metadata/grid_dimensions = Vector2i(18, 16)
+metadata/tile_size_m = 5.0
+metadata/tile_count = 234
+metadata/roof_world_rect = Rect2(-50, -35, 90, 80)
+metadata/base_atrium_world_rect = Rect2(-15, -10, 30, 30)
+metadata/west_stair_world_rect = Rect2(-45, 0, 15, 30)
+metadata/living_cluster_rect = Rect2(15.25, -31, 24, 67)
+metadata/layout_style = "东北角通信高台；贴边棚屋位于其西侧且留2米间距；种植与能源继续沿外围布置"
+metadata/independent_blocker_count = 39
+metadata/collision_shape_count = 82
+metadata/editable_component_count = 68
+metadata/door_walkway_rect = Rect2(15.25, -6.0, 24.0, 20.0)
+metadata/shelter_zone_rect = Rect2(7.5, 27.5, 21.0, 17.5)
+metadata/farm_zone_rect = Rect2(-24.0, 22.0, 12.5, 20.0)
+metadata/radio_zone_rect = Rect2(30.5, 34.0, 9.5, 10.5)
+metadata/collision_policy = "组合碰撞挂在对应可编辑组件节点下；圆形设施使用CylinderShape3D；桌椅/棚架/温室/高台使用贴合结构的多Shape"
+
+[node name="布局_可手动编辑" type="Node3D" parent="."]
+position = Vector3(0, -0.34, 0)
+
+[node name="01_生活棚与家具" type="Node3D" parent="布局_可手动编辑"]
+
+[node name="05_抬高木平台" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(17.97965, 0.34000, -37.00000)
+metadata/component_folder = "Props_Furniture/05_抬高木平台"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/05_抬高木平台" instance=ExtResource("component_01")]
+
+[node name="06_小木板楼梯" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(18.00000, 0.34000, -28.67500)
+metadata/component_folder = "Props_Furniture/06_小木板楼梯"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/06_小木板楼梯" instance=ExtResource("component_02")]
+
+[node name="10_生活棚结构" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(18.00000, 0.84000, -37.00000)
+metadata/component_folder = "Props_Furniture/10_生活棚结构"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构" instance=ExtResource("component_03")]
+
+[node name="20_工作台与工具墙" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(12.00000, 0.86000, -40.51500)
+metadata/component_folder = "Props_Furniture/20_工作台与工具墙"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙" instance=ExtResource("component_04")]
+
+[node name="30_双人沙发" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(21.00000, 0.84000, -37.83465)
+metadata/component_folder = "Props_Furniture/30_双人沙发"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发" instance=ExtResource("component_05")]
+
+[node name="31_电缆卷筒圆桌" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(21.10000, 0.86000, -34.50000)
+metadata/component_folder = "Props_Furniture/31_电缆卷筒圆桌"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/31_电缆卷筒圆桌" instance=ExtResource("component_06")]
+
+[node name="32_桌面老式收音机" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(20.26700, 1.96000, -34.42549)
+metadata/component_folder = "Props_Furniture/32_桌面老式收音机"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/32_桌面老式收音机" instance=ExtResource("component_07")]
+
+[node name="33_桌面独立散件" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(21.27770, 1.97000, -34.63005)
+metadata/component_folder = "Props_Furniture/33_桌面独立散件"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/33_桌面独立散件" instance=ExtResource("component_08")]
+
+[node name="34_休息区地垫" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(21.00408, 0.86500, -36.50000)
+metadata/component_folder = "Props_Furniture/34_休息区地垫"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/34_休息区地垫" instance=ExtResource("component_09")]
+
+[node name="40_床铺与睡袋" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(13.00000, 0.86000, -31.70000)
+metadata/component_folder = "Props_Furniture/40_床铺与睡袋"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/40_床铺与睡袋" instance=ExtResource("component_10")]
+
+[node name="41_生活收纳木箱" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(10.25000, 0.86000, -32.30000)
+metadata/component_folder = "Props_Furniture/41_生活收纳木箱"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/41_生活收纳木箱" instance=ExtResource("component_11")]
+
+[node name="50_地图物资板" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(26.00000, 1.70000, -44.18529)
+metadata/component_folder = "Props_Furniture/50_地图物资板"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/50_地图物资板" instance=ExtResource("component_12")]
+
+[node name="60_火炉与水壶" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(17.50000, 0.86000, -39.70000)
+metadata/component_folder = "Props_Furniture/60_火炉与水壶"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/60_火炉与水壶" instance=ExtResource("component_13")]
+
+[node name="70_露营灯具" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(18.90000, 3.80000, -39.75000)
+metadata/component_folder = "Props_Furniture/70_露营灯具"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/70_露营灯具" instance=ExtResource("component_14")]
+
+[node name="71_棚屋小风车" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(26.80000, 0.84000, -31.16000)
+metadata/component_folder = "Props_Furniture/71_棚屋小风车"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/71_棚屋小风车" instance=ExtResource("component_15")]
+
+[node name="72_棚屋吊挂风铃" type="Node3D" parent="布局_可手动编辑/01_生活棚与家具"]
+position = Vector3(17.56684, 3.83000, -36.50000)
+metadata/component_folder = "Props_Furniture/72_棚屋吊挂风铃"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/01_生活棚与家具/72_棚屋吊挂风铃" instance=ExtResource("component_16")]
+
+[node name="02_生存日常" type="Node3D" parent="布局_可手动编辑"]
+
+[node name="10_公共餐桌" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(23.00000, 0.84000, -42.50000)
+metadata/component_folder = "Props_Survival/10_公共餐桌"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/10_公共餐桌" instance=ExtResource("component_17")]
+
+[node name="11_公共餐桌长凳" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(23.00000, 0.84000, -42.50000)
+metadata/component_folder = "Props_Survival/11_公共餐桌长凳"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳" instance=ExtResource("component_18")]
+
+[node name="12_公共餐桌餐具" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(23.05780, 1.70000, -42.56000)
+metadata/component_folder = "Props_Survival/12_公共餐桌餐具"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/12_公共餐桌餐具" instance=ExtResource("component_19")]
+
+[node name="20_棚口旧鞋" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(9.77000, 0.84000, -29.60000)
+metadata/component_folder = "Props_Survival/20_棚口旧鞋"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/20_棚口旧鞋" instance=ExtResource("component_20")]
+
+[node name="21_生活洗衣盆" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(26.00000, 0.84000, -32.00000)
+metadata/component_folder = "Props_Survival/21_生活洗衣盆"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/21_生活洗衣盆" instance=ExtResource("component_21")]
+
+[node name="22_香草晾晒架" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(23.50000, 0.84000, -31.50289)
+metadata/component_folder = "Props_Survival/22_香草晾晒架"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/22_香草晾晒架" instance=ExtResource("component_22")]
+
+[node name="23_聚落串灯" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(17.75000, 4.43000, -37.75000)
+metadata/component_folder = "Props_Survival/23_聚落串灯"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/23_聚落串灯" instance=ExtResource("component_23")]
+
+[node name="24_生活区盆栽" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(18.02622, 0.84000, -37.63488)
+metadata/component_folder = "Props_Survival/24_生活区盆栽"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/24_生活区盆栽" instance=ExtResource("component_24")]
+
+[node name="30_晾衣设施" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(13.00000, 2.75000, -42.00000)
+metadata/component_folder = "Props_Survival/30_晾衣设施"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/30_晾衣设施" instance=ExtResource("component_25")]
+
+[node name="31_防水布物资" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(11.00000, 0.84000, -42.00000)
+metadata/component_folder = "Props_Survival/31_防水布物资"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/31_防水布物资" instance=ExtResource("component_26")]
+
+[node name="32_备用轮胎" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(21.81966, -0.21000, 23.04157)
+metadata/component_folder = "Props_Survival/32_备用轮胎"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/32_备用轮胎" instance=ExtResource("component_27")]
+
+[node name="40_木板便道" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(27.06249, 0.36000, 2.99703)
+metadata/component_folder = "Props_Survival/40_木板便道"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/40_木板便道" instance=ExtResource("component_28")]
+
+[node name="50_工坊拆件" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(19.77420, 0.31859, 18.33300)
+metadata/component_folder = "Props_Survival/50_工坊拆件"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/50_工坊拆件" instance=ExtResource("component_29")]
+
+[node name="51_南侧补给" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(19.64112, 0.31837, 27.46432)
+metadata/component_folder = "Props_Survival/51_南侧补给"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/51_南侧补给" instance=ExtResource("component_30")]
+
+[node name="52_水箱维修" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(36.00248, 0.33018, 14.32039)
+metadata/component_folder = "Props_Survival/52_水箱维修"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/52_水箱维修" instance=ExtResource("component_31")]
+
+[node name="53_农场园艺" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(-11.01707, 0.33583, -34.10659)
+metadata/component_folder = "Props_Survival/53_农场园艺"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/53_农场园艺" instance=ExtResource("component_32")]
+
+[node name="54_广播备件" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(30.01217, 0.31833, -32.07209)
+metadata/component_folder = "Props_Survival/54_广播备件"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/54_广播备件" instance=ExtResource("component_33")]
+
+[node name="55_生活储备" type="Node3D" parent="布局_可手动编辑/02_生存日常"]
+position = Vector3(9.84994, 0.32279, -40.23510)
+metadata/component_folder = "Props_Survival/55_生活储备"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/02_生存日常/55_生活储备" instance=ExtResource("component_34")]
+
+[node name="03_能源供水" type="Node3D" parent="布局_可手动编辑"]
+
+[node name="10_太阳能板0" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(20.00000, 0.46117, 22.01105)
+metadata/component_folder = "Props_Energy/10_太阳能板0"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/10_太阳能板0" instance=ExtResource("component_35")]
+
+[node name="11_太阳能板1" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(25.00000, 0.46117, 22.01334)
+metadata/component_folder = "Props_Energy/11_太阳能板1"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/11_太阳能板1" instance=ExtResource("component_36")]
+
+[node name="12_太阳能板2" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(20.00000, 0.46117, 26.00951)
+metadata/component_folder = "Props_Energy/12_太阳能板2"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/12_太阳能板2" instance=ExtResource("component_37")]
+
+[node name="13_太阳能板3" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(25.00000, 0.46117, 26.01182)
+metadata/component_folder = "Props_Energy/13_太阳能板3"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/13_太阳能板3" instance=ExtResource("component_38")]
+
+[node name="20_风力发电机" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(29.47750, 0.34000, 24.34500)
+metadata/component_folder = "Props_Energy/20_风力发电机"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/20_风力发电机" instance=ExtResource("component_39")]
+
+[node name="30_柴油发电机" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(31.00000, 0.34000, 18.04750)
+metadata/component_folder = "Props_Energy/30_柴油发电机"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/30_柴油发电机" instance=ExtResource("component_40")]
+
+[node name="31_蓄电池柜0" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(29.00000, 0.34000, 14.00000)
+metadata/component_folder = "Props_Energy/31_蓄电池柜0"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/31_蓄电池柜0" instance=ExtResource("component_41")]
+
+[node name="32_蓄电池柜1" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(30.15000, 0.34000, 14.00000)
+metadata/component_folder = "Props_Energy/32_蓄电池柜1"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/32_蓄电池柜1" instance=ExtResource("component_42")]
+
+[node name="33_蓄电池柜2" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(31.30000, 0.34000, 14.00000)
+metadata/component_folder = "Props_Energy/33_蓄电池柜2"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/33_蓄电池柜2" instance=ExtResource("component_43")]
+
+[node name="34_能源维修工作台" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(22.00000, 0.34000, 14.00000)
+metadata/component_folder = "Props_Energy/34_能源维修工作台"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/34_能源维修工作台" instance=ExtResource("component_44")]
+
+[node name="40_储水罐0" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(35.00000, 0.34000, 23.00000)
+metadata/component_folder = "Props_Energy/40_储水罐0"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/40_储水罐0" instance=ExtResource("component_45")]
+
+[node name="41_储水罐1" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(31.80000, 0.34000, 26.00000)
+metadata/component_folder = "Props_Energy/41_储水罐1"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/41_储水罐1" instance=ExtResource("component_46")]
+
+[node name="42_储水罐2" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(35.00000, 0.34000, 17.80000)
+metadata/component_folder = "Props_Energy/42_储水罐2"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/42_储水罐2" instance=ExtResource("component_47")]
+
+[node name="43_储水罐3" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(31.80000, 0.34000, 10.80000)
+metadata/component_folder = "Props_Energy/43_储水罐3"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/43_储水罐3" instance=ExtResource("component_48")]
+
+[node name="50_管线与配电" type="Node3D" parent="布局_可手动编辑/03_能源供水"]
+position = Vector3(30.02607, 0.34000, 15.52117)
+metadata/component_folder = "Props_Energy/50_管线与配电"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/03_能源供水/50_管线与配电" instance=ExtResource("component_49")]
+
+[node name="04_种植" type="Node3D" parent="布局_可手动编辑"]
+
+[node name="10_种植池0" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-21.00000, 0.34000, -31.00000)
+metadata/component_folder = "Props_Farming/10_种植池0"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/10_种植池0" instance=ExtResource("component_50")]
+
+[node name="11_种植池1" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-15.00000, 0.34000, -31.00000)
+metadata/component_folder = "Props_Farming/11_种植池1"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/11_种植池1" instance=ExtResource("component_51")]
+
+[node name="12_种植池2" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-21.00000, 0.34000, -27.50000)
+metadata/component_folder = "Props_Farming/12_种植池2"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/12_种植池2" instance=ExtResource("component_52")]
+
+[node name="13_种植池3" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-15.00000, 0.34000, -27.50000)
+metadata/component_folder = "Props_Farming/13_种植池3"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/13_种植池3" instance=ExtResource("component_53")]
+
+[node name="14_种植池4" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-21.00000, 0.34000, -24.00000)
+metadata/component_folder = "Props_Farming/14_种植池4"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/14_种植池4" instance=ExtResource("component_54")]
+
+[node name="20_浴缸种植池" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-15.00000, 0.34000, -24.00000)
+metadata/component_folder = "Props_Farming/20_浴缸种植池"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/20_浴缸种植池" instance=ExtResource("component_55")]
+
+[node name="30_温室" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-19.00000, 0.34000, -37.40000)
+metadata/component_folder = "Props_Farming/30_温室"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/30_温室" instance=ExtResource("component_56")]
+
+[node name="31_种植储水滴灌" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-17.75000, 0.34000, -31.78250)
+metadata/component_folder = "Props_Farming/31_种植储水滴灌"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/31_种植储水滴灌" instance=ExtResource("component_57")]
+
+[node name="32_堆肥与园艺工具" type="Node3D" parent="布局_可手动编辑/04_种植"]
+position = Vector3(-13.25984, 0.34000, -39.98250)
+metadata/component_folder = "Props_Farming/32_堆肥与园艺工具"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/04_种植/32_堆肥与园艺工具" instance=ExtResource("component_58")]
+
+[node name="05_通信高台" type="Node3D" parent="布局_可手动编辑"]
+
+[node name="10_广播平台结构" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 0.34000, -40.00000)
+metadata/component_folder = "Props_Communication/10_广播平台结构"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/10_广播平台结构" instance=ExtResource("component_59")]
+
+[node name="11_广播平台楼梯" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 0.34000, -36.28000)
+metadata/component_folder = "Props_Communication/11_广播平台楼梯"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/11_广播平台楼梯" instance=ExtResource("component_60")]
+
+[node name="12_广播平台栏杆" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 4.72000, -40.00000)
+metadata/component_folder = "Props_Communication/12_广播平台栏杆"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆" instance=ExtResource("component_61")]
+
+[node name="20_广播控制桌" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 4.72000, -41.80000)
+metadata/component_folder = "Props_Communication/20_广播控制桌"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/20_广播控制桌" instance=ExtResource("component_62")]
+
+[node name="21_无线电收发机" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.02500, 6.00000, -41.49750)
+metadata/component_folder = "Props_Communication/21_无线电收发机"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/21_无线电收发机" instance=ExtResource("component_63")]
+
+[node name="22_广播地图与记录" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 5.10000, -43.61314)
+metadata/component_folder = "Props_Communication/22_广播地图与记录"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/22_广播地图与记录" instance=ExtResource("component_64")]
+
+[node name="30_通信主桅杆" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.99391, 4.72000, -40.00000)
+metadata/component_folder = "Props_Communication/30_通信主桅杆"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/30_通信主桅杆" instance=ExtResource("component_65")]
+
+[node name="31_八木定向天线" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 12.09000, -40.00000)
+metadata/component_folder = "Props_Communication/31_八木定向天线"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/31_八木定向天线" instance=ExtResource("component_66")]
+
+[node name="32_卫星接收锅" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(38.00000, 7.63199, -37.18897)
+metadata/component_folder = "Props_Communication/32_卫星接收锅"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/32_卫星接收锅" instance=ExtResource("component_67")]
+
+[node name="33_信号灯与仪表" type="Node3D" parent="布局_可手动编辑/05_通信高台"]
+position = Vector3(35.00000, 6.75000, -40.51278)
+metadata/component_folder = "Props_Communication/33_信号灯与仪表"
+metadata/manual_layout_editable = true
+
+[node name="Visual" parent="布局_可手动编辑/05_通信高台/33_信号灯与仪表" instance=ExtResource("component_68")]
+
+[node name="阻挡_shelter_structure" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构"]
+metadata/component_id = "shelter_structure"
+metadata/collision_mode = "compound_15_shapes"
+
+[node name="Shape_00_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-10.00000, 2.60000, 7.50000)
+shape = SubResource("CollisionShape_001")
+
+[node name="Shape_01_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-10.00000, 2.60000, -0.00000)
+shape = SubResource("CollisionShape_002")
+
+[node name="Shape_02_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-10.00000, 2.60000, -7.50000)
+shape = SubResource("CollisionShape_003")
+
+[node name="Shape_03_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(0.00000, 2.60000, 7.50000)
+shape = SubResource("CollisionShape_004")
+
+[node name="Shape_04_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(0.00000, 2.60000, -7.50000)
+shape = SubResource("CollisionShape_005")
+
+[node name="Shape_05_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(10.00000, 2.60000, 7.50000)
+shape = SubResource("CollisionShape_006")
+
+[node name="Shape_06_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(10.00000, 2.60000, -0.00000)
+shape = SubResource("CollisionShape_007")
+
+[node name="Shape_07_棚柱" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(10.00000, 2.60000, -7.50000)
+shape = SubResource("CollisionShape_008")
+
+[node name="Shape_08_西侧墙板A" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-9.90000, 1.82000, -3.70000)
+shape = SubResource("CollisionShape_009")
+
+[node name="Shape_09_西侧墙板B" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-9.90000, 1.47000, 5.30000)
+shape = SubResource("CollisionShape_010")
+
+[node name="Shape_10_东侧墙板A" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(9.90000, 1.67000, -4.60000)
+shape = SubResource("CollisionShape_011")
+
+[node name="Shape_11_东侧墙板B" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(9.90000, 1.27000, 5.30000)
+shape = SubResource("CollisionShape_012")
+
+[node name="Shape_12_北侧墙板A" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-6.80000, 1.67000, -7.40000)
+shape = SubResource("CollisionShape_013")
+
+[node name="Shape_13_北侧墙板B" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(-1.00000, 1.37000, -7.40000)
+shape = SubResource("CollisionShape_014")
+
+[node name="Shape_14_北侧墙板C" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/10_生活棚结构/阻挡_shelter_structure"]
+position = Vector3(6.30000, 1.77000, -7.40000)
+shape = SubResource("CollisionShape_015")
+
+[node name="阻挡_shelter_platform" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/05_抬高木平台"]
+metadata/component_id = "shelter_platform"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_木平台承重面" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/05_抬高木平台/阻挡_shelter_platform"]
+position = Vector3(0.02035, 0.25000, -0.00000)
+shape = SubResource("CollisionShape_016")
+
+[node name="阻挡_shelter_stair_ramp" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/06_小木板楼梯"]
+metadata/component_id = "shelter_stair_ramp"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_连续坡面" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/06_小木板楼梯/阻挡_shelter_stair_ramp"]
+position = Vector3(0.00000, 0.32000, -0.14500)
+rotation_degrees = Vector3(17.35000, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_017")
+
+[node name="阻挡_shelter_workbench" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙"]
+metadata/component_id = "shelter_workbench"
+metadata/collision_mode = "compound_4_shapes"
+
+[node name="Shape_00_桌面" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙/阻挡_shelter_workbench"]
+position = Vector3(0.00000, 0.09000, 0.01500)
+shape = SubResource("CollisionShape_018")
+
+[node name="Shape_01_左桌腿" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙/阻挡_shelter_workbench"]
+position = Vector3(-2.20000, 0.70000, 0.01500)
+shape = SubResource("CollisionShape_019")
+
+[node name="Shape_02_右桌腿" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙/阻挡_shelter_workbench"]
+position = Vector3(2.20000, 0.70000, 0.01500)
+shape = SubResource("CollisionShape_020")
+
+[node name="Shape_03_工具墙" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/20_工作台与工具墙/阻挡_shelter_workbench"]
+position = Vector3(0.00000, 1.40000, -0.70500)
+shape = SubResource("CollisionShape_021")
+
+[node name="阻挡_lounge_sofa" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发"]
+metadata/component_id = "lounge_sofa"
+metadata/collision_mode = "compound_4_shapes"
+
+[node name="Shape_00_底架" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发/阻挡_lounge_sofa"]
+position = Vector3(0.00000, 0.24500, 0.03465)
+shape = SubResource("CollisionShape_022")
+
+[node name="Shape_01_靠背" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发/阻挡_lounge_sofa"]
+position = Vector3(0.00000, 1.61000, -0.66535)
+rotation_degrees = Vector3(-7.00000, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_023")
+
+[node name="Shape_02_左扶手" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发/阻挡_lounge_sofa"]
+position = Vector3(-2.45000, 0.68500, 0.03465)
+shape = SubResource("CollisionShape_024")
+
+[node name="Shape_03_右扶手" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/30_双人沙发/阻挡_lounge_sofa"]
+position = Vector3(2.45000, 0.68500, 0.03465)
+shape = SubResource("CollisionShape_025")
+
+[node name="阻挡_spool_table" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/31_电缆卷筒圆桌"]
+metadata/component_id = "spool_table"
+metadata/collision_mode = "compound_3_shapes"
+
+[node name="Shape_00_下圆盘" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/31_电缆卷筒圆桌/阻挡_spool_table"]
+position = Vector3(0.00000, 0.09000, -0.00000)
+shape = SubResource("CollisionShape_026")
+
+[node name="Shape_01_中轴" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/31_电缆卷筒圆桌/阻挡_spool_table"]
+position = Vector3(0.00000, 0.55500, -0.00000)
+shape = SubResource("CollisionShape_027")
+
+[node name="Shape_02_桌面" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/31_电缆卷筒圆桌/阻挡_spool_table"]
+position = Vector3(0.00000, 1.01000, -0.00000)
+shape = SubResource("CollisionShape_028")
+
+[node name="阻挡_table_radio" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/32_桌面老式收音机"]
+metadata/component_id = "table_radio"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_收音机机身" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/32_桌面老式收音机/阻挡_table_radio"]
+position = Vector3(0.28300, 0.33000, -0.02451)
+rotation_degrees = Vector3(0.00000, 0.00000, -6.90000)
+shape = SubResource("CollisionShape_029")
+
+[node name="阻挡_camp_bed" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/40_床铺与睡袋"]
+metadata/component_id = "camp_bed"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_床架" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/40_床铺与睡袋/阻挡_camp_bed"]
+position = Vector3(0.00000, 0.22500, -0.00000)
+shape = SubResource("CollisionShape_030")
+
+[node name="阻挡_stove" type="StaticBody3D" parent="布局_可手动编辑/01_生活棚与家具/60_火炉与水壶"]
+metadata/component_id = "stove"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_炉体" type="CollisionShape3D" parent="布局_可手动编辑/01_生活棚与家具/60_火炉与水壶/阻挡_stove"]
+position = Vector3(0.00000, 0.55000, -0.00000)
+shape = SubResource("CollisionShape_031")
+
+[node name="阻挡_dining_table" type="StaticBody3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌"]
+metadata/component_id = "dining_table"
+metadata/collision_mode = "compound_5_shapes"
+
+[node name="Shape_00_桌面" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌/阻挡_dining_table"]
+position = Vector3(0.00000, 0.09000, -0.00000)
+shape = SubResource("CollisionShape_032")
+
+[node name="Shape_01_桌腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌/阻挡_dining_table"]
+position = Vector3(-2.00000, 0.67500, 0.45000)
+shape = SubResource("CollisionShape_033")
+
+[node name="Shape_02_桌腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌/阻挡_dining_table"]
+position = Vector3(-2.00000, 0.67500, -0.45000)
+shape = SubResource("CollisionShape_034")
+
+[node name="Shape_03_桌腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌/阻挡_dining_table"]
+position = Vector3(2.00000, 0.67500, 0.45000)
+shape = SubResource("CollisionShape_035")
+
+[node name="Shape_04_桌腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/10_公共餐桌/阻挡_dining_table"]
+position = Vector3(2.00000, 0.67500, -0.45000)
+shape = SubResource("CollisionShape_036")
+
+[node name="阻挡_dining_bench_s" type="StaticBody3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳"]
+metadata/component_id = "dining_bench_s"
+metadata/collision_mode = "compound_3_shapes"
+
+[node name="Shape_00_凳面" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_s"]
+position = Vector3(0.00000, 0.21000, 1.35000)
+shape = SubResource("CollisionShape_037")
+
+[node name="Shape_01_左腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_s"]
+position = Vector3(-1.55000, 0.27500, 1.35000)
+shape = SubResource("CollisionShape_038")
+
+[node name="Shape_02_右腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_s"]
+position = Vector3(1.55000, 0.27500, 1.35000)
+shape = SubResource("CollisionShape_039")
+
+[node name="阻挡_dining_bench_n" type="StaticBody3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳"]
+metadata/component_id = "dining_bench_n"
+metadata/collision_mode = "compound_3_shapes"
+
+[node name="Shape_00_凳面" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_n"]
+position = Vector3(0.00000, 0.21000, -1.35000)
+shape = SubResource("CollisionShape_040")
+
+[node name="Shape_01_左腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_n"]
+position = Vector3(-1.55000, 0.27500, -1.35000)
+shape = SubResource("CollisionShape_041")
+
+[node name="Shape_02_右腿" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/11_公共餐桌长凳/阻挡_dining_bench_n"]
+position = Vector3(1.55000, 0.27500, -1.35000)
+shape = SubResource("CollisionShape_042")
+
+[node name="阻挡_wash_basin" type="StaticBody3D" parent="布局_可手动编辑/02_生存日常/21_生活洗衣盆"]
+metadata/component_id = "wash_basin"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_盆体" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/21_生活洗衣盆/阻挡_wash_basin"]
+position = Vector3(0.00000, 0.14000, -0.00000)
+shape = SubResource("CollisionShape_043")
+
+[node name="阻挡_herb_rack" type="StaticBody3D" parent="布局_可手动编辑/02_生存日常/22_香草晾晒架"]
+metadata/component_id = "herb_rack"
+metadata/collision_mode = "compound_3_shapes"
+
+[node name="Shape_00_左立柱" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/22_香草晾晒架/阻挡_herb_rack"]
+position = Vector3(-3.50000, 1.50000, 0.00289)
+shape = SubResource("CollisionShape_044")
+
+[node name="Shape_01_右立柱" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/22_香草晾晒架/阻挡_herb_rack"]
+position = Vector3(3.50000, 1.50000, 0.00289)
+shape = SubResource("CollisionShape_045")
+
+[node name="Shape_02_横杆" type="CollisionShape3D" parent="布局_可手动编辑/02_生存日常/22_香草晾晒架/阻挡_herb_rack"]
+position = Vector3(0.00000, 2.98000, 0.00289)
+shape = SubResource("CollisionShape_046")
+
+[node name="阻挡_energy_bench" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/34_能源维修工作台"]
+metadata/component_id = "energy_bench"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_工作台" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/34_能源维修工作台/阻挡_energy_bench"]
+position = Vector3(0.00000, 0.62500, -0.00000)
+shape = SubResource("CollisionShape_047")
+
+[node name="阻挡_generator" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/30_柴油发电机"]
+metadata/component_id = "generator"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_机身" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/30_柴油发电机/阻挡_generator"]
+position = Vector3(0.00000, 0.80000, -0.04750)
+shape = SubResource("CollisionShape_048")
+
+[node name="阻挡_battery_0" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/31_蓄电池柜0"]
+metadata/component_id = "battery_0"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_柜体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/31_蓄电池柜0/阻挡_battery_0"]
+position = Vector3(0.00000, 0.80000, -0.00000)
+shape = SubResource("CollisionShape_049")
+
+[node name="阻挡_battery_1" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/32_蓄电池柜1"]
+metadata/component_id = "battery_1"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_柜体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/32_蓄电池柜1/阻挡_battery_1"]
+position = Vector3(0.00000, 0.80000, -0.00000)
+shape = SubResource("CollisionShape_050")
+
+[node name="阻挡_battery_2" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/33_蓄电池柜2"]
+metadata/component_id = "battery_2"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_柜体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/33_蓄电池柜2/阻挡_battery_2"]
+position = Vector3(0.00000, 0.80000, -0.00000)
+shape = SubResource("CollisionShape_051")
+
+[node name="阻挡_water_tank_0" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/40_储水罐0"]
+metadata/component_id = "water_tank_0"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_罐体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/40_储水罐0/阻挡_water_tank_0"]
+position = Vector3(0.00000, 2.40000, -0.00000)
+shape = SubResource("CollisionShape_052")
+
+[node name="阻挡_water_tank_1" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/41_储水罐1"]
+metadata/component_id = "water_tank_1"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_罐体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/41_储水罐1/阻挡_water_tank_1"]
+position = Vector3(0.00000, 1.55000, -0.00000)
+shape = SubResource("CollisionShape_053")
+
+[node name="阻挡_water_tank_2" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/42_储水罐2"]
+metadata/component_id = "water_tank_2"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_罐体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/42_储水罐2/阻挡_water_tank_2"]
+position = Vector3(0.00000, 1.55000, -0.00000)
+shape = SubResource("CollisionShape_054")
+
+[node name="阻挡_water_tank_3" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/43_储水罐3"]
+metadata/component_id = "water_tank_3"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_罐体" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/43_储水罐3/阻挡_water_tank_3"]
+position = Vector3(0.00000, 1.75000, -0.00000)
+shape = SubResource("CollisionShape_055")
+
+[node name="阻挡_wind_mast" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/20_风力发电机"]
+metadata/component_id = "wind_mast"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_塔杆" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/20_风力发电机/阻挡_wind_mast"]
+position = Vector3(-0.47750, 3.60000, -0.34500)
+shape = SubResource("CollisionShape_056")
+
+[node name="阻挡_solar_0" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/10_太阳能板0"]
+metadata/component_id = "solar_0"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_倾斜板面" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/10_太阳能板0/阻挡_solar_0"]
+position = Vector3(0.00000, 1.03883, -0.01105)
+rotation_degrees = Vector3(16.04282, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_057")
+
+[node name="阻挡_solar_1" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/11_太阳能板1"]
+metadata/component_id = "solar_1"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_倾斜板面" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/11_太阳能板1/阻挡_solar_1"]
+position = Vector3(0.00000, 1.03883, -0.01334)
+rotation_degrees = Vector3(19.48057, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_058")
+
+[node name="阻挡_solar_2" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/12_太阳能板2"]
+metadata/component_id = "solar_2"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_倾斜板面" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/12_太阳能板2/阻挡_solar_2"]
+position = Vector3(0.00000, 1.03883, -0.00951)
+rotation_degrees = Vector3(13.75099, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_059")
+
+[node name="阻挡_solar_3" type="StaticBody3D" parent="布局_可手动编辑/03_能源供水/13_太阳能板3"]
+metadata/component_id = "solar_3"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_倾斜板面" type="CollisionShape3D" parent="布局_可手动编辑/03_能源供水/13_太阳能板3/阻挡_solar_3"]
+position = Vector3(0.00000, 1.03883, -0.01182)
+rotation_degrees = Vector3(17.18873, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_060")
+
+[node name="阻挡_farm_planter_0" type="StaticBody3D" parent="布局_可手动编辑/04_种植/10_种植池0"]
+metadata/component_id = "farm_planter_0"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_种植箱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/10_种植池0/阻挡_farm_planter_0"]
+position = Vector3(0.00000, 0.32500, -0.00000)
+shape = SubResource("CollisionShape_061")
+
+[node name="阻挡_farm_planter_1" type="StaticBody3D" parent="布局_可手动编辑/04_种植/11_种植池1"]
+metadata/component_id = "farm_planter_1"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_种植箱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/11_种植池1/阻挡_farm_planter_1"]
+position = Vector3(0.00000, 0.32500, -0.00000)
+shape = SubResource("CollisionShape_062")
+
+[node name="阻挡_farm_planter_2" type="StaticBody3D" parent="布局_可手动编辑/04_种植/12_种植池2"]
+metadata/component_id = "farm_planter_2"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_种植箱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/12_种植池2/阻挡_farm_planter_2"]
+position = Vector3(0.00000, 0.32500, -0.00000)
+shape = SubResource("CollisionShape_063")
+
+[node name="阻挡_farm_planter_3" type="StaticBody3D" parent="布局_可手动编辑/04_种植/13_种植池3"]
+metadata/component_id = "farm_planter_3"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_种植箱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/13_种植池3/阻挡_farm_planter_3"]
+position = Vector3(0.00000, 0.32500, -0.00000)
+shape = SubResource("CollisionShape_064")
+
+[node name="阻挡_farm_planter_4" type="StaticBody3D" parent="布局_可手动编辑/04_种植/14_种植池4"]
+metadata/component_id = "farm_planter_4"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_种植箱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/14_种植池4/阻挡_farm_planter_4"]
+position = Vector3(0.00000, 0.32500, -0.00000)
+shape = SubResource("CollisionShape_065")
+
+[node name="阻挡_bathtub_planter" type="StaticBody3D" parent="布局_可手动编辑/04_种植/20_浴缸种植池"]
+metadata/component_id = "bathtub_planter"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_浴缸外壳" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/20_浴缸种植池/阻挡_bathtub_planter"]
+position = Vector3(0.00000, 0.42500, -0.00000)
+shape = SubResource("CollisionShape_066")
+
+[node name="阻挡_greenhouse" type="StaticBody3D" parent="布局_可手动编辑/04_种植/30_温室"]
+metadata/component_id = "greenhouse"
+metadata/collision_mode = "compound_4_shapes"
+
+[node name="Shape_00_温室立柱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/30_温室/阻挡_greenhouse"]
+position = Vector3(-4.00000, 1.60000, 2.90000)
+shape = SubResource("CollisionShape_067")
+
+[node name="Shape_01_温室立柱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/30_温室/阻挡_greenhouse"]
+position = Vector3(-4.00000, 1.60000, -2.90000)
+shape = SubResource("CollisionShape_068")
+
+[node name="Shape_02_温室立柱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/30_温室/阻挡_greenhouse"]
+position = Vector3(4.00000, 1.60000, 2.90000)
+shape = SubResource("CollisionShape_069")
+
+[node name="Shape_03_温室立柱" type="CollisionShape3D" parent="布局_可手动编辑/04_种植/30_温室/阻挡_greenhouse"]
+position = Vector3(4.00000, 1.60000, -2.90000)
+shape = SubResource("CollisionShape_070")
+
+[node name="阻挡_radio_platform" type="StaticBody3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构"]
+metadata/component_id = "radio_platform"
+metadata/collision_mode = "compound_5_shapes"
+
+[node name="Shape_00_高台楼板" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构/阻挡_radio_platform"]
+position = Vector3(0.00000, 4.19000, -0.00000)
+shape = SubResource("CollisionShape_071")
+
+[node name="Shape_01_高台支柱" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构/阻挡_radio_platform"]
+position = Vector3(-4.00000, 2.00000, 4.00000)
+shape = SubResource("CollisionShape_072")
+
+[node name="Shape_02_高台支柱" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构/阻挡_radio_platform"]
+position = Vector3(-4.00000, 2.00000, -4.00000)
+shape = SubResource("CollisionShape_073")
+
+[node name="Shape_03_高台支柱" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构/阻挡_radio_platform"]
+position = Vector3(4.00000, 2.00000, 4.00000)
+shape = SubResource("CollisionShape_074")
+
+[node name="Shape_04_高台支柱" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/10_广播平台结构/阻挡_radio_platform"]
+position = Vector3(4.00000, 2.00000, -4.00000)
+shape = SubResource("CollisionShape_075")
+
+[node name="阻挡_radio_stairs" type="StaticBody3D" parent="布局_可手动编辑/05_通信高台/11_广播平台楼梯"]
+metadata/component_id = "radio_stairs"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_连续楼梯坡面" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/11_广播平台楼梯/阻挡_radio_stairs"]
+position = Vector3(0.00000, 2.01000, 0.08000)
+rotation_degrees = Vector3(48.00000, 0.00000, 0.00000)
+shape = SubResource("CollisionShape_076")
+
+[node name="阻挡_radio_railings" type="StaticBody3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆"]
+metadata/component_id = "radio_railings"
+metadata/collision_mode = "compound_5_shapes"
+
+[node name="Shape_00_西栏杆" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆/阻挡_radio_railings"]
+position = Vector3(-3.80000, 0.63000, -0.00000)
+shape = SubResource("CollisionShape_077")
+
+[node name="Shape_01_东栏杆" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆/阻挡_radio_railings"]
+position = Vector3(3.80000, 0.63000, -0.00000)
+shape = SubResource("CollisionShape_078")
+
+[node name="Shape_02_北栏杆" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆/阻挡_radio_railings"]
+position = Vector3(0.00000, 0.63000, -3.80000)
+shape = SubResource("CollisionShape_079")
+
+[node name="Shape_03_南栏杆左" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆/阻挡_radio_railings"]
+position = Vector3(-2.75000, 0.63000, 3.80000)
+shape = SubResource("CollisionShape_080")
+
+[node name="Shape_04_南栏杆右" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/12_广播平台栏杆/阻挡_radio_railings"]
+position = Vector3(2.75000, 0.63000, 3.80000)
+shape = SubResource("CollisionShape_081")
+
+[node name="阻挡_radio_console" type="StaticBody3D" parent="布局_可手动编辑/05_通信高台/20_广播控制桌"]
+metadata/component_id = "radio_console"
+metadata/collision_mode = "compound_1_shapes"
+
+[node name="Shape_00_控制桌" type="CollisionShape3D" parent="布局_可手动编辑/05_通信高台/20_广播控制桌/阻挡_radio_console"]
+position = Vector3(0.00000, 0.62500, -0.00000)
+shape = SubResource("CollisionShape_082")

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v013.glb" id="1_rooftop"]
+
+[node name="末世天台生活聚落_90x80米_v013" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-SHELTER-90X80"
+metadata/version = "v013"
+metadata/grid_dimensions = Vector2i(18, 16)
+metadata/tile_size_m = 5.0
+metadata/tile_count = 234
+metadata/roof_world_rect = Rect2(-50, -35, 90, 80)
+metadata/base_atrium_world_rect = Rect2(-15, -10, 30, 30)
+metadata/west_stair_world_rect = Rect2(-45, 0, 15, 30)
+metadata/living_cluster_rect = Rect2(15.25, -31, 24, 67)
+metadata/layout_style = "东侧集中生活聚落：南部能源供水、中部棚屋餐食、北部种植通信"
+metadata/collision_policy = "视觉资产；游戏碰撞由TowerFloorStage3D与楼梯组件持有"
+
+[node name="游戏输出" parent="." instance=ExtResource("1_rooftop")]

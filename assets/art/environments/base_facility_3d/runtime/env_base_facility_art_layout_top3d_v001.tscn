@@ -97,22 +97,6 @@ facility_id = "weapon_workshop"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
 base_size_multiplier = 1.0
 
-[node name="命运占卜台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
-position = Vector3(3, 0, -11.6)
-rotation = Vector3(0, 3.141593, 0)
-facility_id = "fate_divination"
-display_name = "命运占卜台"
-menu_scene_path = "res://scenes/DivinationMenu.tscn"
-beacon_light_enabled = false
-
-[node name="基地管理终端" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
-position = Vector3(9, 0, -11.6)
-rotation = Vector3(0, 3.141593, 0)
-facility_id = "base_console"
-display_name = "基地管理终端"
-menu_scene_path = "res://scenes/BaseMenu.tscn"
-beacon_light_enabled = false
-
 [node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("5_locker")]
 position = Vector3(-9, 0, 11.6)
 facility_id = "vault"

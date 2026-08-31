@@ -45,13 +45,6 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 				data.blueprint_attachment_tier,
 				level,
 			]
-		"fate_divination":
-			var card_name := str(data.pending_fate_card.get("card_name", data.pending_fate_card.get("name", "")))
-			if card_name.is_empty():
-				snapshot["summary"] = "预兆 · 尚未选择"
-				snapshot["attention"] = true
-			else:
-				snapshot["summary"] = "预兆 · %s" % card_name
 		"vault":
 			var capacity := 2 + data.vault_level
 			snapshot["summary"] = "仓储 %d/%d · 带入 %d" % [
@@ -62,11 +55,6 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 			snapshot["summary"] = "精英档案 · Lv.%d" % level
 		"fate_collection":
 			snapshot["summary"] = "48张牌 · 正/逆位"
-		"base_console":
-			snapshot["summary"] = "资源 %d · 待处理 %d" % [
-				data.extraction_points, data.extraction_loot.size()
-			]
-			snapshot["attention"] = not data.extraction_loot.is_empty()
 		"base_vending":
 			var vending_capacity := 2 + data.vault_level
 			snapshot["summary"] = "6类常备货（含电池）· 仓储 %d/%d" % [

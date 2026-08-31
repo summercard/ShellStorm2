@@ -4,6 +4,14 @@
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 !assets/art/environments/base_facility_3d/components/**/*.glb.import
 !assets/art/environments/tower_descent_3d/components/**/*.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v012.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v013.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v014.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v015.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v016.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/layout_v016/**/*.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_v017.glb.import
+!assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/**/*.glb.import
 !assets/art/props/base_world_3d/components/**/*.glb.import
 !assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import
 *.translation
@@ -21,7 +29,8 @@
 # Build outputs
 bin/
 build/
-outputs/
+outputs/*
+!outputs/.gdignore
 .codex-tmp/
 .dev-cycle/
 *.blend1

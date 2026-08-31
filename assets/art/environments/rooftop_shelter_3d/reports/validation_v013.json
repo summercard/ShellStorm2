@@ -1,0 +1,51 @@
+{
+  "blend": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v013.blend",
+  "passed": true,
+  "checks": {
+    "layout_validation": true,
+    "material_budget": true,
+    "runtime_tile_count_234": true,
+    "grid_contract_18x16": true,
+    "base_atrium_is_empty": true,
+    "west_stair_is_empty": true,
+    "living_cluster_is_concentrated": true,
+    "palette_uv_on_all_output_meshes": true,
+    "shared_palette_external": true
+  },
+  "layout": {
+    "passed": true,
+    "tile_count": 234,
+    "grid_dimensions": [
+      18,
+      16
+    ],
+    "roof_world_rect": [
+      -50.0,
+      -35.0,
+      90.0,
+      80.0
+    ],
+    "base_atrium_world_rect": [
+      -15.0,
+      -10.0,
+      30.0,
+      30.0
+    ],
+    "west_stair_world_rect": [
+      -45.0,
+      0.0,
+      15.0,
+      30.0
+    ],
+    "reserved_overlap_count": 0,
+    "living_cluster_rect": [
+      15.25,
+      -31.0,
+      24.0,
+      67.0
+    ],
+    "living_cluster_violation_count": 0
+  },
+  "output_mesh_count": 4276,
+  "material_count": 4
+}

@@ -126,7 +126,7 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 		)
 		if GameTimeManager != null:
 			atmosphere.call("_on_world_time_advanced", 0.0, GameTimeManager.get_time_snapshot())
-	_expect(tower.get_facility_count() == 10, "99层美术布局不是10个设施", failures)
+	_expect(tower.get_facility_count() == 8, "99层美术布局不是8个设施", failures)
 	var full_scale_facilities := [
 		"mission_operations", "weapon_workshop", "vault", "fate_collection", "base_vending",
 	]

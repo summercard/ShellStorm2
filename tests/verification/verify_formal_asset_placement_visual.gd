@@ -50,7 +50,7 @@ func _ready() -> void:
 		_check(editor_guide != null and not editor_guide.visible, "编辑器参考网格在运行时没有隐藏", failures)
 		_check(light_root != null and light_root.get_child_count() >= 3, "基地可编辑灯组缺失", failures)
 		_check(elevator_anchor != null, "99层电梯可编辑锚点缺失", failures)
-		_check(_count_facilities(art_layout) == 10, "美术布置层没有保留10个交互设施桥接节点", failures)
+		_check(_count_facilities(art_layout) == 8, "美术布置层没有保留8个交互设施桥接节点", failures)
 		_check(
 			art_layout.transform.is_equal_approx(authored_layout_transform),
 			"运行时重置了基地美术布置层的作者Transform",

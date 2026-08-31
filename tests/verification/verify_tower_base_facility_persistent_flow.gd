@@ -17,7 +17,7 @@ func _ready() -> void:
 	var facility_room := rooms.get("facility") as DungeonRoom3D
 	_expect(facility_room != null, "99层facility房间缺失", failures)
 	var facilities := tower.get("_facility_nodes") as Array
-	_expect(facilities.size() == 10, "99层常驻设施数量异常: %d" % facilities.size(), failures)
+	_expect(facilities.size() == 8, "99层常驻设施数量异常: %d" % facilities.size(), failures)
 
 	# 先停在阁楼层：楼层与房间权威都必须归属99F基地。
 	if facility_room != null:

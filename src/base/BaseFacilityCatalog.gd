@@ -38,16 +38,6 @@ const DEFINITIONS: Array[Dictionary] = [
 		"color": Color(0.75, 0.42, 0.16),
 	},
 	{
-		"facility_id": "fate_divination",
-		"display_name": "命运占卜屋",
-		"description": "为下一次行动准备命运预兆",
-		"action_kind": ACTION_MENU,
-		"action_path": "res://scenes/DivinationMenu.tscn",
-		"legacy_building_type": 3,
-		"level_property": "divination_level",
-		"color": Color(0.55, 0.31, 0.78),
-	},
-	{
 		"facility_id": "vault",
 		"display_name": "保险柜",
 		"description": "管理撤离物资与下局带入",
@@ -76,16 +66,6 @@ const DEFINITIONS: Array[Dictionary] = [
 		"legacy_building_type": -1,
 		"level_property": "",
 		"color": Color(0.72, 0.28, 0.58),
-	},
-	{
-		"facility_id": "base_console",
-		"display_name": "基地管理终端",
-		"description": "处理战利品、设施升级与长期总览",
-		"action_kind": ACTION_MENU,
-		"action_path": "res://scenes/BaseMenu.tscn",
-		"legacy_building_type": -1,
-		"level_property": "",
-		"color": Color(0.28, 0.52, 0.68),
 	},
 	{
 		"facility_id": "base_vending",

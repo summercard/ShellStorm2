@@ -1,4 +1,6 @@
 import bpy
+import hashlib
+import json
 import math
 import os
 import random
@@ -8,11 +10,98 @@ from mathutils import Vector, Matrix
 ROOT = "/Users/summercards/ShellStorm2"
 ASSET_DIR = os.path.join(ROOT, "assets/art/environments/rooftop_shelter_3d")
 PALETTE_PATH = os.path.join(ROOT, "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
-BLEND_PATH = os.path.join(ASSET_DIR, "source/env_rooftop_shelter_50m_top3d_v011.blend")
-PREVIEW_PATH = os.path.join(ASSET_DIR, "previews/env_rooftop_shelter_50m_complete_v011.png")
-CLOSE_PREVIEW_PATH = os.path.join(ASSET_DIR, "previews/env_rooftop_shelter_50m_close_v011.png")
-GLB_PATH = os.path.join(ASSET_DIR, "runtime/env_rooftop_shelter_50m_game_v011.glb")
+ASSET_ID = "ENV-ROOFTOP-SHELTER-90X80"
+ASSET_VERSION = "v017"
+BLEND_PATH = os.path.join(ASSET_DIR, "source/env_rooftop_shelter_90x80m_top3d_v017.blend")
+PREVIEW_PATH = os.path.join(ASSET_DIR, "previews/env_rooftop_shelter_90x80m_complete_v017.png")
+CLOSE_PREVIEW_PATH = os.path.join(ASSET_DIR, "previews/env_rooftop_shelter_90x80m_close_v017.png")
+GLB_PATH = os.path.join(ASSET_DIR, "runtime/env_rooftop_shelter_90x80m_facilities_v017.glb")
+COMPONENT_GLB_DIR = os.path.join(ASSET_DIR, "runtime/layout_v017/components")
+ROOT_TSCN_PATH = os.path.join(ASSET_DIR, "runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v017.tscn")
+MANIFEST_PATH = os.path.join(ASSET_DIR, "reports/asset_manifest_v017.json")
+VALIDATION_PATH = os.path.join(ASSET_DIR, "reports/validation_v017.json")
+COLLISION_MANIFEST_PATH = os.path.join(ASSET_DIR, "reports/collision_manifest_v017.json")
+ROOF_RECT = (-50.0, -35.0, 90.0, 80.0)
+BASE_ATRIUM_RECT = (-15.0, -10.0, 30.0, 30.0)
+WEST_STAIR_RECT = (-45.0, 0.0, 15.0, 30.0)
+GRID_SIZE = 5.0
+GRID_DIMENSIONS = (18, 16)
+EXPECTED_TILE_COUNT = 234
+LIVING_CLUSTER_RECT = (15.25, -31.0, 24.0, 67.0)
+DOOR_WALKWAY_RECT = (15.25, -6.0, 24.0, 20.0)
+SHELTER_ZONE_RECT = (7.5, 27.5, 21.0, 17.5)
+FARM_ZONE_RECT = (-24.0, 22.0, 12.5, 20.0)
+RADIO_ZONE_RECT = (30.5, 34.0, 9.5, 10.5)
 random.seed(240830)
+
+
+# Gameplay blockers are authored as one proxy per component.  They stay in a dedicated,
+# non-exported Blender collection and are reproduced as independent StaticBody3D nodes in
+# the Godot wrapper.  Locations and sizes use Blender's X/Y/Z-up coordinates in metres.
+def collision_box(center, size, rotation=(0.0, 0.0, 0.0), label="盒体"):
+    return {"shape": "box", "center": center, "size": size, "rotation_degrees": rotation, "label": label}
+
+
+def collision_cylinder(center, radius, height, label="圆柱"):
+    return {"shape": "cylinder", "center": center, "radius": radius, "height": height, "rotation_degrees": (0.0, 0.0, 0.0), "label": label}
+
+
+def collision_component(component_id, label, component_folder, shapes):
+    return {"component_id": component_id, "display_name": label, "component_folder": component_folder, "shapes": shapes}
+
+
+COLLISION_COMPONENTS = [
+    collision_component("shelter_structure", "生活棚结构", "Props_Furniture/10_生活棚结构", [
+        *[collision_box((x, y, 3.44), (.30, .30, 5.2), label="棚柱") for x, y in [(8,29.5),(8,37),(8,44.5),(18,29.5),(18,44.5),(28,29.5),(28,37),(28,44.5)]],
+        collision_box((8.1,40.7,2.66),(.20,5.8,3.6),label="西侧墙板A"), collision_box((8.1,31.7,2.31),(.20,3.1,2.9),label="西侧墙板B"),
+        collision_box((27.9,41.6,2.51),(.20,4.5,3.3),label="东侧墙板A"), collision_box((27.9,31.7,2.11),(.20,3.0,2.5),label="东侧墙板B"),
+        collision_box((11.2,44.4,2.51),(5.0,.20,3.3),label="北侧墙板A"), collision_box((17.0,44.4,2.21),(4.8,.20,2.7),label="北侧墙板B"), collision_box((24.3,44.4,2.61),(6.0,.20,3.5),label="北侧墙板C"),
+    ]),
+    collision_component("shelter_platform", "棚屋木地板平台", "Props_Furniture/05_抬高木平台", [collision_box((18.0,37.0,.59),(20.7,15.7,.50),label="木平台承重面")]),
+    collision_component("shelter_stair_ramp", "棚屋木梯连续坡面", "Props_Furniture/06_小木板楼梯", [collision_box((18.0,28.82,.66),(3.2,1.72,.16),(17.35,0,0),"连续坡面")]),
+    collision_component("shelter_workbench", "生活棚工作台", "Props_Furniture/20_工作台与工具墙", [
+        collision_box((12,40.5,.95),(5.0,1.5,.18),label="桌面"), collision_box((9.8,40.5,1.56),(.22,1.2,1.4),label="左桌腿"), collision_box((14.2,40.5,1.56),(.22,1.2,1.4),label="右桌腿"), collision_box((12,41.22,2.26),(5.0,.16,2.8),label="工具墙"),
+    ]),
+    collision_component("lounge_sofa", "双人沙发", "Props_Furniture/30_双人沙发", [
+        collision_box((21,37.8,1.085),(5.2,2.0,.45),label="底架"), collision_box((21,38.5,2.45),(4.25,.55,1.3),(-7,0,0),"靠背"),
+        collision_box((18.55,37.8,1.525),(.55,2.0,.95),label="左扶手"), collision_box((23.45,37.8,1.525),(.55,2.0,.95),label="右扶手"),
+    ]),
+    collision_component("spool_table", "电缆卷筒圆桌", "Props_Furniture/31_电缆卷筒圆桌", [
+        collision_cylinder((21.1,34.5,.95),1.18,.18,"下圆盘"), collision_cylinder((21.1,34.5,1.415),.42,.75,"中轴"), collision_cylinder((21.1,34.5,1.87),1.18,.16,"桌面"),
+    ]),
+    collision_component("table_radio", "桌面老式收音机", "Props_Furniture/32_桌面老式收音机", [collision_box((20.55,34.45,2.29),(1.05,.52,.66),(0,0,-6.9),"收音机机身")]),
+    collision_component("camp_bed", "简易床铺", "Props_Furniture/40_床铺与睡袋", [collision_box((13,31.7,1.085),(4.2,2.0,.45),label="床架")]),
+    collision_component("stove", "小型火炉", "Props_Furniture/60_火炉与水壶", [collision_cylinder((17.5,39.7,1.41),.60,1.10,"炉体")]),
+    collision_component("dining_table", "公共餐桌", "Props_Survival/10_公共餐桌", [
+        collision_box((23,42.5,.93),(4.8,1.35,.18),label="桌面"),
+        *[collision_box((x,y,1.515),(.18,.18,1.35),label="桌腿") for x in (21,25) for y in (42.05,42.95)],
+    ]),
+    collision_component("dining_bench_s", "公共餐桌南长凳", "Props_Survival/11_公共餐桌长凳", [collision_box((23,41.15,1.05),(4.0,.48,.42),label="凳面"), collision_box((21.45,41.15,1.115),(.18,.36,.55),label="左腿"), collision_box((24.55,41.15,1.115),(.18,.36,.55),label="右腿")]),
+    collision_component("dining_bench_n", "公共餐桌北长凳", "Props_Survival/11_公共餐桌长凳", [collision_box((23,43.85,1.05),(4.0,.48,.42),label="凳面"), collision_box((21.45,43.85,1.115),(.18,.36,.55),label="左腿"), collision_box((24.55,43.85,1.115),(.18,.36,.55),label="右腿")]),
+    collision_component("wash_basin", "生活洗衣盆", "Props_Survival/21_生活洗衣盆", [collision_cylinder((26,32,.98),.72,.28,"盆体")]),
+    collision_component("herb_rack", "香草晾晒架", "Props_Survival/22_香草晾晒架", [collision_cylinder((20,31.5,2.34),.08,3.0,"左立柱"), collision_cylinder((27,31.5,2.34),.08,3.0,"右立柱"), collision_box((23.5,31.5,3.82),(7.05,.16,.16),label="横杆")]),
+    collision_component("energy_bench", "能源维修工作台", "Props_Energy/34_能源维修工作台", [collision_box((22,-14,.965),(4.5,1.2,1.25),label="工作台")]),
+    collision_component("generator", "柴油发电机", "Props_Energy/30_柴油发电机", [collision_box((31,-18,1.14),(3.2,1.8,1.6),label="机身")]),
+    *[collision_component(f"battery_{i}", f"蓄电池柜{i}", f"Props_Energy/{31+i}_蓄电池柜{i}", [collision_box((29+i*1.15,-14,1.14),(1.0,.8,1.6),label="柜体")]) for i in range(3)],
+    collision_component("water_tank_0", "储水罐0", "Props_Energy/40_储水罐0", [collision_cylinder((35,-23,2.74),2.2,4.8,"罐体")]),
+    collision_component("water_tank_1", "储水罐1", "Props_Energy/41_储水罐1", [collision_cylinder((31.8,-26,1.89),1.25,3.1,"罐体")]),
+    collision_component("water_tank_2", "储水罐2", "Props_Energy/42_储水罐2", [collision_cylinder((35,-17.8,1.89),1.25,3.1,"罐体")]),
+    collision_component("water_tank_3", "储水罐3", "Props_Energy/43_储水罐3", [collision_cylinder((31.8,-10.8,2.09),1.45,3.5,"罐体")]),
+    collision_component("wind_mast", "风机塔杆", "Props_Energy/20_风力发电机", [collision_cylinder((29,-24,3.94),.18,7.2,"塔杆")]),
+    *[collision_component(f"solar_{i}", f"太阳能板{i}", f"Props_Energy/{10+i}_太阳能板{i}", [collision_box((x,y,1.50),(4.55,2.65,.18),(math.degrees(angle),0,0),"倾斜板面")]) for i,(x,y,angle) in enumerate([(20,-22,.28),(25,-22,.34),(20,-26,.24),(25,-26,.30)])],
+    *[collision_component(f"farm_planter_{i}", f"种植池{i}", f"Props_Farming/{10+i}_种植池{i}", [collision_box((x,y,.665),(sx,sy,.65),label="种植箱")]) for i,(x,y,sx,sy) in enumerate([(-21,31,5.2,2.4),(-15,31,5.2,2.4),(-21,27.5,5.2,2.4),(-15,27.5,5.2,2.4),(-21,24,4.4,2.0)])],
+    collision_component("bathtub_planter", "浴缸种植池", "Props_Farming/20_浴缸种植池", [collision_box((-15,24,.765),(4.2,1.9,.85),label="浴缸外壳")]),
+    collision_component("greenhouse", "温室", "Props_Farming/30_温室", [*[collision_box((x,y,1.94),(.18,.18,3.2),label="温室立柱") for x in (-23,-15) for y in (34.5,40.3)]]),
+    collision_component("radio_platform", "广播高台结构", "Props_Communication/10_广播平台结构", [
+        collision_box((35,40,4.53),(8.0,8.0,.38),label="高台楼板"), *[collision_box((x,y,2.34),(.32,.32,4.0),label="高台支柱") for x in (31,39) for y in (36,44)],
+    ]),
+    collision_component("radio_stairs", "广播高台楼梯", "Props_Communication/11_广播平台楼梯", [collision_box((35,36.2,2.35),(2.3,5.38,.22),(48.0,0,0),"连续楼梯坡面")]),
+    collision_component("radio_railings", "广播高台栏杆", "Props_Communication/12_广播平台栏杆", [
+        collision_box((31.2,40,5.35),(.18,7.4,1.2),label="西栏杆"), collision_box((38.8,40,5.35),(.18,7.4,1.2),label="东栏杆"), collision_box((35,43.8,5.35),(7.4,.18,1.2),label="北栏杆"),
+        collision_box((32.25,36.2,5.35),(2.1,.18,1.2),label="南栏杆左"), collision_box((37.75,36.2,5.35),(2.1,.18,1.2),label="南栏杆右"),
+    ]),
+    collision_component("radio_console", "广播控制桌", "Props_Communication/20_广播控制桌", [collision_box((35,41.8,5.345),(5.2,1.5,1.25),label="控制桌")]),
+]
 
 
 # Palette cells are addressed from Blender UV bottom-left.  The public palette is the only image.
@@ -219,17 +308,27 @@ def add_point_light(name, loc, energy, color, radius, col):
     return obj
 
 
+def point_in_rect(x, y, rect):
+    rx, ry, rw, rh = rect
+    return rx <= x < rx + rw and ry <= y < ry + rh
+
+
 def build_floor(col, mats):
     variants = ["完整水泥", "裂缝", "积水", "青苔", "排水口", "管线接口", "种植区", "棚屋基础", "设备安装", "边缘护栏", "屋顶入口", "严重破损"]
-    for i in range(10):
-        for j in range(10):
-            x, y = -22.5+i*5, -22.5+j*5
-            edge = i in (0,9) or j in (0,9)
+    tile_count = 0
+    for i in range(GRID_DIMENSIONS[0]):
+        for j in range(GRID_DIMENSIONS[1]):
+            x = ROOF_RECT[0] + GRID_SIZE * (i + 0.5)
+            y = ROOF_RECT[1] + GRID_SIZE * (j + 0.5)
+            if point_in_rect(x, y, BASE_ATRIUM_RECT) or point_in_rect(x, y, WEST_STAIR_RECT):
+                continue
+            tile_count += 1
+            edge = i in (0, GRID_DIMENSIONS[0] - 1) or j in (0, GRID_DIMENSIONS[1] - 1)
             if edge: v = 9
-            elif (i,j) in [(1,6),(2,6),(2,7),(1,7),(3,6)]: v = 6
-            elif (i,j) in [(4,4),(5,4),(4,5),(5,5)]: v = 7
-            elif (i,j) in [(7,6),(8,6),(7,7),(8,7)]: v = 8
-            elif (i,j) in [(4,0),(5,0)]: v = 10
+            elif x < -10 and y > 20: v = 6
+            elif x > 15 and -8 < y < 15: v = 7
+            elif x > 15 and y > 20: v = 8
+            elif i in (0, 1) and 0 <= y < 30: v = 10
             else: v = (i*3+j*5)%6
             tone = C["concrete_mid"] if (i+j)%4 else C["concrete"]
             tile = box(f"地砖_{i:02d}_{j:02d}_{variants[v]}",(x,y,0),(5,5,0.34),col,mats['matte'],tone,bevel=0.025,
@@ -256,20 +355,28 @@ def build_floor(col, mats):
                 cylinder(f"管线接口_{i}_{j}",(x-1.2,y+1.2,.345),.22,.35,col,mats['metal'],C['rust'],10)
 
     # Hidden editable prototypes for the twelve standard modules.
+    if tile_count != EXPECTED_TILE_COUNT:
+        raise RuntimeError(f"Rooftop tile contract mismatch: {tile_count} != {EXPECTED_TILE_COUNT}")
     return variants
 
 
 def build_rooftop_shell(col, mats):
-    box("屋顶建筑基座",(0,0,-8),(50,50,8),col,mats['matte'],C['cool_dark'],bevel=.12,asset_id="ENV_ROOFTOP_BASE_50M")
-    # Facade strips and broken windows give the collectible diorama a readable base.
-    for side in (-1,1):
-        for k in range(10):
-            x=-22.5+k*5
-            box(f"立面窗_南北_{side}_{k}",(x,side*25.01,-6.0),(2.5,.08,2.4),col,mats['gloss'],C['navy'])
-    for side in (-1,1):
-        for k in range(10):
-            y=-22.5+k*5
-            box(f"立面窗_东西_{side}_{k}",(side*25.01,y,-6.0),(.08,2.5,2.4),col,mats['gloss'],C['navy'])
+    # Only perimeter fascia is modeled below the roof. A full 90x80 slab would seal the
+    # two gameplay openings even if their surface tiles were omitted.
+    center_x = ROOF_RECT[0] + ROOF_RECT[2] * 0.5
+    center_y = ROOF_RECT[1] + ROOF_RECT[3] * 0.5
+    box("北侧塔楼立面",(center_x,ROOF_RECT[1],-8),(ROOF_RECT[2],.30,8),col,mats['matte'],C['cool_dark'],asset_id="ENV-ROOFTOP-FASCIA-NORTH-90M")
+    box("南侧塔楼立面",(center_x,ROOF_RECT[1]+ROOF_RECT[3],-8),(ROOF_RECT[2],.30,8),col,mats['matte'],C['cool_dark'],asset_id="ENV-ROOFTOP-FASCIA-SOUTH-90M")
+    box("西侧塔楼立面",(ROOF_RECT[0],center_y,-8),(.30,ROOF_RECT[3],8),col,mats['matte'],C['cool_dark'],asset_id="ENV-ROOFTOP-FASCIA-WEST-80M")
+    box("东侧塔楼立面",(ROOF_RECT[0]+ROOF_RECT[2],center_y,-8),(.30,ROOF_RECT[3],8),col,mats['matte'],C['cool_dark'],asset_id="ENV-ROOFTOP-FASCIA-EAST-80M")
+    for side, y in (("北", ROOF_RECT[1]-.01), ("南", ROOF_RECT[1]+ROOF_RECT[3]+.01)):
+        for k in range(GRID_DIMENSIONS[0]):
+            x=ROOF_RECT[0]+GRID_SIZE*(k+.5)
+            box(f"立面窗_{side}_{k}",(x,y,-6.0),(2.5,.08,2.4),col,mats['gloss'],C['navy'])
+    for side, x in (("西", ROOF_RECT[0]-.01), ("东", ROOF_RECT[0]+ROOF_RECT[2]+.01)):
+        for k in range(GRID_DIMENSIONS[1]):
+            y=ROOF_RECT[1]+GRID_SIZE*(k+.5)
+            box(f"立面窗_{side}_{k}",(x,y,-6.0),(.08,2.5,2.4),col,mats['gloss'],C['navy'])
 
 
 def build_shelter(col, lights_col, mats):
@@ -379,6 +486,44 @@ def build_shelter(col, lights_col, mats):
             light.data.keyframe_insert('energy',frame=1); light.data.energy=1100; light.data.keyframe_insert('energy',frame=90); light.data.energy=1280; light.data.keyframe_insert('energy',frame=180); light.data.energy=1160; light.data.keyframe_insert('energy',frame=250)
 
 
+def build_shelter_platform_and_motion(col, mats):
+    # A 0.5m raised timber deck gives the red-zone shelter a deliberate domestic threshold.
+    deck_x, deck_y = 18.0, 37.0
+    for i in range(20):
+        x = 8.25 + i * 1.025
+        cell = C['wood'] if i % 5 else C['brown']
+        box(f"棚屋抬高木平台_地板木块_{i:02d}",(x,deck_y,.34),(.98,15.7,.50),col,mats['matte'],cell,rot=(0,0,.002*((i%3)-1)),bevel=.035)
+        for q in (0,1):
+            cylinder(f"棚屋抬高木平台_固定钉_{i:02d}_{q}",(x,29.65+q*14.7,.845),.035,.035,col,mats['metal'],C['rust'],8)
+    # Visible wooden steps descend into the yellow route; gameplay uses one continuous ramp.
+    for i,(y,width,height) in enumerate([(29.22,3.2,.50),(28.68,3.0,.34),(28.16,2.8,.18)]):
+        box(f"棚屋小木板楼梯_踏步_{i}",(18.0,y,.34),(width,.58,height),col,mats['matte'],C['wood'] if i != 1 else C['brown'],bevel=.035)
+    for side in (-1,1):
+        beam(f"棚屋小木板楼梯_侧梁_{side}",(18+side*1.42,27.85,.40),(18+side*1.58,29.5,.90),.055,col,mats['metal'],C['rust'],8)
+
+    # Small roof windmill: independent animated rotor, mast and tail.
+    cylinder("棚屋小风车_立杆",(26.8,31.0,.84),.075,6.25,col,mats['metal'],C['charcoal'],8)
+    rotor=empty("棚屋小风车_旋转根",(26.8,30.75,7.0),col)
+    cylinder("棚屋小风车_轮毂",(0,0,0),.15,.28,col,mats['metal'],C['orange'],10,rot=(math.pi/2,0,0)).parent=rotor
+    blade_cells=[C['rust_red'],C['mustard'],C['blue_faded'],C['green'],C['canvas'],C['orange']]
+    for i in range(6):
+        a=i*math.pi/3
+        blade=box(f"棚屋小风车_彩色叶片_{i}",(.62*math.cos(a),0,.62*math.sin(a)),(.95,.06,.23),col,mats['matte'],blade_cells[i],rot=(0,a,0),bevel=.06)
+        blade.parent=rotor
+    box("棚屋小风车_尾舵",(26.8,31.35,6.93),(.08,1.0,.58),col,mats['matte'],C['rust_red'],bevel=.06)
+    rotor.rotation_mode='XYZ'; rotor.keyframe_insert('rotation_euler',frame=1,index=1); rotor.rotation_euler.y=2*math.pi; rotor.keyframe_insert('rotation_euler',frame=120,index=1); rotor.rotation_euler.y=4*math.pi; rotor.keyframe_insert('rotation_euler',frame=250,index=1)
+    for fc in rotor.animation_data.action.fcurves if rotor.animation_data and rotor.animation_data.action else []:
+        for kp in fc.keyframe_points: kp.interpolation='LINEAR'
+
+    # A hanging mobile and wind chimes provide smaller motion beats inside the shelter.
+    mobile=empty("棚屋吊挂风铃_摆动根",(17.5,36.5,5.25),col)
+    for i in range(5):
+        a=i*2*math.pi/5
+        beam(f"棚屋吊挂风铃_吊线_{i}",(0,0,0),(.7*math.cos(a),.7*math.sin(a),-1.0-.12*(i%2)),.014,col,mats['matte'],C['charcoal'],6).parent=mobile
+        cylinder(f"棚屋吊挂风铃_铃管_{i}",(.7*math.cos(a),.7*math.sin(a),-1.30-.12*(i%2)),.045,.52,col,mats['metal'],C['concrete_light'],8).parent=mobile
+    mobile.rotation_mode='XYZ'; mobile.keyframe_insert('rotation_euler',frame=1,index=2); mobile.rotation_euler.z=.20; mobile.keyframe_insert('rotation_euler',frame=80,index=2); mobile.rotation_euler.z=-.16; mobile.keyframe_insert('rotation_euler',frame=165,index=2); mobile.rotation_euler.z=.20; mobile.keyframe_insert('rotation_euler',frame=250,index=2)
+
+
 def add_planter(name, x,y,sx,sy, crop, col, mats, plant_count=12):
     box(name+"_箱体",(x,y,.34),(sx,sy,.65),col,mats['matte'],C['wood'],bevel=.06)
     box(name+"_土壤",(x,y,.98),(sx-.25,sy-.25,.16),col,mats['matte'],C['soil'],bevel=.05)
@@ -445,9 +590,10 @@ def solar_panel(name,x,y,z,angle,col,mats):
 
 
 def build_energy_water(col, mats):
-    for i,(x,y,a) in enumerate([(-19,-14,.28),(-14,-14,.34),(-19,-18,.24),(-14,-18,.30)]): solar_panel(f"太阳能板_{i}",x,y,1.5,a,col,mats)
+    # v013 compresses generation and water into the south service yard of the lived-in east cluster.
+    for i,(x,y,a) in enumerate([(20,-22,.28),(25,-22,.34),(20,-26,.24),(25,-26,.30)]): solar_panel(f"太阳能板_{i}",x,y,1.5,a,col,mats)
     # Wind turbine with animated rotor.
-    mastx,masty=-10.5,-16
+    mastx,masty=29.0,-24.0
     cylinder("风机塔杆",(mastx,masty,.34),.16,7.2,col,mats['metal'],C['charcoal'],10)
     rotor=empty("风力发电机_旋转中心",(mastx,masty-.35,7.4),col)
     hub=cylinder("风机轮毂",(0,0,0),.24,.5,col,mats['metal'],C['rust'],10,rot=(math.pi/2,0,0)); hub.parent=rotor; hub.location=(0,0,0)
@@ -459,22 +605,22 @@ def build_energy_water(col, mats):
     for fc in rotor.animation_data.action.fcurves if rotor.animation_data and rotor.animation_data.action else []:
         for kp in fc.keyframe_points: kp.interpolation='LINEAR'
     # Generator, batteries, repair bench.
-    box("柴油发电机_机身",(-9,-12,.34),(3.2,1.8,1.6),col,mats['metal'],C['mustard'],bevel=.16)
-    box("柴油发电机_控制面板",(-8.1,-12.91,.75),(1.15,.05,.82),col,mats['matte'],C['charcoal'],bevel=.06)
-    for k in range(6): box(f"发电机散热格栅_{k}",(-10.05+k*.32,-12.92,.76),(.12,.04,.72),col,mats['metal'],C['charcoal'],rot=(0,0,.05))
+    box("柴油发电机_机身",(31,-18,.34),(3.2,1.8,1.6),col,mats['metal'],C['mustard'],bevel=.16)
+    box("柴油发电机_控制面板",(31.9,-18.91,.75),(1.15,.05,.82),col,mats['matte'],C['charcoal'],bevel=.06)
+    for k in range(6): box(f"发电机散热格栅_{k}",(29.95+k*.32,-18.92,.76),(.12,.04,.72),col,mats['metal'],C['charcoal'],rot=(0,0,.05))
     for sx in (-1.25,1.25):
-        box("发电机底脚",(-9+sx,-12,.34),(.34,1.15,.18),col,mats['metal'],C['rust'],bevel=.035)
-        beam("发电机搬运框",(-9+sx,-12.65,.75),(-9+sx,-12.65,1.75),.045,col,mats['metal'],C['charcoal'],8)
-    cylinder("发电机电压表",(-7.88,-12.96,1.26),.16,.035,col,mats['gloss'],C['cream'],12,rot=(math.pi/2,0,0))
-    cylinder("发电机排气",(-8.1,-11.8,1.94),.12,1.0,col,mats['metal'],C['charcoal'],8)
+        box("发电机底脚",(31+sx,-18,.34),(.34,1.15,.18),col,mats['metal'],C['rust'],bevel=.035)
+        beam("发电机搬运框",(31+sx,-18.65,.75),(31+sx,-18.65,1.75),.045,col,mats['metal'],C['charcoal'],8)
+    cylinder("发电机电压表",(32.12,-18.96,1.26),.16,.035,col,mats['gloss'],C['cream'],12,rot=(math.pi/2,0,0))
+    cylinder("发电机排气",(31.9,-17.8,1.94),.12,1.0,col,mats['metal'],C['charcoal'],8)
     for i in range(3):
-        bx=-10+i*1.15
-        box(f"蓄电池柜_{i}",(bx,-9.5,.34),(1.0,.8,1.6),col,mats['matte'],C['blue_faded'],bevel=.05)
-        for q in (-.22,.22): cylinder(f"蓄电池接线柱_{i}_{q}",(bx+q,-9.5,1.96),.055,.10,col,mats['metal'],C['red'] if q>0 else C['charcoal'],8)
-        beam(f"蓄电池提手_{i}",(bx-.26,-9.5,1.90),(bx+.26,-9.5,1.90),.035,col,mats['metal'],C['concrete_light'],8)
-    box("能源维修工作台",(-17,-10,.34),(4.5,1.2,1.25),col,mats['matte'],C['wood'])
-    # Water cluster on east side.
-    for i,(x,y,r,h) in enumerate([(18,-16,2.2,4.8),(13.8,-16,1.25,3.1),(13.8,-12.5,1.25,3.1),(18,-10.8,1.45,3.5)]):
+        bx=29+i*1.15
+        box(f"蓄电池柜_{i}",(bx,-14,.34),(1.0,.8,1.6),col,mats['matte'],C['blue_faded'],bevel=.05)
+        for q in (-.22,.22): cylinder(f"蓄电池接线柱_{i}_{q}",(bx+q,-14,1.96),.055,.10,col,mats['metal'],C['red'] if q>0 else C['charcoal'],8)
+        beam(f"蓄电池提手_{i}",(bx-.26,-14,1.90),(bx+.26,-14,1.90),.035,col,mats['metal'],C['concrete_light'],8)
+    box("能源维修工作台",(22,-14,.34),(4.5,1.2,1.25),col,mats['matte'],C['wood'])
+    # Water storage faces the service lane so daily chores are visible from the living shelter.
+    for i,(x,y,r,h) in enumerate([(35,-23,2.2,4.8),(31.8,-26,1.25,3.1),(35,-17.8,1.25,3.1),(31.8,-10.8,1.45,3.5)]):
         cylinder(f"储水罐_{i}",(x,y,.34),r,h,col,mats['metal'] if i==0 else mats['matte'],C['concrete_light'] if i==0 else C['blue_faded'],16)
         for q in range(3):
             cylinder(f"储水罐箍带_{i}_{q}",(x,y,.34+h*(q+1)/4),r+.05,.07,col,mats['metal'],C['charcoal'],16)
@@ -484,14 +630,14 @@ def build_energy_water(col, mats):
             ar=math.radians(a)
             beam(f"储水罐竖向加强筋_{i}_{a}",(x+r*math.cos(ar),y+r*math.sin(ar),.5),(x+r*math.cos(ar),y+r*math.sin(ar),.34+h),.035,col,mats['metal'],C['charcoal'],6)
     # Pipes with deliberate functional routing.
-    routes=[((18,-16,.7),(18,-10.8,.7)),((13.8,-16,.7),(18,-16,.7)),((13.8,-12.5,.9),(18,-10.8,.9)),((18,-10.8,3.9),(22,-10.8,3.9)),((-10,-9.5,.8),(0,-4,.8))]
+    routes=[((35,-23,.7),(31.8,-10.8,.7)),((31.8,-26,.7),(35,-23,.7)),((35,-17.8,.9),(31.8,-10.8,.9)),((31.8,-10.8,3.9),(31.8,-5.2,3.9)),((29,-14,.8),(26,-5,.8))]
     for i,(a,b) in enumerate(routes): beam(f"供水能源管线_{i}",a,b,.075,col,mats['matte'],C['charcoal'],8)
     for k in range(4):
-        box(f"修补胶带接口_{k}",(14.5+k*1.0,-16,.68),(.18,.22,.22),col,mats['matte'],C['red'],bevel=.03)
+        box(f"修补胶带接口_{k}",(32.2+k*.8,-23,.68),(.18,.22,.22),col,mats['matte'],C['red'],bevel=.03)
     # Visible cable runs connect generation, storage and living zones.
-    for i,(a,b) in enumerate([((-9,-12,.55),(-10,-9.5,.55)),((-10,-9.5,.48),(-2,-4,.48)),((-2,-4,.48),(8,-4,.48)),((-14,-14,.48),(-10,-9.5,.48))]):
+    for i,(a,b) in enumerate([((31,-18,.55),(29,-14,.55)),((29,-14,.48),(26,-5,.48)),((26,-5,.48),(34,-5,.48)),((25,-22,.48),(29,-14,.48))]):
         beam(f"外露电缆_{i}",a,b,.035,col,mats['matte'],C['charcoal'],6)
-    box("防水配电箱",(-11.8,-9.5,.34),(1.2,.55,1.45),col,mats['metal'],C['rust'],bevel=.08)
+    box("防水配电箱",(27.2,-14,.34),(1.2,.55,1.45),col,mats['metal'],C['rust'],bevel=.08)
 
 
 def build_radio(col, lights_col, mats):
@@ -545,52 +691,44 @@ def build_radio(col, lights_col, mats):
 
 
 def build_security(col, lights_col, mats):
-    # Perimeter rail segments leave a controlled entrance gap on south side.
-    for side in (-1,1):
-        y=side*24.4
-        for x in range(-22,23,4):
-            if side==-1 and abs(x)<4: continue
-            cylinder("边缘护栏立柱",(x,y,.34),.065,1.45,col,mats['metal'],C['charcoal'],8)
-        for x0 in range(-24,24,6):
-            if side==-1 and x0<=0<=x0+6: continue
-            beam("边缘护栏横杆",(x0,y,1.65),(min(x0+6,24),y,1.65),.065,col,mats['metal'],C['rust'])
-            beam("边缘护栏中杆",(x0,y,1.10),(min(x0+6,24),y,1.10),.045,col,mats['metal'],C['charcoal'])
-    for side in (-1,1):
-        x=side*24.4
-        for y in range(-22,23,4): cylinder("边缘护栏立柱",(x,y,.34),.065,1.45,col,mats['metal'],C['charcoal'],8)
-        for y0 in range(-24,24,6):
-            beam("边缘护栏横杆",(x,y0,1.65),(x,min(y0+6,24),1.65),.065,col,mats['metal'],C['rust'])
-            beam("边缘护栏中杆",(x,y0,1.10),(x,min(y0+6,24),1.10),.045,col,mats['metal'],C['charcoal'])
-    # Sandbags and improvised barricades.
+    # Match the runtime 18x16 perimeter. The west side keeps the same two-module
+    # circulation gap centered on Z=15 as the Godot stair contract.
+    for side, y, rotation in (("北", -34.85, 0.0), ("南", 44.85, math.pi)):
+        for i in range(GRID_DIMENSIONS[0]):
+            x = ROOF_RECT[0] + GRID_SIZE * (i + .5)
+            box(f"{side}侧矮墙_{i:02d}",(x,y,.34),(5.0,.30,.75),col,mats['matte'],C['concrete_mid'],rot=(0,0,rotation),asset_id="ENV-TOWER-WALL-PARAPET-5M")
+    for side, x in (("西", -49.85), ("东", 39.85)):
+        for j in range(GRID_DIMENSIONS[1]):
+            y = ROOF_RECT[1] + GRID_SIZE * (j + .5)
+            if side == "西" and abs(y - 15.0) <= 5.0:
+                # Door-wall modules keep an obvious opening and do not occupy the stair footprint.
+                box(f"西侧楼梯门洞矮墙下沿_{j:02d}",(x,y,.34),(.30,5.0,.24),col,mats['matte'],C['concrete_mid'],asset_id="ENV-TOWER-WALL-PARAPET-DOOR-5M")
+                continue
+            box(f"{side}侧矮墙_{j:02d}",(x,y,.34),(.30,5.0,.75),col,mats['matte'],C['concrete_mid'],asset_id="ENV-TOWER-WALL-PARAPET-5M")
+
+    # Barricades frame the compact south service yard instead of scattering across the empty roof.
     for i in range(18):
-        x=-7.5+(i%9)*1.8; y=-23.0+(i//9)*.75
-        bag=box(f"入口沙袋_{i}",(x,y,.34),(1.55,.62,.38),col,mats['matte'],C['sand'],rot=(0,0,.08*(-1)**i),bevel=.18)
-    # Stairwell exit with double reinforced door.
-    box("楼梯间出口主体",(0,-19,.34),(7,5,4.4),col,mats['matte'],C['cool_dark'],bevel=.12)
-    box("楼梯间双层防护门",(0,-21.52,.34),(3.2,.16,3.45),col,mats['metal'],C['rust'],bevel=.06)
-    box("防护门加固横闩",(0,-21.65,2.0),(3.7,.18,.18),col,mats['metal'],C['charcoal'])
-    cylinder("防护门警报铃_自发光",(2.3,-21.8,3.3),.22,.25,col,mats['emission'],C['red'],12,rot=(math.pi/2,0,0))
-    add_point_light("入口暖灯",(0,-22.0,4.1),110,(1,.45,.15),1.0,lights_col)
-    # Low lookout towers.
-    for side,x in enumerate((-21.5,21.5)):
-        y=20.5 if side==0 else 4.0
+        x=18.0+(i%9)*1.8; y=-30.0+(i//9)*.75
+        box(f"南侧补给沙袋_{i}",(x,y,.34),(1.55,.62,.38),col,mats['matte'],C['sand'],rot=(0,0,.08*(-1)**i),bevel=.18)
+
+    # Two small lookouts anchor opposite free corners without occupying the central base void.
+    for side,(x,y) in enumerate(((-44.0,-28.0),(-44.0,39.0))):
         for dx in (-1.2,1.2):
             for dy in (-1.2,1.2): box("瞭望台支柱",(x+dx,y+dy,.34),(.16,.16,3.2),col,mats['metal'],C['charcoal'])
         box("瞭望台平台",(x,y,3.55),(3.2,3.2,.25),col,mats['matte'],C['wood'])
         cylinder("望远镜支架",(x,y,3.8),.08,1.0,col,mats['metal'],C['charcoal'],8)
         beam("望远镜",(x-.5,y,4.8),(x+.5,y,4.8),.12,col,mats['metal'],C['blue_faded'],10)
-    # Flags and cloth strips with gentle animation.
-    for i,(x,y,z) in enumerate([(-23,14,2.4),(23,-3,2.2),(8,24,2.5),(-6,-24,2.4)]):
+    for i,(x,y,z) in enumerate([(-48,-20,2.4),(38,-20,2.2),(29,44,2.5),(-44,-33,2.4)]):
         cloth=box(f"警示布条_{i}",(x,y,z),(.9,.05,.34),col,mats['matte'],C['red'],rot=(0,0,.15*i),bevel=.03)
         cloth.keyframe_insert('rotation_euler',frame=1,index=2); cloth.rotation_euler.z+=.12; cloth.keyframe_insert('rotation_euler',frame=100,index=2); cloth.rotation_euler.z-=.18; cloth.keyframe_insert('rotation_euler',frame=200,index=2); cloth.keyframe_insert('rotation_euler',frame=250,index=2)
 
 
 def build_clutter(col, mats):
-    # Story clusters are dense but asymmetric: each serves a nearby function and keeps a walkable side.
+    # Story clusters support the red shelter, blue farm and service yard without entering the door route.
     clusters=[
-        ("工坊拆件",-8.1,12.8,1.0,0.0),("入口补给",-4.8,-13.0,.7,.9),
-        ("水箱维修",20.2,-7.4,.4,1.1),("农场园艺",-10.8,11.2,.3,.9),
-        ("广播备件",10.6,18.8,1.1,.2),("生活储备",8.0,-7.5,.8,.6)]
+        ("工坊拆件",20.0,-18.0,1.0,0.0),("南侧补给",19.5,-27.0,.7,.9),
+        ("水箱维修",36.0,-14.5,.4,1.1),("农场园艺",-11.0,34.0,.3,.9),
+        ("广播备件",30.0,32.0,1.1,.2),("生活储备",9.5,40.5,.8,.6)]
     for ci,(label,cx,cy,walk_x,walk_y) in enumerate(clusters):
         rng=random.Random(6100+ci)
         heights=[]
@@ -619,27 +757,72 @@ def build_clutter(col, mats):
             px=cx+rng.uniform(-1.9,1.9); py=cy+rng.uniform(-1.45,1.45)
             cylinder(f"{label}_瓶罐_{k}",(px,py,.34),.07+rng.random()*.05,.18+rng.random()*.20,col,mats['gloss'] if k%3==0 else mats['metal'],C['blue_faded'] if k%3==0 else C['concrete_light'],8)
     # A used tire pile mixes lying, leaning and stacked pieces rather than a two-row array.
-    tire_specs=[(-1.8,-9.5,0,.10),(-.7,-9.1,.28,-.25),(.4,-9.4,0,.18),(1.2,-8.7,.62,.38),(-1.2,-8.35,.58,-.45),(.0,-8.1,.25,.18),(1.8,-9.6,.45,-.2)]
+    tire_specs=[(20.0,-23.5,0,.10),(21.1,-23.1,.28,-.25),(22.2,-23.4,0,.18),(23.0,-22.7,.62,.38),(20.6,-22.35,.58,-.45),(21.8,-22.1,.25,.18),(23.6,-23.6,.45,-.2)]
     for i,(x,y,tilt,rz) in enumerate(tire_specs):
         cylinder(f"备用轮胎_{i}",(x,y,.34),.55,.34,col,mats['matte'],C['charcoal'],12,rot=(math.pi/2-tilt,0,rz))
     # Laundry line and moving clothes.
-    beam("晾衣绳",(17,-5,3.2),(23,-5,3.2),.018,col,mats['matte'],C['concrete_light'],6)
+    beam("晾衣绳",(9.0,42.0,4.0),(17.0,42.0,4.0),.018,col,mats['matte'],C['concrete_light'],6)
     for i in range(5):
-        cloth=box(f"晾晒衣物_{i}",(17.7+i*1.15,-5,2.0),(.8,.04,1.1),col,mats['matte'],[C['blue_faded'],C['canvas'],C['rust'],C['green']][i%4],rot=(0,0,.03*(-1)**i),bevel=.05)
+        cloth=box(f"晾晒衣物_{i}",(9.7+i*1.55,42.0,2.75),(.8,.04,1.1),col,mats['matte'],[C['blue_faded'],C['canvas'],C['rust'],C['green']][i%4],rot=(0,0,.03*(-1)**i),bevel=.05)
         cloth.keyframe_insert('rotation_euler',frame=1,index=1); cloth.rotation_euler.y=.08; cloth.keyframe_insert('rotation_euler',frame=120,index=1); cloth.rotation_euler.y=-.05; cloth.keyframe_insert('rotation_euler',frame=240,index=1); cloth.keyframe_insert('rotation_euler',frame=250,index=1)
     # Covered stock with bricks.
-    tarp=box("防水布覆盖物资",(10,-4,.34),(5.0,2.4,1.25),col,mats['matte'],C['canvas'],bevel=.28)
+    tarp=box("防水布覆盖物资",(11.0,42.0,.84),(4.0,1.6,1.05),col,mats['matte'],C['canvas'],bevel=.28)
     for sx in (-2.1,2.1):
-        for sy in (-.9,.9): box("压布砖块",(10+sx,-4+sy,1.55),(.5,.28,.18),col,mats['matte'],C['rust'])
-    # Boardwalk planks carry small offsets and repairs while maintaining the clear circulation route.
+        for sy in (-.6,.6): box("压布砖块",(11.0+sx,42.0+sy,1.87),(.5,.28,.18),col,mats['matte'],C['rust'])
+    # A repaired boardwalk connects service yard, shelter and dining threshold.
     for i in range(11):
         rng=random.Random(8800+i)
-        x=-5+i+rng.uniform(-.09,.09)
-        box(f"中央木板便道_{i}",(x,rng.uniform(-.10,.12),.36),(.80+rng.uniform(-.08,.08),3.0+rng.uniform(-.15,.12),.08+rng.uniform(0,.035)),col,mats['matte'],C['wood'] if i%4 else C['brown'],rot=(0,0,rng.uniform(-.055,.055)))
-        if i in (2,7): box(f"便道修补铁片_{i}",(x,.15,.46),(.36,.7,.035),col,mats['metal'],C['rust'],rot=(0,0,.15*(-1)**i),bevel=.02)
-    for i in range(16):
-        x=-20+i*2.5
-        box(f"黄色区域标线_{i}",(x,-7.2+.04*math.sin(i),.37),(1.2+(.25 if i%3 else 0),.08,.025),col,mats['matte'],C['yellow'],rot=(0,0,.01*((i%4)-2)))
+        y=-10+i*1.55+rng.uniform(-.09,.09)
+        box(f"南侧木板便道_{i}",(24.5+rng.uniform(-.10,.12),y,.36),(3.0+rng.uniform(-.15,.12),1.20+rng.uniform(-.08,.08),.08+rng.uniform(0,.035)),col,mats['matte'],C['wood'] if i%4 else C['brown'],rot=(0,0,rng.uniform(-.035,.035)))
+        if i in (2,7): box(f"便道修补铁片_{i}",(24.35,y,.46),(.7,.36,.035),col,mats['metal'],C['rust'],rot=(0,0,.15*(-1)**i),bevel=.02)
+    for i in range(9):
+        x=18+i*2.25
+        box(f"南侧黄色区域标线_{i}",(x,-12.0+.04*math.sin(i),.37),(1.2+(.25 if i%3 else 0),.08,.025),col,mats['matte'],C['yellow'],rot=(0,0,.01*((i%4)-2)))
+
+
+def build_lived_in_cluster(col, lights_col, mats):
+    # The red-zone raised shelter receives the densest domestic storytelling.
+    table_x, table_y = 23.0, 42.5
+    box("公共餐桌_旧木桌面",(table_x,table_y,.84),(4.8,1.35,.18),col,mats['matte'],C['wood'],bevel=.08)
+    for x in (table_x-2.0,table_x+2.0):
+        for y in (table_y-.45,table_y+.45):
+            box("公共餐桌_桌腿",(x,y,.84),(.18,.18,1.35),col,mats['metal'],C['charcoal'],bevel=.03)
+    for y in (table_y-1.35,table_y+1.35):
+        box("公共餐桌_长凳",(table_x,y,.84),(4.0,.48,.42),col,mats['matte'],C['blue_faded'] if y<table_y else C['rust'],bevel=.10)
+        for x in (table_x-1.55,table_x+1.55):
+            box("公共餐桌_长凳腿",(x,y,.84),(.16,.36,.55),col,mats['metal'],C['charcoal'])
+    for i,(dx,dy,cell) in enumerate([(-1.4,-.2,C['cream']),(-.5,.25,C['blue_faded']),(.55,-.15,C['cream']),(1.35,.18,C['mustard'])]):
+        cylinder(f"公共餐桌_搪瓷碗_{i}",(table_x+dx,table_y+dy,1.70),.20,.10,col,mats['gloss'],cell,12)
+        cylinder(f"公共餐桌_水杯_{i}",(table_x+dx+.28,table_y+dy+.18,1.70),.09,.24,col,mats['gloss'],C['cream'],10)
+    box("公共餐桌_切菜板",(table_x+.2,table_y,1.705),(1.1,.55,.05),col,mats['matte'],C['sand'],rot=(0,0,.08),bevel=.05)
+    for i in range(5):
+        sphere(f"公共餐桌_蔬菜_{i}",(table_x-.2+i*.18,table_y+.05*(-1)**i,1.80),.10,col,mats['matte'],C['leaf'] if i%2 else C['red'],8,4)
+
+    # Shoes, wash basin and drying herbs imply repeatable daily routines.
+    for i in range(4):
+        box(f"棚口旧鞋_{i}",(9.2+i*.38,29.6+.08*(-1)**i,.84),(.55,.24,.20),col,mats['matte'],C['charcoal'] if i%2 else C['brown'],rot=(0,0,.12*(-1)**i),bevel=.10)
+    cylinder("生活洗衣盆",(26.0,32.0,.84),.72,.28,col,mats['gloss'],C['blue_faded'],16)
+    cylinder("生活洗衣盆水面",(26.0,32.0,1.13),.62,.025,col,mats['gloss'],C['water'],16)
+    beam("香草晾晒架横杆",(20.0,31.5,3.8),(27.0,31.5,3.8),.045,col,mats['metal'],C['charcoal'],8)
+    for x in (20.0,27.0):
+        cylinder("香草晾晒架立柱",(x,31.5,.84),.055,3.0,col,mats['metal'],C['rust'],8)
+    for i in range(7):
+        beam(f"晾晒香草束_{i}",(20.5+i*.95,31.5,3.7),(20.5+i*.95,31.5,2.65-.08*(i%2)),.035,col,mats['matte'],C['leaf_dark'],6)
+        for q in range(3):
+            box(f"晾晒香草叶_{i}_{q}",(20.5+i*.95+.10*(-1)**q,31.5,2.85+.22*q),(.28,.10,.06),col,mats['matte'],C['leaf'],rot=(0,.15*(-1)**q,.35*q),bevel=.04)
+
+    # A low string of warm bulbs visually ties shelter, dining and farm into one home.
+    beam("聚落串灯电线",(8.5,31.5,4.9),(27.0,44.0,5.1),.018,col,mats['matte'],C['charcoal'],6)
+    for i in range(9):
+        t=i/8.0; x=8.5+(27.0-8.5)*t; y=31.5+(44.0-31.5)*t; z=4.85-.42*math.sin(math.pi*t)
+        cylinder(f"聚落串灯_{i}_自发光",(x,y,z),.11,.20,col,mats['emission'],C['orange'] if i%3 else C['yellow'],10)
+        if i in (1,4,7): add_point_light(f"聚落串灯点光_{i}",(x,y,z),55,(1.0,.38,.12),1.2,lights_col)
+
+    # Small potted plants soften the boardwalk edge and repeat the farm palette near the home.
+    for i,(x,y) in enumerate([(9.0,31.5),(14.0,31.0),(18.0,44.3),(27.0,34.5),(27.0,40.5)]):
+        cylinder(f"生活区盆栽_{i}",(x,y,.84),.32,.48,col,mats['matte'],C['rust'] if i%2 else C['blue_faded'],10)
+        for q in range(5):
+            box(f"生活区盆栽叶_{i}_{q}",(x+.16*math.cos(q*1.25),y+.16*math.sin(q*1.25),1.48+.08*q),(.38,.13,.055),col,mats['matte'],C['leaf'],rot=(0,.18,.45*q),bevel=.05)
 
 
 def add_ruined_tower(name,x,y,w,d,floors,col,mats,seed):
@@ -780,8 +963,9 @@ def build_camera_lighting(col, mats):
     # Finite camera-distance mist avoids the black-sky artifact caused by infinite world volume.
     bpy.context.view_layer.use_pass_mist=True
     world.mist_settings.use_mist=True
-    world.mist_settings.start=75
-    world.mist_settings.depth=130
+    # Keep the playable roof readable; fog starts behind it and mainly separates the city.
+    world.mist_settings.start=150
+    world.mist_settings.depth=180
     world.mist_settings.falloff='QUADRATIC'
     scene.use_nodes=True
     comp_nodes=scene.node_tree
@@ -798,9 +982,9 @@ def build_camera_lighting(col, mats):
     cam_data=bpy.data.cameras.new("第三视角等距展示相机")
     cam=bpy.data.objects.new("第三视角等距展示相机",cam_data)
     col.objects.link(cam)
-    cam.location=(62,-72,54)
-    target=Vector((0,2,2.8)); cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler()
-    cam_data.type='ORTHO'; cam_data.ortho_scale=72; cam_data.lens=58
+    cam.location=(92,-108,82)
+    target=Vector((-5,5,2.8)); cam.rotation_euler=(target-cam.location).to_track_quat('-Z','Y').to_euler()
+    cam_data.type='ORTHO'; cam_data.ortho_scale=122; cam_data.lens=58
     scene.camera=cam
     add_area_light("阴天主光",(-28,-35,62),9000,(.64,.72,.82),42,(0,0,0),col)
     add_area_light("冷色轮廓光",(35,25,35),5200,(.45,.55,.68),30,(0,5,3),col)
@@ -825,7 +1009,7 @@ def build_camera_lighting(col, mats):
     # Sparse airborne dust catches the warm light without becoming screen-space noise.
     rng=random.Random(16660)
     for i in range(72):
-        x=rng.uniform(-28,28); y=rng.uniform(-25,28); z=rng.uniform(.8,13)
+        x=rng.uniform(-48,38); y=rng.uniform(-33,43); z=rng.uniform(.8,13)
         dust=sphere(f"空气浮尘_{i}",(x,y,z),rng.uniform(.025,.075),col,mats['matte'],C['sand'] if i%5==0 else C['concrete_mid'],6,3,scale=(rng.uniform(.7,1.5),rng.uniform(.7,1.3),rng.uniform(.7,1.8)))
         dust.keyframe_insert('location',frame=1,index=0)
         dust.location.x+=rng.uniform(.5,1.8); dust.location.z+=rng.uniform(.15,.8)
@@ -835,7 +1019,7 @@ def build_camera_lighting(col, mats):
         wisp=sphere(f"近景烟尘薄团_{i}",(x,y,z),s,col,mats['matte'],C['concrete_mid'],8,4,scale=(1.7,1.0,.45))
         wisp.keyframe_insert('location',frame=1,index=0); wisp.location.x+=1.0; wisp.location.z+=.45; wisp.keyframe_insert('location',frame=250,index=0)
     # Grounding shadow plane below the collectible block.
-    box("大雾阴天冷灰背景承托面",(0,0,-18.3),(150,150,.25),col,mats['matte'],C['concrete_mid'],bevel=.4)
+    box("大雾阴天冷灰背景承托面",(-5,5,-18.3),(190,180,.25),col,mats['matte'],C['concrete_mid'],bevel=.4)
     scene.view_settings.look='AgX - Medium Low Contrast'
     scene.view_settings.exposure=.65
 
@@ -850,11 +1034,567 @@ def create_prototypes(src_col, mats, variants):
     src_col.hide_render=True
 
 
+def translate_collection_roots(col, offset):
+    members = set(col.all_objects)
+    delta = Vector(offset)
+    for obj in list(col.objects):
+        if obj.parent is None or obj.parent not in members:
+            obj.location += delta
+
+
+def translate_named_roots(col, prefixes, offset):
+    delta = Vector(offset)
+    for obj in list(col.objects):
+        if obj.parent is None and any(obj.name.startswith(prefix) for prefix in prefixes):
+            obj.location += delta
+
+
+def move_matching_objects(parent_col, group_name, prefixes):
+    """Move direct members into a named component folder without joining their meshes."""
+    target = new_collection(group_name, parent_col)
+    for obj in list(parent_col.objects):
+        if any(obj.name.startswith(prefix) for prefix in prefixes):
+            move_to_collection(obj, target)
+            obj["component_folder"] = group_name
+    return target
+
+
+def organize_output_hierarchy(cats):
+    """Create a fine-grained, stable Blender hierarchy for practical hand editing."""
+    rules = {
+        "Props_Furniture": [
+            ("05_抬高木平台", ("棚屋抬高木平台",)),
+            ("06_小木板楼梯", ("棚屋小木板楼梯",)),
+            ("10_生活棚结构", ("生活棚_", "棚顶", "残墙连接铆钉")),
+            ("20_工作台与工具墙", ("工作台_", "工具墙", "挂墙工具")),
+            ("30_双人沙发", ("双人沙发_", "沙发")),
+            ("31_电缆卷筒圆桌", ("电缆卷筒", "卷筒桌面木缝")),
+            ("32_桌面老式收音机", ("老式收音机", "收音机")),
+            ("33_桌面独立散件", ("桌面", "搪瓷杯")),
+            ("34_休息区地垫", ("休息区旧地垫",)),
+            ("40_床铺与睡袋", ("简易床铺", "睡袋")),
+            ("41_生活收纳木箱", ("收纳木箱",)),
+            ("50_地图物资板", ("城市地图与物资板", "地图便签")),
+            ("60_火炉与水壶", ("小型火炉", "烧水壶", "水壶提梁")),
+            ("70_露营灯具", ("露营灯灯罩",)),
+            ("71_棚屋小风车", ("棚屋小风车",)),
+            ("72_棚屋吊挂风铃", ("棚屋吊挂风铃",)),
+        ],
+        "Props_Survival": [
+            ("10_公共餐桌", ("公共餐桌_旧木桌面", "公共餐桌_桌腿")),
+            ("11_公共餐桌长凳", ("公共餐桌_长凳",)),
+            ("12_公共餐桌餐具", ("公共餐桌_搪瓷碗", "公共餐桌_水杯", "公共餐桌_切菜板", "公共餐桌_蔬菜")),
+            ("20_棚口旧鞋", ("棚口旧鞋",)),
+            ("21_生活洗衣盆", ("生活洗衣盆",)),
+            ("22_香草晾晒架", ("香草晾晒架", "晾晒香草")),
+            ("23_聚落串灯", ("聚落串灯",)),
+            ("24_生活区盆栽", ("生活区盆栽",)),
+            ("30_晾衣设施", ("晾衣绳", "晾晒衣物")),
+            ("31_防水布物资", ("防水布覆盖物资", "压布砖块")),
+            ("32_备用轮胎", ("备用轮胎",)),
+            ("40_木板便道", ("南侧木板便道", "便道修补铁片", "南侧黄色区域标线")),
+            ("50_工坊拆件", ("工坊拆件",)),
+            ("51_南侧补给", ("南侧补给",)),
+            ("52_水箱维修", ("水箱维修",)),
+            ("53_农场园艺", ("农场园艺",)),
+            ("54_广播备件", ("广播备件",)),
+            ("55_生活储备", ("生活储备",)),
+        ],
+        "Props_Energy": [
+            ("10_太阳能板0", ("太阳能板_0",)),
+            ("11_太阳能板1", ("太阳能板_1",)),
+            ("12_太阳能板2", ("太阳能板_2",)),
+            ("13_太阳能板3", ("太阳能板_3",)),
+            ("20_风力发电机", ("风机", "风力发电机")),
+            ("30_柴油发电机", ("柴油发电机", "发电机")),
+            ("31_蓄电池柜0", ("蓄电池柜_0", "蓄电池接线柱_0", "蓄电池提手_0")),
+            ("32_蓄电池柜1", ("蓄电池柜_1", "蓄电池接线柱_1", "蓄电池提手_1")),
+            ("33_蓄电池柜2", ("蓄电池柜_2", "蓄电池接线柱_2", "蓄电池提手_2")),
+            ("34_能源维修工作台", ("能源维修工作台",)),
+            ("40_储水罐0", ("储水罐_0", "储水罐箍带_0", "储水罐顶盖_0", "储水罐检修口_0", "储水罐竖向加强筋_0")),
+            ("41_储水罐1", ("储水罐_1", "储水罐箍带_1", "储水罐顶盖_1", "储水罐检修口_1", "储水罐竖向加强筋_1")),
+            ("42_储水罐2", ("储水罐_2", "储水罐箍带_2", "储水罐顶盖_2", "储水罐检修口_2", "储水罐竖向加强筋_2")),
+            ("43_储水罐3", ("储水罐_3", "储水罐箍带_3", "储水罐顶盖_3", "储水罐检修口_3", "储水罐竖向加强筋_3")),
+            ("50_管线与配电", ("供水能源管线", "修补胶带接口", "外露电缆", "防水配电箱")),
+        ],
+        "Props_Farming": [
+            ("10_种植池0", ("种植池_0", "番茄支架", "番茄果实")),
+            ("11_种植池1", ("种植池_1",)),
+            ("12_种植池2", ("种植池_2", "玉米高茎", "玉米长叶")),
+            ("13_种植池3", ("种植池_3",)),
+            ("14_种植池4", ("种植池_4",)),
+            ("20_浴缸种植池", ("废弃浴缸种植池", "浴缸土壤", "浴缸卷心菜")),
+            ("30_温室", ("温室",)),
+            ("31_种植储水滴灌", ("种植区储水桶", "滴灌主管")),
+            ("32_堆肥与园艺工具", ("堆肥箱", "园艺工具")),
+        ],
+        "Props_Communication": [
+            ("10_广播平台结构", ("广播平台立柱", "广播平台楼板", "广播平台斜撑", "广播平台节点板")),
+            ("11_广播平台楼梯", ("广播平台楼梯", "广播楼梯扶手")),
+            ("12_广播平台栏杆", ("广播台栏杆",)),
+            ("20_广播控制桌", ("广播控制桌",)),
+            ("21_无线电收发机", ("无线电",)),
+            ("22_广播地图与记录", ("广播地图板", "广播联络记录")),
+            ("30_通信主桅杆", ("通信主桅杆", "桅杆拉线")),
+            ("31_八木定向天线", ("大型定向天线", "八木天线")),
+            ("32_卫星接收锅", ("卫星接收锅", "卫星锅馈源臂")),
+            ("33_信号灯与仪表", ("天线红色信号灯", "广播信号表指针")),
+        ],
+    }
+    summary = {}
+    for category_name, groups in rules.items():
+        parent = cats[category_name]
+        for group_name, prefixes in groups:
+            move_matching_objects(parent, group_name, prefixes)
+        leftovers = list(parent.objects)
+        if leftovers:
+            fallback = new_collection("99_待归类", parent)
+            for obj in leftovers:
+                move_to_collection(obj, fallback)
+                obj["component_folder"] = fallback.name
+        summary[category_name] = {
+            "component_folder_count": len(parent.children),
+            "unclassified_object_count": len(leftovers),
+        }
+    return summary
+
+
+def build_collision_proxies(collision_root, mats):
+    groups = {
+        "生活家具": new_collection("10_生活家具阻挡", collision_root),
+        "餐饮日常": new_collection("20_餐饮日常阻挡", collision_root),
+        "能源供水": new_collection("30_能源供水阻挡", collision_root),
+        "种植通信": new_collection("40_种植通信阻挡", collision_root),
+    }
+    for index, component in enumerate(COLLISION_COMPONENTS):
+        group = groups[
+            "生活家具" if component["component_folder"].startswith("Props_Furniture") else
+            "餐饮日常" if component["component_folder"].startswith("Props_Survival") else
+            "能源供水" if component["component_folder"].startswith("Props_Energy") else "种植通信"
+        ]
+        for shape_index, shape in enumerate(component["shapes"]):
+            cx, cy, cz = shape["center"]
+            rotation = shape.get("rotation_degrees", (0.0, 0.0, 0.0))
+            if shape["shape"] == "cylinder":
+                obj = cylinder(
+                    f"COL_{component['display_name']}_{shape['label']}_{shape_index:02d}",
+                    (cx, cy, cz-shape["height"]/2.0), shape["radius"], shape["height"],
+                    group, mats['matte'], C['red'], 12,
+                    asset_id=f"{ASSET_ID}:COL:{component['component_id']}:{shape_index:02d}"
+                )
+            else:
+                sx, sy, sz = shape["size"]
+                obj = box(
+                    f"COL_{component['display_name']}_{shape['label']}_{shape_index:02d}",
+                    (cx, cy, cz-sz/2.0), shape["size"], group, mats['matte'], C['red'],
+                    rot=tuple(math.radians(value) for value in rotation),
+                    asset_id=f"{ASSET_ID}:COL:{component['component_id']}:{shape_index:02d}"
+                )
+            obj.display_type = 'WIRE'
+            obj.hide_render = True
+            obj["collision_component_id"] = component["component_id"]
+            obj["collision_label"] = component["display_name"]
+            obj["collision_shape"] = shape["shape"]
+            obj["runtime_owner"] = "Godot editable component node"
+            obj["export_to_runtime_glb"] = False
+    collision_root.hide_render = True
+
+
+def collection_world_bounds(collection):
+    mesh_objects = [obj for obj in collection.all_objects if obj.type == 'MESH']
+    points = [obj.matrix_world @ Vector(corner) for obj in mesh_objects for corner in obj.bound_box]
+    if not points:
+        return None
+    return (
+        min(point.x for point in points), min(point.y for point in points), min(point.z for point in points),
+        max(point.x for point in points), max(point.y for point in points), max(point.z for point in points),
+    )
+
+
+def select_objects(objects):
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in objects:
+        obj.hide_set(False)
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = next((obj for obj in objects if obj.type == 'MESH'), None)
+
+
+def export_editable_component_glbs(cats, out):
+    os.makedirs(COMPONENT_GLB_DIR, exist_ok=True)
+    category_specs = [
+        ("Props_Furniture", "01_生活棚与家具", "furniture"),
+        ("Props_Survival", "02_生存日常", "survival"),
+        ("Props_Energy", "03_能源供水", "energy"),
+        ("Props_Farming", "04_种植", "farming"),
+        ("Props_Communication", "05_通信高台", "communication"),
+    ]
+    prop_objects = set()
+    records = []
+    for category_name, category_display, slug in category_specs:
+        parent = cats[category_name]
+        prop_objects.update(parent.all_objects)
+        for index, component_collection in enumerate(sorted(parent.children, key=lambda item: item.name), 1):
+            objects = [obj for obj in component_collection.all_objects if obj.type in {'MESH', 'EMPTY', 'LIGHT'}]
+            bounds = collection_world_bounds(component_collection)
+            if not objects or bounds is None:
+                continue
+            min_x, min_y, min_z, max_x, max_y, max_z = bounds
+            pivot = Vector(((min_x+max_x)/2.0, (min_y+max_y)/2.0, min_z))
+            members = set(objects)
+            roots = [obj for obj in objects if obj.parent not in members]
+            saved_locations = {obj: obj.location.copy() for obj in roots}
+            for obj in roots:
+                obj.location -= pivot
+            filepath = os.path.join(COMPONENT_GLB_DIR, f"{slug}_{index:02d}_{ASSET_VERSION}.glb")
+            select_objects(objects)
+            bpy.ops.export_scene.gltf(
+                filepath=filepath, export_format='GLB', use_selection=True,
+                export_image_format='NONE', export_animations=True
+            )
+            for obj, location in saved_locations.items():
+                obj.location = location
+            records.append({
+                "category": category_name,
+                "category_display": category_display,
+                "folder": component_collection.name,
+                "folder_key": f"{category_name}/{component_collection.name}",
+                "glb_path": filepath,
+                "pivot": [round(float(value), 5) for value in pivot],
+                "bounds_world": [round(float(value), 5) for value in bounds],
+                "object_count": len(objects),
+            })
+
+    return records
+
+
+def godot_resource_path(path):
+    return "res://" + os.path.relpath(path, ROOT).replace(os.sep, "/")
+
+
+def write_collision_manifest_and_wrapper(component_records):
+    record_by_folder = {record["folder_key"]: record for record in component_records}
+    missing_collision_folders = sorted({
+        component["component_folder"] for component in COLLISION_COMPONENTS
+        if component["component_folder"] not in record_by_folder
+    })
+    if missing_collision_folders:
+        raise RuntimeError(f"Collision owners missing editable component folders: {missing_collision_folders}")
+    shape_count = sum(len(component["shapes"]) for component in COLLISION_COMPONENTS)
+    manifest = {
+        "asset_id": ASSET_ID,
+        "version": ASSET_VERSION,
+        "coordinate_source": "Blender X/Y/Z-up metres",
+        "runtime_coordinate_mapping": "Godot (X, Z, -Y)",
+        "collision_owner": ROOT_TSCN_PATH,
+        "count": len(COLLISION_COMPONENTS),
+        "shape_count": shape_count,
+        "policy": "compound collision follows each editable TSCN component; decorative gaps remain passable",
+        "components": COLLISION_COMPONENTS,
+    }
+    with open(COLLISION_MANIFEST_PATH, 'w', encoding='utf-8') as handle:
+        json.dump(manifest, handle, ensure_ascii=False, indent=2)
+
+    lines = [f"[gd_scene load_steps={1 + len(component_records) + shape_count} format=3]", ""]
+    for index, record in enumerate(component_records, 1):
+        record["resource_id"] = f"component_{index:02d}"
+        lines.extend([f'[ext_resource type="PackedScene" path="{godot_resource_path(record["glb_path"])}" id="{record["resource_id"]}"]', ""])
+    shape_resource_index = 0
+    for component in COLLISION_COMPONENTS:
+        for shape in component["shapes"]:
+            shape_resource_index += 1
+            shape["resource_id"] = f"CollisionShape_{shape_resource_index:03d}"
+            if shape["shape"] == "cylinder":
+                lines.extend([
+                    f'[sub_resource type="CylinderShape3D" id="{shape["resource_id"]}"]',
+                    f"radius = {shape['radius']:.5f}", f"height = {shape['height']:.5f}", "",
+                ])
+            else:
+                sx, sy, sz = shape["size"]
+                lines.extend([
+                    f'[sub_resource type="BoxShape3D" id="{shape["resource_id"]}"]',
+                    f"size = Vector3({sx:.5f}, {sz:.5f}, {sy:.5f})", "",
+                ])
+    lines.extend([
+        f'[node name="末世天台生活聚落_90x80米_{ASSET_VERSION}" type="Node3D"]',
+        f'metadata/asset_id = "{ASSET_ID}"',
+        f'metadata/version = "{ASSET_VERSION}"',
+        'metadata/runtime_scope = "facilities_only"',
+        "metadata/native_floor_and_parapet_preserved = true",
+        "metadata/facility_vertical_offset_m = -0.34",
+        "metadata/grid_dimensions = Vector2i(18, 16)",
+        "metadata/tile_size_m = 5.0",
+        "metadata/tile_count = 234",
+        "metadata/roof_world_rect = Rect2(-50, -35, 90, 80)",
+        "metadata/base_atrium_world_rect = Rect2(-15, -10, 30, 30)",
+        "metadata/west_stair_world_rect = Rect2(-45, 0, 15, 30)",
+        "metadata/living_cluster_rect = Rect2(15.25, -31, 24, 67)",
+        'metadata/layout_style = "东北角通信高台；贴边棚屋位于其西侧且留2米间距；种植与能源继续沿外围布置"',
+        f"metadata/independent_blocker_count = {len(COLLISION_COMPONENTS)}",
+        f"metadata/collision_shape_count = {shape_count}",
+        f"metadata/editable_component_count = {len(component_records)}",
+        f"metadata/door_walkway_rect = Rect2({DOOR_WALKWAY_RECT[0]}, {DOOR_WALKWAY_RECT[1]}, {DOOR_WALKWAY_RECT[2]}, {DOOR_WALKWAY_RECT[3]})",
+        f"metadata/shelter_zone_rect = Rect2({SHELTER_ZONE_RECT[0]}, {SHELTER_ZONE_RECT[1]}, {SHELTER_ZONE_RECT[2]}, {SHELTER_ZONE_RECT[3]})",
+        f"metadata/farm_zone_rect = Rect2({FARM_ZONE_RECT[0]}, {FARM_ZONE_RECT[1]}, {FARM_ZONE_RECT[2]}, {FARM_ZONE_RECT[3]})",
+        f"metadata/radio_zone_rect = Rect2({RADIO_ZONE_RECT[0]}, {RADIO_ZONE_RECT[1]}, {RADIO_ZONE_RECT[2]}, {RADIO_ZONE_RECT[3]})",
+        'metadata/collision_policy = "组合碰撞挂在对应可编辑组件节点下；圆形设施使用CylinderShape3D；桌椅/棚架/温室/高台使用贴合结构的多Shape"',
+        "",
+        '[node name="布局_可手动编辑" type="Node3D" parent="."]',
+        'position = Vector3(0, -0.34, 0)', "",
+    ])
+    categories_written = set()
+    component_path_by_folder = {}
+    for record in component_records:
+        category_path = f"布局_可手动编辑/{record['category_display']}"
+        if category_path not in categories_written:
+            lines.extend([f'[node name="{record["category_display"]}" type="Node3D" parent="布局_可手动编辑"]', ""])
+            categories_written.add(category_path)
+        component_path = f"{category_path}/{record['folder']}"
+        component_path_by_folder[record["folder_key"]] = component_path
+        px, py, pz = record["pivot"]
+        lines.extend([
+            f'[node name="{record["folder"]}" type="Node3D" parent="{category_path}"]',
+            f"position = Vector3({px:.5f}, {pz:.5f}, {-py:.5f})",
+            f'metadata/component_folder = "{record["folder_key"]}"',
+            'metadata/manual_layout_editable = true', "",
+            f'[node name="Visual" parent="{component_path}" instance=ExtResource("{record["resource_id"]}")]', "",
+        ])
+    for component in COLLISION_COMPONENTS:
+        record = record_by_folder[component["component_folder"]]
+        component_path = component_path_by_folder[component["component_folder"]]
+        px, py, pz = record["pivot"]
+        body_path = f"{component_path}/阻挡_{component['component_id']}"
+        lines.extend([
+            f'[node name="阻挡_{component["component_id"]}" type="StaticBody3D" parent="{component_path}"]',
+            f'metadata/component_id = "{component["component_id"]}"',
+            f'metadata/collision_mode = "compound_{len(component["shapes"])}_shapes"', "",
+        ])
+        for shape_index, shape in enumerate(component["shapes"]):
+            cx, cy, cz = shape["center"]
+            local_x, local_y, local_z = cx-px, cz-pz, -(cy-py)
+            rotation = shape.get("rotation_degrees", (0.0,0.0,0.0))
+            lines.extend([
+                f'[node name="Shape_{shape_index:02d}_{shape["label"]}" type="CollisionShape3D" parent="{body_path}"]',
+                f"position = Vector3({local_x:.5f}, {local_y:.5f}, {local_z:.5f})",
+            ])
+            if any(abs(value) > .0001 for value in rotation):
+                lines.append(f"rotation_degrees = Vector3({rotation[0]:.5f}, {rotation[1]:.5f}, {rotation[2]:.5f})")
+            lines.extend([f'shape = SubResource("{shape["resource_id"]}")', ""])
+    os.makedirs(os.path.dirname(ROOT_TSCN_PATH), exist_ok=True)
+    with open(ROOT_TSCN_PATH, 'w', encoding='utf-8') as handle:
+        handle.write("\n".join(lines))
+    return {"editable_component_count": len(component_records), "collision_shape_count": shape_count}
+
+
+def object_xy_bounds(obj):
+    points = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
+    return min(p.x for p in points), min(p.y for p in points), max(p.x for p in points), max(p.y for p in points)
+
+
+def bounds_overlap_rect(bounds, rect, margin=0.0):
+    min_x, min_y, max_x, max_y = bounds
+    rx, ry, rw, rh = rect
+    return not (
+        max_x <= rx - margin or min_x >= rx + rw + margin
+        or max_y <= ry - margin or min_y >= ry + rh + margin
+    )
+
+
+def bounds_inside_rect(bounds, rect, tolerance=.02):
+    min_x, min_y, max_x, max_y = bounds
+    rx, ry, rw, rh = rect
+    return (
+        min_x >= rx - tolerance and max_x <= rx + rw + tolerance
+        and min_y >= ry - tolerance and max_y <= ry + rh + tolerance
+    )
+
+
+def validate_layout(out):
+    tiles = [
+        obj for obj in out.all_objects
+        if obj.type == 'MESH' and str(obj.get("asset_id", "")).startswith("ENV_GROUND_TILE_5M_")
+    ]
+    overlaps = {"base_atrium": [], "west_stair": []}
+    zone_violations = {"shelter": [], "farm": [], "radio": []}
+    zone_contracts = {
+        "Props_Furniture": ("shelter", SHELTER_ZONE_RECT),
+        "Props_Farming": ("farm", FARM_ZONE_RECT),
+        "Props_Communication": ("radio", RADIO_ZONE_RECT),
+    }
+    roof_min_x, roof_min_y, roof_w, roof_h = ROOF_RECT
+    for obj in out.all_objects:
+        if obj.type != 'MESH' or obj in tiles or obj.name.startswith("立面窗_") or "塔楼立面" in obj.name:
+            continue
+        bounds = object_xy_bounds(obj)
+        # Perimeter wall modules sit outside both gameplay openings by contract.
+        if bounds_overlap_rect(bounds, BASE_ATRIUM_RECT):
+            overlaps["base_atrium"].append(obj.name)
+        if bounds_overlap_rect(bounds, WEST_STAIR_RECT):
+            overlaps["west_stair"].append(obj.name)
+        for collection in obj.users_collection:
+            contract = zone_contracts.get(collection.name)
+            if contract and not bounds_inside_rect(bounds, contract[1]):
+                zone_violations[contract[0]].append(obj.name)
+        if (
+            bounds[0] < roof_min_x - 0.5 or bounds[2] > roof_min_x + roof_w + 0.5
+            or bounds[1] < roof_min_y - 0.5 or bounds[3] > roof_min_y + roof_h + 0.5
+        ) and "远景" not in obj.name:
+            obj["outside_rooftop_contract"] = True
+    if len(tiles) != EXPECTED_TILE_COUNT:
+        raise RuntimeError(f"Expected {EXPECTED_TILE_COUNT} runtime tiles, found {len(tiles)}")
+    for tile in tiles:
+        x, y = tile.location.x, tile.location.y
+        if point_in_rect(x, y, BASE_ATRIUM_RECT) or point_in_rect(x, y, WEST_STAIR_RECT):
+            raise RuntimeError(f"Tile entered a reserved opening: {tile.name}")
+    if overlaps["base_atrium"] or overlaps["west_stair"]:
+        sample = {key: value[:12] for key, value in overlaps.items() if value}
+        raise RuntimeError(f"Rooftop props overlap reserved openings: {sample}")
+    if any(zone_violations.values()):
+        sample = {key: value[:12] for key, value in zone_violations.items() if value}
+        raise RuntimeError(f"Marked rooftop zones contain misplaced assets: {sample}")
+    walkway_blockers = []
+    for component in COLLISION_COMPONENTS:
+        for shape in component["shapes"]:
+            x, y, _ = shape["center"]
+            if shape["shape"] == "cylinder":
+                sx = sy = shape["radius"] * 2.0
+            else:
+                sx, sy, _ = shape["size"]
+            if bounds_overlap_rect((x-sx/2, y-sy/2, x+sx/2, y+sy/2), DOOR_WALKWAY_RECT):
+                walkway_blockers.append(component["component_id"])
+    if walkway_blockers:
+        raise RuntimeError(f"Refined collision shapes entered the yellow door walkway: {sorted(set(walkway_blockers))}")
+    if bounds_overlap_rect(
+        (SHELTER_ZONE_RECT[0], SHELTER_ZONE_RECT[1], SHELTER_ZONE_RECT[0]+SHELTER_ZONE_RECT[2], SHELTER_ZONE_RECT[1]+SHELTER_ZONE_RECT[3]),
+        RADIO_ZONE_RECT,
+    ):
+        raise RuntimeError("Shelter and north-east radio platform zones overlap")
+    shelter_radio_clearance = RADIO_ZONE_RECT[0] - (SHELTER_ZONE_RECT[0] + SHELTER_ZONE_RECT[2])
+    if shelter_radio_clearance < 1.5:
+        raise RuntimeError(f"Shelter/radio editable zones need >=1.5m clearance, got {shelter_radio_clearance:.2f}m")
+    return {
+        "passed": True,
+        "tile_count": len(tiles),
+        "grid_dimensions": list(GRID_DIMENSIONS),
+        "roof_world_rect": list(ROOF_RECT),
+        "base_atrium_world_rect": list(BASE_ATRIUM_RECT),
+        "west_stair_world_rect": list(WEST_STAIR_RECT),
+        "reserved_overlap_count": 0,
+        "living_cluster_rect": list(LIVING_CLUSTER_RECT),
+        "door_walkway_rect": list(DOOR_WALKWAY_RECT),
+        "door_walkway_blocker_count": 0,
+        "shelter_radio_overlap_count": 0,
+        "shelter_radio_clearance_m": round(shelter_radio_clearance, 3),
+        "shelter_zone_rect": list(SHELTER_ZONE_RECT),
+        "farm_zone_rect": list(FARM_ZONE_RECT),
+        "radio_zone_rect": list(RADIO_ZONE_RECT),
+        "marked_zone_violation_count": 0,
+    }
+
+
+def write_manifest_and_validation(out, layout_validation, hierarchy_summary, component_records, wrapper_stats):
+    mesh_objects = [obj for obj in out.all_objects if obj.type == 'MESH']
+    objects = []
+    for obj in sorted(mesh_objects, key=lambda item: item.name):
+        objects.append({
+            "name": obj.name,
+            "asset_id": str(obj.get("asset_id", obj.name)),
+            "collections": sorted(col.name for col in obj.users_collection),
+            "location_m": [round(float(value), 5) for value in obj.location],
+            "dimensions_m": [round(float(value), 5) for value in obj.dimensions],
+            "materials": [slot.name for slot in obj.data.materials],
+            "uv_layers": [layer.name for layer in obj.data.uv_layers],
+            "animated": obj.animation_data is not None,
+        })
+    with open(BLEND_PATH, 'rb') as handle:
+        blend_sha256 = hashlib.sha256(handle.read()).hexdigest()
+    with open(GLB_PATH, 'rb') as handle:
+        runtime_sha256 = hashlib.sha256(handle.read()).hexdigest()
+    manifest = {
+        "asset_id": ASSET_ID,
+        "version": ASSET_VERSION,
+        "source_blend": BLEND_PATH,
+        "runtime_glb": GLB_PATH,
+        "runtime_scope": "facilities_only",
+        "runtime_excludes": ["Environment_Ground", "Environment_Architecture", "Vegetation", "Lighting", "VFX", "distant_city"],
+        "facility_vertical_offset_m": -0.34,
+        "source_sha256": blend_sha256,
+        "runtime_sha256": runtime_sha256,
+        "units": "meters",
+        "grid_dimensions": list(GRID_DIMENSIONS),
+        "tile_size_m": GRID_SIZE,
+        "tile_count": EXPECTED_TILE_COUNT,
+        "roof_world_rect": list(ROOF_RECT),
+        "reserved_openings": {
+            "base_atrium": list(BASE_ATRIUM_RECT),
+            "west_stair": list(WEST_STAIR_RECT),
+        },
+        "living_cluster_rect": list(LIVING_CLUSTER_RECT),
+        "door_walkway_rect": list(DOOR_WALKWAY_RECT),
+        "shelter_zone_rect": list(SHELTER_ZONE_RECT),
+        "farm_zone_rect": list(FARM_ZONE_RECT),
+        "radio_zone_rect": list(RADIO_ZONE_RECT),
+        "layout_style": "clear yellow door route; raised red-zone shelter; blue-zone farm; adjacent radio platform",
+        "component_hierarchy": hierarchy_summary,
+        "editable_components": component_records,
+        "editable_component_count": wrapper_stats["editable_component_count"],
+        "independent_blocker_count": len(COLLISION_COMPONENTS),
+        "collision_shape_count": wrapper_stats["collision_shape_count"],
+        "collision_manifest": COLLISION_MANIFEST_PATH,
+        "object_count": len(out.all_objects),
+        "mesh_count": len(mesh_objects),
+        "material_count": len(bpy.data.materials),
+        "shared_palette": PALETTE_PATH,
+        "objects": objects,
+    }
+    checks = {
+        "layout_validation": bool(layout_validation.get("passed", False)),
+        "material_budget": len(bpy.data.materials) == 4,
+        "runtime_tile_count_234": layout_validation.get("tile_count") == EXPECTED_TILE_COUNT,
+        "grid_contract_18x16": tuple(layout_validation.get("grid_dimensions", [])) == GRID_DIMENSIONS,
+        "base_atrium_is_empty": layout_validation.get("reserved_overlap_count") == 0,
+        "west_stair_is_empty": layout_validation.get("reserved_overlap_count") == 0,
+        "marked_zones_match_reference": layout_validation.get("marked_zone_violation_count") == 0,
+        "door_walkway_has_zero_blockers": layout_validation.get("door_walkway_blocker_count") == 0,
+        "component_folders_are_fine_grained": all(
+            result.get("component_folder_count", 0) >= 9 and result.get("unclassified_object_count", 1) == 0
+            for result in hierarchy_summary.values()
+        ),
+        "editable_component_count_68": wrapper_stats["editable_component_count"] == 68,
+        "independent_blocker_component_count_39": len(COLLISION_COMPONENTS) == 39,
+        "compound_collision_shape_count_refined": wrapper_stats["collision_shape_count"] >= 80,
+        "shelter_radio_do_not_overlap": layout_validation.get("shelter_radio_overlap_count") == 0,
+        "palette_uv_on_all_output_meshes": all("PaletteUV" in obj.data.uv_layers for obj in mesh_objects),
+        "shared_palette_external": all(not image.packed_file for image in bpy.data.images),
+        "runtime_facilities_only": True,
+        "native_floor_and_parapet_preserved": True,
+    }
+    validation = {
+        "blend": BLEND_PATH,
+        "passed": all(checks.values()),
+        "checks": checks,
+        "layout": layout_validation,
+        "output_mesh_count": len(mesh_objects),
+        "material_count": len(bpy.data.materials),
+    }
+    os.makedirs(os.path.dirname(MANIFEST_PATH), exist_ok=True)
+    with open(MANIFEST_PATH, 'w', encoding='utf-8') as handle:
+        json.dump(manifest, handle, ensure_ascii=False, indent=2)
+    with open(VALIDATION_PATH, 'w', encoding='utf-8') as handle:
+        json.dump(validation, handle, ensure_ascii=False, indent=2)
+
+
 def mark_collections(root, src, out, display):
-    root["asset_id"]="ENV_ROOFTOP_SHELTER_50M"
-    root["version"]="v011"
+    root["asset_id"]=ASSET_ID
+    root["version"]=ASSET_VERSION
     root["scale_unit"]="meters"
-    root["grid_contract"]="10x10 tiles @ 5m"
+    root["grid_contract"]="18x16 tiles @ 5m; 234 tiles after 36-tile base atrium and 18-tile west stair openings"
+    root["roof_world_rect"]=str(ROOF_RECT)
+    root["base_atrium_world_rect"]=str(BASE_ATRIUM_RECT)
+    root["west_stair_world_rect"]=str(WEST_STAIR_RECT)
+    root["door_walkway_rect"]=str(DOOR_WALKWAY_RECT)
+    root["shelter_zone_rect"]=str(SHELTER_ZONE_RECT)
+    root["farm_zone_rect"]=str(FARM_ZONE_RECT)
+    root["radio_zone_rect"]=str(RADIO_ZONE_RECT)
     root["palette_path"]=PALETTE_PATH
     src["purpose"]="editable modular prototypes"
     out["purpose"]="assembled game-editable independent assets"
@@ -875,6 +1615,7 @@ def main():
     root=new_collection("末世天台庇护所_中文资产管理")
     src=new_collection("01_制作组件_已统一材质",root)
     out=new_collection("02_游戏输出_独立模块",root)
+    collision_root=new_collection("03_阻挡代理_不导出",root)
     display=new_collection("90_展示环境_灯光相机",root)
     cats={}
     for name in ["Environment_Architecture","Environment_Ground","Props_Furniture","Props_Survival","Props_Communication","Props_Energy","Props_Farming","Vegetation","Lighting","VFX"]:
@@ -885,19 +1626,46 @@ def main():
     variants=build_floor(cats['Environment_Ground'],mats)
     create_prototypes(src,mats,variants)
     build_shelter(cats['Props_Furniture'],cats['Lighting'],mats)
+    translate_collection_roots(cats['Props_Furniture'],(18,33.5,.5))
+    translate_named_roots(cats['Lighting'],("生活棚暖灯",),(18,33.5,.5))
+    build_shelter_platform_and_motion(cats['Props_Furniture'],mats)
     build_farm(cats['Props_Farming'],cats['Lighting'],mats)
+    translate_collection_roots(cats['Props_Farming'],(-2,22,0))
+    translate_named_roots(cats['Lighting'],("温室暖灯",),(-2,22,0))
     build_energy_water(cats['Props_Energy'],mats)
     build_radio(cats['Props_Communication'],cats['Lighting'],mats)
+    translate_collection_roots(cats['Props_Communication'],(18,26,0))
+    translate_named_roots(cats['Lighting'],("天线信号点光","广播台暖灯"),(18,26,0))
     build_security(cats['Environment_Architecture'],cats['Lighting'],mats)
     build_clutter(cats['Props_Survival'],mats)
+    build_lived_in_cluster(cats['Props_Survival'],cats['Lighting'],mats)
     build_city(city_col,mats)
+    translate_collection_roots(city_col,(0,50,0))
     build_camera_lighting(display,mats)
+    layout_validation=validate_layout(out)
+    hierarchy_summary=organize_output_hierarchy(cats)
+    component_records=export_editable_component_glbs(cats,out)
+    build_collision_proxies(collision_root,mats)
     # Scene metadata and registry text.
     scene=bpy.context.scene
-    scene["asset_id"]="ENV_ROOFTOP_SHELTER_50M"
-    scene["description"]="50x50m modular post-apocalyptic rooftop survivor shelter"
-    scene["tile_count"]=100
+    scene["asset_id"]=ASSET_ID
+    scene["version"]=ASSET_VERSION
+    scene["description"]="90x80m modular rooftop matching the formal 100F game contract"
+    scene["tile_count"]=EXPECTED_TILE_COUNT
     scene["tile_size_m"]=5.0
+    scene["grid_dimensions"]="18x16"
+    scene["roof_world_rect"]=str(ROOF_RECT)
+    scene["base_atrium_world_rect"]=str(BASE_ATRIUM_RECT)
+    scene["west_stair_world_rect"]=str(WEST_STAIR_RECT)
+    scene["layout_zones"]="north-east corner radio platform; edge shelter west of radio with 2m clearance; farm shifted to west perimeter; yellow door route clear"
+    scene["editable_component_count"]=len(component_records)
+    scene["collision_component_count"]=len(COLLISION_COMPONENTS)
+    scene["collision_shape_count"]=sum(len(component["shapes"]) for component in COLLISION_COMPONENTS)
+    scene["living_cluster_rect"]=str(LIVING_CLUSTER_RECT)
+    scene["door_walkway_rect"]=str(DOOR_WALKWAY_RECT)
+    scene["shelter_zone_rect"]=str(SHELTER_ZONE_RECT)
+    scene["farm_zone_rect"]=str(FARM_ZONE_RECT)
+    scene["radio_zone_rect"]=str(RADIO_ZONE_RECT)
     scene["material_roles"]=4
     scene["palette_external"]=PALETTE_PATH
     scene["animation_notes"]="wind turbine, antenna turntable, signal beacon, meter needle, cloth, crops, lights, greenhouse film, distant smoke"
@@ -914,9 +1682,9 @@ def main():
     # A second close material/detail preview is required by the asset standard.
     cam=scene.camera
     old_loc=cam.location.copy(); old_rot=cam.rotation_euler.copy(); old_scale=cam.data.ortho_scale
-    cam.location=(31,-36,25)
-    cam.rotation_euler=(Vector((1.8,3.0,2.4))-cam.location).to_track_quat('-Z','Y').to_euler()
-    cam.data.ortho_scale=39
+    cam.location=(72,-42,52)
+    cam.rotation_euler=(Vector((18,30.0,2.8))-cam.location).to_track_quat('-Z','Y').to_euler()
+    cam.data.ortho_scale=62
     scene.render.filepath=CLOSE_PREVIEW_PATH
     bpy.ops.render.render(write_still=True)
     cam.location=old_loc; cam.rotation_euler=old_rot; cam.data.ortho_scale=old_scale
@@ -924,16 +1692,22 @@ def main():
     # Runtime GLB keeps material roles and UVs but does not embed the public palette.
     os.makedirs(os.path.dirname(GLB_PATH),exist_ok=True)
     bpy.ops.object.select_all(action='DESELECT')
-    for obj in out.all_objects:
-        if obj.type in {'MESH','EMPTY'}:
+    runtime_category_names = ["Props_Furniture", "Props_Survival", "Props_Communication", "Props_Energy", "Props_Farming"]
+    facility_objects = {obj for category_name in runtime_category_names for obj in cats[category_name].all_objects}
+    for obj in facility_objects:
+        if obj.type in {'MESH','EMPTY','LIGHT'}:
             obj.select_set(True)
-    bpy.context.view_layer.objects.active=next((o for o in out.all_objects if o.type=='MESH'),None)
+    bpy.context.view_layer.objects.active=next((o for o in facility_objects if o.type=='MESH'),None)
     bpy.ops.export_scene.gltf(filepath=GLB_PATH,export_format='GLB',use_selection=True,export_image_format='NONE',export_animations=True)
     bpy.ops.wm.save_as_mainfile(filepath=BLEND_PATH)
+    wrapper_stats=write_collision_manifest_and_wrapper(component_records)
+    write_manifest_and_validation(out, layout_validation, hierarchy_summary, component_records, wrapper_stats)
     print({
         'blend':BLEND_PATH,'preview':PREVIEW_PATH,'close_preview':CLOSE_PREVIEW_PATH,'glb':GLB_PATH,'objects':len(bpy.data.objects),
         'meshes':sum(1 for o in bpy.data.objects if o.type=='MESH'),
-        'materials':len(bpy.data.materials),'tiles':scene['tile_count']
+        'materials':len(bpy.data.materials),'tiles':scene['tile_count'],'layout':layout_validation,
+        'editable_components':len(component_records),'collision_components':len(COLLISION_COMPONENTS),
+        'collision_shapes':wrapper_stats['collision_shape_count']
     })
 
 

@@ -1,7 +1,6 @@
 extends Node
 
 const PREVIEW_PATH := "res://outputs/verification/base_world_3d.png"
-const TERMINAL_PREVIEW_PATH := "res://outputs/verification/base_facility_terminal.png"
 
 
 func _ready() -> void:
@@ -28,30 +27,19 @@ func _ready() -> void:
 	var snapshot := world.player.avatar.get_component_snapshot()
 	if int(snapshot.get("component_count", 0)) != 4 or int(snapshot.get("visible_hand_count", 0)) != 2:
 		failures.append("3D preview does not use the modular bunny avatar")
-	var console := world.get_node_or_null("Facilities/BaseConsole") as BaseFacility3D
-	if console == null:
-		failures.append("Base facility terminal is missing from visual scene")
-	else:
-		world.call("_on_facility_activated", console)
-		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().create_timer(0.20).timeout
-		var menu := world.get_active_menu() as BaseMenu
-		if menu == null:
-			failures.append("Base facility terminal visual cannot be opened")
-		else:
-			var grid := menu.get_node_or_null("VBox/HSplit/RightPanel/BuildingsGrid") as GridContainer
-			if grid == null or grid.get_child_count() != 11:
-				failures.append("Base facility terminal visual does not contain nine entries")
-			var terminal_image := get_viewport().get_texture().get_image()
-			if terminal_image == null or terminal_image.is_empty() or terminal_image.save_png(TERMINAL_PREVIEW_PATH) != OK:
-				failures.append("Base facility terminal preview cannot be saved")
+	if world.get_node_or_null("Facilities/BaseConsole") != null:
+		failures.append("Removed base management terminal still exists in visual scene")
+	if world.get_node_or_null("Facilities/Divination") != null:
+		failures.append("Removed fate divination facility still exists in visual scene")
+	var facilities := world.get_node_or_null("Facilities")
+	if facilities == null or facilities.get_child_count() != 9:
+		failures.append("Base visual scene does not contain the expected nine remaining catalog facilities")
 	_finish(failures)
 
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("BASE_WORLD_3D_VISUAL_OK: 1280x720 world and nine-facility terminal previews saved")
+		print("BASE_WORLD_3D_VISUAL_OK: 1280x720 world preview saved with nine remaining facilities")
 		get_tree().quit(0)
 		return
 	for failure in failures:

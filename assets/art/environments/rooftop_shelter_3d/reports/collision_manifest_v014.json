@@ -1,0 +1,520 @@
+{
+  "asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+  "version": "v014",
+  "coordinate_source": "Blender X/Y/Z-up metres",
+  "runtime_coordinate_mapping": "Godot (X, Z, -Y)",
+  "collision_owner": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_root_top3d_v014.tscn",
+  "count": 34,
+  "components": [
+    {
+      "component_id": "shelter_workbench",
+      "display_name": "生活棚工作台",
+      "location_m": [
+        20.0,
+        7.0,
+        0.34
+      ],
+      "size_m": [
+        5.0,
+        1.5,
+        1.55
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "lounge_sofa",
+      "display_name": "双人沙发",
+      "location_m": [
+        29.0,
+        4.3,
+        0.34
+      ],
+      "size_m": [
+        5.4,
+        2.2,
+        1.75
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "spool_table",
+      "display_name": "电缆卷筒圆桌",
+      "location_m": [
+        29.1,
+        1.0,
+        0.34
+      ],
+      "size_m": [
+        2.45,
+        2.45,
+        1.48
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "table_radio",
+      "display_name": "桌面老式收音机",
+      "location_m": [
+        28.55,
+        0.95,
+        1.46
+      ],
+      "size_m": [
+        1.1,
+        0.6,
+        0.72
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "camp_bed",
+      "display_name": "简易床铺",
+      "location_m": [
+        21.0,
+        -1.8,
+        0.34
+      ],
+      "size_m": [
+        4.3,
+        2.1,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "stove",
+      "display_name": "小型火炉",
+      "location_m": [
+        25.5,
+        6.2,
+        0.34
+      ],
+      "size_m": [
+        1.25,
+        1.25,
+        1.65
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "dining_table",
+      "display_name": "公共餐桌",
+      "location_m": [
+        21.0,
+        13.0,
+        0.34
+      ],
+      "size_m": [
+        4.9,
+        1.45,
+        1.45
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "dining_bench_s",
+      "display_name": "公共餐桌南长凳",
+      "location_m": [
+        21.0,
+        11.65,
+        0.34
+      ],
+      "size_m": [
+        4.1,
+        0.55,
+        0.65
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "dining_bench_n",
+      "display_name": "公共餐桌北长凳",
+      "location_m": [
+        21.0,
+        14.35,
+        0.34
+      ],
+      "size_m": [
+        4.1,
+        0.55,
+        0.65
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "wash_basin",
+      "display_name": "生活洗衣盆",
+      "location_m": [
+        35.6,
+        -7.4,
+        0.34
+      ],
+      "size_m": [
+        1.5,
+        1.5,
+        0.62
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "herb_rack",
+      "display_name": "香草晾晒架",
+      "location_m": [
+        32.5,
+        12.0,
+        0.34
+      ],
+      "size_m": [
+        7.15,
+        0.45,
+        3.2
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "energy_bench",
+      "display_name": "能源维修工作台",
+      "location_m": [
+        22.0,
+        -14.0,
+        0.34
+      ],
+      "size_m": [
+        4.6,
+        1.3,
+        1.35
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "generator",
+      "display_name": "柴油发电机",
+      "location_m": [
+        31.0,
+        -18.0,
+        0.34
+      ],
+      "size_m": [
+        3.4,
+        2.0,
+        2.65
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "battery_0",
+      "display_name": "蓄电池柜0",
+      "location_m": [
+        29.0,
+        -14.0,
+        0.34
+      ],
+      "size_m": [
+        1.05,
+        0.85,
+        1.75
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "battery_1",
+      "display_name": "蓄电池柜1",
+      "location_m": [
+        30.15,
+        -14.0,
+        0.34
+      ],
+      "size_m": [
+        1.05,
+        0.85,
+        1.75
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "battery_2",
+      "display_name": "蓄电池柜2",
+      "location_m": [
+        31.3,
+        -14.0,
+        0.34
+      ],
+      "size_m": [
+        1.05,
+        0.85,
+        1.75
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "water_tank_0",
+      "display_name": "储水罐0",
+      "location_m": [
+        35.0,
+        -23.0,
+        0.34
+      ],
+      "size_m": [
+        4.5,
+        4.5,
+        5.25
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "water_tank_1",
+      "display_name": "储水罐1",
+      "location_m": [
+        31.8,
+        -26.0,
+        0.34
+      ],
+      "size_m": [
+        2.6,
+        2.6,
+        3.45
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "water_tank_2",
+      "display_name": "储水罐2",
+      "location_m": [
+        35.0,
+        -17.8,
+        0.34
+      ],
+      "size_m": [
+        2.6,
+        2.6,
+        3.45
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "water_tank_3",
+      "display_name": "储水罐3",
+      "location_m": [
+        31.8,
+        -10.8,
+        0.34
+      ],
+      "size_m": [
+        3.0,
+        3.0,
+        3.85
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "wind_mast",
+      "display_name": "风机塔杆",
+      "location_m": [
+        29.0,
+        -24.0,
+        0.34
+      ],
+      "size_m": [
+        0.5,
+        0.5,
+        7.3
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "solar_0",
+      "display_name": "太阳能板0",
+      "location_m": [
+        20.0,
+        -22.0,
+        0.5
+      ],
+      "size_m": [
+        4.7,
+        2.9,
+        2.1
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "solar_1",
+      "display_name": "太阳能板1",
+      "location_m": [
+        25.0,
+        -22.0,
+        0.5
+      ],
+      "size_m": [
+        4.7,
+        2.9,
+        2.1
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "solar_2",
+      "display_name": "太阳能板2",
+      "location_m": [
+        20.0,
+        -26.0,
+        0.5
+      ],
+      "size_m": [
+        4.7,
+        2.9,
+        2.1
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "solar_3",
+      "display_name": "太阳能板3",
+      "location_m": [
+        25.0,
+        -26.0,
+        0.5
+      ],
+      "size_m": [
+        4.7,
+        2.9,
+        2.1
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "farm_planter_0",
+      "display_name": "种植池0",
+      "location_m": [
+        20.0,
+        23.0,
+        0.34
+      ],
+      "size_m": [
+        5.3,
+        2.5,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "farm_planter_1",
+      "display_name": "种植池1",
+      "location_m": [
+        26.0,
+        23.0,
+        0.34
+      ],
+      "size_m": [
+        5.3,
+        2.5,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "farm_planter_2",
+      "display_name": "种植池2",
+      "location_m": [
+        20.0,
+        19.5,
+        0.34
+      ],
+      "size_m": [
+        5.3,
+        2.5,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "farm_planter_3",
+      "display_name": "种植池3",
+      "location_m": [
+        26.0,
+        19.5,
+        0.34
+      ],
+      "size_m": [
+        5.3,
+        2.5,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "farm_planter_4",
+      "display_name": "种植池4",
+      "location_m": [
+        20.0,
+        16.0,
+        0.34
+      ],
+      "size_m": [
+        4.5,
+        2.1,
+        0.82
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "bathtub_planter",
+      "display_name": "浴缸种植池",
+      "location_m": [
+        26.0,
+        16.0,
+        0.34
+      ],
+      "size_m": [
+        4.3,
+        2.0,
+        1.05
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "greenhouse",
+      "display_name": "温室",
+      "location_m": [
+        22.0,
+        29.4,
+        0.34
+      ],
+      "size_m": [
+        8.3,
+        6.1,
+        4.85
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "radio_platform",
+      "display_name": "广播平台楼板",
+      "location_m": [
+        33.0,
+        24.0,
+        4.34
+      ],
+      "size_m": [
+        8.1,
+        8.1,
+        0.45
+      ],
+      "shape": "BoxShape3D"
+    },
+    {
+      "component_id": "radio_console",
+      "display_name": "广播控制桌",
+      "location_m": [
+        33.0,
+        25.8,
+        4.72
+      ],
+      "size_m": [
+        5.3,
+        1.6,
+        1.35
+      ],
+      "shape": "BoxShape3D"
+    }
+  ]
+}

@@ -39,6 +39,9 @@ const PARAPET_SCENE: PackedScene = preload(
 const PARAPET_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
 )
+const ROOFTOP_ART_SCENE: PackedScene = preload(
+	"res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v017.tscn"
+)
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
 )
@@ -65,6 +68,7 @@ var _protected_floor_visual_light: MultiMeshInstance3D
 var _protected_floor_visual_dark: MultiMeshInstance3D
 var _outer_visual: MultiMeshInstance3D
 var _support_root: StaticBody3D
+var _rooftop_art_instance: Node3D
 var _shell_visible := true
 var _floor_visible := true
 var _outer_visible := true
@@ -87,6 +91,7 @@ func _ready() -> void:
 	_build_floor()
 	_build_outer_shell()
 	_build_support()
+	_install_rooftop_art()
 
 
 func set_shell_visible(show_shell: bool) -> void:
@@ -106,6 +111,8 @@ func set_render_state(_show_floor: bool, _show_outer: bool) -> void:
 		_floor_visual_dark.visible = show_floor
 	if _outer_visual != null:
 		_outer_visual.visible = show_outer
+	if _rooftop_art_instance != null:
+		_rooftop_art_instance.visible = true
 	_apply_protected_floor_patch_visibility()
 
 
@@ -172,11 +179,34 @@ func get_snapshot() -> Dictionary:
 		),
 		"uses_imported_floor_mesh": _floor_visual_light != null and _floor_visual_light.multimesh != null,
 		"uses_imported_outer_mesh": _outer_visual != null and _outer_visual.multimesh != null,
+		"uses_formal_rooftop_art": _rooftop_art_instance != null,
+		"formal_rooftop_art_version": (
+			str(_rooftop_art_instance.get_meta("version", ""))
+			if _rooftop_art_instance != null else ""
+		),
+		"formal_rooftop_art_blocker_count": (
+			int(_rooftop_art_instance.get_meta("independent_blocker_count", 0))
+			if _rooftop_art_instance != null else 0
+		),
 		"checkerboard_pattern": true,
 		"base_99_100_atrium_enabled": floor_index == 0,
 		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if floor_index == 0 else 0,
 		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if floor_index == 0 else Rect2(),
 	}
+
+
+func _install_rooftop_art() -> void:
+	if floor_index != 0 or floor_kind != "rooftop":
+		return
+	var instance := ROOFTOP_ART_SCENE.instantiate() as Node3D
+	if instance == null:
+		push_error("ENV-ROOFTOP-SHELTER-90X80 v017 设施场景无法实例化")
+		return
+	instance.name = "FormalRooftopFacilitiesV017"
+	add_child(instance)
+	_rooftop_art_instance = instance
+	# v017只提供设施、家具及其组合碰撞。100层原生地板、围栏、门洞视觉
+	# 与FloorSupport承重碰撞继续由TowerFloorStage3D完整持有。
 
 
 func _floor_grid_count() -> int:

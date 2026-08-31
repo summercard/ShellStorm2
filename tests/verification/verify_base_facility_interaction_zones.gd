@@ -1,11 +1,15 @@
 extends Node
 
 const TARGET_FACILITIES := ["mission_operations", "weapon_workshop", "base_vending"]
-const REVERSED_FRONT_FACILITIES := ["mission_operations", "weapon_workshop"]
+const LOCKED_POSITIONS := {
+	"mission_operations": Vector3(-9, 0, -11.6),
+	"weapon_workshop": Vector3(-3, 0, -11.6),
+}
 
 
 func _ready() -> void:
 	var failures: Array[String] = []
+	_verify_authored_transforms(failures)
 	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
 	var tower := scene.instantiate() as TowerDescent3D
 	tower.test_mode = true
@@ -58,7 +62,7 @@ func _verify_facility(
 		return
 	if str(interaction.get_meta("front_interaction_profile", "")) != facility_id:
 		failures.append("设施未应用正面交互配置：%s" % facility_id)
-	var expected_side_multiplier := -1.0 if facility_id in REVERSED_FRONT_FACILITIES else 1.0
+	var expected_side_multiplier := 1.0
 	if not is_equal_approx(float(interaction.get_meta("front_interaction_side_multiplier", 0.0)), expected_side_multiplier):
 		failures.append("设施热区正面翻转配置错误：%s" % facility_id)
 	var size_snapshot := facility.get_size_contract_snapshot()
@@ -88,3 +92,24 @@ func _verify_facility(
 	var interaction_width := interaction_box.size.z if axis_is_x else interaction_box.size.x
 	if facility_id != "base_vending" and interaction_width < 5.2:
 		failures.append("工作设施正面交互宽度不足：%s" % facility_id)
+
+
+func _verify_authored_transforms(failures: Array[String]) -> void:
+	var layout_scene := load("res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn") as PackedScene
+	var layout := layout_scene.instantiate() as Node3D
+	for facility_id in LOCKED_POSITIONS:
+		var facility: BaseFacility3D
+		for candidate in layout.find_children("*", "BaseFacility3D", true, false):
+			if (candidate as BaseFacility3D).facility_id == facility_id:
+				facility = candidate as BaseFacility3D
+				break
+		if facility == null:
+			failures.append("美术布置层缺少设施：%s" % facility_id)
+			continue
+		if not facility.position.is_equal_approx(LOCKED_POSITIONS[facility_id] as Vector3):
+			failures.append("设施位置被改动：%s" % facility_id)
+		if not facility.rotation.is_equal_approx(Vector3(0, PI, 0)):
+			failures.append("设施旋转被改动：%s" % facility_id)
+		if not facility.scale.is_equal_approx(Vector3.ONE):
+			failures.append("设施缩放被改动：%s" % facility_id)
+	layout.free()
