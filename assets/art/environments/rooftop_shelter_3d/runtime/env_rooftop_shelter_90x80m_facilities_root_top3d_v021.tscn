@@ -255,6 +255,7 @@ metadata/runtime_scope = "facilities_only"
 metadata/native_floor_and_parapet_preserved = true
 metadata/facility_vertical_offset_m = 0.0
 metadata/layout_revision = "region_center_pivots_north_layout_v021"
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55, 0)
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
