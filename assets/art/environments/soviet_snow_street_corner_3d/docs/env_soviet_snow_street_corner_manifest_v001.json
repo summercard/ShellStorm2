@@ -1,0 +1,52 @@
+{
+  "asset": "前苏联风格雪地街角微缩景观",
+  "asset_id": "ENV_SOVIET_SNOW_STREET_CORNER_001",
+  "version": "v001",
+  "base_dimensions_m": [
+    36.0,
+    36.0
+  ],
+  "style": [
+    "toon-rendered",
+    "Soviet-realist",
+    "snow-night",
+    "85-percent-gray-white",
+    "15-percent-accents"
+  ],
+  "palette": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\soviet_snow_street_corner_3d\\shared\\苏联雪夜色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "category_object_counts": {
+    "Environment/Architecture": 294,
+    "Environment/Ground": 118,
+    "Props/Street": 59,
+    "Props/Signage": 63,
+    "Props/Interior": 169,
+    "Props/Transit": 28,
+    "Props/Vehicle": 24,
+    "Vegetation": 36,
+    "Lighting": 27,
+    "VFX": 275,
+    "Collision/Architecture": 1,
+    "Collision/Ground": 1
+  },
+  "source_prototype_count": 5,
+  "game_output_object_count": 1088,
+  "collision_object_count": 2,
+  "animation_frame_range": [
+    1,
+    360
+  ],
+  "contains_people_or_animals": false,
+  "ui_visible_in_showcase": false,
+  "deliverables": {
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\soviet_snow_street_corner_3d\\source\\soviet_snow_street_corner\\env_soviet_snow_street_corner_source_v001.blend",
+    "game_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\soviet_snow_street_corner_3d\\game_output\\soviet_snow_street_corner\\env_soviet_snow_street_corner_game_v001.blend",
+    "full_preview": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\soviet_snow_street_corner_3d\\previews\\env_soviet_snow_street_corner_full_v001.png",
+    "entry_preview": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\soviet_snow_street_corner_3d\\previews\\env_soviet_snow_street_corner_entry_v001.png"
+  }
+}

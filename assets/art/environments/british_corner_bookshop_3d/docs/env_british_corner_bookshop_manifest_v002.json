@@ -1,0 +1,54 @@
+{
+  "asset": "英伦风街角书店微缩景观",
+  "asset_id": "ENV_BRITISH_CORNER_BOOKSHOP_002",
+  "version": "v002",
+  "base_dimensions_m": [
+    34.0,
+    34.0
+  ],
+  "style": [
+    "toon-rendered",
+    "restrained-dopamine-color",
+    "British-vintage",
+    "steampunk",
+    "wet-night",
+    "elevated-metro",
+    "falling-leaves",
+    "drain-steam"
+  ],
+  "palette": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\british_corner_bookshop_3d\\shared\\多巴胺色盘_10x10_512.png",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "category_object_counts": {
+    "Environment/Architecture": 191,
+    "Environment/Ground": 146,
+    "Props/Furniture": 72,
+    "Props/Advertisement": 108,
+    "Props/Books": 286,
+    "Props/Street": 97,
+    "Props/Transit": 57,
+    "Vegetation": 141,
+    "Lighting": 86,
+    "VFX": 128,
+    "Collision/Ground": 1
+  },
+  "source_prototype_count": 5,
+  "game_output_object_count": 1307,
+  "collision_object_count": 1,
+  "animation_frame_range": [
+    1,
+    360
+  ],
+  "contains_people_or_animals": false,
+  "ui_visible_in_showcase": false,
+  "deliverables": {
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\british_corner_bookshop_3d\\source\\british_corner_bookshop\\env_british_corner_bookshop_source_v002.blend",
+    "game_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\british_corner_bookshop_3d\\game_output\\british_corner_bookshop\\env_british_corner_bookshop_game_v002.blend",
+    "full_preview": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\british_corner_bookshop_3d\\previews\\env_british_corner_bookshop_full_v002.png",
+    "interior_preview": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\british_corner_bookshop_3d\\previews\\env_british_corner_bookshop_interior_v002.png"
+  }
+}
