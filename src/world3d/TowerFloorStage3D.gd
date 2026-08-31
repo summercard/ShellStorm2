@@ -40,7 +40,7 @@ const PARAPET_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
 )
 const ROOFTOP_ART_SCENE: PackedScene = preload(
-	"res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v017.tscn"
+	"res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v021.tscn"
 )
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
@@ -200,9 +200,9 @@ func _install_rooftop_art() -> void:
 		return
 	var instance := ROOFTOP_ART_SCENE.instantiate() as Node3D
 	if instance == null:
-		push_error("ENV-ROOFTOP-SHELTER-90X80 v017 设施场景无法实例化")
+		push_error("ENV-ROOFTOP-SHELTER-90X80 v021 设施场景无法实例化")
 		return
-	instance.name = "FormalRooftopFacilitiesV017"
+	instance.name = "FormalRooftopFacilitiesV019"
 	add_child(instance)
 	_rooftop_art_instance = instance
 	# v017只提供设施、家具及其组合碰撞。100层原生地板、围栏、门洞视觉

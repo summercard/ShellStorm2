@@ -127,14 +127,14 @@ func _verify_editable_components_and_collisions(rooftop: Node3D, failures: Array
 func _verify_key_blocker_rays(rooftop: Node3D, failures: Array[String]) -> void:
 	var space: PhysicsDirectSpaceState3D = rooftop.get_world_3d().direct_space_state
 	for sample in [
-		{"id": "lounge_sofa", "point": Vector3(21.0, 8.0, -37.8)},
+		{"id": "lounge_sofa", "point": Vector3(21.0, 8.0, 37.8)},
 		# 避开摆在桌面上的收音机，从圆桌外沿验证圆柱碰撞。
-		{"id": "spool_table", "point": Vector3(21.9, 8.0, -34.5)},
-		{"id": "table_radio", "point": Vector3(20.55, 8.0, -34.45)},
-		{"id": "shelter_platform", "point": Vector3(10.0, 8.0, -37.0)},
-		{"id": "shelter_stair_ramp", "point": Vector3(18.0, 8.0, -28.82)},
-		{"id": "radio_platform", "point": Vector3(34.0, 8.0, -40.0)},
-		{"id": "radio_stairs", "point": Vector3(35.0, 8.0, -34.8)},
+		{"id": "spool_table", "point": Vector3(21.9, 8.0, 34.5)},
+		{"id": "table_radio", "point": Vector3(20.55, 8.0, 34.45)},
+		{"id": "shelter_platform", "point": Vector3(10.0, 8.0, 37.0)},
+		{"id": "shelter_stair_ramp", "point": Vector3(18.0, 8.0, 28.82)},
+		{"id": "radio_platform", "point": Vector3(34.0, 8.0, 40.0)},
+		{"id": "radio_stairs", "point": Vector3(35.0, 8.0, 34.8)},
 	]:
 		var start := sample["point"] as Vector3
 		var query := PhysicsRayQueryParameters3D.create(start, Vector3(start.x, -1.0, start.z))

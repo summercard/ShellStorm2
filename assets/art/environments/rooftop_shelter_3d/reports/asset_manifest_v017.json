@@ -104,15 +104,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_01_v017.glb",
       "pivot": [
         17.97965,
-        37.0,
+        -37.0,
         0.34
       ],
       "bounds_world": [
         7.7443,
-        29.14904,
+        -44.85096,
         0.34,
         28.215,
-        44.85096,
+        -29.14904,
         0.88
       ],
       "object_count": 60,
@@ -126,15 +126,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_02_v017.glb",
       "pivot": [
         18.0,
-        28.675,
+        -28.675,
         0.34
       ],
       "bounds_world": [
         16.36161,
-        27.82999,
+        -29.52,
         0.34,
         19.63839,
-        29.52,
+        -27.82999,
         0.95749
       ],
       "object_count": 5,
@@ -148,15 +148,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_03_v017.glb",
       "pivot": [
         18.0,
-        37.0,
+        -37.0,
         0.84
       ],
       "bounds_world": [
         7.74,
-        29.24,
+        -44.76,
         0.84,
         28.26,
-        44.76,
+        -29.24,
         6.16
       ],
       "object_count": 108,
@@ -170,15 +170,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_04_v017.glb",
       "pivot": [
         12.0,
-        40.515,
+        -40.515,
         0.86
       ],
       "bounds_world": [
         9.5,
-        39.75,
+        -41.28,
         0.86,
         14.5,
-        41.28,
+        -39.75,
         3.66
       ],
       "object_count": 14,
@@ -192,15 +192,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_05_v017.glb",
       "pivot": [
         21.0,
-        37.83465,
+        -37.83465,
         0.84
       ],
       "bounds_world": [
         18.275,
-        36.76465,
+        -38.90464,
         0.84,
         23.725,
-        38.90464,
+        -36.76465,
         3.14759
       ],
       "object_count": 14,
@@ -214,15 +214,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_06_v017.glb",
       "pivot": [
         21.1,
-        34.5,
+        -34.5,
         0.86
       ],
       "bounds_world": [
         19.92,
-        33.32,
+        -35.68,
         0.86,
         22.28,
-        35.68,
+        -33.32,
         1.978
       ],
       "object_count": 7,
@@ -236,15 +236,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_07_v017.glb",
       "pivot": [
         20.267,
-        34.42549,
+        -34.42549,
         1.96
       ],
       "bounds_world": [
         19.43166,
-        34.08,
+        -34.77098,
         1.96,
         21.10235,
-        34.77098,
+        -34.08,
         3.56695
       ],
       "object_count": 3,
@@ -258,15 +258,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_08_v017.glb",
       "pivot": [
         21.2777,
-        34.63005,
+        -34.63005,
         1.97
       ],
       "bounds_world": [
         20.49046,
-        33.93792,
+        -35.32218,
         1.97,
         22.06495,
-        35.32218,
+        -33.93792,
         2.25
       ],
       "object_count": 9,
@@ -280,15 +280,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_09_v017.glb",
       "pivot": [
         21.00408,
-        36.5,
+        -36.5,
         0.865
       ],
       "bounds_world": [
         17.66801,
-        33.98774,
+        -39.01226,
         0.865,
         24.34015,
-        39.01226,
+        -33.98774,
         0.942
       ],
       "object_count": 2,
@@ -302,15 +302,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_10_v017.glb",
       "pivot": [
         13.0,
-        31.7,
+        -31.7,
         0.86
       ],
       "bounds_world": [
         10.9,
-        30.7,
+        -32.7,
         0.86,
         15.1,
-        32.7,
+        -30.7,
         1.57
       ],
       "object_count": 2,
@@ -324,15 +324,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_11_v017.glb",
       "pivot": [
         10.25,
-        32.3,
+        -32.3,
         0.86
       ],
       "bounds_world": [
         9.05,
-        30.6,
+        -34.0,
         0.86,
         11.45,
-        34.0,
+        -30.6,
         1.61
       ],
       "object_count": 5,
@@ -346,15 +346,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_12_v017.glb",
       "pivot": [
         26.0,
-        44.18529,
+        -44.18529,
         1.7
       ],
       "bounds_world": [
         24.4,
-        44.10058,
+        -44.27,
         1.7,
         27.6,
-        44.27,
+        -44.10058,
         4.2
       ],
       "object_count": 13,
@@ -368,15 +368,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_13_v017.glb",
       "pivot": [
         17.5,
-        39.7,
+        -39.7,
         0.86
       ],
       "bounds_world": [
         16.9,
-        39.1,
+        -40.3,
         0.86,
         18.1,
-        40.3,
+        -39.1,
         2.43
       ],
       "object_count": 3,
@@ -390,15 +390,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_14_v017.glb",
       "pivot": [
         18.9,
-        39.75,
+        -39.75,
         3.8
       ],
       "bounds_world": [
         11.82881,
-        37.32,
+        -42.18,
         3.8,
         25.97119,
-        42.18,
+        -37.32,
         5.04
       ],
       "object_count": 3,
@@ -412,15 +412,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_15_v017.glb",
       "pivot": [
         26.8,
-        31.16,
+        -31.16,
         0.84
       ],
       "bounds_world": [
         25.705,
-        30.47,
+        -31.85,
         0.84,
         27.895,
-        31.85,
+        -30.47,
         8.0633
       ],
       "object_count": 10,
@@ -434,15 +434,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/furniture_16_v017.glb",
       "pivot": [
         17.56684,
-        36.5,
+        -36.5,
         3.83
       ],
       "bounds_world": [
         16.88869,
-        35.78926,
+        -37.21074,
         3.83,
         18.245,
-        37.21074,
+        -35.78926,
         5.26034
       ],
       "object_count": 11,
@@ -456,15 +456,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_01_v017.glb",
       "pivot": [
         23.0,
-        42.5,
+        -42.5,
         0.84
       ],
       "bounds_world": [
         20.6,
-        41.825,
+        -43.175,
         0.84,
         25.4,
-        43.175,
+        -41.825,
         2.19
       ],
       "object_count": 5,
@@ -478,15 +478,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_02_v017.glb",
       "pivot": [
         23.0,
-        42.5,
+        -42.5,
         0.84
       ],
       "bounds_world": [
         21.0,
-        40.91,
+        -44.09,
         0.84,
         25.0,
-        44.09,
+        -40.91,
         1.39
       ],
       "object_count": 6,
@@ -500,15 +500,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_03_v017.glb",
       "pivot": [
         23.0578,
-        42.56,
+        -42.56,
         1.7
       ],
       "bounds_world": [
         21.4,
-        42.1,
+        -43.02,
         1.7,
         24.71559,
-        43.02,
+        -42.1,
         1.94
       ],
       "object_count": 14,
@@ -522,15 +522,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_04_v017.glb",
       "pivot": [
         9.77,
-        29.6,
+        -29.6,
         0.84
       ],
       "bounds_world": [
         8.91261,
-        29.36794,
+        -29.83206,
         0.84,
         10.62739,
-        29.83206,
+        -29.36794,
         1.04
       ],
       "object_count": 4,
@@ -544,15 +544,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_05_v017.glb",
       "pivot": [
         26.0,
-        32.0,
+        -32.0,
         0.84
       ],
       "bounds_world": [
         25.28,
-        31.28,
+        -32.72,
         0.84,
         26.72,
-        32.72,
+        -31.28,
         1.155
       ],
       "object_count": 2,
@@ -566,15 +566,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_06_v017.glb",
       "pivot": [
         23.5,
-        31.50289,
+        -31.50289,
         0.84
       ],
       "bounds_world": [
         19.945,
-        31.37258,
+        -31.6332,
         0.84,
         27.055,
-        31.6332,
+        -31.37258,
         3.845
       ],
       "object_count": 31,
@@ -588,15 +588,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_07_v017.glb",
       "pivot": [
         17.75,
-        37.75,
+        -37.75,
         4.43
       ],
       "bounds_world": [
         8.39538,
-        31.39,
+        -44.11,
         4.43,
         27.10462,
-        44.11,
+        -31.39,
         5.12299
       ],
       "object_count": 10,
@@ -610,15 +610,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_08_v017.glb",
       "pivot": [
         18.02622,
-        37.63488,
+        -37.63488,
         0.84
       ],
       "bounds_world": [
         8.69566,
-        30.64976,
+        -44.62,
         0.84,
         27.35678,
-        44.62,
+        -30.64976,
         1.88813
       ],
       "object_count": 30,
@@ -632,15 +632,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_09_v017.glb",
       "pivot": [
         13.0,
-        42.0,
+        -42.0,
         2.75
       ],
       "bounds_world": [
         9.0,
-        41.96801,
+        -42.03199,
         2.75,
         17.0,
-        42.03199,
+        -41.96801,
         4.01559
       ],
       "object_count": 6,
@@ -654,15 +654,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_10_v017.glb",
       "pivot": [
         11.0,
-        42.0,
+        -42.0,
         0.84
       ],
       "bounds_world": [
         8.65,
-        41.2,
+        -42.8,
         0.84,
         13.35,
-        42.8,
+        -41.2,
         2.05
       ],
       "object_count": 5,
@@ -676,15 +676,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_11_v017.glb",
       "pivot": [
         21.81966,
-        -23.04157,
+        23.04157,
         -0.21
       ],
       "bounds_world": [
         19.45275,
-        -24.24378,
+        21.83936,
         -0.21,
         24.18657,
-        -21.83936,
+        24.24378,
         0.98638
       ],
       "object_count": 7,
@@ -698,15 +698,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_12_v017.glb",
       "pivot": [
         27.06249,
-        -2.99703,
+        2.99703,
         0.36
       ],
       "bounds_world": [
         17.39932,
-        -12.0856,
+        -6.09155,
         0.36,
         36.72565,
-        6.09155,
+        12.0856,
         0.495
       ],
       "object_count": 22,
@@ -720,15 +720,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_13_v017.glb",
       "pivot": [
         19.7742,
-        -18.333,
+        18.333,
         0.31859
       ],
       "bounds_world": [
         17.61206,
-        -19.9836,
+        16.68239,
         0.31859,
         21.93633,
-        -16.68239,
+        19.9836,
         1.99505
       ],
       "object_count": 27,
@@ -742,15 +742,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_14_v017.glb",
       "pivot": [
         19.64112,
-        -27.46432,
+        27.46432,
         0.31837
       ],
       "bounds_world": [
         17.64576,
-        -29.72411,
+        25.20454,
         0.31837,
         21.63648,
-        -25.20454,
+        29.72411,
         1.93113
       ],
       "object_count": 27,
@@ -764,15 +764,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_15_v017.glb",
       "pivot": [
         36.00248,
-        -14.32039,
+        14.32039,
         0.33018
       ],
       "bounds_world": [
         33.98431,
-        -16.03602,
+        12.60476,
         0.33018,
         38.02065,
-        -12.60476,
+        16.03602,
         1.86156
       ],
       "object_count": 27,
@@ -786,15 +786,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_16_v017.glb",
       "pivot": [
         -11.01707,
-        34.10659,
+        -34.10659,
         0.33583
       ],
       "bounds_world": [
         -13.00774,
-        32.64581,
+        -35.56736,
         0.33583,
         -9.0264,
-        35.56736,
+        -32.64581,
         1.88443
       ],
       "object_count": 27,
@@ -808,15 +808,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_17_v017.glb",
       "pivot": [
         30.01217,
-        32.07209,
+        -32.07209,
         0.31833
       ],
       "bounds_world": [
         28.24767,
-        30.42016,
+        -33.72401,
         0.31833,
         31.77668,
-        33.72401,
+        -30.42016,
         1.8027
       ],
       "object_count": 27,
@@ -830,15 +830,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_18_v017.glb",
       "pivot": [
         9.84994,
-        40.2351,
+        -40.2351,
         0.32279
       ],
       "bounds_world": [
         7.73349,
-        38.52608,
+        -41.94411,
         0.32279,
         11.9664,
-        41.94411,
+        -38.52608,
         1.63631
       ],
       "object_count": 27,
@@ -852,15 +852,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_01_v017.glb",
       "pivot": [
         20.0,
-        -22.01105,
+        22.01105,
         0.46117
       ],
       "bounds_world": [
         17.725,
-        -23.29551,
+        20.7266,
         0.46117,
         22.275,
-        -20.7266,
+        23.29551,
         1.94695
       ],
       "object_count": 13,
@@ -874,15 +874,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_02_v017.glb",
       "pivot": [
         25.0,
-        -22.01334,
+        22.01334,
         0.46117
       ],
       "bounds_world": [
         22.725,
-        -23.27583,
+        20.75085,
         0.46117,
         27.275,
-        -20.75085,
+        23.27583,
         2.01332
       ],
       "object_count": 13,
@@ -896,15 +896,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_03_v017.glb",
       "pivot": [
         20.0,
-        -26.00951,
+        26.00951,
         0.46117
       ],
       "bounds_world": [
         17.725,
-        -27.30604,
+        24.71298,
         0.46117,
         22.275,
-        -24.71298,
+        27.30604,
         1.9018
       ],
       "object_count": 13,
@@ -918,15 +918,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_04_v017.glb",
       "pivot": [
         25.0,
-        -26.01182,
+        26.01182,
         0.46117
       ],
       "bounds_world": [
         22.725,
-        -27.28946,
+        24.73418,
         0.46117,
         27.275,
-        -24.73418,
+        27.28946,
         1.96926
       ],
       "object_count": 13,
@@ -940,15 +940,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_05_v017.glb",
       "pivot": [
         29.4775,
-        -24.345,
+        24.345,
         0.34
       ],
       "bounds_world": [
         27.805,
-        -24.85,
+        23.84,
         0.34,
         31.15,
-        -23.84,
+        24.85,
         9.33124
       ],
       "object_count": 6,
@@ -962,15 +962,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_06_v017.glb",
       "pivot": [
         31.0,
-        -18.0475,
+        18.0475,
         0.34
       ],
       "bounds_world": [
         29.4,
-        -18.995,
+        17.1,
         0.34,
         32.6,
-        -17.1,
+        18.995,
         2.94
       ],
       "object_count": 14,
@@ -984,15 +984,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_07_v017.glb",
       "pivot": [
         29.0,
-        -14.0,
+        14.0,
         0.34
       ],
       "bounds_world": [
         28.5,
-        -14.4,
+        13.6,
         0.34,
         29.5,
-        -13.6,
+        14.4,
         2.06
       ],
       "object_count": 4,
@@ -1006,15 +1006,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_08_v017.glb",
       "pivot": [
         30.15,
-        -14.0,
+        14.0,
         0.34
       ],
       "bounds_world": [
         29.65,
-        -14.4,
+        13.6,
         0.34,
         30.65,
-        -13.6,
+        14.4,
         2.06
       ],
       "object_count": 4,
@@ -1028,15 +1028,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_09_v017.glb",
       "pivot": [
         31.3,
-        -14.0,
+        14.0,
         0.34
       ],
       "bounds_world": [
         30.8,
-        -14.4,
+        13.6,
         0.34,
         31.8,
-        -13.6,
+        14.4,
         2.06
       ],
       "object_count": 4,
@@ -1050,15 +1050,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_10_v017.glb",
       "pivot": [
         22.0,
-        -14.0,
+        14.0,
         0.34
       ],
       "bounds_world": [
         19.75,
-        -14.6,
+        13.4,
         0.34,
         24.25,
-        -13.4,
+        14.6,
         1.59
       ],
       "object_count": 1,
@@ -1072,15 +1072,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_11_v017.glb",
       "pivot": [
         35.0,
-        -23.0,
+        23.0,
         0.34
       ],
       "bounds_world": [
         32.75,
-        -25.25,
+        20.75,
         0.34,
         37.25,
-        -20.75,
+        25.25,
         5.52
       ],
       "object_count": 10,
@@ -1094,15 +1094,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_12_v017.glb",
       "pivot": [
         31.8,
-        -26.0,
+        26.0,
         0.34
       ],
       "bounds_world": [
         30.5,
-        -27.3,
+        24.7,
         0.34,
         33.1,
-        -24.7,
+        27.3,
         3.82
       ],
       "object_count": 10,
@@ -1116,15 +1116,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_13_v017.glb",
       "pivot": [
         35.0,
-        -17.8,
+        17.8,
         0.34
       ],
       "bounds_world": [
         33.7,
-        -19.1,
+        16.5,
         0.34,
         36.3,
-        -16.5,
+        19.1,
         3.82
       ],
       "object_count": 10,
@@ -1138,15 +1138,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_14_v017.glb",
       "pivot": [
         31.8,
-        -10.8,
+        10.8,
         0.34
       ],
       "bounds_world": [
         30.3,
-        -12.3,
+        9.3,
         0.34,
         33.3,
-        -9.3,
+        12.3,
         4.22
       ],
       "object_count": 10,
@@ -1160,15 +1160,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/energy_15_v017.glb",
       "pivot": [
         30.02607,
-        -15.52117,
+        15.52117,
         0.34
       ],
       "bounds_world": [
         24.96175,
-        -26.07734,
+        4.965,
         0.34,
         35.0904,
-        -4.965,
+        26.07734,
         3.975
       ],
       "object_count": 14,
@@ -1182,15 +1182,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_01_v017.glb",
       "pivot": [
         -21.0,
-        31.0,
+        -31.0,
         0.34
       ],
       "bounds_world": [
         -23.6,
-        29.8,
+        -32.2,
         0.34,
         -18.4,
-        32.2,
+        -29.8,
         2.8
       ],
       "object_count": 74,
@@ -1204,15 +1204,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_02_v017.glb",
       "pivot": [
         -15.0,
-        31.0,
+        -31.0,
         0.34
       ],
       "bounds_world": [
         -17.6,
-        29.8,
+        -32.2,
         0.34,
         -12.4,
-        32.2,
+        -29.8,
         2.18
       ],
       "object_count": 50,
@@ -1226,15 +1226,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_03_v017.glb",
       "pivot": [
         -21.0,
-        27.5,
+        -27.5,
         0.34
       ],
       "bounds_world": [
         -23.6,
-        26.3,
+        -28.7,
         0.34,
         -18.4,
-        28.7,
+        -26.3,
         2.85
       ],
       "object_count": 90,
@@ -1248,15 +1248,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_04_v017.glb",
       "pivot": [
         -15.0,
-        27.5,
+        -27.5,
         0.34
       ],
       "bounds_world": [
         -17.6,
-        26.3,
+        -28.7,
         0.34,
         -12.4,
-        28.7,
+        -26.3,
         2.18
       ],
       "object_count": 50,
@@ -1270,15 +1270,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_05_v017.glb",
       "pivot": [
         -21.0,
-        24.0,
+        -24.0,
         0.34
       ],
       "bounds_world": [
         -23.2,
-        23.0,
+        -25.0,
         0.34,
         -18.8,
-        25.0,
+        -23.0,
         2.18
       ],
       "object_count": 50,
@@ -1292,15 +1292,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_06_v017.glb",
       "pivot": [
         -15.0,
-        24.0,
+        -24.0,
         0.34
       ],
       "bounds_world": [
         -17.1,
-        23.05,
+        -24.95,
         0.34,
         -12.9,
-        24.95,
+        -23.05,
         1.66
       ],
       "object_count": 12,
@@ -1314,15 +1314,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_07_v017.glb",
       "pivot": [
         -19.0,
-        37.4,
+        -37.4,
         0.34
       ],
       "bounds_world": [
         -23.06,
-        34.42,
+        -40.38,
         0.34,
         -14.94,
-        40.38,
+        -34.42,
         5.07363
       ],
       "object_count": 15,
@@ -1336,15 +1336,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_08_v017.glb",
       "pivot": [
         -17.75,
-        31.7825,
+        -31.7825,
         0.34
       ],
       "bounds_world": [
         -23.0,
-        23.965,
+        -39.6,
         0.34,
         -12.5,
-        39.6,
+        -23.965,
         1.74
       ],
       "object_count": 6,
@@ -1358,15 +1358,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/farming_09_v017.glb",
       "pivot": [
         -13.25984,
-        39.9825,
+        -39.9825,
         0.34
       ],
       "bounds_world": [
         -14.7,
-        38.965,
+        -41.0,
         0.34,
         -11.81969,
-        41.0,
+        -38.965,
         2.1
       ],
       "object_count": 5,
@@ -1380,15 +1380,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_01_v017.glb",
       "pivot": [
         35.0,
-        40.0,
+        -40.0,
         0.34
       ],
       "bounds_world": [
         30.74,
-        35.74,
+        -44.26,
         0.34,
         39.26,
-        44.26,
+        -35.74,
         4.72
       ],
       "object_count": 13,
@@ -1402,15 +1402,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_02_v017.glb",
       "pivot": [
         35.0,
-        36.28,
+        -36.28,
         0.34
       ],
       "bounds_world": [
         33.85,
-        34.29,
+        -38.27,
         0.34,
         36.15,
-        38.27,
+        -34.29,
         5.43679
       ],
       "object_count": 21,
@@ -1424,15 +1424,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_03_v017.glb",
       "pivot": [
         35.0,
-        40.0,
+        -40.0,
         4.72
       ],
       "bounds_world": [
         31.145,
-        36.345,
+        -43.655,
         4.72,
         38.855,
-        43.655,
+        -36.345,
         5.92
       ],
       "object_count": 10,
@@ -1446,15 +1446,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_04_v017.glb",
       "pivot": [
         35.0,
-        41.8,
+        -41.8,
         4.72
       ],
       "bounds_world": [
         32.4,
-        41.05,
+        -42.55,
         4.72,
         37.6,
-        42.55,
+        -41.05,
         5.97
       ],
       "object_count": 1,
@@ -1468,15 +1468,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_05_v017.glb",
       "pivot": [
         35.025,
-        41.4975,
+        -41.4975,
         6.0
       ],
       "bounds_world": [
         32.8,
-        41.12,
+        -41.875,
         6.0,
         37.25,
-        41.875,
+        -41.12,
         6.72
       ],
       "object_count": 20,
@@ -1490,15 +1490,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_06_v017.glb",
       "pivot": [
         35.0,
-        43.61314,
+        -43.61314,
         5.1
       ],
       "bounds_world": [
         32.6,
-        43.52628,
+        -43.7,
         5.1,
         37.4,
-        43.7,
+        -43.52628,
         7.3
       ],
       "object_count": 9,
@@ -1512,15 +1512,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_07_v017.glb",
       "pivot": [
         35.99391,
-        40.0,
+        -40.0,
         4.72
       ],
       "bounds_world": [
         32.96797,
-        36.50698,
+        -43.49302,
         4.72,
         39.01986,
-        43.49302,
+        -36.50698,
         15.22
       ],
       "object_count": 10,
@@ -1534,15 +1534,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_08_v017.glb",
       "pivot": [
         35.0,
-        40.0,
+        -40.0,
         12.09
       ],
       "bounds_world": [
         31.6,
-        38.4,
+        -41.6,
         12.09,
         38.4,
-        41.6,
+        -38.4,
         12.31
       ],
       "object_count": 10,
@@ -1556,15 +1556,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_09_v017.glb",
       "pivot": [
         38.0,
-        37.18897,
+        -37.18897,
         7.63199
       ],
       "bounds_world": [
         36.44109,
-        35.88816,
+        -38.48979,
         7.63199,
         39.55891,
-        38.48979,
+        -35.88816,
         10.36801
       ],
       "object_count": 2,
@@ -1578,15 +1578,15 @@
       "glb_path": "/Users/summercards/ShellStorm2/assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/communication_10_v017.glb",
       "pivot": [
         35.0,
-        40.51278,
+        -40.51278,
         6.75
       ],
       "bounds_world": [
         34.84783,
-        39.84,
+        -41.18556,
         6.75,
         35.15217,
-        41.18556,
+        -39.84,
         15.53
       ],
       "object_count": 2,
@@ -106242,5 +106242,7 @@
       ],
       "animated": false
     }
-  ]
+  ],
+  "coordinate_source": "Blender X/Y/Z-up metres; runtime output mirrored on Blender Y",
+  "runtime_coordinate_mapping": "Godot (X, Z, -Y)"
 }

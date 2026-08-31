@@ -1370,7 +1370,12 @@ def write_collision_manifest_and_wrapper(component_records):
         ])
         for shape_index, shape in enumerate(component["shapes"]):
             cx, cy, cz = shape["center"]
-            local_x, local_y, local_z = cx-px, cz-pz, -(cy-py)
+            # Runtime uses Godot (X, Z, -Y).  The Blender runtime-output
+            # collections are mirrored on Y immediately before export, while
+            # collision authoring remains in the gameplay-plan coordinate
+            # space.  Therefore the component pivot is already mirrored and
+            # the remaining local Z delta must retain the original Y sign.
+            local_x, local_y, local_z = cx-px, cz-pz, cy-py
             rotation = shape.get("rotation_degrees", (0.0,0.0,0.0))
             lines.extend([
                 f'[node name="Shape_{shape_index:02d}_{shape["label"]}" type="CollisionShape3D" parent="{body_path}"]',
@@ -1388,6 +1393,27 @@ def write_collision_manifest_and_wrapper(component_records):
 def object_xy_bounds(obj):
     points = [obj.matrix_world @ Vector(corner) for corner in obj.bound_box]
     return min(p.x for p in points), min(p.y for p in points), max(p.x for p in points), max(p.y for p in points)
+
+
+def mirror_runtime_output_y_basis(out, collision_root):
+    """Convert authored plan-space Y into Blender Y for Godot (X, Z, -Y).
+
+    Gameplay layout constants are intentionally authored in the same planar
+    coordinates as Godot.  Blender's exported basis needs their Y values
+    mirrored so that Godot's standard -Y-to-Z conversion puts facilities back
+    onto the native 100F roof rectangle.  The distant-city presentation is
+    excluded because it is not a runtime rooftop facility.
+    """
+    objects = set()
+    for collection in out.children:
+        if collection.name == "远景荒废城市_低对比":
+            continue
+        objects.update(collection.all_objects)
+    objects.update(collision_root.all_objects)
+    for obj in objects:
+        matrix = obj.matrix_world.copy()
+        matrix.translation.y = -matrix.translation.y
+        obj.matrix_world = matrix
 
 
 def bounds_overlap_rect(bounds, rect, margin=0.0):
@@ -1642,10 +1668,14 @@ def main():
     build_city(city_col,mats)
     translate_collection_roots(city_col,(0,50,0))
     build_camera_lighting(display,mats)
+    # Validate authored gameplay-plan positions before converting them to the
+    # Blender export basis.  This keeps door, stair and roof-zone contracts in
+    # the same coordinate space as TowerFloorStage3D.
     layout_validation=validate_layout(out)
     hierarchy_summary=organize_output_hierarchy(cats)
-    component_records=export_editable_component_glbs(cats,out)
     build_collision_proxies(collision_root,mats)
+    mirror_runtime_output_y_basis(out, collision_root)
+    component_records=export_editable_component_glbs(cats,out)
     # Scene metadata and registry text.
     scene=bpy.context.scene
     scene["asset_id"]=ASSET_ID

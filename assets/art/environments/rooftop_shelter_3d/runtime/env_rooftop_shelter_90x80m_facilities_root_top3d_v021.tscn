@@ -1,0 +1,915 @@
+[gd_scene load_steps=83 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_v021.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Shape_000"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_001"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_002"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_003"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_004"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_005"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_006"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_007"]
+size = Vector3(0.30000, 5.20000, 0.30000)
+
+[sub_resource type="BoxShape3D" id="Shape_008"]
+size = Vector3(0.20000, 3.60000, 5.80000)
+
+[sub_resource type="BoxShape3D" id="Shape_009"]
+size = Vector3(0.20000, 2.90000, 3.10000)
+
+[sub_resource type="BoxShape3D" id="Shape_010"]
+size = Vector3(0.20000, 3.30000, 4.50000)
+
+[sub_resource type="BoxShape3D" id="Shape_011"]
+size = Vector3(0.20000, 2.50000, 3.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_012"]
+size = Vector3(5.00000, 3.30000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_013"]
+size = Vector3(4.80000, 2.70000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_014"]
+size = Vector3(6.00000, 3.50000, 0.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_015"]
+size = Vector3(20.70000, 0.50000, 15.70000)
+
+[sub_resource type="BoxShape3D" id="Shape_016"]
+size = Vector3(3.20000, 0.16000, 1.72000)
+
+[sub_resource type="BoxShape3D" id="Shape_017"]
+size = Vector3(5.00000, 0.18000, 1.50000)
+
+[sub_resource type="BoxShape3D" id="Shape_018"]
+size = Vector3(0.22000, 1.40000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_019"]
+size = Vector3(0.22000, 1.40000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_020"]
+size = Vector3(5.00000, 2.80000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="Shape_021"]
+size = Vector3(5.20000, 0.45000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_022"]
+size = Vector3(4.25000, 1.30000, 0.55000)
+
+[sub_resource type="BoxShape3D" id="Shape_023"]
+size = Vector3(0.55000, 0.95000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_024"]
+size = Vector3(0.55000, 0.95000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_025"]
+size = Vector3(2.36000, 0.18000, 2.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_026"]
+size = Vector3(0.84000, 0.75000, 0.84000)
+
+[sub_resource type="BoxShape3D" id="Shape_027"]
+size = Vector3(2.36000, 0.16000, 2.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_028"]
+size = Vector3(1.05000, 0.66000, 0.52000)
+
+[sub_resource type="BoxShape3D" id="Shape_029"]
+size = Vector3(4.20000, 0.45000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_030"]
+size = Vector3(1.20000, 1.10000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_031"]
+size = Vector3(4.80000, 0.18000, 1.35000)
+
+[sub_resource type="BoxShape3D" id="Shape_032"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_033"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_034"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_035"]
+size = Vector3(0.18000, 1.35000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_036"]
+size = Vector3(4.00000, 0.42000, 0.48000)
+
+[sub_resource type="BoxShape3D" id="Shape_037"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_038"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_039"]
+size = Vector3(4.00000, 0.42000, 0.48000)
+
+[sub_resource type="BoxShape3D" id="Shape_040"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_041"]
+size = Vector3(0.18000, 0.55000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_042"]
+size = Vector3(1.44000, 0.28000, 1.44000)
+
+[sub_resource type="BoxShape3D" id="Shape_043"]
+size = Vector3(0.16000, 3.00000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="Shape_044"]
+size = Vector3(0.16000, 3.00000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="Shape_045"]
+size = Vector3(7.05000, 0.16000, 0.16000)
+
+[sub_resource type="BoxShape3D" id="Shape_046"]
+size = Vector3(4.50000, 1.25000, 1.20000)
+
+[sub_resource type="BoxShape3D" id="Shape_047"]
+size = Vector3(3.20000, 1.60000, 1.80000)
+
+[sub_resource type="BoxShape3D" id="Shape_048"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="BoxShape3D" id="Shape_049"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="BoxShape3D" id="Shape_050"]
+size = Vector3(1.00000, 1.60000, 0.80000)
+
+[sub_resource type="BoxShape3D" id="Shape_051"]
+size = Vector3(4.40000, 4.80000, 4.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_052"]
+size = Vector3(2.50000, 3.10000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="Shape_053"]
+size = Vector3(2.50000, 3.10000, 2.50000)
+
+[sub_resource type="BoxShape3D" id="Shape_054"]
+size = Vector3(2.90000, 3.50000, 2.90000)
+
+[sub_resource type="BoxShape3D" id="Shape_055"]
+size = Vector3(0.36000, 7.20000, 0.36000)
+
+[sub_resource type="BoxShape3D" id="Shape_056"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="Shape_057"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="Shape_058"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="Shape_059"]
+size = Vector3(4.55000, 0.18000, 2.65000)
+
+[sub_resource type="BoxShape3D" id="Shape_060"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_061"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_062"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_063"]
+size = Vector3(5.20000, 0.65000, 2.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_064"]
+size = Vector3(4.40000, 0.65000, 2.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_065"]
+size = Vector3(4.20000, 0.85000, 1.90000)
+
+[sub_resource type="BoxShape3D" id="Shape_066"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_067"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_068"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_069"]
+size = Vector3(0.18000, 3.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_070"]
+size = Vector3(8.00000, 0.38000, 8.00000)
+
+[sub_resource type="BoxShape3D" id="Shape_071"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="Shape_072"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="Shape_073"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="Shape_074"]
+size = Vector3(0.32000, 4.00000, 0.32000)
+
+[sub_resource type="BoxShape3D" id="Shape_075"]
+size = Vector3(2.30000, 0.22000, 5.38000)
+
+[sub_resource type="BoxShape3D" id="Shape_076"]
+size = Vector3(0.18000, 1.20000, 7.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_077"]
+size = Vector3(0.18000, 1.20000, 7.40000)
+
+[sub_resource type="BoxShape3D" id="Shape_078"]
+size = Vector3(7.40000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_079"]
+size = Vector3(2.10000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_080"]
+size = Vector3(2.10000, 1.20000, 0.18000)
+
+[sub_resource type="BoxShape3D" id="Shape_081"]
+size = Vector3(5.20000, 1.25000, 1.50000)
+
+[node name="末世天台生活聚落_90x80米_v021" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-SHELTER-90X80"
+metadata/version = "v021"
+metadata/runtime_scope = "facilities_only"
+metadata/native_floor_and_parapet_preserved = true
+metadata/facility_vertical_offset_m = 0.0
+metadata/layout_revision = "region_center_pivots_north_layout_v021"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="阻挡_000" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_000"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 4.9999980, 0.8400000, -17.7017970)
+shape = SubResource("Shape_000")
+
+[node name="阻挡_001" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_001"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 5.0000010, 0.8400000, -25.2017940)
+shape = SubResource("Shape_001")
+
+[node name="阻挡_002" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_002"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 5.0000020, 0.8400000, -32.7017970)
+shape = SubResource("Shape_002")
+
+[node name="阻挡_003" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_003"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -5.0000010, 0.8400000, -17.7017990)
+shape = SubResource("Shape_003")
+
+[node name="阻挡_004" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_04"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_004"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -4.9999990, 0.8400000, -32.7018010)
+shape = SubResource("Shape_004")
+
+[node name="阻挡_005" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_05"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_005"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -14.9999980, 0.8400000, -17.7018010)
+shape = SubResource("Shape_005")
+
+[node name="阻挡_006" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_06"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_006"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -15.0000000, 0.8400000, -25.2017970)
+shape = SubResource("Shape_006")
+
+[node name="阻挡_007" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_棚柱_07"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_007"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -14.9999980, 0.8400000, -32.7018010)
+shape = SubResource("Shape_007")
+
+[node name="阻挡_008" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_西侧墙板A_08"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_008"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 4.9000010, 0.8600000, -28.9017910)
+shape = SubResource("Shape_008")
+
+[node name="阻挡_009" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_西侧墙板B_09"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_009"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 4.9000000, 0.8600000, -19.9017980)
+shape = SubResource("Shape_009")
+
+[node name="阻挡_010" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_东侧墙板A_10"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_010"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -14.8999960, 0.8600000, -29.8017920)
+shape = SubResource("Shape_010")
+
+[node name="阻挡_011" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_东侧墙板B_11"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_011"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -14.9000000, 0.8600000, -19.9017980)
+shape = SubResource("Shape_011")
+
+[node name="阻挡_012" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_北侧墙板A_12"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_012"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 1.8000010, 0.8600000, -32.6017990)
+shape = SubResource("Shape_012")
+
+[node name="阻挡_013" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_北侧墙板B_13"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_013"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -3.9999980, 0.8600000, -32.6018030)
+shape = SubResource("Shape_013")
+
+[node name="阻挡_014" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚结构_北侧墙板C_14"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_014"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -11.2999970, 0.8600000, -32.6017950)
+shape = SubResource("Shape_014")
+
+[node name="阻挡_015" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_棚屋木地板平台_木平台承重面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_015"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -5.0000000, 0.3400000, -25.2018010)
+shape = SubResource("Shape_015")
+
+[node name="阻挡_016" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_棚屋木梯连续坡面_连续坡面_00"
+metadata/walkable = true
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_016"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 0.9545009, -0.2982080, 0.0000001, -0.2982080, -0.9545009, -5.0000010, 0.5800000, -17.0217990)
+shape = SubResource("Shape_016")
+
+[node name="阻挡_017" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚工作台_桌面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_017"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 1.0000010, 0.8600000, -28.7017970)
+shape = SubResource("Shape_017")
+
+[node name="阻挡_018" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚工作台_左桌腿_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_018"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 3.2000020, 0.8600000, -28.7017940)
+shape = SubResource("Shape_018")
+
+[node name="阻挡_019" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚工作台_右桌腿_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_019"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -1.2000000, 0.8600000, -28.7017970)
+shape = SubResource("Shape_019")
+
+[node name="阻挡_020" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活棚工作台_工具墙_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_020"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 1.0000010, 0.8600000, -29.4217990)
+shape = SubResource("Shape_020")
+
+[node name="阻挡_021" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_双人沙发_底架_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_021"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -7.9999990, 0.8600000, -26.0018010)
+shape = SubResource("Shape_021")
+
+[node name="阻挡_022" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_双人沙发_靠背_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_022"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, -0.0000000, 0.9925461, 0.1218694, 0.0000001, 0.1218694, -0.9925461, -7.9999990, 1.8000000, -26.7018010)
+shape = SubResource("Shape_022")
+
+[node name="阻挡_023" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_双人沙发_左扶手_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_023"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -5.5499980, 1.0500000, -26.0018010)
+shape = SubResource("Shape_023")
+
+[node name="阻挡_024" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_双人沙发_右扶手_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_024"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -10.4500010, 1.0500000, -26.0017970)
+shape = SubResource("Shape_024")
+
+[node name="阻挡_025" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_电缆卷筒圆桌_下圆盘_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_025"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -8.1000020, 0.8600000, -22.7018010)
+shape = SubResource("Shape_025")
+
+[node name="阻挡_026" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_电缆卷筒圆桌_中轴_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_026"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -8.1000020, 1.0400000, -22.7018010)
+shape = SubResource("Shape_026")
+
+[node name="阻挡_027" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_电缆卷筒圆桌_桌面_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_027"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -8.1000020, 1.7900000, -22.7018010)
+shape = SubResource("Shape_027")
+
+[node name="阻挡_028" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_桌面老式收音机_收音机机身_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_028"]
+transform = Transform3D(-0.9927573, 0.0000000, -0.1201371, 0.0000000, 1.0000000, 0.0000000, 0.1201371, 0.0000000, -0.9927573, -7.5500010, 1.9600000, -22.6518020)
+shape = SubResource("Shape_028")
+
+[node name="阻挡_029" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_简易床铺_床架_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_029"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -0.0000010, 0.8600000, -19.9017940)
+shape = SubResource("Shape_029")
+
+[node name="阻挡_030" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_小型火炉_炉体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_030"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, -4.4999990, 0.8600000, -27.9017980)
+shape = SubResource("Shape_030")
+
+[node name="阻挡_031" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌_桌面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_031"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 23.0000000, 0.8400000, 42.5000000)
+shape = SubResource("Shape_031")
+
+[node name="阻挡_032" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌_桌腿_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_032"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 21.0000000, 0.8400000, 42.0499990)
+shape = SubResource("Shape_032")
+
+[node name="阻挡_033" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌_桌腿_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_033"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 21.0000000, 0.8400000, 42.9500010)
+shape = SubResource("Shape_033")
+
+[node name="阻挡_034" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌_桌腿_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_034"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 25.0000000, 0.8400000, 42.0499990)
+shape = SubResource("Shape_034")
+
+[node name="阻挡_035" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌_桌腿_04"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_035"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 25.0000000, 0.8400000, 42.9500010)
+shape = SubResource("Shape_035")
+
+[node name="阻挡_036" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌南长凳_凳面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_036"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 23.0000000, 0.8400000, 41.1500020)
+shape = SubResource("Shape_036")
+
+[node name="阻挡_037" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌南长凳_左腿_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_037"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 21.4500010, 0.8400000, 41.1500020)
+shape = SubResource("Shape_037")
+
+[node name="阻挡_038" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌南长凳_右腿_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_038"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 24.5499990, 0.8400000, 41.1500020)
+shape = SubResource("Shape_038")
+
+[node name="阻挡_039" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌北长凳_凳面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_039"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 23.0000000, 0.8400000, 43.8499980)
+shape = SubResource("Shape_039")
+
+[node name="阻挡_040" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌北长凳_左腿_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_040"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 21.4500010, 0.8400000, 43.8499980)
+shape = SubResource("Shape_040")
+
+[node name="阻挡_041" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_公共餐桌北长凳_右腿_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_041"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 24.5499990, 0.8400000, 43.8499980)
+shape = SubResource("Shape_041")
+
+[node name="阻挡_042" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_生活洗衣盆_盆体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_042"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 26.0000000, 0.8400000, 32.0000000)
+shape = SubResource("Shape_042")
+
+[node name="阻挡_043" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_香草晾晒架_左立柱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_043"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 20.0000000, 0.8400000, 31.5000000)
+shape = SubResource("Shape_043")
+
+[node name="阻挡_044" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_香草晾晒架_右立柱_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_044"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 27.0000000, 0.8400000, 31.5000000)
+shape = SubResource("Shape_044")
+
+[node name="阻挡_045" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_香草晾晒架_横杆_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_045"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 23.5000000, 3.7400000, 31.5000000)
+shape = SubResource("Shape_045")
+
+[node name="阻挡_046" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_能源维修工作台_工作台_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_046"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 21.1271780, 0.3400000, 22.1325000)
+shape = SubResource("Shape_046")
+
+[node name="阻挡_047" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_柴油发电机_机身_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_047"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 30.1271780, 0.3400000, 18.1325000)
+shape = SubResource("Shape_047")
+
+[node name="阻挡_048" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_蓄电池柜0_柜体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_048"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 28.1271780, 0.3400000, 22.1325000)
+shape = SubResource("Shape_048")
+
+[node name="阻挡_049" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_蓄电池柜1_柜体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_049"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 29.2771800, 0.3400000, 22.1325000)
+shape = SubResource("Shape_049")
+
+[node name="阻挡_050" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_蓄电池柜2_柜体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_050"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 30.4271770, 0.3400000, 22.1325000)
+shape = SubResource("Shape_050")
+
+[node name="阻挡_051" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_储水罐0_罐体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_051"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 34.1271780, 0.3400000, 13.1325000)
+shape = SubResource("Shape_051")
+
+[node name="阻挡_052" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_储水罐1_罐体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_052"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 30.9271770, 0.3400000, 10.1325000)
+shape = SubResource("Shape_052")
+
+[node name="阻挡_053" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_储水罐2_罐体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_053"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 34.1271780, 0.3400000, 18.3325000)
+shape = SubResource("Shape_053")
+
+[node name="阻挡_054" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_储水罐3_罐体_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_054"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 30.9271770, 0.3400000, 25.3325000)
+shape = SubResource("Shape_054")
+
+[node name="阻挡_055" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_风机塔杆_塔杆_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_055"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000000, 0.0000000, 1.0000000, 28.1271780, 0.3400000, 12.1325000)
+shape = SubResource("Shape_055")
+
+[node name="阻挡_056" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_太阳能板0_倾斜板面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_056"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 0.9610555, 0.2763557, 0.0000000, -0.2763557, 0.9610555, 19.1271780, 1.4100000, 14.1325000)
+shape = SubResource("Shape_056")
+
+[node name="阻挡_057" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_太阳能板1_倾斜板面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_057"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 0.9427547, 0.3334871, 0.0000000, -0.3334871, 0.9427547, 24.1271780, 1.4100000, 14.1325000)
+shape = SubResource("Shape_057")
+
+[node name="阻挡_058" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_太阳能板2_倾斜板面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_058"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 0.9713380, 0.2377026, 0.0000000, -0.2377026, 0.9713380, 19.1271780, 1.4100000, 10.1325000)
+shape = SubResource("Shape_058")
+
+[node name="阻挡_059" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_太阳能板3_倾斜板面_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_059"]
+transform = Transform3D(1.0000000, 0.0000000, 0.0000000, 0.0000000, 0.9553365, 0.2955202, 0.0000000, -0.2955202, 0.9553365, 24.1271780, 1.4100000, 10.1325000)
+shape = SubResource("Shape_059")
+
+[node name="阻挡_060" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_种植池0_种植箱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_060"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -36.0000000, 0.3400000, -21.3131980)
+shape = SubResource("Shape_060")
+
+[node name="阻挡_061" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_种植池1_种植箱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_061"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -35.9999960, 0.3400000, -27.3131980)
+shape = SubResource("Shape_061")
+
+[node name="阻挡_062" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_种植池2_种植箱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_062"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -39.5000000, 0.3400000, -21.3132000)
+shape = SubResource("Shape_062")
+
+[node name="阻挡_063" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_种植池3_种植箱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_063"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -39.4999960, 0.3400000, -27.3131980)
+shape = SubResource("Shape_063")
+
+[node name="阻挡_064" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_种植池4_种植箱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_064"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -43.0000000, 0.3400000, -21.3132000)
+shape = SubResource("Shape_064")
+
+[node name="阻挡_065" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_浴缸种植池_浴缸外壳_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_065"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -42.9999960, 0.3400000, -27.3132000)
+shape = SubResource("Shape_065")
+
+[node name="阻挡_066" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_温室_温室立柱_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_066"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -32.5000000, 0.3400000, -19.3131980)
+shape = SubResource("Shape_066")
+
+[node name="阻挡_067" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_温室_温室立柱_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_067"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -26.7000010, 0.3400000, -19.3131960)
+shape = SubResource("Shape_067")
+
+[node name="阻挡_068" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_温室_温室立柱_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_068"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -32.5000000, 0.3400000, -27.3131980)
+shape = SubResource("Shape_068")
+
+[node name="阻挡_069" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_温室_温室立柱_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_069"]
+transform = Transform3D(0.0000002, 0.0000000, -1.0000000, 0.0000000, 1.0000000, 0.0000000, 1.0000000, 0.0000000, 0.0000002, -26.7000010, 0.3400000, -27.3131960)
+shape = SubResource("Shape_069")
+
+[node name="阻挡_070" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台结构_高台楼板_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_070"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 19.9032860, 4.3400000, -28.6599240)
+shape = SubResource("Shape_070")
+
+[node name="阻挡_071" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台结构_高台支柱_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_071"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 23.9032860, 0.3400000, -24.6599200)
+shape = SubResource("Shape_071")
+
+[node name="阻挡_072" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台结构_高台支柱_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_072"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 23.9032860, 0.3400000, -32.6599240)
+shape = SubResource("Shape_072")
+
+[node name="阻挡_073" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台结构_高台支柱_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_073"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 15.9032840, 0.3400000, -24.6599200)
+shape = SubResource("Shape_073")
+
+[node name="阻挡_074" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台结构_高台支柱_04"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_074"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 15.9032860, 0.3400000, -32.6599240)
+shape = SubResource("Shape_074")
+
+[node name="阻挡_075" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台楼梯_连续楼梯坡面_00"
+metadata/walkable = true
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_075"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000001, 0.6691306, -0.7431449, 0.0000001, -0.7431449, -0.6691306, 19.9032860, 2.2400000, -24.8599210)
+shape = SubResource("Shape_075")
+
+[node name="阻挡_076" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台栏杆_西栏杆_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_076"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 23.7032850, 4.7500000, -28.6599240)
+shape = SubResource("Shape_076")
+
+[node name="阻挡_077" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台栏杆_东栏杆_01"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_077"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 16.1032870, 4.7500000, -28.6599240)
+shape = SubResource("Shape_077")
+
+[node name="阻挡_078" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台栏杆_北栏杆_02"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_078"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 19.9032860, 4.7500000, -32.4599190)
+shape = SubResource("Shape_078")
+
+[node name="阻挡_079" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台栏杆_南栏杆左_03"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_079"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 22.6532860, 4.7500000, -24.8599210)
+shape = SubResource("Shape_079")
+
+[node name="阻挡_080" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播高台栏杆_南栏杆右_04"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_080"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 17.1532860, 4.7500000, -24.8599210)
+shape = SubResource("Shape_080")
+
+[node name="阻挡_081" type="StaticBody3D" parent="."]
+metadata/source_proxy = "COL_广播控制桌_控制桌_00"
+metadata/walkable = false
+
+[node name="Shape" type="CollisionShape3D" parent="阻挡_081"]
+transform = Transform3D(-1.0000000, 0.0000000, -0.0000002, 0.0000000, 1.0000000, 0.0000000, 0.0000002, 0.0000000, -1.0000000, 19.9032860, 4.7200000, -30.4599190)
+shape = SubResource("Shape_081")
