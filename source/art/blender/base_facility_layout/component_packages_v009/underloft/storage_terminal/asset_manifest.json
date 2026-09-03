@@ -1,0 +1,54 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::storage_terminal",
+  "display_name": "54_STORAGE储物终端_资产包",
+  "asset_slug": "storage_terminal",
+  "category": "underloft",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "40_阁楼外侧视觉中心设施",
+    "54_STORAGE储物终端_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/underloft/storage_terminal",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已深化归类_待独立导出",
+  "object_count": 9,
+  "mesh_count": 9,
+  "light_count": 0,
+  "object_names": [
+    "STORAGE储物终端_STORAGE文字_自发光",
+    "STORAGE储物终端_后部数据线",
+    "STORAGE储物终端_墙挂支架",
+    "STORAGE储物终端_实体按键_01",
+    "STORAGE储物终端_实体按键_02",
+    "STORAGE储物终端_实体按键_03",
+    "STORAGE储物终端_屏幕_自发光",
+    "STORAGE储物终端_屏幕边框",
+    "STORAGE储物终端_读卡器"
+  ],
+  "world_center_m": [
+    -0.62,
+    4.2786,
+    1.765
+  ],
+  "bounding_size_m": [
+    0.56,
+    0.3828,
+    1.03
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "metal"
+  ],
+  "has_animation": true,
+  "dependencies": [],
+  "expected_export": "storage_terminal_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

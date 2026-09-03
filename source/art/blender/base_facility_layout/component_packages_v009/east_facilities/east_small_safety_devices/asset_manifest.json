@@ -1,0 +1,73 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_small_safety_devices",
+  "display_name": "82_东墙小型安全设备_资产包",
+  "asset_slug": "east_small_safety_devices",
+  "category": "east_facilities",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "70_东面设施区域",
+    "82_东墙小型安全设备_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/east_facilities/east_small_safety_devices",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已深化归类_待独立导出",
+  "object_count": 28,
+  "mesh_count": 28,
+  "light_count": 0,
+  "object_names": [
+    "东墙小型设备_EXIT标牌_自发光",
+    "东墙小型设备_分线箱_主体",
+    "东墙小型设备_分线箱_固定螺丝_+0.25_+0.19",
+    "东墙小型设备_分线箱_固定螺丝_+0.25_-0.19",
+    "东墙小型设备_分线箱_固定螺丝_-0.25_+0.19",
+    "东墙小型设备_分线箱_固定螺丝_-0.25_-0.19",
+    "东墙小型设备_分线箱_状态窗_自发光",
+    "东墙小型设备_双联插座",
+    "东墙小型设备_安全指示器_主体",
+    "东墙小型设备_安全指示器_固定螺丝_+0.25_+0.19",
+    "东墙小型设备_安全指示器_固定螺丝_+0.25_-0.19",
+    "东墙小型设备_安全指示器_固定螺丝_-0.25_+0.19",
+    "东墙小型设备_安全指示器_固定螺丝_-0.25_-0.19",
+    "东墙小型设备_安全指示器_状态窗_自发光",
+    "东墙小型设备_应急灯_自发光",
+    "东墙小型设备_消防提示",
+    "东墙小型设备_维修标签盒_主体",
+    "东墙小型设备_维修标签盒_固定螺丝_+0.25_+0.19",
+    "东墙小型设备_维修标签盒_固定螺丝_+0.25_-0.19",
+    "东墙小型设备_维修标签盒_固定螺丝_-0.25_+0.19",
+    "东墙小型设备_维修标签盒_固定螺丝_-0.25_-0.19",
+    "东墙小型设备_维修标签盒_状态窗_自发光",
+    "东墙小型设备_门禁状态面板_主体",
+    "东墙小型设备_门禁状态面板_固定螺丝_+0.25_+0.19",
+    "东墙小型设备_门禁状态面板_固定螺丝_+0.25_-0.19",
+    "东墙小型设备_门禁状态面板_固定螺丝_-0.25_+0.19",
+    "东墙小型设备_门禁状态面板_固定螺丝_-0.25_-0.19",
+    "东墙小型设备_门禁状态面板_状态窗_自发光"
+  ],
+  "world_center_m": [
+    14.1948,
+    -6.425,
+    2.935
+  ],
+  "bounding_size_m": [
+    0.4304,
+    12.47,
+    3.79
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "dependencies": [],
+  "expected_export": "east_small_safety_devices_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

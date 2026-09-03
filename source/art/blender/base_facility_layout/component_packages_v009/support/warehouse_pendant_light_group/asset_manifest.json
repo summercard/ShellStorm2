@@ -1,0 +1,69 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::warehouse_pendant_light_group",
+  "display_name": "61_仓库防爆吊灯组_资产包",
+  "asset_slug": "warehouse_pendant_light_group",
+  "category": "support",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "60_共享照明与环境动效",
+    "61_仓库防爆吊灯组_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/support/warehouse_pendant_light_group",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已归类_待独立导出",
+  "object_count": 25,
+  "mesh_count": 15,
+  "light_count": 5,
+  "object_names": [
+    "仓库主吊灯光_0_0",
+    "仓库主吊灯光_0_1",
+    "仓库主吊灯光_1_0",
+    "仓库主吊灯光_1_1",
+    "仓库主吊灯光_2_1",
+    "仓库吊灯发光面_0_0_自发光",
+    "仓库吊灯发光面_0_1_自发光",
+    "仓库吊灯发光面_1_0_自发光",
+    "仓库吊灯发光面_1_1_自发光",
+    "仓库吊灯发光面_2_1_自发光",
+    "仓库吊灯摆动轴_0_0",
+    "仓库吊灯摆动轴_0_1",
+    "仓库吊灯摆动轴_1_0",
+    "仓库吊灯摆动轴_1_1",
+    "仓库吊灯摆动轴_2_1",
+    "仓库吊灯线缆_0_0",
+    "仓库吊灯线缆_0_1",
+    "仓库吊灯线缆_1_0",
+    "仓库吊灯线缆_1_1",
+    "仓库吊灯线缆_2_1",
+    "仓库防爆吊灯_0_0",
+    "仓库防爆吊灯_0_1",
+    "仓库防爆吊灯_1_0",
+    "仓库防爆吊灯_1_1",
+    "仓库防爆吊灯_2_1"
+  ],
+  "world_center_m": [
+    0.00492,
+    0.00772,
+    7.49019
+  ],
+  "bounding_size_m": [
+    21.2418,
+    8.04272,
+    1.22026
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "metal"
+  ],
+  "has_animation": true,
+  "dependencies": [],
+  "expected_export": "warehouse_pendant_light_group_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

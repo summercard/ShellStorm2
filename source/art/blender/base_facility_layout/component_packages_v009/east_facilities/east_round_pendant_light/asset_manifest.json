@@ -1,0 +1,57 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_round_pendant_light",
+  "display_name": "84_东面圆形工业吊灯_资产包",
+  "asset_slug": "east_round_pendant_light",
+  "category": "east_facilities",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "70_东面设施区域",
+    "84_东面圆形工业吊灯_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/east_facilities/east_round_pendant_light",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已深化归类_待独立导出",
+  "object_count": 13,
+  "mesh_count": 10,
+  "light_count": 2,
+  "object_names": [
+    "东面圆形吊灯_四点吊线_01",
+    "东面圆形吊灯_四点吊线_02",
+    "东面圆形吊灯_四点吊线_03",
+    "东面圆形吊灯_四点吊线_04",
+    "东面圆形吊灯_外围青蓝灯圈_自发光",
+    "东面圆形吊灯_局部冷白光",
+    "东面圆形吊灯_底部冷白发光面_自发光",
+    "东面圆形吊灯_顶部连接座",
+    "仓库主吊灯光_2_0",
+    "仓库吊灯发光面_2_0_自发光",
+    "仓库吊灯摆动轴_2_0",
+    "仓库吊灯线缆_2_0",
+    "仓库防爆吊灯_2_0"
+  ],
+  "world_center_m": [
+    5.31291,
+    -2.00682,
+    4.155
+  ],
+  "bounding_size_m": [
+    10.62582,
+    4.01364,
+    8.31
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "metal"
+  ],
+  "has_animation": true,
+  "dependencies": [],
+  "expected_export": "east_round_pendant_light_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

@@ -1,0 +1,57 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_waste_bin",
+  "display_name": "75_WASTE普通垃圾设施_资产包",
+  "asset_slug": "east_waste_bin",
+  "category": "east_facilities",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "70_东面设施区域",
+    "75_WASTE普通垃圾设施_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/east_facilities/east_waste_bin",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已深化归类_待独立导出",
+  "object_count": 11,
+  "mesh_count": 11,
+  "light_count": 0,
+  "object_names": [
+    "分类垃圾设施_WASTE_主体",
+    "分类垃圾设施_WASTE_功能面板",
+    "分类垃圾设施_WASTE_底座",
+    "分类垃圾设施_WASTE_投入口",
+    "分类垃圾设施_WASTE_拉手",
+    "分类垃圾设施_WASTE_文字_自发光",
+    "分类垃圾设施_WASTE_脚轮_-4.86",
+    "分类垃圾设施_WASTE_脚轮_-5.54",
+    "分类垃圾设施_WASTE_识别灯_自发光",
+    "分类垃圾设施_WASTE_门缝",
+    "分类垃圾设施_WASTE_顶部盖板"
+  ],
+  "world_center_m": [
+    10.70125,
+    -5.2,
+    0.73
+  ],
+  "bounding_size_m": [
+    1.2975,
+    1.1,
+    1.46
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "dependencies": [],
+  "expected_export": "east_waste_bin_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

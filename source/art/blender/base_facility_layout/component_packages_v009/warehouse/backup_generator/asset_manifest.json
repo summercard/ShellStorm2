@@ -1,0 +1,47 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::backup_generator",
+  "display_name": "53_备用发电机_资产包",
+  "asset_slug": "backup_generator",
+  "category": "warehouse",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "50_仓库与辅助设施",
+    "53_备用发电机_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/warehouse/backup_generator",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已归类_待独立导出",
+  "object_count": 3,
+  "mesh_count": 3,
+  "light_count": 0,
+  "object_names": [
+    "备用发电机_底座",
+    "备用发电机_控制屏_自发光",
+    "备用发电机_转子罩"
+  ],
+  "world_center_m": [
+    13.1625,
+    -9.1,
+    0.9525
+  ],
+  "bounding_size_m": [
+    2.325,
+    3.1,
+    1.655
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "metal"
+  ],
+  "has_animation": false,
+  "dependencies": [],
+  "expected_export": "backup_generator_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

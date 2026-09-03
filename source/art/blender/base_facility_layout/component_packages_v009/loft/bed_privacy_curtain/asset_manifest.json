@@ -1,0 +1,54 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::bed_privacy_curtain",
+  "display_name": "32_床区隐私布帘_资产包",
+  "asset_slug": "bed_privacy_curtain",
+  "category": "loft",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "30_阁楼生活设施",
+    "32_床区隐私布帘_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/loft/bed_privacy_curtain",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已归类_待独立导出",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "床区布帘_01",
+    "床区布帘_02",
+    "床区布帘_03",
+    "床区布帘_04",
+    "床区布帘_05",
+    "床区布帘_06",
+    "床区布帘_07",
+    "床区布帘_08",
+    "床区布帘_09",
+    "床区布帘顶轨"
+  ],
+  "world_center_m": [
+    1.8,
+    11.72,
+    7.70117
+  ],
+  "bounding_size_m": [
+    0.06298,
+    2.82,
+    1.95266
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": true,
+  "dependencies": [],
+  "expected_export": "bed_privacy_curtain_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

@@ -1,0 +1,66 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::metal_bed_storage",
+  "display_name": "31_金属床与床下收纳_资产包",
+  "asset_slug": "metal_bed_storage",
+  "category": "loft",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "30_阁楼生活设施",
+    "31_金属床与床下收纳_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/loft/metal_bed_storage",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已归类_待独立导出",
+  "object_count": 21,
+  "mesh_count": 20,
+  "light_count": 1,
+  "object_names": [
+    "床下储物箱_-4.2",
+    "床下储物箱_-5.45",
+    "床下储物箱_-6.7",
+    "床下储物箱扣件_-4.2",
+    "床下储物箱扣件_-5.45",
+    "床下储物箱扣件_-6.7",
+    "床头暖光",
+    "床头灯_灯座",
+    "床头灯_灯杆",
+    "床头灯_灯罩_自发光",
+    "阁楼床_床垫",
+    "阁楼床_床脚_-3.75_10.55",
+    "阁楼床_床脚_-3.75_12.65",
+    "阁楼床_床脚_-7.45_10.55",
+    "阁楼床_床脚_-7.45_12.65",
+    "阁楼床_枕头",
+    "阁楼床_毛毯",
+    "阁楼床_金属床框_东",
+    "阁楼床_金属床框_北",
+    "阁楼床_金属床框_南",
+    "阁楼床_金属床框_西"
+  ],
+  "world_center_m": [
+    -0.91317,
+    11.73817,
+    6.8375
+  ],
+  "bounding_size_m": [
+    4.43367,
+    2.48367,
+    1.525
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "emit",
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "dependencies": [],
+  "expected_export": "metal_bed_storage_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}

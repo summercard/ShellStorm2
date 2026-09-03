@@ -1,0 +1,46 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_bar_stool_01",
+  "display_name": "34_高脚椅01_资产包",
+  "asset_slug": "loft_bar_stool_01",
+  "category": "loft",
+  "version": "v009",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v009",
+    "30_阁楼生活设施",
+    "34_高脚椅01_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v009/loft/loft_bar_stool_01",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v009.blend",
+  "status": "已归类_待独立导出",
+  "object_count": 2,
+  "mesh_count": 2,
+  "light_count": 0,
+  "object_names": [
+    "阁楼高脚椅_1_坐面",
+    "阁楼高脚椅_1_立柱"
+  ],
+  "world_center_m": [
+    5.55,
+    9.95,
+    6.8975
+  ],
+  "bounding_size_m": [
+    0.66967,
+    0.68,
+    1.345
+  ],
+  "local_origin": "preserve scene master world placement; export pivot to be authored at independent-export stage",
+  "forward_axis": "scene master world orientation; Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "dependencies": [],
+  "expected_export": "loft_bar_stool_01_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported",
+  "note": "v009独立设施资产包；Collection与目录一一对应，后续独立导出GLB、碰撞与PackedScene。"
+}
