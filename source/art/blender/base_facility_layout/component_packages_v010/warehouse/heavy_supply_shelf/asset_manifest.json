@@ -1,0 +1,58 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::heavy_supply_shelf",
+  "display_name": "51_重型货架与补给箱_资产包",
+  "asset_slug": "heavy_supply_shelf",
+  "category": "warehouse",
+  "version": "v010",
+  "collection_path": "51_重型货架与补给箱_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/warehouse/heavy_supply_shelf",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 22,
+  "mesh_count": 22,
+  "light_count": 0,
+  "object_names": [
+    "南仓库重型货架_A_层板_0",
+    "南仓库重型货架_A_层板_1",
+    "南仓库重型货架_A_层板_2",
+    "南仓库重型货架_A_层板_3",
+    "南仓库重型货架_A_立柱_-13.4",
+    "南仓库重型货架_A_立柱_-8.200000000000001",
+    "南仓库重型货架_A_补给箱_0_0",
+    "南仓库重型货架_A_补给箱_0_1",
+    "南仓库重型货架_A_补给箱_0_2",
+    "南仓库重型货架_A_补给箱_0_3",
+    "南仓库重型货架_A_补给箱_1_0",
+    "南仓库重型货架_A_补给箱_1_1",
+    "南仓库重型货架_A_补给箱_1_2",
+    "南仓库重型货架_A_补给箱_1_3",
+    "南仓库重型货架_A_补给箱_2_0",
+    "南仓库重型货架_A_补给箱_2_1",
+    "南仓库重型货架_A_补给箱_2_2",
+    "南仓库重型货架_A_补给箱_2_3",
+    "南仓库重型货架_A_补给箱_3_0",
+    "南仓库重型货架_A_补给箱_3_1",
+    "南仓库重型货架_A_补给箱_3_2",
+    "南仓库重型货架_A_补给箱_3_3"
+  ],
+  "world_center_m": [
+    -10.8,
+    -13.55,
+    1.82
+  ],
+  "bounding_size_m": [
+    5.34,
+    0.82,
+    3.64
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "heavy_supply_shelf_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

@@ -1,0 +1,36 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::hose_reel",
+  "display_name": "59_水管卷盘_资产包",
+  "asset_slug": "hose_reel",
+  "category": "warehouse",
+  "version": "v010",
+  "collection_path": "59_水管卷盘_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/warehouse/hose_reel",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 1,
+  "mesh_count": 1,
+  "light_count": 0,
+  "object_names": [
+    "水管卷盘"
+  ],
+  "world_center_m": [
+    -14.05,
+    -10.6,
+    2.65
+  ],
+  "bounding_size_m": [
+    1.24,
+    0.25,
+    1.24
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "hose_reel_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

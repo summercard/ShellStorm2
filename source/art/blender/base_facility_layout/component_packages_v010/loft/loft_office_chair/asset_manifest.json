@@ -1,0 +1,50 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_office_chair",
+  "display_name": "43_办公椅_资产包",
+  "asset_slug": "loft_office_chair",
+  "category": "loft",
+  "version": "v010",
+  "collection_path": "43_办公椅_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/loft/loft_office_chair",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 14,
+  "mesh_count": 14,
+  "light_count": 0,
+  "object_names": [
+    "二楼办公椅_五星脚_01",
+    "二楼办公椅_五星脚_02",
+    "二楼办公椅_五星脚_03",
+    "二楼办公椅_五星脚_04",
+    "二楼办公椅_五星脚_05",
+    "二楼办公椅_五星脚中心",
+    "二楼办公椅_升降杆",
+    "二楼办公椅_坐垫",
+    "二楼办公椅_脚轮_01",
+    "二楼办公椅_脚轮_02",
+    "二楼办公椅_脚轮_03",
+    "二楼办公椅_脚轮_04",
+    "二楼办公椅_脚轮_05",
+    "二楼办公椅_靠背"
+  ],
+  "world_center_m": [
+    9.2825,
+    12.2373,
+    7.272
+  ],
+  "bounding_size_m": [
+    1.245,
+    1.2779,
+    2.3339
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "loft_office_chair_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

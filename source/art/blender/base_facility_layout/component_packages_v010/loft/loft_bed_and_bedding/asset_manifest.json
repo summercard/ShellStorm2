@@ -1,0 +1,49 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_bed_and_bedding",
+  "display_name": "31_床架床品与床下收纳_资产包",
+  "asset_slug": "loft_bed_and_bedding",
+  "category": "loft",
+  "version": "v010",
+  "collection_path": "31_床架床品与床下收纳_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/loft/loft_bed_and_bedding",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 13,
+  "mesh_count": 13,
+  "light_count": 0,
+  "object_names": [
+    "二楼床_厚重金属床框",
+    "二楼床_床下收纳箱_01",
+    "二楼床_床下收纳箱_02",
+    "二楼床_床下箱扣_01",
+    "二楼床_床下箱扣_02",
+    "二楼床_床垫",
+    "二楼床_折叠被毯",
+    "二楼床_支腿_-2.4_10.55",
+    "二楼床_支腿_-2.4_12.45",
+    "二楼床_支腿_1.8_10.55",
+    "二楼床_支腿_1.8_12.45",
+    "二楼床_白色枕头_01",
+    "二楼床_白色枕头_02"
+  ],
+  "world_center_m": [
+    -0.3,
+    11.4675,
+    6.6966
+  ],
+  "bounding_size_m": [
+    4.55,
+    2.325,
+    1.3632
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "loft_bed_and_bedding_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

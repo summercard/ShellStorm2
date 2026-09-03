@@ -1,0 +1,56 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_computer_workstation",
+  "display_name": "42_双屏电脑工位_资产包",
+  "asset_slug": "loft_computer_workstation",
+  "category": "loft",
+  "version": "v010",
+  "collection_path": "42_双屏电脑工位_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/loft/loft_computer_workstation",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 18,
+  "mesh_count": 18,
+  "light_count": 0,
+  "object_names": [
+    "二楼工位_主机状态灯_自发光",
+    "二楼工位_侧柜腿_11.05",
+    "二楼工位_侧柜腿_7.55",
+    "二楼工位_厚实桌面",
+    "二楼工位_咖啡杯",
+    "二楼工位_小主机",
+    "二楼工位_显示器外框_01",
+    "二楼工位_显示器外框_02",
+    "二楼工位_显示器屏幕_01_自发光",
+    "二楼工位_显示器屏幕_02_自发光",
+    "二楼工位_显示器支架_01",
+    "二楼工位_显示器支架_02",
+    "二楼工位_键盘",
+    "二楼工位_音箱_10.75",
+    "二楼工位_音箱_7.9",
+    "二楼工位_音箱单元_10.75",
+    "二楼工位_音箱单元_7.9",
+    "二楼工位_鼠标"
+  ],
+  "world_center_m": [
+    9.3,
+    13.5425,
+    7.125
+  ],
+  "bounding_size_m": [
+    4.1,
+    1.265,
+    2.11
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "matte",
+    "metal"
+  ],
+  "has_animation": true,
+  "expected_export": "loft_computer_workstation_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

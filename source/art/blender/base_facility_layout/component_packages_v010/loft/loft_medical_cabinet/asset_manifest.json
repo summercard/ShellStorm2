@@ -1,0 +1,45 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_medical_cabinet",
+  "display_name": "45_MEDICAL分类柜_资产包",
+  "asset_slug": "loft_medical_cabinet",
+  "category": "loft",
+  "version": "v010",
+  "collection_path": "45_MEDICAL分类柜_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/loft/loft_medical_cabinet",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 8,
+  "mesh_count": 8,
+  "light_count": 0,
+  "object_names": [
+    "二楼MEDICAL分类柜_主体",
+    "二楼MEDICAL分类柜_固定件_-0.42_6.35",
+    "二楼MEDICAL分类柜_固定件_-0.42_7.65",
+    "二楼MEDICAL分类柜_固定件_0.42_6.35",
+    "二楼MEDICAL分类柜_固定件_0.42_7.65",
+    "二楼MEDICAL分类柜_拉手",
+    "二楼MEDICAL分类柜_柜门",
+    "二楼MEDICAL分类柜_标签_自发光"
+  ],
+  "world_center_m": [
+    5.1,
+    14.0788,
+    7.0
+  ],
+  "bounding_size_m": [
+    1.1,
+    1.0825,
+    1.8
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit",
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "loft_medical_cabinet_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

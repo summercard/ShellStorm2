@@ -1,0 +1,47 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_lounge_sofa",
+  "display_name": "36_三人休闲沙发_资产包",
+  "asset_slug": "loft_lounge_sofa",
+  "category": "loft",
+  "version": "v010",
+  "collection_path": "36_三人休闲沙发_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/loft/loft_lounge_sofa",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 12,
+  "mesh_count": 12,
+  "light_count": 0,
+  "object_names": [
+    "二楼沙发_加厚底座",
+    "二楼沙发_座垫_01",
+    "二楼沙发_座垫_02",
+    "二楼沙发_座垫_03",
+    "二楼沙发_彩色靠枕_01",
+    "二楼沙发_彩色靠枕_02",
+    "二楼沙发_彩色靠枕_03",
+    "二楼沙发_扶手_3.88",
+    "二楼沙发_扶手_8.22",
+    "二楼沙发_靠背软垫_01",
+    "二楼沙发_靠背软垫_02",
+    "二楼沙发_靠背软垫_03"
+  ],
+  "world_center_m": [
+    6.05,
+    11.585,
+    7.0605
+  ],
+  "bounding_size_m": [
+    4.68,
+    1.78,
+    1.8109
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "matte"
+  ],
+  "has_animation": false,
+  "expected_export": "loft_lounge_sofa_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

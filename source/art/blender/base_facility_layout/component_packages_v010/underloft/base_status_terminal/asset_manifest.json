@@ -1,0 +1,47 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::base_status_terminal",
+  "display_name": "53_BASE_STATUS状态终端_资产包",
+  "asset_slug": "base_status_terminal",
+  "category": "underloft",
+  "version": "v010",
+  "collection_path": "53_BASE_STATUS状态终端_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/underloft/base_status_terminal",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "BASE_STATUS状态终端_BASE STATUS文字_自发光",
+    "BASE_STATUS状态终端_后部数据线",
+    "BASE_STATUS状态终端_实体按键_01",
+    "BASE_STATUS状态终端_实体按键_02",
+    "BASE_STATUS状态终端_实体按键_03",
+    "BASE_STATUS状态终端_屏幕_自发光",
+    "BASE_STATUS状态终端_屏幕边框",
+    "BASE_STATUS状态终端_立柱",
+    "BASE_STATUS状态终端_读卡器",
+    "BASE_STATUS状态终端_金属底座"
+  ],
+  "world_center_m": [
+    8.38,
+    3.58,
+    1.62
+  ],
+  "bounding_size_m": [
+    0.62,
+    0.52,
+    0.94
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "metal"
+  ],
+  "has_animation": true,
+  "expected_export": "base_status_terminal_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::tools_cabinet",
+  "display_name": "46_TOOLS工具柜_资产包",
+  "asset_slug": "tools_cabinet",
+  "category": "underloft",
+  "version": "v010",
+  "collection_path": "46_TOOLS工具柜_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/underloft/tools_cabinet",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 25,
+  "mesh_count": 25,
+  "light_count": 0,
+  "object_names": [
+    "TOOLS工具柜_TOOLS文字_自发光",
+    "TOOLS工具柜_下部维修盖",
+    "TOOLS工具柜_侧挂盒卡扣",
+    "TOOLS工具柜_侧挂维修盒",
+    "TOOLS工具柜_功能色标题板",
+    "TOOLS工具柜_底部承重座",
+    "TOOLS工具柜_底部通风缝_01",
+    "TOOLS工具柜_底部通风缝_02",
+    "TOOLS工具柜_底部通风缝_03",
+    "TOOLS工具柜_底部通风缝_04",
+    "TOOLS工具柜_扳手图标柄_自发光",
+    "TOOLS工具柜_扳手图标端_自发光",
+    "TOOLS工具柜_独立拉手",
+    "TOOLS工具柜_重型合页_0.78",
+    "TOOLS工具柜_重型合页_2.07",
+    "TOOLS工具柜_锁具",
+    "TOOLS工具柜_门板分区横梁",
+    "TOOLS工具柜_门框_+0.68",
+    "TOOLS工具柜_门框_-0.68",
+    "TOOLS工具柜_顶部装甲帽",
+    "工业储物柜_02_柜体",
+    "工业储物柜_02_柜门",
+    "工业储物柜_02_标签_自发光",
+    "工业储物柜_02_铭牌_自发光",
+    "柜顶工具箱_1"
+  ],
+  "world_center_m": [
+    -1.655,
+    4.3125,
+    1.63
+  ],
+  "bounding_size_m": [
+    1.97,
+    1.015,
+    3.22
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "tools_cabinet_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::volumetric_dust_fx",
+  "display_name": "64_光束尘埃动效组_资产包",
+  "asset_slug": "volumetric_dust_fx",
+  "category": "support",
+  "version": "v010",
+  "collection_path": "64_光束尘埃动效组_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/support/volumetric_dust_fx",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 28,
+  "mesh_count": 28,
+  "light_count": 0,
+  "object_names": [
+    "光束尘埃_00_自发光",
+    "光束尘埃_01_自发光",
+    "光束尘埃_02_自发光",
+    "光束尘埃_03_自发光",
+    "光束尘埃_04_自发光",
+    "光束尘埃_05_自发光",
+    "光束尘埃_06_自发光",
+    "光束尘埃_07_自发光",
+    "光束尘埃_08_自发光",
+    "光束尘埃_09_自发光",
+    "光束尘埃_10_自发光",
+    "光束尘埃_11_自发光",
+    "光束尘埃_12_自发光",
+    "光束尘埃_13_自发光",
+    "光束尘埃_14_自发光",
+    "光束尘埃_15_自发光",
+    "光束尘埃_16_自发光",
+    "光束尘埃_17_自发光",
+    "光束尘埃_18_自发光",
+    "光束尘埃_19_自发光",
+    "光束尘埃_20_自发光",
+    "光束尘埃_21_自发光",
+    "光束尘埃_22_自发光",
+    "光束尘埃_23_自发光",
+    "光束尘埃_24_自发光",
+    "光束尘埃_25_自发光",
+    "光束尘埃_26_自发光",
+    "光束尘埃_27_自发光"
+  ],
+  "world_center_m": [
+    0.2043,
+    -0.015,
+    4.725
+  ],
+  "bounding_size_m": [
+    23.7504,
+    12.014,
+    6.494
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit"
+  ],
+  "has_animation": true,
+  "expected_export": "volumetric_dust_fx_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

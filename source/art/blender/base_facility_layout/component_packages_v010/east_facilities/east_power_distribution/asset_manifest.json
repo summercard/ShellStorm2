@@ -1,0 +1,63 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_power_distribution",
+  "display_name": "73_POWER工业配电系统_资产包",
+  "asset_slug": "east_power_distribution",
+  "category": "east_facilities",
+  "version": "v010",
+  "collection_path": "73_POWER工业配电系统_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/east_facilities/east_power_distribution",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 25,
+  "mesh_count": 25,
+  "light_count": 0,
+  "object_names": [
+    "东墙POWER配电柜_POWER文字_自发光",
+    "东墙POWER配电柜_主箱体",
+    "东墙POWER配电柜_侧面散热结构_01",
+    "东墙POWER配电柜_侧面散热结构_02",
+    "东墙POWER配电柜_侧面散热结构_03",
+    "东墙POWER配电柜_侧面散热结构_04",
+    "东墙POWER配电柜_厚重柜门",
+    "东墙POWER配电柜_固定螺丝_-4.97_1.48",
+    "东墙POWER配电柜_固定螺丝_-4.97_3.22",
+    "东墙POWER配电柜_固定螺丝_-6.13_1.48",
+    "东墙POWER配电柜_固定螺丝_-6.13_3.22",
+    "东墙POWER配电柜_底部出线接口",
+    "东墙POWER配电柜_机械拉手",
+    "东墙POWER配电柜_机械锁",
+    "东墙POWER配电柜_柜门边框_+1",
+    "东墙POWER配电柜_柜门边框_-1",
+    "东墙POWER配电柜_检修标签",
+    "东墙POWER配电柜_状态灯_01_自发光",
+    "东墙POWER配电柜_状态灯_02_自发光",
+    "东墙POWER配电柜_状态灯_03_自发光",
+    "东墙POWER配电柜_重型铰链_1.56",
+    "东墙POWER配电柜_重型铰链_3.14",
+    "东墙POWER配电柜_闪电上段_自发光",
+    "东墙POWER配电柜_闪电下段_自发光",
+    "东墙POWER配电柜_顶部进线接口"
+  ],
+  "world_center_m": [
+    13.9862,
+    -5.55,
+    2.355
+  ],
+  "bounding_size_m": [
+    0.8275,
+    1.55,
+    2.69
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit",
+    "gloss",
+    "matte",
+    "metal"
+  ],
+  "has_animation": true,
+  "expected_export": "east_power_distribution_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

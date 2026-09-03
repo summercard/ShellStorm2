@@ -1,0 +1,36 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::industrial_water_tank",
+  "display_name": "56_工业水箱_资产包",
+  "asset_slug": "industrial_water_tank",
+  "category": "warehouse",
+  "version": "v010",
+  "collection_path": "56_工业水箱_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/warehouse/industrial_water_tank",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 1,
+  "mesh_count": 1,
+  "light_count": 0,
+  "object_names": [
+    "工业水箱"
+  ],
+  "world_center_m": [
+    -13.15,
+    -7.7,
+    1.35
+  ],
+  "bounding_size_m": [
+    2.0,
+    2.0,
+    2.55
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "industrial_water_tank_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

@@ -125,7 +125,9 @@ def add_beam(name, start, end, thickness, role, color, target):
 
 def add_text_east(name, body, loc, size, role, color, target, extrude=0.02, align="CENTER"):
     bpy.ops.object.select_all(action="DESELECT")
-    obj = base.add_text(name, body, loc, size, role, color, extrude, align, (math.pi / 2, 0, math.pi / 2), target)
+    # East-wall labels face the room (-X).  Using +PI/2 here exposes the
+    # back face to the locked inspection camera and mirrors every label.
+    obj = base.add_text(name, body, loc, size, role, color, extrude, align, (math.pi / 2, 0, -math.pi / 2), target)
     obj["v009_scope"] = "east_facility_detail"
     return obj
 

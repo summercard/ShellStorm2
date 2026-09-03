@@ -1,0 +1,39 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::corridor_emergency_light_group",
+  "display_name": "62_主通道应急灯组_资产包",
+  "asset_slug": "corridor_emergency_light_group",
+  "category": "support",
+  "version": "v010",
+  "collection_path": "62_主通道应急灯组_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/support/corridor_emergency_light_group",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 4,
+  "mesh_count": 2,
+  "light_count": 2,
+  "object_names": [
+    "主通道应急灯_-13.8_自发光",
+    "主通道应急灯_13.8_自发光",
+    "主通道应急红光_-13.8",
+    "主通道应急红光_13.8"
+  ],
+  "world_center_m": [
+    0.0,
+    0.0,
+    2.2
+  ],
+  "bounding_size_m": [
+    27.82,
+    0.75,
+    0.32
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "emit"
+  ],
+  "has_animation": false,
+  "expected_export": "corridor_emergency_light_group_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

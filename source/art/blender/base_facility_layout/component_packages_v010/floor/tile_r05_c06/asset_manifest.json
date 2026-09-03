@@ -1,0 +1,60 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::tile_r05_c06",
+  "display_name": "地砖_R05C06_原砖与深化内容_资产包",
+  "asset_slug": "tile_r05_c06",
+  "category": "floor",
+  "version": "v010",
+  "collection_path": "地砖_R05C06_原砖与深化内容_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v010/floor/tile_r05_c06",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v010.blend",
+  "object_count": 24,
+  "mesh_count": 22,
+  "light_count": 0,
+  "object_names": [
+    "ENV-BASE99-FLOOR-RIVET-5M_输出根节点.015",
+    "保留地板_04_05",
+    "地板深化_R05C06_东侧卡扣",
+    "地板深化_R05C06_东内阴影条",
+    "地板深化_R05C06_东压边",
+    "地板深化_R05C06_六角固定螺栓_01",
+    "地板深化_R05C06_六角固定螺栓_02",
+    "地板深化_R05C06_六角固定螺栓_03",
+    "地板深化_R05C06_六角固定螺栓_04",
+    "地板深化_R05C06_北内阴影条",
+    "地板深化_R05C06_北压边",
+    "地板深化_R05C06_南侧卡扣",
+    "地板深化_R05C06_南内阴影条",
+    "地板深化_R05C06_南压边",
+    "地板深化_R05C06_板块编号",
+    "地板深化_R05C06_螺栓中心_01",
+    "地板深化_R05C06_螺栓中心_02",
+    "地板深化_R05C06_螺栓中心_03",
+    "地板深化_R05C06_螺栓中心_04",
+    "地板深化_R05C06_西内阴影条",
+    "地板深化_R05C06_西压边",
+    "地板深化_横分缝_Y04_C06",
+    "地板深化_纵分缝_X05_R05",
+    "带铆钉地板_主体_金属哑光反光.015"
+  ],
+  "world_center_m": [
+    12.4825,
+    7.4825,
+    -0.0763
+  ],
+  "bounding_size_m": [
+    5.035,
+    5.035,
+    0.4475
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "material_roles": [
+    "matte",
+    "metal"
+  ],
+  "has_animation": false,
+  "expected_export": "tile_r05_c06_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}
