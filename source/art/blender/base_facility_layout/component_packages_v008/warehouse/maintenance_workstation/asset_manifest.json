@@ -1,0 +1,31 @@
+{
+  "asset_slug": "maintenance_workstation",
+  "category": "warehouse",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "50_仓库与辅助设施",
+    "52_维修工作台工具墙与挂件_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/warehouse/maintenance_workstation",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 11,
+  "mesh_count": 11,
+  "light_count": 0,
+  "object_names": [
+    "南仓工具墙",
+    "南仓工具挂件_00",
+    "南仓工具挂件_01",
+    "南仓工具挂件_02",
+    "南仓工具挂件_03",
+    "南仓工具挂件_04",
+    "南仓工具挂件_05",
+    "南仓工具挂件_06",
+    "南仓工具挂件_07",
+    "南仓维修台_厚钢台面",
+    "南仓维修台_柜体"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

@@ -1,0 +1,26 @@
+{
+  "asset_slug": "sorting_bin_group",
+  "category": "warehouse",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "50_仓库与辅助设施",
+    "60_分类垃圾箱组_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/warehouse/sorting_bin_group",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 6,
+  "mesh_count": 6,
+  "light_count": 0,
+  "object_names": [
+    "分类垃圾箱_FLAMMABLE",
+    "分类垃圾箱_RECYCLE",
+    "分类垃圾箱_WASTE",
+    "分类垃圾箱标签_FLAMMABLE_自发光",
+    "分类垃圾箱标签_RECYCLE_自发光",
+    "分类垃圾箱标签_WASTE_自发光"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

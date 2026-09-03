@@ -1,0 +1,24 @@
+{
+  "asset_slug": "corridor_emergency_light_group",
+  "category": "support",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "60_共享照明与环境动效",
+    "62_主通道应急灯组_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/support/corridor_emergency_light_group",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 4,
+  "mesh_count": 2,
+  "light_count": 2,
+  "object_names": [
+    "主通道应急灯_-13.8_自发光",
+    "主通道应急灯_13.8_自发光",
+    "主通道应急红光_-13.8",
+    "主通道应急红光_13.8"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

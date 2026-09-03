@@ -1,4 +1,4 @@
 interface:
   display_name: "Blender 场景与设施制作规范"
-  short_description: "制作、整理并验收场景、关卡组件和固定设施"
-  default_prompt: "使用 $blender-game-prop-standard 按规范制作并验收场景、关卡组件或固定设施。"
+  short_description: "高还原制作、独立资产包归类并验收场景与固定设施"
+  default_prompt: "使用 $blender-game-prop-standard 按参考真值、范围锁定和独立资产包规范制作、整理并验收场景、关卡组件或固定设施。"

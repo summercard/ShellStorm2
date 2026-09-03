@@ -1,0 +1,22 @@
+{
+  "asset_slug": "loft_bar_stool_02",
+  "category": "loft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "30_阁楼生活设施",
+    "35_高脚椅02_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/loft/loft_bar_stool_02",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 2,
+  "mesh_count": 2,
+  "light_count": 0,
+  "object_names": [
+    "阁楼高脚椅_2_坐面",
+    "阁楼高脚椅_2_立柱"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

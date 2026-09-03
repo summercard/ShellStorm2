@@ -1,0 +1,30 @@
+{
+  "asset_slug": "base_status_terminal",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "40_阁楼外侧视觉中心设施",
+    "53_BASE_STATUS状态终端_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/underloft/base_status_terminal",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已深化归类_待独立导出",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "BASE_STATUS状态终端_BASE STATUS文字_自发光",
+    "BASE_STATUS状态终端_后部数据线",
+    "BASE_STATUS状态终端_实体按键_01",
+    "BASE_STATUS状态终端_实体按键_02",
+    "BASE_STATUS状态终端_实体按键_03",
+    "BASE_STATUS状态终端_屏幕_自发光",
+    "BASE_STATUS状态终端_屏幕边框",
+    "BASE_STATUS状态终端_立柱",
+    "BASE_STATUS状态终端_读卡器",
+    "BASE_STATUS状态终端_金属底座"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

@@ -1,0 +1,43 @@
+{
+  "asset_slug": "tile_r01_c04",
+  "category": "floor",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "20_统一地面系统_36块独立地砖",
+    "地砖_R01C04_原砖与深化内容_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/floor/tile_r01_c04",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 23,
+  "mesh_count": 21,
+  "light_count": 0,
+  "object_names": [
+    "ENV-BASE99-FLOOR-RIVET-5M_输出根节点.002",
+    "保留地板_00_03",
+    "地板深化_R01C04_东侧卡扣",
+    "地板深化_R01C04_东内阴影条",
+    "地板深化_R01C04_东压边",
+    "地板深化_R01C04_六角固定螺栓_01",
+    "地板深化_R01C04_六角固定螺栓_02",
+    "地板深化_R01C04_六角固定螺栓_03",
+    "地板深化_R01C04_六角固定螺栓_04",
+    "地板深化_R01C04_北内阴影条",
+    "地板深化_R01C04_北压边",
+    "地板深化_R01C04_南侧卡扣",
+    "地板深化_R01C04_南内阴影条",
+    "地板深化_R01C04_南压边",
+    "地板深化_R01C04_板块编号",
+    "地板深化_R01C04_螺栓中心_01",
+    "地板深化_R01C04_螺栓中心_02",
+    "地板深化_R01C04_螺栓中心_03",
+    "地板深化_R01C04_螺栓中心_04",
+    "地板深化_R01C04_西内阴影条",
+    "地板深化_R01C04_西压边",
+    "地板深化_纵分缝_X03_R01",
+    "带铆钉地板_主体_金属哑光反光.002"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

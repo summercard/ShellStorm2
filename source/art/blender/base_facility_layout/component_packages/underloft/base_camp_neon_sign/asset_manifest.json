@@ -1,0 +1,25 @@
+{
+  "package_key": "base_sign",
+  "asset_slug": "base_camp_neon_sign",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "40_阁楼外侧视觉中心设施",
+    "44_BASE_CAMP立体霓虹标识_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/underloft/base_camp_neon_sign",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 4,
+  "mesh_count": 2,
+  "light_count": 2,
+  "object_names": [
+    "BASE_CAMP_立体霓虹字_自发光",
+    "BASE_CAMP_背光_3.1",
+    "BASE_CAMP_背光_6.9",
+    "BASE_CAMP_金属背板"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

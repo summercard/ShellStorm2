@@ -1,0 +1,32 @@
+{
+  "package_key": "underdeck",
+  "asset_slug": "underdeck_sheet_blocker",
+  "category": "architecture",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "10_建筑结构",
+    "13_阁楼下方铁皮封闭体_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/architecture/underdeck_sheet_blocker",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 11,
+  "mesh_count": 5,
+  "light_count": 4,
+  "object_names": [
+    "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER_输出根节点_v003.001",
+    "仓库挡板_主体_金属哑光反光.001",
+    "铁皮外立面呼吸灯_-2.5",
+    "铁皮外立面呼吸灯_12.5",
+    "铁皮外立面呼吸灯_2.5",
+    "铁皮外立面呼吸灯_7.5",
+    "铁皮外立面线性灯_-2.5_自发光",
+    "铁皮外立面线性灯_12.5_自发光",
+    "铁皮外立面线性灯_2.5_自发光",
+    "铁皮外立面线性灯_7.5_自发光",
+    "阁楼下方三面铁皮封闭体"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

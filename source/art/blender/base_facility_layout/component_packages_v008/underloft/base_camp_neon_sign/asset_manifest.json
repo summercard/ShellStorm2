@@ -1,0 +1,39 @@
+{
+  "asset_slug": "base_camp_neon_sign",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v008",
+    "40_阁楼外侧视觉中心设施",
+    "44_BASE_CAMP立体霓虹标识_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v008/underloft/base_camp_neon_sign",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v008.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已深化归类_待独立导出",
+  "object_count": 19,
+  "mesh_count": 17,
+  "light_count": 2,
+  "object_names": [
+    "BASE_CAMP_立体霓虹字_自发光",
+    "BASE_CAMP_背光_3.1",
+    "BASE_CAMP_背光_6.9",
+    "BASE_CAMP_金属背板",
+    "BASE_CAMP标牌_上沿青蓝泛光条_自发光",
+    "BASE_CAMP标牌_侧框_1.16",
+    "BASE_CAMP标牌_侧框_8.84",
+    "BASE_CAMP标牌_加厚外框_4.00",
+    "BASE_CAMP标牌_加厚外框_4.86",
+    "BASE_CAMP标牌_背部固定支架_01",
+    "BASE_CAMP标牌_背部固定支架_02",
+    "BASE_CAMP标牌_背部固定支架_03",
+    "BASE_CAMP标牌_背部固定支架_04",
+    "BASE_CAMP标牌_背部固定支架_05",
+    "BASE_CAMP标牌_连接螺钉_01",
+    "BASE_CAMP标牌_连接螺钉_02",
+    "BASE_CAMP标牌_连接螺钉_03",
+    "BASE_CAMP标牌_连接螺钉_04",
+    "BASE_CAMP标牌_连接螺钉_05"
+  ],
+  "note": "v008独立设施资产包；后续按此Collection独立导出GLB、碰撞与PackedScene。"
+}

@@ -1,0 +1,43 @@
+{
+  "package_key": "shelf",
+  "asset_slug": "heavy_supply_shelf",
+  "category": "warehouse",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "50_仓库与辅助设施",
+    "51_重型货架与补给箱_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/warehouse/heavy_supply_shelf",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 22,
+  "mesh_count": 22,
+  "light_count": 0,
+  "object_names": [
+    "南仓库重型货架_A_层板_0",
+    "南仓库重型货架_A_层板_1",
+    "南仓库重型货架_A_层板_2",
+    "南仓库重型货架_A_层板_3",
+    "南仓库重型货架_A_立柱_-13.4",
+    "南仓库重型货架_A_立柱_-8.200000000000001",
+    "南仓库重型货架_A_补给箱_0_0",
+    "南仓库重型货架_A_补给箱_0_1",
+    "南仓库重型货架_A_补给箱_0_2",
+    "南仓库重型货架_A_补给箱_0_3",
+    "南仓库重型货架_A_补给箱_1_0",
+    "南仓库重型货架_A_补给箱_1_1",
+    "南仓库重型货架_A_补给箱_1_2",
+    "南仓库重型货架_A_补给箱_1_3",
+    "南仓库重型货架_A_补给箱_2_0",
+    "南仓库重型货架_A_补给箱_2_1",
+    "南仓库重型货架_A_补给箱_2_2",
+    "南仓库重型货架_A_补给箱_2_3",
+    "南仓库重型货架_A_补给箱_3_0",
+    "南仓库重型货架_A_补给箱_3_1",
+    "南仓库重型货架_A_补给箱_3_2",
+    "南仓库重型货架_A_补给箱_3_3"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

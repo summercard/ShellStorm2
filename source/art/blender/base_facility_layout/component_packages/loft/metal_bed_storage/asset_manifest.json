@@ -1,0 +1,42 @@
+{
+  "package_key": "loft_bed",
+  "asset_slug": "metal_bed_storage",
+  "category": "loft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "30_阁楼生活设施",
+    "31_金属床与床下收纳_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/loft/metal_bed_storage",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 21,
+  "mesh_count": 20,
+  "light_count": 1,
+  "object_names": [
+    "床下储物箱_-4.2",
+    "床下储物箱_-5.45",
+    "床下储物箱_-6.7",
+    "床下储物箱扣件_-4.2",
+    "床下储物箱扣件_-5.45",
+    "床下储物箱扣件_-6.7",
+    "床头暖光",
+    "床头灯_灯座",
+    "床头灯_灯杆",
+    "床头灯_灯罩_自发光",
+    "阁楼床_床垫",
+    "阁楼床_床脚_-3.75_10.55",
+    "阁楼床_床脚_-3.75_12.65",
+    "阁楼床_床脚_-7.45_10.55",
+    "阁楼床_床脚_-7.45_12.65",
+    "阁楼床_枕头",
+    "阁楼床_毛毯",
+    "阁楼床_金属床框_东",
+    "阁楼床_金属床框_北",
+    "阁楼床_金属床框_南",
+    "阁楼床_金属床框_西"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

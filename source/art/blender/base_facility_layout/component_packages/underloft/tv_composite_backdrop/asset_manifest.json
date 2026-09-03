@@ -1,0 +1,29 @@
+{
+  "package_key": "tv_backdrop",
+  "asset_slug": "tv_composite_backdrop",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "40_阁楼外侧视觉中心设施",
+    "41_电视复合背景墙_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/underloft/tv_composite_backdrop",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 8,
+  "mesh_count": 8,
+  "light_count": 0,
+  "object_names": [
+    "电视背景墙_旧木板中",
+    "电视背景墙_水泥板右",
+    "电视背景墙_钢包边_1.8",
+    "电视背景墙_钢包边_3.4",
+    "电视背景墙_钢包边_5.0",
+    "电视背景墙_钢包边_6.6",
+    "电视背景墙_钢包边_8.2",
+    "电视背景墙_钢板左"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

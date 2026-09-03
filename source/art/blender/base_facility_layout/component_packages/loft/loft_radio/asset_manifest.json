@@ -1,0 +1,27 @@
+{
+  "package_key": "loft_radio",
+  "asset_slug": "loft_radio",
+  "category": "loft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "30_阁楼生活设施",
+    "38_电台_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/loft/loft_radio",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 6,
+  "mesh_count": 6,
+  "light_count": 0,
+  "object_names": [
+    "电台旋钮_0",
+    "电台旋钮_1",
+    "电台旋钮_2",
+    "电台旋钮_3",
+    "电台旋钮_4",
+    "阁楼电台"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

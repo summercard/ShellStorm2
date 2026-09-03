@@ -1,0 +1,26 @@
+{
+  "package_key": "tv_lowcab",
+  "asset_slug": "tv_low_storage_cabinet",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "40_阁楼外侧视觉中心设施",
+    "43_电视低柜_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/underloft/tv_low_storage_cabinet",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 5,
+  "mesh_count": 5,
+  "light_count": 0,
+  "object_names": [
+    "工业电视墙_下方储物柜",
+    "电视低柜门_2.7",
+    "电视低柜门_4.25",
+    "电视低柜门_5.75",
+    "电视低柜门_7.3"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

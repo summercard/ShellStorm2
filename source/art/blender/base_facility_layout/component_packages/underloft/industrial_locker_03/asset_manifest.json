@@ -1,0 +1,26 @@
+{
+  "package_key": "locker_3",
+  "asset_slug": "industrial_locker_03",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "40_阁楼外侧视觉中心设施",
+    "47_工业储物柜03_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/underloft/industrial_locker_03",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 5,
+  "mesh_count": 5,
+  "light_count": 0,
+  "object_names": [
+    "工业储物柜_03_柜体",
+    "工业储物柜_03_柜门",
+    "工业储物柜_03_标签_自发光",
+    "工业储物柜_03_铭牌_自发光",
+    "柜顶工具箱_2"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}

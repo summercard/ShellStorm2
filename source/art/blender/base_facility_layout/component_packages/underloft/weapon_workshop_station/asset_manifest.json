@@ -1,0 +1,34 @@
+{
+  "package_key": "armory",
+  "asset_slug": "weapon_workshop_station",
+  "category": "underloft",
+  "collection_path": [
+    "基地99层高品质微缩模型_中文资产管理",
+    "02_游戏输出_独立资产包_v007",
+    "40_阁楼外侧视觉中心设施",
+    "49_武器工作台与弹药附件_资产包"
+  ],
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/underloft/weapon_workshop_station",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
+  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "status": "已归类_待独立导出",
+  "object_count": 13,
+  "mesh_count": 12,
+  "light_count": 1,
+  "object_names": [
+    "ARMORY_霓虹字_自发光",
+    "武器台加固木台面",
+    "武器台弹药箱_0",
+    "武器台弹药箱_1",
+    "武器台弹药箱_2",
+    "武器台红色警示灯",
+    "武器台锁柜主体",
+    "武器挂墙板",
+    "武器挂架孔列_10.1_自发光",
+    "武器挂架孔列_6.5_自发光",
+    "武器挂架孔列_7.4_自发光",
+    "武器挂架孔列_8.3_自发光",
+    "武器挂架孔列_9.2_自发光"
+  ],
+  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+}
