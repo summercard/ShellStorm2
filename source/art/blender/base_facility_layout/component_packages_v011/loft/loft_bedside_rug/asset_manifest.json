@@ -1,0 +1,38 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_bedside_rug",
+  "display_name": "34_床边暖灰地毯_资产包",
+  "asset_slug": "loft_bedside_rug",
+  "category": "loft",
+  "version": "v011",
+  "collection_path": "34_床边暖灰地毯_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/loft/loft_bedside_rug",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 6,
+  "mesh_count": 6,
+  "light_count": 0,
+  "object_names": [
+    "床边暖灰地毯_低对比编织线_01",
+    "床边暖灰地毯_低对比编织线_02",
+    "床边暖灰地毯_低对比编织线_03",
+    "床边暖灰地毯_低对比编织线_04",
+    "床边暖灰地毯_低对比编织线_05",
+    "床边暖灰地毯_软质基底"
+  ],
+  "world_center_m": [
+    0.3,
+    9.82,
+    6.0922
+  ],
+  "bounding_size_m": [
+    4.25,
+    0.84,
+    0.0555
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "loft_bedside_rug_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

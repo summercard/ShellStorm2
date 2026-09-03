@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_waste_bin",
+  "display_name": "75_WASTE普通垃圾设施_资产包",
+  "asset_slug": "east_waste_bin",
+  "category": "east_facilities",
+  "version": "v011",
+  "collection_path": "75_WASTE普通垃圾设施_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/east_facilities/east_waste_bin",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 11,
+  "mesh_count": 11,
+  "light_count": 0,
+  "object_names": [
+    "分类垃圾设施_WASTE_主体",
+    "分类垃圾设施_WASTE_功能面板",
+    "分类垃圾设施_WASTE_底座",
+    "分类垃圾设施_WASTE_投入口",
+    "分类垃圾设施_WASTE_拉手",
+    "分类垃圾设施_WASTE_文字_自发光",
+    "分类垃圾设施_WASTE_脚轮_-4.86",
+    "分类垃圾设施_WASTE_脚轮_-5.54",
+    "分类垃圾设施_WASTE_识别灯_自发光",
+    "分类垃圾设施_WASTE_门缝",
+    "分类垃圾设施_WASTE_顶部盖板"
+  ],
+  "world_center_m": [
+    10.7013,
+    -5.2,
+    0.73
+  ],
+  "bounding_size_m": [
+    1.2975,
+    1.1,
+    1.46
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "east_waste_bin_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

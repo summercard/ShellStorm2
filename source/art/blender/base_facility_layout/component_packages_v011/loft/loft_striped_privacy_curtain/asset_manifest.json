@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_striped_privacy_curtain",
+  "display_name": "35_红紫条纹隔断帘_资产包",
+  "asset_slug": "loft_striped_privacy_curtain",
+  "category": "loft",
+  "version": "v011",
+  "collection_path": "35_红紫条纹隔断帘_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/loft/loft_striped_privacy_curtain",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 11,
+  "mesh_count": 11,
+  "light_count": 0,
+  "object_names": [
+    "隔断帘_吊杆_10.96",
+    "隔断帘_吊杆_13.54",
+    "隔断帘_布褶片_01",
+    "隔断帘_布褶片_02",
+    "隔断帘_布褶片_03",
+    "隔断帘_布褶片_04",
+    "隔断帘_布褶片_05",
+    "隔断帘_布褶片_06",
+    "隔断帘_布褶片_07",
+    "隔断帘_布褶片_08",
+    "隔断帘_顶部黑色横杆"
+  ],
+  "world_center_m": [
+    3.55,
+    12.2925,
+    7.8197
+  ],
+  "bounding_size_m": [
+    0.1522,
+    2.865,
+    2.3207
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": true,
+  "expected_export": "loft_striped_privacy_curtain_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

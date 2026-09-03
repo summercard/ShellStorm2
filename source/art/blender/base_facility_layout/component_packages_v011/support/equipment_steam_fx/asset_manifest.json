@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::equipment_steam_fx",
+  "display_name": "63_设备蒸汽动效组_资产包",
+  "asset_slug": "equipment_steam_fx",
+  "category": "support",
+  "version": "v011",
+  "collection_path": "63_设备蒸汽动效组_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/support/equipment_steam_fx",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "设备蒸汽_0_0",
+    "设备蒸汽_0_1",
+    "设备蒸汽_0_2",
+    "设备蒸汽_0_3",
+    "设备蒸汽_0_4",
+    "设备蒸汽_1_0",
+    "设备蒸汽_1_1",
+    "设备蒸汽_1_2",
+    "设备蒸汽_1_3",
+    "设备蒸汽_1_4"
+  ],
+  "world_center_m": [
+    0.1681,
+    -10.45,
+    3.1421
+  ],
+  "bounding_size_m": [
+    18.0635,
+    2.3262,
+    1.1331
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": true,
+  "expected_export": "equipment_steam_fx_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

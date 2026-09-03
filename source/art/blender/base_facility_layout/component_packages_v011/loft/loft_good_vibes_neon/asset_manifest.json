@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_good_vibes_neon",
+  "display_name": "44_GOOD VIBES霓虹_资产包",
+  "asset_slug": "loft_good_vibes_neon",
+  "category": "loft",
+  "version": "v011",
+  "collection_path": "44_GOOD VIBES霓虹_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/loft/loft_good_vibes_neon",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 8,
+  "mesh_count": 7,
+  "light_count": 1,
+  "object_names": [
+    "GOOD_VIBES_GOOD_自发光",
+    "GOOD_VIBES_VIBES_自发光",
+    "GOOD_VIBES_小型背板",
+    "GOOD_VIBES_粉色内发光晕板_自发光",
+    "GOOD_VIBES_粉色霓虹洗墙光",
+    "GOOD_VIBES_高亮GOOD_自发光",
+    "GOOD_VIBES_高亮VIBES_自发光",
+    "GOOD_VIBES_黑色字缝遮罩"
+  ],
+  "world_center_m": [
+    10.55,
+    14.3525,
+    8.48
+  ],
+  "bounding_size_m": [
+    1.55,
+    0.805,
+    0.66
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": true,
+  "expected_export": "loft_good_vibes_neon_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

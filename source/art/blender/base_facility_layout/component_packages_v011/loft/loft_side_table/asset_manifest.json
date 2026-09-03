@@ -1,0 +1,39 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_side_table",
+  "display_name": "41_床前辅助小桌_资产包",
+  "asset_slug": "loft_side_table",
+  "category": "loft",
+  "version": "v011",
+  "collection_path": "41_床前辅助小桌_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/loft/loft_side_table",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 7,
+  "mesh_count": 7,
+  "light_count": 0,
+  "object_names": [
+    "辅助小桌_个人终端",
+    "辅助小桌_圆角台面",
+    "辅助小桌_腿_1.36_8.95",
+    "辅助小桌_腿_1.36_9.49",
+    "辅助小桌_腿_2.24_8.95",
+    "辅助小桌_腿_2.24_9.49",
+    "辅助小桌_青色杯"
+  ],
+  "world_center_m": [
+    1.8,
+    9.22,
+    6.5025
+  ],
+  "bounding_size_m": [
+    1.12,
+    0.76,
+    0.765
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "loft_side_table_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

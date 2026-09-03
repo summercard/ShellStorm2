@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_nightstand",
+  "display_name": "32_参考床头柜与生活物件_资产包",
+  "asset_slug": "loft_nightstand",
+  "category": "loft",
+  "version": "v011",
+  "collection_path": "32_参考床头柜与生活物件_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/loft/loft_nightstand",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "床头柜_主箱体",
+    "床头柜_书本",
+    "床头柜_小植物叶团",
+    "床头柜_小植物花盆",
+    "床头柜_抽屉拉手_1",
+    "床头柜_抽屉拉手_2",
+    "床头柜_抽屉面_1",
+    "床头柜_抽屉面_2",
+    "床头柜_杯子",
+    "床头柜_顶板"
+  ],
+  "world_center_m": [
+    -2.75,
+    11.32,
+    6.8475
+  ],
+  "bounding_size_m": [
+    1.1,
+    1.06,
+    1.465
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "loft_nightstand_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

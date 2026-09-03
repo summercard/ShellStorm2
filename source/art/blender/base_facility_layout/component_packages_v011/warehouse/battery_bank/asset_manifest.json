@@ -1,0 +1,38 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::battery_bank",
+  "display_name": "54_蓄电池组_资产包",
+  "asset_slug": "battery_bank",
+  "category": "warehouse",
+  "version": "v011",
+  "collection_path": "54_蓄电池组_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/warehouse/battery_bank",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 6,
+  "mesh_count": 6,
+  "light_count": 0,
+  "object_names": [
+    "蓄电池组_0",
+    "蓄电池组_1",
+    "蓄电池组_2",
+    "蓄电池组_状态灯_0_自发光",
+    "蓄电池组_状态灯_1_自发光",
+    "蓄电池组_状态灯_2_自发光"
+  ],
+  "world_center_m": [
+    12.865,
+    -12.12,
+    0.52
+  ],
+  "bounding_size_m": [
+    1.32,
+    2.28,
+    0.82
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "battery_bank_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

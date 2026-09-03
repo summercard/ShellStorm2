@@ -1,0 +1,35 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::backup_generator",
+  "display_name": "53_备用发电机_资产包",
+  "asset_slug": "backup_generator",
+  "category": "warehouse",
+  "version": "v011",
+  "collection_path": "53_备用发电机_资产包",
+  "future_export_directory": "source/art/blender/base_facility_layout/component_packages_v011/warehouse/backup_generator",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v011.blend",
+  "object_count": 3,
+  "mesh_count": 3,
+  "light_count": 0,
+  "object_names": [
+    "备用发电机_底座",
+    "备用发电机_控制屏_自发光",
+    "备用发电机_转子罩"
+  ],
+  "world_center_m": [
+    13.1625,
+    -9.1,
+    0.9525
+  ],
+  "bounding_size_m": [
+    2.325,
+    3.1,
+    1.655
+  ],
+  "local_origin": "preserve scene master world placement",
+  "forward_axis": "Blender +Y north",
+  "has_animation": false,
+  "expected_export": "backup_generator_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}
