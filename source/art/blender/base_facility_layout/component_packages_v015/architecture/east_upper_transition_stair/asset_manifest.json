@@ -1,0 +1,9 @@
+{
+  "asset_slug": "east_upper_transition_stair",
+  "version": "v015",
+  "target_collection": "51_东侧紧凑上行过渡楼梯_资产包",
+  "source_collection": "51_东侧紧凑上行过渡楼梯_制作组件_v013",
+  "reorganized_components": 16,
+  "contents": "东侧楼梯双侧暖光串灯及电源座",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

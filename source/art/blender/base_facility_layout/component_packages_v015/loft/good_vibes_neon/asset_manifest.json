@@ -1,0 +1,9 @@
+{
+  "asset_slug": "good_vibes_neon",
+  "version": "v015",
+  "target_collection": "44_GOOD VIBES霓虹_资产包",
+  "source_collection": "44_GOOD VIBES霓虹_制作组件_v013",
+  "reorganized_components": 3,
+  "contents": "GOOD VIBES 外框、白粉霓虹文字和洗墙光",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

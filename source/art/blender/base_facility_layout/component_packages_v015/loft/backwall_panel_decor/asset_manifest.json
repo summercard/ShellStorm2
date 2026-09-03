@@ -1,0 +1,9 @@
+{
+  "asset_slug": "backwall_panel_decor",
+  "version": "v015",
+  "target_collection": "92_二楼后墙功能面板与装饰_资产包_v012",
+  "source_collection": "92_二楼后墙功能面板与装饰_制作组件_v012",
+  "reorganized_components": 42,
+  "contents": "顶部压边、内嵌分缝、五组面板框和铆钉",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

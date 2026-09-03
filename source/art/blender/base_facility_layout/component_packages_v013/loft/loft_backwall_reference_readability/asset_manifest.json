@@ -1,0 +1,9 @@
+{
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_backwall_reference_readability_v013",
+  "display_name": "二楼后墙参考图可读性深化_资产包",
+  "asset_slug": "loft_backwall_reference_readability",
+  "collection_path": "95_二楼后墙参考图可读性深化_资产包_v013",
+  "scope": "仅覆盖二楼后墙的面板压条、彩色线束、EXPLORE/STAY CURIOUS/GOOD VIBES标识深化和局部洗墙光。",
+  "reference_priority": "参考图中明确可见的墙板节奏、标识位置、暖冷灯光和附着层级。",
+  "expected_export": "loft_backwall_reference_readability_visual_top3d_v013.glb"
+}

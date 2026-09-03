@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-UNDERSTAIR-LIGHTING-DECOR-V014",
+  "display_name": "103_梯下暖光与生活点缀_资产包_v014",
+  "asset_slug": "understair_lighting_decor",
+  "category": "understair",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "103_梯下暖光与生活点缀_制作组件_v014",
+  "output_collection": "103_梯下暖光与生活点缀_资产包_v014",
+  "visual_objects": ["梯下暖光与生活点缀_主体_金属哑光反光", "梯下暖光与生活点缀_UI灯光_柔和自发光", "梯下暖灯v014_局部暖光", "梯下暖灯v014_休息角柔光补偿"],
+  "collision_objects": ["COLLISION_梯下生活角窄边柜"],
+  "collision_status": "窄边柜独立碰撞；壁灯与植物不阻挡角色"
+}

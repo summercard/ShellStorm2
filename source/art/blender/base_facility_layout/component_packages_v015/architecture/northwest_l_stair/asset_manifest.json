@@ -1,0 +1,9 @@
+{
+  "asset_slug": "northwest_l_stair",
+  "version": "v015",
+  "target_collection": "14_西北贴墙L型楼梯_资产包",
+  "source_collection": "14_西北贴墙L型楼梯_制作组件_v013",
+  "reorganized_components": 21,
+  "contents": "STAY CURIOUS 标识、左梯上下段暖光串灯及电源座",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

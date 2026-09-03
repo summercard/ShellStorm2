@@ -1,0 +1,8 @@
+{
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_backwall_cable_lighting_v012",
+  "display_name": "二楼后墙线管与壁灯_资产包",
+  "asset_slug": "loft_backwall_cable_lighting",
+  "collection_path": "91_二楼后墙线管与壁灯_资产包_v012",
+  "scope": "二楼北侧后墙附着线管、卡件、条形壁灯与局部状态灯；不含墙体本体。",
+  "expected_export": "loft_backwall_cable_lighting_visual_top3d_v012.glb"
+}

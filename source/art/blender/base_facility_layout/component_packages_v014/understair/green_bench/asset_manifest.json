@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-UNDERSTAIR-GREEN-BENCH-V014",
+  "display_name": "99_梯下绿色软垫长凳_资产包_v014",
+  "asset_slug": "understair_green_bench",
+  "category": "understair",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "99_梯下绿色软垫长凳_制作组件_v014",
+  "output_collection": "99_梯下绿色软垫长凳_资产包_v014",
+  "visual_objects": ["梯下绿色软垫长凳_主体_金属哑光反光"],
+  "collision_objects": ["COLLISION_梯下绿色软垫长凳"],
+  "world_bounds_m": {"min": [-12.44, 13.698, 0.03], "max": [-9.86, 14.6, 1.66]}
+}

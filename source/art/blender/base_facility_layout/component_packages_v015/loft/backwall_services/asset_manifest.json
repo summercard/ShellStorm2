@@ -1,0 +1,9 @@
+{
+  "asset_slug": "backwall_services",
+  "version": "v015",
+  "target_collection": "91_二楼后墙线管与壁灯_资产包_v012",
+  "source_collection": "91_二楼后墙线管与壁灯_制作组件_v012",
+  "reorganized_components": 21,
+  "contents": "彩色线束、扎带、冷白填充灯、红色接线盒和暖色工作灯",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

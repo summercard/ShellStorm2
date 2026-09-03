@@ -1,0 +1,9 @@
+{
+  "asset_slug": "workstation_posters",
+  "version": "v015",
+  "target_collection": "42_双屏电脑完整工位_资产包",
+  "source_collection": "42_双屏电脑完整工位_制作组件_v013",
+  "reorganized_components": 16,
+  "contents": "工位双竖海报及红色接线盒附属面板",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

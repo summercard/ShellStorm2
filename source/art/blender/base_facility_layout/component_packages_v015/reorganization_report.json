@@ -1,0 +1,16 @@
+{
+  "version": "v015",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend",
+  "operation": "将 95_参考图高还原视觉迭代_v013 内组件归档至对应设施资产包",
+  "display_components_moved": 124,
+  "source_components_moved": 124,
+  "temporary_collections_removed": [
+    "95_参考图高还原视觉迭代_v013",
+    "95_参考图高还原视觉迭代_制作组件_v013",
+    "95_二楼后墙参考图可读性深化_资产包_v013",
+    "95_二楼后墙参考图可读性深化_制作组件_v013",
+    "96_双楼梯暖光串灯深化_资产包_v013",
+    "96_双楼梯暖光串灯深化_制作组件_v013"
+  ],
+  "geometry_material_uv_transform_changed": false
+}

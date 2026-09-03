@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-UNDERSTAIR-BULLETIN-V014",
+  "display_name": "100_梯下公告留言板_资产包_v014",
+  "asset_slug": "understair_bulletin_board",
+  "category": "understair",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "100_梯下公告留言板_制作组件_v014",
+  "output_collection": "100_梯下公告留言板_资产包_v014",
+  "visual_objects": ["梯下公告留言板_主体_金属哑光反光"],
+  "collision_status": "贴墙薄件并入既有9m墙体阻挡",
+  "world_bounds_m": {"min": [-11.87, 14.581, 1.54], "max": [-9.97, 14.73, 2.96]}
+}

@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-UNDERSTAIR-SHELF-STORAGE-V014",
+  "display_name": "102_梯下层架与收纳_资产包_v014",
+  "asset_slug": "understair_shelf_storage",
+  "category": "understair",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "102_梯下层架与收纳_制作组件_v014",
+  "output_collection": "102_梯下层架与收纳_资产包_v014",
+  "visual_objects": ["梯下层架与收纳_主体_金属哑光反光"],
+  "collision_objects": ["COLLISION_梯下层架与收纳"],
+  "world_bounds_m": {"min": [-9.2, 13.736, 0.025], "max": [-7.96, 14.6, 2.575]}
+}

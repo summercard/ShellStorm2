@@ -1,0 +1,8 @@
+{
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::stair_wall_guidance_details_v012",
+  "display_name": "楼梯墙侧导向细节_资产包",
+  "asset_slug": "stair_wall_guidance_details",
+  "collection_path": "94_楼梯墙侧导向细节_资产包_v012",
+  "scope": "西北L型楼梯与东侧上行楼梯的固定卡件、墙侧导向标记及微型暖光点。",
+  "expected_export": "stair_wall_guidance_details_visual_top3d_v012.glb"
+}

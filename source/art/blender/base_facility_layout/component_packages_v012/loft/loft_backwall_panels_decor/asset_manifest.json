@@ -1,0 +1,8 @@
+{
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_backwall_panels_decor_v012",
+  "display_name": "二楼后墙功能面板与装饰_资产包",
+  "asset_slug": "loft_backwall_panels_decor",
+  "collection_path": "92_二楼后墙功能面板与装饰_资产包_v012",
+  "scope": "二楼北侧后墙的薄型通风面板、安装框、螺栓与挂件；不改变原墙板结构。",
+  "expected_export": "loft_backwall_panels_decor_visual_top3d_v012.glb"
+}

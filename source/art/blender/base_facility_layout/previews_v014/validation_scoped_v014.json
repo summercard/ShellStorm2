@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "palette_uv_on_all_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "source_hidden": true,
+    "output_visible": true
+  },
+  "mesh_count": 124,
+  "polygon_count": 16000,
+  "valid_island_polygon_count": 16000,
+  "bad_objects": [],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ]
+}

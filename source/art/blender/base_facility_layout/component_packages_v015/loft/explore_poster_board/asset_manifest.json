@@ -1,0 +1,9 @@
+{
+  "asset_slug": "explore_poster_board",
+  "version": "v015",
+  "target_collection": "48_EXPLORE海报与工具洞洞板_资产包",
+  "source_collection": "48_EXPLORE海报与工具洞洞板_制作组件_v013",
+  "reorganized_components": 5,
+  "contents": "EXPLORE 海报外框、纸面、标题与双层山形图案",
+  "source_blend": "base_facility_runtime_layout_hq_v015.blend"
+}

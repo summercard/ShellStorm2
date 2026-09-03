@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-STAIR-NW-REFINE-V014",
+  "display_name": "97_西北L梯结构深化_资产包_v014",
+  "asset_slug": "northwest_l_stair_refinement",
+  "category": "architecture",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "97_西北L梯结构深化_制作组件_v014",
+  "output_collection": "97_西北L梯结构深化_资产包_v014",
+  "visual_objects": ["西北L梯结构深化_主体_金属哑光反光"],
+  "collision_objects": ["COLLISION_西北L梯_下段连续斜坡", "COLLISION_西北L梯_上段连续斜坡", "COLLISION_西北L梯_转角平台", "COLLISION_西北L梯_顶层接驳平台", "COLLISION_西北L梯_下段栏杆_-14.63", "COLLISION_西北L梯_下段栏杆_-12.93", "COLLISION_西北L梯_上段栏杆_12.93", "COLLISION_西北L梯_上段栏杆_14.63"],
+  "scope_lock": "不改变原楼梯起终点、两跑方向、宽度、平台和接口"
+}

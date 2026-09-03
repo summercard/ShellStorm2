@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-UNDERSTAIR-EQUIPMENT-CABINET-V014",
+  "display_name": "101_梯下立式设备柜_资产包_v014",
+  "asset_slug": "understair_equipment_cabinet",
+  "category": "understair",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "101_梯下立式设备柜_制作组件_v014",
+  "output_collection": "101_梯下立式设备柜_资产包_v014",
+  "visual_objects": ["梯下立式设备柜_主体_金属哑光反光", "梯下立式设备柜_UI灯光_柔和自发光"],
+  "collision_objects": ["COLLISION_梯下立式设备柜"],
+  "world_bounds_m": {"min": [-7.37, 13.753, 0.0], "max": [-6.27, 14.68, 3.13]}
+}

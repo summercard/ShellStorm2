@@ -1,0 +1,9 @@
+{
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::stair_warm_fairy_lights_v013",
+  "display_name": "双楼梯暖光串灯深化_资产包",
+  "asset_slug": "stair_warm_fairy_lights",
+  "collection_path": "96_双楼梯暖光串灯深化_资产包_v013",
+  "scope": "仅覆盖西北L形楼梯和东侧上行楼梯已存在栏杆上的暖白串灯、固定座和局部导向灯。",
+  "reference_priority": "参考图中沿楼梯栏杆布置的暖光点状灯及安全导向关系。",
+  "expected_export": "stair_warm_fairy_lights_visual_top3d_v013.glb"
+}

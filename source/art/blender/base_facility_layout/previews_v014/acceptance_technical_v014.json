@@ -1,0 +1,66 @@
+{
+  "blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\source\\art\\blender\\base_facility_layout\\base_facility_runtime_layout_hq_v014.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "palette_uv_on_all_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "source_hidden": true,
+    "output_visible": true,
+    "collision_separate_and_hidden": true,
+    "left_stair_original_unchanged": true,
+    "right_stair_original_unchanged": true,
+    "facilities_against_north_wall": true,
+    "no_v014_scope_leaks": true
+  },
+  "mesh_count": 139,
+  "polygon_count": 16090,
+  "valid_island_polygon_count": 16090,
+  "bad_objects": [],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision_mesh_count": 15,
+  "collision_types": {
+    "railing_blocker": 6,
+    "static_box": 4,
+    "walkable_platform": 2,
+    "walkable_ramp": 3
+  },
+  "left_stair_bounds": {
+    "min": [
+      -14.8,
+      8.21,
+      0.0
+    ],
+    "max": [
+      -4.67,
+      14.8,
+      7.128
+    ]
+  },
+  "right_stair_bounds": {
+    "min": [
+      12.305,
+      10.17,
+      5.996
+    ],
+    "max": [
+      14.255,
+      14.92,
+      9.34
+    ]
+  },
+  "facility_y_min": 13.698,
+  "scope_leaks": [],
+  "full_scene_validator_note": "全场历史v012/v013存在1464个旧UV坏面（124个对象）、446个额外UV对象及45个旧自发光命名问题；v014范围自身已单独通过。"
+}

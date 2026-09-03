@@ -1,0 +1,13 @@
+{
+  "asset_id": "ENV-BASE99-STAIR-EAST-REFINE-V014",
+  "display_name": "98_东侧上行楼梯结构深化_资产包_v014",
+  "asset_slug": "east_upper_stair_refinement",
+  "category": "architecture",
+  "version": "v014",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v014.blend",
+  "source_collection": "98_东侧上行楼梯结构深化_制作组件_v014",
+  "output_collection": "98_东侧上行楼梯结构深化_资产包_v014",
+  "visual_objects": ["东侧上行楼梯结构深化_主体_金属哑光反光"],
+  "collision_objects": ["COLLISION_东侧上行楼梯_连续斜坡", "COLLISION_东侧上行楼梯_栏杆_12.36", "COLLISION_东侧上行楼梯_栏杆_14.20"],
+  "scope_lock": "不改变原楼梯位置、东西向关系、长度、底部与墙顶接口"
+}
