@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_base99_wall_content_v021.gd" id="1_test"]
+
+[node name="VerifyBase99WallContentV021" type="Node"]
+script = ExtResource("1_test")

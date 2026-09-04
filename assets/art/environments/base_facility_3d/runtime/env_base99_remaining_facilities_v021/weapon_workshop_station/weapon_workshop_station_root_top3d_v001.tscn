@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(1.48, 0.2, 5.5)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.639999, 0.5, 1.05)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(0.639999, 0.5, 1.05)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.639999, 0.5, 1.05)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(1.1, 1.45, 5.2)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.18, 2.15, 6)
+
+[node name="49_武器工作台与弹药附件_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::weapon_workshop_station"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
+metadata/derived_from_version = "v017"
+metadata/collision_policy = "per_source_object_box_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="SourceObjectBox_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-12.55, 1.64, 3.4)
+shape = SubResource("Box_0")
+
+[node name="SourceObjectBox_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-12.15, 1.98, 5)
+shape = SubResource("Box_1")
+
+[node name="SourceObjectBox_002" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-12.15, 1.98, 3.6)
+shape = SubResource("Box_2")
+
+[node name="SourceObjectBox_003" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-12.15, 1.98, 2.2)
+shape = SubResource("Box_3")
+
+[node name="SourceObjectBox_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-13.25, 0.85, 3.4)
+shape = SubResource("Box_4")
+
+[node name="SourceObjectBox_005" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-14.05, 3.05, 3.4)
+shape = SubResource("Box_5")

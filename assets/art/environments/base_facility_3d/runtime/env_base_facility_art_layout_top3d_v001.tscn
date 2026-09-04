@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
@@ -8,11 +8,15 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn" id="6_retro"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v004.tscn" id="9_mezzanine"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v004.tscn" id="10_stair_l"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d_v002.tscn" id="11_stair_exterior"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h9/env_base100_upper_shell_30x30_h9_root_top3d_v001.tscn" id="12_upper_shell"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn" id="13_recovery"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn" id="14_wardrobe"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v003.tscn" id="16_floor_visuals_v021"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v001.tscn" id="17_wall_contents"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn" id="18_remaining_facilities"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
@@ -71,6 +75,12 @@ metadata/usage = "楼板和楼梯的初始位置来自Blender母版；可在此�
 metadata/usage = "Blender V020完整地板替换旧DungeonRoom3D基础砖MultiMesh；FloorSupport碰撞保持原6×6×5m规格"
 metadata/source_layout = "base_facility_runtime_layout_hq_v020.blend"
 metadata/source_blender_version = "v020"
+
+[node name="二层楼中楼结构与护栏_复用V020地板" parent="基地结构组件_可移动旋转" instance=ExtResource("9_mezzanine")]
+position = Vector3(5, 0, -10)
+
+[node name="L型楼梯_一楼至二楼_Z5" parent="基地结构组件_可移动旋转" instance=ExtResource("10_stair_l")]
+position = Vector3(-9.58, 0, -9.15)
 
 [node name="外门小楼梯_二楼至100层_H4" parent="基地结构组件_可移动旋转" instance=ExtResource("11_stair_exterior")]
 position = Vector3(10.78, 5, -7.5)
@@ -134,6 +144,12 @@ base_size_multiplier = 1.0
 
 [node name="场景装饰_可自由增删" type="Node3D" parent="."]
 metadata/usage = "这里可以继续添加无玩法碰撞的装饰模型"
+
+[node name="BlenderV021非门墙面内容_仅视觉" parent="场景装饰_可自由增删" instance=ExtResource("17_wall_contents")]
+metadata/usage = "V017墙面内容导出为V021；门和结构墙体不在本实例范围，根节点保持原点以复用Blender摆放"
+
+[node name="BlenderV021剩余非门非墙设施" parent="场景装饰_可自由增删" instance=ExtResource("18_remaining_facilities")]
+metadata/usage = "V017剩余独立设施、仓储、阁楼家具与环境支持包；保留Blender烘焙摆放，物理设施自带简化阻挡"
 
 [node name="维修圆凳_独立装饰" parent="场景装饰_可自由增删" instance=ExtResource("7_stool")]
 position = Vector3(-3, 0, -9.8)

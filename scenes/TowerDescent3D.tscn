@@ -97,11 +97,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
 [node name="东墙边界" parent="美术可编辑层/基地99层_美术布置层/编辑器参考_运行时自动隐藏" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
 
-[node name="二层楼中楼楼板_20x10米_Z5" parent="美术可编辑层/基地99层_美术布置层/基地结构组件_可移动旋转" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -54.313663)
+[node name="二层楼中楼结构与护栏_复用V020地板" parent="美术可编辑层/基地99层_美术布置层/基地结构组件_可移动旋转" index="0"]
+position = Vector3(5, 0, -10)
 
 [node name="L型楼梯_一楼至二楼_Z5" parent="美术可编辑层/基地99层_美术布置层/基地结构组件_可移动旋转" index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.58, 0, -51.433685)
+position = Vector3(-9.58, 0, -9.15)
 
 [node name="外门小楼梯_二楼至100层_H4" parent="美术可编辑层/基地99层_美术布置层/基地结构组件_可移动旋转" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.78, 5, -26.03815)

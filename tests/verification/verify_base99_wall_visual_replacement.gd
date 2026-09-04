@@ -86,14 +86,14 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 		var base_door_bindings := tower.call("_get_configured_base_door_bindings") as Array
 		if base_door_bindings.size() != 3:
 			failures.append("基地三个门没有统一注册到同一交互分发器")
-		if int(snapshot.get("base99_mezzanine_count", 0)) != 0:
-			failures.append("基地仍保留旧二层阁楼架/平台实例")
-		if int(snapshot.get("base99_stair_l_count", 0)) != 0:
-			failures.append("基地仍保留旧L型楼梯实例")
+		if int(snapshot.get("base99_mezzanine_count", 0)) != 1:
+			failures.append("基地缺少二层阁楼结构实例")
+		if int(snapshot.get("base99_stair_l_count", 0)) != 1:
+			failures.append("基地缺少L型楼梯实例")
 		if int(snapshot.get("base99_stair_exterior_count", 0)) != 1:
 			failures.append("基地缺少二楼外门小楼梯")
-		if int(snapshot.get("base99_camera_stair_slab_count", 0)) < 1:
-			failures.append("二楼外门小楼梯没有建立下方摄像机净空碰撞标记")
+		if int(snapshot.get("base99_camera_stair_slab_count", 0)) < 3:
+			failures.append("阁楼与两套楼梯没有建立下方摄像机净空碰撞标记")
 		if int(snapshot.get("tower_door_wall_module_count", 0)) != 2:
 			failures.append("两个带门墙的模块数量被改变")
 		if int(snapshot.get("tower_corner_module_count", 0)) != 4:
@@ -191,7 +191,7 @@ func _validate_base99_camera_collisions(root: Node, failures: Array[String]) -> 
 		var shapes := body.find_children("*", "CollisionShape3D", true, false)
 		if shapes.is_empty() or (shapes[0] as CollisionShape3D).disabled:
 			failures.append("摄像机净空碰撞未启用: %s" % body.name)
-	for required_role in ["exterior_stair"]:
+	for required_role in ["mezzanine", "l_stair_unified", "exterior_stair"]:
 		if not roles.has(required_role):
 			failures.append("缺少摄像机净空角色: %s" % required_role)
 
@@ -201,10 +201,11 @@ func _validate_editable_component_layout(facility: DungeonRoom3D, failures: Arra
 	if layout == null:
 		failures.append("基地结构组件没有进入可编辑美术布局tscn")
 		return
-	for removed_name in ["二层楼中楼楼板_20x10米_Z5", "L型楼梯_一楼至二楼_Z5"]:
-		if layout.get_node_or_null(removed_name) != null:
-			failures.append("可编辑布局仍保留应删除的旧摆设: %s" % removed_name)
-	var expected := {"外门小楼梯_二楼至100层_H4": Vector3(10.78, 5.0, -7.5)}
+	var expected := {
+		"二层楼中楼结构与护栏_复用V020地板": Vector3(5.0, 0.0, -10.0),
+		"L型楼梯_一楼至二楼_Z5": Vector3(-9.58, 0.0, -9.15),
+		"外门小楼梯_二楼至100层_H4": Vector3(10.78, 5.0, -7.5),
+	}
 	for node_name in expected:
 		var component := layout.get_node_or_null(node_name) as Node3D
 		if component == null:
@@ -213,7 +214,7 @@ func _validate_editable_component_layout(facility: DungeonRoom3D, failures: Arra
 			failures.append("结构组件没有采用Blender母版初始坐标: %s=%s" % [node_name, component.position])
 	var floor_visuals := facility.get_node_or_null("基地99层_美术布置层/BlenderV021完整地板表现_仅视觉")
 	if floor_visuals == null or floor_visuals.get_node_or_null("二层楼中楼地板面层_仅视觉") == null:
-		failures.append("清理旧阁楼架时误删了Blender V020新增二楼地板表现")
+		failures.append("接入阁楼结构时误删了Blender V020新增二楼地板表现")
 
 
 func _validate_walkable_ramp_angles(root: Node, failures: Array[String]) -> void:
@@ -227,8 +228,8 @@ func _validate_walkable_ramp_angles(root: Node, failures: Array[String]) -> void
 		var angle := acos(clampf(surface_up.dot(Vector3.UP), -1.0, 1.0))
 		if angle >= deg_to_rad(44.0):
 			failures.append("楼梯坡面超过角色44度可行走上限: %s %.2f度" % [collision.name, rad_to_deg(angle)])
-	if ramp_count != 1:
-		failures.append("清理旧L型楼梯后，基地应只保留二楼外门小楼梯的一段简化可行走坡面，当前%d段" % ramp_count)
+	if ramp_count != 3:
+		failures.append("基地两套楼梯应有3段简化可行走坡面，当前%d段" % ramp_count)
 
 
 func _validate_base_atrium(tower: TowerDescent3D, failures: Array[String]) -> void:

@@ -1,0 +1,27 @@
+{
+  "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+  "version": "v004",
+  "input_blend": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v005.blend",
+  "source": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
+  "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v004.glb",
+  "visual_deck_policy": "reuse ENV-BASE99-LOFT-FLOOR-FINISH-V017 v002; no duplicate deck visual",
+  "removed_legacy_floor_mesh_count": 9,
+  "triangles": 552,
+  "bounds_min": [
+    -10.12375,
+    -5.12375,
+    0.0
+  ],
+  "bounds_max": [
+    10.12375,
+    5.12375,
+    5.93
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "PackedScene owns continuous deck and real guard blockers",
+  "source_sha256": "88f16c9c4a9d4a2f22adbbd4b5c1982e95b2f6dccd7032cd8aa8df4641c45e22",
+  "glb_sha256": "a14d40231f212a106b5f7f230bc33e1ef4bac44494a9dc707ab50ca04491a987"
+}

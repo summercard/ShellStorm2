@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v004.glb" id="1_visual"]
+[ext_resource type="Script" path="res://src/world3d/Base99WalkableModule3D.gd" id="2_collision"]
+
+[node name="基地99层二层楼中楼结构与护栏20x10米Z5" type="Node3D"]
+script = ExtResource("2_collision")
+collision_role = "mezzanine"
+target_walkable_height_m = 5.0
+metadata/asset_id = "ENV-BASE99-MEZZANINE-20X10-Z5"
+metadata/asset_version = "v004"
+metadata/logic_id = "base99_mezzanine_20x10_z5"
+metadata/asset_category = "environment_module"
+metadata/component = "loft_structure_and_guardrails"
+metadata/dimensions_m = Vector3(20.2475, 5.93, 10.2475)
+metadata/deck_height_m = 5.0
+metadata/origin_contract = "center_bottom"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/visual_deck_policy = "reuse ENV-BASE99-LOFT-FLOOR-FINISH-V017 v002; no duplicate deck visual"
+metadata/collision_owner = "self_prefab"
+metadata/collision_contract = "continuous_walkable_deck_with_independent_guard_blockers"
+metadata/guard_opening_contract = "west entry gap aligns to L-stair top landing"
+metadata/geometry_contract = "structure_and_guardrails_only; removed legacy deck skin and eight legacy tiles"
+metadata/removed_legacy_floor_mesh_count = 9
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

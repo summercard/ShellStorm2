@@ -86,7 +86,9 @@ core_scenes=(
   verify_door_passability
   verify_tower_descent_flow
   verify_base99_floor_player_collision_flow
-  verify_base99_mezzanine_placement_removal
+  verify_base99_structural_asset_integration
+  verify_base99_wall_content_v021
+  verify_base99_remaining_facilities_v021
   verify_3d_performance_budget
   verify_performance_runtime_complete
   verify_graphics_settings_ui_flow

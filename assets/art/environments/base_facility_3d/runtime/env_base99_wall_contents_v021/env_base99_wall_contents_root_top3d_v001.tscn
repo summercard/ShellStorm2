@@ -1,0 +1,51 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_backwall_services/loft_backwall_services_visual_top3d_v001.glb" id="1_services"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb" id="2_pegboard"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb" id="3_explore"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v001.glb" id="4_good_vibes"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d_v001.glb" id="5_stay_curious"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb" id="6_plant"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/base_camp_neon_sign/base_camp_neon_sign_visual_top3d_v001.glb" id="7_base_camp"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/base_status_terminal/base_status_terminal_visual_top3d_v001.glb" id="8_status"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3d_v001.glb" id="9_south_pipes"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/storage_terminal/storage_terminal_visual_top3d_v001.glb" id="10_storage"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/understair_bulletin_board/understair_bulletin_board_visual_top3d_v001.glb" id="11_bulletin"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/understair_lighting_living_support/understair_lighting_living_support_visual_top3d_v001.glb" id="12_understair_light"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d_v001.glb" id="13_east_pipes"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_power_distribution/east_power_distribution_visual_top3d_v001.glb" id="14_power"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_small_safety_devices/east_small_safety_devices_visual_top3d_v001.glb" id="15_safety"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_work_together_poster/east_work_together_poster_visual_top3d_v001.glb" id="16_poster"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb" id="17_boards"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/hose_reel/hose_reel_visual_top3d_v001.glb" id="18_hose"]
+
+[node name="基地99层非门墙面内容_V021" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-WALL-CONTENTS-V021"
+metadata/asset_version = "v021"
+metadata/asset_category = "environment_wall_content"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_wall_contents.blend"
+metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
+metadata/derived_from_version = "v017"
+metadata/collision_policy = "visual_only_no_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+metadata/excluded_scope = "all doors, door frames, wall modules, wall panels and wall blockers"
+metadata/runtime_mesh_count = 18
+
+[node name="二楼后墙服务管线" parent="." instance=ExtResource("1_services")]
+[node name="二楼工具洞洞板" parent="." instance=ExtResource("2_pegboard")]
+[node name="二楼EXPLORE海报" parent="." instance=ExtResource("3_explore")]
+[node name="二楼GOOD_VIBES霓虹" parent="." instance=ExtResource("4_good_vibes")]
+[node name="楼梯墙STAY_CURIOUS标识" parent="." instance=ExtResource("5_stay_curious")]
+[node name="二楼后墙吊挂植物" parent="." instance=ExtResource("6_plant")]
+[node name="BASE_CAMP霓虹标识" parent="." instance=ExtResource("7_base_camp")]
+[node name="BASE_STATUS状态终端" parent="." instance=ExtResource("8_status")]
+[node name="北侧工业管线" parent="." instance=ExtResource("9_south_pipes")]
+[node name="STORAGE储物终端" parent="." instance=ExtResource("10_storage")]
+[node name="梯下公告留言板" parent="." instance=ExtResource("11_bulletin")]
+[node name="梯下壁灯生活点缀" parent="." instance=ExtResource("12_understair_light")]
+[node name="东墙工业管线" parent="." instance=ExtResource("13_east_pipes")]
+[node name="东墙工业配电" parent="." instance=ExtResource("14_power")]
+[node name="东墙小型安全设备" parent="." instance=ExtResource("15_safety")]
+[node name="东墙WORK_TOGETHER海报" parent="." instance=ExtResource("16_poster")]
+[node name="南墙资料板组" parent="." instance=ExtResource("17_boards")]
+[node name="西侧水管卷盘" parent="." instance=ExtResource("18_hose")]

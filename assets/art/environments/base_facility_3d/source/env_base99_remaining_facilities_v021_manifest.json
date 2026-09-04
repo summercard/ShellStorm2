@@ -1,0 +1,2609 @@
+{
+  "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+  "display_name": "基地99层剩余非门非墙独立设施资产包",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend",
+  "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "derived_from_version": "v017",
+  "scope": "all remaining unimported independent facility/support packages; excludes floors, doors, door-attached controls, structural walls, wall content, mezzanine and stairs",
+  "collision_policy": "furniture has per-source-object simplified BoxShape3D; lights, rugs, curtains, vegetation and FX are visual-only",
+  "root_runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn",
+  "packages": [
+    {
+      "slug": "air_compressor",
+      "display_name": "58_空气压缩机_资产包",
+      "source_collection": "58_空气压缩机_资产包",
+      "source_meshes": 2,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 326,
+      "triangles_after_optimization": 134,
+      "downward_faces_removed": 33,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -13.0,
+            0.7799999713897705,
+            1.550000011920929
+          ],
+          "size": [
+            2.0,
+            1.2000000476837158,
+            1.4500001668930054
+          ]
+        },
+        {
+          "center": [
+            -12.800000190734863,
+            0.75,
+            1.5499999523162842
+          ],
+          "size": [
+            1.4500007629394531,
+            0.9200000762939453,
+            0.9200000762939453
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "backup_generator",
+      "display_name": "53_备用发电机_资产包",
+      "source_collection": "53_备用发电机_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 416,
+      "triangles_after_optimization": 171,
+      "downward_faces_removed": 42,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            13.25,
+            0.550000011920929,
+            9.100000381469727
+          ],
+          "size": [
+            2.1499996185302734,
+            0.8500000238418579,
+            3.1000003814697266
+          ]
+        },
+        {
+          "center": [
+            12.079999923706055,
+            1.350000023841858,
+            8.399999618530273
+          ],
+          "size": [
+            0.15999984741210938,
+            0.5799999237060547,
+            0.7800006866455078
+          ]
+        },
+        {
+          "center": [
+            13.25,
+            1.2000000476837158,
+            9.100000381469727
+          ],
+          "size": [
+            1.1599998474121094,
+            1.1600000858306885,
+            1.6000003814697266
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "battery_bank",
+      "display_name": "54_蓄电池组_资产包",
+      "source_collection": "54_蓄电池组_资产包",
+      "source_meshes": 6,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 540,
+      "triangles_after_optimization": 216,
+      "downward_faces_removed": 54,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            12.899999618530273,
+            0.5199999660253525,
+            11.300000190734863
+          ],
+          "size": [
+            1.25,
+            0.8199999630451202,
+            0.6399993896484375
+          ]
+        },
+        {
+          "center": [
+            12.899999618530273,
+            0.5199999660253525,
+            12.119999885559082
+          ],
+          "size": [
+            1.25,
+            0.8199999630451202,
+            0.6399993896484375
+          ]
+        },
+        {
+          "center": [
+            12.899999618530273,
+            0.5199999660253525,
+            12.9399995803833
+          ],
+          "size": [
+            1.25,
+            0.8199999630451202,
+            0.6399993896484375
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "corridor_emergency_light_group",
+      "display_name": "62_主通道应急灯组_资产包",
+      "source_collection": "62_主通道应急灯组_资产包",
+      "source_meshes": 2,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 180,
+      "triangles_after_optimization": 72,
+      "downward_faces_removed": 18,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/corridor_emergency_light_group/corridor_emergency_light_group_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/corridor_emergency_light_group/corridor_emergency_light_group_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_flammable_bin",
+      "display_name": "76_FLAMMABLE可燃垃圾设施_资产包",
+      "source_collection": "76_FLAMMABLE可燃垃圾设施_资产包",
+      "source_meshes": 12,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 7390,
+      "triangles_after_optimization": 3699,
+      "downward_faces_removed": 631,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_flammable_bin/east_flammable_bin_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.800000190734863,
+            0.6999999582767487,
+            6.650000095367432
+          ],
+          "size": [
+            1.0499992370605469,
+            1.2999998927116394,
+            1.0500001907348633
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            1.340000033378601,
+            6.650000095367432
+          ],
+          "size": [
+            1.1000003814697266,
+            0.16000008583068848,
+            1.1000003814697266
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            0.07999999821186066,
+            6.650000095367432
+          ],
+          "size": [
+            1.0200004577636719,
+            0.1599999964237213,
+            1.0199995040893555
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_flammable_bin/east_flammable_bin_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_low_storage_bench",
+      "display_name": "80_低矮储物收纳区_资产包",
+      "source_collection": "80_低矮储物收纳区_资产包",
+      "source_meshes": 10,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 952,
+      "triangles_after_optimization": 382,
+      "downward_faces_removed": 98,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.850000381469727,
+            0.620000034570694,
+            14.100000381469727
+          ],
+          "size": [
+            2.8999996185302734,
+            1.1000000834465027,
+            1.1000003814697266
+          ]
+        },
+        {
+          "center": [
+            10.850000381469727,
+            1.2300000190734863,
+            13.979999542236328
+          ],
+          "size": [
+            2.760000228881836,
+            0.2200000286102295,
+            0.8600006103515625
+          ]
+        },
+        {
+          "center": [
+            10.050000190734863,
+            1.5499999523162842,
+            13.920000076293945
+          ],
+          "size": [
+            0.7800006866455078,
+            0.4200000762939453,
+            0.5599994659423828
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_maintenance_workstation",
+      "display_name": "78_维修工作台与工具墙_资产包",
+      "source_collection": "78_维修工作台与工具墙_资产包",
+      "source_meshes": 115,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 15296,
+      "triangles_after_optimization": 6308,
+      "downward_faces_removed": 2108,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            6.199999570846558,
+            0.9200000464916229,
+            13.25
+          ],
+          "size": [
+            4.6999993324279785,
+            1.5000000596046448,
+            1.1499996185302734
+          ]
+        },
+        {
+          "center": [
+            6.199999809265137,
+            1.7200000286102295,
+            12.619999885559082
+          ],
+          "size": [
+            5.0,
+            0.18000006675720215,
+            1.4200000762939453
+          ]
+        },
+        {
+          "center": [
+            3.8499999046325684,
+            0.800000011920929,
+            13.25
+          ],
+          "size": [
+            0.23999977111816406,
+            1.4199999570846558,
+            1.1200008392333984
+          ]
+        },
+        {
+          "center": [
+            8.550000190734863,
+            0.800000011920929,
+            13.25
+          ],
+          "size": [
+            0.23999977111816406,
+            1.4199999570846558,
+            1.1200008392333984
+          ]
+        },
+        {
+          "center": [
+            6.199999809265137,
+            3.049999952316284,
+            14.399999618530273
+          ],
+          "size": [
+            5.0,
+            2.0999999046325684,
+            0.1399993896484375
+          ]
+        },
+        {
+          "center": [
+            7.999999761581421,
+            3.119999885559082,
+            14.239999771118164
+          ],
+          "size": [
+            0.37999963760375977,
+            0.15000009536743164,
+            0.12000083923339844
+          ]
+        },
+        {
+          "center": [
+            7.550000190734863,
+            3.5199999809265137,
+            14.180000305175781
+          ],
+          "size": [
+            0.5200004577636719,
+            0.2800002098083496,
+            0.15999984741210938
+          ]
+        },
+        {
+          "center": [
+            7.449999809265137,
+            3.2799999713897705,
+            14.180000305175781
+          ],
+          "size": [
+            0.18000030517578125,
+            0.38000011444091797,
+            0.1399993896484375
+          ]
+        },
+        {
+          "center": [
+            8.149999380111694,
+            3.5199999809265137,
+            14.180000305175781
+          ],
+          "size": [
+            0.559999942779541,
+            0.3400001525878906,
+            0.15999984741210938
+          ]
+        },
+        {
+          "center": [
+            7.75,
+            2.0999999046325684,
+            12.359999656677246
+          ],
+          "size": [
+            0.5799999237060547,
+            0.44046640396118164,
+            0.1705150604248047
+          ]
+        },
+        {
+          "center": [
+            4.5,
+            1.9800000190734863,
+            12.319999694824219
+          ],
+          "size": [
+            0.7799997329711914,
+            0.3600001335144043,
+            0.4400005340576172
+          ]
+        },
+        {
+          "center": [
+            5.349999904632568,
+            1.899999976158142,
+            12.300000190734863
+          ],
+          "size": [
+            0.4799995422363281,
+            0.20000004768371582,
+            0.37999916076660156
+          ]
+        },
+        {
+          "center": [
+            8.199999809265137,
+            1.9400001168251038,
+            12.279999732971191
+          ],
+          "size": [
+            0.2199993133544922,
+            0.30000007152557373,
+            0.2199993133544922
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_plant_group",
+      "display_name": "83_东面植物点缀组_资产包",
+      "source_collection": "83_东面植物点缀组_资产包",
+      "source_meshes": 15,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1146,
+      "triangles_after_optimization": 462,
+      "downward_faces_removed": 291,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_recycle_bin",
+      "display_name": "77_RECYCLE回收垃圾设施_资产包",
+      "source_collection": "77_RECYCLE回收垃圾设施_资产包",
+      "source_meshes": 12,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 9070,
+      "triangles_after_optimization": 4794,
+      "downward_faces_removed": 1101,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_recycle_bin/east_recycle_bin_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.800000190734863,
+            0.6999999582767487,
+            8.100000143051147
+          ],
+          "size": [
+            1.0499992370605469,
+            1.2999998927116394,
+            1.049999713897705
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            1.340000033378601,
+            8.100000381469727
+          ],
+          "size": [
+            1.1000003814697266,
+            0.16000008583068848,
+            1.1000003814697266
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            0.07999999821186066,
+            8.100000381469727
+          ],
+          "size": [
+            1.0200004577636719,
+            0.1599999964237213,
+            1.0200004577636719
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_recycle_bin/east_recycle_bin_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_round_pendant_light",
+      "display_name": "84_东面圆形工业吊灯_资产包",
+      "source_collection": "84_东面圆形工业吊灯_资产包",
+      "source_meshes": 10,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1804,
+      "triangles_after_optimization": 745,
+      "downward_faces_removed": 233,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_round_pendant_light/east_round_pendant_light_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_round_pendant_light/east_round_pendant_light_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_supply_24h_station",
+      "display_name": "72_SUPPLY24H自动补给机_资产包",
+      "source_collection": "72_SUPPLY24H自动补给机_资产包",
+      "source_meshes": 50,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 14908,
+      "triangles_after_optimization": 6195,
+      "downward_faces_removed": 1652,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            13.520000457763672,
+            1.7799999713897705,
+            3.450000047683716
+          ],
+          "size": [
+            1.8199996948242188,
+            3.559999942779541,
+            2.179999828338623
+          ]
+        },
+        {
+          "center": [
+            13.5,
+            3.4800000190734863,
+            3.450000047683716
+          ],
+          "size": [
+            1.9400005340576172,
+            0.3400001525878906,
+            2.2800002098083496
+          ]
+        },
+        {
+          "center": [
+            12.550000190734863,
+            2.099999964237213,
+            3.450000047683716
+          ],
+          "size": [
+            0.1399993896484375,
+            2.220000147819519,
+            1.820000171661377
+          ]
+        },
+        {
+          "center": [
+            12.430000305175781,
+            2.4000000953674316,
+            3.2699999809265137
+          ],
+          "size": [
+            0.12000083923339844,
+            1.4200000762939453,
+            1.3400001525878906
+          ]
+        },
+        {
+          "center": [
+            12.399999618530273,
+            1.3699999749660492,
+            4.069999694824219
+          ],
+          "size": [
+            0.12999916076660156,
+            1.3399999737739563,
+            0.619999885559082
+          ]
+        },
+        {
+          "center": [
+            12.380000114440918,
+            1.5499999225139618,
+            2.7100000381469727
+          ],
+          "size": [
+            0.20000076293945312,
+            1.1799998879432678,
+            0.46000003814697266
+          ]
+        },
+        {
+          "center": [
+            12.399999618530273,
+            0.550000011920929,
+            3.3299999237060547
+          ],
+          "size": [
+            0.15999984741210938,
+            0.41999995708465576,
+            1.179999828338623
+          ]
+        },
+        {
+          "center": [
+            13.520000457763672,
+            0.14000000059604645,
+            3.450000047683716
+          ],
+          "size": [
+            1.9400005340576172,
+            0.2800000011920929,
+            2.299999713897705
+          ]
+        },
+        {
+          "center": [
+            14.5,
+            0.7200000286102295,
+            4.170000076293945
+          ],
+          "size": [
+            0.20000076293945312,
+            0.36000001430511475,
+            0.31999969482421875
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_waste_bin",
+      "display_name": "75_WASTE普通垃圾设施_资产包",
+      "source_collection": "75_WASTE普通垃圾设施_资产包",
+      "source_meshes": 11,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 4108,
+      "triangles_after_optimization": 2214,
+      "downward_faces_removed": 502,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_waste_bin/east_waste_bin_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.800000190734863,
+            0.6999999582767487,
+            5.199999809265137
+          ],
+          "size": [
+            1.0499992370605469,
+            1.2999998927116394,
+            1.0500001907348633
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            1.340000033378601,
+            5.199999809265137
+          ],
+          "size": [
+            1.1000003814697266,
+            0.16000008583068848,
+            1.1000003814697266
+          ]
+        },
+        {
+          "center": [
+            10.800000190734863,
+            0.07999999821186066,
+            5.199999809265137
+          ],
+          "size": [
+            1.0200004577636719,
+            0.1599999964237213,
+            1.0200004577636719
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_waste_bin/east_waste_bin_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "equipment_steam_fx",
+      "display_name": "63_设备蒸汽动效组_资产包",
+      "source_collection": "63_设备蒸汽动效组_资产包",
+      "source_meshes": 10,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 600,
+      "triangles_after_optimization": 240,
+      "downward_faces_removed": 200,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "heavy_supply_shelf",
+      "display_name": "51_重型货架与补给箱_资产包",
+      "source_collection": "51_重型货架与补给箱_资产包",
+      "source_meshes": 22,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1980,
+      "triangles_after_optimization": 792,
+      "downward_faces_removed": 198,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -10.800000190734863,
+            0.3499999940395355,
+            13.550000190734863
+          ],
+          "size": [
+            5.19999885559082,
+            0.12000000476837158,
+            0.8199996948242188
+          ]
+        },
+        {
+          "center": [
+            -13.399999618530273,
+            1.75,
+            13.550000190734863
+          ],
+          "size": [
+            0.1399993896484375,
+            3.5,
+            0.4200000762939453
+          ]
+        },
+        {
+          "center": [
+            -8.199999809265137,
+            1.75,
+            13.550000190734863
+          ],
+          "size": [
+            0.1399993896484375,
+            3.5,
+            0.4200000762939453
+          ]
+        },
+        {
+          "center": [
+            -12.449999809265137,
+            0.6899999976158142,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -11.350000381469727,
+            0.6899999976158142,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -10.25,
+            0.6899999976158142,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -9.149999618530273,
+            0.6899999976158142,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -12.449999809265137,
+            1.590000033378601,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -11.350000381469727,
+            1.590000033378601,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -10.25,
+            1.590000033378601,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -9.149999618530273,
+            1.590000033378601,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -12.449999809265137,
+            2.490000009536743,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -11.350000381469727,
+            2.490000009536743,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -10.25,
+            2.490000009536743,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -9.149999618530273,
+            2.490000009536743,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -12.449999809265137,
+            3.390000104904175,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -11.350000381469727,
+            3.390000104904175,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -10.25,
+            3.390000104904175,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            -9.149999618530273,
+            3.390000104904175,
+            13.630000114440918
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5,
+            0.5799999237060547
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "hologram_terminal_platform",
+      "display_name": "51_圆形全息设备平台_资产包",
+      "source_collection": "51_圆形全息设备平台_资产包",
+      "source_meshes": 38,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 5922,
+      "triangles_after_optimization": 2441,
+      "downward_faces_removed": 757,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            5.0,
+            0.2199999988079071,
+            -1.7200000882148743
+          ],
+          "size": [
+            2.2799997329711914,
+            0.36000001430511475,
+            2.28000009059906
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            0.43000002205371857,
+            -1.7200000882148743
+          ],
+          "size": [
+            2.1999998092651367,
+            0.228253573179245,
+            2.2000001668930054
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            0.5099999904632568,
+            -1.7200000286102295
+          ],
+          "size": [
+            2.0678462982177734,
+            0.15999996662139893,
+            2.0678462982177734
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            0.5199999809265137,
+            -1.7200000286102295
+          ],
+          "size": [
+            0.9600000381469727,
+            0.2799999713897705,
+            0.9600000381469727
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            0.6899999976158142,
+            -1.7200000286102295
+          ],
+          "size": [
+            0.4799995422363281,
+            0.12000000476837158,
+            0.48000001907348633
+          ]
+        },
+        {
+          "center": [
+            5.579999923706055,
+            0.4699999988079071,
+            -1.2000000476837158
+          ],
+          "size": [
+            0.42754268646240234,
+            0.19999998807907104,
+            0.4178929328918457
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "industrial_water_tank",
+      "display_name": "56_工业水箱_资产包",
+      "source_collection": "56_工业水箱_资产包",
+      "source_meshes": 1,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 214,
+      "triangles_after_optimization": 88,
+      "downward_faces_removed": 25,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -13.149999618530273,
+            1.350000023841858,
+            7.699999809265137
+          ],
+          "size": [
+            2.0,
+            2.549999952316284,
+            2.0
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_battery_cabinet",
+      "display_name": "46_BATTERY模块收纳箱_资产包",
+      "source_collection": "46_BATTERY模块收纳箱_资产包",
+      "source_meshes": 12,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 5886,
+      "triangles_after_optimization": 3234,
+      "downward_faces_removed": 621,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_battery_cabinet/loft_battery_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -1.9500000476837158,
+            6.5,
+            -13.920000076293945
+          ],
+          "size": [
+            1.1500000953674316,
+            0.7600002288818359,
+            0.8500003814697266
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_battery_cabinet/loft_battery_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_bed_and_bedding",
+      "display_name": "31_参考床架床品与床下收纳_资产包",
+      "source_collection": "31_参考床架床品与床下收纳_资产包",
+      "source_meshes": 37,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 3394,
+      "triangles_after_optimization": 1364,
+      "downward_faces_removed": 349,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            0.2999999523162842,
+            6.489999771118164,
+            -10.050000190734863
+          ],
+          "size": [
+            4.75,
+            0.3400001525878906,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            0.2999999523162842,
+            6.489999771118164,
+            -12.449999809265137
+          ],
+          "size": [
+            4.75,
+            0.3400001525878906,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            -2.0,
+            6.489999771118164,
+            -11.25
+          ],
+          "size": [
+            0.15000009536743164,
+            0.3400001525878906,
+            2.549999237060547
+          ]
+        },
+        {
+          "center": [
+            2.5999999046325684,
+            6.489999771118164,
+            -11.25
+          ],
+          "size": [
+            0.15000009536743164,
+            0.3400001525878906,
+            2.549999237060547
+          ]
+        },
+        {
+          "center": [
+            -1.899999976158142,
+            6.300000190734863,
+            -10.149999618530273
+          ],
+          "size": [
+            0.15000009536743164,
+            0.5799999237060547,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            -1.899999976158142,
+            6.300000190734863,
+            -12.350000381469727
+          ],
+          "size": [
+            0.15000009536743164,
+            0.5799999237060547,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            2.5,
+            6.300000190734863,
+            -10.149999618530273
+          ],
+          "size": [
+            0.15000009536743164,
+            0.5799999237060547,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            2.5,
+            6.300000190734863,
+            -12.350000381469727
+          ],
+          "size": [
+            0.15000009536743164,
+            0.5799999237060547,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            0.2999999523162842,
+            6.78000020980835,
+            -11.25
+          ],
+          "size": [
+            4.519999980926514,
+            0.38000011444091797,
+            2.299999237060547
+          ]
+        },
+        {
+          "center": [
+            0.6200000047683716,
+            7.03000020980835,
+            -11.25
+          ],
+          "size": [
+            3.799999952316284,
+            0.19999980926513672,
+            2.200000762939453
+          ]
+        },
+        {
+          "center": [
+            -1.4500000476837158,
+            7.190000057220459,
+            -10.779999732971191
+          ],
+          "size": [
+            0.9808468818664551,
+            0.27657032012939453,
+            0.6885433197021484
+          ]
+        },
+        {
+          "center": [
+            -1.4500000476837158,
+            7.190000057220459,
+            -11.619999885559082
+          ],
+          "size": [
+            0.9744894504547119,
+            0.27657032012939453,
+            0.6790962219238281
+          ]
+        },
+        {
+          "center": [
+            0.8500000536441803,
+            6.269999980926514,
+            -10.779999732971191
+          ],
+          "size": [
+            1.1800000071525574,
+            0.38000011444091797,
+            0.7000007629394531
+          ]
+        },
+        {
+          "center": [
+            0.8500000536441803,
+            6.269999980926514,
+            -11.720000267028809
+          ],
+          "size": [
+            1.1800000071525574,
+            0.38000011444091797,
+            0.7000007629394531
+          ]
+        },
+        {
+          "center": [
+            2.0199999809265137,
+            7.179999828338623,
+            -11.25
+          ],
+          "size": [
+            0.48000001907348633,
+            0.14999961853027344,
+            2.1499996185302734
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_bedside_lamp",
+      "display_name": "33_暖橙床头灯_资产包",
+      "source_collection": "33_暖橙床头灯_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 374,
+      "triangles_after_optimization": 154,
+      "downward_faces_removed": 43,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_bedside_rug",
+      "display_name": "34_床边暖灰地毯_资产包",
+      "source_collection": "34_床边暖灰地毯_资产包",
+      "source_meshes": 6,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 540,
+      "triangles_after_optimization": 216,
+      "downward_faces_removed": 54,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_coffee_table",
+      "display_name": "37_红棕茶几与生活物件_资产包",
+      "source_collection": "37_红棕茶几与生活物件_资产包",
+      "source_meshes": 15,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2130,
+      "triangles_after_optimization": 904,
+      "downward_faces_removed": 215,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            6.199999809265137,
+            6.699999809265137,
+            -9.380000114440918
+          ],
+          "size": [
+            2.8500003814697266,
+            0.1700000762939453,
+            1.2800006866455078
+          ]
+        },
+        {
+          "center": [
+            5.71999979019165,
+            6.480000019073486,
+            -9.380000114440918
+          ],
+          "size": [
+            0.6599998474121094,
+            0.19999980926513672,
+            0.5200004577636719
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_computer_workstation",
+      "display_name": "42_双屏电脑完整工位_资产包",
+      "source_collection": "42_双屏电脑完整工位_资产包",
+      "source_meshes": 85,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 8506,
+      "triangles_after_optimization": 3449,
+      "downward_faces_removed": 877,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.449999809265137,
+            6.840000152587891,
+            -13.699999809265137
+          ],
+          "size": [
+            3.75,
+            0.1700000762939453,
+            1.0799999237060547
+          ]
+        },
+        {
+          "center": [
+            8.850000381469727,
+            6.420000076293945,
+            -13.699999809265137
+          ],
+          "size": [
+            0.43000030517578125,
+            0.7600002288818359,
+            1.0
+          ]
+        },
+        {
+          "center": [
+            12.050000190734863,
+            6.420000076293945,
+            -13.699999809265137
+          ],
+          "size": [
+            0.43000030517578125,
+            0.7600002288818359,
+            1.0
+          ]
+        },
+        {
+          "center": [
+            9.699999809265137,
+            7.630000352859497,
+            -14.020000457763672
+          ],
+          "size": [
+            1.239999771118164,
+            0.8600001335144043,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            11.170000076293945,
+            7.630000352859497,
+            -14.020000457763672
+          ],
+          "size": [
+            1.239999771118164,
+            0.8600001335144043,
+            0.14999961853027344
+          ]
+        },
+        {
+          "center": [
+            9.050000190734863,
+            7.289999961853027,
+            -13.300000190734863
+          ],
+          "size": [
+            0.2700004577636719,
+            0.5299997329711914,
+            0.2700004577636719
+          ]
+        },
+        {
+          "center": [
+            11.869999885559082,
+            7.289999961853027,
+            -13.300000190734863
+          ],
+          "size": [
+            0.2700004577636719,
+            0.5299997329711914,
+            0.2700004577636719
+          ]
+        },
+        {
+          "center": [
+            12.149999618530273,
+            7.340000152587891,
+            -13.649999618530273
+          ],
+          "size": [
+            0.4699993133544922,
+            0.880000114440918,
+            0.6599998474121094
+          ]
+        },
+        {
+          "center": [
+            8.869999885559082,
+            7.269999980926514,
+            -13.305000305175781
+          ],
+          "size": [
+            0.22493934631347656,
+            0.43570899963378906,
+            0.1561737060546875
+          ]
+        },
+        {
+          "center": [
+            8.864999771118164,
+            7.630000114440918,
+            -13.319999694824219
+          ],
+          "size": [
+            0.21174240112304688,
+            0.31857776641845703,
+            0.124298095703125
+          ]
+        },
+        {
+          "center": [
+            9.039999961853027,
+            7.809999942779541,
+            -13.1899995803833
+          ],
+          "size": [
+            0.36017417907714844,
+            0.2010650634765625,
+            0.20000076293945312
+          ]
+        },
+        {
+          "center": [
+            10.449999809265137,
+            6.619999885559082,
+            -14.119999885559082
+          ],
+          "size": [
+            2.3500003814697266,
+            0.15999984741210938,
+            0.18000030517578125
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_food_cabinet",
+      "display_name": "47_FOOD模块收纳箱_资产包",
+      "source_collection": "47_FOOD模块收纳箱_资产包",
+      "source_meshes": 9,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 5912,
+      "triangles_after_optimization": 3280,
+      "downward_faces_removed": 610,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_food_cabinet/loft_food_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -0.6499999463558197,
+            6.5,
+            -13.920000076293945
+          ],
+          "size": [
+            1.1499999165534973,
+            0.7600002288818359,
+            0.8500003814697266
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_food_cabinet/loft_food_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_lighting_support",
+      "display_name": "50_二楼分层照明支持_资产包",
+      "source_collection": "50_二楼分层照明支持_资产包",
+      "source_meshes": 8,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 720,
+      "triangles_after_optimization": 288,
+      "downward_faces_removed": 72,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lighting_support/loft_lighting_support_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lighting_support/loft_lighting_support_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_lounge_rug",
+      "display_name": "38_休闲区低饱和地毯_资产包",
+      "source_collection": "38_休闲区低饱和地毯_资产包",
+      "source_meshes": 13,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 690,
+      "triangles_after_optimization": 276,
+      "downward_faces_removed": 69,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_lounge_sofa",
+      "display_name": "36_墨绿三人休闲沙发_资产包",
+      "source_collection": "36_墨绿三人休闲沙发_资产包",
+      "source_meshes": 35,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 3702,
+      "triangles_after_optimization": 1492,
+      "downward_faces_removed": 363,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            6.249999761581421,
+            6.429999828338623,
+            -12.279999732971191
+          ],
+          "size": [
+            4.049999713897705,
+            0.5,
+            1.5
+          ]
+        },
+        {
+          "center": [
+            4.940000057220459,
+            6.789999961853027,
+            -11.989999771118164
+          ],
+          "size": [
+            1.1999998092651367,
+            0.31999969482421875,
+            0.9300003051757812
+          ]
+        },
+        {
+          "center": [
+            4.940000057220459,
+            7.340000152587891,
+            -12.770000457763672
+          ],
+          "size": [
+            1.1999998092651367,
+            1.187150001525879,
+            0.44415855407714844
+          ]
+        },
+        {
+          "center": [
+            6.25,
+            6.789999961853027,
+            -11.989999771118164
+          ],
+          "size": [
+            1.1999998092651367,
+            0.31999969482421875,
+            0.9300003051757812
+          ]
+        },
+        {
+          "center": [
+            6.25,
+            7.340000152587891,
+            -12.770000457763672
+          ],
+          "size": [
+            1.1999998092651367,
+            1.187150001525879,
+            0.44415855407714844
+          ]
+        },
+        {
+          "center": [
+            7.559999942779541,
+            6.789999961853027,
+            -11.989999771118164
+          ],
+          "size": [
+            1.1999998092651367,
+            0.31999969482421875,
+            0.9300003051757812
+          ]
+        },
+        {
+          "center": [
+            7.559999942779541,
+            7.340000152587891,
+            -12.770000457763672
+          ],
+          "size": [
+            1.1999998092651367,
+            1.187150001525879,
+            0.44415855407714844
+          ]
+        },
+        {
+          "center": [
+            4.019999861717224,
+            6.960000038146973,
+            -12.229999542236328
+          ],
+          "size": [
+            0.3599998950958252,
+            0.7399997711181641,
+            1.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            8.479999542236328,
+            6.960000038146973,
+            -12.229999542236328
+          ],
+          "size": [
+            0.3600006103515625,
+            0.7399997711181641,
+            1.5799999237060547
+          ]
+        },
+        {
+          "center": [
+            5.199999809265137,
+            7.340000152587891,
+            -12.279999732971191
+          ],
+          "size": [
+            0.6893033981323242,
+            0.6040573120117188,
+            0.39081382751464844
+          ]
+        },
+        {
+          "center": [
+            6.150000095367432,
+            7.389999866485596,
+            -12.279999732971191
+          ],
+          "size": [
+            0.6754961013793945,
+            0.6040573120117188,
+            0.3591327667236328
+          ]
+        },
+        {
+          "center": [
+            7.199999809265137,
+            7.320000171661377,
+            -12.279999732971191
+          ],
+          "size": [
+            0.6943464279174805,
+            0.6040573120117188,
+            0.4032154083251953
+          ]
+        },
+        {
+          "center": [
+            8.180000305175781,
+            7.389999866485596,
+            -12.140000343322754
+          ],
+          "size": [
+            0.44658470153808594,
+            0.1348428726196289,
+            1.0799999237060547
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_medical_cabinet",
+      "display_name": "45_MEDICAL模块收纳箱_资产包",
+      "source_collection": "45_MEDICAL模块收纳箱_资产包",
+      "source_meshes": 9,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 4558,
+      "triangles_after_optimization": 2514,
+      "downward_faces_removed": 543,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -3.25,
+            6.5,
+            -13.920000076293945
+          ],
+          "size": [
+            1.1500000953674316,
+            0.7600002288818359,
+            0.8500003814697266
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_nightstand",
+      "display_name": "32_参考床头柜与生活物件_资产包",
+      "source_collection": "32_参考床头柜与生活物件_资产包",
+      "source_meshes": 10,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 956,
+      "triangles_after_optimization": 386,
+      "downward_faces_removed": 115,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -2.75,
+            6.639999866485596,
+            -11.350000381469727
+          ],
+          "size": [
+            1.0199999809265137,
+            1.0500001907348633,
+            0.9200000762939453
+          ]
+        },
+        {
+          "center": [
+            -2.369999885559082,
+            7.420000076293945,
+            -11.619999885559082
+          ],
+          "size": [
+            0.3043384552001953,
+            0.31999969482421875,
+            0.31999969482421875
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_office_chair",
+      "display_name": "43_带扶手办公椅_资产包",
+      "source_collection": "43_带扶手办公椅_资产包",
+      "source_meshes": 18,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2374,
+      "triangles_after_optimization": 972,
+      "downward_faces_removed": 283,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            10.449999809265137,
+            6.909999847412109,
+            -12.229999542236328
+          ],
+          "size": [
+            1.0200004577636719,
+            0.25,
+            0.9099998474121094
+          ]
+        },
+        {
+          "center": [
+            10.449999809265137,
+            7.539999961853027,
+            -12.649999618530273
+          ],
+          "size": [
+            1.039999008178711,
+            1.2061729431152344,
+            0.34429931640625
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_pouf_01",
+      "display_name": "39_青绿圆形坐墩01_资产包",
+      "source_collection": "39_青绿圆形坐墩01_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 790,
+      "triangles_after_optimization": 328,
+      "downward_faces_removed": 121,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            3.779999852180481,
+            6.46999979019165,
+            -8.550000190734863
+          ],
+          "size": [
+            0.8799998760223389,
+            0.5399999618530273,
+            0.8799991607666016
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_pouf_02",
+      "display_name": "40_深绿圆形坐墩02_资产包",
+      "source_collection": "40_深绿圆形坐墩02_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 790,
+      "triangles_after_optimization": 328,
+      "downward_faces_removed": 121,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            8.720000267028809,
+            6.46999979019165,
+            -8.619999885559082
+          ],
+          "size": [
+            0.8799991607666016,
+            0.5399999618530273,
+            0.8799991607666016
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_side_table",
+      "display_name": "41_床前辅助小桌_资产包",
+      "source_collection": "41_床前辅助小桌_资产包",
+      "source_meshes": 7,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1216,
+      "triangles_after_optimization": 500,
+      "downward_faces_removed": 117,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            1.7999999523162842,
+            6.619999885559082,
+            -9.220000267028809
+          ],
+          "size": [
+            1.119999885559082,
+            0.1400003433227539,
+            0.7600002288818359
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "loft_striped_privacy_curtain",
+      "display_name": "35_红紫条纹隔断帘_资产包",
+      "source_collection": "35_红紫条纹隔断帘_资产包",
+      "source_meshes": 29,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 4538,
+      "triangles_after_optimization": 1858,
+      "downward_faces_removed": 457,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "main_door_low_storage_cabinet",
+      "display_name": "43_主门下方低矮设备柜_资产包",
+      "source_collection": "43_主门下方低矮设备柜_资产包",
+      "source_meshes": 31,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 3760,
+      "triangles_after_optimization": 1534,
+      "downward_faces_removed": 488,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/main_door_low_storage_cabinet/main_door_low_storage_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            5.0000001192092896,
+            1.2999999523162842,
+            -3.769999861717224
+          ],
+          "size": [
+            6.280000448226929,
+            0.16000008583068848,
+            0.8599998950958252
+          ]
+        },
+        {
+          "center": [
+            5.0000001192092896,
+            0.11999999731779099,
+            -4.179999828338623
+          ],
+          "size": [
+            6.180000066757202,
+            0.20000000298023224,
+            0.7600002288818359
+          ]
+        },
+        {
+          "center": [
+            3.0,
+            1.5199999809265137,
+            -3.680000066757202
+          ],
+          "size": [
+            0.3600001335144043,
+            0.3399999141693115,
+            0.3600001335144043
+          ]
+        },
+        {
+          "center": [
+            3.0,
+            1.8700000047683716,
+            -3.680000066757202
+          ],
+          "size": [
+            0.3043384552001953,
+            0.31999993324279785,
+            0.32000017166137695
+          ]
+        },
+        {
+          "center": [
+            2.880000114440918,
+            1.9199999570846558,
+            -3.680000066757202
+          ],
+          "size": [
+            0.3043384552001953,
+            0.31999993324279785,
+            0.32000017166137695
+          ]
+        },
+        {
+          "center": [
+            3.119999885559082,
+            1.9199999570846558,
+            -3.680000066757202
+          ],
+          "size": [
+            0.3043384552001953,
+            0.31999993324279785,
+            0.32000017166137695
+          ]
+        },
+        {
+          "center": [
+            7.099999904632568,
+            1.5,
+            -3.690000057220459
+          ],
+          "size": [
+            0.6599998474121094,
+            0.2799999713897705,
+            0.4200000762939453
+          ]
+        },
+        {
+          "center": [
+            5.000000238418579,
+            0.6800000071525574,
+            -4.179999828338623
+          ],
+          "size": [
+            6.200000286102295,
+            1.149999976158142,
+            0.7799997329711914
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/main_door_low_storage_cabinet/main_door_low_storage_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "medical_cabinet",
+      "display_name": "45_MEDICAL医疗柜_资产包",
+      "source_collection": "45_MEDICAL医疗柜_资产包",
+      "source_meshes": 28,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 10472,
+      "triangles_after_optimization": 4971,
+      "downward_faces_removed": 1248,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -3.6500000953674316,
+            1.4500000476837158,
+            -4.460000038146973
+          ],
+          "size": [
+            1.5500001907348633,
+            2.8499999046325684,
+            0.7200002670288086
+          ]
+        },
+        {
+          "center": [
+            -3.649999976158142,
+            3.0799999237060547,
+            -4.342310428619385
+          ],
+          "size": [
+            0.9926083087921143,
+            0.32000017166137695,
+            0.38000011444091797
+          ]
+        },
+        {
+          "center": [
+            -3.6500000953674316,
+            2.9100000858306885,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.17999982833862305,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            -3.6500000953674316,
+            0.12999999523162842,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.2199999988079071,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            -3.6500000953674316,
+            3.180000066757202,
+            -4.28000020980835
+          ],
+          "size": [
+            0.9200000762939453,
+            0.3400001525878906,
+            0.4200000762939453
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "narrow_battery_cabinet",
+      "display_name": "47_窄型电池柜_资产包",
+      "source_collection": "47_窄型电池柜_资产包",
+      "source_meshes": 23,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 9582,
+      "triangles_after_optimization": 4772,
+      "downward_faces_removed": 1001,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/narrow_battery_cabinet/narrow_battery_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            11.850000381469727,
+            1.4500000476837158,
+            -4.460000038146973
+          ],
+          "size": [
+            1.5499992370605469,
+            2.8499999046325684,
+            0.7200002670288086
+          ]
+        },
+        {
+          "center": [
+            11.850000381469727,
+            3.0799999237060547,
+            -4.300000190734863
+          ],
+          "size": [
+            0.9200000762939453,
+            0.32000017166137695,
+            0.38000011444091797
+          ]
+        },
+        {
+          "center": [
+            11.850000381469727,
+            2.9100000858306885,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.17999982833862305,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            11.850000381469727,
+            0.12999999523162842,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.2199999988079071,
+            0.7799997329711914
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_battery_cabinet/narrow_battery_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "narrow_emergency_cabinet",
+      "display_name": "48_窄型应急柜_资产包",
+      "source_collection": "48_窄型应急柜_资产包",
+      "source_meshes": 24,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 15762,
+      "triangles_after_optimization": 7696,
+      "downward_faces_removed": 1977,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/narrow_emergency_cabinet/narrow_emergency_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            13.649999618530273,
+            1.4500000476837158,
+            -4.460000038146973
+          ],
+          "size": [
+            1.5499992370605469,
+            2.8499999046325684,
+            0.7200002670288086
+          ]
+        },
+        {
+          "center": [
+            13.649999618530273,
+            3.0799999237060547,
+            -4.300000190734863
+          ],
+          "size": [
+            0.9200000762939453,
+            0.32000017166137695,
+            0.38000011444091797
+          ]
+        },
+        {
+          "center": [
+            13.649999618530273,
+            2.9100000858306885,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.17999982833862305,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            13.649999618530273,
+            0.12999999523162842,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5799999237060547,
+            0.2199999988079071,
+            0.7799997329711914
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_emergency_cabinet/narrow_emergency_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "tools_cabinet",
+      "display_name": "46_TOOLS工具柜_资产包",
+      "source_collection": "46_TOOLS工具柜_资产包",
+      "source_meshes": 25,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 14892,
+      "triangles_after_optimization": 7233,
+      "downward_faces_removed": 1732,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/tools_cabinet/tools_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -1.850000023841858,
+            1.4500000476837158,
+            -4.460000038146973
+          ],
+          "size": [
+            1.5499999523162842,
+            2.8499999046325684,
+            0.7200002670288086
+          ]
+        },
+        {
+          "center": [
+            -1.8499999642372131,
+            3.0799999237060547,
+            -4.300000190734863
+          ],
+          "size": [
+            0.9199999570846558,
+            0.32000017166137695,
+            0.38000011444091797
+          ]
+        },
+        {
+          "center": [
+            -1.850000023841858,
+            2.9100000858306885,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5800001621246338,
+            0.17999982833862305,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            -1.850000023841858,
+            0.12999999523162842,
+            -4.420000076293945
+          ],
+          "size": [
+            1.5800001621246338,
+            0.2199999988079071,
+            0.7799997329711914
+          ]
+        },
+        {
+          "center": [
+            -0.9099999964237213,
+            1.0,
+            -4.239999890327454
+          ],
+          "size": [
+            0.47999995946884155,
+            0.6800000667572021,
+            0.5200002193450928
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/tools_cabinet/tools_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "understair_equipment_cabinet",
+      "display_name": "59_梯下立式设备柜_资产包",
+      "source_collection": "59_梯下立式设备柜_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2157,
+      "triangles_after_optimization": 1086,
+      "downward_faces_removed": 178,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -6.820000171661377,
+            1.565000057220459,
+            -14.232500076293945
+          ],
+          "size": [
+            1.1000003814697266,
+            3.130000114440918,
+            0.8950004577636719
+          ]
+        },
+        {
+          "center": [
+            -6.820000171661377,
+            1.565000057220459,
+            -14.289999961853027
+          ],
+          "size": [
+            1.1000003814697266,
+            3.130000114440918,
+            0.7800006866455078
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "understair_green_bench",
+      "display_name": "57_梯下绿色软垫长凳_资产包",
+      "source_collection": "57_梯下绿色软垫长凳_资产包",
+      "source_meshes": 2,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1322,
+      "triangles_after_optimization": 553,
+      "downward_faces_removed": 133,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_green_bench/understair_green_bench_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -11.149999618530273,
+            0.8450000435113907,
+            -14.148749828338623
+          ],
+          "size": [
+            2.5799999237060547,
+            1.6300000846385956,
+            0.9024991989135742
+          ]
+        },
+        {
+          "center": [
+            -11.149999618530273,
+            0.8299999833106995,
+            -14.15999984741211
+          ],
+          "size": [
+            2.5799999237060547,
+            1.659999966621399,
+            0.8999996185302734
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_green_bench/understair_green_bench_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "understair_storage_shelf",
+      "display_name": "60_梯下层架与收纳_资产包",
+      "source_collection": "60_梯下层架与收纳_资产包",
+      "source_meshes": 2,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1660,
+      "triangles_after_optimization": 695,
+      "downward_faces_removed": 148,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_storage_shelf/understair_storage_shelf_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -8.579999923706055,
+            1.2999998927116394,
+            -14.168099880218506
+          ],
+          "size": [
+            1.239999771118164,
+            2.5499998331069946,
+            0.8637990951538086
+          ]
+        },
+        {
+          "center": [
+            -8.579999923706055,
+            1.2999999523162842,
+            -14.239999771118164
+          ],
+          "size": [
+            1.239999771118164,
+            2.5999999046325684,
+            0.8600006103515625
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_storage_shelf/understair_storage_shelf_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "volumetric_dust_fx",
+      "display_name": "64_光束尘埃动效组_资产包",
+      "source_collection": "64_光束尘埃动效组_资产包",
+      "source_meshes": 28,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1680,
+      "triangles_after_optimization": 672,
+      "downward_faces_removed": 560,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "warehouse_pendant_light_group",
+      "display_name": "61_仓库防爆吊灯组_资产包",
+      "source_collection": "61_仓库防爆吊灯组_资产包",
+      "source_meshes": 15,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 3280,
+      "triangles_after_optimization": 1350,
+      "downward_faces_removed": 355,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/warehouse_pendant_light_group/warehouse_pendant_light_group_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision",
+      "collision_boxes": [],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "water_purifier",
+      "display_name": "57_净水器_资产包",
+      "source_collection": "57_净水器_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 410,
+      "triangles_after_optimization": 168,
+      "downward_faces_removed": 47,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -13.100000381469727,
+            1.300000011920929,
+            4.900000095367432
+          ],
+          "size": [
+            1.75,
+            2.4500001668930054,
+            1.5
+          ]
+        },
+        {
+          "center": [
+            -12.180000305175781,
+            1.0999999940395355,
+            5.25
+          ],
+          "size": [
+            0.3939228057861328,
+            1.3799999356269836,
+            0.39999961853027344
+          ]
+        },
+        {
+          "center": [
+            -12.180000305175781,
+            1.0999999940395355,
+            4.579999923706055
+          ],
+          "size": [
+            0.3939228057861328,
+            1.3799999356269836,
+            0.39999961853027344
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "weapon_workshop_station",
+      "display_name": "49_武器工作台与弹药附件_资产包",
+      "source_collection": "49_武器工作台与弹药附件_资产包",
+      "source_meshes": 12,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 7308,
+      "triangles_after_optimization": 3048,
+      "downward_faces_removed": 764,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v001.glb",
+      "collision_policy": "per_source_object_box_collision",
+      "collision_boxes": [
+        {
+          "center": [
+            -12.550000190734863,
+            1.6399999856948853,
+            3.3999996185302734
+          ],
+          "size": [
+            1.4799995422363281,
+            0.20000004768371582,
+            5.5
+          ]
+        },
+        {
+          "center": [
+            -12.149999618530273,
+            1.9800000190734863,
+            5.0
+          ],
+          "size": [
+            0.6399993896484375,
+            0.5,
+            1.0500001907348633
+          ]
+        },
+        {
+          "center": [
+            -12.149999618530273,
+            1.9800000190734863,
+            3.6000003814697266
+          ],
+          "size": [
+            0.6399993896484375,
+            0.5,
+            1.0500001907348633
+          ]
+        },
+        {
+          "center": [
+            -12.149999618530273,
+            1.9800000190734863,
+            2.1999998688697815
+          ],
+          "size": [
+            0.6399993896484375,
+            0.5,
+            1.0500000715255737
+          ]
+        },
+        {
+          "center": [
+            -13.25,
+            0.8500000238418579,
+            3.3999996185302734
+          ],
+          "size": [
+            1.1000003814697266,
+            1.4500000476837158,
+            5.199999809265137
+          ]
+        },
+        {
+          "center": [
+            -14.050000190734863,
+            3.049999952316284,
+            3.3999996185302734
+          ],
+          "size": [
+            0.18000030517578125,
+            2.1500000953674316,
+            6.0
+          ]
+        }
+      ],
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v001.tscn"
+    }
+  ]
+}

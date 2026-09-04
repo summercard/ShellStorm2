@@ -1,0 +1,210 @@
+{
+  "asset_id": "ENV-BASE99-WALL-CONTENTS-V021",
+  "display_name": "基地99层非门墙面内容资产包",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_wall_contents.blend",
+  "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "derived_from_version": "v017",
+  "scope": "wall-mounted non-door content only; structural walls and all doors excluded",
+  "collision_policy": "visual_only_no_collision; base room wall blockers remain authoritative",
+  "packages": [
+    {
+      "slug": "loft_backwall_services",
+      "source_collection": "50_二楼后墙服务管线与应急盒_资产包",
+      "source_meshes": 66,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 6292,
+      "triangles_after_optimization": 2094,
+      "downward_faces_removed": 626,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_backwall_services/loft_backwall_services_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "loft_tool_pegboard",
+      "source_collection": "49_工具洞洞板与固定工具_资产包",
+      "source_meshes": 41,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 6178,
+      "triangles_after_optimization": 2054,
+      "downward_faces_removed": 917,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "loft_explore_poster",
+      "source_collection": "48_EXPLORE独立海报_资产包",
+      "source_meshes": 14,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 10378,
+      "triangles_after_optimization": 5386,
+      "downward_faces_removed": 1128,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "loft_good_vibes_neon",
+      "source_collection": "44_GOOD VIBES霓虹_资产包",
+      "source_meshes": 15,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 37034,
+      "triangles_after_optimization": 19247,
+      "downward_faces_removed": 4489,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "loft_stay_curious_neon",
+      "source_collection": "52_STAY_CURIOUS楼梯墙标识_资产包",
+      "source_meshes": 2,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 6706,
+      "triangles_after_optimization": 2279,
+      "downward_faces_removed": 685,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "loft_hanging_plant",
+      "source_collection": "49_后墙吊挂植物_资产包",
+      "source_meshes": 12,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 1096,
+      "triangles_after_optimization": 365,
+      "downward_faces_removed": 145,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "base_camp_neon_sign",
+      "source_collection": "44_BASE_CAMP立体霓虹标识_资产包",
+      "source_meshes": 17,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 10334,
+      "triangles_after_optimization": 3498,
+      "downward_faces_removed": 1283,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/base_camp_neon_sign/base_camp_neon_sign_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "base_status_terminal",
+      "source_collection": "53_BASE_STATUS状态终端_资产包",
+      "source_meshes": 10,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 12730,
+      "triangles_after_optimization": 6396,
+      "downward_faces_removed": 1561,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/base_status_terminal/base_status_terminal_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "south_wall_pipeline_system",
+      "source_collection": "55_南墙工业管线系统_资产包",
+      "source_meshes": 21,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2098,
+      "triangles_after_optimization": 694,
+      "downward_faces_removed": 213,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "storage_terminal",
+      "source_collection": "54_STORAGE储物终端_资产包",
+      "source_meshes": 9,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 9618,
+      "triangles_after_optimization": 4796,
+      "downward_faces_removed": 1207,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/storage_terminal/storage_terminal_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "understair_bulletin_board",
+      "source_collection": "58_梯下公告留言板_资产包",
+      "source_meshes": 1,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2686,
+      "triangles_after_optimization": 912,
+      "downward_faces_removed": 265,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/understair_bulletin_board/understair_bulletin_board_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "understair_lighting_living_support",
+      "source_collection": "61_梯下暖光与生活点缀_资产包",
+      "source_meshes": 3,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 2030,
+      "triangles_after_optimization": 689,
+      "downward_faces_removed": 289,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/understair_lighting_living_support/understair_lighting_living_support_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "east_industrial_pipeline_system",
+      "source_collection": "74_东墙工业管线系统_资产包",
+      "source_meshes": 57,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 29838,
+      "triangles_after_optimization": 11015,
+      "downward_faces_removed": 3521,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "east_power_distribution",
+      "source_collection": "73_POWER工业配电系统_资产包",
+      "source_meshes": 25,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 15340,
+      "triangles_after_optimization": 6168,
+      "downward_faces_removed": 1790,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_power_distribution/east_power_distribution_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "east_small_safety_devices",
+      "source_collection": "82_东墙小型安全设备_资产包",
+      "source_meshes": 28,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 6644,
+      "triangles_after_optimization": 2233,
+      "downward_faces_removed": 836,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_small_safety_devices/east_small_safety_devices_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "east_work_together_poster",
+      "source_collection": "81_WORK_TOGETHER工业海报_资产包",
+      "source_meshes": 15,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 23386,
+      "triangles_after_optimization": 11899,
+      "downward_faces_removed": 2829,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_work_together_poster/east_work_together_poster_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "south_wall_information_boards",
+      "source_collection": "61_南墙资料板组_资产包",
+      "source_meshes": 6,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 19816,
+      "triangles_after_optimization": 6733,
+      "downward_faces_removed": 2430,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    },
+    {
+      "slug": "hose_reel",
+      "source_collection": "59_水管卷盘_资产包",
+      "source_meshes": 1,
+      "runtime_meshes": 1,
+      "triangles_after_downward_cull": 236,
+      "triangles_after_optimization": 80,
+      "downward_faces_removed": 24,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
+      "collision_policy": "visual_only_no_collision"
+    }
+  ]
+}

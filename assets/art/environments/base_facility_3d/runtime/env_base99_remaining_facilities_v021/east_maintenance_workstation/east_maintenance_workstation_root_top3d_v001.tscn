@@ -1,0 +1,108 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(4.699999, 1.5, 1.15)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(5, 0.18, 1.42)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(0.24, 1.42, 1.120001)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.24, 1.42, 1.120001)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(5, 2.1, 0.139999)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.38, 0.15, 0.120001)
+
+[sub_resource type="BoxShape3D" id="Box_6"]
+size = Vector3(0.52, 0.28, 0.16)
+
+[sub_resource type="BoxShape3D" id="Box_7"]
+size = Vector3(0.18, 0.38, 0.139999)
+
+[sub_resource type="BoxShape3D" id="Box_8"]
+size = Vector3(0.56, 0.34, 0.16)
+
+[sub_resource type="BoxShape3D" id="Box_9"]
+size = Vector3(0.58, 0.440466, 0.170515)
+
+[sub_resource type="BoxShape3D" id="Box_10"]
+size = Vector3(0.78, 0.36, 0.440001)
+
+[sub_resource type="BoxShape3D" id="Box_11"]
+size = Vector3(0.48, 0.2, 0.379999)
+
+[sub_resource type="BoxShape3D" id="Box_12"]
+size = Vector3(0.219999, 0.3, 0.219999)
+
+[node name="78_维修工作台与工具墙_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::east_maintenance_workstation"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
+metadata/derived_from_version = "v017"
+metadata/collision_policy = "per_source_object_box_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="SourceObjectBox_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(6.2, 0.92, 13.25)
+shape = SubResource("Box_0")
+
+[node name="SourceObjectBox_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(6.2, 1.72, 12.62)
+shape = SubResource("Box_1")
+
+[node name="SourceObjectBox_002" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(3.85, 0.8, 13.25)
+shape = SubResource("Box_2")
+
+[node name="SourceObjectBox_003" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(8.55, 0.8, 13.25)
+shape = SubResource("Box_3")
+
+[node name="SourceObjectBox_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(6.2, 3.05, 14.4)
+shape = SubResource("Box_4")
+
+[node name="SourceObjectBox_005" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(8, 3.12, 14.24)
+shape = SubResource("Box_5")
+
+[node name="SourceObjectBox_006" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(7.55, 3.52, 14.18)
+shape = SubResource("Box_6")
+
+[node name="SourceObjectBox_007" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(7.45, 3.28, 14.18)
+shape = SubResource("Box_7")
+
+[node name="SourceObjectBox_008" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(8.149999, 3.52, 14.18)
+shape = SubResource("Box_8")
+
+[node name="SourceObjectBox_009" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(7.75, 2.1, 12.36)
+shape = SubResource("Box_9")
+
+[node name="SourceObjectBox_010" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(4.5, 1.98, 12.32)
+shape = SubResource("Box_10")
+
+[node name="SourceObjectBox_011" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5.35, 1.9, 12.3)
+shape = SubResource("Box_11")
+
+[node name="SourceObjectBox_012" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(8.2, 1.94, 12.28)
+shape = SubResource("Box_12")

@@ -1,0 +1,148 @@
+[gd_scene load_steps=46 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v001.tscn" id="1_air_compressor"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v001.tscn" id="2_backup_generator"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v001.tscn" id="3_battery_bank"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/corridor_emergency_light_group/corridor_emergency_light_group_root_top3d_v001.tscn" id="4_corridor_emergency_light_group"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_flammable_bin/east_flammable_bin_root_top3d_v001.tscn" id="5_east_flammable_bin"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v001.tscn" id="6_east_low_storage_bench"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v001.tscn" id="7_east_maintenance_workstation"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v001.tscn" id="8_east_plant_group"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_recycle_bin/east_recycle_bin_root_top3d_v001.tscn" id="9_east_recycle_bin"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_round_pendant_light/east_round_pendant_light_root_top3d_v001.tscn" id="10_east_round_pendant_light"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_root_top3d_v001.tscn" id="11_east_supply_24h_station"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_waste_bin/east_waste_bin_root_top3d_v001.tscn" id="12_east_waste_bin"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_root_top3d_v001.tscn" id="13_equipment_steam_fx"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v001.tscn" id="14_heavy_supply_shelf"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_root_top3d_v001.tscn" id="15_hologram_terminal_platform"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v001.tscn" id="16_industrial_water_tank"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_battery_cabinet/loft_battery_cabinet_root_top3d_v001.tscn" id="17_loft_battery_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v001.tscn" id="18_loft_bed_and_bedding"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v001.tscn" id="19_loft_bedside_lamp"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v001.tscn" id="20_loft_bedside_rug"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v001.tscn" id="21_loft_coffee_table"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v001.tscn" id="22_loft_computer_workstation"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_food_cabinet/loft_food_cabinet_root_top3d_v001.tscn" id="23_loft_food_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lighting_support/loft_lighting_support_root_top3d_v001.tscn" id="24_loft_lighting_support"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v001.tscn" id="25_loft_lounge_rug"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v001.tscn" id="26_loft_lounge_sofa"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v001.tscn" id="27_loft_medical_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v001.tscn" id="28_loft_nightstand"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v001.tscn" id="29_loft_office_chair"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v001.tscn" id="30_loft_pouf_01"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v001.tscn" id="31_loft_pouf_02"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v001.tscn" id="32_loft_side_table"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v001.tscn" id="33_loft_striped_privacy_curtain"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/main_door_low_storage_cabinet/main_door_low_storage_cabinet_root_top3d_v001.tscn" id="34_main_door_low_storage_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_root_top3d_v001.tscn" id="35_medical_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_battery_cabinet/narrow_battery_cabinet_root_top3d_v001.tscn" id="36_narrow_battery_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_emergency_cabinet/narrow_emergency_cabinet_root_top3d_v001.tscn" id="37_narrow_emergency_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/tools_cabinet/tools_cabinet_root_top3d_v001.tscn" id="38_tools_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_root_top3d_v001.tscn" id="39_understair_equipment_cabinet"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_green_bench/understair_green_bench_root_top3d_v001.tscn" id="40_understair_green_bench"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_storage_shelf/understair_storage_shelf_root_top3d_v001.tscn" id="41_understair_storage_shelf"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_root_top3d_v001.tscn" id="42_volumetric_dust_fx"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d_v001.tscn" id="43_warehouse_pendant_light_group"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v001.tscn" id="44_water_purifier"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v001.tscn" id="45_weapon_workshop_station"]
+
+[node name="基地99层剩余非门非墙设施_V021" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021"
+metadata/asset_version = "v021"
+metadata/asset_category = "environment_facility_bundle"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
+metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
+metadata/derived_from_version = "v017"
+metadata/excluded_scope = "floors, doors, door-attached controls, structural walls, wall content, mezzanine and stairs"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+metadata/package_count = 45
+
+[node name="58_空气压缩机_资产包" parent="." instance=ExtResource("1_air_compressor")]
+
+[node name="53_备用发电机_资产包" parent="." instance=ExtResource("2_backup_generator")]
+
+[node name="54_蓄电池组_资产包" parent="." instance=ExtResource("3_battery_bank")]
+
+[node name="62_主通道应急灯组_资产包" parent="." instance=ExtResource("4_corridor_emergency_light_group")]
+
+[node name="76_FLAMMABLE可燃垃圾设施_资产包" parent="." instance=ExtResource("5_east_flammable_bin")]
+
+[node name="80_低矮储物收纳区_资产包" parent="." instance=ExtResource("6_east_low_storage_bench")]
+
+[node name="78_维修工作台与工具墙_资产包" parent="." instance=ExtResource("7_east_maintenance_workstation")]
+
+[node name="83_东面植物点缀组_资产包" parent="." instance=ExtResource("8_east_plant_group")]
+
+[node name="77_RECYCLE回收垃圾设施_资产包" parent="." instance=ExtResource("9_east_recycle_bin")]
+
+[node name="84_东面圆形工业吊灯_资产包" parent="." instance=ExtResource("10_east_round_pendant_light")]
+
+[node name="72_SUPPLY24H自动补给机_资产包" parent="." instance=ExtResource("11_east_supply_24h_station")]
+
+[node name="75_WASTE普通垃圾设施_资产包" parent="." instance=ExtResource("12_east_waste_bin")]
+
+[node name="63_设备蒸汽动效组_资产包" parent="." instance=ExtResource("13_equipment_steam_fx")]
+
+[node name="51_重型货架与补给箱_资产包" parent="." instance=ExtResource("14_heavy_supply_shelf")]
+
+[node name="51_圆形全息设备平台_资产包" parent="." instance=ExtResource("15_hologram_terminal_platform")]
+
+[node name="56_工业水箱_资产包" parent="." instance=ExtResource("16_industrial_water_tank")]
+
+[node name="46_BATTERY模块收纳箱_资产包" parent="." instance=ExtResource("17_loft_battery_cabinet")]
+
+[node name="31_参考床架床品与床下收纳_资产包" parent="." instance=ExtResource("18_loft_bed_and_bedding")]
+
+[node name="33_暖橙床头灯_资产包" parent="." instance=ExtResource("19_loft_bedside_lamp")]
+
+[node name="34_床边暖灰地毯_资产包" parent="." instance=ExtResource("20_loft_bedside_rug")]
+
+[node name="37_红棕茶几与生活物件_资产包" parent="." instance=ExtResource("21_loft_coffee_table")]
+
+[node name="42_双屏电脑完整工位_资产包" parent="." instance=ExtResource("22_loft_computer_workstation")]
+
+[node name="47_FOOD模块收纳箱_资产包" parent="." instance=ExtResource("23_loft_food_cabinet")]
+
+[node name="50_二楼分层照明支持_资产包" parent="." instance=ExtResource("24_loft_lighting_support")]
+
+[node name="38_休闲区低饱和地毯_资产包" parent="." instance=ExtResource("25_loft_lounge_rug")]
+
+[node name="36_墨绿三人休闲沙发_资产包" parent="." instance=ExtResource("26_loft_lounge_sofa")]
+
+[node name="45_MEDICAL模块收纳箱_资产包" parent="." instance=ExtResource("27_loft_medical_cabinet")]
+
+[node name="32_参考床头柜与生活物件_资产包" parent="." instance=ExtResource("28_loft_nightstand")]
+
+[node name="43_带扶手办公椅_资产包" parent="." instance=ExtResource("29_loft_office_chair")]
+
+[node name="39_青绿圆形坐墩01_资产包" parent="." instance=ExtResource("30_loft_pouf_01")]
+
+[node name="40_深绿圆形坐墩02_资产包" parent="." instance=ExtResource("31_loft_pouf_02")]
+
+[node name="41_床前辅助小桌_资产包" parent="." instance=ExtResource("32_loft_side_table")]
+
+[node name="35_红紫条纹隔断帘_资产包" parent="." instance=ExtResource("33_loft_striped_privacy_curtain")]
+
+[node name="43_主门下方低矮设备柜_资产包" parent="." instance=ExtResource("34_main_door_low_storage_cabinet")]
+
+[node name="45_MEDICAL医疗柜_资产包" parent="." instance=ExtResource("35_medical_cabinet")]
+
+[node name="47_窄型电池柜_资产包" parent="." instance=ExtResource("36_narrow_battery_cabinet")]
+
+[node name="48_窄型应急柜_资产包" parent="." instance=ExtResource("37_narrow_emergency_cabinet")]
+
+[node name="46_TOOLS工具柜_资产包" parent="." instance=ExtResource("38_tools_cabinet")]
+
+[node name="59_梯下立式设备柜_资产包" parent="." instance=ExtResource("39_understair_equipment_cabinet")]
+
+[node name="57_梯下绿色软垫长凳_资产包" parent="." instance=ExtResource("40_understair_green_bench")]
+
+[node name="60_梯下层架与收纳_资产包" parent="." instance=ExtResource("41_understair_storage_shelf")]
+
+[node name="64_光束尘埃动效组_资产包" parent="." instance=ExtResource("42_volumetric_dust_fx")]
+
+[node name="61_仓库防爆吊灯组_资产包" parent="." instance=ExtResource("43_warehouse_pendant_light_group")]
+
+[node name="57_净水器_资产包" parent="." instance=ExtResource("44_water_purifier")]
+
+[node name="49_武器工作台与弹药附件_资产包" parent="." instance=ExtResource("45_weapon_workshop_station")]

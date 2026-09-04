@@ -1,0 +1,59 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(2.28, 0.36, 2.28)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(2.2, 0.228254, 2.2)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(2.067846, 0.16, 2.067846)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.96, 0.28, 0.96)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(0.48, 0.12, 0.48)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.427543, 0.2, 0.417893)
+
+[node name="51_圆形全息设备平台_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::hologram_terminal_platform"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
+metadata/derived_from_version = "v017"
+metadata/collision_policy = "per_source_object_box_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="SourceObjectBox_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 0.22, -1.72)
+shape = SubResource("Box_0")
+
+[node name="SourceObjectBox_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 0.43, -1.72)
+shape = SubResource("Box_1")
+
+[node name="SourceObjectBox_002" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 0.51, -1.72)
+shape = SubResource("Box_2")
+
+[node name="SourceObjectBox_003" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 0.52, -1.72)
+shape = SubResource("Box_3")
+
+[node name="SourceObjectBox_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 0.69, -1.72)
+shape = SubResource("Box_4")
+
+[node name="SourceObjectBox_005" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5.58, 0.47, -1.2)
+shape = SubResource("Box_5")

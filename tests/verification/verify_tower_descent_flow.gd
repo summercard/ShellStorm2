@@ -234,10 +234,10 @@ func _ready() -> void:
 		and int(base_room_snapshot.get("base99_wall_door_module_count", 0)) == 2
 		and int(base_room_snapshot.get("base99_floor_plain_instance_count", 0)) == 0
 		and int(base_room_snapshot.get("base99_floor_rivet_instance_count", 0)) == 0
-		and int(base_room_snapshot.get("base99_mezzanine_count", 0)) == 0
-		and int(base_room_snapshot.get("base99_stair_l_count", 0)) == 0
+		and int(base_room_snapshot.get("base99_mezzanine_count", 0)) == 1
+		and int(base_room_snapshot.get("base99_stair_l_count", 0)) == 1
 		and int(base_room_snapshot.get("base99_stair_exterior_count", 0)) == 1
-		and int(base_room_snapshot.get("base99_camera_stair_slab_count", 0)) >= 1
+		and int(base_room_snapshot.get("base99_camera_stair_slab_count", 0)) >= 3
 		and int(base_room_snapshot.get("wall_material_variant_a_count", 0)) > 0
 		and int(base_room_snapshot.get("wall_material_variant_b_count", 0)) > 0,
 		"99层基地模块化地板、墙体、楼板、楼梯或底部摄像机碰撞规则不完整",

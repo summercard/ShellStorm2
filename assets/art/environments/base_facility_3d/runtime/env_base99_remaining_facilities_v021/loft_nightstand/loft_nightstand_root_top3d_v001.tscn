@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(1.02, 1.05, 0.92)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(0.304338, 0.32, 0.32)
+
+[node name="32_参考床头柜与生活物件_资产包" type="Node3D"]
+position = Vector3(0, -1, 0)
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_nightstand"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
+metadata/derived_from_version = "v017"
+metadata/collision_policy = "per_source_object_box_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="SourceObjectBox_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-2.75, 6.64, -11.35)
+shape = SubResource("Box_0")
+
+[node name="SourceObjectBox_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-2.37, 7.42, -11.62)
+shape = SubResource("Box_1")
