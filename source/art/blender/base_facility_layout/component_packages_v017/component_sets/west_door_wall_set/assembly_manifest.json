@@ -1,0 +1,49 @@
+{
+  "assembly_id": "base99_west_door_wall_set",
+  "display_name": "基地99层西侧第三段带门组件组",
+  "version": "v017",
+  "coordinate_mapping": "Blender (X,Y,Z) -> Godot (X,Z,Y); horizontal coordinates use equal X/Y-to-X/Z values.",
+  "runtime_placement": {
+    "side": "west",
+    "north_to_south_index": 3,
+    "godot_position_m": [
+      -15.0,
+      -9.0,
+      2.5
+    ],
+    "godot_rotation_y_rad": 1.57079632679,
+    "blender_position_m": [
+      -15.0,
+      2.5,
+      0.0
+    ],
+    "blender_rotation_z_rad": 1.57079632679
+  },
+  "members": [
+    {
+      "role": "wall_door",
+      "asset_slug": "west_door_wall_module",
+      "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn"
+    },
+    {
+      "role": "door_leaf_instance",
+      "asset_slug": "west_door_lift_instance",
+      "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+    }
+  ],
+  "non_members": [
+    {
+      "asset_slug": "east_door_access_control",
+      "reason": "游戏西侧 RoomDoor3D 组合不包含东侧独立门禁外围摆件。"
+    }
+  ],
+  "direct_replacement_contract": "导出时分别替换两个既有通用 visual GLB；保持现有 PackedScene 根节点、AssetID、方向、碰撞与 RoomDoor3D/DungeonRoom3D 职责，不新建运行时路径。",
+  "visual_revision": "v017_west_double_sided_alignment_002",
+  "interface_contract": {
+    "wall_core": "5.000m along local X × 0.360m local Y × 9.000m Z, centred on the west wall anchor.",
+    "portal": "closed, symmetric 0.930m-thick portal with 1.051m maximum service-tag detail envelope, belonging only to west_door_wall_module.",
+    "door_leaf": "closed, symmetric 0.898m-thick visual slab belonging only to west_door_lift_instance."
+  }
+}

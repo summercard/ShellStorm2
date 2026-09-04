@@ -1,0 +1,58 @@
+{
+  "assembly_id": "base99_east_door_wall_set",
+  "display_name": "基地99层东墙带门组件组",
+  "version": "v017",
+  "anchor_m": [
+    15.0,
+    2.5,
+    0.0
+  ],
+  "wall_forward": "world -X",
+  "opening_m": [
+    2.2,
+    2.5
+  ],
+  "wall_owned_frame_contract": {
+    "owner": "east_door_wall_module",
+    "outer_width_m": 2.72,
+    "outer_height_m": 3.1,
+    "inner_clear_width_m": 2.36,
+    "inner_clear_height_m": 2.72,
+    "contents": [
+      "八角外轮廓",
+      "双层冷灰门洞饰条",
+      "顶部橙色服务铭牌",
+      "紧固件"
+    ],
+    "separation": "门框和门洞饰条归属墙模块；门扇与门体状态灯归属 east_personnel_security_door；门禁归属 east_door_access_control。"
+  },
+  "members": [
+    {
+      "role": "door_wall_module",
+      "asset_slug": "east_door_wall_module",
+      "asset_id": "ENV-BASE99-WALL-DOOR-5X9"
+    },
+    {
+      "role": "lift_door",
+      "asset_slug": "east_personnel_security_door",
+      "asset_id": "ENV-BASE99-DOOR-LIFT-22X25"
+    },
+    {
+      "role": "door_access_control",
+      "asset_slug": "east_door_access_control",
+      "asset_id": "ENV-BASE99-ART-LAYOUT-3D"
+    }
+  ],
+  "non_members": [
+    {
+      "asset_slug": "east_supply_24h_station",
+      "reason": "adjacent facility; must not occupy the door opening"
+    }
+  ],
+  "runtime_contract": "Wall visual and wall-owned frame are owned by DungeonRoom3D; lift door visual is owned by RoomDoor3D; visual GLBs contain no runtime collision.",
+  "east_wall_bay": "保留东墙_03（北段）",
+  "swap_note": "带门墙组件由保留东墙_02移动到保留东墙_03；SUPPLY24H单独南移5m，未携带旁侧柜体。",
+  "visual_revision": "v017_east_copies_west_double_sided_003",
+  "visual_source": "west_door_wall_module + west_door_lift_instance geometry copied as independent east package meshes",
+  "double_sided_design": true
+}

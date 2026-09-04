@@ -6,12 +6,10 @@
   "category": "architecture",
   "version": "v017",
   "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
-  "object_count": 72,
-  "mesh_count": 24,
+  "object_count": 66,
+  "mesh_count": 22,
   "light_count": 0,
   "object_names": [
-    "ENV-BASE99-WALL-DOOR-5X9_输出根节点.001",
-    "ENV-BASE99-WALL-DOOR-5X9_输出根节点.002",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.001",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.002",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.003",
@@ -37,7 +35,6 @@
     "保留东墙_00",
     "保留东墙_01",
     "保留东墙_02",
-    "保留东墙_03",
     "保留东墙_04",
     "保留东墙_05",
     "保留北墙_00",
@@ -55,11 +52,8 @@
     "保留西墙_00",
     "保留西墙_01",
     "保留西墙_02",
-    "保留西墙_03",
     "保留西墙_04",
     "保留西墙_05",
-    "带门墙体_主体_金属哑光反光.001",
-    "带门墙体_主体_金属哑光反光.002",
     "普通墙体_主体_金属哑光反光.001",
     "普通墙体_主体_金属哑光反光.002",
     "普通墙体_主体_金属哑光反光.003",
@@ -89,7 +83,7 @@
     4.5
   ],
   "bounding_size_m": [
-    31.1712,
+    30.36,
     30.36,
     9.0
   ],

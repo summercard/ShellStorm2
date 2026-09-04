@@ -1,0 +1,90 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_door_wall_module",
+  "display_name": "12_东墙带门墙模块_资产包",
+  "asset_slug": "east_door_wall_module",
+  "category": "architecture",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 3,
+  "mesh_count": 1,
+  "light_count": 0,
+  "object_names": [
+    "ENV-BASE99-WALL-DOOR-5X9_输出根节点.002",
+    "保留东墙_03",
+    "带门墙体_主体_金属哑光反光.002"
+  ],
+  "world_center_m": [
+    14.9503,
+    2.5,
+    4.5
+  ],
+  "bounding_size_m": [
+    1.2706,
+    5.0,
+    9.0
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_east_door_wall_module",
+  "collider_names": [],
+  "expected_export": "east_door_wall_module_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported",
+  "component_set": "base99_east_door_wall_set",
+  "component_set_role": "host_wall_and_wall_owned_door_frame",
+  "scene_anchor_m": [
+    15.0,
+    2.5,
+    0.0
+  ],
+  "scene_bay": "保留东墙_03（北段）",
+  "visual_revision": "v017_east_door_wall_palette_aligned_004",
+  "base_wall_core_dimensions_m": {
+    "depth": 1.1712,
+    "width": 5.0,
+    "height": 9.0
+  },
+  "wall_owned_door_frame": {
+    "outer_width_m": 2.72,
+    "outer_height_m": 3.1,
+    "inner_clear_width_m": 2.36,
+    "inner_clear_height_m": 2.72,
+    "front_projection_m": 0.0524,
+    "features": [
+      "八角外轮廓",
+      "双层冷灰门洞饰条",
+      "顶部橙色服务铭牌",
+      "成对紧固件"
+    ]
+  },
+  "asset_ownership": {
+    "wall_and_frame": "east_door_wall_module",
+    "door_leaf_and_status_light": "east_personnel_security_door",
+    "access_control": "east_door_access_control"
+  },
+  "interface_contract": {
+    "door_leaf_center_m": [
+      15.0,
+      2.5,
+      1.25
+    ],
+    "door_leaf_dimensions_m": [
+      0.325,
+      2.2,
+      2.5
+    ],
+    "access_control_center_m": [
+      14.64,
+      3.88,
+      1.48
+    ],
+    "access_control_dimensions_m": [
+      0.24,
+      0.54,
+      1.08
+    ]
+  },
+  "visual_source": "west double-sided approved set copied as independent east mesh data",
+  "double_sided_design": true,
+  "palette_alignment": "Only material-slot-1 main wall panels use shared PaletteUV cell (9,9), matching adjacent east wall modules. Portal frame and door assets retain their own cells."
+}

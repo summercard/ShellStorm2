@@ -1,0 +1,47 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_door_access_control",
+  "display_name": "73_东墙门禁外围控制_资产包",
+  "asset_slug": "east_door_access_control",
+  "category": "east_facilities",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 17,
+  "mesh_count": 17,
+  "light_count": 0,
+  "object_names": [
+    "东墙人员门_ACCESS文字_自发光",
+    "东墙人员门_EXIT标牌_自发光",
+    "东墙人员门_安全标签",
+    "东墙人员门_数字键_1_1",
+    "东墙人员门_数字键_1_2",
+    "东墙人员门_数字键_1_3",
+    "东墙人员门_数字键_2_1",
+    "东墙人员门_数字键_2_2",
+    "东墙人员门_数字键_2_3",
+    "东墙人员门_数字键_3_1",
+    "东墙人员门_数字键_3_2",
+    "东墙人员门_数字键_3_3",
+    "东墙人员门_橙色待机灯_自发光",
+    "东墙人员门_紧急开门按钮",
+    "东墙人员门_读卡器",
+    "东墙人员门_门侧控制面板",
+    "东墙人员门_门禁屏幕_自发光"
+  ],
+  "world_center_m": [
+    14.555,
+    3.2324,
+    1.6559
+  ],
+  "bounding_size_m": [
+    0.41,
+    1.8352,
+    2.7311
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_east_facilities/v017_源资产包_east_door_access_control",
+  "collider_names": [],
+  "expected_export": "east_door_access_control_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

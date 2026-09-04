@@ -1,0 +1,60 @@
+{
+  "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::west_door_lift_instance",
+  "display_name": "115_西侧滑升门运行时实例_资产包",
+  "asset_slug": "west_door_lift_instance",
+  "category": "west_facilities",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 4,
+  "mesh_count": 2,
+  "light_count": 1,
+  "object_names": [
+    "ENV-BASE99-DOOR-LIFT-22X25_WEST_输出根节点",
+    "西墙标准滑升门_主体_金属哑光反光",
+    "西墙标准滑升门_状态灯_柔和自发光",
+    "西墙滑升门_状态照明"
+  ],
+  "world_center_m": [
+    -15.0,
+    2.5,
+    1.25
+  ],
+  "bounding_size_m": [
+    0.325,
+    2.2,
+    2.5
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_west_facilities/v017_源资产包_west_door_lift_instance",
+  "collider_names": [],
+  "expected_export": "env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "source_ready_reuses_existing_runtime_asset_not_exported_in_this_iteration",
+  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn",
+  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb",
+  "runtime_component": "door_leaf",
+  "runtime_owner": "RoomDoor3D",
+  "scene_placement": {
+    "side": "west",
+    "north_to_south_index": 3,
+    "blender_anchor_m": [
+      -15.0,
+      2.5,
+      0.0
+    ],
+    "rotation_z_rad": 1.57079632679
+  },
+  "shared_asset_reuse": "复用 ENV-BASE99-DOOR-LIFT-22X25，不创建第二个运行时 AssetID 或 GLB。",
+  "excluded_components": [
+    "east_door_access_control"
+  ],
+  "visual_revision": "v017_west_double_sided_alignment_002",
+  "visual_envelope_m": {
+    "depth_x": 0.898,
+    "width_y": 2.04,
+    "height_z": 2.34
+  },
+  "door_leaf_design": "620mm加厚闭合门扇；内外两面完全同构的嵌板、警示条和状态灯。",
+  "fixture_light_ownership": "西墙滑升门_状态照明为门实例唯一局部点光，位于门厚度中轴，照亮双面。"
+}

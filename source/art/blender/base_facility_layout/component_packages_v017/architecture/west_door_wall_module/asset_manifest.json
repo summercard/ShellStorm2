@@ -1,0 +1,68 @@
+{
+  "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::west_door_wall_module",
+  "display_name": "114_西墙带门墙模块_资产包",
+  "asset_slug": "west_door_wall_module",
+  "category": "architecture",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 3,
+  "mesh_count": 1,
+  "light_count": 0,
+  "object_names": [
+    "ENV-BASE99-WALL-DOOR-5X9_WEST_输出根节点",
+    "保留西墙_03",
+    "西墙带门墙体_主体_金属哑光反光"
+  ],
+  "world_center_m": [
+    -14.9503,
+    2.5,
+    4.5
+  ],
+  "bounding_size_m": [
+    1.2706,
+    5.0,
+    9.0
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_west_door_wall_module",
+  "collider_names": [],
+  "expected_export": "env_base99_wall_door_5x9_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "source_ready_reuses_existing_runtime_asset_not_exported_in_this_iteration",
+  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn",
+  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v001.glb",
+  "runtime_component": "wall_door",
+  "runtime_owner": "DungeonRoom3D + RoomDoor3D",
+  "scene_placement": {
+    "side": "west",
+    "north_to_south_index": 3,
+    "blender_anchor_m": [
+      -15.0,
+      2.5,
+      0.0
+    ],
+    "rotation_z_rad": 1.57079632679
+  },
+  "base_wall_core_dimensions_m": {
+    "depth": 1.1712,
+    "width": 5.0,
+    "height": 9.0
+  },
+  "wall_owned_door_frame": "双面闭合门框；与360mm墙芯同中心，外观投影930mm，门框不再脱离墙面。",
+  "visual_revision": "v017_west_double_sided_alignment_002",
+  "visual_envelope_m": {
+    "depth_x": 1.051,
+    "width_y": 5.0,
+    "height_z": 9.0
+  },
+  "structural_core_dimensions_m": {
+    "depth_x": 0.36,
+    "width_y": 5.0,
+    "height_z": 9.0
+  },
+  "door_opening_m": {
+    "width_y": 2.2,
+    "height_z": 2.5
+  }
+}
