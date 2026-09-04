@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_root_top3d_v003.tscn" id="1_full_floor"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_loft_floor_finish_v020/env_base99_loft_floor_finish_v020_root_top3d_v002.tscn" id="2_loft_finish"]
+
+[node name="基地99层Blender完整地板表现V021" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017"
+metadata/asset_role = "base99_floor_visual_assembly"
+metadata/runtime_export_version = "v003"
+metadata/visual_only = true
+metadata/visual_replaces_old_multimesh = true
+metadata/collision_policy = "visual only; TowerFloorStage3D/FloorSupport keeps the existing 30x30m collision"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+metadata/source_blender_version = "v020"
+
+[node name="一层36块完整地板_替换旧MultiMesh_仅视觉" parent="." instance=ExtResource("1_full_floor")]
+
+[node name="二层楼中楼地板面层_仅视觉" parent="." instance=ExtResource("2_loft_finish")]
+position = Vector3(0, -1, 0)
+metadata/placement_note = "Preserves Blender V020 X/Z layout and aligns source Z=6 deck finish to runtime Y=5 mezzanine walk surface."

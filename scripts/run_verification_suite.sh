@@ -86,7 +86,7 @@ core_scenes=(
   verify_door_passability
   verify_tower_descent_flow
   verify_base99_floor_player_collision_flow
-  verify_base99_mezzanine_underdeck_blocker
+  verify_base99_mezzanine_placement_removal
   verify_3d_performance_budget
   verify_performance_runtime_complete
   verify_graphics_settings_ui_flow
@@ -99,6 +99,7 @@ core_scenes=(
 # texture failures as gameplay regressions.
 visual_scenes=(
   verify_base99_modular_room_visual
+  verify_base99_floor_visuals_v021
   verify_graphics_settings_visual
   verify_facility_light_retoggle_visual
   verify_3d_melee_combat_visual

@@ -579,11 +579,8 @@ func _validate_target_room_airwall_clearance(
 	await get_tree().physics_frame
 	_validate_clear_lane(
 		tower,
-		# 旧x=-14通道现由正式L梯扶手占用。基地中线从入口检查到仓库
-		# 南墙可见面前0.23m；SouthWarehouseBlocker从z=-9.23开始，且由
-		# verify_base99_mezzanine_underdeck_blocker独立验证为应阻挡的可见墙。
-		# 这里仅检查墙前通行带，不能把射线终点送进正式可见墙后再报告
-		# “隐形空气墙”。
+		# 阁楼架、L梯和下方铁门已从基地布局移除；此射线检查基地中线通行带，
+		# 以避免旧摆设残留为不可见阻挡。
 		Vector3(0.0, -7.2, 2.5),
 		Vector3(0.0, -7.2, -9.0),
 		"Base north approach still has an invisible blocker before the visible warehouse wall",

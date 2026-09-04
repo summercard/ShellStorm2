@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_details_v017/env_base99_floor_details_v017_root_top3d_v001.tscn" id="1_ground_details"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_loft_floor_finish_v017/env_base99_loft_floor_finish_v017_root_top3d_v001.tscn" id="2_loft_finish"]
+
+[node name="基地99层Blender地板表现V017" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017"
+metadata/asset_role = "base99_floor_visual_assembly"
+metadata/visual_only = true
+metadata/collision_policy = "visual only; keep existing ground and mezzanine collision owners"
+metadata/reuse_contract = "36 base tiles are reused from ENV-BASE99-FLOOR-PLAIN-5M and ENV-BASE99-FLOOR-RIVET-5M; V017 adds detail overlays only"
+
+[node name="一层36块地板深化_仅视觉" parent="." instance=ExtResource("1_ground_details")]
+
+[node name="二层楼中楼地板面层_仅视觉" parent="." instance=ExtResource("2_loft_finish")]
+position = Vector3(0, -1, 0)
+metadata/placement_note = "Preserves Blender V017 X/Z layout and aligns source Z=6 deck finish to runtime Y=5 mezzanine walk surface."

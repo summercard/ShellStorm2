@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_loft_floor_finish_v017/env_base99_loft_floor_finish_v017_visual_top3d_v001.glb" id="1_model"]
+
+[node name="基地99层二层地板面层V017" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-LOFT-FLOOR-FINISH-V017"
+metadata/asset_role = "visual_loft_floor_finish_overlay"
+metadata/visual_only = true
+metadata/collision_policy = "none; reuse env_base99_mezzanine_20x10_z5 walkable collision"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend"
+metadata/source_package = "component_packages_v017/floor/loft_floor_finish"
+metadata/placement_contract = "Blender source deck is Z=6; runtime mezzanine deck is Y=5 and assembly compensates by -1m"
+
+[node name="BlenderV017二层面层几何_仅视觉" parent="." instance=ExtResource("1_model")]

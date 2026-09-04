@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_floor_details_v020/env_base99_floor_details_v020_visual_top3d_v002.glb" id="1_model"]
+
+[node name="基地99层一层地板深化V020" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-FLOOR-DETAILS-V017"
+metadata/asset_role = "visual_floor_detail_overlay"
+metadata/runtime_export_version = "v002"
+metadata/visual_only = true
+metadata/collision_policy = "none; reuse TowerFloorStage3D support collision"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+metadata/source_blender_version = "v020"
+metadata/source_package = "component_packages_v017/floor/tile_01_to_tile_36"
+metadata/optimization = "72 rivet inner-shadow strips lifted 0.002m; all editable downward faces removed"
+metadata/placement_contract = "Blender layout origin; export_yup maps Blender +Y north to Godot -Z north"
+
+[node name="BlenderV020地板深化几何_仅视觉" parent="." instance=ExtResource("1_model")]

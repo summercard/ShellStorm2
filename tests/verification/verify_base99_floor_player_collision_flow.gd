@@ -1,6 +1,6 @@
 extends Node
-## 99层正式地板表现与TowerFloorStage承重面专项。
-## 两种地板按共同0.30m结构面摆放；铆钉、压条可高出但不参与承重碰撞。
+## 99层完整新地板表现与TowerFloorStage承重面专项。
+## V021完整视觉地板替换旧普通/铆钉MultiMesh，FloorSupport规格保持不变。
 
 const EXPECTED_BASE_SURFACE_Y_M := 0.0
 const MAX_SURFACE_DELTA_FROM_TOWER_M := 0.02
@@ -20,66 +20,24 @@ func _ready() -> void:
 	var rooms := tower.get("_room_by_id") as Dictionary
 	var facility := rooms.get("facility") as DungeonRoom3D
 	_expect(facility != null, "99层基地房间没有生成", failures)
-	var plain := facility.find_child("BaseFloorGrid6x6_Plain", true, false) as MultiMeshInstance3D if facility != null else null
-	var rivet := facility.find_child("BaseFloorGrid6x6_Rivet", true, false) as MultiMeshInstance3D if facility != null else null
-	_expect(plain != null, "99层普通地板MultiMesh缺失", failures)
-	_expect(rivet != null, "99层铆钉地板MultiMesh缺失", failures)
-
-	var plain_surface := _surface_y(plain)
-	var rivet_surface := _surface_y(rivet)
+	var old_plain := facility.find_child("BaseFloorGrid6x6_Plain", true, false) if facility != null else null
+	var old_rivet := facility.find_child("BaseFloorGrid6x6_Rivet", true, false) if facility != null else null
+	_expect(old_plain == null and old_rivet == null, "旧普通/铆钉地板MultiMesh仍被渲染", failures)
+	var full_floor := facility.get_node_or_null(
+		"基地99层_美术布置层/BlenderV021完整地板表现_仅视觉/一层36块完整地板_替换旧MultiMesh_仅视觉"
+	) as Node3D if facility != null else null
+	_expect(full_floor != null, "V021完整地板替换资源没有挂载", failures)
+	var replacement_surface := float(full_floor.get_meta("collision_surface_y_m", INF)) if full_floor != null else INF
 	_expect(
-		absf(plain_surface - EXPECTED_BASE_SURFACE_Y_M) <= 0.001,
-		"99层普通地板顶面没有校正到统一高度: surface=%.4f origin=%.4f mesh_top=%.4f" % [
-			plain_surface,
-			float(plain.get_meta("visual_origin_y_m", INF)) if plain != null else INF,
-			float(plain.get_meta("visual_mesh_top_y_m", INF)) if plain != null else INF,
-		],
+		absf(replacement_surface - EXPECTED_BASE_SURFACE_Y_M) <= 0.001,
+		"完整新地板没有保持旧地板Y=0承重坐标契约",
 		failures
 	)
 	_expect(
-		absf(rivet_surface - EXPECTED_BASE_SURFACE_Y_M) <= 0.001,
-		"99层铆钉地板结构面没有校正到统一高度: surface=%.4f origin=%.4f structural_top=%.4f" % [
-			rivet_surface,
-			float(rivet.get_meta("visual_origin_y_m", INF)) if rivet != null else INF,
-			float(rivet.get_meta("visual_structural_top_local_y_m", INF)) if rivet != null else INF,
-		],
+		bool(full_floor.get_meta("visual_replaces_old_multimesh", false)) if full_floor != null else false,
+		"完整新地板没有登记替换旧MultiMesh视觉的职责",
 		failures
 	)
-	_expect(
-		absf(plain_surface - rivet_surface) <= 0.001,
-		"99层两种地板的角色接触视觉高度不一致",
-		failures
-	)
-	var plain_origin := float(plain.get_meta("visual_origin_y_m", INF)) if plain != null else INF
-	var rivet_origin := float(rivet.get_meta("visual_origin_y_m", INF)) if rivet != null else INF
-	_expect(
-		absf(plain_origin - rivet_origin) <= 0.001,
-		"普通板与铆钉板没有按同一结构基准摆放",
-		failures
-	)
-	var rivet_decoration_top := (
-		float(rivet.get_meta("visual_decoration_top_y_m", -INF)) if rivet != null else -INF
-	)
-	_expect(
-		absf(
-			rivet_decoration_top
-			- rivet_surface
-			- EXPECTED_RIVET_VISUAL_PROTRUSION_M
-		) <= 0.001,
-		"铆钉地板的铁皮/铆钉突出表现被压入结构面: decoration_top=%.4f surface=%.4f" % [
-			rivet_decoration_top, rivet_surface,
-		],
-		failures
-	)
-	_expect(
-		str(rivet.get_meta("collision_policy", ""))
-			== "shared_flat_support_visual_protrusions_ignored",
-		"铆钉地板没有登记突出表现不参与阻挡的规则",
-		failures
-	)
-	if RenderingServer.get_rendering_device() != null:
-		_verify_runtime_transform_buffer(plain, "普通地板", failures)
-		_verify_runtime_transform_buffer(rivet, "铆钉地板", failures)
 
 	var stages := tower.get("_floor_stages") as Dictionary
 	var rooftop_stage := stages.get(0) as TowerFloorStage3D
@@ -89,8 +47,8 @@ func _ready() -> void:
 	if rooftop_stage != null:
 		var rooftop_surface := _tower_visual_surface_y(rooftop_stage)
 		_expect(
-			absf(plain_surface - rooftop_surface) <= MAX_SURFACE_DELTA_FROM_TOWER_M,
-			"99层正式地板与100层正常地板表现高度差过大: %.4f" % absf(plain_surface - rooftop_surface),
+			absf(replacement_surface - rooftop_surface) <= MAX_SURFACE_DELTA_FROM_TOWER_M,
+			"99层完整新地板与100层正常地板表现高度差过大: %.4f" % absf(replacement_surface - rooftop_surface),
 			failures
 		)
 	if facility_stage != null:
@@ -107,10 +65,9 @@ func _ready() -> void:
 		)
 		var collision_surface := _support_surface_below_room_center(facility_stage, support)
 		_expect(
-			absf(plain_surface - collision_surface) <= 0.001
-			and absf(rivet_surface - collision_surface) <= 0.001,
-			"99层地板可视结构面与承重碰撞顶面不一致: plain=%.4f rivet=%.4f collision=%.4f" % [
-				plain_surface, rivet_surface, collision_surface,
+			absf(replacement_surface - collision_surface) <= 0.001,
+			"99层完整新地板与承重碰撞顶面不一致: visual=%.4f collision=%.4f" % [
+				replacement_surface, collision_surface,
 			],
 			failures
 		)

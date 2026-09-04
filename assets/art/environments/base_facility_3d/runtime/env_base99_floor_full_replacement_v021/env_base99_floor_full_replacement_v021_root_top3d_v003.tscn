@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_visual_top3d_v003.glb" id="1_model"]
+
+[node name="基地99层完整地板替换V021" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-FLOOR-FULL-REPLACEMENT-V021"
+metadata/asset_role = "full_visual_floor_replacement"
+metadata/runtime_export_version = "v003"
+metadata/visual_only = true
+metadata/visual_replaces_old_multimesh = true
+metadata/collision_policy = "none; TowerFloorStage3D/FloorSupport remains the unchanged collision owner"
+metadata/collision_surface_y_m = 0.0
+metadata/collision_grid_contract = "6x6 modules at 5m each; horizontal bounds X/Z [-15, 15]"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend"
+metadata/source_blender_version = "v020"
+metadata/placement_contract = "Identity root; source geometry retains the retired 5m floor-module center-bottom coordinate contract"
+
+[node name="BlenderV020完整地板几何_仅视觉" parent="." instance=ExtResource("1_model")]

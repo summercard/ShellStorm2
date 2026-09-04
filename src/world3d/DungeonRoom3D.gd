@@ -719,39 +719,9 @@ func _build_tower_module_shell(dimensions: Vector2) -> void:
 
 
 func _build_base_facility_shell(dimensions: Vector2) -> void:
-	# 30m 基地使用 6×6 的 5m 美术地砖；下方 TowerFloorStage 继续承担整层
-	# 承重碰撞，因此这里的地砖只做轻微抬升的视觉层，避免重复碰撞。
-	var plain_floor_mesh := _get_base99_floor_mesh(BASE99_FLOOR_PLAIN_PREFAB, false)
-	var rivet_floor_mesh := _get_base99_floor_mesh(BASE99_FLOOR_RIVET_PREFAB, true)
-	if plain_floor_mesh != null and rivet_floor_mesh != null:
-		var light_transforms: Array[Transform3D] = []
-		var dark_transforms: Array[Transform3D] = []
-		for tile_z in range(6):
-			for tile_x in range(6):
-				var transform := Transform3D(
-					Basis.IDENTITY,
-					Vector3(
-						-12.5 + float(tile_x) * TOWER_GEOMETRY.GRID_UNIT_M,
-						0.0,
-						-12.5 + float(tile_z) * TOWER_GEOMETRY.GRID_UNIT_M
-					)
-				)
-				if (tile_x + tile_z) % 2 == 0:
-					light_transforms.append(transform)
-				else:
-					dark_transforms.append(transform)
-		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Plain",
-			plain_floor_mesh,
-			light_transforms,
-			"ENV-BASE99-FLOOR-PLAIN-5M"
-		)
-		_add_base_floor_grid(
-			"BaseFloorGrid6x6_Rivet",
-			rivet_floor_mesh,
-			dark_transforms,
-			"ENV-BASE99-FLOOR-RIVET-5M"
-		)
+	# V021完整地板表现由基地美术布局直接实例化。不能再生成旧普通/铆钉
+	# MultiMesh视觉砖，否则会与Blender完整地板发生双重绘制；FloorSupport仍
+	# 保持原30×30m承重与6×6×5m规格，碰撞坐标不变。
 	# 99层外圈只使用普通墙和独立门墙；窗墙属于100层，不得混入本层。
 	_build_tower_wall_v2(dimensions)
 

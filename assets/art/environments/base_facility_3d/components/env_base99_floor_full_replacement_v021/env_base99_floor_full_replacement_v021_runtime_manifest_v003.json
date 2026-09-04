@@ -1,0 +1,46 @@
+{
+  "schema": "shellstorm2.base99.full_floor_replacement_runtime.v1",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v020.blend",
+  "source_blend_sha256": "aee79560972e7d301486cd1dc1388259105ae10a47a3a77045959fd8e29b0498",
+  "source_blender_version": "v020",
+  "runtime_export_version": "v003",
+  "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+  "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_visual_top3d_v003.glb",
+  "replacement_policy": "Replaces DungeonRoom3D's old plain/rivet MultiMesh visuals; no old floor visual remains rendered.",
+  "collision_compatibility": {
+    "owner": "TowerFloorStage3D/FloorSupport",
+    "grid": "6x6 modules at 5m each",
+    "horizontal_bounds_m": [
+      -15.0,
+      15.0,
+      -15.0,
+      15.0
+    ],
+    "collision_surface_y_m": 0.0,
+    "visual_origin_contract": "Matches retired 5m modules: center-bottom, Godot local -Z forward",
+    "new_collision_in_glb": false
+  },
+  "source_content": {
+    "plain_structural_slab_count": 18,
+    "rivet_structural_slab_count": 18,
+    "detail_mesh_count": 1048,
+    "source_bounds_m": {
+      "min": [
+        -15.0,
+        -15.0,
+        -0.3
+      ],
+      "max": [
+        15.0,
+        15.0,
+        0.193
+      ]
+    }
+  },
+  "source_repairs": {
+    "lifted_rivet_inner_shadow_strip_count": 72,
+    "top_coplanar_overlap_count": 0,
+    "downward_facing_triangle_count": 0,
+    "audit": "outputs/verification/base99_floor_v020_overlap_audit.json"
+  }
+}
