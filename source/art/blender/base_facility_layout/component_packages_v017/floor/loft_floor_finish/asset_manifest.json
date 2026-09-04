@@ -1,0 +1,27 @@
+{
+  "asset_slug": "loft_floor_finish",
+  "category": "floor",
+  "display_name": "116_二楼地板色彩深化_资产包",
+  "organization_version": "v017",
+  "revision": "v017_loft_floor_reference_redbrown_006",
+  "object_count": 11,
+  "center": [
+    5.0,
+    10.0,
+    6.044
+  ],
+  "dimensions": [
+    19.6,
+    9.6,
+    0.108
+  ],
+  "source_mirror": "v017_源资产包_loft_floor_finish",
+  "source_object_count": 11,
+  "palette_uv": "PaletteUV",
+  "shared_materials": [
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "acceptance": "可见二楼地面恢复参考图深红棕主色，采用暗红、暖棕拼板与少量紫灰细缝；地面层低于桌毯，不含绿色大面与承重楼板。",
+  "scope": "二楼可见地板表面与直接依附装饰"
+}

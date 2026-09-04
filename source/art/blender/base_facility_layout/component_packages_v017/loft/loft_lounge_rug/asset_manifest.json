@@ -6,7 +6,7 @@
   "category": "loft",
   "version": "v017",
   "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
-  "object_count": 7,
+  "object_count": 13,
   "mesh_count": 7,
   "light_count": 0,
   "object_names": [
@@ -33,5 +33,26 @@
   "collider_names": [],
   "expected_export": "loft_lounge_rug_visual_top3d_v001.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "not_exported"
+  "export_status": "not_exported",
+  "organization_version": "v017",
+  "revision": "v017_loft_lounge_rug_reference_palette_006",
+  "center": [
+    6.18,
+    9.55,
+    6.0993
+  ],
+  "dimensions": [
+    4.9,
+    2.45,
+    0.0695
+  ],
+  "source_mirror": "v017_源资产包_loft_lounge_rug",
+  "source_object_count": 13,
+  "palette_uv": "PaletteUV",
+  "shared_materials": [
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "acceptance": "桌毯按参考图采用暗紫红基底、紫灰边框与低饱和暖棕细纹；咖啡桌本体未改。",
+  "scope": "二楼休闲区桌毯"
 }

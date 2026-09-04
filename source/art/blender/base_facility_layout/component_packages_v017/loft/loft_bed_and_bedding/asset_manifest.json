@@ -63,5 +63,26 @@
   "collider_names": [],
   "expected_export": "loft_bed_and_bedding_visual_top3d_v001.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "not_exported"
+  "export_status": "not_exported",
+  "organization_version": "v017",
+  "revision": "v017_loft_bed_width_corrected_006",
+  "center": [
+    0.3,
+    11.0721,
+    6.6691
+  ],
+  "dimensions": [
+    4.75,
+    2.9058,
+    1.3183
+  ],
+  "source_mirror": "v017_源资产包_loft_bed_and_bedding",
+  "source_object_count": 37,
+  "palette_uv": "PaletteUV",
+  "shared_materials": [
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀"
+  ],
+  "acceptance": "恢复参考长度4.75m；床架沿Y方向加宽至2.55m、床垫宽2.30m，结构同步对齐。",
+  "scope": "二楼床铺与床品"
 }
