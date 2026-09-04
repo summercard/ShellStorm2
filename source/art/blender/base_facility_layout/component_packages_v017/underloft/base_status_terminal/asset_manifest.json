@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::base_status_terminal",
+  "display_name": "53_BASE_STATUS状态终端_资产包",
+  "asset_slug": "base_status_terminal",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "BASE_STATUS状态终端_BASE STATUS文字_自发光",
+    "BASE_STATUS状态终端_后部数据线",
+    "BASE_STATUS状态终端_实体按键_01",
+    "BASE_STATUS状态终端_实体按键_02",
+    "BASE_STATUS状态终端_实体按键_03",
+    "BASE_STATUS状态终端_屏幕_自发光",
+    "BASE_STATUS状态终端_屏幕边框",
+    "BASE_STATUS状态终端_立柱",
+    "BASE_STATUS状态终端_读卡器",
+    "BASE_STATUS状态终端_金属底座"
+  ],
+  "world_center_m": [
+    8.38,
+    3.58,
+    1.62
+  ],
+  "bounding_size_m": [
+    0.62,
+    0.52,
+    0.94
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_base_status_terminal",
+  "collider_names": [],
+  "expected_export": "base_status_terminal_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

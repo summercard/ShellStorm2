@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_bedside_lamp",
+  "display_name": "33_暖橙床头灯_资产包",
+  "asset_slug": "loft_bedside_lamp",
+  "category": "loft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 4,
+  "mesh_count": 3,
+  "light_count": 1,
+  "object_names": [
+    "床头灯_底座",
+    "床头灯_暖橙光",
+    "床头灯_杆",
+    "床头灯_橙色灯罩_自发光"
+  ],
+  "world_center_m": [
+    -2.8,
+    11.67,
+    7.6773
+  ],
+  "bounding_size_m": [
+    0.4068,
+    0.4068,
+    0.8947
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_loft/v017_源资产包_loft_bedside_lamp",
+  "collider_names": [],
+  "expected_export": "loft_bedside_lamp_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

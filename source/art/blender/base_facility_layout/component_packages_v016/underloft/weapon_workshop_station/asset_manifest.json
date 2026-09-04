@@ -1,0 +1,44 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::weapon_workshop_station",
+  "display_name": "49_武器工作台与弹药附件_资产包",
+  "asset_slug": "weapon_workshop_station",
+  "category": "underloft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 13,
+  "mesh_count": 12,
+  "light_count": 1,
+  "object_names": [
+    "ARMORY_霓虹字_自发光",
+    "武器台加固木台面",
+    "武器台弹药箱_0",
+    "武器台弹药箱_1",
+    "武器台弹药箱_2",
+    "武器台红色警示灯",
+    "武器台锁柜主体",
+    "武器挂墙板",
+    "武器挂架孔列_10.1_自发光",
+    "武器挂架孔列_6.5_自发光",
+    "武器挂架孔列_7.4_自发光",
+    "武器挂架孔列_8.3_自发光",
+    "武器挂架孔列_9.2_自发光"
+  ],
+  "world_center_m": [
+    -12.975,
+    -3.4,
+    2.3703
+  ],
+  "bounding_size_m": [
+    2.33,
+    6.0,
+    4.4907
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_underloft/v016_源资产包_weapon_workshop_station",
+  "expected_export": "weapon_workshop_station_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

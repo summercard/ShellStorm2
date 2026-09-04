@@ -1,0 +1,46 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_coffee_table",
+  "display_name": "37_红棕茶几与生活物件_资产包",
+  "asset_slug": "loft_coffee_table",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 15,
+  "mesh_count": 15,
+  "light_count": 0,
+  "object_names": [
+    "v016_茶几下层收纳盒",
+    "v016_茶几下层置物板",
+    "v016_茶几杯垫_01",
+    "v016_茶几杯垫_02",
+    "茶几_台面内嵌边",
+    "茶几_小碟",
+    "茶几_杂志上册",
+    "茶几_杂志下册",
+    "茶几_杯子",
+    "茶几_红棕圆角台面",
+    "茶几_细腿_5.02_8.94",
+    "茶几_细腿_5.02_9.82",
+    "茶几_细腿_7.38_8.94",
+    "茶几_细腿_7.38_9.82",
+    "茶几_遥控器"
+  ],
+  "world_center_m": [
+    6.2,
+    9.38,
+    6.555
+  ],
+  "bounding_size_m": [
+    2.85,
+    1.28,
+    0.91
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 4,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_coffee_table",
+  "expected_export": "loft_coffee_table_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

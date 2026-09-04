@@ -1,0 +1,48 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_good_vibes_neon",
+  "display_name": "44_GOOD VIBES霓虹_资产包",
+  "asset_slug": "loft_good_vibes_neon",
+  "category": "loft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 18,
+  "mesh_count": 15,
+  "light_count": 3,
+  "object_names": [
+    "GOOD_VIBES_GOOD_自发光",
+    "GOOD_VIBES_VIBES_自发光",
+    "GOOD_VIBES_v012_安装螺丝_-0.73_-0.32",
+    "GOOD_VIBES_v012_安装螺丝_-0.73_0.32",
+    "GOOD_VIBES_v012_安装螺丝_0.73_-0.32",
+    "GOOD_VIBES_v012_安装螺丝_0.73_0.32",
+    "GOOD_VIBES_v012_粉紫洗墙光",
+    "GOOD_VIBES_v012_粉紫背光安装底板",
+    "GOOD_VIBES_v012_粉色霓虹字",
+    "GOOD_VIBES_v013_白粉霓虹",
+    "GOOD_VIBES_v013_粉紫洗墙",
+    "GOOD_VIBES_v013_霓虹外框",
+    "GOOD_VIBES_小型背板",
+    "GOOD_VIBES_粉色内发光晕板_自发光",
+    "GOOD_VIBES_粉色霓虹洗墙光",
+    "GOOD_VIBES_高亮GOOD_自发光",
+    "GOOD_VIBES_高亮VIBES_自发光",
+    "GOOD_VIBES_黑色字缝遮罩"
+  ],
+  "world_center_m": [
+    10.55,
+    14.2975,
+    8.48
+  ],
+  "bounding_size_m": [
+    1.58,
+    0.915,
+    0.84
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_loft/v017_源资产包_loft_good_vibes_neon",
+  "collider_names": [],
+  "expected_export": "loft_good_vibes_neon_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

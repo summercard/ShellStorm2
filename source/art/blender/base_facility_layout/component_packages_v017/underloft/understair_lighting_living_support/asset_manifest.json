@@ -1,0 +1,37 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::understair_lighting_living_support",
+  "display_name": "61_梯下暖光与生活点缀_资产包",
+  "asset_slug": "understair_lighting_living_support",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 5,
+  "mesh_count": 3,
+  "light_count": 2,
+  "object_names": [
+    "COLLISION_梯下生活角窄边柜",
+    "梯下暖光与生活点缀_UI灯光_柔和自发光",
+    "梯下暖光与生活点缀_主体_金属哑光反光",
+    "梯下暖灯v014_休息角柔光补偿",
+    "梯下暖灯v014_局部暖光"
+  ],
+  "world_center_m": [
+    -8.8,
+    14.235,
+    1.845
+  ],
+  "bounding_size_m": [
+    3.1,
+    1.03,
+    3.69
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_understair_lighting_living_support",
+  "collider_names": [
+    "COLLISION_梯下生活角窄边柜"
+  ],
+  "expected_export": "understair_lighting_living_support_visual_top3d_v001.glb",
+  "collision_status": "source collider attached",
+  "export_status": "not_exported"
+}

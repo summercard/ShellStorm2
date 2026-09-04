@@ -1,0 +1,49 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::base_camp_neon_sign",
+  "display_name": "44_BASE_CAMP立体霓虹标识_资产包",
+  "asset_slug": "base_camp_neon_sign",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 19,
+  "mesh_count": 17,
+  "light_count": 2,
+  "object_names": [
+    "BASE_CAMP_立体霓虹字_自发光",
+    "BASE_CAMP_背光_3.1",
+    "BASE_CAMP_背光_6.9",
+    "BASE_CAMP_金属背板",
+    "BASE_CAMP标牌_上沿青蓝泛光条_自发光",
+    "BASE_CAMP标牌_侧框_1.16",
+    "BASE_CAMP标牌_侧框_8.84",
+    "BASE_CAMP标牌_加厚外框_4.00",
+    "BASE_CAMP标牌_加厚外框_4.86",
+    "BASE_CAMP标牌_背部固定支架_01",
+    "BASE_CAMP标牌_背部固定支架_02",
+    "BASE_CAMP标牌_背部固定支架_03",
+    "BASE_CAMP标牌_背部固定支架_04",
+    "BASE_CAMP标牌_背部固定支架_05",
+    "BASE_CAMP标牌_连接螺钉_01",
+    "BASE_CAMP标牌_连接螺钉_02",
+    "BASE_CAMP标牌_连接螺钉_03",
+    "BASE_CAMP标牌_连接螺钉_04",
+    "BASE_CAMP标牌_连接螺钉_05"
+  ],
+  "world_center_m": [
+    5.0,
+    4.6025,
+    4.4387
+  ],
+  "bounding_size_m": [
+    7.8,
+    0.845,
+    0.9975
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_base_camp_neon_sign",
+  "collider_names": [],
+  "expected_export": "base_camp_neon_sign_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

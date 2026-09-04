@@ -1,0 +1,36 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::south_wall_information_boards",
+  "display_name": "61_南墙资料板组_资产包",
+  "asset_slug": "south_wall_information_boards",
+  "category": "warehouse",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 6,
+  "mesh_count": 6,
+  "light_count": 0,
+  "object_names": [
+    "南墙资料板_0",
+    "南墙资料板_1",
+    "南墙资料板_2",
+    "南墙资料板标题_0_自发光",
+    "南墙资料板标题_1_自发光",
+    "南墙资料板标题_2_自发光"
+  ],
+  "world_center_m": [
+    2.4,
+    -14.5098,
+    4.65
+  ],
+  "bounding_size_m": [
+    16.2,
+    0.2004,
+    1.3
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_warehouse/v017_源资产包_south_wall_information_boards",
+  "collider_names": [],
+  "expected_export": "south_wall_information_boards_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

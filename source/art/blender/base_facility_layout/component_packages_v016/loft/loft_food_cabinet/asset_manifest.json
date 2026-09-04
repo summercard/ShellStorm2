@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_food_cabinet",
+  "display_name": "47_FOOD模块收纳箱_资产包",
+  "asset_slug": "loft_food_cabinet",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 9,
+  "mesh_count": 9,
+  "light_count": 0,
+  "object_names": [
+    "FOOD分类箱_包角_-0.49",
+    "FOOD分类箱_包角_0.49",
+    "FOOD分类箱_厚实主体",
+    "FOOD分类箱_文字_自发光",
+    "FOOD分类箱_正面标签板",
+    "FOOD分类箱_深色顶盖",
+    "FOOD分类箱_锁扣",
+    "v016_FOOD箱_餐盘图标",
+    "v016_FOOD箱_餐盘高光_自发光"
+  ],
+  "world_center_m": [
+    -0.65,
+    13.872,
+    6.535
+  ],
+  "bounding_size_m": [
+    1.2,
+    0.996,
+    0.87
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 2,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_food_cabinet",
+  "expected_export": "loft_food_cabinet_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

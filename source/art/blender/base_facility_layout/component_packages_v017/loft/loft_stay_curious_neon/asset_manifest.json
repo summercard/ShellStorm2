@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_stay_curious_neon",
+  "display_name": "52_STAY_CURIOUS楼梯墙标识_资产包",
+  "asset_slug": "loft_stay_curious_neon",
+  "category": "loft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 4,
+  "mesh_count": 2,
+  "light_count": 2,
+  "object_names": [
+    "STAY_CURIOUS_v012_安装背板",
+    "STAY_CURIOUS_v012_暖色字",
+    "STAY_CURIOUS_v012_暖色洗墙光",
+    "STAY_CURIOUS_v013_暖红洗墙"
+  ],
+  "world_center_m": [
+    -14.2238,
+    11.02,
+    5.1784
+  ],
+  "bounding_size_m": [
+    0.6075,
+    1.5,
+    0.8439
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_loft/v017_源资产包_loft_stay_curious_neon",
+  "collider_names": [],
+  "expected_export": "loft_stay_curious_neon_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

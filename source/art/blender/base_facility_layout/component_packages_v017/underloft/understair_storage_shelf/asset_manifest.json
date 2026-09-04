@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::understair_storage_shelf",
+  "display_name": "60_梯下层架与收纳_资产包",
+  "asset_slug": "understair_storage_shelf",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 2,
+  "mesh_count": 2,
+  "light_count": 0,
+  "object_names": [
+    "COLLISION_梯下层架与收纳",
+    "梯下层架与收纳_主体_金属哑光反光"
+  ],
+  "world_center_m": [
+    -8.58,
+    14.2031,
+    1.3
+  ],
+  "bounding_size_m": [
+    1.24,
+    0.9338,
+    2.6
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_understair_storage_shelf",
+  "collider_names": [
+    "COLLISION_梯下层架与收纳"
+  ],
+  "expected_export": "understair_storage_shelf_visual_top3d_v001.glb",
+  "collision_status": "source collider attached",
+  "export_status": "not_exported"
+}

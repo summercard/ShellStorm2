@@ -1,0 +1,41 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::underdeck_sheet_blocker",
+  "display_name": "13_阁楼下方铁皮封闭体_资产包",
+  "asset_slug": "underdeck_sheet_blocker",
+  "category": "architecture",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 11,
+  "mesh_count": 5,
+  "light_count": 4,
+  "object_names": [
+    "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER_输出根节点_v003.001",
+    "仓库挡板_主体_金属哑光反光.001",
+    "铁皮外立面呼吸灯_-2.5",
+    "铁皮外立面呼吸灯_12.5",
+    "铁皮外立面呼吸灯_2.5",
+    "铁皮外立面呼吸灯_7.5",
+    "铁皮外立面线性灯_-2.5_自发光",
+    "铁皮外立面线性灯_12.5_自发光",
+    "铁皮外立面线性灯_2.5_自发光",
+    "铁皮外立面线性灯_7.5_自发光",
+    "阁楼下方三面铁皮封闭体"
+  ],
+  "world_center_m": [
+    5.0,
+    9.685,
+    2.7
+  ],
+  "bounding_size_m": [
+    19.315,
+    9.53,
+    5.4
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_underdeck_sheet_blocker",
+  "collider_names": [],
+  "expected_export": "underdeck_sheet_blocker_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

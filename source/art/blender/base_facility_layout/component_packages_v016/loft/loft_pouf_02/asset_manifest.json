@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_pouf_02",
+  "display_name": "40_深绿圆形坐墩02_资产包",
+  "asset_slug": "loft_pouf_02",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 3,
+  "mesh_count": 3,
+  "light_count": 0,
+  "object_names": [
+    "坐墩02_下包边",
+    "坐墩02_坐面滚边",
+    "坐墩02_软包主体"
+  ],
+  "world_center_m": [
+    8.72,
+    8.62,
+    6.46
+  ],
+  "bounding_size_m": [
+    0.88,
+    0.88,
+    0.57
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_pouf_02",
+  "expected_export": "loft_pouf_02_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

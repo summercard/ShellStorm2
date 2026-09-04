@@ -1,0 +1,52 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::south_wall_pipeline_system",
+  "display_name": "55_南墙工业管线系统_资产包",
+  "asset_slug": "south_wall_pipeline_system",
+  "category": "underloft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 21,
+  "mesh_count": 21,
+  "light_count": 0,
+  "object_names": [
+    "南墙管线_A_门控垂直支线",
+    "南墙管线_A_门控接线盒",
+    "南墙管线_A_门控终端线",
+    "南墙管线_A_顶部主管",
+    "南墙管线_B_全息供能垂直线",
+    "南墙管线_B_地面接口保护座",
+    "南墙管线_B_设备分线盒",
+    "南墙管线_主管固定卡扣_01",
+    "南墙管线_主管固定卡扣_02",
+    "南墙管线_主管固定卡扣_03",
+    "南墙管线_主管固定卡扣_04",
+    "南墙管线_主管固定卡扣_05",
+    "南墙管线_主管固定卡扣_06",
+    "南墙管线_主管固定卡扣_07",
+    "南墙管线_主管固定卡扣_08",
+    "南墙管线_垂直线固定卡扣_01",
+    "南墙管线_垂直线固定卡扣_02",
+    "南墙管线_垂直线固定卡扣_03",
+    "南墙管线_垂直线固定卡扣_04",
+    "南墙管线_垂直线固定卡扣_05",
+    "南墙管线_垂直线固定卡扣_06"
+  ],
+  "world_center_m": [
+    5.0,
+    4.46,
+    2.845
+  ],
+  "bounding_size_m": [
+    18.6,
+    0.58,
+    4.95
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_underloft/v016_源资产包_south_wall_pipeline_system",
+  "expected_export": "south_wall_pipeline_system_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_round_pendant_light",
+  "display_name": "84_东面圆形工业吊灯_资产包",
+  "asset_slug": "east_round_pendant_light",
+  "category": "east_facilities",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 13,
+  "mesh_count": 10,
+  "light_count": 2,
+  "object_names": [
+    "东面圆形吊灯_四点吊线_01",
+    "东面圆形吊灯_四点吊线_02",
+    "东面圆形吊灯_四点吊线_03",
+    "东面圆形吊灯_四点吊线_04",
+    "东面圆形吊灯_外围青蓝灯圈_自发光",
+    "东面圆形吊灯_局部冷白光",
+    "东面圆形吊灯_底部冷白发光面_自发光",
+    "东面圆形吊灯_顶部连接座",
+    "仓库主吊灯光_2_0",
+    "仓库吊灯发光面_2_0_自发光",
+    "仓库吊灯摆动轴_2_0",
+    "仓库吊灯线缆_2_0",
+    "仓库防爆吊灯_2_0"
+  ],
+  "world_center_m": [
+    10.0049,
+    -3.3923,
+    7.53
+  ],
+  "bounding_size_m": [
+    1.2418,
+    1.2427,
+    1.56
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_east_facilities/v017_源资产包_east_round_pendant_light",
+  "collider_names": [],
+  "expected_export": "east_round_pendant_light_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

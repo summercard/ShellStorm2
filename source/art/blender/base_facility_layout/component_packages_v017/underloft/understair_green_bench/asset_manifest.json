@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::understair_green_bench",
+  "display_name": "57_梯下绿色软垫长凳_资产包",
+  "asset_slug": "understair_green_bench",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 2,
+  "mesh_count": 2,
+  "light_count": 0,
+  "object_names": [
+    "COLLISION_梯下绿色软垫长凳",
+    "梯下绿色软垫长凳_主体_金属哑光反光"
+  ],
+  "world_center_m": [
+    -11.15,
+    14.1537,
+    0.83
+  ],
+  "bounding_size_m": [
+    2.58,
+    0.9125,
+    1.66
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_understair_green_bench",
+  "collider_names": [
+    "COLLISION_梯下绿色软垫长凳"
+  ],
+  "expected_export": "understair_green_bench_visual_top3d_v001.glb",
+  "collision_status": "source collider attached",
+  "export_status": "not_exported"
+}

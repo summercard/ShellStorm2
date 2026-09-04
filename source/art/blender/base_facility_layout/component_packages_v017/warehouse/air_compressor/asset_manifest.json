@@ -1,0 +1,32 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::air_compressor",
+  "display_name": "58_空气压缩机_资产包",
+  "asset_slug": "air_compressor",
+  "category": "warehouse",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 2,
+  "mesh_count": 2,
+  "light_count": 0,
+  "object_names": [
+    "空气压缩机",
+    "空气压缩机储气罐"
+  ],
+  "world_center_m": [
+    -13.0,
+    -1.55,
+    0.78
+  ],
+  "bounding_size_m": [
+    2.0,
+    1.45,
+    1.2
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_warehouse/v017_源资产包_air_compressor",
+  "collider_names": [],
+  "expected_export": "air_compressor_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

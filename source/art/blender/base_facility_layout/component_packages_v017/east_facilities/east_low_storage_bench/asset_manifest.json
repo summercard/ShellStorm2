@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_low_storage_bench",
+  "display_name": "80_低矮储物收纳区_资产包",
+  "asset_slug": "east_low_storage_bench",
+  "category": "east_facilities",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 10,
+  "mesh_count": 10,
+  "light_count": 0,
+  "object_names": [
+    "东面低矮储物区_主柜体",
+    "东面低矮储物区_小型收纳箱",
+    "东面低矮储物区_柜门_01",
+    "东面低矮储物区_柜门_02",
+    "东面低矮储物区_柜门_03",
+    "东面低矮储物区_柜门拉手_01",
+    "东面低矮储物区_柜门拉手_02",
+    "东面低矮储物区_柜门拉手_03",
+    "东面低矮储物区_水杯",
+    "东面低矮储物区_顶部软垫"
+  ],
+  "world_center_m": [
+    10.85,
+    -14.0375,
+    0.915
+  ],
+  "bounding_size_m": [
+    2.9,
+    1.225,
+    1.69
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_east_facilities/v017_源资产包_east_low_storage_bench",
+  "collider_names": [],
+  "expected_export": "east_low_storage_bench_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

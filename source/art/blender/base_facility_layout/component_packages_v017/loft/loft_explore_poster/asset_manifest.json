@@ -1,0 +1,44 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_explore_poster",
+  "display_name": "48_EXPLORE独立海报_资产包",
+  "asset_slug": "loft_explore_poster",
+  "category": "loft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 14,
+  "mesh_count": 14,
+  "light_count": 0,
+  "object_names": [
+    "EXPLORE_v012_吊装铆钉_-1.66",
+    "EXPLORE_v012_吊装铆钉_-2.58",
+    "EXPLORE_v012_安装侧条_-1.46",
+    "EXPLORE_v012_安装侧条_-2.78",
+    "EXPLORE_v012_顶部安装轨",
+    "EXPLORE_v013_内层海报纸",
+    "EXPLORE_v013_标题",
+    "EXPLORE_v013_紫色远山",
+    "EXPLORE_v013_青色山峰",
+    "EXPLORE_v013_黑色海报框",
+    "EXPLORE海报_山线A",
+    "EXPLORE海报_山线B",
+    "EXPLORE海报_标题_自发光",
+    "EXPLORE海报_深色底板"
+  ],
+  "world_center_m": [
+    -2.12,
+    14.487,
+    8.0975
+  ],
+  "bounding_size_m": [
+    1.46,
+    0.536,
+    1.755
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_loft/v017_源资产包_loft_explore_poster",
+  "collider_names": [],
+  "expected_export": "loft_explore_poster_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

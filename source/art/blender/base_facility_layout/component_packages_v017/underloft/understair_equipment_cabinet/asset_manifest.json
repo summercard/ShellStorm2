@@ -1,0 +1,35 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::understair_equipment_cabinet",
+  "display_name": "59_梯下立式设备柜_资产包",
+  "asset_slug": "understair_equipment_cabinet",
+  "category": "underloft",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 3,
+  "mesh_count": 3,
+  "light_count": 0,
+  "object_names": [
+    "COLLISION_梯下立式设备柜",
+    "梯下立式设备柜_UI灯光_柔和自发光",
+    "梯下立式设备柜_主体_金属哑光反光"
+  ],
+  "world_center_m": [
+    -6.82,
+    14.2165,
+    1.565
+  ],
+  "bounding_size_m": [
+    1.1,
+    0.927,
+    3.13
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_understair_equipment_cabinet",
+  "collider_names": [
+    "COLLISION_梯下立式设备柜"
+  ],
+  "expected_export": "understair_equipment_cabinet_visual_top3d_v001.glb",
+  "collision_status": "source collider attached",
+  "export_status": "not_exported"
+}

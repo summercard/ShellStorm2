@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_hanging_plant",
+  "display_name": "49_后墙吊挂植物_资产包",
+  "asset_slug": "loft_hanging_plant",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 12,
+  "mesh_count": 12,
+  "light_count": 0,
+  "object_names": [
+    "吊挂植物_吊绳_13.97",
+    "吊挂植物_吊绳_14.33",
+    "吊挂植物_垂叶_01",
+    "吊挂植物_垂叶_02",
+    "吊挂植物_垂叶_03",
+    "吊挂植物_垂叶_04",
+    "吊挂植物_垂叶_05",
+    "吊挂植物_垂叶_06",
+    "吊挂植物_垂叶_07",
+    "吊挂植物_垂叶_08",
+    "吊挂植物_垂叶_09",
+    "吊挂植物_陶盆"
+  ],
+  "world_center_m": [
+    2.7245,
+    14.1501,
+    8.1353
+  ],
+  "bounding_size_m": [
+    0.6064,
+    0.5028,
+    1.6494
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_hanging_plant",
+  "expected_export": "loft_hanging_plant_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

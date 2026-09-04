@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_battery_cabinet",
+  "display_name": "46_BATTERY模块收纳箱_资产包",
+  "asset_slug": "loft_battery_cabinet",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 12,
+  "mesh_count": 12,
+  "light_count": 0,
+  "object_names": [
+    "BATTERY分类箱_包角_-0.49",
+    "BATTERY分类箱_包角_0.49",
+    "BATTERY分类箱_厚实主体",
+    "BATTERY分类箱_文字_自发光",
+    "BATTERY分类箱_正面标签板",
+    "BATTERY分类箱_深色顶盖",
+    "BATTERY分类箱_锁扣",
+    "v016_BATTERY箱_电池正极",
+    "v016_BATTERY箱_电池轮廓",
+    "v016_BATTERY箱_电量格_01_自发光",
+    "v016_BATTERY箱_电量格_02_自发光",
+    "v016_BATTERY箱_电量格_03_自发光"
+  ],
+  "world_center_m": [
+    -1.95,
+    13.8738,
+    6.545
+  ],
+  "bounding_size_m": [
+    1.2,
+    0.9925,
+    0.85
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 5,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_battery_cabinet",
+  "expected_export": "loft_battery_cabinet_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

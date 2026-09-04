@@ -1,0 +1,49 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_office_chair",
+  "display_name": "43_带扶手办公椅_资产包",
+  "asset_slug": "loft_office_chair",
+  "category": "loft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 18,
+  "mesh_count": 18,
+  "light_count": 0,
+  "object_names": [
+    "办公椅_五星脚_01",
+    "办公椅_五星脚_02",
+    "办公椅_五星脚_03",
+    "办公椅_五星脚_04",
+    "办公椅_五星脚_05",
+    "办公椅_五星脚中心",
+    "办公椅_升降杆",
+    "办公椅_坐垫",
+    "办公椅_扶手垫_-0.52",
+    "办公椅_扶手垫_0.52",
+    "办公椅_扶手杆_-0.52",
+    "办公椅_扶手杆_0.52",
+    "办公椅_脚轮_01",
+    "办公椅_脚轮_02",
+    "办公椅_脚轮_03",
+    "办公椅_脚轮_04",
+    "办公椅_脚轮_05",
+    "办公椅_靠背"
+  ],
+  "world_center_m": [
+    10.45,
+    12.2588,
+    7.1324
+  ],
+  "bounding_size_m": [
+    1.28,
+    1.1267,
+    2.0213
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_loft/v016_源资产包_loft_office_chair",
+  "expected_export": "loft_office_chair_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}

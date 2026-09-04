@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::loft_lighting_support",
+  "display_name": "50_二楼分层照明支持_资产包",
+  "asset_slug": "loft_lighting_support",
+  "category": "support",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 12,
+  "mesh_count": 8,
+  "light_count": 4,
+  "object_names": [
+    "二楼休闲区_柔和暖光",
+    "二楼前沿_暖橙连续灯带_01_自发光",
+    "二楼前沿_暖橙连续灯带_02_自发光",
+    "二楼前沿_暖橙连续灯带_03_自发光",
+    "二楼前沿_暖橙连续灯带_04_自发光",
+    "二楼前沿_暖橙连续灯带_05_自发光",
+    "二楼前沿_暖橙连续灯带_06_自发光",
+    "二楼工位区_冷色面光",
+    "二楼床区_暖白面光",
+    "二楼整体_冷色轮廓光",
+    "二楼西墙_冷白线性灯_自发光",
+    "二楼西墙_冷白线性灯外壳"
+  ],
+  "world_center_m": [
+    2.9605,
+    9.9863,
+    8.8538
+  ],
+  "bounding_size_m": [
+    18.3209,
+    9.4674,
+    5.2924
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_support/v017_源资产包_loft_lighting_support",
+  "collider_names": [],
+  "expected_export": "loft_lighting_support_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
+}

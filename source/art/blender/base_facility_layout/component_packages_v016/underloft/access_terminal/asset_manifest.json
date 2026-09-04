@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::access_terminal",
+  "display_name": "52_ACCESS门禁终端_资产包",
+  "asset_slug": "access_terminal",
+  "category": "underloft",
+  "version": "v016",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v016.blend",
+  "object_count": 9,
+  "mesh_count": 9,
+  "light_count": 0,
+  "object_names": [
+    "ACCESS门禁终端_ACCESS文字_自发光",
+    "ACCESS门禁终端_后部数据线",
+    "ACCESS门禁终端_墙挂支架",
+    "ACCESS门禁终端_实体按键_01",
+    "ACCESS门禁终端_实体按键_02",
+    "ACCESS门禁终端_实体按键_03",
+    "ACCESS门禁终端_屏幕_自发光",
+    "ACCESS门禁终端_屏幕边框",
+    "ACCESS门禁终端_读卡器"
+  ],
+  "world_center_m": [
+    1.35,
+    4.3086,
+    2.045
+  ],
+  "bounding_size_m": [
+    0.56,
+    0.3828,
+    1.03
+  ],
+  "forward_axis": "Blender +Y north",
+  "baseline_policy": "all v015 objects locked; v016 is additive only",
+  "v016_added_object_count": 0,
+  "editable_source_folder": "01_制作组件_已统一材质/v016_新增制作源_按设施归类/v016_源类别_underloft/v016_源资产包_access_terminal",
+  "expected_export": "access_terminal_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_partial_blender_pass",
+  "export_status": "not_exported"
+}
