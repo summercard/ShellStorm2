@@ -3339,20 +3339,25 @@ func _install_elevator_facility() -> void:
 	var facility_floor := _room_by_id.get("facility") as DungeonRoom3D
 	if facility_floor == null or not _elevator_facilities_by_floor.is_empty():
 		return
-	# 电梯全部挂在塔楼的独立设施层级下；视觉贴墙，但不再是房间内容节点。
-	var elevator_position := facility_floor.position + Vector3(9.0, 0.0, 11.6)
-	var elevator_rotation := PI
-	if _facility_art_layout != null:
-		var elevator_anchor := _facility_art_layout.get_node_or_null("玩法锚点_只移动不删除/99层电梯锚点") as Marker3D
-		if elevator_anchor != null:
-			elevator_position = elevator_anchor.global_position
-			elevator_rotation = elevator_anchor.global_rotation.y
-	_elevator_facility = _create_standalone_elevator(
-		99,
-		"facility",
-		elevator_position,
-		elevator_rotation
-	)
+	# 99F 基地电梯默认隐藏：不要在基地场景里创建该电梯节点，
+	# 改设塔楼入口走楼梯/其他入口；以后要带回基地只需将下面这段
+	# base_elevator_enabled 检查改为 true 即可恢复。
+	var base_elevator_enabled := false
+	if base_elevator_enabled:
+		# 电梯全部挂在塔楼的独立设施层级下；视觉贴墙，但不再是房间内容节点。
+		var elevator_position := facility_floor.position + Vector3(9.0, 0.0, 11.6)
+		var elevator_rotation := PI
+		if _facility_art_layout != null:
+			var elevator_anchor := _facility_art_layout.get_node_or_null("玩法锚点_只移动不删除/99层电梯锚点") as Marker3D
+			if elevator_anchor != null:
+				elevator_position = elevator_anchor.global_position
+				elevator_rotation = elevator_anchor.global_rotation.y
+		_elevator_facility = _create_standalone_elevator(
+			99,
+			"facility",
+			elevator_position,
+			elevator_rotation
+		)
 	for floor_index in range(2, COMBAT_FLOOR_COUNT + 2):
 		var floor_number := _floor_number_from_index(floor_index)
 		var access_room_id := ""

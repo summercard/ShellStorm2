@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_base_optional_facilities_removed.gd" id="1_base"]
+
+[node name="VerifyBaseOptionalFacilitiesRemoved" type="Node"]
+script = ExtResource("1_base")
