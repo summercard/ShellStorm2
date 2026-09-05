@@ -3,6 +3,7 @@
 import bpy
 import bmesh
 import json
+import math
 from mathutils import Vector
 from pathlib import Path
 
@@ -85,6 +86,47 @@ def triangle_count(objects):
     return sum(len(obj.data.polygons) for obj in objects)
 
 
+def finish_visuals(merged):
+    """Keep editable palette islands after decimation, then split emissive faces."""
+    mesh = merged.data
+    uv = mesh.uv_layers.get('PaletteUV')
+    if uv is None:
+        raise RuntimeError('Missing PaletteUV: '+merged.name)
+    for other in list(mesh.uv_layers):
+        if other.name != 'PaletteUV': mesh.uv_layers.remove(other)
+    mesh.uv_layers.active = uv
+    uv.active_render = True
+    for p in mesh.polygons:
+        center = sum((uv.data[i].uv for i in p.loop_indices), Vector((0,0))) / len(p.loop_indices)
+        cell = Vector(((min(9,max(0,int(center.x*10)))+.5)/10,(min(9,max(0,int(center.y*10)))+.5)/10))
+        for j,i in enumerate(p.loop_indices):
+            angle=math.tau*j/len(p.loop_indices)
+            uv.data[i].uv=cell+Vector((math.cos(angle),math.sin(angle)))*.022
+    emissive = {i for i,m in enumerate(mesh.materials) if m and m.use_nodes and any(
+        n.type=='BSDF_PRINCIPLED' and n.inputs['Emission Strength'].default_value>0 for n in m.node_tree.nodes)}
+    outputs=[]
+    for is_emission in [False,True]:
+        obj=merged.copy(); obj.data=mesh.copy()
+        merged.users_collection[0].objects.link(obj)
+        obj.name=merged.name+('_UI灯光_自发光' if is_emission else '_主体')
+        bm=bmesh.new();bm.from_mesh(obj.data)
+        bmesh.ops.delete(bm,geom=[f for f in bm.faces if (f.material_index in emissive)!=is_emission],context='FACES')
+        bm.to_mesh(obj.data);bm.free()
+        if not obj.data.polygons:
+            bpy.data.objects.remove(obj,do_unlink=True);continue
+        indices=[p.material_index for p in obj.data.polygons]
+        used=sorted(set(indices)); mats=[obj.data.materials[i] for i in used]
+        obj.data.materials.clear()
+        for m in mats:obj.data.materials.append(m)
+        for p,index in zip(obj.data.polygons,indices):p.material_index=used.index(index)
+        outputs.append(obj)
+    bpy.data.objects.remove(merged,do_unlink=True)
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in outputs:obj.select_set(True)
+    bpy.context.view_layer.objects.active=outputs[0]
+    return outputs
+
+
 def box_for(obj, preserve_rotation=False):
     if preserve_rotation:
         local = [Vector(corner) for corner in obj.bound_box]
@@ -129,7 +171,11 @@ def export_package(slug):
     bpy.context.scene.collection.children.link(output)
     clones = []
     removed = 0
-    boxes = [box_for(obj, preserve_rotation=bool(collision_sources)) for obj in (collision_sources or visual_sources)]
+    # Source ramps may already have baked rotation in their mesh. An AABB (even
+    # rotated a second time) destroys the slope. Export the actual convex vertices.
+    boxes = ([{"points": [godot_vector(obj.matrix_world @ v.co) for v in obj.data.vertices],
+               "source_object": obj.name} for obj in collision_sources]
+             if collision_sources else [box_for(obj) for obj in visual_sources])
     boxes = [box for box in boxes if box]
     for source in visual_sources:
         clone = source.copy()
@@ -152,9 +198,10 @@ def export_package(slug):
     bpy.ops.object.join()
     merged = bpy.context.view_layer.objects.active
     merged.name = "ENV_BASE99_STRUCTURAL_%s_V021" % slug.upper()
+    final_objects=finish_visuals(merged)
     output_dir = COMPONENT_ROOT / slug
     output_dir.mkdir(parents=True, exist_ok=True)
-    glb_path = output_dir / (slug + "_visual_top3d_v001.glb")
+    glb_path = output_dir / (slug + "_visual_top3d_v002.glb")
     bpy.ops.export_scene.gltf(
         filepath=str(glb_path), export_format="GLB", use_selection=True, export_apply=True,
         export_materials="EXPORT", export_image_format="NONE", export_lights=False, export_cameras=False,
@@ -163,7 +210,7 @@ def export_package(slug):
         "slug": slug, "display_name": package.name, "source_meshes": len(visual_sources),
         "source_collision_meshes": len(collision_sources), "collision_boxes": boxes,
         "downward_faces_removed": removed, "triangles_after_downward_cull": triangles_after_cull,
-        "triangles_after_optimization": triangle_count([merged]), "export": str(glb_path.relative_to(PROJECT)),
+        "triangles_after_optimization": triangle_count(final_objects), "export": str(glb_path.relative_to(PROJECT)),
     }
 
 
@@ -174,20 +221,24 @@ def write_scene(entry):
     lines = ["[gd_scene load_steps=%d format=3]" % (2 + len(entry["collision_boxes"])), "",
         "[ext_resource type=\"PackedScene\" path=\"res://%s\" id=\"1_visual\"]" % entry["export"]]
     for index, box in enumerate(entry["collision_boxes"]):
-        lines += ["", "[sub_resource type=\"BoxShape3D\" id=\"Box_%d\"]" % index, "size = %s" % vector(box["size"])]
+        if "points" in box:
+            lines += ["", '[sub_resource type="ConvexPolygonShape3D" id="Box_%d"]' % index,
+                      'points = PackedVector3Array(%s)' % ', '.join(fmt(v) for p in box['points'] for v in p)]
+        else:
+            lines += ["", "[sub_resource type=\"BoxShape3D\" id=\"Box_%d\"]" % index, "size = %s" % vector(box["size"])]
     lines += ["", "[node name=\"%s\" type=\"Node3D\"]" % entry["display_name"],
         "metadata/asset_id = \"ENV-BASE99-STRUCTURAL-V021::%s\"" % slug,
         "metadata/asset_version = \"v021\"",
         "metadata/source_blend = \"res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend\"",
         "metadata/derived_from_blender = \"base_facility_runtime_layout_hq_v017.blend\"",
-        "metadata/collision_policy = \"source_collider_boxes\"" if entry["source_collision_meshes"] else "metadata/collision_policy = \"per_visual_component_boxes\"",
+        "metadata/collision_policy = \"source_convex_ramps_and_rails\"" if entry["source_collision_meshes"] else "metadata/collision_policy = \"per_visual_component_boxes\"",
         "metadata/placement_policy = \"baked V017 world coordinates; root remains at origin\"", "",
         "[node name=\"ImportedModel\" parent=\".\" instance=ExtResource(\"1_visual\")]", "",
         "[node name=\"StaticCollision\" type=\"StaticBody3D\" parent=\".\"]",
         "collision_layer = 1", "collision_mask = 1"]
     for index, box in enumerate(entry["collision_boxes"]):
         lines += ["", "[node name=\"Blocker_%03d\" type=\"CollisionShape3D\" parent=\"StaticCollision\"]" % index,
-            "position = %s" % vector(box["center"])]
+            "position = %s" % vector(box.get("center", [0,0,0]))]
         if "basis" in box:
             lines.append("basis = Basis(%s)" % ", ".join(fmt(value) for row in box["basis"] for value in row))
         lines.append("shape = SubResource(\"Box_%d\")" % index)

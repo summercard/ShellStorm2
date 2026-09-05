@@ -203,9 +203,10 @@
       "derived_from_version": "v017",
       "version": "v021",
       "package_count": 4,
-      "triangles_after_optimization": 30139,
-      "geometry": "four independent structural packages; 7945 downward-facing faces removed for top-view use",
-      "collision": "V017 source stair colliders retained as simplified rotated BoxShape3D; mezzanine and underdeck use per-component simplified BoxShape3D",
+      "triangles_after_optimization": 31450,
+      "geometry": "V021 GLB revision v002; northwest stair regraded in V017 to 27.699 degrees, 16 treads per flight; 9045 downward-facing faces removed",
+      "collision": "Source convex vertices preserve stair slopes and narrow rails; northwest stair uses continuous ramps with aligned landings; mezzanine and underdeck retain component boxes",
+      "emission": "Shared palette post-import uses MULTIPLY to preserve emissive color without adding white",
       "status": "approved_runtime"
     },
     "base99_mezzanine_underdeck_blocker": {

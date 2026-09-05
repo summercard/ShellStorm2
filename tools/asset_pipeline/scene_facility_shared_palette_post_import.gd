@@ -25,6 +25,9 @@ func _apply_palette(root: Node, palette: Texture2D) -> void:
 					continue
 				material.albedo_texture = palette
 				material.emission_texture = palette
+				# glTF's white emissive factor multiplies the palette. Godot's
+				# default ADD operator instead adds white and washes out every cell.
+				material.emission_operator = BaseMaterial3D.EMISSION_OP_MULTIPLY
 				material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 				material.texture_repeat = false
 	for child in root.get_children():

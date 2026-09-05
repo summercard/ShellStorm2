@@ -1,25 +1,37 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=10 format=3]
 
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v001.glb" id="1_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v002.glb" id="1_visual"]
 
-[sub_resource type="BoxShape3D" id="Box_0"]
-size = Vector3(1.639999, 2.877146, 4.642408)
+[sub_resource type="ConvexPolygonShape3D" id="Box_0"]
+points = PackedVector3Array(-12.98, -0.152, -6.94, -12.98, 2.925, -12.8, -14.62, 2.925, -12.8, -14.62, -0.152, -6.94, -12.98, -0.032, -6.94, -12.98, 3.045, -12.8, -14.62, 3.045, -12.8, -14.62, -0.032, -6.94, -12.8, 2.805, -12.8, -12.8, 2.805, -14.8, -14.8, 2.805, -14.8, -14.8, 2.805, -12.8, -12.8, 3.045, -12.8, -12.8, 3.045, -14.8, -14.8, 3.045, -14.8, -14.8, 3.045, -12.8)
 
-[sub_resource type="BoxShape3D" id="Box_1"]
-size = Vector3(4.642628, 2.887013, 1.639999)
+[sub_resource type="ConvexPolygonShape3D" id="Box_1"]
+points = PackedVector3Array(-12.8, 2.925, -12.98, -7, 5.97, -12.98, -7, 5.97, -14.62, -12.8, 2.925, -14.62, -12.8, 3.045, -12.98, -7, 6.09, -12.98, -7, 6.09, -14.62, -12.8, 3.045, -14.62, -7, 5.93, -12.860001, -4.75, 5.93, -12.860001, -4.75, 5.93, -14.74, -7, 5.93, -14.74, -7, 6.09, -12.860001, -4.75, 6.09, -12.860001, -4.75, 6.09, -14.74, -7, 6.09, -14.74)
 
-[sub_resource type="BoxShape3D" id="Box_2"]
-size = Vector3(1.9, 0.16, 1.9)
+[sub_resource type="ConvexPolygonShape3D" id="Box_2"]
+points = PackedVector3Array(-14.59, 0.05, -7, -14.59, 3.095, -12.8, -14.67, 3.095, -12.8, -14.67, 0.05, -7, -14.59, 1.05, -7, -14.59, 4.095, -12.8, -14.67, 4.095, -12.8, -14.67, 1.05, -7)
 
-[sub_resource type="BoxShape3D" id="Box_3"]
-size = Vector3(3.440001, 0.16, 1.879999)
+[sub_resource type="ConvexPolygonShape3D" id="Box_3"]
+points = PackedVector3Array(-12.89, 0.05, -7, -12.89, 3.095, -12.8, -12.97, 3.095, -12.8, -12.97, 0.05, -7, -12.89, 1.05, -7, -12.89, 4.095, -12.8, -12.97, 4.095, -12.8, -12.97, 1.05, -7)
+
+[sub_resource type="ConvexPolygonShape3D" id="Box_4"]
+points = PackedVector3Array(-12.8, 3.095, -12.89, -7, 6.14, -12.89, -7, 6.14, -12.97, -12.8, 3.095, -12.97, -12.8, 4.095, -12.89, -7, 7.14, -12.89, -7, 7.14, -12.97, -12.8, 4.095, -12.97)
+
+[sub_resource type="ConvexPolygonShape3D" id="Box_5"]
+points = PackedVector3Array(-7, 6.14, -12.89, -4.85, 6.14, -12.89, -4.85, 6.14, -12.97, -7, 6.14, -12.97, -7, 7.14, -12.89, -4.85, 7.14, -12.89, -4.85, 7.14, -12.97, -7, 7.14, -12.97)
+
+[sub_resource type="ConvexPolygonShape3D" id="Box_6"]
+points = PackedVector3Array(-12.8, 3.095, -14.59, -7, 6.14, -14.59, -7, 6.14, -14.67, -12.8, 3.095, -14.67, -12.8, 4.095, -14.59, -7, 7.14, -14.59, -7, 7.14, -14.67, -12.8, 4.095, -14.67)
+
+[sub_resource type="ConvexPolygonShape3D" id="Box_7"]
+points = PackedVector3Array(-7, 6.14, -14.59, -4.85, 6.14, -14.59, -4.85, 6.14, -14.67, -7, 6.14, -14.67, -7, 7.14, -14.59, -4.85, 7.14, -14.59, -4.85, 7.14, -14.67, -7, 7.14, -14.67)
 
 [node name="14_西北贴墙L型楼梯_资产包" type="Node3D"]
 metadata/asset_id = "ENV-BASE99-STRUCTURAL-V021::northwest_l_stair"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
 metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
-metadata/collision_policy = "source_collider_boxes"
+metadata/collision_policy = "source_convex_ramps_and_rails"
 metadata/placement_policy = "baked V017 world coordinates; root remains at origin"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -29,17 +41,33 @@ collision_layer = 1
 collision_mask = 1
 
 [node name="Blocker_000" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(-13.8, 1.67, -10.52)
+position = Vector3(0, 0, 0)
 shape = SubResource("Box_0")
 
 [node name="Blocker_001" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(-10.52, 4.72, -13.8)
+position = Vector3(0, 0, 0)
 shape = SubResource("Box_1")
 
 [node name="Blocker_002" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(-13.8, 3.08, -13.8)
+position = Vector3(0, 0, 0)
 shape = SubResource("Box_2")
 
 [node name="Blocker_003" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(-6.46, 6.12, -13.8)
+position = Vector3(0, 0, 0)
 shape = SubResource("Box_3")
+
+[node name="Blocker_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(0, 0, 0)
+shape = SubResource("Box_4")
+
+[node name="Blocker_005" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(0, 0, 0)
+shape = SubResource("Box_5")
+
+[node name="Blocker_006" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(0, 0, 0)
+shape = SubResource("Box_6")
+
+[node name="Blocker_007" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(0, 0, 0)
+shape = SubResource("Box_7")
