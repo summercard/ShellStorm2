@@ -42,7 +42,6 @@ size = Vector3(0.694346, 0.604057, 0.403215)
 size = Vector3(0.446585, 0.134843, 1.08)
 
 [node name="36_墨绿三人休闲沙发_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_lounge_sofa"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"

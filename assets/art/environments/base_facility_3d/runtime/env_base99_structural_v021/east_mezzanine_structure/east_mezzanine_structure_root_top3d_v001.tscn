@@ -6,7 +6,7 @@
 size = Vector3(20, 0.44, 10)
 
 [sub_resource type="BoxShape3D" id="Box_1"]
-size = Vector3(19.4, 0.09, 0.09)
+size = Vector3(19.4, 1.2, 0.14)
 
 [sub_resource type="BoxShape3D" id="Box_2"]
 size = Vector3(0.3, 5.8, 0.299999)
@@ -21,7 +21,7 @@ size = Vector3(0.299999, 5.8, 0.299999)
 size = Vector3(0.299999, 5.8, 0.3)
 
 [sub_resource type="BoxShape3D" id="Box_6"]
-size = Vector3(0.09, 0.090001, 7.390001)
+size = Vector3(0.14, 1.2, 7.390001)
 
 [sub_resource type="BoxShape3D" id="Box_7"]
 size = Vector3(0.28, 0.280002, 9.500001)
@@ -41,6 +41,7 @@ metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
 metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
 metadata/collision_policy = "per_visual_component_boxes"
+metadata/guardrail_collision_policy = "south and west visual guardrails use continuous 1.2m blockers; northwest L-stair entrance remains open"
 metadata/placement_policy = "baked V017 world coordinates; root remains at origin"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
@@ -54,7 +55,7 @@ position = Vector3(5, 5.78, -10)
 shape = SubResource("Box_0")
 
 [node name="Blocker_001" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(5, 7.28, -5.18)
+position = Vector3(5, 6.6, -5.18)
 shape = SubResource("Box_1")
 
 [node name="Blocker_002" type="CollisionShape3D" parent="StaticCollision"]
@@ -74,7 +75,7 @@ position = Vector3(14.65, 2.9, -5.45)
 shape = SubResource("Box_5")
 
 [node name="Blocker_006" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(-4.77, 7.28, -8.945)
+position = Vector3(-4.77, 6.6, -8.945)
 shape = SubResource("Box_6")
 
 [node name="Blocker_007" type="CollisionShape3D" parent="StaticCollision"]

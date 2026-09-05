@@ -48,7 +48,6 @@ size = Vector3(1.18, 0.38, 0.700001)
 size = Vector3(0.48, 0.15, 2.15)
 
 [node name="31_参考床架床品与床下收纳_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_bed_and_bedding"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"

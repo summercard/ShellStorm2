@@ -16,5 +16,4 @@ metadata/source_blender_version = "v020"
 [node name="一层36块完整地板_替换旧MultiMesh_仅视觉" parent="." instance=ExtResource("1_full_floor")]
 
 [node name="二层楼中楼地板面层_仅视觉" parent="." instance=ExtResource("2_loft_finish")]
-position = Vector3(0, -1, 0)
-metadata/placement_note = "Preserves Blender V020 X/Z layout and aligns source Z=6 deck finish to runtime Y=5 mezzanine walk surface."
+metadata/placement_note = "Uses Blender V020 baked placement at the runtime Y=6 mezzanine walk surface."

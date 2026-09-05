@@ -6,7 +6,6 @@
 size = Vector3(0.88, 0.54, 0.879999)
 
 [node name="39_青绿圆形坐墩01_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_pouf_01"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"

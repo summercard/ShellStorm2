@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v001.glb" id="1_visual"]
 
 [node name="34_床边暖灰地毯_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_bedside_rug"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"

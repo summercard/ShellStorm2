@@ -9,7 +9,6 @@ size = Vector3(1.02, 1.05, 0.92)
 size = Vector3(0.304338, 0.32, 0.32)
 
 [node name="32_参考床头柜与生活物件_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_nightstand"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"

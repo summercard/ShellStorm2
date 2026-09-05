@@ -105,8 +105,8 @@ func _validate_runtime_placement(failures: Array[String]) -> void:
 	else:
 		_validate_visual_package(ground, 2, 4, "运行时一层完整地板替换", failures)
 		_validate_visual_package(loft, 1, 2, "运行时二层地板面层", failures)
-		if not is_equal_approx(loft.position.y, -1.0):
-			failures.append("二层面层没有进行Blender Z6到运行时Y5的-1m对齐")
+		if not is_zero_approx(loft.position.y):
+			failures.append("二层面层不应保留旧资产调整遗留的Y=-1偏移")
 		_validate_layout_bounds(ground, loft, facility, failures)
 		await _capture_preview(tower, facility, failures)
 	tower.queue_free()
@@ -136,8 +136,8 @@ func _validate_layout_bounds(ground: Node3D, loft: Node3D, facility: Node3D, fai
 		or loft_bounds.end.z > -4.95
 	):
 		failures.append("二层面层没有落在20×10米楼中楼范围: %s" % loft_bounds)
-	if loft_bounds.position.y < 4.85 or loft_bounds.position.y > 5.12:
-		failures.append("二层面层底面没有对齐运行时Y=5楼板: %s" % loft_bounds.position.y)
+	if loft_bounds.position.y < 5.85 or loft_bounds.position.y > 6.12:
+		failures.append("二层面层底面没有恢复到Blender Y=6阁楼楼板: %s" % loft_bounds.position.y)
 
 
 func _capture_preview(tower: TowerDescent3D, facility: DungeonRoom3D, failures: Array[String]) -> void:

@@ -205,7 +205,7 @@
       "package_count": 4,
       "triangles_after_optimization": 31450,
       "geometry": "V021 GLB revision v002; northwest stair regraded in V017 to 27.699 degrees, 16 treads per flight; 9045 downward-facing faces removed",
-      "collision": "Source convex vertices preserve stair slopes and narrow rails; northwest stair uses continuous ramps with aligned landings; mezzanine and underdeck retain component boxes",
+      "collision": "Source convex stair ramps preserve slopes; the mezzanine has a walk deck plus 1.2m continuous south/west guardrail blockers, with the northwest stair entry kept open; underdeck retains component boxes",
       "emission": "Shared palette post-import uses MULTIPLY to preserve emissive color without adding white",
       "status": "approved_runtime"
     },

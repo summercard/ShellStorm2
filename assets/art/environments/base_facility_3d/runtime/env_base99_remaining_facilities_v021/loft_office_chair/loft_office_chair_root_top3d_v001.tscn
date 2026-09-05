@@ -9,7 +9,6 @@ size = Vector3(1.02, 0.25, 0.91)
 size = Vector3(1.039999, 1.206173, 0.344299)
 
 [node name="43_带扶手办公椅_资产包" type="Node3D"]
-position = Vector3(0, -1, 0)
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::loft_office_chair"
 metadata/asset_version = "v021"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend"
