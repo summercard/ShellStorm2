@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(19.315001, 4.65, 9.1075)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(3.2, 0.1, 0.14)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(3.200001, 0.1, 0.14)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(3.2, 0.1, 0.14)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(3.2, 0.1, 0.14)
+
+[node name="13_阁楼下方铁皮封闭体_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-STRUCTURAL-V021::underdeck_sheet_blocker"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
+metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
+metadata/collision_policy = "per_visual_component_boxes"
+metadata/placement_policy = "baked V017 world coordinates; root remains at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Blocker_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 2.325, -9.89625)
+shape = SubResource("Box_0")
+
+[node name="Blocker_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-2.5, 5.35, -5.02)
+shape = SubResource("Box_1")
+
+[node name="Blocker_002" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(12.5, 5.35, -5.02)
+shape = SubResource("Box_2")
+
+[node name="Blocker_003" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(2.5, 5.35, -5.02)
+shape = SubResource("Box_3")
+
+[node name="Blocker_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(7.5, 5.35, -5.02)
+shape = SubResource("Box_4")

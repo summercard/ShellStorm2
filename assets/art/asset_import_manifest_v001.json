@@ -187,11 +187,25 @@
       "derived_from_version": "v017",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn",
       "version": "v021",
-      "package_count": 45,
+      "package_count": 46,
       "triangles_after_optimization": 84274,
-      "geometry": "each independent V017 facility package exports as one optimized runtime mesh; downward faces removed for top view",
-      "collision": "34 physical packages use per-source-object simplified BoxShape3D; 11 rugs, lights, curtains, vegetation and FX packages remain visual-only",
+      "geometry": "each independent V017 facility package exports as one optimized runtime mesh; downward faces removed for top view; 42号大型卷帘主门已补入V021优化包",
+      "collision": "34 physical packages use per-source-object simplified BoxShape3D; 42号大型卷帘主门使用一体化BoxShape3D；其余11个地毯、灯光、帘布、植被和FX包保持仅视觉",
       "excluded_scope": "floors, doors, door-attached controls, structural walls, wall content, mezzanine and stairs",
+      "status": "approved_runtime"
+    },
+    "base99_structural_v021": {
+      "asset_id": "ENV-BASE99-STRUCTURAL-V021",
+      "name_cn": "基地99层阁楼、楼梯与阁楼下铁皮结构资产包",
+      "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021",
+      "source": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend",
+      "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+      "derived_from_version": "v017",
+      "version": "v021",
+      "package_count": 4,
+      "triangles_after_optimization": 30139,
+      "geometry": "four independent structural packages; 7945 downward-facing faces removed for top-view use",
+      "collision": "V017 source stair colliders retained as simplified rotated BoxShape3D; mezzanine and underdeck use per-component simplified BoxShape3D",
       "status": "approved_runtime"
     },
     "base99_mezzanine_underdeck_blocker": {

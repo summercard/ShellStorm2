@@ -1,0 +1,32 @@
+{
+  "package_id": "room_08",
+  "name": "09_懒人沙发",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "09_懒人沙发",
+  "objects": [
+    "梨形豆袋软包",
+    "豆袋拼片缝线",
+    "豆袋拼片缝线.001",
+    "豆袋拼片缝线.002",
+    "豆袋拼片缝线.003"
+  ],
+  "object_count": 5,
+  "bbox_min_mm": [
+    -151.986,
+    -124.961,
+    1.266
+  ],
+  "bbox_max_mm": [
+    -89.756,
+    -67.039,
+    38.727
+  ],
+  "size_mm": [
+    62.229,
+    57.922,
+    37.461
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

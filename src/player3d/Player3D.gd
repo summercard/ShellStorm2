@@ -46,6 +46,13 @@ const DEFAULT_BASE_SIZE_MULTIPLIER := 0.70
 const DEBUG_SCALE_STEP_RATIO := 0.10
 const DEBUG_SCALE_MIN_STEP := -9
 const DEBUG_SCALE_MAX_STEP := 20
+## 调试快捷键：仅供本地/编辑器测试用，不影响玩法，关闭/重进场景自动归零。
+const DEBUG_CAMERA_TRAILING_STEP_M := 0.20
+const DEBUG_CAMERA_TRAILING_MIN_M := -8.0
+const DEBUG_CAMERA_TRAILING_MAX_M := 8.0
+const DEBUG_CAMERA_YAW_STEP_DEG := 5.0
+const DEBUG_CAMERA_YAW_MIN_DEG := -75.0
+const DEBUG_CAMERA_YAW_MAX_DEG := 75.0
 const INTERACTION_CONTROLLER_SCRIPT := preload(
 	"res://src/player3d/PlayerInteractionController3D.gd"
 )
@@ -122,6 +129,9 @@ var _base_collision_position := Vector3.ZERO
 var _base_collision_radius := 0.0
 var _base_collision_height := 0.0
 var _debug_scale_initialized := false
+## 仅作用于镜头姿态的临时偏移量；玩家朝向/移动方向/战斗数据完全不受影响。
+var _debug_camera_trailing_offset_m := 0.0
+var _debug_camera_yaw_offset_deg := 0.0
 var _character_fate := {
 	"move_speed_multiplier": 1.0,
 	"dash_cooldown_multiplier": 1.0,
@@ -181,8 +191,29 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_debug_scale_up_key(key_event):
 		adjust_debug_scale(1)
 		get_viewport().set_input_as_handled()
-	elif _is_debug_scale_down_key(key_event):
+		return
+	if _is_debug_scale_down_key(key_event):
 		adjust_debug_scale(-1)
+		get_viewport().set_input_as_handled()
+		return
+	if _is_debug_camera_zoom_in_key(key_event):
+		adjust_debug_camera_trailing(-DEBUG_CAMERA_TRAILING_STEP_M)
+		get_viewport().set_input_as_handled()
+		return
+	if _is_debug_camera_zoom_out_key(key_event):
+		adjust_debug_camera_trailing(DEBUG_CAMERA_TRAILING_STEP_M)
+		get_viewport().set_input_as_handled()
+		return
+	if _is_debug_camera_yaw_left_key(key_event):
+		adjust_debug_camera_yaw(-DEBUG_CAMERA_YAW_STEP_DEG)
+		get_viewport().set_input_as_handled()
+		return
+	if _is_debug_camera_yaw_right_key(key_event):
+		adjust_debug_camera_yaw(DEBUG_CAMERA_YAW_STEP_DEG)
+		get_viewport().set_input_as_handled()
+		return
+	if _is_debug_camera_reset_key(key_event):
+		reset_debug_camera_adjustments()
 		get_viewport().set_input_as_handled()
 
 
@@ -205,7 +236,7 @@ func _is_debug_scale_up_key(event: InputEventKey) -> bool:
 	return (
 		event.unicode == 43
 		or event.keycode == KEY_KP_ADD
-		or (event.physical_keycode == KEY_EQUAL and event.shift_pressed)
+		or event.physical_keycode == KEY_EQUAL
 	)
 
 
@@ -215,6 +246,69 @@ func _is_debug_scale_down_key(event: InputEventKey) -> bool:
 		or event.keycode == KEY_KP_SUBTRACT
 		or event.physical_keycode == KEY_MINUS
 	)
+
+
+## 调试快捷键：仅本地/编辑器手动验证用，不属于玩法、不进存档。
+## 按一次减少镜头到焦点的距离，让相机贴近角色；同步作用于每帧的相机姿态计算。
+func _is_debug_camera_zoom_in_key(event: InputEventKey) -> bool:
+	return (
+		event.physical_keycode == KEY_SEMICOLON
+		or event.keycode == KEY_SEMICOLON
+	)
+
+
+func _is_debug_camera_zoom_out_key(event: InputEventKey) -> bool:
+	return (
+		event.physical_keycode == KEY_APOSTROPHE
+		or event.keycode == KEY_APOSTROPHE
+	)
+
+
+func _is_debug_camera_yaw_left_key(event: InputEventKey) -> bool:
+	return event.physical_keycode == KEY_BRACKETLEFT or event.keycode == KEY_BRACKETLEFT
+
+
+func _is_debug_camera_yaw_right_key(event: InputEventKey) -> bool:
+	return event.physical_keycode == KEY_BRACKETRIGHT or event.keycode == KEY_BRACKETRIGHT
+
+
+func _is_debug_camera_reset_key(event: InputEventKey) -> bool:
+	return event.physical_keycode == KEY_R or event.keycode == KEY_R
+
+
+func adjust_debug_camera_trailing(step_m: float) -> void:
+	var clamped_step := clampf(
+		_debug_camera_trailing_offset_m + step_m,
+		DEBUG_CAMERA_TRAILING_MIN_M,
+		DEBUG_CAMERA_TRAILING_MAX_M
+	)
+	if is_equal_approx(clamped_step, _debug_camera_trailing_offset_m):
+		return
+	_debug_camera_trailing_offset_m = clamped_step
+
+
+func adjust_debug_camera_yaw(step_deg: float) -> void:
+	var clamped_step := clampf(
+		_debug_camera_yaw_offset_deg + step_deg,
+		DEBUG_CAMERA_YAW_MIN_DEG,
+		DEBUG_CAMERA_YAW_MAX_DEG
+	)
+	if is_equal_approx(clamped_step, _debug_camera_yaw_offset_deg):
+		return
+	_debug_camera_yaw_offset_deg = clamped_step
+
+
+func reset_debug_camera_adjustments() -> void:
+	_debug_camera_trailing_offset_m = 0.0
+	_debug_camera_yaw_offset_deg = 0.0
+
+
+func get_debug_camera_trailing_offset_m() -> float:
+	return _debug_camera_trailing_offset_m
+
+
+func get_debug_camera_yaw_offset_deg() -> float:
+	return _debug_camera_yaw_offset_deg
 
 
 func _initialize_debug_scale_contract() -> void:

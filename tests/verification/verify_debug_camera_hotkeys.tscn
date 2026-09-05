@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_debug_camera_hotkeys.gd" id="1_debug_cam"]
+
+[node name="VerifyDebugCameraHotkeys" type="Node"]
+script = ExtResource("1_debug_cam")

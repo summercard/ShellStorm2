@@ -1,0 +1,42 @@
+{
+  "package_id": "room_00",
+  "name": "01_房间外壳",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "01_房间外壳",
+  "objects": [
+    "完整地台",
+    "浅灰地面",
+    "背墙",
+    "左墙",
+    "竖向边框",
+    "竖向边框.001",
+    "背墙上压边",
+    "左墙上压边",
+    "后墙踢脚",
+    "青色竖灯带",
+    "粉色竖灯带",
+    "青色竖灯带.001",
+    "粉色竖灯带.001",
+    "左墙前端粉灯",
+    "左墙前端青灯"
+  ],
+  "object_count": 15,
+  "bbox_min_mm": [
+    -181.0,
+    -156.0,
+    -9.0
+  ],
+  "bbox_max_mm": [
+    181.0,
+    156.0,
+    206.0
+  ],
+  "size_mm": [
+    362.0,
+    312.0,
+    215.0
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

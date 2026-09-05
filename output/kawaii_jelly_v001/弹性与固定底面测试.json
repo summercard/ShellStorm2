@@ -1,0 +1,51 @@
+{
+  "body_vertices": 4610,
+  "pinned_vertices": 97,
+  "fixed_base_max_error": 0.0,
+  "finite": true,
+  "tests": [
+    {
+      "k": 48,
+      "damping": 2.8,
+      "x_min": -0.09283383384660551,
+      "x_max": 0.17792555404005664,
+      "z_min": -0.2911509066110018,
+      "z_max": 0.151909909930809,
+      "rebounded": true,
+      "residual_at_15s": 3.119254260730161e-10,
+      "finite": true
+    },
+    {
+      "k": 15,
+      "damping": 0.8,
+      "x_min": -0.26321535436773014,
+      "x_max": 0.3648541632930497,
+      "z_min": -0.48,
+      "z_max": 0.3462740464626403,
+      "rebounded": true,
+      "residual_at_15s": 0.0016540279635181103,
+      "finite": true
+    },
+    {
+      "k": 95,
+      "damping": 10,
+      "x_min": -0.013103974490123429,
+      "x_max": 0.08801048692672392,
+      "z_min": -0.14401716042554824,
+      "z_max": 0.021442867347474706,
+      "rebounded": true,
+      "residual_at_15s": 1.2792480159590472e-34,
+      "finite": true
+    }
+  ],
+  "grab_release": {
+    "held_displacement": [
+      0.3788066783210271,
+      0.0,
+      0.18940333916051355
+    ],
+    "rest_error_10s": 1.0143032035029687e-07
+  },
+  "nonmanifold_edges": 0,
+  "passed": true
+}

@@ -1,0 +1,34 @@
+{
+  "package_id": "room_07",
+  "name": "08_茶几",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "08_茶几",
+  "objects": [
+    "茶几底层",
+    "茶几金属支柱",
+    "茶几金属支柱.001",
+    "茶几金属支柱.002",
+    "茶几金属支柱.003",
+    "茶几上层",
+    "茶几中层"
+  ],
+  "object_count": 7,
+  "bbox_min_mm": [
+    -80.0,
+    -139.0,
+    3.9
+  ],
+  "bbox_max_mm": [
+    0.0,
+    -79.0,
+    28.35
+  ],
+  "size_mm": [
+    80.0,
+    60.0,
+    24.45
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

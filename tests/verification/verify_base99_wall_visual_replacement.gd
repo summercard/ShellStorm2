@@ -86,14 +86,14 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 		var base_door_bindings := tower.call("_get_configured_base_door_bindings") as Array
 		if base_door_bindings.size() != 3:
 			failures.append("基地三个门没有统一注册到同一交互分发器")
-		if int(snapshot.get("base99_mezzanine_count", 0)) != 1:
-			failures.append("基地缺少二层阁楼结构实例")
-		if int(snapshot.get("base99_stair_l_count", 0)) != 1:
-			failures.append("基地缺少L型楼梯实例")
-		if int(snapshot.get("base99_stair_exterior_count", 0)) != 1:
-			failures.append("基地缺少二楼外门小楼梯")
-		if int(snapshot.get("base99_camera_stair_slab_count", 0)) < 3:
-			failures.append("阁楼与两套楼梯没有建立下方摄像机净空碰撞标记")
+		if int(snapshot.get("base99_mezzanine_count", 0)) != 0:
+			failures.append("基地仍保留旧二层阁楼结构实例")
+		if int(snapshot.get("base99_stair_l_count", 0)) != 0:
+			failures.append("基地仍保留旧L型楼梯实例")
+		if int(snapshot.get("base99_stair_exterior_count", 0)) != 0:
+			failures.append("基地仍保留旧二楼外门小楼梯")
+		if int(snapshot.get("base99_camera_stair_slab_count", 0)) != 0:
+			failures.append("基地仍保留旧阁楼或楼梯摄像机净空阻挡")
 		if int(snapshot.get("tower_door_wall_module_count", 0)) != 2:
 			failures.append("两个带门墙的模块数量被改变")
 		if int(snapshot.get("tower_corner_module_count", 0)) != 4:
@@ -102,11 +102,8 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("基地两个门的运行时快照数量被改变")
 		_validate_base_scene_shadow_policy(facility, failures)
 		_validate_base100_upper_shell(facility, failures)
-		_validate_editable_component_layout(facility, failures)
-		_validate_base99_camera_collisions(facility, failures)
-		_validate_walkable_ramp_angles(facility, failures)
+		_validate_legacy_structures_removed(facility, failures)
 		_validate_base_atrium(tower, failures)
-		await _validate_exterior_stair_climb(tower, facility, failures)
 		await _validate_base99_door_contract(facility, failures)
 	tower.queue_free()
 	await get_tree().process_frame
@@ -196,22 +193,22 @@ func _validate_base99_camera_collisions(root: Node, failures: Array[String]) -> 
 			failures.append("缺少摄像机净空角色: %s" % required_role)
 
 
-func _validate_editable_component_layout(facility: DungeonRoom3D, failures: Array[String]) -> void:
+func _validate_legacy_structures_removed(facility: DungeonRoom3D, failures: Array[String]) -> void:
 	var layout := facility.get_node_or_null("基地99层_美术布置层/基地结构组件_可移动旋转") as Node3D
 	if layout == null:
 		failures.append("基地结构组件没有进入可编辑美术布局tscn")
 		return
-	var expected := {
-		"二层楼中楼结构与护栏_复用V020地板": Vector3(5.0, 0.0, -10.0),
-		"L型楼梯_一楼至二楼_Z5": Vector3(-9.58, 0.0, -9.15),
-		"外门小楼梯_二楼至100层_H4": Vector3(10.78, 5.0, -7.5),
-	}
-	for node_name in expected:
-		var component := layout.get_node_or_null(node_name) as Node3D
-		if component == null:
-			failures.append("可编辑布局缺少结构组件: %s" % node_name)
-		elif not component.position.is_equal_approx(expected[node_name] as Vector3):
-			failures.append("结构组件没有采用Blender母版初始坐标: %s=%s" % [node_name, component.position])
+	var required_v021 := [
+		"V021东墙阁楼主体结构",
+		"V021东侧紧凑上行过渡楼梯",
+		"V021西北贴墙L型楼梯",
+		"V021阁楼下方铁皮封闭体",
+	]
+	if layout.get_child_count() != 5 or layout.get_node_or_null("100层上层围护与18米封顶") == null:
+		failures.append("正式布局没有接入完整V021结构资产")
+	for node_name in required_v021:
+		if layout.get_node_or_null(node_name) == null:
+			failures.append("可编辑布局缺少V021结构资产: %s" % node_name)
 	var floor_visuals := facility.get_node_or_null("基地99层_美术布置层/BlenderV021完整地板表现_仅视觉")
 	if floor_visuals == null or floor_visuals.get_node_or_null("二层楼中楼地板面层_仅视觉") == null:
 		failures.append("接入阁楼结构时误删了Blender V020新增二楼地板表现")

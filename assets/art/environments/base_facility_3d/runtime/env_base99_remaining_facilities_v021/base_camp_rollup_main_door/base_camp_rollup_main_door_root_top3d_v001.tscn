@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape_rollup_door"]
+size = Vector3(6.44, 2.92, 0.91)
+
+[node name="BASE_CAMP大型卷帘主门" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::base_camp_rollup_main_door"
+metadata/asset_version = "v021"
+metadata/collision_policy = "single_box_door_blocker"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+metadata/base99_rollup_main_door_blocker = true
+metadata/collision_purpose = "卷帘门实体阻挡；尺寸与V017原件一致"
+
+[node name="DoorBlocker" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5.07, 2.34, -4.385)
+shape = SubResource("BoxShape_rollup_door")

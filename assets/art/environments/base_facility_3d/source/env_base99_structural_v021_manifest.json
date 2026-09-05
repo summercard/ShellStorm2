@@ -1,0 +1,312 @@
+{
+  "asset_id": "ENV-BASE99-STRUCTURAL-V021",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend",
+  "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "packages": [
+    {
+      "slug": "east_mezzanine_structure",
+      "display_name": "12_东墙阁楼主体结构_资产包",
+      "source_meshes": 86,
+      "source_collision_meshes": 0,
+      "collision_boxes": [
+        {
+          "center": [
+            5.0,
+            5.78000020980835,
+            -10.0
+          ],
+          "size": [
+            20.0,
+            0.4399995803833008,
+            10.0
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            7.28000020980835,
+            -5.179999828338623
+          ],
+          "size": [
+            19.399999618530273,
+            0.09000015258789062,
+            0.09000015258789062
+          ]
+        },
+        {
+          "center": [
+            -4.650000095367432,
+            2.9000000953674316,
+            -14.550000190734863
+          ],
+          "size": [
+            0.3000001907348633,
+            5.800000190734863,
+            0.2999992370605469
+          ]
+        },
+        {
+          "center": [
+            -4.650000095367432,
+            2.9000000953674316,
+            -5.449999809265137
+          ],
+          "size": [
+            0.3000001907348633,
+            5.800000190734863,
+            0.3000001907348633
+          ]
+        },
+        {
+          "center": [
+            14.649999618530273,
+            2.9000000953674316,
+            -14.550000190734863
+          ],
+          "size": [
+            0.2999992370605469,
+            5.800000190734863,
+            0.2999992370605469
+          ]
+        },
+        {
+          "center": [
+            14.649999618530273,
+            2.9000000953674316,
+            -5.449999809265137
+          ],
+          "size": [
+            0.2999992370605469,
+            5.800000190734863,
+            0.3000001907348633
+          ]
+        },
+        {
+          "center": [
+            -4.769999980926514,
+            7.28000020980835,
+            -8.944999694824219
+          ],
+          "size": [
+            0.09000015258789062,
+            0.09000110626220703,
+            7.39000129699707
+          ]
+        },
+        {
+          "center": [
+            -4.900000095367432,
+            5.519999980926514,
+            -10.000000238418579
+          ],
+          "size": [
+            0.2799997329711914,
+            0.2800016403198242,
+            9.500001430511475
+          ]
+        },
+        {
+          "center": [
+            14.899999618530273,
+            5.519999980926514,
+            -10.000000238418579
+          ],
+          "size": [
+            0.2800006866455078,
+            0.2800016403198242,
+            9.500001430511475
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            5.519999980926514,
+            -14.779999732971191
+          ],
+          "size": [
+            19.799999237060547,
+            0.2799997329711914,
+            0.2800006866455078
+          ]
+        },
+        {
+          "center": [
+            5.0,
+            5.519999980926514,
+            -5.150000095367432
+          ],
+          "size": [
+            19.799999237060547,
+            0.2799997329711914,
+            0.2799997329711914
+          ]
+        }
+      ],
+      "downward_faces_removed": 774,
+      "triangles_after_downward_cull": 7740,
+      "triangles_after_optimization": 3440,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_mezzanine_structure/east_mezzanine_structure_visual_top3d_v001.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_mezzanine_structure/east_mezzanine_structure_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "east_upper_transition_stair",
+      "display_name": "51_东侧紧凑上行过渡楼梯_资产包",
+      "source_meshes": 85,
+      "source_collision_meshes": 3,
+      "collision_boxes": [
+        {
+          "center": [
+            13.279999732971191,
+            7.53000020980835,
+            -12.180000305175781
+          ],
+          "size": [
+            1.7800006866455078,
+            2.857487678527832,
+            3.6966781616210938
+          ]
+        }
+      ],
+      "downward_faces_removed": 1358,
+      "triangles_after_downward_cull": 11372,
+      "triangles_after_optimization": 5070,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_visual_top3d_v001.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "northwest_l_stair",
+      "display_name": "14_西北贴墙L型楼梯_资产包",
+      "source_meshes": 170,
+      "source_collision_meshes": 8,
+      "collision_boxes": [
+        {
+          "center": [
+            -13.800000190734863,
+            1.6700000166893005,
+            -10.520000457763672
+          ],
+          "size": [
+            1.6399993896484375,
+            2.8771458864212036,
+            4.64240837097168
+          ]
+        },
+        {
+          "center": [
+            -10.520000457763672,
+            4.71999990940094,
+            -13.800000190734863
+          ],
+          "size": [
+            4.642627716064453,
+            2.8870131969451904,
+            1.6399993896484375
+          ]
+        },
+        {
+          "center": [
+            -13.800000190734863,
+            3.0799999237060547,
+            -13.800000190734863
+          ],
+          "size": [
+            1.8999996185302734,
+            0.15999984741210938,
+            1.8999996185302734
+          ]
+        },
+        {
+          "center": [
+            -6.460000038146973,
+            6.119999885559082,
+            -13.800000190734863
+          ],
+          "size": [
+            3.440000534057617,
+            0.15999984741210938,
+            1.8799991607666016
+          ]
+        }
+      ],
+      "downward_faces_removed": 4679,
+      "triangles_after_downward_cull": 42466,
+      "triangles_after_optimization": 18999,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v001.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_root_top3d_v001.tscn"
+    },
+    {
+      "slug": "underdeck_sheet_blocker",
+      "display_name": "13_阁楼下方铁皮封闭体_资产包",
+      "source_meshes": 5,
+      "source_collision_meshes": 0,
+      "collision_boxes": [
+        {
+          "center": [
+            5.0,
+            2.3249998092651367,
+            -9.896250009536743
+          ],
+          "size": [
+            19.315000534057617,
+            4.649999618530273,
+            9.107499599456787
+          ]
+        },
+        {
+          "center": [
+            -2.4999999403953552,
+            5.349999904632568,
+            -5.019999980926514
+          ],
+          "size": [
+            3.1999999284744263,
+            0.10000038146972656,
+            0.1400003433227539
+          ]
+        },
+        {
+          "center": [
+            12.5,
+            5.349999904632568,
+            -5.019999980926514
+          ],
+          "size": [
+            3.200000762939453,
+            0.10000038146972656,
+            0.1400003433227539
+          ]
+        },
+        {
+          "center": [
+            2.4999999403953552,
+            5.349999904632568,
+            -5.019999980926514
+          ],
+          "size": [
+            3.1999999284744263,
+            0.10000038146972656,
+            0.1400003433227539
+          ]
+        },
+        {
+          "center": [
+            7.500000238418579,
+            5.349999904632568,
+            -5.019999980926514
+          ],
+          "size": [
+            3.200000286102295,
+            0.10000038146972656,
+            0.1400003433227539
+          ]
+        }
+      ],
+      "downward_faces_removed": 1134,
+      "triangles_after_downward_cull": 5850,
+      "triangles_after_optimization": 2630,
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d_v001.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_root_top3d_v001.tscn"
+    }
+  ]
+}

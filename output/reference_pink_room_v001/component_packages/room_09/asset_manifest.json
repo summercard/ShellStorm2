@@ -1,0 +1,28 @@
+{
+  "package_id": "room_09",
+  "name": "10_地毯",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "10_地毯",
+  "objects": [
+    "淡紫方毯"
+  ],
+  "object_count": 1,
+  "bbox_min_mm": [
+    -140.5,
+    -30.0,
+    2.3
+  ],
+  "bbox_max_mm": [
+    -41.5,
+    53.0,
+    3.5
+  ],
+  "size_mm": [
+    99.0,
+    83.0,
+    1.2
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "room_05",
+  "name": "06_床与床品",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "06_床与床品",
+  "objects": [
+    "床箱",
+    "床头外框",
+    "床头软包",
+    "床垫支撑沿",
+    "白色床垫",
+    "枕头",
+    "粉色垂坠被面_已修复床垫穿插",
+    "被头翻折软边",
+    "被边缝线",
+    "被边缝线.001",
+    "被脚弧形滚边"
+  ],
+  "object_count": 11,
+  "bbox_min_mm": [
+    68.8,
+    -55.5,
+    2.6
+  ],
+  "bbox_max_mm": [
+    151.2,
+    85.15,
+    88.05
+  ],
+  "size_mm": [
+    82.4,
+    140.65,
+    85.45
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

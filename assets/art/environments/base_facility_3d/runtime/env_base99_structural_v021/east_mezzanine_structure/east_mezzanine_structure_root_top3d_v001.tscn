@@ -1,0 +1,94 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_mezzanine_structure/east_mezzanine_structure_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(20, 0.44, 10)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(19.4, 0.09, 0.09)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(0.3, 5.8, 0.299999)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.3, 5.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(0.299999, 5.8, 0.299999)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.299999, 5.8, 0.3)
+
+[sub_resource type="BoxShape3D" id="Box_6"]
+size = Vector3(0.09, 0.090001, 7.390001)
+
+[sub_resource type="BoxShape3D" id="Box_7"]
+size = Vector3(0.28, 0.280002, 9.500001)
+
+[sub_resource type="BoxShape3D" id="Box_8"]
+size = Vector3(0.280001, 0.280002, 9.500001)
+
+[sub_resource type="BoxShape3D" id="Box_9"]
+size = Vector3(19.799999, 0.28, 0.280001)
+
+[sub_resource type="BoxShape3D" id="Box_10"]
+size = Vector3(19.799999, 0.28, 0.28)
+
+[node name="12_东墙阁楼主体结构_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-STRUCTURAL-V021::east_mezzanine_structure"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
+metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
+metadata/collision_policy = "per_visual_component_boxes"
+metadata/placement_policy = "baked V017 world coordinates; root remains at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Blocker_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 5.78, -10)
+shape = SubResource("Box_0")
+
+[node name="Blocker_001" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 7.28, -5.18)
+shape = SubResource("Box_1")
+
+[node name="Blocker_002" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-4.65, 2.9, -14.55)
+shape = SubResource("Box_2")
+
+[node name="Blocker_003" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-4.65, 2.9, -5.45)
+shape = SubResource("Box_3")
+
+[node name="Blocker_004" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(14.65, 2.9, -14.55)
+shape = SubResource("Box_4")
+
+[node name="Blocker_005" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(14.65, 2.9, -5.45)
+shape = SubResource("Box_5")
+
+[node name="Blocker_006" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-4.77, 7.28, -8.945)
+shape = SubResource("Box_6")
+
+[node name="Blocker_007" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-4.9, 5.52, -10)
+shape = SubResource("Box_7")
+
+[node name="Blocker_008" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(14.9, 5.52, -10)
+shape = SubResource("Box_8")
+
+[node name="Blocker_009" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 5.52, -14.78)
+shape = SubResource("Box_9")
+
+[node name="Blocker_010" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5, 5.52, -5.15)
+shape = SubResource("Box_10")

@@ -1,0 +1,38 @@
+{
+  "package_id": "room_14",
+  "name": "15_猫咪摆件",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "15_猫咪摆件",
+  "objects": [
+    "猫咪连续躯干",
+    "猫耳",
+    "猫耳内侧",
+    "猫耳.001",
+    "猫耳内侧.001",
+    "猫咪前后足",
+    "猫咪前后足.001",
+    "猫眼",
+    "猫眼.001",
+    "猫鼻",
+    "弯曲猫尾"
+  ],
+  "object_count": 11,
+  "bbox_min_mm": [
+    43.149,
+    122.57,
+    146.55
+  ],
+  "bbox_max_mm": [
+    72.236,
+    132.594,
+    166.202
+  ],
+  "size_mm": [
+    29.087,
+    10.024,
+    19.652
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "fixed_display_attachment"
+}

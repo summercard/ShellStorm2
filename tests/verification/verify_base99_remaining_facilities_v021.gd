@@ -1,8 +1,8 @@
 extends Node
 
 const FACILITY_ROOT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn")
-const EXPECTED_PACKAGE_COUNT := 45
-const EXPECTED_SOLID_PACKAGE_COUNT := 34
+const EXPECTED_PACKAGE_COUNT := 46
+const EXPECTED_SOLID_PACKAGE_COUNT := 35
 
 
 func _ready() -> void:
@@ -23,7 +23,7 @@ func _ready() -> void:
 			_fail("missing ImportedModel on %s" % package.name)
 			return
 		var policy := str(package.get_meta("collision_policy", ""))
-		if policy == "per_source_object_box_collision":
+		if policy == "per_source_object_box_collision" or policy == "single_box_door_blocker":
 			solid_count += 1
 			if not package.has_node("StaticCollision"):
 				_fail("solid package missing collision: %s" % package.name)

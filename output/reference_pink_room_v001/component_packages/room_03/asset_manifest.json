@@ -1,0 +1,29 @@
+{
+  "package_id": "room_03",
+  "name": "04_折线置物架",
+  "source_blend": "粉色电竞卧室_高还原_v001.blend",
+  "collection": "04_折线置物架",
+  "objects": [
+    "床头青色环境线",
+    "一体连续折线架_斜接转角"
+  ],
+  "object_count": 2,
+  "bbox_min_mm": [
+    -77.0,
+    120.5,
+    87.55
+  ],
+  "bbox_max_mm": [
+    170.0,
+    145.7,
+    184.5
+  ],
+  "size_mm": [
+    247.0,
+    25.2,
+    96.95
+  ],
+  "editable_components": true,
+  "runtime_exported": false,
+  "purpose": "reference_scene_asset"
+}

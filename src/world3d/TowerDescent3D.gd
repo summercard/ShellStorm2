@@ -466,17 +466,49 @@ func _physics_process(delta: float) -> void:
 func _apply_indoor_camera_pose() -> void:
 	if player == null or player.camera == null:
 		return
-	player.camera.position = Vector3(
+	# 玩家局部坐标系下：相机焦点位于 (0, look_height, -look_ahead)。
+	# 调试快捷键产生的偏移只修改“相机→焦点”这条向量，再绕焦点竖轴
+	# 旋转 yaw；玩家自身 yaw 与移动控制完全不受影响，下墙探针/楼梯
+	# 探测以及所有 read_*.global_basis.* 都读真实玩家朝向。
+	var focal_local := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
+	var default_relative := Vector3(
 		0.0,
-		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m,
-		_camera_trailing_current_m
+		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m - CAMERA_LOOK_HEIGHT_M,
+		_camera_trailing_current_m + CAMERA_LOOK_AHEAD_M
 	)
+	# trailing 调试偏移：沿“相机→焦点”这条视线轴的总距离增减，保持镜头
+	# 上下倾角不变；玩家高度上的上升/下降由这条轴的默认倾角自然负责。
+	var default_magnitude := default_relative.length()
+	if default_magnitude <= 0.0001:
+		default_magnitude = 1.0
+	var relative_length := maxf(
+		default_magnitude + _read_debug_camera_trailing_offset_m(),
+		0.20
+	)
+	var unit_relative := default_relative / default_magnitude
+	var relative_local := unit_relative * relative_length
+	var yaw_offset_rad := deg_to_rad(_read_debug_camera_yaw_offset_deg())
+	if not is_zero_approx(yaw_offset_rad):
+		relative_local = Basis(Vector3.UP, yaw_offset_rad) * relative_local
+	player.camera.position = focal_local + relative_local
 	var look_target := player.global_position + Vector3(
 		0.0,
 		CAMERA_LOOK_HEIGHT_M,
 		-CAMERA_LOOK_AHEAD_M
 	)
 	player.camera.look_at(look_target, Vector3.UP)
+
+
+func _read_debug_camera_trailing_offset_m() -> float:
+	if player == null or not player.has_method("get_debug_camera_trailing_offset_m"):
+		return 0.0
+	return float(player.call("get_debug_camera_trailing_offset_m"))
+
+
+func _read_debug_camera_yaw_offset_deg() -> float:
+	if player == null or not player.has_method("get_debug_camera_yaw_offset_deg"):
+		return 0.0
+	return float(player.call("get_debug_camera_yaw_offset_deg"))
 
 
 func _has_camera_presentation_override() -> bool:

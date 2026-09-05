@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_visual_top3d_v001.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_0"]
+size = Vector3(1.780001, 2.857488, 3.696678)
+
+[node name="51_东侧紧凑上行过渡楼梯_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-STRUCTURAL-V021::east_upper_transition_stair"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend"
+metadata/derived_from_blender = "base_facility_runtime_layout_hq_v017.blend"
+metadata/collision_policy = "source_collider_boxes"
+metadata/placement_policy = "baked V017 world coordinates; root remains at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Blocker_000" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(13.28, 7.53, -12.18)
+shape = SubResource("Box_0")
