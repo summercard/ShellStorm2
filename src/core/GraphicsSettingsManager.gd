@@ -231,10 +231,10 @@ func _apply_environment(environment: Environment) -> void:
 	# 高档默认以“清晰、层次、克制”为目标：辉光不吞字，AO不压死暗部，
 	# 体积雾只建立纵深，不覆盖顶视角战斗轮廓。
 	_set_property(environment, "glow_enabled", is_enabled("bloom"))
-	_set_property(environment, "glow_intensity", 0.72)
+	_set_property(environment, "glow_intensity", float(environment.get_meta("presentation_glow_intensity", 0.72)))
 	_set_property(environment, "glow_strength", 0.92)
 	_set_property(environment, "glow_bloom", 0.08)
-	_set_property(environment, "glow_hdr_threshold", 1.08)
+	_set_property(environment, "glow_hdr_threshold", float(environment.get_meta("presentation_glow_hdr_threshold", 1.08)))
 	_set_property(environment, "glow_hdr_scale", 1.65)
 	_set_property(environment, "glow_normalized", true)
 

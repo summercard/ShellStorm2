@@ -112,6 +112,7 @@ var _journey_hud_elapsed := 0.0
 var _announced_floors: Dictionary = {}
 var _arrival_title: Label
 var _arrival_tween: Tween
+var _arrival_tween_paused_for_lock := false
 
 var _active_transition_edge := ""
 var _transition_upper_floor := -1
@@ -3630,9 +3631,12 @@ func _entry_context_requests_main_entry() -> bool:
 func _refresh_tower_hud() -> void:
 	if _arrival_tween != null and _arrival_tween.is_valid():
 		if player != null and (player.input_locked or not $HUD.visible):
-			_arrival_tween.pause()
-		else:
+			if not _arrival_tween_paused_for_lock and _arrival_tween.is_running():
+				_arrival_tween.pause()
+				_arrival_tween_paused_for_lock = true
+		elif _arrival_tween_paused_for_lock:
 			_arrival_tween.play()
+			_arrival_tween_paused_for_lock = false
 	if _tower_floor_label == null or player == null:
 		return
 	var floor_number := _current_floor_number()
@@ -3695,6 +3699,7 @@ func _announce_floor_arrival(floor_number: int) -> void:
 		_reference_hud_root.add_child(_arrival_title)
 	if _arrival_tween != null and _arrival_tween.is_valid():
 		_arrival_tween.kill()
+	_arrival_tween_paused_for_lock = false
 	_arrival_title.text = {
 		100: "100F  /  天台避风港", 99: "99F  /  归航基地", 98: "98F  /  失落前哨",
 	}.get(floor_number, "%dF  /  继续深入" % floor_number)

@@ -12,8 +12,8 @@ const BACKGROUND_COLOR := Color(0.58, 0.62, 0.64)
 const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)
 const AMBIENT_ENERGY := 0.01
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
-const FOG_DENSITY := 0.040
-const VOLUMETRIC_FOG_DENSITY := 0.018
+const FOG_DENSITY := 0.030
+const VOLUMETRIC_FOG_DENSITY := 0.009
 const SKY_BOUNCE_ENERGY_BY_QUALITY := {
 	"low": 0.54,
 	"medium": 0.72,
@@ -42,6 +42,8 @@ func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
 	if _environment != null:
 		_environment.set_meta("presentation_volumetric_fog_density", VOLUMETRIC_FOG_DENSITY)
+		_environment.set_meta("presentation_glow_intensity", 0.86)
+		_environment.set_meta("presentation_glow_hdr_threshold", 0.90)
 	_sun = sun
 	if GraphicsSettingsManager != null and _environment != null:
 		GraphicsSettingsManager.register_environment(_environment)

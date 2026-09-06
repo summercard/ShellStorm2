@@ -1,4 +1,6 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=25 format=3]
+
+[ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
@@ -44,6 +46,7 @@ material = SubResource("MatEditorBoundary")
 size = Vector3(0.12, 0.08, 30)
 
 [node name="基地99层_美术布置层" type="Node3D"]
+script = ExtResource("20_fixture_glow")
 metadata/layout_contract = "只编辑位置、旋转、灯光和美术装饰；设施ID与玩法由代码桥接"
 metadata/runtime_owner = "TowerDescent3D._install_facilities"
 

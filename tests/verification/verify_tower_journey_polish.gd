@@ -39,7 +39,11 @@ func _ready() -> void:
 	_expect("东侧" in tower._journey_objective(99), "基地没有东侧路线", failures)
 	var environment := tower.world_environment.environment
 	GraphicsSettingsManager.apply_to_environment(environment)
-	_expect(is_equal_approx(environment.volumetric_fog_density, 0.003), "画质重应用覆盖了塔楼体积雾", failures)
+	_expect(
+		is_equal_approx(environment.volumetric_fog_density, TowerAtmosphere3D.VOLUMETRIC_FOG_DENSITY),
+		"画质重应用覆盖了塔楼体积雾",
+		failures
+	)
 	var density := environment.fog_density
 	var atmosphere := tower.get_node("TowerAtmosphere3D") as TowerAtmosphere3D
 	atmosphere.set_floor_number(98)

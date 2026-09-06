@@ -75,6 +75,7 @@ core_scenes=(
   verify_tactical_inventory_minimap_flow
   verify_backpack_equipment_flow
   verify_scene_facility_shared_palette
+  verify_base_fixture_glow
   verify_base_facility_framework
   verify_base_shop_save_flow
   verify_tower_facility_inventory_binding
