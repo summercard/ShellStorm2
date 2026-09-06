@@ -25,14 +25,6 @@ func _ready() -> void:
 	# 延迟 0.1s 触发基地音乐，避免与上一场景 _exit_tree 的状态写回抢时序。
 	_start_base_music_with_delay()
 
-
-func _start_base_music_with_delay() -> void:
-	var music_mgr := get_node_or_null("/root/MusicManager")
-	if music_mgr == null:
-		return
-	# 保证上一场景的 fade-out / stop() 有时间完成，不被新的 play() kill。
-	await get_tree().create_timer(0.1).timeout
-	music_mgr.play("base_passion")
 	for facility in get_tree().get_nodes_in_group("base_facility"):
 		if facility is BaseFacility3D and is_ancestor_of(facility):
 			facility.activated.connect(_on_facility_activated)
@@ -43,6 +35,15 @@ func _start_base_music_with_delay() -> void:
 	_refresh_facilities()
 	_restore_world_position()
 	_on_player_state_changed(player.get_presentation_state(), {})
+
+
+func _start_base_music_with_delay() -> void:
+	var music_mgr := get_node_or_null("/root/MusicManager")
+	if music_mgr == null:
+		return
+	# 保证上一场景的 fade-out / stop() 有时间完成，不被新的 play() kill。
+	await get_tree().create_timer(0.1).timeout
+	music_mgr.play("base_passion")
 
 
 func _on_facility_activated(facility: BaseFacility3D) -> void:

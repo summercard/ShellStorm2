@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb" id="1"]
+
+[sub_resource type="BoxShape3D" id="Box"]
+size = Vector3(5, 0.3, 5)
+
+[node name="TowerFloorTile5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-FLOOR-TILE-5M"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v002.blend"
+metadata/collision_policy = "centered_5m_slab; stage_uses_shared_support"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1")]
+
+[node name="FloorTileCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorTileCollision"]
+shape = SubResource("Box")

@@ -579,10 +579,10 @@ func _validate_target_room_airwall_clearance(
 	await get_tree().physics_frame
 	_validate_clear_lane(
 		tower,
-		# 阁楼架、L梯和下方铁门已从基地布局移除；此射线检查基地中线通行带，
-		# 以避免旧摆设残留为不可见阻挡。
+		# V021仓库实体已恢复；南面可见墙位于世界Z=-0.3425。
+		# 检查至墙前0.4425m的中线通行带，旧终点-9m已在实体内部。
 		Vector3(0.0, -7.2, 2.5),
-		Vector3(0.0, -7.2, -9.0),
+		Vector3(0.0, -7.2, 0.1),
 		"Base north approach still has an invisible blocker before the visible warehouse wall",
 		failures
 	)

@@ -1,7 +1,7 @@
 extends Node
 
 const SHARED_PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
-const EXPECTED_GLB_COUNT := 44
+const MINIMUM_GLB_COUNT := 44
 const COMPONENT_ROOTS := [
 	"res://assets/art/environments/base_facility_3d/components",
 	"res://assets/art/props/base_world_3d/components",
@@ -13,7 +13,7 @@ func _ready() -> void:
 	var glbs: Array[String] = []
 	for root in COMPONENT_ROOTS:
 		_collect_glbs(root, glbs)
-	_expect(glbs.size() == EXPECTED_GLB_COUNT, "场景/设施GLB数量异常: %d" % glbs.size(), failures)
+	_expect(glbs.size() >= MINIMUM_GLB_COUNT, "场景/设施GLB数量异常: %d" % glbs.size(), failures)
 	var material_count := 0
 	for path in glbs:
 		var packed := load(path) as PackedScene

@@ -785,7 +785,7 @@ func _build_reference_main_hud() -> void:
 
 	var cyan := Color(0.23, 0.88, 1.0)
 	var subdued := Color(0.62, 0.74, 0.82)
-	var identity := _make_hud_label("弹壳风暴 2  |  COMBAT / WEAPON / FATE-CARD", 15, Color(0.86, 0.92, 0.96))
+	var identity := _make_hud_label("弹壳风暴 2  |  向下，寻找世界的答案", 15, Color(0.86, 0.92, 0.96))
 	_anchor_control(identity, 0.0, 0.0, 0.0, 0.0, 18, 10, 520, 36)
 	_reference_hud_root.add_child(identity)
 

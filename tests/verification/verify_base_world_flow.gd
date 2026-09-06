@@ -28,8 +28,8 @@ func _ready() -> void:
 	# 新增恢复舱与角色衣柜后，正式基地静态节点实测483，保留17节点余量。
 	if node_count > 500:
 		failures.append("BaseWorld3D first slice is unexpectedly heavy: %d nodes" % node_count)
-	if base_world.get_facility_count() != 9:
-		failures.append("BaseWorld3D does not expose nine formal facilities")
+	if base_world.get_facility_count() != 8:
+		failures.append("BaseWorld3D physical facility count: expected 8, actual %d" % base_world.get_facility_count())
 	for facility_node in base_world.get_node("Facilities").get_children():
 		var facility := facility_node as BaseFacility3D
 		if facility == null:

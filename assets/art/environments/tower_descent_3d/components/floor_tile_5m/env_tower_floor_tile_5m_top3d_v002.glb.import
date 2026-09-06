@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://djuq0kjhrif2b"
-path="res://.godot/imported/east_work_together_poster_visual_top3d_v001.glb-706a197a46e2f1cc2e9e2d211c6f7490.scn"
+uid="uid://ck4ap8pcqx523"
+path="res://.godot/imported/env_tower_floor_tile_5m_top3d_v002.glb-65c59a0d4e4d3d89b687b76f29a7f86a.scn"
 
 [deps]
 
-source_file="res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_work_together_poster/east_work_together_poster_visual_top3d_v001.glb"
-dest_files=["res://.godot/imported/east_work_together_poster_visual_top3d_v001.glb-706a197a46e2f1cc2e9e2d211c6f7490.scn"]
+source_file="res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb"
+dest_files=["res://.godot/imported/env_tower_floor_tile_5m_top3d_v002.glb-65c59a0d4e4d3d89b687b76f29a7f86a.scn"]
 
 [params]
 
@@ -28,7 +28,7 @@ meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
 meshes/force_disable_compression=false
 skins/use_named_skins=true
-animation/import=true
+animation/import=false
 animation/fps=30
 animation/trimming=false
 animation/remove_immutable_tracks=true

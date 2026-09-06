@@ -30,6 +30,9 @@ const WALL_THICKNESS := 0.30
 const FLOOR_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m_v001.tscn"
 )
+const POLISHED_FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/runtime/floor_tile_5m/env_tower_floor_tile_5m_root_top3d_v002.tscn"
+)
 const WALL_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn"
 )
@@ -276,7 +279,8 @@ func _enabled_collision_shape_count(root: Node) -> int:
 
 
 func _build_floor() -> void:
-	var mesh := _mesh_from_scene(FLOOR_SCENE)
+	var polished := floor_index in [0, 2]
+	var mesh := _mesh_from_scene(POLISHED_FLOOR_SCENE if polished else FLOOR_SCENE)
 	if mesh == null:
 		push_error("Tower floor module GLB has no MeshInstance3D")
 		return
@@ -308,21 +312,21 @@ func _build_floor() -> void:
 			else:
 				dark_transforms.append(transform)
 	_floor_visual_light = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_A", mesh, light_transforms, FLOOR_TILE_MATERIAL_A
+		"ImportedFloorTileGrid5M_A", mesh, light_transforms, null if polished else FLOOR_TILE_MATERIAL_A
 	)
 	add_child(_floor_visual_light)
 	_floor_visual_dark = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, FLOOR_TILE_MATERIAL_B
+		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, null if polished else FLOOR_TILE_MATERIAL_B
 	)
 	add_child(_floor_visual_dark)
 	var empty_transforms: Array[Transform3D] = []
 	_protected_floor_visual_light = _create_floor_multimesh(
-		"ProtectedFloorPatch5M_A", mesh, empty_transforms, FLOOR_TILE_MATERIAL_A
+		"ProtectedFloorPatch5M_A", mesh, empty_transforms, null if polished else FLOOR_TILE_MATERIAL_A
 	)
 	_protected_floor_visual_light.visible = false
 	add_child(_protected_floor_visual_light)
 	_protected_floor_visual_dark = _create_floor_multimesh(
-		"ProtectedFloorPatch5M_B", mesh, empty_transforms, FLOOR_TILE_MATERIAL_B
+		"ProtectedFloorPatch5M_B", mesh, empty_transforms, null if polished else FLOOR_TILE_MATERIAL_B
 	)
 	_protected_floor_visual_dark.visible = false
 	add_child(_protected_floor_visual_dark)

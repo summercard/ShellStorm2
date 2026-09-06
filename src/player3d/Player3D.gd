@@ -68,6 +68,8 @@ var aim_direction := Vector3(0, 0, -1)
 var aim_yaw := 0.0
 var last_move_direction := Vector3(0, 0, -1)
 var dash_direction := Vector3(0, 0, -1)
+const DASH_INPUT_BUFFER_SECONDS := 0.12
+var _dash_input_buffer := 0.0
 var dash_cooldown_timer := 0.0
 var is_dashing := false
 var is_invincible := false
@@ -390,6 +392,7 @@ func _physics_process(delta: float) -> void:
 		_state_machine.physics_update(delta)
 	if melee_combat != null:
 		melee_combat.physics_update(delta)
+	_tick_dash_input_buffer(delta)
 	_tick_footstep_sound(delta)
 	var flashlight := get_node_or_null("PlayerFlashlight3D")
 	if flashlight != null:
@@ -467,6 +470,8 @@ func set_test_move_direction(direction: Variant) -> void:
 
 
 func set_input_locked(locked: bool) -> void:
+	if locked:
+		_dash_input_buffer = 0.0
 	if input_locked == locked or current_hp <= 0:
 		return
 	input_locked = locked
@@ -1656,7 +1661,28 @@ func _update_combat_input() -> void:
 		request_reload()
 
 
+func _tick_dash_input_buffer(delta: float) -> void:
+	if _dash_input_buffer <= 0.0:
+		return
+	if input_locked or current_hp <= 0 or get_state_machine_state() not in ["idle", "moving"]:
+		_dash_input_buffer = 0.0
+		return
+	if dash_cooldown_timer <= 0.0:
+		_dash_input_buffer = 0.0
+		_begin_dash()
+	else:
+		_dash_input_buffer = maxf(0.0, _dash_input_buffer - delta)
+
+
 func _begin_dash() -> bool:
+	if (
+		not input_locked and current_hp > 0
+		and get_state_machine_state() in ["idle", "moving"]
+		and dash_cooldown_timer > 0.0
+		and dash_cooldown_timer <= DASH_INPUT_BUFFER_SECONDS
+	):
+		_dash_input_buffer = DASH_INPUT_BUFFER_SECONDS
+		return false
 	if (
 		input_locked
 		or current_hp <= 0
@@ -1665,6 +1691,7 @@ func _begin_dash() -> bool:
 		or (_state_machine != null and _state_machine.current_state_name in ["falling", "landing"])
 	):
 		return false
+	_dash_input_buffer = 0.0
 	var direction := _get_input_direction_3d()
 	dash_direction = direction if direction != Vector3.ZERO else aim_direction
 	if dash_direction == Vector3.ZERO:

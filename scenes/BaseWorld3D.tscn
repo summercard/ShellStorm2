@@ -74,11 +74,11 @@ description = "管理撤离物资与下局带入"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
 facility_color = Color(0.24, 0.58, 0.72, 1)
 
-# 怪物档案室节点块暂时从基地设施列表移除——保留 catalog/服务/入口场景，
-# 以后要带回基地时把同一段 [node name="Archive" parent="Facilities"] 块
-# 重新贴回 Facilities 节点下即可恢复入口节点。
-# 原节点位置：Vector3(-5.5, 0, 2.6)，facility_id="monster_archive"，
-# menu_scene_path="res://scenes/MonsterArchiveMenu.tscn"。
+; 怪物档案室节点块暂时从基地设施列表移除——保留 catalog/服务/入口场景，
+; 以后要带回基地时把同一段 [node name="Archive" parent="Facilities"] 块
+; 重新贴回 Facilities 节点下即可恢复入口节点。
+; 原节点位置：Vector3(-5.5, 0, 2.6)，facility_id="monster_archive"，
+; menu_scene_path="res://scenes/MonsterArchiveMenu.tscn"。
 
 [node name="FateCollection" parent="Facilities" instance=ExtResource("3_facility")]
 position = Vector3(-12.2, 0, 6.2)

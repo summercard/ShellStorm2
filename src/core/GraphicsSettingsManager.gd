@@ -274,7 +274,7 @@ func _apply_environment(environment: Environment) -> void:
 	_set_property(environment, "sdfgi_probe_bias", 1.1)
 
 	_set_property(environment, "volumetric_fog_enabled", is_enabled("volumetric_fog"))
-	_set_property(environment, "volumetric_fog_density", 0.018)
+	_set_property(environment, "volumetric_fog_density", float(environment.get_meta("presentation_volumetric_fog_density", 0.018)))
 	_set_property(environment, "volumetric_fog_albedo", Color(0.72, 0.80, 0.86))
 	_set_property(environment, "volumetric_fog_emission", Color(0.015, 0.022, 0.030))
 	_set_property(environment, "volumetric_fog_emission_energy", 0.22)

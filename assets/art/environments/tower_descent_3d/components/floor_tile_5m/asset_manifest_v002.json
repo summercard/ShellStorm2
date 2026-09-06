@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+  "version": "v002",
+  "category": "room_kit",
+  "logic_id": "tower_descent",
+  "component": "floor_tile_5m",
+  "name": "5米工业拼接地砖",
+  "collection": "地面系统_5米工业地砖_资产包",
+  "objects": [
+    "FloorTile_5m"
+  ],
+  "source": "assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v002.blend",
+  "visual": "assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb",
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "dimensions_m": [
+    5,
+    5,
+    0.3005
+  ],
+  "origin": "center; visual top +0.1505; runtime offset -0.15",
+  "front": "Godot -Z",
+  "collision": "existing centered 5x5x0.30 box; stage support unchanged",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "triangles": 716,
+  "sha256": "2d6dc8e109a3dbda9dab7a3eece5c06de02511001f8d2a06751b5e1860814d15",
+  "scope": "100F rooftop and 98F floor visuals only; 99F authored floor, wall/stair/door transforms unchanged",
+  "replacement": "v001 registry pointed to GLB but actual runtime was BoxMesh; v002 now explicitly imports the authored mesh",
+  "locked_contract": {
+    "grid_m": 5,
+    "thickness_m": 0.3,
+    "floor_height_m": 9,
+    "unchanged_runtime_support": true
+  },
+  "independent_packages": 1,
+  "empty_packages": 0,
+  "multi_owned_objects": 0
+}

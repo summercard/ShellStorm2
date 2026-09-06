@@ -108,6 +108,11 @@ var _floor_layout_templates: Dictionary = {}
 var _floor_plan_snapshots: Dictionary = {}
 var _floor_seed_gate_edges: Dictionary = {}
 var _floor_stages: Dictionary = {}
+var _journey_hud_elapsed := 0.0
+var _announced_floors: Dictionary = {}
+var _arrival_title: Label
+var _arrival_tween: Tween
+
 var _active_transition_edge := ""
 var _transition_upper_floor := -1
 var _transition_lower_floor := -1
@@ -209,15 +214,16 @@ func _ready() -> void:
 	title_label.text = "弹壳风暴2 · 向下爬楼行动"
 	seed_label.text = "塔楼种子 %d" % run_seed
 	status_label.text = (
-		"楼顶新手出生点 · 西侧特殊楼梯门通向99F基地"
+		"风还在吹。沿西侧楼梯下去，寻找塔内的落脚点。"
 		if starts_on_rooftop
-		else "已从99F基地中点恢复 · 基地屋内禁射，跨出任一侧门即可开火"
+		else "欢迎归航。先恢复状态、整理装备，再开始下一次下潜。"
 	)
 	_update_floor_visibility_state()
 	_refresh_physical_location_authority(true)
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
 	_install_main_entry_screen()
+	_announce_floor_arrival(_current_floor_number())
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
@@ -244,6 +250,10 @@ func _process(delta: float) -> void:
 	super(delta)
 	_refresh_physical_location_authority()
 	_update_facility_combat_lock()
+	_journey_hud_elapsed += delta
+	if _journey_hud_elapsed >= 0.2:
+		_journey_hud_elapsed = fmod(_journey_hud_elapsed, 0.2)
+		_refresh_tower_hud()
 
 
 func _finish_run(success: bool) -> void:
@@ -2585,9 +2595,9 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		return
 	var depth := maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))
 	if room.room_id == "start":
-		room_label.text = "楼顶 · 250m整层 / 65m核心"
+		room_label.text = "100F · 天台避风港"
 	elif room.room_id == "facility":
-		room_label.text = "99层基地 · 30×30m / 6×6地砖 · 安全区"
+		room_label.text = "99F · 归航基地 · 安全区"
 		if not test_mode and BaseManager != null:
 			BaseManager.mark_tutorial_completed()
 	else:
@@ -2599,8 +2609,8 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 		else:
 			room_label.text = "%d层 · %s · %s" % [
 				floor_number,
-				"本批Boss层" if floor_number == 95 else role,
-				room.room_type,
+				"守卫核心" if room.room_type == "BOSS" else "探索区",
+				_room_display_name(room.room_type),
 			]
 	_update_facility_combat_lock()
 	if _atmosphere != null:
@@ -2608,6 +2618,7 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	if player.camera != null:
 		player.camera.far = 520.0 if depth == 0 else 145.0
 	_refresh_tower_hud()
+	_announce_floor_arrival(100 - depth)
 	_refresh_facility_runtime()
 
 
@@ -3617,6 +3628,11 @@ func _entry_context_requests_main_entry() -> bool:
 
 
 func _refresh_tower_hud() -> void:
+	if _arrival_tween != null and _arrival_tween.is_valid():
+		if player != null and (player.input_locked or not $HUD.visible):
+			_arrival_tween.pause()
+		else:
+			_arrival_tween.play()
 	if _tower_floor_label == null or player == null:
 		return
 	var floor_number := _current_floor_number()
@@ -3625,20 +3641,68 @@ func _refresh_tower_hud() -> void:
 		if floor_number >= 100
 		else "%dF" % floor_number
 	)
-	if floor_number >= 100:
-		_tower_target_label.text = "目标：进入西侧楼梯间，抵达99层基地"
-	elif floor_number == 99:
-		_tower_target_label.text = "目标：整备后下降；电梯可返回已点亮楼层"
-	elif floor_number == 95:
-		_tower_target_label.text = "目标：肃清本批Boss层并完成撤离验证"
-	else:
-		_tower_target_label.text = "目标：搜索钥匙、清理房间、点亮电梯并继续下降"
-	_tower_elevator_label.text = "电梯已点亮：%s" % (
-		" / ".join(_sorted_unlocked_elevator_floors().map(
-			func(value): return "%dF" % int(value)
-		))
+	_tower_target_label.text = _journey_objective(floor_number)
+	_tower_elevator_label.text = (
+		"WASD 移动 · E 交互"
+		if floor_number >= 100 else
+		"I / Tab 背包 · Esc 暂停"
+		if floor_number == 99 else
+		"M 路线地图 · F 手电 · Shift 冲刺"
 	)
 	_tower_base_currency_label.text = "魂：◈ %d" % BaseManager.get_extraction_points()
+
+
+func _room_display_name(type_id: String) -> String:
+	return {
+		"COMBAT": "警戒区", "SCAVENGE": "物资搜索区", "STORAGE": "储备仓库",
+		"ELITE": "精英信号", "BOSS": "核心守卫", "EVENT": "异常信号",
+		"MERCHANT": "交易站", "UPGRADE": "改造站", "TRAP": "危险区域",
+		"EXTRACTION": "撤离信标", "STAIR_LOBBY": "楼梯安全屋",
+		"START": "入口", "BASEMENT": "地下储藏区",
+	}.get(type_id, "探索区")
+
+
+func _journey_objective(floor_number: int) -> String:
+	if floor_number >= 100:
+		return "沿天台前往西侧楼梯，进入99F基地"
+	if floor_number == 99:
+		return "恢复状态、补充物资；准备好后从东侧楼梯下行"
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or room.room_type == "STAIR_LOBBY":
+		return "检查装备，开门探索；返程前留意撤退损失"
+	if room.room_type == "EXTRACTION":
+		return "靠近信标查看撤离条件，带着物资安全返航"
+	if room.room_type == "EVENT" and not room.cleared:
+		return "靠近异常信号，按 E 调查"
+	if not room.cleared:
+		var alive := int(_alive_by_room.get(room.room_id, 0))
+		return "肃清威胁 · 剩余 %d 个敌对信号" % alive if alive > 0 else "保持警戒，留意增援与周围掩体"
+	if _get_total_room_keys() <= 0:
+		return "区域已肃清 · 拾取掉落钥匙，再选择下一扇门"
+	return "搜索剩余物资，用钥匙开门选择路线"
+
+
+func _announce_floor_arrival(floor_number: int) -> void:
+	if _announced_floors.has(floor_number) or _tower_floor_label == null:
+		return
+	_announced_floors[floor_number] = true
+	if _arrival_title == null:
+		_arrival_title = _make_hud_label("", 28, Color(0.72, 0.95, 1.0))
+		_arrival_title.name = "FloorArrivalTitle"
+		_arrival_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_arrival_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_anchor_control(_arrival_title, 0.5, 0.0, 0.5, 0.0, -300, 72, 300, 132)
+		_reference_hud_root.add_child(_arrival_title)
+	if _arrival_tween != null and _arrival_tween.is_valid():
+		_arrival_tween.kill()
+	_arrival_title.text = {
+		100: "100F  /  天台避风港", 99: "99F  /  归航基地", 98: "98F  /  失落前哨",
+	}.get(floor_number, "%dF  /  继续深入" % floor_number)
+	_arrival_title.modulate.a = 0.0
+	_arrival_tween = create_tween()
+	_arrival_tween.tween_property(_arrival_title, "modulate:a", 1.0, 0.35)
+	_arrival_tween.tween_interval(2.2)
+	_arrival_tween.tween_property(_arrival_title, "modulate:a", 0.0, 0.65)
 
 
 func _on_service_activated(room: DungeonRoom3D, station: ServiceStation3D) -> void:

@@ -43,6 +43,7 @@ core_scenes=(
   verify_floor_plan_generator
   verify_room_graph_persistence_services
   verify_hud_presenter_3d
+  verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
   verify_unified_player_interaction_flow
   verify_tower_floor_room_authority

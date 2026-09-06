@@ -13,6 +13,7 @@ const AMBIENT_COLOR := Color(0.45, 0.52, 0.60)
 const AMBIENT_ENERGY := 0.01
 const FOG_LIGHT_COLOR := Color(0.40, 0.48, 0.55)
 const FOG_DENSITY := 0.040
+const VOLUMETRIC_FOG_DENSITY := 0.018
 const SKY_BOUNCE_ENERGY_BY_QUALITY := {
 	"low": 0.54,
 	"medium": 0.72,
@@ -39,6 +40,8 @@ var _last_time_snapshot: Dictionary = {}
 
 func configure(environment: Environment, sun: DirectionalLight3D) -> void:
 	_environment = environment
+	if _environment != null:
+		_environment.set_meta("presentation_volumetric_fog_density", VOLUMETRIC_FOG_DENSITY)
 	_sun = sun
 	if GraphicsSettingsManager != null and _environment != null:
 		GraphicsSettingsManager.register_environment(_environment)
@@ -88,6 +91,9 @@ func _update_music_for_floor(floor_number: int, rooftop: bool) -> void:
 		return
 	if rooftop:
 		mgr.play("rooftop_relax")
+		return
+	if floor_number == 99:
+		mgr.play("base_passion")
 		return
 	# Boss 房判定：95/90/85 层或任意 floor % 5 == 0（与 plan.boss_floor 一致）
 	if floor_number > 0 and floor_number % 5 == 0:
@@ -151,6 +157,8 @@ func bind_time_source(source: Node) -> bool:
 	_time_source = source
 	if not _time_source.time_advanced.is_connected(_on_world_time_advanced):
 		_time_source.time_advanced.connect(_on_world_time_advanced)
+	if _time_source.has_signal("solar_state_changed") and not _time_source.is_connected("solar_state_changed", _on_solar_state_changed):
+		_time_source.connect("solar_state_changed", _on_solar_state_changed)
 	if _time_source.has_method("get_time_snapshot"):
 		_last_time_snapshot = _time_source.call("get_time_snapshot") as Dictionary
 		time_of_day = float(_last_time_snapshot.get("hour_float", time_of_day))
@@ -171,8 +179,16 @@ func _on_world_time_advanced(_delta_game_seconds: float, snapshot: Dictionary) -
 	_apply_time_of_day()
 
 
+func _on_solar_state_changed(solar: Dictionary) -> void:
+	# 读档、恢复舱推进时间和测试跳时也必须立即同步；这些不发time_advanced。
+	if _time_source != null and _time_source.has_method("get_time_snapshot"):
+		_last_time_snapshot = _time_source.call("get_time_snapshot") as Dictionary
+		time_of_day = float(_last_time_snapshot.get("hour_float", time_of_day))
+	_apply_solar_snapshot(solar)
+
+
 func _on_graphics_settings_changed(_settings: Dictionary) -> void:
-	_apply_time_of_day()
+	_apply_fixed_lighting()
 
 
 func _apply_solar_snapshot(solar: Dictionary) -> void:

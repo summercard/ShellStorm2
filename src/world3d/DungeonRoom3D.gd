@@ -1764,6 +1764,11 @@ func _build_content() -> void:
 			room_seed,
 			true
 		)
+		# 基地用接近中性的冷白主光保留真实色盘，青色由设备发光承担。
+		_central_light.configure(
+			Color(0.84, 0.90, 1.0), _central_light.energy,
+			_central_light.light_range, room_seed, true, false, "ceiling"
+		)
 		_room_lights.append(_central_light)
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与

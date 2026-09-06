@@ -82,13 +82,14 @@ func _verify_world_and_terminal(failures: Array[String]) -> void:
 		if str(snapshot.get("summary", "")).is_empty() or "\n" not in facility.name_label.text:
 			failures.append("3D 设施牌没有显示实时摘要：%s" % facility.facility_id)
 	if (
-		world_ids.size() != 9
+		world_ids.size() != 8
+		or not world_ids.has("vault")
 		or not world_ids.has("base_vending")
 		or not world_ids.has("base_recovery")
 		or not world_ids.has("avatar_wardrobe")
 	):
-		failures.append("3D 基地没有绑定全部 9 个稳定设施 ID")
-	if world_ids.has("fate_divination") or world_ids.has("base_console"):
+		failures.append("3D 基地没有绑定现行 8 个实体设施 ID: %s" % str(world_ids.keys()))
+	if world_ids.has("fate_divination") or world_ids.has("base_console") or world_ids.has("monster_archive"):
 		failures.append("3D 基地仍实例化命运占卜屋或基地管理终端")
 
 	var menu_scene := load("res://scenes/BaseMenu.tscn") as PackedScene
