@@ -1,17 +1,11 @@
 {
-  "package_key": "underdeck",
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::underdeck_sheet_blocker",
+  "display_name": "13_阁楼下方铁皮封闭体_资产包",
   "asset_slug": "underdeck_sheet_blocker",
   "category": "architecture",
-  "collection_path": [
-    "基地99层高品质微缩模型_中文资产管理",
-    "02_游戏输出_独立资产包_v007",
-    "10_建筑结构",
-    "13_阁楼下方铁皮封闭体_资产包"
-  ],
-  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/architecture/underdeck_sheet_blocker",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
-  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
-  "status": "已归类_待独立导出",
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
   "object_count": 11,
   "mesh_count": 5,
   "light_count": 4,
@@ -28,5 +22,20 @@
     "铁皮外立面线性灯_7.5_自发光",
     "阁楼下方三面铁皮封闭体"
   ],
-  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+  "world_center_m": [
+    5.0,
+    9.685,
+    2.7
+  ],
+  "bounding_size_m": [
+    19.315,
+    9.53,
+    5.4
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_underdeck_sheet_blocker",
+  "collider_names": [],
+  "expected_export": "underdeck_sheet_blocker_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
 }

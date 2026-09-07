@@ -1,23 +1,15 @@
 {
-  "package_key": "walls",
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::retained_wall_system",
+  "display_name": "11_四向保留墙体系统_资产包",
   "asset_slug": "retained_wall_system",
   "category": "architecture",
-  "collection_path": [
-    "基地99层高品质微缩模型_中文资产管理",
-    "02_游戏输出_独立资产包_v007",
-    "10_建筑结构",
-    "11_四向保留墙体系统_资产包"
-  ],
-  "future_export_directory": "source/art/blender/base_facility_layout/component_packages/architecture/retained_wall_system",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v007.blend",
-  "source_asset_id": "ENV-BASE99-ART-LAYOUT-3D",
-  "status": "已归类_待独立导出",
-  "object_count": 72,
-  "mesh_count": 24,
+  "version": "v017",
+  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "object_count": 66,
+  "mesh_count": 22,
   "light_count": 0,
   "object_names": [
-    "ENV-BASE99-WALL-DOOR-5X9_输出根节点.001",
-    "ENV-BASE99-WALL-DOOR-5X9_输出根节点.002",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.001",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.002",
     "ENV-BASE99-WALL-PLAIN-5X9_输出根节点.003",
@@ -43,7 +35,6 @@
     "保留东墙_00",
     "保留东墙_01",
     "保留东墙_02",
-    "保留东墙_03",
     "保留东墙_04",
     "保留东墙_05",
     "保留北墙_00",
@@ -61,11 +52,8 @@
     "保留西墙_00",
     "保留西墙_01",
     "保留西墙_02",
-    "保留西墙_03",
     "保留西墙_04",
     "保留西墙_05",
-    "带门墙体_主体_金属哑光反光.001",
-    "带门墙体_主体_金属哑光反光.002",
     "普通墙体_主体_金属哑光反光.001",
     "普通墙体_主体_金属哑光反光.002",
     "普通墙体_主体_金属哑光反光.003",
@@ -89,5 +77,20 @@
     "普通墙体_主体_金属哑光反光.021",
     "普通墙体_主体_金属哑光反光.022"
   ],
-  "note": "该目录已完成资产归类占位；后续从指定 Blender Collection 独立导出 GLB/碰撞/场景。"
+  "world_center_m": [
+    0.0,
+    -0.0,
+    4.5
+  ],
+  "bounding_size_m": [
+    30.36,
+    30.36,
+    9.0
+  ],
+  "forward_axis": "Blender +Y north",
+  "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_retained_wall_system",
+  "collider_names": [],
+  "expected_export": "retained_wall_system_visual_top3d_v001.glb",
+  "collision_status": "not_authored_in_this_collection_only_pass",
+  "export_status": "not_exported"
 }
