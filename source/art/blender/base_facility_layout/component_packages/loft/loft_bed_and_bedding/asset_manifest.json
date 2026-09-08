@@ -4,8 +4,8 @@
   "display_name": "31_参考床架床品与床下收纳_资产包",
   "asset_slug": "loft_bed_and_bedding",
   "category": "loft",
-  "version": "v017",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
   "object_count": 37,
   "mesh_count": 37,
   "light_count": 0,
@@ -84,5 +84,39 @@
     "03_清漆反光_紫粉点缀"
   ],
   "acceptance": "恢复参考长度4.75m；床架沿Y方向加宽至2.55m、床垫宽2.30m，结构同步对齐。",
-  "scope": "二楼床铺与床品"
+  "scope": "二楼床铺与床品",
+  "layout_revision": "v021_loft_layout_adjustment_001",
+  "layout_only": true,
+  "layout_instruction": "顺时针90度，枕头朝北，靠近门帘。",
+  "layout_blender": {
+    "pivot_xy_m": [
+      0.3,
+      11.25
+    ],
+    "target_xy_m": [
+      1.75,
+      11.55
+    ],
+    "rotation_z_rad": -1.57079632679,
+    "bbox_xy_m": {
+      "min": [
+        0.475,
+        9.175
+      ],
+      "max": [
+        3.025,
+        13.925
+      ]
+    }
+  },
+  "godot_runtime_layout": {
+    "scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+    "position_m": [
+      -9.5,
+      0.0,
+      -11.85
+    ],
+    "rotation_y_rad": -1.57079632679,
+    "collision_policy": "existing package collision follows the same root transform"
+  }
 }

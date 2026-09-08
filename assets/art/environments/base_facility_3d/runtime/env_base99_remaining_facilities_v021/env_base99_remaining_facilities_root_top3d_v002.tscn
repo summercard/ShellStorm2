@@ -94,12 +94,19 @@ metadata/optimized_package_count = 24
 [node name="46_BATTERY模块收纳箱_资产包" parent="." instance=ExtResource("17_loft_battery_cabinet")]
 
 [node name="31_参考床架床品与床下收纳_资产包" parent="." instance=ExtResource("18_loft_bed_and_bedding")]
+position = Vector3(-9.5, 0, -11.85)
+rotation = Vector3(0, -1.5707963, 0)
+metadata/layout_revision = "v021_loft_layout_adjustment_001"
+metadata/layout_note = "Clockwise 90 degrees about original package center; pillows face north beside privacy curtain."
 
 [node name="33_暖橙床头灯_资产包" parent="." instance=ExtResource("19_loft_bedside_lamp")]
 
 [node name="34_床边暖灰地毯_资产包" parent="." instance=ExtResource("20_loft_bedside_rug")]
 
 [node name="37_红棕茶几与生活物件_资产包" parent="." instance=ExtResource("21_loft_coffee_table")]
+position = Vector3(-2.6, 0, 2.83)
+metadata/layout_revision = "v021_loft_layout_adjustment_001"
+metadata/layout_note = "Moved south-west to the clear floor space below the loft rug."
 
 [node name="42_双屏电脑完整工位_资产包" parent="." instance=ExtResource("22_loft_computer_workstation")]
 
@@ -114,6 +121,10 @@ metadata/optimized_package_count = 24
 [node name="45_MEDICAL模块收纳箱_资产包" parent="." instance=ExtResource("27_loft_medical_cabinet")]
 
 [node name="32_参考床头柜与生活物件_资产包" parent="." instance=ExtResource("28_loft_nightstand")]
+position = Vector3(7.62, 0, -10.435)
+rotation = Vector3(0, 1.5707963, 0)
+metadata/layout_revision = "v021_loft_layout_adjustment_001"
+metadata/layout_note = "Counter-clockwise 90 degrees about original package center; drawers face the south railing."
 
 [node name="43_带扶手办公椅_资产包" parent="." instance=ExtResource("29_loft_office_chair")]
 

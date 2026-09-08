@@ -4,8 +4,8 @@
   "display_name": "37_红棕茶几与生活物件_资产包",
   "asset_slug": "loft_coffee_table",
   "category": "loft",
-  "version": "v017",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
   "object_count": 15,
   "mesh_count": 15,
   "light_count": 0,
@@ -41,5 +41,39 @@
   "collider_names": [],
   "expected_export": "loft_coffee_table_visual_top3d_v001.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "not_exported"
+  "export_status": "not_exported",
+  "layout_revision": "v021_loft_layout_adjustment_001",
+  "layout_only": true,
+  "layout_instruction": "向左下移动到休闲地毯南侧空位。",
+  "layout_blender": {
+    "pivot_xy_m": [
+      6.2,
+      9.38
+    ],
+    "target_xy_m": [
+      3.6,
+      6.55
+    ],
+    "rotation_z_rad": 0.0,
+    "bbox_xy_m": {
+      "min": [
+        2.175,
+        5.91
+      ],
+      "max": [
+        5.025,
+        7.19
+      ]
+    }
+  },
+  "godot_runtime_layout": {
+    "scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+    "position_m": [
+      -2.6,
+      0.0,
+      2.83
+    ],
+    "rotation_y_rad": 0.0,
+    "collision_policy": "existing package collision follows the same root transform"
+  }
 }
