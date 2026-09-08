@@ -1,0 +1,70 @@
+{
+  "asset_id": "ENV-BASE99-V023-STAIR-BED",
+  "version": "v023",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v023.blend",
+  "source_sha256": "f9d21e35f3b1a4ae1840c0894bb97a8f841854954f1235b6b5b11aac0511671c",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v023/base_facility_runtime_layout_hq-v023-stair_bed.blend",
+  "packages": {
+    "northwest_l_stair": {
+      "package": "14_西北贴墙L型楼梯_资产包",
+      "collection": "14_西北贴墙L型楼梯_资产包",
+      "scope": "stair",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v006.glb",
+      "triangles_before": 54932,
+      "triangles_after": 46116,
+      "downward_triangles_removed": 8816,
+      "legacy_uv_layers_removed": 18,
+      "degenerate_palette_uv_faces_repaired": 280,
+      "bbox_blender": {
+        "min": [
+          -14.800000190734863,
+          6.8918867111206055,
+          0.0
+        ],
+        "max": [
+          -4.716860294342041,
+          14.800000190734863,
+          7.127500057220459
+        ]
+      }
+    },
+    "loft_bed_and_bedding": {
+      "package": "31_参考床架床品与床下收纳_资产包",
+      "collection": "31__02_游戏输出_整合模型",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v004.glb",
+      "triangles_before": 3852,
+      "triangles_after": 3230,
+      "downward_triangles_removed": 622,
+      "legacy_uv_layers_removed": 0,
+      "degenerate_palette_uv_faces_repaired": 0,
+      "bbox_blender": {
+        "min": [
+          0.9000002145767212,
+          9.966667175292969,
+          6.010000228881836
+        ],
+        "max": [
+          2.5999999046325684,
+          13.133333206176758,
+          6.8319573402404785
+        ]
+      }
+    }
+  },
+  "runtime": {
+    "bed_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v004.tscn",
+    "stair_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
+    "remaining_assembly": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+    "art_layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn"
+  },
+  "collision_contract": {
+    "bed": "preserved optimized output bounds collision",
+    "northwest_l_stair": "preserved source world-space convex ramp and guard blockers"
+  },
+  "lock_signature": {
+    "before": "7938409eba5ab971fc4d370a3829cd94113ba518dc97d2c463c8916ea91e35b0",
+    "after": "7938409eba5ab971fc4d370a3829cd94113ba518dc97d2c463c8916ea91e35b0",
+    "locked_match": true
+  }
+}

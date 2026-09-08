@@ -1489,5 +1489,17 @@
     "replaces": "64_光束尘埃动效组_资产包",
     "implementation": "Godot GPUParticles3D",
     "managed_separately": true
+  },
+  "base_facility_stair_bed_v023": {
+    "asset_id": "ENV-BASE99-V023-STAIR-BED",
+    "version": "v023",
+    "package_count": 2,
+    "import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_stair_bed_v023_import_manifest.json",
+    "runtime": {
+      "bed_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v004.tscn",
+      "stair_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
+      "remaining_assembly": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+      "art_layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn"
+    }
   }
 }

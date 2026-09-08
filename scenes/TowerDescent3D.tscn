@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://daktvsf2n2llc" path="res://src/world3d/TowerDescent3D.gd" id="2_tower"]
 [ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
 [ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn" id="5_base_art"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn" id="5_base_art"]
 
 [sub_resource type="Environment" id="Environment_editor_runtime_match"]
 background_mode = 1
