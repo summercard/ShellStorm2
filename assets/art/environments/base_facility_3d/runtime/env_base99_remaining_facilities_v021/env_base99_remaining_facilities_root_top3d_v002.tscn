@@ -41,7 +41,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_root_top3d_v001.tscn" id="39_understair_equipment_cabinet"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_green_bench/understair_green_bench_root_top3d_v001.tscn" id="40_understair_green_bench"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/understair_storage_shelf/understair_storage_shelf_root_top3d_v001.tscn" id="41_understair_storage_shelf"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_root_top3d_v001.tscn" id="42_volumetric_dust_fx"]
+[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn" id="42_volumetric_dust_fx"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d_v001.tscn" id="43_warehouse_pendant_light_group"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v002.tscn" id="44_water_purifier"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v002.tscn" id="45_weapon_workshop_station"]
@@ -152,7 +152,7 @@ metadata/layout_note = "Counter-clockwise 90 degrees about original package cent
 
 [node name="60_梯下层架与收纳_资产包" parent="." instance=ExtResource("41_understair_storage_shelf")]
 
-[node name="64_光束尘埃动效组_资产包" parent="." instance=ExtResource("42_volumetric_dust_fx")]
+[node name="场景特效_光束尘埃粒子" parent="." instance=ExtResource("42_volumetric_dust_fx")]
 
 [node name="61_仓库防爆吊灯组_资产包" parent="." instance=ExtResource("43_warehouse_pendant_light_group")]
 

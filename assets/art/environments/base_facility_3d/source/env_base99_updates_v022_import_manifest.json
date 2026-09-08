@@ -1,0 +1,324 @@
+{
+  "asset_id": "ENV-BASE99-V022-UPDATES",
+  "version": "v022",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend",
+  "source_sha256": "9578b73ed4def59d3a7a0dd33928c9ebe35e18cf0f9f83c69aee15f4ecc86a71",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend",
+  "packages": {
+    "loft_bed_and_bedding": {
+      "package": "31_参考床架床品与床下收纳_资产包",
+      "collection": "31__02_游戏输出_整合模型",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v003.glb",
+      "triangles_before": 3852,
+      "triangles_after": 3230,
+      "downward_triangles_removed": 622,
+      "bbox_blender": {
+        "min": [
+          0.9000002145767212,
+          9.966667175292969,
+          6.010000228881836
+        ],
+        "max": [
+          2.5999999046325684,
+          13.133333206176758,
+          6.8319573402404785
+        ]
+      }
+    },
+    "loft_bedside_lamp": {
+      "package": "33_暖橙床头灯_资产包",
+      "collection": "33__02_游戏输出_整合模型",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v003.glb",
+      "triangles_before": 508,
+      "triangles_after": 394,
+      "downward_triangles_removed": 114,
+      "bbox_blender": {
+        "min": [
+          -3.9100000858306885,
+          7.489999771118164,
+          7.46999979019165
+        ],
+        "max": [
+          -3.490000009536743,
+          7.909999847412109,
+          8.3774995803833
+        ]
+      }
+    },
+    "hologram_terminal_platform": {
+      "package": "51_圆形全息设备平台_资产包",
+      "collection": "51_圆形全息设备平台_资产包",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_visual_top3d_v002.glb",
+      "triangles_before": 7556,
+      "triangles_after": 5982,
+      "downward_triangles_removed": 1574,
+      "bbox_blender": {
+        "min": [
+          3.7956285,
+          0.5156285,
+          0.04
+        ],
+        "max": [
+          6.2043715,
+          2.9243715,
+          1.8648558
+        ]
+      }
+    },
+    "corridor_emergency_light_group": {
+      "package": "62_主通道应急灯组_资产包",
+      "collection": "62_主通道应急灯组_资产包",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/corridor_emergency_light_group/corridor_emergency_light_group_visual_top3d_v002.glb",
+      "triangles_before": 216,
+      "triangles_after": 180,
+      "downward_triangles_removed": 36,
+      "bbox_blender": {
+        "min": [
+          -14.729999542236328,
+          -0.375,
+          2.0399999618530273
+        ],
+        "max": [
+          14.710000038146973,
+          0.375,
+          2.3600001335144043
+        ]
+      }
+    },
+    "east_power_distribution": {
+      "package": "73_POWER工业配电系统_资产包",
+      "collection": "73_POWER工业配电系统_资产包",
+      "scope": "wall",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_power_distribution/east_power_distribution_visual_top3d_v002.glb",
+      "triangles_before": 18920,
+      "triangles_after": 15906,
+      "downward_triangles_removed": 3014,
+      "bbox_blender": {
+        "min": [
+          13.972500801086426,
+          -6.325000286102295,
+          1.0099999904632568
+        ],
+        "max": [
+          14.800000190734863,
+          -4.775000095367432,
+          3.700000047683716
+        ]
+      }
+    },
+    "east_industrial_pipeline_system": {
+      "package": "74_东墙工业管线系统_资产包",
+      "collection": "74_东墙工业管线系统_资产包",
+      "scope": "wall",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d_v002.glb",
+      "triangles_before": 36800,
+      "triangles_after": 31136,
+      "downward_triangles_removed": 5664,
+      "bbox_blender": {
+        "min": [
+          14.222200393676758,
+          -13.80000114440918,
+          1.7200000286102295
+        ],
+        "max": [
+          14.800000190734863,
+          3.8000011444091797,
+          7.180000305175781
+        ]
+      }
+    },
+    "east_maintenance_workstation": {
+      "package": "78_维修工作台与工具墙_资产包",
+      "collection": "78_02_游戏输出_整合模型_v021",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v003.glb",
+      "triangles_before": 3318,
+      "triangles_after": 2748,
+      "downward_triangles_removed": 570,
+      "bbox_blender": {
+        "min": [
+          3.6999998092651367,
+          -14.800000190734863,
+          0.02499999850988388
+        ],
+        "max": [
+          8.699999809265137,
+          -12.514999389648438,
+          4.264999866485596
+        ]
+      }
+    },
+    "east_work_together_poster": {
+      "package": "81_WORK_TOGETHER工业海报_资产包",
+      "collection": "81_WORK_TOGETHER工业海报_资产包",
+      "scope": "wall",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_work_together_poster/east_work_together_poster_visual_top3d_v002.glb",
+      "triangles_before": 29044,
+      "triangles_after": 24512,
+      "downward_triangles_removed": 4532,
+      "bbox_blender": {
+        "min": [
+          14.255495071411133,
+          -9.630000114440918,
+          3.9100000858306885
+        ],
+        "max": [
+          14.800000190734863,
+          -7.269999980926514,
+          5.529999732971191
+        ]
+      }
+    },
+    "east_small_safety_devices": {
+      "package": "82_东墙小型安全设备_资产包",
+      "collection": "82_东墙小型安全设备_资产包",
+      "scope": "wall",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/east_small_safety_devices/east_small_safety_devices_visual_top3d_v002.glb",
+      "triangles_before": 8316,
+      "triangles_after": 7058,
+      "downward_triangles_removed": 1258,
+      "bbox_blender": {
+        "min": [
+          14.369600296020508,
+          -12.65999984741211,
+          1.040000081062317
+        ],
+        "max": [
+          14.800000190734863,
+          -0.1899999976158142,
+          4.830000400543213
+        ]
+      }
+    },
+    "weapon_workshop_station": {
+      "package": "49_武器工作台与弹药附件_资产包",
+      "collection": "49_02_游戏输出_整合模型_v020",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v003.glb",
+      "triangles_before": 7606,
+      "triangles_after": 6288,
+      "downward_triangles_removed": 1318,
+      "bbox_blender": {
+        "min": [
+          -14.800000190734863,
+          -6.275000095367432,
+          0.14000000059604645
+        ],
+        "max": [
+          -12.876898765563965,
+          -0.5250000953674316,
+          3.8499999046325684
+        ]
+      }
+    },
+    "south_wall_information_boards": {
+      "package": "61_南墙资料板组_资产包",
+      "collection": "61_02_游戏输出_整合模型_v020",
+      "scope": "wall",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v002.glb",
+      "triangles_before": 1467,
+      "triangles_after": 1377,
+      "downward_triangles_removed": 90,
+      "bbox_blender": {
+        "min": [
+          -14.800000190734863,
+          -7.860000133514404,
+          3.0450000762939453
+        ],
+        "max": [
+          -14.711000442504883,
+          -0.7400000691413879,
+          5.539999961853027
+        ]
+      }
+    },
+    "water_purifier": {
+      "package": "57_净水器_资产包",
+      "collection": "57_02_游戏输出_整合模型_v020",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v003.glb",
+      "triangles_before": 696,
+      "triangles_after": 558,
+      "downward_triangles_removed": 138,
+      "bbox_blender": {
+        "min": [
+          -14.800000190734863,
+          -11.100000381469727,
+          0.10000002384185791
+        ],
+        "max": [
+          -12.845000267028809,
+          -9.600000381469727,
+          2.4000000953674316
+        ]
+      }
+    },
+    "heavy_supply_shelf": {
+      "package": "51_重型货架与补给箱_资产包",
+      "collection": "51_02_游戏输出_整合模型_v020",
+      "scope": "remaining",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v003.glb",
+      "triangles_before": 3588,
+      "triangles_after": 2682,
+      "downward_triangles_removed": 906,
+      "bbox_blender": {
+        "min": [
+          -13.53499984741211,
+          -14.800000190734863,
+          0.11999998986721039
+        ],
+        "max": [
+          -8.065000534057617,
+          -13.8100004196167,
+          0.9202552437782288
+        ]
+      }
+    },
+    "northwest_l_stair": {
+      "package": "14_西北贴墙L型楼梯_资产包",
+      "collection": "14_西北贴墙L型楼梯_资产包",
+      "scope": "stair",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v005.glb",
+      "triangles_before": 54932,
+      "triangles_after": 46116,
+      "downward_triangles_removed": 8816,
+      "bbox_blender": {
+        "min": [
+          -14.800000190734863,
+          6.8918867111206055,
+          -0.15199999511241913
+        ],
+        "max": [
+          -4.716860294342041,
+          14.800000190734863,
+          7.139999866485596
+        ]
+      }
+    }
+  },
+  "runtime": {
+    "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn",
+    "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+    "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn"
+  },
+  "shared_palette_import": {
+    "texture": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "compression": "lossless",
+    "mipmaps": false,
+    "material_filter": "nearest",
+    "reason": "色盘用于纯色色块 UV 采样；禁止 VRAM 块压缩和 Mipmap，避免在大面积模型表面形成方格与条纹。"
+  },
+  "scene_vfx": {
+    "asset_id": "VFX-BASE99-SCENE-DUST-V001",
+    "version": "v001",
+    "category": "scene_vfx",
+    "scene": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
+    "replaces": "64_光束尘埃动效组_资产包",
+    "implementation": "Godot GPUParticles3D",
+    "managed_separately": true
+  }
+}

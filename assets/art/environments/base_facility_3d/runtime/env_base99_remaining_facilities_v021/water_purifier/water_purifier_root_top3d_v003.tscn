@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v003.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="Box_bounds"]
+size = Vector3(1.955000, 2.300000, 1.500000)
+
+[node name="57_净水器_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-V022::water_purifier"
+metadata/asset_version = "v022"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend"
+metadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend"
+metadata/source_collection = "57_02_游戏输出_整合模型_v020"
+metadata/triangles_before = 696
+metadata/triangles_after = 558
+metadata/downward_triangles_removed = 138
+metadata/collision_policy = "optimized_output_bounds_box"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="OptimizedOutputBounds" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(-13.822500, 1.250000, 10.350000)
+shape = SubResource("Box_bounds")

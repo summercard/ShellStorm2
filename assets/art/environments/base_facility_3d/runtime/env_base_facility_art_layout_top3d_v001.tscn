@@ -17,8 +17,8 @@
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn" id="13_recovery"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn" id="14_wardrobe"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn" id="16_floor_visuals_v021"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn" id="17_wall_contents"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn" id="18_remaining_facilities"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn" id="17_wall_contents"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn" id="18_remaining_facilities"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_root_top3d_v001.tscn" id="19_underdeck"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]

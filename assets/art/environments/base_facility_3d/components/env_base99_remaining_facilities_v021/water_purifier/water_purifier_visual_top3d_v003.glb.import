@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bl8bpbel7l27p"
-path="res://.godot/imported/volumetric_dust_fx_visual_top3d_v001.glb-46d70462b44543cd779fd885a933aa9a.scn"
+uid="uid://bfxlawvv5303n"
+path="res://.godot/imported/water_purifier_visual_top3d_v003.glb-b1158371b5bca9bc3affa6898ddb69ae.scn"
 
 [deps]
 
-source_file="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_visual_top3d_v001.glb"
-dest_files=["res://.godot/imported/volumetric_dust_fx_visual_top3d_v001.glb-46d70462b44543cd779fd885a933aa9a.scn"]
+source_file="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v003.glb"
+dest_files=["res://.godot/imported/water_purifier_visual_top3d_v003.glb-b1158371b5bca9bc3affa6898ddb69ae.scn"]
 
 [params]
 

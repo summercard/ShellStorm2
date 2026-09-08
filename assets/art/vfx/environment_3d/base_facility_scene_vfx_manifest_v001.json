@@ -1,0 +1,15 @@
+{
+  "scene_vfx": [
+    {
+      "asset_id": "VFX-BASE99-SCENE-DUST-V001",
+      "version": "v001",
+      "category": "scene_vfx",
+      "scene": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
+      "replaces": "64_光束尘埃动效组_资产包",
+      "implementation": "Godot GPUParticles3D",
+      "managed_separately": true,
+      "enabled": true,
+      "status_note": "Re-enabled after removing the accidentally imported high-energy Blender lights."
+    }
+  ]
+}

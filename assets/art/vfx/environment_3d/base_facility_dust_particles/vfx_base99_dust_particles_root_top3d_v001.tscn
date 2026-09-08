@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="StandardMaterial3D" id="DustMaterial"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.42, 0.82, 1, 0.22)
+emission_enabled = true
+emission = Color(0.18, 0.58, 1, 1)
+emission_energy_multiplier = 1.35
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="DustQuad"]
+material = SubResource("DustMaterial")
+size = Vector2(0.025, 0.025)
+
+[sub_resource type="ParticleProcessMaterial" id="DustProcess"]
+emission_shape = 3
+emission_box_extents = Vector3(12, 3.1, 6)
+direction = Vector3(0.08, 1, 0.04)
+spread = 22.0
+initial_velocity_min = 0.025
+initial_velocity_max = 0.075
+gravity = Vector3(0, 0.006, 0)
+scale_min = 0.45
+scale_max = 1.35
+color = Color(0.72, 0.9, 1, 0.42)
+
+[node name="场景特效_光束尘埃粒子" type="Node3D"]
+metadata/asset_id = "VFX-BASE99-SCENE-DUST-V001"
+metadata/asset_category = "scene_vfx"
+metadata/replaces_asset_package = "64_光束尘埃动效组_资产包"
+metadata/management_policy = "separate_scene_vfx_ledger"
+
+[node name="DustParticles" type="GPUParticles3D" parent="."]
+position = Vector3(0, 4.6, 0)
+emitting = true
+amount = 96
+lifetime = 11.0
+preprocess = 11.0
+randomness = 0.85
+visibility_aabb = AABB(-13, -3.5, -7, 26, 7, 14)
+process_material = SubResource("DustProcess")
+draw_pass_1 = SubResource("DustQuad")

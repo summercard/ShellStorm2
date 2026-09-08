@@ -4,8 +4,8 @@
   "display_name": "31_参考床架床品与床下收纳_资产包",
   "asset_slug": "loft_bed_and_bedding",
   "category": "loft",
-  "version": "v021",
-  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+  "version": "v022",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend",
   "object_count": 37,
   "mesh_count": 37,
   "light_count": 0,
@@ -61,7 +61,7 @@
   "forward_axis": "Blender +Y north",
   "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_loft/v017_源资产包_loft_bed_and_bedding",
   "collider_names": [],
-  "expected_export": "loft_bed_and_bedding_visual_top3d_v001.glb",
+  "expected_export": "loft_bed_and_bedding_visual_top3d_v003.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
   "export_status": "not_exported",
   "organization_version": "v017",
@@ -118,5 +118,11 @@
     ],
     "rotation_y_rad": -1.57079632679,
     "collision_policy": "existing package collision follows the same root transform"
+  },
+  "derived_blend": "source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend",
+  "v022_update": {
+    "wall_contact_adjusted": false,
+    "downward_faces_removed": 622,
+    "triangles_after": 3230
   }
 }

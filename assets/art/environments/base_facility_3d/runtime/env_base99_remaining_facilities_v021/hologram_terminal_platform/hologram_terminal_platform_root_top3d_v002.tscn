@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_visual_top3d_v002.glb" id="1_visual"]
+
+[ext_resource type="Script" path="res://tools/asset_pipeline/play_imported_animation.gd" id="2_anim"]
+
+[sub_resource type="BoxShape3D" id="Box_bounds"]
+size = Vector3(2.408743, 3.224856, 6.781744)
+
+[node name="51_圆形全息设备平台_资产包" type="Node3D"]
+script = ExtResource("2_anim")
+metadata/asset_id = "ENV-BASE99-V022::hologram_terminal_platform"
+metadata/asset_version = "v022"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend"
+metadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend"
+metadata/source_collection = "51_圆形全息设备平台_资产包"
+metadata/triangles_before = 7556
+metadata/triangles_after = 5982
+metadata/downward_triangles_removed = 1574
+metadata/collision_policy = "optimized_output_bounds_box"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="OptimizedOutputBounds" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(5.000000, 1.652428, -3.906500)
+shape = SubResource("Box_bounds")

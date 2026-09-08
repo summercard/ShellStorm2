@@ -1469,5 +1469,25 @@
     "layout_ledger": "assets/art/environments/base_facility_3d/source/env_base99_loft_layout_v021_manifest.json",
     "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
     "export_policy": "layout_only_no_glb_reexport"
+  },
+  "base_facility_updates_v022": {
+    "asset_id": "ENV-BASE99-V022-UPDATES",
+    "version": "v022",
+    "package_count": 14,
+    "import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json",
+    "runtime": {
+      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn",
+      "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn"
+    }
+  },
+  "base_facility_scene_vfx": {
+    "asset_id": "VFX-BASE99-SCENE-DUST-V001",
+    "version": "v001",
+    "category": "scene_vfx",
+    "scene": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
+    "replaces": "64_光束尘埃动效组_资产包",
+    "implementation": "Godot GPUParticles3D",
+    "managed_separately": true
   }
 }
