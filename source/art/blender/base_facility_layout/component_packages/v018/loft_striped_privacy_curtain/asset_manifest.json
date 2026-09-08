@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_striped_privacy_curtain",
+  "collection": "35_红紫条纹隔断帘_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "35_红紫条纹隔断帘_资产包_主体"
+  ],
+  "source_collection": "35_01_制作组件_已统一材质",
+  "center": [
+    3.515,
+    12.2975,
+    7.571
+  ],
+  "dimensions": [
+    0.24,
+    2.875,
+    2.8179
+  ],
+  "local_origin": [
+    3.515,
+    12.2975,
+    6.16205
+  ],
+  "front": "-Y",
+  "triangles_before": 5452,
+  "triangles_after": 652,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

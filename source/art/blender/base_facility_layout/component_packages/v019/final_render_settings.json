@@ -1,0 +1,1 @@
+{"views": [["full", [-11, -11, 20], [4.6, 10, 7.2], 22.0], ["bed", [-7, -4, 15], [0.3, 11.15, 7.1], 10.2], ["sofa", [-1, -2, 13], [6.25, 11.65, 7.4], 10.0], ["top", [5, 10, 30], [5, 10, 6], 21.2]], "engine": "CYCLES", "samples": 48, "freestyle": false, "temporary_review_lights": "1800W warm 8m / 900W cool 7m", "view_transform": "AgX"}

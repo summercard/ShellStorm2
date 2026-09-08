@@ -1,0 +1,17 @@
+loft_bed_and_bedding
+loft_nightstand
+loft_bedside_lamp
+loft_bedside_rug
+loft_striped_privacy_curtain
+loft_lounge_sofa
+loft_coffee_table
+loft_lounge_rug
+loft_pouf_01
+loft_pouf_02
+loft_side_table
+loft_computer_workstation
+loft_office_chair
+loft_medical_cabinet
+loft_hanging_plant
+loft_explore_poster
+loft_tool_pegboard

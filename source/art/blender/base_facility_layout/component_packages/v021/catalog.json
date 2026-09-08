@@ -1,0 +1,166 @@
+[
+  {
+    "package_id": "east_maintenance_workstation",
+    "collection": "78_维修工作台与工具墙_资产包",
+    "parent_collection": "70_东面设施区域",
+    "source_collection": "78_01_制作组件_统一材质_v021",
+    "output_collection": "78_02_游戏输出_整合模型_v021",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "version": "v021",
+    "objects": [
+      "78_主体_v021",
+      "78_柔和自发光_v021",
+      "78_固定展示附件_v021"
+    ],
+    "triangles_before": 19556,
+    "triangles_after": 3318,
+    "center": [
+      6.2,
+      -13.2675,
+      2.145
+    ],
+    "dimensions": [
+      5.0,
+      2.285,
+      4.24
+    ],
+    "local_origin": [
+      6.2,
+      -13.2675,
+      0.02499999999999991
+    ],
+    "world_placement": [
+      [
+        6.2,
+        -13.15,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ],
+    "visual_review": "skipped_by_user"
+  },
+  {
+    "package_id": "east_low_storage_bench",
+    "collection": "80_低矮储物收纳区_资产包",
+    "parent_collection": "70_东面设施区域",
+    "source_collection": "80_01_制作组件_统一材质_v021",
+    "output_collection": "80_02_游戏输出_整合模型_v021",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "version": "v021",
+    "objects": [
+      "80_主体_v021",
+      "80_固定展示附件_v021"
+    ],
+    "triangles_before": 1160,
+    "triangles_after": 1044,
+    "center": [
+      10.85,
+      -13.9737,
+      0.953
+    ],
+    "dimensions": [
+      3.04,
+      1.2225,
+      1.786
+    ],
+    "local_origin": [
+      10.85,
+      -13.9737,
+      0.05999999999999994
+    ],
+    "world_placement": [
+      [
+        10.85,
+        -14,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ],
+    "visual_review": "skipped_by_user"
+  },
+  {
+    "package_id": "east_plant_group",
+    "collection": "83_东面植物点缀组_资产包",
+    "parent_collection": "70_东面设施区域",
+    "source_collection": "83_01_制作组件_统一材质_v021",
+    "output_collection": "83_02_游戏输出_整合模型_v021",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "version": "v021",
+    "objects": [
+      "83_植物0_v021",
+      "83_植物1_v021",
+      "83_植物2_v021"
+    ],
+    "triangles_before": 1524,
+    "triangles_after": 3060,
+    "center": [
+      12.19,
+      -5.38,
+      1.2818
+    ],
+    "dimensions": [
+      1.6548,
+      17.8542,
+      2.3436
+    ],
+    "local_origin": [
+      12.19,
+      -5.38,
+      0.1100000000000001
+    ],
+    "world_placement": [
+      [
+        0,
+        0,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ],
+    "visual_review": "skipped_by_user"
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "locked_match": true,
+  "locked_count": 6766,
+  "package_count": 9,
+  "names_unchanged": true,
+  "moved_49_under_50": true,
+  "triangles_before": 38528,
+  "triangles_after": 20019,
+  "material_count": 8,
+  "status": "task_checks_and_visual_review_passed",
+  "global_standard_passed": false,
+  "source_sha256": "e91beca3c7b55ee51744fcd9e618b302a6a41fc892311985238d0c561014a5eb",
+  "triangle_reduction_percent": 48.04,
+  "scope_validation": "scoped_validation.json",
+  "lock_validation": "final_lock.json",
+  "visual_review": {
+    "west": "passed",
+    "bench": "passed",
+    "east": "passed",
+    "top": "passed",
+    "notes": "原场景切面墙体与悬吊灯具保持；工作台标识与提手分离，箱体扣件和支脚清晰，重排通道无交叠。"
+  }
+}

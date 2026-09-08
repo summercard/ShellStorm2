@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_office_chair",
+  "collection": "43_带扶手办公椅_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "43_01_制作组件_已统一材质",
+  "output_collection": "43__02_游戏输出_整合模型",
+  "objects": [
+    "43_主体_v019"
+  ],
+  "triangles": 2960,
+  "center": [
+    10.450000286102295,
+    12.203397750854492,
+    7.130214214324951
+  ],
+  "dimensions": [
+    1.2799997329711914,
+    1.1223030090332031,
+    2.016953468322754
+  ],
+  "local_origin": [
+    10.450000286102295,
+    12.203397750854492,
+    6.121737480163574
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_medical_cabinet",
+  "collection": "45_MEDICAL模块收纳箱_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "45_01_制作组件_已统一材质",
+  "output_collection": "45__02_游戏输出_整合模型",
+  "objects": [
+    "45_主体_v019"
+  ],
+  "triangles": 934,
+  "center": [
+    -3.25,
+    13.880750179290771,
+    6.544999837875366
+  ],
+  "dimensions": [
+    1.1999998092651367,
+    0.9784994125366211,
+    0.8499999046325684
+  ],
+  "local_origin": [
+    -3.25,
+    13.880750179290771,
+    6.119999885559082
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}

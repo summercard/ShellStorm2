@@ -1,0 +1,53 @@
+{
+  "package_id": "loft_floor_finish",
+  "collection": "116_二楼地板色彩深化_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "116_01_制作组件_已统一材质",
+  "output_collection": "116_02_游戏输出_整合模型",
+  "objects": [
+    "116_木地板_原标高深色底层_v019",
+    "116_木地板拼铺模块_R01到03_v019",
+    "116_木地板拼铺模块_R04到06_v019",
+    "116_木地板拼铺模块_R07到09_v019",
+    "116_木地板拼铺模块_R10到12_v019",
+    "116_木地板拼铺模块_R13到15_v019",
+    "116_木地板拼铺模块_R16到18_v019",
+    "116_木地板拼铺模块_R19到21_v019",
+    "116_木地板拼铺模块_R22到24_v019",
+    "116_木地板拼铺模块_R25到27_v019",
+    "116_木地板拼铺模块_R28到30_v019",
+    "116_木地板拼铺模块_R31到33_v019",
+    "116_木地板拼铺模块_R34到36_v019"
+  ],
+  "triangles": 8436,
+  "center": [
+    5.0,
+    10.0,
+    6.039949893951416
+  ],
+  "dimensions": [
+    19.600000381469727,
+    9.600000381469727,
+    0.10190010070800781
+  ],
+  "local_origin": [
+    5.0,
+    10.0,
+    5.988999843597412
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "output_batching": "12 modules of 3 plank rows plus original-height substrate; 324 editable source planks preserved",
+  "preview_collection": "90_v019固定验收镜头",
+  "preview_cameras_excluded_from_export": true
+}

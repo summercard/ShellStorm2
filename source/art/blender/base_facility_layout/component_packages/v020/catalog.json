@@ -1,0 +1,487 @@
+[
+  {
+    "package_id": "weapon_workshop_station",
+    "collection": "49_武器工作台与弹药附件_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "49_01_制作组件_统一材质_v020",
+    "output_collection": "49_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "工作台便携灯_真实暖光",
+      "49_主体_v020",
+      "49_柔和自发光_v020",
+      "49_主补给箱_v020",
+      "49_台面生活附件_v020",
+      "49_细长附件盒_v020",
+      "49_中型弹药盒_v020",
+      "49_终端_v020",
+      "49_便携弹药匣_v020",
+      "49_工作台便携灯_v020",
+      "49_台面多肉_v020"
+    ],
+    "triangles_before": 8836,
+    "triangles_after": 7606,
+    "center": [
+      -13.1185,
+      -3.4,
+      1.995
+    ],
+    "dimensions": [
+      1.9231,
+      5.75,
+      3.71
+    ],
+    "local_origin": [
+      -13.1185,
+      -3.4,
+      0.14000000000000012
+    ],
+    "world_placement": [
+      [
+        -13.5,
+        -3.4,
+        0
+      ],
+      -1.5707963267948966
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "package_id": "heavy_supply_shelf",
+    "collection": "51_重型货架与补给箱_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "51_01_制作组件_统一材质_v020",
+    "output_collection": "51_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "51_主体_v020",
+      "51_补给箱0_v020",
+      "51_补给箱1_v020",
+      "51_补给箱2_v020",
+      "51_补给箱3_v020"
+    ],
+    "triangles_before": 2376,
+    "triangles_after": 3588,
+    "center": [
+      -10.8,
+      -13.55,
+      0.5201
+    ],
+    "dimensions": [
+      5.47,
+      0.99,
+      0.8003
+    ],
+    "local_origin": [
+      -10.8,
+      -13.55,
+      0.11995
+    ],
+    "world_placement": [
+      [
+        -10.8,
+        -13.55,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "package_id": "backup_generator",
+    "collection": "53_备用发电机_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "53_01_制作组件_统一材质_v020",
+    "output_collection": "53_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "53_主体_v020",
+      "53_柔和自发光_v020"
+    ],
+    "triangles_before": 500,
+    "triangles_after": 944,
+    "center": [
+      13.1927,
+      -9.1,
+      0.9851
+    ],
+    "dimensions": [
+      2.2645,
+      3.1,
+      1.7501
+    ],
+    "local_origin": [
+      13.1927,
+      -9.1,
+      0.11004999999999998
+    ],
+    "world_placement": [
+      [
+        13.25,
+        -9.1,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "package_id": "battery_bank",
+    "collection": "54_蓄电池组_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "54_01_制作组件_统一材质_v020",
+    "output_collection": "54_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "54_主体_v020",
+      "54_柔和自发光_v020"
+    ],
+    "triangles_before": 648,
+    "triangles_after": 2212,
+    "center": [
+      12.8875,
+      -12.1094,
+      0.6563
+    ],
+    "dimensions": [
+      1.29,
+      2.3116,
+      1.0325
+    ],
+    "local_origin": [
+      12.8875,
+      -12.1094,
+      0.14005
+    ],
+    "world_placement": [
+      [
+        12.9,
+        -12.12,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "package_id": "industrial_water_tank",
+    "collection": "56_工业水箱_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "56_01_制作组件_统一材质_v020",
+    "output_collection": "56_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "56_主体_v020"
+    ],
+    "triangles_before": 284,
+    "triangles_after": 1590,
+    "center": [
+      -13.15,
+      -7.6999,
+      1.2563
+    ],
+    "dimensions": [
+      1.988,
+      1.9878,
+      2.3125
+    ],
+    "local_origin": [
+      -13.15,
+      -7.6999,
+      0.10004999999999997
+    ],
+    "world_placement": [
+      [
+        -13.15,
+        -7.7,
+        0
+      ],
+      -1.5707963267948966
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "package_id": "water_purifier",
+    "collection": "57_净水器_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "57_01_制作组件_统一材质_v020",
+    "output_collection": "57_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "57_主体_v020",
+      "57_柔和自发光_v020"
+    ],
+    "triangles_before": 532,
+    "triangles_after": 696,
+    "center": [
+      -12.8975,
+      -10.35,
+      1.25
+    ],
+    "dimensions": [
+      1.955,
+      1.5,
+      2.3
+    ],
+    "local_origin": [
+      -12.8975,
+      -10.35,
+      0.10000000000000009
+    ],
+    "world_placement": [
+      [
+        -13.1,
+        -10.35,
+        0
+      ],
+      -1.5707963267948966
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "package_id": "air_compressor",
+    "collection": "58_空气压缩机_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "58_01_制作组件_统一材质_v020",
+    "output_collection": "58_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "58_主体_v020"
+    ],
+    "triangles_before": 392,
+    "triangles_after": 648,
+    "center": [
+      -6.65,
+      -13.4,
+      0.9598
+    ],
+    "dimensions": [
+      2.05,
+      1.3,
+      1.6796
+    ],
+    "local_origin": [
+      -6.65,
+      -13.4,
+      0.12
+    ],
+    "world_placement": [
+      [
+        -6.65,
+        -13.4,
+        0
+      ],
+      0
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      0,
+      1,
+      0
+    ]
+  },
+  {
+    "package_id": "hose_reel",
+    "collection": "59_水管卷盘_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "59_01_制作组件_统一材质_v020",
+    "output_collection": "59_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "59_主体_v020"
+    ],
+    "triangles_before": 284,
+    "triangles_after": 1268,
+    "center": [
+      -14.13,
+      -11.9,
+      2.195
+    ],
+    "dimensions": [
+      0.4,
+      1.06,
+      1.55
+    ],
+    "local_origin": [
+      -14.13,
+      -11.9,
+      1.42
+    ],
+    "world_placement": [
+      [
+        -14.16,
+        -11.9,
+        2.44
+      ],
+      -1.5707963267948966
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "package_id": "south_wall_information_boards",
+    "collection": "61_南墙资料板组_资产包",
+    "parent_collection": "50_仓库与辅助设施",
+    "source_collection": "61_01_制作组件_统一材质_v020",
+    "output_collection": "61_02_游戏输出_整合模型_v020",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+    "version": "v020",
+    "objects": [
+      "61_主体_v020"
+    ],
+    "triangles_before": 24676,
+    "triangles_after": 1467,
+    "center": [
+      -14.2255,
+      -4.3,
+      4.2925
+    ],
+    "dimensions": [
+      0.089,
+      7.12,
+      2.495
+    ],
+    "local_origin": [
+      -14.2255,
+      -4.3,
+      3.0450000000000004
+    ],
+    "world_placement": [
+      [
+        -14.24,
+        -3.4,
+        0
+      ],
+      -1.5707963267948966
+    ],
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "not_modified",
+    "fixed_display_attachments": true,
+    "front_direction": [
+      1,
+      0,
+      0
+    ]
+  }
+]

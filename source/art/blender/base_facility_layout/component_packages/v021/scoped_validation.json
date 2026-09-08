@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "packages": [
+    {
+      "collection": "78_维修工作台与工具墙_资产包",
+      "uv_pass": true,
+      "faces": 3440,
+      "valid_islands": 3440,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          3.6999998092651367,
+          -14.410000801086426,
+          0.02499999850988388
+        ],
+        [
+          8.699999809265137,
+          -12.125,
+          4.264999866485596
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 3
+    },
+    {
+      "collection": "80_低矮储物收纳区_资产包",
+      "uv_pass": true,
+      "faces": 1176,
+      "valid_islands": 1176,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          9.329999923706055,
+          -14.584999084472656,
+          0.059999994933605194
+        ],
+        [
+          12.370000839233398,
+          -13.362500190734863,
+          1.8460358381271362
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 2
+    },
+    {
+      "collection": "83_东面植物点缀组_资产包",
+      "uv_pass": true,
+      "faces": 3492,
+      "valid_islands": 3492,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          11.36258602142334,
+          -14.307100296020508,
+          0.11000001430511475
+        ],
+        [
+          13.017414093017578,
+          3.547100067138672,
+          2.4535999298095703
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 3
+    }
+  ],
+  "layout_overlaps": [],
+  "layout_pass": true
+}

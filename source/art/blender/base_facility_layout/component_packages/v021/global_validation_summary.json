@@ -1,0 +1,23 @@
+{
+  "passed": false,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": false,
+    "palette_uv_face_islands_within_single_cells": false,
+    "palette_uv_is_active_edit_layer": false,
+    "palette_uv_is_active_render_layer": false,
+    "no_undeclared_extra_uv_layers": false,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": false,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": false,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "note": "范围外旧资产问题保留；此次三包任务级数据验收通过。"
+}

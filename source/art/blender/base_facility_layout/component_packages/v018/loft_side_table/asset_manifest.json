@@ -1,0 +1,49 @@
+{
+  "package_id": "loft_side_table",
+  "collection": "41_床前辅助小桌_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "41_床前辅助小桌_资产包_主体",
+    "41_床前辅助小桌_资产包_辅助小桌_青色杯",
+    "41_床前辅助小桌_资产包_辅助小桌_个人终端",
+    "41_床前辅助小桌_资产包_辅助桌小植物陶盆",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶0",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶1",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶2",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶3",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶4",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶5",
+    "41_床前辅助小桌_资产包_辅助桌小植物叶6",
+    "41_床前辅助小桌_资产包_辅助桌书页"
+  ],
+  "source_collection": "41_01_制作组件_已统一材质",
+  "center": [
+    1.8,
+    9.22,
+    6.5225
+  ],
+  "dimensions": [
+    1.12,
+    0.76,
+    0.805
+  ],
+  "local_origin": [
+    1.8,
+    9.22,
+    6.12
+  ],
+  "front": "-Y",
+  "triangles_before": 1484,
+  "triangles_after": 1560,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

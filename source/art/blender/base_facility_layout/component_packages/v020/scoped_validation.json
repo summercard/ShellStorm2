@@ -1,0 +1,214 @@
+{
+  "passed": true,
+  "packages": [
+    {
+      "collection": "49_武器工作台与弹药附件_资产包",
+      "uv_pass": true,
+      "faces": 8892,
+      "valid_islands": 8892,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -14.080000877380371,
+          -6.275000095367432,
+          0.14000000059604645
+        ],
+        [
+          -12.156899452209473,
+          -0.5250000953674316,
+          3.8499999046325684
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 11
+    },
+    {
+      "collection": "51_重型货架与补给箱_资产包",
+      "uv_pass": true,
+      "faces": 3780,
+      "valid_islands": 3780,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -13.53499984741211,
+          -14.045000076293945,
+          0.11999998986721039
+        ],
+        [
+          -8.065000534057617,
+          -13.055000305175781,
+          0.9202552437782288
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 5
+    },
+    {
+      "collection": "53_备用发电机_资产包",
+      "uv_pass": true,
+      "faces": 864,
+      "valid_islands": 864,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          12.060500144958496,
+          -10.65000057220459,
+          0.11000001430511475
+        ],
+        [
+          14.324999809265137,
+          -7.550000190734863,
+          1.8601340055465698
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 2
+    },
+    {
+      "collection": "54_蓄电池组_资产包",
+      "uv_pass": true,
+      "faces": 2336,
+      "valid_islands": 2336,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          12.242500305175781,
+          -13.265199661254883,
+          0.13999998569488525
+        ],
+        [
+          13.532499313354492,
+          -10.95359992980957,
+          1.1725165843963623
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 2
+    },
+    {
+      "collection": "56_工业水箱_资产包",
+      "uv_pass": true,
+      "faces": 1728,
+      "valid_islands": 1728,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -14.143999099731445,
+          -8.693785667419434,
+          0.10000000149011612
+        ],
+        [
+          -12.156000137329102,
+          -6.705999851226807,
+          2.4125001430511475
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 1
+    },
+    {
+      "collection": "57_净水器_资产包",
+      "uv_pass": true,
+      "faces": 552,
+      "valid_islands": 552,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -13.875,
+          -11.100000381469727,
+          0.10000002384185791
+        ],
+        [
+          -11.920000076293945,
+          -9.600000381469727,
+          2.4000000953674316
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 2
+    },
+    {
+      "collection": "58_空气压缩机_资产包",
+      "uv_pass": true,
+      "faces": 520,
+      "valid_islands": 520,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -7.675000190734863,
+          -14.049999237060547,
+          0.11999999731779099
+        ],
+        [
+          -5.625,
+          -12.75,
+          1.7995617389678955
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 1
+    },
+    {
+      "collection": "59_水管卷盘_资产包",
+      "uv_pass": true,
+      "faces": 1204,
+      "valid_islands": 1204,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -14.329999923706055,
+          -12.429999351501465,
+          1.4199999570846558
+        ],
+        [
+          -13.930000305175781,
+          -11.369999885559082,
+          2.9700000286102295
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 1
+    },
+    {
+      "collection": "61_南墙资料板组_资产包",
+      "uv_pass": true,
+      "faces": 2286,
+      "valid_islands": 2286,
+      "material_errors": [],
+      "unique_ownership": true,
+      "not_empty": true,
+      "bbox": [
+        [
+          -14.269999504089355,
+          -7.860000133514404,
+          3.0450000762939453
+        ],
+        [
+          -14.180999755859375,
+          -0.7400000691413879,
+          5.539999961853027
+        ]
+      ],
+      "source_hidden": true,
+      "output_count": 1
+    }
+  ],
+  "layout_overlaps": [],
+  "layout_pass": true
+}

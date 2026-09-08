@@ -1,0 +1,41 @@
+{
+  "package_id": "loft_nightstand",
+  "collection": "32_参考床头柜与生活物件_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "32_01_制作组件_已统一材质",
+  "output_collection": "32__02_游戏输出_整合模型",
+  "objects": [
+    "32_主体_v019",
+    "32_床头柜_书本_v019",
+    "32_床头柜_杯子_v019",
+    "32_植物组件_v019"
+  ],
+  "triangles": 2320,
+  "center": [
+    -3.2350000143051147,
+    11.320000171661377,
+    6.792499780654907
+  ],
+  "dimensions": [
+    2.069999933242798,
+    1.0600004196166992,
+    1.3550000190734863
+  ],
+  "local_origin": [
+    -3.2350000143051147,
+    11.320000171661377,
+    6.114999771118164
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}

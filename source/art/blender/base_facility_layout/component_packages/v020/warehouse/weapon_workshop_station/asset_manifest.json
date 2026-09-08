@@ -1,0 +1,62 @@
+{
+  "package_id": "weapon_workshop_station",
+  "collection": "49_武器工作台与弹药附件_资产包",
+  "parent_collection": "50_仓库与辅助设施",
+  "source_collection": "49_01_制作组件_统一材质_v020",
+  "output_collection": "49_02_游戏输出_整合模型_v020",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+  "version": "v020",
+  "objects": [
+    "工作台便携灯_真实暖光",
+    "49_主体_v020",
+    "49_柔和自发光_v020",
+    "49_主补给箱_v020",
+    "49_台面生活附件_v020",
+    "49_细长附件盒_v020",
+    "49_中型弹药盒_v020",
+    "49_终端_v020",
+    "49_便携弹药匣_v020",
+    "49_工作台便携灯_v020",
+    "49_台面多肉_v020"
+  ],
+  "triangles_before": 8836,
+  "triangles_after": 7606,
+  "center": [
+    -13.1185,
+    -3.4,
+    1.995
+  ],
+  "dimensions": [
+    1.9231,
+    5.75,
+    3.71
+  ],
+  "local_origin": [
+    -13.1185,
+    -3.4,
+    0.14000000000000012
+  ],
+  "world_placement": [
+    [
+      -13.5,
+      -3.4,
+      0
+    ],
+    -1.5707963267948966
+  ],
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "not_modified",
+  "fixed_display_attachments": true,
+  "front_direction": [
+    1,
+    0,
+    0
+  ]
+}

@@ -1,0 +1,698 @@
+{
+  "locked_match": true,
+  "locked_count": 5753,
+  "packages": [
+    {
+      "package_id": "loft_bed_and_bedding",
+      "collection": "31_参考床架床品与床下收纳_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "31_参考床架床品与床下收纳_资产包_主体",
+        "31_参考床架床品与床下收纳_资产包_v016_床边拖",
+        "31_参考床架床品与床下收纳_资产包_v016_床边",
+        "31_参考床架床品与床下收纳_资产包_v016_床边.001",
+        "31_参考床架床品与床下收纳_资产包_v016_床边.002"
+      ],
+      "source_collection": "31_01_制作组件_已统一材质",
+      "center": [
+        0.3,
+        11.0727,
+        6.6677
+      ],
+      "dimensions": [
+        4.75,
+        2.9045,
+        1.3154
+      ],
+      "local_origin": [
+        0.3,
+        11.0727,
+        6.01
+      ],
+      "front": "-Y",
+      "triangles_before": 4124,
+      "triangles_after": 2600,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_nightstand",
+      "collection": "32_参考床头柜与生活物件_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "32_参考床头柜与生活物件_资产包_主体",
+        "32_参考床头柜与生活物件_资产包_床头柜_书本",
+        "32_参考床头柜与生活物件_资产包_床头柜_杯子",
+        "32_参考床头柜与生活物件_资产包_床头盆栽陶盆",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶0",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶1",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶2",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶3",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶4",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶5",
+        "32_参考床头柜与生活物件_资产包_床头盆栽叶6"
+      ],
+      "source_collection": "32_01_制作组件_已统一材质",
+      "center": [
+        -2.75,
+        11.32,
+        6.8137
+      ],
+      "dimensions": [
+        1.1,
+        1.06,
+        1.3975
+      ],
+      "local_origin": [
+        -2.75,
+        11.32,
+        6.11495
+      ],
+      "front": "-Y",
+      "triangles_before": 1188,
+      "triangles_after": 816,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_bedside_lamp",
+      "collection": "33_暖橙床头灯_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "床头灯_暖橙光",
+        "33_暖橙床头灯_资产包_主体",
+        "33_暖橙床头灯_资产包_自发光"
+      ],
+      "source_collection": "33_01_制作组件_已统一材质",
+      "center": [
+        -2.8,
+        11.67,
+        7.6837
+      ],
+      "dimensions": [
+        0.42,
+        0.42,
+        0.9075
+      ],
+      "local_origin": [
+        -2.8,
+        11.67,
+        7.22995
+      ],
+      "front": "-Y",
+      "triangles_before": 484,
+      "triangles_after": 508,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_bedside_rug",
+      "collection": "34_床边暖灰地毯_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "34_床边暖灰地毯_资产包_主体"
+      ],
+      "source_collection": "34_01_制作组件_已统一材质",
+      "center": [
+        0.3,
+        10.9475,
+        6.1058
+      ],
+      "dimensions": [
+        4.65,
+        3.215,
+        0.0365
+      ],
+      "local_origin": [
+        0.3,
+        10.9475,
+        6.08755
+      ],
+      "front": "-Y",
+      "triangles_before": 648,
+      "triangles_after": 108,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_striped_privacy_curtain",
+      "collection": "35_红紫条纹隔断帘_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "35_红紫条纹隔断帘_资产包_主体"
+      ],
+      "source_collection": "35_01_制作组件_已统一材质",
+      "center": [
+        3.515,
+        12.2975,
+        7.571
+      ],
+      "dimensions": [
+        0.24,
+        2.875,
+        2.8179
+      ],
+      "local_origin": [
+        3.515,
+        12.2975,
+        6.16205
+      ],
+      "front": "-Y",
+      "triangles_before": 5452,
+      "triangles_after": 652,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_lounge_sofa",
+      "collection": "36_墨绿三人休闲沙发_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "36_墨绿三人休闲沙发_资产包_主体"
+      ],
+      "source_collection": "36_01_制作组件_已统一材质",
+      "center": [
+        6.25,
+        12.0675,
+        7.0082
+      ],
+      "dimensions": [
+        4.82,
+        1.925,
+        1.8363
+      ],
+      "local_origin": [
+        6.25,
+        12.0675,
+        6.090050000000001
+      ],
+      "front": "-Y",
+      "triangles_before": 4452,
+      "triangles_after": 2708,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_coffee_table",
+      "collection": "37_红棕茶几与生活物件_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "37_红棕茶几与生活物件_资产包_主体",
+        "37_红棕茶几与生活物件_资产包_茶几_遥控器",
+        "37_红棕茶几与生活物件_资产包_茶几_杯子",
+        "37_红棕茶几与生活物件_资产包_茶几_杂志下册",
+        "37_红棕茶几与生活物件_资产包_茶几_杂志上册",
+        "37_红棕茶几与生活物件_资产包_v016_茶几杯垫_01",
+        "37_红棕茶几与生活物件_资产包_v016_茶几杯垫_02",
+        "37_红棕茶几与生活物件_资产包_茶几_相机机身"
+      ],
+      "source_collection": "37_01_制作组件_已统一材质",
+      "center": [
+        6.2,
+        9.38,
+        6.6125
+      ],
+      "dimensions": [
+        2.85,
+        1.28,
+        1.025
+      ],
+      "local_origin": [
+        6.2,
+        9.38,
+        6.1
+      ],
+      "front": "-Y",
+      "triangles_before": 2628,
+      "triangles_after": 2392,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_lounge_rug",
+      "collection": "38_休闲区低饱和地毯_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "38_休闲区低饱和地毯_资产包_主体"
+      ],
+      "source_collection": "38_01_制作组件_已统一材质",
+      "center": [
+        6.18,
+        9.55,
+        6.1098
+      ],
+      "dimensions": [
+        4.9,
+        2.45,
+        0.0425
+      ],
+      "local_origin": [
+        6.18,
+        9.55,
+        6.08855
+      ],
+      "front": "-Y",
+      "triangles_before": 828,
+      "triangles_after": 372,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_pouf_01",
+      "collection": "39_青绿圆形坐墩01_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "39_青绿圆形坐墩01_资产包_主体"
+      ],
+      "source_collection": "39_01_制作组件_已统一材质",
+      "center": [
+        3.78,
+        8.55,
+        6.48
+      ],
+      "dimensions": [
+        0.88,
+        0.88,
+        0.58
+      ],
+      "local_origin": [
+        3.78,
+        8.55,
+        6.19
+      ],
+      "front": "-Y",
+      "triangles_before": 1052,
+      "triangles_after": 188,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_pouf_02",
+      "collection": "40_深绿圆形坐墩02_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "40_深绿圆形坐墩02_资产包_主体"
+      ],
+      "source_collection": "40_01_制作组件_已统一材质",
+      "center": [
+        8.72,
+        8.62,
+        6.48
+      ],
+      "dimensions": [
+        0.88,
+        0.88,
+        0.58
+      ],
+      "local_origin": [
+        8.72,
+        8.62,
+        6.19
+      ],
+      "front": "-Y",
+      "triangles_before": 1052,
+      "triangles_after": 188,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_side_table",
+      "collection": "41_床前辅助小桌_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "41_床前辅助小桌_资产包_主体",
+        "41_床前辅助小桌_资产包_辅助小桌_青色杯",
+        "41_床前辅助小桌_资产包_辅助小桌_个人终端",
+        "41_床前辅助小桌_资产包_辅助桌小植物陶盆",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶0",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶1",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶2",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶3",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶4",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶5",
+        "41_床前辅助小桌_资产包_辅助桌小植物叶6",
+        "41_床前辅助小桌_资产包_辅助桌书页"
+      ],
+      "source_collection": "41_01_制作组件_已统一材质",
+      "center": [
+        1.8,
+        9.22,
+        6.5225
+      ],
+      "dimensions": [
+        1.12,
+        0.76,
+        0.805
+      ],
+      "local_origin": [
+        1.8,
+        9.22,
+        6.12
+      ],
+      "front": "-Y",
+      "triangles_before": 1484,
+      "triangles_after": 1560,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_computer_workstation",
+      "collection": "42_双屏电脑完整工位_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "42_双屏电脑完整工位_资产包_主体",
+        "42_双屏电脑完整工位_资产包_自发光",
+        "42_双屏电脑完整工位_资产包_工位_白色杯"
+      ],
+      "source_collection": "42_01_制作组件_已统一材质",
+      "center": [
+        9.3775,
+        13.6338,
+        7.56
+      ],
+      "dimensions": [
+        6.015,
+        1.4675,
+        3.04
+      ],
+      "local_origin": [
+        9.3775,
+        13.6338,
+        6.039999999999999
+      ],
+      "front": "-Y",
+      "triangles_before": 10302,
+      "triangles_after": 8958,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_office_chair",
+      "collection": "43_带扶手办公椅_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "43_带扶手办公椅_资产包_主体"
+      ],
+      "source_collection": "43_01_制作组件_已统一材质",
+      "center": [
+        10.45,
+        12.2034,
+        7.1302
+      ],
+      "dimensions": [
+        1.28,
+        1.1223,
+        2.017
+      ],
+      "local_origin": [
+        10.45,
+        12.2034,
+        6.121700000000001
+      ],
+      "front": "-Y",
+      "triangles_before": 2960,
+      "triangles_after": 2960,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_medical_cabinet",
+      "collection": "45_MEDICAL模块收纳箱_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "45_MEDICAL模块收纳箱_资产包_主体"
+      ],
+      "source_collection": "45_01_制作组件_已统一材质",
+      "center": [
+        -3.25,
+        13.8808,
+        6.545
+      ],
+      "dimensions": [
+        1.2,
+        0.9785,
+        0.85
+      ],
+      "local_origin": [
+        -3.25,
+        13.8808,
+        6.12
+      ],
+      "front": "-Y",
+      "triangles_before": 5644,
+      "triangles_after": 934,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_hanging_plant",
+      "collection": "49_后墙吊挂植物_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "49_后墙吊挂植物_资产包_吊挂植物_陶盆",
+        "49_后墙吊挂植物_资产包_吊挂植物_吊绳_13.97",
+        "49_后墙吊挂植物_资产包_吊挂植物_吊绳_14.33",
+        "49_后墙吊挂植物_资产包_主体"
+      ],
+      "source_collection": "49_01_制作组件_已统一材质",
+      "center": [
+        2.7287,
+        14.1211,
+        8.255
+      ],
+      "dimensions": [
+        0.5848,
+        0.4979,
+        1.41
+      ],
+      "local_origin": [
+        2.7287,
+        14.1211,
+        7.550000000000001
+      ],
+      "front": "-Y",
+      "triangles_before": 1400,
+      "triangles_after": 468,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_explore_poster",
+      "collection": "48_EXPLORE独立海报_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "48_EXPLORE独立海报_资产包_主体"
+      ],
+      "source_collection": "48_01_制作组件_已统一材质",
+      "center": [
+        -2.12,
+        14.3242,
+        8.0975
+      ],
+      "dimensions": [
+        1.46,
+        0.2515,
+        1.755
+      ],
+      "local_origin": [
+        -2.12,
+        14.3242,
+        7.220000000000001
+      ],
+      "front": "-Y",
+      "triangles_before": 12634,
+      "triangles_after": 784,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    },
+    {
+      "package_id": "loft_tool_pegboard",
+      "collection": "49_工具洞洞板与固定工具_资产包",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+      "version": "v018",
+      "objects": [
+        "49_工具洞洞板与固定工具_资产包_主体"
+      ],
+      "source_collection": "49_01_制作组件_已统一材质.001",
+      "center": [
+        -0.15,
+        14.3263,
+        8.05
+      ],
+      "dimensions": [
+        2.55,
+        0.1875,
+        1.34
+      ],
+      "local_origin": [
+        -0.15,
+        14.3263,
+        7.380000000000001
+      ],
+      "front": "-Y",
+      "triangles_before": 8012,
+      "triangles_after": 1380,
+      "exported": false,
+      "collision": "not_changed",
+      "runtime_integrated": false,
+      "materials": [
+        "01_精工金属_v018公共色盘",
+        "02_细腻哑光_v018公共色盘",
+        "03_清漆反光_v018公共色盘",
+        "04_柔和自发光_v018公共色盘"
+      ],
+      "fixed_display_attachment": "Named accessories remain independent output meshes"
+    }
+  ],
+  "triangles_before": 64344,
+  "triangles_after": 27576,
+  "material_count": 8,
+  "status": "scoped_uv_and_lock_pass_reference_match_partial",
+  "scoped_uv_pass": true,
+  "visual_review": "Reviewed fixed-camera before/after, close-up and top view. Reference silhouette details improved; full visual matching is not passed. Global lighting, outlines and layout remain locked.",
+  "legacy_validation": "Whole-scene validator reports pre-existing out-of-scope UV, legacy palette path and emission naming failures."
+}

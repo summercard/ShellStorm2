@@ -1,0 +1,155 @@
+[
+  {
+    "collection": "31_参考床架床品与床下收纳_资产包",
+    "mesh_count": 35,
+    "faces": 2536,
+    "valid": 2536,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "32_参考床头柜与生活物件_资产包",
+    "mesh_count": 27,
+    "faces": 808,
+    "valid": 808,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "33_暖橙床头灯_资产包",
+    "mesh_count": 7,
+    "faces": 460,
+    "valid": 460,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "34_床边暖灰地毯_资产包",
+    "mesh_count": 50,
+    "faces": 108,
+    "valid": 108,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "35_红紫条纹隔断帘_资产包",
+    "mesh_count": 7,
+    "faces": 612,
+    "valid": 612,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "36_墨绿三人休闲沙发_资产包",
+    "mesh_count": 33,
+    "faces": 2660,
+    "valid": 2660,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "37_红棕茶几与生活物件_资产包",
+    "mesh_count": 30,
+    "faces": 2272,
+    "valid": 2272,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "38_休闲区低饱和地毯_资产包",
+    "mesh_count": 41,
+    "faces": 372,
+    "valid": 372,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "39_青绿圆形坐墩01_资产包",
+    "mesh_count": 2,
+    "faces": 164,
+    "valid": 164,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "40_深绿圆形坐墩02_资产包",
+    "mesh_count": 2,
+    "faces": 164,
+    "valid": 164,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "41_床前辅助小桌_资产包",
+    "mesh_count": 28,
+    "faces": 1508,
+    "valid": 1508,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "42_双屏电脑完整工位_资产包",
+    "mesh_count": 80,
+    "faces": 8652,
+    "valid": 8652,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "43_带扶手办公椅_资产包",
+    "mesh_count": 19,
+    "faces": 2860,
+    "valid": 2860,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "45_MEDICAL模块收纳箱_资产包",
+    "mesh_count": 10,
+    "faces": 1004,
+    "valid": 1004,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "49_后墙吊挂植物_资产包",
+    "mesh_count": 65,
+    "faces": 672,
+    "valid": 672,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "48_EXPLORE独立海报_资产包",
+    "mesh_count": 16,
+    "faces": 830,
+    "valid": 830,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  },
+  {
+    "collection": "49_工具洞洞板与固定工具_资产包",
+    "mesh_count": 216,
+    "faces": 580,
+    "valid": 580,
+    "unique_ownership": true,
+    "uv_pass": true,
+    "manifest_exists": true
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "package_id": "battery_bank",
+  "collection": "54_蓄电池组_资产包",
+  "parent_collection": "50_仓库与辅助设施",
+  "source_collection": "54_01_制作组件_统一材质_v020",
+  "output_collection": "54_02_游戏输出_整合模型_v020",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+  "version": "v020",
+  "objects": [
+    "54_主体_v020",
+    "54_柔和自发光_v020"
+  ],
+  "triangles_before": 648,
+  "triangles_after": 2212,
+  "center": [
+    12.8875,
+    -12.1094,
+    0.6563
+  ],
+  "dimensions": [
+    1.29,
+    2.3116,
+    1.0325
+  ],
+  "local_origin": [
+    12.8875,
+    -12.1094,
+    0.14005
+  ],
+  "world_placement": [
+    [
+      12.9,
+      -12.12,
+      0
+    ],
+    0
+  ],
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "not_modified",
+  "fixed_display_attachments": true,
+  "front_direction": [
+    0,
+    1,
+    0
+  ]
+}

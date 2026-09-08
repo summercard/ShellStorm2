@@ -1,0 +1,728 @@
+[
+  {
+    "package_id": "loft_bed_and_bedding",
+    "collection": "31_参考床架床品与床下收纳_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "31_01_制作组件_已统一材质",
+    "output_collection": "31__02_游戏输出_整合模型",
+    "objects": [
+      "31_主体_v019"
+    ],
+    "triangles": 3852,
+    "center": [
+      0.2999999523162842,
+      11.25,
+      6.626468181610107
+    ],
+    "dimensions": [
+      4.75,
+      2.549999237060547,
+      1.232935905456543
+    ],
+    "local_origin": [
+      0.2999999523162842,
+      11.25,
+      6.010000228881836
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_nightstand",
+    "collection": "32_参考床头柜与生活物件_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "32_01_制作组件_已统一材质",
+    "output_collection": "32__02_游戏输出_整合模型",
+    "objects": [
+      "32_主体_v019",
+      "32_床头柜_书本_v019",
+      "32_床头柜_杯子_v019",
+      "32_植物组件_v019"
+    ],
+    "triangles": 2320,
+    "center": [
+      -3.2350000143051147,
+      11.320000171661377,
+      6.792499780654907
+    ],
+    "dimensions": [
+      2.069999933242798,
+      1.0600004196166992,
+      1.3550000190734863
+    ],
+    "local_origin": [
+      -3.2350000143051147,
+      11.320000171661377,
+      6.114999771118164
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_bedside_lamp",
+    "collection": "33_暖橙床头灯_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "33_01_制作组件_已统一材质",
+    "output_collection": "33__02_游戏输出_整合模型",
+    "objects": [
+      "床头灯_暖橙光",
+      "33_主体_v019",
+      "33_柔和自发光_v019"
+    ],
+    "triangles": 508,
+    "center": [
+      -2.799999952316284,
+      11.670000076293945,
+      7.6837499141693115
+    ],
+    "dimensions": [
+      0.4200000762939453,
+      0.4200000762939453,
+      0.9074997901916504
+    ],
+    "local_origin": [
+      -2.799999952316284,
+      11.670000076293945,
+      7.230000019073486
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_bedside_rug",
+    "collection": "34_床边暖灰地毯_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "34_01_制作组件_已统一材质",
+    "output_collection": "34__02_游戏输出_整合模型",
+    "objects": [
+      "34_主体_v019"
+    ],
+    "triangles": 440,
+    "center": [
+      0.6624999046325684,
+      9.929999828338623,
+      6.106000185012817
+    ],
+    "dimensions": [
+      5.375,
+      5.249999046325684,
+      0.037000179290771484
+    ],
+    "local_origin": [
+      0.6624999046325684,
+      9.929999828338623,
+      6.087500095367432
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_striped_privacy_curtain",
+    "collection": "35_红紫条纹隔断帘_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "35_01_制作组件_已统一材质",
+    "output_collection": "35__02_游戏输出_整合模型",
+    "objects": [
+      "35_主体_v019"
+    ],
+    "triangles": 2064,
+    "center": [
+      3.527000069618225,
+      12.294648170471191,
+      7.57099986076355
+    ],
+    "dimensions": [
+      0.26400017738342285,
+      2.880704879760742,
+      2.8179993629455566
+    ],
+    "local_origin": [
+      3.527000069618225,
+      12.294648170471191,
+      6.1620001792907715
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_lounge_sofa",
+    "collection": "36_墨绿三人休闲沙发_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "36_01_制作组件_已统一材质",
+    "output_collection": "36__02_游戏输出_整合模型",
+    "objects": [
+      "36_主体_v019"
+    ],
+    "triangles": 6252,
+    "center": [
+      6.2499998807907104,
+      12.08931016921997,
+      7.005822658538818
+    ],
+    "dimensions": [
+      4.819999933242798,
+      1.8813791275024414,
+      1.8316459655761719
+    ],
+    "local_origin": [
+      6.2499998807907104,
+      12.08931016921997,
+      6.089999675750732
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_coffee_table",
+    "collection": "37_红棕茶几与生活物件_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "37_01_制作组件_已统一材质",
+    "output_collection": "37__02_游戏输出_整合模型",
+    "objects": [
+      "37_主体_v019",
+      "37_茶几_遥控器_v019",
+      "37_茶几_杯子_v019",
+      "37_茶几_杂志下册_v019",
+      "37_茶几_杂志上册_v019",
+      "37_v016_茶几杯垫_01_v019",
+      "37_v016_茶几杯垫_02_v019",
+      "37_茶几_相机机身_v019",
+      "37_植物组件_v019"
+    ],
+    "triangles": 2836,
+    "center": [
+      6.199999809265137,
+      9.380000114440918,
+      6.606940031051636
+    ],
+    "dimensions": [
+      2.8500003814697266,
+      1.2800006866455078,
+      1.0138802528381348
+    ],
+    "local_origin": [
+      6.199999809265137,
+      9.380000114440918,
+      6.099999904632568
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_lounge_rug",
+    "collection": "38_休闲区低饱和地毯_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "38_01_制作组件_已统一材质",
+    "output_collection": "38__02_游戏输出_整合模型",
+    "objects": [
+      "38_主体_v019"
+    ],
+    "triangles": 372,
+    "center": [
+      6.179999947547913,
+      9.550000190734863,
+      6.109750032424927
+    ],
+    "dimensions": [
+      4.900000333786011,
+      2.450000762939453,
+      0.04250001907348633
+    ],
+    "local_origin": [
+      6.179999947547913,
+      9.550000190734863,
+      6.088500022888184
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_pouf_01",
+    "collection": "39_青绿圆形坐墩01_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "39_01_制作组件_已统一材质",
+    "output_collection": "39__02_游戏输出_整合模型",
+    "objects": [
+      "39_主体_v019"
+    ],
+    "triangles": 216,
+    "center": [
+      0.6799999475479126,
+      8.0,
+      6.485499858856201
+    ],
+    "dimensions": [
+      0.8799998760223389,
+      0.8799991607666016,
+      0.5910005569458008
+    ],
+    "local_origin": [
+      0.6799999475479126,
+      8.0,
+      6.189999580383301
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_pouf_02",
+    "collection": "40_深绿圆形坐墩02_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "40_01_制作组件_已统一材质",
+    "output_collection": "40__02_游戏输出_整合模型",
+    "objects": [
+      "40_主体_v019"
+    ],
+    "triangles": 216,
+    "center": [
+      8.720000267028809,
+      8.619999885559082,
+      6.485499858856201
+    ],
+    "dimensions": [
+      0.8799991607666016,
+      0.8799991607666016,
+      0.5910005569458008
+    ],
+    "local_origin": [
+      8.720000267028809,
+      8.619999885559082,
+      6.189999580383301
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_side_table",
+    "collection": "41_床前辅助小桌_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "41_01_制作组件_已统一材质",
+    "output_collection": "41__02_游戏输出_整合模型",
+    "objects": [
+      "41_主体_v019",
+      "41_辅助小桌_青色杯_v019",
+      "41_辅助小桌_个人终端_v019",
+      "41_植物组件_v019",
+      "41_小桌_打开书页-1_v019",
+      "41_书页印刷-1_0_v019",
+      "41_书页印刷-1_1_v019",
+      "41_书页印刷-1_2_v019",
+      "41_书页印刷-1_3_v019",
+      "41_小桌_打开书页1_v019",
+      "41_书页印刷1_0_v019",
+      "41_书页印刷1_1_v019",
+      "41_书页印刷1_2_v019",
+      "41_书页印刷1_3_v019"
+    ],
+    "triangles": 2464,
+    "center": [
+      1.8027976751327515,
+      8.420000076293945,
+      6.533310174942017
+    ],
+    "dimensions": [
+      1.1255953311920166,
+      0.7600002288818359,
+      0.8266196250915527
+    ],
+    "local_origin": [
+      1.8027976751327515,
+      8.420000076293945,
+      6.12000036239624
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_computer_workstation",
+    "collection": "42_双屏电脑完整工位_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "42_01_制作组件_已统一材质",
+    "output_collection": "42__02_游戏输出_整合模型",
+    "objects": [
+      "沙发壁灯_暖橙实光",
+      "42_主体_v019",
+      "42_柔和自发光_v019",
+      "42_工位_白色杯_v019"
+    ],
+    "triangles": 8497,
+    "center": [
+      8.617499828338623,
+      13.602500438690186,
+      7.559999942779541
+    ],
+    "dimensions": [
+      7.534998893737793,
+      1.4049997329711914,
+      3.0399999618530273
+    ],
+    "local_origin": [
+      8.617499828338623,
+      13.602500438690186,
+      6.039999961853027
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_office_chair",
+    "collection": "43_带扶手办公椅_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "43_01_制作组件_已统一材质",
+    "output_collection": "43__02_游戏输出_整合模型",
+    "objects": [
+      "43_主体_v019"
+    ],
+    "triangles": 2960,
+    "center": [
+      10.450000286102295,
+      12.203397750854492,
+      7.130214214324951
+    ],
+    "dimensions": [
+      1.2799997329711914,
+      1.1223030090332031,
+      2.016953468322754
+    ],
+    "local_origin": [
+      10.450000286102295,
+      12.203397750854492,
+      6.121737480163574
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_medical_cabinet",
+    "collection": "45_MEDICAL模块收纳箱_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "45_01_制作组件_已统一材质",
+    "output_collection": "45__02_游戏输出_整合模型",
+    "objects": [
+      "45_主体_v019"
+    ],
+    "triangles": 934,
+    "center": [
+      -3.25,
+      13.880750179290771,
+      6.544999837875366
+    ],
+    "dimensions": [
+      1.1999998092651367,
+      0.9784994125366211,
+      0.8499999046325684
+    ],
+    "local_origin": [
+      -3.25,
+      13.880750179290771,
+      6.119999885559082
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_hanging_plant",
+    "collection": "49_后墙吊挂植物_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "49_01_制作组件_已统一材质",
+    "output_collection": "49__02_游戏输出_整合模型",
+    "objects": [
+      "49_植物组件_v019"
+    ],
+    "triangles": 1636,
+    "center": [
+      2.721583604812622,
+      14.033051490783691,
+      8.084672927856445
+    ],
+    "dimensions": [
+      0.8565950393676758,
+      0.7779922485351562,
+      1.6773452758789062
+    ],
+    "local_origin": [
+      2.721583604812622,
+      14.033051490783691,
+      7.246000289916992
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_explore_poster",
+    "collection": "48_EXPLORE独立海报_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "48_01_制作组件_已统一材质",
+    "output_collection": "48__02_游戏输出_整合模型",
+    "objects": [
+      "48_主体_v019"
+    ],
+    "triangles": 676,
+    "center": [
+      -2.119999885559082,
+      14.25499963760376,
+      8.050000190734863
+    ],
+    "dimensions": [
+      1.380000114440918,
+      0.09999942779541016,
+      1.6599998474121094
+    ],
+    "local_origin": [
+      -2.119999885559082,
+      14.25499963760376,
+      7.220000267028809
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_tool_pegboard",
+    "collection": "49_工具洞洞板与固定工具_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "49_01_制作组件_已统一材质.001",
+    "output_collection": "49__02_游戏输出_整合模型.001",
+    "objects": [
+      "49_主体_v019"
+    ],
+    "triangles": 3644,
+    "center": [
+      -0.1499999761581421,
+      14.292500019073486,
+      8.050000190734863
+    ],
+    "dimensions": [
+      2.549999952316284,
+      0.25500011444091797,
+      1.3400001525878906
+    ],
+    "local_origin": [
+      -0.1499999761581421,
+      14.292500019073486,
+      7.380000114440918
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ]
+  },
+  {
+    "package_id": "loft_floor_finish",
+    "collection": "116_二楼地板色彩深化_资产包",
+    "version": "v019",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+    "source_collection": "116_01_制作组件_已统一材质",
+    "output_collection": "116_02_游戏输出_整合模型",
+    "objects": [
+      "116_木地板_原标高深色底层_v019",
+      "116_木地板拼铺模块_R01到03_v019",
+      "116_木地板拼铺模块_R04到06_v019",
+      "116_木地板拼铺模块_R07到09_v019",
+      "116_木地板拼铺模块_R10到12_v019",
+      "116_木地板拼铺模块_R13到15_v019",
+      "116_木地板拼铺模块_R16到18_v019",
+      "116_木地板拼铺模块_R19到21_v019",
+      "116_木地板拼铺模块_R22到24_v019",
+      "116_木地板拼铺模块_R25到27_v019",
+      "116_木地板拼铺模块_R28到30_v019",
+      "116_木地板拼铺模块_R31到33_v019",
+      "116_木地板拼铺模块_R34到36_v019"
+    ],
+    "triangles": 8436,
+    "center": [
+      5.0,
+      10.0,
+      6.039949893951416
+    ],
+    "dimensions": [
+      19.600000381469727,
+      9.600000381469727,
+      0.10190010070800781
+    ],
+    "local_origin": [
+      5.0,
+      10.0,
+      5.988999843597412
+    ],
+    "front": "-Y",
+    "exported": false,
+    "runtime_integrated": false,
+    "collision": "unchanged",
+    "floor_height": 6.09,
+    "material_roles": [
+      "01_精工金属_v018公共色盘",
+      "02_细腻哑光_v018公共色盘",
+      "03_清漆反光_v018公共色盘",
+      "04_柔和自发光_v018公共色盘"
+    ],
+    "output_batching": "12 modules of 3 plank rows plus original-height substrate; 324 editable source planks preserved"
+  }
+]

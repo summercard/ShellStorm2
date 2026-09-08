@@ -1,0 +1,46 @@
+{
+  "package_id": "loft_coffee_table",
+  "collection": "37_红棕茶几与生活物件_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "37_01_制作组件_已统一材质",
+  "output_collection": "37__02_游戏输出_整合模型",
+  "objects": [
+    "37_主体_v019",
+    "37_茶几_遥控器_v019",
+    "37_茶几_杯子_v019",
+    "37_茶几_杂志下册_v019",
+    "37_茶几_杂志上册_v019",
+    "37_v016_茶几杯垫_01_v019",
+    "37_v016_茶几杯垫_02_v019",
+    "37_茶几_相机机身_v019",
+    "37_植物组件_v019"
+  ],
+  "triangles": 2836,
+  "center": [
+    6.199999809265137,
+    9.380000114440918,
+    6.606940031051636
+  ],
+  "dimensions": [
+    2.8500003814697266,
+    1.2800006866455078,
+    1.0138802528381348
+  ],
+  "local_origin": [
+    6.199999809265137,
+    9.380000114440918,
+    6.099999904632568
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}

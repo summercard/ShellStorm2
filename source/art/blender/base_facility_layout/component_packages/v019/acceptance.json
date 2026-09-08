@@ -1,0 +1,30 @@
+{
+  "locked_match": true,
+  "locked_count": 5742,
+  "package_count": 18,
+  "triangles": 48323,
+  "floor_triangles": 8436,
+  "material_count": 8,
+  "status": "scoped_source_deepening_complete",
+  "scoped_validation_pass": true,
+  "output_object_count": 59,
+  "floor_output_objects": 13,
+  "editable_planks": 324,
+  "legacy_global_validator_pass": false,
+  "runtime_integrated": false,
+  "final_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "preview_method": "Identical fixed four-view cameras, Cycles 48 samples, temporary warm/cool area rig, no Freestyle. Layout scene global settings remain unchanged.",
+  "visual_review": {
+    "full": "reviewed",
+    "bed": "reviewed",
+    "sofa": "reviewed; throw-seat intersections corrected",
+    "top": "reviewed; original floor/stair elevation preserved"
+  },
+  "valid_uv_islands": 47414,
+  "source_sha256": "b0286f8f00b8ed3b66831080a969ab7133e54ff4b672810335b281dc07730f96",
+  "limitations": [
+    "Original out-of-scope global validator failures preserved",
+    "Review lighting is identical before/after and separate from original scene settings",
+    "No Godot runtime import or performance measurement performed"
+  ]
+}

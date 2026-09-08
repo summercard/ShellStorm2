@@ -1,0 +1,40 @@
+{
+  "package_id": "loft_computer_workstation",
+  "collection": "42_双屏电脑完整工位_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "42_双屏电脑完整工位_资产包_主体",
+    "42_双屏电脑完整工位_资产包_自发光",
+    "42_双屏电脑完整工位_资产包_工位_白色杯"
+  ],
+  "source_collection": "42_01_制作组件_已统一材质",
+  "center": [
+    9.3775,
+    13.6338,
+    7.56
+  ],
+  "dimensions": [
+    6.015,
+    1.4675,
+    3.04
+  ],
+  "local_origin": [
+    9.3775,
+    13.6338,
+    6.039999999999999
+  ],
+  "front": "-Y",
+  "triangles_before": 10302,
+  "triangles_after": 8958,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

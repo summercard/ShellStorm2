@@ -1,0 +1,41 @@
+{
+  "package_id": "loft_hanging_plant",
+  "collection": "49_后墙吊挂植物_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "49_后墙吊挂植物_资产包_吊挂植物_陶盆",
+    "49_后墙吊挂植物_资产包_吊挂植物_吊绳_13.97",
+    "49_后墙吊挂植物_资产包_吊挂植物_吊绳_14.33",
+    "49_后墙吊挂植物_资产包_主体"
+  ],
+  "source_collection": "49_01_制作组件_已统一材质",
+  "center": [
+    2.7287,
+    14.1211,
+    8.255
+  ],
+  "dimensions": [
+    0.5848,
+    0.4979,
+    1.41
+  ],
+  "local_origin": [
+    2.7287,
+    14.1211,
+    7.550000000000001
+  ],
+  "front": "-Y",
+  "triangles_before": 1400,
+  "triangles_after": 468,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

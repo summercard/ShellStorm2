@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_tool_pegboard",
+  "collection": "49_工具洞洞板与固定工具_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "49_工具洞洞板与固定工具_资产包_主体"
+  ],
+  "source_collection": "49_01_制作组件_已统一材质.001",
+  "center": [
+    -0.15,
+    14.3263,
+    8.05
+  ],
+  "dimensions": [
+    2.55,
+    0.1875,
+    1.34
+  ],
+  "local_origin": [
+    -0.15,
+    14.3263,
+    7.380000000000001
+  ],
+  "front": "-Y",
+  "triangles_before": 8012,
+  "triangles_after": 1380,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

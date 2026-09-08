@@ -1,0 +1,56 @@
+{
+  "package_id": "heavy_supply_shelf",
+  "collection": "51_重型货架与补给箱_资产包",
+  "parent_collection": "50_仓库与辅助设施",
+  "source_collection": "51_01_制作组件_统一材质_v020",
+  "output_collection": "51_02_游戏输出_整合模型_v020",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+  "version": "v020",
+  "objects": [
+    "51_主体_v020",
+    "51_补给箱0_v020",
+    "51_补给箱1_v020",
+    "51_补给箱2_v020",
+    "51_补给箱3_v020"
+  ],
+  "triangles_before": 2376,
+  "triangles_after": 3588,
+  "center": [
+    -10.8,
+    -13.55,
+    0.5201
+  ],
+  "dimensions": [
+    5.47,
+    0.99,
+    0.8003
+  ],
+  "local_origin": [
+    -10.8,
+    -13.55,
+    0.11995
+  ],
+  "world_placement": [
+    [
+      -10.8,
+      -13.55,
+      0
+    ],
+    0
+  ],
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "not_modified",
+  "fixed_display_attachments": true,
+  "front_direction": [
+    0,
+    1,
+    0
+  ]
+}

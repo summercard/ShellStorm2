@@ -1,0 +1,52 @@
+{
+  "package_id": "industrial_water_tank",
+  "collection": "56_工业水箱_资产包",
+  "parent_collection": "50_仓库与辅助设施",
+  "source_collection": "56_01_制作组件_统一材质_v020",
+  "output_collection": "56_02_游戏输出_整合模型_v020",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v020.blend",
+  "version": "v020",
+  "objects": [
+    "56_主体_v020"
+  ],
+  "triangles_before": 284,
+  "triangles_after": 1590,
+  "center": [
+    -13.15,
+    -7.6999,
+    1.2563
+  ],
+  "dimensions": [
+    1.988,
+    1.9878,
+    2.3125
+  ],
+  "local_origin": [
+    -13.15,
+    -7.6999,
+    0.10004999999999997
+  ],
+  "world_placement": [
+    [
+      -13.15,
+      -7.7,
+      0
+    ],
+    -1.5707963267948966
+  ],
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "not_modified",
+  "fixed_display_attachments": true,
+  "front_direction": [
+    1,
+    0,
+    0
+  ]
+}

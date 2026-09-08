@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_explore_poster",
+  "collection": "48_EXPLORE独立海报_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "48_01_制作组件_已统一材质",
+  "output_collection": "48__02_游戏输出_整合模型",
+  "objects": [
+    "48_主体_v019"
+  ],
+  "triangles": 676,
+  "center": [
+    -2.119999885559082,
+    14.25499963760376,
+    8.050000190734863
+  ],
+  "dimensions": [
+    1.380000114440918,
+    0.09999942779541016,
+    1.6599998474121094
+  ],
+  "local_origin": [
+    -2.119999885559082,
+    14.25499963760376,
+    7.220000267028809
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}

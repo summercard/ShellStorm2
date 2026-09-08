@@ -1,0 +1,42 @@
+{
+  "package_id": "loft_bed_and_bedding",
+  "collection": "31_参考床架床品与床下收纳_资产包",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v018.blend",
+  "version": "v018",
+  "objects": [
+    "31_参考床架床品与床下收纳_资产包_主体",
+    "31_参考床架床品与床下收纳_资产包_v016_床边拖",
+    "31_参考床架床品与床下收纳_资产包_v016_床边",
+    "31_参考床架床品与床下收纳_资产包_v016_床边.001",
+    "31_参考床架床品与床下收纳_资产包_v016_床边.002"
+  ],
+  "source_collection": "31_01_制作组件_已统一材质",
+  "center": [
+    0.3,
+    11.0727,
+    6.6677
+  ],
+  "dimensions": [
+    4.75,
+    2.9045,
+    1.3154
+  ],
+  "local_origin": [
+    0.3,
+    11.0727,
+    6.01
+  ],
+  "front": "-Y",
+  "triangles_before": 4124,
+  "triangles_after": 2600,
+  "exported": false,
+  "collision": "not_changed",
+  "runtime_integrated": false,
+  "materials": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ],
+  "fixed_display_attachment": "Named accessories remain independent output meshes"
+}

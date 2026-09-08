@@ -1,0 +1,38 @@
+{
+  "package_id": "loft_striped_privacy_curtain",
+  "collection": "35_红紫条纹隔断帘_资产包",
+  "version": "v019",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v019.blend",
+  "source_collection": "35_01_制作组件_已统一材质",
+  "output_collection": "35__02_游戏输出_整合模型",
+  "objects": [
+    "35_主体_v019"
+  ],
+  "triangles": 2064,
+  "center": [
+    3.527000069618225,
+    12.294648170471191,
+    7.57099986076355
+  ],
+  "dimensions": [
+    0.26400017738342285,
+    2.880704879760742,
+    2.8179993629455566
+  ],
+  "local_origin": [
+    3.527000069618225,
+    12.294648170471191,
+    6.1620001792907715
+  ],
+  "front": "-Y",
+  "exported": false,
+  "runtime_integrated": false,
+  "collision": "unchanged",
+  "floor_height": 6.09,
+  "material_roles": [
+    "01_精工金属_v018公共色盘",
+    "02_细腻哑光_v018公共色盘",
+    "03_清漆反光_v018公共色盘",
+    "04_柔和自发光_v018公共色盘"
+  ]
+}
