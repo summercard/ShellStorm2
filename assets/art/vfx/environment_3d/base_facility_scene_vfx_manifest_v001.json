@@ -9,7 +9,15 @@
       "implementation": "Godot GPUParticles3D",
       "managed_separately": true,
       "enabled": true,
-      "status_note": "Re-enabled after removing the accidentally imported high-energy Blender lights."
+      "status_note": "Re-enabled after removing the accidentally imported high-energy Blender lights.",
+      "tuning": {
+        "particle_amount": 192,
+        "amount_change": "96 -> 192 (2x)",
+        "emission_energy_multiplier": 2.2,
+        "emission_reference": "04_柔和自发光_UI灯光_全息增强_v022",
+        "emission_box_extents_m": [14.5, 3.6, 7.25],
+        "visibility_aabb_m": [-15.0, -3.8, -8.5, 30.0, 7.6, 17.0]
+      }
     }
   ]
 }

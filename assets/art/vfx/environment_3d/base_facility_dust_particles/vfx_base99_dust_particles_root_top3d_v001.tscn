@@ -7,7 +7,7 @@ vertex_color_use_as_albedo = true
 albedo_color = Color(0.42, 0.82, 1, 0.22)
 emission_enabled = true
 emission = Color(0.18, 0.58, 1, 1)
-emission_energy_multiplier = 1.35
+emission_energy_multiplier = 2.2
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="DustQuad"]
@@ -16,7 +16,7 @@ size = Vector2(0.025, 0.025)
 
 [sub_resource type="ParticleProcessMaterial" id="DustProcess"]
 emission_shape = 3
-emission_box_extents = Vector3(12, 3.1, 6)
+emission_box_extents = Vector3(14.5, 3.6, 7.25)
 direction = Vector3(0.08, 1, 0.04)
 spread = 22.0
 initial_velocity_min = 0.025
@@ -35,10 +35,10 @@ metadata/management_policy = "separate_scene_vfx_ledger"
 [node name="DustParticles" type="GPUParticles3D" parent="."]
 position = Vector3(0, 4.6, 0)
 emitting = true
-amount = 96
+amount = 192
 lifetime = 11.0
 preprocess = 11.0
 randomness = 0.85
-visibility_aabb = AABB(-13, -3.5, -7, 26, 7, 14)
+visibility_aabb = AABB(-15, -3.8, -8.5, 30, 7.6, 17)
 process_material = SubResource("DustProcess")
 draw_pass_1 = SubResource("DustQuad")

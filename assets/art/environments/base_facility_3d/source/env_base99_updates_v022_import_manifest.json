@@ -319,6 +319,12 @@
     "scene": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
     "replaces": "64_光束尘埃动效组_资产包",
     "implementation": "Godot GPUParticles3D",
-    "managed_separately": true
+    "managed_separately": true,
+    "scene_vfx_ledger": "assets/art/vfx/environment_3d/base_facility_scene_vfx_manifest_v001.json",
+    "tuning": {
+      "particle_amount": 192,
+      "emission_energy_multiplier": 2.2,
+      "emission_box_extents_m": [14.5, 3.6, 7.25]
+    }
   }
 }
