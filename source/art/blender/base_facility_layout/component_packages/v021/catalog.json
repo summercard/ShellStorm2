@@ -43,8 +43,8 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
@@ -52,7 +52,9 @@
       1,
       0
     ],
-    "visual_review": "skipped_by_user"
+    "visual_review": "skipped_by_user",
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "east_low_storage_bench",
@@ -97,8 +99,8 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
@@ -106,7 +108,9 @@
       1,
       0
     ],
-    "visual_review": "skipped_by_user"
+    "visual_review": "skipped_by_user",
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "east_plant_group",
@@ -152,8 +156,8 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
@@ -161,6 +165,8 @@
       1,
       0
     ],
-    "visual_review": "skipped_by_user"
+    "visual_review": "skipped_by_user",
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   }
 ]

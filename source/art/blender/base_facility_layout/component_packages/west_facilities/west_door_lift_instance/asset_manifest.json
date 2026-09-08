@@ -4,8 +4,8 @@
   "display_name": "115_西侧滑升门运行时实例_资产包",
   "asset_slug": "west_door_lift_instance",
   "category": "west_facilities",
-  "version": "v017",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
   "object_count": 4,
   "mesh_count": 2,
   "light_count": 1,
@@ -28,11 +28,11 @@
   "forward_axis": "Blender +Y north",
   "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_west_facilities/v017_源资产包_west_door_lift_instance",
   "collider_names": [],
-  "expected_export": "env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb",
+  "expected_export": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "source_ready_reuses_existing_runtime_asset_not_exported_in_this_iteration",
-  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn",
-  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v001.glb",
+  "export_status": "exported_v021_shared_visual",
+  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn",
+  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb",
   "runtime_component": "door_leaf",
   "runtime_owner": "RoomDoor3D",
   "scene_placement": {
@@ -49,12 +49,14 @@
   "excluded_components": [
     "east_door_access_control"
   ],
-  "visual_revision": "v017_west_double_sided_alignment_002",
+  "visual_revision": "v021_shared_east_west_door_visuals",
   "visual_envelope_m": {
     "depth_x": 0.898,
     "width_y": 2.04,
     "height_z": 2.34
   },
   "door_leaf_design": "620mm加厚闭合门扇；内外两面完全同构的嵌板、警示条和状态灯。",
-  "fixture_light_ownership": "西墙滑升门_状态照明为门实例唯一局部点光，位于门厚度中轴，照亮双面。"
+  "fixture_light_ownership": "西墙滑升门_状态照明为门实例唯一局部点光，位于门厚度中轴，照亮双面。",
+  "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
+  "shared_runtime_visual_contract": "East and west authored packages share this visual AssetID; only the existing runtime prefab is replaced."
 }

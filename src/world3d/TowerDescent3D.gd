@@ -9,7 +9,7 @@ const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
 )
 const MAIN_ENTRY_SCREEN_SCENE: PackedScene = preload(
 	"res://scenes/ui/MainEntryScreen3D.tscn"

@@ -1,0 +1,985 @@
+{
+  "version": "v021",
+  "scopes": {
+    "remaining_facilities": {
+      "scope": "remaining_facilities",
+      "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "source_sha256": "346fd35879e548a5bcd0181d55476e254994b51665b5b5beb38fe75d3b2429b1",
+      "packages": [
+        {
+          "slug": "air_compressor",
+          "collection": "58_空气压缩机_资产包",
+          "source_output_collection": "58_02_游戏输出_整合模型_v020",
+          "objects": [
+            "58_主体_v020.001"
+          ],
+          "triangles_before": 648,
+          "triangles_after": 530,
+          "downward_triangles_removed": 118,
+          "bbox_blender": {
+            "min": [
+              -7.675000190734863,
+              -14.049999237060547,
+              0.11999999731779099
+            ],
+            "max": [
+              -5.625,
+              -12.75,
+              1.7995617389678955
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "backup_generator",
+          "collection": "53_备用发电机_资产包",
+          "source_output_collection": "53_02_游戏输出_整合模型_v020",
+          "objects": [
+            "53_主体_v020.001",
+            "53_柔和自发光_v020.001"
+          ],
+          "triangles_before": 944,
+          "triangles_after": 768,
+          "downward_triangles_removed": 176,
+          "bbox_blender": {
+            "min": [
+              12.060500144958496,
+              -10.65000057220459,
+              0.11000001430511475
+            ],
+            "max": [
+              14.324999809265137,
+              -7.550000190734863,
+              1.8601340055465698
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "battery_bank",
+          "collection": "54_蓄电池组_资产包",
+          "source_output_collection": "54_02_游戏输出_整合模型_v020",
+          "objects": [
+            "54_主体_v020.001",
+            "54_柔和自发光_v020.001"
+          ],
+          "triangles_before": 2212,
+          "triangles_after": 1638,
+          "downward_triangles_removed": 574,
+          "bbox_blender": {
+            "min": [
+              12.242500305175781,
+              -13.265199661254883,
+              0.13999998569488525
+            ],
+            "max": [
+              13.532499313354492,
+              -10.95359992980957,
+              1.1725165843963623
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "east_low_storage_bench",
+          "collection": "80_低矮储物收纳区_资产包",
+          "source_output_collection": "80_02_游戏输出_整合模型_v021",
+          "objects": [
+            "80_主体_v021.001",
+            "80_固定展示附件_v021.001"
+          ],
+          "triangles_before": 1044,
+          "triangles_after": 764,
+          "downward_triangles_removed": 280,
+          "bbox_blender": {
+            "min": [
+              9.329999923706055,
+              -14.584999084472656,
+              0.059999994933605194
+            ],
+            "max": [
+              12.370000839233398,
+              -13.362500190734863,
+              1.8460358381271362
+            ]
+          },
+          "forward": "+Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "east_maintenance_workstation",
+          "collection": "78_维修工作台与工具墙_资产包",
+          "source_output_collection": "78_02_游戏输出_整合模型_v021",
+          "objects": [
+            "78_主体_v021.001",
+            "78_柔和自发光_v021.001",
+            "78_固定展示附件_v021.001"
+          ],
+          "triangles_before": 3318,
+          "triangles_after": 2565,
+          "downward_triangles_removed": 753,
+          "bbox_blender": {
+            "min": [
+              3.6999998092651367,
+              -14.410000801086426,
+              0.02499999850988388
+            ],
+            "max": [
+              8.699999809265137,
+              -12.125,
+              4.264999866485596
+            ]
+          },
+          "forward": "+Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "east_plant_group",
+          "collection": "83_东面植物点缀组_资产包",
+          "source_output_collection": "83_02_游戏输出_整合模型_v021",
+          "objects": [
+            "83_植物0_v021.001",
+            "83_植物1_v021.001",
+            "83_植物2_v021.001"
+          ],
+          "triangles_before": 3060,
+          "triangles_after": 2172,
+          "downward_triangles_removed": 888,
+          "bbox_blender": {
+            "min": [
+              11.36258602142334,
+              -14.307100296020508,
+              0.11000001430511475
+            ],
+            "max": [
+              13.017414093017578,
+              3.547100067138672,
+              2.4535999298095703
+            ]
+          },
+          "forward": "+Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "heavy_supply_shelf",
+          "collection": "51_重型货架与补给箱_资产包",
+          "source_output_collection": "51_02_游戏输出_整合模型_v020",
+          "objects": [
+            "51_主体_v020.001",
+            "51_补给箱0_v020.001",
+            "51_补给箱1_v020.001",
+            "51_补给箱2_v020.001",
+            "51_补给箱3_v020.001"
+          ],
+          "triangles_before": 3588,
+          "triangles_after": 2522,
+          "downward_triangles_removed": 1066,
+          "bbox_blender": {
+            "min": [
+              -13.53499984741211,
+              -14.045000076293945,
+              0.11999998986721039
+            ],
+            "max": [
+              -8.065000534057617,
+              -13.055000305175781,
+              0.9202552437782288
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "hose_reel",
+          "collection": "59_水管卷盘_资产包",
+          "source_output_collection": "59_02_游戏输出_整合模型_v020",
+          "objects": [
+            "59_主体_v020.001"
+          ],
+          "triangles_before": 1268,
+          "triangles_after": 1020,
+          "downward_triangles_removed": 248,
+          "bbox_blender": {
+            "min": [
+              -14.329999923706055,
+              -12.429999351501465,
+              1.4199999570846558
+            ],
+            "max": [
+              -13.930000305175781,
+              -11.369999885559082,
+              2.9700000286102295
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "industrial_water_tank",
+          "collection": "56_工业水箱_资产包",
+          "source_output_collection": "56_02_游戏输出_整合模型_v020",
+          "objects": [
+            "56_主体_v020.001"
+          ],
+          "triangles_before": 1590,
+          "triangles_after": 1118,
+          "downward_triangles_removed": 472,
+          "bbox_blender": {
+            "min": [
+              -14.143999099731445,
+              -8.693785667419434,
+              0.10000000149011612
+            ],
+            "max": [
+              -12.156000137329102,
+              -6.705999851226807,
+              2.4125001430511475
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_bed_and_bedding",
+          "collection": "31_参考床架床品与床下收纳_资产包",
+          "source_output_collection": "31__02_游戏输出_整合模型",
+          "objects": [
+            "31_主体_v019.001"
+          ],
+          "triangles_before": 3852,
+          "triangles_after": 3118,
+          "downward_triangles_removed": 734,
+          "bbox_blender": {
+            "min": [
+              -2.075000047683716,
+              9.975000381469727,
+              6.010000228881836
+            ],
+            "max": [
+              2.674999952316284,
+              12.524999618530273,
+              7.242936134338379
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_bedside_lamp",
+          "collection": "33_暖橙床头灯_资产包",
+          "source_output_collection": "33__02_游戏输出_整合模型",
+          "objects": [
+            "33_主体_v019.001",
+            "33_柔和自发光_v019.001"
+          ],
+          "triangles_before": 508,
+          "triangles_after": 394,
+          "downward_triangles_removed": 114,
+          "bbox_blender": {
+            "min": [
+              -3.009999990463257,
+              11.460000038146973,
+              7.230000019073486
+            ],
+            "max": [
+              -2.5899999141693115,
+              11.880000114440918,
+              8.137499809265137
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_bedside_rug",
+          "collection": "34_床边暖灰地毯_资产包",
+          "source_output_collection": "34__02_游戏输出_整合模型",
+          "objects": [
+            "34_主体_v019.001"
+          ],
+          "triangles_before": 440,
+          "triangles_after": 272,
+          "downward_triangles_removed": 168,
+          "bbox_blender": {
+            "min": [
+              -2.0250000953674316,
+              7.305000305175781,
+              6.087500095367432
+            ],
+            "max": [
+              3.3499999046325684,
+              12.554999351501465,
+              6.124500274658203
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_coffee_table",
+          "collection": "37_红棕茶几与生活物件_资产包",
+          "source_output_collection": "37__02_游戏输出_整合模型",
+          "objects": [
+            "37_主体_v019.001",
+            "37_茶几_遥控器_v019.001",
+            "37_茶几_杯子_v019.001",
+            "37_茶几_杂志下册_v019.001",
+            "37_茶几_杂志上册_v019.001",
+            "37_v016_茶几杯垫_01_v019.001",
+            "37_v016_茶几杯垫_02_v019.001",
+            "37_茶几_相机机身_v019.001",
+            "37_植物组件_v019.001"
+          ],
+          "triangles_before": 2836,
+          "triangles_after": 2346,
+          "downward_triangles_removed": 490,
+          "bbox_blender": {
+            "min": [
+              4.774999618530273,
+              8.739999771118164,
+              6.099999904632568
+            ],
+            "max": [
+              7.625,
+              10.020000457763672,
+              7.113880157470703
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_computer_workstation",
+          "collection": "42_双屏电脑完整工位_资产包",
+          "source_output_collection": "42__02_游戏输出_整合模型",
+          "objects": [
+            "42_主体_v019.001",
+            "42_柔和自发光_v019.001",
+            "42_工位_白色杯_v019.001"
+          ],
+          "triangles_before": 8497,
+          "triangles_after": 6953,
+          "downward_triangles_removed": 1544,
+          "bbox_blender": {
+            "min": [
+              4.850000381469727,
+              12.90000057220459,
+              6.039999961853027
+            ],
+            "max": [
+              12.38499927520752,
+              14.305000305175781,
+              9.079999923706055
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_explore_poster",
+          "collection": "48_EXPLORE独立海报_资产包",
+          "source_output_collection": "48__02_游戏输出_整合模型",
+          "objects": [
+            "48_主体_v019.001"
+          ],
+          "triangles_before": 676,
+          "triangles_after": 600,
+          "downward_triangles_removed": 76,
+          "bbox_blender": {
+            "min": [
+              -2.809999942779541,
+              14.204999923706055,
+              7.220000267028809
+            ],
+            "max": [
+              -1.429999828338623,
+              14.304999351501465,
+              8.880000114440918
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_hanging_plant",
+          "collection": "49_后墙吊挂植物_资产包",
+          "source_output_collection": "49__02_游戏输出_整合模型",
+          "objects": [
+            "49_植物组件_v019.001"
+          ],
+          "triangles_before": 1636,
+          "triangles_after": 1604,
+          "downward_triangles_removed": 32,
+          "bbox_blender": {
+            "min": [
+              2.293286085128784,
+              13.644055366516113,
+              7.246000289916992
+            ],
+            "max": [
+              3.14988112449646,
+              14.42204761505127,
+              8.923345565795898
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_lounge_rug",
+          "collection": "38_休闲区低饱和地毯_资产包",
+          "source_output_collection": "38__02_游戏输出_整合模型",
+          "objects": [
+            "38_主体_v019.001"
+          ],
+          "triangles_before": 372,
+          "triangles_after": 346,
+          "downward_triangles_removed": 26,
+          "bbox_blender": {
+            "min": [
+              3.7299997806549072,
+              8.324999809265137,
+              6.088500022888184
+            ],
+            "max": [
+              8.630000114440918,
+              10.77500057220459,
+              6.13100004196167
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_lounge_sofa",
+          "collection": "36_墨绿三人休闲沙发_资产包",
+          "source_output_collection": "36__02_游戏输出_整合模型",
+          "objects": [
+            "36_主体_v019.001"
+          ],
+          "triangles_before": 6252,
+          "triangles_after": 4889,
+          "downward_triangles_removed": 1363,
+          "bbox_blender": {
+            "min": [
+              3.8399999141693115,
+              11.14862060546875,
+              6.089999675750732
+            ],
+            "max": [
+              8.65999984741211,
+              13.029999732971191,
+              7.921645641326904
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_medical_cabinet",
+          "collection": "45_MEDICAL模块收纳箱_资产包",
+          "source_output_collection": "45__02_游戏输出_整合模型",
+          "objects": [
+            "45_主体_v019.001"
+          ],
+          "triangles_before": 934,
+          "triangles_after": 790,
+          "downward_triangles_removed": 144,
+          "bbox_blender": {
+            "min": [
+              -3.8499999046325684,
+              13.391500473022461,
+              6.119999885559082
+            ],
+            "max": [
+              -2.6500000953674316,
+              14.369999885559082,
+              6.96999979019165
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_nightstand",
+          "collection": "32_参考床头柜与生活物件_资产包",
+          "source_output_collection": "32__02_游戏输出_整合模型",
+          "objects": [
+            "32_主体_v019.001",
+            "32_床头柜_书本_v019.001",
+            "32_床头柜_杯子_v019.001",
+            "32_植物组件_v019.001"
+          ],
+          "triangles_before": 2320,
+          "triangles_after": 1888,
+          "downward_triangles_removed": 432,
+          "bbox_blender": {
+            "min": [
+              -4.269999980926514,
+              10.789999961853027,
+              6.114999771118164
+            ],
+            "max": [
+              -2.200000047683716,
+              11.850000381469727,
+              7.46999979019165
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_office_chair",
+          "collection": "43_带扶手办公椅_资产包",
+          "source_output_collection": "43__02_游戏输出_整合模型",
+          "objects": [
+            "43_主体_v019.001"
+          ],
+          "triangles_before": 2960,
+          "triangles_after": 2354,
+          "downward_triangles_removed": 606,
+          "bbox_blender": {
+            "min": [
+              9.8100004196167,
+              11.64224624633789,
+              6.121737480163574
+            ],
+            "max": [
+              11.09000015258789,
+              12.764549255371094,
+              8.138690948486328
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_pouf_01",
+          "collection": "39_青绿圆形坐墩01_资产包",
+          "source_output_collection": "39__02_游戏输出_整合模型",
+          "objects": [
+            "39_主体_v019.001"
+          ],
+          "triangles_before": 216,
+          "triangles_after": 132,
+          "downward_triangles_removed": 84,
+          "bbox_blender": {
+            "min": [
+              0.24000000953674316,
+              7.560000419616699,
+              6.189999580383301
+            ],
+            "max": [
+              1.119999885559082,
+              8.4399995803833,
+              6.781000137329102
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_pouf_02",
+          "collection": "40_深绿圆形坐墩02_资产包",
+          "source_output_collection": "40__02_游戏输出_整合模型",
+          "objects": [
+            "40_主体_v019.001"
+          ],
+          "triangles_before": 216,
+          "triangles_after": 132,
+          "downward_triangles_removed": 84,
+          "bbox_blender": {
+            "min": [
+              8.280000686645508,
+              8.180000305175781,
+              6.189999580383301
+            ],
+            "max": [
+              9.15999984741211,
+              9.059999465942383,
+              6.781000137329102
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_side_table",
+          "collection": "41_床前辅助小桌_资产包",
+          "source_output_collection": "41__02_游戏输出_整合模型",
+          "objects": [
+            "41_主体_v019.001",
+            "41_辅助小桌_青色杯_v019.001",
+            "41_辅助小桌_个人终端_v019.001",
+            "41_植物组件_v019.001",
+            "41_小桌_打开书页-1_v019.001",
+            "41_书页印刷-1_0_v019.001",
+            "41_书页印刷-1_1_v019.001",
+            "41_书页印刷-1_2_v019.001",
+            "41_书页印刷-1_3_v019.001",
+            "41_小桌_打开书页1_v019.001",
+            "41_书页印刷1_0_v019.001",
+            "41_书页印刷1_1_v019.001",
+            "41_书页印刷1_2_v019.001",
+            "41_书页印刷1_3_v019.001"
+          ],
+          "triangles_before": 2464,
+          "triangles_after": 2046,
+          "downward_triangles_removed": 418,
+          "bbox_blender": {
+            "min": [
+              1.2400000095367432,
+              8.039999961853027,
+              6.12000036239624
+            ],
+            "max": [
+              2.3655953407287598,
+              8.800000190734863,
+              6.946619987487793
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_striped_privacy_curtain",
+          "collection": "35_红紫条纹隔断帘_资产包",
+          "source_output_collection": "35__02_游戏输出_整合模型",
+          "objects": [
+            "35_主体_v019.001"
+          ],
+          "triangles_before": 2064,
+          "triangles_after": 1662,
+          "downward_triangles_removed": 402,
+          "bbox_blender": {
+            "min": [
+              3.3949999809265137,
+              10.85429573059082,
+              6.1620001792907715
+            ],
+            "max": [
+              3.6590001583099365,
+              13.735000610351562,
+              8.979999542236328
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "loft_tool_pegboard",
+          "collection": "49_工具洞洞板与固定工具_资产包",
+          "source_output_collection": "49__02_游戏输出_整合模型.001",
+          "objects": [
+            "49_主体_v019.001"
+          ],
+          "triangles_before": 3644,
+          "triangles_after": 3058,
+          "downward_triangles_removed": 586,
+          "bbox_blender": {
+            "min": [
+              -1.4249999523162842,
+              14.164999961853027,
+              7.380000114440918
+            ],
+            "max": [
+              1.125,
+              14.420000076293945,
+              8.720000267028809
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "south_wall_information_boards",
+          "collection": "61_南墙资料板组_资产包",
+          "source_output_collection": "61_02_游戏输出_整合模型_v020",
+          "objects": [
+            "61_主体_v020.001"
+          ],
+          "triangles_before": 1467,
+          "triangles_after": 1377,
+          "downward_triangles_removed": 90,
+          "bbox_blender": {
+            "min": [
+              -14.269999504089355,
+              -7.860000133514404,
+              3.0450000762939453
+            ],
+            "max": [
+              -14.180999755859375,
+              -0.7400000691413879,
+              5.539999961853027
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "water_purifier",
+          "collection": "57_净水器_资产包",
+          "source_output_collection": "57_02_游戏输出_整合模型_v020",
+          "objects": [
+            "57_主体_v020.001",
+            "57_柔和自发光_v020.001"
+          ],
+          "triangles_before": 696,
+          "triangles_after": 552,
+          "downward_triangles_removed": 144,
+          "bbox_blender": {
+            "min": [
+              -13.875,
+              -11.100000381469727,
+              0.10000002384185791
+            ],
+            "max": [
+              -11.920000076293945,
+              -9.600000381469727,
+              2.4000000953674316
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        },
+        {
+          "slug": "weapon_workshop_station",
+          "collection": "49_武器工作台与弹药附件_资产包",
+          "source_output_collection": "49_02_游戏输出_整合模型_v020",
+          "objects": [
+            "49_主体_v020.001",
+            "49_柔和自发光_v020.001",
+            "49_主补给箱_v020.001",
+            "49_台面生活附件_v020.001",
+            "49_细长附件盒_v020.001",
+            "49_中型弹药盒_v020.001",
+            "49_终端_v020.001",
+            "49_便携弹药匣_v020.001",
+            "49_工作台便携灯_v020.001",
+            "49_台面多肉_v020.001"
+          ],
+          "triangles_before": 7606,
+          "triangles_after": 5903,
+          "downward_triangles_removed": 1703,
+          "bbox_blender": {
+            "min": [
+              -14.080000877380371,
+              -6.275000095367432,
+              0.14000000059604645
+            ],
+            "max": [
+              -12.156899452209473,
+              -0.5250000953674316,
+              3.8499999046325684
+            ]
+          },
+          "forward": "Blender +Y north",
+          "collision": "regenerate_from_optimized_output"
+        }
+      ],
+      "glbs": [
+        {
+          "slug": "air_compressor",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v002.glb",
+          "sha256": "5afa4e731acbde2b5e26d4f3e9a4ecf4e4afda4728ccfae8744186fb118b60fc"
+        },
+        {
+          "slug": "backup_generator",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v002.glb",
+          "sha256": "48534b6fb9dcaeb4f4e94f376626894d371c2d5096305c0b7f9354a3cc30a63f"
+        },
+        {
+          "slug": "battery_bank",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v002.glb",
+          "sha256": "ffe65dd1c1916cb341e57544f23758abddce8b9cb8492cd642140ecec6417b5e"
+        },
+        {
+          "slug": "east_low_storage_bench",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v002.glb",
+          "sha256": "35e2ab1e44ef94ff1f3b4240467c3adf5463c37333843db90aeed40bc96fdb99"
+        },
+        {
+          "slug": "east_maintenance_workstation",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v002.glb",
+          "sha256": "5d809ba7c79766b5de3ebfba3575bb1ec56cba041e268a1615fa1e924e00cedc"
+        },
+        {
+          "slug": "east_plant_group",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v002.glb",
+          "sha256": "33d6756c226b0bd77a0e9b3eb1d39665cdfbf8b5dc78a06a0563c44c4c6b77e8"
+        },
+        {
+          "slug": "heavy_supply_shelf",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v002.glb",
+          "sha256": "60e48cadbca7b404dedf5131d1ee8f2bdd5fefc9cb81ae123e604e030333c6d4"
+        },
+        {
+          "slug": "hose_reel",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
+          "sha256": "2b4ce4ab8daf7ad63761f4370d59a4bfb7770c8589a99f474211479a062efdc9"
+        },
+        {
+          "slug": "industrial_water_tank",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v002.glb",
+          "sha256": "fe525aa566906bdc9753bd403c6df946645cbe6ccadb773d23dc3ef53c85a5cf"
+        },
+        {
+          "slug": "loft_bed_and_bedding",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v002.glb",
+          "sha256": "52c69be81e6315e00fca9bf7b146e4e0bfb81a825c3d7d1495f21af96b3ba197"
+        },
+        {
+          "slug": "loft_bedside_lamp",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v002.glb",
+          "sha256": "99b2a1c0aef8032b3bd00fc57ee10b9585de10e37a31fb9e2b99d89c201ecfb5"
+        },
+        {
+          "slug": "loft_bedside_rug",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb",
+          "sha256": "ce08e6b5d4efd38735990b5d2e6531df21c2b285862ac8247d13e5161933b87b"
+        },
+        {
+          "slug": "loft_coffee_table",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v002.glb",
+          "sha256": "224bfdcf785f4016f0acedefbc5ba9a2730a80c948efde76794509a00910b5f0"
+        },
+        {
+          "slug": "loft_computer_workstation",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v002.glb",
+          "sha256": "55a079c91b9604716fba1c60a406ef3ccdabfe713faaef919ae4f37f9e3c6b82"
+        },
+        {
+          "slug": "loft_explore_poster",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
+          "sha256": "a6c25812f2024438203e86dc3eddb50d8b3d7843e61182b786f65355d51ff841"
+        },
+        {
+          "slug": "loft_hanging_plant",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
+          "sha256": "83267d2bb53f38cfa5f05c0ad50b537ccd26e8abfae9e1313d45b059886aeaf1"
+        },
+        {
+          "slug": "loft_lounge_rug",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v002.glb",
+          "sha256": "3840c56274400706817f3c9b1daed0f06d69ca34d47a7798995213377f517b33"
+        },
+        {
+          "slug": "loft_lounge_sofa",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v002.glb",
+          "sha256": "64872694c47a4fc794451d3148fa9e292e8a638faedec514e00a460037cdc9c6"
+        },
+        {
+          "slug": "loft_medical_cabinet",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v002.glb",
+          "sha256": "3b6953e1aa15510e58fc17aa0a85a648bdbe468518fc55cd607ad36803264b40"
+        },
+        {
+          "slug": "loft_nightstand",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v002.glb",
+          "sha256": "6d61221e28a2fbd2f3433c46a9e82867fd22a4d45ae5f394122b2a1844eb1e07"
+        },
+        {
+          "slug": "loft_office_chair",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v002.glb",
+          "sha256": "8aae66cc7b473405d52631dca7c463c343040db04f1e471ff86274c5b339b50f"
+        },
+        {
+          "slug": "loft_pouf_01",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v002.glb",
+          "sha256": "be18b0fa604328120aa0a34e04b5537b1fe13b8f7f29deec2a55631537c561f2"
+        },
+        {
+          "slug": "loft_pouf_02",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v002.glb",
+          "sha256": "1b4be1d0145b24dcbecbed84e0372917fd320577fb50b7945968da02a55de0bf"
+        },
+        {
+          "slug": "loft_side_table",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v002.glb",
+          "sha256": "afd3f856dc2eff99ffaf70adaa878fd2afedc4accd09347d3301381be1fbf8d8"
+        },
+        {
+          "slug": "loft_striped_privacy_curtain",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v002.glb",
+          "sha256": "63c7b3500e3da0571446fc260a8244aa4f67e8089f256a737fa8ec59f454f19b"
+        },
+        {
+          "slug": "loft_tool_pegboard",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
+          "sha256": "bc7514fada117514dd08c0d7c952ee57f7ed3ded6daa23ebbff42bb97c75aea3"
+        },
+        {
+          "slug": "south_wall_information_boards",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
+          "sha256": "c31e1fefdd8182b82762aacf26ccc2eb175857a9a6f49b1eab32e32a06d0e525"
+        },
+        {
+          "slug": "water_purifier",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v002.glb",
+          "sha256": "2af825aa37dde8d525f8af08d65831c9180b47e53c5cb5b2fcce18321b9dd691"
+        },
+        {
+          "slug": "weapon_workshop_station",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v002.glb",
+          "sha256": "4fd7af129faabab9e4d883e9c974abab49ffb8a1fc4355d10305d50b193cc399"
+        }
+      ]
+    },
+    "floor_visuals": {
+      "scope": "floor_visuals",
+      "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-floor_visuals.blend",
+      "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "source_sha256": "346fd35879e548a5bcd0181d55476e254994b51665b5b5beb38fe75d3b2429b1",
+      "packages": [
+        {
+          "slug": "loft_floor_finish",
+          "collection": "116_二楼地板色彩深化_资产包",
+          "source_output_collection": "116_02_游戏输出_整合模型",
+          "objects": [
+            "116_木地板_原标高深色底层_v019.001",
+            "116_木地板拼铺模块_R01到03_v019.001",
+            "116_木地板拼铺模块_R04到06_v019.001",
+            "116_木地板拼铺模块_R07到09_v019.001",
+            "116_木地板拼铺模块_R10到12_v019.001",
+            "116_木地板拼铺模块_R13到15_v019.001",
+            "116_木地板拼铺模块_R16到18_v019.001",
+            "116_木地板拼铺模块_R19到21_v019.001",
+            "116_木地板拼铺模块_R22到24_v019.001",
+            "116_木地板拼铺模块_R25到27_v019.001",
+            "116_木地板拼铺模块_R28到30_v019.001",
+            "116_木地板拼铺模块_R31到33_v019.001",
+            "116_木地板拼铺模块_R34到36_v019.001"
+          ],
+          "triangles_before": 8436,
+          "triangles_after": 8434,
+          "downward_triangles_removed": 2,
+          "bbox_blender": {
+            "min": [
+              -4.800000190734863,
+              5.199999809265137,
+              5.988999843597412
+            ],
+            "max": [
+              14.800000190734863,
+              14.800000190734863,
+              6.09089994430542
+            ]
+          },
+          "forward": "-Y",
+          "collision": "regenerate_from_optimized_output"
+        }
+      ],
+      "glbs": [
+        {
+          "slug": "loft_floor_finish",
+          "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_visual_top3d_v001.glb",
+          "sha256": "89d91ab345d4b3ec62597a511d03b4c00430570a8c0110f69eb3ceeb64795e82"
+        }
+      ]
+    }
+  }
+}

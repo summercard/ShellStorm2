@@ -1,7 +1,7 @@
 {
   "assembly_id": "base99_west_door_wall_set",
   "display_name": "基地99层西侧第三段带门组件组",
-  "version": "v017",
+  "version": "v021",
   "coordinate_mapping": "Blender (X,Y,Z) -> Godot (X,Z,Y); horizontal coordinates use equal X/Y-to-X/Z values.",
   "runtime_placement": {
     "side": "west",
@@ -24,13 +24,13 @@
       "role": "wall_door",
       "asset_slug": "west_door_wall_module",
       "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
-      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn"
+      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn"
     },
     {
       "role": "door_leaf_instance",
       "asset_slug": "west_door_lift_instance",
       "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
-      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
     }
   ],
   "non_members": [
@@ -39,11 +39,13 @@
       "reason": "游戏西侧 RoomDoor3D 组合不包含东侧独立门禁外围摆件。"
     }
   ],
-  "direct_replacement_contract": "导出时分别替换两个既有通用 visual GLB；保持现有 PackedScene 根节点、AssetID、方向、碰撞与 RoomDoor3D/DungeonRoom3D 职责，不新建运行时路径。",
-  "visual_revision": "v017_west_double_sided_alignment_002",
+  "direct_replacement_contract": "v021只替换两个既有共享视觉GLB和对应视觉Prefab；保留既有PackedScene根、AssetID、方向、碰撞、RoomDoor3D/DungeonRoom3D脚本、触发与存档职责。",
+  "visual_revision": "v021_shared_east_west_door_visuals",
   "interface_contract": {
     "wall_core": "5.000m along local X × 0.360m local Y × 9.000m Z, centred on the west wall anchor.",
     "portal": "closed, symmetric 0.930m-thick portal with 1.051m maximum service-tag detail envelope, belonging only to west_door_wall_module.",
     "door_leaf": "closed, symmetric 0.898m-thick visual slab belonging only to west_door_lift_instance."
-  }
+  },
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend"
 }

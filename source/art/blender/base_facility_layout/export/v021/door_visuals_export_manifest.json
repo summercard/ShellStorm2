@@ -1,0 +1,48 @@
+{
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+  "source_blend_sha256": "346fd35879e548a5bcd0181d55476e254994b51665b5b5beb38fe75d3b2429b1",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend",
+  "packages": [
+    {
+      "slug": "west_door_wall_module",
+      "collection": "114_西墙带门墙模块_资产包",
+      "shared_visual_key": "wall_door",
+      "triangles_before": 488,
+      "triangles_after": 404,
+      "downward_triangles_removed": 84,
+      "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
+      "visual_glb_sha256": "2c83308dc16ebe56698025ac2f8e6ec25a7c2c6d78a38fc614a1cf5caeaaa29a"
+    },
+    {
+      "slug": "east_door_wall_module",
+      "collection": "12_东墙带门墙模块_资产包",
+      "shared_visual_key": "wall_door",
+      "triangles_before": 488,
+      "triangles_after": 404,
+      "downward_triangles_removed": 84,
+      "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
+      "visual_glb_sha256": "2c83308dc16ebe56698025ac2f8e6ec25a7c2c6d78a38fc614a1cf5caeaaa29a"
+    },
+    {
+      "slug": "west_door_lift_instance",
+      "collection": "115_西侧滑升门运行时实例_资产包",
+      "shared_visual_key": "door_lift",
+      "triangles_before": 276,
+      "triangles_after": 230,
+      "downward_triangles_removed": 46,
+      "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb",
+      "visual_glb_sha256": "90e0e75536550e8b445dd91aad5a17a68f9e37329d371050d7ce4f16e57b68f3"
+    },
+    {
+      "slug": "east_personnel_security_door",
+      "collection": "71_正式人员安全门_资产包",
+      "shared_visual_key": "door_lift",
+      "triangles_before": 276,
+      "triangles_after": 230,
+      "downward_triangles_removed": 46,
+      "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb",
+      "visual_glb_sha256": "90e0e75536550e8b445dd91aad5a17a68f9e37329d371050d7ce4f16e57b68f3"
+    }
+  ]
+}

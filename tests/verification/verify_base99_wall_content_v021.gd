@@ -1,6 +1,7 @@
 extends Node
 
 const WALL_CONTENT_ID := "ENV-BASE99-WALL-CONTENTS-V021"
+const IMPORT_LEDGER_PATH := "res://assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
 const REQUIRED_CHILDREN := [
 	"二楼后墙服务管线",
 	"二楼工具洞洞板",
@@ -32,7 +33,13 @@ func _ready() -> void:
 			for child_name in REQUIRED_CHILDREN:
 				_expect(wall_content.get_node_or_null(child_name) != null, "缺少墙面内容包: %s" % child_name, failures)
 			_expect_mesh_near(wall_content, "BASE_STATUS状态终端", Vector3(8.38, 1.62, -3.58), 0.08, failures)
-			_expect_mesh_near(wall_content, "南墙资料板组", Vector3(2.4, 4.65, 14.51), 0.08, failures)
+			_expect_mesh_near(
+				wall_content,
+				"南墙资料板组",
+				_optimized_expected_center("south_wall_information_boards"),
+				0.08,
+				failures,
+			)
 			_expect_mesh_near(wall_content, "东墙WORK_TOGETHER海报", Vector3(14.14, 4.72, 8.45), 0.08, failures)
 			for descendant_value in wall_content.find_children("*", "CollisionObject3D", true, false):
 				_expect(false, "墙面内容产生了不应存在的碰撞节点: %s" % (descendant_value as Node).get_path(), failures)
@@ -53,6 +60,23 @@ func _ready() -> void:
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(message)
+
+
+func _optimized_expected_center(slug: String) -> Vector3:
+	var json := JSON.new()
+	if json.parse(FileAccess.get_file_as_string(IMPORT_LEDGER_PATH)) != OK:
+		return Vector3.INF
+	for item in json.data.get("packages", []):
+		var package: Dictionary = item
+		if str(package.get("slug", "")) != slug:
+			continue
+		var bbox: Dictionary = package.get("bbox_blender", {})
+		var lo: Array = bbox.get("min", [])
+		var hi: Array = bbox.get("max", [])
+		if lo.size() != 3 or hi.size() != 3:
+			return Vector3.INF
+		return Vector3((float(lo[0]) + float(hi[0])) * 0.5, (float(lo[2]) + float(hi[2])) * 0.5, -(float(lo[1]) + float(hi[1])) * 0.5)
+	return Vector3.INF
 
 
 func _expect_mesh_near(root: Node, package_name: String, expected: Vector3, tolerance: float, failures: Array[String]) -> void:

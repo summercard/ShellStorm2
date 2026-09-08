@@ -6,7 +6,7 @@ const GROUND_SCENE := preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_root_top3d_v003.tscn"
 )
 const LOFT_SCENE := preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_loft_floor_finish_v020/env_base99_loft_floor_finish_v020_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_root_top3d_v003.tscn"
 )
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 
@@ -17,7 +17,7 @@ func _ready() -> void:
 	_validate_standalone_visual_packages(failures)
 	await _validate_runtime_placement(failures)
 	if failures.is_empty():
-		print("BASE99_FLOOR_VISUALS_V021_PASS: Blender V020 full-floor replacement, old MultiMesh removal, collision and placement verified")
+		print("BASE99_FLOOR_VISUALS_V021_PASS: Blender V021 full-floor replacement, old MultiMesh removal, collision and placement verified")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -37,7 +37,7 @@ func _validate_standalone_visual_packages(failures: Array[String]) -> void:
 	ground.queue_free()
 	var loft := LOFT_SCENE.instantiate() as Node3D
 	add_child(loft)
-	_validate_visual_package(loft, 1, 2, "二层地板面层", failures)
+	_validate_visual_package(loft, 13, 13, "二层地板面层", failures)
 	loft.queue_free()
 
 
@@ -94,8 +94,8 @@ func _validate_runtime_placement(failures: Array[String]) -> void:
 		failures.append("运行时基地没有挂载Blender V021完整地板表现层")
 		tower.queue_free()
 		return
-	if str(visual_root.get_meta("source_blender_version", "")) != "v020":
-		failures.append("运行时地板表现层没有指向Blender v020源文件")
+	if str(visual_root.get_meta("source_blender_version", "")) != "v021":
+		failures.append("运行时地板表现层没有指向Blender v021源文件")
 	if not bool(visual_root.get_meta("visual_replaces_old_multimesh", false)):
 		failures.append("运行时地板装配没有声明替换旧MultiMesh")
 	var ground := visual_root.get_node_or_null("一层36块完整地板_替换旧MultiMesh_仅视觉") as Node3D
@@ -104,11 +104,12 @@ func _validate_runtime_placement(failures: Array[String]) -> void:
 		failures.append("一层深化或二层面层节点缺失")
 	else:
 		_validate_visual_package(ground, 2, 4, "运行时一层完整地板替换", failures)
-		_validate_visual_package(loft, 1, 2, "运行时二层地板面层", failures)
+		_validate_visual_package(loft, 13, 13, "运行时二层地板面层", failures)
 		if not is_zero_approx(loft.position.y):
 			failures.append("二层面层不应保留旧资产调整遗留的Y=-1偏移")
 		_validate_layout_bounds(ground, loft, facility, failures)
-		await _capture_preview(tower, facility, failures)
+		if DisplayServer.get_name() != "headless":
+			await _capture_preview(tower, facility, failures)
 	tower.queue_free()
 	await get_tree().process_frame
 

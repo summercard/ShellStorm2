@@ -116,7 +116,10 @@
       "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v003.glb",
       "source": "assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v010.blend",
       "runtime": "assets/art/props/dungeon_3d/prp_tower_stairwell_generic_9m_v001.tscn",
-      "footprint_size_m": [15.0, 30.0],
+      "footprint_size_m": [
+        15.0,
+        30.0
+      ],
       "grid_unit_m": 5.0,
       "upper_floor_m": 0.0,
       "lower_floor_m": -9.0,
@@ -132,7 +135,10 @@
       "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v003.glb",
       "source": "assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v010.blend",
       "runtime": "assets/art/props/dungeon_3d/prp_tower_stairwell_rooftop_9m_v001.tscn",
-      "footprint_size_m": [15.0, 30.0],
+      "footprint_size_m": [
+        15.0,
+        30.0
+      ],
       "grid_unit_m": 5.0,
       "upper_floor_m": 0.0,
       "lower_floor_m": -9.0,
@@ -148,11 +154,23 @@
       "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_visual_top3d_v004.glb",
       "source": "assets/art/environments/base_facility_3d/source/env_base99_modular_room/env_base99_modular_room_assets_clean_v006.blend",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v004.tscn",
-      "bounds_min": [-10.12375, 0.0, -5.12375],
-      "bounds_max": [10.12375, 5.93, 5.12375],
+      "bounds_min": [
+        -10.12375,
+        0.0,
+        -5.12375
+      ],
+      "bounds_max": [
+        10.12375,
+        5.93,
+        5.12375
+      ],
       "forward_axis": "-Z",
       "version": "v004",
-      "materials": ["01_精工金属_紫色骨架", "02_细腻哑光_青绿大面", "04_柔和自发光_UI灯光"],
+      "materials": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ],
       "geometry": "structure and guardrails only; legacy inset deck skin and 8 tiles removed to reuse V020 floor finish",
       "collision": "continuous deck plus independent guard blockers in PackedScene",
       "interactive": false,
@@ -216,11 +234,23 @@
       "glb": "assets/art/environments/base_facility_3d/components/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_visual_top3d_v003.glb",
       "source": "assets/art/environments/base_facility_3d/source/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_source_v003.blend",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_root_top3d_v003.tscn",
-      "bounds_min": [-9.66, 0.0, -4.66],
-      "bounds_max": [9.65, 4.65, 4.45],
+      "bounds_min": [
+        -9.66,
+        0.0,
+        -4.66
+      ],
+      "bounds_max": [
+        9.65,
+        4.65,
+        4.45
+      ],
       "forward_axis": "-Z",
       "version": "v003",
-      "materials": ["01_精工金属_冷灰骨架", "02_细腻哑光_中灰横向板", "03_清漆反光_浅灰边条"],
+      "materials": [
+        "01_精工金属_冷灰骨架",
+        "02_细腻哑光_中灰横向板",
+        "03_清漆反光_浅灰边条"
+      ],
       "frame_inset_m": 0.55,
       "collision": "three authored panel-aligned permanent PackedScene blockers; physical ray verified",
       "interactive": false,
@@ -1405,6 +1435,30 @@
       "presentation_scale_multiplier": 1.0,
       "interactive": false,
       "standalone": true
+    }
+  },
+  "base_facility_v021_optimized_packages": {
+    "asset_id": "ENV-BASE99-OPTIMIZED-PACKAGES-V021",
+    "version": "v021",
+    "package_count": 30,
+    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "runtime_roots": {
+      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "floor": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn",
+      "layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
+    }
+  },
+  "base_facility_door_visuals_v021": {
+    "asset_id": "ENV-BASE99-DOOR-VISUALS-V021",
+    "version": "v021",
+    "package_count": 4,
+    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
+    "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+    "runtime_roots": {
+      "wall_door": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn",
+      "door_lift": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
     }
   }
 }

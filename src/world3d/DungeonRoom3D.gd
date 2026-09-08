@@ -57,10 +57,10 @@ const BASE99_FLOOR_RIVET_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn"
 )
 const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
 )
 # —— 房间壳体原子件 prefab（B 节）
 const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_v001.tscn")

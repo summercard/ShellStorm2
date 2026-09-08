@@ -26,8 +26,8 @@
       6.010000228881836
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -35,7 +35,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_nightstand",
@@ -67,8 +69,8 @@
       6.114999771118164
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -76,7 +78,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_bedside_lamp",
@@ -107,8 +111,8 @@
       7.230000019073486
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -116,7 +120,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_bedside_rug",
@@ -145,8 +151,8 @@
       6.087500095367432
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -154,7 +160,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_striped_privacy_curtain",
@@ -183,8 +191,8 @@
       6.1620001792907715
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -192,7 +200,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_lounge_sofa",
@@ -221,8 +231,8 @@
       6.089999675750732
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -230,7 +240,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_coffee_table",
@@ -267,8 +279,8 @@
       6.099999904632568
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -276,7 +288,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_lounge_rug",
@@ -305,8 +319,8 @@
       6.088500022888184
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -314,7 +328,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_pouf_01",
@@ -343,8 +359,8 @@
       6.189999580383301
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -352,7 +368,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_pouf_02",
@@ -381,8 +399,8 @@
       6.189999580383301
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -390,7 +408,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_side_table",
@@ -432,8 +452,8 @@
       6.12000036239624
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -441,7 +461,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_computer_workstation",
@@ -473,8 +495,8 @@
       6.039999961853027
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -482,7 +504,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_office_chair",
@@ -511,8 +535,8 @@
       6.121737480163574
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -520,7 +544,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_medical_cabinet",
@@ -549,8 +575,8 @@
       6.119999885559082
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -558,7 +584,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_hanging_plant",
@@ -587,8 +615,8 @@
       7.246000289916992
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -596,7 +624,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_explore_poster",
@@ -625,8 +655,8 @@
       7.220000267028809
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -634,7 +664,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_tool_pegboard",
@@ -663,8 +695,8 @@
       7.380000114440918
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -672,7 +704,9 @@
       "02_细腻哑光_v018公共色盘",
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "loft_floor_finish",
@@ -713,8 +747,8 @@
       5.988999843597412
     ],
     "front": "-Y",
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "unchanged",
     "floor_height": 6.09,
     "material_roles": [
@@ -723,6 +757,8 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "output_batching": "12 modules of 3 plank rows plus original-height substrate; 324 editable source planks preserved"
+    "output_batching": "12 modules of 3 plank rows plus original-height substrate; 324 editable source planks preserved",
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   }
 ]

@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb" id="1_visual"]
+
+[node name="34_床边暖灰地毯_资产包" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-OPTIMIZED-V021::loft_bedside_rug"
+metadata/asset_version = "v021"
+metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend"
+metadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend"
+metadata/source_collection = "34__02_游戏输出_整合模型"
+metadata/forward = "-Y"
+metadata/triangles_before = 440
+metadata/triangles_after = 272
+metadata/downward_triangles_removed = 168
+metadata/collision_policy = "visual_only_no_collision"
+metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

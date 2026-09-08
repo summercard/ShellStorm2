@@ -51,15 +51,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       1,
       0,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "heavy_supply_shelf",
@@ -107,15 +109,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       0,
       1,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "backup_generator",
@@ -160,15 +164,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       0,
       1,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "battery_bank",
@@ -213,15 +219,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       0,
       1,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "industrial_water_tank",
@@ -265,15 +273,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       1,
       0,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "water_purifier",
@@ -318,15 +328,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       1,
       0,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "air_compressor",
@@ -370,15 +382,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       0,
       1,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "hose_reel",
@@ -422,15 +436,17 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       1,
       0,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   },
   {
     "package_id": "south_wall_information_boards",
@@ -474,14 +490,16 @@
       "03_清漆反光_v018公共色盘",
       "04_柔和自发光_v018公共色盘"
     ],
-    "exported": false,
-    "runtime_integrated": false,
+    "exported": true,
+    "runtime_integrated": true,
     "collision": "not_modified",
     "fixed_display_attachments": true,
     "front_direction": [
       1,
       0,
       0
-    ]
+    ],
+    "runtime_version": "v021_optimized",
+    "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
   }
 ]

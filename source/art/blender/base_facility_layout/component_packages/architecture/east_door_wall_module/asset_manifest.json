@@ -1,11 +1,11 @@
 {
-  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
   "package_id": "ENV-BASE99-ART-LAYOUT-3D::east_door_wall_module",
   "display_name": "12_东墙带门墙模块_资产包",
   "asset_slug": "east_door_wall_module",
   "category": "architecture",
-  "version": "v017",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "version": "v021",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
   "object_count": 3,
   "mesh_count": 1,
   "light_count": 0,
@@ -27,9 +27,9 @@
   "forward_axis": "Blender +Y north",
   "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_east_door_wall_module",
   "collider_names": [],
-  "expected_export": "east_door_wall_module_visual_top3d_v001.glb",
+  "expected_export": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "not_exported",
+  "export_status": "exported_v021_shared_visual",
   "component_set": "base99_east_door_wall_set",
   "component_set_role": "host_wall_and_wall_owned_door_frame",
   "scene_anchor_m": [
@@ -38,7 +38,7 @@
     0.0
   ],
   "scene_bay": "保留东墙_03（北段）",
-  "visual_revision": "v017_east_door_wall_palette_aligned_004",
+  "visual_revision": "v021_shared_east_west_door_visuals",
   "base_wall_core_dimensions_m": {
     "depth": 1.1712,
     "width": 5.0,
@@ -86,5 +86,10 @@
   },
   "visual_source": "west double-sided approved set copied as independent east mesh data",
   "double_sided_design": true,
-  "palette_alignment": "Only material-slot-1 main wall panels use shared PaletteUV cell (9,9), matching adjacent east wall modules. Portal frame and door assets retain their own cells."
+  "palette_alignment": "Only material-slot-1 main wall panels use shared PaletteUV cell (9,9), matching adjacent east wall modules. Portal frame and door assets retain their own cells.",
+  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn",
+  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
+  "runtime_owner": "DungeonRoom3D + RoomDoor3D",
+  "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
+  "shared_runtime_visual_contract": "East and west authored packages share this visual AssetID; only the existing runtime prefab is replaced."
 }
