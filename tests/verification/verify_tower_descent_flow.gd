@@ -295,6 +295,17 @@ func _ready() -> void:
 		"塔楼摄像机FOV不是65度",
 		failures
 	)
+	var camera_attributes := tower.player.camera.attributes as CameraAttributesPractical
+	_expect(
+		camera_attributes != null
+		and camera_attributes.dof_blur_near_enabled
+		and is_equal_approx(camera_attributes.dof_blur_near_distance, 7.0)
+		and is_equal_approx(camera_attributes.dof_blur_near_transition, 2.0)
+		and is_equal_approx(camera_attributes.dof_blur_amount, 0.2)
+		and not camera_attributes.dof_blur_far_enabled,
+		"俯视玩法镜头没有保持相机侧7m起的近景虚化，或误开了远景虚化",
+		failures
+	)
 	_expect(
 		not bool(snapshot.get("camera_floor_cutaway_enabled", true))
 		and str(snapshot.get("camera_cutaway_mode", "")) == "occluded_player_silhouette"
