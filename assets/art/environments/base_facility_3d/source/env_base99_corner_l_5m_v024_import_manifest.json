@@ -1,0 +1,33 @@
+{
+  "asset_id": "ENV-TOWER-CORNER-L-5M",
+  "package": "117_基地5米L型转角墙_资产包",
+  "version": "v024",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+  "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-corner_l_5m.blend",
+  "derived_sha256": "4b3949e4a74862dd2a80adb235258b8083441a9506a4c2609baf187c292bacd8",
+  "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
+  "glb_sha256": "c1787aadabc4234664e04dfc5d59f15fdfac6525b466f3f6d8092d7a1553ebfc",
+  "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn",
+  "active_art_layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
+  "export_policy": {
+    "selected_game_output_only": true,
+    "downward_faces_removed": 28,
+    "triangles_before": 168,
+    "triangles_after": 140,
+    "uv_layers": ["PaletteUV"],
+    "embedded_images": false,
+    "visual_axis_contract": "Blender long +X / short +Y -> Godot long +X / short -Z",
+    "horizontal_ribs_per_arm": 5,
+    "godot_post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+  },
+  "godot_contract": {
+    "scope": "TowerFloorStage3D facility 160m outer shell plus the active Base99 art layout; DungeonRoom3D FACILITY modules retain collision only",
+    "visual": "four Blender-authored PaletteUV GLB instances replace the outer-shell corner straight-wall segments",
+    "long_arm_collision_m": [5.0, 9.0, 0.3],
+    "short_arm_collision_m": [0.3, 9.0, 5.0],
+    "collision_origin_long_m": [2.5, 4.5, 0.0],
+    "collision_origin_short_m": [0.0, 4.5, -2.5],
+    "function_preserved": "camera collision configuration continues to target WallCollisionLong and WallCollisionShort"
+  }
+}

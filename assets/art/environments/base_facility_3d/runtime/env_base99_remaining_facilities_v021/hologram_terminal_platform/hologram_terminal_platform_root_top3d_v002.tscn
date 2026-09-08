@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://tools/asset_pipeline/play_imported_animation.gd" id="2_anim"]
 
 [sub_resource type="BoxShape3D" id="Box_bounds"]
-size = Vector3(2.408743, 3.224856, 6.781744)
+size = Vector3(2.408743, 1.824856, 2.408743)
 
 [node name="51_圆形全息设备平台_资产包" type="Node3D"]
 script = ExtResource("2_anim")
@@ -26,5 +26,5 @@ collision_layer = 1
 collision_mask = 1
 
 [node name="OptimizedOutputBounds" type="CollisionShape3D" parent="StaticCollision"]
-position = Vector3(5.000000, 1.652428, -3.906500)
+position = Vector3(5.000000, 0.952428, -1.720000)
 shape = SubResource("Box_bounds")

@@ -1,0 +1,21 @@
+{
+  "package": "42_BASE_CAMP大型卷帘主门_资产包",
+  "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+  "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
+  "derived": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
+  "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
+  "glb_sha256": "d7c15c0461d8c4f0649ff00ed8b78ef5eef9dae05f12b7d81a3af151ee978665",
+  "triangles_before": 17760,
+  "triangles_after": 14972,
+  "bbox_min": [
+    1.850000023841858,
+    3.929999828338623,
+    0.8799999952316284
+  ],
+  "bbox_max": [
+    8.289999961853027,
+    4.839999675750732,
+    3.799999952316284
+  ],
+  "mesh_count": 70
+}

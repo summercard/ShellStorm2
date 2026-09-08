@@ -1,0 +1,41 @@
+{
+  "asset_id": "ENV-BASE99-CORNER-L-5M",
+  "package_id": "ENV-BASE99-ART-LAYOUT-3D::base_corner_l_5m",
+  "display_name": "117_基地5米L型转角墙_资产包",
+  "asset_slug": "base_corner_l_5m",
+  "category": "architecture",
+  "version": "v024",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+  "independent_asset_blend": "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend",
+  "blender_collection": "117_基地5米L型转角墙_资产包",
+  "editable_collection": "117_01_制作组件_已统一材质",
+  "game_output_collection": "117_02_游戏输出_整合模型",
+  "collision_collection": "117_03_碰撞代理_Godot规格",
+  "object_names": [
+    "基地5米L型转角墙_长臂_制作组件",
+    "基地5米L型转角墙_短臂_制作组件",
+    "基地5米L型转角墙_主体_金属哑光反光",
+    "COLLISION_基地5米L型转角墙_长臂",
+    "COLLISION_基地5米L型转角墙_短臂"
+  ],
+  "root_object": "基地5米L型转角墙_主体_金属哑光反光",
+  "local_origin": "L型内角底部，Blender坐标(0,0,0)",
+  "forward_axis": "Blender +Y / Godot -Z",
+  "arm_length_m": 5.0,
+  "visual_arm_thickness_m": 0.3,
+  "visual_height_m": 8.9,
+  "visual_bounding_size_m": [5.15, 5.15, 8.9],
+  "logical_height_m": 9.0,
+  "collision_shapes_m": [
+    [5.0, 0.3, 9.0],
+    [0.3, 5.0, 9.0]
+  ],
+  "visual_triangles": 168,
+  "material_roles": ["02_细腻哑光_青绿大面_117转角墙外链修正版"],
+  "uv_layers": ["PaletteUV"],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "source_visual_language": "11_四向保留墙体系统_资产包",
+  "expected_export": "env_base99_corner_l_5m_visual_top3d_v001.glb",
+  "collision_status": "Godot v002包装场景保留v001双臂BoxShape3D规格与WallCollisionLong/WallCollisionShort节点契约",
+  "export_status": "v024_derivative_optimized_and_imported_to_godot"
+}

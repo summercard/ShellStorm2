@@ -45,7 +45,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d_v001.tscn" id="43_warehouse_pendant_light_group"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v003.tscn" id="44_water_purifier"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn" id="45_weapon_workshop_station"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d_v001.tscn" id="46_rollup"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d_v002.tscn" id="46_rollup"]
 
 [node name="基地99层剩余非门非墙设施_V021" type="Node3D"]
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021"

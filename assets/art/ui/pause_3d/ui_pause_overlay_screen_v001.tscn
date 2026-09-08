@@ -262,6 +262,11 @@ custom_minimum_size = Vector2(390, 50)
 layout_mode = 2
 text = "电影色彩分级\n轻微增强对比、饱和与白点"
 
+[node name="SceneParticles" type="CheckButton" parent="Center/Panel/Margin/GraphicsPage/Scroll/Grid"]
+custom_minimum_size = Vector2(390, 50)
+layout_mode = 2
+text = "场景氛围粒子\n关闭后可显著降低 GPU 与 draw call 开销"
+
 [node name="Footer" type="HBoxContainer" parent="Center/Panel/Margin/GraphicsPage"]
 layout_mode = 2
 theme_override_constants/separation = 14

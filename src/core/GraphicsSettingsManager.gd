@@ -16,6 +16,7 @@ const DEFAULT_SETTINGS := {
 	"distance_fog": true,
 	"shadow_quality": "high",
 	"color_grading": true,
+	"scene_particles": true,
 }
 const AA_MODES := ["off", "fxaa", "msaa_2x", "msaa_4x", "msaa_8x", "taa"]
 const SHADOW_QUALITY_MODES := ["low", "medium", "high"]

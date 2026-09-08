@@ -1,0 +1,14 @@
+{
+  "version": "v024",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+  "package_count": 1,
+  "packages": [
+    {
+      "asset_id": "ENV-BASE99-CORNER-L-5M",
+      "collection": "117_基地5米L型转角墙_资产包",
+      "category": "architecture",
+      "manifest": "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/asset_manifest.json",
+      "status": "v024_derivative_optimized_and_imported_to_godot"
+    }
+  ]
+}

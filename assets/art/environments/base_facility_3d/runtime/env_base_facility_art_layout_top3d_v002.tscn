@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
 
@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn" id="17_wall_contents"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn" id="18_remaining_facilities"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_root_top3d_v001.tscn" id="19_underdeck"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb" id="21_corner_visual"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1
@@ -50,7 +51,7 @@ script = ExtResource("20_fixture_glow")
 metadata/layout_contract = "只编辑位置、旋转、灯光和美术装饰；设施ID与玩法由代码桥接"
 metadata/runtime_owner = "TowerDescent3D._install_facilities"
 metadata/source_blend = "base_facility_runtime_layout_hq_v023.blend"
-metadata/art_revision = "v023_stair_bed_reimport"
+metadata/art_revision = "v024_corner_l_5m_import"
 
 [node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="."]
 metadata/editor_guide = true
@@ -76,6 +77,35 @@ mesh = SubResource("MeshBoundaryEW")
 
 [node name="基地结构组件_可移动旋转" type="Node3D" parent="."]
 metadata/usage = "V017→V021结构资产保留Blender烘焙坐标；碰撞由各独立Prefab维护"
+
+; Base99 的四个转角由该美术布置层直接持有视觉；DungeonRoom3D 继续保留
+; 对应的既有双臂碰撞节点，避免视觉替换影响相机和角色阻挡。
+[node name="V024西北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
+position = Vector3(-15, 0, -15)
+rotation = Vector3(0, -1.570796, 0)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
+
+[node name="V024东北L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
+position = Vector3(15, 0, -15)
+rotation = Vector3(0, 3.141593, 0)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
+
+[node name="V024西南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
+position = Vector3(-15, 0, 15)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
+
+[node name="V024东南L型转角墙_仅视觉" parent="基地结构组件_可移动旋转" instance=ExtResource("21_corner_visual")]
+position = Vector3(15, 0, 15)
+rotation = Vector3(0, 1.570796, 0)
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
 
 [node name="BlenderV021完整地板表现_仅视觉" parent="." instance=ExtResource("16_floor_visuals_v021")]
 metadata/usage = "Blender V020完整地板替换旧DungeonRoom3D基础砖MultiMesh；FloorSupport碰撞保持原6×6×5m规格"

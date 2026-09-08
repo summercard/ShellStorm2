@@ -36,6 +36,9 @@ const POLISHED_FLOOR_SCENE: PackedScene = preload(
 const WALL_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn"
 )
+const BASE99_CORNER_L_VISUAL: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb"
+)
 const PARAPET_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m_v001.tscn"
 )
@@ -70,6 +73,7 @@ var _floor_visual_dark: MultiMeshInstance3D
 var _protected_floor_visual_light: MultiMeshInstance3D
 var _protected_floor_visual_dark: MultiMeshInstance3D
 var _outer_visual: MultiMeshInstance3D
+var _base99_outer_corner_visuals: Array[Node3D] = []
 var _support_root: StaticBody3D
 var _rooftop_art_instance: Node3D
 var _shell_visible := true
@@ -114,6 +118,8 @@ func set_render_state(_show_floor: bool, _show_outer: bool) -> void:
 		_floor_visual_dark.visible = show_floor
 	if _outer_visual != null:
 		_outer_visual.visible = show_outer
+	for corner_visual in _base99_outer_corner_visuals:
+		corner_visual.visible = show_outer
 	if _rooftop_art_instance != null:
 		_rooftop_art_instance.visible = true
 	_apply_protected_floor_patch_visibility()
@@ -435,24 +441,26 @@ func _build_outer_shell() -> void:
 	var door_transforms: Dictionary = {"north": [], "south": [], "west": [], "east": []}
 	for index in range(outer_grid_dimensions.x):
 		var offset_x := outer_rect.position.x + GRID_UNIT * (float(index) + 0.5)
-		if not _is_in_wall_door_gap("north", index):
-			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
-		else:
+		var is_outer_corner_segment := floor_index == 1 and index in [0, outer_grid_dimensions.x - 1]
+		if _is_in_wall_door_gap("north", index):
 			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset_x, 0.0, north_boundary)))
-		if not _is_in_wall_door_gap("south", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, visual_wall_center_y, south_boundary)))
-		else:
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
+		if _is_in_wall_door_gap("south", index):
 			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(offset_x, 0.0, south_boundary)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, visual_wall_center_y, south_boundary)))
 	for index in range(outer_grid_dimensions.y):
 		var offset_z := outer_rect.position.y + GRID_UNIT * (float(index) + 0.5)
-		if not _is_in_wall_door_gap("west", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, visual_wall_center_y, offset_z)))
-		else:
+		var is_outer_corner_segment := floor_index == 1 and index in [0, outer_grid_dimensions.y - 1]
+		if _is_in_wall_door_gap("west", index):
 			door_transforms["west"].append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, 0.0, offset_z)))
-		if not _is_in_wall_door_gap("east", index):
-			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, visual_wall_center_y, offset_z)))
-		else:
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, visual_wall_center_y, offset_z)))
+		if _is_in_wall_door_gap("east", index):
 			door_transforms["east"].append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, 0.0, offset_z)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, visual_wall_center_y, offset_z)))
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = mesh
@@ -466,6 +474,10 @@ func _build_outer_shell() -> void:
 	_outer_visual.multimesh = multimesh
 	_outer_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	add_child(_outer_visual)
+	if floor_index == 1:
+		_install_base99_outer_corner_visuals(
+			west_boundary, east_boundary, north_boundary, south_boundary
+		)
 
 	# 楼顶：在每个缺口位置摆带门墙预制体（替代被跳过的实墙模块）。
 	if floor_kind == "rooftop":
@@ -491,6 +503,34 @@ func _build_outer_shell() -> void:
 		body.set_meta("camera_lower_wall", side == "south")
 		add_child(body)
 		_add_wall_collision(body, side, wall_height)
+
+
+func _install_base99_outer_corner_visuals(
+	west_boundary: float, east_boundary: float, north_boundary: float, south_boundary: float
+) -> void:
+	# The facility stage is 160m wide. Its four visible perimeter corners used
+	# to be formed by eight generic straight-wall MultiMesh segments. Replace
+	# exactly those segments with the authored 5m L module; boundary collision
+	# remains the continuous existing four-side contract below.
+	var definitions := [
+		{"name": "Base99OuterCorner_NW", "position": Vector3(west_boundary, 0.0, north_boundary), "rotation_y": -PI * 0.5},
+		{"name": "Base99OuterCorner_NE", "position": Vector3(east_boundary, 0.0, north_boundary), "rotation_y": PI},
+		{"name": "Base99OuterCorner_SW", "position": Vector3(west_boundary, 0.0, south_boundary), "rotation_y": 0.0},
+		{"name": "Base99OuterCorner_SE", "position": Vector3(east_boundary, 0.0, south_boundary), "rotation_y": PI * 0.5},
+	]
+	for definition in definitions:
+		var corner := BASE99_CORNER_L_VISUAL.instantiate() as Node3D
+		if corner == null:
+			push_error("Base99 outer corner GLB instance failed")
+			continue
+		corner.name = str(definition["name"])
+		corner.position = definition["position"] as Vector3
+		corner.rotation.y = float(definition["rotation_y"])
+		corner.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
+		corner.set_meta("visual_only", true)
+		corner.set_meta("collision_owner", "TowerFloorStage3D.OuterBoundaryCollision")
+		add_child(corner)
+		_base99_outer_corner_visuals.append(corner)
 
 
 func _outer_visual_transform(basis: Basis, position: Vector3) -> Transform3D:

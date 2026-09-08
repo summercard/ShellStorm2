@@ -33,6 +33,9 @@ const TOWER_PARAPET_DOOR_PREFAB: PackedScene = preload(
 const TOWER_CORNER_L_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_l_5m_v001.tscn"
 )
+const BASE99_CORNER_L_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn"
+)
 const TOWER_CORNER_T_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_t_5m_v001.tscn"
 )
@@ -1202,7 +1205,10 @@ func _build_corner_aware_wall_run(
 ## 拐角 L 拼装。从 4 个角位置以合适的 rotation 报入。
 ## corner_id: "NW" / "NE" / "SW" / "SE"
 func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
-	var module := TOWER_CORNER_L_PREFAB.instantiate() as Node3D
+	# Base99 receives its authored Blender visual. Other tower room types retain
+	# the generic corner asset and its existing material-variant behaviour.
+	var corner_prefab := BASE99_CORNER_L_PREFAB if room_type == "FACILITY" else TOWER_CORNER_L_PREFAB
+	var module := corner_prefab.instantiate() as Node3D
 	module.name = "Imported_CornerL5M_%s" % corner_id
 	module.position = Vector3(corner_pos.x, 0.0, corner_pos.y)
 	# L 默认 long=+X, short=-Z
@@ -1222,6 +1228,10 @@ func _spawn_room_corner(corner_pos: Vector2, corner_id: String) -> void:
 	_configure_corner_camera_collisions(module, corner_id)
 	var corner_variant_index := 0 if corner_id in ["NW", "SE"] else 1
 	_apply_module_material_variant(module, corner_variant_index)
+	# Base99's active art layout owns the Blender corner visual. Keep this room
+	# module collision-only so its legacy visual cannot overlap the layout GLB.
+	if room_type == "FACILITY":
+		_set_corner_visual_visible(module, false)
 	add_child(module)
 
 
@@ -1238,6 +1248,8 @@ func _apply_module_material_variant(module: Node, segment_index: int) -> void:
 	var material := _get_wall_module_material(segment_index)
 	module.set_meta("segment_index", segment_index)
 	module.set_meta("material_variant", variant)
+	if bool(module.get_meta("preserve_authored_palette", false)):
+		return
 	if module is MeshInstance3D:
 		(module as MeshInstance3D).material_override = material
 	for child in module.get_children():
@@ -1249,6 +1261,13 @@ func _apply_module_material_override(root: Node, material: Material) -> void:
 		(root as MeshInstance3D).material_override = material
 	for child in root.get_children():
 		_apply_module_material_override(child, material)
+
+
+func _set_corner_visual_visible(root: Node, is_visible: bool) -> void:
+	if root is GeometryInstance3D:
+		(root as GeometryInstance3D).visible = is_visible
+	for child in root.get_children():
+		_set_corner_visual_visible(child, is_visible)
 
 
 func _count_nodes_with_meta(root: Node, key: String, value: Variant) -> int:

@@ -125,6 +125,7 @@ func _setup_graphics_controls() -> void:
 		"volumetric_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/VolumetricFog,
 		"distance_fog": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/DistanceFog,
 		"color_grading": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/ColorGrading,
+		"scene_particles": $Center/Panel/Margin/GraphicsPage/Scroll/Grid/SceneParticles,
 	}
 	for index in AA_LABELS.size():
 		aa_option.add_item(AA_LABELS[index], index)

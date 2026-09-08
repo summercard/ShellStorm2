@@ -4,8 +4,8 @@
   "display_name": "42_BASE_CAMP大型卷帘主门_资产包",
   "asset_slug": "base_camp_rollup_main_door",
   "category": "underloft",
-  "version": "v017",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "version": "v024",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
   "object_count": 71,
   "mesh_count": 70,
   "light_count": 1,
@@ -95,7 +95,8 @@
   "forward_axis": "Blender +Y north",
   "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_underloft/v017_源资产包_base_camp_rollup_main_door",
   "collider_names": [],
-  "expected_export": "base_camp_rollup_main_door_visual_top3d_v001.glb",
-  "collision_status": "not_authored_in_this_collection_only_pass",
-  "export_status": "not_exported"
+  "expected_export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
+  "collision_status": "runtime_static_box_preserved: size (6.44, 2.92, 0.91), center (5.07, 2.34, -4.385)",
+  "export_status": "approved_runtime",
+  "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d_v002.tscn"
 }

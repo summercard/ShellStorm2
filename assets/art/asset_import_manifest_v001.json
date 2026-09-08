@@ -12,6 +12,17 @@
     "source_controlled_palette_import_contracts": 1,
     "deleted_duplicate_pngs": 51
   },
+  "base99_corner_l_5m_v024": {
+    "asset_id": "ENV-TOWER-CORNER-L-5M",
+    "package": "117_基地5米L型转角墙_资产包",
+    "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+    "derived_export": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-corner_l_5m.blend",
+    "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn",
+    "scope": "TowerFloorStage3D facility 160m outer shell and active Base99 art layout; DungeonRoom3D keeps only the collision nodes",
+    "visual_policy": "Blender authored PaletteUV material; shared palette post-import",
+    "collision_policy": "retains v001 two-arm 5m/9m BoxShape3D contract"
+  },
   "facilities": {
     "locker_station": {
       "name_cn": "赛博储物站",
@@ -1501,5 +1512,35 @@
       "remaining_assembly": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "art_layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn"
     }
+  },
+  "base_rollup_reimport_v024": {
+    "package": "42_BASE_CAMP大型卷帘主门_资产包",
+    "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
+    "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
+    "derived": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
+    "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
+    "glb_sha256": "d7c15c0461d8c4f0649ff00ed8b78ef5eef9dae05f12b7d81a3af151ee978665",
+    "triangles_before": 17760,
+    "triangles_after": 14972,
+    "bbox_min": [
+      1.850000023841858,
+      3.929999828338623,
+      0.8799999952316284
+    ],
+    "bbox_max": [
+      8.289999961853027,
+      4.839999675750732,
+      3.799999952316284
+    ],
+    "mesh_count": 70,
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d_v002.tscn",
+    "assembly": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+    "collision_policy": "unchanged box: optimized bounds match old box (6.44,2.92,0.91) at (5.07,2.34,-4.385)",
+    "verification": {
+      "godot_reimport": "passed",
+      "standalone_scene": "passed: 70 meshes, shared PaletteUV material references, and original door blocker",
+      "preview": "outputs/verification/rollup_reimport_v024.png"
+    },
+    "status": "approved_runtime"
   }
 }
