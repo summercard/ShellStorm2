@@ -20,7 +20,7 @@ COMPONENTS = PROJECT / "assets/art/environments/base_facility_3d/components"
 SOURCE = PROJECT / "source/art/blender/base_facility_layout/component_packages"
 LEDGER = PROJECT / "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json"
 GLOBAL_LEDGER = PROJECT / "assets/art/asset_import_manifest_v001.json"
-POST_IMPORT = "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+POST_IMPORT = "res://tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
 
 VISUALS = {
     "wall_door": {
@@ -66,6 +66,10 @@ def configure_glb_import(glb: Path) -> None:
         raise RuntimeError(f"Godot import contract missing: {contract}")
     text = contract.read_text(encoding="utf-8")
     text = text.replace('import_script/path=""', f'import_script/path="{POST_IMPORT}"')
+    text = text.replace(
+        'import_script/path="res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"',
+        f'import_script/path="{POST_IMPORT}"',
+    )
     text = text.replace("gltf/embedded_image_handling=1", "gltf/embedded_image_handling=0")
     contract.write_text(text, encoding="utf-8")
 

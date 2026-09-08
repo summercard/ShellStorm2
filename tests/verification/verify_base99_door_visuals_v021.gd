@@ -31,6 +31,23 @@ func _validate_visual_root(scene: PackedScene, asset_id: String, collision_owner
 		failures.append("视觉Prefab意外新增碰撞: %s" % visual.name)
 	if visual.find_children("*", "MeshInstance3D", true, false).is_empty():
 		failures.append("视觉Prefab没有导入网格: %s" % visual.name)
+	if asset_id == "ENV-BASE99-WALL-DOOR-5X9":
+		_validate_deep_runtime_metal(visual, failures)
 	if str(visual.get_meta("visual_revision", "")) != "v021_shared_east_west_door_visuals":
 		failures.append("视觉Prefab没有v021来源标识: %s" % visual.name)
 	visual.queue_free()
+
+
+func _validate_deep_runtime_metal(visual: Node3D, failures: Array[String]) -> void:
+	for item in visual.find_children("*", "MeshInstance3D", true, false):
+		var mesh := item as MeshInstance3D
+		for surface in range(mesh.mesh.get_surface_count()):
+			var material := mesh.get_active_material(surface) as BaseMaterial3D
+			if material == null or material.resource_name != "01_精工金属_紫色骨架":
+				continue
+			if material.metallic > 0.35 or material.roughness < 0.54:
+				failures.append("带门墙高反射金属没有转换为游戏内深色金属")
+			if material.albedo_color.r > 0.50:
+				failures.append("带门墙主体亮度仍可能被日照推成白色")
+			return
+	failures.append("带门墙缺少主体金属材质")
