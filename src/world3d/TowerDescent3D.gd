@@ -61,6 +61,7 @@ const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
 const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
+const CAMERA_LOWER_WALL_VIEW_CLEARANCE_M := 0.08
 const CAMERA_WALL_COLLISION_MASK := (
 	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 )
@@ -501,6 +502,10 @@ func _apply_indoor_camera_pose() -> void:
 	var yaw_offset_rad := deg_to_rad(_read_debug_camera_yaw_offset_deg())
 	if not is_zero_approx(yaw_offset_rad):
 		relative_local = Basis(Vector3.UP, yaw_offset_rad) * relative_local
+	# 低位后墙探针只在角色上方约 1 米处取样，无法覆盖位于基地上方的
+	# 100 层围墙。调试镜头拉远后，额外用焦点到最终镜头的真实视线路径
+	# 复查带 camera_lower_wall 标记的墙，并把镜头截在墙内侧。
+	relative_local = _clamp_camera_relative_to_lower_wall(relative_local, focal_local)
 	player.camera.position = focal_local + relative_local
 	var look_target := player.global_position + Vector3(
 		0.0,
@@ -649,7 +654,123 @@ func _find_lower_camera_wall_distance() -> float:
 			if remaining_direction.is_zero_approx():
 				break
 			ray_from = hit_position + remaining_direction * 0.03
+	var view_distance := _find_camera_lower_wall_view_distance()
+	if is_finite(view_distance):
+		nearest_distance = minf(nearest_distance, view_distance)
 	return nearest_distance if is_finite(nearest_distance) else -1.0
+
+
+func _find_camera_lower_wall_view_distance() -> float:
+	if player == null or not player.is_inside_tree():
+		return -1.0
+	var focal_local := Vector3(0.0, CAMERA_LOOK_HEIGHT_M, -CAMERA_LOOK_AHEAD_M)
+	var default_relative := Vector3(
+		0.0,
+		CAMERA_HEIGHT_M + _camera_lift_current_m - _camera_stair_slab_drop_current_m - CAMERA_LOOK_HEIGHT_M,
+		# 用未收镜的标准距离预判。若使用当前已收回的距离，镜头刚避开上层
+		# 围墙就会在下一次探针刷新时失去命中、再向外伸出，形成来回抖动。
+		CAMERA_DEFAULT_TRAILING_M + CAMERA_LOOK_AHEAD_M
+	)
+	var default_magnitude := maxf(default_relative.length(), 0.0001)
+	var requested_relative := default_relative / default_magnitude * maxf(
+		default_magnitude + _read_debug_camera_trailing_offset_m(),
+		0.20
+	)
+	var yaw_offset_rad := deg_to_rad(_read_debug_camera_yaw_offset_deg())
+	if not is_zero_approx(yaw_offset_rad):
+		requested_relative = Basis(Vector3.UP, yaw_offset_rad) * requested_relative
+	var focal_global := player.to_global(focal_local)
+	var requested_camera_global := player.to_global(focal_local + requested_relative)
+	var hit := _find_camera_lower_wall_camera_path_hit(
+		focal_global, requested_camera_global
+	)
+	if hit.is_empty():
+		return -1.0
+	var hit_position := hit.get("position", focal_global) as Vector3
+	var planar_offset := hit_position - player.global_position
+	planar_offset.y = 0.0
+	var trailing := player.global_basis.z
+	trailing.y = 0.0
+	if trailing.length_squared() <= 0.0001:
+		trailing = Vector3.BACK
+	return maxf(0.0, planar_offset.dot(trailing.normalized()))
+
+
+func _clamp_camera_relative_to_lower_wall(
+	relative_local: Vector3, focal_local: Vector3
+) -> Vector3:
+	if player == null or relative_local.length_squared() <= 0.0001:
+		return relative_local
+	var focal_global := player.to_global(focal_local)
+	var requested_camera_global := player.to_global(focal_local + relative_local)
+	var requested_distance := focal_global.distance_to(requested_camera_global)
+	if requested_distance <= 0.0001:
+		return relative_local
+	var hit := _find_camera_lower_wall_camera_path_hit(
+		focal_global, requested_camera_global
+	)
+	if hit.is_empty():
+		return relative_local
+	var hit_position := hit.get("position", focal_global) as Vector3
+	var projected_from := Vector3(
+		focal_global.x, requested_camera_global.y, focal_global.z
+	)
+	var projected_to := Vector3(
+		requested_camera_global.x, requested_camera_global.y, requested_camera_global.z
+	)
+	var projected_distance := projected_from.distance_to(projected_to)
+	# 高处围墙可能让倾斜视线从墙脚下穿过、而最终镜头已越到墙后。此时
+	# 按最终镜头高度投影的水平路径限位，保证镜头本体不会跨过竖直墙面。
+	var distance_for_clamp := requested_distance
+	var hit_distance := focal_global.distance_to(hit_position)
+	if projected_distance > 0.0001 and is_equal_approx(hit_position.y, projected_from.y):
+		distance_for_clamp = projected_distance
+		hit_distance = projected_from.distance_to(hit_position)
+	var safe_distance := maxf(0.20, hit_distance - CAMERA_LOWER_WALL_VIEW_CLEARANCE_M)
+	return relative_local * minf(1.0, safe_distance / distance_for_clamp)
+
+
+func _find_camera_lower_wall_camera_path_hit(from: Vector3, to: Vector3) -> Dictionary:
+	var direct_hit := _find_camera_lower_wall_hit(from, to)
+	if not direct_hit.is_empty():
+		return direct_hit
+	# 对上层围墙，镜头可能在终点高度已经进入墙的竖直范围，但斜向视线恰好
+	# 从墙脚下方通过。使用终点高度的平面投影补查，只影响已标记的镜头后墙。
+	var projected_from := Vector3(from.x, to.y, from.z)
+	var projected_to := Vector3(to.x, to.y, to.z)
+	if projected_from.distance_squared_to(projected_to) <= 0.0001:
+		return {}
+	return _find_camera_lower_wall_hit(projected_from, projected_to)
+
+
+func _find_camera_lower_wall_hit(from: Vector3, to: Vector3) -> Dictionary:
+	if from.distance_squared_to(to) <= 0.0001:
+		return {}
+	var space_state := get_world_3d().direct_space_state
+	var ray_from := from
+	var excluded: Array[RID] = []
+	if player is CollisionObject3D:
+		excluded.append((player as CollisionObject3D).get_rid())
+	for _hit_index in range(CAMERA_LOWER_WALL_MAX_RAY_HITS):
+		var query := PhysicsRayQueryParameters3D.create(
+			ray_from, to, CAMERA_WALL_COLLISION_MASK, excluded
+		)
+		query.collide_with_areas = false
+		query.hit_from_inside = true
+		var hit := space_state.intersect_ray(query)
+		if hit.is_empty():
+			return {}
+		var collider := hit.get("collider") as Node
+		if _is_camera_lower_wall(collider):
+			return hit
+		if collider is CollisionObject3D:
+			excluded.append((collider as CollisionObject3D).get_rid())
+		var hit_position := hit.get("position", ray_from) as Vector3
+		var remaining_direction := ray_from.direction_to(to)
+		if remaining_direction.is_zero_approx():
+			return {}
+		ray_from = hit_position + remaining_direction * 0.03
+	return {}
 
 
 func _update_camera_stair_slab_drop(

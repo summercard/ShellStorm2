@@ -32,6 +32,7 @@ func _ready() -> void:
 		"occluded": facility_snapshot.get("camera_occluded_player"),
 	})
 	_expect_real_wall_cleared("99层基地南墙", tower, facility_snapshot, failures)
+	await _validate_elevated_debug_camera_wall(tower, facility, failures)
 
 	# Combat floors are now committed atomically when the stair arrival door is
 	# opened. The camera test must follow that real lifecycle before asking for
@@ -208,6 +209,38 @@ func _ready() -> void:
 	for failure in failures:
 		push_error("v0.1_REAL_CAMERA_FLOW_FAIL: %s" % failure)
 		get_tree().quit(1)
+
+
+func _validate_elevated_debug_camera_wall(
+	tower: TowerDescent3D, facility: DungeonRoom3D, failures: Array[String]
+) -> void:
+	# 100层围墙从基地上方开始。默认的低位探针不会命中这片模拟墙；只有
+	# 拉远调试镜头后，最终镜头高度进入墙体范围时才应收回。
+	tower.player.global_position = facility.global_position + Vector3(0.0, 0.05, 0.0)
+	var blocker := StaticBody3D.new()
+	blocker.name = "UpperShellCameraLowerWall_South_DebugTest"
+	blocker.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+	blocker.collision_mask = 0
+	blocker.set_meta("camera_lower_wall", true)
+	var collision := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(4.0, 9.0, 0.4)
+	collision.shape = shape
+	blocker.add_child(collision)
+	tower.add_child(blocker)
+	blocker.global_position = tower.player.global_position + Vector3(0.0, 13.5, 2.0)
+	tower.player.adjust_debug_camera_trailing(3.0)
+	await _settle(45)
+	var snapshot := tower.get_tower_snapshot()
+	if not (
+		bool(snapshot.get("camera_lower_wall_detected", false))
+		and tower.player.camera.position.y > 10.0
+		and tower.player.camera.position.z < 1.90
+	):
+		failures.append("调试镜头拉高后越过100层南北围墙")
+	tower.player.reset_debug_camera_adjustments()
+	blocker.queue_free()
+	await _settle(30)
 
 
 func _find_stair_south_camera_wall(connector: Node3D) -> StaticBody3D:
