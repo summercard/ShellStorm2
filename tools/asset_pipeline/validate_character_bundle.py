@@ -1,0 +1,53 @@
+"""Validate hashed transfer records and run character regressions before acceptance."""
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+TESTS=['verify_character_authoring_bundle','verify_player3d_avatar_bounds','verify_player3d_animation_flow','verify_player3d_diy_flow','verify_player3d_head_accessory_flow','verify_player3d_lower_body_socket_flow','verify_player3d_weapon_pose_collision_flow','verify_player3d_state_gallery_flow','verify_3d_reload_state_flow','verify_3d_melee_feedback_flow','verify_avatar_return_persistence_flow']
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('package',type=Path)
+    args=parser.parse_args()
+    root=Path(__file__).resolve().parents[2]
+    package=args.package.resolve()
+    ledger_path=package/'character_transfer_ledger_v009.json'
+    ledger=json.loads(ledger_path.read_text())
+    for entry in ledger['files']+ledger['runtime_files']:
+        path=root/entry['path']
+        assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'], 'Stale file '+str(path)
+    library=json.loads((package/'exports/anim_bunny01_library_v009.json').read_text())
+    assert library['skeleton_sha256']==ledger['skeleton_sha256']
+    for name,clip in library['clips'].items():
+        if clip['loop']:
+            for bone in clip['frames'][0]:
+                for prop in ['p','q','s']:
+                    assert max(abs(a-b) for a,b in zip(clip['frames'][0][bone][prop],clip['frames'][-1][bone][prop]))<0.0001, 'Loop seam '+name
+    logs=root/'outputs/character_pipeline/validation'
+    logs.mkdir(parents=True,exist_ok=True)
+    imported=subprocess.run(['godot','--headless','--path',str(root),'--editor','--quit'],capture_output=True,text=True,timeout=180)
+    assert imported.returncode==0 and 'SCRIPT ERROR' not in imported.stdout+imported.stderr
+    results=[]
+    for test in TESTS:
+        run=subprocess.run(['godot','--headless','--path',str(root),'--scene',f'res://tests/verification/{test}.tscn'],capture_output=True,text=True,timeout=90)
+        output=run.stdout+run.stderr
+        (logs/(test+'.log')).write_text(output)
+        passed=run.returncode==0 and 'ERROR:' not in output
+        results.append({'test':test,'passed':passed,'log':str((logs/(test+'.log')).relative_to(root))})
+        print(test,'PASS' if passed else 'FAIL',flush=True)
+    ledger['validation']=results
+    ledger['status']='validated' if all(r['passed'] for r in results) else 'imported_pending_validation'
+    consumer=root/'scenes/Player3D.tscn'
+    wrapper=str((package/'runtime/chr_bunny01_root_v009.tscn').relative_to(root))
+    if ledger['status']=='validated' and ('res://'+wrapper) in consumer.read_text():
+        ledger['status']='active'
+        ledger['active_consumer']='scenes/Player3D.tscn'
+    else:
+        ledger.pop('active_consumer',None)
+    ledger['remaining_work']=['武器动作覆盖仍采用现有实时程序姿势；后续可逐项替换为Blender剪辑并保留握持约束。','帽子/眼镜既有程序占位未重新建模。']
+    ledger_path.write_text(json.dumps(ledger,ensure_ascii=False,indent=2))
+    assert ledger['status'] in ('validated','active'),'Do not activate a failing bundle'
+
+if __name__=='__main__':main()

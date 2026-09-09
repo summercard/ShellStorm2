@@ -92,6 +92,7 @@ const FEET_COLORS := {
 }
 
 var _player: Node = null
+var _authored_motion := CharacterMotionLibrary3D.new()
 var _elapsed := 0.0
 var _state := "idle"
 var _previous_state := "idle"
@@ -317,6 +318,8 @@ func _ready() -> void:
 			state_vfx.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
 		_apply_bunny_attachment_scale()
 	_apply_customization()
+	if str(get_meta("assembly_version", "")) == "v009":
+		_authored_motion.bind(self)
 
 
 func _process(delta: float) -> void:
@@ -327,18 +330,25 @@ func _process(delta: float) -> void:
 	_read_player_state()
 	_update_orientation(delta)
 	_update_state_motion(delta)
+	if str(get_meta("assembly_version", "")) == "v009":
+		_authored_motion.apply(self, delta)
 	_update_reload_progress_bar()
 	_update_state_materials()
 
 
 func get_component_snapshot() -> Dictionary:
 	var is_bunny := _is_bunny_avatar()
+	var rebased := str(get_meta("assembly_version", "")) == "v009"
+	var right_ring := Vector3.ZERO if rebased else RIGHT_HAND_RING_CENTER_LOCAL
+	var left_ring := Vector3.ZERO if rebased else LEFT_HAND_RING_CENTER_LOCAL
+	var ear_root := Vector3.ZERO if rebased else EAR_ROOT_CENTER_LOCAL
 	var authored_height_m := 1.5 if is_bunny else 1.65
 	var runtime_scale_multiplier := scale.y
 	return {
 		"is_3d": true,
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
-		"assembly_version": "v008" if is_bunny else "v001",
+		"assembly_version": str(get_meta("assembly_version", "v008" if is_bunny else "v001")),
+		"authored_motion_clip": _authored_motion.active_clip,
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
 		"component_space": "pivot_local" if is_bunny else "scene_local",
 		"rig_joint_count": 8 if is_bunny else 0,
@@ -446,27 +456,27 @@ func get_component_snapshot() -> Dictionary:
 		"weapon_fire_style": _weapon_fire_style,
 		"active_grip_hand_count": _active_grip_hand_count,
 		"right_hand_pivot_contract": RIGHT_HAND_PIVOT_CONTRACT,
-		"right_hand_ring_center_local": RIGHT_HAND_RING_CENTER_LOCAL,
-		"left_hand_ring_center_local": LEFT_HAND_RING_CENTER_LOCAL,
+		"right_hand_ring_center_local": right_ring,
+		"left_hand_ring_center_local": left_ring,
 		"right_hand_model_pivot_offset": bunny_hand_r_model.position if bunny_hand_r_model != null else Vector3.ZERO,
 		"right_hand_ring_to_joint_global_distance": (
-			bunny_hand_r_model.to_global(RIGHT_HAND_RING_CENTER_LOCAL).distance_to(bunny_hand_r.global_position)
+			bunny_hand_r_model.to_global(right_ring).distance_to(bunny_hand_r.global_position)
 			if bunny_hand_r_model != null and bunny_hand_r != null else 999.0
 		),
 		"right_hand_ring_to_grip_global_distance": (
-			bunny_hand_r_model.to_global(RIGHT_HAND_RING_CENTER_LOCAL).distance_to(weapon_socket.global_position)
+			bunny_hand_r_model.to_global(right_ring).distance_to(weapon_socket.global_position)
 			if bunny_hand_r_model != null and weapon_socket != null else 999.0
 		),
 		"left_hand_ring_to_joint_global_distance": (
-			(bunny_hand_l.get_node("Model") as Node3D).to_global(LEFT_HAND_RING_CENTER_LOCAL).distance_to(bunny_hand_l.global_position)
+			(bunny_hand_l.get_node("Model") as Node3D).to_global(left_ring).distance_to(bunny_hand_l.global_position)
 			if bunny_hand_l != null and bunny_hand_l.get_node_or_null("Model") != null else 999.0
 		),
 		"ear_l_root_to_socket_global_distance": (
-			(ear_socket_l.get_node("EarAccessory") as Node3D).to_global(EAR_ROOT_CENTER_LOCAL).distance_to(ear_socket_l.global_position)
+			(ear_socket_l.get_node("EarAccessory") as Node3D).to_global(ear_root).distance_to(ear_socket_l.global_position)
 			if ear_socket_l != null and ear_socket_l.get_node_or_null("EarAccessory") != null else 999.0
 		),
 		"ear_r_root_to_socket_global_distance": (
-			(ear_socket_r.get_node("EarAccessory") as Node3D).to_global(EAR_ROOT_CENTER_LOCAL).distance_to(ear_socket_r.global_position)
+			(ear_socket_r.get_node("EarAccessory") as Node3D).to_global(ear_root).distance_to(ear_socket_r.global_position)
 			if ear_socket_r != null and ear_socket_r.get_node_or_null("EarAccessory") != null else 999.0
 		),
 		"hand_l_rotation": bunny_hand_l.rotation if bunny_hand_l != null else Vector3.ZERO,
@@ -1442,6 +1452,8 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 
 
 func _fix_left_ear_mirror_tangent_space() -> void:
+	if str(get_meta("assembly_version", "")) == "v009":
+		return # v009 exports a baked left mesh; no negative-scale tangent repair.
 	# 左耳用 scale = (-1, 1, 1) 复用右耳 GLB。负行列式变换会改变切线空间
 	# 的手性；顶点法线本身会由逆转置矩阵正确变换，不能再额外取反。这里只把
 	# tangent.w 反号，让法线贴图使用正确的副切线方向，并保留原 surface 材质。

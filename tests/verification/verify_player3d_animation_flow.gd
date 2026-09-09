@@ -15,8 +15,8 @@ func _ready() -> void:
 
 	gallery.player.avatar.call("_process", 0.10)
 	var snapshot := gallery.player.avatar.get_component_snapshot()
-	if str(snapshot.get("assembly_version", "")) != "v008":
-		failures.append("Bunny v008 is not the active Player3D asset")
+	if str(snapshot.get("assembly_version", "")) != "v009":
+		failures.append("Bunny v009 is not the active Player3D asset")
 	if (
 		float(snapshot.get("left_hand_ring_to_joint_global_distance", 999.0)) > 0.001
 		or float(snapshot.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001

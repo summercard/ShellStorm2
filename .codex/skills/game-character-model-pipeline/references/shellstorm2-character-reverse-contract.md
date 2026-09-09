@@ -2,6 +2,17 @@
 
 本文件记录当前工程的可核验入口，不代替执行时对目标资产的再次审计。引用路径均相对 ShellStorm2 项目根目录。
 
+## 2026-09-09 生产链更新
+
+当前双文件生产规则见 `docs/v0.1/16.1_角色美术制作与动作导入流程.md`。
+模型：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/source/model/chr_bunny01_model_v009.blend`。
+动作：同包 `source/animation/chr_bunny01_animation_v009.blend`。
+运行包装：同包 `runtime/chr_bunny01_root_v009.tscn`；动作适配：`src/player3d/CharacterMotionLibrary3D.gd`。
+中转账本：同包 `character_transfer_ledger_v009.json`。
+
+导出 `scripts/blender/export_character_bundle.py`；中转校验/包装生成 `tools/asset_pipeline/import_character_bundle.py`；专项 `verify_character_authoring_bundle`。
+v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于理解历史兼容消费者；新母版使用真实共享骨架，骨动作通过表现节点适配器进入原功能层级。
+
 ## 先读的运行时证据
 
 | 目标 | 当前证据 |

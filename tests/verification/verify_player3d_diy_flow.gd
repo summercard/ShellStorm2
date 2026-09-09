@@ -54,7 +54,7 @@ func _ready() -> void:
 		failures.append("Bunny avatar does not expose head/body/hand/feet as four primary modules")
 	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01":
 		failures.append("Player3D does not load the registered bunny01 avatar profile")
-	if str(avatar_snapshot.get("assembly_version", "")) != "v008" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
+	if str(avatar_snapshot.get("assembly_version", "")) != "v009" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
 		failures.append("Bunny v008 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
 	if int(avatar_snapshot.get("ear_count", 0)) != 2 or int(avatar_snapshot.get("ear_socket_count", 0)) != 2 or not bool(avatar_snapshot.get("ears_parented_to_head", false)):
 		failures.append("Bunny ears are not two head-parented accessories on named sockets")

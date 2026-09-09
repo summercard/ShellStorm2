@@ -1,0 +1,93 @@
+class_name CharacterMotionLibrary3D
+extends RefCounted
+## Read-only Blender bone clips mapped to existing presentation nodes.
+## Never writes Player3D, weapons, physics, animation events, or save data.
+
+const LIBRARY_PATH := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/anim_bunny01_library_v009.json"
+static var _cache: Dictionary = {}
+var _time := 0.0
+var _state := ""
+var _nodes: Dictionary = {}
+var active_clip := ""
+
+func bind(avatar: Node3D) -> void:
+	if _cache.is_empty() and FileAccess.file_exists(LIBRARY_PATH):
+		var decoded: Variant = JSON.parse_string(FileAccess.get_file_as_string(LIBRARY_PATH))
+		if decoded is Dictionary and decoded.get("schema") == 1:
+			_cache = decoded
+	_nodes = {"root": avatar.visual_root, "body": avatar.body, "head": avatar.head, "feet": avatar.feet,
+		"hand_l": avatar.bunny_hand_l, "hand_r": avatar.bunny_hand_r,
+		"foot_l": avatar.foot_l, "foot_r": avatar.foot_r,
+		"ear_l": avatar.ear_socket_l, "ear_r": avatar.ear_socket_r}
+
+func apply(avatar: Node3D, delta: float) -> void:
+	var state: String = avatar.get("_state")
+	var clips: Dictionary = _cache.get("clips", {})
+	if not clips.has(state):
+		return
+	if _state != state:
+		_time = 0.0
+		_state = state
+	var clip: Dictionary = clips[state]
+	var duration: float = clip.duration
+	var rate := 1.0
+	if state == "moving" and avatar.get("_player") != null:
+		var velocity: Variant = avatar.get("_player").get("velocity")
+		if velocity is Vector3:
+			rate = lerpf(7.8, 11.2, clampf(Vector2(velocity.x, velocity.z).length() / 7.0, 0.0, 1.0)) / 11.2
+	_time += delta * rate
+	var phase := _time / duration
+	match state:
+		"dashing": phase = avatar.get("_dash_animation_progress")
+		"hurt": phase = avatar.get("_hurt_animation_progress")
+		"landing": phase = avatar.get("_landing_animation_progress")
+		"dead":
+			var player: Node = avatar.get("_player")
+			if player != null and player.has_method("get_death_animation_progress"):
+				phase = player.get_death_animation_progress()
+	phase = fposmod(phase, 1.0) if bool(clip.loop) else clampf(phase, 0.0, 1.0)
+	var frames: Array = clip.frames
+	var cursor := phase * (frames.size() - 1)
+	var first := mini(int(cursor), frames.size() - 1)
+	var second := mini(first + 1, frames.size() - 1)
+	var blend := cursor - first
+	for bone: String in _nodes:
+		if bone in ["hand_l", "hand_r"] and bool(avatar.get("_weapon_grip_pose_active")):
+			continue
+		var target: Node3D = _nodes[bone]
+		if target == null: continue
+		var a: Dictionary = frames[first][bone]
+		var b: Dictionary = frames[second][bone]
+		var aim_yaw := target.rotation.y
+		target.position = _vector(a.p).lerp(_vector(b.p), blend)
+		target.quaternion = _quaternion(a.q).slerp(_quaternion(b.q), blend)
+		target.scale = _vector(a.s).lerp(_vector(b.s), blend)
+		if bone == "root": target.rotation.y = aim_yaw
+	# Root yaw and weapon poses stay with the existing aim/grip constraints.
+	# Dynamic shot/charge/knockback feedback remains an overlay, not a state transition.
+	var fire: float = sin(float(avatar.get("_fire_progress")) * PI) * float(avatar.get("_fire_intensity")) if avatar.get("_firing_animation_active") else 0.0
+	var charge: float = float(avatar.get("_charge_progress")) if avatar.get("_charging_animation_active") else 0.0
+	avatar.body.position.y -= (fire * 0.016 + charge * 0.018) * avatar.BUNNY_LINEAR_SCALE
+	avatar.body.scale *= Vector3(1.0 + fire * 0.045, 1.0 - fire * 0.08, 1.0 - fire * 0.025)
+	avatar.head.rotation.x += fire * 0.035
+	avatar.visual_root.position += Vector3(0.0, -fire * 0.018 - charge * 0.026, fire * 0.045) * avatar.BUNNY_LINEAR_SCALE
+	avatar.visual_root.scale *= Vector3(1.0 + fire * 0.055 - charge * 0.035, 1.0 - fire * 0.075 - charge * 0.055, 1.0 - fire * 0.035 - charge * 0.035)
+	if bool(avatar.get("_knockback_animation_active")):
+		var impulse: Vector3 = avatar.get("_knockback_direction")
+		var pulse := sin(float(avatar.get("_knockback_progress")) * PI)
+		impulse = impulse.rotated(Vector3.UP, -avatar.visual_root.rotation.y)
+		impulse.y = 0.0
+		avatar.visual_root.position += (impulse.normalized() * pulse * 0.16 + Vector3.UP * pulse * 0.045) * avatar.BUNNY_LINEAR_SCALE
+		avatar.visual_root.scale *= Vector3(1.0 + pulse * 0.10, 1.0 - pulse * 0.13, 1.0 + pulse * 0.07)
+	if bool(avatar.get("_melee_animation_active")):
+		var pulse := sin(float(avatar.get("_melee_progress")) * PI)
+		var side := -1.0 if int(avatar.get("_melee_combo_step")) == 1 else 1.0
+		avatar.visual_root.position += Vector3(-side * pulse * 0.08, -pulse * 0.03, 0.04) * avatar.BUNNY_LINEAR_SCALE
+		avatar.visual_root.rotation.z += side * pulse * 0.16
+	active_clip = state
+
+static func _vector(value: Array) -> Vector3:
+	return Vector3(value[0], value[1], value[2])
+
+static func _quaternion(value: Array) -> Quaternion:
+	return Quaternion(value[0], value[1], value[2], value[3]).normalized()

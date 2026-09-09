@@ -114,7 +114,8 @@ func _ready() -> void:
 	var hand_model_r := hand_joint_r.get_node("Model") as Node3D
 	var body_joint := sidearm_player.avatar.get_node("VisualRoot/BunnyRig/BodyJoint") as Node3D
 	var actual_grip_socket := sidearm_player.weapon.find_child("GripSocket", true, false) as Node3D
-	var ring_center := hand_model_r.to_global(PlayerAvatar3D.RIGHT_HAND_RING_CENTER_LOCAL)
+	var ring_local: Vector3 = sidearm_player.avatar.get_component_snapshot()["right_hand_ring_center_local"]
+	var ring_center := hand_model_r.to_global(ring_local)
 	var hand_joint_position := hand_joint_r.global_position
 	var grip_position := actual_grip_socket.global_position if actual_grip_socket != null else sidearm_player.avatar.weapon_socket.global_position
 	_add_debug_bone(rig_overlay, body_joint.global_position + Vector3(0.0, 0.08, 0.0), hand_joint_position, Color("ffd447"), 0.010)
