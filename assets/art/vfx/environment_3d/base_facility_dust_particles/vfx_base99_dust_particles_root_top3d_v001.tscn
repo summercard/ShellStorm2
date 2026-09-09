@@ -17,13 +17,8 @@ transparency = 1
 blend_mode = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
-albedo_color = Color(18.892157, 15.652424, 18.892157, 0.38039216)
+albedo_color = Color(1.4314708, 2.6842701, 3.249258, 0.38039216)
 albedo_texture = ExtResource("1_glow")
-albedo_color = Color(0.42, 0.82, 1, 0.38)
-emission_enabled = true
-emission_texture = ExtResource("1_glow")
-emission = Color(0.28, 0.70, 1, 1)
-emission_energy_multiplier = 15.0
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="DustQuad"]
@@ -37,7 +32,7 @@ metadata/replaces_asset_package = "64_光束尘埃动效组_资产包"
 metadata/management_policy = "separate_scene_vfx_ledger"
 
 [node name="DustParticles" type="GPUParticles3D" parent="." unique_id=11505150]
-position = Vector3(0, 5.6, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6, 0)
 amount = 250
 lifetime = 11.0
 preprocess = 11.0

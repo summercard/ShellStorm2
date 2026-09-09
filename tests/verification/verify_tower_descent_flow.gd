@@ -270,6 +270,7 @@ func _ready() -> void:
 			failures
 		)
 		base_light_switch.toggle_light()
+		await get_tree().create_timer(6.0).timeout
 		_expect(
 			base_light_switch.is_light_on(),
 			"99层基地灯光总开关不能恢复中央灯",

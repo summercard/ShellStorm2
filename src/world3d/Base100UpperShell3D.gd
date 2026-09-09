@@ -34,6 +34,8 @@ func _build_structure_collision() -> void:
 	var wall_center_y := WALL_BASE_Y + WALL_HEIGHT * 0.5
 	_add_box(body, "NorthWallCollision", Vector3(0.0, wall_center_y, -15.0), Vector3(ROOM_SIZE, WALL_HEIGHT, WALL_THICKNESS), "wall")
 	_add_box(body, "SouthWallCollision", Vector3(0.0, wall_center_y, 15.0), Vector3(ROOM_SIZE, WALL_HEIGHT, WALL_THICKNESS), "wall")
+	_add_camera_lower_wall_proxy("North", Vector3(0.0, wall_center_y, -15.0))
+	_add_camera_lower_wall_proxy("South", Vector3(0.0, wall_center_y, 15.0))
 	_add_box(body, "WestWallCollision", Vector3(-15.0, wall_center_y, 0.0), Vector3(WALL_THICKNESS, WALL_HEIGHT, ROOM_SIZE), "wall")
 	# 东墙在Blender母版z=-7.5位置保留5米门墙槽，连续墙碰撞在此拆分。
 	_add_box(body, "EastWallNorthRunCollision", Vector3(15.0, wall_center_y, -12.5), Vector3(WALL_THICKNESS, WALL_HEIGHT, 5.0), "wall")
@@ -56,6 +58,28 @@ func _build_structure_collision() -> void:
 		"door_frame"
 	)
 	_add_box(body, "RoofCollision", Vector3(0.0, ROOF_Y + ROOF_THICKNESS * 0.5, 0.0), Vector3(ROOM_SIZE, ROOF_THICKNESS, ROOM_SIZE), "roof")
+
+
+func _add_camera_lower_wall_proxy(side: String, center: Vector3) -> void:
+	# 实体结构的九片碰撞共用一个 body，不能直接标记为 camera_lower_wall，
+	# 否则东西墙与封顶也会误触发。南北围墙各加一片仅供镜头探针命中的代理：
+	# 角色、子弹仍只与原结构层碰撞，镜头则能在靠近上层围墙时抬升并收回墙内侧。
+	var proxy := StaticBody3D.new()
+	proxy.name = "UpperShellCameraLowerWall_%s" % side
+	proxy.process_mode = Node.PROCESS_MODE_ALWAYS
+	proxy.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+	proxy.collision_mask = 0
+	proxy.set_meta("base100_upper_shell_camera_proxy", true)
+	proxy.set_meta("camera_lower_wall", true)
+	proxy.set_meta("tower_wall_direction", side.to_lower())
+	add_child(proxy)
+	_add_box(
+		proxy,
+		"%sWallCameraProbeCollision" % side,
+		center,
+		Vector3(ROOM_SIZE, WALL_HEIGHT, WALL_THICKNESS),
+		"camera_lower_wall"
+	)
 
 
 func _add_box(body: StaticBody3D, node_name: String, center: Vector3, size: Vector3, role: String) -> void:

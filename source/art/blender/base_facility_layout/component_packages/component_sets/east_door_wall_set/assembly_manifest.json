@@ -1,7 +1,7 @@
 {
   "assembly_id": "base99_east_door_wall_set",
   "display_name": "基地99层东墙带门组件组",
-  "version": "v021",
+  "version": "v025",
   "anchor_m": [
     15.0,
     2.5,
@@ -31,7 +31,7 @@
       "role": "door_wall_module",
       "asset_slug": "east_door_wall_module",
       "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
-      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn"
+      "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn"
     },
     {
       "role": "lift_door",
@@ -54,10 +54,10 @@
   "runtime_contract": "Wall visual and wall-owned frame are owned by DungeonRoom3D; lift door visual is owned by RoomDoor3D; visual GLBs contain no runtime collision.",
   "east_wall_bay": "保留东墙_03（北段）",
   "swap_note": "带门墙组件由保留东墙_02移动到保留东墙_03；SUPPLY24H单独南移5m，未携带旁侧柜体。",
-  "visual_revision": "v021_shared_east_west_door_visuals",
+  "visual_revision": "v025_plain_wall_panel_palette",
   "visual_source": "west_door_wall_module + west_door_lift_instance geometry copied as independent east package meshes",
   "double_sided_design": true,
-  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-  "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend",
   "direct_replacement_contract": "v021只替换两个既有共享视觉GLB和对应视觉Prefab；保留既有PackedScene根、AssetID、方向、碰撞、RoomDoor3D/DungeonRoom3D脚本、触发与存档职责。"
 }

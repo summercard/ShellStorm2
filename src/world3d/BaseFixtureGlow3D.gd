@@ -5,6 +5,9 @@ extends Node3D
 
 const PALETTE := preload("res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
 const SOFT_EMISSION_TARGET := 2.35
+const STARTUP_BATCH_COUNT := 18
+const STARTUP_FLICKER_BATCHES := [2, 8, 14]
+const STARTUP_DOUBLE_FLICKER_BATCH := 8
 const FIXTURE_PROFILES := [
 	{"name": "BASE_CAMP霓虹标识", "offset": Vector3(0, 0, 0.32), "cool": false, "spill": true, "target": 2.35, "energy": 2.40, "range": 3.8},
 	{"name": "二楼GOOD_VIBES霓虹", "offset": Vector3(0, 0, 0.32), "cool": false, "spill": true, "target": 2.35, "energy": 2.40, "range": 3.8},
@@ -15,13 +18,17 @@ const FIXTURE_PROFILES := [
 	{"name": "61_仓库防爆吊灯组_资产包", "offset": Vector3(0, -0.35, 0), "cool": false, "spill": true, "target": 2.35, "energy": 2.40, "range": 3.8},
 	{"name": "62_主通道应急灯组_资产包", "offset": Vector3.ZERO, "cool": false, "spill": true, "target": 2.35, "energy": 2.40, "range": 3.8},
 	{"name": "50_二楼分层照明支持_资产包", "offset": Vector3.ZERO, "cool": false, "spill": false, "target": 2.35},
-	{"name": "14_西北贴墙L型楼梯_资产包", "offset": Vector3.ZERO, "cool": false, "spill": false, "target": 2.40},
 ]
 
 var _enhanced_surfaces := 0
 var _strong_fixtures := 0
 var _spill_lights := 0
 var _processed_surfaces := {}
+var _controlled_emission_materials: Array[BaseMaterial3D] = []
+var _emission_energy_by_material := {}
+var _controlled_spill_lights: Array[OmniLight3D] = []
+var _presentation_lighting_enabled := true
+var _presentation_starting := false
 
 
 func _ready() -> void:
@@ -46,7 +53,92 @@ func get_presentation_snapshot() -> Dictionary:
 		"strong_fixtures": _strong_fixtures,
 		"enhanced_surfaces": _enhanced_surfaces,
 		"spill_lights": _spill_lights,
+		"controlled_emission_materials": _controlled_emission_materials.size(),
+		"presentation_lighting_enabled": _presentation_lighting_enabled,
+		"presentation_starting": _presentation_starting,
 	}
+
+
+## 基地墙边开关调用此方法。开关是唯一状态源；这里仅同步美术表现，
+## 保留每个材质原有的色彩和HDR能量，恢复时不重新计算也不改写资产。
+func set_presentation_lighting_enabled(enabled: bool) -> void:
+	_presentation_starting = false
+	_presentation_lighting_enabled = enabled
+	for material in _controlled_emission_materials:
+		if material == null or not is_instance_valid(material):
+			continue
+		var restored_energy := float(
+			_emission_energy_by_material.get(
+				material.get_instance_id(), material.emission_energy_multiplier
+			)
+		)
+		material.emission_energy_multiplier = restored_energy if enabled else 0.0
+	for spill_light in _controlled_spill_lights:
+		if spill_light != null and is_instance_valid(spill_light):
+			spill_light.visible = enabled
+
+
+## 约五秒的基地美术灯启动：按稳定批次依次恢复灯具，三个批次会短暂
+## 闪烁。RoomLightSwitch3D 会在第4.5秒并行点亮中央玩法顶灯。
+func play_turn_on_sequence(duration_seconds := 4.2) -> void:
+	set_presentation_lighting_enabled(false)
+	if _controlled_emission_materials.is_empty():
+		_presentation_lighting_enabled = true
+		return
+	_presentation_starting = true
+	var batch_count := mini(STARTUP_BATCH_COUNT, _controlled_emission_materials.size())
+	var batch_duration := maxf(duration_seconds / float(batch_count), 0.04)
+	for batch_index in range(batch_count):
+		var start_index := int(
+			floor(float(batch_index) * _controlled_emission_materials.size() / batch_count)
+		)
+		var end_index := int(
+			floor(float(batch_index + 1) * _controlled_emission_materials.size() / batch_count)
+		)
+		var flickers := STARTUP_FLICKER_BATCHES.has(batch_index)
+		if flickers:
+			var flicker_count := 2 if batch_index == STARTUP_DOUBLE_FLICKER_BATCH else 1
+			for flicker_index in range(flicker_count):
+				_set_material_energy_range(start_index, end_index, 0.16)
+				await get_tree().create_timer(minf(batch_duration * 0.30, 0.075)).timeout
+				_set_material_energy_range(start_index, end_index, 0.0)
+				await get_tree().create_timer(minf(batch_duration * 0.25, 0.06)).timeout
+		_set_material_energy_range(start_index, end_index, 1.0)
+		_set_spill_progress(batch_index + 1, batch_count)
+		var flicker_time := (
+			batch_duration * 0.55
+			* (2.0 if batch_index == STARTUP_DOUBLE_FLICKER_BATCH else 1.0)
+			if flickers
+			else 0.0
+		)
+		await get_tree().create_timer(maxf(batch_duration - flicker_time, 0.01)).timeout
+	_set_material_energy_range(0, _controlled_emission_materials.size(), 1.0)
+	_set_spill_progress(batch_count, batch_count)
+	_presentation_starting = false
+	_presentation_lighting_enabled = true
+
+
+func _set_material_energy_range(start_index: int, end_index: int, factor: float) -> void:
+	for material_index in range(start_index, end_index):
+		var material := _controlled_emission_materials[material_index]
+		if material == null or not is_instance_valid(material):
+			continue
+		var restored_energy := float(
+			_emission_energy_by_material.get(
+				material.get_instance_id(), material.emission_energy_multiplier
+			)
+		)
+		material.emission_energy_multiplier = restored_energy * factor
+
+
+func _set_spill_progress(completed_batches: int, total_batches: int) -> void:
+	var enabled_count := int(
+		ceil(float(completed_batches) * _controlled_spill_lights.size() / total_batches)
+	)
+	for spill_index in range(_controlled_spill_lights.size()):
+		var spill_light := _controlled_spill_lights[spill_index]
+		if spill_light != null and is_instance_valid(spill_light):
+			spill_light.visible = spill_index < enabled_count
 
 
 func _enhance_fixture(fixture: Node3D, palette_image: Image, profile: Dictionary) -> void:
@@ -145,9 +237,17 @@ func _enhance_mesh(
 			visual.material_override = material
 		else:
 			visual.set_surface_override_material(surface, material)
+		_register_controlled_emission_material(material)
 		_processed_surfaces[key] = true
 		_enhanced_surfaces += 1
 	return result
+
+
+func _register_controlled_emission_material(material: BaseMaterial3D) -> void:
+	if material == null or _emission_energy_by_material.has(material.get_instance_id()):
+		return
+	_controlled_emission_materials.append(material)
+	_emission_energy_by_material[material.get_instance_id()] = material.emission_energy_multiplier
 
 
 func _add_light_spill(
@@ -172,4 +272,5 @@ func _add_light_spill(
 	light.distance_fade_enabled = true
 	light.distance_fade_begin = 20.0
 	light.distance_fade_length = 6.0
+	_controlled_spill_lights.append(light)
 	_spill_lights += 1

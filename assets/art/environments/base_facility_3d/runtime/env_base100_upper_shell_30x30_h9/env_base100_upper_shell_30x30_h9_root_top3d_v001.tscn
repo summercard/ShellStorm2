@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn" id="1_plain"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_window_5x9/env_base99_wall_window_5x9_root_top3d_v001.tscn" id="2_window"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn" id="3_door"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn" id="3_door"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn" id="4_floor_plain"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn" id="5_floor_rivet"]
 [ext_resource type="Script" path="res://src/world3d/Base100UpperShell3D.gd" id="6_shell"]
@@ -345,4 +345,3 @@ metadata/instance_count = 1
 position = Vector3(12.5, 18, 12.5)
 metadata/floor_index = 101
 metadata/instance_count = 1
-

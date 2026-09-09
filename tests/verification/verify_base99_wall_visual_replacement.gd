@@ -172,6 +172,14 @@ func _validate_base100_upper_shell(facility: DungeonRoom3D, failures: Array[Stri
 				roof_collision_count += 1
 		if roof_collision_count != 1:
 			failures.append("18米封顶没有唯一屋顶碰撞")
+	for side in ["North", "South"]:
+		var camera_proxy := shell.get_node_or_null(
+			"UpperShellCameraLowerWall_%s" % side
+		) as StaticBody3D
+		if camera_proxy == null \
+			or not bool(camera_proxy.get_meta("camera_lower_wall", false)) \
+			or camera_proxy.collision_layer != GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY:
+			failures.append("100层%s围墙缺少仅镜头抬升碰撞代理" % side)
 	for mesh_value in shell.find_children("*", "MeshInstance3D", true, false):
 		var mesh := mesh_value as MeshInstance3D
 		if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:

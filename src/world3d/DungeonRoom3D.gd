@@ -60,7 +60,7 @@ const BASE99_FLOOR_RIVET_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn"
 )
 const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
@@ -442,6 +442,23 @@ func _add_runtime_detail_child(node: Node) -> void:
 		_detail_root.add_child(node)
 	else:
 		add_child(node)
+
+
+func _bind_facility_presentation_light_control(starts_on: bool) -> void:
+	if room_type != "FACILITY" or _light_switch == null:
+		return
+	var art_layout := get_node_or_null("基地99层_美术布置层")
+	if art_layout == null or not art_layout.has_method("set_presentation_lighting_enabled"):
+		push_warning("基地美术自发光灯控未就绪")
+		return
+	var presentation_callback := Callable(
+		art_layout, "set_presentation_lighting_enabled"
+	)
+	if not _light_switch.light_toggled.is_connected(presentation_callback):
+		_light_switch.light_toggled.connect(presentation_callback)
+	# 总启动时长约五秒；第4.5秒中央顶灯先亮，剩余小灯继续完成启动。
+	_light_switch.configure_turn_on_presentation(art_layout, 5.0)
+	art_layout.call("set_presentation_lighting_enabled", starts_on)
 
 
 func _set_room_light_runtime_state(root: Node) -> void:
@@ -1834,6 +1851,7 @@ func _build_content() -> void:
 	var starts_on := room_type in ["FACILITY", "STAIR_LOBBY", "BOSS"]
 	_light_switch.configure_group(_room_lights, starts_on)
 	_add_runtime_detail_child(_light_switch)
+	_bind_facility_presentation_light_control(starts_on)
 	if room_type == "STAIR_LOBBY":
 		_build_stair_lobby_markings(dimensions)
 	elif room_type == "BOSS":

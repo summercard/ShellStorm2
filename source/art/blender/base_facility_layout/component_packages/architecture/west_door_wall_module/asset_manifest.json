@@ -4,8 +4,8 @@
   "display_name": "114_西墙带门墙模块_资产包",
   "asset_slug": "west_door_wall_module",
   "category": "architecture",
-  "version": "v021",
-  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+  "version": "v025",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
   "object_count": 3,
   "mesh_count": 1,
   "light_count": 0,
@@ -27,11 +27,11 @@
   "forward_axis": "Blender +Y north",
   "editable_source_folder": "01_制作组件_已统一材质/v017_全部制作源_按独立设施归类/v017_源类别_architecture/v017_源资产包_west_door_wall_module",
   "collider_names": [],
-  "expected_export": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
+  "expected_export": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
   "collision_status": "not_authored_in_this_collection_only_pass",
   "export_status": "exported_v021_shared_visual",
-  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v002.tscn",
-  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb",
+  "runtime_prefab": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn",
+  "runtime_visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
   "runtime_component": "wall_door",
   "runtime_owner": "DungeonRoom3D + RoomDoor3D",
   "scene_placement": {
@@ -50,7 +50,7 @@
     "height": 9.0
   },
   "wall_owned_door_frame": "双面闭合门框；与360mm墙芯同中心，外观投影930mm，门框不再脱离墙面。",
-  "visual_revision": "v021_shared_east_west_door_visuals",
+  "visual_revision": "v025_plain_wall_panel_palette",
   "visual_envelope_m": {
     "depth_x": 1.051,
     "width_y": 5.0,
@@ -65,6 +65,7 @@
     "width_y": 2.2,
     "height_z": 2.5
   },
-  "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_door_visuals_v021_import_manifest.json",
-  "shared_runtime_visual_contract": "East and west authored packages share this visual AssetID; only the existing runtime prefab is replaced."
+  "godot_import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json",
+  "shared_runtime_visual_contract": "East and west authored packages share this visual AssetID; only the existing runtime prefab is replaced.",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend"
 }

@@ -1542,5 +1542,14 @@
       "preview": "outputs/verification/rollup_reimport_v024.png"
     },
     "status": "approved_runtime"
+  },
+  "base99_door_wall_palette_v025": {
+    "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+    "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+    "derived_export": "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend",
+    "glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn",
+    "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_door_wall_palette_v025_import_manifest.json",
+    "scope": "Shared east/west Base99 door-wall visual; PaletteUV only."
   }
 }

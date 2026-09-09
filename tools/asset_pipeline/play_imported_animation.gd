@@ -7,6 +7,8 @@ func _ready() -> void:
 		var animations := player.get_animation_list()
 		for animation_name in animations:
 			if animation_name != "RESET":
+				var animation := player.get_animation(animation_name)
+				if animation != null:
+					animation.loop_mode = Animation.LOOP_LINEAR
 				player.play(animation_name)
 				return
-

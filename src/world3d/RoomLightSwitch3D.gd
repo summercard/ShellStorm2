@@ -5,8 +5,12 @@ extends Area3D
 signal light_toggled(is_on: bool)
 
 const INTERACTION_RANGE := 2.2
+const STAGED_MAIN_LIGHT_START_SECONDS := 4.5
 
 var _controlled_lights: Array[WastelandLight3D] = []
+var _turn_on_presentation: Node
+var _turn_on_presentation_duration := 0.0
+var _transitioning := false
 var _player_in_range := false
 var _prompt: Label3D
 var _indicator_material: StandardMaterial3D
@@ -29,6 +33,11 @@ func configure_group(
 			_controlled_lights.append(light)
 			light.set_light_enabled(starts_on)
 	_update_state_visual()
+
+
+func configure_turn_on_presentation(controller: Node, duration_seconds := 4.2) -> void:
+	_turn_on_presentation = controller
+	_turn_on_presentation_duration = maxf(duration_seconds, 0.0)
 
 
 func _ready() -> void:
@@ -66,9 +75,12 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 
 func toggle_light() -> bool:
 	_prune_invalid_lights()
-	if _controlled_lights.is_empty():
+	if _controlled_lights.is_empty() or _transitioning:
 		return false
 	var next_state := not is_light_on()
+	if next_state and _has_turn_on_presentation():
+		_run_turn_on_sequence()
+		return true
 	for light in _controlled_lights:
 		light.set_light_enabled(next_state)
 	_update_state_visual()
@@ -80,9 +92,13 @@ func set_light_on(enabled: bool) -> bool:
 	_prune_invalid_lights()
 	if _controlled_lights.is_empty():
 		return false
+	_transitioning = false
+	var changed := is_light_on() != enabled
 	for light in _controlled_lights:
 		light.set_light_enabled(enabled)
 	_update_state_visual()
+	if changed:
+		light_toggled.emit(enabled)
 	return true
 
 
@@ -104,6 +120,7 @@ func set_prompt_visible(visible_state: bool) -> void:
 func get_snapshot() -> Dictionary:
 	return {
 		"light_on": is_light_on(),
+		"transitioning": _transitioning,
 		"player_in_range": _player_in_range,
 		"has_prompt": _prompt != null,
 		"controlled_light_count": _controlled_lights.size(),
@@ -115,6 +132,35 @@ func _prune_invalid_lights() -> void:
 	for index in range(_controlled_lights.size() - 1, -1, -1):
 		if not is_instance_valid(_controlled_lights[index]):
 			_controlled_lights.remove_at(index)
+
+
+func _has_turn_on_presentation() -> bool:
+	return (
+		_turn_on_presentation != null
+		and is_instance_valid(_turn_on_presentation)
+		and _turn_on_presentation_duration > 0.0
+		and _turn_on_presentation.has_method("play_turn_on_sequence")
+	)
+
+
+func _run_turn_on_sequence() -> void:
+	_transitioning = true
+	_update_state_visual()
+	var presentation_sequence: Variant = _turn_on_presentation.call(
+		"play_turn_on_sequence", _turn_on_presentation_duration
+	)
+	await get_tree().create_timer(STAGED_MAIN_LIGHT_START_SECONDS).timeout
+	if not is_instance_valid(self):
+		return
+	for light in _controlled_lights:
+		if light != null and is_instance_valid(light):
+			light.set_light_enabled(true)
+	await presentation_sequence
+	if not is_instance_valid(self):
+		return
+	_transitioning = false
+	_update_state_visual()
+	light_toggled.emit(true)
 
 
 func _build_visual() -> void:
@@ -174,7 +220,11 @@ func _build_visual() -> void:
 func _update_state_visual() -> void:
 	var enabled := is_light_on()
 	if _prompt != null:
-		_prompt.text = "[E] 关闭中央灯" if enabled else "[E] 开启中央灯"
+		_prompt.text = (
+			"灯光启动中…"
+			if _transitioning
+			else "[E] 关闭中央灯" if enabled else "[E] 开启中央灯"
+		)
 	if _indicator_material != null:
 		var color := Color(0.26, 0.92, 0.50) if enabled else Color(0.78, 0.16, 0.10)
 		_indicator_material.albedo_color = color

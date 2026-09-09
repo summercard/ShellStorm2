@@ -1,0 +1,48 @@
+{
+  "version": "v025",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+  "source_blend_sha256": "9dc8ec865a36dd3ba025cc1f91e2cd17c168c5b4c2dcbb784990fca8c171a85f",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend",
+  "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+  "palette_uv_change": {
+    "material": "02_细腻哑光_青绿大面",
+    "target_cell": [
+      1,
+      3
+    ],
+    "source_cells": [
+      [
+        9,
+        2
+      ],
+      [
+        9,
+        3
+      ]
+    ],
+    "master_objects": {
+      "西墙带门墙体_主体_金属哑光反光": {
+        "faces": 50,
+        "loops": 200
+      },
+      "西墙带门墙体_主体_金属哑光反光__源": {
+        "faces": 50,
+        "loops": 200
+      }
+    },
+    "unchanged": [
+      "geometry",
+      "door opening",
+      "metal frame UV",
+      "accent UV",
+      "collision ownership"
+    ]
+  },
+  "triangles_before": 488,
+  "triangles_after": 404,
+  "downward_triangles_removed": 84,
+  "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
+  "visual_glb_sha256": "f53ea3d4670f437574bef21e9f10d334f83c6bbf58850a7f7a6ab161c76cc9f4",
+  "forward_axis": "Godot -Z",
+  "collision_policy": "DungeonRoom3D + RoomDoor3D unchanged"
+}

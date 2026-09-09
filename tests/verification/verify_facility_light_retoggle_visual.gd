@@ -11,6 +11,7 @@ const FLOOR_SAMPLE_OFFSETS := [
 	Vector3(-10.0, 0.06, 10.0), Vector3(0.0, 0.06, 10.0),
 	Vector3(10.0, 0.06, 10.0),
 ]
+const EXPECTED_ACTIVE_BASE_OMNI_LIGHTS := 9 # 中央玩法灯 + 8盏自发光灯具的局部补光。
 
 var _inspection_camera: Camera3D
 
@@ -59,8 +60,10 @@ func _ready() -> void:
 	):
 		failures.append("99F基地没有收敛为一盏可控、可投影中央灯：%s" % room_snapshot)
 	var active_initial := _count_active_base_omni_lights(tower, facility)
-	if active_initial != 1:
-		failures.append("99F基地开灯时实际活动OmniLight不是1盏：%d" % active_initial)
+	if active_initial != EXPECTED_ACTIVE_BASE_OMNI_LIGHTS:
+		failures.append(
+			"99F基地开灯时活动OmniLight数量不正确：%d" % active_initial
+		)
 	var main_light := facility.find_child("FacilityCeilingLight_Main", true, false) as WastelandLight3D
 	if main_light == null:
 		failures.append("99F基地中央主灯节点不存在")
@@ -91,13 +94,16 @@ func _ready() -> void:
 		failures.append("基地关灯后仍有活动OmniLight照射99F地板")
 
 	light_switch.toggle_light()
+	if not bool(light_switch.get_snapshot().transitioning):
+		failures.append("基地开灯没有进入分批灯光启动序列")
+	await get_tree().create_timer(6.0).timeout
 	await _settle()
 	var reopened := get_viewport().get_texture().get_image()
 	var reopened_samples := _sample_floor_luminances(reopened, facility)
 	var reopened_luminance := _average(reopened_samples)
 	_save_image(reopened, REOPEN_OUTPUT, failures)
-	if _count_active_base_omni_lights(tower, facility) != 1:
-		failures.append("基地重开后没有恢复且仅恢复一盏OmniLight")
+	if _count_active_base_omni_lights(tower, facility) != EXPECTED_ACTIVE_BASE_OMNI_LIGHTS:
+		failures.append("基地重开后没有恢复全部灯具补光")
 
 	if initial_luminance < off_luminance + 0.035:
 		failures.append(
@@ -127,10 +133,13 @@ func _ready() -> void:
 	if failures.is_empty():
 		print(
 			(
-				"FACILITY_LIGHT_RETOGGLE_VISUAL_OK: active_omni=1 range>=28m coverage=%d/9 "
+				"FACILITY_LIGHT_RETOGGLE_VISUAL_OK: active_omni=%d range>=28m coverage=%d/9 "
 				+ "nine_point_initial=%.4f off=%.4f reopened=%.4f"
 			)
-			% [covered_sample_count, initial_luminance, off_luminance, reopened_luminance]
+			% [
+				EXPECTED_ACTIVE_BASE_OMNI_LIGHTS, covered_sample_count,
+				initial_luminance, off_luminance, reopened_luminance,
+			]
 		)
 		get_tree().quit(0)
 		return

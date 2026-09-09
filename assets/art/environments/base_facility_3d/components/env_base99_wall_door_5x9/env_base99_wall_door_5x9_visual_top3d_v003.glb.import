@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cyi5qrwcufxo2"
-path="res://.godot/imported/env_base99_wall_door_5x9_visual_top3d_v002.glb-48060fe1a0586079ef592d6cf520df34.scn"
+uid="uid://1g3str8kgg5p"
+path="res://.godot/imported/env_base99_wall_door_5x9_visual_top3d_v003.glb-5faf236150ea449d60e57bedcb44b469.scn"
 
 [deps]
 
-source_file="res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v002.glb"
-dest_files=["res://.godot/imported/env_base99_wall_door_5x9_visual_top3d_v002.glb-48060fe1a0586079ef592d6cf520df34.scn"]
+source_file="res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb"
+dest_files=["res://.godot/imported/env_base99_wall_door_5x9_visual_top3d_v003.glb-5faf236150ea449d60e57bedcb44b469.scn"]
 
 [params]
 
