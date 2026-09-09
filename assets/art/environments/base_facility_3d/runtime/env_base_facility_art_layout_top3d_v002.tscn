@@ -137,13 +137,6 @@ description = "使用赛博储物站模型管理长期仓储与当前背包"
 menu_scene_path = "res://scenes/VaultMenu.tscn"
 base_size_multiplier = 1.0
 
-[node name="怪物档案台" parent="设施交互节点_可移动旋转" instance=ExtResource("1_generic")]
-position = Vector3(-3, 0, 11.6)
-facility_id = "monster_archive"
-display_name = "怪物档案台"
-menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
-beacon_light_enabled = false
-
 [node name="命运卡收藏室" parent="设施交互节点_可移动旋转" instance=ExtResource("6_retro")]
 position = Vector3(3, 0, 11.6)
 facility_id = "fate_collection"

@@ -2015,17 +2015,20 @@ func _create_room_light(
 
 func _place_light_switch(light_switch: RoomLightSwitch3D, dimensions: Vector2) -> void:
 	if room_type == "FACILITY":
-		# 基地开关固定在西墙内侧，对应基地视图左侧绿色框标注的墙面。
-		# 沿墙偏移 4.2m，避开墙角与北侧入口；面板朝向房间内部。
-		var facility_wall_offset := minf(4.2, dimensions.y * 0.22)
+		# 基地开关放在西侧入口门北面紧邻的第一段5m墙上：
+		# 从该墙段的南边向北取 1/3，保留门洞与开关的分离。
+		var west_door := get_door_node("west")
+		var west_door_along := west_door.position.z if west_door != null else -2.5
+		var wall_unit := TOWER_GEOMETRY.GRID_UNIT_M
+		var north_wall_south_edge := west_door_along - wall_unit * 0.5
 		light_switch.position = Vector3(
 			-dimensions.x * 0.5 + 0.34,
 			0.0,
-			facility_wall_offset,
+			north_wall_south_edge - wall_unit / 3.0,
 		)
 		light_switch.rotation.y = -PI * 0.5
-		light_switch.set_meta("facility_entry_switch_clearance_m", 5.0)
-		light_switch.set_meta("facility_entry_direction", "west_wall_left_marked_area")
+		light_switch.set_meta("facility_entry_switch_clearance_m", wall_unit * 0.5)
+		light_switch.set_meta("facility_entry_direction", "west_entry_north_first_wall")
 		return
 	var side: int = absi(room_seed) % 4
 	var x_margin := minf(4.2, dimensions.x * 0.22)

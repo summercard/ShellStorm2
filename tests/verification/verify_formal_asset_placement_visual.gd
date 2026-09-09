@@ -25,6 +25,7 @@ func _ready() -> void:
 	var workshop := _find_facility(world, "weapon_workshop")
 	var vault := _find_facility(world, "vault")
 	var fate_collection := _find_facility(world, "fate_collection")
+	var monster_archive := _find_facility(world, "monster_archive")
 	var workshop_stool := world.find_child("维修圆凳_独立装饰", true, false) as Node3D
 	var mission_chair := world.find_child("战术指挥椅_独立装饰", true, false) as Node3D
 	var art_layout := world.find_child("基地99层_美术布置层", true, false) as Node3D
@@ -50,7 +51,8 @@ func _ready() -> void:
 		_check(editor_guide != null and not editor_guide.visible, "编辑器参考网格在运行时没有隐藏", failures)
 		_check(light_root != null and light_root.get_child_count() >= 3, "基地可编辑灯组缺失", failures)
 		_check(elevator_anchor != null, "99层电梯可编辑锚点缺失", failures)
-		_check(_count_facilities(art_layout) == 8, "美术布置层没有保留8个交互设施桥接节点", failures)
+		_check(_count_facilities(art_layout) == 7, "美术布置层没有保留7个交互设施桥接节点", failures)
+		_check(monster_archive == null, "基地仍实例化了已下线的怪物档案台", failures)
 		_check(
 			art_layout.transform.is_equal_approx(authored_layout_transform),
 			"运行时重置了基地美术布置层的作者Transform",

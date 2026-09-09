@@ -255,11 +255,12 @@ func _ready() -> void:
 	_expect(base_light_switch != null, "99层基地灯光总开关不存在", failures)
 	if base_light_switch != null:
 		var base_entry_door := base_room.get_door_node("west")
+		var expected_switch_position := Vector3(-14.66, 0.0, -6.6666665)
 		_expect(
 			base_entry_door != null
-			and base_light_switch.position.distance_to(base_entry_door.position) >= 3.8
-			and str(base_light_switch.get_meta("facility_entry_direction", "")) == "west",
-			"99层基地灯开关没有放在入口侧，或离开门交互区过近",
+			and base_light_switch.position.is_equal_approx(expected_switch_position)
+			and str(base_light_switch.get_meta("facility_entry_direction", "")) == "west_entry_north_first_wall",
+			"99层基地灯开关没有放在西侧入口门北侧第一段墙的南侧三分之一处",
 			failures
 		)
 		base_light_switch.toggle_light()
@@ -299,11 +300,11 @@ func _ready() -> void:
 	_expect(
 		camera_attributes != null
 		and camera_attributes.dof_blur_near_enabled
-		and is_equal_approx(camera_attributes.dof_blur_near_distance, 7.0)
+		and is_equal_approx(camera_attributes.dof_blur_near_distance, 5.0)
 		and is_equal_approx(camera_attributes.dof_blur_near_transition, 2.0)
 		and is_equal_approx(camera_attributes.dof_blur_amount, 0.2)
 		and not camera_attributes.dof_blur_far_enabled,
-		"俯视玩法镜头没有保持相机侧7m起的近景虚化，或误开了远景虚化",
+		"俯视玩法镜头没有保持相机侧5m起的近景虚化，或误开了远景虚化",
 		failures
 	)
 	_expect(

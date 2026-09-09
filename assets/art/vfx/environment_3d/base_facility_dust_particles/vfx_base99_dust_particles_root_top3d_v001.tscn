@@ -1,48 +1,47 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://kiq33pblhiaq"]
 
-[ext_resource type="Texture2D" path="res://assets/art/vfx/textures/glow_32.png" id="1_glow"]
+[ext_resource type="Texture2D" uid="uid://c6amwgnoml5yf" path="res://assets/art/vfx/textures/glow_32.png" id="1_glow"]
+
+[sub_resource type="ParticleProcessMaterial" id="DustProcess"]
+emission_shape = 3
+emission_box_extents = Vector3(14.5, 2.6, 15)
+direction = Vector3(1, 1, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 0.05
+gravity = Vector3(0, 0.05, 0)
+scale_max = 6.0
+color = Color(0.72, 0.9, 1, 0.58)
 
 [sub_resource type="StandardMaterial3D" id="DustMaterial"]
 transparency = 1
+blend_mode = 1
 shading_mode = 0
 vertex_color_use_as_albedo = true
+albedo_color = Color(18.892157, 15.652424, 18.892157, 0.38039216)
 albedo_texture = ExtResource("1_glow")
-albedo_color = Color(0.42, 0.82, 1, 0.22)
+albedo_color = Color(0.42, 0.82, 1, 0.38)
 emission_enabled = true
 emission_texture = ExtResource("1_glow")
-emission = Color(0.18, 0.58, 1, 1)
-emission_energy_multiplier = 4.4
+emission = Color(0.28, 0.70, 1, 1)
+emission_energy_multiplier = 15.0
 billboard_mode = 1
 
 [sub_resource type="QuadMesh" id="DustQuad"]
 material = SubResource("DustMaterial")
-size = Vector2(0.04, 0.04)
+size = Vector2(0.02, 0.02)
 
-[sub_resource type="ParticleProcessMaterial" id="DustProcess"]
-emission_shape = 3
-emission_box_extents = Vector3(14.5, 3.6, 15.0)
-direction = Vector3(1, 1, 0)
-spread = 45.0
-initial_velocity_min = 0.05
-initial_velocity_max = 0.25
-gravity = Vector3(0, 0.05, 0)
-scale_min = 1.0
-scale_max = 6.0
-color = Color(0.72, 0.9, 1, 0.42)
-
-[node name="场景特效_光束尘埃粒子" type="Node3D"]
+[node name="场景特效_光束尘埃粒子" type="Node3D" unique_id=1757120007]
 metadata/asset_id = "VFX-BASE99-SCENE-DUST-V001"
 metadata/asset_category = "scene_vfx"
 metadata/replaces_asset_package = "64_光束尘埃动效组_资产包"
 metadata/management_policy = "separate_scene_vfx_ledger"
 
-[node name="DustParticles" type="GPUParticles3D" parent="."]
-position = Vector3(0, 4.6, 0)
-emitting = true
-amount = 500
+[node name="DustParticles" type="GPUParticles3D" parent="." unique_id=11505150]
+position = Vector3(0, 5.6, 0)
+amount = 250
 lifetime = 11.0
 preprocess = 11.0
 randomness = 0.85
-visibility_aabb = AABB(-15, -3.8, -15, 30, 7.6, 30)
+visibility_aabb = AABB(-15, -2.6, -15, 30, 5.2, 30)
 process_material = SubResource("DustProcess")
 draw_pass_1 = SubResource("DustQuad")
