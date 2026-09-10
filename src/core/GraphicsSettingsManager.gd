@@ -57,6 +57,29 @@ const SHADOW_FILTER_QUALITIES := {
 var _settings: Dictionary = DEFAULT_SETTINGS.duplicate(true)
 var _environments: Array[WeakRef] = []
 
+# 调试后处理覆盖：仅供 FlashlightColorTweaker 等临时调试工具写入，
+# 不进入 DEFAULT_SETTINGS / 持久化 cfg，不影响玩家画质档位。键名以
+# "debug_postfx_" 前缀避免和正式键冲突；空字典表示"未启用任何覆盖"。
+const DEBUG_POSTFX_KEYS := [
+	"debug_postfx_anisotropy_strength",
+	"debug_postfx_anisotropy_expansion",
+	"debug_postfx_adjustment_enabled",
+	"debug_postfx_adjustment_hue",
+	"debug_postfx_adjustment_brightness",
+	"debug_postfx_adjustment_contrast",
+	"debug_postfx_adjustment_saturation",
+	"debug_postfx_grain_enabled",
+	"debug_postfx_grain_strength",
+	"debug_postfx_grain_size",
+	# 电视干扰：复用 Environment 现有 glow_* + tonemap_* 字段组合近似 CRT。
+	"debug_postfx_tv_distortion_enabled",
+	"debug_postfx_tv_glow_anisotropy",
+	"debug_postfx_tv_glow_strength",
+	"debug_postfx_tv_glow_hdr_threshold",
+	"debug_postfx_tv_glow_hdr_scale",
+]
+var _debug_postfx: Dictionary = {}
+
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -133,6 +156,55 @@ func get_renderer_summary() -> String:
 	var method := RenderingServer.get_current_rendering_method()
 	var device := RenderingServer.get_current_rendering_driver_name()
 	return "%s / %s" % [method, device]
+
+
+# ---------- 调试后处理覆盖 ----------
+# 由 FlashlightColorTweaker 等临时调试面板写入，实时应用到所有已注册
+# Environment。返回值代表是否真有字段更新（便于面板刷新 value_changed
+# 的回环检测）。
+
+func set_debug_postfx(key: String, value: Variant, apply_now := true) -> bool:
+	if key not in DEBUG_POSTFX_KEYS:
+		return false
+	if _debug_postfx.get(key, null) == value:
+		return true
+	_debug_postfx[key] = value
+	if apply_now:
+		_apply_all()
+	return true
+
+
+func clear_debug_postfx(apply_now := true) -> void:
+	if _debug_postfx.is_empty():
+		return
+	_debug_postfx.clear()
+	if apply_now:
+		_apply_all()
+
+
+func get_debug_postfx_snapshot() -> Dictionary:
+	return _debug_postfx.duplicate()
+
+
+func is_debug_postfx_active() -> bool:
+	return not _debug_postfx.is_empty()
+
+
+# 写入整组调试参数。空值 / 非法键会被忽略；空字典等效于清空。
+func apply_debug_postfx(values: Dictionary, apply_now := true) -> bool:
+	var any := false
+	for key in values.keys():
+		if key in DEBUG_POSTFX_KEYS:
+			_debug_postfx[key] = values[key]
+			any = true
+	if not any and values.is_empty():
+		_debug_postfx.clear()
+		if apply_now:
+			_apply_all()
+		return true
+	if apply_now:
+		_apply_all()
+	return any
 
 
 func _load_settings() -> void:
@@ -293,6 +365,105 @@ func _apply_environment(environment: Environment) -> void:
 	_set_property(environment, "tonemap_mode", Environment.TONE_MAPPER_FILMIC)
 	_set_property(environment, "tonemap_exposure", 1.12)
 	_set_property(environment, "tonemap_white", 1.18)
+
+	_apply_debug_postfx_overrides(environment)
+
+
+func _apply_debug_postfx_overrides(environment: Environment) -> void:
+	# 仅写入 _debug_postfx 中明确存在过的键；空白表示玩家画质档未变。
+	if _debug_postfx.is_empty():
+		return
+	if _debug_postfx.has("debug_postfx_anisotropy_strength"):
+		_set_property(
+			environment,
+			"glow_anisotropy_strength",
+			float(_debug_postfx["debug_postfx_anisotropy_strength"])
+		)
+	if _debug_postfx.has("debug_postfx_anisotropy_expansion"):
+		_set_property(
+			environment,
+			"glow_anisotropy_expansion",
+			float(_debug_postfx["debug_postfx_anisotropy_expansion"])
+		)
+	if _debug_postfx.has("debug_postfx_adjustment_enabled"):
+		_set_property(
+			environment,
+			"adjustment_enabled",
+			bool(_debug_postfx["debug_postfx_adjustment_enabled"])
+		)
+	if _debug_postfx.has("debug_postfx_adjustment_brightness"):
+		_set_property(
+			environment,
+			"adjustment_brightness",
+			float(_debug_postfx["debug_postfx_adjustment_brightness"])
+		)
+	if _debug_postfx.has("debug_postfx_adjustment_contrast"):
+		_set_property(
+			environment,
+			"adjustment_contrast",
+			float(_debug_postfx["debug_postfx_adjustment_contrast"])
+		)
+	if _debug_postfx.has("debug_postfx_adjustment_saturation"):
+		_set_property(
+			environment,
+			"adjustment_saturation",
+			float(_debug_postfx["debug_postfx_adjustment_saturation"])
+		)
+	if _debug_postfx.has("debug_postfx_adjustment_hue"):
+		_set_property(
+			environment,
+			"adjustment_hue",
+			float(_debug_postfx["debug_postfx_adjustment_hue"])
+		)
+
+	# 噪点效果：Environment.grain_* 三件套
+	if _debug_postfx.has("debug_postfx_grain_enabled"):
+		_set_property(
+			environment,
+			"grain_enabled",
+			bool(_debug_postfx["debug_postfx_grain_enabled"])
+		)
+	if _debug_postfx.has("debug_postfx_grain_strength"):
+		_set_property(
+			environment,
+			"grain_strength",
+			float(_debug_postfx["debug_postfx_grain_strength"])
+		)
+	if _debug_postfx.has("debug_postfx_grain_size"):
+		_set_property(
+			environment,
+			"grain_size",
+			float(_debug_postfx["debug_postfx_grain_size"])
+		)
+
+	# 电视干扰：复用 glow_* 字段近似 CRT 漏光 + 横向渐变。
+	# 仅当 tv_distortion_enabled=true 时面板写入的 4 个键才落 Environment；
+	# 关闭时清空 -> 玩家画质档 _apply_environment() 末尾写死的默认基线恢复。
+	if bool(_debug_postfx.get("debug_postfx_tv_distortion_enabled", false)):
+		if _debug_postfx.has("debug_postfx_tv_glow_anisotropy"):
+			_set_property(
+				environment,
+				"glow_anisotropy_strength",
+				float(_debug_postfx["debug_postfx_tv_glow_anisotropy"])
+			)
+		if _debug_postfx.has("debug_postfx_tv_glow_strength"):
+			_set_property(
+				environment,
+				"glow_strength",
+				float(_debug_postfx["debug_postfx_tv_glow_strength"])
+			)
+		if _debug_postfx.has("debug_postfx_tv_glow_hdr_threshold"):
+			_set_property(
+				environment,
+				"glow_hdr_threshold",
+				float(_debug_postfx["debug_postfx_tv_glow_hdr_threshold"])
+			)
+		if _debug_postfx.has("debug_postfx_tv_glow_hdr_scale"):
+			_set_property(
+				environment,
+				"glow_hdr_scale",
+				float(_debug_postfx["debug_postfx_tv_glow_hdr_scale"])
+			)
 
 
 func _set_property(object: Object, property_name: String, value: Variant) -> void:
