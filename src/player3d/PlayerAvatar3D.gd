@@ -318,7 +318,7 @@ func _ready() -> void:
 			state_vfx.scale = Vector3.ONE * BUNNY_LINEAR_SCALE
 		_apply_bunny_attachment_scale()
 	_apply_customization()
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011"]:
+	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.bind(self)
 
 
@@ -330,7 +330,7 @@ func _process(delta: float) -> void:
 	_read_player_state()
 	_update_orientation(delta)
 	_update_state_motion(delta)
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011"]:
+	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.apply(self, delta)
 	_update_reload_progress_bar()
 	_update_state_materials()
@@ -338,7 +338,7 @@ func _process(delta: float) -> void:
 
 func get_component_snapshot() -> Dictionary:
 	var is_bunny := _is_bunny_avatar()
-	var rebased := str(get_meta("assembly_version", "")) in ["v009", "v010", "v011"]
+	var rebased := str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]
 	var right_ring := Vector3.ZERO if rebased else RIGHT_HAND_RING_CENTER_LOCAL
 	var left_ring := Vector3.ZERO if rebased else LEFT_HAND_RING_CENTER_LOCAL
 	var ear_root := Vector3.ZERO if rebased else EAR_ROOT_CENTER_LOCAL
@@ -1452,7 +1452,7 @@ func _set_node_render_layer(root: Node, layer_mask: int) -> void:
 
 
 func _fix_left_ear_mirror_tangent_space() -> void:
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011"]:
+	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
 		return # v009 exports a baked left mesh; no negative-scale tangent repair.
 	# 左耳用 scale = (-1, 1, 1) 复用右耳 GLB。负行列式变换会改变切线空间
 	# 的手性；顶点法线本身会由逆转置矩阵正确变换，不能再额外取反。这里只把

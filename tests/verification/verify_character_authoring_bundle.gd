@@ -1,12 +1,12 @@
 extends Node
 
-const PACKAGE := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/"
+const PACKAGE := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/"
 const OLD := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v008.tscn"
 
 func _ready() -> void:
 	var failures: Array[String] = []
 	var old: Node3D = load(OLD).instantiate()
-	var current: Node3D = load(PACKAGE + "runtime/chr_bunny01_root_v011.tscn").instantiate()
+	var current: Node3D = load(PACKAGE + "runtime/chr_bunny01_root_v021.tscn").instantiate()
 	add_child(old)
 	add_child(current)
 	old.set_process(false)
@@ -17,8 +17,9 @@ func _ready() -> void:
 		failures.append("Rest silhouette changed: %s -> %s" % [old_bounds, new_bounds])
 	for child in current.find_children("*", "CollisionObject3D", true, false):
 		failures.append("Presentation contains physics: " + str(child.get_path()))
-	var library: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE + "exports/anim_bunny01_library_v011.json"))
-	for state in ["idle", "moving", "armed_idle", "armed_moving"]:
+	var library: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE + "exports/anim_bunny01_library_v021.json"))
+	var required := ["idle", "moving", "dashing", "hurt", "locked", "falling", "landing", "dead", "walking", "armed_walking", "armed_moving", "armed_idle"]
+	for state in required:
 		if not library.clips.has(state): failures.append("Missing " + state)
 		else:
 			var clip: Dictionary = library.clips[state]
@@ -45,11 +46,12 @@ func _ready() -> void:
 					failures.append("Base clip deforms mesh: " + clip_name + "/" + joint.name)
 			if armed and current.bunny_hand_r.global_position.distance_to(current.weapon_socket.global_position) > 0.001:
 				failures.append("Authored hand detached from weapon socket")
+	if library.clips.size() != required.size(): failures.append("Unexpected clip count")
 	print("CHARACTER_REST_BOUNDS old=", old_bounds, " new=", new_bounds)
 	old.queue_free()
 	current.queue_free()
 	if failures.is_empty():
-		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, four Blender clips, moving bone playback")
+		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, twelve Blender clips, moving and palm-grip playback")
 		get_tree().quit()
 	else:
 		for failure in failures: push_error(failure)

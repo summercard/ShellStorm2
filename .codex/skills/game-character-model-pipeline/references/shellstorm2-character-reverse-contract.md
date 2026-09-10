@@ -1,18 +1,16 @@
 # ShellStorm2 角色反推资料
 
-当前版为v011 / SKEL-BUNNY01-003。模型面向Blender +Y，导出为Godot -Z，不附加偏航补偿。手臂和腿的原位绑定直链、腰胸归位，四基础动作无骨链拉伸。以制作流程顶部v011章节及新版中转验收记录为准；下面v010未验收说明仅属历史。
-
-当前制作版本已推进到 Bunny v010 / SKEL-BUNNY01-002；模型几何不改，增加腰胸、上下臂、指链、大小腿骨，四个新基础/持枪动作通过 schema 2 对接。当前文件与未验收交付状态以 `docs/v0.1/16.1_角色美术制作与动作导入流程.md` 顶部 v010 章节为准。v009 保留为其余六态依赖与回退版本，不再是当前玩家包装。此次用户明确要求跳过验收，不能沿用 v009 的 PASS 结论。
+当前版为 v021 / SKEL-BUNNY01-004。模型面向 Blender +Y，导出为 Godot -Z，不附加偏航补偿。完整包含八个玩法状态和 walking、armed_walking、armed_moving、armed_idle 四个登记变体，不再依赖 v009/v011 动作。模型几何保持不变，身体表现映射 `body → chest`；持枪时实时 GripSocket 继续拥有双手最终全局变换，Blender 动作负责身体、头、耳、脚等表演轮廓。以制作流程顶部 v021 接入章节及版本中转账本为准；下面 v010/v011 内容仅属历史。
 
 本文件记录当前工程的可核验入口，不代替执行时对目标资产的再次审计。引用路径均相对 ShellStorm2 项目根目录。
 
 ## 2026-09-09 生产链更新
 
 当前双文件生产规则见 `docs/v0.1/16.1_角色美术制作与动作导入流程.md`。
-模型：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/source/model/chr_bunny01_model_v009.blend`。
-动作：同包 `source/animation/chr_bunny01_animation_v009.blend`。
-运行包装：同包 `runtime/chr_bunny01_root_v009.tscn`；动作适配：`src/player3d/CharacterMotionLibrary3D.gd`。
-中转账本：同包 `character_transfer_ledger_v009.json`。
+模型：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend`。
+动作：同包 `source/animation/chr_bunny01_animation_v021.blend`。
+运行包装：同包 `runtime/chr_bunny01_root_v021.tscn`；动作适配：`src/player3d/CharacterMotionLibrary3D.gd`。
+中转账本：同包 `character_transfer_ledger_v021.json`。
 
 导出 `scripts/blender/export_character_bundle.py`；中转校验/包装生成 `tools/asset_pipeline/import_character_bundle.py`；专项 `verify_character_authoring_bundle`。
 v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于理解历史兼容消费者；新母版使用真实共享骨架，骨动作通过表现节点适配器进入原功能层级。

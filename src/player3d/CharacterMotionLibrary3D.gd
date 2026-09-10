@@ -20,7 +20,8 @@ func bind(avatar: Node3D) -> void:
 	_version = str(avatar.get_meta("assembly_version", "v009"))
 	var path := LIBRARY_PATH.replace("v009", _version)
 	_cache = _load_library(path)
-	_fallback = _load_library(LIBRARY_PATH) if _version in ["v010", "v011"] else _cache
+	var cache_clips: Dictionary = _cache.get("clips", {})
+	_fallback = _load_library(LIBRARY_PATH) if not cache_clips.has("dead") else _cache
 	_nodes = {"root": avatar.visual_root, "body": avatar.body, "head": avatar.head, "feet": avatar.feet,
 		"hand_l": avatar.bunny_hand_l, "hand_r": avatar.bunny_hand_r,
 		"foot_l": avatar.foot_l, "foot_r": avatar.foot_r,
@@ -36,11 +37,13 @@ static func _load_library(path: String) -> Dictionary:
 func apply(avatar: Node3D, delta: float) -> void:
 	var state: String = avatar.get("_state")
 	var armed := bool(avatar.get("_weapon_grip_pose_active")) and str(avatar.get("_weapon_class")) in ["sidearm", "longgun"]
-	var clip_name := "armed_" + state if armed and state in ["idle", "moving"] and _version in ["v010", "v011"] else state
 	var clips: Dictionary = _cache.get("clips", {})
-	var authored_v010 := _version in ["v010", "v011"] and clips.has(clip_name)
+	var armed_name := "armed_" + state
+	var clip_name := armed_name if armed and state in ["idle", "moving"] and clips.has(armed_name) else state
+	var authored_anatomical := int(_cache.get("schema", 0)) == 2 and clips.has(clip_name)
 	if not clips.has(clip_name):
 		clips = _fallback.get("clips", {})
+		authored_anatomical = false
 	if not clips.has(clip_name):
 		return
 	if _state != clip_name:
@@ -72,8 +75,10 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var first := mini(int(cursor), frames.size() - 1)
 	var second := mini(first + 1, frames.size() - 1)
 	var blend := cursor - first
-	var support_offset: Vector3 = avatar.bunny_hand_l.global_position - avatar.weapon_socket.global_position
-	if authored_v010 and (armed or not bool(avatar.get("_weapon_grip_pose_active"))):
+	var live_grip_active := bool(avatar.get("_weapon_grip_pose_active"))
+	var live_hand_l_global: Transform3D = avatar.bunny_hand_l.global_transform
+	var live_hand_r_global: Transform3D = avatar.bunny_hand_r.global_transform
+	if authored_anatomical and (armed or not bool(avatar.get("_weapon_grip_pose_active"))):
 		avatar.hand.transform = Transform3D.IDENTITY
 	for bone: String in _nodes:
 		var target: Node3D = _nodes[bone]
@@ -84,27 +89,29 @@ func apply(avatar: Node3D, delta: float) -> void:
 		var position := _vector(a.p).lerp(_vector(b.p), blend)
 		var rotation := _quaternion(a.q).slerp(_quaternion(b.q), blend)
 		var scaling := _vector(a.s).lerp(_vector(b.s), blend)
-		if _version in ["v010", "v011"] and _transition_pose.has(bone) and (authored_v010 or _version == "v010"):
+		if authored_anatomical and _transition_pose.has(bone):
 			var weight := smoothstep(0.0, 1.0, minf(_transition_time / 0.18, 1.0))
 			var previous: Dictionary = _transition_pose[bone]
 			position = (previous.p as Vector3).lerp(position, weight)
 			rotation = (previous.q as Quaternion).slerp(rotation, weight)
 			scaling = (previous.s as Vector3).lerp(scaling, weight)
 		_last_pose[bone] = {"p": position, "q": rotation, "s": scaling}
-		if bone in ["hand_l", "hand_r"] and bool(avatar.get("_weapon_grip_pose_active")) and (not authored_v010 or not armed):
+		# Blender supplies the acting silhouette, but live GripSocket constraints own
+		# the final hands whenever a weapon is present. This prevents an authored
+		# preview pose from changing muzzle alignment or one/two-hand gameplay grips.
+		if bone in ["hand_l", "hand_r"] and live_grip_active:
 			continue
 		target.position = position
 		target.quaternion = rotation
 		target.scale = scaling
 		if bone == "root": target.rotation.y = aim_yaw
-	if authored_v010 and armed:
-		# Authored ready-hand trajectory owns the presentation socket translation.
-		# Actual weapon aim, recoil and reload remain the existing live constraints.
-		avatar.weapon_socket.position = avatar.bunny_hand_r.position + (avatar.get("_reload_offset") as Vector3) + (avatar.get("_action_offset") as Vector3)
-		avatar.bunny_hand_r.global_position = avatar.weapon_socket.global_position
-		avatar.bunny_hand_r.rotation += (avatar.get("_reload_rotation") as Vector3) + (avatar.get("_action_rotation") as Vector3)
-		if str(avatar.get("_weapon_class")) == "longgun" or bool(avatar.get("_reload_animation_active")):
-			avatar.bunny_hand_l.global_position = avatar.weapon_socket.global_position + support_offset
+	# Parent/body motion can move skipped hand nodes indirectly. Restore the complete
+	# live global grip after sampling so GripSocket and support-hand constraints remain exact.
+	if live_grip_active:
+		avatar.bunny_hand_l.global_transform = live_hand_l_global
+		avatar.bunny_hand_r.global_transform = live_hand_r_global
+		if str(avatar.get("_weapon_class")) in ["sidearm", "longgun"]:
+			avatar.bunny_hand_r.global_position = avatar.weapon_socket.global_position
 	# Root yaw and weapon poses stay with the existing aim/grip constraints.
 	# Dynamic shot/charge/knockback feedback remains an overlay, not a state transition.
 	var fire: float = sin(float(avatar.get("_fire_progress")) * PI) * float(avatar.get("_fire_intensity")) if avatar.get("_firing_animation_active") else 0.0

@@ -15,8 +15,8 @@ func _ready() -> void:
 
 	gallery.player.avatar.call("_process", 0.10)
 	var snapshot := gallery.player.avatar.get_component_snapshot()
-	if str(snapshot.get("assembly_version", "")) != "v011":
-		failures.append("Bunny v011 is not the active Player3D asset")
+	if str(snapshot.get("assembly_version", "")) != "v021":
+		failures.append("Bunny v021 is not the active Player3D asset")
 	if (
 		float(snapshot.get("left_hand_ring_to_joint_global_distance", 999.0)) > 0.001
 		or float(snapshot.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001
@@ -58,27 +58,25 @@ func _ready() -> void:
 	# v0.1 的翻滚周期为位移周期的 1.3 倍；90 ms 才进入约 34% 的收腹关键帧。
 	gallery.player.avatar.call("_process", 0.09)
 	snapshot = gallery.player.avatar.get_component_snapshot()
-	var dash_scale := snapshot.get("visual_scale", Vector3.ONE) as Vector3
+	var dash_head_rotation := snapshot.get("head_rotation", Vector3.ZERO) as Vector3
 	if (
 		not bool(snapshot.get("dash_roll_active", false))
 		or float(snapshot.get("dash_roll_progress", 0.0)) < 0.30
-		or absf(float(snapshot.get("visual_pitch", 0.0))) < 1.0
-		or dash_scale.y > 0.82
-		or dash_scale.z < 1.35
+		or str(snapshot.get("authored_motion_clip", "")) != "dashing"
+		or dash_head_rotation.length() < 0.45
 	):
-		failures.append("Dash does not show the exaggerated full-roll tuck key pose")
+		failures.append("Dash does not play the authored Blender roll key pose")
 
 	gallery.run_player_action("hurt")
 	gallery.player.avatar.call("_process", 0.06)
 	snapshot = gallery.player.avatar.get_component_snapshot()
-	var hurt_scale := snapshot.get("visual_scale", Vector3.ONE) as Vector3
 	var head_rotation := snapshot.get("head_rotation", Vector3.ZERO) as Vector3
 	var foot_l_rotation := snapshot.get("foot_l_rotation", Vector3.ZERO) as Vector3
 	var foot_r_rotation := snapshot.get("foot_r_rotation", Vector3.ZERO) as Vector3
 	if (
 		not bool(snapshot.get("hurt_keyframe_active", false))
 		or float(snapshot.get("hurt_animation_progress", 0.0)) <= 0.10
-		or hurt_scale.y > 0.90
+		or str(snapshot.get("authored_motion_clip", "")) != "hurt"
 		or head_rotation.length() < 0.25
 		or maxf(foot_l_rotation.length(), foot_r_rotation.length()) < 0.20
 	):

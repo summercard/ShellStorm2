@@ -97,7 +97,9 @@ def main():
             if schema==2:
                 globals={}
                 for name,rest in component_rest.items():
-                    source='waist' if name=='body' else name
+                    # v012+ binds the coat/body to chest. Sampling waist here
+                    # silently discarded authored chest counter-motion.
+                    source='chest' if name=='body' else name
                     globals[name]=(rig.pose.bones[source].matrix@rig.data.bones[source].matrix_local.inverted()@rest) if source in rig.pose.bones else rest
                 matrices={name:(globals['head'].inverted()@m if name.startswith('ear_') else globals['root'].inverted()@m if name not in ('root','feet') else m) for name,m in globals.items()}
             else:
@@ -107,18 +109,39 @@ def main():
                 p,q,s=matrix.decompose()
                 values[name]={'p':list(p),'q':[q.x,q.y,q.z,q.w],'s':list(s)}
             frames.append(values)
-        clips[action['state_id']]={'duration':float(action['duration']),'loop':bool(action['loop']),'frames':frames}
-    required={'idle','moving','armed_idle','armed_moving'} if schema==2 else {'idle','moving','dashing','hurt','locked','falling','landing','dead'}
-    assert required.issubset(clips), 'Missing production clips'
+        state_id=str(action['state_id'])
+        assert state_id not in clips, 'Duplicate production clip: '+state_id
+        clips[state_id]={'duration':float(action['duration']),'loop':bool(action['loop']),'frames':frames}
+    gameplay={'idle','moving','dashing','hurt','locked','falling','landing','dead'}
+    variants={'walking','armed_walking','armed_moving','armed_idle'}
+    required=gameplay|variants if schema==2 else gameplay
+    assert set(clips)==required, 'Production clip set mismatch: '+str(sorted(set(clips)^required))
+    expected_loops={'idle','moving','locked','walking','armed_walking','armed_moving','armed_idle'}
+    assert {name for name,clip in clips.items() if clip['loop']}==expected_loops, 'Loop flags do not match the state contract'
     animation_json=output/f'anim_bunny01_library_{version}.json'
     animation_json.write_text(json.dumps({'schema':schema,'skeleton_sha256':expected,'clips':clips},separators=(',',':')))
     # Keep a standard animated GLB available for Skeleton3D consumers and DCC review.
+    # Preview meshes (notably the hand-aligned pistol) are authoring aids only. Blender's
+    # selected-object export can still pull armature descendants, so remove every mesh
+    # from this unsaved export scene before writing the animation-only interchange file.
+    # Remove objects from every loaded scene/library, not just the active scene:
+    # linked preview collections can otherwise be gathered by the glTF animator.
+    for obj in list(bpy.data.objects):
+        if obj != rig:
+            bpy.data.objects.remove(obj, do_unlink=True)
+    for mesh in list(bpy.data.meshes):
+        if mesh.users == 0:
+            bpy.data.meshes.remove(mesh)
     bpy.ops.object.select_all(action='DESELECT')
     rig.select_set(True)
     animation_glb=output/f'anim_bunny01_library_{version}.glb'
-    bpy.ops.export_scene.gltf(filepath=str(animation_glb),export_format='GLB',use_selection=True,export_animations=True,export_yup=True)
+    bpy.ops.export_scene.gltf(filepath=str(animation_glb),export_format='GLB',use_selection=True,export_animations=True,export_skins=False,export_morph=False,export_yup=True)
     files=[models[0],motions[0],model_glb,animation_json,animation_glb]+component_files
-    ledger={'schema':1,'asset_id':'CHR-PLY-CAPSULE01-3D-BUNNY01','version':version,'skeleton_id':'SKEL-BUNNY01-001','skeleton_sha256':expected,'status':'exported_pending_godot_validation','animation_adapter':'rigid_node_bone_map','model_components':entries,'clips':{k:{'duration':v['duration'],'loop':v['loop'],'frame_count':len(v['frames'])} for k,v in clips.items()},'files':[{'path':str(p.relative_to(root)),'sha256':digest(p),'bytes':p.stat().st_size} for p in files],'collision_owner':'scenes/Player3D.tscn','authoring_height_m':1.5,'runtime_base_scale':0.7,'runtime_visual_height_m':1.05}
+    previous_ledger=package/f'character_transfer_ledger_{version}.json'
+    previous=json.loads(previous_ledger.read_text()) if previous_ledger.exists() else {}
+    ledger={'schema':1,'asset_id':'CHR-PLY-CAPSULE01-3D-BUNNY01','version':version,'skeleton_id':'SKEL-BUNNY01-001','skeleton_sha256':expected,'status':'exported_pending_godot_validation','animation_adapter':'rigid_node_bone_map','model_components':entries,'clips':{k:{'duration':v['duration'],'loop':v['loop'],'frame_count':len(v['frames'])} for k,v in clips.items()},'files':[{'path':str(p.relative_to(root)),'sha256':digest(p),'bytes':p.stat().st_size} for p in files],'collision_owner':'scenes/Player3D.tscn','authoring_height_m':1.5,'runtime_base_scale':0.7,'runtime_visual_height_m':1.05,
+        'source_validation':previous.get('validation',previous.get('source_validation',{})),
+        'presentation_contract':{'body_source_bone':'chest','weapon_grip':'hand_r_palm','blender_forward':'+Y','godot_forward':'-Z','preview_weapon_exported':False}}
     ledger['skeleton_id']=skeleton_id
     ledger['animation_adapter']='anatomical_to_rigid_node_map' if schema==2 else 'rigid_node_bone_map'
     ledger['skeleton_bones']=[{'name':b.name,'parent':b.parent.name if b.parent else None,'deform':b.use_deform} for b in rig.data.bones]
