@@ -1,0 +1,90 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v019",
+  "status": "authored_pending_export",
+  "runtime_active_version": "v011",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "validation": {
+    "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+    "preserved_curves": {
+      "walking": true,
+      "moving": true,
+      "idle": true,
+      "armed_walking": true,
+      "armed_moving": true,
+      "armed_idle": true
+    },
+    "clips": {
+      "dashing": {
+        "duration": 0.4,
+        "loop": false,
+        "unit_scale_error": 4.76837158203125e-07,
+        "arm_joint_gap": 2.430305843099965e-07,
+        "min_visible_mesh_z": -6.254288018681109e-05,
+        "motion_extent": 1.9999176859855652,
+        "loop_or_hold_error": 0.0
+      },
+      "hurt": {
+        "duration": 0.55,
+        "loop": false,
+        "unit_scale_error": 3.5762786865234375e-07,
+        "arm_joint_gap": 1.0848715046366689e-07,
+        "min_visible_mesh_z": -3.4958054584421916e-06,
+        "motion_extent": 0.7641782760620117,
+        "loop_or_hold_error": 0.0
+      },
+      "locked": {
+        "duration": 1.8,
+        "loop": true,
+        "unit_scale_error": 4.76837158203125e-07,
+        "arm_joint_gap": 1.2293457984924316e-07,
+        "min_visible_mesh_z": -6.069534919106445e-08,
+        "motion_extent": 0.15775924921035767,
+        "loop_or_hold_error": 0.0
+      },
+      "falling": {
+        "duration": 0.65,
+        "loop": false,
+        "unit_scale_error": 3.5762786865234375e-07,
+        "arm_joint_gap": 1.341104507446289e-07,
+        "min_visible_mesh_z": -3.711789986482472e-09,
+        "motion_extent": 1.3318151533603668,
+        "loop_or_hold_error": 0.0
+      },
+      "landing": {
+        "duration": 0.45,
+        "loop": false,
+        "unit_scale_error": 3.5762786865234375e-07,
+        "arm_joint_gap": 9.432752598466828e-08,
+        "min_visible_mesh_z": -1.6762597851993633e-06,
+        "motion_extent": 1.1849777400493622,
+        "loop_or_hold_error": 0.0
+      },
+      "dead": {
+        "duration": 1.2,
+        "loop": false,
+        "unit_scale_error": 3.5762786865234375e-07,
+        "arm_joint_gap": 1.494301193962364e-07,
+        "min_visible_mesh_z": -0.0007349848747253418,
+        "motion_extent": 1.3539203107357025,
+        "loop_or_hold_error": 0.0
+      }
+    },
+    "model_byte_identical_to_v018": true,
+    "death_final_contact_z": 5.960464477539063e-08,
+    "fall_to_landing_pose_error": 0.0,
+    "new_clips_root_motion_error": 0
+  },
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/model/chr_bunny01_model_v019.blend",
+      "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v019/source/animation/chr_bunny01_animation_v019.blend",
+      "sha256": "a46aa28ad7100fb4ddc8368d36d387aba5d261cec0a3c31cf92d7cad48be308a"
+    }
+  ],
+  "scope": "six original unarmed basic states; six v018 locomotion/idle clips preserved; no combat overlays or two-handed authoring",
+  "integration_warning": "Need body->chest and palm grip mapping; remove duplicate procedural roll/death transforms when integrating. Real state progress must still own timing."
+}

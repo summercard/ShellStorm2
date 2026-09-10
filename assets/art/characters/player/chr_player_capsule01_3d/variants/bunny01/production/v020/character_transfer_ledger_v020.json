@@ -1,0 +1,85 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v020",
+  "status": "authored_pending_export",
+  "runtime_active_version": "v011",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "validation": {
+    "capture": {
+      "file": "v018/source/animation/chr_bunny01_animation_v018.blend",
+      "scene": "05_单手持枪_小跑",
+      "frame": 8,
+      "mesh": "吹风机_主体_金属哑光反光.002",
+      "local_location": [
+        0.16671323776245117,
+        0.24394561350345612,
+        -0.10994306951761246
+      ],
+      "unsaved_live_scene_preserved": true,
+      "author_world_grip_delta": [
+        0.16671323776245117,
+        0.07516060769557953,
+        0.012894928455352783
+      ]
+    },
+    "max_pose_shoulder_reach_m": 0.27557730584969187,
+    "preserved_curves": {
+      "walking": true,
+      "moving": true,
+      "idle": true,
+      "dashing": true,
+      "hurt": true,
+      "locked": true,
+      "falling": true,
+      "landing": true
+    },
+    "clips": {
+      "armed_walking": {
+        "scale_error": 3.5762786865234375e-07,
+        "arm_chain_gap": 9.8843121241194e-08,
+        "grip_error": 0,
+        "loop_or_hold_error": 2.984602687326323e-18,
+        "ground_min_z": null,
+        "duration": 1.0
+      },
+      "armed_moving": {
+        "scale_error": 3.5762786865234375e-07,
+        "arm_chain_gap": 8.940696716308594e-08,
+        "grip_error": 0,
+        "loop_or_hold_error": 0.0,
+        "ground_min_z": null,
+        "duration": 0.8
+      },
+      "armed_idle": {
+        "scale_error": 4.76837158203125e-07,
+        "arm_chain_gap": 1.228781230931777e-07,
+        "grip_error": 0,
+        "loop_or_hold_error": 1.9594351543878095e-18,
+        "ground_min_z": null,
+        "duration": 3.2
+      },
+      "dead": {
+        "scale_error": 4.76837158203125e-07,
+        "arm_chain_gap": 2.640492490927778e-07,
+        "grip_error": 0,
+        "loop_or_hold_error": 0.0,
+        "ground_min_z": -9.229517672793008e-06,
+        "duration": 1.6
+      }
+    },
+    "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+    "model_unchanged": true
+  },
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v020/source/model/chr_bunny01_model_v020.blend",
+      "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v020/source/animation/chr_bunny01_animation_v020.blend",
+      "sha256": "f08835c4c2b0a5bb10dacf35ae9562bdcaf1a9d06b7902a4925812a8e3ec7449"
+    }
+  ],
+  "scope": "death and three sidearm poses; user live edit captured without overwriting unsaved Blender state",
+  "integration_warning": "No Godot integration. New palm mapping and pose-only shoulder reach must be retained; avoid duplicate procedural death transforms."
+}
