@@ -159,8 +159,12 @@ func _ready() -> void:
 	await get_tree().process_frame
 	gallery.player.avatar.call("_process", 0.016)
 	avatar_snapshot = gallery.player.avatar.get_component_snapshot()
-	if not bool(avatar_snapshot.get("firing_animation_active", false)) or (avatar_snapshot.get("action_rotation", Vector3.ZERO) as Vector3).length() <= 0.001:
-		failures.append("DIY avatar does not preserve expressive firing animation")
+	if (
+		not bool(avatar_snapshot.get("firing_animation_active", false))
+		or (avatar_snapshot.get("action_rotation", Vector3.ZERO) as Vector3).length() > 0.001
+		or bool(avatar_snapshot.get("legacy_procedural_motion_enabled", true))
+	):
+		failures.append("DIY avatar fire does not preserve the clean authored animation contract")
 	if (
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_fire"
 		or float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.36

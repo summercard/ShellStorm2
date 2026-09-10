@@ -51,8 +51,11 @@ func _ready() -> void:
 	var firing_components := gallery.player.avatar.get_component_snapshot()
 	if not bool(overlays.get("firing", false)) or not bool(firing_components.get("firing_animation_active", false)):
 		failures.append("Weapon shot does not activate the player firing overlay")
-	if (firing_components.get("action_rotation", Vector3.ZERO) as Vector3).length() <= 0.001:
-		failures.append("Firing overlay does not produce a component recoil transform")
+	if (
+		(firing_components.get("action_rotation", Vector3.ZERO) as Vector3).length() > 0.001
+		or bool(firing_components.get("legacy_procedural_motion_enabled", true))
+	):
+		failures.append("Firing overlay still injects a legacy procedural character transform")
 	if (
 		str(firing_components.get("weapon_pose_state", "")) != "sidearm_fire"
 		or int(firing_components.get("active_grip_hand_count", 0)) != 1

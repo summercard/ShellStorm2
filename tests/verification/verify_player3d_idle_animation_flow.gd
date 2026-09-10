@@ -22,15 +22,15 @@ func _ready() -> void:
 		failures.append("Standing player is not owned by the top-level idle state")
 	if not bool(idle_b.get("idle_animation_active", false)) or not bool(idle_b.get("idle_state_machine_owned", false)):
 		failures.append("Idle state does not activate the formal standing animation")
-	if absf(float(idle_b.get("idle_loop_duration_s", 0.0)) - 2.380952) > 0.01:
-		failures.append("Idle loop duration is not the approved approximately 2.38 seconds")
-	if is_equal_approx(float(idle_a.get("idle_cycle", 0.0)), float(idle_b.get("idle_cycle", 0.0))):
-		failures.append("Idle animation cycle does not advance while standing")
+	if str(idle_b.get("authored_motion_clip", "")) != "armed_idle":
+		failures.append("Standing armed player is not sampling the authored armed_idle clip")
+	if bool(idle_b.get("legacy_procedural_motion_enabled", true)):
+		failures.append("Standing player still enables the legacy procedural idle generator")
 	if (
-		(idle_a.get("body_scale", Vector3.ONE) as Vector3)
-		.distance_to(idle_b.get("body_scale", Vector3.ONE) as Vector3) < 0.012
+		(idle_a.get("body_position", Vector3.ZERO) as Vector3)
+		.distance_to(idle_b.get("body_position", Vector3.ZERO) as Vector3) < 0.002
 	):
-		failures.append("Idle animation lacks readable body breathing squash")
+		failures.append("Authored idle lacks readable body breathing motion")
 	if (
 		(idle_a.get("head_rotation", Vector3.ZERO) as Vector3)
 		.distance_to(idle_b.get("head_rotation", Vector3.ZERO) as Vector3) < 0.014
@@ -41,15 +41,8 @@ func _ready() -> void:
 			.distance_to(idle_b.get("ear_l_rotation", Vector3.ZERO) as Vector3),
 		(idle_a.get("ear_r_rotation", Vector3.ZERO) as Vector3)
 			.distance_to(idle_b.get("ear_r_rotation", Vector3.ZERO) as Vector3)
-	) < 0.012:
+	) < 0.008:
 		failures.append("Idle animation lacks asymmetric ear follow/flick")
-	if (
-		(idle_a.get("foot_l_position", Vector3.ZERO) as Vector3)
-		.distance_to(idle_b.get("foot_l_position", Vector3.ZERO) as Vector3) < 0.0011
-		and (idle_a.get("foot_r_position", Vector3.ZERO) as Vector3)
-		.distance_to(idle_b.get("foot_r_position", Vector3.ZERO) as Vector3) < 0.0011
-	):
-		failures.append("Idle animation lacks the standing weight transfer between feet")
 	if (
 		str(idle_b.get("weapon_pose_state", "")) != "sidearm_hold"
 		or int(idle_b.get("active_grip_hand_count", 0)) != 1
@@ -67,9 +60,9 @@ func _ready() -> void:
 		player.get_state_machine_state() != "moving"
 		or bool(moving.get("idle_animation_active", true))
 		or not bool(moving.get("moving_animation_active", false))
-		or absf(float(moving.get("idle_breath", 1.0))) > 0.0001
+		or str(moving.get("authored_motion_clip", "")) != "armed_moving"
 	):
-		failures.append("Movement does not immediately exit and zero the idle animation")
+		failures.append("Movement does not immediately switch from authored idle to authored jog")
 
 	player.velocity = Vector3.ZERO
 	if not machine.transition_to("idle"):
@@ -86,7 +79,7 @@ func _ready() -> void:
 	player.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_IDLE_ANIMATION_OK: state-owned standing loop, breathing, weight shift, ear follow, grip stability, and locomotion exit pass")
+		print("BUNNY_IDLE_ANIMATION_OK: Blender-only idle motion, ear follow, grip stability, and locomotion exit pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

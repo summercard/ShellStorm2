@@ -513,15 +513,36 @@
   },
   "dependencies": [],
   "remaining_work": [
-    "武器动作覆盖仍采用现有实时程序姿势；后续可逐项替换为Blender剪辑并保留握持约束。",
+    "按 animation_migration.missing_authored_actions 制作并接入武器动作；完成前长枪复用单手持枪动作。",
+    "怪物仍保留程序动画，后续按怪物资产批次逐步替换并单独验收。",
     "帽子/眼镜既有程序占位未重新建模。"
   ],
-  "active_consumer": "scenes/Player3D.tscn",
   "duplicate_gate": {
     "classification": "version_increment",
     "passed": true,
     "report": "outputs/asset_guard/CHR-PLY-CAPSULE01-3D-BUNNY01_v021.json",
     "same_asset_id_count": 12,
     "identical_registered_file_count": 28
-  }
+  },
+  "animation_migration": {
+    "active_player_driver": "blender_v021_only",
+    "legacy_player_procedural_motion": "disabled",
+    "monster_procedural_motion": "retained_pending_replacement",
+    "longgun_fallback": "armed_idle / armed_walking / armed_moving single-hand clips",
+    "heavy_melee_fallback": "base-state Blender clip with right-hand attachment only",
+    "missing_authored_actions": [
+      "longgun_two_hand_idle",
+      "longgun_two_hand_walking",
+      "longgun_two_hand_moving",
+      "sidearm_fire",
+      "sidearm_reload",
+      "longgun_fire",
+      "longgun_reload",
+      "longgun_charge",
+      "heavy_melee_windup",
+      "heavy_melee_active",
+      "heavy_melee_recovery"
+    ]
+  },
+  "active_consumer": "scenes/Player3D.tscn"
 }

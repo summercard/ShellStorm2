@@ -1,6 +1,6 @@
 # ShellStorm2 角色反推资料
 
-当前版为 v021 / SKEL-BUNNY01-004。模型面向 Blender +Y，导出为 Godot -Z，不附加偏航补偿。完整包含八个玩法状态和 walking、armed_walking、armed_moving、armed_idle 四个登记变体，不再依赖 v009/v011 动作。模型几何保持不变，身体表现映射 `body → chest`；持枪时实时 GripSocket 继续拥有双手最终全局变换，Blender 动作负责身体、头、耳、脚等表演轮廓。以制作流程顶部 v021 接入章节及版本中转账本为准；下面 v010/v011 内容仅属历史。
+当前版为 v021 / SKEL-BUNNY01-004。模型面向 Blender +Y，导出为 Godot -Z，不附加偏航补偿。完整包含八个玩法状态和 walking、armed_walking、armed_moving、armed_idle 四个登记变体，不再依赖 v009/v011 动作。模型几何保持不变，身体表现映射 `body → chest`。v021 正式玩家已关闭 `_update_state_motion` 旧程序动画，身体、头、耳、手和脚只接受当前 Blender 库；武器节点在采样后跟随右手掌心，不能反向覆盖手部。双手长枪动作未制作，暂用单手 armed 三动作并在账本显式报告。以制作流程顶部 v021 接入章节及版本中转账本为准；下面 v010/v011 内容仅属历史。
 
 本文件记录当前工程的可核验入口，不代替执行时对目标资产的再次审计。引用路径均相对 ShellStorm2 项目根目录。
 
@@ -27,7 +27,7 @@ v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于
 | 手持/背挂验收 | `tests/verification/verify_player3d_weapon_grip_visual.gd`、`tests/verification/verify_player3d_lower_body_socket_flow.gd` |
 | 敌人表现与尺寸消费 | `src/enemy3d/EnemyAvatar3D.gd`、对应 `Enemy3D` 场景和测试 |
 
-当前 Bunny 玩家是**节点驱动角色**，不是可随意替换成 Skeleton 的角色：`BunnyRig` 下含 `BodyJoint`、`HeadJoint`、`HandRoot/HandJointL`、`HandRoot/HandJointR`、`FeetRoot/FootJointL`、`FeetRoot/FootJointR`，其状态姿势由 `PlayerAvatar3D.gd` 驱动。新玩家变体必须先确认当前消费者是否仍使用这套层级。
+当前 Bunny 玩家是**骨动作到节点映射角色**，不是可随意替换层级的 Skeleton 运行时：`BunnyRig` 下含 `BodyJoint`、`HeadJoint`、`HandRoot/HandJointL`、`HandRoot/HandJointR`、`FeetRoot/FootJointL`、`FeetRoot/FootJointR`。`PlayerAvatar3D.gd` 只读取状态和进度，`CharacterMotionLibrary3D.gd` 采样 Blender 动作；v021 不得调用旧程序姿势生成器。新玩家变体必须先确认当前消费者仍使用这套层级。
 
 ## 当前玩家挂点与所有权
 

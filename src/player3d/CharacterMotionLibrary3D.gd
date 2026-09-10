@@ -14,6 +14,7 @@ var _transition_time := 1.0
 var _time := 0.0
 var _state := ""
 var _nodes: Dictionary = {}
+var _weapon_socket_rest := Transform3D.IDENTITY
 var active_clip := ""
 
 func bind(avatar: Node3D) -> void:
@@ -26,6 +27,7 @@ func bind(avatar: Node3D) -> void:
 		"hand_l": avatar.bunny_hand_l, "hand_r": avatar.bunny_hand_r,
 		"foot_l": avatar.foot_l, "foot_r": avatar.foot_r,
 		"ear_l": avatar.ear_socket_l, "ear_r": avatar.ear_socket_r}
+	_weapon_socket_rest = avatar.weapon_socket.transform
 
 static func _load_library(path: String) -> Dictionary:
 	if not _libraries.has(path) and FileAccess.file_exists(path):
@@ -38,8 +40,16 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var state: String = avatar.get("_state")
 	var armed := bool(avatar.get("_weapon_grip_pose_active")) and str(avatar.get("_weapon_class")) in ["sidearm", "longgun"]
 	var clips: Dictionary = _cache.get("clips", {})
-	var armed_name := "armed_" + state
-	var clip_name := armed_name if armed and state in ["idle", "moving"] and clips.has(armed_name) else state
+	var locomotion_name := state
+	var planar_speed := 0.0
+	if state == "moving" and avatar.get("_player") != null:
+		var velocity: Variant = avatar.get("_player").get("velocity")
+		if velocity is Vector3:
+			planar_speed = Vector2(velocity.x, velocity.z).length()
+			if planar_speed > 0.05 and planar_speed < 3.2 and clips.has("walking"):
+				locomotion_name = "walking"
+	var armed_name := "armed_" + locomotion_name
+	var clip_name := armed_name if armed and locomotion_name in ["idle", "moving", "walking"] and clips.has(armed_name) else locomotion_name
 	var authored_anatomical := int(_cache.get("schema", 0)) == 2 and clips.has(clip_name)
 	if not clips.has(clip_name):
 		clips = _fallback.get("clips", {})
@@ -56,9 +66,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var duration: float = clip.duration
 	var rate := 1.0
 	if state == "moving" and avatar.get("_player") != null:
-		var velocity: Variant = avatar.get("_player").get("velocity")
-		if velocity is Vector3:
-			rate = lerpf(7.8, 11.2, clampf(Vector2(velocity.x, velocity.z).length() / 7.0, 0.0, 1.0)) / 11.2
+		rate = clampf(planar_speed / (2.4 if locomotion_name == "walking" else 5.0), 0.72, 1.18)
 	_time += delta * rate
 	var phase := _time / duration
 	match state:
@@ -76,6 +84,7 @@ func apply(avatar: Node3D, delta: float) -> void:
 	var second := mini(first + 1, frames.size() - 1)
 	var blend := cursor - first
 	var live_grip_active := bool(avatar.get("_weapon_grip_pose_active"))
+	var legacy_grip_override := live_grip_active and _version != "v021"
 	var live_hand_l_global: Transform3D = avatar.bunny_hand_l.global_transform
 	var live_hand_r_global: Transform3D = avatar.bunny_hand_r.global_transform
 	if authored_anatomical and (armed or not bool(avatar.get("_weapon_grip_pose_active"))):
@@ -96,10 +105,9 @@ func apply(avatar: Node3D, delta: float) -> void:
 			rotation = (previous.q as Quaternion).slerp(rotation, weight)
 			scaling = (previous.s as Vector3).lerp(scaling, weight)
 		_last_pose[bone] = {"p": position, "q": rotation, "s": scaling}
-		# Blender supplies the acting silhouette, but live GripSocket constraints own
-		# the final hands whenever a weapon is present. This prevents an authored
-		# preview pose from changing muzzle alignment or one/two-hand gameplay grips.
-		if bone in ["hand_l", "hand_r"] and live_grip_active:
+		# v021 由 Blender 唯一拥有角色姿势。旧版本仍保留原实时握持覆盖，
+		# 以便回滚；正式玩家不再让程序约束反向覆盖手部关键帧。
+		if bone in ["hand_l", "hand_r"] and legacy_grip_override:
 			continue
 		target.position = position
 		target.quaternion = rotation
@@ -107,13 +115,22 @@ func apply(avatar: Node3D, delta: float) -> void:
 		if bone == "root": target.rotation.y = aim_yaw
 	# Parent/body motion can move skipped hand nodes indirectly. Restore the complete
 	# live global grip after sampling so GripSocket and support-hand constraints remain exact.
-	if live_grip_active:
+	if legacy_grip_override:
 		avatar.bunny_hand_l.global_transform = live_hand_l_global
 		avatar.bunny_hand_r.global_transform = live_hand_r_global
 		if str(avatar.get("_weapon_class")) in ["sidearm", "longgun"]:
 			avatar.bunny_hand_r.global_position = avatar.weapon_socket.global_position
+	elif _version == "v021":
+		# 武器是角色动画的从属物：保持枪口局部朝向契约，只把握点平移到
+		# Blender 右手掌心。长枪双手动作缺失时也明确复用同一单手动作。
+		avatar.weapon_socket.transform = _weapon_socket_rest
+		if live_grip_active:
+			avatar.weapon_socket.global_position = avatar.bunny_hand_r.global_position
 	# Root yaw and weapon poses stay with the existing aim/grip constraints.
 	# Dynamic shot/charge/knockback feedback remains an overlay, not a state transition.
+	if _version == "v021":
+		active_clip = clip_name
+		return
 	var fire: float = sin(float(avatar.get("_fire_progress")) * PI) * float(avatar.get("_fire_intensity")) if avatar.get("_firing_animation_active") else 0.0
 	var charge: float = float(avatar.get("_charge_progress")) if avatar.get("_charging_animation_active") else 0.0
 	avatar.body.position.y -= (fire * 0.016 + charge * 0.018) * avatar.BUNNY_LINEAR_SCALE

@@ -78,7 +78,26 @@ def main():
         ledger['active_consumer']='scenes/Player3D.tscn'
     else:
         ledger.pop('active_consumer',None)
-    ledger['remaining_work']=['武器动作覆盖仍采用现有实时程序姿势；后续可逐项替换为Blender剪辑并保留握持约束。','帽子/眼镜既有程序占位未重新建模。']
+    if package.name=='v021':
+        ledger['animation_migration']={
+            'active_player_driver':'blender_v021_only',
+            'legacy_player_procedural_motion':'disabled',
+            'monster_procedural_motion':'retained_pending_replacement',
+            'longgun_fallback':'armed_idle / armed_walking / armed_moving single-hand clips',
+            'heavy_melee_fallback':'base-state Blender clip with right-hand attachment only',
+            'missing_authored_actions':[
+                'longgun_two_hand_idle','longgun_two_hand_walking','longgun_two_hand_moving',
+                'sidearm_fire','sidearm_reload','longgun_fire','longgun_reload','longgun_charge',
+                'heavy_melee_windup','heavy_melee_active','heavy_melee_recovery'
+            ],
+        }
+        ledger['remaining_work']=[
+            '按 animation_migration.missing_authored_actions 制作并接入武器动作；完成前长枪复用单手持枪动作。',
+            '怪物仍保留程序动画，后续按怪物资产批次逐步替换并单独验收。',
+            '帽子/眼镜既有程序占位未重新建模。',
+        ]
+    else:
+        ledger['remaining_work']=['武器动作覆盖仍采用现有实时程序姿势；后续可逐项替换为Blender剪辑并保留握持约束。','帽子/眼镜既有程序占位未重新建模。']
     ledger_path.write_text(json.dumps(ledger,ensure_ascii=False,indent=2))
     assert ledger['status'] in ('validated','active'),'Do not activate a failing bundle'
 

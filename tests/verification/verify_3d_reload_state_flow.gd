@@ -63,10 +63,12 @@ func _ready() -> void:
 		failures.append("Reload progress is not driven by the real weapon timer: %.3f" % mid_progress)
 	if absf(float(avatar_snapshot.get("reload_fill_scale_x", 0.0)) - mid_progress) > 0.01:
 		failures.append("Head-top bar fill does not match weapon reload progress")
-	if (avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() < 0.048:
-		failures.append("Reload overlay has no readable hand/weapon displacement")
-	if (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() < 0.12:
-		failures.append("Reload overlay has no readable hand/weapon rotation")
+	if (
+		(avatar_snapshot.get("reload_offset", Vector3.ZERO) as Vector3).length() > 0.001
+		or (avatar_snapshot.get("reload_rotation", Vector3.ZERO) as Vector3).length() > 0.001
+		or str(avatar_snapshot.get("missing_authored_action", "")) != "sidearm_reload"
+	):
+		failures.append("Reload did not keep the base Blender clip and expose the registered sidearm_reload gap")
 	var mid_right_grip_distance := float(avatar_snapshot.get("hand_r_to_socket_global_distance", 999.0))
 	if (
 		str(avatar_snapshot.get("weapon_pose_state", "")) != "sidearm_reload"

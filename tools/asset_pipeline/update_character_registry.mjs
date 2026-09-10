@@ -38,8 +38,8 @@ if(version === 'v011' || version === 'v021') {
   master.getRange('N156').values=[['创作高1.5m；运行可见高1.05m；碰撞由Player3D拥有，不随美术骨架修改。']];
   parts.getRange('F31').values=[['刚性分件骨动作适配；创作高1.5m，运行可见高1.05m；玩法碰撞独立。']];
   const states=wb.worksheets.getItem('动画与状态');
-  states.getRange('F6').values=[[version === 'v021' ? 'v021：3.2秒循环待机；单手持枪使用armed_idle。Blender单位缩放，实时武器覆盖保留。' : 'v011：3.2秒低幅呼吸/重心微移，部件刚性不缩放；持枪待机使用armed_idle（2.8秒）。']];
-  states.getRange('F7').values=[[version === 'v021' ? 'v021：0.8秒小跑，另有1秒慢走；单手持枪分别使用armed_moving/armed_walking。' : 'v011：0.8秒交替步态与低幅起伏；持枪移动使用armed_moving；0.18秒过渡，无骨链拉伸。']];
+  states.getRange('F6').values=[[version === 'v021' ? 'v021：纯Blender 3.2秒循环待机；持枪使用armed_idle，禁用玩家程序姿势。' : 'v011：3.2秒低幅呼吸/重心微移，部件刚性不缩放；持枪待机使用armed_idle（2.8秒）。']];
+  states.getRange('F7').values=[[version === 'v021' ? 'v021：正常速度0.8秒小跑，慢速1秒慢走；按速度选择moving/walking及对应armed变体。' : 'v011：0.8秒交替步态与低幅起伏；持枪移动使用armed_moving；0.18秒过渡，无骨链拉伸。']];
   states.getRange('G6').values=[['刚性头部，不缩放；低幅反向滞后保持重量感。']];
   if (version === 'v021') {
     states.getRange('F8:G13').values = [
@@ -50,6 +50,13 @@ if(version === 'v011' || version === 'v021') {
       ['v021：0.45秒下沉缓冲、回弹并稳定。','承接下落末姿后抬头恢复。'],
       ['v021：1.6秒空中前翻一周，正面朝下趴地，弹一次后保持。','头部随整身落地；双臂向头顶两侧伸出。'],
     ];
+    states.getRange('F17:G17').values = [[
+      '保持当前Blender基础/持枪剪辑；禁用程序姿势。待制作：长枪双手idle/walking/moving；sidearm/longgun fire、reload、charge。',
+      '待制作：heavy_melee windup/active/recovery。完成前长枪复用单手armed动作；怪物程序动画暂留，后续分批替换。',
+    ]];
+    states.getRange('A17:G17').format.rowHeight=92;
+    states.getRange('A17:G17').format.wrapText=true;
+    states.getRange('A18:G18').clear({applyTo:'contents'});
   }
 }
 three.getRange('C6').values = [[wrapper]];
@@ -79,7 +86,7 @@ sheet.showGridLines=false;
 wb.recalculate();
 await (await SpreadsheetFile.exportXlsx(wb)).save(path);
 await fs.mkdir(`${root}/outputs/character_pipeline/registry`,{recursive:true});
-for(const [name,range] of [['角色中转记录','A1:D8'],['3D-角色','A4:F8'],['角色组件','A31:F39'],['资产主表','A156:O162'],['动画与状态','A5:G14']]) {
+for(const [name,range] of [['角色中转记录','A1:D8'],['3D-角色','A4:F8'],['角色组件','A31:F39'],['资产主表','A156:O162'],['动画与状态','A5:G17']]) {
   if (skipValidation) break;
   const blob=await wb.render({sheetName:name,range,scale:1,format:'png'});
   await fs.writeFile(`${root}/outputs/character_pipeline/registry/${name}.png`,new Uint8Array(await blob.arrayBuffer()));

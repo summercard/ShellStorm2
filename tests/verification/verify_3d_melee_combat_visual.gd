@@ -163,8 +163,11 @@ func _assert_melee_pose(player: Player3D, weapon_id: String, combo_step: int, fa
 		failures.append("Visual preview did not reach %s combo-%d active" % [weapon_id, combo_step])
 	if str(avatar.get("weapon_pose_state", "")) != "heavy_melee_active":
 		failures.append("Avatar is not rendering the heavy_melee_active pose for %s" % weapon_id)
-	if int(avatar.get("active_grip_hand_count", 0)) != 2:
-		failures.append("Large melee pose does not keep both hands on %s" % weapon_id)
+	if (
+		int(avatar.get("active_grip_hand_count", 0)) != 1
+		or str(avatar.get("weapon_animation_fallback", "")) != "single_hand_attachment_only"
+	):
+		failures.append("Large melee pose does not expose the registered temporary single-hand attachment fallback for %s" % weapon_id)
 	var bounds := weapon.get("visual_bounds_hint", Vector3.ZERO) as Vector3
 	if bounds.z < 2.30 or bounds.x < 0.80:
 		failures.append("Rendered melee silhouette is below the large-weapon contract for %s" % weapon_id)

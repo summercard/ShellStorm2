@@ -67,18 +67,12 @@ func _ready() -> void:
 		failures.append("Default pistol did not enter sidearm_hold")
 	if int(sidearm_hold.get("active_grip_hand_count", 0)) != 1:
 		failures.append("Pistol pose does not use exactly one gripping hand")
-	if float(sidearm_hold.get("weapon_socket_position", Vector3.ZERO).x) < 0.060:
-		failures.append("Pistol socket is not staged on the rabbit's right side")
-	var sidearm_socket_position := sidearm_hold.get("weapon_socket_position", Vector3.ZERO) as Vector3
-	if sidearm_socket_position.y > 0.27 or sidearm_socket_position.z > -0.33:
-		failures.append("Pistol idle hold is not lowered and extended clear of the rabbit's face")
+	if str(sidearm_hold.get("authored_motion_clip", "")) != "armed_idle":
+		failures.append("Pistol idle does not use the Blender armed_idle clip")
 	var sidearm_socket_rotation := sidearm_hold.get("weapon_socket_rotation", Vector3.ZERO) as Vector3
 	if sidearm_socket_rotation.length() > 0.03:
 		failures.append("Pistol idle barrel is not aligned to the real aim direction")
 	_check_muzzle_alignment(player, "idle", failures)
-	var sidearm_left_position := sidearm_hold.get("hand_l_position", Vector3.ZERO) as Vector3
-	if sidearm_left_position.z > -0.24:
-		failures.append("Free left hand is not extended into the sidearm ready silhouette")
 	if float(sidearm_hold.get("hand_r_to_socket_global_distance", 999.0)) > 0.001:
 		failures.append("Pistol HandJointR is not exactly seated on GripSocket")
 	if float(sidearm_hold.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001:
@@ -90,8 +84,7 @@ func _ready() -> void:
 		>= float(sidearm_hold.get("hand_l_to_socket_global_distance", 0.0))
 	):
 		failures.append("Pistol right hand is not closer to the weapon than the free left hand")
-	var sidearm_right_rotation := sidearm_hold.get("hand_r_rotation", Vector3.ZERO) as Vector3
-	if sidearm_right_rotation.y < 1.0 or str(sidearm_hold.get("right_hand_pivot_contract", "")) != "cuff_ring_center_is_HandJointR_and_GripSocket":
+	if str(sidearm_hold.get("right_hand_pivot_contract", "")) != "cuff_ring_center_is_HandJointR_and_GripSocket":
 		failures.append("Right hand does not use the cuff-ring/HandJointR/GripSocket pivot contract")
 
 	_set_presentation_state(player, "moving")
@@ -127,14 +120,14 @@ func _ready() -> void:
 	var longgun_hold := player.avatar.get_component_snapshot()
 	if str(longgun_hold.get("weapon_pose_state", "")) != "longgun_hold":
 		failures.append("Rifle did not enter longgun_hold")
-	if int(longgun_hold.get("active_grip_hand_count", 0)) != 2:
-		failures.append("Rifle pose does not use right grip plus left support")
+	if (
+		int(longgun_hold.get("active_grip_hand_count", 0)) != 1
+		or str(longgun_hold.get("weapon_animation_fallback", "")) != "single_hand_armed_clip"
+		or str(longgun_hold.get("authored_motion_clip", "")) != "armed_idle"
+	):
+		failures.append("Rifle pose does not use the temporary single-hand Blender fallback")
 	if float(longgun_hold.get("hand_r_to_socket_global_distance", 999.0)) > 0.001:
 		failures.append("Rifle HandJointR is not exactly seated on GripSocket")
-	var longgun_left_rotation := longgun_hold.get("hand_l_rotation", Vector3.ZERO) as Vector3
-	var longgun_right_rotation := longgun_hold.get("hand_r_rotation", Vector3.ZERO) as Vector3
-	if longgun_left_rotation.y > -1.0 or longgun_right_rotation.y < 1.0:
-		failures.append("Longgun hand rotations do not face both palms toward -Z")
 
 	_set_presentation_state(player, "moving")
 	_advance_avatar(player, 0.10, 2)
@@ -151,13 +144,12 @@ func _ready() -> void:
 	if str(longgun_fire.get("weapon_fire_style", "")) != "rifle_braced_burst":
 		failures.append("Rifle did not select its weapon-specific fire style")
 	var longgun_fire_rotation := longgun_fire.get("action_rotation", Vector3.ZERO) as Vector3
-	if sidearm_fire_rotation.distance_to(longgun_fire_rotation) < 0.08:
-		failures.append("Pistol and rifle fire key poses are not sufficiently distinct")
+	if sidearm_fire_rotation.length() > 0.001 or longgun_fire_rotation.length() > 0.001:
+		failures.append("Gun fire still injects legacy procedural rotation into the player")
 	if int(longgun_fire.get("weapon_pose_transition_count", 0)) < 6:
 		failures.append("Weapon pose state transitions were not recorded by the state machine")
 
 	var fire_styles_seen: Dictionary = {}
-	var fire_signatures_seen: Dictionary = {}
 	for gun_id in EXPECTED_FIRE_STYLES:
 		player.call("_clear_action_overlays")
 		_set_presentation_state(player, "idle")
@@ -167,7 +159,7 @@ func _ready() -> void:
 		await get_tree().process_frame
 		_advance_avatar(player, 0.10, 1)
 		var hold_snapshot := player.avatar.get_component_snapshot()
-		var expected_grip_count := 1 if gun_id == "bp_pistol" else 2
+		var expected_grip_count := 1
 		if int(hold_snapshot.get("active_grip_hand_count", 0)) != expected_grip_count:
 			failures.append("%s selected the wrong one/two-hand grip class" % gun_id)
 		player.call("_on_weapon_shot_fired", 1)
@@ -178,17 +170,16 @@ func _ready() -> void:
 		if fire_style != str(EXPECTED_FIRE_STYLES[gun_id]):
 			failures.append("%s selected the wrong fire style" % gun_id)
 		fire_styles_seen[fire_style] = true
-		var fire_rotation := fire_snapshot.get("action_rotation", Vector3.ZERO) as Vector3
-		var fire_offset := fire_snapshot.get("action_offset", Vector3.ZERO) as Vector3
-		fire_signatures_seen["%.3f/%.3f/%.3f" % [fire_rotation.x, fire_rotation.z, fire_offset.z]] = true
-	if fire_styles_seen.size() != EXPECTED_FIRE_STYLES.size() or fire_signatures_seen.size() != EXPECTED_FIRE_STYLES.size():
-		failures.append("The seven gun bodies do not all resolve to distinct named and keyed fire actions")
+		if (fire_snapshot.get("action_rotation", Vector3.ZERO) as Vector3).length() > 0.001:
+			failures.append("%s still injects a procedural character fire pose" % gun_id)
+	if fire_styles_seen.size() != EXPECTED_FIRE_STYLES.size():
+		failures.append("The seven gun bodies do not all retain their functional fire-style metadata")
 
 	player.queue_free()
 	wall.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_WEAPON_POSE_COLLISION_OK: cuff-ring/HandJointR/GripSocket alignment, one/two-hand FSM, distinct gun fire, and unified 1.05 m runtime visual/collision contract pass")
+		print("BUNNY_WEAPON_POSE_COLLISION_OK: authored hand/weapon alignment, single-hand longgun fallback, fire metadata, and collision isolation pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:

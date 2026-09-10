@@ -329,8 +329,12 @@ func _process(delta: float) -> void:
 		_player = _find_player()
 	_read_player_state()
 	_update_orientation(delta)
-	_update_state_motion(delta)
-	if str(get_meta("assembly_version", "")) in ["v009", "v010", "v011", "v021"]:
+	var assembly_version := str(get_meta("assembly_version", ""))
+	if assembly_version == "v021":
+		_update_authored_motion_progress(delta)
+	else:
+		_update_state_motion(delta)
+	if assembly_version in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.apply(self, delta)
 	_update_reload_progress_bar()
 	_update_state_materials()
@@ -349,6 +353,14 @@ func get_component_snapshot() -> Dictionary:
 		"avatar_profile": "bunny01" if is_bunny else "capsule_cat",
 		"assembly_version": str(get_meta("assembly_version", "v008" if is_bunny else "v001")),
 		"authored_motion_clip": _authored_motion.active_clip,
+		"animation_driver": "blender_v021_only" if str(get_meta("assembly_version", "")) == "v021" else "legacy_compatible",
+		"legacy_procedural_motion_enabled": str(get_meta("assembly_version", "")) != "v021",
+		"weapon_animation_fallback": (
+			"single_hand_armed_clip" if str(get_meta("assembly_version", "")) == "v021" and _weapon_class == "longgun"
+			else "single_hand_attachment_only" if str(get_meta("assembly_version", "")) == "v021" and _weapon_class == "heavy_melee"
+			else "none"
+		),
+		"missing_authored_action": _get_missing_authored_action(),
 		"rig_type": "rigid_node_skeleton" if is_bunny else "legacy_component_nodes",
 		"component_space": "pivot_local" if is_bunny else "scene_local",
 		"rig_joint_count": 8 if is_bunny else 0,
@@ -588,7 +600,12 @@ func _refresh_weapon_pose_state() -> void:
 	)
 	var profile := _get_weapon_animation_profile()
 	_weapon_fire_style = str(profile.get("fire_style", "none")) if has_weapon else "none"
-	_active_grip_hand_count = 1 if _weapon_class == "sidearm" else (2 if _weapon_class in ["longgun", "heavy_melee"] else 0)
+	_active_grip_hand_count = (
+		1 if has_weapon and str(get_meta("assembly_version", "")) == "v021"
+		else 1 if _weapon_class == "sidearm"
+		else 2 if _weapon_class in ["longgun", "heavy_melee"]
+		else 0
+	)
 	_weapon_grip_pose_active = has_weapon
 	var next_pose_state := "unarmed"
 	if has_weapon:
@@ -626,11 +643,60 @@ func _get_weapon_animation_profile() -> Dictionary:
 	) as Dictionary)
 
 
+func _get_missing_authored_action() -> String:
+	if str(get_meta("assembly_version", "")) != "v021" or not _weapon_grip_pose_active:
+		return ""
+	if _weapon_class == "heavy_melee" and _melee_animation_active:
+		return "heavy_melee_%s" % _melee_phase
+	if _reload_animation_active:
+		return "%s_reload" % _weapon_class
+	if _charging_animation_active and _weapon_class == "longgun":
+		return "longgun_charge"
+	if _firing_animation_active and _weapon_class in ["sidearm", "longgun"]:
+		return "%s_fire" % _weapon_class
+	if _weapon_class == "longgun":
+		var locomotion := "idle"
+		if _state == "moving":
+			locomotion = "moving"
+			if _player != null and _player.get("velocity") is Vector3:
+				var velocity := _player.get("velocity") as Vector3
+				var speed := Vector2(velocity.x, velocity.z).length()
+				if speed > 0.05 and speed < 3.2:
+					locomotion = "walking"
+		return "longgun_two_hand_%s" % locomotion
+	return ""
+
+
 func _update_orientation(delta: float) -> void:
 	if _player == null:
 		return
 	var target_yaw := float(_player.get("aim_yaw"))
 	visual_root.rotation.y = lerp_angle(visual_root.rotation.y, target_yaw, minf(1.0, delta * 16.0))
+
+
+func _update_authored_motion_progress(delta: float) -> void:
+	# 这里只把玩法状态的真实时间归一化给 Blender 剪辑，不生成、叠加或
+	# 修正任何角色姿势。v021 的节点变换只由 CharacterMotionLibrary3D 采样。
+	_idle_animation_active = _state == "idle"
+	_moving_animation_active = _state == "moving"
+	match _state:
+		"dashing":
+			var duration := 0.18
+			if _player != null and _player.has_method("get_dash_duration"):
+				duration = maxf(0.01, float(_player.call("get_dash_duration")))
+			_dash_animation_progress = clampf(_dash_animation_progress + delta / duration, 0.0, 1.0)
+		"hurt":
+			var duration := 0.30
+			if _player != null and _player.has_method("get_hurt_recovery_duration"):
+				duration = maxf(0.14, float(_player.call("get_hurt_recovery_duration")))
+			_hurt_animation_progress = clampf(_hurt_animation_progress + delta / duration, 0.0, 1.0)
+		"falling":
+			_fall_animation_progress += delta
+		"landing":
+			var duration := 0.18
+			if _player != null and _player.has_method("get_landing_duration"):
+				duration = maxf(0.01, float(_player.call("get_landing_duration")))
+			_landing_animation_progress = clampf(_landing_animation_progress + delta / duration, 0.0, 1.0)
 
 
 func _update_state_motion(delta: float) -> void:

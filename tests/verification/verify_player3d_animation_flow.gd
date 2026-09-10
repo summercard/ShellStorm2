@@ -18,6 +18,11 @@ func _ready() -> void:
 	if str(snapshot.get("assembly_version", "")) != "v021":
 		failures.append("Bunny v021 is not the active Player3D asset")
 	if (
+		str(snapshot.get("animation_driver", "")) != "blender_v021_only"
+		or bool(snapshot.get("legacy_procedural_motion_enabled", true))
+	):
+		failures.append("Bunny v021 still enables the legacy procedural player animation driver")
+	if (
 		float(snapshot.get("left_hand_ring_to_joint_global_distance", 999.0)) > 0.001
 		or float(snapshot.get("right_hand_ring_to_joint_global_distance", 999.0)) > 0.001
 	):
@@ -48,11 +53,23 @@ func _ready() -> void:
 		snapshot = gallery.player.avatar.get_component_snapshot()
 		if (
 			str(snapshot.get("weapon_pose_state", "")) != "longgun_hold"
-			or int(snapshot.get("active_grip_hand_count", 0)) != 2
-				or float(snapshot.get("hand_l_to_socket_global_distance", 999.0)) > 0.255
-				or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.189
+			or int(snapshot.get("active_grip_hand_count", 0)) != 1
+			or str(snapshot.get("weapon_animation_fallback", "")) != "single_hand_armed_clip"
+			or str(snapshot.get("authored_motion_clip", "")) != "armed_idle"
+			or float(snapshot.get("hand_r_to_socket_global_distance", 999.0)) > 0.001
 		):
-			failures.append("Rifle does not converge on right grip plus left support")
+			failures.append("Rifle does not use the registered single-hand Blender fallback")
+		gallery.run_player_action("moving")
+		gallery.player.velocity = Vector3(2.0, 0.0, 0.0)
+		gallery.player.avatar.call("_process", 0.20)
+		snapshot = gallery.player.avatar.get_component_snapshot()
+		if str(snapshot.get("authored_motion_clip", "")) != "armed_walking":
+			failures.append("Slow longgun locomotion does not select armed_walking")
+		gallery.player.velocity = Vector3(5.0, 0.0, 0.0)
+		gallery.player.avatar.call("_process", 0.20)
+		snapshot = gallery.player.avatar.get_component_snapshot()
+		if str(snapshot.get("authored_motion_clip", "")) != "armed_moving":
+			failures.append("Normal-speed longgun locomotion does not select armed_moving")
 
 	gallery.run_player_action("dashing")
 	# v0.1 的翻滚周期为位移周期的 1.3 倍；90 ms 才进入约 34% 的收腹关键帧。
@@ -85,7 +102,7 @@ func _ready() -> void:
 	gallery.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BUNNY_V008_ANIMATION_FLOW_OK: ring-centered hands, hood-contact-centered ears, idle, grip, dash, and hurt key poses pass")
+		print("BUNNY_V021_ANIMATION_FLOW_OK: Blender-only driver, authored grips, dash, and hurt key poses pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
