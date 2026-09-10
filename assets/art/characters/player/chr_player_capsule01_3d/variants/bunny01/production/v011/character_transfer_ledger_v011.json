@@ -1,0 +1,450 @@
+{
+  "schema": 1,
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v011",
+  "skeleton_id": "SKEL-BUNNY01-003",
+  "skeleton_sha256": "091b71df635c23e7723424b4b176ae94d085414f2fbd52d92a7f1bb39e43272d",
+  "status": "active",
+  "animation_adapter": "anatomical_to_rigid_node_map",
+  "model_components": [
+    {
+      "slot": "身体",
+      "variant": "身体__bunny_white",
+      "object": "SRC_Body",
+      "bone": "waist"
+    },
+    {
+      "slot": "头部",
+      "variant": "头部__bunny_white",
+      "object": "SRC_Head",
+      "bone": "head"
+    },
+    {
+      "slot": "头部",
+      "variant": "头部__chibi_anime",
+      "object": "制作组件_二次元头部_已对齐",
+      "bone": "head"
+    },
+    {
+      "slot": "左手",
+      "variant": "左手__bunny_white",
+      "object": "SRC_Hand_Main_L",
+      "bone": "hand_l"
+    },
+    {
+      "slot": "左手",
+      "variant": "左手__bunny_white",
+      "object": "SRC_Hand_Cuff_L",
+      "bone": "hand_l"
+    },
+    {
+      "slot": "右手",
+      "variant": "右手__bunny_white",
+      "object": "SRC_Hand_Main_R",
+      "bone": "hand_r"
+    },
+    {
+      "slot": "右手",
+      "variant": "右手__bunny_white",
+      "object": "SRC_Hand_Cuff_R",
+      "bone": "hand_r"
+    },
+    {
+      "slot": "左脚",
+      "variant": "左脚__bunny_white",
+      "object": "SRC_Foot_L",
+      "bone": "foot_l"
+    },
+    {
+      "slot": "右脚",
+      "variant": "右脚__bunny_white",
+      "object": "SRC_Foot_R",
+      "bone": "foot_r"
+    },
+    {
+      "slot": "帽子",
+      "variant": "帽子__bunny_ears_l",
+      "object": "SRC_Ear_L_Mirror",
+      "bone": "ear_l"
+    },
+    {
+      "slot": "帽子",
+      "variant": "帽子__bunny_ears_r",
+      "object": "SRC_Ear_R",
+      "bone": "ear_r"
+    }
+  ],
+  "clips": {
+    "armed_idle": {
+      "duration": 2.8,
+      "loop": true,
+      "frame_count": 169
+    },
+    "armed_moving": {
+      "duration": 0.8,
+      "loop": true,
+      "frame_count": 49
+    },
+    "idle": {
+      "duration": 3.2,
+      "loop": true,
+      "frame_count": 193
+    },
+    "moving": {
+      "duration": 0.8,
+      "loop": true,
+      "frame_count": 49
+    }
+  },
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/source/model/chr_bunny01_model_v011.blend",
+      "sha256": "f203d04eee13a8d8b900a621bd791a39fb8e79c979161fd94046858c44038d77",
+      "bytes": 11338552
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/source/animation/chr_bunny01_animation_v011.blend",
+      "sha256": "cd7dc60cda8d9a4c1c8d3ae8a79365acae7ae617cf837412cc9b37c95e41fd4c",
+      "bytes": 10947744
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_model_v011.glb",
+      "sha256": "353c1d901101a93452da7cf100883b55a52d74de17a047335c948f3e178505bd",
+      "bytes": 8178188
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/anim_bunny01_library_v011.json",
+      "sha256": "53368236f2a9b6c95ba93662886ce08811322094850580d9504285b1acbc55a8",
+      "bytes": 831270
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/anim_bunny01_library_v011.glb",
+      "sha256": "1ca67225fa4dfea247000773fb30b6230924e85191986f562e348f104b91e130",
+      "bytes": 281388
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_body_v011.glb",
+      "sha256": "861c7d454e510d7d50c0459dc9fa5b052af56c473896333a68ab6940ae981b49",
+      "bytes": 2437308
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_head_v011.glb",
+      "sha256": "f654754b8a52cbd173597bd5f1e390a900bd0c2b0ed4ba357a8060542d51fda5",
+      "bytes": 1356048
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_chibi_anime_v011.glb",
+      "sha256": "d83d016304df67eeff0f1222e3f4be19baef05437e7cbdca6f60a4842b26f5ec",
+      "bytes": 2524432
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_hand_l_v011.glb",
+      "sha256": "eb021c9f0858a3b6bc5012551db2424cbc44baa0f769d6365fde780df4b8058c",
+      "bytes": 186356
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_hand_r_v011.glb",
+      "sha256": "ceaf3366cd4fa1887c3e897608052419120f2e4887003f48871b1fdea71f5cfb",
+      "bytes": 186356
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_l_v011.glb",
+      "sha256": "60617a88b9659d9c4dba5884ed68314ff1e503a80df0ff5b35d63f8578b6b60a",
+      "bytes": 1833688
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_foot_r_v011.glb",
+      "sha256": "8509a8e959a7d427b4ee168d8585fb2d09ca01cbbf8c83601d8d5c46fe22e7a7",
+      "bytes": 1833692
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_l_v011.glb",
+      "sha256": "0936a7e3212554eddf48af62704649b6a6c98a67b56b180ed2e802bc97a1fc7c",
+      "bytes": 979276
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/exports/chr_bunny01_ear_r_v011.glb",
+      "sha256": "7719ba73dec977951da3edf997752ba5afcf4a1c9f8b2bc8dd5ad8a78381b208",
+      "bytes": 979268
+    }
+  ],
+  "collision_owner": "scenes/Player3D.tscn",
+  "authoring_height_m": 1.5,
+  "runtime_base_scale": 0.7,
+  "runtime_visual_height_m": 1.05,
+  "skeleton_bones": [
+    {
+      "name": "root",
+      "parent": null,
+      "deform": false
+    },
+    {
+      "name": "waist",
+      "parent": "root",
+      "deform": true
+    },
+    {
+      "name": "chest",
+      "parent": "waist",
+      "deform": true
+    },
+    {
+      "name": "head",
+      "parent": "chest",
+      "deform": true
+    },
+    {
+      "name": "ear_l",
+      "parent": "head",
+      "deform": true
+    },
+    {
+      "name": "ear_r",
+      "parent": "head",
+      "deform": true
+    },
+    {
+      "name": "upper_arm_l",
+      "parent": "chest",
+      "deform": true
+    },
+    {
+      "name": "forearm_l",
+      "parent": "upper_arm_l",
+      "deform": true
+    },
+    {
+      "name": "hand_l",
+      "parent": "forearm_l",
+      "deform": true
+    },
+    {
+      "name": "thumb_01_l",
+      "parent": "hand_l",
+      "deform": true
+    },
+    {
+      "name": "thumb_02_l",
+      "parent": "thumb_01_l",
+      "deform": true
+    },
+    {
+      "name": "index_01_l",
+      "parent": "hand_l",
+      "deform": true
+    },
+    {
+      "name": "index_02_l",
+      "parent": "index_01_l",
+      "deform": true
+    },
+    {
+      "name": "fingers_01_l",
+      "parent": "hand_l",
+      "deform": true
+    },
+    {
+      "name": "fingers_02_l",
+      "parent": "fingers_01_l",
+      "deform": true
+    },
+    {
+      "name": "upper_arm_r",
+      "parent": "chest",
+      "deform": true
+    },
+    {
+      "name": "forearm_r",
+      "parent": "upper_arm_r",
+      "deform": true
+    },
+    {
+      "name": "hand_r",
+      "parent": "forearm_r",
+      "deform": true
+    },
+    {
+      "name": "thumb_01_r",
+      "parent": "hand_r",
+      "deform": true
+    },
+    {
+      "name": "thumb_02_r",
+      "parent": "thumb_01_r",
+      "deform": true
+    },
+    {
+      "name": "index_01_r",
+      "parent": "hand_r",
+      "deform": true
+    },
+    {
+      "name": "index_02_r",
+      "parent": "index_01_r",
+      "deform": true
+    },
+    {
+      "name": "fingers_01_r",
+      "parent": "hand_r",
+      "deform": true
+    },
+    {
+      "name": "fingers_02_r",
+      "parent": "fingers_01_r",
+      "deform": true
+    },
+    {
+      "name": "thigh_l",
+      "parent": "waist",
+      "deform": true
+    },
+    {
+      "name": "shin_l",
+      "parent": "thigh_l",
+      "deform": true
+    },
+    {
+      "name": "foot_l",
+      "parent": "shin_l",
+      "deform": true
+    },
+    {
+      "name": "thigh_r",
+      "parent": "waist",
+      "deform": true
+    },
+    {
+      "name": "shin_r",
+      "parent": "thigh_r",
+      "deform": true
+    },
+    {
+      "name": "foot_r",
+      "parent": "shin_r",
+      "deform": true
+    }
+  ],
+  "validation_status": "passed",
+  "visual_validation": {
+    "reviewed": true,
+    "renderer": "gl_compatibility",
+    "tests": ["verify_player3d_weapon_grip_visual", "verify_player3d_state_gallery_visual"],
+    "images": ["outputs/verification/player3d_sidearm_idle_closeup.png", "outputs/verification/player3d_state_gallery.png", "outputs/character_pipeline/v011/rest_bone_overlay.png"],
+    "limitation": "Compatibility renderer does not exercise depth-of-field or screen-space antialiasing."
+  },
+  "runtime_wrapper": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/runtime/chr_bunny01_root_v011.tscn",
+  "runtime_files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/runtime/chr_bunny01_root_v011.tscn",
+      "sha256": "91784fc341a61c54efd4e65c4b62ba2d7fa660555670759a0f2b9694e792682d"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/runtime/chr_bunny01_chibi_anime_root_v011.tscn",
+      "sha256": "4087aa5c4614258914ecd4e3c646169757380fa6bc3c0d19703ea8c3897ae685"
+    }
+  ],
+  "validation": [
+    {
+      "test": "verify_character_authoring_bundle",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_character_authoring_bundle.log"
+    },
+    {
+      "test": "verify_player3d_avatar_bounds",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_avatar_bounds.log"
+    },
+    {
+      "test": "verify_player3d_animation_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_animation_flow.log"
+    },
+    {
+      "test": "verify_player3d_diy_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_diy_flow.log"
+    },
+    {
+      "test": "verify_player3d_head_accessory_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_head_accessory_flow.log"
+    },
+    {
+      "test": "verify_player3d_lower_body_socket_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_lower_body_socket_flow.log"
+    },
+    {
+      "test": "verify_player3d_weapon_pose_collision_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_weapon_pose_collision_flow.log"
+    },
+    {
+      "test": "verify_player3d_state_gallery_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_player3d_state_gallery_flow.log"
+    },
+    {
+      "test": "verify_3d_reload_state_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_3d_reload_state_flow.log"
+    },
+    {
+      "test": "verify_3d_melee_feedback_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_3d_melee_feedback_flow.log"
+    },
+    {
+      "test": "verify_avatar_return_persistence_flow",
+      "passed": true,
+      "log": "outputs/character_pipeline/validation/verify_avatar_return_persistence_flow.log"
+    }
+  ],
+  "source_validation": {
+    "geometry_unchanged": true,
+    "rest_chains_straight": true,
+    "forward": "Blender +Y -> Godot -Z",
+    "skeleton_sha256": "091b71df635c23e7723424b4b176ae94d085414f2fbd52d92a7f1bb39e43272d",
+    "clips": {
+      "armed_idle": {
+        "frames": 169,
+        "maximum_scale_error": 3.5762786865234375e-07,
+        "loop_seam_passed": true
+      },
+      "armed_moving": {
+        "frames": 49,
+        "maximum_scale_error": 3.5762786865234375e-07,
+        "loop_seam_passed": true
+      },
+      "idle": {
+        "frames": 193,
+        "maximum_scale_error": 3.5762786865234375e-07,
+        "loop_seam_passed": true
+      },
+      "moving": {
+        "frames": 49,
+        "maximum_scale_error": 3.5762786865234375e-07,
+        "loop_seam_passed": true
+      }
+    },
+    "model_sha256": "f203d04eee13a8d8b900a621bd791a39fb8e79c979161fd94046858c44038d77",
+    "animation_sha256": "cd7dc60cda8d9a4c1c8d3ae8a79365acae7ae617cf837412cc9b37c95e41fd4c"
+  },
+  "forward_contract": {
+    "blender": "+Y",
+    "godot": "-Z",
+    "additional_yaw_degrees": 0
+  },
+  "dependencies": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/anim_bunny01_library_v009.json",
+      "sha256": "1a960f955aba29b455de304b528388ee467b4cd0026fd53f29caeb091dc99210",
+      "purpose": "six retained non-locomotion states"
+    }
+  ],
+  "active_consumer": "scenes/Player3D.tscn",
+  "remaining_work": [
+    "武器动作覆盖仍采用现有实时程序姿势；后续可逐项替换为Blender剪辑并保留握持约束。",
+    "帽子/眼镜既有程序占位未重新建模。"
+  ]
+}

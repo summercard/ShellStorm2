@@ -1,0 +1,131 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v013",
+  "status": "authored_pending_export",
+  "runtime_active_version": "v011",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v013/source/model/chr_bunny01_model_v013.blend",
+      "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v013/source/animation/chr_bunny01_animation_v013.blend",
+      "sha256": "ec71c6ef262a8ffb8d5c163e53b79c6cf656c5431e4987b444b343c55bdfa350"
+    },
+    {
+      "path": "assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn",
+      "sha256": "ec5be48b60ec8724759108b9d8f0530473e324e0df25f392622474909f52f05e"
+    },
+    {
+      "path": "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v003.glb",
+      "sha256": "4c65166cec5416b673ba2692450c3e987a59cc038bee4d6dbbd753ddaf105843"
+    }
+  ],
+  "validation": {
+    "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+    "previous_scene_range": [
+      1,
+      61
+    ],
+    "previous_idle_cycles": {
+      "idle": true,
+      "armed_idle": true
+    },
+    "model_identical_to_v012": true,
+    "weapon": {
+      "logic_id": "bp_pistol",
+      "scene": "assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn",
+      "glb": "assets/art/weapons/weapon_3d/components/hair_dryer/wpn_hair_dryer_visual_top3d_v003.glb",
+      "scale_in_authoring_space": 0.6060606060606061,
+      "godot_visual_offset": [
+        0.0,
+        -0.122838,
+        -0.168785
+      ],
+      "blender_visual_offset": [
+        0.0,
+        0.1687850058078766,
+        -0.12283799797296524
+      ],
+      "mount": "hand_r head / cuff center; COPY_LOCATION, baseline aim +Y"
+    },
+    "clips": {
+      "walking": {
+        "period_frames": 60,
+        "duration": 1.0,
+        "scene": "01_慢走",
+        "two_periods_match": true,
+        "loop_seam": 9.313225746154785e-10,
+        "scale_error": 3.5762786865234375e-07,
+        "min_ground": -4.7497451305389404e-08,
+        "grip_error": 0
+      },
+      "moving": {
+        "period_frames": 42,
+        "duration": 0.7,
+        "scene": "02_正常移动_小跑",
+        "two_periods_match": true,
+        "loop_seam": 0.0,
+        "scale_error": 3.5762786865234375e-07,
+        "min_ground": -3.3527612686157227e-08,
+        "grip_error": 0
+      },
+      "idle": {
+        "period_frames": 192,
+        "duration": 3.2,
+        "scene": "03_待机_循环",
+        "two_periods_match": true,
+        "loop_seam": 1.9594351543878095e-18,
+        "scale_error": 4.76837158203125e-07,
+        "min_ground": -5.2852556109428406e-08,
+        "grip_error": 0
+      },
+      "armed_walking": {
+        "period_frames": 60,
+        "duration": 1.0,
+        "scene": "04_单手持枪_慢走",
+        "two_periods_match": true,
+        "loop_seam": 2.984602687326323e-18,
+        "scale_error": 3.5762786865234375e-07,
+        "min_ground": -9.685754776000977e-08,
+        "grip_error": 0
+      },
+      "armed_moving": {
+        "period_frames": 42,
+        "duration": 0.7,
+        "scene": "05_单手持枪_小跑",
+        "two_periods_match": true,
+        "loop_seam": 0.0,
+        "scale_error": 3.5762786865234375e-07,
+        "min_ground": -3.3527612686157227e-08,
+        "grip_error": 0
+      },
+      "armed_idle": {
+        "period_frames": 192,
+        "duration": 3.2,
+        "scene": "06_单手持枪_待机循环",
+        "two_periods_match": true,
+        "loop_seam": 1.9594351543878095e-18,
+        "scale_error": 4.76837158203125e-07,
+        "min_ground": -1.0535586625337601e-07,
+        "grip_error": 0
+      }
+    },
+    "original_walk_fcurves_preserved": true,
+    "non_static_pose_variation": {
+      "walking": 0.6593984663486481,
+      "moving": 0.8830384910106659,
+      "idle": 0.148995041847229,
+      "armed_walking": 0.6593983173370361,
+      "armed_moving": 0.8830384910106659,
+      "armed_idle": 0.14899513125419617
+    },
+    "relative_model_library_reopen": true
+  },
+  "export_requirements": [
+    "Exclude all preview_only objects and preview scenes; export one matching rig only.",
+    "body maps to chest; walking/armed_walking are slow; moving/armed_moving are normal jog; sidearm only. Runtime integration not performed."
+  ]
+}

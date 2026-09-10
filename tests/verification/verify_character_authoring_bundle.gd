@@ -1,12 +1,12 @@
 extends Node
 
-const PACKAGE := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/"
+const PACKAGE := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v011/"
 const OLD := "res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v008.tscn"
 
 func _ready() -> void:
 	var failures: Array[String] = []
 	var old: Node3D = load(OLD).instantiate()
-	var current: Node3D = load(PACKAGE + "runtime/chr_bunny01_root_v009.tscn").instantiate()
+	var current: Node3D = load(PACKAGE + "runtime/chr_bunny01_root_v011.tscn").instantiate()
 	add_child(old)
 	add_child(current)
 	old.set_process(false)
@@ -17,8 +17,8 @@ func _ready() -> void:
 		failures.append("Rest silhouette changed: %s -> %s" % [old_bounds, new_bounds])
 	for child in current.find_children("*", "CollisionObject3D", true, false):
 		failures.append("Presentation contains physics: " + str(child.get_path()))
-	var library: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE + "exports/anim_bunny01_library_v009.json"))
-	for state in ["idle", "moving", "dashing", "hurt", "locked", "falling", "landing", "dead"]:
+	var library: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE + "exports/anim_bunny01_library_v011.json"))
+	for state in ["idle", "moving", "armed_idle", "armed_moving"]:
 		if not library.clips.has(state): failures.append("Missing " + state)
 		else:
 			var clip: Dictionary = library.clips[state]
@@ -29,11 +29,27 @@ func _ready() -> void:
 	driver.apply(current, 0.15)
 	if driver.active_clip != "moving" or absf(current.foot_l.position.y - current.foot_r.position.y) < 0.001:
 		failures.append("Imported moving bones do not animate alternate feet")
+	for clip_name in ["idle", "moving", "armed_idle", "armed_moving"]:
+		var armed: bool = clip_name.begins_with("armed_")
+		current.set("_state", "moving" if "moving" in clip_name else "idle")
+		current.set("_weapon_grip_pose_active", armed)
+		current.set("_weapon_class", "sidearm")
+		var clip_driver := CharacterMotionLibrary3D.new()
+		clip_driver.bind(current)
+		for frame in range(120):
+			clip_driver.apply(current, 1.0 / 60.0)
+			if clip_driver.active_clip != clip_name:
+				failures.append("Wrong authored clip: " + clip_name)
+			for joint: Node3D in [current.visual_root, current.body, current.head, current.bunny_hand_l, current.bunny_hand_r, current.foot_l, current.foot_r]:
+				if joint.scale.distance_to(Vector3.ONE) > 0.002:
+					failures.append("Base clip deforms mesh: " + clip_name + "/" + joint.name)
+			if armed and current.bunny_hand_r.global_position.distance_to(current.weapon_socket.global_position) > 0.001:
+				failures.append("Authored hand detached from weapon socket")
 	print("CHARACTER_REST_BOUNDS old=", old_bounds, " new=", new_bounds)
 	old.queue_free()
 	current.queue_free()
 	if failures.is_empty():
-		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, eight Blender clips, moving bone playback")
+		print("CHARACTER_AUTHORING_BUNDLE_OK: bounds, no physics, four Blender clips, moving bone playback")
 		get_tree().quit()
 	else:
 		for failure in failures: push_error(failure)

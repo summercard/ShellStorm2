@@ -1,0 +1,106 @@
+{
+  "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+  "version": "v015",
+  "status": "authored_pending_export",
+  "runtime_active_version": "v011",
+  "skeleton_id": "SKEL-BUNNY01-004",
+  "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+  "files": [
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v015/source/model/chr_bunny01_model_v015.blend",
+      "sha256": "0164fa024715d7b7020094b8e1d2719fd6fde717deba5280f4e5ad4fb9f7f711"
+    },
+    {
+      "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v015/source/animation/chr_bunny01_animation_v015.blend",
+      "sha256": "20f34f0ca3ab46d4708590fbb5a33361ac2984e4e011dafbdade54ece25f9447"
+    }
+  ],
+  "validation": {
+    "skeleton_sha256": "203cbcaf9a7d4eaa55baacc6ea4d2093e157ad853ecab5bf08abb8a38f41edb8",
+    "model_unchanged": true,
+    "grip_cause": "v013 conflated wrist/cuff pivot and palm grip; bone tail is the palm, not head",
+    "runtime_migration_required": "Godot still aligns weapon to cuff; must introduce palm offset in presentation adapter when integrating. Not changed in this authoring task.",
+    "clips": {
+      "walking": {
+        "period": 60,
+        "duration": 1.0,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 3.5762786865234375e-07,
+          "arm_joint_gap": 0,
+          "grip": 0,
+          "free_arm_local_translation": 0
+        },
+        "loop_seam": 9.313225746154785e-10,
+        "min_ground": -4.7497451305389404e-08
+      },
+      "moving": {
+        "period": 48,
+        "duration": 0.8,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 3.5762786865234375e-07,
+          "arm_joint_gap": 1.0106459234841567e-07,
+          "grip": 0,
+          "free_arm_local_translation": 1.043081283569336e-07
+        },
+        "loop_seam": 0.0,
+        "min_ground": -4.284083843231201e-08
+      },
+      "idle": {
+        "period": 192,
+        "duration": 3.2,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 4.76837158203125e-07,
+          "arm_joint_gap": 0,
+          "grip": 0,
+          "free_arm_local_translation": 0
+        },
+        "loop_seam": 1.9594351543878095e-18,
+        "min_ground": -5.2852556109428406e-08
+      },
+      "armed_walking": {
+        "period": 60,
+        "duration": 1.0,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 3.5762786865234375e-07,
+          "arm_joint_gap": 0,
+          "grip": 0,
+          "free_arm_local_translation": 0
+        },
+        "loop_seam": 2.984602687326323e-18,
+        "min_ground": -9.685754776000977e-08
+      },
+      "armed_moving": {
+        "period": 48,
+        "duration": 0.8,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 3.5762786865234375e-07,
+          "arm_joint_gap": 9.996002811937585e-08,
+          "grip": 0,
+          "free_arm_local_translation": 8.948454372185702e-08
+        },
+        "loop_seam": 0.0,
+        "min_ground": -4.284083843231201e-08
+      },
+      "armed_idle": {
+        "period": 192,
+        "duration": 3.2,
+        "two_cycles_match": true,
+        "errors": {
+          "scale": 4.76837158203125e-07,
+          "arm_joint_gap": 0,
+          "grip": 0,
+          "free_arm_local_translation": 0
+        },
+        "loop_seam": 1.9594351543878095e-18,
+        "min_ground": -1.0535586625337601e-07
+      }
+    }
+  },
+  "preview_only_weapon": true,
+  "next_step": "Confirm source art; implement palm grip presentation mapping and body chest mapping before runtime export/integration."
+}

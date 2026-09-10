@@ -12,12 +12,13 @@ from pathlib import Path
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('package',type=Path)
+    parser.add_argument('--skip-validation',action='store_true',help='Explicit user waiver; never label the result validated')
     args=parser.parse_args()
     root=Path(__file__).resolve().parents[2]
     package=args.package.resolve()
-    ledger_path=package/'character_transfer_ledger_v009.json'
+    ledger_path=package/f'character_transfer_ledger_{package.name}.json'
     ledger=json.loads(ledger_path.read_text())
-    for file in ledger['files']:
+    for file in ([] if args.skip_validation else ledger['files']):
         path=root/file['path']
         if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest()!=file['sha256']:
             raise RuntimeError('Stale/missing source or export: '+str(path))
@@ -53,6 +54,11 @@ def main():
     wrapper.write_text(text)
     ledger['runtime_wrapper']=str(wrapper.relative_to(root))
     ledger['status']='imported_pending_validation'
+    if args.skip_validation:
+        ledger['status']='imported_unverified_user_requested'
+        ledger['validation_status']='skipped_by_user'
+        ledger['validation']=[]
+        ledger['validation_note']='本次用户明确要求不进行验收和验证，直接导入交付。'
     ledger['runtime_files']=[{'path':str(p.relative_to(root)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in [wrapper,head_path]]
     ledger_path.write_text(json.dumps(ledger,ensure_ascii=False,indent=2))
     print('CHARACTER_WRAPPER_READY',wrapper)

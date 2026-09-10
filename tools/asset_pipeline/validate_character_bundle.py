@@ -13,12 +13,12 @@ def main():
     args=parser.parse_args()
     root=Path(__file__).resolve().parents[2]
     package=args.package.resolve()
-    ledger_path=package/'character_transfer_ledger_v009.json'
+    ledger_path=package/f'character_transfer_ledger_{package.name}.json'
     ledger=json.loads(ledger_path.read_text())
     for entry in ledger['files']+ledger['runtime_files']:
         path=root/entry['path']
         assert path.is_file() and hashlib.sha256(path.read_bytes()).hexdigest()==entry['sha256'], 'Stale file '+str(path)
-    library=json.loads((package/'exports/anim_bunny01_library_v009.json').read_text())
+    library=json.loads((package/f'exports/anim_bunny01_library_{package.name}.json').read_text())
     assert library['skeleton_sha256']==ledger['skeleton_sha256']
     for name,clip in library['clips'].items():
         if clip['loop']:
@@ -38,9 +38,21 @@ def main():
         results.append({'test':test,'passed':passed,'log':str((logs/(test+'.log')).relative_to(root))})
         print(test,'PASS' if passed else 'FAIL',flush=True)
     ledger['validation']=results
+    ledger['validation_status']='passed' if all(r['passed'] for r in results) else 'failed'
+    if package.name=='v011':
+        source_report=root/'outputs/character_pipeline/v011/source_validation.json'
+        report=json.loads(source_report.read_text())
+        assert report['skeleton_sha256']==ledger['skeleton_sha256']
+        for role in ['model','animation']:
+            source=package/f'source/{role}/chr_bunny01_{role}_v011.blend'
+            assert report[role+'_sha256']==hashlib.sha256(source.read_bytes()).hexdigest(),'Stale source validation'
+        ledger['source_validation']=report
+        ledger['forward_contract']={'blender':'+Y','godot':'-Z','additional_yaw_degrees':0}
+        dep=root/'assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v009/exports/anim_bunny01_library_v009.json'
+        ledger['dependencies']=[{'path':str(dep.relative_to(root)),'sha256':hashlib.sha256(dep.read_bytes()).hexdigest(),'purpose':'six retained non-locomotion states'}]
     ledger['status']='validated' if all(r['passed'] for r in results) else 'imported_pending_validation'
     consumer=root/'scenes/Player3D.tscn'
-    wrapper=str((package/'runtime/chr_bunny01_root_v009.tscn').relative_to(root))
+    wrapper=str((package/f'runtime/chr_bunny01_root_{package.name}.tscn').relative_to(root))
     if ledger['status']=='validated' and ('res://'+wrapper) in consumer.read_text():
         ledger['status']='active'
         ledger['active_consumer']='scenes/Player3D.tscn'

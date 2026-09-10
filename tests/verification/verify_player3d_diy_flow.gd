@@ -54,7 +54,7 @@ func _ready() -> void:
 		failures.append("Bunny avatar does not expose head/body/hand/feet as four primary modules")
 	if str(avatar_snapshot.get("avatar_profile", "")) != "bunny01":
 		failures.append("Player3D does not load the registered bunny01 avatar profile")
-	if str(avatar_snapshot.get("assembly_version", "")) != "v009" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
+	if str(avatar_snapshot.get("assembly_version", "")) != "v011" or str(avatar_snapshot.get("rig_type", "")) != "rigid_node_skeleton" or str(avatar_snapshot.get("component_space", "")) != "pivot_local":
 		failures.append("Bunny v008 is not assembled from pivot-local parts on the Godot rigid-node skeleton")
 	if int(avatar_snapshot.get("ear_count", 0)) != 2 or int(avatar_snapshot.get("ear_socket_count", 0)) != 2 or not bool(avatar_snapshot.get("ears_parented_to_head", false)):
 		failures.append("Bunny ears are not two head-parented accessories on named sockets")
@@ -70,12 +70,12 @@ func _ready() -> void:
 	) > 0.001:
 		failures.append("Bunny v008 did not apply the approved 70% entity-size baseline")
 	if (
-		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 90
-		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+X"
+		int(avatar_snapshot.get("authored_forward_correction_degrees", 0)) != 0
+		or str(avatar_snapshot.get("raw_forward_blender", "")) != "+Y"
 		or str(avatar_snapshot.get("runtime_forward_godot", "")) != "-Z"
 		or not bool(avatar_snapshot.get("forward_contract_pass", false))
 	):
-		failures.append("Bunny v008 does not enforce the Blender +X to Godot -Z forward-axis contract")
+		failures.append("Current Blender +Y to Godot -Z contract is inconsistent")
 	if str(avatar_snapshot.get("tail_style", "")) != "none":
 		failures.append("Bunny source unexpectedly retains the legacy cat tail")
 	for required_path in [
@@ -143,6 +143,8 @@ func _ready() -> void:
 	await get_tree().physics_frame
 	await get_tree().process_frame
 	gallery.player.avatar.call("_process", 0.016)
+	# Evaluate after the authored 0.18s transition, not during its double-support start.
+	for _step in range(18): gallery.player.avatar.call("_process", 0.016)
 	var moving_snapshot := gallery.player.avatar.get_component_snapshot()
 	if (
 		str(moving_snapshot.get("weapon_pose_state", "")) != "sidearm_run"
