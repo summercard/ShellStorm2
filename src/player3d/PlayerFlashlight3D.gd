@@ -28,8 +28,8 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export var start_enabled := false
 
 @export_group("Beam")
-@export var beam_color := Color(0.86, 0.96, 0.93)
-@export_range(0.0, 32.0, 0.1) var beam_energy := 7.2
+@export var beam_color := Color("#7dc4ea")
+@export_range(0.0, 32.0, 0.1) var beam_energy := 7.60
 @export_range(4.0, 40.0, 0.5) var beam_range := 25.0
 @export_range(20.0, 110.0, 1.0) var beam_angle_degrees := 66.0
 @export_range(0.1, 2.0, 0.05) var beam_attenuation := 0.48
@@ -48,15 +48,15 @@ const FLASHLIGHT_TIER_THRESHOLDS := [0.60, 0.30, 0.10, 0.01]
 @export_range(0.0, 2.0, 0.05) var target_height := 0.38
 
 @export_group("Environment Spill")
-@export var spill_color := Color(0.68, 0.88, 0.84)
-@export_range(0.0, 8.0, 0.05) var spill_energy := 0.7
+@export var spill_color := Color("#469ac2")
+@export_range(0.0, 8.0, 0.05) var spill_energy := 1.20
 @export_range(1.0, 10.0, 0.25) var spill_range := 4.8
 @export_range(0.1, 4.0, 0.05) var spill_attenuation := 2.0
 @export_range(0.2, 2.0, 0.05) var spill_height := 0.65
 
 @export_group("Avatar Front Fill")
-@export var front_fill_color := Color(0.70, 0.90, 0.86)
-@export_range(0.0, 16.0, 0.05) var front_fill_energy := 2.8
+@export var front_fill_color := Color("#558cec")
+@export_range(0.0, 16.0, 0.05) var front_fill_energy := 5.25
 @export_range(1.0, 8.0, 0.25) var front_fill_range := 4.0
 @export_range(20.0, 110.0, 1.0) var front_fill_angle_degrees := 74.0
 @export_range(0.1, 3.0, 0.05) var front_fill_attenuation := 1.15
@@ -371,6 +371,64 @@ func apply_configuration() -> void:
 	## 允许运行时调参面板或主题预设修改导出值后立即应用，不需要重建节点。
 	_apply_configuration()
 	force_sync()
+
+
+## ---- 公开调参 setter/getter（供调试工具 / 运行时主题切换使用） ----
+## 同时写 export 变量和实时灯光节点：当前画面立刻变化，且后续
+## _apply_configuration / 模块切换 / toggle_flashlight 都能保留新值。
+## 灯节点尚未构建时调用 setter 是安全的，仅写 export 即可。
+
+func get_beam_color() -> Color:
+	return beam_color
+
+func set_beam_color(color: Color) -> void:
+	beam_color = color
+	if _beam != null:
+		_beam.light_color = color
+
+func get_beam_energy() -> float:
+	return beam_energy
+
+func set_beam_energy(energy: float) -> void:
+	beam_energy = energy
+	_beam_energy_active = energy
+	if _beam != null and _enabled:
+		_beam.light_energy = energy * _energy_multiplier
+
+func get_spill_color() -> Color:
+	return spill_color
+
+func set_spill_color(color: Color) -> void:
+	spill_color = color
+	if _spill != null:
+		_spill.light_color = color
+
+func get_spill_energy() -> float:
+	return spill_energy
+
+func set_spill_energy(energy: float) -> void:
+	spill_energy = energy
+	_spill_energy_active = energy
+	if _spill != null and _enabled:
+		_spill.light_energy = energy * _energy_multiplier
+
+func get_front_fill_color() -> Color:
+	return front_fill_color
+
+func set_front_fill_color(color: Color) -> void:
+	front_fill_color = color
+	if _front_fill != null:
+		_front_fill.light_color = color
+
+func get_front_fill_energy() -> float:
+	return front_fill_energy
+
+func set_front_fill_energy(energy: float) -> void:
+	front_fill_energy = energy
+	_front_fill_energy_active = energy
+	if _front_fill != null and _enabled:
+		_front_fill.light_energy = energy * _energy_multiplier
+
 
 
 func is_light_enabled() -> bool:

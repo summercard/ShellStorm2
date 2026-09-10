@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://src/player3d/PlayerVision3D.gd" id="3_vision"]
 [ext_resource type="PackedScene" path="res://assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn" id="4_flashlight"]
 [ext_resource type="Resource" path="res://assets/world3d/cam_attrs_player3d_practical_v001.tres" id="5_cam_attrs"]
+[ext_resource type="Script" path="res://src/player3d/FlashlightColorTweaker.gd" id="6_tweaker"]
 
 [sub_resource type="CapsuleShape3D" id="ShapePlayer"]
 radius = 0.34
@@ -79,3 +80,10 @@ cast_shadow = 0
 [node name="Dot" type="MeshInstance3D" parent="AimCursor"]
 mesh = SubResource("MeshCursorDot")
 cast_shadow = 0
+
+[node name="FlashlightTweakerLayer" type="CanvasLayer" parent="."]
+layer = 100
+
+[node name="FlashlightColorTweaker" type="PanelContainer" parent="FlashlightTweakerLayer"]
+visible = false
+script = ExtResource("6_tweaker")
