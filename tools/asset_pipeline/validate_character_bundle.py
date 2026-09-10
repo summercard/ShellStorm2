@@ -83,16 +83,17 @@ def main():
             'active_player_driver':'blender_v021_only',
             'legacy_player_procedural_motion':'disabled',
             'monster_procedural_motion':'retained_pending_replacement',
-            'longgun_fallback':'armed_idle / armed_walking / armed_moving single-hand clips',
+            'longgun_fallback':'reuse pistol-designed single-hand armed_idle / armed_walking / armed_moving clips',
+            'single_hand_action_policy':'sidearm and longgun share pistol-designed single-hand actions until dedicated two-hand actions exist',
             'heavy_melee_fallback':'base-state Blender clip with right-hand attachment only',
             'missing_authored_actions':[
+                'single_hand_fire','single_hand_reload','single_hand_charge',
                 'longgun_two_hand_idle','longgun_two_hand_walking','longgun_two_hand_moving',
-                'sidearm_fire','sidearm_reload','longgun_fire','longgun_reload','longgun_charge',
                 'heavy_melee_windup','heavy_melee_active','heavy_melee_recovery'
             ],
         }
         ledger['remaining_work']=[
-            '按 animation_migration.missing_authored_actions 制作并接入武器动作；完成前长枪复用单手持枪动作。',
+            '按 animation_migration.missing_authored_actions 制作并接入武器动作；单手动作以手枪为母版，可供长枪复用。',
             '怪物仍保留程序动画，后续按怪物资产批次逐步替换并单独验收。',
             '帽子/眼镜既有程序占位未重新建模。',
         ]

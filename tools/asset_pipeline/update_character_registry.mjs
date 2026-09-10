@@ -51,8 +51,8 @@ if(version === 'v011' || version === 'v021') {
       ['v021：1.6秒空中前翻一周，正面朝下趴地，弹一次后保持。','头部随整身落地；双臂向头顶两侧伸出。'],
     ];
     states.getRange('F17:G17').values = [[
-      '保持当前Blender基础/持枪剪辑；禁用程序姿势。待制作：长枪双手idle/walking/moving；sidearm/longgun fire、reload、charge。',
-      '待制作：heavy_melee windup/active/recovery。完成前长枪复用单手armed动作；怪物程序动画暂留，后续分批替换。',
+      '单手持枪以手枪动作为母版，手枪/长枪可共用。待制作：single_hand fire、reload、charge；长枪双手idle/walking/moving。',
+      '待制作：heavy_melee windup/active/recovery。完成前长枪复用手枪单手armed动作；怪物程序动画暂留，后续分批替换。',
     ]];
     states.getRange('A17:G17').format.rowHeight=92;
     states.getRange('A17:G17').format.wrapText=true;

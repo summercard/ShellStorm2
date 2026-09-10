@@ -649,11 +649,11 @@ func _get_missing_authored_action() -> String:
 	if _weapon_class == "heavy_melee" and _melee_animation_active:
 		return "heavy_melee_%s" % _melee_phase
 	if _reload_animation_active:
-		return "%s_reload" % _weapon_class
+		return "single_hand_reload" if _weapon_class in ["sidearm", "longgun"] else "%s_reload" % _weapon_class
 	if _charging_animation_active and _weapon_class == "longgun":
-		return "longgun_charge"
+		return "single_hand_charge"
 	if _firing_animation_active and _weapon_class in ["sidearm", "longgun"]:
-		return "%s_fire" % _weapon_class
+		return "single_hand_fire"
 	if _weapon_class == "longgun":
 		var locomotion := "idle"
 		if _state == "moving":
