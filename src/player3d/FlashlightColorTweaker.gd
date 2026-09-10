@@ -203,13 +203,24 @@ func _sync_postfx_from_manager() -> void:
 	_postfx_aniso_strength_slider.value = float(snap.get("debug_postfx_anisotropy_strength", 0.0))
 	_postfx_aniso_expansion_slider.value = float(snap.get("debug_postfx_anisotropy_expansion", 0.0))
 	_postfx_adjustment_toggle.button_pressed = bool(snap.get("debug_postfx_adjustment_enabled", true))
-	_postfx_hue_slider.value = float(snap.get("debug_postfx_adjustment_hue", 0.0))
 	_postfx_brightness_slider.value = float(snap.get("debug_postfx_adjustment_brightness", 1.0))
 	_postfx_contrast_slider.value = float(snap.get("debug_postfx_adjustment_contrast", 1.0))
 	_postfx_saturation_slider.value = float(snap.get("debug_postfx_adjustment_saturation", 1.0))
-	_postfx_grain_toggle.button_pressed = bool(snap.get("debug_postfx_grain_enabled", false))
-	_postfx_grain_strength_slider.value = float(snap.get("debug_postfx_grain_strength", 0.0))
-	_postfx_grain_size_slider.value = float(snap.get("debug_postfx_grain_size", 1.0))
+
+	# 噪点 + 色相走 PostfxOverlay autoload，不再走 GraphicsSettingsManager
+	# 调试钩子（Environment 里没有这些属性）。
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		_postfx_grain_toggle.button_pressed = bool(overlay.is_grain_enabled())
+		_postfx_grain_strength_slider.value = float(overlay.get_grain_strength())
+		_postfx_grain_size_slider.value = float(overlay.get_grain_size())
+		_postfx_hue_slider.value = float(overlay.get_hue_shift())
+	else:
+		_postfx_grain_toggle.button_pressed = false
+		_postfx_grain_strength_slider.value = 0.0
+		_postfx_grain_size_slider.value = 1.0
+		_postfx_hue_slider.value = 0.0
+
 	_postfx_tv_toggle.button_pressed = bool(snap.get("debug_postfx_tv_distortion_enabled", false))
 	_postfx_tv_glow_aniso_slider.value = float(snap.get("debug_postfx_tv_glow_anisotropy", 0.0))
 	_postfx_tv_glow_strength_slider.value = float(snap.get("debug_postfx_tv_glow_strength", 0.92))
@@ -247,16 +258,20 @@ func _refresh_postfx_value_labels() -> void:
 	_postfx_tv_glow_hdr_scale_label.text = "%.2f" % _postfx_tv_glow_hdr_scale_slider.value
 
 func _refresh_postfx_controls_enabled() -> void:
+	# 「色彩调整」总开关仅负责 brightness/contrast/saturation 三件套。
+	# 色相（hue）走独立 shader uniform，不被总开关绑灰。
 	var color_on := _postfx_adjustment_toggle.button_pressed
-	_postfx_hue_slider.editable = color_on
+	_postfx_hue_slider.editable = true
 	_postfx_brightness_slider.editable = color_on
 	_postfx_contrast_slider.editable = color_on
 	_postfx_saturation_slider.editable = color_on
 
+	# 「噪点」总开关负责强度与颗粒尺寸。
 	var grain_on := _postfx_grain_toggle.button_pressed
 	_postfx_grain_strength_slider.editable = grain_on
 	_postfx_grain_size_slider.editable = grain_on
 
+	# 「电视干扰」总开关负责 4 个 glow 字段。
 	var tv_on := _postfx_tv_toggle.button_pressed
 	_postfx_tv_glow_aniso_slider.editable = tv_on
 	_postfx_tv_glow_strength_slider.editable = tv_on
@@ -292,6 +307,22 @@ func _get_debug_postfx_snapshot() -> Dictionary:
 	if GraphicsSettingsManager != null and GraphicsSettingsManager.has_method("get_debug_postfx_snapshot"):
 		return GraphicsSettingsManager.get_debug_postfx_snapshot()
 	return {}
+
+# 拿 PostfxOverlay autoload 引用。autoload 名字在 project.godot 里注册为
+# PostfxOverlay。如果运行中未初始化（早期 _ready 顺序）返回 null。
+func _get_postfx_overlay() -> Node:
+	if Engine.has_singleton("PostfxOverlay"):
+		return Engine.get_singleton("PostfxOverlay") as Node
+	var main_loop: MainLoop = Engine.get_main_loop()
+	if main_loop == null:
+		return null
+	if not (main_loop is SceneTree):
+		return null
+	var tree := main_loop as SceneTree
+	var root: Node = tree.root
+	if root == null:
+		return null
+	return root.get_node_or_null("PostfxOverlay")
 
 # ---------- UI 构造 ----------
 
@@ -668,8 +699,9 @@ func _on_adjustment_toggle_changed(pressed: bool) -> void:
 
 func _on_hue_changed(value: float) -> void:
 	_postfx_hue_label.text = "%.3f" % value
-	if GraphicsSettingsManager != null:
-		GraphicsSettingsManager.set_debug_postfx("debug_postfx_adjustment_hue", value)
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.set_hue_shift(value)
 
 func _on_brightness_changed(value: float) -> void:
 	_postfx_brightness_label.text = "%.2f" % value
@@ -687,22 +719,25 @@ func _on_saturation_changed(value: float) -> void:
 		GraphicsSettingsManager.set_debug_postfx("debug_postfx_adjustment_saturation", value)
 
 
-# ---------- 噪点 —----------
+# ---------- 噪点 + 色相（走 PostfxOverlay）----------
 
 func _on_grain_toggle_changed(pressed: bool) -> void:
 	_refresh_postfx_controls_enabled()
-	if GraphicsSettingsManager != null:
-		GraphicsSettingsManager.set_debug_postfx("debug_postfx_grain_enabled", pressed)
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.set_grain_enabled(pressed)
 
 func _on_grain_strength_changed(value: float) -> void:
 	_postfx_grain_strength_label.text = "%.2f" % value
-	if GraphicsSettingsManager != null:
-		GraphicsSettingsManager.set_debug_postfx("debug_postfx_grain_strength", value)
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.set_grain_strength(value)
 
 func _on_grain_size_changed(value: float) -> void:
 	_postfx_grain_size_label.text = "%.2f" % value
-	if GraphicsSettingsManager != null:
-		GraphicsSettingsManager.set_debug_postfx("debug_postfx_grain_size", value)
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.set_grain_size(value)
 
 
 # ---------- 电视干扰 —----------
@@ -711,6 +746,13 @@ func _on_tv_toggle_changed(pressed: bool) -> void:
 	_refresh_postfx_controls_enabled()
 	if GraphicsSettingsManager != null:
 		GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_distortion_enabled", pressed)
+		# 关闭电视干扰总开关时清零 4 个调试键，与噪点语义一致：
+		# “总开关 off → 画面上不应再有效果”。
+		if not pressed:
+			GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_glow_anisotropy", 0.0)
+			GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_glow_strength", 0.92)
+			GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_glow_hdr_threshold", 1.08)
+			GraphicsSettingsManager.set_debug_postfx("debug_postfx_tv_glow_hdr_scale", 1.65)
 
 func _on_tv_glow_aniso_changed(value: float) -> void:
 	_postfx_tv_glow_aniso_label.text = "%.2f" % value
@@ -735,4 +777,7 @@ func _on_tv_glow_hdr_scale_changed(value: float) -> void:
 func _on_clear_postfx_pressed() -> void:
 	if GraphicsSettingsManager != null:
 		GraphicsSettingsManager.clear_debug_postfx()
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.reset_to_defaults()
 	_sync_postfx_from_manager()

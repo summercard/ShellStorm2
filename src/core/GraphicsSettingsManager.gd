@@ -410,31 +410,18 @@ func _apply_debug_postfx_overrides(environment: Environment) -> void:
 			float(_debug_postfx["debug_postfx_adjustment_saturation"])
 		)
 	if _debug_postfx.has("debug_postfx_adjustment_hue"):
-		_set_property(
-			environment,
-			"adjustment_hue",
-			float(_debug_postfx["debug_postfx_adjustment_hue"])
-		)
+		# Godot 4.6 Environment 没有 adjustment_hue 属性；色相偏移改走
+		# PostfxOverlay autoload + 全屏 shader uniform。键位保留仅为向后兼容。
+		pass
 
-	# 噪点效果：Environment.grain_* 三件套
+	# 噪点：Godot 4.6 Environment 没有 grain_* 属性；实际效果走 PostfxOverlay
+	# autoload + 全屏 shader uniform。键位保留仅为向后兼容。
 	if _debug_postfx.has("debug_postfx_grain_enabled"):
-		_set_property(
-			environment,
-			"grain_enabled",
-			bool(_debug_postfx["debug_postfx_grain_enabled"])
-		)
+		pass
 	if _debug_postfx.has("debug_postfx_grain_strength"):
-		_set_property(
-			environment,
-			"grain_strength",
-			float(_debug_postfx["debug_postfx_grain_strength"])
-		)
+		pass
 	if _debug_postfx.has("debug_postfx_grain_size"):
-		_set_property(
-			environment,
-			"grain_size",
-			float(_debug_postfx["debug_postfx_grain_size"])
-		)
+		pass
 
 	# 电视干扰：复用 glow_* 字段近似 CRT 漏光 + 横向渐变。
 	# 仅当 tv_distortion_enabled=true 时面板写入的 4 个键才落 Environment；
