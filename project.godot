@@ -64,6 +64,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+VfxPool="*res://src/vfx/VfxPool3D.gd"
 Global="*res://src/core/Global.gd"
 GameEntryFlow="*res://src/core/GameEntryFlow.gd"
 GameManager="*res://src/core/GameManager.gd"

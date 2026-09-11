@@ -12,6 +12,8 @@ signal illumination_state_changed(enemy: Enemy3D, previous: String, current: Str
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
+const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")
 const ILLUMINATION_SCRIPT := preload("res://src/enemy3d/EnemyIllumination3D.gd")
 const VALID_STATES := [
@@ -935,12 +937,12 @@ func receive_healing(amount: int) -> void:
 		return
 	current_hp = mini(max_hp, current_hp + maxi(0, amount))
 	health_changed.emit(self, current_hp, max_hp)
-	_spawn_effect("damage", 0.52)
+	_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.52)
 
 
 func _explode() -> void:
 	_active_explosion_committed = true
-	_spawn_effect("explosion", 1.75)
+	_spawn_effect("VFX-EXPLOSION-3D", 1.75)
 	if MonsterAIManager != null:
 		MonsterAIManager.broadcast_sound_stimulus(global_position, 20.0, "explosion", self)
 	for player in get_tree().get_nodes_in_group("player_3d"):
@@ -962,7 +964,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 	if enemy_kind == "shielded" and not _bypass_shield_once and hit_direction.dot(-global_basis.z) < -0.15:
 		if randf() < 0.15:
 			avatar.flash_hit()
-			_spawn_effect("impact", 0.82)
+			_spawn_effect("VFX-IMPACT-3D", 0.82)
 			return
 		applied = maxi(1, int(applied * 0.32))
 	if critical:
@@ -973,7 +975,7 @@ func take_damage(amount: int, critical := false, hit_direction := Vector3.ZERO, 
 	_last_hit_direction = hit_direction
 	_hit_knockback = maxf(0.0, hit_knockback)
 	avatar.flash_hit()
-	_spawn_effect("damage", 0.72)
+	_spawn_effect("VFX-DAMAGE-NUMBER-3D", 0.72)
 	_spawn_damage_number(applied, critical)
 	if current_hp <= 0:
 		_die()
@@ -1505,7 +1507,7 @@ func _die() -> void:
 			_spawn_death_fragments()
 	collision_layer = 0
 	collision_mask = 0
-	_spawn_effect("explosion" if enemy_kind == "boss" else "impact", 1.4 if enemy_kind == "boss" else 0.8)
+	_spawn_effect("VFX-EXPLOSION-3D" if enemy_kind == "boss" else "VFX-IMPACT-3D", 1.4 if enemy_kind == "boss" else 0.8)
 	killed.emit(self, get_enemy_data())
 	if not elite_id.is_empty() and EliteRosterService != null:
 		EliteRosterService.settle(elite_id, elite_encounter_instance_id, "killed", {
@@ -1669,20 +1671,29 @@ func _update_boss_phase() -> void:
 	boss_phase_changed.emit(self, boss_phase)
 
 
-func _spawn_effect(kind: String, size: float) -> void:
+func _spawn_effect(asset_id: StringName, size: float) -> void:
 	if get_tree().current_scene == null:
 		return
 	var world_position := global_position + Vector3(0, 0.65, 0)
+	var color: Color = EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE)
+	# FX01-* 战斗反馈特效：走 VfxPool3D 新体系
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(asset_id, world_position, color, size)
+		return
+	# 兼容旧 CombatEffectPool3D（待 14.6 §6 迁移完成后删除）
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
 		(pools[0] as CombatEffectPool3D).acquire(
-			kind, EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE), size, world_position
+			str(asset_id).to_lower(), color, size, world_position
 		)
 		return
-	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
-	effect.configure(kind, EnemyAvatar3D.COLORS.get(enemy_kind, Color.WHITE), size)
-	get_tree().current_scene.add_child(effect)
-	effect.global_position = world_position
+	# 直接独立实例化作为后备
+	if VfxPool3D._REGISTRY.has(asset_id):
+		var packed: PackedScene = VfxPool3D._REGISTRY[asset_id]
+		var effect: VfxEffectBase3D = packed.instantiate() as VfxEffectBase3D
+		get_tree().current_scene.add_child(effect)
+		effect.activate(world_position, color, size)
 
 
 func _spawn_damage_number(amount: int, critical: bool) -> void:
@@ -1691,6 +1702,17 @@ func _spawn_damage_number(amount: int, critical: bool) -> void:
 	var footprint := EnemyAvatar3D.get_footprint_profile(enemy_kind)
 	var world_height := float(footprint.get("height", 1.3)) * maxf(scale.y, 0.01)
 	var spawn_position := global_position + Vector3.UP * (world_height + 0.72)
+	# 伤害颜色：普通=红 #ff4444；暴击=金 #ffcc33
+	var dmg_color: Color = Color("ffcc33") if critical else Color("ff4444")
+	# FX02-01 伤害飘字：走 VfxPool3D 新体系
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(
+			VfxPool3D.FX02_DAMAGE_NUMBER, spawn_position, dmg_color, 1.0,
+			{"text_value": str(amount), "critical": critical}
+		)
+		return
+	# 兼容旧 DAMAGE_NUMBER_SCRIPT（待 14.6 §6 迁移完成后删除）
 	var damage_number := DAMAGE_NUMBER_SCRIPT.new() as Node3D
 	get_tree().current_scene.add_child(damage_number)
 	damage_number.global_position = spawn_position

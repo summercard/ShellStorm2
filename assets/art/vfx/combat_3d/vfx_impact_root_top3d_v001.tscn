@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0102"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxImpact3D.gd" id="1_impact"]
+
+[node name="VfxImpact3D" type="Node3D"]
+script = ExtResource("1_impact")

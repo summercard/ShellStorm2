@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0202"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxHealNumber3D.gd" id="1_heal"]
+
+[node name="VfxHealNumber3D" type="Node3D"]
+script = ExtResource("1_heal")

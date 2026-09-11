@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0103"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxExplosion3D.gd" id="1_explosion"]
+
+[node name="VfxExplosion3D" type="Node3D"]
+script = ExtResource("1_explosion")

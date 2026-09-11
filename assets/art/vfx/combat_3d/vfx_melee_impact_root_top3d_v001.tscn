@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0105"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxMeleeImpact3D.gd" id="1_melee_impact"]
+
+[node name="VfxMeleeImpact3D" type="Node3D"]
+script = ExtResource("1_melee_impact")

@@ -3,6 +3,8 @@ extends Node
 ## 与八态移动机并行的近战动作子状态机。连段编号是上下文，不复制状态类。
 
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
+const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 
 signal action_changed(snapshot: Dictionary)
 signal hit_resolved(result: Dictionary)
@@ -268,7 +270,7 @@ func _spawn_swing_feedback() -> void:
 		"weapon_content_id": str(profile.get("content_id", "")),
 		"attack_instance_id": _attack_instance_id,
 	}
-	_acquire_effect("slash", color, size, position, context)
+	_acquire_effect(VfxPool3D.FX01_MELEE_SLASH, color, size, position, context)
 	_swing_feedback_count += 1
 	_last_feedback = {"kind": "slash", "combo_step": combo_step, "position": position}
 	if AudioManager != null:
@@ -290,28 +292,36 @@ func _spawn_hit_feedback(target: Node3D, result: Dictionary) -> void:
 		"target_instance_id": target.get_instance_id(),
 		"attack_instance_id": _attack_instance_id,
 	}
-	_acquire_effect("melee_impact", color, size, position, context)
+	_acquire_effect(VfxPool3D.FX01_MELEE_IMPACT, color, size, position, context)
 	_impact_feedback_count += 1
 	_last_feedback = {"kind": "melee_impact", "combo_step": combo_step, "position": position, "critical": critical}
 
 
 func _acquire_effect(
-	kind: String,
+	asset_id: StringName,
 	color: Color,
 	size: float,
 	world_position: Vector3,
 	context: Dictionary
 ) -> void:
+	# FX01-* 战斗反馈特效：走 VfxPool3D 新体系（按 AssetID 路由）
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(asset_id, world_position, color, size, context)
+		return
+	# 兼容旧 CombatEffectPool3D（待 14.6 §6 迁移完成后删除）
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
-		(pools[0] as CombatEffectPool3D).acquire(kind, color, size, world_position, "", context)
+		(pools[0] as CombatEffectPool3D).acquire(str(asset_id).to_lower(), color, size, world_position, "", context)
 		return
 	if get_tree().current_scene == null:
 		return
-	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
-	effect.configure(kind, color, size, "", context)
-	get_tree().current_scene.add_child(effect)
-	effect.global_position = world_position
+	# 直接独立实例化作为后备
+	if VfxPool3D._REGISTRY.has(asset_id):
+		var packed: PackedScene = VfxPool3D._REGISTRY[asset_id]
+		var effect: VfxEffectBase3D = packed.instantiate() as VfxEffectBase3D
+		get_tree().current_scene.add_child(effect)
+		effect.activate(world_position, color, size, context)
 
 
 func _is_wall_occluded(from: Vector3, to: Vector3) -> bool:
