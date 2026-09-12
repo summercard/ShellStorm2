@@ -286,9 +286,20 @@ func _finish_run(success: bool) -> void:
 		"return_room_id": "facility",
 	}
 	if not test_mode:
-		BaseManager.record_run(true, _kills)
-		BaseManager.add_extraction_points(_run_value)
-		BaseManager.clear_active_run_checkpoint("successful_extraction_to_99f")
+		var transaction_id := _get_run_settlement_transaction_id(true)
+		var commit := BaseManager.commit_run_settlement({
+			"transaction_id": transaction_id,
+			"success": true,
+			"kills": _kills,
+			"extraction_points": _run_value,
+			# 塔楼成功返航保留同一运行时物品实例，不复制到待领取栏。
+			"extraction_loot": [],
+		}) as Dictionary
+		if not bool(commit.get("success", false)):
+			_completed = false
+			status_label.text = "撤离结算保存失败 · 请重试撤离"
+			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
+			return
 	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
 	run_completed.emit(true, summary)
 	if not test_mode:
@@ -310,6 +321,7 @@ func _return_successful_extraction_to_facility() -> void:
 		_current_room_id = ""
 		_on_room_entered(facility_room)
 	_completed = false
+	_pending_run_settlement_transaction_id = ""
 	_extraction_defense_active = false
 	_active_extraction_beacon = null
 	_kills = 0

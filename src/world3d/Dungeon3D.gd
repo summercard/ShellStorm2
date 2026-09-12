@@ -177,6 +177,7 @@ var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
 var _runtime_restore_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
+var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
 var _segment_runtime_state: Dictionary = {}
 var _room_graph_runtime: RoomGraphRuntime = ROOM_GRAPH_RUNTIME_SCRIPT.new()
@@ -4699,6 +4700,9 @@ func _finish_run(success: bool) -> void:
 	if _completed:
 		return
 	_completed = true
+	var inventory_before := _inventory.get_slots_snapshot()
+	var insurance_before := _insurance.get_slots_snapshot()
+	var quick_before := _quick_inventory.get_slots_snapshot()
 	_close_inventory_for_modal()
 	_sync_player_input_lock()
 	extraction_panel.visible = false
@@ -4723,22 +4727,27 @@ func _finish_run(success: bool) -> void:
 		"inventory_capacity": _inventory.get_capacity(), "insurance_capacity": _insurance.get_max_slots(),
 	}
 	if not test_mode:
-		BaseManager.record_run(success, _kills)
-		if success:
-			BaseManager.add_extraction_points(_run_value)
-			BaseManager.add_extraction_loot_items(_run_loot)
-			# 成功撤离:清理检查点(电量不补满)
-			BaseManager.clear_active_run_checkpoint("run_success")
-		else:
-			var insurance_saved := settlement.get("insurance_saved", []) as Array
-			if not insurance_saved.is_empty():
-				var insurance_return := BaseManager.store_insurance_return_items(
-					insurance_saved, BaseShopService.generate_transaction_id("death_insurance")
-				) as Dictionary
-				if bool(insurance_return.get("success", false)):
-					_insurance.clear_all()
-			# 玩家确认死亡后行动已经结算，不能再恢复到结算前的战斗房间。
-			BaseManager.clear_active_run_checkpoint("run_death_settled")
+		var transaction_id := _get_run_settlement_transaction_id(success)
+		var commit := BaseManager.commit_run_settlement({
+			"transaction_id": transaction_id,
+			"success": success,
+			"kills": _kills,
+			"extraction_points": _run_value if success else 0,
+			"extraction_loot": _run_loot if success else [],
+			"insurance_saved": settlement.get("insurance_saved", []) if not success else [],
+		}) as Dictionary
+		if not bool(commit.get("success", false)):
+			_inventory.restore_slots_snapshot(inventory_before)
+			_insurance.restore_slots_snapshot(insurance_before)
+			_quick_inventory.restore_slots_snapshot(quick_before)
+			_completed = false
+			status_label.text = "行动结算保存失败 · 请重试"
+			push_error("[Dungeon3D] Run settlement failed: %s" % commit)
+			if not success:
+				_show_death_confirmation_dialog()
+			return
+		if not success:
+			_insurance.clear_all()
 		# 结算后的场景卸载不再回写旧运行态；保险/战利品已经进入长期事务。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
@@ -4752,6 +4761,14 @@ func _finish_run(success: bool) -> void:
 			if entry_request_id > 0:
 				GameEntryFlow.cancel_request(entry_request_id)
 			push_error("行动结算后的场景返回失败：%s" % error_string(change_error))
+
+
+func _get_run_settlement_transaction_id(success: bool) -> String:
+	if _pending_run_settlement_transaction_id.is_empty():
+		_pending_run_settlement_transaction_id = BaseShopService.generate_transaction_id(
+			"run_success" if success else "run_death"
+		)
+	return _pending_run_settlement_transaction_id
 
 
 func _request_return_entry_context(success: bool) -> int:

@@ -5,13 +5,13 @@
 设计依据：用户要求按差异项目逐行比较工程与文档，并标注一致性、是否修改和修改方向；遵循[文档驱动开发规范](../../DOCUMENTATION_STANDARD.md)。
 代码基线：`31ed360644768808e6faef5cd3b341b731888625`。事实来源：[工程审计](../audits/2026-09-12_engineering_audit.md)及其证据。
 
-- 交付 Excel：保留44项跟踪，其中10项已一致、10项开发中·部分完成、6项工程/文档不匹配、12项待设计／核验、6项文档缺失；另有214条资产摘要展开明细、9项上一轮已对齐文档记录。资产汇总在主表只计1项，不与明细重复累加。
-- 当前未处理方向为16项工程对齐文档、11项先确定文档再对齐、7项先核验版本；原7项“文档对齐工程”已经全部处理。
-- 每行列出工程现状、文档要求、判定分类、情况说明、是否已处理、修改方向、建议、处理状态、优先级和依据；当前10项已处理、34项未处理，主表支持按字段筛选及冻结表头、识别列。
+- 交付 Excel：保留44项跟踪，其中12项已一致、8项开发中·部分完成、6项工程/文档不匹配、12项待设计／核验、6项文档缺失；另有214条资产摘要展开明细、11项已对齐记录。资产汇总在主表只计1项，不与明细重复累加。
+- 当前未处理方向为14项工程对齐文档、11项先确定文档再对齐、7项先核验版本；原7项“文档对齐工程”已经全部处理。
+- 每行列出工程现状、文档要求、判定分类、情况说明、是否已处理、修改方向、建议、处理状态、优先级和依据；当前12项已处理、32项未处理，主表支持按字段筛选及冻结表头、识别列。
 - `开发中·部分完成`是版本施工进度，不计为错误或事实冲突；只有冻结口径互相冲突、或文档错误宣称已完成时才进入`工程/文档不匹配`。未冻结项目和契约缺失分别统计，不能与开发进度混算。
 - 未将明确标注未施工的30张命运卡计为错误；未将214条哈希变化认定为214个损坏资产；有争议的数值及版本保留待核验。
-- 初次交付只制作统计；2026-09-12后续已修复E03，并按用户决定用当前工程行为更新E01/E02文档。原内容数据库和资产台账未修改。
-- 验证：重新计算统计公式；逐表检查排版；导出后核对44条主表、9条历史记录、214组资产路径与双方完整SHA、筛选器及冻结窗格；214个资产文件的当前哈希与留存证据再次一致。未执行Excel客户端重算或新增游戏验收。
+- 初次交付只制作统计；2026-09-12后续已修复E03、E05、E06，并按用户决定用当前工程行为更新E01/E02文档。D01、D03–D07、D13内容文档也已对齐工程。
+- 验证：重新计算统计公式；逐表检查排版；导出后核对44条主表、11条已对齐记录、214组资产路径与双方完整SHA、筛选器及冻结窗格；E05/E06新增行动结算专项。未执行Excel客户端重算。
 
 长期结构化清单保存在[差异数据](../audits/evidence/discrepancy_inventory_20260912.json)。Excel 为本次任务输出目录中的交付文件；游戏缺陷的故障证据、验收范围及限制继续以工程审计为准。
 ## 逐项处理状态与对应文件（全部跟踪项目）
@@ -63,23 +63,38 @@
 
 ### E05｜撤离结算／多次提交
 
-- **是否已处理：`否`；处理状态：`部分完成（待续开发）`。**
-- 判定：`开发中·部分完成`；修改方向：`工程对齐文档`。
-- 处理建议：建立单次结算事务；持久化成功后发事件；验证拒绝、重试与重载。
+- **是否已处理：`是`；处理状态：`已修改并验证`。**
+- 判定：`已一致`；修改方向：`工程已对齐文档`。
+- 处理结果：已建立单次结算事务并验证写盘失败、重试、重复请求与重载幂等。
 - 对应文件／定位：
 
-  - `src/world3d/TowerDescent3D.gd:288`
-  - `docs/v0.1/09_技术施工_存档结算与复活.md 撤离结算`
+  - `src/base/BaseManager.gd`
+  - `src/world3d/TowerDescent3D.gd`
+  - `src/world3d/Dungeon3D.gd`
+  - `tests/verification/verify_run_settlement_transaction.gd`
+  - `tests/verification/verify_run_settlement_transaction.tscn`
+  - `docs/v0.1/09_技术施工_存档结算与复活.md`
+  - `docs/v0.1/development/2026-09-12_e05_e06_run_settlement_transaction.md`
+  - `scripts/run_verification_suite.sh`
+  - `tests/README.md`
+
 
 ### E06｜死亡结算／场景多域写入
 
-- **是否已处理：`否`；处理状态：`部分完成（待续开发）`。**
-- 判定：`开发中·部分完成`；修改方向：`工程对齐文档`。
-- 处理建议：收拢死亡结算命令；覆盖保险交接、写盘失败与重入，不重复发奖励。
+- **是否已处理：`是`；处理状态：`已修改并验证`。**
+- 判定：`已一致`；修改方向：`工程已对齐文档`。
+- 处理结果：已覆盖保险交接、写盘失败、重试、重复请求和重载，不重复累计失败行动或复制保险物。
 - 对应文件／定位：
 
-  - `src/world3d/Dungeon3D.gd:4727`
-  - `docs/v0.1/09_技术施工_存档结算与复活.md 死亡结算`
+  - `src/base/BaseManager.gd`
+  - `src/world3d/Dungeon3D.gd`
+  - `tests/verification/verify_run_settlement_transaction.gd`
+  - `tests/verification/verify_run_settlement_transaction.tscn`
+  - `docs/v0.1/09_技术施工_存档结算与复活.md`
+  - `docs/v0.1/development/2026-09-12_e05_e06_run_settlement_transaction.md`
+  - `scripts/run_verification_suite.sh`
+  - `tests/README.md`
+
 
 ### E07｜新特效池／回收回调
 
@@ -125,6 +140,7 @@
 
   - `src/enemy3d/EliteRosterService.gd:208`
   - `docs/v0.1/02_技术架构总则.md`
+  - `审计 A05`
 
 ### E11｜行动与布局／身份混用
 
@@ -136,6 +152,7 @@
   - `src/world3d/RunPersistenceService.gd:18–19`
   - `src/world3d/Dungeon3D.gd:1950`
   - `docs/v0.1/09_技术施工_存档结算与复活.md`
+  - `审计 A05`
 
 ### E12｜文件存储／故障安全证明
 
@@ -147,6 +164,7 @@
   - `src/core/AtomicJsonStore.gd:27–58`
   - `src/base/BaseManager.gd`
   - `docs/v0.1/09_技术施工_存档结算与复活.md`
+  - `审计 A06`
 
 ### E13｜自动验收／存档隔离
 
@@ -157,6 +175,7 @@
 
   - `scripts/run_verification_suite.sh`
   - `docs/v0.1/11_测试与发布.md；AGENTS.md`
+  - `审计 A07`
 
 ### E14｜自动验收／退出码口径
 
@@ -236,6 +255,7 @@
 
   - `tests/verification/verify_scene_facility_shared_palette.gd`
   - `docs/v0.1/audits/evidence/core_output.txt`
+  - `审计 A07／核心回归表`
 
 ### E21｜基地表现／旧基准断言
 
@@ -257,6 +277,7 @@
 
   - `tests/verification/verify_base99_structural_asset_integration.gd`
   - `docs/v0.1/audits/evidence/core_output.txt`
+  - `审计核心回归表`
 
 ### E23｜基地墙面／坐标基线
 
@@ -454,6 +475,7 @@
 
   - `assets/registry/ShellStorm2_美术资产台账_v001.xlsx`
   - `docs/v0.1/audits/evidence/asset_registry_check.json`
+  - `审计 A09`
 
 ### G01｜后处理／专项设计缺口
 
@@ -464,6 +486,7 @@
 
   - `src/postfx/PostfxOverlay.gd`
   - `docs/v0.1/MODULE_INDEX.md；docs/v0.1/13_技术施工_性能优化与热管理.md`
+  - `审计 A10`
 
 ### G02｜训练场／专项设计缺口
 
@@ -474,6 +497,7 @@
 
   - `src/training3d/TrainingRange3D.gd`
   - `docs/v0.1/MODULE_INDEX.md TRAINING`
+  - `审计 A10`
 
 ### G03｜工坊／功能文档与记录
 

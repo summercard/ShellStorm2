@@ -547,6 +547,80 @@ func record_run(success: bool, kills: int) -> void:
 	save_base()
 
 
+## 将一次行动的统计、魂、撤离战利品／死亡保险中转和行动检查点清理
+## 合并为一次存档提交。相同 transaction_id 重试只返回既有成功结果。
+func commit_run_settlement(request: Dictionary) -> Dictionary:
+	_ensure_data()
+	var transaction_id := str(request.get("transaction_id", ""))
+	if transaction_id.is_empty():
+		return {"success": false, "reason": "行动结算缺少事务ID"}
+	if ShopService.has_completed(data.completed_transaction_ids, transaction_id):
+		return {"success": true, "duplicate": true, "transaction_id": transaction_id}
+	var success := bool(request.get("success", false))
+	var kills := maxi(0, int(request.get("kills", 0)))
+	var extraction_points := maxi(0, int(request.get("extraction_points", 0))) if success else 0
+	var extraction_loot := request.get("extraction_loot", []) as Array
+	var insurance_saved := request.get("insurance_saved", []) as Array
+	var transaction_data := data
+	var old_total_runs := data.total_runs
+	var old_successful_extractions := data.successful_extractions
+	var old_total_kills := data.total_kills
+	var old_points := data.extraction_points
+	var old_loot := data.extraction_loot.duplicate(true)
+	var old_insurance := data.pending_insurance_slots.duplicate(true)
+	var old_checkpoint := data.active_run_snapshot.duplicate(true)
+	var old_transactions := data.completed_transaction_ids.duplicate()
+
+	data.record_run(success, kills)
+	data.extraction_points += extraction_points
+	if success:
+		for raw_item in extraction_loot:
+			if raw_item is Dictionary:
+				var item := ShopService.ensure_item_instance((raw_item as Dictionary).duplicate(true))
+				item["count"] = maxi(1, int(item.get("count", 1)))
+				data.extraction_loot.append(item)
+	else:
+		for raw_entry in insurance_saved:
+			if not raw_entry is Dictionary:
+				continue
+			var entry := raw_entry as Dictionary
+			var item := (entry.get("item", entry) as Dictionary).duplicate(true)
+			if item.is_empty():
+				continue
+			var count := maxi(1, int(entry.get("count", item.get("count", 1))))
+			item.erase("count")
+			var identity := _owned_item_identity(item)
+			if not identity.is_empty() and _insurance_return_contains_identity(identity):
+				continue
+			data.pending_insurance_slots.append({
+				"item": ShopService.ensure_item_instance(item),
+				"count": count,
+				"insurance_slot": maxi(0, int(entry.get("insurance_slot", data.pending_insurance_slots.size()))),
+				"insured_at": int(entry.get("insured_at", Time.get_unix_time_from_system())),
+			})
+	data.active_run_snapshot.clear()
+	ShopService.append_completed(data.completed_transaction_ids, transaction_id)
+	if save_base("run_settlement:%s" % ("success" if success else "death")):
+		return {
+			"success": true,
+			"duplicate": false,
+			"transaction_id": transaction_id,
+			"extraction_points": extraction_points,
+			"insurance_return_count": insurance_saved.size() if not success else 0,
+		}
+	# 并发冲突会让 save_base 重载权威档；只回滚仍是本次旧对象的情况。
+	if data == transaction_data:
+		data.total_runs = old_total_runs
+		data.successful_extractions = old_successful_extractions
+		data.total_kills = old_total_kills
+		data.extraction_points = old_points
+		data.extraction_loot = old_loot
+		data.pending_insurance_slots = old_insurance
+		data.active_run_snapshot = old_checkpoint
+		data.completed_transaction_ids.assign(old_transactions)
+	return {"success": false, "reason": "存档失败，行动结算已整体回滚", "transaction_id": transaction_id}
+
+
 func is_tutorial_completed() -> bool:
 	_ensure_data()
 	return data.tutorial_completed

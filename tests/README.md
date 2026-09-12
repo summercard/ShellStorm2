@@ -19,3 +19,5 @@
 新增测试时使用 `verify_<领域>_<行为>.tscn`，避免阶段号、日期和临时修补名。
 
 资源扣款事务使用 `verify_extraction_points_spend_transaction.tscn`：覆盖正常持久化、强制写盘失败回滚、余额/参数拒绝和旧revision实例重新加载权威档案。revision冲突分支会产生一条预期的`Refusing stale save`错误日志，验收记录必须与非预期脚本错误分开。
+
+行动结算事务使用 `verify_run_settlement_transaction.tscn`：覆盖成功撤离与死亡结算的一次提交、强制写盘失败整体回滚、故障解除后重试、同事务重复请求及重新加载后的幂等重放。

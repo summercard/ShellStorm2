@@ -5,6 +5,7 @@
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
 - [本次工程与文档审计记录](2026-09-12_documentation_audit.md)。
 - [工程、文档与开发状态表交付记录](2026-09-12_discrepancy_table.md)：44项跟踪按已一致、开发中·部分完成、工程/文档不匹配、待设计／核验和文档缺失分类，另含214条资产展开明细。
+- [E05/E06行动结算单次事务](2026-09-12_e05_e06_run_settlement_transaction.md)：成功撤离与死亡统一为一次原子、可重试、跨重载幂等的长期结算。
 - [E03资源扣款失败回滚](2026-09-12_e03_extraction_points_transaction.md)：普通资源扣款在写盘失败和revision冲突时拒绝并保持权威余额。
 - [E01/E02运行态先行文档对齐](2026-09-12_e01_e02_document_alignment.md)：按用户决定将开门与区段卸载改为运行态先行、快照最终一致。
 - [D01、D03–D07、D13内容文档对齐](2026-09-12_d01_d03_d07_d13_document_alignment.md)：内容名称、正式ID、实现状态与商店去向按运行工程同步。
