@@ -36,6 +36,10 @@ const STAIR_ROOFTOP_SCENE: PackedScene = preload(
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85
 const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
+## 非行动下线时的固定重生点。数值使用世界坐标，集中在这里供场景微调。
+## 100F保留原天台入口右上侧的安全落点；99F为基地房间中心。
+const ROOFTOP_LOGOUT_SPAWN := Vector3(-17.5, 0.05, 2.5)
+const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -8.95, 5.0)
 const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
@@ -200,15 +204,11 @@ func _ready() -> void:
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
 	var starts_on_rooftop := _should_start_on_rooftop_for_entry()
 	if starts_on_rooftop:
-		player.global_position = Vector3(
-			TOWER_GEOMETRY.CORE_CENTER_XZ.x - 20.0,
-			0.05,
-			TOWER_GEOMETRY.CORE_CENTER_XZ.y
-		)
+		player.global_position = ROOFTOP_LOGOUT_SPAWN
 	else:
 		var facility_room := _room_by_id.get("facility") as DungeonRoom3D
 		if facility_room != null:
-			player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 0.0)
+			player.global_position = FACILITY_LOGOUT_SPAWN
 			player.velocity = Vector3.ZERO
 			_current_room_id = ""
 			_on_room_entered(facility_room)
@@ -244,6 +244,12 @@ func _should_start_on_rooftop_for_entry() -> bool:
 	# 死亡结算已明确承诺返回99F，不得再被新手出生条件改送天台。
 	if str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F:
 		return false
+	if not test_mode and BaseManager != null:
+		var last_base_snapshot := BaseManager.get_active_run_checkpoint()
+		if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(last_base_snapshot):
+			# 没有可续局行动时，基地快照只决定100F/99F固定出生点，不恢复旧坐标。
+			if str(last_base_snapshot.get("scope", "")) == "base":
+				return str(last_base_snapshot.get("current_room_id", "")) == "start"
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
@@ -4092,7 +4098,9 @@ func _runtime_current_room_id_for_save() -> String:
 
 
 func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
-	return "base" if floor_index == 1 and room_id == "facility" else "combat"
+	# 100F天台与99F基地都不是可续局战斗；它们的快照只作为下次冷启动
+	# 选择固定出生点的“最后基地楼层”记录。
+	return "base" if floor_index <= 1 and room_id in ["start", "facility"] else "combat"
 
 
 func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
@@ -4211,6 +4219,12 @@ func _has_unclaimed_room_key(room_id: String) -> bool:
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	if bool(snapshot.get("world_restore_failed", false)):
 		return _room_by_id.get("facility") as DungeonRoom3D
+	# 续局不恢复战斗房内的精确坐标：统一投放到保存楼层的入口安全房间中心。
+	# 世界仍完整按快照重建，故房间进度、门、背包和装备不受此出生策略影响。
+	if str(snapshot.get("scope", "")) != "base":
+		var entry_room := _resolve_floor_entry_safe_room(int(snapshot.get("current_floor_index", 1)))
+		if entry_room != null:
+			return entry_room
 	var room_id := str(snapshot.get("current_room_id", ""))
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room != null:
@@ -4227,6 +4241,16 @@ func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 		if str(_find_record(candidate_id).get("tower_role", "")) == preferred_role:
 			return candidate
 	return _room_by_id.get("facility") as DungeonRoom3D
+
+
+func _resolve_floor_entry_safe_room(floor_index: int) -> DungeonRoom3D:
+	if floor_index <= 1:
+		return _room_by_id.get("facility") as DungeonRoom3D
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var room_id := str(room_id_value)
+		if str(_find_record(room_id).get("tower_role", "")) == "stair_entry":
+			return _room_by_id.get(room_id) as DungeonRoom3D
+	return null
 
 
 func get_active_facility_menu() -> CanvasLayer:

@@ -198,7 +198,7 @@ func _ready() -> void:
 		)
 		if not has_death_insurance_return:
 			var candidate := BaseManager.get_active_run_checkpoint()
-			if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(candidate):
+			if _is_combat_runtime_snapshot(candidate):
 				_runtime_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
@@ -377,6 +377,17 @@ func _runtime_current_room_id_for_save() -> String:
 
 func _runtime_scope_for_save(_floor_index: int, room_id: String) -> String:
 	return "base" if room_id == "facility" else "combat"
+
+
+## 只有仍在塔内的行动快照才续局。99F/100F 的基地快照只记录上次
+## 下线所在楼层，下一次进入按固定基地出生点重建，不能把玩家投回旧的任意坐标。
+func _is_combat_runtime_snapshot(snapshot: Dictionary) -> bool:
+	if not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(snapshot):
+		return false
+	if str(snapshot.get("scope", "")) == "base":
+		return false
+	# v1 旧档没有 scope；只要并非99F facility，按原行动快照兼容恢复。
+	return str(snapshot.get("current_room_id", "")) != "facility"
 
 
 func _build_runtime_world_save_snapshot() -> Dictionary:

@@ -47,10 +47,13 @@ func _ready() -> void:
 	combat_room.cleared = true
 	(first.get("_spawned_rooms") as Dictionary)[combat_room.room_id] = true
 	var expected_layout_id := str(((first.get("_floor_plan_snapshots") as Dictionary).get(2, {}) as Dictionary).get("layout_id", ""))
+	var expected_entry_room := (first.get("_room_by_id") as Dictionary).get("floor_01_entry") as DungeonRoom3D
+	var expected_restore_position := (
+		expected_entry_room.global_position + Vector3.UP * 0.05
+		if expected_entry_room != null else combat_room.global_position + Vector3.UP * 0.05
+	)
 	await get_tree().physics_frame
-	# 物理帧会把角色从0.05m初始悬空位置贴到地面；快照保存的是贴地后
-	# 坐标，期望值也必须在同一边界采集。
-	var expected_position := first.player.global_position
+	# 保留一个物理帧，使保存前的角色稳定落地；恢复目标由入口安全房间决定。
 	var inventory := first.get_inventory_module()
 	inventory.clear_all()
 	var backpack := ItemRegistry.get_instance().get_item("equipment_backpack_2")
@@ -87,8 +90,8 @@ func _ready() -> void:
 	for _frame in 20:
 		await get_tree().process_frame
 		if (
-			str(second.get("_current_room_id")) == combat_room_id
-			and _positions_restore_equivalent(second.player.global_position, expected_position)
+			str(second.get("_current_room_id")) == "floor_01_entry"
+			and _positions_restore_equivalent(second.player.global_position, expected_restore_position)
 		):
 			break
 	var restored_inventory := second.get_inventory_module()
@@ -117,12 +120,12 @@ func _ready() -> void:
 	var restored_room := (second.get("_room_by_id") as Dictionary).get(combat_room_id) as DungeonRoom3D
 	if restored_room == null:
 		failures.append("重启后没有按行动种子重新提交98F FloorBundle")
-	elif str(second.get("_current_room_id")) != combat_room_id:
-		failures.append("重启后没有回到保存时的战斗房")
-	elif not _positions_restore_equivalent(second.player.global_position, expected_position):
-		failures.append("重启后玩家没有恢复到战斗房合法位置 expected=%s actual=%s distance=%.3f" % [
-			str(expected_position), str(second.player.global_position),
-			second.player.global_position.distance_to(expected_position),
+	elif str(second.get("_current_room_id")) != "floor_01_entry":
+		failures.append("重启后没有回到保存楼层的入口安全房间")
+	elif not _positions_restore_equivalent(second.player.global_position, expected_restore_position):
+		failures.append("重启后玩家没有出生在保存楼层入口安全房间中心 expected=%s actual=%s distance=%.3f" % [
+			str(expected_restore_position), str(second.player.global_position),
+			second.player.global_position.distance_to(expected_restore_position),
 		])
 	if restored_room != null and not restored_room.cleared:
 		failures.append("已清理房间进度没有跨重启恢复")
