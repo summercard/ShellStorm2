@@ -1,0 +1,18 @@
+
+[scene] verify_music_system
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ERROR: [MusicManager] music_id 未注册: __nonexistent__
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] play (res://src/audio/MusicManager.gd:50)
+       [1] _ready (res://tests/verification/verify_music_system.gd:65)
+MUSIC_SYSTEM_OK: catalog ok, autoload ok, A/B loaded, repeat-play stable, push/restore works, unknown-id rejected
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+     at: cleanup (core/object/object.cpp:2641)
+ERROR: 6 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:810)
+
+VERIFICATION_SUITE_OK suite=scene count=1

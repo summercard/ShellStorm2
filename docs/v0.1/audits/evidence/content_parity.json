@@ -1,0 +1,572 @@
+{
+  "counts": {
+    "武器": 24,
+    "命运卡": 78,
+    "怪物与Boss": 10,
+    "精英怪": 12,
+    "掉落物品": 45,
+    "基地商店": 7,
+    "字段字典": 58
+  },
+  "differences": [
+    {
+      "sheet": "掉落物品",
+      "row": 21,
+      "id": "item_room_key",
+      "column": "价格",
+      "sheet_value": 0,
+      "runtime_value": null
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 47,
+      "id": "weapon_greatblade",
+      "column": "基地购买价",
+      "sheet_value": null,
+      "runtime_value": 165
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 47,
+      "id": "weapon_greatblade",
+      "column": "基地出售价",
+      "sheet_value": null,
+      "runtime_value": 83
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 48,
+      "id": "weapon_waraxe",
+      "column": "基地购买价",
+      "sheet_value": null,
+      "runtime_value": 240
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 48,
+      "id": "weapon_waraxe",
+      "column": "基地出售价",
+      "sheet_value": null,
+      "runtime_value": 120
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 18,
+      "id": "item_ammo_pack",
+      "column": "名称",
+      "sheet_value": "弹药包",
+      "runtime_value": "通用弹药"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 18,
+      "id": "item_ammo_pack",
+      "column": "堆叠",
+      "sheet_value": 5,
+      "runtime_value": 999
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 41,
+      "id": "item_battery_s",
+      "column": "子类",
+      "sheet_value": "battery",
+      "runtime_value": null
+    },
+    {
+      "sheet": "掉落物品",
+      "id": "item_battery_l",
+      "issue": "runtime_id_missing_in_workbook"
+    },
+    {
+      "sheet": "掉落物品",
+      "id": "item_cell_pack",
+      "issue": "runtime_id_missing_in_workbook"
+    },
+    {
+      "sheet": "掉落物品",
+      "id": "item_flashlight_basic",
+      "issue": "runtime_id_missing_in_workbook"
+    },
+    {
+      "sheet": "掉落物品",
+      "id": "item_flashlight_advanced",
+      "issue": "runtime_id_missing_in_workbook"
+    },
+    {
+      "sheet": "掉落物品",
+      "id": "item_flashlight_efficient",
+      "issue": "runtime_id_missing_in_workbook"
+    }
+  ],
+  "expected_design_only": [
+    {
+      "sheet": "掉落物品",
+      "row": 37,
+      "id": "item_boss_descent_key",
+      "status": "设计冻结；未实装"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 42,
+      "id": "battery_l",
+      "status": "设计完成；未实装"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 43,
+      "id": "cell_pack",
+      "status": "设计完成；未实装"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 44,
+      "id": "flashlight_module_basic",
+      "status": "设计完成；未实装"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 45,
+      "id": "flashlight_module_advanced",
+      "status": "设计完成；未实装"
+    },
+    {
+      "sheet": "掉落物品",
+      "row": 46,
+      "id": "flashlight_module_efficient",
+      "status": "设计完成；未实装"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 41,
+      "id": "fate_sword_ace",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 42,
+      "id": "fate_sword_two",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 43,
+      "id": "fate_sword_three",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 44,
+      "id": "fate_sword_four",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 45,
+      "id": "fate_sword_five",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 46,
+      "id": "fate_sword_six",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 47,
+      "id": "fate_sword_seven",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 48,
+      "id": "fate_sword_eight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 49,
+      "id": "fate_sword_nine",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 50,
+      "id": "fate_sword_ten",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 51,
+      "id": "fate_sword_page",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 52,
+      "id": "fate_sword_knight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 53,
+      "id": "fate_sword_queen",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 54,
+      "id": "fate_sword_king",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 60,
+      "id": "fate_cup_six",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 61,
+      "id": "fate_cup_seven",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 62,
+      "id": "fate_cup_eight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 63,
+      "id": "fate_cup_nine",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 64,
+      "id": "fate_cup_ten",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 65,
+      "id": "fate_cup_page",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 66,
+      "id": "fate_cup_knight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 67,
+      "id": "fate_cup_queen",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 68,
+      "id": "fate_cup_king",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 76,
+      "id": "fate_pentacle_eight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 77,
+      "id": "fate_pentacle_nine",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 78,
+      "id": "fate_pentacle_ten",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 79,
+      "id": "fate_pentacle_page",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 80,
+      "id": "fate_pentacle_knight",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 81,
+      "id": "fate_pentacle_queen",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    },
+    {
+      "sheet": "命运卡",
+      "row": 82,
+      "id": "fate_pentacle_king",
+      "status": "[未施工] 名称、正/逆位与效果参数已完成数据设计"
+    }
+  ],
+  "duplicates": {
+    "武器": [],
+    "命运卡": [],
+    "怪物与Boss": [],
+    "精英怪": [],
+    "掉落物品": [],
+    "基地商店": []
+  },
+  "runtime_counts": {
+    "bosses": 3,
+    "cards": 48,
+    "elites": 12,
+    "enemy_profiles": 7,
+    "items": 44,
+    "shop": 7
+  },
+  "runtime_elite_deployed": [
+    "elite_rift_boar_armed"
+  ],
+  "runtime_enemy_profiles": {
+    "ambusher": {
+      "cooldown": 1.9,
+      "damage": 18,
+      "hp": 50,
+      "range": 2.15,
+      "speed": 4.65
+    },
+    "boss": {
+      "cooldown": 1.45,
+      "damage": 24,
+      "hp": 520,
+      "range": 9.5,
+      "speed": 1.72
+    },
+    "exploder": {
+      "cooldown": 3.0,
+      "damage": 30,
+      "hp": 42,
+      "range": 2.85,
+      "speed": 3.1
+    },
+    "melee_chaser": {
+      "cooldown": 1.05,
+      "damage": 12,
+      "hp": 58,
+      "range": 1.9,
+      "speed": 3.7
+    },
+    "ranged_caster": {
+      "cooldown": 1.8,
+      "damage": 10,
+      "hp": 46,
+      "range": 8.8,
+      "speed": 2.25
+    },
+    "shielded": {
+      "cooldown": 1.55,
+      "damage": 17,
+      "hp": 112,
+      "range": 2.05,
+      "speed": 2.0
+    },
+    "summoner": {
+      "cooldown": 4.8,
+      "damage": 8,
+      "hp": 72,
+      "range": 7.2,
+      "speed": 1.65
+    }
+  },
+  "workbook_enemy_rows": [
+    {
+      "row": 5,
+      "内容ID": "monster_ambusher",
+      "名称": "地刺虫",
+      "原型": "ambusher",
+      "HP": 50,
+      "速度m/s": 4.65,
+      "伤害": 18,
+      "攻击范围m": 2.15,
+      "冷却s": 1.9,
+      "技能/战术": "未触发时潜伏；揭示后高速突进；低矮轮廓",
+      "刷新位置": "深度2+及主题池；COMBAT/ELITE",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 6,
+      "内容ID": "monster_boss_generic",
+      "名称": "Boss（通用回退模板）",
+      "原型": "boss",
+      "HP": 520,
+      "速度m/s": 1.72,
+      "伤害": 24,
+      "攻击范围m": 9.5,
+      "冷却s": 1.45,
+      "技能/战术": "无独立内容ID时使用的确定性弹幕/召唤回退",
+      "刷新位置": "测试/未来未配置Boss楼层",
+      "掉落/进度": "boss_floor_*",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D低模回退；不作为95/90/85正式内容",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式Boss由BossContentCatalog替换模型和阶段技能袋"
+    },
+    {
+      "row": 7,
+      "内容ID": "monster_exploder",
+      "名称": "炸弹果",
+      "原型": "exploder",
+      "HP": 42,
+      "速度m/s": 3.1,
+      "伤害": 30,
+      "攻击范围m": 2.85,
+      "冷却s": 3,
+      "技能/战术": "接近目标后3m范围自爆；攻击后死亡",
+      "刷新位置": "浅层及全部战斗层；COMBAT/陷阱倾向/增援",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 8,
+      "内容ID": "monster_melee_chaser",
+      "名称": "小菌猪",
+      "原型": "melee_chaser",
+      "HP": 58,
+      "速度m/s": 3.7,
+      "伤害": 12,
+      "攻击范围m": 1.9,
+      "冷却s": 1.05,
+      "技能/战术": "高速追击；近身突进；接触伤害",
+      "刷新位置": "浅层及全部战斗层；COMBAT/ELITE/撤离增援",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 9,
+      "内容ID": "monster_ranged_caster",
+      "名称": "孢子射手",
+      "原型": "ranged_caster",
+      "HP": 46,
+      "速度m/s": 2.25,
+      "伤害": 10,
+      "攻击范围m": 8.8,
+      "冷却s": 1.8,
+      "技能/战术": "保持中距；三连散射弹幕；侧向走位",
+      "刷新位置": "浅层及全部战斗层；COMBAT/ELITE/撤离增援",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 10,
+      "内容ID": "monster_shielded",
+      "名称": "壳甲卫兵",
+      "原型": "shielded",
+      "HP": 112,
+      "速度m/s": 2,
+      "伤害": 17,
+      "攻击范围m": 2.05,
+      "冷却s": 1.55,
+      "技能/战术": "正面减伤；15%正面完全格挡；穿甲可绕过护盾",
+      "刷新位置": "深度2+及主题池；COMBAT/ELITE/Boss护卫",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 11,
+      "内容ID": "monster_summoner",
+      "名称": "蜂巢怪",
+      "原型": "summoner",
+      "HP": 72,
+      "速度m/s": 1.65,
+      "伤害": 8,
+      "攻击范围m": 7.2,
+      "冷却s": 4.8,
+      "技能/战术": "周期召唤1–2只；6.5m范围治疗友军；远距游走",
+      "刷新位置": "深度2+及主题池；COMBAT/ELITE",
+      "掉落/进度": "由房间/楼层掉落表决定",
+      "状态来源": "[已实装]",
+      "实现状态": "正式3D基础模板",
+      "事实源": "src/enemy3d/Enemy3D.gd；src/map/MonsterInjector.gd",
+      "备注": "正式数值以Enemy3D.PROFILES为基线；旧2D基线仅用于倍率换算"
+    },
+    {
+      "row": 12,
+      "内容ID": "boss_abyss_archivist_95",
+      "名称": "深渊档案官",
+      "原型": "boss",
+      "HP": 520,
+      "速度m/s": 1.72,
+      "伤害": 24,
+      "攻击范围m": 9.5,
+      "冷却s": 1.45,
+      "技能/战术": "archive_fan / index_beam / archive_storm；召唤档案侍从",
+      "刷新位置": "95F不可绕过Boss竞技场",
+      "掉落/进度": "boss_floor_5；专用下行权限",
+      "状态来源": "[已实装]",
+      "实现状态": "独立Boss内容/模型/竞技场",
+      "事实源": "src/enemy3d/BossContentCatalog.gd；assets/art/enemies/bosses_v01/enm_boss_archivist_95_top3d_v001.glb",
+      "备注": "独立三阶段技能袋；档案竞技场8组掩体"
+    },
+    {
+      "row": 13,
+      "内容ID": "boss_furnace_warden_90",
+      "名称": "熔炉狱监",
+      "原型": "boss",
+      "HP": 520,
+      "速度m/s": 1.72,
+      "伤害": 24,
+      "攻击范围m": 9.5,
+      "冷却s": 1.45,
+      "技能/战术": "molten_volley / hammer_drive / furnace_burst；召唤余烬",
+      "刷新位置": "90F不可绕过Boss竞技场",
+      "掉落/进度": "boss_floor_10；专用下行权限",
+      "状态来源": "[已实装]",
+      "实现状态": "独立Boss内容/模型/竞技场",
+      "事实源": "src/enemy3d/BossContentCatalog.gd；assets/art/enemies/bosses_v01/enm_boss_furnace_warden_90_top3d_v001.glb",
+      "备注": "独立三阶段技能袋；熔炉竞技场6组掩体"
+    },
+    {
+      "row": 14,
+      "内容ID": "boss_hollow_choir_85",
+      "名称": "空洞合唱团",
+      "原型": "boss",
+      "HP": 520,
+      "速度m/s": 1.72,
+      "伤害": 24,
+      "攻击范围m": 9.5,
+      "冷却s": 1.45,
+      "技能/战术": "choir_wave / silence_chord / echo_burst；召唤回声",
+      "刷新位置": "85F不可绕过Boss竞技场",
+      "掉落/进度": "boss_floor_15；专用下行权限",
+      "状态来源": "[已实装]",
+      "实现状态": "独立Boss内容/模型/竞技场",
+      "事实源": "src/enemy3d/BossContentCatalog.gd；assets/art/enemies/bosses_v01/enm_boss_hollow_choir_85_top3d_v001.glb",
+      "备注": "独立三阶段技能袋；合唱竞技场5组掩体"
+    }
+  ]
+}

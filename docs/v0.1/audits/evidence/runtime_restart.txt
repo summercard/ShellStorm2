@@ -1,0 +1,11 @@
+
+[scene] verify_tower_runtime_restart_restore
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+[MapFateTriggers] 已连接到 3D 局内运行时
+[MapFateTriggers] 已连接到 3D 局内运行时
+TOWER_RUNTIME_RESTART_OK: seeded 98F world, room progress, position, inventory, real quick slots, equipment, insurance and flashlight survive restart
+
+VERIFICATION_SUITE_OK suite=scene count=1

@@ -1,0 +1,118 @@
+[
+  {
+    "source": "docs/v0.1/03_技术施工_玩家与操作.md",
+    "heading": "#### 3.4.1 尺寸参数版本记录（历史值不得覆盖）",
+    "target": "docs/v0.1/development/history/03_玩家与操作_历史记录.md#record-1",
+    "body_sha256": "ef2b86b8e74e395c5b0d2ee48a949f80d28060182ba6e33f6dcba271970cd3f4",
+    "original_lines": 18
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "### 3.2 本轮施工结果（2026-08-05）",
+    "target": "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md#record-1",
+    "body_sha256": "57b05cbbf3ed09febe33a177397abd18946f589df8a62bd57af92ca85150eb52",
+    "original_lines": 9
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "## 18. 本轮验收记录（2026-08-06）",
+    "target": "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md#record-2",
+    "body_sha256": "6d238128ab8501f61d5fd6cd136886924184ebc6ac1c8d35fd20cb74b3f1b619",
+    "original_lines": 12
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "### 20.5 实装与验收记录",
+    "target": "docs/v0.1/development/history/04_战斗与局内成长_历史记录.md#record-3",
+    "body_sha256": "9e0dc5f358d2bcfdc9d7dee7d3ebdb28422f69cd4a85047bc28b056615870998",
+    "original_lines": 9
+  },
+  {
+    "source": "docs/v0.1/06_技术施工_怪物精英与Boss.md",
+    "heading": "### 2.1 怪物体型参数版本记录（历史值不得覆盖）",
+    "target": "docs/v0.1/development/history/06_怪物精英与Boss_历史记录.md#record-1",
+    "body_sha256": "7e8e9a4aa4a606367a7669a99f3a974a4c4a9522ec4996d1d117b6c550f056bb",
+    "original_lines": 14
+  },
+  {
+    "source": "docs/v0.1/07_技术施工_基地设施.md",
+    "heading": "### 尺寸参数版本记录（历史值不得覆盖）",
+    "target": "docs/v0.1/development/history/07_基地设施_历史记录.md#record-1",
+    "body_sha256": "c7007505e94ed00819fa7d6180b32a64043f8619137058c2591ee5866ad04156",
+    "original_lines": 13
+  },
+  {
+    "source": "docs/v0.1/07_技术施工_基地设施.md",
+    "heading": "## 8. 本轮实现与验收（2026-08-06）",
+    "target": "docs/v0.1/development/history/07_基地设施_历史记录.md#record-2",
+    "body_sha256": "bae5c99932754c2ff3bad0659215745413b5540255e5ec2a29f3d4b4abef86f0",
+    "original_lines": 12
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 本轮施工验收记录（2026-08-05）",
+    "target": "docs/v0.1/development/history/11_测试与发布_历史记录.md#record-1",
+    "body_sha256": "2511d9050d66fae697c2a4eddc1c1a2fdcdd0a3a1365c6da1ff8e4da35144849",
+    "original_lines": 29
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 7.1 当前 AI / 性能验收口径",
+    "target": "docs/v0.1/development/history/11_测试与发布_历史记录.md#record-2",
+    "body_sha256": "e4022722d7cd29564a3986f6decb6d4d12fdf675bd7b8fba494661d2d5d43701",
+    "original_lines": 15
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 2026-09-12 99F设施功能资产转移验收",
+    "target": "docs/v0.1/development/history/11_测试与发布_历史记录.md#record-3",
+    "body_sha256": "d45a51e55bdca5367b4ccbd91268f8c7fa0d0125fa8ecf03ce0608cd1ed124f7",
+    "original_lines": 6
+  },
+  {
+    "source": "docs/v0.1/13_技术施工_性能优化与热管理.md",
+    "heading": "## 2. 2026-08-05 实机现场检查",
+    "target": "docs/v0.1/development/history/13_性能优化与热管理_历史记录.md#record-1",
+    "body_sha256": "0416f8754ef1c6f0a25db5069b54ed3854a127e18192fbe18aef2956e2266b62",
+    "original_lines": 28
+  },
+  {
+    "source": "docs/v0.1/13_技术施工_性能优化与热管理.md",
+    "heading": "### 6.1 历史Compatibility基线实测（2026-08-13，不代表当前Forward+发布结果）",
+    "target": "docs/v0.1/development/history/13_性能优化与热管理_历史记录.md#record-2",
+    "body_sha256": "08d9c96b6bb6b1229f89ecf40a699233c9d2d7815da4cc8641058bd51ad5b9b2",
+    "original_lines": 27
+  },
+  {
+    "source": "docs/v0.1/14.8_音乐系统与配乐资产.md",
+    "heading": "## 9. Bug 修复记录",
+    "target": "docs/v0.1/development/history/14.8_音乐系统与配乐资产_历史记录.md#record-1",
+    "body_sha256": "e4d6aa80893e3b99a4593fb0db2b1d89de54efcef5edb540222112c7f7fa2257",
+    "original_lines": 19
+  },
+  {
+    "source": "docs/v0.1/14.6_特效系统与制作规范.md",
+    "heading": "## 附录 A：3D-特效 sheet 体检快照（2026-09-11）",
+    "target": "docs/v0.1/development/history/14.6_特效系统与制作规范_历史记录.md#record-1",
+    "body_sha256": "2999bcdc0101f29878b392cbcb03a5e70611d5cf96e080e3e2a2ff76c231fc21",
+    "original_lines": 62
+  },
+  {
+    "source": "docs/v0.1/CHANGELOG.md",
+    "target": "docs/v0.1/development/CHANGELOG.md",
+    "original_sha256": "4ba4c4671cab5b248a4ba2b57ca254b2bbac4490032184118eb93ebb74abae0d",
+    "original_lines": 691
+  },
+  {
+    "source": "docs/v0.1/14.5_推送更新摘要_2026-08-27.md",
+    "target": "docs/v0.1/development/history/14.5_推送更新摘要_2026-08-27.md",
+    "original_sha256": "fcd3be1193627f5c5afa84a5988d2c801adc0d81b8a9a55393c5ffebdd6e9dd7",
+    "original_lines": 130
+  },
+  {
+    "source": "docs/v0.1/17_天台至98层成品化验收.md",
+    "target": "docs/v0.1/development/history/17_天台至98层成品化验收.md",
+    "original_sha256": "007c8e9a66bd3c2f48879180a9cf830712994f20c1a320bf6806913f281d6df9",
+    "original_lines": 62
+  }
+]

@@ -1,0 +1,99 @@
+{
+  "code_baseline": "31ed360644768808e6faef5cd3b341b731888625",
+  "engine": "4.6.2.stable.official.71f334935",
+  "date": "2026-09-12",
+  "isolation": "project settings custom_user_dir_name set before autoload startup; shared source/resources and import cache",
+  "core": {
+    "attempted": 61,
+    "exit_zero": 49,
+    "exit_one": 11,
+    "timeout_exit_143": 1
+  },
+  "additional": {
+    "runtime_autosave": "exit0",
+    "runtime_restart": "exit0",
+    "music": "exit0 with expected unknown-id rejection and unaccepted resource-leak warning",
+    "postfx_formal": "LOAD_FAILURE missing tscn",
+    "postfx_temporary_scene": "POSTFX_OVERLAY_RUNTIME_OK"
+  },
+  "limits": [
+    "No full suite",
+    "No fresh import from clean cache",
+    "No visual/GPU/long soak acceptance",
+    "Probes are handler-level fault injection, not keyboard E2E or process crash tests"
+  ],
+  "files": {
+    "asset_registry_check.json": {
+      "sha256": "b1d604a8a582615e7dd797422846e5b686c444ec2ce7aadf54e4b7fcd9223b89",
+      "bytes": 81698
+    },
+    "assets_formula_scan.txt": {
+      "sha256": "44b42bbc2fa2bbf67b44ab8b232a112cf94c577c317f8b4f242e70e8f343db89",
+      "bytes": 61
+    },
+    "commit_trace.json": {
+      "sha256": "a8f2adc5b472a48e4fc9fc1581b06e137db4e3a89a9abeb504be5d20482efbcb",
+      "bytes": 7012
+    },
+    "content_formula_scan.txt": {
+      "sha256": "44b42bbc2fa2bbf67b44ab8b232a112cf94c577c317f8b4f242e70e8f343db89",
+      "bytes": 61
+    },
+    "content_parity.json": {
+      "sha256": "944901b8a8cdd408e99f0e7337d3f5792a9ad231e3aac9dcad61f241b1f720dd",
+      "bytes": 16801
+    },
+    "core_output.txt": {
+      "sha256": "208e925ce87543ed52600369a2fcdf360e6011f4224abf56887936b0a31bcc4c",
+      "bytes": 60589
+    },
+    "core_results.json": {
+      "sha256": "3f32778512b6ae735bcf5832a72a65291574bda09a7f449bcc84a4c834f71f0c",
+      "bytes": 21055
+    },
+    "failure_probe_source.gd.txt": {
+      "sha256": "4f3e5820fccebdddb2d19249028be340f946b458a89e94a4dc8313eab9dfe2a8",
+      "bytes": 1960
+    },
+    "failure_probes.txt": {
+      "sha256": "e2b6716910b9c9311b5568b62fca9430945e16d6cede183f6ab6da7dcb1e94cc",
+      "bytes": 387
+    },
+    "history_migration.json": {
+      "sha256": "7aa451383c53efb1e174cf99dd1091fbefd8a1e8f4f27a97c6fa57f1ca9faa70",
+      "bytes": 5601
+    },
+    "migration_verification.json": {
+      "sha256": "b6db97be274f187e6a903d565beafeadafeef745860530898e171e727362d81d",
+      "bytes": 2607
+    },
+    "music.txt": {
+      "sha256": "4e5fef98519941df2701626f0bcfbe81019f3eb68447e3354d660ea57716530b",
+      "bytes": 858
+    },
+    "postfx_missing_scene.txt": {
+      "sha256": "7af0cd69c722584e1bd1c1d9437c2b1ecdc9d4c839565756862b28f34d39f039",
+      "bytes": 440
+    },
+    "postfx_temporary_scene.txt": {
+      "sha256": "dc75ffc5e10087f68c21c8573ddd72faf3f2f40cda4cf3d37af7b307e57f46ae",
+      "bytes": 99
+    },
+    "runtime_autosave.txt": {
+      "sha256": "0bfa2434e5fb6b2e3f77e7480d41301db6b6c04fef6e95eca86d22eb52f9dbed",
+      "bytes": 326
+    },
+    "runtime_export.txt": {
+      "sha256": "1037a18d8897db87e7c490ed394d38e2f67f5b8612a0475fd1e0d39b0eb3f11c",
+      "bytes": 121
+    },
+    "runtime_restart.txt": {
+      "sha256": "3a9e5e19ad0dcbc0326ed079dc4302f687959b2b838f9906a4b58a834321598e",
+      "bytes": 485
+    },
+    "source_inventory.json": {
+      "sha256": "bbba740ff11820cdd216725fb5ed4c4750009b6dbf31224a110a39f2d7f48abb",
+      "bytes": 42329
+    }
+  }
+}

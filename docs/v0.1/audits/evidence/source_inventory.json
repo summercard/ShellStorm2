@@ -1,0 +1,1711 @@
+{
+  "baseline": "31ed360644768808e6faef5cd3b341b731888625",
+  "modules": {
+    "audio": {
+      "files": 3,
+      "lines": 378
+    },
+    "base": {
+      "files": 9,
+      "lines": 4032
+    },
+    "base3d": {
+      "files": 5,
+      "lines": 871
+    },
+    "combat3d": {
+      "files": 6,
+      "lines": 1912
+    },
+    "core": {
+      "files": 13,
+      "lines": 2162
+    },
+    "enemy3d": {
+      "files": 8,
+      "lines": 3686
+    },
+    "framework": {
+      "files": 1,
+      "lines": 32
+    },
+    "fx": {
+      "files": 1,
+      "lines": 71
+    },
+    "game": {
+      "files": 9,
+      "lines": 1933
+    },
+    "map": {
+      "files": 4,
+      "lines": 1197
+    },
+    "player3d": {
+      "files": 25,
+      "lines": 7380
+    },
+    "postfx": {
+      "files": 1,
+      "lines": 148
+    },
+    "testing": {
+      "files": 3,
+      "lines": 64
+    },
+    "training3d": {
+      "files": 5,
+      "lines": 713
+    },
+    "ui": {
+      "files": 28,
+      "lines": 8891
+    },
+    "vfx": {
+      "files": 9,
+      "lines": 622
+    },
+    "weapons": {
+      "files": 7,
+      "lines": 3577
+    },
+    "world3d": {
+      "files": 27,
+      "lines": 16552
+    }
+  },
+  "source_count": 164,
+  "source_lines": 54221,
+  "autoloads": {
+    "VfxPool": "src/vfx/VfxPool3D.gd",
+    "Global": "src/core/Global.gd",
+    "GameEntryFlow": "src/core/GameEntryFlow.gd",
+    "GameManager": "src/core/GameManager.gd",
+    "AudioManager": "src/core/AudioManager.gd",
+    "BaseManager": "src/base/BaseManager.gd",
+    "GameTimeManager": "src/core/GameTimeManager.gd",
+    "BlueprintRegistry": "src/base/BlueprintRegistry.gd",
+    "FateCardGameBridge": "src/game/FateCardGameBridge.gd",
+    "LevelSelect": "src/game/LevelSelectState.gd",
+    "MobileInput": "src/ui/MobileInput.gd",
+    "MonsterAIManager": "src/enemy3d/MonsterAIManager.gd",
+    "EliteRosterService": "src/enemy3d/EliteRosterService.gd",
+    "GameplaySpatialRegistry3D": "src/core/GameplaySpatialRegistry3D.gd",
+    "GraphicsSettingsManager": "src/core/GraphicsSettingsManager.gd",
+    "PostfxOverlay": "src/postfx/PostfxOverlay.gd",
+    "RuntimePerformanceManager": "src/core/RuntimePerformanceManager.gd",
+    "SceneParticleToggle3D": "src/world3d/SceneParticleToggle3D.gd",
+    "MusicManager": "src/audio/MusicManager.gd"
+  },
+  "metrics": [
+    {
+      "path": "src/world3d/Dungeon3D.gd",
+      "lines": 5104,
+      "functions": 249,
+      "dependencies": 60,
+      "autoloads": [
+        "AudioManager",
+        "BaseManager",
+        "BlueprintRegistry",
+        "EliteRosterService",
+        "FateCardGameBridge",
+        "GameEntryFlow",
+        "GameManager",
+        "GameplaySpatialRegistry3D",
+        "GraphicsSettingsManager",
+        "LevelSelect",
+        "MonsterAIManager",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/world3d/TowerDescent3D.gd",
+      "lines": 4468,
+      "functions": 163,
+      "dependencies": 23,
+      "autoloads": [
+        "BaseManager",
+        "FateCardGameBridge",
+        "GameEntryFlow",
+        "GameManager",
+        "GameTimeManager",
+        "GameplaySpatialRegistry3D",
+        "MonsterAIManager"
+      ]
+    },
+    {
+      "path": "src/world3d/DungeonRoom3D.gd",
+      "lines": 2244,
+      "functions": 91,
+      "dependencies": 9,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/Player3D.gd",
+      "lines": 1892,
+      "functions": 150,
+      "dependencies": 24,
+      "autoloads": [
+        "AudioManager",
+        "BlueprintRegistry",
+        "MobileInput",
+        "MonsterAIManager"
+      ]
+    },
+    {
+      "path": "src/enemy3d/Enemy3D.gd",
+      "lines": 1719,
+      "functions": 80,
+      "dependencies": 12,
+      "autoloads": [
+        "AudioManager",
+        "EliteRosterService",
+        "GameplaySpatialRegistry3D",
+        "MonsterAIManager"
+      ]
+    },
+    {
+      "path": "src/player3d/PlayerAvatar3D.gd",
+      "lines": 1682,
+      "functions": 50,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/InventoryUI.gd",
+      "lines": 1610,
+      "functions": 70,
+      "dependencies": 11,
+      "autoloads": [
+        "FateCardGameBridge"
+      ]
+    },
+    {
+      "path": "src/base/BaseManager.gd",
+      "lines": 1295,
+      "functions": 96,
+      "dependencies": 10,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/weapons/FateCardEngine.gd",
+      "lines": 1282,
+      "functions": 38,
+      "dependencies": 5,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/base/ItemRegistry.gd",
+      "lines": 1233,
+      "functions": 26,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/combat3d/WeaponModel3D.gd",
+      "lines": 909,
+      "functions": 41,
+      "dependencies": 12,
+      "autoloads": [
+        "AudioManager",
+        "BlueprintRegistry",
+        "MonsterAIManager"
+      ]
+    },
+    {
+      "path": "src/world3d/TowerFloorStage3D.gd",
+      "lines": 801,
+      "functions": 41,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/DungeonMinimap3D.gd",
+      "lines": 789,
+      "functions": 47,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/FlashlightColorTweaker.gd",
+      "lines": 783,
+      "functions": 45,
+      "dependencies": 5,
+      "autoloads": [
+        "GraphicsSettingsManager",
+        "PostfxOverlay"
+      ]
+    },
+    {
+      "path": "src/weapons/FateCardPresets.gd",
+      "lines": 752,
+      "functions": 56,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/WeaponAssemblyTreePanel.gd",
+      "lines": 739,
+      "functions": 33,
+      "dependencies": 4,
+      "autoloads": []
+    },
+    {
+      "path": "src/enemy3d/MonsterAIManager.gd",
+      "lines": 697,
+      "functions": 33,
+      "dependencies": 3,
+      "autoloads": [
+        "GameplaySpatialRegistry3D"
+      ]
+    },
+    {
+      "path": "src/player3d/Player3DStateGallery.gd",
+      "lines": 636,
+      "functions": 41,
+      "dependencies": 5,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/BlueprintRegistry.gd",
+      "lines": 632,
+      "functions": 43,
+      "dependencies": 4,
+      "autoloads": [
+        "BaseManager",
+        "BlueprintRegistry"
+      ]
+    },
+    {
+      "path": "src/player3d/PlayerVision3D.gd",
+      "lines": 604,
+      "functions": 30,
+      "dependencies": 4,
+      "autoloads": [
+        "GameplaySpatialRegistry3D"
+      ]
+    },
+    {
+      "path": "src/player3d/PlayerFlashlight3D.gd",
+      "lines": 602,
+      "functions": 44,
+      "dependencies": 5,
+      "autoloads": [
+        "GameplaySpatialRegistry3D",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/ui/wardrobe/WardrobeMenu3D.gd",
+      "lines": 544,
+      "functions": 28,
+      "dependencies": 7,
+      "autoloads": []
+    },
+    {
+      "path": "src/combat3d/Projectile3D.gd",
+      "lines": 501,
+      "functions": 22,
+      "dependencies": 5,
+      "autoloads": [
+        "MonsterAIManager"
+      ]
+    },
+    {
+      "path": "src/ui/BaseMenu.gd",
+      "lines": 489,
+      "functions": 21,
+      "dependencies": 5,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/core/GraphicsSettingsManager.gd",
+      "lines": 466,
+      "functions": 27,
+      "dependencies": 1,
+      "autoloads": [
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/map/FloorPlanGenerator.gd",
+      "lines": 451,
+      "functions": 16,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/InventoryModule.gd",
+      "lines": 430,
+      "functions": 31,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/WorkbenchPanel.gd",
+      "lines": 401,
+      "functions": 23,
+      "dependencies": 8,
+      "autoloads": [
+        "BaseManager",
+        "BlueprintRegistry",
+        "FateCardGameBridge"
+      ]
+    },
+    {
+      "path": "src/enemy3d/EnemyIllumination3D.gd",
+      "lines": 392,
+      "functions": 18,
+      "dependencies": 1,
+      "autoloads": [
+        "GameplaySpatialRegistry3D"
+      ]
+    },
+    {
+      "path": "src/weapons/FateCard.gd",
+      "lines": 392,
+      "functions": 22,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/weapons/WeaponInstance.gd",
+      "lines": 381,
+      "functions": 22,
+      "dependencies": 5,
+      "autoloads": [
+        "BlueprintRegistry"
+      ]
+    },
+    {
+      "path": "src/weapons/WeaponAssemblyTree.gd",
+      "lines": 368,
+      "functions": 29,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/RoomFurniture3D.gd",
+      "lines": 353,
+      "functions": 21,
+      "dependencies": 5,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/ui/BaseVendingMenu.gd",
+      "lines": 352,
+      "functions": 18,
+      "dependencies": 6,
+      "autoloads": [
+        "AudioManager",
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/map/MonsterInjector.gd",
+      "lines": 342,
+      "functions": 16,
+      "dependencies": 3,
+      "autoloads": [
+        "EliteRosterService"
+      ]
+    },
+    {
+      "path": "src/enemy3d/EliteRosterService.gd",
+      "lines": 333,
+      "functions": 21,
+      "dependencies": 2,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/player3d/melee/PlayerMeleeCombat3D.gd",
+      "lines": 333,
+      "functions": 20,
+      "dependencies": 10,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/map/RoomData.gd",
+      "lines": 331,
+      "functions": 24,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/TowerAtmosphere3D.gd",
+      "lines": 330,
+      "functions": 21,
+      "dependencies": 8,
+      "autoloads": [
+        "GameTimeManager",
+        "GameplaySpatialRegistry3D",
+        "GraphicsSettingsManager",
+        "MusicManager",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/ui/MobileInput.gd",
+      "lines": 315,
+      "functions": 20,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/main_entry/MainEntryScreen3D.gd",
+      "lines": 315,
+      "functions": 22,
+      "dependencies": 4,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/PauseMenu3D.gd",
+      "lines": 311,
+      "functions": 25,
+      "dependencies": 10,
+      "autoloads": [
+        "BaseManager",
+        "FateCardGameBridge",
+        "GameEntryFlow",
+        "GameTimeManager",
+        "GameplaySpatialRegistry3D",
+        "Global",
+        "GraphicsSettingsManager",
+        "LevelSelect"
+      ]
+    },
+    {
+      "path": "src/ui/MerchantUI.gd",
+      "lines": 309,
+      "functions": 20,
+      "dependencies": 5,
+      "autoloads": [
+        "GameManager"
+      ]
+    },
+    {
+      "path": "src/weapons/AssemblyNode.gd",
+      "lines": 307,
+      "functions": 22,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/WastelandLight3D.gd",
+      "lines": 303,
+      "functions": 20,
+      "dependencies": 5,
+      "autoloads": [
+        "GameplaySpatialRegistry3D",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/game/LootModule.gd",
+      "lines": 300,
+      "functions": 15,
+      "dependencies": 4,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/world3d/RoomDoor3D.gd",
+      "lines": 295,
+      "functions": 14,
+      "dependencies": 2,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/base3d/BaseWorld3DEnvironment.gd",
+      "lines": 293,
+      "functions": 13,
+      "dependencies": 6,
+      "autoloads": [
+        "GameTimeManager",
+        "GraphicsSettingsManager",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/world3d/ItemModelFactory3D.gd",
+      "lines": 292,
+      "functions": 18,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/UIStyleFactory.gd",
+      "lines": 287,
+      "functions": 15,
+      "dependencies": 3,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/enemy3d/EnemyAvatar3D.gd",
+      "lines": 283,
+      "functions": 18,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/MonsterArchiveMenu.gd",
+      "lines": 276,
+      "functions": 13,
+      "dependencies": 3,
+      "autoloads": [
+        "EliteRosterService"
+      ]
+    },
+    {
+      "path": "src/world3d/BaseFixtureGlow3D.gd",
+      "lines": 276,
+      "functions": 10,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/FateCardGameBridge.gd",
+      "lines": 272,
+      "functions": 19,
+      "dependencies": 4,
+      "autoloads": [
+        "FateCardGameBridge"
+      ]
+    },
+    {
+      "path": "src/base3d/BaseFacility3D.gd",
+      "lines": 261,
+      "functions": 14,
+      "dependencies": 5,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/core/SynthSfx.gd",
+      "lines": 260,
+      "functions": 23,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/RoomLightSwitch3D.gd",
+      "lines": 254,
+      "functions": 20,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/ProfileSaveService.gd",
+      "lines": 250,
+      "functions": 11,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/InsuranceModule.gd",
+      "lines": 250,
+      "functions": 21,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/training3d/TrainingRange3D.gd",
+      "lines": 249,
+      "functions": 20,
+      "dependencies": 11,
+      "autoloads": [
+        "BaseManager",
+        "BlueprintRegistry",
+        "GraphicsSettingsManager",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/world3d/Base99WalkableModule3D.gd",
+      "lines": 245,
+      "functions": 11,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/WorkshopMenu.gd",
+      "lines": 235,
+      "functions": 10,
+      "dependencies": 4,
+      "autoloads": [
+        "AudioManager",
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/combat3d/CombatEffect3D.gd",
+      "lines": 234,
+      "functions": 11,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/GameplaySpatialRegistry3D.gd",
+      "lines": 229,
+      "functions": 19,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/ExtractionBeacon3D.gd",
+      "lines": 226,
+      "functions": 19,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/ItemUseHandler.gd",
+      "lines": 225,
+      "functions": 11,
+      "dependencies": 2,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/audio/MusicManager.gd",
+      "lines": 223,
+      "functions": 20,
+      "dependencies": 1,
+      "autoloads": [
+        "MusicManager"
+      ]
+    },
+    {
+      "path": "src/base/BaseData.gd",
+      "lines": 221,
+      "functions": 3,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/StateMachine.gd",
+      "lines": 220,
+      "functions": 19,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/AudioManager.gd",
+      "lines": 215,
+      "functions": 21,
+      "dependencies": 0,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/game/MapFateTriggers.gd",
+      "lines": 210,
+      "functions": 15,
+      "dependencies": 1,
+      "autoloads": [
+        "FateCardGameBridge"
+      ]
+    },
+    {
+      "path": "src/base3d/BaseWorld3D.gd",
+      "lines": 208,
+      "functions": 17,
+      "dependencies": 10,
+      "autoloads": [
+        "BaseManager",
+        "Global",
+        "LevelSelect",
+        "MusicManager"
+      ]
+    },
+    {
+      "path": "src/ui/ItemSlot.gd",
+      "lines": 204,
+      "functions": 11,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/ItemModelIcon3D.gd",
+      "lines": 203,
+      "functions": 13,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/ThemedNPC3D.gd",
+      "lines": 203,
+      "functions": 17,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/ServiceStation3D.gd",
+      "lines": 194,
+      "functions": 13,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/DivinationMenu.gd",
+      "lines": 192,
+      "functions": 11,
+      "dependencies": 5,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/ui/BaseRecoveryMenu.gd",
+      "lines": 187,
+      "functions": 8,
+      "dependencies": 4,
+      "autoloads": [
+        "AudioManager",
+        "BaseManager",
+        "GameTimeManager"
+      ]
+    },
+    {
+      "path": "src/ui/VaultMenu.gd",
+      "lines": 184,
+      "functions": 12,
+      "dependencies": 5,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/ui/FateCardCollectionMenu.gd",
+      "lines": 180,
+      "functions": 5,
+      "dependencies": 4,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/CodeHUDGlyph.gd",
+      "lines": 168,
+      "functions": 15,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/combat3d/MeleeWeaponVisual3D.gd",
+      "lines": 160,
+      "functions": 12,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/CharacterMotionLibrary3D.gd",
+      "lines": 159,
+      "functions": 5,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/RuntimePerformanceManager.gd",
+      "lines": 156,
+      "functions": 17,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/GameTimeManager.gd",
+      "lines": 155,
+      "functions": 17,
+      "dependencies": 2,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/player3d/PlayerInteractionController3D.gd",
+      "lines": 149,
+      "functions": 11,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/postfx/PostfxOverlay.gd",
+      "lines": 148,
+      "functions": 15,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/training3d/TrainingRack3D.gd",
+      "lines": 140,
+      "functions": 11,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/GroundLootPickup3D.gd",
+      "lines": 138,
+      "functions": 8,
+      "dependencies": 3,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/enemy3d/MonsterVisionSystem3D.gd",
+      "lines": 134,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/training3d/TrainingTarget3D.gd",
+      "lines": 127,
+      "functions": 10,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/BaseFacilityService.gd",
+      "lines": 123,
+      "functions": 4,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/WorldTimeDomain.gd",
+      "lines": 123,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/DeathSettlementModule.gd",
+      "lines": 120,
+      "functions": 7,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/BaseStorageSlot.gd",
+      "lines": 119,
+      "functions": 7,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/BaseFacilityCatalog.gd",
+      "lines": 118,
+      "functions": 3,
+      "dependencies": 8,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/RoomKeyPickup3D.gd",
+      "lines": 117,
+      "functions": 6,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/training3d/TrainingRangeEnvironment3D.gd",
+      "lines": 116,
+      "functions": 8,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/UIFX.gd",
+      "lines": 109,
+      "functions": 9,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxPool3D.gd",
+      "lines": 108,
+      "functions": 7,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/UIPalette.gd",
+      "lines": 107,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxMeleeImpact3D.gd",
+      "lines": 107,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/Base100UpperShell3D.gd",
+      "lines": 104,
+      "functions": 5,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/EquipmentTransactionService.gd",
+      "lines": 103,
+      "functions": 3,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/enemy3d/EliteContentCatalog.gd",
+      "lines": 102,
+      "functions": 5,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/Global.gd",
+      "lines": 98,
+      "functions": 13,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/customization/AvatarCustomizationCatalog.gd",
+      "lines": 98,
+      "functions": 5,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/PerformanceOverlay.gd",
+      "lines": 96,
+      "functions": 5,
+      "dependencies": 3,
+      "autoloads": [
+        "GraphicsSettingsManager",
+        "RuntimePerformanceManager"
+      ]
+    },
+    {
+      "path": "src/weapons/TarotFateCatalog.gd",
+      "lines": 95,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/SimpleTransitDoor3D.gd",
+      "lines": 92,
+      "functions": 6,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/audio/MusicCatalog.gd",
+      "lines": 89,
+      "functions": 3,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/base3d/DungeonEntrance3D.gd",
+      "lines": 89,
+      "functions": 8,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/BaseEnergyService.gd",
+      "lines": 86,
+      "functions": 3,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/SceneParticleToggle3D.gd",
+      "lines": 84,
+      "functions": 6,
+      "dependencies": 1,
+      "autoloads": [
+        "GraphicsSettingsManager"
+      ]
+    },
+    {
+      "path": "src/world3d/RoomGraphRuntime.gd",
+      "lines": 83,
+      "functions": 11,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/GameEntryFlow.gd",
+      "lines": 81,
+      "functions": 7,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/training3d/TrainingExit3D.gd",
+      "lines": 81,
+      "functions": 7,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxExplosion3D.gd",
+      "lines": 79,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/base/BaseShopService.gd",
+      "lines": 74,
+      "functions": 9,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/map/MapThemeProfile.gd",
+      "lines": 73,
+      "functions": 6,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/fx/CombatDamageNumber3D.gd",
+      "lines": 71,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/RunPersistenceService.gd",
+      "lines": 71,
+      "functions": 7,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/NeonFrameControl.gd",
+      "lines": 67,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/audio/MusicTrigger.gd",
+      "lines": 66,
+      "functions": 6,
+      "dependencies": 1,
+      "autoloads": [
+        "MusicManager"
+      ]
+    },
+    {
+      "path": "src/player3d/customization/AvatarCustomizationPersistence.gd",
+      "lines": 66,
+      "functions": 7,
+      "dependencies": 4,
+      "autoloads": [
+        "BaseManager"
+      ]
+    },
+    {
+      "path": "src/combat3d/CombatEffectPool3D.gd",
+      "lines": 63,
+      "functions": 4,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/HazardField3D.gd",
+      "lines": 63,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/RooftopAmbience3D.gd",
+      "lines": 62,
+      "functions": 4,
+      "dependencies": 1,
+      "autoloads": [
+        "GameTimeManager"
+      ]
+    },
+    {
+      "path": "src/vfx/VfxMuzzleFlash3D.gd",
+      "lines": 61,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxEffectBase3D.gd",
+      "lines": 60,
+      "functions": 8,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/AtomicJsonStore.gd",
+      "lines": 58,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxMeleeSlash3D.gd",
+      "lines": 57,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DDeadState.gd",
+      "lines": 56,
+      "functions": 3,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/Base99MezzanineUnderdeckBlocker3D.gd",
+      "lines": 55,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxImpact3D.gd",
+      "lines": 54,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxDamageNumber3D.gd",
+      "lines": 53,
+      "functions": 3,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/TowerGeometry3D.gd",
+      "lines": 53,
+      "functions": 2,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/GameManager.gd",
+      "lines": 52,
+      "functions": 6,
+      "dependencies": 1,
+      "autoloads": [
+        "Global"
+      ]
+    },
+    {
+      "path": "src/ui/HUDPresenter3D.gd",
+      "lines": 52,
+      "functions": 2,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/ui/unstuck/ReturnToBaseAction.gd",
+      "lines": 51,
+      "functions": 3,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DStateBase.gd",
+      "lines": 50,
+      "functions": 8,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/core/State.gd",
+      "lines": 49,
+      "functions": 4,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/combat3d/ProjectilePool3D.gd",
+      "lines": 45,
+      "functions": 4,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/vfx/VfxHealNumber3D.gd",
+      "lines": 43,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/world3d/DungeonTheme3D.gd",
+      "lines": 42,
+      "functions": 1,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DDashingState.gd",
+      "lines": 41,
+      "functions": 3,
+      "dependencies": 2,
+      "autoloads": [
+        "AudioManager"
+      ]
+    },
+    {
+      "path": "src/player3d/states/Player3DIdleState.gd",
+      "lines": 33,
+      "functions": 3,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DMovingState.gd",
+      "lines": 33,
+      "functions": 3,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/framework/GameDesignConfig.gd",
+      "lines": 32,
+      "functions": 1,
+      "dependencies": 3,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DHurtState.gd",
+      "lines": 31,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DFallingState.gd",
+      "lines": 30,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/testing/VerificationQuitter.gd",
+      "lines": 29,
+      "functions": 2,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/enemy3d/BossContentCatalog.gd",
+      "lines": 26,
+      "functions": 3,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DLandingState.gd",
+      "lines": 26,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/game/LevelSelectState.gd",
+      "lines": 23,
+      "functions": 2,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/base3d/wardrobe/WardrobeFacility3D.gd",
+      "lines": 20,
+      "functions": 1,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/states/Player3DLockedState.gd",
+      "lines": 19,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/testing/VerificationClock.gd",
+      "lines": 18,
+      "functions": 1,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/testing/VerificationOutput.gd",
+      "lines": 17,
+      "functions": 2,
+      "dependencies": 0,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/melee/Player3DMeleeActiveState.gd",
+      "lines": 13,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/melee/Player3DMeleeStateBase.gd",
+      "lines": 13,
+      "functions": 2,
+      "dependencies": 2,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/melee/Player3DMeleeRecoveryState.gd",
+      "lines": 12,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/melee/Player3DMeleeWindupState.gd",
+      "lines": 12,
+      "functions": 2,
+      "dependencies": 1,
+      "autoloads": []
+    },
+    {
+      "path": "src/player3d/melee/Player3DMeleeReadyState.gd",
+      "lines": 7,
+      "functions": 1,
+      "dependencies": 1,
+      "autoloads": []
+    }
+  ],
+  "doc_name_unmentioned": [
+    "src/base3d/DungeonEntrance3D.gd",
+    "src/base3d/wardrobe/WardrobeFacility3D.gd",
+    "src/combat3d/MeleeWeaponVisual3D.gd",
+    "src/combat3d/ProjectilePool3D.gd",
+    "src/core/GameManager.gd",
+    "src/core/Global.gd",
+    "src/core/StateMachine.gd",
+    "src/enemy3d/EnemyIllumination3D.gd",
+    "src/framework/GameDesignConfig.gd",
+    "src/fx/CombatDamageNumber3D.gd",
+    "src/game/DeathSettlementModule.gd",
+    "src/game/EquipmentTransactionService.gd",
+    "src/game/FateCardGameBridge.gd",
+    "src/game/LevelSelectState.gd",
+    "src/map/MapThemeProfile.gd",
+    "src/map/RoomData.gd",
+    "src/player3d/FlashlightColorTweaker.gd",
+    "src/player3d/customization/AvatarCustomizationCatalog.gd",
+    "src/player3d/melee/Player3DMeleeActiveState.gd",
+    "src/player3d/melee/Player3DMeleeReadyState.gd",
+    "src/player3d/melee/Player3DMeleeRecoveryState.gd",
+    "src/player3d/melee/Player3DMeleeStateBase.gd",
+    "src/player3d/melee/Player3DMeleeWindupState.gd",
+    "src/player3d/states/Player3DDashingState.gd",
+    "src/player3d/states/Player3DDeadState.gd",
+    "src/player3d/states/Player3DFallingState.gd",
+    "src/player3d/states/Player3DHurtState.gd",
+    "src/player3d/states/Player3DIdleState.gd",
+    "src/player3d/states/Player3DLandingState.gd",
+    "src/player3d/states/Player3DLockedState.gd",
+    "src/player3d/states/Player3DMovingState.gd",
+    "src/player3d/states/Player3DStateBase.gd",
+    "src/postfx/PostfxOverlay.gd",
+    "src/testing/VerificationClock.gd",
+    "src/testing/VerificationOutput.gd",
+    "src/training3d/TrainingExit3D.gd",
+    "src/training3d/TrainingRack3D.gd",
+    "src/training3d/TrainingRange3D.gd",
+    "src/training3d/TrainingRangeEnvironment3D.gd",
+    "src/training3d/TrainingTarget3D.gd",
+    "src/ui/BaseStorageSlot.gd",
+    "src/ui/DivinationMenu.gd",
+    "src/ui/HUDPresenter3D.gd",
+    "src/ui/MerchantUI.gd",
+    "src/ui/MobileInput.gd",
+    "src/ui/PerformanceOverlay.gd",
+    "src/ui/UIFX.gd",
+    "src/ui/WorkbenchPanel.gd",
+    "src/ui/WorkshopMenu.gd",
+    "src/ui/unstuck/ReturnToBaseAction.gd",
+    "src/weapons/FateCardEngine.gd",
+    "src/weapons/FateCardPresets.gd",
+    "src/weapons/TarotFateCatalog.gd",
+    "src/world3d/Base100UpperShell3D.gd",
+    "src/world3d/Base99MezzanineUnderdeckBlocker3D.gd",
+    "src/world3d/Base99WalkableModule3D.gd",
+    "src/world3d/BaseFixtureGlow3D.gd",
+    "src/world3d/DungeonTheme3D.gd",
+    "src/world3d/ExtractionBeacon3D.gd",
+    "src/world3d/RooftopAmbience3D.gd",
+    "src/world3d/RoomFurniture3D.gd",
+    "src/world3d/RoomGraphRuntime.gd",
+    "src/world3d/RoomKeyPickup3D.gd",
+    "src/world3d/RoomLightSwitch3D.gd",
+    "src/world3d/RunPersistenceService.gd",
+    "src/world3d/SceneParticleToggle3D.gd",
+    "src/world3d/ServiceStation3D.gd",
+    "src/world3d/TowerGeometry3D.gd"
+  ],
+  "broken_links": [],
+  "tests": {
+    "smoke": [
+      "verify_3d_only_project_structure",
+      "verify_player3d_avatar_bounds",
+      "verify_tower_grid_component_alignment",
+      "verify_tower_lighting_wall_combat_regressions",
+      "verify_full_3d_game_flow"
+    ],
+    "core": [
+      "verify_3d_only_project_structure",
+      "verify_player3d_avatar_bounds",
+      "verify_tower_grid_component_alignment",
+      "verify_tower_lighting_wall_combat_regressions",
+      "verify_full_3d_game_flow",
+      "verify_floor_plan_generator",
+      "verify_room_graph_persistence_services",
+      "verify_hud_presenter_3d",
+      "verify_tower_journey_polish",
+      "verify_arrival_gate_floor_bundle_flow",
+      "verify_unified_player_interaction_flow",
+      "verify_tower_floor_room_authority",
+      "verify_base_rooftop_transit_door_motion",
+      "verify_floor_visibility_shadow_patch",
+      "verify_player3d_animation_flow",
+      "verify_player3d_debug_scale_flow",
+      "verify_player3d_vertical_physics_flow",
+      "verify_player3d_weapon_pose_collision_flow",
+      "verify_3d_enemy_behavior_flow",
+      "verify_enemy_illumination_states",
+      "verify_monster_ai_light_effects",
+      "verify_monster_ai_system_complete",
+      "verify_unique_elite_roster_flow",
+      "verify_unique_boss_content_flow",
+      "verify_three_segment_tower_generation_flow",
+      "verify_3d_melee_combat_flow",
+      "verify_3d_melee_feedback_flow",
+      "verify_training_range_3d_flow",
+      "verify_3d_fate_weapon_flow",
+      "verify_3d_inventory_weapon_flow",
+      "verify_weapon_instance_contract_matrix",
+      "verify_equipment_transaction_service",
+      "verify_weapon_attachment_inventory_flow",
+      "verify_weapon_instance_fate_ownership_flow",
+      "verify_celestial_fate_scope_flow",
+      "verify_finite_ammo_flow",
+      "verify_avatar_return_persistence_flow",
+      "verify_tactical_inventory_minimap_flow",
+      "verify_backpack_equipment_flow",
+      "verify_scene_facility_shared_palette",
+      "verify_base_fixture_glow",
+      "verify_base_facility_framework",
+      "verify_base_shop_save_flow",
+      "verify_tower_facility_inventory_binding",
+      "verify_tower_base_facility_persistent_flow",
+      "verify_tower_extraction_return_flow",
+      "verify_game_entry_flow",
+      "verify_base_world_flow",
+      "verify_dual_weapon_quick_map_fate_flow",
+      "verify_tarot_fate_runtime",
+      "verify_door_passability",
+      "verify_tower_descent_flow",
+      "verify_base99_floor_player_collision_flow",
+      "verify_base99_structural_asset_integration",
+      "verify_base99_wall_content_v021",
+      "verify_base99_remaining_facilities_v021",
+      "verify_3d_performance_budget",
+      "verify_performance_runtime_complete",
+      "verify_graphics_settings_ui_flow",
+      "verify_pause_game_save_reset_flow",
+      "verify_3d_flashlight_charge_flow"
+    ],
+    "visual": [
+      "verify_base99_modular_room_visual",
+      "verify_base99_floor_visuals_v021",
+      "verify_graphics_settings_visual",
+      "verify_facility_light_retoggle_visual",
+      "verify_3d_melee_combat_visual",
+      "verify_base_vending_visual",
+      "verify_base_world_3d_visual",
+      "verify_full_3d_visual",
+      "verify_player3d_state_gallery_visual",
+      "verify_player3d_weapon_grip_visual",
+      "verify_tower_descent_visual",
+      "verify_tower_stair_fall_visual",
+      "verify_training_range_3d_visual",
+      "verify_tactical_inventory_minimap_visual",
+      "verify_reference_hud_fate_visual",
+      "verify_wall_alignment_overlay",
+      "verify_wall_alignment_pure",
+      "verify_wall_alignment_visual",
+      "verify_ai_performance_soak"
+    ],
+    "renderer": [
+      "verify_base99_modular_room_visual",
+      "verify_base99_floor_visuals_v021",
+      "verify_graphics_settings_visual",
+      "verify_facility_light_retoggle_visual",
+      "verify_3d_melee_combat_visual",
+      "verify_base_vending_visual",
+      "verify_base_world_3d_visual",
+      "verify_full_3d_visual",
+      "verify_player3d_state_gallery_visual",
+      "verify_player3d_weapon_grip_visual",
+      "verify_tower_descent_visual",
+      "verify_tower_stair_fall_visual",
+      "verify_training_range_3d_visual",
+      "verify_tactical_inventory_minimap_visual",
+      "verify_reference_hud_fate_visual",
+      "verify_wall_alignment_overlay",
+      "verify_wall_alignment_pure",
+      "verify_wall_alignment_visual",
+      "verify_ai_performance_soak",
+      "verify_formal_3d_asset_gallery_visual",
+      "verify_formal_asset_placement_visual"
+    ],
+    "full": [
+      "verify_3d_combat_progression_flow",
+      "verify_3d_enemy_behavior_flow",
+      "verify_3d_fate_weapon_flow",
+      "verify_3d_flashlight_charge_flow",
+      "verify_3d_inventory_weapon_flow",
+      "verify_3d_melee_combat_flow",
+      "verify_3d_melee_feedback_flow",
+      "verify_3d_only_project_structure",
+      "verify_3d_parity_core",
+      "verify_3d_performance_budget",
+      "verify_3d_reload_state_flow",
+      "verify_3d_vision_input_flow",
+      "verify_arrival_gate_floor_bundle_flow",
+      "verify_avatar_return_persistence_flow",
+      "verify_backpack_equipment_flow",
+      "verify_base99_door_visuals_v021",
+      "verify_base99_floor_player_collision_flow",
+      "verify_base99_loft_guardrail_collision",
+      "verify_base99_loft_layout_v021",
+      "verify_base99_optimized_packages_v021",
+      "verify_base99_remaining_facilities_v021",
+      "verify_base99_stair_walkable_v021",
+      "verify_base99_structural_asset_integration",
+      "verify_base99_wall_content_v021",
+      "verify_base99_wall_visual_replacement",
+      "verify_base_facility_framework",
+      "verify_base_facility_interaction_zones",
+      "verify_base_fixture_glow",
+      "verify_base_optional_facilities_removed",
+      "verify_base_overhaul_flow",
+      "verify_base_rooftop_transit_door_motion",
+      "verify_base_shop_save_flow",
+      "verify_base_world_flow",
+      "verify_celestial_fate_scope_flow",
+      "verify_character_authoring_bundle",
+      "verify_debug_camera_hotkeys",
+      "verify_door_function_check",
+      "verify_door_passability",
+      "verify_dual_weapon_quick_map_fate_flow",
+      "verify_enemy_illumination_states",
+      "verify_enemy_stimulus_activation",
+      "verify_equipment_transaction_service",
+      "verify_finite_ammo_flow",
+      "verify_first_elite_deployment_flow",
+      "verify_first_elite_growth_flow",
+      "verify_first_elite_visual",
+      "verify_floor_plan_generator",
+      "verify_floor_visibility_shadow_patch",
+      "verify_formal_3d_asset_import",
+      "verify_full_3d_game_flow",
+      "verify_game_entry_flow",
+      "verify_graphics_settings_ui_flow",
+      "verify_hud_presenter_3d",
+      "verify_main_entry_realtime_sun_flow",
+      "verify_monster_ai_light_effects",
+      "verify_monster_ai_system_complete",
+      "verify_music_system",
+      "verify_pause_game_save_reset_flow",
+      "verify_performance_runtime_complete",
+      "verify_player3d_animation_flow",
+      "verify_player3d_avatar_bounds",
+      "verify_player3d_debug_scale_flow",
+      "verify_player3d_diy_flow",
+      "verify_player3d_head_accessory_flow",
+      "verify_player3d_head_accessory_visual",
+      "verify_player3d_idle_animation_flow",
+      "verify_player3d_lower_body_socket_flow",
+      "verify_player3d_state_gallery_flow",
+      "verify_player3d_vertical_physics_flow",
+      "verify_player3d_weapon_pose_collision_flow",
+      "verify_requested_experience_upgrade_flow",
+      "verify_rooftop_32x32_contract",
+      "verify_rooftop_door",
+      "verify_rooftop_railing",
+      "verify_rooftop_shelter_asset_contract",
+      "verify_room_graph_persistence_services",
+      "verify_runtime_autosave_flow",
+      "verify_scene_facility_shared_palette",
+      "verify_state_machine_safety",
+      "verify_tactical_inventory_minimap_flow",
+      "verify_tarot_fate_runtime",
+      "verify_three_segment_tower_generation_flow",
+      "verify_tower_base_facility_persistent_flow",
+      "verify_tower_camera_occlusion_flow",
+      "verify_tower_descent_flow",
+      "verify_tower_extraction_return_flow",
+      "verify_tower_facility_inventory_binding",
+      "verify_tower_floor_room_authority",
+      "verify_tower_grid_component_alignment",
+      "verify_tower_journey_polish",
+      "verify_tower_lighting_wall_combat_regressions",
+      "verify_tower_runtime_restart_restore",
+      "verify_training_range_3d_flow",
+      "verify_unified_player_interaction_flow",
+      "verify_unique_boss_content_flow",
+      "verify_unique_elite_roster_flow",
+      "verify_wardrobe_layout_visual",
+      "verify_wardrobe_preview_fill_flow",
+      "verify_weapon_attachment_inventory_flow",
+      "verify_weapon_instance_contract_matrix",
+      "verify_weapon_instance_fate_ownership_flow"
+    ],
+    "unclassified_visual": [
+      "verify_base99_door_visuals_v021",
+      "verify_base99_wall_visual_replacement",
+      "verify_first_elite_visual",
+      "verify_player3d_head_accessory_visual",
+      "verify_wardrobe_layout_visual"
+    ]
+  },
+  "test_count": 122
+}

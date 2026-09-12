@@ -1,0 +1,87 @@
+[
+  {
+    "source": "docs/v0.1/03_技术施工_玩家与操作.md",
+    "heading": "#### 3.4.1 尺寸参数版本记录（历史值不得覆盖）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "### 3.2 本轮施工结果（2026-08-05）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "## 18. 本轮验收记录（2026-08-06）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/04_技术施工_战斗与局内成长.md",
+    "heading": "### 20.5 实装与验收记录",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/06_技术施工_怪物精英与Boss.md",
+    "heading": "### 2.1 怪物体型参数版本记录（历史值不得覆盖）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/07_技术施工_基地设施.md",
+    "heading": "### 尺寸参数版本记录（历史值不得覆盖）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/07_技术施工_基地设施.md",
+    "heading": "## 8. 本轮实现与验收（2026-08-06）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 本轮施工验收记录（2026-08-05）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 7.1 当前 AI / 性能验收口径",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/11_测试与发布.md",
+    "heading": "### 2026-09-12 99F设施功能资产转移验收",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/13_技术施工_性能优化与热管理.md",
+    "heading": "## 2. 2026-08-05 实机现场检查",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/13_技术施工_性能优化与热管理.md",
+    "heading": "### 6.1 历史Compatibility基线实测（2026-08-13，不代表当前Forward+发布结果）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/14.8_音乐系统与配乐资产.md",
+    "heading": "## 9. Bug 修复记录",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/14.6_特效系统与制作规范.md",
+    "heading": "## 附录 A：3D-特效 sheet 体检快照（2026-09-11）",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/CHANGELOG.md",
+    "heading": "entire_document",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/14.5_推送更新摘要_2026-08-27.md",
+    "heading": "entire_document",
+    "preserved": true
+  },
+  {
+    "source": "docs/v0.1/17_天台至98层成品化验收.md",
+    "heading": "entire_document",
+    "preserved": true
+  }
+]

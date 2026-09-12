@@ -1,0 +1,1534 @@
+{
+  "workbook": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+  "scope": "full",
+  "asset_count": 418,
+  "status_counts": {
+    "原型已接入": 71,
+    "弃用": 11,
+    "程序占位": 106,
+    "已完成": 89,
+    "待制作": 13,
+    "正式美术已接入": 51,
+    "旧资产已从正式基地移除": 4,
+    "已优化并正式接入": 5,
+    "Blender源已完成": 66,
+    "已导入；优化完成": 2
+  },
+  "category_counts": {
+    "角色": 31,
+    "特效": 16,
+    "敌人": 12,
+    "武器": 36,
+    "道具": 20,
+    "场景": 95,
+    "场景道具": 20,
+    "UI": 17,
+    "音频": 57,
+    "基地资产包": 114
+  },
+  "issue_counts": {
+    "sha_mismatch": 214
+  },
+  "issues": {
+    "sha_mismatch": [
+      {
+        "row": 6,
+        "asset_id": "CHR-PLY-CAPSULE01",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
+        "recorded": "e9cac2738d9fa586eed9f2e97a93ff220cab52b60d89f53f4cd80e38ebc9b6c4",
+        "actual": "c571c093bab22f38361fabb0317d30602035d8e5187b7bf7279aec5b14a370ea"
+      },
+      {
+        "row": 24,
+        "asset_id": "WPN-GUN-BP-PISTOL",
+        "path": "assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn",
+        "recorded": "2470638382999aaed09f3e141f345b3aac5173b00215a6e320d3a3e65c00271f",
+        "actual": "ec5be48b60ec8724759108b9d8f0530473e324e0df25f392622474909f52f05e"
+      },
+      {
+        "row": 25,
+        "asset_id": "WPN-GUN-BP-SHOTGUN",
+        "path": "assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn",
+        "recorded": "3e7dbd12824eb293a6f8e4331c3932591c172a659c47418caccf83a46e0556bb",
+        "actual": "67aa2883793ca21ce27b41732c48b1f4b250182c505dfab8267fcd45eb74831b"
+      },
+      {
+        "row": 26,
+        "asset_id": "WPN-GUN-BP-RIFLE",
+        "path": "assets/art/weapons/weapon_3d/runtime/broom_rifle/wpn_broom_rifle_root_top3d_v001.tscn",
+        "recorded": "d58d0c336be59b57b77c4f2cec6f529fcb62ecb454cb3f509049136988925255",
+        "actual": "ce12927b14a1cb3be4f8403dfca41347f21a038faab502b3779245ef9f211cd8"
+      },
+      {
+        "row": 27,
+        "asset_id": "WPN-GUN-BP-MACHINEGUN",
+        "path": "assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn",
+        "recorded": "eaadde61c36370e93adbd649521bd0982e3dd95d514ec2358761853ccb9ff120",
+        "actual": "037a040062930e47d813d7b1ffd5f6cff96b826750d4a9b2e38f42a78b5f5f98"
+      },
+      {
+        "row": 28,
+        "asset_id": "WPN-GUN-BP-SNIPER",
+        "path": "assets/art/weapons/weapon_3d/runtime/candy_sniper/wpn_candy_sniper_root_top3d_v001.tscn",
+        "recorded": "0420a3cfa88542bb07b4491ab80e3c51ea196bdaa52af0f3345858133765e25c",
+        "actual": "a9c319e031c0f30b7404a435de8b5aaf2f5d5e470bd591e7dfbcf2e6ed8f2753"
+      },
+      {
+        "row": 29,
+        "asset_id": "WPN-GUN-BP-LAUNCHER",
+        "path": "assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn",
+        "recorded": "12032855cedf0329be1addcf480b71b5d0ef59ea52c150171bc3d9ad12d2e638",
+        "actual": "97d05fc29d0ed170225489c8d7282c0065757d557c9bfaa31bd31761f8f67a41"
+      },
+      {
+        "row": 30,
+        "asset_id": "WPN-GUN-BP-CHARGE",
+        "path": "assets/art/weapons/weapon_3d/runtime/gumball_cannon/wpn_gumball_cannon_root_top3d_v001.tscn",
+        "recorded": "0a2b6d1f567042f536a25f9e6ba692c294402595000bec1a41db938904a92119",
+        "actual": "1c494d0811ef503c74e8dc61277b307e35db210241b46083a6da7b2121b54cee"
+      },
+      {
+        "row": 49,
+        "asset_id": "ITM-PICKUP-ROOM-KEY-PICKUP",
+        "path": "src/world3d/RoomKeyPickup3D.gd",
+        "recorded": "c3fa58385895f6f62648ad2783d27b8b6148a97a0f0916dfe85f9fe67e351304",
+        "actual": "1f5953cef11cc376d18ecc875a4a88eae6ce3dff05eba2f5479cb006926fb928"
+      },
+      {
+        "row": 50,
+        "asset_id": "ITM-PICKUP-BASE-GROUND-ITEM",
+        "path": "src/world3d/GroundLootPickup3D.gd",
+        "recorded": "97741ce50aabc60ff61a26676e653a5cbc6528f1e43a70b438e385198f00ef11",
+        "actual": "14eca357cf5198a232d95231ccbf07e15b67a1428f7d27bf2f32222e59bcb29d"
+      },
+      {
+        "row": 69,
+        "asset_id": "PRP-BASE-BRIEFING",
+        "path": "assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn",
+        "recorded": "4c54dda7f6f0d97db1e697f84b991718a795200ab74e7c14dbe3d3380c58246e",
+        "actual": "ab5196f29c8c5944647b85133625dd485b8ed0834d0c0ac6db7053031b638be5"
+      },
+      {
+        "row": 70,
+        "asset_id": "PRP-BASE-WORKSHOP",
+        "path": "assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn",
+        "recorded": "3026e360fa67a3362ad45fc6bab0e70917b935213f0de105ef53416d47154796",
+        "actual": "207785d3d2576cf80ecab4f9629522b32156e1a635c62257c12537195a0fdb61"
+      },
+      {
+        "row": 79,
+        "asset_id": "UI-SCREEN-HUD",
+        "path": "scenes/Dungeon3D.tscn",
+        "recorded": "86fa546a86758f57eb7b5c8fae0aeadb30e62b29e08c1b40d7fb685ac36a4b53",
+        "actual": "4e61089a3bcd77427f88f2fde2419ce365f7d42072685db4815f0dc41188934b"
+      },
+      {
+        "row": 80,
+        "asset_id": "UI-SCREEN-INVENTORY",
+        "path": "src/ui/InventoryUI.gd",
+        "recorded": "7237a181430578fa95598dc6501fe3a37def471fa180f7771ebc816f28ffdce2",
+        "actual": "e2c3f432a5612775615ad87768a934d23f89356b0cde1cd7e5ad666a8d84f6ed"
+      },
+      {
+        "row": 97,
+        "asset_id": "VFX-HEALTH-VIGNETTE",
+        "path": "scenes/Dungeon3D.tscn",
+        "recorded": "86fa546a86758f57eb7b5c8fae0aeadb30e62b29e08c1b40d7fb685ac36a4b53",
+        "actual": "4e61089a3bcd77427f88f2fde2419ce365f7d42072685db4815f0dc41188934b"
+      },
+      {
+        "row": 113,
+        "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_root_top3d_v003.tscn",
+        "recorded": "a64002f9f70a0ff3b15375fc48e58911dd6c49dc0b59d676601ee63a8fdd437f",
+        "actual": "09ae55fbcfdb4b4e5638c171a9265622ea2c82147a2e0bbb1bf4088320c8d5de"
+      },
+      {
+        "row": 114,
+        "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_loft_floor_finish_v020/env_base99_loft_floor_finish_v020_root_top3d_v002.tscn",
+        "recorded": "f51994b6f49d96bc4707826819bd03529c6312c6b497ec63415cb01c430ab66f",
+        "actual": "92717eaf7eddb0357910eb92183257bd5d5a7623c26c36e8f826fd8aac5bb91a"
+      },
+      {
+        "row": 115,
+        "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v003.tscn",
+        "recorded": "7f5ef790624b34aa56cad971c411e7b5a4c9339db542e63ce5fa0d6acc25c5a3",
+        "actual": "f3de82fa84973f442b50379c6d2aade92b4a6e25072f6238f5cbcdac2d9380a5"
+      },
+      {
+        "row": 116,
+        "asset_id": "CHR-PLY-CAPSULE01-HAND-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 117,
+        "asset_id": "CHR-PLY-CAPSULE01-SCARF-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 118,
+        "asset_id": "CHR-PLY-CAPSULE01-WEAPON-SOCKET-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 119,
+        "asset_id": "ENV-BASE-WORLD-KIT-3D",
+        "path": "assets/art/environments/base_world_3d/env_base_world_kit_top3d_v001.tscn",
+        "recorded": "b9040926e7d2e7d09a25d072d30a815f7bb5e35a4aa1c824c0c27a73de1b6e71",
+        "actual": "63c840d59bcecefab946690136474c9ca7b70408fb7b6bcc264819f9b66f14a5"
+      },
+      {
+        "row": 120,
+        "asset_id": "PRP-BASE-FACILITY-3D",
+        "path": "assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn",
+        "recorded": "0c12134edcce24dab43e3364e1f09a75d4c41d0721edfb40fc4720a8aad6c3a1",
+        "actual": "391cad1c83f33586ba70d208dca713c52c05e62c6c8100801a615c84d2d7c719"
+      },
+      {
+        "row": 121,
+        "asset_id": "PRP-DUNGEON-GATE-3D",
+        "path": "assets/art/props/base_world_3d/prp_dungeon_gate_root_top3d_v001.tscn",
+        "recorded": "67f42bca67d541f83b244a4ed6a8ae23495b22d7cbf3aa9b32656339e59cfa0d",
+        "actual": "1fc802ceb8caef1ce77a54958a8b5e82a0fcae37459106fee970c8941146ba8f"
+      },
+      {
+        "row": 123,
+        "asset_id": "ENV-DUNGEON-RUNTIME-3D",
+        "path": "assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn",
+        "recorded": "e4e7472285a1f2d89f18c5d8a11e414c475adabeed98584cd9d10d4e5d793b76",
+        "actual": "fc33ac084150c3e3cbba89505b3e04f35712abbceaa5cec297c94fe4d7dcc2f3"
+      },
+      {
+        "row": 124,
+        "asset_id": "ENV-DUNGEON-IRON-FRONTIER-3D",
+        "path": "assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres",
+        "recorded": "f8b3ab02d3613a2e6c739e9d3013adce091dff82c76e6198eb13a816e144b00c",
+        "actual": "a3c6e7e5433928b790e1fa0fe5124beaeb5ab579f2d376aa35a1be25b6736b58"
+      },
+      {
+        "row": 125,
+        "asset_id": "ENV-DUNGEON-RUST-FOUNDRY-3D",
+        "path": "assets/art/environments/dungeon_3d/env_rust_foundry_kit_top3d_v001.tres",
+        "recorded": "acc115574ec882b7bc3f74acb8da788151a6ce810b4b99ee4bedc96357d3d5b8",
+        "actual": "0c14c1dd5a5b8edcb51fa5bb024666d845611bfd87c3c4ee0ded56c4614010a8"
+      },
+      {
+        "row": 126,
+        "asset_id": "ENV-DUNGEON-SPORE-DEPTHS-3D",
+        "path": "assets/art/environments/dungeon_3d/env_spore_depths_kit_top3d_v001.tres",
+        "recorded": "50b5a344a474a866d2065a8979bac564170ba8422bb610418ac8082d24db91dc",
+        "actual": "bbd5cc04028e3962ce9eb8ea04c1c06157d128b5dbad1cea64bed7b4a02e7689"
+      },
+      {
+        "row": 127,
+        "asset_id": "ENV-DUNGEON-ABYSS-ARCHIVE-3D",
+        "path": "assets/art/environments/dungeon_3d/env_abyss_archive_kit_top3d_v001.tres",
+        "recorded": "93b2f606618b202fd51513e3eb2b039c0db2d26f328d1f71dd0ef4df196939e5",
+        "actual": "fb276fb1586de1b69d306ff894800f51da600b8dfb2780cf8bc8d22695ad3a52"
+      },
+      {
+        "row": 128,
+        "asset_id": "PRP-WASTELAND-LIGHT-3D",
+        "path": "assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn",
+        "recorded": "0b6eee3dde59911854d2a062aaab55672c6d1fa4c705155f7a217faf46394e00",
+        "actual": "0a6ec0add8b6e01b83f4dbaae421ff0dc69ed08648d304bac061f540af27d99b"
+      },
+      {
+        "row": 129,
+        "asset_id": "PRP-ROOM-FURNITURE-3D",
+        "path": "assets/art/props/dungeon_3d/prp_room_furniture_root_top3d_v001.tscn",
+        "recorded": "b98c316a9634111506783e11ada7d6558cebd85f136ec1d2fb6bfb325b0f46c3",
+        "actual": "a78a7eaac02ce39add97d8a57754cc86ea34e740e24e0e901f4e037198a086e9"
+      },
+      {
+        "row": 130,
+        "asset_id": "PRP-SEARCH-CONTAINER-3D",
+        "path": "assets/art/props/dungeon_3d/prp_search_container_root_top3d_v001.tscn",
+        "recorded": "c9a836df320181589c748ffc3aa57dc45a403bc148dec9972013b105795c40f5",
+        "actual": "2c0852d86e7c0e635e76197ff8d2f6a030daa186f760dfb339d3fdeddf3c192d"
+      },
+      {
+        "row": 131,
+        "asset_id": "PRP-SERVICE-STATION-3D",
+        "path": "assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn",
+        "recorded": "8d2ccf3e8714a237d0096d7e44beaa824ca2acd13e5c5a20b8cb22ba5ef38e78",
+        "actual": "da288e4a8ffc005053741d2eda3bbcbf2f6ad34c32c6657e35d0ddf62b837be4"
+      },
+      {
+        "row": 132,
+        "asset_id": "PRP-EXTRACTION-BEACON-3D",
+        "path": "assets/art/props/dungeon_3d/prp_extraction_beacon_root_top3d_v001.tscn",
+        "recorded": "26922cc2f1d9640f0b237f0876d6d549f1f323d20ac4f916ca789b3893bc6aa3",
+        "actual": "f2638fdaca3f9542e918a56750bda04a5828b18a763569eb16a36619e9e336b4"
+      },
+      {
+        "row": 133,
+        "asset_id": "VFX-HAZARD-FIELD-3D",
+        "path": "assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn",
+        "recorded": "9457d360dc6529e42502980b94188d13f76da5efb581b261cfb9b8adbd0f5ff6",
+        "actual": "66ab8d6bc0e2729ca56c7f3c46a588e5f74890cfdf02b90de1fdc46fd1a67648"
+      },
+      {
+        "row": 134,
+        "asset_id": "WPN-GUN-KIT-3D",
+        "path": "assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn",
+        "recorded": "ca471a3f8f041a7061f31ab7279ff9a976a0d9d182d0d0fd3c8e1437fe704bf4",
+        "actual": "e13801540404433f6fc5f00faa0f523b804d18ec7fa30c0f6c15fab48f1ec4c9"
+      },
+      {
+        "row": 135,
+        "asset_id": "ENM-ECOSYSTEM-KIT-3D",
+        "path": "assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn",
+        "recorded": "901fb3e339fca1127138a6da85ff7e69cf93a56bb8b0e840e7124a1216198149",
+        "actual": "d9d8a49bed3fdcb863bad72f60be1f774309c7dda52753f5efb3d4e56159c12d"
+      },
+      {
+        "row": 136,
+        "asset_id": "VFX-COMBAT-KIT-3D",
+        "path": "assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn",
+        "recorded": "59cd5409b33ff9fae9c541b357699249d8f0574bc21add6fec2d1fdfd89a098e",
+        "actual": "2ee5109b1876ea2114ac5c73b4bd0e2fc0348e1209a9d2ca16bc8ef9834ff357"
+      },
+      {
+        "row": 137,
+        "asset_id": "ENV-TRAINING-RANGE-KIT-3D",
+        "path": "assets/art/environments/training_range_3d/env_training_range_kit_top3d_v001.tscn",
+        "recorded": "e3a0ef2fb72576117c4f6faa6528c46f11bec8470b2ddec0eac2d1beb0bdc356",
+        "actual": "4d1153bc736fab0790300f171beef8435002670f3789d6434e966bca0a79d28e"
+      },
+      {
+        "row": 140,
+        "asset_id": "VFX-VISIBILITY-FIELD-3D",
+        "path": "src/player3d/PlayerVision3D.gd",
+        "recorded": "128dc5eab4c8b523961178714d4ed65bbefd86297641e6ba2cb0b7cf8b91f7f0",
+        "actual": "3405769a7da2c227a4ad0239e08963851ff8b739dcaff1f80fd8d5e35eb705ce"
+      },
+      {
+        "row": 141,
+        "asset_id": "UI-SCREEN-INVENTORY-3D",
+        "path": "src/ui/InventoryUI.gd",
+        "recorded": "7237a181430578fa95598dc6501fe3a37def471fa180f7771ebc816f28ffdce2",
+        "actual": "e2c3f432a5612775615ad87768a934d23f89356b0cde1cd7e5ad666a8d84f6ed"
+      },
+      {
+        "row": 142,
+        "asset_id": "UI-SCREEN-PAUSE-3D",
+        "path": "assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn",
+        "recorded": "0ed9c0963e35156a1116af3eb6878b084a498bac87af50a9e9a4071d5f6b49b8",
+        "actual": "84e1ebff780b39a7619ad8c7e8796199517a6da62afdbb3dc40935a4b4e99244"
+      },
+      {
+        "row": 143,
+        "asset_id": "PRP-ROOM-LIGHT-SWITCH-3D",
+        "path": "assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d_v001.tscn",
+        "recorded": "56accc731cf04c9d11aaa105e3012f5e4aeecc34f96616dd8a20de5929929555",
+        "actual": "7802bc3a71d892072e43962875e26b60443d19de35bcc77fe0cbedcfa6dd5d94"
+      },
+      {
+        "row": 144,
+        "asset_id": "VFX-PLAYER-FLASHLIGHT-3D",
+        "path": "assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn",
+        "recorded": "66d910c4fbcfd63176427c8012d3b6dbb11c4e0999587b34a3a66d6202920017",
+        "actual": "b389efe1d1fcfd30087a6d3f3f2784effee95cf6c54769fde27ecb6806011a05"
+      },
+      {
+        "row": 145,
+        "asset_id": "UI-ICON-ITEM-MODEL-3D",
+        "path": "assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn",
+        "recorded": "7d3deb95a52bbebca119606ce4189e501a812ed496b7c2f8f1e389ebeeb38d3c",
+        "actual": "97c10f3884107c1263f3de1f8bc1ce84bb568ecd80418b62bdb023c55cdab9fe"
+      },
+      {
+        "row": 146,
+        "asset_id": "CHR-PLY-CAPSULE01-BODY-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 147,
+        "asset_id": "CHR-PLY-CAPSULE01-HEAD-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 148,
+        "asset_id": "CHR-PLY-CAPSULE01-HAND-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 149,
+        "asset_id": "CHR-PLY-CAPSULE01-HAT-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 150,
+        "asset_id": "CHR-PLY-CAPSULE01-GLASSES-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 151,
+        "asset_id": "CHR-PLY-CAPSULE01-FOOT-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 152,
+        "asset_id": "CHR-PLY-CAPSULE01-EYES-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 153,
+        "asset_id": "CHR-PLY-CAPSULE01-EARS-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 154,
+        "asset_id": "CHR-PLY-CAPSULE01-TAIL-STUB-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/chr_player_capsule01_root_top3d_v001.tscn",
+        "recorded": "d962a133c9f966e97e0471adf110eaddda7ade65c2ef3ec47b56dbf2f1c93af0",
+        "actual": "2802d5526c3eb7a8ab01a09bb9d2115c7dc531563442527460ddfd71870cbdec"
+      },
+      {
+        "row": 155,
+        "asset_id": "CHR-PLY-CAPSULE01-FEET-DIY-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 156,
+        "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
+        "recorded": "e9cac2738d9fa586eed9f2e97a93ff220cab52b60d89f53f4cd80e38ebc9b6c4",
+        "actual": "c571c093bab22f38361fabb0317d30602035d8e5187b7bf7279aec5b14a370ea"
+      },
+      {
+        "row": 164,
+        "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+        "path": "assets/art/environments/tower_descent_3d/runtime/floor_tile_5m/env_tower_floor_tile_5m_root_top3d_v002.tscn",
+        "recorded": "0678524ecdbca8efc085fa4bb65535c63aacc3397fcda0a85542236b1137d185",
+        "actual": "e9412b93caeaf1b9575af0ebe26a67adb0867b69b35999573e8ce87d61046ec2"
+      },
+      {
+        "row": 170,
+        "asset_id": "CHR-PLY-CAPSULE01-BACKPACK-SOCKET-3D",
+        "path": "src/player3d/PlayerAvatar3D.gd",
+        "recorded": "4499816448fa5c8cd655053b8191f12c7db3f87713f0572965f1250aa31ec85b",
+        "actual": "40ad906c8f93325ea1551d048af54f8c822121ee519bde9122c460d514586b40"
+      },
+      {
+        "row": 172,
+        "asset_id": "PRP-BASE-VENDING-MACHINE-3D",
+        "path": "assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn",
+        "recorded": "527cb1b22eec644c0869b8dc321968438bde91500f90d69fa0d41d0fa568229d",
+        "actual": "0e8574cd7a9a26a88e9040ed34e292b71ced882b4c6b8a465ef6eb1e432dbc85"
+      },
+      {
+        "row": 173,
+        "asset_id": "UI-SCREEN-BASE-VENDING",
+        "path": "scenes/BaseVendingMenu.tscn",
+        "recorded": "119e03cab16d9fc3780315b3df088e710f6bf2f2d9e4e84c95c79b6abb540bd3",
+        "actual": "064d8c1f92cfa6e1724bab0980520481cd8de44b384e498456e1d1be806a4c7d"
+      },
+      {
+        "row": 205,
+        "asset_id": "CHR-PLY-CAPSULE01-3D-BUNNY01-LOWER-BODY-SOCKET",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_root_v021.tscn",
+        "recorded": "e9cac2738d9fa586eed9f2e97a93ff220cab52b60d89f53f4cd80e38ebc9b6c4",
+        "actual": "c571c093bab22f38361fabb0317d30602035d8e5187b7bf7279aec5b14a370ea"
+      },
+      {
+        "row": 211,
+        "asset_id": "WPN-GUN-FUTURE-MEGAPHONE-CANNON-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/megaphone_cannon/wpn_megaphone_cannon_root_top3d_v001.tscn",
+        "recorded": "05d5f8631ae0e809f42dc4c103dae5eba8613929a0ce019b8ee17f0a508fb6e7",
+        "actual": "5af8a086bf2988755cc0e385bb5b6d527e9dbde0d11123c809741d306b38e45f"
+      },
+      {
+        "row": 212,
+        "asset_id": "WPN-GUN-FUTURE-GUITAR-BLASTER-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/guitar_blaster/wpn_guitar_blaster_root_top3d_v001.tscn",
+        "recorded": "1f91e9e4d2a54e82d5ebfc0b5099a7e65c91eb32e86e8c1c8f52afa2df52c264",
+        "actual": "7611a99cf53a4a0fd80404be89c450351994bafd161824a0b92d05a729ec05f3"
+      },
+      {
+        "row": 213,
+        "asset_id": "WPN-GUN-FUTURE-SPATULA-RIFLE-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/spatula_rifle/wpn_spatula_rifle_root_top3d_v001.tscn",
+        "recorded": "3e833ff63ebff0575600f0da74b12bdea155598fa239834294968f411495c426",
+        "actual": "04a9659dcef16faed7af37c04dbe4f2bd7322b87992d9f269f503d87ea2f9cca"
+      },
+      {
+        "row": 214,
+        "asset_id": "WPN-GUN-FUTURE-FRYING-PAN-CANNON-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/frying_pan_cannon/wpn_frying_pan_cannon_root_top3d_v001.tscn",
+        "recorded": "d1fd5653d2d9e5b834f6d4e7327159e49c2810fff46a38a93da80a7d72a6848c",
+        "actual": "f73360d92e0188808efdd39aa652067dec9a7fd5fd1fef243879b6e28b61c465"
+      },
+      {
+        "row": 215,
+        "asset_id": "WPN-GUN-FUTURE-SCOPE-CANNON-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/scope_cannon/wpn_scope_cannon_root_top3d_v001.tscn",
+        "recorded": "a30e709f22c4e33f99398b002307af2d27c2f4dd3aca10bf192921c063223aa4",
+        "actual": "ad9e3e21a430c104cc44345297a05b7a4ea61a02bb1d605ef79c4b8d1c49de35"
+      },
+      {
+        "row": 216,
+        "asset_id": "WPN-GUN-FUTURE-POPCORN-BLASTER-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/popcorn_blaster/wpn_popcorn_blaster_root_top3d_v001.tscn",
+        "recorded": "dbcc9441cc5f5c2df19d1b745850072880ca1abf39030ed90353999828eec57a",
+        "actual": "01c3204ae0d66aa0e0bf28bf2643c327a7550ff1c024f36114f45fb9010de7a8"
+      },
+      {
+        "row": 217,
+        "asset_id": "WPN-GUN-FUTURE-SODA-STRAW-BLASTER-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/soda_straw_blaster/wpn_soda_straw_blaster_root_top3d_v001.tscn",
+        "recorded": "b8c6a97267f825937f58851aad49588de64c1d3e713526a26f275306413b702f",
+        "actual": "bc0fa22a6e7c32ed741079af21a73152e3404b7f4fd236cdb38e2a3ab0e477fa"
+      },
+      {
+        "row": 218,
+        "asset_id": "WPN-GUN-FUTURE-CROCODILE-CANNON-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/crocodile_cannon/wpn_crocodile_cannon_root_top3d_v001.tscn",
+        "recorded": "c0e1abe37949f4aee0619e04f40104b4bcf0c59f4269ddc64f4f10df4733416b",
+        "actual": "01d4ecf005d76562942e584db25fa586a9bfb9fa2533ea7290fbfdd65bc1f749"
+      },
+      {
+        "row": 219,
+        "asset_id": "WPN-GUN-FUTURE-CAMERA-BLASTER-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/camera_blaster/wpn_camera_blaster_root_top3d_v001.tscn",
+        "recorded": "e4afd543d2e1be93ac923edc02ba570611ca0ee73fe3a0764ff0f7677ead1968",
+        "actual": "07ec25c941bb19732944bafdaae85db88ea93b4a870606b3202669bee8313932"
+      },
+      {
+        "row": 220,
+        "asset_id": "WPN-GUN-FUTURE-TISSUE-BOX-CANNON-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/tissue_box_cannon/wpn_tissue_box_cannon_root_top3d_v001.tscn",
+        "recorded": "d4acc27b57bae6f0d1688365d8bbba123fa6e174b9f2acce02173853513659f7",
+        "actual": "6c277b10c52f4dde4790e91c760a6f981fa38af9b19bf67fdf584785659a618e"
+      },
+      {
+        "row": 221,
+        "asset_id": "WPN-GUN-FUTURE-FAN-BLASTER-3D",
+        "path": "assets/art/weapons/weapon_3d/runtime/fan_blaster/wpn_fan_blaster_root_top3d_v001.tscn",
+        "recorded": "3ef7b483eb98314077ee9a014c6b6de00dddf66509f8d35ab78aec539958fe18",
+        "actual": "5b740e26cc2b5e2b4cbdd1334b371224cba40165048a6747fad4e5962e53c8c7"
+      },
+      {
+        "row": 222,
+        "asset_id": "PRP-BASE-LOCKER-STATION-3D",
+        "path": "assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d_v001.tscn",
+        "recorded": "bc75b86a6e37fba24dff86f2f108f3bd0be10622baf7e59b2dd84d49795b33d5",
+        "actual": "90b868783b9f0bfe23656187403d8630a4caa3eced3fd60798ffbb6641672c6a"
+      },
+      {
+        "row": 223,
+        "asset_id": "PRP-BASE-RETRO-TV-STATION-3D",
+        "path": "assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn",
+        "recorded": "fcba0ee6bbb657b3cd4a1d87d32284b15b9d75ad54d10b60ed6dc8d45c045856",
+        "actual": "5664a0d62034939fc6bd86a652d6d7a293e2d2f41cac4fe0ac4edd989c7a77b3"
+      },
+      {
+        "row": 224,
+        "asset_id": "PRP-BASE-WORKSHOP-STOOL-3D",
+        "path": "assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn",
+        "recorded": "802506f1cff4d0ee7bb22b0e3a20c34d4b2c87fdb7e699d7c0e2c294aaa66abf",
+        "actual": "24c43b83564e57f074ff7c93bfdf623e470ac070f07d8b60bd2a27a835bcc5e6"
+      },
+      {
+        "row": 225,
+        "asset_id": "PRP-BASE-MISSION-COMMAND-CHAIR-3D",
+        "path": "assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn",
+        "recorded": "576769edb34e09f4fd113c2f69b2f00ef8fb87afe12795241aa928b4a5ac585c",
+        "actual": "a8c70158f3af0eb7e4842135f7f598fc5ad7ada17d30ce7039ac861f45613135"
+      },
+      {
+        "row": 236,
+        "asset_id": "ENV-BASE99-WALL-PLAIN-5X9",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn",
+        "recorded": "e417da3178d5356a7249fc738fd8faab120bfe4558f6569ef64d6faca25bc467",
+        "actual": "223079d316dd220cfc68d582fa6d28b48b4c454cb92804de9a475ebb422ce983"
+      },
+      {
+        "row": 237,
+        "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn",
+        "recorded": "622b5e10939c29c1970a67248a7e7fb553d2077e6ebad1e135abee5665f052b3",
+        "actual": "cdd6625e5aa56c8eb1382bc4b3f119100883e407330cdd77e68c7f46e1b5251b"
+      },
+      {
+        "row": 238,
+        "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn",
+        "recorded": "4e59c7b770c48b9832d6f2134e36d6d6e2042c30e49dfa51e9bb58f33177fd1f",
+        "actual": "7d3c4a543b46ae698071fb3c9fbac6a5b31661f29e9d66d721dd16bce4177567"
+      },
+      {
+        "row": 239,
+        "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn",
+        "recorded": "27d8448e4860ea8b3fde87c4d7c99b7f8d137935fb5bc3e06c4d8f68551018f3",
+        "actual": "bc849c71619fb9d257493fc4c8bb99ed9e967cead67c80722689e2003298793c"
+      },
+      {
+        "row": 240,
+        "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
+        "recorded": "d39857923f3e86ef98175297c8849286612196e2a22298a406349f1666d635c9",
+        "actual": "915534b76a5c003b644ca68ee0ca30406844334926890bdfd46bcbda9e2aa12b"
+      },
+      {
+        "row": 241,
+        "asset_id": "ENV-TOWER-CORNER-L-5M",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
+        "recorded": "cca0761bf62acd0ce6af1cddd9ff466545385ec7725e7c0a00523eb88b7f0d5c",
+        "actual": "5549c3e027eea7d26507d0cdc8d0e9c54bb89e50989370544a5b73172a6cf984"
+      },
+      {
+        "row": 275,
+        "asset_id": "ENV-BASE99-WALL-WINDOW-5X9",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_window_5x9/env_base99_wall_window_5x9_root_top3d_v001.tscn",
+        "recorded": "84047a4a83f314866d95e91f49a4796351b7b54fd0c36f67727afad78dfbaada",
+        "actual": "4ea43e7f70f4acb9d3ad729b75d69f023aa135493391e42f1cc3623053ca122c"
+      },
+      {
+        "row": 276,
+        "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z7/env_base99_mezzanine_20x10_z7_root_top3d_v001.tscn",
+        "recorded": "e4a736764edfe29345bddc85c226360e7cd4ad0c44474c715b704b8521c9a8ac",
+        "actual": "a57b8d9db0c2fe9927bd71d9e51264b7dde30b3a6ad52a093d01a2c0fbb53a2e"
+      },
+      {
+        "row": 277,
+        "asset_id": "ENV-BASE99-STAIR-L-Z7",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z7/env_base99_stair_l_z7_root_top3d_v001.tscn",
+        "recorded": "fa7d1d7f9745050ba7e584a2d8908b6eec256dfdeb5b22cf934b065096425254",
+        "actual": "471d64b1c1aca185c0920db02578150f0b27e7345f9451f90be40ef03fdd6269"
+      },
+      {
+        "row": 278,
+        "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h2/env_base99_stair_exterior_h2_root_top3d_v001.tscn",
+        "recorded": "7f7ba660bd28cad7f71605f7d2b2aa15726bbe19047e69a871efc0c21e93b73d",
+        "actual": "9b4b79ae0210ebf549b40015dfef5ef19f54c87c2622bcbdd02e5609eae77531"
+      },
+      {
+        "row": 279,
+        "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v001.tscn",
+        "recorded": "3d818286df5334e4f4b8ea9b27413a9c68d68b576adfed199e162d18c6be0b38",
+        "actual": "2e2541a5bcaa6afed9f1ecde2877d6352824bf45871e370afd647bf6fe6b1fce"
+      },
+      {
+        "row": 280,
+        "asset_id": "ENV-BASE100-UPPER-SHELL-30X30-H9",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h9/env_base100_upper_shell_30x30_h9_root_top3d_v001.tscn",
+        "recorded": "7ab24e71dc7189338255f8dca48efbe9c3b4e0385cf5b4092b8873874ee0657e",
+        "actual": "5e041b9cba5d3f88439672a012e90488ba3f179cf5a4788ff7c4e4ace40ee071"
+      },
+      {
+        "row": 281,
+        "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_20x10_z5/env_base99_mezzanine_20x10_z5_root_top3d_v003.tscn",
+        "recorded": "bf889cc27c104d45f3826c3260530e2b676648c4a8689fb3305a26c444f326b4",
+        "actual": "a52762f1da07fbd7dcd8ec661bf591da922cc9daff043493a873b6a09034e600"
+      },
+      {
+        "row": 282,
+        "asset_id": "ENV-BASE99-STAIR-L-Z5",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v004.tscn",
+        "recorded": "de5190a9cd57ef7319bffbf95bbec8625acb23b730254b05f6f98cfc1e82b02e",
+        "actual": "f0e567b01a1b65afcae1a5d8c7e2cc36206eda31ecdc9f8458e6fb83f557d734"
+      },
+      {
+        "row": 283,
+        "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_exterior_h4/env_base99_stair_exterior_h4_root_top3d_v002.tscn",
+        "recorded": "5a4c81bcb729e09f33dbafdb34acfdad63ee1583b0046dbd26cd77c2f6eb37b6",
+        "actual": "0132e33e89f065d389bd240e48e5cd416239a37b84604f33021e192ae9807e9b"
+      },
+      {
+        "row": 284,
+        "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_root_top3d_v003.tscn",
+        "recorded": "30bdd1491da3170e49719496dff7a8d0a7e856cabe7bdc4ec1e01fc53f6a5746",
+        "actual": "7e217260471544012bf175dbc1a0f0f99a53ef0118ae99248e11e3f4f1396e03"
+      },
+      {
+        "row": 285,
+        "asset_id": "PRP-BASE-AVATAR-WARDROBE-001",
+        "path": "assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn",
+        "recorded": "6204010a604d138b4f5b797bfdc7b4701a3a2a086c80f69c9a749196dbc01c51",
+        "actual": "237ab00d041ba14be035afda81b98097737ceab7f7eab5359a6ca803aa85436a"
+      },
+      {
+        "row": 287,
+        "asset_id": "ENM-ELITE-RIFT-BOAR-ARMED-3D",
+        "path": "assets/art/enemies/elite_3d/rift_boar_armed/runtime/enm_elite_rift_boar_armed_root_top3d_v001.tscn",
+        "recorded": "ec19ed6bda41e2a5d9ace78f28150ccdb1a646e0bd0bb9051e61ed374579e6e8",
+        "actual": "b5b187474a58aebe1f5e7c2522b2e4a4db609f103365dca6e7bd8c082a08b496"
+      },
+      {
+        "row": 297,
+        "asset_id": "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D",
+        "path": "assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/runtime/chr_bunny01_chibi_anime_root_v021.tscn",
+        "recorded": "7f01db18d3f93d33567589bdf93f3b966930df9221a571dea8cf99d0ca005d9c",
+        "actual": "09dac92ea794b1c42c9c4c1e23db83d3d057216f2ac11fa53624a6951bc1e284"
+      },
+      {
+        "row": 298,
+        "asset_id": "PRP-BASE-RECOVERY-STATION-3D",
+        "path": "assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn",
+        "recorded": "76906ebbed0b1de64105ea4e31f85887f6437ecb9819ae3d47c558173a667237",
+        "actual": "fd313b49b12db893b48751fd3b15a2bac089f2ece80ff370af6b51b0cebf9ff0"
+      },
+      {
+        "row": 299,
+        "asset_id": "PRP-TOWER-ROOM-DOOR-3D",
+        "path": "assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn",
+        "recorded": "6ab7516a40ca661264ceebe59973b3790640e3495230c25e70a38eb0b267d22f",
+        "actual": "b0071bee31068f2d3995005cac41a93567ddfc68f662b4c8d9428d59b8083fc3"
+      },
+      {
+        "row": 301,
+        "asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+        "path": "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v021.tscn",
+        "recorded": "43c7f33957a8fe6b3758af1bb8155cfbeb3250691972dde0768d5fa64bbcfc55",
+        "actual": "e23e285b6340306867472161125ecb1be3cbe73b149802cfc5c632245747686b"
+      },
+      {
+        "row": 302,
+        "asset_id": "BPK-BASE99-EAST-MEZZANINE-STRUCTURE",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/east_mezzanine_structure/asset_manifest.json",
+        "recorded": "b6757e1229b9394b9d29a5f3cef24473c04580c1cb864e13cfb76d04e6a7ae4f",
+        "actual": "85c5a1e4e65168ecb8bad3439181965e5c8dac006af56fcd76b131d9a9de5701"
+      },
+      {
+        "row": 303,
+        "asset_id": "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/east_upper_transition_stair/asset_manifest.json",
+        "recorded": "0e56158a1f1468a33f1c8ac73eec33652268c4bd56baba657f4a9832b12ce08f",
+        "actual": "d824adb7c6e195f7755698caa68cd0ffcd405211f519be0ddafc59dac045dcf6"
+      },
+      {
+        "row": 304,
+        "asset_id": "BPK-BASE99-NORTHWEST-L-STAIR",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/northwest_l_stair/asset_manifest.json",
+        "recorded": "0ea9d373b5ee6bec5c73c4c0e1eef330af2c5937838e3019a703437fa7de7a30",
+        "actual": "7fbea30a4b39c0bd4a0bbf946d2bca490e8642b97ad60c5cabc6db57f0fe2c80"
+      },
+      {
+        "row": 305,
+        "asset_id": "BPK-BASE99-RETAINED-WALL-SYSTEM",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/retained_wall_system/asset_manifest.json",
+        "recorded": "1757151e65d8c0d147dacfa2e0efac8fe420eef2130340a4371d2a9a452edcf6",
+        "actual": "c772d3d1da76ff56c14a297936c0736a85c12acc4be69681dba1f125710b359d"
+      },
+      {
+        "row": 306,
+        "asset_id": "BPK-BASE99-UNDERDECK-SHEET-BLOCKER",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/underdeck_sheet_blocker/asset_manifest.json",
+        "recorded": "df9b6eff39e247df5282cea02660cf273b246090473f6269e5a0b2334943ac85",
+        "actual": "8b8a3a689384ef1519e86259e762c2f56f2f2c30e04e52e142123f9faa1b0f9b"
+      },
+      {
+        "row": 307,
+        "asset_id": "BPK-BASE99-EAST-FLAMMABLE-BIN",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_flammable_bin/asset_manifest.json",
+        "recorded": "d67856f7054de69177c719bb95fb60f3840f92a162bfcdfbda06263ea1a12480",
+        "actual": "b761ec0a6c0fb6ef88a5b3ce229c69e447bc9d0a8ada0dabf3928b28a0136d3e"
+      },
+      {
+        "row": 308,
+        "asset_id": "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_industrial_pipeline_system/asset_manifest.json",
+        "recorded": "17131b6c007c19a68cbfa9840985791cde68ac938e59b14d960c27d164a391f3",
+        "actual": "30cd758456e0e41dc59246f4ef6bb520f135799624b178e6e987ee463d156150"
+      },
+      {
+        "row": 309,
+        "asset_id": "BPK-BASE99-EAST-LOW-STORAGE-BENCH",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_low_storage_bench/asset_manifest.json",
+        "recorded": "425f3923fe553cac17dbb350477207a41015df2ae7aac88fe578e3737db1f438",
+        "actual": "da684e47481e7979da47f1ffd0ee9bea0a3cd930a1eedf9d5975c3cf5680a10e"
+      },
+      {
+        "row": 310,
+        "asset_id": "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_maintenance_workstation/asset_manifest.json",
+        "recorded": "8175ece5f3b1bea66004ebbca23a7c807b63e555eb1981feda6e1c564175ccc4",
+        "actual": "6be24f334d15b77481f4d717c365bda4342d511b50c9da81d2099424d367dff6"
+      },
+      {
+        "row": 311,
+        "asset_id": "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_personnel_security_door/asset_manifest.json",
+        "recorded": "c5e08f9aa4fd858444a8622de401cf99106cd0af57ef8cb25f235bc05fdf3f20",
+        "actual": "d13c58d2b093487ecec279f163a1cc93810a7f5683ea2b701d2c645ed2cbe54e"
+      },
+      {
+        "row": 312,
+        "asset_id": "BPK-BASE99-EAST-PLANT-GROUP",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_plant_group/asset_manifest.json",
+        "recorded": "e776728d1d2cef6a575f5e32916f80050c3ee88c5cf2a160d64f7389d2285564",
+        "actual": "666e4f4de4e76543f3eea83348d3ba9f4cb2c07dce740b1b4b904b863e38a419"
+      },
+      {
+        "row": 313,
+        "asset_id": "BPK-BASE99-EAST-POWER-DISTRIBUTION",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_power_distribution/asset_manifest.json",
+        "recorded": "414ce80873bfafe62cbdab687819652bf7f5a851fbdda34d059c73e9a6a0ee5c",
+        "actual": "279060f71448bd2de0fdce48209ef571577e8efe06e5a8187ce2dcad86ede7a8"
+      },
+      {
+        "row": 314,
+        "asset_id": "BPK-BASE99-EAST-RECYCLE-BIN",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_recycle_bin/asset_manifest.json",
+        "recorded": "cebdf92cb4adefa25ee23460d4f7c09ed6a14c2ebd54c08604f890dfb2ab8b98",
+        "actual": "9f9534f65426a4df833293c470853dbfc90ff80b08b6e1a75ff234680f56d97f"
+      },
+      {
+        "row": 315,
+        "asset_id": "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_round_pendant_light/asset_manifest.json",
+        "recorded": "97e280af194980156a0cdd900717a63adee22d679f0c9f7193e3b900d1d7e832",
+        "actual": "722ea4d41aa66a74b7d8b74781181de16b4964be201b54c6e090397a65daf62f"
+      },
+      {
+        "row": 316,
+        "asset_id": "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_small_safety_devices/asset_manifest.json",
+        "recorded": "04104b58b3411162a65f90065f2c54f8cef5254413b0b4dfb4f59f12ee0ce0a5",
+        "actual": "9773bfcfcb45b2b21177bedfa2f1d568bacc9fe44e8a806fa25786943a6feb22"
+      },
+      {
+        "row": 317,
+        "asset_id": "BPK-BASE99-EAST-SUPPLY-24H-STATION",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_supply_24h_station/asset_manifest.json",
+        "recorded": "8aaec3764c331a2fe56f5645483c66e60b3f9b4d2e2fa2faccc794f03034f95d",
+        "actual": "3751d257e1db21f28c84fbb3aa8e6ddf085e3d56270e87d7cf6ee12e1806b069"
+      },
+      {
+        "row": 318,
+        "asset_id": "BPK-BASE99-EAST-WASTE-BIN",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_waste_bin/asset_manifest.json",
+        "recorded": "7b49265dd096d1b51188f479eda5b4239755543c917f3d8e1cb757ffa633533e",
+        "actual": "6a78c74a3600bc5c4bb34683cf8e487982e3da1045433b3bb5abb0e251cb1408"
+      },
+      {
+        "row": 319,
+        "asset_id": "BPK-BASE99-EAST-WORK-TOGETHER-POSTER",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_work_together_poster/asset_manifest.json",
+        "recorded": "862f766c8d48f7ef6ea4b6c5c918cc279e4e234c5680dda9f261b9f59943a8ec",
+        "actual": "19f6ed4bef33da58791809d085a4877f361dd4f4a743b0272f6f63613bd126ac"
+      },
+      {
+        "row": 320,
+        "asset_id": "BPK-BASE99-TILE-R01-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c01/asset_manifest.json",
+        "recorded": "2d1bd5a9a5b1532ddfcd6b80d711b764255f4205abb334905a325ab2c72c1404",
+        "actual": "50114ddc61a41a4203b8bf5470c1b7f0d11fdd9f54184096469632a06af30a69"
+      },
+      {
+        "row": 321,
+        "asset_id": "BPK-BASE99-TILE-R01-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c02/asset_manifest.json",
+        "recorded": "5559ec023d166cae6a8b5155b696f5bd9998693f7f4ad9fbfea00136b490bcab",
+        "actual": "1b5ac0739c758c20681bf4ac48ca20b1e6ec1da707b52afd008d15d61ed0cc92"
+      },
+      {
+        "row": 322,
+        "asset_id": "BPK-BASE99-TILE-R01-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c03/asset_manifest.json",
+        "recorded": "e0e599a8f2798876cd7e29a52d4393d6b799bccf13aa46e25996cad94ee89836",
+        "actual": "fa8f49384390c5cf0df25001ffc592250eec86f8d178ac19b5ef70d9386a3ae0"
+      },
+      {
+        "row": 323,
+        "asset_id": "BPK-BASE99-TILE-R01-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c04/asset_manifest.json",
+        "recorded": "9991ac680ebbae80ea9b8b18305d51525090dd9aa55686ab78ef00437feccdb2",
+        "actual": "07953f736d6441d1b292f6f093531569e7187ecdd7e74ff972c85d4ecae0bf19"
+      },
+      {
+        "row": 324,
+        "asset_id": "BPK-BASE99-TILE-R01-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c05/asset_manifest.json",
+        "recorded": "d45ec20535d6cca0824c5c248ed49b5c3c0d381291e72aed3a0af3617e3a5a8a",
+        "actual": "8815ea27facc0a19383962cb9019b1ea199e6dcf230ac7daf0a46ae93d45061c"
+      },
+      {
+        "row": 325,
+        "asset_id": "BPK-BASE99-TILE-R01-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r01_c06/asset_manifest.json",
+        "recorded": "a3a61202fa7c06c7204854319288c1f0c5e60fef93e2c1f755a4f06f379a4a90",
+        "actual": "73fada6c331d64af5514379eb64412301b3674328cea8e34b698f2c0f5562690"
+      },
+      {
+        "row": 326,
+        "asset_id": "BPK-BASE99-TILE-R02-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c01/asset_manifest.json",
+        "recorded": "05143a649b91d046c2c09dafe705d94f0346d0770c39b1ae526ee52a046582e8",
+        "actual": "6fcc0af792b1356054d6b74858d389fed4d4d46d1b140121faead5a9d6d850a3"
+      },
+      {
+        "row": 327,
+        "asset_id": "BPK-BASE99-TILE-R02-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c02/asset_manifest.json",
+        "recorded": "22b9e407b68836896207ea49099214bcf7aaa7efb8736162bb2722ebf00734a4",
+        "actual": "9f6df3fa5f32a0404acf1d0029c19324f7189403a1b2169a826a6637040baf5d"
+      },
+      {
+        "row": 328,
+        "asset_id": "BPK-BASE99-TILE-R02-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c03/asset_manifest.json",
+        "recorded": "2f6a8782942233e2926c6f31281f5d98fa50e858b72995eca6c74eb7198cc4db",
+        "actual": "5e726328226ee81ac59f23f1db00b5e8a7475c3f882d278afb43fc0a757e981b"
+      },
+      {
+        "row": 329,
+        "asset_id": "BPK-BASE99-TILE-R02-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c04/asset_manifest.json",
+        "recorded": "d90d14028c3f434be09acf88ef6b467aefaecdf5fa76a206d370c98c0603d555",
+        "actual": "38a8093d74018eca0afd3e485dbaee4ffb4f3b5f0b9329e8dbf96f2df2854501"
+      },
+      {
+        "row": 330,
+        "asset_id": "BPK-BASE99-TILE-R02-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c05/asset_manifest.json",
+        "recorded": "61200762c6e6e04e040bb6105dce32fda5f1bd9d69c357ec7cc539bce9754e3b",
+        "actual": "5e7f52da5c3544d7fbac389a634ef65207bb512820c1e73cff6dc6f693a04c5d"
+      },
+      {
+        "row": 331,
+        "asset_id": "BPK-BASE99-TILE-R02-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r02_c06/asset_manifest.json",
+        "recorded": "5202b82292620f369443fa36ec4ba3b8b62ad620c4d74a797bbf69fb829c7ed1",
+        "actual": "ce8bffa5705fcab7f2fc7ceccd6593f376a78c793192d27877b13330a65c101b"
+      },
+      {
+        "row": 332,
+        "asset_id": "BPK-BASE99-TILE-R03-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c01/asset_manifest.json",
+        "recorded": "a71e85e45cc4d1a72e7875cc410843e8dfe193dfb676c9680d66c63a62aa0453",
+        "actual": "30c2ccc77637326151a6a4a10cc3314938e24ab8825c7c226647bcc3b2bf2fd9"
+      },
+      {
+        "row": 333,
+        "asset_id": "BPK-BASE99-TILE-R03-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c02/asset_manifest.json",
+        "recorded": "f8dd8e763276ff2635af0ff614361bddd2930ef68c160cc229aaf2e0c54c9dd3",
+        "actual": "2aaa4cfe2ba32c4ddd89bf705c9771d576ed62bb3d75bcb2e1998409b3326247"
+      },
+      {
+        "row": 334,
+        "asset_id": "BPK-BASE99-TILE-R03-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c03/asset_manifest.json",
+        "recorded": "2cd8e29242ecf121d91d5a44126c672b8d1d93529fef0ad1a3eab230cab3ee91",
+        "actual": "89c023859c7aaaf8a95120fedd52cbb34da7fb0402d06dbf6432103190b935a5"
+      },
+      {
+        "row": 335,
+        "asset_id": "BPK-BASE99-TILE-R03-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c04/asset_manifest.json",
+        "recorded": "5859d50bb04a09c0cf7b3fe6151193c51737b2118f3f5584bbedade814d66b6c",
+        "actual": "aaedf919f4765fdafe08ef36de30b1fe56a6d6dd39ee82bf58f176068611f0ef"
+      },
+      {
+        "row": 336,
+        "asset_id": "BPK-BASE99-TILE-R03-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c05/asset_manifest.json",
+        "recorded": "e329b1e52e214692364ebf810abca7fc4fe6d0b67b0174eb2a6f418004ff6b8c",
+        "actual": "554673964f9f14e093a707a1d340631053a132eb3696485003ca73afa8d59a48"
+      },
+      {
+        "row": 337,
+        "asset_id": "BPK-BASE99-TILE-R03-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r03_c06/asset_manifest.json",
+        "recorded": "e8eaa3e6e43e5b1ee450aee2ea8d502b34db6c300199466b2d90e919796fe00b",
+        "actual": "3bd98c558e72d6c8a8707d35d9f078249c38eb82aa4bb83cfac2c83b292e2ce2"
+      },
+      {
+        "row": 338,
+        "asset_id": "BPK-BASE99-TILE-R04-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c01/asset_manifest.json",
+        "recorded": "b06fd80bf8c9725277500eaa6994ab44b64c0d0b57262ac5920e79bc56960650",
+        "actual": "338cb6b5a8069f9cf9456e6f196187931eb7bc6c96cb4b72d0e8a758a5f15ce9"
+      },
+      {
+        "row": 339,
+        "asset_id": "BPK-BASE99-TILE-R04-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c02/asset_manifest.json",
+        "recorded": "e8b84767dce8656c366c381fbc131452d8019be4581fb4f1892625d5909d3f97",
+        "actual": "5738caf788da722683bdcc4809fa1e6cba51e8537ebacde0e866d01fdac3daf9"
+      },
+      {
+        "row": 340,
+        "asset_id": "BPK-BASE99-TILE-R04-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c03/asset_manifest.json",
+        "recorded": "9a66cc637b1abd89d06434949aa19b6b38be017d2a6dad9454cf6403ba22b4ea",
+        "actual": "e92eab4472a95829706ee534c3e9f320a201b9111d7b08b8306610af9346a34e"
+      },
+      {
+        "row": 341,
+        "asset_id": "BPK-BASE99-TILE-R04-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c04/asset_manifest.json",
+        "recorded": "9b962f6d003e082f33dc44ba251f5d5d1be141ffb69d6b056899e8ad9ef06c4f",
+        "actual": "f6ab2f697f3e2aafc6b30a0dd76d3c29da4ee77f8780327de33633e770db5d87"
+      },
+      {
+        "row": 342,
+        "asset_id": "BPK-BASE99-TILE-R04-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c05/asset_manifest.json",
+        "recorded": "7865cb437e32dfb271918f2c09c14fd1864d17233a1f932563227af201e72374",
+        "actual": "122243e9a67680a77dbb6ac79cca9f5ad4546dc81da0dcc154dbe662de1e4391"
+      },
+      {
+        "row": 343,
+        "asset_id": "BPK-BASE99-TILE-R04-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r04_c06/asset_manifest.json",
+        "recorded": "a727a84f59506e36ae549fafca03cd986e900c1fb0626ff7201158f492f2730b",
+        "actual": "596c60a990893cd7afeb8cc3c482c972682c3f42e955d103a4910d5493cf9137"
+      },
+      {
+        "row": 344,
+        "asset_id": "BPK-BASE99-TILE-R05-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c01/asset_manifest.json",
+        "recorded": "25ce320949596cebbe75797299a65b576438bc04be76cc4e7f9a8d8a8a942e2d",
+        "actual": "fe30e9a5abcc4d3e41ff324066e3df45983f1d5f3a9117cb431ecc44c3037b75"
+      },
+      {
+        "row": 345,
+        "asset_id": "BPK-BASE99-TILE-R05-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c02/asset_manifest.json",
+        "recorded": "c1e0cf57455c9162fa4db66615695f1bcce722fb9a4bf371884be2c28015b44f",
+        "actual": "a783b334746644717eb8f55b714b32053f6cb2b99870192db5ba4f30dc5df837"
+      },
+      {
+        "row": 346,
+        "asset_id": "BPK-BASE99-TILE-R05-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c03/asset_manifest.json",
+        "recorded": "9963472468273a6ed85fd89256f4c5bfafa28b3bc881a663f698d1ede44168bf",
+        "actual": "ee85c0ace45e59a4c21f7d77f77df84a80cc990c8961ffc955d11bc38079b2b0"
+      },
+      {
+        "row": 347,
+        "asset_id": "BPK-BASE99-TILE-R05-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c04/asset_manifest.json",
+        "recorded": "40018cec7389eec3fc60e519d46d2f568d92d4d6c95e8078efefd1fc52ddc952",
+        "actual": "5d65291670394b9a0d6d15e84770b965a7f9150253bf28a2717f52f5ab87a1ac"
+      },
+      {
+        "row": 348,
+        "asset_id": "BPK-BASE99-TILE-R05-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c05/asset_manifest.json",
+        "recorded": "35cc3a0eaeeec55f2589501c960a46def1cfdf7a0cbc7a5514888399729cc3cf",
+        "actual": "8bd979af8e0fc07fa25bc9c66c204ea64a50e978fb2d09d4b12a5a4a5d5604ce"
+      },
+      {
+        "row": 349,
+        "asset_id": "BPK-BASE99-TILE-R05-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r05_c06/asset_manifest.json",
+        "recorded": "1ffb43895468ba8454caf8cd96736a43b23c4bfa7f1c5a7ce90045ab79b0cda1",
+        "actual": "db7dfa24d8238709eb3e434f2451dc1dab734e81f6b76a1c162a946a10fe6c22"
+      },
+      {
+        "row": 350,
+        "asset_id": "BPK-BASE99-TILE-R06-C01",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c01/asset_manifest.json",
+        "recorded": "93355c7c277d68051bf8f57cbe647724040947ea3ef62fb303eb6156bcc3330a",
+        "actual": "12bca314b55122e9c2f6585400641c5da3ab7928943f792e0a56f60d1359f381"
+      },
+      {
+        "row": 351,
+        "asset_id": "BPK-BASE99-TILE-R06-C02",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c02/asset_manifest.json",
+        "recorded": "8b1d9e1c00926068b1a766bf9b06cd77c8564494a9e53a737cce499e8700299c",
+        "actual": "8b1ebc38d0240518741c35f0e9cb711684e50e794e1b1332f2f954ec1961dff9"
+      },
+      {
+        "row": 352,
+        "asset_id": "BPK-BASE99-TILE-R06-C03",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c03/asset_manifest.json",
+        "recorded": "587528fa866f3c611502ec6a25302b42a151003b4e9ce7f006bd333bef94df28",
+        "actual": "359eb33a0a69757f863f293df00529484ababa1ffb9694fd869d4d89be9f7195"
+      },
+      {
+        "row": 353,
+        "asset_id": "BPK-BASE99-TILE-R06-C04",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c04/asset_manifest.json",
+        "recorded": "642031fcb2150bb66acdf355c66a4c306df7dd33f72608668ff15c9577a46e38",
+        "actual": "d0f90f5fbe0909fa39a9321863136f93f88807b3efeac80976fa1303172ea452"
+      },
+      {
+        "row": 354,
+        "asset_id": "BPK-BASE99-TILE-R06-C05",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c05/asset_manifest.json",
+        "recorded": "c0329eb9daf7da1934787930e05ca0bc66ec0f0de0e513bb38f7522c3afa085d",
+        "actual": "c8eb5578976bd3a9f6b731e4624430fdccbd9207ef794650216332e6d05be6d8"
+      },
+      {
+        "row": 355,
+        "asset_id": "BPK-BASE99-TILE-R06-C06",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/tile_r06_c06/asset_manifest.json",
+        "recorded": "4410eb7cee5e0420ed07525523ffd0ab0f340cc8f801a9c98419ff3b903e6a5a",
+        "actual": "8ae804eb26047b9415efbe30c008e8e26e76d9ef0bec857677b1032028cfc780"
+      },
+      {
+        "row": 356,
+        "asset_id": "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_backwall_function_panel_system/asset_manifest.json",
+        "recorded": "e97ed4ea9b8bdf13e8c0accd7f2453cc0120175ee02d6f2d9051723d67239570",
+        "actual": "e19e912899716a1946613ca8b36cad17279a125e88ba3759d49066b46b623fca"
+      },
+      {
+        "row": 357,
+        "asset_id": "BPK-BASE99-LOFT-BACKWALL-SERVICES",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_backwall_services/asset_manifest.json",
+        "recorded": "176002fd29433831e3b0e5dc30d1ffc32abacb6a4f2c893ef9edeb4c5868fa0c",
+        "actual": "e5757210ba00607935a810ba77136f6936a0473d16ba3ead9ec72b232f3dbb42"
+      },
+      {
+        "row": 358,
+        "asset_id": "BPK-BASE99-LOFT-BATTERY-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_battery_cabinet/asset_manifest.json",
+        "recorded": "35982945ea521268c8c3d232ef47bc175f652eae1ced10c42efcb806623fde73",
+        "actual": "e84bd2da9ba84cddb8cd892c9fd9ef57db9fc4f386a8996fb108e9ef39b6dd60"
+      },
+      {
+        "row": 359,
+        "asset_id": "BPK-BASE99-LOFT-BED-AND-BEDDING",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_bed_and_bedding/asset_manifest.json",
+        "recorded": "9752c9cdd1e599e96b2aeb15bb787731a36ece66d7cde48db6747856c4542b41",
+        "actual": "dd30243415412741c680e29441cda860904e400d99515f745cd810832a906d18"
+      },
+      {
+        "row": 360,
+        "asset_id": "BPK-BASE99-LOFT-BEDSIDE-LAMP",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_bedside_lamp/asset_manifest.json",
+        "recorded": "dfa62a3159a7ffce0ca1d8dd098818ab648b2e5804ec339550a5dc2b69b877da",
+        "actual": "eb20834befc657db683f620b613ea884507d47c2652188ac681dee39052f8367"
+      },
+      {
+        "row": 361,
+        "asset_id": "BPK-BASE99-LOFT-BEDSIDE-RUG",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_bedside_rug/asset_manifest.json",
+        "recorded": "c425070885081f74727ab40c783cd109cc5d52c65986d3dfe990665712bfaacd",
+        "actual": "155af02af099a16947c2fce7c1b089557d556979381e07edb7b49a918a21dfe4"
+      },
+      {
+        "row": 362,
+        "asset_id": "BPK-BASE99-LOFT-COFFEE-TABLE",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_coffee_table/asset_manifest.json",
+        "recorded": "41b9b97f112c9f2e7b666edb68ebc21dda17e8904b1c31ed14392e840f81e202",
+        "actual": "b21199bcadb9b8ea20598f3bf7b3210c63b955724a4b00f742e97d24b654c475"
+      },
+      {
+        "row": 363,
+        "asset_id": "BPK-BASE99-LOFT-COMPUTER-WORKSTATION",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_computer_workstation/asset_manifest.json",
+        "recorded": "ae8512dc8d445075a9a334b6366d8595e635ce7c75a7c745497ba0bc4f6e31eb",
+        "actual": "4d9ffaafc5ef96c16072b1221fce45649b469d530c02977942d6e8b163fa7c70"
+      },
+      {
+        "row": 364,
+        "asset_id": "BPK-BASE99-LOFT-EXPLORE-POSTER",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_explore_poster/asset_manifest.json",
+        "recorded": "3e6f3503232b8bf78b103a606d626169d02fdaf368bed59a62fedae9ae7e882b",
+        "actual": "03344c4b9c3a23ff4daae3368a4159bb720760d255d8afa67800bd44e260d720"
+      },
+      {
+        "row": 365,
+        "asset_id": "BPK-BASE99-LOFT-FOOD-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_food_cabinet/asset_manifest.json",
+        "recorded": "47f07c66ca448d78584fc1a2c255f7e68b7431c9e017bd2896084fb5c1d0ded9",
+        "actual": "3f2bac0b240d54254a5b4f6691d1e04dfedea85475b7770bee48b19e93a4e2c7"
+      },
+      {
+        "row": 366,
+        "asset_id": "BPK-BASE99-LOFT-GOOD-VIBES-NEON",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_good_vibes_neon/asset_manifest.json",
+        "recorded": "d80f55a362a7f865b32988bfab3466cd054ac41ea5319f07541e39dea39dda0d",
+        "actual": "b94d3724faa9216d9a5f3e7774395683d54a573a8bc1c114cbf37a914bfc7554"
+      },
+      {
+        "row": 367,
+        "asset_id": "BPK-BASE99-LOFT-HANGING-PLANT",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_hanging_plant/asset_manifest.json",
+        "recorded": "ec3b5a9fe2c042eac25147940cef9cf1f3644d3c50a2fa70e6fb740c136e056a",
+        "actual": "a76f5086eeab2510781ac2356968ca855ed7a31274dcb5b90d5a4a8bff7b430f"
+      },
+      {
+        "row": 368,
+        "asset_id": "BPK-BASE99-LOFT-LOUNGE-RUG",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_lounge_rug/asset_manifest.json",
+        "recorded": "e78f61c3ad775e6d8f8c39cf945e9520953ba172268e18dc49fb4559dea30710",
+        "actual": "ec707f122b5860e4db4824f6b557f006af83025556dd2907dd19d422d9c68d9c"
+      },
+      {
+        "row": 369,
+        "asset_id": "BPK-BASE99-LOFT-LOUNGE-SOFA",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_lounge_sofa/asset_manifest.json",
+        "recorded": "0ea576fd93a4e4cfaab99f5fa628b2561954259a5cf0badcadfd0ed711dc711d",
+        "actual": "64f2651594439cf2411aa14011398b78e868084d520d0cc28f3dd476c44130b1"
+      },
+      {
+        "row": 370,
+        "asset_id": "BPK-BASE99-LOFT-MEDICAL-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_medical_cabinet/asset_manifest.json",
+        "recorded": "90a440b55dfe8b8de10f0e4be29b60f4563b4659fea46da390a619131cc1466c",
+        "actual": "1311552bd04b13fe297cf652e06262f7ad83612279134b81478d2d226141b036"
+      },
+      {
+        "row": 371,
+        "asset_id": "BPK-BASE99-LOFT-NIGHTSTAND",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_nightstand/asset_manifest.json",
+        "recorded": "a671d85e1ea271fc63803ef03491d6e963024cabedf4c795d2709e629d15a6f1",
+        "actual": "863176caeb734394865ab7f51bf48699ae549de0066aa2aed828244e18530bd3"
+      },
+      {
+        "row": 372,
+        "asset_id": "BPK-BASE99-LOFT-OFFICE-CHAIR",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_office_chair/asset_manifest.json",
+        "recorded": "cebb026db98f698673e2758ee5b887a5d2108a277298e8fdd3dde9e2fa06704e",
+        "actual": "bbb9a18203bbc0cf555ab09bd88734aa4f4da837a31849bc6f8d4f60be0e787e"
+      },
+      {
+        "row": 373,
+        "asset_id": "BPK-BASE99-LOFT-POUF-01",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_pouf_01/asset_manifest.json",
+        "recorded": "eefc2ff2071498076d80babd04c265a339885c872298e33ac1032f7ba16affde",
+        "actual": "410696ebbbc7cc3ad5269487a9a44a6fe5380a560c4113be6aa0ee9908aae219"
+      },
+      {
+        "row": 374,
+        "asset_id": "BPK-BASE99-LOFT-POUF-02",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_pouf_02/asset_manifest.json",
+        "recorded": "12605eb5bd72bfcf95a6681defcf7f3bf10c433598bdc573bf88ba7c45988f01",
+        "actual": "31473d4ed82edd5b06fcdc2fd925b506a9ee6079d47d478452f560b218d0223b"
+      },
+      {
+        "row": 375,
+        "asset_id": "BPK-BASE99-LOFT-SIDE-TABLE",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_side_table/asset_manifest.json",
+        "recorded": "196228330020639583b065ab7356611b6ec416c887ed0cb2ea8a691979a94a43",
+        "actual": "7195b627200aee96cc5ad1af2f20deacfaa4187178cf24e5c85e9ad5e382f8b4"
+      },
+      {
+        "row": 376,
+        "asset_id": "BPK-BASE99-LOFT-STAY-CURIOUS-NEON",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_stay_curious_neon/asset_manifest.json",
+        "recorded": "839a14265dd791c3f75a3db2366d5f6ae3231711710ff2d37294e08852eab7d2",
+        "actual": "7126cd846635ae528b323245747413e5b6130dd2140ab9d0ddead50aaa7aa0be"
+      },
+      {
+        "row": 377,
+        "asset_id": "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_striped_privacy_curtain/asset_manifest.json",
+        "recorded": "314bae326f34e948dddfa42d0e73b70b79743095bcb218ec4ae96970f07cf656",
+        "actual": "d1d3ab10ad5f640d1af0be677718403ebcedf45cc7d1ead355ff20f2f9019501"
+      },
+      {
+        "row": 378,
+        "asset_id": "BPK-BASE99-LOFT-TOOL-PEGBOARD",
+        "path": "source/art/blender/base_facility_layout/component_packages/loft/loft_tool_pegboard/asset_manifest.json",
+        "recorded": "680345a4a3adf2fc74a5395e7105033c8633e411e57dfc61f7c98474fa70d5e7",
+        "actual": "c5ce8fa244331d60ca0efb66680f4ecd382aed050dabf38490f25d2f3adacfe9"
+      },
+      {
+        "row": 379,
+        "asset_id": "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP",
+        "path": "source/art/blender/base_facility_layout/component_packages/support/corridor_emergency_light_group/asset_manifest.json",
+        "recorded": "91a2188f0a0819488332d5384088e7d4eba0c6043421a93b18c444260e1d9701",
+        "actual": "543a7da688e0d78ce6ba7ec9b7f07890b934ba6c25a66d55a12c67fc3042ac0d"
+      },
+      {
+        "row": 380,
+        "asset_id": "BPK-BASE99-LOFT-LIGHTING-SUPPORT",
+        "path": "source/art/blender/base_facility_layout/component_packages/support/loft_lighting_support/asset_manifest.json",
+        "recorded": "abe38c11684b2be621edcb448b12850da7d3472d215e9f18c78a0a9592948f23",
+        "actual": "c52f581b50aed742ff9cf9567a2188a81024eaadc4f94c98b2b3f178d527a2cf"
+      },
+      {
+        "row": 381,
+        "asset_id": "BPK-BASE99-VOLUMETRIC-DUST-FX",
+        "path": "source/art/blender/base_facility_layout/component_packages/support/volumetric_dust_fx/asset_manifest.json",
+        "recorded": "70a699d6ddb5c3005b0c982960be90e7997595c76c6b22110d635452f3fde467",
+        "actual": "a45cf20c8f73d8fd4d9ea37e05078d6963f31cc6efc873445af2b6c87b8e51b8"
+      },
+      {
+        "row": 382,
+        "asset_id": "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP",
+        "path": "source/art/blender/base_facility_layout/component_packages/support/warehouse_pendant_light_group/asset_manifest.json",
+        "recorded": "543f336c346e31fd89c4cf60b28a843e41023b7cd8be1b1d1036b3e28b711343",
+        "actual": "de64c5243679d4acbdae7545808d2233871703cadcc529a5c3bfd62826476689"
+      },
+      {
+        "row": 383,
+        "asset_id": "BPK-BASE99-ACCESS-TERMINAL",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/access_terminal/asset_manifest.json",
+        "recorded": "36db763dbbc616a69a135d71b83b094d1773b8196858c2340505527cf8574f1f",
+        "actual": "84c73e295098a57bf4b0c606a9bc6f94654b6fbff4db25e16f44a530e8c71a76"
+      },
+      {
+        "row": 384,
+        "asset_id": "BPK-BASE99-BASE-CAMP-NEON-SIGN",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/base_camp_neon_sign/asset_manifest.json",
+        "recorded": "ba7d0fb2dbba09a1b860340c6b59b47c6b1eb598ab8b502ee36e288272de2e45",
+        "actual": "2ac4aa48342161d2d2bc1873e444044264dcf415363f0118c318e5892566edae"
+      },
+      {
+        "row": 385,
+        "asset_id": "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/base_camp_rollup_main_door/asset_manifest.json",
+        "recorded": "10136ee036092b66b19780625e92a9f7bc808770838a285a8f1c52bc44e88581",
+        "actual": "04b7c247d1af1d3a293be61c4543f88b7e3a9e98c23f94734fb5ad5acacaccdc"
+      },
+      {
+        "row": 386,
+        "asset_id": "BPK-BASE99-BASE-STATUS-TERMINAL",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/base_status_terminal/asset_manifest.json",
+        "recorded": "f5083ec93792056dedf834c275351c144170c170e265c45907654bab1a2e2d18",
+        "actual": "c3e5602c0e11fdfa610a67ca18968dc45026639e2e8a03ee67bc7897f2ccf643"
+      },
+      {
+        "row": 387,
+        "asset_id": "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/hologram_terminal_platform/asset_manifest.json",
+        "recorded": "761b1591ee608316a47fa06e85a5a7f2a18d87dac3cb80f5294b54c47813852d",
+        "actual": "6772461db9f240378eb1fee67ee54994272f1b9c4ee87b29bc9b5ceaa3fc3d70"
+      },
+      {
+        "row": 388,
+        "asset_id": "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/main_door_low_storage_cabinet/asset_manifest.json",
+        "recorded": "5fa3be4b090c09f631db5d18960be6180696449b04bcba402aba6d34674fb928",
+        "actual": "a16a84b747c4d97e0e3017ae615753d652d2df297366fbb4c25c4780e75fe45d"
+      },
+      {
+        "row": 389,
+        "asset_id": "BPK-BASE99-MEDICAL-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/medical_cabinet/asset_manifest.json",
+        "recorded": "e5d0bcd80ad4c56e60e6e5ead83154e036d46f6b3e7c7fd691c8d2eb12073f79",
+        "actual": "9c6e519f89e470c4b1f3aba1c856d869e9a9fb8feb456f0e946229d58f82f411"
+      },
+      {
+        "row": 390,
+        "asset_id": "BPK-BASE99-NARROW-BATTERY-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/narrow_battery_cabinet/asset_manifest.json",
+        "recorded": "8d0866fc43cd1c50b0977d3b37c81ec27ad5203055dec4da99117ff788d45f2e",
+        "actual": "6d4f355ae2f78209341d5886b593337db19e898b48d5eadbd3054f48a03bee92"
+      },
+      {
+        "row": 391,
+        "asset_id": "BPK-BASE99-NARROW-EMERGENCY-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/narrow_emergency_cabinet/asset_manifest.json",
+        "recorded": "2d3e67ae01fb8d2722d637fd58c007ced90f44746aec4301eb762814acb1ed45",
+        "actual": "9a5090522f7af48f0e7ac02ef3a52ea2225a292366d6a61cc98cafd159f5a192"
+      },
+      {
+        "row": 392,
+        "asset_id": "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/south_industrial_wall_details/asset_manifest.json",
+        "recorded": "b5c165d27e34d5e679129345e0a8fc19d716535f818f59946544275bbe2078df",
+        "actual": "1c3a1bae26ffeab9adad29252b498b44d424d22fcc0522ec7eb6a797b9b67229"
+      },
+      {
+        "row": 393,
+        "asset_id": "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/south_upper_railing_details/asset_manifest.json",
+        "recorded": "a6ed0e3a365744c2d7ddc23b44f6db88a87e05ae3af5d8c4c049880fd02e6030",
+        "actual": "d08e3ac0f25926d4c7d405b3fb8b7503e5b6917b39c6ae1c16cd7e8d01984f09"
+      },
+      {
+        "row": 394,
+        "asset_id": "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/south_wall_pipeline_system/asset_manifest.json",
+        "recorded": "4df099890e491380d7579c1a423144c6065aaceb8fc7aeb359b8dc12a45beb8e",
+        "actual": "03172fdf43e8c4f7b0bc3d303ea4d0dcc4e2ad1e091d4738cfabc0a293060378"
+      },
+      {
+        "row": 395,
+        "asset_id": "BPK-BASE99-STORAGE-TERMINAL",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/storage_terminal/asset_manifest.json",
+        "recorded": "9a3bcdb47187783f355dd37fe4127d98e38672a1d597ee68e97fa7dde5bfe180",
+        "actual": "e81b9e834cb3e3cda6f81182e905051f143fe4d8a95941ffe92a303c2e9fd318"
+      },
+      {
+        "row": 396,
+        "asset_id": "BPK-BASE99-TOOLS-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/tools_cabinet/asset_manifest.json",
+        "recorded": "02c3f0b47847e989ae88a803b2e91cb9557fd60c776f69752d866d16c8a2a389",
+        "actual": "543aa1776613f2279210bb9e1d179be48050412335b4be68c20988422d8bf50f"
+      },
+      {
+        "row": 397,
+        "asset_id": "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/understair_bulletin_board/asset_manifest.json",
+        "recorded": "09b8e426a88a07d63b81fddfe5c60678c9a36795e7724ef7596b2a861784075f",
+        "actual": "4f5cc4b2f4604c0b9bd5e2c26a08d3837a50faa6195a902fadf914e317ffa4f5"
+      },
+      {
+        "row": 398,
+        "asset_id": "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/understair_equipment_cabinet/asset_manifest.json",
+        "recorded": "1aa9bb72dcf2d2937ff7d26c1df1e1886258ecbcc27d1a62dc3584b2ecc2ff80",
+        "actual": "40df72432d99584f49445d049d1ed7ba481f94d7d18fc764d560e633f5593720"
+      },
+      {
+        "row": 399,
+        "asset_id": "BPK-BASE99-UNDERSTAIR-GREEN-BENCH",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/understair_green_bench/asset_manifest.json",
+        "recorded": "5ac9a6343b67f5515d37eafb1feb9057d6809890c184a48acd90df6aa868964c",
+        "actual": "8aec1c6114e2b1d6415d86371450bb3c734d217dc75c13495da2b4aba91db8f4"
+      },
+      {
+        "row": 400,
+        "asset_id": "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/understair_lighting_living_support/asset_manifest.json",
+        "recorded": "45b9c9bf88b00892b8ebf61ba99fafee68c80caee3307bcd7b52ab687069394d",
+        "actual": "0bfb375054fc31ad9ceda6fb8fdbf7e1395d1f0b860121768c46afdb3a6a94d1"
+      },
+      {
+        "row": 401,
+        "asset_id": "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/understair_storage_shelf/asset_manifest.json",
+        "recorded": "2e7e296aec13638562542154a7e6c0f60864c65de6baa6f6dd51a33d1146849e",
+        "actual": "07ceb970797ac439ce0ecdd91078112c20a02b14041f12d17296e50d17a7f3c4"
+      },
+      {
+        "row": 402,
+        "asset_id": "BPK-BASE99-WEAPON-WORKSHOP-STATION",
+        "path": "source/art/blender/base_facility_layout/component_packages/underloft/weapon_workshop_station/asset_manifest.json",
+        "recorded": "f568e54a20f9da78496f14a7dc6b5a2480e8d06ae1444556e67eaf1714e52eed",
+        "actual": "4f10203affcfaac523c5464a5cecd6df31e52aa99a61d200af91afac6f0fe60a"
+      },
+      {
+        "row": 403,
+        "asset_id": "BPK-BASE99-AIR-COMPRESSOR",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/air_compressor/asset_manifest.json",
+        "recorded": "fe223a3c61fefa41112c53d0db19456b7fe7fa7a1b96c344dd3731890f520abf",
+        "actual": "a2803d7ba558baab5d23bbf2b8453259ca6f367475660a5db1c2fb4be27323c0"
+      },
+      {
+        "row": 404,
+        "asset_id": "BPK-BASE99-BACKUP-GENERATOR",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/backup_generator/asset_manifest.json",
+        "recorded": "46365109119549947bf83b6ce9dc5f6f437615a351fe9170e75fa25c7c9bd99a",
+        "actual": "d958a816a983dec19f9a121f96cb050a3fc39fb83778dd670491969e73b9b03e"
+      },
+      {
+        "row": 405,
+        "asset_id": "BPK-BASE99-BATTERY-BANK",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/battery_bank/asset_manifest.json",
+        "recorded": "6fdffb163e8c09d489b9b6e8a016ee9f5a2966d88c59210a2631904733bf0417",
+        "actual": "2472c6e24341f034f65fb178a1dc03ad9b99e134a1af4e8c44a851e1d0c9ec48"
+      },
+      {
+        "row": 406,
+        "asset_id": "BPK-BASE99-HEAVY-SUPPLY-SHELF",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/heavy_supply_shelf/asset_manifest.json",
+        "recorded": "0d2048acc401d5580c86cb36de4f34b7e3787150cff3eb1ae8051c37a026e8e7",
+        "actual": "4865871090018469f6727806ff118619a94cbd34fc45c4a0653fab7700fb7145"
+      },
+      {
+        "row": 407,
+        "asset_id": "BPK-BASE99-HOSE-REEL",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/hose_reel/asset_manifest.json",
+        "recorded": "0824feeb2d04559927f281f0718fec54324bcd89a2a89a7adfbb9647a0e5778f",
+        "actual": "4a7f78ea56b56e29bcce1dde3bb2d0c65a841e81c143cb74b55f999d5057c8c8"
+      },
+      {
+        "row": 408,
+        "asset_id": "BPK-BASE99-INDUSTRIAL-WATER-TANK",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/industrial_water_tank/asset_manifest.json",
+        "recorded": "dc9600c8d886f01da3ae3155cc834dc3be57a2ce1694443882cde146b37eea1f",
+        "actual": "c133e666268b455d5132220eb5857310f3dea4ef114c4496fa7a08e56e284738"
+      },
+      {
+        "row": 409,
+        "asset_id": "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/south_wall_information_boards/asset_manifest.json",
+        "recorded": "34a301ac94e1f61fe04e6ecbaf7cfd2ac7eba947bfffe534a361ee6f2fd70fa2",
+        "actual": "468528eb4aa881acb8f42831fe42e1f4eddfe8002ef99f5419e3128e088e4dc5"
+      },
+      {
+        "row": 410,
+        "asset_id": "BPK-BASE99-WATER-PURIFIER",
+        "path": "source/art/blender/base_facility_layout/component_packages/warehouse/water_purifier/asset_manifest.json",
+        "recorded": "ce901e1145a3d1f7c0ee20ba57e89ee224ce84c9d3057e001903b84e4ffad0ad",
+        "actual": "06e561ef43a1720af2dbab8a676c6a57a1138b2721f81e1504415fb3dd8569c5"
+      },
+      {
+        "row": 411,
+        "asset_id": "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL",
+        "path": "source/art/blender/base_facility_layout/component_packages/east_facilities/east_door_access_control/asset_manifest.json",
+        "recorded": "a2ae13595d1301377c215e354641f74116c7e7935a2369ddf4f2fb1d2fd681c0",
+        "actual": "35721bd073a033f74730ba2cf7d79df6b86d26c8e316e837fe28f072779b11e2"
+      },
+      {
+        "row": 412,
+        "asset_id": "BPK-BASE99-EAST-DOOR-WALL-MODULE",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/east_door_wall_module/asset_manifest.json",
+        "recorded": "87bf2ab81c6713c2fcfc96fa83303389400b30df878ac64967d95d8c80578f21",
+        "actual": "3c85c0e9dd909442b4452b023d7fdbce06607a8014925a1d3f3a2af364c6ab53"
+      },
+      {
+        "row": 413,
+        "asset_id": "BPK-BASE99-WEST-DOOR-WALL-MODULE",
+        "path": "source/art/blender/base_facility_layout/component_packages/architecture/west_door_wall_module/asset_manifest.json",
+        "recorded": "561879c23a51a6aa3482596abb7ec85b58610759b734bf2d563aac18eee72f65",
+        "actual": "c31b84e4d8053e0a9a06131ae8ac565f52b1e58e98642e13af659f960b405bd9"
+      },
+      {
+        "row": 414,
+        "asset_id": "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE",
+        "path": "source/art/blender/base_facility_layout/component_packages/west_facilities/west_door_lift_instance/asset_manifest.json",
+        "recorded": "8476b5676a9345cef4f7eb9ac64694a546609f71770ff84b548d897f0e53907f",
+        "actual": "399d81c2f65dec17ed2ea6075e9f6a830a93f0c6cb7e396a9c8f6a587aa60d74"
+      },
+      {
+        "row": 415,
+        "asset_id": "BPK-BASE99-LOFT-FLOOR-FINISH",
+        "path": "source/art/blender/base_facility_layout/component_packages/floor/loft_floor_finish/asset_manifest.json",
+        "recorded": "cdbab0f3c5bc3a4cb41c97cc1522fa2abff0943bcb3e4495d09e323b2552c15b",
+        "actual": "6ce5eed8db6dcb29f09ffd20644573e353fcfef1e0f56690db403c1e825602ae"
+      },
+      {
+        "row": 416,
+        "asset_id": "ENV-BASE99-WALL-CONTENTS-V021",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+        "recorded": "f2e4c10d268036cd78fdefe1812a203b22bbf05e210f437bb7cd02ed2389f77d",
+        "actual": "62df20bade3c0f27536496adedd6ba9ff089ff0a199236957f1dd0c294040531"
+      },
+      {
+        "row": 417,
+        "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+        "path": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+        "recorded": "a5dfe6a7bf658ab2f66eb5bdd8044f68a0ce788ebbca6a654a5ea15a67440ba4",
+        "actual": "22f01b01fe0ed77ca37643a923cdfb2c9125cfc6b30c79942bdcdb9a03322050"
+      }
+    ]
+  }
+}

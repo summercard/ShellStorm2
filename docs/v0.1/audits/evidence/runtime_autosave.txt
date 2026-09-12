@@ -1,0 +1,9 @@
+
+[scene] verify_runtime_autosave_flow
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+RUNTIME_AUTOSAVE_OK: coalesced changes, forced room checkpoint, restart and insurance restore pass
+
+VERIFICATION_SUITE_OK suite=scene count=1

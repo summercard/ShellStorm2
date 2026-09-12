@@ -4,6 +4,8 @@ Godot 4.6 顶视角 3D 搜打撤肉鸽。当前项目版本为 `0.1.0`，正式�
 
 ## 开始开发
 
+先阅读 [工程文档入口](docs/README.md)、[文档驱动开发规范](docs/DOCUMENTATION_STANDARD.md)与[功能契约索引](docs/v0.1/MODULE_INDEX.md)。设计规范和开发记录已分离；当前风险与验证基线见[工程健康审计](docs/v0.1/audits/2026-09-12_engineering_audit.md)。
+
 1. 使用 Godot 4.6.x 打开仓库根目录。
 2. 运行项目进入塔楼主循环。
 3. 修改前先阅读 [游戏设计文档 v0.1](docs/v0.1/README.md)；性能施工同时阅读 [性能优化与热管理](docs/v0.1/13_技术施工_性能优化与热管理.md)。

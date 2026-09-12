@@ -1,5 +1,7 @@
 # 验证测试
 
+开发与证据记录遵循[文档驱动开发规范](../docs/DOCUMENTATION_STANDARD.md)。当前套件风险与实际结果见[2026-09-12工程审计](../docs/v0.1/audits/2026-09-12_engineering_audit.md)：现有runner尚未统一隔离user://，`full`的真实渲染分类也有遗漏，不应把下面运行模式说明当作已完全实现的保证。测试执行前必须隔离用户存档；设计标准与每次执行结果分别记录。
+
 `verification/` 中每个 `.tscn` 都是可独立运行的 Godot 回归入口，对应脚本同名。测试不得写入存档或正式资产；截图统一输出到 `outputs/verification/`。
 
 常用命令：

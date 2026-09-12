@@ -1,0 +1,34 @@
+extends Node
+
+func _ready() -> void:
+	BaseManager.save_path = "user://audit_failure_probe.json"
+	BaseManager.data = BaseData.new()
+	BaseManager.data.extraction_points = 500
+	var baseline_saved := BaseManager.save_base("audit_baseline")
+	BaseManager.force_save_failure_for_test = true
+	var spend_reported_success := BaseManager.spend_extraction_points(70)
+	var memory_points := BaseManager.get_extraction_points()
+	var disk: Dictionary = AtomicJsonStore.load_dictionary(BaseManager.save_path)
+	print("AUDIT_SPEND_FAILURE ", JSON.stringify({"baseline_saved":baseline_saved,"reported_success":spend_reported_success,"memory_points":memory_points,"disk_points":disk.payload.extraction_points}))
+	BaseManager.force_save_failure_for_test = false
+	var tower := (load("res://scenes/TowerDescent3D.tscn") as PackedScene).instantiate() as TowerDescent3D
+	tower.test_mode = true
+	tower.run_seed_override = 980095
+	add_child(tower)
+	await get_tree().process_frame
+	# Enable the production persistence branch after bypassing the entry UI.
+	tower.test_mode = false
+	tower.set("_runtime_persistence_active", true)
+	BaseManager.register_runtime_checkpoint_provider(tower)
+	BaseManager.force_save_failure_for_test = true
+	var before := BaseManager.data.save_revision
+	var accepted := tower.activate_arrival_between_for_test("facility", "floor_01_entry")
+	var edge := str(tower.call("_edge_key", "facility", "floor_01_entry"))
+	var state := tower.get_tower_snapshot()
+	print("AUDIT_ARRIVAL_SAVE_FAILURE ", JSON.stringify({"accepted":accepted,"arrival_open":tower.get("_vertical_arrival_open").get(edge,false),"generated_floors":state.get("generated_floor_indices"),"revision_before":before,"revision_after":BaseManager.data.save_revision,"save_forced_to_fail":true}))
+	BaseManager.unregister_runtime_checkpoint_provider(tower, false)
+	tower.test_mode = true
+	BaseManager.force_save_failure_for_test = false
+	tower.queue_free()
+	await get_tree().process_frame
+	get_tree().quit()

@@ -1,0 +1,419 @@
+[
+  {
+    "scene": "verify_3d_only_project_structure",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_player3d_avatar_bounds",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_grid_component_alignment",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_lighting_wall_combat_regressions",
+    "exit": 1,
+    "errors": [
+      "ERROR: Player flashlight exposure exceeds the accepted v0.1 energy budget",
+      "ERROR: Facility light did not restore stable floor illumination: FacilityCeilingLight_Main (0.0000/24.3000)"
+    ]
+  },
+  {
+    "scene": "verify_full_3d_game_flow",
+    "exit": 1,
+    "errors": [
+      "ERROR: 3D level exceeds prototype node budget: 2703"
+    ]
+  },
+  {
+    "scene": "verify_floor_plan_generator",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_room_graph_persistence_services",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_hud_presenter_3d",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_journey_polish",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_arrival_gate_floor_bundle_flow",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_unified_player_interaction_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_floor_room_authority",
+    "exit": 0,
+    "errors": [
+      "ERROR: 6 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_base_rooftop_transit_door_motion",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_floor_visibility_shadow_patch",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_player3d_animation_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_player3d_debug_scale_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_player3d_vertical_physics_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_player3d_weapon_pose_collision_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_3d_enemy_behavior_flow",
+    "exit": 1,
+    "errors": [
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3.",
+      "ERROR: Enemy damage does not create a 3D floating number: melee_chaser",
+      "ERROR: Enemy damage does not create a 3D floating number: ranged_caster",
+      "ERROR: Enemy damage does not create a 3D floating number: summoner",
+      "ERROR: Enemy damage does not create a 3D floating number: shielded",
+      "ERROR: Enemy damage does not create a 3D floating number: exploder",
+      "ERROR: Enemy damage does not create a 3D floating number: ambusher",
+      "ERROR: Enemy damage does not create a 3D floating number: boss"
+    ]
+  },
+  {
+    "scene": "verify_enemy_illumination_states",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_monster_ai_light_effects",
+    "exit": 0,
+    "errors": [
+      "ERROR: Error calling from signal 'retired' to callable: 'Node3D(VfxPool3D.gd)::_on_effect_retired': Method expected 2 argument(s), but called with 3."
+    ]
+  },
+  {
+    "scene": "verify_monster_ai_system_complete",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_unique_elite_roster_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_unique_boss_content_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_three_segment_tower_generation_flow",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_3d_melee_combat_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_3d_melee_feedback_flow",
+    "exit": 1,
+    "errors": [
+      "ERROR: Parameterized combat VFX kit did not emit one slash and two impacts",
+      "ERROR: Melee feedback VFX does not build readable slash/impact geometry"
+    ]
+  },
+  {
+    "scene": "verify_training_range_3d_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_3d_fate_weapon_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_3d_inventory_weapon_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_weapon_instance_contract_matrix",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_equipment_transaction_service",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_weapon_attachment_inventory_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_weapon_instance_fate_ownership_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_celestial_fate_scope_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_finite_ammo_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_avatar_return_persistence_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tactical_inventory_minimap_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_backpack_equipment_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_scene_facility_shared_palette",
+    "exit": 1,
+    "errors": [
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 材质缺少公共色盘: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
+      "ERROR: 色盘不是最近邻采样: res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb"
+    ]
+  },
+  {
+    "scene": "verify_base_fixture_glow",
+    "exit": 143,
+    "errors": [
+      "SCRIPT ERROR: Assertion failed.",
+      "TIMEOUT verify_base_fixture_glow after 180s; terminating PID 10348"
+    ]
+  },
+  {
+    "scene": "verify_base_facility_framework",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_base_shop_save_flow",
+    "exit": 0,
+    "errors": [
+      "ERROR: [BaseManager] Refusing stale save: memory revision 1 < disk revision 5 (stale_writer_attempt)"
+    ]
+  },
+  {
+    "scene": "verify_tower_facility_inventory_binding",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_tower_base_facility_persistent_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_extraction_return_flow",
+    "exit": 0,
+    "errors": [
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_game_entry_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_base_world_flow",
+    "exit": 1,
+    "errors": [
+      "ERROR: BaseWorld3D first slice is unexpectedly heavy: 563 nodes",
+      "ERROR: Player3D moving state has no independent locomotion animation cycle",
+      "ERROR: Player3D locked state does not drive the amber ring",
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_dual_weapon_quick_map_fate_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tarot_fate_runtime",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_door_passability",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_tower_descent_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_base99_floor_player_collision_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_base99_structural_asset_integration",
+    "exit": 1,
+    "errors": [
+      "ERROR: 基地结构层没有完整接入四项V021结构资产",
+      "ERROR: 基地仍实例化旧L型楼梯资产",
+      "ERROR: V021结构资产未接入或缺少阻挡: ENV-BASE99-STRUCTURAL-V021::northwest_l_stair",
+      "ERROR: 基地仍保留旧阁楼或楼梯实例: { \"room_id\": \"facility\", \"room_type\": \"FACILITY\", \"size_class\": \"floor\", \"dimensions\": (30.0, 30.0), \"doors\": [\"west\", \"east\"], \"visited\": false, \"cleared\": false, \"is_main_path\": true, \"shell_built\": true, \"detail_built\": false, \"stream_state\": 1, \"stream_state_name\": \"SHELL_READY\", \"stream_transition_count\": 2, \"furniture_count\": 0, \"light_count\": 0, \"central_light\": false, \"room_light_on\": false, \"light_switch\": false, \"controlled_light_count\": 0, \"shadow_capable_light_count\": 0, \"active_shadow_light_count\": 0, \"room_light_cull_mask\": 3, \"base_grid_dimensions\": (6, 6), \"base_grid_tile_count\": 36, \"base_grid_tile_count_light\": 18, \"base_grid_tile_count_dark\": 18, \"base_grid_checkerboard_pattern\": true, \"base99_floor_plain_instance_count\": 0, \"base99_floor_rivet_instance_count\": 0, \"tower_wall_module_count\": 8, \"base99_wall_plain_module_count\": 8, \"base99_wall_plain_instance_count\": 14, \"base99_wall_window_instance_count\": 0, \"base99_wall_door_module_count\": 2, \"base100_upper_shell_count\": 1, \"base100_wall_plain_instance_count\": 19, \"base100_wall_window_instance_count\": 4, \"base100_wall_door_instance_count\": 1, \"base100_roof_tile_count\": 36, \"base100_structure_collision_count\": 1, \"base99_door_lift_count\": 3, \"base99_mezzanine_count\": 0, \"base99_stair_l_count\": 1, \"base99_stair_exterior_count\": 0, \"base99_camera_stair_slab_count\": 0, \"tower_door_wall_module_count\": 2, \"tower_corner_module_count\": 8, \"wall_material_variant_a_count\": 6, \"wall_material_variant_b_count\": 6, \"tower_module_shell\": true, \"open_wall_directions\": [], \"wall_height\": 9.0, \"support_collision_persistent\": false, \"service_station_count\": 0, \"event_objective_ready\": false, \"door_snapshots\": [{ \"direction\": \"west\", \"target_room_id\": \"start\", \"is_open\": false, \"requires_key\": false, \"requires_clear\": false, \"triggers_fate\": false, \"blocks_passage\": true, \"transitioning\": false, \"target_open\": false, \"motion_duration_s\": 0.72, \"collision_tracks_panel_motion\": true, \"collision_is_direct_body_child\": true, \"panel_y\": 1.25, \"collision_y\": 1.25, \"clear_width_m\": 2.2, \"clear_height_m\": 2.5, \"panel_size\": (2.2, 2.5, 0.18), \"visual_asset_id\": \"ENV-BASE99-DOOR-LIFT-22X25\", \"is_3d\": true }, { \"direction\": \"east\", \"target_room_id\": \"floor_01_entry\", \"is_open\": false, \"requires_key\": false, \"requires_clear\": false, \"triggers_fate\": false, \"blocks_passage\": true, \"transitioning\": false, \"target_open\": false, \"motion_duration_s\": 0.72, \"collision_tracks_panel_motion\": true, \"collision_is_direct_body_child\": true, \"panel_y\": 1.25, \"collision_y\": 1.25, \"clear_width_m\": 2.2, \"clear_height_m\": 2.5, \"panel_size\": (2.2, 2.5, 0.18), \"visual_asset_id\": \"ENV-BASE99-DOOR-LIFT-22X25\", \"is_3d\": true }], \"is_3d\": true }"
+    ]
+  },
+  {
+    "scene": "verify_base99_wall_content_v021",
+    "exit": 1,
+    "errors": [
+      "ERROR: Blender摆放坐标漂移: 南墙资料板组 actual=(-14.7555, 4.2925, 4.3) expected=(-14.2255, 4.2925, 4.3)",
+      "ERROR: Blender摆放坐标漂移: 东墙WORK_TOGETHER海报 actual=(14.52784, 4.723222, 8.45) expected=(14.14, 4.72, 8.45)",
+      "ERROR: 2 resources still in use at exit (run with --verbose for details)."
+    ]
+  },
+  {
+    "scene": "verify_base99_remaining_facilities_v021",
+    "exit": 1,
+    "errors": [
+      "ERROR: BASE99_REMAINING_FACILITIES_V021_FAIL: expected 46 packages, got 45"
+    ]
+  },
+  {
+    "scene": "verify_3d_performance_budget",
+    "exit": 1,
+    "errors": [
+      "ERROR: Formal HUD and modal shells exceeded 171 fixed UI nodes: 267",
+      "ERROR: HUD shells + shared 3D preview exceeded 190 fixed nodes: 278",
+      "ERROR: Permanent structural proxy world + HUD exceeded 2480 total nodes: 2549"
+    ]
+  },
+  {
+    "scene": "verify_performance_runtime_complete",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_graphics_settings_ui_flow",
+    "exit": 1,
+    "errors": [
+      "ERROR: 画面设置没有提供完整的9项效果控制"
+    ]
+  },
+  {
+    "scene": "verify_pause_game_save_reset_flow",
+    "exit": 0,
+    "errors": []
+  },
+  {
+    "scene": "verify_3d_flashlight_charge_flow",
+    "exit": 0,
+    "errors": []
+  }
+]

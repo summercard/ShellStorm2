@@ -1,0 +1,9 @@
+
+[scene] verify_postfx_overlay_runtime
+Godot Engine v4.6.2.stable.official.71f334935 - https://godotengine.org
+
+ERROR: SCENE_PREFLIGHT_FAIL: scene does not exist: res://tests/verification/verify_postfx_overlay_runtime.tscn
+   at: push_error (core/variant/variant_utility.cpp:1024)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (res://scripts/verify_scene_preflight.gd:14)
+LOAD_FAILURE verify_postfx_overlay_runtime

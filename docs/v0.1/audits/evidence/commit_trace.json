@@ -1,0 +1,261 @@
+[
+  {
+    "commit": "18a4c61 2026-09-12 修改场景内设施",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/07_技术施工_基地设施.md",
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/12_全游戏完成度清单.md",
+      "docs/v0.1/CHANGELOG.md",
+      "docs/v0.1/README.md"
+    ]
+  },
+  {
+    "commit": "384306f 2026-09-11 FX01+FX02 战斗反馈/受击飘字落地（7 个独立 Prefab + VfxPool3D）",
+    "source_files": 20,
+    "docs": [
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/14.6_特效系统与制作规范.md",
+      "docs/v0.1/README.md"
+    ]
+  },
+  {
+    "commit": "3c45081 2026-09-10 噪点/色相改走全屏后处理 shader overlay，修复开关与滑条耦合 bug",
+    "source_files": 4,
+    "docs": []
+  },
+  {
+    "commit": "e8d66b7 2026-09-10 调参面板加后处理 tab：各向异性 + 色彩调整（含色相）+ 噪点 + 电视干扰",
+    "source_files": 2,
+    "docs": []
+  },
+  {
+    "commit": "680e0e4 2026-09-10 修改账本信息",
+    "source_files": 1,
+    "docs": []
+  },
+  {
+    "commit": "734f079 2026-09-10 角色动画系统重构",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/16.1_角色美术制作与动作导入流程.md"
+    ]
+  },
+  {
+    "commit": "7c3b372 2026-09-10 第一次动作导入测试",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/16.1_角色美术制作与动作导入流程.md"
+    ]
+  },
+  {
+    "commit": "d03dd7c 2026-09-10 增加灯光调控功能，修改默认灯光",
+    "source_files": 3,
+    "docs": []
+  },
+  {
+    "commit": "3c921be 2026-09-10 动作设计和制作框架,skill重新整理,完成基础骨骼绑定和重新制作骨骼.",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/16.1_角色美术制作与动作导入流程.md"
+    ]
+  },
+  {
+    "commit": "63d08fb 2026-09-09 角色制作规则和规范重新制作",
+    "source_files": 3,
+    "docs": [
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/16.1_角色美术制作与动作导入流程.md",
+      "docs/v0.1/16_技术施工_主页面与角色换装.md"
+    ]
+  },
+  {
+    "commit": "63e9ee1 2026-09-09 特效修改,灯光修改",
+    "source_files": 4,
+    "docs": []
+  },
+  {
+    "commit": "6709f4b 2026-09-09 灯控开关位置",
+    "source_files": 2,
+    "docs": []
+  },
+  {
+    "commit": "775bc63 2026-09-09 修改阻挡",
+    "source_files": 6,
+    "docs": []
+  },
+  {
+    "commit": "1533b8d 2026-09-08 替换资产",
+    "source_files": 1,
+    "docs": []
+  },
+  {
+    "commit": "646a223 2026-09-08 资产导入",
+    "source_files": 2,
+    "docs": []
+  },
+  {
+    "commit": "664cab6 2026-09-06 修改灯光表现",
+    "source_files": 5,
+    "docs": [
+      "docs/v0.1/17_天台至98层成品化验收.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "3d2183d 2026-09-06 粗略优化一半",
+    "source_files": 10,
+    "docs": [
+      "docs/v0.1/17_天台至98层成品化验收.md",
+      "docs/v0.1/CHANGELOG.md",
+      "docs/v0.1/README.md"
+    ]
+  },
+  {
+    "commit": "4f3f545 2026-09-05 果冻",
+    "source_files": 1,
+    "docs": []
+  },
+  {
+    "commit": "1899f09 2026-09-05 果冻及美术资产带入",
+    "source_files": 2,
+    "docs": []
+  },
+  {
+    "commit": "b873663 2026-09-05 清空基地场景准备带入资产",
+    "source_files": 1,
+    "docs": []
+  },
+  {
+    "commit": "6dfbe90 2026-08-31 天台资产调整",
+    "source_files": 1,
+    "docs": [
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "8de6a70 2026-08-31 天台模型带入",
+    "source_files": 5,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/07_技术施工_基地设施.md",
+      "docs/v0.1/12_全游戏完成度清单.md",
+      "docs/v0.1/CHANGELOG.md",
+      "docs/v0.1/README.md"
+    ]
+  },
+  {
+    "commit": "a9f43a1 2026-08-31 部分bug修复",
+    "source_files": 11,
+    "docs": [
+      "docs/v0.1/04_技术施工_战斗与局内成长.md",
+      "docs/v0.1/07_技术施工_基地设施.md",
+      "docs/v0.1/09_技术施工_存档结算与复活.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/16_技术施工_主页面与角色换装.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "e44f8f4 2026-08-30 完成战局内修复",
+    "source_files": 4,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "ac5bd23 2026-08-30 修复第二部",
+    "source_files": 1,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "ec385f6 2026-08-30 代码修复第一周期",
+    "source_files": 14,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/14.8_音乐系统与配乐资产.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "aa0b9a2 2026-08-30 3d天台制作,总体代码检查",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/11_测试与发布.md"
+    ]
+  },
+  {
+    "commit": "5dacb9d 2026-08-29 楼梯间调整",
+    "source_files": 2,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "96edd91 2026-08-29 交互重整",
+    "source_files": 18,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/07_技术施工_基地设施.md",
+      "docs/v0.1/10_资产与内容规范.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "713757b 2026-08-29 门的逻辑修正",
+    "source_files": 5,
+    "docs": [
+      "docs/v0.1/03_技术施工_玩家与操作.md",
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "642bde4 2026-08-29 修复存档",
+    "source_files": 5,
+    "docs": [
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  },
+  {
+    "commit": "0f9ab2c 2026-08-28 修改墙高，规则",
+    "source_files": 4,
+    "docs": []
+  },
+  {
+    "commit": "5251818 2026-08-28 调整100层面积",
+    "source_files": 1,
+    "docs": []
+  },
+  {
+    "commit": "547a9b5 2026-08-28 修改100层大小",
+    "source_files": 2,
+    "docs": []
+  },
+  {
+    "commit": "549aed3 2026-08-28 bug修复",
+    "source_files": 6,
+    "docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/09_技术施工_存档结算与复活.md",
+      "docs/v0.1/11_测试与发布.md",
+      "docs/v0.1/16_技术施工_主页面与角色换装.md",
+      "docs/v0.1/CHANGELOG.md"
+    ]
+  }
+]
