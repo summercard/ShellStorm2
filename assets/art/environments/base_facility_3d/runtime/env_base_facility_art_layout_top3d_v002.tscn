@@ -15,7 +15,7 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn" id="17_wall_contents"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn" id="18_remaining_facilities"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/underdeck_sheet_blocker/underdeck_sheet_blocker_root_top3d_v001.tscn" id="19_underdeck"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb" id="21_corner_visual"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn" id="21_corner_visual"]
 
 [sub_resource type="StandardMaterial3D" id="MatEditorFloor"]
 transparency = 1

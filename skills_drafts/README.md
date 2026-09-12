@@ -20,3 +20,12 @@
 - `game-prop-model-pipeline`：可拾取或可移动普通道具的资产流程规范。
 - `game-weapon-model-pipeline`：枪械与近战武器的资产流程规范。
 - `player-avatar-asset-standard`：ShellStorm2 玩家角色与换装配件规范（草稿）。
+
+## Skill 同步规则
+
+- 同一 Skill 的项目生效副本为 `.codex/skills/<skill-name>/`。
+- 工程版本化副本为 `skills_drafts/<skill-name>/`。
+- 修改用户级 Skill 后，必须将对应 Skill 文件同步到上述项目内两个目录。
+- 修改项目内 Skill 后，也必须同步两个项目副本；如项目规则面向所有 ShellStorm2 会话，还应同步用户级 Skill。
+- 同步范围包括 `SKILL.md` 及其 `references/`、`scripts/`、`agents/` 支持文件。
+- 完成后必须校验副本内容或 SHA-256 一致，禁止只更新其中一份。

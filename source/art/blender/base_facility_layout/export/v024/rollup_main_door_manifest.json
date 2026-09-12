@@ -4,7 +4,7 @@
   "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
   "derived": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
   "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
-  "glb_sha256": "d7c15c0461d8c4f0649ff00ed8b78ef5eef9dae05f12b7d81a3af151ee978665",
+  "glb_sha256": "896ca6d605c5f5e6c494ae7790cc5e463523eb639f866f712442d3ec197bf9af",
   "triangles_before": 17760,
   "triangles_after": 14972,
   "bbox_min": [

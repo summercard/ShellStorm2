@@ -53,3 +53,6 @@ Thumbs.db
 # Project specific (sensitive)
 export_presets.cfg
 *.keystore
+
+# Blender/Godot import temp files
+*.import~RF*.TMP

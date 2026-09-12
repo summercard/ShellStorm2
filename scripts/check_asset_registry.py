@@ -23,10 +23,10 @@ except ImportError as exc:  # pragma: no cover - actionable setup failure
     raise SystemExit("openpyxl is required to check the asset registry: pip install openpyxl") from exc
 
 
-ALLOWED_CATEGORIES = {"角色", "敌人", "武器", "道具", "场景", "场景道具", "UI", "特效", "音频"}
-ALLOWED_STATUSES = {"待制作", "程序占位", "已完成", "原型已接入", "弃用"}
+ALLOWED_CATEGORIES = {"角色", "敌人", "武器", "道具", "场景", "场景道具", "基地资产包", "UI", "特效", "音频"}
+ALLOWED_STATUSES = {"待制作", "程序占位", "已完成", "原型已接入", "弃用", "旧资产已从正式基地移除", "正式美术已接入", "已优化并正式接入", "Blender源已完成", "已导入；优化完成"}
 ALLOWED_PRIORITIES = {"P0", "P1", "P2"}
-ACTIVE_STATUSES = {"已完成", "原型已接入"}
+ARTIFACT_STATUSES = ALLOWED_STATUSES - {"待制作", "程序占位", "弃用"}
 ASSET_ID_PATTERN = re.compile(r"^[A-Z0-9]+(?:-[A-Z0-9]+)+$")
 PRODUCTION_NAME_PATTERN = re.compile(
     r"^[a-z0-9]+(?:_[a-z0-9]+)*_v[0-9]{3}\.(?:png|webp|svg|wav|ogg|glb|gltf|tres|tscn|blend)$"
@@ -102,6 +102,8 @@ def check_registry(workbook_path: Path, project_root: Path, scope: str) -> dict[
 
         if scope != "full":
             continue
+        if status not in ARTIFACT_STATUSES:
+            continue
         raw_path = _text(row[14])
         raw_sha = _text(row[19]).lower()
         paths = _registry_paths(raw_path, project_root)
@@ -120,8 +122,6 @@ def check_registry(workbook_path: Path, project_root: Path, scope: str) -> dict[
                     issues["noncanonical_filename"].append(
                         {"row": offset, "asset_id": asset_id, "path": str(relative_path)}
                     )
-        if status not in ACTIVE_STATUSES:
-            continue
         if not raw_path:
             issues["missing_path"].append({"row": offset, "asset_id": asset_id})
         if not raw_sha:

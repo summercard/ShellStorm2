@@ -5,14 +5,20 @@
   "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
   "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
   "derived_blend": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-corner_l_5m.blend",
-  "derived_sha256": "4b3949e4a74862dd2a80adb235258b8083441a9506a4c2609baf187c292bacd8",
+  "derived_sha256": "b8f227f1c822a3d8df11990f23bab8af4f758a5bd9c322b3d21cee433636c473",
   "exported_glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
-  "glb_sha256": "c1787aadabc4234664e04dfc5d59f15fdfac6525b466f3f6d8092d7a1553ebfc",
+  "glb_sha256": "2a1006ffb9e0a725ea16fa105cf5d2fbb20b660e4e66e597a2f54c6ef3c01273",
   "selected_collection": "117_02_游戏输出_整合模型",
   "selected_object": "基地5米L型转角墙_主体_金属哑光反光",
-  "triangle_count": {"before": 168, "after": 140, "downward_faces_removed": 28},
+  "triangle_count": {
+    "before": 168,
+    "after": 140,
+    "downward_faces_removed": 28
+  },
   "geometry_contract": "two complete arms with five horizontal rib bands per inward face; Blender +X/+Y maps to Godot +X/-Z",
   "uv_contract": "PaletteUV only",
   "texture_contract": "external shared palette; GLB export_image_format=NONE",
-  "godot_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn"
+  "godot_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn",
+  "godot_layout_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
+  "wrapper_policy": "v002 retains standalone collision; v003 is visual-only and is used by the art layout where DungeonRoom3D owns collision"
 }

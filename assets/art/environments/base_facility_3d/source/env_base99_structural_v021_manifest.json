@@ -1,8 +1,8 @@
 {
   "asset_id": "ENV-BASE99-STRUCTURAL-V021",
   "version": "v021",
-  "source_blend": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend",
-  "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+  "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
   "packages": [
     {
       "slug": "east_mezzanine_structure",

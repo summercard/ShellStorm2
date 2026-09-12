@@ -1,7 +1,7 @@
 {
   "version": "v025",
   "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
-  "source_blend_sha256": "9dc8ec865a36dd3ba025cc1f91e2cd17c168c5b4c2dcbb784990fca8c171a85f",
+  "source_blend_sha256": "c6ad47133125f3615674379a7b12f9a20bcb514e316baf7e886914ea5f6a44db",
   "derived_blend": "source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend",
   "asset_id": "ENV-BASE99-WALL-DOOR-5X9",
   "palette_uv_change": {

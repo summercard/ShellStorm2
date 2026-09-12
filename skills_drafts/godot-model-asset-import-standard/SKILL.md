@@ -36,7 +36,7 @@ description: 将场景、关卡组件与固定设施从 Blender 或其他DCC规�
 
 ## ShellStorm2 基地母版的版本化导出
 
-`source/art/blender/base_facility_layout/` 的基地母版必须按“源版本驱动”导出。禁止将 v017 或任何历史版本写死为后续导入的输入。
+`source/art/blender/base_facility_layout/` 的基地母版必须按“当前文件即正式来源、后续最高版本优先”的规则导出。2026-09-12 的当前正式母版为 v025；后续创建 v026 或更高版本后，最高数值源自动成为新的正式来源。禁止将 v017、v021 或任何历史版本写死为后续导入的输入。当前运行资产可以来自 v021-v025 的增量组合，但账本必须同时记录实际运行时版本与当前母版来源。
 
 1. 在 `source/` 中解析 `base_facility_runtime_layout_hq_v###.blend`，默认选择数值最高的版本；只有用户明确指定历史版本时才允许覆盖此选择。
 2. 为选中的源版本建立 `export/v###/`。派生文件必须与源版本一致，例如 v021 的派生文件只能落在 `export/v021/`，并采用 `base_facility_runtime_layout_hq-v021-<scope>.blend` 命名。

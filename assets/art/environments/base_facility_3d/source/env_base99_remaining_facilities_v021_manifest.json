@@ -2,8 +2,8 @@
   "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
   "display_name": "基地99层剩余非门非墙独立设施资产包",
   "version": "v021",
-  "source_blend": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend",
-  "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+  "source_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
+  "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
   "derived_from_version": "v017",
   "scope": "all remaining unimported independent facility/support packages; excludes floors, doors, door-attached controls, structural walls, wall content, mezzanine and stairs",
   "collision_policy": "furniture has per-source-object simplified BoxShape3D; lights, rugs, curtains, vegetation and FX are visual-only",
@@ -2449,10 +2449,10 @@
       "triangles_after_downward_cull": 1680,
       "triangles_after_optimization": 672,
       "downward_faces_removed": 560,
-      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_visual_top3d_v001.glb",
+      "export": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
       "collision_policy": "visual_only_no_collision",
       "collision_boxes": [],
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/volumetric_dust_fx/volumetric_dust_fx_root_top3d_v001.tscn"
+      "runtime": "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn"
     },
     {
       "slug": "warehouse_pendant_light_group",

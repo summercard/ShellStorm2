@@ -2,7 +2,7 @@
   "asset_id": "ENV-BASE99-V022-UPDATES",
   "version": "v022",
   "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend",
-  "source_sha256": "9578b73ed4def59d3a7a0dd33928c9ebe35e18cf0f9f83c69aee15f4ecc86a71",
+  "source_sha256": "378e16a9d24e62718594ebc959f00f9d7076c96c5d02bf85eca633b98483de28",
   "derived_blend": "source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend",
   "packages": {
     "loft_bed_and_bedding": {
@@ -24,7 +24,8 @@
           13.133333206176758,
           6.8319573402404785
         ]
-      }
+      },
+      "glb_sha256": "14b797839d7233364cf8e1cac5655c4bc474c4ec6fa12ce89abc6269f07e2936"
     },
     "loft_bedside_lamp": {
       "package": "33_暖橙床头灯_资产包",
@@ -45,7 +46,8 @@
           7.909999847412109,
           8.3774995803833
         ]
-      }
+      },
+      "glb_sha256": "9205aac81c9706244fc28e80d4fcb5035b0dc4ae5dbee2b4f080b751cc2c28e1"
     },
     "hologram_terminal_platform": {
       "package": "51_圆形全息设备平台_资产包",
@@ -66,7 +68,8 @@
           2.9243715,
           1.8648558
         ]
-      }
+      },
+      "glb_sha256": "51c69b395e7e8c3819913c14b765c2558f16f17473c8e4c6f2a8d276723fe6d0"
     },
     "corridor_emergency_light_group": {
       "package": "62_主通道应急灯组_资产包",
@@ -87,7 +90,8 @@
           0.375,
           2.3600001335144043
         ]
-      }
+      },
+      "glb_sha256": "f1ba8d9c9dd6181d51393131044464a981aac42244e11503b4bfd0b46676c7c0"
     },
     "east_power_distribution": {
       "package": "73_POWER工业配电系统_资产包",
@@ -108,7 +112,8 @@
           -4.775000095367432,
           3.700000047683716
         ]
-      }
+      },
+      "glb_sha256": "65307b3876dbed981631376041fd70a3357bf1e188461cd795582d7c4c190567"
     },
     "east_industrial_pipeline_system": {
       "package": "74_东墙工业管线系统_资产包",
@@ -129,7 +134,8 @@
           3.8000011444091797,
           7.180000305175781
         ]
-      }
+      },
+      "glb_sha256": "b6a4170a3666aaccfb4213e3f6fe917e29e0c94b83885a547b9dfc348c190fb1"
     },
     "east_maintenance_workstation": {
       "package": "78_维修工作台与工具墙_资产包",
@@ -150,7 +156,8 @@
           -12.514999389648438,
           4.264999866485596
         ]
-      }
+      },
+      "glb_sha256": "a3998750aca8b98505d6c7383478278d9b26cf84eb5c8a404b42313d4b0ca289"
     },
     "east_work_together_poster": {
       "package": "81_WORK_TOGETHER工业海报_资产包",
@@ -171,7 +178,8 @@
           -7.269999980926514,
           5.529999732971191
         ]
-      }
+      },
+      "glb_sha256": "e3eb24c09b2c0081c6d82a7528aa1a55bbf9ce495f7b4496c77a7a2258dc0641"
     },
     "east_small_safety_devices": {
       "package": "82_东墙小型安全设备_资产包",
@@ -192,7 +200,8 @@
           -0.1899999976158142,
           4.830000400543213
         ]
-      }
+      },
+      "glb_sha256": "d0124bf2a023e809d63b140e408122ee752f1f81d6001326a0445f51b1c05bbd"
     },
     "weapon_workshop_station": {
       "package": "49_武器工作台与弹药附件_资产包",
@@ -221,7 +230,8 @@
           -0.5250000953674316,
           3.8499999046325684
         ]
-      }
+      },
+      "glb_sha256": "2d0ecee7831628d6392d4777cb1d5587690bfb9cf826e948d7dd82116c507663"
     },
     "south_wall_information_boards": {
       "package": "61_南墙资料板组_资产包",
@@ -242,7 +252,8 @@
           -0.7400000691413879,
           5.539999961853027
         ]
-      }
+      },
+      "glb_sha256": "b34192e5556c07f695c2d8e5a966ea00de6a958d90fd8d1bb9f17cb91f822c6f"
     },
     "water_purifier": {
       "package": "57_净水器_资产包",
@@ -263,7 +274,8 @@
           -9.600000381469727,
           2.4000000953674316
         ]
-      }
+      },
+      "glb_sha256": "10efbcb2ddc8593d7114eca8462da253ba9d1ca515044ca3a56784dac63a1129"
     },
     "heavy_supply_shelf": {
       "package": "51_重型货架与补给箱_资产包",
@@ -284,7 +296,8 @@
           -13.8100004196167,
           0.9202552437782288
         ]
-      }
+      },
+      "glb_sha256": "4526f01a829f71cdb645e23b1ddf67f7911431c9563150fe2d50b5f44f9513dc"
     },
     "northwest_l_stair": {
       "package": "14_西北贴墙L型楼梯_资产包",
@@ -305,7 +318,8 @@
           14.800000190734863,
           7.139999866485596
         ]
-      }
+      },
+      "glb_sha256": "e6e9cd61943d954f51a138776f1ebd05c4df5f93d4d089088577f4c67693bb0b"
     }
   },
   "runtime": {
@@ -332,7 +346,11 @@
     "tuning": {
       "particle_amount": 192,
       "emission_energy_multiplier": 2.2,
-      "emission_box_extents_m": [14.5, 3.6, 7.25]
+      "emission_box_extents_m": [
+        14.5,
+        3.6,
+        7.25
+      ]
     }
   }
 }

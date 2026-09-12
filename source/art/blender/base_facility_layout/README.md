@@ -1,81 +1,120 @@
 # base_facility_layout · 基地设施布局资产
 
-> ShellStorm2 顶视角射击搜打撤肉鸽 —— 基地设施（HQ）布局的 Blender 源与导出。
+> ShellStorm2 顶视角射击搜打撤肉鸽 —— 基地设施（HQ）Blender 源、派生导出与 Godot 导入链。
 
-## 📂 目录结构
+## 当前来源策略
 
-```
+自 2026-09-12 起，**仓库中实际存在的 Blender 源文件就是正式资产来源**。
+
+- 主基地当前正式母版：`source/base_facility_runtime_layout_hq_v025.blend`
+- 后续如果继续更新，复制当前最高版本并提升版本号，例如 `v025 -> v026`
+- 新版本生成后，**数值最高的完整源版本自动成为新的正式来源**
+- 历史版本继续保留，用于回滚和追溯，不删除
+- 当前运行资产可以是 v021-v025 的增量组合；账本必须记录实际运行时版本，不能假定所有资产都来自同一版本
+- 禁止把 v017、v021 等历史版本写死为“当前源”
+
+## 目录结构
+
+```text
 base_facility_layout/
-├── source/                                    ← v017 完整布局源（可编辑）
-│   └── base_facility_runtime_layout_hq_v017.blend
-├── export/                                    ← 基于 v017 源的优化导出
-│   └── v017/
-│       ├── base_facility_runtime_layout_hq-v017-structural.blend         （结构）
-│       ├── base_facility_runtime_layout_hq-v017-wall_contents.blend      （墙体内容）
-│       └── base_facility_runtime_layout_hq-v017-remaining_facilities.blend （剩余设施）
-├── component_packages/                        ← v017 源的组件清单（按区域分）
-│   ├── architecture/  east_facilities/  west_facilities/
-│   ├── loft/  underloft/  warehouse/  floor/  support/
-│   └── component_sets/   east_door_wall_set/  west_door_wall_set/
+├── source/                                 当前与历史母版源
+│   ├── base_facility_runtime_layout_hq_v017.blend
+│   ├── ...
+│   └── base_facility_runtime_layout_hq_v025.blend   ← 当前正式母版
+├── export/                                 按源版本派生的导出文件
+│   ├── v017/
+│   ├── v021/
+│   ├── v022/
+│   ├── v023/
+│   ├── v024/
+│   └── v025/
+├── component_packages/                     当前组件清单与历史版本目录
 └── 使用说明.md
 ```
 
-## 🎯 源 vs 导出 · 派生关系
+## 版本规则
 
-| 维度 | source/ | export/ |
-|---|---|---|
-| 性质 | **源**，可编辑 | **派生**，只读 |
-| 内容 | 完整布局（结构 + 墙体内容 + 设施全部合在一个 .blend） | 按"结构 / 墙体内容 / 剩余设施"三组分拆，便于导入 |
-| 命名 | `..._hq_v0XX.blend`（独立版本号） | `..._hq-v0XX-<类型>.blend`（连字符标记派生，版本号绑定源） |
-| 迭代规则 | 源变 → 版本号 +1；新源替代旧源 | 源不变 → 导出按"迭代轮次"重做，不升版本号 |
+1. 源文件命名：`base_facility_runtime_layout_hq_v<NNN>.blend`
+2. 派生文件命名：`base_facility_runtime_layout_hq-v<NNN>-<scope>.blend`
+3. 派生版本必须等于被选中的源版本。
+4. Blender 源内容发生几何、材质、拆分或接口变化时，创建更高版本，不原地修改已发布基线。
+5. 只有当前基线制度化的非内容性修复，才允许在原版本上执行；执行后必须重新计算源、派生、GLB、PackedScene 和台账 SHA。
+6. Godot 账本要区分：
+   - `当前母版来源`：当前最高 Blender 源
+   - `运行时资产版本`：包装场景和 GLB 的实际版本
 
-**关键**：**导出版本号永远等于源版本号**。即使导出迭代了 10 次、文件名依然是 `-v017-...`。
+## 当前材质规则
 
-## 📐 命名规则
+场景和固定设施统一只使用以下四个材质角色：
 
-### 源文件
+- `01_精工金属_紫色骨架`
+- `02_细腻哑光_青绿大面`
+- `03_清漆反光_紫粉点缀`
+- `04_柔和自发光_UI灯光`
+
+禁止保留以下迭代遗留物：
+
+- `.001`、`.002` 等 Blender 自动后缀
+- `_v018公共色盘`、`_全息增强_v022`、`_117转角墙外链修正版` 等版本化材质名
+- 未使用但仍保存在 `.blend` 中的旧材质球
+
+当前主基地 v025 已由：
+
+`tools/blender/normalize_current_base99_materials.py`
+
+收敛为四个标准材质。
+
+## 当前正式运行入口
+
+- 美术布局：`assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn`
+- 墙面内容聚合：`env_base99_wall_contents_root_top3d_v003.tscn`
+- 剩余设施聚合：`env_base99_remaining_facilities_root_top3d_v004.tscn`
+- L 型楼梯：`env_base99_stair_l_z5_root_top3d_v006.tscn`
+- L 型转角墙：`env_base99_corner_l_5m_root_top3d_v003.tscn`
+- 门墙：`env_base99_wall_door_5x9_root_top3d_v003.tscn`
+
+正式关卡只实例化 PackedScene 包装场景，不直接实例化裸 GLB。
+
+## 维护命令
+
+当前源材质收敛：
+
+```powershell
+blender --background --python tools\blender\normalize_current_base99_materials.py -- `
+  --blend source\art\blender\base_facility_layout\source\base_facility_runtime_layout_hq_v025.blend
 ```
-base_facility_runtime_layout_hq_v<NNN>.blend
-```
-- `<NNN>` = 3 位版本号（v001、v002 …）
-- 源发生实质性变化 → 版本号 +1
 
-### 导出文件
-```
-base_facility_runtime_layout_hq-v<NNN>-<类型>.blend
-```
-- `<NNN>` = **必须等于源版本号**（派生绑定）
-- `<类型>` = 三选一：`structural` / `wall_contents` / `remaining_facilities`
-- 导出重做时（如重新分组、修bug）→ **覆盖原文件，不升版本号**
+当前引用 GLB 材质收敛：
 
-## 🔄 派生与迭代流程
-
-```
-source/v017/base_facility_runtime_layout_hq_v017.blend   ← 编辑（Blender）
-        │
-        │  File → Append / 导出分组（脚本或手工）
-        ▼
-export/v017/base_facility_runtime_layout_hq-v017-structural.blend
-export/v017/base_facility_runtime_layout_hq-v017-wall_contents.blend
-export/v017/base_facility_runtime_layout_hq-v017-remaining_facilities.blend
+```powershell
+python tools\asset_pipeline\normalize_scene_facility_glb_materials.py `
+  --project . --referenced-only
 ```
 
-- **源升级** → 建 `source/v018/`、`export/v018/` 两个新目录
-- **导出重做** → 覆盖 `export/v017/` 下三个文件，**不**建新目录
-- **历史备份** → 由 git 负责（不要在本目录留时间戳后缀或 v001_v002_... 那种历史副本）
+批次 JSON 来源与哈希修复：
 
-## 🧹 维护规则
+```powershell
+python tools\asset_pipeline\repair_base99_asset_lineage.py --project .
+```
 
-1. **本目录不留历史**：v001 ~ v016 的所有 .blend / 脚本 / 预览图都已在 git 历史里，本目录只保留**当前源 + 当前导出**
-2. **新源升版**：把旧 `source/v017/` 整个 → `source/v018/`，并把 `export/v017/` → `export/v018/`，新版本号绑新源
-3. **导出文件命名强制 v<NNN>-<类型>**：发现 `v021_wall_contents.blend` 这种"导出用了独立版本号"立刻改回
-4. **不要在主目录留 .blend**：所有 .blend 必须落到 `source/` 或 `export/`
+Excel 台账同步：
 
-## 📜 历史归档说明
+```powershell
+python tools\asset_pipeline\sync_base99_current_ledger.py --project .
+python scripts\check_asset_registry.py --scope structure
+python scripts\check_asset_registry.py --scope full
+```
 
-v001 ~ v016 的所有历史 `.blend`、`.blend1`、`.py` 脚本、预览 PNG、`component_packages_v008~v016/` 已于 2026-09-07 清理。历史内容保存在 ShellStorm2 git 仓库历史提交中，需要时通过 git checkout 找回。
+Godot 材质去重验收：
 
-清理原因：
-- 文件体积庞大（数 GB），本地工作目录膨胀
-- 历史版本功能已迭代替代
-- git 历史是唯一的真相源，本地无需冗余副本
+```powershell
+godot --headless --path "F:\wxgame\ShellStorm2" --script "res://tools/asset_pipeline/validate_base99_godot_materials.gd"
+```
+
+## 原则
+
+- Blender 源是资产本体与版本来源。
+- GLB 和 PackedScene 是派生物，不能反向定义源版本。
+- 历史版本只用于回滚，不得替代当前最高源版本。
+- 当前正式资产必须使用四个标准材质角色。
+- 文档、JSON 台账、Excel 台账和 Godot 实际引用必须指向同一资产端。

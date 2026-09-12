@@ -1,7 +1,7 @@
 {
   "schema": "shellstorm2.base99.floor_visual_runtime.v1",
-  "source_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
-  "source_blend_sha256": "ee3f1178a3b629e6d3b068eda797c9567861c9f640429bab9140ca865e3d55ed",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
+  "source_blend_sha256": "4cd4a1ffd84a705b2cc7d88c7cbe747c114c3bf90981814e642c78d6662021e7",
   "version": "v017",
   "coordinate_contract": {
     "blender": "X east, Y north, Z up",

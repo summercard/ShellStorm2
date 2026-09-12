@@ -6,11 +6,29 @@
     "blender_policy": "external link only; never pack or copy into a model source directory",
     "glb_policy": "no embedded images/textures; export_image_format=NONE",
     "godot_post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
-    "managed_blend_sources": 36,
-    "managed_glbs": 109,
-    "source_controlled_glb_import_contracts": 109,
+    "managed_blend_sources": 30,
+    "managed_glbs": 148,
+    "source_controlled_glb_import_contracts": 148,
     "source_controlled_palette_import_contracts": 1,
-    "deleted_duplicate_pngs": 51
+    "deleted_duplicate_pngs": 51,
+    "palette_import_contract": {
+      "compress/mode": 0,
+      "mipmaps/generate": false
+    },
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "material_normalization": {
+      "blend": "tools/blender/normalize_current_base99_materials.py",
+      "glb": "tools/asset_pipeline/normalize_scene_facility_glb_materials.py",
+      "godot_post_import": [
+        "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
+        "tools/asset_pipeline/scene_facility_door_visual_post_import.gd"
+      ]
+    }
   },
   "base99_corner_l_5m_v024": {
     "asset_id": "ENV-TOWER-CORNER-L-5M",
@@ -18,7 +36,7 @@
     "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v024.blend",
     "derived_export": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-corner_l_5m.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
-    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn",
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
     "scope": "TowerFloorStage3D facility 160m outer shell and active Base99 art layout; DungeonRoom3D keeps only the collision nodes",
     "visual_policy": "Blender authored PaletteUV material; shared palette post-import",
     "collision_policy": "retains v001 two-arm 5m/9m BoxShape3D contract"
@@ -194,8 +212,8 @@
       "name_cn": "基地99层非门墙面内容资产包",
       "category": "environment_wall_content",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021",
-      "source": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_wall_contents.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+      "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v001.tscn",
       "version": "v021",
@@ -211,8 +229,8 @@
       "name_cn": "基地99层剩余非门非墙独立设施资产包",
       "category": "environment_facility_bundle",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021",
-      "source": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_remaining_facilities.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+      "source": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
+      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn",
       "version": "v021",
@@ -227,8 +245,8 @@
       "asset_id": "ENV-BASE99-STRUCTURAL-V021",
       "name_cn": "基地99层阁楼、楼梯与阁楼下铁皮结构资产包",
       "glb_root": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021",
-      "source": "source/art/blender/base_facility_layout/v021/base_facility_runtime_layout_hq_v021_structural.blend",
-      "derived_from_blend": "source/art/blender/base_facility_layout/base_facility_runtime_layout_hq_v017.blend",
+      "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
+      "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
       "version": "v021",
       "package_count": 4,
@@ -1519,7 +1537,7 @@
     "source_sha256": "611e7015c8a8225dd19f7f9c8bdf33eec808c12f7a78f27f7fb8cc2ebf30d174",
     "derived": "source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-rollup_main_door.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d_v002.glb",
-    "glb_sha256": "d7c15c0461d8c4f0649ff00ed8b78ef5eef9dae05f12b7d81a3af151ee978665",
+    "glb_sha256": "896ca6d605c5f5e6c494ae7790cc5e463523eb639f866f712442d3ec197bf9af",
     "triangles_before": 17760,
     "triangles_after": 14972,
     "bbox_min": [
@@ -1618,6 +1636,25 @@
         "source_number": "36",
         "interaction_shape": "6.42×3.431646×3.481379m"
       }
+    ]
+  },
+  "base99_source_policy": {
+    "effective_date": "2026-09-12",
+    "authority": "current Blender source files on disk",
+    "selection_rule": "use the current source file; after a source update use the highest numeric v### as the formal source",
+    "current_master_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+    "current_runtime_strategy": "incremental runtime asset versions remain valid; ledger records both current master source and actual runtime version",
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "material_history_forbidden": [
+      ".001/.002 suffixes",
+      "_v018公共色盘",
+      "_全息增强_v022",
+      "_117转角墙外链修正版"
     ]
   }
 }

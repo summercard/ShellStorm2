@@ -22,6 +22,6 @@
     "04_柔和自发光_UI灯光"
   ],
   "collision": "PackedScene owns continuous deck and real guard blockers",
-  "source_sha256": "88f16c9c4a9d4a2f22adbbd4b5c1982e95b2f6dccd7032cd8aa8df4641c45e22",
+  "source_sha256": "1bc07c7ecad926f58f6cfe2b67c269701dc79af3e0042dd7dcd19f78b3bfefd5",
   "glb_sha256": "a14d40231f212a106b5f7f230bc33e1ef4bac44494a9dc707ab50ca04491a987"
 }

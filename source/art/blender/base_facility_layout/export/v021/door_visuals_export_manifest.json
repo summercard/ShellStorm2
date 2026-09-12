@@ -1,7 +1,7 @@
 {
   "version": "v021",
   "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
-  "source_blend_sha256": "346fd35879e548a5bcd0181d55476e254994b51665b5b5beb38fe75d3b2429b1",
+  "source_blend_sha256": "8f5a4625cc82aa3dfd4b29160692cad77c65ac5a111e6d42c5e69e2b7304f2d2",
   "derived_blend": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-door_visuals.blend",
   "packages": [
     {

@@ -28,8 +28,8 @@
   "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_mezzanine_underdeck_blocker/env_base99_mezzanine_underdeck_blocker_root_top3d_v003.tscn",
   "collision_panel_count": 3,
   "collision_height_m": 4.95,
-  "source_sha256": "192ef9ef68fdb490d00f69fdf31ff5c9f739cda8ca47a9395d612751f853a6af",
-  "glb_sha256": "072e95feaed8cd019e4c4a20e231ec5a61ceb9664688d6c773e576023784123e",
+  "source_sha256": "ccd7279e6373824ee5744e6e9f429c076962818f677c5a48a54e36266efa7592",
+  "glb_sha256": "e637f3d579aa8cec249a32da6898b9f25b722d0177557f90f8e3793c853149e1",
   "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
   "palette_packed": false,
   "status": "approved_runtime"

@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-TOWER-CORNER-L-5M | visual-only wrapper for DungeonRoom3D-owned collision
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb" id="1_visual"]
+
+[node name="PrpCornerL5mVisual" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/asset_version = "v003"
+metadata/logic_id = "base99_corner_l_5m"
+metadata/component = "corner_l_5m"
+metadata/grid_unit_m = 5.0
+metadata/dimensions_m = Vector3(5, 9, 5)
+metadata/visual_height_m = 8.9
+metadata/origin_contract = "inside_corner_floor"
+metadata/forward_axis = "-Z"
+metadata/preserve_authored_palette = true
+metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend"
+metadata/derived_blend = "res://source/art/blender/base_facility_layout/export/v024/base_facility_runtime_layout_hq-v024-corner_l_5m.blend"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D"
+metadata/collision_policy = "external_owner_no_collision"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
