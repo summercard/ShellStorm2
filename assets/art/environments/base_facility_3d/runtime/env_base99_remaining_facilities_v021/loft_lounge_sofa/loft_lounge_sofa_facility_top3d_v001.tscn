@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn" id="2_source"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(6.42, 3.431646, 3.481379)
+
+[node name="角色衣柜" type="Area3D"]
+position = Vector3(6.25, 7.005823, -12.08931)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = "avatar_wardrobe"
+display_name = "角色衣柜"
+description = "更换身体、头部、手部、脚部、帽子与眼镜外观"
+menu_scene_path = "res://scenes/ui/WardrobeMenu3D.tscn"
+base_size_multiplier = 1.0
+metadata/interaction_shape_locked = true
+metadata/interaction_margin_m = 0.8
+metadata/facility_wrapper = true
+metadata/asset_source = "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn"
+metadata/source_collection = "36_墨绿三人休闲沙发_资产包"
+metadata/placement_policy = "center pivot preserves baked world coordinates"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("ShapeInteraction")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="SourcePackage" parent="Visual" instance=ExtResource("2_source")]
+position = Vector3(-6.25, -7.005823, 12.08931)
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 1.365823, 0)
+billboard = 1
+text = "角色衣柜"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 1.075823, -0.2)
+billboard = 1
+text = "[E] 使用 角色衣柜"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

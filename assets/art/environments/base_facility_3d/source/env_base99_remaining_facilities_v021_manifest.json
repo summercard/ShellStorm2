@@ -8,6 +8,7 @@
   "scope": "all remaining unimported independent facility/support packages; excludes floors, doors, door-attached controls, structural walls, wall content, mezzanine and stairs",
   "collision_policy": "furniture has per-source-object simplified BoxShape3D; lights, rugs, curtains, vegetation and FX are visual-only",
   "root_runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn",
+  "gameplay_facility_binding_ledger": "assets/art/asset_import_manifest_v001.json",
   "packages": [
     {
       "slug": "air_compressor",

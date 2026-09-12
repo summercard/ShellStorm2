@@ -46,6 +46,8 @@ var _base_size_applied := false
 
 
 func configure_front_interaction_toward(world_target: Vector3) -> bool:
+	if has_meta("interaction_shape_locked"):
+		return true
 	var profile := FRONT_INTERACTION_PROFILES.get(facility_id, {}) as Dictionary
 	if profile.is_empty():
 		return false

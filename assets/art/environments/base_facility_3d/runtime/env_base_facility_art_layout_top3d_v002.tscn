@@ -1,21 +1,16 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
 
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn" id="1_generic"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn" id="2_mission"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn" id="3_workshop"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn" id="4_vending"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d_v001.tscn" id="5_locker"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn" id="6_retro"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn" id="8_chair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_mezzanine_structure/east_mezzanine_structure_root_top3d_v001.tscn" id="9_east_mezzanine"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_root_top3d_v001.tscn" id="10_east_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn" id="11_northwest_stair"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h9/env_base100_upper_shell_30x30_h9_root_top3d_v001.tscn" id="12_upper_shell"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/recovery_station/prp_base_recovery_station_root_top3d_v001.tscn" id="13_recovery"]
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/avatar_wardrobe/prp_base_avatar_wardrobe_root_top3d_v001.tscn" id="14_wardrobe"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn" id="16_floor_visuals_v021"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn" id="17_wall_contents"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn" id="18_remaining_facilities"]
@@ -127,39 +122,6 @@ position = Vector3(-3, 0, -11.6)
 rotation = Vector3(0, 3.141593, 0)
 facility_id = "weapon_workshop"
 menu_scene_path = "res://scenes/WorkshopMenu.tscn"
-base_size_multiplier = 1.0
-
-[node name="保险柜" parent="设施交互节点_可移动旋转" instance=ExtResource("5_locker")]
-position = Vector3(-9, 0, 11.6)
-facility_id = "vault"
-display_name = "保险柜"
-description = "使用赛博储物站模型管理长期仓储与当前背包"
-menu_scene_path = "res://scenes/VaultMenu.tscn"
-base_size_multiplier = 1.0
-
-[node name="命运卡收藏室" parent="设施交互节点_可移动旋转" instance=ExtResource("6_retro")]
-position = Vector3(3, 0, 11.6)
-facility_id = "fate_collection"
-display_name = "命运卡收藏室"
-description = "使用复古游戏电视站模型浏览已发现的命运卡片"
-menu_scene_path = "res://scenes/FateCardCollectionMenu.tscn"
-base_size_multiplier = 1.0
-
-[node name="自动贩卖机" parent="设施交互节点_可移动旋转" instance=ExtResource("4_vending")]
-position = Vector3(11.6, 0, 5.6)
-rotation = Vector3(0, 1.570796, 0)
-facility_id = "base_vending"
-menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
-base_size_multiplier = 1.0
-
-[node name="状态恢复舱" parent="设施交互节点_可移动旋转" instance=ExtResource("13_recovery")]
-position = Vector3(11.6, 0, -3.4)
-rotation = Vector3(0, 1.570796, 0)
-base_size_multiplier = 1.0
-
-[node name="角色衣柜" parent="设施交互节点_可移动旋转" instance=ExtResource("14_wardrobe")]
-position = Vector3(-11.6, 0, 3.8)
-rotation = Vector3(0, -1.570796, 0)
 base_size_multiplier = 1.0
 
 [node name="场景装饰_可自由增删" type="Node3D" parent="."]

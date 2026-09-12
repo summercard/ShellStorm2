@@ -199,6 +199,14 @@
       "collection": "49_02_游戏输出_整合模型_v020",
       "scope": "remaining",
       "glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v003.glb",
+      "gameplay_facility_binding": {
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_facility_top3d_v001.tscn",
+        "facility_id": "monster_archive",
+        "menu_scene": "res://scenes/MonsterArchiveMenu.tscn",
+        "interaction_margin_m": 0.8,
+        "interaction_shape_locked": true
+      },
       "triangles_before": 7606,
       "triangles_after": 6288,
       "downward_triangles_removed": 1318,

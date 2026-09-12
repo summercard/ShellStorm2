@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn" id="2_source"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(3.523101, 5.31, 7.35)
+
+[node name="怪物档案室" type="Area3D"]
+position = Vector3(-13.838449, 1.995, 3.4)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = "monster_archive"
+display_name = "怪物档案室"
+description = "查看成长中的精英与悬赏情报"
+menu_scene_path = "res://scenes/MonsterArchiveMenu.tscn"
+base_size_multiplier = 1.0
+metadata/interaction_shape_locked = true
+metadata/interaction_margin_m = 0.8
+metadata/facility_wrapper = true
+metadata/asset_source = "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn"
+metadata/source_collection = "49_02_游戏输出_整合模型_v020"
+metadata/placement_policy = "center pivot preserves baked world coordinates"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+shape = SubResource("ShapeInteraction")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="SourcePackage" parent="Visual" instance=ExtResource("2_source")]
+position = Vector3(13.838449, -1.995, -3.4)
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 2.305, 0)
+billboard = 1
+text = "怪物档案室"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 2.015, -0.2)
+billboard = 1
+text = "[E] 使用 怪物档案室"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)

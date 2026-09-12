@@ -1,5 +1,11 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-12｜99层设施功能资产转移与0.8m交互包装
+
+- TowerDescent99F完成六项设施资产迁移：`base_vending → 72_SUPPLY24H自动补给机`、`vault → 47_窄型电池柜`、`monster_archive → 49_02_游戏输出_整合模型_v020`、`fate_collection → 42__02_游戏输出_整合模型`、`base_recovery → 45_MEDICAL医疗柜`、`avatar_wardrobe → 36_墨绿三人休闲沙发`。
+- 六项均新增独立`BaseFacility3D`包装Prefab；包装根以源资产碰撞包围盒中心为原点，`SourcePackage`反向偏移以保持原世界坐标、模型和碰撞不变。交互区统一为包围盒每侧外扩0.8m，并锁定，防止通用正面交互配置再次覆盖。
+- 原菜单、商店交易、恢复、换装、存档和`facility_id`逻辑均未改写；独立的`BaseWorld3D`保留旧赛博储物站、复古电视站和自动贩卖机映射，TowerDescent99F切换到新资产。
+- 99F常驻设施由7项更新为8项，新增怪物档案室实体入口。更新Excel美术资产台账、全局资产导入账本、99F优化包账本和v022更新账本；通过`verify_tower_base_facility_persistent_flow`、`verify_tower_facility_inventory_binding`、`verify_formal_asset_placement_visual`和Godot无头编译。
 ## 2026-09-06｜天台至98F场景与体验成品化
 
 - 100F/98F接入Blender工业地砖v002；保留5米网格、承重面和MultiMesh，新增面板、压边、紧固与检修细节，台账纠正旧GLB/BoxMesh引用差异。

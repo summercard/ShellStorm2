@@ -26,18 +26,24 @@ func _ready() -> void:
 	var vault := _find_facility(world, "vault")
 	var fate_collection := _find_facility(world, "fate_collection")
 	var monster_archive := _find_facility(world, "monster_archive")
+	var recovery := _find_facility(world, "base_recovery")
+	var wardrobe := _find_facility(world, "avatar_wardrobe")
 	var workshop_stool := world.find_child("维修圆凳_独立装饰", true, false) as Node3D
 	var mission_chair := world.find_child("战术指挥椅_独立装饰", true, false) as Node3D
 	var art_layout := world.find_child("基地99层_美术布置层", true, false) as Node3D
 	_check(
-		vending != null and mission != null and workshop != null and vault != null and fate_collection != null,
-		"五个正式模型基地设施未全部实例化",
+		vending != null and mission != null and workshop != null and vault != null and fate_collection != null and recovery != null and wardrobe != null,
+		"基础基地设施未全部实例化",
 		failures
 	)
 	if vault != null:
-		_check("locker_station" in str(vault.get_meta("asset_source", "")), "保险柜未使用储物站正式模型", failures)
+		_check("narrow_battery_cabinet" in str(vault.get_meta("asset_source", "")), "保险柜未绑定47_窄型电池柜资产包", failures)
 	if fate_collection != null:
-		_check("retro_tv_station" in str(fate_collection.get_meta("asset_source", "")), "命运卡收藏室未使用复古电视正式模型", failures)
+		_check("loft_computer_workstation" in str(fate_collection.get_meta("asset_source", "")), "命运卡收藏室未绑定42__02_游戏输出整合模型", failures)
+	if recovery != null:
+		_check("medical_cabinet" in str(recovery.get_meta("asset_source", "")), "状态恢复舱未绑定45_MEDICAL医疗柜资产包", failures)
+	if wardrobe != null:
+		_check("loft_lounge_sofa" in str(wardrobe.get_meta("asset_source", "")), "角色衣柜未绑定36_墨绿三人休闲沙发资产包", failures)
 	_check(workshop_stool != null and mission_chair != null, "两把独立座椅未全部实例化", failures)
 	if workshop_stool != null:
 		_check(not workshop_stool.is_in_group("base_facility"), "维修圆凳不应绑定设施交互", failures)
@@ -51,8 +57,8 @@ func _ready() -> void:
 		_check(editor_guide != null and not editor_guide.visible, "编辑器参考网格在运行时没有隐藏", failures)
 		_check(light_root != null and light_root.get_child_count() >= 3, "基地可编辑灯组缺失", failures)
 		_check(elevator_anchor != null, "99层电梯可编辑锚点缺失", failures)
-		_check(_count_facilities(art_layout) == 7, "美术布置层没有保留7个交互设施桥接节点", failures)
-		_check(monster_archive == null, "基地仍实例化了已下线的怪物档案台", failures)
+		_check(_count_facilities(art_layout) == 8, "美术布置层没有保留8个交互设施桥接节点", failures)
+		_check(monster_archive != null and "weapon_workshop_station" in str(monster_archive.get_meta("asset_source", "")), "怪物档案室未绑定49_02_游戏输出整合模型", failures)
 		_check(
 			art_layout.transform.is_equal_approx(authored_layout_transform),
 			"运行时重置了基地美术布置层的作者Transform",

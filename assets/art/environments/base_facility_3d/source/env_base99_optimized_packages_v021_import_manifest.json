@@ -1006,5 +1006,73 @@
       "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     }
-  ]
+  ],
+  "base99_facility_gameplay_bindings_v001": {
+    "contract": "BaseFacility3D gameplay wrapper preserves source package transform and collision",
+    "assembly": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+    "interaction_margin_m": 0.8,
+    "interaction_shape_locked": true,
+    "bindings": [
+      {
+        "facility_id": "base_vending",
+        "display_name": "自动贩卖机",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_root_top3d_v001.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/BaseVendingMenu.tscn",
+        "source_collection": "72_SUPPLY24H自动补给机_资产包",
+        "source_number": "72",
+        "interaction_shape": "4.720001×6.05×4.7m"
+      },
+      {
+        "facility_id": "vault",
+        "display_name": "保险柜",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_battery_cabinet/narrow_battery_cabinet_root_top3d_v001.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/narrow_battery_cabinet/narrow_battery_cabinet_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/VaultMenu.tscn",
+        "source_collection": "47_窄型电池柜_资产包",
+        "source_number": "47",
+        "interaction_shape": "3.18×4.82×2.39m"
+      },
+      {
+        "facility_id": "monster_archive",
+        "display_name": "怪物档案室",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v003.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/MonsterArchiveMenu.tscn",
+        "source_collection": "49_02_游戏输出_整合模型_v020",
+        "source_number": "49",
+        "interaction_shape": "3.523101×5.31×7.35m"
+      },
+      {
+        "facility_id": "fate_collection",
+        "display_name": "命运卡收藏室",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/FateCardCollectionMenu.tscn",
+        "source_collection": "42__02_游戏输出_整合模型",
+        "source_number": "42",
+        "interaction_shape": "9.134999×4.64×3.005m"
+      },
+      {
+        "facility_id": "base_recovery",
+        "display_name": "状态恢复舱",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_root_top3d_v001.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/medical_cabinet/medical_cabinet_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/BaseRecoveryMenu.tscn",
+        "source_collection": "45_MEDICAL医疗柜_资产包",
+        "source_number": "45",
+        "interaction_shape": "3.18×4.93×2.39m"
+      },
+      {
+        "facility_id": "avatar_wardrobe",
+        "display_name": "角色衣柜",
+        "asset_package": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn",
+        "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_facility_top3d_v001.tscn",
+        "menu_scene": "res://scenes/ui/WardrobeMenu3D.tscn",
+        "source_collection": "36_墨绿三人休闲沙发_资产包",
+        "source_number": "36",
+        "interaction_shape": "6.42×3.431646×3.481379m"
+      }
+    ]
+  }
 }

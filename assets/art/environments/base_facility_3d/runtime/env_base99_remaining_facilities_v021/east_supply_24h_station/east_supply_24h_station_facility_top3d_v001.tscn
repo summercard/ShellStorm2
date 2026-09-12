@@ -1,0 +1,118 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_visual_top3d_v001.glb" id="2_visual"]
+
+[sub_resource type="BoxShape3D" id="ShapeInteraction"]
+size = Vector3(4.720001, 6.05, 4.7)
+
+[sub_resource type="BoxShape3D" id="ShapeBody"]
+size = Vector3(1.82, 3.56, 2.18)
+
+[sub_resource type="BoxShape3D" id="Box_1"]
+size = Vector3(1.940001, 0.34, 2.28)
+
+[sub_resource type="BoxShape3D" id="Box_2"]
+size = Vector3(0.139999, 2.22, 1.82)
+
+[sub_resource type="BoxShape3D" id="Box_3"]
+size = Vector3(0.120001, 1.42, 1.34)
+
+[sub_resource type="BoxShape3D" id="Box_4"]
+size = Vector3(0.129999, 1.34, 0.62)
+
+[sub_resource type="BoxShape3D" id="Box_5"]
+size = Vector3(0.200001, 1.18, 0.46)
+
+[sub_resource type="BoxShape3D" id="Box_6"]
+size = Vector3(0.16, 0.42, 1.18)
+
+[sub_resource type="BoxShape3D" id="Box_7"]
+size = Vector3(1.940001, 0.28, 2.3)
+
+[sub_resource type="BoxShape3D" id="Box_8"]
+size = Vector3(0.200001, 0.36, 0.32)
+
+[node name="72_SUPPLY24H自动补给机" type="Area3D"]
+position = Vector3(13.52, 0, 3.45)
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("1_script")
+facility_id = "base_vending"
+display_name = "自动贩卖机"
+description = "购买基础枪械、初级背包与药水；出售保险柜物品"
+menu_scene_path = "res://scenes/BaseVendingMenu.tscn"
+base_size_multiplier = 1.0
+metadata/interaction_shape_locked = true
+metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021::east_supply_24h_station"
+metadata/asset_version = "v021"
+metadata/asset_source = "res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_visual_top3d_v001.glb"
+metadata/source_package = "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_root_top3d_v001.tscn"
+metadata/collision_policy = "facility_wrapper_preserves_source_object_boxes"
+metadata/placement_policy = "center pivot preserves baked world coordinates"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(-0.08, 1.825, 0)
+shape = SubResource("ShapeInteraction")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0, 1.78, 0)
+shape = SubResource("ShapeBody")
+
+[node name="SourceObjectBox_001" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-0.02, 3.48, 0)
+shape = SubResource("Box_1")
+
+[node name="SourceObjectBox_002" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-0.97, 2.1, 0)
+shape = SubResource("Box_2")
+
+[node name="SourceObjectBox_003" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-1.09, 2.4, -0.18)
+shape = SubResource("Box_3")
+
+[node name="SourceObjectBox_004" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-1.12, 1.37, 0.62)
+shape = SubResource("Box_4")
+
+[node name="SourceObjectBox_005" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-1.14, 1.55, -0.74)
+shape = SubResource("Box_5")
+
+[node name="SourceObjectBox_006" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(-1.12, 0.55, -0.12)
+shape = SubResource("Box_6")
+
+[node name="SourceObjectBox_007" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0, 0.14, 0)
+shape = SubResource("Box_7")
+
+[node name="SourceObjectBox_008" type="CollisionShape3D" parent="StaticBody3D"]
+position = Vector3(0.98, 0.72, 0.72)
+shape = SubResource("Box_8")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="ImportedModel" parent="Visual" instance=ExtResource("2_visual")]
+position = Vector3(-13.52, 0, -3.45)
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(0, 4.05, 0)
+billboard = 1
+text = "自动贩卖机"
+font_size = 32
+outline_size = 8
+modulate = Color(0.82, 0.96, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(0, 3.76, -0.2)
+billboard = 1
+text = "[E] 使用 自动贩卖机"
+font_size = 26
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)
