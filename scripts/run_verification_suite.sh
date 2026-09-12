@@ -78,6 +78,7 @@ core_scenes=(
   verify_base_fixture_glow
   verify_base_facility_framework
   verify_base_shop_save_flow
+  verify_extraction_points_spend_transaction
   verify_tower_facility_inventory_binding
   verify_tower_base_facility_persistent_flow
   verify_tower_extraction_return_flow

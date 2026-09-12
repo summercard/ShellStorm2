@@ -700,11 +700,21 @@ func add_extraction_points(amount: int) -> void:
 	save_base()
 
 func spend_extraction_points(amount: int) -> bool:
+	_ensure_data()
+	if amount <= 0:
+		return false
 	if data.extraction_points < amount:
 		return false
+	var transaction_data := data
+	var old_points := data.extraction_points
 	data.extraction_points -= amount
-	save_base()
-	return true
+	if save_base("spend_extraction_points"):
+		return true
+	# save_base 会在检测到磁盘 revision 更新时重新加载权威档案；这种情况下
+	# 只能回滚本次被修改的旧对象，不能用旧余额覆盖刚加载的新数据。
+	if data == transaction_data:
+		data.extraction_points = old_points
+	return false
 
 ## — 保险柜物品持久化 —
 func get_vault_items() -> Array[Dictionary]:

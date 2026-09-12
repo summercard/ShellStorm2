@@ -17,3 +17,5 @@
 `smoke`、`core` 与 `full` 使用无窗口逻辑回归；`visual` 使用真实渲染器生成截图。选择单个视觉场景时，`scene` 会自动切换到真实渲染模式。
 
 新增测试时使用 `verify_<领域>_<行为>.tscn`，避免阶段号、日期和临时修补名。
+
+资源扣款事务使用 `verify_extraction_points_spend_transaction.tscn`：覆盖正常持久化、强制写盘失败回滚、余额/参数拒绝和旧revision实例重新加载权威档案。revision冲突分支会产生一条预期的`Refusing stale save`错误日志，验收记录必须与非预期脚本错误分开。
