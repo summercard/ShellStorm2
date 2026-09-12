@@ -48,9 +48,9 @@ def manifests_by_slug(root: Path) -> dict[str, tuple[int, Path, dict]]:
     return result
 
 
-def set_formula(ws, row: int) -> None:
+def set_formula(ws, row: int, end: int) -> None:
     ws.cell(row, 18).value = f'=LOWER(TRIM(C{row})&"|"&TRIM(D{row})&"|"&TRIM(E{row})&"|"&TRIM(F{row})&"|"&TRIM(H{row})&"|"&TRIM(I{row}))'
-    ws.cell(row, 19).value = f'=IF(COUNTIF($R$6:$R$424,R{row})>1,"重复","唯一")'
+    ws.cell(row, 19).value = f'=IF(COUNTIF($R$6:$R${end},R{row})>1,"重复","唯一")'
 
 
 def update_workbook(root: Path, dry_run: bool) -> dict:
@@ -59,35 +59,35 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
     main = workbook["资产主表"]
     overview = workbook["总览"]
     manifest_map = manifests_by_slug(root)
-    master = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend"
+    master = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
     updated = defaultdict(int)
 
     explicit = {
-        237: (
+        "ENV-BASE99-WALL-DOOR-5X9": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn",
             "v003",
             "已完成",
             master + "; source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend; assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
         ),
-        240: (
+        "ENV-BASE99-ART-LAYOUT-3D": (
             "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
             "v002",
             "原型已接入",
             master + "; assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
         ),
-        241: (
+        "ENV-TOWER-CORNER-L-5M": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
             "v003",
             "正式美术已接入",
             master + "; source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend; assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
         ),
-        417: (
+        "ENV-BASE99-WALL-CONTENTS-V021": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
             "v003",
             "已导入；优化完成",
             master + "; assets/art/environments/base_facility_3d/source/env_base99_wall_contents_v021_manifest.json",
         ),
-        418: (
+        "ENV-BASE99-REMAINING-FACILITIES-V021": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
             "v004",
             "已导入；优化完成",
@@ -119,8 +119,8 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
             main.cell(row, 13).value = str(manifest_data.get("version", main.cell(row, 13).value or "v001"))
             updated["manifest_rows"] += 1
 
-        if row in explicit:
-            path, version, status, source = explicit[row]
+        if asset_id in explicit:
+            path, version, status, source = explicit[asset_id]
             main.cell(row, 15).value = path
             main.cell(row, 13).value = version
             main.cell(row, 11).value = status
@@ -134,11 +134,11 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
                 main.cell(row, 20).value = sha256(path)
                 updated["sha_rows"] += 1
 
-    for row in range(6, main.max_row + 1):
-        set_formula(main, row)
-    updated["formula_rows"] = main.max_row - 5
-
     end = main.max_row
+    for row in range(6, end + 1):
+        set_formula(main, row, end)
+    updated["formula_rows"] = end - 5
+
     overview["A6"] = f"=COUNTA('资产主表'!$A$6:$A${end})"
     active_formula = "+".join(f'COUNTIF(\'资产主表\'!$K$6:$K${end},"{status}")' for status in DONE_STATUSES)
     overview["C6"] = "=" + active_formula

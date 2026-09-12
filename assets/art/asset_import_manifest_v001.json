@@ -6,9 +6,9 @@
     "blender_policy": "external link only; never pack or copy into a model source directory",
     "glb_policy": "no embedded images/textures; export_image_format=NONE",
     "godot_post_import": "tools/asset_pipeline/scene_facility_shared_palette_post_import.gd",
-    "managed_blend_sources": 30,
-    "managed_glbs": 148,
-    "source_controlled_glb_import_contracts": 148,
+    "managed_blend_sources": 31,
+    "managed_glbs": 147,
+    "source_controlled_glb_import_contracts": 147,
     "source_controlled_palette_import_contracts": 1,
     "deleted_duplicate_pngs": 51,
     "palette_import_contract": {
@@ -1642,7 +1642,7 @@
     "effective_date": "2026-09-12",
     "authority": "current Blender source files on disk",
     "selection_rule": "use the current source file; after a source update use the highest numeric v### as the formal source",
-    "current_master_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v025.blend",
+    "current_master_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
     "current_runtime_strategy": "incremental runtime asset versions remain valid; ledger records both current master source and actual runtime version",
     "material_roles": [
       "01_精工金属_紫色骨架",

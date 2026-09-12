@@ -692,20 +692,6 @@
       "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_waste_bin/east_waste_bin_root_top3d_v001.tscn"
     },
     {
-      "slug": "equipment_steam_fx",
-      "display_name": "63_设备蒸汽动效组_资产包",
-      "source_collection": "63_设备蒸汽动效组_资产包",
-      "source_meshes": 10,
-      "runtime_meshes": 1,
-      "triangles_after_downward_cull": 600,
-      "triangles_after_optimization": 240,
-      "downward_faces_removed": 200,
-      "export": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_visual_top3d_v001.glb",
-      "collision_policy": "visual_only_no_collision",
-      "collision_boxes": [],
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_root_top3d_v001.tscn"
-    },
-    {
       "slug": "heavy_supply_shelf",
       "display_name": "51_重型货架与补给箱_资产包",
       "source_collection": "51_重型货架与补给箱_资产包",

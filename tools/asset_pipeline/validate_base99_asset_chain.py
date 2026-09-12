@@ -64,7 +64,7 @@ def main() -> None:
     source_root = root / "source/art/blender/base_facility_layout/source"
     sources = sorted(source_root.glob("base_facility_runtime_layout_hq_v*.blend"))
     latest = max(sources, key=lambda p: int(re.search(r"v(\d{3})\.blend$", p.name).group(1)))
-    if latest.name != "base_facility_runtime_layout_hq_v025.blend":
+    if latest.name != "base_facility_runtime_layout_hq_v026.blend":
         errors.append(f"unexpected current master: {latest.name}")
 
     runtime = root / "assets/art/environments/base_facility_3d/runtime"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3]
+[gd_scene load_steps=46 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v001.tscn" id="1_air_compressor"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v001.tscn" id="2_backup_generator"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_round_pendant_light/east_round_pendant_light_root_top3d_v001.tscn" id="10_east_round_pendant_light"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_supply_24h_station/east_supply_24h_station_root_top3d_v001.tscn" id="11_east_supply_24h_station"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_waste_bin/east_waste_bin_root_top3d_v001.tscn" id="12_east_waste_bin"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/equipment_steam_fx/equipment_steam_fx_root_top3d_v001.tscn" id="13_equipment_steam_fx"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v001.tscn" id="14_heavy_supply_shelf"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_root_top3d_v001.tscn" id="15_hologram_terminal_platform"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v001.tscn" id="16_industrial_water_tank"]
@@ -82,7 +81,6 @@ metadata/package_count = 45
 
 [node name="75_WASTE普通垃圾设施_资产包" parent="." instance=ExtResource("12_east_waste_bin")]
 
-[node name="63_设备蒸汽动效组_资产包" parent="." instance=ExtResource("13_equipment_steam_fx")]
 
 [node name="51_重型货架与补给箱_资产包" parent="." instance=ExtResource("14_heavy_supply_shelf")]
 

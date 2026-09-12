@@ -198,7 +198,6 @@ def build_collection_tree(output_collection):
 
     add("pendant_lights", "support", "61_仓库防爆吊灯组_资产包", "warehouse_pendant_light_group")
     add("emergency_lights", "support", "62_主通道应急灯组_资产包", "corridor_emergency_light_group")
-    add("steam", "support", "63_设备蒸汽动效组_资产包", "equipment_steam_fx")
     add("dust", "support", "64_光束尘埃动效组_资产包", "volumetric_dust_fx")
 
     return categories, packages, tile_packages

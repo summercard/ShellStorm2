@@ -6,11 +6,12 @@
 
 自 2026-09-12 起，**仓库中实际存在的 Blender 源文件就是正式资产来源**。
 
-- 主基地当前正式母版：`source/base_facility_runtime_layout_hq_v025.blend`
-- 后续如果继续更新，复制当前最高版本并提升版本号，例如 `v025 -> v026`
+- 主基地当前正式母版：`source/base_facility_runtime_layout_hq_v026.blend`
+- 后续如果继续更新，复制当前最高版本并提升版本号，例如 `v026 -> v027`
 - 新版本生成后，**数值最高的完整源版本自动成为新的正式来源**
 - 历史版本继续保留，用于回滚和追溯，不删除
 - 当前运行资产可以是 v021-v025 的增量组合；账本必须记录实际运行时版本，不能假定所有资产都来自同一版本
+- v026 正式源已删除退役资产 `63_设备蒸汽动效组_资产包`；该资产不再导出、不再进入运行时场景。
 - 禁止把 v017、v021 等历史版本写死为“当前源”
 
 ## 目录结构
@@ -20,7 +21,7 @@ base_facility_layout/
 ├── source/                                 当前与历史母版源
 │   ├── base_facility_runtime_layout_hq_v017.blend
 │   ├── ...
-│   └── base_facility_runtime_layout_hq_v025.blend   ← 当前正式母版
+│   └── base_facility_runtime_layout_hq_v026.blend   ← 当前正式母版
 ├── export/                                 按源版本派生的导出文件
 │   ├── v017/
 │   ├── v021/
@@ -81,7 +82,7 @@ base_facility_layout/
 
 ```powershell
 blender --background --python tools\blender\normalize_current_base99_materials.py -- `
-  --blend source\art\blender\base_facility_layout\source\base_facility_runtime_layout_hq_v025.blend
+  --blend source\art\blender\base_facility_layout\source\base_facility_runtime_layout_hq_v026.blend
 ```
 
 当前引用 GLB 材质收敛：

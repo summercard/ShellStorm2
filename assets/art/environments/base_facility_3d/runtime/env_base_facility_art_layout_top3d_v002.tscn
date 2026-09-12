@@ -45,8 +45,8 @@ size = Vector3(0.12, 0.08, 30)
 script = ExtResource("20_fixture_glow")
 metadata/layout_contract = "只编辑位置、旋转、灯光和美术装饰；设施ID与玩法由代码桥接"
 metadata/runtime_owner = "TowerDescent3D._install_facilities"
-metadata/source_blend = "base_facility_runtime_layout_hq_v023.blend"
-metadata/art_revision = "v024_corner_l_5m_import"
+metadata/source_blend = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
+metadata/art_revision = "v025_corner_l_5m_visual_wrapper"
 
 [node name="编辑器参考_运行时自动隐藏" type="Node3D" parent="."]
 metadata/editor_guide = true
