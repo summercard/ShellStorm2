@@ -102,6 +102,7 @@ func _register_room_key_item() -> void:
 		"rarity": "common",
 		"stack_max": 9,
 		"tags": ["key", "progression"],
+		"price": 40,
 		"floor_loot_weights": {
 			"loot_common": 1.0,
 			"loot_floor_1_2": 1.8,
@@ -700,6 +701,7 @@ func _register_consumables() -> void:
 			"name": "小型电池",
 			"description": "恢复手电筒 25% 电量。",
 			"type": "consumable",
+			"subtype": "battery",
 			"rarity": "common",
 			"stack_max": 5,
 			"tags": ["consumable", "flashlight", "battery"],

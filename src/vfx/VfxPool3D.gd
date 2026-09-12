@@ -62,8 +62,10 @@ func acquire(asset_id: StringName, world_pos: Vector3, color: Color, size: float
 	eff.activate(world_pos, color, size, context)
 	_active[asset_id].append(eff)
 	# 监听 retired 信号，retire 时回收到 inactive
-	if not eff.retired.is_connected(_on_effect_retired.bind(asset_id, eff)):
-		eff.retired.connect(_on_effect_retired.bind(asset_id, eff))
+	# retired 已经携带 effect；这里只绑定 asset_id，避免把同一实例作为第三个参数重复传入。
+	var retire_callback := _on_effect_retired.bind(asset_id)
+	if not eff.retired.is_connected(retire_callback):
+		eff.retired.connect(retire_callback)
 	return eff
 
 ## 按 AssetID 归还特效（通常由 retired 信号自动调用）
@@ -103,6 +105,12 @@ func active_count(asset_id: StringName) -> int:
 	if not _active.has(asset_id):
 		return 0
 	return _active[asset_id].size()
+
+
+func inactive_count(asset_id: StringName) -> int:
+	if not _inactive.has(asset_id):
+		return 0
+	return _inactive[asset_id].size()
 
 func _on_effect_retired(effect: VfxEffectBase3D, asset_id: StringName) -> void:
 	retire(asset_id, effect)

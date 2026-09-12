@@ -6,6 +6,24 @@ project_root="$(cd "${script_dir}/.." && pwd)"
 godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 aggregate_mode=false
+verification_tmp_root="$(mktemp -d "${TMPDIR:-/tmp}/shellstorm-verification.XXXXXX")"
+isolated_project_root="${verification_tmp_root}/project"
+verification_log_dir="${verification_tmp_root}/logs"
+verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
+mkdir -p "${isolated_project_root}" "${verification_log_dir}"
+while IFS= read -r entry; do
+  ln -s "${entry}" "${isolated_project_root}/$(basename "${entry}")"
+done < <(find "${project_root}" -mindepth 1 -maxdepth 1 ! -name project.godot ! -name .git -print)
+awk -v isolated_name="${verification_user_dir_name}" '
+  /^\[application\]$/ {
+    print
+    print "config/use_custom_user_dir=true"
+    print "config/custom_user_dir_name=\"" isolated_name "\""
+    next
+  }
+  { print }
+' "${project_root}/project.godot" > "${isolated_project_root}/project.godot"
+export SHELLSTORM_VERIFICATION_USER_DIR_NAME="${verification_user_dir_name}"
 test_timeout_seconds="${GODOT_TEST_TIMEOUT_SECONDS:-180}"
 if [[ "${suite}" == "soak" && -z "${GODOT_TEST_TIMEOUT_SECONDS+x}" ]]; then
 	test_timeout_seconds=3700
@@ -26,9 +44,16 @@ cleanup_active_test() {
   active_godot_pid=""
 }
 
-trap cleanup_active_test EXIT
-trap 'cleanup_active_test; exit 130' INT
-trap 'cleanup_active_test; exit 143' TERM
+cleanup_verification_workspace() {
+  cleanup_active_test
+  rm -rf "${verification_tmp_root}"
+  rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${verification_user_dir_name}"
+  rm -rf "${HOME}/.local/share/godot/app_userdata/${verification_user_dir_name}"
+}
+
+trap cleanup_verification_workspace EXIT
+trap 'cleanup_verification_workspace; exit 130' INT
+trap 'cleanup_verification_workspace; exit 143' TERM
 
 smoke_scenes=(
   verify_3d_only_project_structure
@@ -42,6 +67,7 @@ core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
   verify_room_graph_persistence_services
+  verify_verification_runner_contract
   verify_hud_presenter_3d
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
@@ -57,6 +83,7 @@ core_scenes=(
   verify_enemy_illumination_states
   verify_monster_ai_light_effects
   verify_monster_ai_system_complete
+  verify_vfx_pool_lifecycle
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow
@@ -146,16 +173,26 @@ run_scene() {
   local scene_name="$1"
   local scene_path="res://tests/verification/${scene_name}.tscn"
   local scene_result=0
+  local log_result=0
+  local preflight_log="${verification_log_dir}/${scene_name}.preflight.log"
+  local scene_log="${verification_log_dir}/${scene_name}.scene.log"
+  local expected_errors="${project_root}/tests/verification/expected_errors/${scene_name}.txt"
   printf '\n[%s] %s\n' "${suite}" "${scene_name}"
-  if ! "${godot_bin}" --headless --path "${project_root}" \
-    --script res://scripts/verify_scene_preflight.gd -- "${scene_path}"; then
+  if ! "${godot_bin}" --headless --path "${isolated_project_root}" \
+    --script res://scripts/verify_scene_preflight.gd -- "${scene_path}" >"${preflight_log}" 2>&1; then
+    cat "${preflight_log}"
     printf 'LOAD_FAILURE %s\n' "${scene_name}" >&2
     return 2
   fi
+  cat "${preflight_log}"
+  if ! python3 "${project_root}/scripts/check_verification_log.py" "${preflight_log}" "${expected_errors}"; then
+    printf 'PREFLIGHT_LOG_FAILURE %s\n' "${scene_name}" >&2
+    return 3
+  fi
   if is_renderer_scene "${scene_name}"; then
-    "${godot_bin}" --path "${project_root}" --scene "${scene_path}" &
+    "${godot_bin}" --path "${isolated_project_root}" --scene "${scene_path}" >"${scene_log}" 2>&1 &
   else
-    "${godot_bin}" --headless --path "${project_root}" --scene "${scene_path}" &
+    "${godot_bin}" --headless --path "${isolated_project_root}" --scene "${scene_path}" >"${scene_log}" 2>&1 &
   fi
   active_godot_pid="$!"
   (
@@ -191,6 +228,15 @@ run_scene() {
   fi
   wait "${active_watchdog_pid}" 2>/dev/null || true
   active_watchdog_pid=""
+  cat "${scene_log}"
+  if python3 "${project_root}/scripts/check_verification_log.py" "${scene_log}" "${expected_errors}"; then
+    log_result=0
+  else
+    log_result=$?
+  fi
+  if (( scene_result == 0 && log_result != 0 )); then
+    return "${log_result}"
+  fi
   return "${scene_result}"
 }
 

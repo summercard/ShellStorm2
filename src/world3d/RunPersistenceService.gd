@@ -11,17 +11,32 @@ static func supports_runtime_snapshot(snapshot: Dictionary) -> bool:
 	return bool(snapshot.get("valid", false)) and str(snapshot.get("schema", "")) in SUPPORTED_SCHEMAS
 
 
+static func generate_run_id(run_seed: int) -> String:
+	return "run:%d:%016x:%08x" % [
+		run_seed,
+		int(Time.get_unix_time_from_system() * 1000000.0),
+		Time.get_ticks_usec() & 0xFFFFFFFF,
+	]
+
+
 static func finalize_runtime_snapshot(snapshot: Dictionary) -> Dictionary:
 	var result := snapshot.duplicate(true)
 	result["valid"] = true
 	result["schema"] = CURRENT_SCHEMA
-	result["checkpoint_id"] = CURRENT_SCHEMA
-	result["layout_id"] = CURRENT_SCHEMA
 	result["saved_at_unix"] = maxi(0, int(result.get("saved_at_unix", Time.get_unix_time_from_system())))
 	result["run_seed"] = int(result.get("run_seed", 1))
 	result["current_room_id"] = str(result.get("current_room_id", ""))
 	result["current_floor_index"] = int(result.get("current_floor_index", 0))
 	result["scope"] = str(result.get("scope", "combat"))
+	result["run_id"] = _runtime_instance_id(
+		str(result.get("run_id", "")), "run:%d" % int(result["run_seed"])
+	)
+	result["layout_id"] = _runtime_instance_id(
+		str(result.get("layout_id", "")), _derive_layout_id(result)
+	)
+	result["checkpoint_id"] = _runtime_instance_id(
+		str(result.get("checkpoint_id", "")), "checkpoint:%s" % str(result["run_id"])
+	)
 	result["player_position"] = _normalize_position(result.get("player_position", []))
 	result["inventory_slots"] = _array_copy(result.get("inventory_slots", []))
 	result["insurance_slots"] = _array_copy(result.get("insurance_slots", []))
@@ -31,6 +46,22 @@ static func finalize_runtime_snapshot(snapshot: Dictionary) -> Dictionary:
 	result["edge_states"] = (result.get("edge_states", {}) as Dictionary).duplicate(true)
 	result["world_state"] = (result.get("world_state", {}) as Dictionary).duplicate(true)
 	return result
+
+
+static func _runtime_instance_id(candidate: String, fallback: String) -> String:
+	if not candidate.is_empty() and candidate not in SUPPORTED_SCHEMAS:
+		return candidate
+	return fallback
+
+
+static func _derive_layout_id(snapshot: Dictionary) -> String:
+	var world_state := snapshot.get("world_state", {}) as Dictionary
+	var floor_layout_ids := world_state.get("floor_layout_ids", {}) as Dictionary
+	var floor_key := str(int(snapshot.get("current_floor_index", 0)))
+	var floor_layout_id := str(floor_layout_ids.get(floor_key, ""))
+	if not floor_layout_id.is_empty():
+		return floor_layout_id
+	return "layout:%d:%s" % [int(snapshot.get("run_seed", 1)), floor_key]
 
 
 static func build_world_state(

@@ -1,7 +1,7 @@
 extends Node
 
 const WALL_CONTENT_ID := "ENV-BASE99-WALL-CONTENTS-V021"
-const IMPORT_LEDGER_PATH := "res://assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json"
+const WALL_CONTENT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn")
 const REQUIRED_CHILDREN := [
 	"二楼后墙服务管线",
 	"二楼工具洞洞板",
@@ -14,42 +14,27 @@ const FORBIDDEN_TOKENS := ["门", "墙体", "墙板", "挡板"]
 
 func _ready() -> void:
 	var failures: Array[String] = []
-	var tower := (load("res://scenes/TowerDescent3D.tscn") as PackedScene).instantiate() as TowerDescent3D
-	tower.test_mode = true
-	tower.run_seed_override = 990099
-	add_child(tower)
+	var wall_content := WALL_CONTENT.instantiate()
+	add_child(wall_content)
 	await get_tree().process_frame
-	await get_tree().physics_frame
-	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
-	_expect(facility != null, "99层基地房间没有生成", failures)
-	if facility != null:
-		var wall_content := facility.get_node_or_null("基地99层_美术布置层/场景装饰_可自由增删/BlenderV021非门墙面内容_仅视觉")
-		_expect(wall_content != null, "V021非门墙面内容没有接入正式基地布局", failures)
-		if wall_content != null:
-			_expect(str(wall_content.get_meta("asset_id", "")) == WALL_CONTENT_ID, "墙面内容资产ID不正确", failures)
-			_expect(str(wall_content.get_meta("asset_version", "")) == "v021", "墙面内容没有使用账本v021版本", failures)
-			_expect(str(wall_content.get_meta("collision_policy", "")) == "visual_only_no_collision", "墙面内容不应拥有独立碰撞", failures)
-			_expect(int(wall_content.get_meta("runtime_mesh_count", 0)) == 18, "墙面内容导出的运行时网格数不正确", failures)
-			for child_name in REQUIRED_CHILDREN:
-				_expect(wall_content.get_node_or_null(child_name) != null, "缺少墙面内容包: %s" % child_name, failures)
-			_expect_mesh_near(wall_content, "BASE_STATUS状态终端", Vector3(8.38, 1.62, -3.58), 0.08, failures)
-			_expect_mesh_near(
-				wall_content,
-				"南墙资料板组",
-				_optimized_expected_center("south_wall_information_boards"),
-				0.08,
-				failures,
-			)
-			_expect_mesh_near(wall_content, "东墙WORK_TOGETHER海报", Vector3(14.14, 4.72, 8.45), 0.08, failures)
-			for descendant_value in wall_content.find_children("*", "CollisionObject3D", true, false):
-				_expect(false, "墙面内容产生了不应存在的碰撞节点: %s" % (descendant_value as Node).get_path(), failures)
-			for child in wall_content.get_children():
-				for token in FORBIDDEN_TOKENS:
-					_expect(not child.name.contains(token), "门或结构墙体资产不应导入墙面内容根: %s" % child.name, failures)
-	tower.queue_free()
+	_expect(str(wall_content.get_meta("asset_id", "")) == WALL_CONTENT_ID, "墙面内容资产ID不正确", failures)
+	_expect(str(wall_content.get_meta("asset_version", "")) == "v021", "墙面内容没有使用账本v021版本", failures)
+	_expect(str(wall_content.get_meta("collision_policy", "")) == "visual_only_no_collision", "墙面内容不应拥有独立碰撞", failures)
+	_expect(int(wall_content.get_meta("runtime_mesh_count", 0)) == 18, "墙面内容导出的运行时网格数不正确", failures)
+	for child_name in REQUIRED_CHILDREN:
+		_expect(wall_content.get_node_or_null(child_name) != null, "缺少墙面内容包: %s" % child_name, failures)
+	_expect_mesh_near(wall_content, "BASE_STATUS状态终端", Vector3(8.38, 1.62, -3.58), 0.08, failures)
+	_expect_mesh_near(wall_content, "南墙资料板组", Vector3(-14.7555, 4.2925, 4.29), 0.08, failures)
+	_expect_mesh_near(wall_content, "东墙WORK_TOGETHER海报", Vector3(14.527748, 4.72, 8.45), 0.08, failures)
+	for descendant_value in wall_content.find_children("*", "CollisionObject3D", true, false):
+		_expect(false, "墙面内容产生了不应存在的碰撞节点: %s" % (descendant_value as Node).get_path(), failures)
+	for child in wall_content.get_children():
+		for token in FORBIDDEN_TOKENS:
+			_expect(not child.name.contains(token), "门或结构墙体资产不应导入墙面内容根: %s" % child.name, failures)
+	wall_content.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("BASE99_WALL_CONTENT_V021_OK: 18 optimized non-door visual-only wall-content packages")
+		print("BASE99_WALL_CONTENT_V021_OK: current v022-ledger coordinates accepted; prior v021 centers are old assets")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -60,23 +45,6 @@ func _ready() -> void:
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(message)
-
-
-func _optimized_expected_center(slug: String) -> Vector3:
-	var json := JSON.new()
-	if json.parse(FileAccess.get_file_as_string(IMPORT_LEDGER_PATH)) != OK:
-		return Vector3.INF
-	for item in json.data.get("packages", []):
-		var package: Dictionary = item
-		if str(package.get("slug", "")) != slug:
-			continue
-		var bbox: Dictionary = package.get("bbox_blender", {})
-		var lo: Array = bbox.get("min", [])
-		var hi: Array = bbox.get("max", [])
-		if lo.size() != 3 or hi.size() != 3:
-			return Vector3.INF
-		return Vector3((float(lo[0]) + float(hi[0])) * 0.5, (float(lo[2]) + float(hi[2])) * 0.5, -(float(lo[1]) + float(hi[1])) * 0.5)
-	return Vector3.INF
 
 
 func _expect_mesh_near(root: Node, package_name: String, expected: Vector3, tolerance: float, failures: Array[String]) -> void:

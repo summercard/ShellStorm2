@@ -2422,6 +2422,7 @@ func _start_new_run_generation() -> void:
 		next_seed = previous_seed + 1
 	run_seed = next_seed
 	run_seed_override = next_seed
+	_run_id = RUN_PERSISTENCE_SERVICE.generate_run_id(run_seed)
 	_rng.seed = run_seed
 	if _loot_module != null:
 		_loot_module.set_seed(run_seed ^ 0x4C4F4F54)

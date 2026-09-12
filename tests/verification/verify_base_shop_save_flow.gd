@@ -31,6 +31,19 @@ func _verify_catalog(failures: Array[String]) -> void:
 	for item in goods:
 		if int(item.get("base_buy_price", 0)) <= 0 or int(item.get("base_sell_price", 0)) <= 0:
 			failures.append("上架商品缺少独立买价/卖价：%s" % str(item.get("id", "")))
+	var designed_prices := {
+		"weapon_greatblade": [165, 83],
+		"weapon_waraxe": [240, 120],
+		"item_room_key": [40, 20],
+	}
+	for item_id in designed_prices:
+		var definition := ItemRegistry.get_instance().get_item(item_id)
+		var expected := designed_prices[item_id] as Array
+		if int(definition.get("base_buy_price", 0)) != int(expected[0]) or int(definition.get("base_sell_price", 0)) != int(expected[1]):
+			failures.append("设计成交价未进入运行定义：%s" % item_id)
+	var battery := ItemRegistry.get_instance().get_item("item_battery_s")
+	if str(battery.get("subtype", "")) != "battery":
+		failures.append("小型电池缺少battery子类")
 
 
 func _verify_save_envelope_and_backup(failures: Array[String]) -> void:

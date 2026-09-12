@@ -66,6 +66,7 @@ const BASE_INVENTORY_CAPACITY := 12
 @onready var low_health_vignette: ColorRect = $HUD/LowHealthVignette
 
 var run_seed := 1
+var _run_id := ""
 var _rng := RandomNumberGenerator.new()
 var _rooms: Array[DungeonRoom3D] = []
 var _room_by_id: Dictionary = {}
@@ -200,6 +201,7 @@ func _ready() -> void:
 			if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(candidate):
 				_runtime_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
+				_run_id = str(candidate.get("run_id", ""))
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -207,6 +209,8 @@ func _ready() -> void:
 	run_seed = run_seed_override
 	if run_seed < 0:
 		run_seed = LevelSelect.selected_seed if LevelSelect != null and LevelSelect.selected_seed >= 0 else int(Time.get_unix_time_from_system()) ^ randi()
+	if _run_id.is_empty():
+		_run_id = RUN_PERSISTENCE_SERVICE.generate_run_id(run_seed)
 	_rng.seed = run_seed
 	_setup_run_modules()
 	# 热返城不会重新创建主入口界面，因此玩法场景自身必须恢复已保存外观。
@@ -334,6 +338,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"scope": _runtime_scope_for_save(runtime_floor_index, runtime_room_id),
 		"saved_at_unix": int(Time.get_unix_time_from_system()),
 		"run_seed": run_seed,
+		"run_id": _run_id,
 		"current_room_id": runtime_room_id,
 		"current_floor_index": runtime_floor_index,
 		"player_position": [position.x, position.y, position.z],
@@ -1948,8 +1953,8 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 
 
 func _elite_encounter_id(room: DungeonRoom3D) -> String:
-	var checkpoint_id := str(build_runtime_save_snapshot().get("checkpoint_id", "run:%d" % run_seed))
-	return "%s:%s:elite" % [checkpoint_id, room.room_id]
+	var run_id := str(build_runtime_save_snapshot().get("run_id", "run:%d" % run_seed))
+	return "%s:%s:elite" % [run_id, room.room_id]
 
 
 func _elite_floor_number(room: DungeonRoom3D) -> int:

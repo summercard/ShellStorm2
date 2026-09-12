@@ -186,9 +186,16 @@ func _finish(scene: Node, original_path: String, original_data: BaseData, failur
 	if scene != null and is_instance_valid(scene):
 		scene.queue_free()
 	await get_tree().process_frame
+	await get_tree().process_frame
 	BaseManager.save_path = original_path
 	BaseManager.data = original_data
 	_cleanup()
+	# 让_ready调用栈中的PackedScene、房间及物品局部引用先释放，再退出引擎；
+	# 否则主体断言通过时仍可能留下只存在于测试栈上的资源引用。
+	call_deferred("_report_and_quit", failures.duplicate())
+
+
+func _report_and_quit(failures: Array[String]) -> void:
 	if failures.is_empty():
 		print("TOWER_RUNTIME_RESTART_OK: seeded 98F world, room progress, position, inventory, real quick slots, equipment, insurance and flashlight survive restart")
 		get_tree().quit(0)
