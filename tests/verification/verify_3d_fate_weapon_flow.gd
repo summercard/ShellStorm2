@@ -21,7 +21,7 @@ func _ready() -> void:
 	await _verify_numeric_cards(failures)
 	await _verify_relative_weapon_scale(failures)
 	if failures.is_empty():
-		print("3D_FATE_WEAPON_FLOW_OK: behaviors pass and weapon fate scale remains relative to the current 70% mount baseline")
+		print("3D_FATE_WEAPON_FLOW_OK: behaviors pass and weapon fate scale remains relative to the current 80% player mount baseline")
 		get_tree().quit(0)
 		return
 	for failure in failures:

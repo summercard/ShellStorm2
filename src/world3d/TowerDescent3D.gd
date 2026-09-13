@@ -44,24 +44,26 @@ const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
 const STAIR_GUARD_HEIGHT := TOWER_GEOMETRY.GUARD_HEIGHT_M
-const CAMERA_HEIGHT_M := 8.0
-# 镜头相对角色在无遮挡时的默认水平后移：tan(65°)=(8-0.45)/(trailing+0.75)
-# ⇒ trailing ≈ 7.55/2.1445 - 0.75 ≈ 2.77m，对应从水平面算起 65° 俯视角。
-const CAMERA_DEFAULT_TRAILING_M := 2.77
+# 原默认镜头在调试模式按15次 '，每次沿相机到焦点的视线轴拉远0.20m。
+# 固化后的精确局部位置为Y=10.719009m、后移Z=4.037671m，保持原俯视角。
+const CAMERA_HEIGHT_M := 10.719009
+const CAMERA_DEFAULT_TRAILING_M := 4.037671
 const CAMERA_LOOK_HEIGHT_M := 0.45
 const CAMERA_LOOK_AHEAD_M := 0.75
 const CAMERA_FOV_DEG := 65.0
-const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 0.95
+const CAMERA_LOWER_WALL_PROBE_HEIGHT_M := 1.09
 # 探针从角色前侧开始并向镜头后方穿过角色。若从角色身后0.42m起射，
 # 角色贴墙时起点会落入0.30m厚的墙体，射线便可能漏掉“从内部出发”的墙。
-const CAMERA_LOWER_WALL_PROBE_START_M := -0.40
-const CAMERA_LOWER_WALL_PROBE_LENGTH_M := 6.2
-const CAMERA_LOWER_WALL_PROBE_LATERAL_OFFSETS_M := [-0.28, 0.0, 0.28]
+const CAMERA_LOWER_WALL_PROBE_START_M := -0.46
+const CAMERA_LOWER_WALL_PROBE_LENGTH_M := 7.47
+const CAMERA_LOWER_WALL_PROBE_LATERAL_OFFSETS_M := [-0.32, 0.0, 0.32]
 const CAMERA_LOWER_WALL_LIFT_MAX_M := 0.30
-const CAMERA_LOWER_WALL_LIFT_BLEND_DISTANCE_M := 1.2
+const CAMERA_LOWER_WALL_LIFT_BLEND_DISTANCE_M := 1.37
 const CAMERA_LOWER_WALL_LIFT_RISE_RATE := 8.0
 const CAMERA_LOWER_WALL_LIFT_FALL_RATE := 4.5
 const CAMERA_LOWER_WALL_MIN_TRAILING_M := 0.15
+# 收镜必须在墙进入新的4.037671m默认镜头通道时触发，不能沿用旧2.77m阈值。
+const CAMERA_LOWER_WALL_RETRACT_TRIGGER_M := CAMERA_DEFAULT_TRAILING_M
 const CAMERA_LOWER_WALL_RETRACT_RATE := 10.0
 const CAMERA_LOWER_WALL_EXTEND_RATE := 4.5
 const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
@@ -70,7 +72,7 @@ const CAMERA_WALL_COLLISION_MASK := (
 )
 # 楼梯的上下两跑斜楼板会压低局部净高。只查询导入楼梯明确
 # 标记的两块Flight_Walkable，不让普通房间楼板或其他碰撞改变镜头体验。
-const CAMERA_STAIR_SLAB_PROBE_START_HEIGHT_M := 1.15
+const CAMERA_STAIR_SLAB_PROBE_START_HEIGHT_M := 1.31
 const CAMERA_STAIR_SLAB_CLEARANCE_M := 0.28
 const CAMERA_STAIR_SLAB_MIN_HEIGHT_M := 1.25
 const CAMERA_STAIR_SLAB_RECOVER_RATE := 5.0
@@ -577,7 +579,7 @@ func _update_camera_lower_wall_lift(delta: float, refresh_probe: bool = true) ->
 		_camera_lift_target_m = CAMERA_LOWER_WALL_LIFT_MAX_M * lift_ratio
 		# 只退到墙内侧仍会让窄楼梯间的墙占满视锥。墙进入默认镜头通道后，
 		# 直接沿固定后方轴收至角色正上方附近，保证整个视锥也回到墙内侧。
-		if _camera_lower_wall_distance_m < CAMERA_DEFAULT_TRAILING_M:
+		if _camera_lower_wall_distance_m < CAMERA_LOWER_WALL_RETRACT_TRIGGER_M:
 			_camera_trailing_target_m = CAMERA_LOWER_WALL_MIN_TRAILING_M
 	var response_rate := (
 		CAMERA_LOWER_WALL_LIFT_RISE_RATE
@@ -4429,6 +4431,10 @@ func get_tower_snapshot() -> Dictionary:
 		"camera_trailing_min_m": CAMERA_LOWER_WALL_MIN_TRAILING_M,
 		"camera_lower_wall_detected": _camera_lower_wall_detected,
 		"camera_lower_wall_distance_m": _camera_lower_wall_distance_m,
+		"camera_lower_wall_probe_height_m": CAMERA_LOWER_WALL_PROBE_HEIGHT_M,
+		"camera_lower_wall_probe_start_m": CAMERA_LOWER_WALL_PROBE_START_M,
+		"camera_lower_wall_probe_length_m": CAMERA_LOWER_WALL_PROBE_LENGTH_M,
+		"camera_lower_wall_retract_trigger_m": CAMERA_LOWER_WALL_RETRACT_TRIGGER_M,
 		"camera_collision_mode": "lower_wall_lift_and_retract_arc",
 		"camera_stair_slab_mode": "tagged_upper_lower_flight_vertical_clamp",
 		"camera_stair_slab_detected": _camera_stair_slab_detected,

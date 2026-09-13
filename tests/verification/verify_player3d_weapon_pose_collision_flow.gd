@@ -1,8 +1,8 @@
 extends Node
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
-const FULL_VISUAL_HEIGHT_M := 1.05
-const COLLISION_HEIGHT_M := 1.05
+const FULL_VISUAL_HEIGHT_M := 1.20
+const COLLISION_HEIGHT_M := 1.20
 const EXPECTED_FIRE_STYLES := {
 	"bp_pistol": "sidearm_snap",
 	"bp_shotgun": "shotgun_heavy_pump",
@@ -31,9 +31,9 @@ func _ready() -> void:
 		var capsule := collision.shape as CapsuleShape3D
 		var collision_top := collision.position.y + capsule.height * 0.5
 		if not is_equal_approx(capsule.height, COLLISION_HEIGHT_M):
-			failures.append("Virtual collision capsule height is not the new 1.05 m base")
+			failures.append("Virtual collision capsule height is not the new 1.20 m base")
 		if not is_equal_approx(collision_top, FULL_VISUAL_HEIGHT_M):
-			failures.append("Virtual collision capsule top does not match the full 1.05 m visual height")
+			failures.append("Virtual collision capsule top does not match the full 1.20 m visual height")
 		if capsule.radius * 2.0 >= 0.75:
 			failures.append("Virtual collision capsule is not tighter than the visible head silhouette")
 	var avatar_snapshot := player.avatar.get_component_snapshot()

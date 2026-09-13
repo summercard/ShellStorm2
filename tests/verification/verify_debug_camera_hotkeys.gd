@@ -154,10 +154,19 @@ func _run_offset_function_checks(failures: Array[String]) -> void:
 ## unit_relative = default_relative / |default_relative|，relative_length =
 ## |default_relative| + trailing_offset_m，下界 0.20m 防止相机缩到焦点里。
 func _run_camera_formula_checks(failures: Array[String]) -> void:
-	var camera_height_m := 8.0
+	var camera_height_m := 10.719009
 	var camera_look_height_m := 0.45
 	var camera_look_ahead_m := 0.75
-	var default_trailing := 2.77
+	var default_trailing := 4.037671
+	# 新默认值必须严格等价于旧默认值沿视线轴执行15次0.20m拉远，
+	# 防止后续只凭近似画面手调Y/Z而改变原俯视角。
+	var legacy_relative := Vector3(0.0, 8.0 - camera_look_height_m, 2.77 + camera_look_ahead_m)
+	var promoted_position := (
+		Vector3(0.0, camera_look_height_m, -camera_look_ahead_m)
+		+ legacy_relative.normalized() * (legacy_relative.length() + 15.0 * 0.20)
+	)
+	if promoted_position.distance_to(Vector3(0.0, camera_height_m, default_trailing)) > 0.00001:
+		failures.append("新默认相机位置不等于旧默认连续按15次'：%s" % promoted_position)
 	var default_relative := Vector3(
 		0.0,
 		camera_height_m - camera_look_height_m,

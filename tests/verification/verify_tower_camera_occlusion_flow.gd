@@ -265,8 +265,8 @@ func _expect_real_wall_cleared(
 	if bool(snapshot.get("camera_occluded_player", true)):
 		failures.append("%s收镜后仍有黑墙遮住角色" % label)
 	if (
-		tower.player.camera.position.y <= 8.20
-		or tower.player.camera.position.y > 8.301
+		tower.player.camera.position.y <= 10.89
+		or tower.player.camera.position.y > 11.020
 	):
 		failures.append(
 			"%s镜头抬升高度异常：%.3fm"
@@ -290,8 +290,8 @@ func _expect_non_south_wall_ignored(
 	if bool(snapshot.get("camera_lower_wall_detected", true)):
 		failures.append("%s错误触发了仅限南墙的镜头交互" % label)
 	if (
-		absf(tower.player.camera.position.y - 8.0) > 0.02
-		or absf(tower.player.camera.position.z - 2.77) > 0.03
+		absf(tower.player.camera.position.y - 10.719009) > 0.02
+		or absf(tower.player.camera.position.z - 4.037671) > 0.03
 	):
 		failures.append("%s错误改变了固定镜头位置：%s" % [label, tower.player.camera.position])
 

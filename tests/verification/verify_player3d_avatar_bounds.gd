@@ -1,7 +1,7 @@
 extends Node
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
-const EXPECTED_STATIC_HEIGHT_M := 1.05
+const EXPECTED_STATIC_HEIGHT_M := 1.20
 
 
 func _ready() -> void:
@@ -53,9 +53,9 @@ func _ready() -> void:
 	if absf(low.y) > 0.001:
 		failures.append("Bunny static assembly does not start at ground Y=0: %.6f" % low.y)
 	if absf(height - EXPECTED_STATIC_HEIGHT_M) > 0.001:
-		failures.append("Bunny runtime assembly height is not the new 1.05 m base: %.6f" % height)
-	if low.x < -0.378 or high.x > 0.378 or low.z < -0.263 or high.z > 0.263:
-		failures.append("Bunny runtime assembly footprint escaped the new 70% base bounds")
+		failures.append("Bunny runtime assembly height is not the new 1.20 m base: %.6f" % height)
+	if low.x < -0.432 or high.x > 0.432 or low.z < -0.301 or high.z > 0.301:
+		failures.append("Bunny runtime assembly footprint escaped the new 80% base bounds")
 	if absf(left_foot_low) > 0.001 or absf(right_foot_low) > 0.001:
 		failures.append(
 			"Bunny feet no longer rest on the visual ground: left=%.6f right=%.6f" % [
