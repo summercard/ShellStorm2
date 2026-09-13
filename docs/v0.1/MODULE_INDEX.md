@@ -1,6 +1,6 @@
 # v0.1 模块、功能与工程契约索引
 
-工程版本：0.1.0。设计索引修订：r1（2026-09-12）。审计代码基线：`31ed360`。
+工程版本：0.1.0。设计索引修订：r2（2026-09-13）。审计代码基线：`31ed360`。
 本表建立追溯入口，不替代各模块设计，也不把现存实现自动认定为设计已批准。当前验收结果见 [工程审计](audits/2026-09-12_engineering_audit.md)。
 
 ## 1. 独立开发判断
@@ -67,7 +67,7 @@
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`（仅脚本，缺tscn） | 新后处理缺独立设计和日志关联；7/9项口径失配 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：18枪架、59组合、三类靶标、重置/退出、暂停及BaseData隔离已有独立契约 |
-| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | source/art→tools/asset_pipeline→assets/art→XLSX | `scripts/check_asset_registry.py`、资产专项 | 有标准和批次记录；214项哈希漂移未签署 |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、资产专项、真实场景渲染 | 3D场景已有简明流程、白盒数据要求和两项Skill入口；其他资产类型待建立并列流程；历史哈希漂移未批量签署 |
 
 ## 3. 开发记录定位
 
