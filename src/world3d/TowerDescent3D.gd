@@ -6,7 +6,7 @@ extends Dungeon3D
 
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn")
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn"
+	"res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
@@ -187,10 +187,11 @@ var _initial_loop_retreat_overlay: Control = null
 func _ready() -> void:
 	process_physics_priority = 100
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
-	var editor_art_root := get_node_or_null("美术可编辑层") as Node3D
-	if editor_art_root != null:
-		editor_art_root.visible = false
+	var base_art := get_node_or_null("Blocks/Base/Art") as Node3D
+	if base_art != null:
+		base_art.visible = false
 	super()
+	_organize_existing_rooms_by_block()
 	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
@@ -230,6 +231,39 @@ func _ready() -> void:
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
+
+
+func _block(block_name: String) -> Node3D:
+	var block := get_node_or_null("Blocks/%s" % block_name) as Node3D
+	if block != null:
+		return block
+	push_error("缺少关卡区块 Blocks/%s" % block_name)
+	return $GeneratedRooms as Node3D
+
+
+func _room_block_for_floor(floor_index: int) -> Node3D:
+	if floor_index == 0:
+		return _block("Rooftop")
+	if floor_index == 1:
+		return _block("Base")
+	return _block("Battle")
+
+
+func _organize_existing_rooms_by_block() -> void:
+	# Dungeon3D 的基础生成器在 super() 内先把首批房间放入兼容容器；
+	# 塔楼在继续生成楼层前统一迁入四区块树并锁定稳定短名。
+	for room_id_value in _room_by_id.keys():
+		var room_id := str(room_id_value)
+		var room := _room_by_id.get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		var floor_index := int(_room_floor_index.get(room_id, 0))
+		var target := _room_block_for_floor(floor_index)
+		if room.get_parent() != target:
+			room.reparent(target, true)
+		room.name = room_id
+		room.set_meta("floor_number", 100 - floor_index)
+		room.set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
 
 
 func _accepts_pending_insurance_return_at_spawn() -> bool:
@@ -367,7 +401,9 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 	var stage = FLOOR_STAGE_SCRIPT.new()
 	stage.call("configure", floor_index, kind, hole_sides)
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
-	$GeneratedRooms.add_child(stage)
+	_room_block_for_floor(floor_index).add_child(stage)
+	# PackedScene/运行时节点在 add_child() 时可能被分配内部名；挂载后再锁定短名。
+	stage.name = "Floor_%d" % (100 - floor_index)
 	_floor_stages[floor_index] = stage
 
 
@@ -1375,12 +1411,21 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 		lower_door,
 	]
 	var connector := Node3D.new()
-	connector.name = "TowerStairwell_%02d" % index
+	var upper_floor_index := int(_room_floor_index.get(from_room.room_id, 0))
+	var lower_floor_index := int(_room_floor_index.get(to_room.room_id, 1))
+	var upper_floor_number := 100 - upper_floor_index
+	var lower_floor_number := 100 - lower_floor_index
+	var connector_name := (
+		"Stair_A" if upper_floor_number == 100 and lower_floor_number == 99
+		else "Stair_B" if upper_floor_number == 99 and lower_floor_number == 98
+		else "Stair_%d_%d" % [upper_floor_number, lower_floor_number]
+	)
 	connector.set_meta("is_vertical_connector", true)
+	connector.set_meta("block_id", "stairs")
 	connector.set_meta("from_room_id", from_room.room_id)
 	connector.set_meta("to_room_id", to_room.room_id)
-	connector.set_meta("upper_floor_index", int(_room_floor_index.get(from_room.room_id, 0)))
-	connector.set_meta("lower_floor_index", int(_room_floor_index.get(to_room.room_id, 1)))
+	connector.set_meta("upper_floor_index", upper_floor_index)
+	connector.set_meta("lower_floor_index", lower_floor_index)
 	connector.set_meta("height_delta", lower_y - upper_y)
 	connector.set_meta("side", side)
 	connector.set_meta("upper_door_side", upper_door_side)
@@ -1417,7 +1462,8 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	connector.set_meta("uses_blender_stairwell_visual", true)
 	connector.visible = false
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
-	$GeneratedCorridors.add_child(connector)
+	_block("Stairs").add_child(connector)
+	connector.name = connector_name
 	_corridor_by_edge[edge] = connector
 	connector.set_meta("edge_key", edge)
 	connector.set_meta("spatial_registry_position", (upper_door + lower_door) * 0.5)
@@ -1686,7 +1732,8 @@ func _build_tower_horizontal_corridor(
 	)
 	connector.visible = false
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
-	$GeneratedCorridors.add_child(connector)
+	_block("Battle").add_child(connector)
+	connector.name = "Corridor_%02d" % index
 	_corridor_by_edge[edge] = connector
 	connector.set_meta("edge_key", edge)
 	connector.set_meta("spatial_registry_position", center)
@@ -3136,7 +3183,10 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	room.set_meta("boss_content_id", str(record.get("boss_content_id", "")))
 	room.set_meta("arena_asset_id", str(record.get("arena_asset_id", "")))
 	room.set_meta("arena_scene", str(record.get("arena_scene", "")))
-	$GeneratedRooms.add_child(room)
+	var floor_index := int(record.get("floor_index", 0))
+	room.set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
+	_room_block_for_floor(floor_index).add_child(room)
+	room.name = str(record["id"])
 	_rooms.append(room)
 	_room_by_id[room.room_id] = room
 	room.player_entered.connect(_on_room_entered)
@@ -3276,7 +3326,7 @@ func _install_facilities() -> void:
 	var facility_floor := _room_by_id.get("facility") as DungeonRoom3D
 	if facility_floor == null or not _facility_nodes.is_empty():
 		return
-	_facility_art_layout = get_node_or_null("美术可编辑层/基地99层_美术布置层") as Node3D
+	_facility_art_layout = get_node_or_null("Blocks/Base/Art") as Node3D
 	if _facility_art_layout != null:
 		# 美术布置层及其设施的position/rotation/scale是作者最终值。
 		# reparent(false)会保留局部Transform；禁止再归零或按房间中心校正。
@@ -3286,7 +3336,7 @@ func _install_facilities() -> void:
 	if _facility_art_layout == null:
 		push_error("基地美术布置层实例化失败")
 		return
-	_facility_art_layout.name = "基地99层_美术布置层"
+	_facility_art_layout.name = "Art"
 	if _facility_art_layout.get_parent() == null:
 		facility_floor.add_child(_facility_art_layout)
 	_facility_art_layout.visible = true
@@ -3429,7 +3479,8 @@ func _create_standalone_elevator(
 	bay.set_meta("standalone_facility", true)
 	bay.set_meta("floor_number", floor_number)
 	bay.set_meta("access_room_id", access_room_id)
-	$GeneratedCorridors.add_child(bay)
+	_room_block_for_floor(100 - floor_number).add_child(bay)
+	bay.name = "Elevator_%dF" % floor_number
 
 	var pad_material := StandardMaterial3D.new()
 	pad_material.albedo_color = Color(0.035, 0.12, 0.15)

@@ -59,6 +59,7 @@ smoke_scenes=(
   verify_3d_only_project_structure
   verify_player3d_avatar_bounds
   verify_tower_grid_component_alignment
+  verify_tower_level_blocks
   verify_tower_lighting_wall_combat_regressions
   verify_full_3d_game_flow
 )

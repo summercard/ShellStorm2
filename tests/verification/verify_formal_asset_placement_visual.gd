@@ -12,7 +12,7 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	var world := TOWER.instantiate() as TowerDescent3D
 	var authored_layout := world.get_node_or_null(
-		"美术可编辑层/基地99层_美术布置层"
+		"Blocks/Base/Art"
 	) as Node3D
 	var authored_layout_transform := authored_layout.transform if authored_layout != null else Transform3D.IDENTITY
 	var authored_facility_transforms := _capture_facility_transforms(authored_layout)
@@ -30,7 +30,7 @@ func _ready() -> void:
 	var wardrobe := _find_facility(world, "avatar_wardrobe")
 	var workshop_stool := world.find_child("维修圆凳_独立装饰", true, false) as Node3D
 	var mission_chair := world.find_child("战术指挥椅_独立装饰", true, false) as Node3D
-	var art_layout := world.find_child("基地99层_美术布置层", true, false) as Node3D
+	var art_layout := world.find_child("Art", true, false) as Node3D
 	_check(
 		vending != null and mission != null and workshop != null and vault != null and fate_collection != null and recovery != null and wardrobe != null,
 		"基础基地设施未全部实例化",

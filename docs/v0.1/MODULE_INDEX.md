@@ -13,7 +13,7 @@
 | WEAPON | `BlueprintRegistry/ItemRegistry`内容→`WeaponInstance`→装配树→`WeaponModel3D/Projectile3D` | 部分 | 统一命中上下文、内容导入与全局所有权账本未闭环；需先明确节点树的生命周期 |
 | INVENTORY | `InventoryModule/InsuranceModule`格位→`EquipmentTransactionService`换装→玩家实例槽 | 换装事务可独立，其余部分 | 场景仍编排卸装、快捷栏、掉落、回滚；集合去重不是全局唯一账本 |
 | FATE | `FateCardPresets/TarotFateCatalog`→`FateCardEngine`→武器/角色/世界持有者 | 部分 | 世界执行器耦合Dungeon；48运行卡与78设计卡要持续区分 |
-| WORLD | `FloorPlanGenerator`纯计划→`RoomGraphRuntime`查询→`Dungeon3D/TowerDescent3D`装配 | 计划/查询可独立，生命周期不足 | 9572行父子编排和私有字段依赖；当前设计允许开门/卸载先于快照成功，生命周期Service仍未提取 |
+| WORLD | `FloorPlanGenerator`纯计划→`RoomGraphRuntime`查询→`Dungeon3D/TowerDescent3D`装配；`WORLD-BLOCKS`定义四区块归属 | 计划/查询可独立，生命周期不足 | 父子编排和私有字段依赖仍多；当前设计允许开门/卸载先于快照成功，生命周期Service仍未提取 |
 | ENEMY | `Enemy3D`战斗、`MonsterAIManager`调度、`EnemyIllumination3D`光照查询 | 部分 | 公共管理器及空间上下文必需；物种行为主要集中在Enemy3D |
 | ELITE | `EliteContentCatalog`静态名册→`EliteRosterService`预约/成长→`BaseData.elite_archive_records` | 部分 | 服务直接写BaseManager.data并调用私有ensure；仅1/12内容投放 |
 | BOSS | `BossContentCatalog`95/90/85定义→Enemy3D阶段→塔楼下行权限计数 | 部分 | 设计Boss钥匙ID与当前计数式授权不一致；门和持久化交接不足 |
@@ -42,7 +42,7 @@
 | WEAPON-OWNERSHIP | 完整武器实例转移 | [04](04_技术施工_战斗与局内成长.md)、[09](09_技术施工_存档结算与复活.md) | `WeaponInstance`→`EquipmentTransactionService` | `verify_equipment_transaction_service`、`verify_weapon_instance_contract_matrix` | 可用替身验证；全局所有权仍待补 |
 | INVENTORY-SLOTS | 背包、保险、快捷物品、扩容 | [04](04_技术施工_战斗与局内成长.md) | `InventoryModule/InsuranceModule`→Dungeon→InventoryUI | `verify_backpack_equipment_flow`、`verify_finite_ammo_flow` | 有规范与历史；场景编排分散 |
 | FATE-RULES | 48运行塔罗、78目标牌组、三作用域 | [14](14_技术施工_命运塔罗牌组.md)、[04](04_技术施工_战斗与局内成长.md) | `FateCardPresets/FateCardEngine/TarotFateCatalog` | `verify_tarot_fate_runtime`、`verify_celestial_fate_scope_flow` | 有设计与历史；新增30张未施工 |
-| WORLD-PLAN | 纯数据楼层/房间图 | [05](05_技术施工_关卡生成与爬楼.md) | `FloorPlanGenerator/RoomGraphRuntime` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services` | 可独立；缺领域版本与完整门事务 |
+| WORLD-PLAN | 纯数据楼层/房间图与四区块归属 | [05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks` | 可独立；缺领域版本与完整门事务 |
 | WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | 当前契约与工程一致：内存生成/验证完成后开门，不等待快照写盘；未保存状态可在重启后丢失 |
 | WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md) | `TowerDescent3D._finalize_airlock_commit` | `verify_three_segment_tower_generation_flow` | 当前契约与工程一致：前门交互时先关闭后侧路线并卸载旧段；无独立提交回执或跨重启保证 |
 | WORLD-LOOT | 搜索、清房钥匙、掉落与拾取 | [04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md) | `LootModule/ItemRegistry/GroundLootPickup3D` | `verify_requested_experience_upgrade_flow` | 有设计/历史；批量数值仍手工投影 |

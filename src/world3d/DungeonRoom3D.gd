@@ -447,7 +447,7 @@ func _add_runtime_detail_child(node: Node) -> void:
 func _bind_facility_presentation_light_control(starts_on: bool) -> void:
 	if room_type != "FACILITY" or _light_switch == null:
 		return
-	var art_layout := get_node_or_null("基地99层_美术布置层")
+	var art_layout := get_node_or_null("Art")
 	if art_layout == null or not art_layout.has_method("set_presentation_lighting_enabled"):
 		push_warning("基地美术自发光灯控未就绪")
 		return

@@ -68,7 +68,7 @@ def main() -> None:
         errors.append(f"unexpected current master: {latest.name}")
 
     runtime = root / "assets/art/environments/base_facility_3d/runtime"
-    layout = runtime / "env_base_facility_art_layout_top3d_v002.tscn"
+    layout = root / "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
     layout_text = layout.read_text(encoding="utf-8")
     if re.search(r'path="res://[^"]+\.glb"', layout_text):
         errors.append("art layout directly references a GLB")

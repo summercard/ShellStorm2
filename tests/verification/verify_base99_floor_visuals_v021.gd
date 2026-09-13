@@ -89,7 +89,7 @@ func _validate_runtime_placement(failures: Array[String]) -> void:
 		failures.append("旧普通地板MultiMesh仍在运行时生成")
 	if int(snapshot.get("base99_floor_rivet_instance_count", 0)) != 0:
 		failures.append("旧铆钉地板MultiMesh仍在运行时生成")
-	var visual_root := facility.get_node_or_null("基地99层_美术布置层/BlenderV021完整地板表现_仅视觉") as Node3D
+	var visual_root := facility.get_node_or_null("Art/BlenderV021完整地板表现_仅视觉") as Node3D
 	if visual_root == null:
 		failures.append("运行时基地没有挂载Blender V021完整地板表现层")
 		tower.queue_free()

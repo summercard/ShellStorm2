@@ -9,7 +9,7 @@
   "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
   "glb_sha256": "2a1006ffb9e0a725ea16fa105cf5d2fbb20b660e4e66e597a2f54c6ef3c01273",
   "runtime_wrapper": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
-  "active_art_layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
+  "active_art_layout": "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
   "export_policy": {
     "selected_game_output_only": true,
     "downward_faces_removed": 28,

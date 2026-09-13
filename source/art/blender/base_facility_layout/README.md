@@ -67,7 +67,7 @@ base_facility_layout/
 
 ## 当前正式运行入口
 
-- 美术布局：`assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn`
+- 美术布局：`assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn`
 - 墙面内容聚合：`env_base99_wall_contents_root_top3d_v003.tscn`
 - 剩余设施聚合：`env_base99_remaining_facilities_root_top3d_v004.tscn`
 - L 型楼梯：`env_base99_stair_l_z5_root_top3d_v006.tscn`

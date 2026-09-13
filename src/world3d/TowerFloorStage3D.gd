@@ -46,7 +46,7 @@ const PARAPET_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
 )
 const ROOFTOP_ART_SCENE: PackedScene = preload(
-	"res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v021.tscn"
+	"res://assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn"
 )
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
@@ -93,7 +93,10 @@ func configure(index: int, kind: String, holes: Array[String]) -> void:
 
 
 func _ready() -> void:
-	name = "TowerFloorStage_%02d_%s" % [floor_index, floor_kind.capitalize()]
+	name = "Floor_%d" % (100 - floor_index)
+	set_meta("floor_index", floor_index)
+	set_meta("floor_number", 100 - floor_index)
+	set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
 	add_to_group("tower_floor_stage_3d")
 	_build_floor()
 	_build_outer_shell()

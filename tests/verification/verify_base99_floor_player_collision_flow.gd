@@ -24,7 +24,7 @@ func _ready() -> void:
 	var old_rivet := facility.find_child("BaseFloorGrid6x6_Rivet", true, false) if facility != null else null
 	_expect(old_plain == null and old_rivet == null, "旧普通/铆钉地板MultiMesh仍被渲染", failures)
 	var full_floor := facility.get_node_or_null(
-		"基地99层_美术布置层/BlenderV021完整地板表现_仅视觉/一层36块完整地板_替换旧MultiMesh_仅视觉"
+		"Art/BlenderV021完整地板表现_仅视觉/一层36块完整地板_替换旧MultiMesh_仅视觉"
 	) as Node3D if facility != null else null
 	_expect(full_floor != null, "V021完整地板替换资源没有挂载", failures)
 	var replacement_surface := float(full_floor.get_meta("collision_surface_y_m", INF)) if full_floor != null else INF

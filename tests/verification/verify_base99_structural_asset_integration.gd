@@ -21,7 +21,7 @@ func _ready() -> void:
 	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
 	_expect(facility != null, "99层基地房间没有生成", failures)
 	if facility != null:
-		var layout := facility.get_node_or_null("基地99层_美术布置层/基地结构组件_可移动旋转")
+		var layout := facility.get_node_or_null("Art/基地结构组件_可移动旋转")
 		_expect(layout != null, "基地可编辑美术布局不存在", failures)
 		if layout != null:
 			_expect(layout.get_child_count() == 9 and layout.get_node_or_null("100层上层围护与24米封顶") != null, "基地结构层没有按当前账本接入九项结构资产", failures)
@@ -30,7 +30,7 @@ func _ready() -> void:
 		for asset_id in CURRENT_STRUCTURAL_IDS:
 			var replacement := _find_asset(facility, asset_id)
 			_expect(replacement != null and replacement.has_node("StaticCollision"), "当前账本结构资产未接入或缺少阻挡: %s" % asset_id, failures)
-		var floor_visuals := facility.get_node_or_null("基地99层_美术布置层/BlenderV021完整地板表现_仅视觉")
+		var floor_visuals := facility.get_node_or_null("Art/BlenderV021完整地板表现_仅视觉")
 		_expect(floor_visuals != null and floor_visuals.get_node_or_null("二层楼中楼地板面层_仅视觉") != null, "阁楼结构接入时误删了V020二楼地板", failures)
 		var underdeck_collision_count := 0
 		for body_value in facility.find_children("*", "StaticBody3D", true, false):

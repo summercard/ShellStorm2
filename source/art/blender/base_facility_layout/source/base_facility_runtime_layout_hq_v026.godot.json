@@ -1,0 +1,12 @@
+{
+  "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+  "asset_version": "v026",
+  "blender_source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
+  "godot_block": "base",
+  "godot_scene_tree": "Blocks/Base/Art",
+  "godot_runtime": "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
+  "naming_contract": "WORLD-BLOCKS-r1",
+  "updated": "2026-09-13",
+  "import_status": "not_reimported",
+  "note": "Base v026 was authored by a newer Blender version than the available 4.2 runtime. The original Blend bytes are preserved; this sidecar owns the Godot block mapping without changing Chinese collections or geometry."
+}

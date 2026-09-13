@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 ASSET = ROOT / "assets/art/environments/rooftop_shelter_3d"
 SOURCE = ASSET / "runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v019.tscn"
-TARGET = ASSET / "runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v021.tscn"
+TARGET = ROOT / "assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn"
 REPORT = ASSET / "reports/collision_layout_v021.json"
 NODE_RE = re.compile(r'^\[node name="([^"]+)" type="([^"]+)"(?: parent="([^"]+)")?\]$')
 PROXY_RE = re.compile(r'^metadata/source_proxy = "([^"]+)"$')

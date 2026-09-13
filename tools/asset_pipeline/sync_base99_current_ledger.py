@@ -70,10 +70,10 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
             master + "; source/art/blender/base_facility_layout/export/v025/base_facility_runtime_layout_hq-v025-door_wall_palette.blend; assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x9/env_base99_wall_door_5x9_visual_top3d_v003.glb",
         ),
         "ENV-BASE99-ART-LAYOUT-3D": (
-            "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
+            "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
             "v002",
             "原型已接入",
-            master + "; assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn",
+            master + "; assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
         ),
         "ENV-TOWER-CORNER-L-5M": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",

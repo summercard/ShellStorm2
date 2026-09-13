@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 EXPORT_MANIFEST = ROOT / 'source/art/blender/base_facility_layout/export/v023/export_manifest.json'
 RUNTIME = ROOT / 'assets/art/environments/base_facility_3d/runtime'
+ZONE_RUNTIME = ROOT / 'assets/art/environments/tower_zones/base/runtime'
 REMAINING = RUNTIME / 'env_base99_remaining_facilities_v021'
 
 data = json.loads(EXPORT_MANIFEST.read_text())
@@ -86,7 +87,7 @@ configure_shared_palette_import(stair['glb'])
 
 # Keep historical layout v001 intact; v002 is the current gameplay layout with the v023 references.
 layout_old = RUNTIME / 'env_base_facility_art_layout_top3d_v001.tscn'
-layout_new = RUNTIME / 'env_base_facility_art_layout_top3d_v002.tscn'
+layout_new = ZONE_RUNTIME / 'zone_base_v002.tscn'
 text = layout_old.read_text()
 text = replace_required(text, 'env_base99_structural_v021/northwest_l_stair/northwest_l_stair_root_top3d_v001.tscn', 'env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn', layout_old)
 text = replace_required(text, 'env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn', 'env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn', layout_old)

@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://daktvsf2n2llc" path="res://src/world3d/TowerDescent3D.gd" id="2_tower"]
 [ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
 [ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
-[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v002.tscn" id="5_base_art"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn" id="5_base_art"]
 
 [sub_resource type="Environment" id="Environment_editor_runtime_match"]
 background_mode = 1
@@ -80,48 +80,78 @@ layout_mode = 2
 [node name="PauseOverlay" parent="HUD" index="7"]
 layout_mode = 3
 
-[node name="美术可编辑层" type="Node3D" parent="." index="9" unique_id=1638559547]
-metadata/usage = "编辑器中直接调整；运行时由TowerDescent3D隐藏并桥接到对应生成楼层"
+[node name="Blocks" type="Node3D" parent="." index="9" unique_id=1638559547]
+metadata/naming_contract = "WORLD-BLOCKS-r1"
+metadata/runtime_owner = "TowerDescent3D"
 
-[node name="基地99层_美术布置层" parent="美术可编辑层" index="0" unique_id=355486011 instance=ExtResource("5_base_art")]
+[node name="Rooftop" type="Node3D" parent="Blocks" index="0"]
+metadata/block_id = "rooftop"
+metadata/display_name = "天台区"
+metadata/floor_range = "100F"
+metadata/asset_ids = Array[String](["ENV-ROOFTOP-SHELTER-90X80"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v021.blend"])
 
-[node name="北墙边界" parent="美术可编辑层/基地99层_美术布置层/编辑器参考_运行时自动隐藏" index="1"]
+[node name="Base" type="Node3D" parent="Blocks" index="1"]
+metadata/block_id = "base"
+metadata/display_name = "基地区"
+metadata/floor_range = "99F"
+metadata/asset_ids = Array[String](["ENV-BASE99-ART-LAYOUT-3D"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"])
+
+[node name="Art" parent="Blocks/Base" index="0" unique_id=355486011 instance=ExtResource("5_base_art")]
+
+[node name="北墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, -15)
 
-[node name="南墙边界" parent="美术可编辑层/基地99层_美术布置层/编辑器参考_运行时自动隐藏" index="2"]
+[node name="南墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 15)
 
-[node name="西墙边界" parent="美术可编辑层/基地99层_美术布置层/编辑器参考_运行时自动隐藏" index="3"]
+[node name="西墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
 
-[node name="东墙边界" parent="美术可编辑层/基地99层_美术布置层/编辑器参考_运行时自动隐藏" index="4"]
+[node name="东墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
 
-[node name="远征情报终端" parent="美术可编辑层/基地99层_美术布置层/设施交互节点_可移动旋转" index="0"]
+[node name="远征情报终端" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="0"]
 transform = Transform3D(0.7999955, -0.0017910304, 0.0020135036, 0.0017900532, 0.7999979, 0.00039103843, -0.0020143723, -0.00038653857, 0.7999974, 7.2398195, 0, -30.79027)
 
-[node name="枪械工坊" parent="美术可编辑层/基地99层_美术布置层/设施交互节点_可移动旋转" index="1"]
+[node name="枪械工坊" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="1"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 2.8696804, 0, -31.346287)
 
-[node name="维修圆凳_独立装饰" parent="美术可编辑层/基地99层_美术布置层/场景装饰_可自由增删" index="0"]
+[node name="维修圆凳_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="0"]
 transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, -0.3827412, 0, -2.6486073)
 
-[node name="战术指挥椅_独立装饰" parent="美术可编辑层/基地99层_美术布置层/场景装饰_可自由增删" index="1"]
+[node name="战术指挥椅_独立装饰" parent="Blocks/Base/Art/场景装饰_可自由增删" index="1"]
 transform = Transform3D(0.47313932, 0, 0.5158868, 0, 0.7, 0, -0.5158868, 0, 0.47313932, 7.459879, 0, -1.9208963)
 
-[node name="中央冷色主灯" parent="美术可编辑层/基地99层_美术布置层/基地美术灯光_可编辑" index="0"]
+[node name="中央冷色主灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.5, 0)
 
-[node name="西北紫色轮廓灯" parent="美术可编辑层/基地99层_美术布置层/基地美术灯光_可编辑" index="1"]
+[node name="西北紫色轮廓灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.5, 3.4, -8.5)
 
-[node name="东南暖色轮廓灯" parent="美术可编辑层/基地99层_美术布置层/基地美术灯光_可编辑" index="2"]
+[node name="东南暖色轮廓灯" parent="Blocks/Base/Art/基地美术灯光_可编辑" index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.5, 3.4, 8.5)
 
-[node name="99层电梯锚点" parent="美术可编辑层/基地99层_美术布置层/玩法锚点_只移动不删除" index="0"]
+[node name="99层电梯锚点" parent="Blocks/Base/Art/玩法锚点_只移动不删除" index="0"]
 transform = Transform3D(-1, 0, -3.2584137e-07, 0, 1, 0, 3.2584137e-07, 0, -1, 9, 0, 11.6)
 
-[node name="其它楼层美术模板_预留" type="Node3D" parent="美术可编辑层" index="1" unique_id=693240615]
-metadata/usage = "后续楼层美术子场景放在这里，并由对应楼层锚点桥接；当前运行时隐藏"
+[node name="Battle" type="Node3D" parent="Blocks" index="2" unique_id=693240615]
+metadata/block_id = "battle"
+metadata/display_name = "首关战斗区"
+metadata/floor_range = "98F-95F"
+metadata/asset_ids = Array[String](["ENV-TOWER-DESCENT-KIT-3D"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v011.blend"])
 
-[editable path="美术可编辑层/基地99层_美术布置层"]
+[node name="Stairs" type="Node3D" parent="Blocks" index="3"]
+metadata/block_id = "stairs"
+metadata/display_name = "楼梯区"
+metadata/floor_range = "100F-99F;99F-98F"
+metadata/asset_ids = Array[String](["ENV-TOWER-STAIRWELL-ROOFTOP-12M", "ENV-TOWER-STAIRWELL-GENERIC-12M"])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v011.blend"])
+
+[editable path="Blocks/Base/Art"]

@@ -175,7 +175,7 @@ func _validate_base_perimeter_wall_palette(root: Node, failures: Array[String]) 
 
 func _validate_base100_upper_shell(facility: DungeonRoom3D, failures: Array[String]) -> void:
 	var shell := facility.get_node_or_null(
-		"基地99层_美术布置层/基地结构组件_可移动旋转/100层上层围护与24米封顶"
+		"Art/基地结构组件_可移动旋转/100层上层围护与24米封顶"
 	) as Node3D
 	if shell == null:
 		failures.append("可编辑布局tscn缺少100层上层围护与24米封顶")
@@ -239,7 +239,7 @@ func _validate_base99_camera_collisions(root: Node, failures: Array[String]) -> 
 
 
 func _validate_legacy_structures_removed(facility: DungeonRoom3D, failures: Array[String]) -> void:
-	var layout := facility.get_node_or_null("基地99层_美术布置层/基地结构组件_可移动旋转") as Node3D
+	var layout := facility.get_node_or_null("Art/基地结构组件_可移动旋转") as Node3D
 	if layout == null:
 		failures.append("基地结构组件没有进入可编辑美术布局tscn")
 		return
@@ -254,7 +254,7 @@ func _validate_legacy_structures_removed(facility: DungeonRoom3D, failures: Arra
 	for node_name in required_v021:
 		if layout.get_node_or_null(node_name) == null:
 			failures.append("可编辑布局缺少V021结构资产: %s" % node_name)
-	var floor_visuals := facility.get_node_or_null("基地99层_美术布置层/BlenderV021完整地板表现_仅视觉")
+	var floor_visuals := facility.get_node_or_null("Art/BlenderV021完整地板表现_仅视觉")
 	if floor_visuals == null or floor_visuals.get_node_or_null("二层楼中楼地板面层_仅视觉") == null:
 		failures.append("接入阁楼结构时误删了Blender V020新增二楼地板表现")
 

@@ -61,5 +61,5 @@ v017沿用v016最终布局：通信高台固定在东北角`Rect2(30.5,34,9.5,10
 - 源文件：`source/env_rooftop_shelter_90x80m_top3d_v021.blend`；保留 v017、v020 作为历史回滚，不覆盖原文件。
 - `01_北侧生活棚区`、`02_东北通信高台区`、`03_西北能源与储水区`、`04_北侧种植园区`均以各自区域平面中心作为根节点枢轴；移动或旋转区域根时，该区视觉组件与 Blender 阻挡代理一同跟随。
 - 方位遵循本文件的空间方位契约：Blender `+Y` 为北。当前布局为：01 北侧中段、02 北侧东段、03 东侧偏南、04 北侧西段；01、02 旋转 180°，04 旋转 90°。
-- 修复了生活棚风铃/小风车及四组太阳能板的错误子级局部偏移；正式视觉输出为`runtime/env_rooftop_shelter_90x80m_facilities_v021.glb`，包装场景为`runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v021.tscn`。
+- 修复了生活棚风铃/小风车及四组太阳能板的错误子级局部偏移；正式视觉输出仍为`runtime/env_rooftop_shelter_90x80m_facilities_v021.glb`，简化命名后的包装场景为`../tower_zones/rooftop/runtime/zone_rooftop_v021.tscn`。
 - GLB SHA-256：`5b5ae47b6407db41a357e20f1ec14f2ba696c07efa101684803d915724ee0bbf`。包装场景由同一份 Blender 的82个阻挡代理生成对应碰撞，100F运行引用已在`src/world3d/TowerFloorStage3D.gd`切换至 v021。GLB仅包含五个设施区域；Godot原生天台地板、围栏、门洞与外围碰撞继续保留。
