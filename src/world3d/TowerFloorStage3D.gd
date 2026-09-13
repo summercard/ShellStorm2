@@ -37,7 +37,7 @@ const WALL_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn"
 )
 const BASE99_CORNER_L_VISUAL: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb"
+	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb"
 )
 const PARAPET_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m_v001.tscn"
@@ -272,7 +272,7 @@ func _outer_world_rect() -> Rect2:
 
 
 func _outer_wall_height() -> float:
-	return ROOFTOP_PARAPET_HEIGHT if floor_index == 0 else 9.0
+	return ROOFTOP_PARAPET_HEIGHT if floor_index == 0 else TowerGeometry3D.WALL_LOGICAL_HEIGHT_M
 
 
 func _enabled_collision_shape_count(root: Node) -> int:
@@ -427,7 +427,7 @@ func _build_outer_shell() -> void:
 	var outer_rect := _outer_world_rect()
 	var outer_max := outer_rect.end
 	var wall_height := _outer_wall_height()
-	# 普通墙视觉网格高8.9m且以中心为原点；按底面反算其中心高度。
+	# 普通墙视觉网格高11.9m且以中心为原点；按底面反算其中心高度。
 	# 屋顶矮墙继续使用0.75m运行时缩放后的中心高度。
 	var visual_wall_center_y := (
 		wall_height * 0.5

@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_visual_top3d_v003.glb" id="1_visual"]
+
+[sub_resource type="ConvexPolygonShape3D" id="RampCollision"]
+points = PackedVector3Array(6.45, 4.88, -8.6, 6.45, 5.08, -8.6, 14.95, 11.88, -8.6, 14.95, 12.08, -8.6, 6.45, 4.88, -6.4, 6.45, 5.08, -6.4, 14.95, 11.88, -6.4, 14.95, 12.08, -6.4)
+
+[sub_resource type="BoxShape3D" id="RailCollision"]
+size = Vector3(10.9, 1.1, 0.08)
+
+[node name="51_东侧12米上行过渡楼梯_资产包" type="Node3D"]
+metadata/asset_id = "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/wall_height12/env_base99_east_upper_transition_stair_12m_source_v001.blend"
+metadata/collision_policy = "continuous_walkable_ramp_plus_side_rails"
+metadata/placement_policy = "baked facility coordinates; root remains at origin"
+metadata/start_height_m = 5.0
+metadata/target_height_m = 12.0
+metadata/step_count = 20
+metadata/step_rise_m = 0.35
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="StaticCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="WalkableRamp" type="CollisionShape3D" parent="StaticCollision"]
+shape = SubResource("RampCollision")
+
+[node name="RailNorth" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(10.7, 9.05, -8.56)
+rotation = Vector3(0, 0, -0.697)
+shape = SubResource("RailCollision")
+
+[node name="RailSouth" type="CollisionShape3D" parent="StaticCollision"]
+position = Vector3(10.7, 9.05, -6.44)
+rotation = Vector3(0, 0, -0.697)
+shape = SubResource("RailCollision")

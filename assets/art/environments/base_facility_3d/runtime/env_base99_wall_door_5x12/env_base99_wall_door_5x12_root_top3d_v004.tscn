@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d_v004.glb" id="1_visual"]
+
+[node name="基地99层带门墙体5x12米" type="Node3D"]
+metadata/asset_id = "ENV-BASE99-WALL-DOOR-5X12"
+metadata/logic_id = "base99_wall_door_5x12"
+metadata/asset_category = "environment_module"
+metadata/component = "wall_door"
+metadata/grid_unit_m = 5.0
+metadata/dimensions_m = Vector3(5, 12, 1.1712)
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/door_clear_width_m = 2.2
+metadata/door_clear_height_m = 2.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/visual_only = true
+metadata/collision_owner = "DungeonRoom3D + RoomDoor3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/wall_height12/env_base99_wall_door_5x12_source_v004.blend"
+metadata/visual_revision = "v021_shared_east_west_door_visuals_height12"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

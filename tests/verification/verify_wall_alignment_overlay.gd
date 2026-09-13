@@ -35,7 +35,7 @@ func _ready() -> void:
 	add_child(overlay_root)
 
 	# 战斗层
-	const COMBAT_Y := -18.0
+	const COMBAT_Y := -24.0
 	const FLOOR_TOP := COMBAT_Y + 0.3
 
 	# 1. 画 5m 网格覆盖整个战斗层
@@ -103,8 +103,8 @@ func _draw_grid(root: Node3D, y: float, count: int, unit: float) -> void:
 
 
 func _draw_hole_marker(root: Node3D, center: Vector2, y: float) -> void:
-	# 缺口是 10m × 9m 的矩形（沿墙面 10m, 垂直墙面由楼板决定）
-	# 这里画一个 10m × 9m 的 wireframe 方框，中心在 hole center, 顶部 y+9, 底部 y
+	# 缺口是 10m × 12m 的矩形（沿墙面 10m, 垂直墙面由楼板决定）
+	# 这里画一个 10m × 12m 的 wireframe 方框，中心在 hole center, 顶部 y+12, 底部 y
 	var im := ImmediateMesh.new()
 	var mi := MeshInstance3D.new()
 	mi.mesh = im
@@ -115,16 +115,16 @@ func _draw_hole_marker(root: Node3D, center: Vector2, y: float) -> void:
 	mi.material_override = mat
 	mi.position = Vector3(center.x, y, center.y)
 	# 假设是 west/east 墙（沿 z 方向），南北墙翻转即可
-	# 为简化，我们画一个通用 10m × 9m 的盒子，绕 y 旋转
+	# 为简化，我们画一个通用 10m × 12m 的盒子，绕 y 旋转
 	# 实际上要先判断缺口在哪个方向：
 	# north/south 墙：墙在 ±Z, 缺口宽沿 x（10m）, 沿 z 是墙厚（10m 用作 span 标记也可）
 	# west/east 墙：墙在 ±X, 缺口宽沿 z（10m）
-	# 我们用最简标记：画一个 10m × 9m × 0.5m 的盒子，中心对齐墙外侧
+	# 我们用最简标记：画一个 10m × 12m × 0.5m 的盒子，中心对齐墙外侧
 	# 让盒子略在墙外（+0.5m 朝外方向）
 	var wall_thickness := 0.5
 	var half_x := 5.0  # 沿缺口宽度方向（默认 x）
 	var half_z := wall_thickness * 0.5  # 沿墙面方向（厚度）
-	var half_y := 9.0 * 0.5
+	var half_y := 12.0 * 0.5
 	im.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 	# 8 个顶点
 	var corners: Array[Vector3] = [
@@ -164,7 +164,7 @@ func _draw_wall_lines(root: Node3D, y: float) -> void:
 	mi.position = Vector3.ZERO
 	im.surface_begin(Mesh.PRIMITIVE_LINES, mat)
 	var boundary := 125.0
-	var top := 9.0
+	var top := 12.0
 	# 4 条边
 	var corners_2d: Array[Vector2] = [
 		Vector2(-boundary, -boundary),

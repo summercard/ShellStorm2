@@ -1,6 +1,8 @@
 extends Node
 ## v0.1 98—95层搜打撤、30m基地、独立电梯、全局光照、窄门与全息HUD验收。
 
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
+
 
 func _ready() -> void:
 	var failures: Array[String] = []
@@ -69,7 +71,7 @@ func _ready() -> void:
 		"99层基地西门没有按5m组件边界保留15m入口走廊",
 		failures
 	)
-	_expect(is_equal_approx(float(snapshot.get("floor_height", 0.0)), 9.0), "层高不是9m", failures)
+	_expect(is_equal_approx(float(snapshot.get("floor_height", 0.0)), TOWER_GEOMETRY.FLOOR_HEIGHT_M), "层高不是12m", failures)
 	_expect(int(snapshot.get("combat_floor_count", 0)) == 4, "首批探索层不是98—95四层", failures)
 	_expect(
 		int(snapshot.get("rooms_per_normal_combat_floor", 0)) == 16
@@ -325,8 +327,8 @@ func _ready() -> void:
 	_expect(heights.size() == 6, "物理高度层数不是六层", failures)
 	for index in range(heights.size()):
 		_expect(
-			is_equal_approx(float(heights[index]), -9.0 * float(index)),
-			"第%d个物理层高度不在9m网格" % index,
+			is_equal_approx(float(heights[index]), -TOWER_GEOMETRY.FLOOR_HEIGHT_M * float(index)),
+			"第%d个物理层高度不在12m网格" % index,
 			failures
 		)
 
@@ -363,7 +365,7 @@ func _ready() -> void:
 		failures
 	)
 
-	# 五段楼梯都必须共享9m U形模板契约，通行宽度/折返位移一致并有三面满高墙。
+	# 五段楼梯都必须共享12m U形模板契约，通行宽度/折返位移一致并有四面满高墙。
 	var first_stair: Node3D = null
 	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():
 		var connector := connector_value as Node3D
@@ -422,7 +424,7 @@ func _ready() -> void:
 	if first_stair != null:
 		_expect(
 			str(first_stair.get_meta("stair_asset_id", ""))
-			== "ENV-TOWER-STAIRWELL-ROOFTOP-9M",
+			== "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
 			"楼顶没有使用Blender特殊楼梯资产",
 			failures
 		)
@@ -510,7 +512,7 @@ func _ready() -> void:
 		)
 		_expect(descended, "99层下端门开启后角色仍不能通过", failures)
 		_expect(
-			absf(tower.player.global_position.y + 9.0) <= 0.65,
+			absf(tower.player.global_position.y + TOWER_GEOMETRY.FLOOR_HEIGHT_M) <= 0.65,
 			"角色走到底后没有落在99层高度",
 			failures
 		)
@@ -712,7 +714,7 @@ func _ready() -> void:
 	tower.force_enter_room_for_test("floor_01_hub")
 	await get_tree().process_frame
 	await get_tree().physics_frame
-	_expect(is_equal_approx(hub98.global_position.y, -18.0), "98层房间坐标不是Y=-18m", failures)
+	_expect(is_equal_approx(hub98.global_position.y, -24.0), "98层房间坐标不是Y=-24m", failures)
 	_expect(tower.player.combat_enabled, "进入98层战斗枢纽后没有恢复战斗输入", failures)
 	_expect(_count_room_enemies(tower, "floor_01_hub") > 0, "98层战斗房没有刷怪", failures)
 	snapshot = tower.get_tower_snapshot()
@@ -993,7 +995,7 @@ func _validate_combat_floor_layouts(
 			"第%d物理层未通过主路、支线或面积预算验收" % physical_floor,
 			failures
 		)
-		var floor_y := -9.0 * float(physical_floor)
+		var floor_y := -TOWER_GEOMETRY.FLOOR_HEIGHT_M * float(physical_floor)
 		var floor_records: Array[Dictionary] = []
 		for record_value in records:
 			var record := record_value as Dictionary
@@ -1211,7 +1213,7 @@ func _validate_atomic_floor_generation(
 		var floor_data := floor_value as Dictionary
 		if is_equal_approx(
 			float(floor_data.get("height", INF)),
-			-9.0 * float(floor_index)
+			-TOWER_GEOMETRY.FLOOR_HEIGHT_M * float(floor_index)
 		):
 			floor_room_ids = floor_data.get("room_ids", []) as Array
 			break
@@ -1468,7 +1470,7 @@ func _validate_camera_lower_wall_lift(
 	blocker.set_meta("camera_lower_wall", true)
 	var collision := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
-	shape.size = Vector3(4.0, 9.0, 0.4)
+	shape.size = Vector3(4.0, TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M, 0.4)
 	collision.shape = shape
 	blocker.add_child(collision)
 	var blocker_visual := MeshInstance3D.new()
@@ -1578,7 +1580,7 @@ func _validate_camera_lower_wall_lift(
 	side_blocker.collision_mask = 0
 	var side_collision := CollisionShape3D.new()
 	var side_shape := BoxShape3D.new()
-	side_shape.size = Vector3(0.4, 9.0, 4.0)
+	side_shape.size = Vector3(0.4, TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M, 4.0)
 	side_collision.shape = side_shape
 	side_blocker.add_child(side_collision)
 	tower.add_child(side_blocker)

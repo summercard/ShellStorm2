@@ -4,7 +4,7 @@ const MEZZANINE_ID := "ENV-BASE99-MEZZANINE-20X10-Z5"
 const UNDERDECK_ID := "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER"
 const CURRENT_STRUCTURAL_IDS := [
 	"ENV-BASE99-STRUCTURAL-V021::east_mezzanine_structure",
-	"ENV-BASE99-STRUCTURAL-V021::east_upper_transition_stair",
+	"BPK-BASE99-EAST-UPPER-TRANSITION-STAIR",
 	"ENV-BASE99-STAIR-L-Z5",
 	"ENV-BASE99-STRUCTURAL-V021::underdeck_sheet_blocker",
 ]
@@ -24,7 +24,7 @@ func _ready() -> void:
 		var layout := facility.get_node_or_null("基地99层_美术布置层/基地结构组件_可移动旋转")
 		_expect(layout != null, "基地可编辑美术布局不存在", failures)
 		if layout != null:
-			_expect(layout.get_child_count() == 9 and layout.get_node_or_null("100层上层围护与18米封顶") != null, "基地结构层没有按当前账本接入九项结构资产", failures)
+			_expect(layout.get_child_count() == 9 and layout.get_node_or_null("100层上层围护与24米封顶") != null, "基地结构层没有按当前账本接入九项结构资产", failures)
 		_expect(_find_asset(facility, MEZZANINE_ID) == null, "基地仍实例化旧阁楼资产", failures)
 		_expect(_find_asset(facility, UNDERDECK_ID) == null, "基地仍实例化旧13号阁楼下铁皮包裹区", failures)
 		for asset_id in CURRENT_STRUCTURAL_IDS:

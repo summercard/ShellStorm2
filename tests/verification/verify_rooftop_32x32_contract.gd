@@ -102,7 +102,7 @@ func _verify_facility(snapshot: Dictionary, failures: Array[String]) -> void:
 	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 250.0), "99层地板边长被错误修改", failures)
 	_expect(int(snapshot.get("outer_grid_count", -1)) == 32, "99层外墙被意外缩小", failures)
 	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 160.0), "99层外墙边长被意外改变", failures)
-	_expect(is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 9.0), "99层外墙高度被意外改变", failures)
+	_expect(is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 12.0), "99层外墙不是12米", failures)
 
 
 func _verify_combat_floor(snapshot: Dictionary, failures: Array[String]) -> void:

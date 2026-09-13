@@ -21,7 +21,7 @@ func _verify_stage_patch_contract(failures: Array[String]) -> void:
 	add_child(stage)
 	await get_tree().process_frame
 	stage.set_render_state(false, false)
-	stage.set_protected_floor_patch(Vector3(2.5, -9.0, 2.5), true)
+	stage.set_protected_floor_patch(Vector3(2.5, -12.0, 2.5), true)
 	var snapshot := stage.get_snapshot()
 	_expect(bool(snapshot.get("floor_visible", false)), "流送调用隐藏了完整楼板", failures)
 	_expect(bool(snapshot.get("outer_visible", false)), "流送调用隐藏了塔楼外圈墙", failures)

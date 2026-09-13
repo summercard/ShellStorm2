@@ -1,5 +1,5 @@
 extends Node
-## 灯光分层、9m墙、南墙摄像机标记、隐藏连接器碰撞和刷怪软锁综合回归。
+## 灯光分层、12m墙、南墙摄像机标记、隐藏连接器碰撞和刷怪软锁综合回归。
 
 const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
 const ENEMY_SCENE: PackedScene = preload(
@@ -35,7 +35,7 @@ func _ready() -> void:
 	tower.queue_free()
 	await get_tree().process_frame
 	if failures.is_empty():
-		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: flashlight shadows, 9m walls, tagged upper/lower stair slab camera clamp, ordinary-floor isolation and hostile spawning pass")
+		print("TOWER_LIGHTING_WALL_COMBAT_REGRESSIONS_OK: flashlight shadows, 12m walls, tagged upper/lower stair slab camera clamp, ordinary-floor isolation and hostile spawning pass")
 		get_tree().quit(0)
 		return
 	for failure in failures:
@@ -358,8 +358,8 @@ func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -
 				continue
 			var world_aabb := mesh.global_transform * mesh.get_aabb()
 			var room_floor_y := room.global_position.y
-			if world_aabb.position.y < room_floor_y - 0.02 or world_aabb.end.y > room_floor_y + 9.02:
-				failures.append("Wall component exceeds the 0-9m floor envelope: %s" % mesh.get_path())
+			if world_aabb.position.y < room_floor_y - 0.02 or world_aabb.end.y > room_floor_y + 12.02:
+				failures.append("Wall component exceeds the 0-12m floor envelope: %s" % mesh.get_path())
 			elif world_aabb.size.y < 6.45 and "Lintel" not in mesh.name:
 				failures.append("Wall component is not full-height: %s height=%.2f" % [mesh.get_path(), world_aabb.size.y])
 			if not mesh.visible or mesh.transparency > 0.001:

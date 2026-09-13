@@ -23,7 +23,7 @@ func _ready() -> void:
 	if not far_enemy.is_runtime_ai_active():
 		failures.append("屏幕外休眠怪物受击后没有立即激活")
 
-	var other_floor := _make_sleeping_enemy(Vector3(2.0, -9.0, 0.0))
+	var other_floor := _make_sleeping_enemy(Vector3(2.0, -12.0, 0.0))
 	if other_floor.activate_from_player_proximity(player, 38.0):
 		failures.append("预激活跨越楼板启动了其他楼层怪物")
 

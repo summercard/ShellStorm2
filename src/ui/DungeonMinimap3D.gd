@@ -1,5 +1,7 @@
 class_name DungeonMinimap3D
 extends Control
+
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 ## 实时战术小地图：以当前楼层 AABB 为整张地图画布。
 ## 房间/走廊/门全部按真实墙体位置画蓝色线段；玩家居中（雷达模式）或全图铺开。
 ## 敌人红点、楼层堆叠、当前房间脉冲高亮保留。
@@ -756,7 +758,7 @@ func _contains_floor_height(value: float) -> bool:
 
 func _floor_label() -> String:
 	if _has_multiple_floors:
-		return "%dF" % int(round(100.0 + _current_floor_y / 9.0))
+		return "%dF" % int(round(100.0 + _current_floor_y / TOWER_GEOMETRY.FLOOR_HEIGHT_M))
 	return "LIVE"
 
 

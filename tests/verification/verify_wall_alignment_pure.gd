@@ -10,7 +10,7 @@ const MAP_SIZE := GRID_UNIT * GRID_COUNT  # 250
 const MAP_HALF := MAP_SIZE * 0.5  # 125
 const WALL_DOOR_GAP_HALF_WIDTH := 5.0
 const WALL_THICKNESS := 0.30
-const WALL_HEIGHT := 9.0
+const WALL_HEIGHT := 12.0
 
 # 4 个缺口中心（必须落在 5m 网格上 = 5*(n+0.5)）
 const HOLE_CENTERS := {
@@ -111,7 +111,7 @@ func _build_floor(root: Node3D) -> void:
 
 
 func _build_outer_shell(root: Node3D) -> void:
-	# 墙用 BoxMesh，5m 宽 × 9m 高 × 0.3m 厚
+	# 墙用 BoxMesh，5m 宽 × 12m 高 × 0.3m 厚
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(GRID_UNIT, WALL_HEIGHT, WALL_THICKNESS)
 	var material := StandardMaterial3D.new()
@@ -155,7 +155,7 @@ func _build_outer_shell(root: Node3D) -> void:
 
 
 func _draw_hole_marker(root: Node3D, center: Vector3) -> void:
-	# 在缺口位置画一个绿色 wireframe 立方体（10m × 9m × 0.5m）
+	# 在缺口位置画一个绿色 wireframe 立方体（10m × 12m × 0.5m）
 	var im := ImmediateMesh.new()
 	var mi := MeshInstance3D.new()
 	mi.mesh = im

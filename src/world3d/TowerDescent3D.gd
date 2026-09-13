@@ -22,16 +22,16 @@ const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/d
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v002.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v003.glb"
 )
 const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_9m_top3d_v003.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb"
 )
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_9m_top3d_v003.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb"
 )
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85
@@ -39,7 +39,7 @@ const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
 ## 非行动下线时的固定重生点。数值使用世界坐标，集中在这里供场景微调。
 ## 100F保留原天台入口右上侧的安全落点；99F为基地房间中心。
 const ROOFTOP_LOGOUT_SPAWN := Vector3(-17.5, 0.05, 2.5)
-const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -8.95, 5.0)
+const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -FLOOR_HEIGHT + 0.05, 5.0)
 const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
@@ -68,7 +68,7 @@ const CAMERA_LOWER_WALL_MAX_RAY_HITS := 8
 const CAMERA_WALL_COLLISION_MASK := (
 	1 | GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
 )
-# 楼梯的上下两跑斜楼板会把局部净高压到9m以下。只查询导入楼梯明确
+# 楼梯的上下两跑斜楼板会压低局部净高。只查询导入楼梯明确
 # 标记的两块Flight_Walkable，不让普通房间楼板或其他碰撞改变镜头体验。
 const CAMERA_STAIR_SLAB_PROBE_START_HEIGHT_M := 1.15
 const CAMERA_STAIR_SLAB_CLEARANCE_M := 0.28
@@ -191,7 +191,7 @@ func _ready() -> void:
 	super()
 	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
-	# 镜头固定在9m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
+	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
 	player.camera.fov = CAMERA_FOV_DEG
 	_install_player_occlusion_silhouette()
@@ -1408,9 +1408,9 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 	var rooftop_variant := from_room.room_id == "start"
 	connector.set_meta(
 		"stair_asset_id",
-		"ENV-TOWER-STAIRWELL-ROOFTOP-9M"
+		"ENV-TOWER-STAIRWELL-ROOFTOP-12M"
 		if rooftop_variant
-		else "ENV-TOWER-STAIRWELL-GENERIC-9M"
+		else "ENV-TOWER-STAIRWELL-GENERIC-12M"
 	)
 	connector.set_meta("uses_blender_stairwell_visual", true)
 	connector.visible = false
@@ -1452,21 +1452,21 @@ func _add_imported_stairwell_visual(
 	var packed := STAIR_ROOFTOP_SCENE if rooftop_variant else STAIR_GENERIC_SCENE
 	var visual := packed.instantiate() as Node3D
 	visual.name = (
-		"ImportedStairwellRooftop9M"
+		"ImportedStairwellRooftop12M"
 		if rooftop_variant
-		else "ImportedStairwellGeneric9M"
+		else "ImportedStairwellGeneric12M"
 	)
 	visual.position = upper_interface
 	# 默认 local +X；旋转后精确朝向 north/south/east/west 任一核心边。
 	visual.rotation.y = atan2(-outward.z, outward.x)
 	visual.set_meta(
 		"asset_id",
-		"ENV-TOWER-STAIRWELL-ROOFTOP-9M"
+		"ENV-TOWER-STAIRWELL-ROOFTOP-12M"
 		if rooftop_variant
-		else "ENV-TOWER-STAIRWELL-GENERIC-9M"
+		else "ENV-TOWER-STAIRWELL-GENERIC-12M"
 	)
-	visual.set_meta("asset_version", "v003")
-	visual.set_meta("blender_source_version", "v010")
+	visual.set_meta("asset_version", "v001")
+	visual.set_meta("blender_source_version", "v011")
 	connector.add_child(visual)
 	var walkable_collision_count := _add_imported_stair_collisions(visual)
 	connector.set_meta("walkable_collision_count", walkable_collision_count)
@@ -1708,7 +1708,7 @@ func _build_tower_horizontal_corridor(
 	var wall_transforms: Array[Transform3D] = []
 	var wall_basis := Basis.IDENTITY if horizontal_x else Basis(Vector3.UP, PI * 0.5)
 	var wall_mesh := _get_corridor_wall_module_mesh()
-	# v002墙源网格已原生制作成8.9m，底面保持Y=0；阻挡仍为完整9m。
+	# v003墙源网格已原生制作成11.9m，底面保持Y=0；阻挡为完整12m。
 	# 水平走廊和楼梯接驳走廊必须共用该源资产，禁止再以运行时缩放凑高度。
 	var wall_floor_offset_y := (
 		-wall_mesh.get_aabb().position.y
@@ -1903,7 +1903,7 @@ func _build_stair_approach_corridor(
 			wall.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
 			wall.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
 			wall.set_meta("uses_native_wall_visual_height", true)
-			wall.set_meta("source_visual_version", "v002")
+			wall.set_meta("source_visual_version", "v003")
 			connector.add_child(wall)
 	for side_sign in [-1.0, 1.0]:
 		var side_name := (
@@ -3322,8 +3322,8 @@ func _install_base_rooftop_transit_door(facility_floor: DungeonRoom3D) -> void:
 	# 门跨越100F/99F两套流送范围，必须独立常驻；否则玩家从100F靠近时
 	# 99F父房间尚未激活，门板可见但StaticBody碰撞不会进入物理空间。
 	door.process_mode = Node.PROCESS_MODE_ALWAYS
-	# 与ENV-BASE100-UPPER-SHELL-30X30-H9的东侧门洞严格同位：本地
-	# (15, 9, -7.5)，底边处于100F门槛。RoomDoor3D的朝向沿X轴。
+	# 与ENV-BASE100-UPPER-SHELL-30X30-H12的东侧门洞严格同位：本地
+	# (15, 12, -7.5)，底边处于100F门槛。RoomDoor3D的朝向沿X轴。
 	door.position = Vector3(15.0, FLOOR_HEIGHT, -7.5)
 	door.rotation.y = PI * 0.5
 	door.set_meta("asset_id", "ENV-BASE99-DOOR-LIFT-22X25")

@@ -40,7 +40,7 @@ func _ready() -> void:
 	cam.near = 0.3
 	cam.far = 600.0
 
-	const COMBAT_Y := -18.0
+	const COMBAT_Y := -24.0
 	const FLOOR_TOP := COMBAT_Y + 0.3
 
 	# 1. 北墙缺口：正对北墙，相机高 5m，距离 10m 远

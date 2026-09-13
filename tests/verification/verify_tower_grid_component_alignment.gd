@@ -74,9 +74,9 @@ func _ready() -> void:
 	if vertical_count <= 0:
 		failures.append("tower generated no vertical connector for stair approach wall validation")
 
-	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -9.0, 2.5), failures)
-	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -9.0, 2.5), failures)
-	_validate_key_door(room_by_id, "floor_01_entry", "east", Vector3(35.0, -18.0, 2.5), failures)
+	_validate_key_door(room_by_id, "facility", "west", Vector3(-15.0, -12.0, 2.5), failures)
+	_validate_key_door(room_by_id, "facility", "east", Vector3(15.0, -12.0, 2.5), failures)
+	_validate_key_door(room_by_id, "floor_01_entry", "east", Vector3(35.0, -24.0, 2.5), failures)
 	var entry98 := room_by_id.get("floor_01_entry") as DungeonRoom3D
 	var hub98 := room_by_id.get("floor_01_hub") as DungeonRoom3D
 	var hub_is_north := hub98.position.z < entry98.position.z
@@ -87,7 +87,7 @@ func _ready() -> void:
 		room_by_id,
 		"floor_01_entry",
 		entry_hub_side,
-		Vector3(entry98.position.x, -18.0, entry98.position.z + z_sign * 7.5),
+		Vector3(entry98.position.x, -24.0, entry98.position.z + z_sign * 7.5),
 		failures
 	)
 	_validate_key_door(
@@ -96,7 +96,7 @@ func _ready() -> void:
 		hub_entry_side,
 		Vector3(
 			entry98.position.x,
-			-18.0,
+			-24.0,
 			hub98.position.z - z_sign * hub98.get_dimensions().y * 0.5
 		),
 		failures
@@ -145,13 +145,13 @@ func _validate_stairwell_5m_contract(
 			imported = child
 			break
 	if imported == null:
-		failures.append("%s has no imported stairwell v003" % connector.name)
+		failures.append("%s has no imported 12m stairwell v001" % connector.name)
 		return
 	if (
-		str(imported.get_meta("asset_version", "")) != "v003"
-		or str(imported.get_meta("blender_source_version", "")) != "v010"
+		str(imported.get_meta("asset_version", "")) != "v001"
+		or str(imported.get_meta("blender_source_version", "")) != "v011"
 	):
-		failures.append("%s does not use Blender v010 / stair asset v003" % connector.name)
+		failures.append("%s does not use Blender v011 / 12m stair asset v001" % connector.name)
 
 	var lower_aabb := AABB()
 	var upper_aabb := AABB()
@@ -173,18 +173,18 @@ func _validate_stairwell_5m_contract(
 		elif "EnclosureWall_" in mesh.name:
 			enclosure_count += 1
 			if (
-				absf(local_aabb.position.y + 9.0) > 0.001
+				absf(local_aabb.position.y + TowerGeometry3D.FLOOR_HEIGHT_M) > 0.001
 				or absf(local_aabb.end.y + 0.1) > 0.001
 			):
-				failures.append("%s enclosure wall is not the native -9.0..-0.1m visual" % mesh.name)
+				failures.append("%s enclosure wall is not the native -12.0..-0.1m visual" % mesh.name)
 	if not has_lower:
 		failures.append("%s normalized lower landing is missing" % connector.name)
 	elif (
 		absf(lower_aabb.size.x - 15.0) > 0.001
 		or absf(lower_aabb.size.z - 30.0) > 0.001
-		or absf(lower_aabb.end.y + 8.9) > 0.001
+		or absf(lower_aabb.end.y + TowerGeometry3D.WALL_VISUAL_HEIGHT_M) > 0.001
 	):
-		failures.append("%s lower landing is not 15x30m with top at -8.9m" % connector.name)
+		failures.append("%s lower landing is not 15x30m with top at -11.9m" % connector.name)
 	if not has_upper:
 		failures.append("%s unchanged upper landing is missing" % connector.name)
 	elif (
@@ -214,16 +214,16 @@ func _validate_stair_approach_wall_modules(
 			visual_count += 1
 			if (
 				not bool(node.get_meta("uses_native_wall_visual_height", false))
-				or str(node.get_meta("source_visual_version", "")) != "v002"
+				or str(node.get_meta("source_visual_version", "")) != "v003"
 			):
-				failures.append("%s stair approach wall does not use native v002 height" % node.name)
+				failures.append("%s stair approach wall does not use native v003 height" % node.name)
 			var mesh_instance := _find_first_mesh_instance(node)
 			if mesh_instance == null or mesh_instance.mesh == null:
 				failures.append("%s stair approach wall has no visual mesh" % node.name)
 				continue
 			var world_bounds := mesh_instance.global_transform * mesh_instance.mesh.get_aabb()
 			if not is_equal_approx(world_bounds.size.y, TowerGeometry3D.WALL_VISUAL_HEIGHT_M):
-				failures.append("%s stair approach visual is not 8.9m high" % node.name)
+				failures.append("%s stair approach visual is not 11.9m high" % node.name)
 			if not is_equal_approx(world_bounds.position.y, node.global_position.y):
 				failures.append("%s stair approach visual bottom left the floor datum" % node.name)
 			if (
@@ -242,9 +242,9 @@ func _validate_stair_approach_wall_modules(
 			if shape != null:
 				collision_count += 1
 				if not is_equal_approx(shape.size.y, TowerGeometry3D.WALL_LOGICAL_HEIGHT_M):
-					failures.append("%s stair approach collision is not 9m high" % node.name)
+					failures.append("%s stair approach collision is not 12m high" % node.name)
 	if visual_count > 0 and collision_count <= 0:
-		failures.append("%s stair approach lost its continuous 9m side-wall colliders" % connector.name)
+		failures.append("%s stair approach lost its continuous 12m side-wall colliders" % connector.name)
 
 
 func _find_first_mesh_instance(root: Node) -> MeshInstance3D:
@@ -369,7 +369,7 @@ func _validate_horizontal_corridor_modules(
 			wall_aabb.size.y * wall_visual_scale_y,
 			TowerGeometry3D.WALL_VISUAL_HEIGHT_M
 		):
-			failures.append("%s wall visual module is not 8.9m high" % connector.name)
+			failures.append("%s wall visual module is not 11.9m high" % connector.name)
 	if collision_bodies.size() != 2:
 		failures.append("%s must keep exactly two continuous side-wall colliders" % connector.name)
 	for body in collision_bodies:
@@ -408,7 +408,7 @@ func _find_door_wall_module(root: Node, side: String) -> Node3D:
 		root is Node3D
 		and str(root.get_meta("asset_id", "")) in [
 			"ENV-TOWER-WALL-DOOR-5M",
-			"ENV-BASE99-WALL-DOOR-5X9",
+			"ENV-BASE99-WALL-DOOR-5X12",
 		]
 		and str(root.get_meta("tower_wall_direction", "")) == side
 	):

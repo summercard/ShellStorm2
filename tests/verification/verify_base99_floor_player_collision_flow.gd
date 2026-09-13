@@ -128,7 +128,7 @@ func _support_surface_below_room_center(stage: TowerFloorStage3D, support: Stati
 	if support == null:
 		return INF
 	# facility世界中心为(0,-9,5)，换算到stage局部后检查XZ是否落入某块承重盒。
-	var local_center := stage.to_local(Vector3(0.0, -9.0, 5.0))
+	var local_center := stage.to_local(Vector3(0.0, -12.0, 5.0))
 	for child in support.get_children():
 		var collision := child as CollisionShape3D
 		if collision == null or collision.disabled:

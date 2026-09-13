@@ -1,13 +1,14 @@
 class_name Base100UpperShell3D
 extends Node3D
-## 100层上层围护与18米封顶的组合Prefab。子节点位置完全由tscn持有；
+## 100层上层围护与24米封顶的组合Prefab。子节点位置完全由tscn持有；
 ## 本脚本只提供连续结构碰撞和统一投影策略；墙体与封顶均参与真实遮光。
 
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const ROOM_SIZE := 30.0
-const WALL_BASE_Y := 9.0
-const WALL_HEIGHT := 9.0
+const WALL_BASE_Y := TOWER_GEOMETRY.FLOOR_HEIGHT_M
+const WALL_HEIGHT := TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M
 const WALL_THICKNESS := 0.30
-const ROOF_Y := 18.0
+const ROOF_Y := TOWER_GEOMETRY.FLOOR_HEIGHT_M * 2.0
 const ROOF_THICKNESS := 0.30
 const EAST_DOOR_CENTER_Z := -7.5
 const DOOR_MODULE_WIDTH := 5.0

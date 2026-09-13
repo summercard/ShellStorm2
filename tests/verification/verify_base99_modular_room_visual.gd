@@ -61,7 +61,7 @@ func _ready() -> void:
 		push_error("BASE99_VISUAL_FAIL: cannot save mezzanine edge closeup")
 		get_tree().quit(1)
 		return
-	# 从东南上方验证18米封顶和两层围护；这是独立验收图，不改变玩法相机。
+	# 从东南上方验证24米封顶和两层围护；这是独立验收图，不改变玩法相机。
 	camera.global_position = facility.global_position + Vector3(0.0, 25.0, -32.0)
 	camera.look_at(facility.global_position + Vector3(0.0, 10.0, 0.0), Vector3.UP)
 	for _frame in range(8):

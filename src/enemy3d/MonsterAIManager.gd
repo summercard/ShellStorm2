@@ -1,4 +1,6 @@
 extends Node
+
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 ## 全局怪物 AI 调度器：统一感知、记忆、目标合法性、群体令牌和可诊断快照。
 
 signal decision_changed(enemy_instance_id: int, decision: Dictionary)
@@ -516,7 +518,7 @@ func _prune_stimuli(record: Dictionary, now: int) -> void:
 
 func _update_spatial_record(enemy: CharacterBody3D, record: Dictionary) -> void:
 	record["room_id"] = str(enemy.get("room_id"))
-	record["floor_index"] = int(round(-enemy.global_position.y / 9.0))
+	record["floor_index"] = int(round(-enemy.global_position.y / TOWER_GEOMETRY.FLOOR_HEIGHT_M))
 	update_enemy_spatial(enemy)
 
 
@@ -621,7 +623,7 @@ func _new_record(enemy: Node3D) -> Dictionary:
 		"attack_token_target_id": 0,
 		"attack_token_channel": "",
 		"room_id": str(enemy.get("room_id")),
-		"floor_index": int(round(-enemy.global_position.y / 9.0)),
+		"floor_index": int(round(-enemy.global_position.y / TOWER_GEOMETRY.FLOOR_HEIGHT_M)),
 		"stimuli": [],
 		"decision_sequence": 0,
 		"decision": _empty_decision(),

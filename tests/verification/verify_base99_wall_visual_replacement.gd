@@ -3,8 +3,17 @@ extends Node
 ## 可编辑楼板/楼梯、可行走坡面，以及原有门功能没有被表现替换破坏。
 
 const WALL_SCENE: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d_v002.tscn"
 )
+const BASE_SHARED_PALETTE: Texture2D = preload(
+	"res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+)
+const BASE_PERIMETER_WALL_ASSET_IDS := [
+	"ENV-BASE99-WALL-PLAIN-5X12",
+	"ENV-BASE99-WALL-DOOR-5X12",
+	"ENV-BASE99-WALL-WINDOW-5X12",
+	"ENV-TOWER-CORNER-L-5M",
+]
 
 
 func _ready() -> void:
@@ -30,8 +39,8 @@ func _validate_standalone_wall(failures: Array[String]) -> void:
 	else:
 		var mesh_instance := meshes[0] as MeshInstance3D
 		var bounds := mesh_instance.global_transform * mesh_instance.mesh.get_aabb()
-		if not bounds.size.is_equal_approx(Vector3(5.0, 8.9, 0.36)):
-			failures.append("普通墙视觉包围盒不是5×8.9×0.36m: %s" % bounds.size)
+		if not bounds.size.is_equal_approx(Vector3(5.0, 11.9, 0.36)):
+			failures.append("普通墙视觉包围盒不是5×11.9×0.36m: %s" % bounds.size)
 		if not is_equal_approx(bounds.position.y, 0.0):
 			failures.append("普通墙底部原点没有落在y=0: %s" % bounds.position.y)
 		if mesh_instance.mesh.get_surface_count() != 2:
@@ -75,7 +84,7 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 		if int(snapshot.get("base100_wall_door_instance_count", 0)) != 1:
 			failures.append("100层东墙侧向门墙不是1块")
 		if int(snapshot.get("base100_roof_tile_count", 0)) != 36:
-			failures.append("18米封顶不是6×6共36块5米模块")
+			failures.append("24米封顶不是6×6共36块5米模块")
 		if int(snapshot.get("base100_structure_collision_count", 0)) != 1:
 			failures.append("100层上层围护没有独立连续结构碰撞")
 		if int(snapshot.get("base99_door_lift_count", 0)) != 3:
@@ -88,19 +97,21 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("基地三个门没有统一注册到同一交互分发器")
 		if int(snapshot.get("base99_mezzanine_count", 0)) != 0:
 			failures.append("基地仍保留旧二层阁楼结构实例")
-		if int(snapshot.get("base99_stair_l_count", 0)) != 0:
-			failures.append("基地仍保留旧L型楼梯实例")
+		if int(snapshot.get("base99_stair_l_count", 0)) != 1:
+			failures.append("基地原有西北L型楼梯被改变")
 		if int(snapshot.get("base99_stair_exterior_count", 0)) != 0:
 			failures.append("基地仍保留旧二楼外门小楼梯")
 		if int(snapshot.get("base99_camera_stair_slab_count", 0)) != 0:
 			failures.append("基地仍保留旧阁楼或楼梯摄像机净空阻挡")
 		if int(snapshot.get("tower_door_wall_module_count", 0)) != 2:
 			failures.append("两个带门墙的模块数量被改变")
-		if int(snapshot.get("tower_corner_module_count", 0)) != 4:
-			failures.append("四个原有L型墙角被改变")
+		# 4个DungeonRoom功能碰撞根 + 4个布置层Blender视觉根。
+		if int(snapshot.get("tower_corner_module_count", 0)) != 8:
+			failures.append("四个L型墙角的视觉/功能双层数量被改变")
 		if (snapshot.get("door_snapshots", []) as Array).size() != 2:
 			failures.append("基地两个门的运行时快照数量被改变")
 		_validate_base_scene_shadow_policy(facility, failures)
+		_validate_base_perimeter_wall_palette(facility, failures)
 		_validate_base100_upper_shell(facility, failures)
 		_validate_legacy_structures_removed(facility, failures)
 		_validate_base_atrium(tower, failures)
@@ -136,15 +147,41 @@ func _collect_base_asset_roots(root: Node, result: Array[Node]) -> void:
 		_collect_base_asset_roots(child, result)
 
 
+func _validate_base_perimeter_wall_palette(root: Node, failures: Array[String]) -> void:
+	var counts := {}
+	for asset_id in BASE_PERIMETER_WALL_ASSET_IDS:
+		counts[asset_id] = 0
+	var pending: Array[Node] = [root]
+	while not pending.is_empty():
+		var node: Node = pending.pop_back()
+		for child in node.get_children():
+			pending.append(child)
+		var asset_id := str(node.get_meta("asset_id", ""))
+		if asset_id not in BASE_PERIMETER_WALL_ASSET_IDS:
+			continue
+		counts[asset_id] = int(counts[asset_id]) + 1
+		for mesh_value in node.find_children("*", "MeshInstance3D", true, false):
+			var mesh := mesh_value as MeshInstance3D
+			for surface_index in range(mesh.mesh.get_surface_count() if mesh.mesh != null else 0):
+				var material := mesh.get_active_material(surface_index) as BaseMaterial3D
+				if material == null or material.albedo_texture != BASE_SHARED_PALETTE:
+					failures.append("基地外围墙丢失共享色盘: %s/%s" % [asset_id, mesh.name])
+				elif material.texture_filter != BaseMaterial3D.TEXTURE_FILTER_NEAREST:
+					failures.append("基地外围墙色盘不是最近邻采样: %s/%s" % [asset_id, mesh.name])
+	for asset_id in BASE_PERIMETER_WALL_ASSET_IDS:
+		if int(counts[asset_id]) == 0:
+			failures.append("色盘验收未找到基地外围墙资产: %s" % asset_id)
+
+
 func _validate_base100_upper_shell(facility: DungeonRoom3D, failures: Array[String]) -> void:
 	var shell := facility.get_node_or_null(
-		"基地99层_美术布置层/基地结构组件_可移动旋转/100层上层围护与18米封顶"
+		"基地99层_美术布置层/基地结构组件_可移动旋转/100层上层围护与24米封顶"
 	) as Node3D
 	if shell == null:
-		failures.append("可编辑布局tscn缺少100层上层围护与18米封顶")
+		failures.append("可编辑布局tscn缺少100层上层围护与24米封顶")
 		return
 	var wall_group := shell.get_node_or_null("100层围护墙_可移动旋转")
-	var roof_group := shell.get_node_or_null("18米封顶_6x6地砖")
+	var roof_group := shell.get_node_or_null("24米封顶_6x6地砖")
 	if wall_group == null or wall_group.get_child_count() != 24:
 		failures.append("100层围护墙不是24块独立可编辑模块")
 	if roof_group == null or roof_group.get_child_count() != 36:
@@ -171,7 +208,7 @@ func _validate_base100_upper_shell(facility: DungeonRoom3D, failures: Array[Stri
 			if str(shape.get_meta("base100_structure_role", "")) == "roof":
 				roof_collision_count += 1
 		if roof_collision_count != 1:
-			failures.append("18米封顶没有唯一屋顶碰撞")
+			failures.append("24米封顶没有唯一屋顶碰撞")
 	for side in ["North", "South"]:
 		var camera_proxy := shell.get_node_or_null(
 			"UpperShellCameraLowerWall_%s" % side
@@ -208,11 +245,11 @@ func _validate_legacy_structures_removed(facility: DungeonRoom3D, failures: Arra
 		return
 	var required_v021 := [
 		"V021东墙阁楼主体结构",
-		"V021东侧紧凑上行过渡楼梯",
+		"12米东侧上行过渡楼梯",
 		"V021西北贴墙L型楼梯",
 		"V021阁楼下方铁皮封闭体",
 	]
-	if layout.get_child_count() != 5 or layout.get_node_or_null("100层上层围护与18米封顶") == null:
+	if layout.get_child_count() != 9 or layout.get_node_or_null("100层上层围护与24米封顶") == null:
 		failures.append("正式布局没有接入完整V021结构资产")
 	for node_name in required_v021:
 		if layout.get_node_or_null(node_name) == null:
@@ -283,8 +320,8 @@ func _validate_exterior_stair_climb(tower: TowerDescent3D, facility: DungeonRoom
 	tower.player.velocity = Vector3.ZERO
 	tower.player.global_position = facility.to_global(Vector3(6.64, 5.08, -7.5))
 	await get_tree().physics_frame
-	if not await _walk_player_to(tower.player, facility.to_global(Vector3(14.85, 8.98, -7.5))):
-		failures.append("角色无法从5米楼板沿外门小楼梯走向9米门槛: %s" % tower.player.global_position)
+	if not await _walk_player_to(tower.player, facility.to_global(Vector3(14.85, 12.02, -7.5))):
+		failures.append("角色无法从5米楼板沿上行楼梯走向12米门槛: %s" % tower.player.global_position)
 	tower.player.set_test_move_direction(Vector3.ZERO)
 
 

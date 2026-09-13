@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3]
+
+; Stable AssetID: ENV-TOWER-CORNER-L-5M | 11.9m Blender visual + retained 12m Godot collision contract
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_long"]
+size = Vector3(5, 12, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_short"]
+size = Vector3(0.3, 12, 5)
+
+[node name="PrpCornerL5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/asset_version = "v004"
+metadata/logic_id = "base99_corner_l_5m"
+metadata/component = "corner_l_5m"
+metadata/grid_unit_m = 5.0
+metadata/dimensions_m = Vector3(5, 12, 5)
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/origin_contract = "inside_corner_floor"
+metadata/forward_axis = "-Z"
+metadata/preserve_authored_palette = true
+metadata/source_blend = "res://assets/art/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend"
+metadata/collision_owner = "Godot wrapper; retained from prp_corner_l_5m_v001"
+metadata/collision_policy = "two_arm_static_boxes"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WallCollisionLong" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionLong" type="CollisionShape3D" parent="WallCollisionLong"]
+position = Vector3(2.5, 6, 0)
+shape = SubResource("BoxShape3D_corner_L_long")
+
+[node name="WallCollisionShort" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShort" type="CollisionShape3D" parent="WallCollisionShort"]
+position = Vector3(0, 6, -2.5)
+shape = SubResource("BoxShape3D_corner_L_short")

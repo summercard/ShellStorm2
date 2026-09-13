@@ -34,7 +34,7 @@ const TOWER_CORNER_L_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_l_5m_v001.tscn"
 )
 const BASE99_CORNER_L_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn"
 )
 const TOWER_CORNER_T_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_t_5m_v001.tscn"
@@ -51,7 +51,7 @@ const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
 # 基地99层专属普通墙视觉。该PackedScene/GLB不持有碰撞、门或交互逻辑；
 # 结构碰撞继续由本脚本的0.30m代理负责，避免美术替换影响玩法。
 const BASE99_WALL_PLAIN_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x9/env_base99_wall_plain_5x9_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d_v002.tscn"
 )
 const BASE99_FLOOR_PLAIN_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn"
@@ -60,7 +60,7 @@ const BASE99_FLOOR_RIVET_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn"
 )
 const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x9/env_base99_wall_door_5x9_root_top3d_v003.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d_v004.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
@@ -271,35 +271,35 @@ func get_room_snapshot() -> Dictionary:
 		"tower_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-SOLID-5M")
 			+ _count_nodes_with_meta_floor(
-				self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9", 99
+				self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X12", 99
 			)
 		),
 		"base99_wall_plain_module_count": _count_nodes_with_meta_floor(
-			self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X9", 99
+			self, "asset_id", "ENV-BASE99-WALL-PLAIN-5X12", 99
 		),
 		"base99_wall_plain_instance_count": _sum_int_meta_for_asset_floor(
-			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count", 99
+			self, "ENV-BASE99-WALL-PLAIN-5X12", "segment_count", 99
 		),
 		"base99_wall_window_instance_count": _sum_int_meta_for_asset_floor(
-			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count", 99
+			self, "ENV-BASE99-WALL-WINDOW-5X12", "segment_count", 99
 		),
 		"base99_wall_door_module_count": _count_nodes_with_meta_floor(
-			self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9", 99
+			self, "asset_id", "ENV-BASE99-WALL-DOOR-5X12", 99
 		),
 		"base100_upper_shell_count": _count_nodes_with_meta(
-			self, "asset_id", "ENV-BASE100-UPPER-SHELL-30X30-H9"
+			self, "asset_id", "ENV-BASE100-UPPER-SHELL-30X30-H12"
 		),
 		"base100_wall_plain_instance_count": _sum_int_meta_for_asset_floor(
-			self, "ENV-BASE99-WALL-PLAIN-5X9", "segment_count", 100
+			self, "ENV-BASE99-WALL-PLAIN-5X12", "segment_count", 100
 		),
 		"base100_wall_window_instance_count": _sum_int_meta_for_asset_floor(
-			self, "ENV-BASE99-WALL-WINDOW-5X9", "segment_count", 100
+			self, "ENV-BASE99-WALL-WINDOW-5X12", "segment_count", 100
 		),
 		"base100_wall_door_instance_count": _sum_int_meta_for_asset_floor(
-			self, "ENV-BASE99-WALL-DOOR-5X9", "segment_count", 100
+			self, "ENV-BASE99-WALL-DOOR-5X12", "segment_count", 100
 		),
 		"base100_roof_tile_count": _sum_int_meta_for_asset(
-			self, "ENV-BASE100-UPPER-SHELL-30X30-H9", "roof_tile_count"
+			self, "ENV-BASE100-UPPER-SHELL-30X30-H12", "roof_tile_count"
 		),
 		"base100_structure_collision_count": _count_nodes_with_meta(
 			self, "base100_upper_shell_collision", true
@@ -322,7 +322,7 @@ func get_room_snapshot() -> Dictionary:
 		"tower_door_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			+ _count_nodes_with_meta_floor(
-				self, "asset_id", "ENV-BASE99-WALL-DOOR-5X9", 99
+				self, "asset_id", "ENV-BASE99-WALL-DOOR-5X12", 99
 			)
 		),
 		"tower_corner_module_count": _count_nodes_with_meta(self, "asset_id", "ENV-TOWER-CORNER-L-5M"),
@@ -904,7 +904,7 @@ func _build_tower_wall_multimesh(
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = mesh
 	multimesh.instance_count = transforms.size()
-	# 通用墙视觉网格为8.9m高；按包围盒底面反算偏移，继续贴合原Y=0基准。
+	# 通用墙视觉网格为11.9m高；按包围盒底面反算偏移，继续贴合原Y=0基准。
 	var visual_floor_offset_y := -mesh.get_aabb().position.y
 	for index in range(transforms.size()):
 		var wall_transform := transforms[index]
@@ -941,12 +941,8 @@ func _spawn_solid_wall_visual_instances(
 		)
 		var wall_transform := transforms[index]
 		# 通用旧墙BoxMesh以几何中心为原点，需要抬高半层；基地99层正式GLB
-		# 已按底边中心为原点导出。基地视觉墙也按8.9/9缩放，原碰撞不变。
-		var visual_scale_y := (
-			TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M / TOWER_GEOMETRY.WALL_LOGICAL_HEIGHT_M
-			if uses_base99_visual
-			else 1.0
-		)
+		# 已按底边中心为原点导出。基地视觉墙原生11.9m，原点仍贴楼面。
+		var visual_scale_y := 1.0
 		if uses_base99_visual:
 			wall_transform.basis = wall_transform.basis.scaled(
 				Vector3(1.0, visual_scale_y, 1.0)
@@ -962,7 +958,7 @@ func _spawn_solid_wall_visual_instances(
 		material_a = _get_wall_module_material(0)
 		material_b = _get_wall_module_material(1)
 	var plain_asset_id := (
-		"ENV-BASE99-WALL-PLAIN-5X9"
+		"ENV-BASE99-WALL-PLAIN-5X12"
 		if uses_base99_visual
 		else "ENV-TOWER-WALL-SOLID-5M"
 	)
@@ -1171,7 +1167,7 @@ func _build_corner_aware_wall_run(
 			module.rotation.y = rotation_y
 			module.set_meta(
 				"asset_id",
-				"ENV-BASE99-WALL-DOOR-5X9"
+				"ENV-BASE99-WALL-DOOR-5X12"
 				if uses_base99_door
 				else "ENV-TOWER-WALL-DOOR-5M"
 			)

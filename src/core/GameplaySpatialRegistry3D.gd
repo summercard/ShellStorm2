@@ -1,4 +1,6 @@
 extends Node
+
+const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 ## 运行时近场空间注册表。只保存弱引用和稳定空间键，不拥有任何玩法节点。
 
 signal node_registered(node: Node3D, kind: String)
@@ -210,7 +212,7 @@ func _infer_room_id(node: Node) -> String:
 
 
 func _floor_index(position: Vector3) -> int:
-	return int(round(-position.y / 9.0))
+	return int(round(-position.y / TOWER_GEOMETRY.FLOOR_HEIGHT_M))
 
 
 func _bucket_key(position: Vector3) -> String:
