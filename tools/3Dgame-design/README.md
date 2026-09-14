@@ -7,8 +7,13 @@ ShellStorm2 场景白盒编辑工具。运行 `npm run dev` 后访问 `http://12
 工具把项目区块作为场景的上层容器。区块列表不在工具内重复维护，而是在每次请求时读取
 `docs/v0.1/05.1_关卡区块设计.md` 的“§3 四区块分布”表。按既有五列格式增加区块行后，刷新工具即可看到新区块。
 
-新场景保存到 `save/blocks/<block_id>/<scene_name>/scene.json`。场景 JSON 的 `project` 字段同时保存
-`blockId / blockName / blockNodePath / floorRange` 快照。既有平铺存档保留兼容，但不会混入项目区块场景列表。
+新场景保存到 `save/blocks/<block_id>/<scene_name>/`：`<scene_name>.blend` 是最终场景文件，`scene.json` 是网页继续编辑所需的伴随数据。保存时后台调用本机 Blender，只有 Blend 生成成功才会提交新 JSON；既有平铺存档保留兼容，但不会混入项目区块场景列表。
+
+网页保留拖放、旋转、缩放、分组、参数化组件、撤销/重做、AI 编辑和场景读取功能，不提供顶点编辑。顶部“下载 .blend”会下载当前已保存的 Blender 文件。默认 Blender 路径为 `/Applications/Blender.app/Contents/MacOS/Blender`，可用环境变量 `BLENDER_BIN` 覆盖。本流程不导入 Godot。
+
+“打开 Blender”是通用入口：先选择区块，再选择 `.blend` 文件。工具会识别资产包集合或包含网格的顶层对象，显示真实网格，并把根对象移动、旋转、缩放或删除写回该区块的工作副本。楼梯正式源只是首个验收样本，不再使用专用按钮。
+
+当前楼梯白盒 `whitebox_tower_battle_stairs_v011` 已去除天台、基地、战斗区、模块库、运行同步和展示对象，只保留两个楼梯间根；正式楼梯源导入场景未做此清理。
 
 组件库会始终显示角色、建筑两组通用组件，并根据当前区块追加专用组件：`battle` 显示家具、办公，`rooftop` 显示道具。专用组件标题使用项目文档同步的正式区块名。
 

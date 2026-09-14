@@ -14,7 +14,7 @@
         <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span><span>SCENEKIT</span><b>Preview</b></div>
         <div class="project-context"><label>区块<select id="blockSelect" aria-label="当前关卡区块"><option>正在读取项目区块…</option></select></label><span id="blockSource" title="区块名称来源">项目文档同步</span></div>
         <div class="file-name"><span class="status-dot"></span>untitled_scene <span>·</span> 已保存</div>
-        <div class="top-actions"><button class="icon-button" title="撤销 (Ctrl+Z)" id="undoBtn">↶</button><button class="icon-button" title="重做 (Ctrl+Shift+Z)" id="redoBtn">↷</button><button class="header-command" id="chooseSaveDirBtn">选择存档文件夹</button><button class="header-command" id="newSceneBtn">新建场景</button><button class="header-command" id="loadSceneBtn">读取场景</button><button class="header-command" id="saveSceneBtn">保存场景</button><button class="header-command" id="aiEditBtn">AI 编辑</button><button class="export-button" id="exportBtn">导出场景</button></div>
+        <div class="top-actions"><button class="icon-button" title="撤销 (Ctrl+Z)" id="undoBtn">↶</button><button class="icon-button" title="重做 (Ctrl+Shift+Z)" id="redoBtn">↷</button><button class="header-command" id="openBlendBtn">打开 Blender</button><input id="blendFileInput" type="file" accept=".blend" hidden /><button class="header-command" id="newSceneBtn">新建场景</button><button class="header-command" id="loadSceneBtn">读取场景</button><button class="header-command" id="saveSceneBtn">保存 Blender</button><button class="header-command" id="aiEditBtn">AI 编辑</button><button class="export-button" id="exportBtn">下载 .blend</button></div>
       </header>
 
       <main class="workbench">
@@ -82,7 +82,7 @@
       <div id="toast" class="toast"></div>
       <div class="modal-backdrop" id="modalBackdrop" hidden>
         <section class="scene-modal" id="saveModal" hidden aria-label="保存场景">
-          <h2>保存场景</h2><p>场景将保存到当前选择的项目区块。</p>
+          <h2>保存 Blender 场景</h2><p>网页布局与可继续编辑的数据将一起写入 Blender 场景目录。</p>
           <div class="modal-context" id="saveBlockName"></div>
           <label class="modal-field">场景名称<input id="sceneNameInput" maxlength="32" placeholder="例如：客厅布局" /></label>
           <div class="modal-actions"><button class="modal-secondary" data-modal-close>取消</button><button class="export-button" id="confirmSaveBtn">保存</button></div>

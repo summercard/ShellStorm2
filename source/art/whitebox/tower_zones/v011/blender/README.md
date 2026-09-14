@@ -1,3 +1,3 @@
 # Blender 白盒输出
 
-`whitebox_tower_battle_stairs_v011.blend` 是 Battle 与 Stairs 共用的当前白盒母版，不是正式美术源。下一版本必须读取同版本 `data/` JSON 后生成。
+`whitebox_tower_battle_stairs_v011.blend` 保留历史文件名，但当前内容已经清理为 Stairs 专用白盒，只包含 `02_STAIRWELLS` 下的两个楼梯间。Battle 白盒仍以同版本 `data/whitebox_battle_98_95_v011.json` 为数据源，目前没有对应 Blender 输出。该文件不是正式美术源。

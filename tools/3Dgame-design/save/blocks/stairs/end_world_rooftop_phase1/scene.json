@@ -1,0 +1,8537 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "end_world_rooftop_phase1",
+  "groups": [],
+  "components": [
+    {
+      "name": "Rooftop_Base_50M",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Rooftop_Base_50M",
+        "assetCollection": null,
+        "modelFile": "model_001.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_001.glb"
+    },
+    {
+      "name": "Wall_North",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_North",
+        "assetCollection": null,
+        "modelFile": "model_002.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_002.glb"
+    },
+    {
+      "name": "Wall_South",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_South",
+        "assetCollection": null,
+        "modelFile": "model_003.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_003.glb"
+    },
+    {
+      "name": "Wall_East",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_East",
+        "assetCollection": null,
+        "modelFile": "model_004.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_004.glb"
+    },
+    {
+      "name": "Wall_West",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_West",
+        "assetCollection": null,
+        "modelFile": "model_005.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_005.glb"
+    },
+    {
+      "name": "Rooftop_Base_50M.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Rooftop_Base_50M.001",
+        "assetCollection": null,
+        "modelFile": "model_006.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_006.glb"
+    },
+    {
+      "name": "Wall_North.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_North.001",
+        "assetCollection": null,
+        "modelFile": "model_007.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_007.glb"
+    },
+    {
+      "name": "Wall_South.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_South.001",
+        "assetCollection": null,
+        "modelFile": "model_008.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_008.glb"
+    },
+    {
+      "name": "Wall_East.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_East.001",
+        "assetCollection": null,
+        "modelFile": "model_009.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_009.glb"
+    },
+    {
+      "name": "Wall_West.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_West.001",
+        "assetCollection": null,
+        "modelFile": "model_010.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_010.glb"
+    },
+    {
+      "name": "Rooftop_Base_50M.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Rooftop_Base_50M.002",
+        "assetCollection": null,
+        "modelFile": "model_011.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_011.glb"
+    },
+    {
+      "name": "Wall_North.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_North.002",
+        "assetCollection": null,
+        "modelFile": "model_012.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_012.glb"
+    },
+    {
+      "name": "Wall_South.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -25,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 50,
+        "y": 0.20000000298023224,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_South.002",
+        "assetCollection": null,
+        "modelFile": "model_013.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_013.glb"
+    },
+    {
+      "name": "Wall_East.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_East.002",
+        "assetCollection": null,
+        "modelFile": "model_014.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_014.glb"
+    },
+    {
+      "name": "Wall_West.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -25,
+        "y": 0,
+        "z": 0.4000000059604645
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.20000000298023224,
+        "y": 50,
+        "z": 0.800000011920929
+      },
+      "blenderSettings": {
+        "rootObject": "Wall_West.002",
+        "assetCollection": null,
+        "modelFile": "model_015.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_015.glb"
+    },
+    {
+      "name": "Tile_X00_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y00",
+        "assetCollection": null,
+        "modelFile": "model_016.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_016.glb"
+    },
+    {
+      "name": "Tile_X00_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y01",
+        "assetCollection": null,
+        "modelFile": "model_017.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_017.glb"
+    },
+    {
+      "name": "Tile_X00_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y02",
+        "assetCollection": null,
+        "modelFile": "model_018.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_018.glb"
+    },
+    {
+      "name": "Tile_X00_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y03",
+        "assetCollection": null,
+        "modelFile": "model_019.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_019.glb"
+    },
+    {
+      "name": "Tile_X00_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y04",
+        "assetCollection": null,
+        "modelFile": "model_020.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_020.glb"
+    },
+    {
+      "name": "Tile_X00_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y05",
+        "assetCollection": null,
+        "modelFile": "model_021.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_021.glb"
+    },
+    {
+      "name": "Tile_X00_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y06",
+        "assetCollection": null,
+        "modelFile": "model_022.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_022.glb"
+    },
+    {
+      "name": "Tile_X00_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y07",
+        "assetCollection": null,
+        "modelFile": "model_023.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_023.glb"
+    },
+    {
+      "name": "Tile_X00_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y08",
+        "assetCollection": null,
+        "modelFile": "model_024.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_024.glb"
+    },
+    {
+      "name": "Tile_X00_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y09",
+        "assetCollection": null,
+        "modelFile": "model_025.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_025.glb"
+    },
+    {
+      "name": "Tile_X01_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y00",
+        "assetCollection": null,
+        "modelFile": "model_026.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_026.glb"
+    },
+    {
+      "name": "Tile_X01_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y01",
+        "assetCollection": null,
+        "modelFile": "model_027.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_027.glb"
+    },
+    {
+      "name": "Tile_X01_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y02",
+        "assetCollection": null,
+        "modelFile": "model_028.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_028.glb"
+    },
+    {
+      "name": "Tile_X01_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y03",
+        "assetCollection": null,
+        "modelFile": "model_029.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_029.glb"
+    },
+    {
+      "name": "Tile_X01_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y04",
+        "assetCollection": null,
+        "modelFile": "model_030.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_030.glb"
+    },
+    {
+      "name": "Tile_X01_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y05",
+        "assetCollection": null,
+        "modelFile": "model_031.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_031.glb"
+    },
+    {
+      "name": "Tile_X01_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y06",
+        "assetCollection": null,
+        "modelFile": "model_032.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_032.glb"
+    },
+    {
+      "name": "Tile_X01_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y07",
+        "assetCollection": null,
+        "modelFile": "model_033.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_033.glb"
+    },
+    {
+      "name": "Tile_X01_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y08",
+        "assetCollection": null,
+        "modelFile": "model_034.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_034.glb"
+    },
+    {
+      "name": "Tile_X01_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y09",
+        "assetCollection": null,
+        "modelFile": "model_035.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_035.glb"
+    },
+    {
+      "name": "Tile_X02_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y00",
+        "assetCollection": null,
+        "modelFile": "model_036.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_036.glb"
+    },
+    {
+      "name": "Tile_X02_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y01",
+        "assetCollection": null,
+        "modelFile": "model_037.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_037.glb"
+    },
+    {
+      "name": "Tile_X02_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y02",
+        "assetCollection": null,
+        "modelFile": "model_038.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_038.glb"
+    },
+    {
+      "name": "Tile_X02_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y03",
+        "assetCollection": null,
+        "modelFile": "model_039.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_039.glb"
+    },
+    {
+      "name": "Tile_X02_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y04",
+        "assetCollection": null,
+        "modelFile": "model_040.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_040.glb"
+    },
+    {
+      "name": "Tile_X02_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y05",
+        "assetCollection": null,
+        "modelFile": "model_041.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_041.glb"
+    },
+    {
+      "name": "Tile_X02_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y06",
+        "assetCollection": null,
+        "modelFile": "model_042.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_042.glb"
+    },
+    {
+      "name": "Tile_X02_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y07",
+        "assetCollection": null,
+        "modelFile": "model_043.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_043.glb"
+    },
+    {
+      "name": "Tile_X02_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y08",
+        "assetCollection": null,
+        "modelFile": "model_044.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_044.glb"
+    },
+    {
+      "name": "Tile_X02_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y09",
+        "assetCollection": null,
+        "modelFile": "model_045.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_045.glb"
+    },
+    {
+      "name": "Tile_X03_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y00",
+        "assetCollection": null,
+        "modelFile": "model_046.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_046.glb"
+    },
+    {
+      "name": "Tile_X03_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y01",
+        "assetCollection": null,
+        "modelFile": "model_047.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_047.glb"
+    },
+    {
+      "name": "Tile_X03_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y02",
+        "assetCollection": null,
+        "modelFile": "model_048.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_048.glb"
+    },
+    {
+      "name": "Tile_X03_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y03",
+        "assetCollection": null,
+        "modelFile": "model_049.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_049.glb"
+    },
+    {
+      "name": "Tile_X03_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y04",
+        "assetCollection": null,
+        "modelFile": "model_050.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_050.glb"
+    },
+    {
+      "name": "Tile_X03_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y05",
+        "assetCollection": null,
+        "modelFile": "model_051.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_051.glb"
+    },
+    {
+      "name": "Tile_X03_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y06",
+        "assetCollection": null,
+        "modelFile": "model_052.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_052.glb"
+    },
+    {
+      "name": "Tile_X03_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y07",
+        "assetCollection": null,
+        "modelFile": "model_053.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_053.glb"
+    },
+    {
+      "name": "Tile_X03_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y08",
+        "assetCollection": null,
+        "modelFile": "model_054.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_054.glb"
+    },
+    {
+      "name": "Tile_X03_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y09",
+        "assetCollection": null,
+        "modelFile": "model_055.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_055.glb"
+    },
+    {
+      "name": "Tile_X04_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y00",
+        "assetCollection": null,
+        "modelFile": "model_056.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_056.glb"
+    },
+    {
+      "name": "Tile_X04_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y01",
+        "assetCollection": null,
+        "modelFile": "model_057.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_057.glb"
+    },
+    {
+      "name": "Tile_X04_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y02",
+        "assetCollection": null,
+        "modelFile": "model_058.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_058.glb"
+    },
+    {
+      "name": "Tile_X04_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y03",
+        "assetCollection": null,
+        "modelFile": "model_059.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_059.glb"
+    },
+    {
+      "name": "Tile_X04_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y04",
+        "assetCollection": null,
+        "modelFile": "model_060.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_060.glb"
+    },
+    {
+      "name": "Tile_X04_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y05",
+        "assetCollection": null,
+        "modelFile": "model_061.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_061.glb"
+    },
+    {
+      "name": "Tile_X04_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y06",
+        "assetCollection": null,
+        "modelFile": "model_062.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_062.glb"
+    },
+    {
+      "name": "Tile_X04_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y07",
+        "assetCollection": null,
+        "modelFile": "model_063.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_063.glb"
+    },
+    {
+      "name": "Tile_X04_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y08",
+        "assetCollection": null,
+        "modelFile": "model_064.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_064.glb"
+    },
+    {
+      "name": "Tile_X04_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y09",
+        "assetCollection": null,
+        "modelFile": "model_065.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_065.glb"
+    },
+    {
+      "name": "Tile_X05_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y00",
+        "assetCollection": null,
+        "modelFile": "model_066.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_066.glb"
+    },
+    {
+      "name": "Tile_X05_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y01",
+        "assetCollection": null,
+        "modelFile": "model_067.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_067.glb"
+    },
+    {
+      "name": "Tile_X05_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y02",
+        "assetCollection": null,
+        "modelFile": "model_068.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_068.glb"
+    },
+    {
+      "name": "Tile_X05_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y03",
+        "assetCollection": null,
+        "modelFile": "model_069.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_069.glb"
+    },
+    {
+      "name": "Tile_X05_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y04",
+        "assetCollection": null,
+        "modelFile": "model_070.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_070.glb"
+    },
+    {
+      "name": "Tile_X05_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y05",
+        "assetCollection": null,
+        "modelFile": "model_071.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_071.glb"
+    },
+    {
+      "name": "Tile_X05_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y06",
+        "assetCollection": null,
+        "modelFile": "model_072.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_072.glb"
+    },
+    {
+      "name": "Tile_X05_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y07",
+        "assetCollection": null,
+        "modelFile": "model_073.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_073.glb"
+    },
+    {
+      "name": "Tile_X05_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y08",
+        "assetCollection": null,
+        "modelFile": "model_074.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_074.glb"
+    },
+    {
+      "name": "Tile_X05_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y09",
+        "assetCollection": null,
+        "modelFile": "model_075.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_075.glb"
+    },
+    {
+      "name": "Tile_X06_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y00",
+        "assetCollection": null,
+        "modelFile": "model_076.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_076.glb"
+    },
+    {
+      "name": "Tile_X06_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y01",
+        "assetCollection": null,
+        "modelFile": "model_077.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_077.glb"
+    },
+    {
+      "name": "Tile_X06_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y02",
+        "assetCollection": null,
+        "modelFile": "model_078.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_078.glb"
+    },
+    {
+      "name": "Tile_X06_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y03",
+        "assetCollection": null,
+        "modelFile": "model_079.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_079.glb"
+    },
+    {
+      "name": "Tile_X06_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y04",
+        "assetCollection": null,
+        "modelFile": "model_080.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_080.glb"
+    },
+    {
+      "name": "Tile_X06_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y05",
+        "assetCollection": null,
+        "modelFile": "model_081.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_081.glb"
+    },
+    {
+      "name": "Tile_X06_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y06",
+        "assetCollection": null,
+        "modelFile": "model_082.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_082.glb"
+    },
+    {
+      "name": "Tile_X06_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y07",
+        "assetCollection": null,
+        "modelFile": "model_083.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_083.glb"
+    },
+    {
+      "name": "Tile_X06_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y08",
+        "assetCollection": null,
+        "modelFile": "model_084.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_084.glb"
+    },
+    {
+      "name": "Tile_X06_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y09",
+        "assetCollection": null,
+        "modelFile": "model_085.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_085.glb"
+    },
+    {
+      "name": "Tile_X07_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y00",
+        "assetCollection": null,
+        "modelFile": "model_086.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_086.glb"
+    },
+    {
+      "name": "Tile_X07_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y01",
+        "assetCollection": null,
+        "modelFile": "model_087.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_087.glb"
+    },
+    {
+      "name": "Tile_X07_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y02",
+        "assetCollection": null,
+        "modelFile": "model_088.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_088.glb"
+    },
+    {
+      "name": "Tile_X07_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y03",
+        "assetCollection": null,
+        "modelFile": "model_089.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_089.glb"
+    },
+    {
+      "name": "Tile_X07_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y04",
+        "assetCollection": null,
+        "modelFile": "model_090.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_090.glb"
+    },
+    {
+      "name": "Tile_X07_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y05",
+        "assetCollection": null,
+        "modelFile": "model_091.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_091.glb"
+    },
+    {
+      "name": "Tile_X07_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y06",
+        "assetCollection": null,
+        "modelFile": "model_092.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_092.glb"
+    },
+    {
+      "name": "Tile_X07_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y07",
+        "assetCollection": null,
+        "modelFile": "model_093.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_093.glb"
+    },
+    {
+      "name": "Tile_X07_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y08",
+        "assetCollection": null,
+        "modelFile": "model_094.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_094.glb"
+    },
+    {
+      "name": "Tile_X07_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y09",
+        "assetCollection": null,
+        "modelFile": "model_095.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_095.glb"
+    },
+    {
+      "name": "Tile_X08_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y00",
+        "assetCollection": null,
+        "modelFile": "model_096.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_096.glb"
+    },
+    {
+      "name": "Tile_X08_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y01",
+        "assetCollection": null,
+        "modelFile": "model_097.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_097.glb"
+    },
+    {
+      "name": "Tile_X08_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y02",
+        "assetCollection": null,
+        "modelFile": "model_098.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_098.glb"
+    },
+    {
+      "name": "Tile_X08_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y03",
+        "assetCollection": null,
+        "modelFile": "model_099.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_099.glb"
+    },
+    {
+      "name": "Tile_X08_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y04",
+        "assetCollection": null,
+        "modelFile": "model_100.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_100.glb"
+    },
+    {
+      "name": "Tile_X08_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y05",
+        "assetCollection": null,
+        "modelFile": "model_101.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_101.glb"
+    },
+    {
+      "name": "Tile_X08_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y06",
+        "assetCollection": null,
+        "modelFile": "model_102.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_102.glb"
+    },
+    {
+      "name": "Tile_X08_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y07",
+        "assetCollection": null,
+        "modelFile": "model_103.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_103.glb"
+    },
+    {
+      "name": "Tile_X08_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y08",
+        "assetCollection": null,
+        "modelFile": "model_104.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_104.glb"
+    },
+    {
+      "name": "Tile_X08_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y09",
+        "assetCollection": null,
+        "modelFile": "model_105.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_105.glb"
+    },
+    {
+      "name": "Tile_X09_Y00",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y00",
+        "assetCollection": null,
+        "modelFile": "model_106.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_106.glb"
+    },
+    {
+      "name": "Tile_X09_Y01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y01",
+        "assetCollection": null,
+        "modelFile": "model_107.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_107.glb"
+    },
+    {
+      "name": "Tile_X09_Y02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y02",
+        "assetCollection": null,
+        "modelFile": "model_108.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_108.glb"
+    },
+    {
+      "name": "Tile_X09_Y03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y03",
+        "assetCollection": null,
+        "modelFile": "model_109.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_109.glb"
+    },
+    {
+      "name": "Tile_X09_Y04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y04",
+        "assetCollection": null,
+        "modelFile": "model_110.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_110.glb"
+    },
+    {
+      "name": "Tile_X09_Y05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y05",
+        "assetCollection": null,
+        "modelFile": "model_111.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_111.glb"
+    },
+    {
+      "name": "Tile_X09_Y06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y06",
+        "assetCollection": null,
+        "modelFile": "model_112.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_112.glb"
+    },
+    {
+      "name": "Tile_X09_Y07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y07",
+        "assetCollection": null,
+        "modelFile": "model_113.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_113.glb"
+    },
+    {
+      "name": "Tile_X09_Y08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y08",
+        "assetCollection": null,
+        "modelFile": "model_114.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_114.glb"
+    },
+    {
+      "name": "Tile_X09_Y09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y09",
+        "assetCollection": null,
+        "modelFile": "model_115.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_115.glb"
+    },
+    {
+      "name": "Tile_X00_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_116.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_116.glb"
+    },
+    {
+      "name": "Tile_X00_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_117.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_117.glb"
+    },
+    {
+      "name": "Tile_X00_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_118.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_118.glb"
+    },
+    {
+      "name": "Tile_X00_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_119.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_119.glb"
+    },
+    {
+      "name": "Tile_X00_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_120.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_120.glb"
+    },
+    {
+      "name": "Tile_X00_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_121.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_121.glb"
+    },
+    {
+      "name": "Tile_X00_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_122.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_122.glb"
+    },
+    {
+      "name": "Tile_X00_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_123.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_123.glb"
+    },
+    {
+      "name": "Tile_X00_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_124.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_124.glb"
+    },
+    {
+      "name": "Tile_X00_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_125.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_125.glb"
+    },
+    {
+      "name": "Tile_X01_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_126.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_126.glb"
+    },
+    {
+      "name": "Tile_X01_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_127.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_127.glb"
+    },
+    {
+      "name": "Tile_X01_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_128.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_128.glb"
+    },
+    {
+      "name": "Tile_X01_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_129.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_129.glb"
+    },
+    {
+      "name": "Tile_X01_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_130.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_130.glb"
+    },
+    {
+      "name": "Tile_X01_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_131.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_131.glb"
+    },
+    {
+      "name": "Tile_X01_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_132.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_132.glb"
+    },
+    {
+      "name": "Tile_X01_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_133.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_133.glb"
+    },
+    {
+      "name": "Tile_X01_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_134.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_134.glb"
+    },
+    {
+      "name": "Tile_X01_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_135.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_135.glb"
+    },
+    {
+      "name": "Tile_X02_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_136.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_136.glb"
+    },
+    {
+      "name": "Tile_X02_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_137.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_137.glb"
+    },
+    {
+      "name": "Tile_X02_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_138.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_138.glb"
+    },
+    {
+      "name": "Tile_X02_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_139.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_139.glb"
+    },
+    {
+      "name": "Tile_X02_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_140.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_140.glb"
+    },
+    {
+      "name": "Tile_X02_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_141.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_141.glb"
+    },
+    {
+      "name": "Tile_X02_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_142.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_142.glb"
+    },
+    {
+      "name": "Tile_X02_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_143.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_143.glb"
+    },
+    {
+      "name": "Tile_X02_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_144.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_144.glb"
+    },
+    {
+      "name": "Tile_X02_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_145.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_145.glb"
+    },
+    {
+      "name": "Tile_X03_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_146.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_146.glb"
+    },
+    {
+      "name": "Tile_X03_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_147.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_147.glb"
+    },
+    {
+      "name": "Tile_X03_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_148.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_148.glb"
+    },
+    {
+      "name": "Tile_X03_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_149.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_149.glb"
+    },
+    {
+      "name": "Tile_X03_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_150.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_150.glb"
+    },
+    {
+      "name": "Tile_X03_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_151.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_151.glb"
+    },
+    {
+      "name": "Tile_X03_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_152.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_152.glb"
+    },
+    {
+      "name": "Tile_X03_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_153.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_153.glb"
+    },
+    {
+      "name": "Tile_X03_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_154.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_154.glb"
+    },
+    {
+      "name": "Tile_X03_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_155.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_155.glb"
+    },
+    {
+      "name": "Tile_X04_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_156.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_156.glb"
+    },
+    {
+      "name": "Tile_X04_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_157.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_157.glb"
+    },
+    {
+      "name": "Tile_X04_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_158.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_158.glb"
+    },
+    {
+      "name": "Tile_X04_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_159.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_159.glb"
+    },
+    {
+      "name": "Tile_X04_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_160.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_160.glb"
+    },
+    {
+      "name": "Tile_X04_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_161.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_161.glb"
+    },
+    {
+      "name": "Tile_X04_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_162.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_162.glb"
+    },
+    {
+      "name": "Tile_X04_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_163.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_163.glb"
+    },
+    {
+      "name": "Tile_X04_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_164.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_164.glb"
+    },
+    {
+      "name": "Tile_X04_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_165.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_165.glb"
+    },
+    {
+      "name": "Tile_X05_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_166.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_166.glb"
+    },
+    {
+      "name": "Tile_X05_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_167.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_167.glb"
+    },
+    {
+      "name": "Tile_X05_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_168.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_168.glb"
+    },
+    {
+      "name": "Tile_X05_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_169.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_169.glb"
+    },
+    {
+      "name": "Tile_X05_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_170.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_170.glb"
+    },
+    {
+      "name": "Tile_X05_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_171.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_171.glb"
+    },
+    {
+      "name": "Tile_X05_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_172.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_172.glb"
+    },
+    {
+      "name": "Tile_X05_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_173.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_173.glb"
+    },
+    {
+      "name": "Tile_X05_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_174.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_174.glb"
+    },
+    {
+      "name": "Tile_X05_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_175.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_175.glb"
+    },
+    {
+      "name": "Tile_X06_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_176.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_176.glb"
+    },
+    {
+      "name": "Tile_X06_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_177.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_177.glb"
+    },
+    {
+      "name": "Tile_X06_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_178.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_178.glb"
+    },
+    {
+      "name": "Tile_X06_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_179.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_179.glb"
+    },
+    {
+      "name": "Tile_X06_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_180.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_180.glb"
+    },
+    {
+      "name": "Tile_X06_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_181.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_181.glb"
+    },
+    {
+      "name": "Tile_X06_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_182.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_182.glb"
+    },
+    {
+      "name": "Tile_X06_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_183.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_183.glb"
+    },
+    {
+      "name": "Tile_X06_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_184.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_184.glb"
+    },
+    {
+      "name": "Tile_X06_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_185.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_185.glb"
+    },
+    {
+      "name": "Tile_X07_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_186.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_186.glb"
+    },
+    {
+      "name": "Tile_X07_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_187.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_187.glb"
+    },
+    {
+      "name": "Tile_X07_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_188.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_188.glb"
+    },
+    {
+      "name": "Tile_X07_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_189.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_189.glb"
+    },
+    {
+      "name": "Tile_X07_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_190.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_190.glb"
+    },
+    {
+      "name": "Tile_X07_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_191.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_191.glb"
+    },
+    {
+      "name": "Tile_X07_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_192.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_192.glb"
+    },
+    {
+      "name": "Tile_X07_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_193.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_193.glb"
+    },
+    {
+      "name": "Tile_X07_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_194.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_194.glb"
+    },
+    {
+      "name": "Tile_X07_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_195.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_195.glb"
+    },
+    {
+      "name": "Tile_X08_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_196.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_196.glb"
+    },
+    {
+      "name": "Tile_X08_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_197.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_197.glb"
+    },
+    {
+      "name": "Tile_X08_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_198.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_198.glb"
+    },
+    {
+      "name": "Tile_X08_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_199.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_199.glb"
+    },
+    {
+      "name": "Tile_X08_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_200.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_200.glb"
+    },
+    {
+      "name": "Tile_X08_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_201.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_201.glb"
+    },
+    {
+      "name": "Tile_X08_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_202.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_202.glb"
+    },
+    {
+      "name": "Tile_X08_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_203.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_203.glb"
+    },
+    {
+      "name": "Tile_X08_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_204.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_204.glb"
+    },
+    {
+      "name": "Tile_X08_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_205.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_205.glb"
+    },
+    {
+      "name": "Tile_X09_Y00.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y00.001",
+        "assetCollection": null,
+        "modelFile": "model_206.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_206.glb"
+    },
+    {
+      "name": "Tile_X09_Y01.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y01.001",
+        "assetCollection": null,
+        "modelFile": "model_207.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_207.glb"
+    },
+    {
+      "name": "Tile_X09_Y02.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y02.001",
+        "assetCollection": null,
+        "modelFile": "model_208.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_208.glb"
+    },
+    {
+      "name": "Tile_X09_Y03.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y03.001",
+        "assetCollection": null,
+        "modelFile": "model_209.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_209.glb"
+    },
+    {
+      "name": "Tile_X09_Y04.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y04.001",
+        "assetCollection": null,
+        "modelFile": "model_210.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_210.glb"
+    },
+    {
+      "name": "Tile_X09_Y05.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y05.001",
+        "assetCollection": null,
+        "modelFile": "model_211.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_211.glb"
+    },
+    {
+      "name": "Tile_X09_Y06.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y06.001",
+        "assetCollection": null,
+        "modelFile": "model_212.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_212.glb"
+    },
+    {
+      "name": "Tile_X09_Y07.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y07.001",
+        "assetCollection": null,
+        "modelFile": "model_213.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_213.glb"
+    },
+    {
+      "name": "Tile_X09_Y08.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y08.001",
+        "assetCollection": null,
+        "modelFile": "model_214.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_214.glb"
+    },
+    {
+      "name": "Tile_X09_Y09.001",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y09.001",
+        "assetCollection": null,
+        "modelFile": "model_215.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_215.glb"
+    },
+    {
+      "name": "Tile_X00_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_216.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_216.glb"
+    },
+    {
+      "name": "Tile_X00_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_217.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_217.glb"
+    },
+    {
+      "name": "Tile_X00_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_218.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_218.glb"
+    },
+    {
+      "name": "Tile_X00_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_219.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_219.glb"
+    },
+    {
+      "name": "Tile_X00_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_220.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_220.glb"
+    },
+    {
+      "name": "Tile_X00_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_221.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_221.glb"
+    },
+    {
+      "name": "Tile_X00_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_222.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_222.glb"
+    },
+    {
+      "name": "Tile_X00_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_223.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_223.glb"
+    },
+    {
+      "name": "Tile_X00_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_224.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_224.glb"
+    },
+    {
+      "name": "Tile_X00_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X00_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_225.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_225.glb"
+    },
+    {
+      "name": "Tile_X01_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_226.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_226.glb"
+    },
+    {
+      "name": "Tile_X01_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_227.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_227.glb"
+    },
+    {
+      "name": "Tile_X01_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_228.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_228.glb"
+    },
+    {
+      "name": "Tile_X01_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_229.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_229.glb"
+    },
+    {
+      "name": "Tile_X01_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_230.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_230.glb"
+    },
+    {
+      "name": "Tile_X01_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_231.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_231.glb"
+    },
+    {
+      "name": "Tile_X01_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_232.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_232.glb"
+    },
+    {
+      "name": "Tile_X01_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_233.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_233.glb"
+    },
+    {
+      "name": "Tile_X01_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_234.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_234.glb"
+    },
+    {
+      "name": "Tile_X01_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X01_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_235.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_235.glb"
+    },
+    {
+      "name": "Tile_X02_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_236.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_236.glb"
+    },
+    {
+      "name": "Tile_X02_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_237.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_237.glb"
+    },
+    {
+      "name": "Tile_X02_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_238.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_238.glb"
+    },
+    {
+      "name": "Tile_X02_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_239.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_239.glb"
+    },
+    {
+      "name": "Tile_X02_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_240.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_240.glb"
+    },
+    {
+      "name": "Tile_X02_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_241.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_241.glb"
+    },
+    {
+      "name": "Tile_X02_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_242.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_242.glb"
+    },
+    {
+      "name": "Tile_X02_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_243.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_243.glb"
+    },
+    {
+      "name": "Tile_X02_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_244.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_244.glb"
+    },
+    {
+      "name": "Tile_X02_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X02_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_245.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_245.glb"
+    },
+    {
+      "name": "Tile_X03_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_246.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_246.glb"
+    },
+    {
+      "name": "Tile_X03_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_247.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_247.glb"
+    },
+    {
+      "name": "Tile_X03_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_248.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_248.glb"
+    },
+    {
+      "name": "Tile_X03_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_249.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_249.glb"
+    },
+    {
+      "name": "Tile_X03_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_250.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_250.glb"
+    },
+    {
+      "name": "Tile_X03_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_251.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_251.glb"
+    },
+    {
+      "name": "Tile_X03_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_252.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_252.glb"
+    },
+    {
+      "name": "Tile_X03_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_253.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_253.glb"
+    },
+    {
+      "name": "Tile_X03_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_254.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_254.glb"
+    },
+    {
+      "name": "Tile_X03_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X03_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_255.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_255.glb"
+    },
+    {
+      "name": "Tile_X04_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_256.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_256.glb"
+    },
+    {
+      "name": "Tile_X04_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_257.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_257.glb"
+    },
+    {
+      "name": "Tile_X04_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_258.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_258.glb"
+    },
+    {
+      "name": "Tile_X04_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_259.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_259.glb"
+    },
+    {
+      "name": "Tile_X04_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_260.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_260.glb"
+    },
+    {
+      "name": "Tile_X04_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_261.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_261.glb"
+    },
+    {
+      "name": "Tile_X04_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_262.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_262.glb"
+    },
+    {
+      "name": "Tile_X04_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_263.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_263.glb"
+    },
+    {
+      "name": "Tile_X04_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_264.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_264.glb"
+    },
+    {
+      "name": "Tile_X04_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X04_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_265.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_265.glb"
+    },
+    {
+      "name": "Tile_X05_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_266.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_266.glb"
+    },
+    {
+      "name": "Tile_X05_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_267.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_267.glb"
+    },
+    {
+      "name": "Tile_X05_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_268.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_268.glb"
+    },
+    {
+      "name": "Tile_X05_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_269.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_269.glb"
+    },
+    {
+      "name": "Tile_X05_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_270.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_270.glb"
+    },
+    {
+      "name": "Tile_X05_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_271.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_271.glb"
+    },
+    {
+      "name": "Tile_X05_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_272.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_272.glb"
+    },
+    {
+      "name": "Tile_X05_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_273.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_273.glb"
+    },
+    {
+      "name": "Tile_X05_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_274.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_274.glb"
+    },
+    {
+      "name": "Tile_X05_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 2.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X05_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_275.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_275.glb"
+    },
+    {
+      "name": "Tile_X06_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_276.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_276.glb"
+    },
+    {
+      "name": "Tile_X06_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_277.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_277.glb"
+    },
+    {
+      "name": "Tile_X06_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_278.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_278.glb"
+    },
+    {
+      "name": "Tile_X06_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_279.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_279.glb"
+    },
+    {
+      "name": "Tile_X06_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_280.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_280.glb"
+    },
+    {
+      "name": "Tile_X06_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_281.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_281.glb"
+    },
+    {
+      "name": "Tile_X06_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_282.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_282.glb"
+    },
+    {
+      "name": "Tile_X06_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_283.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_283.glb"
+    },
+    {
+      "name": "Tile_X06_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_284.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_284.glb"
+    },
+    {
+      "name": "Tile_X06_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X06_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_285.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_285.glb"
+    },
+    {
+      "name": "Tile_X07_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_286.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_286.glb"
+    },
+    {
+      "name": "Tile_X07_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_287.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_287.glb"
+    },
+    {
+      "name": "Tile_X07_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_288.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_288.glb"
+    },
+    {
+      "name": "Tile_X07_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_289.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_289.glb"
+    },
+    {
+      "name": "Tile_X07_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_290.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_290.glb"
+    },
+    {
+      "name": "Tile_X07_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_291.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_291.glb"
+    },
+    {
+      "name": "Tile_X07_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_292.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_292.glb"
+    },
+    {
+      "name": "Tile_X07_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_293.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_293.glb"
+    },
+    {
+      "name": "Tile_X07_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_294.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_294.glb"
+    },
+    {
+      "name": "Tile_X07_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 12.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X07_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_295.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_295.glb"
+    },
+    {
+      "name": "Tile_X08_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_296.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_296.glb"
+    },
+    {
+      "name": "Tile_X08_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_297.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_297.glb"
+    },
+    {
+      "name": "Tile_X08_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_298.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_298.glb"
+    },
+    {
+      "name": "Tile_X08_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_299.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_299.glb"
+    },
+    {
+      "name": "Tile_X08_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_300.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_300.glb"
+    },
+    {
+      "name": "Tile_X08_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_301.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_301.glb"
+    },
+    {
+      "name": "Tile_X08_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_302.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_302.glb"
+    },
+    {
+      "name": "Tile_X08_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_303.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_303.glb"
+    },
+    {
+      "name": "Tile_X08_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_304.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_304.glb"
+    },
+    {
+      "name": "Tile_X08_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 17.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X08_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_305.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_305.glb"
+    },
+    {
+      "name": "Tile_X09_Y00.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y00.002",
+        "assetCollection": null,
+        "modelFile": "model_306.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_306.glb"
+    },
+    {
+      "name": "Tile_X09_Y01.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y01.002",
+        "assetCollection": null,
+        "modelFile": "model_307.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_307.glb"
+    },
+    {
+      "name": "Tile_X09_Y02.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y02.002",
+        "assetCollection": null,
+        "modelFile": "model_308.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_308.glb"
+    },
+    {
+      "name": "Tile_X09_Y03.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y03.002",
+        "assetCollection": null,
+        "modelFile": "model_309.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_309.glb"
+    },
+    {
+      "name": "Tile_X09_Y04.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": -2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y04.002",
+        "assetCollection": null,
+        "modelFile": "model_310.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_310.glb"
+    },
+    {
+      "name": "Tile_X09_Y05.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 2.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y05.002",
+        "assetCollection": null,
+        "modelFile": "model_311.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_311.glb"
+    },
+    {
+      "name": "Tile_X09_Y06.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 7.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y06.002",
+        "assetCollection": null,
+        "modelFile": "model_312.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_312.glb"
+    },
+    {
+      "name": "Tile_X09_Y07.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 12.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y07.002",
+        "assetCollection": null,
+        "modelFile": "model_313.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_313.glb"
+    },
+    {
+      "name": "Tile_X09_Y08.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 17.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y08.002",
+        "assetCollection": null,
+        "modelFile": "model_314.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_314.glb"
+    },
+    {
+      "name": "Tile_X09_Y09.002",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 22.5,
+        "y": 22.5,
+        "z": 0.009999999776482582
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Tile_X09_Y09.002",
+        "assetCollection": null,
+        "modelFile": "model_315.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/end_world_rooftop_phase1/models/model_315.glb"
+    }
+  ],
+  "blenderSource": {
+    "mode": "bidirectional",
+    "sourceFile": "end_world_rooftop_phase1.blend",
+    "managedRootObjects": [
+      "Rooftop_Base_50M",
+      "Wall_North",
+      "Wall_South",
+      "Wall_East",
+      "Wall_West",
+      "Rooftop_Base_50M.001",
+      "Wall_North.001",
+      "Wall_South.001",
+      "Wall_East.001",
+      "Wall_West.001",
+      "Rooftop_Base_50M.002",
+      "Wall_North.002",
+      "Wall_South.002",
+      "Wall_East.002",
+      "Wall_West.002",
+      "Tile_X00_Y00",
+      "Tile_X00_Y01",
+      "Tile_X00_Y02",
+      "Tile_X00_Y03",
+      "Tile_X00_Y04",
+      "Tile_X00_Y05",
+      "Tile_X00_Y06",
+      "Tile_X00_Y07",
+      "Tile_X00_Y08",
+      "Tile_X00_Y09",
+      "Tile_X01_Y00",
+      "Tile_X01_Y01",
+      "Tile_X01_Y02",
+      "Tile_X01_Y03",
+      "Tile_X01_Y04",
+      "Tile_X01_Y05",
+      "Tile_X01_Y06",
+      "Tile_X01_Y07",
+      "Tile_X01_Y08",
+      "Tile_X01_Y09",
+      "Tile_X02_Y00",
+      "Tile_X02_Y01",
+      "Tile_X02_Y02",
+      "Tile_X02_Y03",
+      "Tile_X02_Y04",
+      "Tile_X02_Y05",
+      "Tile_X02_Y06",
+      "Tile_X02_Y07",
+      "Tile_X02_Y08",
+      "Tile_X02_Y09",
+      "Tile_X03_Y00",
+      "Tile_X03_Y01",
+      "Tile_X03_Y02",
+      "Tile_X03_Y03",
+      "Tile_X03_Y04",
+      "Tile_X03_Y05",
+      "Tile_X03_Y06",
+      "Tile_X03_Y07",
+      "Tile_X03_Y08",
+      "Tile_X03_Y09",
+      "Tile_X04_Y00",
+      "Tile_X04_Y01",
+      "Tile_X04_Y02",
+      "Tile_X04_Y03",
+      "Tile_X04_Y04",
+      "Tile_X04_Y05",
+      "Tile_X04_Y06",
+      "Tile_X04_Y07",
+      "Tile_X04_Y08",
+      "Tile_X04_Y09",
+      "Tile_X05_Y00",
+      "Tile_X05_Y01",
+      "Tile_X05_Y02",
+      "Tile_X05_Y03",
+      "Tile_X05_Y04",
+      "Tile_X05_Y05",
+      "Tile_X05_Y06",
+      "Tile_X05_Y07",
+      "Tile_X05_Y08",
+      "Tile_X05_Y09",
+      "Tile_X06_Y00",
+      "Tile_X06_Y01",
+      "Tile_X06_Y02",
+      "Tile_X06_Y03",
+      "Tile_X06_Y04",
+      "Tile_X06_Y05",
+      "Tile_X06_Y06",
+      "Tile_X06_Y07",
+      "Tile_X06_Y08",
+      "Tile_X06_Y09",
+      "Tile_X07_Y00",
+      "Tile_X07_Y01",
+      "Tile_X07_Y02",
+      "Tile_X07_Y03",
+      "Tile_X07_Y04",
+      "Tile_X07_Y05",
+      "Tile_X07_Y06",
+      "Tile_X07_Y07",
+      "Tile_X07_Y08",
+      "Tile_X07_Y09",
+      "Tile_X08_Y00",
+      "Tile_X08_Y01",
+      "Tile_X08_Y02",
+      "Tile_X08_Y03",
+      "Tile_X08_Y04",
+      "Tile_X08_Y05",
+      "Tile_X08_Y06",
+      "Tile_X08_Y07",
+      "Tile_X08_Y08",
+      "Tile_X08_Y09",
+      "Tile_X09_Y00",
+      "Tile_X09_Y01",
+      "Tile_X09_Y02",
+      "Tile_X09_Y03",
+      "Tile_X09_Y04",
+      "Tile_X09_Y05",
+      "Tile_X09_Y06",
+      "Tile_X09_Y07",
+      "Tile_X09_Y08",
+      "Tile_X09_Y09",
+      "Tile_X00_Y00.001",
+      "Tile_X00_Y01.001",
+      "Tile_X00_Y02.001",
+      "Tile_X00_Y03.001",
+      "Tile_X00_Y04.001",
+      "Tile_X00_Y05.001",
+      "Tile_X00_Y06.001",
+      "Tile_X00_Y07.001",
+      "Tile_X00_Y08.001",
+      "Tile_X00_Y09.001",
+      "Tile_X01_Y00.001",
+      "Tile_X01_Y01.001",
+      "Tile_X01_Y02.001",
+      "Tile_X01_Y03.001",
+      "Tile_X01_Y04.001",
+      "Tile_X01_Y05.001",
+      "Tile_X01_Y06.001",
+      "Tile_X01_Y07.001",
+      "Tile_X01_Y08.001",
+      "Tile_X01_Y09.001",
+      "Tile_X02_Y00.001",
+      "Tile_X02_Y01.001",
+      "Tile_X02_Y02.001",
+      "Tile_X02_Y03.001",
+      "Tile_X02_Y04.001",
+      "Tile_X02_Y05.001",
+      "Tile_X02_Y06.001",
+      "Tile_X02_Y07.001",
+      "Tile_X02_Y08.001",
+      "Tile_X02_Y09.001",
+      "Tile_X03_Y00.001",
+      "Tile_X03_Y01.001",
+      "Tile_X03_Y02.001",
+      "Tile_X03_Y03.001",
+      "Tile_X03_Y04.001",
+      "Tile_X03_Y05.001",
+      "Tile_X03_Y06.001",
+      "Tile_X03_Y07.001",
+      "Tile_X03_Y08.001",
+      "Tile_X03_Y09.001",
+      "Tile_X04_Y00.001",
+      "Tile_X04_Y01.001",
+      "Tile_X04_Y02.001",
+      "Tile_X04_Y03.001",
+      "Tile_X04_Y04.001",
+      "Tile_X04_Y05.001",
+      "Tile_X04_Y06.001",
+      "Tile_X04_Y07.001",
+      "Tile_X04_Y08.001",
+      "Tile_X04_Y09.001",
+      "Tile_X05_Y00.001",
+      "Tile_X05_Y01.001",
+      "Tile_X05_Y02.001",
+      "Tile_X05_Y03.001",
+      "Tile_X05_Y04.001",
+      "Tile_X05_Y05.001",
+      "Tile_X05_Y06.001",
+      "Tile_X05_Y07.001",
+      "Tile_X05_Y08.001",
+      "Tile_X05_Y09.001",
+      "Tile_X06_Y00.001",
+      "Tile_X06_Y01.001",
+      "Tile_X06_Y02.001",
+      "Tile_X06_Y03.001",
+      "Tile_X06_Y04.001",
+      "Tile_X06_Y05.001",
+      "Tile_X06_Y06.001",
+      "Tile_X06_Y07.001",
+      "Tile_X06_Y08.001",
+      "Tile_X06_Y09.001",
+      "Tile_X07_Y00.001",
+      "Tile_X07_Y01.001",
+      "Tile_X07_Y02.001",
+      "Tile_X07_Y03.001",
+      "Tile_X07_Y04.001",
+      "Tile_X07_Y05.001",
+      "Tile_X07_Y06.001",
+      "Tile_X07_Y07.001",
+      "Tile_X07_Y08.001",
+      "Tile_X07_Y09.001",
+      "Tile_X08_Y00.001",
+      "Tile_X08_Y01.001",
+      "Tile_X08_Y02.001",
+      "Tile_X08_Y03.001",
+      "Tile_X08_Y04.001",
+      "Tile_X08_Y05.001",
+      "Tile_X08_Y06.001",
+      "Tile_X08_Y07.001",
+      "Tile_X08_Y08.001",
+      "Tile_X08_Y09.001",
+      "Tile_X09_Y00.001",
+      "Tile_X09_Y01.001",
+      "Tile_X09_Y02.001",
+      "Tile_X09_Y03.001",
+      "Tile_X09_Y04.001",
+      "Tile_X09_Y05.001",
+      "Tile_X09_Y06.001",
+      "Tile_X09_Y07.001",
+      "Tile_X09_Y08.001",
+      "Tile_X09_Y09.001",
+      "Tile_X00_Y00.002",
+      "Tile_X00_Y01.002",
+      "Tile_X00_Y02.002",
+      "Tile_X00_Y03.002",
+      "Tile_X00_Y04.002",
+      "Tile_X00_Y05.002",
+      "Tile_X00_Y06.002",
+      "Tile_X00_Y07.002",
+      "Tile_X00_Y08.002",
+      "Tile_X00_Y09.002",
+      "Tile_X01_Y00.002",
+      "Tile_X01_Y01.002",
+      "Tile_X01_Y02.002",
+      "Tile_X01_Y03.002",
+      "Tile_X01_Y04.002",
+      "Tile_X01_Y05.002",
+      "Tile_X01_Y06.002",
+      "Tile_X01_Y07.002",
+      "Tile_X01_Y08.002",
+      "Tile_X01_Y09.002",
+      "Tile_X02_Y00.002",
+      "Tile_X02_Y01.002",
+      "Tile_X02_Y02.002",
+      "Tile_X02_Y03.002",
+      "Tile_X02_Y04.002",
+      "Tile_X02_Y05.002",
+      "Tile_X02_Y06.002",
+      "Tile_X02_Y07.002",
+      "Tile_X02_Y08.002",
+      "Tile_X02_Y09.002",
+      "Tile_X03_Y00.002",
+      "Tile_X03_Y01.002",
+      "Tile_X03_Y02.002",
+      "Tile_X03_Y03.002",
+      "Tile_X03_Y04.002",
+      "Tile_X03_Y05.002",
+      "Tile_X03_Y06.002",
+      "Tile_X03_Y07.002",
+      "Tile_X03_Y08.002",
+      "Tile_X03_Y09.002",
+      "Tile_X04_Y00.002",
+      "Tile_X04_Y01.002",
+      "Tile_X04_Y02.002",
+      "Tile_X04_Y03.002",
+      "Tile_X04_Y04.002",
+      "Tile_X04_Y05.002",
+      "Tile_X04_Y06.002",
+      "Tile_X04_Y07.002",
+      "Tile_X04_Y08.002",
+      "Tile_X04_Y09.002",
+      "Tile_X05_Y00.002",
+      "Tile_X05_Y01.002",
+      "Tile_X05_Y02.002",
+      "Tile_X05_Y03.002",
+      "Tile_X05_Y04.002",
+      "Tile_X05_Y05.002",
+      "Tile_X05_Y06.002",
+      "Tile_X05_Y07.002",
+      "Tile_X05_Y08.002",
+      "Tile_X05_Y09.002",
+      "Tile_X06_Y00.002",
+      "Tile_X06_Y01.002",
+      "Tile_X06_Y02.002",
+      "Tile_X06_Y03.002",
+      "Tile_X06_Y04.002",
+      "Tile_X06_Y05.002",
+      "Tile_X06_Y06.002",
+      "Tile_X06_Y07.002",
+      "Tile_X06_Y08.002",
+      "Tile_X06_Y09.002",
+      "Tile_X07_Y00.002",
+      "Tile_X07_Y01.002",
+      "Tile_X07_Y02.002",
+      "Tile_X07_Y03.002",
+      "Tile_X07_Y04.002",
+      "Tile_X07_Y05.002",
+      "Tile_X07_Y06.002",
+      "Tile_X07_Y07.002",
+      "Tile_X07_Y08.002",
+      "Tile_X07_Y09.002",
+      "Tile_X08_Y00.002",
+      "Tile_X08_Y01.002",
+      "Tile_X08_Y02.002",
+      "Tile_X08_Y03.002",
+      "Tile_X08_Y04.002",
+      "Tile_X08_Y05.002",
+      "Tile_X08_Y06.002",
+      "Tile_X08_Y07.002",
+      "Tile_X08_Y08.002",
+      "Tile_X08_Y09.002",
+      "Tile_X09_Y00.002",
+      "Tile_X09_Y01.002",
+      "Tile_X09_Y02.002",
+      "Tile_X09_Y03.002",
+      "Tile_X09_Y04.002",
+      "Tile_X09_Y05.002",
+      "Tile_X09_Y06.002",
+      "Tile_X09_Y07.002",
+      "Tile_X09_Y08.002",
+      "Tile_X09_Y09.002"
+    ]
+  },
+  "id": "end_world_rooftop_phase1",
+  "savedAt": "2026-09-14T04:54:19.511Z",
+  "blenderFile": "end_world_rooftop_phase1.blend",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  }
+}

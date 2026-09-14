@@ -38,7 +38,7 @@
     "designScope": "Blocks/Battle; Floor_98-Floor_95",
     "sceneDesignDocs": ["docs/v0.1/05_技术施工_关卡生成与爬楼.md", "docs/v0.1/05.1_关卡区块设计.md"],
     "assetLedger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
-    "blenderOutput": "source/art/whitebox/tower_zones/v011/blender/whitebox_tower_battle_stairs_v011.blend",
-    "layoutNote": "3Dgame-design preview stores the four floor slabs and the 98F perimeter. Runtime rooms and corridors remain procedurally generated."
+    "blenderOutput": null,
+    "layoutNote": "3Dgame-design data stores the four floor slabs and the 98F perimeter. The former combined v011 Blend is now stairs-only; Battle currently has no Blender output. Runtime rooms and corridors remain procedurally generated."
   }
 }

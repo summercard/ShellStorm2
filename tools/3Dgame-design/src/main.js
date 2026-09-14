@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import './style.css';
 
 const $ = (s) => document.querySelector(s);
@@ -9,7 +10,7 @@ const legacyScenesKey = 'scenekit-preview-scenes-v2';
 const sceneIndexKey = 'scenekit-preview-scene-index-v3';
 const sceneDataKey = id => `scenekit-preview-scene-v3:${id}`;
 const undoHistory = [], redoHistory = [], historyLimit = 40;
-let activeSceneId = null, activeBlockId = null, projectBlocks = [], currentSceneName = 'untitled_scene', pendingSceneAction = null, activeSceneSavedAt = null, sceneSyncInFlight = false;
+let activeSceneId = null, activeBlockId = null, activeBlenderSource = null, projectBlocks = [], currentSceneName = 'untitled_scene', pendingSceneAction = null, activeSceneSavedAt = null, sceneSyncInFlight = false;
 let clipboardComponent = null;
 let saveDirectoryHandle = null;
 let activeGroup = null, transformMode = 'translate';
@@ -32,6 +33,26 @@ const assetLibraries = [
 ];
 let selected = null, snapping = true, grounding = true, rotationSnapping = true, collisionEnabled = true, passThrough = false, dragOffset = new THREE.Vector3(), dragging = false, gizmoInteraction = false, transformDragPreviousPosition = null, verticalSnapApplied = false, lastCollisionNotice = 0;
 const instances = [];
+const gltfLoader = new GLTFLoader();
+let frameImportedTimer = null;
+
+function frameImportedScene() {
+  const box = new THREE.Box3(); instances.forEach(instance => box.expandByObject(instance));
+  if (box.isEmpty()) return;
+  const center = box.getCenter(new THREE.Vector3()), size = box.getSize(new THREE.Vector3()), radius = Math.max(size.x, size.y, size.z, 4);
+  controls.target.copy(center); camera.position.copy(center).add(new THREE.Vector3(radius * .8, radius * .8, radius * .6)); camera.near = Math.max(.05, radius / 1000); camera.far = Math.max(100, radius * 10); camera.updateProjectionMatrix(); controls.update();
+}
+
+function loadBlenderModel(root, record) {
+  if (!record.modelUrl) return;
+  root.userData.blenderSettings = structuredClone(record.blenderSettings || {}); root.userData.modelUrl = record.modelUrl;
+  gltfLoader.load(record.modelUrl, gltf => {
+    modelRoot(root).add(gltf.scene);
+    root.traverse(object => { if (object.isMesh) { object.userData.root = root; object.castShadow = true; object.receiveShadow = true; } });
+    if (selected === root) selectionBox.setFromObject(root);
+    clearTimeout(frameImportedTimer); frameImportedTimer = setTimeout(frameImportedScene, 120);
+  }, undefined, () => showToast(`模型读取失败：${record.name}`));
+}
 
 function renderAssets(filter = '') {
   const list = $('#assetList'); list.innerHTML = '';
@@ -194,7 +215,8 @@ function createComponent(type) {
   const root = new THREE.Group(); const geometryRoot = new THREE.Group(); geometryRoot.rotation.x = Math.PI / 2; root.add(geometryRoot); root.userData = { type, name: `${type}_${instances.filter(i => i.userData.type === type).length + 1}`, modelRoot: geometryRoot };
   const wood = 0x9b6745, wall = 0xa9b8ba, fabric = 0x547f91, dark = 0x425157;
   const addLegs = (w, d, h) => [-1, 1].forEach(x => [-1, 1].forEach(z => { const leg = mesh(new THREE.BoxGeometry(.13, h, .13), wood, h / 2); leg.position.set(x*w/2.25, h/2, z*d/2.25); addPart(root, leg); }));
-  if (type === '墙壁') { root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 3, thickness: .2 }; buildSurface(root); }
+  if (type === 'Blender模型') { /* Geometry is loaded from the imported GLB preview. */ }
+  else if (type === '墙壁') { root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 3, thickness: .2 }; buildSurface(root); }
   else if (type === '地板') { root.userData.surfaceSettings = { kind: 'floor', length: 5, width: 5, thickness: .1 }; buildSurface(root); }
   else if (type === '楼梯') { root.userData.stairSettings = { steps: 10, width: 1.5, handrailHeight: 1, leftHandrail: true, rightHandrail: true, totalHeight: 1.8 }; buildStair(root); }
   else if (type === '门') { addPart(root, mesh(new THREE.BoxGeometry(1.25, 2.35, .13), wood, 1.175)); const knob = mesh(new THREE.SphereGeometry(.06, 12, 8), 0xd8b362); knob.position.set(.42, 1.15, -.1); addPart(root, knob); }
@@ -436,6 +458,7 @@ function scenePayload() {
     coordinateSystem,
     axes: { right: 'X', forward: '-Y', up: 'Z' },
     units: { distance: 'm', rotation: 'deg' },
+    blenderSource: activeBlenderSource ? structuredClone(activeBlenderSource) : undefined,
     savedAt: new Date().toISOString(),
     camera: {
       position: { x: camera.position.x, y: camera.position.y, z: camera.position.z },
@@ -457,7 +480,9 @@ function scenePayload() {
       surfaceSettings: o.userData.surfaceSettings,
       chairSettings: o.userData.chairSettings,
       tableSettings: o.userData.tableSettings,
-      stairSettings: o.userData.stairSettings
+      stairSettings: o.userData.stairSettings,
+      blenderSettings: o.userData.blenderSettings,
+      modelUrl: o.userData.modelUrl
     }))
   };
 }
@@ -528,7 +553,7 @@ function readSavedScene(id) { try { return JSON.parse(localStorage.getItem(scene
 const selectedBlock = () => projectBlocks.find(block => block.id === $('#blockSelect').value);
 function updateSceneTitle() {
   const block = selectedBlock();
-  $('.file-name').innerHTML = `<span class="status-dot"></span>${block ? `${block.name} / ` : ''}${currentSceneName} <span>·</span> 已保存`;
+  $('.file-name').innerHTML = `<span class="status-dot"></span>${block ? `${block.name} / ` : ''}${currentSceneName} <span>·</span> ${activeSceneId ? 'Blender 已保存' : '未保存'}`;
 }
 async function loadProjectBlocks() {
   try {
@@ -554,8 +579,8 @@ async function saveCurrentScene(name) {
   try {
     const response = await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: trimmed, payload }) });
     if (!response.ok) throw new Error('save');
-    const record = await response.json(); activeSceneId = record.id; activeBlockId = block.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id, block.id); updateSceneTitle(); showToast(`场景“${record.name}”已保存至${block.name}`); return true;
-  } catch { showToast('本地存档服务未启动，请重新运行 npm run dev'); return false; }
+    const record = await response.json(); activeSceneId = record.id; activeBlockId = block.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id, block.id); updateSceneTitle(); showToast(`已生成 ${record.blenderFile}`); return true;
+  } catch { showToast('Blender 场景生成失败，请检查本地 Blender'); return false; }
 }
 function showSaveModal(afterSave = null) { pendingSceneAction = afterSave; $('#saveBlockName').textContent = selectedBlock()?.name || '未选择区块'; $('#sceneNameInput').value = currentSceneName === 'untitled_scene' ? '' : currentSceneName; openModal('#saveModal'); $('#sceneNameInput').focus(); }
 async function showLoadModal() {
@@ -617,7 +642,7 @@ async function syncAiScenePreview() {
   } catch { /* The local server may be restarting; retry on the next sync. */ }
   finally { sceneSyncInFlight = false; }
 }
-function createNewScene() { captureHistory(); clearScene(); $('#dropNotice').classList.remove('hidden'); updateCounts(); renderNodes(); activeSceneId = null; activeBlockId = $('#blockSelect').value || null; activeSceneSavedAt = null; void setActivePreview(null, activeBlockId); currentSceneName = 'untitled_scene'; updateSceneTitle(); showToast(`已在${selectedBlock()?.name || '当前区块'}新建空白场景`); }
+function createNewScene() { captureHistory(); clearScene(); activeBlenderSource = null; $('#dropNotice').classList.remove('hidden'); updateCounts(); renderNodes(); activeSceneId = null; activeBlockId = $('#blockSelect').value || null; activeSceneSavedAt = null; void setActivePreview(null, activeBlockId); currentSceneName = 'untitled_scene'; updateSceneTitle(); showToast(`已在${selectedBlock()?.name || '当前区块'}新建空白场景`); }
 function continueSceneTransition(action) {
   pendingSceneAction = null;
   closeModal();
@@ -636,7 +661,7 @@ function clearScene() {
 }
 function restoreScene(payload) {
   if (!payload?.components || !Array.isArray(payload.components)) throw new Error('场景数据无效');
-  clearScene();
+  clearScene(); activeBlenderSource = payload.blenderSource ? structuredClone(payload.blenderSource) : null;
   const groups = new Map();
   (Array.isArray(payload.groups) ? payload.groups : []).forEach(record => {
     const group = new THREE.Group();
@@ -655,6 +680,7 @@ function restoreScene(payload) {
     if (record.chairSettings) { obj.userData.chairSettings = record.chairSettings; buildChair(obj); }
     if (record.tableSettings) { obj.userData.tableSettings = record.tableSettings; buildTable(obj); }
     if (record.stairSettings) { obj.userData.stairSettings = record.stairSettings; buildStair(obj); }
+    if (record.blenderSettings) loadBlenderModel(obj, record);
     const transform = normalizeTransform(record, payload);
     obj.position.set(transform.position?.x || 0, transform.position?.y || 0, transform.position?.z || 0);
     obj.rotation.set(transform.rotation?.x || 0, transform.rotation?.y || 0, transform.rotation?.z || 0);
@@ -686,6 +712,7 @@ function componentSnapshot(obj) {
 }
 function pasteComponent() {
   if (!clipboardComponent) { showToast('请先选中组件并复制'); return; }
+  if (clipboardComponent.type === 'Blender模型') { showToast('导入的 Blender 根组件不能复制；可移动、旋转、缩放或删除'); return; }
   captureHistory();
   const record = structuredClone(clipboardComponent), obj = createComponent(record.type);
   obj.userData.name = `${record.type}_${instances.filter(item => item.userData.type === record.type).length + 1}`;
@@ -785,6 +812,8 @@ $('#focusBtn').onclick=()=>{if(selected){controls.target.copy(selected.position)
 $('#bindBtn').onclick=()=>showToast('基础版组件均绑定至 Scene 根节点');
 $('#createGroupBtn').onclick=()=>{const group=new THREE.Group();group.userData={nodeType:'group',name:`分组_${[...scene.children].filter(o=>o.userData?.nodeType==='group').length+1}`};scene.add(group);activeGroup=group;select(group);showToast(`${group.userData.name} 已创建`);};
 $('#newSceneBtn').onclick=()=>requestSceneTransition(createNewScene);
+$('#openBlendBtn').onclick=()=>{if(!selectedBlock()){showToast('请先选择区块');return;}$('#blendFileInput').value='';$('#blendFileInput').click();};
+$('#blendFileInput').onchange=async event=>{const file=event.target.files?.[0],block=selectedBlock();if(!file||!block)return;try{showToast(`正在打开 ${file.name}…`);const response=await fetch(`/api/blocks/${encodeURIComponent(block.id)}/import-blend`,{method:'POST',headers:{'X-File-Name':encodeURIComponent(file.name)},body:file});const payload=await response.json();if(!response.ok)throw new Error(payload.error||'打开失败');captureHistory();activeBlockId=block.id;activeSceneId=payload.id;currentSceneName=payload.name;activeSceneSavedAt=payload.savedAt;restoreScene(payload);void setActivePreview(activeSceneId,activeBlockId);updateSceneTitle();showToast(`已在${block.name}打开 ${file.name}`);}catch(error){showToast(error.message||'Blender 文件打开失败');}};
 $('#saveSceneBtn').onclick=()=>showSaveModal();
 $('#loadSceneBtn').onclick=()=>requestSceneTransition(showLoadModal);
 $('#aiEditBtn').onclick=showAiModal;
@@ -794,7 +823,7 @@ $('#discardSceneBtn').onclick=()=>{continueSceneTransition(pendingSceneAction);}
 $('#confirmLoadBtn').onclick=async()=>{const id=$('#savedSceneSelect').value,block=selectedBlock();if(!id||!block)return;try{const response=await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes/${encodeURIComponent(id)}`);if(!response.ok)throw new Error('load');const payload=await response.json();captureHistory();restoreScene(payload);activeSceneId=payload.id||id;activeBlockId=block.id;currentSceneName=payload.name||id;activeSceneSavedAt=payload.savedAt||null;void setActivePreview(activeSceneId,activeBlockId);updateSceneTitle();closeModal();showToast(`已从${block.name}读取“${currentSceneName}”`);}catch{showToast('场景文件读取失败');}};
 $('#blockSelect').onchange=()=>{activeBlockId=$('#blockSelect').value||null;renderAssets($('#searchInput').value.trim());requestSceneTransition(createNewScene);updateSceneTitle();};
 $('#applyAiCommandBtn').onclick=applyAiCommands;
-$('#chooseSaveDirBtn').onclick=()=>showToast('存档目录已固定为程序目录下的 save 文件夹');
+if ($('#chooseSaveDirBtn')) $('#chooseSaveDirBtn').onclick=()=>showToast('Blender 场景保存在 tools/3Dgame-design/save/blocks/区块/场景/');
 document.querySelectorAll('[data-modal-close]').forEach(button=>button.onclick=()=>{pendingSceneAction=null;closeModal();});
 $('#modalBackdrop').onclick=e=>{if(e.target===e.currentTarget){pendingSceneAction=null;closeModal();}};
 $('#undoBtn').onclick=undoScene; $('#redoBtn').onclick=redoScene;
@@ -809,7 +838,7 @@ document.addEventListener('keydown',e=>{
   if (!(e.ctrlKey || e.metaKey)) return;
   if(key==='z'){e.preventDefault();e.shiftKey?redoScene():undoScene();}else if(key==='y'){e.preventDefault();redoScene();}else if(key==='c'&&!editingText){if(selected){clipboardComponent=componentSnapshot(selected);showToast('组件已复制');e.preventDefault();}}else if(key==='v'&&!editingText){pasteComponent();e.preventDefault();}
 });
-$('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(scenePayload(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='scene-preview.json';a.click();URL.revokeObjectURL(a.href);showToast('场景数据已导出');};
+$('#exportBtn').onclick=()=>{if(!activeSceneId||!activeBlockId){showToast('请先保存 Blender 场景');return;}const a=document.createElement('a');a.href=`/api/blocks/${encodeURIComponent(activeBlockId)}/scenes/${encodeURIComponent(activeSceneId)}/blend`;a.download=`${activeSceneId}.blend`;a.click();showToast('开始下载 Blender 场景');};
 function resize(){const r=container.getBoundingClientRect();camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height);}new ResizeObserver(resize).observe(container);resize();
 window.setInterval(syncAiScenePreview, 1200);
 void loadProjectBlocks();

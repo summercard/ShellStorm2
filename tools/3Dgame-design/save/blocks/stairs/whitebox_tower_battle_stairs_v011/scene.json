@@ -1,0 +1,86 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "whitebox_tower_battle_stairs_v011",
+  "groups": [],
+  "components": [
+    {
+      "name": "Stair_Special_Rooftop_ROOT",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -32.5,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Special_Rooftop_ROOT",
+        "assetCollection": null,
+        "modelFile": "model_001.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_battle_stairs_v011/models/model_001.glb"
+    },
+    {
+      "name": "Stair_Generic_Rotatable_ROOT",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 32.5,
+        "y": 0,
+        "z": -9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Generic_Rotatable_ROOT",
+        "assetCollection": null,
+        "modelFile": "model_002.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_battle_stairs_v011/models/model_002.glb"
+    }
+  ],
+  "blenderSource": {
+    "mode": "bidirectional",
+    "sourceFile": "whitebox_tower_battle_stairs_v011.blend",
+    "managedRootObjects": [
+      "Stair_Special_Rooftop_ROOT",
+      "Stair_Generic_Rotatable_ROOT"
+    ]
+  },
+  "id": "whitebox_tower_battle_stairs_v011",
+  "savedAt": "2026-09-14T05:40:21.574Z",
+  "blenderFile": "whitebox_tower_battle_stairs_v011.blend",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  }
+}
