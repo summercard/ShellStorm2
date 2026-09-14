@@ -144,7 +144,8 @@ metadata/display_name = "首关战斗区"
 metadata/floor_range = "98F-95F"
 metadata/asset_ids = Array[String](["ENV-TOWER-DESCENT-KIT-3D"])
 metadata/runtime_owner = "TowerDescent3D"
-metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v011.blend"])
+metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend"])
+metadata/production_stage = "formal_blender_source"
 
 [node name="Stairs" type="Node3D" parent="Blocks" index="3"]
 metadata/block_id = "stairs"
@@ -152,6 +153,7 @@ metadata/display_name = "楼梯区"
 metadata/floor_range = "100F-99F;99F-98F"
 metadata/asset_ids = Array[String](["ENV-TOWER-STAIRWELL-ROOFTOP-12M", "ENV-TOWER-STAIRWELL-GENERIC-12M"])
 metadata/runtime_owner = "TowerDescent3D"
-metadata/source_blends = Array[String](["assets/art/environments/tower_descent_3d/source/env_tower_descent_kit_top3d_v011.blend"])
+metadata/source_blends = Array[String](["source/art/whitebox/tower_zones/v011/blender/whitebox_tower_battle_stairs_v011.blend"])
+metadata/production_stage = "whitebox"
 
 [editable path="Blocks/Base/Art"]

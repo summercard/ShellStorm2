@@ -13,8 +13,9 @@ from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "assets/art/environments/tower_descent_3d/source"
+WHITEBOX_DIR = ROOT / "source/art/whitebox/tower_zones/v011/blender"
 COMPONENT_DIR = ROOT / "assets/art/environments/tower_descent_3d/components"
-OUTPUT_BLEND = SOURCE_DIR / "env_tower_descent_kit_top3d_v011.blend"
+OUTPUT_BLEND = WHITEBOX_DIR / "whitebox_tower_battle_stairs_v011.blend"
 FLOOR_HEIGHT = 12.0
 VISUAL_HEIGHT = 11.9
 HALF_HEIGHT = FLOOR_HEIGHT * 0.5
@@ -203,6 +204,7 @@ scene["asset_version"] = "v011"
 scene["tower_floor_height_m"] = FLOOR_HEIGHT
 scene["tower_wall_visual_height_m"] = VISUAL_HEIGHT
 scene["derived_from"] = str(SOURCE_DIR / "env_tower_descent_kit_top3d_v010.blend")
+WHITEBOX_DIR.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUTPUT_BLEND))
 
 bpy.ops.object.select_all(action="DESELECT")

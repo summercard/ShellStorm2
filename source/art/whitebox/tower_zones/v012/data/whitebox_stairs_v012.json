@@ -1,0 +1,44 @@
+{
+  "scene_id": "tower_stairs",
+  "display_name": "塔楼楼梯间反推白盒",
+  "version": 12,
+  "stage": "reverse_engineered_whitebox",
+  "block": {
+    "block_id": "stairs",
+    "floor_range": "100F-99F;99F-98F",
+    "design_scope": "Blocks/Stairs; Stair_A; Stair_B",
+    "scene_design_docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
+  },
+  "truth_source": "current_godot_glb",
+  "source_glbs": {
+    "stair_a": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb",
+    "stair_b": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb"
+  },
+  "unit": "meter",
+  "coordinate_system": "godot_y_up_negative_z_forward; imported into Blender as Z-up",
+  "grid_size_m": [5.0, 5.0],
+  "footprint_size_m": [15.0, 30.0],
+  "floor_height_m": 12.0,
+  "visible_wall_height_m": 11.9,
+  "sockets_blender_z_m": {
+    "upper_door": 0.0,
+    "lower_door": -12.0
+  },
+  "stair_geometry": {
+    "layout": "U_shape_two_flights",
+    "treads_per_flight": 20,
+    "rise_per_tread_m": 0.3,
+    "run_per_tread_m": 0.75,
+    "tread_width_m": 5.58,
+    "tread_depth_m": 0.72,
+    "tread_thickness_m": 0.07
+  },
+  "formal_blender_output": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+  "generator": "scripts/blender/build_formal_tower_stairs_from_godot_v001.py",
+  "runtime_reimported": false,
+  "migration_note": "v012 was measured from the currently referenced Godot GLBs after the 12 m floor-height change. The combined v011 whitebox Blend remains unchanged for rollback."
+}

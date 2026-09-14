@@ -4,6 +4,8 @@
 
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
 - [WORLD-BLOCKS 四区块场景树与资产目录整理](2026-09-13_world_level_blocks.md)：统一天台、基地、首关战斗与楼梯区块，简化运行名并同步 Blender 对照和资产台账。
+- [Battle 与 Stairs 白盒目录归一](2026-09-14_battle_stairs_whitebox_relocation.md)：将98–95F战斗区和楼梯区重新定性为白盒阶段，统一数据、Blender输出和效果图目录。
+- [楼梯间 Godot 反推与正式 Blender 源](2026-09-14_stairs_formal_blender_from_godot.md)：按当前12米楼梯GLB反推白盒合同，生成只含两个楼梯间资产包的正式源且不重导入Godot。
 - [本次工程与文档审计记录](2026-09-12_documentation_audit.md)。
 - [工程、文档与开发状态表交付记录](2026-09-12_discrepancy_table.md)：44项跟踪按已一致、开发中·部分完成、工程/文档不匹配、待设计／核验和文档缺失分类，另含214条资产展开明细。
 - [E05/E06行动结算单次事务](2026-09-12_e05_e06_run_settlement_transaction.md)：成功撤离与死亡统一为一次原子、可重试、跨重载幂等的长期结算。

@@ -1,0 +1,38 @@
+{
+  "asset_id": "ENV-TOWER-STAIRS-12M-SOURCE",
+  "version": "v001",
+  "block_id": "stairs",
+  "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+  "contract": "source/art/whitebox/tower_zones/v012/data/whitebox_stairs_v012.json",
+  "production_stage": "formal_blender_source",
+  "runtime_reimported": false,
+  "contains_non_stair_models": false,
+  "packages": [
+    {
+      "package_id": "楼梯A_100至99层",
+      "source_glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb",
+      "source_glb_sha256": "17b82c570b7538942a34ab0664224ea08a8f7588fa94c79f35bde33995fd94bd",
+      "output_collection": "楼梯A_100至99层_资产包",
+      "mesh_count": 55,
+      "object_count": 58,
+      "footprint_size_m": [
+        15.0,
+        30.0
+      ],
+      "floor_height_m": 12.0
+    },
+    {
+      "package_id": "楼梯B_99至98层",
+      "source_glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb",
+      "source_glb_sha256": "18884bc87f7a733631fafbca0ef5739ec15e85fd1259a41ff3e7add454179c1b",
+      "output_collection": "楼梯B_99至98层_资产包",
+      "mesh_count": 56,
+      "object_count": 59,
+      "footprint_size_m": [
+        15.0,
+        30.0
+      ],
+      "floor_height_m": 12.0
+    }
+  ]
+}
