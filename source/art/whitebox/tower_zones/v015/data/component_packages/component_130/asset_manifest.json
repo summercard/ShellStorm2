@@ -1,0 +1,98 @@
+{
+  "package_id": "component_130",
+  "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+  "name": "B_下跑",
+  "category": "楼梯间B/楼梯",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "B_下跑",
+  "root": "B_下跑",
+  "objects": [
+    "B_下跑",
+    "Walkable.003",
+    "Guard_01.002",
+    "Guard_02.003",
+    "踏步_1.003",
+    "踏步_2.003",
+    "踏步_3.003",
+    "踏步_4.003",
+    "踏步_5.003",
+    "踏步_6.003",
+    "踏步_7.003",
+    "踏步_8.003",
+    "踏步_9.003",
+    "踏步_10.003",
+    "踏步_11.003",
+    "踏步_12.003",
+    "踏步_13.003",
+    "踏步_14.003",
+    "踏步_15.003",
+    "踏步_16.003",
+    "踏步_17.003",
+    "踏步_18.003",
+    "踏步_19.003",
+    "踏步_20.003"
+  ],
+  "world_position": [
+    36.000999450683594,
+    18.12030029296875,
+    -15.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      32.750999450683594,
+      3.0102994441986084,
+      -21.270301818847656
+    ],
+    "max": [
+      39.25100326538086,
+      18.20652198791504,
+      -15.008520126342773
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 3.5009995,
+      "y": 18.1203003,
+      "z": -6.0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 180
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "profile": "original-v013",
+    "runLength": 15,
+    "slopeDeg": 21.80140948635181,
+    "width": 6,
+    "stepCount": 20,
+    "handrailHeight": 1.2,
+    "omitParts": []
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

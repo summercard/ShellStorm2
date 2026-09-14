@@ -66,6 +66,11 @@
       "modelUrl": "/save/blocks/stairs/whitebox_tower_battle_stairs_v011/models/model_002.glb"
     }
   ],
+  "editorSettings": {
+    "snapping": false,
+    "grounding": false,
+    "collision": false
+  },
   "blenderSource": {
     "mode": "bidirectional",
     "sourceFile": "whitebox_tower_battle_stairs_v011.blend",
@@ -75,7 +80,7 @@
     ]
   },
   "id": "whitebox_tower_battle_stairs_v011",
-  "savedAt": "2026-09-14T05:40:21.574Z",
+  "savedAt": "2026-09-14T06:06:10.066Z",
   "blenderFile": "whitebox_tower_battle_stairs_v011.blend",
   "project": {
     "blockId": "stairs",

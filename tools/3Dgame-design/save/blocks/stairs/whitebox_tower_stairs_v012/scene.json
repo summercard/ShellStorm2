@@ -1,0 +1,91 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "whitebox_tower_stairs_v012",
+  "groups": [],
+  "components": [
+    {
+      "name": "Stair_Special_Rooftop_ROOT",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -32.5,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Special_Rooftop_ROOT",
+        "assetCollection": "01_楼梯间A_天台至基地_组件包",
+        "modelFile": "model_001.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v012/models/model_001.glb"
+    },
+    {
+      "name": "Stair_Generic_Rotatable_ROOT",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 32.5,
+        "y": 0,
+        "z": -9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Generic_Rotatable_ROOT",
+        "assetCollection": "02_楼梯间B_通用旋转_组件包",
+        "modelFile": "model_002.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v012/models/model_002.glb"
+    }
+  ],
+  "editorSettings": {
+    "snapping": false,
+    "grounding": false,
+    "collision": false
+  },
+  "blenderSource": {
+    "mode": "bidirectional",
+    "sourceFile": "whitebox_tower_stairs_v012.blend",
+    "managedRootObjects": [
+      "Stair_Special_Rooftop_ROOT",
+      "Stair_Generic_Rotatable_ROOT"
+    ]
+  },
+  "id": "whitebox_tower_stairs_v012",
+  "savedAt": "2026-09-14T06:06:47.611Z",
+  "blenderFile": "whitebox_tower_stairs_v012.blend",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  }
+}

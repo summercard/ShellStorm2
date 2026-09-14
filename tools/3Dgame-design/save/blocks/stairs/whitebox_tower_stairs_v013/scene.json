@@ -1,0 +1,236 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "whitebox_tower_stairs_v013",
+  "groups": [
+    {
+      "name": "01_楼梯间A_天台至基地_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "02_楼梯间B_通用旋转_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ],
+  "components": [
+    {
+      "name": "01_楼板",
+      "type": "Blender模型",
+      "group": "01_楼梯间A_天台至基地_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Special_Rooftop_01_楼板_ROOT",
+        "assetCollection": "A_01_楼板",
+        "modelFile": "model_001.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_001.glb"
+    },
+    {
+      "name": "02_墙壁",
+      "type": "Blender模型",
+      "group": "01_楼梯间A_天台至基地_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Special_Rooftop_02_墙壁_ROOT",
+        "assetCollection": "A_02_墙壁",
+        "modelFile": "model_002.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_002.glb"
+    },
+    {
+      "name": "03_楼梯",
+      "type": "Blender模型",
+      "group": "01_楼梯间A_天台至基地_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Special_Rooftop_03_楼梯_ROOT",
+        "assetCollection": "A_03_楼梯",
+        "modelFile": "model_003.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_003.glb"
+    },
+    {
+      "name": "01_楼板",
+      "type": "Blender模型",
+      "group": "02_楼梯间B_通用旋转_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Generic_Rotatable_01_楼板_ROOT",
+        "assetCollection": "B_01_楼板",
+        "modelFile": "model_004.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_004.glb"
+    },
+    {
+      "name": "02_墙壁",
+      "type": "Blender模型",
+      "group": "02_楼梯间B_通用旋转_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Generic_Rotatable_02_墙壁_ROOT",
+        "assetCollection": "B_02_墙壁",
+        "modelFile": "model_005.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_005.glb"
+    },
+    {
+      "name": "03_楼梯",
+      "type": "Blender模型",
+      "group": "02_楼梯间B_通用旋转_组件包",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "Stair_Generic_Rotatable_03_楼梯_ROOT",
+        "assetCollection": "B_03_楼梯",
+        "modelFile": "model_006.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairs_v013/models/model_006.glb"
+    }
+  ],
+  "editorSettings": {
+    "snapping": false,
+    "grounding": false,
+    "collision": false
+  },
+  "blenderSource": {
+    "mode": "bidirectional",
+    "sourceFile": "whitebox_tower_stairs_v013.blend",
+    "managedRootObjects": [
+      "Stair_Special_Rooftop_01_楼板_ROOT",
+      "Stair_Special_Rooftop_02_墙壁_ROOT",
+      "Stair_Special_Rooftop_03_楼梯_ROOT",
+      "Stair_Generic_Rotatable_01_楼板_ROOT",
+      "Stair_Generic_Rotatable_02_墙壁_ROOT",
+      "Stair_Generic_Rotatable_03_楼梯_ROOT"
+    ]
+  },
+  "id": "whitebox_tower_stairs_v013",
+  "savedAt": "2026-09-14T06:12:45.154Z",
+  "blenderFile": "whitebox_tower_stairs_v013.blend",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  }
+}

@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readProjectBlocks, requireProjectBlock } from './project-blocks.mjs';
+import { validateFixedModules } from './component-policy.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const saveRoot = path.join(root, 'save');
@@ -19,7 +20,7 @@ const blenderWriter = path.join(root, 'blender', 'write_scene_blend.py');
 const blenderImportedUpdater = path.join(root, 'blender', 'update_imported_blend.py');
 const blenderGenericImporter = path.join(root, 'blender', 'import_blend_bidirectional.py');
 const componentTypes = [
-  '成人角色 · 1.6m / 4头身', '儿童角色 · 1.1m / 2头身', '墙壁', '地板', '门', '窗', '桌子', '柜子', '衣柜', '电视柜', '椅子', '沙发', '懒人沙发', '床',
+  '成人角色 · 1.6m / 4头身', '儿童角色 · 1.1m / 2头身', '墙壁', '地板', '拐角柱', '楼梯间下层楼板', '楼梯间中层楼板', '楼梯间上层楼板', '楼梯间楼梯', '门', '窗', '桌子', '柜子', '衣柜', '电视柜', '椅子', '沙发', '懒人沙发', '床',
   '办公桌', '办公椅', '显示器', '笔记本电脑', '文件柜', '书架', '打印机', '饮水机', '会议桌', '白板', '路灯', '箱子', '楼梯', 'Blender模型'
 ];
 
@@ -59,6 +60,7 @@ async function readBlockScenePayload(blockId, id) {
   return { id: sceneId, block, payload };
 }
 async function writeBlockScenePayload(blockId, id, payload) {
+  validateFixedModules(payload);
   const block = await requireProjectBlock(blockId), sceneId = safeName(id), folder = blockSceneFolder(block.id, sceneId);
   await fs.mkdir(folder, { recursive: true });
   payload.id = sceneId; payload.name = payload.name || sceneId; payload.savedAt = new Date().toISOString();
@@ -106,7 +108,7 @@ function applyAiOperations(payload, operations) {
         rotation: vector(source.rotation, { x: 0, y: 0, z: 0 }),
         scale: vector(source.scale, { x: 1, y: 1, z: 1 })
       };
-      ['characterSettings', 'surfaceSettings', 'chairSettings', 'tableSettings', 'stairSettings'].forEach(key => { if (source[key]) component[key] = source[key]; });
+      ['assetId', 'characterSettings', 'surfaceSettings', 'chairSettings', 'tableSettings', 'stairSettings', 'stairwellSettings'].forEach(key => { if (source[key]) component[key] = source[key]; });
       payload.components.push(component); changed.push({ op: 'add', name });
       continue;
     }
@@ -124,7 +126,7 @@ function applyAiOperations(payload, operations) {
       if (patch.rotation) component.rotation = vector(patch.rotation, component.rotation);
       if (patch.scale) component.scale = vector(patch.scale, component.scale);
       if (typeof patch.group === 'string' || patch.group === null) component.group = patch.group;
-      ['characterSettings', 'surfaceSettings', 'chairSettings', 'tableSettings', 'stairSettings'].forEach(key => { if (patch[key]) component[key] = patch[key]; });
+      ['assetId', 'characterSettings', 'surfaceSettings', 'chairSettings', 'tableSettings', 'stairSettings', 'stairwellSettings'].forEach(key => { if (patch[key]) component[key] = patch[key]; });
       if (patch.name && patch.name !== component.name) component.name = uniqueName(payload.components.filter(item => item !== component), patch.name);
       changed.push({ op: 'update', name: component.name });
       continue;
@@ -193,7 +195,7 @@ async function api(req, res, url) {
       const payload = JSON.parse(await fs.readFile(pendingJsonPath, 'utf8'));
       payload.id = sceneId; payload.savedAt = new Date().toISOString(); payload.blenderFile = `${sceneId}.blend`;
       payload.project = { blockId: block.id, blockName: block.name, blockNodePath: block.nodePath, floorRange: block.floorRange };
-      payload.components.forEach(component => { component.modelUrl = `/save/blocks/${block.id}/${encodeURIComponent(sceneId)}/models/${component.blenderSettings.modelFile}`; });
+      payload.components.forEach(component => { if (component.blenderSettings?.modelFile) component.modelUrl = `/save/blocks/${block.id}/${encodeURIComponent(sceneId)}/models/${component.blenderSettings.modelFile}`; });
       await fs.writeFile(pendingJsonPath, JSON.stringify(payload, null, 2), 'utf8');
       await fs.rename(pendingBlendPath, blendPath); await fs.rm(modelDir, { recursive: true, force: true });
       await fs.rename(pendingModelDir, modelDir); await fs.rename(pendingJsonPath, jsonPath);

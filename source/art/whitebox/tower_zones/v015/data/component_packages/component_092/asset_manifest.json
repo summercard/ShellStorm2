@@ -1,0 +1,81 @@
+{
+  "package_id": "component_092",
+  "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+  "name": "B_LowerDoorLanding_Walkable_03_03_01",
+  "category": "楼梯间B/楼板",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "B_LowerDoorLanding_Walkable_03_03_01",
+  "root": "B_LowerDoorLanding_Walkable_03_03_01",
+  "objects": [
+    "B_LowerDoorLanding_Walkable_03_03_01",
+    "地板.058"
+  ],
+  "world_position": [
+    45.0,
+    10.0,
+    -21.19999885559082
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      42.5,
+      7.5,
+      -21.19999885559082
+    ],
+    "max": [
+      47.5,
+      12.5,
+      -20.899999618530273
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 12.5000001,
+      "y": 10.0000002,
+      "z": -12.1999989
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "kind": "floor",
+    "length": 4.9999998640100785,
+    "width": 5.0,
+    "thickness": 0.2999992370605469,
+    "fixedModule": true,
+    "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+    "edgeCut": false,
+    "nominalSize": [
+      5,
+      5,
+      0.3
+    ]
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

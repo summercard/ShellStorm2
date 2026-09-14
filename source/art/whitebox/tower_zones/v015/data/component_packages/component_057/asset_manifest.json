@@ -1,0 +1,81 @@
+{
+  "package_id": "component_057",
+  "asset_id": "ENV-TOWER-WALL-SOLID-5M",
+  "name": "A_EnclosureWall_Inner_01_02_01",
+  "category": "楼梯间A/墙壁",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "A_EnclosureWall_Inner_01_02_01",
+  "root": "A_EnclosureWall_Inner_01_02_01",
+  "objects": [
+    "A_EnclosureWall_Inner_01_02_01",
+    "墙体.024"
+  ],
+  "world_position": [
+    -32.650001525878906,
+    -11.534088134765625,
+    -12.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      -32.79999923706055,
+      -14.034088134765625,
+      -12.0
+    ],
+    "max": [
+      -32.500003814697266,
+      -9.034088134765625,
+      -0.10000038146972656
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 0.1500008,
+      "y": 11.5340886,
+      "z": -12.0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 90
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "kind": "wall",
+    "width": 5.0,
+    "thickness": 0.2999972128916397,
+    "height": 11.900000095367432,
+    "fixedModule": true,
+    "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+    "edgeCut": true,
+    "nominalSize": [
+      5,
+      0.3,
+      12.9
+    ]
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

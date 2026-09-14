@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 2,
+  "blockId": "stairs",
+  "blockName": "楼梯区",
+  "sourceVersion": "v014",
+  "components": [
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-LOWER", "name": "楼梯间下层楼板", "size": [15, 30, 0.3], "topZ": 0.1},
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-MID", "name": "楼梯间中层楼板", "size": [15, 6, 0.3], "topZ": 6.0},
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-UPPER", "name": "楼梯间上层楼板", "size": [15, 6, 0.3], "topZ": 12.0},
+    {
+      "assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "name": "楼梯间可调直梯母组件",
+      "parameters": {"runLength": 15.0, "slopeDeg": 21.8014, "width": 6.0, "stepCount": 20, "handrailHeight": 1.0},
+      "derived": {"riseHeight": 6.0, "stepTread": 0.75, "stepRise": 0.3},
+      "assembly": "同一母组件使用两次；第二跑绕Z轴旋转180度"
+    }
+  ]
+}

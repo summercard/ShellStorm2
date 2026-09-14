@@ -1,0 +1,766 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "whitebox_tower_stairwell_components_v014",
+  "groups": [],
+  "components": [
+    {
+      "name": "直梯_踏步_01",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0.375,
+        "z": 0.15000000596046448
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_01",
+        "assetCollection": null,
+        "modelFile": "model_001.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_001.glb"
+    },
+    {
+      "name": "直梯_踏步_02",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 1.125,
+        "z": 0.44999998807907104
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_02",
+        "assetCollection": null,
+        "modelFile": "model_002.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_002.glb"
+    },
+    {
+      "name": "直梯_踏步_03",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 1.875,
+        "z": 0.75
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_03",
+        "assetCollection": null,
+        "modelFile": "model_003.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_003.glb"
+    },
+    {
+      "name": "直梯_踏步_04",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 2.625,
+        "z": 1.0499999523162842
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_04",
+        "assetCollection": null,
+        "modelFile": "model_004.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_004.glb"
+    },
+    {
+      "name": "直梯_踏步_05",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 3.375,
+        "z": 1.350000023841858
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_05",
+        "assetCollection": null,
+        "modelFile": "model_005.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_005.glb"
+    },
+    {
+      "name": "直梯_踏步_06",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 4.125,
+        "z": 1.649999976158142
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_06",
+        "assetCollection": null,
+        "modelFile": "model_006.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_006.glb"
+    },
+    {
+      "name": "直梯_踏步_07",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 4.875,
+        "z": 1.9500000476837158
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_07",
+        "assetCollection": null,
+        "modelFile": "model_007.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_007.glb"
+    },
+    {
+      "name": "直梯_踏步_08",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 5.625,
+        "z": 2.25
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_08",
+        "assetCollection": null,
+        "modelFile": "model_008.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_008.glb"
+    },
+    {
+      "name": "直梯_踏步_09",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 6.375,
+        "z": 2.549999952316284
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_09",
+        "assetCollection": null,
+        "modelFile": "model_009.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_009.glb"
+    },
+    {
+      "name": "直梯_踏步_10",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 7.125,
+        "z": 2.8499999046325684
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_10",
+        "assetCollection": null,
+        "modelFile": "model_010.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_010.glb"
+    },
+    {
+      "name": "直梯_踏步_11",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 7.875,
+        "z": 3.1500000953674316
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_11",
+        "assetCollection": null,
+        "modelFile": "model_011.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_011.glb"
+    },
+    {
+      "name": "直梯_踏步_12",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 8.625,
+        "z": 3.450000047683716
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_12",
+        "assetCollection": null,
+        "modelFile": "model_012.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_012.glb"
+    },
+    {
+      "name": "直梯_踏步_13",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 9.375,
+        "z": 3.75
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_13",
+        "assetCollection": null,
+        "modelFile": "model_013.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_013.glb"
+    },
+    {
+      "name": "直梯_踏步_14",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 10.125,
+        "z": 4.050000190734863
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_14",
+        "assetCollection": null,
+        "modelFile": "model_014.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_014.glb"
+    },
+    {
+      "name": "直梯_踏步_15",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 10.875,
+        "z": 4.349999904632568
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_15",
+        "assetCollection": null,
+        "modelFile": "model_015.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_015.glb"
+    },
+    {
+      "name": "直梯_踏步_16",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 11.625,
+        "z": 4.650000095367432
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_16",
+        "assetCollection": null,
+        "modelFile": "model_016.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_016.glb"
+    },
+    {
+      "name": "直梯_踏步_17",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 12.375,
+        "z": 4.949999809265137
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_17",
+        "assetCollection": null,
+        "modelFile": "model_017.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_017.glb"
+    },
+    {
+      "name": "直梯_踏步_18",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 13.125,
+        "z": 5.25
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_18",
+        "assetCollection": null,
+        "modelFile": "model_018.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_018.glb"
+    },
+    {
+      "name": "直梯_踏步_19",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 13.875,
+        "z": 5.550000190734863
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_19",
+        "assetCollection": null,
+        "modelFile": "model_019.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_019.glb"
+    },
+    {
+      "name": "直梯_踏步_20",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 14.625,
+        "z": 5.849999904632568
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "直梯_踏步_20",
+        "assetCollection": null,
+        "modelFile": "model_020.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_020.glb"
+    },
+    {
+      "name": "下层楼板_15x30_top_plus_0.1",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": -0.05000000074505806
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "下层楼板_15x30_top_plus_0.1",
+        "assetCollection": null,
+        "modelFile": "model_021.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_021.glb"
+    },
+    {
+      "name": "中层楼板_15x6_z6",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 6,
+        "z": 5.849999904632568
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "中层楼板_15x6_z6",
+        "assetCollection": null,
+        "modelFile": "model_022.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_022.glb"
+    },
+    {
+      "name": "上层楼板_15x6_z12",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -9,
+        "z": 11.850000381469727
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "上层楼板_15x6_z12",
+        "assetCollection": null,
+        "modelFile": "model_023.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_023.glb"
+    },
+    {
+      "name": "墙壁_左",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": -7.349999904632568,
+        "y": 0,
+        "z": 6.449999809265137
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "墙壁_左",
+        "assetCollection": null,
+        "modelFile": "model_024.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_024.glb"
+    },
+    {
+      "name": "墙壁_右",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 7.349999904632568,
+        "y": 0,
+        "z": 6.449999809265137
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "墙壁_右",
+        "assetCollection": null,
+        "modelFile": "model_025.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_025.glb"
+    },
+    {
+      "name": "墙壁_前",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -14.850000381469727,
+        "z": 6.449999809265137
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "墙壁_前",
+        "assetCollection": null,
+        "modelFile": "model_026.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_026.glb"
+    },
+    {
+      "name": "墙壁_后",
+      "type": "Blender模型",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 14.850000381469727,
+        "z": 6.449999809265137
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "blenderSettings": {
+        "rootObject": "墙壁_后",
+        "assetCollection": null,
+        "modelFile": "model_027.glb"
+      },
+      "modelUrl": "/save/blocks/stairs/whitebox_tower_stairwell_components_v014/models/model_027.glb"
+    }
+  ],
+  "editorSettings": {
+    "snapping": false,
+    "grounding": false,
+    "collision": false
+  },
+  "blenderSource": {
+    "mode": "bidirectional",
+    "sourceFile": "whitebox_tower_stairwell_components_v014.blend",
+    "managedRootObjects": [
+      "直梯_踏步_01",
+      "直梯_踏步_02",
+      "直梯_踏步_03",
+      "直梯_踏步_04",
+      "直梯_踏步_05",
+      "直梯_踏步_06",
+      "直梯_踏步_07",
+      "直梯_踏步_08",
+      "直梯_踏步_09",
+      "直梯_踏步_10",
+      "直梯_踏步_11",
+      "直梯_踏步_12",
+      "直梯_踏步_13",
+      "直梯_踏步_14",
+      "直梯_踏步_15",
+      "直梯_踏步_16",
+      "直梯_踏步_17",
+      "直梯_踏步_18",
+      "直梯_踏步_19",
+      "直梯_踏步_20",
+      "下层楼板_15x30_top_plus_0.1",
+      "中层楼板_15x6_z6",
+      "上层楼板_15x6_z12",
+      "墙壁_左",
+      "墙壁_右",
+      "墙壁_前",
+      "墙壁_后"
+    ]
+  },
+  "id": "whitebox_tower_stairwell_components_v014",
+  "savedAt": "2026-09-14T06:47:20.253Z",
+  "blenderFile": "whitebox_tower_stairwell_components_v014.blend",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  }
+}

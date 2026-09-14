@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "coordinateSystem": "blender-z-up",
+  "units": "m",
+  "scope": "stairs",
+  "components": [
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-LOWER", "name": "楼梯间下层楼板", "size": [15, 30, 0.3], "topOffsetFromLowerLevel": 0.1},
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-MID", "name": "楼梯间中层楼板", "size": [15, 6, 0.3], "levelOffset": 6},
+    {"assetId": "ENV-TOWER-STAIR-FLOOR-UPPER", "name": "楼梯间上层楼板", "size": [15, 6, 0.3], "levelOffset": 12},
+    {"assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE", "name": "楼梯间直梯", "defaultRunLength": 15, "defaultSlopeDeg": 21.8014, "defaultRiseHeight": 6, "stepCount": 20, "stepRise": 0.3, "stepTread": 0.75, "stairWidth": 6, "assembly": "同一母组件复用两次，第二跑绕Z轴旋转180度"}
+  ],
+  "commonComponents": [
+    {"assetId": "ENV-TOWER-CORNER-COLUMN-05M", "name": "拐角柱", "size": [0.5, 0.5, 12.9]}
+  ],
+  "runtimeImported": false
+}

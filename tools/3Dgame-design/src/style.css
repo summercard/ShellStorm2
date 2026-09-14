@@ -685,6 +685,17 @@ button {
   .inspector-panel {
     display: none;
   }
+  body.inspector-open .inspector-panel {
+    display: flex;
+    position: fixed;
+    right: 0;
+    top: 104px;
+    bottom: 0;
+    width: 280px;
+    z-index: 20;
+    background: #fff;
+    box-shadow: -4px 0 18px #0002;
+  }
   .file-name {
     display: none;
   }

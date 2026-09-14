@@ -1,0 +1,81 @@
+{
+  "package_id": "component_101",
+  "asset_id": "ENV-TOWER-WALL-SOLID-5M",
+  "name": "B_EnclosureWall_Outer_01_02_01",
+  "category": "楼梯间B/墙壁",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "B_EnclosureWall_Outer_01_02_01",
+  "root": "B_EnclosureWall_Outer_01_02_01",
+  "objects": [
+    "B_EnclosureWall_Outer_01_02_01",
+    "墙体.034"
+  ],
+  "world_position": [
+    47.000999450683594,
+    5.0,
+    -21.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      46.85099792480469,
+      2.5,
+      -21.0
+    ],
+    "max": [
+      47.1510009765625,
+      7.5,
+      -9.100000381469727
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 14.5009979,
+      "y": 5.0,
+      "z": -12.0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 90
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "kind": "wall",
+    "width": 5.0,
+    "thickness": 0.3000000000000007,
+    "height": 11.900000095367432,
+    "fixedModule": true,
+    "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+    "edgeCut": true,
+    "nominalSize": [
+      5,
+      0.3,
+      12.9
+    ]
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

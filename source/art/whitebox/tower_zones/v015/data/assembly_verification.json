@@ -1,0 +1,163 @@
+{
+  "source": "v013 actual Blender world coordinates",
+  "componentCount": 130,
+  "surfaceChecks": [
+    {
+      "source": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+      "boundsErrorM": 2.384185791015625e-07,
+      "volumeErrorM3": 4.5061143225666456e-06,
+      "pieces": 6
+    },
+    {
+      "source": "Stair_Special_Rooftop_TurnLanding_Walkable",
+      "boundsErrorM": 3.814697265625e-06,
+      "volumeErrorM3": 4.122111093352032e-06,
+      "pieces": 6
+    },
+    {
+      "source": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+      "boundsErrorM": 7.62939453125e-06,
+      "volumeErrorM3": 5.4537699924139815e-05,
+      "pieces": 18
+    },
+    {
+      "source": "Stair_Special_Rooftop_CoreConnector_Walkable",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 2.6524462182209163e-07,
+      "pieces": 2
+    },
+    {
+      "source": "Stair_Special_Rooftop_CoreConnector_Guard_Left",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0,
+      "pieces": 1
+    },
+    {
+      "source": "Stair_Special_Rooftop_CoreConnector_Guard_Right",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0,
+      "pieces": 1
+    },
+    {
+      "source": "Stair_Special_Rooftop_EnclosureWall_Outer",
+      "boundsErrorM": 3.814697265625e-06,
+      "volumeErrorM3": 0.003224390479658723,
+      "pieces": 18
+    },
+    {
+      "source": "Stair_Special_Rooftop_EnclosureWall_Far",
+      "boundsErrorM": 1.9073486328125e-06,
+      "volumeErrorM3": 0.000114746107563235,
+      "pieces": 3
+    },
+    {
+      "source": "Stair_Special_Rooftop_EnclosureWall_Inner",
+      "boundsErrorM": 4.76837158203125e-07,
+      "volumeErrorM3": 0.00038182112359663734,
+      "pieces": 5
+    },
+    {
+      "source": "Stair_Special_Rooftop_EnclosureWall_DoorSide",
+      "boundsErrorM": 4.76837158203125e-07,
+      "volumeErrorM3": 4.0411948617702365e-05,
+      "pieces": 3
+    },
+    {
+      "source": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 6.866439253627732e-06,
+      "pieces": 6
+    },
+    {
+      "source": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+      "boundsErrorM": 3.814697265625e-06,
+      "volumeErrorM3": 6.866437615826726e-06,
+      "pieces": 6
+    },
+    {
+      "source": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+      "boundsErrorM": 1.9073486328125e-06,
+      "volumeErrorM3": 9.655927897256333e-06,
+      "pieces": 18
+    },
+    {
+      "source": "Stair_Generic_Rotatable_CoreConnector_Walkable",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0,
+      "pieces": 2
+    },
+    {
+      "source": "Stair_Generic_Rotatable_CoreConnector_Guard_Left",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0,
+      "pieces": 1
+    },
+    {
+      "source": "Stair_Generic_Rotatable_CoreConnector_Guard_Right",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0,
+      "pieces": 1
+    },
+    {
+      "source": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 0.0013618468801723793,
+      "pieces": 18
+    },
+    {
+      "source": "Stair_Generic_Rotatable_EnclosureWall_Far",
+      "boundsErrorM": 5.7220458984375e-06,
+      "volumeErrorM3": 0.0010213851601292845,
+      "pieces": 3
+    },
+    {
+      "source": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+      "boundsErrorM": 0.0,
+      "volumeErrorM3": 6.80930367025212e-06,
+      "pieces": 5
+    },
+    {
+      "source": "Stair_Generic_Rotatable_EnclosureWall_DoorSide",
+      "boundsErrorM": 2.384185791015625e-07,
+      "volumeErrorM3": 4.2557715005386854e-05,
+      "pieces": 3
+    }
+  ],
+  "flightChecks": [
+    {
+      "name": "A_上跑",
+      "vertexErrorM": 4.912117219646461e-05,
+      "vertexCount": [
+        184,
+        184
+      ]
+    },
+    {
+      "name": "A_下跑",
+      "vertexErrorM": 7.138078944990411e-05,
+      "vertexCount": [
+        176,
+        176
+      ]
+    },
+    {
+      "name": "B_上跑",
+      "vertexErrorM": 3.932099843950709e-06,
+      "vertexCount": [
+        184,
+        184
+      ]
+    },
+    {
+      "name": "B_下跑",
+      "vertexErrorM": 3.701251625898294e-05,
+      "vertexCount": [
+        184,
+        184
+      ]
+    }
+  ],
+  "nonUnitScale": [],
+  "uniqueStairMeshes": 23,
+  "passed": true
+}

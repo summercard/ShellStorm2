@@ -21,7 +21,10 @@ const coordinateSystem = 'blender-z-up';
 const assetLibraries = [
   { scope: 'common', groups: [
     { name: '角色', open: true, items: [{ type: '成人角色 · 1.6m / 4头身', icon: '♙', tint: '#d9a83d' }, { type: '儿童角色 · 1.1m / 2头身', icon: '♟', tint: '#76a5b4' }] },
-    { name: '建筑', open: true, items: [{ type: '墙壁', icon: '▥', tint: '#92a4af' }, { type: '地板', icon: '▤', tint: '#9f8f7a' }, { type: '门', icon: '▯', tint: '#9a6748' }, { type: '窗', icon: '▦', tint: '#70a9c0' }, { type: '楼梯', icon: '▰', tint: '#a47b55' }] }
+    { name: '建筑', open: true, items: [{ type: '墙壁', icon: '▥', tint: '#92a4af' }, { type: '地板', icon: '▤', tint: '#9f8f7a' }, { type: '拐角柱', icon: '▮', tint: '#778b91' }, { type: '门', icon: '▯', tint: '#9a6748' }, { type: '窗', icon: '▦', tint: '#70a9c0' }, { type: '楼梯', icon: '▰', tint: '#a47b55' }] }
+  ] },
+  { scope: 'block', blockId: 'stairs', groups: [
+    { name: '楼梯间结构', open: true, items: [{ type: '楼梯间下层楼板', icon: '▤', tint: '#778d91' }, { type: '楼梯间中层楼板', icon: '▤', tint: '#8a9da0' }, { type: '楼梯间上层楼板', icon: '▤', tint: '#9aabad' }, { type: '楼梯间楼梯', icon: '▰', tint: '#a47b55' }] }
   ] },
   { scope: 'block', blockId: 'battle', groups: [
     { name: '家具', open: true, items: [{ type: '桌子', icon: '⊥', tint: '#b47852' }, { type: '柜子', icon: '▤', tint: '#947052' }, { type: '衣柜', icon: '▥', tint: '#a9b2b0' }, { type: '电视柜', icon: '▰', tint: '#71656a' }, { type: '椅子', icon: '♧', tint: '#b9825e' }, { type: '沙发', icon: '▱', tint: '#d8c7d0' }, { type: '懒人沙发', icon: '●', tint: '#d98fa8' }, { type: '床', icon: '▰', tint: '#6c9fb1' }] },
@@ -116,13 +119,21 @@ function drawOrientationGizmo() {
   orientationContext.beginPath(); orientationContext.arc(0, 0, 3, 0, Math.PI * 2); orientationContext.fillStyle = '#647773'; orientationContext.fill(); orientationContext.restore();
 }
 
+import originalStairProfile from './stair-flight-profile.json';
+import { stairProfileParts } from './stair-profile.mjs';
 function material(color) { return new THREE.MeshStandardMaterial({ color, roughness: .72, metalness: .03 }); }
+function locksScale(obj) {
+  if (isStairwellStair(obj) || isStair(obj)) return true;
+  if (isSurface(obj) && obj.userData.surfaceSettings.kind !== 'column') return true;
+  return obj?.userData?.nodeType === 'group' && obj.children.some(locksScale);
+}
 function mesh(geometry, color, y = 0) { const m = new THREE.Mesh(geometry, material(color)); m.position.y = y; m.castShadow = m.receiveShadow = true; return m; }
 function isCharacter(obj) { return Boolean(obj?.userData?.characterSettings); }
 function isSurface(obj) { return Boolean(obj?.userData?.surfaceSettings); }
 function isChair(obj) { return Boolean(obj?.userData?.chairSettings); }
 function isTable(obj) { return Boolean(obj?.userData?.tableSettings); }
 function isStair(obj) { return Boolean(obj?.userData?.stairSettings); }
+function isStairwellStair(obj) { return Boolean(obj?.userData?.stairwellSettings); }
 function modelRoot(root) { return root.userData.modelRoot || root; }
 function addPart(root, child) { modelRoot(root).add(child); return child; }
 function clearComponent(root) { const target = modelRoot(root); target.children.slice().forEach(child => { child.traverse?.(part => { part.geometry?.dispose(); part.material?.dispose(); }); child.geometry?.dispose(); child.material?.dispose(); target.remove(child); }); }
@@ -150,7 +161,8 @@ function buildSurface(root) {
   const geometry = s.kind === 'wall'
     ? new THREE.BoxGeometry(s.width, s.height, s.thickness)
     : new THREE.BoxGeometry(s.length, s.thickness, s.width);
-  const surface = mesh(geometry, s.kind === 'wall' ? 0xa9b8ba : 0x9d907e, s.kind === 'wall' ? s.height / 2 : s.thickness / 2);
+  const verticalCenter = s.kind === 'wall' ? s.height / 2 : (Number.isFinite(s.topOffset) ? s.topOffset - s.thickness / 2 : s.thickness / 2);
+  const surface = mesh(geometry, s.kind === 'wall' ? 0xa9b8ba : 0x9d907e, verticalCenter);
   addPart(root, surface); surface.userData.root = root;
 }
 function buildStair(root) {
@@ -172,6 +184,37 @@ function buildStair(root) {
     beam.position.x = x; beam.position.z = run / 2; beam.rotation.x = -Math.atan2(total, run); addPart(root, beam);
   });
   s.totalHeight = total; root.traverse(o => { if (o.isMesh) o.userData.root = root; });
+}
+function buildStairwellStair(root) {
+  clearComponent(root);
+  const s = root.userData.stairwellSettings, wood = 0x9b7453, rail = 0x536a6e;
+  if (s.profile === 'original-v013') {
+    for (const part of stairProfileParts(originalStairProfile, s)) {
+      const vertices = [];
+      for (const face of part.faces) for (let i=1; i<face.length-1; i++) for (const index of [face[0],face[i],face[i+1]]) {
+        const [x,y,z] = part.vertices[index]; vertices.push(x,z,-y);
+      }
+      const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3)); geometry.computeVertexNormals();
+      addPart(root, mesh(geometry, wood));
+    }
+    s.totalHeight = Math.tan(THREE.MathUtils.degToRad(s.slopeDeg)) * s.runLength;
+    s.stepRise = s.totalHeight / s.stepCount; s.stepTread = s.runLength / s.stepCount;
+    root.traverse(o => { if (o.isMesh) o.userData.root = root; });
+    return;
+  }
+  const steps = Math.max(1, Math.round(s.stepCount)), run = Math.max(1, s.runLength), angle = THREE.MathUtils.degToRad(Math.max(5, Math.min(60, s.slopeDeg)));
+  const total = Math.tan(angle) * run, tread = run / steps, rise = total / steps;
+  for (let i = 0; i < steps; i++) {
+    const step = mesh(new THREE.BoxGeometry(s.width, rise, tread), wood, (i + .5) * rise);
+    step.position.z = (i + .5) * tread; addPart(root, step);
+  }
+  [-1, 1].forEach(side => {
+    const beam = mesh(new THREE.BoxGeometry(.08, .08, Math.hypot(run, total)), rail, s.handrailHeight + total / 2);
+    beam.position.x = side * s.width / 2; beam.position.z = run / 2;
+    beam.rotation.x = -angle; addPart(root, beam);
+  });
+  s.totalHeight = total; s.stepRise = rise; s.stepTread = tread;
+  root.traverse(o => { if (o.isMesh) o.userData.root = root; });
 }
 function characterPreset(type) {
   return type.includes('成人角色')
@@ -216,8 +259,13 @@ function createComponent(type) {
   const wood = 0x9b6745, wall = 0xa9b8ba, fabric = 0x547f91, dark = 0x425157;
   const addLegs = (w, d, h) => [-1, 1].forEach(x => [-1, 1].forEach(z => { const leg = mesh(new THREE.BoxGeometry(.13, h, .13), wood, h / 2); leg.position.set(x*w/2.25, h/2, z*d/2.25); addPart(root, leg); }));
   if (type === 'Blender模型') { /* Geometry is loaded from the imported GLB preview. */ }
-  else if (type === '墙壁') { root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 3, thickness: .2 }; buildSurface(root); }
-  else if (type === '地板') { root.userData.surfaceSettings = { kind: 'floor', length: 5, width: 5, thickness: .1 }; buildSurface(root); }
+  else if (type === '墙壁') { root.userData.assetId = 'ENV-TOWER-WALL-SOLID-5M'; root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 12.9, thickness: .3 }; buildSurface(root); }
+  else if (type === '地板') { root.userData.assetId = 'ENV-TOWER-FLOOR-TILE-5M'; root.userData.surfaceSettings = { kind: 'floor', length: 5, width: 5, thickness: .3 }; buildSurface(root); }
+  else if (type === '拐角柱') { root.userData.assetId = 'ENV-TOWER-CORNER-COLUMN-05M'; root.userData.surfaceSettings = { kind: 'column', length: .5, width: .5, thickness: 12.9 }; buildSurface(root); }
+  else if (type === '楼梯间下层楼板') { root.userData.assetId = 'ENV-TOWER-STAIR-FLOOR-LOWER'; root.userData.surfaceSettings = { kind: 'floor', length: 15, width: 30, thickness: .3, topOffset: .1 }; buildSurface(root); }
+  else if (type === '楼梯间中层楼板') { root.userData.assetId = 'ENV-TOWER-STAIR-FLOOR-MID'; root.userData.surfaceSettings = { kind: 'floor', length: 15, width: 6, thickness: .3, levelOffset: 6 }; buildSurface(root); }
+  else if (type === '楼梯间上层楼板') { root.userData.assetId = 'ENV-TOWER-STAIR-FLOOR-UPPER'; root.userData.surfaceSettings = { kind: 'floor', length: 15, width: 6, thickness: .3, levelOffset: 12 }; buildSurface(root); }
+  else if (type === '楼梯间楼梯') { root.userData.assetId = 'ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE'; root.userData.stairwellSettings = { profile: 'original-v013', stepCount: 20, width: 6, runLength: 15, slopeDeg: THREE.MathUtils.radToDeg(Math.atan2(6,15)), handrailHeight: 1.2 }; buildStairwellStair(root); }
   else if (type === '楼梯') { root.userData.stairSettings = { steps: 10, width: 1.5, handrailHeight: 1, leftHandrail: true, rightHandrail: true, totalHeight: 1.8 }; buildStair(root); }
   else if (type === '门') { addPart(root, mesh(new THREE.BoxGeometry(1.25, 2.35, .13), wood, 1.175)); const knob = mesh(new THREE.SphereGeometry(.06, 12, 8), 0xd8b362); knob.position.set(.42, 1.15, -.1); addPart(root, knob); }
   else if (type === '窗') { const f = mesh(new THREE.BoxGeometry(2, 1.55, .12), 0x77aabe, 1.45); addPart(root, f); [-.65, 0, .65].forEach(x => { const b = mesh(new THREE.BoxGeometry(.07, 1.7, .17), 0xe5eeec, 1.45); b.position.x=x; addPart(root, b); }); const h=mesh(new THREE.BoxGeometry(2.15,.07,.17),0xe5eeec,1.45); addPart(root, h); }
@@ -327,7 +375,7 @@ function addComponent(type, point = new THREE.Vector3()) {
   preventCollision(obj, point);
   instances.push(obj); select(obj); $('#dropNotice').classList.add('hidden'); updateCounts(); showToast(`${type} 已添加`);
 }
-function setOnGround(obj) { const box = new THREE.Box3().setFromObject(obj); obj.position.z -= box.min.z; }
+function setOnGround(obj) { if (Number.isFinite(obj.userData.surfaceSettings?.topOffset)) return; const box = new THREE.Box3().setFromObject(obj); obj.position.z -= box.min.z; }
 function preventCollision(obj, previousPosition) {
   if (!collisionEnabled || passThrough || obj.userData.type === '地板') return false;
   const movement = previousPosition ? obj.position.clone().sub(previousPosition) : new THREE.Vector3();
@@ -376,7 +424,7 @@ function updateSurfaceControls() {
   const visible = isSurface(selected); $('#surfaceControls').hidden = !visible; if (!visible) return;
   const s = selected.userData.surfaceSettings, wall = s.kind === 'wall';
   $('#wallDimensions').hidden = !wall; $('#floorDimensions').hidden = wall;
-  document.querySelectorAll('[data-surface]').forEach(input => { if (input.closest(wall ? '#wallDimensions' : '#floorDimensions')) input.value = s[input.dataset.surface].toFixed(1); });
+  document.querySelectorAll('[data-surface]').forEach(input => { input.disabled = locksScale(selected); input.title = input.disabled ? '固定规格组件，请通过复制拼接扩展' : ''; if (input.closest(wall ? '#wallDimensions' : '#floorDimensions')) input.value = s[input.dataset.surface].toFixed(3); });
 }
 function updateChairControls() {
   const visible = isChair(selected); $('#chairControls').hidden = !visible; if (!visible) return;
@@ -393,6 +441,12 @@ function updateStairControls() {
   $('#stairHeight').textContent = `总高度 ${(Math.max(1, Number(s.steps) || 1) * .18).toFixed(2)}m`;
   document.querySelectorAll('[data-stair-toggle]').forEach(input => { input.checked = Boolean(s[input.dataset.stairToggle]); });
 }
+function updateStairwellControls() {
+  const visible = isStairwellStair(selected); $('#stairwellControls').hidden = !visible; if (!visible) return;
+  const s = selected.userData.stairwellSettings;
+  document.querySelectorAll('[data-stairwell]').forEach(input => { input.value = Number(input.dataset.stairwell === 'riseHeight' ? s.totalHeight : s[input.dataset.stairwell]).toFixed(input.dataset.stairwell === 'stepCount' ? 0 : 3); });
+  $('#stairwellRise').textContent = `总升高 ${Number(s.totalHeight || 0).toFixed(2)}m`;
+}
 function snapRotation(obj) {
   obj.rotation.x = Math.round(obj.rotation.x / rotationSnapRadians) * rotationSnapRadians;
   obj.rotation.y = Math.round(obj.rotation.y / rotationSnapRadians) * rotationSnapRadians;
@@ -400,8 +454,12 @@ function snapRotation(obj) {
 }
 function updateFields() {
   if (!selected) return;
+  const locked = locksScale(selected);
+  if (locked && transformMode === 'scale') setTransformMode('translate');
+  document.querySelectorAll('[data-mode="scale"]').forEach(button => { button.disabled = locked; button.title = locked ? '墙壁、地板及其分组使用固定规格，请复制拼接' : ''; });
   document.querySelectorAll('[data-transform]').forEach(input => {
     const { transform, axis } = input.dataset;
+    input.disabled = transform === 'scale' && locked;
     let value = Number(selected?.[transform]?.[axis]);
     if (!Number.isFinite(value)) value = 0;
     if (transform === 'rotation') value = THREE.MathUtils.radToDeg(value);
@@ -409,7 +467,7 @@ function updateFields() {
   });
   const position = selected.position || { x: 0, y: 0, z: 0 };
   $('#coordinates').textContent = `${Number(position.x || 0).toFixed(2)}, ${Number(position.y || 0).toFixed(2)}, ${Number(position.z || 0).toFixed(2)}`;
-  updateCharacterControls(); updateSurfaceControls(); updateChairControls(); updateTableControls(); updateStairControls();
+  updateCharacterControls(); updateSurfaceControls(); updateChairControls(); updateTableControls(); updateStairControls(); updateStairwellControls();
 }
 function beginGroupRename(group, row) {
   const label = row.querySelector('strong');
@@ -458,6 +516,7 @@ function scenePayload() {
     coordinateSystem,
     axes: { right: 'X', forward: '-Y', up: 'Z' },
     units: { distance: 'm', rotation: 'deg' },
+    editorSettings: { snapping, grounding, collision: collisionEnabled },
     blenderSource: activeBlenderSource ? structuredClone(activeBlenderSource) : undefined,
     savedAt: new Date().toISOString(),
     camera: {
@@ -473,6 +532,7 @@ function scenePayload() {
     })),
     components: instances.map(o => ({
       name: o.userData.name, type: o.userData.type, group: o.parent?.userData?.nodeType === 'group' ? o.parent.userData.name : null,
+      assetId: o.userData.assetId,
       position: { x: o.position.x, y: o.position.y, z: o.position.z },
       rotation: { x: THREE.MathUtils.radToDeg(o.rotation.x), y: THREE.MathUtils.radToDeg(o.rotation.y), z: THREE.MathUtils.radToDeg(o.rotation.z) },
       scale: { x: o.scale.x, y: o.scale.y, z: o.scale.z },
@@ -481,6 +541,7 @@ function scenePayload() {
       chairSettings: o.userData.chairSettings,
       tableSettings: o.userData.tableSettings,
       stairSettings: o.userData.stairSettings,
+      stairwellSettings: o.userData.stairwellSettings,
       blenderSettings: o.userData.blenderSettings,
       modelUrl: o.userData.modelUrl
     }))
@@ -628,7 +689,7 @@ async function syncAiScenePreview() {
         const response = preview.blockId ? await fetch(`/api/blocks/${encodeURIComponent(preview.blockId)}/scenes/${encodeURIComponent(preview.sceneId)}`) : await fetch(`/api/scenes/${encodeURIComponent(preview.sceneId)}`);
         if (response.ok) {
           const payload = await response.json();
-          captureHistory(); restoreScene(payload); activeSceneId = payload.id || preview.sceneId; activeBlockId = preview.blockId || null; if (activeBlockId) $('#blockSelect').value = activeBlockId; currentSceneName = payload.name || activeSceneId; activeSceneSavedAt = payload.savedAt || null; updateSceneTitle(); showToast(`已切换至“${currentSceneName}”预览`);
+          captureHistory(); restoreScene(payload); activeSceneId = payload.id || preview.sceneId; activeBlockId = preview.blockId || null; if (activeBlockId) $('#blockSelect').value = activeBlockId; renderAssets($('#searchInput').value.trim()); currentSceneName = payload.name || activeSceneId; activeSceneSavedAt = payload.savedAt || null; updateSceneTitle(); showToast(`已切换至“${currentSceneName}”预览`);
         }
         return;
       }
@@ -662,6 +723,14 @@ function clearScene() {
 function restoreScene(payload) {
   if (!payload?.components || !Array.isArray(payload.components)) throw new Error('场景数据无效');
   clearScene(); activeBlenderSource = payload.blenderSource ? structuredClone(payload.blenderSource) : null;
+  if (payload.editorSettings) {
+    snapping = payload.editorSettings.snapping !== false;
+    grounding = payload.editorSettings.grounding !== false;
+    collisionEnabled = payload.editorSettings.collision !== false;
+    [['#snapToggle', snapping], ['#groundToggle', grounding], ['#collisionToggle', collisionEnabled]].forEach(([id, enabled]) => {
+      $(id).classList.toggle('on', enabled); $(id).setAttribute('aria-pressed', String(enabled));
+    });
+  }
   const groups = new Map();
   (Array.isArray(payload.groups) ? payload.groups : []).forEach(record => {
     const group = new THREE.Group();
@@ -680,6 +749,8 @@ function restoreScene(payload) {
     if (record.chairSettings) { obj.userData.chairSettings = record.chairSettings; buildChair(obj); }
     if (record.tableSettings) { obj.userData.tableSettings = record.tableSettings; buildTable(obj); }
     if (record.stairSettings) { obj.userData.stairSettings = record.stairSettings; buildStair(obj); }
+    if (record.stairwellSettings) { obj.userData.stairwellSettings = record.stairwellSettings; buildStairwellStair(obj); }
+    if (record.assetId) obj.userData.assetId = record.assetId;
     if (record.blenderSettings) loadBlenderModel(obj, record);
     const transform = normalizeTransform(record, payload);
     obj.position.set(transform.position?.x || 0, transform.position?.y || 0, transform.position?.z || 0);
@@ -692,6 +763,7 @@ function restoreScene(payload) {
     const position = payload.camera.position, target = payload.camera.target;
     camera.position.set(Number(position.x) || 0, Number(position.y) || 0, Number(position.z) || 0);
     controls.target.set(Number(target.x) || 0, Number(target.y) || 0, Number(target.z) || 0);
+    camera.far = Math.max(100, camera.position.distanceTo(controls.target) * 5); camera.updateProjectionMatrix();
     if (Number.isFinite(Number(payload.camera.fov))) { camera.fov = Number(payload.camera.fov); camera.updateProjectionMatrix(); }
     controls.update();
   }
@@ -700,7 +772,10 @@ function restoreScene(payload) {
 function componentSnapshot(obj) {
   return {
     name: obj.userData.name, type: obj.userData.type,
-    position: { x: obj.position.x + .6, y: obj.position.y, z: obj.position.z + .6 },
+    assetId: obj.userData.assetId,
+    stairwellSettings: obj.userData.stairwellSettings ? structuredClone(obj.userData.stairwellSettings) : undefined,
+    group: obj.parent?.userData?.nodeType === 'group' ? obj.parent.userData.name : null,
+    position: { x: obj.position.x + (obj.userData.surfaceSettings?.length || obj.userData.surfaceSettings?.width || .6), y: obj.position.y, z: obj.position.z },
     rotation: { x: obj.rotation.x, y: obj.rotation.y, z: obj.rotation.z },
     scale: { x: obj.scale.x, y: obj.scale.y, z: obj.scale.z },
     characterSettings: obj.userData.characterSettings ? structuredClone(obj.userData.characterSettings) : undefined,
@@ -721,8 +796,11 @@ function pasteComponent() {
   if (record.chairSettings) { obj.userData.chairSettings = record.chairSettings; buildChair(obj); }
   if (record.tableSettings) { obj.userData.tableSettings = record.tableSettings; buildTable(obj); }
   if (record.stairSettings) { obj.userData.stairSettings = record.stairSettings; buildStair(obj); }
+  if (record.stairwellSettings) { obj.userData.stairwellSettings = record.stairwellSettings; buildStairwellStair(obj); }
+  if (record.assetId) obj.userData.assetId = record.assetId;
   obj.position.set(record.position.x, record.position.y, record.position.z); obj.rotation.set(record.rotation.x, record.rotation.y, record.rotation.z); obj.scale.set(record.scale.x, record.scale.y, record.scale.z);
-  scene.add(obj); instances.push(obj); preventCollision(obj, selected?.position || obj.position); select(obj); $('#dropNotice').classList.add('hidden'); updateCounts(); showToast('组件已粘贴');
+  const parent = scene.children.find(child => child.userData?.nodeType === 'group' && child.userData.name === record.group) || scene;
+  parent.add(obj); instances.push(obj); preventCollision(obj, selected?.position || obj.position); select(obj); $('#dropNotice').classList.add('hidden'); updateCounts(); showToast('组件已粘贴');
 }
 function undoScene() {
   const previous = undoHistory.pop();
@@ -794,12 +872,24 @@ function applyCharacterSetting(key, value) {
 document.querySelectorAll('[data-character]').forEach(input => { input.onpointerdown = () => isCharacter(selected) && captureHistory(); input.oninput = () => applyCharacterSetting(input.dataset.character, input.value); });
 document.querySelectorAll('[data-character-number]').forEach(input => input.onchange = () => { if (!isCharacter(selected)) return; captureHistory(); applyCharacterSetting(input.dataset.characterNumber, input.value); });
 document.querySelectorAll('[data-shape-part]').forEach(button => button.onclick = () => { if (!isCharacter(selected)) return; captureHistory(); selected.userData.characterSettings[`${button.dataset.shapePart}Shape`] = button.dataset.shapeValue; buildCharacter(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
-document.querySelectorAll('[data-surface]').forEach(input => input.onchange = () => { if (!isSurface(selected)) return; captureHistory(); selected.userData.surfaceSettings[input.dataset.surface] = Number(input.value); buildSurface(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
+document.querySelectorAll('[data-surface]').forEach(input => input.onchange = () => { if (!isSurface(selected) || locksScale(selected)) { updateFields(); return; } captureHistory(); selected.userData.surfaceSettings[input.dataset.surface] = Number(input.value); buildSurface(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
 document.querySelectorAll('[data-chair]').forEach(input => input.onchange = () => { if (!isChair(selected)) return; captureHistory(); selected.userData.chairSettings[input.dataset.chair] = Number(input.value); buildChair(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
 document.querySelectorAll('[data-table]').forEach(input => input.onchange = () => { if (!isTable(selected)) return; captureHistory(); selected.userData.tableSettings[input.dataset.table] = Number(input.value); buildTable(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
 document.querySelectorAll('[data-stair]').forEach(input => input.onchange = () => { if (!isStair(selected)) return; captureHistory(); selected.userData.stairSettings[input.dataset.stair] = Number(input.value); buildStair(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
 document.querySelectorAll('[data-stair-toggle]').forEach(input => input.onchange = () => { if (!isStair(selected)) return; captureHistory(); selected.userData.stairSettings[input.dataset.stairToggle] = input.checked; buildStair(selected); if (grounding) setOnGround(selected); selectionBox.setFromObject(selected); updateFields(); });
+document.querySelectorAll('[data-stairwell]').forEach(input => input.oninput = input.onchange = () => {
+  if (!isStairwellStair(selected)) return;
+  const value = Number(input.value), s = selected.userData.stairwellSettings;
+  if (!Number.isFinite(value) || value <= 0) { updateFields(); return; }
+  const angle = input.dataset.stairwell === 'riseHeight' ? THREE.MathUtils.radToDeg(Math.atan2(value,s.runLength)) : (input.dataset.stairwell === 'slopeDeg' ? value : s.slopeDeg);
+  if (angle < 5 || angle > 60) { showToast('坡度需在5°至60°之间，请配合水平长度调整'); updateFields(); return; }
+  captureHistory();
+  if (input.dataset.stairwell === 'riseHeight') s.slopeDeg = angle;
+  else s[input.dataset.stairwell] = value;
+  buildStairwellStair(selected); selectionBox.setFromObject(selected); updateFields();
+});
 function setTransformMode(mode) {
+  if (mode === 'scale' && locksScale(selected)) { showToast('墙壁和地板不能拉伸，请复制组件拼接'); return; }
   transformMode = mode;
   transformControls.setMode(mode);
   document.querySelectorAll('[data-mode]').forEach(item => item.classList.toggle('active', item.dataset.mode === mode));
@@ -810,6 +900,7 @@ document.querySelectorAll('.inspector-tabs button').forEach(b=>b.onclick=()=>{do
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-view]').forEach(x=>x.classList.remove('active'));b.classList.add('active');const view=b.dataset.view;if(view==='top')camera.position.set(0,0,14);else if(view==='front')camera.position.set(0,-14,2.5);else camera.position.set(8,10,7);controls.target.set(0,0,1);controls.update();});
 $('#focusBtn').onclick=()=>{if(selected){controls.target.copy(selected.position);camera.position.copy(selected.position).add(new THREE.Vector3(5,6,4));controls.update();}};
 $('#bindBtn').onclick=()=>showToast('基础版组件均绑定至 Scene 根节点');
+$('#inspectorToggle').onclick=()=>document.body.classList.toggle('inspector-open');
 $('#createGroupBtn').onclick=()=>{const group=new THREE.Group();group.userData={nodeType:'group',name:`分组_${[...scene.children].filter(o=>o.userData?.nodeType==='group').length+1}`};scene.add(group);activeGroup=group;select(group);showToast(`${group.userData.name} 已创建`);};
 $('#newSceneBtn').onclick=()=>requestSceneTransition(createNewScene);
 $('#openBlendBtn').onclick=()=>{if(!selectedBlock()){showToast('请先选择区块');return;}$('#blendFileInput').value='';$('#blendFileInput').click();};

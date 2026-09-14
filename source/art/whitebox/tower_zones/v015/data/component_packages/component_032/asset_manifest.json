@@ -1,0 +1,81 @@
+{
+  "package_id": "component_032",
+  "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+  "name": "A_CoreConnector_Walkable_01_02_01",
+  "category": "楼梯间A/楼板",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "A_CoreConnector_Walkable_01_02_01",
+  "root": "A_CoreConnector_Walkable_01_02_01",
+  "objects": [
+    "A_CoreConnector_Walkable_01_02_01",
+    "地板.031"
+  ],
+  "world_position": [
+    -32.73705291748047,
+    -2.5,
+    -0.30000001192092896
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      -32.97410583496094,
+      -3.0,
+      -0.30000001192092896
+    ],
+    "max": [
+      -32.5,
+      -2.0,
+      0.0
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 0.2370529,
+      "y": 2.5,
+      "z": -0.3
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "kind": "floor",
+    "length": 0.4741065412680996,
+    "width": 1.0,
+    "thickness": 0.30000001192092896,
+    "fixedModule": true,
+    "sourceObject": "Stair_Special_Rooftop_CoreConnector_Walkable",
+    "edgeCut": true,
+    "nominalSize": [
+      5,
+      5,
+      0.3
+    ]
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

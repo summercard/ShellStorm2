@@ -1,0 +1,4695 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "editorSettings": {
+    "snapping": false,
+    "grounding": false,
+    "collision": false
+  },
+  "savedAt": "2026-09-14T08:18:11.217Z",
+  "camera": {
+    "position": {
+      "x": 79.99999999996597,
+      "y": 89.99999999992784,
+      "z": 69.9999999999019
+    },
+    "target": {
+      "x": 0,
+      "y": 0,
+      "z": -9
+    },
+    "fov": 48
+  },
+  "groups": [
+    {
+      "name": "楼梯间A/楼板",
+      "position": {
+        "x": -32.5,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "楼梯间A/墙壁",
+      "position": {
+        "x": -32.5,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "楼梯间A/楼梯",
+      "position": {
+        "x": -32.5,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "楼梯间B/楼板",
+      "position": {
+        "x": 32.5,
+        "y": 0,
+        "z": -9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "楼梯间B/墙壁",
+      "position": {
+        "x": 32.5,
+        "y": 0,
+        "z": -9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "楼梯间B/楼梯",
+      "position": {
+        "x": 32.5,
+        "y": 0,
+        "z": -9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ],
+  "components": [
+    {
+      "name": "A_UpperDoorLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.9741077423095703,
+        "y": -0.3797467052936554,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_UpperDoorLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.9741077423095703,
+        "y": 2.6202549934387207,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1.0000030994415283,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_UpperDoorLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.97410774230957,
+        "y": -0.3797467052936554,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_UpperDoorLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.97410774230957,
+        "y": 2.6202549934387207,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1.0000030994415283,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_UpperDoorLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.487566947937012,
+        "y": -0.3797467052936554,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.026918321847916,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_UpperDoorLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.487566947937012,
+        "y": 2.6202549934387207,
+        "z": -0.2999759912490845
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.026918321847916,
+        "width": 1.0000030994415283,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.8615055084228516,
+        "y": 20.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.8615055084228516,
+        "y": 23.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.861505508422852,
+        "y": 20.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.861505508422852,
+        "y": 23.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.447830200195312,
+        "y": 20.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.172649383544922,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_TurnLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.447830200195312,
+        "y": 23.507062911987305,
+        "z": -6.299975872039795
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.172649383544922,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": -0.0000016999999843392288,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": 4.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_03_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": 9.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_04_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": 14.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_05_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": 19.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_01_06_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.4999921321868896,
+        "y": 24.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 4.999999761581421,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": -0.0000016999999843392288,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": 4.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_03_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": 9.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_04_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": 14.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_05_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": 19.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_02_06_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.499992370605469,
+        "y": 24.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 4.999999761581421,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": -0.0000016999999843392288,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": 4.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_03_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": 9.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_04_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": 14.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_05_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": 19.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_LowerDoorLanding_Walkable_03_06_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.499992370605469,
+        "y": 24.999998092651367,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 4.999999761581421,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_CoreConnector_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 0.23705290257930756,
+        "y": -0.5,
+        "z": -0.30000001192092896
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 0.4741065412680996,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_CoreConnector_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_CoreConnector_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间A/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 0.23705290257930756,
+        "y": 2.5,
+        "z": -0.30000001192092896
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 0.4741065412680996,
+        "width": 1,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_CoreConnector_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "A_CoreConnector_Guard_Left_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.23705320060253143,
+        "y": 3.1500000953674316,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 0.4741056638952159,
+        "thickness": 0.2999999999999998,
+        "height": 1.2000000476837158,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_CoreConnector_Guard_Left",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_CoreConnector_Guard_Right_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.23705260455608368,
+        "y": -3.1500000953674316,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 0.4741056638952159,
+        "thickness": 0.2999999999999998,
+        "height": 1.2000000476837158,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_CoreConnector_Guard_Right",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": -2.0000000233721948e-7,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_02_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_03_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_04_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_05_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_01_06_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.501023292541504,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": -2.0000000233721948e-7,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_02_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_03_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_04_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_05_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_02_06_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.801023483276367,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": -2.0000000233721948e-7,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_02_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_03_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_04_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_05_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Outer_03_06_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975512504577637,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.04897727966308629,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Far_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 2.499999761581421,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Far_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 7.5,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Far_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 12.5,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Inner_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.15000079572200775,
+        "y": 6.534088611602783,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999972128916397,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Inner_01_02_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.15000079572200775,
+        "y": 11.534088134765625,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999972128916397,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Inner_01_03_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.15000079572200775,
+        "y": 16.534088134765625,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999972128916397,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Inner_01_04_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.15000079572200775,
+        "y": 21.534088134765625,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999972128916397,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_Inner_01_05_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.15000079572200775,
+        "y": 25.76704216003418,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 3.4659056663513184,
+        "thickness": 0.2999972128916397,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_DoorSide_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 2.499999761581421,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_DoorSide_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 7.499999523162842,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_EnclosureWall_DoorSide_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间A/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 12.5,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Special_Rooftop_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "A_上跑",
+      "type": "楼梯间楼梯",
+      "group": "楼梯间A/楼梯",
+      "assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "position": {
+        "x": 11.500999450683594,
+        "y": 3.120300054550171,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "stairwellSettings": {
+        "profile": "original-v013",
+        "runLength": 15,
+        "slopeDeg": 21.80140948635181,
+        "width": 6,
+        "stepCount": 20,
+        "handrailHeight": 1.2,
+        "totalHeight": 6,
+        "stepRise": 0.3,
+        "stepTread": 0.75
+      }
+    },
+    {
+      "name": "A_下跑",
+      "type": "楼梯间楼梯",
+      "group": "楼梯间A/楼梯",
+      "assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "position": {
+        "x": 3.5009994506835938,
+        "y": 18.12030029296875,
+        "z": -6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "stairwellSettings": {
+        "profile": "original-v013",
+        "runLength": 15,
+        "slopeDeg": 21.80140948635181,
+        "width": 6,
+        "stepCount": 20,
+        "handrailHeight": 1.2,
+        "omitParts": [
+          "Guard_01"
+        ],
+        "totalHeight": 6,
+        "stepRise": 0.3,
+        "stepTread": 0.75
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.9740805625915527,
+        "y": -0.3797180950641632,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.9740805625915527,
+        "y": 2.6202826499938965,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1.0000014305114746,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.974080562591553,
+        "y": -0.3797180950641632,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.974080562591553,
+        "y": 2.6202826499938965,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1.0000014305114746,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.487540245056152,
+        "y": -0.3797180950641632,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.026918828487396,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_UpperDoorLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.487540245056152,
+        "y": 2.6202826499938965,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.026918828487396,
+        "width": 1.0000014305114746,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_UpperDoorLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.861480712890625,
+        "y": 20.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.861480712890625,
+        "y": 23.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.861480712890625,
+        "y": 20.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.861480712890625,
+        "y": 23.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.447805404663086,
+        "y": 20.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.172649383544922,
+        "width": 5,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_TurnLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.447805404663086,
+        "y": 23.507089614868164,
+        "z": -6.299999713897705
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.172649383544922,
+        "width": 1,
+        "thickness": 0.3000001907348633,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_TurnLanding_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 2.0000000233721948e-7,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 5,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_03_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 10,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_04_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 15,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_05_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 20,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_01_06_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 2.5,
+        "y": 25,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 4.999997854232788,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 2.0000000233721948e-7,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 5,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_03_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 10,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_04_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 15,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_05_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 20,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_02_06_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 7.5,
+        "y": 25,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 4.999997854232788,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 2.0000000233721948e-7,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 5,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_03_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 10,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_04_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 15,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_05_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 20,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 5,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_LowerDoorLanding_Walkable_03_06_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 12.5,
+        "y": 25,
+        "z": -12.19999885559082
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4.9999998640100785,
+        "width": 4.999997854232788,
+        "thickness": 0.2999992370605469,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_LowerDoorLanding_Walkable",
+        "edgeCut": false,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_CoreConnector_Walkable_01_01_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 0.23704150319099426,
+        "y": -0.5,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 0.4740789085626602,
+        "width": 5,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_CoreConnector_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_CoreConnector_Walkable_01_02_01",
+      "type": "地板",
+      "group": "楼梯间B/楼板",
+      "assetId": "ENV-TOWER-FLOOR-TILE-5M",
+      "position": {
+        "x": 0.23704150319099426,
+        "y": 2.5,
+        "z": -0.2999995946884155
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 0.4740789085626602,
+        "width": 1,
+        "thickness": 0.30000001192092896,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_CoreConnector_Walkable",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          5,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "B_CoreConnector_Guard_Left_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.23704150319099426,
+        "y": -3.1500000953674316,
+        "z": 4.0000000467443897e-7
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 0.4740789085626602,
+        "thickness": 0.2999999999999998,
+        "height": 1.2000000476837158,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_CoreConnector_Guard_Left",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_CoreConnector_Guard_Right_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.23704150319099426,
+        "y": 3.1500000953674316,
+        "z": 4.0000000467443897e-7
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 0.4740789085626602,
+        "thickness": 0.2999999999999998,
+        "height": 1.2000000476837158,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_CoreConnector_Guard_Right",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 0,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_02_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_03_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_04_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_05_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_01_06_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.500997543334961,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 0,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_02_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_03_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_04_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_05_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_02_06_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.800997734069824,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.29999999999999893,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 0,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_02_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 5,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_03_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 10,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_04_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 15,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_05_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 20,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Outer_03_06_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 14.975500106811523,
+        "y": 25,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.049004936218262074,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Outer",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Far_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 2.499999761581421,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Far_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 7.499999523162842,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Far_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 12.5,
+        "y": 27.350000381469727,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3000000000000007,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Far",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Inner_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.1499978005886078,
+        "y": 6.534116268157959,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Inner_01_02_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.1499978005886078,
+        "y": 11.534116744995117,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Inner_01_03_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.1499978005886078,
+        "y": 16.534116744995117,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Inner_01_04_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.1499978005886078,
+        "y": 21.534116744995117,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.3,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_Inner_01_05_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 0.1499978005886078,
+        "y": 25.767057418823242,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90.00000250447816
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 3.465883731842041,
+        "thickness": 0.3,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_Inner",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_DoorSide_01_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 2.499999761581421,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_DoorSide_02_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 7.5,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_EnclosureWall_DoorSide_03_01_01",
+      "type": "墙壁",
+      "group": "楼梯间B/墙壁",
+      "assetId": "ENV-TOWER-WALL-SOLID-5M",
+      "position": {
+        "x": 12.5,
+        "y": -2.3499999046325684,
+        "z": -12
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 5,
+        "thickness": 0.2999999523162842,
+        "height": 11.900000095367432,
+        "fixedModule": true,
+        "sourceObject": "Stair_Generic_Rotatable_EnclosureWall_DoorSide",
+        "edgeCut": true,
+        "nominalSize": [
+          5,
+          0.3,
+          12.9
+        ]
+      }
+    },
+    {
+      "name": "B_上跑",
+      "type": "楼梯间楼梯",
+      "group": "楼梯间B/楼梯",
+      "assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "position": {
+        "x": 11.500999450683594,
+        "y": 3.120300054550171,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "stairwellSettings": {
+        "profile": "original-v013",
+        "runLength": 15,
+        "slopeDeg": 21.80140948635181,
+        "width": 6,
+        "stepCount": 20,
+        "handrailHeight": 1.2,
+        "totalHeight": 6,
+        "stepRise": 0.3,
+        "stepTread": 0.75
+      }
+    },
+    {
+      "name": "B_下跑",
+      "type": "楼梯间楼梯",
+      "group": "楼梯间B/楼梯",
+      "assetId": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "position": {
+        "x": 3.5009994506835938,
+        "y": 18.12030029296875,
+        "z": -6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180.00000500895632
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "stairwellSettings": {
+        "profile": "original-v013",
+        "runLength": 15,
+        "slopeDeg": 21.80140948635181,
+        "width": 6,
+        "stepCount": 20,
+        "handrailHeight": 1.2,
+        "omitParts": [],
+        "totalHeight": 6,
+        "stepRise": 0.3,
+        "stepTread": 0.75
+      }
+    }
+  ],
+  "id": "whitebox_tower_stairs_v015",
+  "name": "whitebox_tower_stairs_v015",
+  "project": {
+    "blockId": "stairs",
+    "blockName": "楼梯区",
+    "blockNodePath": "Blocks/Stairs",
+    "floorRange": "100→99、99→98"
+  },
+  "blenderFile": "whitebox_tower_stairs_v015.blend"
+}

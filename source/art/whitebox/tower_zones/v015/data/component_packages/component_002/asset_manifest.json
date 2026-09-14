@@ -1,0 +1,81 @@
+{
+  "package_id": "component_002",
+  "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+  "name": "A_UpperDoorLanding_Walkable_01_02_01",
+  "category": "楼梯间A/楼板",
+  "version": "v015",
+  "source_blend": "source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend",
+  "collection": "A_UpperDoorLanding_Walkable_01_02_01",
+  "root": "A_UpperDoorLanding_Walkable_01_02_01",
+  "objects": [
+    "A_UpperDoorLanding_Walkable_01_02_01",
+    "地板.001"
+  ],
+  "world_position": [
+    -35.47410583496094,
+    -2.6202552318573,
+    -0.2999759912490845
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "forward": "-Y",
+  "world_bounds": {
+    "min": [
+      -37.97410583496094,
+      -3.1202569007873535,
+      -0.2999759912490845
+    ],
+    "max": [
+      -32.97410583496094,
+      -2.120253562927246,
+      2.4020671844482422e-05
+    ]
+  },
+  "local_transform": {
+    "position": {
+      "x": 2.9741078,
+      "y": 2.6202549,
+      "z": -0.299976
+    },
+    "rotation": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "scale": {
+      "x": 1,
+      "y": 1,
+      "z": 1
+    }
+  },
+  "settings": {
+    "kind": "floor",
+    "length": 5.0,
+    "width": 1.0000030994415283,
+    "thickness": 0.30000001192092896,
+    "fixedModule": true,
+    "sourceObject": "Stair_Special_Rooftop_UpperDoorLanding_Walkable",
+    "edgeCut": true,
+    "nominalSize": [
+      5,
+      5,
+      0.3
+    ]
+  },
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "animation": false,
+  "lights": false,
+  "emission": false,
+  "dependencies": [
+    "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "attachments": [],
+  "expected_export": null,
+  "collision": "not_generated",
+  "exported_to_godot": false
+}

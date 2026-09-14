@@ -28,6 +28,7 @@
 
         <section class="viewport-shell">
           <div class="viewport-toolbar">
+            <button id="inspectorToggle" title="显示或隐藏属性与节点">属性/节点</button>
             <div class="scene-label"><span class="cube-icon">◇</span> 场景预览 <span class="slash">/</span> <b id="selectionName">全景</b></div>
             <div class="view-buttons transform-modes"><button data-mode="translate" class="active" title="移动工具">✣ <span>移动</span></button><button data-mode="rotate" title="旋转工具">⟳ <span>旋转</span></button><button data-mode="scale" title="缩放工具">⌗ <span>缩放</span></button><span class="toolbar-divider"></span><button data-view="orbit" title="旋转视图">◎</button><button data-view="top" title="顶视图">⌗</button><button data-view="front" title="正视图">▱</button><button id="focusBtn" title="聚焦选中物体">⊙</button></div>
           </div>
@@ -71,6 +72,12 @@
                 <div class="table-dimensions"><label>台阶数量<input data-stair="steps" type="number" min="1" max="80" step="1" /></label><label>楼梯宽度<input data-stair="width" type="number" min="0.3" step="0.1" /></label><label>扶手高度<input data-stair="handrailHeight" type="number" min="0.2" step="0.1" /></label></div>
                 <div class="stair-toggles"><label><input data-stair-toggle="leftHandrail" type="checkbox" /> 左侧扶手</label><label><input data-stair-toggle="rightHandrail" type="checkbox" /> 右侧扶手</label></div>
                 <small>每级高度 0.18m，台阶数量决定总高度</small>
+              </section>
+              <section class="inspector-section stair-controls" id="stairwellControls" hidden>
+                <div class="section-heading">楼梯间直梯参数 <span id="stairwellRise">总升高 6.00m</span></div>
+                <div class="table-dimensions"><label>水平长度<input data-stairwell="runLength" type="number" min="3" max="30" step="0.1" /></label><label>坡度角<input data-stairwell="slopeDeg" type="number" min="5" max="60" step="0.1" /></label><label>楼梯宽度<input data-stairwell="width" type="number" min="1" max="10" step="0.1" /></label><label>台阶数量<input data-stairwell="stepCount" type="number" min="4" max="60" step="1" /></label><label>扶手高度<input data-stairwell="handrailHeight" type="number" min="0.2" max="2" step="0.1" /></label></div>
+                <label>总高度（米）<input data-stairwell="riseHeight" type="number" min="0.3" max="50" step="0.1" /></label>
+                <small>高度、坡度与水平长度联动重建，禁止缩放拉伸。原型组件原点位于上端；另一跑复制后绕Z轴旋转180°。</small>
               </section>
               <section class="inspector-section"><div class="section-heading">绑定</div><div class="binding"><div><strong>父级节点</strong><span id="parentNode">世界 / Scene</span></div><button class="node-pick" id="bindBtn">选择节点</button></div></section>
             </div>
