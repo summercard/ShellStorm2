@@ -1,0 +1,310 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "savedAt": "2026-09-05T06:10:16.184Z",
+  "camera": {
+    "position": {
+      "x": 10.500000000000004,
+      "y": -12.499999999999979,
+      "z": 8.199999999999985
+    },
+    "target": {
+      "x": 0,
+      "y": 0,
+      "z": 1.05
+    },
+    "fov": 32
+  },
+  "groups": [],
+  "components": [
+    {
+      "name": "地板_主空间",
+      "type": "地板",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 8,
+        "width": 6,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "后墙",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 2.9,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 8,
+        "height": 3,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "左墙",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": -3.9,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 6,
+        "height": 3,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "衣柜_左侧",
+      "type": "衣柜",
+      "group": null,
+      "position": {
+        "x": -2.65,
+        "y": 2.45,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.05,
+        "y": 1.05,
+        "z": 1.05
+      }
+    },
+    {
+      "name": "电视柜_后墙",
+      "type": "电视柜",
+      "group": null,
+      "position": {
+        "x": -0.8,
+        "y": 2.45,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.05,
+        "y": 1.05,
+        "z": 1.05
+      }
+    },
+    {
+      "name": "办公桌_后右",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 2,
+        "y": 2.1,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.15,
+        "y": 1.15,
+        "z": 1.15
+      }
+    },
+    {
+      "name": "床_右侧",
+      "type": "床",
+      "group": null,
+      "position": {
+        "x": 2,
+        "y": 0.25,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.15,
+        "y": 1.15,
+        "z": 1.15
+      }
+    },
+    {
+      "name": "沙发_前景",
+      "type": "沙发",
+      "group": null,
+      "position": {
+        "x": 0.1,
+        "y": -1.95,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.05,
+        "y": 1.05,
+        "z": 1.05
+      }
+    },
+    {
+      "name": "懒人沙发_左前",
+      "type": "懒人沙发",
+      "group": null,
+      "position": {
+        "x": -2,
+        "y": -1.6,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.05,
+        "y": 1.05,
+        "z": 1.05
+      }
+    },
+    {
+      "name": "办公椅_桌前",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 2,
+        "y": 1.25,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "显示器_桌面",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 2,
+        "y": 2.05,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.2,
+        "y": 1.2,
+        "z": 1.2
+      }
+    },
+    {
+      "name": "笔记本_桌面",
+      "type": "笔记本电脑",
+      "group": null,
+      "position": {
+        "x": 2.35,
+        "y": 1.9,
+        "z": 0.9
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.8,
+        "y": 0.8,
+        "z": 0.8
+      }
+    },
+    {
+      "name": "床头柜_占位",
+      "type": "柜子",
+      "group": null,
+      "position": {
+        "x": 3.35,
+        "y": 1.55,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 0.75,
+        "y": 0.75,
+        "z": 0.75
+      }
+    }
+  ],
+  "id": "粉白电竞卧室_参考图还原",
+  "name": "粉白电竞卧室_参考图还原"
+}

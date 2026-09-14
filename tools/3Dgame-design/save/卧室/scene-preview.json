@@ -1,0 +1,514 @@
+{
+  "version": 1,
+  "savedAt": "2026-09-01T10:51:08.858Z",
+  "components": [
+    {
+      "name": "墙壁_1",
+      "type": "墙壁",
+      "position": {
+        "x": 1,
+        "y": 0,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_2",
+      "type": "墙壁",
+      "position": {
+        "x": -3.0149999999999997,
+        "y": 0,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_3",
+      "type": "墙壁",
+      "position": {
+        "x": 5.015,
+        "y": 0,
+        "z": 4
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_4",
+      "type": "墙壁",
+      "position": {
+        "x": -5,
+        "y": 0,
+        "z": 1.884999998509884
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_5",
+      "type": "墙壁",
+      "position": {
+        "x": -5,
+        "y": 0,
+        "z": -2.130000001490116
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_6",
+      "type": "墙壁",
+      "position": {
+        "x": -5,
+        "y": 0,
+        "z": -6.145000001490115
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 4,
+        "height": 6,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "地板_1",
+      "type": "地板",
+      "position": {
+        "x": -3,
+        "y": 7.450580569168253e-10,
+        "z": -2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_2",
+      "type": "地板",
+      "position": {
+        "x": -3,
+        "y": 7.450580569168253e-10,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_3",
+      "type": "地板",
+      "position": {
+        "x": 1,
+        "y": 7.450580569168253e-10,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_4",
+      "type": "地板",
+      "position": {
+        "x": 5,
+        "y": 7.450580569168253e-10,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_5",
+      "type": "地板",
+      "position": {
+        "x": 1,
+        "y": 7.450580569168253e-10,
+        "z": -2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_6",
+      "type": "地板",
+      "position": {
+        "x": -3,
+        "y": 7.450580569168253e-10,
+        "z": -6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_7",
+      "type": "地板",
+      "position": {
+        "x": 1,
+        "y": 7.450580569168253e-10,
+        "z": -6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_8",
+      "type": "地板",
+      "position": {
+        "x": 5,
+        "y": 7.450580569168253e-10,
+        "z": -2
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地板_9",
+      "type": "地板",
+      "position": {
+        "x": 5,
+        "y": 7.450580569168253e-10,
+        "z": -6
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 4,
+        "width": 4,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "柜子_1",
+      "type": "柜子",
+      "position": {
+        "x": -4.334999986588955,
+        "y": -2.3841857821338408e-8,
+        "z": 2
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 2,
+        "y": 2,
+        "z": 2
+      }
+    },
+    {
+      "name": "柜子_2",
+      "type": "柜子",
+      "position": {
+        "x": -4.5,
+        "y": -2.3841857821338408e-8,
+        "z": -1
+      },
+      "rotation": {
+        "x": 0,
+        "y": -1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 2,
+        "y": 2,
+        "z": 2
+      }
+    },
+    {
+      "name": "床_1",
+      "type": "床",
+      "position": {
+        "x": 1,
+        "y": 0.1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 2,
+        "y": 1,
+        "z": 2
+      }
+    },
+    {
+      "name": "椅子_1",
+      "type": "椅子",
+      "position": {
+        "x": 3.5,
+        "y": 0,
+        "z": 3
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "chairSettings": {
+        "legHeight": 0.7,
+        "seatWidth": 0.8,
+        "seatDepth": 0.8,
+        "backHeight": 0.75,
+        "backWidth": 0.8
+      }
+    },
+    {
+      "name": "桌子_1",
+      "type": "桌子",
+      "position": {
+        "x": -4,
+        "y": 0,
+        "z": -5
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "tableSettings": {
+        "legHeight": 0.6,
+        "width": 2.2,
+        "depth": 1.3,
+        "topThickness": 0.2
+      }
+    },
+    {
+      "name": "桌子_2",
+      "type": "桌子",
+      "position": {
+        "x": 5,
+        "y": 0,
+        "z": 2.5
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.5707963267948966,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "tableSettings": {
+        "legHeight": 0.6,
+        "width": 1.5,
+        "depth": 1.3,
+        "topThickness": 0.2
+      }
+    }
+  ]
+}

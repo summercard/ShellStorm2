@@ -1,0 +1,1674 @@
+{
+  "layout": "I:\\工作项目\\3Dgame-design\\save\\办公室03_参考布局\\scene.json",
+  "fixed_component_count_expected": 98,
+  "fixed_component_count_actual": 98,
+  "all_passed": true,
+  "components": [
+    {
+      "name": "地砖_01",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_02",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_03",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_04",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_05",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_06",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_07",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_08",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_09",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_10",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_11",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_12",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_13",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_14",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_15",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_16",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_17",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_18",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_19",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_20",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_21",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_22",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_23",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_24",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_25",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_26",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_27",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_28",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_29",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_30",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_31",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_32",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_33",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_34",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_35",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地砖_36",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        5.0,
+        5.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "北外墙",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        30.0,
+        0.2,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        30.0,
+        0.2,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "南外墙",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        30.0,
+        0.2,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        30.0,
+        0.2,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "东外墙",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        30.0,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        30.0,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "西外墙",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        30.0,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        30.0,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左下区上隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        7.5,
+        0.2,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        7.5,
+        0.2,
+        2.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下区右隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        10.0,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        10.0,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "会议室上隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        9.0,
+        0.2,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        9.0,
+        0.2,
+        2.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议室左隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        7.5,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        7.5,
+        2.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议室右隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        7.5,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        7.5,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左侧资料隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        8.0,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        8.0,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "右侧工位隔断",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        8.0,
+        2.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        8.0,
+        2.0
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左上工位桌",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.6,
+        0.75,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        1.6,
+        0.75,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左上工位椅",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左上工位屏幕",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.9,
+        0.25,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.9,
+        0.25,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "北侧文件柜_1",
+      "type": "文件柜",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "北侧打印机_1",
+      "type": "打印机",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.68,
+        0.7,
+        0.56
+      ],
+      "actual_world_dimensions": [
+        0.68,
+        0.7,
+        0.56
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "东北饮水机",
+      "type": "饮水机",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.42,
+        0.52,
+        1.43
+      ],
+      "actual_world_dimensions": [
+        0.42,
+        0.52,
+        1.43
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "北侧白板",
+      "type": "白板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.6,
+        0.1975,
+        1.875
+      ],
+      "actual_world_dimensions": [
+        1.6,
+        0.1975,
+        1.875
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位桌_1",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位椅_1",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位屏幕_1",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位桌_2",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位椅_2",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右上工位屏幕_2",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位桌_1",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位椅_1",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位屏幕_1",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位桌_2",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位椅_2",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右中工位屏幕_2",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "中央资料架_1",
+      "type": "书架",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "中央资料架_2",
+      "type": "书架",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "中央资料架_3",
+      "type": "书架",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        0.38,
+        1.8
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "中央文件柜",
+      "type": "文件柜",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左侧打印机",
+      "type": "打印机",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.68,
+        0.7,
+        0.56
+      ],
+      "actual_world_dimensions": [
+        0.68,
+        0.7,
+        0.56
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左侧文件柜",
+      "type": "文件柜",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        0.85,
+        0.5725,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下工位桌",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.6,
+        0.75,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        1.6,
+        0.75,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下工位椅",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下工位屏幕",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.9,
+        0.25,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.9,
+        0.25,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右下工位桌",
+      "type": "办公桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "actual_world_dimensions": [
+        0.75,
+        1.6,
+        0.795
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右下工位椅",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右下工位屏幕",
+      "type": "显示器",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "actual_world_dimensions": [
+        0.25,
+        0.9,
+        1.05
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "右下打印机",
+      "type": "打印机",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.7,
+        0.68,
+        0.56
+      ],
+      "actual_world_dimensions": [
+        0.7,
+        0.68,
+        0.56
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "会议桌",
+      "type": "会议桌",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.9,
+        1.178,
+        0.835
+      ],
+      "actual_world_dimensions": [
+        1.9,
+        1.178,
+        0.835
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_北_1",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_北_2",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_南_1",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_南_2",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_西",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议椅_东",
+      "type": "办公椅",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        1.1,
+        1.25
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "会议白板",
+      "type": "白板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.6,
+        0.1975,
+        1.875
+      ],
+      "actual_world_dimensions": [
+        1.6,
+        0.1975,
+        1.875
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "南侧主入口",
+      "type": "门",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.25,
+        0.225,
+        2.35
+      ],
+      "actual_world_dimensions": [
+        1.25,
+        0.225,
+        2.35
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "北侧行政入口",
+      "type": "门",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.25,
+        0.225,
+        2.35
+      ],
+      "actual_world_dimensions": [
+        1.25,
+        0.225,
+        2.35
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "东侧窗_北",
+      "type": "窗",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "actual_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "东侧窗_中北",
+      "type": "窗",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "actual_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "东侧窗_中南",
+      "type": "窗",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "actual_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "东侧窗_南",
+      "type": "窗",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "actual_world_dimensions": [
+        0.17,
+        2.15,
+        1.7
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下休息桌",
+      "type": "桌子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        2.2,
+        1.3,
+        1.3
+      ],
+      "actual_world_dimensions": [
+        2.2,
+        1.3,
+        1.3
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左下休息椅_1",
+      "type": "椅子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "actual_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左下休息椅_2",
+      "type": "椅子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "actual_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    },
+    {
+      "name": "左下休息区矮柜",
+      "type": "柜子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.4,
+        0.61,
+        1.65
+      ],
+      "actual_world_dimensions": [
+        1.4,
+        0.61,
+        1.65
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "左下辅助打印机",
+      "type": "打印机",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.7,
+        0.68,
+        0.56
+      ],
+      "actual_world_dimensions": [
+        0.7,
+        0.68,
+        0.56
+      ],
+      "max_dimension_error": 1e-06,
+      "passed": true
+    }
+  ]
+}

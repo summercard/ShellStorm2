@@ -1,0 +1,397 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "name": "粉白电竞卧室_布局简模02",
+  "camera": {
+    "fov": 35,
+    "target": {
+      "z": 1.05,
+      "y": 0,
+      "x": 0
+    },
+    "position": {
+      "z": 8,
+      "y": -12,
+      "x": 10.5
+    }
+  },
+  "groups": [
+    {
+      "rotation": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "name": "01_建筑结构",
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "position": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      }
+    },
+    {
+      "rotation": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "name": "02_大型家具",
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "position": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      }
+    },
+    {
+      "rotation": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "name": "03_中型家具",
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "position": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      }
+    }
+  ],
+  "components": [
+    {
+      "surfaceSettings": {
+        "thickness": 0.1,
+        "kind": "floor",
+        "length": 7,
+        "width": 5.5
+      },
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "rotation": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "type": "地板",
+      "name": "连续地面_7x5.5m",
+      "group": "01_建筑结构"
+    },
+    {
+      "surfaceSettings": {
+        "thickness": 0.2,
+        "kind": "wall",
+        "height": 3.2,
+        "width": 7
+      },
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "rotation": {
+        "z": 0,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "z": 0,
+        "y": 2.65,
+        "x": 0
+      },
+      "type": "墙壁",
+      "name": "后墙_7m",
+      "group": "01_建筑结构"
+    },
+    {
+      "surfaceSettings": {
+        "thickness": 0.2,
+        "kind": "wall",
+        "height": 3.2,
+        "width": 5.5
+      },
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "rotation": {
+        "z": 90,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "z": 0,
+        "y": 0,
+        "x": -3.4
+      },
+      "type": "墙壁",
+      "name": "左墙_5.5m",
+      "group": "01_建筑结构"
+    },
+    {
+      "scale": {
+        "x": 0.75,
+        "y": 0.95,
+        "z": 1.17
+      },
+      "rotation": {
+        "z": -90,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "x": -2.99,
+        "y": -1.55,
+        "z": 0
+      },
+      "type": "衣柜",
+      "name": "左墙衣柜",
+      "group": "02_大型家具"
+    },
+    {
+      "tableSettings": {
+        "depth": 0.8,
+        "topThickness": 0.12,
+        "legHeight": 0.76,
+        "width": 2.5
+      },
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "rotation": {
+        "z": 180,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "z": 0,
+        "y": 2.15,
+        "x": 0.55
+      },
+      "type": "桌子",
+      "name": "后墙电竞桌",
+      "group": "02_大型家具"
+    },
+    {
+      "scale": {
+        "z": 1,
+        "y": 1,
+        "x": 1
+      },
+      "rotation": {
+        "z": -90,
+        "y": 0,
+        "x": 0
+      },
+      "position": {
+        "z": 0,
+        "y": 1.25,
+        "x": 2.35
+      },
+      "type": "床",
+      "name": "右侧单人床",
+      "group": "02_大型家具"
+    },
+    {
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "position": {
+        "x": 1.25,
+        "y": -0.36,
+        "z": 0
+      },
+      "type": "沙发",
+      "name": "前景双人沙发",
+      "group": "02_大型家具"
+    },
+    {
+      "name": "左后电视柜",
+      "type": "电视柜",
+      "group": "03_中型家具",
+      "position": {
+        "x": -1.8,
+        "y": 2.32,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "电视屏幕",
+      "type": "显示器",
+      "group": "03_中型家具",
+      "position": {
+        "x": -1.8,
+        "y": 2.05,
+        "z": 0.62
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1.45,
+        "y": 1.45,
+        "z": 1.45
+      }
+    },
+    {
+      "name": "桌面主屏",
+      "type": "显示器",
+      "group": "03_中型家具",
+      "position": {
+        "x": 0.55,
+        "y": 2.02,
+        "z": 0.43
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "桌面左屏",
+      "type": "显示器",
+      "group": "03_中型家具",
+      "position": {
+        "x": -0.27,
+        "y": 2.02,
+        "z": 0.43
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 165
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "桌面右屏",
+      "type": "显示器",
+      "group": "03_中型家具",
+      "position": {
+        "x": 1.37,
+        "y": 2.02,
+        "z": 0.43
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 195
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "电竞椅",
+      "type": "办公椅",
+      "group": "03_中型家具",
+      "position": {
+        "x": 0.55,
+        "y": 1.1,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "前景茶几",
+      "type": "桌子",
+      "group": "03_中型家具",
+      "position": {
+        "x": -0.25,
+        "y": -2.15,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "tableSettings": {
+        "legHeight": 0.3,
+        "width": 1.45,
+        "depth": 0.82,
+        "topThickness": 0.12
+      }
+    }
+  ],
+  "id": "粉白电竞卧室_布局简模02",
+  "savedAt": "2026-09-05T04:42:47.194Z"
+}

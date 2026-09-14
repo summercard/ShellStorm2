@@ -1,0 +1,509 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "id": "30x25米办公室",
+  "name": "30x25米办公室",
+  "savedAt": "2026-09-02T08:27:40.637Z",
+  "groups": [],
+  "components": [
+    {
+      "name": "地板_30x25m",
+      "type": "地板",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 30,
+        "width": 25,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "墙壁_北_30m",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 12.4,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 9,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_南_30m",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": -12.4,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 9,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_东_25m",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": 14.9,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 25,
+        "height": 9,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "墙壁_西_25m",
+      "type": "墙壁",
+      "group": null,
+      "position": {
+        "x": -14.9,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 25,
+        "height": 9,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "办公桌_1",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": -9,
+        "y": -7,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "办公椅_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": -9,
+        "y": -8.2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "显示器_1",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": -9,
+        "y": -6.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "办公桌_2",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": -5,
+        "y": -7,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "办公椅_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": -5,
+        "y": -8.2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "显示器_2",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": -5,
+        "y": -6.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "办公桌_3",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": -1,
+        "y": -7,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "办公椅_3",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": -1,
+        "y": -8.2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "显示器_3",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": -1,
+        "y": -6.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议桌_1",
+      "type": "会议桌",
+      "group": null,
+      "position": {
+        "x": 3,
+        "y": 3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1.5,
+        "y": 1.5,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_北",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 3,
+        "y": 4.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_南",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 3,
+        "y": 1.2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_东",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 5.1,
+        "y": 3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_西",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0.9,
+        "y": 3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": -90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "文件柜_1",
+      "type": "文件柜",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": -8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "打印机_1",
+      "type": "打印机",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": -5.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "饮水机_1",
+      "type": "饮水机",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "白板_1",
+      "type": "白板",
+      "group": null,
+      "position": {
+        "x": -8,
+        "y": 10.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SceneKit Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark"><i></i><i></i><i></i></span><span>SCENEKIT</span><b>Preview</b></div>
+        <div class="file-name"><span class="status-dot"></span>untitled_scene <span>·</span> 已保存</div>
+        <div class="top-actions"><button class="icon-button" title="撤销 (Ctrl+Z)" id="undoBtn">↶</button><button class="icon-button" title="重做 (Ctrl+Shift+Z)" id="redoBtn">↷</button><button class="header-command" id="chooseSaveDirBtn">选择存档文件夹</button><button class="header-command" id="newSceneBtn">新建场景</button><button class="header-command" id="loadSceneBtn">读取场景</button><button class="header-command" id="saveSceneBtn">保存场景</button><button class="header-command" id="aiEditBtn">AI 编辑</button><button class="export-button" id="exportBtn">导出场景</button></div>
+      </header>
+
+      <main class="workbench">
+        <aside class="library-panel">
+          <div class="panel-title"><span>组件库</span><button class="icon-button small" id="collapseAll" title="收起分类">−</button></div>
+          <label class="search"><span>⌕</span><input id="searchInput" placeholder="搜索组件" /></label>
+          <div class="asset-hint">拖入视图以添加组件</div>
+          <div id="assetList" class="asset-list"></div>
+          <div class="library-footer"><button id="clearScene">清空场景</button><span id="assetCount">0 个组件</span></div>
+        </aside>
+
+        <section class="viewport-shell">
+          <div class="viewport-toolbar">
+            <div class="scene-label"><span class="cube-icon">◇</span> 场景预览 <span class="slash">/</span> <b id="selectionName">全景</b></div>
+            <div class="view-buttons transform-modes"><button data-mode="translate" class="active" title="移动工具">✣ <span>移动</span></button><button data-mode="rotate" title="旋转工具">⟳ <span>旋转</span></button><button data-mode="scale" title="缩放工具">⌗ <span>缩放</span></button><span class="toolbar-divider"></span><button data-view="orbit" title="旋转视图">◎</button><button data-view="top" title="顶视图">⌗</button><button data-view="front" title="正视图">▱</button><button id="focusBtn" title="聚焦选中物体">⊙</button></div>
+          </div>
+          <div id="viewport" class="viewport">
+            <div class="orientation-gizmo" aria-label="当前视角 XYZ 轴向"><canvas id="orientationGizmoCanvas" width="192" height="192"></canvas></div>
+            <div class="drop-notice" id="dropNotice"><strong>拖放组件至场景</strong><span>拖动空白处旋转视角，滚轮缩放</span></div>
+            <div class="axis-hint"><span class="axis-x">X</span><span class="axis-y">Y</span><span class="axis-z">Z</span></div>
+            <div class="viewport-bottom"><div><span class="scene-live"></span> 实时预览</div><div id="coordinates">0.00, 0.00, 0.00</div></div>
+          </div>
+        </section>
+
+        <aside class="inspector-panel">
+          <div class="inspector-tabs"><button class="active" data-tab="properties">属性</button><button data-tab="nodes">节点</button></div>
+          <div class="inspector-content" id="propertiesTab">
+            <div class="empty-selection" id="emptySelection"><div class="empty-glyph">◇</div><strong>未选择组件</strong><span>在场景中选择一个组件以编辑</span></div>
+            <div id="propertyContent" hidden>
+              <div class="selection-summary"><div class="selection-icon">◈</div><div><strong id="propertyName">墙壁</strong><span id="propertyType">环境 / 墙壁</span></div><button id="duplicateBtn" title="复制组件 (Ctrl+C)">⧉</button><button id="deleteBtn" title="删除组件">⌫</button></div>
+              <section class="inspector-section"><div class="section-heading">变换 <span class="unit-note">Blender Z-up · 米 / 度</span><button class="reset-btn" id="resetTransform">重置</button></div><div class="transform-grid"><span>位置</span><label>X<input data-transform="position" data-axis="x" type="number" step="0.1" /></label><label>Y<input data-transform="position" data-axis="y" type="number" step="0.1" /></label><label>Z<input data-transform="position" data-axis="z" type="number" step="0.1" /></label><span>旋转</span><label>X<input data-transform="rotation" data-axis="x" type="number" step="5" /></label><label>Y<input data-transform="rotation" data-axis="y" type="number" step="5" /></label><label>Z<input data-transform="rotation" data-axis="z" type="number" step="5" /></label><span>缩放</span><label><input data-transform="scale" data-axis="x" type="number" step="0.1" /></label><label><input data-transform="scale" data-axis="y" type="number" step="0.1" /></label><label><input data-transform="scale" data-axis="z" type="number" step="0.1" /></label></div></section>
+              <section class="inspector-section character-controls" id="characterControls" hidden>
+                <div class="section-heading">身体参数 <span id="characterHeight">身高 1.60m</span></div>
+                <div class="body-part"><div class="body-part-name">头部 <div class="segment" aria-label="头部形状"><button data-shape-part="head" data-shape-value="sphere">球体</button><button data-shape-part="head" data-shape-value="box">方体</button></div></div><label class="range-row">大小<input data-character="headSize" type="range" min="0.18" max="0.72" step="0.01" /><input data-character-number="headSize" type="number" min="0.18" max="0.72" step="0.01" /></label></div>
+                <div class="body-part"><div class="body-part-name">身体 <div class="segment" aria-label="身体形状"><button data-shape-part="body" data-shape-value="sphere">球体</button><button data-shape-part="body" data-shape-value="box">方体</button></div></div><label class="range-row">大小<input data-character="bodyLength" type="range" min="0.16" max="1.10" step="0.01" /><input data-character-number="bodyLength" type="number" min="0.16" max="1.10" step="0.01" /></label><label class="range-row">粗细<input data-character="bodyThickness" type="range" min="0.10" max="0.50" step="0.01" /><input data-character-number="bodyThickness" type="number" min="0.10" max="0.50" step="0.01" /></label></div>
+                <div class="body-part"><div class="body-part-name">手臂 <div class="segment" aria-label="手臂形状"><button data-shape-part="arm" data-shape-value="sphere">球体</button><button data-shape-part="arm" data-shape-value="box">方体</button></div></div><label class="range-row">大小<input data-character="armLength" type="range" min="0.12" max="0.90" step="0.01" /><input data-character-number="armLength" type="number" min="0.12" max="0.90" step="0.01" /></label><label class="range-row">粗细<input data-character="armThickness" type="range" min="0.04" max="0.24" step="0.01" /><input data-character-number="armThickness" type="number" min="0.04" max="0.24" step="0.01" /></label></div>
+                <div class="body-part"><div class="body-part-name">双腿 <div class="segment" aria-label="双腿形状"><button data-shape-part="leg" data-shape-value="sphere">球体</button><button data-shape-part="leg" data-shape-value="box">方体</button></div></div><label class="range-row">大小<input data-character="legLength" type="range" min="0.15" max="1.00" step="0.01" /><input data-character-number="legLength" type="number" min="0.15" max="1.00" step="0.01" /></label><label class="range-row">粗细<input data-character="legThickness" type="range" min="0.06" max="0.28" step="0.01" /><input data-character-number="legThickness" type="number" min="0.06" max="0.28" step="0.01" /></label></div>
+              </section>
+              <section class="inspector-section surface-controls" id="surfaceControls" hidden>
+                <div class="section-heading">尺寸 <span>单位 / 米</span></div>
+                <div id="wallDimensions" class="surface-dimensions"><label>宽度<input data-surface="width" type="number" min="0.5" step="0.5" /></label><label>高度<input data-surface="height" type="number" min="0.5" step="0.5" /></label><label>厚度<input data-surface="thickness" type="number" min="0.1" step="0.1" /></label></div>
+                <div id="floorDimensions" class="surface-dimensions" hidden><label>长度<input data-surface="length" type="number" min="0.5" step="0.5" /></label><label>宽度<input data-surface="width" type="number" min="0.5" step="0.5" /></label><label>厚度<input data-surface="thickness" type="number" min="0.1" step="0.1" /></label></div>
+              </section>
+              <section class="inspector-section chair-controls" id="chairControls" hidden>
+                <div class="section-heading">椅子尺寸 <span>单位 / 米</span></div>
+                <div class="chair-dimensions"><label>凳脚高度<input data-chair="legHeight" type="number" min="0.1" step="0.1" /></label><label>坐垫宽度<input data-chair="seatWidth" type="number" min="0.2" step="0.1" /></label><label>坐垫深度<input data-chair="seatDepth" type="number" min="0.2" step="0.1" /></label><label>靠背高度<input data-chair="backHeight" type="number" min="0.1" step="0.1" /></label><label>靠背宽度<input data-chair="backWidth" type="number" min="0.2" step="0.1" /></label></div>
+              </section>
+              <section class="inspector-section table-controls" id="tableControls" hidden>
+                <div class="section-heading">桌子尺寸 <span>单位 / 米</span></div>
+                <div class="table-dimensions"><label>桌脚高度<input data-table="legHeight" type="number" min="0.1" step="0.1" /></label><label>桌面宽度<input data-table="width" type="number" min="0.2" step="0.1" /></label><label>桌面深度<input data-table="depth" type="number" min="0.2" step="0.1" /></label><label>桌面厚度<input data-table="topThickness" type="number" min="0.1" step="0.1" /></label></div>
+              </section>
+              <section class="inspector-section stair-controls" id="stairControls" hidden>
+                <div class="section-heading">楼梯参数 <span id="stairHeight">总高度 1.80m</span></div>
+                <div class="table-dimensions"><label>台阶数量<input data-stair="steps" type="number" min="1" max="80" step="1" /></label><label>楼梯宽度<input data-stair="width" type="number" min="0.3" step="0.1" /></label><label>扶手高度<input data-stair="handrailHeight" type="number" min="0.2" step="0.1" /></label></div>
+                <div class="stair-toggles"><label><input data-stair-toggle="leftHandrail" type="checkbox" /> 左侧扶手</label><label><input data-stair-toggle="rightHandrail" type="checkbox" /> 右侧扶手</label></div>
+                <small>每级高度 0.18m，台阶数量决定总高度</small>
+              </section>
+              <section class="inspector-section"><div class="section-heading">绑定</div><div class="binding"><div><strong>父级节点</strong><span id="parentNode">世界 / Scene</span></div><button class="node-pick" id="bindBtn">选择节点</button></div></section>
+            </div>
+          </div>
+          <div class="nodes-content" id="nodesTab" hidden><div class="node-toolbar"><button id="createGroupBtn">＋ 新建分组</button></div><div class="node-root">⌘ <strong>Scene</strong></div><div id="nodeList"></div></div>
+          <div class="snap-settings"><div><div class="setting-label"><span>吸附</span><button id="snapToggle" class="toggle on" aria-label="切换吸附" aria-pressed="true"><i></i></button></div><small>移动时吸附附近组件</small></div><div><div class="setting-label"><span>贴地</span><button id="groundToggle" class="toggle on" aria-label="切换贴地" aria-pressed="true"><i></i></button></div><small>自动贴合地面高度</small></div><div><div class="setting-label"><span>旋转吸附 · 5°</span><button id="rotationSnapToggle" class="toggle on" aria-label="切换 5 度旋转吸附" aria-pressed="true"><i></i></button></div><small>旋转工具按 5° 递进</small></div><div><div class="setting-label"><span>碰撞</span><button id="collisionToggle" class="toggle on" aria-label="切换碰撞" aria-pressed="true"><i></i></button></div><small>阻止组件重叠摆放</small></div><div><div class="setting-label"><span>穿模型</span><button id="passThroughToggle" class="toggle" aria-label="切换穿模型" aria-pressed="false"><i></i></button></div><small>允许组件穿过其他模型</small></div></div>
+        </aside>
+      </main>
+      <div id="toast" class="toast"></div>
+      <div class="modal-backdrop" id="modalBackdrop" hidden>
+        <section class="scene-modal" id="saveModal" hidden aria-label="保存场景">
+          <h2>保存场景</h2><p>为当前场景输入一个名称。</p>
+          <label class="modal-field">场景名称<input id="sceneNameInput" maxlength="32" placeholder="例如：客厅布局" /></label>
+          <div class="modal-actions"><button class="modal-secondary" data-modal-close>取消</button><button class="export-button" id="confirmSaveBtn">保存</button></div>
+        </section>
+        <section class="scene-modal" id="confirmModal" hidden aria-label="保存确认">
+          <h2>保存当前场景？</h2><p>继续前可以先保存当前摆放与编辑内容。</p>
+          <div class="modal-actions"><button class="modal-secondary" data-modal-close>取消</button><button class="modal-secondary" id="discardSceneBtn">不保存</button><button class="export-button" id="saveBeforeActionBtn">保存</button></div>
+        </section>
+        <section class="scene-modal" id="loadModal" hidden aria-label="读取场景">
+          <h2>读取场景</h2><p>选择一个已保存的场景。</p>
+          <label class="modal-field">已保存场景<select id="savedSceneSelect"></select></label>
+          <div class="modal-actions"><button class="modal-secondary" data-modal-close>取消</button><button class="export-button" id="confirmLoadBtn">读取</button></div>
+        </section>
+        <section class="scene-modal ai-modal" id="aiModal" hidden aria-label="AI 编辑">
+          <h2>AI 编辑</h2><p>粘贴批量编辑命令并应用到当前已保存场景。</p>
+          <label class="modal-field">编辑命令<textarea id="aiCommandInput" spellcheck="false" placeholder='{"operations":[{"op":"update","name":"办公桌_1","patch":{"position":{"x":2,"y":3,"z":0}}}]}'></textarea></label>
+          <div class="modal-actions"><button class="modal-secondary" data-modal-close>取消</button><button class="export-button" id="applyAiCommandBtn">应用并预览</button></div>
+        </section>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

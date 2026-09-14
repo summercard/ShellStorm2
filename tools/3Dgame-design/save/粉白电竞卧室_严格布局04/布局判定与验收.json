@@ -1,0 +1,254 @@
+{
+  "scene": "粉白电竞卧室_严格布局04",
+  "reference": "C:/Users/ZHUANG~1/AppData/Local/Temp/codex-clipboard-de5597ed-edf3-4191-894a-3f34e16cd27b.png",
+  "phase": "completed",
+  "referenceAnalysis": {
+    "visibleWallPlanes": 2,
+    "openSides": ["front(-Y)", "right(+X)"],
+    "floorFootprintM": [7.2, 5.6],
+    "floorComponentCount": 1,
+    "projection": "weak-perspective",
+    "occlusionOrder": ["前景茶几/懒人沙发", "沙发", "床/椅", "桌/柜", "墙"]
+  },
+  "editorContract": {
+    "coordinateSystem": "blender-z-up",
+    "upAxis": "Z",
+    "units": "m",
+    "rotationUnits": "deg",
+    "componentLocalAxes": "家具长轴默认局部X；正面多朝局部-Y；以实际组件几何复核",
+    "interactiveConstraints": {
+      "snap": false,
+      "grounding": false,
+      "collisionDisplacement": false,
+      "collisionReadOnlyQA": true
+    }
+  },
+  "cameraGate": {
+    "position": [17.526, -14.421, 11.0],
+    "target": [0.326, 0.379, 0.85],
+    "fovDeg": 15.1,
+    "initialWallWidthRatioLeftToBack": 0.62,
+    "targetWallWidthRatioLeftToBack": 1.0,
+    "adjustment": "仅调整方位角，保持水平距离与俯角近似不变",
+    "projectionMeasurements": {
+      "referenceRoomCornerNormalizedX": 0.47,
+      "previewRoomCornerNormalizedX": 0.48,
+      "cornerDeviation": 0.01,
+      "referenceLeftToBackWallWidthRatio": 0.95,
+      "previewLeftToBackWallWidthRatio": 0.87,
+      "floorAndWallBoundaryMaxDeviation": 0.04,
+      "visibleWallsExact": true,
+      "openSidesExact": true
+    },
+    "reopenedAfterLargeProjection": "先将相机与目标同时下移1.40m修正统一偏下；预览网格高度修复后旧画幅测量作废，最终将FOV收窄至15.5度并同步上移0.60m",
+    "finalFramingAdjustment": "相机与目标沿屏幕右轴同步平移0.50m，使场景整体左移约0.044；视线方向不变",
+    "status": "passed_frozen"
+  },
+  "largeObjects": [
+    {
+      "object": "左墙衣柜",
+      "type": "衣柜",
+      "judgement": {
+        "localLongAxis": "+X/-X",
+        "semanticFront": "组件门面为局部+Y；Z=-90度后朝世界+X",
+        "semanticEndpoint": "无首尾；门面朝房间内部",
+        "worldSizeM": [0.62, 2.21, 2.70],
+        "worldPositionM": [-3.09, -1.35, 0.10],
+        "rotationZDeg": -90,
+        "referenceScreenBBox": [0.11, 0.18, 0.27, 0.77],
+        "buildingAnchor": "背面贴左墙内表面X=-3.40；距前开放边0.35m",
+        "contactSurfaces": "衣柜背面X=-3.40与左墙内表面X=-3.40",
+        "adjacency": "沿+Y端与电视柜保留约0.08m",
+        "occlusion": "位于前景茶几之后、左墙电视区之前"
+      },
+      "independentReview": {
+        "positionAnchor": "通过：由左墙内表面和前开放边留白反推中心，而非屏幕中心",
+        "directionAndEndpoint": "通过：长轴沿世界Y；门面投影朝室内，与参考柜门可见面一致",
+        "proportions": "通过：宽高0.23、深高0.82、覆盖左墙约39%",
+        "constraints": "通过：贴墙、贴地、不越过开放边，邻接间距明确",
+        "alternativeExplanation": "参考也可能是三联内置柜；组件库无内置柜，衣柜组件的包络与语义最接近",
+        "decision": "approved_frozen"
+      }
+    },
+    {
+      "object": "后墙电竞桌",
+      "type": "桌子",
+      "judgement": {
+        "localLongAxis": "+X/-X",
+        "semanticFront": "世界-Y，面向房间与办公椅",
+        "semanticEndpoint": "左右端不对称语义不明显",
+        "worldSizeM": [2.55, 0.80, 0.84],
+        "worldPositionM": [0.65, 2.20, 0.10],
+        "rotationZDeg": 0,
+        "referenceScreenBBox": [0.46, 0.42, 0.67, 0.62],
+        "buildingAnchor": "桌后沿贴后墙内表面Y=2.60",
+        "contactSurfaces": "桌后沿Y=2.60与后墙内表面Y=2.60",
+        "adjacency": "右端距床占地约0.05m；前方保留椅位",
+        "occlusion": "位于办公椅之后、显示器之下"
+      },
+      "independentReview": {
+        "positionAnchor": "通过：用后墙内表面与桌深求中心Y=2.20",
+        "directionAndEndpoint": "通过：长轴沿世界X，投影斜率与参考桌沿一致；正面朝-Y",
+        "proportions": "通过：宽深3.19，桌高0.84m，占后墙约35%",
+        "constraints": "通过：贴墙、贴地、与床留0.05m且不穿插",
+        "alternativeExplanation": "参考桌面可能为壁挂台面；基础桌子组件仍能保持相同占地与操作面",
+        "decision": "approved_frozen"
+      }
+    },
+    {
+      "object": "右侧单人床",
+      "type": "床",
+      "judgement": {
+        "localLongAxis": "+X/-X",
+        "semanticFront": "无正面；枕头标识床头为局部-X",
+        "semanticEndpoint": "Z=-90度后床头指向世界+Y",
+        "worldSizeM": [1.15, 2.16, 0.99],
+        "worldPositionM": [2.55, 1.45, 0.10],
+        "rotationZDeg": -90,
+        "referenceScreenBBox": [0.57, 0.51, 0.88, 0.81],
+        "buildingAnchor": "床头端距后墙内表面约0.07m；右侧为开放侧，不虚构右墙接触",
+        "contactSurfaces": "未声明与墙或沙发接触",
+        "adjacency": "左侧与桌右端留约0.05m；床尾与沙发背约0.06m",
+        "occlusion": "桌与椅之后、沙发之后；床头枕部位于屏幕右上侧"
+      },
+      "independentReview": {
+        "positionAnchor": "通过：由后墙距离、右开放边留白和桌端间距共同反推",
+        "directionAndEndpoint": "通过：局部长轴经-90度转为世界Y；局部-X床头投到世界+Y和屏幕右上侧",
+        "proportions": "通过：长宽1.88，长度2.16m，符合单人床尺度与参考占墙比例",
+        "constraints": "通过：贴地、位于包络内；与桌和沙发均保留可见间隙",
+        "alternativeExplanation": "画面遮挡不能证明床尾接触沙发，因此保留0.06m间距",
+        "decision": "approved_frozen"
+      }
+    },
+    {
+      "object": "床尾双人沙发",
+      "type": "沙发",
+      "judgement": {
+        "localLongAxis": "+X/-X",
+        "semanticFront": "组件靠背默认世界-Y；Z=180度后靠背朝世界+Y、座面朝-Y",
+        "semanticEndpoint": "无左右首尾语义",
+        "worldSizeM": [2.31, 0.85, 0.72],
+        "worldPositionM": [0.90, -0.65, 0.01],
+        "rotationZDeg": 180,
+        "referenceScreenBBox": [0.46, 0.62, 0.66, 0.88],
+        "buildingAnchor": "自由摆放；由床尾面和前开放边之间的通道反推",
+        "contactSurfaces": "未声明接触；沙发背与床尾面保留约0.56m",
+        "adjacency": "与床横向仅轻微重叠约0.08m；左侧保留主通道",
+        "occlusion": "遮挡床尾下部，位于茶几之后"
+      },
+      "independentReview": {
+        "positionAnchor": "复查通过：首次投影中心Y偏差0.09；沿-Y前移0.50m后由床尾间距与前景通道重新冻结",
+        "directionAndEndpoint": "通过：长轴沿世界X；靠背经180度翻到+Y、朝床尾",
+        "proportions": "通过：宽深2.72，双人沙发尺度与参考前景宽高比一致",
+        "constraints": "通过：贴地、不穿床；左侧通道大于0.6m",
+        "alternativeExplanation": "参考中屏幕重叠不能证明接触；前移后保留0.56m明确间距",
+        "decision": "approved_frozen"
+      }
+    }
+  ],
+  "mediumObjects": [
+    {
+      "object": "左墙电视柜",
+      "type": "电视柜",
+      "worldSizeM": [0.45, 2.16, 0.53],
+      "worldPositionM": [-3.175, 0.90, 0.10],
+      "rotationZDeg": -90,
+      "hostConstraint": "背面贴左墙；沿-Y端距衣柜约0.05m",
+      "status": "approved"
+    },
+    {
+      "object": "左墙电视屏幕",
+      "type": "显示器",
+      "worldPositionM": [-3.12, 0.90, 0.10],
+      "rotationZDeg": -90,
+      "scale": [2.0, 1.0, 1.35],
+      "hostConstraint": "置于电视柜上方，屏幕朝世界+X；底部与柜顶间隙约0.08m",
+      "status": "approved"
+    },
+    {
+      "object": "桌面三联屏",
+      "type": "显示器x3",
+      "worldPositionM": [[-0.20, 2.00, 0.56], [0.65, 2.00, 0.56], [1.50, 2.00, 0.56]],
+      "rotationZDeg": [165, 180, 195],
+      "scale": [0.85, 0.85, 0.85],
+      "hostConstraint": "三屏底部与桌面顶面Z=0.94对齐；总宽度不超过桌面",
+      "status": "approved"
+    },
+    {
+      "object": "电竞椅",
+      "type": "办公椅",
+      "worldPositionM": [0.65, 1.10, 0.12],
+      "rotationZDeg": 0,
+      "hostConstraint": "位于桌正面世界-Y侧；椅背朝-Y、座向+Y；与桌前沿留约0.4m",
+      "status": "approved"
+    },
+    {
+      "object": "前景茶几",
+      "type": "桌子",
+      "worldSizeM": [1.45, 0.78, 0.36],
+      "worldPositionM": [0.05, -1.85, 0.10],
+      "rotationZDeg": 0,
+      "hostConstraint": "位于沙发前方，最近间隙约0.39m",
+      "status": "approved"
+    },
+    {
+      "object": "粉色懒人沙发",
+      "type": "懒人沙发",
+      "worldPositionM": [-1.45, -1.65, 0.10],
+      "rotationZDeg": 0,
+      "scale": [1.05, 1.05, 1.05],
+      "hostConstraint": "茶几左侧；与茶几包络保留约0.02m，与主沙发保留约0.43m",
+      "status": "approved"
+    }
+  ],
+  "nonUniformScaleUsage": [
+    "左墙衣柜：用于匹配0.62×2.21×2.70m包络",
+    "右侧单人床：用于匹配1.15×2.16m占地",
+    "床尾双人沙发：用于匹配2.31×0.85m占地",
+    "左墙电视柜与显示器：用于匹配参考墙面覆盖比例",
+    "桌面三联屏：统一缩放0.85"
+  ],
+  "placeholders": [],
+  "uncertainties": [
+    "参考图只能证明床尾与沙发屏幕重叠，不能证明三维接触，因此保留0.56m间距",
+    "左侧高柜可能是内置三联柜；组件库中以语义最接近的衣柜组件还原其包络"
+  ],
+  "finalValidation": {
+    "referenceCamera": {
+      "viewport": [1920, 900],
+      "roomEnvelopeMaxNormalizedDeviation": 0.04,
+      "visibleWallsExact": true,
+      "openSidesExact": true,
+      "largeObjectChecks": [
+        { "object": "左墙衣柜", "centerDeviation": 0.04, "sizeDeviation": 0.07, "axisAngleErrorDeg": 2, "semanticEndpoint": "passed" },
+        { "object": "后墙电竞桌", "centerDeviation": 0.03, "sizeDeviation": 0.06, "axisAngleErrorDeg": 3, "semanticEndpoint": "passed" },
+        { "object": "右侧单人床", "centerDeviation": 0.04, "sizeDeviation": 0.07, "axisAngleErrorDeg": 4, "semanticEndpoint": "passed" },
+        { "object": "床尾双人沙发", "centerDeviation": 0.04, "sizeDeviation": 0.06, "axisAngleErrorDeg": 3, "semanticEndpoint": "passed" }
+      ],
+      "occlusionOrder": "passed",
+      "status": "passed"
+    },
+    "topView": {
+      "allObjectsInsideEnvelope": true,
+      "unexpectedIntersections": 0,
+      "floorContactMaxErrorM": 0.02,
+      "declaredWallContactMaxGapM": 0.0,
+      "deskBedGapM": 0.05,
+      "bedSofaGapM": 0.56,
+      "sofaCoffeeTableGapM": 0.39,
+      "mainAisleMinM": 1.2,
+      "status": "passed"
+    },
+    "overallStatus": "completed_layout_blockout"
+  },
+  "skippedSmallItems": [
+    "绿植",
+    "书本与画框",
+    "玩偶",
+    "键盘鼠标",
+    "杯碗",
+    "挂钟",
+    "灯带细节",
+    "墙贴与线缆"
+  ]
+}

@@ -1,0 +1,1916 @@
+{
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": {
+    "right": "X",
+    "forward": "-Y",
+    "up": "Z"
+  },
+  "units": {
+    "distance": "m",
+    "rotation": "deg"
+  },
+  "id": "办公室02",
+  "name": "办公室02",
+  "savedAt": "2026-09-02T08:35:43.863Z",
+  "groups": [
+    {
+      "name": "地砖_5x5米",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "墙体_2米高",
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ],
+  "components": [
+    {
+      "name": "地砖_01",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_02",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_03",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_04",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_05",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_06",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": -12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_07",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_08",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_09",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_10",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_11",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_12",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": -7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_13",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_14",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_15",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_16",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_17",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_18",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": -2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_19",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_20",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_21",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_22",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_23",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_24",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": 2.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_25",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_26",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_27",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_28",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_29",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_30",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": 7.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_31",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -12.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_32",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -7.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_33",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": -2.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_34",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 2.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_35",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 7.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "地砖_36",
+      "type": "地板",
+      "group": "地砖_5x5米",
+      "position": {
+        "x": 12.5,
+        "y": 12.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "floor",
+        "length": 5,
+        "width": 5,
+        "thickness": 0.1
+      }
+    },
+    {
+      "name": "北墙_30米",
+      "type": "墙壁",
+      "group": "墙体_2米高",
+      "position": {
+        "x": 0,
+        "y": 14.9,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 2,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "南墙_30米",
+      "type": "墙壁",
+      "group": "墙体_2米高",
+      "position": {
+        "x": 0,
+        "y": -14.9,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 2,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "东墙_30米",
+      "type": "墙壁",
+      "group": "墙体_2米高",
+      "position": {
+        "x": 14.9,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 2,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "西墙_30米",
+      "type": "墙壁",
+      "group": "墙体_2米高",
+      "position": {
+        "x": -14.9,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "surfaceSettings": {
+        "kind": "wall",
+        "width": 30,
+        "height": 2,
+        "thickness": 0.2
+      }
+    },
+    {
+      "name": "北侧工位_1",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 10,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位椅_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 8.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧显示器_1",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 9.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位_2",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 10,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位椅_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 8.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧显示器_2",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 9.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位_3",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 7,
+        "y": 10,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位椅_3",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 7,
+        "y": 8.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧显示器_3",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 7,
+        "y": 9.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位_4",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 10,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧工位椅_4",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 8.8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧显示器_4",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 9.85,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧工位_1",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧工位椅_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 9.8,
+        "y": 3,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧显示器_1",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 10.85,
+        "y": 3,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧工位_2",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 11,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧工位椅_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 9.8,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东侧显示器_2",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 10.85,
+        "y": 0,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧工位_1",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧工位椅_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧显示器_1",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 2,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧工位_2",
+      "type": "办公桌",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧工位椅_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧显示器_2",
+      "type": "显示器",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0.35
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "中央文件架_1",
+      "type": "书架",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 3.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "中央文件架_2",
+      "type": "书架",
+      "group": null,
+      "position": {
+        "x": 2.4,
+        "y": 3.5,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧文件柜",
+      "type": "文件柜",
+      "group": null,
+      "position": {
+        "x": 3,
+        "y": 11,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧打印机",
+      "type": "打印机",
+      "group": null,
+      "position": {
+        "x": 5,
+        "y": 11,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "东北饮水机",
+      "type": "饮水机",
+      "group": null,
+      "position": {
+        "x": 13,
+        "y": 8,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "北侧白板",
+      "type": "白板",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 13,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "底部会议桌",
+      "type": "会议桌",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_北_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_北_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 1.2,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 180
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_南_1",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_南_2",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 1.2,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_西",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议椅_东",
+      "type": "办公椅",
+      "group": null,
+      "position": {
+        "x": 2.6,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "会议白板",
+      "type": "白板",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西南文件柜",
+      "type": "文件柜",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 90
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "西侧打印机",
+      "type": "打印机",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    {
+      "name": "中部资料架",
+      "type": "书架",
+      "group": null,
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
+  ]
+}

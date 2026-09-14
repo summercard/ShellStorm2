@@ -1,0 +1,365 @@
+{
+  "layout": "I:\\工作项目\\3Dgame-design\\save\\卧室\\scene.json",
+  "fixed_component_count_expected": 21,
+  "fixed_component_count_actual": 21,
+  "all_passed": true,
+  "components": [
+    {
+      "name": "墙壁_1",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "墙壁_2",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "墙壁_3",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        0.2,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "墙壁_4",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "墙壁_5",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "墙壁_6",
+      "type": "墙壁",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "actual_world_dimensions": [
+        0.2,
+        4.0,
+        6.0
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_1",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_2",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_3",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_4",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_5",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_6",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_7",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_8",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "地板_9",
+      "type": "地板",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "actual_world_dimensions": [
+        4.0,
+        4.0,
+        0.1
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "柜子_1",
+      "type": "柜子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        2.8,
+        3.3
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        2.8,
+        3.3
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "柜子_2",
+      "type": "柜子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.1,
+        2.8,
+        3.3
+      ],
+      "actual_world_dimensions": [
+        1.1,
+        2.8,
+        3.3
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "床_1",
+      "type": "床",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        4.05,
+        4.5,
+        1.06
+      ],
+      "actual_world_dimensions": [
+        4.05,
+        4.5,
+        1.06
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "椅子_1",
+      "type": "椅子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "actual_world_dimensions": [
+        0.8,
+        0.8,
+        1.58
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "桌子_1",
+      "type": "桌子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.3,
+        2.2,
+        0.8
+      ],
+      "actual_world_dimensions": [
+        1.3,
+        2.2,
+        0.8
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    },
+    {
+      "name": "桌子_2",
+      "type": "桌子",
+      "transform_locked": true,
+      "expected_world_dimensions": [
+        1.3,
+        1.5,
+        0.8
+      ],
+      "actual_world_dimensions": [
+        1.3,
+        1.5,
+        0.8
+      ],
+      "max_dimension_error": 0.0,
+      "passed": true
+    }
+  ]
+}
