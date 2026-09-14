@@ -68,6 +68,7 @@
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：18枪架、59组合、三类靶标、重置/退出、暂停及BaseData隔离已有独立契约 |
 | ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、资产专项、真实场景渲染 | 楼梯间v015已完成原位130组件拼装及参数化Blend读存，未重新导入Godot；其他资产类型待建立并列流程；历史哈希漂移未批量签署 |
+| ASSET-LEVEL-BUILDER | Blender原生关卡组件库、可编辑白盒、Collection与磁盘资产包镜像 | [05.1](05.1_关卡区块设计.md#312-blender-原生关卡搭建插件)、[10.1](10.1_3D场景美术生产流程.md) | `.blend`对象/Collection→`asset_manifest.json`→`catalog.json/tree.txt` | `tools/blender_addons/test_shellstorm_level_builder.py`（Blender 4.5后台） | r2已实现并安装：组件改为单网格、锚点对齐游戏资产（默认底面中心）、一键开启原生吸附并对齐/贴靠、参数重建、白盒配色与线框预览、顶视图渲染、未保存保护的清单同步及字段别名兼容扫描；暂不导出GLB或修改Godot引用 |
 
 ## 3. 开发记录定位
 
