@@ -1,5 +1,5 @@
 import { createServer as createViteServer } from 'vite';
-import { promises as fs } from 'node:fs';
+import { existsSync, promises as fs, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFile } from 'node:child_process';
@@ -15,7 +15,25 @@ const port = Number(process.env.PORT || 4173);
 const safeName = value => String(value || '').replace(/[\\/:*?"<>|]/g, '_').trim().slice(0, 80) || '未命名场景';
 const coordinateSystem = 'blender-z-up';
 const execFileAsync = promisify(execFile);
-const blenderExecutable = process.env.BLENDER_BIN || '/Applications/Blender.app/Contents/MacOS/Blender';
+function findBlenderExecutable() {
+  if (process.env.BLENDER_BIN) return process.env.BLENDER_BIN;
+  if (process.platform === 'darwin') return '/Applications/Blender.app/Contents/MacOS/Blender';
+  if (process.platform !== 'win32') return 'blender';
+  const roots = [process.env.ProgramFiles, process.env['ProgramFiles(x86)'], 'D:\\Program Files']
+    .filter(Boolean)
+    .map(folder => path.join(folder, 'Blender Foundation'));
+  for (const rootFolder of roots) {
+    if (!existsSync(rootFolder)) continue;
+    const installations = readdirSync(rootFolder, { withFileTypes: true })
+      .filter(entry => entry.isDirectory() && /^Blender(?:\s|$)/i.test(entry.name))
+      .map(entry => path.join(rootFolder, entry.name, 'blender.exe'))
+      .filter(existsSync)
+      .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }));
+    if (installations.length) return installations[0];
+  }
+  return 'blender.exe';
+}
+const blenderExecutable = findBlenderExecutable();
 const blenderWriter = path.join(root, 'blender', 'write_scene_blend.py');
 const blenderImportedUpdater = path.join(root, 'blender', 'update_imported_blend.py');
 const blenderGenericImporter = path.join(root, 'blender', 'import_blend_bidirectional.py');

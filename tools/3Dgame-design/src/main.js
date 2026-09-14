@@ -259,7 +259,7 @@ function createComponent(type) {
   const wood = 0x9b6745, wall = 0xa9b8ba, fabric = 0x547f91, dark = 0x425157;
   const addLegs = (w, d, h) => [-1, 1].forEach(x => [-1, 1].forEach(z => { const leg = mesh(new THREE.BoxGeometry(.13, h, .13), wood, h / 2); leg.position.set(x*w/2.25, h/2, z*d/2.25); addPart(root, leg); }));
   if (type === 'Blender模型') { /* Geometry is loaded from the imported GLB preview. */ }
-  else if (type === '墙壁') { root.userData.assetId = 'ENV-TOWER-WALL-SOLID-5M'; root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 12.9, thickness: .3 }; buildSurface(root); }
+  else if (type === '墙壁') { root.userData.assetId = 'ENV-TOWER-WALL-SOLID-5M'; root.userData.surfaceSettings = { kind: 'wall', width: 5, height: 11.9, thickness: .3 }; buildSurface(root); }
   else if (type === '地板') { root.userData.assetId = 'ENV-TOWER-FLOOR-TILE-5M'; root.userData.surfaceSettings = { kind: 'floor', length: 5, width: 5, thickness: .3 }; buildSurface(root); }
   else if (type === '拐角柱') { root.userData.assetId = 'ENV-TOWER-CORNER-COLUMN-05M'; root.userData.surfaceSettings = { kind: 'column', length: .5, width: .5, thickness: 12.9 }; buildSurface(root); }
   else if (type === '楼梯间下层楼板') { root.userData.assetId = 'ENV-TOWER-STAIR-FLOOR-LOWER'; root.userData.surfaceSettings = { kind: 'floor', length: 15, width: 30, thickness: .3, topOffset: .1 }; buildSurface(root); }
@@ -639,9 +639,10 @@ async function saveCurrentScene(name) {
   const payload = { ...scenePayload(), id: activeSceneId || crypto.randomUUID(), name: trimmed };
   try {
     const response = await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: trimmed, payload }) });
-    if (!response.ok) throw new Error('save');
-    const record = await response.json(); activeSceneId = record.id; activeBlockId = block.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id, block.id); updateSceneTitle(); showToast(`已生成 ${record.blenderFile}`); return true;
-  } catch { showToast('Blender 场景生成失败，请检查本地 Blender'); return false; }
+    const record = await response.json();
+    if (!response.ok) throw new Error(record.error || 'Blender 场景生成失败');
+    activeSceneId = record.id; activeBlockId = block.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id, block.id); updateSceneTitle(); showToast(`已生成 ${record.blenderFile}`); return true;
+  } catch (error) { showToast(error.message || 'Blender 场景生成失败，请检查本地 Blender'); return false; }
 }
 function showSaveModal(afterSave = null) { pendingSceneAction = afterSave; $('#saveBlockName').textContent = selectedBlock()?.name || '未选择区块'; $('#sceneNameInput').value = currentSceneName === 'untitled_scene' ? '' : currentSceneName; openModal('#saveModal'); $('#sceneNameInput').focus(); }
 async function showLoadModal() {
@@ -814,37 +815,66 @@ function redoScene() {
 }
 function showToast(text){ const t=$('#toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1700); }
 function pointerFrom(e) { const r=renderer.domElement.getBoundingClientRect(); pointer.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1); raycaster.setFromCamera(pointer,camera); }
+function localToWorldPosition(object, position) {
+  return object.parent ? object.parent.localToWorld(position.clone()) : position.clone();
+}
+function worldToLocalPosition(object, position) {
+  return object.parent ? object.parent.worldToLocal(position.clone()) : position.clone();
+}
 function snapPosition(pos) {
   verticalSnapApplied = false;
   if (!snapping) return pos;
-  const threshold = .45;
-  pos.x = Math.round(pos.x * 2) / 2;
-  pos.y = Math.round(pos.y * 2) / 2;
   if (!selected) return pos;
+  const threshold = .28;
+  selected.updateWorldMatrix(true, true);
   const currentBox = new THREE.Box3().setFromObject(selected);
-  const offset = pos.clone().sub(selected.position);
-  const candidate = currentBox.clone().translate(offset);
+  const currentWorldPosition = selected.getWorldPosition(new THREE.Vector3());
+  const desiredWorldPosition = localToWorldPosition(selected, pos);
+  const candidate = currentBox.clone().translate(desiredWorldPosition.clone().sub(currentWorldPosition));
   const intervalDistance = (aMin, aMax, bMin, bMax) => Math.max(bMin - aMax, aMin - bMax, 0);
   const near = (aMin, aMax, bMin, bMax) => intervalDistance(aMin, aMax, bMin, bMax) <= threshold;
-  const candidates = [];
+  const solutions = [];
   for (const other of instances) {
     if (other === selected) continue;
+    other.updateWorldMatrix(true, true);
     const target = new THREE.Box3().setFromObject(other);
     const nearX = near(candidate.min.x, candidate.max.x, target.min.x, target.max.x);
     const nearY = near(candidate.min.y, candidate.max.y, target.min.y, target.max.y);
     const nearZ = near(candidate.min.z, candidate.max.z, target.min.z, target.max.z);
-    const addFace = (axis, gap, requires) => { if (requires && Math.abs(gap) <= threshold) candidates.push({ axis, gap }); };
-    addFace('x', target.min.x - candidate.max.x, nearY && nearZ);
-    addFace('x', target.max.x - candidate.min.x, nearY && nearZ);
-    addFace('y', target.min.y - candidate.max.y, nearX && nearZ);
-    addFace('y', target.max.y - candidate.min.y, nearX && nearZ);
-    addFace('z', target.min.z - candidate.max.z, nearX && nearY);
-    addFace('z', target.max.z - candidate.min.z, nearX && nearY);
+    const bestAxisCorrection = (axis, requires) => {
+      if (!requires) return null;
+      const candidateCenter = (candidate.min[axis] + candidate.max[axis]) / 2;
+      const targetCenter = (target.min[axis] + target.max[axis]) / 2;
+      const options = [
+        { gap: target.min[axis] - candidate.min[axis], priority: 0 },
+        { gap: target.max[axis] - candidate.max[axis], priority: 0 },
+        { gap: targetCenter - candidateCenter, priority: 0 },
+        { gap: target.min[axis] - candidate.max[axis], priority: 1 },
+        { gap: target.max[axis] - candidate.min[axis], priority: 1 }
+      ].filter(option => Math.abs(option.gap) <= threshold);
+      options.sort((a, b) => Math.abs(a.gap) - Math.abs(b.gap) || a.priority - b.priority);
+      return options[0] || null;
+    };
+    const corrections = {
+      x: bestAxisCorrection('x', nearY && nearZ),
+      y: bestAxisCorrection('y', nearX && nearZ),
+      z: bestAxisCorrection('z', nearX && nearY)
+    };
+    const axes = Object.entries(corrections).filter(([, correction]) => correction);
+    if (!axes.length) continue;
+    const score = Math.hypot(...axes.map(([, correction]) => correction.gap));
+    solutions.push({ corrections, score });
   }
-  const byAxis = new Map();
-  candidates.forEach(item => { const current = byAxis.get(item.axis); if (!current || Math.abs(item.gap) < Math.abs(current.gap)) byAxis.set(item.axis, item); });
-  byAxis.forEach((item, axis) => { pos[axis] += item.gap; if (axis === 'z') verticalSnapApplied = true; });
-  return pos;
+  solutions.sort((a, b) => a.score - b.score);
+  const best = solutions[0];
+  if (!best) return pos;
+  const snappedWorldPosition = desiredWorldPosition.clone();
+  Object.entries(best.corrections).forEach(([axis, correction]) => {
+    if (!correction) return;
+    snappedWorldPosition[axis] += correction.gap;
+    if (axis === 'z') verticalSnapApplied = true;
+  });
+  return worldToLocalPosition(selected, snappedWorldPosition);
 }
 renderer.domElement.addEventListener('pointerdown',e=>{ if(e.button!==0 || gizmoInteraction || transformControls.dragging)return;pointerFrom(e);const hits=raycaster.intersectObjects(instances,true);if(hits.length){const obj=hits[0].object.userData.root;select(obj);}else{selected=null;activeGroup=null;transformControls.detach();selectionBox.visible=false;$('#emptySelection').hidden=false;$('#propertyContent').hidden=true;$('#selectionName').textContent='全景';} });
 renderer.domElement.addEventListener('pointermove',e=>{if(!dragging||!selected)return;pointerFrom(e);const p=new THREE.Vector3();raycaster.ray.intersectPlane(plane,p);p.sub(dragOffset);const previous=selected.position.clone();selected.position.copy(snapPosition(p));if(grounding)setOnGround(selected);preventCollision(selected,previous);selectionBox.setFromObject(selected);updateFields();});
@@ -853,7 +883,25 @@ container.addEventListener('dragover',e=>e.preventDefault());container.addEventL
 $('#searchInput').oninput=e=>renderAssets(e.target.value.trim());
 $('#collapseAll').onclick=()=>{const groups=assetLibraries.flatMap(library=>library.groups),shouldOpen=groups.some(group=>group.open);groups.forEach(group=>group.open=!shouldOpen);renderAssets($('#searchInput').value.trim());};
 $('#clearScene').onclick=()=>{captureHistory();clearScene();$('#dropNotice').classList.remove('hidden');updateCounts();renderNodes();showToast('场景已清空');};
-$('#deleteBtn').onclick=()=>{if(!selected)return;captureHistory();transformControls.detach();scene.remove(selected);if(instances.includes(selected))instances.splice(instances.indexOf(selected),1);selected=null;selectionBox.visible=false;$('#emptySelection').hidden=false;$('#propertyContent').hidden=true;$('#selectionName').textContent='全景';updateCounts();renderNodes();};
+function deleteSelectedComponent() {
+  if (!selected) return;
+  captureHistory(); transformControls.detach();
+  const target = selected;
+  const removedInstances = target.userData?.nodeType === 'group'
+    ? instances.filter(instance => target === instance || target.getObjectById(instance.id))
+    : instances.filter(instance => instance === target);
+  target.removeFromParent();
+  removedInstances.forEach(instance => {
+    const index = instances.indexOf(instance);
+    if (index >= 0) instances.splice(index, 1);
+  });
+  if (activeGroup === target || !activeGroup?.parent) activeGroup = null;
+  selected = null; selectionBox.visible = false; $('#emptySelection').hidden = false;
+  $('#propertyContent').hidden = true; $('#selectionName').textContent = '全景';
+  $('#dropNotice').classList.toggle('hidden', instances.length > 0);
+  updateCounts(); renderNodes(); showToast(target.userData?.nodeType === 'group' ? '分组已删除' : '组件已删除');
+}
+$('#deleteBtn').onclick=deleteSelectedComponent;
 $('#duplicateBtn').onclick=()=>{if(!selected){showToast('请先选择组件');return;}clipboardComponent=componentSnapshot(selected);pasteComponent();};
 $('#resetTransform').onclick=()=>{if(!selected)return;captureHistory();selected.position.set(0,0,0);selected.rotation.set(0,0,0);selected.scale.set(1,1,1);setOnGround(selected);selectionBox.setFromObject(selected);updateFields();};
 document.querySelectorAll('[data-transform]').forEach(input=>input.onchange=()=>{if(!selected)return;captureHistory();const previousPosition=selected.position.clone();let v=Number(input.value)||0;const {transform,axis}=input.dataset;if(transform==='rotation'){if(rotationSnapping)v=Math.round(v/rotationSnapDegrees)*rotationSnapDegrees;v=THREE.MathUtils.degToRad(v);}selected[transform][axis]=v;if(grounding&&transform==='position')setOnGround(selected);preventCollision(selected,previousPosition);selectionBox.setFromObject(selected);updateFields();});
@@ -923,6 +971,9 @@ document.addEventListener('keydown',e=>{
   const editingText = ['INPUT','TEXTAREA','SELECT'].includes(target?.tagName) || target?.isContentEditable;
   const key = e.key.toLowerCase();
   if (!e.ctrlKey && !e.metaKey && !e.altKey && !editingText) {
+    if ((key === 'delete' || key === 'backspace') && selected) {
+      e.preventDefault(); deleteSelectedComponent(); return;
+    }
     const mode = { w: 'translate', r: 'rotate', s: 'scale' }[key];
     if (mode) { e.preventDefault(); setTransformMode(mode); showToast(`${mode === 'translate' ? '移动' : mode === 'rotate' ? '旋转' : '缩放'}工具已激活`); return; }
   }
