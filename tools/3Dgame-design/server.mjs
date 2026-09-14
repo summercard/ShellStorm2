@@ -2,10 +2,12 @@ import { createServer as createViteServer } from 'vite';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readProjectBlocks, requireProjectBlock } from './project-blocks.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const saveRoot = path.join(root, 'save');
 const activePreviewPath = path.join(saveRoot, 'active-preview.json');
+const blockSaveRoot = path.join(saveRoot, 'blocks');
 const port = Number(process.env.PORT || 4173);
 const safeName = value => String(value || '').replace(/[\\/:*?"<>|]/g, '_').trim().slice(0, 80) || '未命名场景';
 const coordinateSystem = 'blender-z-up';
@@ -42,12 +44,27 @@ async function writeScenePayload(id, payload) {
   await fs.writeFile(path.join(folder, 'scene.json'), JSON.stringify(payload, null, 2), 'utf8');
   return payload;
 }
+const blockSceneFolder = (blockId, sceneId) => path.join(blockSaveRoot, safeName(blockId), safeName(sceneId));
+async function readBlockScenePayload(blockId, id) {
+  const block = await requireProjectBlock(blockId), sceneId = safeName(id);
+  const filePath = path.join(blockSceneFolder(block.id, sceneId), 'scene.json');
+  const payload = JSON.parse(await fs.readFile(filePath, 'utf8'));
+  return { id: sceneId, block, payload };
+}
+async function writeBlockScenePayload(blockId, id, payload) {
+  const block = await requireProjectBlock(blockId), sceneId = safeName(id), folder = blockSceneFolder(block.id, sceneId);
+  await fs.mkdir(folder, { recursive: true });
+  payload.id = sceneId; payload.name = payload.name || sceneId; payload.savedAt = new Date().toISOString();
+  payload.project = { ...(payload.project || {}), blockId: block.id, blockName: block.name, blockNodePath: block.nodePath, floorRange: block.floorRange };
+  await fs.writeFile(path.join(folder, 'scene.json'), JSON.stringify(payload, null, 2), 'utf8');
+  return payload;
+}
 async function readActivePreview() {
   try { return JSON.parse(await fs.readFile(activePreviewPath, 'utf8')); }
   catch { return { sceneId: null, updatedAt: null }; }
 }
-async function writeActivePreview(sceneId) {
-  const record = { sceneId: sceneId ? safeName(sceneId) : null, updatedAt: new Date().toISOString() };
+async function writeActivePreview(sceneId, blockId = null) {
+  const record = { blockId: blockId ? safeName(blockId) : null, sceneId: sceneId ? safeName(sceneId) : null, updatedAt: new Date().toISOString() };
   await fs.writeFile(activePreviewPath, JSON.stringify(record, null, 2), 'utf8');
   return record;
 }
@@ -101,6 +118,18 @@ function applyAiOperations(payload, operations) {
 }
 
 async function ensureSaveRoot() { await fs.mkdir(saveRoot, { recursive: true }); }
+async function readBlockScenes(blockId) {
+  const block = await requireProjectBlock(blockId), folder = path.join(blockSaveRoot, block.id), scenes = [];
+  let entries = []; try { entries = await fs.readdir(folder, { withFileTypes: true }); } catch { return []; }
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    try {
+      const payload = JSON.parse(await fs.readFile(path.join(folder, entry.name, 'scene.json'), 'utf8'));
+      scenes.push({ id: entry.name, blockId: block.id, name: payload.name || entry.name, updatedAt: payload.savedAt || new Date().toISOString() });
+    } catch { /* ignore incomplete scene folders */ }
+  }
+  return scenes.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+}
 async function readScenes() {
   await ensureSaveRoot(); const entries = await fs.readdir(saveRoot, { withFileTypes: true }); const scenes = [];
   for (const entry of entries) {
@@ -119,13 +148,17 @@ async function readScenes() {
 }
 function json(res, status, body) { res.statusCode = status; res.setHeader('Content-Type', 'application/json; charset=utf-8'); res.end(JSON.stringify(body)); }
 async function api(req, res, url) {
+  if (req.method === 'GET' && url.pathname === '/api/blocks') {
+    try { return json(res, 200, await readProjectBlocks()); }
+    catch (error) { return json(res, 500, { error: error.message }); }
+  }
   if (req.method === 'GET' && url.pathname === '/api/preview') return json(res, 200, await readActivePreview());
   if (req.method === 'POST' && url.pathname === '/api/preview') {
     let body = ''; for await (const chunk of req) body += chunk;
     try {
-      const { sceneId } = JSON.parse(body);
-      if (sceneId) await readScenePayload(sceneId);
-      return json(res, 200, await writeActivePreview(sceneId));
+      const { blockId, sceneId } = JSON.parse(body);
+      if (sceneId) blockId ? await readBlockScenePayload(blockId, sceneId) : await readScenePayload(sceneId);
+      return json(res, 200, await writeActivePreview(sceneId, blockId));
     } catch { return json(res, 400, { error: '当前预览场景不存在' }); }
   }
   if (req.method === 'GET' && url.pathname === '/api/ai/schema') return json(res, 200, {
@@ -136,6 +169,31 @@ async function api(req, res, url) {
     operations: ['add', 'update', 'remove'],
     endpoint: 'POST /api/ai/scenes/:sceneId/commands'
   });
+  const blockSceneMatch = url.pathname.match(/^\/api\/blocks\/([^/]+)\/scenes(?:\/([^/]+))?$/);
+  if (blockSceneMatch && req.method === 'GET') {
+    const blockId = decodeURIComponent(blockSceneMatch[1]), sceneId = blockSceneMatch[2] && decodeURIComponent(blockSceneMatch[2]);
+    try { return json(res, 200, sceneId ? (await readBlockScenePayload(blockId, sceneId)).payload : { scenes: await readBlockScenes(blockId) }); }
+    catch (error) { return json(res, 404, { error: error.message || '区块或场景不存在' }); }
+  }
+  if (blockSceneMatch && req.method === 'POST' && !blockSceneMatch[2]) {
+    let body = ''; for await (const chunk of req) body += chunk;
+    try {
+      const blockId = decodeURIComponent(blockSceneMatch[1]), input = JSON.parse(body), name = safeName(input.name), payload = input.payload;
+      if (!payload?.components) return json(res, 400, { error: '场景数据无效' });
+      await writeBlockScenePayload(blockId, name, payload);
+      return json(res, 200, { id: name, blockId, name, updatedAt: payload.savedAt });
+    } catch (error) { return json(res, 400, { error: error.message || '保存失败' }); }
+  }
+  const blockAiMatch = url.pathname.match(/^\/api\/ai\/blocks\/([^/]+)\/scenes\/([^/]+)\/commands$/);
+  if (req.method === 'POST' && blockAiMatch) {
+    let body = ''; for await (const chunk of req) body += chunk;
+    try {
+      const blockId = decodeURIComponent(blockAiMatch[1]), id = decodeURIComponent(blockAiMatch[2]);
+      const input = JSON.parse(body), { payload } = await readBlockScenePayload(blockId, id);
+      const changed = applyAiOperations(payload, input.operations); await writeBlockScenePayload(blockId, id, payload);
+      return json(res, 200, { scene: payload, changed });
+    } catch (error) { return json(res, 400, { error: error.message || 'AI 编辑命令执行失败' }); }
+  }
   if (req.method === 'POST' && /^\/api\/ai\/scenes\/[^/]+\/commands$/.test(url.pathname)) {
     let body = ''; for await (const chunk of req) body += chunk;
     try {

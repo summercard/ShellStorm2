@@ -9,7 +9,7 @@ const legacyScenesKey = 'scenekit-preview-scenes-v2';
 const sceneIndexKey = 'scenekit-preview-scene-index-v3';
 const sceneDataKey = id => `scenekit-preview-scene-v3:${id}`;
 const undoHistory = [], redoHistory = [], historyLimit = 40;
-let activeSceneId = null, currentSceneName = 'untitled_scene', pendingSceneAction = null, activeSceneSavedAt = null, sceneSyncInFlight = false;
+let activeSceneId = null, activeBlockId = null, projectBlocks = [], currentSceneName = 'untitled_scene', pendingSceneAction = null, activeSceneSavedAt = null, sceneSyncInFlight = false;
 let clipboardComponent = null;
 let saveDirectoryHandle = null;
 let activeGroup = null, transformMode = 'translate';
@@ -17,23 +17,37 @@ const rotationSnapDegrees = 5;
 const rotationSnapRadians = THREE.MathUtils.degToRad(rotationSnapDegrees);
 const groupClickTimers = new WeakMap();
 const coordinateSystem = 'blender-z-up';
-const assetGroups = [
-  { name: '角色', open: true, items: [{ type: '成人角色 · 1.6m / 4头身', icon: '♙', tint: '#d9a83d' }, { type: '儿童角色 · 1.1m / 2头身', icon: '♟', tint: '#76a5b4' }] },
-  { name: '建筑', open: true, items: [{ type: '墙壁', icon: '▥', tint: '#92a4af' }, { type: '地板', icon: '▤', tint: '#9f8f7a' }, { type: '门', icon: '▯', tint: '#9a6748' }, { type: '窗', icon: '▦', tint: '#70a9c0' }, { type: '楼梯', icon: '▰', tint: '#a47b55' }] },
-  { name: '家具', open: true, items: [{ type: '桌子', icon: '⊥', tint: '#b47852' }, { type: '柜子', icon: '▤', tint: '#947052' }, { type: '衣柜', icon: '▥', tint: '#a9b2b0' }, { type: '电视柜', icon: '▰', tint: '#71656a' }, { type: '椅子', icon: '♧', tint: '#b9825e' }, { type: '沙发', icon: '▱', tint: '#d8c7d0' }, { type: '懒人沙发', icon: '●', tint: '#d98fa8' }, { type: '床', icon: '▰', tint: '#6c9fb1' }] },
-  { name: '办公', open: true, items: [{ type: '办公桌', icon: '▱', tint: '#526d7c' }, { type: '办公椅', icon: '♧', tint: '#4f7f9a' }, { type: '显示器', icon: '▣', tint: '#4e6f83' }, { type: '笔记本电脑', icon: '▱', tint: '#72818b' }, { type: '文件柜', icon: '▤', tint: '#81939b' }, { type: '书架', icon: '▥', tint: '#9a7959' }, { type: '打印机', icon: '▤', tint: '#56656d' }, { type: '饮水机', icon: '◉', tint: '#6c9bb4' }, { type: '会议桌', icon: '⊣', tint: '#7a6758' }, { type: '白板', icon: '▭', tint: '#8b9fa6' }] },
-  { name: '道具', open: true, items: [{ type: '路灯', icon: '♧', tint: '#d7ac55' }, { type: '箱子', icon: '▣', tint: '#bc8b46' }] }
+const assetLibraries = [
+  { scope: 'common', groups: [
+    { name: '角色', open: true, items: [{ type: '成人角色 · 1.6m / 4头身', icon: '♙', tint: '#d9a83d' }, { type: '儿童角色 · 1.1m / 2头身', icon: '♟', tint: '#76a5b4' }] },
+    { name: '建筑', open: true, items: [{ type: '墙壁', icon: '▥', tint: '#92a4af' }, { type: '地板', icon: '▤', tint: '#9f8f7a' }, { type: '门', icon: '▯', tint: '#9a6748' }, { type: '窗', icon: '▦', tint: '#70a9c0' }, { type: '楼梯', icon: '▰', tint: '#a47b55' }] }
+  ] },
+  { scope: 'block', blockId: 'battle', groups: [
+    { name: '家具', open: true, items: [{ type: '桌子', icon: '⊥', tint: '#b47852' }, { type: '柜子', icon: '▤', tint: '#947052' }, { type: '衣柜', icon: '▥', tint: '#a9b2b0' }, { type: '电视柜', icon: '▰', tint: '#71656a' }, { type: '椅子', icon: '♧', tint: '#b9825e' }, { type: '沙发', icon: '▱', tint: '#d8c7d0' }, { type: '懒人沙发', icon: '●', tint: '#d98fa8' }, { type: '床', icon: '▰', tint: '#6c9fb1' }] },
+    { name: '办公', open: true, items: [{ type: '办公桌', icon: '▱', tint: '#526d7c' }, { type: '办公椅', icon: '♧', tint: '#4f7f9a' }, { type: '显示器', icon: '▣', tint: '#4e6f83' }, { type: '笔记本电脑', icon: '▱', tint: '#72818b' }, { type: '文件柜', icon: '▤', tint: '#81939b' }, { type: '书架', icon: '▥', tint: '#9a7959' }, { type: '打印机', icon: '▤', tint: '#56656d' }, { type: '饮水机', icon: '◉', tint: '#6c9bb4' }, { type: '会议桌', icon: '⊣', tint: '#7a6758' }, { type: '白板', icon: '▭', tint: '#8b9fa6' }] }
+  ] },
+  { scope: 'block', blockId: 'rooftop', groups: [
+    { name: '道具', open: true, items: [{ type: '路灯', icon: '♧', tint: '#d7ac55' }, { type: '箱子', icon: '▣', tint: '#bc8b46' }] }
+  ] }
 ];
 let selected = null, snapping = true, grounding = true, rotationSnapping = true, collisionEnabled = true, passThrough = false, dragOffset = new THREE.Vector3(), dragging = false, gizmoInteraction = false, transformDragPreviousPosition = null, verticalSnapApplied = false, lastCollisionNotice = 0;
 const instances = [];
 
 function renderAssets(filter = '') {
   const list = $('#assetList'); list.innerHTML = '';
-  assetGroups.forEach(group => {
-    const valid = group.items.filter(a => a.type.includes(filter)); if (!valid.length) return;
-    const title = document.createElement('button'); title.className = 'asset-group'; title.innerHTML = `<span class="chevron">${group.open ? '⌄' : '›'}</span>${group.name}<em>${valid.length}</em>`;
-    title.onclick = () => { group.open = !group.open; renderAssets(filter); }; list.append(title);
-    if (group.open) valid.forEach(asset => { const el = document.createElement('div'); el.className = 'asset'; el.draggable = true; el.dataset.type = asset.type; el.innerHTML = `<span class="asset-icon" style="color:${asset.tint}">${asset.icon}</span><span>${asset.type}</span><small>拖拽添加</small>`; el.addEventListener('dragstart', e => e.dataTransfer.setData('component', asset.type)); list.append(el); });
+  const currentBlockId = $('#blockSelect')?.value;
+  assetLibraries.filter(library => library.scope === 'common' || library.blockId === currentBlockId).forEach(library => {
+    const visibleGroups = library.groups.map(group => ({ group, items: group.items.filter(asset => asset.type.includes(filter)) })).filter(entry => entry.items.length);
+    if (!visibleGroups.length) return;
+    const heading = document.createElement('div'); heading.className = `asset-scope ${library.scope}`;
+    const blockName = projectBlocks.find(block => block.id === library.blockId)?.name || library.blockId;
+    heading.innerHTML = `<strong>${library.scope === 'common' ? '通用组件' : `${blockName}组件`}</strong><span>${visibleGroups.reduce((sum, entry) => sum + entry.items.length, 0)}</span>`;
+    list.append(heading);
+    visibleGroups.forEach(({ group, items }) => {
+      const title = document.createElement('button'); title.className = 'asset-group'; title.innerHTML = `<span class="chevron">${group.open ? '⌄' : '›'}</span>${group.name}<em>${items.length}</em>`;
+      title.onclick = () => { group.open = !group.open; renderAssets(filter); }; list.append(title);
+      if (group.open) items.forEach(asset => { const el = document.createElement('div'); el.className = 'asset'; el.draggable = true; el.dataset.type = asset.type; el.innerHTML = `<span class="asset-icon" style="color:${asset.tint}">${asset.icon}</span><span>${asset.type}</span><small>拖拽添加</small>`; el.addEventListener('dragstart', e => e.dataTransfer.setData('component', asset.type)); list.append(el); });
+    });
   });
 }
 renderAssets();
@@ -511,7 +525,22 @@ function migrateSavedScenes() {
 }
 function readSavedScenes() { return migrateSavedScenes(); }
 function readSavedScene(id) { try { return JSON.parse(localStorage.getItem(sceneDataKey(id)) || 'null'); } catch { return null; } }
-function updateSceneTitle() { $('.file-name').innerHTML = `<span class="status-dot"></span>${currentSceneName} <span>·</span> 已保存`; }
+const selectedBlock = () => projectBlocks.find(block => block.id === $('#blockSelect').value);
+function updateSceneTitle() {
+  const block = selectedBlock();
+  $('.file-name').innerHTML = `<span class="status-dot"></span>${block ? `${block.name} / ` : ''}${currentSceneName} <span>·</span> 已保存`;
+}
+async function loadProjectBlocks() {
+  try {
+    const response = await fetch('/api/blocks'); if (!response.ok) throw new Error('区块读取失败');
+    const catalog = await response.json(); projectBlocks = catalog.blocks || [];
+    const select = $('#blockSelect'); select.innerHTML = '';
+    projectBlocks.forEach(block => { const option = document.createElement('option'); option.value = block.id; option.textContent = `${block.name} · ${block.floorRange}`; select.append(option); });
+    $('#blockSource').textContent = catalog.source.split('/').pop();
+    if (activeBlockId && projectBlocks.some(block => block.id === activeBlockId)) select.value = activeBlockId;
+    activeBlockId = select.value || null; updateSceneTitle(); renderAssets($('#searchInput').value.trim());
+  } catch { $('#blockSelect').innerHTML = '<option value="">项目区块读取失败</option>'; showToast('无法读取项目关卡区块文档'); }
+}
 function closeModal() { $('#modalBackdrop').classList.remove('is-open'); ['#saveModal', '#confirmModal', '#loadModal', '#aiModal'].forEach(id => $(id).classList.remove('is-open')); }
 function openModal(id) {
   $('#modalBackdrop').classList.add('is-open');
@@ -520,17 +549,20 @@ function openModal(id) {
 }
 async function saveCurrentScene(name) {
   const trimmed = name.trim(); if (!trimmed) { showToast('请输入场景名称'); return false; }
+  const block = selectedBlock(); if (!block) { showToast('请先选择项目区块'); return false; }
   const payload = { ...scenePayload(), id: activeSceneId || crypto.randomUUID(), name: trimmed };
   try {
-    const response = await fetch('/api/scenes', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: trimmed, payload }) });
+    const response = await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: trimmed, payload }) });
     if (!response.ok) throw new Error('save');
-    const record = await response.json(); activeSceneId = record.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id); updateSceneTitle(); showToast(`场景“${record.name}”已保存`); return true;
+    const record = await response.json(); activeSceneId = record.id; activeBlockId = block.id; currentSceneName = record.name; activeSceneSavedAt = record.updatedAt || activeSceneSavedAt; void setActivePreview(record.id, block.id); updateSceneTitle(); showToast(`场景“${record.name}”已保存至${block.name}`); return true;
   } catch { showToast('本地存档服务未启动，请重新运行 npm run dev'); return false; }
 }
-function showSaveModal(afterSave = null) { pendingSceneAction = afterSave; $('#sceneNameInput').value = currentSceneName === 'untitled_scene' ? '' : currentSceneName; openModal('#saveModal'); $('#sceneNameInput').focus(); }
+function showSaveModal(afterSave = null) { pendingSceneAction = afterSave; $('#saveBlockName').textContent = selectedBlock()?.name || '未选择区块'; $('#sceneNameInput').value = currentSceneName === 'untitled_scene' ? '' : currentSceneName; openModal('#saveModal'); $('#sceneNameInput').focus(); }
 async function showLoadModal() {
   let scenes = [];
-  try { const response = await fetch('/api/scenes'); if (!response.ok) throw new Error('load'); scenes = (await response.json()).scenes || []; } catch { showToast('本地存档服务未启动，请重新运行 npm run dev'); return; }
+  const block = selectedBlock(); if (!block) { showToast('请先选择项目区块'); return; }
+  try { const response = await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes`); if (!response.ok) throw new Error('load'); scenes = (await response.json()).scenes || []; } catch { showToast('本地存档服务未启动，请重新运行 npm run dev'); return; }
+  $('#loadBlockName').textContent = `${block.name} · ${block.floorRange}`;
   const select = $('#savedSceneSelect'); select.innerHTML = '';
   if (!scenes.length) { select.innerHTML = '<option value="">暂无已保存场景</option>'; $('#confirmLoadBtn').disabled = true; }
   else { scenes.forEach(item => { const option = document.createElement('option'); option.value = item.id; option.textContent = `${item.name} · ${new Date(item.updatedAt).toLocaleString('zh-CN')}`; select.append(option); }); $('#confirmLoadBtn').disabled = false; }
@@ -550,14 +582,14 @@ async function applyAiCommands() {
   if (!Array.isArray(operations) || !operations.length) { showToast('请提供至少一条编辑命令'); return; }
   if (!(await saveCurrentScene(currentSceneName))) return;
   try {
-    const response = await fetch(`/api/ai/scenes/${encodeURIComponent(activeSceneId)}/commands`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ operations }) });
+    const response = await fetch(`/api/ai/blocks/${encodeURIComponent(activeBlockId)}/scenes/${encodeURIComponent(activeSceneId)}/commands`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ operations }) });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'AI 编辑失败');
     captureHistory(); restoreScene(result.scene); currentSceneName = result.scene.name || activeSceneId; activeSceneSavedAt = result.scene.savedAt || activeSceneSavedAt; updateSceneTitle(); closeModal(); showToast(`AI 已完成 ${result.changed.length} 项编辑`);
   } catch (error) { showToast(error.message || 'AI 编辑命令执行失败'); }
 }
-async function setActivePreview(sceneId) {
-  try { await fetch('/api/preview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sceneId }) }); }
+async function setActivePreview(sceneId, blockId = activeBlockId) {
+  try { await fetch('/api/preview', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ blockId, sceneId }) }); }
   catch { /* The preview will retry when the local server is available. */ }
 }
 async function syncAiScenePreview() {
@@ -567,17 +599,17 @@ async function syncAiScenePreview() {
     const previewResponse = await fetch('/api/preview');
     if (previewResponse.ok) {
       const preview = await previewResponse.json();
-      if (preview.sceneId && preview.sceneId !== activeSceneId) {
-        const response = await fetch(`/api/scenes/${encodeURIComponent(preview.sceneId)}`);
+      if (preview.sceneId && preview.blockId && (preview.sceneId !== activeSceneId || preview.blockId !== activeBlockId)) {
+        const response = preview.blockId ? await fetch(`/api/blocks/${encodeURIComponent(preview.blockId)}/scenes/${encodeURIComponent(preview.sceneId)}`) : await fetch(`/api/scenes/${encodeURIComponent(preview.sceneId)}`);
         if (response.ok) {
           const payload = await response.json();
-          captureHistory(); restoreScene(payload); activeSceneId = payload.id || preview.sceneId; currentSceneName = payload.name || activeSceneId; activeSceneSavedAt = payload.savedAt || null; updateSceneTitle(); showToast(`已切换至“${currentSceneName}”预览`);
+          captureHistory(); restoreScene(payload); activeSceneId = payload.id || preview.sceneId; activeBlockId = preview.blockId || null; if (activeBlockId) $('#blockSelect').value = activeBlockId; currentSceneName = payload.name || activeSceneId; activeSceneSavedAt = payload.savedAt || null; updateSceneTitle(); showToast(`已切换至“${currentSceneName}”预览`);
         }
         return;
       }
     }
     if (!activeSceneId) return;
-    const response = await fetch(`/api/scenes/${encodeURIComponent(activeSceneId)}`);
+    const response = activeBlockId ? await fetch(`/api/blocks/${encodeURIComponent(activeBlockId)}/scenes/${encodeURIComponent(activeSceneId)}`) : await fetch(`/api/scenes/${encodeURIComponent(activeSceneId)}`);
     if (!response.ok) return;
     const payload = await response.json();
     if (!payload.savedAt || payload.savedAt === activeSceneSavedAt) return;
@@ -585,7 +617,7 @@ async function syncAiScenePreview() {
   } catch { /* The local server may be restarting; retry on the next sync. */ }
   finally { sceneSyncInFlight = false; }
 }
-function createNewScene() { captureHistory(); clearScene(); $('#dropNotice').classList.remove('hidden'); updateCounts(); renderNodes(); activeSceneId = null; activeSceneSavedAt = null; void setActivePreview(null); currentSceneName = 'untitled_scene'; updateSceneTitle(); showToast('已新建空白场景'); }
+function createNewScene() { captureHistory(); clearScene(); $('#dropNotice').classList.remove('hidden'); updateCounts(); renderNodes(); activeSceneId = null; activeBlockId = $('#blockSelect').value || null; activeSceneSavedAt = null; void setActivePreview(null, activeBlockId); currentSceneName = 'untitled_scene'; updateSceneTitle(); showToast(`已在${selectedBlock()?.name || '当前区块'}新建空白场景`); }
 function continueSceneTransition(action) {
   pendingSceneAction = null;
   closeModal();
@@ -714,7 +746,7 @@ renderer.domElement.addEventListener('pointermove',e=>{if(!dragging||!selected)r
 renderer.domElement.addEventListener('pointerup',e=>{dragging=false;controls.enabled=true;renderer.domElement.releasePointerCapture?.(e.pointerId);});
 container.addEventListener('dragover',e=>e.preventDefault());container.addEventListener('drop',e=>{e.preventDefault();const type=e.dataTransfer.getData('component');if(!type)return;pointerFrom(e);const p=new THREE.Vector3();raycaster.ray.intersectPlane(plane,p);addComponent(type,snapPosition(p));});
 $('#searchInput').oninput=e=>renderAssets(e.target.value.trim());
-$('#collapseAll').onclick=()=>{const shouldOpen=assetGroups.some(g=>g.open);assetGroups.forEach(g=>g.open=!shouldOpen);renderAssets();};
+$('#collapseAll').onclick=()=>{const groups=assetLibraries.flatMap(library=>library.groups),shouldOpen=groups.some(group=>group.open);groups.forEach(group=>group.open=!shouldOpen);renderAssets($('#searchInput').value.trim());};
 $('#clearScene').onclick=()=>{captureHistory();clearScene();$('#dropNotice').classList.remove('hidden');updateCounts();renderNodes();showToast('场景已清空');};
 $('#deleteBtn').onclick=()=>{if(!selected)return;captureHistory();transformControls.detach();scene.remove(selected);if(instances.includes(selected))instances.splice(instances.indexOf(selected),1);selected=null;selectionBox.visible=false;$('#emptySelection').hidden=false;$('#propertyContent').hidden=true;$('#selectionName').textContent='全景';updateCounts();renderNodes();};
 $('#duplicateBtn').onclick=()=>{if(!selected){showToast('请先选择组件');return;}clipboardComponent=componentSnapshot(selected);pasteComponent();};
@@ -759,7 +791,8 @@ $('#aiEditBtn').onclick=showAiModal;
 $('#confirmSaveBtn').onclick=async()=>{const afterSave=pendingSceneAction;if(await saveCurrentScene($('#sceneNameInput').value)){continueSceneTransition(afterSave);}};
 $('#saveBeforeActionBtn').onclick=()=>{const action=pendingSceneAction;showSaveModal(action);};
 $('#discardSceneBtn').onclick=()=>{continueSceneTransition(pendingSceneAction);};
-$('#confirmLoadBtn').onclick=async()=>{const id=$('#savedSceneSelect').value;if(!id)return;try{const response=await fetch(`/api/scenes/${encodeURIComponent(id)}`);if(!response.ok)throw new Error('load');const payload=await response.json();captureHistory();restoreScene(payload);activeSceneId=payload.id||id;currentSceneName=payload.name||id;activeSceneSavedAt=payload.savedAt||null;void setActivePreview(activeSceneId);updateSceneTitle();closeModal();showToast(`场景“${currentSceneName}”已读取`);}catch{showToast('场景文件读取失败');}};
+$('#confirmLoadBtn').onclick=async()=>{const id=$('#savedSceneSelect').value,block=selectedBlock();if(!id||!block)return;try{const response=await fetch(`/api/blocks/${encodeURIComponent(block.id)}/scenes/${encodeURIComponent(id)}`);if(!response.ok)throw new Error('load');const payload=await response.json();captureHistory();restoreScene(payload);activeSceneId=payload.id||id;activeBlockId=block.id;currentSceneName=payload.name||id;activeSceneSavedAt=payload.savedAt||null;void setActivePreview(activeSceneId,activeBlockId);updateSceneTitle();closeModal();showToast(`已从${block.name}读取“${currentSceneName}”`);}catch{showToast('场景文件读取失败');}};
+$('#blockSelect').onchange=()=>{activeBlockId=$('#blockSelect').value||null;renderAssets($('#searchInput').value.trim());requestSceneTransition(createNewScene);updateSceneTitle();};
 $('#applyAiCommandBtn').onclick=applyAiCommands;
 $('#chooseSaveDirBtn').onclick=()=>showToast('存档目录已固定为程序目录下的 save 文件夹');
 document.querySelectorAll('[data-modal-close]').forEach(button=>button.onclick=()=>{pendingSceneAction=null;closeModal();});
@@ -779,4 +812,5 @@ document.addEventListener('keydown',e=>{
 $('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify(scenePayload(),null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='scene-preview.json';a.click();URL.revokeObjectURL(a.href);showToast('场景数据已导出');};
 function resize(){const r=container.getBoundingClientRect();camera.aspect=r.width/r.height;camera.updateProjectionMatrix();renderer.setSize(r.width,r.height);}new ResizeObserver(resize).observe(container);resize();
 window.setInterval(syncAiScenePreview, 1200);
+void loadProjectBlocks();
 function animate(){requestAnimationFrame(animate);controls.update();drawOrientationGizmo();renderer.render(scene,camera);} animate();

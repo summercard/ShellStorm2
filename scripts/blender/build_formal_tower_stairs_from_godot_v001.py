@@ -122,6 +122,7 @@ def duplicate_package(source_objects, output_collection: bpy.types.Collection, l
 
 def main() -> None:
     contract = json.loads(CONTRACT.read_text(encoding="utf-8"))
+    metadata = contract["projectMetadata"]
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
     scene.unit_settings.system = "METRIC"
@@ -129,8 +130,8 @@ def main() -> None:
     scene["block_id"] = "stairs"
     scene["production_stage"] = "formal_blender_source"
     scene["derived_from_godot_glb"] = True
-    scene["floor_height_m"] = contract["floor_height_m"]
-    scene["visible_wall_height_m"] = contract["visible_wall_height_m"]
+    scene["floor_height_m"] = metadata["floorHeightM"]
+    scene["visible_wall_height_m"] = metadata["visibleWallHeightM"]
     scene["runtime_reimported"] = False
 
     root = new_collection("塔楼12米楼梯间_中文资产管理", scene.collection)
@@ -143,8 +144,8 @@ def main() -> None:
     }
 
     package_specs = [
-        ("楼梯A_100至99层", ROOT / contract["source_glbs"]["stair_a"]),
-        ("楼梯B_99至98层", ROOT / contract["source_glbs"]["stair_b"]),
+        ("楼梯A_100至99层", ROOT / metadata["sourceGlbs"]["stairA"]),
+        ("楼梯B_99至98层", ROOT / metadata["sourceGlbs"]["stairB"]),
     ]
     manifest_packages = []
     for label, glb in package_specs:
@@ -162,8 +163,8 @@ def main() -> None:
             "output_collection": output_collection.name,
             "mesh_count": len(meshes),
             "object_count": len(copies),
-            "footprint_size_m": contract["footprint_size_m"],
-            "floor_height_m": contract["floor_height_m"],
+            "footprint_size_m": metadata["footprintSizeM"],
+            "floor_height_m": metadata["floorHeightM"],
         })
 
     non_stair_meshes = [obj.name for obj in bpy.data.objects if obj.type == "MESH" and obj.get("block_id") != "stairs"]

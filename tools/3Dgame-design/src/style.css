@@ -75,6 +75,11 @@ button {
   color: #788684;
   font-size: 12px;
 }
+.project-context { display: flex; align-items: center; gap: 8px; min-width: 250px; }
+.project-context label { color: #657472; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
+.project-context select { background: #fff; border: 1px solid #cfdad7; border-radius: 4px; color: #294c4a; max-width: 225px; padding: 5px 7px; }
+.project-context > span { color: #91a09d; font-size: 9px; }
+.modal-context { background: #eef5f2; border-left: 3px solid #43a197; color: #356d68; font-size: 11px; font-weight: 700; margin: -8px 0 14px; padding: 7px 9px; }
 .file-name span {
   padding: 0 6px;
   color: #b5bdbc;
@@ -183,6 +188,9 @@ button {
   font-size: 10px;
   margin: 0 16px 7px;
 }
+.asset-scope { align-items: center; background: #e9efed; color: #445c59; display: flex; font-size: 10px; justify-content: space-between; letter-spacing: .04em; margin-top: 6px; padding: 8px 14px; text-transform: uppercase; }
+.asset-scope.block { background: #e4f2ef; color: #277f78; }
+.asset-scope span { background: rgba(255,255,255,.75); border-radius: 10px; font: 500 9px "DM Mono", monospace; padding: 2px 6px; }
 .asset-list {
   flex: 1;
   min-height: 0;

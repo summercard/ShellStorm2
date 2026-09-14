@@ -1,44 +1,41 @@
 {
-  "scene_id": "tower_stairs",
-  "display_name": "塔楼楼梯间反推白盒",
-  "version": 12,
-  "stage": "reverse_engineered_whitebox",
-  "block": {
-    "block_id": "stairs",
-    "floor_range": "100F-99F;99F-98F",
-    "design_scope": "Blocks/Stairs; Stair_A; Stair_B",
-    "scene_design_docs": [
-      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
-      "docs/v0.1/05.1_关卡区块设计.md"
-    ],
-    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
-  },
-  "truth_source": "current_godot_glb",
-  "source_glbs": {
-    "stair_a": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb",
-    "stair_b": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb"
-  },
-  "unit": "meter",
-  "coordinate_system": "godot_y_up_negative_z_forward; imported into Blender as Z-up",
-  "grid_size_m": [5.0, 5.0],
-  "footprint_size_m": [15.0, 30.0],
-  "floor_height_m": 12.0,
-  "visible_wall_height_m": 11.9,
-  "sockets_blender_z_m": {
-    "upper_door": 0.0,
-    "lower_door": -12.0
-  },
-  "stair_geometry": {
-    "layout": "U_shape_two_flights",
-    "treads_per_flight": 20,
-    "rise_per_tread_m": 0.3,
-    "run_per_tread_m": 0.75,
-    "tread_width_m": 5.58,
-    "tread_depth_m": 0.72,
-    "tread_thickness_m": 0.07
-  },
-  "formal_blender_output": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
-  "generator": "scripts/blender/build_formal_tower_stairs_from_godot_v001.py",
-  "runtime_reimported": false,
-  "migration_note": "v012 was measured from the currently referenced Godot GLBs after the 12 m floor-height change. The combined v011 whitebox Blend remains unchanged for rollback."
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": { "right": "X", "forward": "-Y", "up": "Z" },
+  "units": { "distance": "m", "rotation": "deg" },
+  "id": "塔楼12米楼梯间_反推白模_v012",
+  "name": "塔楼12米楼梯间反推白模",
+  "savedAt": "2026-09-14T00:00:00+08:00",
+  "groups": [
+    { "name": "楼梯A_100至99层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } },
+    { "name": "楼梯B_99至98层", "position": { "x": 35, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } }
+  ],
+  "components": [
+    { "name": "楼梯A_上跑", "type": "楼梯", "group": "楼梯A_100至99层", "position": { "x": 4, "y": 3, "z": -6 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "stairSettings": { "steps": 20, "width": 5.58, "handrailHeight": 1, "leftHandrail": true, "rightHandrail": true, "totalHeight": 6 } },
+    { "name": "楼梯A_下跑", "type": "楼梯", "group": "楼梯A_100至99层", "position": { "x": -4, "y": 18, "z": -12 }, "rotation": { "x": 0, "y": 0, "z": 180 }, "scale": { "x": 1, "y": 1, "z": 1 }, "stairSettings": { "steps": 20, "width": 5.58, "handrailHeight": 1, "leftHandrail": true, "rightHandrail": true, "totalHeight": 6 } },
+    { "name": "楼梯A_下层平台", "type": "地板", "group": "楼梯A_100至99层", "position": { "x": 0, "y": 0, "z": -12 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 15, "width": 30, "thickness": 0.3 } },
+    { "name": "楼梯B_上跑", "type": "楼梯", "group": "楼梯B_99至98层", "position": { "x": 4, "y": 3, "z": -6 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "stairSettings": { "steps": 20, "width": 5.58, "handrailHeight": 1, "leftHandrail": true, "rightHandrail": true, "totalHeight": 6 } },
+    { "name": "楼梯B_下跑", "type": "楼梯", "group": "楼梯B_99至98层", "position": { "x": -4, "y": 18, "z": -12 }, "rotation": { "x": 0, "y": 0, "z": 180 }, "scale": { "x": 1, "y": 1, "z": 1 }, "stairSettings": { "steps": 20, "width": 5.58, "handrailHeight": 1, "leftHandrail": true, "rightHandrail": true, "totalHeight": 6 } },
+    { "name": "楼梯B_下层平台", "type": "地板", "group": "楼梯B_99至98层", "position": { "x": 0, "y": 0, "z": -12 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 15, "width": 30, "thickness": 0.3 } }
+  ],
+  "projectMetadata": {
+    "schemaOwner": "tools/3Dgame-design",
+    "assetVersion": 12,
+    "stage": "reverse_engineered_whitebox",
+    "blockId": "stairs",
+    "floorRange": "100F-99F;99F-98F",
+    "gridSizeM": [5, 5],
+    "footprintSizeM": [15, 30],
+    "floorHeightM": 12,
+    "visibleWallHeightM": 11.9,
+    "truthSource": "current_godot_glb",
+    "sourceGlbs": {
+      "stairA": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb",
+      "stairB": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb"
+    },
+    "formalBlenderOutput": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+    "generator": "scripts/blender/build_formal_tower_stairs_from_godot_v001.py",
+    "runtimeReimported": false,
+    "previewOffsetNote": "楼梯B组X偏移35米仅用于3Dgame-design并排预览；组件局部坐标与楼梯A相同。"
+  }
 }

@@ -1,23 +1,44 @@
 {
-  "scene_id": "tower_battle_98_95",
-  "display_name": "98-95层第一关战斗区白盒",
-  "version": 11,
-  "stage": "whitebox",
-  "block": {
-    "block_id": "battle",
-    "floor_range": "98F-95F",
-    "design_scope": "Blocks/Battle; Floor_98-Floor_95",
-    "scene_design_docs": [
-      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
-      "docs/v0.1/05.1_关卡区块设计.md"
-    ],
-    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
-  },
-  "unit": "meter",
-  "coordinate_system": "godot_y_up_negative_z_forward",
-  "grid_size_m": [5.0, 5.0],
-  "floor_height_m": 12.0,
-  "visible_wall_height_m": 11.9,
-  "blender_output": "source/art/whitebox/tower_zones/v011/blender/whitebox_tower_battle_stairs_v011.blend",
-  "migration_note": "The existing v011 whitebox Blend was moved without regeneration; future revisions must be generated from the versioned JSON files."
+  "version": 3,
+  "coordinateSystem": "blender-z-up",
+  "axes": { "right": "X", "forward": "-Y", "up": "Z" },
+  "units": { "distance": "m", "rotation": "deg" },
+  "id": "局内关卡01-顶部数据库_白模_v011",
+  "name": "局内关卡01-顶部数据库",
+  "savedAt": "2026-09-14T00:00:00+08:00",
+  "groups": [
+    { "name": "98层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } },
+    { "name": "97层", "position": { "x": 0, "y": 0, "z": -12 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } },
+    { "name": "96层", "position": { "x": 0, "y": 0, "z": -24 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } },
+    { "name": "95层", "position": { "x": 0, "y": 0, "z": -36 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 } }
+  ],
+  "components": [
+    { "name": "98层_白模楼板", "type": "地板", "group": "98层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 250, "width": 250, "thickness": 0.3 } },
+    { "name": "98层_北侧边界墙", "type": "墙壁", "group": "98层", "position": { "x": 0, "y": 124.85, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "wall", "width": 250, "height": 11.9, "thickness": 0.3 } },
+    { "name": "98层_南侧边界墙", "type": "墙壁", "group": "98层", "position": { "x": 0, "y": -124.85, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "wall", "width": 250, "height": 11.9, "thickness": 0.3 } },
+    { "name": "98层_东侧边界墙", "type": "墙壁", "group": "98层", "position": { "x": 124.85, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 90 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "wall", "width": 250, "height": 11.9, "thickness": 0.3 } },
+    { "name": "98层_西侧边界墙", "type": "墙壁", "group": "98层", "position": { "x": -124.85, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 90 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "wall", "width": 250, "height": 11.9, "thickness": 0.3 } },
+    { "name": "97层_白模楼板", "type": "地板", "group": "97层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 250, "width": 250, "thickness": 0.3 } },
+    { "name": "96层_白模楼板", "type": "地板", "group": "96层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 250, "width": 250, "thickness": 0.3 } },
+    { "name": "95层_白模楼板", "type": "地板", "group": "95层", "position": { "x": 0, "y": 0, "z": 0 }, "rotation": { "x": 0, "y": 0, "z": 0 }, "scale": { "x": 1, "y": 1, "z": 1 }, "surfaceSettings": { "kind": "floor", "length": 250, "width": 250, "thickness": 0.3 } }
+  ],
+  "projectMetadata": {
+    "schemaOwner": "tools/3Dgame-design",
+    "assetVersion": 11,
+    "stage": "whitebox",
+    "blockId": "battle",
+    "levelNumber": 1,
+    "levelCode": "局内关卡01",
+    "settingName": "顶部数据库",
+    "displayNamePattern": "{levelCode}-{settingName}",
+    "floorRange": "98F-95F",
+    "gridSizeM": [5, 5],
+    "floorHeightM": 12,
+    "visibleWallHeightM": 11.9,
+    "designScope": "Blocks/Battle; Floor_98-Floor_95",
+    "sceneDesignDocs": ["docs/v0.1/05_技术施工_关卡生成与爬楼.md", "docs/v0.1/05.1_关卡区块设计.md"],
+    "assetLedger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "blenderOutput": "source/art/whitebox/tower_zones/v011/blender/whitebox_tower_battle_stairs_v011.blend",
+    "layoutNote": "3Dgame-design preview stores the four floor slabs and the 98F perimeter. Runtime rooms and corridors remain procedurally generated."
+  }
 }
