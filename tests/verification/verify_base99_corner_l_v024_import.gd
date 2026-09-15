@@ -1,6 +1,7 @@
 extends SceneTree
 
-const CORNER_SCENE := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn")
+const CORNER_SCENE := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn")
+const COLLISION_SCENE := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn")
 const PALETTE := preload("res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
 const DUNGEON_ROOM_SCRIPT := "res://src/world3d/DungeonRoom3D.gd"
 const ART_LAYOUT_PATH := "res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
@@ -13,10 +14,11 @@ func _init() -> void:
 	get_root().add_child(root)
 	_check(root != null, "corner wrapper instantiates")
 	_check(root.get_meta("asset_id", "") == "ENV-TOWER-CORNER-L-5M", "stable asset id")
+	_check(bool(root.get_meta("visual_only", false)), "active layout wrapper is visual-only")
+	_check(root.get_meta("collision_owner", "") == "DungeonRoom3D", "external collision owner is retained")
 	_check(bool(root.get_meta("preserve_authored_palette", false)), "authored palette is protected from generic wall override")
 	_check(root.get_node_or_null("ImportedModel") != null, "Blender visual is present")
-	_check_collision(root, "CollisionLong", Vector3(5.0, 12.0, 0.3), Vector3(2.5, 6.0, 0.0))
-	_check_collision(root, "CollisionShort", Vector3(0.3, 12.0, 5.0), Vector3(0.0, 6.0, -2.5))
+	_check(root.find_children("*", "StaticBody3D", true, false).is_empty(), "visual wrapper contains no collision")
 	var mesh_count := 0
 	var visual_bounds := AABB()
 	var has_visual_bounds := false
@@ -44,7 +46,7 @@ func _init() -> void:
 	_check(long_rib_levels.size() >= 10, "Godot visual retains all long-arm horizontal rib levels")
 	_check(short_rib_levels.size() >= 10, "Godot visual retains all short-arm horizontal rib levels")
 	var layout_text := FileAccess.get_file_as_string(ART_LAYOUT_PATH)
-	for corner_name in ["V024西北L型转角墙_仅视觉", "V024东北L型转角墙_仅视觉", "V024西南L型转角墙_仅视觉", "V024东南L型转角墙_仅视觉"]:
+	for corner_name in ["V026西北L型转角墙_仅视觉", "V026东北L型转角墙_仅视觉", "V026西南L型转角墙_仅视觉", "V026东南L型转角墙_仅视觉"]:
 		_check(layout_text.contains("[node name=\"" + corner_name + "\""), "active base art layout contains " + corner_name)
 	var code := FileAccess.get_file_as_string(DUNGEON_ROOM_SCRIPT)
 	_check(code.contains("BASE99_CORNER_L_PREFAB") and code.contains('BASE99_CORNER_L_PREFAB if room_type == "FACILITY" else TOWER_CORNER_L_PREFAB'), "only facility rooms select the base corner visual")
@@ -55,6 +57,12 @@ func _init() -> void:
 	_check(stage_code.contains("_install_base99_outer_corner_visuals"), "Base99 outer shell replaces four visible outer corners")
 	_check(stage_code.contains("Base99OuterCorner_NW") and stage_code.contains("Base99OuterCorner_SE"), "all four outer corner instances are declared")
 	root.free()
+	var collision_root := COLLISION_SCENE.instantiate() as Node3D
+	get_root().add_child(collision_root)
+	_check(collision_root.find_children("*", "StaticBody3D", true, false).size() == 2, "standalone collision wrapper has two StaticBody3D nodes")
+	_check_collision(collision_root, "CollisionLong", Vector3(5.0, 12.0, 0.3), Vector3(2.5, 6.0, 0.0))
+	_check_collision(collision_root, "CollisionShort", Vector3(0.3, 12.0, 5.0), Vector3(0.0, 6.0, -2.5))
+	collision_root.free()
 	if failures.is_empty():
 		print("BASE99_CORNER_L_V024_IMPORT_OK: 11.9m visual, both L arms, palette, outer-shell routing, and 12m collision contract retained")
 		quit(0)

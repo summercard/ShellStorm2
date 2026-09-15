@@ -1,0 +1,454 @@
+{
+  "zone": "battle_level01",
+  "display_name": "局内关卡01 顶部数据库",
+  "version": "v002",
+  "asset_count": 19,
+  "component_policy": "独立墙体、地板、地砖和门洞墙；禁止 join",
+  "category_counts": {
+    "main_rooms": 10,
+    "branch_rooms": 4,
+    "safe_rooms": 2,
+    "boss_arena": 1,
+    "corridors": 2
+  },
+  "normal_topology": {
+    "node_count": 16,
+    "tree_edge_count": 15,
+    "connections": [
+      {
+        "from": "entry",
+        "to": "hub"
+      },
+      {
+        "from": "hub",
+        "to": "main_02"
+      },
+      {
+        "from": "main_02",
+        "to": "main_03"
+      },
+      {
+        "from": "main_03",
+        "to": "main_04"
+      },
+      {
+        "from": "main_04",
+        "to": "main_05"
+      },
+      {
+        "from": "main_05",
+        "to": "main_06"
+      },
+      {
+        "from": "main_06",
+        "to": "main_07"
+      },
+      {
+        "from": "main_07",
+        "to": "main_08"
+      },
+      {
+        "from": "main_08",
+        "to": "main_09"
+      },
+      {
+        "from": "main_09",
+        "to": "main_10"
+      },
+      {
+        "from": "main_10",
+        "to": "exit"
+      },
+      {
+        "from": "main_03",
+        "to": "branch_01"
+      },
+      {
+        "from": "branch_01",
+        "to": "branch_02"
+      },
+      {
+        "from": "main_09",
+        "to": "branch_03"
+      },
+      {
+        "from": "branch_03",
+        "to": "branch_04"
+      }
+    ],
+    "corridor_asset_contract": "One 5x5x0.30m floor asset and one 5x0.30x11.9m wall asset are reused at all 15 logical edges."
+  },
+  "boss_topology": {
+    "connections": [
+      {
+        "from": "boss_prep",
+        "to": "boss"
+      },
+      {
+        "from": "boss",
+        "to": "boss_exit"
+      }
+    ],
+    "note": "Boss source uses the latest user override 190x90m. Runtime coordinates and docs still require resync from 90x90m."
+  },
+  "assets": [
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-01-HUB",
+      "name_zh": "局内关卡01 主路内容房01 hub 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_01_hub_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+      "name_zh": "局内关卡01 主路内容房02 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_02_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_02_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-03",
+      "name_zh": "局内关卡01 主路内容房03 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_03_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_03_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 41,
+      "component_counts": {
+        "door_wall": 3,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 7
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-04",
+      "name_zh": "局内关卡01 主路内容房04 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_04_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_04_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-05",
+      "name_zh": "局内关卡01 主路内容房05 30×40m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_05_30x40m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_05_30x40m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        40.0,
+        11.9
+      ],
+      "component_count": 57,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 48,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-06",
+      "name_zh": "局内关卡01 主路内容房06 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_06_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_06_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-07",
+      "name_zh": "局内关卡01 主路内容房07 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_07_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_07_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-08",
+      "name_zh": "局内关卡01 主路内容房08 35×30m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_08_35x30m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_08_35x30m_v002.blend",
+      "dimensions_m": [
+        35.0,
+        30.0,
+        11.9
+      ],
+      "component_count": 51,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 42,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-09",
+      "name_zh": "局内关卡01 主路内容房09 40×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_09_40x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_09_40x25m_v002.blend",
+      "dimensions_m": [
+        40.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 51,
+      "component_counts": {
+        "door_wall": 3,
+        "floor_slab": 1,
+        "floor_tile": 40,
+        "wall": 7
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-10",
+      "name_zh": "局内关卡01 主路内容房10 30×25m 白模",
+      "category": "main_rooms",
+      "slug": "局内关卡01_白模_主路内容房_10_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_10_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-01",
+      "name_zh": "局内关卡01 支路内容房01 30×25m 白模",
+      "category": "branch_rooms",
+      "slug": "局内关卡01_白模_支路内容房_01_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_01_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 39,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-02",
+      "name_zh": "局内关卡01 支路内容房02 30×25m 白模",
+      "category": "branch_rooms",
+      "slug": "局内关卡01_白模_支路内容房_02_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_02_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 37,
+      "component_counts": {
+        "door_wall": 1,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 5
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-03",
+      "name_zh": "局内关卡01 支路内容房03 40×35m 白模",
+      "category": "branch_rooms",
+      "slug": "局内关卡01_白模_支路内容房_03_40x35m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_03_40x35m_v002.blend",
+      "dimensions_m": [
+        40.0,
+        35.0,
+        11.9
+      ],
+      "component_count": 65,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 56,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-04",
+      "name_zh": "局内关卡01 支路内容房04 30×25m 白模",
+      "category": "branch_rooms",
+      "slug": "局内关卡01_白模_支路内容房_04_30x25m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_支路内容房_04_30x25m_v002.blend",
+      "dimensions_m": [
+        30.0,
+        25.0,
+        11.9
+      ],
+      "component_count": 37,
+      "component_counts": {
+        "door_wall": 1,
+        "floor_slab": 1,
+        "floor_tile": 30,
+        "wall": 5
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-SAFE-ENTRY",
+      "name_zh": "局内关卡01 入口安全房 15×15m 白模",
+      "category": "safe_rooms",
+      "slug": "局内关卡01_白模_入口安全房_15x15m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_入口安全房_15x15m_v002.blend",
+      "dimensions_m": [
+        15.0,
+        15.0,
+        11.9
+      ],
+      "component_count": 16,
+      "component_counts": {
+        "door_wall": 1,
+        "floor_slab": 1,
+        "floor_tile": 9,
+        "wall": 5
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-SAFE-EXIT",
+      "name_zh": "局内关卡01 出口安全房 15×15m 白模",
+      "category": "safe_rooms",
+      "slug": "局内关卡01_白模_出口安全房_15x15m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_出口安全房_15x15m_v002.blend",
+      "dimensions_m": [
+        15.0,
+        15.0,
+        11.9
+      ],
+      "component_count": 16,
+      "component_counts": {
+        "door_wall": 1,
+        "floor_slab": 1,
+        "floor_tile": 9,
+        "wall": 5
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-BOSS-ARENA",
+      "name_zh": "局内关卡01 Boss竞技场 190×90m 白模",
+      "category": "boss_arena",
+      "slug": "局内关卡01_白模_boss竞技场_190x90m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_Boss竞技场_190x90m_v002.blend",
+      "dimensions_m": [
+        190.0,
+        90.0,
+        11.9
+      ],
+      "component_count": 693,
+      "component_counts": {
+        "door_wall": 2,
+        "floor_slab": 1,
+        "floor_tile": 684,
+        "wall": 6
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-CORRIDOR-FLOOR-5M",
+      "name_zh": "局内关卡01 走廊通用地砖 5×5×0.30m 白模",
+      "category": "corridors",
+      "slug": "corridor_floor_5x5x0p3m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v002.blend",
+      "dimensions_m": [
+        5.0,
+        5.0,
+        0.3
+      ],
+      "component_count": 6,
+      "component_counts": {
+        "floor_edge": 4,
+        "floor_slab": 1,
+        "floor_tile": 1
+      }
+    },
+    {
+      "asset_id": "ENV-BATTLE-L01-CORRIDOR-WALL-5M",
+      "name_zh": "局内关卡01 走廊通用墙壁 5×0.30×11.9m 白模",
+      "category": "corridors",
+      "slug": "corridor_wall_5x0p3x11p9m",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v002.blend",
+      "dimensions_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "component_count": 4,
+      "component_counts": {
+        "wall": 1,
+        "wall_edge": 3
+      }
+    }
+  ]
+}

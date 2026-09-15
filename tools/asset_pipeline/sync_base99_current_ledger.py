@@ -76,10 +76,10 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
             master + "; assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn",
         ),
         "ENV-TOWER-CORNER-L-5M": (
-            "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v003.tscn",
-            "v003",
+            "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn",
+            "v005",
             "正式美术已接入",
-            master + "; source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend; assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v001.glb",
+            master + "; source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend; assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb",
         ),
         "ENV-BASE99-WALL-CONTENTS-V021": (
             "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",

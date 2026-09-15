@@ -1,7 +1,7 @@
 extends Node
 ## Verifies the approved three-package layout-only revision without GLB reimport.
 
-const ROOT_SCENE: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn")
+const ROOT_SCENE: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn")
 
 const EXPECTED := {
 	"31_参考床架床品与床下收纳_资产包": {

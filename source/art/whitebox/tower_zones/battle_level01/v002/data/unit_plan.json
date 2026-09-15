@@ -1,0 +1,102 @@
+{
+  "source": "src/map/FloorPlanGenerator.gd",
+  "normal_room_count": 14,
+  "safe_room_count": 2,
+  "boss_arena_count": 1,
+  "corridor_component_count": 2,
+  "blend_count": 19,
+  "normal_tree_edge_count": 15,
+  "connections": [
+    {
+      "from": "entry",
+      "to": "hub"
+    },
+    {
+      "from": "hub",
+      "to": "main_02"
+    },
+    {
+      "from": "main_02",
+      "to": "main_03"
+    },
+    {
+      "from": "main_03",
+      "to": "main_04"
+    },
+    {
+      "from": "main_04",
+      "to": "main_05"
+    },
+    {
+      "from": "main_05",
+      "to": "main_06"
+    },
+    {
+      "from": "main_06",
+      "to": "main_07"
+    },
+    {
+      "from": "main_07",
+      "to": "main_08"
+    },
+    {
+      "from": "main_08",
+      "to": "main_09"
+    },
+    {
+      "from": "main_09",
+      "to": "main_10"
+    },
+    {
+      "from": "main_10",
+      "to": "exit"
+    },
+    {
+      "from": "main_03",
+      "to": "branch_01"
+    },
+    {
+      "from": "branch_01",
+      "to": "branch_02"
+    },
+    {
+      "from": "main_09",
+      "to": "branch_03"
+    },
+    {
+      "from": "branch_03",
+      "to": "branch_04"
+    }
+  ],
+  "boss_connections": [
+    {
+      "from": "boss_prep",
+      "to": "boss"
+    },
+    {
+      "from": "boss",
+      "to": "boss_exit"
+    }
+  ],
+  "boss_size_override_m": [
+    190.0,
+    90.0
+  ],
+  "boss_code_size_m": [
+    90.0,
+    90.0
+  ],
+  "sync_required": [
+    "FloorPlanGenerator.BOSS_ARENA",
+    "TowerGeometry3D.BOSS_ARENA_SIZE_M",
+    "Battle runtime placement for the enlarged arena"
+  ],
+  "component_storage": {
+    "authoring_collection": "01_制作组件_按设施拆分",
+    "output_collection": "02_游戏输出_独立资产包_v002",
+    "join_policy": "forbidden",
+    "wall_origin": "bottom_center",
+    "lintel_origin": "bottom_center",
+    "floor_origin": "underside_z_0"
+  }
+}

@@ -27,6 +27,7 @@ func _ready() -> void:
 	await _validate_close_wall_probes(tower, failures)
 	_validate_stair_camera_walls(tower, failures)
 	await _validate_stair_slab_camera_drop(tower, failures)
+	await _validate_lower_flight_camera_slab_ignored_on_surface(tower, failures)
 	await _validate_internal_partition_camera_wall(tower, failures)
 	_validate_hidden_connector_collisions(tower, failures)
 	await _validate_target_room_airwall_clearance(tower, failures)
@@ -564,6 +565,60 @@ func _validate_stair_slab_camera_drop(
 		failures.append("Untagged ordinary floor incorrectly triggered stair camera clamp")
 	ordinary_floor.queue_free()
 	await get_tree().physics_frame
+
+
+func _validate_lower_flight_camera_slab_ignored_on_surface(
+	tower: TowerDescent3D,
+	failures: Array[String]
+) -> void:
+	var stair: Node3D = null
+	for value in (tower.get("_corridor_by_edge") as Dictionary).values():
+		var connector := value as Node3D
+		if connector != null and connector.name == "Stair_A":
+			stair = connector
+			break
+	if stair == null:
+		failures.append("Stair_A is missing from the generated tower")
+		return
+	var slab := stair.get_node_or_null("LowerFlightCameraSlab") as StaticBody3D
+	var points := stair.get_meta("path_points", []) as Array
+	if slab == null or points.size() < 8:
+		failures.append("Stair_A lower-flight camera slab or path points are missing")
+		return
+	stair.visible = true
+	stair.process_mode = Node.PROCESS_MODE_INHERIT
+	tower.call("_set_connector_collision_enabled", stair, true, false)
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	var upper := points[6] as Vector3
+	var lower := points[7] as Vector3
+	var down_direction := (lower - upper).normalized()
+	for ratio in [0.0, 0.35, 1.0]:
+		var position := upper.lerp(lower, ratio) + Vector3.UP * 0.03
+		tower.player.global_position = position
+		tower.player.look_at(position + down_direction, Vector3.UP)
+		await get_tree().physics_frame
+		var clearance := float(tower.call(
+			"_find_stair_slab_camera_clearance_height",
+			TowerDescent3D.CAMERA_HEIGHT_M
+		))
+		if clearance >= 0.0:
+			failures.append(
+				"Stair_A lower-flight surface falsely triggers camera slab at ratio %.2f: %.4f"
+				% [ratio, clearance]
+			)
+		tower.call("_update_camera_stair_slab_drop", 1.0, true)
+		tower.call("_apply_indoor_camera_pose")
+		var snapshot := tower.get_tower_snapshot()
+		if (
+			bool(snapshot.get("camera_stair_slab_detected", true))
+			or float(snapshot.get("camera_stair_slab_drop_current_m", 1.0)) > 0.01
+			or absf(tower.player.camera.position.y - TowerDescent3D.CAMERA_HEIGHT_M) > 0.02
+		):
+			failures.append(
+				"Stair_A downward-facing camera was lowered at ratio %.2f: %s"
+				% [ratio, snapshot]
+			)
 
 
 func _validate_target_room_airwall_clearance(

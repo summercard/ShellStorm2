@@ -46,8 +46,8 @@ def add_rail(name, z_godot, steel):
 
 bpy.ops.object.select_all(action="SELECT")
 bpy.ops.object.delete(use_global=False)
-steel = material("MAT_BASE99_STAIR_STEEL", (0.12, 0.17, 0.19), 0.65, 0.32)
-edge = material("MAT_BASE99_STAIR_EDGE", (0.10, 0.56, 0.63), 0.35, 0.30)
+steel = material("01_精工金属_紫色骨架", (0.12, 0.17, 0.19), 0.65, 0.32)
+edge = material("02_细腻哑光_青绿大面", (0.10, 0.56, 0.63), 0.35, 0.30)
 run, rise = END_X - START_X, END_Y - START_Y
 tread_run, step_rise = run / STEP_COUNT, rise / STEP_COUNT
 for index in range(STEP_COUNT):

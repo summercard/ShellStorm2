@@ -85,6 +85,7 @@ const CAMERA_STAIR_SLAB_MIN_HEIGHT_M := 1.25
 const CAMERA_STAIR_SLAB_RECOVER_RATE := 5.0
 const CAMERA_STAIR_SLAB_MAX_RAY_HITS := 8
 const CAMERA_STAIR_SLAB_LATERAL_OFFSETS_M := [-0.24, 0.0, 0.24]
+const CAMERA_STAIR_SLAB_TOP_SURFACE_TOLERANCE_M := 0.20
 const STAIR_ARRIVAL_INTERACTION_DISTANCE_M := 3.4
 # 楼梯资产位于65m核心外侧：沿外法线预留20m、沿折返方向预留30m。
 # 该占位参与整层布局规划，普通/随机房间不得进入；楼梯大厅自身作为接口例外。
@@ -810,6 +811,16 @@ func _find_stair_slab_camera_clearance_height(
 			if collider != null and bool(
 				collider.get_meta("camera_stair_slab", false)
 			):
+				# 玩家站在代理顶面时，身后的上坡梯面可能在角色上方形成
+				# 假天花板。只有玩家确实位于楼梯代理下方时才垂直夹镜。
+				if _is_player_on_or_above_camera_stair_slab(collider):
+					if collider is CollisionObject3D:
+						excluded.append((collider as CollisionObject3D).get_rid())
+					var skipped_direction := ray_from.direction_to(probe_end)
+					if skipped_direction.is_zero_approx():
+						break
+					ray_from = hit_position + skipped_direction * 0.03
+					continue
 				allowed_height_m = minf(
 					allowed_height_m,
 					clampf(
@@ -828,6 +839,29 @@ func _find_stair_slab_camera_clearance_height(
 				break
 			ray_from = hit_position + remaining_direction * 0.03
 	return allowed_height_m if is_finite(allowed_height_m) else -1.0
+
+
+func _is_player_on_or_above_camera_stair_slab(collider: Node) -> bool:
+	if player == null or collider == null:
+		return false
+	var collision: CollisionShape3D = null
+	if collider is CollisionShape3D:
+		collision = collider as CollisionShape3D
+	else:
+		for value in collider.find_children("*", "CollisionShape3D", true, false):
+			collision = value as CollisionShape3D
+			if collision != null:
+				break
+	if collision == null:
+		return false
+	var box := collision.shape as BoxShape3D
+	if box == null:
+		return false
+	var player_local_y := collision.to_local(player.global_position).y
+	return (
+		player_local_y
+		>= box.size.y * 0.5 - CAMERA_STAIR_SLAB_TOP_SURFACE_TOLERANCE_M
+	)
 
 
 func _is_camera_lower_wall(collider: Node) -> bool:

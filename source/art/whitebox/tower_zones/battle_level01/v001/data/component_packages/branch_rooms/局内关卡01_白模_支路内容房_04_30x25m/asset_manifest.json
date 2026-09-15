@@ -1,0 +1,67 @@
+{
+  "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-04",
+  "name_zh": "局内关卡01 支路内容房04 30×25m 白模",
+  "slug": "局内关卡01_白模_支路内容房_04_30x25m",
+  "category": "branch_rooms",
+  "role": "支路内容房",
+  "version": "v001",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v001/blender/局内关卡01_白模_支路内容房_04_30x25m_v001.blend",
+  "blender_collection": "局内关卡01 支路内容房04 30×25m 白模_资产管理",
+  "output_collection": "02_游戏输出_整合模型",
+  "objects": [
+    "局内关卡01 支路内容房04 30×25m 白模_主体"
+  ],
+  "root_object": "局内关卡01 支路内容房04 30×25m 白模_主体",
+  "origin": "center_x_y; floor_bottom_z_0",
+  "front": "Godot -Z",
+  "dimensions_m": [
+    30.0,
+    25.0,
+    11.9
+  ],
+  "bounds_local_m": {
+    "min": [
+      -15.0,
+      -12.5,
+      0.0
+    ],
+    "max": [
+      15.0,
+      12.5,
+      11.9
+    ]
+  },
+  "logical_wall_height_m": 12.0,
+  "visual_wall_height_m": 11.9,
+  "floor_thickness_m": 0.3,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0
+  },
+  "ports": [
+    {
+      "target": "branch_03",
+      "side": "east",
+      "offset_m": 0.0
+    }
+  ],
+  "world_slot_center_m": [
+    -105.0,
+    87.5
+  ],
+  "materials": [
+    "01_精工金属_白模框架",
+    "02_细腻哑光_白模体块",
+    "03_精细哑光_白模底色"
+  ],
+  "palette_uv": "PaletteUV",
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "triangles": 1404,
+  "render_reference": "source/art/whitebox/tower_zones/battle_level01/v001/renders/局内关卡01_白模_支路内容房_04_30x25m_v001_参考.png",
+  "render_top": "source/art/whitebox/tower_zones/battle_level01/v001/renders/局内关卡01_白模_支路内容房_04_30x25m_v001_俯视.png",
+  "export_status": "blend_only; GLB and Godot integration not requested",
+  "collision_status": "not authored",
+  "runtime_status": "not connected",
+  "notes": ""
+}

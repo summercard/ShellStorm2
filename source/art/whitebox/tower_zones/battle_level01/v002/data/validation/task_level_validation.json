@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "asset_count": 19,
+  "failed_assets": [],
+  "checks": [
+    "no join or merged 主体 object",
+    "wall, floor slab, floor tile and door wall components stay separate",
+    "wall and lintel origins are bottom-center",
+    "floor origins are at underside Z=0",
+    "wireframe object names contain no .001, _nort or _sout suffix",
+    "each output object belongs to exactly one output collection",
+    "asset bounds match the contract size"
+  ]
+}

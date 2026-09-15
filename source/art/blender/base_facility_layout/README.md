@@ -71,7 +71,7 @@ base_facility_layout/
 - 墙面内容聚合：`env_base99_wall_contents_root_top3d_v003.tscn`
 - 剩余设施聚合：`env_base99_remaining_facilities_root_top3d_v004.tscn`
 - L 型楼梯：`env_base99_stair_l_z5_root_top3d_v006.tscn`
-- L 型转角墙：`env_base99_corner_l_5m_root_top3d_v003.tscn`
+- L 型转角墙：`env_base99_corner_l_5m_root_top3d_v005.tscn`
 - 门墙：`env_base99_wall_door_5x9_root_top3d_v003.tscn`
 
 正式关卡只实例化 PackedScene 包装场景，不直接实例化裸 GLB。

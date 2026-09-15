@@ -4,7 +4,7 @@
   "revision": "v021_loft_layout_adjustment_001",
   "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
   "source_blend_sha256": "8f5a4625cc82aa3dfd4b29160692cad77c65ac5a111e6d42c5e69e2b7304f2d2",
-  "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+  "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
   "export_policy": "layout_only_no_glb_reexport",
   "packages": [
     {

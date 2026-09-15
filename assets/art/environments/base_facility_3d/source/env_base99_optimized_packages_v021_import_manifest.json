@@ -9,8 +9,8 @@
     "floor_visuals": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-floor_visuals.blend"
   },
   "runtime_roots": {
-    "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
-    "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+    "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+    "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
     "floor": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn",
     "layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
   },
@@ -44,7 +44,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/air_compressor/air_compressor_visual_top3d_v002.glb",
       "visual_glb_sha256": "32172dfe492b28af28bf4c3066c54bdd98568065deed994729696d88fb03e44d",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/air_compressor/air_compressor_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -76,7 +76,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/backup_generator/backup_generator_visual_top3d_v002.glb",
       "visual_glb_sha256": "fbced40643a5b310d0cbf0d4d1b5190871712774b0fb01d7373d0db4b1ae129f",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/backup_generator/backup_generator_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -108,7 +108,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/battery_bank/battery_bank_visual_top3d_v002.glb",
       "visual_glb_sha256": "fc048957ea5e13a7e4f110d5d13c633bd3b61b5d825c505e7d8666fe6597d9d7",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/battery_bank/battery_bank_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -140,7 +140,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_visual_top3d_v002.glb",
       "visual_glb_sha256": "4582b5b7985fb8d31b7515690ee909d06ab500f4d62fd987e576f289fff9e316",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_low_storage_bench/east_low_storage_bench_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -173,7 +173,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_visual_top3d_v002.glb",
       "visual_glb_sha256": "3e39edf61cb456a5565af78551e172b02a448a542f4ff576e41285c999dfabb0",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_maintenance_workstation/east_maintenance_workstation_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -206,7 +206,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_visual_top3d_v002.glb",
       "visual_glb_sha256": "c166cf209bd5d1a0e51c00ea46b39236bda35c428cdf70bdefc7ae41c2700d71",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/east_plant_group/east_plant_group_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -241,7 +241,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_visual_top3d_v002.glb",
       "visual_glb_sha256": "dae9f35d99b1f587c0e77bf5cbfcde87554984d4a3abd51fe03637d3637e3fc6",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/heavy_supply_shelf/heavy_supply_shelf_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -271,8 +271,8 @@
       "scope": "remaining_facilities",
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/hose_reel/hose_reel_visual_top3d_v001.glb",
       "visual_glb_sha256": "9c1d2b67e419e80fbab62f283e58c671c5413099e2def61208742a948fc96f0e",
-      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -303,7 +303,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_visual_top3d_v002.glb",
       "visual_glb_sha256": "28e416f1fd86628f5b98138b9ee2b8757b4fe6666825b5fa22a1c1698b2acfeb",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/industrial_water_tank/industrial_water_tank_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -334,7 +334,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d_v002.glb",
       "visual_glb_sha256": "596acdaaf345a2eab70b107ff35e8ff59e2ffe4daa36b528c5335c1b76146266",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -366,7 +366,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_visual_top3d_v002.glb",
       "visual_glb_sha256": "585444360f7b0b903d3cfd9904d4271689d36aa629568f520a096c3047e89c13",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_lamp/loft_bedside_lamp_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -397,7 +397,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_visual_top3d_v002.glb",
       "visual_glb_sha256": "0b4b2b9b59ee26d20bd397361ec2f9bcf0e759bedee1b40dfaee460a137d2ec7",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bedside_rug/loft_bedside_rug_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -436,7 +436,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_visual_top3d_v002.glb",
       "visual_glb_sha256": "453f01860aaa63d7cb45257524d2c7e50fa71db6e801a9ab0952195b550cc7f9",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_coffee_table/loft_coffee_table_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -469,7 +469,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_visual_top3d_v002.glb",
       "visual_glb_sha256": "adcdc7e418ed06b00316ea8be77933d2b54b8713a08ff1874d3ef8d91af1e224",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_computer_workstation/loft_computer_workstation_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -499,8 +499,8 @@
       "scope": "remaining_facilities",
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_explore_poster/loft_explore_poster_visual_top3d_v001.glb",
       "visual_glb_sha256": "f6505fb762ba217dc155536b8b2679fbff364ee7ce14798eda3fb611f070ae59",
-      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -530,8 +530,8 @@
       "scope": "remaining_facilities",
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_hanging_plant/loft_hanging_plant_visual_top3d_v001.glb",
       "visual_glb_sha256": "b3cea2ada5533b94fad87e57000e361c4318cf6ca4b41e102c7d50c51895746e",
-      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -562,7 +562,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_visual_top3d_v002.glb",
       "visual_glb_sha256": "f5f721349d26d506dc90f06bd4e1064dae057f6d43302ec9f0ff22e0e29c77af",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_rug/loft_lounge_rug_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -593,7 +593,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_visual_top3d_v002.glb",
       "visual_glb_sha256": "5e2d18b590672666dcbe553ba39ca766090fe47c3861b4bfdd8280ca451f047d",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_lounge_sofa/loft_lounge_sofa_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -624,7 +624,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_visual_top3d_v002.glb",
       "visual_glb_sha256": "75376e523e3fc9afa02c8db8d6df02845ebbae6e6508d5853b01a39ee636098d",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_medical_cabinet/loft_medical_cabinet_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -658,7 +658,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_visual_top3d_v002.glb",
       "visual_glb_sha256": "36a41d21bee657c7242c35df894d1845a7ada962ba0dfe59071d9d45053c36a5",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_nightstand/loft_nightstand_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -689,7 +689,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_visual_top3d_v002.glb",
       "visual_glb_sha256": "7ca0d9ef7f16322f44015a0613d26109e2d83e6e0efc481941572837d1eae3e7",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_office_chair/loft_office_chair_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -720,7 +720,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_visual_top3d_v002.glb",
       "visual_glb_sha256": "887532399dc852c924c8b0b395aa88021a9cf4b8d49776fdfe560474dcbd8f61",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_01/loft_pouf_01_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -751,7 +751,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_visual_top3d_v002.glb",
       "visual_glb_sha256": "fc32a64187e0a6f11f23304d12551eed4f3b720ae893f4625c89969faf569b89",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_pouf_02/loft_pouf_02_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -795,7 +795,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_visual_top3d_v002.glb",
       "visual_glb_sha256": "c96094faf4c17e486d1414c4f0cc28b5fd0f514a5743db766f3dc52330380e9f",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_side_table/loft_side_table_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -826,7 +826,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d_v002.glb",
       "visual_glb_sha256": "bb4aeef261cafc12e1708e025cbb5847dc54a1e0e351bf67ada7bb0cabf7887c",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -856,8 +856,8 @@
       "scope": "remaining_facilities",
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/loft_tool_pegboard/loft_tool_pegboard_visual_top3d_v001.glb",
       "visual_glb_sha256": "2db1351709d7a0067a7d8befa90d5ddfb97ec1395fc337317427c981c245595c",
-      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -887,8 +887,8 @@
       "scope": "remaining_facilities",
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/south_wall_information_boards/south_wall_information_boards_visual_top3d_v001.glb",
       "visual_glb_sha256": "083e458b0a7c34900d92691dd37f80126806332d82ee52bb90b5d4abab614718",
-      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "collision_policy": "visual_only_no_collision"
     },
     {
@@ -920,7 +920,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/water_purifier/water_purifier_visual_top3d_v002.glb",
       "visual_glb_sha256": "9ed5ae78b7bb4fdc90842b6769dc84b6ecd0a158c87571ee9538ccdfc2e4f5a3",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/water_purifier/water_purifier_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {
@@ -960,7 +960,7 @@
       "visual_glb": "assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_visual_top3d_v002.glb",
       "visual_glb_sha256": "8602db65f4334cf2409700bbde5d3dcdbf5b3d9a1634cced8ee082c09e88ba1b",
       "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/weapon_workshop_station/weapon_workshop_station_root_top3d_v002.tscn",
-      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+      "runtime_root": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "collision_policy": "optimized_output_bounds_box"
     },
     {

@@ -110,7 +110,7 @@
     }
   },
   "godot_runtime_layout": {
-    "scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+    "scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
     "position_m": [
       -9.5,
       0.0,

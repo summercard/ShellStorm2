@@ -1,0 +1,31 @@
+{
+  "asset_id": "ENV-BATTLE-L01-CORRIDOR-FLOOR-5M",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v002.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 6,
+  "mesh_count": 6,
+  "component_counts": {
+    "floor_edge": 4,
+    "floor_slab": 1,
+    "floor_tile": 1
+  },
+  "bounds_world_m": {
+    "min": [
+      -2.5,
+      -2.5,
+      0.0
+    ],
+    "max": [
+      2.5,
+      2.5,
+      0.3
+    ]
+  },
+  "measured_dimensions_m": [
+    5.0,
+    5.0,
+    0.3
+  ]
+}

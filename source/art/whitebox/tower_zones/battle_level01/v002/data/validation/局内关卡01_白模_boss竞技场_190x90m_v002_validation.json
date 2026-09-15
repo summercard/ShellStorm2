@@ -1,0 +1,32 @@
+{
+  "asset_id": "ENV-BATTLE-L01-BOSS-ARENA",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_Boss竞技场_190x90m_v002.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 693,
+  "mesh_count": 693,
+  "component_counts": {
+    "door_wall": 2,
+    "floor_slab": 1,
+    "floor_tile": 684,
+    "wall": 6
+  },
+  "bounds_world_m": {
+    "min": [
+      -95.0,
+      -45.0,
+      0.0
+    ],
+    "max": [
+      95.0,
+      45.0,
+      11.9
+    ]
+  },
+  "measured_dimensions_m": [
+    190.0,
+    90.0,
+    11.9
+  ]
+}

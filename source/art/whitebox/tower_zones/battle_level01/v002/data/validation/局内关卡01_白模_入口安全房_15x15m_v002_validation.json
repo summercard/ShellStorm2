@@ -1,0 +1,32 @@
+{
+  "asset_id": "ENV-BATTLE-L01-SAFE-ENTRY",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_入口安全房_15x15m_v002.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 16,
+  "mesh_count": 16,
+  "component_counts": {
+    "door_wall": 1,
+    "floor_slab": 1,
+    "floor_tile": 9,
+    "wall": 5
+  },
+  "bounds_world_m": {
+    "min": [
+      -7.5,
+      -7.5,
+      0.0
+    ],
+    "max": [
+      7.5,
+      7.5,
+      11.9
+    ]
+  },
+  "measured_dimensions_m": [
+    15.0,
+    15.0,
+    11.9
+  ]
+}

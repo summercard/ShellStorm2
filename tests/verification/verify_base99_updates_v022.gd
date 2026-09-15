@@ -1,9 +1,9 @@
 extends SceneTree
 
 const SCENES := [
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn",
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn",
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
 ]
 
 func _init() -> void:
@@ -16,7 +16,7 @@ func _init() -> void:
 	var vfx := load("res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn") as PackedScene
 	var vfx_node := vfx.instantiate()
 	assert(vfx_node.get_node("DustParticles") is GPUParticles3D)
-	assert(vfx_node.get_node("DustParticles").amount == 96)
+	assert(vfx_node.get_node("DustParticles").amount == 250)
 	assert(vfx_node.get_node("DustParticles").emitting == true)
 	vfx_node.free()
 	var holo := load("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_root_top3d_v002.tscn") as PackedScene
@@ -25,5 +25,5 @@ func _init() -> void:
 	assert(players.size() > 0, "Hologram GLB has no imported AnimationPlayer")
 	assert((players[0] as AnimationPlayer).get_animation_list().size() > 1, "Hologram GLB has no authored rotation animation")
 	holo_node.free()
-	print("BASE99_V022_VERIFY_OK scenes=3 particles=96 hologram_animation=true")
+	print("BASE99_V022_VERIFY_OK scenes=3 particles=250 hologram_animation=true")
 	quit()

@@ -1,6 +1,6 @@
 extends SceneTree
 
-const ROOT_SCENE := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn"
+const ROOT_SCENE := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn"
 
 func _init() -> void:
 	var scene := load(ROOT_SCENE) as PackedScene

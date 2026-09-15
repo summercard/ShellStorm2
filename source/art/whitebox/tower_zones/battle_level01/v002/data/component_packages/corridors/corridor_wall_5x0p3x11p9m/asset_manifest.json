@@ -1,0 +1,183 @@
+{
+  "asset_id": "ENV-BATTLE-L01-CORRIDOR-WALL-5M",
+  "name_zh": "局内关卡01 走廊通用墙壁 5×0.30×11.9m 白模",
+  "slug": "corridor_wall_5x0p3x11p9m",
+  "category": "corridors",
+  "role": "走廊通用墙壁",
+  "version": "v002",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v002.blend",
+  "blender_collection": "局内关卡01 走廊通用墙壁 5×0.30×11.9m 白模_资产",
+  "authoring_collection": "01_制作组件_按设施拆分",
+  "output_collection": "02_游戏输出_独立资产包_v002",
+  "objects": [
+    "WALL_CORRIDOR_BODY",
+    "WALL_CORRIDOR_EDGE_X_MIN",
+    "WALL_CORRIDOR_EDGE_X_MAX",
+    "WALL_CORRIDOR_TOP_TRIM"
+  ],
+  "root_object": null,
+  "component_count": 4,
+  "component_policy": "independent_meshes; walls, floor slabs, tiles and door walls are never joined",
+  "origin": "asset floor underside Z=0; each wall/lintel stores its own bottom-center origin",
+  "front": "Godot -Z",
+  "dimensions_m": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "bounds_world_m": {
+    "min": [
+      -2.5,
+      -0.15,
+      0.0
+    ],
+    "max": [
+      2.5,
+      0.15,
+      11.9
+    ]
+  },
+  "logical_wall_height_m": null,
+  "visual_wall_height_m": 11.9,
+  "floor_thickness_m": null,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "ports": [],
+  "world_slot_center_m": null,
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_深色哑光_结构底面"
+  ],
+  "palette_uv": "PaletteUV",
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "components": [
+    {
+      "name": "WALL_CORRIDOR_BODY",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "走廊通用墙体",
+      "origin_world_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.5,
+          -0.15,
+          0.0
+        ],
+        "max": [
+          2.5,
+          0.15,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_CORRIDOR_EDGE_X_MIN",
+      "collection": "01_建筑结构.001",
+      "kind": "wall_edge",
+      "role": "走廊墙壁模块收边",
+      "origin_world_m": [
+        -2.46,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        0.08,
+        0.3,
+        11.82
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.5,
+          -0.15,
+          0.04
+        ],
+        "max": [
+          -2.42,
+          0.15,
+          11.86
+        ]
+      }
+    },
+    {
+      "name": "WALL_CORRIDOR_EDGE_X_MAX",
+      "collection": "01_建筑结构.001",
+      "kind": "wall_edge",
+      "role": "走廊墙壁模块收边",
+      "origin_world_m": [
+        2.46,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        0.08,
+        0.3,
+        11.82
+      ],
+      "bounds_world_m": {
+        "min": [
+          2.42,
+          -0.15,
+          0.04
+        ],
+        "max": [
+          2.5,
+          0.15,
+          11.86
+        ]
+      }
+    },
+    {
+      "name": "WALL_CORRIDOR_TOP_TRIM",
+      "collection": "01_建筑结构.001",
+      "kind": "wall_edge",
+      "role": "走廊墙壁顶部收边",
+      "origin_world_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        5.0,
+        0.3,
+        0.12
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.5,
+          -0.15,
+          11.78
+        ],
+        "max": [
+          2.5,
+          0.15,
+          11.9
+        ]
+      }
+    }
+  ],
+  "render_reference": "source/art/whitebox/tower_zones/battle_level01/v002/renders/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v002_参考.png",
+  "render_top": "source/art/whitebox/tower_zones/battle_level01/v002/renders/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v002_俯视.png",
+  "export_status": "blend_only; GLB and Godot integration not requested",
+  "collision_status": "not authored",
+  "runtime_status": "not connected",
+  "notes": ""
+}

@@ -4,8 +4,8 @@
   "display_name": "14_西北贴墙L型楼梯_资产包",
   "asset_slug": "northwest_l_stair",
   "category": "architecture",
-  "version": "v022",
-  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend",
+  "version": "v006",
+  "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend",
   "object_count": 226,
   "mesh_count": 226,
   "light_count": 0,
@@ -259,17 +259,20 @@
     "COLLISION_西北L梯_平台护栏_12.93",
     "COLLISION_西北L梯_平台护栏_14.63"
   ],
-  "expected_export": "env_base99_stair_l_z5_visual_top3d_v005.glb",
+  "expected_export": "env_base99_stair_l_z5_visual_top3d_v006.glb",
   "collision_status": "two continuous convex ramp/landing hulls and six separate rail hulls",
-  "export_status": "optimized_and_imported_v021",
+  "export_status": "optimized_and_imported_v006",
   "slope_degrees": 27.699473,
   "treads_per_flight": 16,
-  "runtime_version": "v021",
+  "runtime_version": "v006",
   "revision": "gentle_28deg_r2",
-  "derived_blend": "source/art/blender/base_facility_layout/export/v022/base_facility_runtime_layout_hq-v022-updated_packages.blend",
-  "v022_update": {
-    "wall_contact_adjusted": false,
+  "export_source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v023.blend",
+  "derived_blend": "source/art/blender/base_facility_layout/export/v023/base_facility_runtime_layout_hq-v023-stair_bed.blend",
+  "export_manifest": "source/art/blender/base_facility_layout/export/v023/export_manifest.json",
+  "expected_runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
+  "v023_export": {
     "downward_faces_removed": 8816,
+    "triangles_before": 54932,
     "triangles_after": 46116
   }
 }

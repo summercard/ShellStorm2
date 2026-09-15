@@ -81,8 +81,8 @@ func _validate_visual(path: String, slug: String, failures: Array[String]) -> vo
 func _validate_layout_refs(failures: Array[String]) -> void:
 	var text := FileAccess.get_file_as_string(LAYOUT_PATH)
 	for required in [
-		"env_base99_remaining_facilities_root_top3d_v002.tscn",
-		"env_base99_wall_contents_root_top3d_v002.tscn",
+		"env_base99_remaining_facilities_root_top3d_v004.tscn",
+		"env_base99_wall_contents_root_top3d_v003.tscn",
 		"env_base99_floor_visuals_root_top3d_v004.tscn",
 	]:
 		_expect(text.contains(required), "基地总装配没有使用新版引用: %s" % required, failures)

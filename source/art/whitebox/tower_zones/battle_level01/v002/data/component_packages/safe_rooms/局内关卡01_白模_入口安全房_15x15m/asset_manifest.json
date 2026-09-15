@@ -1,0 +1,552 @@
+{
+  "asset_id": "ENV-BATTLE-L01-SAFE-ENTRY",
+  "name_zh": "局内关卡01 入口安全房 15×15m 白模",
+  "slug": "局内关卡01_白模_入口安全房_15x15m",
+  "category": "safe_rooms",
+  "role": "入口安全房",
+  "version": "v002",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_入口安全房_15x15m_v002.blend",
+  "blender_collection": "局内关卡01 入口安全房 15×15m 白模_资产管理",
+  "authoring_collection": "01_制作组件_按设施拆分",
+  "output_collection": "02_游戏输出_独立资产包_v002",
+  "objects": [
+    "FLOOR_BASE",
+    "FLOOR_TILE_R01_C01",
+    "FLOOR_TILE_R01_C02",
+    "FLOOR_TILE_R01_C03",
+    "FLOOR_TILE_R02_C01",
+    "FLOOR_TILE_R02_C02",
+    "FLOOR_TILE_R02_C03",
+    "FLOOR_TILE_R03_C01",
+    "FLOOR_TILE_R03_C02",
+    "FLOOR_TILE_R03_C03",
+    "WALL_NORTH_01",
+    "WALL_SOUTH_DOOR_01_LEFT",
+    "WALL_SOUTH_DOOR_01_LINTEL",
+    "WALL_SOUTH_DOOR_01_RIGHT",
+    "WALL_EAST_01",
+    "WALL_WEST_01"
+  ],
+  "root_object": null,
+  "component_count": 16,
+  "component_policy": "independent_meshes; walls, floor slabs, tiles and door walls are never joined",
+  "origin": "asset floor underside Z=0; each wall/lintel stores its own bottom-center origin",
+  "front": "Godot -Z",
+  "dimensions_m": [
+    15.0,
+    15.0,
+    11.9
+  ],
+  "bounds_world_m": {
+    "min": [
+      -7.5,
+      -7.5,
+      0.0
+    ],
+    "max": [
+      7.5,
+      7.5,
+      11.9
+    ]
+  },
+  "logical_wall_height_m": 12.0,
+  "visual_wall_height_m": 11.9,
+  "floor_thickness_m": 0.3,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "ports": [
+    {
+      "target": "hub",
+      "side": "south",
+      "offset_m": 2.5
+    }
+  ],
+  "world_slot_center_m": [
+    27.5,
+    2.5
+  ],
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_深色哑光_结构底面"
+  ],
+  "palette_uv": "PaletteUV",
+  "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "components": [
+    {
+      "name": "FLOOR_BASE",
+      "collection": "02_地面系统.001",
+      "kind": "floor_slab",
+      "role": "房间承重地坪",
+      "origin_world_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        15.0,
+        15.0,
+        0.26
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.5,
+          -7.5,
+          0.0
+        ],
+        "max": [
+          7.5,
+          7.5,
+          0.26
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R01_C01",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        -5.0,
+        -5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.47,
+          -7.47,
+          0.26
+        ],
+        "max": [
+          -2.53,
+          -2.53,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R01_C02",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        0.0,
+        -5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.47,
+          -7.47,
+          0.26
+        ],
+        "max": [
+          2.47,
+          -2.53,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R01_C03",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        5.0,
+        -5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          2.53,
+          -7.47,
+          0.26
+        ],
+        "max": [
+          7.47,
+          -2.53,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R02_C01",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        -5.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.47,
+          -2.47,
+          0.26
+        ],
+        "max": [
+          -2.53,
+          2.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R02_C02",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.47,
+          -2.47,
+          0.26
+        ],
+        "max": [
+          2.47,
+          2.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R02_C03",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        5.0,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          2.53,
+          -2.47,
+          0.26
+        ],
+        "max": [
+          7.47,
+          2.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R03_C01",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        -5.0,
+        5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.47,
+          2.53,
+          0.26
+        ],
+        "max": [
+          -2.53,
+          7.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R03_C02",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        0.0,
+        5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          -2.47,
+          2.53,
+          0.26
+        ],
+        "max": [
+          2.47,
+          7.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "FLOOR_TILE_R03_C03",
+      "collection": "02_地面系统.001",
+      "kind": "floor_tile",
+      "role": "5m 可替换地砖",
+      "origin_world_m": [
+        5.0,
+        5.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "bounds_world_m": {
+        "min": [
+          2.53,
+          2.53,
+          0.26
+        ],
+        "max": [
+          7.47,
+          7.47,
+          0.3
+        ]
+      }
+    },
+    {
+      "name": "WALL_NORTH_01",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "NORTH 完整外墙",
+      "origin_world_m": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        15.0,
+        0.3,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.5,
+          7.2,
+          0.0
+        ],
+        "max": [
+          7.5,
+          7.5,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_SOUTH_DOOR_01_LEFT",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "SOUTH 门洞01 左侧墙",
+      "origin_world_m": [
+        -3.05,
+        -7.35,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        8.9,
+        0.3,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.5,
+          -7.5,
+          0.0
+        ],
+        "max": [
+          1.4,
+          -7.2,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_SOUTH_DOOR_01_LINTEL",
+      "collection": "01_建筑结构.001",
+      "kind": "door_wall",
+      "role": "SOUTH 门洞01 门楣",
+      "origin_world_m": [
+        2.5,
+        -7.35,
+        2.8
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        2.2,
+        0.3,
+        9.1
+      ],
+      "bounds_world_m": {
+        "min": [
+          1.4,
+          -7.5,
+          2.8
+        ],
+        "max": [
+          3.6,
+          -7.2,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_SOUTH_DOOR_01_RIGHT",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "SOUTH 门洞01 右侧墙",
+      "origin_world_m": [
+        5.55,
+        -7.35,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        3.9,
+        0.3,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          3.6,
+          -7.5,
+          0.0
+        ],
+        "max": [
+          7.5,
+          -7.2,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_EAST_01",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "EAST 完整外墙",
+      "origin_world_m": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        0.3,
+        15.0,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          7.2,
+          -7.5,
+          0.0
+        ],
+        "max": [
+          7.5,
+          7.5,
+          11.9
+        ]
+      }
+    },
+    {
+      "name": "WALL_WEST_01",
+      "collection": "01_建筑结构.001",
+      "kind": "wall",
+      "role": "WEST 完整外墙",
+      "origin_world_m": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "origin_contract": "world_origin_stored_on_object_location",
+      "dimensions_m": [
+        0.3,
+        15.0,
+        11.9
+      ],
+      "bounds_world_m": {
+        "min": [
+          -7.5,
+          -7.5,
+          0.0
+        ],
+        "max": [
+          -7.2,
+          7.5,
+          11.9
+        ]
+      }
+    }
+  ],
+  "render_reference": "source/art/whitebox/tower_zones/battle_level01/v002/renders/局内关卡01_白模_入口安全房_15x15m_v002_参考.png",
+  "render_top": "source/art/whitebox/tower_zones/battle_level01/v002/renders/局内关卡01_白模_入口安全房_15x15m_v002_俯视.png",
+  "export_status": "blend_only; GLB and Godot integration not requested",
+  "collision_status": "not authored",
+  "runtime_status": "not connected",
+  "notes": ""
+}

@@ -36,7 +36,7 @@
     "source": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
     "derived_export": "assets/art/environments/base_facility_3d/source/wall_height12/env_base99_corner_l_5m_source_v002.blend",
     "glb": "assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb",
-    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn",
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn",
     "scope": "TowerFloorStage3D facility 160m outer shell and active Base99 art layout; DungeonRoom3D keeps only the collision nodes",
     "visual_policy": "Blender authored PaletteUV material; shared palette post-import",
     "collision_policy": "two-arm 5m/12m BoxShape3D contract; native 11.9m visual"
@@ -217,7 +217,7 @@
       "source": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
       "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v001.tscn",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "version": "v021",
       "package_count": 18,
       "triangles_after_optimization": 86538,
@@ -234,7 +234,7 @@
       "source": "source/art/blender/base_facility_layout/export/v021/base_facility_runtime_layout_hq-v021-remaining_facilities.blend",
       "derived_from_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v017.blend",
       "derived_from_version": "v017",
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v001.tscn",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "version": "v021",
       "package_count": 46,
       "triangles_after_optimization": 84274,
@@ -253,7 +253,7 @@
       "version": "v021",
       "package_count": 4,
       "triangles_after_optimization": 31450,
-      "geometry": "V021 GLB revision v002; northwest stair regraded in V017 to 27.699 degrees, 16 treads per flight; 9045 downward-facing faces removed",
+      "geometry": "Runtime GLBs use east stair v003 and northwest stair v006; northwest stair has 27.699 degrees and 16 treads per flight; downward-facing faces removed",
       "collision": "Source convex stair ramps preserve slopes; the mezzanine has a walk deck plus 1.2m continuous south/west guardrail blockers, with the northwest stair entry kept open; underdeck retains component boxes",
       "emission": "Shared palette post-import uses MULTIPLY to preserve emissive color without adding white",
       "status": "approved_runtime"
@@ -1475,8 +1475,8 @@
     "import_ledger": "assets/art/environments/base_facility_3d/source/env_base99_optimized_packages_v021_import_manifest.json",
     "source_blend": "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v021.blend",
     "runtime_roots": {
-      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
-      "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v002.tscn",
+      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
+      "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
       "floor": "assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/env_base99_floor_visuals_root_top3d_v004.tscn",
       "layout": "assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn"
     }
@@ -1498,7 +1498,7 @@
     "revision": "v021_loft_layout_adjustment_001",
     "package_count": 3,
     "layout_ledger": "assets/art/environments/base_facility_3d/source/env_base99_loft_layout_v021_manifest.json",
-    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn",
+    "runtime_scene": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
     "export_policy": "layout_only_no_glb_reexport"
   },
   "base_facility_updates_v022": {
@@ -1507,9 +1507,9 @@
     "package_count": 14,
     "import_manifest": "assets/art/environments/base_facility_3d/source/env_base99_updates_v022_import_manifest.json",
     "runtime": {
-      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn",
+      "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
       "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
-      "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn"
+      "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn"
     }
   },
   "base_facility_scene_vfx": {

@@ -7,6 +7,7 @@
   "derived_from_version": "v017",
   "scope": "wall-mounted non-door content only; structural walls and all doors excluded",
   "collision_policy": "visual_only_no_collision; base room wall blockers remain authoritative",
+  "root_runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
   "packages": [
     {
       "slug": "loft_backwall_services",

@@ -18,12 +18,18 @@ ROLE_RULES = (
     ("03_清漆反光", "03_清漆反光_紫粉点缀"),
     ("04_柔和自发光", "04_柔和自发光_UI灯光"),
 )
+LEGACY_ALIASES = {
+    "MAT_BASE99_STAIR_STEEL": "01_精工金属_紫色骨架",
+    "MAT_BASE99_STAIR_EDGE": "02_细腻哑光_青绿大面",
+}
 ROLE_ORDER = {canonical: index for index, (_, canonical) in enumerate(ROLE_RULES)}
 JSON_CHUNK = 0x4E4F534A
 BIN_CHUNK = 0x004E4942
 
 
 def canonical_role(name: str) -> str | None:
+    if name in LEGACY_ALIASES:
+        return LEGACY_ALIASES[name]
     for prefix, canonical in ROLE_RULES:
         if name == canonical or name.startswith(prefix):
             return canonical

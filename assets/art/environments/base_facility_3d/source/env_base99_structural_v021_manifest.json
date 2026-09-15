@@ -294,8 +294,8 @@
       "downward_faces_removed": 1358,
       "triangles_after_downward_cull": 11372,
       "triangles_after_optimization": 5070,
-      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_visual_top3d_v002.glb",
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_root_top3d_v001.tscn"
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_visual_top3d_v003.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/east_upper_transition_stair/east_upper_transition_stair_root_top3d_v002.tscn"
     },
     {
       "slug": "northwest_l_stair",
@@ -747,8 +747,8 @@
       "downward_faces_removed": 5779,
       "triangles_after_downward_cull": 45450,
       "triangles_after_optimization": 20310,
-      "export": "assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v002.glb",
-      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_root_top3d_v001.tscn"
+      "export": "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v006.glb",
+      "runtime": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn"
     },
     {
       "slug": "underdeck_sheet_blocker",

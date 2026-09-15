@@ -303,7 +303,7 @@
       "package": "14_西北贴墙L型楼梯_资产包",
       "collection": "14_西北贴墙L型楼梯_资产包",
       "scope": "stair",
-      "glb": "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v005.glb",
+      "glb": "assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d_v006.glb",
       "triangles_before": 54932,
       "triangles_after": 46116,
       "downward_triangles_removed": 8816,
@@ -319,13 +319,13 @@
           7.139999866485596
         ]
       },
-      "glb_sha256": "e6e9cd61943d954f51a138776f1ebd05c4df5f93d4d089088577f4c67693bb0b"
+      "glb_sha256": "1e2a5fdc5b439272b6ca20cdd1fd688a89f9720546d2850c8cc85ae81ff335d7"
     }
   },
   "runtime": {
-    "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v003.tscn",
+    "remaining": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
     "wall": "assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
-    "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v005.tscn"
+    "stair": "assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn"
   },
   "shared_palette_import": {
     "texture": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
@@ -344,12 +344,12 @@
     "managed_separately": true,
     "scene_vfx_ledger": "assets/art/vfx/environment_3d/base_facility_scene_vfx_manifest_v001.json",
     "tuning": {
-      "particle_amount": 192,
+      "particle_amount": 250,
       "emission_energy_multiplier": 2.2,
       "emission_box_extents_m": [
         14.5,
-        3.6,
-        7.25
+        2.6,
+        15.0
       ]
     }
   }

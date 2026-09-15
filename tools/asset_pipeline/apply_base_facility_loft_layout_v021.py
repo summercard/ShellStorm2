@@ -17,7 +17,7 @@ SOURCE_BLEND = PROJECT / "source/art/blender/base_facility_layout/source/base_fa
 MANIFEST_ROOT = PROJECT / "source/art/blender/base_facility_layout/component_packages/loft"
 LEDGER = PROJECT / "assets/art/environments/base_facility_3d/source/env_base99_loft_layout_v021_manifest.json"
 GLOBAL = PROJECT / "assets/art/asset_import_manifest_v001.json"
-RUNTIME_ROOT = PROJECT / "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v002.tscn"
+RUNTIME_ROOT = PROJECT / "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn"
 
 PACKAGES = {
     "loft_bed_and_bedding": {
