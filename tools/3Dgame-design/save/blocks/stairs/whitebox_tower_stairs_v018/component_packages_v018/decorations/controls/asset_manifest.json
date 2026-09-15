@@ -1,0 +1,47 @@
+{
+  "asset_id": "STAIRS-V018-DECO-CONTROL",
+  "display_name": "控制盒_装饰组件",
+  "slug": "controls",
+  "category": "decorations",
+  "component_role": "fixed_facility_attachment",
+  "version": "v018",
+  "source_blend": "whitebox_tower_stairs_v017/whitebox_tower_stairs_v017.blend",
+  "output_blend": "/Users/summercards/ShellStorm2/tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v018/whitebox_tower_stairs_v018.blend",
+  "blender_collection": "控制盒_装饰组件",
+  "objects": [
+    "控制盒_0_主体_v017输出",
+    "控制盒_0_屏幕_UI灯光_v017输出",
+    "控制盒_1_主体_v017输出",
+    "控制盒_1_屏幕_UI灯光_v017输出",
+    "控制盒_2_主体_v017输出",
+    "控制盒_2_屏幕_UI灯光_v017输出"
+  ],
+  "root_object": "控制盒_0_主体_v017输出",
+  "world_bounds": {
+    "min": [
+      32.775,
+      15.825,
+      -16.125
+    ],
+    "max": [
+      47.225,
+      26.975,
+      -1.975
+    ]
+  },
+  "layout_origin": [
+    32.5,
+    0,
+    -9
+  ],
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "export_glb": null,
+  "runtime_imported": false
+}

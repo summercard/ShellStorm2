@@ -1,0 +1,65 @@
+{
+  "asset_id": "STAIRS-V016-SIGNAGE-CONTROLS",
+  "display_name": "楼梯间_标识与控制盒_资产包",
+  "slug": "signage_controls",
+  "category": "facilities",
+  "version": "v016",
+  "source_blend": "/Users/summercards/ShellStorm2/tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v016/whitebox_tower_stairs_v016.blend",
+  "blender_collection": "楼梯间_标识与控制盒_资产包",
+  "objects": [
+    "标识牌_左墙_LEVEL02_底板",
+    "标识字_左墙_LEVEL02_UI灯光",
+    "标识牌_后墙_LEVEL01_底板",
+    "标识字_后墙_LEVEL01_UI灯光",
+    "海报_后墙_协作_底板",
+    "海报字_后墙_协作_UI灯光",
+    "海报图形_峰_0_UI灯光",
+    "海报图形_峰_1_UI灯光",
+    "海报图形_峰_2_UI灯光",
+    "海报图形_峰_3_UI灯光",
+    "控制盒_0_主体",
+    "控制盒_0_屏幕_UI灯光",
+    "控制盒_1_主体",
+    "控制盒_1_屏幕_UI灯光",
+    "控制盒_2_主体",
+    "控制盒_2_屏幕_UI灯光",
+    "绿植_花盆",
+    "绿植_叶片_0",
+    "绿植_叶片_1",
+    "绿植_叶片_2",
+    "绿植_叶片_3",
+    "绿植_叶片_4",
+    "绿植_叶片_5",
+    "绿植_叶片_6",
+    "绿植_叶片_7"
+  ],
+  "root_object": "标识牌_左墙_LEVEL02_底板",
+  "world_bounds": {
+    "min": [
+      32.73,
+      4.4,
+      -16.85
+    ],
+    "max": [
+      47.225,
+      26.975,
+      -0.05
+    ]
+  },
+  "local_origin": [
+    40.0,
+    12.35,
+    -21.27
+  ],
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "export_glb": null,
+  "collision_status": "source geometry retained; packaging not exported",
+  "runtime_imported": false
+}

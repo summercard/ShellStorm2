@@ -1,0 +1,35 @@
+{
+  "version": "v016",
+  "packages": [
+    {
+      "asset_id": "STAIRS-V016-SOURCE-GEOMETRY",
+      "collection": "楼梯间_原始结构_资产包",
+      "path": "architecture/source_geometry",
+      "object_count": 97
+    },
+    {
+      "asset_id": "STAIRS-V016-WALL-PANELS",
+      "collection": "楼梯间_墙板与结构框架_资产包",
+      "path": "architecture/wall_panels",
+      "object_count": 57
+    },
+    {
+      "asset_id": "STAIRS-V016-FLOOR-TRIM",
+      "collection": "楼梯间_地面饰条_资产包",
+      "path": "floor/floor_trim",
+      "object_count": 41
+    },
+    {
+      "asset_id": "STAIRS-V016-SIGNAGE-CONTROLS",
+      "collection": "楼梯间_标识与控制盒_资产包",
+      "path": "facilities/signage_controls",
+      "object_count": 25
+    },
+    {
+      "asset_id": "STAIRS-V016-PIPES-LIGHTING",
+      "collection": "楼梯间_管线与照明_资产包",
+      "path": "support/pipes_lighting",
+      "object_count": 22
+    }
+  ]
+}

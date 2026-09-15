@@ -28,10 +28,10 @@ const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d_v002.tscn"
 )
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d_v002.tscn"
 )
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85
@@ -44,6 +44,13 @@ const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
 const STAIR_GUARD_HEIGHT := TOWER_GEOMETRY.GUARD_HEIGHT_M
+# Blender v021 两侧扶手中心距梯跑中心约2.15m；角色阻挡必须贴合可见扶手，
+# 不能沿6m承重面外缘放到3.12m处，否则角色会先穿过约0.97m可见栏杆。
+const STAIR_VISIBLE_GUARD_HALF_WIDTH_M := 2.15
+# 栏杆阻挡覆盖整跑并在坡脚/坡顶各多出少量长度，与平台阻挡消除接缝。
+const STAIR_GUARD_COLLISION_OVERLAP_M := 0.20
+# 楼板边缘阻挡向梯跑扶手中心各搭接少量距离，封住转角缝而不封闭楼梯入口。
+const STAIR_GUARD_CORNER_JOIN_OVERLAP_M := 0.15
 # 原默认镜头在调试模式按15次 '，每次沿相机到焦点的视线轴拉远0.20m。
 # 固化后的精确局部位置为Y=10.719009m、后移Z=4.037671m，保持原俯视角。
 const CAMERA_HEIGHT_M := 10.719009
@@ -1475,6 +1482,7 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 		outward,
 		rooftop_variant
 	)
+	_add_unified_stair_support(connector, upper_interface, outward, tangent)
 	for point_index in range(points.size() - 1):
 		_add_stair_segment(
 			connector,
@@ -1513,8 +1521,8 @@ func _add_imported_stairwell_visual(
 		if rooftop_variant
 		else "ENV-TOWER-STAIRWELL-GENERIC-12M"
 	)
-	visual.set_meta("asset_version", "v001")
-	visual.set_meta("blender_source_version", "v011")
+	visual.set_meta("asset_version", "v002")
+	visual.set_meta("blender_source_version", "v021")
 	connector.add_child(visual)
 	var walkable_collision_count := _add_imported_stair_collisions(visual)
 	connector.set_meta("walkable_collision_count", walkable_collision_count)
@@ -1533,13 +1541,9 @@ func _add_imported_stair_collisions(root: Node) -> int:
 	# 整段路径包围盒估算楼梯墙，否则包围盒会跨过接驳走廊伸进相邻房间，
 	# 形成没有视觉组件对应的空气墙。
 	var is_walkable := root is MeshInstance3D and "Walkable" in root.name
-	var is_camera_stair_slab := (
-		is_walkable
-		and (
-			"UpperFlight_Walkable" in root.name
-			or "LowerFlight_Walkable" in root.name
-		)
-	)
+	# v002 的合并Walkable只保留来源追溯。摄像机净空由运行包装中的
+	# 下跑专用代理负责，避免上跑/北向台阶面触发动态镜头。
+	var is_camera_stair_slab := false
 	var is_enclosure_wall := (
 		root is MeshInstance3D
 		and "EnclosureWall_" in root.name
@@ -1551,16 +1555,16 @@ func _add_imported_stair_collisions(root: Node) -> int:
 			if shape != null:
 				var body := StaticBody3D.new()
 				body.name = "%sCollisionBody" % mesh_instance.name
-				body.collision_layer = 1
+				# v002 的 Walkable 含离散踏步和楼板竖直唇边；它只保留给
+				# 摄像机净空探针，角色通行改用下方连续坡面，避免卡台阶。
+				body.collision_layer = 0 if is_walkable else 1
 				body.collision_mask = 0
 				body.set_meta("stair_enclosure_collision", is_enclosure_wall)
 				body.set_meta("camera_stair_slab", is_camera_stair_slab)
 				if is_camera_stair_slab:
-					body.set_meta(
-						"camera_stair_slab_role",
-						"upper" if "UpperFlight_Walkable" in root.name else "lower"
-					)
+					body.set_meta("camera_stair_slab_role", "combined_floor_and_flights")
 				body.set_meta("source_visual_name", mesh_instance.name)
+				body.set_meta("camera_only_walkable_source", false)
 				mesh_instance.add_child(body)
 				var collision := CollisionShape3D.new()
 				collision.name = "%sCollisionShape" % mesh_instance.name
@@ -2005,6 +2009,189 @@ func _configure_stairwell_camera_walls(connector: Node3D) -> void:
 			south_body = body
 	if south_body != null:
 		south_body.set_meta("camera_lower_wall", true)
+		return
+
+	# v002 为降低运行节点数把四面围护合并成一个 Mesh。合并网格的世界
+	# AABB不再能选出单独南墙；玩法围护仍使用原同形碰撞，这里只补一片
+	# camera-only 代理，避免把东西墙/北墙错误识别为角色身后的下方墙。
+	var enclosure_visual: MeshInstance3D = null
+	for value in connector.find_children("*", "MeshInstance3D", true, false):
+		var mesh := value as MeshInstance3D
+		if mesh != null and mesh.mesh != null and "EnclosureWall_" in mesh.name:
+			enclosure_visual = mesh
+			break
+	if enclosure_visual == null:
+		return
+	var bounds := enclosure_visual.global_transform * enclosure_visual.get_aabb()
+	var proxy := StaticBody3D.new()
+	proxy.name = "StairwellSouthCameraWallProxy"
+	proxy.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+	proxy.collision_mask = 0
+	proxy.set_meta("camera_lower_wall", true)
+	proxy.set_meta("stair_camera_wall_proxy", true)
+	connector.add_child(proxy)
+	proxy.global_position = Vector3(
+		bounds.get_center().x,
+		bounds.get_center().y,
+		bounds.end.z - 0.15
+	)
+	var collision := CollisionShape3D.new()
+	collision.name = "StairwellSouthCameraWallShape"
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(maxf(bounds.size.x, 0.3), maxf(bounds.size.y, 0.3), 0.30)
+	collision.shape = shape
+	proxy.add_child(collision)
+
+
+func _add_unified_stair_support(root: Node3D, origin: Vector3, outward: Vector3, tangent: Vector3) -> void:
+	# 平台完整宽度与梯跑端点共用同一组顶点；仅外边界封边，内部无立面。
+	var xs := [0.0, TOWER_GEOMETRY.STAIR_LOWER_LANE_OFFSET_M - STAIR_WIDTH * 0.5,
+		TOWER_GEOMETRY.STAIR_LOWER_LANE_OFFSET_M + STAIR_WIDTH * 0.5,
+		TOWER_GEOMETRY.STAIR_UPPER_LANE_OFFSET_M - STAIR_WIDTH * 0.5,
+		TOWER_GEOMETRY.STAIR_UPPER_LANE_OFFSET_M + STAIR_WIDTH * 0.5, 15.0]
+	var start := TOWER_GEOMETRY.STAIR_RUN_START_M
+	var end := TOWER_GEOMETRY.STAIR_RUN_END_M
+	var quads: Array = []
+	for i in range(xs.size() - 1):
+		for level in [0.0, -FLOOR_HEIGHT]:
+			quads.append([Vector3(xs[i], level, -2.5), Vector3(xs[i+1], level, -2.5), Vector3(xs[i+1], level, start), Vector3(xs[i], level, start)])
+		quads.append([Vector3(xs[i], -FLOOR_HEIGHT * 0.5, end), Vector3(xs[i+1], -FLOOR_HEIGHT * 0.5, end), Vector3(xs[i+1], -FLOOR_HEIGHT * 0.5, 27.5), Vector3(xs[i], -FLOOR_HEIGHT * 0.5, 27.5)])
+	for lane in [1, 3]:
+		var start_height := -FLOOR_HEIGHT if lane == 1 else 0.0
+		var end_height := -FLOOR_HEIGHT * 0.5
+		# 每跑只用一个从坡脚到坡顶的平面；可见踏步不参与角色碰撞。
+		quads.append([
+			Vector3(xs[lane], start_height, start),
+			Vector3(xs[lane+1], start_height, start),
+			Vector3(xs[lane+1], end_height, end),
+			Vector3(xs[lane], end_height, end),
+		])
+	var vertices: Array[Vector3] = []
+	var lookup := {}
+	var indices: Array[int] = []
+	var edges := {}
+	for quad in quads:
+		var ids: Array[int] = []
+		for vertex in quad:
+			if not lookup.has(vertex):
+				lookup[vertex] = vertices.size()
+				vertices.append(vertex)
+			ids.append(lookup[vertex])
+		indices.append_array([ids[0], ids[1], ids[2], ids[0], ids[2], ids[3]])
+		for i in range(4):
+			var a := ids[i]
+			var b := ids[(i + 1) % 4]
+			var key := Vector2i(mini(a,b), maxi(a,b))
+			if edges.has(key):
+				edges.erase(key)
+			else:
+				edges[key] = Vector2i(a,b)
+	var count := vertices.size()
+	for i in range(count):
+		vertices.append(vertices[i] - Vector3.UP * 0.20)
+	var top_count := indices.size()
+	for i in range(0, top_count, 3):
+		indices.append_array([indices[i+2]+count, indices[i+1]+count, indices[i]+count])
+	for edge: Vector2i in edges.values():
+		indices.append_array([edge.y, edge.x, edge.x+count, edge.y, edge.x+count, edge.y+count])
+	var faces := PackedVector3Array()
+	for i in indices:
+		var v := vertices[i]
+		faces.append(origin + outward * v.x + tangent * v.z + Vector3.UP * v.y)
+	var body := StaticBody3D.new()
+	body.name = "StairUnifiedSupport"
+	body.collision_layer = 1
+	body.collision_mask = 0
+	body.set_meta("stair_surface_raise_m", 0.0)
+	body.set_meta("stair_flight_plane_count", 2)
+	body.set_meta("stair_surface_segment_count_per_flight", 1)
+	var collision := CollisionShape3D.new()
+	collision.name = "ContinuousFloorFlightsLanding"
+	var shape := ConcavePolygonShape3D.new()
+	shape.backface_collision = true
+	shape.set_faces(faces)
+	collision.shape = shape
+	collision.set_meta("persistent_stair_support", true)
+	body.add_child(collision)
+	root.add_child(body)
+	_add_lower_flight_camera_slab(root, origin, outward, tangent)
+	_add_upper_landing_guards(root, origin, outward, tangent)
+
+
+func _add_lower_flight_camera_slab(
+	root: Node3D, origin: Vector3, outward: Vector3, tangent: Vector3
+) -> void:
+	var run_start := TOWER_GEOMETRY.STAIR_RUN_START_M
+	var run_end := TOWER_GEOMETRY.STAIR_RUN_END_M
+	var start := (
+		origin
+		+ outward * TOWER_GEOMETRY.STAIR_LOWER_LANE_OFFSET_M
+		+ tangent * run_start
+		- Vector3.UP * FLOOR_HEIGHT
+	)
+	var end := (
+		origin
+		+ outward * TOWER_GEOMETRY.STAIR_LOWER_LANE_OFFSET_M
+		+ tangent * run_end
+		- Vector3.UP * (FLOOR_HEIGHT * 0.5)
+	)
+	var delta := end - start
+	var planar_length := Vector2(delta.x, delta.z).length()
+	var body := StaticBody3D.new()
+	body.name = "LowerFlightCameraSlab"
+	body.position = (start + end) * 0.5
+	body.rotation.y = atan2(tangent.x, tangent.z)
+	body.rotation.x = -atan2(delta.y, planar_length)
+	body.collision_layer = GameDesignConfig.COLLISION_LAYER_CAMERA_ONLY
+	body.collision_mask = 0
+	body.set_meta("camera_stair_slab", true)
+	body.set_meta("camera_stair_slab_role", "lower")
+	body.set_meta("stair_lower_camera_only", true)
+	var shape := BoxShape3D.new()
+	shape.size = Vector3(STAIR_WIDTH, 0.12, delta.length())
+	var collision := CollisionShape3D.new()
+	collision.name = "LowerFlightCameraSlabShape"
+	collision.shape = shape
+	body.add_child(collision)
+	root.add_child(body)
+
+
+func _add_upper_landing_guards(
+	root: Node3D, origin: Vector3, outward: Vector3, tangent: Vector3
+) -> void:
+	# Blender v021 的楼板边缘栏杆是两段，楼梯上口位于二者之间。
+	# 不能在折返中心横放整宽阻挡，否则会把正常转向路线封死。
+	var stair_open_min := (
+		TOWER_GEOMETRY.STAIR_UPPER_LANE_OFFSET_M
+		- STAIR_VISIBLE_GUARD_HALF_WIDTH_M
+		+ STAIR_GUARD_CORNER_JOIN_OVERLAP_M
+	)
+	var stair_open_max := (
+		TOWER_GEOMETRY.STAIR_UPPER_LANE_OFFSET_M
+		+ STAIR_VISIBLE_GUARD_HALF_WIDTH_M
+		- STAIR_GUARD_CORNER_JOIN_OVERLAP_M
+	)
+	var rail_ranges := [Vector2(0.22, stair_open_min), Vector2(stair_open_max, 14.78)]
+	var along_x := absf(outward.x) >= absf(outward.z)
+	for range_index in range(rail_ranges.size()):
+		var rail_range: Vector2 = rail_ranges[range_index]
+		var rail_length := rail_range.y - rail_range.x
+		var center := (
+			origin
+			+ outward * ((rail_range.x + rail_range.y) * 0.5)
+			+ tangent * 3.30
+			+ Vector3.UP * (STAIR_GUARD_HEIGHT * 0.5)
+		)
+		_add_connector_box(
+			root,
+			"StairGuard_UpperLanding_%02d" % range_index,
+			center,
+			Vector3(rail_length, STAIR_GUARD_HEIGHT, 0.24)
+				if along_x else Vector3(0.24, STAIR_GUARD_HEIGHT, rail_length),
+			Vector3.ZERO,
+			false,
+			true
+		)
 
 
 func _add_stair_segment(
@@ -2027,18 +2214,31 @@ func _add_stair_segment(
 		rotation.x = -atan(delta.y / delta.z) if absf(delta.z) > 0.01 else 0.0
 	var surface_normal := Basis.from_euler(rotation) * Vector3.UP
 	var sloped := absf(delta.y) > 0.05
+	# 仅保留楼梯间外的上下门接驳段；内部由单一封闭网格承重。
+	var support_size := (
+		Vector3(length, 0.20, STAIR_WIDTH)
+		if along_x
+		else Vector3(STAIR_WIDTH, 0.20, length)
+	)
+	if index == 0 or index == 9:
+		_add_connector_box(
+			root,
+			"StairApproachSupport_%02d" % index,
+			center - surface_normal * 0.10,
+			support_size,
+			rotation,
+			true,
+			true
+		)
 	if sloped:
 		# 可见台阶仍来自 Blender；程序层用有厚度的坡面楼板和两侧护栏。
 		var perpendicular := Vector3(0, 0, 1) if along_x else Vector3(1, 0, 0)
-		var guard_planar_length := maxf(
-			0.4,
-			planar_length - TOWER_GEOMETRY.GUARD_END_CLEARANCE_M * 2.0
-		)
+		var guard_planar_length := planar_length + STAIR_GUARD_COLLISION_OVERLAP_M * 2.0
 		var guard_length := length * guard_planar_length / planar_length
 		for side_sign in [-1.0, 1.0]:
 			var guard_center: Vector3 = (
 				center
-				+ perpendicular * side_sign * (STAIR_WIDTH * 0.5 + 0.12)
+				+ perpendicular * side_sign * STAIR_VISIBLE_GUARD_HALF_WIDTH_M
 				+ surface_normal * (STAIR_GUARD_HEIGHT * 0.5)
 			)
 			var guard_size := (
@@ -2051,7 +2251,9 @@ func _add_stair_segment(
 				"StairGuard_%02d" % index,
 				guard_center,
 				guard_size,
-				rotation
+				rotation,
+				false,
+				true
 			)
 
 
@@ -2082,6 +2284,10 @@ func _add_connector_box(
 	collision.disabled = not collision_enabled
 	collision.set_meta("persistent_stair_support", is_support)
 	body.set_meta("camera_lower_wall", camera_lower_wall)
+	body.set_meta("stair_guard_collision", node_name.begins_with("StairGuard_"))
+	if node_name.begins_with("StairGuard_"):
+		body.set_meta("stair_guard_full_coverage", true)
+		body.set_meta("stair_guard_visual_half_width_m", STAIR_VISIBLE_GUARD_HALF_WIDTH_M)
 	body.add_child(collision)
 
 

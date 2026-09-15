@@ -1,0 +1,5 @@
+architecture/source_geometry  [STAIRS-V016-SOURCE-GEOMETRY]  objects=97
+architecture/wall_panels  [STAIRS-V016-WALL-PANELS]  objects=57
+floor/floor_trim  [STAIRS-V016-FLOOR-TRIM]  objects=41
+facilities/signage_controls  [STAIRS-V016-SIGNAGE-CONTROLS]  objects=25
+support/pipes_lighting  [STAIRS-V016-PIPES-LIGHTING]  objects=22

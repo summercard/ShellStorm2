@@ -1,0 +1,51 @@
+{
+  "asset_id": "STAIRS-V019-DECO-SIGN",
+  "display_name": "楼层标识与海报_装饰组件",
+  "slug": "signage",
+  "category": "decorations",
+  "component_role": "signage",
+  "version": "v019",
+  "source_blend": "whitebox_tower_stairs_v018/whitebox_tower_stairs_v018.blend",
+  "output_blend": "/Users/summercards/ShellStorm2/assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend",
+  "blender_collection": "楼层标识与海报_装饰组件",
+  "objects": [
+    "标识牌_左墙_LEVEL02_底板_v017输出",
+    "标识字_左墙_LEVEL02_UI灯光_v017输出",
+    "标识牌_后墙_LEVEL01_底板_v017输出",
+    "标识字_后墙_LEVEL01_UI灯光_v017输出",
+    "海报_后墙_协作_底板_v017输出",
+    "海报字_后墙_协作_UI灯光_v017输出",
+    "海报图形_峰_0_UI灯光_v017输出",
+    "海报图形_峰_1_UI灯光_v017输出",
+    "海报图形_峰_2_UI灯光_v017输出",
+    "海报图形_峰_3_UI灯光_v017输出"
+  ],
+  "root_object": "标识牌_左墙_LEVEL02_底板_v017输出",
+  "world_bounds": {
+    "min": [
+      32.73,
+      -2.508,
+      -16.85
+    ],
+    "max": [
+      42.9,
+      26.95,
+      0.07
+    ]
+  },
+  "layout_origin": [
+    32.5,
+    0,
+    -9
+  ],
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "export_glb": null,
+  "runtime_imported": false
+}

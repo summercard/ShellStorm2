@@ -388,18 +388,28 @@ func _ready() -> void:
 		_expect(is_equal_approx(float(connector.get_meta("approach_outset", 0.0)), 6.0), "%s 门厅不是6m" % connector.name, failures)
 		_expect(is_equal_approx(float(connector.get_meta("lane_spacing", 0.0)), 8.0), "%s 折返走道不是8m" % connector.name, failures)
 		_expect(
-			int(connector.get_meta("enclosure_collision_count", 0)) == 4,
-			"%s 没有为四面可视围护墙生成同形碰撞" % connector.name,
+			int(connector.get_meta("enclosure_collision_count", 0)) == 1,
+			"%s 没有为合并后的可视围护墙生成同形碰撞" % connector.name,
 			failures
 		)
 		_expect(
-			int(connector.get_meta("walkable_collision_count", 0)) >= 6,
-			"%s 没有为六块Blender Walkable楼板生成碰撞" % connector.name,
+			int(connector.get_meta("walkable_collision_count", 0)) == 1,
+			"%s 没有为合并后的Blender Walkable结构生成碰撞" % connector.name,
+			failures
+		)
+		_expect(
+			_count_meta_nodes(connector, "camera_stair_slab") == 1,
+			"%s 合并后的楼板/楼梯没有恢复镜头净空碰撞" % connector.name,
+			failures
+		)
+		_expect(
+			_count_meta_nodes(connector, "stair_camera_wall_proxy") == 1,
+			"%s 合并围护墙没有恢复南墙camera-only碰撞" % connector.name,
 			failures
 		)
 		_expect(
 			_count_named_nodes(connector, "Stair_") >= 4
-			and int(connector.get_meta("walkable_collision_count", 0)) >= 6,
+			and int(connector.get_meta("walkable_collision_count", 0)) == 1,
 			"%s 导入外壳或Walkable楼板碰撞缺失" % connector.name,
 			failures
 		)
@@ -1674,6 +1684,13 @@ func _count_named_nodes(root: Node, prefix: String) -> int:
 	var count := 1 if root.name.begins_with(prefix) else 0
 	for child in root.get_children():
 		count += _count_named_nodes(child, prefix)
+	return count
+
+
+func _count_meta_nodes(root: Node, meta_key: String) -> int:
+	var count := 1 if bool(root.get_meta(meta_key, false)) else 0
+	for child in root.get_children():
+		count += _count_meta_nodes(child, meta_key)
 	return count
 
 

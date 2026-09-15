@@ -1,0 +1,223 @@
+{
+  "version": "v021",
+  "structural_component_count": 3,
+  "decoration_component_count": 7,
+  "packages": [
+    {
+      "asset_id": "STAIRS-V021-COMP-WALL",
+      "path": "architecture/wall_component",
+      "collection": "通用墙组件_资产包",
+      "role": "universal_wall",
+      "object_count": 52,
+      "bounds": {
+        "min": [
+          -47.5,
+          -27.5,
+          -21.2
+        ],
+        "max": [
+          47.5,
+          27.5,
+          11.6
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-COMP-FLOOR",
+      "path": "architecture/floor_component",
+      "collection": "通用地板组件_资产包",
+      "role": "universal_floor_with_edge_railing",
+      "object_count": 234,
+      "bounds": {
+        "min": [
+          -47.5,
+          -27.5,
+          -21.2
+        ],
+        "max": [
+          47.5,
+          27.5,
+          1.155
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-COMP-STAIR",
+      "path": "architecture/stair_component",
+      "collection": "通用楼梯组件_资产包",
+      "role": "universal_stairs_with_railing",
+      "object_count": 188,
+      "bounds": {
+        "min": [
+          -46.501,
+          -18.2303,
+          -21.2703
+        ],
+        "max": [
+          46.501,
+          18.2303,
+          1.13959
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-WALL",
+      "path": "decorations/wall_surface",
+      "collection": "墙面装甲与结构框_装饰组件",
+      "role": "wall_attached_detail",
+      "object_count": 108,
+      "bounds": {
+        "min": [
+          -47.4525,
+          -27.225,
+          -20.85
+        ],
+        "max": [
+          47.4525,
+          27.225,
+          11.25
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-FLOOR",
+      "path": "decorations/floor_guidance",
+      "collection": "地面导光与警示_装饰组件",
+      "role": "floor_attached_detail",
+      "object_count": 32,
+      "bounds": {
+        "min": [
+          -47.17,
+          -27.05,
+          -20.899
+        ],
+        "max": [
+          47.17,
+          27.05,
+          0.0365
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-PIPES",
+      "path": "decorations/pipes",
+      "collection": "工业管线_装饰组件",
+      "role": "cross_scene_support",
+      "object_count": 52,
+      "bounds": {
+        "min": [
+          -47.06837,
+          -27.07946,
+          -20.728
+        ],
+        "max": [
+          47.06837,
+          27.07946,
+          10.74
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-LIGHT",
+      "path": "decorations/light_geometry",
+      "collection": "灯带与发光几何_装饰组件",
+      "role": "emissive_geometry",
+      "object_count": 12,
+      "bounds": {
+        "min": [
+          -47.07,
+          -15.45,
+          -13.965
+        ],
+        "max": [
+          47.07,
+          15.45,
+          9.865
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-SIGN",
+      "path": "decorations/signage",
+      "collection": "楼层标识与海报_装饰组件",
+      "role": "signage",
+      "object_count": 34,
+      "bounds": {
+        "min": [
+          -47.145,
+          -14.75,
+          -17.42285
+        ],
+        "max": [
+          47.145,
+          14.75,
+          8.5
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-CONTROL",
+      "path": "decorations/controls",
+      "collection": "控制盒_装饰组件",
+      "role": "fixed_facility_attachment",
+      "object_count": 34,
+      "bounds": {
+        "min": [
+          -47.14,
+          -10.76,
+          -19.4
+        ],
+        "max": [
+          47.14,
+          10.76,
+          10.6
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V021-DECO-PLANT",
+      "path": "decorations/fixed_plant",
+      "collection": "固定绿植_装饰组件",
+      "role": "fixed_display_attachment",
+      "object_count": 18,
+      "bounds": {
+        "min": [
+          -45.58411,
+          -25.575,
+          -8.775
+        ],
+        "max": [
+          45.5841,
+          25.575,
+          3.07694
+        ]
+      }
+    }
+  ],
+  "assemblies": [
+    {
+      "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
+      "display_name": "楼梯A（100→99）",
+      "root": "楼梯A_100至99层_装配根",
+      "position": [
+        -32.5,
+        0,
+        0
+      ],
+      "rotation_z_deg": 180,
+      "object_count": 382
+    },
+    {
+      "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
+      "display_name": "楼梯B（99→98）",
+      "root": "楼梯B_99至98层_装配根",
+      "position": [
+        32.5,
+        0,
+        -9
+      ],
+      "rotation_z_deg": 0,
+      "object_count": 382
+    }
+  ]
+}

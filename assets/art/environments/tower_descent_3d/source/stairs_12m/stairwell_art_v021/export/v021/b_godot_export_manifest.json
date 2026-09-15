@@ -1,0 +1,21 @@
+{
+  "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+  "source_sha256": "cf1756fe3d7f96a835a4a53f28220b23083007e40a7afad8a40b74bdea47f8ef",
+  "derived_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/export/v021/env_tower_stairwell_generic_12m_runtime_v002.blend",
+  "derived_sha256": "b2a12db220dffe4847b34b6b5c72cfc3b58e942e70501df06bdb109762f6ea42",
+  "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v002.glb",
+  "glb_sha256": "1865f6e89650640f12e1234b547f726d983c94fce215e74027f7489b43fd33dd",
+  "source_output_mesh_count": 382,
+  "optimized_mesh_count": 3,
+  "walkable_collision_source_count": 1,
+  "enclosure_collision_source_count": 1,
+  "glb_node_count": 4,
+  "glb_mesh_count": 3,
+  "glb_material_count": 3,
+  "glb_image_count": 0,
+  "glb_texture_count": 0,
+  "runtime_collision_owner": "src/world3d/TowerDescent3D.gd",
+  "palette_post_import": "res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"
+}

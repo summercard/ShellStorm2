@@ -1,0 +1,228 @@
+{
+  "workbook": "/Users/summercards/ShellStorm2/assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+  "scope": "structure",
+  "asset_count": 423,
+  "status_counts": {
+    "原型已接入": 68,
+    "弃用": 11,
+    "程序占位": 109,
+    "已完成": 89,
+    "待制作": 13,
+    "正式美术已接入": 51,
+    "旧资产已从正式基地移除": 4,
+    "已优化并正式接入": 5,
+    "Blender源已完成": 66,
+    "已导入；优化完成": 2,
+    "白盒组件": 5
+  },
+  "category_counts": {
+    "角色": 31,
+    "特效": 16,
+    "敌人": 12,
+    "武器": 36,
+    "道具": 20,
+    "场景": 100,
+    "场景道具": 20,
+    "UI": 17,
+    "音频": 57,
+    "基地资产包": 114
+  },
+  "issue_counts": {
+    "invalid_status": 5,
+    "missing_dedupe_formula": 10,
+    "stale_overview_formula": 22
+  },
+  "issues": {
+    "invalid_status": [
+      {
+        "row": 424,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
+        "value": "白盒组件"
+      },
+      {
+        "row": 425,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
+        "value": "白盒组件"
+      },
+      {
+        "row": 426,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
+        "value": "白盒组件"
+      },
+      {
+        "row": 427,
+        "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+        "value": "白盒组件"
+      },
+      {
+        "row": 428,
+        "asset_id": "ENV-TOWER-CORNER-COLUMN-05M",
+        "value": "白盒组件"
+      }
+    ],
+    "missing_dedupe_formula": [
+      {
+        "row": 424,
+        "column": "R",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER"
+      },
+      {
+        "row": 424,
+        "column": "S",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER"
+      },
+      {
+        "row": 425,
+        "column": "R",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-MID"
+      },
+      {
+        "row": 425,
+        "column": "S",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-MID"
+      },
+      {
+        "row": 426,
+        "column": "R",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER"
+      },
+      {
+        "row": 426,
+        "column": "S",
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER"
+      },
+      {
+        "row": 427,
+        "column": "R",
+        "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE"
+      },
+      {
+        "row": 427,
+        "column": "S",
+        "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE"
+      },
+      {
+        "row": 428,
+        "column": "R",
+        "asset_id": "ENV-TOWER-CORNER-COLUMN-05M"
+      },
+      {
+        "row": 428,
+        "column": "S",
+        "asset_id": "ENV-TOWER-CORNER-COLUMN-05M"
+      }
+    ],
+    "stale_overview_formula": [
+      {
+        "cell": "A6",
+        "formula": "=COUNTA('资产主表'!$A$6:$A$423)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C6",
+        "formula": "=COUNTIF('资产主表'!$K$6:$K$423,\"已完成\")+COUNTIF('资产主表'!$K$6:$K$423,\"原型已接入\")+COUNTIF('资产主表'!$K$6:$K$423,\"正式美术已接入\")+COUNTIF('资产主表'!$K$6:$K$423,\"已优化并正式接入\")+COUNTIF('资产主表'!$K$6:$K$423,\"Blender源已完成\")+COUNTIF('资产主表'!$K$6:$K$423,\"已导入；优化完成\")",
+        "expected_end": 428
+      },
+      {
+        "cell": "E6",
+        "formula": "=COUNTIF('资产主表'!$K$6:$K$423,\"待制作\")+COUNTIF('资产主表'!$K$6:$K$423,\"程序占位\")",
+        "expected_end": 428
+      },
+      {
+        "cell": "G6",
+        "formula": "=COUNTIF('资产主表'!$S$6:$S$423,\"重复\")",
+        "expected_end": 428
+      },
+      {
+        "cell": "B10",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A10)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C10",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A10)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B11",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A11)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C11",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A11)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B12",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A12)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C12",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A12)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B13",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A13)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C13",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A13)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B14",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A14)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C14",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A14)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B15",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A15)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C15",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A15)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B16",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A16)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C16",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A16)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B17",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A17)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C17",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A17)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      },
+      {
+        "cell": "B18",
+        "formula": "=COUNTIF('资产主表'!$C$6:$C$423,A18)",
+        "expected_end": 428
+      },
+      {
+        "cell": "C18",
+        "formula": "=SUMPRODUCT(('资产主表'!$C$6:$C$423=A18)*(('资产主表'!$K$6:$K$423=\"已完成\")+('资产主表'!$K$6:$K$423=\"原型已接入\")+('资产主表'!$K$6:$K$423=\"正式美术已接入\")+('资产主表'!$K$6:$K$423=\"已优化并正式接入\")+('资产主表'!$K$6:$K$423=\"Blender源已完成\")+('资产主表'!$K$6:$K$423=\"已导入；优化完成\")))",
+        "expected_end": 428
+      }
+    ]
+  }
+}

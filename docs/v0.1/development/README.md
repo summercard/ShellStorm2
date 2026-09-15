@@ -6,6 +6,14 @@
 - [WORLD-BLOCKS 四区块场景树与资产目录整理](2026-09-13_world_level_blocks.md)：统一天台、基地、首关战斗与楼梯区块，简化运行名并同步 Blender 对照和资产台账。
 - [Battle 与 Stairs 白盒目录归一](2026-09-14_battle_stairs_whitebox_relocation.md)：将98–95F战斗区和楼梯区重新定性为白盒阶段，统一数据、Blender输出和效果图目录。
 - [楼梯间 Godot 反推与正式 Blender 源](2026-09-14_stairs_formal_blender_from_godot.md)：按当前12米楼梯GLB反推白盒合同，生成只含两个楼梯间资产包的正式源且不重导入Godot。
+- [楼梯间参考图美术深化 v016](2026-09-14_stairs_reference_art_v016.md)：严格保留 v015 楼梯空间与接口，在原位增加工业墙板、管线、标识、灯带、灯光和固定验收镜头；Blender 材质/UV专项通过，未导入Godot。
+- [楼梯间通用组件重整与栏杆修复 v017](2026-09-14_stairs_component_reclassification_v017.md)：墙、地板、楼梯收口为三个通用组件，装饰按七类内容组件整理；不改变 v016 组合与坐标，并按踏步真实边界重建栏杆。
+- [楼梯间主墙、删墙、栏杆贴边与二楼墙高修复 v018](2026-09-14_stairs_wall_railing_height_v018.md)：主装饰迁到指定墙面，移除标注位置的一二楼墙段，将楼板栏杆落到边缘并统一二楼墙高；保留 v017 组件边界。
+- [楼梯间对面留空墙位纠正 v019](2026-09-14_stairs_opposite_wall_opening_v019.md)：恢复 v018 误删的右侧双层墙段，将开口改到用户补充截图指定的左侧首跨；其它已确认修改保持锁定。
+- [楼梯间 Blender 美术源目录规范化 v019](2026-09-14_stairs_art_source_storage_v019.md)：将 v019 建立为项目资产目录中的唯一美术源单元，源文件、组件清单、验收图与 QA 按职责对应存放。
+- [楼梯间墙地与墙面配件深化 v020](2026-09-14_stairs_wall_floor_detail_v020.md)：保持原组合与十类组件，重做参考墙面附件、墙板和地板表面；117个对象锁定与严格UV验收通过，未导入Godot。
+- [楼梯间复制、反向装配与99→98层对应摆放 v021](2026-09-15_stairs_dual_assembly_v021.md)：将完整楼梯间复制为两个独立装配体，按区块合同相反朝向放置到100→99与99→98层，并保持十类组件归档不变。
+- [楼梯间 v021 正式导入 Godot](2026-09-15_stairwell_art_v002_godot_import.md)：导出两份GLB v002，以PackedScene替换临时楼梯资产，同步碰撞、共享色盘、台账与真实渲染验收。
 - [局内关卡01-顶部数据库命名规范](2026-09-14_level01_top_database_naming.md)：将稳定的两位数字编号与可变设定名拆分，保持Battle节点、AssetID和文件路径不变。
 - [白模JSON对齐3Dgame-design](2026-09-14_whitebox_3dgame_design_schema.md)：Battle与Stairs白模数据升级为工具可直接读取的v3场景文档，项目合同集中到`projectMetadata`。
 - [Blender 原生关卡搭建插件](2026-09-14_blender_level_builder_addon.md)：以 `.blend` 为编辑事实所有者，提供组件库、参数化可编辑白盒、规范Collection和磁盘资产包镜像；r2 改为单网格并锚点对齐游戏资产、修复吸附、增强预览。

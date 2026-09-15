@@ -1,0 +1,24 @@
+{
+  "asset_id": "ENV-TOWER-STAIRWELL-ART-SOURCE",
+  "version": "v019",
+  "block_id": "stairs",
+  "display_name": "塔楼楼梯间美术源",
+  "production_stage": "blender_art_source",
+  "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend",
+  "baseline_source": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+  "component_catalog": "component_packages/catalog.json",
+  "renders": [
+    "renders/stairwell_art_v019_wall_swap_overview.png",
+    "renders/stairwell_art_v019_opposite_opening_close.png"
+  ],
+  "qa": {
+    "report": "qa/QA_REPORT.md",
+    "scope_verifier": "qa/verify_scope.py",
+    "blender_validation": "validate_game_prop.py --all-meshes: passed"
+  },
+  "output_mesh_count": 301,
+  "component_package_count": 10,
+  "runtime_imported": false,
+  "export_glb": null,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
+}

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v002.glb" id="1_visual"]
+
+[node name="EnvTowerStairwellGeneric12MRootTop3DV002" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-STAIRWELL-GENERIC-12M"
+metadata/asset_version = "v002"
+metadata/blender_source_version = "v021"
+metadata/block_id = "stairs"
+metadata/collision_owner = "TowerDescent3D"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

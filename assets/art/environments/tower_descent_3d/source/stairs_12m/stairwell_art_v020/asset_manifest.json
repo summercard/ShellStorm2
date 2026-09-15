@@ -1,0 +1,57 @@
+{
+  "asset_id": "ENV-TOWER-STAIRWELL-ART-SOURCE",
+  "version": "v020",
+  "block_id": "stairs",
+  "display_name": "塔楼楼梯间美术源",
+  "production_stage": "blender_art_source",
+  "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/env_tower_stairwell_art_source_v020.blend",
+  "baseline_source": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+  "component_catalog": "component_packages/catalog.json",
+  "renders": [
+    "renders/overview.png",
+    "renders/wall_focus.png",
+    "renders/floor_close.png",
+    "renders/top.png",
+    "renders/railing_opening.png",
+    "renders/before_wall_focus.png",
+    "renders/before_overview.png"
+  ],
+  "qa": {
+    "report": "qa/QA_REPORT.md",
+    "scope_verifier": "qa/verify_scope.py",
+    "scope_result": "qa/scope_result.json",
+    "material_result": "qa/material_result.json"
+  },
+  "output_mesh_count": 382,
+  "component_package_count": 10,
+  "runtime_imported": false,
+  "export_glb": null,
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "previous_source": "/Users/summercards/ShellStorm2/assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v019/env_tower_stairwell_art_source_v019.blend",
+  "source_sha256": "78134c5e71b8104c629e2f4026ee26ef5cb26473a9865bf7f39c080026f7c629",
+  "scope": {
+    "editable": [
+      "wall_surfaces",
+      "floor_surfaces",
+      "wall_accessories",
+      "floor_attached_details",
+      "presentation_lights"
+    ],
+    "locked": [
+      "stair_meshes",
+      "platform_railings",
+      "fixed_plant",
+      "original_wall_floor_geometry",
+      "existing_opening_positions",
+      "10_output_collections"
+    ]
+  },
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "scene_design_docs": [
+    "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "floor_range": "stairs_12m_existing_assembly",
+  "design_scope": "Existing stairwell wall/floor art detail and wall accessories only"
+}

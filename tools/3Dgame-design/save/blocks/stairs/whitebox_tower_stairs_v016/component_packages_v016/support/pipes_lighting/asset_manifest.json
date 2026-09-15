@@ -1,0 +1,62 @@
+{
+  "asset_id": "STAIRS-V016-PIPES-LIGHTING",
+  "display_name": "楼梯间_管线与照明_资产包",
+  "slug": "pipes_lighting",
+  "category": "support",
+  "version": "v016",
+  "source_blend": "/Users/summercards/ShellStorm2/tools/3Dgame-design/save/blocks/stairs/whitebox_tower_stairs_v016/whitebox_tower_stairs_v016.blend",
+  "blender_collection": "楼梯间_管线与照明_资产包",
+  "objects": [
+    "纵向服务管_33.05_-17.8",
+    "纵向服务管_33.05_-16.95",
+    "纵向服务管_46.95_-5.8",
+    "后墙_竖向管_34.1",
+    "后墙_竖向管_34.45",
+    "后墙_竖向管_45.55",
+    "后墙_竖向管_45.9",
+    "后墙_横向管_-18.0",
+    "后墙_横向管_-17.25",
+    "后墙_横向管_-6.1",
+    "后墙_横向管_-5.35",
+    "管夹_左_1",
+    "管夹_左_6",
+    "管夹_左_11",
+    "管夹_左_16",
+    "管夹_左_21",
+    "管夹_左_26",
+    "蓝色壁灯_左_3.0_UI灯光",
+    "蓝色壁灯_左_13.0_UI灯光",
+    "蓝色壁灯_左_23.0_UI灯光",
+    "蓝色壁灯_后_36.2_UI灯光",
+    "蓝色壁灯_后_43.8_UI灯光"
+  ],
+  "root_object": "纵向服务管_33.05_-17.8",
+  "world_bounds": {
+    "min": [
+      32.77,
+      -1.0,
+      -19.8
+    ],
+    "max": [
+      47.05,
+      27.12,
+      1.0
+    ]
+  },
+  "local_origin": [
+    40.0,
+    12.35,
+    -21.27
+  ],
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "export_glb": null,
+  "collision_status": "source geometry retained; packaging not exported",
+  "runtime_imported": false
+}

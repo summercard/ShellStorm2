@@ -1,0 +1,197 @@
+{
+  "version": "v019",
+  "structural_component_count": 3,
+  "decoration_component_count": 7,
+  "packages": [
+    {
+      "asset_id": "STAIRS-V019-COMP-WALL",
+      "path": "architecture/wall_component",
+      "collection": "通用墙组件_资产包",
+      "role": "universal_wall",
+      "object_count": 26,
+      "bounds": {
+        "min": [
+          32.5,
+          -2.8,
+          -21.2
+        ],
+        "max": [
+          47.5,
+          27.5,
+          2.6
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-COMP-FLOOR",
+      "path": "architecture/floor_component",
+      "collection": "通用地板组件_资产包",
+      "role": "universal_floor_with_edge_railing",
+      "object_count": 39,
+      "bounds": {
+        "min": [
+          32.5,
+          -2.6221,
+          -21.2
+        ],
+        "max": [
+          47.5,
+          27.5,
+          -7.845
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-COMP-STAIR",
+      "path": "architecture/stair_component",
+      "collection": "通用楼梯组件_资产包",
+      "role": "universal_stairs_with_railing",
+      "object_count": 94,
+      "bounds": {
+        "min": [
+          33.501,
+          3.0103,
+          -21.2703
+        ],
+        "max": [
+          46.501,
+          18.2303,
+          -7.8604
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-WALL",
+      "path": "decorations/wall_surface",
+      "collection": "墙面装甲与结构框_装饰组件",
+      "role": "wall_attached_detail",
+      "object_count": 54,
+      "bounds": {
+        "min": [
+          32.55,
+          -2.59,
+          -20.74
+        ],
+        "max": [
+          47.45,
+          27.44,
+          2.4
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-FLOOR",
+      "path": "decorations/floor_guidance",
+      "collection": "地面导光与警示_装饰组件",
+      "role": "floor_attached_detail",
+      "object_count": 41,
+      "bounds": {
+        "min": [
+          32.99,
+          -2.1,
+          -20.89
+        ],
+        "max": [
+          47.01,
+          27.01,
+          2.34
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-PIPES",
+      "path": "decorations/pipes",
+      "collection": "工业管线_装饰组件",
+      "role": "cross_scene_support",
+      "object_count": 17,
+      "bounds": {
+        "min": [
+          32.89,
+          -1.0,
+          -19.8
+        ],
+        "max": [
+          47.05,
+          27.12,
+          1.0
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-LIGHT",
+      "path": "decorations/light_geometry",
+      "collection": "灯带与发光几何_装饰组件",
+      "role": "emissive_geometry",
+      "object_count": 5,
+      "bounds": {
+        "min": [
+          32.77,
+          1.7,
+          -3.08
+        ],
+        "max": [
+          45.0,
+          27.07,
+          -0.92
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-SIGN",
+      "path": "decorations/signage",
+      "collection": "楼层标识与海报_装饰组件",
+      "role": "signage",
+      "object_count": 10,
+      "bounds": {
+        "min": [
+          32.73,
+          -2.508,
+          -16.85
+        ],
+        "max": [
+          42.9,
+          26.95,
+          0.07
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-CONTROL",
+      "path": "decorations/controls",
+      "collection": "控制盒_装饰组件",
+      "role": "fixed_facility_attachment",
+      "object_count": 6,
+      "bounds": {
+        "min": [
+          32.775,
+          15.825,
+          -16.125
+        ],
+        "max": [
+          47.225,
+          26.975,
+          -1.975
+        ]
+      }
+    },
+    {
+      "asset_id": "STAIRS-V019-DECO-PLANT",
+      "path": "decorations/fixed_plant",
+      "collection": "固定绿植_装饰组件",
+      "role": "fixed_display_attachment",
+      "object_count": 9,
+      "bounds": {
+        "min": [
+          44.0159,
+          24.225,
+          -8.775
+        ],
+        "max": [
+          45.5841,
+          25.575,
+          -5.9231
+        ]
+      }
+    }
+  ]
+}

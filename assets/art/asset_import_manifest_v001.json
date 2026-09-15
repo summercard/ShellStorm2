@@ -142,10 +142,10 @@
       "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
       "name_cn": "塔楼通用12米U形楼梯间",
       "category": "environment_module",
-      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v001.glb",
-      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
-      "production_stage": "formal_blender_source",
-      "runtime": "src/world3d/TowerDescent3D.gd",
+      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v002.glb",
+      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+      "production_stage": "runtime_integrated",
+      "runtime": "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d_v002.tscn",
       "footprint_size_m": [
         15.0,
         30.0
@@ -154,18 +154,18 @@
       "upper_floor_m": 0.0,
       "lower_floor_m": -12.0,
       "lower_landing_top_m": -11.9,
-      "version": "v001",
-      "collision": "Godot generates trimesh collision from Walkable and four enclosure meshes",
-      "status": "formal_source_complete_runtime_not_reimported"
+      "version": "v002",
+      "collision": "Godot runtime: one flush slope plane per flight in StairUnifiedSupport; lower-only camera slab; 4 flight guards aligned to v021 visible rails at +/-2.15m plus 2 landing edge guards with 0.15m closed corner joins",
+      "status": "runtime_integrated_verified"
     },
     "tower_stairwell_rooftop_12m": {
       "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
       "name_cn": "塔楼楼顶专用12米U形楼梯间",
       "category": "environment_module",
-      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v001.glb",
-      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
-      "production_stage": "formal_blender_source",
-      "runtime": "src/world3d/TowerDescent3D.gd",
+      "glb": "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v002.glb",
+      "source": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+      "production_stage": "runtime_integrated",
+      "runtime": "assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d_v002.tscn",
       "footprint_size_m": [
         15.0,
         30.0
@@ -174,9 +174,9 @@
       "upper_floor_m": 0.0,
       "lower_floor_m": -12.0,
       "lower_landing_top_m": -11.9,
-      "version": "v001",
-      "collision": "Godot generates trimesh collision from Walkable and four enclosure meshes",
-      "status": "formal_source_complete_runtime_not_reimported"
+      "version": "v002",
+      "collision": "Godot runtime: one flush slope plane per flight in StairUnifiedSupport; lower-only camera slab; 4 flight guards aligned to v021 visible rails at +/-2.15m plus 2 landing edge guards with 0.15m closed corner joins",
+      "status": "runtime_integrated_verified"
     },
     "base99_mezzanine_20x10_z5": {
       "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",

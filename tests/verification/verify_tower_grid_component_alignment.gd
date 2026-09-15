@@ -145,56 +145,88 @@ func _validate_stairwell_5m_contract(
 			imported = child
 			break
 	if imported == null:
-		failures.append("%s has no imported 12m stairwell v001" % connector.name)
+		failures.append("%s has no imported 12m stairwell v002" % connector.name)
 		return
 	if (
-		str(imported.get_meta("asset_version", "")) != "v001"
-		or str(imported.get_meta("blender_source_version", "")) != "v011"
+		str(imported.get_meta("asset_version", "")) != "v002"
+		or str(imported.get_meta("blender_source_version", "")) != "v021"
 	):
-		failures.append("%s does not use Blender v011 / 12m stair asset v001" % connector.name)
+		failures.append("%s does not use Blender v021 / 12m stair art asset v002" % connector.name)
 
-	var lower_aabb := AABB()
-	var upper_aabb := AABB()
-	var has_lower := false
-	var has_upper := false
+	var has_art_visual := false
+	var walkable_count := 0
 	var enclosure_count := 0
-	var imported_inverse := imported.global_transform.affine_inverse()
 	for mesh_value in imported.find_children("*", "MeshInstance3D", true, false):
 		var mesh := mesh_value as MeshInstance3D
 		if mesh == null or mesh.mesh == null:
 			continue
-		var local_aabb := (imported_inverse * mesh.global_transform) * mesh.get_aabb()
-		if "LowerDoorLanding_Walkable" in mesh.name:
-			lower_aabb = local_aabb
-			has_lower = true
-		elif "UpperDoorLanding_Walkable" in mesh.name:
-			upper_aabb = local_aabb
-			has_upper = true
+		if "StairwellArt_VisualOnly" in mesh.name:
+			has_art_visual = true
+		elif "Walkable" in mesh.name:
+			walkable_count += 1
 		elif "EnclosureWall_" in mesh.name:
 			enclosure_count += 1
+	if not has_art_visual:
+		failures.append("%s v021 art visual batch is missing" % connector.name)
+	if walkable_count != 1:
+		failures.append("%s does not have one optimized walkable collision mesh" % connector.name)
+	if enclosure_count != 1:
+		failures.append("%s does not have one optimized enclosure collision mesh" % connector.name)
+	var camera_slab_count := 0
+	var lower_camera_slab_count := 0
+	var camera_wall_proxy_count := 0
+	var guard_collision_count := 0
+	var full_run_guard_count := 0
+	var landing_guard_count := 0
+	var support_raise_verified := false
+	for body_value in connector.find_children("*", "StaticBody3D", true, false):
+		var body := body_value as StaticBody3D
+		if body == null:
+			continue
+		if bool(body.get_meta("camera_stair_slab", false)):
+			camera_slab_count += 1
+			if str(body.get_meta("camera_stair_slab_role", "")) == "lower":
+				lower_camera_slab_count += 1
+		if bool(body.get_meta("stair_camera_wall_proxy", false)):
+			camera_wall_proxy_count += 1
+		if bool(body.get_meta("stair_guard_collision", false)):
 			if (
-				absf(local_aabb.position.y + TowerGeometry3D.FLOOR_HEIGHT_M) > 0.001
-				or absf(local_aabb.end.y + 0.1) > 0.001
+				"UpperLanding" not in body.name
+				and not is_equal_approx(float(body.get_meta("stair_guard_visual_half_width_m", 0.0)), 2.15)
 			):
-				failures.append("%s enclosure wall is not the native -12.0..-0.1m visual" % mesh.name)
-	if not has_lower:
-		failures.append("%s normalized lower landing is missing" % connector.name)
-	elif (
-		absf(lower_aabb.size.x - 15.0) > 0.001
-		or absf(lower_aabb.size.z - 30.0) > 0.001
-		or absf(lower_aabb.end.y + TowerGeometry3D.WALL_VISUAL_HEIGHT_M) > 0.001
-	):
-		failures.append("%s lower landing is not 15x30m with top at -11.9m" % connector.name)
-	if not has_upper:
-		failures.append("%s unchanged upper landing is missing" % connector.name)
-	elif (
-		absf(upper_aabb.size.x - 14.0269) > 0.001
-		or absf(upper_aabb.size.z - 6.0) > 0.001
-		or absf(upper_aabb.end.y) > 0.001
-	):
-		failures.append("%s upper landing changed from the approved v008 geometry" % connector.name)
-	if enclosure_count != 4:
-		failures.append("%s normalized stairwell does not have four enclosure walls" % connector.name)
+				failures.append("%s flight guard is not aligned to v021 visible railing" % connector.name)
+			for shape_value in body.find_children("*", "CollisionShape3D", true, false):
+				var guard_shape := shape_value as CollisionShape3D
+				if guard_shape != null and guard_shape.shape != null:
+					guard_collision_count += 1
+					if bool(body.get_meta("stair_guard_full_coverage", false)):
+						if "UpperLanding" in body.name:
+							landing_guard_count += 1
+						else:
+							full_run_guard_count += 1
+		if body.name == "StairUnifiedSupport":
+			support_raise_verified = (
+				is_zero_approx(float(body.get_meta("stair_surface_raise_m", -1.0)))
+				and int(body.get_meta("stair_flight_plane_count", 0)) == 2
+				and int(body.get_meta("stair_surface_segment_count_per_flight", 0)) == 1
+			)
+	if camera_slab_count != 1 or lower_camera_slab_count != 1:
+		failures.append("%s must keep only the lower-flight camera slab" % connector.name)
+	if camera_wall_proxy_count != 1:
+		failures.append("%s v002 south-wall camera-only collision proxy is missing" % connector.name)
+	if guard_collision_count != 6:
+		failures.append("%s must own four flight guards and two upper-landing edge guards" % connector.name)
+	if full_run_guard_count != 4 or landing_guard_count != 2:
+		failures.append("%s railing blockers do not cover both flights and both landing edge segments" % connector.name)
+	if not support_raise_verified:
+		failures.append("%s must use exactly one flush slope plane per flight" % connector.name)
+	var smooth_support_count := 0
+	for collision_value in connector.find_children("ContinuousFloorFlightsLanding", "CollisionShape3D", true, false):
+		var collision := collision_value as CollisionShape3D
+		if collision != null and bool(collision.get_meta("persistent_stair_support", false)):
+			smooth_support_count += 1
+	if smooth_support_count != 1:
+		failures.append("%s does not provide continuous Godot stair/floor support" % connector.name)
 
 
 func _validate_stair_approach_wall_modules(

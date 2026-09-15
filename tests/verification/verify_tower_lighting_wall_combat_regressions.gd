@@ -455,11 +455,9 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 		if connector == null or not bool(connector.get_meta("is_vertical_connector", false)):
 			continue
 		var enclosure_count := 0
-		var marked_enclosure_count := 0
+		var marked_camera_wall_count := 0
 		var camera_stair_slab_count := 0
 		var camera_stair_slab_roles: Dictionary = {}
-		var south_z := -INF
-		var marked_z := -INF
 		for body_value in connector.find_children("*", "StaticBody3D", true, false):
 			var body := body_value as StaticBody3D
 			if bool(body.get_meta("camera_stair_slab", false)):
@@ -469,6 +467,8 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 				)] = true
 			if body.name.begins_with("StairwellWall_"):
 				failures.append("Legacy invisible stair enclosure box remains: %s" % body.get_path())
+			if bool(body.get_meta("stair_camera_wall_proxy", false)):
+				marked_camera_wall_count += 1
 			if not bool(body.get_meta("stair_enclosure_collision", false)):
 				continue
 			enclosure_count += 1
@@ -476,23 +476,17 @@ func _validate_stair_camera_walls(tower: TowerDescent3D, failures: Array[String]
 			if visual == null or visual.mesh == null:
 				failures.append("Stair enclosure collision has no matching visible mesh: %s" % body.get_path())
 				continue
-			var world_aabb := visual.global_transform * visual.get_aabb()
-			if world_aabb.size.x > world_aabb.size.z:
-				south_z = maxf(south_z, world_aabb.get_center().z)
-				if bool(body.get_meta("camera_lower_wall", false)):
-					marked_enclosure_count += 1
-					marked_z = world_aabb.get_center().z
-		if enclosure_count != 4:
-			failures.append("Stairwell does not have four mesh-matched enclosure colliders: %s" % connector.name)
-		if marked_enclosure_count != 1 or not is_equal_approx(marked_z, south_z):
-			failures.append("Stairwell south visible wall is not the sole camera wall: %s" % connector.name)
+		if enclosure_count != 1:
+			failures.append("Stairwell does not have one optimized enclosure collider: %s" % connector.name)
+		if marked_camera_wall_count != 1:
+			failures.append("Stairwell south camera-only proxy is not unique: %s" % connector.name)
 		if (
-			camera_stair_slab_count != 2
-			or not camera_stair_slab_roles.has("upper")
+			camera_stair_slab_count != 1
 			or not camera_stair_slab_roles.has("lower")
+			or camera_stair_slab_roles.has("upper")
 		):
 			failures.append(
-				"Stairwell upper/lower flight camera slabs are incomplete: %s count=%d roles=%s"
+				"Stairwell must retain only the lower-flight camera slab: %s count=%d roles=%s"
 				% [connector.name, camera_stair_slab_count, camera_stair_slab_roles.keys()]
 			)
 

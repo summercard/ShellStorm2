@@ -1,0 +1,87 @@
+{
+  "asset_id": "ENV-TOWER-STAIRWELL-ART-SOURCE",
+  "version": "v021",
+  "block_id": "stairs",
+  "display_name": "塔楼楼梯间美术源",
+  "production_stage": "runtime_integrated",
+  "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v021/env_tower_stairwell_dual_art_source_v021.blend",
+  "baseline_source": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
+  "component_catalog": "component_packages/catalog.json",
+  "renders": [
+    "renders/dual_overview.png",
+    "renders/dual_top.png",
+    "renders/stair_a_100_99.png",
+    "renders/stair_b_99_98.png"
+  ],
+  "qa": {
+    "report": "qa/QA_REPORT.md",
+    "scope_result": "qa/verify_result.json",
+    "material_result": "qa/material_result.json"
+  },
+  "output_mesh_count": 764,
+  "component_package_count": 10,
+  "runtime_imported": true,
+  "export_glb": [
+    "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_rooftop_12m_top3d_v002.glb",
+    "assets/art/environments/tower_descent_3d/components/env_tower_stairwell_generic_12m_top3d_v002.glb"
+  ],
+  "palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+  "previous_source": "assets/art/environments/tower_descent_3d/source/stairs_12m/stairwell_art_v020/env_tower_stairwell_art_source_v020.blend",
+  "source_sha256": "cf1756fe3d7f96a835a4a53f28220b23083007e40a7afad8a40b74bdea47f8ef",
+  "runtime_version": "v002",
+  "runtime_meshes_per_assembly": 3,
+  "runtime_collision_sources_per_assembly": 2,
+  "runtime_verification": "component_alignment, descent_flow, level_blocks and Forward+ visual passed",
+  "scope": {
+    "editable": [
+      "wall_surfaces",
+      "floor_surfaces",
+      "wall_accessories",
+      "floor_attached_details",
+      "presentation_lights"
+    ],
+    "locked": [
+      "stair_meshes",
+      "platform_railings",
+      "fixed_plant",
+      "original_wall_floor_geometry",
+      "existing_opening_positions",
+      "10_output_collections"
+    ]
+  },
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "scene_design_docs": [
+    "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "floor_range": "stairs_12m_existing_assembly",
+  "design_scope": "Duplicate the complete stairwell as an independent 99-to-98 assembly and place both stairwells at the exact block-contract transforms",
+  "assembly_count": 2,
+  "assembly_contract": [
+    {
+      "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
+      "display_name": "楼梯A（100→99）",
+      "root": "楼梯A_100至99层_装配根",
+      "position": [
+        -32.5,
+        0,
+        0
+      ],
+      "rotation_z_deg": 180,
+      "object_count": 382
+    },
+    {
+      "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
+      "display_name": "楼梯B（99→98）",
+      "root": "楼梯B_99至98层_装配根",
+      "position": [
+        32.5,
+        0,
+        -9
+      ],
+      "rotation_z_deg": 0,
+      "object_count": 382
+    }
+  ]
+}
