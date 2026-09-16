@@ -1,19 +1,6 @@
 # ShellStorm2 角色反推资料
 
-当前版为 v021 / SKEL-BUNNY01-004。模型面向 Blender +Y，导出为 Godot -Z，不附加偏航补偿。完整包含八个玩法状态和 walking、armed_walking、armed_moving、armed_idle 四个登记变体，不再依赖 v009/v011 动作。模型几何保持不变，身体表现映射 `body → chest`。v021 正式玩家已关闭 `_update_state_motion` 旧程序动画，身体、头、耳、手和脚只接受当前 Blender 库；武器节点在采样后跟随右手掌心，不能反向覆盖手部。双手长枪动作未制作，暂用单手 armed 三动作并在账本显式报告。以制作流程顶部 v021 接入章节及版本中转账本为准；下面 v010/v011 内容仅属历史。
-
 本文件记录当前工程的可核验入口，不代替执行时对目标资产的再次审计。引用路径均相对 ShellStorm2 项目根目录。
-
-## 2026-09-09 生产链更新
-
-当前双文件生产规则见 `docs/v0.1/16.1_角色美术制作与动作导入流程.md`。
-模型：`assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/v021/source/model/chr_bunny01_model_v021.blend`。
-动作：同包 `source/animation/chr_bunny01_animation_v021.blend`。
-运行包装：同包 `runtime/chr_bunny01_root_v021.tscn`；动作适配：`src/player3d/CharacterMotionLibrary3D.gd`。
-中转账本：同包 `character_transfer_ledger_v021.json`。
-
-导出 `scripts/blender/export_character_bundle.py`；中转校验/包装生成 `tools/asset_pipeline/import_character_bundle.py`；专项 `verify_character_authoring_bundle`。
-v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于理解历史兼容消费者；新母版使用真实共享骨架，骨动作通过表现节点适配器进入原功能层级。
 
 ## 先读的运行时证据
 
@@ -27,7 +14,7 @@ v008 为迁移回滚。以下旧 v006 路径及“节点驱动”描述仅用于
 | 手持/背挂验收 | `tests/verification/verify_player3d_weapon_grip_visual.gd`、`tests/verification/verify_player3d_lower_body_socket_flow.gd` |
 | 敌人表现与尺寸消费 | `src/enemy3d/EnemyAvatar3D.gd`、对应 `Enemy3D` 场景和测试 |
 
-当前 Bunny 玩家是**骨动作到节点映射角色**，不是可随意替换层级的 Skeleton 运行时：`BunnyRig` 下含 `BodyJoint`、`HeadJoint`、`HandRoot/HandJointL`、`HandRoot/HandJointR`、`FeetRoot/FootJointL`、`FeetRoot/FootJointR`。`PlayerAvatar3D.gd` 只读取状态和进度，`CharacterMotionLibrary3D.gd` 采样 Blender 动作；v021 不得调用旧程序姿势生成器。新玩家变体必须先确认当前消费者仍使用这套层级。
+当前 Bunny 玩家是**节点驱动角色**，不是可随意替换成 Skeleton 的角色：`BunnyRig` 下含 `BodyJoint`、`HeadJoint`、`HandRoot/HandJointL`、`HandRoot/HandJointR`、`FeetRoot/FootJointL`、`FeetRoot/FootJointR`，其状态姿势由 `PlayerAvatar3D.gd` 驱动。新玩家变体必须先确认当前消费者是否仍使用这套层级。
 
 ## 当前玩家挂点与所有权
 
