@@ -14,6 +14,7 @@
 - [楼梯间墙地与墙面配件深化 v020](2026-09-14_stairs_wall_floor_detail_v020.md)：保持原组合与十类组件，重做参考墙面附件、墙板和地板表面；117个对象锁定与严格UV验收通过，未导入Godot。
 - [楼梯间复制、反向装配与99→98层对应摆放 v021](2026-09-15_stairs_dual_assembly_v021.md)：将完整楼梯间复制为两个独立装配体，按区块合同相反朝向放置到100→99与99→98层，并保持十类组件归档不变。
 - [楼梯间 v021 正式导入 Godot](2026-09-15_stairwell_art_v002_godot_import.md)：导出两份GLB v002，以PackedScene替换临时楼梯资产，同步碰撞、共享色盘、台账与真实渲染验收。
+- [入口安全房 v003 正式导入 Godot](2026-09-16_entry_safe_room_art_v003_godot_import.md)：将98F入口安全房制作并拆分为33个正式资产包，以独立PackedScene和整房总装配接入布局冻结后的运行时流程。
 - [局内关卡01-顶部数据库命名规范](2026-09-14_level01_top_database_naming.md)：将稳定的两位数字编号与可变设定名拆分，保持Battle节点、AssetID和文件路径不变。
 - [白模JSON对齐3Dgame-design](2026-09-14_whitebox_3dgame_design_schema.md)：Battle与Stairs白模数据升级为工具可直接读取的v3场景文档，项目合同集中到`projectMetadata`。
 - [Blender 原生关卡搭建插件](2026-09-14_blender_level_builder_addon.md)：以 `.blend` 为编辑事实所有者，提供组件库、参数化可编辑白盒、规范Collection和磁盘资产包镜像；r2 改为单网格并锚点对齐游戏资产、修复吸附、增强预览。

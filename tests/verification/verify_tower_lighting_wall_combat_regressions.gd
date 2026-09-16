@@ -8,6 +8,12 @@ const ENEMY_SCENE: PackedScene = preload(
 const HOSTILE_TYPES: Array[String] = [
 	"COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE", "SCAVENGE",
 ]
+const ENTRY_SAFE_ROOM_ART_NODE_NAME := "EntrySafeRoomArt_v003"
+const ENTRY_SAFE_ROOM_LEGACY_WALL_PREFIXES: Array[String] = [
+	"Imported_SolidWall5M_",
+	"Imported_CornerL5M_",
+	"Imported_DoorWall5M_",
+]
 
 
 func _ready() -> void:
@@ -350,12 +356,15 @@ func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -
 		if room == null or not is_instance_valid(room) or not room.tower_module_shell or room.size_class == "rooftop":
 			continue
 		room.set_stream_state(1)
+		var uses_entry_safe_room_art := room.get_node_or_null(ENTRY_SAFE_ROOM_ART_NODE_NAME) != null
 		for value in room.find_children("*", "MeshInstance3D", true, false):
 			var mesh := value as MeshInstance3D
 			if not (
 				mesh.name.begins_with("Imported_SolidWall5M_")
 				or mesh.name in ["Wall_Long", "Wall_Short", "WallDoor_Left", "WallDoor_Right", "WallDoor_Lintel"]
 			):
+				continue
+			if uses_entry_safe_room_art and _is_entry_safe_room_legacy_wall(mesh):
 				continue
 			var world_aabb := mesh.global_transform * mesh.get_aabb()
 			var room_floor_y := room.global_position.y
@@ -401,6 +410,17 @@ func _validate_wall_components(tower: TowerDescent3D, failures: Array[String]) -
 					or not bool(proxy.get_meta("camera_lower_wall", false))
 				):
 					failures.append("Door camera proxy can affect gameplay collision: %s" % proxy.get_path())
+
+
+func _is_entry_safe_room_legacy_wall(node: Node) -> bool:
+	var current := node
+	while current != null:
+		var current_name := str(current.name)
+		for prefix in ENTRY_SAFE_ROOM_LEGACY_WALL_PREFIXES:
+			if current_name.begins_with(prefix):
+				return true
+		current = current.get_parent()
+	return false
 
 
 func _validate_hidden_connector_collisions(tower: TowerDescent3D, failures: Array[String]) -> void:

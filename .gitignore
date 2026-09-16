@@ -4,6 +4,7 @@
 # Scene/facility GLB import contracts carry the shared-palette post-import hook.
 !assets/art/environments/base_facility_3d/components/**/*.glb.import
 !assets/art/environments/tower_descent_3d/components/**/*.glb.import
+!assets/art/environments/tower_zones/battle/components/**/*.glb.import
 !assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v012.glb.import
 !assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v013.glb.import
 !assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v014.glb.import
