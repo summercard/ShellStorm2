@@ -1,0 +1,1548 @@
+{
+  "blend": "/Users/summercards/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components/v001/战局区块_通用组件库_v001.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 150,
+  "polygon_count": 191482,
+  "valid_island_polygon_count": 191482,
+  "uv_reports": [
+    {
+      "object": "AP_data_banner_00_主体_制作源",
+      "polygon_count": 1126,
+      "valid_island_polygon_count": 1126,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_00_00_主体_制作源",
+      "polygon_count": 3154,
+      "valid_island_polygon_count": 3154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_00_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_01_00_主体_制作源",
+      "polygon_count": 3216,
+      "valid_island_polygon_count": 3216,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_01_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_02_00_主体_制作源",
+      "polygon_count": 3159,
+      "valid_island_polygon_count": 3159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_02_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_03_00_主体_制作源",
+      "polygon_count": 3183,
+      "valid_island_polygon_count": 3183,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_03_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_04_00_主体_制作源",
+      "polygon_count": 3151,
+      "valid_island_polygon_count": 3151,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_04_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_05_00_主体_制作源",
+      "polygon_count": 3156,
+      "valid_island_polygon_count": 3156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_05_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_portal_00_主体_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_portal_01_自发光_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_utilities_00_主体_制作源",
+      "polygon_count": 1198,
+      "valid_island_polygon_count": 1198,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_east_utilities_01_自发光_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_equipment_case_00_00_主体_制作源",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_equipment_case_01_00_主体_制作源",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_equipment_case_02_00_主体_制作源",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_equipment_case_03_00_主体_制作源",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_00_00_主体_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_00_01_自发光_制作源",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_01_00_主体_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_01_01_自发光_制作源",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_02_00_主体_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fault_tray_02_01_自发光_制作源",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_fixed_papers_00_主体_制作源",
+      "polygon_count": 1440,
+      "valid_island_polygon_count": 1440,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_floor_cabling_00_主体_制作源",
+      "polygon_count": 4714,
+      "valid_island_polygon_count": 4714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_00_00_主体_制作源",
+      "polygon_count": 1798,
+      "valid_island_polygon_count": 1798,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_00_01_自发光_制作源",
+      "polygon_count": 630,
+      "valid_island_polygon_count": 630,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_01_00_主体_制作源",
+      "polygon_count": 1708,
+      "valid_island_polygon_count": 1708,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_01_01_自发光_制作源",
+      "polygon_count": 480,
+      "valid_island_polygon_count": 480,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_02_00_主体_制作源",
+      "polygon_count": 1708,
+      "valid_island_polygon_count": 1708,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_island_02_01_自发光_制作源",
+      "polygon_count": 480,
+      "valid_island_polygon_count": 480,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_00_00_主体_制作源",
+      "polygon_count": 3154,
+      "valid_island_polygon_count": 3154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_00_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_01_00_主体_制作源",
+      "polygon_count": 3114,
+      "valid_island_polygon_count": 3114,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_01_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_02_00_主体_制作源",
+      "polygon_count": 3159,
+      "valid_island_polygon_count": 3159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_02_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_03_00_主体_制作源",
+      "polygon_count": 3285,
+      "valid_island_polygon_count": 3285,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_03_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_04_00_主体_制作源",
+      "polygon_count": 3151,
+      "valid_island_polygon_count": 3151,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_04_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_05_00_主体_制作源",
+      "polygon_count": 3156,
+      "valid_island_polygon_count": 3156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_05_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_06_00_主体_制作源",
+      "polygon_count": 3271,
+      "valid_island_polygon_count": 3271,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_06_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_07_00_主体_制作源",
+      "polygon_count": 3120,
+      "valid_island_polygon_count": 3120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_07_01_自发光_制作源",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_control_00_主体_制作源",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_control_01_自发光_制作源",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_utilities_00_主体_制作源",
+      "polygon_count": 1318,
+      "valid_island_polygon_count": 1318,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_north_utilities_01_自发光_制作源",
+      "polygon_count": 540,
+      "valid_island_polygon_count": 540,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_planter_00_00_主体_制作源",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_planter_01_00_主体_制作源",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_planter_02_00_主体_制作源",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_south_utilities_00_主体_制作源",
+      "polygon_count": 1318,
+      "valid_island_polygon_count": 1318,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_south_utilities_01_自发光_制作源",
+      "polygon_count": 540,
+      "valid_island_polygon_count": 540,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_technician_chair_00_主体_制作源",
+      "polygon_count": 350,
+      "valid_island_polygon_count": 350,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_00_00_主体_制作源",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_00_01_自发光_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_01_00_主体_制作源",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_01_01_自发光_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_02_00_主体_制作源",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_wall_service_02_01_自发光_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_control_00_主体_制作源",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_control_01_自发光_制作源",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_desk_00_主体_制作源",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_desk_01_自发光_制作源",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_portal_00_主体_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_portal_01_自发光_制作源",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_utilities_00_主体_制作源",
+      "polygon_count": 1198,
+      "valid_island_polygon_count": 1198,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_west_utilities_01_自发光_制作源",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "data_banner_主体_输出",
+      "polygon_count": 1126,
+      "valid_island_polygon_count": 1126,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_00_主体_输出",
+      "polygon_count": 3154,
+      "valid_island_polygon_count": 3154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_00_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_01_主体_输出",
+      "polygon_count": 3216,
+      "valid_island_polygon_count": 3216,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_01_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_02_主体_输出",
+      "polygon_count": 3159,
+      "valid_island_polygon_count": 3159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_02_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_03_主体_输出",
+      "polygon_count": 3183,
+      "valid_island_polygon_count": 3183,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_03_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_04_主体_输出",
+      "polygon_count": 3151,
+      "valid_island_polygon_count": 3151,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_04_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_05_主体_输出",
+      "polygon_count": 3156,
+      "valid_island_polygon_count": 3156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_05_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_portal_主体_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_portal_自发光_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_utilities_主体_输出",
+      "polygon_count": 1198,
+      "valid_island_polygon_count": 1198,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "east_utilities_自发光_输出",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "equipment_case_00_主体_输出",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "equipment_case_01_主体_输出",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "equipment_case_02_主体_输出",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "equipment_case_03_主体_输出",
+      "polygon_count": 301,
+      "valid_island_polygon_count": 301,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_00_主体_输出",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_00_自发光_输出",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_01_主体_输出",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_01_自发光_输出",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_02_主体_输出",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fault_tray_02_自发光_输出",
+      "polygon_count": 180,
+      "valid_island_polygon_count": 180,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "fixed_papers_主体_输出",
+      "polygon_count": 1440,
+      "valid_island_polygon_count": 1440,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "floor_cabling_主体_输出",
+      "polygon_count": 4714,
+      "valid_island_polygon_count": 4714,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_00_主体_输出",
+      "polygon_count": 1798,
+      "valid_island_polygon_count": 1798,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_00_自发光_输出",
+      "polygon_count": 630,
+      "valid_island_polygon_count": 630,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_01_主体_输出",
+      "polygon_count": 1708,
+      "valid_island_polygon_count": 1708,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_01_自发光_输出",
+      "polygon_count": 480,
+      "valid_island_polygon_count": 480,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_02_主体_输出",
+      "polygon_count": 1708,
+      "valid_island_polygon_count": 1708,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "island_02_自发光_输出",
+      "polygon_count": 480,
+      "valid_island_polygon_count": 480,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_00_主体_输出",
+      "polygon_count": 3154,
+      "valid_island_polygon_count": 3154,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_00_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_01_主体_输出",
+      "polygon_count": 3114,
+      "valid_island_polygon_count": 3114,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_01_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_02_主体_输出",
+      "polygon_count": 3159,
+      "valid_island_polygon_count": 3159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_02_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_03_主体_输出",
+      "polygon_count": 3285,
+      "valid_island_polygon_count": 3285,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_03_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_04_主体_输出",
+      "polygon_count": 3151,
+      "valid_island_polygon_count": 3151,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_04_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_05_主体_输出",
+      "polygon_count": 3156,
+      "valid_island_polygon_count": 3156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_05_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_06_主体_输出",
+      "polygon_count": 3271,
+      "valid_island_polygon_count": 3271,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_06_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_07_主体_输出",
+      "polygon_count": 3120,
+      "valid_island_polygon_count": 3120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_07_自发光_输出",
+      "polygon_count": 1320,
+      "valid_island_polygon_count": 1320,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_control_主体_输出",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_control_自发光_输出",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_utilities_主体_输出",
+      "polygon_count": 1318,
+      "valid_island_polygon_count": 1318,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "north_utilities_自发光_输出",
+      "polygon_count": 540,
+      "valid_island_polygon_count": 540,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "planter_00_主体_输出",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "planter_01_主体_输出",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "planter_02_主体_输出",
+      "polygon_count": 159,
+      "valid_island_polygon_count": 159,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "south_utilities_主体_输出",
+      "polygon_count": 1318,
+      "valid_island_polygon_count": 1318,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "south_utilities_自发光_输出",
+      "polygon_count": 540,
+      "valid_island_polygon_count": 540,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "technician_chair_主体_输出",
+      "polygon_count": 350,
+      "valid_island_polygon_count": 350,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_00_主体_输出",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_00_自发光_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_01_主体_输出",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_01_自发光_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_02_主体_输出",
+      "polygon_count": 270,
+      "valid_island_polygon_count": 270,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "wall_service_02_自发光_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_control_主体_输出",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_control_自发光_输出",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_desk_主体_输出",
+      "polygon_count": 1865,
+      "valid_island_polygon_count": 1865,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_desk_自发光_输出",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_portal_主体_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_portal_自发光_输出",
+      "polygon_count": 120,
+      "valid_island_polygon_count": 120,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_utilities_主体_输出",
+      "polygon_count": 1198,
+      "valid_island_polygon_count": 1198,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "west_utilities_自发光_输出",
+      "polygon_count": 420,
+      "valid_island_polygon_count": 420,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

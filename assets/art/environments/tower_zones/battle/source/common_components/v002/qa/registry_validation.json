@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "changes": [
+    [
+      "3D-场景通用",
+      "E90"
+    ],
+    [
+      "3D-场景通用",
+      "F90"
+    ],
+    [
+      "3D-场景通用",
+      "O90"
+    ],
+    [
+      "3D-场景通用",
+      "P90"
+    ]
+  ],
+  "style_differences": [],
+  "source_sha256": "5e4eca9f52cc1899ad254d2e18567b41ac03731b4593e4ec6686a91ebb21cfed"
+}

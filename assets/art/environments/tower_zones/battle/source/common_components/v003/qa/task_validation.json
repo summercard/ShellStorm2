@@ -1,0 +1,130 @@
+{
+  "passed": true,
+  "package_count": 23,
+  "group_count": 9,
+  "output_mesh_count": 39,
+  "kept_by_group": {
+    "01_服务器机柜": [
+      "north_00",
+      "north_03"
+    ],
+    "02_工作终端": [
+      "west_desk",
+      "north_control",
+      "technician_chair"
+    ],
+    "03_中央设备岛": [
+      "island_00",
+      "island_01"
+    ],
+    "04_维修与机箱": [
+      "fault_tray_00",
+      "wall_service_00",
+      "wall_service_01",
+      "wall_service_02",
+      "equipment_case_00"
+    ],
+    "05_门框与标识": [
+      "data_banner",
+      "east_portal"
+    ],
+    "06_环境陈设": [
+      "planter_00"
+    ],
+    "07_环境支持": [
+      "north_utilities",
+      "east_utilities",
+      "south_utilities",
+      "floor_cabling",
+      "fixed_papers"
+    ],
+    "08_墙壁组件": [
+      "wall_standard_5m"
+    ],
+    "09_地板组件": [
+      "floor_tile_r01_c01",
+      "floor_tile_r01_c02"
+    ]
+  },
+  "removed_by_group": {
+    "01_服务器机柜": [
+      "north_01",
+      "north_02",
+      "north_04",
+      "north_05",
+      "north_06",
+      "north_07",
+      "east_00",
+      "east_01",
+      "east_02",
+      "east_03",
+      "east_05"
+    ],
+    "02_工作终端": [
+      "west_control"
+    ],
+    "03_中央设备岛": [
+      "island_02"
+    ],
+    "04_维修与机箱": [
+      "fault_tray_01",
+      "fault_tray_02",
+      "equipment_case_01",
+      "equipment_case_02",
+      "equipment_case_03"
+    ],
+    "05_门框与标识": [],
+    "06_环境陈设": [
+      "planter_01",
+      "planter_02"
+    ],
+    "07_环境支持": [],
+    "08_墙壁组件": [
+      "wall_north_01",
+      "wall_south_01",
+      "wall_east_door_01_left",
+      "wall_east_door_01_lintel",
+      "wall_west_door_01_left",
+      "wall_west_door_01_lintel",
+      "wall_west_door_01_right"
+    ],
+    "09_地板组件": [
+      "floor_tile_r01_c03",
+      "floor_tile_r01_c04",
+      "floor_tile_r01_c05",
+      "floor_tile_r01_c06",
+      "floor_tile_r02_c01",
+      "floor_tile_r02_c02",
+      "floor_tile_r02_c03",
+      "floor_tile_r02_c04",
+      "floor_tile_r02_c05",
+      "floor_tile_r02_c06",
+      "floor_tile_r03_c01",
+      "floor_tile_r03_c02",
+      "floor_tile_r03_c03",
+      "floor_tile_r03_c04",
+      "floor_tile_r03_c05",
+      "floor_tile_r03_c06",
+      "floor_tile_r04_c01",
+      "floor_tile_r04_c02",
+      "floor_tile_r04_c03",
+      "floor_tile_r04_c04",
+      "floor_tile_r04_c05",
+      "floor_tile_r04_c06",
+      "floor_tile_r05_c01",
+      "floor_tile_r05_c02",
+      "floor_tile_r05_c03",
+      "floor_tile_r05_c04",
+      "floor_tile_r05_c05",
+      "floor_tile_r05_c06"
+    ]
+  },
+  "wall_size_m": [
+    5,
+    0.3,
+    11.9
+  ],
+  "wall_package_count": 1,
+  "floor_package_count": 2,
+  "fault_tray_straightened_yaw_degrees": 15.0
+}

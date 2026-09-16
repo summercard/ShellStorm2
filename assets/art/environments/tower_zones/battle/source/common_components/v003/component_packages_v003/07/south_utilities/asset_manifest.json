@@ -1,0 +1,41 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-SOUTH-UTILITIES",
+  "name_zh": "南墙电缆桥架与检修灯_资产包",
+  "slug": "south_utilities",
+  "category": "07_环境支持",
+  "version": "v003",
+  "source_blend": "战局区块_通用组件库_v003.blend",
+  "blender_collection": "south_utilities_通用包",
+  "root_object": "ROOT_south_utilities_通用组件",
+  "objects": [
+    "south_utilities_主体_输出",
+    "south_utilities_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    72.5,
+    -35.9746,
+    0.0
+  ],
+  "bounds_size": [
+    28.0,
+    0.39,
+    9.0506
+  ],
+  "front_direction": "+Y",
+  "source_component": "south_utilities",
+  "straightened_yaw_degrees": 0,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created"
+}

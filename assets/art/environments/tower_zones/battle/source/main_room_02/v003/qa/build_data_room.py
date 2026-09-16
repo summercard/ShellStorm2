@@ -136,7 +136,7 @@ for o in originals:
             box('格栅内凹底',(x-.7,y+.35,.322),(1.3,.9,.012),'black',1,.001)
             for k in range(7): box('检修格栅',(x-.7,y+.02+k*.11,.331),(1.21,.042,.02),'silver',0,.004)
         # Flat authored wear polygons and small scratch marks, local to each tile.
-        for k in range(18):
+        for k in range(3 if row in (2,3,4) and idx in (2,3,4,5) else 9):
             xx=x+random.uniform(-1.8,1.8); yy=y+random.uniform(-1.8,1.8); rad=random.uniform(.025,.24)
             vs=[(xx+math.cos(a)*rad*random.uniform(.6,1.2),yy+math.sin(a)*rad*.55,.308) for a in [j*math.pi/4 for j in range(8)]]
             mesh_custom('地面油漆磨损',vs,[tuple(range(8))],'black',1)
@@ -173,6 +173,7 @@ for side,loc,ang,length,cut in [('north',(0,11.98,0),0,28,False),('east',(14.48,
         box('管线固定卡',(x,0,5.4),(.09,.22,.75),'steel',0)
         box('灯条底座',(x,-.10,5.03),(1.8,.21,.18),'black',0)
         box('蓝色检修灯条',(x,-.23,5.03),(1.48,.07,.065),'cyan',3,.015)
+        box('检修灯白蓝灯芯',(x,-.272,5.033),(1.37,.016,.023),'paper',3,.005)
     for x in (-length/2+.5,length/2-.5):
         tube('转角下行管',[(x,0,9.7),(x,0,6),(x,-.05,.65)],.065,'steel',0)
     text('AUTHORIZED   /   DATA DIVISION',(0,-.07,8.0),.36,'silver',(math.pi/2,0,0))
@@ -194,8 +195,10 @@ def rack(slug,loc,ang=0,damaged=False):
         box('抽屉服务器面板',(0,-.53,z),(1.23,.16,.23),'black',0,.016)
         for x in [-.53,.53]: box('抽屉把手',(x,-.66,z),(.06,.11,.16),'steel',0,.012)
         for j in range(4): box('硬盘散热片',(-.31+j*.12,-.63,z),(.05,.028,.12),'steel',0,.002)
-        for j in range(3): box('状态LED',(.23+j*.09,-.646,z),(.04,.018,.038),'cyan' if j<2 else 'amber',3,.007)
-    for x in [-.6,.6]: box('纵向蓝灯',(x,-.68,2),(.026,.035,2.65),'cyan',3,.009)
+        for j in range(3): box('状态LED',(.23+j*.09,-.646,z),(.04,.018,.038),['paper','cyan','amber'][j],3,.007)
+    for x in [-.6,.6]:
+        box('纵向蓝灯',(x,-.68,2),(.026,.035,2.65),'cyan',3,.009)
+        for z in [.65,1.2,1.75,2.3,2.85,3.25]: box('导轨LED刻度',(x,-.702,z),(.018,.012,.10),'paper',3,.003)
     for j in range(5): box('顶部散热槽',(-.44+j*.22,0,4.005),(.12,.7,.014),'black',1,.004)
     if damaged:
         box('外翻脱落柜门',(.78,-.82,1.93),(1.20,.12,3.15),'steel',0,.04,rot=(0,-.16,-.18))

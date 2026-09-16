@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-FLOOR-BASE",
+  "name_zh": "承重底板_资产包",
+  "slug": "floor_base",
+  "category": "09_地板组件",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "floor_base_通用包",
+  "root_object": "ROOT_floor_base_通用组件",
+  "objects": [
+    "floor_base_主体_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    13.75,
+    -82.8338,
+    0.0
+  ],
+  "bounds_size": [
+    25.0,
+    30.0,
+    0.26
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 270,
+  "geometry_signature": "3dd06daa12748e9cd144a3ff5b5570e27d0d4e5dd514824bd7027b10b5ad3eb5",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "floor_base"
+}

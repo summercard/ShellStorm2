@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "package_count": 23,
+  "category_count": 9,
+  "output_mesh_count": 39,
+  "wall_package_count": 1,
+  "floor_package_count": 2,
+  "wall_dimensions_m": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "kept_by_group": {
+    "01_服务器机柜": [
+      "north_00",
+      "north_03"
+    ],
+    "02_工作终端": [
+      "west_desk",
+      "north_control",
+      "technician_chair"
+    ],
+    "03_中央设备岛": [
+      "island_00",
+      "island_01"
+    ],
+    "04_维修与机箱": [
+      "fault_tray_00",
+      "wall_service_00",
+      "wall_service_01",
+      "wall_service_02",
+      "equipment_case_00"
+    ],
+    "05_门框与标识": [
+      "data_banner",
+      "east_portal"
+    ],
+    "06_环境陈设": [
+      "planter_00"
+    ],
+    "07_环境支持": [
+      "north_utilities",
+      "east_utilities",
+      "south_utilities",
+      "floor_cabling",
+      "fixed_papers"
+    ],
+    "08_墙壁组件": [
+      "wall_standard_5m"
+    ],
+    "09_地板组件": [
+      "floor_tile_r01_c01",
+      "floor_tile_r01_c02"
+    ]
+  },
+  "manifest_mismatch": [],
+  "below_local_ground": [],
+  "non_unified_front": []
+}

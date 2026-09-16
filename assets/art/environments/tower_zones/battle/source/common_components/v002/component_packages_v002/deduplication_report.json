@@ -1,0 +1,30 @@
+{
+  "source_package_count": 82,
+  "excluded_room_specific_packages": [
+    "floor_base"
+  ],
+  "candidate_package_count": 81,
+  "unique_package_count": 77,
+  "removed_duplicates": [
+    {
+      "removed": "wall_east_door_01_right",
+      "kept": "wall_east_door_01_left",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "west_utilities",
+      "kept": "east_utilities",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "east_04",
+      "kept": "north_04",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "west_portal",
+      "kept": "east_portal",
+      "reason": "rotation_normalized_exact_duplicate"
+    }
+  ]
+}

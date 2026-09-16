@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-NORTH-02",
+  "name_zh": "服务器柜_north_02_资产包",
+  "slug": "north_02",
+  "category": "01_服务器机柜",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "north_02_通用包",
+  "root_object": "ROOT_north_02_通用组件",
+  "objects": [
+    "north_02_主体_输出",
+    "north_02_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    10.575,
+    0.0,
+    0.0
+  ],
+  "bounds_size": [
+    1.73,
+    1.53,
+    4.012
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 180,
+  "geometry_signature": "5672ba7b4249e766a1d0d4e78c4602e7a0b4da41861d7819da812eeecf075551",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "north_02"
+}

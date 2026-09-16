@@ -1,0 +1,45 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-WALL-EAST-DOOR-01-LEFT",
+  "name_zh": "东墙_DOOR_01_LEFT_资产包",
+  "slug": "wall_east_door_01_left",
+  "category": "08_墙壁组件",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "wall_east_door_01_left_通用包",
+  "root_object": "ROOT_wall_east_door_01_left_通用组件",
+  "objects": [
+    "wall_east_door_01_left_主体_输出",
+    "wall_east_door_01_left_主体_输出.001"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    71.95,
+    -62.9718,
+    0.0
+  ],
+  "bounds_size": [
+    11.4,
+    0.306,
+    11.9
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 270,
+  "geometry_signature": "7efc1da8f14c5457e6a58af4f4757cecf4c1c6c3db1886fb63f936d664532b85",
+  "deduplicated_source_aliases": [
+    "wall_east_door_01_right"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "wall_east_door_01_left"
+}

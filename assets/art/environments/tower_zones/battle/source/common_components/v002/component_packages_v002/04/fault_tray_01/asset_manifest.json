@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-FAULT-TRAY-01",
+  "name_zh": "脱落服务器模块_01_资产包",
+  "slug": "fault_tray_01",
+  "category": "04_维修与机箱",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "fault_tray_01_通用包",
+  "root_object": "ROOT_fault_tray_01_通用组件",
+  "objects": [
+    "fault_tray_01_主体_输出",
+    "fault_tray_01_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    6.2488,
+    -21.2231,
+    0.0
+  ],
+  "bounds_size": [
+    1.7108,
+    1.7411,
+    0.4745
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 0,
+  "geometry_signature": "32af55471f5a8f86346a4b040cc6d5cdb27166f74279c7129ce09cbe9541f71d",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "fault_tray_01"
+}

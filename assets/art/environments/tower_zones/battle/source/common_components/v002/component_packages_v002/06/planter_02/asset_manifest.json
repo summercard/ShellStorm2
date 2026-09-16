@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-PLANTER-02",
+  "name_zh": "固定绿植_02_资产包",
+  "slug": "planter_02",
+  "category": "06_环境陈设",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "planter_02_通用包",
+  "root_object": "ROOT_planter_02_通用组件",
+  "objects": [
+    "planter_02_主体_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    9.1278,
+    -33.9642,
+    0.0
+  ],
+  "bounds_size": [
+    1.1511,
+    1.1379,
+    2.0285
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 0,
+  "geometry_signature": "13bd43b9224b2655143c281a7b66d92c5b534a1b58c1e91fe6ea148cd006a60b",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "planter_02"
+}

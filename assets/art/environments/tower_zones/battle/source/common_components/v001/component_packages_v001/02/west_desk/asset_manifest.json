@@ -1,0 +1,40 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-WEST-DESK",
+  "name_zh": "数据操作终端_west_desk_资产包",
+  "slug": "west_desk",
+  "category": "02_工作终端",
+  "version": "v001",
+  "source_blend": "战局区块_通用组件库_v001.blend",
+  "blender_collection": "数据操作终端_west_desk_资产包_通用包",
+  "root_object": "ROOT_west_desk_通用组件",
+  "objects": [
+    "west_desk_主体_输出",
+    "west_desk_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    1.9599,
+    -7.2765,
+    0.0
+  ],
+  "bounds_size": [
+    1.6198,
+    3.8,
+    2.96
+  ],
+  "front_direction": "+Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "west_desk"
+}

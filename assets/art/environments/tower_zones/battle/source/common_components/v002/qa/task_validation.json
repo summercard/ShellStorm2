@@ -1,0 +1,92 @@
+{
+  "passed": true,
+  "source_package_count": 82,
+  "excluded_room_specific_packages": [
+    "floor_base"
+  ],
+  "candidate_package_count": 81,
+  "package_count": 77,
+  "removed_duplicate_count": 4,
+  "removed_duplicates": [
+    {
+      "removed": "wall_east_door_01_right",
+      "kept": "wall_east_door_01_left",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "west_utilities",
+      "kept": "east_utilities",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "east_04",
+      "kept": "north_04",
+      "reason": "rotation_normalized_exact_duplicate"
+    },
+    {
+      "removed": "west_portal",
+      "kept": "east_portal",
+      "reason": "rotation_normalized_exact_duplicate"
+    }
+  ],
+  "group_count": 9,
+  "output_mesh_count": 143,
+  "wall_package_count": 7,
+  "floor_package_count": 30,
+  "front_direction": "+Y",
+  "camera_pages": {
+    "01_设施组件总览.png": [
+      [
+        -9.3852,
+        -62.7198,
+        88.0
+      ],
+      [
+        0.601141,
+        0.0,
+        -0.690447
+      ],
+      71.1484
+    ],
+    "02_环境支持组件总览.png": [
+      [
+        34.1027,
+        -86.102,
+        88.0
+      ],
+      [
+        0.601141,
+        0.0,
+        -0.690447
+      ],
+      184.2169
+    ],
+    "03_墙壁组件总览.png": [
+      [
+        26.8125,
+        -108.9718,
+        88.0
+      ],
+      [
+        0.601141,
+        0.0,
+        -0.690447
+      ],
+      182.2125
+    ],
+    "04_地板组件总览.png": [
+      [
+        19.57,
+        -95.5138,
+        85.0
+      ],
+      [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      41.814
+    ]
+  },
+  "source_blend": "/Users/summercards/ShellStorm2/assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend"
+}

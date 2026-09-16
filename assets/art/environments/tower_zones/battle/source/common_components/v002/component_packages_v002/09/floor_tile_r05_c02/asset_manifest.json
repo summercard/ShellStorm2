@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R05-C02",
+  "name_zh": "地砖_R05_C02_资产包",
+  "slug": "floor_tile_r05_c02",
+  "category": "09_地板组件",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "floor_tile_r05_c02_通用包",
+  "root_object": "ROOT_floor_tile_r05_c02_通用组件",
+  "objects": [
+    "floor_tile_r05_c02_主体_输出",
+    "floor_tile_r05_c02_主体_输出.001"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    10.06,
+    -108.1938,
+    0.0
+  ],
+  "bounds_size": [
+    4.94,
+    4.94,
+    0.056
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 90,
+  "geometry_signature": "278bb0d07d470bb00afebe726a3376ded11068a73ce5cd1bb3911830912da712",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "floor_tile_r05_c02"
+}

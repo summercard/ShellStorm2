@@ -1,0 +1,45 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-EAST-PORTAL",
+  "name_zh": "东侧门洞装甲_资产包",
+  "slug": "east_portal",
+  "category": "05_门框与标识",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "east_portal_通用包",
+  "root_object": "ROOT_east_portal_通用组件",
+  "objects": [
+    "east_portal_主体_输出",
+    "east_portal_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    11.97,
+    -27.9642,
+    0.0
+  ],
+  "bounds_size": [
+    3.04,
+    0.356,
+    2.815
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 270,
+  "geometry_signature": "658ee53c40d23a530ba29755c63506aa65cc7c6a042cde3635da0dbc3c5763be",
+  "deduplicated_source_aliases": [
+    "west_portal"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "east_portal"
+}

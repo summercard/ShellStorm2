@@ -1,0 +1,12 @@
+{
+  "sheet": "3D-场景通用",
+  "row": 90,
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "modified_columns": [
+    "E",
+    "F",
+    "O",
+    "P"
+  ],
+  "source_sha256": "5e4eca9f52cc1899ad254d2e18567b41ac03731b4593e4ec6686a91ebb21cfed"
+}

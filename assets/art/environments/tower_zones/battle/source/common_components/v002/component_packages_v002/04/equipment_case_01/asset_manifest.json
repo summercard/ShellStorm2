@@ -1,0 +1,42 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-EQUIPMENT-CASE-01",
+  "name_zh": "固定设备箱_01_资产包",
+  "slug": "equipment_case_01",
+  "category": "04_维修与机箱",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "equipment_case_01_通用包",
+  "root_object": "ROOT_equipment_case_01_通用组件",
+  "objects": [
+    "equipment_case_01_主体_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    28.4966,
+    -21.2231,
+    0.0
+  ],
+  "bounds_size": [
+    1.5903,
+    1.3004,
+    1.14
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 0,
+  "geometry_signature": "ccdffd4505f4692942d5e2667e095c5e8222fc7626006b1bcd0cc706e7db252a",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "equipment_case_01"
+}

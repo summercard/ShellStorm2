@@ -1,0 +1,41 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-ISLAND-01",
+  "name_zh": "中央低矮数据设备岛_01_资产包",
+  "slug": "island_01",
+  "category": "03_中央设备岛",
+  "version": "v003",
+  "source_blend": "战局区块_通用组件库_v003.blend",
+  "blender_collection": "island_01_通用包",
+  "root_object": "ROOT_island_01_通用组件",
+  "objects": [
+    "island_01_主体_输出",
+    "island_01_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    11.1,
+    -12.8068,
+    0.0
+  ],
+  "bounds_size": [
+    4.4,
+    1.75,
+    2.295
+  ],
+  "front_direction": "+Y",
+  "source_component": "island_01",
+  "straightened_yaw_degrees": 0,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created"
+}

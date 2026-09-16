@@ -1,0 +1,43 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-EAST-00",
+  "name_zh": "服务器柜_east_00_资产包",
+  "slug": "east_00",
+  "category": "01_服务器机柜",
+  "version": "v002",
+  "source_blend": "战局区块_通用组件库_v002.blend",
+  "blender_collection": "east_00_通用包",
+  "root_object": "ROOT_east_00_通用组件",
+  "objects": [
+    "east_00_主体_输出",
+    "east_00_自发光_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    37.448,
+    0.0,
+    0.0
+  ],
+  "bounds_size": [
+    1.73,
+    1.53,
+    4.012
+  ],
+  "front_direction": "+Y",
+  "normalization_yaw_degrees": 270,
+  "geometry_signature": "82f20ea4ba2cb60a122723d4b8bb00fc2c07e9a90e682def4df6cf349cd730a3",
+  "deduplicated_source_aliases": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": false,
+  "collision": "not_created",
+  "source_room_package": "east_00"
+}

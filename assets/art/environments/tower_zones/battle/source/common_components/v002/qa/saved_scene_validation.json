@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "package_count": 77,
+  "category_count": 9,
+  "output_mesh_count": 143,
+  "wall_package_count": 7,
+  "floor_package_count": 30,
+  "deduplicated_count": 4,
+  "duplicate_signatures": 0,
+  "manifest_mismatch": [],
+  "multiple_package_objects": [],
+  "below_local_ground": [],
+  "non_unified_front": [],
+  "excluded_room_specific_packages": [
+    "floor_base"
+  ]
+}
