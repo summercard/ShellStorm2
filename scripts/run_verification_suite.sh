@@ -139,6 +139,7 @@ visual_scenes=(
   verify_3d_melee_combat_visual
   verify_base_vending_visual
   verify_base_world_3d_visual
+  verify_entry_safe_room_v003_visual
   verify_full_3d_visual
   verify_player3d_state_gallery_visual
   verify_player3d_weapon_grip_visual

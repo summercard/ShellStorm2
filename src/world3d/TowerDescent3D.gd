@@ -19,6 +19,15 @@ const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
+const ENTRY_SAFE_ROOM_ART_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/v003/env_entry_safe_room_root_top3d_v003.tscn"
+)
+const ENTRY_SAFE_ROOM_ART_NODE_NAME := "EntrySafeRoomArt_v003"
+const ENTRY_SAFE_ROOM_LEGACY_VISUAL_PREFIXES: Array[String] = [
+	"Imported_SolidWall5M_",
+	"Imported_CornerL5M_",
+	"Imported_DoorWall5M_",
+]
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
@@ -200,6 +209,9 @@ func _ready() -> void:
 		base_art.visible = false
 	super()
 	_organize_existing_rooms_by_block()
+	var initial_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
+	if initial_entry != null:
+		_install_entry_safe_room_art(initial_entry)
 	_ensure_floor_generated(0, "rooftop_bootstrap")
 	_build_floor_stages()
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
@@ -2694,6 +2706,9 @@ func _reset_initial_loop_world_after_retreat() -> void:
 	# 碰撞留在通道中的“空气墙”。
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
+	var refreshed_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
+	if refreshed_entry != null:
+		_install_entry_safe_room_art(refreshed_entry)
 	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
 	var base_room := _room_by_id.get("facility") as DungeonRoom3D
 	if base_room != null and entry_room != null:
@@ -3289,6 +3304,9 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 			_instantiate_dynamic_room(record)
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
+	var refreshed_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
+	if refreshed_entry != null:
+		_install_entry_safe_room_art(refreshed_entry)
 	for declaration in _declared_edges:
 		var edge := _edge_key(str(declaration["a"]), str(declaration["b"]))
 		if _corridor_by_edge.has(edge):
@@ -3432,6 +3450,62 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	room.player_entered.connect(_on_room_entered)
 	room.prop_searched.connect(_on_prop_searched)
 	room.service_activated.connect(_on_service_activated)
+
+
+func _install_entry_safe_room_art(room: DungeonRoom3D) -> void:
+	if room == null or not _entry_safe_room_layout_ready(room):
+		return
+	room.ensure_shell_built()
+	var existing := room.get_node_or_null(ENTRY_SAFE_ROOM_ART_NODE_NAME) as Node3D
+	if existing != null:
+		_hide_entry_safe_room_legacy_visuals(room)
+		return
+	var art := ENTRY_SAFE_ROOM_ART_SCENE.instantiate() as Node3D
+	if art == null:
+		push_error("入口安全房正式美术总装配实例化失败")
+		return
+	art.name = ENTRY_SAFE_ROOM_ART_NODE_NAME
+	art.set_meta("asset_id", "ENV-BATTLE-L01-SAFE-ENTRY")
+	art.set_meta("asset_version", "v003")
+	art.set_meta("collision_owner", "TowerDescent3D.FloorSupport + RoomDoor3D")
+	room.add_child(art)
+	_hide_entry_safe_room_legacy_visuals(room)
+
+
+func _entry_safe_room_layout_ready(room: DungeonRoom3D) -> bool:
+	if room == null or room.doors.is_empty():
+		return false
+	for side in room.doors:
+		if not room.has_meta("room_door_world_%s" % side):
+			return false
+	return true
+
+
+func _hide_entry_safe_room_legacy_visuals(room: Node) -> void:
+	for child in room.get_children():
+		if child.name == ENTRY_SAFE_ROOM_ART_NODE_NAME:
+			continue
+		_set_entry_safe_room_legacy_visuals_hidden(child, false)
+
+
+func _set_entry_safe_room_legacy_visuals_hidden(node: Node, hide_tree: bool) -> void:
+	if node is RoomDoor3D:
+		return
+	var hide_descendants := hide_tree or _is_entry_safe_room_legacy_visual_root(node)
+	if hide_descendants and node is GeometryInstance3D:
+		(node as GeometryInstance3D).visible = false
+	for child in node.get_children():
+		_set_entry_safe_room_legacy_visuals_hidden(child, hide_descendants)
+
+
+func _is_entry_safe_room_legacy_visual_root(node: Node) -> bool:
+	var node_name := str(node.name)
+	if node_name == "Floor" or node_name == "FloorInset" or node_name.begins_with("FloorSeam"):
+		return true
+	for prefix in ENTRY_SAFE_ROOM_LEGACY_VISUAL_PREFIXES:
+		if node_name.begins_with(prefix):
+			return true
+	return false
 
 
 func generate_through_floor_for_test(target_floor_number: int) -> bool:

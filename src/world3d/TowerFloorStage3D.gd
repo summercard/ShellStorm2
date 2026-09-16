@@ -718,6 +718,10 @@ func _floor_visual_hole_rects() -> Array[Rect2i]:
 	# 基地地板区域，避免与两套正式基地地砖在Y=0处重叠闪烁。
 	if floor_index == 1:
 		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
+	# 98F入口安全房由正式美术总装配接管可视地板；通用地砖只保留该区域外的
+	# 视觉，FloorSupport仍保持完整15×15m承重面。
+	if floor_index == 2:
+		holes.append(_world_rect_to_grid(Rect2(-7.5, -7.5, 15.0, 15.0)))
 	return holes
 
 
