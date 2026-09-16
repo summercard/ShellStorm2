@@ -1,0 +1,1707 @@
+{
+  "blend": "/Users/summercards/ShellStorm2/source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_05_30x40m_v003.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 166,
+  "polygon_count": 2916,
+  "valid_island_polygon_count": 2916,
+  "uv_reports": [
+    {
+      "object": "AP_FLOOR_BASE",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R01_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R02_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R03_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R04_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R05_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R06_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R07_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_FLOOR_TILE_R08_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_01_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_04_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_05_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_EAST_SLOT_08_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_01_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_04_DOOR_LEFT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_04_DOOR_LINTEL",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_04_DOOR_RIGHT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_05_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_NORTH_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_01_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_04_DOOR_LEFT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_04_DOOR_LINTEL",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_04_DOOR_RIGHT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_05_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_SOUTH_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_01_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_04_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_05_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "AP_WALL_WEST_SLOT_08_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_BASE",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R01_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R02_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R03_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R04_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R05_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R06_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R07_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C01",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C02",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C03",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C04",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C05",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "FLOOR_TILE_R08_C06",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_01_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_04_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_05_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_EAST_SLOT_08_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_01_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_04_DOOR_LEFT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_04_DOOR_LINTEL",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_04_DOOR_RIGHT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_05_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_NORTH_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_01_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_04_DOOR_LEFT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_04_DOOR_LINTEL",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_04_DOOR_RIGHT",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_05_FIXED_TRIM",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_SOUTH_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_01_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_02_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_03_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_04_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_05_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_06_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_07_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "WALL_WEST_SLOT_08_SOLID",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_深色哑光_结构底面"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

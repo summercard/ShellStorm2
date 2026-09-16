@@ -1,0 +1,11 @@
+battle_level01/v003
+├─ blender/ (19 .blend)
+├─ data/component_packages/
+│  ├─ catalog.json
+│  ├─ boss_arena/ (1)
+│  ├─ branch_rooms/ (4)
+│  ├─ corridors/ (2)
+│  ├─ main_rooms/ (10)
+│  ├─ safe_rooms/ (2)
+├─ data/validation/
+└─ renders/

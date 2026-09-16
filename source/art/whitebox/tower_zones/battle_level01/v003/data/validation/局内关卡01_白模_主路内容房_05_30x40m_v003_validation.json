@@ -1,0 +1,32 @@
+{
+  "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-05",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_05_30x40m_v003.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 83,
+  "mesh_count": 83,
+  "component_counts": {
+    "door_wall": 2,
+    "floor_slab": 1,
+    "floor_tile": 48,
+    "wall": 32
+  },
+  "bounds_world_m": {
+    "min": [
+      -15.0,
+      -20.0,
+      0.0
+    ],
+    "max": [
+      15.0,
+      20.0,
+      11.9
+    ]
+  },
+  "measured_dimensions_m": [
+    30.0,
+    40.0,
+    11.9
+  ]
+}

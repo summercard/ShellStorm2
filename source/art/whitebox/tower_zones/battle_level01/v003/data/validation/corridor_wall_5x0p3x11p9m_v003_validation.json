@@ -1,0 +1,30 @@
+{
+  "asset_id": "ENV-BATTLE-L01-CORRIDOR-WALL-5M",
+  "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v003.blend",
+  "status": "PASS",
+  "failures": [],
+  "warnings": [],
+  "object_count": 4,
+  "mesh_count": 4,
+  "component_counts": {
+    "wall": 1,
+    "wall_edge": 3
+  },
+  "bounds_world_m": {
+    "min": [
+      -2.5,
+      -0.15,
+      0.0
+    ],
+    "max": [
+      2.5,
+      0.15,
+      11.9
+    ]
+  },
+  "measured_dimensions_m": [
+    5.0,
+    0.3,
+    11.9
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "sheet": "3D-场景通用",
+  "updated": [
+    {
+      "row": 72,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-01-HUB",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_01_hub_30x25m_v003.blend",
+      "sha256": "29b9180a6de49af8f21daa2e3bfe074dcf01c5f45a845dc05f83c16106c61661"
+    },
+    {
+      "row": 74,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-03",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_03_30x25m_v003.blend",
+      "sha256": "f61200942b2907d8cd8fb1773979172d570c1a885bafdb32909ebe624b617590"
+    },
+    {
+      "row": 75,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-04",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_04_30x25m_v003.blend",
+      "sha256": "0c67ec35481b555804ee2b618f1884e6e290af4e2a2065671ff16d04555e6d30"
+    },
+    {
+      "row": 76,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-05",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_05_30x40m_v003.blend",
+      "sha256": "5657ac7120e2a7ed6a19f9fe5436b389dd489e88641ed01bd11e31284850cc0b"
+    },
+    {
+      "row": 77,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-06",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_06_30x25m_v003.blend",
+      "sha256": "f01cad5d06fbc1e7ba9cbefe602603f8dc4edc4b7f96b81d58348655a3ff4010"
+    },
+    {
+      "row": 78,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-07",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_07_30x25m_v003.blend",
+      "sha256": "98c199eb70a821ecca36519e5f653f6eab8804c34131c3e8c60988e22d8545df"
+    },
+    {
+      "row": 79,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-08",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_08_35x30m_v003.blend",
+      "sha256": "35588e1e0b232944fe4d8a742df3824f1d9e3878bc6b4d52112fe149437f5dc5"
+    },
+    {
+      "row": 80,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-09",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_09_40x25m_v003.blend",
+      "sha256": "593ed390ac3e54d4b7f7666f2bb9795e61d75112ddfd8636a10303e2b74f8280"
+    },
+    {
+      "row": 81,
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-10",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_主路内容房_10_30x25m_v003.blend",
+      "sha256": "906da8b7224bd6010efc9af9ea298aff6f4aa282c49aa774b1ec72a36c16affe"
+    },
+    {
+      "row": 82,
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-01",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_01_30x25m_v003.blend",
+      "sha256": "13e4a206e23cff87878fb1b6fff433ba8c2ec782d2449333589a34b867465e6a"
+    },
+    {
+      "row": 83,
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-02",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_02_30x25m_v003.blend",
+      "sha256": "5826151dfc9a615c1c632a29f9bdc8f69e0e9cd82ea6544e81586e40df3925ce"
+    },
+    {
+      "row": 84,
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-03",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_03_40x35m_v003.blend",
+      "sha256": "88ebf803d7aa854158f6fb8e9fb911a927ae26a21722f1a78f2fe821cb12c0be"
+    },
+    {
+      "row": 85,
+      "asset_id": "ENV-BATTLE-L01-ROOM-BRANCH-04",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_支路内容房_04_30x25m_v003.blend",
+      "sha256": "a19878a1b5bc6e4f48477984a9b2373689723bcebd73cfd530802c35056941b3"
+    },
+    {
+      "row": 86,
+      "asset_id": "ENV-BATTLE-L01-SAFE-ENTRY",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_入口安全房_15x15m_v003.blend",
+      "sha256": "e9945e2d8d7495aac5ca2d35546784af90ce775aeee56f1f866bf6ac8e85db90"
+    },
+    {
+      "row": 87,
+      "asset_id": "ENV-BATTLE-L01-SAFE-EXIT",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_出口安全房_15x15m_v003.blend",
+      "sha256": "c7bc25016e1da0de856a4f0f6b0c64e96cd078a5dbf5bfe92a36012a90ff24f5"
+    },
+    {
+      "row": 88,
+      "asset_id": "ENV-BATTLE-L01-BOSS-ARENA",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_Boss竞技场_190x90m_v003.blend",
+      "sha256": "b18f6003418567973b082d5aef399acc3903927d15740985e0762a7266dbc666"
+    },
+    {
+      "row": 89,
+      "asset_id": "ENV-BATTLE-L01-CORRIDOR-FLOOR-5M",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊地砖_5x5x0.3m_v003.blend",
+      "sha256": "25447140148e530e0837c379c192caee2747762f48102bd69eceffbbccc88e88"
+    },
+    {
+      "row": 91,
+      "asset_id": "ENV-BATTLE-L01-CORRIDOR-WALL-5M",
+      "source_blend": "source/art/whitebox/tower_zones/battle_level01/v003/blender/局内关卡01_白模_走廊墙壁_5x0.3x11.9m_v003.blend",
+      "sha256": "0bf6c37daa755cffd42b0d9e3e81437c8b04c494912188e1a28e0a1773760926"
+    }
+  ],
+  "skipped": [
+    {
+      "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+      "reason": "正式机房美术源优先，不以白模覆盖"
+    }
+  ],
+  "added_row": 91
+}
