@@ -1,0 +1,60 @@
+﻿PY_EXIT=0
+changed members: ['xl/worksheets/sheet10.xml']
+row max: 280 | 94/95/96 present: True
+
+=== row 94 ===
+  A  ENV-BATTLE-COMMON-WALL-STANDARD-5M
+  B  鎴樺眬閫氱敤鏍囧噯澧?5脳0.30脳11.9m
+  C  assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d_v003.tscn
+  D  assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d_v003.glb
+  E  assets/art/environments/tower_zones/battle/source/common_components/v003/鎴樺眬鍖哄潡_閫氱敤缁勪欢搴揰v003.blend锛堥泦鍚?wall_standard_5m_閫氱敤鍖咃級
+  F  鎴樺眬01閫氱敤缁勪欢搴?08_澧欏缁勪欢锛涢潤鎬佸疄澧欙紝涓庣綉鏍?5m 鍚屽鍙钩閾猴紙鑼冨紡B锛氳嚜鍖呭惈 prefab + 鑷甫纰版挒锛?
+  G  鏃?
+  H  寮€
+  I  鏈粍浠讹紙PackedScene 鑷甫锛?
+  J  BoxShape3D 5.0脳11.9脳0.30锛屼腑蹇?y=5.95锛屽簳闈腑蹇冨師鐐?
+  K  5.0脳0.30脳11.9m
+  L  搴曢潰涓績锛圙odot 搴曢潰 Y=0銆乆Z 灞呬腑锛夛紱鏈?-Z
+  M  灞€鍐呭叧鍗?1 / Battle锛堟殏鏈帴鍏ワ級
+  N  缁勪欢宸插畬鎴愶紱鏈帴鍏?
+  O  v003
+  P  2026-09-16锛氭湰杞粠 v003 婧?blend 閲嶆柊瀵煎嚭 GLB锛堟鍓嶅伐浣滃尯缂鸿瀵煎嚭浠讹級锛屽苟鍋氳嚜鍖呭惈 prefab锛涚櫧妯″墠韬负 r90銆傝瑙夊楂?11.9m锛岄€昏緫灞傞珮 12.0m锛屽椤剁暀 0.10m 鍑€绌轰笌 TowerGeometry3D.WALL_VISUAL_TOP_CLEARANCE_
+
+=== row 95 ===
+  A  ENV-BATTLE-COMMON-WALL-DOOR-5M
+  B  鎴樺眬閫氱敤闂ㄥ 5脳0.30脳11.9m锛堥棬娲?2.2脳2.5锛?
+  C  assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d_v003.tscn
+  D  assets/art/environments/tower_zones/battle/components/common_components/wall_door_5m/wall_door_5m_visual_top3d_v003.glb
+  E  assets/art/environments/tower_zones/battle/source/common_components/v003/鎴樺眬鍖哄潡_閫氱敤缁勪欢搴揰v003.blend锛堥泦鍚?wall_door_5m_閫氱敤鍖咃級
+  F  鎴樺眬01閫氱敤缁勪欢搴?08_澧欏缁勪欢锛涘甫闂ㄦ礊鐨勯殧澧欙紝鐢卞乏/鍙抽棬鍨涗笌闂ㄦィ涓夊潡鏋勬垚锛堣寖寮廈锛氳嚜鍖呭惈 prefab + 鑷甫纰版挒锛?
+  G  鏃?
+  H  寮€
+  I  鏈粍浠讹紙PackedScene 鑷甫锛?
+  J  3脳BoxShape3D锛氬乏/鍙抽棬鍨?1.4脳11.9脳0.30锛坸=鈭?.8锛? 闂ㄦィ 2.2脳9.4脳0.30锛坹 搴?2.5锛夛紝闂ㄦ礊澶勪笉浜х敓纰版挒
+  K  5.0脳0.30脳11.9m锛堝噣闂ㄦ礊 2.2脳2.5m锛?
+  L  搴曢潰涓績锛圙odot 搴曢潰 Y=0銆乆Z 灞呬腑锛夛紱鏈?-Z
+  M  灞€鍐呭叧鍗?1 / Battle锛堟殏鏈帴鍏ワ級
+  N  缁勪欢宸插畬鎴愶紱鏈帴鍏?
+  O  v003
+  P  2026-09-16锛氭柊寤恒€傞棬娲炲噣绌?2.2脳2.5 鍙栬嚜 TowerGeometry3D.DOOR_CLEAR_WIDTH_M / DOOR_CLEAR_HEIGHT_M锛岄棬鍨涘 1.4銆侀棬妤ｉ珮 9.4 鐢辩綉鏍?5.0 涓庡楂?11.9 鎺ㄥ緱锛涗笌 door_5m 闂ㄦ墖涓ユ牸閰嶅锛堥棬妤ｅ簳=闂ㄦ墖椤?2.
+
+=== row 96 ===
+  A  ENV-BATTLE-COMMON-DOOR-5M
+  B  鎴樺眬閫氱敤闂ㄦ墖 2.2脳0.18脳2.5m
+  C  assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d_v003.tscn
+  D  assets/art/environments/tower_zones/battle/components/common_components/door_5m/door_5m_visual_top3d_v003.glb
+  E  assets/art/environments/tower_zones/battle/source/common_components/v003/鎴樺眬鍖哄潡_閫氱敤缁勪欢搴揰v003.blend锛堥泦鍚?door_5m_閫氱敤鍖咃級
+  F  鎴樺眬01閫氱敤缁勪欢搴?10_闂ㄧ粍浠讹紱闂ㄦ墖鏈綋锛屽簳杈逛腑蹇冨師鐐广€佸紑闂ㄤ负鍨傜洿鍗囪捣锛堣寖寮廈锛氳嚜鍖呭惈 prefab + 鑷甫纰版挒锛?
+  G  鏃?
+  H  寮€
+  I  鏈粍浠讹紙PackedScene 鑷甫锛?
+  J  BoxShape3D 2.2脳2.5脳0.18锛屼腑蹇?y=1.25锛屽簳杈逛腑蹇冨師鐐?
+  K  2.2脳0.18脳2.5m
+  L  搴曡竟涓績锛圙odot 搴曢潰 Y=0銆乆Z 灞呬腑锛夛紱鏈?-Z
+  M  灞€鍐呭叧鍗?1 / Battle锛堟殏鏈帴鍏ワ級
+  N  缁勪欢宸插畬鎴愶紱鏈帴鍏?
+  O  v003
+  P  2026-09-16锛氭柊寤恒€傚彛寰勪笌 RoomDoor3D 涓€鑷粹€斺€旈潰鏉?2.2脳2.5脳0.18锛圥ANEL_THICKNESS_M=0.18锛夛紝瀵煎叆闂ㄤ互搴曡竟涓績涓哄師鐐癸紝寮€闂ㄦ敼 panel.position.y 鍨傜洿鍗囪捣鑰岄潪鏃嬭浆銆傛帴鍏?RoomDoor3D 鏃跺彧鍙栧叾 ImportedModel 瀛愭爲
+
+LEDGER_PATCH_OK: 鍙拌处浠呮柊澧?r94/r95/r96锛屽叾浣欐潯鐩€愬瓧鑺備笉鍙?
+

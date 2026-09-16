@@ -1,0 +1,6 @@
+﻿PATCHED wall_standard_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\components\common_components\wall_standard_5m\wall_standard_5m_visual_top3d_v003.glb.import
+PATCHED wall_door_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\components\common_components\wall_door_5m\wall_door_5m_visual_top3d_v003.glb.import
+PATCHED door_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\components\common_components\door_5m\door_5m_visual_top3d_v003.glb.import
+BIND_REPORT {'wall_standard_5m': 'patched', 'wall_door_5m': 'patched', 'door_5m': 'patched'}
+BIND_WALL_DOOR_PALETTE_IMPORTS_OK total=3 patched=3
+

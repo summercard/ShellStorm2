@@ -1,0 +1,6 @@
+﻿SKIP wall_standard_5m: 鍐呭宸蹭竴鑷达紙骞傜瓑锛?
+SKIP wall_door_5m: 鍐呭宸蹭竴鑷达紙骞傜瓑锛?
+SKIP door_5m: 鍐呭宸蹭竴鑷达紙骞傜瓑锛?
+PREFAB_REPORT {'wall_standard_5m': {'status': 'unchanged', 'path': 'I:\\宸ヤ綔椤圭洰\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\common_components\\wall_standard_5m\\wall_standard_5m_root_top3d_v003.tscn'}, 'wall_door_5m': {'status': 'unchanged', 'path': 'I:\\宸ヤ綔椤圭洰\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\common_components\\wall_door_5m\\wall_door_5m_root_top3d_v003.tscn'}, 'door_5m': {'status': 'unchanged', 'path': 'I:\\宸ヤ綔椤圭洰\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\common_components\\door_5m\\door_5m_root_top3d_v003.tscn'}}
+PREFAB_OK total=3 written=0
+

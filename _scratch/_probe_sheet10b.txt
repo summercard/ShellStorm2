@@ -1,0 +1,28 @@
+﻿PY_EXIT=0
+has <x:f> (formula): False
+
+=== r280 raw ===
+<x:row r="280"><x:c r="T280" /></x:row>
+
+=== r93 raw (鍦扮爾鐧昏褰曟牱寮忓熀鍑? ===
+length: 1724
+<x:row r="93" ht="90" customHeight="1"><x:c r="A93" s="393" t="str"><x:v>ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02</x:v></x:c><x:c r="B93" s="393" t="str"><x:v>鎴樺眬閫氱敤鍦扮爾 R01_C02 4.94脳4.94脳0.081m</x:v></x:c><x:c r="C93" s="393" t="str"><x:v>assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v003.tscn</x:v></x:c><x:c r="D93" s="393" t="str"><x:v>assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d_v003.glb</x:v></x:c><x:c r="E93" s="393" t="str"><x:v>assets/art/environments/tower_zones/battle/source/common_components/v003/鎴樺眬鍖哄潡_閫氱敤缁勪欢搴揰v003.blend锛堥泦鍚?floor_tile_r01_c02_閫氱敤鍖咃級</x:v></x:c><x:c r="F93" s="393" t="str"><x:v>鎴樺眬01閫氱敤缁勪欢搴?09_鍦版澘缁勪欢锛涜瑙夎杽澹冲湴鐮栵紝閫愬疄渚嬪寲鍙浛鎹㈠崟鍏冿紙鑼冨紡B锛氳嚜鍖呭惈 prefab + 鑷甫纰版挒锛?/x:v></x:c><x:c r="G93" s="393" t="str"><x:v>鏃?/x:v></x:c><x:c r="H93" s="393" t="str"><x:v>寮€</x:v></x:
+
+=== all cell styles ===
+[145, 157, 158, 159, 188, 189, 190, 191, 192, 193, 194, 195, 196, 311, 349, 392, 393]
+
+=== row-level styles ===
+sample rows: ['1', '2', '3', '4', '5']
+
+=== r92/r93 row tag (raw prefix) ===
+  <x:row r="90" ht="90" customHeight="1">
+  <x:row r="91">
+  <x:row r="92" ht="90" customHeight="1">
+  <x:row r="93" ht="90" customHeight="1">
+
+=== sheetData start / dims ===
+<?xml version="1.0" encoding="utf-8"?><x:worksheet xmlns:x="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><x:sheetViews><x:sheetView showGridLines="0" workbookViewId="0" /></x:sheetViews><x:sheetFormatPr baseColWidth="8" defaultRowHeight="15" /><x:cols><x:col min="1" max="1" width="30" customWidth="1" /><x:col min="2" max="2" width="21" customWidth="1" /><x:col min="3" max="3" width="44" customWidth="1" /><x:col min="4" max="4" width="42" customWidth="1" /><x:col min="5" max="5" width="38" customWidth="1" /><x:col min="6" max="6" width="27" customWidth="1" /><x:col min="7" max="7"
+
+... tail 400 ...
+50"><x:formula1>"Prefab鑷韩,澶栭儴鑴氭湰,娣峰悎,鏃?</x:formula1></x:dataValidation><x:dataValidation type="list" allowBlank="0" showDropDown="0" showInputMessage="0" showErrorMessage="0" sqref="N5:N250"><x:formula1>"寰呭埗浣?绋嬪簭鍗犱綅,姝ｅ紡缇庢湳宸插叆搴?寰呮帴鍏?鍘熷瀷宸叉帴鍏?姝ｅ紡缇庢湳宸叉帴鍏?宸插畬鎴?寮冪敤"</x:formula1></x:dataValidation></x:dataValidations><x:pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3" /></x:worksheet>
+

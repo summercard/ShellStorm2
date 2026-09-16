@@ -36,6 +36,29 @@
     "03_清漆反光_紫粉点缀",
     "04_柔和自发光_UI灯光"
   ],
-  "exported": false,
-  "collision": "not_created"
+  "exported": true,
+  "collision": "self_contained_box_bottom_center",
+  "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d_v003.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v003.tscn",
+  "godot_bounds_size": [
+    4.94,
+    0.081,
+    4.94
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "runtime_grid_unit_m": 5.0,
+  "tile_gap_m": 0.06,
+  "runtime_collision_owner": "TowerFloorStage3D._build_support",
+  "verified_by": "res://assets/art/environments/tower_zones/battle/source/common_components/v003/qa/probe_floor_tile_components.gd",
+  "verification_scene": "res://tests/verification/verify_common_floor_tile_components.tscn",
+  "acceptance_images": [
+    "res://outputs/verification/common_floor_tile_components.png",
+    "res://outputs/verification/common_floor_tile_components_edge.png"
+  ],
+  "ledger": {
+    "file": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+    "sheet": "3D-场景通用",
+    "row": 93
+  }
 }

@@ -35,6 +35,51 @@
     "03_清漆反光_紫粉点缀",
     "04_柔和自发光_UI灯光"
   ],
-  "exported": false,
-  "collision": "not_created"
+  "exported": true,
+  "collision": "self_contained_box_bottom_center",
+  "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d_v003.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d_v003.tscn",
+  "godot_bounds_size": [
+    5.0,
+    11.9,
+    0.3
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "collision_owner": "self",
+  "collision_shape_count": 1,
+  "collision_shapes": [
+    {
+      "name": "wall_standard_5m_1",
+      "size": [
+        5.0,
+        11.9,
+        0.3
+      ],
+      "center": [
+        0.0,
+        5.95,
+        0.0
+      ]
+    }
+  ],
+  "runtime_instantiation": "per_instance_prefab",
+  "verified_by": "res://assets/art/environments/tower_zones/battle/source/common_components/v003/qa/build_wall_door_prefabs.py",
+  "verification_scene": "res://tests/verification/verify_common_wall_door_components.tscn",
+  "acceptance_images": [
+    "res://outputs/verification/common_wall_door_components.png",
+    "res://outputs/verification/common_wall_door_components_door.png"
+  ],
+  "ledger": {
+    "file": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+    "sheet": "3D-场景通用",
+    "row": 94
+  },
+  "wall_kind": "solid",
+  "wall_thickness_m": 0.3,
+  "wall_visual_height_m": 11.9,
+  "wall_logical_height_m": 12.0,
+  "visual_top_clearance_m": 0.1,
+  "grid_unit_m": 5.0
 }

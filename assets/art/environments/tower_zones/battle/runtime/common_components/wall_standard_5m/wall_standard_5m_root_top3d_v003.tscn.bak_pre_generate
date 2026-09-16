@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-BATTLE-COMMON-WALL-STANDARD-5M
+; 战局区块通用组件库 v003 · 08_墙壁组件 · wall_standard_5m
+; 范式 B（自包含可替换组件）：模型 + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与 v003 全库一致。
+; 静态实墙，1 mesh 单材质，与网格 5m 同宽，可直接沿网格平铺。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d_v003.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_standard_5m_1"]
+size = Vector3(5, 11.9, 0.3)
+
+[node name="BattleCommonWallStandard5m" type="Node3D"]
+metadata/asset_id = ENV-BATTLE-COMMON-WALL-STANDARD-5M
+metadata/asset_version = v003
+metadata/library_id = ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY
+metadata/library_root = res://assets/art/environments/tower_zones/battle
+metadata/category = 08_wall_component
+metadata/component = wall_standard_5m
+metadata/logic_id = wall_standard_5m
+metadata/display_name_zh = 战局通用标准墙 5×0.3×11.9m
+metadata/source_blend = res://assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend
+metadata/source_collection = wall_standard_5m_通用包
+metadata/source_root_object = ROOT_wall_standard_5m_通用组件
+metadata/source_manifest = res://assets/art/environments/tower_zones/battle/source/common_components/v003/component_packages_v003/08/wall_standard_5m/asset_manifest.json
+metadata/origin_contract = bottom_center
+metadata/forward_axis = -Z
+metadata/up_axis = +Y
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/preserve_authored_palette = true
+metadata/collision_owner = self
+metadata/collision_policy = embedded_box_bottom_center
+metadata/collision_shape_count = 1
+metadata/runtime_instantiation = per_instance_prefab
+metadata/wall_kind = solid
+metadata/wall_thickness_m = 0.3
+metadata/wall_visual_height_m = 11.9
+metadata/wall_logical_height_m = 12
+metadata/visual_top_clearance_m = 0.1
+metadata/grid_unit_m = 5
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = 底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WallStandardCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallStandardCollision"]
+position = Vector3(0, 5.95, 0)
+shape = SubResource("BoxShape3D_wall_standard_5m_1")

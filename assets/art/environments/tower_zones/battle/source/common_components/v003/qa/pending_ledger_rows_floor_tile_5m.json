@@ -1,0 +1,59 @@
+{
+  "_purpose": "战局区块通用组件库 v003 · 09_地板组件两块地砖的资产台账补登行，供 3D-场景通用 表直接追加。",
+  "_reason_not_applied": "本轮未能安全写入 ShellStorm2_美术资产台账_v001.xlsx：表格处理链路对 Windows 盘符路径解析失败（原生 I:\\ 与 /I:/ 两种写法均被拒，session 中亦无已打开工作簿）。台账是项目唯一登记源且已有专门的冲突处理Skill，故不冒险直改。",
+  "_created": "2026-09-16",
+  "target_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+  "target_sheet": "3D-场景通用",
+  "sheet_header_a1_p1": [
+    "AssetID", "中文名", "Prefab路径", "GLB模型路径", "Blender源文件", "功能说明",
+    "功能脚本路径", "碰撞开关", "碰撞归属", "碰撞方式", "标准尺寸", "原点与朝向",
+    "使用位置", "制作状态", "版本", "备注"
+  ],
+  "_last_existing_data_row_when_prepared": 90,
+  "_append_after_row": 90,
+  "rows": [
+    {
+      "AssetID": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "中文名": "战局通用地砖 R01_C01 4.94×4.94×0.056m",
+      "Prefab路径": "assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d_v003.tscn",
+      "GLB模型路径": "assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c01_visual_top3d_v003.glb",
+      "Blender源文件": "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend（集合 floor_tile_r01_c01_通用包）",
+      "功能说明": "战局01通用组件库 09_地板组件；视觉薄壳地砖，逐实例化可替换单元",
+      "功能脚本路径": "无",
+      "碰撞开关": "开",
+      "碰撞归属": "本组件（PackedScene 自带）",
+      "碰撞方式": "BoxShape3D 4.94×0.056×4.94，原点=底面中心",
+      "标准尺寸": "4.94×4.94×0.056m",
+      "原点与朝向": "bottom_center；-Z",
+      "使用位置": "局内关卡01（暂未接入）",
+      "制作状态": "组件已完成，未接入",
+      "版本": "v003",
+      "备注": "与运行时塔楼地砖口径不同（RUN 网格5.00m/厚0.30m/几何中心原点）；接入前须与 TowerFloorStage3D._build_support() 的整层矩形碰撞去重。契约断言 qa/probe_floor_tile_components.gd 共29项通过（退出码0）。"
+    },
+    {
+      "AssetID": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "中文名": "战局通用地砖 R01_C02 4.94×4.94×0.081m",
+      "Prefab路径": "assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v003.tscn",
+      "GLB模型路径": "assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d_v003.glb",
+      "Blender源文件": "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend（集合 floor_tile_r01_c02_通用包）",
+      "功能说明": "战局01通用组件库 09_地板组件；视觉薄壳地砖，逐实例化可替换单元",
+      "功能脚本路径": "无",
+      "碰撞开关": "开",
+      "碰撞归属": "本组件（PackedScene 自带）",
+      "碰撞方式": "BoxShape3D 4.94×0.081×4.94，原点=底面中心",
+      "标准尺寸": "4.94×4.94×0.081m",
+      "原点与朝向": "bottom_center；-Z",
+      "使用位置": "局内关卡01（暂未接入）",
+      "制作状态": "组件已完成，未接入",
+      "版本": "v003",
+      "备注": "与运行时塔楼地砖口径不同（RUN 网格5.00m/厚0.30m/几何中心原点）；接入前须与 TowerFloorStage3D._build_support() 的整层矩形碰撞去重。契约断言 qa/probe_floor_tile_components.gd 共29项通过（退出码0）。"
+    }
+  ],
+  "_also_missing_from_ledger": {
+    "note": "同库的 08_标准墙（wall_standard_5m，5×0.30×11.9m）同样未登记；其 GLB 曾导出并导入过，但源文件当前不在工作区，须先重跑导出才能登记 Prefab/GLB 路径。台账 r90 的 ENV-BATTLE-L01-CORRIDOR-WALL-5M（白模 5×0.30×11.9m）是它的白模前身。",
+    "related_existing_rows": {
+      "r89": "ENV-BATTLE-L01-CORRIDOR-FLOOR-5M 局内关卡01 走廊通用地砖 5×5×0.30m 白模",
+      "r90": "ENV-BATTLE-L01-CORRIDOR-WALL-5M 局内关卡01 走廊通用墙壁 5×0.30×11.9m 白模"
+    }
+  }
+}

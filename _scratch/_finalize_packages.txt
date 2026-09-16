@@ -1,0 +1,10 @@
+﻿PY_EXIT=0
+MANIFEST wall_standard_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\source\common_components\v003\component_packages_v003\08\wall_standard_5m\asset_manifest.json
+MANIFEST wall_door_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\source\common_components\v003\component_packages_v003\08\wall_door_5m\asset_manifest.json
+MANIFEST door_5m -> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\source\common_components\v003\component_packages_v003\10\door_5m\asset_manifest.json
+CATALOG + wall_door_5m
+CATALOG + door_5m
+CATALOG 宸叉洿鏂?-> I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\environments\tower_zones\battle\source\common_components\v003\component_packages_v003\catalog.json
+FINALIZE_REPORT manifests_written=['wall_standard_5m', 'wall_door_5m', 'door_5m'] manifests_unchanged=[]
+FINALIZE_WALL_DOOR_PACKAGES_OK catalog=25 exported_true=5
+

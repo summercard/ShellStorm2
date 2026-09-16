@@ -26,8 +26,11 @@
 │  ├─ south_utilities
 │  ├─ floor_cabling
 │  ├─ fixed_papers
-├─ 08_墙壁组件 (1)
+├─ 08_墙壁组件 (2)
 │  ├─ wall_standard_5m
+│  ├─ wall_door_5m
 ├─ 09_地板组件 (2)
 │  ├─ floor_tile_r01_c01
 │  ├─ floor_tile_r01_c02
+├─ 10_门组件 (1)
+│  ├─ door_5m

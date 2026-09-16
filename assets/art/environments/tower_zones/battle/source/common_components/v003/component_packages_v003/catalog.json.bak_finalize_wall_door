@@ -1,0 +1,942 @@
+[
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-NORTH-00",
+    "name_zh": "服务器柜_north_00_资产包",
+    "slug": "north_00",
+    "category": "01_服务器机柜",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "north_00_通用包",
+    "root_object": "ROOT_north_00_通用组件",
+    "objects": [
+      "north_00_主体_输出",
+      "north_00_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      2.365,
+      0.0,
+      0.0
+    ],
+    "bounds_size": [
+      1.73,
+      1.53,
+      4.012
+    ],
+    "front_direction": "+Y",
+    "source_component": "north_00",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-NORTH-03",
+    "name_zh": "故障服务器柜_north_03_资产包",
+    "slug": "north_03",
+    "category": "01_服务器机柜",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "north_03_通用包",
+    "root_object": "ROOT_north_03_通用组件",
+    "objects": [
+      "north_03_主体_输出",
+      "north_03_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      7.4683,
+      0.0,
+      0.0
+    ],
+    "bounds_size": [
+      2.4765,
+      2.187,
+      4.012
+    ],
+    "front_direction": "+Y",
+    "source_component": "north_03",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-WEST-DESK",
+    "name_zh": "数据操作终端_west_desk_资产包",
+    "slug": "west_desk",
+    "category": "02_工作终端",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "west_desk_通用包",
+    "root_object": "ROOT_west_desk_通用组件",
+    "objects": [
+      "west_desk_主体_输出",
+      "west_desk_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      3.4,
+      -6.687,
+      0.0
+    ],
+    "bounds_size": [
+      3.8,
+      1.6198,
+      2.96
+    ],
+    "front_direction": "+Y",
+    "source_component": "west_desk",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-NORTH-CONTROL",
+    "name_zh": "数据操作终端_north_control_资产包",
+    "slug": "north_control",
+    "category": "02_工作终端",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "north_control_通用包",
+    "root_object": "ROOT_north_control_通用组件",
+    "objects": [
+      "north_control_主体_输出",
+      "north_control_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      9.9,
+      -6.687,
+      0.0
+    ],
+    "bounds_size": [
+      3.2,
+      1.6198,
+      2.96
+    ],
+    "front_direction": "+Y",
+    "source_component": "north_control",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-TECHNICIAN-CHAIR",
+    "name_zh": "检修工作椅_独立展示包_资产包",
+    "slug": "technician_chair",
+    "category": "02_工作终端",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "technician_chair_通用包",
+    "root_object": "ROOT_technician_chair_通用组件",
+    "objects": [
+      "technician_chair_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      15.0691,
+      -6.687,
+      0.0
+    ],
+    "bounds_size": [
+      1.1381,
+      1.115,
+      2.1613
+    ],
+    "front_direction": "+Y",
+    "source_component": "technician_chair",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-ISLAND-00",
+    "name_zh": "中央低矮数据设备岛_00_资产包",
+    "slug": "island_00",
+    "category": "03_中央设备岛",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "island_00_通用包",
+    "root_object": "ROOT_island_00_通用组件",
+    "objects": [
+      "island_00_主体_输出",
+      "island_00_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      3.7,
+      -12.8068,
+      0.0
+    ],
+    "bounds_size": [
+      4.4,
+      1.75,
+      2.96
+    ],
+    "front_direction": "+Y",
+    "source_component": "island_00",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-ISLAND-01",
+    "name_zh": "中央低矮数据设备岛_01_资产包",
+    "slug": "island_01",
+    "category": "03_中央设备岛",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "island_01_通用包",
+    "root_object": "ROOT_island_01_通用组件",
+    "objects": [
+      "island_01_主体_输出",
+      "island_01_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      11.1,
+      -12.8068,
+      0.0
+    ],
+    "bounds_size": [
+      4.4,
+      1.75,
+      2.295
+    ],
+    "front_direction": "+Y",
+    "source_component": "island_01",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-FAULT-TRAY-00",
+    "name_zh": "脱落服务器模块_00_资产包",
+    "slug": "fault_tray_00",
+    "category": "04_维修与机箱",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "fault_tray_00_通用包",
+    "root_object": "ROOT_fault_tray_00_通用组件",
+    "objects": [
+      "fault_tray_00_主体_输出",
+      "fault_tray_00_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      2.21,
+      -19.0568,
+      0.0
+    ],
+    "bounds_size": [
+      1.42,
+      1.28,
+      0.4745
+    ],
+    "front_direction": "+Y",
+    "source_component": "fault_tray_00",
+    "straightened_yaw_degrees": 15.0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-WALL-SERVICE-00",
+    "name_zh": "墙边电控柜_00_资产包",
+    "slug": "wall_service_00",
+    "category": "04_维修与机箱",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "wall_service_00_通用包",
+    "root_object": "ROOT_wall_service_00_通用组件",
+    "objects": [
+      "wall_service_00_主体_输出",
+      "wall_service_00_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      6.2975,
+      -19.0568,
+      0.0
+    ],
+    "bounds_size": [
+      0.755,
+      1.08,
+      2.56
+    ],
+    "front_direction": "+Y",
+    "source_component": "wall_service_00",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-WALL-SERVICE-01",
+    "name_zh": "墙边电控柜_01_资产包",
+    "slug": "wall_service_01",
+    "category": "04_维修与机箱",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "wall_service_01_通用包",
+    "root_object": "ROOT_wall_service_01_通用组件",
+    "objects": [
+      "wall_service_01_主体_输出",
+      "wall_service_01_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      10.215,
+      -19.0568,
+      0.0
+    ],
+    "bounds_size": [
+      1.08,
+      0.755,
+      2.56
+    ],
+    "front_direction": "+Y",
+    "source_component": "wall_service_01",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-WALL-SERVICE-02",
+    "name_zh": "墙边电控柜_02_资产包",
+    "slug": "wall_service_02",
+    "category": "04_维修与机箱",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "wall_service_02_通用包",
+    "root_object": "ROOT_wall_service_02_通用组件",
+    "objects": [
+      "wall_service_02_主体_输出",
+      "wall_service_02_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      14.1325,
+      -19.0568,
+      0.0
+    ],
+    "bounds_size": [
+      0.755,
+      1.08,
+      2.56
+    ],
+    "front_direction": "+Y",
+    "source_component": "wall_service_02",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-EQUIPMENT-CASE-00",
+    "name_zh": "固定设备箱_00_资产包",
+    "slug": "equipment_case_00",
+    "category": "04_维修与机箱",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "equipment_case_00_通用包",
+    "root_object": "ROOT_equipment_case_00_通用组件",
+    "objects": [
+      "equipment_case_00_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      18.21,
+      -19.0568,
+      0.0
+    ],
+    "bounds_size": [
+      1.4,
+      1.065,
+      1.14
+    ],
+    "front_direction": "+Y",
+    "source_component": "equipment_case_00",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-DATA-BANNER",
+    "name_zh": "数据部破损旗帜_资产包",
+    "slug": "data_banner",
+    "category": "05_门框与标识",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "data_banner_通用包",
+    "root_object": "ROOT_data_banner_通用组件",
+    "objects": [
+      "data_banner_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      4.85,
+      -24.8368,
+      0.0
+    ],
+    "bounds_size": [
+      6.7,
+      0.4347,
+      5.0784
+    ],
+    "front_direction": "+Y",
+    "source_component": "data_banner",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-EAST-PORTAL",
+    "name_zh": "东侧门洞装甲_资产包",
+    "slug": "east_portal",
+    "category": "05_门框与标识",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "east_portal_通用包",
+    "root_object": "ROOT_east_portal_通用组件",
+    "objects": [
+      "east_portal_主体_输出",
+      "east_portal_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      12.72,
+      -24.8368,
+      0.0
+    ],
+    "bounds_size": [
+      3.04,
+      0.356,
+      2.815
+    ],
+    "front_direction": "+Y",
+    "source_component": "east_portal",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-PLANTER-00",
+    "name_zh": "固定绿植_00_资产包",
+    "slug": "planter_00",
+    "category": "06_环境陈设",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "planter_00_通用包",
+    "root_object": "ROOT_planter_00_通用组件",
+    "objects": [
+      "planter_00_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      2.0756,
+      -30.3368,
+      0.0
+    ],
+    "bounds_size": [
+      1.1511,
+      1.1379,
+      2.0109
+    ],
+    "front_direction": "+Y",
+    "source_component": "planter_00",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-NORTH-UTILITIES",
+    "name_zh": "北墙电缆桥架与检修灯_资产包",
+    "slug": "north_utilities",
+    "category": "07_环境支持",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "north_utilities_通用包",
+    "root_object": "ROOT_north_utilities_通用组件",
+    "objects": [
+      "north_utilities_主体_输出",
+      "north_utilities_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      15.5,
+      -35.9746,
+      0.0
+    ],
+    "bounds_size": [
+      28.0,
+      0.39,
+      9.0506
+    ],
+    "front_direction": "+Y",
+    "source_component": "north_utilities",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-EAST-UTILITIES",
+    "name_zh": "东墙电缆桥架与检修灯_资产包",
+    "slug": "east_utilities",
+    "category": "07_环境支持",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "east_utilities_通用包",
+    "root_object": "ROOT_east_utilities_通用组件",
+    "objects": [
+      "east_utilities_主体_输出",
+      "east_utilities_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      44.0,
+      -35.9746,
+      0.0
+    ],
+    "bounds_size": [
+      23.0,
+      0.39,
+      9.0506
+    ],
+    "front_direction": "+Y",
+    "source_component": "east_utilities",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-SOUTH-UTILITIES",
+    "name_zh": "南墙电缆桥架与检修灯_资产包",
+    "slug": "south_utilities",
+    "category": "07_环境支持",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "south_utilities_通用包",
+    "root_object": "ROOT_south_utilities_通用组件",
+    "objects": [
+      "south_utilities_主体_输出",
+      "south_utilities_自发光_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      72.5,
+      -35.9746,
+      0.0
+    ],
+    "bounds_size": [
+      28.0,
+      0.39,
+      9.0506
+    ],
+    "front_direction": "+Y",
+    "source_component": "south_utilities",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-FLOOR-CABLING",
+    "name_zh": "跨设备地面电缆_资产包",
+    "slug": "floor_cabling",
+    "category": "07_环境支持",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "floor_cabling_通用包",
+    "root_object": "ROOT_floor_cabling_通用组件",
+    "objects": [
+      "floor_cabling_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      102.735,
+      -35.9746,
+      0.0
+    ],
+    "bounds_size": [
+      26.47,
+      17.57,
+      0.12
+    ],
+    "front_direction": "+Y",
+    "source_component": "floor_cabling",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-FIXED-PAPERS",
+    "name_zh": "固定展示散落文件_资产包",
+    "slug": "fixed_papers",
+    "category": "07_环境支持",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "fixed_papers_通用包",
+    "root_object": "ROOT_fixed_papers_通用组件",
+    "objects": [
+      "fixed_papers_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      132.0877,
+      -35.9746,
+      0.0
+    ],
+    "bounds_size": [
+      26.2353,
+      17.8698,
+      0.007
+    ],
+    "front_direction": "+Y",
+    "source_component": "fixed_papers",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+    "name_zh": "战局通用标准墙 5×0.3×11.9m",
+    "slug": "wall_standard_5m",
+    "category": "08_墙壁组件",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "wall_standard_5m_通用包",
+    "root_object": "ROOT_wall_standard_5m_通用组件",
+    "objects": [
+      "wall_standard_5m_主体_输出"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      4.0,
+      -58.3444,
+      0.0
+    ],
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "front_direction": "+Y",
+    "source_component": "procedural_standard_wall",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": false,
+    "collision": "not_created"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+    "name_zh": "地砖_R01_C01_资产包",
+    "slug": "floor_tile_r01_c01",
+    "category": "09_地板组件",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "floor_tile_r01_c01_通用包",
+    "root_object": "ROOT_floor_tile_r01_c01_通用组件",
+    "objects": [
+      "floor_tile_r01_c01_主体_输出",
+      "floor_tile_r01_c01_主体_输出.001"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      3.97,
+      -63.8444,
+      0.0
+    ],
+    "bounds_size": [
+      4.94,
+      4.94,
+      0.056
+    ],
+    "front_direction": "+Y",
+    "source_component": "floor_tile_r01_c01",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": true,
+    "collision": "self_contained_box_bottom_center",
+    "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c01_visual_top3d_v003.glb",
+    "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d_v003.tscn"
+  },
+  {
+    "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+    "package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+    "name_zh": "地砖_R01_C02_资产包",
+    "slug": "floor_tile_r01_c02",
+    "category": "09_地板组件",
+    "version": "v003",
+    "source_blend": "战局区块_通用组件库_v003.blend",
+    "blender_collection": "floor_tile_r01_c02_通用包",
+    "root_object": "ROOT_floor_tile_r01_c02_通用组件",
+    "objects": [
+      "floor_tile_r01_c02_主体_输出",
+      "floor_tile_r01_c02_主体_输出.001"
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "showcase_position": [
+      11.91,
+      -63.8444,
+      0.0
+    ],
+    "bounds_size": [
+      4.94,
+      4.94,
+      0.081
+    ],
+    "front_direction": "+Y",
+    "source_component": "floor_tile_r01_c02",
+    "straightened_yaw_degrees": 0,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "exported": true,
+    "collision": "self_contained_box_bottom_center",
+    "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d_v003.glb",
+    "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v003.tscn"
+  }
+]

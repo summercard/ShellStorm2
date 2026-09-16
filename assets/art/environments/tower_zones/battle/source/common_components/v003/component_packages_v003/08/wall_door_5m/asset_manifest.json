@@ -1,0 +1,116 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+  "name_zh": "战局通用门墙 5×0.3×11.9m（门洞 2.2×2.5）",
+  "slug": "wall_door_5m",
+  "category": "08_墙壁组件",
+  "version": "v003",
+  "source_blend": "战局区块_通用组件库_v003.blend",
+  "blender_collection": "wall_door_5m_通用包",
+  "root_object": "ROOT_wall_door_5m_通用组件",
+  "objects": [
+    "wall_door_5m_门垛左_输出",
+    "wall_door_5m_门垛右_输出",
+    "wall_door_5m_门楣_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    8.0,
+    -58.3444,
+    0.0
+  ],
+  "bounds_size": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "front_direction": "+Y",
+  "source_component": "wall_door_5m",
+  "straightened_yaw_degrees": 0,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": true,
+  "collision": "self_contained_three_box_bottom_center",
+  "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/wall_door_5m/wall_door_5m_visual_top3d_v003.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d_v003.tscn",
+  "godot_bounds_size": [
+    5.0,
+    11.9,
+    0.3
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "collision_owner": "self",
+  "collision_shape_count": 3,
+  "collision_shapes": [
+    {
+      "name": "wall_door_5m_pier_l",
+      "size": [
+        1.4,
+        11.9,
+        0.3
+      ],
+      "center": [
+        -1.8,
+        5.95,
+        0.0
+      ]
+    },
+    {
+      "name": "wall_door_5m_pier_r",
+      "size": [
+        1.4,
+        11.9,
+        0.3
+      ],
+      "center": [
+        1.8,
+        5.95,
+        0.0
+      ]
+    },
+    {
+      "name": "wall_door_5m_lintel",
+      "size": [
+        2.2,
+        9.4,
+        0.3
+      ],
+      "center": [
+        0.0,
+        7.2,
+        0.0
+      ]
+    }
+  ],
+  "runtime_instantiation": "per_instance_prefab",
+  "verified_by": "res://assets/art/environments/tower_zones/battle/source/common_components/v003/qa/build_wall_door_prefabs.py",
+  "verification_scene": "res://tests/verification/verify_common_wall_door_components.tscn",
+  "acceptance_images": [
+    "res://outputs/verification/common_wall_door_components.png",
+    "res://outputs/verification/common_wall_door_components_door.png"
+  ],
+  "ledger": {
+    "file": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+    "sheet": "3D-场景通用",
+    "row": 95
+  },
+  "wall_kind": "door_portal",
+  "wall_thickness_m": 0.3,
+  "wall_visual_height_m": 11.9,
+  "wall_logical_height_m": 12.0,
+  "grid_unit_m": 5.0,
+  "door_clear_width_m": 2.2,
+  "door_clear_height_m": 2.5,
+  "pier_width_m": 1.4,
+  "lintel_height_m": 9.4
+}

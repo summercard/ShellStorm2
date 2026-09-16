@@ -1,0 +1,84 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-DOOR-5M",
+  "name_zh": "战局通用门扇 2.2×0.18×2.5m",
+  "slug": "door_5m",
+  "category": "10_门组件",
+  "version": "v003",
+  "source_blend": "战局区块_通用组件库_v003.blend",
+  "blender_collection": "door_5m_通用包",
+  "root_object": "ROOT_door_5m_通用组件",
+  "objects": [
+    "door_5m_门扇_输出"
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "showcase_position": [
+    2.6,
+    -69.3444,
+    0.0
+  ],
+  "bounds_size": [
+    2.2,
+    0.18,
+    2.5
+  ],
+  "front_direction": "+Y",
+  "source_component": "door_5m",
+  "straightened_yaw_degrees": 0,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "exported": true,
+  "collision": "self_contained_box_bottom_center",
+  "visual_glb": "res://assets/art/environments/tower_zones/battle/components/common_components/door_5m/door_5m_visual_top3d_v003.glb",
+  "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d_v003.tscn",
+  "godot_bounds_size": [
+    2.2,
+    2.5,
+    0.18
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "collision_owner": "self",
+  "collision_shape_count": 1,
+  "collision_shapes": [
+    {
+      "name": "door_5m_1",
+      "size": [
+        2.2,
+        2.5,
+        0.18
+      ],
+      "center": [
+        0.0,
+        1.25,
+        0.0
+      ]
+    }
+  ],
+  "runtime_instantiation": "per_instance_prefab",
+  "verified_by": "res://assets/art/environments/tower_zones/battle/source/common_components/v003/qa/build_wall_door_prefabs.py",
+  "verification_scene": "res://tests/verification/verify_common_wall_door_components.tscn",
+  "acceptance_images": [
+    "res://outputs/verification/common_wall_door_components.png",
+    "res://outputs/verification/common_wall_door_components_door.png"
+  ],
+  "ledger": {
+    "file": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx",
+    "sheet": "3D-场景通用",
+    "row": 96
+  },
+  "door_clear_width_m": 2.2,
+  "door_clear_height_m": 2.5,
+  "panel_thickness_m": 0.18,
+  "open_mode": "vertical_lift",
+  "panel_origin_policy": "bottom_center"
+}

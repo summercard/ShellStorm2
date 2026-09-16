@@ -1,0 +1,17 @@
+﻿PY_EXIT=0
+row count: 94 min: 1 max: 280
+has 91: True | has 92: True | has 93: True
+last 8 rows: [87, 88, 89, 90, 91, 92, 93, 280]
+
+=== last 5 rows detail ===
+  r90 {'A': 'ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY', 'B': '鎴樺眬鍖哄潡 閫氱敤缁勪欢搴?, 'K': '鎸夌粍浠舵竻鍗?, 'O': 'v003'}
+  r91 {'A': 'ENV-BATTLE-L01-CORRIDOR-WALL-5M', 'B': '灞€鍐呭叧鍗?1 璧板粖閫氱敤澧欏 5脳0.30脳11.9m 鐧芥ā', 'K': '5脳0.30脳11.9m', 'O': 'v003'}
+  r92 {'A': 'ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01', 'B': '鎴樺眬閫氱敤鍦扮爾 R01_C01 4.94脳4.94脳0.056m', 'K': '4.94脳4.94脳0.056m', 'O': 'v003'}
+  r93 {'A': 'ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02', 'B': '鎴樺眬閫氱敤鍦扮爾 R01_C02 4.94脳4.94脳0.081m', 'K': '4.94脳4.94脳0.081m', 'O': 'v003'}
+  r280 {}
+
+=== row 1 (header) ===
+
+structural: mergeCells=True dataValidations=True sheetData_end=True
+cell styles used: ['145', '157', '158', '159', '188', '189', '190', '191', '192', '193', '194', '195', '196', '311', '349', '392'] ... total 17
+

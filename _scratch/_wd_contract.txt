@@ -1,0 +1,47 @@
+﻿GODOT_EXIT=0
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+Godot_v4.6.3-stable_win64.exe : WARNING: 'res://assets/art/environments/base_fa
+cility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d
+_v002.glb': In external resource #0, invalid UID: 'uid://dt6u3ksl5xpl0' - using
+ text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.pn
+g'.
+所在位置 行:451 字符: 10
++   $out = & $g --headless --path $proj --scene "res://tests/verificati ...
++          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: 'res:/...10x10_512.png'. 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d_v002.glb': In external 
+resource #0, invalid UID: 'uid://dt6u3ksl5xpl0' - using text path instead: 'res
+://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_plain_5m/env_base99_floor_plain_5m_visual_top3d_v001.glb': In external re
+source #0, invalid UID: 'uid://b7f4v84i2yeen' - using text path instead: 'res:/
+/assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d_v001.glb': In external re
+source #0, invalid UID: 'uid://b7f4v84i2yeen' - using text path instead: 'res:/
+/assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_door_5x12/env_base99_wall_door_5x12_visual_top3d_v004.glb': In external re
+source #0, invalid UID: 'uid://dt6u3ksl5xpl0' - using text path instead: 'res:/
+/assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb': In exter
+nal resource #0, invalid UID: 'uid://dt6u3ksl5xpl0' - using text path instead: 
+'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+=== battle common wall/door component contract ===
+--- wall_standard_5m ---
+--- wall_door_5m ---
+--- door_5m ---
+COMMON_WALL_DOOR_COMPONENTS_OK: 鍘熺偣/鍙ｅ緞/纰版挒/闂ㄦ礊鍑€绌哄绾﹀叏閮ㄦ垚绔?
+
