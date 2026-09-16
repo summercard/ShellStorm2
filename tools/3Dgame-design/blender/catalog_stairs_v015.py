@@ -5,7 +5,7 @@ import bpy
 from mathutils import Vector
 
 project = Path(__file__).resolve().parents[3]
-target = project / 'source/art/whitebox/tower_zones/v015/data'
+target = project / 'source/art/whitebox/tower_zones/stairs/v015/data'
 payload = json.loads((target / 'whitebox_tower_stairs_v015.json').read_text())
 catalog = []
 for index, record in enumerate(payload['components'], 1):

@@ -1,0 +1,23 @@
+{
+  "scene_id": "tower_stairs",
+  "display_name": "塔楼楼梯间白盒",
+  "version": 11,
+  "stage": "whitebox",
+  "block": {
+    "block_id": "stairs",
+    "floor_range": "100F-99F;99F-98F",
+    "design_scope": "Blocks/Stairs; Stair_A; Stair_B",
+    "scene_design_docs": [
+      "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
+  },
+  "unit": "meter",
+  "coordinate_system": "godot_y_up_negative_z_forward",
+  "grid_size_m": [5.0, 5.0],
+  "floor_height_m": 12.0,
+  "visible_wall_height_m": 11.9,
+  "blender_output": "source/art/whitebox/tower_zones/stairs/v011/blender/whitebox_tower_battle_stairs_v011.blend",
+  "migration_note": "The existing v011 whitebox Blend was moved without regeneration; future revisions must be generated from the versioned JSON files."
+}

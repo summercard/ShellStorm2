@@ -15,8 +15,8 @@ SUPPORTED = {
     "显示器", "笔记本电脑", "文件柜", "书架", "打印机", "饮水机", "会议桌", "白板", "路灯", "箱子", "楼梯",
 }
 DEFAULTS = [
-    ROOT / "source/art/whitebox/tower_zones/v011/data/whitebox_battle_98_95_v011.json",
-    ROOT / "source/art/whitebox/tower_zones/v012/data/whitebox_stairs_v012.json",
+    ROOT / "source/art/whitebox/tower_zones/battle_level01/legacy/v011/data/whitebox_battle_98_95_v011.json",
+    ROOT / "source/art/whitebox/tower_zones/stairs/v012/data/whitebox_stairs_v012.json",
 ]
 
 

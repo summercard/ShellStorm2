@@ -3,7 +3,7 @@
   "version": "v001",
   "block_id": "stairs",
   "source_blend": "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend",
-  "contract": "source/art/whitebox/tower_zones/v012/data/whitebox_stairs_v012.json",
+  "contract": "source/art/whitebox/tower_zones/stairs/v012/data/whitebox_stairs_v012.json",
   "production_stage": "formal_blender_source",
   "runtime_reimported": false,
   "contains_non_stair_models": false,

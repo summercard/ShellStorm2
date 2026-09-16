@@ -13,7 +13,7 @@ from mathutils import Matrix, Vector
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_DIR = ROOT / "assets/art/environments/tower_descent_3d/source"
-WHITEBOX_DIR = ROOT / "source/art/whitebox/tower_zones/v011/blender"
+WHITEBOX_DIR = ROOT / "source/art/whitebox/tower_zones/stairs/v011/blender"
 COMPONENT_DIR = ROOT / "assets/art/environments/tower_descent_3d/components"
 OUTPUT_BLEND = WHITEBOX_DIR / "whitebox_tower_battle_stairs_v011.blend"
 FLOOR_HEIGHT = 12.0

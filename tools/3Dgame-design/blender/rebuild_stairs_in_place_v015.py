@@ -6,9 +6,9 @@ import bpy
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[3]
-DEST = ROOT / 'source/art/whitebox/tower_zones/v015'
+DEST = ROOT / 'source/art/whitebox/tower_zones/stairs/v015'
 SCENE_ID = 'whitebox_tower_stairs_v015'
-source = ROOT / 'source/art/whitebox/tower_zones/v013/blender/whitebox_tower_stairs_v013.blend'
+source = ROOT / 'source/art/whitebox/tower_zones/stairs/v013/blender/whitebox_tower_stairs_v013.blend'
 bpy.ops.wm.open_mainfile(filepath=str(source))
 bpy.context.view_layer.update()
 base = bpy.data.objects['Stair_Generic_Rotatable_ROOT']

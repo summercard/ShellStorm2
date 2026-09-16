@@ -4,9 +4,9 @@ from mathutils import Vector
 from mathutils.kdtree import KDTree
 
 ROOT=Path(__file__).resolve().parents[3]
-DEST=ROOT/'source/art/whitebox/tower_zones/v015'
+DEST=ROOT/'source/art/whitebox/tower_zones/stairs/v015'
 payload=json.loads((DEST/'data/whitebox_tower_stairs_v015.json').read_text())
-bpy.ops.wm.open_mainfile(filepath=str(ROOT/'source/art/whitebox/tower_zones/v013/blender/whitebox_tower_stairs_v013.blend'))
+bpy.ops.wm.open_mainfile(filepath=str(ROOT/'source/art/whitebox/tower_zones/stairs/v013/blender/whitebox_tower_stairs_v013.blend'))
 bpy.context.view_layer.update()
 original={o.name:[o.matrix_world@v.co for v in o.data.vertices] for o in bpy.context.scene.objects if o.type=='MESH'}
 bpy.ops.wm.open_mainfile(filepath=str(DEST/'blender/whitebox_tower_stairs_v015.blend'))

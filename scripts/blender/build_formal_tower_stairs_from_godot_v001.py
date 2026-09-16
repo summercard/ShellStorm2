@@ -16,7 +16,7 @@ import bpy
 
 
 ROOT = Path(__file__).resolve().parents[2]
-CONTRACT = ROOT / "source/art/whitebox/tower_zones/v012/data/whitebox_stairs_v012.json"
+CONTRACT = ROOT / "source/art/whitebox/tower_zones/stairs/v012/data/whitebox_stairs_v012.json"
 OUTPUT = ROOT / "assets/art/environments/tower_descent_3d/source/stairs_12m/env_tower_stairs_12m_source_v001.blend"
 MANIFEST = OUTPUT.with_name("asset_manifest_v001.json")
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"

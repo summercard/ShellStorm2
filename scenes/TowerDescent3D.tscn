@@ -147,7 +147,7 @@ metadata/setting_name = "顶部数据库"
 metadata/floor_range = "98F-95F"
 metadata/asset_ids = Array[String](["ENV-TOWER-DESCENT-KIT-3D"])
 metadata/runtime_owner = "TowerDescent3D"
-metadata/source_blends = Array[String](["source/art/whitebox/tower_zones/v011/blender/whitebox_tower_battle_stairs_v011.blend"])
+metadata/source_blends = Array[String](["source/art/whitebox/tower_zones/stairs/v011/blender/whitebox_tower_battle_stairs_v011.blend"])
 metadata/production_stage = "whitebox"
 
 [node name="Stairs" type="Node3D" parent="Blocks" index="3"]

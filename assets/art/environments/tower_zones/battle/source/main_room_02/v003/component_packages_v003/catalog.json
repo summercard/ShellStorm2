@@ -1,0 +1,5554 @@
+[
+  {
+    "package_id": "main02_wall_north_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "北墙",
+    "slug": "wall_north_01",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "北墙_资产包",
+    "objects": [
+      "WALL_NORTH_01",
+      "北墙_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_NORTH_01",
+      "北墙_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        12.194001,
+        0.0
+      ],
+      [
+        15.0,
+        12.5,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      30.0,
+      0.3059989999999999,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_north_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_south_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "南墙",
+    "slug": "wall_south_01",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "南墙_资产包",
+    "objects": [
+      "WALL_SOUTH_01",
+      "南墙_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_SOUTH_01",
+      "南墙_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        -12.5,
+        0.0
+      ],
+      [
+        15.0,
+        -12.194001,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      30.0,
+      0.3059989999999999,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_south_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_wall_east_door_01_left",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "东墙_DOOR_01_LEFT",
+    "slug": "wall_east_door_01_left",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "东墙_DOOR_01_LEFT_资产包",
+    "objects": [
+      "WALL_EAST_DOOR_01_LEFT",
+      "东墙_DOOR_01_LEFT_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_EAST_DOOR_01_LEFT",
+      "东墙_DOOR_01_LEFT_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        14.694001,
+        -12.5,
+        0.0
+      ],
+      [
+        15.0,
+        -1.1,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      11.4,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_east_door_01_left_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_east_door_01_lintel",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "东墙_DOOR_01_LINTEL",
+    "slug": "wall_east_door_01_lintel",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "东墙_DOOR_01_LINTEL_资产包",
+    "objects": [
+      "WALL_EAST_DOOR_01_LINTEL",
+      "东墙_DOOR_01_LINTEL_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_EAST_DOOR_01_LINTEL",
+      "东墙_DOOR_01_LINTEL_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        14.694001,
+        -1.1,
+        2.8
+      ],
+      [
+        15.0,
+        1.1,
+        11.900001
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      2.2,
+      9.100000999999999
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_east_door_01_lintel_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_east_door_01_right",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "东墙_DOOR_01_RIGHT",
+    "slug": "wall_east_door_01_right",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "东墙_DOOR_01_RIGHT_资产包",
+    "objects": [
+      "WALL_EAST_DOOR_01_RIGHT",
+      "东墙_DOOR_01_RIGHT_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_EAST_DOOR_01_RIGHT",
+      "东墙_DOOR_01_RIGHT_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        14.694001,
+        1.1,
+        0.0
+      ],
+      [
+        15.0,
+        12.5,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      11.4,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_east_door_01_right_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_west_door_01_left",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "西墙_DOOR_01_LEFT",
+    "slug": "wall_west_door_01_left",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "西墙_DOOR_01_LEFT_资产包",
+    "objects": [
+      "WALL_WEST_DOOR_01_LEFT",
+      "西墙_DOOR_01_LEFT_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_WEST_DOOR_01_LEFT",
+      "西墙_DOOR_01_LEFT_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        -12.5,
+        0.0
+      ],
+      [
+        -14.694001,
+        -1.1,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      11.4,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_west_door_01_left_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_wall_west_door_01_lintel",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "西墙_DOOR_01_LINTEL",
+    "slug": "wall_west_door_01_lintel",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "西墙_DOOR_01_LINTEL_资产包",
+    "objects": [
+      "WALL_WEST_DOOR_01_LINTEL",
+      "西墙_DOOR_01_LINTEL_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_WEST_DOOR_01_LINTEL",
+      "西墙_DOOR_01_LINTEL_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        -1.1,
+        2.8
+      ],
+      [
+        -14.694001,
+        1.1,
+        11.900001
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      2.2,
+      9.100000999999999
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_west_door_01_lintel_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_wall_west_door_01_right",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "西墙_DOOR_01_RIGHT",
+    "slug": "wall_west_door_01_right",
+    "category": "architecture",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "西墙_DOOR_01_RIGHT_资产包",
+    "objects": [
+      "WALL_WEST_DOOR_01_RIGHT",
+      "西墙_DOOR_01_RIGHT_附着细节_主体"
+    ],
+    "root_objects": [
+      "WALL_WEST_DOOR_01_RIGHT",
+      "西墙_DOOR_01_RIGHT_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        1.1,
+        0.0
+      ],
+      [
+        -14.694001,
+        12.5,
+        11.9
+      ]
+    ],
+    "dimensions": [
+      0.3059989999999999,
+      11.4,
+      11.9
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_west_door_01_right_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_floor_base",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "承重底板",
+    "slug": "floor_base",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "承重底板_资产包",
+    "objects": [
+      "FLOOR_BASE"
+    ],
+    "root_objects": [
+      "FLOOR_BASE"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -15.0,
+        -12.5,
+        0.0
+      ],
+      [
+        15.0,
+        12.5,
+        0.26
+      ]
+    ],
+    "dimensions": [
+      30.0,
+      25.0,
+      0.26
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_base_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C01",
+    "slug": "floor_tile_r01_c01",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C01_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C01",
+      "地砖_R01_C01_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C01",
+      "地砖_R01_C01_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.97,
+        -12.47,
+        0.26
+      ],
+      [
+        -10.03,
+        -7.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C02",
+    "slug": "floor_tile_r01_c02",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C02_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C02",
+      "地砖_R01_C02_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C02",
+      "地砖_R01_C02_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -9.97,
+        -12.47,
+        0.26
+      ],
+      [
+        -5.03,
+        -7.53,
+        0.341
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.08100000000000002
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C03",
+    "slug": "floor_tile_r01_c03",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C03_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C03",
+      "地砖_R01_C03_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C03",
+      "地砖_R01_C03_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -4.97,
+        -12.47,
+        0.26
+      ],
+      [
+        -0.03,
+        -7.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C04",
+    "slug": "floor_tile_r01_c04",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C04_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C04",
+      "地砖_R01_C04_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C04",
+      "地砖_R01_C04_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.03,
+        -12.47,
+        0.26
+      ],
+      [
+        4.97,
+        -7.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C05",
+    "slug": "floor_tile_r01_c05",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C05_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C05",
+      "地砖_R01_C05_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C05",
+      "地砖_R01_C05_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        5.03,
+        -12.47,
+        0.26
+      ],
+      [
+        9.97,
+        -7.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r01_c06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R01_C06",
+    "slug": "floor_tile_r01_c06",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R01_C06_资产包",
+    "objects": [
+      "FLOOR_TILE_R01_C06",
+      "地砖_R01_C06_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R01_C06",
+      "地砖_R01_C06_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.03,
+        -12.47,
+        0.26
+      ],
+      [
+        14.97,
+        -7.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r01_c06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C01",
+    "slug": "floor_tile_r02_c01",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C01_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C01",
+      "地砖_R02_C01_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C01",
+      "地砖_R02_C01_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.97,
+        -7.47,
+        0.26
+      ],
+      [
+        -10.03,
+        -2.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C02",
+    "slug": "floor_tile_r02_c02",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C02_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C02",
+      "地砖_R02_C02_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C02",
+      "地砖_R02_C02_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -9.97,
+        -7.47,
+        0.26
+      ],
+      [
+        -5.03,
+        -2.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C03",
+    "slug": "floor_tile_r02_c03",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C03_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C03",
+      "地砖_R02_C03_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C03",
+      "地砖_R02_C03_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -4.97,
+        -7.47,
+        0.26
+      ],
+      [
+        -0.03,
+        -2.53,
+        0.341
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.9399999999999995,
+      0.08100000000000002
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C04",
+    "slug": "floor_tile_r02_c04",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C04_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C04",
+      "地砖_R02_C04_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C04",
+      "地砖_R02_C04_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.03,
+        -7.47,
+        0.26
+      ],
+      [
+        4.97,
+        -2.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C05",
+    "slug": "floor_tile_r02_c05",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C05_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C05",
+      "地砖_R02_C05_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C05",
+      "地砖_R02_C05_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        5.03,
+        -7.47,
+        0.26
+      ],
+      [
+        9.97,
+        -2.53,
+        0.341
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.9399999999999995,
+      0.08100000000000002
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r02_c06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R02_C06",
+    "slug": "floor_tile_r02_c06",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R02_C06_资产包",
+    "objects": [
+      "FLOOR_TILE_R02_C06",
+      "地砖_R02_C06_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R02_C06",
+      "地砖_R02_C06_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.03,
+        -7.47,
+        0.26
+      ],
+      [
+        14.97,
+        -2.53,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r02_c06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C01",
+    "slug": "floor_tile_r03_c01",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C01_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C01",
+      "地砖_R03_C01_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C01",
+      "地砖_R03_C01_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.97,
+        -2.47,
+        0.26
+      ],
+      [
+        -10.03,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C02",
+    "slug": "floor_tile_r03_c02",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C02_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C02",
+      "地砖_R03_C02_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C02",
+      "地砖_R03_C02_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -9.97,
+        -2.47,
+        0.26
+      ],
+      [
+        -5.03,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C03",
+    "slug": "floor_tile_r03_c03",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C03_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C03",
+      "地砖_R03_C03_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C03",
+      "地砖_R03_C03_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -4.97,
+        -2.47,
+        0.26
+      ],
+      [
+        -0.03,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C04",
+    "slug": "floor_tile_r03_c04",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C04_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C04",
+      "地砖_R03_C04_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C04",
+      "地砖_R03_C04_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.03,
+        -2.47,
+        0.26
+      ],
+      [
+        4.97,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C05",
+    "slug": "floor_tile_r03_c05",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C05_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C05",
+      "地砖_R03_C05_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C05",
+      "地砖_R03_C05_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        5.03,
+        -2.47,
+        0.26
+      ],
+      [
+        9.97,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r03_c06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R03_C06",
+    "slug": "floor_tile_r03_c06",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R03_C06_资产包",
+    "objects": [
+      "FLOOR_TILE_R03_C06",
+      "地砖_R03_C06_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R03_C06",
+      "地砖_R03_C06_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.03,
+        -2.47,
+        0.26
+      ],
+      [
+        14.97,
+        2.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r03_c06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C01",
+    "slug": "floor_tile_r04_c01",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C01_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C01",
+      "地砖_R04_C01_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C01",
+      "地砖_R04_C01_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.97,
+        2.53,
+        0.26
+      ],
+      [
+        -10.03,
+        7.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C02",
+    "slug": "floor_tile_r04_c02",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C02_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C02",
+      "地砖_R04_C02_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C02",
+      "地砖_R04_C02_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -9.97,
+        2.53,
+        0.26
+      ],
+      [
+        -5.03,
+        7.47,
+        0.341
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.9399999999999995,
+      0.08100000000000002
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C03",
+    "slug": "floor_tile_r04_c03",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C03_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C03",
+      "地砖_R04_C03_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C03",
+      "地砖_R04_C03_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -4.97,
+        2.53,
+        0.26
+      ],
+      [
+        -0.03,
+        7.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C04",
+    "slug": "floor_tile_r04_c04",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C04_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C04",
+      "地砖_R04_C04_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C04",
+      "地砖_R04_C04_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.03,
+        2.53,
+        0.26
+      ],
+      [
+        4.97,
+        7.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C05",
+    "slug": "floor_tile_r04_c05",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C05_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C05",
+      "地砖_R04_C05_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C05",
+      "地砖_R04_C05_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        5.03,
+        2.53,
+        0.26
+      ],
+      [
+        9.97,
+        7.47,
+        0.341
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.9399999999999995,
+      0.08100000000000002
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r04_c06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R04_C06",
+    "slug": "floor_tile_r04_c06",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R04_C06_资产包",
+    "objects": [
+      "FLOOR_TILE_R04_C06",
+      "地砖_R04_C06_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R04_C06",
+      "地砖_R04_C06_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.03,
+        2.53,
+        0.26
+      ],
+      [
+        14.97,
+        7.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.9399999999999995,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r04_c06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C01",
+    "slug": "floor_tile_r05_c01",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C01_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C01",
+      "地砖_R05_C01_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C01",
+      "地砖_R05_C01_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.97,
+        7.53,
+        0.26
+      ],
+      [
+        -10.03,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C02",
+    "slug": "floor_tile_r05_c02",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C02_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C02",
+      "地砖_R05_C02_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C02",
+      "地砖_R05_C02_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -9.97,
+        7.53,
+        0.26
+      ],
+      [
+        -5.03,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C03",
+    "slug": "floor_tile_r05_c03",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C03_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C03",
+      "地砖_R05_C03_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C03",
+      "地砖_R05_C03_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -4.97,
+        7.53,
+        0.26
+      ],
+      [
+        -0.03,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C04",
+    "slug": "floor_tile_r05_c04",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C04_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C04",
+      "地砖_R05_C04_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C04",
+      "地砖_R05_C04_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.03,
+        7.53,
+        0.26
+      ],
+      [
+        4.97,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.9399999999999995,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C05",
+    "slug": "floor_tile_r05_c05",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C05_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C05",
+      "地砖_R05_C05_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C05",
+      "地砖_R05_C05_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        5.03,
+        7.53,
+        0.26
+      ],
+      [
+        9.97,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.94,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_tile_r05_c06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "地砖_R05_C06",
+    "slug": "floor_tile_r05_c06",
+    "category": "floor",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "地砖_R05_C06_资产包",
+    "objects": [
+      "FLOOR_TILE_R05_C06",
+      "地砖_R05_C06_附着细节_主体"
+    ],
+    "root_objects": [
+      "FLOOR_TILE_R05_C06",
+      "地砖_R05_C06_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.03,
+        7.53,
+        0.26
+      ],
+      [
+        14.97,
+        12.47,
+        0.316
+      ]
+    ],
+    "dimensions": [
+      4.940000000000001,
+      4.94,
+      0.055999999999999994
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_tile_r05_c06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_utilities",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "北墙电缆桥架与检修灯",
+    "slug": "north_utilities",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "北墙电缆桥架与检修灯_资产包",
+    "objects": [
+      "北墙电缆桥架与检修灯_附着细节_主体",
+      "北墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "北墙电缆桥架与检修灯_附着细节_主体",
+      "北墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      0,
+      11.98,
+      0
+    ],
+    "local_origin": [
+      0,
+      11.98,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.0,
+        11.715,
+        0.649393
+      ],
+      [
+        14.0,
+        12.089999,
+        9.7
+      ]
+    ],
+    "dimensions": [
+      28.0,
+      0.37499900000000075,
+      9.050607
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_utilities_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_utilities",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "东墙电缆桥架与检修灯",
+    "slug": "east_utilities",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "东墙电缆桥架与检修灯_资产包",
+    "objects": [
+      "东墙电缆桥架与检修灯_附着细节_主体",
+      "东墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "东墙电缆桥架与检修灯_附着细节_主体",
+      "东墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      14.48,
+      0,
+      0
+    ],
+    "local_origin": [
+      14.48,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        14.214999,
+        -11.5,
+        0.649393
+      ],
+      [
+        14.589999,
+        11.5,
+        9.7
+      ]
+    ],
+    "dimensions": [
+      0.375,
+      23.0,
+      9.050607
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_utilities_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_south_utilities",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "南墙电缆桥架与检修灯",
+    "slug": "south_utilities",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "南墙电缆桥架与检修灯_资产包",
+    "objects": [
+      "南墙电缆桥架与检修灯_附着细节_主体",
+      "南墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "南墙电缆桥架与检修灯_附着细节_主体",
+      "南墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      0,
+      -11.98,
+      0
+    ],
+    "local_origin": [
+      0,
+      -11.98,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.0,
+        -12.09,
+        0.649393
+      ],
+      [
+        14.0,
+        -11.714998,
+        9.7
+      ]
+    ],
+    "dimensions": [
+      28.0,
+      0.3750020000000003,
+      9.050607
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "south_utilities_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_west_utilities",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "西墙电缆桥架与检修灯",
+    "slug": "west_utilities",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "西墙电缆桥架与检修灯_资产包",
+    "objects": [
+      "西墙电缆桥架与检修灯_附着细节_主体",
+      "西墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "西墙电缆桥架与检修灯_附着细节_主体",
+      "西墙电缆桥架与检修灯_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -14.48,
+      0,
+      0
+    ],
+    "local_origin": [
+      -14.48,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.59,
+        -11.5,
+        0.649393
+      ],
+      [
+        -14.214999,
+        11.5,
+        9.7
+      ]
+    ],
+    "dimensions": [
+      0.37500099999999925,
+      23.0,
+      9.050607
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "west_utilities_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_north_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_00",
+    "slug": "north_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_00_资产包",
+    "objects": [
+      "服务器柜_north_00_附着细节_主体",
+      "服务器柜_north_00_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_00_附着细节_主体",
+      "服务器柜_north_00_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -2.8,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      -2.8,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -3.665,
+        9.934999,
+        0.3
+      ],
+      [
+        -1.935,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.73,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_01",
+    "slug": "north_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_01_资产包",
+    "objects": [
+      "服务器柜_north_01_附着细节_主体",
+      "服务器柜_north_01_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_01_附着细节_主体",
+      "服务器柜_north_01_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -0.9,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      -0.9,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -1.765,
+        9.934999,
+        0.3
+      ],
+      [
+        -0.035,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.73,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_02",
+    "slug": "north_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_02_资产包",
+    "objects": [
+      "服务器柜_north_02_附着细节_主体",
+      "服务器柜_north_02_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_02_附着细节_主体",
+      "服务器柜_north_02_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      1.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      1.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.135,
+        9.934999,
+        0.3
+      ],
+      [
+        1.865,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.73,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "故障服务器柜_north_03",
+    "slug": "north_03",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "故障服务器柜_north_03_资产包",
+    "objects": [
+      "故障服务器柜_north_03_附着细节_主体",
+      "故障服务器柜_north_03_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "故障服务器柜_north_03_附着细节_主体",
+      "故障服务器柜_north_03_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      3.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      3.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        2.135,
+        9.278039,
+        0.3
+      ],
+      [
+        4.611516,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      2.476516,
+      2.186961,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_04",
+    "slug": "north_04",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_04_资产包",
+    "objects": [
+      "服务器柜_north_04_附着细节_主体",
+      "服务器柜_north_04_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_04_附着细节_主体",
+      "服务器柜_north_04_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      5.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      5.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        4.135,
+        9.934999,
+        0.3
+      ],
+      [
+        5.865,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.7300000000000004,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_05",
+    "slug": "north_05",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_05_资产包",
+    "objects": [
+      "服务器柜_north_05_附着细节_主体",
+      "服务器柜_north_05_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_05_附着细节_主体",
+      "服务器柜_north_05_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      7.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      7.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        6.135,
+        9.934999,
+        0.3
+      ],
+      [
+        7.865,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.7300000000000004,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_06",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "故障服务器柜_north_06",
+    "slug": "north_06",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "故障服务器柜_north_06_资产包",
+    "objects": [
+      "故障服务器柜_north_06_附着细节_主体",
+      "故障服务器柜_north_06_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "故障服务器柜_north_06_附着细节_主体",
+      "故障服务器柜_north_06_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      9.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      9.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        8.135,
+        9.278039,
+        0.3
+      ],
+      [
+        10.611516,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      2.476516,
+      2.186961,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_06_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_07",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_north_07",
+    "slug": "north_07",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_north_07_资产包",
+    "objects": [
+      "服务器柜_north_07_附着细节_主体",
+      "服务器柜_north_07_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_north_07_附着细节_主体",
+      "服务器柜_north_07_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      11.0,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      11.0,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.135,
+        9.934999,
+        0.3
+      ],
+      [
+        11.865,
+        11.465,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.7300000000000004,
+      1.5300010000000004,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_07_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_east_00",
+    "slug": "east_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_east_00_资产包",
+    "objects": [
+      "服务器柜_east_00_附着细节_主体",
+      "服务器柜_east_00_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_east_00_附着细节_主体",
+      "服务器柜_east_00_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      8.1,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      8.1,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        12.434999,
+        7.235,
+        0.3
+      ],
+      [
+        13.965,
+        8.965,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.5300010000000004,
+      1.7299999999999995,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "故障服务器柜_east_01",
+    "slug": "east_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "故障服务器柜_east_01_资产包",
+    "objects": [
+      "故障服务器柜_east_01_附着细节_主体",
+      "故障服务器柜_east_01_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "故障服务器柜_east_01_附着细节_主体",
+      "故障服务器柜_east_01_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      5.95,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      5.95,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        11.778039,
+        4.338484,
+        0.3
+      ],
+      [
+        13.965,
+        6.815,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      2.186961,
+      2.476516,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_east_02",
+    "slug": "east_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_east_02_资产包",
+    "objects": [
+      "服务器柜_east_02_附着细节_主体",
+      "服务器柜_east_02_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_east_02_附着细节_主体",
+      "服务器柜_east_02_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      3.8,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      3.8,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        12.434999,
+        2.935,
+        0.3
+      ],
+      [
+        13.965,
+        4.665,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.5300010000000004,
+      1.73,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_east_03",
+    "slug": "east_03",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_east_03_资产包",
+    "objects": [
+      "服务器柜_east_03_附着细节_主体",
+      "服务器柜_east_03_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_east_03_附着细节_主体",
+      "服务器柜_east_03_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      -3.9,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      -3.9,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        12.434999,
+        -4.765,
+        0.3
+      ],
+      [
+        13.965,
+        -3.035,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.5300010000000004,
+      1.7299999999999995,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_04",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_east_04",
+    "slug": "east_04",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_east_04_资产包",
+    "objects": [
+      "服务器柜_east_04_附着细节_主体",
+      "服务器柜_east_04_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_east_04_附着细节_主体",
+      "服务器柜_east_04_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      -6.1,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      -6.1,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        12.434999,
+        -6.965,
+        0.3
+      ],
+      [
+        13.965,
+        -5.235,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.5300010000000004,
+      1.7299999999999995,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_04_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_05",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "服务器柜_east_05",
+    "slug": "east_05",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "服务器柜_east_05_资产包",
+    "objects": [
+      "服务器柜_east_05_附着细节_主体",
+      "服务器柜_east_05_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "服务器柜_east_05_附着细节_主体",
+      "服务器柜_east_05_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      13.2,
+      -8.3,
+      0.3
+    ],
+    "local_origin": [
+      13.2,
+      -8.3,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        12.434999,
+        -9.165,
+        0.3
+      ],
+      [
+        13.965,
+        -7.435,
+        4.312
+      ]
+    ],
+    "dimensions": [
+      1.5300010000000004,
+      1.7299999999999995,
+      4.0120000000000005
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_05_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_west_desk",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "数据操作终端_west_desk",
+    "slug": "west_desk",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "数据操作终端_west_desk_资产包",
+    "objects": [
+      "数据操作终端_west_desk_附着细节_主体",
+      "数据操作终端_west_desk_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "数据操作终端_west_desk_附着细节_主体",
+      "数据操作终端_west_desk_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -12.85,
+      -5.5,
+      0.3
+    ],
+    "local_origin": [
+      -12.85,
+      -5.5,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.650001,
+        -7.4,
+        0.3
+      ],
+      [
+        -12.0302,
+        -3.6,
+        3.26
+      ]
+    ],
+    "dimensions": [
+      1.619800999999999,
+      3.8000000000000003,
+      2.96
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "west_desk_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_west_control",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "数据操作终端_west_control",
+    "slug": "west_control",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "数据操作终端_west_control_资产包",
+    "objects": [
+      "数据操作终端_west_control_附着细节_主体",
+      "数据操作终端_west_control_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "数据操作终端_west_control_附着细节_主体",
+      "数据操作终端_west_control_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -12.85,
+      5.0,
+      0.3
+    ],
+    "local_origin": [
+      -12.85,
+      5.0,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.650001,
+        3.5,
+        0.3
+      ],
+      [
+        -12.0302,
+        6.5,
+        3.26
+      ]
+    ],
+    "dimensions": [
+      1.619800999999999,
+      3.0,
+      2.96
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "west_control_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_north_control",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "数据操作终端_north_control",
+    "slug": "north_control",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "数据操作终端_north_control_资产包",
+    "objects": [
+      "数据操作终端_north_control_附着细节_主体",
+      "数据操作终端_north_control_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "数据操作终端_north_control_附着细节_主体",
+      "数据操作终端_north_control_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -9.8,
+      10.75,
+      0.3
+    ],
+    "local_origin": [
+      -9.8,
+      10.75,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -11.400001,
+        9.9302,
+        0.3
+      ],
+      [
+        -8.2,
+        11.55,
+        3.26
+      ]
+    ],
+    "dimensions": [
+      3.2000010000000003,
+      1.6198000000000015,
+      2.96
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "north_control_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_fault_tray_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "脱落服务器模块_00",
+    "slug": "fault_tray_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "脱落服务器模块_00_资产包",
+    "objects": [
+      "脱落服务器模块_00_附着细节_主体",
+      "脱落服务器模块_00_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "脱落服务器模块_00_附着细节_主体",
+      "脱落服务器模块_00_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      3.2,
+      8.4,
+      0.3
+    ],
+    "local_origin": [
+      3.2,
+      8.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        2.378313,
+        7.534872,
+        0.315
+      ],
+      [
+        4.021688,
+        9.10855,
+        0.7895
+      ]
+    ],
+    "dimensions": [
+      1.6433750000000003,
+      1.5736779999999992,
+      0.4745
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "fault_tray_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_fault_tray_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "脱落服务器模块_01",
+    "slug": "fault_tray_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "脱落服务器模块_01_资产包",
+    "objects": [
+      "脱落服务器模块_01_附着细节_主体",
+      "脱落服务器模块_01_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "脱落服务器模块_01_附着细节_主体",
+      "脱落服务器模块_01_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      10.8,
+      4.4,
+      0.3
+    ],
+    "local_origin": [
+      10.8,
+      4.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        10.012037,
+        3.524292,
+        0.315
+      ],
+      [
+        11.722868,
+        5.265353,
+        0.7895
+      ]
+    ],
+    "dimensions": [
+      1.7108310000000007,
+      1.7410610000000002,
+      0.4745
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "fault_tray_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_fault_tray_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "脱落服务器模块_02",
+    "slug": "fault_tray_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "脱落服务器模块_02_资产包",
+    "objects": [
+      "脱落服务器模块_02_附着细节_主体",
+      "脱落服务器模块_02_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "脱落服务器模块_02_附着细节_主体",
+      "脱落服务器模块_02_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      9.5,
+      -8.2,
+      0.3
+    ],
+    "local_origin": [
+      9.5,
+      -8.2,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        8.696362,
+        -9.042579,
+        0.315
+      ],
+      [
+        10.303638,
+        -7.519599,
+        0.7895
+      ]
+    ],
+    "dimensions": [
+      1.6072759999999988,
+      1.5229799999999996,
+      0.4745
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "fault_tray_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_service_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "墙边电控柜_00",
+    "slug": "wall_service_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "墙边电控柜_00_资产包",
+    "objects": [
+      "墙边电控柜_00_附着细节_主体",
+      "墙边电控柜_00_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "墙边电控柜_00_附着细节_主体",
+      "墙边电控柜_00_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -13.5,
+      8.1,
+      0.3
+    ],
+    "local_origin": [
+      -13.5,
+      8.1,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.82,
+        7.56,
+        0.3
+      ],
+      [
+        -13.065001,
+        8.64,
+        2.86
+      ]
+    ],
+    "dimensions": [
+      0.7549989999999998,
+      1.080000000000001,
+      2.56
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_service_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_service_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "墙边电控柜_01",
+    "slug": "wall_service_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "墙边电控柜_01_资产包",
+    "objects": [
+      "墙边电控柜_01_附着细节_主体",
+      "墙边电控柜_01_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "墙边电控柜_01_附着细节_主体",
+      "墙边电控柜_01_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -5.1,
+      11.9,
+      0.3
+    ],
+    "local_origin": [
+      -5.1,
+      11.9,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -5.64,
+        11.465,
+        0.3
+      ],
+      [
+        -4.56,
+        12.219999,
+        2.86
+      ]
+    ],
+    "dimensions": [
+      1.08,
+      0.7549989999999998,
+      2.56
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_service_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_wall_service_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "墙边电控柜_02",
+    "slug": "wall_service_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "墙边电控柜_02_资产包",
+    "objects": [
+      "墙边电控柜_02_附着细节_主体",
+      "墙边电控柜_02_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "墙边电控柜_02_附着细节_主体",
+      "墙边电控柜_02_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      14.35,
+      -2.25,
+      0.3
+    ],
+    "local_origin": [
+      14.35,
+      -2.25,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        13.915001,
+        -2.79,
+        0.3
+      ],
+      [
+        14.67,
+        -1.71,
+        2.86
+      ]
+    ],
+    "dimensions": [
+      0.7549989999999998,
+      1.08,
+      2.56
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "wall_service_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_island_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "中央低矮数据设备岛_00",
+    "slug": "island_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "中央低矮数据设备岛_00_资产包",
+    "objects": [
+      "中央低矮数据设备岛_00_附着细节_主体",
+      "中央低矮数据设备岛_00_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "中央低矮数据设备岛_00_附着细节_主体",
+      "中央低矮数据设备岛_00_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -4,
+      4.0,
+      0.3
+    ],
+    "local_origin": [
+      -4,
+      4.0,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -6.2,
+        3.11,
+        0.3
+      ],
+      [
+        -1.8,
+        4.86,
+        3.26
+      ]
+    ],
+    "dimensions": [
+      4.4,
+      1.7500000000000004,
+      2.96
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "island_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_island_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "中央低矮数据设备岛_01",
+    "slug": "island_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "中央低矮数据设备岛_01_资产包",
+    "objects": [
+      "中央低矮数据设备岛_01_附着细节_主体",
+      "中央低矮数据设备岛_01_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "中央低矮数据设备岛_01_附着细节_主体",
+      "中央低矮数据设备岛_01_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      3,
+      -4.5,
+      0.3
+    ],
+    "local_origin": [
+      3,
+      -4.5,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        0.8,
+        -5.39,
+        0.3
+      ],
+      [
+        5.2,
+        -3.64,
+        2.595
+      ]
+    ],
+    "dimensions": [
+      4.4,
+      1.7499999999999996,
+      2.2950000000000004
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "island_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_island_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "中央低矮数据设备岛_02",
+    "slug": "island_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "中央低矮数据设备岛_02_资产包",
+    "objects": [
+      "中央低矮数据设备岛_02_附着细节_主体",
+      "中央低矮数据设备岛_02_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "中央低矮数据设备岛_02_附着细节_主体",
+      "中央低矮数据设备岛_02_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -4.5,
+      -7.7,
+      0.3
+    ],
+    "local_origin": [
+      -4.5,
+      -7.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -6.432193,
+        -8.908171,
+        0.3
+      ],
+      [
+        -2.567807,
+        -6.491829,
+        2.595
+      ]
+    ],
+    "dimensions": [
+      3.8643859999999997,
+      2.4163419999999993,
+      2.2950000000000004
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "island_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_technician_chair",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "检修工作椅_独立展示包",
+    "slug": "technician_chair",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "检修工作椅_独立展示包_资产包",
+    "objects": [
+      "检修工作椅_独立展示包_附着细节_主体"
+    ],
+    "root_objects": [
+      "检修工作椅_独立展示包_附着细节_主体"
+    ],
+    "world_position": [
+      -11,
+      -5.4,
+      0.3
+    ],
+    "local_origin": [
+      -11,
+      -5.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -11.569059,
+        -5.91,
+        0.315
+      ],
+      [
+        -10.430941,
+        -4.795,
+        2.476253
+      ]
+    ],
+    "dimensions": [
+      1.1381179999999986,
+      1.1150000000000002,
+      2.161253
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": true,
+    "exported": false,
+    "expected_export": "technician_chair_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_data_banner",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "数据部破损旗帜",
+    "slug": "data_banner",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "数据部破损旗帜_资产包",
+    "objects": [
+      "数据部破损旗帜_附着细节_主体"
+    ],
+    "root_objects": [
+      "数据部破损旗帜_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -10.4,
+        11.585,
+        4.21229
+      ],
+      [
+        -3.7,
+        12.019655,
+        9.205
+      ]
+    ],
+    "dimensions": [
+      6.7,
+      0.43465499999999935,
+      4.99271
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "data_banner_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_east_portal",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "东侧门洞装甲",
+    "slug": "east_portal",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "东侧门洞装甲_资产包",
+    "objects": [
+      "东侧门洞装甲_附着细节_主体",
+      "东侧门洞装甲_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "东侧门洞装甲_附着细节_主体",
+      "东侧门洞装甲_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      14.51,
+      0,
+      0.3
+    ],
+    "local_origin": [
+      14.51,
+      0,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        14.279,
+        -1.69,
+        0.3
+      ],
+      [
+        14.635,
+        1.35,
+        3.115
+      ]
+    ],
+    "dimensions": [
+      0.35599999999999987,
+      3.04,
+      2.8150000000000004
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "east_portal_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_west_portal",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "西侧门洞装甲",
+    "slug": "west_portal",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "西侧门洞装甲_资产包",
+    "objects": [
+      "西侧门洞装甲_附着细节_主体",
+      "西侧门洞装甲_UI灯光_柔和自发光"
+    ],
+    "root_objects": [
+      "西侧门洞装甲_附着细节_主体",
+      "西侧门洞装甲_UI灯光_柔和自发光"
+    ],
+    "world_position": [
+      -14.51,
+      0,
+      0.3
+    ],
+    "local_origin": [
+      -14.51,
+      0,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -14.635,
+        -1.35,
+        0.3
+      ],
+      [
+        -14.279,
+        1.69,
+        3.115
+      ]
+    ],
+    "dimensions": [
+      0.35599999999999987,
+      3.04,
+      2.8150000000000004
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": true,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "west_portal_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": true
+  },
+  {
+    "package_id": "main02_planter_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定绿植_00",
+    "slug": "planter_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定绿植_00_资产包",
+    "objects": [
+      "固定绿植_00_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定绿植_00_附着细节_主体"
+    ],
+    "world_position": [
+      -12.9,
+      -9.5,
+      0.3
+    ],
+    "local_origin": [
+      -12.9,
+      -9.5,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.471119,
+        -10.077776,
+        0.3
+      ],
+      [
+        -12.32,
+        -8.939919,
+        2.333236
+      ]
+    ],
+    "dimensions": [
+      1.1511189999999996,
+      1.1378570000000003,
+      2.033236
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "planter_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_planter_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定绿植_01",
+    "slug": "planter_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定绿植_01_资产包",
+    "objects": [
+      "固定绿植_01_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定绿植_01_附着细节_主体"
+    ],
+    "world_position": [
+      -11.7,
+      8.4,
+      0.3
+    ],
+    "local_origin": [
+      -11.7,
+      8.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -12.271119,
+        7.822224,
+        0.3
+      ],
+      [
+        -11.12,
+        8.960081,
+        2.261144
+      ]
+    ],
+    "dimensions": [
+      1.1511190000000013,
+      1.1378570000000003,
+      1.9611439999999998
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "planter_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_planter_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定绿植_02",
+    "slug": "planter_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定绿植_02_资产包",
+    "objects": [
+      "固定绿植_02_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定绿植_02_附着细节_主体"
+    ],
+    "world_position": [
+      11.7,
+      10.7,
+      0.3
+    ],
+    "local_origin": [
+      11.7,
+      10.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        11.128881,
+        10.122225,
+        0.3
+      ],
+      [
+        12.28,
+        11.260081,
+        2.321376
+      ]
+    ],
+    "dimensions": [
+      1.1511189999999996,
+      1.1378559999999993,
+      2.021376
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "planter_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_equipment_case_00",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定设备箱_00",
+    "slug": "equipment_case_00",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定设备箱_00_资产包",
+    "objects": [
+      "固定设备箱_00_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定设备箱_00_附着细节_主体"
+    ],
+    "world_position": [
+      -13,
+      -10.6,
+      0.3
+    ],
+    "local_origin": [
+      -13,
+      -10.6,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.7,
+        -11.155001,
+        0.3
+      ],
+      [
+        -12.3,
+        -10.09,
+        1.44
+      ]
+    ],
+    "dimensions": [
+      1.3999999999999986,
+      1.0650010000000005,
+      1.14
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "equipment_case_00_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_equipment_case_01",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定设备箱_01",
+    "slug": "equipment_case_01",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定设备箱_01_资产包",
+    "objects": [
+      "固定设备箱_01_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定设备箱_01_附着细节_主体"
+    ],
+    "world_position": [
+      12,
+      -10.4,
+      0.3
+    ],
+    "local_origin": [
+      12,
+      -10.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        11.204847,
+        -11.050196,
+        0.3
+      ],
+      [
+        12.795153,
+        -9.749804,
+        1.44
+      ]
+    ],
+    "dimensions": [
+      1.5903060000000018,
+      1.3003920000000004,
+      1.14
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "equipment_case_01_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_equipment_case_02",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定设备箱_02",
+    "slug": "equipment_case_02",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定设备箱_02_资产包",
+    "objects": [
+      "固定设备箱_02_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定设备箱_02_附着细节_主体"
+    ],
+    "world_position": [
+      9,
+      7.7,
+      0.3
+    ],
+    "local_origin": [
+      9,
+      7.7,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        8.163882,
+        6.938917,
+        0.3
+      ],
+      [
+        9.836118,
+        8.461082,
+        1.44
+      ]
+    ],
+    "dimensions": [
+      1.6722360000000016,
+      1.5221649999999993,
+      1.14
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "equipment_case_02_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_equipment_case_03",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定设备箱_03",
+    "slug": "equipment_case_03",
+    "category": "facilities",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定设备箱_03_资产包",
+    "objects": [
+      "固定设备箱_03_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定设备箱_03_附着细节_主体"
+    ],
+    "world_position": [
+      -10.8,
+      -7.4,
+      0.3
+    ],
+    "local_origin": [
+      -10.8,
+      -7.4,
+      0.3
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -11.620103,
+        -8.220102,
+        0.3
+      ],
+      [
+        -9.979897,
+        -6.579898,
+        1.44
+      ]
+    ],
+    "dimensions": [
+      1.640206000000001,
+      1.6402040000000007,
+      1.14
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "equipment_case_03_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_floor_cabling",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "跨设备地面电缆",
+    "slug": "floor_cabling",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "跨设备地面电缆_资产包",
+    "objects": [
+      "跨设备地面电缆_附着细节_主体"
+    ],
+    "root_objects": [
+      "跨设备地面电缆_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -13.434999,
+        -7.285,
+        0.335
+      ],
+      [
+        13.035,
+        10.285,
+        0.455
+      ]
+    ],
+    "dimensions": [
+      26.469999,
+      17.57,
+      0.12
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": false,
+    "exported": false,
+    "expected_export": "floor_cabling_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  },
+  {
+    "package_id": "main02_fixed_papers",
+    "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+    "name": "固定展示散落文件",
+    "slug": "fixed_papers",
+    "category": "support",
+    "version": "v003",
+    "block_id": "battle",
+    "floor_range": "98–95F",
+    "design_scope": "主路内容房02",
+    "scene_design_docs": [
+      "docs/v0.1/05.1_关卡区块设计.md",
+      "docs/v0.1/10.1_3D场景美术生产流程.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "source_blend": "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+    "blender_collection": "固定展示散落文件_资产包",
+    "objects": [
+      "固定展示散落文件_附着细节_主体"
+    ],
+    "root_objects": [
+      "固定展示散落文件_附着细节_主体"
+    ],
+    "world_position": [
+      0,
+      0,
+      0
+    ],
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "forward": "Blender -Y / Godot -Z",
+    "bounds": [
+      [
+        -12.502425,
+        -7.060397,
+        0.3165
+      ],
+      [
+        12.697488,
+        10.878951,
+        0.3235
+      ]
+    ],
+    "dimensions": [
+      25.199913000000002,
+      17.939348000000003,
+      0.007000000000000006
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "emission": false,
+    "animation": false,
+    "dependencies": [],
+    "fixed_display_attachment": true,
+    "exported": false,
+    "expected_export": "fixed_papers_v003.glb",
+    "collision_status": "未制作",
+    "cutaway_preview_only": false
+  }
+]

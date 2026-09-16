@@ -13,7 +13,7 @@ ShellStorm2 场景白盒编辑工具。运行 `npm run dev` 后访问 `http://12
 
 “打开 Blender”是通用入口：先选择区块，再选择 `.blend` 文件。工具会识别资产包集合或包含网格的顶层对象，显示真实网格，并把根对象移动、旋转、缩放或删除写回该区块的工作副本。楼梯正式源只是首个验收样本，不再使用专用按钮。
 
-当前楼梯白盒编辑源为`source/art/whitebox/tower_zones/v015/blender/whitebox_tower_stairs_v015.blend`：按v013原世界坐标保留A/B两个楼梯间，每间分楼板、墙壁、楼梯三类，共130个固定组件实例。v014原点装配已废弃，v013保留为坐标参考。
+当前楼梯白盒编辑源为`source/art/whitebox/tower_zones/stairs/v015/blender/whitebox_tower_stairs_v015.blend`：按v013原世界坐标保留A/B两个楼梯间，每间分楼板、墙壁、楼梯三类，共130个固定组件实例。v014原点装配已废弃，v013保留为坐标参考。
 
 组件库会始终显示角色、建筑两组通用组件，并根据当前区块追加专用组件：`battle` 显示家具、办公，`rooftop` 显示道具。专用组件标题使用项目文档同步的正式区块名。
 

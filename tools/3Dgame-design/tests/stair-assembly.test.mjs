@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { stairProfileParts } from '../src/stair-profile.mjs';
 import { validateFixedModules } from '../component-policy.mjs';
-const scene=JSON.parse(fs.readFileSync(new URL('../../../source/art/whitebox/tower_zones/v015/data/whitebox_tower_stairs_v015.json',import.meta.url)));
+const scene=JSON.parse(fs.readFileSync(new URL('../../../source/art/whitebox/tower_zones/stairs/v015/data/whitebox_tower_stairs_v015.json',import.meta.url)));
 const profile=JSON.parse(fs.readFileSync(new URL('../src/stair-flight-profile.json',import.meta.url)));
 const settings=scene.components.find(c=>c.stairwellSettings).stairwellSettings;
 const zThickness=part=>Math.max(...part.vertices.map(p=>p[2]))-Math.min(...part.vertices.map(p=>p[2]));

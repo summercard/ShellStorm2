@@ -1,6 +1,6 @@
 # 塔楼区块资产目录
 
-本目录只管理塔楼四区块的 Godot 入口和对照说明。天台与基地保留正式 Blender 源目录；Battle 与 Stairs 当前是白盒阶段，数据、白盒 Blend 和效果图统一位于 `source/art/whitebox/tower_zones/v011/`。已导入 GLB 保留原运行目录，避免管理重排触发模型重新导入。
+本目录只管理塔楼四区块的 Godot 入口和对照说明。天台与基地保留正式 Blender 源目录；Battle 与 Stairs 当前是白盒阶段，数据、白盒 Blend 和效果图统一位于 `source/art/whitebox/tower_zones/stairs/v011/`。已导入 GLB 保留原运行目录，避免管理重排触发模型重新导入。
 
 ```text
 tower_zones/

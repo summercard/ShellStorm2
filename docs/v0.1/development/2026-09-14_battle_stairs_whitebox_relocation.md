@@ -7,7 +7,7 @@
 ## 结果
 
 - 明确 `Battle` 98–95F 与 `Stairs` 尚处于白盒阶段，不登记为正式 Blender 美术源。
-- 建立 `source/art/whitebox/tower_zones/v011/`，固定分为 `data/`、`blender/`、`renders/`。
+- 建立 `source/art/whitebox/tower_zones/stairs/v011/`，固定分为 `data/`、`blender/`、`renders/`。
 - `data/` 分别保存战斗区与楼梯区 JSON；二者共同约束一份白盒 Blender 母版。
 - 将现有 v011 母版迁移并改名为 `whitebox_tower_battle_stairs_v011.blend`，补充白盒阶段和 JSON 路径元数据；没有重新导入 GLB。
 - 天台与基地正式 Blender 源保持原目录不动。
