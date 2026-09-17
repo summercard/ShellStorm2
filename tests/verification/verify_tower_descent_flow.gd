@@ -698,10 +698,13 @@ func _ready() -> void:
 		"98层楼梯入口大厅没有保持安全区或自动点亮顶灯",
 		failures
 	)
+	# 安全房曾有两件程序生成的地面标线：StairLobbyRouteGuide ×1（房间正中）与
+	# StairLobbyThresholdGuide ×2（两侧门内）。它们不挂游戏逻辑，已按需求整体移除，
+	# 这里把断言反过来用 —— 不该再出现，防止以后被误加回来。
 	_expect(
-		_count_named_nodes(entry98, "StairLobbyRouteGuide") == 1
-		and _count_named_nodes(entry98, "StairLobbyThresholdGuide") == 2,
-		"98层安全厅缺少可读的路线与双门槛地面标识",
+		_count_named_nodes(entry98, "StairLobbyRouteGuide") == 0
+		and _count_named_nodes(entry98, "StairLobbyThresholdGuide") == 0,
+		"98层安全厅重新出现了已移除的程序地面标线",
 		failures
 	)
 	var keys_before_entry_door := int(tower.call("_get_total_room_keys"))

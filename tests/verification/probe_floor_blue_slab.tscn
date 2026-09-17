@@ -1,6 +1,0 @@
-[gd_scene format=3]
-
-[ext_resource type="Script" path="res://tests/verification/probe_floor_blue_slab.gd" id="1_probe"]
-
-[node name="ProbeFloorBlueSlab" type="Node"]
-script = ExtResource("1_probe")

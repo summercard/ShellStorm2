@@ -2067,48 +2067,6 @@ func _configure_corner_camera_collisions(module: Node, corner_id: String) -> voi
 		body.set_meta("camera_lower_wall", enabled)
 
 
-func _build_stair_lobby_markings(dimensions: Vector2) -> void:
-	var guide_material := _material(theme.accent_color, 0.20, 0.34)
-	guide_material.emission_enabled = true
-	guide_material.emission = theme.accent_color * 0.72
-	guide_material.emission_energy_multiplier = 1.25
-	var east_west_route := "east" in doors or "west" in doors
-	var guide_size := (
-		Vector3(dimensions.x - 2.0, 0.035, 1.20)
-		if east_west_route
-		else Vector3(1.20, 0.035, dimensions.y - 2.0)
-	)
-	_spawn_prefab(
-		"StairLobbyRouteGuide",
-		STAIR_LOBBY_ROUTE_GUIDE_PREFAB,
-		Vector3(0.0, 0.045, 0.0),
-		guide_size,
-		guide_material
-	)
-	var threshold_size := (
-		Vector3(0.26, 0.045, 4.2)
-		if east_west_route
-		else Vector3(4.2, 0.045, 0.26)
-	)
-	for threshold_index in range(2):
-		var direction_sign := -1.0 if threshold_index == 0 else 1.0
-		var threshold_position := Vector3.ZERO
-		if east_west_route:
-			threshold_position.x = direction_sign * (dimensions.x * 0.5 - 0.65)
-		else:
-			threshold_position.z = direction_sign * (dimensions.y * 0.5 - 0.65)
-		threshold_position.y = 0.055
-		_spawn_prefab(
-			"StairLobbyThresholdGuide_%s" % (
-				"A" if threshold_index == 0 else "B"
-			),
-			STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB,
-			threshold_position,
-			threshold_size,
-			guide_material
-		)
-
-
 func _build_content() -> void:
 	# 内容生成使用独立稳定种子，卸载再载入后家具类型与搜索点不漂移。
 	_rng.seed = room_seed ^ 0x51A77E
@@ -2180,9 +2138,12 @@ func _build_content() -> void:
 	_light_switch.configure_group(_room_lights, starts_on)
 	_add_runtime_detail_child(_light_switch)
 	_bind_facility_presentation_light_control(starts_on)
-	if room_type == "STAIR_LOBBY":
-		_build_stair_lobby_markings(dimensions)
-	elif room_type == "BOSS":
+	# 安全房原先还有程序画的地面标线 `_build_stair_lobby_markings()`：
+	# 正中一条 StairLobbyRouteGuide（13.00×0.035×1.20m）+ 两侧门内各一条
+	# StairLobbyThresholdGuide（0.26×0.045×4.2m），都是青色自发光、离地几厘米。
+	# 两批均已按需求整体移除，故这里不再调用。对应 prefab 常量与资产保留，
+	# 需要时可原样恢复。
+	if room_type == "BOSS":
 		_build_boss_arena_dressing()
 
 	var prop_count := (

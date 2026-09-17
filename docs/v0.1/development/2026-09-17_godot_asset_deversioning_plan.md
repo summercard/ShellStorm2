@@ -1,6 +1,6 @@
 # Godot 侧资产替换去版本化 —— 执行计划
 
-日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1、P2 已完成（2026-09-17），P3 未开始**。
+日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1 / P2 / P4 已完成（2026-09-17），批 B1…B9 未开始**。
 依据：`assets/art/3D模型资产目录与命名规范.md` §Blender 到 Godot 的更新流程（L126–133）。
 基线：commit `b8af6fd`。
 作用域：`assets/art/**` 的 Godot 运行资产（`components/` + `runtime/`）与 `src/**/*.gd` 的引用路径；`source/**` 的 Blender 历史版本保留策略**不变**。
@@ -43,16 +43,52 @@
 
 D1 的连带影响：旧版不再并存 → 回滚必须依赖 git（N5），manifest + 节点 meta + 台账 O 列成为唯一溯源（N3）。
 
-## 4. 执行阶段（共 6 个）
+## 4. 执行阶段
+
+### 4.0 关键耦合 —— 原「P3 → P4 → P5 → P6」顺序不成立（2026-09-17 实测修正）
+
+原计划按「层」推进。**实测证明 P3 / P5 / P6 是同一个重命名事件的三个面，按层拆无法落地**：
+
+| 证据 | 结果 |
+|---|---|
+| `src/**/*.gd` 里带版本的资产引用 | **112 处 / 22 个文件**；其中**去版本目标已存在 = 0** |
+| 单个 `preload()` 指向不存在的 `res://` 路径 | Godot 4.6.3 实测 `--headless --check-only`：`Parse Error: Preload file "…" does not exist` + `Failed to load script … with error "Parse error"`。**是编译期错误，整个脚本不可用**，不是只丢那一个资产 |
+| 因此 P3 先行 | `DungeonRoom3D.gd`（48 处）、`WeaponModel3D.gd`（11）、`TowerDescent3D.gd`（9）等 22 个核心脚本会全部编译失败 → 游戏直接起不来 |
+| 因此 P5 先行 | 台账会登记尚不存在的路径，等于把账本写成假的 |
+| 引用带版本路径的 `.tscn` | **207 处**，同样是硬引用，缺一个即场景加载报错 |
+
+**结论：不能按层拆，也不必「一次性改全仓」。正确单位是「套件原子批」** —— 一个套件内 P6 重命名 + P3 代码引用 + P5 台账 + 该套件的 verifier 必须同批落地、同批验收。全仓一次性动（818 文件 + 112 引用 + 207 场景引用）出问题无法定位、无法回滚，反而是最高风险做法。
+
+**执行顺序修正为：P1 ✅ → P2 ✅ → P4 门禁 ✅（已上线，带欠账快照）→ 原子批 B1…B8（每批含 P3+P5+P6 该套件部分）→ 收尾批 B9（无耦合的纯清理）。**
+
+### 4.1 原子批（新的执行单位）
+
+欠账实测口径（2026-09-17，`scripts/asset_runtime_naming_debt.json`）：**1345 个带版本文件 / 22 个版本目录 / 14 个备份残留 / 112 处 .gd 引用**。文件类型 = 527 `.glb` + 527 `.glb.import` + 291 `.tscn`。全仓共 **21 个套件**受影响，按「谁共享引用方」+「体量」合并为 8 批：
+
+| 批 | 套件 | 欠账文件 | .gd 引用 | 备注 |
+|---|---|---|---|---|
+| **B1** | `environments/tower_zones`（战局/安全房） | 131 | 6（+1 处动态拼接） | **样板批**。欠账多为 v003–v007 冗余与空目录，以「删 + 稳定化」为主；探针最全（`probe_safe_room_v007_integration`、`verify_common_*_v004`） |
+| **B2** | `props/dungeon_3d` + `environments/tower_descent_3d` + `props/base_world_3d` + `environments/dungeon_3d` + `environments/base_world_3d` | 156 | **56（耦合最重）** | `DungeonRoom3D.gd`(36)、`Dungeon3D.gd`(5)、`TowerFloorStage3D.gd`(4)、`TowerDescent3D.gd`(5)、`TrainingRange3D`(2) |
+| **B3** | `environments/base_facility_3d` | **443（体量最大）** | 8 | 99F 基地，回归面最广；与其他批无引用重叠 |
+| **B4** | `environments/rooftop_shelter_3d` | 311 | 0 | 零 `.gd` 耦合；自带 `verify_rooftop_shelter_asset_contract` |
+| **B5** | `weapons/weapon_3d` + `weapons/melee_3d` | 130 | 14 | `WeaponModel3D.gd`(10)、`Player3D.gd`(2)、`ItemModelFactory3D`、`TrainingRack3D` |
+| **B6** | `vfx/combat_3d` + `vfx/environment_3d` + `vfx/visibility_3d` + `ui/inventory_3d` + `ui/pause_3d` + `environments/training_range_3d` | 14 | 18 | `VfxPool3D.gd`(7)、`CombatEffectPool3D`、`Projectile3D`、`Enemy3D`、`PlayerMeleeCombat3D`、`ui/*`(5) |
+| **B7** | `enemies/enemy_3d` + `elite_3d` + `bosses_v01` + `environments/boss_arenas_v01` | 16 | 9 | `BossContentCatalog.gd`(6)、`EliteContentCatalog`、`Player3DStateGallery`、`Dungeon3D` |
+| **B8** | `characters/player` | 144 | 1 | 含 13 个 `production/vNNN/` 目录；与「角色链版本契约」待决项绑定，建议最后做 |
+| **B9** | 纯清理：空版本目录 / 孤儿 GLB / `.bak_*` / 欠账快照清零 | 22 目录 + 14 备份 | — | 无代码耦合，随时可做；做完删掉快照与豁免机制 |
+
+**并行度**：B1→B2→B3→B6 共用 `DungeonRoom3D.gd`，**必须串行**；B3/B4/B5/B7/B8 之间无共享引用方，可独立推进（但每批都要跑一遍 core 套件）。
+
+每批固定 8 步：① 出该套件清单 → ② `git mv` 重命名（GLB + tscn + sidecar；删旧 `.import`，搬运 `.uid`） → ③ 改该套件 `.tscn` 内的 `ext_resource` → ④ 改该套件对应的 `src/**/*.gd` 引用 → ⑤ Godot `--import` 重新导入 → ⑥ 跑验收（core 套件 + 专属探针） → ⑦ 台账回填该套件行 + `check_asset_runtime_naming.py --update-debt` 缩表 → ⑧ 单独提交。
 
 | 阶段 | 改动点 | 完成判据 |
 |---|---|---|
 | **P1 规则层** ✅ 已完成（2026-09-17，见下「P1 执行记录」） | ① `godot-model-asset-import-standard` 的 L32/L46/L63、§版本与引用替换、目录模板改为「覆盖既定路径、路径不含版本」；用户级 `~/.workbuddy/skills/` 与工程 `skills_drafts/` 两份逐字节同步。② `assets/art/3D模型资产目录与命名规范.md` L10–11 目录模板去 `_v###`，§坐标与替换契约补「Godot 侧路径恒定、GLB 不含版本」。③ `docs/v0.1/10_资产与内容规范.md:5` 删去「运行时可保留按批次递增的 v021–v024 组件版本」 | 两份 skill diff 为空；`python3 scripts/check_documentation_contracts.py` 通过 |
 | **P2 工具层** ✅ 已完成（2026-09-17，见下「P2 执行记录」） | ① 战局区块 `source/**/qa/export_*.py`、`build_*_prefabs_*.py`：`VERSION` 只写 manifest 与节点 meta，不进路径；v006/v007 平行脚本合并为一份带版本参数的脚本。② `tools/asset_pipeline/generate_runtime_scenes.py:43`、`export_split_facilities_and_seating.py:107-129`、`update_character_registry.mjs` 同步。③ manifest 与节点 meta 写入改为必填校验 | 同一输入连跑两次，输出路径集合与 mtime 不变；`git status` 无新增带版本路径；抽 1 件资产确认 manifest + meta 均记录了版本 |
-| **P3 运行时层** | ① `DungeonRoom3D.gd`：`SAFE_ROOM_ART_VERSION` 退出路径拼接（L1007–1013 改为 `<slug>/<slug>_root_top3d.tscn`），5 条 L97–109 preload 去 `_v004`；版本降级为纯元数据。② `TowerDescent3D.gd:7-34`、`TowerFloorStage3D.gd:31-46` 及其余带版本引用的 `.gd`（共 22 个文件 / 109 行）改为去版本路径 | `bash scripts/run_verification_suite.sh core` 全绿；`probe_safe_room_v007_integration` → `SAFE_ROOM_V007_INTEGRATION_OK`；`probe_tower_palette_visible` → `TOWER_PALETTE_VISIBLE_OK` |
-| **P4 门禁** | 新增 `scripts/check_asset_runtime_naming.py`：扫描 `assets/art/**/{components,runtime}/**`，出现 `_v\d\d\d\.(glb\|tscn)` 文件名或 `components|runtime/**/v\d\d\d/` 目录即失败（`source/**` 豁免）。存量未清前挂**精确路径欠账清单**（同 `LEGACY_PALETTE_EXEMPT_GLBS` 先例），双向断言：清单内路径消失要缩表、新出现的带版本路径立刻报错。接入 `AGENTS.md` 交付前检查与 `run_verification_suite.sh core` | 新增一件带版本资产即报错；欠账表清零后删除豁免机制 |
-| **P5 台账回填（第一批）** | `3D-场景通用`（外科式 XML 补丁，备份 `*.xlsx.bak_deversioning`）：<br>① r86/r87（SAFE-ENTRY/EXIT）C 列现值 `.../runtime/entry_safe_room/v007/*/*_root_top3d_v007.tscn（17 包）；墙/地/门引用 .../runtime/common_components/*_root_top3d_v004.tscn`，D 列现值 `.../components/entry_safe_room/v007/*/*_visual_top3d_v007.glb（17 包）` → 去 `v007/` 目录与 `_v007`/`_v004` 后缀，括号与分号说明文字结构保留。<br>② r92–r96（5 个 `ENV-BATTLE-COMMON-*`）C/D 列现值含 `_v004` → 去版本。<br>③ O 列保留现有版本事实（r86/r87=v007，r92–r96=v004）不动 | `python3 scripts/check_asset_registry.py --scope structure` 相对基线（既有 37 项）**新增为 0**；AssetID、状态、尺寸列不变 |
-| **P6 存量清理（全仓，最后）** | ① 先跑 `check_asset_runtime_naming.py` 出**全量清单**（818 个文件 + 9 个版本目录 + 207 处 tscn 引用），按套件拆分。② 顺序：空版本目录 → 同资产 `_v003`/`_v004` 冗余簇 → 孤儿 GLB（如 `components/entry_safe_room/v006` 24 件）→ 稳定命名重命名（GLB + tscn 一起去版本，脚本批量处理 `.import`/`.uid` 与全部引用）→ `.bak_*`。③ 每批 ≤10 项，每批单独提交、单独跑套件；每批同步缩 P4 欠账表并回填对应台账行 | 每批：引用扫描为 0、`run_verification_suite.sh core` 通过、`git status` 仅剩预期删除/重命名；全部完成后 `check_asset_runtime_naming.py` 判绿且欠账表为空 |
+| ~~**P3 运行时层**~~ → **并入原子批**（见 §4.1） | 原设想「先改代码、后改文件」不可行：`preload` 是编译期解析，路径不存在即脚本编译失败。改为在每一批内与重命名同批改 | 每批跑 `run_verification_suite.sh core`；`probe_safe_room_v007_integration` / `probe_tower_palette_visible` 保持 `_OK` |
+| **P4 门禁（必须先上线）** | 新增 `scripts/check_asset_runtime_naming.py`：扫描 `assets/art/**/{components,runtime}/**`，出现 `_v\d\d\d\.(glb\|tscn)` 文件名或 `components|runtime/**/v\d\d\d/` 目录即失败（`source/**` 豁免）；同时报告 `src/**/*.gd` 与 `tscn` 里的带版本引用数。存量未清前挂**精确路径欠账清单**（同 `LEGACY_PALETTE_EXEMPT_GLBS` 先例），双向断言：清单内路径消失要缩表、新出现的带版本路径立刻报错。接入 `AGENTS.md` 交付前检查与 run_verification_suite.sh core | 新增一件带版本资产即报错；**每完成一批原子批，欠账表相应缩表**；清零后删除豁免机制 |
+| ~~**P5 台账回填**~~ → **并入原子批** | 台账路径必须与磁盘同批改，否则账本先撒谎。每批只改该套件的行（第一批 = `3D-场景通用` r86/r87 + r92–r96） | 每批：`check_asset_registry.py --scope structure` 新增为 0；AssetID / 状态 / 尺寸列不变 |
+| ~~**P6 存量清理（全仓一次性）**~~ → **并入原子批 + 收尾批** | 原「全仓一次性、排最后」改为「按套件分批、与代码同批」。删除类无耦合动作（空版本目录、孤儿 GLB、`.bak_*`）集中在收尾批 | 见 §4.1 的批次表；删除类动作集中在 B8 | 每批引用扫描为 0、套件全绿；B8 后 `check_asset_runtime_naming.py` 判绿且欠账表为空 |
 
 ### P1 执行记录（2026-09-17，已完成）
 
@@ -115,11 +151,57 @@ P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-stand
 
 
 
-回滚：每阶段与 P6 每批次以独立提交交付；不使用工作区备份文件。
+### P4 执行记录（2026-09-17，已完成）
 
-风险提示：P6 的「稳定命名重命名」是唯一会同时触及 818 个文件、207 处场景引用与 `.import`/`.uid` 的动作，必须脚本化 + 分批，禁止手工逐个改。
+**产出**：`scripts/check_asset_runtime_naming.py`（纯标准库）+ 欠账快照 `scripts/asset_runtime_naming_debt.json`。
 
-## 5. P6 存量清单（首轮，战局区块已实测）
+**扫描口径**
+
+| 类别 | 判定 |
+|---|---|
+| 运行资产文件 | `assets/art/**` 下（`source/` 整树豁免）文件名匹配 `_v\d{3}\.(glb\|tscn)(\.(import\|uid))?` |
+| 版本目录 | `assets/art/**` 下（`source/` 豁免）任一层目录名匹配 `v\d{3}` |
+| 备份残留 | 文件名含 `.bak_`，单列一类（对应 N5） |
+| 引用计数 | `src/**/*.gd` 与 `assets/art`/`scenes`/`tests`/`src` 下 `.tscn` 里的 `res://…_vNNN.(glb\|tscn)` 引用数 |
+
+**退出码语义（快照 = 「磁盘现状必须逐项一致」）**
+
+| 码 | 含义 |
+|---|---|
+| 0 | 与快照一致（打印剩余欠账规模） |
+| 1 | **新增违规**：快照之外出现带版本文件/目录/备份，或引用计数上升 |
+| 2 | **快照陈旧**：快照内条目已消失或引用计数下降 → 必须 `--update-debt` 缩表 |
+
+退出 2 是刻意设计的强制项：每完成一批原子批就必须缩表，否则这张表会重新变成假账（做法沿用仓库既有的 `LEGACY_PALETTE_EXEMPT_GLBS` 双向断言先例）。另提供 `--json` 供机器消费。
+
+**基线实测（2026-09-17）**：**1345 文件 / 22 版本目录 / 14 备份残留 / gd 引用 112 / tscn 引用 702**。文件类型 = 527 `.glb` + 527 `.glb.import` + 291 `.tscn`。受影响共 **21 个套件**（构成 §4.1 分批依据）。
+
+**接入**：`run_verification_suite.sh` 在 `core|aggregate|full` 三条路径的**场景全过之后**追加该门禁（失败打印 `reason=asset_runtime_naming` 或 `reason=asset_runtime_naming_debt_stale`）；`AGENTS.md` 的交付前检查已加入该命令与命名契约。
+
+**验收**
+
+| 项 | 结果 |
+|---|---|
+| 无快照时 | 退出 1 并提示先建基线 |
+| 建立基线 | `DEBT_UPDATED … files=1345 dirs=22 backup=14 refs(gd=112 tscn=702)` |
+| 复跑 | `ASSET_RUNTIME_NAMING_OK …` 退出 0 |
+| 自测·新增违规 | 临时放一件 `_v999.tscn` → 退出 **1** 并点名该文件；已删除 |
+| 自测·快照陈旧 | 临时移走一件已登记的备份残留 → 退出 **2** 并点名；已还原 |
+| 自测·`--json` | 字段齐全，`remaining` 计数正确 |
+| 集成（套件真的会调用它） | 用假 Godot 桩跑 `GODOT_BIN=<stub> bash scripts/run_verification_suite.sh aggregate smoke` → 6 个场景全过 → 打印 `ASSET_RUNTIME_NAMING_OK …` → `VERIFICATION_SUITE_OK suite=aggregate count=6` |
+| `bash -n` 语法 | 通过 |
+
+**未覆盖（明确不做）**：不校验 `asset_manifest.json` / 节点 `metadata/asset_version` 是否存在（那是 P2 生成器侧的必填校验）；不校验 `.import` 内容与 UID 一致性；不判定某件资产是否仍被引用（属 B* 批的第 ①/⑥ 步）。
+
+**顺带实测（与本阶段无关但需记录）**：真实跑 `aggregate smoke` 时 3 个场景红 —— `verify_3d_only_project_structure:1`（`Retired 2D directory returned: assets/art/characters/player/chr_player_capsule01`，该目录在 `a0871af` 就已入库，**非本次改动引入**）、`verify_tower_level_blocks:4` 与 `verify_tower_lighting_wall_combat_regressions:4`（退出码 4 = 既有资源泄漏，见 §6 基线备注）。这 3 项在动手做 P4 前就已存在，需要在开 B 批之前先确认基线。
+
+
+
+回滚：每批次以独立提交交付；不使用工作区备份文件。
+
+风险提示：B2 的「稳定命名重命名」是体量与耦合的双高点（156 文件 / 56 处 gd 引用），必须脚本化 + 分批，禁止手工逐个改。
+
+## 5. 存量清单（B1 战局区块已实测；其余套件由 P4 脚本按批出）
 
 | 位置 | 内容 | 引用状态 |
 |---|---|---|

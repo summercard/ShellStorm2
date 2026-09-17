@@ -24,8 +24,14 @@ const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v003.glb"
 )
+## 走廊（水平接驳 + 楼梯接驳）的地板源。必须与楼层通用地砖同版：
+## 旧 v001 是底面原点、单表面，自带材质 MAT_Rooftop（albedo 0.349/0.396/0.449、
+## 无贴图），在暗场景里会呈现成一整条均匀的亮青蓝色地板 —— 与房间地砖（v002
+## PaletteUV 双表面美术）完全不同，玩家一进层就能看到那条"蓝带"。
+## v002 是 centered_slab（几何 Y = -0.15..+0.1505），顶面比摆放点高 0.1505m，
+## 与 TowerFloorStage3D 的地砖顶面（标称层高 + 0.1505）一致，所以摆放偏移改为 0。
 const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb"
+	"res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d_v002.tscn"
@@ -1826,8 +1832,11 @@ func _build_tower_horizontal_corridor(
 			+ direction_from_start * TOWER_GEOMETRY.GRID_UNIT_M
 			* (float(module_index) + 0.5)
 		)
+		# v002 地砖是 centered_slab，顶面自带 +0.1505m，与 TowerFloorStage3D 的
+		# 楼层地砖顶面（标称层高 + 0.1505）天然齐平，所以摆放点直接落在行走面，
+		# 不再需要旧 v001（底面原点）时代的 +0.015 抬升。
 		floor_transforms.append(
-			Transform3D(Basis.IDENTITY, module_center + Vector3.UP * 0.015)
+			Transform3D(Basis.IDENTITY, module_center)
 		)
 		for side_sign in [-1.0, 1.0]:
 			wall_transforms.append(
@@ -1985,7 +1994,8 @@ func _build_stair_approach_corridor(
 			label,
 			module_index,
 		]
-		floor_tile.position = module_center + Vector3.UP * 0.015
+		# 与水平走廊同一口径：v002 地砖顶面自带 +0.1505m，摆放点落在行走面即可。
+		floor_tile.position = module_center
 		floor_tile.set_meta("asset_id", "ENV-TOWER-FLOOR-TILE-5M")
 		floor_tile.set_meta("stair_approach_corridor", true)
 		connector.add_child(floor_tile)

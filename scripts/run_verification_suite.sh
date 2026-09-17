@@ -348,4 +348,24 @@ if (( ${#failed_scenes[@]} > 0 )); then
   exit 1
 fi
 
+# 静态门禁：Godot 运行资产命名（去版本化执行计划 P4）。
+# 存量欠账未清零前只拦「新增」带版本资产；快照陈旧（欠账已还却没缩表）返回 2。
+# 退出码 1 = 新增违规，2 = 欠账快照陈旧。
+case "${suite}" in
+  core|aggregate|full)
+    naming_status=0
+    python3 "${project_root}/scripts/check_asset_runtime_naming.py" --quiet || naming_status=$?
+    if (( naming_status != 0 )); then
+      if (( naming_status == 2 )); then
+        printf '\nVERIFICATION_SUITE_FAILED suite=%s reason=asset_runtime_naming_debt_stale\n' \
+          "${suite}" >&2
+      else
+        printf '\nVERIFICATION_SUITE_FAILED suite=%s reason=asset_runtime_naming\n' \
+          "${suite}" >&2
+      fi
+      exit 1
+    fi
+    ;;
+esac
+
 printf '\nVERIFICATION_SUITE_OK suite=%s count=%d\n' "${suite}" "${#scenes[@]}"

@@ -10,5 +10,6 @@
 - 验收分别记录退出码、预期故障、非预期脚本错误、未执行项；真实渲染用例使用真实渲染器。不要为了全绿删除目标设计或直接放宽旧阈值。
 - 涉及内容/资产时同步相应表格与运行时映射；哈希漂移先核对变更来源，不批量接受当前文件掩盖差异。
 - 交付前运行 `python3 scripts/check_documentation_contracts.py` 和变更所需的相关验证，并更新独立开发记录及受影响功能状态。文档检查不代替语义审查和运行验收。
+- Godot 运行资产（`components/`、`runtime/`）的路径不含版本号：替换一律覆盖同路径同名文件，版本号只写 `source/`、`asset_manifest.json`、台账版本列与 Prefab 根节点 `metadata/asset_version`。交付前运行 `python3 scripts/check_asset_runtime_naming.py`（`core`/`aggregate`/`full` 套件已内置该门禁）；新增带版本资产会被拒。存量去版本化按 `docs/v0.1/development/2026-09-17_godot_asset_deversioning_plan.md` 的套件原子批推进，每批完成后重跑 `--update-debt` 缩表。
 
 当前风险见 `docs/v0.1/audits/2026-09-12_engineering_audit.md`。不因本约定额外要求重复审批；在已授权范围内持续完成工作。
