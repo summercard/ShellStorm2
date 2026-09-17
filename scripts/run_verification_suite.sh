@@ -87,8 +87,6 @@ core_scenes=(
   verify_hud_presenter_3d
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
-  verify_common_floor_tile_components
-  verify_common_wall_door_components
   verify_common_floor_tile_components_v004
   verify_common_wall_door_components_v004
   verify_unified_player_interaction_flow
@@ -174,8 +172,6 @@ visual_scenes=(
 
 renderer_scenes=(
   "${visual_scenes[@]}"
-  verify_common_floor_tile_components_visual
-  verify_common_wall_door_components_visual
   verify_formal_3d_asset_gallery_visual
   verify_formal_asset_placement_visual
 )

@@ -20,8 +20,9 @@ import re
 import sys
 from pathlib import Path
 
-# 遗留命名：<名>_v001.glb / <名>_v012.tscn
-LEGACY_VERSIONED = re.compile(r"_v\d{3}\.[A-Za-z0-9]+$")
+# 遗留命名：<名>_v001.glb / <名>_v012.tscn / <名>_v004.glb.import（旁文件同罪）
+# 用 `(?=\.)` 而不是 `\.[A-Za-z0-9]+$`：后者会被 two-dot 的 `.glb.import` 绕过。
+LEGACY_VERSIONED = re.compile(r"_v\d{3}(?=\.)")
 
 
 def visual_glb_name(slug: str) -> str:

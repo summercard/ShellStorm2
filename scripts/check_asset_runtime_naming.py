@@ -190,6 +190,10 @@ def main() -> int:
                 "references": now_counts,
             },
         }, ensure_ascii=False, indent=2))
+        # --json 只输出 JSON：必须在这里结束，否则尾部的人话会污染机器可读输出。
+        if violations:
+            return 1
+        return 2 if stale else 0
 
     def show(title: str, items: list[str], limit: int = 10) -> None:
         if not items:

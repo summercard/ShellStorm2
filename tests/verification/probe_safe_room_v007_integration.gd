@@ -61,7 +61,7 @@ func _ready() -> void:
 
 func _probe_components() -> void:
 	for component_id in COMPONENT_IDS:
-		var scene_path := "%scommon_components/%s/%s_root_top3d_v004.tscn" % [
+		var scene_path := "%scommon_components/%s/%s_root_top3d.tscn" % [
 			ROOM_RUNTIME_ROOT, _component_dir(component_id), component_id
 		]
 		var packed := load(scene_path) as PackedScene
@@ -106,8 +106,8 @@ func _probe_packages() -> void:
 	var total_min_y := INF
 	var total_max_y := -INF
 	for package_id in SAFE_ROOM_PACKAGE_IDS:
-		var scene_path := "%sentry_safe_room/%s/%s/%s_root_top3d_%s.tscn" % [
-			ROOM_RUNTIME_ROOT, SAFE_ROOM_VERSION, package_id, package_id, SAFE_ROOM_VERSION
+		var scene_path := "%sentry_safe_room/%s/%s_root_top3d.tscn" % [
+			ROOM_RUNTIME_ROOT, package_id, package_id
 		]
 		if not ResourceLoader.exists(scene_path):
 			failures.append("房间包缺失 %s" % scene_path)

@@ -73,7 +73,7 @@ func _near(a: float, b: float) -> bool:
 func _check_case(case: Dictionary, failures: Array[String]) -> void:
 	var slug := str(case["slug"])
 	print("--- %s ---" % slug)
-	var scene_path := "%s/%s_root_top3d_%s.tscn" % [RUNTIME_DIR, slug, VERSION]
+	var scene_path := "%s/%s_root_top3d.tscn" % [RUNTIME_DIR, slug]
 	var packed := load(scene_path) as PackedScene
 	if packed == null:
 		failures.append("%s 包装场景加载失败：%s" % [slug, scene_path])

@@ -96,7 +96,7 @@ func _check_authority_constants(failures: Array[String]) -> void:
 
 func _check_case(slug: String, case: Dictionary, failures: Array[String]) -> void:
 	print("--- %s ---" % slug)
-	var scene_path := "%s/%s/%s_root_top3d_%s.tscn" % [RUNTIME_DIR, _subdir(slug), slug, VERSION]
+	var scene_path := "%s/%s/%s_root_top3d.tscn" % [RUNTIME_DIR, _subdir(slug), slug]
 	var packed := load(scene_path) as PackedScene
 	if packed == null:
 		failures.append("%s 包装场景加载失败：%s" % [slug, scene_path])
@@ -345,8 +345,8 @@ func _check_door_aperture(inst: Node3D, slug: String, failures: Array[String]) -
 
 ## 门墙门楣底（2.5）必须与门扇顶（2.5）等高；门扇宽（2.2）必须等于门洞宽。
 func _check_door_pairing(failures: Array[String]) -> void:
-	var wall := load("%s/wall_door_5m/wall_door_5m_root_top3d_%s.tscn" % [RUNTIME_DIR, VERSION]) as PackedScene
-	var door := load("%s/door_5m/door_5m_root_top3d_%s.tscn" % [RUNTIME_DIR, VERSION]) as PackedScene
+	var wall := load("%s/wall_door_5m/wall_door_5m_root_top3d.tscn" % RUNTIME_DIR) as PackedScene
+	var door := load("%s/door_5m/door_5m_root_top3d.tscn" % RUNTIME_DIR) as PackedScene
 	if wall == null or door == null:
 		failures.append("门墙/门扇包装缺失，无法验证门洞配对")
 		return

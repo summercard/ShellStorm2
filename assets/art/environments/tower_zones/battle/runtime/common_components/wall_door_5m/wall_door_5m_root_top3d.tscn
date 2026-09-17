@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3]
+
+; Stable AssetID: ENV-BATTLE-COMMON-WALL-DOOR-5M
+; 战局区块通用组件库 v004 · 08_墙壁组件 · wall_door_5m
+; 范式 B（自包含可替换组件）：模型 + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
+; 墙体由左门垛、右门垛、门楣三块组成，中间正好让出 2.2×2.5 门洞。
+; 门洞尺寸取自 TowerGeometry3D.DOOR_CLEAR_WIDTH_M / DOOR_CLEAR_HEIGHT_M，与 door_5m 门扇严格配对。
+; 美术已并进房内同款「装甲门禁」（门框立柱 + 门楣装甲 + 门扇面 + 状态灯 + 门禁屏），12 件装饰随组件走；门洞处不产生碰撞，通行由门扇或宿主门逻辑负责。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/wall_door_5m/wall_door_5m_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_door_5m_pier_l"]
+size = Vector3(1.4, 11.9, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_door_5m_pier_r"]
+size = Vector3(1.4, 11.9, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_door_5m_lintel"]
+size = Vector3(2.2, 9.4, 0.3)
+
+[node name="BattleCommonWallDoor5m" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-COMMON-WALL-DOOR-5M"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "08_wall_component"
+metadata/component = "wall_door_5m"
+metadata/logic_id = "wall_door_5m"
+metadata/display_name_zh = "战局通用门墙 5×0.3×11.9m（门洞 2.2×2.5，含装甲门禁）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "wall_door_5m_通用包"
+metadata/source_root_object = "ROOT_wall_door_5m_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/08/wall_door_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.365)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_three_box_bottom_center"
+metadata/collision_shape_count = 3
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/entry_safe_room/v006"
+metadata/wall_kind = "door_portal"
+metadata/wall_thickness_m = 0.3
+metadata/wall_visual_height_m = 11.9
+metadata/wall_logical_height_m = 12
+metadata/grid_unit_m = 5
+metadata/door_clear_width_m = 2.2
+metadata/door_clear_height_m = 2.5
+metadata/pier_width_m = 1.4
+metadata/lintel_height_m = 9.4
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WallDoorCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallDoorCollision"]
+position = Vector3(-1.8, 5.95, 0)
+shape = SubResource("BoxShape3D_wall_door_5m_pier_l")
+
+[node name="CollisionShape3D_2" type="CollisionShape3D" parent="WallDoorCollision"]
+position = Vector3(1.8, 5.95, 0)
+shape = SubResource("BoxShape3D_wall_door_5m_pier_r")
+
+[node name="CollisionShape3D_3" type="CollisionShape3D" parent="WallDoorCollision"]
+position = Vector3(0, 7.2, 0)
+shape = SubResource("BoxShape3D_wall_door_5m_lintel")

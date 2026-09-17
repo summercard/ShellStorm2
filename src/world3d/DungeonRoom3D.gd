@@ -94,19 +94,19 @@ const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"maintenance_chair",
 ]
 const SAFE_ROOM_WALL_STANDARD_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d_v004.tscn"
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn"
 )
 const SAFE_ROOM_WALL_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d_v004.tscn"
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn"
 )
 const SAFE_ROOM_DOOR_LEAF_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d_v004.tscn"
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d.tscn"
 )
 const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d_v004.tscn"
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn"
 )
 const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v004.tscn"
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn"
 )
 # v007 墙槽位表，逐项源自 source/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
@@ -1004,12 +1004,11 @@ func _build_safe_room_floor_tiles(art_root: Node3D) -> int:
 func _build_safe_room_packages(art_root: Node3D) -> int:
 	var placed := 0
 	for package_id in SAFE_ROOM_PACKAGE_IDS:
-		var scene_path := "%sentry_safe_room/%s/%s/%s_root_top3d_%s.tscn" % [
+		# 路径恒定契约：运行资产不含版本号（版本事实在 metadata/asset_version 与台账）。
+		var scene_path := "%sentry_safe_room/%s/%s_root_top3d.tscn" % [
 			SAFE_ROOM_RUNTIME_ROOT,
-			SAFE_ROOM_ART_VERSION,
 			package_id,
 			package_id,
-			SAFE_ROOM_ART_VERSION,
 		]
 		if not ResourceLoader.exists(scene_path):
 			push_warning("DungeonRoom3D: 安全房 v007 缺少房间包 %s" % scene_path)

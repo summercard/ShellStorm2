@@ -1,6 +1,6 @@
 # Godot 侧资产替换去版本化 —— 执行计划
 
-日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1 / P2 / P4 已完成（2026-09-17），批 B1…B9 未开始**。
+日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1 / P2 / P4 已完成，原子批 B1（`tower_zones/battle`）已完成；B2…B9 未开始**。
 依据：`assets/art/3D模型资产目录与命名规范.md` §Blender 到 Godot 的更新流程（L126–133）。
 基线：commit `b8af6fd`。
 作用域：`assets/art/**` 的 Godot 运行资产（`components/` + `runtime/`）与 `src/**/*.gd` 的引用路径；`source/**` 的 Blender 历史版本保留策略**不变**。
@@ -63,11 +63,13 @@ D1 的连带影响：旧版不再并存 → 回滚必须依赖 git（N5），man
 
 ### 4.1 原子批（新的执行单位）
 
-欠账实测口径（2026-09-17，`scripts/asset_runtime_naming_debt.json`）：**1345 个带版本文件 / 22 个版本目录 / 14 个备份残留 / 112 处 .gd 引用**。文件类型 = 527 `.glb` + 527 `.glb.import` + 291 `.tscn`。全仓共 **21 个套件**受影响，按「谁共享引用方」+「体量」合并为 8 批：
+欠账实测口径（2026-09-17 起始基线，`scripts/asset_runtime_naming_debt.json`）：**1345 个带版本文件 / 22 个版本目录 / 14 个备份残留 / 112 处 .gd 引用**。文件类型 = 527 `.glb` + 527 `.glb.import` + 291 `.tscn`。全仓共 **21 个套件**受影响，按「谁共享引用方」+「体量」合并为 8 批。
+
+**当前剩余**（B1 完成并缩表后）：**1216 文件 / 13 目录 / 1 备份 / gd 引用 107 / tscn 引用 675**；按大类 = `base_facility_3d` 443、`rooftop_shelter_3d` 311、`player` 144、`weapon_3d` 127、`base_world_3d` 67、`dungeon_3d` 48、`tower_descent_3d` 41、其余小计 37。
 
 | 批 | 套件 | 欠账文件 | .gd 引用 | 备注 |
 |---|---|---|---|---|
-| **B1** | `environments/tower_zones`（战局/安全房） | 131 | 6（+1 处动态拼接） | **样板批**。欠账多为 v003–v007 冗余与空目录，以「删 + 稳定化」为主；探针最全（`probe_safe_room_v007_integration`、`verify_common_*_v004`） |
+| **B1** ✅ **已完成（2026-09-17）** | `environments/tower_zones/battle`（common_components 5 + entry_safe_room 17） | 131 → 已还 129 文件 / 9 目录 / 13 备份 | 6（+1 处动态拼接）→ 已清零 | **样板批**。以「删 + 稳定化」为主；详见上「B1 执行记录」。**残留**：`tower_zones/base` + `tower_zones/rooftop` 的 2 个文件不属本子集，转后续批 |
 | **B2** | `props/dungeon_3d` + `environments/tower_descent_3d` + `props/base_world_3d` + `environments/dungeon_3d` + `environments/base_world_3d` | 156 | **56（耦合最重）** | `DungeonRoom3D.gd`(36)、`Dungeon3D.gd`(5)、`TowerFloorStage3D.gd`(4)、`TowerDescent3D.gd`(5)、`TrainingRange3D`(2) |
 | **B3** | `environments/base_facility_3d` | **443（体量最大）** | 8 | 99F 基地，回归面最广；与其他批无引用重叠 |
 | **B4** | `environments/rooftop_shelter_3d` | 311 | 0 | 零 `.gd` 耦合；自带 `verify_rooftop_shelter_asset_contract` |
@@ -88,7 +90,7 @@ D1 的连带影响：旧版不再并存 → 回滚必须依赖 git（N5），man
 | ~~**P3 运行时层**~~ → **并入原子批**（见 §4.1） | 原设想「先改代码、后改文件」不可行：`preload` 是编译期解析，路径不存在即脚本编译失败。改为在每一批内与重命名同批改 | 每批跑 `run_verification_suite.sh core`；`probe_safe_room_v007_integration` / `probe_tower_palette_visible` 保持 `_OK` |
 | **P4 门禁（必须先上线）** | 新增 `scripts/check_asset_runtime_naming.py`：扫描 `assets/art/**/{components,runtime}/**`，出现 `_v\d\d\d\.(glb\|tscn)` 文件名或 `components|runtime/**/v\d\d\d/` 目录即失败（`source/**` 豁免）；同时报告 `src/**/*.gd` 与 `tscn` 里的带版本引用数。存量未清前挂**精确路径欠账清单**（同 `LEGACY_PALETTE_EXEMPT_GLBS` 先例），双向断言：清单内路径消失要缩表、新出现的带版本路径立刻报错。接入 `AGENTS.md` 交付前检查与 run_verification_suite.sh core | 新增一件带版本资产即报错；**每完成一批原子批，欠账表相应缩表**；清零后删除豁免机制 |
 | ~~**P5 台账回填**~~ → **并入原子批** | 台账路径必须与磁盘同批改，否则账本先撒谎。每批只改该套件的行（第一批 = `3D-场景通用` r86/r87 + r92–r96） | 每批：`check_asset_registry.py --scope structure` 新增为 0；AssetID / 状态 / 尺寸列不变 |
-| ~~**P6 存量清理（全仓一次性）**~~ → **并入原子批 + 收尾批** | 原「全仓一次性、排最后」改为「按套件分批、与代码同批」。删除类无耦合动作（空版本目录、孤儿 GLB、`.bak_*`）集中在收尾批 | 见 §4.1 的批次表；删除类动作集中在 B8 | 每批引用扫描为 0、套件全绿；B8 后 `check_asset_runtime_naming.py` 判绿且欠账表为空 |
+| ~~**P6 存量清理（全仓一次性）**~~ → **并入原子批 + 收尾批** | 原「全仓一次性、排最后」改为「按套件分批、与代码同批」。删除类无耦合动作（空版本目录、孤儿 GLB、`.bak_*`）集中在收尾批 | 见 §4.1 的批次表；删除类动作集中在 B9 | 每批引用扫描为 0、套件全绿；B9 后 `check_asset_runtime_naming.py` 判绿且欠账表为空 |
 
 ### P1 执行记录（2026-09-17，已完成）
 
@@ -150,6 +152,63 @@ P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-stand
 **未执行**：带 `bpy` 的 Blender 导出/构建脚本（会重写 GLB，属资产写入）未实跑，仅做 `py_compile` 与干跑；需 Blender 4.5 + P6 完成后按需重跑。
 
 
+
+### 事故记录（2026-09-17 11:52–11:58，B1 执行中）：`assets/art/**` 被抹除并已恢复
+
+**事实链**
+
+| 时间 | 事件 |
+|---|---|
+| 11:47 | B1 侦察完成（131 欠账文件 / 9 版本目录 / 13 备份） |
+| 11:52 | `--apply-renames` 执行：`git mv` 66 个（22 glb + 22 glb.import + 22 tscn），并改写 22 个 tscn 的内部引用 |
+| 11:55 | `--apply-deletes` 执行：`git rm` 76 个（`_v003` 冗余 15 + `entry_safe_room/v006` 整树 48 + `.bak_*` 13） |
+| 11:56 | 复核时发现 **`assets/art/**` 整棵树从工作区消失**；`find assets/art -type f` = 0 |
+
+**取证（未做任何猜测性动作前先定性）**
+
+- `git status --porcelain` 状态码分布：`2533 ' D'`（未暂存的工作区删除）+ `76 'D '`（我的 `git rm`）+ `66 'RD'`（我的重命名，新路径也在工作区缺失）
+- 删除**只在 `assets/art/**` 内**：`src/`、`tests/`、`docs/` 未受影响
+- 我的两个工具动作只有：`git mv` ×66、`git rm` ×76（文件粒度）、`rmdir`（仅 `vNNN` 名且为空的目录）。**无法解释 2533 个未暂存的整树删除** → 判定为**外部进程**所为，原因未知
+- **补充取证（2026-09-17 13:00）：`git reflog` 在 11:52–11:56 窗口内没有任何条目（上一条是 11:45:22），且 `.git` 在该时段零文件写入** → 排除 git 侧操作（checkout / reset / merge / stash 均无记录），确认为**文件系统层删除**，非版本库行为
+
+**恢复**
+
+1. `git checkout -- assets/art` 从索引恢复被跟踪文件 → 磁盘 2599 = 索引 2599 ✓（未触碰 `src/`、`tests/` 里其它会话的改动）
+2. 差额复核（用 P4 门禁的欠账快照做差集）：263 个带版本文件消失 = **129 个属 B1 有意改名/删除的旧名** + **134 个 `*.glb.import`**
+3. 那 134 个 `.import` 是 `.gitignore` 的 `*.import` 白名单（第 3–17 行）未覆盖的目录（characters / weapons 等）→ **从未被 git 跟踪** → git 无法恢复；但其**源 `.glb` 全部健在**，由 `godot --headless --import` 重建
+4. 其它会话的未跟踪探针文件（`tests/verification/probe_corridor_*`、`probe_floor_blue_slab*`）已不在工作区，需该会话自行重建
+
+**结论**：未损失任何不可重建的资产；所有被跟踪文件已回到索引状态。**外部抹除的起因未能确定（已排除 git 侧操作），属未消除的风险。**
+
+**相关旁证（同日 13:00）**：台账 xlsx 写入时 `os.replace()` 连续 8 次返回 `WinError 5 拒绝访问`，而同一文件 `open('r+b')` 成功 —— 这是「有进程持有该文件但未开放 delete 共享」的典型特征。持有者未确定；环境内查得 **OneDrive.exe / OneDrive.Sync.Service.exe 在运行**（无 Excel `~$` 锁文件）。应对：改用本仓库既有范式**就地写入**（`zipfile.ZipFile(LEDGER, "w")`，见 `_scratch/patch_ledger_safe_room_v007.py:298`），并在写前确认备份与当前文件逐字节一致、写后复验 zip 条目集合与逐条目字节。**后续批次操作台账前，先取 sha/mtime 快照确认无并发写入。**
+
+### B1 执行记录（2026-09-17，已完成）
+
+范围：`assets/art/environments/tower_zones/battle`（common_components 5 + entry_safe_room 17）。工具：`tools/asset_pipeline/deversion_batch.py`（`b1`，`--plan` / `--apply-renames` / `--apply-deletes` / `--fix-scene-refs`）。
+
+**步骤**：① 侦察（131 欠账文件 / 9 版本目录 / 13 备份）→ ② `git mv` 改名 66 个 → ③ 删除 76 个（`_v003` 冗余 15 + `entry_safe_room/v006` 整树 48 + `.bak_*` 13）→ ④ 改引用（`DungeonRoom3D.gd` 5 条 preload + 动态拼接；7 个 tests 验证器；2 份文档）→ ⑤ `godot --headless --import` 重建 134 个被抹掉的 `.import` → ⑥ 场景内部引用改写 `--fix-scene-refs`（22 个 tscn，幂等）→ ⑦ 退役 4 个 v003 期验证器 → ⑧ 台账补丁 → ⑨ 缩欠账表。
+
+**验收**
+
+| 项 | 结果 |
+|---|---|
+| `probe_safe_room_v007_integration` | `SAFE_ROOM_V007_INTEGRATION_OK` ✓ |
+| `verify_common_wall_door_components_v004` | 通过 ✓ |
+| `verify_common_floor_tile_components_v004` | 通过 ✓ |
+| `verify_scene_facility_shared_palette` | 通过 ✓ |
+| `verify_tower_grid_component_alignment` | `TOWER_GRID_COMPONENT_ALIGNMENT_OK` ✓ |
+| `check_asset_runtime_naming.py` | 新增违规 **0**；已还欠账 129 文件 / 9 目录 / 13 备份（全部 `tower_zones`）；缩表后 exit 0 ✓ |
+| `check_asset_registry.py --scope structure` | **38**（等于基线，无新增）✓ |
+| `check_documentation_contracts.py` | `issues: []` ✓ |
+| `src` 内对 `tower_zones/battle` 的引用 | 全部版本无关（6 处，含动态拼接已注释原因）✓ |
+
+**退役 4 个 v003 期验证器**（主人确认）：`verify_common_wall_door_components` / `verify_common_floor_tile_components` 及其 2 个 `_visual` 变体 —— 共 12 个文件（`.gd`/`.tscn`/`.uid`）已从仓库删除，并移出 `run_verification_suite.sh` 的 core / renderer 名单。理由：它们断言 v003 版几何，而 v003 资产已按 N1「同一资产只留一份」在本批删除，稳定路径现装 v004 内容；实测不符是**真差异非错位**（`wall_standard_5m` 可视包围盒 z=0.3030 且区间 `[-0.1530,0.1500]` 不对称 —— v004 并入装饰的 3mm 凸出；两块地砖厚度 0.0830/0.0852 vs v003 期望 0.056/0.081 —— v004 加了砖面美术）。v004 期验证器已覆盖活契约且通过。
+
+**台账回填**（`_scratch/patch_ledger_b1_deversion.py`）：`3D-场景通用` r86/r87、r92–r96 的 C/D 列去版本（含 `/entry_safe_room/v007/` 目录段，runtime 与 components 两侧都去），**O 列版本事实保留**（r86/r87=v007，r92–r96=v004）。复验：zip 29 条目集合不变、仅 `sheet10.xml` 变化、行数 142 不变、B1 行 C/D 列无残留。备份 `*.xlsx.bak_b1_deversion`（保留：台账当前状态尚未提交，git HEAD 里没有它）。
+
+**残留（转后续批）**：`tower_zones/base` + `tower_zones/rooftop` 的 2 个文件（`zone_base_v002.tscn`、`zone_rooftop_v021.tscn`）不属 battle 子集，未动。
+
+**事故与两个工具层缺陷**：见上「事故记录」与 P2/B1 缺陷条 —— ① tscn 内部引用改写未暂存，被事故恢复回滚（已加 `--fix-scene-refs`）；② 引用扫描漏「版本目录拼接」形式（已修）；③ `--apply-deletes` 曾错误复用「保留最高版本」逻辑，重命名后会反过来删掉刚改名成功的文件 —— 已拆出 `collect_leftovers()`：第二步只认「稳定名已存在则删带版本的那个」。
 
 ### P4 执行记录（2026-09-17，已完成）
 
