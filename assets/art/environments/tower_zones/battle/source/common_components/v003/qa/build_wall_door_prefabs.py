@@ -2,9 +2,9 @@
 
 范式 B（自包含可替换组件）= 模型 + 碰撞同包、逐实例化，
 与 09 地板组件的地砖完全同构：
-  <slug>_root_top3d_v003.tscn
+  <slug>_root_top3d.tscn
     ├─ Node3D 根（承载全部 metadata 契约）
-    ├─ ImportedModel       ← 实例化 <slug>_visual_top3d_v003.glb
+    ├─ ImportedModel       ← 实例化 <slug>_visual_top3d.glb
     └─ <Slug>Collision (StaticBody3D, layer 1 / mask 0)
          └─ CollisionShape3D × N（BoxShape3D，与可视网格齐平）
 
@@ -30,6 +30,11 @@ SOURCE_DIR = V003.parent.parent                 # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
+
+import sys
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
 
 RUNTIME_DIR = BATTLE / "runtime" / "common_components"
 MANIFEST_DIR = V003 / "component_packages_v003"
@@ -162,7 +167,7 @@ def fmt_scalar(value) -> str:
 
 
 def build_scene(slug: str, spec: dict) -> str:
-    visual_path = f"{LIBRARY_ROOT}/components/common_components/{slug}/{slug}_visual_top3d_v003.glb"
+    visual_path = f"{LIBRARY_ROOT}/components/common_components/{slug}/{grn.visual_glb_name(slug)}"
     manifest_path = f"{LIBRARY_ROOT}/source/common_components/v003/component_packages_v003/{spec['category'][:2]}/{slug}/asset_manifest.json"
     bounds = spec["shapes"][0][1]
     # 由 3 个 shape 推出整体包围盒（门墙需要合并左右门垛与门楣）
@@ -244,14 +249,13 @@ def main() -> int:
     for slug, spec in ASSETS.items():
         out_dir = RUNTIME_DIR / slug
         out_dir.mkdir(parents=True, exist_ok=True)
-        target = out_dir / f"{slug}_root_top3d_v003.tscn"
+        target = out_dir / grn.root_scene_name(slug)
         content = build_scene(slug, spec)
         if target.is_file() and target.read_text(encoding="utf-8") == content:
             print(f"SKIP {slug}: 内容已一致（幂等）")
             results[slug] = {"status": "unchanged", "path": str(target)}
             continue
-        if target.is_file():
-            shutil.copy2(target, target.with_suffix(".tscn.bak_pre_generate"))
+        # 历史由 git 承担，不再落 `*.bak_pre_generate`（工作区不保留旧资产副本）。
         target.write_text(content, encoding="utf-8")
         print(f"WROTE {slug} -> {target}")
         results[slug] = {"status": "written", "path": str(target), "shapes": len(spec["shapes"])}

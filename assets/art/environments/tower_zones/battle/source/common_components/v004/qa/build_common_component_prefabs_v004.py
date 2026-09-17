@@ -1,11 +1,14 @@
-"""为战局通用组件库 v004 生成范式 B 的 runtime PackedScene 五件。
+"""为战局通用组件库生成范式 B 的 runtime PackedScene（五件）。
 
 范式 B（自包含可替换组件）= 模型 + 碰撞同包、逐实例化：
-  <slug>_root_top3d_v004.tscn
+  <slug>_root_top3d.tscn
     ├─ Node3D 根（承载全部 metadata 契约）
-    ├─ ImportedModel       <- 实例化 <slug>_visual_top3d_v004.glb
+    ├─ ImportedModel       <- 实例化 <slug>_visual_top3d.glb
     └─ <Slug>Collision (StaticBody3D, layer 1 / mask 0)
          └─ CollisionShape3D × N（BoxShape3D）
+
+版本号默认取本脚本所在版本目录名，也可用 `--version vNNN` 指定；版本号只写进
+`metadata/asset_version` 与摘要，**Godot 侧路径恒定、不含版本号**。
 
 碰撞按「结构」而非「美术」：
   这次并进组件的是房内装甲壁板 / 地砖装饰 / 门禁，都是**表面装饰**，
@@ -28,19 +31,23 @@
 from __future__ import annotations
 
 import json
-import shutil
+import sys
 from pathlib import Path
 
-HERE = Path(__file__).resolve().parent          # .../v004/qa
-V4 = HERE.parent                                # .../v004
-SOURCE_DIR = V4.parent.parent                   # .../source
+HERE = Path(__file__).resolve().parent          # .../<版本>/qa
+VERSION_DIR = HERE.parent                       # .../<版本>
+SOURCE_DIR = VERSION_DIR.parent.parent          # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
+# 版本号只写进 metadata 与摘要；Godot 侧 runtime 路径恒定、不含版本号。
+VERSION = grn.version_from_argv(VERSION_DIR.name)
 RUNTIME_DIR = BATTLE / "runtime" / "common_components"
-SUMMARY = HERE / "export_common_library_v004_summary.json"
-VERSION = "v004"
+SUMMARY = HERE / f"export_common_library_{VERSION}_summary.json"
 
 LIBRARY_ID = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
 LIBRARY_ROOT = "res://assets/art/environments/tower_zones/battle"
@@ -245,7 +252,7 @@ def fmt_scalar(value) -> str:
 def build_scene(slug: str, spec: dict, visual_bounds: list, blend_name: str) -> str:
     sub = OUT_SUBDIR[slug]
     visual_path = (f"{LIBRARY_ROOT}/components/common_components/{sub}/"
-                   f"{slug}_visual_top3d_{VERSION}.glb")
+                   f"{grn.visual_glb_name(slug)}")
     manifest_path = (f"{LIBRARY_ROOT}/source/common_components/{VERSION}/component_packages_{VERSION}/"
                      f"{spec['category'][:2]}/{slug}/asset_manifest.json")
     source_blend = f"{LIBRARY_ROOT}/source/common_components/{VERSION}/{blend_name}"
@@ -331,6 +338,7 @@ def build_scene(slug: str, spec: dict, visual_bounds: list, blend_name: str) -> 
         raise SystemExit(
             "asset %s 的 metadata 出现重复键 %s；请让每个键只声明一次" % (slug, sorted(set(duplicated)))
         )
+    grn.require_version_metadata(meta_pairs, VERSION, script=Path(__file__).name)
     for key, value in meta_pairs:
         lines.append(f"metadata/{key} = {fmt_scalar(value)}")
     lines.append("")
@@ -350,29 +358,31 @@ def build_scene(slug: str, spec: dict, visual_bounds: list, blend_name: str) -> 
 
 
 def main() -> int:
+    for sub in sorted(set(OUT_SUBDIR.values())):
+        grn.guard_no_legacy_versioned(
+            RUNTIME_DIR / sub, script=Path(__file__).name, allow=grn.allow_legacy_from_argv()
+        )
     summary = json.loads(SUMMARY.read_text(encoding="utf8"))
     blend_name = f"战局区块_通用组件库_{VERSION}.blend"
     results = {}
     for slug, spec in ASSETS.items():
         if slug not in summary:
-            raise SystemExit(f"导出摘要里缺少 {slug}，先跑 export_common_library_v004.py")
+            raise SystemExit(f"导出摘要里缺少 {slug}，先跑 export_common_library_{VERSION}.py")
         visual_bounds = summary[slug]["godot_size_xyz"]
         out_dir = RUNTIME_DIR / OUT_SUBDIR[slug]
         out_dir.mkdir(parents=True, exist_ok=True)
-        target = out_dir / f"{slug}_root_top3d_{VERSION}.tscn"
+        target = out_dir / grn.root_scene_name(slug)
         content = build_scene(slug, spec, visual_bounds, blend_name)
         if target.is_file() and target.read_text(encoding="utf-8") == content:
             print(f"SKIP {slug}: 内容已一致（幂等）")
             results[slug] = {"status": "unchanged", "path": str(target)}
             continue
-        if target.is_file():
-            shutil.copy2(target, target.with_suffix(".tscn.bak_pre_generate"))
         target.write_text(content, encoding="utf-8")
         print(f"WROTE {slug} -> {target}")
         results[slug] = {"status": "written", "path": str(target), "shapes": len(spec["shapes"])}
 
     invalid = [s for s in results if not (RUNTIME_DIR / OUT_SUBDIR[s] /
-                                         f"{s}_root_top3d_{VERSION}.tscn").is_file()]
+                                         grn.root_scene_name(s)).is_file()]
     if invalid:
         raise SystemExit(f"生成后仍缺文件: {invalid}")
     print("PREFAB_REPORT " + str(results))

@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import bpy
@@ -32,6 +33,9 @@ SOURCE_DIR = V003.parent.parent                 # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
 
 BLEND = V003 / "战局区块_通用组件库_v003.blend"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
@@ -123,7 +127,7 @@ for slug, (collection_name, root_name, out_subdir) in EXPORTS.items():
     for name, box in per_mesh.items():
         print(f"    {name}: {box['min']} -> {box['max']}")
 
-    out = out_dir / f"{slug}_visual_top3d_v003.glb"
+    out = out_dir / grn.visual_glb_name(slug)
     bpy.ops.export_scene.gltf(
         filepath=str(out),
         export_format="GLB",

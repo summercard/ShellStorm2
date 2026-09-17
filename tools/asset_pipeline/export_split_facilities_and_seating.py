@@ -25,6 +25,7 @@ from export_game_assets import (  # noqa: E402
     reset_to,
 )
 from generate_runtime_scenes import write_facility  # noqa: E402
+import godot_runtime_naming as grn  # noqa: E402
 
 
 LIBRARY = Path(r"C:\Users\zhuangmenghong\Documents\图片制作\新建文件夹\中文游戏资产成品\风格统一重制V3")
@@ -105,7 +106,10 @@ def export_facility(data: dict, manifest: dict) -> None:
     source_dir.mkdir(parents=True, exist_ok=True)
     component_dir.mkdir(parents=True, exist_ok=True)
     project_source = source_dir / f"prp_base_{data['slug']}_source_{data['version']}.blend"
-    glb_path = component_dir / f"prp_base_{data['slug']}_visual_top3d_{data['version']}.glb"
+    glb_path = component_dir / grn.visual_glb_name(f"prp_base_{data['slug']}")
+    grn.guard_no_legacy_versioned(
+        component_dir, script=Path(__file__).name, allow=grn.allow_legacy_from_argv()
+    )
     shutil.copy2(source_file, project_source)
     export_glb(glb_path, copies)
     minimum, maximum = calculate_bounds(copies)
@@ -113,6 +117,7 @@ def export_facility(data: dict, manifest: dict) -> None:
         "name_cn": data["cn"],
         "glb": glb_path.relative_to(PROJECT).as_posix(),
         "source": project_source.relative_to(PROJECT).as_posix(),
+        "asset_version": data["version"],
         "bounds_min": minimum,
         "bounds_max": maximum,
         "presentation_scale_multiplier": 1.0,
@@ -126,7 +131,7 @@ def export_facility(data: dict, manifest: dict) -> None:
 def write_decor_scene(data: dict, record: dict) -> None:
     runtime_dir = PROP_ROOT / "runtime" / data["slug"]
     runtime_dir.mkdir(parents=True, exist_ok=True)
-    scene_path = runtime_dir / f"prp_base_{data['slug']}_root_top3d_{data['version']}.tscn"
+    scene_path = runtime_dir / grn.root_scene_name(f"prp_base_{data['slug']}")
     scene_path.write_text(
         f'''[gd_scene load_steps=2 format=3]\n\n'''
         f'''[ext_resource type="PackedScene" path="res://{record['glb']}" id="1_visual"]\n\n'''
@@ -134,6 +139,7 @@ def write_decor_scene(data: dict, record: dict) -> None:
         f'''metadata/asset_name_cn = "{data['cn']}"\n'''
         f'''metadata/asset_category = "decor_prop"\n'''
         f'''metadata/asset_source = "res://{record['source']}"\n'''
+        f'''metadata/asset_version = "{record.get('asset_version', '')}"\n'''
         f'''metadata/forward_axis = "-Z"\n'''
         f'''metadata/interactive = false\n\n'''
         f'''[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]\n''',
@@ -149,7 +155,10 @@ def export_seating(data: dict, manifest: dict) -> None:
     source_dir.mkdir(parents=True, exist_ok=True)
     component_dir.mkdir(parents=True, exist_ok=True)
     project_source = source_dir / f"prp_base_{data['slug']}_source_{data['version']}.blend"
-    glb_path = component_dir / f"prp_base_{data['slug']}_visual_top3d_{data['version']}.glb"
+    glb_path = component_dir / grn.visual_glb_name(f"prp_base_{data['slug']}")
+    grn.guard_no_legacy_versioned(
+        component_dir, script=Path(__file__).name, allow=grn.allow_legacy_from_argv()
+    )
     shutil.copy2(source_file, project_source)
     export_glb(glb_path, copies)
     minimum, maximum = calculate_bounds(copies)
@@ -158,9 +167,10 @@ def export_seating(data: dict, manifest: dict) -> None:
         "category": "decor_prop",
         "glb": glb_path.relative_to(PROJECT).as_posix(),
         "source": project_source.relative_to(PROJECT).as_posix(),
+        "asset_version": data["version"],
         "runtime": (
             PROP_ROOT / "runtime" / data["slug"]
-            / f"prp_base_{data['slug']}_root_top3d_{data['version']}.tscn"
+            / grn.root_scene_name(f"prp_base_{data['slug']}")
         ).relative_to(PROJECT).as_posix(),
         "bounds_min": minimum,
         "bounds_max": maximum,

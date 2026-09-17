@@ -17,6 +17,11 @@ HERE = Path(__file__).resolve().parent                       # .../v003/qa
 V003 = HERE.parent                                           # .../v003
 BATTLE = V003.parent.parent.parent                           # .../battle
 ROOT = BATTLE.parents[4]                                     # .../ShellStorm2
+
+import sys
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
 PKG = V003 / "component_packages_v003" / "09"
@@ -44,8 +49,8 @@ for slug, (godot_size, thickness) in CASES.items():
 
     data["exported"] = True
     data["collision"] = "self_contained_box_bottom_center"
-    data["visual_glb"] = f"res://{COMPONENTS_REL}/{slug}_visual_top3d_v003.glb"
-    data["runtime_scene"] = f"res://{RUNTIME_REL}/{slug}_root_top3d_v003.tscn"
+    data["visual_glb"] = f"res://{COMPONENTS_REL}/{grn.visual_glb_name(slug)}"
+    data["runtime_scene"] = f"res://{RUNTIME_REL}/{grn.root_scene_name(slug)}"
     data["godot_bounds_size"] = godot_size
     data["origin_contract"] = "bottom_center"
     data["forward_axis"] = "-Z"

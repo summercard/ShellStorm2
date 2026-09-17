@@ -1,6 +1,6 @@
 # Godot 侧资产替换去版本化 —— 执行计划
 
-日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1 已完成（2026-09-17），P2 未开始**。
+日期：2026-09-17；记录ID：待补；工程版本：0.1.0；状态：**执行中 —— P1、P2 已完成（2026-09-17），P3 未开始**。
 依据：`assets/art/3D模型资产目录与命名规范.md` §Blender 到 Godot 的更新流程（L126–133）。
 基线：commit `b8af6fd`。
 作用域：`assets/art/**` 的 Godot 运行资产（`components/` + `runtime/`）与 `src/**/*.gd` 的引用路径；`source/**` 的 Blender 历史版本保留策略**不变**。
@@ -48,7 +48,7 @@ D1 的连带影响：旧版不再并存 → 回滚必须依赖 git（N5），man
 | 阶段 | 改动点 | 完成判据 |
 |---|---|---|
 | **P1 规则层** ✅ 已完成（2026-09-17，见下「P1 执行记录」） | ① `godot-model-asset-import-standard` 的 L32/L46/L63、§版本与引用替换、目录模板改为「覆盖既定路径、路径不含版本」；用户级 `~/.workbuddy/skills/` 与工程 `skills_drafts/` 两份逐字节同步。② `assets/art/3D模型资产目录与命名规范.md` L10–11 目录模板去 `_v###`，§坐标与替换契约补「Godot 侧路径恒定、GLB 不含版本」。③ `docs/v0.1/10_资产与内容规范.md:5` 删去「运行时可保留按批次递增的 v021–v024 组件版本」 | 两份 skill diff 为空；`python3 scripts/check_documentation_contracts.py` 通过 |
-| **P2 工具层** | ① 战局区块 `source/**/qa/export_*.py`、`build_*_prefabs_*.py`：`VERSION` 只写 manifest 与节点 meta，不进路径；v006/v007 平行脚本合并为一份带版本参数的脚本。② `tools/asset_pipeline/generate_runtime_scenes.py:43`、`export_split_facilities_and_seating.py:107-129`、`update_character_registry.mjs` 同步。③ manifest 与节点 meta 写入改为必填校验 | 同一输入连跑两次，输出路径集合与 mtime 不变；`git status` 无新增带版本路径；抽 1 件资产确认 manifest + meta 均记录了版本 |
+| **P2 工具层** ✅ 已完成（2026-09-17，见下「P2 执行记录」） | ① 战局区块 `source/**/qa/export_*.py`、`build_*_prefabs_*.py`：`VERSION` 只写 manifest 与节点 meta，不进路径；v006/v007 平行脚本合并为一份带版本参数的脚本。② `tools/asset_pipeline/generate_runtime_scenes.py:43`、`export_split_facilities_and_seating.py:107-129`、`update_character_registry.mjs` 同步。③ manifest 与节点 meta 写入改为必填校验 | 同一输入连跑两次，输出路径集合与 mtime 不变；`git status` 无新增带版本路径；抽 1 件资产确认 manifest + meta 均记录了版本 |
 | **P3 运行时层** | ① `DungeonRoom3D.gd`：`SAFE_ROOM_ART_VERSION` 退出路径拼接（L1007–1013 改为 `<slug>/<slug>_root_top3d.tscn`），5 条 L97–109 preload 去 `_v004`；版本降级为纯元数据。② `TowerDescent3D.gd:7-34`、`TowerFloorStage3D.gd:31-46` 及其余带版本引用的 `.gd`（共 22 个文件 / 109 行）改为去版本路径 | `bash scripts/run_verification_suite.sh core` 全绿；`probe_safe_room_v007_integration` → `SAFE_ROOM_V007_INTEGRATION_OK`；`probe_tower_palette_visible` → `TOWER_PALETTE_VISIBLE_OK` |
 | **P4 门禁** | 新增 `scripts/check_asset_runtime_naming.py`：扫描 `assets/art/**/{components,runtime}/**`，出现 `_v\d\d\d\.(glb\|tscn)` 文件名或 `components|runtime/**/v\d\d\d/` 目录即失败（`source/**` 豁免）。存量未清前挂**精确路径欠账清单**（同 `LEGACY_PALETTE_EXEMPT_GLBS` 先例），双向断言：清单内路径消失要缩表、新出现的带版本路径立刻报错。接入 `AGENTS.md` 交付前检查与 `run_verification_suite.sh core` | 新增一件带版本资产即报错；欠账表清零后删除豁免机制 |
 | **P5 台账回填（第一批）** | `3D-场景通用`（外科式 XML 补丁，备份 `*.xlsx.bak_deversioning`）：<br>① r86/r87（SAFE-ENTRY/EXIT）C 列现值 `.../runtime/entry_safe_room/v007/*/*_root_top3d_v007.tscn（17 包）；墙/地/门引用 .../runtime/common_components/*_root_top3d_v004.tscn`，D 列现值 `.../components/entry_safe_room/v007/*/*_visual_top3d_v007.glb（17 包）` → 去 `v007/` 目录与 `_v007`/`_v004` 后缀，括号与分号说明文字结构保留。<br>② r92–r96（5 个 `ENV-BATTLE-COMMON-*`）C/D 列现值含 `_v004` → 去版本。<br>③ O 列保留现有版本事实（r86/r87=v007，r92–r96=v004）不动 | `python3 scripts/check_asset_registry.py --scope structure` 相对基线（既有 37 项）**新增为 0**；AssetID、状态、尺寸列不变 |
@@ -75,6 +75,44 @@ D1 的连带影响：旧版不再并存 → 回滚必须依赖 git（N5），man
 
 P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-standard/references/` 与 `README.md` 未发现其他带版本路径声明；`skills_drafts/README.md` 的 skill 清单未变（本次未增删 skill）。
 
+### P2 执行记录（2026-09-17，已完成）
+
+**核心产出：命名契约的唯一实现处** —— 新增 `tools/asset_pipeline/godot_runtime_naming.py`，所有导出/构建脚本从这里取 Godot 侧路径，脚本内不再出现 `f"..._{VERSION}.glb"`。
+
+| API | 语义 |
+|---|---|
+| `visual_glb_name(slug)` / `root_scene_name(slug)` | `<slug>_visual_top3d.glb` / `<slug>_root_top3d.tscn` |
+| `legacy_versioned_files(dir, recursive=False)` | 列出仍是 `_vNNN` 命名的运行资产 |
+| `guard_no_legacy_versioned(dir, script, allow, recursive=True)` | 存量未去版本时 `SystemExit`；**默认递归**（资产在 `<套件>/<slug>/` 之下，只看一层会全漏）；`--allow-legacy-versioned` 可显式放行 |
+| `require_version_metadata(meta_items, version, script)` | manifest / 节点 meta 必须写入本次源版本号，缺失即失败（GLB 去版本后这是唯一溯源入口） |
+| `split_glb_version(rel)` / `require_stable_glb(root, rel, script)` | 把清单里带版本的 GLB 路径归一为稳定路径；稳定文件不存在时失败并提示先做 P6，而不是继续引用旧命名 |
+| `version_from_argv(default)` / `allow_legacy_from_argv()` | Blender/CLI 参数解析 |
+
+**改动的生成器（15 个文件）**：`entry_safe_room` v007 导出与 prefab 构建（成为全版本唯一脚本，`--version` 驱动）、v006 两份**转发壳**（`runpy` 转调，保留原路径让 v006 的 README/QA_REPORT 引用继续有效）；`common_components` v004 的导出/构建/色盘绑定 + v003 的导出墙门、导出地砖、构建 prefab、绑定色盘、finalize 包、回填地板 manifest。两版之间除版本号与包数量外主体逐行相同（已用 `diff` 逐行确认），合并未丢失任何逻辑。
+
+**顺带落实 N5**：生成器不再落 `*.bak_pre_generate` / `*.bak_pre_palette`（回滚交给 git）。
+
+**边界划分（本轮明确）**
+
+- **生成器**（会再次运行、产出 Godot 资产）→ 必须去版本（本轮已改）。
+- **资产验证器**（`verify_v004_glb.py` 等）与**台账补丁/复验脚本**（`update_ledger_rows_v004.py`、`register_*_ledger_rows.py`、`verify_*_ledger_patch.py`、`sync_catalog_export_status.py`）→ **冻结不动**：前者必须与磁盘现状同步，改了会立刻变红；后两者断言的是历史补丁的确切内容。全部登记为 **P6 同批处理项**。
+- **`assets/art/asset_import_manifest_v001.json` 里的 GLB 路径**（实测全部带 `_vNNN`）→ 属数据，**P6 与重命名同批更新**；`generate_runtime_scenes.py` 已改为经 `require_stable_glb` 消费它。
+
+**待决（本轮未动，需主人裁）**：`tools/asset_pipeline/update_character_registry.mjs` 的 `runtime/chr_bunny01_root_${version}.tscn`。角色资产按 `production/<version>/` 整树版本化，改它等于改 `player-avatar-asset-standard` 的版本契约，且该脚本依赖 macOS 侧运行时、本机无法执行验证。建议单列一轮，随角色资产链决定。
+
+**验收**
+
+| 项 | 结果 |
+|---|---|
+| `py_compile` 全部改动脚本（16 个） | 通过 |
+| helper 自测（路径拼接 / 版本解析 / 守卫 / meta 校验 / 旧命名归一） | 11/11 PASS |
+| 守卫递归用例（资产在下一层也能检出） | 3/3 PASS |
+| 版本解析干跑（默认 / `--version v006` / `--allow-legacy-versioned`） | VERSION 与 VERSION_DIR 正确，`RUNTIME_DIR` 恒为 `runtime/entry_safe_room`（无版本目录） |
+| 端到端：`build_package_prefabs_v006.py`（转发壳） | EXIT=1，命中守卫并列出 17 个旧命名文件；`runtime/` 变更文件数 **0**（未写任何文件） |
+| 残留扫描：`assets/art/**/battle/source` + `tools/asset_pipeline` 内把版本拼进 Godot 路径 | 仅剩上表「冻结」类别 |
+
+**未执行**：带 `bpy` 的 Blender 导出/构建脚本（会重写 GLB，属资产写入）未实跑，仅做 `py_compile` 与干跑；需 Blender 4.5 + P6 完成后按需重跑。
+
 
 
 回滚：每阶段与 P6 每批次以独立提交交付；不使用工作区备份文件。
@@ -90,6 +128,9 @@ P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-stand
 | `components/entry_safe_room/v006` | 24 个 GLB | 无 runtime、无代码/场景引用；仅 v004 组件元数据 `carries_room_art_from` 提及源侧 `source/entry_safe_room/v006`（保留） |
 | `components|runtime/common_components/` 的 5 组 `_v003` | wall_standard_5m、wall_door_5m、door_5m、floor_tile_r01_c01、floor_tile_r01_c02 的 GLB/tscn | src 只 preload `_v004`；`_v003` 仅被自身 tscn 的 `ext_resource` 与 `source/common_components/v003/` 的 manifest/catalog 引用 |
 | 战局区块 `.bak_*` 18 个 | `*.glb.import.bak_pre_palette` 8、`*.tscn.bak_pre_generate` 5、源侧备份 5 | 备份，非运行资产 |
+| 验证器与台账脚本（P2 登记，**必须与重命名同批改**） | `common_components/v004/qa/verify_v004_glb.py`、`update_ledger_rows_v004.py`、v003 的 `register_*_ledger_rows.py` / `verify_*_ledger_patch.py`、`sync_catalog_export_status.py` | 这些脚本按确切文件名/路径断言磁盘现状或历史补丁；早改会立刻变红，晚改会漏检——只能与 P6 重命名同批 |
+| `assets/art/asset_import_manifest_v001.json` | 全部 `*.glb` 字段实测带 `_vNNN` | 数据侧，与 P6 同批去版本；`generate_runtime_scenes.py` 已按稳定路径消费并硬拦未重命名的项 |
+| 角色链（待决） | `update_character_registry.mjs` 与 `production/<version>/runtime/*.tscn` | 属 `player-avatar-asset-standard` 版本契约，建议单列一轮 |
 
 其余套件（environments 558、props 86、characters 79、weapons 76、vfx 11、enemies 6、ui 2）在 P6 第①步由脚本出清单，不在本文件手工枚举。
 

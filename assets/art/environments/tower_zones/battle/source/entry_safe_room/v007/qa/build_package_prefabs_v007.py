@@ -2,9 +2,9 @@
 
 范式 B（自包含可替换资产包）= 视觉 GLB + 稳定根节点 + 元数据，逐实例化：
 
-  <slug>_root_top3d_v007.tscn
+  <slug>_root_top3d.tscn
     ├─ Node3D 根（承载全部 metadata 契约与房间摆位）
-    └─ ImportedModel  ← 实例化 <slug>_visual_top3d_v007.glb
+    └─ ImportedModel  ← 实例化 <slug>_visual_top3d.glb
 
 **本包不含碰撞**，这是 asset_manifest.json 已声明的契约，不是遗漏：
   structural_geometry : "none: no wall/floor module, no collision shape"
@@ -20,30 +20,37 @@
   position 用 metadata/room_placement_position、rotation 保持 identity 即正位。
   不声明 forward_axis 这类需要额外推理的字段，只记录实际契约。
 
-幂等：目标 tscn 已存在且内容一致则跳过；不同则先备份再写。
+幂等：目标 tscn 已存在且内容一致则跳过；不同则覆盖（历史由 git 承担，不再产生 `*.bak_*`）。
 
 运行：
-  python build_package_prefabs_v007.py
+  python build_package_prefabs_v007.py --version v007
+
+版本参数：本脚本是入口安全房全部版本的**唯一 prefab 构建脚本**；版本号只写进
+`metadata/asset_version` 与摘要，**Godot 侧 runtime 路径恒定、不含版本号**。
 """
 
 from __future__ import annotations
 
 import json
-import shutil
+import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-V007 = HERE.parent
-SOURCE_DIR = V007.parent.parent                 # .../source
+SUITE_DIR = HERE.parent.parent                  # .../entry_safe_room
+SOURCE_DIR = SUITE_DIR.parent                   # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
-PACKAGES_DIR = V007 / "component_packages_v007"
-RUNTIME_DIR = BATTLE / "runtime" / "entry_safe_room" / "v007"
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
+VERSION = grn.version_from_argv(HERE.parent.name)
+VERSION_DIR = SUITE_DIR / VERSION
+PACKAGES_DIR = VERSION_DIR / f"component_packages_{VERSION}"
+RUNTIME_DIR = BATTLE / "runtime" / "entry_safe_room"
 CATEGORY_DIRS = ("facilities", "decor", "support")
 
-VERSION = "v007"
 ASSET_ID = "ENV-BATTLE-L01-SAFE-ENTRY"
 BLOCK_ID = "battle"
 ROOM_ROOT = "res://assets/art/environments/tower_zones/battle"
@@ -78,7 +85,7 @@ def node_name(slug: str) -> str:
 
 def build_scene(pkg: dict, manifest: dict, category: str) -> str:
     slug = pkg["slug"]
-    visual = f"{ROOM_ROOT}/components/entry_safe_room/{VERSION}/{slug}/{slug}_visual_top3d_{VERSION}.glb"
+    visual = f"{ROOM_ROOT}/components/entry_safe_room/{slug}/{grn.visual_glb_name(slug)}"
     manifest_path = (f"{ROOM_ROOT}/source/entry_safe_room/{VERSION}/component_packages_{VERSION}"
                      f"/{category}/{slug}/asset_manifest.json")
     lo, hi = manifest["bounds"]
@@ -131,13 +138,17 @@ def build_scene(pkg: dict, manifest: dict, category: str) -> str:
     ]
     for key, value in meta:
         lines.append(f"metadata/{key} = {fmt_scalar(value)}")
+    grn.require_version_metadata(meta, VERSION, script=Path(__file__).name)
     lines.append("")
     lines.append('[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]')
     return "\n".join(lines).rstrip() + "\n"
 
 
 def main() -> int:
-    summary = json.loads((HERE / "export_packages_v007_summary.json").read_text(encoding="utf8"))
+    grn.guard_no_legacy_versioned(
+        RUNTIME_DIR, script=Path(__file__).name, allow=grn.allow_legacy_from_argv()
+    )
+    summary = json.loads((HERE / f"export_packages_{VERSION}_summary.json").read_text(encoding="utf8"))
     results = {}
     written = 0
     for category in CATEGORY_DIRS:
@@ -150,17 +161,15 @@ def main() -> int:
             manifest = json.loads((pkg_dir / "asset_manifest.json").read_text(encoding="utf8"))
             slug = manifest["slug"]
             if slug not in summary:
-                raise SystemExit(f"{slug}: 不在 export_packages_v007_summary.json 里，先跑导出")
+                raise SystemExit(f"{slug}: 不在 export_packages_{VERSION}_summary.json 里，先跑导出")
             out_dir = RUNTIME_DIR / slug
             out_dir.mkdir(parents=True, exist_ok=True)
-            target = out_dir / f"{slug}_root_top3d_{VERSION}.tscn"
+            target = out_dir / grn.root_scene_name(slug)
             content = build_scene(manifest, manifest, category)
             if target.is_file() and target.read_text(encoding="utf-8") == content:
                 print(f"SKIP  {slug}: 内容已一致（幂等）")
                 results[slug] = {"status": "unchanged"}
                 continue
-            if target.is_file():
-                shutil.copy2(target, target.with_suffix(".tscn.bak_pre_generate"))
             target.write_text(content, encoding="utf-8")
             written += 1
             print(f"WROTE {slug:24s} -> {target.name}")

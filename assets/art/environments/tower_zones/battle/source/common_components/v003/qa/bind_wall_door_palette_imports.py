@@ -23,6 +23,11 @@ BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
+import sys
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
 COMPONENTS = BATTLE / "components" / "common_components"
 
 TARGET_SCRIPT = '"res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"'
@@ -36,7 +41,7 @@ SLUGS = ["wall_standard_5m", "wall_door_5m", "door_5m"]
 def main() -> int:
     results = {}
     for slug in SLUGS:
-        glb = COMPONENTS / slug / f"{slug}_visual_top3d_v003.glb"
+        glb = COMPONENTS / slug / grn.visual_glb_name(slug)
         imp = Path(str(glb) + ".import")
         if not glb.is_file():
             raise SystemExit(f"缺少 GLB（先跑导出脚本）: {glb}")
@@ -53,7 +58,7 @@ def main() -> int:
             print(f"SKIP {slug}: 契约已就位（幂等）")
             continue
 
-        imp.with_suffix(".import.bak_pre_palette").write_text(original, encoding="utf-8")
+        # 历史由 git 承担，不再落 `*.bak_pre_palette`（工作区不保留旧资产副本）。
         imp.write_text(text, encoding="utf-8")
         results[slug] = "patched"
         print(f"PATCHED {slug} -> {imp}")
@@ -61,7 +66,7 @@ def main() -> int:
     # 复验：每个 .import 必须同时满足两条契约
     failures = []
     for slug in SLUGS:
-        imp = Path(str(COMPONENTS / slug / f"{slug}_visual_top3d_v003.glb") + ".import")
+        imp = Path(str(COMPONENTS / slug / grn.visual_glb_name(slug)) + ".import")
         text = imp.read_text(encoding="utf-8")
         if f'import_script/path={TARGET_SCRIPT}' not in text:
             failures.append(f"{slug}: import_script/path 未指向公共色盘后处理脚本")

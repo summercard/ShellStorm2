@@ -3,7 +3,11 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import godot_runtime_naming as grn  # noqa: E402
 
 
 PROJECT = Path(__file__).resolve().parents[2]
@@ -40,9 +44,10 @@ def write_facility(slug: str, data: dict) -> None:
     center = [(maximum[i] + minimum[i]) * 0.5 for i in range(3)]
     interaction_size = [max(size[0] + 1.4, 3.4), max(size[1] + 0.8, 3.0), max(size[2] + 1.8, 3.2)]
     interaction_center = [0.0, size[1] * 0.48, -max(0.45, size[2] * 0.48)]
-    root_filename = f"prp_base_{slug}_root_top3d_v001.tscn"
-    if slug == "vending_machine":
-        root_filename = "prp_base_vending_machine_root_top3d_v002.tscn"
+    root_filename = grn.root_scene_name(f"prp_base_{slug}")
+    # 清单里的 GLB 路径（可能仍带 `_vNNN`）归一为稳定路径 + 源版本号：
+    # 版本号进入节点 metadata，路径进入场景引用。
+    glb_rel, glb_version = grn.require_stable_glb(PROJECT, data["glb"], script=Path(__file__).name)
     runtime_dir = PROJECT / "assets/art/props/base_world_3d/runtime" / slug
     runtime_dir.mkdir(parents=True, exist_ok=True)
     menu = "res://scenes/BaseVendingMenu.tscn" if slug == "vending_machine" else (
@@ -52,7 +57,7 @@ def write_facility(slug: str, data: dict) -> None:
     text = f'''[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/base3d/BaseFacility3D.gd" id="1_script"]
-[ext_resource type="PackedScene" path="res://{data['glb']}" id="2_visual"]
+[ext_resource type="PackedScene" path="res://{glb_rel}" id="2_visual"]
 
 [sub_resource type="BoxShape3D" id="ShapeInteraction"]
 size = {vec(interaction_size)}
@@ -69,6 +74,7 @@ display_name = "{display_name}"
 description = "{description}"
 {menu_line}metadata/asset_name_cn = "{data['name_cn']}"
 metadata/asset_source = "res://{data['source']}"
+metadata/asset_version = "{glb_version or ''}"
 metadata/forward_axis = "-Z"
 
 [node name="InteractionShape" type="CollisionShape3D" parent="."]
@@ -109,6 +115,7 @@ modulate = Color(1, 0.82, 0.28, 1)
 
 def write_weapon(slug: str, data: dict) -> None:
     sockets = data["sockets"]
+    glb_rel, glb_version = grn.require_stable_glb(PROJECT, data["glb"], script=Path(__file__).name)
     runtime_dir = PROJECT / "assets/art/weapons/weapon_3d/runtime" / slug
     runtime_dir.mkdir(parents=True, exist_ok=True)
     logic_id = WEAPON_LOGIC_IDS.get(slug, "")
@@ -130,12 +137,13 @@ position = {vec(sockets[key])}
 ''')
     text = f'''[gd_scene load_steps=2 format=3]
 
-[ext_resource type="PackedScene" path="res://{data['glb']}" id="1_visual"]
+[ext_resource type="PackedScene" path="res://{glb_rel}" id="1_visual"]
 
 [node name="{data['name_cn']}" type="Node3D"]
 metadata/asset_name_cn = "{data['name_cn']}"
 metadata/logic_id = "{logic_id}"
 metadata/source_blend = "res://{data['source']}"
+metadata/asset_version = "{glb_version or ''}"
 metadata/grip_contract = "root origin"
 metadata/forward_axis = "-Z"
 
@@ -148,7 +156,7 @@ position = Vector3(0, {data['bounds_min'][1]:.6f}, 0)
 [node name="IconPivot" type="Marker3D" parent="."]
 position = Vector3(0, {(data['bounds_min'][1] + data['bounds_max'][1]) * 0.5:.6f}, {(data['bounds_min'][2] + data['bounds_max'][2]) * 0.5:.6f})
 '''
-    (runtime_dir / f"wpn_{slug}_root_top3d_v001.tscn").write_text(text, encoding="utf-8")
+    (runtime_dir / grn.root_scene_name(f"wpn_{slug}")).write_text(text, encoding="utf-8")
 
 
 def main() -> None:

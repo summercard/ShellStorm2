@@ -248,7 +248,9 @@ func _build(accent: Color) -> void:
 	set_open(false, true)
 
 
-func _build_procedural_panel(accent: Color) -> void:
+## 未换美术门扇时的降级门板：只剩一块深色实心板。
+## 形参保留 `configure(accent) → _build(accent)` 的调用契约，本函数已不再消费它。
+func _build_procedural_panel(_accent: Color) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(0.11, 0.13, 0.13)
 	material.metallic = 0.78
@@ -264,24 +266,9 @@ func _build_procedural_panel(accent: Color) -> void:
 	panel_visual.name = "ProceduralDoorPanel"
 	panel_visual.mesh = panel_mesh
 	_panel.add_child(panel_visual)
-	var stripe_material := StandardMaterial3D.new()
-	stripe_material.albedo_color = accent
-	stripe_material.emission_enabled = true
-	stripe_material.emission = accent
-	stripe_material.emission_energy_multiplier = 1.5
-	var stripe_mesh := BoxMesh.new()
-	stripe_mesh.size = Vector3(
-		TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M * 0.72,
-		0.11,
-		0.035
-	)
-	stripe_mesh.material = stripe_material
-	for z in [-0.17, 0.17]:
-		var stripe := MeshInstance3D.new()
-		stripe.name = "LockStripeFront" if z < 0.0 else "LockStripeBack"
-		stripe.position.z = z
-		stripe.mesh = stripe_mesh
-		_panel.add_child(stripe)
+	# 原先这里还有一对 LockStripeFront / LockStripeBack（1.584×0.11×0.035m、
+	# 离地 1.25m 的亮青色自发光横条）。它只是程序门板的点缀，不挂任何游戏逻辑
+	# （无 meta、无碰撞、无外部引用），按需求已整体移除。
 
 
 func _set_geometry_shadow_casting(root: Node, enabled: bool) -> void:

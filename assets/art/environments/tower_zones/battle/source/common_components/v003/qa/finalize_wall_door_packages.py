@@ -35,6 +35,11 @@ BATTLE = SOURCE_DIR.parent                             # .../battle
 ROOT = BATTLE.parents[4]                               # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
+import sys
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
 PKG = V003 / "component_packages_v003"
 CATALOG = PKG / "catalog.json"
 SUMMARY = HERE / "export_wall_door_5m_summary.json"
@@ -148,8 +153,8 @@ SPECS = {
 
 
 def manifest_for(slug: str, spec: dict) -> dict:
-    glb_rel = f"{COMPONENTS_REL}/{slug}/{slug}_visual_top3d_v003.glb"
-    scene_rel = f"{RUNTIME_REL}/{slug}/{slug}_root_top3d_v003.tscn"
+    glb_rel = f"{COMPONENTS_REL}/{slug}/{grn.visual_glb_name(slug)}"
+    scene_rel = f"{RUNTIME_REL}/{slug}/{grn.root_scene_name(slug)}"
     data = {
         "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
         "package_id": spec["package_id"],
@@ -214,8 +219,8 @@ def catalog_entry(slug: str, spec: dict) -> dict:
         "material_roles": MATERIAL_ROLES,
         "exported": True,
         "collision": spec["collision"],
-        "visual_glb": f"res://{COMPONENTS_REL}/{slug}/{slug}_visual_top3d_v003.glb",
-        "runtime_scene": f"res://{RUNTIME_REL}/{slug}/{slug}_root_top3d_v003.tscn",
+        "visual_glb": f"res://{COMPONENTS_REL}/{slug}/{grn.visual_glb_name(slug)}",
+        "runtime_scene": f"res://{RUNTIME_REL}/{slug}/{grn.root_scene_name(slug)}",
     }
 
 
@@ -305,8 +310,8 @@ def main() -> int:
         entry = by_slug[slug]
         entry["exported"] = True
         entry["collision"] = spec["collision"]
-        entry["visual_glb"] = f"res://{COMPONENTS_REL}/{slug}/{slug}_visual_top3d_v003.glb"
-        entry["runtime_scene"] = f"res://{RUNTIME_REL}/{slug}/{slug}_root_top3d_v003.tscn"
+        entry["visual_glb"] = f"res://{COMPONENTS_REL}/{slug}/{grn.visual_glb_name(slug)}"
+        entry["runtime_scene"] = f"res://{RUNTIME_REL}/{slug}/{grn.root_scene_name(slug)}"
         catalog_changed = True
 
     if catalog_changed:

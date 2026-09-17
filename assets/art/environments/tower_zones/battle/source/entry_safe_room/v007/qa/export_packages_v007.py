@@ -23,34 +23,47 @@
 
 运行：
   "D:\\Program Files\\Blender Foundation\\Blender 4.5\\blender.exe" \
-      --background --factory-startup --python export_packages_v007.py
+      --background --factory-startup --python export_packages_v007.py -- --version v007
+
+版本参数：本脚本是入口安全房全部版本的**唯一导出脚本**。版本号默认取本脚本所在
+版本目录名，也可用 `-- --version vNNN` 指定；旧版本目录下的同名脚本只是转调本脚本
+的转发壳。版本号只进入 summary 与 asset_manifest，**Godot 侧路径恒定、不含版本号**。
 """
 
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import bpy
 import mathutils
 
-HERE = Path(__file__).resolve().parent            # .../v007/qa
-V007 = HERE.parent                                # .../v007
-SOURCE_DIR = V007.parent.parent                   # .../source
+HERE = Path(__file__).resolve().parent            # .../entry_safe_room/<版本>/qa
+SUITE_DIR = HERE.parent.parent                    # .../entry_safe_room
+SOURCE_DIR = SUITE_DIR.parent                     # .../source
 BATTLE = SOURCE_DIR.parent                        # .../battle
 ROOT = BATTLE.parents[4]                          # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
-BLEND = V007 / "局内关卡01_入口安全房_15x15m_正式美术_v007.blend"
-CATALOG = V007 / "component_packages_v007" / "catalog.json"
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
+VERSION = grn.version_from_argv(HERE.parent.name)
+VERSION_DIR = SUITE_DIR / VERSION
+BLEND = VERSION_DIR / f"局内关卡01_入口安全房_15x15m_正式美术_{VERSION}.blend"
+CATALOG = VERSION_DIR / f"component_packages_{VERSION}" / "catalog.json"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
-COMPONENTS_DIR = BATTLE / "components" / "entry_safe_room" / "v007"
-VERSION = "v007"
+COMPONENTS_DIR = BATTLE / "components" / "entry_safe_room"
 
 if not BLEND.is_file():
     raise SystemExit(f"缺少源 blend: {BLEND}")
 if not CATALOG.is_file():
     raise SystemExit(f"缺少 catalog: {CATALOG}")
+
+grn.guard_no_legacy_versioned(
+    COMPONENTS_DIR, script=Path(__file__).name, allow=grn.allow_legacy_from_argv()
+)
 
 bpy.ops.wm.open_mainfile(filepath=str(BLEND))
 bpy.context.view_layer.update()
@@ -141,7 +154,7 @@ for pkg in packages:
         f"{slug}: x/y 未居中 mn={mn2} mx={mx2}"
 
     size = [round(mx2[i] - mn2[i], 4) for i in range(3)]
-    out = out_dir / f"{slug}_visual_top3d_{VERSION}.glb"
+    out = out_dir / grn.visual_glb_name(slug)
     bpy.ops.export_scene.gltf(
         filepath=str(out),
         export_format="GLB",
@@ -161,6 +174,7 @@ for pkg in packages:
         "package_id": pkg.get("package_id"),
         "category": pkg.get("category"),
         "display_name_zh": pkg.get("name"),
+        "source_version": VERSION,
         "glb": str(out.relative_to(ROOT)).replace("\\", "/"),
         "meshes": names,
         "origin_blender_m": [round(v, 4) for v in origin],
@@ -171,7 +185,7 @@ for pkg in packages:
         "room_bounds_blender": [[round(v, 4) for v in mn], [round(v, 4) for v in mx]],
     }
 
-out_summary = HERE / "export_packages_v007_summary.json"
+out_summary = HERE / f"export_packages_{VERSION}_summary.json"
 out_summary.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"SUMMARY_WRITTEN {out_summary}")
-print(f"EXPORT_OK count={len(summary)}")
+print(f"EXPORT_OK version={VERSION} count={len(summary)}")

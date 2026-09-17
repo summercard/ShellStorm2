@@ -12,16 +12,21 @@ gltf/embedded_image_handling=1。按全库与 scene_facility_shared_palette 契�
   "C:/Users/zhuangmenghong/.workbuddy/binaries/python/versions/3.13.12/python.exe" bind_v004_palette_imports.py
 """
 from pathlib import Path
+import sys
 
-HERE = Path(__file__).resolve().parent          # .../v004/qa
-V4 = HERE.parent
-SOURCE_DIR = V4.parent.parent
+HERE = Path(__file__).resolve().parent          # .../<版本>/qa
+VERSION_DIR = HERE.parent                       # .../<版本>
+SOURCE_DIR = VERSION_DIR.parent.parent
 BATTLE = SOURCE_DIR.parent
 ROOT = BATTLE.parents[4]
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
+# 版本号只用于日志；Godot 侧路径恒定、不含版本号。
+VERSION = grn.version_from_argv(VERSION_DIR.name)
 COMPONENTS = BATTLE / "components" / "common_components"
-VERSION = "v004"
 
 TARGET_SCRIPT = '"res://tools/asset_pipeline/scene_facility_shared_palette_post_import.gd"'
 EMPTY_SCRIPT = 'import_script/path=""'
@@ -41,7 +46,7 @@ TARGETS = [
 def main() -> int:
     results = {}
     for slug, sub in TARGETS:
-        glb = COMPONENTS / sub / f"{slug}_visual_top3d_{VERSION}.glb"
+        glb = COMPONENTS / sub / grn.visual_glb_name(slug)
         imp = Path(str(glb) + ".import")
         if not glb.is_file():
             raise SystemExit(f"缺少 GLB（先跑导出脚本）: {glb}")
@@ -58,14 +63,14 @@ def main() -> int:
             print(f"SKIP {slug}: 契约已就位（幂等）")
             continue
 
-        imp.with_suffix(".import.bak_pre_palette").write_text(original, encoding="utf-8")
+        # 历史由 git 承担，不再落 `*.bak_pre_palette`（工作区不保留旧资产副本）。
         imp.write_text(text, encoding="utf-8")
         results[slug] = "patched"
         print(f"PATCHED {slug} -> {imp}")
 
     failures = []
     for slug, sub in TARGETS:
-        imp = Path(str(COMPONENTS / sub / f"{slug}_visual_top3d_{VERSION}.glb") + ".import")
+        imp = Path(str(COMPONENTS / sub / grn.visual_glb_name(slug)) + ".import")
         text = imp.read_text(encoding="utf-8")
         if f"import_script/path={TARGET_SCRIPT}" not in text:
             failures.append(f"{slug}: import_script/path 未指向公共色盘后处理脚本")

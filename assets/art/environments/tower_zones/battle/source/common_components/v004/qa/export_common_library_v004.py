@@ -24,22 +24,27 @@ v004 新增的装饰件本就以 root-local 顶点、恒等变换挂在 ROOT 下
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import bpy
 import mathutils
 
-HERE = Path(__file__).resolve().parent          # .../v004/qa
-V4 = HERE.parent                                # .../v004
-SOURCE_DIR = V4.parent.parent                   # .../source
+HERE = Path(__file__).resolve().parent          # .../<版本>/qa
+VERSION_DIR = HERE.parent                       # .../<版本>
+SOURCE_DIR = VERSION_DIR.parent.parent          # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
 
-BLEND = V4 / "战局区块_通用组件库_v004.blend"
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
+
+# 版本号只属于 source/ 与 asset_manifest；Godot 侧路径恒定、不含版本号。
+VERSION = grn.version_from_argv(VERSION_DIR.name)
+BLEND = VERSION_DIR / f"战局区块_通用组件库_{VERSION}.blend"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 COMPONENTS_DIR = BATTLE / "components" / "common_components"
-VERSION = "v004"
 
 # slug: (blender collection, ROOT object, 输出子目录)
 EXPORTS = {
@@ -56,6 +61,13 @@ print(f"COMPONENTS_DIR = {COMPONENTS_DIR}")
 
 if not BLEND.is_file():
     raise SystemExit(f"缺少源 blend: {BLEND}")
+
+for _sub in sorted({item[2] for item in EXPORTS.values()}):
+    grn.guard_no_legacy_versioned(
+        COMPONENTS_DIR / _sub,
+        script=Path(__file__).name,
+        allow=grn.allow_legacy_from_argv(),
+    )
 
 bpy.ops.wm.open_mainfile(filepath=str(BLEND))
 
@@ -132,7 +144,7 @@ for slug, (collection_name, root_name, out_subdir) in EXPORTS.items():
     assert abs((mn[0] + mx[0]) / 2.0) < 1e-3, f"{slug} 折算后 x 不居中: {mn[0]}..{mx[0]}"
     assert abs((mn[1] + mx[1]) / 2.0) < 0.05, f"{slug} 折算后 y 中心漂移过大: {mn[1]}..{mx[1]}"
 
-    out = out_dir / f"{slug}_visual_top3d_{VERSION}.glb"
+    out = out_dir / grn.visual_glb_name(slug)
     bpy.ops.export_scene.gltf(
         filepath=str(out),
         export_format="GLB",
@@ -162,7 +174,7 @@ for slug, (collection_name, root_name, out_subdir) in EXPORTS.items():
         "per_mesh": per_mesh,
     }
 
-summary_path = HERE / "export_common_library_v004_summary.json"
+summary_path = HERE / f"export_common_library_{VERSION}_summary.json"
 summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"SUMMARY_WRITTEN {summary_path}")
-print(f"EXPORT_OK count={len(EXPORTS)}")
+print(f"EXPORT_OK version={VERSION} count={len(EXPORTS)}")

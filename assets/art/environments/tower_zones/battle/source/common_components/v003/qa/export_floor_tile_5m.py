@@ -2,7 +2,7 @@
 
 背景：v003 通用组件库（ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY）此前只交付
 Blender 源，README 明写「未生成GLB、碰撞或Godot场景」。通用墙（08 墙组件）已按
-`<slug>_visual_top3d_v003.glb` 走过一遍导出流水线，本脚本把 09 地板组件补齐。
+`<slug>_visual_top3d.glb` 走过一遍导出流水线，本脚本把 09 地板组件补齐。
 
 坐标契约（与 v003 全库一致）：
   - Blender 正面 = 本地 +Y          → Godot -Z
@@ -18,6 +18,7 @@ Blender 源，README 明写「未生成GLB、碰撞或Godot场景」。通用墙
       --background --factory-startup --python export_floor_tile_5m.py
 """
 from pathlib import Path
+import sys
 
 import bpy
 import mathutils
@@ -28,6 +29,9 @@ SOURCE_DIR = V003.parent.parent                 # .../source
 BATTLE = SOURCE_DIR.parent                      # .../battle
 ROOT = BATTLE.parents[4]                        # .../ShellStorm2
 assert (ROOT / "assets" / "art").is_dir(), f"ROOT 解析失败: {ROOT}"
+
+sys.path.insert(0, str(ROOT / "tools" / "asset_pipeline"))
+import godot_runtime_naming as grn  # noqa: E402
 
 BLEND = V003 / "战局区块_通用组件库_v003.blend"
 PALETTE = ROOT / "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
@@ -106,7 +110,7 @@ for slug, (collection_name, root_name) in EXPORTS.items():
     size = [round(mx[i] - mn[i], 4) for i in range(3)]
     print(f"[{slug}] 归零后 AABB  min={[round(v, 4) for v in mn]} max={[round(v, 4) for v in mx]} size={size}")
 
-    out = OUT_DIR / f"{slug}_visual_top3d_v003.glb"
+    out = OUT_DIR / grn.visual_glb_name(slug)
     bpy.ops.export_scene.gltf(
         filepath=str(out),
         export_format="GLB",
