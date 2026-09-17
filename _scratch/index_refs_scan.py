@@ -21,8 +21,25 @@ CORE_EXT = (".gd", ".tscn", ".tres", ".import")
 SKIP_PREFIX = (".godot/", "addons/gut/", "source/", "outputs/")
 SKIP_EXT = (".blend", ".blend1")
 
-# 本批去版本化的根 —— 悬空引用若命中此处即为本批引入的破坏
-B3_ROOT = "assets/art/environments/base_facility_3d/"
+# 已完成去版本化的批次根 —— 悬空引用若命中此处即为「某批引入的破坏」，必须为 0。
+# 逐批累积：B1 / B2 / B3 / B6（后续批次继续往下加，本脚本就成为跨批总护栏）。
+BATCH_ROOTS: dict[str, str] = {
+    "B1": "assets/art/environments/tower_zones/battle/",
+    "B2:a": "assets/art/props/dungeon_3d/",
+    "B2:b": "assets/art/environments/tower_descent_3d/",
+    "B2:c": "assets/art/props/base_world_3d/",
+    "B2:d": "assets/art/environments/dungeon_3d/",
+    "B2:e": "assets/art/environments/base_world_3d/",
+    "B2:f": "assets/art/environments/tower_zones/base/runtime/",
+    "B2:g": "assets/art/environments/tower_zones/rooftop/runtime/",
+    "B3": "assets/art/environments/base_facility_3d/",
+    "B6:a": "assets/art/vfx/combat_3d/",
+    "B6:b": "assets/art/vfx/environment_3d/",
+    "B6:c": "assets/art/vfx/visibility_3d/",
+    "B6:d": "assets/art/ui/inventory_3d/",
+    "B6:e": "assets/art/ui/pause_3d/",
+    "B6:f": "assets/art/environments/training_range_3d/",
+}
 TRIM = "`\"')]},;: "
 RES_RE = re.compile(r'res://([^"\'\)\s]+)')
 UIDS_RE = re.compile(r'uid://[a-z0-9]+')
@@ -109,15 +126,22 @@ def main() -> int:
 
     print(f"[i] 实读 blob = {checked}")
     print()
-    b3_hits: dict[str, set[str]] = {}
+    batch_hits: dict[str, set[str]] = {}
+    hit_root: dict[str, set[str]] = {}
     for p, refs in CORE_EXT_BUCKET.items():
         for r in refs:
-            if r.startswith(B3_ROOT):
-                b3_hits.setdefault(p, set()).add(r)
-    print("=== A. 悬空引用命中 B3 根（本批引入的破坏，必须为 0） ===")
-    if not b3_hits:
-        print("  (无) —— B3 改名/删除未留下任何悬空引用")
-    for p, refs in sorted(b3_hits.items()):
+            for label, root in BATCH_ROOTS.items():
+                if r.startswith(root):
+                    batch_hits.setdefault(p, set()).add(r)
+                    hit_root.setdefault(label, set()).add(r)
+    print("=== A. 悬空引用命中任一「已去版本化批次根」（改造引入的破坏，必须为 0） ===")
+    if not batch_hits:
+        print(f"  (无) —— {len(BATCH_ROOTS)} 个批次根上没有任何悬空引用")
+    for label in sorted(hit_root):
+        print(f"  [{label}] {BATCH_ROOTS[label]}")
+        for r in sorted(hit_root[label]):
+            print(f"      -> res://{r}")
+    for p, refs in sorted(batch_hits.items()):
         print(f"  {p}")
         for r in sorted(refs):
             print(f"      -> res://{r}")
@@ -138,11 +162,13 @@ def main() -> int:
         for r in sorted(refs):
             print(f"      -> res://{r}")
     print()
-    n_b3 = sum(len(v) for v in b3_hits.values())
+    n_batch = sum(len(v) for v in batch_hits.values())
     n_all = sum(len(v) for v in CORE_EXT_BUCKET.values())
-    both = sorted(set(b3_hits) | set(CORE_EXT_BUCKET))
-    print(f"RESULT: B3_DANGLING={n_b3} / ALL_ENGINE_DANGLING={n_all} / 涉及文件={len(both)}")
-    return 0 if n_b3 == 0 else 1
+    both = sorted(set(batch_hits) | set(CORE_EXT_BUCKET))
+    print(f"RESULT: BATCH_DANGLING={n_batch} / ALL_ENGINE_DANGLING={n_all} / 涉及文件={len(both)}")
+    if hit_root:
+        print("        命中批次：" + ", ".join(f"{k}({len(v)})" for k, v in sorted(hit_root.items())))
+    return 0 if n_batch == 0 else 1
 
 
 if __name__ == "__main__":

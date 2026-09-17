@@ -11,7 +11,7 @@ signal reload_progress_changed(progress: float, remaining: float)
 signal reload_ended(completed: bool)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
-const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const MELEE_VISUAL_SCENES := {
 	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
 	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),

@@ -2,7 +2,7 @@ class_name BaseVendingMenu
 extends CanvasLayer
 ## 基地自动贩卖机：左侧无限固定货架，右侧出售随身背包/保险柜物品。
 
-const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 
 var _points_label: Label
 var _capacity_label: Label

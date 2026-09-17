@@ -2,9 +2,14 @@
 """门禁：Godot 运行资产不得带版本号（去版本化执行计划 P4）。
 
 规则（assets/art/3D模型资产目录与命名规范.md §坐标与替换契约）
-  - `components/`、`runtime/` 下的运行资产文件名与目录名不含 `_vNNN` 与 `vNNN/`。
+  - `assets/art/**`（`source/**` 豁免）下的运行资产文件名与目录名不含 `_vNNN` 与 `vNNN/`。
+    口径是**整个 assets/art**，不只 `components/`、`runtime/`：本仓有「非标准三件套
+    布局」的套件（如 `vfx/combat_3d` 把 8 个 `*_root_top3d.tscn` 平铺在套件根、
+    没有 `components/`/`runtime/` 层），它们同样是运行资产、同样受此约束。
   - `source/**` 是 Blender 源，版本历史属于它，整体豁免。
   - `src/**/*.gd` 与场景 `.tscn` 不得引用带版本号的资产路径。
+  - 口径只认 `.glb`/`.tscn`（见 RUN_ASSET_SUFFIX）。`.png`/`.jpg`/`.tres`/`.wav`
+    一类带版本文件是刻意排除的独立类，不在本门禁职责内。
 
 存量未清完前用**精确快照**（`asset_runtime_naming_debt.json`）记账，语义是
 「磁盘现状必须与快照逐项一致」：

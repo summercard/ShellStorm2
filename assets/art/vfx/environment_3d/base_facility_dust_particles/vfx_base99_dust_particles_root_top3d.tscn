@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://kiq33pblhiaq"]
 
-[ext_resource type="Texture2D" uid="uid://c6amwgnoml5yf" path="res://assets/art/vfx/textures/glow_32.png" id="1_glow"]
+[ext_resource type="Texture2D" uid="uid://duehsq4qikpex" path="res://assets/art/vfx/textures/glow_32.png" id="1_glow"]
 
 [sub_resource type="ParticleProcessMaterial" id="DustProcess"]
 emission_shape = 3

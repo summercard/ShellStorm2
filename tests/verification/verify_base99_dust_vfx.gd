@@ -1,6 +1,6 @@
 extends SceneTree
 
-const DUST_SCENE := "res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn"
+const DUST_SCENE := "res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn"
 
 func _init() -> void:
 	var scene := load(DUST_SCENE) as PackedScene

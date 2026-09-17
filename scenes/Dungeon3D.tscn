@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://src/combat3d/ProjectilePool3D.gd" id="3_pool"]
 [ext_resource type="Script" path="res://src/combat3d/CombatEffectPool3D.gd" id="4_fx_pool"]
 [ext_resource type="Script" path="res://src/ui/DungeonMinimap3D.gd" id="5_minimap"]
-[ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn" id="6_pause"]
+[ext_resource type="PackedScene" path="res://assets/art/ui/pause_3d/ui_pause_overlay_screen.tscn" id="6_pause"]
 
 [sub_resource type="Shader" id="ShaderLowHealth"]
 code = "shader_type canvas_item;\nrender_mode unshaded;\nuniform float intensity : hint_range(0.0, 1.0) = 0.0;\nvoid fragment() {\n    float d = distance(UV, vec2(0.5));\n    float edge = smoothstep(0.30, 0.69, d);\n    COLOR = vec4(0.72, 0.025, 0.018, edge * intensity * 0.62);\n}\n"

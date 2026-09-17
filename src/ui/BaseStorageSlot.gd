@@ -5,7 +5,7 @@ extends PanelContainer
 signal item_clicked(owner: String, source_index: int)
 signal item_drop_requested(source_owner: String, source_index: int, target_owner: String)
 
-const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 
 var owner_id := ""
 var source_index := -1

@@ -82,7 +82,7 @@ var _hovered_item_slot: Control = null
 const SLOT_SIZE := 78
 const BASE_INVENTORY_CAPACITY := 12
 const SLOT_SCENE: PackedScene = preload("res://scenes/ItemSlot.tscn")
-const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const ITEM_MODEL_ICON_SCENE: PackedScene = preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS

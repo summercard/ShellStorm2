@@ -11,7 +11,7 @@ signal health_changed(enemy: Enemy3D, current: int, maximum: int)
 signal illumination_state_changed(enemy: Enemy3D, previous: String, current: String, context: Dictionary)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
-const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
 const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 const DAMAGE_NUMBER_SCRIPT := preload("res://src/fx/CombatDamageNumber3D.gd")

@@ -5,7 +5,7 @@ signal hit_confirmed(target: Node, applied_damage: int, critical: bool)
 signal expired
 signal retired(projectile: Projectile3D)
 
-const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 
 var direction := Vector3(0, 0, -1)
 var speed := 24.0

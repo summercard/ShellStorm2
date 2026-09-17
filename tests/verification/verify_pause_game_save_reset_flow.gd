@@ -3,7 +3,7 @@ extends Node
 
 const TEST_PATH := "user://pause_game_save_reset_probe.json"
 const PAUSE_SCENE: PackedScene = preload(
-	"res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn"
+	"res://assets/art/ui/pause_3d/ui_pause_overlay_screen.tscn"
 )
 
 

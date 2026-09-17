@@ -474,20 +474,6 @@
     "assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_17_v017.glb.import",
     "assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_18_v017.glb",
     "assets/art/environments/rooftop_shelter_3d/runtime/layout_v017/components/survival_18_v017.glb.import",
-    "assets/art/environments/training_range_3d/env_training_range_kit_top3d_v001.tscn",
-    "assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn",
-    "assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_damage_number_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_explosion_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_heal_number_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_impact_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_melee_impact_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_melee_slash_root_top3d_v001.tscn",
-    "assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d_v001.tscn",
-    "assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn",
-    "assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn",
-    "assets/art/vfx/visibility_3d/vfx_player_flashlight_root_top3d_v001.tscn",
     "assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn",
     "assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn",
     "assets/art/weapons/melee_3d/wpn_melee_waraxe_root_top3d_v001.tscn",
@@ -638,7 +624,7 @@
     "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import.bak_pre_standard_fix"
   ],
   "reference_counts": {
-    "gd": 42,
-    "tscn": 242
+    "gd": 24,
+    "tscn": 236
   }
 }

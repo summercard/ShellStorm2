@@ -2,7 +2,7 @@ class_name PlayerMeleeCombat3D
 extends Node
 ## 与八态移动机并行的近战动作子状态机。连段编号是上下文，不复制状态类。
 
-const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 const VfxPool3D = preload("res://src/vfx/VfxPool3D.gd")
 const VfxEffectBase3D = preload("res://src/vfx/VfxEffectBase3D.gd")
 

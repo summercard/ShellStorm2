@@ -13,7 +13,7 @@ func _init() -> void:
 		var node := packed.instantiate()
 		assert(node != null, "Failed to instantiate %s" % path)
 		node.free()
-	var vfx := load("res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d_v001.tscn") as PackedScene
+	var vfx := load("res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn") as PackedScene
 	var vfx_node := vfx.instantiate()
 	assert(vfx_node.get_node("DustParticles") is GPUParticles3D)
 	assert(vfx_node.get_node("DustParticles").amount == 250)

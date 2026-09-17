@@ -15,13 +15,13 @@ const FX02_DAMAGE_NUMBER := "VFX-DAMAGE-NUMBER-3D"
 const FX02_HEAL_NUMBER := "VFX-HEAL-NUMBER-3D"
 
 const _REGISTRY := {
-	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d_v001.tscn"),
-	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d_v001.tscn"),
-	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d_v001.tscn"),
-	FX01_MELEE_SLASH: preload("res://assets/art/vfx/combat_3d/vfx_melee_slash_root_top3d_v001.tscn"),
-	FX01_MELEE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_melee_impact_root_top3d_v001.tscn"),
-	FX02_DAMAGE_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_damage_number_root_top3d_v001.tscn"),
-	FX02_HEAL_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_heal_number_root_top3d_v001.tscn"),
+	FX01_MUZZLE_FLASH: preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn"),
+	FX01_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn"),
+	FX01_EXPLOSION: preload("res://assets/art/vfx/combat_3d/vfx_explosion_root_top3d.tscn"),
+	FX01_MELEE_SLASH: preload("res://assets/art/vfx/combat_3d/vfx_melee_slash_root_top3d.tscn"),
+	FX01_MELEE_IMPACT: preload("res://assets/art/vfx/combat_3d/vfx_melee_impact_root_top3d.tscn"),
+	FX02_DAMAGE_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_damage_number_root_top3d.tscn"),
+	FX02_HEAL_NUMBER: preload("res://assets/art/vfx/combat_3d/vfx_heal_number_root_top3d.tscn"),
 }
 
 @export var max_per_kind: int = 32

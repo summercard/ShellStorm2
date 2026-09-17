@@ -148,6 +148,33 @@ BATCHES: dict[str, dict] = {
                 "env_base99_corner_l_5m_collision_top3d.tscn",
         },
     },
+    # B6 是**纯改名批**：六个套件里的运行资产全部只有 `_v001` 一代，
+    # 既没有「多代并存」也没有「批次分组目录」，因此 deletes 恒为 0。
+    # 它同时是唯一「运行资产不在 components//runtime/ 下」的批 —— 这些套件本身就是
+    # 「一个套件一个扁平目录」（如 vfx/combat_3d 是 8 个同级的 *_root_top3d_v001.tscn），
+    # 见 assets/art/3D模型资产目录与命名规范.md:153 记的「非标准三件套布局」。
+    # 门禁 check_asset_runtime_naming.py 扫的是整个 assets/art/**（仅 source/ 豁免），
+    # 所以这批文件虽然在套件根、不在 components//runtime/ 下，一样是口径内欠账。
+    "b6": {
+        "label": "vfx + ui + training_range（纯改名批：全部唯一版本 _v001）",
+        "roots": [
+            {"root": "assets/art/vfx/combat_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/vfx/environment_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/vfx/visibility_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/ui/inventory_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/ui/pause_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/environments/training_range_3d", "rules": {"": {"mode": "collapse"}}},
+        ],
+        "excluded": [
+            "assets/art/vfx/**/source/**（如有，Blender 源整体豁免）",
+            "assets/art/vfx/environment_3d/base_facility_scene_vfx_manifest_v001.json："
+            "manifest 是版本事实登记处，不属门禁口径（RUN_ASSET 只认 .glb/.tscn）",
+            "assets/art/ui/inventory_3d/ui_inventory_item_model_preview_v001.png(+.import)、"
+            "assets/art/environments/training_range_3d/env_training_range_preview_top3d_v001.png(+.import)："
+            "预览图，不属门禁口径。`.png`/`.jpg`/`.tres`/`.wav` 一类全仓共 646 个带版本文件，"
+            "是项目刻意收窄掉的独立类（动它等于改命名契约），留待单独决策",
+        ],
+    },
 }
 
 

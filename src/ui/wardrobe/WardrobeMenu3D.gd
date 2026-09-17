@@ -9,7 +9,7 @@ signal camera_override_changed(active: bool)
 
 const Catalog = preload("res://src/player3d/customization/AvatarCustomizationCatalog.gd")
 const Persistence = preload("res://src/player3d/customization/AvatarCustomizationPersistence.gd")
-const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root_v001.tscn")
+const ITEM_ICON_SCENE := preload("res://assets/art/ui/inventory_3d/ui_item_model_icon_root.tscn")
 const AVATAR_PREVIEW_SCENE := preload("res://assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/chr_player_capsule01_bunny01_root_top3d_v008.tscn")
 const CAMERA_CLOSEUP_LOCAL_POSITION := Vector3(0.0, 1.45, -3.15)
 const CAMERA_CLOSEUP_FOV := 34.0

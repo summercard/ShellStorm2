@@ -2,7 +2,7 @@ class_name CombatEffectPool3D
 extends Node3D
 ## 按表现类型复用短命特效，降低连射、爆炸和受击时的节点/网格分配尖峰。
 
-const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d_v001.tscn")
+const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
 
 @export var max_per_kind := 32
 var _inactive: Dictionary = {}

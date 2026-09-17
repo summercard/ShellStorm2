@@ -1,7 +1,7 @@
 extends Node
 ## 高档画质、太阳间接漫反射、ESC画面设置、抗锯齿档位与0键性能面板验收。
 
-const PAUSE_SCENE: PackedScene = preload("res://assets/art/ui/pause_3d/ui_pause_overlay_screen_v001.tscn")
+const PAUSE_SCENE: PackedScene = preload("res://assets/art/ui/pause_3d/ui_pause_overlay_screen.tscn")
 
 
 func _ready() -> void:
