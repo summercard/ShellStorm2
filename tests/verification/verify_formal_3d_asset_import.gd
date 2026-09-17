@@ -22,16 +22,16 @@ const WEAPON_ASSETS := {
 }
 
 const FACILITY_ASSETS := {
-	"locker_station": "res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d_v001.tscn",
-	"weapon_workshop": "res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn",
-	"retro_tv_station": "res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn",
-	"mission_operations": "res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn",
-	"vending_machine": "res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn",
+	"locker_station": "res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d.tscn",
+	"weapon_workshop": "res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d.tscn",
+	"retro_tv_station": "res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d.tscn",
+	"mission_operations": "res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d.tscn",
+	"vending_machine": "res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn",
 }
 
 const DECOR_ASSETS := {
-	"workshop_stool": "res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d_v001.tscn",
-	"mission_command_chair": "res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d_v001.tscn",
+	"workshop_stool": "res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn",
+	"mission_command_chair": "res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn",
 }
 
 const REQUIRED_WEAPON_SOCKETS := [

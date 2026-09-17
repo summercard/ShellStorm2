@@ -67,5 +67,6 @@ __pycache__/
 # 一次性备份（如台账补丁前的 .xlsx.bak_b1_deversion）
 *.bak_*
 
-# 每批去版本化迁移的临时基线快照
+# 每批去版本化迁移的临时基线快照 / 中途工作副本（台账补丁前后对照等）
 _scratch/b2_baseline/
+_scratch/b2_work/

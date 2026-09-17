@@ -4,9 +4,9 @@ extends Dungeon3D
 ## 战斗/命运/掉落管线；这里只定义垂直拓扑、电梯、五层流送、固定镜头
 ## 下方墙平滑抬升收拢、双端楼梯门、独立墙边电梯与全局固定环境光。
 
-const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d_v001.tscn")
+const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d.tscn")
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
+	"res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
@@ -18,11 +18,11 @@ const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
-const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d_v001.tscn")
-const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn")
+const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
+const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
 const TOWER_WALL_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v003.glb"
+	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb"
 )
 ## 走廊（水平接驳 + 楼梯接驳）的地板源。必须与楼层通用地砖同版：
 ## 旧 v001 是底面原点、单表面，自带材质 MAT_Rooftop（albedo 0.349/0.396/0.449、
@@ -31,13 +31,13 @@ const TOWER_WALL_SCENE: PackedScene = preload(
 ## v002 是 centered_slab（几何 Y = -0.15..+0.1505），顶面比摆放点高 0.1505m，
 ## 与 TowerFloorStage3D 的地砖顶面（标称层高 + 0.1505）一致，所以摆放偏移改为 0。
 const TOWER_FLOOR_TILE_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb"
+	"res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb"
 )
 const STAIR_GENERIC_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d_v002.tscn"
+	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_generic_12m/env_tower_stairwell_generic_12m_root_top3d.tscn"
 )
 const STAIR_ROOFTOP_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d_v002.tscn"
+	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d.tscn"
 )
 const COMBAT_FLOOR_COUNT := 4
 const DEEPEST_PLANNED_FLOOR := 85

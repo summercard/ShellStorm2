@@ -7,46 +7,46 @@ signal player_entered(room: DungeonRoom3D)
 signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
 signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
 
-const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn")
-const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d_v001.tscn")
-const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_furniture_root_top3d_v001.tscn")
-const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d_v001.tscn")
-const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn")
+const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn")
+const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn")
+const FURNITURE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_furniture_root_top3d.tscn")
+const SEARCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_search_container_root_top3d.tscn")
+const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d.tscn")
 const HAZARD_SCENE: PackedScene = preload("res://assets/art/vfx/environment_3d/vfx_hazard_field_root_top3d_v001.tscn")
-const DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d_v001.tscn")
+const DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 
 # —— 5m 塔楼模块 prefab（A 节）
 const TOWER_WALL_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
 )
 const TOWER_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn"
 )
 const TOWER_PARAPET_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn"
 )
 const TOWER_PARAPET_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m.tscn"
 )
 # 4 拐角模块
 const TOWER_CORNER_L_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_corner_l_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn"
 )
 const BASE99_CORNER_L_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn"
 )
 const TOWER_CORNER_T_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_corner_t_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_corner_t_5m.tscn"
 )
 const TOWER_CORNER_X_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_corner_x_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_corner_x_5m.tscn"
 )
 const TOWER_CORNER_L_PARAPET_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_corner_l_parapet_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_corner_l_parapet_5m.tscn"
 )
 const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
 )
 # 基地99层专属普通墙视觉。该PackedScene/GLB不持有碰撞、门或交互逻辑；
 # 结构碰撞继续由本脚本的0.30m代理负责，避免美术替换影响玩法。
@@ -139,28 +139,28 @@ const SAFE_ROOM_FLOOR_GRID_M := 5.0
 # 墙厚向房间外侧展开。授权美术（v007 README）把外墙皮写在 7.5 / 中线 7.35，
 # 运行时统一按塔楼口径把墙件原点落在 7.5，使门洞、走廊起点与楼板 5m 网格三者同线。
 # —— 房间壳体原子件 prefab（B 节）
-const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_v001.tscn")
-const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset_v001.tscn")
-const FLOOR_SEAM_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_seam_strip_v001.tscn")
-const WALL_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_segment_v001.tscn")
-const WALL_DOOR_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_door_segment_v001.tscn")
-const DOOR_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_lintel_v001.tscn")
-const CORNER_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_corner_post_v001.tscn")
-const PARTITION_VERTICAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_vertical_v001.tscn")
-const PARTITION_HORIZONTAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_horizontal_v001.tscn")
+const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor.tscn")
+const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset.tscn")
+const FLOOR_SEAM_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_seam_strip.tscn")
+const WALL_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_segment.tscn")
+const WALL_DOOR_SEGMENT_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_wall_door_segment.tscn")
+const DOOR_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_lintel.tscn")
+const CORNER_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_corner_post.tscn")
+const PARTITION_VERTICAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_vertical.tscn")
+const PARTITION_HORIZONTAL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_partition_horizontal.tscn")
 # —— 楼顶/楼梯厅装饰 prefab（C 节）
-const ROOFTOP_FACADE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade_v001.tscn")
-const ROOFTOP_FACADE_BAND_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade_band_v001.tscn")
-const ROOFTOP_RAIL_LOWER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_lower_v001.tscn")
-const ROOFTOP_RAIL_UPPER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_upper_v001.tscn")
-const ROOFTOP_RAIL_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_rail_post_v001.tscn")
-const ROOFTOP_STAIR_FRAME_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_post_v001.tscn")
-const ROOFTOP_STAIR_FRAME_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_lintel_v001.tscn")
-const ROOFTOP_DESCENT_MARKER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_descent_marker_v001.tscn")
-const STAIR_LOBBY_ROUTE_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_route_guide_v001.tscn")
-const STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_threshold_guide_v001.tscn")
-const ACCESS_STEP_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_access_step_v001.tscn")
-const VERTICAL_ACCESS_LABEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_vertical_access_marker_label_v001.tscn")
+const ROOFTOP_FACADE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade.tscn")
+const ROOFTOP_FACADE_BAND_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_facade_band.tscn")
+const ROOFTOP_RAIL_LOWER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_lower.tscn")
+const ROOFTOP_RAIL_UPPER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_railing_upper.tscn")
+const ROOFTOP_RAIL_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_rail_post.tscn")
+const ROOFTOP_STAIR_FRAME_POST_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_post.tscn")
+const ROOFTOP_STAIR_FRAME_LINTEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_stair_frame_lintel.tscn")
+const ROOFTOP_DESCENT_MARKER_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_rooftop_descent_marker.tscn")
+const STAIR_LOBBY_ROUTE_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_route_guide.tscn")
+const STAIR_LOBBY_THRESHOLD_GUIDE_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_stair_lobby_threshold_guide.tscn")
+const ACCESS_STEP_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_access_step.tscn")
+const VERTICAL_ACCESS_LABEL_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_vertical_access_marker_label.tscn")
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
 )

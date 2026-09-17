@@ -28,22 +28,22 @@ const PROTECTED_FLOOR_PATCH_TILES_PER_SIDE := int(PROTECTED_FLOOR_PATCH_SIDE_M /
 const FLOOR_THICKNESS := 0.30
 const WALL_THICKNESS := 0.30
 const FLOOR_SCENE: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
 )
 const POLISHED_FLOOR_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_descent_3d/runtime/floor_tile_5m/env_tower_floor_tile_5m_root_top3d_v002.tscn"
+	"res://assets/art/environments/tower_descent_3d/runtime/floor_tile_5m/env_tower_floor_tile_5m_root_top3d.tscn"
 )
 const WALL_SCENE: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
 )
 const BASE99_CORNER_L_VISUAL: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb"
 )
 const PARAPET_SCENE: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn"
 )
 const PARAPET_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m.tscn"
 )
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"

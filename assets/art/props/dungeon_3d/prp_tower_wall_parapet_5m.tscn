@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 楼顶矮墙（parapet）- 自包含独立模块
+; 正式美术：tower_descent_3d/components/env_tower_wall_parapet_5m_top3d_v001.glb
+;   5m × 1.50m 高 × 0.30m 厚；底面中心原点（几何 Y=0..1.50）。
+; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，
+;   保留美术自带 PaletteUV（MAT_Structure_DarkSteel）。
+; 本 Prefab 视觉专用（visual_only）。楼顶边界碰撞由 TowerFloorStage3D 的
+;   OuterBoundaryCollision_* 按 0.30m 代理生成。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_wall_parapet_5m_top3d.glb" id="1_visual"]
+
+[node name="PrpTowerWallParapet5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-WALL-PARAPET-5M"
+metadata/asset_version = "v001"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_parapet_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 1.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

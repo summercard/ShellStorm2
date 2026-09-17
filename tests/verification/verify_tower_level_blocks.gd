@@ -4,9 +4,9 @@ extends Node
 
 func _ready() -> void:
 	var failures: Array[String] = []
-	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn", "PackedScene"):
+	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop.tscn", "PackedScene"):
 		failures.append("zone_rooftop_v021.tscn cannot load")
-	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn", "PackedScene"):
+	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn", "PackedScene"):
 		failures.append("zone_base_v002.tscn cannot load")
 
 	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene

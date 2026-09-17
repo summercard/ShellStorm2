@@ -4,7 +4,7 @@ const CORNER_SCENE := preload("res://assets/art/environments/base_facility_3d/ru
 const COLLISION_SCENE := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn")
 const PALETTE := preload("res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png")
 const DUNGEON_ROOM_SCRIPT := "res://src/world3d/DungeonRoom3D.gd"
-const ART_LAYOUT_PATH := "res://assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
+const ART_LAYOUT_PATH := "res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
 const FLOOR_STAGE_SCRIPT := "res://src/world3d/TowerFloorStage3D.gd"
 
 var failures: Array[String] = []

@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m × 5m 楼板砖 - 自包含独立模块
+; 正式美术：tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb
+;   5m × 0.3005m 厚 × 5m；2 材质（02_细腻哑光_青绿大面 / 01_精工金属_紫色骨架）。
+;   板厚居中（几何 Y=-0.15..+0.1505），与运行时的 -FLOOR_THICKNESS*0.5 偏移
+;   共同把可视顶面对齐到承重面 Y=0 —— 与 100F/98F 已验证的正式地砖同源同版。
+; 根节点下 ImportedModel 内的 MeshInstance3D 名为 FloorTile_5m，
+; 与 TowerFloorStage3D 的 _mesh_from_scene() 取首个网格的调用兼容。
+; preserve_authored_palette：禁止运行时用暖色 A/B 主题地砖材质覆盖，
+;   保留美术自带双表面 PaletteUV。
+; 本 Prefab 视觉专用（visual_only）。楼板承重碰撞由 TowerFloorStage3D 的
+;   FloorSupport 按 5×0.30×5m BoxShape3D 生成。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb" id="1_visual"]
+
+[node name="PrpTowerFloorTile5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-FLOOR-TILE-5M"
+metadata/asset_version = "v002"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/thickness_m = 0.3005
+metadata/visual_top_offset_y = -0.15
+metadata/origin_contract = "centered_slab"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D.FloorSupport"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

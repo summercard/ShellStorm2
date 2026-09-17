@@ -2,10 +2,10 @@ extends SceneTree
 ## 只读校验：替换后的 4 个塔楼模块 Prefab 是否结构正确。
 
 const TARGETS := [
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m_v001.tscn",
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m_v001.tscn",
-	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m_v001.tscn",
-	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m_v001.tscn",
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn",
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn",
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn",
+	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn",
 ]
 
 var failures: Array[String] = []

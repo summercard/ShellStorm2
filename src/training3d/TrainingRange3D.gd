@@ -4,7 +4,7 @@ extends Node3D
 ## 近战武器以无弹药单体组合计数；
 ## 不写入基地存档、局内战利品或长期统计。
 
-const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d_v001.tscn")
+const SERVICE_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_service_station_root_top3d.tscn")
 
 @export var test_mode := false
 

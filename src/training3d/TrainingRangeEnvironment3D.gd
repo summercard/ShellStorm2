@@ -2,7 +2,7 @@ class_name TrainingRangeEnvironment3D
 extends Node3D
 ## 靶场空间资产：射击区、装备墙、三条射击道、掩体、工作台和废土灯光一次组合。
 
-const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d_v001.tscn")
+const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn")
 
 var _metal: StandardMaterial3D
 var _floor: StandardMaterial3D

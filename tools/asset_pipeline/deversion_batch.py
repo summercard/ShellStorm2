@@ -45,9 +45,40 @@ BATCHES: dict[str, dict] = {
         },
         "excluded": [
             "assets/art/environments/tower_zones/base/runtime/zone_base_v002.tscn"
-            "（zone 场景、非 <slug> 粒度；引用方 TowerDescent3D.gd 正在被併行会话改动）→ 转 B2",
-            "assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn → 转 B2",
+            "（zone 场景、非 <slug> 粒度）→ 已转 B2",
+            "assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn → 已转 B2",
         ],
+    },
+    # B2 横跨 7 个根（其中 tower_zones/base + rooftop 收的是 B1 残留的 2 个 zone 场景）。
+    "b2": {
+        "label": "dungeon_3d + tower_descent_3d + base_world_3d（+ B1 残留 zone 场景）",
+        "roots": [
+            {"root": "assets/art/props/dungeon_3d", "rules": {"": {"mode": "collapse"}}},
+            {
+                "root": "assets/art/environments/tower_descent_3d",
+                "rules": {
+                    "components": {"mode": "collapse"},
+                    "runtime": {"mode": "collapse"},
+                },
+            },
+            {"root": "assets/art/props/base_world_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/environments/dungeon_3d", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/environments/base_world_3d", "rules": {"": {"mode": "collapse"}}},
+            # B1 残留：这两个 zone 场景是 <slug> 粒度之上的整关包，B1 因「引用方
+            # TowerDescent3D.gd 正被并行会话改动」而排除；B2 已一并改引用，故收进来。
+            {"root": "assets/art/environments/tower_zones/base", "rules": {"runtime": {"mode": "collapse"}}},
+            {"root": "assets/art/environments/tower_zones/rooftop", "rules": {"runtime": {"mode": "collapse"}}},
+        ],
+        # 跨目录取代：这两份是「同一逻辑资产」的两版，却分处不同目录，
+        # 按 stable_path 分组看不出来（稳定路径不同 → 会被各自改名、双双留下）。
+        # 依据 floor_tile_5m/asset_manifest_v002.json 的 replacement 字段：
+        # 「v001 registry pointed to GLB but actual runtime was BoxMesh; v002 now
+        #  explicitly imports the authored mesh」→ 扁平的 v001 是废弃版，删；
+        #  floor_tile_5m/ 下的 v002 是正式版，改名保留。
+        "superseded": {
+            "assets/art/environments/tower_descent_3d/components/env_tower_floor_tile_5m_top3d_v001.glb":
+                "assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb",
+        },
     },
 }
 
@@ -72,6 +103,40 @@ def version_of(rel: str) -> str:
     return ""
 
 
+def batch_roots(batch: dict) -> list[tuple[str, dict]]:
+    """归一化批次的根列表：老写法 `root` + `rules`，新写法 `roots: [{root, rules}]`。"""
+    if "roots" in batch:
+        return [(entry["root"], entry["rules"]) for entry in batch["roots"]]
+    return [(batch["root"], batch["rules"])]
+
+
+def superseded_paths(batch: dict) -> list[str]:
+    """跨目录「废弃版」及其旁文件（.import/.uid）：这些是删除项，不是改名项。"""
+    out: list[str] = []
+    for doomed in batch.get("superseded", {}):
+        out.append(doomed)
+        for suffix in (".import", ".uid"):
+            if (PROJECT / (doomed + suffix)).is_file():
+                out.append(doomed + suffix)
+    return out
+
+
+def batch_applied(batch: dict) -> list[str]:
+    """判定批次已落地：`superseded` 的废弃版与其正式版都不在磁盘，但正式版的稳定路径在。
+
+    这是一次性迁移脚本的**正常终态**，必须与「文件被误删」区分开 —— 否则在已应用
+    的批次上重跑 `--plan` 会报「废弃版不存在」，读起来像丢了文件，会诱导操作者去
+    「恢复」一个按设计本就该删掉的旧版。
+    """
+    hit: list[str] = []
+    for doomed, canonical in batch.get("superseded", {}).items():
+        if (PROJECT / doomed).is_file():
+            continue
+        if not (PROJECT / canonical).is_file() and (PROJECT / stable_path(canonical)).is_file():
+            hit.append(doomed)
+    return hit
+
+
 def collect_leftovers(batch: dict) -> list[str]:
     """第二步（重命名之后）的删除清单：批根下**仍然带版本**的运行资产。
 
@@ -79,112 +144,136 @@ def collect_leftovers(batch: dict) -> list[str]:
     的 `<slug>_v004.glb` 占据；若还用「保留最高版本」的逻辑重算，会把 `v003` 当成
     更高版本、反过来删掉刚改名成功的文件。
 
-    第二步只认两条：
+    第二步只认三条：
       A. 稳定名已存在 → 删带版本的那个（同资产多版本的旧版）
       B. 落在非保留版本的整树目录里（`<套件>/vNNN/...` 且 vNNN ≠ 规则保留版本）→ 整树删
+      C. 命中 `superseded` 声明的废弃版（跨目录同名资产的旧版）→ 删
     """
-    root = PROJECT / batch["root"]
-    # 整树删除范围：keep_version 规则子树 <path>，保留版本 <version>
-    tree_rules = [
-        (sub, rule["version"])
-        for sub, rule in batch["rules"].items()
-        if rule["mode"] == "keep_version"
-    ]
     deletes: list[str] = []
-    for p in sorted(root.rglob("*")):
-        if not p.is_file():
-            continue
-        rel = p.relative_to(PROJECT).as_posix()
-        if rel in batch.get("excluded", []):
-            continue
-        if BACKUP.search(p.name):
-            if "/source/" not in rel:
-                deletes.append(rel)
-            continue
-        if not RUN_ASSET.search(p.name):
-            continue
-
-        # B：整树目录（非保留版本）
-        version_dir_hit = False
-        for sub, keep in tree_rules:
-            prefix = f"{batch['root']}/{sub}/"
-            if not rel.startswith(prefix):
+    doomed_set = set(superseded_paths(batch))
+    for root_rel, rules in batch_roots(batch):
+        root = PROJECT / root_rel
+        # 整树删除范围：keep_version 规则子树 <path>，保留版本 <version>
+        tree_rules = [
+            (sub, rule["version"])
+            for sub, rule in rules.items()
+            if rule["mode"] == "keep_version"
+        ]
+        for p in sorted(root.rglob("*")):
+            if not p.is_file():
                 continue
-            head = rel[len(prefix):].split("/")[0]
-            if VERSION_DIR.match(head) and head != keep:
-                version_dir_hit = True
-        if version_dir_hit:
-            deletes.append(rel)
-            continue
+            rel = p.relative_to(PROJECT).as_posix()
+            if rel in doomed_set:
+                deletes.append(rel)
+                continue
+            if BACKUP.search(p.name):
+                if "/source/" not in rel:
+                    deletes.append(rel)
+                continue
+            if not RUN_ASSET.search(p.name):
+                continue
 
-        stable = stable_path(rel)
-        if stable == rel:
-            continue  # 已经是稳定名
-        if not (PROJECT / stable).is_file():
-            raise SystemExit(
-                f"{rel} 仍是带版本命名，但稳定路径 {stable} 不存在，也不在整树删除范围内——"
-                f"说明重命名还没做完或规则有漏，先跑 --apply-renames 并检查 BATCHES 规则。"
-            )
-        deletes.append(rel)
+            # B：整树目录（非保留版本）
+            version_dir_hit = False
+            for sub, keep in tree_rules:
+                prefix = f"{root_rel}/{sub}/" if sub else f"{root_rel}/"
+                if not rel.startswith(prefix):
+                    continue
+                head = rel[len(prefix):].split("/")[0]
+                if VERSION_DIR.match(head) and head != keep:
+                    version_dir_hit = True
+            if version_dir_hit:
+                deletes.append(rel)
+                continue
+
+            stable = stable_path(rel)
+            if stable == rel:
+                continue  # 已经是稳定名
+            if not (PROJECT / stable).is_file():
+                raise SystemExit(
+                    f"{rel} 仍是带版本命名，但稳定路径 {stable} 不存在，也不在整树删除范围内——"
+                    f"说明重命名还没做完或规则有漏，先跑 --apply-renames 并检查 BATCHES 规则。"
+                )
+            deletes.append(rel)
     return sorted(set(deletes))
 
 
 def collect(batch: dict) -> tuple[list[tuple[str, str]], list[str]]:
     """返回 (rename_pairs, delete_relpaths)。"""
-    root = PROJECT / batch["root"]
     renames: list[tuple[str, str]] = []
     deletes: list[str] = []
 
-    for sub, rule in batch["rules"].items():
-        base = root / sub
-        if not base.is_dir():
-            continue
-        # 收集该子树下所有带版本运行资产
-        owned: dict[str, list[Path]] = {}
-        for p in sorted(base.rglob("*")):
-            if not p.is_file():
+    for root_rel, rules in batch_roots(batch):
+        root = PROJECT / root_rel
+        for sub, rule in rules.items():
+            base = root / sub if sub else root
+            if not base.is_dir():
                 continue
-            if BACKUP.search(p.name):
-                continue
-            if not RUN_ASSET.search(p.name):
-                continue
-            if rule["mode"] == "keep_version" and version_of(str(p.relative_to(PROJECT))) != rule["version"]:
-                deletes.append(p.relative_to(PROJECT).as_posix())
-                continue
-            owned.setdefault(stable_path(str(p.relative_to(PROJECT)).replace("\\", "/")), []).append(p)
-
-        for stable, group in sorted(owned.items()):
-            if len(group) == 1:
-                old = group[0].relative_to(PROJECT).as_posix()
-                if old != stable:
-                    renames.append((old, stable))
-                continue
-            # 多版本并存 → 保留最高版本
-            group.sort(key=lambda p: version_of(p.relative_to(PROJECT).as_posix()), reverse=True)
-            if len({version_of(p.relative_to(PROJECT).as_posix()) for p in group}) != len(group):
-                raise SystemExit(f"{stable}: 同版本重复文件，人工确认：{[str(p) for p in group]}")
-            keep = group[0].relative_to(PROJECT).as_posix()
-            if keep != stable:
-                renames.append((keep, stable))
-            for p in group[1:]:
-                deletes.append(p.relative_to(PROJECT).as_posix())
-
-        # keep_version 模式下，被保版本以外的整树兜底（含非运行资产后缀的残件）
-        if rule["mode"] == "keep_version":
+            # 收集该子树下所有带版本运行资产
+            owned: dict[str, list[Path]] = {}
             for p in sorted(base.rglob("*")):
-                if p.is_file() and p.relative_to(PROJECT).as_posix() not in deletes:
-                    v = version_of(p.relative_to(PROJECT).as_posix())
-                    if v and v != rule["version"]:
-                        deletes.append(p.relative_to(PROJECT).as_posix())
+                if not p.is_file():
+                    continue
+                if BACKUP.search(p.name):
+                    continue
+                if not RUN_ASSET.search(p.name):
+                    continue
+                if rule["mode"] == "keep_version" and version_of(str(p.relative_to(PROJECT))) != rule["version"]:
+                    deletes.append(p.relative_to(PROJECT).as_posix())
+                    continue
+                owned.setdefault(stable_path(str(p.relative_to(PROJECT)).replace("\\", "/")), []).append(p)
+
+            for stable, group in sorted(owned.items()):
+                if len(group) == 1:
+                    old = group[0].relative_to(PROJECT).as_posix()
+                    if old != stable:
+                        renames.append((old, stable))
+                    continue
+                # 多版本并存 → 保留最高版本
+                group.sort(key=lambda p: version_of(p.relative_to(PROJECT).as_posix()), reverse=True)
+                if len({version_of(p.relative_to(PROJECT).as_posix()) for p in group}) != len(group):
+                    raise SystemExit(f"{stable}: 同版本重复文件，人工确认：{[str(p) for p in group]}")
+                keep = group[0].relative_to(PROJECT).as_posix()
+                if keep != stable:
+                    renames.append((keep, stable))
+                for p in group[1:]:
+                    deletes.append(p.relative_to(PROJECT).as_posix())
+
+            # keep_version 模式下，被保版本以外的整树兜底（含非运行资产后缀的残件）
+            if rule["mode"] == "keep_version":
+                for p in sorted(base.rglob("*")):
+                    if p.is_file() and p.relative_to(PROJECT).as_posix() not in deletes:
+                        v = version_of(p.relative_to(PROJECT).as_posix())
+                        if v and v != rule["version"]:
+                            deletes.append(p.relative_to(PROJECT).as_posix())
+
+    # 跨目录取代：废弃版（含其 .import/.uid 旁文件）删除，正式版按常规改名保留。
+    # 旁文件必须一起删：只删 .glb 会把 `<slug>_v001.glb.import` 改名成稳定的
+    # `<slug>.glb.import`，与正式版改名后的同类旁文件并存、留下无主残留。
+    superseded: dict[str, str] = batch.get("superseded", {})
+    for doomed, canonical in superseded.items():
+        if not (PROJECT / doomed).is_file():
+            raise SystemExit(
+                f"superseded 声明要删的废弃版不存在：{doomed}\n"
+                f"  若本批已应用，正式版的稳定路径应当存在：{stable_path(canonical)}"
+                f"（现在{'存在' if (PROJECT / stable_path(canonical)).is_file() else '也不存在'}）"
+            )
+        if not (PROJECT / canonical).is_file():
+            raise SystemExit(f"superseded 声明要保留的正式版不存在：{canonical}")
+    doomed_all = set(superseded_paths(batch))
+    renames = [(o, n) for (o, n) in renames if o not in doomed_all]
+    deletes.extend(sorted(doomed_all))
 
     # 备份残留：只清运行资产侧的，`source/` 的备份不属于本批（源侧历史另议）
-    for p in sorted(root.rglob("*")):
-        if not p.is_file() or not BACKUP.search(p.name):
-            continue
-        rel = p.relative_to(PROJECT).as_posix()
-        if "/source/" in rel:
-            continue
-        deletes.append(rel)
+    for root_rel, _rules in batch_roots(batch):
+        root = PROJECT / root_rel
+        for p in sorted(root.rglob("*")):
+            if not p.is_file() or not BACKUP.search(p.name):
+                continue
+            rel = p.relative_to(PROJECT).as_posix()
+            if "/source/" in rel:
+                continue
+            deletes.append(rel)
 
     renames = sorted(set(renames))
     deletes = sorted(set(d for d in deletes if not any(d == r[0] for r in renames)))
@@ -253,20 +342,67 @@ def fix_scene_refs(batch: dict) -> int:
     任何 `git checkout` 恢复都会把它抹掉——本批就踩过。
     """
     touched = 0
-    root = PROJECT / batch["root"]
-    ref = re.compile(r"res://(assets/[A-Za-z0-9_/.\-]*?_v\d{3}\.(?:glb|tscn))")
-    for tscn in sorted(root.rglob("*.tscn")):
-        text = tscn.read_text(encoding="utf8")
-        updated = text
-        for old_rel in set(ref.findall(text)):
-            stable = stable_path(old_rel)
-            if stable == old_rel or not (PROJECT / stable).is_file():
-                continue
-            updated = updated.replace(f"res://{old_rel}", f"res://{stable}")
-        if updated != text:
-            tscn.write_text(updated, encoding="utf8")
-            touched += 1
+    for root_rel, _rules in batch_roots(batch):
+        root = PROJECT / root_rel
+        ref = re.compile(r"res://(assets/[A-Za-z0-9_/.\-]*?_v\d{3}\.(?:glb|tscn))")
+        for tscn in sorted(root.rglob("*.tscn")):
+            text = tscn.read_text(encoding="utf8")
+            updated = text
+            for old_rel in set(ref.findall(text)):
+                stable = stable_path(old_rel)
+                if stable == old_rel or not (PROJECT / stable).is_file():
+                    continue
+                updated = updated.replace(f"res://{old_rel}", f"res://{stable}")
+            if updated != text:
+                tscn.write_text(updated, encoding="utf8")
+                touched += 1
     return touched
+
+
+CODE_REF = re.compile(r"res://(assets/[A-Za-z0-9_/.\-]*?_v\d{3}\.(?:glb|tscn))")
+
+
+def fix_code_refs(batch: dict) -> list[tuple[str, int, list[str]]]:
+    """把全仓 `res://..._vNNN.glb|tscn` 引用改写到稳定路径。
+
+    判据（三条同时成立才改，故自限定作用域、幂等）：
+      1. 稳定路径与带版本路径不同；
+      2. 带版本路径**已不存在**（说明本批或更早已把它改走）；
+      3. 稳定路径**存在**。
+    未处理的批次（如 weapons/base_facility 的 `_v001`）带版本文件仍在 → 跳过。
+    只扫 `.gd` / `.tscn`：`.py` 批次配置与历史导入脚本不在改写范围（门禁亦只管
+    `src/**/*.gd` 与 `*.tscn`）。
+    """
+    files: list[Path] = []
+    for folder in ("src", "scenes", "tests", "tools"):
+        base = PROJECT / folder
+        if base.is_dir():
+            files += [f for f in base.rglob("*") if f.suffix in (".gd", ".tscn")]
+    for suffix in ("*.gd", "*.tscn"):
+        files += list((PROJECT / "assets" / "art").rglob(suffix))
+
+    changed: list[tuple[str, int, list[str]]] = []
+    for f in sorted(set(files)):
+        text = f.read_text(encoding="utf8")
+        repl: dict[str, str] = {}
+        for old in set(CODE_REF.findall(text)):
+            stable = stable_path(old)
+            if stable == old:
+                continue
+            if (PROJECT / old).exists():
+                continue  # 仍带版本 → 属后续批次，不越界
+            if not (PROJECT / stable).is_file():
+                continue  # 稳定目标不存在（如被取代的旧版）→ 不能改
+            repl[old] = stable
+        if not repl:
+            continue
+        updated = text
+        for o, n in repl.items():
+            updated = updated.replace(f"res://{o}", f"res://{n}")
+        if updated != text:
+            f.write_text(updated, encoding="utf8")
+            changed.append((f.relative_to(PROJECT).as_posix(), len(repl), sorted(repl)))
+    return changed
 
 
 def apply_deletes(deletes) -> None:
@@ -290,10 +426,21 @@ def main() -> int:
     ap.add_argument("--apply-renames", action="store_true")
     ap.add_argument("--apply-deletes", action="store_true")
     ap.add_argument("--fix-scene-refs", action="store_true")
+    ap.add_argument("--fix-code-refs", action="store_true")
     args = ap.parse_args()
 
     batch = BATCHES[args.batch]
     excluded = list(batch.get("excluded", []))
+
+    if args.fix_code_refs:
+        print(f"=== {args.batch} 全仓代码/场景引用改写（.gd/.tscn） ===")
+        changed = fix_code_refs(batch)
+        for rel, n, refs in changed:
+            print(f"  {rel}  ({n})")
+            for r in refs:
+                print(f"      -> res://{stable_path(r)}")
+        print(f"共改写 {len(changed)} 个文件")
+        return 0
 
     if args.fix_scene_refs:
         print(f"=== {args.batch} 场景内部引用改写 ===")
@@ -311,6 +458,16 @@ def main() -> int:
         apply_deletes(deletes)
         return 0
 
+    applied = batch_applied(batch)
+    if applied and len(applied) == len(batch.get("superseded", {})):
+        print(f"=== {args.batch} {batch['label']} ===")
+        print(f"本批已应用：superseded 声明的废弃版已删除、正式版已去版本化（{len(applied)} 项）。")
+        print(f"  例：{applied[0]}")
+        print("  复核：python _scratch/verify_ledger_b2_deversion.py"
+              " && python scripts/check_asset_runtime_naming.py")
+        print("（无需重复执行；这条不是错误，是正常终态）")
+        return 0
+
     renames, deletes = collect(batch)
     check(renames, deletes)
 
@@ -325,7 +482,6 @@ def main() -> int:
         print("\n本批排除（转其它批）：")
         for e in excluded:
             print(f"  {e}")
-
     if args.apply_renames:
         apply_renames(renames)
     if not args.apply_renames:

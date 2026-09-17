@@ -4,11 +4,11 @@ const FACILITY_OUTPUT := "res://outputs/verification/formal_facility_asset_galle
 const WEAPON_OUTPUT := "res://outputs/verification/formal_weapon_asset_gallery.png"
 
 const FACILITIES := [
-	["储物站（待开放）", "res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d_v001.tscn"],
-	["枪械工坊", "res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d_v001.tscn"],
-	["电视站（待开放）", "res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d_v001.tscn"],
-	["远征情报终端", "res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d_v001.tscn"],
-	["自动贩卖机", "res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d_v002.tscn"],
+	["储物站（待开放）", "res://assets/art/props/base_world_3d/runtime/locker_station/prp_base_locker_station_root_top3d.tscn"],
+	["枪械工坊", "res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d.tscn"],
+	["电视站（待开放）", "res://assets/art/props/base_world_3d/runtime/retro_tv_station/prp_base_retro_tv_station_root_top3d.tscn"],
+	["远征情报终端", "res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d.tscn"],
+	["自动贩卖机", "res://assets/art/props/base_world_3d/runtime/vending_machine/prp_base_vending_machine_root_top3d.tscn"],
 ]
 
 const WEAPONS := [

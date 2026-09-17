@@ -18,14 +18,14 @@ const EPS := 0.0015
 const CASES := [
 	{
 		"slug": "floor_tile_r01_c01",
-		"scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d_v003.tscn",
+		"scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn",
 		"footprint": 4.94,
 		"thickness": 0.056,
 		"asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
 	},
 	{
 		"slug": "floor_tile_r01_c02",
-		"scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v003.tscn",
+		"scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn",
 		"footprint": 4.94,
 		"thickness": 0.081,
 		"asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",

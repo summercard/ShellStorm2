@@ -379,7 +379,7 @@ func _verify_interface_and_model(failures: Array[String]) -> void:
 	if visible_runtime_items != 2:
 		failures.append("保险柜右栏没有读取I键背包中的两件物品")
 	vault_menu.queue_free()
-	var model_scene := load("res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d_v001.tscn") as PackedScene
+	var model_scene := load("res://assets/art/props/base_world_3d/prp_base_vending_machine_root_top3d.tscn") as PackedScene
 	var model := model_scene.instantiate() as BaseFacility3D
 	add_child(model)
 	await get_tree().process_frame
