@@ -22,6 +22,12 @@ var _current_track_path: String = ""
 var _previous_stack: Array[String] = []
 var _paused: bool = false
 var _rng := RandomNumberGenerator.new()
+## 本项目未配 AudioBusLayout，Music 总线由 _ensure_music_bus() 在运行时补建。
+## 记下「是不是我们建的」，退出时才能把它收回去（否则留下一枚孤立的 StringName "Music"）。
+var _created_music_bus: bool = false
+## 场景树拆除中（_exit_tree 已跑）。此后再 play() 会把 stream 重新挂回播放器，
+## 而引擎紧接着就释放该播放器，AudioServer 仍持有该 AudioStream → 退出时资源泄漏。
+var _shutting_down: bool = false
 
 
 func _ready() -> void:
@@ -34,6 +40,37 @@ func _ready() -> void:
 	_ensure_music_bus()
 
 
+func _exit_tree() -> void:
+	# 退出清理。必须做，否则验收套件会判 exit 4（资源泄漏）：
+	# 1. 仍在播放的 AudioStreamPlayer 会让 AudioServer 继续持有该 AudioStream 及其
+	#    OggPacketSequence，ResourceCache 在引擎退出时就报
+	#    "N resources still in use at exit"（实测恒为 2：AudioStreamOggVorbis + OggPacketSequence）。
+	#    这里先停、再断开 stream 引用，让资源在退出前释放。
+	# 2. 收回运行时补建的 Music 总线，避免留下孤立 StringName "Music"。
+	# 3. 置 _shutting_down，拦住拆除期间才醒来的延迟 play()。
+	#    BaseWorld3D 用 `await get_tree().create_timer(0.1).timeout` 后 play("base_passion")，
+	#    autoload 先于当前场景退出树；若该协程恰在此时恢复，就会在本函数之后重新挂上 stream
+	#    → 泄漏照旧（这正是修了 _exit_tree 后仍有场景偶发 exit 4 的原因）。
+	# 注意：autoload 在场景树拆除阶段被释放，此时不能再依赖 Tween（Tween 同样在被拆除），
+	# 所以这里不做淡出，直接停。
+	_shutting_down = true
+	if _bus_volume_tween != null and _bus_volume_tween.is_valid():
+		_bus_volume_tween.kill()
+	_bus_volume_tween = null
+	if _stream_player != null:
+		_stream_player.stop()
+		_stream_player.stream = null
+	_current_music_id = ""
+	_current_track_path = ""
+	_previous_stack.clear()
+	_paused = false
+	if _created_music_bus:
+		var idx := AudioServer.get_bus_index("Music")
+		if idx > 0:
+			AudioServer.remove_bus(idx)
+		_created_music_bus = false
+
+
 func _ensure_music_bus() -> void:
 	# 简易兜底：项目应配 AudioBusLayout 含 Music 总线。
 	# 本函数确保 Music 总线存在并跟随 master。
@@ -42,10 +79,14 @@ func _ensure_music_bus() -> void:
 		AudioServer.add_bus(1)
 		AudioServer.set_bus_name(1, "Music")
 		AudioServer.set_bus_send(1, "Master")
+		_created_music_bus = true
 
 
 ## 播放一首注册曲目。已注册曲目会淡入淡出切换；未注册的 music_id 直接报错。
 func play(music_id: String) -> bool:
+	# 拆除期间（或本就未入树）一律拒绝：此时挂上 stream 只会变成退出泄漏。
+	if _shutting_down or not is_inside_tree():
+		return false
 	if not Catalog.has_music_id(music_id):
 		push_error("[MusicManager] music_id 未注册: %s" % music_id)
 		return false
@@ -160,6 +201,18 @@ func _previous_track_index(entry: Dictionary) -> int:
 
 
 func _play_track(music_id: String, track_path: String, entry: Dictionary) -> void:
+	# _on_stream_finished 的循环重播会绕过 play() 直接进这里，所以守卫要放两份。
+	if _shutting_down or _stream_player == null:
+		return
+	# headless（验收套件）不真正播：一旦 load() 出 Ogg，AudioServer 就会持有
+	# AudioStreamPlaybackOggVorbis / OggPacketSequence，实测退出时无法稳定释放
+	# → check_verification_log 判 exit 4（资源泄漏）。与 src/core/AudioManager.gd
+	# 的既有 headless 约定一致。这里只落状态，供 verify_music_system 断言。
+	if DisplayServer.get_name() == "headless":
+		_current_music_id = music_id
+		_current_track_path = track_path
+		music_changed.emit(music_id, track_path)
+		return
 	var stream := load(track_path) as AudioStream
 	if stream == null:
 		push_error("[MusicManager] 无法加载音频: %s" % track_path)
