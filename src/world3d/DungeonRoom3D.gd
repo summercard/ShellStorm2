@@ -1860,7 +1860,8 @@ func _build_content() -> void:
 		else 9
 	)
 	if size_class == "rooftop":
-		prop_count = 3
+		# 用户要求清空屋顶设施，包含程序生成的家具和可搜容器。
+		prop_count = 0
 	if room_type == "FACILITY":
 		prop_count = 0
 	if room_type == "STAIR_LOBBY":

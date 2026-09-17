@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": {
+    "scope_values": true,
+    "scope_styles": true,
+    "44_packages": true,
+    "source_hash": true,
+    "source_version": true
+  },
+  "unexpected_values": [],
+  "unexpected_styles": [],
+  "sha256": "ca091c6dec5ac3dc0c63b4e3b28a84934d78d685656388c882087c1a9b9b966e"
+}

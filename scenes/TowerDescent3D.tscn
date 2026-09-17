@@ -88,9 +88,10 @@ metadata/runtime_owner = "TowerDescent3D"
 metadata/block_id = "rooftop"
 metadata/display_name = "天台区"
 metadata/floor_range = "100F"
-metadata/asset_ids = Array[String](["ENV-ROOFTOP-SHELTER-90X80"])
+metadata/asset_ids = Array[String]([])
+metadata/facility_art_state = "removed_by_user"
 metadata/runtime_owner = "TowerDescent3D"
-metadata/source_blends = Array[String](["assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v021.blend"])
+metadata/source_blends = Array[String]([])
 
 [node name="Base" type="Node3D" parent="Blocks" index="1"]
 metadata/block_id = "base"

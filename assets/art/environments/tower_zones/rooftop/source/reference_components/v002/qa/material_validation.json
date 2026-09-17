@@ -1,0 +1,2608 @@
+{
+  "blend": "/Users/summercards/ShellStorm2/assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "passed": true,
+  "checks": {
+    "material_budget": true,
+    "no_unused_materials": true,
+    "has_game_output_collection": true,
+    "has_output_meshes": true,
+    "palette_uv_on_all_output_meshes": true,
+    "palette_uv_face_islands_within_single_cells": true,
+    "palette_uv_is_active_edit_layer": true,
+    "palette_uv_is_active_render_layer": true,
+    "no_undeclared_extra_uv_layers": true,
+    "materials_read_palette_uv": true,
+    "palette_images_use_closest": true,
+    "palette_images_use_single_external_shared_file": true,
+    "no_display_ground_or_plinth": true,
+    "emissive_not_mixed_with_body": true,
+    "emissive_objects_clearly_named": true,
+    "body_has_at_most_three_materials": true,
+    "emissive_has_one_material": true
+  },
+  "output_mesh_count": 256,
+  "polygon_count": 126322,
+  "valid_island_polygon_count": 126322,
+  "uv_reports": [
+    {
+      "object": "三通管_主体",
+      "polygon_count": 64,
+      "valid_island_polygon_count": 64,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "三通管_接头法兰_制作",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "三通管_金属管件_制作",
+      "polygon_count": 28,
+      "valid_island_polygon_count": 28,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "内角地砖_主体",
+      "polygon_count": 144,
+      "valid_island_polygon_count": 144,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "内角地砖_水泥结构_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "内角地砖_表面磨损_制作",
+      "polygon_count": 66,
+      "valid_island_polygon_count": 66,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "半块地砖_主体",
+      "polygon_count": 102,
+      "valid_island_polygon_count": 102,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "半块地砖_水泥结构_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "半块地砖_表面磨损_制作",
+      "polygon_count": 24,
+      "valid_island_polygon_count": 24,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面攀爬藤蔓_主体",
+      "polygon_count": 4304,
+      "valid_island_polygon_count": 4304,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面攀爬藤蔓_叶片_制作",
+      "polygon_count": 1840,
+      "valid_island_polygon_count": 1840,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面攀爬藤蔓_藤蔓茎_制作",
+      "polygon_count": 2464,
+      "valid_island_polygon_count": 2464,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面通风箱_主体",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面通风箱_百叶暗腔_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面通风箱_百叶片_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面通风箱_紧固件_制作",
+      "polygon_count": 32,
+      "valid_island_polygon_count": 32,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "墙面通风箱_通风箱壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_主体",
+      "polygon_count": 1498,
+      "valid_island_polygon_count": 1498,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_护网与管卡_制作",
+      "polygon_count": 576,
+      "valid_island_polygon_count": 576,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_检修门_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_百叶暗腔_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_百叶片_制作",
+      "polygon_count": 234,
+      "valid_island_polygon_count": 234,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_紧固件_制作",
+      "polygon_count": 160,
+      "valid_island_polygon_count": 160,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_金属管件_制作",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_风扇叶轮_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_风扇底腔_制作",
+      "polygon_count": 34,
+      "valid_island_polygon_count": 34,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大型空调机组_风扇轴_制作",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_主体",
+      "polygon_count": 478,
+      "valid_island_polygon_count": 478,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_叶片_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_土壤_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_枝茎_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_盆沿_制作",
+      "polygon_count": 192,
+      "valid_island_polygon_count": 192,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "大盆栽_陶盆_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角_主体",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角_水泥结构_制作",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角挂藤_主体",
+      "polygon_count": 5804,
+      "valid_island_polygon_count": 5804,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角挂藤_叶片_制作",
+      "polygon_count": 2248,
+      "valid_island_polygon_count": 2248,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角挂藤_水泥结构_制作",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙内角挂藤_藤蔓茎_制作",
+      "polygon_count": 3024,
+      "valid_island_polygon_count": 3024,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角_主体",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角_水泥结构_制作",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角挂藤_主体",
+      "polygon_count": 5804,
+      "valid_island_polygon_count": 5804,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角挂藤_叶片_制作",
+      "polygon_count": 2248,
+      "valid_island_polygon_count": 2248,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角挂藤_水泥结构_制作",
+      "polygon_count": 532,
+      "valid_island_polygon_count": 532,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙外角挂藤_藤蔓茎_制作",
+      "polygon_count": 3024,
+      "valid_island_polygon_count": 3024,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙挂藤_主体",
+      "polygon_count": 5824,
+      "valid_island_polygon_count": 5824,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙挂藤_叶片_制作",
+      "polygon_count": 2248,
+      "valid_island_polygon_count": 2248,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙挂藤_水泥结构_制作",
+      "polygon_count": 552,
+      "valid_island_polygon_count": 552,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙挂藤_藤蔓茎_制作",
+      "polygon_count": 3024,
+      "valid_island_polygon_count": 3024,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙直段_主体",
+      "polygon_count": 552,
+      "valid_island_polygon_count": 552,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "女儿墙直段_水泥结构_制作",
+      "polygon_count": 552,
+      "valid_island_polygon_count": 552,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "完整地砖_主体",
+      "polygon_count": 178,
+      "valid_island_polygon_count": 178,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "完整地砖_水泥结构_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "完整地砖_表面磨损_制作",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_主体",
+      "polygon_count": 1330,
+      "valid_island_polygon_count": 1330,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_护网与管卡_制作",
+      "polygon_count": 576,
+      "valid_island_polygon_count": 576,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_百叶暗腔_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_百叶片_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_紧固件_制作",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_金属管件_制作",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_风扇叶轮_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_风扇底腔_制作",
+      "polygon_count": 34,
+      "valid_island_polygon_count": 34,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小型空调机组_风扇轴_制作",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_主体",
+      "polygon_count": 478,
+      "valid_island_polygon_count": 478,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_叶片_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_土壤_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_枝茎_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_盆沿_制作",
+      "polygon_count": 192,
+      "valid_island_polygon_count": 192,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小盆栽_陶盆_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_主体",
+      "polygon_count": 382,
+      "valid_island_polygon_count": 382,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_百叶暗腔_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_百叶片_制作",
+      "polygon_count": 104,
+      "valid_island_polygon_count": 104,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_紧固件_制作",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "小通风口_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_主体",
+      "polygon_count": 4938,
+      "valid_island_polygon_count": 4938,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_叶片_制作",
+      "polygon_count": 1932,
+      "valid_island_polygon_count": 1932,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_水泥结构_制作",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_藤蔓茎_制作",
+      "polygon_count": 2576,
+      "valid_island_polygon_count": 2576,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间实墙挂藤_表面磨损_制作",
+      "polygon_count": 40,
+      "valid_island_polygon_count": 40,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间标准墙_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间标准墙_主体",
+      "polygon_count": 430,
+      "valid_island_polygon_count": 430,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间标准墙_水泥结构_制作",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间标准墙_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间标准墙_表面磨损_制作",
+      "polygon_count": 40,
+      "valid_island_polygon_count": 40,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_主体",
+      "polygon_count": 516,
+      "valid_island_polygon_count": 516,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_水泥结构_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_窗台_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_窗框_制作",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_窗玻璃_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙_表面磨损_制作",
+      "polygon_count": 22,
+      "valid_island_polygon_count": 22,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_主体",
+      "polygon_count": 5027,
+      "valid_island_polygon_count": 5027,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_叶片_制作",
+      "polygon_count": 1932,
+      "valid_island_polygon_count": 1932,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_水泥结构_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_窗台_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_窗框_制作",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_窗玻璃_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_藤蔓茎_制作",
+      "polygon_count": 2576,
+      "valid_island_polygon_count": 2576,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间窗墙挂藤_表面磨损_制作",
+      "polygon_count": 25,
+      "valid_island_polygon_count": 25,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙_主体",
+      "polygon_count": 199,
+      "valid_island_polygon_count": 199,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙_水泥结构_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙_表面磨损_制作",
+      "polygon_count": 17,
+      "valid_island_polygon_count": 17,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_主体",
+      "polygon_count": 4110,
+      "valid_island_polygon_count": 4110,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_叶片_制作",
+      "polygon_count": 1672,
+      "valid_island_polygon_count": 1672,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_水泥结构_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_藤蔓茎_制作",
+      "polygon_count": 2240,
+      "valid_island_polygon_count": 2240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房间门洞墙挂藤_表面磨损_制作",
+      "polygon_count": 16,
+      "valid_island_polygon_count": 16,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶完整板_主体",
+      "polygon_count": 178,
+      "valid_island_polygon_count": 178,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶完整板_水泥结构_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶完整板_表面磨损_制作",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶角板_主体",
+      "polygon_count": 230,
+      "valid_island_polygon_count": 230,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶角板_水泥结构_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶角板_表面磨损_制作",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶角板_边缘压条_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶边缘板_主体",
+      "polygon_count": 204,
+      "valid_island_polygon_count": 204,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶边缘板_水泥结构_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶边缘板_表面磨损_制作",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "房顶边缘板_边缘压条_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "排水格栅_主体",
+      "polygon_count": 266,
+      "valid_island_polygon_count": 266,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "排水格栅_排水暗腔_制作",
+      "polygon_count": 6,
+      "valid_island_polygon_count": 6,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "排水格栅_排水格栅_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "排水格栅_排水框_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "排水格栅_横格栅_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "支撑雨棚_主体",
+      "polygon_count": 152,
+      "valid_island_polygon_count": 152,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "支撑雨棚_板缝_制作",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "支撑雨棚_金属管件_制作",
+      "polygon_count": 56,
+      "valid_island_polygon_count": 56,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "支撑雨棚_雨棚压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "支撑雨棚_雨棚板_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_主体",
+      "polygon_count": 414,
+      "valid_island_polygon_count": 414,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_箱门_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_紧固件_制作",
+      "polygon_count": 128,
+      "valid_island_polygon_count": 128,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_警告铭牌_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_门锁_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "机电箱_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙_主体",
+      "polygon_count": 430,
+      "valid_island_polygon_count": 430,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙_水泥结构_制作",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙_表面磨损_制作",
+      "polygon_count": 40,
+      "valid_island_polygon_count": 40,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_主体",
+      "polygon_count": 5898,
+      "valid_island_polygon_count": 5898,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_叶片_制作",
+      "polygon_count": 2332,
+      "valid_island_polygon_count": 2332,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_水泥结构_制作",
+      "polygon_count": 286,
+      "valid_island_polygon_count": 286,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_藤蔓茎_制作",
+      "polygon_count": 3136,
+      "valid_island_polygon_count": 3136,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙实墙挂藤_表面磨损_制作",
+      "polygon_count": 40,
+      "valid_island_polygon_count": 40,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_主体",
+      "polygon_count": 515,
+      "valid_island_polygon_count": 515,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_水泥结构_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_窗台_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_窗框_制作",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_窗玻璃_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙_表面磨损_制作",
+      "polygon_count": 21,
+      "valid_island_polygon_count": 21,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_上下压边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_主体",
+      "polygon_count": 5984,
+      "valid_island_polygon_count": 5984,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_叶片_制作",
+      "polygon_count": 2332,
+      "valid_island_polygon_count": 2332,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_水泥结构_制作",
+      "polygon_count": 182,
+      "valid_island_polygon_count": 182,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_窗台_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_窗框_制作",
+      "polygon_count": 156,
+      "valid_island_polygon_count": 156,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_窗玻璃_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_竖向结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_藤蔓茎_制作",
+      "polygon_count": 3136,
+      "valid_island_polygon_count": 3136,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "标准外墙窗墙挂藤_表面磨损_制作",
+      "polygon_count": 22,
+      "valid_island_polygon_count": 22,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "直管段_主体",
+      "polygon_count": 50,
+      "valid_island_polygon_count": 50,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "直管段_接头法兰_制作",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "直管段_金属管件_制作",
+      "polygon_count": 14,
+      "valid_island_polygon_count": 14,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立管下水管_主体",
+      "polygon_count": 198,
+      "valid_island_polygon_count": 198,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立管下水管_抱箍_制作",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立管下水管_接头法兰_制作",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立管下水管_管卡底座_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "立管下水管_金属管件_制作",
+      "polygon_count": 42,
+      "valid_island_polygon_count": 42,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "管道支架_主体",
+      "polygon_count": 122,
+      "valid_island_polygon_count": 122,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "管道支架_挂墙板_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "管道支架_金属管件_制作",
+      "polygon_count": 70,
+      "valid_island_polygon_count": 70,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "编织门垫_主体",
+      "polygon_count": 780,
+      "valid_island_polygon_count": 780,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "编织门垫_纤维纹_制作",
+      "polygon_count": 702,
+      "valid_island_polygon_count": 702,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "编织门垫_编织边_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "编织门垫_门垫底_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "角块地砖_主体",
+      "polygon_count": 116,
+      "valid_island_polygon_count": 116,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "角块地砖_水泥结构_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "角块地砖_表面磨损_制作",
+      "polygon_count": 12,
+      "valid_island_polygon_count": 12,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "角块地砖_边缘压条_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "转角弯管_主体",
+      "polygon_count": 148,
+      "valid_island_polygon_count": 148,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "转角弯管_接头法兰_制作",
+      "polygon_count": 36,
+      "valid_island_polygon_count": 36,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "转角弯管_金属管件_制作",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "边缘地砖_主体",
+      "polygon_count": 204,
+      "valid_island_polygon_count": 204,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "边缘地砖_水泥结构_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "边缘地砖_表面磨损_制作",
+      "polygon_count": 48,
+      "valid_island_polygon_count": 48,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "边缘地砖_边缘压条_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_主体",
+      "polygon_count": 330,
+      "valid_island_polygon_count": 330,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_箱门_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_紧固件_制作",
+      "polygon_count": 96,
+      "valid_island_polygon_count": 96,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_警告铭牌_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_门锁_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "配电箱_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_主体",
+      "polygon_count": 1786,
+      "valid_island_polygon_count": 1786,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_叶片_制作",
+      "polygon_count": 768,
+      "valid_island_polygon_count": 768,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_土壤_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_木板_制作",
+      "polygon_count": 312,
+      "valid_island_polygon_count": 312,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_箍条_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_花心_制作",
+      "polygon_count": 240,
+      "valid_island_polygon_count": 240,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "长条花箱_花茎_制作",
+      "polygon_count": 336,
+      "valid_island_polygon_count": 336,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_UI灯光_柔和自发光",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_主体",
+      "polygon_count": 548,
+      "valid_island_polygon_count": 548,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_厚石材门柱_制作",
+      "polygon_count": 208,
+      "valid_island_polygon_count": 208,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_厚门楣_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_窥窗框_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_窥窗玻璃_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_自发光灯芯_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_进深门槛_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_铰链_制作",
+      "polygon_count": 28,
+      "valid_island_polygon_count": 28,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门扇_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门把手_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门板_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门框_制作",
+      "polygon_count": 78,
+      "valid_island_polygon_count": 78,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门槛_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "门与暖灯_门灯罩_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_主体",
+      "polygon_count": 1090,
+      "valid_island_polygon_count": 1090,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_护网与管卡_制作",
+      "polygon_count": 576,
+      "valid_island_polygon_count": 576,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_支脚_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_框架_制作",
+      "polygon_count": 52,
+      "valid_island_polygon_count": 52,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_紧固件_制作",
+      "polygon_count": 64,
+      "valid_island_polygon_count": 64,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_设备外壳_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_金属管件_制作",
+      "polygon_count": 112,
+      "valid_island_polygon_count": 112,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_顶盖_制作",
+      "polygon_count": 26,
+      "valid_island_polygon_count": 26,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_风扇叶轮_制作",
+      "polygon_count": 130,
+      "valid_island_polygon_count": 130,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_风扇底腔_制作",
+      "polygon_count": 34,
+      "valid_island_polygon_count": 34,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    },
+    {
+      "object": "顶置通风扇_风扇轴_制作",
+      "polygon_count": 18,
+      "valid_island_polygon_count": 18,
+      "missing_palette_uv": false,
+      "active_uv": "PaletteUV",
+      "active_render_uv": "PaletteUV",
+      "extra_uv_layers": [],
+      "bad_polygon_examples": []
+    }
+  ],
+  "extra_uv_layers": {},
+  "material_audit": {
+    "used_materials": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "unused_materials": [],
+    "bad_uv_map_nodes": [],
+    "missing_uv_map_nodes": [],
+    "bad_image_interpolation": [],
+    "non_shared_palette_images": [],
+    "packed_palette_images": []
+  },
+  "forbidden_objects": [],
+  "mixed_emission_objects": [],
+  "poorly_named_emissive_objects": [],
+  "body_material_budget_failures": [],
+  "emissive_material_budget_failures": []
+}

@@ -35,22 +35,20 @@ func _ready() -> void:
 	tower.player.set_physics_process(false)
 	var flashlight := tower.player.get_node_or_null("PlayerFlashlight3D") as PlayerFlashlight3D
 
-	# 现行90×80m天台：在生活设施前采样，旧z=-122已在可玩区域外。
+	var start_room := (tower.get("_room_by_id") as Dictionary)["start"] as DungeonRoom3D
+	start_room.ensure_detail_built()
+	for node in start_room.find_children("*", "RoomFurniture3D", true, false):
+		failures.append("天台残留随机家具：" + str(node.name))
+
+	# 现行90×80m天台：在清空后的屋顶采样，旧z=-122已在可玩区域外。
 	tower.player.global_position = Vector3(24.0, 0.05, -18.0)
 	tower.force_enter_room_for_test("start")
 	await _settle()
 	_capture(ROOF_PATH, "楼顶画面采样失败", failures)
 	var rooftop_stage := (tower.get("_floor_stages") as Dictionary)[0] as TowerFloorStage3D
 	var rooftop := rooftop_stage.get("_rooftop_art_instance") as Node3D
-	var warm_bulb := rooftop.find_child("聚落串灯_4_自发光", true, false) as Node3D
-	if warm_bulb != null:
-		tower.player.global_position = Vector3(warm_bulb.global_position.x - 1.8, 0.6, warm_bulb.global_position.z + 3.0)
-		await _settle()
-		_capture(OUTPUT_DIR + "/tower_rooftop_living_day_v001.png", "生活区白昼采样失败", failures)
-		GameTimeManager.set_elapsed_game_seconds(5.0 * 3600.0, false)
-		await _settle()
-		_capture(OUTPUT_DIR + "/tower_rooftop_living_night_v001.png", "生活区夜晚采样失败", failures)
-		GameTimeManager.set_elapsed_game_seconds(23.0 * 3600.0, false)
+	if rooftop != null:
+		failures.append("天台设施应已移除")
 
 	var facility := (tower.get("_room_by_id") as Dictionary).get("facility") as DungeonRoom3D
 	var base_player_position := facility.global_position + Vector3(0.0, 0.05, 0.0)

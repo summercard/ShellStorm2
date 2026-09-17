@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": {
+    "existing_values_preserved": true,
+    "existing_styles_preserved": true,
+    "all_package_ids_registered": true,
+    "master_hash_matches": true,
+    "parent_rows_agree": true,
+    "canonical_sheet_count_preserved": true
+  },
+  "unexpected_changes": [],
+  "style_changes": [],
+  "source_sha256": "3389968a197067a925b50d1dc45b0da403d77ba687c48bab196812eef0908ffc",
+  "package_rows": 37
+}

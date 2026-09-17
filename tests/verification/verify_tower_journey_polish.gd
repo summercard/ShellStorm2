@@ -12,20 +12,7 @@ func _ready() -> void:
 	tower.player.set_physics_process(false)
 	var stage := (tower.get("_floor_stages") as Dictionary)[0] as TowerFloorStage3D
 	var rooftop := stage.get("_rooftop_art_instance") as Node3D
-	var ambience: Dictionary = rooftop.call("get_presentation_snapshot")
-	_expect(int(ambience.get("authored_tracks", 0)) >= 29, "天台Blender环境动画未接入", failures)
-	_expect(int(ambience.get("practical_lights", 0)) == 3, "天台串灯缺少真实暖光", failures)
-	var windmill := rooftop.find_child("棚屋小风车_旋转根", true, false) as Node3D
-	var animator := rooftop.find_child("AnimationPlayer", true, false) as AnimationPlayer
-	if windmill == null or animator == null:
-		failures.append("天台风车的源动画挂点缺失")
-	else:
-		var before := windmill.transform
-		animator.advance(0.5)
-		_expect(not before.is_equal_approx(windmill.transform), "风车轨道没有驱动真实模型", failures)
-	rooftop.hide()
-	_expect(animator.process_mode == Node.PROCESS_MODE_DISABLED, "隐藏天台继续计算动画", failures)
-	rooftop.show()
+	_expect(rooftop == null, "天台设施应已移除", failures)
 	var floor_mesh := (stage.get("_floor_visual_light") as MultiMeshInstance3D)
 	_expect(floor_mesh.material_override == null, "程序材质覆盖了Blender色盘", failures)
 	_expect(floor_mesh.multimesh.mesh.get_surface_count() == 2, "地砖未保留金属与哑光双材质", failures)

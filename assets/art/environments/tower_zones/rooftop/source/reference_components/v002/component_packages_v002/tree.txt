@@ -1,0 +1,54 @@
+01_地面系统
+  floor_full / 完整地砖
+  floor_half / 半块地砖
+  floor_corner / 角块地砖
+  floor_edge / 边缘地砖
+  floor_inner / 内角地砖
+02_女儿墙
+  parapet / 女儿墙直段
+  parapet_ivy / 女儿墙挂藤
+  parapet_outer / 女儿墙外角
+  parapet_inner / 女儿墙内角
+  parapet_outer_ivy / 女儿墙外角挂藤
+  parapet_inner_ivy / 女儿墙内角挂藤
+03_房间墙体
+  room_wall / 房间标准墙
+  room_window / 房间窗墙
+  room_doorwall / 房间门洞墙
+  room_wall_ivy / 房间实墙挂藤
+  room_window_ivy / 房间窗墙挂藤
+  room_doorwall_ivy / 房间门洞墙挂藤
+04_房顶模块
+  roof_full / 房顶完整板
+  roof_edge / 房顶边缘板
+  roof_corner / 房顶角板
+05_空调与设备
+  hvac_large / 大型空调机组
+  hvac_small / 小型空调机组
+  hvac_fan / 顶置通风扇
+  hvac_vent / 小通风口
+  hvac_cabinet / 机电箱
+  hvac_electric / 配电箱
+06_管线系统
+  pipe_straight / 直管段
+  pipe_elbow / 转角弯管
+  pipe_tee / 三通管
+  pipe_riser / 立管下水管
+  pipe_bracket / 管道支架
+07_门与雨棚
+  door_lamp / 门与暖灯
+  canopy / 支撑雨棚
+08_固定绿化
+  ivy / 墙面攀爬藤蔓
+  flowerbox / 长条花箱
+  plant_large / 大盆栽
+  plant_small / 小盆栽
+09_细节附件
+  detail_mat / 编织门垫
+  detail_drain / 排水格栅
+  detail_vent / 墙面通风箱
+10_外墙系统
+  facade_solid / 标准外墙实墙
+  facade_window / 标准外墙窗墙
+  facade_solid_ivy / 标准外墙实墙挂藤
+  facade_window_ivy / 标准外墙窗墙挂藤

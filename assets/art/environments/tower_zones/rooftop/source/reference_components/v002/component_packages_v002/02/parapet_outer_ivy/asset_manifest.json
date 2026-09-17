@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+  "package_id": "ENV-ROOFTOP-REF-PARAPET-OUTER-IVY",
+  "name_zh": "女儿墙外角挂藤",
+  "slug": "parapet_outer_ivy",
+  "category": "02_女儿墙",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "参考图独立组件，非正式布局替换",
+  "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "blender_collection": "女儿墙外角挂藤_资产包",
+  "root_object": "根_女儿墙外角挂藤",
+  "objects": [
+    "女儿墙外角挂藤_主体"
+  ],
+  "source_collection": "女儿墙外角挂藤_制作组件",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    32,
+    -34,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_size": [
+    2.917249,
+    3.015286,
+    1.99725
+  ],
+  "bounds_min": [
+    -1.4586243629455566,
+    -1.5076429843902588,
+    0
+  ],
+  "bounds_max": [
+    1.4586243629455566,
+    1.5076429843902588,
+    1.9972501993179321
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "sockets": {
+    "east": [
+      1.2813756465911865,
+      -1.0176429748535156,
+      0
+    ],
+    "north": [
+      -0.9686243534088135,
+      1.2323570251464844,
+      0
+    ]
+  },
+  "dependencies": [
+    "shared_facility_palette"
+  ],
+  "attachment": "independent_module",
+  "exported": false,
+  "expected_export": "env_rooftop_ref_parapet_outer_ivy_v002.glb",
+  "collision": "not_created",
+  "logical_wall_height": null,
+  "collision_bounds": null,
+  "camera_clearance": null,
+  "animation": false,
+  "emission": false,
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_component_library.md",
+    "docs/v0.1/05.1_关卡区块设计.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
+  "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+  "dedupe_classification": "child_variant",
+  "variant_of": "ENV-ROOFTOP-REF-PARAPET-OUTER",
+  "vegetation_variant": true,
+  "structural_core_offset": [
+    0.03137564659118652,
+    -0.017642974853515625,
+    0.0
+  ],
+  "structural_bounds": [
+    2.5,
+    2.5,
+    1.8
+  ]
+}

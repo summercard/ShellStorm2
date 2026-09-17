@@ -45,9 +45,6 @@ const PARAPET_SCENE: PackedScene = preload(
 const PARAPET_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m_v001.tscn"
 )
-const ROOFTOP_ART_SCENE: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop_v021.tscn"
-)
 const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
 	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
 )
@@ -75,6 +72,7 @@ var _protected_floor_visual_dark: MultiMeshInstance3D
 var _outer_visual: MultiMeshInstance3D
 var _base99_outer_corner_visuals: Array[Node3D] = []
 var _support_root: StaticBody3D
+# 保留查询兼容字段；用户要求清空100F设施，当前始终为空。
 var _rooftop_art_instance: Node3D
 var _shell_visible := true
 var _floor_visible := true
@@ -101,7 +99,6 @@ func _ready() -> void:
 	_build_floor()
 	_build_outer_shell()
 	_build_support()
-	_install_rooftop_art()
 
 
 func set_shell_visible(show_shell: bool) -> void:
@@ -205,20 +202,6 @@ func get_snapshot() -> Dictionary:
 		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if floor_index == 0 else 0,
 		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if floor_index == 0 else Rect2(),
 	}
-
-
-func _install_rooftop_art() -> void:
-	if floor_index != 0 or floor_kind != "rooftop":
-		return
-	var instance := ROOFTOP_ART_SCENE.instantiate() as Node3D
-	if instance == null:
-		push_error("ENV-ROOFTOP-SHELTER-90X80 v021 设施场景无法实例化")
-		return
-	instance.name = "FormalRooftopFacilitiesV019"
-	add_child(instance)
-	_rooftop_art_instance = instance
-	# v017只提供设施、家具及其组合碰撞。100层原生地板、围栏、门洞视觉
-	# 与FloorSupport承重碰撞继续由TowerFloorStage3D完整持有。
 
 
 func _floor_grid_count() -> int:

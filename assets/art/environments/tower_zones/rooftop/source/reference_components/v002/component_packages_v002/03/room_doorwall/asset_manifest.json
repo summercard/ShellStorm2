@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+  "package_id": "ENV-ROOFTOP-REF-ROOM-DOORWALL",
+  "name_zh": "房间门洞墙",
+  "slug": "room_doorwall",
+  "category": "03_房间墙体",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "参考图独立组件，非正式布局替换",
+  "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "blender_collection": "房间门洞墙_资产包",
+  "root_object": "根_房间门洞墙",
+  "objects": [
+    "房间门洞墙_主体"
+  ],
+  "source_collection": "房间门洞墙_制作组件",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    16,
+    -51,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_size": [
+    5.0,
+    0.3,
+    11.9
+  ],
+  "bounds_min": [
+    -2.5,
+    -0.15000000596046448,
+    0
+  ],
+  "bounds_max": [
+    2.5,
+    0.15000000596046448,
+    11.899999618530273
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "sockets": {
+    "left": [
+      -2.5,
+      0,
+      0
+    ],
+    "right": [
+      2.5,
+      0,
+      0
+    ],
+    "base": [
+      0,
+      0,
+      0
+    ],
+    "upper_floor": [
+      0,
+      0,
+      12
+    ]
+  },
+  "dependencies": [
+    "shared_facility_palette"
+  ],
+  "attachment": "independent_module",
+  "exported": false,
+  "expected_export": "env_rooftop_ref_room_doorwall_v002.glb",
+  "collision": "not_created",
+  "logical_wall_height": 12,
+  "collision_bounds": [
+    5,
+    0.3,
+    12
+  ],
+  "camera_clearance": null,
+  "animation": false,
+  "emission": false,
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_component_library.md",
+    "docs/v0.1/05.1_关卡区块设计.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
+  "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+  "dedupe_classification": "child_variant",
+  "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+}

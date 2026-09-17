@@ -1,0 +1,3068 @@
+[
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOOR-FULL",
+    "name_zh": "完整地砖",
+    "slug": "floor_full",
+    "category": "01_地面系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "完整地砖_资产包",
+    "root_object": "根_完整地砖",
+    "objects": [
+      "完整地砖_主体"
+    ],
+    "source_collection": "完整地砖_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -17,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_floor_full_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-FLOOR-TILE-5M"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOOR-HALF",
+    "name_zh": "半块地砖",
+    "slug": "floor_half",
+    "category": "01_地面系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "半块地砖_资产包",
+    "root_object": "根_半块地砖",
+    "objects": [
+      "半块地砖_主体"
+    ],
+    "source_collection": "半块地砖_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -17,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.5,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -1.25,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      1.25,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -1.25,
+        0,
+        0.3
+      ],
+      "right": [
+        1.25,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_floor_half_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-FLOOR-TILE-5M"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOOR-CORNER",
+    "name_zh": "角块地砖",
+    "slug": "floor_corner",
+    "category": "01_地面系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "角块地砖_资产包",
+    "root_object": "根_角块地砖",
+    "objects": [
+      "角块地砖_主体"
+    ],
+    "source_collection": "角块地砖_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -17,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.5,
+      2.5,
+      0.3
+    ],
+    "bounds_min": [
+      -1.25,
+      -1.25,
+      0
+    ],
+    "bounds_max": [
+      1.25,
+      1.25,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -1.25,
+        0,
+        0.3
+      ],
+      "right": [
+        1.25,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -1.25,
+        0.3
+      ],
+      "back": [
+        0,
+        1.25,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_floor_corner_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-FLOOR-TILE-5M"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOOR-EDGE",
+    "name_zh": "边缘地砖",
+    "slug": "floor_edge",
+    "category": "01_地面系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "边缘地砖_资产包",
+    "root_object": "根_边缘地砖",
+    "objects": [
+      "边缘地砖_主体"
+    ],
+    "source_collection": "边缘地砖_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      24,
+      -17,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_floor_edge_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-FLOOR-TILE-5M"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOOR-INNER",
+    "name_zh": "内角地砖",
+    "slug": "floor_inner",
+    "category": "01_地面系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "内角地砖_资产包",
+    "root_object": "根_内角地砖",
+    "objects": [
+      "内角地砖_主体"
+    ],
+    "source_collection": "内角地砖_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      32,
+      -17,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_floor_inner_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-FLOOR-TILE-5M"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PARAPET",
+    "name_zh": "女儿墙直段",
+    "slug": "parapet",
+    "category": "02_女儿墙",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "女儿墙直段_资产包",
+    "root_object": "根_女儿墙直段",
+    "objects": [
+      "女儿墙直段_主体"
+    ],
+    "source_collection": "女儿墙直段_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -34,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.5,
+      1.8
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.25,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.25,
+      1.7999999523162842
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_parapet_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PARAPET-IVY",
+    "name_zh": "女儿墙挂藤",
+    "slug": "parapet_ivy",
+    "category": "02_女儿墙",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "女儿墙挂藤_资产包",
+    "root_object": "根_女儿墙挂藤",
+    "objects": [
+      "女儿墙挂藤_主体"
+    ],
+    "source_collection": "女儿墙挂藤_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -34,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.00355,
+      0.81416,
+      2.008857
+    ],
+    "bounds_min": [
+      -2.501774787902832,
+      -0.4070800542831421,
+      0
+    ],
+    "bounds_max": [
+      2.501774787902832,
+      0.4070800542831421,
+      2.008856773376465
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.498225212097168,
+        0.07291991263628006,
+        0
+      ],
+      "right": [
+        2.501774787902832,
+        0.07291991263628006,
+        0
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_parapet_ivy_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "structural_core_offset": [
+      0.0017747879028320312,
+      0.07291991263628006,
+      0.0
+    ],
+    "structural_bounds": [
+      5,
+      0.5,
+      1.8
+    ]
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PARAPET-OUTER",
+    "name_zh": "女儿墙外角",
+    "slug": "parapet_outer",
+    "category": "02_女儿墙",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "女儿墙外角_资产包",
+    "root_object": "根_女儿墙外角",
+    "objects": [
+      "女儿墙外角_主体"
+    ],
+    "source_collection": "女儿墙外角_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -34,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.5,
+      2.5,
+      1.8
+    ],
+    "bounds_min": [
+      -1.25,
+      -1.25,
+      0
+    ],
+    "bounds_max": [
+      1.25,
+      1.25,
+      1.7999999523162842
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "east": [
+        1.25,
+        -1,
+        0
+      ],
+      "north": [
+        -1,
+        1.25,
+        0
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_parapet_outer_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PARAPET-INNER",
+    "name_zh": "女儿墙内角",
+    "slug": "parapet_inner",
+    "category": "02_女儿墙",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "女儿墙内角_资产包",
+    "root_object": "根_女儿墙内角",
+    "objects": [
+      "女儿墙内角_主体"
+    ],
+    "source_collection": "女儿墙内角_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      24,
+      -34,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.5,
+      2.5,
+      1.8
+    ],
+    "bounds_min": [
+      -1.25,
+      -1.25,
+      0
+    ],
+    "bounds_max": [
+      1.25,
+      1.25,
+      1.7999999523162842
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "east": [
+        -1.25,
+        -1,
+        0
+      ],
+      "north": [
+        1,
+        1.25,
+        0
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_parapet_inner_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOM-WALL",
+    "name_zh": "房间标准墙",
+    "slug": "room_wall",
+    "category": "03_房间墙体",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房间标准墙_资产包",
+    "root_object": "根_房间标准墙",
+    "objects": [
+      "房间标准墙_主体"
+    ],
+    "source_collection": "房间标准墙_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -51,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.15000000596046448,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.15000000596046448,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ],
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "upper_floor": [
+        0,
+        0,
+        12
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_room_wall_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": 12,
+    "collision_bounds": [
+      5,
+      0.3,
+      12
+    ],
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOM-WINDOW",
+    "name_zh": "房间窗墙",
+    "slug": "room_window",
+    "category": "03_房间墙体",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房间窗墙_资产包",
+    "root_object": "根_房间窗墙",
+    "objects": [
+      "房间窗墙_主体"
+    ],
+    "source_collection": "房间窗墙_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -51,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.15000000596046448,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.15000000596046448,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ],
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "upper_floor": [
+        0,
+        0,
+        12
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_room_window_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": 12,
+    "collision_bounds": [
+      5,
+      0.3,
+      12
+    ],
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOM-DOORWALL",
+    "name_zh": "房间门洞墙",
+    "slug": "room_doorwall",
+    "category": "03_房间墙体",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房间门洞墙_资产包",
+    "root_object": "根_房间门洞墙",
+    "objects": [
+      "房间门洞墙_主体"
+    ],
+    "source_collection": "房间门洞墙_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -51,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.15000000596046448,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.15000000596046448,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ],
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "upper_floor": [
+        0,
+        0,
+        12
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_room_doorwall_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": 12,
+    "collision_bounds": [
+      5,
+      0.3,
+      12
+    ],
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOF-FULL",
+    "name_zh": "房顶完整板",
+    "slug": "roof_full",
+    "category": "04_房顶模块",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房顶完整板_资产包",
+    "root_object": "根_房顶完整板",
+    "objects": [
+      "房顶完整板_主体"
+    ],
+    "source_collection": "房顶完整板_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -68,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_roof_full_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": 12,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOF-EDGE",
+    "name_zh": "房顶边缘板",
+    "slug": "roof_edge",
+    "category": "04_房顶模块",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房顶边缘板_资产包",
+    "root_object": "根_房顶边缘板",
+    "objects": [
+      "房顶边缘板_主体"
+    ],
+    "source_collection": "房顶边缘板_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -68,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_roof_edge_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": 12,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-ROOF-CORNER",
+    "name_zh": "房顶角板",
+    "slug": "roof_corner",
+    "category": "04_房顶模块",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "房顶角板_资产包",
+    "root_object": "根_房顶角板",
+    "objects": [
+      "房顶角板_主体"
+    ],
+    "source_collection": "房顶角板_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -68,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      5.0,
+      0.3
+    ],
+    "bounds_min": [
+      -2.5,
+      -2.5,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      2.5,
+      0.30000001192092896
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0.3
+      ],
+      "right": [
+        2.5,
+        0,
+        0.3
+      ],
+      "front": [
+        0,
+        -2.5,
+        0.3
+      ],
+      "back": [
+        0,
+        2.5,
+        0.3
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_roof_corner_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": 12,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-LARGE",
+    "name_zh": "大型空调机组",
+    "slug": "hvac_large",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "大型空调机组_资产包",
+    "root_object": "根_大型空调机组",
+    "objects": [
+      "大型空调机组_主体"
+    ],
+    "source_collection": "大型空调机组_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      4.7,
+      2.565,
+      2.42
+    ],
+    "bounds_min": [
+      -2.3499999046325684,
+      -1.2825000286102295,
+      0
+    ],
+    "bounds_max": [
+      2.3499999046325684,
+      1.2825000286102295,
+      2.4200000762939453
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_large_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-SMALL",
+    "name_zh": "小型空调机组",
+    "slug": "hvac_small",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "小型空调机组_资产包",
+    "root_object": "根_小型空调机组",
+    "objects": [
+      "小型空调机组_主体"
+    ],
+    "source_collection": "小型空调机组_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.5,
+      2.365,
+      1.87
+    ],
+    "bounds_min": [
+      -1.25,
+      -1.1825000047683716,
+      0
+    ],
+    "bounds_max": [
+      1.25,
+      1.1825000047683716,
+      1.8700000047683716
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_small_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-FAN",
+    "name_zh": "顶置通风扇",
+    "slug": "hvac_fan",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "顶置通风扇_资产包",
+    "root_object": "根_顶置通风扇",
+    "objects": [
+      "顶置通风扇_主体"
+    ],
+    "source_collection": "顶置通风扇_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.2,
+      2.275,
+      0.72
+    ],
+    "bounds_min": [
+      -1.100000023841858,
+      -1.1375000476837158,
+      0
+    ],
+    "bounds_max": [
+      1.100000023841858,
+      1.1375000476837158,
+      0.7199999690055847
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_fan_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-VENT",
+    "name_zh": "小通风口",
+    "slug": "hvac_vent",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "小通风口_资产包",
+    "root_object": "根_小通风口",
+    "objects": [
+      "小通风口_主体"
+    ],
+    "source_collection": "小通风口_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      24,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.4,
+      1.165,
+      0.85
+    ],
+    "bounds_min": [
+      -0.699999988079071,
+      -0.5824999809265137,
+      0
+    ],
+    "bounds_max": [
+      0.699999988079071,
+      0.5824999809265137,
+      0.8500000238418579
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_vent_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-CABINET",
+    "name_zh": "机电箱",
+    "slug": "hvac_cabinet",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "机电箱_资产包",
+    "root_object": "根_机电箱",
+    "objects": [
+      "机电箱_主体"
+    ],
+    "source_collection": "机电箱_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      32,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.4,
+      1.16,
+      2.1
+    ],
+    "bounds_min": [
+      -1.2000000476837158,
+      -0.5800000429153442,
+      0
+    ],
+    "bounds_max": [
+      1.2000000476837158,
+      0.5800000429153442,
+      2.0999999046325684
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_cabinet_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-HVAC-ELECTRIC",
+    "name_zh": "配电箱",
+    "slug": "hvac_electric",
+    "category": "05_空调与设备",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "配电箱_资产包",
+    "root_object": "根_配电箱",
+    "objects": [
+      "配电箱_主体"
+    ],
+    "source_collection": "配电箱_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      40,
+      -85,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.5,
+      0.91,
+      2.4
+    ],
+    "bounds_min": [
+      -0.75,
+      -0.45500001311302185,
+      0
+    ],
+    "bounds_max": [
+      0.75,
+      0.45500001311302185,
+      2.4000000953674316
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_hvac_electric_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PIPE-STRAIGHT",
+    "name_zh": "直管段",
+    "slug": "pipe_straight",
+    "category": "06_管线系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "直管段_资产包",
+    "root_object": "根_直管段",
+    "objects": [
+      "直管段_主体"
+    ],
+    "source_collection": "直管段_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -102,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.64,
+      0.41,
+      0.41
+    ],
+    "bounds_min": [
+      -1.3200000524520874,
+      -0.20499996840953827,
+      0
+    ],
+    "bounds_max": [
+      1.3200000524520874,
+      0.20499996840953827,
+      0.4099999666213989
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "port_0": [
+        -1.25,
+        0.0,
+        0.205
+      ],
+      "port_1": [
+        1.25,
+        0.0,
+        0.205
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_pipe_straight_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "pipe_diameter": 0.3
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PIPE-ELBOW",
+    "name_zh": "转角弯管",
+    "slug": "pipe_elbow",
+    "category": "06_管线系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "转角弯管_资产包",
+    "root_object": "根_转角弯管",
+    "objects": [
+      "转角弯管_主体"
+    ],
+    "source_collection": "转角弯管_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -102,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.575,
+      0.41,
+      1.275
+    ],
+    "bounds_min": [
+      -0.7875000238418579,
+      -0.20499999821186066,
+      0
+    ],
+    "bounds_max": [
+      0.7875000238418579,
+      0.20499999821186066,
+      1.274999976158142
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "port_0": [
+        -0.7175,
+        0.0,
+        1.07
+      ],
+      "port_1": [
+        0.5825,
+        0.0,
+        0.07
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_pipe_elbow_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "pipe_diameter": 0.3
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PIPE-TEE",
+    "name_zh": "三通管",
+    "slug": "pipe_tee",
+    "category": "06_管线系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "三通管_资产包",
+    "root_object": "根_三通管",
+    "objects": [
+      "三通管_主体"
+    ],
+    "source_collection": "三通管_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -102,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      2.64,
+      0.41,
+      1.355
+    ],
+    "bounds_min": [
+      -1.3200000524520874,
+      -0.20499996840953827,
+      0
+    ],
+    "bounds_max": [
+      1.3200000524520874,
+      0.20499996840953827,
+      1.3549998998641968
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "port_0": [
+        -1.25,
+        0.0,
+        1.15
+      ],
+      "port_1": [
+        1.25,
+        0.0,
+        1.15
+      ],
+      "port_2": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_pipe_tee_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "pipe_diameter": 0.3
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PIPE-RISER",
+    "name_zh": "立管下水管",
+    "slug": "pipe_riser",
+    "category": "06_管线系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "立管下水管_资产包",
+    "root_object": "根_立管下水管",
+    "objects": [
+      "立管下水管_主体"
+    ],
+    "source_collection": "立管下水管_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      24,
+      -102,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      0.795,
+      0.485,
+      4.945
+    ],
+    "bounds_min": [
+      -0.3974999785423279,
+      -0.24250000715255737,
+      0
+    ],
+    "bounds_max": [
+      0.3974999785423279,
+      0.24250000715255737,
+      4.944999694824219
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "port_0": [
+        -0.1225,
+        -0.0325,
+        0.07
+      ],
+      "port_1": [
+        0.3275,
+        -0.0325,
+        4.74
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_pipe_riser_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "pipe_diameter": 0.3
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PIPE-BRACKET",
+    "name_zh": "管道支架",
+    "slug": "pipe_bracket",
+    "category": "06_管线系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "管道支架_资产包",
+    "root_object": "根_管道支架",
+    "objects": [
+      "管道支架_主体"
+    ],
+    "source_collection": "管道支架_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      32,
+      -102,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      0.48,
+      0.875652,
+      3.64
+    ],
+    "bounds_min": [
+      -0.23999999463558197,
+      -0.4378262162208557,
+      0
+    ],
+    "bounds_max": [
+      0.23999999463558197,
+      0.4378262162208557,
+      3.640000104904175
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_pipe_bracket_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "pipe_diameter": null
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-DOOR-LAMP",
+    "name_zh": "门与暖灯",
+    "slug": "door_lamp",
+    "category": "07_门与雨棚",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "门与暖灯_资产包",
+    "root_object": "根_门与暖灯",
+    "objects": [
+      "门与暖灯_主体",
+      "门与暖灯_UI灯光_柔和自发光"
+    ],
+    "source_collection": "门与暖灯_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -119,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      4.16,
+      0.675,
+      7.57
+    ],
+    "bounds_min": [
+      -2.0799999237060547,
+      -0.3374999761581421,
+      0
+    ],
+    "bounds_max": [
+      2.0799999237060547,
+      0.3374999761581421,
+      7.570000171661377
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_door_lamp_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": true,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-CANOPY",
+    "name_zh": "支撑雨棚",
+    "slug": "canopy",
+    "category": "07_门与雨棚",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "支撑雨棚_资产包",
+    "root_object": "根_支撑雨棚",
+    "objects": [
+      "支撑雨棚_主体"
+    ],
+    "source_collection": "支撑雨棚_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -119,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      2.8,
+      2.18573
+    ],
+    "bounds_min": [
+      -2.5,
+      -1.399999976158142,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      1.399999976158142,
+      2.185730457305908
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_canopy_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-IVY",
+    "name_zh": "墙面攀爬藤蔓",
+    "slug": "ivy",
+    "category": "08_固定绿化",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "墙面攀爬藤蔓_资产包",
+    "root_object": "根_墙面攀爬藤蔓",
+    "objects": [
+      "墙面攀爬藤蔓_主体"
+    ],
+    "source_collection": "墙面攀爬藤蔓_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -136,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      4.255973,
+      0.819439,
+      3.802195
+    ],
+    "bounds_min": [
+      -2.1279866695404053,
+      -0.4097193777561188,
+      0
+    ],
+    "bounds_max": [
+      2.1279866695404053,
+      0.4097193777561188,
+      3.8021950721740723
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_ivy_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FLOWERBOX",
+    "name_zh": "长条花箱",
+    "slug": "flowerbox",
+    "category": "08_固定绿化",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "长条花箱_资产包",
+    "root_object": "根_长条花箱",
+    "objects": [
+      "长条花箱_主体"
+    ],
+    "source_collection": "长条花箱_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -136,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      4.5,
+      1.185,
+      2.134416
+    ],
+    "bounds_min": [
+      -2.25,
+      -0.5924999713897705,
+      0
+    ],
+    "bounds_max": [
+      2.25,
+      0.5924999713897705,
+      2.134415626525879
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_flowerbox_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PLANT-LARGE",
+    "name_zh": "大盆栽",
+    "slug": "plant_large",
+    "category": "08_固定绿化",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "大盆栽_资产包",
+    "root_object": "根_大盆栽",
+    "objects": [
+      "大盆栽_主体"
+    ],
+    "source_collection": "大盆栽_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -136,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.546915,
+      1.745475,
+      2.771805
+    ],
+    "bounds_min": [
+      -0.7734572887420654,
+      -0.87273770570755,
+      0
+    ],
+    "bounds_max": [
+      0.7734572887420654,
+      0.87273770570755,
+      2.7718045711517334
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_plant_large_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-PLANT-SMALL",
+    "name_zh": "小盆栽",
+    "slug": "plant_small",
+    "category": "08_固定绿化",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "小盆栽_资产包",
+    "root_object": "根_小盆栽",
+    "objects": [
+      "小盆栽_主体"
+    ],
+    "source_collection": "小盆栽_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      24,
+      -136,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.095902,
+      1.094774,
+      1.481524
+    ],
+    "bounds_min": [
+      -0.5479508638381958,
+      -0.5473867654800415,
+      0
+    ],
+    "bounds_max": [
+      0.5479508638381958,
+      0.5473867654800415,
+      1.4815244674682617
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_plant_small_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-DETAIL-MAT",
+    "name_zh": "编织门垫",
+    "slug": "detail_mat",
+    "category": "09_细节附件",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "编织门垫_资产包",
+    "root_object": "根_编织门垫",
+    "objects": [
+      "编织门垫_主体"
+    ],
+    "source_collection": "编织门垫_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -153,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      3.0,
+      1.65,
+      0.1
+    ],
+    "bounds_min": [
+      -1.5,
+      -0.824999988079071,
+      0
+    ],
+    "bounds_max": [
+      1.5,
+      0.824999988079071,
+      0.10000000149011612
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_detail_mat_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-DETAIL-DRAIN",
+    "name_zh": "排水格栅",
+    "slug": "detail_drain",
+    "category": "09_细节附件",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "排水格栅_资产包",
+    "root_object": "根_排水格栅",
+    "objects": [
+      "排水格栅_主体"
+    ],
+    "source_collection": "排水格栅_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -153,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.2,
+      1.2,
+      0.2
+    ],
+    "bounds_min": [
+      -0.6000000238418579,
+      -0.6000000238418579,
+      0
+    ],
+    "bounds_max": [
+      0.6000000238418579,
+      0.6000000238418579,
+      0.20000000298023224
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_detail_drain_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-DETAIL-VENT",
+    "name_zh": "墙面通风箱",
+    "slug": "detail_vent",
+    "category": "09_细节附件",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "墙面通风箱_资产包",
+    "root_object": "根_墙面通风箱",
+    "objects": [
+      "墙面通风箱_主体"
+    ],
+    "source_collection": "墙面通风箱_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      16,
+      -153,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      1.8,
+      0.89,
+      1.44
+    ],
+    "bounds_min": [
+      -0.8999999761581421,
+      -0.4449999928474426,
+      0
+    ],
+    "bounds_max": [
+      0.8999999761581421,
+      0.4449999928474426,
+      1.440000057220459
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {},
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "fixed_display_attachment",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_detail_vent_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": null,
+    "collision_bounds": null,
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FACADE-SOLID",
+    "name_zh": "标准外墙实墙",
+    "slug": "facade_solid",
+    "category": "10_外墙系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "标准外墙实墙_资产包",
+    "root_object": "根_标准外墙实墙",
+    "objects": [
+      "标准外墙实墙_主体"
+    ],
+    "source_collection": "标准外墙实墙_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      0,
+      -170,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.15000000596046448,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.15000000596046448,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ],
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "upper_floor": [
+        0,
+        0,
+        12
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_facade_solid_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": 12,
+    "collision_bounds": [
+      5,
+      0.3,
+      12
+    ],
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-ROOFTOP-FACADE"
+  },
+  {
+    "schema": 1,
+    "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+    "package_id": "ENV-ROOFTOP-REF-FACADE-WINDOW",
+    "name_zh": "标准外墙窗墙",
+    "slug": "facade_window",
+    "category": "10_外墙系统",
+    "version": "v001",
+    "block_id": "rooftop",
+    "floor_range": "100F",
+    "design_scope": "参考图独立组件，非正式布局替换",
+    "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v001/天台区块_参考组件库_v001.blend",
+    "blender_collection": "标准外墙窗墙_资产包",
+    "root_object": "根_标准外墙窗墙",
+    "objects": [
+      "标准外墙窗墙_主体"
+    ],
+    "source_collection": "标准外墙窗墙_制作组件",
+    "local_origin": [
+      0,
+      0,
+      0
+    ],
+    "world_position": [
+      8,
+      -170,
+      0
+    ],
+    "front_direction": "-Y",
+    "bounds_size": [
+      5.0,
+      0.3,
+      11.9
+    ],
+    "bounds_min": [
+      -2.5,
+      -0.15000000596046448,
+      0
+    ],
+    "bounds_max": [
+      2.5,
+      0.15000000596046448,
+      11.899999618530273
+    ],
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "03_清漆反光_紫粉点缀",
+      "04_柔和自发光_UI灯光"
+    ],
+    "sockets": {
+      "left": [
+        -2.5,
+        0,
+        0
+      ],
+      "right": [
+        2.5,
+        0,
+        0
+      ],
+      "base": [
+        0,
+        0,
+        0
+      ],
+      "upper_floor": [
+        0,
+        0,
+        12
+      ]
+    },
+    "dependencies": [
+      "shared_facility_palette"
+    ],
+    "attachment": "independent_module",
+    "exported": false,
+    "expected_export": "env_rooftop_ref_facade_window_v001.glb",
+    "collision": "not_created",
+    "logical_wall_height": 12,
+    "collision_bounds": [
+      5,
+      0.3,
+      12
+    ],
+    "camera_clearance": null,
+    "animation": false,
+    "emission": false,
+    "scene_design_docs": [
+      "docs/v0.1/design/rooftop_component_library.md",
+      "docs/v0.1/05.1_关卡区块设计.md"
+    ],
+    "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+    "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+    "dedupe_classification": "child_variant",
+    "variant_of": "ENV-TOWER-ROOFTOP-FACADE"
+  }
+]

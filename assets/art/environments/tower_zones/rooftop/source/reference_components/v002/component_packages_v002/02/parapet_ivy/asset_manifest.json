@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+  "package_id": "ENV-ROOFTOP-REF-PARAPET-IVY",
+  "name_zh": "女儿墙挂藤",
+  "slug": "parapet_ivy",
+  "category": "02_女儿墙",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "参考图独立组件，非正式布局替换",
+  "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "blender_collection": "女儿墙挂藤_资产包",
+  "root_object": "根_女儿墙挂藤",
+  "objects": [
+    "女儿墙挂藤_主体"
+  ],
+  "source_collection": "女儿墙挂藤_制作组件",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    8,
+    -34,
+    0
+  ],
+  "front_direction": "-Y",
+  "bounds_size": [
+    5.00355,
+    0.81416,
+    2.008857
+  ],
+  "bounds_min": [
+    -2.501774787902832,
+    -0.4070800542831421,
+    0
+  ],
+  "bounds_max": [
+    2.501774787902832,
+    0.4070800542831421,
+    2.008856773376465
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "sockets": {
+    "left": [
+      -2.498225212097168,
+      0.07291991263628006,
+      0
+    ],
+    "right": [
+      2.501774787902832,
+      0.07291991263628006,
+      0
+    ]
+  },
+  "dependencies": [
+    "shared_facility_palette"
+  ],
+  "attachment": "independent_module",
+  "exported": false,
+  "expected_export": "env_rooftop_ref_parapet_ivy_v002.glb",
+  "collision": "not_created",
+  "logical_wall_height": null,
+  "collision_bounds": null,
+  "camera_clearance": null,
+  "animation": false,
+  "emission": false,
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_component_library.md",
+    "docs/v0.1/05.1_关卡区块设计.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
+  "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+  "dedupe_classification": "child_variant",
+  "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+  "structural_core_offset": [
+    0.0017747879028320312,
+    0.07291991263628006,
+    0.0
+  ],
+  "structural_bounds": [
+    5,
+    0.5,
+    1.8
+  ]
+}

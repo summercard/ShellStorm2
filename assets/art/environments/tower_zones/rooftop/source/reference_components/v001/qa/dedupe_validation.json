@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "checks": {
+    "unique_ids": true,
+    "no_preexisting_child_ids": true,
+    "unique_dedupe_keys": true,
+    "unique_collection_paths": true,
+    "new_source_path": true,
+    "new_source_hash": true,
+    "explicit_child_variants": true,
+    "existing_parent": true
+  },
+  "classification": "child_variant; existing rooftop/floor/facade identities retained",
+  "asset_guard_limit": "scripts/asset_guard.py requires character_transfer_ledger; environment-specific gate used without inventing character data",
+  "sha256": "3389968a197067a925b50d1dc45b0da403d77ba687c48bab196812eef0908ffc"
+}

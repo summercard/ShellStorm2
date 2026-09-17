@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "issues": [],
+  "packages": 44,
+  "new_child_variants": 7,
+  "existing_ids_reused": 37,
+  "unchanged_previews_reused": 36,
+  "source_sha256": "ca091c6dec5ac3dc0c63b4e3b28a84934d78d685656388c882087c1a9b9b966e"
+}
