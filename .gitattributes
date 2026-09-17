@@ -1,0 +1,16 @@
+# ============================================================
+# 行尾策略（2026-09-17 加入）
+# ============================================================
+# 背景：仓库 core.autocrlf=true，但没有 .gitattributes。
+# 后果：git 期望检出成 CRLF，而 Godot 生成 .import 时坚持写 LF
+#      → 索引里的 stat 缓存（记录当时的 CRLF 尺寸）与实际 LF 尺寸永久打架
+#      → git status 把 300+ 个 .import 报成 M，而 git diff 却是空的（幻影脏）
+#      → 索引 blob 实际一直是 LF，所以 git add 不会产生任何内容变更。
+# 处理：把 .import 显式钉成「文本 + 工作区 LF」，与 Godot 的写法一致，噪声从此消失。
+#
+# 注意：**不要**给 *.gd / *.tscn / *.md 等加 eol=lf。
+#      它们当前是 i/lf w/crlf（工作区 CRLF）且状态一致、没有噪声；
+#      一旦声明 eol=lf，git 会要求工作区改成 LF，造成数千文件的巨型差异。
+# 另注：若将来要让 Godot 重写的 .gd/.tscn 也不再产生幻影脏，
+#      需要先做一次全库 renormalize（工作区 CRLF→LF）再声明 eol=lf，属独立任务。
+*.import text eol=lf
