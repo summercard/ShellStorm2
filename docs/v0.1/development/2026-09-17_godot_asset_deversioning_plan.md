@@ -261,6 +261,49 @@ P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-stand
 
 **一个既有噪声（非本批、待主人决定）**：`source/entry_safe_room/v007/qa/probe_floor_tile_components.gd` 之类**资产侧** `.gd` 不在 P4 门禁的引用扫描口径内（该门禁只数 `src/**/*.gd` 与 tscn），因此 B1 期间漏改、由 B2 顺手补齐。若希望后续批次自动发现这类「资产侧引用方」，需要把扫描口径扩到 `assets/art/**/*.gd`（改动小，但会改变欠账数，需独立一批）。
 
+### B3 预备（2026-09-17 调研，**未开工**）
+
+用 `_scratch/scan_batch_debt.py assets/art/environments/base_facility_3d` 出的实测数据（该脚本参数化，B4–B9 可直接复用）：
+
+| 项 | 实测 |
+|---|---|
+| 门禁口径欠账 | `components/`+`runtime/` 下 **152 个 `.glb`（各带 1 个 `.glb.import`）+ 139 个 `.tscn` = 443**，与批次表一致 |
+| 版本目录 | **0 个**（B3 无 `vNNN/` 目录，比 B1/B2 少一层 `collapse`/`keep_version` 规则） |
+| 同子树内其他带版本文件 | `components/**` 另有 3 个 `.json`（不计入门禁） |
+| `source/` 侧（豁免） | 14 `.blend` / 4 `.json` / 3 `.png` |
+| 备份残留 | 3 个 `source/**/previews/*.png.import<digits>.tmp`（在豁免区，留 B9） |
+
+**引用面 67 条 / 35 个文件**（远超批次表写的「8」——8 只是 `src/**/*.gd` 的硬引用数）：
+
+| 位置 | 条数 | 性质 |
+|---|---|---|
+| `src/world3d/` | **8**（3 文件） | **硬引用**，`preload` 编译期解析，必须与本批同批改 |
+| `tests/verification/` | 26（16 文件） | 断言磁盘现状的探针，同批改 |
+| `tools/asset_pipeline/` | 25（12 文件） | 生成 / 导入 / 台账同步脚本 |
+| `scripts/blender/` | 8（4 文件） | Blender 装配脚本 |
+
+`src/` 侧 8 处明细：`DungeonRoom3D.gd` 6 处（`:37` corner_l_5m v004、`:54` wall_plain_5x12 v002、`:57` floor_plain_5m v001、`:60` floor_rivet_5m v001、`:63` wall_door_5x12 v004、`:66` door_lift_2p2x2p5 v002）、`TowerDescent3D.gd:12`（door_lift_2p2x2p5 v002）、`TowerFloorStage3D.gd:40`（corner_l_5m **GLB** v002）。
+
+⚠️ **`DungeonRoom3D.gd` 同时是 B2 与 B6 的引用方** —— B3 会再改它 6 处。开批前必须先确认 B2 提交后该文件没有未提交改动。
+
+**两种目录布局混存（B3 特有的复杂度）**：
+
+1. **两级**（同 B1/B2）：`components/<slug>/<slug>_visual_top3d_vNNN.glb`，如 `env_base99_corner_l_5m/`。
+2. **三级**（B3 特有）：`components/env_base99_<批次>_v021/<slug>/<slug>_visual_top3d_vNNN.glb` —— 中间那层是**批次分组目录**（`env_base99_remaining_facilities_v021` / `env_base99_wall_contents_v021` / `env_base99_structural_v021`），目录名自身也带 `_vNNN`。写 `rules` 时必须把这一层一并去版本化。
+
+**同名收敛检查**：A 类（同目录多版本，剥后缀后合并属正常）**80 组**；B 类（**跨目录两代并存，剥离会互相覆盖，须人工定策略**）**1 组**：
+
+```
+runtime/env_base99_floor_visuals_v017/…_root_top3d_v001.tscn
+runtime/env_base99_floor_visuals_v020/…_root_top3d_v002.tscn
+runtime/env_base99_floor_visuals_v021/…_root_top3d_v003.tscn
+runtime/env_base99_floor_visuals_v021/…_root_top3d_v004.tscn
+```
+
+→ 归一后都会落到 `runtime/env_base99_floor_visuals/env_base99_floor_visuals_root_top3d.tscn`。需先查引用方（`verify_base99_floor_visuals_v021.gd` 等）确认留哪一代。
+
+**开批第一步**：在 `deversion_batch.py` 的 `BATCHES` 里新增 `b3` 定义（现存只有 `b1`/`b2`，`--plan b3` 会报 `invalid choice`）——含 root + rules（两级/三级各写一条）+ 上述 B 类冲突的处理策略。
+
 ### P4 执行记录（2026-09-17，已完成）
 
 **产出**：`scripts/check_asset_runtime_naming.py`（纯标准库）+ 欠账快照 `scripts/asset_runtime_naming_debt.json`。
