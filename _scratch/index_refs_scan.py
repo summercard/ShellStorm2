@@ -39,6 +39,7 @@ BATCH_ROOTS: dict[str, str] = {
     "B6:d": "assets/art/ui/inventory_3d/",
     "B6:e": "assets/art/ui/pause_3d/",
     "B6:f": "assets/art/environments/training_range_3d/",
+    "B4": "assets/art/environments/rooftop_shelter_3d/",
 }
 TRIM = "`\"')]},;: "
 RES_RE = re.compile(r'res://([^"\'\)\s]+)')

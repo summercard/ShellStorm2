@@ -175,6 +175,96 @@ BATCHES: dict[str, dict] = {
             "是项目刻意收窄掉的独立类（动它等于改命名契约），留待单独决策",
         ],
     },
+    # B4 是本系列里形状最杂的一批：`runtime/` 是**扁平**的（所有 GLB/场景同层），
+    # 里面三代方案并存：50m（v003–v011）→ 90x80m 组件化（v012–v016 + layout_v016/）
+    # → 90x80m 合体（v017–v021）。四类处置同时出现：
+    #   1) 整组淘汰：50m / 90x80m_game / 90x80m_root_top3d / layout_v016 全删（0 消费者）；
+    #   2) 常规 collapse：layout_v017 的 68 个组件、references/ 的 1 个参考 GLB；
+    #   3) 定代例外（pinned）：facilities 三代的规范名归**当前在用**的 v021，
+    #      v017/v019 走 `_gen017` / `_gen019` 语义后缀；
+    #   4) 段内版本：`layout_v017/` 目录名的 `_vNNN` 后缀（故 strip_dir_version）。
+    #
+    # ── 为什么规范名归 v021（2026-09-17 用户裁决）────────────────────────────
+    # `tower_zones/rooftop/runtime/zone_rooftop.tscn:3` 直接引用
+    # `env_rooftop_shelter_90x80m_facilities_v021.glb`，它是**真·运行时**（100F 在用），
+    # README「v021｜区域中心枢轴」节也把它记为正式视觉输出。按命名契约
+    # 「替换 = 覆盖同路径同名文件」，规范名必须给当前代，故 v021 占
+    # `env_rooftop_shelter_90x80m_facilities.glb`。
+    #
+    # ── 为什么场景规范名反过来归 v017 ───────────────────────────────────────
+    # `env_rooftop_shelter_90x80m_facilities_root_top3d_*.tscn` 在本套件里没有 v021
+    # 一代（v021 的包装场景已按 README 移出到 `tower_zones/rooftop/runtime/zone_rooftop.tscn`），
+    # 剩下的是 v017 与 v019：v017 被契约测试 `verify_rooftop_shelter_asset_contract.gd`
+    # （68 组件 / 39 阻挡 / 82 形状断言）与 `repair_rooftop_v017_coordinate_contract.py`
+    # 认作「v017 正式包装」，v019 只是 `build_rooftop_v021_wrapper.py` 的一次性构建输入。
+    # 故规范名给有活契约的 v017，v019 走 `_gen019`。这也意味着**规范场景(v017)与规范
+    # GLB(v021)不同代**，是有意为之：两者是不同粒度的产物（组件化包装 vs 合体视觉），
+    # 各自的「当前代」本就不同步。
+    "b4": {
+        "label": "天台庇护所 rooftop_shelter_3d（扁平 runtime + 两组 layout 组件目录 + 三代包装并存）",
+        "roots": [
+            {"root": "assets/art/environments/rooftop_shelter_3d/runtime", "rules": {"": {"mode": "collapse"}}},
+            {"root": "assets/art/environments/rooftop_shelter_3d/references", "rules": {"": {"mode": "collapse"}}},
+        ],
+        # `runtime/layout_v017/` 的版本写在**目录名的 `_vNNN` 后缀**上（非纯 `vNNN/`），
+        # 与 B3 的 `env_base99_*_v021/` 同类，故开 strip_dir_version。
+        "strip_dir_version": True,
+        "obsolete_globs": [
+            # 50m 方案：被 90x80m 取代，v003–v006/v010 属被替换的旧代（其 `.import` 本就
+            # 未被 .gitignore 白名单覆盖，属未跟踪构建产物）→ 删。
+            # ⚠️ v011 **刻意不在**此删单：它是该资产在 `资产主表!O300`
+            # （ENV-ROOFTOP-SHELTER-50M-3D，K300=已完成 / L300=P1）登记的**唯一运行文件**，
+            # 源 blend 与 reports 均仍在库 → 按契约 collapse 规则留最高代，
+            # 由 runtime 根的 collapse 规则去版本化为 `env_rooftop_shelter_50m_game.glb`。
+            # 若将来真要退役 50m，属**登记层面的决策**（须连源 blend + reports 一起退），
+            # 不应由去版本化批隐式完成。
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_50m_game_v003*",
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_50m_game_v004*",
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_50m_game_v005*",
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_50m_game_v006*",
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_50m_game_v010*",
+            # 90x80m 组件化「game」合体代数：只被同代 root_top3d 场景引用，而后者也在本清单里。
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_game_v*",
+            "assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_root_top3d_v*",
+            # v016 组件布局树：仅被上面的 root_top3d_v016.tscn 引用；v017 树才是契约代。
+            "assets/art/environments/rooftop_shelter_3d/runtime/layout_v016/**/*",
+        ],
+        "pinned": {
+            # 契约代 v017：占场景规范名（契约测试 3 处引用随之自动改写到稳定路径）。
+            "assets/art/environments/rooftop_shelter_3d/runtime/"
+            "env_rooftop_shelter_90x80m_facilities_root_top3d_v017.tscn":
+                "assets/art/environments/rooftop_shelter_3d/runtime/"
+                "env_rooftop_shelter_90x80m_facilities_root_top3d.tscn",
+            # v017 合体 GLB：规范名让给在用的 v021，走 _gen017（契约测试查它存在性）。
+            "assets/art/environments/rooftop_shelter_3d/runtime/"
+            "env_rooftop_shelter_90x80m_facilities_v017.glb":
+                "assets/art/environments/rooftop_shelter_3d/runtime/"
+                "env_rooftop_shelter_90x80m_facilities_gen017.glb",
+            # 该 `.import` 被 .gitignore 白名单跟踪，必须随主文件一起改名（另两代的
+            # `.import` 里 v021 走 collapse 得规范名、v019 未跟踪由 --import 重建）。
+            "assets/art/environments/rooftop_shelter_3d/runtime/"
+            "env_rooftop_shelter_90x80m_facilities_v017.glb.import":
+                "assets/art/environments/rooftop_shelter_3d/runtime/"
+                "env_rooftop_shelter_90x80m_facilities_gen017.glb.import",
+            # v019：v021 包装的一次性构建输入（build_rooftop_v021_wrapper.py 的 SOURCE）。
+            "assets/art/environments/rooftop_shelter_3d/runtime/"
+            "env_rooftop_shelter_90x80m_facilities_root_top3d_v019.tscn":
+                "assets/art/environments/rooftop_shelter_3d/runtime/"
+                "env_rooftop_shelter_90x80m_facilities_root_top3d_gen019.tscn",
+            "assets/art/environments/rooftop_shelter_3d/runtime/"
+            "env_rooftop_shelter_90x80m_facilities_v019.glb":
+                "assets/art/environments/rooftop_shelter_3d/runtime/"
+                "env_rooftop_shelter_90x80m_facilities_gen019.glb",
+        },
+        "excluded": [
+            "assets/art/environments/rooftop_shelter_3d/source/**（Blender 源，整体豁免）",
+            "assets/art/environments/rooftop_shelter_3d/previews/*.png（+.import）、"
+            "docs/*.json、game_output/**/*.blend（+.import）：`_vNNN` 在 `.png`/`.json`/`.blend` 上"
+            "全仓系统性存在（门禁 RUN_ASSET_SUFFIX 只认 .glb/.tscn，刻意收窄），不属本批",
+            "reports/*.json（asset_manifest_v0NN / validation_v0NN / collision_*）："
+            "版本事实登记与验收记录，非运行资产路径，且契约测试按名读取，保持原样",
+        ],
+    },
 }
 
 
@@ -221,6 +311,37 @@ def superseded_paths(batch: dict) -> list[str]:
     return out
 
 
+# 旁文件后缀：改名时随主文件一起走的边车。
+SIDECAR = re.compile(r"\.(?:import|uid)$")
+
+# 全仓已跟踪清单（main() 注入一次）。只用于一处判断：**未跟踪的** `.import`/`.uid`
+# 旁文件不参与改名 —— 它们是本机 `godot --import` 生成的、被 `.gitignore` 忽略的
+# 构建产物，改名后由下一次 `--import` 按新主文件名重建，硬改名反而会留下无主残留，
+# 且 `check()` 的「未被 git 跟踪」守卫会误判整批。
+TRACKED: set[str] = set()
+
+
+def obsolete_paths(batch: dict) -> list[str]:
+    """整组淘汰：`obsolete_globs` 命中的文件**全部删除**，没有「保留最高版本」例外。
+
+    与 `keep_version` 的区别：那条规则表达「只留指定版本」，本条表达「这一代及其中间
+    产物整体退役，一份都不留」。B4 的天台庇护所正是这种形态 —— 90x80m 组件化方案
+    （v012–v016 + layout_v016/）被 90x80m 合体方案整体取代，其最高版本也没有任何消费者，
+    `collapse` 若按「留最高版」会白留一份无人引用的重资产。
+
+    ⚠️ **本条不得用于「唯一代就是资产本体」的情形**：50m 方案曾被整体列入本清单，
+    但 `v011` 其实是该资产在台账里的**唯一登记运行文件**（`资产主表!O300`，已完成/P1），
+    删掉它等于退役一件已登记资产并让台账运行路径列出现**新增**失效格。故本条的判据是
+    「这一代**有更新的同族代**在读，或整族都无登记」，而不是「名字带 `_vNNN` 就删」。
+    """
+    out: list[str] = []
+    for pattern in batch.get("obsolete_globs", []):
+        for p in sorted(PROJECT.glob(pattern)):
+            if p.is_file():
+                out.append(p.relative_to(PROJECT).as_posix())
+    return sorted(set(out))
+
+
 def batch_applied(batch: dict) -> list[str]:
     """判定批次已落地：`superseded` 的废弃版与其正式版都不在磁盘，但正式版的稳定路径在。
 
@@ -251,6 +372,7 @@ def collect_leftovers(batch: dict) -> list[str]:
     """
     deletes: list[str] = []
     doomed_set = set(superseded_paths(batch))
+    obsolete = set(obsolete_paths(batch))
     for root_rel, rules in batch_roots(batch):
         root = PROJECT / root_rel
         # 整树删除范围：keep_version 规则子树 <path>，保留版本 <version>
@@ -263,6 +385,9 @@ def collect_leftovers(batch: dict) -> list[str]:
             if not p.is_file():
                 continue
             rel = p.relative_to(PROJECT).as_posix()
+            if rel in obsolete:
+                deletes.append(rel)
+                continue
             if rel in doomed_set:
                 deletes.append(rel)
                 continue
@@ -271,6 +396,8 @@ def collect_leftovers(batch: dict) -> list[str]:
                     deletes.append(rel)
                 continue
             if not RUN_ASSET.search(p.name):
+                continue
+            if SIDECAR.search(p.name) and rel not in TRACKED:
                 continue
 
             # B：整树目录（非保留版本）
@@ -303,6 +430,7 @@ def collect(batch: dict) -> tuple[list[tuple[str, str]], list[str]]:
     renames: list[tuple[str, str]] = []
     deletes: list[str] = []
 
+    obsolete = set(obsolete_paths(batch))
     for root_rel, rules in batch_roots(batch):
         root = PROJECT / root_rel
         for sub, rule in rules.items():
@@ -318,10 +446,16 @@ def collect(batch: dict) -> tuple[list[tuple[str, str]], list[str]]:
                     continue
                 if not RUN_ASSET.search(p.name):
                     continue
-                if rule["mode"] == "keep_version" and version_of(str(p.relative_to(PROJECT))) != rule["version"]:
-                    deletes.append(p.relative_to(PROJECT).as_posix())
+                rel_p = p.relative_to(PROJECT).as_posix()
+                if rel_p in obsolete:
+                    deletes.append(rel_p)
                     continue
-                owned.setdefault(stable_path(str(p.relative_to(PROJECT)).replace("\\", "/")), []).append(p)
+                if SIDECAR.search(p.name) and rel_p not in TRACKED:
+                    continue
+                if rule["mode"] == "keep_version" and version_of(str(p.relative_to(PROJECT))) != rule["version"]:
+                    deletes.append(rel_p)
+                    continue
+                owned.setdefault(stable_path(rel_p), []).append(p)
 
             for stable, group in sorted(owned.items()):
                 if len(group) == 1:
@@ -529,19 +663,22 @@ def fix_code_refs(batch: dict) -> list[tuple[str, int, list[str]]]:
 
 
 def apply_deletes(batch: dict, deletes) -> None:
+    vacated: set[Path] = set()
     for d in deletes:
         p = PROJECT / d
         if p.is_file():
+            vacated.update(a for a in p.parents if a != ART and ART in a.parents)
             p.unlink()
-    # 清掉留空的版本目录（纯 `vNNN/` 与 B3 那种 `_vNNN` 后缀的批次分组目录）
-    for p in sorted((ART).rglob("*"), reverse=True):
-        if not p.is_dir():
-            continue
-        is_version_dir = VERSION_DIR.match(p.name) or (
-            STRIP_DIR_VERSION and VERSION_ANY.search(p.name)
-        )
-        if not is_version_dir:
-            continue
+    # 清掉留空的版本目录（纯 `vNNN/` 与 B3 那种 `_vNNN` 后缀的批次分组目录），
+    # 以及被整组淘汰（`obsolete_globs`，如 B4 的 runtime/layout_v016/）后腾空的目录。
+    # 只处理「版本目录」与「本批删过文件的祖先目录」两类，故不会误删别处本就为空的
+    # 目录 —— rooftop_shelter_3d/components/UI/ 契约要求保持为空，正是要避开的反例。
+    candidates = {
+        p for p in ART.rglob("*")
+        if p.is_dir() and (VERSION_DIR.match(p.name) or (STRIP_DIR_VERSION and VERSION_ANY.search(p.name)))
+    }
+    candidates |= vacated
+    for p in sorted(candidates, key=lambda x: len(x.parts), reverse=True):
         try:
             p.rmdir()
             print(f"RMDIR {p.relative_to(PROJECT).as_posix()}")
@@ -565,9 +702,14 @@ def main() -> int:
     excluded = list(batch.get("excluded", []))
 
     # 批次级开关必须在使用 stable_path 之前生效（模块级全局）
-    global STRIP_DIR_VERSION, PINNED
+    global STRIP_DIR_VERSION, PINNED, TRACKED
     STRIP_DIR_VERSION = bool(batch.get("strip_dir_version", False))
     PINNED = dict(batch.get("pinned", {}))
+    TRACKED = set(
+        subprocess.run(
+            ["git", "-C", str(PROJECT), "ls-files"], capture_output=True, text=True
+        ).stdout.splitlines()
+    )
 
     if args.fix_code_refs:
         print(f"=== {args.batch} 全仓代码/场景引用改写（.gd/.tscn） ===")

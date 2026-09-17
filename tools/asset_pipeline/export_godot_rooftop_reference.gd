@@ -3,7 +3,7 @@ extends SceneTree
 ## Exports only Godot's native 100F shell as a Blender comparison reference.
 ## It deliberately excludes the rooftop facilities scene and every collider.
 
-const OUTPUT_PATH := "res://assets/art/environments/rooftop_shelter_3d/references/godot_100f_native_rooftop_reference_v001.glb"
+const OUTPUT_PATH := "res://assets/art/environments/rooftop_shelter_3d/references/godot_100f_native_rooftop_reference.glb"
 
 
 func _initialize() -> void:

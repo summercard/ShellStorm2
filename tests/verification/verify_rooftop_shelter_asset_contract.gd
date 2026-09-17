@@ -1,7 +1,7 @@
 extends Node
 
-const ROOT_SCENE := "res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d_v017.tscn"
-const GLB_PATH := "res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_v017.glb"
+const ROOT_SCENE := "res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_root_top3d.tscn"
+const GLB_PATH := "res://assets/art/environments/rooftop_shelter_3d/runtime/env_rooftop_shelter_90x80m_facilities_gen017.glb"
 const REPORT_PATH := "res://assets/art/environments/rooftop_shelter_3d/reports/validation_v017.json"
 const COLLISION_REPORT_PATH := "res://assets/art/environments/rooftop_shelter_3d/reports/collision_manifest_v017.json"
 const SHARED_PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
