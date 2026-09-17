@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-BATTLE-COMMON-WALL-STANDARD-5M
+; 战局区块通用组件库 v004 · 08_墙壁组件 · wall_standard_5m
+; 范式 B（自包含可替换组件）：模型 + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
+; 静态实墙，与网格 5m 同宽，可直接沿网格平铺。
+; 美术已并进房内同款「内嵌装甲壁板」（2.4m 壁板 ×2 + 板缝压条），在组件局部 +Y（朝房内那面）离面约 15mm；任何 5m 槽位/朝向都自动对齐。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/wall_standard_5m/wall_standard_5m_visual_top3d_v004.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_standard_5m_1"]
+size = Vector3(5, 11.9, 0.3)
+
+[node name="BattleCommonWallStandard5m" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "08_wall_component"
+metadata/component = "wall_standard_5m"
+metadata/logic_id = "wall_standard_5m"
+metadata/display_name_zh = "战局通用标准墙 5×0.3×11.9m（含 5m 槽位装甲壁板）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "wall_standard_5m_通用包"
+metadata/source_root_object = "ROOT_wall_standard_5m_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/08/wall_standard_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.303)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/entry_safe_room/v006"
+metadata/wall_kind = "solid"
+metadata/wall_thickness_m = 0.3
+metadata/wall_visual_height_m = 11.9
+metadata/wall_logical_height_m = 12
+metadata/visual_top_clearance_m = 0.1
+metadata/grid_unit_m = 5
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WallStandardCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WallStandardCollision"]
+position = Vector3(0, 5.95, 0)
+shape = SubResource("BoxShape3D_wall_standard_5m_1")

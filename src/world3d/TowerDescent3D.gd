@@ -407,12 +407,30 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 		previous.queue_free()
 	var kind := "rooftop" if floor_index == 0 else "facility" if floor_index == 1 else "combat"
 	var stage = FLOOR_STAGE_SCRIPT.new()
-	stage.call("configure", floor_index, kind, hole_sides)
+	stage.call(
+		"configure", floor_index, kind, hole_sides, _stair_lobby_visual_holes(floor_index)
+	)
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
 	_room_block_for_floor(floor_index).add_child(stage)
 	# PackedScene/运行时节点在 add_child() 时可能被分配内部名；挂载后再锁定短名。
 	stage.name = "Floor_%d" % (100 - floor_index)
 	_floor_stages[floor_index] = stage
+
+
+## 入口安全房自持正式地砖（3×3 格 = 15×15m），必须从整层通用地砖里挖掉，
+## 否则两套砖面在 Y=0 共面闪烁。只挖可视砖：承重碰撞仍由 _build_support() 铺满，
+## 该函数只吃 _hole_rects()，不受这里影响。
+func _stair_lobby_visual_holes(floor_index: int) -> Array[Rect2]:
+	var holes: Array[Rect2] = []
+	var size := TowerGeometry3D.COMBAT_STAIR_LOBBY_SIZE_M
+	var half := size * 0.5
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var record := _find_record(str(room_id_value))
+		if record.is_empty() or str(record.get("type", "")) != "STAIR_LOBBY":
+			continue
+		var room_position := record.get("position", Vector3.ZERO) as Vector3
+		holes.append(Rect2(room_position.x - half, room_position.z - half, size, size))
+	return holes
 
 
 func _update_floor_visibility_state() -> void:

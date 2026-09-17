@@ -1,0 +1,774 @@
+{
+  "envelope": {
+    "outer_face_m": 7.5,
+    "centreline_m": 7.35,
+    "inner_face_m": 7.2,
+    "wall_thickness_m": 0.3,
+    "visual_height_m": 11.9,
+    "logical_height_m": 12.0,
+    "walkable_surface_z_m": 0.3,
+    "slab_top_z_m": 0.26,
+    "grid_m": 5.0
+  },
+  "wall_layout": {
+    "north": "3x solid",
+    "south": "solid + door + solid",
+    "east": "solid + door + solid",
+    "west": "3x solid",
+    "doorway_tangential_centre_m": 0.0,
+    "basis": "runtime probe (runtime probe _probe_safe_room_door.txt)"
+  },
+  "runtime_measured": {
+    "door_wall_node_outer_face_m": 7.5,
+    "door_pier_offset_m": 1.8,
+    "door_lintel_bottom_m": 2.5,
+    "door_clear_width_m": 2.2,
+    "door_clear_height_m": 2.5
+  },
+  "component_usage": {
+    "wall_standard_5m": 10,
+    "wall_door_5m": 2,
+    "door_5m": 2,
+    "floor_tile": 9
+  },
+  "slots": [
+    {
+      "slot_id": "WALLSLOT_NORTH_01",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02_PIER_L",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "sub_part": "PIER_L",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛左_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02_PIER_R",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "sub_part": "PIER_R",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛右_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02_LINTEL",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "sub_part": "LINTEL",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门楣_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.2,
+        0.3,
+        9.4
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01",
+      "placement_id": "WALLSLOT_EAST_01",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02_PIER_L",
+      "placement_id": "WALLSLOT_EAST_02",
+      "sub_part": "PIER_L",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛左_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02_PIER_R",
+      "placement_id": "WALLSLOT_EAST_02",
+      "sub_part": "PIER_R",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛右_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02_LINTEL",
+      "placement_id": "WALLSLOT_EAST_02",
+      "sub_part": "LINTEL",
+      "slot_role": "door_wall",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门楣_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.2,
+        0.3,
+        9.4
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03",
+      "placement_id": "WALLSLOT_EAST_03",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01",
+      "placement_id": "WALLSLOT_WEST_01",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02",
+      "placement_id": "WALLSLOT_WEST_02",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03",
+      "placement_id": "WALLSLOT_WEST_03",
+      "sub_part": null,
+      "slot_role": "solid_wall",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "DOORLEAF_SOUTH",
+      "placement_id": "DOORLEAF_SOUTH",
+      "sub_part": null,
+      "slot_role": "door_leaf",
+      "component": "door_5m",
+      "library_object": "door_5m_门扇_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.2,
+        0.18,
+        2.5
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "DOORLEAF_EAST",
+      "placement_id": "DOORLEAF_EAST",
+      "sub_part": null,
+      "slot_role": "door_leaf",
+      "component": "door_5m",
+      "library_object": "door_5m_门扇_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.2,
+        0.18,
+        2.5
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01_INSET",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02_INSET",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03_INSET",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01_INSET",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02_INSET",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03_INSET",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01_INSET",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02_INSET",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "sub_part": null,
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03_INSET",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "sub_part": "INSET",
+      "slot_role": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    }
+  ],
+  "removed_room_owned_packages": [
+    "北墙_资产包",
+    "东墙_资产包",
+    "西墙_资产包",
+    "南门左墙_资产包",
+    "南门右墙_资产包",
+    "南门楣_资产包",
+    "承重底板_资产包",
+    "地砖_R01_C01_资产包",
+    "地砖_R01_C02_资产包",
+    "地砖_R01_C03_资产包",
+    "地砖_R02_C01_资产包",
+    "地砖_R02_C02_资产包",
+    "地砖_R02_C03_资产包",
+    "地砖_R03_C01_资产包",
+    "地砖_R03_C02_资产包",
+    "地砖_R03_C03_资产包"
+  ]
+}

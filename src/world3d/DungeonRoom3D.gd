@@ -65,6 +65,79 @@ const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
 )
+# —— 入口安全房（STAIR_LOBBY）v007 正式美术。
+# v007 是「单一方位」布局：南墙与东墙中段各开 2.2×2.5 门洞，其余 10 段为 5m 实墙，
+# 地面为 3×3 格棋盘地砖。运行时按本层实际门向把整房旋转 0/90/180/270°，
+# 于是任意楼层的安全房都共用同一套资产，无需按方位分版本。
+# 墙/地/门三类构件复用战局区块通用组件库 v004（自带碰撞、自带色盘），
+# 房间设施由 17 个房间包按各自 metadata 的 room_placement_position 摆位。
+const SAFE_ROOM_RUNTIME_ROOT := "res://assets/art/environments/tower_zones/battle/runtime/"
+const SAFE_ROOM_ART_VERSION := "v007"
+const SAFE_ROOM_ART_ASSET_ID := "ENV-BATTLE-L01-SAFE-ENTRY"
+const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
+	"floor_base",
+	"overhead_services",
+	"debris_papers",
+	"central_terminal_island",
+	"north_server_00",
+	"north_server_01",
+	"north_server_02",
+	"north_server_03",
+	"north_server_04",
+	"north_server_05",
+	"north_broken_core",
+	"north_nexus_sign",
+	"west_glass_office",
+	"east_repair_bay",
+	"east_robot_arm",
+	"office_planter",
+	"maintenance_chair",
+]
+const SAFE_ROOM_WALL_STANDARD_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d_v004.tscn"
+)
+const SAFE_ROOM_WALL_DOOR_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d_v004.tscn"
+)
+const SAFE_ROOM_DOOR_LEAF_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d_v004.tscn"
+)
+const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d_v004.tscn"
+)
+const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
+	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d_v004.tscn"
+)
+# v007 墙槽位表，逐项源自 source/entry_safe_room/v007/qa/slot_table.json。
+# 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
+# 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
+# 绕 Blender +Z 的角与绕 Godot +Y 的角同号，因此 rotation_z_deg 可直接沿用。
+# 组件 forward_axis = -Z（朝房内那面即 -Z），槽位角度正好让装甲壁板朝向房内。
+const SAFE_ROOM_WALL_SLOTS: Array = [
+	[-5.0, -7.5, 180.0, false, "north"],
+	[0.0, -7.5, 180.0, false, "north"],
+	[5.0, -7.5, 180.0, false, "north"],
+	[-5.0, 7.5, 0.0, false, "south"],
+	[0.0, 7.5, 0.0, true, "south"],
+	[5.0, 7.5, 0.0, false, "south"],
+	[7.5, 5.0, 90.0, false, "east"],
+	[7.5, 0.0, 90.0, true, "east"],
+	[7.5, -5.0, 90.0, false, "east"],
+	[-7.5, 5.0, -90.0, false, "west"],
+	[-7.5, 0.0, -90.0, false, "west"],
+	[-7.5, -5.0, -90.0, false, "west"],
+]
+# 原生门轴墙：南（+Z）与东（+X）。旋转解析以这两个方向为基准集合。
+const SAFE_ROOM_DOOR_SIDES: Array[String] = ["south", "east"]
+# v007 行走面在授权文件里是 Blender z=0.30（结构板顶 0.26 + 0.04 砖面），
+# 运行时行走面是 Y=0，因此房间包整体下沉 0.30 对齐；墙体件以底面中心为原点，
+# 直接坐在 Y=0 即可与塔楼自身墙体（0..11.9）同高同缝。
+# 地砖不下沉固定值，改读每个组件自己的 snap_to_walk_plane_offset_m（c01 −0.056 / c02 −0.081）。
+const SAFE_ROOM_WALK_LIFT_M := 0.30
+const SAFE_ROOM_FLOOR_GRID_M := 5.0
+# 安全房沿用塔楼房间的边界约定：组件原点坐在 ±dimensions/2（= 5m 网格线）上，
+# 墙厚向房间外侧展开。授权美术（v007 README）把外墙皮写在 7.5 / 中线 7.35，
+# 运行时统一按塔楼口径把墙件原点落在 7.5，使门洞、走廊起点与楼板 5m 网格三者同线。
 # —— 房间壳体原子件 prefab（B 节）
 const FLOOR_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_v001.tscn")
 const FLOOR_INSET_PREFAB: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_floor_inset_v001.tscn")
@@ -137,6 +210,7 @@ const BASE_ROOFTOP_TRANSIT_DIRECTION := "east"
 const BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M := -7.5
 const BASE_ROOFTOP_TRANSIT_COLLISION_TOP_M := 8.45
 static var _tower_solid_wall_mesh: Mesh
+static var _tower_solid_wall_preserves_palette := false
 static var _tower_floor_tile_mesh: Mesh
 static var _base99_solid_wall_mesh: Mesh
 static var _base99_floor_plain_mesh: Mesh
@@ -319,6 +393,21 @@ func get_room_snapshot() -> Dictionary:
 		"base99_camera_stair_slab_count": _count_nodes_with_meta(
 			self, "camera_stair_slab", true
 		),
+		# 入口安全房 v007：墙体/门墙/地砖来自战局区块通用组件库 v004，
+		# 房间设施来自 17 个房间包。四组计数用于确认正式美术确实装配到位。
+		"safe_room_art_version": str(get_meta("safe_room_art_version", "")),
+		"safe_room_orientation_steps": int(get_meta("safe_room_orientation_steps", 0)),
+		"safe_room_wall_module_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+		),
+		"safe_room_door_wall_module_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-BATTLE-COMMON-WALL-DOOR-5M"
+		),
+		"safe_room_floor_tile_count": (
+			_count_nodes_with_meta(self, "asset_id", "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01")
+			+ _count_nodes_with_meta(self, "asset_id", "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02")
+		),
+		"safe_room_package_count": int(get_meta("safe_room_package_count", 0)),
 		"tower_door_wall_module_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-TOWER-WALL-DOOR-5M")
 			+ _count_nodes_with_meta_floor(
@@ -734,8 +823,232 @@ func _build_tower_module_shell(dimensions: Vector2) -> void:
 	):
 		_build_base_facility_shell(dimensions)
 		return
+	if room_type == "STAIR_LOBBY" and _can_build_safe_room_shell(dimensions):
+		_build_safe_room_shell(dimensions)
+		return
 	# v0.1 v2：4 拐角 + 边墙拟合 + 门洞
 	_build_tower_wall_v2(dimensions)
+
+
+## 入口安全房只在 15×15m 塔楼格、且恰好两扇门时才走 v007 单一布局整房旋转。
+## 任何非常规配置一律回退旧拼装，避免把门洞留在没有开门的那面墙上。
+func _can_build_safe_room_shell(dimensions: Vector2) -> bool:
+	if not is_equal_approx(dimensions.x, dimensions.y):
+		return false
+	if not is_equal_approx(dimensions.x, TOWER_GEOMETRY.COMBAT_STAIR_LOBBY_SIZE_M):
+		return false
+	if doors.size() != SAFE_ROOM_DOOR_SIDES.size():
+		return false
+	return _safe_room_rotation_steps() >= 0
+
+
+## v007 正式美术：v004 通用墙/地/门 + 17 个房间包，整房按实际门向旋转。
+## 碰撞策略沿用 v004 组件契约 collision_owner=self：墙与门墙自带的 0.30m 结构碰撞
+## 就是玩法阻挡，本函数不再叠加旧的逐段 0.30m 代理，避免同位置两套静态碰撞。
+## 地砖包与门扇包的内嵌碰撞则必须去掉：楼板承重由 TowerFloorStage3D._build_support()
+## 统一持有，门扇通行由 RoomDoor3D 的升降碰撞持有（见组件自身的 runtime_collision_note）。
+func _build_safe_room_shell(dimensions: Vector2) -> void:
+	var rotation_steps := maxi(0, _safe_room_rotation_steps())
+	var rotation_y := float(rotation_steps) * PI * 0.5
+	var art_root := Node3D.new()
+	art_root.name = "SafeRoomArtRoot"
+	art_root.set_meta("asset_id", SAFE_ROOM_ART_ASSET_ID)
+	art_root.set_meta("asset_version", SAFE_ROOM_ART_VERSION)
+	art_root.set_meta("art_source", "entry_safe_room/%s" % SAFE_ROOM_ART_VERSION)
+	art_root.set_meta("room_orientation_steps", rotation_steps)
+	art_root.set_meta("authoring_note", "v007 单一方位；按本层门向整房旋转，不按方位分版本。")
+	art_root.rotation.y = rotation_y
+	add_child(art_root)
+	var wall_count := 0
+	for slot in SAFE_ROOM_WALL_SLOTS:
+		if _build_safe_room_wall_slot(art_root, slot as Array, rotation_y):
+			wall_count += 1
+	var tile_count := _build_safe_room_floor_tiles(art_root)
+	var package_count := _build_safe_room_packages(art_root)
+	# 门扇仍走通用 _build_door：v007 门洞切向中心就是 5m 网格中段（偏移 0），
+	# 与 _build_door 读取的 tower_wall_door_offset_* 默认值一致，门扇正好落在门垛之间。
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+	set_meta("safe_room_art_version", SAFE_ROOM_ART_VERSION)
+	set_meta("safe_room_orientation_steps", rotation_steps)
+	set_meta("safe_room_wall_module_count", wall_count)
+	set_meta("safe_room_floor_tile_count", tile_count)
+	set_meta("safe_room_package_count", package_count)
+	if wall_count != SAFE_ROOM_WALL_SLOTS.size():
+		push_warning("DungeonRoom3D: 安全房 %s 墙组件缺失 (%d/%d)" % [
+			room_id, wall_count, SAFE_ROOM_WALL_SLOTS.size()
+		])
+
+
+## 解析整房旋转步数：把授权布局的门轴墙集合 {南, 东} 转到本层实际门向集合。
+## 实测 98F→78F 只出现 {东,南}/{西,南}/{东,北}/{西,北} 四种相邻组合，
+## 恰好对应 0/−1/+1/2 步（0°/270°/90°/180°）；无法匹配时返回 -1 并回退旧拼装。
+func _safe_room_rotation_steps() -> int:
+	for step in range(4):
+		var angle := float(step) * PI * 0.5
+		var rotated: Array[String] = []
+		for native_direction in SAFE_ROOM_DOOR_SIDES:
+			rotated.append(_rotated_direction(native_direction, angle))
+		if _same_direction_set(rotated, doors):
+			return step
+	return -1
+
+
+func _rotated_direction(direction: String, angle: float) -> String:
+	var vector := Vector3.ZERO
+	match direction:
+		"north":
+			vector = Vector3(0.0, 0.0, -1.0)
+		"south":
+			vector = Vector3(0.0, 0.0, 1.0)
+		"east":
+			vector = Vector3(1.0, 0.0, 0.0)
+		"west":
+			vector = Vector3(-1.0, 0.0, 0.0)
+		_:
+			return direction
+	var rotated := vector.rotated(Vector3.UP, angle)
+	if absf(rotated.x) >= absf(rotated.z):
+		return "east" if rotated.x > 0.0 else "west"
+	return "south" if rotated.z > 0.0 else "north"
+
+
+func _same_direction_set(a: Array[String], b: Array) -> bool:
+	if a.size() != b.size():
+		return false
+	for direction in a:
+		if direction not in b:
+			return false
+	return true
+
+
+## 一个 5m 墙槽位：门墙（含 2.2×2.5 门洞）或实墙，按槽位角度落在 ±7.5 边界网格线上。
+func _build_safe_room_wall_slot(art_root: Node3D, slot: Array, rotation_y: float) -> bool:
+	if slot.size() < 5:
+		return false
+	var uses_door := bool(slot[3])
+	var native_direction := str(slot[4])
+	var module := (
+		SAFE_ROOM_WALL_DOOR_PREFAB if uses_door else SAFE_ROOM_WALL_STANDARD_PREFAB
+	).instantiate() as Node3D
+	if module == null:
+		push_error("DungeonRoom3D: 安全房 v007 墙组件实例化失败 (%s)" % native_direction)
+		return false
+	module.name = "SafeRoomWall_%s_%s" % [
+		native_direction.capitalize(),
+		"Door" if uses_door else "Solid",
+	]
+	module.position = Vector3(float(slot[0]), 0.0, float(slot[1]))
+	module.rotation.y = deg_to_rad(float(slot[2]))
+	# tower_wall_direction 必须记“整房旋转之后”的世界朝向：TowerDescent3D 的镜头
+	# 探针（_camera_wall_expectation）与塔楼网格验收都按世界朝向读这个 meta。
+	# 授权文件里的原生方位另存 stair_lobby_native_direction，便于回溯 v007 布局。
+	var world_direction := _rotated_direction(native_direction, rotation_y)
+	module.set_meta("tower_wall_direction", world_direction)
+	module.set_meta("stair_lobby_native_direction", native_direction)
+	module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	# 摄像机下墙规则按“旋转之后”的实际世界朝向来标，房内看到的南北墙才正确。
+	_set_camera_lower_wall_on_static_bodies(
+		module,
+		world_direction in ["north", "south"]
+	)
+	_set_geometry_shadow_casting(module, true)
+	module.set_meta("shadow_policy", "cast_and_receive")
+	art_root.add_child(module)
+	if uses_door and world_direction in ["north", "south"]:
+		# 南北向门洞开门后不能留实体碰撞，用 camera-only 门墙代理承接 TowerDescent3D
+		# 的镜头探针，与旧塔楼拼装路径（_build_corner_aware_wall_run）同契约。
+		# 挂在 art_root 下继承整房旋转，所以这里传的是槽位局部变换。
+		_add_camera_only_door_wall_proxy(
+			world_direction,
+			module.position,
+			module.rotation.y,
+			0,
+			art_root
+		)
+	return true
+
+
+## 3×3 棋盘地砖：c01 = (row + col) 偶数的 5 块角/中心砖，c02 = 其余 4 块。
+## 砖面顶面按每个组件自己的 snap_to_walk_plane_offset_m 落到 Y=0：c01 结构厚 0.056、
+## c02 结构厚 0.081，两版厚度不同，不能共用一个硬编码偏移。
+func _build_safe_room_floor_tiles(art_root: Node3D) -> int:
+	var placed := 0
+	for row in range(3):
+		for column in range(3):
+			var uses_c01 := (row + column) % 2 == 0
+			var tile := (
+				SAFE_ROOM_FLOOR_TILE_C01_PREFAB if uses_c01 else SAFE_ROOM_FLOOR_TILE_C02_PREFAB
+			).instantiate() as Node3D
+			if tile == null:
+				push_error("DungeonRoom3D: 安全房 v007 地砖实例化失败 (r%02d_c%02d)" % [
+					row + 1, column + 1
+				])
+				continue
+			tile.name = "SafeRoomFloorTile_R%02d_C%02d" % [row + 1, column + 1]
+			var snap_offset: float = tile.get_meta("snap_to_walk_plane_offset_m", 0.0)
+			tile.position = Vector3(
+				SAFE_ROOM_FLOOR_GRID_M * (float(column) - 1.0),
+				snap_offset,
+				SAFE_ROOM_FLOOR_GRID_M * (float(row) - 1.0)
+			)
+			tile.set_meta("walk_plane_snap_y", snap_offset)
+			_disable_static_collision_descendants(tile)
+			art_root.add_child(tile)
+			placed += 1
+	return placed
+
+
+## 17 个房间包逐件实例化。摆位不在脚本里硬编码：每个包的 PackedScene 根节点都带
+## room_placement_position 元数据（范式 B 契约），y 统一减去行走面高差即可落到 Y=0。
+func _build_safe_room_packages(art_root: Node3D) -> int:
+	var placed := 0
+	for package_id in SAFE_ROOM_PACKAGE_IDS:
+		var scene_path := "%sentry_safe_room/%s/%s/%s_root_top3d_%s.tscn" % [
+			SAFE_ROOM_RUNTIME_ROOT,
+			SAFE_ROOM_ART_VERSION,
+			package_id,
+			package_id,
+			SAFE_ROOM_ART_VERSION,
+		]
+		if not ResourceLoader.exists(scene_path):
+			push_warning("DungeonRoom3D: 安全房 v007 缺少房间包 %s" % scene_path)
+			continue
+		var packed := load(scene_path) as PackedScene
+		if packed == null:
+			push_error("DungeonRoom3D: 安全房 v007 房间包无法加载 %s" % scene_path)
+			continue
+		var package := packed.instantiate() as Node3D
+		if package == null:
+			push_error("DungeonRoom3D: 安全房 v007 房间包根节点必须是 Node3D: %s" % scene_path)
+			continue
+		package.name = "SafeRoomPackage_%s" % package_id
+		var placement: Vector3 = package.get_meta("room_placement_position", Vector3.ZERO)
+		package.position = Vector3(
+			placement.x,
+			placement.y - SAFE_ROOM_WALK_LIFT_M,
+			placement.z
+		)
+		package.set_meta("room_package_id", package_id)
+		art_root.add_child(package)
+		placed += 1
+	return placed
+
+
+## 关掉一件美术包自带的静态碰撞。用于两类去重：地砖（楼板承重归 TowerFloorStage3D）
+## 与门扇（通行归 RoomDoor3D 的升降碰撞）。只关碰撞层与形状，不删节点，便于运行时排查。
+func _disable_static_collision_descendants(root: Node) -> void:
+	for value in root.find_children("*", "StaticBody3D", true, false):
+		var body := value as StaticBody3D
+		if body == null:
+			continue
+		body.collision_layer = 0
+		body.collision_mask = 0
+		body.set_meta("collision_deduped_by", "DungeonRoom3D")
+		for shape_value in body.find_children("*", "CollisionShape3D", true, false):
+			var shape := shape_value as CollisionShape3D
+			if shape != null:
+				shape.disabled = true
 
 
 func _build_base_facility_shell(dimensions: Vector2) -> void:
@@ -954,7 +1267,9 @@ func _spawn_solid_wall_visual_instances(
 			transforms_b.append(wall_transform)
 	var material_a: StandardMaterial3D = null
 	var material_b: StandardMaterial3D = null
-	if not uses_base99_visual:
+	# 塔楼正式 GLB 自带 PaletteUV（资产侧声明 preserve_authored_palette）；
+	# 只有仍在使用主题材质的模块才做暖色 A/B 逐段交替覆盖，否则美术会被盖成单色。
+	if not uses_base99_visual and not _tower_solid_wall_preserves_palette:
 		material_a = _get_wall_module_material(0)
 		material_b = _get_wall_module_material(1)
 	var plain_asset_id := (
@@ -1016,6 +1331,10 @@ func _get_tower_solid_wall_mesh() -> Mesh:
 		return _tower_solid_wall_mesh
 	var source := TOWER_WALL_PREFAB.instantiate()
 	_tower_solid_wall_mesh = _find_first_mesh(source)
+	# 资产侧声明该模块自带调色板：运行时不得再用主题 A/B 材质覆盖。
+	_tower_solid_wall_preserves_palette = bool(
+		source.get_meta("preserve_authored_palette", false)
+	)
 	source.free()
 	return _tower_solid_wall_mesh
 
@@ -1575,7 +1894,8 @@ func _add_camera_only_door_wall_proxy(
 	direction: String,
 	module_position: Vector3,
 	rotation_y: float,
-	module_index: int
+	module_index: int,
+	parent: Node = null
 ) -> void:
 	# 门洞打开后不能放置世界层实体碰撞，否则会挡住角色与子弹。使用独立
 	# camera-only层覆盖完整5m门墙，仅供TowerDescent3D的镜头探针命中。
@@ -1591,7 +1911,7 @@ func _add_camera_only_door_wall_proxy(
 	proxy.set_meta("camera_lower_wall", true)
 	proxy.set_meta("camera_only_door_wall", true)
 	proxy.set_meta("tower_wall_direction", direction)
-	add_child(proxy)
+	(parent if parent != null else self).add_child(proxy)
 	_add_collision_shape(
 		proxy,
 		Vector3(0.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M * 0.5, 0.0),
@@ -1695,22 +2015,34 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 		theme.accent_color,
 		BASE99_DOOR_LIFT_PREFAB
 		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility")
+		else SAFE_ROOM_DOOR_LEAF_PREFAB
+		if room_type == "STAIR_LOBBY"
 		else null
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])
+	if room_type == "STAIR_LOBBY":
+		# 门扇包自带静态碰撞，但它不会随升降门逻辑启用/禁用，必须让位给 RoomDoor3D
+		# 自己的升降碰撞，否则门永远开不了。
+		var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
+		if door_leaf != null:
+			_disable_static_collision_descendants(door_leaf)
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
 	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
+	# 门扇停在墙件原点上：安全房墙件与塔楼墙件同样以原点坐边界网格线，门墙
+	# 门洞切向中心也是 0，门扇正好落在门垛之间，并和走廊起点同线。
+	var face_x := dimensions.x * 0.5
+	var face_z := dimensions.y * 0.5
 	match direction:
 		"north":
-			door.position = Vector3(door_offset_along, 0, -dimensions.y * 0.5)
+			door.position = Vector3(door_offset_along, 0, -face_z)
 		"south":
-			door.position = Vector3(door_offset_along, 0, dimensions.y * 0.5)
+			door.position = Vector3(door_offset_along, 0, face_z)
 		"west":
-			door.position = Vector3(-dimensions.x * 0.5, 0, door_offset_along)
+			door.position = Vector3(-face_x, 0, door_offset_along)
 			door.rotation.y = PI * 0.5
 		"east":
-			door.position = Vector3(dimensions.x * 0.5, 0, door_offset_along)
+			door.position = Vector3(face_x, 0, door_offset_along)
 			door.rotation.y = PI * 0.5
 	add_child(door)
 	_door_nodes[direction] = door

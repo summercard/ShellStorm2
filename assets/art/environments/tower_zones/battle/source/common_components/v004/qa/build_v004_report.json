@@ -1,0 +1,823 @@
+{
+  "version": "v004",
+  "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+  "output_blend": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+  "components": {
+    "wall_standard_5m": {
+      "lo": [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      "hi": [
+        2.5,
+        0.153,
+        11.9
+      ],
+      "dims": [
+        5.0,
+        0.303,
+        11.9
+      ],
+      "meshes": 5,
+      "roles": [
+        "02_细腻哑光_青绿大面"
+      ]
+    },
+    "wall_door_5m": {
+      "lo": [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      "hi": [
+        2.5,
+        0.215,
+        11.9
+      ],
+      "dims": [
+        5.0,
+        0.365,
+        11.9
+      ],
+      "meshes": 14,
+      "roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    "door_5m": {
+      "lo": [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      "hi": [
+        1.1,
+        0.09,
+        2.5
+      ],
+      "dims": [
+        2.2,
+        0.18,
+        2.5
+      ],
+      "meshes": 1,
+      "roles": [
+        "01_精工金属_紫色骨架"
+      ]
+    },
+    "floor_tile_r01_c01": {
+      "lo": [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      "hi": [
+        2.47,
+        2.47,
+        0.083
+      ],
+      "dims": [
+        4.94,
+        4.94,
+        0.083
+      ],
+      "meshes": 27,
+      "roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ]
+    },
+    "floor_tile_r01_c02": {
+      "lo": [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      "hi": [
+        2.47,
+        2.47,
+        0.0852
+      ],
+      "dims": [
+        4.94,
+        4.94,
+        0.0852
+      ],
+      "meshes": 24,
+      "roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "04_柔和自发光_UI灯光"
+      ]
+    }
+  },
+  "added_object_count": 62,
+  "wall_armour_unit": {
+    "parts": 4,
+    "box": [
+      [
+        -2.45,
+        0.125,
+        0.45
+      ],
+      [
+        2.45,
+        0.153,
+        8.358
+      ]
+    ]
+  },
+  "door_gate_unit": {
+    "parts": 11,
+    "box": [
+      [
+        -1.34,
+        -0.128,
+        0.3
+      ],
+      [
+        1.585,
+        0.215,
+        3.165
+      ]
+    ],
+    "source_collection_south": "南门装甲与门禁_资产包.001",
+    "source_collection_east": "东门装甲与门禁_资产包"
+  },
+  "tile_units": {
+    "floor_tile_r01_c01": {
+      "parts": 25,
+      "box": [
+        [
+          -2.457,
+          -2.457,
+          0.037
+        ],
+        [
+          2.457,
+          2.457,
+          0.083
+        ]
+      ]
+    },
+    "floor_tile_r01_c02": {
+      "parts": 22,
+      "box": [
+        [
+          -2.457,
+          -2.457,
+          0.037
+        ],
+        [
+          2.457,
+          2.457,
+          0.085
+        ]
+      ]
+    }
+  },
+  "uniformity": {
+    "c01_distinct_detail_sets": 1,
+    "c02_distinct_detail_sets": 2,
+    "c02_clusters": {
+      "12": "plain",
+      "21": "cover",
+      "23": "plain",
+      "32": "cover"
+    },
+    "tile_frames_uniform": true,
+    "wall_directions_agreeing": [
+      "north",
+      "south",
+      "east"
+    ]
+  },
+  "tile_structure_provenance": "the v003 floor components two plates are vert/poly identical to the room v006 FLOORSLOT_* (24/26) + FLOORSLOT_*_INSET (c01 872/711, c02 1220/1026); only decor is merged in v004",
+  "replay": [
+    {
+      "slot": "WALLSLOT_NORTH_01",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          -7.45,
+          7.197,
+          0.45
+        ],
+        [
+          -2.55,
+          7.225,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          -7.45,
+          7.197,
+          0.45
+        ],
+        [
+          -2.55,
+          7.225,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_NORTH_02",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          -2.45,
+          7.197,
+          0.45
+        ],
+        [
+          2.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          -2.45,
+          7.197,
+          0.45
+        ],
+        [
+          2.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_NORTH_03",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          2.55,
+          7.197,
+          0.45
+        ],
+        [
+          7.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          2.55,
+          7.197,
+          0.45
+        ],
+        [
+          7.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_SOUTH_01",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          -7.45,
+          -7.225,
+          0.45
+        ],
+        [
+          -2.55,
+          -7.197,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          -7.45,
+          -7.225,
+          0.45
+        ],
+        [
+          -2.55,
+          -7.197,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_SOUTH_03",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          2.55,
+          -7.225,
+          0.45
+        ],
+        [
+          7.45,
+          -7.197,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          2.55,
+          -7.225,
+          0.45
+        ],
+        [
+          7.45,
+          -7.197,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_EAST_01",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          7.197,
+          -7.45,
+          0.45
+        ],
+        [
+          7.225,
+          -2.55,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          7.197,
+          -7.45,
+          0.45
+        ],
+        [
+          7.225,
+          -2.55,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_EAST_03",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          7.197,
+          2.55,
+          0.45
+        ],
+        [
+          7.225,
+          7.45,
+          8.358
+        ]
+      ],
+      "component_box": [
+        [
+          7.197,
+          2.55,
+          0.45
+        ],
+        [
+          7.225,
+          7.45,
+          8.358
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "WALLSLOT_WEST_02",
+      "kind": "wall_armour",
+      "room_box": [
+        [
+          -7.215,
+          -1.45,
+          0.45
+        ],
+        [
+          -7.197,
+          1.45,
+          8.35
+        ]
+      ],
+      "component_box": [
+        [
+          -7.225,
+          -2.45,
+          0.45
+        ],
+        [
+          -7.197,
+          2.45,
+          8.358
+        ]
+      ],
+      "match": false,
+      "note": "normalised on purpose: authored west wall ran a 2.9 m cadence across the whole 15 m wall and is not slot-aligned"
+    },
+    {
+      "slot": "DOORSLOT_SOUTH",
+      "kind": "door_gate",
+      "room_box": [
+        [
+          -1.34,
+          -7.478,
+          0.3
+        ],
+        [
+          1.585,
+          -7.135,
+          3.165
+        ]
+      ],
+      "component_box": [
+        [
+          -1.34,
+          -7.478,
+          0.3
+        ],
+        [
+          1.585,
+          -7.135,
+          3.165
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "DOORSLOT_EAST",
+      "kind": "door_gate",
+      "room_box": [
+        [
+          7.135,
+          -1.34,
+          0.3
+        ],
+        [
+          7.478,
+          1.585,
+          3.165
+        ]
+      ],
+      "component_box": [
+        [
+          7.135,
+          -1.34,
+          0.3
+        ],
+        [
+          7.478,
+          1.585,
+          3.165
+        ]
+      ],
+      "match": true
+    },
+    {
+      "slot": "FLOORSLOT_R01_C01",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "slot_xy": [
+        -5.0,
+        -5.0
+      ],
+      "frame_room_box": [
+        [
+          -7.457,
+          -7.457,
+          0.297
+        ],
+        [
+          -2.543,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -7.457,
+          -7.457,
+          0.297
+        ],
+        [
+          -2.543,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R01_C02",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "slot_xy": [
+        0.0,
+        -5.0
+      ],
+      "frame_room_box": [
+        [
+          -2.457,
+          -7.457,
+          0.297
+        ],
+        [
+          2.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -2.457,
+          -7.457,
+          0.297
+        ],
+        [
+          2.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": false,
+      "note": "own scuffs / feature cluster normalised to the generic component; structural frame aligns"
+    },
+    {
+      "slot": "FLOORSLOT_R01_C03",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "slot_xy": [
+        5.0,
+        -5.0
+      ],
+      "frame_room_box": [
+        [
+          2.543,
+          -7.457,
+          0.297
+        ],
+        [
+          7.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          2.543,
+          -7.457,
+          0.297
+        ],
+        [
+          7.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R02_C01",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "slot_xy": [
+        -5.0,
+        0.0
+      ],
+      "frame_room_box": [
+        [
+          -7.457,
+          -2.457,
+          0.297
+        ],
+        [
+          -2.543,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -7.457,
+          -2.457,
+          0.297
+        ],
+        [
+          -2.543,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R02_C02",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "slot_xy": [
+        0.0,
+        0.0
+      ],
+      "frame_room_box": [
+        [
+          -2.457,
+          -2.457,
+          0.297
+        ],
+        [
+          2.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -2.457,
+          -2.457,
+          0.297
+        ],
+        [
+          2.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R02_C03",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "slot_xy": [
+        5.0,
+        0.0
+      ],
+      "frame_room_box": [
+        [
+          2.543,
+          -2.457,
+          0.297
+        ],
+        [
+          7.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          2.543,
+          -2.457,
+          0.297
+        ],
+        [
+          7.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": false,
+      "note": "own scuffs / feature cluster normalised to the generic component; structural frame aligns"
+    },
+    {
+      "slot": "FLOORSLOT_R03_C01",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "slot_xy": [
+        -5.0,
+        5.0
+      ],
+      "frame_room_box": [
+        [
+          -7.457,
+          2.543,
+          0.297
+        ],
+        [
+          -2.543,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -7.457,
+          2.543,
+          0.297
+        ],
+        [
+          -2.543,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R03_C02",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c02",
+      "slot_xy": [
+        0.0,
+        5.0
+      ],
+      "frame_room_box": [
+        [
+          -2.457,
+          2.543,
+          0.297
+        ],
+        [
+          2.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          -2.457,
+          2.543,
+          0.297
+        ],
+        [
+          2.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    },
+    {
+      "slot": "FLOORSLOT_R03_C03",
+      "kind": "floor_tile",
+      "component": "floor_tile_r01_c01",
+      "slot_xy": [
+        5.0,
+        5.0
+      ],
+      "frame_room_box": [
+        [
+          2.543,
+          2.543,
+          0.297
+        ],
+        [
+          7.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_component_box": [
+        [
+          2.543,
+          2.543,
+          0.297
+        ],
+        [
+          7.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "frame_match": true,
+      "whole_tile_identical": true,
+      "note": ""
+    }
+  ],
+  "warnings": [
+    "west wall armour normalised 5 x 2.9 m -> 6 x 2.4 m (was not slot-aligned)",
+    "c02 floor tile: the room splits 2 with / 2 without the square access cover (21+32 vs 12+23); the generic component takes the WITH-cover variant, so those tiles gain a cover",
+    "floor tiles carry per-tile unique scuff marks (地砖磨损); a generic component keeps one representative per variant, so scuffs repeat across slots"
+  ]
+}

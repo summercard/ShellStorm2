@@ -1,0 +1,56 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+  "slug": "wall_standard_5m",
+  "component": "wall_standard_5m",
+  "version": "v004",
+  "category": "08_墙壁组件",
+  "note_zh": "实墙 + 5m 槽位装甲壁板",
+  "source_blend": "战局区块_通用组件库_v004.blend",
+  "blender_collection": "wall_standard_5m_通用包",
+  "root_object": "ROOT_wall_standard_5m_通用组件",
+  "objects": [
+    "wall_standard_5m_主体_输出",
+    "wall_standard_5m_槽位装甲单元_01",
+    "wall_standard_5m_槽位装甲单元_02",
+    "wall_standard_5m_槽位装甲单元_03",
+    "wall_standard_5m_槽位装甲单元_04"
+  ],
+  "object_count": 5,
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "bounds_lo": [
+    -2.5,
+    -0.15,
+    0.0
+  ],
+  "bounds_hi": [
+    2.5,
+    0.153,
+    11.9
+  ],
+  "bounds_size": [
+    5.0,
+    0.303,
+    11.9
+  ],
+  "godot_bounds_size": [
+    5.0,
+    11.9,
+    0.303
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "material_roles_used": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "instance_rule_zh": "原点=底面中心、本地 +Y=朝房内那面。放到任意 5m 网格槽位即自动对齐，不需要按方位区分。",
+  "supersedes": "v003",
+  "carries_room_art_from": "entry_safe_room/v006",
+  "collision_note": "碰撞不随美术：结构碰撞仍由 Godot 0.30m 代理负责。",
+  "exported": false
+}

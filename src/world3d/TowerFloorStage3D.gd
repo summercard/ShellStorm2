@@ -65,6 +65,11 @@ const BASE_99_100_ATRIUM_TILE_COUNT := 36
 var floor_index := 0
 var floor_kind := "combat"
 var stair_hole_sides: Array[String] = []
+# 房间自带正式地砖的区域（当前仅入口安全房 3×3 格）。只从通用可视地砖里挖掉，
+# 承重碰撞不受影响，仍由 _build_support() 用 _hole_rects() 铺满整个房间地面。
+var additional_visual_holes: Array[Rect2] = []
+# 上述洞实际从通用可视地砖里移除了多少格（已扣除与楼梯洞重叠的部分）。
+var _additional_visual_hole_tile_count := 0
 var _floor_visual_light: MultiMeshInstance3D
 var _floor_visual_dark: MultiMeshInstance3D
 var _protected_floor_visual_light: MultiMeshInstance3D
@@ -82,12 +87,17 @@ var _support_rect_count := 0
 var _protected_floor_patch_enabled := false
 var _protected_floor_patch_grid_center := Vector2i(-1, -1)
 var _protected_floor_patch_tile_count := 0
+static var _floor_preserves_authored_palette := false
+static var _floor_palette_probed := false
 
 
-func configure(index: int, kind: String, holes: Array[String]) -> void:
+func configure(
+	index: int, kind: String, holes: Array[String], extra_visual_holes: Array[Rect2] = []
+) -> void:
 	floor_index = index
 	floor_kind = kind
 	stair_hole_sides.assign(holes)
+	additional_visual_holes.assign(extra_visual_holes)
 
 
 func _ready() -> void:
@@ -158,6 +168,8 @@ func get_snapshot() -> Dictionary:
 		"outer_wall_height": _outer_wall_height(),
 		"support_rect_count": _support_rect_count,
 		"stair_hole_sides": stair_hole_sides.duplicate(),
+		"additional_visual_hole_count": additional_visual_holes.size(),
+		"additional_visual_hole_tile_count": _additional_visual_hole_tile_count,
 		"shell_visible": _shell_visible,
 		"floor_visible": _floor_visible,
 		"outer_visible": _outer_visible,
@@ -276,25 +288,29 @@ func _build_floor() -> void:
 	if mesh == null:
 		push_error("Tower floor module GLB has no MeshInstance3D")
 		return
+	# 正式地砖 GLB 自带双表面 PaletteUV；只有旧占位地砖才需要暖色 A/B 主题材质。
+	var uses_authored_palette := polished or _floor_module_preserves_palette()
 	# 国际象棋棋盘式地砖：按 (x_index + z_index) % 2 分流到浅/深两套 MultiMesh。
 	var light_transforms: Array[Transform3D] = []
 	var dark_transforms: Array[Transform3D] = []
-	var holes := _floor_visual_hole_rects()
+	var base_holes := _base_visual_hole_rects()
+	var extra_holes := _additional_visual_hole_rects()
 	var grid_dimensions := _floor_grid_dimensions()
 	var floor_rect := _floor_world_rect()
+	_additional_visual_hole_tile_count = 0
 	for z_index in range(grid_dimensions.y):
 		for x_index in range(grid_dimensions.x):
 			var point := Vector2i(x_index, z_index)
-			var skipped := false
-			for hole in holes:
-				if (hole as Rect2i).has_point(point):
-					skipped = true
-					break
-			if skipped:
+			if _point_in_hole_rects(base_holes, point):
+				continue
+			if _point_in_hole_rects(extra_holes, point):
+				# 房间自带正式地砖顶掉通用砖：只减少可视覆盖，承重碰撞不受影响。
+				_additional_visual_hole_tile_count += 1
 				continue
 			var x := floor_rect.position.x + GRID_UNIT * (float(x_index) + 0.5)
 			var z := floor_rect.position.y + GRID_UNIT * (float(z_index) + 0.5)
-			# BoxMesh地砖以中心为原点；下移半个厚度，使可视顶面与承重面Y=0重合。
+			# 楼板模块地砖板厚居中（Y=-0.15..+0.1505）；下移半个厚度，
+			# 使可视顶面与承重面 Y=0 重合。
 			var transform := Transform3D(
 				Basis.IDENTITY,
 				Vector3(x, -FLOOR_THICKNESS * 0.5, z)
@@ -304,25 +320,39 @@ func _build_floor() -> void:
 			else:
 				dark_transforms.append(transform)
 	_floor_visual_light = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_A", mesh, light_transforms, null if polished else FLOOR_TILE_MATERIAL_A
+		"ImportedFloorTileGrid5M_A", mesh, light_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_A
 	)
 	add_child(_floor_visual_light)
 	_floor_visual_dark = _create_floor_multimesh(
-		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, null if polished else FLOOR_TILE_MATERIAL_B
+		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_B
 	)
 	add_child(_floor_visual_dark)
 	var empty_transforms: Array[Transform3D] = []
 	_protected_floor_visual_light = _create_floor_multimesh(
-		"ProtectedFloorPatch5M_A", mesh, empty_transforms, null if polished else FLOOR_TILE_MATERIAL_A
+		"ProtectedFloorPatch5M_A", mesh, empty_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_A
 	)
 	_protected_floor_visual_light.visible = false
 	add_child(_protected_floor_visual_light)
 	_protected_floor_visual_dark = _create_floor_multimesh(
-		"ProtectedFloorPatch5M_B", mesh, empty_transforms, null if polished else FLOOR_TILE_MATERIAL_B
+		"ProtectedFloorPatch5M_B", mesh, empty_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_B
 	)
 	_protected_floor_visual_dark.visible = false
 	add_child(_protected_floor_visual_dark)
 	_tile_count = light_transforms.size() + dark_transforms.size()
+
+
+## FLOOR_SCENE 由资产侧声明是否保留自带材质（preserve_authored_palette）。
+## 首次调用探测一次并缓存，避免每层重复实例化 Prefab。
+func _floor_module_preserves_palette() -> bool:
+	if _floor_palette_probed:
+		return _floor_preserves_authored_palette
+	_floor_palette_probed = true
+	var probe := FLOOR_SCENE.instantiate()
+	_floor_preserves_authored_palette = bool(
+		probe.get_meta("preserve_authored_palette", false)
+	)
+	probe.free()
+	return _floor_preserves_authored_palette
 
 
 func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
@@ -413,13 +443,10 @@ func _build_outer_shell() -> void:
 	var outer_rect := _outer_world_rect()
 	var outer_max := outer_rect.end
 	var wall_height := _outer_wall_height()
-	# 普通墙视觉网格高11.9m且以中心为原点；按底面反算其中心高度。
-	# 屋顶矮墙继续使用0.75m运行时缩放后的中心高度。
-	var visual_wall_center_y := (
-		wall_height * 0.5
-		if floor_index == 0
-		else -mesh.get_aabb().position.y
-	)
+	# 普通墙与女儿墙的正式 GLB 均以底面中心为原点；按包围盒底面贴合楼面
+	# （旧占位 BoxMesh 以几何中心为原点，同一表达式也能得出原中心高度）。
+	# 楼顶矮墙几何 1.50m，经 _outer_visual_transform 的 0.5 纵向缩放后为 0.75m。
+	var visual_wall_center_y := -mesh.get_aabb().position.y
 	var north_boundary := outer_rect.position.y + WALL_THICKNESS * 0.5
 	var south_boundary := outer_max.y - WALL_THICKNESS * 0.5
 	var west_boundary := outer_rect.position.x + WALL_THICKNESS * 0.5
@@ -696,12 +723,34 @@ func _hole_rects() -> Array[Rect2i]:
 
 
 func _floor_visual_hole_rects() -> Array[Rect2i]:
+	var holes := _base_visual_hole_rects()
+	holes.append_array(_additional_visual_hole_rects())
+	return holes
+
+
+## 结构/通用美术本来就要留的洞：楼梯口，以及 99F 与 100F 的贯通中庭。
+func _base_visual_hole_rects() -> Array[Rect2i]:
 	var holes := _hole_rects()
 	# 99F的承重面仍由完整FloorSupport负责；这里只从通用可视地砖中挖出
 	# 基地地板区域，避免与两套正式基地地砖在Y=0处重叠闪烁。
 	if floor_index == 1:
 		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	return holes
+
+
+## 房间自带的正式地砖（入口安全房 v007）与通用地砖都在 Y=0 共面，必须挖洞让位。
+func _additional_visual_hole_rects() -> Array[Rect2i]:
+	var holes: Array[Rect2i] = []
+	for extra_rect in additional_visual_holes:
+		holes.append(_world_rect_to_grid(extra_rect))
+	return holes
+
+
+func _point_in_hole_rects(holes: Array[Rect2i], point: Vector2i) -> bool:
+	for hole in holes:
+		if hole.has_point(point):
+			return true
+	return false
 
 
 func _stair_hole_world_rect(side: String) -> Rect2:

@@ -7,6 +7,17 @@ godot_bin="${GODOT_BIN:-godot}"
 suite="${1:-smoke}"
 aggregate_mode=false
 verification_tmp_root="$(mktemp -d "${TMPDIR:-/tmp}/shellstorm-verification.XXXXXX")"
+
+# Windows / Git Bash：Godot 是原生 exe，只认 Windows 路径。MSYS 的虚拟路径
+# （/tmp/...、/i/...）传给它会被判成 "Invalid project path" 并直接中止，
+# 而 python3 也会把 /i/... 解析成 I:\i\...。能拿到 cygpath 时统一转成
+# drive-letter 形式（I:/...），MSYS 与原生 exe 都能接受。
+# 在 macOS/Linux 上 cygpath 不存在，本段整体跳过，行为与原来完全一致。
+if command -v cygpath >/dev/null 2>&1; then
+  project_root="$(cygpath -m "${project_root}")"
+  verification_tmp_root="$(cygpath -m "${verification_tmp_root}")"
+fi
+
 isolated_project_root="${verification_tmp_root}/project"
 verification_log_dir="${verification_tmp_root}/logs"
 verification_user_dir_name="ShellStorm2Verification_$$_$(date +%s)"
@@ -49,6 +60,10 @@ cleanup_verification_workspace() {
   rm -rf "${verification_tmp_root}"
   rm -rf "${HOME}/Library/Application Support/Godot/app_userdata/${verification_user_dir_name}"
   rm -rf "${HOME}/.local/share/godot/app_userdata/${verification_user_dir_name}"
+  # Windows：Godot 把自定义用户目录落在 %APPDATA%\Godot\app_userdata 下。
+  if [[ -n "${APPDATA:-}" ]]; then
+    rm -rf "${APPDATA}/Godot/app_userdata/${verification_user_dir_name}"
+  fi
 }
 
 trap cleanup_verification_workspace EXIT
@@ -74,6 +89,8 @@ core_scenes=(
   verify_arrival_gate_floor_bundle_flow
   verify_common_floor_tile_components
   verify_common_wall_door_components
+  verify_common_floor_tile_components_v004
+  verify_common_wall_door_components_v004
   verify_unified_player_interaction_flow
   verify_tower_floor_room_authority
   verify_base_rooftop_transit_door_motion

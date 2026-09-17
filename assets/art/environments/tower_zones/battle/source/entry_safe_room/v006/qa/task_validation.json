@@ -1,0 +1,563 @@
+{
+  "passed": true,
+  "checks": {
+    "whitebox_provenance_geometry_untouched": true,
+    "whitebox_provenance_position_untouched": true,
+    "whitebox_envelope_matches_manifest": true,
+    "merged_output_matches_source_parts": true,
+    "no_room_owned_wall_or_floor_module": true,
+    "every_slot_matches_common_library_geometry": true,
+    "every_slot_uses_shared_palette_roles": true,
+    "solid_wall_slot_count_10": true,
+    "door_wall_slot_count_2": true,
+    "door_leaf_count_2": true,
+    "floor_tile_slot_count_9": true,
+    "wall_placement_count_12": true,
+    "stale_room_owned_packages_removed": true,
+    "superseded_wall_floor_modules_removed": true,
+    "structural_base_plate_present": true,
+    "walk_plane_has_no_through_holes": true,
+    "armour_keeps_both_doorways_clear": true,
+    "packages_inside_room_envelope": true,
+    "wall_ring_lands_on_declared_envelope": true,
+    "floor_grid_lands_on_declared_envelope": true,
+    "door_leaves_land_in_their_openings": true,
+    "doorway_core_is_empty": true,
+    "four_material_roles": true,
+    "shared_palette_external": true,
+    "packages_nonempty": true,
+    "one_output_package_per_object": true,
+    "no_wall_or_floor_asset_id_in_room": true
+  },
+  "changed_provenance_objects": {},
+  "moved_provenance_objects": [],
+  "provenance_envelope": {
+    "walls": [
+      [
+        -7.5,
+        -7.5,
+        0.0
+      ],
+      [
+        7.5,
+        7.5,
+        11.9
+      ]
+    ],
+    "floors": [
+      [
+        -7.5,
+        -7.5,
+        0.0
+      ],
+      [
+        7.5,
+        7.5,
+        0.3
+      ]
+    ]
+  },
+  "whitebox_manifest_bounds": {
+    "min": [
+      -7.5,
+      -7.5,
+      0.0
+    ],
+    "max": [
+      7.5,
+      7.5,
+      11.9
+    ]
+  },
+  "room_owned_module_offenders": [],
+  "slot_ring_bounds": [
+    [
+      -7.5,
+      -7.5,
+      0.0
+    ],
+    [
+      7.5,
+      7.5,
+      11.9
+    ]
+  ],
+  "floor_grid_bounds": [
+    [
+      -7.47,
+      -7.47,
+      0.26
+    ],
+    [
+      7.47,
+      7.47,
+      0.3
+    ]
+  ],
+  "door_leaf_placements": [
+    [
+      "DOORLEAF_SOUTH",
+      true,
+      [
+        0.0,
+        -7.35
+      ],
+      [
+        0.0,
+        -7.35
+      ]
+    ],
+    [
+      "DOORLEAF_EAST",
+      true,
+      [
+        7.35,
+        0.0
+      ],
+      [
+        7.35,
+        0.0
+      ]
+    ]
+  ],
+  "doorway_core_intruders": [],
+  "doorway_edge_grazes_m": {
+    "south/FLOORSLOT_R01_C02_INSET": {
+      "eaten_width_m": 2.2,
+      "eaten_height_m": 0.041,
+      "eaten_depth_m": 0.1825,
+      "volume_m3": 0.016462
+    },
+    "south/地砖压边_主体_00027": {
+      "eaten_width_m": 2.2,
+      "eaten_height_m": 0.007,
+      "eaten_depth_m": 0.055,
+      "volume_m3": 0.000847
+    },
+    "south/门框蓝色灯条_自发光_00954": {
+      "eaten_width_m": 0.0175,
+      "eaten_height_m": 0.78,
+      "eaten_depth_m": 0.035,
+      "volume_m3": 0.000478
+    },
+    "south/门框蓝色灯条_自发光_00956": {
+      "eaten_width_m": 0.0175,
+      "eaten_height_m": 0.78,
+      "eaten_depth_m": 0.035,
+      "volume_m3": 0.000478
+    },
+    "east/FLOORSLOT_R02_C03_INSET": {
+      "eaten_width_m": 2.2,
+      "eaten_height_m": 0.041,
+      "eaten_depth_m": 0.1825,
+      "volume_m3": 0.016461
+    },
+    "east/地砖压边_主体_00118": {
+      "eaten_width_m": 2.2,
+      "eaten_height_m": 0.007,
+      "eaten_depth_m": 0.055,
+      "volume_m3": 0.000847
+    },
+    "east/蓝色拼缝_自发光_00120": {
+      "eaten_width_m": 2.2,
+      "eaten_height_m": 0.009,
+      "eaten_depth_m": 0.025,
+      "volume_m3": 0.000495
+    },
+    "east/门框蓝色灯条_自发光_00954.001": {
+      "eaten_width_m": 0.0175,
+      "eaten_height_m": 0.78,
+      "eaten_depth_m": 0.035,
+      "volume_m3": 0.000478
+    },
+    "east/门框蓝色灯条_自发光_00956.001": {
+      "eaten_width_m": 0.0175,
+      "eaten_height_m": 0.78,
+      "eaten_depth_m": 0.035,
+      "volume_m3": 0.000478
+    }
+  },
+  "doorway_clash_objects": [],
+  "packages_outside_envelope": [],
+  "slot_hashes": [
+    [
+      "WALLSLOT_NORTH_01",
+      true
+    ],
+    [
+      "WALLSLOT_NORTH_02",
+      true
+    ],
+    [
+      "WALLSLOT_NORTH_03",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_01",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_PIER_L",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_PIER_R",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_LINTEL",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_03",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_01",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_PIER_L",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_PIER_R",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_LINTEL",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_03",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_01",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_02",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_03",
+      true
+    ],
+    [
+      "DOORLEAF_SOUTH",
+      true
+    ],
+    [
+      "DOORLEAF_EAST",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C03_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C03_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C03_INSET",
+      true
+    ]
+  ],
+  "slot_roles": [
+    [
+      "WALLSLOT_NORTH_01",
+      true
+    ],
+    [
+      "WALLSLOT_NORTH_02",
+      true
+    ],
+    [
+      "WALLSLOT_NORTH_03",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_01",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_PIER_L",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_PIER_R",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_02_LINTEL",
+      true
+    ],
+    [
+      "WALLSLOT_SOUTH_03",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_01",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_PIER_L",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_PIER_R",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_02_LINTEL",
+      true
+    ],
+    [
+      "WALLSLOT_EAST_03",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_01",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_02",
+      true
+    ],
+    [
+      "WALLSLOT_WEST_03",
+      true
+    ],
+    [
+      "DOORLEAF_SOUTH",
+      true
+    ],
+    [
+      "DOORLEAF_EAST",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R01_C03_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R02_C03_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C01",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C01_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C02",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C02_INSET",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C03",
+      true
+    ],
+    [
+      "FLOORSLOT_R03_C03_INSET",
+      true
+    ]
+  ],
+  "component_usage": {
+    "wall_standard_5m": 10,
+    "door_5m": 2,
+    "floor_tile_r01_c01": 5,
+    "floor_tile_r01_c02": 4
+  },
+  "package_count": 24,
+  "slot_object_count": 36,
+  "slot_placement_count": 23,
+  "removed_room_owned_packages": [
+    "北墙_资产包",
+    "东墙_资产包",
+    "西墙_资产包",
+    "南门左墙_资产包",
+    "南门右墙_资产包",
+    "南门楣_资产包",
+    "承重底板_资产包",
+    "地砖_R01_C01_资产包",
+    "地砖_R01_C02_资产包",
+    "地砖_R01_C03_资产包",
+    "地砖_R02_C01_资产包",
+    "地砖_R02_C02_资产包",
+    "地砖_R02_C03_资产包",
+    "地砖_R03_C01_资产包",
+    "地砖_R03_C02_资产包",
+    "地砖_R03_C03_资产包"
+  ],
+  "removed_wall_floor_modules": [
+    "FLOOR_TILE_R01_C01",
+    "FLOOR_TILE_R01_C02",
+    "FLOOR_TILE_R01_C03",
+    "FLOOR_TILE_R02_C01",
+    "FLOOR_TILE_R02_C02",
+    "FLOOR_TILE_R02_C03",
+    "FLOOR_TILE_R03_C01",
+    "FLOOR_TILE_R03_C02",
+    "FLOOR_TILE_R03_C03",
+    "WALL_EAST_01",
+    "WALL_NORTH_01",
+    "WALL_SOUTH_DOOR_01_LEFT",
+    "WALL_SOUTH_DOOR_01_LINTEL",
+    "WALL_SOUTH_DOOR_01_RIGHT",
+    "WALL_WEST_01"
+  ],
+  "floor_gap_samples": [],
+  "structural_base_plate": {
+    "present": true,
+    "bounds": [
+      [
+        -7.5,
+        -7.5,
+        0.0
+      ],
+      [
+        7.5,
+        7.5,
+        0.26
+      ]
+    ],
+    "why_room_owned": "the shared library has no base plate; the reference room main_room_02/v003 keeps the same floor/floor_base package (object FLOOR_BASE, 0.26 thick). Its top face is what shows through the 60 mm grout between the 5 m tile modules."
+  },
+  "door_wall_origin_note": "common_components origin = wall centreline, so slots sit at +-7.35 and the wall occupies 7.2..7.5, the same occupancy the runtime gets by putting its door-wall node at the outer face 7.5",
+  "open_issues": [
+    {
+      "id": "door_clear_height_0p30",
+      "detail": "common_components wall_door_5m lintel is 9.4m tall (local z 2.5..11.9), so the opening runs 0..2.5 from the wall base. With the walkable floor top at z=0.30 the usable clear height is 2.2m, while whitebox v003 door_contract specifies bottom_z 0.30 + height 2.5 (clear 2.5m, lintel 9.1m tall). 0.30m disagreement between the shared component library and the whitebox contract; the library was used unmodified (GLB is visual-only) and Godot owns the opening.",
+      "owner": "common_components v004 or whitebox contract revision"
+    },
+    {
+      "id": "south_door_off_centre",
+      "detail": "whitebox v003 authored the south doorway on slot centre +2.5 (south wall = 2.5 trim + 5 solid + 5 door + 2.5 trim) and no east doorway. The runtime puts both doorways in the middle 5m slot and the 5m shared component cannot represent a 2.5m trim, so v006 follows the runtime.",
+      "owner": "user decision, recorded"
+    },
+    {
+      "id": "armour_relaid_for_door_walls",
+      "detail": "the authored south/east wall armour was drawn around the old door positions and has been re-laid on the 5m slot grid from the authored north panel unit (2.4m, which tiles a 5m slot exactly twice). North and west keep their authored armour verbatim because those walls have no doorway.",
+      "owner": "art review"
+    },
+    {
+      "id": "doorway_edge_grazes_sub_5cm",
+      "detail": "measured encroachments into the exact 2.2 x 2.5 opening, none of them blocking (the hard CORE gate is empty; Godot owns the opening, the door FSM, navigation and collision, and the GLB is visual only). Both doorways carry the same set, all inherited from v003 art: the shared floor tile (r01_c02 / r02_c03) raises its decorative inlay 41 mm proud of the 0.30 walkable surface at the threshold; the gate frame LED strips muzzle 17.5 mm into the clear width on each side (the opening is 2.2 m nominal, 2.165 m between strips); the wall-base trim bar crosses the threshold 7 mm proud, and an east-wall inlay seam 9 mm. See doorway_edge_grazes_m for the full table.",
+      "owner": "art review; cosmetic, no gameplay effect"
+    },
+    {
+      "id": "canonicalisation_frame",
+      "detail": "the shared library authors every wall/floor part at location (0,0,0) with its vertices already in the component root-local frame, parented to a ROOT_* empty that marks the library layout position. Canonicalising through that root offset double-counts it and displaces whole slots by tens of metres while every shape hash still agrees. The build now verifies the declared shape convention (x/y centred on the origin, z from 0) and the final ring / grid world bounds, and qa/verify_entry_safe_room_v006.py re-measures the saved blend independently.",
+      "owner": "common_components v003 contract note"
+    }
+  ]
+}

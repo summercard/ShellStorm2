@@ -1,0 +1,52 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-DOOR-5M",
+  "slug": "door_5m",
+  "component": "door_5m",
+  "version": "v004",
+  "category": "10_门组件",
+  "note_zh": "门扇",
+  "source_blend": "战局区块_通用组件库_v004.blend",
+  "blender_collection": "door_5m_通用包",
+  "root_object": "ROOT_door_5m_通用组件",
+  "objects": [
+    "door_5m_门扇_输出"
+  ],
+  "object_count": 1,
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "bounds_lo": [
+    -1.1,
+    -0.09,
+    0.0
+  ],
+  "bounds_hi": [
+    1.1,
+    0.09,
+    2.5
+  ],
+  "bounds_size": [
+    2.2,
+    0.18,
+    2.5
+  ],
+  "godot_bounds_size": [
+    2.2,
+    2.5,
+    0.18
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "material_roles_used": [
+    "01_精工金属_紫色骨架"
+  ],
+  "instance_rule_zh": "原点=底面中心、本地 +Y=朝房内那面。放到任意 5m 网格槽位即自动对齐，不需要按方位区分。",
+  "supersedes": "v003",
+  "carries_room_art_from": "entry_safe_room/v006",
+  "collision_note": "碰撞不随美术：结构碰撞仍由 Godot 0.30m 代理负责。",
+  "exported": false
+}

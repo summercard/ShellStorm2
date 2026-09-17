@@ -1,0 +1,960 @@
+{
+  "claim": "the component decoration lands exactly where the room art used to be",
+  "contract_of_record": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\qa\\build_v004_report.json",
+  "tolerance_m": 0.01,
+  "slots": [
+    {
+      "placement_id": "FLOORSLOT_R01_C01",
+      "component": "floor_tile_r01_c01",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -7.4575,
+          -7.4575,
+          0.297
+        ],
+        [
+          -2.5425,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.4575,
+          -7.4575,
+          0.297
+        ],
+        [
+          -2.5425,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R01_C01",
+      "reference_box": [
+        [
+          -7.457,
+          -7.457,
+          0.297
+        ],
+        [
+          -2.543,
+          -2.543,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R01_C02",
+      "component": "floor_tile_r01_c02",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -2.4575,
+          -7.4575,
+          0.297
+        ],
+        [
+          2.4575,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -2.4575,
+          -7.4575,
+          0.297
+        ],
+        [
+          2.4575,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R01_C02",
+      "reference_box": [
+        [
+          -2.457,
+          -7.457,
+          0.297
+        ],
+        [
+          2.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R01_C03",
+      "component": "floor_tile_r01_c01",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          2.5425,
+          -7.4575,
+          0.297
+        ],
+        [
+          7.4575,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          2.5425,
+          -7.4575,
+          0.297
+        ],
+        [
+          7.4575,
+          -2.5425,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R01_C03",
+      "reference_box": [
+        [
+          2.543,
+          -7.457,
+          0.297
+        ],
+        [
+          7.457,
+          -2.543,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R02_C01",
+      "component": "floor_tile_r01_c02",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -7.4575,
+          -2.4575,
+          0.297
+        ],
+        [
+          -2.5425,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.4575,
+          -2.4575,
+          0.297
+        ],
+        [
+          -2.5425,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R02_C01",
+      "reference_box": [
+        [
+          -7.457,
+          -2.457,
+          0.297
+        ],
+        [
+          -2.543,
+          2.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R02_C02",
+      "component": "floor_tile_r01_c01",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -2.4575,
+          -2.4575,
+          0.297
+        ],
+        [
+          2.4575,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -2.4575,
+          -2.4575,
+          0.297
+        ],
+        [
+          2.4575,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R02_C02",
+      "reference_box": [
+        [
+          -2.457,
+          -2.457,
+          0.297
+        ],
+        [
+          2.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R02_C03",
+      "component": "floor_tile_r01_c02",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          2.5425,
+          -2.4575,
+          0.297
+        ],
+        [
+          7.4575,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          2.5425,
+          -2.4575,
+          0.297
+        ],
+        [
+          7.4575,
+          2.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R02_C03",
+      "reference_box": [
+        [
+          2.543,
+          -2.457,
+          0.297
+        ],
+        [
+          7.457,
+          2.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R03_C01",
+      "component": "floor_tile_r01_c01",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -7.4575,
+          2.5425,
+          0.297
+        ],
+        [
+          -2.5425,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.4575,
+          2.5425,
+          0.297
+        ],
+        [
+          -2.5425,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R03_C01",
+      "reference_box": [
+        [
+          -7.457,
+          2.543,
+          0.297
+        ],
+        [
+          -2.543,
+          7.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R03_C02",
+      "component": "floor_tile_r01_c02",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          -2.4575,
+          2.5425,
+          0.297
+        ],
+        [
+          2.4575,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          -2.4575,
+          2.5425,
+          0.297
+        ],
+        [
+          2.4575,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R03_C02",
+      "reference_box": [
+        [
+          -2.457,
+          2.543,
+          0.297
+        ],
+        [
+          2.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "FLOORSLOT_R03_C03",
+      "component": "floor_tile_r01_c01",
+      "family": "tile_frame",
+      "placed_box": [
+        [
+          2.5425,
+          2.5425,
+          0.297
+        ],
+        [
+          7.4575,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_box": [
+        [
+          2.5425,
+          2.5425,
+          0.297
+        ],
+        [
+          7.4575,
+          7.4575,
+          0.3115
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "FLOORSLOT_R03_C03",
+      "reference_box": [
+        [
+          2.543,
+          2.543,
+          0.297
+        ],
+        [
+          7.457,
+          7.457,
+          0.312
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_EAST_01",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          7.197,
+          -7.45,
+          0.45
+        ],
+        [
+          7.225,
+          -2.55,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          7.197,
+          -7.45,
+          0.45
+        ],
+        [
+          7.225,
+          -2.55,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_EAST_01",
+      "reference_box": [
+        [
+          7.197,
+          -7.45,
+          0.45
+        ],
+        [
+          7.225,
+          -2.55,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_EAST_02",
+      "component": "wall_door_5m",
+      "family": "door_gate",
+      "placed_box": [
+        [
+          7.135,
+          -1.34,
+          0.3
+        ],
+        [
+          7.478,
+          1.585,
+          3.165
+        ]
+      ],
+      "contract_box": [
+        [
+          7.135,
+          -1.34,
+          0.3
+        ],
+        [
+          7.478,
+          1.585,
+          3.165
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "DOORSLOT_EAST",
+      "reference_box": [
+        [
+          7.135,
+          -1.34,
+          0.3
+        ],
+        [
+          7.478,
+          1.585,
+          3.165
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_EAST_03",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          7.197,
+          2.55,
+          0.45
+        ],
+        [
+          7.225,
+          7.45,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          7.197,
+          2.55,
+          0.45
+        ],
+        [
+          7.225,
+          7.45,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_EAST_03",
+      "reference_box": [
+        [
+          7.197,
+          2.55,
+          0.45
+        ],
+        [
+          7.225,
+          7.45,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_NORTH_01",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -7.45,
+          7.197,
+          0.45
+        ],
+        [
+          -2.55,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.45,
+          7.197,
+          0.45
+        ],
+        [
+          -2.55,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_NORTH_01",
+      "reference_box": [
+        [
+          -7.45,
+          7.197,
+          0.45
+        ],
+        [
+          -2.55,
+          7.225,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_NORTH_02",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -2.45,
+          7.197,
+          0.45
+        ],
+        [
+          2.45,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -2.45,
+          7.197,
+          0.45
+        ],
+        [
+          2.45,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_NORTH_02",
+      "reference_box": [
+        [
+          -2.45,
+          7.197,
+          0.45
+        ],
+        [
+          2.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_NORTH_03",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          2.55,
+          7.197,
+          0.45
+        ],
+        [
+          7.45,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          2.55,
+          7.197,
+          0.45
+        ],
+        [
+          7.45,
+          7.225,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_NORTH_03",
+      "reference_box": [
+        [
+          2.55,
+          7.197,
+          0.45
+        ],
+        [
+          7.45,
+          7.225,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -7.45,
+          -7.225,
+          0.45
+        ],
+        [
+          -2.55,
+          -7.197,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.45,
+          -7.225,
+          0.45
+        ],
+        [
+          -2.55,
+          -7.197,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_SOUTH_01",
+      "reference_box": [
+        [
+          -7.45,
+          -7.225,
+          0.45
+        ],
+        [
+          -2.55,
+          -7.197,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "component": "wall_door_5m",
+      "family": "door_gate",
+      "placed_box": [
+        [
+          -1.34,
+          -7.478,
+          0.3
+        ],
+        [
+          1.585,
+          -7.135,
+          3.165
+        ]
+      ],
+      "contract_box": [
+        [
+          -1.34,
+          -7.478,
+          0.3
+        ],
+        [
+          1.585,
+          -7.135,
+          3.165
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "DOORSLOT_SOUTH",
+      "reference_box": [
+        [
+          -1.34,
+          -7.478,
+          0.3
+        ],
+        [
+          1.585,
+          -7.135,
+          3.165
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          2.55,
+          -7.225,
+          0.45
+        ],
+        [
+          7.45,
+          -7.197,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          2.55,
+          -7.225,
+          0.45
+        ],
+        [
+          7.45,
+          -7.197,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_SOUTH_03",
+      "reference_box": [
+        [
+          2.55,
+          -7.225,
+          0.45
+        ],
+        [
+          7.45,
+          -7.197,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_WEST_01",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -7.225,
+          -7.45,
+          0.45
+        ],
+        [
+          -7.197,
+          -2.55,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.225,
+          -7.45,
+          0.45
+        ],
+        [
+          -7.197,
+          -2.55,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": null,
+      "reference_box": null,
+      "reference_ok": null,
+      "reference_agrees_with_contract": null,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_WEST_02",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -7.225,
+          -2.45,
+          0.45
+        ],
+        [
+          -7.197,
+          2.45,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.225,
+          -2.45,
+          0.45
+        ],
+        [
+          -7.197,
+          2.45,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": "WALLSLOT_WEST_02",
+      "reference_box": [
+        [
+          -7.225,
+          -2.45,
+          0.45
+        ],
+        [
+          -7.197,
+          2.45,
+          8.358
+        ]
+      ],
+      "reference_ok": true,
+      "reference_agrees_with_contract": true,
+      "ok": true
+    },
+    {
+      "placement_id": "WALLSLOT_WEST_03",
+      "component": "wall_standard_5m",
+      "family": "wall_armour",
+      "placed_box": [
+        [
+          -7.225,
+          2.55,
+          0.45
+        ],
+        [
+          -7.197,
+          7.45,
+          8.3575
+        ]
+      ],
+      "contract_box": [
+        [
+          -7.225,
+          2.55,
+          0.45
+        ],
+        [
+          -7.197,
+          7.45,
+          8.3575
+        ]
+      ],
+      "contract_ok": true,
+      "reference_slot": null,
+      "reference_box": null,
+      "reference_ok": null,
+      "reference_agrees_with_contract": null,
+      "ok": true
+    }
+  ],
+  "v004_replay_verdict": {
+    "entries": 19,
+    "matched": 18
+  },
+  "v004_warnings": [
+    "west wall armour normalised 5 x 2.9 m -> 6 x 2.4 m (was not slot-aligned)",
+    "c02 floor tile: the room splits 2 with / 2 without the square access cover (21+32 vs 12+23); the generic component takes the WITH-cover variant, so those tiles gain a cover",
+    "floor tiles carry per-tile unique scuff marks (地砖磨损); a generic component keeps one representative per variant, so scuffs repeat across slots"
+  ]
+}

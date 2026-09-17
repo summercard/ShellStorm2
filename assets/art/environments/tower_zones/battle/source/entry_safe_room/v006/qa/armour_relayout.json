@@ -1,0 +1,23 @@
+{
+  "unit": {
+    "name": "墙体内嵌面板_主体_00216",
+    "cap": "面板分缝_主体_00217",
+    "width_m": 2.4,
+    "source": "制作_北墙.001"
+  },
+  "rule": "2x2.4m panel + cap per 5m slot, 0.05 inset at the slot edge, door slot skipped",
+  "walls": {
+    "south": {
+      "objects": 8,
+      "rotation_z_deg": 180.0
+    },
+    "east": {
+      "objects": 8,
+      "rotation_z_deg": -90.0
+    }
+  },
+  "reused_verbatim": [
+    "north",
+    "west"
+  ]
+}

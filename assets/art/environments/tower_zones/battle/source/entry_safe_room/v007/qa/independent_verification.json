@@ -1,0 +1,176 @@
+{
+  "passed": true,
+  "failed": [],
+  "checks": [
+    {
+      "check": "provenance ring = 16 whitebox source parts",
+      "detail": "found 16"
+    },
+    {
+      "check": "room owns no wall / floor module geometry",
+      "detail": "[]"
+    },
+    {
+      "check": "room owns no wall / floor / door decoration",
+      "detail": "[]"
+    },
+    {
+      "check": "structural slot inventory unchanged (16 wall / 18 tile / 2 leaf)",
+      "detail": "{'wall_body': 10, 'door_wall_body': 6, 'door_leaf_body': 2, 'tile_plate': 9, 'tile_inset': 9}"
+    },
+    {
+      "check": "decoration now travels inside the slots (275 parts)",
+      "detail": "{'wall_armour': 40, 'door_gate': 22, 'tile_frame': 54, 'tile_detail': 159}"
+    },
+    {
+      "check": "slot object total = 311",
+      "detail": "found 311"
+    },
+    {
+      "check": "no slot carries an unclassified part family",
+      "detail": "[]"
+    },
+    {
+      "check": "wall ring fills the 15x15x11.9 envelope",
+      "detail": "bounds=[[-7.5, -7.5, 0.0], [7.5, 7.5, 11.899999618530273]]"
+    },
+    {
+      "check": "every slot declares Godot as collision owner",
+      "detail": "[]"
+    },
+    {
+      "check": "no slot claims room-owned geometry",
+      "detail": "[]"
+    },
+    {
+      "check": "every slot defers its visual to the shared component library",
+      "detail": "[]"
+    },
+    {
+      "check": "one unit serves every slot of its component in every direction",
+      "detail": "{}"
+    },
+    {
+      "check": "SOUTH doorway placed as 2 piers + 1 lintel",
+      "detail": "found 3"
+    },
+    {
+      "check": "SOUTH doorway CORE (>30 mm intrusion) is empty",
+      "detail": "[]"
+    },
+    {
+      "check": "SOUTH doorway EDGE (exact 2.2 x 2.5) is empty",
+      "detail": ""
+    },
+    {
+      "check": "SOUTH doorway lintel spans the opening at z=2.5",
+      "detail": "lintel z=2.5..11.899999618530273"
+    },
+    {
+      "check": "SOUTH door leaf fills and sits in the opening",
+      "detail": "leaf=[-1.100000023841858, -7.440000057220459, 0.0]..[1.100000023841858, -7.259999752044678, 2.5]"
+    },
+    {
+      "check": "EAST doorway placed as 2 piers + 1 lintel",
+      "detail": "found 3"
+    },
+    {
+      "check": "EAST doorway CORE (>30 mm intrusion) is empty",
+      "detail": "[]"
+    },
+    {
+      "check": "EAST doorway EDGE (exact 2.2 x 2.5) is empty",
+      "detail": ""
+    },
+    {
+      "check": "EAST doorway lintel spans the opening at z=2.5",
+      "detail": "lintel z=2.5..11.899999618530273"
+    },
+    {
+      "check": "EAST door leaf fills and sits in the opening",
+      "detail": "leaf=[7.259999752044678, -1.100000023841858, 0.0]..[7.440000057220459, 1.100000023841858, 2.5]"
+    },
+    {
+      "check": "room-owned structural base plate present (15 x 15 x 0.26, z 0..0.26)",
+      "detail": "1 plate(s) bounds=[[-7.5, -7.5, 0.0], [7.5, 7.5, 0.25999999046325684]]"
+    },
+    {
+      "check": "floor grid covers the inner face and stays inside the shell",
+      "detail": "bounds=[[-7.470000267028809, -7.470000267028809, 0.25999999046325684], [7.470000267028809, 7.470000267028809, 0.3452000021934509]]"
+    },
+    {
+      "check": "tile tops land on the 0.30 walkable surface",
+      "detail": "z=0.25999999046325684..0.30000001192092896"
+    },
+    {
+      "check": "all 9 tile centres sit on the 5 m grid",
+      "detail": "[]"
+    },
+    {
+      "check": "walk plane has no through-holes across the 60 mm grout",
+      "detail": "[]"
+    },
+    {
+      "check": "nothing sinks below z=0",
+      "detail": "[]"
+    },
+    {
+      "check": "the room references the common component library by path",
+      "detail": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend"
+    },
+    {
+      "check": "the library meshes are NOT re-hosted inside the room blend",
+      "detail": "[]"
+    },
+    {
+      "check": "the v004 library blend is the one the room cites",
+      "detail": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend"
+    },
+    {
+      "check": "the 17 packages carry no superseded wall/floor/door decor",
+      "detail": "[]"
+    },
+    {
+      "check": "package count 17 (was 24)",
+      "detail": "found 17: ['central_terminal_island', 'debris_papers', 'east_repair_bay', 'east_robot_arm', 'floor_base', 'maintenance_chair', 'north_broken_core', 'north_nexus_sign', 'north_server_00', 'north_server_01', 'north_server_02', 'north_server_03', 'north_server_04', 'north_server_05', 'office_planter', 'overhead_services', 'west_glass_office']"
+    },
+    {
+      "check": "the structural base plate is still room-owned",
+      "detail": "floor_base present: True"
+    }
+  ],
+  "slot_inventory": {
+    "structural": {
+      "wall_body": 10,
+      "door_wall_body": 6,
+      "door_leaf_body": 2,
+      "tile_plate": 9,
+      "tile_inset": 9
+    },
+    "decoration": {
+      "wall_armour": 40,
+      "door_gate": 22,
+      "tile_frame": 54,
+      "tile_detail": 159
+    }
+  },
+  "packages": [
+    "central_terminal_island",
+    "debris_papers",
+    "east_repair_bay",
+    "east_robot_arm",
+    "floor_base",
+    "maintenance_chair",
+    "north_broken_core",
+    "north_nexus_sign",
+    "north_server_00",
+    "north_server_01",
+    "north_server_02",
+    "north_server_03",
+    "north_server_04",
+    "north_server_05",
+    "office_planter",
+    "overhead_services",
+    "west_glass_office"
+  ]
+}

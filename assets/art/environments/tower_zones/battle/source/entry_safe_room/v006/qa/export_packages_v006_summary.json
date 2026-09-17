@@ -1,0 +1,1026 @@
+{
+  "north_server_00": {
+    "package_id": "esr_north_server_00",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_00",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_00/north_server_00_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_00_整合主体.001",
+      "服务器柜_north_server_00_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      -5.65,
+      6.5408,
+      0.29
+    ],
+    "godot_placement_position": [
+      -5.65,
+      0.29,
+      -6.5408
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.42,
+      1.3384,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.42,
+      3.696,
+      1.3384
+    ],
+    "room_bounds_blender": [
+      [
+        -6.36,
+        5.8716,
+        0.29
+      ],
+      [
+        -4.94,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_server_01": {
+    "package_id": "esr_north_server_01",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_01",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_01/north_server_01_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_01_整合主体.001",
+      "服务器柜_north_server_01_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      -4.12,
+      6.5408,
+      0.29
+    ],
+    "godot_placement_position": [
+      -4.12,
+      0.29,
+      -6.5408
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.42,
+      1.3384,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.42,
+      3.696,
+      1.3384
+    ],
+    "room_bounds_blender": [
+      [
+        -4.83,
+        5.8716,
+        0.29
+      ],
+      [
+        -3.41,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_server_02": {
+    "package_id": "esr_north_server_02",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_02",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_02/north_server_02_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_02_整合主体.001",
+      "服务器柜_north_server_02_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      -2.3561,
+      6.2704,
+      0.29
+    ],
+    "godot_placement_position": [
+      -2.3561,
+      0.29,
+      -6.2704
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.8878,
+      1.8792,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.8878,
+      3.696,
+      1.8792
+    ],
+    "room_bounds_blender": [
+      [
+        -3.3,
+        5.3308,
+        0.29
+      ],
+      [
+        -1.4122,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_server_03": {
+    "package_id": "esr_north_server_03",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_03",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_03/north_server_03_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_03_整合主体.001",
+      "服务器柜_north_server_03_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      2.8239,
+      6.2704,
+      0.29
+    ],
+    "godot_placement_position": [
+      2.8239,
+      0.29,
+      -6.2704
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.8878,
+      1.8792,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.8878,
+      3.696,
+      1.8792
+    ],
+    "room_bounds_blender": [
+      [
+        1.88,
+        5.3308,
+        0.29
+      ],
+      [
+        3.7678,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_server_04": {
+    "package_id": "esr_north_server_04",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_04",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_04/north_server_04_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_04_整合主体.001",
+      "服务器柜_north_server_04_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      4.12,
+      6.5408,
+      0.29
+    ],
+    "godot_placement_position": [
+      4.12,
+      0.29,
+      -6.5408
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.42,
+      1.3384,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.42,
+      3.696,
+      1.3384
+    ],
+    "room_bounds_blender": [
+      [
+        3.41,
+        5.8716,
+        0.29
+      ],
+      [
+        4.83,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_server_05": {
+    "package_id": "esr_north_server_05",
+    "category": "facilities",
+    "display_name_zh": "服务器柜_north_server_05",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_server_05/north_server_05_visual_top3d_v006.glb",
+    "meshes": [
+      "服务器柜_north_server_05_整合主体.001",
+      "服务器柜_north_server_05_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      5.65,
+      6.5408,
+      0.29
+    ],
+    "godot_placement_position": [
+      5.65,
+      0.29,
+      -6.5408
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.42,
+      1.3384,
+      3.696
+    ],
+    "godot_size_xyz": [
+      1.42,
+      3.696,
+      1.3384
+    ],
+    "room_bounds_blender": [
+      [
+        4.94,
+        5.8716,
+        0.29
+      ],
+      [
+        6.36,
+        7.21,
+        3.986
+      ]
+    ]
+  },
+  "north_broken_core": {
+    "package_id": "esr_north_broken_core",
+    "category": "facilities",
+    "display_name_zh": "北墙破损服务器核心",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_broken_core/north_broken_core_visual_top3d_v006.glb",
+    "meshes": [
+      "北墙破损服务器核心_整合主体.001",
+      "北墙破损服务器核心_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      0.0,
+      5.9846,
+      0.3
+    ],
+    "godot_placement_position": [
+      0.0,
+      0.3,
+      -5.9846
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      2.15,
+      1.9408,
+      9.656
+    ],
+    "godot_size_xyz": [
+      2.15,
+      9.656,
+      1.9408
+    ],
+    "room_bounds_blender": [
+      [
+        -1.075,
+        5.0142,
+        0.3
+      ],
+      [
+        1.075,
+        6.955,
+        9.956
+      ]
+    ]
+  },
+  "north_nexus_sign": {
+    "package_id": "esr_north_nexus_sign",
+    "category": "facilities",
+    "display_name_zh": "北墙标识_NEXUS",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/north_nexus_sign/north_nexus_sign_visual_top3d_v006.glb",
+    "meshes": [
+      "北墙标识_NEXUS_整合主体",
+      "北墙标识_NEXUS_UI灯光_柔和自发光"
+    ],
+    "origin_blender_m": [
+      0.0,
+      7.1652,
+      6.575
+    ],
+    "godot_placement_position": [
+      0.0,
+      6.575,
+      -7.1652
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      11.3,
+      0.0745,
+      2.35
+    ],
+    "godot_size_xyz": [
+      11.3,
+      2.35,
+      0.0745
+    ],
+    "room_bounds_blender": [
+      [
+        -5.65,
+        7.128,
+        6.575
+      ],
+      [
+        5.65,
+        7.2025,
+        8.925
+      ]
+    ]
+  },
+  "west_glass_office": {
+    "package_id": "esr_west_glass_office",
+    "category": "facilities",
+    "display_name_zh": "西北玻璃办公室",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/west_glass_office/west_glass_office_visual_top3d_v006.glb",
+    "meshes": [
+      "西北玻璃办公室_整合主体.001",
+      "西北玻璃办公室_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      -5.1,
+      3.3021,
+      0.3
+    ],
+    "godot_placement_position": [
+      -5.1,
+      0.3,
+      -3.3021
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      4.28,
+      3.6758,
+      3.29
+    ],
+    "godot_size_xyz": [
+      4.28,
+      3.29,
+      3.6758
+    ],
+    "room_bounds_blender": [
+      [
+        -7.24,
+        1.4642,
+        0.3
+      ],
+      [
+        -2.96,
+        5.14,
+        3.59
+      ]
+    ]
+  },
+  "central_terminal_island": {
+    "package_id": "esr_central_terminal_island",
+    "category": "facilities",
+    "display_name_zh": "中央四屏终端岛",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/central_terminal_island/central_terminal_island_visual_top3d_v006.glb",
+    "meshes": [
+      "中央四屏终端岛_整合主体.001",
+      "中央四屏终端岛_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      0.0,
+      -0.8825,
+      0.3
+    ],
+    "godot_placement_position": [
+      0.0,
+      0.3,
+      0.8825
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      3.67,
+      2.485,
+      2.18
+    ],
+    "godot_size_xyz": [
+      3.67,
+      2.18,
+      2.485
+    ],
+    "room_bounds_blender": [
+      [
+        -1.835,
+        -2.125,
+        0.3
+      ],
+      [
+        1.835,
+        0.36,
+        2.48
+      ]
+    ]
+  },
+  "east_repair_bay": {
+    "package_id": "esr_east_repair_bay",
+    "category": "facilities",
+    "display_name_zh": "东侧维修间",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/east_repair_bay/east_repair_bay_visual_top3d_v006.glb",
+    "meshes": [
+      "东侧维修间_整合主体.001",
+      "东侧维修间_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      5.7184,
+      4.3675,
+      0.3
+    ],
+    "godot_placement_position": [
+      5.7184,
+      0.3,
+      -4.3675
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      2.7533,
+      4.375,
+      2.75
+    ],
+    "godot_size_xyz": [
+      2.7533,
+      2.75,
+      4.375
+    ],
+    "room_bounds_blender": [
+      [
+        4.3417,
+        2.18,
+        0.3
+      ],
+      [
+        7.095,
+        6.555,
+        3.05
+      ]
+    ]
+  },
+  "east_robot_arm": {
+    "package_id": "esr_east_robot_arm",
+    "category": "facilities",
+    "display_name_zh": "东侧黄色机械臂",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/east_robot_arm/east_robot_arm_visual_top3d_v006.glb",
+    "meshes": [
+      "东侧黄色机械臂_整合主体.001",
+      "东侧黄色机械臂_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      5.26,
+      -3.55,
+      0.3
+    ],
+    "godot_placement_position": [
+      5.26,
+      0.3,
+      3.55
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.64,
+      1.46,
+      3.02
+    ],
+    "godot_size_xyz": [
+      1.64,
+      3.02,
+      1.46
+    ],
+    "room_bounds_blender": [
+      [
+        4.44,
+        -4.28,
+        0.3
+      ],
+      [
+        6.08,
+        -2.82,
+        3.32
+      ]
+    ]
+  },
+  "office_planter": {
+    "package_id": "esr_office_planter",
+    "category": "facilities",
+    "display_name_zh": "办公室外固定绿植",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/office_planter/office_planter_visual_top3d_v006.glb",
+    "meshes": [
+      "办公室外固定绿植_整合主体.001"
+    ],
+    "origin_blender_m": [
+      -7.0047,
+      -0.7192,
+      0.38
+    ],
+    "godot_placement_position": [
+      -7.0047,
+      0.38,
+      0.7192
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      1.0294,
+      1.043,
+      1.83
+    ],
+    "godot_size_xyz": [
+      1.0294,
+      1.83,
+      1.043
+    ],
+    "room_bounds_blender": [
+      [
+        -7.5194,
+        -1.2407,
+        0.38
+      ],
+      [
+        -6.49,
+        -0.1977,
+        2.21
+      ]
+    ]
+  },
+  "maintenance_chair": {
+    "package_id": "esr_maintenance_chair",
+    "category": "facilities",
+    "display_name_zh": "固定展示检修椅",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/maintenance_chair/maintenance_chair_visual_top3d_v006.glb",
+    "meshes": [
+      "固定展示检修椅_整合主体.001"
+    ],
+    "origin_blender_m": [
+      -3.5342,
+      3.05,
+      0.31
+    ],
+    "godot_placement_position": [
+      -3.5342,
+      0.31,
+      -3.05
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      0.9983,
+      1.033,
+      1.8117
+    ],
+    "godot_size_xyz": [
+      0.9983,
+      1.8117,
+      1.033
+    ],
+    "room_bounds_blender": [
+      [
+        -4.0333,
+        2.5335,
+        0.31
+      ],
+      [
+        -3.035,
+        3.5665,
+        2.1217
+      ]
+    ]
+  },
+  "overhead_services": {
+    "package_id": "esr_overhead_services",
+    "category": "support",
+    "display_name_zh": "跨设施顶部管线与灯带",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/overhead_services/overhead_services_visual_top3d_v006.glb",
+    "meshes": [
+      "跨设施顶部管线与灯带_整合主体.001",
+      "跨设施顶部管线与灯带_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      0.2075,
+      0.865,
+      3.8996
+    ],
+    "godot_placement_position": [
+      0.2075,
+      3.8996,
+      -0.865
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      13.735,
+      12.61,
+      7.5208
+    ],
+    "godot_size_xyz": [
+      13.735,
+      7.5208,
+      12.61
+    ],
+    "room_bounds_blender": [
+      [
+        -6.66,
+        -5.44,
+        3.8996
+      ],
+      [
+        7.075,
+        7.17,
+        11.4204
+      ]
+    ]
+  },
+  "debris_papers": {
+    "package_id": "esr_debris_papers",
+    "category": "support",
+    "display_name_zh": "固定碎片与散落文件",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/debris_papers/debris_papers_visual_top3d_v006.glb",
+    "meshes": [
+      "固定碎片与散落文件_整合主体.001"
+    ],
+    "origin_blender_m": [
+      -0.0288,
+      -0.0547,
+      0.313
+    ],
+    "godot_placement_position": [
+      -0.0288,
+      0.313,
+      0.0547
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      11.7816,
+      11.797,
+      0.017
+    ],
+    "godot_size_xyz": [
+      11.7816,
+      0.017,
+      11.797
+    ],
+    "room_bounds_blender": [
+      [
+        -5.9196,
+        -5.9532,
+        0.313
+      ],
+      [
+        5.862,
+        5.8438,
+        0.33
+      ]
+    ]
+  },
+  "south_door_gate": {
+    "package_id": "esr_south_door_gate",
+    "category": "facilities",
+    "display_name_zh": "南门装甲与门禁",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/south_door_gate/south_door_gate_visual_top3d_v006.glb",
+    "meshes": [
+      "南门装甲与门禁_整合主体.001",
+      "南门装甲与门禁_UI灯光_柔和自发光.001"
+    ],
+    "origin_blender_m": [
+      0.1225,
+      -7.3065,
+      0.3
+    ],
+    "godot_placement_position": [
+      0.1225,
+      0.3,
+      7.3065
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      2.925,
+      0.343,
+      2.865
+    ],
+    "godot_size_xyz": [
+      2.925,
+      2.865,
+      0.343
+    ],
+    "room_bounds_blender": [
+      [
+        -1.34,
+        -7.478,
+        0.3
+      ],
+      [
+        1.585,
+        -7.135,
+        3.165
+      ]
+    ]
+  },
+  "wall_armor_north": {
+    "package_id": "esr_wall_armor_north",
+    "category": "decor",
+    "display_name_zh": "墙面装饰_北墙内嵌装甲壁板",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/wall_armor_north/wall_armor_north_visual_top3d_v006.glb",
+    "meshes": [
+      "墙面装饰_北墙内嵌装甲壁板_整合主体"
+    ],
+    "origin_blender_m": [
+      0.0,
+      7.211,
+      0.45
+    ],
+    "godot_placement_position": [
+      0.0,
+      0.45,
+      -7.211
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      14.9,
+      0.028,
+      7.9075
+    ],
+    "godot_size_xyz": [
+      14.9,
+      7.9075,
+      0.028
+    ],
+    "room_bounds_blender": [
+      [
+        -7.45,
+        7.197,
+        0.45
+      ],
+      [
+        7.45,
+        7.225,
+        8.3575
+      ]
+    ]
+  },
+  "wall_armor_west": {
+    "package_id": "esr_wall_armor_west",
+    "category": "decor",
+    "display_name_zh": "墙面装饰_西墙内嵌装甲壁板",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/wall_armor_west/wall_armor_west_visual_top3d_v006.glb",
+    "meshes": [
+      "墙面装饰_西墙内嵌装甲壁板_整合主体"
+    ],
+    "origin_blender_m": [
+      -7.206,
+      0.0,
+      0.45
+    ],
+    "godot_placement_position": [
+      -7.206,
+      0.45,
+      -0.0
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      0.018,
+      14.9,
+      7.9
+    ],
+    "godot_size_xyz": [
+      0.018,
+      7.9,
+      14.9
+    ],
+    "room_bounds_blender": [
+      [
+        -7.215,
+        -7.45,
+        0.45
+      ],
+      [
+        -7.197,
+        7.45,
+        8.35
+      ]
+    ]
+  },
+  "floor_base": {
+    "package_id": "esr_floor_base",
+    "category": "support",
+    "display_name_zh": "承重底板与结构底台",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/floor_base/floor_base_visual_top3d_v006.glb",
+    "meshes": [
+      "承重底板与结构底台_整合主体"
+    ],
+    "origin_blender_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "godot_placement_position": [
+      0.0,
+      0.0,
+      -0.0
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      15.0,
+      15.0,
+      0.26
+    ],
+    "godot_size_xyz": [
+      15.0,
+      0.26,
+      15.0
+    ],
+    "room_bounds_blender": [
+      [
+        -7.5,
+        -7.5,
+        0.0
+      ],
+      [
+        7.5,
+        7.5,
+        0.26
+      ]
+    ]
+  },
+  "floor_trim": {
+    "package_id": "esr_floor_trim",
+    "category": "decor",
+    "display_name_zh": "地面装饰_地砖压条与检修口",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/floor_trim/floor_trim_visual_top3d_v006.glb",
+    "meshes": [
+      "地面装饰_地砖压条与检修口_整合主体",
+      "地面装饰_地砖压条与检修口_UI灯光_柔和自发光"
+    ],
+    "origin_blender_m": [
+      0.0,
+      0.0,
+      0.297
+    ],
+    "godot_placement_position": [
+      0.0,
+      0.297,
+      -0.0
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      14.915,
+      14.915,
+      0.0482
+    ],
+    "godot_size_xyz": [
+      14.915,
+      0.0482,
+      14.915
+    ],
+    "room_bounds_blender": [
+      [
+        -7.4575,
+        -7.4575,
+        0.297
+      ],
+      [
+        7.4575,
+        7.4575,
+        0.3452
+      ]
+    ]
+  },
+  "wall_armor_south": {
+    "package_id": "esr_wall_armor_south",
+    "category": "decor",
+    "display_name_zh": "墙面装饰_南墙内嵌装甲壁板",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/wall_armor_south/wall_armor_south_visual_top3d_v006.glb",
+    "meshes": [
+      "墙面装饰_南墙内嵌装甲壁板_整合主体"
+    ],
+    "origin_blender_m": [
+      -0.0,
+      -7.211,
+      0.45
+    ],
+    "godot_placement_position": [
+      -0.0,
+      0.45,
+      7.211
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      14.9,
+      0.028,
+      7.9075
+    ],
+    "godot_size_xyz": [
+      14.9,
+      7.9075,
+      0.028
+    ],
+    "room_bounds_blender": [
+      [
+        -7.45,
+        -7.225,
+        0.45
+      ],
+      [
+        7.45,
+        -7.197,
+        8.3575
+      ]
+    ]
+  },
+  "wall_armor_east": {
+    "package_id": "esr_wall_armor_east",
+    "category": "decor",
+    "display_name_zh": "墙面装饰_东墙内嵌装甲壁板",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/wall_armor_east/wall_armor_east_visual_top3d_v006.glb",
+    "meshes": [
+      "墙面装饰_东墙内嵌装甲壁板_整合主体"
+    ],
+    "origin_blender_m": [
+      7.211,
+      -0.0,
+      0.45
+    ],
+    "godot_placement_position": [
+      7.211,
+      0.45,
+      0.0
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      0.028,
+      14.9,
+      7.9075
+    ],
+    "godot_size_xyz": [
+      0.028,
+      7.9075,
+      14.9
+    ],
+    "room_bounds_blender": [
+      [
+        7.197,
+        -7.45,
+        0.45
+      ],
+      [
+        7.225,
+        7.45,
+        8.3575
+      ]
+    ]
+  },
+  "east_door_gate": {
+    "package_id": "esr_east_door_gate",
+    "category": "facilities",
+    "display_name_zh": "东门装甲与门禁",
+    "glb": "assets/art/environments/tower_zones/battle/components/entry_safe_room/v006/east_door_gate/east_door_gate_visual_top3d_v006.glb",
+    "meshes": [
+      "东门装甲与门禁_整合主体",
+      "东门装甲与门禁_UI灯光_柔和自发光"
+    ],
+    "origin_blender_m": [
+      7.3065,
+      0.1225,
+      0.3
+    ],
+    "godot_placement_position": [
+      7.3065,
+      0.3,
+      -0.1225
+    ],
+    "godot_placement_note": "底面中心原点，实例化时 position 用本值、rotation 保持 identity。",
+    "blender_size_xyz": [
+      0.343,
+      2.925,
+      2.865
+    ],
+    "godot_size_xyz": [
+      0.343,
+      2.865,
+      2.925
+    ],
+    "room_bounds_blender": [
+      [
+        7.135,
+        -1.34,
+        0.3
+      ],
+      [
+        7.478,
+        1.585,
+        3.165
+      ]
+    ]
+  }
+}

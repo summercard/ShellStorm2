@@ -1,0 +1,64 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01
+; 战局区块通用组件库 v004 · 09_地板组件 · floor_tile_r01_c01
+; 范式 B（自包含可替换组件）：模型 + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
+; c01 = 棋盘格角块与中心块；四边 5 块一律带「检修格栅」装饰，是唯一干净的一版。
+; 结构（砖体 0..0.04 + 内嵌上板 0.035..0.056）与房间 FLOORSLOT_* + FLOORSLOT_*_INSET 逐面相同，v004 只把砖面装饰并了进来。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c01_visual_top3d_v004.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor_tile_r01_c01"]
+size = Vector3(4.94, 0.056, 4.94)
+
+[node name="BattleCommonFloorTileR01C01" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "09_floor_component"
+metadata/component = "floor_tile_r01_c01"
+metadata/logic_id = "floor_tile_r01_c01"
+metadata/display_name_zh = "战局通用地砖 4.94×4.94m（含压边/拼缝/标识/检修格栅）"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "floor_tile_r01_c01_通用包"
+metadata/source_root_object = "ROOT_floor_tile_r01_c01_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/09/floor_tile_r01_c01/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(4.94, 0.056, 4.94)
+metadata/visual_bounds_size_m = Vector3(4.94, 0.083, 4.94)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/entry_safe_room/v006"
+metadata/footprint_m = 4.94
+metadata/thickness_m = 0.056
+metadata/runtime_grid_unit_m = 5
+metadata/tile_gap_m = 0.06
+metadata/runtime_owner = "TowerFloorStage3D"
+metadata/runtime_floor_composition = "multi_mesh_ab_chessboard"
+metadata/runtime_floor_thickness_m = 0.3
+metadata/runtime_walk_plane_y = 0
+metadata/runtime_collision_owner = "TowerFloorStage3D._build_support"
+metadata/runtime_collision_note = "运行时地砖是整层矩形承重碰撞；本组件内嵌逐砖碰撞，接入前须与 _build_support() 去重。"
+metadata/snap_to_walk_plane_offset_m = -0.056
+metadata/snap_note = "底面中心原点；若要求地砖结构顶面与行走面 Y=0 齐平，实例另加 y=-0.056。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="FloorTileCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FloorTileCollision"]
+position = Vector3(0, 0.028, 0)
+shape = SubResource("BoxShape3D_floor_tile_r01_c01")

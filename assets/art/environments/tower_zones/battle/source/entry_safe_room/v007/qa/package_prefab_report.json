@@ -1,0 +1,87 @@
+{
+  "central_terminal_island": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\central_terminal_island\\central_terminal_island_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "east_repair_bay": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\east_repair_bay\\east_repair_bay_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "east_robot_arm": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\east_robot_arm\\east_robot_arm_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "maintenance_chair": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\maintenance_chair\\maintenance_chair_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_broken_core": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_broken_core\\north_broken_core_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_nexus_sign": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_nexus_sign\\north_nexus_sign_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_00": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_00\\north_server_00_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_01": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_01\\north_server_01_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_02": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_02\\north_server_02_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_03": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_03\\north_server_03_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_04": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_04\\north_server_04_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "north_server_05": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\north_server_05\\north_server_05_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "office_planter": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\office_planter\\office_planter_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "west_glass_office": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\west_glass_office\\west_glass_office_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "debris_papers": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\debris_papers\\debris_papers_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "floor_base": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\floor_base\\floor_base_root_top3d_v007.tscn",
+    "shapes": 0
+  },
+  "overhead_services": {
+    "status": "written",
+    "path": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\runtime\\entry_safe_room\\v007\\overhead_services\\overhead_services_root_top3d_v007.tscn",
+    "shapes": 0
+  }
+}

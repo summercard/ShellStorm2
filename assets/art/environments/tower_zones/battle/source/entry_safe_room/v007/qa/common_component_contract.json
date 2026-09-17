@@ -1,0 +1,1923 @@
+{
+  "wall_standard_5m": {
+    "component": "wall_standard_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      4.0,
+      -58.34441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; the STRUCTURAL body is centred in the two tangential axes and extends from local z=0 upward; decoration may be proud on +y (front, facing the room interior) or on +z",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+    "parts": {
+      "wall_standard_5m_主体_输出": {
+        "family": "wall_body",
+        "local_bounds": [
+          [
+            -2.5,
+            -0.15,
+            0.0
+          ],
+          [
+            2.5,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          5.0,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "934b486c742cac3e6ade0fcd69e5ff6fd63b1c107b32be2013b6722bbc5d7547"
+      },
+      "wall_standard_5m_槽位装甲单元_01": {
+        "family": "wall_armour",
+        "local_bounds": [
+          [
+            -2.45,
+            0.135,
+            0.45
+          ],
+          [
+            -0.05,
+            0.153,
+            8.35
+          ]
+        ],
+        "local_dims": [
+          2.4,
+          0.018,
+          7.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "1f0fee0c59fc1bb093ce945f319ace4f777f486518086e25864fa0eab8d1599d"
+      },
+      "wall_standard_5m_槽位装甲单元_02": {
+        "family": "wall_armour",
+        "local_bounds": [
+          [
+            -2.42,
+            0.125,
+            8.3225
+          ],
+          [
+            -0.08,
+            0.143,
+            8.3575
+          ]
+        ],
+        "local_dims": [
+          2.34,
+          0.018,
+          0.035
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "d73a9ee267890633b9ec4035f563c49cd81887461619554d5676d9b84a793f55"
+      },
+      "wall_standard_5m_槽位装甲单元_03": {
+        "family": "wall_armour",
+        "local_bounds": [
+          [
+            0.05,
+            0.135,
+            0.45
+          ],
+          [
+            2.45,
+            0.153,
+            8.35
+          ]
+        ],
+        "local_dims": [
+          2.4,
+          0.018,
+          7.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "ce7a9845a54bdb31d9369cc8dfbc71ad6d5ea69290383ff44dfc5db904d00afd"
+      },
+      "wall_standard_5m_槽位装甲单元_04": {
+        "family": "wall_armour",
+        "local_bounds": [
+          [
+            0.08,
+            0.125,
+            8.3225
+          ],
+          [
+            2.42,
+            0.143,
+            8.3575
+          ]
+        ],
+        "local_dims": [
+          2.34,
+          0.018,
+          0.035
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "d4a71b2fd5565df10c41ac902809a49ecf1fc18f7b821284f9ccc299c9890b7e"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      [
+        2.5,
+        0.153,
+        11.9
+      ]
+    ],
+    "component_dims": [
+      5.0,
+      0.303,
+      11.9
+    ],
+    "structural_bounds": [
+      [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      [
+        2.5,
+        0.15,
+        11.9
+      ]
+    ],
+    "decor_family": "wall_armour"
+  },
+  "wall_door_5m": {
+    "component": "wall_door_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      8.0,
+      -58.3444,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; the STRUCTURAL body is centred in the two tangential axes and extends from local z=0 upward; decoration may be proud on +y (front, facing the room interior) or on +z",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+    "parts": {
+      "wall_door_5m_门垛左_输出": {
+        "family": "door_wall_body",
+        "local_bounds": [
+          [
+            -2.5,
+            -0.15,
+            0.0
+          ],
+          [
+            -1.1,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          1.4,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "cf17ec1f8b487177a999135750f2d5b182c5c1fd9ffe3e73543321b8948c848d"
+      },
+      "wall_door_5m_门垛右_输出": {
+        "family": "door_wall_body",
+        "local_bounds": [
+          [
+            1.1,
+            -0.15,
+            0.0
+          ],
+          [
+            2.5,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          1.4,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "11ae192dfa3f9ebd7bb1c9f9711da5af1ad0d23c09ec1ce29436d443b5fe4721"
+      },
+      "wall_door_5m_门楣_输出": {
+        "family": "door_wall_body",
+        "local_bounds": [
+          [
+            -1.1,
+            -0.15,
+            2.5
+          ],
+          [
+            1.1,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          2.2,
+          0.3,
+          9.4
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "a79f7b7d32e3a3512f1c028d38da6fe876eee64f5782a9d8e8e5e9b60ef41cd0"
+      },
+      "wall_door_5m_装甲门禁_01": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            -1.28,
+            -0.035,
+            0.3
+          ],
+          [
+            -1.15,
+            0.215,
+            2.9
+          ]
+        ],
+        "local_dims": [
+          0.13,
+          0.25,
+          2.6
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "8f2a1c620de1ab593882414a4475e18064fc6f8e50168e5692d20082913bbd1b"
+      },
+      "wall_door_5m_装甲门禁_02": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.15,
+            -0.035,
+            0.3
+          ],
+          [
+            1.28,
+            0.215,
+            2.9
+          ]
+        ],
+        "local_dims": [
+          0.13,
+          0.25,
+          2.6
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "db7961d0212ace5b1fc33cf1566dea81ac18ea8b0ca7ec6c77fe52b3b4f319d8"
+      },
+      "wall_door_5m_装甲门禁_03": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.275,
+            -0.09,
+            1.39
+          ],
+          [
+            1.585,
+            0.11,
+            1.97
+          ]
+        ],
+        "local_dims": [
+          0.31,
+          0.2,
+          0.58
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "878ed8ec6de1427331536c3537e443be3cc74c0b16cf758fdfc33a44100acb5b"
+      },
+      "wall_door_5m_装甲门禁_04": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            -1.1175,
+            0.0025,
+            1.43
+          ],
+          [
+            -1.0825,
+            0.0375,
+            2.21
+          ]
+        ],
+        "local_dims": [
+          0.035,
+          0.035,
+          0.78
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "5ca986e56b81919b135265f1245210f593b58b7804ff94993729b80c2830fb71"
+      },
+      "wall_door_5m_装甲门禁_05": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.0825,
+            0.0025,
+            1.43
+          ],
+          [
+            1.1175,
+            0.0375,
+            2.21
+          ]
+        ],
+        "local_dims": [
+          0.035,
+          0.035,
+          0.78
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "7c42faf0681dc4feae349b268b2974a68e7702747460546497537d8974972e1f"
+      },
+      "wall_door_5m_装甲门禁_06": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.3225,
+            -0.128,
+            1.5575
+          ],
+          [
+            1.3575,
+            -0.116,
+            1.6025
+          ]
+        ],
+        "local_dims": [
+          0.035,
+          0.012,
+          0.045
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "923d1a52896d93a6b250d6f364ed257e4c9b22419e2aa4eb63733ecf93f1e576"
+      },
+      "wall_door_5m_装甲门禁_07": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.4125,
+            -0.128,
+            1.5575
+          ],
+          [
+            1.4475,
+            -0.116,
+            1.6025
+          ]
+        ],
+        "local_dims": [
+          0.035,
+          0.012,
+          0.045
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "6f5971aeff7176a2331fc2e3de546f159a6ab35db192381bd11517276e630188"
+      },
+      "wall_door_5m_装甲门禁_08": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.5025,
+            -0.128,
+            1.5575
+          ],
+          [
+            1.5375,
+            -0.116,
+            1.6025
+          ]
+        ],
+        "local_dims": [
+          0.035,
+          0.012,
+          0.045
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "b6ac1df4cf3329414828e2600405d7510d7dc2d94c7fb45010b9d7e7409aac0f"
+      },
+      "wall_door_5m_装甲门禁_09": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            1.325,
+            -0.118,
+            1.685
+          ],
+          [
+            1.535,
+            -0.096,
+            1.875
+          ]
+        ],
+        "local_dims": [
+          0.21,
+          0.022,
+          0.19
+        ],
+        "materials": [
+          "03_清漆反光_紫粉点缀"
+        ],
+        "canon_sha256": "5693b565813c285e781b827ffbda4061656cd6b777638d254006ff7984df25b5"
+      },
+      "wall_door_5m_装甲门禁_10": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            -1.34,
+            -0.035,
+            2.955
+          ],
+          [
+            1.34,
+            0.215,
+            3.165
+          ]
+        ],
+        "local_dims": [
+          2.68,
+          0.25,
+          0.21
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "76680cceeaa4743d40c1a26de2a24ea39f6c50ad7e3d947d1a12daf9858b3067"
+      },
+      "wall_door_5m_装甲门禁_11": {
+        "family": "door_gate",
+        "local_bounds": [
+          [
+            -0.76,
+            -0.0025,
+            3.0825
+          ],
+          [
+            0.76,
+            0.0425,
+            3.1375
+          ]
+        ],
+        "local_dims": [
+          1.52,
+          0.045,
+          0.055
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "ab3de96124df2244352f1c9e946847278514b1da62827429441eeaa41921d9ba"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      [
+        2.5,
+        0.215,
+        11.9
+      ]
+    ],
+    "component_dims": [
+      5.0,
+      0.365,
+      11.9
+    ],
+    "structural_bounds": [
+      [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      [
+        2.5,
+        0.15,
+        11.9
+      ]
+    ],
+    "decor_family": "door_gate"
+  },
+  "door_5m": {
+    "component": "door_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      2.6,
+      -69.3444,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; the STRUCTURAL body is centred in the two tangential axes and extends from local z=0 upward; decoration may be proud on +y (front, facing the room interior) or on +z",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+    "parts": {
+      "door_5m_门扇_输出": {
+        "family": "door_leaf_body",
+        "local_bounds": [
+          [
+            -1.1,
+            -0.09,
+            0.0
+          ],
+          [
+            1.1,
+            0.09,
+            2.5
+          ]
+        ],
+        "local_dims": [
+          2.2,
+          0.18,
+          2.5
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e786c3832a11f5e6a589f5aafe8245b6459f296b6ee401735473f0c8887f99e7"
+      }
+    },
+    "component_bounds": [
+      [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      [
+        1.1,
+        0.09,
+        2.5
+      ]
+    ],
+    "component_dims": [
+      2.2,
+      0.18,
+      2.5
+    ],
+    "structural_bounds": [
+      [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      [
+        1.1,
+        0.09,
+        2.5
+      ]
+    ],
+    "decor_family": null
+  },
+  "floor_tile_r01_c01": {
+    "component": "floor_tile_r01_c01",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      3.97,
+      -63.84441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; the STRUCTURAL body is centred in the two tangential axes and extends from local z=0 upward; decoration may be proud on +y (front, facing the room interior) or on +z",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+    "parts": {
+      "floor_tile_r01_c01_主体_输出": {
+        "family": "tile_plate",
+        "local_bounds": [
+          [
+            -2.47,
+            -2.47,
+            0.0
+          ],
+          [
+            2.47,
+            2.47,
+            0.04
+          ]
+        ],
+        "local_dims": [
+          4.94,
+          4.94,
+          0.04
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "970e1f11ebc84cbc5613266ae6517ece0a40420f9a2dcd7e9045453abc203d7b"
+      },
+      "floor_tile_r01_c01_主体_输出.001": {
+        "family": "tile_inset",
+        "local_bounds": [
+          [
+            -2.3825,
+            -2.3825,
+            0.035
+          ],
+          [
+            2.3825,
+            2.3825,
+            0.056
+          ]
+        ],
+        "local_dims": [
+          4.765,
+          4.765,
+          0.021
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "6fe50bab01abfc216d545a9e9bb935ed3bbc40fbf147998615830185610ef4ad"
+      },
+      "floor_tile_r01_c01_砖面美术_01": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.4575,
+            -2.42,
+            0.037
+          ],
+          [
+            -2.4025,
+            2.42,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          0.055,
+          4.84,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e6a68da2e0a476f2e58d026977b207e37e637295570e2c3fe2823277103eaa36"
+      },
+      "floor_tile_r01_c01_砖面美术_02": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.42,
+            -2.4575,
+            0.037
+          ],
+          [
+            2.42,
+            -2.4025,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          4.84,
+          0.055,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "b856ea06f3eb3b33bf32749c2081a14ecd8a9f1068212e8a8f87d329506b6178"
+      },
+      "floor_tile_r01_c01_砖面美术_03": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            2.4025,
+            -2.42,
+            0.037
+          ],
+          [
+            2.4575,
+            2.42,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          0.055,
+          4.84,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "292c2e68963f32b734f92de81e19f821032a92d2873f4d8fa207568e8cfbe5fc"
+      },
+      "floor_tile_r01_c01_砖面美术_04": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.42,
+            2.4025,
+            0.037
+          ],
+          [
+            2.42,
+            2.4575,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          4.84,
+          0.055,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "2e2270ec4ce68fdd4e53d057701bcce92db7624589fa5c3e2120168107cdd799"
+      },
+      "floor_tile_r01_c01_砖面美术_05": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.29467,
+            0.59094,
+            0.048
+          ],
+          [
+            0.56486,
+            0.75845,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.27019,
+          0.16751,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "ac236129b5525ba02ecfdc8b6ee1dba553f1135f23c39ed5f2fc8219a9b22174"
+      },
+      "floor_tile_r01_c01_砖面美术_06": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -1.79637,
+            -0.18627,
+            0.048
+          ],
+          [
+            -1.5518,
+            -0.03464,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.24457,
+          0.15163,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "6b538e0ccd8f09653e2b985b158296f05d16d8638c67e9b932f3c012c14224e6"
+      },
+      "floor_tile_r01_c01_砖面美术_07": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -0.35747,
+            -1.3153,
+            0.048
+          ],
+          [
+            -0.22431,
+            -1.23274,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.13316,
+          0.08256,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "f83b31b945cc4cdd1a4f36bd4b3f55c4dff65321ac9f6c9e0c2397fcb43d424d"
+      },
+      "floor_tile_r01_c01_砖面美术_08": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            1.40155,
+            -0.34425,
+            0.048
+          ],
+          [
+            1.47988,
+            -0.29568,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.07833,
+          0.04857,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "888ae6f68324e475c52fd292993ad133fe889aa2c242d1b9df8c914bfef13320"
+      },
+      "floor_tile_r01_c01_砖面美术_09": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.59391,
+            -0.35437,
+            0.048
+          ],
+          [
+            0.66428,
+            -0.31074,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.07037,
+          0.04363,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "a2ffa310d03fef744968381c8e6dc27d36f0fe103626fca6cbc23a84edcddaab"
+      },
+      "floor_tile_r01_c01_砖面美术_10": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.80054,
+            -0.65549,
+            0.048
+          ],
+          [
+            0.93744,
+            -0.57062,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.1369,
+          0.08487,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "74f2d58900feade1d6fda9a2919bbbb70b32451d11a58bb8512fa724b224bb03"
+      },
+      "floor_tile_r01_c01_砖面美术_11": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.31857,
+            0.1228,
+            0.048
+          ],
+          [
+            0.51936,
+            0.24729,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.20079,
+          0.12449,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "ea78b630de59af591c9571b81ec3f27cf430b394e244bb20317f4f837c57b0cb"
+      },
+      "floor_tile_r01_c01_砖面美术_12": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -1.65439,
+            0.75256,
+            0.048
+          ],
+          [
+            -1.55975,
+            0.81124,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.09464,
+          0.05868,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "8bb448a268f8b87ebd68a58d04592f7612cbad1f196e8331feabd87519e679b1"
+      },
+      "floor_tile_r01_c01_砖面美术_13": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.30055,
+            -1.3698,
+            0.048
+          ],
+          [
+            0.37328,
+            -1.32471,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.07273,
+          0.04509,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "4effd84eb8e880f91b5d1086ffc54d038f8c8e7e810496969c16dcef7b012e81"
+      },
+      "floor_tile_r01_c01_砖面美术_14": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.44431,
+            1.51324,
+            0.048
+          ],
+          [
+            0.59962,
+            1.60953,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.15531,
+          0.09629,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "08021992922742aba661ffcf5f3f3dcd6357005f20ba6794c4c540590740a8cf"
+      },
+      "floor_tile_r01_c01_砖面美术_15": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -0.66276,
+            -0.02582,
+            0.048
+          ],
+          [
+            -0.5767,
+            0.02754,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.08606,
+          0.05336,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "4e664ccb8b3f88e97a8269283c60ff12e731ac77e3caa6777d6ecdb6e6f5cb5b"
+      },
+      "floor_tile_r01_c01_砖面美术_16": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -1.42388,
+            -1.67326,
+            0.0532
+          ],
+          [
+            -1.07612,
+            -1.57526,
+            0.0548
+          ]
+        ],
+        "local_dims": [
+          0.34776,
+          0.098,
+          0.0016
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "3fe7466b547b3ef1ed79bcafb56c027e8123a9e069add7ac5fba650deeb6be36"
+      },
+      "floor_tile_r01_c01_砖面美术_17": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.28,
+            -1.03,
+            0.059
+          ],
+          [
+            1.08,
+            -0.49,
+            0.071
+          ]
+        ],
+        "local_dims": [
+          0.8,
+          0.54,
+          0.012
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "f342419f7c14457709e946485f4f5c4f5db0043cffcf17bbefda4ac5d4113e58"
+      },
+      "floor_tile_r01_c01_砖面美术_18": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.3,
+            -0.9975,
+            0.065
+          ],
+          [
+            1.06,
+            -0.9625,
+            0.083
+          ]
+        ],
+        "local_dims": [
+          0.76,
+          0.035,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e4fcaf2fe2364b985481f7f05bb7a63c441ae0876cbf30fd7a2abdcb4113c0d8"
+      },
+      "floor_tile_r01_c01_砖面美术_19": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.3,
+            -0.8875,
+            0.065
+          ],
+          [
+            1.06,
+            -0.8525,
+            0.083
+          ]
+        ],
+        "local_dims": [
+          0.76,
+          0.035,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "96c72f2628101040bef6460b0bd5697b33430052f31ef8ca974211fddb01a404"
+      },
+      "floor_tile_r01_c01_砖面美术_20": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.3,
+            -0.7775,
+            0.065
+          ],
+          [
+            1.06,
+            -0.7425,
+            0.083
+          ]
+        ],
+        "local_dims": [
+          0.76,
+          0.035,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "a7f4740640f109d9af58af4fc95fc1df8483c38a365b106c1e6cf3b43258b828"
+      },
+      "floor_tile_r01_c01_砖面美术_21": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.3,
+            -0.6675,
+            0.065
+          ],
+          [
+            1.06,
+            -0.6325,
+            0.083
+          ]
+        ],
+        "local_dims": [
+          0.76,
+          0.035,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "37d140e3d11be96f5866497a04c5732f5ed5db6ec9ce842c380587d931df6b67"
+      },
+      "floor_tile_r01_c01_砖面美术_22": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.3,
+            -0.5575,
+            0.065
+          ],
+          [
+            1.06,
+            -0.5225,
+            0.083
+          ]
+        ],
+        "local_dims": [
+          0.76,
+          0.035,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "d960fcd180f5c806e854799fad28645648880d324990c080356cb945ff72c12a"
+      },
+      "floor_tile_r01_c01_砖面美术_23": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.22,
+            -1.09,
+            0.045
+          ],
+          [
+            1.14,
+            -0.43,
+            0.063
+          ]
+        ],
+        "local_dims": [
+          0.92,
+          0.66,
+          0.018
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "5c14e47b4c77bb17a5ac907f192e8097327c5d0d994566af3623090dfed6b201"
+      },
+      "floor_tile_r01_c01_砖面美术_24": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            2.4275,
+            -2.385,
+            0.0425
+          ],
+          [
+            2.4525,
+            2.385,
+            0.0515
+          ]
+        ],
+        "local_dims": [
+          0.025,
+          4.77,
+          0.009
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "7e5a6e3df62be8cc884832bf07be0456e145ca0b0c005dc85194680163430394"
+      },
+      "floor_tile_r01_c01_砖面美术_25": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.385,
+            2.4275,
+            0.0425
+          ],
+          [
+            2.385,
+            2.4525,
+            0.0515
+          ]
+        ],
+        "local_dims": [
+          4.77,
+          0.025,
+          0.009
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "4dee9ceb4aca3ab8d40aa94792a65cc715455f4212df7928e21d4cf25f333591"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      [
+        2.47,
+        2.47,
+        0.083
+      ]
+    ],
+    "component_dims": [
+      4.94,
+      4.94,
+      0.083
+    ],
+    "structural_bounds": [
+      [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      [
+        2.47,
+        2.47,
+        0.056
+      ]
+    ],
+    "decor_family": "tile_frame"
+  },
+  "floor_tile_r01_c02": {
+    "component": "floor_tile_r01_c02",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      11.91,
+      -63.84441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; the STRUCTURAL body is centred in the two tangential axes and extends from local z=0 upward; decoration may be proud on +y (front, facing the room interior) or on +z",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+    "parts": {
+      "floor_tile_r01_c02_主体_输出": {
+        "family": "tile_plate",
+        "local_bounds": [
+          [
+            -2.47,
+            -2.47,
+            0.0
+          ],
+          [
+            2.47,
+            2.47,
+            0.04
+          ]
+        ],
+        "local_dims": [
+          4.94,
+          4.94,
+          0.04
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "6b4ef6a968064746ba8907eae700e02cfcc39ed4e8ef32b582e3f8c076b8395d"
+      },
+      "floor_tile_r01_c02_主体_输出.001": {
+        "family": "tile_inset",
+        "local_bounds": [
+          [
+            -2.3825,
+            -2.3825,
+            0.035
+          ],
+          [
+            2.3825,
+            2.3825,
+            0.081
+          ]
+        ],
+        "local_dims": [
+          4.765,
+          4.765,
+          0.046
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "0ec05eb72574575812c6638c7f3971dd5bb354e790be834e513fb04e60aa4b7a"
+      },
+      "floor_tile_r01_c02_砖面美术_01": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.4575,
+            -2.42,
+            0.037
+          ],
+          [
+            -2.4025,
+            2.42,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          0.055,
+          4.84,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e6a68da2e0a476f2e58d026977b207e37e637295570e2c3fe2823277103eaa36"
+      },
+      "floor_tile_r01_c02_砖面美术_02": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.42,
+            -2.4575,
+            0.037
+          ],
+          [
+            2.42,
+            -2.4025,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          4.84,
+          0.055,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "b856ea06f3eb3b33bf32749c2081a14ecd8a9f1068212e8a8f87d329506b6178"
+      },
+      "floor_tile_r01_c02_砖面美术_03": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            2.4025,
+            -2.42,
+            0.037
+          ],
+          [
+            2.4575,
+            2.42,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          0.055,
+          4.84,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "292c2e68963f32b734f92de81e19f821032a92d2873f4d8fa207568e8cfbe5fc"
+      },
+      "floor_tile_r01_c02_砖面美术_04": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.42,
+            2.4025,
+            0.037
+          ],
+          [
+            2.42,
+            2.4575,
+            0.047
+          ]
+        ],
+        "local_dims": [
+          4.84,
+          0.055,
+          0.01
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "2e2270ec4ce68fdd4e53d057701bcce92db7624589fa5c3e2120168107cdd799"
+      },
+      "floor_tile_r01_c02_砖面美术_05": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            1.44602,
+            -1.64893,
+            0.048
+          ],
+          [
+            1.66319,
+            -1.51428,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.21717,
+          0.13465,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "5eb3fd8fe427727ac31e71add39ef74749cdd90df2673e2510f3f6c60c82bcf7"
+      },
+      "floor_tile_r01_c02_砖面美术_06": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -0.56933,
+            -0.24037,
+            0.048
+          ],
+          [
+            -0.46341,
+            -0.1747,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.10592,
+          0.06567,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "d4d643031ea248754897296fec4091d5833626466411767ad139c8d46e1fb03a"
+      },
+      "floor_tile_r01_c02_砖面美术_07": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -0.94459,
+            0.95677,
+            0.048
+          ],
+          [
+            -0.89105,
+            0.98996,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.05354,
+          0.03319,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "381e3c889f4f744dea03c7ac9007d2779c1dc2b7135df74e6a3b577318910ae1"
+      },
+      "floor_tile_r01_c02_砖面美术_08": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.63024,
+            -0.96684,
+            0.048
+          ],
+          [
+            0.70244,
+            -0.92208,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.0722,
+          0.04476,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "e19ed97ac723b8c5622da88b19926624c92217e386503f9259f787128cb5bb16"
+      },
+      "floor_tile_r01_c02_砖面美术_09": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -1.45462,
+            0.00819,
+            0.048
+          ],
+          [
+            -1.3111,
+            0.09718,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.14352,
+          0.08899,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "5d8c265541e5be60e951bbdb35b3c5734d8624b92aad06cae037f84b9901fe0c"
+      },
+      "floor_tile_r01_c02_砖面美术_10": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.47362,
+            -1.70831,
+            0.048
+          ],
+          [
+            0.70342,
+            -1.56584,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.2298,
+          0.14247,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "0d17e6b9efdf28f69191afec9a622cc548c4b48e8e86e72bbbf66384c59b1f85"
+      },
+      "floor_tile_r01_c02_砖面美术_11": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.78215,
+            0.40904,
+            0.048
+          ],
+          [
+            1.01148,
+            0.55122,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.22933,
+          0.14218,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "4b07d377c440097c949be3f1b184e962d880d42907fb5b9842d2c4ffa1e1afeb"
+      },
+      "floor_tile_r01_c02_砖面美术_12": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            1.3341,
+            -1.74034,
+            0.048
+          ],
+          [
+            1.40636,
+            -1.69554,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.07226,
+          0.0448,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "8c2d6ab7725ec6d55f54ec701da51a6b643e6f72a5e9901bd4ffae4924e88822"
+      },
+      "floor_tile_r01_c02_砖面美术_13": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.37459,
+            -0.17844,
+            0.048
+          ],
+          [
+            0.51688,
+            -0.09023,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.14229,
+          0.08821,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "19371685f85b84adf0c8dfdacd4c2b1aabb2db12facf3aaeb0a30b73d6372cd0"
+      },
+      "floor_tile_r01_c02_砖面美术_14": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.90823,
+            1.34117,
+            0.048
+          ],
+          [
+            1.1701,
+            1.50354,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.26187,
+          0.16237,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "76199d16361063b78335973368925489bd55f7e0149ed87904f9df487e8b6021"
+      },
+      "floor_tile_r01_c02_砖面美术_15": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -0.1376,
+            -0.9531,
+            0.048
+          ],
+          [
+            0.01272,
+            -0.8599,
+            0.048
+          ]
+        ],
+        "local_dims": [
+          0.15032,
+          0.0932,
+          0.0
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "f54c81fffcdc0b9e69b74f9ea0f7887a64f6180c63328203cb31c1c8b0ef8939"
+      },
+      "floor_tile_r01_c02_砖面美术_16": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.36,
+            0.2,
+            0.043
+          ],
+          [
+            1.08,
+            0.92,
+            0.065
+          ]
+        ],
+        "local_dims": [
+          0.72,
+          0.72,
+          0.022
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e9027629ce21298807c65590c040519b925546d4b41eecab3698a9bbef48b6b2"
+      },
+      "floor_tile_r01_c02_砖面美术_17": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            -1.42388,
+            -1.67326,
+            0.0532
+          ],
+          [
+            -1.07612,
+            -1.57526,
+            0.0548
+          ]
+        ],
+        "local_dims": [
+          0.34776,
+          0.098,
+          0.0016
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "ad984a82e13abd618862ebe9a7a3b617e9dc6a6dda4f6807833f208e497f3116"
+      },
+      "floor_tile_r01_c02_砖面美术_18": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.425,
+            0.265,
+            0.061
+          ],
+          [
+            1.015,
+            0.855,
+            0.073
+          ]
+        ],
+        "local_dims": [
+          0.59,
+          0.59,
+          0.012
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "170b6576edeb5a24587c85530fcc9df7ccf1c7ff92a26919d9c1bc1cbb865954"
+      },
+      "floor_tile_r01_c02_砖面美术_19": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            0.364,
+            0.204,
+            0.0708
+          ],
+          [
+            0.416,
+            0.256,
+            0.0852
+          ]
+        ],
+        "local_dims": [
+          0.052,
+          0.052,
+          0.0144
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "098bc0ba8ee26ae337bc0e9d8018d62b5841f0ba8dc6e67edeae015f32744f01"
+      },
+      "floor_tile_r01_c02_砖面美术_20": {
+        "family": "tile_detail",
+        "local_bounds": [
+          [
+            1.024,
+            0.864,
+            0.0708
+          ],
+          [
+            1.076,
+            0.916,
+            0.0852
+          ]
+        ],
+        "local_dims": [
+          0.052,
+          0.052,
+          0.0144
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "d5f3e463f1d1f323b1de22017937d4e987702fcb6dff54a9f9389f6f3547e34b"
+      },
+      "floor_tile_r01_c02_砖面美术_21": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            2.4275,
+            -2.385,
+            0.0425
+          ],
+          [
+            2.4525,
+            2.385,
+            0.0515
+          ]
+        ],
+        "local_dims": [
+          0.025,
+          4.77,
+          0.009
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "7e5a6e3df62be8cc884832bf07be0456e145ca0b0c005dc85194680163430394"
+      },
+      "floor_tile_r01_c02_砖面美术_22": {
+        "family": "tile_frame",
+        "local_bounds": [
+          [
+            -2.385,
+            2.4275,
+            0.0425
+          ],
+          [
+            2.385,
+            2.4525,
+            0.0515
+          ]
+        ],
+        "local_dims": [
+          4.77,
+          0.025,
+          0.009
+        ],
+        "materials": [
+          "04_柔和自发光_UI灯光"
+        ],
+        "canon_sha256": "4dee9ceb4aca3ab8d40aa94792a65cc715455f4212df7928e21d4cf25f333591"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      [
+        2.47,
+        2.47,
+        0.0852
+      ]
+    ],
+    "component_dims": [
+      4.94,
+      4.94,
+      0.0852
+    ],
+    "structural_bounds": [
+      [
+        -2.47,
+        -2.47,
+        0.0
+      ],
+      [
+        2.47,
+        2.47,
+        0.081
+      ]
+    ],
+    "decor_family": "tile_frame"
+  }
+}

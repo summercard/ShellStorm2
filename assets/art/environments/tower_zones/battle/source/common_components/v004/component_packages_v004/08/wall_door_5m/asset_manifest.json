@@ -1,0 +1,68 @@
+{
+  "asset_id": "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY",
+  "package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+  "slug": "wall_door_5m",
+  "component": "wall_door_5m",
+  "version": "v004",
+  "category": "08_墙壁组件",
+  "note_zh": "带门洞墙 + 装甲门禁",
+  "source_blend": "战局区块_通用组件库_v004.blend",
+  "blender_collection": "wall_door_5m_通用包",
+  "root_object": "ROOT_wall_door_5m_通用组件",
+  "objects": [
+    "wall_door_5m_装甲门禁_01",
+    "wall_door_5m_装甲门禁_02",
+    "wall_door_5m_装甲门禁_03",
+    "wall_door_5m_装甲门禁_04",
+    "wall_door_5m_装甲门禁_05",
+    "wall_door_5m_装甲门禁_06",
+    "wall_door_5m_装甲门禁_07",
+    "wall_door_5m_装甲门禁_08",
+    "wall_door_5m_装甲门禁_09",
+    "wall_door_5m_装甲门禁_10",
+    "wall_door_5m_装甲门禁_11",
+    "wall_door_5m_门垛右_输出",
+    "wall_door_5m_门垛左_输出",
+    "wall_door_5m_门楣_输出"
+  ],
+  "object_count": 14,
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "bounds_lo": [
+    -2.5,
+    -0.15,
+    0.0
+  ],
+  "bounds_hi": [
+    2.5,
+    0.215,
+    11.9
+  ],
+  "bounds_size": [
+    5.0,
+    0.365,
+    11.9
+  ],
+  "godot_bounds_size": [
+    5.0,
+    11.9,
+    0.365
+  ],
+  "origin_contract": "bottom_center",
+  "forward_axis": "-Z",
+  "up_axis": "+Y",
+  "material_roles_used": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "instance_rule_zh": "原点=底面中心、本地 +Y=朝房内那面。放到任意 5m 网格槽位即自动对齐，不需要按方位区分。",
+  "supersedes": "v003",
+  "carries_room_art_from": "entry_safe_room/v006",
+  "collision_note": "碰撞不随美术：结构碰撞仍由 Godot 0.30m 代理负责。",
+  "exported": false
+}

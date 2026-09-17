@@ -1,0 +1,66 @@
+{
+  "package_id": "esr_north_server_04",
+  "asset_id": "ENV-BATTLE-L01-SAFE-ENTRY",
+  "name": "服务器柜_north_server_04",
+  "slug": "north_server_04",
+  "category": "facilities",
+  "version": "v006",
+  "block_id": "battle",
+  "floor_range": "01F",
+  "design_scope": "入口安全房",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "source_blend": "assets\\art\\environments\\tower_zones\\battle\\source\\entry_safe_room\\v006\\局内关卡01_入口安全房_15x15m_正式美术_v006.blend",
+  "blender_collection": "服务器柜_north_server_04_资产包.001",
+  "objects": [
+    "服务器柜_north_server_04_整合主体.001",
+    "服务器柜_north_server_04_UI灯光_柔和自发光.001"
+  ],
+  "root_objects": [
+    "服务器柜_north_server_04_整合主体.001",
+    "服务器柜_north_server_04_UI灯光_柔和自发光.001"
+  ],
+  "world_delta": [
+    0,
+    0,
+    0
+  ],
+  "relocated_from_v003": false,
+  "local_origin": "package bounds bottom-centre in blender world space",
+  "forward": "Blender -Y / Godot -Z",
+  "bounds": [
+    [
+      3.41,
+      5.8716,
+      0.29
+    ],
+    [
+      4.83,
+      7.21,
+      3.986
+    ]
+  ],
+  "dimensions": [
+    1.42,
+    1.3384,
+    3.696
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "emission": true,
+  "animation": false,
+  "dependencies": [],
+  "geometry_ownership": "room_owned_facility",
+  "structural_geometry": "none: no wall/floor module, no collision shape",
+  "replacement_contract": "decoration only; must not change room size, 5m grid, collision layer or navigation",
+  "exported": false,
+  "expected_export": "north_server_04_v006.glb",
+  "collision_status": "未制作；玩法碰撞由 Godot 0.30m 结构代理负责"
+}

@@ -1,0 +1,87 @@
+{
+  "passed": true,
+  "failed": [],
+  "checked_packages": 17,
+  "checks": [
+    {
+      "check": "17 package GLBs on disk",
+      "detail": "found 17"
+    },
+    {
+      "check": "north_server_00 GLB contract",
+      "detail": "size=[1.42, 3.696, 1.3384] want=[1.42, 3.696, 1.3384] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_server_01 GLB contract",
+      "detail": "size=[1.42, 3.696, 1.3384] want=[1.42, 3.696, 1.3384] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_server_02 GLB contract",
+      "detail": "size=[1.8878, 3.696, 1.8792] want=[1.8878, 3.696, 1.8792] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_server_03 GLB contract",
+      "detail": "size=[1.8878, 3.696, 1.8792] want=[1.8878, 3.696, 1.8792] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_server_04 GLB contract",
+      "detail": "size=[1.42, 3.696, 1.3384] want=[1.42, 3.696, 1.3384] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_server_05 GLB contract",
+      "detail": "size=[1.42, 3.696, 1.3384] want=[1.42, 3.696, 1.3384] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "north_broken_core GLB contract",
+      "detail": "size=[2.15, 9.656, 1.9408] want=[2.15, 9.656, 1.9408] base_y=0.0000 mats=4"
+    },
+    {
+      "check": "north_nexus_sign GLB contract",
+      "detail": "size=[11.3, 2.35, 0.0745] want=[11.3, 2.35, 0.0745] base_y=0.0000 mats=2"
+    },
+    {
+      "check": "west_glass_office GLB contract",
+      "detail": "size=[4.28, 3.29, 3.6758] want=[4.28, 3.29, 3.6758] base_y=0.0000 mats=4"
+    },
+    {
+      "check": "central_terminal_island GLB contract",
+      "detail": "size=[3.67, 2.18, 2.485] want=[3.67, 2.18, 2.485] base_y=0.0000 mats=4"
+    },
+    {
+      "check": "east_repair_bay GLB contract",
+      "detail": "size=[2.7533, 2.75, 4.375] want=[2.7533, 2.75, 4.375] base_y=0.0000 mats=4"
+    },
+    {
+      "check": "east_robot_arm GLB contract",
+      "detail": "size=[1.64, 3.02, 1.46] want=[1.64, 3.02, 1.46] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "office_planter GLB contract",
+      "detail": "size=[1.0294, 1.83, 1.043] want=[1.0294, 1.83, 1.043] base_y=0.0000 mats=1"
+    },
+    {
+      "check": "maintenance_chair GLB contract",
+      "detail": "size=[0.9983, 1.8117, 1.033] want=[0.9983, 1.8117, 1.033] base_y=0.0000 mats=2"
+    },
+    {
+      "check": "overhead_services GLB contract",
+      "detail": "size=[13.735, 7.5208, 12.61] want=[13.735, 7.5208, 12.61] base_y=0.0000 mats=3"
+    },
+    {
+      "check": "debris_papers GLB contract",
+      "detail": "size=[11.7816, 0.017, 11.797] want=[11.7816, 0.017, 11.797] base_y=0.0000 mats=2"
+    },
+    {
+      "check": "floor_base GLB contract",
+      "detail": "size=[15.0, 0.26, 15.0] want=[15.0, 0.26, 15.0] base_y=0.0000 mats=1"
+    },
+    {
+      "check": "no GLB embeds an image or texture",
+      "detail": ""
+    },
+    {
+      "check": "no GLB carries a camera or a light",
+      "detail": ""
+    }
+  ]
+}

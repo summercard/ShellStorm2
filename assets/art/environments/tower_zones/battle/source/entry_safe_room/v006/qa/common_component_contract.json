@@ -1,0 +1,361 @@
+{
+  "wall_standard_5m": {
+    "component": "wall_standard_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      4.0,
+      -58.34441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; body is centred in the two tangential axes and extends from local z=0 upward",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+    "parts": {
+      "wall_standard_5m_主体_输出": {
+        "local_bounds": [
+          [
+            -2.5,
+            -0.15,
+            0.0
+          ],
+          [
+            2.5,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          5.0,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "934b486c742cac3e6ade0fcd69e5ff6fd63b1c107b32be2013b6722bbc5d7547"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.5,
+        -0.15000000596046448,
+        0.0
+      ],
+      [
+        2.5,
+        0.15000000596046448,
+        11.899999618530273
+      ]
+    ],
+    "component_dims": [
+      5.0,
+      0.3,
+      11.9
+    ]
+  },
+  "wall_door_5m": {
+    "component": "wall_door_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      8.0,
+      -58.3444,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; body is centred in the two tangential axes and extends from local z=0 upward",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+    "parts": {
+      "wall_door_5m_门垛左_输出": {
+        "local_bounds": [
+          [
+            -2.5,
+            -0.15,
+            0.0
+          ],
+          [
+            -1.1,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          1.4,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "cf17ec1f8b487177a999135750f2d5b182c5c1fd9ffe3e73543321b8948c848d"
+      },
+      "wall_door_5m_门垛右_输出": {
+        "local_bounds": [
+          [
+            1.1,
+            -0.15,
+            0.0
+          ],
+          [
+            2.5,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          1.4,
+          0.3,
+          11.9
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "11ae192dfa3f9ebd7bb1c9f9711da5af1ad0d23c09ec1ce29436d443b5fe4721"
+      },
+      "wall_door_5m_门楣_输出": {
+        "local_bounds": [
+          [
+            -1.1,
+            -0.15,
+            2.5
+          ],
+          [
+            1.1,
+            0.15,
+            11.9
+          ]
+        ],
+        "local_dims": [
+          2.2,
+          0.3,
+          9.4
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "a79f7b7d32e3a3512f1c028d38da6fe876eee64f5782a9d8e8e5e9b60ef41cd0"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.5,
+        -0.15000000596046448,
+        0.0
+      ],
+      [
+        2.5,
+        0.15000000596046448,
+        11.899999618530273
+      ]
+    ],
+    "component_dims": [
+      5.0,
+      0.3,
+      11.9
+    ]
+  },
+  "door_5m": {
+    "component": "door_5m",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      2.6,
+      -69.3444,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; body is centred in the two tangential axes and extends from local z=0 upward",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+    "parts": {
+      "door_5m_门扇_输出": {
+        "local_bounds": [
+          [
+            -1.1,
+            -0.09,
+            0.0
+          ],
+          [
+            1.1,
+            0.09,
+            2.5
+          ]
+        ],
+        "local_dims": [
+          2.2,
+          0.18,
+          2.5
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架"
+        ],
+        "canon_sha256": "e786c3832a11f5e6a589f5aafe8245b6459f296b6ee401735473f0c8887f99e7"
+      }
+    },
+    "component_bounds": [
+      [
+        -1.100000023841858,
+        -0.09000000357627869,
+        0.0
+      ],
+      [
+        1.100000023841858,
+        0.09000000357627869,
+        2.5
+      ]
+    ],
+    "component_dims": [
+      2.2,
+      0.18,
+      2.5
+    ]
+  },
+  "floor_tile_r01_c01": {
+    "component": "floor_tile_r01_c01",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      3.97,
+      -63.84441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; body is centred in the two tangential axes and extends from local z=0 upward",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+    "parts": {
+      "floor_tile_r01_c01_主体_输出": {
+        "local_bounds": [
+          [
+            -2.47,
+            -2.47,
+            0.0
+          ],
+          [
+            2.47,
+            2.47,
+            0.04
+          ]
+        ],
+        "local_dims": [
+          4.94,
+          4.94,
+          0.04
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "970e1f11ebc84cbc5613266ae6517ece0a40420f9a2dcd7e9045453abc203d7b"
+      },
+      "floor_tile_r01_c01_主体_输出.001": {
+        "local_bounds": [
+          [
+            -2.3825,
+            -2.3825,
+            0.035
+          ],
+          [
+            2.3825,
+            2.3825,
+            0.056
+          ]
+        ],
+        "local_dims": [
+          4.765,
+          4.765,
+          0.021
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "6fe50bab01abfc216d545a9e9bb935ed3bbc40fbf147998615830185610ef4ad"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.4700000286102295,
+        -2.4700000286102295,
+        0.0
+      ],
+      [
+        2.4700000286102295,
+        2.4700000286102295,
+        0.0560000017285347
+      ]
+    ],
+    "component_dims": [
+      4.94,
+      4.94,
+      0.056
+    ]
+  },
+  "floor_tile_r01_c02": {
+    "component": "floor_tile_r01_c02",
+    "root_local_origin": "library world origin (0,0,0); see shape_convention",
+    "library_layout_marker": [
+      11.91,
+      -63.84441,
+      0.0
+    ],
+    "shape_convention": "origin = bottom-edge centre; body is centred in the two tangential axes and extends from local z=0 upward",
+    "source_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend",
+    "parts": {
+      "floor_tile_r01_c02_主体_输出": {
+        "local_bounds": [
+          [
+            -2.47,
+            -2.47,
+            0.0
+          ],
+          [
+            2.47,
+            2.47,
+            0.04
+          ]
+        ],
+        "local_dims": [
+          4.94,
+          4.94,
+          0.04
+        ],
+        "materials": [
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "6b4ef6a968064746ba8907eae700e02cfcc39ed4e8ef32b582e3f8c076b8395d"
+      },
+      "floor_tile_r01_c02_主体_输出.001": {
+        "local_bounds": [
+          [
+            -2.3825,
+            -2.3825,
+            0.035
+          ],
+          [
+            2.3825,
+            2.3825,
+            0.081
+          ]
+        ],
+        "local_dims": [
+          4.765,
+          4.765,
+          0.046
+        ],
+        "materials": [
+          "01_精工金属_紫色骨架",
+          "02_细腻哑光_青绿大面"
+        ],
+        "canon_sha256": "0ec05eb72574575812c6638c7f3971dd5bb354e790be834e513fb04e60aa4b7a"
+      }
+    },
+    "component_bounds": [
+      [
+        -2.4700000286102295,
+        -2.4700000286102295,
+        0.0
+      ],
+      [
+        2.4700000286102295,
+        2.4700000286102295,
+        0.08100000023841858
+      ]
+    ],
+    "component_dims": [
+      4.94,
+      4.94,
+      0.081
+    ]
+  }
+}

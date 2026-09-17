@@ -1,0 +1,114 @@
+{
+  "passed": true,
+  "failed": [],
+  "checks": [
+    {
+      "check": "provenance ring = 16 whitebox source parts",
+      "detail": "found 16"
+    },
+    {
+      "check": "room owns no wall / floor module geometry",
+      "detail": "[]"
+    },
+    {
+      "check": "wall ring = 16 visual parts (10 solid + 2x3 door wall)",
+      "detail": "found 16"
+    },
+    {
+      "check": "door leaves = 2",
+      "detail": "found 2"
+    },
+    {
+      "check": "floor tile parts = 18 (9 tiles x main+inset)",
+      "detail": "found 18"
+    },
+    {
+      "check": "wall ring fills the 15x15x11.9 envelope",
+      "detail": "bounds=[[-7.5, -7.5, 0.0], [7.5, 7.5, 11.899999618530273]]"
+    },
+    {
+      "check": "every wall/floor slot declares Godot as collision owner",
+      "detail": "[]"
+    },
+    {
+      "check": "no wall/floor slot claims room-owned geometry",
+      "detail": "[]"
+    },
+    {
+      "check": "SOUTH doorway placed as 2 piers + 1 lintel",
+      "detail": "found 3"
+    },
+    {
+      "check": "SOUTH doorway CORE (>30 mm intrusion) is empty",
+      "detail": "[]"
+    },
+    {
+      "check": "SOUTH doorway EDGE (exact 2.2 x 2.5) is empty",
+      "detail": ""
+    },
+    {
+      "check": "SOUTH doorway lintel spans the opening at z=2.5",
+      "detail": "lintel z=2.5..11.899999618530273"
+    },
+    {
+      "check": "SOUTH door leaf fills and sits in the opening",
+      "detail": "leaf=[-1.100000023841858, -7.440000057220459, 0.0]..[1.100000023841858, -7.259999752044678, 2.5]"
+    },
+    {
+      "check": "EAST doorway placed as 2 piers + 1 lintel",
+      "detail": "found 3"
+    },
+    {
+      "check": "EAST doorway CORE (>30 mm intrusion) is empty",
+      "detail": "[]"
+    },
+    {
+      "check": "EAST doorway EDGE (exact 2.2 x 2.5) is empty",
+      "detail": ""
+    },
+    {
+      "check": "EAST doorway lintel spans the opening at z=2.5",
+      "detail": "lintel z=2.5..11.899999618530273"
+    },
+    {
+      "check": "EAST door leaf fills and sits in the opening",
+      "detail": "leaf=[7.259999752044678, -1.100000023841858, 0.0]..[7.440000057220459, 1.100000023841858, 2.5]"
+    },
+    {
+      "check": "room-owned structural base plate present (15 x 15 x 0.26, z 0..0.26)",
+      "detail": "1 plate(s) bounds=[[-7.5, -7.5, 0.0], [7.5, 7.5, 0.25999999046325684]]"
+    },
+    {
+      "check": "floor grid covers the inner face and stays inside the shell",
+      "detail": "bounds=[[-7.470000267028809, -7.470000267028809, 0.25999999046325684], [7.470000267028809, 7.470000267028809, 0.3409999907016754]]"
+    },
+    {
+      "check": "tile tops land on the 0.30 walkable surface",
+      "detail": "z=0.25999999046325684..0.30000001192092896"
+    },
+    {
+      "check": "all 9 tile centres sit on the 5 m grid",
+      "detail": "[]"
+    },
+    {
+      "check": "decorations do not cross the wall into the outside",
+      "detail": "decor bounds=[-7.457499980926514, -7.457499980926514, 0.296999990940094]..[7.457499980926514, 7.457499980926514, 8.357500076293945]"
+    },
+    {
+      "check": "no decoration floats away from a wall",
+      "detail": "[]"
+    },
+    {
+      "check": "nothing sinks below z=0",
+      "detail": "[]"
+    },
+    {
+      "check": "the room references the common component library by path",
+      "detail": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v003\\战局区块_通用组件库_v003.blend"
+    },
+    {
+      "check": "the library meshes are NOT re-hosted inside the room blend",
+      "detail": "[]"
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "claim": "one library unit serves every slot in every direction; measured in the slot-local frame",
+  "tolerance_m": 0.002,
+  "families": {
+    "wall_standard_5m": {
+      "reference_slot": "WALLSLOT_EAST_01",
+      "local_box": [
+        [
+          -2.45,
+          0.125,
+          0.45
+        ],
+        [
+          2.45,
+          0.153,
+          8.3575
+        ]
+      ],
+      "slots": [
+        "WALLSLOT_EAST_01",
+        "WALLSLOT_EAST_03",
+        "WALLSLOT_NORTH_01",
+        "WALLSLOT_NORTH_02",
+        "WALLSLOT_NORTH_03",
+        "WALLSLOT_SOUTH_01",
+        "WALLSLOT_SOUTH_03",
+        "WALLSLOT_WEST_01",
+        "WALLSLOT_WEST_02",
+        "WALLSLOT_WEST_03"
+      ],
+      "part_count_per_slot": 4,
+      "all_slots_identical": true,
+      "divergent": []
+    },
+    "wall_door_5m": {
+      "reference_slot": "WALLSLOT_EAST_02",
+      "local_box": [
+        [
+          -1.34,
+          -0.128,
+          0.3
+        ],
+        [
+          1.585,
+          0.215,
+          3.165
+        ]
+      ],
+      "slots": [
+        "WALLSLOT_EAST_02",
+        "WALLSLOT_SOUTH_02"
+      ],
+      "part_count_per_slot": 11,
+      "all_slots_identical": true,
+      "divergent": []
+    },
+    "floor_tile_r01_c01": {
+      "reference_slot": "FLOORSLOT_R01_C01",
+      "local_box": [
+        [
+          -2.4575,
+          -2.4575,
+          0.037
+        ],
+        [
+          2.4575,
+          2.4575,
+          0.0515
+        ]
+      ],
+      "slots": [
+        "FLOORSLOT_R01_C01",
+        "FLOORSLOT_R01_C02",
+        "FLOORSLOT_R01_C03",
+        "FLOORSLOT_R02_C01",
+        "FLOORSLOT_R02_C02",
+        "FLOORSLOT_R02_C03",
+        "FLOORSLOT_R03_C01",
+        "FLOORSLOT_R03_C02",
+        "FLOORSLOT_R03_C03"
+      ],
+      "part_count_per_slot": 6,
+      "all_slots_identical": true,
+      "divergent": []
+    },
+    "floor_tile_r01_c02": {
+      "reference_slot": "FLOORSLOT_R01_C01",
+      "local_box": [
+        [
+          -2.4575,
+          -2.4575,
+          0.037
+        ],
+        [
+          2.4575,
+          2.4575,
+          0.0515
+        ]
+      ],
+      "slots": [
+        "FLOORSLOT_R01_C01",
+        "FLOORSLOT_R01_C02",
+        "FLOORSLOT_R01_C03",
+        "FLOORSLOT_R02_C01",
+        "FLOORSLOT_R02_C02",
+        "FLOORSLOT_R02_C03",
+        "FLOORSLOT_R03_C01",
+        "FLOORSLOT_R03_C02",
+        "FLOORSLOT_R03_C03"
+      ],
+      "part_count_per_slot": 6,
+      "all_slots_identical": true,
+      "divergent": []
+    }
+  }
+}

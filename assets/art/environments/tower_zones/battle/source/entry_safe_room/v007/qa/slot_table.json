@@ -1,0 +1,6594 @@
+{
+  "envelope": {
+    "outer_face_m": 7.5,
+    "centreline_m": 7.35,
+    "inner_face_m": 7.2,
+    "wall_thickness_m": 0.3,
+    "visual_height_m": 11.9,
+    "logical_height_m": 12.0,
+    "walkable_surface_z_m": 0.3,
+    "slab_top_z_m": 0.26,
+    "grid_m": 5.0
+  },
+  "wall_layout": {
+    "north": "3x solid",
+    "south": "solid + door + solid",
+    "east": "solid + door + solid",
+    "west": "3x solid",
+    "doorway_tangential_centre_m": 0.0,
+    "basis": "runtime probe (runtime probe _probe_safe_room_door.txt)"
+  },
+  "runtime_measured": {
+    "door_wall_node_outer_face_m": 7.5,
+    "door_pier_offset_m": 1.8,
+    "door_lintel_bottom_m": 2.5,
+    "door_clear_width_m": 2.2,
+    "door_clear_height_m": 2.5
+  },
+  "component_usage": {
+    "door_5m": 2,
+    "floor_tile_r01_c01": 5,
+    "floor_tile_r01_c02": 4,
+    "wall_door_5m": 2,
+    "wall_standard_5m": 10
+  },
+  "component_part_counts": {
+    "wall_standard_5m": 5,
+    "wall_door_5m": 14,
+    "door_5m": 1,
+    "floor_tile_r01_c01": 27,
+    "floor_tile_r01_c02": 24
+  },
+  "common_library": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+  "slots": [
+    {
+      "slot_id": "WALLSLOT_NORTH_01__主体_输出",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_01__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_01__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_01__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_01__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_NORTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        -5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02__主体_输出",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_02__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_NORTH_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        0.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03__主体_输出",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_NORTH_03__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_NORTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        5.0,
+        7.35,
+        0.0
+      ],
+      "rotation_z_deg": 180.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01__主体_输出",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_01__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_SOUTH_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        -5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__门垛左_输出",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛左_输出",
+      "part_suffix": "门垛左_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__门垛右_输出",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛右_输出",
+      "part_suffix": "门垛右_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__门楣_输出",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门楣_输出",
+      "part_suffix": "门楣_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.2,
+        0.3,
+        9.4
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_01",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_01",
+      "part_suffix": "装甲门禁_01",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13,
+        0.25,
+        2.6
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_02",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_02",
+      "part_suffix": "装甲门禁_02",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13,
+        0.25,
+        2.6
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_03",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_03",
+      "part_suffix": "装甲门禁_03",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.31,
+        0.2,
+        0.58
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_04",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_04",
+      "part_suffix": "装甲门禁_04",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.035,
+        0.035,
+        0.78
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_05",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_05",
+      "part_suffix": "装甲门禁_05",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.035,
+        0.035,
+        0.78
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_06",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_06",
+      "part_suffix": "装甲门禁_06",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_07",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_07",
+      "part_suffix": "装甲门禁_07",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_08",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_08",
+      "part_suffix": "装甲门禁_08",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_09",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_09",
+      "part_suffix": "装甲门禁_09",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.21,
+        0.022,
+        0.19
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_10",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_10",
+      "part_suffix": "装甲门禁_10",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.68,
+        0.25,
+        0.21
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_02__装甲门禁_11",
+      "placement_id": "WALLSLOT_SOUTH_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_11",
+      "part_suffix": "装甲门禁_11",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        1.52,
+        0.045,
+        0.055
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03__主体_输出",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_SOUTH_03__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_SOUTH_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        5.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01__主体_输出",
+      "placement_id": "WALLSLOT_EAST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_EAST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_EAST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_EAST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_01__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_EAST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__门垛左_输出",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛左_输出",
+      "part_suffix": "门垛左_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__门垛右_输出",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门垛右_输出",
+      "part_suffix": "门垛右_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        1.4,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__门楣_输出",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_wall_body",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_门楣_输出",
+      "part_suffix": "门楣_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.2,
+        0.3,
+        9.4
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_01",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_01",
+      "part_suffix": "装甲门禁_01",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.13,
+        0.25,
+        2.6
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_02",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_02",
+      "part_suffix": "装甲门禁_02",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.13,
+        0.25,
+        2.6
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_03",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_03",
+      "part_suffix": "装甲门禁_03",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.31,
+        0.2,
+        0.58
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_04",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_04",
+      "part_suffix": "装甲门禁_04",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.035,
+        0.035,
+        0.78
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_05",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_05",
+      "part_suffix": "装甲门禁_05",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.035,
+        0.035,
+        0.78
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_06",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_06",
+      "part_suffix": "装甲门禁_06",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_07",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_07",
+      "part_suffix": "装甲门禁_07",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_08",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_08",
+      "part_suffix": "装甲门禁_08",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.035,
+        0.012,
+        0.045
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_09",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_09",
+      "part_suffix": "装甲门禁_09",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        0.21,
+        0.022,
+        0.19
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_10",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_10",
+      "part_suffix": "装甲门禁_10",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.68,
+        0.25,
+        0.21
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_02__装甲门禁_11",
+      "placement_id": "WALLSLOT_EAST_02",
+      "slot_role": "door_wall",
+      "part_family": "door_gate",
+      "component": "wall_door_5m",
+      "library_object": "wall_door_5m_装甲门禁_11",
+      "part_suffix": "装甲门禁_11",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        1.52,
+        0.045,
+        0.055
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03__主体_输出",
+      "placement_id": "WALLSLOT_EAST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_EAST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_EAST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_EAST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_EAST_03__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_EAST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01__主体_输出",
+      "placement_id": "WALLSLOT_WEST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_WEST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_WEST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_WEST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_01__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_WEST_01",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        -7.35,
+        -5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02__主体_输出",
+      "placement_id": "WALLSLOT_WEST_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_WEST_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_WEST_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_WEST_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_02__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_WEST_02",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        -7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03__主体_输出",
+      "placement_id": "WALLSLOT_WEST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_body",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        5.0,
+        0.3,
+        11.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03__槽位装甲单元_01",
+      "placement_id": "WALLSLOT_WEST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_01",
+      "part_suffix": "槽位装甲单元_01",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03__槽位装甲单元_02",
+      "placement_id": "WALLSLOT_WEST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_02",
+      "part_suffix": "槽位装甲单元_02",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03__槽位装甲单元_03",
+      "placement_id": "WALLSLOT_WEST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_03",
+      "part_suffix": "槽位装甲单元_03",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.4,
+        0.018,
+        7.9
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "WALLSLOT_WEST_03__槽位装甲单元_04",
+      "placement_id": "WALLSLOT_WEST_03",
+      "slot_role": "solid_wall",
+      "part_family": "wall_armour",
+      "component": "wall_standard_5m",
+      "library_object": "wall_standard_5m_槽位装甲单元_04",
+      "part_suffix": "槽位装甲单元_04",
+      "location": [
+        -7.35,
+        5.0,
+        0.0
+      ],
+      "rotation_z_deg": -90.0,
+      "local_dims": [
+        2.34,
+        0.018,
+        0.035
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "DOORLEAF_SOUTH__门扇_输出",
+      "placement_id": "DOORLEAF_SOUTH",
+      "slot_role": "door_leaf",
+      "part_family": "door_leaf_body",
+      "component": "door_5m",
+      "library_object": "door_5m_门扇_输出",
+      "part_suffix": "门扇_输出",
+      "location": [
+        0.0,
+        -7.35,
+        0.0
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        2.2,
+        0.18,
+        2.5
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "DOORLEAF_EAST__门扇_输出",
+      "placement_id": "DOORLEAF_EAST",
+      "slot_role": "door_leaf",
+      "part_family": "door_leaf_body",
+      "component": "door_5m",
+      "library_object": "door_5m_门扇_输出",
+      "part_suffix": "门扇_输出",
+      "location": [
+        7.35,
+        0.0,
+        0.0
+      ],
+      "rotation_z_deg": 90.0,
+      "local_dims": [
+        2.2,
+        0.18,
+        2.5
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__主体_输出",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__主体_输出.001",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_01",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_02",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_03",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_04",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_05",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.27019,
+        0.16751,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_06",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.24457,
+        0.15163,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_07",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13316,
+        0.08256,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_08",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07833,
+        0.04857,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_09",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07037,
+        0.04363,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_10",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.1369,
+        0.08487,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_11",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.20079,
+        0.12449,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_12",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.09464,
+        0.05868,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_13",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07273,
+        0.04509,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_14",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15531,
+        0.09629,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_15",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.08606,
+        0.05336,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_16",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_17",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.8,
+        0.54,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_18",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_19",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_20",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_21",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_22",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_23",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_23",
+      "part_suffix": "砖面美术_23",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.92,
+        0.66,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_24",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_24",
+      "part_suffix": "砖面美术_24",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C01__砖面美术_25",
+      "placement_id": "FLOORSLOT_R01_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_25",
+      "part_suffix": "砖面美术_25",
+      "location": [
+        -5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__主体_输出",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__主体_输出.001",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_01",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_02",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_03",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_04",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_05",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.21717,
+        0.13465,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_06",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.10592,
+        0.06567,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_07",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.05354,
+        0.03319,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_08",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.0722,
+        0.04476,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_09",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14352,
+        0.08899,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_10",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.2298,
+        0.14247,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_11",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.22933,
+        0.14218,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_12",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07226,
+        0.0448,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_13",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14229,
+        0.08821,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_14",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.26187,
+        0.16237,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_15",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15032,
+        0.0932,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_16",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.72,
+        0.72,
+        0.022
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_17",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_18",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.59,
+        0.59,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_19",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_20",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_21",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C02__砖面美术_22",
+      "placement_id": "FLOORSLOT_R01_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        0.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__主体_输出",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__主体_输出.001",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_01",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_02",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_03",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_04",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_05",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.27019,
+        0.16751,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_06",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.24457,
+        0.15163,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_07",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13316,
+        0.08256,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_08",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07833,
+        0.04857,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_09",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07037,
+        0.04363,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_10",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.1369,
+        0.08487,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_11",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.20079,
+        0.12449,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_12",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.09464,
+        0.05868,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_13",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07273,
+        0.04509,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_14",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15531,
+        0.09629,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_15",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.08606,
+        0.05336,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_16",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_17",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.8,
+        0.54,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_18",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_19",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_20",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_21",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_22",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_23",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_23",
+      "part_suffix": "砖面美术_23",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.92,
+        0.66,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_24",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_24",
+      "part_suffix": "砖面美术_24",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R01_C03__砖面美术_25",
+      "placement_id": "FLOORSLOT_R01_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_25",
+      "part_suffix": "砖面美术_25",
+      "location": [
+        5.0,
+        -5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__主体_输出",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__主体_输出.001",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_01",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_02",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_03",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_04",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_05",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.21717,
+        0.13465,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_06",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.10592,
+        0.06567,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_07",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.05354,
+        0.03319,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_08",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.0722,
+        0.04476,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_09",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14352,
+        0.08899,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_10",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.2298,
+        0.14247,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_11",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.22933,
+        0.14218,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_12",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07226,
+        0.0448,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_13",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14229,
+        0.08821,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_14",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.26187,
+        0.16237,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_15",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15032,
+        0.0932,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_16",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.72,
+        0.72,
+        0.022
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_17",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_18",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.59,
+        0.59,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_19",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_20",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_21",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C01__砖面美术_22",
+      "placement_id": "FLOORSLOT_R02_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        -5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__主体_输出",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__主体_输出.001",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_01",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_02",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_03",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_04",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_05",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.27019,
+        0.16751,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_06",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.24457,
+        0.15163,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_07",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13316,
+        0.08256,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_08",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07833,
+        0.04857,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_09",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07037,
+        0.04363,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_10",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.1369,
+        0.08487,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_11",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.20079,
+        0.12449,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_12",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.09464,
+        0.05868,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_13",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07273,
+        0.04509,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_14",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15531,
+        0.09629,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_15",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.08606,
+        0.05336,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_16",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_17",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.8,
+        0.54,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_18",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_19",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_20",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_21",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_22",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_23",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_23",
+      "part_suffix": "砖面美术_23",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.92,
+        0.66,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_24",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_24",
+      "part_suffix": "砖面美术_24",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C02__砖面美术_25",
+      "placement_id": "FLOORSLOT_R02_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_25",
+      "part_suffix": "砖面美术_25",
+      "location": [
+        0.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__主体_输出",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__主体_输出.001",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_01",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_02",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_03",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_04",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_05",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.21717,
+        0.13465,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_06",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.10592,
+        0.06567,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_07",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.05354,
+        0.03319,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_08",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.0722,
+        0.04476,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_09",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14352,
+        0.08899,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_10",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.2298,
+        0.14247,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_11",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.22933,
+        0.14218,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_12",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07226,
+        0.0448,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_13",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14229,
+        0.08821,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_14",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.26187,
+        0.16237,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_15",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15032,
+        0.0932,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_16",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.72,
+        0.72,
+        0.022
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_17",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_18",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.59,
+        0.59,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_19",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_20",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_21",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R02_C03__砖面美术_22",
+      "placement_id": "FLOORSLOT_R02_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        5.0,
+        0.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__主体_输出",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__主体_输出.001",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_01",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_02",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_03",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_04",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_05",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.27019,
+        0.16751,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_06",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.24457,
+        0.15163,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_07",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13316,
+        0.08256,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_08",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07833,
+        0.04857,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_09",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07037,
+        0.04363,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_10",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.1369,
+        0.08487,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_11",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.20079,
+        0.12449,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_12",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.09464,
+        0.05868,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_13",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07273,
+        0.04509,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_14",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15531,
+        0.09629,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_15",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.08606,
+        0.05336,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_16",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_17",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.8,
+        0.54,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_18",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_19",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_20",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_21",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_22",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_23",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_23",
+      "part_suffix": "砖面美术_23",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.92,
+        0.66,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_24",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_24",
+      "part_suffix": "砖面美术_24",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C01__砖面美术_25",
+      "placement_id": "FLOORSLOT_R03_C01",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_25",
+      "part_suffix": "砖面美术_25",
+      "location": [
+        -5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__主体_输出",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__主体_输出.001",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.046
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_01",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_02",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_03",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_04",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_05",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.21717,
+        0.13465,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_06",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.10592,
+        0.06567,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_07",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.05354,
+        0.03319,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_08",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.0722,
+        0.04476,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_09",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14352,
+        0.08899,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_10",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.2298,
+        0.14247,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_11",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.22933,
+        0.14218,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_12",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07226,
+        0.0448,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_13",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.14229,
+        0.08821,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_14",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.26187,
+        0.16237,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_15",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15032,
+        0.0932,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_16",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.72,
+        0.72,
+        0.022
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_17",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_18",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.59,
+        0.59,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_19",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_20",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.052,
+        0.052,
+        0.0144
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_21",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C02__砖面美术_22",
+      "placement_id": "FLOORSLOT_R03_C02",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c02",
+      "library_object": "floor_tile_r01_c02_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        0.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__主体_输出",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_plate",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出",
+      "part_suffix": "主体_输出",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.94,
+        4.94,
+        0.04
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__主体_输出.001",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_inset",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_主体_输出.001",
+      "part_suffix": "主体_输出.001",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.765,
+        4.765,
+        0.021
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_01",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_01",
+      "part_suffix": "砖面美术_01",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_02",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_02",
+      "part_suffix": "砖面美术_02",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_03",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_03",
+      "part_suffix": "砖面美术_03",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.055,
+        4.84,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_04",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_04",
+      "part_suffix": "砖面美术_04",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.84,
+        0.055,
+        0.01
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_05",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_05",
+      "part_suffix": "砖面美术_05",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.27019,
+        0.16751,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_06",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_06",
+      "part_suffix": "砖面美术_06",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.24457,
+        0.15163,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_07",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_07",
+      "part_suffix": "砖面美术_07",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.13316,
+        0.08256,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_08",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_08",
+      "part_suffix": "砖面美术_08",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07833,
+        0.04857,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_09",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_09",
+      "part_suffix": "砖面美术_09",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07037,
+        0.04363,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_10",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_10",
+      "part_suffix": "砖面美术_10",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.1369,
+        0.08487,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_11",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_11",
+      "part_suffix": "砖面美术_11",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.20079,
+        0.12449,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_12",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_12",
+      "part_suffix": "砖面美术_12",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.09464,
+        0.05868,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_13",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_13",
+      "part_suffix": "砖面美术_13",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.07273,
+        0.04509,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_14",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_14",
+      "part_suffix": "砖面美术_14",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.15531,
+        0.09629,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_15",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_15",
+      "part_suffix": "砖面美术_15",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.08606,
+        0.05336,
+        0.0
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_16",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_16",
+      "part_suffix": "砖面美术_16",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.34776,
+        0.098,
+        0.0016
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_17",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_17",
+      "part_suffix": "砖面美术_17",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.8,
+        0.54,
+        0.012
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_18",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_18",
+      "part_suffix": "砖面美术_18",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_19",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_19",
+      "part_suffix": "砖面美术_19",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_20",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_20",
+      "part_suffix": "砖面美术_20",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_21",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_21",
+      "part_suffix": "砖面美术_21",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_22",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_22",
+      "part_suffix": "砖面美术_22",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.76,
+        0.035,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_23",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_detail",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_23",
+      "part_suffix": "砖面美术_23",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.92,
+        0.66,
+        0.018
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_24",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_24",
+      "part_suffix": "砖面美术_24",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        0.025,
+        4.77,
+        0.009
+      ],
+      "room_owned_geometry": false
+    },
+    {
+      "slot_id": "FLOORSLOT_R03_C03__砖面美术_25",
+      "placement_id": "FLOORSLOT_R03_C03",
+      "slot_role": "floor_tile",
+      "part_family": "tile_frame",
+      "component": "floor_tile_r01_c01",
+      "library_object": "floor_tile_r01_c01_砖面美术_25",
+      "part_suffix": "砖面美术_25",
+      "location": [
+        5.0,
+        5.0,
+        0.26
+      ],
+      "rotation_z_deg": 0.0,
+      "local_dims": [
+        4.77,
+        0.025,
+        0.009
+      ],
+      "room_owned_geometry": false
+    }
+  ],
+  "removed_room_owned_packages": [
+    "北墙_资产包",
+    "东墙_资产包",
+    "西墙_资产包",
+    "南门左墙_资产包",
+    "南门右墙_资产包",
+    "南门楣_资产包",
+    "承重底板_资产包",
+    "地砖_R01_C01_资产包",
+    "地砖_R01_C02_资产包",
+    "地砖_R01_C03_资产包",
+    "地砖_R02_C01_资产包",
+    "地砖_R02_C02_资产包",
+    "地砖_R02_C03_资产包",
+    "地砖_R03_C01_资产包",
+    "地砖_R03_C02_资产包",
+    "地砖_R03_C03_资产包"
+  ]
+}

@@ -1,0 +1,60 @@
+[gd_scene load_steps=3 format=3]
+
+; Stable AssetID: ENV-BATTLE-COMMON-DOOR-5M
+; 战局区块通用组件库 v004 · 10_门组件 · door_5m
+; 范式 B（自包含可替换组件）：模型 + 碰撞同包，逐实例化。
+; 原点契约 = 底面中心（Blender 底面 Z=0 → Godot 底面 Y=0），与全库一致。
+; 本版把 entry_safe_room v006 的墙/地/门美术并进组件；不按方位区分，任意槽位自动对齐。
+; 门扇为底边中心原点，接入时 visual.position.y = -DOOR_CLEAR_HEIGHT_M * 0.5 即可落在 DoorPanel 动画根上。
+; 开门方式是垂直升起（RoomDoor3D.set_open 改 panel.position.y），不是旋转，故原点无需落在铰链轴上。
+; 本件美术未变（房间没有给门扇附加件）；装甲门禁在 wall_door_5m 上。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/common_components/door_5m/door_5m_visual_top3d_v004.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door_5m_1"]
+size = Vector3(2.2, 2.5, 0.18)
+
+[node name="BattleCommonDoor5m" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-COMMON-DOOR-5M"
+metadata/asset_version = "v004"
+metadata/library_id = "ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY"
+metadata/library_root = "res://assets/art/environments/tower_zones/battle"
+metadata/category = "10_door_component"
+metadata/component = "door_5m"
+metadata/logic_id = "door_5m"
+metadata/display_name_zh = "战局通用门扇 2.2×0.18×2.5m"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/战局区块_通用组件库_v004.blend"
+metadata/source_collection = "door_5m_通用包"
+metadata/source_root_object = "ROOT_door_5m_通用组件"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/common_components/v004/component_packages_v004/10/door_5m/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "-Z"
+metadata/up_axis = "+Y"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/visual_bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/bounds_note = "bounds_size_m 是结构/碰撞包围盒；visual_bounds_size_m 是并入美术后的实测可视包围盒。"
+metadata/preserve_authored_palette = true
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/supersedes = "v003"
+metadata/carries_room_art_from = "assets/art/environments/tower_zones/battle/source/entry_safe_room/v006"
+metadata/door_clear_width_m = 2.2
+metadata/door_clear_height_m = 2.5
+metadata/panel_thickness_m = 0.18
+metadata/open_mode = "vertical_lift"
+metadata/panel_origin_policy = "bottom_center"
+metadata/snap_to_ground_offset_m = 0
+metadata/snap_note = "底面中心原点，直接放在目标地面 Y 上即可，无需额外偏移。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="DoorCollision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorCollision"]
+position = Vector3(0, 1.25, 0)
+shape = SubResource("BoxShape3D_door_5m_1")

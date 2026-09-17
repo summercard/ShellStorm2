@@ -123,8 +123,21 @@ func _ready() -> void:
 		elif index == 1:
 			# 99F通用可视地砖会避开基地正式地板，承重面仍完整保留。
 			expected_tiles -= 36
+		# 入口安全房自带正式地砖，会从整层通用可视地砖里挖掉对应格数（承重面不受影响）。
+		# 该挖洞量由 stage 自己记账，必须计入期望值，否则会把有意挖洞误判成缺砖。
+		var safe_room_hole_tiles := int(stage.get("additional_visual_hole_tile_count", 0))
+		expected_tiles -= safe_room_hole_tiles
 		if int(stage.get("tile_count", -1)) != expected_tiles:
-			failures.append("floor stage %d tile coverage is incomplete" % index)
+			failures.append(
+				"floor stage %d tile coverage is incomplete: %d tiles, expected %d (stair holes %d, safe-room holes %d)"
+				% [
+					index,
+					int(stage.get("tile_count", -1)),
+					expected_tiles,
+					hole_count,
+					safe_room_hole_tiles,
+				]
+			)
 
 	_validate_player_light_shadow_separation(tower.player, failures)
 	_finish(failures)
@@ -441,6 +454,9 @@ func _find_door_wall_module(root: Node, side: String) -> Node3D:
 		and str(root.get_meta("asset_id", "")) in [
 			"ENV-TOWER-WALL-DOOR-5M",
 			"ENV-BASE99-WALL-DOOR-5X12",
+			# 98F/78F 入口安全房（STAIR_LOBBY）已换成战局区块通用组件库 v004，
+			# 门墙是同一 5m 规格（2.2×2.5 门洞、原点坐边界网格线），只是换库换名。
+			"ENV-BATTLE-COMMON-WALL-DOOR-5M",
 		]
 		and str(root.get_meta("tower_wall_direction", "")) == side
 	):

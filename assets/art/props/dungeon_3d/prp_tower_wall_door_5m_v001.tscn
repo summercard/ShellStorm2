@@ -1,23 +1,19 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=4 format=3]
 
-; 5m 段带门墙 v2 - 自包含独立模块
-; 逻辑/阻挡高12m；视觉墙体高11.9m，顶部预留0.1m；中间留 2.2m 宽 × 2.5m 高门洞可通行
-; 门侧柱 1.4m 宽各自带碰撞，门洞镂空；玩家穿过门洞不会被撞
-; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向
-; 节点命名规则：MeshInstance3D = WallDoor_Left / WallDoor_Right / WallDoor_Lintel
-;                CollisionShape3D = CollisionLeft / CollisionRight / CollisionLintel
+; 5m 段带门墙 - 自包含独立模块
+; 正式美术：tower_descent_3d/components/env_tower_wall_door_5m_top3d_v003.glb
+;   逻辑/阻挡高 12m；视觉墙体高 11.9m；门洞净宽 2.2m × 净高 2.5m。
+;   底面中心原点（几何 Y=0..11.9）；门柱 1.4m 宽 @ x=∓1.8，门楣 2.2m 宽 @ y=2.5..11.9，
+;   与旧占位 BoxMesh 的 x/y 位置逐值相同。
+; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向。
+; preserve_authored_palette：禁止 _apply_module_material_variant() 用塔楼暖色 A/B
+;   主题材质覆盖，保留美术自带材质（MAT_Door_CyanSteel / MAT_PH49_*）。
+; 门扇由运行时 RoomDoor3D 的 DoorPanel 提供（门自带开合交互与碰撞），
+;   故此处隐藏美术自带的静态 DoorLeaf_OPEN，避免出现两片门扇。
+;   这与基地99层正式带门墙一致：wall_door GLB 只含墙体与门框，不含门扇。
+; WallCollision 保留原有 3 个 BoxShape3D 代理（门柱 2 + 门楣 1，门洞镂空可通行）。
 
-[sub_resource type="BoxMesh" id="BoxMesh_wall_door_pillar"]
-size = Vector3(1.4, 11.9, 0.3)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wall_door_lintel"]
-size = Vector3(2.2, 9.4, 0.3)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall_door"]
-albedo_color = Color(0.30, 0.32, 0.34, 1)
-metallic = 0.05
-metallic_specular = 0.5
-roughness = 0.75
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d_v003.glb" id="1_visual"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_wall_door_pillar"]
 size = Vector3(1.4, 12, 0.3)
@@ -26,24 +22,25 @@ size = Vector3(1.4, 12, 0.3)
 size = Vector3(2.2, 9.5, 0.3)
 
 [node name="PrpTowerWallDoor5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-WALL-DOOR-5M"
+metadata/asset_version = "v003"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d_v003.glb"
+metadata/grid_unit_m = 5.0
+metadata/logical_height_m = 12.0
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/door_clear_width_m = 2.2
+metadata/door_clear_height_m = 2.5
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/collision_owner = "Prefab自身(代理) + DungeonRoom3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
 
-; 左侧门柱：local x: -2.5 ~ -1.1，中心 x=-1.8
-[node name="WallDoor_Left" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8, 5.95, 0)
-mesh = SubResource("BoxMesh_wall_door_pillar")
-material_override = SubResource("StandardMaterial3D_wall_door")
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
 
-; 右侧门柱：local x: +1.1 ~ +2.5，中心 x=+1.8
-[node name="WallDoor_Right" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8, 5.95, 0)
-mesh = SubResource("BoxMesh_wall_door_pillar")
-material_override = SubResource("StandardMaterial3D_wall_door")
-
-; 门楣横梁视觉：local x: -1.1 ~ +1.1，y 中心 y=7.2（门洞顶部2.5m，上方9.4m至11.9m）
-[node name="WallDoor_Lintel" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.2, 0)
-mesh = SubResource("BoxMesh_wall_door_lintel")
-material_override = SubResource("StandardMaterial3D_wall_door")
+[node name="MOD_WALL_DOOR_5M_U01_DoorLeaf_OPEN" parent="ImportedModel/MOD_WALL_DOOR_5M_U01_ROOT" index="0"]
+visible = false
 
 [node name="WallCollision" type="StaticBody3D" parent="."]
 collision_layer = 1
