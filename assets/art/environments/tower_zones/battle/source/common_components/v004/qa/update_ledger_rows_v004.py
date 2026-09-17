@@ -227,6 +227,24 @@ def main():
         if not old_ids or old_ids[0] != values[0]:
             raise SystemExit("r%d 的 AssetID 不符：表内=%s 期望=%s"
                              % (row_number, old_ids[:1], values[0]))
+
+        # 防呆：安全房 v007 接入运行时后，会在 _scratch/patch_ledger_safe_room_v007.py
+        # 里把本行的 M/N 改成「已接入」。而本脚本 ROWS 里写死的是「暂未接入 / 未接入」，
+        # 重跑会把运行时接入状态悄悄改回去（本脚本对 M/N/P 并不真正幂等）。
+        # 故一旦发现该行已被标记接入，直接中止——不要颠倒两个脚本的顺序。
+        for column in ("M", "N"):
+            cell = re.search(r'<x:c r="%s%d"((?:[^>]*?))(?:/>|>(.*?)</x:c>)'
+                             % (column, row_number), old, re.S)
+            value = re.search(r"<x:v>(.*?)</x:v>", (cell.group(2) or "") if cell else "", re.S)
+            current = value.group(1).strip() if value else ""
+            if current in ("局内关卡01 / Battle（安全房 v007 已接入）", "组件已完成；已接入"):
+                raise SystemExit(
+                    "r%d%s 当前是「%s」：安全房 v007 已在本行登记为已接入，"
+                    "重放本脚本会把 M/N 重置为「暂未接入 / 未接入」。"
+                    "如确需重放，请在本脚本之后重新执行 "
+                    "_scratch/patch_ledger_safe_room_v007.py。" % (row_number, column, current)
+                )
+
         if old == build_row(row_number, values):
             print("r%-4d 已是最新，跳过" % row_number)
             continue
