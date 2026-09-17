@@ -24,8 +24,8 @@ const PALETTE_CONTRACT_ROOTS := [
 ## 而不是放宽整个目录的检查——新增的违规资产不会被豁免，仍会点亮红灯；
 ## 欠账还清（资产合规了）或路径消失也会报错，逼迫这张表随现实一起更新。
 const LEGACY_PALETTE_EXEMPT_GLBS := [
-	"res://assets/art/environments/base_facility_3d/components/env_base99_structural_v021/northwest_l_stair/northwest_l_stair_visual_top3d_v003.glb",
-	"res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents_v021/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d_v002.glb",
+	"res://assets/art/environments/base_facility_3d/components/env_base99_structural/northwest_l_stair/northwest_l_stair_visual_top3d.glb",
+	"res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_good_vibes_neon/loft_good_vibes_neon_visual_top3d.glb",
 ]
 
 

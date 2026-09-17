@@ -4,7 +4,7 @@ func _init() -> void:
 	call_deferred("verify")
 
 func verify() -> void:
-	var path := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d_v002.tscn"
+	var path := "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d.tscn"
 	var door := (load(path) as PackedScene).instantiate() as Node3D
 	root.add_child(door)
 	var blocker := door.get_node("StaticCollision/DoorBlocker") as CollisionShape3D

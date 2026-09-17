@@ -2,8 +2,8 @@ extends SceneTree
 ## P0-2 acceptance for the L-corner visual wrapper and its standalone collision wrapper.
 
 const LAYOUT := "res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
-const VISUAL_WRAPPER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn"
-const COLLISION_WRAPPER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn"
+const VISUAL_WRAPPER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d.tscn"
+const COLLISION_WRAPPER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_collision_top3d.tscn"
 const EXPECTED_POSITIONS := [
 	Vector3(-15, 0, -15),
 	Vector3(15, 0, -15),

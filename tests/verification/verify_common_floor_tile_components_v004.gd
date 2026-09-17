@@ -40,7 +40,7 @@ const CASES := [
 ]
 
 ## 本组件沿用 L 型转角 v005 包装的写法，顺带确认该包装仍可解析。
-const REFERENCE_L_CORNER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn"
+const REFERENCE_L_CORNER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d.tscn"
 
 ## 运行时塔楼楼板口径（TowerFloorStage3D 常量），用于断言"缝"是刻意值而非误差。
 const RUNTIME_GRID_UNIT := 5.0

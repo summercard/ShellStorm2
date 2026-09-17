@@ -1,6 +1,6 @@
 extends Node
 
-const FACILITY_ROOT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn")
+const FACILITY_ROOT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn")
 const EXPECTED_PACKAGE_COUNT := 45
 const EXPECTED_SOLID_PACKAGE_COUNT := 35
 

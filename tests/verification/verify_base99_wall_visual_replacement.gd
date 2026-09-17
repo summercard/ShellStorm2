@@ -3,7 +3,7 @@ extends Node
 ## 可编辑楼板/楼梯、可行走坡面，以及原有门功能没有被表现替换破坏。
 
 const WALL_SCENE: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d.tscn"
 )
 const BASE_SHARED_PALETTE: Texture2D = preload(
 	"res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"

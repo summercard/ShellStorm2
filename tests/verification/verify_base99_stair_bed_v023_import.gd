@@ -1,7 +1,7 @@
 extends SceneTree
 
-const BED_PREFAB := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d_v004.tscn")
-const STAIR_PREFAB := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn")
+const BED_PREFAB := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d.tscn")
+const STAIR_PREFAB := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d.tscn")
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 const LAYOUT_PATH := "res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
 

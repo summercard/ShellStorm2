@@ -1,7 +1,7 @@
 extends Node
 
 const WALL_CONTENT_ID := "ENV-BASE99-WALL-CONTENTS-V021"
-const WALL_CONTENT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn")
+const WALL_CONTENT := preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents/env_base99_wall_contents_root_top3d.tscn")
 const REQUIRED_CHILDREN := [
 	"二楼后墙服务管线",
 	"二楼工具洞洞板",

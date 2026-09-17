@@ -2,8 +2,8 @@ extends SceneTree
 ## 只读探针：对照基地99层正式带门墙 GLB —— 它的门扇是美术自带还是由 RoomDoor3D 提供？
 
 const CANDIDATES := [
-	"res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d_v004.glb",
-	"res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d_v002.glb",
+	"res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb",
+	"res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb",
 ]
 
 

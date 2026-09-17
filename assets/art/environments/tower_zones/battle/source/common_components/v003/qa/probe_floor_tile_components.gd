@@ -33,7 +33,7 @@ const CASES := [
 ]
 
 ## 顺带验证 `;` 行注释格式能解析（本组件沿用了 L 型转角包装的写法）。
-const REFERENCE_L_CORNER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v005.tscn"
+const REFERENCE_L_CORNER := "res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d.tscn"
 
 var _pass := 0
 var _fail := 0

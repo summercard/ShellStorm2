@@ -1,9 +1,9 @@
 extends SceneTree
 
 const SCENES := [
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/env_base99_remaining_facilities_root_top3d_v004.tscn",
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents_v021/env_base99_wall_contents_root_top3d_v003.tscn",
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d_v006.tscn",
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn",
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_contents/env_base99_wall_contents_root_top3d.tscn",
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_stair_l_z5/env_base99_stair_l_z5_root_top3d.tscn",
 ]
 
 func _init() -> void:
@@ -19,7 +19,7 @@ func _init() -> void:
 	assert(vfx_node.get_node("DustParticles").amount == 250)
 	assert(vfx_node.get_node("DustParticles").emitting == true)
 	vfx_node.free()
-	var holo := load("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities_v021/hologram_terminal_platform/hologram_terminal_platform_root_top3d_v002.tscn") as PackedScene
+	var holo := load("res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_root_top3d.tscn") as PackedScene
 	var holo_node := holo.instantiate()
 	var players := holo_node.find_children("*", "AnimationPlayer", true, false)
 	assert(players.size() > 0, "Hologram GLB has no imported AnimationPlayer")

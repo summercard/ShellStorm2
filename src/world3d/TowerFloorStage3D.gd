@@ -37,7 +37,7 @@ const WALL_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
 )
 const BASE99_CORNER_L_VISUAL: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d_v002.glb"
+	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb"
 )
 const PARAPET_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn"

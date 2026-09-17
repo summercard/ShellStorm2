@@ -34,7 +34,7 @@ const TOWER_CORNER_L_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn"
 )
 const BASE99_CORNER_L_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_root_top3d_v004.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/env_base99_corner_l_5m_collision_top3d.tscn"
 )
 const TOWER_CORNER_T_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_corner_t_5m.tscn"
@@ -51,19 +51,19 @@ const TOWER_FLOOR_TILE_PREFAB: PackedScene = preload(
 # 基地99层专属普通墙视觉。该PackedScene/GLB不持有碰撞、门或交互逻辑；
 # 结构碰撞继续由本脚本的0.30m代理负责，避免美术替换影响玩法。
 const BASE99_WALL_PLAIN_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_root_top3d.tscn"
 )
 const BASE99_FLOOR_PLAIN_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_plain_5m/env_base99_floor_plain_5m_root_top3d.tscn"
 )
 const BASE99_FLOOR_RIVET_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d_v001.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_root_top3d.tscn"
 )
 const BASE99_WALL_DOOR_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d_v004.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d.tscn"
 )
 const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d.tscn"
 )
 # —— 入口安全房（STAIR_LOBBY）v007 正式美术。
 # v007 是「单一方位」布局：南墙与东墙中段各开 2.2×2.5 门洞，其余 10 段为 5m 实墙，

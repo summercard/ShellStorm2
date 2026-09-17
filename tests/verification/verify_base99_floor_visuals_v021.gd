@@ -3,10 +3,10 @@ extends Node
 
 const OUTPUT := "res://outputs/verification/base99_floor_visuals_v021.png"
 const GROUND_SCENE := preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_full_replacement_v021/env_base99_floor_full_replacement_v021_root_top3d_v003.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_full_replacement/env_base99_floor_full_replacement_root_top3d.tscn"
 )
 const LOFT_SCENE := preload(
-	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals_v021/loft_floor_finish/loft_floor_finish_root_top3d_v003.tscn"
+	"res://assets/art/environments/base_facility_3d/runtime/env_base99_floor_visuals/loft_floor_finish/loft_floor_finish_root_top3d.tscn"
 )
 const PALETTE_PATH := "res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png"
 

@@ -85,34 +85,6 @@ def collisions(root):
     return normal, conflict
 
 
-
-
-    hits = collections.Counter()
-    detail = collections.defaultdict(list)
-    for base in SCAN_DIRS:
-        if not os.path.isdir(base):
-            continue
-        for dp, dns, fns in os.walk(base):
-            for f in fns:
-                if not f.endswith(SCAN_EXTS):
-                    continue
-                p = os.path.join(dp, f)
-                try:
-                    lines = open(p, encoding="utf-8", errors="replace").read().splitlines()
-                except OSError:
-                    continue
-                for i, line in enumerate(lines, 1):
-                    if root not in line:
-                        continue
-                    for m in re.finditer(re.escape(root) + r"/[^\"'\s)]+", line):
-                        frag = m.group(0)
-                        if VER_FILE.search(frag):
-                            hits[p] += 1
-                            detail[p].append((i, frag.rsplit("/", 1)[-1]))
-                            break
-    return hits, detail
-
-
 def refs(root):
     hits = collections.Counter()
     detail = collections.defaultdict(list)
@@ -145,6 +117,10 @@ def main() -> int:
         print(__doc__, file=sys.stderr)
         return 2
     root = sys.argv[1].rstrip("/")
+    # 引用扫描用相对 cwd 的目录（src/ tests/ …），因此强制以项目根为工作目录，
+    # 否则从 /tmp 之类的位置跑会静默全 0（踩过）。
+    project = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    os.chdir(project)
 
     gated, gated_other, src_side, dirs, residue = debt(root)
     glbs = gated.get(".glb", 0)

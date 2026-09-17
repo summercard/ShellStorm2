@@ -1,8 +1,8 @@
 extends Node
 ## Confirms the v021 door import changed only reusable visual prefabs.
 
-const WALL_VISUAL: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d_v004.tscn")
-const LIFT_VISUAL: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d_v002.tscn")
+const WALL_VISUAL: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_wall_door_5x12/env_base99_wall_door_5x12_root_top3d.tscn")
+const LIFT_VISUAL: PackedScene = preload("res://assets/art/environments/base_facility_3d/runtime/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_root_top3d.tscn")
 
 
 func _ready() -> void:

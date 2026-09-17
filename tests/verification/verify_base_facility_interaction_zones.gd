@@ -95,7 +95,7 @@ func _verify_facility(
 
 
 func _verify_authored_transforms(failures: Array[String]) -> void:
-	var layout_scene := load("res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d_v001.tscn") as PackedScene
+	var layout_scene := load("res://assets/art/environments/base_facility_3d/runtime/env_base_facility_art_layout_top3d.tscn") as PackedScene
 	var layout := layout_scene.instantiate() as Node3D
 	for facility_id in LOCKED_POSITIONS:
 		var facility: BaseFacility3D

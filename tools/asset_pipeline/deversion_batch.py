@@ -6,6 +6,8 @@
 - 带版本目录整树（如 `entry_safe_room/v007/<slug>/`） → 只保留指定版本，其余整树删除
 - 稳定化 = 去掉文件名里的 `_vNNN`、去掉路径里的 `vNNN/` 段
 - `.glb` 与其 `.import` 同步改名；改名后的 `.tscn` 内部 `res://` 引用同步改写
+- `pinned`（人工定代例外）：同一稳定路径下若是**两份不同资产**而非代际，
+  钉住其中一份到独立稳定名，两份都留（见 B3 的 corner_l_5m）
 
 默认 `--plan` 只打印计划，不做任何改动。`--apply-renames` / `--apply-deletes` 才动手，
 两者都走 `git mv` / `git rm`，历史由 git 承担。
@@ -31,6 +33,27 @@ VERSION_SUFFIX = re.compile(r"_v(\d{3})(?=\.)")
 VERSION_DIR = re.compile(r"^v(\d{3})$")
 RUN_ASSET = re.compile(r"_v\d{3}\.(?:glb|tscn)(?:\.(?:import|uid))?$")
 BACKUP = re.compile(r"\.bak_")
+
+# 批次级开关：本批的「版本」是否写在**目录名后缀**上。
+# B1/B2 的版本目录是纯 `vNNN/`（已由 VERSION_DIR 处理）；base_facility_3d 不一样，
+# 它的批次分组目录形如 `env_base99_remaining_facilities_v021/<slug>/`，版本是
+# **目录名的 `_vNNN` 后缀**，而且文件名里也可能嵌着组版本（`env_base99_floor_details_v017_visual_top3d_v001.glb`）。
+# 开启后 stable_path 对**每个路径段**剥掉所有 `_vNNN`（后接 `.` / `_` / 段尾），
+# 于是 `<组>_v017/…` 与 `<组>_v021/…` 归一到同一稳定路径，再由 collapse
+# 的「保留最高版本」把旧代删掉 —— 跨目录同名冲突由此自然消解。
+STRIP_DIR_VERSION = False
+
+# 段内版本：允许 `_vNNN` 后接 `.`（文件扩展名前）、`_`（嵌在名字中间）或段尾（目录名后缀）。
+VERSION_ANY = re.compile(r"_v(\d{3})(?=[._]|$)")
+
+# 定代例外（module 级，由 main() 从批次定义的 `pinned` 注入）：
+# 把**指定文件**固定到**指定稳定路径**，不走 stable_name 的「剥掉 _vNNN」推导。
+#
+# 为什么需要：collapse 的前提是「同一稳定路径下的多份 = 同一资产的代际」。但同一目录里
+# 可能躺着**两份不同资产**，它们剥完版本号恰好同名 —— 这时 collapse 会按「留最高版」
+# 删掉另一份，且被删的那份往往正是代码在用的那个（引用还在，内容被静默换掉）。
+# 遇到这种情形必须人工定代，把其中一份钉到独立稳定名，两份都留。
+PINNED: dict[str, str] = {}
 
 BATCHES: dict[str, dict] = {
     "b1": {
@@ -80,6 +103,51 @@ BATCHES: dict[str, dict] = {
                 "assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb",
         },
     },
+    # B3 与其它批不同：版本同时写在**文件名的尾缀**与**批次分组目录名的后缀**上。
+    # 见 STRIP_DIR_VERSION / VERSION_ANY。三条形态：
+    #   1) 两级扁平   components/env_base99_corner_l_5m/<slug>_visual_top3d_vNNN.glb
+    #   2) 三级分组   components/env_base99_remaining_facilities_v021/<slug>/<slug>_visual_top3d_vNNN.glb
+    #   3) 三代并存   components/env_base99_floor_{details,visuals}_v0{17,20,21}/… 与
+    #                 env_base99_loft_floor_finish_v0{17,20}/…
+    # 形态 3 归一后落到同一稳定路径，由 collapse「保留最高版本」保留 v021/v020 代、
+    # 删掉 v017 代（已用 _scratch/b3_closure_check.py 验证：从美术总装递归解析的
+    # 157 文件依赖闭包内，没有任何引用指向将被删除的版本）。
+    "b3": {
+        "label": "基地 99F base_facility_3d（两级扁平 + 三级分组 + 三代并存）",
+        "root": "assets/art/environments/base_facility_3d",
+        "strip_dir_version": True,
+        "rules": {
+            "components": {"mode": "collapse"},
+            "runtime": {"mode": "collapse"},
+        },
+        "excluded": [
+            "assets/art/environments/base_facility_3d/source/**（Blender 源，整体豁免）",
+            "components/** 的 3 个 *_runtime_manifest_vNNN.json：不属门禁口径（"
+            "RUN_ASSET 只认 .glb/.tscn），随所在分组目录的重命名单独处理",
+            "assets/art/asset_import_manifest_v001.json：B1/B2 均未回填，"
+            "按 P2 记的「P6 与重命名同批更新」统一留到收尾批",
+        ],
+        # 定代例外（人工决策，2026-09-17）：corner_l_5m 的 v004 与 v005 剥掉版本号后
+        # 稳定路径相同，却是**两个不同资产**，不是代际 ——
+        #   v004 = 手工维护的「11.9m 视觉 + 12m 双 BoxShape3D 碰撞载体」，根节点
+        #          PrpCornerL5m，collision_owner="Godot wrapper"；
+        #          DungeonRoom3D.gd:37 用它当 FACILITY 房间的 BASE99_CORNER_L_PREFAB，
+        #          而 L2057 _configure_corner_camera_collisions() 正是遍历它那 2 个
+        #          StaticBody3D（WallCollisionLong/Short）来配相机推墙。
+        #   v005 = 纯视觉壳（visual_only=true，零碰撞，collision_owner="DungeonRoom3D"），
+        #          zone_base.tscn 与 asset_import_manifest 的 runtime_scene 用的就是它。
+        # 若按 collapse 留 v005 删 v004：DungeonRoom3D 的 preload 被改写到稳定路径后
+        # 会加载 v005，2 个碰撞体凭空消失 → FACILITY 拐角丢碰撞（早期 "修改阻挡" 修掉的
+        # bug 回归），且 verify_base99_corner_l_v024_import.gd / validate_base99_corner_wrapper.gd
+        # 的 COLLISION_WRAPPER 断言同时失效。故把 v004 钉到独立稳定名，两份都留：
+        # v005 占规范名（与 manifest 登记一致），v004 走角色名。
+        "pinned": {
+            "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/"
+            "env_base99_corner_l_5m_root_top3d_v004.tscn":
+                "assets/art/environments/base_facility_3d/runtime/env_base99_corner_l_5m/"
+                "env_base99_corner_l_5m_collision_top3d.tscn",
+        },
+    },
 }
 
 
@@ -88,8 +156,13 @@ def stable_name(name: str) -> str:
 
 
 def stable_path(rel: str) -> str:
+    if rel in PINNED:
+        return PINNED[rel]
     parts = [p for p in rel.split("/") if not VERSION_DIR.match(p)]
-    parts[-1] = stable_name(parts[-1])
+    if STRIP_DIR_VERSION:
+        parts = [VERSION_ANY.sub("", p) for p in parts]
+    else:
+        parts[-1] = stable_name(parts[-1])
     return "/".join(parts)
 
 
@@ -283,6 +356,15 @@ def collect(batch: dict) -> tuple[list[tuple[str, str]], list[str]]:
 def check(renames, deletes) -> None:
     problems = []
     targets = set()
+    # 一次性取全仓已跟踪清单：本机每个 git 子进程约 0.45s（杀软/沙箱拖慢），
+    # 逐文件跑 `ls-files --error-unmatch` 会在大批（B3 266 条）上白烧两分钟，
+    # 还会把整批拖过默认超时被杀。批量取一次，判据等价。
+    tracked = set(
+        subprocess.run(
+            ["git", "-C", str(PROJECT), "ls-files"],
+            capture_output=True, text=True,
+        ).stdout.splitlines()
+    )
     for old, new in renames:
         op, np_ = PROJECT / old, PROJECT / new
         if not op.is_file():
@@ -292,8 +374,7 @@ def check(renames, deletes) -> None:
         if new in targets:
             problems.append(f"重命名目标重复: {new}")
         targets.add(new)
-        if not subprocess.run(["git", "-C", str(PROJECT), "ls-files", "--error-unmatch", old],
-                              capture_output=True).returncode == 0:
+        if old not in tracked:
             problems.append(f"未被 git 跟踪（改名会丢历史）: {old}")
     for d in deletes:
         if not (PROJECT / d).is_file():
@@ -313,11 +394,25 @@ def git(*args: str) -> None:
         raise SystemExit(f"git {' '.join(args)} 失败：{r.stderr.strip()}")
 
 
-def apply_renames(renames) -> None:
+def stage_roots(batch: dict) -> None:
+    """把批根下的一切改动一次性暂存（改名、删除、内容改写）。
+
+    为什么不用逐文件的 `git mv` / `git rm`：本机每个 git 子进程约 0.45s
+    （杀软/沙箱），B3 要 266 次 mv + 177 次 rm ≈ 5 分钟，且**每次都在索引上
+    开一次锁**——并行会话稍有 git 操作就会撞 `index.lock`（B3 首跑即因此被
+    中途 SIGTERM，留下部分改名）。改名本身是纯文件系统操作，提交时 git 按
+    内容相似度照样识别为 rename，历史不丢。故：文件操作走 os 层，暂存只做一次。
+    """
+    for root_rel, _rules in batch_roots(batch):
+        git("add", "-A", "--", root_rel)
+
+
+def apply_renames(batch: dict, renames) -> None:
     path_map = {old: new for old, new in renames}
     for old, new in renames:
-        (PROJECT / new).parent.mkdir(parents=True, exist_ok=True)
-        git("mv", old, new)
+        src, dst = PROJECT / old, PROJECT / new
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        src.rename(dst)
     # 改名后的 .tscn 内部引用同步改写
     touched = 0
     for old, new in renames:
@@ -331,6 +426,7 @@ def apply_renames(renames) -> None:
         if updated != text:
             f.write_text(updated, encoding="utf8")
             touched += 1
+    stage_roots(batch)
     print(f"RENAMED {len(renames)} 个文件；改写内部引用的 .tscn {touched} 个")
 
 
@@ -405,17 +501,26 @@ def fix_code_refs(batch: dict) -> list[tuple[str, int, list[str]]]:
     return changed
 
 
-def apply_deletes(deletes) -> None:
+def apply_deletes(batch: dict, deletes) -> None:
     for d in deletes:
-        git("rm", "-q", "--", d)
-    # 清掉留空的版本目录
+        p = PROJECT / d
+        if p.is_file():
+            p.unlink()
+    # 清掉留空的版本目录（纯 `vNNN/` 与 B3 那种 `_vNNN` 后缀的批次分组目录）
     for p in sorted((ART).rglob("*"), reverse=True):
-        if p.is_dir() and VERSION_DIR.match(p.name):
-            try:
-                p.rmdir()
-                print(f"RMDIR {p.relative_to(PROJECT).as_posix()}")
-            except OSError:
-                pass
+        if not p.is_dir():
+            continue
+        is_version_dir = VERSION_DIR.match(p.name) or (
+            STRIP_DIR_VERSION and VERSION_ANY.search(p.name)
+        )
+        if not is_version_dir:
+            continue
+        try:
+            p.rmdir()
+            print(f"RMDIR {p.relative_to(PROJECT).as_posix()}")
+        except OSError:
+            pass
+    stage_roots(batch)
     print(f"DELETED {len(deletes)} 个文件")
 
 
@@ -431,6 +536,11 @@ def main() -> int:
 
     batch = BATCHES[args.batch]
     excluded = list(batch.get("excluded", []))
+
+    # 批次级开关必须在使用 stable_path 之前生效（模块级全局）
+    global STRIP_DIR_VERSION, PINNED
+    STRIP_DIR_VERSION = bool(batch.get("strip_dir_version", False))
+    PINNED = dict(batch.get("pinned", {}))
 
     if args.fix_code_refs:
         print(f"=== {args.batch} 全仓代码/场景引用改写（.gd/.tscn） ===")
@@ -455,7 +565,7 @@ def main() -> int:
         print(f"=== {args.batch} 第二步：删除残留 {len(deletes)} 个 ===")
         for d in deletes:
             print(f"  {d}")
-        apply_deletes(deletes)
+        apply_deletes(batch, deletes)
         return 0
 
     applied = batch_applied(batch)
@@ -483,7 +593,7 @@ def main() -> int:
         for e in excluded:
             print(f"  {e}")
     if args.apply_renames:
-        apply_renames(renames)
+        apply_renames(batch, renames)
     if not args.apply_renames:
         print("\n（--plan 模式，未做任何改动）")
     return 0
