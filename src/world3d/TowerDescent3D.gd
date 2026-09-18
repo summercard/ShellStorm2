@@ -16,6 +16,7 @@ const MAIN_ENTRY_SCREEN_SCENE: PackedScene = preload(
 )
 const TOWER_GEOMETRY := preload("res://src/world3d/TowerGeometry3D.gd")
 const FLOOR_PLAN_GENERATOR := preload("res://src/map/FloorPlanGenerator.gd")
+const ROOM_DOOR_LANE := preload("res://src/map/RoomDoorLane.gd")
 const FLOOR_STAGE_SCRIPT := preload("res://src/world3d/TowerFloorStage3D.gd")
 const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
@@ -1818,54 +1819,34 @@ func _shared_door_lane(
 	target: DungeonRoom3D,
 	target_side: String
 ) -> float:
+	# 门槽算法唯一实现在 RoomDoorLane；白盒版图导出与校验共用同一份，
+	# 不再各自复刻，避免两侧静默分叉。
 	var room_lanes := _door_lane_candidates(room, side)
 	if room_lanes.is_empty():
 		return room.global_position.x if side in ["north", "south"] else room.global_position.z
-	var target_lanes := _door_lane_candidates(target, target_side)
-	var desired := (
-		(
+	var desired := float(room_lanes[0])
+	if target != null:
+		desired = (
 			(room.global_position.x + target.global_position.x) * 0.5
 			if side in ["north", "south"]
 			else (room.global_position.z + target.global_position.z) * 0.5
 		)
-		if target != null
-		else room_lanes[0]
+	return ROOM_DOOR_LANE.pick_shared(
+		room_lanes, _door_lane_candidates(target, target_side), desired
 	)
-	var shared: Array[float] = []
-	for lane in room_lanes:
-		for target_lane in target_lanes:
-			if is_equal_approx(lane, target_lane):
-				shared.append(lane)
-				break
-	var candidates := shared if not shared.is_empty() else room_lanes
-	var best := float(candidates[0])
-	for candidate in candidates:
-		if absf(float(candidate) - desired) < absf(best - desired):
-			best = float(candidate)
-	return best
 
 
 func _door_lane_candidates(room: DungeonRoom3D, side: String) -> Array[float]:
-	var lanes: Array[float] = []
 	if room == null or side.is_empty():
-		return lanes
+		return [] as Array[float]
 	var dimensions := room.get_dimensions()
 	var length := dimensions.x if side in ["north", "south"] else dimensions.y
-	var module_count := maxi(1, int(round(length / TOWER_GEOMETRY.GRID_UNIT_M)))
-	var first_index := 1 if module_count >= 3 else 0
-	var last_index := module_count - 2 if module_count >= 3 else module_count - 1
 	var axis_center := (
 		room.global_position.x
 		if side in ["north", "south"]
 		else room.global_position.z
 	)
-	for module_index in range(first_index, last_index + 1):
-		lanes.append(
-			axis_center
-			+ -length * 0.5
-			+ TOWER_GEOMETRY.GRID_UNIT_M * (float(module_index) + 0.5)
-		)
-	return lanes
+	return ROOM_DOOR_LANE.world_candidates(axis_center, length)
 
 
 func _room_door_world_position(room: DungeonRoom3D, side: String) -> Vector3:

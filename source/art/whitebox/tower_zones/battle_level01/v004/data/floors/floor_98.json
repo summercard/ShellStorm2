@@ -1,0 +1,592 @@
+{
+  "schema": "shellstorm2.battle.floor_plan_whitebox",
+  "schema_version": 1,
+  "level_id": "battle_level01",
+  "mode": "authored",
+  "floor_number": 98,
+  "floor_index": 2,
+  "sequence_index": 1,
+  "entry_side": "east",
+  "exit_side": "west",
+  "reservations": [
+    {
+      "kind": "stair_entry",
+      "side": "east",
+      "rect_m": [
+        20.0,
+        30.0
+      ]
+    },
+    {
+      "kind": "stair_exit",
+      "side": "west",
+      "rect_m": [
+        20.0,
+        30.0
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "key": "entry",
+      "room_id": "f98_entry",
+      "legacy_room_id": "floor_01_entry",
+      "room_type": "SAFE_ROOM",
+      "role": "stair_entry",
+      "parent_key": "",
+      "template_id": "safe_15x15",
+      "template_variant": "",
+      "center_m": [
+        27.5,
+        2.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "hub",
+          "side": "south",
+          "lane_m": 0.0,
+          "wall_length_m": 15.0
+        }
+      ]
+    },
+    {
+      "key": "hub",
+      "room_id": "f98_hub",
+      "legacy_room_id": "floor_01_hub",
+      "room_type": "COMMON_ROOM",
+      "role": "hub",
+      "parent_key": "entry",
+      "template_id": "common_30x25",
+      "template_variant": "main_room_01_hub",
+      "center_m": [
+        30.0,
+        -42.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "entry",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_02",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    },
+    {
+      "key": "main_02",
+      "room_id": "f98_main_02",
+      "legacy_room_id": "floor_01_main_02",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "hub",
+      "template_id": "common_30x25",
+      "template_variant": "main_room_02",
+      "center_m": [
+        65.0,
+        -42.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "hub",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_03",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    },
+    {
+      "key": "main_03",
+      "room_id": "f98_main_03",
+      "legacy_room_id": "floor_01_main_03",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_02",
+      "template_id": "common_30x25",
+      "template_variant": "main_room_03",
+      "center_m": [
+        100.0,
+        -42.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_01",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_02",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P3",
+          "target": "main_04",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "main_04",
+      "room_id": "f98_main_04",
+      "legacy_room_id": "floor_01_main_04",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_03",
+      "template_id": "common_30x25",
+      "template_variant": "main_room_04",
+      "center_m": [
+        100.0,
+        -12.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_03",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_05",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "main_05",
+      "room_id": "f98_main_05",
+      "legacy_room_id": "floor_01_main_05",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_04",
+      "template_id": "common_30x40",
+      "template_variant": "",
+      "center_m": [
+        100.0,
+        40.0
+      ],
+      "size_m": [
+        30.0,
+        40.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_04",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_06",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "main_06",
+      "room_id": "f98_main_06",
+      "legacy_room_id": "floor_01_main_06",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_05",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        100.0,
+        87.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_05",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_07",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    },
+    {
+      "key": "main_07",
+      "room_id": "f98_main_07",
+      "legacy_room_id": "floor_01_main_07",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_06",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        65.0,
+        87.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_06",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_08",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    },
+    {
+      "key": "main_08",
+      "room_id": "f98_main_08",
+      "legacy_room_id": "floor_01_main_08",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_07",
+      "template_id": "common_35x30",
+      "template_variant": "",
+      "center_m": [
+        27.5,
+        90.0
+      ],
+      "size_m": [
+        35.0,
+        30.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_07",
+          "side": "east",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_09",
+          "side": "west",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "main_09",
+      "room_id": "f98_main_09",
+      "legacy_room_id": "floor_01_main_09",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_08",
+      "template_id": "common_40x25",
+      "template_variant": "",
+      "center_m": [
+        -20.0,
+        87.5
+      ],
+      "size_m": [
+        40.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_03",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_08",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P3",
+          "target": "main_10",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 40.0
+        }
+      ]
+    },
+    {
+      "key": "main_10",
+      "room_id": "f98_main_10",
+      "legacy_room_id": "floor_01_main_10",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "main_09",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        -20.0,
+        47.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "exit",
+          "side": "south",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_09",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "exit",
+      "room_id": "f98_exit",
+      "legacy_room_id": "floor_01_exit",
+      "room_type": "SAFE_ROOM",
+      "role": "stair_exit",
+      "parent_key": "main_10",
+      "template_id": "safe_15x15",
+      "template_variant": "",
+      "center_m": [
+        -22.5,
+        2.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "main_10",
+          "side": "north",
+          "lane_m": 0.0,
+          "wall_length_m": 15.0
+        }
+      ]
+    },
+    {
+      "key": "branch_01",
+      "room_id": "f98_branch_01",
+      "legacy_room_id": "floor_01_branch_01",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "main_03",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        100.0,
+        -77.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_02",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_03",
+          "side": "north",
+          "lane_m": -2.5,
+          "wall_length_m": 30.0
+        }
+      ]
+    },
+    {
+      "key": "branch_02",
+      "room_id": "f98_branch_02",
+      "legacy_room_id": "floor_01_branch_02",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "branch_01",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        65.0,
+        -77.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_01",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    },
+    {
+      "key": "branch_03",
+      "room_id": "f98_branch_03",
+      "legacy_room_id": "floor_01_branch_03",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "main_09",
+      "template_id": "common_40x35",
+      "template_variant": "",
+      "center_m": [
+        -65.0,
+        87.5
+      ],
+      "size_m": [
+        40.0,
+        35.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_04",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 35.0
+        },
+        {
+          "port_id": "P2",
+          "target": "main_09",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 35.0
+        }
+      ]
+    },
+    {
+      "key": "branch_04",
+      "room_id": "f98_branch_04",
+      "legacy_room_id": "floor_01_branch_04",
+      "room_type": "COMMON_ROOM",
+      "role": "branch",
+      "parent_key": "branch_03",
+      "template_id": "common_30x25",
+      "template_variant": "",
+      "center_m": [
+        -105.0,
+        87.5
+      ],
+      "size_m": [
+        30.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "branch_03",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ]
+    }
+  ],
+  "main_path": [
+    "hub",
+    "main_02",
+    "main_03",
+    "main_04",
+    "main_05",
+    "main_06",
+    "main_07",
+    "main_08",
+    "main_09",
+    "main_10"
+  ],
+  "edge_policy": [],
+  "layout_variant": "north_ring",
+  "layout_id": "floor_98_436741386"
+}

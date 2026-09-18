@@ -1,0 +1,75 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "common_30x25",
+  "room_type": "COMMON_ROOM",
+  "size_m": [
+    30.0,
+    25.0
+  ],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": [
+    "north",
+    "south",
+    "east",
+    "west"
+  ],
+  "wall_lane_table": {
+    "north": [
+      -7.5,
+      -2.5,
+      2.5,
+      7.5
+    ],
+    "south": [
+      -7.5,
+      -2.5,
+      2.5,
+      7.5
+    ],
+    "east": [
+      -5.0,
+      0.0,
+      5.0
+    ],
+    "west": [
+      -5.0,
+      0.0,
+      5.0
+    ]
+  },
+  "variants": [
+    {
+      "variant_id": "main_room_01_hub",
+      "room_layout": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_01_hub/v003/room_layout.json",
+      "legacy_room_id": "floor_01_hub",
+      "status": "approved"
+    },
+    {
+      "variant_id": "main_room_02",
+      "room_layout": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/room_layout.json",
+      "legacy_room_id": "floor_01_main_02",
+      "status": "approved"
+    },
+    {
+      "variant_id": "main_room_03",
+      "room_layout": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_03/v003/room_layout.json",
+      "legacy_room_id": "floor_01_main_03",
+      "status": "approved"
+    },
+    {
+      "variant_id": "main_room_04",
+      "room_layout": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_04/v003/room_layout.json",
+      "legacy_room_id": "floor_01_main_04",
+      "status": "approved"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "common_40x35",
+  "room_type": "COMMON_ROOM",
+  "size_m": [
+    40.0,
+    35.0
+  ],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": [
+    "north",
+    "south",
+    "east",
+    "west"
+  ],
+  "wall_lane_table": {
+    "north": [
+      -12.5,
+      -7.5,
+      -2.5,
+      2.5,
+      7.5,
+      12.5
+    ],
+    "south": [
+      -12.5,
+      -7.5,
+      -2.5,
+      2.5,
+      7.5,
+      12.5
+    ],
+    "east": [
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0
+    ],
+    "west": [
+      -10.0,
+      -5.0,
+      0.0,
+      5.0,
+      10.0
+    ]
+  },
+  "variants": []
+}
