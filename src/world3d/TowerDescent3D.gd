@@ -197,6 +197,7 @@ var _corridor_wall_module_mesh: Mesh
 var _initial_loop_gate_armed := false
 var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
+var _standalone_exit_overlay: Control = null
 
 # 独立 Rogue 地图配置：复用 98—95 生成/美术/玩法，但不含 100F 天台与 99F 基地。
 # 通过场景继承的 .tscn 覆盖下面两个导出项来开启；旧塔楼默认保持 false/空。
@@ -2748,6 +2749,29 @@ func _cancel_initial_loop_retreat() -> void:
 
 
 func _confirm_initial_loop_retreat() -> void:
+	var discarded := _discard_run_carry_for_retreat()
+	_cancel_initial_loop_retreat()
+	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+	if facility_room != null:
+		player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 2.7)
+		player.velocity = Vector3.ZERO
+		_on_room_entered(facility_room)
+	_reset_initial_loop_world_after_retreat()
+	if not test_mode and BaseManager != null:
+		# 放弃战利品也是行动结算边界，不能让旧的深层战局检查点在
+		# 下一次进入主场景时被当作可恢复行动重新加载。
+		BaseManager.clear_active_run_checkpoint("initial_loop_retreat")
+	status_label.text = "已撤退至99F基地 · 丢失物品%d格、装备武器%d把、背包%d个" % [
+		int(discarded.get("inventory_slots", 0)),
+		int(discarded.get("weapons", 0)),
+		int(discarded.get("backpack", 0)),
+	]
+
+
+func _discard_run_carry_for_retreat() -> Dictionary:
+	# 98F 首门反向撤退的物品契约：背包、装备枪、装备背包全部丢失；保险格按
+	# 保险规则保留。独立副本退出战局沿用同一契约，差异只在落点，因此两条
+	# 路径共用这一份清空实现，避免两份契约漂移。
 	var discarded_inventory := _inventory.get_occupied_slots().size() if _inventory != null else 0
 	var discarded_backpack := player.get_equipped_backpack_item() if player != null and player.has_method("get_equipped_backpack_item") else {}
 	if _inventory != null:
@@ -2765,20 +2789,124 @@ func _confirm_initial_loop_retreat() -> void:
 		_inventory_ui.set_quick_item_module(_quick_inventory)
 	_refresh_quick_item_hud()
 	FateCardGameBridge.reset_run_state()
-	_cancel_initial_loop_retreat()
-	var facility_room := _room_by_id.get("facility") as DungeonRoom3D
-	if facility_room != null:
-		player.global_position = facility_room.global_position + Vector3(0.0, 0.05, 2.7)
-		player.velocity = Vector3.ZERO
-		_on_room_entered(facility_room)
-	_reset_initial_loop_world_after_retreat()
+	return {
+		"inventory_slots": discarded_inventory,
+		"weapons": discarded_weapons.size(),
+		"backpack": 0 if discarded_backpack.is_empty() else 1,
+	}
+
+
+func _show_standalone_exit_warning() -> void:
+	# 独立副本的“退出战局”门：与塔楼 98F 首门反向撤退共用物品契约，但落点是
+	# return_scene_path（正式基地场景），因为独立副本不生成 99F 基地房，
+	# 场景内没有可传送的 facility。文案必须独立，不能出现塔楼专属的 98F 字样。
+	# 首门开启后经重新上线回到 98F 安全房的玩家走的是同一个入口，故同样生效。
+	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
+		return
+	var overlay := Control.new()
+	overlay.name = "StandaloneExitWarning"
+	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.z_index = 920
+	var dim := ColorRect.new()
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	dim.color = Color(0.01, 0.0, 0.0, 0.78)
+	dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	overlay.add_child(dim)
+	var panel := PanelContainer.new()
+	panel.set_anchors_preset(Control.PRESET_CENTER)
+	panel.position = Vector2(-310, -145)
+	panel.custom_minimum_size = Vector2(620, 290)
+	panel.add_theme_stylebox_override("panel", _make_hud_style(Color(1.0, 0.24, 0.18), Color(0.05, 0.008, 0.010, 0.98), 3))
+	overlay.add_child(panel)
+	var margin := _make_margin(24, 22, 24, 22)
+	panel.add_child(margin)
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation", 14)
+	margin.add_child(box)
+	var title := _make_hud_label("退出本次独立副本行动？", 24, Color(1.0, 0.36, 0.28))
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	box.add_child(title)
+	var detail := _make_hud_label(
+		"确认后，背包内全部物品以及主武器、副武器都会永久丢失。\n"
+		+ "保险格按保险规则保留；你将立即返回基地，本次行动结束且不可撤销。",
+		15,
+		Color(0.94, 0.88, 0.86)
+	)
+	detail.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	box.add_child(detail)
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 18)
+	box.add_child(buttons)
+	var cancel := Button.new()
+	cancel.text = "取消 · 留在副本"
+	cancel.custom_minimum_size = Vector2(190, 48)
+	cancel.pressed.connect(_cancel_standalone_exit)
+	buttons.add_child(cancel)
+	var confirm := Button.new()
+	confirm.text = "确认退出 · 全部丢失"
+	confirm.custom_minimum_size = Vector2(220, 48)
+	confirm.pressed.connect(_confirm_standalone_exit)
+	buttons.add_child(confirm)
+	$HUD.add_child(overlay)
+	_standalone_exit_overlay = overlay
+	cancel.grab_focus()
+	_sync_player_input_lock()
+
+
+func _cancel_standalone_exit() -> void:
+	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
+		_standalone_exit_overlay.queue_free()
+	_standalone_exit_overlay = null
+	_sync_player_input_lock()
+	status_label.text = "已取消退出 · 行动继续"
+
+
+func _confirm_standalone_exit() -> void:
+	if _completed:
+		return
+	_completed = true
+	_close_inventory_for_modal()
+	_sync_player_input_lock()
+	var discarded := _discard_run_carry_for_retreat()
 	if not test_mode and BaseManager != null:
-		# 放弃战利品也是行动结算边界，不能让旧的深层战局检查点在
-		# 下一次进入主场景时被当作可恢复行动重新加载。
-		BaseManager.clear_active_run_checkpoint("initial_loop_retreat")
-	status_label.text = "已撤退至99F基地 · 丢失物品%d格、装备武器%d把、背包%d个" % [
-		discarded_inventory, discarded_weapons.size(), 0 if discarded_backpack.is_empty() else 1,
+		# 退出战局同样是行动事务边界：先摘掉运行时提供者，避免场景卸载把已放弃
+		# 的战局再写回检查点，再清掉行动档，防止下次进图恢复一个已放弃的战局。
+		BaseManager.unregister_runtime_checkpoint_provider(self, false)
+		_runtime_persistence_active = false
+		BaseManager.clear_active_run_checkpoint("standalone_retreat")
+	status_label.text = "已退出独立副本 · 丢失物品%d格、装备武器%d把、背包%d个 · 正在返回基地" % [
+		int(discarded.get("inventory_slots", 0)),
+		int(discarded.get("weapons", 0)),
+		int(discarded.get("backpack", 0)),
 	]
+	run_completed.emit(false, {
+		"success": false,
+		"aborted": true,
+		"kills": _kills,
+		"value": _run_value,
+		"loot": [],
+		"seed": run_seed,
+		"theme_id": gameplay_theme.theme_id,
+		"return_room_id": "facility",
+	})
+	# 独立副本不生成 99F 基地房，回基地只能靠场景切换；必须登记 99F 出生契约，
+	# 否则入口场景无法区分“撤退回基地”和普通冷启动。自动化下不切场景，但契约
+	# 仍登记，供专项验收断言“回的是基地而不是停在场景内”。
+	var entry_request_id := GameEntryFlow.request_gameplay_entry(
+		GameEntryFlow.REASON_ABORT_RETURN_99F,
+		GameEntryFlow.SPAWN_BASE_99F
+	)
+	if test_mode:
+		return
+	await get_tree().create_timer(0.8).timeout
+	var change_error := get_tree().change_scene_to_file(return_scene_path)
+	if change_error != OK:
+		if entry_request_id > 0:
+			GameEntryFlow.cancel_request(entry_request_id)
+		push_error("[TowerDescent3D] Standalone retreat scene return failed: %s" % error_string(change_error))
 
 
 func _reset_initial_loop_world_after_retreat() -> void:
@@ -3252,7 +3380,9 @@ func perform_interaction(
 	var mode := str(candidate.get("mode", "room_door"))
 	match mode:
 		"configured_standalone_retreat":
-			_show_initial_loop_retreat_warning()
+			# 独立副本没有 99F 基地房，退出战局必须另走“清空物品 + 回基地场景”，
+			# 不能复用塔楼的场景内反向撤退（那会按塔楼 98F 重建世界，只剩白盒房）。
+			_show_standalone_exit_warning()
 			return true
 		"configured_rooftop_transit":
 			return _try_open_base_rooftop_transit_door()
@@ -4480,11 +4610,15 @@ func _has_exclusive_modal() -> bool:
 		(_active_facility_menu != null and is_instance_valid(_active_facility_menu))
 		or (_elevator_overlay != null and is_instance_valid(_elevator_overlay))
 		or (_initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay))
+		or (_standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay))
 		or super()
 	)
 
 
 func try_close_modal_for_pause() -> bool:
+	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
+		_cancel_standalone_exit()
+		return true
 	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
 		_cancel_initial_loop_retreat()
 		return true

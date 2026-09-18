@@ -43,7 +43,7 @@
 | INVENTORY-SLOTS | 背包、保险、快捷物品、扩容 | [04](04_技术施工_战斗与局内成长.md) | `InventoryModule/InsuranceModule`→Dungeon→InventoryUI | `verify_backpack_equipment_flow`、`verify_finite_ammo_flow` | 有规范与历史；场景编排分散 |
 | FATE-RULES | 48运行塔罗、78目标牌组、三作用域 | [14](14_技术施工_命运塔罗牌组.md)、[04](04_技术施工_战斗与局内成长.md) | `FateCardPresets/FateCardEngine/TarotFateCatalog` | `verify_tarot_fate_runtime`、`verify_celestial_fate_scope_flow` | 有设计与历史；新增30张未施工 |
 | WORLD-PLAN | 纯数据楼层/房间图与四区块归属 | [05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks` | 可独立；缺领域版本与完整门事务 |
-| WORLD-ENTRY | 关卡入口：基地传送 + 切换地图进入独立关卡 | [05](05_技术施工_关卡生成与爬楼.md)（§3.0）、[07](07_技术施工_基地设施.md)（§2.2） | `BaseFacilityCatalog(mission_operations, ACTION_MENU)`→`RogueMapSelectMenu`→`RogueMap01TowerSegment3D.tscn`（`standalone_rogue`） | `verify_rogue_map_segment_flow`、`verify_central_expedition_hologram_facility` | **部分完成**：平台交互、菜单、场景切换、出生点、`runtime_map_id` 存档隔离已实装；单层化与撤离房间（撤离信号塔）为 2026-09-18 新设计，尚未施工；`verify_rogue_map_segment_flow` **未注册进 `core`** |
+| WORLD-ENTRY | 关卡入口：基地传送 + 切换地图进入独立关卡 | [05](05_技术施工_关卡生成与爬楼.md)（§3.0）、[07](07_技术施工_基地设施.md)（§2.2）、[09](09_技术施工_存档结算与复活.md)（§5.1） | `BaseFacilityCatalog(mission_operations, ACTION_MENU)`→`RogueMapSelectMenu`→`RogueMap01TowerSegment3D.tscn`（`standalone_rogue`） | `verify_rogue_map_segment_flow`（已注册进 `core`）、`verify_central_expedition_hologram_facility` | **部分完成**：平台交互、菜单、场景切换、出生点、`runtime_map_id` 存档隔离、出生安全房「退出战局」弃局离场契约（含关卡内重新上线路径）已实装；单层化与撤离房间（撤离信号塔）为 2026-09-18 新设计，尚未施工 |
 | WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | 当前契约与工程一致：内存生成/验证完成后开门，不等待快照写盘；未保存状态可在重启后丢失 |
 | WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md) | `TowerDescent3D._finalize_airlock_commit` | `verify_three_segment_tower_generation_flow` | 当前契约与工程一致：前门交互时先关闭后侧路线并卸载旧段；无独立提交回执或跨重启保证 |
 | WORLD-LOOT | 搜索、清房钥匙、掉落与拾取 | [04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md) | `LootModule/ItemRegistry/GroundLootPickup3D` | `verify_requested_experience_upgrade_flow` | 有设计/历史；批量数值仍手工投影 |
@@ -82,7 +82,7 @@
 - PERFORMANCE/TOOLING：[性能历史](development/history/13_性能优化与热管理_历史记录.md)、[测试历史](development/history/11_测试与发布_历史记录.md)。
 - AUDIO/VFX：[音乐修复](development/history/14.8_音乐系统与配乐资产_历史记录.md)、[特效快照](development/history/14.6_特效系统与制作规范_历史记录.md)。
 - WORLD/SAVE/TIME/ENTRY/ASSET：[版本开发日志](development/CHANGELOG.md)及[场景成品化历史](development/history/17_天台至98层成品化验收.md)。这些尚未逐条绑定功能ID，属于追溯债务。
-- WORLD-ENTRY：[关卡传送入口与独立关卡设计](development/2026-09-18_level_teleport_entry_and_standalone_map.md)。
+- WORLD-ENTRY：[关卡传送入口与独立关卡设计](development/2026-09-18_level_teleport_entry_and_standalone_map.md)、[独立关卡出生安全房退出门契约](development/2026-09-19_standalone_safe_room_exit_contract.md)。
 - NARRATIVE/RUN-REVIVE/GRAPHICS-POSTFX仍缺功能级独立契约；RUN-MERCHANT与BASE-WORKSHOP已建立开发中文档，TRAINING-RANGE功能1.0已完成。开发中功能不得因文档已建立而提前标成实现完成。
 
 ## 4. 允许的独立开发方式
