@@ -1,0 +1,4 @@
+interface:
+  display_name: "S2 导出与严格中转"
+  short_description: "从双母版导出纯视觉GLB并生成可校验中转台账"
+  default_prompt: "使用 $02-character-export-transfer 把当前角色母版导出为纯视觉 GLB 并生成严格中转台账。"

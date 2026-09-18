@@ -1,0 +1,4 @@
+interface:
+  display_name: "S3 Godot 导入与包装"
+  short_description: "把视觉GLB包装成稳定路径的PackedScene并完成引用替换"
+  default_prompt: "使用 $03-character-godot-import 把当前角色 GLB 导入 Godot 并建立稳定路径的运行包装。"

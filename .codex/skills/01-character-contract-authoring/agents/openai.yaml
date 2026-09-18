@@ -1,0 +1,4 @@
+interface:
+  display_name: "S1 契约反推与母版制作"
+  short_description: "反推角色运行时契约并在 Blender 建立模型/动作双母版"
+  default_prompt: "使用 $01-character-contract-authoring 为当前项目的一名人形角色、NPC 或怪物建立运行时契约与 Blender 双母版。"

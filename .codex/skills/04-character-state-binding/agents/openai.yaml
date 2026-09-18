@@ -1,0 +1,4 @@
+interface:
+  display_name: "S4 运行时接入与状态映射"
+  short_description: "建立状态机到动作的表现适配层并处理兜底"
+  default_prompt: "使用 $04-character-state-binding 把当前表现资产接到运行时状态机并建立状态到动作的映射。"
