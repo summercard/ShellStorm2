@@ -1,0 +1,5 @@
+scenes/RogueMapSelectMenu.gd	 BOM=False CRLF=True
+scenes/RogueMapSelectMenu.tscn	 BOM=False CRLF=True
+scenes/RogueMap01TowerSegment3D.tscn	 BOM=False CRLF=True
+tests/verification/verify_rogue_map_segment_flow.gd	 BOM=False CRLF=True
+tests/verification/verify_rogue_map_segment_flow.tscn	 BOM=False CRLF=True

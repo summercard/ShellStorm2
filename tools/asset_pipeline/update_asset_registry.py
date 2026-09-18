@@ -1,10 +1,23 @@
-"""Register the independent Blender facility and weapon assets in the project workbook."""
+"""Register the independent Blender facility and weapon assets in the project workbook.
+
+⛔ 已封存（2026-09-18，账本分册化当天）。这是 2026-08-10 的一次性登记工具，内置 payload
+早于后续三次结构变更：账本分册化（条目移至 assets/registry/ledgers/）、去版本化批
+B1–B6（枪械运行路径已去掉 _vNNN）、大类枚举收敛（payload 里的「3D道具」不在《分类与
+编码》的 10 个大类内）。原实现 `next((PROJECT / "assets/registry").glob("*.xlsx"))` 现在
+会命中《总目录》，`worksheets[1]` 也变成了《分账本索引》——重跑会向错误的工作簿插行并
+覆盖《版本记录》。
+
+保留本体是为了可追溯。要重新登记资产：先按 assets/registry/ledger_index.json 确定归属域，
+在对应分账本里登记，再跑 `python scripts/check_asset_registry.py --scope structure`。
+"""
 
 from __future__ import annotations
 
+import argparse
 import copy
 import hashlib
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -15,6 +28,11 @@ PROJECT = Path(__file__).resolve().parents[2]
 REGISTRY = next((PROJECT / "assets/registry").glob("*.xlsx"))
 MANIFEST = json.loads((PROJECT / "assets/art/asset_import_manifest_v001.json").read_text(encoding="utf-8"))
 TODAY = datetime(2026, 8, 10)
+
+SEALED_REASON = (
+    "update_asset_registry.py 已封存：payload 与账本分册化 / 去版本化 / 大类枚举收敛三处口径冲突，"
+    "重跑会向错误工作簿插行。请改在目标分账本登记后跑 scripts/check_asset_registry.py --scope structure。"
+)
 
 ACTIVE_WEAPONS = {
     "hair_dryer": ("WPN-GUN-BP-PISTOL", "bp_pistol", "豌豆手枪 / 吹风机造型"),
@@ -85,6 +103,7 @@ def append_row(ws, template_row: int, values: list[object]) -> int:
 
 
 def main() -> None:
+    raise SystemExit(SEALED_REASON)
     workbook = load_workbook(REGISTRY)
     ws = workbook.worksheets[1]
     rows = {str(ws.cell(row, 1).value): row for row in range(6, ws.max_row + 1) if ws.cell(row, 1).value}

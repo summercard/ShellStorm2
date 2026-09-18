@@ -1,0 +1,60 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-WALL-SERVICE-00",
+  "slug": "wall_service_00",
+  "name_zh": "wall_service_00_通用包",
+  "category": "04_维修与机箱",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "blender_collection": "wall_service_00_通用包",
+  "root_object": "ROOT_wall_service_00_通用组件",
+  "objects": [
+    "wall_service_00_主体_输出",
+    "wall_service_00_自发光_输出"
+  ],
+  "object_count": 2,
+  "world_position": [
+    6.2975,
+    -19.056763,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -0.3775,
+    -0.540001,
+    0.0
+  ],
+  "bounds_hi": [
+    0.3775,
+    0.540001,
+    2.56
+  ],
+  "bounds_size": [
+    0.755,
+    1.080002,
+    2.56
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "editable_collection": "wall_service_00_制作源",
+  "emissive_objects": [
+    "wall_service_00_自发光_输出"
+  ],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "wall_service_00_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

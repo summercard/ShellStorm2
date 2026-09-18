@@ -88,6 +88,8 @@ metadata/scene_vfx_count = 1
 [node name="51_重型货架与补给箱_资产包" parent="." instance=ExtResource("14_heavy_supply_shelf")]
 
 [node name="51_圆形全息设备平台_资产包" parent="." instance=ExtResource("15_hologram_terminal_platform")]
+metadata/placement_role = "基地中央远征情报室"
+metadata/interactive = true
 
 [node name="56_工业水箱_资产包" parent="." instance=ExtResource("16_industrial_water_tank")]
 

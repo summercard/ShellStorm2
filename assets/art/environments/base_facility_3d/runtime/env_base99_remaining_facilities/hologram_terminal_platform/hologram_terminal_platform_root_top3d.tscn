@@ -1,14 +1,27 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_visual_top3d.glb" id="1_visual"]
 
-[ext_resource type="Script" path="res://tools/asset_pipeline/play_imported_animation.gd" id="2_anim"]
+[ext_resource type="Script" path="res://src/base3d/HologramExpeditionFacility3D.gd" id="2_facility"]
 
 [sub_resource type="BoxShape3D" id="Box_bounds"]
 size = Vector3(2.408743, 1.824856, 2.408743)
 
-[node name="51_圆形全息设备平台_资产包" type="Node3D"]
-script = ExtResource("2_anim")
+[sub_resource type="BoxShape3D" id="Box_interaction"]
+size = Vector3(5.2, 3.0, 5.2)
+
+[node name="51_圆形全息设备平台_资产包" type="Area3D"]
+collision_layer = 0
+collision_mask = 1
+script = ExtResource("2_facility")
+facility_id = "mission_operations"
+display_name = "远征情报室"
+description = "靠近后按E打开地图选择，传送进入独立肉鸽地图"
+base_size_multiplier = 1.0
+facility_color = Color(0.15, 0.82, 0.92, 1)
+metadata/interaction_role = "expedition_intelligence_room"
+metadata/interaction_contract = "player_nearby_and_press_E"
+metadata/action_path = "res://scenes/RogueMapSelectMenu.tscn"
 metadata/asset_id = "ENV-BASE99-V022::hologram_terminal_platform"
 metadata/asset_version = "v022"
 metadata/source_blend = "res://source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v022.blend"
@@ -18,6 +31,27 @@ metadata/triangles_before = 7556
 metadata/triangles_after = 5982
 metadata/downward_triangles_removed = 1574
 metadata/collision_policy = "optimized_output_bounds_box"
+
+[node name="InteractionShape" type="CollisionShape3D" parent="."]
+position = Vector3(5, 1.5, -1.72)
+shape = SubResource("Box_interaction")
+
+[node name="NameLabel" type="Label3D" parent="."]
+position = Vector3(5, 2.6, -1.72)
+billboard = 1
+text = "远征情报室"
+font_size = 34
+outline_size = 8
+modulate = Color(0.35, 0.95, 1, 1)
+
+[node name="PromptLabel" type="Label3D" parent="."]
+visible = false
+position = Vector3(5, 2.25, -1.72)
+billboard = 1
+text = "[E] 打开远征情报室"
+font_size = 24
+outline_size = 8
+modulate = Color(1, 0.82, 0.28, 1)
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
 

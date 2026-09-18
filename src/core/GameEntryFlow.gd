@@ -16,6 +16,8 @@ const REASON_EXPLICIT_MAIN_ENTRY := "explicit_main_entry"
 const REASON_NEW_GAME_RESET := "new_game_reset"
 const REASON_DEATH_RETURN_99F := "death_return_99f"
 const REASON_SUCCESSFUL_RETURN_99F := "successful_return_99f"
+const REASON_MISSION_OPERATIONS_TELEPORT := "mission_operations_teleport"
+const REASON_RUNTIME_RESTORE := "runtime_restore"
 const REASON_SCENE_REENTRY := "scene_reentry"
 
 const SPAWN_SAVED_PROGRESS := "saved_progress"

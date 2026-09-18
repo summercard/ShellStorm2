@@ -1,0 +1,115 @@
+[gd_scene load_steps=12 format=3]
+
+; Stable AssetID: ENV-BATTLE-L01-WALL-FLOOR-FACILITY-KIT
+; 战局区块墙地板与墙边设施装配包
+; 结构组件保持独立：墙/地板各自负责视觉与结构契约；墙边设施为独立视觉包。
+; 装饰包不改变5m网格、12m逻辑墙高、导航或战斗碰撞。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn" id="1_wall"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn" id="2_floor_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn" id="3_floor_b"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_server_00/north_server_00_root_top3d.tscn" id="4_server_a"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/north_server_01/north_server_01_root_top3d.tscn" id="5_server_b"]
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/runtime/entry_safe_room/central_terminal_island/central_terminal_island_root_top3d.tscn" id="6_terminal"]
+
+[node name="BattleWallFloorFacilityKit" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-L01-WALL-FLOOR-FACILITY-KIT"
+metadata/asset_version = "v001"
+metadata/block_id = "battle"
+metadata/floor_range = "98-95F"
+metadata/design_scope = "战局区块墙地板与墙边设施装配"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend"
+metadata/source_blend_facilities = "res://assets/art/environments/tower_zones/battle/source/entry_safe_room/v007/局内关卡01_入口安全房_15x15m_正式美术_v007.blend"
+metadata/scene_design_docs = "docs/v0.1/05.1_关卡区块设计.md;docs/v0.1/10.1_3D场景美术生产流程.md"
+metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
+metadata/grid_unit_m = 5.0
+metadata/wall_visual_height_m = 11.9
+metadata/wall_logical_height_m = 12.0
+metadata/room_size_m = Vector2(15, 15)
+metadata/visual_only_facilities = true
+metadata/collision_policy = "walls_self;floor_host_owned;facilities_none"
+metadata/replacement_contract = "replace wall/floor/facility children independently; preserve transforms"
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="WallNorth_01" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(-5, 0, -7.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="WallNorth_02" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(0, 0, -7.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="WallNorth_03" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(5, 0, -7.5)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="WallSouth_01" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(-5, 0, 7.5)
+
+[node name="WallSouth_02" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(0, 0, 7.5)
+
+[node name="WallSouth_03" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(5, 0, 7.5)
+
+[node name="WallEast_01" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(7.5, 0, -5)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="WallEast_02" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(7.5, 0, 0)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="WallEast_03" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(7.5, 0, 5)
+rotation_degrees = Vector3(0, 90, 0)
+
+[node name="WallWest_01" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(-7.5, 0, -5)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="WallWest_02" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(-7.5, 0, 0)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="WallWest_03" parent="Walls" instance=ExtResource("1_wall")]
+position = Vector3(-7.5, 0, 5)
+rotation_degrees = Vector3(0, -90, 0)
+
+[node name="Floor" type="Node3D" parent="."]
+
+[node name="Tile_01" parent="Floor" instance=ExtResource("2_floor_a")]
+position = Vector3(-5, 0.056, -5)
+[node name="Tile_02" parent="Floor" instance=ExtResource("3_floor_b")]
+position = Vector3(0, 0.081, -5)
+[node name="Tile_03" parent="Floor" instance=ExtResource("2_floor_a")]
+position = Vector3(5, 0.056, -5)
+[node name="Tile_04" parent="Floor" instance=ExtResource("3_floor_b")]
+position = Vector3(-5, 0.081, 0)
+[node name="Tile_05" parent="Floor" instance=ExtResource("2_floor_a")]
+position = Vector3(0, 0.056, 0)
+[node name="Tile_06" parent="Floor" instance=ExtResource("3_floor_b")]
+position = Vector3(5, 0.081, 0)
+[node name="Tile_07" parent="Floor" instance=ExtResource("2_floor_a")]
+position = Vector3(-5, 0.056, 5)
+[node name="Tile_08" parent="Floor" instance=ExtResource("3_floor_b")]
+position = Vector3(0, 0.081, 5)
+[node name="Tile_09" parent="Floor" instance=ExtResource("2_floor_a")]
+position = Vector3(5, 0.056, 5)
+
+[node name="WallSideFacilities" type="Node3D" parent="."]
+metadata/visual_only = true
+metadata/collision_policy = "none_in_package"
+
+[node name="DataCabinet_North_01" parent="WallSideFacilities" instance=ExtResource("4_server_a")]
+position = Vector3(-4.8, 0.3, -6.15)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="DataCabinet_North_02" parent="WallSideFacilities" instance=ExtResource("5_server_b")]
+position = Vector3(-2.9, 0.3, -6.15)
+rotation_degrees = Vector3(0, 180, 0)
+
+[node name="WallSideDataDesk" parent="WallSideFacilities" instance=ExtResource("6_terminal")]
+position = Vector3(4.2, 0.3, -5.7)
+rotation_degrees = Vector3(0, 180, 0)

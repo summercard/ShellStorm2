@@ -1,0 +1,54 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-FLOOR-CABLING",
+  "slug": "floor_cabling",
+  "name_zh": "floor_cabling_通用包",
+  "category": "07_环境支持",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "blender_collection": "floor_cabling_通用包",
+  "root_object": "ROOT_floor_cabling_通用组件",
+  "objects": [
+    "floor_cabling_主体_输出"
+  ],
+  "object_count": 1,
+  "world_position": [
+    102.735001,
+    -35.974621,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -13.235001,
+    -8.785,
+    0.0
+  ],
+  "bounds_hi": [
+    13.235001,
+    8.785,
+    0.12
+  ],
+  "bounds_size": [
+    26.470002,
+    17.57,
+    0.12
+  ],
+  "material_roles": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "editable_collection": "floor_cabling_制作源",
+  "emissive_objects": [],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "floor_cabling_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

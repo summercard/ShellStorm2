@@ -1,0 +1,201 @@
+{
+  "source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v004\\战局区块_通用组件库_v004.blend",
+  "source_sha256": "7c420d1711e8a5de429f1555db0e5296d38d195ab1f6b4d7e5dd338932f1a837",
+  "result": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "scope": [
+    "08/wall_standard_5m",
+    "08/wall_door_5m"
+  ],
+  "locked_object_count": 164,
+  "locked_match": true,
+  "locked_changed": [],
+  "locked_before_sha256": "e1973c2a57f1c1d3dbee6d9225b1d43c6d65ec1d7550e556167816009990da87",
+  "locked_after_sha256": "e1973c2a57f1c1d3dbee6d9225b1d43c6d65ec1d7550e556167816009990da87",
+  "source_unchanged": true,
+  "materials_unchanged": {
+    "01_精工金属_紫色骨架": "6c6ad9fdd86eb5c6d36ddc559aa18ec897e2f69ad8d7bcd8c5b1d4ab00181952",
+    "02_细腻哑光_青绿大面": "24706733762706232c13f98c6eb4efc25ec28d4b4cdda6efb152058e377a5061",
+    "03_清漆反光_紫粉点缀": "89cfab08ff93295c02794a6616fbbdcb1726be4b51181404ddb4dba450d100da",
+    "04_柔和自发光_UI灯光": "6528e60ff4c4c8909f88ddcac334916d75c7495150166c430d3b0ac7e6c6208c"
+  },
+  "material_count": 4,
+  "package_count": 25,
+  "category_count": 10,
+  "empty_packages": [],
+  "multiple_package_membership": [],
+  "walls": {
+    "wall_standard_5m": {
+      "package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "slug": "wall_standard_5m",
+      "name_zh": "wall_standard_5m_通用包",
+      "category": "08_墙壁组件",
+      "version": "v005",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+      "blender_collection": "wall_standard_5m_通用包",
+      "root_object": "ROOT_wall_standard_5m_通用组件",
+      "objects": [
+        "wall_standard_5m_主体_输出",
+        "wall_standard_5m_UI灯光_柔和自发光"
+      ],
+      "object_count": 2,
+      "world_position": [
+        4.0,
+        -58.344406,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "blender_forward_axis": "+Y",
+      "blender_up_axis": "+Z",
+      "bounds_lo": [
+        -2.5,
+        -0.150002,
+        0.0
+      ],
+      "bounds_hi": [
+        2.5,
+        0.317501,
+        11.9
+      ],
+      "bounds_size": [
+        5.0,
+        0.467503,
+        11.9
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "editable_collection": "wall_standard_5m_制作源",
+      "emissive_objects": [
+        "wall_standard_5m_UI灯光_柔和自发光"
+      ],
+      "collision": "visual_only; existing Godot collision untouched",
+      "exported": false,
+      "expected_export": "wall_standard_5m_visual_top3d.glb",
+      "dependencies": [
+        "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+      ],
+      "animation": "none",
+      "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+    },
+    "wall_door_5m": {
+      "package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "slug": "wall_door_5m",
+      "name_zh": "wall_door_5m_通用包",
+      "category": "08_墙壁组件",
+      "version": "v005",
+      "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+      "blender_collection": "wall_door_5m_通用包",
+      "root_object": "ROOT_wall_door_5m_通用组件",
+      "objects": [
+        "wall_door_5m_主体_输出",
+        "wall_door_5m_UI灯光_柔和自发光"
+      ],
+      "object_count": 2,
+      "world_position": [
+        8.0,
+        -58.344398,
+        0.0
+      ],
+      "local_origin": [
+        0,
+        0,
+        0
+      ],
+      "blender_forward_axis": "+Y",
+      "blender_up_axis": "+Z",
+      "bounds_lo": [
+        -2.5,
+        -0.150002,
+        0.0
+      ],
+      "bounds_hi": [
+        2.5,
+        0.341499,
+        11.9
+      ],
+      "bounds_size": [
+        5.0,
+        0.491501,
+        11.9
+      ],
+      "material_roles": [
+        "01_精工金属_紫色骨架",
+        "02_细腻哑光_青绿大面",
+        "03_清漆反光_紫粉点缀",
+        "04_柔和自发光_UI灯光"
+      ],
+      "editable_collection": "wall_door_5m_制作源",
+      "emissive_objects": [
+        "wall_door_5m_UI灯光_柔和自发光"
+      ],
+      "collision": "visual_only; existing Godot collision untouched",
+      "exported": false,
+      "expected_export": "wall_door_5m_visual_top3d.glb",
+      "dependencies": [
+        "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+      ],
+      "animation": "none",
+      "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+    }
+  },
+  "door_clear_aperture": [
+    2.2,
+    2.5
+  ],
+  "logical_wall_height": 12,
+  "visual_wall_height": 11.9,
+  "interface_notes": [
+    "Original roots, 5m span, Z=0..11.9m and 2.2x2.5m aperture retained. Actual surface-relief bounds are measured in output_geometry.",
+    "Review instances are separated 6m for visibility; library original root placements are unchanged.",
+    "Independent moving door in category 10 is locked. No Godot import or collision edit.",
+    "Old downstream object-name enumerators for v004 must not be reused to export v005; enumerate package meshes instead."
+  ],
+  "editable_mesh_count": 339,
+  "output_wall_mesh_count": 4,
+  "removed_display_geometry": [],
+  "game_runtime_integrated": false,
+  "reopened_locked_match": true,
+  "reopened_locked_count": 164,
+  "package_membership_checked": true,
+  "output_geometry": {
+    "wall_standard_5m": {
+      "bounds_lo": [
+        -2.5,
+        -0.15000152587890625,
+        0.0
+      ],
+      "bounds_hi": [
+        2.5,
+        0.3175010681152344,
+        11.899999618530273
+      ],
+      "triangles": 6414,
+      "polygons": 3615,
+      "objects": 2,
+      "active_modifiers": 0
+    },
+    "wall_door_5m": {
+      "bounds_lo": [
+        -2.5,
+        -0.15000152587890625,
+        0.0
+      ],
+      "bounds_hi": [
+        2.5,
+        0.34149932861328125,
+        11.899999618530273
+      ],
+      "triangles": 8051,
+      "polygons": 4592,
+      "objects": 2,
+      "active_modifiers": 0
+    }
+  }
+}

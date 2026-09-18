@@ -198,7 +198,7 @@ func _ready() -> void:
 		)
 		if not has_death_insurance_return:
 			var candidate := BaseManager.get_active_run_checkpoint()
-			if _is_combat_runtime_snapshot(candidate):
+			if _is_combat_runtime_snapshot(candidate) and _snapshot_matches_runtime_map(candidate):
 				_runtime_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
@@ -318,6 +318,11 @@ func _queue_runtime_autosave(reason: String) -> void:
 		BaseManager.queue_runtime_checkpoint(reason)
 
 
+# 运行时存档归属的独立地图 ID。默认空字符串即“旧塔楼/兼容”地图；
+# 独立副本（如 RogueMap01）覆盖为自身 ID，实现存档隔离与旧档兼容。
+func get_runtime_map_id() -> String:
+	return ""
+
 func build_runtime_save_snapshot() -> Dictionary:
 	if player == null or _inventory == null or _insurance == null:
 		return {}
@@ -362,6 +367,7 @@ func build_runtime_save_snapshot() -> Dictionary:
 		"kills": _kills,
 		"run_currency": GameManager.currency,
 		"edge_states": _open_edges.duplicate(true),
+		"runtime_map_id": get_runtime_map_id(),
 	}
 	snapshot["world_state"] = _build_runtime_world_save_snapshot()
 	return RUN_PERSISTENCE_SERVICE.finalize_runtime_snapshot(snapshot)
@@ -388,6 +394,16 @@ func _is_combat_runtime_snapshot(snapshot: Dictionary) -> bool:
 		return false
 	# v1 旧档没有 scope；只要并非99F facility，按原行动快照兼容恢复。
 	return str(snapshot.get("current_room_id", "")) != "facility"
+
+
+## 运行时存档按 runtime_map_id 隔离：旧塔楼（空）只匹配缺失/空的 map id，
+## 独立副本只匹配自身 ID，互不续对方的局。
+func _snapshot_matches_runtime_map(snapshot: Dictionary) -> bool:
+	var snapshot_map := str(snapshot.get("runtime_map_id", ""))
+	var self_map := get_runtime_map_id()
+	if self_map.is_empty():
+		return snapshot_map.is_empty()
+	return snapshot_map == self_map
 
 
 func _build_runtime_world_save_snapshot() -> Dictionary:

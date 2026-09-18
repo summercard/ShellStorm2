@@ -1,0 +1,4 @@
+interface:
+  display_name: "场景全流程制作编排"
+  short_description: "效果图到白模到 Blender 正式资产到 Godot 导入的全程编排、门禁与阶段路由"
+  default_prompt: "使用 $scene-full-pipeline 按阶段门禁编排场景全流程，并在阶段 2 路由到 $blender-game-prop-standard、阶段 3 路由到 $godot-model-asset-import-standard。"

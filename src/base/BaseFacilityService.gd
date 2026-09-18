@@ -35,7 +35,7 @@ static func get_snapshot(facility_id: String, data: BaseData) -> Dictionary:
 
 	match facility_id:
 		"mission_operations":
-			snapshot["summary"] = "4条路线 · 外部入口"
+			snapshot["summary"] = "中央全息平台 · 1张独立肉鸽地图"
 		"training_range":
 			snapshot["summary"] = "全武器测试 · 不保存"
 		"weapon_workshop":

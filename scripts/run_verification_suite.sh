@@ -89,6 +89,8 @@ core_scenes=(
   verify_arrival_gate_floor_bundle_flow
   verify_common_floor_tile_components_v004
   verify_common_wall_door_components_v004
+  verify_battle_wall_floor_facility_kit
+  verify_central_expedition_hologram_facility
   verify_unified_player_interaction_flow
   verify_tower_floor_room_authority
   verify_base_rooftop_transit_door_motion

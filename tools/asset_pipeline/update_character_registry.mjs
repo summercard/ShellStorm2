@@ -1,3 +1,8 @@
+// ⛔ 行号已过时：本工具的行号/区域（M156、E31、F34:F35、C6 等）是**单体账本**坐标，
+// 账本已按域拆成 assets/registry/ledgers/ 下的分账本，行号整体改变。
+// 账本路径已改为经 assets/registry/ledger_index.json 解析（与 scripts/ledger_registry.py 同一真源）；
+// 角色域的 资产主表/角色组件/动画与状态/3D-角色/角色中转记录 现在同处《角色账本》。
+// 重跑前必须把下列行号按 AssetID 重新定位，否则会写错行 —— 所以默认拒绝执行，需 --i-know-the-rows-are-stale。
 import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { FileBlob, SpreadsheetFile } from '/Users/summercards/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/@oai/artifact-tool/dist/artifact_tool.mjs';
@@ -7,7 +12,15 @@ const version = process.argv[2] || 'v009';
 const skipValidation = process.argv.includes('--skip-validation');
 const pkg = `assets/art/characters/player/chr_player_capsule01_3d/variants/bunny01/production/${version}`;
 const ledger = JSON.parse(await fs.readFile(`${root}/${pkg}/character_transfer_ledger_${version}.json`, 'utf8'));
-const path = `${root}/assets/registry/ShellStorm2_美术资产台账_v001.xlsx`;
+const registryIndex = JSON.parse(await fs.readFile(`${root}/assets/registry/ledger_index.json`, 'utf8'));
+const domain = registryIndex.domains.find(d => d.categories.includes('角色'));
+const path = `${root}/${registryIndex.ledger_dir}/${domain.file}`;
+if (!process.argv.includes('--i-know-the-rows-are-stale')) {
+  throw new Error(
+    `update_character_registry.mjs 里的行号是单体账本坐标，分账本行号已变（目标：${domain.file}）。` +
+    '请先把映射改为按 AssetID 定位，再加 --i-know-the-rows-are-stale 执行。'
+  );
+}
 const wb = await SpreadsheetFile.importXlsx(await FileBlob.load(path));
 const model = `${pkg}/source/model/chr_bunny01_model_${version}.blend`;
 const motion = `${pkg}/source/animation/chr_bunny01_animation_${version}.blend`;

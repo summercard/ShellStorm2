@@ -45,6 +45,8 @@ static func finalize_runtime_snapshot(snapshot: Dictionary) -> Dictionary:
 	result["quick_item_ids"] = _array_copy(result.get("quick_item_ids", ["", ""]))
 	result["edge_states"] = (result.get("edge_states", {}) as Dictionary).duplicate(true)
 	result["world_state"] = (result.get("world_state", {}) as Dictionary).duplicate(true)
+	# runtime_map_id：独立副本的存档隔离键。旧档缺省为空字符串，仍按旧塔楼/兼容处理。
+	result["runtime_map_id"] = str(result.get("runtime_map_id", ""))
 	return result
 
 

@@ -10,9 +10,9 @@ const DEFINITIONS: Array[Dictionary] = [
 	{
 		"facility_id": "mission_operations",
 		"display_name": "远征情报室",
-		"description": "查看野外道路情报；副本必须从基地外入口进入",
-		"action_kind": ACTION_INFO,
-		"action_path": "",
+		"description": "查看野外道路情报；独立副本从基地外入口进入",
+		"action_kind": ACTION_MENU,
+		"action_path": "res://scenes/RogueMapSelectMenu.tscn",
 		"legacy_building_type": -1,
 		"level_property": "",
 		"color": Color(0.88, 0.48, 0.18),

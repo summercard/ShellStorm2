@@ -32,3 +32,22 @@ description: 制作并导入独立道具模型到 Godot，处理静态摆放、�
 5. 正式重新导入后，分别验证独立加载、世界摆放、拾取范围、掉落物理、手持对齐、可选自身动画、材质与实际关卡截图。更新资产ID、类型、版本、源文件、GLB、PackedScene、包围盒、碰撞方式、使用场景和回滚位置。
 
 详细的道具模式、锚点和动画职责见 [references/prop-contract.md](references/prop-contract.md)。
+
+## 账本落位（分册化后，2026-09-18 起）
+
+资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
+`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
+**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+
+```python
+from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
+index = LedgerIndex.load(project_root)
+index.path_for_category("<大类>")                  # -> 该大类的分账本路径
+index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
+index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
+```
+
+- 本 skill 涉及的分账本：道具（`ledgers/ShellStorm2_道具账本_v001.xlsx`）。
+- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
+- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
+- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

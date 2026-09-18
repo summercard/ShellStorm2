@@ -60,7 +60,7 @@ description: 将场景、关卡组件与固定设施从 Blender 或其他DCC规�
 
 ## Prefab资产台账最小契约
 
-每个正式PackedScene至少登记：资产ID、类别、显示名、Prefab路径、视觉GLB路径、功能脚本路径（纯表现可空）、碰撞开关与方式、版本、源Blend、使用场景和状态。三角面数等短期无决策价值的字段不强制。替换流程必须是：覆盖既定路径 GLB → 重新导入 → 包装场景与关卡引用保持不变 → 关卡验证 → 台账与文档同步。
+每个正式PackedScene至少登记：资产ID、类别、显示名、Prefab路径、视觉GLB路径、功能脚本路径（纯表现可空）、碰撞开关与方式、版本、源Blend、使用场景和状态。三角面数等短期无决策价值的字段不强制。替换流程必须是：覆盖既定路径 GLB → 重新导入 → 包装场景与关卡引用保持不变 → 关卡验证 → 台账与文档同步。这里的「台账」是**该资产所属域的分账本**（`assets/registry/ledgers/`，路径经 `assets/registry/ledger_index.json` 解析），不是总目录 —— 见文末「账本落位」。
 
 ## 目录与命名默认值
 
@@ -124,3 +124,22 @@ godot --headless --import --path "<项目目录>"
 - 自动测试通过，并生成至少一张资产墙或实际场景验收图。
 
 需要精确检查表、清单字段和常见故障处理时，读取 [references/acceptance-checklist.md](references/acceptance-checklist.md)。
+
+## 账本落位（分册化后，2026-09-18 起）
+
+资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
+`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
+**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+
+```python
+from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
+index = LedgerIndex.load(project_root)
+index.path_for_category("<大类>")                  # -> 该大类的分账本路径
+index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
+index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
+```
+
+- 本 skill 涉及的分账本：按大类路由 —— 场景 / 场景道具 / 基地资产包 → 场景账本；道具 → 道具账本；角色 → 角色账本；敌人 → 敌人账本；武器 → 武器账本；特效 → 特效账本；UI / 音频 → 表现资源账本。
+- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
+- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
+- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

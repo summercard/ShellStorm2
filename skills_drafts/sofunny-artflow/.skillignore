@@ -1,0 +1,3 @@
+# 开发产物，安装到 skills 目录时排除
+test/
+.claude/

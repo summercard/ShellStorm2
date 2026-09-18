@@ -1,14 +1,22 @@
-"""Synchronize the authoritative Base99 rows with the current asset graph."""
+"""Synchronize the authoritative Base99 rows with the current asset graph.
+
+只作用于《基地资产包》所在的分账本（由 assets/registry/ledger_index.json 解析）。
+"""
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
 import re
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 from openpyxl import load_workbook
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+from ledger_registry import LedgerIndex  # noqa: E402
+from split_asset_ledger import dedupe_key_formula, dedupe_result_formula  # noqa: E402
 
 
 DONE_STATUSES = (
@@ -49,18 +57,24 @@ def manifests_by_slug(root: Path) -> dict[str, tuple[int, Path, dict]]:
 
 
 def set_formula(ws, row: int, end: int) -> None:
-    ws.cell(row, 18).value = f'=LOWER(TRIM(C{row})&"|"&TRIM(D{row})&"|"&TRIM(E{row})&"|"&TRIM(F{row})&"|"&TRIM(H{row})&"|"&TRIM(I{row}))'
-    ws.cell(row, 19).value = f'=IF(COUNTIF($R$6:$R${end},R{row})>1,"重复","唯一")'
+    # 公式形状只由 split_asset_ledger 定义一次，避免这里另抄一份后悄悄失配。
+    ws.cell(row, 18).value = dedupe_key_formula(row)
+    ws.cell(row, 19).value = dedupe_result_formula(row, end)
 
 
 def update_workbook(root: Path, dry_run: bool) -> dict:
-    workbook_path = root / "assets/registry/ShellStorm2_美术资产台账_v001.xlsx"
+    # 账本已按域拆开：本工具只动 base99 家族，全部落在「基地资产包」大类所属的分账本里。
+    # 路径一律经 ledger_index.json 解析，不再硬编码单体账本文件名。
+    index = LedgerIndex.load(root)
+    target = index.domain_for_category("基地资产包")
+    workbook_path = target.path
     workbook = load_workbook(workbook_path, data_only=False)
     main = workbook["资产主表"]
     overview = workbook["总览"]
     manifest_map = manifests_by_slug(root)
     master = "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend"
     updated = defaultdict(int)
+    updated["ledger"] = target.relative_path
 
     explicit = {
         "ENV-BASE99-WALL-DOOR-5X9": (
@@ -100,7 +114,9 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
         if "BASE99" not in asset_id.upper() and asset_id != "ENV-TOWER-CORNER-L-5M":
             continue
 
-        if row == 235:
+        # 原来是硬编码 `row == 235`（单体账本行号）。拆账本后行号必然改变，
+        # 所以改按 AssetID 认行 —— 行号会漂，资产身份不会。
+        if asset_id == "ENV-BASE99-MODULAR-KIT-3D":
             main.cell(row, 11).value = "弃用"
             main.cell(row, 15).value = None
             main.cell(row, 16).value = "聚合目录条目，不属于独立 PackedScene；由布局与 BPK 子项登记"
@@ -144,13 +160,13 @@ def update_workbook(root: Path, dry_run: bool) -> dict:
     overview["C6"] = "=" + active_formula
     overview["E6"] = f'=COUNTIF(\'资产主表\'!$K$6:$K${end},"待制作")+COUNTIF(\'资产主表\'!$K$6:$K${end},"程序占位")'
     overview["G6"] = f'=COUNTIF(\'资产主表\'!$S$6:$S${end},"重复")'
-    for row in range(10, 19):
-        category = overview.cell(row, 1).value
+    # 分账本《总览》的大类行只到本域的大类数为止（场景账本 = 3 行），不能照抄单体账本的 10..18。
+    row = 10
+    status_sum = "+".join(f'(\'资产主表\'!$K$6:$K${end}="{status}")' for status in DONE_STATUSES)
+    while overview.cell(row, 1).value not in (None, ""):
         overview.cell(row, 2).value = f"=COUNTIF('资产主表'!$C$6:$C${end},A{row})"
-        status_sum = "+".join(f'(\'资产主表\'!$K$6:$K${end}="{status}")' for status in DONE_STATUSES)
         overview.cell(row, 3).value = f"=SUMPRODUCT(('资产主表'!$C$6:$C${end}=A{row})*({status_sum}))"
-        if not category:
-            updated["overview_incomplete"] += 1
+        row += 1
 
     if not dry_run:
         workbook.save(workbook_path)

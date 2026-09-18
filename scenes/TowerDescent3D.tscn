@@ -115,9 +115,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.04, 0)
 [node name="东墙边界" parent="Blocks/Base/Art/编辑器参考_运行时自动隐藏" index="4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0.04, 0)
 
-[node name="远征情报终端" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="0"]
-transform = Transform3D(0.7999955, -0.0017910304, 0.0020135036, 0.0017900532, 0.7999979, 0.00039103843, -0.0020143723, -0.00038653857, 0.7999974, 7.2398195, 0, -30.79027)
-
 [node name="枪械工坊" parent="Blocks/Base/Art/设施交互节点_可移动旋转" index="1"]
 transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 2.8696804, 0, -31.346287)
 

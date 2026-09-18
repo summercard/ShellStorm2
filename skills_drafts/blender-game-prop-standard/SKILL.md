@@ -120,3 +120,22 @@ blender --background "asset.blend" --python "scripts/validate_game_prop.py" -- -
 ```
 
 多资产总合集没有单一 `02_游戏输出` 集合时，使用 `--all-meshes` 对合集内全部网格执行同等严格验收。
+
+## 账本落位（分册化后，2026-09-18 起）
+
+资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
+`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
+**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+
+```python
+from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
+index = LedgerIndex.load(project_root)
+index.path_for_category("<大类>")                  # -> 该大类的分账本路径
+index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
+index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
+```
+
+- 本 skill 涉及的分账本：关卡场景（`ledgers/ShellStorm2_场景账本_v001.xlsx`）；若产出的是可拾取/可手持道具，转 `$game-prop-model-pipeline`。
+- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
+- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
+- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

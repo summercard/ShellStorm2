@@ -1,0 +1,34 @@
+{
+  "asset_id": "ENV-BATTLE-L01-WALL-FLOOR-FACILITY-KIT",
+  "package_id": "battle_wall_floor_facility_kit",
+  "name_zh": "战局区块墙地板与墙边设施装配包",
+  "slug": "wall_floor_facility_kit",
+  "category": "room_assembly",
+  "version": "v001",
+  "block_id": "battle",
+  "floor_range": "98-95F",
+  "design_scope": "战局区块墙地板与墙边桌柜装饰组合",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend",
+  "source_blend_facilities": "assets/art/environments/tower_zones/battle/source/entry_safe_room/v007/局内关卡01_入口安全房_15x15m_正式美术_v007.blend",
+  "runtime_scene": "assets/art/environments/tower_zones/battle/runtime/wall_floor_facility_kit/wall_floor_facility_kit_root_top3d.tscn",
+  "components": {
+    "walls": 12,
+    "floor_tiles": 9,
+    "wall_side_facilities": 3,
+    "wall_visual_asset": "common_components/wall_standard_5m",
+    "floor_visual_assets": ["common_components/floor_tile_r01_c01", "common_components/floor_tile_r01_c02"],
+    "facility_visual_assets": ["entry_safe_room/north_server_00", "entry_safe_room/north_server_01", "entry_safe_room/central_terminal_island"]
+  },
+  "dimensions_m": [15.0, 15.0, 11.9],
+  "grid_unit_m": 5.0,
+  "collision_policy": "walls_self;floor_host_owned;facilities_none",
+  "visual_only_facilities": true,
+  "blender_export_status": "blocked_missing_blender_executable",
+  "godot_import_status": "validated_runtime_scene",
+  "replacement_contract": "replace children independently; preserve transforms and collision ownership"
+}

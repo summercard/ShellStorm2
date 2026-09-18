@@ -1,0 +1,35 @@
+01_服务器机柜
+  north_00/asset_manifest.json
+  north_03/asset_manifest.json
+02_工作终端
+  west_desk/asset_manifest.json
+  north_control/asset_manifest.json
+  technician_chair/asset_manifest.json
+03_中央设备岛
+  island_00/asset_manifest.json
+  island_01/asset_manifest.json
+04_维修与机箱
+  fault_tray_00/asset_manifest.json
+  wall_service_00/asset_manifest.json
+  wall_service_01/asset_manifest.json
+  wall_service_02/asset_manifest.json
+  equipment_case_00/asset_manifest.json
+05_门框与标识
+  data_banner/asset_manifest.json
+  east_portal/asset_manifest.json
+06_环境陈设
+  planter_00/asset_manifest.json
+07_环境支持
+  north_utilities/asset_manifest.json
+  east_utilities/asset_manifest.json
+  south_utilities/asset_manifest.json
+  floor_cabling/asset_manifest.json
+  fixed_papers/asset_manifest.json
+08_墙壁组件
+  wall_standard_5m/asset_manifest.json
+  wall_door_5m/asset_manifest.json
+09_地板组件
+  floor_tile_r01_c01/asset_manifest.json
+  floor_tile_r01_c02/asset_manifest.json
+10_门组件
+  door_5m/asset_manifest.json

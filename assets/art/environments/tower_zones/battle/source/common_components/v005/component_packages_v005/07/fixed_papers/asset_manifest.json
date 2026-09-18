@@ -1,0 +1,54 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-FIXED-PAPERS",
+  "slug": "fixed_papers",
+  "name_zh": "fixed_papers_通用包",
+  "category": "07_环境支持",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "blender_collection": "fixed_papers_通用包",
+  "root_object": "ROOT_fixed_papers_通用组件",
+  "objects": [
+    "fixed_papers_主体_输出"
+  ],
+  "object_count": 1,
+  "world_position": [
+    132.087662,
+    -35.974621,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -13.117661,
+    -8.934891,
+    0.0
+  ],
+  "bounds_hi": [
+    13.117661,
+    8.934891,
+    0.007
+  ],
+  "bounds_size": [
+    26.235322,
+    17.869782,
+    0.007
+  ],
+  "material_roles": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "editable_collection": "fixed_papers_制作源",
+  "emissive_objects": [],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "fixed_papers_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

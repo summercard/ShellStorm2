@@ -62,3 +62,22 @@ Godot 状态机只输出状态和真实进度，表现适配器据此选择动�
 - 新角色视觉或外观变体：交付新版本源 Blend、GLB、包装场景、预览、契约记录与通过的验证。
 - 需要新增槽位、骨骼、动画状态、碰撞类型、AI/战斗接口或装备 socket：这是角色运行时系统改动，必须同时修改消费者与测试，不应伪装成单纯美术导入。
 - 对可更换外观，先验证现有槽位和动画能容纳该部件；不以改 `Player3D` 主碰撞或临时缩放为捷径。
+
+## 账本落位（分册化后，2026-09-18 起）
+
+资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
+`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
+**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+
+```python
+from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
+index = LedgerIndex.load(project_root)
+index.path_for_category("<大类>")                  # -> 该大类的分账本路径
+index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
+index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
+```
+
+- 本 skill 涉及的分账本：角色（`ledgers/ShellStorm2_角色账本_v001.xlsx`）或敌人（`ledgers/ShellStorm2_敌人账本_v001.xlsx`），按《资产主表》的「大类」二选一。
+- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
+- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
+- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

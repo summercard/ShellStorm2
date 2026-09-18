@@ -1,0 +1,55 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-DATA-BANNER",
+  "slug": "data_banner",
+  "name_zh": "data_banner_通用包",
+  "category": "05_门框与标识",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+  "blender_collection": "data_banner_通用包",
+  "root_object": "ROOT_data_banner_通用组件",
+  "objects": [
+    "data_banner_主体_输出"
+  ],
+  "object_count": 1,
+  "world_position": [
+    4.85,
+    -24.836763,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -3.35,
+    -0.217327,
+    0.0
+  ],
+  "bounds_hi": [
+    3.35,
+    0.217327,
+    5.078414
+  ],
+  "bounds_size": [
+    6.7,
+    0.434654,
+    5.078414
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "editable_collection": "data_banner_制作源",
+  "emissive_objects": [],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "data_banner_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

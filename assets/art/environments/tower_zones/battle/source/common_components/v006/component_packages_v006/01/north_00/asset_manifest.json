@@ -1,0 +1,59 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-NORTH-00",
+  "slug": "north_00",
+  "name_zh": "north_00_通用包",
+  "category": "01_服务器机柜",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+  "blender_collection": "north_00_通用包",
+  "root_object": "ROOT_north_00_通用组件",
+  "objects": [
+    "north_00_主体_输出",
+    "north_00_自发光_输出"
+  ],
+  "object_count": 2,
+  "world_position": [
+    2.365,
+    0.0,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -0.865,
+    -0.765,
+    0.0
+  ],
+  "bounds_hi": [
+    0.865,
+    0.765,
+    4.012
+  ],
+  "bounds_size": [
+    1.73,
+    1.53,
+    4.012
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "editable_collection": "north_00_制作源",
+  "emissive_objects": [
+    "north_00_自发光_输出"
+  ],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "north_00_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

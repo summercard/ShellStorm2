@@ -35,3 +35,22 @@ description: 制作并导入枪械和近战武器模型到 Godot，处理手持�
 5. 新版本 GLB → 包装场景引用 → 正式重新导入 → 角色挂接验证 → 关卡验证 → 资产台账与回滚记录。保留旧版本，除非用户明确授权删除。
 
 完整的锚点、动画边界和验收清单见 [references/handheld-contract.md](references/handheld-contract.md)。
+
+## 账本落位（分册化后，2026-09-18 起）
+
+资产条目按**大类**路由到 `assets/registry/ledgers/` 下的分账本；域 / 大类 / 文件 / 分页的映射只由
+`assets/registry/ledger_index.json` 声明（说明见 `assets/registry/README.md`）。
+**不得写死账本文件名，也不得假定 `3D-*` 分页还在总目录里。**
+
+```python
+from ledger_registry import LedgerIndex            # scripts/ledger_registry.py
+index = LedgerIndex.load(project_root)
+index.path_for_category("<大类>")                  # -> 该大类的分账本路径
+index.domain_for_sheet("3D-<分页>")                 # -> 拥有该分页的域
+index.rewrite_ref("<旧引用>")                       # 旧 master#分页 -> 分账本#分页（幂等）
+```
+
+- 本 skill 涉及的分账本：武器（`ledgers/ShellStorm2_武器账本_v001.xlsx`）。
+- 总目录 `assets/registry/ShellStorm2_美术资产台账_v001.xlsx` 只放跨域契约与索引，**不得写入资产行**。
+- 旧批次 `asset_manifest.json` / QA 脚本里的 `…美术资产台账_v001.xlsx#3D-<分页>` 是**产出记录**，不要批量重写；`resolve_ref()` 会解析到正确的分账本。
+- 写完必查：`python scripts/check_asset_registry.py --ledger <域>`（结构 + 跨文件契约：每个 AssetID 全库恰好出现一次）。

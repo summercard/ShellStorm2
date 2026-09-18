@@ -1,13 +1,20 @@
-"""Delete the retired equipment_steam_fx package from current assets and ledgers."""
+"""Delete the retired equipment_steam_fx package from current assets and ledgers.
+
+账本已按域拆开：删行前先经 assets/registry/ledger_index.json 定位持有该 AssetID 的分账本。
+"""
 from __future__ import annotations
 
 import argparse
 import json
 import re
 import shutil
+import sys
 from pathlib import Path
 
 from openpyxl import load_workbook
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from split_asset_ledger import dedupe_key_formula, dedupe_result_formula  # noqa: E402
 
 
 TARGET_SLUG = "equipment_steam_fx"
@@ -77,8 +84,30 @@ def remove_godot_references(root: Path) -> list[str]:
     return changed
 
 
+def _ledger_holding(root: Path, asset_id: str) -> tuple[Path, object]:
+    """定位持有该 AssetID 的分账本：先按前缀归属，找不到再逐本搜。"""
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
+    from ledger_registry import LedgerIndex
+
+    index = LedgerIndex.load(root)
+    domain = index.domain_for_asset_id(asset_id)
+    candidates = [domain] if domain is not None else []
+    candidates += [d for d in index.domains if d not in candidates]
+    for candidate in candidates:
+        if not candidate.path.is_file():
+            continue
+        workbook = load_workbook(candidate.path, data_only=False)
+        sheet = workbook["资产主表"]
+        for row in range(6, sheet.max_row + 1):
+            if str(sheet.cell(row, 1).value or "") == asset_id:
+                return candidate.path, candidate
+    raise SystemExit(
+        f"没有任何分账本登记 {asset_id!r} —— 检查 ledger_index.json 与前缀归属，不要盲目新增行。"
+    )
+
+
 def remove_ledger_row(root: Path) -> int | None:
-    path = root / "assets/registry/ShellStorm2_美术资产台账_v001.xlsx"
+    path, domain = _ledger_holding(root, TARGET_ASSET_ID)
     workbook = load_workbook(path, data_only=False)
     main = workbook["资产主表"]
     target_row = next((row for row in range(6, main.max_row + 1) if str(main.cell(row, 1).value or "") == TARGET_ASSET_ID), None)
@@ -87,18 +116,22 @@ def remove_ledger_row(root: Path) -> int | None:
     main.delete_rows(target_row, 1)
     end = main.max_row
     for row in range(6, end + 1):
-        main.cell(row, 18).value = f'=LOWER(TRIM(C{row})&"|"&TRIM(D{row})&"|"&TRIM(E{row})&"|"&TRIM(F{row})&"|"&TRIM(H{row})&"|"&TRIM(I{row}))'
-        main.cell(row, 19).value = f'=IF(COUNTIF($R$6:$R${end},R{row})>1,"重复","唯一")'
+        main.cell(row, 18).value = dedupe_key_formula(row)
+        main.cell(row, 19).value = dedupe_result_formula(row, end)
     overview = workbook["总览"]
     overview["A6"] = f"=COUNTA('资产主表'!$A$6:$A${end})"
     overview["C6"] = "=" + "+".join(f'COUNTIF(\'资产主表\'!$K$6:$K${end},"{status}")' for status in DONE_STATUSES)
     overview["E6"] = f'=COUNTIF(\'资产主表\'!$K$6:$K${end},"待制作")+COUNTIF(\'资产主表\'!$K$6:$K${end},"程序占位")'
     overview["G6"] = f'=COUNTIF(\'资产主表\'!$S$6:$S${end},"重复")'
-    for row in range(10, 19):
+    # 分账本《总览》大类行只到本域大类数为止（BPK 属场景账本 = 3 行），不能写满单体账本的 10..18。
+    row = 10
+    statuses = "+".join(f'(\'资产主表\'!$K$6:$K${end}="{status}")' for status in DONE_STATUSES)
+    while overview.cell(row, 1).value not in (None, ""):
         overview.cell(row, 2).value = f"=COUNTIF('资产主表'!$C$6:$C${end},A{row})"
-        statuses = "+".join(f'(\'资产主表\'!$K$6:$K${end}="{status}")' for status in DONE_STATUSES)
         overview.cell(row, 3).value = f"=SUMPRODUCT(('资产主表'!$C$6:$C${end}=A{row})*({statuses}))"
+        row += 1
     workbook.save(path)
+    print(f"  账本: {domain.relative_path}  删除行: {target_row}")
     return target_row
 
 

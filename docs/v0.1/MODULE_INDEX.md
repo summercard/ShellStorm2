@@ -13,7 +13,7 @@
 | WEAPON | `BlueprintRegistry/ItemRegistry`内容→`WeaponInstance`→装配树→`WeaponModel3D/Projectile3D` | 部分 | 统一命中上下文、内容导入与全局所有权账本未闭环；需先明确节点树的生命周期 |
 | INVENTORY | `InventoryModule/InsuranceModule`格位→`EquipmentTransactionService`换装→玩家实例槽 | 换装事务可独立，其余部分 | 场景仍编排卸装、快捷栏、掉落、回滚；集合去重不是全局唯一账本 |
 | FATE | `FateCardPresets/TarotFateCatalog`→`FateCardEngine`→武器/角色/世界持有者 | 部分 | 世界执行器耦合Dungeon；48运行卡与78设计卡要持续区分 |
-| WORLD | `FloorPlanGenerator`纯计划→`RoomGraphRuntime`查询→`Dungeon3D/TowerDescent3D`装配；`WORLD-BLOCKS`定义四区块归属 | 计划/查询可独立，生命周期不足 | 父子编排和私有字段依赖仍多；当前设计允许开门/卸载先于快照成功，生命周期Service仍未提取 |
+| WORLD | `FloorPlanGenerator`纯计划→`RoomGraphRuntime`查询→`Dungeon3D/TowerDescent3D`装配；`WORLD-BLOCKS`定义四区块归属；`BaseFacilityCatalog(mission_operations)`→`RogueMapSelectMenu`→独立关卡场景提供关卡入口 | 计划/查询可独立，生命周期不足 | 父子编排和私有字段依赖仍多；关卡入口由菜单场景切换承担，尚无独立生命周期服务；当前设计允许开门/卸载先于快照成功，生命周期Service仍未提取 |
 | ENEMY | `Enemy3D`战斗、`MonsterAIManager`调度、`EnemyIllumination3D`光照查询 | 部分 | 公共管理器及空间上下文必需；物种行为主要集中在Enemy3D |
 | ELITE | `EliteContentCatalog`静态名册→`EliteRosterService`预约/成长→`BaseData.elite_archive_records` | 部分 | 服务直接写BaseManager.data并调用私有ensure；仅1/12内容投放 |
 | BOSS | `BossContentCatalog`95/90/85定义→Enemy3D阶段→塔楼下行权限计数 | 部分 | 设计Boss钥匙ID与当前计数式授权不一致；门和持久化交接不足 |
@@ -43,6 +43,7 @@
 | INVENTORY-SLOTS | 背包、保险、快捷物品、扩容 | [04](04_技术施工_战斗与局内成长.md) | `InventoryModule/InsuranceModule`→Dungeon→InventoryUI | `verify_backpack_equipment_flow`、`verify_finite_ammo_flow` | 有规范与历史；场景编排分散 |
 | FATE-RULES | 48运行塔罗、78目标牌组、三作用域 | [14](14_技术施工_命运塔罗牌组.md)、[04](04_技术施工_战斗与局内成长.md) | `FateCardPresets/FateCardEngine/TarotFateCatalog` | `verify_tarot_fate_runtime`、`verify_celestial_fate_scope_flow` | 有设计与历史；新增30张未施工 |
 | WORLD-PLAN | 纯数据楼层/房间图与四区块归属 | [05](05_技术施工_关卡生成与爬楼.md)、[05.1](05.1_关卡区块设计.md) | `FloorPlanGenerator/RoomGraphRuntime`、`TowerDescent3D/Blocks` | `verify_floor_plan_generator`、`verify_room_graph_persistence_services`、`verify_tower_level_blocks` | 可独立；缺领域版本与完整门事务 |
+| WORLD-ENTRY | 关卡入口：基地传送 + 切换地图进入独立关卡 | [05](05_技术施工_关卡生成与爬楼.md)（§3.0）、[07](07_技术施工_基地设施.md)（§2.2） | `BaseFacilityCatalog(mission_operations, ACTION_MENU)`→`RogueMapSelectMenu`→`RogueMap01TowerSegment3D.tscn`（`standalone_rogue`） | `verify_rogue_map_segment_flow`、`verify_central_expedition_hologram_facility` | **部分完成**：平台交互、菜单、场景切换、出生点、`runtime_map_id` 存档隔离已实装；单层化与撤离房间（撤离信号塔）为 2026-09-18 新设计，尚未施工；`verify_rogue_map_segment_flow` **未注册进 `core`** |
 | WORLD-GATE | 到达门、Boss门、楼梯 | [05](05_技术施工_关卡生成与爬楼.md)、[09](09_技术施工_存档结算与复活.md) | `TowerDescent3D`→FloorBundle→RoomDoor3D | `verify_arrival_gate_floor_bundle_flow` | 当前契约与工程一致：内存生成/验证完成后开门，不等待快照写盘；未保存状态可在重启后丢失 |
 | WORLD-SEGMENT | 隔离间、区段卸载、永久遗失 | [05](05_技术施工_关卡生成与爬楼.md) | `TowerDescent3D._finalize_airlock_commit` | `verify_three_segment_tower_generation_flow` | 当前契约与工程一致：前门交互时先关闭后侧路线并卸载旧段；无独立提交回执或跨重启保证 |
 | WORLD-LOOT | 搜索、清房钥匙、掉落与拾取 | [04](04_技术施工_战斗与局内成长.md)、[05](05_技术施工_关卡生成与爬楼.md) | `LootModule/ItemRegistry/GroundLootPickup3D` | `verify_requested_experience_upgrade_flow` | 有设计/历史；批量数值仍手工投影 |
@@ -67,7 +68,7 @@
 | GRAPHICS-POSTFX | 画面设置、调参、屏幕后处理 | [13](13_技术施工_性能优化与热管理.md)（上级） | GraphicsSettingsManager/PostfxOverlay/FlashlightColorTweaker | `verify_graphics_settings_ui_flow`、`verify_postfx_overlay_runtime`（仅脚本，缺tscn） | 新后处理缺独立设计和日志关联；7/9项口径失配 |
 | PERFORMANCE-RUNTIME | 帧预算、流送、长测与退出 | [13](13_技术施工_性能优化与热管理.md)、[11](11_测试与发布.md) | RuntimePerformanceManager/GameplaySpatialRegistry3D | `verify_3d_performance_budget`、`verify_performance_runtime_complete` | 有规范/历史；节点预算失败，未执行本次真实GPU/长测 |
 | TRAINING-RANGE | 独立靶场与武器预览 | [11.1](11.1_测试功能_独立训练场.md) | `src/training3d/TrainingRange3D.gd` | `verify_training_range_3d_flow`、`verify_training_range_3d_visual` | **功能版本1.0已完成**：18枪架、59组合、三类靶标、重置/退出、暂停及BaseData隔离已有独立契约 |
-| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、资产专项、真实场景渲染 | 楼梯间 v021 美术源保留三个通用组件与七类装饰组件；100→99与99→98两个独立装配体已分别导出为 GLB v002，以共享色盘后处理导入 PackedScene 并替换 `TowerDescent3D` 临时资产。每套运行时合并为3个可视网格，玩法碰撞由1个Walkable和1个EnclosureWall网格生成；组件、流程与真实渲染验收通过；历史哈希漂移未批量签署。主路内容房02机房美术源 v003 已完成82包归类和墙地锁定验收；战局区块通用组件库 v003 精简为23包（标准墙1、地板2）。局内关卡01白模 v003 的19个文件已将长墙拆为固定5m件，并将32个门口改为完整5m门墙槽，地板与房间基线保持不变；尚未接入Godot，见[房间记录](development/2026-09-16_main_room_02_data_room_art_v003.md)、[组件库记录](development/2026-09-16_battle_common_component_library_v003.md)与[白模墙体记录](development/2026-09-16_battle_level01_whitebox_wall_modules_v003.md) |
+| ASSET-PIPELINE | 模型、组件、导入、台账与放置 | [10](10_资产与内容规范.md)、[10.1](10.1_3D场景美术生产流程.md)、[16.1](16.1_角色美术制作与动作导入流程.md)、[账本入口](../../assets/registry/README.md) | 概念→白盒JSON/顶视图→风格稿→Blend→GLB→PackedScene→XLSX | `scripts/check_asset_registry.py`、资产专项、真实场景渲染 | 楼梯间 v021 美术源保留三个通用组件与七类装饰组件；100→99与99→98两个独立装配体已分别导出为 GLB v002，以共享色盘后处理导入 PackedScene 并替换 `TowerDescent3D` 临时资产。每套运行时合并为3个可视网格，玩法碰撞由1个Walkable和1个EnclosureWall网格生成；组件、流程与真实渲染验收通过；历史哈希漂移未批量签署。主路内容房02机房美术源 v003 已完成82包归类和墙地锁定验收；战局区块通用组件库 v003 精简为23包（标准墙1、地板2）。局内关卡01白模 v003 的19个文件已将长墙拆为固定5m件，并将32个门口改为完整5m门墙槽，地板与房间基线保持不变；尚未接入Godot，见[房间记录](development/2026-09-16_main_room_02_data_room_art_v003.md)、[组件库记录](development/2026-09-16_battle_common_component_library_v003.md)与[白模墙体记录](development/2026-09-16_battle_level01_whitebox_wall_modules_v003.md) |
 | ASSET-ROOFTOP | 天台参考组件与标准外墙 | [组件契约r2](design/rooftop_component_library.md) | `tower_zones/rooftop/source/reference_components/v002/`的Blend与catalog；Godot入口保留原版 | `qa/validate_rooftop.py`、锁区签名、严格逐面UV、固定镜头渲染 | Blender源44独立包完成；新增7挂藤变体与厚门口；运行天台设施已清空，见[清空记录](development/2026-09-17_rooftop_facilities_removed.md)；外墙主体5×0.30×11.9m；未导出或接入Godot，见[交付记录](development/2026-09-17_rooftop_ivy_thick_door_v002.md) |
 
 ## 3. 开发记录定位
@@ -81,6 +82,7 @@
 - PERFORMANCE/TOOLING：[性能历史](development/history/13_性能优化与热管理_历史记录.md)、[测试历史](development/history/11_测试与发布_历史记录.md)。
 - AUDIO/VFX：[音乐修复](development/history/14.8_音乐系统与配乐资产_历史记录.md)、[特效快照](development/history/14.6_特效系统与制作规范_历史记录.md)。
 - WORLD/SAVE/TIME/ENTRY/ASSET：[版本开发日志](development/CHANGELOG.md)及[场景成品化历史](development/history/17_天台至98层成品化验收.md)。这些尚未逐条绑定功能ID，属于追溯债务。
+- WORLD-ENTRY：[关卡传送入口与独立关卡设计](development/2026-09-18_level_teleport_entry_and_standalone_map.md)。
 - NARRATIVE/RUN-REVIVE/GRAPHICS-POSTFX仍缺功能级独立契约；RUN-MERCHANT与BASE-WORKSHOP已建立开发中文档，TRAINING-RANGE功能1.0已完成。开发中功能不得因文档已建立而提前标成实现完成。
 
 ## 4. 允许的独立开发方式

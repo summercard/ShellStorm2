@@ -47,30 +47,37 @@ def _tokens(value: str) -> set[str]:
     }
 
 
-def _registry_rows(workbook_path: Path, project_root: Path) -> tuple[list[dict[str, Any]], set[str]]:
-    workbook = load_workbook(workbook_path, read_only=False, data_only=False)
-    sheet = workbook["资产主表"]
+def _registry_rows(sources: list[tuple[str, Path]], project_root: Path) -> tuple[list[dict[str, Any]], set[str]]:
+    """汇总所有分账本《资产主表》的登记行。
+
+    账本已按域拆开，行号只在各自文件内唯一，所以每行都带 `ledger`（账本相对路径）；
+    父资产定位必须用「账本 + 行号」表达，不能只报一个裸行号。
+    """
     rows: list[dict[str, Any]] = []
     exact_paths: set[str] = set()
-    for row_number in range(6, sheet.max_row + 1):
-        asset_id = _text(sheet.cell(row_number, 1).value)
-        if not asset_id:
-            continue
-        values = [_text(sheet.cell(row_number, column).value) for column in range(1, 25)]
-        paths = []
-        for token in PATH_SPLIT_PATTERN.split(values[14]):
-            token = token.strip().removeprefix("res://")
-            if token:
-                paths.append(token)
-                if (project_root / token).is_file():
-                    exact_paths.add(token)
-        rows.append({
-            "row": row_number,
-            "asset_id": asset_id,
-            "paths": paths,
-            "corpus": " ".join(values),
-            "tokens": _tokens(" ".join(values)),
-        })
+    for ledger_label, workbook_path in sources:
+        workbook = load_workbook(workbook_path, read_only=False, data_only=False)
+        sheet = workbook["资产主表"]
+        for row_number in range(6, sheet.max_row + 1):
+            asset_id = _text(sheet.cell(row_number, 1).value)
+            if not asset_id:
+                continue
+            values = [_text(sheet.cell(row_number, column).value) for column in range(1, 25)]
+            paths = []
+            for token in PATH_SPLIT_PATTERN.split(values[14]):
+                token = token.strip().removeprefix("res://")
+                if token:
+                    paths.append(token)
+                    if (project_root / token).is_file():
+                        exact_paths.add(token)
+            rows.append({
+                "ledger": ledger_label,
+                "row": row_number,
+                "asset_id": asset_id,
+                "paths": paths,
+                "corpus": " ".join(values),
+                "tokens": _tokens(" ".join(values)),
+            })
     return rows, exact_paths
 
 
@@ -92,7 +99,7 @@ def _text_reference_blob(project_root: Path) -> str:
     return "\n".join(chunks)
 
 
-def _parent_for(relative_path: str, rows: list[dict[str, Any]]) -> tuple[str, int, str]:
+def _parent_for(relative_path: str, rows: list[dict[str, Any]]) -> tuple[str, str, int, str]:
     normalized = relative_path.lower()
     override_id = ""
     if "/shared/palette/" in normalized:
@@ -131,7 +138,7 @@ def _parent_for(relative_path: str, rows: list[dict[str, Any]]) -> tuple[str, in
     if override_id:
         for row in rows:
             if row["asset_id"] == override_id:
-                return override_id, row["row"], "explicit_asset_family"
+                return override_id, row["ledger"], row["row"], "explicit_asset_family"
 
     candidate_tokens = _tokens(relative_path)
     candidate_parts = set(Path(relative_path).parts)
@@ -151,16 +158,16 @@ def _parent_for(relative_path: str, rows: list[dict[str, Any]]) -> tuple[str, in
             score += 24
         if score <= 0:
             continue
-        candidate = (score, row["asset_id"], row["row"], ",".join(sorted(common_tokens)))
+        candidate = (score, row["asset_id"], row["ledger"], row["row"], ",".join(sorted(common_tokens)))
         if best is None or candidate > best:
             best = candidate
     if best is None:
-        return "", 0, ""
-    return best[1], best[2], best[3]
+        return "", "", 0, ""
+    return best[1], best[2], best[3], best[4]
 
 
-def classify(workbook_path: Path, project_root: Path) -> dict[str, Any]:
-    rows, exact_paths = _registry_rows(workbook_path, project_root)
+def classify(sources: list[tuple[str, Path]], project_root: Path) -> dict[str, Any]:
+    rows, exact_paths = _registry_rows(sources, project_root)
     references = _text_reference_blob(project_root)
     candidates: list[str] = []
     for path in (project_root / "assets").rglob("*"):
@@ -175,7 +182,7 @@ def classify(workbook_path: Path, project_root: Path) -> dict[str, Any]:
     records: list[dict[str, Any]] = []
     for relative in sorted(candidates):
         path = Path(relative)
-        parent_id, parent_row, token_basis = _parent_for(relative, rows)
+        parent_id, parent_ledger, parent_row, token_basis = _parent_for(relative, rows)
         referenced = relative in references or f"res://{relative}" in references or path.name in references
         if "chibi_anime_head_v001" in relative or "bunny01_root_top3d_v007" in relative:
             classification = "historical_or_intermediate_version"
@@ -196,6 +203,7 @@ def classify(workbook_path: Path, project_root: Path) -> dict[str, Any]:
             "path": relative,
             "classification": classification,
             "parent_asset_id": parent_id,
+            "parent_registry_ledger": parent_ledger,
             "parent_registry_row": parent_row,
             "referenced_by_current_text_assets": referenced,
             "classification_basis": reason,
@@ -204,7 +212,7 @@ def classify(workbook_path: Path, project_root: Path) -> dict[str, Any]:
 
     unresolved = [record for record in records if not record["parent_asset_id"]]
     return {
-        "workbook": str(workbook_path),
+        "ledgers": [{"ledger": label, "path": str(path)} for label, path in sources],
         "scan_contract": {
             "extensions": sorted(PRODUCTION_EXTENSIONS),
             "excluded_directories": sorted(EXCLUDED_DIRECTORIES),
@@ -227,12 +235,21 @@ def classify(workbook_path: Path, project_root: Path) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-root", type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument("--workbook", type=Path)
+    parser.add_argument("--workbook", type=Path,
+                        help="只把某一个工作簿当作登记源（默认汇总 ledger_index.json 里的全部分账本）")
     parser.add_argument("--json-output", type=Path)
     args = parser.parse_args()
     project_root = args.project_root.resolve()
-    workbook_path = (args.workbook or project_root / "assets/registry/ShellStorm2_美术资产台账_v001.xlsx").resolve()
-    result = classify(workbook_path, project_root)
+    if args.workbook:
+        target = args.workbook if args.workbook.is_absolute() else project_root / args.workbook
+        sources = [(str(target), target)]
+    else:
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from ledger_registry import LedgerIndex
+
+        index = LedgerIndex.load(project_root)
+        sources = [(domain.relative_path, domain.path) for domain in index.domains]
+    result = classify(sources, project_root)
     encoded = json.dumps(result, ensure_ascii=False, indent=2)
     if args.json_output:
         output_path = args.json_output if args.json_output.is_absolute() else project_root / args.json_output

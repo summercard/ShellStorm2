@@ -1,0 +1,4 @@
+interface:
+  display_name: "玩家角色资产制作与带入规范"
+  short_description: "以1.5米角色母版制作、拆分、导出并接入Godot换装组件"
+  default_prompt: "使用项目角色母版规范制作或验收角色与配件资产，并按稳定槽位导入Godot。"

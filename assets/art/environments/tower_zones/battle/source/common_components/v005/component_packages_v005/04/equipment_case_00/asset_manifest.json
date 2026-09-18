@@ -1,0 +1,55 @@
+{
+  "package_id": "ENV-BATTLE-COMMON-EQUIPMENT-CASE-00",
+  "slug": "equipment_case_00",
+  "name_zh": "equipment_case_00_通用包",
+  "category": "04_维修与机箱",
+  "version": "unchanged_from_v004",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "blender_collection": "equipment_case_00_通用包",
+  "root_object": "ROOT_equipment_case_00_通用组件",
+  "objects": [
+    "equipment_case_00_主体_输出"
+  ],
+  "object_count": 1,
+  "world_position": [
+    18.209997,
+    -19.056763,
+    0.0
+  ],
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "blender_forward_axis": "+Y",
+  "blender_up_axis": "+Z",
+  "bounds_lo": [
+    -0.699999,
+    -0.532501,
+    0.0
+  ],
+  "bounds_hi": [
+    0.699999,
+    0.532501,
+    1.14
+  ],
+  "bounds_size": [
+    1.399998,
+    1.065002,
+    1.14
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "editable_collection": "equipment_case_00_制作源",
+  "emissive_objects": [],
+  "collision": "visual_only; existing Godot collision untouched",
+  "exported": "not_reexported",
+  "expected_export": "equipment_case_00_visual_top3d.glb",
+  "dependencies": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png"
+  ],
+  "animation": "none",
+  "attachments": "Only directly attached hardware; no independent props or moving door leaf"
+}

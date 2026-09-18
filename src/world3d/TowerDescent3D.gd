@@ -197,16 +197,84 @@ var _initial_loop_gate_armed := false
 var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
 
+# 独立 Rogue 地图配置：复用 98—95 生成/美术/玩法，但不含 100F 天台与 99F 基地。
+# 通过场景继承的 .tscn 覆盖下面两个导出项来开启；旧塔楼默认保持 false/空。
+const RUNTIME_MAP_SCENE_BY_ID := {
+	"rogue_map_01": "res://scenes/RogueMap01TowerSegment3D.tscn",
+}
+
+@export var standalone_rogue: bool = false
+@export var rogue_map_id: String = ""
+
+func is_standalone_rogue() -> bool:
+	return standalone_rogue
+
+func get_rogue_map_id() -> String:
+	return rogue_map_id
+
+# 运行时存档隔离 ID：独立图返回自身 rogue_map_id，旧塔楼/未设置时为空（兼容旧档）。
+func get_runtime_map_id() -> String:
+	return rogue_map_id
+
+# 独立图计划楼层（显示层号）：98/97/96/95。
+func get_standalone_planned_floor_numbers() -> Array[int]:
+	var numbers: Array[int] = []
+	for floor_index_value in _floor_plan_snapshots.keys():
+		numbers.append(100 - int(floor_index_value))
+	numbers.sort()
+	return numbers
+
+# 独立图终端楼层：95F 作为本地图终端 Boss。
+func get_standalone_terminal_floor_number() -> int:
+	return 95
+
+# 首个安全房（15×15 入口大厅）的世界尺寸；用于验收安全房尺寸不变。
+func get_first_safe_room_dimensions() -> Vector2:
+	var entry_id := "start" if is_standalone_rogue() else "floor_01_entry"
+	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
+	if entry_room != null and entry_room.has_method("get_dimensions"):
+		return entry_room.get_dimensions()
+	return Vector2.ZERO
+
+# 独立图 95F 是否拥有 Boss 撤离信标（BOSS_KILL）。
+func has_standalone_terminal_boss_extraction() -> bool:
+	return _conditional_extractions.has("BOSS_KILL") and _extraction != null
+
+
+## 冷启动/重进主场景时，根据行动检查点回到其所属的独立副本。
+## 空 map id 属于旧塔楼，不需要转场；未知 map id 留在主场景，避免坏档循环跳转。
+func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
+	if not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(snapshot):
+		return ""
+	if not _is_combat_runtime_snapshot(snapshot):
+		return ""
+	return str(RUNTIME_MAP_SCENE_BY_ID.get(str(snapshot.get("runtime_map_id", "")), ""))
+
 
 func _ready() -> void:
 	process_physics_priority = 100
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
+	if not test_mode and not is_standalone_rogue() and BaseManager != null:
+		var resume_scene_path := get_runtime_resume_scene_path(BaseManager.get_active_run_checkpoint())
+		if not resume_scene_path.is_empty():
+			# 主场景本身不是该行动的运行时提供者；此处必须在 super() 前转场，
+			# 防止它初始化后覆盖独立副本的检查点。
+			var request_id := GameEntryFlow.request_gameplay_entry(
+				GameEntryFlow.REASON_RUNTIME_RESTORE,
+				GameEntryFlow.SPAWN_SAVED_PROGRESS
+			)
+			call_deferred("_resume_standalone_runtime_scene", resume_scene_path, request_id)
+			return
 	var base_art := get_node_or_null("Blocks/Base/Art") as Node3D
 	if base_art != null:
 		base_art.visible = false
 	super()
+	# 独立肉鸽图没有99F到达门负责提交首层；进入场景时必须直接完成98F整层，
+	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的Hub目标。
+	if is_standalone_rogue():
+		_commit_floor_bundle(2, "standalone_map_bootstrap")
 	_organize_existing_rooms_by_block()
-	_ensure_floor_generated(0, "rooftop_bootstrap")
+	_ensure_floor_generated(2 if is_standalone_rogue() else 0, "standalone_map_bootstrap" if is_standalone_rogue() else "rooftop_bootstrap")
 	_build_floor_stages()
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
@@ -220,15 +288,24 @@ func _ready() -> void:
 	_install_atmosphere()
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
 	var starts_on_rooftop := _should_start_on_rooftop_for_entry()
-	if starts_on_rooftop:
-		player.global_position = ROOFTOP_LOGOUT_SPAWN
-	else:
-		var facility_room := _room_by_id.get("facility") as DungeonRoom3D
-		if facility_room != null:
-			player.global_position = FACILITY_LOGOUT_SPAWN
+	if is_standalone_rogue():
+		# 独立图玩家出生在 98F 第一入口 15×15 安全房的原入口门口（东侧），不含天台/基地。
+		var entry_room := _room_by_id.get("start") as DungeonRoom3D
+		if entry_room != null:
+			player.global_position = entry_room.global_position + Vector3(5.0, 0.05, 0.0)
 			player.velocity = Vector3.ZERO
 			_current_room_id = ""
-			_on_room_entered(facility_room)
+			_on_room_entered(entry_room)
+	else:
+		if starts_on_rooftop:
+			player.global_position = ROOFTOP_LOGOUT_SPAWN
+		else:
+			var facility_room := _room_by_id.get("facility") as DungeonRoom3D
+			if facility_room != null:
+				player.global_position = FACILITY_LOGOUT_SPAWN
+				player.velocity = Vector3.ZERO
+				_current_room_id = ""
+				_on_room_entered(facility_room)
 	title_label.text = "弹壳风暴2 · 向下爬楼行动"
 	seed_label.text = "塔楼种子 %d" % run_seed
 	status_label.text = (
@@ -245,6 +322,15 @@ func _ready() -> void:
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
+
+
+func _resume_standalone_runtime_scene(scene_path: String, request_id: int) -> void:
+	var error := get_tree().change_scene_to_file(scene_path)
+	if error == OK:
+		return
+	if request_id > 0:
+		GameEntryFlow.cancel_request(request_id)
+	push_error("[TowerDescent3D] 独立副本续局场景切换失败: %s" % error_string(error))
 
 
 func _block(block_name: String) -> Node3D:
@@ -299,6 +385,9 @@ func _should_start_on_rooftop_for_entry() -> bool:
 		if RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(last_base_snapshot):
 			# 没有可续局行动时，基地快照只决定100F/99F固定出生点，不恢复旧坐标。
 			if str(last_base_snapshot.get("scope", "")) == "base":
+				# 独立图与旧塔楼存档按 runtime_map_id 隔离，互不续对方的局。
+				if not _snapshot_matches_runtime_map(last_base_snapshot):
+					return test_mode or BaseManager.should_start_on_rooftop()
 				return str(last_base_snapshot.get("current_room_id", "")) == "start"
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
@@ -314,6 +403,11 @@ func _process(delta: float) -> void:
 
 
 func _finish_run(success: bool) -> void:
+	# 独立图按 Dungeon3D 的标准独立副本结算：成功/死亡都返回 return_scene_path
+	# （即 99F 基地 TowerDescent3D.tscn），不执行塔楼“带物返航基地”逻辑。
+	if is_standalone_rogue():
+		super(success)
+		return
 	# 塔楼成功撤离是“带物返航99F”，不是重新加载塔楼。父类的成功路径会把
 	# 战利品复制到待处理集合后重载本场景，导致玩家回100F且I键背包为空。
 	if not success:
@@ -983,6 +1077,10 @@ func _build_records() -> void:
 	_airlock_front_edges.clear()
 	_level_elevator_edge = ""
 
+	if is_standalone_rogue():
+		_build_standalone_rogue_records()
+		return
+
 	var core_center := Vector3(
 		TOWER_GEOMETRY.CORE_CENTER_XZ.x,
 		0.0,
@@ -1021,6 +1119,42 @@ func _build_records() -> void:
 	_validate_floor_layout_plans()
 
 
+func _build_standalone_rogue_records() -> void:
+	# 独立图不含 100F 天台与 99F 基地：98F 入口安全房即起点（复用 Dungeon3D 的 start 兼容位）。
+	_regenerate_floor_plans_for_current_seed()
+	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
+	if first_plan.is_empty():
+		push_error("[TowerDescent3D] standalone rogue 缺少 98F 楼层规划")
+		return
+	# 把入口房 ID 固定为 start，作为 Dungeon3D 兼容起点，避免重写上层房间索引逻辑。
+	for room_value in first_plan.get("rooms", []):
+		var room := room_value as Dictionary
+		if str(room.get("key", "")) == "entry":
+			room["id"] = "start"
+	var first_entry := _plan_spec(first_plan, "entry")
+	var first_hub := _plan_spec(first_plan, "hub")
+	_append_plan_room_record(first_plan, first_entry, "")
+	var entry_record := _find_record(str(first_entry.get("id", "")))
+	if entry_record.is_empty():
+		push_error("[TowerDescent3D] standalone rogue 入口房记录缺失")
+		return
+	# v007 安全房是完整 15×15 双门布局。独立副本没有99F实体楼梯，
+	# 但必须保留“传送抵达侧”的结构门位，否则会退回旧塔楼拼装外观。
+	# 这扇门是封闭的抵达气闸：它不挂地图边、不参与房间拓扑，也不伪造一条可走路线。
+	var arrival_direction := str(first_plan.get("entry_side", "east"))
+	var front_direction := _direction_between(
+		entry_record.get("position", Vector3.ZERO) as Vector3,
+		_plan_world_position(first_plan, first_hub)
+	)
+	if arrival_direction == front_direction:
+		arrival_direction = _opposite_direction(front_direction)
+	(entry_record["doors"] as Array).append(arrival_direction)
+	(entry_record["door_targets"] as Dictionary)[arrival_direction] = ""
+	(entry_record["doors"] as Array).append(front_direction)
+	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_hub.get("id", ""))
+	_validate_floor_layout_plans()
+
+
 func _regenerate_floor_plans_for_current_seed() -> void:
 	# 纯数据规划可提前计算和存档；场景节点只保留99层与98层入口壳。
 	# 新战局也走同一入口，确保 run_seed、layout_id 与实际路线同步换代。
@@ -1028,7 +1162,9 @@ func _regenerate_floor_plans_for_current_seed() -> void:
 	_floor_layout_templates.clear()
 	_planned_floor_indices.clear()
 	_floor_layout_plan_conflicts.clear()
-	for displayed_floor_number in range(98, DEEPEST_PLANNED_FLOOR - 1, -1):
+	# 独立图只规划 98/97/96/95 四层；旧塔楼仍规划到 85F。
+	var deepest_displayed := 94 if is_standalone_rogue() else DEEPEST_PLANNED_FLOOR - 1
+	for displayed_floor_number in range(98, deepest_displayed, -1):
 		var sequence_index := 99 - displayed_floor_number
 		var physical_floor_index := sequence_index + 1
 		var stair_side := "east" if sequence_index % 2 == 1 else "west"
@@ -3337,7 +3473,8 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 		if boss_room != null:
 			_extraction = _create_extraction_beacon(boss_room, "BOSS_KILL", 30.0, true, Vector3.ZERO)
 			_conditional_extractions["BOSS_KILL"] = _extraction
-	if int(plan.get("floor_number", 0)) == 95 and not _elevator_facilities_by_floor.has(95):
+	# 独立图 95F 是终端 Boss：不生成楼层电梯，由 Boss 撤离信标收尾。
+	if not is_standalone_rogue() and int(plan.get("floor_number", 0)) == 95 and not _elevator_facilities_by_floor.has(95):
 		var exit_room := _room_by_id.get(current_exit_id) as DungeonRoom3D
 		if exit_room != null:
 			var pose := _elevator_wall_pose(exit_room)
@@ -3947,6 +4084,9 @@ func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
 
 
 func _install_main_entry_screen() -> void:
+	# 启动页只属于冷启动/显式返回主页；独立图直接进入玩法，不显示主页面。
+	if is_standalone_rogue():
+		return
 	# 启动页只属于冷启动/显式返回主页；死亡、撤离和场景恢复均直接进入玩法。
 	if not _entry_context_requests_main_entry():
 		return
@@ -4539,7 +4679,7 @@ func _has_unclaimed_room_key(room_id: String) -> bool:
 
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	if bool(snapshot.get("world_restore_failed", false)):
-		return _room_by_id.get("facility") as DungeonRoom3D
+		return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
 	# 续局不恢复战斗房内的精确坐标：统一投放到保存楼层的入口安全房间中心。
 	# 世界仍完整按快照重建，故房间进度、门、背包和装备不受此出生策略影响。
 	if str(snapshot.get("scope", "")) != "base":
@@ -4551,6 +4691,8 @@ func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	if room != null:
 		return room
 	var floor_index := int(snapshot.get("current_floor_index", 1))
+	if is_standalone_rogue() and floor_index <= 1:
+		return _room_by_id.get("start") as DungeonRoom3D
 	var preferred_role := "stair_entry" if floor_index > 1 else "facility"
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var candidate_id := str(room_id_value)
@@ -4561,12 +4703,12 @@ func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 			return candidate
 		if str(_find_record(candidate_id).get("tower_role", "")) == preferred_role:
 			return candidate
-	return _room_by_id.get("facility") as DungeonRoom3D
+	return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
 
 
 func _resolve_floor_entry_safe_room(floor_index: int) -> DungeonRoom3D:
 	if floor_index <= 1:
-		return _room_by_id.get("facility") as DungeonRoom3D
+		return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var room_id := str(room_id_value)
 		if str(_find_record(room_id).get("tower_role", "")) == "stair_entry":

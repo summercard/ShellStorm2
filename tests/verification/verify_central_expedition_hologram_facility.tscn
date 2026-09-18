@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_central_expedition_hologram_facility.gd" id="1_script"]
+
+[node name="VerifyCentralExpeditionHologramFacility" type="Node"]
+script = ExtResource("1_script")

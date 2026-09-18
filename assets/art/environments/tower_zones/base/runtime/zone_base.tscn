@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" path="res://src/world3d/BaseFixtureGlow3D.gd" id="20_fixture_glow"]
 
-[ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_operations/prp_base_mission_operations_root_top3d.tscn" id="2_mission"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/weapon_workshop/prp_base_weapon_workshop_root_top3d.tscn" id="3_workshop"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/workshop_stool/prp_base_workshop_stool_root_top3d.tscn" id="7_stool"]
 [ext_resource type="PackedScene" path="res://assets/art/props/base_world_3d/runtime/mission_command_chair/prp_base_mission_command_chair_root_top3d.tscn" id="8_chair"]
@@ -113,12 +112,6 @@ metadata/source_blender_version = "v021"
 [node name="100层上层围护与24米封顶" parent="基地结构组件_可移动旋转" instance=ExtResource("12_upper_shell")]
 
 [node name="设施交互节点_可移动旋转" type="Node3D" parent="."]
-
-[node name="远征情报终端" parent="设施交互节点_可移动旋转" instance=ExtResource("2_mission")]
-position = Vector3(-9, 0, -11.6)
-rotation = Vector3(0, 3.141593, 0)
-facility_id = "mission_operations"
-base_size_multiplier = 1.0
 
 [node name="枪械工坊" parent="设施交互节点_可移动旋转" instance=ExtResource("3_workshop")]
 position = Vector3(-3, 0, -11.6)

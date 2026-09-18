@@ -1,0 +1,409 @@
+﻿Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+Godot_v4.6.3-stable_win64_console.exe : WARNING: 'res://assets/art/environments
+/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visu
+al_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - us
+ing text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512
+.png'.
+所在位置 行:448 字符: 1
++ & $env:GODOT_BIN --headless --path $proj --scene "res://tests/verific ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (WARNING: 'res:/...10x10_512.png'. 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resou
+rce #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://as
+sets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resourc
+e #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://asse
+ts/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resourc
+e #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://asse
+ts/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resourc
+e #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://asse
+ts/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external r
+esource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res:
+//assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_co
+mponents/wall_standard_5m/wall_standard_5m_visual_top3d.glb': In external resou
+rce #0, invalid UID: 'uid://c8tfkc8nrnge7' - using text path instead: 'res://as
+sets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/tower_zones/battle/components/common_co
+mponents/wall_door_5m/wall_door_5m_visual_top3d.glb': In external resource #0, 
+invalid UID: 'uid://c8tfkc8nrnge7' - using text path instead: 'res://assets/art
+/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+structural/east_mezzanine_structure/east_mezzanine_structure_visual_top3d.glb':
+ In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path 
+instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+structural/east_upper_transition_stair/east_upper_transition_stair_visual_top3d
+.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text
+ path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+stair_l_z5/env_base99_stair_l_z5_visual_top3d.glb': In external resource #0, in
+valid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/s
+hared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_window_5x12/env_base99_wall_window_5x12_visual_top3d.glb': In external res
+ource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://
+assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_full_replacement/env_base99_floor_full_replacement_visual_top3d.glb': In 
+external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inst
+ead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+floor_visuals/loft_floor_finish/loft_floor_finish_visual_top3d.glb': In externa
+l resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'r
+es://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/loft_backwall_services/loft_backwall_services_visual_top3d.glb': 
+In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path i
+nstead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_tool_pegboard/loft_tool_pegboard_visual_top3d.glb': I
+n external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path in
+stead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_explore_poster/loft_explore_poster_visual_top3d.glb':
+ In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path 
+instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d.glb': 
+In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path i
+nstead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_hanging_plant/loft_hanging_plant_visual_top3d.glb': I
+n external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path in
+stead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/base_camp_neon_sign/base_camp_neon_sign_visual_top3d.glb': In ext
+ernal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead
+: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/base_status_terminal/base_status_terminal_visual_top3d.glb': In e
+xternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inste
+ad: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3
+d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using tex
+t path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/storage_terminal/storage_terminal_visual_top3d.glb': In external 
+resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res
+://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/understair_bulletin_board/understair_bulletin_board_visual_top3d.
+glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text 
+path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/understair_lighting_living_support/understair_lighting_living_sup
+port_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnm
+bdg' - using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑
+10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/east_industrial_pipeline_system/east_industrial_pipeline_system_v
+isual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' -
+ using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_
+512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/east_power_distribution/east_power_distribution_visual_top3d.glb'
+: In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path
+ instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/east_small_safety_devices/east_small_safety_devices_visual_top3d.
+glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text 
+path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/east_work_together_poster/east_work_together_poster_visual_top3d.
+glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text 
+path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+wall_contents/south_wall_information_boards/south_wall_information_boards_visua
+l_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - usi
+ng text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.
+png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/hose_reel/hose_reel_visual_top3d.glb': In external resourc
+e #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://asse
+ts/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/air_compressor/air_compressor_visual_top3d.glb': In extern
+al resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: '
+res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/backup_generator/backup_generator_visual_top3d.glb': In ex
+ternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instea
+d: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/battery_bank/battery_bank_visual_top3d.glb': In external r
+esource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res:
+//assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/corridor_emergency_light_group/corridor_emergency_light_gr
+oup_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmb
+dg' - using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑1
+0x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_flammable_bin/east_flammable_bin_visual_top3d.glb': I
+n external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path in
+stead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_low_storage_bench/east_low_storage_bench_visual_top3d
+.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text
+ path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_maintenance_workstation/east_maintenance_workstation_
+visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' 
+- using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10
+_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_plant_group/east_plant_group_visual_top3d.glb': In ex
+ternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instea
+d: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_recycle_bin/east_recycle_bin_visual_top3d.glb': In ex
+ternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instea
+d: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_round_pendant_light/east_round_pendant_light_visual_t
+op3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using 
+text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png
+'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_supply_24h_station/east_supply_24h_station_visual_top
+3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using te
+xt path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/east_waste_bin/east_waste_bin_visual_top3d.glb': In extern
+al resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: '
+res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/heavy_supply_shelf/heavy_supply_shelf_visual_top3d.glb': I
+n external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path in
+stead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_visu
+al_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - us
+ing text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512
+.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/industrial_water_tank/industrial_water_tank_visual_top3d.g
+lb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text p
+ath instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_visual_top3d.glb
+': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text pat
+h instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d.glb
+': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text pat
+h instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_bedside_lamp/loft_bedside_lamp_visual_top3d.glb': In 
+external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inst
+ead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_bedside_rug/loft_bedside_rug_visual_top3d.glb': In ex
+ternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instea
+d: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_coffee_table/loft_coffee_table_visual_top3d.glb': In 
+external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inst
+ead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_computer_workstation/loft_computer_workstation_visual
+_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - usin
+g text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.p
+ng'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_food_cabinet/loft_food_cabinet_visual_top3d.glb': In 
+external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inst
+ead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_lighting_support/loft_lighting_support_visual_top3d.g
+lb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text p
+ath instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_lounge_rug/loft_lounge_rug_visual_top3d.glb': In exte
+rnal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead:
+ 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_visual_top3d.glb': In ex
+ternal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instea
+d: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_medical_cabinet/loft_medical_cabinet_visual_top3d.glb
+': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text pat
+h instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_nightstand/loft_nightstand_visual_top3d.glb': In exte
+rnal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead:
+ 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_office_chair/loft_office_chair_visual_top3d.glb': In 
+external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path inst
+ead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_pouf_01/loft_pouf_01_visual_top3d.glb': In external r
+esource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res:
+//assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_pouf_02/loft_pouf_02_visual_top3d.glb': In external r
+esource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res:
+//assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_side_table/loft_side_table_visual_top3d.glb': In exte
+rnal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead:
+ 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/loft_striped_privacy_curtain/loft_striped_privacy_curtain_
+visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' 
+- using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10
+_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/main_door_low_storage_cabinet/main_door_low_storage_cabine
+t_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg
+' - using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x
+10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/medical_cabinet/medical_cabinet_visual_top3d.glb': In exte
+rnal resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead:
+ 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/narrow_battery_cabinet/narrow_battery_cabinet_visual_top3d
+.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text
+ path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/narrow_emergency_cabinet/narrow_emergency_cabinet_visual_t
+op3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using 
+text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png
+'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/tools_cabinet/tools_cabinet_visual_top3d.glb': In external
+ resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 're
+s://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_
+visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' 
+- using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10
+_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/understair_green_bench/understair_green_bench_visual_top3d
+.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text
+ path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/understair_storage_shelf/understair_storage_shelf_visual_t
+op3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using 
+text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png
+'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_grou
+p_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg
+' - using text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x
+10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/water_purifier/water_purifier_visual_top3d.glb': In extern
+al resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: '
+res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/weapon_workshop_station/weapon_workshop_station_visual_top
+3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using te
+xt path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_visu
+al_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - us
+ing text path instead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512
+.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_
+structural/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d.glb': I
+n external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path in
+stead: 'res://assets/art/shared/palette/璁炬柦浣庝寒澶氬反鑳鸿壊鐩榑10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+[MapFateTriggers] 宸茶繛鎺ュ埌 3D 灞€鍐呰繍琛屾椂
+[MapFateTriggers] 宸茶繛鎺ュ埌 3D 灞€鍐呰繍琛屾椂
+ROGUE_MAP_SEGMENT_FLOW_OK: catalog->menu, standalone 98/97/96/95, 15x15 safe room, terminal 95F boss extraction without 94F/elevator, default tower unchanged
+EXIT=0

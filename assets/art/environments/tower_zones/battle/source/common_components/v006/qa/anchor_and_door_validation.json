@@ -1,0 +1,500 @@
+{
+  "source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v005\\战局区块_通用组件库_v005.blend",
+  "source_sha256": "e6e977439845c0eba4aa0cd094b1c3be895fd0b0b872b31128e4d06b5497032e",
+  "result": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+  "locked_match": true,
+  "locked_count": 529,
+  "wall_geometry_unchanged": true,
+  "root_positions_unchanged": true,
+  "collection_offsets_before": {
+    "wall_door_5m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "door_5m": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "collection_offsets_after": {
+    "wall_door_5m": [
+      8.0,
+      -58.344398,
+      0.0
+    ],
+    "door_5m": [
+      2.6,
+      -69.344398,
+      0.0
+    ]
+  },
+  "review_instance_corrections": [
+    {
+      "name": "91_08两墙固定参考审阅_wall_door_5m_仅展示实例",
+      "before": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          58.344398
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "after": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -3.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rendered_geometry_unchanged": true
+    },
+    {
+      "name": "92_wall_door_5m_近景_wall_door_5m_仅展示实例",
+      "before": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -8.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          58.344398
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "after": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rendered_geometry_unchanged": true
+    },
+    {
+      "name": "93_08正立面接口核验_wall_door_5m_仅展示实例",
+      "before": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          58.344398
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "after": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -3.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rendered_geometry_unchanged": true
+    },
+    {
+      "name": "94_08俯视结构核验_wall_door_5m_仅展示实例",
+      "before": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -11.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          58.344398
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "after": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          -3.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ],
+      "rendered_geometry_unchanged": true
+    }
+  ],
+  "actual_evaluated_anchor_tests": [
+    {
+      "asset": "wall_door_5m",
+      "angle": 0,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      "local_bounds_hi": [
+        2.5,
+        0.3415,
+        11.9
+      ],
+      "bottom_center_error_m": 0.0,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "angle": 90,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -2.500001,
+        -0.149999,
+        0.0
+      ],
+      "local_bounds_hi": [
+        2.499999,
+        0.3415,
+        11.9
+      ],
+      "bottom_center_error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "angle": 180,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -2.499999,
+        -0.150001,
+        0.0
+      ],
+      "local_bounds_hi": [
+        2.500001,
+        0.3415,
+        11.9
+      ],
+      "bottom_center_error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "angle": 270,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -2.5,
+        -0.15,
+        0.0
+      ],
+      "local_bounds_hi": [
+        2.5,
+        0.341499,
+        11.9
+      ],
+      "bottom_center_error_m": 2.384185791015625e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "angle": 0,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      "local_bounds_hi": [
+        1.1,
+        0.09,
+        2.5
+      ],
+      "bottom_center_error_m": 0.0,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "angle": 90,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      "local_bounds_hi": [
+        1.1,
+        0.090001,
+        2.5
+      ],
+      "bottom_center_error_m": 3.501772880554199e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "angle": 180,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -1.1,
+        -0.090001,
+        0.0
+      ],
+      "local_bounds_hi": [
+        1.100001,
+        0.09,
+        2.5
+      ],
+      "bottom_center_error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "angle": 270,
+      "evaluated_mesh_count": 2,
+      "local_bounds_lo": [
+        -1.1,
+        -0.09,
+        0.0
+      ],
+      "local_bounds_hi": [
+        1.100001,
+        0.09,
+        2.5
+      ],
+      "bottom_center_error_m": 4.76837158203125e-07,
+      "passed": true
+    }
+  ],
+  "door_dimensions": [
+    2.2,
+    0.18,
+    2.5
+  ],
+  "material_count": 4,
+  "palette_external": true,
+  "source_preserved": true,
+  "runtime_imported": false,
+  "door_motion": "single rigid leaf, no new animation",
+  "package_count": 25,
+  "reopened_locked_match": true,
+  "reopened_locked_count": 529,
+  "package_membership_checked": true,
+  "empty_package_count": 0,
+  "multiple_package_object_count": 0,
+  "output_geometry": {
+    "wall_door_5m": {
+      "bounds_lo": [
+        -2.5,
+        -0.15000152587890625,
+        0.0
+      ],
+      "bounds_hi": [
+        2.5,
+        0.34149932861328125,
+        11.899999618530273
+      ],
+      "triangles": 8051,
+      "polygons": 4592,
+      "objects": 2,
+      "active_modifiers": 0
+    },
+    "door_5m": {
+      "bounds_lo": [
+        -1.100000023841858,
+        -0.089996337890625,
+        0.0
+      ],
+      "bounds_hi": [
+        1.0999999046325684,
+        0.089996337890625,
+        2.5
+      ],
+      "triangles": 8468,
+      "polygons": 5120,
+      "objects": 2,
+      "active_modifiers": 0
+    }
+  },
+  "reopened_anchor_tests": [
+    {
+      "asset": "wall_door_5m",
+      "rotation": 0,
+      "error_m": 0.0,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "rotation": 90,
+      "error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "rotation": 180,
+      "error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "wall_door_5m",
+      "rotation": 270,
+      "error_m": 2.384185791015625e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "rotation": 0,
+      "error_m": 0.0,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "rotation": 90,
+      "error_m": 3.501772880554199e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "rotation": 180,
+      "error_m": 7.152557373046875e-07,
+      "passed": true
+    },
+    {
+      "asset": "door_5m",
+      "rotation": 270,
+      "error_m": 4.76837158203125e-07,
+      "passed": true
+    }
+  ],
+  "scope_validation_passed": true,
+  "full_library_checks_except_existing_naming_passed": true,
+  "existing_naming_warning_count": 4
+}

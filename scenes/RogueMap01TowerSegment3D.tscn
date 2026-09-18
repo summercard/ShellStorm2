@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c1rogue0m1pseg"]
+
+[ext_resource type="PackedScene" path="res://scenes/TowerDescent3D.tscn" id="1_parent"]
+
+[node name="TowerDescent3D" instance=ExtResource("1_parent")]
+standalone_rogue = true
+rogue_map_id = "rogue_map_01"
+return_scene_path = "res://scenes/TowerDescent3D.tscn"
