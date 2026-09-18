@@ -1,0 +1,24 @@
+{
+  "schema": "shellstorm2.battle.room_runtime_manifest",
+  "schema_version": 1,
+  "level_id": "battle_level01",
+  "room_id": "ROOM_ID",
+  "room_type": "COMMON_ROOM",
+  "assembly_route": "blender_layout_replay",
+  "whitebox_source": "",
+  "room_layout": "",
+  "component_catalog": "",
+  "component_source_version": "",
+  "runtime_component_version": "",
+  "instances": [],
+  "required_facilities": [],
+  "validation": {
+    "room_identity_unique": false,
+    "all_components_resolved": false,
+    "source_runtime_versions_match": false,
+    "room_owned_geometry": false,
+    "non_unit_scale_count": 0,
+    "missing_required_facilities": [],
+    "gameplay_files_modified": []
+  }
+}

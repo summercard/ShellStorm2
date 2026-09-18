@@ -57,6 +57,14 @@ func _verify_tower_entry_gate(failures: Array[String]) -> void:
 	})
 	if bool(tower.call("_entry_context_requests_main_entry")):
 		failures.append("TowerDescent3D仍会为死亡返回安装启动页")
+	# 独立副本返回正式 BaseWorld3D 时也必须沿用99F基地出生契约。
+	tower.return_scene_path = GameDesignConfig.BASE_SCENE_3D
+	var rogue_return_request_id := int(tower.call("_request_return_entry_context", true))
+	var rogue_return := GameEntryFlow.consume_main_scene_entry()
+	if rogue_return_request_id <= 0 or str(rogue_return.get("reason", "")) != GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F:
+		failures.append("独立副本返回正式基地没有登记成功撤离入口意图")
+	if str(rogue_return.get("spawn_target", "")) != GameEntryFlow.SPAWN_BASE_99F:
+		failures.append("独立副本返回正式基地没有保留99F出生契约")
 	if bool(tower.call("_should_start_on_rooftop_for_entry")):
 		failures.append("死亡返回99F仍可被新手逻辑改送到100F天台")
 	tower.set("_entry_context", {

@@ -5,7 +5,7 @@ from mathutils import Vector,Matrix
 BASE=Path('I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components')
 SOURCE=BASE/'v005/战局区块_通用组件库_v005.blend'
 DEST=BASE/'v006'; OUT=Path('I:/工作项目/shellstrom2/outputs/door_anchor_v006')
-BLEND=DEST/'战局区块_通用组件库_v006.blend'
+BLEND=DEST/'env_battle_common_components_source_v006.blend'
 PALETTE=Path('I:/工作项目/shellstrom2/ShellStorm2/assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png')
 RENDER=DEST/'renders'
 for p in [RENDER,OUT,DEST/'qa']:p.mkdir(parents=True,exist_ok=True)

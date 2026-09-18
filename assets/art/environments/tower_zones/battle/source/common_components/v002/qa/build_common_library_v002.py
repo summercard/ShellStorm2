@@ -3,7 +3,7 @@ from pathlib import Path
 from mathutils import Vector,Matrix
 
 ROOT=Path('/Users/summercards/ShellStorm2')
-SRC=ROOT/'assets/art/environments/tower_zones/battle/source/main_room_02/v003'
+SRC=ROOT/'assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003'
 OUT=ROOT/'assets/art/environments/tower_zones/battle/source/common_components/v002'
 PKG=OUT/'component_packages_v002'
 for p in [OUT,OUT/'renders',OUT/'qa',PKG]:p.mkdir(parents=True,exist_ok=True)
@@ -166,7 +166,7 @@ for n,items in groups:tree.append(f'├─ {n} ({len(items)})');tree += [f'│  
 report={'passed':len(manifest)==len(unique) and len({p['geometry_signature'] for p in manifest})==len(manifest),'source_package_count':len(source_catalog),'excluded_room_specific_packages':['floor_base'],'candidate_package_count':len(catalog),'package_count':len(manifest),
         'removed_duplicate_count':len(removed),'removed_duplicates':removed,'group_count':len(groups),'output_mesh_count':sum(len(p['objects']) for p in manifest),
         'wall_package_count':sum(p['category']=='08_墙壁组件' for p in manifest),'floor_package_count':sum(p['category']=='09_地板组件' for p in manifest),
-        'front_direction':'+Y','camera_pages':camera_states,'source_blend':str(SRC/'局内关卡01_主路内容房02_数据机房美术_v003.blend')}
+        'front_direction':'+Y','camera_pages':camera_states,'source_blend':str(SRC/'env_battle_l01_main_02_data_room_layout_source_v003.blend')}
 (OUT/'qa/task_validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 scene['asset_id']='ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY';scene['version']='v002';scene['package_count']=len(manifest);scene['deduplicated_source_count']=len(removed)
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'战局区块_通用组件库_v002.blend'),compress=True)

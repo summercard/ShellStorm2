@@ -11,7 +11,7 @@ from mathutils import Vector
 LIB3 = Path(r'I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/'
             r'battle/source/common_components/v003/战局区块_通用组件库_v003.blend')
 ROOM6 = Path(r'I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/'
-             r'battle/source/entry_safe_room/v006/局内关卡01_入口安全房_15x15m_正式美术_v006.blend')
+             r'battle/source/room_instances/entry_safe_room/v006/局内关卡01_入口安全房_15x15m_正式美术_v006.blend')
 
 
 def W(o):

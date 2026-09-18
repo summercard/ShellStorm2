@@ -1,0 +1,20 @@
+{
+  "schema": "shellstorm2.battle.room_type_art",
+  "schema_version": 1,
+  "level_id": "battle_level01",
+  "room_type": "COMMON_ROOM",
+  "source_version": "v001",
+  "source_blend": "",
+  "whitebox_sources": [],
+  "nominal_dimensions_m": [],
+  "required_components": [],
+  "required_facilities": [],
+  "block_id": "battle",
+  "design_scope": "scene_art_only",
+  "asset_ledger": "resolved_by_ledger_index",
+  "validation": {
+    "whitebox_contract_preserved": false,
+    "decomposable": false,
+    "gameplay_files_modified": []
+  }
+}

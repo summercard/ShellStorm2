@@ -61,7 +61,7 @@ LIB3_DIR = BATTLE / 'source/common_components/v003'
 LIB3 = LIB3_DIR / '战局区块_通用组件库_v003.blend'
 V4_DIR = BATTLE / 'source/common_components/v004'
 BLEND4 = V4_DIR / '战局区块_通用组件库_v004.blend'
-ROOM6 = BATTLE / 'source/entry_safe_room/v006/局内关卡01_入口安全房_15x15m_正式美术_v006.blend'
+ROOM6 = BATTLE / 'source/room_instances/entry_safe_room/v006/局内关卡01_入口安全房_15x15m_正式美术_v006.blend'
 RECOVERED = Path(r'I:/工作项目/shellstrom2/_scratch/esr_recover/v003_recovered.blend')
 PALETTE = ROOT / 'assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'
 

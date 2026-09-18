@@ -1,0 +1,20 @@
+{
+  "schema": "shellstorm2.battle.room_instance_layout",
+  "schema_version": 1,
+  "level_id": "battle_level01",
+  "room_id": "ROOM_ID",
+  "room_type": "COMMON_ROOM",
+  "layout_version": "v001",
+  "whitebox_source": "",
+  "component_source": "",
+  "source_blend": "",
+  "dimensions_m": [0.0, 0.0],
+  "coordinate_contract": "blender_z_up_to_godot_y_up",
+  "instances": [],
+  "room_markers": [],
+  "validation": {
+    "room_owned_geometry": false,
+    "non_unit_scale_count": 0,
+    "missing_components": []
+  }
+}

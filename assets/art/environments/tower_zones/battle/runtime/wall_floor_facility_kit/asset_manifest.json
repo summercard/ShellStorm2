@@ -14,7 +14,7 @@
   ],
   "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
   "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend",
-  "source_blend_facilities": "assets/art/environments/tower_zones/battle/source/entry_safe_room/v007/局内关卡01_入口安全房_15x15m_正式美术_v007.blend",
+  "source_blend_facilities": "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend",
   "runtime_scene": "assets/art/environments/tower_zones/battle/runtime/wall_floor_facility_kit/wall_floor_facility_kit_root_top3d.tscn",
   "components": {
     "walls": 12,

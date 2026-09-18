@@ -21,6 +21,7 @@ var _panel_visual_scene: PackedScene
 var _motion_duration_s := DEFAULT_MOTION_DURATION_S
 var _collision_tracks_panel_motion := false
 var _manual_close_enabled := false
+var _prompt_override := ""
 var _motion_tween: Tween
 var _transitioning := false
 var _target_open := false
@@ -58,6 +59,11 @@ func set_motion_profile(duration_s: float, collision_tracks_panel := false) -> v
 
 func set_manual_close_enabled(enabled: bool) -> void:
 	_manual_close_enabled = enabled
+	_refresh_prompt()
+
+
+func set_prompt_override(text: String) -> void:
+	_prompt_override = text
 	_refresh_prompt()
 
 
@@ -179,6 +185,10 @@ func get_snapshot() -> Dictionary:
 
 func _refresh_prompt() -> void:
 	if _prompt == null:
+		return
+	if not _prompt_override.is_empty() and not _transitioning and not is_open:
+		_prompt.text = _prompt_override
+		_prompt.modulate = Color(1.0, 0.42, 0.28)
 		return
 	if _transitioning:
 		_prompt.text = "通道开启中…" if _target_open else "通道关闭中…"

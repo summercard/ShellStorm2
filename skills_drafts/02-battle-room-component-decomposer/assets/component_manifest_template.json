@@ -1,0 +1,17 @@
+{
+  "schema": "shellstorm2.battle.room_type_component",
+  "schema_version": 1,
+  "component_id": "COMPONENT_ID",
+  "room_type": "COMMON_ROOM",
+  "source_room_type_blend": "",
+  "component_source_blend": "",
+  "collection": "",
+  "root_object": "",
+  "bounds_size_m": [0.0, 0.0, 0.0],
+  "origin_contract": "bottom_center",
+  "front_axis": "-Z",
+  "allowed_rotations_y_deg": [0, 90, 180, 270],
+  "collision_owner": "godot_wrapper",
+  "runtime_scene": "",
+  "asset_ledger": "resolved_by_ledger_index"
+}

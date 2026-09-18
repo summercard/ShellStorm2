@@ -1,0 +1,68 @@
+{
+  "package_id": "main02_east_02",
+  "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+  "name": "服务器柜_east_02",
+  "slug": "east_02",
+  "category": "facilities",
+  "version": "v003",
+  "block_id": "battle",
+  "floor_range": "98–95F",
+  "design_scope": "主路内容房02",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "source_blend": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/env_battle_l01_main_02_data_room_layout_source_v003.blend",
+  "blender_collection": "服务器柜_east_02_资产包",
+  "objects": [
+    "服务器柜_east_02_附着细节_主体",
+    "服务器柜_east_02_UI灯光_柔和自发光"
+  ],
+  "root_objects": [
+    "服务器柜_east_02_附着细节_主体",
+    "服务器柜_east_02_UI灯光_柔和自发光"
+  ],
+  "world_position": [
+    13.2,
+    3.8,
+    0.3
+  ],
+  "local_origin": [
+    13.2,
+    3.8,
+    0.3
+  ],
+  "forward": "Blender -Y / Godot -Z",
+  "bounds": [
+    [
+      12.434999,
+      2.935,
+      0.3
+    ],
+    [
+      13.965,
+      4.665,
+      4.312
+    ]
+  ],
+  "dimensions": [
+    1.5300010000000004,
+    1.73,
+    4.0120000000000005
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "emission": true,
+  "animation": false,
+  "dependencies": [],
+  "fixed_display_attachment": false,
+  "exported": false,
+  "expected_export": "east_02_v003.glb",
+  "collision_status": "未制作",
+  "cutaway_preview_only": false
+}

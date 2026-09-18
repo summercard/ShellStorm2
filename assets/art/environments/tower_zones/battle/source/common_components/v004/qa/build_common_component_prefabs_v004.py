@@ -310,7 +310,7 @@ def build_scene(slug: str, spec: dict, visual_bounds: list, blend_name: str) -> 
         ("collision_structure_note", "碰撞按结构不按美术：装饰件不改变组件体积，碰撞盒与 v003 一致。"),
         ("runtime_instantiation", "per_instance_prefab"),
         ("supersedes", "v003"),
-        ("carries_room_art_from", "assets/art/environments/tower_zones/battle/source/entry_safe_room/v006"),
+        ("carries_room_art_from", "assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v006"),
     ]
     meta_pairs += [(k, v) for k, v in spec["meta"]]
     if slug.startswith("floor_tile"):

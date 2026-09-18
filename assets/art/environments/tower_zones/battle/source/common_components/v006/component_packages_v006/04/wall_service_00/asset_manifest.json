@@ -4,7 +4,7 @@
   "name_zh": "wall_service_00_通用包",
   "category": "04_维修与机箱",
   "version": "unchanged_from_v004",
-  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+  "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
   "blender_collection": "wall_service_00_通用包",
   "root_object": "ROOT_wall_service_00_通用组件",
   "objects": [

@@ -32,6 +32,33 @@ python scripts/sync_skill_mirrors.py --check   # 只读校验
 - 行尾全为 CRLF（无 lone LF、无 bare CR）
 - 退出码 0 = 一致；1 = 有差异
 
+## 新增 skill
+
+1. 内容写在 A 里（`~/.workbuddy/skills/<name>/`）。目录名必须与 SKILL.md 的 `name:` 完全一致。
+2. **先过行尾关再同步**：`--check` 要求 A 里**每个文件**都是 CRLF —— 包括 `assets/*.json`、`references/*.md`、`scripts/*.py`。用别的工具生成的模板常是 LF，不转就 `SKILL_MIRROR_CHECK_FAIL ... A has N non-CRLF file(s)`。
+3. 跑 `--sync`，再跑 `--check`。`--sync` 会 `rmtree` 重建，所以新 skill 的副本一定干净。
+
+若 skill 原本只存在于**项目级** `{workspace}/.workbuddy/skills/`，那处不在这四副本里、也不由本脚本管理 —— 要推广到各处，必须先把目录复制进 A，再 `--sync`。
+
+## 改名 skill 的坑
+
+`--sync` 只按「A 当前拥有的名字」写入，**从不删副本里的多余目录**；`--check` 也只遍历 A 的名字，**不会报告副本里多出来的旧目录**。所以给 skill 改名（例如加 `00-` 前缀）后：
+
+- A 里的旧名目录要自己删；
+- B/C/D 里若曾同步过旧名，旧名目录会**静默留存**，改完必须人工核对目录清单，别只看 `--check` 的 OK。
+
+改名后要同步改的位置：目录名、SKILL.md 的 `name:`、以及所有引用该 skill 名字的地方（其他 skill 的路由表、项目文档、交付 zip）。
+
+## 顺便发现：副本落后于正本
+
+`--sync` 是全量重建，会把**所有** skill 的最新内容带过去，包括与本次任务无关的。若某副本此前落后，事后 `git diff` 会看到它的改动 —— 属正常补齐，不是误改。可先确认是纯增量：
+
+```bash
+git diff --unified=0 -- <copy>/<skill>/SKILL.md | grep -E '^[-+][^-+]' | awk '{substr($0,1,1)=="+"?a++:d++} END{print "added="a" removed="d}'
+```
+
+`removed=0` 说明只补了内容、没丢东西。
+
 ## 边界
 
 - **绝不反向**：不从副本同步回 A。副本行尾被污染时，修副本、不修 A。

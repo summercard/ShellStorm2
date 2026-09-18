@@ -5,4 +5,4 @@
 [node name="TowerDescent3D" instance=ExtResource("1_parent")]
 standalone_rogue = true
 rogue_map_id = "rogue_map_01"
-return_scene_path = "res://scenes/TowerDescent3D.tscn"
+return_scene_path = "res://scenes/BaseWorld3D.tscn"

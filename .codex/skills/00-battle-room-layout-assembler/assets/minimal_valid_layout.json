@@ -1,0 +1,37 @@
+{
+  "schema": "shellstorm2.battle.room_layout",
+  "schema_version": 1,
+  "room_id": "example_room",
+  "block_id": "battle",
+  "layout_version": "v001",
+  "coordinate_system": "godot-y-up-room-local",
+  "source_blend": "assets/art/environments/tower_zones/battle/source/example_room/v001/example_room_source_v001.blend",
+  "whitebox_source": "source/art/whitebox/example_room/v001/data/whitebox_example_room_v001.json",
+  "component_library": {
+    "catalog": "assets/art/environments/tower_zones/battle/source/common_components/v006/component_catalog.json"
+  },
+  "instances": [
+    {
+      "instance_id": "WALL_NORTH_01",
+      "component_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "runtime_scene": "res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_standard_5m/wall_standard_5m_root_top3d.tscn",
+      "slot_role": "solid_wall",
+      "transform": {
+        "position_m": [0.0, 0.0, 0.0],
+        "rotation_y_deg": 0.0,
+        "scale": [1.0, 1.0, 1.0]
+      },
+      "enabled": true,
+      "collision_policy": "component_default"
+    }
+  ],
+  "connections": [],
+  "validation": {
+    "room_owned_geometry": false,
+    "non_unit_scale_count": 0,
+    "illegal_rotation_count": 0,
+    "missing_component_count": 0,
+    "outside_room_bounds_count": 0,
+    "component_instance_count": 1
+  }
+}

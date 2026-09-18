@@ -3,7 +3,7 @@ from pathlib import Path
 from mathutils import Vector, Matrix
 
 ROOT=Path('/Users/summercards/ShellStorm2')
-SRC=ROOT/'assets/art/environments/tower_zones/battle/source/main_room_02/v003'
+SRC=ROOT/'assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003'
 OUT=ROOT/'assets/art/environments/tower_zones/battle/source/common_components/v001'
 OUT.mkdir(parents=True,exist_ok=True)
 (OUT/'renders').mkdir(exist_ok=True)
@@ -124,7 +124,7 @@ for g,slugs in groups:
 report={'passed':len(output_manifest)==43 and all(len(p['objects']) in (1,2) for p in output_manifest),
         'package_count':len(output_manifest),'group_count':len(groups),'output_mesh_count':sum(len(p['objects']) for p in output_manifest),
         'source_mesh_count':sum(len(p['objects']) for p in output_manifest),'empty_packages':[],
-        'source_blend':str(SRC/'局内关卡01_主路内容房02_数据机房美术_v003.blend')}
+        'source_blend':str(SRC/'env_battle_l01_main_02_data_room_layout_source_v003.blend')}
 (OUT/'qa').mkdir(exist_ok=True);(OUT/'qa/task_validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
 scene['asset_id']='ENV-BATTLE-L01-COMMON-COMPONENT-LIBRARY';scene['package_count']=43;scene['source_room']='ENV-BATTLE-L01-ROOM-MAIN-02'
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'战局区块_通用组件库_v001.blend'),compress=True)

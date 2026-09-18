@@ -1,0 +1,68 @@
+{
+  "package_id": "main02_east_portal",
+  "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
+  "name": "东侧门洞装甲",
+  "slug": "east_portal",
+  "category": "facilities",
+  "version": "v003",
+  "block_id": "battle",
+  "floor_range": "98–95F",
+  "design_scope": "主路内容房02",
+  "scene_design_docs": [
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用",
+  "source_blend": "assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/env_battle_l01_main_02_data_room_layout_source_v003.blend",
+  "blender_collection": "东侧门洞装甲_资产包",
+  "objects": [
+    "东侧门洞装甲_附着细节_主体",
+    "东侧门洞装甲_UI灯光_柔和自发光"
+  ],
+  "root_objects": [
+    "东侧门洞装甲_附着细节_主体",
+    "东侧门洞装甲_UI灯光_柔和自发光"
+  ],
+  "world_position": [
+    14.51,
+    0,
+    0.3
+  ],
+  "local_origin": [
+    14.51,
+    0,
+    0.3
+  ],
+  "forward": "Blender -Y / Godot -Z",
+  "bounds": [
+    [
+      14.279,
+      -1.69,
+      0.3
+    ],
+    [
+      14.635,
+      1.35,
+      3.115
+    ]
+  ],
+  "dimensions": [
+    0.35599999999999987,
+    3.04,
+    2.8150000000000004
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "emission": true,
+  "animation": false,
+  "dependencies": [],
+  "fixed_display_attachment": false,
+  "exported": false,
+  "expected_export": "east_portal_v003.glb",
+  "collision_status": "未制作",
+  "cutaway_preview_only": false
+}

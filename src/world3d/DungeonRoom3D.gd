@@ -108,7 +108,7 @@ const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
 const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn"
 )
-# v007 墙槽位表，逐项源自 source/entry_safe_room/v007/qa/slot_table.json。
+# v007 墙槽位表，逐项源自 source/room_instances/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
 # 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
 # 绕 Blender +Z 的角与绕 Godot +Y 的角同号，因此 rotation_z_deg 可直接沿用。

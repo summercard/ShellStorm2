@@ -21,7 +21,7 @@
     "row": 73,
     "asset_id": "ENV-BATTLE-L01-ROOM-MAIN-02",
     "values": [
-      "assets/art/environments/tower_zones/battle/source/main_room_02/v003/局内关卡01_主路内容房02_数据机房美术_v003.blend",
+      "assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/env_battle_l01_main_02_data_room_layout_source_v003.blend",
       "基于v002白盒的参考图机房包装；82个独立资产包，墙/地砖/机柜/终端/跨设施支持分别归类。",
       "未接入",
       "无",
@@ -32,7 +32,7 @@
       "局内关卡01 / Battle",
       "Blender美术源已完成；未接入Godot",
       "v003",
-      "2026-09-16：39件白盒结构及39件原制作源几何/变换保留；30×25m、墙11.9×0.3m、地面Z=0.3、东西门洞2.2×2.5m。82包磁盘镜像；四材质、共享外链色盘、全网格逐面PaletteUV验收通过。SHA256=5dcbd3f9c036c4f94b04a7d81a193a9b4c390d1aeec6b846507d08013cba1143。源和验收=assets/art/environments/tower_zones/battle/source/main_room_02/v003/；原白盒=source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_02_30x25m_v002.blend。"
+      "2026-09-16：39件白盒结构及39件原制作源几何/变换保留；30×25m、墙11.9×0.3m、地面Z=0.3、东西门洞2.2×2.5m。82包磁盘镜像；四材质、共享外链色盘、全网格逐面PaletteUV验收通过。SHA256=5dcbd3f9c036c4f94b04a7d81a193a9b4c390d1aeec6b846507d08013cba1143。源和验收=assets/art/environments/tower_zones/battle/source/room_instances/main_room_02/v003/；原白盒=source/art/whitebox/tower_zones/battle_level01/v002/blender/局内关卡01_白模_主路内容房_02_30x25m_v002.blend。"
     ]
   },
   {

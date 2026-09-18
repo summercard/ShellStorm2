@@ -4804,7 +4804,10 @@ func _get_run_settlement_transaction_id(success: bool) -> String:
 
 
 func _request_return_entry_context(success: bool) -> int:
-	if return_scene_path != GameDesignConfig.MAIN_SCENE:
+	# 独立副本虽然返回正式 BaseWorld3D，但仍必须登记99F基地出生契约；
+	# 否则入口场景无法区分“撤退回基地”和普通冷启动，可能落入未包装的兼容空间。
+	var is_base_return := return_scene_path == GameDesignConfig.MAIN_SCENE or return_scene_path == GameDesignConfig.BASE_SCENE_3D
+	if not is_base_return:
 		return -1
 	var reason := (
 		GameEntryFlow.REASON_SUCCESSFUL_RETURN_99F

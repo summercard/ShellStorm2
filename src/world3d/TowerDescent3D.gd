@@ -3169,7 +3169,29 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 	# 基地三个可从房间侧直接交互的实体门共用同一入口；100F西侧上端门
 	# 继续由房间门/楼梯内侧查询找到，但四扇实体门都挂同一普通交通门组件。
 	# 98层入口安全房间的下端门不属于基地门集合，继续走战局专用流程。
+	# 独立战局的 start 房没有 facility 边；其出生侧封闭门是“入口撤退门”，
+	# 必须进入统一的 E 交互候选，否则空 target_room_id 会被父类直接过滤。
 	var bindings: Array[Dictionary] = []
+	if is_standalone_rogue():
+		var start_room := _room_by_id.get("start") as DungeonRoom3D
+		if start_room != null:
+			for side_value in start_room.door_targets.keys():
+				var side := str(side_value)
+				if not str(start_room.door_targets[side_value]).is_empty():
+					continue
+				var exit_door := start_room.get_door_node(side)
+				if exit_door == null or not is_instance_valid(exit_door):
+					continue
+				exit_door.set_prompt_override("[E] 退出战局")
+				bindings.append({
+					"door": exit_door,
+					"mode": "standalone_retreat",
+					"owner_room_id": "start",
+					"target_room_id": "",
+					"edge_key": "",
+					"interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
+				})
+		return bindings
 	if _base_rooftop_transit_door != null and is_instance_valid(_base_rooftop_transit_door):
 		bindings.append({
 			"door": _base_rooftop_transit_door,
@@ -3248,6 +3270,9 @@ func perform_interaction(
 		return false
 	var mode := str(candidate.get("mode", "room_door"))
 	match mode:
+		"configured_standalone_retreat":
+			_show_initial_loop_retreat_warning()
+			return true
 		"configured_rooftop_transit":
 			return _try_open_base_rooftop_transit_door()
 		"configured_room_edge":

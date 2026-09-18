@@ -52,8 +52,8 @@ COL_ORDER = {c: i for i, c in enumerate(COLUMNS)}
 
 RUNTIME_ROOT = "assets/art/environments/tower_zones/battle/runtime"
 COMPONENTS_ROOT = "assets/art/environments/tower_zones/battle/components"
-SOURCE_BLEND = ("assets/art/environments/tower_zones/battle/source/entry_safe_room/v007/"
-                "局内关卡01_入口安全房_15x15m_正式美术_v007.blend")
+SOURCE_BLEND = ("assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/"
+                "env_battle_l01_safe_entry_layout_source_v007.blend")
 
 PACKAGE_RUNTIME = (RUNTIME_ROOT + "/entry_safe_room/v007/*/*_root_top3d_v007.tscn"
                    "（17 包）；墙/地/门引用 "

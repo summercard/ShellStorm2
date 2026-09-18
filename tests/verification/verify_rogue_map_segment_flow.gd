@@ -75,8 +75,8 @@ func _ready() -> void:
 		failures.append("独立图 standalone_rogue 未开启")
 	if not str(tower.get_rogue_map_id()).ends_with("rogue_map_01"):
 		failures.append("独立图 rogue_map_id 不正确：%s" % tower.get_rogue_map_id())
-	if tower.return_scene_path != "res://scenes/TowerDescent3D.tscn":
-		failures.append("独立图结算返回场景不是 TowerDescent3D：%s" % tower.return_scene_path)
+	if tower.return_scene_path != "res://scenes/BaseWorld3D.tscn":
+		failures.append("独立图结算返回场景不是正式3D基地：%s" % tower.return_scene_path)
 
 	var planned := tower.get_standalone_planned_floor_numbers()
 	for expected in [98, 97, 96, 95]:
@@ -127,6 +127,27 @@ func _ready() -> void:
 			failures.append("独立图安全房缺少真实 Hub 门目标：%s" % entry_room.door_targets)
 		if closed_arrival_count != 1:
 			failures.append("独立图安全房应有 1 扇传送抵达封闭门：%s" % entry_room.door_targets)
+		var retreat_door_count := 0
+		for side_value in entry_room.door_targets.keys():
+			var side := str(side_value)
+			if not str(entry_room.door_targets[side_value]).is_empty():
+				continue
+			var retreat_door := entry_room.get_door_node(side)
+			if retreat_door != null and retreat_door.get_interaction_prompt_text() == "[E] 退出战局":
+				retreat_door_count += 1
+		if retreat_door_count != 1:
+			failures.append("独立图出生安全房未注册唯一退出战局门：%d" % retreat_door_count)
+		tower.player.global_position = entry_room.global_position + Vector3(5.0, 0.05, 0.0)
+		await get_tree().physics_frame
+		var retreat_candidate := tower.get_interaction_candidate(tower.player)
+		if str(retreat_candidate.get("mode", "")) != "configured_standalone_retreat":
+			failures.append("独立图出生门未产生 standalone_retreat 交互候选：%s" % retreat_candidate)
+		elif not tower.perform_interaction(tower.player, retreat_candidate):
+			failures.append("独立图出生门按E未打开退出确认")
+		elif tower.get_node_or_null("HUD/InitialLoopRetreatWarning") == null:
+			failures.append("独立图出生门交互后缺少退出确认弹窗")
+		else:
+			tower._cancel_initial_loop_retreat()
 
 	# 4) 终端条件：无 94F 计划、无 95F 电梯、有 Boss 撤离。
 	if tower._floor_plan_snapshots.has(6):

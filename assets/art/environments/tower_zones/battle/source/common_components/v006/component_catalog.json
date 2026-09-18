@@ -5,7 +5,7 @@
     "name_zh": "north_00_通用包",
     "category": "01_服务器机柜",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "north_00_通用包",
     "root_object": "ROOT_north_00_通用组件",
     "objects": [
@@ -64,7 +64,7 @@
     "name_zh": "north_03_通用包",
     "category": "01_服务器机柜",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "north_03_通用包",
     "root_object": "ROOT_north_03_通用组件",
     "objects": [
@@ -123,7 +123,7 @@
     "name_zh": "west_desk_通用包",
     "category": "02_工作终端",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "west_desk_通用包",
     "root_object": "ROOT_west_desk_通用组件",
     "objects": [
@@ -183,7 +183,7 @@
     "name_zh": "north_control_通用包",
     "category": "02_工作终端",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "north_control_通用包",
     "root_object": "ROOT_north_control_通用组件",
     "objects": [
@@ -243,7 +243,7 @@
     "name_zh": "technician_chair_通用包",
     "category": "02_工作终端",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "technician_chair_通用包",
     "root_object": "ROOT_technician_chair_通用组件",
     "objects": [
@@ -298,7 +298,7 @@
     "name_zh": "island_00_通用包",
     "category": "03_中央设备岛",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "island_00_通用包",
     "root_object": "ROOT_island_00_通用组件",
     "objects": [
@@ -358,7 +358,7 @@
     "name_zh": "island_01_通用包",
     "category": "03_中央设备岛",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "island_01_通用包",
     "root_object": "ROOT_island_01_通用组件",
     "objects": [
@@ -418,7 +418,7 @@
     "name_zh": "fault_tray_00_通用包",
     "category": "04_维修与机箱",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "fault_tray_00_通用包",
     "root_object": "ROOT_fault_tray_00_通用组件",
     "objects": [
@@ -477,7 +477,7 @@
     "name_zh": "wall_service_00_通用包",
     "category": "04_维修与机箱",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "wall_service_00_通用包",
     "root_object": "ROOT_wall_service_00_通用组件",
     "objects": [
@@ -537,7 +537,7 @@
     "name_zh": "wall_service_01_通用包",
     "category": "04_维修与机箱",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "wall_service_01_通用包",
     "root_object": "ROOT_wall_service_01_通用组件",
     "objects": [
@@ -597,7 +597,7 @@
     "name_zh": "wall_service_02_通用包",
     "category": "04_维修与机箱",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "wall_service_02_通用包",
     "root_object": "ROOT_wall_service_02_通用组件",
     "objects": [
@@ -657,7 +657,7 @@
     "name_zh": "equipment_case_00_通用包",
     "category": "04_维修与机箱",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "equipment_case_00_通用包",
     "root_object": "ROOT_equipment_case_00_通用组件",
     "objects": [
@@ -712,7 +712,7 @@
     "name_zh": "data_banner_通用包",
     "category": "05_门框与标识",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "data_banner_通用包",
     "root_object": "ROOT_data_banner_通用组件",
     "objects": [
@@ -767,7 +767,7 @@
     "name_zh": "east_portal_通用包",
     "category": "05_门框与标识",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "east_portal_通用包",
     "root_object": "ROOT_east_portal_通用组件",
     "objects": [
@@ -825,7 +825,7 @@
     "name_zh": "planter_00_通用包",
     "category": "06_环境陈设",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "planter_00_通用包",
     "root_object": "ROOT_planter_00_通用组件",
     "objects": [
@@ -879,7 +879,7 @@
     "name_zh": "north_utilities_通用包",
     "category": "07_环境支持",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "north_utilities_通用包",
     "root_object": "ROOT_north_utilities_通用组件",
     "objects": [
@@ -938,7 +938,7 @@
     "name_zh": "east_utilities_通用包",
     "category": "07_环境支持",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "east_utilities_通用包",
     "root_object": "ROOT_east_utilities_通用组件",
     "objects": [
@@ -997,7 +997,7 @@
     "name_zh": "south_utilities_通用包",
     "category": "07_环境支持",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "south_utilities_通用包",
     "root_object": "ROOT_south_utilities_通用组件",
     "objects": [
@@ -1056,7 +1056,7 @@
     "name_zh": "floor_cabling_通用包",
     "category": "07_环境支持",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "floor_cabling_通用包",
     "root_object": "ROOT_floor_cabling_通用组件",
     "objects": [
@@ -1110,7 +1110,7 @@
     "name_zh": "fixed_papers_通用包",
     "category": "07_环境支持",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "fixed_papers_通用包",
     "root_object": "ROOT_fixed_papers_通用组件",
     "objects": [
@@ -1164,7 +1164,7 @@
     "name_zh": "wall_standard_5m_通用包",
     "category": "08_墙壁组件",
     "version": "v005",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "wall_standard_5m_通用包",
     "root_object": "ROOT_wall_standard_5m_通用组件",
     "objects": [
@@ -1224,7 +1224,7 @@
     "name_zh": "wall_door_5m_通用包",
     "category": "08_墙壁组件",
     "version": "v006",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "wall_door_5m_通用包",
     "root_object": "ROOT_wall_door_5m_通用组件",
     "objects": [
@@ -1290,7 +1290,7 @@
     "name_zh": "floor_tile_r01_c01_通用包",
     "category": "09_地板组件",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "floor_tile_r01_c01_通用包",
     "root_object": "ROOT_floor_tile_r01_c01_通用组件",
     "objects": [
@@ -1375,7 +1375,7 @@
     "name_zh": "floor_tile_r01_c02_通用包",
     "category": "09_地板组件",
     "version": "unchanged_from_v004",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "floor_tile_r01_c02_通用包",
     "root_object": "ROOT_floor_tile_r01_c02_通用组件",
     "objects": [
@@ -1457,7 +1457,7 @@
     "name_zh": "door_5m_通用包",
     "category": "10_门组件",
     "version": "v006",
-    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\战局区块_通用组件库_v006.blend",
+    "source_blend": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v006\\env_battle_common_components_source_v006.blend",
     "blender_collection": "door_5m_通用包",
     "root_object": "ROOT_door_5m_通用组件",
     "objects": [

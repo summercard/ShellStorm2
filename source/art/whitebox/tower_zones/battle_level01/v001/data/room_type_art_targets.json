@@ -1,0 +1,50 @@
+{
+  "schema": "shellstorm2.battle.room_type_art_targets",
+  "schema_version": 1,
+  "level_id": "battle_level01",
+  "block_id": "battle",
+  "design_scope": "scene_art_only",
+  "source_whitebox_plan": "source/art/whitebox/tower_zones/battle_level01/v001/data/unit_plan.json",
+  "scene_design_docs": [
+    "docs/v0.1/05_技术施工_关卡生成与爬楼.md",
+    "docs/v0.1/05.1_关卡区块设计.md",
+    "docs/v0.1/10.1_3D场景美术生产流程.md",
+    "docs/v0.1/development/2026-09-18_战局房间美术制成与导入链路.md"
+  ],
+  "asset_ledger": "resolved_by_assets/registry/ledger_index.json",
+  "room_type_targets": [
+    {
+      "room_type": "SAFE_ROOM",
+      "target_count": 2,
+      "dimensions_source": "whitebox_and_existing_safe_room_contract",
+      "required_facilities": []
+    },
+    {
+      "room_type": "COMMON_ROOM",
+      "target_count": 14,
+      "dimensions_source": "room_instance_whitebox",
+      "required_facilities": []
+    },
+    {
+      "room_type": "BOSS_ROOM",
+      "target_count": 1,
+      "dimensions_source": "boss_whitebox_and_level_design",
+      "required_facilities": []
+    },
+    {
+      "room_type": "EXTRACTION_ROOM",
+      "target_count": 1,
+      "dimensions_m": [30.0, 30.0],
+      "required_facilities": [
+        {
+          "facility_role": "extraction_beacon",
+          "count": 1,
+          "pickup": false,
+          "runtime_logic_owner": "gameplay_layer"
+        }
+      ]
+    }
+  ],
+  "gameplay_topology_status": "NOT_CHANGED_BY_THIS_FILE",
+  "note": "This is a scene-art production target only. Adding the extraction room to the playable level, its topology, activation conditions, and settlement flow requires a separate level/gameplay change."
+}

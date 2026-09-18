@@ -13,7 +13,7 @@
 | # | 层 | 根因 | 证据 |
 |---|---|---|---|
 | A | 规范 | 导入 skill 规定「替换=新建版本」，与命名规范「替换=覆盖既定路径」相反；执行导入时只加载 skill | `godot-model-asset-import-standard/SKILL.md` L32/L46/L63 vs 命名规范 L126–133 |
-| B | 工具 | 版本号是脚本常量，直接拼进目录名与文件名；qa 脚本一版一份 | 全仓 18 个 `^VERSION = "v0NN"`；`source/entry_safe_room/v007/qa/export_packages_v007.py:47-48,144`、`build_package_prefabs_v007.py:43,156`；`tools/asset_pipeline/generate_runtime_scenes.py:43`；同目录另有平行的 `*_v006.py` |
+| B | 工具 | 版本号是脚本常量，直接拼进目录名与文件名；qa 脚本一版一份 | 全仓 18 个 `^VERSION = "v0NN"`；`source/room_instances/entry_safe_room/v007/qa/export_packages_v007.py:47-48,144`、`build_package_prefabs_v007.py:43,156`；`tools/asset_pipeline/generate_runtime_scenes.py:43`；同目录另有平行的 `*_v006.py` |
 | C | 运行时 | 版本号进 `preload` 常量与路径拼接 | `src/world3d/DungeonRoom3D.gd:75,97-109,1007-1013`；`TowerDescent3D.gd:7-34`；`TowerFloorStage3D.gd:31-46`；src 共 109 行 / 22 个 `.gd` |
 | D | 台账 | O 列一格需同时表达源 / GLB / Prefab 三个版本 | 命名规范 L76；`assets/art/asset_import_manifest_v001.json` 顶层键即版本名（`*_v021_optimized_packages` / `*_v022_updates` / `*_v023_stair_bed`） |
 
@@ -260,7 +260,7 @@ P1 遗留（不属于 P1，转 P2/P6 承接）：`godot-model-asset-import-stand
 
 **残留（转后续批）**：无。B1 残留的 2 个 zone 场景本批已清；五根套件引用扫描为 0。
 
-**一个既有噪声（非本批、待主人决定）**：`source/entry_safe_room/v007/qa/probe_floor_tile_components.gd` 之类**资产侧** `.gd` 不在 P4 门禁的引用扫描口径内（该门禁只数 `src/**/*.gd` 与 tscn），因此 B1 期间漏改、由 B2 顺手补齐。若希望后续批次自动发现这类「资产侧引用方」，需要把扫描口径扩到 `assets/art/**/*.gd`（改动小，但会改变欠账数，需独立一批）。
+**一个既有噪声（非本批、待主人决定）**：`source/room_instances/entry_safe_room/v007/qa/probe_floor_tile_components.gd` 之类**资产侧** `.gd` 不在 P4 门禁的引用扫描口径内（该门禁只数 `src/**/*.gd` 与 tscn），因此 B1 期间漏改、由 B2 顺手补齐。若希望后续批次自动发现这类「资产侧引用方」，需要把扫描口径扩到 `assets/art/**/*.gd`（改动小，但会改变欠账数，需独立一批）。
 
 ### B3 预备（2026-09-17 调研，**未开工**）
 
@@ -544,7 +544,7 @@ runtime/env_base99_floor_visuals_v021/…_root_top3d_v004.tscn
 |---|---|---|
 | `runtime/entry_safe_room/v003`、`v004`、`v005` | 空目录（0 个 `.tscn`） | 无 |
 | `components/entry_safe_room/v003`、`v004`、`v005` | 空目录（0 个 `.glb`） | 无 |
-| `components/entry_safe_room/v006` | 24 个 GLB | 无 runtime、无代码/场景引用；仅 v004 组件元数据 `carries_room_art_from` 提及源侧 `source/entry_safe_room/v006`（保留） |
+| `components/entry_safe_room/v006` | 24 个 GLB | 无 runtime、无代码/场景引用；仅 v004 组件元数据 `carries_room_art_from` 提及源侧 `source/room_instances/entry_safe_room/v006`（保留） |
 | `components|runtime/common_components/` 的 5 组 `_v003` | wall_standard_5m、wall_door_5m、door_5m、floor_tile_r01_c01、floor_tile_r01_c02 的 GLB/tscn | src 只 preload `_v004`；`_v003` 仅被自身 tscn 的 `ext_resource` 与 `source/common_components/v003/` 的 manifest/catalog 引用 |
 | 战局区块 `.bak_*` 18 个 | `*.glb.import.bak_pre_palette` 8、`*.tscn.bak_pre_generate` 5、源侧备份 5 | 备份，非运行资产 |
 | 验证器与台账脚本（P2 登记，**必须与重命名同批改**） | `common_components/v004/qa/verify_v004_glb.py`、`update_ledger_rows_v004.py`、v003 的 `register_*_ledger_rows.py` / `verify_*_ledger_patch.py`、`sync_catalog_export_status.py` | 这些脚本按确切文件名/路径断言磁盘现状或历史补丁；早改会立刻变红，晚改会漏检——只能与 P6 重命名同批 |
