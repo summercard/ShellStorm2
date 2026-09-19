@@ -64,6 +64,17 @@ const BASE_99_100_ATRIUM_TILE_COUNT := 36
 
 var floor_index := 0
 var floor_kind := "combat"
+# 单层关卡（远征）虽然 floor_index==0，但绝不继承「天台」窄轮廓：
+# 必须使用标准 250×250 网格，否则 x>40 / z<-35 的房间会既没有承重楼面、
+# 也没有外圈墙，玩家会直接掉出关卡。
+var force_standard_map := false
+## 独立单层关卡（远征）的实际内容外框。非空时楼面与外墙都按该矩形生成，
+## 不再套用塔楼整块 250×250 网格 —— 否则远处空地上会立着一圈没有内容的墙。
+var content_world_rect := Rect2()
+var _has_content_bounds := false
+## 外墙可视纵向缩放实测值。正常层与远征都是 1.0，只有 100F 天台女儿墙是 0.5。
+## 写入快照供门禁断言「可视高度 == 碰撞高度」，防止再次出现看不见的挡墙。
+var _outer_visual_scale_y := 1.0
 var stair_hole_sides: Array[String] = []
 # 房间自带正式地砖的区域（当前仅入口安全房 3×3 格）。只从通用可视地砖里挖掉，
 # 承重碰撞不受影响，仍由 _build_support() 用 _hole_rects() 铺满整个房间地面。
@@ -92,10 +103,18 @@ static var _floor_palette_probed := false
 
 
 func configure(
-	index: int, kind: String, holes: Array[String], extra_visual_holes: Array[Rect2] = []
+	index: int,
+	kind: String,
+	holes: Array[String],
+	extra_visual_holes: Array[Rect2] = [],
+	use_standard_map: bool = false,
+	content_bounds: Rect2 = Rect2()
 ) -> void:
 	floor_index = index
 	floor_kind = kind
+	force_standard_map = use_standard_map
+	content_world_rect = content_bounds
+	_has_content_bounds = content_bounds.size.x > 0.0 and content_bounds.size.y > 0.0
 	stair_hole_sides.assign(holes)
 	additional_visual_holes.assign(extra_visual_holes)
 
@@ -104,7 +123,16 @@ func _ready() -> void:
 	name = "Floor_%d" % (100 - floor_index)
 	set_meta("floor_index", floor_index)
 	set_meta("floor_number", 100 - floor_index)
-	set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
+	set_meta(
+		"block_id",
+		"expedition"
+		if force_standard_map
+		else "rooftop"
+		if floor_index == 0
+		else "base"
+		if floor_index == 1
+		else "battle"
+	)
 	add_to_group("tower_floor_stage_3d")
 	_build_floor()
 	_build_outer_shell()
@@ -210,9 +238,13 @@ func get_snapshot() -> Dictionary:
 			if _rooftop_art_instance != null else 0
 		),
 		"checkerboard_pattern": true,
-		"base_99_100_atrium_enabled": floor_index == 0,
-		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if floor_index == 0 else 0,
-		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if floor_index == 0 else Rect2(),
+		"force_standard_map": force_standard_map,
+		"has_content_bounds": _has_content_bounds,
+		"content_world_rect": content_world_rect if _has_content_bounds else Rect2(),
+		"outer_visual_scale_y": _outer_visual_scale_y,
+		"base_99_100_atrium_enabled": _uses_rooftop_profile(),
+		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if _uses_rooftop_profile() else 0,
+		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if _uses_rooftop_profile() else Rect2(),
 	}
 
 
@@ -220,8 +252,20 @@ func _floor_grid_count() -> int:
 	return _floor_grid_dimensions().x
 
 
+## 只有「真正的 100F 天台」才使用窄轮廓；远征单层关卡强制走标准 250×250 网格。
+func _uses_rooftop_profile() -> bool:
+	return floor_index == 0 and not force_standard_map
+
+
 func _floor_grid_dimensions() -> Vector2i:
-	return ROOFTOP_GRID_DIMENSIONS if floor_index == 0 else Vector2i(GRID_COUNT, GRID_COUNT)
+	if _uses_rooftop_profile():
+		return ROOFTOP_GRID_DIMENSIONS
+	if _has_content_bounds:
+		return Vector2i(
+			int(round(content_world_rect.size.x / GRID_UNIT)),
+			int(round(content_world_rect.size.y / GRID_UNIT))
+		)
+	return Vector2i(GRID_COUNT, GRID_COUNT)
 
 
 func _floor_map_size() -> float:
@@ -229,11 +273,15 @@ func _floor_map_size() -> float:
 
 
 func _floor_map_dimensions() -> Vector2:
-	return ROOFTOP_MAP_DIMENSIONS if floor_index == 0 else Vector2(MAP_SIZE, MAP_SIZE)
+	return _floor_world_rect().size
 
 
 func _floor_world_rect() -> Rect2:
-	return ROOFTOP_WORLD_RECT if floor_index == 0 else Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
+	if _uses_rooftop_profile():
+		return ROOFTOP_WORLD_RECT
+	if _has_content_bounds:
+		return content_world_rect
+	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
 
 
 func _outer_grid_count() -> int:
@@ -242,13 +290,14 @@ func _outer_grid_count() -> int:
 
 
 func _outer_grid_dimensions() -> Vector2i:
-	return (
-		ROOFTOP_GRID_DIMENSIONS
-		if floor_index == 0
-		else Vector2i(FACILITY_OUTER_GRID_COUNT, FACILITY_OUTER_GRID_COUNT)
-		if floor_index == 1
-		else Vector2i(GRID_COUNT, GRID_COUNT)
-	)
+	if _uses_rooftop_profile():
+		return ROOFTOP_GRID_DIMENSIONS
+	if _has_content_bounds:
+		# 独立单层关卡：外墙贴着内容外框走，不套塔楼的整块 250×250。
+		return _floor_grid_dimensions()
+	if floor_index == 1:
+		return Vector2i(FACILITY_OUTER_GRID_COUNT, FACILITY_OUTER_GRID_COUNT)
+	return Vector2i(GRID_COUNT, GRID_COUNT)
 
 
 func _outer_map_size() -> float:
@@ -256,21 +305,23 @@ func _outer_map_size() -> float:
 
 
 func _outer_map_dimensions() -> Vector2:
-	return (
-		ROOFTOP_MAP_DIMENSIONS
-		if floor_index == 0
-		else Vector2(FACILITY_OUTER_MAP_SIZE, FACILITY_OUTER_MAP_SIZE)
-		if floor_index == 1
-		else Vector2(MAP_SIZE, MAP_SIZE)
-	)
+	return _outer_world_rect().size
 
 
 func _outer_world_rect() -> Rect2:
-	return ROOFTOP_WORLD_RECT if floor_index == 0 else FACILITY_OUTER_WORLD_RECT if floor_index == 1 else Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
+	if _uses_rooftop_profile():
+		return ROOFTOP_WORLD_RECT
+	if _has_content_bounds:
+		return content_world_rect
+	if floor_index == 1:
+		return FACILITY_OUTER_WORLD_RECT
+	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
 
 
 func _outer_wall_height() -> float:
-	return ROOFTOP_PARAPET_HEIGHT if floor_index == 0 else TowerGeometry3D.WALL_LOGICAL_HEIGHT_M
+	return (
+		ROOFTOP_PARAPET_HEIGHT if _uses_rooftop_profile() else TowerGeometry3D.WALL_LOGICAL_HEIGHT_M
+	)
 
 
 func _enabled_collision_shape_count(root: Node) -> int:
@@ -443,6 +494,10 @@ func _build_outer_shell() -> void:
 	var outer_rect := _outer_world_rect()
 	var outer_max := outer_rect.end
 	var wall_height := _outer_wall_height()
+	# 直接取真实摆放用的缩放值回填快照字段，避免与 _outer_visual_transform 各写一份。
+	_outer_visual_scale_y = _outer_visual_transform(
+		Basis.IDENTITY, Vector3.ZERO
+	).basis.get_scale().y
 	# 普通墙与女儿墙的正式 GLB 均以底面中心为原点；按包围盒底面贴合楼面
 	# （旧占位 BoxMesh 以几何中心为原点，同一表达式也能得出原中心高度）。
 	# 楼顶矮墙几何 1.50m，经 _outer_visual_transform 的 0.5 纵向缩放后为 0.75m。
@@ -548,7 +603,10 @@ func _install_base99_outer_corner_visuals(
 
 func _outer_visual_transform(basis: Basis, position: Vector3) -> Transform3D:
 	var visual_basis := basis
-	if floor_index == 0:
+	# 只有真正的 100F 天台女儿墙需要 0.5 纵向缩放（几何 1.50m → 0.75m）。
+	# 远征单层关卡的 floor_index 同样是 0，早期版本在这里一并被缩到一半高度，
+	# 于是可视墙 5.95m 而碰撞盒 12m —— 上沿 6m 是看不见却挡人的空气墙。
+	if _uses_rooftop_profile():
 		visual_basis = visual_basis.scaled(Vector3(1.0, 0.5, 1.0))
 	return Transform3D(visual_basis, position)
 
@@ -715,7 +773,8 @@ func _hole_rects() -> Array[Rect2i]:
 	var holes: Array[Rect2i] = []
 	# 100层与99层基地打通：只从100层(stage 0)移除基地上方6×6地砖，
 	# 99层自身的36块地面仍由基地房间保留。
-	if floor_index == 0:
+	# 远征单层关卡没有「下方 99F 基地」，挖洞只会让入口安全房悬空。
+	if _uses_rooftop_profile():
 		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	for side in stair_hole_sides:
 		holes.append(_world_rect_to_grid(_stair_hole_world_rect(side)))
@@ -817,20 +876,14 @@ func _subtract_hole(rectangles: Array[Rect2i], hole: Rect2i) -> Array[Rect2i]:
 	return result
 
 
+## 从模块 Prefab 取「用于批渲染的单一 Mesh 资源」。
+## 走 TowerGeometry3D 的唯一解析入口（按 metadata/visual_node_name 声明），
+## 不再本地递归取第一个 MeshInstance3D —— 那个隐式约定在带门墙这类
+## 「首个网格是被隐藏的门扇」的资产上会取错。
 func _mesh_from_scene(scene: PackedScene) -> Mesh:
 	if scene == null:
 		return null
 	var instance := scene.instantiate()
-	var mesh := _find_first_mesh(instance)
+	var mesh := TowerGeometry3D.resolve_visual_mesh(instance)
 	instance.free()
 	return mesh
-
-
-func _find_first_mesh(root: Node) -> Mesh:
-	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
-		return (root as MeshInstance3D).mesh
-	for child in root.get_children():
-		var mesh := _find_first_mesh(child)
-		if mesh != null:
-			return mesh
-	return null

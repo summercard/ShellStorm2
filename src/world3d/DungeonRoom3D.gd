@@ -23,6 +23,13 @@ const TOWER_WALL_PREFAB: PackedScene = preload(
 const TOWER_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn"
 )
+# 5m 段门扇（门板）视觉：塔楼 A 套正式美术，与门墙共用 forward_axis=+Z。
+# 由战局通用组件库的「door_5m_通用包」派生而来，脚本与清单见
+# tower_descent_3d/source/door_leaf_5m/。战斗房与入口安全房共用它。
+# 门扇在厚度轴上镜面对称，故 A 套（+Z）与旧 B 套（-Z）互换外观不变。
+const TOWER_DOOR_LEAF_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn"
+)
 const TOWER_PARAPET_PREFAB: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_5m.tscn"
 )
@@ -99,9 +106,12 @@ const SAFE_ROOM_WALL_STANDARD_PREFAB: PackedScene = preload(
 const SAFE_ROOM_WALL_DOOR_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/common_components/wall_door_5m/wall_door_5m_root_top3d.tscn"
 )
-const SAFE_ROOM_DOOR_LEAF_PREFAB: PackedScene = preload(
-	"res://assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d.tscn"
-)
+# 安全房门扇原走 B 套「door_5m_root_top3d.tscn / ENV-BATTLE-COMMON-DOOR-5M」。
+# 那个包的 GLB 实测只是一个 13 三角形占位方块（单材质、无面板细节），
+# 并非 door_5m_通用包 v006 的真实美术（5352 顶点 / 4 个色盘角色）。
+# 2026-09-19：门扇统一改为塔楼 A 套正式美术 TOWER_DOOR_LEAF_PREFAB，
+# 该常量随之退场。B 套那两个文件仍留在战局通用组件库里（属库的账面资产，
+# 不由本脚本消费），不再被运行时引用。
 const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c01_root_top3d.tscn"
 )
@@ -211,6 +221,14 @@ const BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M := -7.5
 const BASE_ROOFTOP_TRANSIT_COLLISION_TOP_M := 8.45
 static var _tower_solid_wall_mesh: Mesh
 static var _tower_solid_wall_preserves_palette := false
+# 资产声明的装配方式。实墙实际走 MultiMesh 批渲染（节点树被丢弃），若资产仍
+# 声明 per_instance_prefab 就是「声明与实际不符」——由 _assert_wall_instantiation()
+# 当场报错，避免后人按声明去改装配代码。
+static var _tower_solid_wall_declared_instantiation := ""
+# 装配基准 Y 偏移改为读资产声明的 origin_contract，不再从网格 AABB 反算。
+# 见 TowerGeometry3D.origin_offset_y()：美术换件时基准不随装饰件（门框等）漂移。
+static var _tower_solid_wall_origin_offset_y := 0.0
+static var _base99_solid_wall_origin_offset_y := 0.0
 static var _tower_floor_tile_mesh: Mesh
 static var _base99_solid_wall_mesh: Mesh
 static var _base99_floor_plain_mesh: Mesh
@@ -1115,7 +1133,7 @@ func _get_base99_floor_mesh(prefab: PackedScene, rivet: bool) -> Mesh:
 	if not rivet and _base99_floor_plain_mesh != null:
 		return _base99_floor_plain_mesh
 	var source := prefab.instantiate()
-	var mesh := _find_first_mesh(source)
+	var mesh := TOWER_GEOMETRY.resolve_visual_mesh(source)
 	source.free()
 	if rivet:
 		_base99_floor_rivet_mesh = mesh
@@ -1128,7 +1146,7 @@ func _get_tower_floor_tile_mesh() -> Mesh:
 	if _tower_floor_tile_mesh != null:
 		return _tower_floor_tile_mesh
 	var source := TOWER_FLOOR_TILE_PREFAB.instantiate()
-	_tower_floor_tile_mesh = _find_first_mesh(source)
+	_tower_floor_tile_mesh = TOWER_GEOMETRY.resolve_visual_mesh(source)
 	source.free()
 	return _tower_floor_tile_mesh
 
@@ -1243,6 +1261,16 @@ func _spawn_solid_wall_visual_instances(
 	var mesh := _get_base99_solid_wall_mesh() if uses_base99_visual else _get_tower_solid_wall_mesh()
 	if mesh == null or transforms.is_empty():
 		return
+	# 装配基准偏移来自资产声明的 origin_contract（bottom_center → 0）。
+	# 旧实现是「-mesh.get_aabb().position.y」反算，注释里写着「通用旧墙以几何中心为
+	# 原点、需抬高半层」——2026-09-19 实测证明该描述已过时：塔楼 v003 与基地墙的
+	# 网格 AABB 底面都在 y=0，反算结果恒为 0。改用声明值后，美术若加装饰件
+	# （门墙门框就下探 0.14m）也不会把整面墙顶高。
+	var visual_floor_offset_y := (
+		_base99_solid_wall_origin_offset_y
+		if uses_base99_visual
+		else _tower_solid_wall_origin_offset_y
+	)
 	var transforms_a: Array[Transform3D] = []
 	var transforms_b: Array[Transform3D] = []
 	for index in range(transforms.size()):
@@ -1252,14 +1280,7 @@ func _spawn_solid_wall_visual_instances(
 			else index
 		)
 		var wall_transform := transforms[index]
-		# 通用旧墙BoxMesh以几何中心为原点，需要抬高半层；基地99层正式GLB
-		# 已按底边中心为原点导出。基地视觉墙原生11.9m，原点仍贴楼面。
-		var visual_scale_y := 1.0
-		if uses_base99_visual:
-			wall_transform.basis = wall_transform.basis.scaled(
-				Vector3(1.0, visual_scale_y, 1.0)
-			)
-		wall_transform.origin.y += -mesh.get_aabb().position.y * visual_scale_y
+		wall_transform.origin.y += visual_floor_offset_y
 		if abs_segment_index % 2 == 0:
 			transforms_a.append(wall_transform)
 		else:
@@ -1329,11 +1350,25 @@ func _get_tower_solid_wall_mesh() -> Mesh:
 	if _tower_solid_wall_mesh != null:
 		return _tower_solid_wall_mesh
 	var source := TOWER_WALL_PREFAB.instantiate()
-	_tower_solid_wall_mesh = _find_first_mesh(source)
+	_tower_solid_wall_mesh = TOWER_GEOMETRY.resolve_visual_mesh(source)
 	# 资产侧声明该模块自带调色板：运行时不得再用主题 A/B 材质覆盖。
 	_tower_solid_wall_preserves_palette = bool(
 		source.get_meta("preserve_authored_palette", false)
 	)
+	_tower_solid_wall_origin_offset_y = TOWER_GEOMETRY.origin_offset_y(source)
+	_tower_solid_wall_declared_instantiation = str(
+		source.get_meta("runtime_instantiation", "")
+	)
+	# 本函数有 mesh 缓存，每进程只走一次；断言放这里正好只报一次。
+	# 实墙的装配路径是本文件的 _spawn_solid_wall_visual_instances → MultiMesh，
+	# 资产必须声明 batched_multimesh。声明成 per_instance_prefab 说明有人
+	# 按「逐 prefab 实例化」去过资产或读过契约卡，会得出错误结论。
+	if _tower_solid_wall_declared_instantiation == "per_instance_prefab":
+		push_error(
+			"DungeonRoom3D: 塔楼实墙 prefab 声明 runtime_instantiation=per_instance_prefab，"
+			+ "但运行时实际由 MultiMesh 批渲染承载（节点树被丢弃）。"
+			+ "请把 prp_tower_wall_solid_5m.tscn 改为 batched_multimesh。"
+		)
 	source.free()
 	return _tower_solid_wall_mesh
 
@@ -1342,19 +1377,10 @@ func _get_base99_solid_wall_mesh() -> Mesh:
 	if _base99_solid_wall_mesh != null:
 		return _base99_solid_wall_mesh
 	var source := BASE99_WALL_PLAIN_PREFAB.instantiate()
-	_base99_solid_wall_mesh = _find_first_mesh(source)
+	_base99_solid_wall_mesh = TOWER_GEOMETRY.resolve_visual_mesh(source)
+	_base99_solid_wall_origin_offset_y = TOWER_GEOMETRY.origin_offset_y(source)
 	source.free()
 	return _base99_solid_wall_mesh
-
-
-func _find_first_mesh(root: Node) -> Mesh:
-	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
-		return (root as MeshInstance3D).mesh
-	for child in root.get_children():
-		var found := _find_first_mesh(child)
-		if found != null:
-			return found
-	return null
 
 
 func _set_geometry_shadow_casting(root: Node, enabled: bool) -> void:
@@ -2008,24 +2034,26 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 	if door == null:
 		push_error("通用RoomDoor3D Prefab实例化失败")
 		return
+	# 门扇视觉二选一，两条都是正式美术，区别在语义而不是画质：
+	#   FACILITY（99F 基地）—— 滑升门，自带独立 logic_id 与状态灯，不随楼层主题换材质；
+	#   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
+	# 原先战斗房传 null 走程序化深色方块门板；2026-09-19 起统一换成正式门扇。
 	door.configure(
 		direction,
 		target_room_id,
 		theme.accent_color,
 		BASE99_DOOR_LIFT_PREFAB
 		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility")
-		else SAFE_ROOM_DOOR_LEAF_PREFAB
-		if room_type == "STAIR_LOBBY"
-		else null
+		else TOWER_DOOR_LEAF_PREFAB
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
 	door.set_meta("camera_lower_wall", direction in ["north", "south"])
-	if room_type == "STAIR_LOBBY":
-		# 门扇包自带静态碰撞，但它不会随升降门逻辑启用/禁用，必须让位给 RoomDoor3D
-		# 自己的升降碰撞，否则门永远开不了。
-		var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
-		if door_leaf != null:
-			_disable_static_collision_descendants(door_leaf)
+	# A 套门扇声明 visual_only 且不自带碰撞，本段对它是空跑。
+	# 保留为廉价保险：门扇包一旦又带上静态碰撞（B 套那个包就带），它不会随升降门
+	# 逻辑启用/禁用，必须让位给 RoomDoor3D 自己的升降碰撞，否则门永远开不了。
+	var door_leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
+	if door_leaf != null:
+		_disable_static_collision_descendants(door_leaf)
 	# 与 _build_tower_wall_run 同步：门偏移到沿墙中心最近模块位置 (5m 网格偶数段是 ±2.5m)。
 	var door_offset_along := float(get_meta("tower_wall_door_offset_%s" % direction, 0.0))
 	# 门扇停在墙件原点上：安全房墙件与塔楼墙件同样以原点坐边界网格线，门墙

@@ -283,40 +283,8 @@ func _build_ports(
 func _port_pair(
 	a_center: Vector2, a_size: Vector2, b_center: Vector2, b_size: Vector2
 ) -> Dictionary:
-	var delta := b_center - a_center
-	var along_x := absf(delta.x) >= absf(delta.y)
-	var a_side := ""
-	var b_side := ""
-	var a_length := 0.0
-	var b_length := 0.0
-	var a_axis := 0.0
-	var b_axis := 0.0
-	if along_x:
-		a_side = "east" if delta.x >= 0.0 else "west"
-		b_side = "west" if delta.x >= 0.0 else "east"
-		a_length = a_size.y
-		b_length = b_size.y
-		a_axis = a_center.y
-		b_axis = b_center.y
-	else:
-		a_side = "north" if delta.y >= 0.0 else "south"
-		b_side = "south" if delta.y >= 0.0 else "north"
-		a_length = a_size.x
-		b_length = b_size.x
-		a_axis = a_center.x
-		b_axis = b_center.x
-	var world_lane := ROOM_DOOR_LANE.resolve_shared_world_lane(
-		a_axis, a_length, b_axis, b_length, (a_axis + b_axis) * 0.5
-	)
-	return {
-		"a_side": a_side,
-		"a_lane": world_lane - a_axis,
-		"a_wall_length": a_length,
-		"b_side": b_side,
-		"b_lane": world_lane - b_axis,
-		"b_wall_length": b_length,
-		"world_lane": world_lane,
-	}
+	# 单一实现已上移到 RoomDoorLane.port_pair()，本处只做转发，避免第二份镜像。
+	return ROOM_DOOR_LANE.port_pair(a_center, a_size, b_center, b_size)
 
 
 func _build_level_plan(contract: Dictionary, template_meta: Dictionary) -> Dictionary:

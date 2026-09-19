@@ -641,7 +641,7 @@ func _process(delta: float) -> void:
 			_minimap_runtime_accumulator, MINIMAP_RUNTIME_INTERVAL
 		)
 		if _hud_floor_label != null and minimap != null:
-			var next_floor_text := "高塔外层 · %s" % minimap.get_floor_label()
+			var next_floor_text := _hud_floor_label_text()
 			if _hud_floor_label.text != next_floor_text:
 				_hud_floor_label.text = next_floor_text
 		if minimap != null and player != null:
@@ -652,6 +652,13 @@ func _process(delta: float) -> void:
 			minimap.set_enemy_positions(_get_minimap_enemy_positions())
 			if _full_map_control != null and is_instance_valid(_full_map_control):
 				_full_map_control.copy_state_from(minimap)
+
+
+## HUD 右上、小地图正上方那块「当前所处区域」标签的文案。
+## 塔楼口径是「高塔外层 · <层或 LIVE>」；单层独立关卡必须覆写它，
+## 否则会一直顶着塔楼语义（既没有「高塔外层」也没有楼层号）。
+func _hud_floor_label_text() -> String:
+	return "高塔外层 · %s" % minimap.get_floor_label()
 
 
 func _tick_enemy_preactivation(delta: float) -> void:

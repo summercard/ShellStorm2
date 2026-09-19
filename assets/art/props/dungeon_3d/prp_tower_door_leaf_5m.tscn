@@ -1,0 +1,60 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 段门扇（门板）- 自包含独立模块
+; 正式美术：tower_descent_3d/components/env_tower_door_leaf_5m_top3d.glb（v001）
+;   来源：tower_zones/battle/source/common_components/v006 批源里的「door_5m_通用包」
+;   （ROOT_door_5m_通用组件 / door_5m_门扇_输出 + door_5m_UI灯光_柔和自发光），
+;   按 godot-model-asset-import-standard 派生到塔楼 A 套；派生脚本与清单见
+;   tower_descent_3d/source/door_leaf_5m/。
+; 门洞净宽 2.2m（±1.1）× 净高 2.5m；板厚 0.18m；底面中心原点。
+;   默认朝向 +Z，与 A 套门墙共用同一条朝向约定；实例化时由脚本设 rotation 适配方位。
+;
+; 派生时绕竖轴 180°：源美术自述正面在 Blender +Y，经 YUP 导出会落到 Godot -Z，
+;   而塔楼 A 套硬要求 forward_axis=+Z。门扇在厚度轴上镜面对称（厚度包络 ±0.09 精确居中），
+;   所以这一步对当前外观是恒等变换 —— 照做是为了和门墙同约定：将来美术若做成一面对一面空
+;   （把手、门禁面板），代码侧不必再按房间方位补 180°。
+; 派生时 ROOT 空物体的世界偏移（展示阵列里的 (2.6, -69.34, 0)）已烘焙进顶点数据，
+;   GLB 根节点是恒等变换；顶点在世界空间朝下的面已在三角化之后剔除。
+;
+; 【可视包络 2.2 × 2.492 × 0.18 与结构包络 2.2 × 2.5 × 0.18 刻意分离】
+;   门扇最低点悬在组件原点上方 8mm（美术原始几何：关闭的门扇不该擦地）。
+;   派生脚本只翻朝向、不改尺寸，故如实声明 0.008..2.5；这 8mm 相对门高 0.3%，不可见，
+;   但必须登记，否则将来换美术时无从判断「底面到底对不对」。
+;   与 A 套门墙同一口径：门墙结构盒写 5×11.9×0.3、可视包络如实写 5×12.04×0.43。
+;
+; 本 Prefab 视觉专用（visual_only），不内嵌任何 StaticBody3D / CollisionShape3D。
+;   RoomDoor3D 自己生成升降门碰撞（2.2×2.5×0.42 @ y=1.25）并按开合启停，
+;   内嵌碰撞会与之重复阻挡、且不随门逻辑启停，门将永远开不了。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV（01/02/03/04 四个角色，由
+;   tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_door_leaf_5m_top3d.glb" id="1_visual"]
+
+[node name="PrpTowerDoorLeaf5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-DOOR-LEAF-5M"
+metadata/asset_version = "v001"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_door_leaf_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/door_clear_width_m = 2.2
+metadata/door_clear_height_m = 2.5
+metadata/panel_thickness_m = 0.18
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(2.2, 2.5, 0.18)
+metadata/visual_bounds_size_m = Vector3(2.2, 2.492, 0.18)
+metadata/panel_bottom_clearance_m = 0.008
+metadata/bounds_note = "结构包络 2.2×2.5×0.18 = 门洞净尺寸，与 TowerGeometry3D.DOOR_CLEAR_WIDTH_M/HEIGHT_M 逐值一致；可视包络 2.2×2.492×0.18 少掉的 0.008m 是门扇底边离地间隙（美术原始几何，非缺陷）。替换美术时先核对本条：结构包络由玩法与门洞决定，不得改。"
+metadata/visual_node_name = "ENV_TOWER_DOOR_LEAF_5M"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
+metadata/visual_only = true
+metadata/collision_owner = "RoomDoor3D"
+metadata/collision_note = "门扇不自带碰撞：RoomDoor3D._build 生成 2.2×2.5×0.42 @ y=1.25 的升降碰撞，开门即禁用。"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/open_mode = "vertical_lift"
+metadata/panel_origin_policy = "bottom_center"
+metadata/attach_note = "底边中心原点；接入时 visual.position.y = -TowerGeometry3D.DOOR_CLEAR_HEIGHT_M * 0.5 即可落在 RoomDoor3D 的 DoorPanel 动画根上（开门是垂直升起而非绕铰链旋转，故原点无需落在铰链轴）。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -154,7 +154,10 @@ func _ready() -> void:
 	await _verify_weapon_matrix(failures)
 	# 永久结构代理使所有房间的墙/地/门框从开局常驻；此处只拦截明显的重复
 	# 实例化，正式分账硬预算继续由 verify_3d_performance_budget 阻断。
-	if node_peak > 2700:
+	# 基线登记：门扇由程序化 BoxMesh 换成 A 套正式门扇后，每道门 +2 节点
+	# （ImportedDoorVisual 节点 + 其网格实例），×38 门共 +76。峰值 2627 → 2703。
+	# 上限同步 +80 到 2780，与 verify_3d_performance_budget 的余量口径一致。
+	if node_peak > 2780:
 		failures.append("3D level exceeds prototype node budget: %d" % node_peak)
 	_finish(failures, node_peak)
 

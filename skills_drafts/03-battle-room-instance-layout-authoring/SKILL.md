@@ -48,6 +48,15 @@ metadata:
 4. 房间尺寸通过组件数量和布局表达，不通过拉伸 5m 组件。
 5. 布局源可包含白模参考和展示相机，但导出的 `room_layout.json` 只能包含运行组件和明确的房间级挂点。
 6. 具体房间可有房间专属摆位，但不能产生房间专属组件资产。
+7. 读取白模对象变换必须使用 `matrix_world`；禁止直接把 `object.location` 当世界/房间局部坐标，否则父级或集合变换会静默丢失。
+8. Library Link 只加载 Collection datablock，禁止再把被链接的组件集合本体挂到 `scene.collection.children`；房间场景根只能看见 `ROOM_LAYOUT_INSTANCES` 的 Collection Instance，不能同时显示组件库散件。
+9. 门墙实例根点必须来自完整5m门槽的 `wall_slot_center_m` 与墙边界根平面，禁止使用左/右门柱原点（典型偏差 `±1.8m`）或门楣原点（典型高度 `2.8m`）。
+10. 房间尺寸是逻辑边界；墙组件根点落在 `±width/2`、`±depth/2` 的5m网格边界。0.3m墙厚属于视觉包络，允许外包络比逻辑尺寸多0.3m；不得为追求视觉包络等于房间尺寸而把根点内缩0.15m。
+11. 门槽必须复用游戏关卡的5m lane规则：奇数段墙可取0m中心槽；偶数段墙没有0m槽，取与运行时相同的最近合法中心（如30m墙取`-2.5m`，不是`0m`）。布局 `ports[].offset_m`、门墙实例和白模 `wall_slot_center_m` 必须一致。
+12. 组件 `front_axis=-Z` 时，南北墙必须让展示面朝房内：Blender +Y 北墙使用 180°，-Y 南墙使用 0°；东墙 90°、西墙 -90°。门墙视觉实例、门扇/RoomDoor3D 旋转必须使用同一方向表，禁止只旋转门墙而不旋转门扇。
+13. 白盒若只表达结构槽位，房间布局脚本必须从房间级需求/参考图补入已验收共享设施实例（如 `west_desk`、`island_00`），并记录到 `slot_role=facility`；不能因白盒没有设施对象而把正式房间做成空房。
+14. 在链接任何共享组件前，必须逐 Collection 断言 `instance_offset=(0,0,0)`；该偏移会在 Collection Instance 阶段额外作用，不能由 ROOT/Mesh 坐标归零替代。至少对普通墙、门墙、门扇做同族差异检查，禁止只抽查普通墙后推断门组件正确。
+15. 门扇的运行时所有者是 `RoomDoor3D` 时，Blender 房间源必须在同一门槽放置 `door_5m` 的 editor-only 预览实例以供肉眼验收，但 `room_layout.json` 不得序列化该预览；运行时只由 `RoomDoor3D` 生成一份可动画门扇，避免 Blender 无门可看或 Godot 重复门扇。
 
 ## 撤离房实例规则
 

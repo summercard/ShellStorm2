@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/Dungeon3D.tscn" id="1_base"]
+[ext_resource type="Script" path="res://src/world3d/TowerDescent3D.gd" id="2_tower"]
+[ext_resource type="Resource" path="res://data/map_themes/iron_frontier.tres" id="3_gameplay"]
+[ext_resource type="Resource" path="res://assets/art/environments/dungeon_3d/env_iron_frontier_kit_top3d_v001.tres" id="4_visual"]
+
+[sub_resource type="Environment" id="Environment_editor_runtime_match"]
+background_mode = 1
+background_color = Color(0.58, 0.62, 0.64, 1)
+ambient_light_source = 3
+ambient_light_color = Color(0.45, 0.52, 0.6, 1)
+ambient_light_energy = 0.01
+reflected_light_source = 2
+tonemap_mode = 2
+tonemap_exposure = 1.18
+fog_enabled = true
+fog_light_color = Color(0.4, 0.48, 0.55, 1)
+fog_light_energy = 0.36
+fog_density = 0.04
+
+[node name="ExpeditionLevel01_3D" instance=ExtResource("1_base")]
+script = ExtResource("2_tower")
+gameplay_theme = ExtResource("3_gameplay")
+visual_theme = ExtResource("4_visual")
+expedition_mode = true
+expedition_run_id = "expedition_01"
+return_scene_path = "res://scenes/TowerDescent3D.tscn"
+
+[node name="WorldEnvironment" parent="." index="0"]
+environment = SubResource("Environment_editor_runtime_match")
+
+[node name="DirectionalLight3D" parent="." index="1"]
+transform = Transform3D(-0.70710677, -0.61237246, 0.35355335, 0, 0.49999997, 0.86602545, -0.70710677, 0.61237246, -0.35355335, 0, 0, 0)
+
+[node name="Blocks" type="Node3D" parent="." index="9"]
+metadata/naming_contract = "WORLD-BLOCKS-r1"
+metadata/runtime_owner = "TowerDescent3D"
+
+[node name="Expedition" type="Node3D" parent="Blocks" index="0"]
+metadata/block_id = "expedition"
+metadata/display_name = "远征关卡01"
+metadata/level_code = "远征关卡01"
+metadata/level_number = 1
+metadata/setting_name = "远征前哨站"
+metadata/floor_range = "单层"
+metadata/asset_ids = Array[String]([])
+metadata/runtime_owner = "TowerDescent3D"
+metadata/source_blends = Array[String]([])
+metadata/production_stage = "whitebox"

@@ -13,6 +13,7 @@ metadata/visual_height_m = 11.9
 metadata/visual_top_clearance_m = 0.1
 metadata/door_clear_width_m = 2.2
 metadata/door_clear_height_m = 2.5
+metadata/visual_node_name = "wall_door_西墙带门墙体_主体_金属哑光反光"
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "-Z"
 metadata/visual_only = true

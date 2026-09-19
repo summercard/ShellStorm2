@@ -1,5 +1,7 @@
 # 独立关卡出生安全房「退出战局」门：离场契约修正
 
+> <span style="color:#777777">**[名称已更新｜2026-09-19]** 本文的门禁场景 `verify_rogue_map_segment_flow` 已随「远征关卡01」替换被删除，其断言组并入 `verify_expedition_level01_flow` 的 `_verify_expedition_exit_contract`；运行时节点名改为 `ExpeditionExitWarning`，场景为 `ExpeditionLevel01_3D.tscn`。**契约内容本身仍然有效**（保持不变）。见[远征关卡01制作记录](2026-09-19_expedition_level01_buildout.md)。</span>
+
 日期：2026-09-19；记录ID：WORLD-ENTRY-EXIT-2026-09-19；功能ID：WORLD-ENTRY；工程版本：0.1.0。
 设计依据与修订：用户设计（2026-09-19 复现路径补充），主设计见[关卡生成与爬楼](../05_技术施工_关卡生成与爬楼.md) §3.0、[存档结算与复活](../09_技术施工_存档结算与复活.md) §5.1 离场语义表。
 代码基线：提交 `90fc00e6`；本次修复已提交（见文末"提交"节）。

@@ -259,9 +259,9 @@ func _validate_stair_approach_wall_modules(
 			visual_count += 1
 			if (
 				not bool(node.get_meta("uses_native_wall_visual_height", false))
-				or str(node.get_meta("source_visual_version", "")) != "v003"
+				or str(node.get_meta("source_visual_version", "")) != "v004"
 			):
-				failures.append("%s stair approach wall does not use native v003 height" % node.name)
+				failures.append("%s stair approach wall does not use native v004 height" % node.name)
 			var mesh_instance := _find_first_mesh_instance(node)
 			if mesh_instance == null or mesh_instance.mesh == null:
 				failures.append("%s stair approach wall has no visual mesh" % node.name)

@@ -49,7 +49,7 @@
         {
           "port_id": "P1",
           "target": "hub",
-          "side": "south",
+          "side": "north",
           "lane_m": 0.0,
           "wall_length_m": 15.0
         }
@@ -77,7 +77,7 @@
         {
           "port_id": "P1",
           "target": "entry",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
@@ -147,7 +147,7 @@
         {
           "port_id": "P1",
           "target": "branch_01",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
@@ -161,7 +161,7 @@
         {
           "port_id": "P3",
           "target": "main_04",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         }
@@ -189,14 +189,14 @@
         {
           "port_id": "P1",
           "target": "main_03",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
         {
           "port_id": "P2",
           "target": "main_05",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         }
@@ -224,14 +224,14 @@
         {
           "port_id": "P1",
           "target": "main_04",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
         {
           "port_id": "P2",
           "target": "main_06",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         }
@@ -259,7 +259,7 @@
         {
           "port_id": "P1",
           "target": "main_05",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
@@ -378,7 +378,7 @@
         {
           "port_id": "P3",
           "target": "main_10",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 40.0
         }
@@ -406,14 +406,14 @@
         {
           "port_id": "P1",
           "target": "exit",
-          "side": "south",
+          "side": "north",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         },
         {
           "port_id": "P2",
           "target": "main_09",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         }
@@ -441,7 +441,7 @@
         {
           "port_id": "P1",
           "target": "main_10",
-          "side": "north",
+          "side": "south",
           "lane_m": 0.0,
           "wall_length_m": 15.0
         }
@@ -476,7 +476,7 @@
         {
           "port_id": "P2",
           "target": "main_03",
-          "side": "north",
+          "side": "south",
           "lane_m": -2.5,
           "wall_length_m": 30.0
         }

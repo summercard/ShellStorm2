@@ -5,8 +5,9 @@
 ;   5m × 0.3005m 厚 × 5m；2 材质（02_细腻哑光_青绿大面 / 01_精工金属_紫色骨架）。
 ;   板厚居中（几何 Y=-0.15..+0.1505），与运行时的 -FLOOR_THICKNESS*0.5 偏移
 ;   共同把可视顶面对齐到承重面 Y=0 —— 与 100F/98F 已验证的正式地砖同源同版。
-; 根节点下 ImportedModel 内的 MeshInstance3D 名为 FloorTile_5m，
-; 与 TowerFloorStage3D 的 _mesh_from_scene() 取首个网格的调用兼容。
+; 根节点下 ImportedModel 内的 MeshInstance3D 名为 FloorTile_5m，由
+; metadata/visual_node_name 显式声明；TowerFloorStage3D 的 _resolve_visual_mesh()
+; 按该声明取网格，不再依赖「递归取第一个 MeshInstance3D」的隐式约定。
 ; preserve_authored_palette：禁止运行时用暖色 A/B 主题地砖材质覆盖，
 ;   保留美术自带双表面 PaletteUV。
 ; 本 Prefab 视觉专用（visual_only）。楼板承重碰撞由 TowerFloorStage3D 的
@@ -22,9 +23,15 @@ metadata/grid_unit_m = 5.0
 metadata/thickness_m = 0.3005
 metadata/visual_top_offset_y = -0.15
 metadata/origin_contract = "centered_slab"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.3005, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.3005, 5)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同；板厚居中，承重面由运行时的 -FLOOR_THICKNESS_M*0.5 偏移对齐到 Y=0。地砖四向对称，forward_axis 仅用于满足统一契约。"
+metadata/visual_node_name = "FloorTile_5m"
 metadata/visual_only = true
 metadata/collision_owner = "TowerFloorStage3D.FloorSupport"
 metadata/shadow_policy = "cast_and_receive"
 metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "batched_multimesh"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

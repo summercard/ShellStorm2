@@ -54,6 +54,10 @@ metadata:
 
 Blender 布局是视觉摆放事实源。Godot 不得再手工摆第二套视觉组件。
 
+运行时门不是可选项：当布局包含 `slot_role=door_wall` 时，装配器必须从同一门墙实例位置创建对应的 `RoomDoor3D`，并校验方向、目标房间和世界坐标误差不超过0.01m。视觉门墙与游戏门的碰撞责任必须分离，不能只数 PackedScene 组件就宣称门已接入。
+
+门验收必须同时证明 `RoomDoor3D/DoorPanel/ImportedDoorVisual` 存在且其后代至少有一个 `MeshInstance3D`；只验证 `RoomDoor3D` 节点数量和位置不能证明门扇可见。若 Blender 源包含 editor-only 门扇预览，运行时必须忽略它，由 `RoomDoor3D` 独占门扇视觉与动画。
+
 ### 分支 B：没有具体房间 Blender 布局
 
 判定条件：没有合格的具体房间 `room_layout.json`，但存在：

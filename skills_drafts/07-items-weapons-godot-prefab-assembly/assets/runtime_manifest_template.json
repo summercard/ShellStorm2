@@ -1,0 +1,105 @@
+{
+  "schema": "shellstorm2.items_weapons.runtime_manifest",
+  "schema_version": 1,
+  "generated_by": "07-items-weapons-godot-prefab-assembly",
+
+  "asset_id": "WPN-GUN-BP-PISTOL",
+  "display_name_zh": "豌豆手枪",
+  "branch": "weapon",
+  "logical_id": "bp_pistol",
+  "asset_version": "v001",
+
+  "source": {
+    "blend_path": "assets/art/items_weapons/weapons/pea_pistol/source/wpn_pea_pistol_source_v001.blend",
+    "blend_sha256": null,
+    "template_used": "assets/art/items_weapons/_templates/wpn/wpn_template_source_v001.blend"
+  },
+
+  "export": {
+    "glb_path": "assets/art/items_weapons/weapons/pea_pistol/components/wpn_pea_pistol_visual_top3d.glb",
+    "glb_sha256": null,
+    "rig_glb_path": "assets/art/items_weapons/weapons/pea_pistol/rig/wpn_pea_pistol_skeleton_v001.glb",
+    "exported_collections": ["02_游戏输出_整合模型", "10_骨骼与动画", "80_挂点_交互接口"],
+    "excluded_collections": ["01_制作组件_已统一材质", "90_展示环境_灯光相机"],
+    "embedded_images": 0,
+    "import_settings": {
+      "gltf_embedded_image_handling": 0,
+      "palette_linked": true
+    }
+  },
+
+  "runtime": {
+    "stable_prefab": "assets/art/items_weapons/weapons/pea_pistol/runtime/wpn_pea_pistol_root_top3d_v001.tscn",
+    "root_node": "WeaponRoot",
+    "root_scale": [1.0, 1.0, 1.0],
+    "nodes": {
+      "visual": "Visual",
+      "world_collision": "WorldCollision",
+      "held_collision": "HeldCollision",
+      "interaction": null
+    },
+    "metadata": {
+      "asset_version": "v001",
+      "asset_id": "WPN-GUN-BP-PISTOL",
+      "logical_id": "bp_pistol",
+      "branch": "weapon",
+      "animation_tier": "tier_1_articulated",
+      "collision_owner": "Prefab自身"
+    }
+  },
+
+  "materials": {
+    "roles_used": [
+      "01_精工金属_枪身骨架",
+      "02_细腻哑光_枪身大面",
+      "03_清漆反光_枪身点缀"
+    ],
+    "role_limit": 3,
+    "emissive_roles": 0,
+    "surface_count": 3,
+    "palette_texture": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
+    "palette_sampling": "nearest"
+  },
+
+  "anchors": {
+    "required": ["WeaponRoot", "GripSocket", "MuzzleSocket"],
+    "present": ["WeaponRoot", "GripSocket", "MuzzleSocket", "MagazineSocket"],
+    "alignment_target": "角色侧 WeaponSocket",
+    "runtime_compensation": false
+  },
+
+  "animation": {
+    "tier": "tier_1_articulated",
+    "actions": ["reload_eject", "reload_insert", "fire"],
+    "event_alignment_verified": false
+  },
+
+  "collision": {
+    "world_collision": "StaticBody3D",
+    "held_collision": "Area3D",
+    "damage_detection": "运行时扫掠",
+    "separated": true
+  },
+
+  "geometry": {
+    "bounds_m": [0.24, 0.22, 0.72],
+    "origin_m": [0.0, 0.0, 0.0],
+    "local_forward": "-Z",
+    "muzzle_forward_deg_error": null
+  },
+
+  "validation": {
+    "import_ok": false,
+    "independent_load_ok": false,
+    "visual_check_image": null,
+    "blocking_issues": []
+  },
+
+  "ledger_writeback": {
+    "domain_key": "weapons",
+    "prefab_page": "3D-武器",
+    "pending": true
+  },
+
+  "next_stage": "08-items-weapons-code-integration"
+}

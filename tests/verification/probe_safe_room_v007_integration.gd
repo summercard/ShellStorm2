@@ -215,25 +215,34 @@ func _probe_rooms() -> void:
 				absf(door.position.z) if direction in ["north", "south"] else absf(door.position.x)
 			)
 			var leaf := door.get_node_or_null("DoorPanel/ImportedDoorVisual")
-			var dead_leaf_bodies := 0
+			var leaf_bodies := 0
+			var live_leaf_bodies := 0
 			if leaf != null:
 				for body_value in leaf.find_children("*", "StaticBody3D", true, false):
-					if (body_value as StaticBody3D).collision_layer == 0:
-						dead_leaf_bodies += 1
+					leaf_bodies += 1
+					if (body_value as StaticBody3D).collision_layer != 0:
+						live_leaf_bodies += 1
 			print(
-				"      door %-5s pos=%s rot_y=%.1f 墙面距离=%.2f 门扇包=%s 已去重碰撞体=%d"
+				"      door %-5s pos=%s rot_y=%.1f 墙面距离=%.2f 门扇包=%s 门扇内碰撞体=%d(活%d)"
 				% [
 					direction,
 					_vector3_text(door.position),
 					rad_to_deg(door.rotation.y),
 					lateral,
 					"有" if leaf != null else "无",
-					dead_leaf_bodies,
+					leaf_bodies,
+					live_leaf_bodies,
 				]
 			)
 			_expect(is_equal_approx(lateral, 7.5), "门扇未落在 7.5 边界网格线", doors)
 			_expect(leaf != null, "门扇包未接入", doors)
-			_expect(dead_leaf_bodies >= 1, "门扇包自带碰撞未去重", doors)
+			# 2026-09-19：安全房门扇换成塔楼 A 套正式美术（prp_tower_door_leaf_5m），
+			# 它声明 visual_only 且**不自带碰撞**。旧断言要求「门扇包自带碰撞被去重」，
+			# 那是 B 套 door_5m 包（自带 DoorCollision StaticBody3D）的历史形态 ——
+			# 它正是最后一处冗余碰撞。契约已改为碰撞责任单一化：
+			# 门扇不得携带任何活的碰撞，门洞阻挡唯一由 RoomDoor3D 的升降碰撞负责。
+			_expect(leaf_bodies == 0, "门扇包不应自带碰撞（碰撞责任单一化）", doors)
+			_expect(live_leaf_bodies == 0, "门扇包内不得有启用的碰撞体", doors)
 			# 南北向门洞开门后不能留实体碰撞：必须有唯一 camera-only 门墙代理
 			# 承接 TowerDescent3D 的镜头探针（与旧塔楼拼装路径同契约）。
 			var proxies := room.find_children(

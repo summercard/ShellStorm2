@@ -70,7 +70,7 @@ assets/art/environments/tower_zones/<block_id>/runtime/common_components/<compon
 
 历史 `source/common_components/v###/` 目录继续兼容读取；新组件源不得再创建到房间种类目录或具体房间编号目录。
 
-4. 组件根必须稳定；建筑模块默认底部中心原点，设施默认底部贴地；不得通过整体非等比缩放修正尺寸。
+4. 组件根必须稳定；建筑模块默认底部中心原点，设施默认底部贴地；不得通过整体非等比缩放修正尺寸。对将被 `Collection Instance` 链接到房间的每个输出 Collection，还必须显式验证 `collection.instance_offset == (0,0,0)`；只把 ROOT 与 Mesh 归零不够，残留的集合实例偏移会在房间中额外平移整个组件。
 5. 输出主体与自发光为独立网格；保留四类材质角色、PaletteUV、公共色盘外链和材质索引。
 6. 组件拆解文件必须能单独打开、单独渲染、单独验证；不要只保留房间总场景引用。
 7. 生成组件源版本，不覆盖房间种类源，也不覆盖历史组件源。
@@ -115,4 +115,5 @@ runtime_logic_owner = gameplay layer, not component
 - 禁止输出房间专用整屋 GLB/PackedScene。
 - `room_owned_geometry` 对后续实例布局必须为 `false`。
 - 所有组件必须有 AssetID、稳定原点、包络、旋转和来源追溯。
+- 锚点验收必须同时覆盖三层：ROOT 对象变换、Mesh 相对 ROOT 的局部变换、输出 Collection 的 `instance_offset`。三层任一非零都不得交给房间布局；尤其要做同族差异检查（普通墙、门墙、门扇），防止只有少数组件残留制作场景偏移而被整体抽查漏过。
 - 源文件必须通过范围锁定、材质、UV、尺寸和包络验收后，才可交给 `godot-model-asset-import-standard`。

@@ -92,6 +92,74 @@ static func resolve_shared_world_lane(
 	)
 
 
+## 一对同轴邻房之间共享门槽的推导结果。
+##
+## 这是「父子房几何 → 门槽」的唯一实现：白盒导出工具、设计源加载器、关卡校验器
+## 必须共用本函数，禁止各自复刻（历史病根见类头注释）。
+## 返回键：a_side / a_lane / a_wall_length / b_side / b_lane / b_wall_length / world_lane。
+## 坐标语义：a_lane / b_lane 是**相对各自墙中心线**的偏移，world_lane 是绝对坐标。
+static func port_pair(
+	a_center: Vector2, a_size: Vector2, b_center: Vector2, b_size: Vector2
+) -> Dictionary:
+	var delta := b_center - a_center
+	var along_x := absf(delta.x) >= absf(delta.y)
+	var a_side := ""
+	var b_side := ""
+	var a_length := 0.0
+	var b_length := 0.0
+	var a_axis := 0.0
+	var b_axis := 0.0
+	if along_x:
+		a_side = "east" if delta.x >= 0.0 else "west"
+		b_side = "west" if delta.x >= 0.0 else "east"
+		a_length = a_size.y
+		b_length = b_size.y
+		a_axis = a_center.y
+		b_axis = b_center.y
+	else:
+		# 南北约定必须与运行时一致：planar +y 对应世界 +z，即"南"。
+		# FloorPlanGenerator._stair_reservation_rect() 用 "north": Vector2.UP(-y)，
+		# TowerDescent3D._direction_between() 用 z 减小为 north —— 两者同向。
+		# 本处原写作 delta.y >= 0 → "north"，与上述两处相反，属 S1 导出工具的
+		# 既有缺陷（当时无消费者故未暴露）；提为唯一实现时一并修正。
+		a_side = "north" if delta.y < 0.0 else "south"
+		b_side = "south" if delta.y < 0.0 else "north"
+		a_length = a_size.x
+		b_length = b_size.x
+		a_axis = a_center.x
+		b_axis = b_center.x
+	var world_lane := resolve_shared_world_lane(
+		a_axis, a_length, b_axis, b_length, (a_axis + b_axis) * 0.5
+	)
+	return {
+		"a_side": a_side,
+		"a_lane": world_lane - a_axis,
+		"a_wall_length": a_length,
+		"b_side": b_side,
+		"b_lane": world_lane - b_axis,
+		"b_wall_length": b_length,
+		"world_lane": world_lane,
+	}
+
+
+## 两房中心沿主轴方向的净距，已扣除两端半尺寸（即走廊长度）。
+## 非主轴方向的分量不参与计算 —— 同轴性由 lateral_offset() 单独把关。
+static func corridor_clear(
+	a_center: Vector2, a_size: Vector2, b_center: Vector2, b_size: Vector2
+) -> float:
+	var delta := b_center - a_center
+	var along_x := absf(delta.x) >= absf(delta.y)
+	if along_x:
+		return maxf(0.0, absf(delta.x) - (a_size.x + b_size.x) * 0.5)
+	return maxf(0.0, absf(delta.y) - (a_size.y + b_size.y) * 0.5)
+
+
+## 两房中心的横向偏移（非主轴方向的分量）。> LATERAL_TOLERANCE_M 即不共轴。
+static func lateral_offset(a_center: Vector2, b_center: Vector2) -> float:
+	var delta := (b_center - a_center).abs()
+	return delta.y if delta.x >= delta.y else delta.x
+
+
 ## 门槽校验：返回错误列表（空数组 = 通过）。
 static func validate_port_lane(length_m: float, lane_offset_m: float, tolerance := 0.001) -> Array[String]:
 	var errors: Array[String] = []

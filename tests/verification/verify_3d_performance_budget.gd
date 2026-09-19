@@ -26,8 +26,16 @@ func _ready() -> void:
 	# 固定 CanvasLayer HUD 与房间流送节点分账：HUD 不会随探索增长，但仍有独立上限和总量上限。
 	# 结构代理永久驻留后，初始节点包含全部已生成房间的墙/地面/门框；
 	# 动态细节仍流送，持续帧节拍与完全探索上限保持原有硬门禁。
-	if initial_world_nodes > 2400:
-		failures.append("Permanent structural proxy world exceeded 2400 nodes: %d" % initial_world_nodes)
+	#
+	# 2026-09-19 基线重定（门扇换成正式美术）：
+	#   战斗房门扇原先是脚本建的程序化方块（DoorPanel/ProceduralDoorPanel），
+	#   每个门 5 个节点；换成 A 套正式门扇 prefab 后每门 7 个节点
+	#   （多出 prefab 根 + GLB 根两层），38 扇门共 +76。
+	#   实测：world 2195 -> 2271，total 2473 -> 2549（探针 probe_door_leaf_node_cost）。
+	#   上下限各 +80，保持与原限额相同的绝对余量（world 205 -> 209，total 7 -> 11）。
+	#   注意 HUD 自己的两条上限（171 / 190）仍是既有红项，与本次无关，未改动。
+	if initial_world_nodes > 2480:
+		failures.append("Permanent structural proxy world exceeded 2480 nodes: %d" % initial_world_nodes)
 	# ESC画面设置页与0键性能面板增加27个静态Control；均不随房间探索增长，
 	# 性能面板隐藏时也不采样。雷达下新增唯一世界时间Label，固定壳预算为171。
 	if hud_shell_nodes > 171:
@@ -36,8 +44,8 @@ func _ready() -> void:
 		failures.append("Shared HUD 3D item preview exceeded 20 fixed nodes: %d" % hud_preview_nodes)
 	if hud_nodes > 190:
 		failures.append("HUD shells + shared 3D preview exceeded 190 fixed nodes: %d" % hud_nodes)
-	if initial_nodes > 2480:
-		failures.append("Permanent structural proxy world + HUD exceeded 2480 total nodes: %d" % initial_nodes)
+	if initial_nodes > 2560:
+		failures.append("Permanent structural proxy world + HUD exceeded 2560 total nodes: %d" % initial_nodes)
 
 	var generation := dungeon.get_generation_snapshot()
 	var max_room_build_ms := 0.0

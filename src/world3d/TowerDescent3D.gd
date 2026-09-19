@@ -163,6 +163,8 @@ var _floor_layout_plan_conflicts: Array[String] = []
 var _planned_floor_indices: Array[int] = []
 var _boss_descent_gate_edges: Dictionary = {}
 var _airlock_front_edges: Dictionary = {}
+## 远征关卡入口门（安全屋→01 号房）：与塔楼 floor_seed_gate 同语义，固定免费通行。
+var _expedition_entry_gate_edges: Dictionary = {}
 var _boss_descent_key_count := 0
 var _level_elevator_edge := ""
 var _last_bundle_room_count := 0
@@ -197,50 +199,134 @@ var _corridor_wall_module_mesh: Mesh
 var _initial_loop_gate_armed := false
 var _initial_loop_gate_sealed := false
 var _initial_loop_retreat_overlay: Control = null
-var _standalone_exit_overlay: Control = null
+var _expedition_exit_overlay: Control = null
 
-# 独立 Rogue 地图配置：复用 98—95 生成/美术/玩法，但不含 100F 天台与 99F 基地。
-# 通过场景继承的 .tscn 覆盖下面两个导出项来开启；旧塔楼默认保持 false/空。
-const RUNTIME_MAP_SCENE_BY_ID := {
-	"rogue_map_01": "res://scenes/RogueMap01TowerSegment3D.tscn",
-}
+# 远征关卡01：独立单层关卡，复用 Dungeon3D 的战斗/命运/掉落/撤离管线，
+# 但不含 100F 天台与 99F 基地，也不生成任何楼梯与电梯。
+# 由关卡场景 `scenes/ExpeditionLevel01_3D.tscn` 覆盖下面两个导出项来开启；塔楼默认 false/空。
+# ⚠️ 该场景**只继承公共关卡基座 `scenes/Dungeon3D.tscn`**，不再继承塔楼关卡场景
+# `scenes/TowerDescent3D.tscn`——塔楼内容因此根本不参与加载，而不是靠运行时逐条排除。
+# 本文件里所有 `is_expedition()` 分支仍是实测必需（同一份脚本服务两种关卡），
+# 但它们已不再是「干净场景」的保证；保证在场景结构本身（见 verify_expedition_level01_flow）。
+#
+# 关卡构成（规划器见 FloorPlanGenerator.generate_expedition）：
+#   入口安全屋 15×15（id=start） → 内容房 room_01…room_05（各 25×25，种子随机排布）
+#   → 撤离房 extraction（25×25）。单层 floor_index = EXPEDITION_LAYER_INDEX。
+const EXPEDITION_LAYER_INDEX := 0
+## 默认远征关卡的设计源 id。真正的取值走 `get_expedition_level_id()`：
+## 优先场景显式声明的 `expedition_plan_id`，其次运行标识 `expedition_run_id`，
+## 都为空才回退到这里。三个值同源不是巧合 —— 关卡 id、存档标识、设计源目录名
+## 在远征关卡里是同一个东西，拆成三份只会制造「改一处漏两处」。
+const EXPEDITION_PLAN_KEY := "expedition_01"
+## 塔楼关卡的设计源 ID（05.2 §8 S3 接缝用）。与 EXPEDITION_PLAN_KEY 同为
+## LevelPlanLoader 的目录名，两套关卡表并存互不影响。
+const BATTLE_LEVEL_ID := "battle_level01"
 
-@export var standalone_rogue: bool = false
-@export var rogue_map_id: String = ""
+@export var expedition_mode: bool = false
+## 运行时标识：进存档的隔离标识，也是续局路由的键。关卡场景必须显式声明。
+@export var expedition_run_id: String = ""
+## 设计源 id（`source/art/whitebox/tower_zones/<id>/`）。留空则跟随 expedition_run_id。
+## 单独留一个出口是为了让「同一份设计源、两个不同 run_id」这种对照实验不必复制目录。
+@export var expedition_plan_id: String = ""
 
-func is_standalone_rogue() -> bool:
-	return standalone_rogue
+func is_expedition() -> bool:
+	return expedition_mode
 
-func get_rogue_map_id() -> String:
-	return rogue_map_id
+func get_expedition_run_id() -> String:
+	return expedition_run_id
 
-# 运行时存档隔离 ID：独立图返回自身 rogue_map_id，旧塔楼/未设置时为空（兼容旧档）。
+
+## 本关的设计源 id（LevelPlanLoader 的 level_id）。
+func get_expedition_level_id() -> String:
+	if not expedition_plan_id.is_empty():
+		return expedition_plan_id
+	if not expedition_run_id.is_empty():
+		return expedition_run_id
+	return EXPEDITION_PLAN_KEY
+
+
+## 本关的玩家可见名。取自 GameDesignConfig 的关卡清单；未登记的 run_id 回退到默认关卡名。
+func get_expedition_display_name() -> String:
+	return GameDesignConfig.expedition_level_display_name(expedition_run_id)
+
+
+## HUD 地图区域标签（小地图正上方）的远征口径：远征关卡既没有「高塔外层」，
+## 也没有楼层号，改写为「<关卡名> · 单层」。塔楼仍走父类的「高塔外层 · <层>」。
+func _hud_floor_label_text() -> String:
+	if is_expedition():
+		return "%s · 单层" % get_expedition_display_name()
+	return super()
+
+
+## 远征关卡的房间标签（HUD 顶栏）。远征是单层独立关卡，不存在 100F 天台与 99F 基地，
+## 因此不能沿用塔楼的「<层>F · <区>」口径，改写为「<关卡名> · <房间定位>」。
+func _expedition_room_label(room: DungeonRoom3D) -> String:
+	var level_name := get_expedition_display_name()
+	if room.room_id == "start":
+		return "%s · 入口安全屋" % level_name
+	if room.room_type == "EXTRACTION":
+		return "%s · 撤离点" % level_name
+	var order := room.room_id.trim_prefix("room_")
+	if order != room.room_id and not order.is_empty():
+		return "%s · %s号房 · %s" % [level_name, order, _room_display_name(room.room_type)]
+	return "%s · 探索区 · %s" % [level_name, _room_display_name(room.room_type)]
+
+
+## 续局路由：run_id → 场景路径。由 GameDesignConfig 的远征关卡清单派生 ——
+## 新增关卡只登记清单即可，这里不再各写一份路径（漏一处就是「续局进错关」）。
+func _runtime_map_scene_by_run_id() -> Dictionary:
+	var result: Dictionary = {}
+	for level_id in GameDesignConfig.expedition_level_ids():
+		var run_id := GameDesignConfig.expedition_run_id(level_id)
+		var scene := GameDesignConfig.expedition_level_scene(level_id)
+		if not run_id.is_empty() and not scene.is_empty():
+			result[run_id] = scene
+	return result
+
+
+# 运行时存档隔离 ID：远征关卡返回自身 expedition_run_id，塔楼/未设置时为空（兼容旧档）。
 func get_runtime_map_id() -> String:
-	return rogue_map_id
+	return expedition_run_id
 
-# 独立图计划楼层（显示层号）：98/97/96/95。
-func get_standalone_planned_floor_numbers() -> Array[int]:
-	var numbers: Array[int] = []
+# 远征关卡是单层关卡：已规划层索引固定为 [EXPEDITION_LAYER_INDEX]。
+func get_expedition_planned_floor_numbers() -> Array[int]:
+	var layers: Array[int] = []
 	for floor_index_value in _floor_plan_snapshots.keys():
-		numbers.append(100 - int(floor_index_value))
-	numbers.sort()
-	return numbers
+		layers.append(int(floor_index_value))
+	layers.sort()
+	return layers
 
-# 独立图终端楼层：95F 作为本地图终端 Boss。
-func get_standalone_terminal_floor_number() -> int:
-	return 95
+# 远征关卡唯一层索引。
+func get_expedition_layer_index() -> int:
+	return EXPEDITION_LAYER_INDEX
+
+# 远征关卡的房间 ID 清单（入口 → 01…05 → 撤离房），供验收核对拓扑完整性。
+func get_expedition_room_ids() -> Array[String]:
+	var ids: Array[String] = []
+	for value in _records_order_for_expedition():
+		ids.append(str(value))
+	return ids
+
+
+func _records_order_for_expedition() -> Array:
+	var plan := _floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
+	var ids: Array = []
+	for room_value in plan.get("rooms", []):
+		ids.append(str((room_value as Dictionary).get("id", "")))
+	return ids
+
 
 # 首个安全房（15×15 入口大厅）的世界尺寸；用于验收安全房尺寸不变。
 func get_first_safe_room_dimensions() -> Vector2:
-	var entry_id := "start" if is_standalone_rogue() else "floor_01_entry"
+	var entry_id := "start" if is_expedition() else "floor_01_entry"
 	var entry_room := _room_by_id.get(entry_id) as DungeonRoom3D
 	if entry_room != null and entry_room.has_method("get_dimensions"):
 		return entry_room.get_dimensions()
 	return Vector2.ZERO
 
-# 独立图 95F 是否拥有 Boss 撤离信标（BOSS_KILL）。
-func has_standalone_terminal_boss_extraction() -> bool:
-	return _conditional_extractions.has("BOSS_KILL") and _extraction != null
+# 远征关卡是否已装配可用的撤离信标（STANDARD，非锁定）。
+func has_expedition_extraction() -> bool:
+	return _conditional_extractions.has("STANDARD") and _extraction != null
 
 
 ## 冷启动/重进主场景时，根据行动检查点回到其所属的独立副本。
@@ -250,13 +336,18 @@ func get_runtime_resume_scene_path(snapshot: Dictionary) -> String:
 		return ""
 	if not _is_combat_runtime_snapshot(snapshot):
 		return ""
-	return str(RUNTIME_MAP_SCENE_BY_ID.get(str(snapshot.get("runtime_map_id", "")), ""))
+	return str(_runtime_map_scene_by_run_id().get(str(snapshot.get("runtime_map_id", "")), ""))
 
 
 func _ready() -> void:
 	process_physics_priority = 100
+	if is_expedition():
+		# 远征的退出/结算落点 = 玩家出发点 = 塔楼 99F 基地主场景。
+		# 刻意在代码里钉死、不靠各关卡场景文件自己写：BaseWorld3D 是历史「兼容基地」，
+		# 不是玩家出发的地方；新增关卡漏写一处就会把玩家退回那个旧场景。
+		return_scene_path = GameDesignConfig.MAIN_SCENE
 	_entry_context = GameEntryFlow.consume_main_scene_entry()
-	if not test_mode and not is_standalone_rogue() and BaseManager != null:
+	if not test_mode and not is_expedition() and BaseManager != null:
 		var resume_scene_path := get_runtime_resume_scene_path(BaseManager.get_active_run_checkpoint())
 		if not resume_scene_path.is_empty():
 			# 主场景本身不是该行动的运行时提供者；此处必须在 super() 前转场，
@@ -265,18 +356,25 @@ func _ready() -> void:
 				GameEntryFlow.REASON_RUNTIME_RESTORE,
 				GameEntryFlow.SPAWN_SAVED_PROGRESS
 			)
-			call_deferred("_resume_standalone_runtime_scene", resume_scene_path, request_id)
+			call_deferred("_resume_expedition_runtime_scene", resume_scene_path, request_id)
 			return
 	var base_art := get_node_or_null("Blocks/Base/Art") as Node3D
 	if base_art != null:
-		base_art.visible = false
+		if is_expedition():
+			_remove_tower_base_art(base_art)
+		else:
+			base_art.visible = false
 	super()
-	# 独立肉鸽图没有99F到达门负责提交首层；进入场景时必须直接完成98F整层，
-	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的Hub目标。
-	if is_standalone_rogue():
-		_commit_floor_bundle(2, "standalone_map_bootstrap")
+	# 远征关卡没有 99F 到达门负责提交整层；进入场景时必须一次性提交唯一层，
+	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的目标房。
+	if is_expedition():
+		_ensure_expedition_block()
+		_commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap")
 	_organize_existing_rooms_by_block()
-	_ensure_floor_generated(2 if is_standalone_rogue() else 0, "standalone_map_bootstrap" if is_standalone_rogue() else "rooftop_bootstrap")
+	_ensure_floor_generated(
+		EXPEDITION_LAYER_INDEX if is_expedition() else 0,
+		"expedition_bootstrap" if is_expedition() else "rooftop_bootstrap"
+	)
 	_build_floor_stages()
 	# 镜头固定在12m层高内部的斜俯视位置；墙体和物件不再推动或旋转镜头。
 	_apply_indoor_camera_pose()
@@ -290,11 +388,13 @@ func _ready() -> void:
 	_install_atmosphere()
 	# 自动化/编辑器验证固定从楼顶开始，避免读取或改写开发者的真实存档。
 	var starts_on_rooftop := _should_start_on_rooftop_for_entry()
-	if is_standalone_rogue():
-		# 独立图玩家出生在 98F 第一入口 15×15 安全房的原入口门口（东侧），不含天台/基地。
+	if is_expedition():
+		# 远征关卡玩家出生在入口 15×15 安全房内，不含天台/基地。
 		var entry_room := _room_by_id.get("start") as DungeonRoom3D
 		if entry_room != null:
-			player.global_position = entry_room.global_position + Vector3(5.0, 0.05, 0.0)
+			player.global_position = (
+				entry_room.global_position + _expedition_entry_spawn_offset(entry_room)
+			)
 			player.velocity = Vector3.ZERO
 			_current_room_id = ""
 			_on_room_entered(entry_room)
@@ -308,13 +408,18 @@ func _ready() -> void:
 				player.velocity = Vector3.ZERO
 				_current_room_id = ""
 				_on_room_entered(facility_room)
-	title_label.text = "弹壳风暴2 · 向下爬楼行动"
-	seed_label.text = "塔楼种子 %d" % run_seed
-	status_label.text = (
-		"风还在吹。沿西侧楼梯下去，寻找塔内的落脚点。"
-		if starts_on_rooftop
-		else "欢迎归航。先恢复状态、整理装备，再开始下一次下潜。"
-	)
+	if is_expedition():
+		title_label.text = "弹壳风暴2 · %s" % get_expedition_display_name()
+		seed_label.text = "关卡种子 %d" % run_seed
+		status_label.text = "远征情报已同步。" + _expedition_entry_objective()
+	else:
+		title_label.text = "弹壳风暴2 · 向下爬楼行动"
+		seed_label.text = "塔楼种子 %d" % run_seed
+		status_label.text = (
+			"风还在吹。沿西侧楼梯下去，寻找塔内的落脚点。"
+			if starts_on_rooftop
+			else "欢迎归航。先恢复状态、整理装备，再开始下一次下潜。"
+		)
 	_update_floor_visibility_state()
 	_refresh_physical_location_authority(true)
 	_refresh_tower_hud()
@@ -326,7 +431,7 @@ func _ready() -> void:
 		first_entry.player_entered.connect(_on_initial_loop_entry_physically_entered)
 
 
-func _resume_standalone_runtime_scene(scene_path: String, request_id: int) -> void:
+func _resume_expedition_runtime_scene(scene_path: String, request_id: int) -> void:
 	var error := get_tree().change_scene_to_file(scene_path)
 	if error == OK:
 		return
@@ -343,7 +448,87 @@ func _block(block_name: String) -> Node3D:
 	return $GeneratedRooms as Node3D
 
 
+## 远征关卡区块由场景声明（`scenes/ExpeditionLevel01_3D.tscn` 在 Blocks 根下挂
+## `Blocks/Expedition`，且不挂任何塔楼容器）。这里再做一次运行时兜底，
+## 保证任何以 expedition_mode 开启的场景都能落进正式区块。
+func _ensure_expedition_block() -> Node3D:
+	var blocks := get_node_or_null("Blocks") as Node3D
+	if blocks == null:
+		push_error("[TowerDescent3D] 缺少 Blocks 根节点，远征关卡无法归属区块")
+		return _block("Battle")
+	var existing := blocks.get_node_or_null("Expedition") as Node3D
+	if existing != null:
+		return existing
+	var created := Node3D.new()
+	created.name = "Expedition"
+	blocks.add_child(created)
+	created.set_meta("block_id", "expedition")
+	created.set_meta("display_name", get_expedition_display_name())
+	created.set_meta("runtime_owner", "TowerDescent3D")
+	return created
+
+
+## 远征关卡是独立单层场景，只保留基础玩法逻辑与关卡本身：99F 基地美术
+## （卷帘主门、补给机、工作台、工坊等约 1200 个节点）不属于本关卡。
+## 仅置 visible=false 不会移除碰撞体，会在关卡地面上留下「看不见却撞得到」的
+## 空气墙（实测：入口安全房北侧 6.3m、走廊中点 23.1m 均有隐形阻挡），
+## 因此这里把整棵子树从场景树上摘除并释放。
+##
+## ⚠️ 2026-09-19 起远征场景已不继承塔楼场景，`Blocks/Base/Art` 根本不存在，
+## 正常情况下 `_ready()` 的 `get_node_or_null` 即为 null、本函数不会被调用。
+## 保留它纯粹是「万一又有人把基地美术挂回远征场景」的兜底——干净场景的第一道
+## 保证是场景结构（见 `verify_expedition_level01_flow._verify_clean_scene`），不是这里。
+func _remove_tower_base_art(base_art: Node3D) -> void:
+	var art_parent := base_art.get_parent()
+	if art_parent != null:
+		art_parent.remove_child(base_art)
+		# 区块上声明的 99F 美术资产在远征中已不存在，同步清空，避免台账/审计
+		# 从远征场景里读出「有基地美术」的假信息。
+		if str(art_parent.name) == "Base":
+			art_parent.set_meta("asset_ids", [] as Array[String])
+			art_parent.set_meta("source_blends", [] as Array[String])
+	base_art.queue_free()
+
+
+## 走廊必须落在关卡自己的区块里：塔楼用 Blocks/Battle，远征用 Blocks/Expedition。
+func _connector_block() -> Node3D:
+	return _block("Expedition") if is_expedition() else _block("Battle")
+
+
+## 远征关卡的内容外框：7 个房间的实际包围盒外扩一格（5m）并对齐到 5m 网格，
+## 使 _world_rect_to_grid 保持整数映射。返回空 Rect2 表示回退舞台默认网格。
+func _expedition_content_world_rect() -> Rect2:
+	var margin := TOWER_GEOMETRY.GRID_UNIT_M
+	var minimum := Vector2(INF, INF)
+	var maximum := Vector2(-INF, -INF)
+	var found := false
+	for room_id_value in _floor_room_ids.get(EXPEDITION_LAYER_INDEX, []):
+		var room := _room_by_id.get(str(room_id_value)) as DungeonRoom3D
+		if room == null:
+			continue
+		var dimensions := room.get_dimensions()
+		var center := room.position
+		minimum.x = minf(minimum.x, center.x - dimensions.x * 0.5)
+		minimum.y = minf(minimum.y, center.z - dimensions.y * 0.5)
+		maximum.x = maxf(maximum.x, center.x + dimensions.x * 0.5)
+		maximum.y = maxf(maximum.y, center.z + dimensions.y * 0.5)
+		found = true
+	if not found:
+		return Rect2()
+	minimum -= Vector2(margin, margin)
+	maximum += Vector2(margin, margin)
+	var snapped_min := Vector2(
+		floorf(minimum.x / margin) * margin, floorf(minimum.y / margin) * margin
+	)
+	var snapped_max := Vector2(
+		ceilf(maximum.x / margin) * margin, ceilf(maximum.y / margin) * margin
+	)
+	return Rect2(snapped_min, snapped_max - snapped_min)
+
+
 func _room_block_for_floor(floor_index: int) -> Node3D:
+	if is_expedition():
+		return _block("Expedition")
 	if floor_index == 0:
 		return _block("Rooftop")
 	if floor_index == 1:
@@ -351,9 +536,19 @@ func _room_block_for_floor(floor_index: int) -> Node3D:
 	return _block("Battle")
 
 
+func _block_id_for_floor(floor_index: int) -> String:
+	if is_expedition():
+		return "expedition"
+	if floor_index == 0:
+		return "rooftop"
+	if floor_index == 1:
+		return "base"
+	return "battle"
+
+
 func _organize_existing_rooms_by_block() -> void:
 	# Dungeon3D 的基础生成器在 super() 内先把首批房间放入兼容容器；
-	# 塔楼在继续生成楼层前统一迁入四区块树并锁定稳定短名。
+	# 塔楼/远征关卡在继续生成楼层前统一迁入区块树并锁定稳定短名。
 	for room_id_value in _room_by_id.keys():
 		var room_id := str(room_id_value)
 		var room := _room_by_id.get(room_id) as DungeonRoom3D
@@ -365,7 +560,29 @@ func _organize_existing_rooms_by_block() -> void:
 			room.reparent(target, true)
 		room.name = room_id
 		room.set_meta("floor_number", 100 - floor_index)
-		room.set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
+		room.set_meta("block_id", _block_id_for_floor(floor_index))
+
+
+## 远征关卡出生点：安全房中心朝前门方向偏 4m，永远落在房间内部，
+## 又比正中更靠近即将前往的 01 号房，避免开局先撞传送抵达门。
+func _expedition_entry_spawn_offset(entry_room: DungeonRoom3D) -> Vector3:
+	var front := ""
+	for side_value in entry_room.door_targets.keys():
+		if not str(entry_room.door_targets[side_value]).is_empty():
+			front = str(side_value)
+			break
+	return {
+		"north": Vector3(0.0, 0.05, -4.0),
+		"south": Vector3(0.0, 0.05, 4.0),
+		"east": Vector3(4.0, 0.05, 0.0),
+		"west": Vector3(-4.0, 0.05, 0.0),
+	}.get(front, Vector3(0.0, 0.05, 0.0)) as Vector3
+
+
+## 安全房 v007 单一方位需要恰好两扇互相垂直的门（原生 {south,east} 的某个旋转）。
+## 入口前门由规划给出，抵达侧封闭门必须取它的垂直侧，否则整房旋转会退回旧拼装外观。
+func _perpendicular_side(side: String) -> String:
+	return {"north": "east", "east": "south", "south": "west", "west": "north"}.get(side, "east")
 
 
 func _accepts_pending_insurance_return_at_spawn() -> bool:
@@ -407,7 +624,7 @@ func _process(delta: float) -> void:
 func _finish_run(success: bool) -> void:
 	# 独立图按 Dungeon3D 的标准独立副本结算：成功/死亡都返回 return_scene_path
 	# （即 99F 基地 TowerDescent3D.tscn），不执行塔楼“带物返航基地”逻辑。
-	if is_standalone_rogue():
+	if is_expedition():
 		super(success)
 		return
 	# 塔楼成功撤离是“带物返航99F”，不是重新加载塔楼。父类的成功路径会把
@@ -507,15 +724,31 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 	var previous = _floor_stages.get(floor_index)
 	if previous != null and is_instance_valid(previous):
 		previous.queue_free()
-	var kind := "rooftop" if floor_index == 0 else "facility" if floor_index == 1 else "combat"
+	var kind := (
+		"combat" if is_expedition()
+		else "rooftop" if floor_index == 0
+		else "facility" if floor_index == 1
+		else "combat"
+	)
 	var stage = FLOOR_STAGE_SCRIPT.new()
 	stage.call(
-		"configure", floor_index, kind, hole_sides, _stair_lobby_visual_holes(floor_index)
+		"configure",
+		floor_index,
+		kind,
+		hole_sides,
+		_stair_lobby_visual_holes(floor_index),
+		# 远征单层关卡的 floor_index 也是 0，但绝不继承 100F 天台的窄轮廓，
+		# 否则 x>40 / z<-35 的房间与走廊都落在承重楼面之外。
+		is_expedition(),
+		# 独立单层关卡按实际内容外框生成楼面与外墙，不套塔楼整块 250×250。
+		_expedition_content_world_rect() if is_expedition() else Rect2()
 	)
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
 	_room_block_for_floor(floor_index).add_child(stage)
 	# PackedScene/运行时节点在 add_child() 时可能被分配内部名；挂载后再锁定短名。
-	stage.name = "Floor_%d" % (100 - floor_index)
+	stage.name = (
+		"Expedition" if is_expedition() else "Floor_%d" % (100 - floor_index)
+	)
 	_floor_stages[floor_index] = stage
 
 
@@ -1077,10 +1310,11 @@ func _build_records() -> void:
 	_planned_floor_indices.clear()
 	_boss_descent_gate_edges.clear()
 	_airlock_front_edges.clear()
+	_expedition_entry_gate_edges.clear()
 	_level_elevator_edge = ""
 
-	if is_standalone_rogue():
-		_build_standalone_rogue_records()
+	if is_expedition():
+		_build_expedition_records()
 		return
 
 	var core_center := Vector3(
@@ -1121,63 +1355,113 @@ func _build_records() -> void:
 	_validate_floor_layout_plans()
 
 
-func _build_standalone_rogue_records() -> void:
-	# 独立图不含 100F 天台与 99F 基地：98F 入口安全房即起点（复用 Dungeon3D 的 start 兼容位）。
+func _build_expedition_records() -> void:
+	# 远征关卡不含 100F 天台、99F 基地与任何楼梯：入口安全房即起点，
+	# 复用 Dungeon3D 的 start 兼容位，避免重写上层房间索引逻辑。
 	_regenerate_floor_plans_for_current_seed()
-	var first_plan := _floor_plan_snapshots.get(2, {}) as Dictionary
-	if first_plan.is_empty():
-		push_error("[TowerDescent3D] standalone rogue 缺少 98F 楼层规划")
+	var plan := _floor_plan_snapshots.get(EXPEDITION_LAYER_INDEX, {}) as Dictionary
+	if plan.is_empty():
+		push_error("[TowerDescent3D] 远征关卡缺少单层规划")
 		return
-	# 把入口房 ID 固定为 start，作为 Dungeon3D 兼容起点，避免重写上层房间索引逻辑。
-	for room_value in first_plan.get("rooms", []):
-		var room := room_value as Dictionary
-		if str(room.get("key", "")) == "entry":
-			room["id"] = "start"
-	var first_entry := _plan_spec(first_plan, "entry")
-	var first_hub := _plan_spec(first_plan, "hub")
-	_append_plan_room_record(first_plan, first_entry, "")
-	var entry_record := _find_record(str(first_entry.get("id", "")))
+	var entry_spec := _plan_spec(plan, "entry")
+	if entry_spec.is_empty():
+		push_error("[TowerDescent3D] 远征关卡规划缺少入口安全房")
+		return
+	# 规划里的房间 ID 已经就是 start / room_01..05 / extraction；入口房直接落成 start。
+	_append_plan_room_record(plan, entry_spec, "")
+	var entry_record := _find_record(str(entry_spec.get("id", "")))
 	if entry_record.is_empty():
-		push_error("[TowerDescent3D] standalone rogue 入口房记录缺失")
+		push_error("[TowerDescent3D] 远征关卡入口安全房记录缺失")
 		return
-	# v007 安全房是完整 15×15 双门布局。独立副本没有99F实体楼梯，
-	# 但必须保留“传送抵达侧”的结构门位，否则会退回旧塔楼拼装外观。
-	# 这扇门是封闭的抵达气闸：它不挂地图边、不参与房间拓扑，也不伪造一条可走路线。
-	var arrival_direction := str(first_plan.get("entry_side", "east"))
+	# v007 安全房是 15×15 单一双门布局，两扇门必须互相垂直。前门指向 01 号房，
+	# 另加一扇“传送抵达侧”的封闭气闸门：它不挂地图边、不参与房间拓扑、
+	# 也不伪造一条可走路线，只负责补齐安全房造型与“退出战局”交互位。
+	var first_main := _plan_spec(plan, "room_01")
+	if first_main.is_empty():
+		push_error("[TowerDescent3D] 远征关卡规划缺少 01 号房")
+		return
 	var front_direction := _direction_between(
 		entry_record.get("position", Vector3.ZERO) as Vector3,
-		_plan_world_position(first_plan, first_hub)
+		_plan_world_position(plan, first_main)
 	)
-	if arrival_direction == front_direction:
-		arrival_direction = _opposite_direction(front_direction)
+	var arrival_direction := _perpendicular_side(front_direction)
 	(entry_record["doors"] as Array).append(arrival_direction)
 	(entry_record["door_targets"] as Dictionary)[arrival_direction] = ""
 	(entry_record["doors"] as Array).append(front_direction)
-	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_hub.get("id", ""))
+	(entry_record["door_targets"] as Dictionary)[front_direction] = str(first_main.get("id", ""))
+	# 入口门是固定交通接口：不清房、不耗钥匙、不弹命运卡，保证开局动线不会被锁死。
+	# 其余 01→…→撤离 的门全部继承默认门策略，正常触发清房/钥匙/命运卡。
+	var entry_gate_edge := _edge_key(str(entry_spec.get("id", "")), str(first_main.get("id", "")))
+	_expedition_entry_gate_edges[entry_gate_edge] = EXPEDITION_LAYER_INDEX
 	_validate_floor_layout_plans()
 
 
 func _regenerate_floor_plans_for_current_seed() -> void:
-	# 纯数据规划可提前计算和存档；场景节点只保留99层与98层入口壳。
+	# 纯数据规划可提前计算和存档；场景节点只保留入口壳。
 	# 新战局也走同一入口，确保 run_seed、layout_id 与实际路线同步换代。
 	_floor_plan_snapshots.clear()
 	_floor_layout_templates.clear()
 	_planned_floor_indices.clear()
 	_floor_layout_plan_conflicts.clear()
-	# 独立图只规划 98/97/96/95 四层；旧塔楼仍规划到 85F。
-	var deepest_displayed := 94 if is_standalone_rogue() else DEEPEST_PLANNED_FLOOR - 1
+	if is_expedition():
+		# 远征关卡是单层关卡：只生成一张固定拓扑 + 受约束随机的版图。
+		# 关卡 id 由场景声明（见 get_expedition_level_id），不再写死成 expedition_01，
+		# 否则新增关卡会静默套用远征关卡01 的房表。
+		var expedition_level_id := get_expedition_level_id()
+		var expedition_plan: Dictionary = {}
+		# 数据驱动接缝（05.2 §8 S3）：逐关卡开关，见 FloorPlanGenerator.data_driven_enabled()。
+		# 该关卡的设计源声明了 runtime_enabled=true 才走这条路；否则原样回退内置房表 ——
+		# 未登记的关卡行为与接入前一字不变（因此对既有存档零影响）。
+		if FLOOR_PLAN_GENERATOR.data_driven_enabled(expedition_level_id):
+			expedition_plan = FLOOR_PLAN_GENERATOR.generate_from_level_plan(
+				expedition_level_id, 0, run_seed
+			)
+			if expedition_plan.is_empty():
+				push_warning(
+					"[TowerDescent3D] 远征设计源不可用，已回退内置房表: %s" % expedition_level_id
+				)
+		if expedition_plan.is_empty():
+			expedition_plan = FLOOR_PLAN_GENERATOR.generate_expedition({
+				"run_seed": run_seed,
+				"expedition_id": (
+					expedition_run_id if not expedition_run_id.is_empty() else EXPEDITION_PLAN_KEY
+				),
+			})
+		_floor_plan_snapshots[EXPEDITION_LAYER_INDEX] = expedition_plan.duplicate(true)
+		_floor_layout_templates[EXPEDITION_LAYER_INDEX] = str(
+			expedition_plan.get("layout_id", "")
+		)
+		_planned_floor_indices.append(EXPEDITION_LAYER_INDEX)
+		if not bool(expedition_plan.get("valid", false)):
+			for error_value in expedition_plan.get("validation_errors", []):
+				_floor_layout_plan_conflicts.append(
+					"expedition plan generator: %s" % str(error_value)
+				)
+		return
+	var deepest_displayed := DEEPEST_PLANNED_FLOOR - 1
 	for displayed_floor_number in range(98, deepest_displayed, -1):
 		var sequence_index := 99 - displayed_floor_number
 		var physical_floor_index := sequence_index + 1
 		var stair_side := "east" if sequence_index % 2 == 1 else "west"
-		var plan := FLOOR_PLAN_GENERATOR.generate({
-			"run_seed": run_seed,
-			"floor_number": displayed_floor_number,
-			"floor_index": physical_floor_index,
-			"sequence_index": sequence_index,
-			"entry_side": stair_side,
-			"boss_floor": displayed_floor_number % 5 == 0,
-		})
+		var plan: Dictionary = {}
+		# 数据驱动接缝（05.2 §8 S3）：与远征同一开关，默认关闭。
+		if FLOOR_PLAN_GENERATOR.data_driven_enabled(BATTLE_LEVEL_ID):
+			plan = FLOOR_PLAN_GENERATOR.generate_from_level_plan(
+				BATTLE_LEVEL_ID, displayed_floor_number, run_seed
+			)
+			if plan.is_empty():
+				push_warning(
+					"[TowerDescent3D] %dF 设计源不可用，已回退内置房表" % displayed_floor_number
+				)
+		if plan.is_empty():
+			plan = FLOOR_PLAN_GENERATOR.generate({
+				"run_seed": run_seed,
+				"floor_number": displayed_floor_number,
+				"floor_index": physical_floor_index,
+				"sequence_index": sequence_index,
+				"entry_side": stair_side,
+				"boss_floor": displayed_floor_number % 5 == 0,
+			})
 		_floor_plan_snapshots[physical_floor_index] = plan.duplicate(true)
 		_floor_layout_templates[physical_floor_index] = str(plan.get("layout_id", ""))
 		_planned_floor_indices.append(physical_floor_index)
@@ -1403,6 +1687,14 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 			"triggers_fate": false,
 		}
 	if _airlock_front_edges.has(edge):
+		return {
+			"requires_clear": false,
+			"requires_key": false,
+			"triggers_fate": false,
+		}
+	# 远征关卡的安全屋→01 号房是入口交通门：免费开启，不掉命运卡，
+	# 保证玩家在任何随机排布下都能起步。01 之后的门恢复默认清房/钥匙/命运卡流程。
+	if _expedition_entry_gate_edges.has(edge):
 		return {
 			"requires_clear": false,
 			"requires_key": false,
@@ -1912,7 +2204,8 @@ func _build_tower_horizontal_corridor(
 	)
 	connector.visible = false
 	connector.process_mode = Node.PROCESS_MODE_DISABLED
-	_block("Battle").add_child(connector)
+	# 塔楼落 Blocks/Battle，远征落 Blocks/Expedition——远征关卡必须是自持的干净场景。
+	_connector_block().add_child(connector)
 	connector.name = "Corridor_%02d" % index
 	_corridor_by_edge[edge] = connector
 	connector.set_meta("edge_key", edge)
@@ -2058,23 +2351,16 @@ func _get_corridor_wall_module_mesh() -> Mesh:
 	return _corridor_wall_module_mesh
 
 
+## 从模块 Prefab 取「用于批渲染的单一 Mesh 资源」。
+## 走 TowerGeometry3D 的唯一解析入口（按 metadata/visual_node_name 声明），
+## 不再本地递归取第一个 MeshInstance3D。
 func _mesh_from_packed_scene(scene: PackedScene) -> Mesh:
 	if scene == null:
 		return null
 	var instance := scene.instantiate()
-	var mesh := _find_first_imported_mesh(instance)
+	var mesh := TOWER_GEOMETRY.resolve_visual_mesh(instance)
 	instance.free()
 	return mesh
-
-
-func _find_first_imported_mesh(root: Node) -> Mesh:
-	if root is MeshInstance3D and (root as MeshInstance3D).mesh != null:
-		return (root as MeshInstance3D).mesh
-	for child in root.get_children():
-		var mesh := _find_first_imported_mesh(child)
-		if mesh != null:
-			return mesh
-	return null
 
 func _build_stair_approach_corridor(
 	connector: Node3D,
@@ -2136,7 +2422,7 @@ func _build_stair_approach_corridor(
 			wall.set_meta("visual_height_m", TOWER_GEOMETRY.WALL_VISUAL_HEIGHT_M)
 			wall.set_meta("visual_top_clearance_m", TOWER_GEOMETRY.WALL_VISUAL_TOP_CLEARANCE_M)
 			wall.set_meta("uses_native_wall_visual_height", true)
-			wall.set_meta("source_visual_version", "v003")
+			wall.set_meta("source_visual_version", "v004")
 			connector.add_child(wall)
 	for side_sign in [-1.0, 1.0]:
 		var side_name := (
@@ -2796,15 +3082,15 @@ func _discard_run_carry_for_retreat() -> Dictionary:
 	}
 
 
-func _show_standalone_exit_warning() -> void:
+func _show_expedition_exit_warning() -> void:
 	# 独立副本的“退出战局”门：与塔楼 98F 首门反向撤退共用物品契约，但落点是
 	# return_scene_path（正式基地场景），因为独立副本不生成 99F 基地房，
 	# 场景内没有可传送的 facility。文案必须独立，不能出现塔楼专属的 98F 字样。
 	# 首门开启后经重新上线回到 98F 安全房的玩家走的是同一个入口，故同样生效。
-	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
+	if _expedition_exit_overlay != null and is_instance_valid(_expedition_exit_overlay):
 		return
 	var overlay := Control.new()
-	overlay.name = "StandaloneExitWarning"
+	overlay.name = "ExpeditionExitWarning"
 	overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	overlay.z_index = 920
@@ -2843,28 +3129,28 @@ func _show_standalone_exit_warning() -> void:
 	var cancel := Button.new()
 	cancel.text = "取消 · 留在副本"
 	cancel.custom_minimum_size = Vector2(190, 48)
-	cancel.pressed.connect(_cancel_standalone_exit)
+	cancel.pressed.connect(_cancel_expedition_exit)
 	buttons.add_child(cancel)
 	var confirm := Button.new()
 	confirm.text = "确认退出 · 全部丢失"
 	confirm.custom_minimum_size = Vector2(220, 48)
-	confirm.pressed.connect(_confirm_standalone_exit)
+	confirm.pressed.connect(_confirm_expedition_exit)
 	buttons.add_child(confirm)
 	$HUD.add_child(overlay)
-	_standalone_exit_overlay = overlay
+	_expedition_exit_overlay = overlay
 	cancel.grab_focus()
 	_sync_player_input_lock()
 
 
-func _cancel_standalone_exit() -> void:
-	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
-		_standalone_exit_overlay.queue_free()
-	_standalone_exit_overlay = null
+func _cancel_expedition_exit() -> void:
+	if _expedition_exit_overlay != null and is_instance_valid(_expedition_exit_overlay):
+		_expedition_exit_overlay.queue_free()
+	_expedition_exit_overlay = null
 	_sync_player_input_lock()
 	status_label.text = "已取消退出 · 行动继续"
 
 
-func _confirm_standalone_exit() -> void:
+func _confirm_expedition_exit() -> void:
 	if _completed:
 		return
 	_completed = true
@@ -2876,7 +3162,7 @@ func _confirm_standalone_exit() -> void:
 		# 的战局再写回检查点，再清掉行动档，防止下次进图恢复一个已放弃的战局。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
-		BaseManager.clear_active_run_checkpoint("standalone_retreat")
+		BaseManager.clear_active_run_checkpoint("expedition_retreat")
 	status_label.text = "已退出独立副本 · 丢失物品%d格、装备武器%d把、背包%d个 · 正在返回基地" % [
 		int(discarded.get("inventory_slots", 0)),
 		int(discarded.get("weapons", 0)),
@@ -3176,7 +3462,11 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 	if room == null:
 		return
 	var depth := maxi(0, -int(round(room.global_position.y / FLOOR_HEIGHT)))
-	if room.room_id == "start":
+	if is_expedition():
+		# 远征是单层独立关卡：既没有 100F 天台也没有 99F 基地，
+		# 房间标签必须走远征自己的口径，不能落进塔楼的楼层分支。
+		room_label.text = _expedition_room_label(room)
+	elif room.room_id == "start":
 		room_label.text = "100F · 天台避风港"
 	elif room.room_id == "facility":
 		room_label.text = "99F · 归航基地 · 安全区"
@@ -3238,6 +3528,10 @@ func _is_player_near_base_rooftop_transit_door() -> bool:
 
 func _install_simple_transit_door_components() -> void:
 	_simple_transit_door_components.clear()
+	# 远征关卡没有天台/基地交通门：安全房的封闭抵达门走远征专用"退出战局"绑定，
+	# 不能被这里的普通交通门组件抢走交互候选。
+	if is_expedition():
+		return
 	var doors: Array[RoomDoor3D] = []
 	var rooftop := _room_by_id.get("start") as DungeonRoom3D
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
@@ -3281,7 +3575,7 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 	# 独立战局的 start 房没有 facility 边；其出生侧封闭门是“入口撤退门”，
 	# 必须进入统一的 E 交互候选，否则空 target_room_id 会被父类直接过滤。
 	var bindings: Array[Dictionary] = []
-	if is_standalone_rogue():
+	if is_expedition():
 		var start_room := _room_by_id.get("start") as DungeonRoom3D
 		if start_room != null:
 			for side_value in start_room.door_targets.keys():
@@ -3294,7 +3588,7 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 				exit_door.set_prompt_override("[E] 退出战局")
 				bindings.append({
 					"door": exit_door,
-					"mode": "standalone_retreat",
+					"mode": "expedition_retreat",
 					"owner_room_id": "start",
 					"target_room_id": "",
 					"edge_key": "",
@@ -3379,10 +3673,10 @@ func perform_interaction(
 		return false
 	var mode := str(candidate.get("mode", "room_door"))
 	match mode:
-		"configured_standalone_retreat":
+		"configured_expedition_retreat":
 			# 独立副本没有 99F 基地房，退出战局必须另走“清空物品 + 回基地场景”，
 			# 不能复用塔楼的场景内反向撤退（那会按塔楼 98F 重建世界，只剩白盒房）。
-			_show_standalone_exit_warning()
+			_show_expedition_exit_warning()
 			return true
 		"configured_rooftop_transit":
 			return _try_open_base_rooftop_transit_door()
@@ -3609,12 +3903,25 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 		if boss_room != null:
 			_extraction = _create_extraction_beacon(boss_room, "BOSS_KILL", 30.0, true, Vector3.ZERO)
 			_conditional_extractions["BOSS_KILL"] = _extraction
-	# 独立图 95F 是终端 Boss：不生成楼层电梯，由 Boss 撤离信标收尾。
-	if not is_standalone_rogue() and int(plan.get("floor_number", 0)) == 95 and not _elevator_facilities_by_floor.has(95):
+	# 远征关卡的终点就是撤离房：不生成 Boss 门、不生成楼层电梯，
+	# 只在尽头那间 25×25 撤离房里放一座常驻可用的 STANDARD 撤离信标。
+	if is_expedition() and _extraction == null:
+		var extraction_room := _room_by_id.get(
+			str(ids_by_key.get("extraction", ""))
+		) as DungeonRoom3D
+		if extraction_room != null:
+			var expedition_beacon := _create_extraction_beacon(
+				extraction_room, "STANDARD", 30.0, false, Vector3.ZERO
+			)
+			_extraction = expedition_beacon
+			_standard_extraction = expedition_beacon
+			_conditional_extractions["STANDARD"] = expedition_beacon
+	# 塔楼 95F 是终端 Boss：不生成楼层电梯，由 Boss 撤离信标收尾。
+	if not is_expedition() and int(plan.get("floor_number", 0)) == 95 and not _elevator_facilities_by_floor.has(95):
 		var exit_room := _room_by_id.get(current_exit_id) as DungeonRoom3D
 		if exit_room != null:
 			var pose := _elevator_wall_pose(exit_room)
-			var level_elevator := _create_standalone_elevator(
+			var level_elevator := _create_level_elevator(
 				95, current_exit_id, pose["position"] as Vector3, float(pose["rotation_y"])
 			)
 			level_elevator.set_meta("unique_level_elevator", true)
@@ -3725,7 +4032,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	room.set_meta("arena_asset_id", str(record.get("arena_asset_id", "")))
 	room.set_meta("arena_scene", str(record.get("arena_scene", "")))
 	var floor_index := int(record.get("floor_index", 0))
-	room.set_meta("block_id", "rooftop" if floor_index == 0 else "base" if floor_index == 1 else "battle")
+	room.set_meta("block_id", _block_id_for_floor(floor_index))
 	_room_block_for_floor(floor_index).add_child(room)
 	room.name = str(record["id"])
 	_rooms.append(room)
@@ -3976,7 +4283,7 @@ func _install_elevator_facility() -> void:
 			if elevator_anchor != null:
 				elevator_position = elevator_anchor.global_position
 				elevator_rotation = elevator_anchor.global_rotation.y
-		_elevator_facility = _create_standalone_elevator(
+		_elevator_facility = _create_level_elevator(
 			99,
 			"facility",
 			elevator_position,
@@ -3999,7 +4306,7 @@ func _install_elevator_facility() -> void:
 		if access_room == null:
 			continue
 		var pose := _elevator_wall_pose(access_room)
-		_create_standalone_elevator(
+		_create_level_elevator(
 			floor_number,
 			access_room_id,
 			pose["position"] as Vector3,
@@ -4007,7 +4314,7 @@ func _install_elevator_facility() -> void:
 		)
 
 
-func _create_standalone_elevator(
+func _create_level_elevator(
 	floor_number: int,
 	access_room_id: String,
 	world_position: Vector3,
@@ -4221,7 +4528,7 @@ func _refresh_world_time_hud(snapshot: Dictionary = {}) -> void:
 
 func _install_main_entry_screen() -> void:
 	# 启动页只属于冷启动/显式返回主页；独立图直接进入玩法，不显示主页面。
-	if is_standalone_rogue():
+	if is_expedition():
 		return
 	# 启动页只属于冷启动/显式返回主页；死亡、撤离和场景恢复均直接进入玩法。
 	if not _entry_context_requests_main_entry():
@@ -4254,6 +4561,13 @@ func _refresh_tower_hud() -> void:
 			_arrival_tween.play()
 			_arrival_tween_paused_for_lock = false
 	if _tower_floor_label == null or player == null:
+		return
+	if is_expedition():
+		# 远征关卡是单层关卡，没有楼层号概念：区位标签直接写关卡名与当前房间。
+		_tower_floor_label.text = get_expedition_display_name()
+		_tower_target_label.text = _expedition_objective()
+		_tower_elevator_label.text = "M 路线地图 · F 手电 · Shift 冲刺"
+		_tower_base_currency_label.text = "魂：◈ %d" % BaseManager.get_extraction_points()
 		return
 	var floor_number := _current_floor_number()
 	_tower_floor_label.text = (
@@ -4302,6 +4616,34 @@ func _journey_objective(floor_number: int) -> String:
 	return "搜索剩余物资，用钥匙开门选择路线"
 
 
+## 带本关名字的进场目标文案（HUD 状态栏）。取自关卡清单，未登记时回退到通用文案。
+func _expedition_entry_objective() -> String:
+	var line := GameDesignConfig.expedition_level_objective(expedition_run_id)
+	if not line.is_empty():
+		return line
+	return "肃清全部内容房，穿过命运之门，抵达终点撤离点。"
+
+
+## 远征关卡没有楼层，目标提示按"当前房间 → 终点撤离房"的推进关系给出。
+func _expedition_objective() -> String:
+	var room := _room_by_id.get(_current_room_id) as DungeonRoom3D
+	if room == null or room.room_id == "start":
+		return "穿过入口门进入 01 号房；抵达尽头撤离点即可带物返航"
+	if room.room_type == "EXTRACTION":
+		return "已完成全部房间 · 靠近信标读取撤离"
+	if room.room_type == "EVENT" and not room.cleared:
+		return "靠近异常信号，按 E 调查"
+	if not room.cleared:
+		var alive := int(_alive_by_room.get(room.room_id, 0))
+		return (
+			"肃清威胁 · 剩余 %d 个敌对信号" % alive
+			if alive > 0 else "保持警戒，留意增援与周围掩体"
+		)
+	if _get_total_room_keys() <= 0:
+		return "房间已肃清 · 拾取掉落钥匙，再选择下一扇门"
+	return "搜索剩余物资，用钥匙开门选择路线"
+
+
 func _announce_floor_arrival(floor_number: int) -> void:
 	if _announced_floors.has(floor_number) or _tower_floor_label == null:
 		return
@@ -4316,9 +4658,13 @@ func _announce_floor_arrival(floor_number: int) -> void:
 	if _arrival_tween != null and _arrival_tween.is_valid():
 		_arrival_tween.kill()
 	_arrival_tween_paused_for_lock = false
-	_arrival_title.text = {
-		100: "100F  /  天台避风港", 99: "99F  /  归航基地", 98: "98F  /  失落前哨",
-	}.get(floor_number, "%dF  /  继续深入" % floor_number)
+	_arrival_title.text = (
+		"%s  /  单层独立行动" % get_expedition_display_name()
+		if is_expedition()
+		else {
+			100: "100F  /  天台避风港", 99: "99F  /  归航基地", 98: "98F  /  失落前哨",
+		}.get(floor_number, "%dF  /  继续深入" % floor_number)
+	)
 	_arrival_title.modulate.a = 0.0
 	_arrival_tween = create_tween()
 	_arrival_tween.tween_property(_arrival_title, "modulate:a", 1.0, 0.35)
@@ -4610,14 +4956,14 @@ func _has_exclusive_modal() -> bool:
 		(_active_facility_menu != null and is_instance_valid(_active_facility_menu))
 		or (_elevator_overlay != null and is_instance_valid(_elevator_overlay))
 		or (_initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay))
-		or (_standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay))
+		or (_expedition_exit_overlay != null and is_instance_valid(_expedition_exit_overlay))
 		or super()
 	)
 
 
 func try_close_modal_for_pause() -> bool:
-	if _standalone_exit_overlay != null and is_instance_valid(_standalone_exit_overlay):
-		_cancel_standalone_exit()
+	if _expedition_exit_overlay != null and is_instance_valid(_expedition_exit_overlay):
+		_cancel_expedition_exit()
 		return true
 	if _initial_loop_retreat_overlay != null and is_instance_valid(_initial_loop_retreat_overlay):
 		_cancel_initial_loop_retreat()
@@ -4699,6 +5045,11 @@ func _runtime_current_room_id_for_save() -> String:
 
 
 func _runtime_scope_for_save(floor_index: int, room_id: String) -> String:
+	# 远征关卡是独立单层行动：入口安全屋的 floor_index 同样是 0，但它不是塔楼
+	# 100F/99F 的基地落脚点。若按基地保存，行动检查点会被判成不可续局，
+	# 关卡内重新上线将无法路由回远征场景。
+	if is_expedition():
+		return "combat"
 	# 100F天台与99F基地都不是可续局战斗；它们的快照只作为下次冷启动
 	# 选择固定出生点的“最后基地楼层”记录。
 	return "base" if floor_index <= 1 and room_id in ["start", "facility"] else "combat"
@@ -4819,7 +5170,7 @@ func _has_unclaimed_room_key(room_id: String) -> bool:
 
 func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	if bool(snapshot.get("world_restore_failed", false)):
-		return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
+		return _room_by_id.get("start" if is_expedition() else "facility") as DungeonRoom3D
 	# 续局不恢复战斗房内的精确坐标：统一投放到保存楼层的入口安全房间中心。
 	# 世界仍完整按快照重建，故房间进度、门、背包和装备不受此出生策略影响。
 	if str(snapshot.get("scope", "")) != "base":
@@ -4831,7 +5182,7 @@ func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 	if room != null:
 		return room
 	var floor_index := int(snapshot.get("current_floor_index", 1))
-	if is_standalone_rogue() and floor_index <= 1:
+	if is_expedition() and floor_index <= 1:
 		return _room_by_id.get("start") as DungeonRoom3D
 	var preferred_role := "stair_entry" if floor_index > 1 else "facility"
 	for room_id_value in _floor_room_ids.get(floor_index, []):
@@ -4843,12 +5194,12 @@ func _resolve_runtime_restore_room(snapshot: Dictionary) -> DungeonRoom3D:
 			return candidate
 		if str(_find_record(candidate_id).get("tower_role", "")) == preferred_role:
 			return candidate
-	return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
+	return _room_by_id.get("start" if is_expedition() else "facility") as DungeonRoom3D
 
 
 func _resolve_floor_entry_safe_room(floor_index: int) -> DungeonRoom3D:
 	if floor_index <= 1:
-		return _room_by_id.get("start" if is_standalone_rogue() else "facility") as DungeonRoom3D
+		return _room_by_id.get("start" if is_expedition() else "facility") as DungeonRoom3D
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var room_id := str(room_id_value)
 		if str(_find_record(room_id).get("tower_role", "")) == "stair_entry":

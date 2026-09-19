@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "safe_15x15",
+  "room_type": "SAFE_ROOM",
+  "size_m": [15.0, 15.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [0.0],
+    "south": [0.0],
+    "east": [0.0],
+    "west": [0.0]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-BATTLE-L01-ROOM-SAFE-15X15",
+    "components": []
+  },
+  "note": "L3 房间模板按关卡各存一份（LevelPlanLoader 只读本关卡目录）。本文件与 expedition_01/v001 的同名模板内容一致，引用同一条 SAFE_ROOM 房间契约。改契约需同步全部关卡副本。"
+}

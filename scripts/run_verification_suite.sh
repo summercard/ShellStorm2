@@ -82,6 +82,7 @@ smoke_scenes=(
 core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
+  verify_level_plan_design_source
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
@@ -91,7 +92,8 @@ core_scenes=(
   verify_common_wall_door_components_v004
   verify_battle_wall_floor_facility_kit
   verify_central_expedition_hologram_facility
-  verify_rogue_map_segment_flow
+  verify_expedition_level01_flow
+  verify_test_level_99_flow
   verify_unified_player_interaction_flow
   verify_tower_floor_room_authority
   verify_base_rooftop_transit_door_motion
@@ -163,6 +165,7 @@ visual_scenes=(
   verify_player3d_state_gallery_visual
   verify_player3d_weapon_grip_visual
   verify_tower_descent_visual
+  verify_test_level_99_visual
   verify_tower_stair_fall_visual
   verify_training_range_3d_visual
   verify_tactical_inventory_minimap_visual

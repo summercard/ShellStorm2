@@ -1,0 +1,48 @@
+{
+  "schema": "shellstorm2.battle.level_plan",
+  "schema_version": 1,
+  "level_id": "expedition_01",
+  "level_name_zh": "远征关卡01",
+  "block_id": "expedition",
+  "floor_rule_version": 2,
+  "grid_unit_m": 5.0,
+  "wall_thickness_m": 0.3,
+  "floor_height_m": 12.0,
+  "visible_wall_height_m": 11.9,
+  "site": {
+    "size_m": [250.0, 250.0],
+    "center_m": [2.5, 2.5]
+  },
+  "core": {
+    "size_m": [65.0, 65.0],
+    "center_m": [2.5, 2.5]
+  },
+  "floors": [
+    {
+      "floor_number": 0,
+      "floor_index": 0,
+      "sequence_index": 0,
+      "rule": "normal",
+      "plan": "floors/floor_00.json"
+    }
+  ],
+  "room_templates": [
+    "safe_15x15",
+    "std_25x25",
+    "extraction_25x25"
+  ],
+  "generation_policy": {
+    "min_main_content_rooms": 5,
+    "branch_count_range": [0, 0],
+    "max_attempts": 1,
+    "target_occupancy_ratio": 0.42,
+    "reference_room_cost_m2": 1450.0,
+    "enforce_core_exclusion": false,
+    "content_type_pool": ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"]
+  },
+  "provenance": {
+    "mode": "authored",
+    "extracted_from": "src/map/FloorPlanGenerator.gd::generate_expedition",
+    "note": "远征关卡01 设计源。由运行态房表口径转写，作为数据驱动路径的首个关卡与等价性基准。"
+  }
+}

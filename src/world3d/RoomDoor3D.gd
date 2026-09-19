@@ -258,8 +258,13 @@ func _build(accent: Color) -> void:
 	set_open(false, true)
 
 
-## 未换美术门扇时的降级门板：只剩一块深色实心板。
-## 形参保留 `configure(accent) → _build(accent)` 的调用契约，本函数已不再消费它。
+## 降级门板：只剩一块深色实心板。形参保留 `configure(accent) → _build(accent)` 的
+## 调用契约，本函数已不再消费它。
+## 2026-09-19 起两条运行时调用点（DungeonRoom3D._build_door、
+## TowerDescent3D._install_base_rooftop_transit_door）都传正式门扇 prefab，
+## 因此本路径只能由「显式传 null」触发，不是「prefab 加载失败」的兜底
+## ——prefab 路径走的是编译期 preload，缺文件会直接编译失败，不会静默降级到这里。
+## 保留它是为了让「本局不要门板」这种明确诉求有一个出口。
 func _build_procedural_panel(_accent: Color) -> void:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = Color(0.11, 0.13, 0.13)

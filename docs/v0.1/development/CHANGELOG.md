@@ -1,12 +1,51 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-19｜远征关卡01 干净场景改造：移除塔楼残留与隐形阻挡
+
+- 按用户要求「新增加的远征关卡应该是一个干净的场景，只会保留游戏基础逻辑和新的关卡」，清理远征关卡01 场景里的三处塔楼残留。
+- **修复（隐形阻挡 / 主因）**：`Blocks/Base/Art`（99F 基地美术：卷帘主门、补给机、工作台、枪械工坊等约 **1200 节点**）此前在 `_ready()` 里只被置 `visible = false`，**碰撞体仍留在物理空间**。塔楼流程会把它 `reparent` 到 99F `facility` 房（降到 y = −12），而远征没有 `facility` 房、`_install_facilities()` 直接 early-return，美术就原地留在 **y ≈ 0**，正是远征的行走平面——表现为入口安全房北侧 6.3/6.4/7.8m、走廊中点 23.1/25.0m、`room_02`/`room_03` 西侧 32.6/67.6/102.6m 均有「看不见却撞得到」的阻挡（命中坐标 `(2.87, 0, −31.35)` 与场景里「枪械工坊」作者坐标吻合）。新增 `TowerDescent3D._remove_tower_base_art()`：`remove_child` + `queue_free` 整棵摘除，并清空 `Blocks/Base` 上的 `asset_ids`/`source_blends`，避免台账从远征场景读出「有基地美术」的假信息。
+- **修复（隐形挡墙）**：`TowerFloorStage3D._outer_visual_transform()` 把 `floor_index == 0` 当成天台女儿墙判据，对远征也施加 **0.5 纵向缩放**，外墙可视高度 5.95m 而碰撞盒 12m → 上沿 6m 是隐形挡墙。改挂 `_uses_rooftop_profile()`，并把实测值回填快照字段 `outer_visual_scale_y` 供门禁断言（正常层与远征恒 `1.0`，只有真正的 100F 天台是 `0.5`）。
+- **改造（楼面/外墙按内容外框收缩）**：楼面与外墙此前铺满塔楼整块 250×250，远征内容只占一角，远处空地上立着一圈没有内容的墙。新增 `TowerFloorStage3D.configure()` 第 6 参 `content_bounds` + `_has_content_bounds`，非空时 `_floor_grid_dimensions` / `_floor_world_rect` / `_outer_grid_dimensions` / `_outer_world_rect` 一律以它为准；由 `TowerDescent3D._expedition_content_world_rect()`（7 房实际包围盒外扩一格 5m 并对齐 5m 网格）计算传入。实测外框从 `Rect2(-125,-125,250,250)`（50×50）收缩为 `Rect2(-10,-50,135,70)`（27×14 格），地砖数 2500 → **369**，场景总节点 ≈2744 → **1544**。默认值为空 `Rect2()`，塔楼逐值不变。
+- **改造（走廊归位）**：新增 `_connector_block()`（远征 → `Blocks/Expedition`，塔楼 → `Blocks/Battle`），水平走廊改走它；此前 6 条 `Corridor_00..05` 都挂在 `Blocks/Battle` 下，远征的通道被算作塔楼内容。垂直楼梯走廊**有意不改**（只在塔楼生成，且 `_connector_block()` 在塔楼返回 `Battle`，改了会把楼梯走廊挪出 `Blocks/Stairs`，破坏 `verify_tower_level_blocks`）。
+- 改造后塔楼四区块在远征中**子节点全为 0**，`Blocks/Expedition` 有 14 个子节点（7 房 + 6 走廊 + 1 楼面舞台）。`Blocks/Rooftop|Base|Battle|Stairs` 四个空容器有意保留：`_block()` 会 `push_error` 兜底，删除它们会波及塔楼共用代码，且空容器无碰撞无渲染。
+- 门禁补充：`verify_expedition_level01_flow` 增 `_verify_clean_scene()`（`Blocks/Base/Art` 不存在、四区块子节点为 0、`Blocks/Base` 不声明塔楼资产、每条走廊父节点为 `Blocks/Expedition`）；`_verify_level_enclosure()` 由硬编码 250×250 改为内容外框口径（外框对齐 5m 网格、完整包住 7 房、`floor_world_rect == content_world_rect`、`outer_visual_scale_y == 1.0`）。判据仍为 `EXPEDITION_LEVEL01_FLOW_OK`。
+- 回归全绿（塔楼路径未受影响）：`ROOFTOP_WEST_EXPANSION_CONTRACT_PASS`、`TOWER_LEVEL_BLOCKS_OK`、`FLOOR_PLAN_GENERATOR_OK`、`ARRIVAL_GATE_FLOOR_BUNDLE_OK`、`TOWER_FLOOR_ROOM_AUTHORITY_OK`、`TOWER_EXTRACTION_RETURN_OK`、`TOWER_JOURNEY_POLISH_OK`、`LEVEL_PLAN_VALIDATE_OK`。
+- 详见[远征关卡01制作记录 §7](2026-09-19_expedition_level01_buildout.md)。
+
+## 2026-09-19｜新关卡「远征关卡01」落地：单层 7 房 + 读取界面 + 独立区块
+
+- 按用户要求**完全替换**旧独立副本关卡：删除 `scenes/RogueMap01TowerSegment3D.tscn` 与 `standalone_rogue` / `rogue_map_id` 旧分支，新建 `scenes/ExpeditionLevel01_3D.tscn`（`expedition_mode = true`、`expedition_run_id = "expedition_01"`）。
+- 关卡形态：单层 **7 房** = 入口安全房 15×15m + `room_01`…`room_05` 各 **25×25m** + 撤离房间 25×25m。**房型表按 25×25 走 `FloorPlanGenerator.generate_expedition()/validate_expedition()` 独立分支**，不挤进塔楼通用房表（通用 `validate()` 硬拒 `minf < 25`）。
+- 5 个内容房房型从 `COMBAT / COMBAT / SCAVENGE / STORAGE / EVENT` 池洗牌分配；排列由 seed 决定（4 种旋转 + 可选 Z 镜像，`0x45585031`），格步 35m、网格原点 2.5m。96 seed 全部合法且至少 4 种排列，随机性成立。
+- 新增第五个区块根 `Blocks/Expedition`（`block_id = expedition`，显示名「远征关卡01」，设定名「远征前哨站」）；`_room_block_for_floor()` / `_block_id_for_floor()` 与房间 `block_id` 元数据统一路由到该区块。塔楼主场景仍只有四区块。
+- 新增读取界面 `scenes/ExpeditionLoadingScreen.tscn`：面包屑「远征情报室 → 远征关卡01」+ 步骤文案 + 进度条；无头/编辑器跳过延时。入口链路变为 99F基地 → 远征情报室 → 菜单 → **读取界面** → 关卡。
+- 撤离房间常驻 `STANDARD`（非锁定、随时可用）撤离信标，沿用 `prp_extraction_beacon_root_top3d.tscn`；不刷怪、不计入必经主路。死亡/撤离/安全房弃局统一走 `Dungeon3D._finish_run()` 返回 `return_scene_path`（BaseWorld3D）。
+- **修复**：`_runtime_scope_for_save()` 对 `is_expedition()` 直接返回 `combat`，否则入口安全房（`floor_index = 0`）会被判成 `base` 作用域，导致进图快照不可续局。
+- **修复**：`_instantiate_dynamic_room` 的 `block_id` 元数据改为取 `_block_id_for_floor()`，不再硬编码 rooftop/base/battle 三分支。
+- **修复（关卡包围）**：远征是单层关卡，唯一层的 `floor_index` 也是 0，被 `TowerFloorStage3D` 当成 100F 天台，静默继承了窄轮廓 `Rect2(-50, -35, 90, 80)`（18×16 格）、99F 中庭贯通洞与 0.75m 女儿墙。后果是 `start` 落在中庭洞里、`room_03/04/05` 与 `extraction`（x ≥ 55、z ≤ −45）落在窄矩形外，**6/7 房间既没有 `FloorSupport` 承重楼面也没有外圈墙**，玩家踩空掉出关卡（即用户反馈的「房间没有阻挡」）。新增 `TowerFloorStage3D.force_standard_map`（`configure()` 第 5 参数），由 `_rebuild_floor_stage()` 以 `is_expedition()` 传入，强制标准 250×250 网格 / 12m 整墙 / 不挖中庭洞 / 不做女儿墙纵向缩放；默认 `false`，塔楼与真正的 100F 天台逐值不变。<span style="color:#777777">（同日后续再收缩为**内容外框** `Rect2(-10,-50,135,70)`，见上方「干净场景改造」条目。）</span>
+- 门禁补充：`verify_expedition_level01_flow` 增 `_verify_level_enclosure()` —— 断言楼面舞台快照（标准网格、无中庭洞、整墙高、`block_id=expedition`）、7 间房逐房脚下楼面与四向墙体物理射线、以及每条走廊「开门后可见 + 两侧 3.5m 处命中侧墙」。走廊代码本身经实测无缺陷（隐藏/碰撞卸载由 `_update_corridor_streaming()` 按门开状态管理，开门后即可见可撞），本轮未改动；新增只读诊断探针 `probe_expedition_walls`。
+- 基础玩法全部承载：内容房刷怪+清房门锁、穿门命运卡牌三选一、可搜索容器（`RoomFurniture3D.searchable` + `searched` 信号）、撤离信标。
+- 门禁：新建 `verify_expedition_level01_flow`（覆盖 入口→菜单→读取界面→关卡、单层、区块、25×25 版图、v007 安全房、门口命运三选一、刷怪+搜索、撤离契约、弃局返航、96 seed 扫描、默认塔楼不变）并**注册进 `core`**；删除 `verify_rogue_map_segment_flow`、`verify_rogue_retreat_return_to_base`、`probe_rogue_resume_exit_flow` 三个旧场景。原「门禁缺口」条目就此消除。
+- 详见[远征关卡01制作记录](2026-09-19_expedition_level01_buildout.md)。
+
+## 2026-09-19｜关卡四类通用物体统一契约（地板 / 墙壁 / 墙壁门 / 门）
+
+- 建立唯一视觉解析入口 `TowerGeometry3D.resolve_visual_node/_mesh/_bounds/origin_offset_y`；退役三份重复的「递归取第一个 MeshInstance3D」（`DungeonRoom3D`、`TowerFloorStage3D`、`TowerDescent3D`），改按资产声明的 `metadata/visual_node_name` 解析。该隐式约定已被实测打破：`prp_tower_wall_door_5m` 的第一个 MeshInstance3D 是 `visible=false` 的门扇。
+- 四件套补齐同一套 11 项契约字段：`asset_id / asset_version / origin_contract / forward_axis / bounds_size_m / visual_bounds_size_m / visual_node_name / visual_only / collision_owner / preserve_authored_palette / runtime_instantiation`。新增 `visual_bounds_size_m` 是因为实测门墙**结构包络 5×11.9×0.3 ≠ 可视包络 5×12.04×0.43**（装饰门框下探楼面下 0.14m）。
+- 装配基准从「网格 AABB 反算」改为「读 `origin_contract` 声明」。旧注释「通用旧墙以几何中心为原点、需抬高半层」经实测为过时描述（v003 与基地墙 AABB 底面均在 y=0，反算恒为 0）。数值行为不变。
+- 移除 `prp_tower_wall_door_5m` 内与脚本代理逐值重叠的内嵌碰撞（门柱 2 + 门楣 1），碰撞责任单一化。
+- `verify_tower_module_prefabs.gd` 从「只 print」升级为 8 项断言门禁，判据 `PREFAB_CONTRACT_OK`。
+- **明确否决**「墙/地砖逐 prefab 实例化」：实测 `initial_world` 余量仅 205 节点（2195/2400），实墙逐实例化净增 2038、地砖净增 45026。按房级只改墙也不可行（419 个墙节点全属房间墙）。门扇接美术同样超预算（114 扇 × 3 = +342）。
+- 回归全绿：`verify_tower_grid_component_alignment`、`verify_tower_lighting_wall_combat_regressions`、`probe_safe_room_v007_integration`、`verify_base99_floor_player_collision_flow`、`verify_base99_wall_visual_replacement`、`probe_tower_palette_visible`。
+- 详见[契约对照与实施记录](2026-09-19_关卡通用物体资产契约对照.md)。未决：普通战斗房门扇美术选型；基地家族 `dimensions_m`/`center_bottom`/`-Z` 命名漂移未迁移。
+
 ## 2026-09-18｜关卡传送入口确立为主线，塔楼连续爬楼转为隐藏关卡
 
-- 按用户设计修订关卡入口：99F基地中央远征情报室选关后“传送进入副本”＝切换地图，进入独立关卡。
-- 独立关卡定位为单层完整肉鸽关卡，新增加撤离房间与撤离信号塔（**待施工**）；当前实现仍为四层。
+- 按用户设计修订关卡入口：99F基地中央远征情报室选关后“传送进入副本”＝切换地图，进入独立关卡。<span style="color:#777777">（**已被 2026-09-19「远征关卡01」条目完全替换**：关卡已改名为远征关卡01，入口新增读取界面，单层化与撤离房间已完成交付。）</span>
+- 独立关卡定位为单层完整肉鸽关卡，新增加撤离房间与撤离信号塔（**待施工**）；当前实现仍为四层。<span style="color:#777777">（**2026-09-19 已完成**：单层 7 房 + 撤离房间 + `STANDARD` 撤离信标。）</span>
 - 塔楼连续爬楼（100F→98F→…→85F、95→94唯一电梯、隔离间卸载）整体保留为后续隐藏关卡，本轮不改动行为与数字。
 - 原“禁止以传送或地图按钮替代”类条款改为按“关卡内部 / 关卡入口”分域限定，消除与实现的明文冲突。
-- 登记门禁缺口：`verify_rogue_map_segment_flow` 未注册进 `core` 套件。
+- 登记门禁缺口：`verify_rogue_map_segment_flow` 未注册进 `core` 套件。<span style="color:#777777">（**2026-09-19 已消除**：该场景被删除，替代门禁 `verify_expedition_level01_flow` 已注册 `core`。）</span>
 - 详见[独立记录](2026-09-18_level_teleport_entry_and_standalone_map.md)。
 
 ## 2026-09-17｜天台运行设施清空

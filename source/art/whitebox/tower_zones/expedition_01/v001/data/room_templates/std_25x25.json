@@ -1,0 +1,30 @@
+{
+  "schema": "shellstorm2.battle.room_template_whitebox",
+  "schema_version": 1,
+  "template_id": "std_25x25",
+  "room_type": "COMMON_ROOM",
+  "size_m": [25.0, 25.0],
+  "grid_unit_m": 5.0,
+  "wall_height_m": 11.9,
+  "door_contract": {
+    "width_m": 2.2,
+    "height_m": 2.5,
+    "clear_floor_gap_m": 0.0,
+    "bottom_z_m": 0.3,
+    "lintel_bottom_z_m": 2.8
+  },
+  "openable_walls": ["north", "south", "east", "west"],
+  "wall_lane_table": {
+    "north": [-5.0, 0.0, 5.0],
+    "south": [-5.0, 0.0, 5.0],
+    "east": [-5.0, 0.0, 5.0],
+    "west": [-5.0, 0.0, 5.0]
+  },
+  "slots": [],
+  "variants": [],
+  "asset_ids": {
+    "room": "ENV-EXPEDITION-L01-ROOM-STD-25X25",
+    "components": []
+  },
+  "note": "远征关卡标准内容房。25×25 为远征专属尺寸，与塔楼通用房表（30×25 起跳）无关，见 05.2 §7.4。variants 待美术产出后登记。"
+}

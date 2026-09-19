@@ -1,13 +1,20 @@
 [gd_scene load_steps=2 format=3]
 
 ; 5m 段实心外墙 - 自包含独立模块
-; 正式美术：tower_descent_3d/components/env_tower_wall_solid_5m_top3d_v003.glb
+; 正式美术：tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb（v004）
+;   来源：tower_zones/battle/source/common_components/v007 批源里的「通用墙组件」
+;   （ROOT_wall_standard_5m_通用组件），按 godot-model-asset-import-standard 派生到
+;   塔楼 A 套；派生脚本与清单见 tower_descent_3d/source/wall_height12/。
+;   派生时绕竖轴 180°：美术自述正面在 Blender +Y，经 YUP 导出会落到 Godot -Z，
+;   而塔楼 A 套硬要求 forward_axis=+Z，故先翻转再把偏移烘焙进顶点。
 ;   逻辑/阻挡高 12m；视觉墙高 11.9m，顶部预留 0.1m；底面中心原点（几何 Y=0..11.9）。
-;   底面中心契约与塔楼/基地99层一致，运行时按 -mesh.get_aabb().position.y 反算
-;   Y 偏移后自然贴合楼面，无需烘焙位移。
+;   底面中心契约与塔楼/基地99层一致；派生时 ROOT 空物体的世界偏移已烘焙进顶点数据，
+;   GLB 根节点是恒等变换 —— 这点必须有：TowerDescent3D 直连裸 GLB 整树实例化，
+;   会直接继承根节点变换。
 ; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向。
-; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，
-;   保留美术自带 PaletteUV（MAT_Structure_DarkSteel）。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV（01/02/04 三个角色，由
+;   tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
 ; 本 Prefab 视觉专用（visual_only）。结构碰撞由 DungeonRoom3D 的
 ;   TowerWallCollision_*_Run 与 TowerFloorStage3D 的 OuterBoundaryCollision_*
 ;   按 0.30m 代理生成，避免美术替换影响玩法。
@@ -16,7 +23,7 @@
 
 [node name="PrpTowerWallSolid5m" type="Node3D"]
 metadata/asset_id = "ENV-TOWER-WALL-SOLID-5M"
-metadata/asset_version = "v003"
+metadata/asset_version = "v004"
 metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb"
 metadata/grid_unit_m = 5.0
 metadata/logical_height_m = 12.0
@@ -24,9 +31,20 @@ metadata/visual_height_m = 11.9
 metadata/visual_top_clearance_m = 0.1
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.4675)
+metadata/bounds_note = "结构包络 5×11.9×0.3 = 玩法阻挡体，由 DungeonRoom3D.TowerWallCollision_*_Run / TowerFloorStage3D.OuterBoundaryCollision_* 按 0.30m 代理生成，与美术无关；可视包络 5×11.9×0.4675 = 实测装甲向 +Z 前凸到 0.3175、结构背面在 -0.15。两个包络刻意分离：替换美术只改本条与可视声明，不得改碰撞。"
+metadata/visual_node_name = "ENV_TOWER_WALL_SOLID_5M"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
 metadata/visual_only = true
-metadata/collision_owner = "DungeonRoom3D + TowerFloorStage3D"
+metadata/collision_owner = "DungeonRoom3D"
 metadata/shadow_policy = "cast_and_receive"
 metadata/preserve_authored_palette = true
+; 实墙是纯 Mesh 资源被 MultiMesh 批渲染承载（DungeonRoom3D._spawn_solid_wall_visual_instances
+; → _add_wall_multimesh_variant），运行时并不保留 prefab 节点树。
+; 2026-09-19 修正：原声明为 per_instance_prefab 与实测不符（探针实测承载节点
+; Imported_SolidWall5M_*_Run_A/B 是 MultiMeshInstance3D、MeshInstance3D(deep)=0）。
+metadata/runtime_instantiation = "batched_multimesh"
+metadata/instantiation_note = "只作为网格数据源：instantiate → resolve_visual_mesh → source.free()，节点树被丢弃。"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -203,6 +203,58 @@ for fi in [2, 3, 4, 5]:
 
 通用结论：**尺寸、位置、碰撞由代码常量决定，不由资产决定。** 改资产只可能换外观。若新资产原点契约或尺寸与老的差一点，会静默错位——必须加 AABB 断言，不能靠肉眼验收。
 
+### 第五条关键陷阱：`--headless` 下 `MultiMesh.instance_transform` 回读**不可信**
+
+无头模式的假渲染器**不填充 MultiMesh 的实例缓冲**：`multimesh.get_instance_transform(i)` 对**所有**实例都返回 `origin=(0,0,0)`、`scale=(1,1,1)`。
+
+实测反例：把 200 个外墙实例与 2500 块地砖全部读出来，每一块都是「原点零、缩放一」——**连必然有位置的楼板都是零**。显然不可能，属回读假象，不是真实装配结果。
+
+**判断「缩放 / 位置对不对」只能靠：**
+
+1. 读代码——`Basis.scaled()` 的语义本身是可靠的（`Basis.IDENTITY.scaled(Vector3(1,0.5,1))` 确实得到 Y=0.5），错的是回读；
+2. 让被测代码把真实值**回填进 `get_snapshot()` 字段**再断言（例：`TowerFloorStage3D` 把外墙实际纵向缩放写进 `outer_visual_scale_y`，门禁从此有据可依）；
+3. 或改跑**非 headless**（`visual/renderer` 类场景）。
+
+> ⚠️ 别用回读值下「资产没缩放 / 没定位」的结论——会得到一个看起来精确、实际纯属虚构的判据，并据此改错代码。
+
+### 第六条关键陷阱：动态实体挂在**专门的容器节点**下，不在业务对象子树里
+
+敌人不是房间的子节点。`_spawn_enemy_batch()` 里写的是 `$ActiveEnemies.add_child(enemy)` —— 全场敌人挂在关卡根同级的一个 `ActiveEnemies` 容器下，只用 `room_id` 字段标明归属。
+
+**踩法**：在房里 `room.find_children("*", "Enemy3D", true, false).size()` 得到 `0`，于是误判「没刷怪」。实测该房 `_alive_by_room[room_id]` 明明是 3。
+
+**正确查法**：查容器节点本身（`tower.get_node_or_null("ActiveEnemies")` + `find_children`），或查运行时的归属表 `_enemy_nodes_by_room[room_id]`。
+
+> 通用教训：节点树的「容器维度」与玩法的「归属维度」经常不是同一个。探针要找实体，先看生成代码里的 `add_child()` 目标，而不是猜它挂在哪个业务对象下。
+
+### 第七条关键陷阱：状态标记 ≠ 玩家位置，房内实体会被 hibernate 释放
+
+房间的流送状态是**按玩家实际所在位置**算的。只改标记（`_current_room_id = id`）或只调测试后门（`force_enter_room_for_test(id)`）而**不挪玩家**，房间会被判为离开 → 进 hibernate → `_hibernate_room_entities()` 当场 `queue_free()` 掉该房全部敌人。
+
+**结果是最迷惑的一种**：`_alive_by_room[room_id]` 还留着生成时的首波数（释放时不回写），敌节点数却是 `0`。看着像「刷了怪但立刻消失」。
+
+**修法**：探针在触发刷怪前先把玩家真放进房间正中央——
+
+```gdscript
+tower.force_enter_room_for_test(room_id)
+tower.player.global_position = room.global_position + Vector3(0.0, 0.05, 0.0)
+tower._on_room_entered(room)
+```
+
+顺带：多波次战斗房的 `_alive_by_room` 是**首波**存活数，不是该房敌人总数；待发波次在 `_room_wave_queues`，当前波号在 `_room_wave_numbers` / `_room_wave_totals`。只报 `_alive_by_room` 会把「3 只」说成全部。
+
+### 第八条关键陷阱：`*_for_test` 后门会**污染**你要测的判定
+
+为了进房方便而在探针开头把所有边 `force_open_edge_for_test()` 全开，会直接毁掉后面「未清房不能开门」那一段——`_try_open_room_door()` 对**已开启的边**第一条分支就是 `return true`（状态文案「通道已经开启」），于是「未清房」测出 `true` 的假阳性，而 `*_OK` 打印照样好看。
+
+**规矩**：后门只在被测机制**确实需要**时开，且在进入该段之前把状态清回去；同一探针里「开边」与「验门禁判定」互斥。
+
+### 附：类型化字段不是 Dictionary，别用 `get(k, default)` 摸字段
+
+`Array[FateCard]` 的元素是 RefCounted 对象（不是 `Dictionary`）。写 `choice.get("label", choice)` 会同时炸两条 parse error：`Expression is of type "FateCard" so it can't be of type "Dictionary"` 与 `Too many arguments for "get()" call`（对象上的 `get()` 只收 1 参）。读字段用属性（`card.card_name`）。
+
+同理，`var x := <Node>.get("prop")` 会因 Variant 推断而触发「warning treated as error」——**探针里尽量直接属性访问**（`tower._map_fate_triggers`），需要按名取时显式标注类型。
+
 ## 已知噪音（不影响结论）
 
 - 大量 `invalid UID: 'uid://...' - using text path instead` WARNING：base99 / tower 色盘 UID 既有问题，与探针无关。

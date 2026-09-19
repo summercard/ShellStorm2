@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_test_level_99_flow.gd" id="1_verify"]
+
+[node name="VerifyTestLevel99Flow" type="Node"]
+script = ExtResource("1_verify")

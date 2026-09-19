@@ -1,0 +1,149 @@
+{
+  "schema": "shellstorm2.battle.floor_plan_whitebox",
+  "schema_version": 1,
+  "level_id": "99",
+  "mode": "authored",
+  "floor_number": 0,
+  "floor_index": 0,
+  "sequence_index": 0,
+  "entry_side": "east",
+  "exit_side": "west",
+  "reservations": [],
+  "rooms": [
+    {
+      "key": "entry",
+      "room_id": "start",
+      "legacy_room_id": "",
+      "room_type": "SAFE_ROOM",
+      "role": "stair_entry",
+      "parent_key": "",
+      "template_id": "safe_15x15",
+      "template_variant": "",
+      "center_m": [
+        2.5,
+        2.5
+      ],
+      "size_m": [
+        15.0,
+        15.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "room_01",
+          "side": "north",
+          "lane_m": 0.0,
+          "wall_length_m": 15.0
+        }
+      ],
+      "content_type": ""
+    },
+    {
+      "key": "room_01",
+      "room_id": "room_01",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "entry",
+      "template_id": "std_25x25",
+      "template_variant": "",
+      "center_m": [
+        2.5,
+        -32.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "entry",
+          "side": "south",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "room_02",
+          "side": "east",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ],
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "room_02",
+      "room_id": "room_02",
+      "legacy_room_id": "",
+      "room_type": "COMMON_ROOM",
+      "role": "main",
+      "parent_key": "room_01",
+      "template_id": "std_25x25",
+      "template_variant": "",
+      "center_m": [
+        37.5,
+        -32.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "extraction",
+          "side": "north",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        },
+        {
+          "port_id": "P2",
+          "target": "room_01",
+          "side": "west",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ],
+      "content_type": "COMBAT"
+    },
+    {
+      "key": "extraction",
+      "room_id": "extraction",
+      "legacy_room_id": "",
+      "room_type": "EXTRACTION_ROOM",
+      "role": "extraction",
+      "parent_key": "room_02",
+      "template_id": "extraction_25x25",
+      "template_variant": "",
+      "center_m": [
+        37.5,
+        -67.5
+      ],
+      "size_m": [
+        25.0,
+        25.0
+      ],
+      "template_rotation_deg": 0,
+      "ports": [
+        {
+          "port_id": "P1",
+          "target": "room_02",
+          "side": "south",
+          "lane_m": 0.0,
+          "wall_length_m": 25.0
+        }
+      ],
+      "content_type": ""
+    }
+  ],
+  "main_path": [
+    "room_01",
+    "room_02"
+  ],
+  "edge_policy": []
+}

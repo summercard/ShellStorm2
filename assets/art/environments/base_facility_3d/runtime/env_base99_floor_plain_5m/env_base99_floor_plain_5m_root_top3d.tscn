@@ -9,6 +9,7 @@ metadata/asset_category = "environment_module"
 metadata/component = "floor_plain"
 metadata/grid_unit_m = 5.0
 metadata/dimensions_m = Vector3(5, 0.3, 5)
+metadata/visual_node_name = "普通地板_主体_金属哑光反光"
 metadata/origin_contract = "center_bottom"
 metadata/forward_axis = "-Z"
 metadata/visual_only = true

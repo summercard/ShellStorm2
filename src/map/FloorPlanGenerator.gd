@@ -3,6 +3,12 @@ extends RefCounted
 ## 纯数据楼层规划器。输入种子与楼层语义，输出可复现的房间树、面积预算和验收结果。
 ## 本类不创建 Node，不依赖场景树，便于存档恢复、批量性质测试和独立维护。
 
+const LEVEL_AREA_BUDGET := preload("res://src/map/LevelAreaBudget.gd")
+const LEVEL_PLAN_LOADER := preload("res://src/map/LevelPlanLoader.gd")
+## 显式 preload 而非依赖 class_name 全局：新增脚本在 global_script_class_cache.cfg
+## 刷新前用全局名会直接 parse error（headless 门禁会静默红掉）。
+const LEVEL_PLAN_VALIDATOR := preload("res://src/map/LevelPlanValidator.gd")
+
 const MAP_SIZE_M := 250.0
 const CORE_SIZE_M := 65.0
 const CORE_CENTER := Vector2(2.5, 2.5)
@@ -32,6 +38,336 @@ const ROOM_SIZES := {
 const CONTENT_TYPES := [
 	"COMBAT", "COMBAT", "EVENT", "STORAGE", "SCAVENGE", "ELITE", "TRAP", "UPGRADE",
 ]
+
+## 功能房 role 全集 —— 这些房间的身份由 role 决定，不是「内容类型」，不参与内容洗牌、
+## 不计入 content_room_count。它们的 type 缺省值见 `_default_type_for_role`。
+## 断言方（tests/verification/verify_level_plan_design_source.gd）按同一张表逐值核对。
+const FUNCTIONAL_ROLES := ["stair_entry", "stair_exit", "extraction", "boss", "boss_prep"]
+
+## —— 远征关卡01（独立单层关卡）——
+## 一张入口安全屋（15×15，沿用塔楼安全房契约）+ 5 个 25×25 内容房（编号 01-05）
+## + 末尾一间 25×25 撤离房。单层、无楼梯、无电梯，撤离即终局。
+## 尺寸与"内容房最小 30×25m"的塔楼规则无关：远征关卡单列房型表（见 05.2 §7.4）。
+const EXPEDITION_ROOM_SIZE := Vector2(25.0, 25.0)
+const EXPEDITION_ROOM_COUNT := 5
+## 5 个内容房的房型池：固定含 2 间战斗房（保证刷怪）与 1 间可搜索房，
+## 顺序由种子洗牌 —— 这就是"受约束随机"里的随机部分。
+const EXPEDITION_CONTENT_TYPES := ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"]
+## 房间中心必须落在 2.5 + 5k 上，TowerGeometry3D.snap_component_axis 才是恒等映射。
+## 15×15 与 25×25 同属该格点集，35m 步长 = 25m 房 + 10m 门间净距。
+const EXPEDITION_GRID_STEP_M := 35.0
+const EXPEDITION_GRID_ORIGIN_M := 2.5
+
+
+static func generate_expedition(request: Dictionary) -> Dictionary:
+	# 单层受约束随机：模板固定（蛇形主通道），随机量只有两个 ——
+	# 整图绕入口安全屋的 0/90/180/270 旋转（可叠加 Z 轴镜像）与 5 间房的房型顺序。
+	# 两者都不改变"每间房仍与前一间共轴、门间净距 10m"这一可建造约束。
+	var run_seed := int(request.get("run_seed", 1))
+	var expedition_id := str(request.get("expedition_id", "expedition_01"))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = run_seed ^ 0x45585031
+	var rooms := _expedition_rooms()
+	var rotation_steps := rng.randi_range(0, 3)
+	var mirror_z := rng.randi_range(0, 1) == 1
+	for room_value in rooms:
+		var room := room_value as Dictionary
+		var position := room["position"] as Vector2
+		if mirror_z:
+			position = Vector2(position.x, CORE_CENTER.y * 2.0 - position.y)
+		room["position"] = _rotate_point(position, rotation_steps)
+	_shuffle_expedition_types(rooms, rng)
+	var main_path_keys: Array[String] = []
+	for room_value in rooms:
+		var room := room_value as Dictionary
+		if str(room.get("role", "")) == "main":
+			main_path_keys.append(str(room["key"]))
+	var layout_variant := "expedition_rot_%d%s" % [rotation_steps, "_mirror" if mirror_z else ""]
+	var plan := {
+		"layout_id": "expedition_%s_%d" % [
+			expedition_id, abs(hash("%d:%s" % [run_seed, layout_variant])),
+		],
+		"run_seed": run_seed,
+		"expedition_id": expedition_id,
+		"mode": "expedition",
+		"floor_number": 0,
+		"floor_index": 0,
+		"entry_side": "east",
+		"exit_side": "west",
+		"layout_variant": layout_variant,
+		"trigger": "expedition_bootstrap",
+		"rooms": rooms,
+		"main_path_keys": main_path_keys,
+		"main_path_content_count": main_path_keys.size(),
+		"content_room_count": EXPEDITION_ROOM_COUNT,
+		"branch_count": 0,
+		"branch_room_count": 0,
+		"room_size_catalog": {"EXPEDITION_STANDARD": EXPEDITION_ROOM_SIZE},
+		"terminal_mode": "extraction_room",
+	}
+	var errors := validate_expedition(plan)
+	plan["valid"] = errors.is_empty()
+	plan["validation_errors"] = errors
+	plan["attempt_count"] = 1
+	plan["used_fallback"] = false
+	return plan
+
+
+## —— 数据驱动路径（依据 05.2 §3 / §8 S3）——
+##
+## 读 L1/L2/L3 设计源，产出与 generate() 同形的 plan 字典，供
+## TowerDescent3D._commit_floor_bundle() 消费。
+##
+## 与内置房表路径并存，不是替换：登记了设计源的关卡走本路径，
+## 未登记的关卡行为一字不变（因此对既有存档零影响）。
+##
+## 等价性声明（重要）：本路径保证 **几何、拓扑、运行时房间 ID** 与设计源一致；
+## **不宣称** 内容类型分配与旧 `_shuffle_content_types` 逐位一致 —— 设计源
+## 钉死了 `content_type` 就用钉死值，留空则用数据驱动种子洗牌（05.2 §5 第 5 项
+## 「内容类型分配保留现行行为」指的是随机性保留，不是序列逐位复现）。
+##
+## 设计源缺失或校验不通过时返回 {}（空字典），由调用方决定拒绝进入还是回退内置房表。
+static func generate_from_level_plan(level_id: String, floor_number: int, run_seed: int) -> Dictionary:
+	var level_plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
+	if level_plan.is_empty():
+		return {}
+	var normalized := LEVEL_PLAN_LOADER.normalize_floor(level_id, floor_number)
+	if normalized.is_empty():
+		return {}
+	var policy := level_plan.get("generation_policy", {}) as Dictionary
+	var templates := LEVEL_PLAN_LOADER.load_room_templates(level_id)
+	var errors := LEVEL_PLAN_VALIDATOR.validate_floor(level_id, floor_number, policy, templates)
+	var mode := str(normalized.get("mode", "authored"))
+	var boss_floor := false
+	for value in normalized.get("rooms", []):
+		var src := value as Dictionary
+		if str(src.get("role", "")) == "boss":
+			boss_floor = true
+	var rooms: Array[Dictionary] = []
+	for value in normalized.get("rooms", []):
+		var src := value as Dictionary
+		var role := str(src.get("role", "main"))
+		# 运行时房间 ID：优先 legacy_room_id，使既有存档的 room_progress 索引不变；
+		# 新关卡没有 legacy 字段时才用 05.2 §7.1 的新规则 room_id。
+		var runtime_id := str(src.get("legacy_room_id", ""))
+		if runtime_id.is_empty():
+			runtime_id = str(src.get("room_id", ""))
+		var content_type := str(src.get("content_type", ""))
+		if content_type.is_empty():
+			# 功能性 role 的缺省 type，口径与内置房表逐值一致（见 _default_type_for_role）。
+			# 设计源显式写了 content_type 时以设计源为准（钉死优先）。
+			content_type = _default_type_for_role(role)
+		rooms.append({
+			"key": str(src.get("key", "")),
+			"id": runtime_id,
+			"type": content_type,
+			"role": role,
+			"position": src.get("center", Vector2.ZERO) as Vector2,
+			"dimensions": src.get("size", Vector2.ZERO) as Vector2,
+			"parent_key": str(src.get("parent_key", "")),
+		})
+	var rng := RandomNumberGenerator.new()
+	# abci/absi 返回 int：^ 的左右操作数必须都是 int，absf 会让此处 parse error。
+	rng.seed = run_seed ^ absi(str(level_id).hash()) ^ (floor_number << 17)
+	_assign_content_types_data_driven(rooms, rng, boss_floor, policy)
+	var main_path: Array[String] = []
+	for value in normalized.get("main_path", []):
+		main_path.append(str(value))
+	var branch_count := 0
+	var branch_room_count := 0
+	var content_room_count := 0
+	var role_by_key: Dictionary = {}
+	for room in rooms:
+		role_by_key[str(room["key"])] = str(room["role"])
+	for room in rooms:
+		var role := str(room["role"])
+		if role == "branch":
+			branch_room_count += 1
+			if str(role_by_key.get(str(room["parent_key"]), "")) != "branch":
+				branch_count += 1
+		# 内容房计数排除全部功能房：入口 / 出口楼梯厅 / 撤离房 / Boss / Boss 前厅
+		# 都不是内容房。远征内置路径硬编码 EXPEDITION_ROOM_COUNT=5（7 房减 entry 与
+		# extraction），这里逐值对齐；此前漏排 extraction 会算出 6。
+		if not role in FUNCTIONAL_ROLES:
+			content_room_count += 1
+	var terminal_mode := "down_stair_lobby"
+	for room in rooms:
+		if str(room["role"]) == "extraction":
+			terminal_mode = "extraction_room"
+			break
+	if terminal_mode == "down_stair_lobby" and boss_floor:
+		terminal_mode = "boss_down_stair_lobby"
+	var catalog: Dictionary = {}
+	for room in rooms:
+		var dimensions := room["dimensions"] as Vector2
+		catalog[_size_catalog_key(dimensions)] = dimensions
+	var entry_side := str(normalized.get("entry_side", "east"))
+	var plan := {
+		"layout_id": _data_driven_layout_id(level_id, floor_number, normalized, mode, run_seed),
+		"run_seed": run_seed,
+		"level_id": level_id,
+		"mode": mode,
+		"floor_number": int(normalized.get("floor_number", floor_number)),
+		"floor_index": int(normalized.get("floor_index", 0)),
+		"sequence_index": int(normalized.get("sequence_index", 0)),
+		"boss_floor": boss_floor,
+		"entry_side": entry_side,
+		"exit_side": str(normalized.get("exit_side", _opposite_side(entry_side))),
+		"layout_variant": "data_driven_%s" % str(normalized.get("mode", "authored")),
+		"trigger": "level_plan_data",
+		"rooms": rooms,
+		"main_path_keys": main_path,
+		"main_path_content_count": main_path.size(),
+		"branch_count": branch_count,
+		"branch_room_count": branch_room_count,
+		"content_room_count": content_room_count,
+		"area_budget": _calculate_area_budget(rooms),
+		"room_size_catalog": catalog,
+		"terminal_mode": terminal_mode,
+	}
+	plan["valid"] = errors.is_empty()
+	plan["validation_errors"] = errors
+	plan["attempt_count"] = 1
+	plan["used_fallback"] = false
+	return plan
+
+
+## 数据驱动 layout_id（05.2 §7.2）：canonical 只含语义字段，排除时间戳与哈希顺序。
+## authored 模式几何与种子无关，故 canonical 不含 run_seed；
+## constrained 模式随机与种子相关，必须含 —— 否则两局不同图会撞同一个 layout_id。
+static func _data_driven_layout_id(
+	level_id: String, floor_number: int, normalized: Dictionary, mode: String, run_seed: int
+) -> String:
+	var rows: Array = []
+	for value in normalized.get("rooms", []):
+		var room := value as Dictionary
+		var center := room.get("center", Vector2.ZERO) as Vector2
+		var size := room.get("size", Vector2.ZERO) as Vector2
+		var port_rows: Array = []
+		for port_value in room.get("ports", []):
+			var port := port_value as Dictionary
+			port_rows.append([
+				str(port.get("target", "")), str(port.get("side", "")),
+				snappedf(float(port.get("lane_m", 0.0)), 0.001),
+			])
+		port_rows.sort_custom(func(a, b): return str(a[0]) < str(b[0]))
+		rows.append({
+			"key": str(room.get("key", "")),
+			"template_id": str(room.get("template_id", "")),
+			"template_variant": str(room.get("template_variant", "")),
+			"center": [snappedf(center.x, 0.001), snappedf(center.y, 0.001)],
+			"size": [snappedf(size.x, 0.001), snappedf(size.y, 0.001)],
+			"rotation_deg": snappedf(float(room.get("rotation_deg", 0.0)), 0.001),
+			"ports": port_rows,
+		})
+	rows.sort_custom(func(a, b): return str(a["key"]) < str(b["key"]))
+	var canonical := {
+		"level_id": level_id,
+		"floor_number": floor_number,
+		"floor_index": int(normalized.get("floor_index", 0)),
+		"entry_side": str(normalized.get("entry_side", "")),
+		"rooms": rows,
+	}
+	if mode == "constrained":
+		canonical["run_seed"] = run_seed
+	return "f%02d_%s" % [floor_number, JSON.stringify(canonical, "", true).sha256_text().substr(0, 16)]
+
+
+## 远征关卡专用校验：不使用塔楼的 10 房/2-5 支线/30×25 最小内容房口径。
+static func validate_expedition(plan: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var rooms := plan.get("rooms", []) as Array
+	var room_by_key: Dictionary = {}
+	var map_rect := Rect2(
+		Vector2(-MAP_SIZE_M * 0.5, -MAP_SIZE_M * 0.5),
+		Vector2(MAP_SIZE_M, MAP_SIZE_M)
+	)
+	for room_value in rooms:
+		var room := room_value as Dictionary
+		var key := str(room.get("key", ""))
+		if key.is_empty() or room_by_key.has(key):
+			errors.append("duplicate_or_empty_room_key:%s" % key)
+			continue
+		room_by_key[key] = room
+		var dimensions := room.get("dimensions", Vector2.ZERO) as Vector2
+		var role := str(room.get("role", ""))
+		var expected := SAFE_ROOM_SIZE if role == "stair_entry" else EXPEDITION_ROOM_SIZE
+		if not dimensions.is_equal_approx(expected):
+			errors.append("expedition_room_size:%s:%s" % [key, dimensions])
+		if not _rect_contains_rect(map_rect, _room_rect(room)):
+			errors.append("outside_floor_bounds:%s" % key)
+	for first_index in range(rooms.size()):
+		var first := rooms[first_index] as Dictionary
+		for second_index in range(first_index + 1, rooms.size()):
+			var second := rooms[second_index] as Dictionary
+			if _room_rect(first).intersection(_room_rect(second)).get_area() > 0.01:
+				errors.append("room_overlap:%s:%s" % [first.get("key", ""), second.get("key", "")])
+	for room_value in rooms:
+		var room := room_value as Dictionary
+		var parent_key := str(room.get("parent_key", ""))
+		if parent_key.is_empty():
+			continue
+		if not room_by_key.has(parent_key):
+			errors.append("missing_parent:%s" % room.get("key", ""))
+			continue
+		if not _edge_is_buildable(room_by_key[parent_key] as Dictionary, room):
+			errors.append("unbuildable_corridor:%s:%s" % [parent_key, room.get("key", "")])
+	var main_keys := plan.get("main_path_keys", []) as Array
+	if main_keys.size() != EXPEDITION_ROOM_COUNT:
+		errors.append("expedition_main_path_count:%d" % main_keys.size())
+	for main_key in main_keys:
+		if not room_by_key.has(str(main_key)):
+			errors.append("missing_main_room:%s" % main_key)
+	var extraction_room := room_by_key.get("extraction", {}) as Dictionary
+	if extraction_room.is_empty():
+		errors.append("missing_extraction_room")
+	elif not main_keys.is_empty():
+		var last_key := str(main_keys[main_keys.size() - 1])
+		if str(extraction_room.get("parent_key", "")) != last_key:
+			errors.append("extraction_not_after_last_room")
+	return errors
+
+
+static func _expedition_rooms() -> Array[Dictionary]:
+	# 蛇形主通道：入口 → 01 → 02 → 03 → 04 → 05 → 撤离房。
+	# 所有中心坐标都是 2.5 + 35k，坐标吸附是恒等映射，房间记录位置即规划位置。
+	var origin := EXPEDITION_GRID_ORIGIN_M
+	var step := EXPEDITION_GRID_STEP_M
+	var near := origin + step
+	var mid := origin - step
+	var far := origin - step * 2.0
+	var tail := origin - step * 3.0
+	return [
+		_room("entry", "start", "STAIR_LOBBY", "stair_entry", Vector2(origin, origin), SAFE_ROOM_SIZE),
+		_room("room_01", "room_01", "COMBAT", "main", Vector2(origin, mid), EXPEDITION_ROOM_SIZE, "entry"),
+		_room("room_02", "room_02", "COMBAT", "main", Vector2(near, mid), EXPEDITION_ROOM_SIZE, "room_01"),
+		_room("room_03", "room_03", "COMBAT", "main", Vector2(near, far), EXPEDITION_ROOM_SIZE, "room_02"),
+		_room("room_04", "room_04", "COMBAT", "main", Vector2(origin, far), EXPEDITION_ROOM_SIZE, "room_03"),
+		_room("room_05", "room_05", "COMBAT", "main", Vector2(origin, tail), EXPEDITION_ROOM_SIZE, "room_04"),
+		_room(
+			"extraction", "extraction", "EXTRACTION", "extraction",
+			Vector2(near, tail), EXPEDITION_ROOM_SIZE, "room_05"
+		),
+	]
+
+
+static func _shuffle_expedition_types(
+	rooms: Array[Dictionary], rng: RandomNumberGenerator
+) -> void:
+	var shuffled: Array[String] = []
+	for type_id in EXPEDITION_CONTENT_TYPES:
+		shuffled.append(str(type_id))
+	for index in range(shuffled.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held := shuffled[index]
+		shuffled[index] = shuffled[swap_index]
+		shuffled[swap_index] = held
+	var content_index := 0
+	for room in rooms:
+		if str(room.get("role", "")) != "main":
+			continue
+		room["type"] = shuffled[content_index % shuffled.size()]
+		content_index += 1
 
 
 static func generate(request: Dictionary) -> Dictionary:
@@ -299,6 +635,111 @@ static func _room(
 	}
 
 
+## 数据驱动路径是否对该关卡启用（05.2 §8 S3 接缝）。
+##
+## **默认关闭**，两个条件必须同时满足：
+##   1. 该关卡已提供设计源（level_plan.json 可读且 schema 正确）；
+##   2. L1 `generation_policy.runtime_enabled == true`。
+##
+## 为什么默认关：把既有关卡切到数据驱动会改变 `layout_id`，而存档按
+## `floor_layout_ids[floor_index]` 比对，不一致直接整档恢复失败（05.2 §7.2）。
+## 05.2 §9 的 D4（存档兼容策略）尚未裁决，相关条款不得作为施工依据 —— 因此
+## 本接缝先建好但不接通任何关卡，等 D4 裁决 + 新旧 layout_id 等价性证明落地后再逐个开。
+static func data_driven_enabled(level_id: String) -> bool:
+	var level_plan := LEVEL_PLAN_LOADER.load_level_plan(level_id)
+	if level_plan.is_empty():
+		return false
+	var policy := level_plan.get("generation_policy", {}) as Dictionary
+	return bool(policy.get("runtime_enabled", false))
+
+
+## 数据驱动路径的内容类型分配（05.2 §5 第 5 项「保留现行随机行为」）。
+##
+## 与 `_shuffle_content_types` 的三点差异，都是设计源路径必需：
+##   1. **设计源钉死优先**：L2 写了 `content_type` 就该生效，不能被洗牌覆盖。
+##      钉死的房间不消耗池子序号，未钉死的房间按声明顺序依次取池内下一项。
+##   2. **池子可声明**：`generation_policy.content_type_pool` 缺省时才用塔楼 CONTENT_TYPES。
+##      远征关卡的池子是 5 项（COMBAT×2/SCAVENGE/STORAGE/EVENT），与塔楼 8 项不同。
+##   3. **撤离房不参与**：role `extraction` 是终局房，不是内容房，不得被分配内容类型
+##      （内置路径靠「只给 role==main 赋值」保证，本处显式列出）。
+## 功能性 role 的缺省 type —— 与内置房表（`generate()` / `generate_expedition()` 里的
+## `_room()` 写死值）逐值一致。
+##
+## 为什么必须有：这几个不是「内容类型」，运行时靠它们认出这是入口安全房 / 出口楼梯厅 /
+## 撤离房，从而决定刷什么功能（信标、撤离点）。设计源不写 content_type 时若留空，
+## 这些房间会失去身份 —— 实测数据驱动路径曾把 entry/extraction 的 type 产成空串。
+static func _default_type_for_role(role: String) -> String:
+	match role:
+		"stair_entry", "stair_exit":
+			return "STAIR_LOBBY"
+		"extraction":
+			return "EXTRACTION"
+		"boss":
+			return "BOSS"
+		"boss_prep":
+			return "UPGRADE"
+		_:
+			return ""
+
+
+## `room_size_catalog` 的键：把 "25.0 x 25.0" 写成 "25x25"，小数（如 27.5）原样保留。
+## 不用 `"%g" %`：GDScript 的 `%` 格式化**不支持 %g**，会抛
+## "String formatting error: unsupported format character"（实测每房一次引擎 ERROR）。
+static func _size_catalog_key(dimensions: Vector2) -> String:
+	return "%sx%s" % [_trim_trailing_zero(dimensions.x), _trim_trailing_zero(dimensions.y)]
+
+
+static func _trim_trailing_zero(value: float) -> String:
+	var text := "%.3f" % value
+	text = text.rstrip("0").rstrip(".")
+	if text.is_empty() or text == "-":
+		return "0"
+	return text
+
+
+static func _assign_content_types_data_driven(
+	rooms: Array[Dictionary], rng: RandomNumberGenerator, boss_floor: bool, policy: Dictionary
+) -> void:
+	var pool_value: Variant = policy.get("content_type_pool", [])
+	var pool: Array[String] = []
+	if pool_value is Array and not (pool_value as Array).is_empty():
+		for type_id in (pool_value as Array):
+			pool.append(str(type_id))
+	else:
+		for type_id in CONTENT_TYPES:
+			pool.append(str(type_id))
+	if pool.is_empty():
+		return
+	var shuffled: Array[String] = []
+	for type_id in pool:
+		shuffled.append(type_id)
+	for index in range(shuffled.size() - 1, 0, -1):
+		var swap_index := rng.randi_range(0, index)
+		var held := shuffled[index]
+		shuffled[index] = shuffled[swap_index]
+		shuffled[swap_index] = held
+	var content_index := 0
+	for room in rooms:
+		var role := str(room.get("role", ""))
+		# boss 恒 BOSS：玩法不变量（Boss 层必须能识别 Boss 房），与内置写死口径一致。
+		if role == "boss":
+			room["type"] = "BOSS"
+			continue
+		# 其余功能性 role 保留 _default_type_for_role 给的缺省值，不参与内容洗牌
+		# （内置 _shuffle_content_types 的 skip 列表为 stair_entry/stair_exit/boss/boss_prep，
+		#  本处另加 extraction —— 它是终局房，不是内容房）。
+		if role in ["stair_entry", "stair_exit", "extraction", "boss_prep"]:
+			continue
+		if not str(room.get("type", "")).is_empty():
+			continue
+		room["type"] = shuffled[content_index % shuffled.size()]
+		content_index += 1
+	if boss_floor:
+		for room in rooms:
+			if str(room.get("role", "")) == "hub":
+				room["type"] = "ELITE"
+
+
 static func _shuffle_content_types(rooms: Array[Dictionary], rng: RandomNumberGenerator, boss_floor: bool) -> void:
 	var shuffled: Array[String] = []
 	for type_id in CONTENT_TYPES:
@@ -322,47 +763,9 @@ static func _shuffle_content_types(rooms: Array[Dictionary], rng: RandomNumberGe
 
 
 static func _calculate_area_budget(rooms: Array[Dictionary]) -> Dictionary:
-	var total_floor_area := MAP_SIZE_M * MAP_SIZE_M
-	var outer_wall_area := MAP_SIZE_M * 4.0 * WALL_THICKNESS_M
-	var core_area := CORE_SIZE_M * CORE_SIZE_M
-	# 电梯井、双楼梯折返区、楼板洞、门前净空与不可规整角区统一先扣除。
-	var stair_and_utility_reserve := 6500.0
-	var available_area := total_floor_area - outer_wall_area - core_area - stair_and_utility_reserve
-	var room_area := 0.0
-	var interior_wall_area := 0.0
-	var corridor_area := 0.0
-	var room_by_key: Dictionary = {}
-	for room in rooms:
-		room_by_key[str(room["key"])] = room
-		var dimensions := room["dimensions"] as Vector2
-		room_area += dimensions.x * dimensions.y
-		interior_wall_area += (dimensions.x + dimensions.y) * 2.0 * WALL_THICKNESS_M
-	for room in rooms:
-		var parent_key := str(room.get("parent_key", ""))
-		if parent_key.is_empty() or not room_by_key.has(parent_key):
-			continue
-		corridor_area += _corridor_length(room_by_key[parent_key] as Dictionary, room) * CORRIDOR_WIDTH_M
-	var estimated_used := room_area + interior_wall_area + corridor_area
-	var target_usable_area := available_area * TARGET_OCCUPANCY_RATIO
-	return {
-		"total_floor_area_m2": total_floor_area,
-		"outer_wall_area_m2": outer_wall_area,
-		"core_area_m2": core_area,
-		"stair_corridor_utility_reserve_m2": stair_and_utility_reserve,
-		"available_area_m2": available_area,
-		"target_occupancy_ratio": TARGET_OCCUPANCY_RATIO,
-		"target_usable_area_m2": target_usable_area,
-		"reference_content_room_cost_m2": REFERENCE_CONTENT_ROOM_COST_M2,
-		"calculated_content_room_target": clampi(
-			int(floor(target_usable_area / REFERENCE_CONTENT_ROOM_COST_M2)),
-			14,
-			16
-		),
-		"room_area_m2": room_area,
-		"interior_wall_area_m2": interior_wall_area,
-		"corridor_area_m2": corridor_area,
-		"estimated_used_area_m2": estimated_used,
-	}
+	# 公式已抽到 LevelAreaBudget 唯一实现（校验器与加载路径共用，避免第三份）。
+	# 本处保留同名转发，调用点与返回键完全不变。
+	return LEVEL_AREA_BUDGET.calculate(rooms)
 
 
 static func _corridor_length(parent: Dictionary, child: Dictionary) -> float:
