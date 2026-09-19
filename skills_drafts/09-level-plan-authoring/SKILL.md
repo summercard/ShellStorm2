@@ -38,6 +38,10 @@ source/art/whitebox/tower_zones/<level_id>/<版本>/data/
 版本目录默认 `v001`；已登记覆盖见 `LevelPlanLoader.DATA_ROOT_OVERRIDES`
 （`battle_level01` 固定在 `v004`）。
 
+L2 每个房间还有一个**可选**字段 `enemy_spawn_plan`（房间级刷怪计划：波次数 / 每波数量 /
+怪物组成）。不写就完全不影响现状；写了就由设计源全量接管那一间房的刷怪。
+口径见 §2 第 2 步补充。
+
 **唯一权威规范：** `docs/v0.1/05.2_关卡版图白盒与生成规范.md`。
 **可填的设计表：** `docs/v0.1/design/新关卡设计表.md`（六个部分：要你填的 / 可以改的 /
 固定的 / 工具自动算的 / 硬规则 / 填完之后。**没有样例，用户明确要求过不要范例**）。
@@ -82,6 +86,7 @@ source/art/whitebox/tower_zones/<level_id>/<版本>/data/
 | 主路 `main_path` | 入口到终点的 key 序列 |
 | 模板池 | 每个模板的 `template_id` / `room_type` / 尺寸 / 可开门墙 |
 | 内容房怎么刷 | 建议全部留空（走池子洗牌）；只在需要固定时填 |
+| 每间房的刷怪 | **默认不填**（走引擎全局公式）。只有用户明确要求「这一间房的波次数 / 每波数量 / 怪物组合必须固定」时才填 `enemy_spawn_plan`，口径见第 2 步补充 |
 
 **不要问用户的（全是派生量，问了就是错的）：**
 `room_id`、`layout_id`、`ports[]`（`side` / `lane_m` / `wall_length_m`）、`reservations`（塔楼除外）、`area_budget`。
@@ -103,6 +108,77 @@ source/art/whitebox/tower_zones/<level_id>/<版本>/data/
 - L3 的 `wall_lane_table` 按规范 §3.5 公式填：
   15m → `[0]`；25m → `[-5, 0, 5]`；30m / 40m → **没有 0m 槽**，别想当然写 0。
 - 所有 `.gd` / `.tscn` / `.json` / `.md` 写 **CRLF** 行尾。
+
+### 第 2 步补充 · 房间级刷怪计划 `enemy_spawn_plan`（可选）
+
+**什么时候填：** 只有用户明确要求「这一间房必须固定波数 / 固定每波数量 / 固定怪物组合」时才填。
+不填 / 留空 = 该房继续走引擎的全局公式（`desired = 4 + floor*2`、房型波次表、主题权重池），
+这是默认且推荐的行为。**不要主动替用户填。**
+
+**位置：** L2 `floors/floor_<NN>.json` 的 `rooms[]` 里，与 `content_type` 同级。
+
+```json
+"enemy_spawn_plan": {
+  "waves": [
+    { "monsters": [ { "type": "melee_chaser", "count": 2 }, { "type": "ranged_caster", "count": 1 } ] },
+    { "monsters": [ { "type": "shielded", "count": 1 }, { "type": "exploder", "count": 2 } ] }
+  ]
+}
+```
+
+- `waves`：一项 = 一波，数组顺序即出场顺序。
+- `monsters`：一波里的怪物组成，每条是 `type` + `count`。
+- 一波总数 = 该波所有 `count` 之和。
+
+**`type` 只能取这 6 个值**（= `MonsterInjector.BASE_ENEMY_TYPES` 去掉 `boss`）：
+
+| `type` | 名字 |
+|---|---|
+| `melee_chaser` | 小菌猪 |
+| `ranged_caster` | 孢子射手 |
+| `summoner` | 蜂巢怪 |
+| `shielded` | 壳甲卫兵 |
+| `exploder` | 炸弹果 |
+| `ambusher` | 地刺虫 |
+
+`boss` **不可填**：Boss 有独立的出场与结算路径，从刷怪入口硬塞会绕过 Boss 逻辑。
+
+**硬上限（超了校验器直接红）：** 波数 ≤ 6、单波总数 ≤ 24、全房总数 ≤ 64。
+
+**只能填在会刷怪的房型上。** 判定口径是 `content_type`（**不是** `room_type`），必须属于
+`GameDesignConfig.ROOM_TYPES_WITH_HOSTILES`。填在安全房 / 撤离房这类永不调用刷怪入口的房上会报
+`enemy_spawn_plan_on_non_hostile_room` —— 没有这条断言时它只会静默失效。
+
+**接管范围（要说清楚给用户）：** 填了之后，该房的**波次数、每波数量、怪物组合**全部以设计源为准，
+`desired` 数量公式、COMBAT 波次表 `[1,2,2,3]`、主题权重池 `enemy_pool` 一律不参与。
+但**单只怪的数值**（血量 / 伤害 / 速度）仍由 `MonsterInjector` 出，主题倍率与楼层缩放照常生效 ——
+设计源只写「要谁、几只」，不写数值。这样数值永远只有一个真源。
+
+**校验错误码：**
+
+| 错误 | 含义 |
+|---|---|
+| `enemy_spawn_plan_not_object` | 值不是对象 |
+| `enemy_spawn_plan_on_non_hostile_room` | 房型不刷怪，写了等于静默失效 |
+| `enemy_spawn_plan_waves_empty` | `waves` 缺失或为空 |
+| `enemy_spawn_plan_too_many_waves` | 波数超过 6 |
+| `enemy_spawn_plan_wave_not_object` | 某一波不是对象 |
+| `enemy_spawn_plan_wave_monsters_empty` | 某一波没写 `monsters` 或为空 |
+| `enemy_spawn_plan_monster_not_object` | 某一条怪不是对象 |
+| `enemy_spawn_plan_unknown_monster` | `type` 不在可填的 6 个里 |
+| `enemy_spawn_plan_monster_not_authorable` | `type` 写了 `boss` |
+| `enemy_spawn_plan_monster_count_invalid` | `count` ≤ 0 |
+| `enemy_spawn_plan_wave_too_large` | 单波总数 > 24 |
+| `enemy_spawn_plan_total_too_large` | 全房总数 > 64 |
+
+**落地要有两道闸（缺一即等于没接通）：**
+
+1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... plans=N` —— 末尾的 `plans` 就是这个校验器**真找到并逐值比对**
+   过的刷怪计划条数。填了几间房就该是几。**出现 `plans=0` 而设计源里确实写了，就是字段半路被吞了**
+   （见坑 18），不是「没问题」。
+2. 专属门禁里真调一次刷怪入口，逐值断言波次数 / 每波数量 / 总敌数。
+   范本：`tests/verification/verify_test_level_99_flow.gd` 的 `_verify_enemy_spawn_plan`
+   —— 它同时留一间**没填**的同类房做 A/B，证明覆盖是「按房间可选」而不是「一填全改」。
 
 ### 第 3 步 · 取门槽数据（禁止手算）
 
@@ -139,11 +215,14 @@ Godot_v4.6.3-stable_win64_console.exe --headless --path <项目根> \
 
 ```text
 LEVEL_PLAN_VALIDATE_OK levels=1 checks=... rooms=... templates=...
-LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=...
+LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 ```
 
 第一条查设计数据自洽；第二条**真的调一次生成器**，查产出可用（功能房类型 / 尺寸 /
 内容房计数）。两条不是一回事 —— 实测曾有设计数据全绿而产出把入口房类型产成空串。
+
+末尾的 `plans=` 是「设计源里写的刷怪计划，有几间真的带到了运行时计划」。没填刷怪计划时它是
+`0`，属正常；填了却还是 `0`，就是字段半路被吞了（见坑 18）。
 
 不过就逐条读 `LEVEL_PLAN_ERROR`（设计数据侧）或 `LEVEL_PLAN_RUNTIME_ERROR`（产出侧），
 回去改设计源。设计数据侧错误码含义：
@@ -254,6 +333,8 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=...
 | 动 `grid_unit_m` / `wall_thickness_m` / `floor_height_m` / 场地与核心筒尺寸 | 全局几何基准，改等于改引擎口径，不属本 Skill 授权 |
 | 顺手改 `FloorPlanGenerator` 的塔楼内置房表 | 塔楼路线已冻结；新关卡走设计源，不动老表 |
 | 改了 `.gd` 却忘了 `.tscn` / `preload` 的引用 | 改名与引用必须同一批完成 |
+| 擅自给房间填 `enemy_spawn_plan`（或替用户猜波数 / 怪物组合） | 它是**可选覆盖项**。用户没明确要求「这一间房固定刷法」时，留空走全局公式才是对的；替他猜会静默改掉那一间房的节奏 |
+| 在 `enemy_spawn_plan` 里写单只怪的数值（血量 / 伤害 / 速度） | 设计源只写「要谁、几只」。数值由 `MonsterInjector` 统一出，写第二份必然漂移 |
 
 ---
 
@@ -343,7 +424,21 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=...
    |---|---|---|
    | `ERROR: Node not inside tree. Use look_at_from_position()`，机位全乱、图里只有几层亮度 | `Camera3D` 还没 `add_child` 就调 `look_at()`/`make_current()`，树外 `global_transform` 是恒等、静默失败 | 先 `add_child(camera)` **再**设 `position` / `look_at()` / `make_current()` |
    | 金属/高反光资产在纯色背景里渲染成**近黑**（中心像素 luma 0.05–0.11），判据误报「没渲染出内容」 | 金属靠**环境反射**才有亮度，纯色 `Environment` 没有可反射内容 | `Environment` 用 `ProceduralSkyMaterial` 天空 + `ambient_light_source = AMBIENT_SOURCE_SKY`；光源能量调足（1.15→2.1） |
-   | 门扇等**底边为原点**的资产在关卡里判「没贴地」 | 资产以底边中心为原点，装配时靠 `visual.position.y = -DOOR_CLEAR_HEIGHT_M * 0.5` 对齐门中心；实测有个位数 mm 余量（门扇 8mm 悬空）属**正常** | 核贴地用**世界空间 AABB 底边**（阈值 `MAX_BOTTOM_GAP_M≈0.012`），别用局部坐标拍脑袋；8mm 要在文档里**如实登记**为已知边界，不是 bug |
+   | 门扇等**底边为原点**的资产在关卡里判「没贴地」 | 资产以底边中心为原点，装配时靠 `visual.position.y = -DOOR_CLEAR_HEIGHT_M * 0.5` 对齐门中心；实测有个位数 mm 余量（门扇 8mm 悬空）属**正常** | 核贴地用**世界空间 AABB 底边**（阈值 `MAX_BOTTOM_GAP_M≈0.012`），     别用局部坐标拍脑袋；8mm 要在文档里**如实登记**为已知边界，不是 bug |
+18. **给房间加「房间级字段」时，两处 `configure` 调用点都要改 —— 漏一个就静默丢字段。**
+   房间实例有**两处**实例化点，各自把 record 拷进 `DungeonRoom3D.configure({...})`：
+   - `Dungeon3D._generate_layout()` —— 塔楼 / 公共基座路径
+   - `TowerDescent3D._instantiate_dynamic_room()` —— **远征关卡走这一个**
+
+   两处的 `configure({...})` 都是**显式白名单**：没列进去的键根本不会传，字段在房间实例上就是空。
+   实测：只给前者加了 `enemy_spawn_plan`，远征关卡 99 的房实例上仍是空字典，而
+   `LEVEL_PLAN_VALIDATE_OK`、`LEVEL_PLAN_RUNTIME_GUARD_OK`、设计源校验**全部照样绿** ——
+   因为它们只验到「生成的 plan」为止，不碰房间实例。**只有真装配一次场景、再读房实例才看得见。**
+
+   配套两条纪律：
+   - `DungeonRoom3D.configure` 里新增字段一律写成 `config.get("key", 当前值)`（保留式），
+     别写 `config.get("key", {})` —— 后者会让任何一次忘了带键的重复 configure 把已有值洗掉。
+   - 新增房间级字段后，要在专属门禁里断言 `room.<字段>` 真的非空，**别只断言 plan**。
 
 ---
 
@@ -356,6 +451,8 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=...
 - [ ] L2 的 `ports` 来自第 3 步取数（不是手算），或干脆没写
 - [ ] `LEVEL_PLAN_VALIDATE_OK` 出来了，且日志里零 `SCRIPT ERROR`、零 `ERROR:`
 - [ ] `LEVEL_PLAN_RUNTIME_GUARD_OK` 也出来了（**两条判据缺一不可**）
+- [ ] 若用户在 1.7 填了刷怪计划：`LEVEL_PLAN_RUNTIME_GUARD_OK` 末尾的 `plans=` 等于他填的房数
+      （`plans=0` 就是没接通，回来查坑 18），且专属门禁里真调过刷怪入口、逐值断言过波次与数量
 - [ ] 若用户只要求「生成设计源」：`runtime_enabled` 仍是 `false`
 - [ ] 若用户要求「能玩到」：`runtime_enabled` 为 `true`**且只对他指定的那一关开**，
       `EXPEDITION_LEVELS` 已登记、独立场景已建、`room_id` 已对齐 `start`/`room_NN`/`extraction`、

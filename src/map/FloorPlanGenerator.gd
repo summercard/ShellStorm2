@@ -165,6 +165,9 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 			"position": src.get("center", Vector2.ZERO) as Vector2,
 			"dimensions": src.get("size", Vector2.ZERO) as Vector2,
 			"parent_key": str(src.get("parent_key", "")),
+			# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
+			# 与 content_type 同样属于「设计源钉死优先」的字段，本层只透传不解释。
+			"enemy_spawn_plan": (src.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
 		})
 	var rng := RandomNumberGenerator.new()
 	# abci/absi 返回 int：^ 的左右操作数必须都是 int，absf 会让此处 parse error。

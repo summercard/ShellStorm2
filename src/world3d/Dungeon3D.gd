@@ -42,6 +42,10 @@ const ENEMY_FILL_ATTEMPT_LIMIT := 4
 const MINIMAP_RUNTIME_INTERVAL := 1.0 / 15.0
 const FATE_CURRENCY_BY_RARITY := [20, 40, 70, 120, 180]
 const BASE_INVENTORY_CAPACITY := 12
+## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
+## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
+## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
+const GUARANTEED_LOADOUT_AMMO_ROUNDS := 60
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -726,6 +730,11 @@ func _setup_run_modules() -> void:
 			if added < requested:
 				item["count"] = requested - added
 				BaseManager.add_vault_item(item)
+	# 保底武装配套：白送手枪每次装配场景都会给，弹药按同一生命周期补一份，
+	# 否则「返城时手上有一把枪」实际是枪 + 0 发备弹，弹匣打空就再也打不响。
+	# 与 consume_pending_loadout 同一条边界，不读开发者真实档案的测试路径不受影响。
+	if not test_mode:
+		_grant_guaranteed_loadout_ammo()
 	_inventory.inventory_changed.connect(_refresh_loot_label)
 	GameManager.currency_changed.connect(_on_run_currency_changed)
 	_inventory_ui = InventoryUI.new()
@@ -759,6 +768,27 @@ func _setup_run_modules() -> void:
 	_inventory_ui.quick_item_move_requested.connect(_on_quick_item_move_requested)
 	_inventory_ui.quick_item_use_requested.connect(_use_quick_item)
 	_sync_quick_item_state()
+
+
+## 保底武装配套弹药：把入场即得的通用备弹放进主背包。
+## 与白送手枪同一条生命周期（每次装配战局/基地场景都会重新给），因此续档恢复
+## 会在 `_restore_runtime_save_snapshot()` 里被存档快照整格覆盖，不会重复累计。
+## 返回实际入包发数；背包格位被占满时可能少于 `GUARANTEED_LOADOUT_AMMO_ROUNDS`。
+func _grant_guaranteed_loadout_ammo() -> int:
+	if _inventory == null or GUARANTEED_LOADOUT_AMMO_ROUNDS <= 0:
+		return 0
+	var ammo := ItemRegistry.get_instance().get_item("item_ammo_pack")
+	if ammo.is_empty():
+		return 0
+	var added := _inventory.add_item(ammo, GUARANTEED_LOADOUT_AMMO_ROUNDS)
+	if added > 0:
+		_refresh_loot_label()
+	return added
+
+
+## 供验收读取的保底备弹发数；内容数值的唯一出口，禁止在测试里重复写死 60。
+func get_guaranteed_loadout_ammo_rounds() -> int:
+	return GUARANTEED_LOADOUT_AMMO_ROUNDS
 
 
 ## 武器表现页只在玩家首次按 K 时创建。隐藏的完整树面板无需常驻 HUD，
@@ -1432,6 +1462,7 @@ func _generate_layout() -> void:
 			"custom_dimensions": record.get("custom_dimensions", Vector2.ZERO),
 			"tower_module_shell": bool(record.get("tower_module_shell", false)),
 			"open_wall_directions": record.get("open_wall_directions", []),
+			"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)
@@ -1898,6 +1929,17 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		return false
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0), 0, 3)
+	# —— 设计源覆盖（房间级）——
+	# 房间若声明了 enemy_spawn_plan，则波次数、每波数量、怪物组成全部以设计源为准：
+	# desired 数量公式、COMBAT 波次表 [1,2,2,3]、主题权重池（enemy_pool）一律不参与。
+	# 单只怪的数值仍由 MonsterInjector 出（主题倍率 + 楼层缩放照常生效）。
+	var authored_waves := _authored_spawn_waves(room, floor, floor_level)
+	if not authored_waves.is_empty():
+		# 设计源接管本房的数量与组成，但命运卡注入的倍率仍须照常落账并清零：
+		# 只写 _room_enemy_*_multipliers 而不清零，会让「下一间房」的临时倍率
+		# 泄漏到更后面的房间（公式路径原本就在末尾做这件事）。
+		_note_room_enemy_modifiers(room)
+		return _commit_room_waves(room, authored_waves)
 	var enemy_configs: Array[Dictionary] = []
 	match room.room_type:
 		"BOSS":
@@ -1943,12 +1985,7 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		})
 		enemy_configs.append_array(reinforcements)
 		_next_room_enemy_count = 0
-	_room_enemy_hp_multipliers[room.room_id] = _next_room_enemy_hp_multiplier
-	_room_enemy_damage_multipliers[room.room_id] = _next_room_enemy_damage_multiplier
-	_room_currency_multipliers[room.room_id] = _next_room_currency_multiplier
-	_next_room_enemy_hp_multiplier = 1.0
-	_next_room_enemy_damage_multiplier = 1.0
-	_next_room_currency_multiplier = 1.0
+	_note_room_enemy_modifiers(room)
 	if enemy_configs.is_empty():
 		push_error("Hostile room %s generated no enemies; unlocking room to prevent a soft lock" % room.room_id)
 		_alive_by_room[room.room_id] = 0
@@ -1970,6 +2007,38 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 			batch.append(enemy_configs[cursor])
 			cursor += 1
 		waves.append(batch)
+	return _commit_room_waves(room, waves)
+
+
+## 把命运卡注入的「本房倍率」落账到本房 id，并清零待用值。
+## 公式路径与设计源路径都必须调用：只落账不清零，待用值会漏到后面几间房。
+## `_next_room_enemy_count`（补兵）由公式路径自行消费（它要按数量追加敌人）；
+## 设计源路径不做补兵 —— 数量以设计源为准 —— 但仍须在此清零。
+func _note_room_enemy_modifiers(room: DungeonRoom3D) -> void:
+	_room_enemy_hp_multipliers[room.room_id] = _next_room_enemy_hp_multiplier
+	_room_enemy_damage_multipliers[room.room_id] = _next_room_enemy_damage_multiplier
+	_room_currency_multipliers[room.room_id] = _next_room_currency_multiplier
+	_next_room_enemy_hp_multiplier = 1.0
+	_next_room_enemy_damage_multiplier = 1.0
+	_next_room_currency_multiplier = 1.0
+	_next_room_enemy_count = 0
+
+
+## 读房间设计源给出的刷怪计划并转成波次（每项一波）。
+## 返回空数组 = 没有覆盖（回退全局公式），不是「零敌人」。
+func _authored_spawn_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Array:
+	if _monster_injector == null or room.enemy_spawn_plan.is_empty():
+		return []
+	return _monster_injector.build_waves_from_plan(room.enemy_spawn_plan, floor, floor_level)
+
+
+## 把已分好的波次提交为本房的刷怪队列，并立刻刷出第一波。
+## `waves` 每项是一波的敌人配置数组（公式路径与设计源路径共用此处）。
+## 返回是否成功出怪；任一步失败都会把房间解锁，防软锁。
+func _commit_room_waves(room: DungeonRoom3D, waves: Array) -> bool:
+	if waves.is_empty():
+		return false
+	var wave_count := waves.size()
 	var first_wave: Array[Dictionary] = waves.pop_front() as Array[Dictionary]
 	_room_wave_queues[room.room_id] = waves
 	_room_wave_numbers[room.room_id] = 1

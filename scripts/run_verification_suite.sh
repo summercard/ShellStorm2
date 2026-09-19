@@ -121,6 +121,7 @@ core_scenes=(
   verify_weapon_instance_fate_ownership_flow
   verify_celestial_fate_scope_flow
   verify_finite_ammo_flow
+  verify_guaranteed_loadout_ammo_flow
   verify_avatar_return_persistence_flow
   verify_tactical_inventory_minimap_flow
   verify_backpack_equipment_flow

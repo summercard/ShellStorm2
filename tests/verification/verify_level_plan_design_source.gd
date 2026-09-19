@@ -107,12 +107,14 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 	var failed_levels := 0
 	var guard_checks := 0
 	var guard_rooms := 0
+	var guard_plans := 0
 	for level_id in targets:
 		var level_plan := LOADER.load_level_plan(level_id)
 		if level_plan.is_empty():
 			continue  # 静态校验已报缺失，不重复
 		var errors: Array[String] = []
 		var level_rooms := 0
+		var level_plans := 0
 		for entry in LOADER.list_floors(level_plan):
 			var floor_number := int(entry.get("floor_number", 0))
 			var plan := GENERATOR.generate_from_level_plan(
@@ -123,6 +125,9 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				continue
 			if not bool(plan.get("valid", false)):
 				errors.append("floor %d: 生成器自校验未通过" % floor_number)
+			var source_plans := _source_spawn_plans(level_id, floor_number)
+			level_plans += source_plans.size()
+			guard_plans += source_plans.size()
 			var rooms: Array = plan.get("rooms", [])
 			level_rooms += rooms.size()
 			var content_rooms := 0
@@ -139,6 +144,9 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 					errors.append(
 						"floor %d room %s: 尺寸缺失 %s" % [floor_number, key, str(dimensions)]
 					)
+				errors.append_array(
+					_verify_spawn_plan_carried(floor_number, key, room, source_plans)
+				)
 				if ROLE_EXPECTED_TYPE.has(role):
 					var expected := str(ROLE_EXPECTED_TYPE[role])
 					if room_type != expected:
@@ -172,7 +180,8 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 		guard_rooms += level_rooms
 		if errors.is_empty():
 			print(
-				"LEVEL_PLAN_RUNTIME_LEVEL_OK %s rooms=%d" % [level_id, level_rooms]
+				"LEVEL_PLAN_RUNTIME_LEVEL_OK %s rooms=%d plans=%d"
+				% [level_id, level_rooms, level_plans]
 			)
 		else:
 			failed_levels += 1
@@ -184,10 +193,65 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				print("LEVEL_PLAN_RUNTIME_ERROR %s %s" % [level_id, str(error)])
 	if failed_levels == 0:
 		print(
-			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d"
-			% [targets.size(), guard_rooms, guard_checks]
+			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d"
+			% [targets.size(), guard_rooms, guard_checks, guard_plans]
 		)
 	return failed_levels
+
+
+## 读该层设计源里每个房间的 enemy_spawn_plan（按 key 索引），用于下面的透传断言。
+func _source_spawn_plans(level_id: String, floor_number: int) -> Dictionary:
+	var out: Dictionary = {}
+	var floor_plan := LOADER.load_floor_plan(level_id, floor_number)
+	for value in floor_plan.get("rooms", []):
+		if not (value is Dictionary):
+			continue
+		var raw := value as Dictionary
+		var plan_value: Variant = raw.get("enemy_spawn_plan", {})
+		if plan_value is Dictionary and not (plan_value as Dictionary).is_empty():
+			out[str(raw.get("key", ""))] = (plan_value as Dictionary).duplicate(true)
+	return out
+
+
+## 断言设计源的刷怪计划**原样透传到运行时计划**。
+##
+## 这条断言存在的理由：LevelPlanLoader.normalize_floor 是白名单重建，设计源里
+## 新增的字段若忘了在 Loader 登记，会被静默丢掉 —— 不报错、不警告、运行时回退
+## 全局公式，表现为「我明明填了却没生效」。此处按 key 比对 `波次数|每波数量` 签名，
+## 漏字段或中途被改写都会红。
+func _verify_spawn_plan_carried(
+	floor_number: int, key: String, room: Dictionary, source_plans: Dictionary
+) -> Array[String]:
+	var errors: Array[String] = []
+	if not source_plans.has(key):
+		return errors
+	var expected := _spawn_plan_signature(source_plans[key] as Dictionary)
+	var carried := room.get("enemy_spawn_plan", {}) as Dictionary
+	if carried.is_empty():
+		errors.append(
+			"floor %d room %s: enemy_spawn_plan 未透传到运行时计划（应为 %s）"
+			% [floor_number, key, expected]
+		)
+		return errors
+	var actual := _spawn_plan_signature(carried)
+	if actual != expected:
+		errors.append(
+			"floor %d room %s: enemy_spawn_plan 透传后被改写 %s -> %s"
+			% [floor_number, key, expected, actual]
+		)
+	return errors
+
+
+## 刷怪计划的紧凑签名：`波次数|每波数量,每波数量`。用于比对"填的"与"到的"是否一致。
+func _spawn_plan_signature(plan: Dictionary) -> String:
+	var waves: Array = plan.get("waves", []) as Array
+	var parts: Array[String] = []
+	for wave_value in waves:
+		var wave_total := 0
+		for monster_value in ((wave_value as Dictionary).get("monsters", []) as Array):
+			wave_total += int((monster_value as Dictionary).get("count", 0))
+		parts.append(str(wave_total))
+	return "%d|%s" % [waves.size(), ",".join(parts)]
 
 
 ## 支持 --level=<id> 覆盖默认目标；无参数时校验 TARGET_LEVELS。

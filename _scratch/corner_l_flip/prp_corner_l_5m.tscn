@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3]
+; Stable AssetID: ENV-TOWER-CORNER-L-5M | normalized production path v001
+
+; 5m L 墙角 - 自包含独立模块（长臂沿 +X、短臂沿 -Z，原点在转角）
+; 正式美术：tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb（v001）
+;   来源：tower_zones/battle/source/common_components/v007 批源里的「通用墙组件」
+;   （ROOT_wall_standard_5m_通用组件）。L 角不是单独建模的：它由**两份同一通用墙**
+;   刚性拼成（长臂 = T(+2.5,0,0)；短臂 = T(0,+2.5,0) @ Rz(+90°)），因此与直墙美术
+;   逐面一致——派生脚本断言每条臂 5319 三角面 == 通用墙，L 合计 10638 == 2×墙。
+;   派生脚本与清单见 tower_descent_3d/source/corner_l_5m/。
+;   派生时绕竖轴 180°：美术自述正面在 Blender +Y，经 YUP 导出会落到 Godot -Z，
+;   而塔楼 A 套硬要求 forward_axis=+Z，故先翻转再把偏移烘焙进顶点。
+;   两条臂的装饰面都朝外：长臂在 Godot +Z、短臂在 Godot +X。
+;   逻辑/阻挡高 12m；视觉墙高 11.9m，顶部预留 0.1m。
+; 原点契约是 bottom_corner（不是 bottom_center）：原点落在转角、两臂从原点向
+;   +X 与 -Z 伸出。DungeonRoom3D._spawn_room_corner() 直接把模块摆到房间角点再
+;   按 NW/NE/SW/SE 旋转，所以把模型重新居中会让所有房间的角错位。
+;   （统一契约门禁为此新增识别 bottom_corner，见 verify_tower_module_prefabs.gd。）
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV（01/02/04 三个角色，由
+;   tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
+;   （DungeonRoom3D._apply_module_material_variant() 见到本标记即 return；
+;   直墙早已如此，本次让 L 角与直墙口径一致。）
+; 碰撞留本 Prefab：两条墙臂各自一个 StaticBody3D，节点名 WallCollisionLong /
+;   WallCollisionShort 是运行时契约——DungeonRoom3D._configure_corner_camera_collisions()
+;   按名字只把「属于南墙的那一条臂」标为 camera_lower_wall，镜头下压行为依赖它。
+;   因此本件声明 visual_only=false（其余五件是纯视觉件，碰撞由脚本 0.30m 代理生成）。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_long"]
+size = Vector3(5, 12, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_corner_L_short"]
+size = Vector3(0.3, 12, 5)
+
+[node name="PrpTowerCornerL5m" type="Node3D"]
+metadata/asset_id = "ENV-TOWER-CORNER-L-5M"
+metadata/asset_version = "v001"
+metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/logical_height_m = 12.0
+metadata/visual_height_m = 11.9
+metadata/visual_top_clearance_m = 0.1
+metadata/origin_contract = "bottom_corner"
+metadata/origin_note = "原点 = 转角（两臂交点），底面 Y=0。长臂沿 +X 覆盖 0..5m，短臂沿 -Z 覆盖 -5..0m；凹侧（-X/-Z）为房间内。装配脚本按此摆位，勿把几何重新居中。"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 5)
+metadata/visual_bounds_size_m = Vector3(5.15, 11.9, 5.3175)
+metadata/bounds_note = "结构包络 5×11.9×5 = 转角起算的 L 标称占地（两臂各 5m），玩法阻挡 12m 高由本 Prefab 的两个 StaticBody3D 承担；可视包络 5.15×11.9×5.3175 = 实测两臂装饰面各自外凸到 +X 0.3175 / +Z 0.3175、反向结构面在 -0.15。两个包络刻意分离：替换美术只改本条与可视声明，不得改碰撞。"
+metadata/visual_node_name = "ENV_TOWER_CORNER_L_5M"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
+metadata/visual_only = false
+metadata/collision_owner = "self"
+metadata/collision_note = "两条墙臂各一个 StaticBody3D（WallCollisionLong / WallCollisionShort），12m 高 0.30m 厚，随 Prefab 根移动。节点名是 DungeonRoom3D 的镜头下压契约，改名即回归。"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/instantiation_note = "每房间 4 个角各实例化一次（NW/NE/SW/SE 用 rotation_y 区分朝向），节点树保留。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="WallCollisionLong" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionLong" type="CollisionShape3D" parent="WallCollisionLong"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 6, 0)
+shape = SubResource("BoxShape3D_corner_L_long")
+
+[node name="WallCollisionShort" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShort" type="CollisionShape3D" parent="WallCollisionShort"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6, -2.5)
+shape = SubResource("BoxShape3D_corner_L_short")

@@ -109,7 +109,23 @@
           "wall_length_m": 25.0
         }
       ],
-      "content_type": "COMBAT"
+      "content_type": "COMBAT",
+      "enemy_spawn_plan": {
+        "waves": [
+          {
+            "monsters": [
+              { "type": "melee_chaser", "count": 2 },
+              { "type": "ranged_caster", "count": 1 }
+            ]
+          },
+          {
+            "monsters": [
+              { "type": "shielded", "count": 1 },
+              { "type": "exploder", "count": 2 }
+            ]
+          }
+        ]
+      }
     },
     {
       "key": "extraction",

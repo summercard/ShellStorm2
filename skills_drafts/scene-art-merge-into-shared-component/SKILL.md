@@ -91,6 +91,7 @@ agent_created: true
   bash scripts/run_verification_suite.sh scene <verify_scene_name>
   ```
 - 导出新 GLB 后要触发导入扫描（`--headless --path . --import`）才会生成 `.import` 与 `.godot/imported/*.scn`。
+- ⚠️ **首次导入生成的 `.import` 不会自动带上色盘契约**：Godot 只对**已存在该绑定**的 `.import` 保留它，全新 GLB 会退回 `import_script/path=""` + `gltf/embedded_image_handling=1`。后果是色盘不绑定、资产**渲染成纯白板**，而且**不触发任何 `*_OK` 门禁**（包络、面数、材质数、节点数全部照旧通过）——只有画面能看见。写完 `.import` 必须逐字复核第 4 步那两行，别只看「导入无错误」。复现与修复见 ShellStorm2 `env_tower_corner_l_5m_top3d.glb`（2026-09-19，靠并排对照图才抓到）。
 
 ## 序列化容器陷阱
 

@@ -1,12 +1,14 @@
 extends SceneTree
-## 断言门禁：塔楼通用物体（地板 / 墙壁 / 墙壁门 / 女儿墙 / 门扇）的「统一契约」是否成立。
+## 断言门禁：塔楼通用物体（地板 / 墙壁 / 墙壁门 / 女儿墙 / 门扇 / L 墙角）的「统一契约」是否成立。
 ##
 ## 背景：这些件原本各自用「递归取第一个 MeshInstance3D」的隐式约定找视觉网格，
-## 已被实测打破 —— prp_tower_wall_door_5m 的第一个 MeshInstance3D 是 visible=false
-## 的门扇，尺寸 2.08×2.38×0.18，而不是 5×11.9×0.3 的墙体。
+## 已被实测打破 —— prp_tower_wall_door_5m（当时是 v003 塔楼旧套件）的第一个
+## MeshInstance3D 是 visible=false 的门扇，尺寸 2.08×2.38×0.18，而不是 5×11.9×0.3 的墙体。
+## 该资产 2026-09-19 已换 v004 派生美术（隐藏门扇不复存在），但「隐式取首网格会漂移」
+## 这条教训对任何带装饰件/隐藏件的资产都成立。
 ## 现在改为按资产自己声明的 metadata/visual_node_name 解析，断言门禁盯住这条契约。
-## 清单是五件（2026-09-19 加入 prp_tower_door_leaf_5m），名字里的「四类」已不准确，
-## 故判据统一改为带 count 的形式。
+## 清单是六件（2026-09-19 加入 prp_tower_door_leaf_5m 与 prp_corner_l_5m），名字里的
+## 「四类」已不准确，故判据统一改为带 count 的形式。
 ##
 ## 检查项（任一不满足即失败）：
 ##   1. 统一字段齐全：asset_id / asset_version / origin_contract / forward_axis /
@@ -14,7 +16,7 @@ extends SceneTree
 ##      collision_owner / preserve_authored_palette / runtime_instantiation
 ##   2. visual_node_name 能解析到真实存在的节点，且不靠回退命中
 ##   3. 根空间可视包络 == visual_bounds_size_m（容差 0.02m）
-##   4. origin_contract 语义与实测包络一致（bottom_center / centered_slab）
+##   4. origin_contract 语义与实测包络一致（bottom_center / centered_slab / bottom_corner）
 ##   5. forward_axis 全集一致（塔楼 A 套 = +Z）
 ##   6. visual_only=true ⇒ Prefab 内不得内嵌任何 StaticBody3D / CollisionShape3D
 ##   7. preserve_authored_palette=true ⇒ Prefab 内不得有任何 material_override
@@ -52,6 +54,11 @@ const TARGETS: Array[String] = [
 	# 由战局通用组件库的 door_5m_通用包派生；原先战斗房的门扇是程序化方块，
 	# 没有资产可管，所以它此前不在本门禁里。
 	"res://assets/art/props/dungeon_3d/prp_tower_door_leaf_5m.tscn",
+	# 2026-09-19 新增：5m L 墙角。它不由单独建模产出，而是两份同一通用墙刚性拼成
+	# （见 tower_descent_3d/source/corner_l_5m/），因此首次带来 bottom_corner 原点
+	# 约定：原点落在转角而非几何中心。它也是清单里唯一自带碰撞的件（相机下压契约），
+	# 故 visual_only=false。
+	"res://assets/art/props/dungeon_3d/prp_corner_l_5m.tscn",
 ]
 
 var failures: Array[String] = []
@@ -66,7 +73,7 @@ func _initialize() -> void:
 		# （2026-09-19 由四类扩到五类），只印 count 的话看日志的人无法确认
 		# 「多出来的那一件」是哪个，也无法确认它真的被检查了。
 		print(
-			"PREFAB_CONTRACT_OK: 塔楼通用物体（地板/墙壁/墙壁门/女儿墙/门扇）统一契约全部成立 count=%d"
+			"PREFAB_CONTRACT_OK: 塔楼通用物体（地板/墙壁/墙壁门/女儿墙/门扇/L墙角）统一契约全部成立 count=%d"
 			% TARGETS.size()
 		)
 	else:
@@ -146,21 +153,32 @@ func _verify(path: String) -> void:
 	#    因此这里不要求「可视包络底面 == 0」，而要求「结构盒 ⊂ 可视包络」。
 	var origin_contract := str(root.get_meta("origin_contract", ""))
 	var declared_structural := root.get_meta("bounds_size_m", Vector3.ZERO) as Vector3
+	# 三种原点约定，差别在结构盒在 X/Z 上从哪里起算：
+	#   bottom_center —— X/Z 居中于原点，底面 Y=0（墙 / 地砖 / 门墙 / 女儿墙 / 门扇）
+	#   centered_slab —— X/Z 居中，板厚居中于 Y=0（层板类）
+	#   bottom_corner —— 原点落在 L 的转角，结构盒只向 +X 与 -Z 伸出，底面 Y=0
+	#                    （L 墙角）。DungeonRoom3D._spawn_room_corner() 就是按转角
+	#                    摆位的，把它按居中解会让所有房间的角错位。
 	var structural_bottom_y := 0.0
+	var structural_origin_x := -declared_structural.x * 0.5
+	var structural_origin_z := -declared_structural.z * 0.5
 	var origin_recognized := true
 	match origin_contract:
 		"bottom_center":
 			structural_bottom_y = 0.0
 		"centered_slab":
 			structural_bottom_y = -declared_structural.y * 0.5
+		"bottom_corner":
+			structural_origin_x = 0.0
+			structural_origin_z = -declared_structural.z
 		_:
 			origin_recognized = false
 			failures.append("%s 未识别的 origin_contract: %s" % [file_name, origin_contract])
 	var structural_box := AABB(
 		Vector3(
-			-declared_structural.x * 0.5,
+			structural_origin_x,
 			structural_bottom_y,
-			-declared_structural.z * 0.5
+			structural_origin_z
 		),
 		declared_structural
 	)

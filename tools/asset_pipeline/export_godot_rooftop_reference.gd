@@ -2,8 +2,10 @@ extends SceneTree
 
 ## Exports only Godot's native 100F shell as a Blender comparison reference.
 ## It deliberately excludes the rooftop facilities scene and every collider.
+## 输出到 tower_zones/rooftop/references/：旧 rooftop_shelter_3d 已于 2026-09-19
+## 整体移除，本工具仍用于给天台参考组件库的后续版本出「Godot 原生对照」。
 
-const OUTPUT_PATH := "res://assets/art/environments/rooftop_shelter_3d/references/godot_100f_native_rooftop_reference.glb"
+const OUTPUT_PATH := "res://assets/art/environments/tower_zones/rooftop/references/godot_100f_native_rooftop_reference.glb"
 
 
 func _initialize() -> void:

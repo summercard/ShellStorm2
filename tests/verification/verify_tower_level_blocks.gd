@@ -4,8 +4,8 @@ extends Node
 
 func _ready() -> void:
 	var failures: Array[String] = []
-	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/rooftop/runtime/zone_rooftop.tscn", "PackedScene"):
-		failures.append("zone_rooftop_v021.tscn cannot load")
+	# Rooftop 区块已无 PackedScene 入口：100F 由 TowerFloorStage3D 程序化装配，
+	# 旧 zone_rooftop.tscn 随 ENV-ROOFTOP-SHELTER-90X80 于 2026-09-19 整体移除。
 	if not ResourceLoader.exists("res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn", "PackedScene"):
 		failures.append("zone_base_v002.tscn cannot load")
 

@@ -344,6 +344,7 @@ func _verify_level_scene(failures: Array[String]) -> void:
 	_verify_rooms(tower, failures)
 	_verify_entry_gate(tower, failures)
 	_verify_extraction(tower, failures)
+	_verify_enemy_spawn_plan(tower, failures)
 
 	tower.queue_free()
 	await get_tree().process_frame
@@ -580,6 +581,79 @@ func _verify_extraction(tower: TowerDescent3D, failures: Array[String]) -> void:
 		failures.append("撤离信标不在终点撤离房内：%s" % str(beacon.get_path()))
 
 
+## 房间级刷怪计划（enemy_spawn_plan）的运行时落地断言。
+##
+## 只验「设计源透传到 plan」是不够的：plan 里的字段要真的驱动刷怪才有意义。
+## 这里真装配 99、真调唯一刷怪入口 `_spawn_room_enemies`，逐值读产出：
+##   * room_02 填了计划 → 波次数 / 每波数量 / 组成必须与设计源逐值一致（2 波 × 3 只）；
+##   * room_01 没填     → 必须仍走全局公式（覆盖是「按房间可选」，不是「一填全改」）。
+## 另钉一条状态不泄漏：命运卡注入的「下一间房」倍率与补兵计数，在被设计源接管的
+## 房里也必须落账并清零 —— 漏清零会安静地污染后面几间房，没有任何几何/静态校验看得见。
+func _verify_enemy_spawn_plan(tower: TowerDescent3D, failures: Array[String]) -> void:
+	var room_01 := tower._room_by_id.get("room_01") as DungeonRoom3D
+	var room_02 := tower._room_by_id.get("room_02") as DungeonRoom3D
+	if room_01 == null or room_02 == null:
+		failures.append("刷怪计划断言取不到 room_01 / room_02")
+		return
+	# A/B 前提：同一张关卡、同一种房型（都是 COMBAT），只有 room_02 填了计划。
+	if not room_01.enemy_spawn_plan.is_empty():
+		failures.append(
+			"room_01 本应保持全局公式（未填 enemy_spawn_plan），实为 %s" % [room_01.enemy_spawn_plan]
+		)
+	if room_02.enemy_spawn_plan.is_empty():
+		failures.append("room_02 的 enemy_spawn_plan 没有落到房间实例上（设计源字段被吞了）")
+		return
+	var authored_waves: Array = room_02.enemy_spawn_plan.get("waves", []) as Array
+	if authored_waves.size() != 2:
+		failures.append("room_02 设计源应为 2 波，实为 %d" % authored_waves.size())
+
+	# 命运卡注入：临时设「下一间房」倍率 + 补兵计数，验证被接管的房照常落账/清零。
+	tower._next_room_enemy_hp_multiplier = 2.5
+	tower._next_room_enemy_count = 4
+	if not bool(tower.call("_spawn_room_enemies", room_02)):
+		failures.append("room_02 刷怪失败（入口会解锁房间防软锁）")
+		return
+	var live := tower._enemy_nodes_by_room.get("room_02", []) as Array
+	var queue := tower._room_wave_queues.get("room_02", []) as Array
+	var queued := int((queue[0] as Array).size()) if queue.size() == 1 else -1
+	if live.size() != 3:
+		failures.append("room_02 第一波应为 3 只（2 近战 + 1 远程），实为 %d" % live.size())
+	if queue.size() != 1:
+		failures.append("room_02 剩余波数应为 1，实为 %d" % queue.size())
+	elif queued != 3:
+		failures.append("room_02 第二波应为 3 只（1 护盾 + 2 自爆），实为 %d" % queued)
+	if int(tower._room_wave_totals.get("room_02", 0)) != 2:
+		failures.append(
+			"room_02 波次总数应为 2，实为 %s" % str(tower._room_wave_totals.get("room_02", 0))
+		)
+	if live.size() + maxi(queued, 0) != 6:
+		failures.append(
+			"room_02 总敌数应为 6（数量以设计源为准，补兵计数不得追加到本房），实为 %d"
+			% [live.size() + maxi(queued, 0)]
+		)
+	if not is_equal_approx(float(tower._room_enemy_hp_multipliers.get("room_02", 1.0)), 2.5):
+		failures.append(
+			"room_02 未落账命运卡倍率：%s" % str(tower._room_enemy_hp_multipliers.get("room_02", 1.0))
+		)
+	if not is_equal_approx(float(tower._next_room_enemy_hp_multiplier), 1.0):
+		failures.append(
+			"被设计源接管的房没有清零「下一间房」倍率，会泄漏给后面的房间：%s"
+			% str(tower._next_room_enemy_hp_multiplier)
+		)
+	if int(tower._next_room_enemy_count) != 0:
+		failures.append(
+			"被设计源接管的房没有清零补兵计数：%d" % int(tower._next_room_enemy_count)
+		)
+
+	# room_01 未填计划 → 必须仍走全局公式（证明覆盖是按房间可选的）。
+	if not bool(tower.call("_spawn_room_enemies", room_01)):
+		failures.append("room_01 走全局公式时刷怪失败")
+		return
+	var formula_live := tower._enemy_nodes_by_room.get("room_01", []) as Array
+	if formula_live.is_empty():
+		failures.append("room_01 未按全局公式刷出任何敌人")
+
+
 # —— 工具 ——
 
 ## 读 res:// 文本资源：场景的「不继承塔楼」是文件级契约，只有读原文才能断言。
@@ -604,6 +678,8 @@ func _report(failures: Array[String]) -> void:
 			+ "content bounds shrunk to the 4-room footprint with real raycast floor/walls, "
 			+ "free entry gate, STANDARD extraction beacon in the extraction room, "
 			+ "99F mission-operations menu exposes the test-level-99 entry button, "
+			+ "per-room enemy_spawn_plan drives room_02 (2 waves x 3) while room_01 stays "
+			+ "on the global formula, fate-card next-room multipliers recorded then reset, "
 			+ "loading screen follows the pending level and falls back to expedition_01 unchanged"
 		)
 		get_tree().quit(0)

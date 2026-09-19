@@ -1,0 +1,2 @@
+﻿157380 | 09/18/2026 13:42:43 | I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64.exe --path I:/工作项目/shellstrom2/ShellStorm2 --editor
+196408 | 09/19/2026 13:04:14 | I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64.exe --path I:/工作项目/shellstrom2/ShellStorm2 --remote-debug tcp://127.0.0.1:6007 --editor-pid 157380 --scene res://scenes/TowerDescent3D.tscn --wid 32835032 --position "640,340" --resolution 1280x720

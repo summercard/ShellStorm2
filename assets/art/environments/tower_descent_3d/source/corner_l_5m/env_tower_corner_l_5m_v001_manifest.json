@@ -1,0 +1,130 @@
+{
+  "asset_id": "ENV-TOWER-CORNER-L-5M",
+  "asset_version": "v001",
+  "node_name": "ENV_TOWER_CORNER_L_5M",
+  "source_blend": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v007\\env_battle_common_components_source_v007.blend",
+  "source_package": "wall_standard_5m_通用包",
+  "source_component": "ROOT_wall_standard_5m_通用组件",
+  "source_root_world_translation": [
+    4.0,
+    -58.344406,
+    0.0
+  ],
+  "baked_yaw_deg": 180,
+  "arm_count": 2,
+  "arm_placement_blender": {
+    "long": "Translation(+2.5, 0, 0) @ Rotation(+180 deg, Z)",
+    "short": "Translation(0, +2.5, 0) @ Rotation(+90 deg, Z)"
+  },
+  "arm_facing_godot": {
+    "long": "armor on Godot -Z (room interior), structural back at +0.15",
+    "short": "armor on Godot +X (room interior), structural back at -0.15"
+  },
+  "arm_bounds_blender": {
+    "long": {
+      "min": [
+        0.0,
+        -0.15,
+        0.0
+      ],
+      "max": [
+        5.0,
+        0.3175,
+        11.9
+      ],
+      "size": [
+        5.0,
+        0.4675,
+        11.9
+      ]
+    },
+    "short": {
+      "min": [
+        -0.15,
+        0.0,
+        0.0
+      ],
+      "max": [
+        0.3175,
+        5.0,
+        11.9
+      ],
+      "size": [
+        0.4675,
+        5.0,
+        11.9
+      ]
+    }
+  },
+  "wall_reference": {
+    "asset_version": "v004",
+    "triangles": 5319,
+    "material_roles": [
+      "01_精工金属_紫色骨架",
+      "02_细腻哑光_青绿大面",
+      "04_柔和自发光_UI灯光"
+    ],
+    "bounds_blender": {
+      "min": [
+        -2.5,
+        -0.3175,
+        0.0
+      ],
+      "max": [
+        2.5,
+        0.15,
+        11.9
+      ],
+      "size": [
+        5.0,
+        0.4675,
+        11.9
+      ]
+    }
+  },
+  "faces_before_optimize": 3615,
+  "triangles_before_cull": 6414,
+  "downward_faces_removed": 1095,
+  "faces_after_optimize": 10638,
+  "triangles_after_optimize": 10638,
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "dropped_empty_material_slots": [
+    "03_清漆反光_紫粉点缀"
+  ],
+  "scenes_removed": 11,
+  "uv_layers": [
+    "PaletteUV"
+  ],
+  "bounds_blender": {
+    "min": [
+      -0.15,
+      -0.15,
+      0.0
+    ],
+    "max": [
+      5.0,
+      5.0,
+      11.9
+    ],
+    "size": [
+      5.15,
+      5.15,
+      11.9
+    ]
+  },
+  "bounds_godot_predicted_min": [
+    -0.15,
+    0.0,
+    -5.0
+  ],
+  "bounds_godot_predicted_max": [
+    5.0,
+    11.9,
+    0.15
+  ],
+  "derived_blend": "assets\\art\\environments\\tower_descent_3d\\source\\corner_l_5m\\env_tower_corner_l_5m_source_v001.blend"
+}

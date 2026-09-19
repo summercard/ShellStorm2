@@ -1,0 +1,247 @@
+{
+  "baseline_assets": 424,
+  "baseline_captured_at": "2026-09-18T10:15:23",
+  "ledger_totals": {
+    "characters": 31,
+    "enemies": 12,
+    "scenes": 236,
+    "props": 20,
+    "weapons": 36,
+    "vfx": 16,
+    "media": 74
+  },
+  "union_assets": 425,
+  "missing_assets": [],
+  "extra_assets": [
+    "ENV-TOWER-DOOR-LEAF-5M"
+  ],
+  "column_digest_drift": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25"
+  ],
+  "failure_count": 475,
+  "failures": [
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT",
+      "actual": "==LOWER(TRIM(C6)&\"|\"&TRIM(D6)&\"|\"&TRIM(E6)&\"|\"&TRIM(F6)&\"|\"&TRIM(H6)&\"|\"&TRIM(I6))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87DF380>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-IRON-FRONTIER-KIT",
+      "actual": "==LOWER(TRIM(C7)&\"|\"&TRIM(D7)&\"|\"&TRIM(E7)&\"|\"&TRIM(F7)&\"|\"&TRIM(H7)&\"|\"&TRIM(I7))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-IRON-FRONTIER-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87D7C50>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-RUST-FOUNDRY-KIT",
+      "actual": "==LOWER(TRIM(C8)&\"|\"&TRIM(D8)&\"|\"&TRIM(E8)&\"|\"&TRIM(F8)&\"|\"&TRIM(H8)&\"|\"&TRIM(I8))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-RUST-FOUNDRY-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87D6FD0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-SPORE-DEPTHS-KIT",
+      "actual": "==LOWER(TRIM(C9)&\"|\"&TRIM(D9)&\"|\"&TRIM(E9)&\"|\"&TRIM(F9)&\"|\"&TRIM(H9)&\"|\"&TRIM(I9))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-SPORE-DEPTHS-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87896E0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ABYSS-ARCHIVE-KIT",
+      "actual": "==LOWER(TRIM(C10)&\"|\"&TRIM(D10)&\"|\"&TRIM(E10)&\"|\"&TRIM(F10)&\"|\"&TRIM(H10)&\"|\"&TRIM(I10))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ABYSS-ARCHIVE-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87895B0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT",
+      "actual": "==LOWER(TRIM(C11)&\"|\"&TRIM(D11)&\"|\"&TRIM(E11)&\"|\"&TRIM(F11)&\"|\"&TRIM(H11)&\"|\"&TRIM(I11))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A88EA0F0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-COMBAT-DRESSING",
+      "actual": "==LOWER(TRIM(C12)&\"|\"&TRIM(D12)&\"|\"&TRIM(E12)&\"|\"&TRIM(F12)&\"|\"&TRIM(H12)&\"|\"&TRIM(I12))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-COMBAT-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A886E250>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-ELITE-DRESSING",
+      "actual": "==LOWER(TRIM(C13)&\"|\"&TRIM(D13)&\"|\"&TRIM(E13)&\"|\"&TRIM(F13)&\"|\"&TRIM(H13)&\"|\"&TRIM(I13))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-ELITE-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A886D6A0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-BOSS-DRESSING",
+      "actual": "==LOWER(TRIM(C14)&\"|\"&TRIM(D14)&\"|\"&TRIM(E14)&\"|\"&TRIM(F14)&\"|\"&TRIM(H14)&\"|\"&TRIM(I14))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-BOSS-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8A42650>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-EVENT-DRESSING",
+      "actual": "==LOWER(TRIM(C15)&\"|\"&TRIM(D15)&\"|\"&TRIM(E15)&\"|\"&TRIM(F15)&\"|\"&TRIM(H15)&\"|\"&TRIM(I15))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-EVENT-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8A42750>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-EXTRACTION-DRESSING",
+      "actual": "==LOWER(TRIM(C16)&\"|\"&TRIM(D16)&\"|\"&TRIM(E16)&\"|\"&TRIM(F16)&\"|\"&TRIM(H16)&\"|\"&TRIM(I16))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-EXTRACTION-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8935C70>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-MERCHANT-DRESSING",
+      "actual": "==LOWER(TRIM(C17)&\"|\"&TRIM(D17)&\"|\"&TRIM(E17)&\"|\"&TRIM(F17)&\"|\"&TRIM(H17)&\"|\"&TRIM(I17))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-MERCHANT-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8935D60>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-SCAVENGE-DRESSING",
+      "actual": "==LOWER(TRIM(C18)&\"|\"&TRIM(D18)&\"|\"&TRIM(E18)&\"|\"&TRIM(F18)&\"|\"&TRIM(H18)&\"|\"&TRIM(I18))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-SCAVENGE-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A88E4C90>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-STORAGE-DRESSING",
+      "actual": "==LOWER(TRIM(C19)&\"|\"&TRIM(D19)&\"|\"&TRIM(E19)&\"|\"&TRIM(F19)&\"|\"&TRIM(H19)&\"|\"&TRIM(I19))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-STORAGE-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A88E4AD0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-TRAP-DRESSING",
+      "actual": "==LOWER(TRIM(C20)&\"|\"&TRIM(D20)&\"|\"&TRIM(E20)&\"|\"&TRIM(F20)&\"|\"&TRIM(H20)&\"|\"&TRIM(I20))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-TRAP-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8756DD0>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-UPGRADE-DRESSING",
+      "actual": "==LOWER(TRIM(C21)&\"|\"&TRIM(D21)&\"|\"&TRIM(E21)&\"|\"&TRIM(F21)&\"|\"&TRIM(H21)&\"|\"&TRIM(I21))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-UPGRADE-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8A39310>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-SPAWN-DRESSING",
+      "actual": "==LOWER(TRIM(C22)&\"|\"&TRIM(D22)&\"|\"&TRIM(E22)&\"|\"&TRIM(F22)&\"|\"&TRIM(H22)&\"|\"&TRIM(I22))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-SPAWN-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8A39910>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-STAIRS-DRESSING",
+      "actual": "==LOWER(TRIM(C23)&\"|\"&TRIM(D23)&\"|\"&TRIM(E23)&\"|\"&TRIM(F23)&\"|\"&TRIM(H23)&\"|\"&TRIM(I23))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-STAIRS-DRESSING",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87C1700>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-DIVINATION",
+      "actual": "==LOWER(TRIM(C24)&\"|\"&TRIM(D24)&\"|\"&TRIM(E24)&\"|\"&TRIM(F24)&\"|\"&TRIM(H24)&\"|\"&TRIM(I24))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-DIVINATION",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A87C1650>"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-VAULT",
+      "actual": "==LOWER(TRIM(C25)&\"|\"&TRIM(D25)&\"|\"&TRIM(E25)&\"|\"&TRIM(F25)&\"|\"&TRIM(H25)&\"|\"&TRIM(I25))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-VAULT",
+      "actual": "<openpyxl.worksheet.formula.ArrayFormula object at 0x000002A4A8785DB0>"
+    }
+  ]
+}LEDGER_SPLIT_VERIFY_FAILED failures=475 missing=0 extra=1
+

@@ -18,6 +18,14 @@ const LOADER := preload("res://src/map/LevelPlanLoader.gd")
 const EPS := 0.01
 ## 安全房/楼梯厅允许压核心筒与楼梯保留区（它们是核心筒的交通接口）。
 const SAFE_ROLES := ["stair_entry", "stair_exit"]
+## 房间级刷怪计划（enemy_spawn_plan）的合法性口径。
+## 用 preload 而非 class_name 全局名：新脚本在全局类缓存刷新前用全局名会 parse error。
+const MONSTER_INJECTOR := preload("res://src/map/MonsterInjector.gd")
+const GAME_DESIGN_CONFIG := preload("res://src/framework/GameDesignConfig.gd")
+## 硬上限：设计源写超大数字不该变成性能事故或开局卡死，直接在静态校验拦住。
+const SPAWN_PLAN_MAX_WAVES := 6
+const SPAWN_PLAN_MAX_PER_WAVE := 24
+const SPAWN_PLAN_MAX_TOTAL := 64
 
 
 ## 校验整张关卡（L1 + 全部 L2 + 引用的全部 L3）。
@@ -327,6 +335,95 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 						errors.append(
 							"port_lane_not_in_template_table:%s:%s:%s" % [key, side, str(lane)]
 						)
+	errors.append_array(_validate_enemy_spawn_plan(room))
+	return errors
+
+
+## 校验房间级刷怪计划 enemy_spawn_plan。
+## 结构：{"waves": [ {"monsters": [ {"type": "<种类>", "count": <正整数>} ]} ]}
+##   waves 长度        = 波次数
+##   一波内 count 之和 = 该波数量
+##   monsters 列表     = 该波的怪物组成
+## 允许留空/不写（回退全局公式）；但一旦写了就必须完全合法 ——
+## 运行时的 build_waves_from_plan 对非法输入是「整份丢弃并回退」，
+## 若不在这里拦住，"写错了"会表现为"没生效"，很难查。
+static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var key := str(room.get("key", ""))
+	var raw: Variant = room.get("enemy_spawn_plan", {})
+	if raw == null:
+		return errors
+	if not (raw is Dictionary):
+		errors.append("enemy_spawn_plan_not_object:%s" % key)
+		return errors
+	var plan := raw as Dictionary
+	if plan.is_empty():
+		return errors
+	# 只有会刷怪的房型才允许声明：其它房型永不调用刷怪入口，
+	# 写了等于静默失效（隐形契约，必须报出来）。
+	var content_type := str(room.get("content_type", ""))
+	if not content_type in GAME_DESIGN_CONFIG.ROOM_TYPES_WITH_HOSTILES:
+		errors.append(
+			"enemy_spawn_plan_on_non_hostile_room:%s:%s" % [key, content_type]
+		)
+	var raw_waves: Variant = plan.get("waves", [])
+	if not (raw_waves is Array) or (raw_waves as Array).is_empty():
+		errors.append("enemy_spawn_plan_waves_empty:%s" % key)
+		return errors
+	var waves := raw_waves as Array
+	if waves.size() > SPAWN_PLAN_MAX_WAVES:
+		errors.append(
+			"enemy_spawn_plan_too_many_waves:%s:%d>%d"
+			% [key, waves.size(), SPAWN_PLAN_MAX_WAVES]
+		)
+	var total := 0
+	for wave_index in range(waves.size()):
+		var wave_value: Variant = waves[wave_index]
+		if not (wave_value is Dictionary):
+			errors.append("enemy_spawn_plan_wave_not_object:%s:%d" % [key, wave_index])
+			continue
+		var raw_monsters: Variant = (wave_value as Dictionary).get("monsters", [])
+		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
+			errors.append(
+				"enemy_spawn_plan_wave_monsters_empty:%s:%d" % [key, wave_index]
+			)
+			continue
+		var wave_total := 0
+		for monster_value in (raw_monsters as Array):
+			if not (monster_value is Dictionary):
+				errors.append(
+					"enemy_spawn_plan_monster_not_object:%s:%d" % [key, wave_index]
+				)
+				continue
+			var monster := monster_value as Dictionary
+			var type_id := str(monster.get("type", ""))
+			var count := int(monster.get("count", 0))
+			if not MONSTER_INJECTOR.BASE_ENEMY_TYPES.has(type_id):
+				errors.append(
+					"enemy_spawn_plan_unknown_monster:%s:%d:%s" % [key, wave_index, type_id]
+				)
+			elif not MONSTER_INJECTOR.is_authorable_enemy_type(type_id):
+				# Boss 有独立的出场与结算路径，从刷怪入口硬塞会绕过 Boss 逻辑。
+				errors.append(
+					"enemy_spawn_plan_monster_not_authorable:%s:%d:%s"
+					% [key, wave_index, type_id]
+				)
+			if count <= 0:
+				errors.append(
+					"enemy_spawn_plan_monster_count_invalid:%s:%d:%s:%d"
+					% [key, wave_index, type_id, count]
+				)
+			wave_total += maxi(0, count)
+		if wave_total > SPAWN_PLAN_MAX_PER_WAVE:
+			errors.append(
+				"enemy_spawn_plan_wave_too_large:%s:%d:%d>%d"
+				% [key, wave_index, wave_total, SPAWN_PLAN_MAX_PER_WAVE]
+			)
+		total += wave_total
+	if total > SPAWN_PLAN_MAX_TOTAL:
+		errors.append(
+			"enemy_spawn_plan_total_too_large:%s:%d>%d" % [key, total, SPAWN_PLAN_MAX_TOTAL]
+		)
 	return errors
 
 

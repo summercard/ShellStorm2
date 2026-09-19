@@ -1,30 +1,44 @@
 [gd_scene load_steps=2 format=3]
 
 ; 5m 段带门墙 - 自包含独立模块
-; 正式美术：tower_descent_3d/components/env_tower_wall_door_5m_top3d_v003.glb
-;   逻辑/阻挡高 12m；视觉墙体高 11.9m；门洞净宽 2.2m × 净高 2.5m。
-;   底面中心原点（几何 Y=0..11.9）；门柱 1.4m 宽 @ x=∓1.8，门楣 2.2m 宽 @ y=2.5..11.9，
-;   与旧占位 BoxMesh 的 x/y 位置逐值相同。
+; 正式美术：tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb（v005）
+;   来源：tower_zones/battle/source/common_components/v007 批源里的「门墙组件」
+;   （ROOT_wall_door_5m_通用组件 / wall_door_5m_通用包），按
+;   godot-model-asset-import-standard 派生到塔楼 A 套；派生脚本与清单见
+;   tower_descent_3d/source/wall_height12/。
+;   派生时绕竖轴 180°：美术自述正面在 Blender +Y，经 YUP 导出会落到 Godot -Z，
+;   而塔楼 A 套硬要求 forward_axis=+Z，故先翻转再把偏移烘焙进顶点。
+;   v005 起**双面**：门墙不只服务房间内墙，还落在房间/走廊边界上，站在走廊里
+;   看过去原来是块素背板。现在把装饰面按结构面切分后镜像到背面，模块关于自身
+;   基准面对称，两面都读作装饰。镜像只复制装饰（结构壳与门洞隧道原样不动），
+;   forward_axis 仍声明 +Z —— 那是房间侧，也是门禁要求的那一侧。
+;   逻辑/阻挡高 12m；视觉墙体高 11.9m；门洞净宽 2.2m × 净高 2.5m（贯穿全厚
+;   无阻挡，派生脚本从门洞内部沿 ±X/±Z/±Y 六向射线实测复核，不采信源文件
+;   自报的包络）。
+;   底面中心原点（几何 Y=0..11.9）；GLB 根节点是恒等变换 —— 这点必须有：
+;   TowerDescent3D 直连裸 GLB 整树实例化，会直接继承根节点变换。
 ; 默认朝向 +Z 方向；实例化时通过脚本设置 rotation 适配各方向。
 ; preserve_authored_palette：禁止 _apply_module_material_variant() 用塔楼暖色 A/B
-;   主题材质覆盖，保留美术自带材质（MAT_Door_CyanSteel / MAT_PH49_*）。
-; 门扇由运行时 RoomDoor3D 的 DoorPanel 提供（门自带开合交互与碰撞），
-;   故此处隐藏美术自带的静态 DoorLeaf_OPEN，避免出现两片门扇。
-;   这与基地99层正式带门墙一致：wall_door GLB 只含墙体与门框，不含门扇。
+;   主题材质覆盖，保留美术自带的共享色盘 PaletteUV（01/02/03/04 四个角色都有面，
+;   由 tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
+; 门扇由运行时 RoomDoor3D 的 DoorPanel 提供（门自带开合交互与碰撞）。通用组件的
+;   门墙包本身不含门扇（其 asset_manifest 写明 no independent props or moving
+;   door leaf），所以这里不再需要隐藏静态门扇节点 —— 旧 v003（塔楼旧套件
+;   10D_MOD_WALL_DOOR_5M_U01）自带的那片 DoorLeaf_OPEN 已随重导出消失。
 ;
 ; 【视觉专用】本 Prefab 不内嵌碰撞。门柱 2 + 门楣 1 的 0.30m 结构阻挡与实墙同源，
 ;   统一由 DungeonRoom3D._add_tower_wall_collision() 的脚本代理提供。
+;   替换美术后门洞净空仍实测 2.2 × 2.5，故脚本代理逐值不变，无需跟着改。
 ;   原先 Prefab 内那份 WallCollision 与脚本代理逐值重叠（门柱 ±1.8 / 1.4×12×0.3，
 ;   门楣 y=7.25 / 2.2×9.5×0.3），属重复碰撞，已于 2026-09-19 移除，碰撞责任单一化。
-;   移除前已确认无验收或运行时引用依赖 Prefab 内的 WallCollision ——
-;   验收只读脚本生成的 TowerWallCollision_* 与 CameraOnlyDoorWall_*。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb" id="1_visual"]
 
 [node name="PrpTowerWallDoor5m" type="Node3D"]
 metadata/asset_id = "ENV-TOWER-WALL-DOOR-5M"
-metadata/asset_version = "v003"
+metadata/asset_version = "v005"
 metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb"
+metadata/source_note = "派生自战局通用组件库 v007 的 wall_door_5m_通用包；v004 取代 v003 塔楼旧套件的方块门墙，v005 再把装饰面镜像到结构背做成双面。"
 metadata/grid_unit_m = 5.0
 metadata/logical_height_m = 12.0
 metadata/visual_height_m = 11.9
@@ -33,10 +47,11 @@ metadata/door_clear_width_m = 2.2
 metadata/door_clear_height_m = 2.5
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
+metadata/double_sided = true
 metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
-metadata/visual_bounds_size_m = Vector3(5, 12.04, 0.43)
-metadata/bounds_note = "结构包络 5×11.9×0.3 = 门垛(2×1.4m)+门楣 的玩法阻挡体；可视包络 5×12.04×0.43 多出的是装饰门框 Frame_*：向下探出楼面 0.14m、两侧各外凸 0.065m。两者刻意分离，替换美术时先核对本条。"
-metadata/visual_node_name = "MOD_WALL_DOOR_5M_U01_ROOT"
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.683)
+metadata/bounds_note = "结构包络 5×11.9×0.3 = 门垛(2×1.4m)+门楣 的玩法阻挡体，由 DungeonRoom3D 的脚本代理生成，与美术无关；可视包络 5×11.9×0.683 = 实测装饰面两面各前凸到 ±0.3415（v005 起双面），结构板 ±0.15 落在其内。两者刻意分离：替换美术只改本条与可视声明，不得改碰撞。"
+metadata/visual_node_name = "ENV_TOWER_WALL_DOOR_5M"
 metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
 metadata/visual_only = true
 metadata/collision_owner = "DungeonRoom3D"
@@ -45,6 +60,3 @@ metadata/preserve_authored_palette = true
 metadata/runtime_instantiation = "per_instance_prefab"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
-
-[node name="MOD_WALL_DOOR_5M_U01_DoorLeaf_OPEN" parent="ImportedModel/MOD_WALL_DOOR_5M_U01_ROOT" index="0"]
-visible = false

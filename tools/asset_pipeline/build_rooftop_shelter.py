@@ -1,3 +1,8 @@
+# 旧聚落天台资产（ENV-ROOFTOP-SHELTER-90X80）已于 2026-09-19 整体移除，
+# 本文件顶部的 ASSET_ROOT 构建目标不再存在，不再用于重建该天台。
+# 保留原因：tools/asset_pipeline/build_british_corner_bookshop.py 通过 exec
+# 复用本文件里的通用构建函数（几何/色盘/导出辅助），删掉会连带弄坏英伦街角书店。
+# 回滚锚点：git tag pre-old-rooftop-removal
 import json
 import math
 import random

@@ -1,0 +1,74 @@
+{
+  "asset_id": "ENV-TOWER-WALL-DOOR-5M",
+  "asset_version": "v004",
+  "node_name": "ENV_TOWER_WALL_DOOR_5M",
+  "source_blend": "assets\\art\\environments\\tower_zones\\battle\\source\\common_components\\v007\\env_battle_common_components_source_v007.blend",
+  "source_package": "wall_door_5m_通用包",
+  "source_component": "ROOT_wall_door_5m_通用组件",
+  "source_root_world_translation": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "baked_yaw_deg": 180,
+  "faces_before_optimize": 4592,
+  "downward_faces_above_floor_band_kept": 1376,
+  "downward_faces_removed_on_floor_band": 116,
+  "faces_after_optimize": 7935,
+  "triangles_after_optimize": 7935,
+  "door_aperture": {
+    "origin": [
+      0.0,
+      0.0,
+      1.25
+    ],
+    "ray_plus_x": [
+      1.1,
+      0.0,
+      1.25
+    ],
+    "ray_minus_x": [
+      -1.1,
+      0.0,
+      1.25
+    ],
+    "ray_plus_z": [
+      0.0,
+      0.0,
+      2.5
+    ],
+    "ray_minus_z": null,
+    "clear_width_m": 2.2,
+    "clear_height_m": 2.5,
+    "floor_hit_z_m": null
+  },
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "dropped_empty_material_slots": [],
+  "scenes_removed": 11,
+  "uv_layers": [
+    "PaletteUV"
+  ],
+  "bounds_blender": {
+    "min": [
+      -2.5,
+      -0.3415,
+      0.0
+    ],
+    "max": [
+      2.5,
+      0.15,
+      11.9
+    ],
+    "size": [
+      5.0,
+      0.4915,
+      11.9
+    ]
+  },
+  "derived_blend": "assets\\art\\environments\\tower_descent_3d\\source\\wall_height12\\env_tower_wall_door_5m_source_v004.blend"
+}

@@ -1,0 +1,3657 @@
+{
+  "failures": [
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT",
+      "domain": "scenes",
+      "row": 6,
+      "actual": "==LOWER(TRIM(C6)&\"|\"&TRIM(D6)&\"|\"&TRIM(E6)&\"|\"&TRIM(F6)&\"|\"&TRIM(H6)&\"|\"&TRIM(I6))",
+      "wanted": "=LOWER(TRIM(C6)&\"|\"&TRIM(D6)&\"|\"&TRIM(E6)&\"|\"&TRIM(F6)&\"|\"&TRIM(H6)&\"|\"&TRIM(I6))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT",
+      "domain": "scenes",
+      "row": 6,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-IRON-FRONTIER-KIT",
+      "domain": "scenes",
+      "row": 7,
+      "actual": "==LOWER(TRIM(C7)&\"|\"&TRIM(D7)&\"|\"&TRIM(E7)&\"|\"&TRIM(F7)&\"|\"&TRIM(H7)&\"|\"&TRIM(I7))",
+      "wanted": "=LOWER(TRIM(C7)&\"|\"&TRIM(D7)&\"|\"&TRIM(E7)&\"|\"&TRIM(F7)&\"|\"&TRIM(H7)&\"|\"&TRIM(I7))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-IRON-FRONTIER-KIT",
+      "domain": "scenes",
+      "row": 7,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-RUST-FOUNDRY-KIT",
+      "domain": "scenes",
+      "row": 8,
+      "actual": "==LOWER(TRIM(C8)&\"|\"&TRIM(D8)&\"|\"&TRIM(E8)&\"|\"&TRIM(F8)&\"|\"&TRIM(H8)&\"|\"&TRIM(I8))",
+      "wanted": "=LOWER(TRIM(C8)&\"|\"&TRIM(D8)&\"|\"&TRIM(E8)&\"|\"&TRIM(F8)&\"|\"&TRIM(H8)&\"|\"&TRIM(I8))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-RUST-FOUNDRY-KIT",
+      "domain": "scenes",
+      "row": 8,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-SPORE-DEPTHS-KIT",
+      "domain": "scenes",
+      "row": 9,
+      "actual": "==LOWER(TRIM(C9)&\"|\"&TRIM(D9)&\"|\"&TRIM(E9)&\"|\"&TRIM(F9)&\"|\"&TRIM(H9)&\"|\"&TRIM(I9))",
+      "wanted": "=LOWER(TRIM(C9)&\"|\"&TRIM(D9)&\"|\"&TRIM(E9)&\"|\"&TRIM(F9)&\"|\"&TRIM(H9)&\"|\"&TRIM(I9))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-SPORE-DEPTHS-KIT",
+      "domain": "scenes",
+      "row": 9,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ABYSS-ARCHIVE-KIT",
+      "domain": "scenes",
+      "row": 10,
+      "actual": "==LOWER(TRIM(C10)&\"|\"&TRIM(D10)&\"|\"&TRIM(E10)&\"|\"&TRIM(F10)&\"|\"&TRIM(H10)&\"|\"&TRIM(I10))",
+      "wanted": "=LOWER(TRIM(C10)&\"|\"&TRIM(D10)&\"|\"&TRIM(E10)&\"|\"&TRIM(F10)&\"|\"&TRIM(H10)&\"|\"&TRIM(I10))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ABYSS-ARCHIVE-KIT",
+      "domain": "scenes",
+      "row": 10,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT",
+      "domain": "scenes",
+      "row": 11,
+      "actual": "==LOWER(TRIM(C11)&\"|\"&TRIM(D11)&\"|\"&TRIM(E11)&\"|\"&TRIM(F11)&\"|\"&TRIM(H11)&\"|\"&TRIM(I11))",
+      "wanted": "=LOWER(TRIM(C11)&\"|\"&TRIM(D11)&\"|\"&TRIM(E11)&\"|\"&TRIM(F11)&\"|\"&TRIM(H11)&\"|\"&TRIM(I11))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT",
+      "domain": "scenes",
+      "row": 11,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-COMBAT-DRESSING",
+      "domain": "scenes",
+      "row": 12,
+      "actual": "==LOWER(TRIM(C12)&\"|\"&TRIM(D12)&\"|\"&TRIM(E12)&\"|\"&TRIM(F12)&\"|\"&TRIM(H12)&\"|\"&TRIM(I12))",
+      "wanted": "=LOWER(TRIM(C12)&\"|\"&TRIM(D12)&\"|\"&TRIM(E12)&\"|\"&TRIM(F12)&\"|\"&TRIM(H12)&\"|\"&TRIM(I12))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-COMBAT-DRESSING",
+      "domain": "scenes",
+      "row": 12,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-ELITE-DRESSING",
+      "domain": "scenes",
+      "row": 13,
+      "actual": "==LOWER(TRIM(C13)&\"|\"&TRIM(D13)&\"|\"&TRIM(E13)&\"|\"&TRIM(F13)&\"|\"&TRIM(H13)&\"|\"&TRIM(I13))",
+      "wanted": "=LOWER(TRIM(C13)&\"|\"&TRIM(D13)&\"|\"&TRIM(E13)&\"|\"&TRIM(F13)&\"|\"&TRIM(H13)&\"|\"&TRIM(I13))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-ELITE-DRESSING",
+      "domain": "scenes",
+      "row": 13,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-BOSS-DRESSING",
+      "domain": "scenes",
+      "row": 14,
+      "actual": "==LOWER(TRIM(C14)&\"|\"&TRIM(D14)&\"|\"&TRIM(E14)&\"|\"&TRIM(F14)&\"|\"&TRIM(H14)&\"|\"&TRIM(I14))",
+      "wanted": "=LOWER(TRIM(C14)&\"|\"&TRIM(D14)&\"|\"&TRIM(E14)&\"|\"&TRIM(F14)&\"|\"&TRIM(H14)&\"|\"&TRIM(I14))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-BOSS-DRESSING",
+      "domain": "scenes",
+      "row": 14,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-EVENT-DRESSING",
+      "domain": "scenes",
+      "row": 15,
+      "actual": "==LOWER(TRIM(C15)&\"|\"&TRIM(D15)&\"|\"&TRIM(E15)&\"|\"&TRIM(F15)&\"|\"&TRIM(H15)&\"|\"&TRIM(I15))",
+      "wanted": "=LOWER(TRIM(C15)&\"|\"&TRIM(D15)&\"|\"&TRIM(E15)&\"|\"&TRIM(F15)&\"|\"&TRIM(H15)&\"|\"&TRIM(I15))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-EVENT-DRESSING",
+      "domain": "scenes",
+      "row": 15,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-EXTRACTION-DRESSING",
+      "domain": "scenes",
+      "row": 16,
+      "actual": "==LOWER(TRIM(C16)&\"|\"&TRIM(D16)&\"|\"&TRIM(E16)&\"|\"&TRIM(F16)&\"|\"&TRIM(H16)&\"|\"&TRIM(I16))",
+      "wanted": "=LOWER(TRIM(C16)&\"|\"&TRIM(D16)&\"|\"&TRIM(E16)&\"|\"&TRIM(F16)&\"|\"&TRIM(H16)&\"|\"&TRIM(I16))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-EXTRACTION-DRESSING",
+      "domain": "scenes",
+      "row": 16,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-MERCHANT-DRESSING",
+      "domain": "scenes",
+      "row": 17,
+      "actual": "==LOWER(TRIM(C17)&\"|\"&TRIM(D17)&\"|\"&TRIM(E17)&\"|\"&TRIM(F17)&\"|\"&TRIM(H17)&\"|\"&TRIM(I17))",
+      "wanted": "=LOWER(TRIM(C17)&\"|\"&TRIM(D17)&\"|\"&TRIM(E17)&\"|\"&TRIM(F17)&\"|\"&TRIM(H17)&\"|\"&TRIM(I17))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-MERCHANT-DRESSING",
+      "domain": "scenes",
+      "row": 17,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-SCAVENGE-DRESSING",
+      "domain": "scenes",
+      "row": 18,
+      "actual": "==LOWER(TRIM(C18)&\"|\"&TRIM(D18)&\"|\"&TRIM(E18)&\"|\"&TRIM(F18)&\"|\"&TRIM(H18)&\"|\"&TRIM(I18))",
+      "wanted": "=LOWER(TRIM(C18)&\"|\"&TRIM(D18)&\"|\"&TRIM(E18)&\"|\"&TRIM(F18)&\"|\"&TRIM(H18)&\"|\"&TRIM(I18))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-SCAVENGE-DRESSING",
+      "domain": "scenes",
+      "row": 18,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-STORAGE-DRESSING",
+      "domain": "scenes",
+      "row": 19,
+      "actual": "==LOWER(TRIM(C19)&\"|\"&TRIM(D19)&\"|\"&TRIM(E19)&\"|\"&TRIM(F19)&\"|\"&TRIM(H19)&\"|\"&TRIM(I19))",
+      "wanted": "=LOWER(TRIM(C19)&\"|\"&TRIM(D19)&\"|\"&TRIM(E19)&\"|\"&TRIM(F19)&\"|\"&TRIM(H19)&\"|\"&TRIM(I19))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-STORAGE-DRESSING",
+      "domain": "scenes",
+      "row": 19,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-TRAP-DRESSING",
+      "domain": "scenes",
+      "row": 20,
+      "actual": "==LOWER(TRIM(C20)&\"|\"&TRIM(D20)&\"|\"&TRIM(E20)&\"|\"&TRIM(F20)&\"|\"&TRIM(H20)&\"|\"&TRIM(I20))",
+      "wanted": "=LOWER(TRIM(C20)&\"|\"&TRIM(D20)&\"|\"&TRIM(E20)&\"|\"&TRIM(F20)&\"|\"&TRIM(H20)&\"|\"&TRIM(I20))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-TRAP-DRESSING",
+      "domain": "scenes",
+      "row": 20,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-UPGRADE-DRESSING",
+      "domain": "scenes",
+      "row": 21,
+      "actual": "==LOWER(TRIM(C21)&\"|\"&TRIM(D21)&\"|\"&TRIM(E21)&\"|\"&TRIM(F21)&\"|\"&TRIM(H21)&\"|\"&TRIM(I21))",
+      "wanted": "=LOWER(TRIM(C21)&\"|\"&TRIM(D21)&\"|\"&TRIM(E21)&\"|\"&TRIM(F21)&\"|\"&TRIM(H21)&\"|\"&TRIM(I21))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-UPGRADE-DRESSING",
+      "domain": "scenes",
+      "row": 21,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-SPAWN-DRESSING",
+      "domain": "scenes",
+      "row": 22,
+      "actual": "==LOWER(TRIM(C22)&\"|\"&TRIM(D22)&\"|\"&TRIM(E22)&\"|\"&TRIM(F22)&\"|\"&TRIM(H22)&\"|\"&TRIM(I22))",
+      "wanted": "=LOWER(TRIM(C22)&\"|\"&TRIM(D22)&\"|\"&TRIM(E22)&\"|\"&TRIM(F22)&\"|\"&TRIM(H22)&\"|\"&TRIM(I22))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-SPAWN-DRESSING",
+      "domain": "scenes",
+      "row": 22,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOM-STAIRS-DRESSING",
+      "domain": "scenes",
+      "row": 23,
+      "actual": "==LOWER(TRIM(C23)&\"|\"&TRIM(D23)&\"|\"&TRIM(E23)&\"|\"&TRIM(F23)&\"|\"&TRIM(H23)&\"|\"&TRIM(I23))",
+      "wanted": "=LOWER(TRIM(C23)&\"|\"&TRIM(D23)&\"|\"&TRIM(E23)&\"|\"&TRIM(F23)&\"|\"&TRIM(H23)&\"|\"&TRIM(I23))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOM-STAIRS-DRESSING",
+      "domain": "scenes",
+      "row": 23,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-DIVINATION",
+      "domain": "scenes",
+      "row": 24,
+      "actual": "==LOWER(TRIM(C24)&\"|\"&TRIM(D24)&\"|\"&TRIM(E24)&\"|\"&TRIM(F24)&\"|\"&TRIM(H24)&\"|\"&TRIM(I24))",
+      "wanted": "=LOWER(TRIM(C24)&\"|\"&TRIM(D24)&\"|\"&TRIM(E24)&\"|\"&TRIM(F24)&\"|\"&TRIM(H24)&\"|\"&TRIM(I24))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-DIVINATION",
+      "domain": "scenes",
+      "row": 24,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-VAULT",
+      "domain": "scenes",
+      "row": 25,
+      "actual": "==LOWER(TRIM(C25)&\"|\"&TRIM(D25)&\"|\"&TRIM(E25)&\"|\"&TRIM(F25)&\"|\"&TRIM(H25)&\"|\"&TRIM(I25))",
+      "wanted": "=LOWER(TRIM(C25)&\"|\"&TRIM(D25)&\"|\"&TRIM(E25)&\"|\"&TRIM(F25)&\"|\"&TRIM(H25)&\"|\"&TRIM(I25))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-VAULT",
+      "domain": "scenes",
+      "row": 25,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-MONSTER-ARCHIVE",
+      "domain": "scenes",
+      "row": 26,
+      "actual": "==LOWER(TRIM(C26)&\"|\"&TRIM(D26)&\"|\"&TRIM(E26)&\"|\"&TRIM(F26)&\"|\"&TRIM(H26)&\"|\"&TRIM(I26))",
+      "wanted": "=LOWER(TRIM(C26)&\"|\"&TRIM(D26)&\"|\"&TRIM(E26)&\"|\"&TRIM(F26)&\"|\"&TRIM(H26)&\"|\"&TRIM(I26))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-MONSTER-ARCHIVE",
+      "domain": "scenes",
+      "row": 26,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-CARD-COLLECTION",
+      "domain": "scenes",
+      "row": 27,
+      "actual": "==LOWER(TRIM(C27)&\"|\"&TRIM(D27)&\"|\"&TRIM(E27)&\"|\"&TRIM(F27)&\"|\"&TRIM(H27)&\"|\"&TRIM(I27))",
+      "wanted": "=LOWER(TRIM(C27)&\"|\"&TRIM(D27)&\"|\"&TRIM(E27)&\"|\"&TRIM(F27)&\"|\"&TRIM(H27)&\"|\"&TRIM(I27))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-CARD-COLLECTION",
+      "domain": "scenes",
+      "row": 27,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-TERMINAL",
+      "domain": "scenes",
+      "row": 28,
+      "actual": "==LOWER(TRIM(C28)&\"|\"&TRIM(D28)&\"|\"&TRIM(E28)&\"|\"&TRIM(F28)&\"|\"&TRIM(H28)&\"|\"&TRIM(I28))",
+      "wanted": "=LOWER(TRIM(C28)&\"|\"&TRIM(D28)&\"|\"&TRIM(E28)&\"|\"&TRIM(F28)&\"|\"&TRIM(H28)&\"|\"&TRIM(I28))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-TERMINAL",
+      "domain": "scenes",
+      "row": 28,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-DUNGEON-GATE",
+      "domain": "scenes",
+      "row": 29,
+      "actual": "==LOWER(TRIM(C29)&\"|\"&TRIM(D29)&\"|\"&TRIM(E29)&\"|\"&TRIM(F29)&\"|\"&TRIM(H29)&\"|\"&TRIM(I29))",
+      "wanted": "=LOWER(TRIM(C29)&\"|\"&TRIM(D29)&\"|\"&TRIM(E29)&\"|\"&TRIM(F29)&\"|\"&TRIM(H29)&\"|\"&TRIM(I29))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-DUNGEON-GATE",
+      "domain": "scenes",
+      "row": 29,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-WORKBENCH",
+      "domain": "scenes",
+      "row": 30,
+      "actual": "==LOWER(TRIM(C30)&\"|\"&TRIM(D30)&\"|\"&TRIM(E30)&\"|\"&TRIM(F30)&\"|\"&TRIM(H30)&\"|\"&TRIM(I30))",
+      "wanted": "=LOWER(TRIM(C30)&\"|\"&TRIM(D30)&\"|\"&TRIM(E30)&\"|\"&TRIM(F30)&\"|\"&TRIM(H30)&\"|\"&TRIM(I30))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-WORKBENCH",
+      "domain": "scenes",
+      "row": 30,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-DOOR",
+      "domain": "scenes",
+      "row": 31,
+      "actual": "==LOWER(TRIM(C31)&\"|\"&TRIM(D31)&\"|\"&TRIM(E31)&\"|\"&TRIM(F31)&\"|\"&TRIM(H31)&\"|\"&TRIM(I31))",
+      "wanted": "=LOWER(TRIM(C31)&\"|\"&TRIM(D31)&\"|\"&TRIM(E31)&\"|\"&TRIM(F31)&\"|\"&TRIM(H31)&\"|\"&TRIM(I31))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-DOOR",
+      "domain": "scenes",
+      "row": 31,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+      "domain": "scenes",
+      "row": 32,
+      "actual": "==LOWER(TRIM(C32)&\"|\"&TRIM(D32)&\"|\"&TRIM(E32)&\"|\"&TRIM(F32)&\"|\"&TRIM(H32)&\"|\"&TRIM(I32))",
+      "wanted": "=LOWER(TRIM(C32)&\"|\"&TRIM(D32)&\"|\"&TRIM(E32)&\"|\"&TRIM(F32)&\"|\"&TRIM(H32)&\"|\"&TRIM(I32))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-DETAILS-V017",
+      "domain": "scenes",
+      "row": 32,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+      "domain": "scenes",
+      "row": 33,
+      "actual": "==LOWER(TRIM(C33)&\"|\"&TRIM(D33)&\"|\"&TRIM(E33)&\"|\"&TRIM(F33)&\"|\"&TRIM(H33)&\"|\"&TRIM(I33))",
+      "wanted": "=LOWER(TRIM(C33)&\"|\"&TRIM(D33)&\"|\"&TRIM(E33)&\"|\"&TRIM(F33)&\"|\"&TRIM(H33)&\"|\"&TRIM(I33))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-LOFT-FLOOR-FINISH-V017",
+      "domain": "scenes",
+      "row": 33,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+      "domain": "scenes",
+      "row": 34,
+      "actual": "==LOWER(TRIM(C34)&\"|\"&TRIM(D34)&\"|\"&TRIM(E34)&\"|\"&TRIM(F34)&\"|\"&TRIM(H34)&\"|\"&TRIM(I34))",
+      "wanted": "=LOWER(TRIM(C34)&\"|\"&TRIM(D34)&\"|\"&TRIM(E34)&\"|\"&TRIM(F34)&\"|\"&TRIM(H34)&\"|\"&TRIM(I34))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-VISUAL-LAYOUT-V017",
+      "domain": "scenes",
+      "row": 34,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT-3D",
+      "domain": "scenes",
+      "row": 35,
+      "actual": "==LOWER(TRIM(C35)&\"|\"&TRIM(D35)&\"|\"&TRIM(E35)&\"|\"&TRIM(F35)&\"|\"&TRIM(H35)&\"|\"&TRIM(I35))",
+      "wanted": "=LOWER(TRIM(C35)&\"|\"&TRIM(D35)&\"|\"&TRIM(E35)&\"|\"&TRIM(F35)&\"|\"&TRIM(H35)&\"|\"&TRIM(I35))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-KIT-3D",
+      "domain": "scenes",
+      "row": 35,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-FACILITY-3D",
+      "domain": "scenes",
+      "row": 36,
+      "actual": "==LOWER(TRIM(C36)&\"|\"&TRIM(D36)&\"|\"&TRIM(E36)&\"|\"&TRIM(F36)&\"|\"&TRIM(H36)&\"|\"&TRIM(I36))",
+      "wanted": "=LOWER(TRIM(C36)&\"|\"&TRIM(D36)&\"|\"&TRIM(E36)&\"|\"&TRIM(F36)&\"|\"&TRIM(H36)&\"|\"&TRIM(I36))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-FACILITY-3D",
+      "domain": "scenes",
+      "row": 36,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-DUNGEON-GATE-3D",
+      "domain": "scenes",
+      "row": 37,
+      "actual": "==LOWER(TRIM(C37)&\"|\"&TRIM(D37)&\"|\"&TRIM(E37)&\"|\"&TRIM(F37)&\"|\"&TRIM(H37)&\"|\"&TRIM(I37))",
+      "wanted": "=LOWER(TRIM(C37)&\"|\"&TRIM(D37)&\"|\"&TRIM(E37)&\"|\"&TRIM(F37)&\"|\"&TRIM(H37)&\"|\"&TRIM(I37))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-DUNGEON-GATE-3D",
+      "domain": "scenes",
+      "row": 37,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 38,
+      "actual": "==LOWER(TRIM(C38)&\"|\"&TRIM(D38)&\"|\"&TRIM(E38)&\"|\"&TRIM(F38)&\"|\"&TRIM(H38)&\"|\"&TRIM(I38))",
+      "wanted": "=LOWER(TRIM(C38)&\"|\"&TRIM(D38)&\"|\"&TRIM(E38)&\"|\"&TRIM(F38)&\"|\"&TRIM(H38)&\"|\"&TRIM(I38))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE-WORLD-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 38,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUNTIME-3D",
+      "domain": "scenes",
+      "row": 39,
+      "actual": "==LOWER(TRIM(C39)&\"|\"&TRIM(D39)&\"|\"&TRIM(E39)&\"|\"&TRIM(F39)&\"|\"&TRIM(H39)&\"|\"&TRIM(I39))",
+      "wanted": "=LOWER(TRIM(C39)&\"|\"&TRIM(D39)&\"|\"&TRIM(E39)&\"|\"&TRIM(F39)&\"|\"&TRIM(H39)&\"|\"&TRIM(I39))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUNTIME-3D",
+      "domain": "scenes",
+      "row": 39,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-IRON-FRONTIER-3D",
+      "domain": "scenes",
+      "row": 40,
+      "actual": "==LOWER(TRIM(C40)&\"|\"&TRIM(D40)&\"|\"&TRIM(E40)&\"|\"&TRIM(F40)&\"|\"&TRIM(H40)&\"|\"&TRIM(I40))",
+      "wanted": "=LOWER(TRIM(C40)&\"|\"&TRIM(D40)&\"|\"&TRIM(E40)&\"|\"&TRIM(F40)&\"|\"&TRIM(H40)&\"|\"&TRIM(I40))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-IRON-FRONTIER-3D",
+      "domain": "scenes",
+      "row": 40,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUST-FOUNDRY-3D",
+      "domain": "scenes",
+      "row": 41,
+      "actual": "==LOWER(TRIM(C41)&\"|\"&TRIM(D41)&\"|\"&TRIM(E41)&\"|\"&TRIM(F41)&\"|\"&TRIM(H41)&\"|\"&TRIM(I41))",
+      "wanted": "=LOWER(TRIM(C41)&\"|\"&TRIM(D41)&\"|\"&TRIM(E41)&\"|\"&TRIM(F41)&\"|\"&TRIM(H41)&\"|\"&TRIM(I41))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUST-FOUNDRY-3D",
+      "domain": "scenes",
+      "row": 41,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-SPORE-DEPTHS-3D",
+      "domain": "scenes",
+      "row": 42,
+      "actual": "==LOWER(TRIM(C42)&\"|\"&TRIM(D42)&\"|\"&TRIM(E42)&\"|\"&TRIM(F42)&\"|\"&TRIM(H42)&\"|\"&TRIM(I42))",
+      "wanted": "=LOWER(TRIM(C42)&\"|\"&TRIM(D42)&\"|\"&TRIM(E42)&\"|\"&TRIM(F42)&\"|\"&TRIM(H42)&\"|\"&TRIM(I42))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-SPORE-DEPTHS-3D",
+      "domain": "scenes",
+      "row": 42,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ABYSS-ARCHIVE-3D",
+      "domain": "scenes",
+      "row": 43,
+      "actual": "==LOWER(TRIM(C43)&\"|\"&TRIM(D43)&\"|\"&TRIM(E43)&\"|\"&TRIM(F43)&\"|\"&TRIM(H43)&\"|\"&TRIM(I43))",
+      "wanted": "=LOWER(TRIM(C43)&\"|\"&TRIM(D43)&\"|\"&TRIM(E43)&\"|\"&TRIM(F43)&\"|\"&TRIM(H43)&\"|\"&TRIM(I43))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ABYSS-ARCHIVE-3D",
+      "domain": "scenes",
+      "row": 43,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-WASTELAND-LIGHT-3D",
+      "domain": "scenes",
+      "row": 44,
+      "actual": "==LOWER(TRIM(C44)&\"|\"&TRIM(D44)&\"|\"&TRIM(E44)&\"|\"&TRIM(F44)&\"|\"&TRIM(H44)&\"|\"&TRIM(I44))",
+      "wanted": "=LOWER(TRIM(C44)&\"|\"&TRIM(D44)&\"|\"&TRIM(E44)&\"|\"&TRIM(F44)&\"|\"&TRIM(H44)&\"|\"&TRIM(I44))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-WASTELAND-LIGHT-3D",
+      "domain": "scenes",
+      "row": 44,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-ROOM-FURNITURE-3D",
+      "domain": "scenes",
+      "row": 45,
+      "actual": "==LOWER(TRIM(C45)&\"|\"&TRIM(D45)&\"|\"&TRIM(E45)&\"|\"&TRIM(F45)&\"|\"&TRIM(H45)&\"|\"&TRIM(I45))",
+      "wanted": "=LOWER(TRIM(C45)&\"|\"&TRIM(D45)&\"|\"&TRIM(E45)&\"|\"&TRIM(F45)&\"|\"&TRIM(H45)&\"|\"&TRIM(I45))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-ROOM-FURNITURE-3D",
+      "domain": "scenes",
+      "row": 45,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-SEARCH-CONTAINER-3D",
+      "domain": "scenes",
+      "row": 46,
+      "actual": "==LOWER(TRIM(C46)&\"|\"&TRIM(D46)&\"|\"&TRIM(E46)&\"|\"&TRIM(F46)&\"|\"&TRIM(H46)&\"|\"&TRIM(I46))",
+      "wanted": "=LOWER(TRIM(C46)&\"|\"&TRIM(D46)&\"|\"&TRIM(E46)&\"|\"&TRIM(F46)&\"|\"&TRIM(H46)&\"|\"&TRIM(I46))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-SEARCH-CONTAINER-3D",
+      "domain": "scenes",
+      "row": 46,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-SERVICE-STATION-3D",
+      "domain": "scenes",
+      "row": 47,
+      "actual": "==LOWER(TRIM(C47)&\"|\"&TRIM(D47)&\"|\"&TRIM(E47)&\"|\"&TRIM(F47)&\"|\"&TRIM(H47)&\"|\"&TRIM(I47))",
+      "wanted": "=LOWER(TRIM(C47)&\"|\"&TRIM(D47)&\"|\"&TRIM(E47)&\"|\"&TRIM(F47)&\"|\"&TRIM(H47)&\"|\"&TRIM(I47))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-SERVICE-STATION-3D",
+      "domain": "scenes",
+      "row": 47,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-EXTRACTION-BEACON-3D",
+      "domain": "scenes",
+      "row": 48,
+      "actual": "==LOWER(TRIM(C48)&\"|\"&TRIM(D48)&\"|\"&TRIM(E48)&\"|\"&TRIM(F48)&\"|\"&TRIM(H48)&\"|\"&TRIM(I48))",
+      "wanted": "=LOWER(TRIM(C48)&\"|\"&TRIM(D48)&\"|\"&TRIM(E48)&\"|\"&TRIM(F48)&\"|\"&TRIM(H48)&\"|\"&TRIM(I48))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-EXTRACTION-BEACON-3D",
+      "domain": "scenes",
+      "row": 48,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT-3D",
+      "domain": "scenes",
+      "row": 49,
+      "actual": "==LOWER(TRIM(C49)&\"|\"&TRIM(D49)&\"|\"&TRIM(E49)&\"|\"&TRIM(F49)&\"|\"&TRIM(H49)&\"|\"&TRIM(I49))",
+      "wanted": "=LOWER(TRIM(C49)&\"|\"&TRIM(D49)&\"|\"&TRIM(E49)&\"|\"&TRIM(F49)&\"|\"&TRIM(H49)&\"|\"&TRIM(I49))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-KIT-3D",
+      "domain": "scenes",
+      "row": 49,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUNTIME-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 50,
+      "actual": "==LOWER(TRIM(C50)&\"|\"&TRIM(D50)&\"|\"&TRIM(E50)&\"|\"&TRIM(F50)&\"|\"&TRIM(H50)&\"|\"&TRIM(I50))",
+      "wanted": "=LOWER(TRIM(C50)&\"|\"&TRIM(D50)&\"|\"&TRIM(E50)&\"|\"&TRIM(F50)&\"|\"&TRIM(H50)&\"|\"&TRIM(I50))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-RUNTIME-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 50,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 51,
+      "actual": "==LOWER(TRIM(C51)&\"|\"&TRIM(D51)&\"|\"&TRIM(E51)&\"|\"&TRIM(F51)&\"|\"&TRIM(H51)&\"|\"&TRIM(I51))",
+      "wanted": "=LOWER(TRIM(C51)&\"|\"&TRIM(D51)&\"|\"&TRIM(E51)&\"|\"&TRIM(F51)&\"|\"&TRIM(H51)&\"|\"&TRIM(I51))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TRAINING-RANGE-3D-PREVIEW",
+      "domain": "scenes",
+      "row": 51,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-ROOM-LIGHT-SWITCH-3D",
+      "domain": "scenes",
+      "row": 52,
+      "actual": "==LOWER(TRIM(C52)&\"|\"&TRIM(D52)&\"|\"&TRIM(E52)&\"|\"&TRIM(F52)&\"|\"&TRIM(H52)&\"|\"&TRIM(I52))",
+      "wanted": "=LOWER(TRIM(C52)&\"|\"&TRIM(D52)&\"|\"&TRIM(E52)&\"|\"&TRIM(F52)&\"|\"&TRIM(H52)&\"|\"&TRIM(I52))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-ROOM-LIGHT-SWITCH-3D",
+      "domain": "scenes",
+      "row": 52,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-DESCENT-KIT-3D",
+      "domain": "scenes",
+      "row": 53,
+      "actual": "==LOWER(TRIM(C53)&\"|\"&TRIM(D53)&\"|\"&TRIM(E53)&\"|\"&TRIM(F53)&\"|\"&TRIM(H53)&\"|\"&TRIM(I53))",
+      "wanted": "=LOWER(TRIM(C53)&\"|\"&TRIM(D53)&\"|\"&TRIM(E53)&\"|\"&TRIM(F53)&\"|\"&TRIM(H53)&\"|\"&TRIM(I53))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-DESCENT-KIT-3D",
+      "domain": "scenes",
+      "row": 53,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+      "domain": "scenes",
+      "row": 54,
+      "actual": "==LOWER(TRIM(C54)&\"|\"&TRIM(D54)&\"|\"&TRIM(E54)&\"|\"&TRIM(F54)&\"|\"&TRIM(H54)&\"|\"&TRIM(I54))",
+      "wanted": "=LOWER(TRIM(C54)&\"|\"&TRIM(D54)&\"|\"&TRIM(E54)&\"|\"&TRIM(F54)&\"|\"&TRIM(H54)&\"|\"&TRIM(I54))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-FLOOR-TILE-5M",
+      "domain": "scenes",
+      "row": 54,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "row_content_mutated",
+      "asset_id": "ENV-TOWER-WALL-SOLID-5M",
+      "domain": "scenes",
+      "baseline_v": "f07d60c7464b58483f6c9d8d0f04f6a12e1d0b45746257509f9f17bf122423a6",
+      "actual_v": "38883d0244596f7c0e99c43c5b6c0440da2b0671ccf06ae1499ba5d48c9000e4",
+      "row": [
+        "ENV-TOWER-WALL-SOLID-5M",
+        "塔楼5米满高实墙模块",
+        "场景",
+        "room_kit",
+        "tower_descent",
+        "wall_solid_5m",
+        "ENV-TOWER-DESCENT-KIT-3D",
+        "俯视3D",
+        "godot_runtime",
+        "整层外墙/65m核心/探索房内墙/5m正交走廊",
+        "原型已接入",
+        "P0",
+        "v004",
+        "GLB / 可视包络 5×11.9×0.4675m（结构阻挡 0.30m）/ 12m逻辑碰撞 / 共享Mesh / 可旋转",
+        "assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb",
+        "assets/art/environments/tower_descent_3d/source/wall_height12/env_tower_wall_solid_5m_source_v004.blend; assets/art/environments/tower_descent_3d/source/wall_height12/export_env_tower_wall_solid_5m_v004.py; assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend; assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn; src/world3d/TowerGeometry3D.gd",
+        "塔楼;实墙;满高墙;5米;12米逻辑墙;11.9米可见墙;模块化",
+        "==LOWER(TRIM(C55)&\"|\"&TRIM(D55)&\"|\"&TRIM(E55)&\"|\"&TRIM(F55)&\"|\"&TRIM(H55)&\"|\"&TRIM(I55))",
+        "<openpyxl.worksheet.formula.ArrayFormula object at 0x000001881A88BD70>",
+        "0bca134eef74148f0df444d72afff769974863cab6fec4ca885b773186649fb9",
+        "Codex",
+        "2026-09-19 00:00:00",
+        "Blender 派生（自 v007 通用实墙组件）",
+        "—",
+        "2026-08-02：南北向水平共享墙统一注册相机抬升判定，楼梯南侧墙纳入同一规则；墙体始终不透明，取消运行时墙体透明度改写。\n2026-08-03：东西向5m房间连接通道的无门南侧实墙增加独立camera_lower_wall碰撞标记；南北向通道的东/西墙保持不触发。真实98层侧门通道相机回归通过。\n2026-08-03：水平通道按每5m左右各一块动态生成9m实墙实例；墙体可视覆盖与连续碰撞严格等长，东西向通道南墙继续承担相机抬升判定。\n2026-08-03：动态水平通道按实墙Mesh包围盒底面自动贴合楼面；GLB几何保持Y=0..9m，可视原点不再误用碰撞盒4.5m中心。新增墙底高度与9m墙高自动回归。\n2026-09-19：可视网格换为 v004（自 battle/common_components v007「wall_standard_5m_通用包」派生，派生脚本 assets/art/environments/tower_descent_3d/source/wall_height12/export_env_tower_wall_solid_5m_v004.py）。Blender 内对根节点烘焙 180° 偏航后 transform_apply，使装饰面落在 Godot +Z（与 prp_tower_* A 套 forward_axis=\"+Z\" 对齐）；先三角化再删朝下面（去 1095 面）、join 成单 Mesh，丢掉无几何的 03_清漆反光_紫粉点缀 槽，只留 01/02/04 三个共享色盘角色。稳定路径 GLB 原地覆盖（文件名去版本号），节点名统一 ENV_TOWER_WALL_SOLID_5M，根变换为单位矩阵（该 GLB 被 TowerDescent3D 直接 preload，根变换会直接决定走廊墙位置）。阻挡不动：结构碰撞仍 0.30m 代理，可视包络 5×11.9×0.4675m（正面装甲凸到 +Z 0.3175）。"
+      ]
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-SOLID-5M",
+      "domain": "scenes",
+      "row": 55,
+      "actual": "==LOWER(TRIM(C55)&\"|\"&TRIM(D55)&\"|\"&TRIM(E55)&\"|\"&TRIM(F55)&\"|\"&TRIM(H55)&\"|\"&TRIM(I55))",
+      "wanted": "=LOWER(TRIM(C55)&\"|\"&TRIM(D55)&\"|\"&TRIM(E55)&\"|\"&TRIM(F55)&\"|\"&TRIM(H55)&\"|\"&TRIM(I55))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-SOLID-5M",
+      "domain": "scenes",
+      "row": 55,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-PARAPET-5M",
+      "domain": "scenes",
+      "row": 56,
+      "actual": "==LOWER(TRIM(C56)&\"|\"&TRIM(D56)&\"|\"&TRIM(E56)&\"|\"&TRIM(F56)&\"|\"&TRIM(H56)&\"|\"&TRIM(I56))",
+      "wanted": "=LOWER(TRIM(C56)&\"|\"&TRIM(D56)&\"|\"&TRIM(E56)&\"|\"&TRIM(F56)&\"|\"&TRIM(H56)&\"|\"&TRIM(I56))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-PARAPET-5M",
+      "domain": "scenes",
+      "row": 56,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "row_content_mutated",
+      "asset_id": "ENV-TOWER-WALL-DOOR-5M",
+      "domain": "scenes",
+      "baseline_v": "437998b715825a4c7427f28351dcaaaa353caf6ba7f6594e48fbd3e8b3e354b1",
+      "actual_v": "46fbe6d6910451ec633c298f73d674bdbbf4fd050e7f2caa4d4ab557e3a6f7a7",
+      "row": [
+        "ENV-TOWER-WALL-DOOR-5M",
+        "塔楼5米带门墙模块",
+        "场景",
+        "room_kit",
+        "tower_descent",
+        "wall_door_5m",
+        "ENV-TOWER-DESCENT-KIT-3D",
+        "俯视3D",
+        "godot_runtime",
+        "5m墙位/2.2m净宽/2.5m净高/独立门扇",
+        "原型已接入",
+        "P0",
+        "v005",
+        "GLB / 可视包络 5×11.9×0.683m（双面装饰，两侧各前凸 0.3415；结构阻挡 0.30m）/ 门洞净空 2.2×2.5m / 12m逻辑碰撞 / 共享Mesh / 可旋转",
+        "assets/art/environments/tower_descent_3d/components/env_tower_wall_door_5m_top3d.glb",
+        "assets/art/environments/tower_descent_3d/source/wall_height12/env_tower_wall_door_5m_source_v005.blend; assets/art/environments/tower_descent_3d/source/wall_height12/export_env_tower_wall_door_5m_v005.py; assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend; assets/art/props/dungeon_3d/prp_tower_wall_door_5m.tscn; src/world3d/DungeonRoom3D.gd",
+        "塔楼;门;门洞;5米;模块化;肉鸽触发;独立门扇",
+        "==LOWER(TRIM(C57)&\"|\"&TRIM(D57)&\"|\"&TRIM(E57)&\"|\"&TRIM(F57)&\"|\"&TRIM(H57)&\"|\"&TRIM(I57))",
+        "<openpyxl.worksheet.formula.ArrayFormula object at 0x000001881A88BE90>",
+        "473a2d18971202580e37823da026f53528774b527a307b05517a45aaf73cb8e0",
+        "Codex",
+        "2026-09-12 00:00:00",
+        "Blender 派生（自 v007 通用门墙组件，v005 双面）",
+        "—",
+        "2026-08-02：南北门墙统一使用仅限相机层的门洞代理，开门不再全局绕过后墙检测；代理不阻挡玩家、怪物或子弹。\n2026-09-19：可视本体由「塔楼旧套件程序生成源」换成战局通用组件派生美术（grep 关键词：DOOR_V004_DERIVE_REPORT / DOOR_V004_APERTURE_FAILED / PREFAB_DOOR_WALL_OK / DOOR_WALL_VISUAL_OK）。旧 GLB 出自 env_tower_descent_kit_top3d_v007.blend 的集合 10D_MOD_WALL_DOOR_5M_U01（本行 W 列原值即「程序生成 Blender 源集合」）：41,760 B、方块门垛+门楣、没有 PaletteUV、.import 里 import_script/path 为空且 embedded_image_handling=1，游离在共享色盘体系之外——同批其它塔楼构件（实墙/门扇/L 墙角）都已绑定。新资产自 tower_zones/battle/source/common_components/v007 的 wall_door_5m_通用包（ROOT_wall_door_5m_通用组件 + 主体_输出 4410 面 + UI灯光_柔和自发光 182 面）派生：绕竖轴 180°（美术自述正面在 Blender +Y，经 YUP 会落到 Godot -Z，而塔楼 A 套硬要求 forward_axis=+Z）后把偏移烘焙进顶点、ROOT 空物体丢弃、两网格合并为单 Mesh、12 个审阅场景塌缩为 1 个。朝下面剔除刻意只剔「贴地」那一层：门墙有门楣，其底面朝下且位于净高 2.5m 处，照实墙那样全剔会让玩家仰头看穿墙体；实测删掉 116 个地面封口面、保留 1376 个高于地面的朝下面，派生脚本内置断言（lintel underside was culled）挡住回退。门洞净空不采信源文件自报包络，改用射线从门洞内部实测复核：净宽 2.2（±1.1）、净高 2.5（门楣底），与 TowerGeometry3D.DOOR_CLEAR_WIDTH_M / DOOR_CLEAR_HEIGHT_M 及 DungeonRoom3D._add_tower_wall_collision() 的脚本碰撞代理逐值一致，故碰撞代理与门洞口径无需改动。实测：GLB 581,392 B / sha256 d5fd5a75…；4 个材质角色（01/02/03/04）全部有面、无空槽；.import 已绑 tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 且 embedded_image_handling=0，探针实测四个表面 albedo_texture=true（色盘真的生效）；可视包络 5×11.9×0.4915（装饰面朝房内 Godot +Z 凸到 0.3415、结构背 -0.15）；PREFAB_CONTRACT_OK count=6；TOWER_GRID_COMPONENT_ALIGNMENT_OK；TOWER_PALETTE_VISIBLE_OK（各房间 Imported_DoorWall5M_* 全部 override=null 且无残留门扇）；运行时递归探针实测 118 个塔楼门墙模块全部 4 表面 / AABB=(5,11.9,0.4915) / 装饰面朝 +Z；DOOR_WALL_VISUAL_OK captured=4（房内侧/外侧细节能量比 4.247，外侧为纯平板无装饰）；PREFAB_DOOR_WALL_OK（无静态门扇、无内嵌碰撞）。程序生成旧资产自带的那片静态门扇 DoorLeaf_OPEN 随重导出消失（通用包本来就不含门扇），qa/probe_tower_palette_visible.gd 的对应断言已由「必须隐藏」反转为「必须不存在」。注：节点名前缀 Imported_DoorWall5M_* 被两条路径共用——基地99层设施房走 ENV-BASE99-WALL-DOOR-5X12（自身包络 1.051m 深），核对时须按 asset_id 区分，否则会拿 A 套契约量出假失败。\n2026-09-19（v005）：门墙改为**双面装饰**。用户原话「我发现这个墙会连着走廊，做成两面都有效果的，直接复制一个镜像一下，在blender里头制作，完成后重新导入」。v004 只有房内侧（Godot +Z）有装饰，走廊侧（−Z）是一块平整结构背，玩家站在走廊里看过去是素板。v005 在派生脚本里新增 mirror_decoration 阶段：在 yaw 烘焙与三角化之后、朝下剔面之前，把「位于结构面前侧（Blender y ≤ −0.152，结构面 −0.15 加 2mm 切割容差）」的装饰面复制一份，用 Mirror 修改器绕 y=0 基准面（网格中心线）翻转后与原网格 join。（grep 关键词：DOOR_V005_DERIVE_REPORT / DOOR_V005_DERIVE_CONTRACT_FAILED / DOOR_V005_GLB_VERIFY_FAILED / DOOR_V005_EXPORT_CONTRACT_FAILED / DERIVE_OK / EXPORT_OK / PREFAB_DOOR_WALL_OK / DOOR_WALL_RUNTIME_OK / DOOR_WALL_VISUAL_OK。）Mirror 必须 use_mirror_merge=false、use_clip=false——门洞隧道与背壳横跨 y=0，开启合并会把它们粘在基准面上、开启裁剪会把它们钉死；关掉这两项后修改器自动翻转绕向，镜像面法线朝外，无需手工 flip。**整物体镜像不可行**：会与保留的背板共面闪烁，并把门洞复制成两条，所以切割后只复制装饰面。实测：装饰面/侧 7883 面（剔贴地面后 7799），镜像新增 7883（1:1）；跨侧共面孪生 0（源本身有 132 组薄片双面写法，镜像后恰好 264 组，未新增）；包络 Blender y∈[−0.3415, +0.3415]（Godot z 同值），关于 z=0 对称；门洞射线三向复测：±X 净宽 2.2、+Z 净高 2.5、±Y 贯穿厚度无阻挡（clear_through_thickness=true）——镜像面没有把门洞堵死；门楣底面仍在（朝下面只剔贴地一层 GROUND_BAND_M=0.05，保留 2734 个、删 200 个，断言「lintel underside was culled」挡住回退）。⚠️ float32 陷阱：镜像后顶点以 float32 存盘，面色心/法线会差约 1e-5，任何基于色心的逐项比对（排序后 zip、容差桶贪心匹配）都会误报「不对称」（本次曾误报 911 条、再误报 29 条）。改用两个对 float32 逐位稳定的不变量：① 顶点位置键多重集（镜像只翻 abs(y)，逐位精确）② 向量面积相对偏差（抓绕向反转）——实测 position_key_mismatches=0、area_delta=0.0，两侧顶点位置多重集差异为 0。⚠️ 退化面陷阱：源含 24 个零面积面（area<1e-9），其法线是数值垃圾，会让「朝下面」的阈值计数在存盘/重载之间翻转（实测 1367/1368）。已在统计中排除并单独报告 degenerate_zero_area_faces=24，门楣保留断言加 DOWN_FACE_COUNT_TOLERANCE=4 容差（门楣是否存在由门洞射线精确证明，不靠计数）。实测：GLB 1,147,372 B（v004 为 581,392 B）/ sha256 473a2d18…；4 个材质角色（01_精工金属_紫色骨架 / 02_细腻哑光_青绿大面 / 03_清漆反光_紫粉点缀 / 04_柔和自发光_UI灯光）全部保留；prefab 声明 asset_version=v005、visual_bounds_size_m=(5,11.9,0.683)、新增 metadata/double_sided=true；bounds_size_m 仍为 (5,11.9,0.3)（结构阻挡量，刻意与可视包络分离）。门禁：PREFAB_CONTRACT_OK count=6；TOWER_GRID_COMPONENT_ALIGNMENT_OK；TOWER_PALETTE_VISIBLE_OK；PREFAB_DOOR_WALL_OK；DOOR_WALL_RUNTIME_OK（递归探针实测 120 个模块中塔楼 A 套 118 个全部包络 ±0.3415 双面对称、4 表面）；DOOR_WALL_VISUAL_OK captured=4。画面取证（probe_door_wall_visual，v004 → v005）：房内侧保持 7 层亮度分层 / 细节能量 0.0015 不变（v004 与 v005 房内侧图做像素比对，平均通道差 0.04/255，判定「几乎同一画面」）；走廊侧 2 层 / 0.0004 → 6 层 / 0.0018（×4.5）；两侧能量比 4.247 → 0.829，即真正「两面都有效果」。走廊侧图与房内侧图互为左右镜像（B1 标牌、警示三角、门楣黄黑警示条全部左右翻转），水平翻转后平均通道差 1.59 → 0.96/255（v004 基线翻转前后 2.75→2.73，毫无变化——素背板翻转等于没翻）；门洞近景仍通透、仰视门楣底面仍在。接线：**未改任何运行时代码**——门洞净空 2.2×2.5 与 TowerGeometry3D.DOOR_CLEAR_WIDTH_M / DOOR_CLEAR_HEIGHT_M 及 DungeonRoom3D._add_tower_wall_collision() 的脚本碰撞代理逐值一致，碰撞代理与门洞口径无需改动；节点名前缀 Imported_DoorWall5M_* 仍被基地99层设施门墙（ENV-BASE99-WALL-DOOR-5X12，自身包络 1.051m 深）共用，核对须按 asset_id 过滤。"
+      ]
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-DOOR-5M",
+      "domain": "scenes",
+      "row": 57,
+      "actual": "==LOWER(TRIM(C57)&\"|\"&TRIM(D57)&\"|\"&TRIM(E57)&\"|\"&TRIM(F57)&\"|\"&TRIM(H57)&\"|\"&TRIM(I57))",
+      "wanted": "=LOWER(TRIM(C57)&\"|\"&TRIM(D57)&\"|\"&TRIM(E57)&\"|\"&TRIM(F57)&\"|\"&TRIM(H57)&\"|\"&TRIM(I57))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-DOOR-5M",
+      "domain": "scenes",
+      "row": 57,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
+      "domain": "scenes",
+      "row": 58,
+      "actual": "==LOWER(TRIM(C58)&\"|\"&TRIM(D58)&\"|\"&TRIM(E58)&\"|\"&TRIM(F58)&\"|\"&TRIM(H58)&\"|\"&TRIM(I58))",
+      "wanted": "=LOWER(TRIM(C58)&\"|\"&TRIM(D58)&\"|\"&TRIM(E58)&\"|\"&TRIM(F58)&\"|\"&TRIM(H58)&\"|\"&TRIM(I58))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIRWELL-GENERIC-12M",
+      "domain": "scenes",
+      "row": 58,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
+      "domain": "scenes",
+      "row": 59,
+      "actual": "==LOWER(TRIM(C59)&\"|\"&TRIM(D59)&\"|\"&TRIM(E59)&\"|\"&TRIM(F59)&\"|\"&TRIM(H59)&\"|\"&TRIM(I59))",
+      "wanted": "=LOWER(TRIM(C59)&\"|\"&TRIM(D59)&\"|\"&TRIM(E59)&\"|\"&TRIM(F59)&\"|\"&TRIM(H59)&\"|\"&TRIM(I59))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIRWELL-ROOFTOP-12M",
+      "domain": "scenes",
+      "row": 59,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-ARCHIVE-95",
+      "domain": "scenes",
+      "row": 60,
+      "actual": "==LOWER(TRIM(C60)&\"|\"&TRIM(D60)&\"|\"&TRIM(E60)&\"|\"&TRIM(F60)&\"|\"&TRIM(H60)&\"|\"&TRIM(I60))",
+      "wanted": "=LOWER(TRIM(C60)&\"|\"&TRIM(D60)&\"|\"&TRIM(E60)&\"|\"&TRIM(F60)&\"|\"&TRIM(H60)&\"|\"&TRIM(I60))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-ARCHIVE-95",
+      "domain": "scenes",
+      "row": 60,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-FURNACE-90",
+      "domain": "scenes",
+      "row": 61,
+      "actual": "==LOWER(TRIM(C61)&\"|\"&TRIM(D61)&\"|\"&TRIM(E61)&\"|\"&TRIM(F61)&\"|\"&TRIM(H61)&\"|\"&TRIM(I61))",
+      "wanted": "=LOWER(TRIM(C61)&\"|\"&TRIM(D61)&\"|\"&TRIM(E61)&\"|\"&TRIM(F61)&\"|\"&TRIM(H61)&\"|\"&TRIM(I61))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-FURNACE-90",
+      "domain": "scenes",
+      "row": 61,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-CHOIR-85",
+      "domain": "scenes",
+      "row": 62,
+      "actual": "==LOWER(TRIM(C62)&\"|\"&TRIM(D62)&\"|\"&TRIM(E62)&\"|\"&TRIM(F62)&\"|\"&TRIM(H62)&\"|\"&TRIM(I62))",
+      "wanted": "=LOWER(TRIM(C62)&\"|\"&TRIM(D62)&\"|\"&TRIM(E62)&\"|\"&TRIM(F62)&\"|\"&TRIM(H62)&\"|\"&TRIM(I62))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BOSS-ARENA-CHOIR-85",
+      "domain": "scenes",
+      "row": 62,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-MODULAR-KIT-3D",
+      "domain": "scenes",
+      "row": 63,
+      "actual": "==LOWER(TRIM(C63)&\"|\"&TRIM(D63)&\"|\"&TRIM(E63)&\"|\"&TRIM(F63)&\"|\"&TRIM(H63)&\"|\"&TRIM(I63))",
+      "wanted": "=LOWER(TRIM(C63)&\"|\"&TRIM(D63)&\"|\"&TRIM(E63)&\"|\"&TRIM(F63)&\"|\"&TRIM(H63)&\"|\"&TRIM(I63))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-MODULAR-KIT-3D",
+      "domain": "scenes",
+      "row": 63,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-PLAIN-5X12",
+      "domain": "scenes",
+      "row": 64,
+      "actual": "==LOWER(TRIM(C64)&\"|\"&TRIM(D64)&\"|\"&TRIM(E64)&\"|\"&TRIM(F64)&\"|\"&TRIM(H64)&\"|\"&TRIM(I64))",
+      "wanted": "=LOWER(TRIM(C64)&\"|\"&TRIM(D64)&\"|\"&TRIM(E64)&\"|\"&TRIM(F64)&\"|\"&TRIM(H64)&\"|\"&TRIM(I64))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-PLAIN-5X12",
+      "domain": "scenes",
+      "row": 64,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-DOOR-5X12",
+      "domain": "scenes",
+      "row": 65,
+      "actual": "==LOWER(TRIM(C65)&\"|\"&TRIM(D65)&\"|\"&TRIM(E65)&\"|\"&TRIM(F65)&\"|\"&TRIM(H65)&\"|\"&TRIM(I65))",
+      "wanted": "=LOWER(TRIM(C65)&\"|\"&TRIM(D65)&\"|\"&TRIM(E65)&\"|\"&TRIM(F65)&\"|\"&TRIM(H65)&\"|\"&TRIM(I65))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-DOOR-5X12",
+      "domain": "scenes",
+      "row": 65,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+      "domain": "scenes",
+      "row": 66,
+      "actual": "==LOWER(TRIM(C66)&\"|\"&TRIM(D66)&\"|\"&TRIM(E66)&\"|\"&TRIM(F66)&\"|\"&TRIM(H66)&\"|\"&TRIM(I66))",
+      "wanted": "=LOWER(TRIM(C66)&\"|\"&TRIM(D66)&\"|\"&TRIM(E66)&\"|\"&TRIM(F66)&\"|\"&TRIM(H66)&\"|\"&TRIM(I66))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-PLAIN-5M",
+      "domain": "scenes",
+      "row": 66,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+      "domain": "scenes",
+      "row": 67,
+      "actual": "==LOWER(TRIM(C67)&\"|\"&TRIM(D67)&\"|\"&TRIM(E67)&\"|\"&TRIM(F67)&\"|\"&TRIM(H67)&\"|\"&TRIM(I67))",
+      "wanted": "=LOWER(TRIM(C67)&\"|\"&TRIM(D67)&\"|\"&TRIM(E67)&\"|\"&TRIM(F67)&\"|\"&TRIM(H67)&\"|\"&TRIM(I67))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-FLOOR-RIVET-5M",
+      "domain": "scenes",
+      "row": 67,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+      "domain": "scenes",
+      "row": 68,
+      "actual": "==LOWER(TRIM(C68)&\"|\"&TRIM(D68)&\"|\"&TRIM(E68)&\"|\"&TRIM(F68)&\"|\"&TRIM(H68)&\"|\"&TRIM(I68))",
+      "wanted": "=LOWER(TRIM(C68)&\"|\"&TRIM(D68)&\"|\"&TRIM(E68)&\"|\"&TRIM(F68)&\"|\"&TRIM(H68)&\"|\"&TRIM(I68))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-ART-LAYOUT-3D",
+      "domain": "scenes",
+      "row": 68,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "row_content_mutated",
+      "asset_id": "ENV-TOWER-CORNER-L-5M",
+      "domain": "scenes",
+      "baseline_v": "e15f6f2bfe3214f1b8751156433aff0e1d1bb767042c058ddc12ca41de66b338",
+      "actual_v": "fab5e14109d7cff3fa2353a016b4a5f33ef33c311ca2e435167fc47903016a98",
+      "row": [
+        "ENV-TOWER-CORNER-L-5M",
+        "塔楼L型转角5米",
+        "场景",
+        "room_kit",
+        "tower_descent",
+        "corner_l_5m",
+        "ENV-TOWER-DESCENT-KIT-3D",
+        "俯视3D",
+        "godot_runtime",
+        "场景通用组件",
+        "原型已接入",
+        "P0",
+        "v001",
+        "GLB / 可视包络 5.15×11.9×5.15m（原点=转角，两臂向 +X/-Z 伸出；两臂装饰面都朝房内：长臂 Godot -Z、短臂 Godot +X）/ 结构占地 5×11.9×5m / 单 Mesh 三材质角色 / 自带两臂碰撞",
+        "assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb",
+        "assets/art/environments/tower_descent_3d/source/corner_l_5m/export_env_tower_corner_l_5m_v001.py; assets/art/props/dungeon_3d/prp_corner_l_5m.tscn; src/world3d/DungeonRoom3D.gd; assets/art/props/dungeon_3d/qa/verify_tower_module_prefabs.gd",
+        "塔楼L型转角5米;12米逻辑墙;11.9米可见墙;PaletteUV;L墙角;corner_l;bottom_corner",
+        "==LOWER(TRIM(C69)&\"|\"&TRIM(D69)&\"|\"&TRIM(E69)&\"|\"&TRIM(F69)&\"|\"&TRIM(H69)&\"|\"&TRIM(I69))",
+        "<openpyxl.worksheet.formula.ArrayFormula object at 0x000001881A88BE30>",
+        "451ba73e82aa38fa4bf91e8421496b09488cd202c453aee2c749619146031c71",
+        "Codex",
+        "2026-09-19 00:00:00",
+        "Blender 派生（由两份通用墙刚性拼成）",
+        "—",
+        "2026-08-18项目扫描补登记；按Prefab独立身份管理；根节点=PrpCornerL5m(Node3D)；2026-08-18扫描补登记资产主表\n2026-08-30 AST-03：asset_guard PASS；生产路径 assets/art/props/dungeon_3d/prp_corner_L_5m.tscn → assets/art/props/dungeon_3d/prp_corner_l_5m_v001.tscn；稳定 AssetID 不变；代码引用已迁移；验收 verify_rooftop_railing / verify_rooftop_32x32_contract / verify_door_passability / verify_full_3d_game_flow。\n2026-09-19：可视本体换成塔楼 A 套正式美术（grep 关键词：bottom_corner / CORNER_L_V001）。稳定 AssetID 不变，仍 ENV-TOWER-CORNER-L-5M；prefab 仍是 assets/art/props/dungeon_3d/prp_corner_l_5m.tscn（DungeonRoom3D.TOWER_CORNER_L_PREFAB，非 FACILITY 房间的四个转角）。本次把原来的程序化 BoxMesh 占位换成 A 套正式 GLB，做法是**由两份同一通用墙刚性拼成**而非单独建模：取自与实心墙同源的包 battle/source/common_components/v007（包 wall_standard_5m_通用包 / 根件 ROOT_wall_standard_5m_通用组件）。摆位：长臂 T(+2.5,0,0) 沿 +X 覆盖 0..5m，短臂 T(0,+2.5,0)@Rz(90°) 沿 -Z 覆盖 -5..0m；两臂先在烘焙坐标系内各自完成 triangulate→删朝下面，再刚性复制两次，逐臂断言 5319 三角面 == 通用墙、L 合计 10638 == 2×墙，因此与直墙逐面一致。装饰面朝外（长臂 Godot +Z、短臂 Godot +X）。原点契约由 bottom_center 变为 bottom_corner（原点=转角，两臂向 +X/-Z 伸出）：DungeonRoom3D._spawn_room_corner() 直接摆到房间角点再按 NW/NE/SW/SE 旋转，把几何重新居中会让所有房间角错位；统一契约门禁 verify_tower_module_prefabs.gd 为此新增 bottom_corner 识别。本件是六件通用物体里唯一自带碰撞的件（visual_only=false / collision_owner=self）：prefab 内两个 StaticBody3D（WallCollisionLong / WallCollisionShort，12m 高 0.30m 厚）的节点名是 _configure_corner_camera_collisions() 的镜头下压契约，改名即回归。保留美术自带共享色盘（01 精工金属_紫色骨架 / 02 细腻哑光_青绿大面 / 04 柔和自发光_UI灯光；空槽 03 已丢）。版本提法：本行 M 由 v004 改为 v001 —— 旧值 v004 属于 base_facility(99F) 那条派生线，本件的稳定 GLB 改走 tower_descent_3d/source/corner_l_5m/ 的 v001 线，与实心墙 v004 / 门扇 v001 同口径。原登记的 O/P 指向 base_facility_3d 的 env_base99_corner_l_5m（99F 那条线，运行时由 BASE99_CORNER_L_PREFAB 承担 FACILITY 房间），与塔楼 prefab 无关，本次一并纠正。注意：新生成 GLB 的 .import 不会自动绑定 scene_facility_shared_palette_post_import.gd，缺绑定会渲染成白板且不触发任何 *_OK 门禁，需手工绑定。\n2026-09-19 同日朝向修正（grep 关键词：ARM_FACING_GODOT / CORNER_ARM_FACING_WRONG）：首版长臂是纯平移 T(+2.5,0,0)、无偏航，于是保留了烘焙后朝 Godot +Z 的装饰面——那是 L 的外侧，玩家在房间里面对长臂时看到的是平整的结构背；短臂当时是对的（+X）。根因是「哪一侧算房间内」被写错：两臂沿 +X 与 -Z 伸出，房间内侧是两臂之间的凹象限（+X/-Z），而 prefab 注释与探针当时标成 -X/-Z，朝向断言也照错标号写成「长臂装饰面在 +Z」，于是自洽放行。正确口径只认运行时：_spawn_room_corner()（两臂从角点沿房间两条边指向房内）与 _build_corner_aware_wall_run()（南墙 rotation_y=PI、西墙 +PI/2，装饰面永远朝房内）。修正：长臂补 Rz(+180°)（与南墙同款；短臂不变）；派生脚本新增 ARM_FACING_GODOT 逐臂断言——拿「装饰面凸 0.3175 / 结构背 0.15」这条美术不对称当朝向指纹，逐臂比对自身 AABB，任一条反了即 CORNER_ARM_FACING_WRONG（既有包络/面数/材质/原点四类断言都抓不到朝向）；prefab origin_note 与 probe_corner_l_visual 机位改成「房内侧 = 两臂之间的凹象限（+X/-Z）」。重导出实测：两臂仍各 5319 面、L 合计 10638（「与直墙逐面一致」未被破坏）；可视包络 5.15×11.9×5.15、最小角 (-0.15, 0, -5.0)（z_max 由 0.3175 收成 0.15：装饰面朝内、外侧只剩结构背）；PREFAB_CONTRACT_OK count=6（0 ERROR）；CORNER_L_VISUAL_OK captured=4；逐面细节能量：长臂房内面 4.99 vs 外面 1.54，pair 图对照直墙 3.72 / L 长臂 3.97。本行 T 列 GLB 哈希随之二次改写（297ffb52… -> 451ba73e…）：路径与版本串仍是 v001（同一份资产的当日修正，不是新版本），但哈希变了，凡引用哈希处须同批更新。判据固化（2026-09-19 同日，第二轮）：上述逐面细节能量已从临时对照脚本搬进画面探针 probe_corner_l_visual.gd —— 新增 FACE_GAUGES + _measure_faces()：把长臂装饰面（房内侧 z=-0.3175）与结构背（外侧 z=+0.15）的世界四角用 Camera3D.unproject_position() 投影到屏幕取外接矩形裁出来，量高通能量（积分图盒式模糊半径 6，平均 |灰度-邻域均值|，与离线脚本同口径）；判据 room/outer >= FACE_ENERGY_RATIO_MIN = 1.6，机内实测 3.220（0.02099 / 0.00652，多轮重跑数值一致）。反向对照（把两个取样面互换机位）得 0.149 -> exit 1 并报「长臂装饰面疑似朝外」，判别力约 21x —— 即该判据不是「怎么都绿」的摆设。这是本件唯一能抓住「面朝反」的自动判据：包络 / 面数 / 材质角色 / 原点约定四类断言对朝向缺陷全部全绿。"
+      ]
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-L-5M",
+      "domain": "scenes",
+      "row": 69,
+      "actual": "==LOWER(TRIM(C69)&\"|\"&TRIM(D69)&\"|\"&TRIM(E69)&\"|\"&TRIM(F69)&\"|\"&TRIM(H69)&\"|\"&TRIM(I69))",
+      "wanted": "=LOWER(TRIM(C69)&\"|\"&TRIM(D69)&\"|\"&TRIM(E69)&\"|\"&TRIM(F69)&\"|\"&TRIM(H69)&\"|\"&TRIM(I69))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-L-5M",
+      "domain": "scenes",
+      "row": 69,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-L-PARAPET-5M",
+      "domain": "scenes",
+      "row": 70,
+      "actual": "==LOWER(TRIM(C70)&\"|\"&TRIM(D70)&\"|\"&TRIM(E70)&\"|\"&TRIM(F70)&\"|\"&TRIM(H70)&\"|\"&TRIM(I70))",
+      "wanted": "=LOWER(TRIM(C70)&\"|\"&TRIM(D70)&\"|\"&TRIM(E70)&\"|\"&TRIM(F70)&\"|\"&TRIM(H70)&\"|\"&TRIM(I70))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-L-PARAPET-5M",
+      "domain": "scenes",
+      "row": 70,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-T-5M",
+      "domain": "scenes",
+      "row": 71,
+      "actual": "==LOWER(TRIM(C71)&\"|\"&TRIM(D71)&\"|\"&TRIM(E71)&\"|\"&TRIM(F71)&\"|\"&TRIM(H71)&\"|\"&TRIM(I71))",
+      "wanted": "=LOWER(TRIM(C71)&\"|\"&TRIM(D71)&\"|\"&TRIM(E71)&\"|\"&TRIM(F71)&\"|\"&TRIM(H71)&\"|\"&TRIM(I71))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-T-5M",
+      "domain": "scenes",
+      "row": 71,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-X-5M",
+      "domain": "scenes",
+      "row": 72,
+      "actual": "==LOWER(TRIM(C72)&\"|\"&TRIM(D72)&\"|\"&TRIM(E72)&\"|\"&TRIM(F72)&\"|\"&TRIM(H72)&\"|\"&TRIM(I72))",
+      "wanted": "=LOWER(TRIM(C72)&\"|\"&TRIM(D72)&\"|\"&TRIM(E72)&\"|\"&TRIM(F72)&\"|\"&TRIM(H72)&\"|\"&TRIM(I72))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-X-5M",
+      "domain": "scenes",
+      "row": 72,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-CEILING-SEGMENT",
+      "domain": "scenes",
+      "row": 73,
+      "actual": "==LOWER(TRIM(C73)&\"|\"&TRIM(D73)&\"|\"&TRIM(E73)&\"|\"&TRIM(F73)&\"|\"&TRIM(H73)&\"|\"&TRIM(I73))",
+      "wanted": "=LOWER(TRIM(C73)&\"|\"&TRIM(D73)&\"|\"&TRIM(E73)&\"|\"&TRIM(F73)&\"|\"&TRIM(H73)&\"|\"&TRIM(I73))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-CEILING-SEGMENT",
+      "domain": "scenes",
+      "row": 73,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-FLOOR-SEGMENT",
+      "domain": "scenes",
+      "row": 74,
+      "actual": "==LOWER(TRIM(C74)&\"|\"&TRIM(D74)&\"|\"&TRIM(E74)&\"|\"&TRIM(F74)&\"|\"&TRIM(H74)&\"|\"&TRIM(I74))",
+      "wanted": "=LOWER(TRIM(C74)&\"|\"&TRIM(D74)&\"|\"&TRIM(E74)&\"|\"&TRIM(F74)&\"|\"&TRIM(H74)&\"|\"&TRIM(I74))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-FLOOR-SEGMENT",
+      "domain": "scenes",
+      "row": 74,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-STAIR-TREAD",
+      "domain": "scenes",
+      "row": 75,
+      "actual": "==LOWER(TRIM(C75)&\"|\"&TRIM(D75)&\"|\"&TRIM(E75)&\"|\"&TRIM(F75)&\"|\"&TRIM(H75)&\"|\"&TRIM(I75))",
+      "wanted": "=LOWER(TRIM(C75)&\"|\"&TRIM(D75)&\"|\"&TRIM(E75)&\"|\"&TRIM(F75)&\"|\"&TRIM(H75)&\"|\"&TRIM(I75))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-STAIR-TREAD",
+      "domain": "scenes",
+      "row": 75,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-WALL-SEGMENT",
+      "domain": "scenes",
+      "row": 76,
+      "actual": "==LOWER(TRIM(C76)&\"|\"&TRIM(D76)&\"|\"&TRIM(E76)&\"|\"&TRIM(F76)&\"|\"&TRIM(H76)&\"|\"&TRIM(I76))",
+      "wanted": "=LOWER(TRIM(C76)&\"|\"&TRIM(D76)&\"|\"&TRIM(E76)&\"|\"&TRIM(F76)&\"|\"&TRIM(H76)&\"|\"&TRIM(I76))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-CORRIDOR-WALL-SEGMENT",
+      "domain": "scenes",
+      "row": 76,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-ACCESS-STEP",
+      "domain": "scenes",
+      "row": 77,
+      "actual": "==LOWER(TRIM(C77)&\"|\"&TRIM(D77)&\"|\"&TRIM(E77)&\"|\"&TRIM(F77)&\"|\"&TRIM(H77)&\"|\"&TRIM(I77))",
+      "wanted": "=LOWER(TRIM(C77)&\"|\"&TRIM(D77)&\"|\"&TRIM(E77)&\"|\"&TRIM(F77)&\"|\"&TRIM(H77)&\"|\"&TRIM(I77))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-ACCESS-STEP",
+      "domain": "scenes",
+      "row": 77,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-CORNER-POST",
+      "domain": "scenes",
+      "row": 78,
+      "actual": "==LOWER(TRIM(C78)&\"|\"&TRIM(D78)&\"|\"&TRIM(E78)&\"|\"&TRIM(F78)&\"|\"&TRIM(H78)&\"|\"&TRIM(I78))",
+      "wanted": "=LOWER(TRIM(C78)&\"|\"&TRIM(D78)&\"|\"&TRIM(E78)&\"|\"&TRIM(F78)&\"|\"&TRIM(H78)&\"|\"&TRIM(I78))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-CORNER-POST",
+      "domain": "scenes",
+      "row": 78,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-DOOR-LINTEL",
+      "domain": "scenes",
+      "row": 79,
+      "actual": "==LOWER(TRIM(C79)&\"|\"&TRIM(D79)&\"|\"&TRIM(E79)&\"|\"&TRIM(F79)&\"|\"&TRIM(H79)&\"|\"&TRIM(I79))",
+      "wanted": "=LOWER(TRIM(C79)&\"|\"&TRIM(D79)&\"|\"&TRIM(E79)&\"|\"&TRIM(F79)&\"|\"&TRIM(H79)&\"|\"&TRIM(I79))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-DOOR-LINTEL",
+      "domain": "scenes",
+      "row": 79,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL-DOOR-SIDE",
+      "domain": "scenes",
+      "row": 80,
+      "actual": "==LOWER(TRIM(C80)&\"|\"&TRIM(D80)&\"|\"&TRIM(E80)&\"|\"&TRIM(F80)&\"|\"&TRIM(H80)&\"|\"&TRIM(I80))",
+      "wanted": "=LOWER(TRIM(C80)&\"|\"&TRIM(D80)&\"|\"&TRIM(E80)&\"|\"&TRIM(F80)&\"|\"&TRIM(H80)&\"|\"&TRIM(I80))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL-DOOR-SIDE",
+      "domain": "scenes",
+      "row": 80,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL-LINTEL",
+      "domain": "scenes",
+      "row": 81,
+      "actual": "==LOWER(TRIM(C81)&\"|\"&TRIM(D81)&\"|\"&TRIM(E81)&\"|\"&TRIM(F81)&\"|\"&TRIM(H81)&\"|\"&TRIM(I81))",
+      "wanted": "=LOWER(TRIM(C81)&\"|\"&TRIM(D81)&\"|\"&TRIM(E81)&\"|\"&TRIM(F81)&\"|\"&TRIM(H81)&\"|\"&TRIM(I81))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL-LINTEL",
+      "domain": "scenes",
+      "row": 81,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL",
+      "domain": "scenes",
+      "row": 82,
+      "actual": "==LOWER(TRIM(C82)&\"|\"&TRIM(D82)&\"|\"&TRIM(E82)&\"|\"&TRIM(F82)&\"|\"&TRIM(H82)&\"|\"&TRIM(I82))",
+      "wanted": "=LOWER(TRIM(C82)&\"|\"&TRIM(D82)&\"|\"&TRIM(E82)&\"|\"&TRIM(F82)&\"|\"&TRIM(H82)&\"|\"&TRIM(I82))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-FACILITY-WALL",
+      "domain": "scenes",
+      "row": 82,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-INSET",
+      "domain": "scenes",
+      "row": 83,
+      "actual": "==LOWER(TRIM(C83)&\"|\"&TRIM(D83)&\"|\"&TRIM(E83)&\"|\"&TRIM(F83)&\"|\"&TRIM(H83)&\"|\"&TRIM(I83))",
+      "wanted": "=LOWER(TRIM(C83)&\"|\"&TRIM(D83)&\"|\"&TRIM(E83)&\"|\"&TRIM(F83)&\"|\"&TRIM(H83)&\"|\"&TRIM(I83))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-INSET",
+      "domain": "scenes",
+      "row": 83,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-PARTITION-H",
+      "domain": "scenes",
+      "row": 84,
+      "actual": "==LOWER(TRIM(C84)&\"|\"&TRIM(D84)&\"|\"&TRIM(E84)&\"|\"&TRIM(F84)&\"|\"&TRIM(H84)&\"|\"&TRIM(I84))",
+      "wanted": "=LOWER(TRIM(C84)&\"|\"&TRIM(D84)&\"|\"&TRIM(E84)&\"|\"&TRIM(F84)&\"|\"&TRIM(H84)&\"|\"&TRIM(I84))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-PARTITION-H",
+      "domain": "scenes",
+      "row": 84,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-PARTITION-V",
+      "domain": "scenes",
+      "row": 85,
+      "actual": "==LOWER(TRIM(C85)&\"|\"&TRIM(D85)&\"|\"&TRIM(E85)&\"|\"&TRIM(F85)&\"|\"&TRIM(H85)&\"|\"&TRIM(I85))",
+      "wanted": "=LOWER(TRIM(C85)&\"|\"&TRIM(D85)&\"|\"&TRIM(E85)&\"|\"&TRIM(F85)&\"|\"&TRIM(H85)&\"|\"&TRIM(I85))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-PARTITION-V",
+      "domain": "scenes",
+      "row": 85,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-SEAM",
+      "domain": "scenes",
+      "row": 86,
+      "actual": "==LOWER(TRIM(C86)&\"|\"&TRIM(D86)&\"|\"&TRIM(E86)&\"|\"&TRIM(F86)&\"|\"&TRIM(H86)&\"|\"&TRIM(I86))",
+      "wanted": "=LOWER(TRIM(C86)&\"|\"&TRIM(D86)&\"|\"&TRIM(E86)&\"|\"&TRIM(F86)&\"|\"&TRIM(H86)&\"|\"&TRIM(I86))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR-SEAM",
+      "domain": "scenes",
+      "row": 86,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR",
+      "domain": "scenes",
+      "row": 87,
+      "actual": "==LOWER(TRIM(C87)&\"|\"&TRIM(D87)&\"|\"&TRIM(E87)&\"|\"&TRIM(F87)&\"|\"&TRIM(H87)&\"|\"&TRIM(I87))",
+      "wanted": "=LOWER(TRIM(C87)&\"|\"&TRIM(D87)&\"|\"&TRIM(E87)&\"|\"&TRIM(F87)&\"|\"&TRIM(H87)&\"|\"&TRIM(I87))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-FLOOR",
+      "domain": "scenes",
+      "row": 87,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-DESCENT-MARKER",
+      "domain": "scenes",
+      "row": 88,
+      "actual": "==LOWER(TRIM(C88)&\"|\"&TRIM(D88)&\"|\"&TRIM(E88)&\"|\"&TRIM(F88)&\"|\"&TRIM(H88)&\"|\"&TRIM(I88))",
+      "wanted": "=LOWER(TRIM(C88)&\"|\"&TRIM(D88)&\"|\"&TRIM(E88)&\"|\"&TRIM(F88)&\"|\"&TRIM(H88)&\"|\"&TRIM(I88))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-DESCENT-MARKER",
+      "domain": "scenes",
+      "row": 88,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-FACADE-BAND",
+      "domain": "scenes",
+      "row": 89,
+      "actual": "==LOWER(TRIM(C89)&\"|\"&TRIM(D89)&\"|\"&TRIM(E89)&\"|\"&TRIM(F89)&\"|\"&TRIM(H89)&\"|\"&TRIM(I89))",
+      "wanted": "=LOWER(TRIM(C89)&\"|\"&TRIM(D89)&\"|\"&TRIM(E89)&\"|\"&TRIM(F89)&\"|\"&TRIM(H89)&\"|\"&TRIM(I89))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-FACADE-BAND",
+      "domain": "scenes",
+      "row": 89,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-FACADE",
+      "domain": "scenes",
+      "row": 90,
+      "actual": "==LOWER(TRIM(C90)&\"|\"&TRIM(D90)&\"|\"&TRIM(E90)&\"|\"&TRIM(F90)&\"|\"&TRIM(H90)&\"|\"&TRIM(I90))",
+      "wanted": "=LOWER(TRIM(C90)&\"|\"&TRIM(D90)&\"|\"&TRIM(E90)&\"|\"&TRIM(F90)&\"|\"&TRIM(H90)&\"|\"&TRIM(I90))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-FACADE",
+      "domain": "scenes",
+      "row": 90,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAIL-POST",
+      "domain": "scenes",
+      "row": 91,
+      "actual": "==LOWER(TRIM(C91)&\"|\"&TRIM(D91)&\"|\"&TRIM(E91)&\"|\"&TRIM(F91)&\"|\"&TRIM(H91)&\"|\"&TRIM(I91))",
+      "wanted": "=LOWER(TRIM(C91)&\"|\"&TRIM(D91)&\"|\"&TRIM(E91)&\"|\"&TRIM(F91)&\"|\"&TRIM(H91)&\"|\"&TRIM(I91))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAIL-POST",
+      "domain": "scenes",
+      "row": 91,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAILING-LOWER",
+      "domain": "scenes",
+      "row": 92,
+      "actual": "==LOWER(TRIM(C92)&\"|\"&TRIM(D92)&\"|\"&TRIM(E92)&\"|\"&TRIM(F92)&\"|\"&TRIM(H92)&\"|\"&TRIM(I92))",
+      "wanted": "=LOWER(TRIM(C92)&\"|\"&TRIM(D92)&\"|\"&TRIM(E92)&\"|\"&TRIM(F92)&\"|\"&TRIM(H92)&\"|\"&TRIM(I92))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAILING-LOWER",
+      "domain": "scenes",
+      "row": 92,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAILING-UPPER",
+      "domain": "scenes",
+      "row": 93,
+      "actual": "==LOWER(TRIM(C93)&\"|\"&TRIM(D93)&\"|\"&TRIM(E93)&\"|\"&TRIM(F93)&\"|\"&TRIM(H93)&\"|\"&TRIM(I93))",
+      "wanted": "=LOWER(TRIM(C93)&\"|\"&TRIM(D93)&\"|\"&TRIM(E93)&\"|\"&TRIM(F93)&\"|\"&TRIM(H93)&\"|\"&TRIM(I93))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-RAILING-UPPER",
+      "domain": "scenes",
+      "row": 93,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-STAIR-FRAME-LINTEL",
+      "domain": "scenes",
+      "row": 94,
+      "actual": "==LOWER(TRIM(C94)&\"|\"&TRIM(D94)&\"|\"&TRIM(E94)&\"|\"&TRIM(F94)&\"|\"&TRIM(H94)&\"|\"&TRIM(I94))",
+      "wanted": "=LOWER(TRIM(C94)&\"|\"&TRIM(D94)&\"|\"&TRIM(E94)&\"|\"&TRIM(F94)&\"|\"&TRIM(H94)&\"|\"&TRIM(I94))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-STAIR-FRAME-LINTEL",
+      "domain": "scenes",
+      "row": 94,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-STAIR-FRAME-POST",
+      "domain": "scenes",
+      "row": 95,
+      "actual": "==LOWER(TRIM(C95)&\"|\"&TRIM(D95)&\"|\"&TRIM(E95)&\"|\"&TRIM(F95)&\"|\"&TRIM(H95)&\"|\"&TRIM(I95))",
+      "wanted": "=LOWER(TRIM(C95)&\"|\"&TRIM(D95)&\"|\"&TRIM(E95)&\"|\"&TRIM(F95)&\"|\"&TRIM(H95)&\"|\"&TRIM(I95))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-ROOFTOP-STAIR-FRAME-POST",
+      "domain": "scenes",
+      "row": 95,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-STAIR-LOBBY-ROUTE-GUIDE",
+      "domain": "scenes",
+      "row": 96,
+      "actual": "==LOWER(TRIM(C96)&\"|\"&TRIM(D96)&\"|\"&TRIM(E96)&\"|\"&TRIM(F96)&\"|\"&TRIM(H96)&\"|\"&TRIM(I96))",
+      "wanted": "=LOWER(TRIM(C96)&\"|\"&TRIM(D96)&\"|\"&TRIM(E96)&\"|\"&TRIM(F96)&\"|\"&TRIM(H96)&\"|\"&TRIM(I96))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-STAIR-LOBBY-ROUTE-GUIDE",
+      "domain": "scenes",
+      "row": 96,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-STAIR-LOBBY-THRESHOLD-GUIDE",
+      "domain": "scenes",
+      "row": 97,
+      "actual": "==LOWER(TRIM(C97)&\"|\"&TRIM(D97)&\"|\"&TRIM(E97)&\"|\"&TRIM(F97)&\"|\"&TRIM(H97)&\"|\"&TRIM(I97))",
+      "wanted": "=LOWER(TRIM(C97)&\"|\"&TRIM(D97)&\"|\"&TRIM(E97)&\"|\"&TRIM(F97)&\"|\"&TRIM(H97)&\"|\"&TRIM(I97))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-STAIR-LOBBY-THRESHOLD-GUIDE",
+      "domain": "scenes",
+      "row": 97,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-VERTICAL-ACCESS-MARKER",
+      "domain": "scenes",
+      "row": 98,
+      "actual": "==LOWER(TRIM(C98)&\"|\"&TRIM(D98)&\"|\"&TRIM(E98)&\"|\"&TRIM(F98)&\"|\"&TRIM(H98)&\"|\"&TRIM(I98))",
+      "wanted": "=LOWER(TRIM(C98)&\"|\"&TRIM(D98)&\"|\"&TRIM(E98)&\"|\"&TRIM(F98)&\"|\"&TRIM(H98)&\"|\"&TRIM(I98))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-VERTICAL-ACCESS-MARKER",
+      "domain": "scenes",
+      "row": 98,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-WALL-DOOR-SEGMENT",
+      "domain": "scenes",
+      "row": 99,
+      "actual": "==LOWER(TRIM(C99)&\"|\"&TRIM(D99)&\"|\"&TRIM(E99)&\"|\"&TRIM(F99)&\"|\"&TRIM(H99)&\"|\"&TRIM(I99))",
+      "wanted": "=LOWER(TRIM(C99)&\"|\"&TRIM(D99)&\"|\"&TRIM(E99)&\"|\"&TRIM(F99)&\"|\"&TRIM(H99)&\"|\"&TRIM(I99))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-WALL-DOOR-SEGMENT",
+      "domain": "scenes",
+      "row": 99,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-WALL-SEGMENT",
+      "domain": "scenes",
+      "row": 100,
+      "actual": "==LOWER(TRIM(C100)&\"|\"&TRIM(D100)&\"|\"&TRIM(E100)&\"|\"&TRIM(F100)&\"|\"&TRIM(H100)&\"|\"&TRIM(I100))",
+      "wanted": "=LOWER(TRIM(C100)&\"|\"&TRIM(D100)&\"|\"&TRIM(E100)&\"|\"&TRIM(F100)&\"|\"&TRIM(H100)&\"|\"&TRIM(I100))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-DUNGEON-ROOM-WALL-SEGMENT",
+      "domain": "scenes",
+      "row": 100,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-PARAPET-DOOR-5M",
+      "domain": "scenes",
+      "row": 101,
+      "actual": "==LOWER(TRIM(C101)&\"|\"&TRIM(D101)&\"|\"&TRIM(E101)&\"|\"&TRIM(F101)&\"|\"&TRIM(H101)&\"|\"&TRIM(I101))",
+      "wanted": "=LOWER(TRIM(C101)&\"|\"&TRIM(D101)&\"|\"&TRIM(E101)&\"|\"&TRIM(F101)&\"|\"&TRIM(H101)&\"|\"&TRIM(I101))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-WALL-PARAPET-DOOR-5M",
+      "domain": "scenes",
+      "row": 101,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-FACILITY-LIGHT-GRID-3D",
+      "domain": "scenes",
+      "row": 102,
+      "actual": "==LOWER(TRIM(C102)&\"|\"&TRIM(D102)&\"|\"&TRIM(E102)&\"|\"&TRIM(F102)&\"|\"&TRIM(H102)&\"|\"&TRIM(I102))",
+      "wanted": "=LOWER(TRIM(C102)&\"|\"&TRIM(D102)&\"|\"&TRIM(E102)&\"|\"&TRIM(F102)&\"|\"&TRIM(H102)&\"|\"&TRIM(I102))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-FACILITY-LIGHT-GRID-3D",
+      "domain": "scenes",
+      "row": 102,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-WINDOW-5X12",
+      "domain": "scenes",
+      "row": 103,
+      "actual": "==LOWER(TRIM(C103)&\"|\"&TRIM(D103)&\"|\"&TRIM(E103)&\"|\"&TRIM(F103)&\"|\"&TRIM(H103)&\"|\"&TRIM(I103))",
+      "wanted": "=LOWER(TRIM(C103)&\"|\"&TRIM(D103)&\"|\"&TRIM(E103)&\"|\"&TRIM(F103)&\"|\"&TRIM(H103)&\"|\"&TRIM(I103))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-WINDOW-5X12",
+      "domain": "scenes",
+      "row": 103,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+      "domain": "scenes",
+      "row": 104,
+      "actual": "==LOWER(TRIM(C104)&\"|\"&TRIM(D104)&\"|\"&TRIM(E104)&\"|\"&TRIM(F104)&\"|\"&TRIM(H104)&\"|\"&TRIM(I104))",
+      "wanted": "=LOWER(TRIM(C104)&\"|\"&TRIM(D104)&\"|\"&TRIM(E104)&\"|\"&TRIM(F104)&\"|\"&TRIM(H104)&\"|\"&TRIM(I104))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z7",
+      "domain": "scenes",
+      "row": 104,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-L-Z7",
+      "domain": "scenes",
+      "row": 105,
+      "actual": "==LOWER(TRIM(C105)&\"|\"&TRIM(D105)&\"|\"&TRIM(E105)&\"|\"&TRIM(F105)&\"|\"&TRIM(H105)&\"|\"&TRIM(I105))",
+      "wanted": "=LOWER(TRIM(C105)&\"|\"&TRIM(D105)&\"|\"&TRIM(E105)&\"|\"&TRIM(F105)&\"|\"&TRIM(H105)&\"|\"&TRIM(I105))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-L-Z7",
+      "domain": "scenes",
+      "row": 105,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+      "domain": "scenes",
+      "row": 106,
+      "actual": "==LOWER(TRIM(C106)&\"|\"&TRIM(D106)&\"|\"&TRIM(E106)&\"|\"&TRIM(F106)&\"|\"&TRIM(H106)&\"|\"&TRIM(I106))",
+      "wanted": "=LOWER(TRIM(C106)&\"|\"&TRIM(D106)&\"|\"&TRIM(E106)&\"|\"&TRIM(F106)&\"|\"&TRIM(H106)&\"|\"&TRIM(I106))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H2",
+      "domain": "scenes",
+      "row": 106,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+      "domain": "scenes",
+      "row": 107,
+      "actual": "==LOWER(TRIM(C107)&\"|\"&TRIM(D107)&\"|\"&TRIM(E107)&\"|\"&TRIM(F107)&\"|\"&TRIM(H107)&\"|\"&TRIM(I107))",
+      "wanted": "=LOWER(TRIM(C107)&\"|\"&TRIM(D107)&\"|\"&TRIM(E107)&\"|\"&TRIM(F107)&\"|\"&TRIM(H107)&\"|\"&TRIM(I107))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-DOOR-LIFT-22X25",
+      "domain": "scenes",
+      "row": 107,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE100-UPPER-SHELL-30X30-H12",
+      "domain": "scenes",
+      "row": 108,
+      "actual": "==LOWER(TRIM(C108)&\"|\"&TRIM(D108)&\"|\"&TRIM(E108)&\"|\"&TRIM(F108)&\"|\"&TRIM(H108)&\"|\"&TRIM(I108))",
+      "wanted": "=LOWER(TRIM(C108)&\"|\"&TRIM(D108)&\"|\"&TRIM(E108)&\"|\"&TRIM(F108)&\"|\"&TRIM(H108)&\"|\"&TRIM(I108))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE100-UPPER-SHELL-30X30-H12",
+      "domain": "scenes",
+      "row": 108,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+      "domain": "scenes",
+      "row": 109,
+      "actual": "==LOWER(TRIM(C109)&\"|\"&TRIM(D109)&\"|\"&TRIM(E109)&\"|\"&TRIM(F109)&\"|\"&TRIM(H109)&\"|\"&TRIM(I109))",
+      "wanted": "=LOWER(TRIM(C109)&\"|\"&TRIM(D109)&\"|\"&TRIM(E109)&\"|\"&TRIM(F109)&\"|\"&TRIM(H109)&\"|\"&TRIM(I109))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-20X10-Z5",
+      "domain": "scenes",
+      "row": 109,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-L-Z5",
+      "domain": "scenes",
+      "row": 110,
+      "actual": "==LOWER(TRIM(C110)&\"|\"&TRIM(D110)&\"|\"&TRIM(E110)&\"|\"&TRIM(F110)&\"|\"&TRIM(H110)&\"|\"&TRIM(I110))",
+      "wanted": "=LOWER(TRIM(C110)&\"|\"&TRIM(D110)&\"|\"&TRIM(E110)&\"|\"&TRIM(F110)&\"|\"&TRIM(H110)&\"|\"&TRIM(I110))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-L-Z5",
+      "domain": "scenes",
+      "row": 110,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+      "domain": "scenes",
+      "row": 111,
+      "actual": "==LOWER(TRIM(C111)&\"|\"&TRIM(D111)&\"|\"&TRIM(E111)&\"|\"&TRIM(F111)&\"|\"&TRIM(H111)&\"|\"&TRIM(I111))",
+      "wanted": "=LOWER(TRIM(C111)&\"|\"&TRIM(D111)&\"|\"&TRIM(E111)&\"|\"&TRIM(F111)&\"|\"&TRIM(H111)&\"|\"&TRIM(I111))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-STAIR-EXTERIOR-H4",
+      "domain": "scenes",
+      "row": 111,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+      "domain": "scenes",
+      "row": 112,
+      "actual": "==LOWER(TRIM(C112)&\"|\"&TRIM(D112)&\"|\"&TRIM(E112)&\"|\"&TRIM(F112)&\"|\"&TRIM(H112)&\"|\"&TRIM(I112))",
+      "wanted": "=LOWER(TRIM(C112)&\"|\"&TRIM(D112)&\"|\"&TRIM(E112)&\"|\"&TRIM(F112)&\"|\"&TRIM(H112)&\"|\"&TRIM(I112))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-MEZZANINE-UNDERDECK-BLOCKER",
+      "domain": "scenes",
+      "row": 112,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-AVATAR-WARDROBE-001",
+      "domain": "scenes",
+      "row": 113,
+      "actual": "==LOWER(TRIM(C113)&\"|\"&TRIM(D113)&\"|\"&TRIM(E113)&\"|\"&TRIM(F113)&\"|\"&TRIM(H113)&\"|\"&TRIM(I113))",
+      "wanted": "=LOWER(TRIM(C113)&\"|\"&TRIM(D113)&\"|\"&TRIM(E113)&\"|\"&TRIM(F113)&\"|\"&TRIM(H113)&\"|\"&TRIM(I113))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-AVATAR-WARDROBE-001",
+      "domain": "scenes",
+      "row": 113,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE",
+      "domain": "scenes",
+      "row": 114,
+      "actual": "==LOWER(TRIM(C114)&\"|\"&TRIM(D114)&\"|\"&TRIM(E114)&\"|\"&TRIM(F114)&\"|\"&TRIM(H114)&\"|\"&TRIM(I114))",
+      "wanted": "=LOWER(TRIM(C114)&\"|\"&TRIM(D114)&\"|\"&TRIM(E114)&\"|\"&TRIM(F114)&\"|\"&TRIM(H114)&\"|\"&TRIM(I114))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE",
+      "domain": "scenes",
+      "row": 114,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-BASE-RECOVERY-STATION-3D",
+      "domain": "scenes",
+      "row": 115,
+      "actual": "==LOWER(TRIM(C115)&\"|\"&TRIM(D115)&\"|\"&TRIM(E115)&\"|\"&TRIM(F115)&\"|\"&TRIM(H115)&\"|\"&TRIM(I115))",
+      "wanted": "=LOWER(TRIM(C115)&\"|\"&TRIM(D115)&\"|\"&TRIM(E115)&\"|\"&TRIM(F115)&\"|\"&TRIM(H115)&\"|\"&TRIM(I115))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-BASE-RECOVERY-STATION-3D",
+      "domain": "scenes",
+      "row": 115,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "PRP-TOWER-ROOM-DOOR-3D",
+      "domain": "scenes",
+      "row": 116,
+      "actual": "==LOWER(TRIM(C116)&\"|\"&TRIM(D116)&\"|\"&TRIM(E116)&\"|\"&TRIM(F116)&\"|\"&TRIM(H116)&\"|\"&TRIM(I116))",
+      "wanted": "=LOWER(TRIM(C116)&\"|\"&TRIM(D116)&\"|\"&TRIM(E116)&\"|\"&TRIM(F116)&\"|\"&TRIM(H116)&\"|\"&TRIM(I116))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "PRP-TOWER-ROOM-DOOR-3D",
+      "domain": "scenes",
+      "row": 116,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-SHELTER-50M-3D",
+      "domain": "scenes",
+      "row": 117,
+      "actual": "==LOWER(TRIM(C117)&\"|\"&TRIM(D117)&\"|\"&TRIM(E117)&\"|\"&TRIM(F117)&\"|\"&TRIM(H117)&\"|\"&TRIM(I117))",
+      "wanted": "=LOWER(TRIM(C117)&\"|\"&TRIM(D117)&\"|\"&TRIM(E117)&\"|\"&TRIM(F117)&\"|\"&TRIM(H117)&\"|\"&TRIM(I117))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-SHELTER-50M-3D",
+      "domain": "scenes",
+      "row": 117,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+      "domain": "scenes",
+      "row": 118,
+      "actual": "==LOWER(TRIM(C118)&\"|\"&TRIM(D118)&\"|\"&TRIM(E118)&\"|\"&TRIM(F118)&\"|\"&TRIM(H118)&\"|\"&TRIM(I118))",
+      "wanted": "=LOWER(TRIM(C118)&\"|\"&TRIM(D118)&\"|\"&TRIM(E118)&\"|\"&TRIM(F118)&\"|\"&TRIM(H118)&\"|\"&TRIM(I118))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+      "domain": "scenes",
+      "row": 118,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-MEZZANINE-STRUCTURE",
+      "domain": "scenes",
+      "row": 119,
+      "actual": "==LOWER(TRIM(C119)&\"|\"&TRIM(D119)&\"|\"&TRIM(E119)&\"|\"&TRIM(F119)&\"|\"&TRIM(H119)&\"|\"&TRIM(I119))",
+      "wanted": "=LOWER(TRIM(C119)&\"|\"&TRIM(D119)&\"|\"&TRIM(E119)&\"|\"&TRIM(F119)&\"|\"&TRIM(H119)&\"|\"&TRIM(I119))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-MEZZANINE-STRUCTURE",
+      "domain": "scenes",
+      "row": 119,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR",
+      "domain": "scenes",
+      "row": 120,
+      "actual": "==LOWER(TRIM(C120)&\"|\"&TRIM(D120)&\"|\"&TRIM(E120)&\"|\"&TRIM(F120)&\"|\"&TRIM(H120)&\"|\"&TRIM(I120))",
+      "wanted": "=LOWER(TRIM(C120)&\"|\"&TRIM(D120)&\"|\"&TRIM(E120)&\"|\"&TRIM(F120)&\"|\"&TRIM(H120)&\"|\"&TRIM(I120))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-UPPER-TRANSITION-STAIR",
+      "domain": "scenes",
+      "row": 120,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-NORTHWEST-L-STAIR",
+      "domain": "scenes",
+      "row": 121,
+      "actual": "==LOWER(TRIM(C121)&\"|\"&TRIM(D121)&\"|\"&TRIM(E121)&\"|\"&TRIM(F121)&\"|\"&TRIM(H121)&\"|\"&TRIM(I121))",
+      "wanted": "=LOWER(TRIM(C121)&\"|\"&TRIM(D121)&\"|\"&TRIM(E121)&\"|\"&TRIM(F121)&\"|\"&TRIM(H121)&\"|\"&TRIM(I121))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-NORTHWEST-L-STAIR",
+      "domain": "scenes",
+      "row": 121,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-RETAINED-WALL-SYSTEM",
+      "domain": "scenes",
+      "row": 122,
+      "actual": "==LOWER(TRIM(C122)&\"|\"&TRIM(D122)&\"|\"&TRIM(E122)&\"|\"&TRIM(F122)&\"|\"&TRIM(H122)&\"|\"&TRIM(I122))",
+      "wanted": "=LOWER(TRIM(C122)&\"|\"&TRIM(D122)&\"|\"&TRIM(E122)&\"|\"&TRIM(F122)&\"|\"&TRIM(H122)&\"|\"&TRIM(I122))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-RETAINED-WALL-SYSTEM",
+      "domain": "scenes",
+      "row": 122,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERDECK-SHEET-BLOCKER",
+      "domain": "scenes",
+      "row": 123,
+      "actual": "==LOWER(TRIM(C123)&\"|\"&TRIM(D123)&\"|\"&TRIM(E123)&\"|\"&TRIM(F123)&\"|\"&TRIM(H123)&\"|\"&TRIM(I123))",
+      "wanted": "=LOWER(TRIM(C123)&\"|\"&TRIM(D123)&\"|\"&TRIM(E123)&\"|\"&TRIM(F123)&\"|\"&TRIM(H123)&\"|\"&TRIM(I123))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERDECK-SHEET-BLOCKER",
+      "domain": "scenes",
+      "row": 123,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-FLAMMABLE-BIN",
+      "domain": "scenes",
+      "row": 124,
+      "actual": "==LOWER(TRIM(C124)&\"|\"&TRIM(D124)&\"|\"&TRIM(E124)&\"|\"&TRIM(F124)&\"|\"&TRIM(H124)&\"|\"&TRIM(I124))",
+      "wanted": "=LOWER(TRIM(C124)&\"|\"&TRIM(D124)&\"|\"&TRIM(E124)&\"|\"&TRIM(F124)&\"|\"&TRIM(H124)&\"|\"&TRIM(I124))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-FLAMMABLE-BIN",
+      "domain": "scenes",
+      "row": 124,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM",
+      "domain": "scenes",
+      "row": 125,
+      "actual": "==LOWER(TRIM(C125)&\"|\"&TRIM(D125)&\"|\"&TRIM(E125)&\"|\"&TRIM(F125)&\"|\"&TRIM(H125)&\"|\"&TRIM(I125))",
+      "wanted": "=LOWER(TRIM(C125)&\"|\"&TRIM(D125)&\"|\"&TRIM(E125)&\"|\"&TRIM(F125)&\"|\"&TRIM(H125)&\"|\"&TRIM(I125))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-INDUSTRIAL-PIPELINE-SYSTEM",
+      "domain": "scenes",
+      "row": 125,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-LOW-STORAGE-BENCH",
+      "domain": "scenes",
+      "row": 126,
+      "actual": "==LOWER(TRIM(C126)&\"|\"&TRIM(D126)&\"|\"&TRIM(E126)&\"|\"&TRIM(F126)&\"|\"&TRIM(H126)&\"|\"&TRIM(I126))",
+      "wanted": "=LOWER(TRIM(C126)&\"|\"&TRIM(D126)&\"|\"&TRIM(E126)&\"|\"&TRIM(F126)&\"|\"&TRIM(H126)&\"|\"&TRIM(I126))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-LOW-STORAGE-BENCH",
+      "domain": "scenes",
+      "row": 126,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION",
+      "domain": "scenes",
+      "row": 127,
+      "actual": "==LOWER(TRIM(C127)&\"|\"&TRIM(D127)&\"|\"&TRIM(E127)&\"|\"&TRIM(F127)&\"|\"&TRIM(H127)&\"|\"&TRIM(I127))",
+      "wanted": "=LOWER(TRIM(C127)&\"|\"&TRIM(D127)&\"|\"&TRIM(E127)&\"|\"&TRIM(F127)&\"|\"&TRIM(H127)&\"|\"&TRIM(I127))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION",
+      "domain": "scenes",
+      "row": 127,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR",
+      "domain": "scenes",
+      "row": 128,
+      "actual": "==LOWER(TRIM(C128)&\"|\"&TRIM(D128)&\"|\"&TRIM(E128)&\"|\"&TRIM(F128)&\"|\"&TRIM(H128)&\"|\"&TRIM(I128))",
+      "wanted": "=LOWER(TRIM(C128)&\"|\"&TRIM(D128)&\"|\"&TRIM(E128)&\"|\"&TRIM(F128)&\"|\"&TRIM(H128)&\"|\"&TRIM(I128))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-PERSONNEL-SECURITY-DOOR",
+      "domain": "scenes",
+      "row": 128,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-PLANT-GROUP",
+      "domain": "scenes",
+      "row": 129,
+      "actual": "==LOWER(TRIM(C129)&\"|\"&TRIM(D129)&\"|\"&TRIM(E129)&\"|\"&TRIM(F129)&\"|\"&TRIM(H129)&\"|\"&TRIM(I129))",
+      "wanted": "=LOWER(TRIM(C129)&\"|\"&TRIM(D129)&\"|\"&TRIM(E129)&\"|\"&TRIM(F129)&\"|\"&TRIM(H129)&\"|\"&TRIM(I129))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-PLANT-GROUP",
+      "domain": "scenes",
+      "row": 129,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-POWER-DISTRIBUTION",
+      "domain": "scenes",
+      "row": 130,
+      "actual": "==LOWER(TRIM(C130)&\"|\"&TRIM(D130)&\"|\"&TRIM(E130)&\"|\"&TRIM(F130)&\"|\"&TRIM(H130)&\"|\"&TRIM(I130))",
+      "wanted": "=LOWER(TRIM(C130)&\"|\"&TRIM(D130)&\"|\"&TRIM(E130)&\"|\"&TRIM(F130)&\"|\"&TRIM(H130)&\"|\"&TRIM(I130))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-POWER-DISTRIBUTION",
+      "domain": "scenes",
+      "row": 130,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-RECYCLE-BIN",
+      "domain": "scenes",
+      "row": 131,
+      "actual": "==LOWER(TRIM(C131)&\"|\"&TRIM(D131)&\"|\"&TRIM(E131)&\"|\"&TRIM(F131)&\"|\"&TRIM(H131)&\"|\"&TRIM(I131))",
+      "wanted": "=LOWER(TRIM(C131)&\"|\"&TRIM(D131)&\"|\"&TRIM(E131)&\"|\"&TRIM(F131)&\"|\"&TRIM(H131)&\"|\"&TRIM(I131))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-RECYCLE-BIN",
+      "domain": "scenes",
+      "row": 131,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT",
+      "domain": "scenes",
+      "row": 132,
+      "actual": "==LOWER(TRIM(C132)&\"|\"&TRIM(D132)&\"|\"&TRIM(E132)&\"|\"&TRIM(F132)&\"|\"&TRIM(H132)&\"|\"&TRIM(I132))",
+      "wanted": "=LOWER(TRIM(C132)&\"|\"&TRIM(D132)&\"|\"&TRIM(E132)&\"|\"&TRIM(F132)&\"|\"&TRIM(H132)&\"|\"&TRIM(I132))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT",
+      "domain": "scenes",
+      "row": 132,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES",
+      "domain": "scenes",
+      "row": 133,
+      "actual": "==LOWER(TRIM(C133)&\"|\"&TRIM(D133)&\"|\"&TRIM(E133)&\"|\"&TRIM(F133)&\"|\"&TRIM(H133)&\"|\"&TRIM(I133))",
+      "wanted": "=LOWER(TRIM(C133)&\"|\"&TRIM(D133)&\"|\"&TRIM(E133)&\"|\"&TRIM(F133)&\"|\"&TRIM(H133)&\"|\"&TRIM(I133))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-SMALL-SAFETY-DEVICES",
+      "domain": "scenes",
+      "row": 133,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-SUPPLY-24H-STATION",
+      "domain": "scenes",
+      "row": 134,
+      "actual": "==LOWER(TRIM(C134)&\"|\"&TRIM(D134)&\"|\"&TRIM(E134)&\"|\"&TRIM(F134)&\"|\"&TRIM(H134)&\"|\"&TRIM(I134))",
+      "wanted": "=LOWER(TRIM(C134)&\"|\"&TRIM(D134)&\"|\"&TRIM(E134)&\"|\"&TRIM(F134)&\"|\"&TRIM(H134)&\"|\"&TRIM(I134))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-SUPPLY-24H-STATION",
+      "domain": "scenes",
+      "row": 134,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-WASTE-BIN",
+      "domain": "scenes",
+      "row": 135,
+      "actual": "==LOWER(TRIM(C135)&\"|\"&TRIM(D135)&\"|\"&TRIM(E135)&\"|\"&TRIM(F135)&\"|\"&TRIM(H135)&\"|\"&TRIM(I135))",
+      "wanted": "=LOWER(TRIM(C135)&\"|\"&TRIM(D135)&\"|\"&TRIM(E135)&\"|\"&TRIM(F135)&\"|\"&TRIM(H135)&\"|\"&TRIM(I135))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-WASTE-BIN",
+      "domain": "scenes",
+      "row": 135,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-WORK-TOGETHER-POSTER",
+      "domain": "scenes",
+      "row": 136,
+      "actual": "==LOWER(TRIM(C136)&\"|\"&TRIM(D136)&\"|\"&TRIM(E136)&\"|\"&TRIM(F136)&\"|\"&TRIM(H136)&\"|\"&TRIM(I136))",
+      "wanted": "=LOWER(TRIM(C136)&\"|\"&TRIM(D136)&\"|\"&TRIM(E136)&\"|\"&TRIM(F136)&\"|\"&TRIM(H136)&\"|\"&TRIM(I136))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-WORK-TOGETHER-POSTER",
+      "domain": "scenes",
+      "row": 136,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C01",
+      "domain": "scenes",
+      "row": 137,
+      "actual": "==LOWER(TRIM(C137)&\"|\"&TRIM(D137)&\"|\"&TRIM(E137)&\"|\"&TRIM(F137)&\"|\"&TRIM(H137)&\"|\"&TRIM(I137))",
+      "wanted": "=LOWER(TRIM(C137)&\"|\"&TRIM(D137)&\"|\"&TRIM(E137)&\"|\"&TRIM(F137)&\"|\"&TRIM(H137)&\"|\"&TRIM(I137))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C01",
+      "domain": "scenes",
+      "row": 137,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C02",
+      "domain": "scenes",
+      "row": 138,
+      "actual": "==LOWER(TRIM(C138)&\"|\"&TRIM(D138)&\"|\"&TRIM(E138)&\"|\"&TRIM(F138)&\"|\"&TRIM(H138)&\"|\"&TRIM(I138))",
+      "wanted": "=LOWER(TRIM(C138)&\"|\"&TRIM(D138)&\"|\"&TRIM(E138)&\"|\"&TRIM(F138)&\"|\"&TRIM(H138)&\"|\"&TRIM(I138))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C02",
+      "domain": "scenes",
+      "row": 138,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C03",
+      "domain": "scenes",
+      "row": 139,
+      "actual": "==LOWER(TRIM(C139)&\"|\"&TRIM(D139)&\"|\"&TRIM(E139)&\"|\"&TRIM(F139)&\"|\"&TRIM(H139)&\"|\"&TRIM(I139))",
+      "wanted": "=LOWER(TRIM(C139)&\"|\"&TRIM(D139)&\"|\"&TRIM(E139)&\"|\"&TRIM(F139)&\"|\"&TRIM(H139)&\"|\"&TRIM(I139))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C03",
+      "domain": "scenes",
+      "row": 139,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C04",
+      "domain": "scenes",
+      "row": 140,
+      "actual": "==LOWER(TRIM(C140)&\"|\"&TRIM(D140)&\"|\"&TRIM(E140)&\"|\"&TRIM(F140)&\"|\"&TRIM(H140)&\"|\"&TRIM(I140))",
+      "wanted": "=LOWER(TRIM(C140)&\"|\"&TRIM(D140)&\"|\"&TRIM(E140)&\"|\"&TRIM(F140)&\"|\"&TRIM(H140)&\"|\"&TRIM(I140))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C04",
+      "domain": "scenes",
+      "row": 140,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C05",
+      "domain": "scenes",
+      "row": 141,
+      "actual": "==LOWER(TRIM(C141)&\"|\"&TRIM(D141)&\"|\"&TRIM(E141)&\"|\"&TRIM(F141)&\"|\"&TRIM(H141)&\"|\"&TRIM(I141))",
+      "wanted": "=LOWER(TRIM(C141)&\"|\"&TRIM(D141)&\"|\"&TRIM(E141)&\"|\"&TRIM(F141)&\"|\"&TRIM(H141)&\"|\"&TRIM(I141))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C05",
+      "domain": "scenes",
+      "row": 141,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C06",
+      "domain": "scenes",
+      "row": 142,
+      "actual": "==LOWER(TRIM(C142)&\"|\"&TRIM(D142)&\"|\"&TRIM(E142)&\"|\"&TRIM(F142)&\"|\"&TRIM(H142)&\"|\"&TRIM(I142))",
+      "wanted": "=LOWER(TRIM(C142)&\"|\"&TRIM(D142)&\"|\"&TRIM(E142)&\"|\"&TRIM(F142)&\"|\"&TRIM(H142)&\"|\"&TRIM(I142))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R01-C06",
+      "domain": "scenes",
+      "row": 142,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C01",
+      "domain": "scenes",
+      "row": 143,
+      "actual": "==LOWER(TRIM(C143)&\"|\"&TRIM(D143)&\"|\"&TRIM(E143)&\"|\"&TRIM(F143)&\"|\"&TRIM(H143)&\"|\"&TRIM(I143))",
+      "wanted": "=LOWER(TRIM(C143)&\"|\"&TRIM(D143)&\"|\"&TRIM(E143)&\"|\"&TRIM(F143)&\"|\"&TRIM(H143)&\"|\"&TRIM(I143))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C01",
+      "domain": "scenes",
+      "row": 143,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C02",
+      "domain": "scenes",
+      "row": 144,
+      "actual": "==LOWER(TRIM(C144)&\"|\"&TRIM(D144)&\"|\"&TRIM(E144)&\"|\"&TRIM(F144)&\"|\"&TRIM(H144)&\"|\"&TRIM(I144))",
+      "wanted": "=LOWER(TRIM(C144)&\"|\"&TRIM(D144)&\"|\"&TRIM(E144)&\"|\"&TRIM(F144)&\"|\"&TRIM(H144)&\"|\"&TRIM(I144))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C02",
+      "domain": "scenes",
+      "row": 144,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C03",
+      "domain": "scenes",
+      "row": 145,
+      "actual": "==LOWER(TRIM(C145)&\"|\"&TRIM(D145)&\"|\"&TRIM(E145)&\"|\"&TRIM(F145)&\"|\"&TRIM(H145)&\"|\"&TRIM(I145))",
+      "wanted": "=LOWER(TRIM(C145)&\"|\"&TRIM(D145)&\"|\"&TRIM(E145)&\"|\"&TRIM(F145)&\"|\"&TRIM(H145)&\"|\"&TRIM(I145))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C03",
+      "domain": "scenes",
+      "row": 145,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C04",
+      "domain": "scenes",
+      "row": 146,
+      "actual": "==LOWER(TRIM(C146)&\"|\"&TRIM(D146)&\"|\"&TRIM(E146)&\"|\"&TRIM(F146)&\"|\"&TRIM(H146)&\"|\"&TRIM(I146))",
+      "wanted": "=LOWER(TRIM(C146)&\"|\"&TRIM(D146)&\"|\"&TRIM(E146)&\"|\"&TRIM(F146)&\"|\"&TRIM(H146)&\"|\"&TRIM(I146))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C04",
+      "domain": "scenes",
+      "row": 146,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C05",
+      "domain": "scenes",
+      "row": 147,
+      "actual": "==LOWER(TRIM(C147)&\"|\"&TRIM(D147)&\"|\"&TRIM(E147)&\"|\"&TRIM(F147)&\"|\"&TRIM(H147)&\"|\"&TRIM(I147))",
+      "wanted": "=LOWER(TRIM(C147)&\"|\"&TRIM(D147)&\"|\"&TRIM(E147)&\"|\"&TRIM(F147)&\"|\"&TRIM(H147)&\"|\"&TRIM(I147))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C05",
+      "domain": "scenes",
+      "row": 147,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C06",
+      "domain": "scenes",
+      "row": 148,
+      "actual": "==LOWER(TRIM(C148)&\"|\"&TRIM(D148)&\"|\"&TRIM(E148)&\"|\"&TRIM(F148)&\"|\"&TRIM(H148)&\"|\"&TRIM(I148))",
+      "wanted": "=LOWER(TRIM(C148)&\"|\"&TRIM(D148)&\"|\"&TRIM(E148)&\"|\"&TRIM(F148)&\"|\"&TRIM(H148)&\"|\"&TRIM(I148))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R02-C06",
+      "domain": "scenes",
+      "row": 148,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C01",
+      "domain": "scenes",
+      "row": 149,
+      "actual": "==LOWER(TRIM(C149)&\"|\"&TRIM(D149)&\"|\"&TRIM(E149)&\"|\"&TRIM(F149)&\"|\"&TRIM(H149)&\"|\"&TRIM(I149))",
+      "wanted": "=LOWER(TRIM(C149)&\"|\"&TRIM(D149)&\"|\"&TRIM(E149)&\"|\"&TRIM(F149)&\"|\"&TRIM(H149)&\"|\"&TRIM(I149))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C01",
+      "domain": "scenes",
+      "row": 149,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C02",
+      "domain": "scenes",
+      "row": 150,
+      "actual": "==LOWER(TRIM(C150)&\"|\"&TRIM(D150)&\"|\"&TRIM(E150)&\"|\"&TRIM(F150)&\"|\"&TRIM(H150)&\"|\"&TRIM(I150))",
+      "wanted": "=LOWER(TRIM(C150)&\"|\"&TRIM(D150)&\"|\"&TRIM(E150)&\"|\"&TRIM(F150)&\"|\"&TRIM(H150)&\"|\"&TRIM(I150))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C02",
+      "domain": "scenes",
+      "row": 150,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C03",
+      "domain": "scenes",
+      "row": 151,
+      "actual": "==LOWER(TRIM(C151)&\"|\"&TRIM(D151)&\"|\"&TRIM(E151)&\"|\"&TRIM(F151)&\"|\"&TRIM(H151)&\"|\"&TRIM(I151))",
+      "wanted": "=LOWER(TRIM(C151)&\"|\"&TRIM(D151)&\"|\"&TRIM(E151)&\"|\"&TRIM(F151)&\"|\"&TRIM(H151)&\"|\"&TRIM(I151))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C03",
+      "domain": "scenes",
+      "row": 151,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C04",
+      "domain": "scenes",
+      "row": 152,
+      "actual": "==LOWER(TRIM(C152)&\"|\"&TRIM(D152)&\"|\"&TRIM(E152)&\"|\"&TRIM(F152)&\"|\"&TRIM(H152)&\"|\"&TRIM(I152))",
+      "wanted": "=LOWER(TRIM(C152)&\"|\"&TRIM(D152)&\"|\"&TRIM(E152)&\"|\"&TRIM(F152)&\"|\"&TRIM(H152)&\"|\"&TRIM(I152))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C04",
+      "domain": "scenes",
+      "row": 152,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C05",
+      "domain": "scenes",
+      "row": 153,
+      "actual": "==LOWER(TRIM(C153)&\"|\"&TRIM(D153)&\"|\"&TRIM(E153)&\"|\"&TRIM(F153)&\"|\"&TRIM(H153)&\"|\"&TRIM(I153))",
+      "wanted": "=LOWER(TRIM(C153)&\"|\"&TRIM(D153)&\"|\"&TRIM(E153)&\"|\"&TRIM(F153)&\"|\"&TRIM(H153)&\"|\"&TRIM(I153))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C05",
+      "domain": "scenes",
+      "row": 153,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C06",
+      "domain": "scenes",
+      "row": 154,
+      "actual": "==LOWER(TRIM(C154)&\"|\"&TRIM(D154)&\"|\"&TRIM(E154)&\"|\"&TRIM(F154)&\"|\"&TRIM(H154)&\"|\"&TRIM(I154))",
+      "wanted": "=LOWER(TRIM(C154)&\"|\"&TRIM(D154)&\"|\"&TRIM(E154)&\"|\"&TRIM(F154)&\"|\"&TRIM(H154)&\"|\"&TRIM(I154))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R03-C06",
+      "domain": "scenes",
+      "row": 154,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C01",
+      "domain": "scenes",
+      "row": 155,
+      "actual": "==LOWER(TRIM(C155)&\"|\"&TRIM(D155)&\"|\"&TRIM(E155)&\"|\"&TRIM(F155)&\"|\"&TRIM(H155)&\"|\"&TRIM(I155))",
+      "wanted": "=LOWER(TRIM(C155)&\"|\"&TRIM(D155)&\"|\"&TRIM(E155)&\"|\"&TRIM(F155)&\"|\"&TRIM(H155)&\"|\"&TRIM(I155))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C01",
+      "domain": "scenes",
+      "row": 155,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C02",
+      "domain": "scenes",
+      "row": 156,
+      "actual": "==LOWER(TRIM(C156)&\"|\"&TRIM(D156)&\"|\"&TRIM(E156)&\"|\"&TRIM(F156)&\"|\"&TRIM(H156)&\"|\"&TRIM(I156))",
+      "wanted": "=LOWER(TRIM(C156)&\"|\"&TRIM(D156)&\"|\"&TRIM(E156)&\"|\"&TRIM(F156)&\"|\"&TRIM(H156)&\"|\"&TRIM(I156))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C02",
+      "domain": "scenes",
+      "row": 156,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C03",
+      "domain": "scenes",
+      "row": 157,
+      "actual": "==LOWER(TRIM(C157)&\"|\"&TRIM(D157)&\"|\"&TRIM(E157)&\"|\"&TRIM(F157)&\"|\"&TRIM(H157)&\"|\"&TRIM(I157))",
+      "wanted": "=LOWER(TRIM(C157)&\"|\"&TRIM(D157)&\"|\"&TRIM(E157)&\"|\"&TRIM(F157)&\"|\"&TRIM(H157)&\"|\"&TRIM(I157))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C03",
+      "domain": "scenes",
+      "row": 157,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C04",
+      "domain": "scenes",
+      "row": 158,
+      "actual": "==LOWER(TRIM(C158)&\"|\"&TRIM(D158)&\"|\"&TRIM(E158)&\"|\"&TRIM(F158)&\"|\"&TRIM(H158)&\"|\"&TRIM(I158))",
+      "wanted": "=LOWER(TRIM(C158)&\"|\"&TRIM(D158)&\"|\"&TRIM(E158)&\"|\"&TRIM(F158)&\"|\"&TRIM(H158)&\"|\"&TRIM(I158))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C04",
+      "domain": "scenes",
+      "row": 158,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C05",
+      "domain": "scenes",
+      "row": 159,
+      "actual": "==LOWER(TRIM(C159)&\"|\"&TRIM(D159)&\"|\"&TRIM(E159)&\"|\"&TRIM(F159)&\"|\"&TRIM(H159)&\"|\"&TRIM(I159))",
+      "wanted": "=LOWER(TRIM(C159)&\"|\"&TRIM(D159)&\"|\"&TRIM(E159)&\"|\"&TRIM(F159)&\"|\"&TRIM(H159)&\"|\"&TRIM(I159))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C05",
+      "domain": "scenes",
+      "row": 159,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C06",
+      "domain": "scenes",
+      "row": 160,
+      "actual": "==LOWER(TRIM(C160)&\"|\"&TRIM(D160)&\"|\"&TRIM(E160)&\"|\"&TRIM(F160)&\"|\"&TRIM(H160)&\"|\"&TRIM(I160))",
+      "wanted": "=LOWER(TRIM(C160)&\"|\"&TRIM(D160)&\"|\"&TRIM(E160)&\"|\"&TRIM(F160)&\"|\"&TRIM(H160)&\"|\"&TRIM(I160))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R04-C06",
+      "domain": "scenes",
+      "row": 160,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C01",
+      "domain": "scenes",
+      "row": 161,
+      "actual": "==LOWER(TRIM(C161)&\"|\"&TRIM(D161)&\"|\"&TRIM(E161)&\"|\"&TRIM(F161)&\"|\"&TRIM(H161)&\"|\"&TRIM(I161))",
+      "wanted": "=LOWER(TRIM(C161)&\"|\"&TRIM(D161)&\"|\"&TRIM(E161)&\"|\"&TRIM(F161)&\"|\"&TRIM(H161)&\"|\"&TRIM(I161))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C01",
+      "domain": "scenes",
+      "row": 161,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C02",
+      "domain": "scenes",
+      "row": 162,
+      "actual": "==LOWER(TRIM(C162)&\"|\"&TRIM(D162)&\"|\"&TRIM(E162)&\"|\"&TRIM(F162)&\"|\"&TRIM(H162)&\"|\"&TRIM(I162))",
+      "wanted": "=LOWER(TRIM(C162)&\"|\"&TRIM(D162)&\"|\"&TRIM(E162)&\"|\"&TRIM(F162)&\"|\"&TRIM(H162)&\"|\"&TRIM(I162))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C02",
+      "domain": "scenes",
+      "row": 162,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C03",
+      "domain": "scenes",
+      "row": 163,
+      "actual": "==LOWER(TRIM(C163)&\"|\"&TRIM(D163)&\"|\"&TRIM(E163)&\"|\"&TRIM(F163)&\"|\"&TRIM(H163)&\"|\"&TRIM(I163))",
+      "wanted": "=LOWER(TRIM(C163)&\"|\"&TRIM(D163)&\"|\"&TRIM(E163)&\"|\"&TRIM(F163)&\"|\"&TRIM(H163)&\"|\"&TRIM(I163))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C03",
+      "domain": "scenes",
+      "row": 163,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C04",
+      "domain": "scenes",
+      "row": 164,
+      "actual": "==LOWER(TRIM(C164)&\"|\"&TRIM(D164)&\"|\"&TRIM(E164)&\"|\"&TRIM(F164)&\"|\"&TRIM(H164)&\"|\"&TRIM(I164))",
+      "wanted": "=LOWER(TRIM(C164)&\"|\"&TRIM(D164)&\"|\"&TRIM(E164)&\"|\"&TRIM(F164)&\"|\"&TRIM(H164)&\"|\"&TRIM(I164))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C04",
+      "domain": "scenes",
+      "row": 164,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C05",
+      "domain": "scenes",
+      "row": 165,
+      "actual": "==LOWER(TRIM(C165)&\"|\"&TRIM(D165)&\"|\"&TRIM(E165)&\"|\"&TRIM(F165)&\"|\"&TRIM(H165)&\"|\"&TRIM(I165))",
+      "wanted": "=LOWER(TRIM(C165)&\"|\"&TRIM(D165)&\"|\"&TRIM(E165)&\"|\"&TRIM(F165)&\"|\"&TRIM(H165)&\"|\"&TRIM(I165))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C05",
+      "domain": "scenes",
+      "row": 165,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C06",
+      "domain": "scenes",
+      "row": 166,
+      "actual": "==LOWER(TRIM(C166)&\"|\"&TRIM(D166)&\"|\"&TRIM(E166)&\"|\"&TRIM(F166)&\"|\"&TRIM(H166)&\"|\"&TRIM(I166))",
+      "wanted": "=LOWER(TRIM(C166)&\"|\"&TRIM(D166)&\"|\"&TRIM(E166)&\"|\"&TRIM(F166)&\"|\"&TRIM(H166)&\"|\"&TRIM(I166))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R05-C06",
+      "domain": "scenes",
+      "row": 166,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C01",
+      "domain": "scenes",
+      "row": 167,
+      "actual": "==LOWER(TRIM(C167)&\"|\"&TRIM(D167)&\"|\"&TRIM(E167)&\"|\"&TRIM(F167)&\"|\"&TRIM(H167)&\"|\"&TRIM(I167))",
+      "wanted": "=LOWER(TRIM(C167)&\"|\"&TRIM(D167)&\"|\"&TRIM(E167)&\"|\"&TRIM(F167)&\"|\"&TRIM(H167)&\"|\"&TRIM(I167))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C01",
+      "domain": "scenes",
+      "row": 167,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C02",
+      "domain": "scenes",
+      "row": 168,
+      "actual": "==LOWER(TRIM(C168)&\"|\"&TRIM(D168)&\"|\"&TRIM(E168)&\"|\"&TRIM(F168)&\"|\"&TRIM(H168)&\"|\"&TRIM(I168))",
+      "wanted": "=LOWER(TRIM(C168)&\"|\"&TRIM(D168)&\"|\"&TRIM(E168)&\"|\"&TRIM(F168)&\"|\"&TRIM(H168)&\"|\"&TRIM(I168))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C02",
+      "domain": "scenes",
+      "row": 168,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C03",
+      "domain": "scenes",
+      "row": 169,
+      "actual": "==LOWER(TRIM(C169)&\"|\"&TRIM(D169)&\"|\"&TRIM(E169)&\"|\"&TRIM(F169)&\"|\"&TRIM(H169)&\"|\"&TRIM(I169))",
+      "wanted": "=LOWER(TRIM(C169)&\"|\"&TRIM(D169)&\"|\"&TRIM(E169)&\"|\"&TRIM(F169)&\"|\"&TRIM(H169)&\"|\"&TRIM(I169))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C03",
+      "domain": "scenes",
+      "row": 169,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C04",
+      "domain": "scenes",
+      "row": 170,
+      "actual": "==LOWER(TRIM(C170)&\"|\"&TRIM(D170)&\"|\"&TRIM(E170)&\"|\"&TRIM(F170)&\"|\"&TRIM(H170)&\"|\"&TRIM(I170))",
+      "wanted": "=LOWER(TRIM(C170)&\"|\"&TRIM(D170)&\"|\"&TRIM(E170)&\"|\"&TRIM(F170)&\"|\"&TRIM(H170)&\"|\"&TRIM(I170))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C04",
+      "domain": "scenes",
+      "row": 170,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C05",
+      "domain": "scenes",
+      "row": 171,
+      "actual": "==LOWER(TRIM(C171)&\"|\"&TRIM(D171)&\"|\"&TRIM(E171)&\"|\"&TRIM(F171)&\"|\"&TRIM(H171)&\"|\"&TRIM(I171))",
+      "wanted": "=LOWER(TRIM(C171)&\"|\"&TRIM(D171)&\"|\"&TRIM(E171)&\"|\"&TRIM(F171)&\"|\"&TRIM(H171)&\"|\"&TRIM(I171))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C05",
+      "domain": "scenes",
+      "row": 171,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C06",
+      "domain": "scenes",
+      "row": 172,
+      "actual": "==LOWER(TRIM(C172)&\"|\"&TRIM(D172)&\"|\"&TRIM(E172)&\"|\"&TRIM(F172)&\"|\"&TRIM(H172)&\"|\"&TRIM(I172))",
+      "wanted": "=LOWER(TRIM(C172)&\"|\"&TRIM(D172)&\"|\"&TRIM(E172)&\"|\"&TRIM(F172)&\"|\"&TRIM(H172)&\"|\"&TRIM(I172))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TILE-R06-C06",
+      "domain": "scenes",
+      "row": 172,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM",
+      "domain": "scenes",
+      "row": 173,
+      "actual": "==LOWER(TRIM(C173)&\"|\"&TRIM(D173)&\"|\"&TRIM(E173)&\"|\"&TRIM(F173)&\"|\"&TRIM(H173)&\"|\"&TRIM(I173))",
+      "wanted": "=LOWER(TRIM(C173)&\"|\"&TRIM(D173)&\"|\"&TRIM(E173)&\"|\"&TRIM(F173)&\"|\"&TRIM(H173)&\"|\"&TRIM(I173))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BACKWALL-FUNCTION-PANEL-SYSTEM",
+      "domain": "scenes",
+      "row": 173,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BACKWALL-SERVICES",
+      "domain": "scenes",
+      "row": 174,
+      "actual": "==LOWER(TRIM(C174)&\"|\"&TRIM(D174)&\"|\"&TRIM(E174)&\"|\"&TRIM(F174)&\"|\"&TRIM(H174)&\"|\"&TRIM(I174))",
+      "wanted": "=LOWER(TRIM(C174)&\"|\"&TRIM(D174)&\"|\"&TRIM(E174)&\"|\"&TRIM(F174)&\"|\"&TRIM(H174)&\"|\"&TRIM(I174))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BACKWALL-SERVICES",
+      "domain": "scenes",
+      "row": 174,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BATTERY-CABINET",
+      "domain": "scenes",
+      "row": 175,
+      "actual": "==LOWER(TRIM(C175)&\"|\"&TRIM(D175)&\"|\"&TRIM(E175)&\"|\"&TRIM(F175)&\"|\"&TRIM(H175)&\"|\"&TRIM(I175))",
+      "wanted": "=LOWER(TRIM(C175)&\"|\"&TRIM(D175)&\"|\"&TRIM(E175)&\"|\"&TRIM(F175)&\"|\"&TRIM(H175)&\"|\"&TRIM(I175))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BATTERY-CABINET",
+      "domain": "scenes",
+      "row": 175,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BED-AND-BEDDING",
+      "domain": "scenes",
+      "row": 176,
+      "actual": "==LOWER(TRIM(C176)&\"|\"&TRIM(D176)&\"|\"&TRIM(E176)&\"|\"&TRIM(F176)&\"|\"&TRIM(H176)&\"|\"&TRIM(I176))",
+      "wanted": "=LOWER(TRIM(C176)&\"|\"&TRIM(D176)&\"|\"&TRIM(E176)&\"|\"&TRIM(F176)&\"|\"&TRIM(H176)&\"|\"&TRIM(I176))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BED-AND-BEDDING",
+      "domain": "scenes",
+      "row": 176,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BEDSIDE-LAMP",
+      "domain": "scenes",
+      "row": 177,
+      "actual": "==LOWER(TRIM(C177)&\"|\"&TRIM(D177)&\"|\"&TRIM(E177)&\"|\"&TRIM(F177)&\"|\"&TRIM(H177)&\"|\"&TRIM(I177))",
+      "wanted": "=LOWER(TRIM(C177)&\"|\"&TRIM(D177)&\"|\"&TRIM(E177)&\"|\"&TRIM(F177)&\"|\"&TRIM(H177)&\"|\"&TRIM(I177))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BEDSIDE-LAMP",
+      "domain": "scenes",
+      "row": 177,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BEDSIDE-RUG",
+      "domain": "scenes",
+      "row": 178,
+      "actual": "==LOWER(TRIM(C178)&\"|\"&TRIM(D178)&\"|\"&TRIM(E178)&\"|\"&TRIM(F178)&\"|\"&TRIM(H178)&\"|\"&TRIM(I178))",
+      "wanted": "=LOWER(TRIM(C178)&\"|\"&TRIM(D178)&\"|\"&TRIM(E178)&\"|\"&TRIM(F178)&\"|\"&TRIM(H178)&\"|\"&TRIM(I178))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-BEDSIDE-RUG",
+      "domain": "scenes",
+      "row": 178,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-COFFEE-TABLE",
+      "domain": "scenes",
+      "row": 179,
+      "actual": "==LOWER(TRIM(C179)&\"|\"&TRIM(D179)&\"|\"&TRIM(E179)&\"|\"&TRIM(F179)&\"|\"&TRIM(H179)&\"|\"&TRIM(I179))",
+      "wanted": "=LOWER(TRIM(C179)&\"|\"&TRIM(D179)&\"|\"&TRIM(E179)&\"|\"&TRIM(F179)&\"|\"&TRIM(H179)&\"|\"&TRIM(I179))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-COFFEE-TABLE",
+      "domain": "scenes",
+      "row": 179,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-COMPUTER-WORKSTATION",
+      "domain": "scenes",
+      "row": 180,
+      "actual": "==LOWER(TRIM(C180)&\"|\"&TRIM(D180)&\"|\"&TRIM(E180)&\"|\"&TRIM(F180)&\"|\"&TRIM(H180)&\"|\"&TRIM(I180))",
+      "wanted": "=LOWER(TRIM(C180)&\"|\"&TRIM(D180)&\"|\"&TRIM(E180)&\"|\"&TRIM(F180)&\"|\"&TRIM(H180)&\"|\"&TRIM(I180))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-COMPUTER-WORKSTATION",
+      "domain": "scenes",
+      "row": 180,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-EXPLORE-POSTER",
+      "domain": "scenes",
+      "row": 181,
+      "actual": "==LOWER(TRIM(C181)&\"|\"&TRIM(D181)&\"|\"&TRIM(E181)&\"|\"&TRIM(F181)&\"|\"&TRIM(H181)&\"|\"&TRIM(I181))",
+      "wanted": "=LOWER(TRIM(C181)&\"|\"&TRIM(D181)&\"|\"&TRIM(E181)&\"|\"&TRIM(F181)&\"|\"&TRIM(H181)&\"|\"&TRIM(I181))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-EXPLORE-POSTER",
+      "domain": "scenes",
+      "row": 181,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-FOOD-CABINET",
+      "domain": "scenes",
+      "row": 182,
+      "actual": "==LOWER(TRIM(C182)&\"|\"&TRIM(D182)&\"|\"&TRIM(E182)&\"|\"&TRIM(F182)&\"|\"&TRIM(H182)&\"|\"&TRIM(I182))",
+      "wanted": "=LOWER(TRIM(C182)&\"|\"&TRIM(D182)&\"|\"&TRIM(E182)&\"|\"&TRIM(F182)&\"|\"&TRIM(H182)&\"|\"&TRIM(I182))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-FOOD-CABINET",
+      "domain": "scenes",
+      "row": 182,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-GOOD-VIBES-NEON",
+      "domain": "scenes",
+      "row": 183,
+      "actual": "==LOWER(TRIM(C183)&\"|\"&TRIM(D183)&\"|\"&TRIM(E183)&\"|\"&TRIM(F183)&\"|\"&TRIM(H183)&\"|\"&TRIM(I183))",
+      "wanted": "=LOWER(TRIM(C183)&\"|\"&TRIM(D183)&\"|\"&TRIM(E183)&\"|\"&TRIM(F183)&\"|\"&TRIM(H183)&\"|\"&TRIM(I183))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-GOOD-VIBES-NEON",
+      "domain": "scenes",
+      "row": 183,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-HANGING-PLANT",
+      "domain": "scenes",
+      "row": 184,
+      "actual": "==LOWER(TRIM(C184)&\"|\"&TRIM(D184)&\"|\"&TRIM(E184)&\"|\"&TRIM(F184)&\"|\"&TRIM(H184)&\"|\"&TRIM(I184))",
+      "wanted": "=LOWER(TRIM(C184)&\"|\"&TRIM(D184)&\"|\"&TRIM(E184)&\"|\"&TRIM(F184)&\"|\"&TRIM(H184)&\"|\"&TRIM(I184))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-HANGING-PLANT",
+      "domain": "scenes",
+      "row": 184,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LOUNGE-RUG",
+      "domain": "scenes",
+      "row": 185,
+      "actual": "==LOWER(TRIM(C185)&\"|\"&TRIM(D185)&\"|\"&TRIM(E185)&\"|\"&TRIM(F185)&\"|\"&TRIM(H185)&\"|\"&TRIM(I185))",
+      "wanted": "=LOWER(TRIM(C185)&\"|\"&TRIM(D185)&\"|\"&TRIM(E185)&\"|\"&TRIM(F185)&\"|\"&TRIM(H185)&\"|\"&TRIM(I185))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LOUNGE-RUG",
+      "domain": "scenes",
+      "row": 185,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LOUNGE-SOFA",
+      "domain": "scenes",
+      "row": 186,
+      "actual": "==LOWER(TRIM(C186)&\"|\"&TRIM(D186)&\"|\"&TRIM(E186)&\"|\"&TRIM(F186)&\"|\"&TRIM(H186)&\"|\"&TRIM(I186))",
+      "wanted": "=LOWER(TRIM(C186)&\"|\"&TRIM(D186)&\"|\"&TRIM(E186)&\"|\"&TRIM(F186)&\"|\"&TRIM(H186)&\"|\"&TRIM(I186))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LOUNGE-SOFA",
+      "domain": "scenes",
+      "row": 186,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-MEDICAL-CABINET",
+      "domain": "scenes",
+      "row": 187,
+      "actual": "==LOWER(TRIM(C187)&\"|\"&TRIM(D187)&\"|\"&TRIM(E187)&\"|\"&TRIM(F187)&\"|\"&TRIM(H187)&\"|\"&TRIM(I187))",
+      "wanted": "=LOWER(TRIM(C187)&\"|\"&TRIM(D187)&\"|\"&TRIM(E187)&\"|\"&TRIM(F187)&\"|\"&TRIM(H187)&\"|\"&TRIM(I187))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-MEDICAL-CABINET",
+      "domain": "scenes",
+      "row": 187,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-NIGHTSTAND",
+      "domain": "scenes",
+      "row": 188,
+      "actual": "==LOWER(TRIM(C188)&\"|\"&TRIM(D188)&\"|\"&TRIM(E188)&\"|\"&TRIM(F188)&\"|\"&TRIM(H188)&\"|\"&TRIM(I188))",
+      "wanted": "=LOWER(TRIM(C188)&\"|\"&TRIM(D188)&\"|\"&TRIM(E188)&\"|\"&TRIM(F188)&\"|\"&TRIM(H188)&\"|\"&TRIM(I188))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-NIGHTSTAND",
+      "domain": "scenes",
+      "row": 188,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-OFFICE-CHAIR",
+      "domain": "scenes",
+      "row": 189,
+      "actual": "==LOWER(TRIM(C189)&\"|\"&TRIM(D189)&\"|\"&TRIM(E189)&\"|\"&TRIM(F189)&\"|\"&TRIM(H189)&\"|\"&TRIM(I189))",
+      "wanted": "=LOWER(TRIM(C189)&\"|\"&TRIM(D189)&\"|\"&TRIM(E189)&\"|\"&TRIM(F189)&\"|\"&TRIM(H189)&\"|\"&TRIM(I189))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-OFFICE-CHAIR",
+      "domain": "scenes",
+      "row": 189,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-POUF-01",
+      "domain": "scenes",
+      "row": 190,
+      "actual": "==LOWER(TRIM(C190)&\"|\"&TRIM(D190)&\"|\"&TRIM(E190)&\"|\"&TRIM(F190)&\"|\"&TRIM(H190)&\"|\"&TRIM(I190))",
+      "wanted": "=LOWER(TRIM(C190)&\"|\"&TRIM(D190)&\"|\"&TRIM(E190)&\"|\"&TRIM(F190)&\"|\"&TRIM(H190)&\"|\"&TRIM(I190))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-POUF-01",
+      "domain": "scenes",
+      "row": 190,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-POUF-02",
+      "domain": "scenes",
+      "row": 191,
+      "actual": "==LOWER(TRIM(C191)&\"|\"&TRIM(D191)&\"|\"&TRIM(E191)&\"|\"&TRIM(F191)&\"|\"&TRIM(H191)&\"|\"&TRIM(I191))",
+      "wanted": "=LOWER(TRIM(C191)&\"|\"&TRIM(D191)&\"|\"&TRIM(E191)&\"|\"&TRIM(F191)&\"|\"&TRIM(H191)&\"|\"&TRIM(I191))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-POUF-02",
+      "domain": "scenes",
+      "row": 191,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-SIDE-TABLE",
+      "domain": "scenes",
+      "row": 192,
+      "actual": "==LOWER(TRIM(C192)&\"|\"&TRIM(D192)&\"|\"&TRIM(E192)&\"|\"&TRIM(F192)&\"|\"&TRIM(H192)&\"|\"&TRIM(I192))",
+      "wanted": "=LOWER(TRIM(C192)&\"|\"&TRIM(D192)&\"|\"&TRIM(E192)&\"|\"&TRIM(F192)&\"|\"&TRIM(H192)&\"|\"&TRIM(I192))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-SIDE-TABLE",
+      "domain": "scenes",
+      "row": 192,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-STAY-CURIOUS-NEON",
+      "domain": "scenes",
+      "row": 193,
+      "actual": "==LOWER(TRIM(C193)&\"|\"&TRIM(D193)&\"|\"&TRIM(E193)&\"|\"&TRIM(F193)&\"|\"&TRIM(H193)&\"|\"&TRIM(I193))",
+      "wanted": "=LOWER(TRIM(C193)&\"|\"&TRIM(D193)&\"|\"&TRIM(E193)&\"|\"&TRIM(F193)&\"|\"&TRIM(H193)&\"|\"&TRIM(I193))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-STAY-CURIOUS-NEON",
+      "domain": "scenes",
+      "row": 193,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN",
+      "domain": "scenes",
+      "row": 194,
+      "actual": "==LOWER(TRIM(C194)&\"|\"&TRIM(D194)&\"|\"&TRIM(E194)&\"|\"&TRIM(F194)&\"|\"&TRIM(H194)&\"|\"&TRIM(I194))",
+      "wanted": "=LOWER(TRIM(C194)&\"|\"&TRIM(D194)&\"|\"&TRIM(E194)&\"|\"&TRIM(F194)&\"|\"&TRIM(H194)&\"|\"&TRIM(I194))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN",
+      "domain": "scenes",
+      "row": 194,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-TOOL-PEGBOARD",
+      "domain": "scenes",
+      "row": 195,
+      "actual": "==LOWER(TRIM(C195)&\"|\"&TRIM(D195)&\"|\"&TRIM(E195)&\"|\"&TRIM(F195)&\"|\"&TRIM(H195)&\"|\"&TRIM(I195))",
+      "wanted": "=LOWER(TRIM(C195)&\"|\"&TRIM(D195)&\"|\"&TRIM(E195)&\"|\"&TRIM(F195)&\"|\"&TRIM(H195)&\"|\"&TRIM(I195))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-TOOL-PEGBOARD",
+      "domain": "scenes",
+      "row": 195,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP",
+      "domain": "scenes",
+      "row": 196,
+      "actual": "==LOWER(TRIM(C196)&\"|\"&TRIM(D196)&\"|\"&TRIM(E196)&\"|\"&TRIM(F196)&\"|\"&TRIM(H196)&\"|\"&TRIM(I196))",
+      "wanted": "=LOWER(TRIM(C196)&\"|\"&TRIM(D196)&\"|\"&TRIM(E196)&\"|\"&TRIM(F196)&\"|\"&TRIM(H196)&\"|\"&TRIM(I196))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP",
+      "domain": "scenes",
+      "row": 196,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LIGHTING-SUPPORT",
+      "domain": "scenes",
+      "row": 197,
+      "actual": "==LOWER(TRIM(C197)&\"|\"&TRIM(D197)&\"|\"&TRIM(E197)&\"|\"&TRIM(F197)&\"|\"&TRIM(H197)&\"|\"&TRIM(I197))",
+      "wanted": "=LOWER(TRIM(C197)&\"|\"&TRIM(D197)&\"|\"&TRIM(E197)&\"|\"&TRIM(F197)&\"|\"&TRIM(H197)&\"|\"&TRIM(I197))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-LIGHTING-SUPPORT",
+      "domain": "scenes",
+      "row": 197,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-VOLUMETRIC-DUST-FX",
+      "domain": "scenes",
+      "row": 198,
+      "actual": "==LOWER(TRIM(C198)&\"|\"&TRIM(D198)&\"|\"&TRIM(E198)&\"|\"&TRIM(F198)&\"|\"&TRIM(H198)&\"|\"&TRIM(I198))",
+      "wanted": "=LOWER(TRIM(C198)&\"|\"&TRIM(D198)&\"|\"&TRIM(E198)&\"|\"&TRIM(F198)&\"|\"&TRIM(H198)&\"|\"&TRIM(I198))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-VOLUMETRIC-DUST-FX",
+      "domain": "scenes",
+      "row": 198,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP",
+      "domain": "scenes",
+      "row": 199,
+      "actual": "==LOWER(TRIM(C199)&\"|\"&TRIM(D199)&\"|\"&TRIM(E199)&\"|\"&TRIM(F199)&\"|\"&TRIM(H199)&\"|\"&TRIM(I199))",
+      "wanted": "=LOWER(TRIM(C199)&\"|\"&TRIM(D199)&\"|\"&TRIM(E199)&\"|\"&TRIM(F199)&\"|\"&TRIM(H199)&\"|\"&TRIM(I199))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP",
+      "domain": "scenes",
+      "row": 199,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-ACCESS-TERMINAL",
+      "domain": "scenes",
+      "row": 200,
+      "actual": "==LOWER(TRIM(C200)&\"|\"&TRIM(D200)&\"|\"&TRIM(E200)&\"|\"&TRIM(F200)&\"|\"&TRIM(H200)&\"|\"&TRIM(I200))",
+      "wanted": "=LOWER(TRIM(C200)&\"|\"&TRIM(D200)&\"|\"&TRIM(E200)&\"|\"&TRIM(F200)&\"|\"&TRIM(H200)&\"|\"&TRIM(I200))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-ACCESS-TERMINAL",
+      "domain": "scenes",
+      "row": 200,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-CAMP-NEON-SIGN",
+      "domain": "scenes",
+      "row": 201,
+      "actual": "==LOWER(TRIM(C201)&\"|\"&TRIM(D201)&\"|\"&TRIM(E201)&\"|\"&TRIM(F201)&\"|\"&TRIM(H201)&\"|\"&TRIM(I201))",
+      "wanted": "=LOWER(TRIM(C201)&\"|\"&TRIM(D201)&\"|\"&TRIM(E201)&\"|\"&TRIM(F201)&\"|\"&TRIM(H201)&\"|\"&TRIM(I201))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-CAMP-NEON-SIGN",
+      "domain": "scenes",
+      "row": 201,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR",
+      "domain": "scenes",
+      "row": 202,
+      "actual": "==LOWER(TRIM(C202)&\"|\"&TRIM(D202)&\"|\"&TRIM(E202)&\"|\"&TRIM(F202)&\"|\"&TRIM(H202)&\"|\"&TRIM(I202))",
+      "wanted": "=LOWER(TRIM(C202)&\"|\"&TRIM(D202)&\"|\"&TRIM(E202)&\"|\"&TRIM(F202)&\"|\"&TRIM(H202)&\"|\"&TRIM(I202))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-CAMP-ROLLUP-MAIN-DOOR",
+      "domain": "scenes",
+      "row": 202,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-STATUS-TERMINAL",
+      "domain": "scenes",
+      "row": 203,
+      "actual": "==LOWER(TRIM(C203)&\"|\"&TRIM(D203)&\"|\"&TRIM(E203)&\"|\"&TRIM(F203)&\"|\"&TRIM(H203)&\"|\"&TRIM(I203))",
+      "wanted": "=LOWER(TRIM(C203)&\"|\"&TRIM(D203)&\"|\"&TRIM(E203)&\"|\"&TRIM(F203)&\"|\"&TRIM(H203)&\"|\"&TRIM(I203))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-BASE-STATUS-TERMINAL",
+      "domain": "scenes",
+      "row": 203,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM",
+      "domain": "scenes",
+      "row": 204,
+      "actual": "==LOWER(TRIM(C204)&\"|\"&TRIM(D204)&\"|\"&TRIM(E204)&\"|\"&TRIM(F204)&\"|\"&TRIM(H204)&\"|\"&TRIM(I204))",
+      "wanted": "=LOWER(TRIM(C204)&\"|\"&TRIM(D204)&\"|\"&TRIM(E204)&\"|\"&TRIM(F204)&\"|\"&TRIM(H204)&\"|\"&TRIM(I204))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM",
+      "domain": "scenes",
+      "row": 204,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET",
+      "domain": "scenes",
+      "row": 205,
+      "actual": "==LOWER(TRIM(C205)&\"|\"&TRIM(D205)&\"|\"&TRIM(E205)&\"|\"&TRIM(F205)&\"|\"&TRIM(H205)&\"|\"&TRIM(I205))",
+      "wanted": "=LOWER(TRIM(C205)&\"|\"&TRIM(D205)&\"|\"&TRIM(E205)&\"|\"&TRIM(F205)&\"|\"&TRIM(H205)&\"|\"&TRIM(I205))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET",
+      "domain": "scenes",
+      "row": 205,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-MEDICAL-CABINET",
+      "domain": "scenes",
+      "row": 206,
+      "actual": "==LOWER(TRIM(C206)&\"|\"&TRIM(D206)&\"|\"&TRIM(E206)&\"|\"&TRIM(F206)&\"|\"&TRIM(H206)&\"|\"&TRIM(I206))",
+      "wanted": "=LOWER(TRIM(C206)&\"|\"&TRIM(D206)&\"|\"&TRIM(E206)&\"|\"&TRIM(F206)&\"|\"&TRIM(H206)&\"|\"&TRIM(I206))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-MEDICAL-CABINET",
+      "domain": "scenes",
+      "row": 206,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-NARROW-BATTERY-CABINET",
+      "domain": "scenes",
+      "row": 207,
+      "actual": "==LOWER(TRIM(C207)&\"|\"&TRIM(D207)&\"|\"&TRIM(E207)&\"|\"&TRIM(F207)&\"|\"&TRIM(H207)&\"|\"&TRIM(I207))",
+      "wanted": "=LOWER(TRIM(C207)&\"|\"&TRIM(D207)&\"|\"&TRIM(E207)&\"|\"&TRIM(F207)&\"|\"&TRIM(H207)&\"|\"&TRIM(I207))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-NARROW-BATTERY-CABINET",
+      "domain": "scenes",
+      "row": 207,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-NARROW-EMERGENCY-CABINET",
+      "domain": "scenes",
+      "row": 208,
+      "actual": "==LOWER(TRIM(C208)&\"|\"&TRIM(D208)&\"|\"&TRIM(E208)&\"|\"&TRIM(F208)&\"|\"&TRIM(H208)&\"|\"&TRIM(I208))",
+      "wanted": "=LOWER(TRIM(C208)&\"|\"&TRIM(D208)&\"|\"&TRIM(E208)&\"|\"&TRIM(F208)&\"|\"&TRIM(H208)&\"|\"&TRIM(I208))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-NARROW-EMERGENCY-CABINET",
+      "domain": "scenes",
+      "row": 208,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS",
+      "domain": "scenes",
+      "row": 209,
+      "actual": "==LOWER(TRIM(C209)&\"|\"&TRIM(D209)&\"|\"&TRIM(E209)&\"|\"&TRIM(F209)&\"|\"&TRIM(H209)&\"|\"&TRIM(I209))",
+      "wanted": "=LOWER(TRIM(C209)&\"|\"&TRIM(D209)&\"|\"&TRIM(E209)&\"|\"&TRIM(F209)&\"|\"&TRIM(H209)&\"|\"&TRIM(I209))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-INDUSTRIAL-WALL-DETAILS",
+      "domain": "scenes",
+      "row": 209,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS",
+      "domain": "scenes",
+      "row": 210,
+      "actual": "==LOWER(TRIM(C210)&\"|\"&TRIM(D210)&\"|\"&TRIM(E210)&\"|\"&TRIM(F210)&\"|\"&TRIM(H210)&\"|\"&TRIM(I210))",
+      "wanted": "=LOWER(TRIM(C210)&\"|\"&TRIM(D210)&\"|\"&TRIM(E210)&\"|\"&TRIM(F210)&\"|\"&TRIM(H210)&\"|\"&TRIM(I210))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-UPPER-RAILING-DETAILS",
+      "domain": "scenes",
+      "row": 210,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM",
+      "domain": "scenes",
+      "row": 211,
+      "actual": "==LOWER(TRIM(C211)&\"|\"&TRIM(D211)&\"|\"&TRIM(E211)&\"|\"&TRIM(F211)&\"|\"&TRIM(H211)&\"|\"&TRIM(I211))",
+      "wanted": "=LOWER(TRIM(C211)&\"|\"&TRIM(D211)&\"|\"&TRIM(E211)&\"|\"&TRIM(F211)&\"|\"&TRIM(H211)&\"|\"&TRIM(I211))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-WALL-PIPELINE-SYSTEM",
+      "domain": "scenes",
+      "row": 211,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-STORAGE-TERMINAL",
+      "domain": "scenes",
+      "row": 212,
+      "actual": "==LOWER(TRIM(C212)&\"|\"&TRIM(D212)&\"|\"&TRIM(E212)&\"|\"&TRIM(F212)&\"|\"&TRIM(H212)&\"|\"&TRIM(I212))",
+      "wanted": "=LOWER(TRIM(C212)&\"|\"&TRIM(D212)&\"|\"&TRIM(E212)&\"|\"&TRIM(F212)&\"|\"&TRIM(H212)&\"|\"&TRIM(I212))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-STORAGE-TERMINAL",
+      "domain": "scenes",
+      "row": 212,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-TOOLS-CABINET",
+      "domain": "scenes",
+      "row": 213,
+      "actual": "==LOWER(TRIM(C213)&\"|\"&TRIM(D213)&\"|\"&TRIM(E213)&\"|\"&TRIM(F213)&\"|\"&TRIM(H213)&\"|\"&TRIM(I213))",
+      "wanted": "=LOWER(TRIM(C213)&\"|\"&TRIM(D213)&\"|\"&TRIM(E213)&\"|\"&TRIM(F213)&\"|\"&TRIM(H213)&\"|\"&TRIM(I213))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-TOOLS-CABINET",
+      "domain": "scenes",
+      "row": 213,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD",
+      "domain": "scenes",
+      "row": 214,
+      "actual": "==LOWER(TRIM(C214)&\"|\"&TRIM(D214)&\"|\"&TRIM(E214)&\"|\"&TRIM(F214)&\"|\"&TRIM(H214)&\"|\"&TRIM(I214))",
+      "wanted": "=LOWER(TRIM(C214)&\"|\"&TRIM(D214)&\"|\"&TRIM(E214)&\"|\"&TRIM(F214)&\"|\"&TRIM(H214)&\"|\"&TRIM(I214))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-BULLETIN-BOARD",
+      "domain": "scenes",
+      "row": 214,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET",
+      "domain": "scenes",
+      "row": 215,
+      "actual": "==LOWER(TRIM(C215)&\"|\"&TRIM(D215)&\"|\"&TRIM(E215)&\"|\"&TRIM(F215)&\"|\"&TRIM(H215)&\"|\"&TRIM(I215))",
+      "wanted": "=LOWER(TRIM(C215)&\"|\"&TRIM(D215)&\"|\"&TRIM(E215)&\"|\"&TRIM(F215)&\"|\"&TRIM(H215)&\"|\"&TRIM(I215))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET",
+      "domain": "scenes",
+      "row": 215,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-GREEN-BENCH",
+      "domain": "scenes",
+      "row": 216,
+      "actual": "==LOWER(TRIM(C216)&\"|\"&TRIM(D216)&\"|\"&TRIM(E216)&\"|\"&TRIM(F216)&\"|\"&TRIM(H216)&\"|\"&TRIM(I216))",
+      "wanted": "=LOWER(TRIM(C216)&\"|\"&TRIM(D216)&\"|\"&TRIM(E216)&\"|\"&TRIM(F216)&\"|\"&TRIM(H216)&\"|\"&TRIM(I216))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-GREEN-BENCH",
+      "domain": "scenes",
+      "row": 216,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT",
+      "domain": "scenes",
+      "row": 217,
+      "actual": "==LOWER(TRIM(C217)&\"|\"&TRIM(D217)&\"|\"&TRIM(E217)&\"|\"&TRIM(F217)&\"|\"&TRIM(H217)&\"|\"&TRIM(I217))",
+      "wanted": "=LOWER(TRIM(C217)&\"|\"&TRIM(D217)&\"|\"&TRIM(E217)&\"|\"&TRIM(F217)&\"|\"&TRIM(H217)&\"|\"&TRIM(I217))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-LIGHTING-LIVING-SUPPORT",
+      "domain": "scenes",
+      "row": 217,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF",
+      "domain": "scenes",
+      "row": 218,
+      "actual": "==LOWER(TRIM(C218)&\"|\"&TRIM(D218)&\"|\"&TRIM(E218)&\"|\"&TRIM(F218)&\"|\"&TRIM(H218)&\"|\"&TRIM(I218))",
+      "wanted": "=LOWER(TRIM(C218)&\"|\"&TRIM(D218)&\"|\"&TRIM(E218)&\"|\"&TRIM(F218)&\"|\"&TRIM(H218)&\"|\"&TRIM(I218))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF",
+      "domain": "scenes",
+      "row": 218,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-WEAPON-WORKSHOP-STATION",
+      "domain": "scenes",
+      "row": 219,
+      "actual": "==LOWER(TRIM(C219)&\"|\"&TRIM(D219)&\"|\"&TRIM(E219)&\"|\"&TRIM(F219)&\"|\"&TRIM(H219)&\"|\"&TRIM(I219))",
+      "wanted": "=LOWER(TRIM(C219)&\"|\"&TRIM(D219)&\"|\"&TRIM(E219)&\"|\"&TRIM(F219)&\"|\"&TRIM(H219)&\"|\"&TRIM(I219))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-WEAPON-WORKSHOP-STATION",
+      "domain": "scenes",
+      "row": 219,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-AIR-COMPRESSOR",
+      "domain": "scenes",
+      "row": 220,
+      "actual": "==LOWER(TRIM(C220)&\"|\"&TRIM(D220)&\"|\"&TRIM(E220)&\"|\"&TRIM(F220)&\"|\"&TRIM(H220)&\"|\"&TRIM(I220))",
+      "wanted": "=LOWER(TRIM(C220)&\"|\"&TRIM(D220)&\"|\"&TRIM(E220)&\"|\"&TRIM(F220)&\"|\"&TRIM(H220)&\"|\"&TRIM(I220))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-AIR-COMPRESSOR",
+      "domain": "scenes",
+      "row": 220,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-BACKUP-GENERATOR",
+      "domain": "scenes",
+      "row": 221,
+      "actual": "==LOWER(TRIM(C221)&\"|\"&TRIM(D221)&\"|\"&TRIM(E221)&\"|\"&TRIM(F221)&\"|\"&TRIM(H221)&\"|\"&TRIM(I221))",
+      "wanted": "=LOWER(TRIM(C221)&\"|\"&TRIM(D221)&\"|\"&TRIM(E221)&\"|\"&TRIM(F221)&\"|\"&TRIM(H221)&\"|\"&TRIM(I221))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-BACKUP-GENERATOR",
+      "domain": "scenes",
+      "row": 221,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-BATTERY-BANK",
+      "domain": "scenes",
+      "row": 222,
+      "actual": "==LOWER(TRIM(C222)&\"|\"&TRIM(D222)&\"|\"&TRIM(E222)&\"|\"&TRIM(F222)&\"|\"&TRIM(H222)&\"|\"&TRIM(I222))",
+      "wanted": "=LOWER(TRIM(C222)&\"|\"&TRIM(D222)&\"|\"&TRIM(E222)&\"|\"&TRIM(F222)&\"|\"&TRIM(H222)&\"|\"&TRIM(I222))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-BATTERY-BANK",
+      "domain": "scenes",
+      "row": 222,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-HEAVY-SUPPLY-SHELF",
+      "domain": "scenes",
+      "row": 223,
+      "actual": "==LOWER(TRIM(C223)&\"|\"&TRIM(D223)&\"|\"&TRIM(E223)&\"|\"&TRIM(F223)&\"|\"&TRIM(H223)&\"|\"&TRIM(I223))",
+      "wanted": "=LOWER(TRIM(C223)&\"|\"&TRIM(D223)&\"|\"&TRIM(E223)&\"|\"&TRIM(F223)&\"|\"&TRIM(H223)&\"|\"&TRIM(I223))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-HEAVY-SUPPLY-SHELF",
+      "domain": "scenes",
+      "row": 223,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-HOSE-REEL",
+      "domain": "scenes",
+      "row": 224,
+      "actual": "==LOWER(TRIM(C224)&\"|\"&TRIM(D224)&\"|\"&TRIM(E224)&\"|\"&TRIM(F224)&\"|\"&TRIM(H224)&\"|\"&TRIM(I224))",
+      "wanted": "=LOWER(TRIM(C224)&\"|\"&TRIM(D224)&\"|\"&TRIM(E224)&\"|\"&TRIM(F224)&\"|\"&TRIM(H224)&\"|\"&TRIM(I224))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-HOSE-REEL",
+      "domain": "scenes",
+      "row": 224,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-INDUSTRIAL-WATER-TANK",
+      "domain": "scenes",
+      "row": 225,
+      "actual": "==LOWER(TRIM(C225)&\"|\"&TRIM(D225)&\"|\"&TRIM(E225)&\"|\"&TRIM(F225)&\"|\"&TRIM(H225)&\"|\"&TRIM(I225))",
+      "wanted": "=LOWER(TRIM(C225)&\"|\"&TRIM(D225)&\"|\"&TRIM(E225)&\"|\"&TRIM(F225)&\"|\"&TRIM(H225)&\"|\"&TRIM(I225))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-INDUSTRIAL-WATER-TANK",
+      "domain": "scenes",
+      "row": 225,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS",
+      "domain": "scenes",
+      "row": 226,
+      "actual": "==LOWER(TRIM(C226)&\"|\"&TRIM(D226)&\"|\"&TRIM(E226)&\"|\"&TRIM(F226)&\"|\"&TRIM(H226)&\"|\"&TRIM(I226))",
+      "wanted": "=LOWER(TRIM(C226)&\"|\"&TRIM(D226)&\"|\"&TRIM(E226)&\"|\"&TRIM(F226)&\"|\"&TRIM(H226)&\"|\"&TRIM(I226))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-SOUTH-WALL-INFORMATION-BOARDS",
+      "domain": "scenes",
+      "row": 226,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-WATER-PURIFIER",
+      "domain": "scenes",
+      "row": 227,
+      "actual": "==LOWER(TRIM(C227)&\"|\"&TRIM(D227)&\"|\"&TRIM(E227)&\"|\"&TRIM(F227)&\"|\"&TRIM(H227)&\"|\"&TRIM(I227))",
+      "wanted": "=LOWER(TRIM(C227)&\"|\"&TRIM(D227)&\"|\"&TRIM(E227)&\"|\"&TRIM(F227)&\"|\"&TRIM(H227)&\"|\"&TRIM(I227))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-WATER-PURIFIER",
+      "domain": "scenes",
+      "row": 227,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL",
+      "domain": "scenes",
+      "row": 228,
+      "actual": "==LOWER(TRIM(C228)&\"|\"&TRIM(D228)&\"|\"&TRIM(E228)&\"|\"&TRIM(F228)&\"|\"&TRIM(H228)&\"|\"&TRIM(I228))",
+      "wanted": "=LOWER(TRIM(C228)&\"|\"&TRIM(D228)&\"|\"&TRIM(E228)&\"|\"&TRIM(F228)&\"|\"&TRIM(H228)&\"|\"&TRIM(I228))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-DOOR-ACCESS-CONTROL",
+      "domain": "scenes",
+      "row": 228,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-DOOR-WALL-MODULE",
+      "domain": "scenes",
+      "row": 229,
+      "actual": "==LOWER(TRIM(C229)&\"|\"&TRIM(D229)&\"|\"&TRIM(E229)&\"|\"&TRIM(F229)&\"|\"&TRIM(H229)&\"|\"&TRIM(I229))",
+      "wanted": "=LOWER(TRIM(C229)&\"|\"&TRIM(D229)&\"|\"&TRIM(E229)&\"|\"&TRIM(F229)&\"|\"&TRIM(H229)&\"|\"&TRIM(I229))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-EAST-DOOR-WALL-MODULE",
+      "domain": "scenes",
+      "row": 229,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-WEST-DOOR-WALL-MODULE",
+      "domain": "scenes",
+      "row": 230,
+      "actual": "==LOWER(TRIM(C230)&\"|\"&TRIM(D230)&\"|\"&TRIM(E230)&\"|\"&TRIM(F230)&\"|\"&TRIM(H230)&\"|\"&TRIM(I230))",
+      "wanted": "=LOWER(TRIM(C230)&\"|\"&TRIM(D230)&\"|\"&TRIM(E230)&\"|\"&TRIM(F230)&\"|\"&TRIM(H230)&\"|\"&TRIM(I230))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-WEST-DOOR-WALL-MODULE",
+      "domain": "scenes",
+      "row": 230,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE",
+      "domain": "scenes",
+      "row": 231,
+      "actual": "==LOWER(TRIM(C231)&\"|\"&TRIM(D231)&\"|\"&TRIM(E231)&\"|\"&TRIM(F231)&\"|\"&TRIM(H231)&\"|\"&TRIM(I231))",
+      "wanted": "=LOWER(TRIM(C231)&\"|\"&TRIM(D231)&\"|\"&TRIM(E231)&\"|\"&TRIM(F231)&\"|\"&TRIM(H231)&\"|\"&TRIM(I231))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-WEST-DOOR-LIFT-INSTANCE",
+      "domain": "scenes",
+      "row": 231,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-FLOOR-FINISH",
+      "domain": "scenes",
+      "row": 232,
+      "actual": "==LOWER(TRIM(C232)&\"|\"&TRIM(D232)&\"|\"&TRIM(E232)&\"|\"&TRIM(F232)&\"|\"&TRIM(H232)&\"|\"&TRIM(I232))",
+      "wanted": "=LOWER(TRIM(C232)&\"|\"&TRIM(D232)&\"|\"&TRIM(E232)&\"|\"&TRIM(F232)&\"|\"&TRIM(H232)&\"|\"&TRIM(I232))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "BPK-BASE99-LOFT-FLOOR-FINISH",
+      "domain": "scenes",
+      "row": 232,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-CONTENTS-V021",
+      "domain": "scenes",
+      "row": 233,
+      "actual": "==LOWER(TRIM(C233)&\"|\"&TRIM(D233)&\"|\"&TRIM(E233)&\"|\"&TRIM(F233)&\"|\"&TRIM(H233)&\"|\"&TRIM(I233))",
+      "wanted": "=LOWER(TRIM(C233)&\"|\"&TRIM(D233)&\"|\"&TRIM(E233)&\"|\"&TRIM(F233)&\"|\"&TRIM(H233)&\"|\"&TRIM(I233))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-WALL-CONTENTS-V021",
+      "domain": "scenes",
+      "row": 233,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+      "domain": "scenes",
+      "row": 234,
+      "actual": "==LOWER(TRIM(C234)&\"|\"&TRIM(D234)&\"|\"&TRIM(E234)&\"|\"&TRIM(F234)&\"|\"&TRIM(H234)&\"|\"&TRIM(I234))",
+      "wanted": "=LOWER(TRIM(C234)&\"|\"&TRIM(D234)&\"|\"&TRIM(E234)&\"|\"&TRIM(F234)&\"|\"&TRIM(H234)&\"|\"&TRIM(I234))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+      "domain": "scenes",
+      "row": 234,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
+      "domain": "scenes",
+      "row": 235,
+      "actual": "==LOWER(TRIM(C235)&\"|\"&TRIM(D235)&\"|\"&TRIM(E235)&\"|\"&TRIM(F235)&\"|\"&TRIM(H235)&\"|\"&TRIM(I235))",
+      "wanted": "=LOWER(TRIM(C235)&\"|\"&TRIM(D235)&\"|\"&TRIM(E235)&\"|\"&TRIM(F235)&\"|\"&TRIM(H235)&\"|\"&TRIM(I235))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
+      "domain": "scenes",
+      "row": 235,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
+      "domain": "scenes",
+      "row": 236,
+      "actual": "==LOWER(TRIM(C236)&\"|\"&TRIM(D236)&\"|\"&TRIM(E236)&\"|\"&TRIM(F236)&\"|\"&TRIM(H236)&\"|\"&TRIM(I236))",
+      "wanted": "=LOWER(TRIM(C236)&\"|\"&TRIM(D236)&\"|\"&TRIM(E236)&\"|\"&TRIM(F236)&\"|\"&TRIM(H236)&\"|\"&TRIM(I236))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
+      "domain": "scenes",
+      "row": 236,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
+      "domain": "scenes",
+      "row": 237,
+      "actual": "==LOWER(TRIM(C237)&\"|\"&TRIM(D237)&\"|\"&TRIM(E237)&\"|\"&TRIM(F237)&\"|\"&TRIM(H237)&\"|\"&TRIM(I237))",
+      "wanted": "=LOWER(TRIM(C237)&\"|\"&TRIM(D237)&\"|\"&TRIM(E237)&\"|\"&TRIM(F237)&\"|\"&TRIM(H237)&\"|\"&TRIM(I237))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
+      "domain": "scenes",
+      "row": 237,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "domain": "scenes",
+      "row": 238,
+      "actual": "==LOWER(TRIM(C238)&\"|\"&TRIM(D238)&\"|\"&TRIM(E238)&\"|\"&TRIM(F238)&\"|\"&TRIM(H238)&\"|\"&TRIM(I238))",
+      "wanted": "=LOWER(TRIM(C238)&\"|\"&TRIM(D238)&\"|\"&TRIM(E238)&\"|\"&TRIM(F238)&\"|\"&TRIM(H238)&\"|\"&TRIM(I238))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+      "domain": "scenes",
+      "row": 238,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-COLUMN-05M",
+      "domain": "scenes",
+      "row": 239,
+      "actual": "==LOWER(TRIM(C239)&\"|\"&TRIM(D239)&\"|\"&TRIM(E239)&\"|\"&TRIM(F239)&\"|\"&TRIM(H239)&\"|\"&TRIM(I239))",
+      "wanted": "=LOWER(TRIM(C239)&\"|\"&TRIM(D239)&\"|\"&TRIM(E239)&\"|\"&TRIM(F239)&\"|\"&TRIM(H239)&\"|\"&TRIM(I239))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-CORNER-COLUMN-05M",
+      "domain": "scenes",
+      "row": 239,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+      "domain": "scenes",
+      "row": 240,
+      "actual": "==LOWER(TRIM(C240)&\"|\"&TRIM(D240)&\"|\"&TRIM(E240)&\"|\"&TRIM(F240)&\"|\"&TRIM(H240)&\"|\"&TRIM(I240))",
+      "wanted": "=LOWER(TRIM(C240)&\"|\"&TRIM(D240)&\"|\"&TRIM(E240)&\"|\"&TRIM(F240)&\"|\"&TRIM(H240)&\"|\"&TRIM(I240))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+      "domain": "scenes",
+      "row": 240,
+      "actual": "ArrayFormula"
+    },
+    {
+      "kind": "asset_not_in_baseline",
+      "asset_id": "ENV-TOWER-DOOR-LEAF-5M",
+      "domain": "scenes"
+    },
+    {
+      "kind": "dedupe_key_formula_wrong",
+      "asset_id": "ENV-TOWER-DOOR-LEAF-5M",
+      "domain": "scenes",
+      "row": 241,
+      "actual": "==LOWER(TRIM(C241)&\"|\"&TRIM(D241)&\"|\"&TRIM(E241)&\"|\"&TRIM(F241)&\"|\"&TRIM(H241)&\"|\"&TRIM(I241))",
+      "wanted": "=LOWER(TRIM(C241)&\"|\"&TRIM(D241)&\"|\"&TRIM(E241)&\"|\"&TRIM(F241)&\"|\"&TRIM(H241)&\"|\"&TRIM(I241))"
+    },
+    {
+      "kind": "dedupe_result_formula_wrong",
+      "asset_id": "ENV-TOWER-DOOR-LEAF-5M",
+      "domain": "scenes",
+      "row": 241,
+      "actual": "ArrayFormula"
+    }
+  ],
+  "counts": {
+    "dedupe_key_formula_wrong": 236,
+    "dedupe_result_formula_wrong": 236,
+    "row_content_mutated": 3,
+    "asset_not_in_baseline": 1
+  }
+}

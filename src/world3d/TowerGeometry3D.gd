@@ -56,8 +56,10 @@ static func is_component_axis_aligned(center_m: float, size_m: float) -> bool:
 # —— 通用组件视觉解析：跨模块唯一真源（2026-09-19）——
 # 背景：DungeonRoom3D / TowerFloorStage3D / TowerDescent3D 原先各自实现
 # 「递归取第一个 MeshInstance3D」。这个隐式约定已被实测打破：
-# prp_tower_wall_door_5m 的第一个 MeshInstance3D 是 visible=false 的门扇
-# （取证见 assets/art/props/dungeon_3d/qa/verify_tower_module_prefabs.gd）。
+# prp_tower_wall_door_5m 当时（v003 塔楼旧套件）的第一个 MeshInstance3D 是
+# visible=false 的门扇（取证见 assets/art/props/dungeon_3d/qa/verify_tower_module_prefabs.gd）。
+# 该资产已于 2026-09-19 换成 v004 派生美术，隐藏门扇不复存在；但「隐式取首网格会漂移」
+# 这条教训不变 —— 带装饰件/隐藏件的资产换一批就会重现，所以按声明解析的做法保留。
 # 现在统一按组件自己声明的 metadata/visual_node_name 解析，三级回退：
 #   1) 按节点路径（支持 "A/B" 形式）
 #   2) 按节点名递归查找
@@ -116,8 +118,10 @@ static func _first_visible_mesh_in(root: Node) -> Mesh:
 # —— 包络解析：把「声明节点子树里全部可见网格」并成 root 局部空间的 AABB ——
 # 为什么必须按节点变换累积：Mesh.get_aabb() 是「网格自身坐标系」的包围盒，
 # 不含 MeshInstance3D 与其父节点（如 ImportedModel / *_ROOT）的变换。
-# 例如 prp_tower_wall_door_5m 的门垛网格自身 AABB 的 y 是 -4.5..7.4，
+# 例如 v003 时代的 prp_tower_wall_door_5m，其门垛网格自身 AABB 的 y 是 -4.5..7.4，
 # 真正贴合 0..11.9 的是「累积到 prefab 根」之后的结果。只读网格 AABB 会误判。
+# （该资产 2026-09-19 已换 v004：新 GLB 根为恒等变换、网格 AABB 直接就是 0..11.9，
+# 所以这个具体例子不再复现；但只要导入根带 T/R/S，累积仍然是唯一正确做法。）
 # 契约检查（bounds_size_m）与美术替换验收都以此为准。
 static func resolve_visual_bounds(root: Node, declared_name := "") -> AABB:
 	var node := resolve_visual_node(root, declared_name)

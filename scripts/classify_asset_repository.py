@@ -104,8 +104,6 @@ def _parent_for(relative_path: str, rows: list[dict[str, Any]]) -> tuple[str, st
     override_id = ""
     if "/shared/palette/" in normalized:
         override_id = "ART-PALETTE-FACILITY-LOWLIGHT-DOPAMINE"
-    elif "/rooftop_shelter_3d/" in normalized:
-        override_id = "ENV-ROOFTOP-SHELTER-50M-3D"
     elif "chibi_anime_head_" in normalized or "head_chibi_anime_" in normalized:
         override_id = "CHR-PLY-BUNNY01-HEAD-CHIBI-ANIME-3D"
     elif "chr_player_capsule01_bunny01_" in normalized:

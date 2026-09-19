@@ -296,6 +296,9 @@ var _light_switch: RoomLightSwitch3D
 var custom_dimensions := Vector2.ZERO
 var tower_module_shell := false
 var open_wall_directions: Array[String] = []
+## 设计源给出的房间级刷怪计划（波次 / 每波数量 / 怪物组成）。
+## 空字典 = 该房走全局刷怪公式；非空时由 Dungeon3D._spawn_room_enemies 全量接管。
+var enemy_spawn_plan: Dictionary = {}
 
 
 func configure(config: Dictionary) -> void:
@@ -311,6 +314,7 @@ func configure(config: Dictionary) -> void:
 	custom_dimensions = config.get("custom_dimensions", custom_dimensions) as Vector2
 	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
 	open_wall_directions.assign(config.get("open_wall_directions", []))
+	enemy_spawn_plan = (config.get("enemy_spawn_plan", enemy_spawn_plan) as Dictionary).duplicate(true)
 
 
 func _ready() -> void:

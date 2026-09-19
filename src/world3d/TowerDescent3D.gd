@@ -1496,6 +1496,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
 	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
+	# 房间级刷怪计划：设计源没写就不落字段，_spawn_room_enemies 见空即回退全局公式。
+	var spawn_plan := spec.get("enemy_spawn_plan", {}) as Dictionary
+	if not spawn_plan.is_empty():
+		record["enemy_spawn_plan"] = spawn_plan.duplicate(true)
 	if str(spec.get("type", "")) == "BOSS":
 		var boss_profile := BossContentCatalog.get_for_floor(int(plan.get("floor_number", 0)))
 		if not boss_profile.is_empty():
@@ -4025,6 +4029,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"custom_dimensions": record.get("custom_dimensions", Vector2.ZERO),
 		"tower_module_shell": bool(record.get("tower_module_shell", false)),
 		"open_wall_directions": record.get("open_wall_directions", []),
+		"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
 	})
 	room.position = record["position"]
 	room.set_meta("floor_number", int(record.get("floor_number", _floor_number_from_index(int(record.get("floor_index", 0))))))

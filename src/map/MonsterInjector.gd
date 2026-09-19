@@ -87,9 +87,53 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 	
 	return enemies
 
+## 设计源覆盖：按关卡设计源给定的波次计划生成敌人。
+## plan 形如 {"waves": [{"monsters": [{"type": "melee_chaser", "count": 2}]}]}，
+## 外层每项 = 一波，monsters 里每项 = 该波的怪物组成与数量。
+##
+## 只覆盖**编成**（波次数 / 每波数量 / 怪物种类），不覆盖**数值**：每只怪仍走
+## `_generate_basic_enemy`，因此主题倍率与楼层缩放照常生效，避免设计源与全局数值
+## 出现两套真源。返回 Array[Array[Dictionary]]（每波一个配置数组）；
+## 计划缺失或非法时返回空数组，由调用方回退全局公式 —— 绝不产出半截波次。
+func build_waves_from_plan(plan: Dictionary, floor: int, floor_level: int) -> Array:
+	var waves: Array = []
+	if plan.is_empty():
+		return waves
+	var raw_waves: Variant = plan.get("waves", [])
+	if not (raw_waves is Array) or (raw_waves as Array).is_empty():
+		return waves
+	for wave_value in (raw_waves as Array):
+		if not (wave_value is Dictionary):
+			return []
+		var raw_monsters: Variant = (wave_value as Dictionary).get("monsters", [])
+		if not (raw_monsters is Array) or (raw_monsters as Array).is_empty():
+			return []
+		var batch: Array[Dictionary] = []
+		for monster_value in (raw_monsters as Array):
+			if not (monster_value is Dictionary):
+				return []
+			var monster := monster_value as Dictionary
+			var type_id := str(monster.get("type", ""))
+			var count := int(monster.get("count", 0))
+			if not is_authorable_enemy_type(type_id) or count <= 0:
+				return []
+			for _index in range(count):
+				batch.append(_generate_basic_enemy(type_id, floor, floor_level))
+		if batch.is_empty():
+			return []
+		waves.append(batch)
+	return waves
+
+
+## 该怪物种类能否由设计源直接指定。Boss 不在内：Boss 房有自己的出场/结算路径，
+## 走本通道会以普通外壳出场，绕过 Boss 逻辑，故设计源禁用。
+## static：校验器需要在不构造实例的前提下复用同一判据（单一实现，禁止复刻）。
+static func is_authorable_enemy_type(type_id: String) -> bool:
+	return BASE_ENEMY_TYPES.has(type_id) and type_id != "boss"
+
+
 ## 生成随机敌人
-func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]:
-	# 怪物数量随楼层增加：每房 baseline 3-5 只（floor=1 -> 3, floor=2 -> 4, floor=4 -> 6）
+func _generate_random_enemies(floor: int, floor_level: int) -> Array[Dictionary]:	# 怪物数量随楼层增加：每房 baseline 3-5 只（floor=1 -> 3, floor=2 -> 4, floor=4 -> 6）
 	var count: int = 2 + floor
 	var enemies: Array[Dictionary] = []
 	

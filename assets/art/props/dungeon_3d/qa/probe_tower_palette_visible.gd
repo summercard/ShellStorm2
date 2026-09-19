@@ -8,8 +8,11 @@ extends SceneTree
 ##      （实墙 GLB 本就单表面，PaletteUV 在单材质 UV 通道内取色，故不要求多表面。）
 ##   2. ImportedOuterParapetGrid5M —— mesh 高 == 1.50（女儿墙 v001），无主题覆盖。
 ##   3. ImportedFloorTileGrid5M_A/B —— material_override == null，mesh 表面数 >= 2（美术双表面）。
-##   4. Imported_DoorWall5M_* 上不得有主题材质覆盖，且其美术自带静态门扇
-##      DoorLeaf_OPEN 必须 visible == false（改由 RoomDoor3D 提供，避免双门扇）。
+##   4. Imported_DoorWall5M_* 上不得有主题材质覆盖，且其子树里**不得存在**静态门扇
+##      节点。门墙美术自 2026-09-19 起改为由战局通用组件库的 wall_door_5m_通用包
+##      派生（v004），该通用包本身不含门扇，所以旧 v003 自带的那片 DoorLeaf_OPEN
+##      已随重导出消失 —— 门扇一律由 RoomDoor3D 提供。断言方向因此从「必须隐藏」
+##      反转为「必须不存在」：留着这条旧方向会让探针在正确资产上反而报错。
 ##
 ## 跑法：
 ##   Godot --headless --path <项目> --script res://assets/art/props/dungeon_3d/qa/probe_tower_palette_visible.gd
@@ -80,16 +83,18 @@ func _scan(root_node: Node) -> void:
 		# 门墙与门扇是普通 Node3D 子树，不走 MultiMesh，必须在 MultiMesh 过滤之前判。
 		if name.begins_with("Imported_DoorWall5M_"):
 			door_wall += 1
-			_lines.append("[门墙] %-46s override=%s" % [name, _first_override_label(node)])
+			# 门墙美术不再自带静态门扇；这里数的是「残留」，期望恒为 0。
+			var leaf_names := _names_containing(node, "DoorLeaf")
+			door_leaf += leaf_names.size()
+			_lines.append("[门墙] %-46s override=%s doorleaf=%s" % [
+				name,
+				_first_override_label(node),
+				str(leaf_names) if leaf_names.size() > 0 else "none",
+			])
 			_expect(
 				_first_override_label(node) == "null(美术自带)",
 				"%s 存在主题材质覆盖，美术被盖掉" % name
 			)
-		if name.contains("DoorLeaf_OPEN"):
-			door_leaf += 1
-			var leaf := node as Node3D
-			_lines.append("[门扇] %-44s visible=%s" % [name, str(leaf.visible)])
-			_expect(not leaf.visible, "%s 美术自带静态门扇未隐藏，会与 RoomDoor3D 门扇重叠" % name)
 		var mm := node as MultiMeshInstance3D
 		if mm == null or mm.multimesh == null or mm.multimesh.mesh == null:
 			continue
@@ -127,7 +132,26 @@ func _scan(root_node: Node) -> void:
 	_expect(parapet > 0, "未找到 ImportedOuterParapetGrid5M（女儿墙未接入）")
 	_expect(floor_grid > 0, "未找到地砖 MultiMesh 节点（地砖未接入）")
 	_expect(door_wall > 0, "未找到 Imported_DoorWall5M_* 节点（带门墙未接入）")
-	_expect(door_leaf > 0, "未找到 DoorLeaf_OPEN（带门墙美术门扇未接入，无法确认隐藏）")
+	_expect(
+		door_leaf == 0,
+		"带门墙子树里出现 %d 个 DoorLeaf 节点（美术已改为不含门扇的通用组件派生版，"
+		% door_leaf + "出现即说明换回了会与 RoomDoor3D 重叠的旧资产）"
+	)
+
+
+## 收集子树里名字含指定片段的节点名（用于「门墙里不许再有静态门扇」这条断言）。
+func _names_containing(root_node: Node, needle: String) -> Array[String]:
+	var result: Array[String] = []
+	var stack: Array[Node] = [root_node]
+	while not stack.is_empty():
+		var node := stack.pop_back() as Node
+		if node == null:
+			continue
+		for child in node.get_children():
+			stack.append(child)
+			if String(child.name).contains(needle):
+				result.append(String(child.name))
+	return result
 
 
 ## 在一整棵子树里找第一个非空 material_override 的名字；全为空则视为「美术自带」。
