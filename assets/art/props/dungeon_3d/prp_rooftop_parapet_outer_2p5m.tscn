@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+; 2.5m 天台女儿墙外角（天台参考组件库 v002）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb
+;   2.50m × 1.80m 高 × 2.50m；底面中心原点（几何 Y=0..1.80）。
+; L 形：两条臂的外表面分别贴合局部 −X 边与 +Z 边，开口朝 +X/−Z；
+;   臂厚 0.50m，两条臂的中心线分别在局部 x=−1.00 与 z=+1.00。
+; 摆放契约（由 TowerFloorStage3D 按四角调用）：
+;   本件 AABB 中心 = 角的 2.5m 让位区中心；rotation_y 取 90° 整数倍，
+;   SW=0 / SE=PI/2 / NE=PI / NW=3PI/2（俯视逆时针）。
+; preserve_authored_palette：保留美术自带 PaletteUV 四角色材质
+;   （本件实际只用到 02_细腻哑光_青绿大面）。
+; 本 Prefab 视觉专用（visual_only）。天台四边仍是连续碰撞，
+;   转角由 TowerFloorStage3D 的 OuterBoundaryCollision_* 覆盖，本件不带碰撞节点。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopParapetOuter" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-PARAPET-OUTER"
+metadata/package_id = "ENV-ROOFTOP-REF-PARAPET-OUTER"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb"
+metadata/grid_unit_m = 2.5
+metadata/visual_height_m = 1.8
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(2.5, 1.8, 2.5)
+metadata/visual_bounds_size_m = Vector3(2.5, 1.8, 2.5)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
+metadata/visual_node_name = "女儿墙外角_主体"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "individual_nodes"
+metadata/layout_role = "rooftop_parapet_outer_corner"
+metadata/corner_arms = "local_neg_x_and_local_pos_z"
+metadata/corner_arm_centerlines = "x=-1.0,z=+1.0"
+metadata/corner_arm_thickness_m = 0.5
+metadata/corner_open_facing = "+X/-Z"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

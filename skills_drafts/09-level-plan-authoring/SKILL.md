@@ -38,9 +38,13 @@ source/art/whitebox/tower_zones/<level_id>/<版本>/data/
 版本目录默认 `v001`；已登记覆盖见 `LevelPlanLoader.DATA_ROOT_OVERRIDES`
 （`battle_level01` 固定在 `v004`）。
 
-L2 每个房间还有一个**可选**字段 `enemy_spawn_plan`（房间级刷怪计划：波次数 / 每波数量 /
-怪物组成）。不写就完全不影响现状；写了就由设计源全量接管那一间房的刷怪。
-口径见 §2 第 2 步补充。
+L2 每个房间还有两个**可选**字段：
+
+- `enemy_spawn_plan`（房间级刷怪计划：波次数 / 每波数量 / 怪物组成）。不写就完全不影响现状；
+  写了就由设计源全量接管那一间房的刷怪。口径见 §2 第 2 步补充。
+- `boss_content_id`（房间级首领指派：指定 Boss 房出场的是名册里的**哪一个**首领）。不写 =
+  塔楼按层号取、单层关卡不出 Boss；写了就按名册条目出场。**只指定身份，不写竞技场 / 技能袋。**
+  口径见 §2 第 2 步补充二。
 
 **唯一权威规范：** `docs/v0.1/05.2_关卡版图白盒与生成规范.md`。
 **可填的设计表：** `docs/v0.1/design/新关卡设计表.md`（六个部分：要你填的 / 可以改的 /
@@ -145,9 +149,17 @@ L2 每个房间还有一个**可选**字段 `enemy_spawn_plan`（房间级刷怪
 
 **硬上限（超了校验器直接红）：** 波数 ≤ 6、单波总数 ≤ 24、全房总数 ≤ 64。
 
-**只能填在会刷怪的房型上。** 判定口径是 `content_type`（**不是** `room_type`），必须属于
-`GameDesignConfig.ROOM_TYPES_WITH_HOSTILES`。填在安全房 / 撤离房这类永不调用刷怪入口的房上会报
-`enemy_spawn_plan_on_non_hostile_room` —— 没有这条断言时它只会静默失效。
+**只能填在会刷怪的房型上。** 判定口径是 `content_type`（**不是** `room_type`），必须让
+`GameDesignConfig.is_spawn_plan_authorable_room(content_type)` 为真 —— 也就是房型属于
+`ROOM_TYPES_WITH_HOSTILES`（`COMBAT` / `ELITE` / `BOSS` / `TRAP` / `BASEMENT` / `STORAGE` /
+`SCAVENGE`）**且不是 `BOSS`**。填在安全房 / 撤离房这类永不调用刷怪入口的房上会报
+`enemy_spawn_plan_on_non_hostile_room`；填在 Boss 房上报 `enemy_spawn_plan_on_boss_room`
+（Boss 房不是「不刷怪」，而是**不归设计源管** —— 见下面的「第 2 步补充二」）。
+没有这两条断言时它们只会静默失效。
+
+**不要在本文件里复刻那两个房型表。** 唯一口径是
+`GameDesignConfig.is_spawn_plan_authorable_room` 与 `GameDesignConfig.is_boss_room`，
+静态校验与运行时兜底共用它们；复刻一份必然与真源漂移。
 
 **接管范围（要说清楚给用户）：** 填了之后，该房的**波次数、每波数量、怪物组合**全部以设计源为准，
 `desired` 数量公式、COMBAT 波次表 `[1,2,2,3]`、主题权重池 `enemy_pool` 一律不参与。
@@ -160,6 +172,7 @@ L2 每个房间还有一个**可选**字段 `enemy_spawn_plan`（房间级刷怪
 |---|---|
 | `enemy_spawn_plan_not_object` | 值不是对象 |
 | `enemy_spawn_plan_on_non_hostile_room` | 房型不刷怪，写了等于静默失效 |
+| `enemy_spawn_plan_on_boss_room` | 写了 Boss 房 —— Boss 房不归设计源管，要指派首领请用 `boss_content_id` |
 | `enemy_spawn_plan_waves_empty` | `waves` 缺失或为空 |
 | `enemy_spawn_plan_too_many_waves` | 波数超过 6 |
 | `enemy_spawn_plan_wave_not_object` | 某一波不是对象 |
@@ -173,12 +186,68 @@ L2 每个房间还有一个**可选**字段 `enemy_spawn_plan`（房间级刷怪
 
 **落地要有两道闸（缺一即等于没接通）：**
 
-1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... plans=N` —— 末尾的 `plans` 就是这个校验器**真找到并逐值比对**
-   过的刷怪计划条数。填了几间房就该是几。**出现 `plans=0` 而设计源里确实写了，就是字段半路被吞了**
-   （见坑 18），不是「没问题」。
+1. `LEVEL_PLAN_RUNTIME_GUARD_OK ... plans=N boss_ids=N` —— 末尾的 `plans` 是这个校验器
+   **真找到并逐值比对**过的刷怪计划条数，`boss_ids` 是首领指派条数。填了几间房就该是几。
+   **出现 `plans=0` / `boss_ids=0` 而设计源里确实写了，就是字段半路被吞了**（见坑 18），
+   不是「没问题」。注意：当前所有关卡都没写 `boss_content_id`，所以门禁会额外打一行
+   `LEVEL_PLAN_RUNTIME_NOTE` 说明该字段暂无可比样本 —— 这个字段的透传改由专属门禁的手写
+   patch 探针覆盖，别把「没样本」当成「已验证」。
 2. 专属门禁里真调一次刷怪入口，逐值断言波次数 / 每波数量 / 总敌数。
    范本：`tests/verification/verify_test_level_99_flow.gd` 的 `_verify_enemy_spawn_plan`
    —— 它同时留一间**没填**的同类房做 A/B，证明覆盖是「按房间可选」而不是「一填全改」。
+
+### 第 2 步补充二 · 房间级首领指派 `boss_content_id`（可选）
+
+**什么时候填：** 只有用户明确要求「这一间 Boss 房出场的**是哪一个**首领」时才填。
+不填 = 塔楼按层号取名册条目（95 / 90 / 85），**单层关卡则不出 Boss**（见下面的口径）。
+**不要主动替用户填。**
+
+**位置：** L2 `floors/floor_<NN>.json` 的 `rooms[]` 里，与 `content_type` 同级。
+
+```json
+{ "key": "boss", "role": "boss", "content_type": "BOSS",
+  "boss_content_id": "boss_hollow_choir_85" }
+```
+
+**本字段只能写「是哪一个」，不能写「怎么打」。** 首领的**身份**由它指定，其余全部由名册
+`BossContentCatalog` 决定：显示名、正式模型、竞技场资产、阶段技能袋、强调色。设计源
+**绝不**写竞技场 / 技能袋 / 血量 / 波次 —— 那会和名册形成两份真源。
+
+**可填的值**（`BossContentCatalog.CONTENT` 的键，当前 3 个）：
+
+| `boss_content_id` | 名字 | 固有层号 |
+|---|---|---|
+| `boss_abyss_archivist_95` | 深渊档案官 | 95 |
+| `boss_furnace_warden_90` | 熔炉狱监 | 90 |
+| `boss_hollow_choir_85` | 空洞合唱团 | 85 |
+
+**解析口径（唯一真源 `BossContentCatalog.resolve_profile`）：**
+
+1. 写了 `boss_content_id` → **就用它**，层号取该条目的**固有层号**（不是房间所在层号）。
+2. 没写 → 按房间所在层号取名册条目（塔楼 95 / 90 / 85 照旧工作）。
+3. 两层都取不到（**单层关卡没写**）→ **本房不出 Boss**。这是**合法空房**，不是错误：
+   运行时清房放行、状态栏提示「首领房未指派首领 · 区域已放行」，**不会** `push_error`。
+4. 写了但名册里没有（拼写错误）→ **什么也不出，且绝不静默换人**。作者只会看到「我明明
+   指定了却没出现」，所以静态校验必须提前拦住（见下）。
+
+**校验错误码：**
+
+| 错误 | 含义 |
+|---|---|
+| `boss_content_id_on_non_boss_room` | 填在了非 Boss 房上（只有 Boss 房能指派首领） |
+| `boss_content_id_unknown` | 指向名册里不存在的内容（拼写错误） |
+
+**「Boss 房」的判定口径是 `GameDesignConfig.is_boss_room(content_type, role)`** ——
+`content_type == "BOSS"` **或** `role == "boss"` 都算。为什么两者都要认：
+`FloorPlanGenerator._assign_content_types_data_driven` 会把 `role == "boss"` 的房间**钉成**
+`type = "BOSS"`（玩法不变量），所以只写 `role` 没写 `content_type` 的房间运行时照样是 Boss 房，
+只看 `content_type` 会让它绕过静态校验。
+
+**落地要有闸：** 专属门禁里逐条断言四件事 —— ① 写了就按写的出；② 没写且同层有名册条目就按层出；
+③ 单层没写就**一只都不出**；④ 写错 ID**不静默换人**。范本：
+`tests/verification/verify_test_level_99_flow.gd` 的 `_verify_boss_identity`。
+透传侧（设计源 → 运行时计划）另有一条手写 patch 探针，因为至今没有关卡在数据里写这个字段，
+纯读现成关卡会让这条断言退化成 0 样本空跑。
 
 ### 第 3 步 · 取门槽数据（禁止手算）
 
@@ -335,6 +404,10 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 | 改了 `.gd` 却忘了 `.tscn` / `preload` 的引用 | 改名与引用必须同一批完成 |
 | 擅自给房间填 `enemy_spawn_plan`（或替用户猜波数 / 怪物组合） | 它是**可选覆盖项**。用户没明确要求「这一间房固定刷法」时，留空走全局公式才是对的；替他猜会静默改掉那一间房的节奏 |
 | 在 `enemy_spawn_plan` 里写单只怪的数值（血量 / 伤害 / 速度） | 设计源只写「要谁、几只」。数值由 `MonsterInjector` 统一出，写第二份必然漂移 |
+| 给 Boss 房写 `enemy_spawn_plan` | Boss 房不归设计源管。写了会让刷怪入口跳过 boss 生成，表现为「Boss 房没有 Boss」并可能锁死下楼门 —— 校验器报 `enemy_spawn_plan_on_boss_room` |
+| 在 `boss_content_id` 里写竞技场 / 技能袋 / 血量 | 设计源**只指定身份**，其余全由 `BossContentCatalog` 名册条目决定。写第二份必然与名册漂移 |
+| 擅自给房间填 `boss_content_id` | 同为可选覆盖项。用户没明确说「这一间房要出哪个首领」时，留空（塔楼按层取 / 单层不出 Boss）才是对的 |
+| 以为「单层 Boss 房没写首领」是配置错误 | 那是**合法空房**：运行时清房放行、不报错。别去补 `enemy_spawn_plan` 或硬塞一个小怪顶替 |
 
 ---
 
@@ -372,9 +445,13 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
     `%s %d %f %x %X %o %c %v %%`。要按数值拼字符串键，用
     `FloorPlanGenerator._size_catalog_key()`（`"%.3f"` + `rstrip("0")`）。
     跑完校验**必 grep `ERROR`**，不能只 grep `*_OK`。
-11. **同一份文件的多次编辑必须串行。** 并行发多个改同一文件的编辑请求时，各自按
-    「读原文件 → 写回」执行，**后写的会整体覆盖先写的**，而每个请求都回「成功」——
-    结果只保留一处改动，且没有任何报错。批量改一个文件要么串行，要么一次改完。
+11. **同一份文件的多次编辑必须串行，且改完立刻回读。** 并行发多个改同一文件的编辑请求时，
+   各自按「读原文件 → 写回」执行，**后写的会整体覆盖先写的**，而每个请求都回「成功」——
+   结果只保留一处改动，且没有任何报错。批量改一个文件要么串行，要么一次改完。
+   **实测复现**（2026-09-19）：给同一份验收脚本连发 3 个编辑，其中 **2 个静默丢失**，
+   直到跑门禁报 `Identifier "guard_boss_ids" not declared` 才发现。
+   纪律：**改完一处就 grep 回读那一处**（别攒着最后一起看），也别把「工具回成功」
+   当成「改动已落地」。
 12. **远征关卡的运行时房间编号不是 `f%02d_<key>`。** 05.2 §7.1 的
    `room_id = "f%02d_%s" % [floor_number, key]` 是**塔楼层**的约定；远征关卡运行时
    （`TowerDescent3D`）是**按字面量认房**的：入口房恒取 `"start"`、撤离房恒取 `"extraction"`、
@@ -440,6 +517,29 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
      别写 `config.get("key", {})` —— 后者会让任何一次忘了带键的重复 configure 把已有值洗掉。
    - 新增房间级字段后，要在专属门禁里断言 `room.<字段>` 真的非空，**别只断言 plan**。
 
+19. **房间级可选字段是「四道白名单」，漏任何一道都静默丢字段。** 以
+   `enemy_spawn_plan` / `boss_content_id` 为例，从设计源到房实例要过四关，**每关都是重建式
+   白名单、都得手工登记**：
+
+   | # | 关卡 | 位置 | 漏了会怎样 |
+   |---|---|---|---|
+   | 1 | 源文件 → 规范化层 | `LevelPlanLoader.normalize_floor` 的房间字典 | 静态校验看不到该字段 |
+   | 2 | 规范化层 → 运行时计划 | `FloorPlanGenerator.room_from_source` | 生成器产出里没有该字段 |
+   | 3 | 计划 → 塔楼 record | `TowerDescent3D._append_plan_room_record` | 远征侧房间 meta 是空 |
+   | 4 | record → 房实例 | 两处 `configure({...})`（见坑 18） | 房实例上是空值 |
+
+   四关全绿而字段仍丢是**完全静默**的：`LEVEL_PLAN_VALIDATE_OK`、
+   `LEVEL_PLAN_RUNTIME_GUARD_OK`、设计源校验都只验到第 2~3 关为止。
+   **两个反向的坑要同时防：**
+   - **别把字段塞进 `layout_id`。** `layout_id` 是存档指纹，加字段会让既有存档失配。
+     `boss_content_id` 刻意不进 `layout_id`。
+   - **别只靠「专属门禁里读现成关卡」验证透传。** 只要没有任何关卡在数据里写该字段，
+     端到端断言就是 **0 样本空跑**、照样绿。必须另加**手写 patch 探针**直接驱动
+     第 2 关的函数（`FloorPlanGenerator.room_from_source`），范本见
+     `verify_test_level_99_flow.gd._verify_boss_identity` 尾段。
+     同理，门禁末尾的样本计数（`plans=` / `boss_ids=`）要打出来并**当判据读**：
+     写了字段却仍是 0，就是被吞了；本就没有样本，则要打一行 `*_NOTE` 声明而非静默通过。
+
 ---
 
 ## 6. 交付自检
@@ -453,6 +553,9 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 - [ ] `LEVEL_PLAN_RUNTIME_GUARD_OK` 也出来了（**两条判据缺一不可**）
 - [ ] 若用户在 1.7 填了刷怪计划：`LEVEL_PLAN_RUNTIME_GUARD_OK` 末尾的 `plans=` 等于他填的房数
       （`plans=0` 就是没接通，回来查坑 18），且专属门禁里真调过刷怪入口、逐值断言过波次与数量
+- [ ] 若用户指定了某个 Boss 房出场的首领：`boss_content_id` 写在该房上且值在名册里
+      （`boss_abyss_archivist_95` / `boss_furnace_warden_90` / `boss_hollow_choir_85`），
+      该房是 Boss 房（`content_type: "BOSS"` 或 `role: "boss"`），且**没**给同一间房写 `enemy_spawn_plan`
 - [ ] 若用户只要求「生成设计源」：`runtime_enabled` 仍是 `false`
 - [ ] 若用户要求「能玩到」：`runtime_enabled` 为 `true`**且只对他指定的那一关开**，
       `EXPEDITION_LEVELS` 已登记、独立场景已建、`room_id` 已对齐 `start`/`room_NN`/`extraction`、

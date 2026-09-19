@@ -39,7 +39,7 @@ PortableGit shim 缺 coreutils：`dirname` / `cd` / `head` / `tail` / `wc` / `ls
 
 stderr 里的 `dirname: command not found` / `cd: null directory` 是 shim 噪音，**可忽略**。删临时文件 / 列目录用 Python `os.remove` / `os.listdir`。
 
-## 三大坑（每个都烧过时间）
+## 六条坑（每条都烧过时间）
 
 ### 1. 起桌宠必须剥环境变量（否则秒退、日志一行不留）
 
@@ -208,6 +208,49 @@ finally:
 电视侧还是灰的）。只连电视窗口看不出分歧 —— 必须在一次运行里同时读两边的同一个元素。
 `window.__tvHost.openPanel(key)` 可以从 CDP 直接把真面板窗口叫起来。
 
+## 交互行为：抓帧看不出来的那一类
+
+"按钮点下去不暗 / 点了没反应 / 状态卡住不弹回"——**抓帧一定看不出来**（帧是静止的，
+故障发生在事件命中那一层）。这类问题只能用**真实输入事件**验。
+
+两个代表性场景与各自的判据：
+
+**① `-webkit-app-region` 命中归属（Electron frameless 窗口）**
+
+拖动区吞掉点击时，按钮的 `:active` 拿不到 —— 表现为"按下去不暗"，而窗口会跟着手走
+一小段，**两端都不报错**。光读 CSS 也验不出来（`button { no-drag }` 写着呢，
+漏的是侧栏自己的 padding、组间距、`span` 小标题、装饰性旋钮）。
+
+```js
+const win = new BrowserWindow({ show: false, width: 1120, height: 736, x: -4000 });
+win.webContents.setZoomFactor(1);          // ← 关键：CSS 像素 == sendInputEvent 坐标
+await win.loadFile(...);
+await win.webContents.insertCSS(TV_DRAG_CSS);
+// 20×20 网格遍历目标容器：每个点问"这一像素归谁"，沿命中元素读有效值
+const el = document.elementFromPoint(x, y);
+getComputedStyle(el).getPropertyValue('-webkit-app-region');
+// 再打真实鼠标事件验 :active 是否生效
+win.webContents.sendInputEvent({ type: 'mouseDown', x, y, button: 'left', clickCount: 1 });
+getComputedStyle(btn).transform;           // 期望 matrix(1,0,0,1,3,3)（下沉 3px）
+```
+
+- **`setZoomFactor(1)` 必须在 insertCSS 之前**：电视窗口实跑是 0.46，缩放状态下
+  输入事件坐标和 CSS 坐标不是一套，打点会全偏。
+- `-webkit-app-region` 是**继承属性**，所以从 `elementFromPoint` 的命中元素读到的
+  就是有效值，不用自己爬祖先链。
+- **先做对照采样**：同时读 `body` 与 `.shell`，两者应当是 `drag`。**属性读不到时
+  全部样本会是空串** —— 不设对照的话，`badCount === 0` 会被当成"全通过"，是假绿。
+- 现成脚本：`.workbuddy/probe-sidebar-drag.cjs`（侧栏覆盖率 + 连点换台能亮能暗 +
+  遥控器 `:active` 下沉，三条一起验）。
+
+**② 双态按钮能不能亮回去 / 暗下去**
+
+连点 N 次同一个按钮，每次松开后读类名与文案，**第 1 次与第 N 次的状态都必须回到
+预期**。只验一次"点亮了"会漏掉"卡在点亮态出不来"这半边 —— 而主人报的正是后一半。
+
+现成实现（2026-09-19）：`probe-sidebar-drag.cjs` 连点换台 7 次，覆盖 6 个频道后
+回到直播，断言 `cls` 里 `.on` 出现又消失。
+
 ## 写新探针时的进程纪律
 
 **唯一允许的杀法**：把自己 spawn 出来的那棵树收掉。
@@ -254,5 +297,8 @@ Get-CimInstance Win32_Process -Filter "Name='electron.exe'" |
 ## 不要做的事
 
 - 不要用探针数字替代看图。数字只用来**定位**，最后必须 Read PNG 亲眼确认。
-- 不要把设计文档的承诺当成现状。`globalScaleFor` 封顶 1.80 但渲染调用 0 次——**测试守着它，所以永远是绿的**。设计公式和实际渲染是两套，必须都查。
+- 不要把设计文档的承诺当成现状。设计公式和实际渲染是两套，必须都查 ——
+  本项目已抓到过两类：① 同一条曲线在两个文件里各有一份（两个上限谁也不认谁）；
+  ② 名字相近的两个上限被当成一件事（体型系数上限 vs 屏幕表观上限，
+  前者调大不会让画面变大，后者才是渲染安全线）。
 - 不要在审查任务里顺手改产品代码。审查就是审查。

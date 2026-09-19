@@ -38,6 +38,13 @@ func _ready() -> void:
 		or not bool(snapshot.get("idle_state_machine_owned", false))
 	):
 		failures.append("The current avatar idle state does not own the standing animation")
+	# 出厂枪已由豌豆手枪换成花洒机枪，因此「手枪」不再等于「默认枪」。
+	# 本段验的是手枪专用的单手持枪姿势，必须显式装备后再取样。
+	if not gallery.player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		failures.append("Pistol could not be equipped for the one-hand sidearm grip check")
+	else:
+		gallery.player.avatar.call("_process", 0.10)
+		snapshot = gallery.player.avatar.get_component_snapshot()
 	if (
 		not bool(snapshot.get("weapon_grip_pose_active", false))
 		or str(snapshot.get("weapon_pose_state", "")) != "sidearm_hold"

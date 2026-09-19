@@ -345,6 +345,7 @@ func _verify_level_scene(failures: Array[String]) -> void:
 	_verify_entry_gate(tower, failures)
 	_verify_extraction(tower, failures)
 	_verify_enemy_spawn_plan(tower, failures)
+	_verify_boss_identity(failures)
 
 	tower.queue_free()
 	await get_tree().process_frame
@@ -653,6 +654,191 @@ func _verify_enemy_spawn_plan(tower: TowerDescent3D, failures: Array[String]) ->
 	if formula_live.is_empty():
 		failures.append("room_01 未按全局公式刷出任何敌人")
 
+	# 上面把 _next_room_enemy_count 设成 4 才刷的 room_02：设计源赢下「数量」这一维度，
+	# 但不允许静默吞掉 —— 必须留痕，否则表现为「卡抽了没反应」且无处可查。
+	if int(tower._room_spawn_plan_suppressed_reinforcements.get("room_02", 0)) != 4:
+		failures.append(
+			"被接管房没有留下「命运卡补兵被抑制」的记录（静默吞掉不可接受）：%s"
+			% str(tower._room_spawn_plan_suppressed_reinforcements)
+		)
+
+	# 落点必须逐只不同：布局房只有 4 个环形点，而设计源允许一波 24 只。
+	# 若仍按 index % size 取点，超出的敌人会叠在同一坐标 —— 数量上限就成了空话。
+	var seen_positions: Array[Vector3] = []
+	for spawn_index in range(12):
+		var spawn_point: Vector3 = room_02.spawn_point_for_index(spawn_index)
+		for existing_point in seen_positions:
+			if existing_point.distance_to(spawn_point) < 0.05:
+				failures.append(
+					"刷怪落点重合：index %d 与已有点相距仅 %.3f m（数量上限无法兑现）"
+					% [spawn_index, existing_point.distance_to(spawn_point)]
+				)
+				break
+		seen_positions.append(spawn_point)
+
+	# BOSS 房不归设计源管：Boss 的出场与结算由生成工具（BossContentCatalog）决定。
+	# 在 BOSS 房写计划会让刷怪入口先于 match room.room_type 返回，boss + elite 整段被跳过。
+	# 静态校验与运行时兜底两道都要在，这里逐条钉住。
+	if GameDesignConfig.is_spawn_plan_authorable_room("BOSS"):
+		failures.append("唯一口径 is_spawn_plan_authorable_room 把 BOSS 判成可写，口径反了")
+	var boss_probe := LevelPlanValidator._validate_enemy_spawn_plan({
+		"key": "boss_probe",
+		"content_type": "BOSS",
+		"enemy_spawn_plan": {
+			"waves": [{"monsters": [{"type": "melee_chaser", "count": 1}]}],
+		},
+	})
+	if not _has_error_prefix(boss_probe, "enemy_spawn_plan_on_boss_room"):
+		failures.append("BOSS 房写 enemy_spawn_plan 未被静态校验拦住：%s" % [boss_probe])
+	var combat_probe := LevelPlanValidator._validate_enemy_spawn_plan({
+		"key": "combat_probe",
+		"content_type": "COMBAT",
+		"enemy_spawn_plan": {
+			"waves": [{"monsters": [{"type": "melee_chaser", "count": 1}]}],
+		},
+	})
+	if not combat_probe.is_empty():
+		failures.append("合法的内容房计划竟被静态校验判错：%s" % [combat_probe])
+
+
+## 首领指派（`boss_content_id`）：设计源可以指定本房出场的是名册里的哪一个首领。
+##
+## 三条口径必须钉死，否则失效方式全是静默的：
+##   ① 未指定 + 本层没有按层指派的内容（单层关卡 floor_number=0）→ **不出 Boss**，
+##      而不是退化成「通用外壳首领」；
+##   ② 指定了名册里的一条 → 身份/正式模型/竞技场/阶段技能袋全部来自该条目（层号也取名册的）；
+##   ③ 写了名册里没有的 ID → 解析为空且**绝不静默换成另一个首领**，静态校验另行拦住。
+## 另加一条「白名单防漏登记」：LevelPlanLoader.normalize_floor 是重建式白名单，
+## 漏登记房间级新字段会静默丢弃（不报错、不警告），只有断言 key 存在才能防住。
+func _verify_boss_identity(failures: Array[String]) -> void:
+	# —— ① 没写 boss = 不刷 boss ——
+	var single_layer := BossContentCatalog.resolve_profile("", 0)
+	if not single_layer.is_empty():
+		failures.append(
+			"单层关卡未指派首领时竟解析出了 Boss（口径应为不出 Boss）：%s" % str(single_layer)
+		)
+	# —— ② 按 ID 指派优先，且层号取名册条目的固有层号 ——
+	var authored := BossContentCatalog.resolve_profile("boss_hollow_choir_85", 0)
+	if str(authored.get("boss_content_id", "")) != "boss_hollow_choir_85":
+		failures.append("设计源指派的首领身份没有被优先采纳：%s" % str(authored))
+	if int(authored.get("floor_number", 0)) != 85:
+		failures.append(
+			"按 ID 指派时层号应取名册条目的固有层号(85)，实为 %d"
+			% int(authored.get("floor_number", 0))
+		)
+	if str(authored.get("arena_asset_id", "")).is_empty():
+		failures.append("按 ID 指派的首领没有带出竞技场资产")
+	# 按层指派必须照旧工作：塔楼 95/90/85 不写 ID 也要能出场，否则塔楼整体失去 Boss。
+	var by_floor := BossContentCatalog.resolve_profile("", 95)
+	if str(by_floor.get("boss_content_id", "")) != "boss_abyss_archivist_95":
+		failures.append("未指派时「按层号取名册条目」的回退被破坏：%s" % str(by_floor))
+	# —— ③ 写错 ID 不得静默换人 ——
+	var typo := BossContentCatalog.resolve_profile("boss_not_in_roster", 0)
+	if not typo.is_empty():
+		failures.append("写错的首领内容 ID 竟解析出别的内容（不得静默替换）：%s" % str(typo))
+
+	# 运行时证据：拿不到名册条目就是**不刷 Boss**，而不是刷一个通用外壳。
+	var injector := MonsterInjector.new()
+	var none_spawned := injector.generate_enemies({
+		"type": "boss", "floor": 1, "floor_level": RoomData.FloorLevel.SHALLOW,
+		"floor_number": 0,
+	})
+	if not none_spawned.is_empty():
+		failures.append(
+			"单层未指派首领的 Boss 房仍刷出了 %d 只敌人（应为 0）" % none_spawned.size()
+		)
+	var one_spawned := injector.generate_enemies({
+		"type": "boss", "floor": 1, "floor_level": RoomData.FloorLevel.SHALLOW,
+		"floor_number": 0, "boss_content_id": "boss_hollow_choir_85",
+	})
+	if one_spawned.size() != 1:
+		failures.append("按 ID 指派后应恰好刷出 1 只 Boss，实为 %d" % one_spawned.size())
+	elif str(one_spawned[0].get("boss_content_id", "")) != "boss_hollow_choir_85":
+		failures.append("刷出的 Boss 不是设计源指定的那一个：%s" % str(one_spawned[0]))
+	var floor_spawned := injector.generate_enemies({
+		"type": "boss", "floor": 1, "floor_level": RoomData.FloorLevel.SHALLOW,
+		"floor_number": 95,
+	})
+	if (
+		floor_spawned.size() != 1
+		or str(floor_spawned[0].get("boss_content_id", "")) != "boss_abyss_archivist_95"
+	):
+		failures.append("未指派时按层号出场 Boss 的路径被破坏：%s" % str(floor_spawned))
+
+	# —— 静态校验两条判据 ——
+	var non_boss_probe := LevelPlanValidator._validate_boss_content_id({
+		"key": "combat_probe", "role": "main", "content_type": "COMBAT",
+		"boss_content_id": "boss_hollow_choir_85",
+	})
+	if not _has_error_prefix(non_boss_probe, "boss_content_id_on_non_boss_room"):
+		failures.append("非 Boss 房写 boss_content_id 未被拦住：%s" % [non_boss_probe])
+	var unknown_probe := LevelPlanValidator._validate_boss_content_id({
+		"key": "boss_probe", "role": "boss", "content_type": "BOSS",
+		"boss_content_id": "boss_not_in_roster",
+	})
+	if not _has_error_prefix(unknown_probe, "boss_content_id_unknown"):
+		failures.append("Boss 房写了名册里不存在的 boss_content_id 未被拦住：%s" % [unknown_probe])
+	var legal_probe := LevelPlanValidator._validate_boss_content_id({
+		"key": "boss_probe", "role": "boss", "content_type": "BOSS",
+		"boss_content_id": "boss_abyss_archivist_95",
+	})
+	if not legal_probe.is_empty():
+		failures.append("合法的首领指派竟被静态校验判错：%s" % [legal_probe])
+	# 只写 role=boss（没写 content_type）也是 Boss 房 —— 生成器会把这种房钉成 BOSS 型，
+	# 只看 content_type 会让它绕过静态校验。
+	var role_only_probe := LevelPlanValidator._validate_boss_content_id({
+		"key": "boss_probe", "role": "boss", "content_type": "",
+		"boss_content_id": "boss_abyss_archivist_95",
+	})
+	if not role_only_probe.is_empty():
+		failures.append("只写 role=boss 的 Boss 房被误判成非 Boss 房：%s" % [role_only_probe])
+
+	# —— 白名单防漏登记 ——
+	var normalized := LevelPlanLoader.normalize_floor(LEVEL_ID, 0)
+	for value in normalized.get("rooms", []):
+		if not (value as Dictionary).has("boss_content_id"):
+			failures.append(
+				"LevelPlanLoader 白名单漏登记 boss_content_id，房间级该字段会被静默丢弃"
+			)
+			break
+
+	# —— 透传防漏登记（出口侧）——
+	# 上面那条只钉住「入口白名单」，本函数是「设计源 → 运行时计划」的出口登记点。
+	# 为什么必须用手写 patch 而不是读现成关卡：**当前没有任何关卡在数据里写
+	# boss_content_id**，端到端断言会退化成 0 样本空跑并静默通过。
+	# 两侧只要漏一侧，字段就会静默消失，作者只会看到「我明明指定了却没出现」。
+	var authored_boss_room := FloorPlanGenerator.room_from_source({
+		"key": "boss_probe", "room_id": "boss_probe", "role": "boss",
+		"content_type": "BOSS", "size": Vector2(25.0, 25.0),
+		"boss_content_id": "boss_hollow_choir_85",
+		"enemy_spawn_plan": {"waves": [{"monsters": [{"type": "melee_chaser", "count": 2}]}]},
+	})
+	if str(authored_boss_room.get("boss_content_id", "")) != "boss_hollow_choir_85":
+		failures.append(
+			"FloorPlanGenerator 未把 boss_content_id 透传进运行时房间：%s"
+			% str(authored_boss_room.get("boss_content_id", "<缺失>"))
+		)
+	if str(authored_boss_room.get("type", "")) != "BOSS":
+		failures.append("手写 Boss 房的 content_type 未按设计源钉死：%s" % str(authored_boss_room))
+	# 没写就不许凭空长出来 —— 否则「没写 boss」会被上游残留值污染成「有 boss」。
+	var plain_room := FloorPlanGenerator.room_from_source({
+		"key": "room_probe", "room_id": "room_probe", "role": "main",
+		"content_type": "COMBAT", "size": Vector2(25.0, 25.0),
+	})
+	if not str(plain_room.get("boss_content_id", "")).is_empty():
+		failures.append(
+			"没写 boss_content_id 的普通房竟被赋了值：%s"
+			% str(plain_room.get("boss_content_id", ""))
+		)
+
+
+## 断言错误列表里存在指定前缀的错误码。
+func _has_error_prefix(errors: Array, prefix: String) -> bool:
+	for error in errors:
+		if str(error).begins_with(prefix):
+			return true
+	return false
+
 
 # —— 工具 ——
 
@@ -680,6 +866,14 @@ func _report(failures: Array[String]) -> void:
 			+ "99F mission-operations menu exposes the test-level-99 entry button, "
 			+ "per-room enemy_spawn_plan drives room_02 (2 waves x 3) while room_01 stays "
 			+ "on the global formula, fate-card next-room multipliers recorded then reset, "
+			+ "boss rooms excluded from spawn-plan authoring at both validator and runtime, "
+			+ "boss identity authorable per room via boss_content_id through one resolver "
+			+ "(authored id wins over the floor roster, an unknown id is never silently swapped, "
+			+ "and an unspecified single-layer boss room spawns no boss at all), "
+			+ "boss_content_id survives both the loader whitelist and the generator passthrough "
+			+ "(hand-written patch probe, since no shipped level authors the field yet), "
+			+ "suppressed fate-card reinforcements recorded instead of silently dropped, "
+			+ "spawn points stay pairwise distinct beyond the ring (cap is honorable), "
 			+ "loading screen follows the pending level and falls back to expedition_01 unchanged"
 		)
 		get_tree().quit(0)

@@ -79,18 +79,20 @@ func _probe_spawn(tag: String, as_death_return: bool) -> void:
 		failures.append("%s 主武器栏为空（与实机观察矛盾）" % tag)
 	else:
 		var assembly_id := str(slot_zero.get("assembly_id", ""))
-		if assembly_id != "bp_pistol":
-			failures.append("%s 主武器不是默认手枪，而是 %s" % [tag, assembly_id])
+		# 出厂枪身份只认 BlueprintRegistry 的常量，换初始枪不必再改本探针。
+		var expected_starting_gun := BlueprintRegistry.DEFAULT_STARTING_GUN_ID
+		if assembly_id != expected_starting_gun:
+			failures.append("%s 主武器不是出厂枪 %s，而是 %s" % [tag, expected_starting_gun, assembly_id])
 		var instance_id := str(slot_zero.get("weapon_instance_id", ""))
 		if instance_id.is_empty():
 			failures.append("%s 主武器没有稳定实例ID" % tag)
 		if insurance != null and insurance.has_weapon_instance(instance_id):
-			failures.append("%s 手枪竟然来自保险格，契约被误接" % tag)
+			failures.append("%s 出厂枪竟然来自保险格，契约被误接" % tag)
 		if inventory != null:
 			for occupied in inventory.get_occupied_slots():
 				var occupied_item := occupied.get("item", {}) as Dictionary
 				if str(occupied_item.get("weapon_instance_id", "")) == instance_id:
-					failures.append("%s 手枪同时存在于背包里，出现双份" % tag)
+					failures.append("%s 出厂枪同时存在于背包里，出现双份" % tag)
 					break
 	if as_death_return and str(tower.get("_current_room_id")) != "facility":
 		failures.append("死亡返城没有落在 99F facility，而是 %s" % str(tower.get("_current_room_id")))
@@ -120,7 +122,7 @@ func _read_text(res_path: String) -> String:
 
 func _finish() -> void:
 	if failures.is_empty():
-		print("PROBE_DEATH_RETURN_LOADOUT_OK: 返城后玩家手上始终是出厂默认手枪，来自 Player3D.start_with_weapon，与死亡结算无关")
+		print("PROBE_DEATH_RETURN_LOADOUT_OK: 返城后玩家手上始终是 BlueprintRegistry.DEFAULT_STARTING_GUN_ID 指定的出厂枪，来自 Player3D.start_with_weapon，与死亡结算无关")
 	else:
 		for message in failures:
 			push_error(message)

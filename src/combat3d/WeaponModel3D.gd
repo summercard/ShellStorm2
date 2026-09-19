@@ -22,6 +22,9 @@ const GUN_VISUAL_SCENES := {
 	"bp_shotgun": preload("res://assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn"),
 	"bp_rifle": preload("res://assets/art/weapons/weapon_3d/runtime/broom_rifle/wpn_broom_rifle_root_top3d_v001.tscn"),
 	"bp_machinegun": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn"),
+	# 花洒机枪是蜂窝机枪的出厂型号，共用同一份正式美术资产；它的独立身份
+	# 靠 assembly/bp ID 区分，不复制 GLB。
+	"bp_sprinkler": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn"),
 	"bp_sniper": preload("res://assets/art/weapons/weapon_3d/runtime/candy_sniper/wpn_candy_sniper_root_top3d_v001.tscn"),
 	"bp_launcher": preload("res://assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn"),
 	"bp_charge": preload("res://assets/art/weapons/weapon_3d/runtime/gumball_cannon/wpn_gumball_cannon_root_top3d_v001.tscn"),
@@ -32,6 +35,7 @@ const GUN_PROFILES := {
 	"bp_shotgun": {"length": 1.02, "barrel": 0.78, "width": 0.25, "height": 0.25, "color": Color(0.36, 0.25, 0.16)},
 	"bp_rifle": {"length": 1.10, "barrel": 0.62, "width": 0.21, "height": 0.24, "color": Color(0.20, 0.30, 0.27)},
 	"bp_machinegun": {"length": 1.18, "barrel": 0.58, "width": 0.31, "height": 0.30, "color": Color(0.27, 0.29, 0.20)},
+	"bp_sprinkler": {"length": 1.18, "barrel": 0.58, "width": 0.31, "height": 0.30, "color": Color(0.27, 0.29, 0.20)},
 	"bp_sniper": {"length": 1.30, "barrel": 1.02, "width": 0.19, "height": 0.22, "color": Color(0.18, 0.24, 0.30)},
 	"bp_launcher": {"length": 1.08, "barrel": 0.72, "width": 0.38, "height": 0.36, "color": Color(0.30, 0.22, 0.16)},
 	"bp_charge": {"length": 1.12, "barrel": 0.62, "width": 0.32, "height": 0.34, "color": Color(0.28, 0.18, 0.34)},
@@ -97,6 +101,7 @@ var _fate_visual_multiplier := DEFAULT_FATE_VISUAL_MULTIPLIER
 const GUN_NAME_TO_ID := {
 	"GunBody_Pistol": "bp_pistol", "GunBody_Shotgun": "bp_shotgun",
 	"GunBody_Rifle": "bp_rifle", "GunBody_Machinegun": "bp_machinegun",
+	"GunBody_Sprinkler": "bp_sprinkler",
 	"GunBody_Sniper": "bp_sniper", "GunBody_Launcher": "bp_launcher",
 	"GunBody_Charge": "bp_charge",
 	"Melee_BaseballBat": "bp_baseball_bat",

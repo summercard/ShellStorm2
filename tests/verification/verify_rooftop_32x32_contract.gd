@@ -4,7 +4,26 @@ extends Node
 const ROOFTOP_TILE_COUNT_WITH_OPENINGS := 234
 const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
 const WEST_STAIR_WORLD_RECT := Rect2(-45.0, 0.0, 15.0, 30.0)
-const WEST_PARAPET_X := -49.85
+## 天台女儿墙换成参考组件库 v002（0.50m 厚 / 1.80m 高）后，边界内缩由 0.15m 变 0.25m。
+const WEST_PARAPET_X := -49.75
+## 实体直段数 = 2×(17+15)：每边两端各让出 2.5m 转角件后比格数少一格。
+const ROOFTOP_SEGMENT_COUNT := 64
+## 四角各一件 2.5m 转角件。
+const ROOFTOP_CORNER_COUNT := 4
+## 2026-09-19：天台女儿墙直段改为「按种子随机分档」——intact + 三件破损变体
+## （崩顶 / 贯穿 / 塌脚）。这三件在 Blender 里由 intact 网格程序化剔料派生，
+## 包络与端头带与 intact 件逐位相同，因此可任意顺序对接。
+## 下列常量是门禁侧的口径副本：破损比例区间（用户口径「约 1/4」）、
+## 排布种子（与 TowerFloorStage3D.ROOFTOP_PARAPET_DAMAGE_SEED 同值）与变体清单。
+const ROOFTOP_DAMAGE_RATIO_MIN := 0.15
+const ROOFTOP_DAMAGE_RATIO_MAX := 0.35
+const ROOFTOP_DAMAGE_PLAN_SEED := 20260919
+const ROOFTOP_DAMAGE_VARIANT_KEYS: Array[String] = ["dmg_a", "dmg_b", "dmg_c"]
+const ROOFTOP_DAMAGE_VARIANT_PATHS: Array[String] = [
+	"res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_a_5m.tscn",
+	"res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_b_5m.tscn",
+	"res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_c_5m.tscn",
+]
 const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
 
 
@@ -59,8 +78,27 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	_expect((snapshot.get("outer_grid_dimensions", Vector2i.ZERO) as Vector2i) == Vector2i(18, 16), "100层围栏没有同步改为18×16轮廓", failures)
 	_expect((snapshot.get("outer_map_dimensions", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(90.0, 80.0)), "100层围栏尺寸不是90m×80m", failures)
 	_expect(int(snapshot.get("outer_module_count", -1)) == 68, "100层围栏模块周长计数不是68", failures)
+	_expect(
+		int(snapshot.get("outer_segment_count", -1)) == ROOFTOP_SEGMENT_COUNT,
+		"100层女儿墙实体直段数不是64（两角让位后每边少一段）",
+		failures
+	)
+	_expect(
+		int(snapshot.get("outer_corner_count", -1)) == ROOFTOP_CORNER_COUNT,
+		"100层没有生成四件女儿墙转角件",
+		failures
+	)
+	_expect(
+		is_equal_approx(float(snapshot.get("outer_wall_thickness", -1.0)), 0.5),
+		"100层女儿墙厚度不是组件库v002的0.50m",
+		failures
+	)
 	_expect((snapshot.get("outer_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "100层围栏没有与扩展地板共用轮廓", failures)
-	_expect(is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 0.75), "100层围栏没有降低50%至0.75m", failures)
+	_expect(
+		is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 1.8),
+		"100层女儿墙不是组件库v002的1.80m（旧值0.75m是几何×0.5缩放凑的）",
+		failures
+	)
 	_expect(not bool(snapshot.get("uses_formal_rooftop_art", true)), "天台仍加载设施美术", failures)
 	_expect(str(snapshot.get("formal_rooftop_art_version", "")) == "", "天台设施版本应为空", failures)
 	_expect(int(snapshot.get("formal_rooftop_art_blocker_count", -1)) == 0, "天台残留设施阻挡", failures)
@@ -74,13 +112,74 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	_expect(floor_light != null and floor_light.visible, "100层原生浅色地砖被设施导入隐藏", failures)
 	_expect(floor_dark != null and floor_dark.visible, "100层原生深色地砖被设施导入隐藏", failures)
 	if outer != null and outer.multimesh != null:
-		# 西侧门洞由2个独立预制体替代，因此MultiMesh应为68-2个实体模块。
-		_expect(outer.multimesh.instance_count == 66, "100层围栏实体模块数量不符合18×16周长和西门洞合同", failures)
-	var doorway := rooftop.find_child("ParapetDoorWall_West", false, false) as Node3D
-	_expect(doorway != null and is_equal_approx(doorway.scale.y, 0.5), "楼梯门洞旁围栏没有同步降低50%", failures)
+		# 不变量：被跳过的直段数 == 补位的门洞墙件数（缺口宽度由两者共同决定）。
+		# 不硬编码件数：天台让位 2.5m 后直段相位与旧排布差半格，洞口中心正好落在
+		# 某段中心上（判定为 ≤5m，含边界），因此命中段数由 2 变 3、缺口 10m→15m，
+		# 而 15m 恰好等于西侧楼梯间外廓宽度且在 z∈[0,30] 内居中。
+		var doorway_walls := 0
+		for child in rooftop.get_children():
+			if child.name.begins_with("ParapetDoorWall_"):
+				doorway_walls += 1
+		_expect(doorway_walls > 0, "100层西侧楼梯门洞没有补位墙件", failures)
+		# 2026-09-19：直段可视件改为「按种子随机分档」——intact + 崩顶/贯穿/塌脚三件
+		# 破损变体各占一个 MultiMesh 批次，所以「实体直段数」不再等于 _outer_visual
+		# 单个 MultiMesh 的实例数。真源改为**槽位表**：破损只换外观、不增删槽位，
+		# 因此槽位总数必须仍等于「64 段 - 门洞补位墙」。四批次之和 == 槽位表
+		# 由 _verify_rooftop_parapet_damage() 逐项对账。
+		var slot_count := int(rooftop.call("get_outer_straight_slot_count"))
+		_expect(
+			slot_count == ROOFTOP_SEGMENT_COUNT - doorway_walls,
+			"100层女儿墙直段槽位数(%d)与「64段-门洞补位墙%d件」不符"
+				% [slot_count, doorway_walls],
+			failures
+		)
+		_verify_rooftop_parapet_damage(rooftop, slot_count, failures)
+	var doorway := rooftop.find_child("ParapetDoorWall_West*", false, false) as Node3D
+	_expect(
+		doorway != null and is_equal_approx(doorway.scale.y, 1.2),
+		"楼梯门洞旁矮墙没有同步到1.80m（基础几何1.5m×1.2）",
+		failures
+	)
 	if doorway != null:
 		_expect(doorway.visible, "100层原生西侧门洞围护被设施导入隐藏", failures)
 		_expect(is_equal_approx(doorway.position.x, WEST_PARAPET_X), "西侧楼梯门洞墙仍位于旧边界并插入楼梯间", failures)
+	# 四角必须是 2.5m 转角件，而不是继续让两根直段在角上交叉。
+	# 期望位置 = 该角 2.5m 让位区中心；朝向按俯视逆时针 0 → PI/2 → PI → 3PI/2。
+	var corner_expectations := {
+		"SW": {"position": Vector3(-48.75, 0.0, 43.75), "rotation_y": 0.0},
+		"SE": {"position": Vector3(38.75, 0.0, 43.75), "rotation_y": PI * 0.5},
+		"NE": {"position": Vector3(38.75, 0.0, -33.75), "rotation_y": PI},
+		"NW": {"position": Vector3(-48.75, 0.0, -33.75), "rotation_y": PI * 1.5},
+	}
+	for corner_name in corner_expectations.keys():
+		var expectation := corner_expectations[corner_name] as Dictionary
+		var corner_found := rooftop.find_child(
+			"RooftopOuterCorner_%s" % corner_name, false, false
+		) as Node3D
+		_expect(corner_found != null, "100层%s角缺少女儿墙转角件" % corner_name, failures)
+		if corner_found == null:
+			continue
+		_expect(
+			str(corner_found.get_meta("asset_id", "")) == "ENV-ROOFTOP-REF-PARAPET-OUTER",
+			"100层%s角转角件资产ID不符" % corner_name,
+			failures
+		)
+		_expect(
+			bool(corner_found.get_meta("visual_only", false)),
+			"100层%s角转角件不是纯视觉件" % corner_name,
+			failures
+		)
+		_expect(
+			corner_found.position.is_equal_approx(expectation["position"] as Vector3),
+			"100层%s角转角件没有落在2.5m让位区中心：实际%s" % [corner_name, corner_found.position],
+			failures
+		)
+		_expect_angle(
+			corner_found.rotation.y,
+			float(expectation["rotation_y"]),
+			"100层%s角转角件朝向不对：实际%.4f" % [corner_name, corner_found.rotation.y],
+			failures
+		)
 	var west_collision := rooftop.find_child("OuterBoundaryCollision_West", false, false) as StaticBody3D
 	_expect(west_collision != null, "100层西侧边界碰撞缺失", failures)
 	if west_collision != null:
@@ -162,3 +261,130 @@ func _count_nodes_with_suffix(root: Node, suffix: String) -> int:
 func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 	if not condition:
 		failures.append(message)
+
+
+## 角度比较先 wrap 到 (-PI, PI]，避免 3PI/2 这类值因浮点误差误报。
+func _expect_angle(actual: float, expected: float, message: String, failures: Array[String]) -> void:
+	if not is_equal_approx(wrapf(actual - expected, -PI, PI), 0.0):
+		failures.append(message)
+
+
+## 天台女儿墙「按种子随机破损」的运行时对账（2026-09-19 新增）。
+##
+## 用户要求：Blender 里做 3 个「能接起来」的破损变种，导入成 prefab 后**随机排列外墙**。
+## 本函数把这句话落成可实测的不变量：
+##   1. 破损只换外观：四批次件数之和 == 直段槽位总数（槽位没被增删）；
+##   2. 计划 == 摆放：各批次 MultiMesh 的实测实例数逐档等于计划数，且四档都 >0
+##      （防「三件资产躺在仓库里没被用」）；
+##   3. 比例符合口径：总受损率 ∈ [0.15, 0.35]，且破损批次网格包络与 intact 件逐值
+##      相同（「能接起来」的运行时证据）；
+##   4. 排布可复现且真的随机：把「实际槽位 + 实际种子」重算一遍必须得到与运行时
+##      完全相同的计划；同种子两次同结果、换种子必换结果、非天台层整批完好。
+func _verify_rooftop_parapet_damage(
+	rooftop: TowerFloorStage3D, slot_count: int, failures: Array[String]
+) -> void:
+	var seed_value := int(rooftop.get("_outer_damage_seed"))
+	var damage_nodes: Array = rooftop.get("_outer_damage_visual")
+	var batch_counts: Dictionary = rooftop.call("_outer_damage_batch_counts")
+	var planned: Dictionary = rooftop.call("get_outer_damage_counts")
+	var intact_count := int(batch_counts.get("intact", -1))
+	var damaged := 0
+	for key in ROOFTOP_DAMAGE_VARIANT_KEYS:
+		damaged += int(batch_counts.get(key, -1))
+	var ratio := float(damaged) / float(slot_count) if slot_count > 0 else 0.0
+	print(
+		"    [破损排布] seed=%d slots=%d intact=%d dmg_a=%d dmg_b=%d dmg_c=%d damaged=%d ratio=%.4f"
+		% [
+			seed_value,
+			slot_count,
+			intact_count,
+			int(batch_counts.get("dmg_a", -1)),
+			int(batch_counts.get("dmg_b", -1)),
+			int(batch_counts.get("dmg_c", -1)),
+			damaged,
+			ratio,
+		]
+	)
+	# 哨兵：四批次全为 0 时，下面的「求和 == 槽位数」只会退化成 0 == 0 之外的假绿，
+	# 而「计划 == 摆放」会两边同为 0 而恒真 —— 必须先确认真摆了件。
+	_expect(damaged > 0, "100层没有任何破损直段（破损未接线，或哨兵为 0 样本）", failures)
+	_expect(intact_count > 0, "100层完好直段批次为空", failures)
+	_expect(
+		intact_count + damaged == slot_count,
+		"四批次件数之和(%d) != 直段槽位数(%d)：破损增删了槽位"
+			% [intact_count + damaged, slot_count],
+		failures
+	)
+	var all_keys: Array = ["intact"]
+	all_keys.append_array(ROOFTOP_DAMAGE_VARIANT_KEYS)
+	for key in all_keys:
+		_expect(
+			int(planned.get(key, -1)) == int(batch_counts.get(key, -1)),
+			"100层破损计划数(%s=%d)与实际批次实例数(%d)不符"
+				% [key, int(planned.get(key, -1)), int(batch_counts.get(key, -1))],
+			failures
+		)
+		_expect(int(batch_counts.get(key, 0)) > 0, "100层 %s 档一件都没摆上" % key, failures)
+	_expect(
+		ratio >= ROOFTOP_DAMAGE_RATIO_MIN and ratio <= ROOFTOP_DAMAGE_RATIO_MAX,
+		"100层破损比例 %.4f 不在 [%.2f, %.2f]（用户口径约 1/4）"
+			% [ratio, ROOFTOP_DAMAGE_RATIO_MIN, ROOFTOP_DAMAGE_RATIO_MAX],
+		failures
+	)
+	_expect(
+		damage_nodes.size() == ROOFTOP_DAMAGE_VARIANT_KEYS.size(),
+		"100层破损批次不是 %d 个（实际 %d）" % [ROOFTOP_DAMAGE_VARIANT_KEYS.size(), damage_nodes.size()],
+		failures
+	)
+	var outer := rooftop.get("_outer_visual") as MultiMeshInstance3D
+	if outer == null or outer.multimesh == null or outer.multimesh.mesh == null:
+		_expect(false, "100层完好批次 MultiMesh 缺失，无法核对包络", failures)
+		return
+	var intact_aabb := outer.multimesh.mesh.get_aabb()
+	for index in range(damage_nodes.size()):
+		var node := damage_nodes[index] as MultiMeshInstance3D
+		if node == null or node.multimesh == null or node.multimesh.mesh == null:
+			_expect(false, "100层破损批次 %d 不是 MultiMeshInstance3D 或缺网格" % index, failures)
+			continue
+		_expect(node.visible, "100层破损批次 %d 被隐藏（破损位置会露出空洞）" % index, failures)
+		var variant_aabb := node.multimesh.mesh.get_aabb()
+		_expect(
+			variant_aabb.is_equal_approx(intact_aabb),
+			"100层破损件 %s 包络 %s != intact 件 %s（会导致接头错台）"
+				% [ROOFTOP_DAMAGE_VARIANT_KEYS[index], str(variant_aabb), str(intact_aabb)],
+			failures
+		)
+	# 用「实际槽位 + 实际种子」重算计划：这条同时盯住「种子有没有接线」与
+	# 「运行时用的槽位顺序是否与算法假定的顺序一致」。
+	var live_slots: Array = rooftop.call("get_outer_straight_slot_transforms")
+	var recomputed: Dictionary = (
+		TowerFloorStage3D.split_outer_parapet_damage(live_slots, seed_value, true)["counts"]
+	)
+	_expect(
+		planned == recomputed,
+		"100层实际排布 %s 与按种子重算的计划 %s 不符" % [str(planned), str(recomputed)],
+		failures
+	)
+	# 纯函数三条对照（不建第二个 stage，避免再铺一层地砖）：
+	#   同种子必同结果 / 换种子必换结果 / 非天台层整批完好。
+	var probe: Array = []
+	for index in range(slot_count):
+		probe.append(Transform3D(Basis.IDENTITY, Vector3(5.0 * float(index), 0.0, 0.0)))
+	var plan_a: Dictionary = TowerFloorStage3D.split_outer_parapet_damage(probe, ROOFTOP_DAMAGE_PLAN_SEED, true)["counts"]
+	var plan_b: Dictionary = TowerFloorStage3D.split_outer_parapet_damage(probe, ROOFTOP_DAMAGE_PLAN_SEED, true)["counts"]
+	var plan_c: Dictionary = TowerFloorStage3D.split_outer_parapet_damage(probe, ROOFTOP_DAMAGE_PLAN_SEED + 1, true)["counts"]
+	var plan_off: Dictionary = TowerFloorStage3D.split_outer_parapet_damage(probe, ROOFTOP_DAMAGE_PLAN_SEED, false)["counts"]
+	_expect(plan_a == plan_b, "同种子两次排布结果不同（排布不可复现）", failures)
+	_expect(plan_a != plan_c, "换种子排布结果没变（种子没接线，随机写成了常量）", failures)
+	_expect(
+		int(plan_off.get("intact", -1)) == slot_count,
+		"非天台层应整批完好，实际 intact=%d / slots=%d" % [int(plan_off.get("intact", -1)), slot_count],
+		failures
+	)
+	# 变体 prefab 必须真能加载（防「路径写错但件数为 0 时静默跳过」）。
+	for path in ROOFTOP_DAMAGE_VARIANT_PATHS:
+		_expect(
+			ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) != null,
+			"破损变体 prefab 加载失败：%s" % path,
+			failures
+		)

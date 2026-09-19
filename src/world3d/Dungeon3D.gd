@@ -141,6 +141,13 @@ var _next_room_currency_multiplier := 1.0
 var _room_enemy_hp_multipliers: Dictionary = {}
 var _room_enemy_damage_multipliers: Dictionary = {}
 var _room_currency_multipliers: Dictionary = {}
+## 被设计源接管的房「没有吃到的」命运卡补兵数量，按 room_id 记账。
+## 为什么必须记：命运卡补兵与设计源编成是两个来源，同时作用于同一间房的数量就是两处真源打架。
+## 口径 = 设计源赢（这间房出什么由设计源定），命运卡的**倍率**照常生效（那是另一维度，不冲突），
+## 而「下一间房 +N 敌人」这类**数量**效果在本房不被采纳。但**不能静默吞掉** ——
+## 吞掉会表现为「卡抽了没反应」，且无处可查；这里留痕，供界面/门禁/排查读数。
+## 键 = room_id，值 = 被抑制的补兵数量（>0 才入账）。
+var _room_spawn_plan_suppressed_reinforcements: Dictionary = {}
 var _world_currency_multiplier := 1.0
 var _room_clear_bounty_rooms := 0
 var _room_clear_bounty_amount := 0
@@ -1938,13 +1945,26 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		# 设计源接管本房的数量与组成，但命运卡注入的倍率仍须照常落账并清零：
 		# 只写 _room_enemy_*_multipliers 而不清零，会让「下一间房」的临时倍率
 		# 泄漏到更后面的房间（公式路径原本就在末尾做这件事）。
+		# 命运卡的「下一间房 +N 敌人」属于**数量**效果，与设计源编成是两处真源 →
+		# 本房以设计源为准、不采纳补兵；但不静默吞掉，按 room_id 留痕备查。
+		if _next_room_enemy_count > 0:
+			_room_spawn_plan_suppressed_reinforcements[room.room_id] = _next_room_enemy_count
 		_note_room_enemy_modifiers(room)
 		return _commit_room_waves(room, authored_waves)
 	var enemy_configs: Array[Dictionary] = []
 	match room.room_type:
 		"BOSS":
-			enemy_configs.assign(_monster_injector.generate_enemies({"type": "boss", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room)}))
-			enemy_configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
+			# Boss 身份由 BossContentCatalog 唯一解析（设计源 boss_content_id 优先，其次按层号）。
+			# 取不到 → 本房不出 Boss，这是「没写 boss 就是没有 boss」的口径，属**合法空房**。
+			var boss_configs := _monster_injector.generate_enemies({
+				"type": "boss", "floor": floor, "floor_level": floor_level,
+				"floor_number": _elite_floor_number(room),
+				"boss_content_id": str(room.get_meta("boss_content_id", "")),
+			})
+			enemy_configs.assign(boss_configs)
+			# 没有 Boss 就不配精英随从：否则「未指派首领房」会变成精英房，与本房声明不符。
+			if not boss_configs.is_empty():
+				enemy_configs.append_array(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
 		"ELITE":
 			enemy_configs.assign(_monster_injector.generate_enemies({"type": "elite", "floor": floor, "floor_level": floor_level, "floor_number": _elite_floor_number(room), "encounter_id": _elite_encounter_id(room), "seed": run_seed}))
 		"TRAP":
@@ -1986,6 +2006,17 @@ func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 		enemy_configs.append_array(reinforcements)
 		_next_room_enemy_count = 0
 	_note_room_enemy_modifiers(room)
+	# 设计源把 BOSS 房留空（未指派首领，且本层也没有按层指派的内容）是**合法空房**：
+	# 不刷 Boss、不报错、直接放行 —— 这是「没写 boss 就是没有 boss」这一条口径的落地。
+	# 必须早于下面的通用空房分支，否则会以「敌群生成失败」误报并刷屏 push_error。
+	# 顺序要紧：塔楼的 _mark_room_cleared 会在 BOSS 房授予下行权限并改状态栏文案，
+	# 故先清房、后写文案，免得留下「Boss 已击败」这种不实提示。
+	if enemy_configs.is_empty() and room.room_type == "BOSS":
+		_alive_by_room[room.room_id] = 0
+		_room_wave_queues[room.room_id] = []
+		_mark_room_cleared(room, true)
+		status_label.text = "首领房未指派首领 · 区域已放行"
+		return true
 	if enemy_configs.is_empty():
 		push_error("Hostile room %s generated no enemies; unlocking room to prevent a soft lock" % room.room_id)
 		_alive_by_room[room.room_id] = 0
@@ -2026,8 +2057,13 @@ func _note_room_enemy_modifiers(room: DungeonRoom3D) -> void:
 
 ## 读房间设计源给出的刷怪计划并转成波次（每项一波）。
 ## 返回空数组 = 没有覆盖（回退全局公式），不是「零敌人」。
+## 房型判据走 GameDesignConfig.is_spawn_plan_authorable_room 这一条唯一口径，不在本处复刻：
+## BOSS 房一律不接管 —— 即便数据绕过了静态校验，也必须让 boss + elite 生成照常执行，
+## 否则表现为「Boss 房没有 Boss」并可能锁死下楼门。
 func _authored_spawn_waves(room: DungeonRoom3D, floor: int, floor_level: int) -> Array:
 	if _monster_injector == null or room.enemy_spawn_plan.is_empty():
+		return []
+	if not GameDesignConfig.is_spawn_plan_authorable_room(room.room_type):
 		return []
 	return _monster_injector.build_waves_from_plan(room.enemy_spawn_plan, floor, floor_level)
 
@@ -2117,8 +2153,10 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		var damage_multiplier := float(_room_enemy_damage_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(damage_multiplier, 1.0):
 			enemy.contact_damage = maxi(1, int(round(float(enemy.contact_damage) * damage_multiplier)))
-		var points := room.enemy_spawn_points
-		enemy.global_position = points[index % points.size()] if not points.is_empty() else room.global_position
+		# 逐只取落点，而不是 points[index % size]：布局房只有 4 个环形点，而设计源的房间级
+		# 刷怪计划允许一波 24 只 —— 取模会让超出的敌人逐只叠在同一坐标（看起来只有一只）。
+		# 唯一落点算法在 DungeonRoom3D.spawn_point_for_index，公式路径与设计源路径共用。
+		enemy.global_position = room.spawn_point_for_index(index)
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)

@@ -32,12 +32,17 @@ var _registry: Dictionary = {
 	"attachment": {}
 }
 
+## 出厂配发主武器。`Player3D.start_with_weapon` 经 `get_starting_weapon_tree()`
+## 走到这里，所以换掉这一个 ID 就等于换掉「新档出生 / 死亡返城」白送的枪。
+const DEFAULT_STARTING_GUN_ID := "bp_sprinkler"
+
 ## PUBG式统一槽位框架：界面位置固定，枪型只声明开放的槽位子集。
 const ROOT_ATTACHMENT_SUPPORT := {
 	"GunBody_Pistol": ["scope", "muzzle", "magazine", "mutator"],
 	"GunBody_Shotgun": ["muzzle", "magazine", "stock", "tactical", "mutator"],
 	"GunBody_Rifle": ["scope", "muzzle", "magazine", "stock", "tactical", "mutator"],
 	"GunBody_Machinegun": ["scope", "muzzle", "magazine", "stock", "tactical"],
+	"GunBody_Sprinkler": ["scope", "muzzle", "magazine", "stock", "tactical"],
 	"GunBody_Sniper": ["scope", "muzzle", "magazine", "stock", "mutator"],
 	"GunBody_Launcher": ["scope", "stock", "tactical", "mutator"],
 	"GunBody_Charge": ["scope", "stock", "tactical", "mutator"],
@@ -48,6 +53,7 @@ const ASSEMBLY_NODE_ITEM_IDS := {
 	"GunBody_Shotgun": "weapon_shotgun",
 	"GunBody_Rifle": "weapon_rifle",
 	"GunBody_Machinegun": "weapon_machinegun",
+	"GunBody_Sprinkler": "weapon_sprinkler",
 	"GunBody_Sniper": "weapon_sniper",
 	"GunBody_Launcher": "weapon_launcher",
 	"GunBody_Charge": "weapon_charge",
@@ -78,6 +84,13 @@ func _build_registry() -> void:
 		"factory": func(): return _create_gunbody_pistol(),
 		"tags": ["pistol", "semi_auto", "sidearm"],
 		"display_name": "豌豆手枪",
+	})
+	_register_gunbody({
+		"item_id": "bp_sprinkler",
+		"tier": 0,
+		"factory": func(): return _create_gunbody_sprinkler(),
+		"tags": ["auto", "high_rate", "spray"],
+		"display_name": "花洒机枪",
 	})
 	_register_gunbody({
 		"item_id": "bp_shotgun",
@@ -367,11 +380,18 @@ func get_attachment_slot_type_for_item(item: Dictionary) -> int:
 
 ## 构建一个完整武器树（枪身+子弹），根据蓝图Tier自动选择
 func build_default_weapon_tree(blueprint_tier: int) -> WeaponAssemblyTree:
-	# 枪身：按优先级选一个可用的
+	# 枪身：优先给出厂枪；它被 Tier 锁住时才退回可用列表首位。
 	var available_guns: Array[Dictionary] = get_available_gunbodies(blueprint_tier)
-	var gun_id: String = "bp_pistol"  # 默认
-	if not available_guns.is_empty():
-		gun_id = available_guns[0]["item_id"]
+	var gun_id: String = DEFAULT_STARTING_GUN_ID
+	var starter_present := false
+	for gun in available_guns:
+		if str(gun["item_id"]) == gun_id:
+			starter_present = true
+			break
+	if not starter_present:
+		gun_id = "bp_pistol"
+		if not available_guns.is_empty():
+			gun_id = available_guns[0]["item_id"]
 
 	# 子弹：尝试挂一个同Tier可用的
 	var available_bullets: Array[Dictionary] = get_available_bullets(blueprint_tier)
@@ -470,6 +490,17 @@ func _create_gunbody_machinegun() -> AssemblyNode:
 	node.set_base_stats({
 		"damage": 15, "fire_rate": 12.0, "bullet_count": 1,
 		"spread": 0.15, "reload_time": 2.8, "magazine_size": 60,
+	})
+	return node
+
+## 出厂机枪：沿用蜂窝机枪的射速与散布，单发伤害减半、弹匣加厚到 100 发。
+## 它是白送枪，所以不开放「特性」槽，命运槽容量由 ItemRegistry 限成 4。
+func _create_gunbody_sprinkler() -> AssemblyNode:
+	var node := AssemblyNode.new(AssemblyNode.NodeType.GUN_BODY, "GunBody_Sprinkler")
+	node.tags = ["auto", "high_rate", "spray"]
+	node.set_base_stats({
+		"damage": 8, "fire_rate": 12.0, "bullet_count": 1,
+		"spread": 0.15, "reload_time": 2.8, "magazine_size": 100,
 	})
 	return node
 

@@ -145,7 +145,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw := value as Dictionary
 		# 本字典是**白名单重建**，不是原样透传：设计源新增字段若忘记在此登记，
 		# 会被静默丢掉（不会报错、也不会红），因此每次扩字段都要连这里一起改。
-		# enemy_spawn_plan 就是这样的字段：房间级刷怪计划（波次/每波数量/怪物组成）。
+		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）。
 		var spawn_plan: Dictionary = {}
 		var raw_spawn_plan: Variant = raw.get("enemy_spawn_plan", {})
 		if raw_spawn_plan is Dictionary:
@@ -163,6 +163,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"size": _vec2(raw.get("size_m", [])),
 			"rotation_deg": float(raw.get("template_rotation_deg", 0.0)),
 			"content_type": str(raw.get("content_type", "")),
+			"boss_content_id": str(raw.get("boss_content_id", "")),
 			"enemy_spawn_plan": spawn_plan,
 			"declared_ports": raw.get("ports", []),
 			"ports": [],

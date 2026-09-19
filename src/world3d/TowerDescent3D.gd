@@ -1501,7 +1501,12 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	if not spawn_plan.is_empty():
 		record["enemy_spawn_plan"] = spawn_plan.duplicate(true)
 	if str(spec.get("type", "")) == "BOSS":
-		var boss_profile := BossContentCatalog.get_for_floor(int(plan.get("floor_number", 0)))
+		# Boss 身份解析走唯一口径（BossContentCatalog.resolve_profile）：
+		# 设计源房间的 boss_content_id 优先，其次按层号指派。取不到 → 一条 boss 字段都不落，
+		# 运行时该房即「未指派首领」的合法空房（口径：没写 boss 就是没有 boss）。
+		var boss_profile := BossContentCatalog.resolve_profile(
+			str(spec.get("boss_content_id", "")), int(plan.get("floor_number", 0))
+		)
 		if not boss_profile.is_empty():
 			record["boss_content_id"] = str(boss_profile["boss_content_id"])
 			record["arena_asset_id"] = str(boss_profile["arena_asset_id"])

@@ -108,6 +108,10 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 	var guard_checks := 0
 	var guard_rooms := 0
 	var guard_plans := 0
+	# 首领指派的**样本数**：当前没有任何关卡在数据里写 boss_content_id，此值会是 0，
+	# 意味着「设计源 → 运行时」的透传断言是空跑。必须把它打出来，别让 0 样本
+	# 伪装成通过；透传机制本身由 verify_test_level_99_flow 的手写 patch 探针单独覆盖。
+	var guard_boss_ids := 0
 	for level_id in targets:
 		var level_plan := LOADER.load_level_plan(level_id)
 		if level_plan.is_empty():
@@ -126,8 +130,10 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 			if not bool(plan.get("valid", false)):
 				errors.append("floor %d: 生成器自校验未通过" % floor_number)
 			var source_plans := _source_spawn_plans(level_id, floor_number)
+			var source_boss_ids := _source_boss_content_ids(level_id, floor_number)
 			level_plans += source_plans.size()
 			guard_plans += source_plans.size()
+			guard_boss_ids += source_boss_ids.size()
 			var rooms: Array = plan.get("rooms", [])
 			level_rooms += rooms.size()
 			var content_rooms := 0
@@ -146,6 +152,9 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 					)
 				errors.append_array(
 					_verify_spawn_plan_carried(floor_number, key, room, source_plans)
+				)
+				errors.append_array(
+					_verify_boss_content_id_carried(floor_number, key, room, source_boss_ids)
 				)
 				if ROLE_EXPECTED_TYPE.has(role):
 					var expected := str(ROLE_EXPECTED_TYPE[role])
@@ -193,9 +202,14 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				print("LEVEL_PLAN_RUNTIME_ERROR %s %s" % [level_id, str(error)])
 	if failed_levels == 0:
 		print(
-			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d"
-			% [targets.size(), guard_rooms, guard_checks, guard_plans]
+			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d boss_ids=%d"
+			% [targets.size(), guard_rooms, guard_checks, guard_plans, guard_boss_ids]
 		)
+		if guard_boss_ids == 0:
+			print(
+				"LEVEL_PLAN_RUNTIME_NOTE 设计源暂无 boss_content_id 样本，"
+				+ "该字段的透传由 verify_test_level_99_flow 的手写 patch 探针覆盖"
+			)
 	return failed_levels
 
 
@@ -252,6 +266,46 @@ func _spawn_plan_signature(plan: Dictionary) -> String:
 			wave_total += int((monster_value as Dictionary).get("count", 0))
 		parts.append(str(wave_total))
 	return "%d|%s" % [waves.size(), ",".join(parts)]
+
+
+## 读该层设计源里每个房间的 `boss_content_id`（按 key 索引），用于下面的透传断言。
+func _source_boss_content_ids(level_id: String, floor_number: int) -> Dictionary:
+	var out: Dictionary = {}
+	var floor_plan := LOADER.load_floor_plan(level_id, floor_number)
+	for value in floor_plan.get("rooms", []):
+		if not (value is Dictionary):
+			continue
+		var raw := value as Dictionary
+		var content_id := str(raw.get("boss_content_id", ""))
+		if not content_id.is_empty():
+			out[str(raw.get("key", ""))] = content_id
+	return out
+
+
+## 断言设计源的首领指派 `boss_content_id` **原样透传到运行时计划**。
+##
+## 与 `_verify_spawn_plan_carried` 同源理由：`LevelPlanLoader.normalize_floor` 是白名单
+## 重建，房间级新字段忘登记就会被静默丢掉 —— 不报错、不警告，运行时退化成
+## 「按层号取首领」或「不出首领」，表现为「我明明指定了却没生效」。此处逐房比对。
+func _verify_boss_content_id_carried(
+	floor_number: int, key: String, room: Dictionary, source_boss_ids: Dictionary
+) -> Array[String]:
+	var errors: Array[String] = []
+	if not source_boss_ids.has(key):
+		return errors
+	var expected := str(source_boss_ids[key])
+	var carried := str(room.get("boss_content_id", ""))
+	if carried.is_empty():
+		errors.append(
+			"floor %d room %s: boss_content_id 未透传到运行时计划（应为 %s）"
+			% [floor_number, key, expected]
+		)
+	elif carried != expected:
+		errors.append(
+			"floor %d room %s: boss_content_id 透传后被改写 %s -> %s"
+			% [floor_number, key, expected, carried]
+		)
+	return errors
 
 
 ## 支持 --level=<id> 覆盖默认目标；无参数时校验 TARGET_LEVELS。

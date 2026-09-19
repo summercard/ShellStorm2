@@ -116,6 +116,7 @@ core_scenes=(
   verify_3d_fate_weapon_flow
   verify_3d_inventory_weapon_flow
   verify_weapon_instance_contract_matrix
+  verify_starting_weapon_contract
   verify_equipment_transaction_service
   verify_weapon_attachment_inventory_flow
   verify_weapon_instance_fate_ownership_flow

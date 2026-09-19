@@ -172,6 +172,43 @@ const ROOM_TYPES_WITH_HOSTILES: Array[String] = [
 	"SCAVENGE",
 ]
 
+## Boss 房型。Boss 的**出场与结算**归生成工具：`BossContentCatalog` 是首领名册，
+## `MonsterInjector._generate_boss` / `EnemyAvatar3D` 是装配端。设计源只做两件事：
+##   ① 声明本房是 Boss 房（`role: "boss"` / `content_type: "BOSS"`）；
+##   ② **可选**地用 `boss_content_id` 指定本房出场的是名册里的哪一个首领。
+## 设计源**不参与编成**（不写波次/数量/技能袋/竞技场）——那些由名册条目决定。
+const BOSS_ROOM_TYPE := "BOSS"
+
+## Boss 房角色名。`FloorPlanGenerator._assign_content_types_data_driven` 依据它把房间
+## **钉成** `type = "BOSS"`，所以 role 与 content_type 是同一件事的两种写法，都要认。
+const BOSS_ROOM_ROLE := "boss"
+
+
+## 房间级刷怪计划能否写在该房型上 —— **唯一口径**。
+## 消费方共两处，都必须走本函数，禁止各自复刻列表（否则会出现两套口径互相冲突）：
+##   ① `LevelPlanValidator._validate_enemy_spawn_plan` —— 静态校验，写错即报错；
+##   ② `Dungeon3D._authored_spawn_waves` —— 运行时兜底，数据绕过校验也不接管。
+## 判据 = 会刷怪的房型（否则永不调用刷怪入口，写了等于静默失效）且不是 BOSS。
+## 为什么 BOSS 房必须排除：`_authored_spawn_waves` 会先于 `match room.room_type` 返回，
+## boss + elite 整段被跳过，表现为「Boss 房没有 Boss」并可能锁死下楼门。
+static func is_spawn_plan_authorable_room(content_type: String) -> bool:
+	return (
+		ROOM_TYPES_WITH_HOSTILES.has(content_type)
+		and content_type != BOSS_ROOM_TYPE
+	)
+
+
+## 本房是不是 Boss 房 —— **唯一口径**，两个消费方都必须走本函数：
+##   ① `LevelPlanValidator._validate_enemy_spawn_plan`（Boss 房禁写刷怪计划）；
+##   ② `LevelPlanValidator._validate_boss_content_id`（只有 Boss 房可指派首领身份）。
+## 为什么 content_type 与 role 都要看：`FloorPlanGenerator._assign_content_types_data_driven`
+## 会把 `role == "boss"` 的房间**钉成** `type = "BOSS"`（玩法不变量），因此即便设计源
+## 没显式写 content_type，运行时它照样是 Boss 房 —— 只看 content_type 会让这种房间
+## 绕过静态校验（运行时兜底虽在，但报错点应当前移，别让作者靠猜）。
+## 禁止在别处复刻这条判据。
+static func is_boss_room(content_type: String, role: String) -> bool:
+	return content_type == BOSS_ROOM_TYPE or role == BOSS_ROOM_ROLE
+
 
 static func scene_exists(scene_path: String) -> bool:
 	return not scene_path.is_empty() and ResourceLoader.exists(scene_path, "PackedScene")

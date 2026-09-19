@@ -75,7 +75,9 @@ func generate_enemies(config: Dictionary) -> Array[Dictionary]:
 			if not elite.is_empty():
 				enemies.append(elite)
 		"boss":
-			enemies.append(_generate_boss(floor, floor_level, config))
+			var boss := _generate_boss(floor, floor_level, config)
+			if not boss.is_empty():
+				enemies.append(boss)
 		"minion":
 			enemies = _generate_minion_pack(floor, floor_level)
 		"guard":
@@ -258,7 +260,10 @@ func _generate_elite(floor: int, floor_level: int, request: Dictionary = {}) -> 
 		base = EliteRosterService.apply_archive_to_enemy_config(base, elite_snapshot)
 	return base
 
-## 生成Boss敌人
+## 生成Boss敌人。
+## 返回 **空字典 = 本房不出 Boss**（名册里没有可用内容，或设计源写了不存在的 ID）。
+## 调用方（`generate_enemies` 的 "boss" 分支 / `Dungeon3D._spawn_room_enemies`）
+## 必须把空字典当作「合法空房」处理，不得当成生成失败。
 func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> Dictionary:
 	var scaling: Dictionary = FLOOR_SCALING.get(floor, FLOOR_SCALING[1])
 	var hp: float = 200.0 * scaling["hp_mult"]
@@ -301,18 +306,24 @@ func _generate_boss(floor: int, floor_level: int, request: Dictionary = {}) -> D
 			"boss_name", "%s首领" % _theme_profile.display_name
 		))
 		result["theme_id"] = _theme_profile.theme_id
+	# Boss 身份的唯一解析口径见 BossContentCatalog.resolve_profile：
+	# 设计源指定的 boss_content_id 优先，其次按层指派（95/90/85）。
+	# 名册条目同时决定目标名、正式模型、竞技场与阶段技能袋 —— 设计源只负责「指定哪一个」。
 	var floor_number := int(request.get("floor_number", 95))
-	var boss_profile := BossContentCatalog.get_for_floor(floor_number)
-	if not boss_profile.is_empty():
-		result["floor_number"] = floor_number
-		result["boss_content_id"] = str(boss_profile["boss_content_id"])
-		result["name"] = str(boss_profile["display_name"])
-		result["presentation_asset_id"] = str(boss_profile["presentation_asset_id"])
-		result["presentation_scene"] = str(boss_profile["presentation_scene"])
-		result["arena_asset_id"] = str(boss_profile["arena_asset_id"])
-		result["arena_scene"] = str(boss_profile["arena_scene"])
-		result["boss_accent"] = boss_profile.get("accent", Color(1.0, 0.2, 0.035))
-		result["boss_phase_skill_bags"] = (boss_profile["phase_skill_bags"] as Dictionary).duplicate(true)
+	var boss_profile := BossContentCatalog.resolve_profile(
+		str(request.get("boss_content_id", "")), floor_number
+	)
+	if boss_profile.is_empty():
+		return {}
+	result["floor_number"] = int(boss_profile.get("floor_number", floor_number))
+	result["boss_content_id"] = str(boss_profile["boss_content_id"])
+	result["name"] = str(boss_profile["display_name"])
+	result["presentation_asset_id"] = str(boss_profile["presentation_asset_id"])
+	result["presentation_scene"] = str(boss_profile["presentation_scene"])
+	result["arena_asset_id"] = str(boss_profile["arena_asset_id"])
+	result["arena_scene"] = str(boss_profile["arena_scene"])
+	result["boss_accent"] = boss_profile.get("accent", Color(1.0, 0.2, 0.035))
+	result["boss_phase_skill_bags"] = (boss_profile["phase_skill_bags"] as Dictionary).duplicate(true)
 	return result
 
 ## 生成小怪群

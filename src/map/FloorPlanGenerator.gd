@@ -113,6 +113,47 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 	return plan
 
 
+## —— 单间房的「设计源 → 运行时计划」透传（唯一登记点）——
+##
+## 房间级**可选**字段只在此处登记一次：`enemy_spawn_plan`（刷怪计划）、
+## `boss_content_id`（首领指派）。两处消费方（`generate_from_level_plan` 与
+## 验收脚本）都走本函数，禁止各自复刻字段表。
+##
+## 为什么抽成独立函数：这些字段**当前没有任何关卡在数据里写**，端到端断言
+## 因此会退化成空跑（0 个样本、静默通过）。抽出来之后可以用手写 patch 直接
+## 驱动本函数，把「透传不漏字段」钉成一条真会失败的断言。
+## 同时它与 `LevelPlanLoader.normalize_floor` 的白名单是一对：那边漏登记
+## 字段会被静默丢弃（源头），这边漏登记会被静默丢弃（出口），两头都要有闸。
+static func room_from_source(src: Dictionary) -> Dictionary:
+	var role := str(src.get("role", "main"))
+	# 运行时房间 ID：优先 legacy_room_id，使既有存档的 room_progress 索引不变；
+	# 新关卡没有 legacy 字段时才用 05.2 §7.1 的新规则 room_id。
+	var runtime_id := str(src.get("legacy_room_id", ""))
+	if runtime_id.is_empty():
+		runtime_id = str(src.get("room_id", ""))
+	var content_type := str(src.get("content_type", ""))
+	if content_type.is_empty():
+		# 功能性 role 的缺省 type，口径与内置房表逐值一致（见 _default_type_for_role）。
+		# 设计源显式写了 content_type 时以设计源为准（钉死优先）。
+		content_type = _default_type_for_role(role)
+	return {
+		"key": str(src.get("key", "")),
+		"id": runtime_id,
+		"type": content_type,
+		"role": role,
+		"position": src.get("center", Vector2.ZERO) as Vector2,
+		"dimensions": src.get("size", Vector2.ZERO) as Vector2,
+		"parent_key": str(src.get("parent_key", "")),
+		# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
+		# 与 content_type 同样属于「设计源钉死优先」的字段，本层只透传不解释。
+		"enemy_spawn_plan": (src.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
+		# 房间级首领指派（仅 Boss 房有效）。空串 = 不指派：
+		# 塔楼按层号取名册条目，单层关卡则**不出 Boss**（口径见 BossContentCatalog.resolve_profile）。
+		# 只透传不解释；本字段**不进 layout_id**，故改它不会让既有存档失配。
+		"boss_content_id": str(src.get("boss_content_id", "")),
+	}
+
+
 ## —— 数据驱动路径（依据 05.2 §3 / §8 S3）——
 ##
 ## 读 L1/L2/L3 设计源，产出与 generate() 同形的 plan 字典，供
@@ -145,30 +186,7 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 			boss_floor = true
 	var rooms: Array[Dictionary] = []
 	for value in normalized.get("rooms", []):
-		var src := value as Dictionary
-		var role := str(src.get("role", "main"))
-		# 运行时房间 ID：优先 legacy_room_id，使既有存档的 room_progress 索引不变；
-		# 新关卡没有 legacy 字段时才用 05.2 §7.1 的新规则 room_id。
-		var runtime_id := str(src.get("legacy_room_id", ""))
-		if runtime_id.is_empty():
-			runtime_id = str(src.get("room_id", ""))
-		var content_type := str(src.get("content_type", ""))
-		if content_type.is_empty():
-			# 功能性 role 的缺省 type，口径与内置房表逐值一致（见 _default_type_for_role）。
-			# 设计源显式写了 content_type 时以设计源为准（钉死优先）。
-			content_type = _default_type_for_role(role)
-		rooms.append({
-			"key": str(src.get("key", "")),
-			"id": runtime_id,
-			"type": content_type,
-			"role": role,
-			"position": src.get("center", Vector2.ZERO) as Vector2,
-			"dimensions": src.get("size", Vector2.ZERO) as Vector2,
-			"parent_key": str(src.get("parent_key", "")),
-			# 房间级刷怪计划（设计源覆盖）。空字典 = 该房走全局公式。
-			# 与 content_type 同样属于「设计源钉死优先」的字段，本层只透传不解释。
-			"enemy_spawn_plan": (src.get("enemy_spawn_plan", {}) as Dictionary).duplicate(true),
-		})
+		rooms.append(room_from_source(value as Dictionary))
 	var rng := RandomNumberGenerator.new()
 	# abci/absi 返回 int：^ 的左右操作数必须都是 int，absf 会让此处 parse error。
 	rng.seed = run_seed ^ absi(str(level_id).hash()) ^ (floor_number << 17)

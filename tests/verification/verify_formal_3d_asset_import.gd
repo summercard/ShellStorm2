@@ -150,19 +150,28 @@ func _contains_seat_name(root: Node) -> bool:
 	return false
 
 
+## gun_id -> 该内容 ID 必须能解析到的正式美术 logic_id。
+## 断言的是「映射到了正式导入资产」而不是「与 gun_id 同名」：花洒机枪
+## 复用蜂窝机枪的 water_tank_blaster 美术，两行因此指向同一个 logic_id。
 func _verify_runtime_mapping(failures: Array[String]) -> void:
 	var expected := {
-		"bp_pistol": "hair_dryer", "bp_shotgun": "double_barrel_cannon",
-		"bp_rifle": "broom_rifle", "bp_machinegun": "water_tank_blaster",
-		"bp_sniper": "candy_sniper", "bp_launcher": "toaster_launcher",
-		"bp_charge": "gumball_cannon",
+		"bp_pistol": "bp_pistol", "bp_shotgun": "bp_shotgun",
+		"bp_rifle": "bp_rifle", "bp_machinegun": "bp_machinegun",
+		"bp_sprinkler": "bp_machinegun",
+		"bp_sniper": "bp_sniper", "bp_launcher": "bp_launcher",
+		"bp_charge": "bp_charge",
 	}
 	for gun_id in expected:
+		var expected_logic := str(expected[gun_id])
 		var model := WeaponModel3D.new()
 		add_child(model)
 		_check(model.configure(str(gun_id), "mod_bullet_standard"), "%s 不能配置正式模型" % gun_id, failures)
-		var imported := _find_logic_asset(model, str(gun_id))
-		_check(imported != null, "%s 未映射到独立正式枪械资产" % gun_id, failures)
+		var imported := _find_logic_asset(model, expected_logic)
+		_check(
+			imported != null,
+			"%s 未映射到正式枪械资产（期望 logic_id=%s）" % [gun_id, expected_logic],
+			failures
+		)
 		model.queue_free()
 
 

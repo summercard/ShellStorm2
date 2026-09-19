@@ -213,7 +213,21 @@ for fi in [2, 3, 4, 5]:
 
 1. 读代码——`Basis.scaled()` 的语义本身是可靠的（`Basis.IDENTITY.scaled(Vector3(1,0.5,1))` 确实得到 Y=0.5），错的是回读；
 2. 让被测代码把真实值**回填进 `get_snapshot()` 字段**再断言（例：`TowerFloorStage3D` 把外墙实际纵向缩放写进 `outer_visual_scale_y`，门禁从此有据可依）；
-3. 或改跑**非 headless**（`visual/renderer` 类场景）。
+3. 或**把同一条命令的 `--headless` 直接去掉**，跑真渲染器（2026-09-19 实测有效，见下）。
+
+**已有探针想拿真实实例位置时，优先用第 3 条**——不用改代码，把 `--headless` 删掉即可，实例变换立刻回读正常：
+
+```bash
+# ❌ 实例全变单位阵
+"<godot-console>" --headless --path "<project>" --scene res://tests/verification/<probe>.tscn
+# ✅ 回读正常；会短暂弹一个窗口，跑完自己退
+"<godot-console>" --path "<project>" --scene res://tests/verification/<probe>.tscn
+```
+
+实测对照（`probe_rooftop_parapet_alignment`，同一份代码同一天）：headless 下 61 个直段实例**全部** `origin=(0,0,0)`，四条边一律误报「缺 80m 以上」；去掉 `--headless` 后同一批实例给出 `origin=(-45,0,-34.75)` 等真实值，四条边 `gap=0.000 / overlap=0.000`。
+→ **headless 跑出的「大面积缺失 / 数量对不上」先怀疑这条回读限制，别急着改装配代码**；反过来，带窗口跑出来的覆盖/接缝结论才可作为验收证据。
+
+> 探针自己写判据时另有一条：量「贴某条边界」的成员，必须用**垂直于该边**的轴判跨界。南北边（boundary 是 Z）看 Z，东西边（boundary 是 X）看 X；一律拿 Z 判会让竖边恒报「一个模块都没有」。
 
 > ⚠️ 别用回读值下「资产没缩放 / 没定位」的结论——会得到一个看起来精确、实际纯属虚构的判据，并据此改错代码。
 

@@ -201,6 +201,13 @@ const WEAPON_ANIMATION_PROFILES := {
 		"roll": -0.04,
 		"lift": 0.018,
 	},
+	"bp_sprinkler": {
+		"fire_style": "machinegun_rattle",
+		"kick": 0.68,
+		"pitch": 0.16,
+		"roll": -0.04,
+		"lift": 0.018,
+	},
 	"bp_sniper": {
 		"fire_style": "sniper_long_recoil",
 		"kick": 1.62,

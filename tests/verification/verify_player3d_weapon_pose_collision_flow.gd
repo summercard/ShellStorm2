@@ -8,6 +8,7 @@ const EXPECTED_FIRE_STYLES := {
 	"bp_shotgun": "shotgun_heavy_pump",
 	"bp_rifle": "rifle_braced_burst",
 	"bp_machinegun": "machinegun_rattle",
+	"bp_sprinkler": "machinegun_rattle",
 	"bp_sniper": "sniper_long_recoil",
 	"bp_launcher": "launcher_body_push",
 	"bp_charge": "charge_release",
@@ -60,11 +61,17 @@ func _ready() -> void:
 		failures.append("Invisible virtual capsule did not produce a real gameplay wall collision")
 	player.global_position = Vector3.ZERO
 
+	# 出厂枪已由豌豆手枪换成花洒机枪，因此「手枪」不再等于「默认枪」。
+	# 本段验的是手枪专用的单手持枪姿势路径（sidearm_hold/run/fire），必须显式装备，
+	# 否则这里量到的是机枪的 longgun 路径，断言会永远对不上。
+	if not player.equip_weapon("bp_pistol", "mod_bullet_standard"):
+		failures.append("Could not equip pistol for the sidearm pose verification")
+	await get_tree().process_frame
 	_set_presentation_state(player, "idle")
 	_advance_avatar(player, 0.10, 3)
 	var sidearm_hold := player.avatar.get_component_snapshot()
 	if str(sidearm_hold.get("weapon_pose_state", "")) != "sidearm_hold":
-		failures.append("Default pistol did not enter sidearm_hold")
+		failures.append("Pistol did not enter sidearm_hold")
 	if int(sidearm_hold.get("active_grip_hand_count", 0)) != 1:
 		failures.append("Pistol pose does not use exactly one gripping hand")
 	if str(sidearm_hold.get("authored_motion_clip", "")) != "armed_idle":
@@ -154,7 +161,7 @@ func _ready() -> void:
 		player.call("_clear_action_overlays")
 		_set_presentation_state(player, "idle")
 		if not player.equip_weapon(gun_id, "mod_bullet_standard"):
-			failures.append("Could not equip %s for the seven-gun animation profile check" % gun_id)
+			failures.append("Could not equip %s for the %d-gun animation profile check" % [gun_id, EXPECTED_FIRE_STYLES.size()])
 			continue
 		await get_tree().process_frame
 		_advance_avatar(player, 0.10, 1)
@@ -172,8 +179,16 @@ func _ready() -> void:
 		fire_styles_seen[fire_style] = true
 		if (fire_snapshot.get("action_rotation", Vector3.ZERO) as Vector3).length() > 0.001:
 			failures.append("%s still injects a procedural character fire pose" % gun_id)
-	if fire_styles_seen.size() != EXPECTED_FIRE_STYLES.size():
-		failures.append("The seven gun bodies do not all retain their functional fire-style metadata")
+	# 判据是「**不同的**开火风格种类」都被覆盖到，不是「风格条数 == 配置表条数」：
+	# 花洒机枪与蜂窝机枪刻意共用 machinegun_rattle，两者相加会让条数多算一个。
+	var expected_style_kinds: Dictionary = {}
+	for gun_id in EXPECTED_FIRE_STYLES:
+		expected_style_kinds[str(EXPECTED_FIRE_STYLES[gun_id])] = true
+	if fire_styles_seen.size() != expected_style_kinds.size():
+		failures.append(
+			"The %d gun bodies do not all retain their functional fire-style metadata (%d/%d distinct styles)"
+			% [EXPECTED_FIRE_STYLES.size(), fire_styles_seen.size(), expected_style_kinds.size()]
+		)
 
 	player.queue_free()
 	wall.queue_free()

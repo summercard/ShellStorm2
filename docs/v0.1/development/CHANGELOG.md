@@ -1,5 +1,22 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-19｜关卡设计源支持房间级覆盖：刷怪计划 `enemy_spawn_plan` 与首领指派 `boss_content_id`
+
+- 背景：关卡设计源（L2 `floors/floor_NN.json`）此前只能定**几何与内容类型**，控制不了「这一间房刷什么」和「这一间 Boss 房出哪个首领」。本次给房间加两个**可选**字段，让设计源能覆盖这两件事，同时**不新增任何数值真源**。
+- `enemy_spawn_plan`（房间级刷怪计划）：写了就由设计源全量接管该房的**波次数 / 每波数量 / 怪物组合**，`desired = 4 + floor*2` 公式、COMBAT 波次表 `[1,2,2,3]`、主题权重池 `enemy_pool` 一律不参与；**单只怪的数值仍由 `MonsterInjector` 出**（主题倍率 + 楼层缩放照常生效），设计源只写「要谁、几只」。硬上限波数 ≤ 6 / 单波 ≤ 24 / 全房 ≤ 64。`monsters[].type` 只能取 `BASE_ENEMY_TYPES` 去掉 `boss` 的 6 个值。
+- `boss_content_id`（房间级首领指派）：只指定本 Boss 房出场的**是哪一个**首领，其余（显示名 / 正式模型 / 竞技场资产 / 阶段技能袋 / 强调色）全部由名册 `BossContentCatalog` 决定 —— **设计源绝不写竞技场或技能袋**，否则会与名册形成两份真源。当前可填 3 个（`boss_abyss_archivist_95` / `boss_furnace_warden_90` / `boss_hollow_choir_85`）。
+- **口径统一（新增两条唯一真源函数，禁止在别处复刻表）：**
+  - `GameDesignConfig.is_spawn_plan_authorable_room(content_type)` = 房型属于 `ROOM_TYPES_WITH_HOSTILES` **且不是 `BOSS`**。原 `SPAWN_PLAN_FORBIDDEN_ROOM_TYPE` 常量被 `BOSS_ROOM_TYPE` / `BOSS_ROOM_ROLE` 取代。
+  - `GameDesignConfig.is_boss_room(content_type, role)` = `content_type == "BOSS"` **或** `role == "boss"`。两者都要认，因为 `FloorPlanGenerator._assign_content_types_data_driven` 会把 `role == "boss"` 的房间**钉成** `type = "BOSS"`；只看 `content_type` 会让这种房间绕过静态校验。
+  - `BossContentCatalog.resolve_profile(authored_content_id, floor_number)` 是首领身份的**唯一解析口径**：①写了 ID 就用它，层号取内容**固有层号**；②没写则按房间所在层号取名册条目（塔楼 95/90/85 照旧）；③两层都取不到（**单层关卡没写**）→ **本房不出 Boss**；④写了但名册里没有 → **返回空、绝不静默换人**。
+- **「没写 boss 就是没有 boss」落地为合法空房**（用户确认口径）：单层关卡的 Boss 房若未指派首领，`Dungeon3D._spawn_room_enemies` 走专门的空房分支 —— 清房放行、状态栏「首领房未指派首领 · 区域已放行」，**不 `push_error`**（必须早于通用「敌群生成失败」分支，否则会误报并刷屏）。`MonsterInjector.generate_enemies` 的 `"boss"` 分支同时改为**空字典不入列**，与 `"elite"` 分支一致。
+- **校验新增两条错误码：** `enemy_spawn_plan_on_boss_room`（Boss 房不归设计源管）、`boss_content_id_on_non_boss_room` / `boss_content_id_unknown`（首领指派填错位置或指向名册外内容）。
+- **透传链路是「四道白名单」，四处都补齐：** `LevelPlanLoader.normalize_floor`（源→规范化层）→ `FloorPlanGenerator.room_from_source`（规范化层→运行时计划，本次**从 `generate_from_level_plan` 的循环体抽成独立函数**以便直接驱动）→ `TowerDescent3D._append_plan_room_record`（计划→塔楼 record）→ 两处 `configure({...})`（record→房实例）。`Dungeon3D` 的 BOSS 分支把 `room.get_meta("boss_content_id")` 传进刷怪入口。**两个字段都刻意不进 `layout_id`**（存档指纹），改它们不会让既有存档失配。
+- **门禁：** 四项全绿 —— `verify_level_plan_design_source`（`LEVEL_PLAN_VALIDATE_OK` + `LEVEL_PLAN_RUNTIME_GUARD_OK`，现在多打一个 `boss_ids=` 样本计数）、`verify_test_level_99_flow`（`TEST_LEVEL_99_FLOW_OK`，新增 `_verify_boss_identity`）、`verify_expedition_level01_flow`、`verify_floor_plan_generator`（`layout_ids=100` 不变，证明未动存档指纹）。回归：`verify_unique_boss_content_flow` / `verify_three_segment_tower_generation_flow` / `verify_tower_descent_flow` / `verify_tower_floor_room_authority` 全绿，塔楼 95/90/85 首领照常出场。
+- ⚠️ **两处「空跑门禁」已识别并处理：** ①`LEVEL_PLAN_RUNTIME_GUARD_OK` 新增 `boss_ids=` 计数，并在为 0 时另打一行 `LEVEL_PLAN_RUNTIME_NOTE` 声明「暂无 `boss_content_id` 样本」，避免 0 样本伪装成通过；②透传侧改由**手写 patch 探针**直接驱动 `FloorPlanGenerator.room_from_source` 覆盖（当前没有任何关卡在数据里写该字段，纯读现成关卡会退化成 0 样本）。
+- **反向对照（防假绿）两次实测通过：** 把 `resolve_profile` 的「按 ID 指派」分支临时屏蔽 → `verify_test_level_99_flow` 报 3 条错、0 个 `*_OK`、exit 1；把 `room_from_source` 的 `boss_content_id` 键临时改名 → 报 `FloorPlanGenerator 未把 boss_content_id 透传进运行时房间`、exit 1。两条断言都**真会红**，已还原。
+- 文档：`05.2` §3.3 关键点新增第 5、6 条并扩了 JSON 示例；skill `09-level-plan-authoring` 修正了原先「`enemy_spawn_plan` 必须属于 `ROOM_TYPES_WITH_HOSTILES`」的**错误口径**（正确口径是 `is_spawn_plan_authorable_room`，即**排除 BOSS**），并新增「第 2 步补充二 · 首领指派」与两条已知坑（四道白名单 / 编辑必须串行且回读）。
+
 ## 2026-09-19｜删除旧聚落天台资产（ENV-ROOFTOP-SHELTER-90X80 整体移除）
 
 - 按用户要求「先把旧的那套删除」，把旧聚落天台整条链路从仓库移除：`assets/art/environments/rooftop_shelter_3d/`（609 MB / 329 文件）、`rooftop_shelter_diorama_3d/`（83 MB / 45 文件，**全项目零引用**）、`source/art/blender/environments_v01/rooftop_shelter_50m/`（57 MB / 15 文件），**合计 749 MB / 389 文件**。前序 [天台运行设施清空](2026-09-17_rooftop_facilities_removed.md) 只摘了运行引用，本次把资产本体一并删除。

@@ -5,6 +5,7 @@ const RANGED_WEAPONS := {
 	"weapon_shotgun": ["bp_shotgun", "GunBody_Shotgun"],
 	"weapon_rifle": ["bp_rifle", "GunBody_Rifle"],
 	"weapon_machinegun": ["bp_machinegun", "GunBody_Machinegun"],
+	"weapon_sprinkler": ["bp_sprinkler", "GunBody_Sprinkler"],
 	"weapon_sniper": ["bp_sniper", "GunBody_Sniper"],
 	"weapon_launcher": ["bp_launcher", "GunBody_Launcher"],
 	"weapon_charge": ["bp_charge", "GunBody_Charge"],
@@ -43,7 +44,7 @@ func _ready() -> void:
 			str(content_id), str(expected[0]), str(expected[1]), "", "", true, failures
 		)
 	if failures.is_empty():
-		print("WEAPON_INSTANCE_CONTRACT_MATRIX_OK: 7 gun bodies x 8 bullets and 3 melee roots round-trip through ItemRegistry, WeaponInstance and BlueprintRegistry")
+		print("WEAPON_INSTANCE_CONTRACT_MATRIX_OK: 8 gun bodies x 8 bullets and 3 melee roots round-trip through ItemRegistry, WeaponInstance and BlueprintRegistry")
 		get_tree().quit(0)
 		return
 	for failure in failures:

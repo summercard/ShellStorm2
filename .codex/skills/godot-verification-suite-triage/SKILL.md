@@ -1,6 +1,6 @@
 ---
 name: godot-verification-suite-triage
-description: 诊断并修复 Godot 验收套件（run_verification_suite.sh + check_verification_log.py）的日志门禁失败——exit 3（意外引擎错误）与 exit 4（退出时资源泄漏）。用于「套件跑出红项 / 场景 exit 3 或 4 / resources still in use at exit / ObjectDB instances leaked / 判某红项是回归还是既有 / 要不要加 expected_errors 白名单」这类问题。不用于资产制作、也不用于正常通过时的收尾。
+description: 诊断并修复 Godot 验收套件（run_verification_suite.sh + check_verification_log.py）的门禁失败——exit 1/2（依赖脚本编译失败、场景压根跑不起来）与 exit 3（意外引擎错误）、exit 4（退出时资源泄漏）。用于「套件跑出红项 / 场景 exit 1、2、3 或 4 / Identifier not declared / Failed to compile depended scripts / resources still in use at exit / ObjectDB instances leaked / 判某红项是回归还是既有 / 要不要加 expected_errors 白名单 / 套件太慢想直跑单场景分诊」这类问题。不用于资产制作、也不用于正常通过时的收尾。
 agent_created: true
 ---
 
@@ -29,6 +29,8 @@ agent_created: true
 ## 决策树
 
 ```
+FAILED_SCENE x:1  → 场景没跑到 quit(0)：多为依赖脚本编译失败，走「编译链断裂」
+FAILED_SCENE x:2  → preflight 装载失败：场景/依赖根本 load 不出来，同上
 FAILED_SCENE x:3  → 是「预期错误没声明」还是「真 bug」？
    ├─ 该 ERROR 是本测试**刻意**触发的（例如测试故意传非法 id 断言被拒绝，
    │  被调用方用 push_error 报出）→ 加白名单文件，见下节
@@ -36,6 +38,67 @@ FAILED_SCENE x:3  → 是「预期错误没声明」还是「真 bug」？
 
 FAILED_SCENE x:4  → 资源泄漏，走「泄漏定位」
 ```
+
+## exit 1 / 2：场景根本跑不起来（编译链断裂）
+
+日志开头（不是结尾）就会出现：
+
+```
+SCRIPT ERROR: Parse Error: Identifier "XXX" not declared in the current scope.
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed".
+```
+
+**注意区分**：这不是日志门禁（3/4）问题，是**场景压根没加载成功**。所以别去加 `expected_errors` 白名单——加白名单只会把真问题盖住。
+
+定位三步：
+
+1. **取第一个 `SCRIPT ERROR`**，grep 那个未声明标识符在全仓的**定义处**。
+2. **「只有引用、没有定义」= 半成品**。本仓多会话并行是常态，用 `git diff -U0 <文件>` 看该文件改动：若**纯新增却引用了不存在的符号**，就是在途编辑留下的中间态。
+3. **不要替它改**。同文件并发写会互相覆盖（一条消息里的多个 Edit 也会互相覆盖）。报出来 + 记进当日日志，等它收尾后补跑。
+
+**一批场景同时红，先看第一个 `SCRIPT ERROR` 指向谁。** 传播链会放大：一个 config 脚本坏掉 → 所有依赖它的模块坏掉 → 依赖那些模块的场景整批 exit 1。例：`GameDesignConfig.gd` 坏了 → `WastelandLight3D.gd` 编译失败 → 四个玩家/背包/动画场景全 exit 1，而**不依赖 WastelandLight3D 的资产导入场景照样 `[PASS]`**。
+
+## 加速分诊：`--headless` 直跑单场景（只分诊，不替代套件）
+
+套件每跑一条都要重建隔离工程，实测**单场景 >7 分钟**；直跑同一条只要 **4–7 秒**：
+
+```bash
+"<Godot>_console.exe" --headless --path "<工程绝对路径>" \
+  --scene "res://tests/verification/<场景>.tscn"
+```
+
+用途：快速拿到**权威 PASS/FAIL 与原始日志**来定位破损点（尤其 exit 1/2 这种"跑不起来"的情形）。
+
+**三条限制，都必须记住**：
+
+- **只对非渲染场景**：`visual_scenes` / `renderer_scenes` 名单里的场景去掉 `--headless` 会挂死等 viewport 纹理（见铁律 2）。⚠️ 反过来更常见：**给截图类场景加了 `--headless`，`get_viewport().get_texture().get_image()` 返回 null** → 报 `Cannot save ... preview` / `Parameter "t" is null`。这是**跑法错了，不是代码坏了**。跑前先查该场景在不在 `visual_scenes`。
+- **用真实 user dir**：不隔离存档，会写存档的场景别这么跑。副作用之一：可能多出 `ERROR: Can't create shader cache folder`（套件的隔离 user dir 里不会出现），会让日志门禁误判 exit 3。
+- **跳过 `check_verification_log.py`**：`[PASS]` 里也可能夹带 `SCRIPT ERROR`，**不能据此判绿**。
+
+**要拿正式判定时的替身组合**：直跑场景取场景退出码 + 单独手跑日志门禁
+`python3 scripts/check_verification_log.py <日志> tests/verification/expected_errors/<场景>.txt`
+两者都 0 即等价于套件判定。注意脚本场景名要带 `I:/...` 绝对路径的日志，别让相对路径落到错误的工作目录。
+
+> ⚠️ **绝不要用 `: > "$exp"` 之类去"准备一个空白名单"** —— 若 `$exp` 恰好指向仓库里**真实存在**的
+> `expected_errors/<场景>.txt`，这会**把仓库白名单清空**，原本绿的场景立刻变 exit 3。
+> 需要"无白名单"时用 `/dev/null`，并且**先 `[ -f ]` 判断存在就原样沿用**。
+> 已清空的用 `git checkout -- <文件>` 还原，再用 `git diff --name-only` 确认。
+
+### 套件在本机跑不动时的判定（Windows + PortableGit + 安全守卫）
+
+症状：`bash scripts/run_verification_suite.sh ...` **无输出、日志 0 字节、被 SIGTERM 杀掉**，`run_in_background` 也一样，绕过沙箱也一样。两个叠加原因：
+
+1. **`cygpath` 版本错配（可修）**。为补 `dirname`/`basename` 而 `export PATH="/c/Program Files/Git/usr/bin:$PATH"`，会让 `cygpath` 解析到 **Git for Windows** 的版本，它把 `/tmp` 映射成 **`C:/Windows`**：
+   ```
+   cygpath -m /tmp        -> C:/windows        # 错！套件会在 C:\Windows 下建工作区
+   cygpath -m /c/Users/…  -> C:/Users/…        # 对
+   cygpath -m I:/…        -> I:/…              # 对（Windows 风格原样透传）
+   ```
+   所以跑套件前**把 TMPDIR 设成 Windows 风格路径**（如 `I:/…/_scratch/vtmp`），别让它落到 `/tmp`。
+2. **退出清理被守卫拦下**（不可绕）。套件 EXIT trap 里的 `rm -rf` 会被本机 safe-delete 守卫拦，进程随之被终止——表现为启动阶段就被 SIGTERM，连第一个 `printf` 都写不进日志。
+
+**结论**：本机套件的正式判定不可得。用上面的「直跑 + 手跑日志门禁」组合做**定向回归**（把该功能相关的场景列出来逐条跑），并把套件留到能正常执行的环境上补跑。**不要因为套件跑不动就宣称验收通过**——要说清哪几项是用替身组合验的。
 
 ### 加白名单的正确姿势
 

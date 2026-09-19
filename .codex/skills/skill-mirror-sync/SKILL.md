@@ -26,6 +26,12 @@ python scripts/sync_skill_mirrors.py --check   # 只读校验
 
 `--sync` 对 A 拥有的每个 skill：先 `rmtree` 目标目录再整树复制，**杜绝残留旧文件**；排除 `__pycache__`。
 
+⚠️ **不要把临时文件写进 skill 目录（`~/.workbuddy/skills/<name>/`）。** 那里是正本，
+任何临时日志都会被当成 skill 内容同步到 B/C/D —— 实测把 `_sync.log` 重定向进
+`skill-mirror-sync/` 后，`--check` 立刻报 `diff=['skill-mirror-sync/_sync.log', ...]`
+外加 `A has 1 non-CRLF file(s)`。临时输出一律落在 skill 目录**之外**（如 `%TEMP%` 或项目
+`_scratch/`）；若已写进去，从 A 删掉再跑一次 `--sync` 即可用全量重建清掉副本里的残留。
+
 ## 判据
 
 - 每个 skill 的全部文件 sha256 与 A 逐字节相同

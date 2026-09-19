@@ -17,6 +17,43 @@ static func get_by_content_id(content_id: String) -> Dictionary:
 			return (profile as Dictionary).duplicate(true)
 	return {}
 
+
+## 内容 ID → 该内容所属的稳定层号（名册里没有则返回 0）。
+## 名册的键就是层号，故层号是内容的固有属性；设计源用 ID 指派时也要能拿到它，
+## 否则结算（Enemy3D 的 floor_number 记账）会记在设计源房间所在的层号上。
+static func floor_number_for_content_id(content_id: String) -> int:
+	for floor_number in CONTENT.keys():
+		var profile := CONTENT[floor_number] as Dictionary
+		if str(profile.get("boss_content_id", "")) == content_id:
+			return int(floor_number)
+	return 0
+
+
+## 本房实际出场的 Boss 档案 —— **唯一解析口径**。
+##
+## 优先级：设计源指定的 `boss_content_id` > 按层号指派（塔楼 95/90/85）。
+## 返回空字典 = 本房**不出 Boss**，两种情形：
+##   · 设计源没写 ID，且本层没有按层指派的内容（单层关卡 floor_number=0）——
+##     口径：「没写 boss 就是没有 boss」；
+##   · 设计源写了 ID，但名册里没有这一条（拼写错误）—— 静态校验已能拦住
+##     `boss_content_id_unknown`；运行时**绝不静默替换成另一个 Boss**，
+##     否则作者会看到一个自己没指定的首领。
+##
+## 返回的档案一律带 `floor_number`，供随后的结算按真实层号记账。
+## 两个消费方（`MonsterInjector._generate_boss` / `TowerDescent3D._append_plan_room_record`）
+## 都必须走本函数，禁止各自复刻「先按 ID、再按层」的回退顺序。
+static func resolve_profile(authored_content_id: String, floor_number: int) -> Dictionary:
+	if not authored_content_id.is_empty():
+		var authored := get_by_content_id(authored_content_id)
+		if authored.is_empty():
+			return {}
+		authored["floor_number"] = floor_number_for_content_id(authored_content_id)
+		return authored
+	var by_floor := get_for_floor(floor_number)
+	if not by_floor.is_empty():
+		by_floor["floor_number"] = floor_number
+	return by_floor
+
 static func all_profiles() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for floor_number in [95, 90, 85]:

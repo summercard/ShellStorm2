@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台女儿墙直段 · 破损B（贯穿）（天台参考组件库 v002 程序化派生件）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_parapet_dmg_b_top3d.glb
+;   5.00m 长 × 1.80m 高 × 0.50m 厚；底面中心原点（几何 Y=0..1.80）。
+; 来源：本件不是新造型，而是 intact 件（ENV-ROOFTOP-REF-PARAPET）的程序化破损派生：
+;   脚本 author_env_rooftop_parapet_damage_v001.py 把 intact 网格按「积木」（22 块
+;   闭合倒角块：基座 + 分隔带 + 10 块墙身 + 10 块压顶）拆开，只对与破损区相交的
+;   积木做逐块布尔剔料，再合并；破损面 UV 钳回色盘色块，故不换材质、不掉色。
+; 破损口径（through_breach / 贯穿）：墙身中段被打穿 2 个带放射裂纹的贯穿洞，可透视到墙外；洞缘粗化。
+; 拼接契约（用户要求「需要能接起来」）：破损只发生在中段，两端头带 |x|>=2.05m 与
+;   intact 件逐位相同；包络仍是 5.00×0.50×1.80、原点仍是底面中心。
+;   ⇒ 可与 intact 件 / 另两件破损件沿任一边、任意顺序对接，接头无缝且槽位相位不变。
+; preserve_authored_palette：破损新面 UV 已钳在色盘色块内（U 0.923..0.977 /
+;   V 0.123..0.477），禁止运行时用塔楼暖色 A/B 主题材质覆盖，否则破损面会掉色。
+; visual_only：天台边界碰撞由 TowerFloorStage3D 的 OuterBoundaryCollision_* 按
+;   0.50m 代理生成。破损只改外观、不改阻挡高度，玩法阻挡与 intact 段完全一致。
+; runtime_instantiation=batched_multimesh：与 intact 件同批按 5m 槽位摆放，
+;   由 TowerFloorStage3D._build_outer_shell() 用带种子的随机排布选件。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_dmg_b_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopParapetDmgB5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-PARAPET-DMG-B"
+metadata/package_id = "ENV-ROOFTOP-REF-PARAPET-DMG-B"
+metadata/asset_version = "v001"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_dmg_b_top3d.glb"
+metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_damage_v001.py"
+metadata/derived_from_asset_id = "ENV-ROOFTOP-REF-PARAPET"
+metadata/damage_kind = "through_breach"
+metadata/damage_label = "贯穿"
+metadata/damage_note = "墙身中段被打穿 2 个带放射裂纹的贯穿洞，可透视到墙外；洞缘粗化。"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 1.8
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 1.8, 0.5)
+metadata/visual_bounds_size_m = Vector3(5, 1.8, 0.5)
+metadata/bounds_note = "破损只在中段剔料，两端头带 |x|>=2.05m 未改动，包络与 intact 件逐值相同。"
+metadata/visual_node_name = "女儿墙直段破损B_主体"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "batched_multimesh"
+metadata/layout_role = "rooftop_parapet_straight_run"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -264,6 +264,12 @@ const STREAM_STATE_NAMES := {
 const ROOM_OWNERSHIP_BOUNDARY_INSET_M := 0.08
 const ROOM_OWNERSHIP_MIN_LOCAL_Y_M := -0.40
 const ROOM_OWNERSHIP_MAX_LOCAL_Y_M := 2.50
+# 刷怪落点的「超量退让」参数，供 spawn_point_for_index 使用。
+# 环形点位只够 size_class 决定的那几个（布局房 = 4），而设计源允许一波 24 / 单房 64，
+# 超出部分按层退让：每层转一个固定角 + 缩一档半径，直到半径触底靠角度区分。
+const SPAWN_POINT_LAYER_ANGLE_STEP := 0.37
+const SPAWN_POINT_LAYER_RADIUS_STEP := 0.17
+const SPAWN_POINT_MIN_RADIUS_SCALE := 0.12
 
 var room_id := "room_00"
 var room_type := "COMBAT"
@@ -2452,6 +2458,30 @@ func _build_spawn_points() -> void:
 	for index in range(count):
 		var angle := TAU * float(index) / float(count) + _rng.randf_range(-0.24, 0.24)
 		enemy_spawn_points.append(global_position + Vector3(cos(angle) * dimensions.x * 0.23, 0.0, sin(angle) * dimensions.y * 0.23))
+
+
+## 取第 index 个落点 —— 数量超过环形点位时**必须仍然互不重合**。
+## 为什么必须有：布局房（`size_class == "tower_cell"`）只产出 4 个环形点，而设计源的房间级
+## 刷怪计划允许一波最多 24 只、单房最多 64 只。若沿用 `index % points.size()` 取点，
+## 超出的敌人会**逐只叠在同一坐标**，画面上看起来是「一只怪」而实际是一群 ——
+## 数量上限就成了空话，且「填了 6 只」与「填了 4 只」看不出差别。
+## 口径：环上点位算第 0 层；超出后逐层退让（每层转一个固定角并缩一档半径），
+## 使任意 index 都有确定且互不重合的落点（半径触底后仍靠角度差区分）。
+## 公式路径与设计源路径共用本函数（都经 `Dungeon3D._spawn_enemy_batch`），不另设第二套落点算法。
+func spawn_point_for_index(index: int) -> Vector3:
+	if enemy_spawn_points.is_empty():
+		return global_position
+	var point_count := enemy_spawn_points.size()
+	var safe_index := maxi(0, index)
+	var layer := safe_index / point_count
+	var base := enemy_spawn_points[safe_index % point_count]
+	if layer <= 0:
+		return base
+	var offset := base - global_position
+	var planar := Vector3(offset.x, 0.0, offset.z)
+	var angle_shift := SPAWN_POINT_LAYER_ANGLE_STEP * float(layer)
+	var radius_scale := maxf(SPAWN_POINT_MIN_RADIUS_SCALE, 1.0 - SPAWN_POINT_LAYER_RADIUS_STEP * float(layer))
+	return global_position + planar.rotated(Vector3.UP, angle_shift) * radius_scale
 
 
 func _on_room_body_entered(body: Node3D) -> void:

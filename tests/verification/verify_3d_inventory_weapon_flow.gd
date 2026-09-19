@@ -80,8 +80,19 @@ func _verify_real_slot_click_and_3d_icons(
 			failures.append("Actual ItemSlot left click did not equip the picked-up shotgun")
 		if str(weapon_snapshot.get("gun_id", "")) != "bp_shotgun" or not bool(weapon_snapshot.get("has_model", false)):
 			failures.append("Actual inventory click did not synchronize the equipped 3D gun model")
-		if not inventory.has_item("weapon_pistol"):
-			failures.append("Actual inventory click did not return the old pistol to the inventory")
+		# 换枪后回背包的应当是「出厂枪」，而出厂枪由 BlueprintRegistry.DEFAULT_STARTING_GUN_ID
+		# 决定（当前是花洒机枪）。这里不要写死手枪：换一次出厂枪就会红一次，
+		# 而且写死等于永远只盯着一把枪，出厂枪真换错了反而看不出来。
+		var starting_item_id := _starting_weapon_item_id()
+		if starting_item_id.is_empty():
+			failures.append(
+				"Cannot resolve the starting weapon item id from BlueprintRegistry.DEFAULT_STARTING_GUN_ID"
+			)
+		elif not inventory.has_item(starting_item_id):
+			failures.append(
+				"Actual inventory click did not return the old starting gun (%s) to the inventory"
+				% starting_item_id
+			)
 	inventory_ui.set_inventory_panel_open(false)
 	inventory.clear_all()
 	if not dungeon.player.equip_weapon("bp_pistol", "mod_bullet_standard"):
@@ -227,6 +238,17 @@ func _find_slot(inventory: InventoryModule, item_id: String) -> int:
 		if str((slot.get("item", {}) as Dictionary).get("id", "")) == item_id:
 			return int(slot.get("slot", -1))
 	return -1
+
+
+## 出厂枪的**内容 ID**：走的是「装配 ID -> 节点名 -> 内容 ID」这条运行时同构路径，
+## 因此它顺带也在替出厂枪的三方身份一致性站岗（任一处漏改都会在这里断掉）。
+func _starting_weapon_item_id() -> String:
+	var node := BlueprintRegistry.create_assembly_node(BlueprintRegistry.DEFAULT_STARTING_GUN_ID)
+	if node == null:
+		return ""
+	var item_id := BlueprintRegistry.get_item_id_for_assembly_node(node)
+	node.free()
+	return item_id
 
 
 func _module_item_id(node_name: String) -> String:

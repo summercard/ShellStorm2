@@ -60,6 +60,9 @@ const INTERACTION_CONTROLLER_SCRIPT := preload(
 @export var max_hp := 100
 @export var combat_enabled := false
 @export var start_with_weapon := true
+## 这两个 export 目前没有被任何代码或 .tscn 读取。出厂枪的真源是
+## `BlueprintRegistry.DEFAULT_STARTING_GUN_ID`，经 `get_starting_weapon_tree()`
+## 装配；改这里不会换枪。
 @export var default_gun_id := "bp_pistol"
 @export var default_bullet_id := "mod_bullet_standard"
 

@@ -22,6 +22,8 @@ const SAFE_ROLES := ["stair_entry", "stair_exit"]
 ## 用 preload 而非 class_name 全局名：新脚本在全局类缓存刷新前用全局名会 parse error。
 const MONSTER_INJECTOR := preload("res://src/map/MonsterInjector.gd")
 const GAME_DESIGN_CONFIG := preload("res://src/framework/GameDesignConfig.gd")
+## 首领名册：只用来查 `boss_content_id` 是否指向真实存在的内容，绝不复制名册表本身。
+const BOSS_CONTENT_CATALOG := preload("res://src/enemy3d/BossContentCatalog.gd")
 ## 硬上限：设计源写超大数字不该变成性能事故或开局卡死，直接在静态校验拦住。
 const SPAWN_PLAN_MAX_WAVES := 6
 const SPAWN_PLAN_MAX_PER_WAVE := 24
@@ -359,10 +361,17 @@ static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
 	var plan := raw as Dictionary
 	if plan.is_empty():
 		return errors
-	# 只有会刷怪的房型才允许声明：其它房型永不调用刷怪入口，
-	# 写了等于静默失效（隐形契约，必须报出来）。
+	# 只有会刷怪的房型才允许声明：其它房型永不调用刷怪入口，写了等于静默失效。
+	# BOSS 房单列一条错误码 —— 它不是「不刷怪」（它刷 Boss），而是**不归设计源管**：
+	# Boss 的出场与结算由生成工具（BossContentCatalog）决定，设计源只声明 role/content_type。
+	# 写在这里会让刷怪入口跳过 boss 生成，表现为「Boss 房没有 Boss」。
+	# 判据统一取 GameDesignConfig.is_spawn_plan_authorable_room，禁止在本处复刻房型列表。
 	var content_type := str(room.get("content_type", ""))
-	if not content_type in GAME_DESIGN_CONFIG.ROOM_TYPES_WITH_HOSTILES:
+	if GAME_DESIGN_CONFIG.is_boss_room(content_type, str(room.get("role", ""))):
+		errors.append(
+			"enemy_spawn_plan_on_boss_room:%s:%s" % [key, content_type]
+		)
+	elif not GAME_DESIGN_CONFIG.is_spawn_plan_authorable_room(content_type):
 		errors.append(
 			"enemy_spawn_plan_on_non_hostile_room:%s:%s" % [key, content_type]
 		)
@@ -424,6 +433,28 @@ static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
 		errors.append(
 			"enemy_spawn_plan_total_too_large:%s:%d>%d" % [key, total, SPAWN_PLAN_MAX_TOTAL]
 		)
+	return errors
+
+
+## 校验房间级首领指派 `boss_content_id`（可选字段）。
+##
+## 两条判据，缺一不可：
+##   ① 只有 **Boss 房**能写 —— 其余房型永不生成 Boss，写了等于静默失效；
+##   ② 必须指向 `BossContentCatalog` 里**真实存在**的内容 —— 拼写错误必须当场报错，
+##      否则运行时表现为「这间房没 Boss」（`resolve_profile` 对未知 ID 一律返回空，
+##      刻意不静默换成另一个首领），作者只会看到「我明明指定了却没出现」。
+## 判据①走 GameDesignConfig.is_boss_room 唯一口径，禁止在本处复刻房型/角色列表。
+static func _validate_boss_content_id(room: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var content_id := str(room.get("boss_content_id", ""))
+	if content_id.is_empty():
+		return errors
+	var key := str(room.get("key", ""))
+	var content_type := str(room.get("content_type", ""))
+	if not GAME_DESIGN_CONFIG.is_boss_room(content_type, str(room.get("role", ""))):
+		errors.append("boss_content_id_on_non_boss_room:%s:%s" % [key, content_type])
+	if BOSS_CONTENT_CATALOG.floor_number_for_content_id(content_id) <= 0:
+		errors.append("boss_content_id_unknown:%s:%s" % [key, content_id])
 	return errors
 
 
