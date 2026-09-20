@@ -1,0 +1,15 @@
+
+新增带版本资产被拒绝：运行资产路径必须恒定、不含版本号，替换一律覆盖同路径同名文件（见 assets/art/3D模型资产目录与命名规范.md）。
+
+带版本引用计数上升：gd 24 → 25
+
+引用样例（gd 文件，括号内为引用数）（9）
+  src/combat3d/WeaponModel3D.gd (11)
+  src/enemy3d/BossContentCatalog.gd (6)
+  src/enemy3d/EliteContentCatalog.gd (1)
+  src/player3d/Player3D.gd (2)
+  src/player3d/Player3DStateGallery.gd (1)
+  src/training3d/TrainingRack3D.gd (1)
+  src/ui/wardrobe/WardrobeMenu3D.gd (1)
+  src/world3d/Dungeon3D.gd (1)
+  src/world3d/ItemModelFactory3D.gd (1)

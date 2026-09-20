@@ -8,6 +8,8 @@ Source blend : the v003 WORK blend produced by author_env_rooftop_parapet_v003.p
                  --python-exit-code 1 \\
                  --python source/author_env_rooftop_parapet_damage_v003.py
 Output       : components/env_rooftop_ref_parapet_dmg_{a,b,c}_top3d.glb
+               and, when run against the formal reference library, three reusable
+               source/package collections embedded back into that .blend.
 
 What changed from v001
 ----------------------
@@ -628,21 +630,92 @@ print(
     )
 )
 
+def _collection(name, parent):
+    collection = bpy.data.collections.get(name)
+    if collection is None:
+        collection = bpy.data.collections.new(name)
+        parent.children.link(collection)
+    return collection
+
+
+def _unlink_everywhere(obj):
+    for owner in list(obj.users_collection):
+        owner.objects.unlink(obj)
+
+
+def _embed_variant_in_library(variant, recipe):
+    """Write a reusable source/package pair into the formal rooftop library."""
+    library_root = bpy.data.collections.get("天台区块_中文资产管理")
+    _require(library_root is not None, "主库缺少天台区块_中文资产管理")
+    make_root = _collection("01_制作组件_按设施拆分", library_root)
+    output_root = _collection("02_游戏输出_独立资产包_v002", library_root)
+    make_parent = _collection("02_女儿墙_制作", make_root)
+    output_parent = _collection("02_女儿墙", output_root)
+
+    key = recipe["key"]
+    label = {"dmg_a": "A", "dmg_b": "B", "dmg_c": "C"}[key]
+    source_collection = _collection("女儿墙直段破损%s_制作组件" % label, make_parent)
+    package_collection = _collection("女儿墙直段破损%s_资产包" % label, output_parent)
+    for owner in list(source_collection.objects):
+        bpy.data.objects.remove(owner, do_unlink=True)
+    for owner in list(package_collection.objects):
+        bpy.data.objects.remove(owner, do_unlink=True)
+
+    # Detach the temporary exported variant before creating named library copies;
+    # otherwise Blender silently suffixes the package mesh with ".001".
+    source_copy = variant.copy()
+    source_copy.data = variant.data.copy()
+    source_copy.name = "女儿墙直段破损%s_主体_制作" % label
+    source_copy.data.name = source_copy.name
+    source_copy.location = Vector((0.0, 0.0, 0.0))
+    _unlink_everywhere(source_copy)
+    source_collection.objects.link(source_copy)
+    _unlink_everywhere(variant)
+    bpy.data.objects.remove(variant, do_unlink=True)
+
+    package_copy = source_copy.copy()
+    package_copy.data = source_copy.data.copy()
+    package_copy.name = "女儿墙直段破损%s_主体" % label
+    package_copy.data.name = package_copy.name
+    # The package root owns the showcase transform; the mesh itself stays in local
+    # contract space so validate_rooftop.py measures XY-centred, base-Z=0 bounds.
+    package_copy.location = Vector((0.0, 0.0, 0.0))
+    _unlink_everywhere(package_copy)
+    package_collection.objects.link(package_copy)
+
+    root = bpy.data.objects.new("根_女儿墙直段破损%s" % label, None)
+    root.empty_display_type = "PLAIN_AXES"
+    root.empty_display_size = 0.25
+    root.location = Vector((0.0, -34.0, 0.0))
+    package_collection.objects.link(root)
+    package_copy.parent = root
+    root["asset_id"] = "ENV-ROOFTOP-REF-PARAPET-DMG-%s" % label
+    root["block_id"] = "rooftop"
+    root["version"] = "v002"
+    root["design_revision"] = "plan_a_0p80m_2026-09-20"
+    root["geometry_notes"] = "0.80m含压顶总高，方案A平整墙板；%s破损变种；端头带保持可拼接。" % recipe["label"]
+
+    return root, source_copy, package_copy
+
+
 variants = []
 for recipe in RECIPES:
     variant, fracture_verts = _build_variant(source, recipe)
     removed = _verify_variant(variant, source, recipe, fracture_verts)
     _export(variant, recipe["filename"])
+    embedded = _embed_variant_in_library(variant, recipe)
     variants.append(
         {
-            "name": variant.name,
+            "name": recipe["key"],
             "key": recipe["key"],
             "removed": removed,
             "filename": recipe["filename"],
+            "embedded_root": embedded[0].name,
         }
     )
 
+bpy.ops.wm.save_as_mainfile(filepath=bpy.data.filepath, compress=True)
 print(
-    "DAMAGE_AUTHOR_V003_OK variants=%d files=%s"
-    % (len(variants), ",".join(item["filename"] for item in variants))
+    "DAMAGE_AUTHOR_V003_OK variants=%d embedded=%d files=%s"
+    % (len(variants), len(variants), ",".join(item["filename"] for item in variants))
 )

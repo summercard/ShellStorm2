@@ -15,6 +15,6 @@ for sa in a:
      if copy.copy(getattr(c,prop))!=copy.copy(getattr(target,prop)):styles.append([sa.title,c.coordinate,prop])
 cat=json.loads((O/'component_packages_v002/catalog.json').read_text());sha=hashlib.sha256((O/'天台区块_参考组件库_v002.blend').read_bytes()).hexdigest()
 ids=[b['3D-场景通用'].cell(r,1).value for r in range(98,142)]
-checks={'scope_values':not diff,'scope_styles':not styles,'44_packages':set(ids)=={p['package_id'] for p in cat},'source_hash':b['资产主表']['T429'].value==sha,'source_version':b['资产主表']['M429'].value=='v002'}
+checks={'scope_values':not diff,'scope_styles':not styles,'47_packages':set(ids)=={p['package_id'] for p in cat},'source_hash':b['资产主表']['T429'].value==sha,'source_version':b['资产主表']['M429'].value=='v002'}
 report={'passed':all(checks.values()),'checks':checks,'unexpected_values':diff,'unexpected_styles':styles,'sha256':sha}
 (O/'qa/registry_validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps(report,ensure_ascii=False));raise SystemExit(0 if report['passed'] else 1)

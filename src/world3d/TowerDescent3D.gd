@@ -228,6 +228,11 @@ const BATTLE_LEVEL_ID := "battle_level01"
 ## 设计源 id（`source/art/whitebox/tower_zones/<id>/`）。留空则跟随 expedition_run_id。
 ## 单独留一个出口是为了让「同一份设计源、两个不同 run_id」这种对照实验不必复制目录。
 @export var expedition_plan_id: String = ""
+## 测试接缝：强制 98F 回落到生成器房表，跳过区块00 授权布局接管。
+## 生成器的结构契约（5m 网格 / 走廊计数 / 门墙归属）由 verify_tower_grid_component_alignment
+## 在「纯净生成器」下验收；98F 被区块00 接管后的装配另由 verify_block00_floor98_assembly 验收。
+## 默认 false = 运行时行为完全不变。
+@export var force_standard_floor_plan_for_test: bool = false
 
 func is_expedition() -> bool:
 	return expedition_mode
@@ -721,6 +726,29 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 		var side := str(declaration.get("side", "west"))
 		if side not in hole_sides:
 			hole_sides.append(side)
+	# 天台立面环（= 天台边缘往下那一层的「塔身外墙」）长在 floor_index 0 的层带里，
+	# 而它占的竖向空间正是 99F(floor_index 1) 的层带。凡是与 1 层相邻的竖直楼梯，
+	# 井壁都可能**穿过**天台外轮廓 —— 这类楼梯的侧别要交给天台层去让位，
+	# 否则立面环会在井的上层平台正中立一道 12m 高的墙，把下行梯跑封死。
+	# 只有天台层会用到这份表；其余层拿到它也一律不摆立面环。
+	var facade_gap_sides: Array[String] = []
+	for declaration in _declared_edges:
+		if str(declaration.get("kind", "")) != "vertical":
+			continue
+		var a_index := int(_room_floor_index.get(str(declaration["a"]), -1))
+		var b_index := int(_room_floor_index.get(str(declaration["b"]), -1))
+		if a_index != 1 and b_index != 1:
+			continue
+		var stair_side := str(declaration.get("side", "west"))
+		if stair_side not in facade_gap_sides:
+			facade_gap_sides.append(stair_side)
+	# ⚠️ configure 的第 7 参是 typed `Array[String]`，传 `else []`（**无类型** Array）
+	# 会被引擎拒绝；而 `call()` 的参数类型错误会**静默中断本函数后半段** ——
+	# stage 既不注册进 `_floor_stages` 也不入树，现象是「98F 无 floor stage」。
+	# 必须传同类型的空数组（天台层 = 真表；其余层 = 空表，反正不摆立面环）。
+	var facade_gaps_for_stage: Array[String] = []
+	if floor_index == 0:
+		facade_gaps_for_stage = facade_gap_sides
 	var previous = _floor_stages.get(floor_index)
 	if previous != null and is_instance_valid(previous):
 		previous.queue_free()
@@ -741,7 +769,9 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 		# 否则 x>40 / z<-35 的房间与走廊都落在承重楼面之外。
 		is_expedition(),
 		# 独立单层关卡按实际内容外框生成楼面与外墙，不套塔楼整块 250×250。
-		_expedition_content_world_rect() if is_expedition() else Rect2()
+		_expedition_content_world_rect() if is_expedition() else Rect2(),
+		# 立面环让位：只有天台层真的会摆立面环，其余层拿到也无害。
+		facade_gaps_for_stage
 	)
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
 	_room_block_for_floor(floor_index).add_child(stage)
@@ -755,15 +785,30 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 ## 入口安全房自持正式地砖（3×3 格 = 15×15m），必须从整层通用地砖里挖掉，
 ## 否则两套砖面在 Y=0 共面闪烁。只挖可视砖：承重碰撞仍由 _build_support() 铺满，
 ## 该函数只吃 _hole_rects()，不受这里影响。
+## 授权布局（区块00）的房间自持地砖覆盖的是**真实足迹**而非 15×15 安全房方格，
+## 按 15×15 挖会在 15×20 的办公室里留下 2.5m 通用砖带与自持砖共面 —— 所以授权房间
+## 一律按 custom_dimensions 精确挖，且不再叠加通用的 15×15 方格洞。
 func _stair_lobby_visual_holes(floor_index: int) -> Array[Rect2]:
 	var holes: Array[Rect2] = []
 	var size := TowerGeometry3D.COMBAT_STAIR_LOBBY_SIZE_M
 	var half := size * 0.5
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var record := _find_record(str(room_id_value))
-		if record.is_empty() or str(record.get("type", "")) != "STAIR_LOBBY":
+		if record.is_empty():
 			continue
 		var room_position := record.get("position", Vector3.ZERO) as Vector3
+		if bool(record.get("authored_layout_shell", false)):
+			var dimensions := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+			if dimensions.x > 0.0 and dimensions.y > 0.0:
+				holes.append(Rect2(
+					room_position.x - dimensions.x * 0.5,
+					room_position.z - dimensions.y * 0.5,
+					dimensions.x,
+					dimensions.y
+				))
+			continue
+		if str(record.get("type", "")) != "STAIR_LOBBY":
+			continue
 		holes.append(Rect2(room_position.x - half, room_position.z - half, size, size))
 	return holes
 
@@ -1393,6 +1438,10 @@ func _build_expedition_records() -> void:
 	# 其余 01→…→撤离 的门全部继承默认门策略，正常触发清房/钥匙/命运卡。
 	var entry_gate_edge := _edge_key(str(entry_spec.get("id", "")), str(first_main.get("id", "")))
 	_expedition_entry_gate_edges[entry_gate_edge] = EXPEDITION_LAYER_INDEX
+	# 四角补 L 型墙角：直接引用塔楼 A 套 prp_corner_l_5m —— 该件的正式美术就是
+	# 「通用房通用墙组件」两份刚性拼成的 L（见 DungeonRoom3D.SAFE_ROOM_CORNER_IDS）。
+	# 只在远征置真，塔楼 98F 入口安全房保持 12 段直墙口径不变。
+	entry_record["safe_room_corner_l"] = true
 	_validate_floor_layout_plans()
 
 
@@ -1462,6 +1511,24 @@ func _regenerate_floor_plans_for_current_seed() -> void:
 				"entry_side": stair_side,
 				"boss_floor": displayed_floor_number % 5 == 0,
 			})
+		# 区块00「主人的办公室」接管 98F：用 Blender 摆位源的四房拓扑整层替换生成器房表。
+		# 生成器仍先跑一遍 —— 入口房的锚点、exit_side、layout_id 都从它取，
+		# 覆盖只换 rooms / 主路统计（见 Block00MasterOfficeLayout3D.build_plan_override）。
+		# 摆位源不可用或自检失败时返回空字典，这里原样保留生成器结果（绝不静默换布局）。
+		if (
+			not force_standard_floor_plan_for_test
+			and not plan.is_empty()
+			and physical_floor_index == Block00MasterOfficeLayout3D.FLOOR_INDEX
+			and displayed_floor_number == Block00MasterOfficeLayout3D.FLOOR_NUMBER
+		):
+			var block00_plan := Block00MasterOfficeLayout3D.build_plan_override(plan)
+			if block00_plan.is_empty():
+				push_warning(
+					"[TowerDescent3D] %dF 区块00 摆位源不可用，已回退内置房表"
+					% displayed_floor_number
+				)
+			else:
+				plan = block00_plan
 		_floor_plan_snapshots[physical_floor_index] = plan.duplicate(true)
 		_floor_layout_templates[physical_floor_index] = str(plan.get("layout_id", ""))
 		_planned_floor_indices.append(physical_floor_index)
@@ -1496,6 +1563,16 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	record["floor_number"] = int(plan.get("floor_number", 0))
 	record["floor_plan_key"] = str(spec.get("key", ""))
 	record["floor_plan_main_path"] = str(spec.get("key", "")) in (plan.get("main_path_keys", []) as Array)
+	# 授权布局壳体（区块00）：把整房组件清单随记录带到 DungeonRoom3D.configure。
+	# 只在房表写了 authored_layout_shell 时才落字段，未接管的房间一个字段都不多。
+	if bool(spec.get("authored_layout_shell", false)):
+		record["authored_layout_shell"] = true
+		record["authored_layout_asset_id"] = str(spec.get("authored_layout_asset_id", ""))
+		record["authored_layout_version"] = str(spec.get("authored_layout_version", ""))
+		record["authored_layout_room_id"] = str(spec.get("authored_layout_room_id", ""))
+		record["authored_layout_instances"] = (
+			spec.get("authored_layout_instances", []) as Array
+		).duplicate(true)
 	# 房间级刷怪计划：设计源没写就不落字段，_spawn_room_enemies 见空即回退全局公式。
 	var spawn_plan := spec.get("enemy_spawn_plan", {}) as Dictionary
 	if not spawn_plan.is_empty():
@@ -1884,6 +1961,20 @@ func _build_corridor(from_room: DungeonRoom3D, to_room: DungeonRoom3D, index: in
 		+ outward * (TOWER_GEOMETRY.CORE_SIZE_M * 0.5)
 		+ Vector3.UP * upper_y
 	)
+	# 上层接口默认落在核心边界：门厅墙恰好压在核心边界时，上层门与接口同点、
+	# 接驳走廊长度为 0（98F~78F 与 Boss 层都是这个洞型，本段对它们是恒等变换）。
+	# 例外：区块00「主人的办公室」把下行门装在办公室西墙 x=−40，而核心西界是 x=−30。
+	# 沿用核心边界会把 10m 接驳走廊**反着修进办公室内部**（门在 −40，接口在 −30）。
+	# 因此当门向与楼梯侧一致时，接口的行进轴坐标改由上层门推出，并以核心半宽为下界
+	# （门若落在核心内侧，仍按核心边界摆，避免楼梯井压进核心）。
+	if upper_door_side == side:
+		var upper_outward_m := maxf(
+			TOWER_GEOMETRY.CORE_SIZE_M * 0.5,
+			(upper_door - core_center).dot(outward)
+		)
+		upper_interface = (
+			core_center + outward * upper_outward_m + Vector3.UP * upper_y
+		)
 	var lower_interface := (
 		core_center
 		+ outward * (TOWER_GEOMETRY.CORE_SIZE_M * 0.5)
@@ -4035,6 +4126,12 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"tower_module_shell": bool(record.get("tower_module_shell", false)),
 		"open_wall_directions": record.get("open_wall_directions", []),
 		"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+		"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
+		"authored_layout_shell": bool(record.get("authored_layout_shell", false)),
+		"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
+		"authored_layout_version": str(record.get("authored_layout_version", "")),
+		"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
+		"authored_layout_instances": record.get("authored_layout_instances", []),
 	})
 	room.position = record["position"]
 	room.set_meta("floor_number", int(record.get("floor_number", _floor_number_from_index(int(record.get("floor_index", 0))))))

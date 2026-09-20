@@ -8,6 +8,11 @@ func _ready() -> void:
 	var tower := scene.instantiate() as TowerDescent3D
 	tower.test_mode = true
 	tower.run_seed_override = 990095
+	# 本测试只验收「生成器」的 5m 结构契约（网格边界 / 走廊计数 / 门墙归属 / 楼板洞）。
+	# 98F 已被区块00 授权布局整层接管，房间、门墙与走廊不再由生成器产出，
+	# 其装配由 verify_block00_floor98_assembly 单独验收。这里强制回落生成器房表，
+	# 才能继续校验其余楼层的结构契约，避免把「有意接管」误判成回归。
+	tower.force_standard_floor_plan_for_test = true
 	add_child(tower)
 	await get_tree().process_frame
 	await get_tree().physics_frame

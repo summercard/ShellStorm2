@@ -1,0 +1,44 @@
+{
+  "asset_id": "ENV-BATTLE-BLOCK00-ART-LAYOUT-3D",
+  "asset_version": "v002",
+  "blender_source": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.blend",
+  "layout_manifest": "source/art/blender/master_office_layout/source/block_00_master_office_layout_v002.layout.json",
+  "godot_block": "battle",
+  "godot_scene_tree": "pending（尚未装配进运行时场景）",
+  "godot_runtime": "pending",
+  "naming_contract": {
+    "root_collection": "区块00-主人的办公室_中文资产管理",
+    "layout_collection": "01_白盒布局_可编辑",
+    "output_collection": "02_游戏输出_独立资产包_v002",
+    "instance_prefixes": {
+      "CORNER_": "L 角件",
+      "WALL_": "实心墙",
+      "DOORWALL_": "门墙",
+      "DOORLEAF_": "门扇（预览）",
+      "FLOOR_": "地砖"
+    }
+  },
+  "instance_counts": {
+    "corner_l": 11,
+    "solid_wall": 23,
+    "door_wall": 4,
+    "door_leaf_preview": 3,
+    "floor_tile": 49
+  },
+  "component_used_counts": {
+    "runtime_v001": 11,
+    "wall_standard_5m_通用包": 23,
+    "wall_door_5m_通用包": 4,
+    "door_5m_通用包": 3,
+    "floor_tile_r01_c01_通用包": 25,
+    "floor_tile_r01_c02_通用包": 24
+  },
+  "component_libraries": {
+    "common_components": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend",
+    "corner_l_5m": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_descent_3d/source/corner_l_5m/env_tower_corner_l_5m_source_v001.blend"
+  },
+  "library_version_note": "本布局源链接 common_components/v007。v006 与 v007 的这 5 个组件包几何逐值相同（网格数/面数/局部包络一致），差别仅在 v007 把 door_5m 与 wall_door_5m 的库原点归零规范化（v006 分别为 (2.6,-69.3444,0) 与 (8.0,-58.3444,0)）。账本该 5 行的「版本/Blender源文件」仍写 v006，属版本字段滞后；塔楼 L 角件的派生清单已记录其源出 v007。摆位代码逐包实测库原点，故两版均安全。",
+  "updated": "2026-09-20",
+  "import_status": "not_exported",
+  "note": "区块00-主人的办公室。取代原 98F 的固定关卡布局源。运行时接线（含 99F↔98F 楼梯末端门的处理）本轮未做。"
+}

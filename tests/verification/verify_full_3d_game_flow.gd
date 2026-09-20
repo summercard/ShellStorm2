@@ -202,7 +202,8 @@ func _verify_enemy_ecosystem(failures: Array[String]) -> void:
 		var snapshot := enemy.get_state_snapshot()
 		if snapshot["enemy_kind"] != kind or snapshot["valid_states"].size() < 9:
 			failures.append("Enemy state contract invalid: %s" % kind)
-		if int(snapshot["component_snapshot"].get("component_count", 0)) != 4:
+		var expected_components := 2 if kind == "melee_chaser" else 4
+		if int(snapshot["component_snapshot"].get("component_count", 0)) != expected_components:
 			failures.append("Enemy modular avatar invalid: %s" % kind)
 		var behavior_role := str(snapshot.get("behavior_role", ""))
 		if behavior_role.is_empty() or behavior_roles.has(behavior_role):

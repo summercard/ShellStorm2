@@ -58,9 +58,9 @@
   "animation": false,
   "dependencies": [],
   "geometry_ownership": "room_owned_facility",
-  "structural_geometry": "none: no wall/floor module, no collision shape",
+  "structural_geometry": "none: no wall/floor module; player blocking is an embedded BoxShape3D in the runtime prefab, sized from bounds_size_m with the bottom-centre origin",
   "replacement_contract": "decoration only; must not change room size, 5m grid, collision layer or navigation",
   "exported": false,
   "expected_export": "north_server_04_v007.glb",
-  "collision_status": "未制作；玩法碰撞由 Godot 0.30m 结构代理负责"
+  "collision_status": "已补（2026-09-20）：运行时 prefab 内嵌 BoxShape3D（layer 1，尺寸 = bounds_size_m）。旧的「Godot 0.30m 结构代理」全仓无实现，设施当时全部可穿模"
 }

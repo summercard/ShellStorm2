@@ -4,7 +4,7 @@ extends RefCounted
 
 ## 怪物基础类型配置
 const BASE_ENEMY_TYPES := {
-	"melee_chaser": { "name": "小菌猪", "hp_base": 25, "damage_base": 5, "speed": 80 },
+	"melee_chaser": { "name": "小僵尸", "hp_base": 25, "damage_base": 5, "speed": 80 },
 	"ranged_caster": { "name": "孢子射手", "hp_base": 15, "damage_base": 8, "speed": 50 },
 	"summoner": { "name": "蜂巢怪", "hp_base": 30, "damage_base": 0, "speed": 40 },
 	"shielded": { "name": "壳甲卫兵", "hp_base": 40, "damage_base": 3, "speed": 30 },
@@ -14,7 +14,7 @@ const BASE_ENEMY_TYPES := {
 }
 
 const ENEMY_PRESENTATION := {
-	"melee_chaser": { "emoji": "🐗", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
+	"melee_chaser": { "emoji": "尸", "color": Color(0.95, 0.28, 0.24, 1.0), "ai_type": "chase" },
 	"ranged_caster": { "emoji": "🍄", "color": Color(0.62, 0.35, 1.0, 1.0), "ai_type": "ranged" },
 	"summoner": { "emoji": "🐝", "color": Color(0.95, 0.70, 0.16, 1.0), "ai_type": "summoner" },
 	"shielded": { "emoji": "🛡", "color": Color(0.35, 0.62, 0.95, 1.0), "ai_type": "chase" },

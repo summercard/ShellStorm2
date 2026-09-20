@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/melee_chaser_formal_visual.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://assets/art/enemies/normal_enemy_3d/melee_chaser/components/enm_melee_fungboar01_visual_top3d.glb" id="2_glb"]
+
+[node name="MeleeChaserFormalVisual" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="VisualGLB" parent="." instance=ExtResource("2_glb")]

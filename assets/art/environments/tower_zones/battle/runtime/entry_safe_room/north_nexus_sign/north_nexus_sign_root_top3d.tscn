@@ -3,8 +3,8 @@
 ; Stable AssetID: ENV-BATTLE-L01-SAFE-ENTRY · package north_nexus_sign
 ; 入口安全房 v007 · facilities · 北墙标识_NEXUS
 ; 范式 B：视觉 GLB + 稳定根；房间摆位与契约写在 metadata。
-; 本包不含碰撞——玩法阻挡由引擎 0.30m 结构代理持有（见 asset_manifest.json 的
-; structural_geometry / collision_status / replacement_contract）。视觉资产不注册玩法组。
+; 2026-09-20 复核：本包**按设计不含玩法阻挡**（原因见 metadata/collision_exclusion_reason），
+; 不是漏做。旧注释「碰撞由引擎 0.30m 结构代理持有」不成立——全仓并无该代理实现。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/entry_safe_room/north_nexus_sign/north_nexus_sign_visual_top3d.glb" id="1_visual"]
 
@@ -29,9 +29,10 @@ metadata/preserve_authored_palette = true
 metadata/visual_only = true
 metadata/geometry_ownership = "room_owned_facility"
 metadata/replacement_contract = "decoration only; must not change room size, 5m grid, collision layer or navigation"
-metadata/collision_owner = "godot_0p30m_structural_proxy"
-metadata/collision_policy = "none_in_package"
+metadata/collision_owner = "none"
+metadata/collision_policy = "no_blocking_by_design"
 metadata/collision_shape_count = 0
+metadata/collision_exclusion_reason = "北墙标识，底部离走行面 6.28m，超出玩家身位"
 metadata/runtime_instantiation = "per_instance_prefab"
 metadata/emission = true
 metadata/animation = false

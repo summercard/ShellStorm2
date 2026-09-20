@@ -97,7 +97,21 @@ func _ready() -> void:
 	# 成员按「槽位中心落在该边线上」选，长度取模块自己的 AABB（5m），
 	# 而不是沿用女儿墙那套「包络横跨 boundary 线」——后者会把垂直侧在角上占满的
 	# 那件也算进来，导致角上误报 0.3m 重叠。
-	_expect(facade_slots.size() == 68, "外立面环槽位数不是68（整格满铺一圈）")
+	#
+	# 2026-09-20：槽位数不再是恒定的 68 —— 楼梯井穿过轮廓的边要**让位**
+	# （99F→98F 的井外廓 x∈[35,50] 穿过天台东界 x=40，东侧让出 z∈[-25,5] 共 6 件）。
+	# 这里改成「满铺 68 - 让位件数」，让位件数由快照真源给出，不另写一份。
+	var rooftop_snapshot: Dictionary = rooftop.get_snapshot()
+	var gap_modules := int(rooftop_snapshot.get("outer_facade_gap_module_count", 0))
+	print(
+		"PROBE_ALIGN facade_gap gap_sides=%s gap_modules=%d"
+			% [str(rooftop_snapshot.get("facade_gap_sides", [])), gap_modules]
+	)
+	_expect(
+		facade_slots.size() == 68 - gap_modules,
+		"外立面环槽位数不是「满铺68 - 让位%d = %d」（实际 %d）"
+			% [gap_modules, 68 - gap_modules, facade_slots.size()]
+	)
 	_expect(
 		facade_kinds.size() == facade_slots.size(),
 		"外立面档位表与槽位表不同长：%d vs %d" % [facade_kinds.size(), facade_slots.size()]

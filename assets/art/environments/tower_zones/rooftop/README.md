@@ -17,7 +17,7 @@
 
 ## 现行替代：天台参考组件库
 
-`source/reference_components/v002/`（44 个独立包 / 10 类）。状态为 **Blender 源已完成，未导出 GLB、未生成 PackedScene、未接入运行时**。纯包名清单见该版 `component_packages_v002/tree.txt`。
+`source/reference_components/v002/`（47 个独立包 / 10 类）。2026-09-20 起女儿墙主库为方案A：直段/外角总高 0.80m（含压顶）、厚度 0.50m、平整墙板；并包含 DMG-A/B/C 三件直段破损变种。女儿墙相关 GLB 已导出到 `rooftop/components/`，Prefab 已接入 Godot；其余参考组件仍按原 Blender 源交付口径管理。纯包名清单见该版 `component_packages_v002/tree.txt`。
 
 各版 `qa/` 里的 `build_rooftop.py` 与 `scope_before.json` 仍登记着 v021 源的 SHA-256——那是制作当时未被改动的历史证据，源文件移除后这些记录不再可复算，**保留原样用于回溯，不要改写**。
 

@@ -3,8 +3,9 @@
 ; Stable AssetID: ENV-BATTLE-L01-SAFE-ENTRY · package central_terminal_island
 ; 入口安全房 v007 · facilities · 中央四屏终端岛
 ; 范式 B：视觉 GLB + 稳定根；房间摆位与契约写在 metadata。
-; 本包不含碰撞——玩法阻挡由引擎 0.30m 结构代理持有（见 asset_manifest.json 的
-; structural_geometry / collision_status / replacement_contract）。视觉资产不注册玩法组。
+; 本包不含碰撞，也不依赖任何外部结构代理（早期文档所称「引擎 0.30m 结构代理」从未实现）。
+; 2026-09-20：本包已移出安全房运行时消费（见 DungeonRoom3D.SAFE_ROOM_PACKAGE_IDS），
+; 仅保留在库中备用；视觉资产不注册玩法组。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/entry_safe_room/central_terminal_island/central_terminal_island_visual_top3d.glb" id="1_visual"]
 
@@ -29,8 +30,9 @@ metadata/preserve_authored_palette = true
 metadata/visual_only = true
 metadata/geometry_ownership = "room_owned_facility"
 metadata/replacement_contract = "decoration only; must not change room size, 5m grid, collision layer or navigation"
-metadata/collision_owner = "godot_0p30m_structural_proxy"
-metadata/collision_policy = "none_in_package"
+metadata/collision_owner = "none"
+metadata/collision_policy = "no_blocking_by_design"
+metadata/collision_exclusion_reason = "无内嵌碰撞，且已移出安全房运行时消费；不注册玩法组。"
 metadata/collision_shape_count = 0
 metadata/runtime_instantiation = "per_instance_prefab"
 metadata/emission = true

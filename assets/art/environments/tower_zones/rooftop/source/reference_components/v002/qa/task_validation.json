@@ -1,21 +1,22 @@
 {
   "passed": true,
   "errors": [],
-  "package_count": 44,
+  "package_count": 47,
   "category_count": 10,
-  "source_meshes": 211,
-  "output_meshes": 45,
-  "disk_manifest_count": 44,
+  "source_meshes": 214,
+  "output_meshes": 48,
+  "disk_manifest_count": 47,
   "empty_packages": 0,
   "scope": "new library; prior sources excluded from scene; whole-file hashes stronger than individual geometry signatures",
   "locked_match": true,
+  "missing_locked_files": [
+    "assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v021.blend"
+  ],
   "locked_before": {
-    "assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v021.blend": "84425641136f743ed4e574ac10619c561f68680cae180109703d9980e0a24b67",
     "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend": "0eec20ede096ce97180b185d18a7d0b06b54d2b100ee1423380e62e09ca47690",
     "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend": "119d59422884496081100d4c37942decd453c312c8b647dcc19368e614af9ebb"
   },
   "locked_after": {
-    "assets/art/environments/rooftop_shelter_3d/source/env_rooftop_shelter_90x80m_top3d_v021.blend": "84425641136f743ed4e574ac10619c561f68680cae180109703d9980e0a24b67",
     "source/art/blender/base_facility_layout/source/base_facility_runtime_layout_hq_v026.blend": "0eec20ede096ce97180b185d18a7d0b06b54d2b100ee1423380e62e09ca47690",
     "assets/art/environments/tower_zones/battle/source/common_components/v003/战局区块_通用组件库_v003.blend": "119d59422884496081100d4c37942decd453c312c8b647dcc19368e614af9ebb"
   },
@@ -120,12 +121,12 @@
       "maximum": [
         2.5,
         0.25,
-        1.7999999523162842
+        0.800000011920929
       ],
       "size": [
         5.0,
         0.5,
-        1.7999999523162842
+        0.800000011920929
       ]
     },
     {
@@ -156,12 +157,12 @@
       "maximum": [
         1.25,
         1.25,
-        1.7999999523162842
+        0.800000011920929
       ],
       "size": [
         2.5,
         2.5,
-        1.7999999523162842
+        0.800000011920929
       ]
     },
     {
@@ -810,6 +811,60 @@
         5.067058563232422,
         0.8015565872192383,
         12.015061378479004
+      ]
+    },
+    {
+      "slug": "parapet_dmg_a",
+      "minimum": [
+        -2.5,
+        -0.25,
+        0.0
+      ],
+      "maximum": [
+        2.5,
+        0.25,
+        0.800000011920929
+      ],
+      "size": [
+        5.0,
+        0.5,
+        0.800000011920929
+      ]
+    },
+    {
+      "slug": "parapet_dmg_b",
+      "minimum": [
+        -2.5,
+        -0.25,
+        0.0
+      ],
+      "maximum": [
+        2.5,
+        0.25,
+        0.800000011920929
+      ],
+      "size": [
+        5.0,
+        0.5,
+        0.800000011920929
+      ]
+    },
+    {
+      "slug": "parapet_dmg_c",
+      "minimum": [
+        -2.5,
+        -0.25,
+        0.0
+      ],
+      "maximum": [
+        2.5,
+        0.25,
+        0.800000011920929
+      ],
+      "size": [
+        5.0,
+        0.5,
+        0.800000011920929
       ]
     }
   ],

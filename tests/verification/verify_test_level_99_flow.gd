@@ -95,11 +95,18 @@ func _verify_design_source(failures: Array[String]) -> void:
 	if not LevelPlanLoader.has_level_plan(LEVEL_ID):
 		failures.append("测试关卡99 的设计源加载失败（L1 缺失或 schema 不符）")
 		return
-	# 开关是**逐关卡**的：99 打开，远征关卡01 不打开（后者仍走内置房表以保住既有存档口径）。
+	# 开关是**逐关卡**的，两侧都要钉住 —— 只断言「99 开着」会漏掉开关被误关或误开。
+	# 2026-09-20：远征关卡01 由主人决定打开（要砍掉「每局 0/90/180/270 旋转 + Z 镜像」的
+	# 版图随机），故此处的远征断言改为**正向**。原反向断言的理由是「既有存档口径会被改变」，
+	# 已实测澄清：唯一比对 layout_id 的恢复闸门
+	# TowerDescent3D._restore_runtime_world_save_snapshot 只遍历 floor_index > 1 的已提交层，
+	# 而远征是单层 floor_index 0，不进比对 ⇒ 不会整档恢复失败；真实代价是进行中的存档会
+	# resume 到未旋转的固定版图（room_progress 按 room_id 走，进度不丢）。
+	# 对方侧（远征关卡01 自己）的对应断言见 verify_expedition_level01_flow。
 	if not FloorPlanGenerator.data_driven_enabled(LEVEL_ID):
 		failures.append("测试关卡99 未打开数据驱动（design_source.generation_policy.runtime_enabled）")
-	if FloorPlanGenerator.data_driven_enabled("expedition_01"):
-		failures.append("远征关卡01 的数据驱动开关被误开，既有存档口径会被改变")
+	if not FloorPlanGenerator.data_driven_enabled("expedition_01"):
+		failures.append("远征关卡01 的数据驱动开关被关闭，版图会退回每局旋转的随机口径")
 	if FloorPlanGenerator.data_driven_enabled("battle_level01"):
 		failures.append("battle_level01 的数据驱动开关被误开")
 
@@ -857,7 +864,8 @@ func _report(failures: Array[String]) -> void:
 		print(
 			"TEST_LEVEL_99_FLOW_OK: "
 			+ "registry(99 -> ExpeditionLevel99_3D, run_id 99, resume route), "
-			+ "design source loaded with runtime_enabled per-level (expedition_01/battle_level01 still off), "
+			+ "design source loaded with runtime_enabled pinned per level (99 + expedition_01 on, "
+			+ "battle_level01 off), "
 			+ "generator trigger=level_plan_data with 4 rooms start/room_01/room_02/extraction "
 			+ "(no fallback to the 5-content-room builtin table), "
 			+ "standalone single-layer scene on Dungeon3D base with Blocks/Expedition only, "

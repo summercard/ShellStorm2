@@ -12,7 +12,6 @@ const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"floor_base",
 	"overhead_services",
 	"debris_papers",
-	"central_terminal_island",
 	"north_server_00",
 	"north_server_01",
 	"north_server_02",
@@ -21,7 +20,6 @@ const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"north_server_05",
 	"north_broken_core",
 	"north_nexus_sign",
-	"west_glass_office",
 	"east_repair_bay",
 	"east_robot_arm",
 	"office_planter",
@@ -172,7 +170,11 @@ func _probe_rooms() -> void:
 		_expect(int(snapshot.get("safe_room_wall_module_count", -1)) == 10, "实墙模块应为 10", doors)
 		_expect(int(snapshot.get("safe_room_door_wall_module_count", -1)) == 2, "门墙模块应为 2", doors)
 		_expect(int(snapshot.get("safe_room_floor_tile_count", -1)) == 9, "地砖应为 9", doors)
-		_expect(int(snapshot.get("safe_room_package_count", -1)) == 17, "房间包应为 17", doors)
+		_expect(
+			int(snapshot.get("safe_room_package_count", -1)) == SAFE_ROOM_PACKAGE_IDS.size(),
+			"房间包数应与本清单一致（%d）" % SAFE_ROOM_PACKAGE_IDS.size(),
+			doors
+		)
 		# 旧塔楼拼装不得残留，否则与 v004 墙体重影。
 		_expect(
 			_count_meta(room, "asset_id", "ENV-TOWER-WALL-SOLID-5M") == 0,

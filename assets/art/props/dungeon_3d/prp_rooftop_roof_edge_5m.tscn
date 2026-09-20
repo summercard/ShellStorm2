@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间房顶边缘板」（天台参考组件库 v002 · 房顶模块）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_roof_edge_top3d.glb
+;   5.00m × 0.30m × 5.00m；原点在**底面中心**（几何 Y=0..0.30，XZ 居中 ±2.5）。
+;   来源包：房顶边缘板_资产包（房顶边缘板_主体，2 个表面 = 01 骨架收口线脚 + 02 青绿大面）。
+;
+; 【收口在哪一侧】收口线脚（01_精工金属_紫色骨架）在**局部 +Z 一侧**。
+;   实测依据：参考拼装 reference_assembly.json 把 roof_edge 摆在 6×6 的最外圈、
+;   每条边都用「收口朝外」，其 rotation_z 与「+Z 即外法线」的口径逐值吻合：
+;     max z 边 → 0°； min z 边 → 180°； max x 边 → +90°； min x 边 → -90°。
+;   例如 (x=-2.5, 外墙最大 z 侧) → 0°，(x=-7.5, 最小 x 侧) → -90°，(x=+7.5) → +90°。
+; ⚠️ 与 99F 系（forward_axis=-Z）差 180°：同样一面，99F 件用 -90°，本套件用 +90°。
+;
+; 【本件只铺外圈非角格】6×6 网格共 36 格 = 4 角格 + 16 边格（本件）+ 16 内圈格。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV。本件视觉专用（visual_only），封顶碰撞由 Base100UpperShell3D 的
+;   RoofCollision 代理生成，本件不带任何碰撞节点。
+; 高度口径同 prp_rooftop_roof_full_5m：底面原点到顶面 0.30，摆 y=24 时占 24.00..24.30。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_roof_edge_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoofEdge5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOF-EDGE"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOF-EDGE"
+metadata/source_package = "房顶边缘板_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_roof_edge_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/slab_thickness_m = 0.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.3, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.3, 5)
+metadata/bounds_note = "包络 5×0.30×5 与完整板逐值相同（收口线脚在 0.30m 板厚之内，不外扩包络）。差异在表面分配（2 表面 vs 1 表面）。"
+metadata/visual_node_name = "房顶边缘板_主体"
+metadata/surface_count = 2
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_roof_edge"
+metadata/roof_cell_role = "edge"
+metadata/placement_note = "只用于 6×6 网格外圈非角格；收口侧（局部 +Z）朝场地外侧。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,5 +1,19 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-20｜100F 上层围护东西南三面与 24m 封顶换成天台参考组件库 v002（房间墙 + 房顶模块）
+
+- 按用户口径「把天台参考组件库里的房间墙体、门与房顶做成正规 prefab，拼装到 100F 上层围护」落地。`env_base100_upper_shell_30x30_h12_root_top3d.tscn` 的 **24 块墙 + 36 格封顶**重新装配：东西南三面 **17 块**换 `ENV-ROOFTOP-REF-ROOM-WALL`（`prp_rooftop_room_wall_5x12.tscn`），24m 封顶 **36 格**换 `ENV-ROOFTOP-REF-ROOF-{CORNER,EDGE,FULL}`（角 4 + 边 16 + 内圈 16）。
+- **北面大窗与东面门洞槽保留 base99**（2 普通墙 + 4 窗墙 + 1 门墙）。原因：东面 `z=-7.5` 门洞槽是 100F **唯一外梯过场门**，由 `TowerDescent3D._install_base_rooftop_transit_door()` 挂 `RoomDoor3D`，净尺寸写死 `TOWER_GEOMETRY.DOOR_CLEAR_WIDTH_M/HEIGHT_M = 2.2×2.5`（`TowerGeometry3D`）；换 v002 门洞墙的 **3.80×6.80** 洞 = 改全游戏所有门。用户决策「东门不动，新门只入库」。
+- ⚠️ **朝向差 180°（本批最大的坑）**：天台 v002 件外法线朝**局部 +Z**，99F/基地系 base99 件朝**局部 -Z**，同一条边 rotation 差 180°。对照（三方互证：facade 环注释 / `reference_assembly.json` / 场景实测包络）：**南 max z** → v002 `0°`（base99 `180°`）；**北 min z** → v002 `180°`（base99 `0°`）；**东 max x** → v002 `+90°`（base99 `-90°`）；**西 min x** → v002 `-90°`（base99 `+90°`）。全部只用 `rotation_y`，不做 z 翻转。
+- 房顶模块收口在**局部 +Z 与 -X**：6×6 角格 `(min x,max z)→0°` / `(max x,max z)→+90°` / `(max x,min z)→180°` / `(min x,min z)→-90°`；边格按所在边 `max z→0°` / `min z→180°` / `max x→+90°` / `min x→-90°`；内圈 `0°`。封顶摆 `y=24`（占 24.00..24.30），墙视觉高 `11.9m` 顶面 23.9，留 0.10 给封顶。
+- 场景由 `_scratch/task_house/gen_h12_scene.py` 重生成，自校验 `COUNTS {'1_plain':2,'2_window':4,'5_room_wall':17,'3_door':1,'8_roof_corner':4,'7_roof_edge':16,'6_roof_full':16}`、`SELFCHECK_OK walls=24 roof=36`。⚠️ **CRLF 归一必须整体 `.replace("\r\n", "\n").replace("\n", "\r\n")`** —— 拼接 parts 内的注释串含裸 `\n`，只 `join` 不够（初版实测 `bare_LF=237`）。
+- 运行时快照 `DungeonRoom3D.get_room_snapshot()` 新增 4 键：`base100_rooftop_room_wall_count` / `base100_rooftop_roof_{corner,edge,full}_count`（按 `asset_id` 元数据统计节点数）。`verify_base99_wall_visual_replacement` 的 `base100_wall_plain_instance_count` 断言 **19 → 2**（换墙后 base99 普通墙只剩北面 2 块），并新增 4 条 v002 计数断言（17 / 4 / 16 / 16）。**反向对照**：临时把 17 改 18 → 变红、exit 1、报错精确，已还原。
+- 只读探针 `probe_h12_house` 实测：`wall_children=24`、`roof_children=36`；4 件数量全 OK；rotation 全符合；`palette_bound=73 / palette_wrong=0 / no_material=0`；首个实例世界包络正确（ROOM-WALL `(10,12,14.85)..(15,23.9,15.15)`；ROOF-CORNER `(-10,24,-15)..(-15,24.3,-10)`）。
+- **11 个正式 prefab**（`assets/art/props/dungeon_3d/prp_rooftop_*`）+ 11 GLB（`tower_zones/rooftop/components/`）建立；其中 `prp_rooftop_room_door.tscn` / `prp_rooftop_room_door_leaf.tscn` 是**全新**件（v002「门与暖灯_主体」528 顶点焊接网格按 5 制作件 AABB 无损二分：130 面 → 门扇、418 面 → 门组件）。门两件与挂藤三件**只入库、不摆放**。
+- 台账（`ShellStorm2_场景账本_v001.xlsx`）：《3D-场景通用》9 行（106-111 / 136-138）`Blender源已完成 → 正式美术已接入` 并补 prefab/GLB/碰撞/尺寸/朝向；新增 2 行（144 `ENV-ROOFTOP-REF-ROOM-DOOR`、145 `-DOOR-LEAF`）；《资产主表》row 108 `ENV-BASE100-UPPER-SHELL-30X30-H12` **v002 → v003**、SHA 刷新 `3c44b2bd… → 376d1620…`。遵守 README「AssetID 已存在 → 升级既有行，不新增行」。
+- 门禁：`check_asset_registry --ledger scenes --scope full` issue **47 → 46**（`sha_mismatch` 24 → 23，恰好是上层围护行；`invalid_status` 5 / `path_not_found` 18 不变，**无任何一类增加**、无新增 `duplicate_asset_id`）；`--scope structure` 仅剩 5 条既有 `invalid_status`（`ENV-TOWER-STAIR-*` / `ENV-TOWER-CORNER-COLUMN-05M` 的「白盒组件」）。跑绿：`verify_base99_wall_visual_replacement`、`verify_base99_structural_asset_integration`、`verify_rooftop_floor_facade_components`、`verify_rooftop_32x32_contract`、`verify_base_rooftop_transit_door_motion`、`verify_base99_door_visuals_v021`、`verify_arrival_gate_floor_bundle_flow`、`verify_tower_extraction_return_flow`、`verify_base99_modular_room_visual`。`verify_base_overhaul_flow` 为**基线红**（用改动前旧场景反向复跑，同样的 4 条 ERROR 与 `Invalid call. Nonexistent 'float' constructor.` 完全一致，与本批无关）。
+- 文档：`assets/art/environments/base_facility_3d/基地99层美术场景编辑说明.md` 第 30 / 31 / 35 / 39 行同步（`H9 → H12`、`9→18m → 12→24m`、`18m 封顶 → 24m 封顶`、`36 块基地地板 → 36 块 v002 房顶模块`、`19 普通墙 → 2 普通墙 + 17 v002 房间墙`），并把 180° 朝向差写进编辑器说明。
+
 ## 2026-09-19｜关卡设计源支持房间级覆盖：刷怪计划 `enemy_spawn_plan` 与首领指派 `boss_content_id`
 
 - 背景：关卡设计源（L2 `floors/floor_NN.json`）此前只能定**几何与内容类型**，控制不了「这一间房刷什么」和「这一间 Boss 房出哪个首领」。本次给房间加两个**可选**字段，让设计源能覆盖这两件事，同时**不新增任何数值真源**。

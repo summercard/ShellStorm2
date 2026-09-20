@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3]
+
+; 天台「房间门扇」（天台参考组件库 v002 · 门与暖灯，**从门组件里切出的门扇本体**）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_door_leaf_top3d.glb
+;   门扇板 3.68m 宽 × 6.80m 高 × 0.18m 厚；可视包络 3.68 × 6.80 × 0.41（含门板/把手凸出）。
+;   原点在**底面中心**：门扇板厚度精确对称于局部 z=0。
+;   ⚠️ 与 99F 的 prp_tower_door_leaf_5m（净宽 2.2 × 净高 2.5）**不可互换**，
+;   本件门洞净宽 3.80 × 净高 6.80，高度差 4.3m。
+;   来源包：门与暖灯_资产包 → 门与暖灯_主体 的 5 个松散部件
+;   （门扇板 / 门板 / 窥窗框 / 窥窗玻璃 / 门把手，共 130 面）。派生脚本：
+;   tower_zones/rooftop/source/export_env_rooftop_ref_room_walls_v001.py
+;
+; 【为什么可以拆】见 prp_rooftop_room_door.tscn：418（门组件）+ 130（门扇）= 548 = 主体
+;   全部面数，是对游戏输出网格的精确二分；用 门与暖灯_制作组件 里 5 个同名制作件的
+;   局部 AABB 精确核出这 5 件再切走，不是按顶点数猜。
+;
+; 【三件同槽叠放的装配口径】门洞墙 / 门组件 / 门扇 共用一条「门扇平面」基准：
+;   1) 门洞墙 prp_rooftop_room_doorwall_5x12  放基准位（例：东墙 (15, 12, -7.5)）
+;   2) 本件（门扇）                            也放基准位 —— 同位、同 rotation、无需偏移，
+;      因为门扇板平面已经在自己局部 z=0
+;   3) 门组件 prp_rooftop_room_door            放 基准位 + 0.4175×外法线（其门扇平面在
+;      局部 z=-0.4175，外移后正好压回基准位）
+;
+; 装配缝：门扇宽 3.68 对门洞净宽 3.80，两侧各留 0.06 安装缝；高度 6.80 与净高逐值相同。
+; 默认朝向 +Z（门扇正面 / 把手凸出侧朝房间外，与门组件暖灯侧同向）；
+;   ⚠️ 与 99F 门系（forward_axis=-Z）差 180°。
+; 本件视觉专用（visual_only）。本房型的门碰撞由 Base100UpperShell3D 生成，
+;   其实现「门只是洞、不做开合动画」，故门扇以**关闭态静态**呈现，
+;   不声明 open_mode（对比 prp_tower_door_leaf_5m 的 vertical_lift 是升降门）
+;   —— 将来若要把这扇门做成可开合，先改 Base100UpperShell3D 的门洞拆分与
+;   RoomDoor3D（后者把净尺寸写死为 TOWER_GEOMETRY.DOOR_CLEAR_*，不接受本件的 3.8×6.8）。
+; preserve_authored_palette：保留共享色盘（01 骨架 / 02 水泥 / 03 点缀）。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_door_leaf_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomDoorLeaf" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-DOOR-LEAF"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-DOOR-LEAF"
+metadata/source_package = "门与暖灯_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_door_leaf_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/door_clear_width_m = 3.8
+metadata/door_clear_height_m = 6.8
+metadata/panel_thickness_m = 0.18
+metadata/panel_width_m = 3.68
+metadata/panel_height_m = 6.8
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(3.68, 6.8, 0.18)
+metadata/visual_bounds_size_m = Vector3(3.68, 6.8, 0.41)
+metadata/leaf_plane_local_z_m = 0.0
+metadata/bounds_note = "结构包络 = 门扇板 3.68×6.80×0.18（板面居中于局部 z=0，即 ±0.09）；与门洞净宽 3.80 相差的 0.12m 是两侧各 0.06 安装缝，净高 6.80 逐值吻合。可视包络 3.68×6.80×0.41 多出的 0.23m 是门板/把手在**外侧（局部 +Z）**的凸出，实测局部 z ∈ [-0.09, +0.32]。替换美术时先核对本条。"
+metadata/visual_node_name = "门与暖灯_门扇_主体"
+metadata/visual_bounds_policy = "envelope_carrier_node_union_of_visible_meshes"
+metadata/surface_count = 3
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/collision_note = "门扇不自带碰撞；门洞碰撞由 Base100UpperShell3D 生成。本件以关闭态静态呈现，无 open_mode。"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_door_leaf"
+metadata/attach_note = "与门洞墙同位（基准位），无需偏移；门组件见 prp_rooftop_room_door，需 +0.4175×外法线。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,6 @@
+RESULT verify_block00_floor98_assembly exit=1 markers=[BLOCK00_ASSEMBLY_FAIL|]
+RESULT verify_tower_grid_component_alignment exit=0 markers=[TOWER_GRID_COMPONENT_ALIGNMENT_OK|]
+RESULT verify_rooftop_32x32_contract exit=0 markers=[ROOFTOP_WEST_EXPANSION_CONTRACT_PASS|]
+RESULT verify_rooftop_floor_facade_components exit=0 markers=[]
+RESULT probe_rooftop_parapet_alignment exit=0 markers=[PROBE_ALIGN_DONE|]
+RESULT verify_stair_entry_clearance exit=0 markers=[STAIR_ENTRY_CLEARANCE failures=0|]

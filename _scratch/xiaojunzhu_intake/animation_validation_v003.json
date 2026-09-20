@@ -1,0 +1,62 @@
+[
+  {
+    "clip": "idle",
+    "samples": 385,
+    "min_surface_z": 0.002371804788708687,
+    "max_min_surface_z": 0.0025656691286712885,
+    "loop_vertex_error": 7.278749183740821e-07,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  },
+  {
+    "clip": "walking",
+    "samples": 193,
+    "min_surface_z": 0.0009193145669996738,
+    "max_min_surface_z": 0.004305743612349033,
+    "loop_vertex_error": 6.670662547826586e-07,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  },
+  {
+    "clip": "running",
+    "samples": 97,
+    "min_surface_z": -0.0013032591668888927,
+    "max_min_surface_z": 0.01205629762262106,
+    "loop_vertex_error": 6.690604782296314e-07,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  },
+  {
+    "clip": "attack",
+    "samples": 205,
+    "min_surface_z": 0.0016671804478392005,
+    "max_min_surface_z": 0.002000044099986553,
+    "loop_vertex_error": null,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  },
+  {
+    "clip": "hurt",
+    "samples": 97,
+    "min_surface_z": 0.0024661440402269363,
+    "max_min_surface_z": 0.002700184006243944,
+    "loop_vertex_error": null,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  },
+  {
+    "clip": "dead",
+    "samples": 289,
+    "min_surface_z": 0.0007415382424369454,
+    "max_min_surface_z": 0.08689730614423752,
+    "loop_vertex_error": null,
+    "root_motion": 0,
+    "skeleton_match": true,
+    "unit_scale": true
+  }
+]

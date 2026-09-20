@@ -1,0 +1,68 @@
+{
+  "asset_id": "ENM-MELEE-FUNGBOAR01",
+  "display_name": "小僵尸",
+  "status": "exported_pending_godot_validation",
+  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend",
+  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend",
+  "skeleton_signature": "96d86b7b2d125053898ef4431d5f03809f931c228f1532f27376fe330ab865aa",
+  "clips": [
+    {
+      "id": "idle",
+      "action": "anim_melee_fungboar01_idle_v002",
+      "frames": 96,
+      "duration": 3.2,
+      "loop": true,
+      "scene": "01_待机_驼背晃身"
+    },
+    {
+      "id": "walking",
+      "action": "anim_melee_fungboar01_walking_v002",
+      "frames": 48,
+      "duration": 1.6,
+      "loop": true,
+      "scene": "02_慢走_跛脚拖步"
+    },
+    {
+      "id": "running",
+      "action": "anim_melee_fungboar01_running_v003",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": true,
+      "scene": "03_跑步_失衡前冲"
+    },
+    {
+      "id": "attack",
+      "action": "anim_melee_fungboar01_attack_v003",
+      "frames": 51,
+      "duration": 1.7,
+      "loop": false,
+      "scene": "04_近战_挥臂迟缓收势"
+    },
+    {
+      "id": "hurt",
+      "action": "anim_melee_fungboar01_hurt_v002",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": false,
+      "scene": "05_受击_踉跄回神"
+    },
+    {
+      "id": "dead",
+      "action": "anim_melee_fungboar01_dead_v002",
+      "frames": 72,
+      "duration": 2.4,
+      "loop": false,
+      "scene": "06_死亡_后躺砸地回弹"
+    }
+  ],
+  "outputs": {
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\components\\enm_melee_fungboar01_visual_top3d.glb": "fb233a3cb57dc82e24fa8afcd262048a1ccdbe10b8a0c3c06b5535ebb37b07a6"
+  },
+  "limitations": [
+    "源跑步亚帧约1.3mm穿地；未完成全程自穿插/支撑脚滑移质量审查"
+  ],
+  "source_sha256": {
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend": "bc14b22d389b79cb22a998ba7f713ada33cfccab4ab128d677dec2f3a4910d86",
+    "assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v003.blend": "5d16d2993a2f6d69f56bc99cfdd067d443bf15e916e819737cde1d8c30d654ee"
+  }
+}

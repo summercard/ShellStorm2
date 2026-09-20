@@ -3,8 +3,8 @@
 ; Stable AssetID: ENV-BATTLE-L01-SAFE-ENTRY · package floor_base
 ; 入口安全房 v007 · support · 承重底板与结构底台
 ; 范式 B：视觉 GLB + 稳定根；房间摆位与契约写在 metadata。
-; 本包不含碰撞——玩法阻挡由引擎 0.30m 结构代理持有（见 asset_manifest.json 的
-; structural_geometry / collision_status / replacement_contract）。视觉资产不注册玩法组。
+; 2026-09-20 复核：本包**按设计不含玩法阻挡**（原因见 metadata/collision_exclusion_reason），
+; 不是漏做。旧注释「碰撞由引擎 0.30m 结构代理持有」不成立——全仓并无该代理实现。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/entry_safe_room/floor_base/floor_base_visual_top3d.glb" id="1_visual"]
 
@@ -28,10 +28,11 @@ metadata/room_placement_note = "实例化时 position 用本值、rotation 保�
 metadata/preserve_authored_palette = true
 metadata/visual_only = true
 metadata/geometry_ownership = "room_owned_structure"
-metadata/replacement_contract = "structural support, not a replaceable visual module; the 5m floor tile modules seat on its 0.26 top face and the 60 mm grout shows this surface. Godot keeps the 0.30 structural collision proxy."
-metadata/collision_owner = "godot_0p30m_structural_proxy"
-metadata/collision_policy = "none_in_package"
+metadata/replacement_contract = "structural support, not a replaceable visual module; the 5m floor tile modules seat on its 0.26 top face and the 60 mm grout shows this surface. Player blocking for this package is external: TowerFloorStage3D._build_support() owns it; the package itself carries no shape."
+metadata/collision_owner = "TowerFloorStage3D._build_support"
+metadata/collision_policy = "external_owner_no_shape_in_package"
 metadata/collision_shape_count = 0
+metadata/collision_exclusion_reason = "承重底板，碰撞归 TowerFloorStage3D._build_support()，包内不持有"
 metadata/runtime_instantiation = "per_instance_prefab"
 metadata/emission = false
 metadata/animation = false

@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间标准墙」（天台参考组件库 v002 · 房间墙体）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_wall_top3d.glb
+;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
+;   来源包：天台区块_参考组件库_v002.blend → 房间标准墙_资产包（房间标准墙_主体）。
+; 默认朝向 +Z（装饰面朝房间外）。⚠️ 与 99F 的 ENV-BASE99-WALL-PLAIN-5X12 朝向相反：
+;   99F 系（forward_axis=-Z）东墙用 -90°，本件（+Z）东墙用 +90° —— 混用会让装饰面朝屋里。
+;   参考拼装 reference_assembly.json 的四向 rotation_z 已验证：本件 +Z 即外法线。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV（由 tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
+; 本 Prefab 视觉专用（visual_only）。围护碰撞由 Base100UpperShell3D._build_structure_collision()
+;   按 30×30×0.30 连续结构层代理生成，本件不带任何碰撞节点（内嵌会与结构层重复阻挡）。
+; 包络说明：可视包络 = 结构包络（无外挂装饰）；高度 11.90 与 12.00 刻意分离 ——
+;   顶面落在上层楼板（24m 封顶）下方 0.10m，与 ENV-BASE99-WALL-PLAIN-5X12 同口径。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_wall_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomWall5x12" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-WALL"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-WALL"
+metadata/source_package = "房间标准墙_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_wall_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 11.9
+metadata/logical_height_m = 12.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/bounds_note = "可视包络与结构包络逐值相同（无外挂装饰）。"
+metadata/visual_node_name = "房间标准墙_主体"
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_wall_run"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

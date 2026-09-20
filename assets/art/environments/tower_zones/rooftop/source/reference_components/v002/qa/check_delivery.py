@@ -15,5 +15,5 @@ for f in ['00_固定镜头结构素模.png','01_参考镜头全景.png','02_俯�
  if not (O/'renders'/f).is_file():issues.append('missing '+f)
  if (O/'renders'/f).is_file():Image.open(O/'renders'/f).verify()
 if len(new)!=7 or not all(p['variant_of'] in oldids for p in new):issues.append('variant IDs')
-report={'passed':not issues,'issues':issues,'packages':44,'new_child_variants':7,'existing_ids_reused':37,'unchanged_previews_reused':36,'source_sha256':hashlib.sha256((O/'天台区块_参考组件库_v002.blend').read_bytes()).hexdigest()}
+report={'passed':not issues,'issues':issues,'packages':47,'new_child_variants':10,'existing_ids_reused':37,'unchanged_previews_reused':36,'source_sha256':hashlib.sha256((O/'天台区块_参考组件库_v002.blend').read_bytes()).hexdigest()}
 (O/'qa/delivery_validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps(report,ensure_ascii=False));raise SystemExit(0 if report['passed'] else 1)

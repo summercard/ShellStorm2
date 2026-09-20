@@ -60,5 +60,5 @@
   "replacement_contract": "structural support, not a replaceable visual module; the 5m floor tile modules seat on its 0.26 top face and the 60 mm grout shows this surface. Godot keeps the 0.30 structural collision proxy.",
   "exported": false,
   "expected_export": "floor_base_v007.glb",
-  "collision_status": "未制作；玩法碰撞由 Godot 0.30m 结构代理负责"
+  "collision_status": "不适用：玩法阻挡归 TowerFloorStage3D._build_support()，包内不持有碰撞"
 }

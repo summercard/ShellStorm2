@@ -77,8 +77,18 @@ func _validate_facility_shell(failures: Array[String]) -> void:
 			failures.append("基地带门墙不是2个独立模块")
 		if int(snapshot.get("base100_upper_shell_count", 0)) != 1:
 			failures.append("基地缺少独立可编辑的100层上层围护与封顶Prefab")
-		if int(snapshot.get("base100_wall_plain_instance_count", 0)) != 19:
-			failures.append("100层上层围护普通墙不是19块")
+		if int(snapshot.get("base100_wall_plain_instance_count", 0)) != 2:
+			failures.append("100层上层围护残留的99层普通墙不是北面2块")
+		# 2026-09-20：东西南三面 17 块墙与 24m 封顶 36 格换成天台参考组件库 v002。
+		# 换墙后 base99 plain 只剩北面 2 块（上面那条），必须靠下面四条断言确认新件真到位。
+		if int(snapshot.get("base100_rooftop_room_wall_count", 0)) != 17:
+			failures.append("100层东西南三面天台v002房间标准墙不是17块")
+		if int(snapshot.get("base100_rooftop_roof_corner_count", 0)) != 4:
+			failures.append("24米封顶天台v002角板不是4块")
+		if int(snapshot.get("base100_rooftop_roof_edge_count", 0)) != 16:
+			failures.append("24米封顶天台v002边缘板不是16块")
+		if int(snapshot.get("base100_rooftop_roof_full_count", 0)) != 16:
+			failures.append("24米封顶天台v002完整板不是16块")
 		if int(snapshot.get("base100_wall_window_instance_count", 0)) != 4:
 			failures.append("100层北墙窗墙不是中间4块")
 		if int(snapshot.get("base100_wall_door_instance_count", 0)) != 1:

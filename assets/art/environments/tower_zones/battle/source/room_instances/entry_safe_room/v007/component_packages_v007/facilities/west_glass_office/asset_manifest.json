@@ -62,5 +62,5 @@
   "replacement_contract": "decoration only; must not change room size, 5m grid, collision layer or navigation",
   "exported": false,
   "expected_export": "west_glass_office_v007.glb",
-  "collision_status": "未制作；玩法碰撞由 Godot 0.30m 结构代理负责"
+  "collision_status": "no_blocking_by_design：无内嵌碰撞；早期文档所称 Godot 0.30m 结构代理从未实现。2026-09-20 起该包已移出安全房运行时消费，仅留在库中备用。"
 }

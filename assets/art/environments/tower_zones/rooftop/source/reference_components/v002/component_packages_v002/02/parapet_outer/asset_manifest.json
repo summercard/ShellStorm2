@@ -30,7 +30,7 @@
   "bounds_size": [
     2.5,
     2.5,
-    1.8
+    0.8
   ],
   "bounds_min": [
     -1.25,
@@ -40,7 +40,7 @@
   "bounds_max": [
     1.25,
     1.25,
-    1.7999999523162842
+    0.8
   ],
   "material_roles": [
     "01_精工金属_紫色骨架",
@@ -64,8 +64,8 @@
     "shared_facility_palette"
   ],
   "attachment": "independent_module",
-  "exported": false,
-  "expected_export": "env_rooftop_ref_parapet_outer_v002.glb",
+  "exported": true,
+  "expected_export": "env_rooftop_ref_parapet_outer_top3d.glb",
   "collision": "not_created",
   "logical_wall_height": null,
   "collision_bounds": null,
@@ -79,5 +79,7 @@
   "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
   "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
   "dedupe_classification": "child_variant",
-  "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+  "geometry_revision": "plan_a_0p80m_2026-09-20",
+  "geometry_notes": "方案A平整墙板：基座带0.10m + 墙板0.64m + 压顶带0.10m；含压顶总高0.80m；取消中间密集竖向分块。"
 }

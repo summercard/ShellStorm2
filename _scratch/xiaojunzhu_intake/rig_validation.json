@@ -1,0 +1,128 @@
+{
+  "height_source_m": 1.857142537270846,
+  "height_display_m": 1.2999997760895923,
+  "min_z": -4.464734217890509e-07,
+  "bones": 36,
+  "finger_deform_bones": 16,
+  "finger_tests": [
+    {
+      "bone": "L_Thumb1",
+      "weighted_vertices": 10,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.027614794326399905,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Thumb2",
+      "weighted_vertices": 14,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.021031836298817087,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Index1",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.0225693268994884,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Index2",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.0138928122810341,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Middle1",
+      "weighted_vertices": 10,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.023597188502397195,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Middle2",
+      "weighted_vertices": 15,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.015323340964085564,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Pinky1",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.01897350480428451,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "L_Pinky2",
+      "weighted_vertices": 15,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.014261057848507184,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Thumb1",
+      "weighted_vertices": 10,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.027614795412098745,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Thumb2",
+      "weighted_vertices": 14,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.02103182708790411,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Index1",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.022569401692120766,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Index2",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.013892916168302055,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Middle1",
+      "weighted_vertices": 10,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.023597273064496622,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Middle2",
+      "weighted_vertices": 15,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.015323311621145618,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Pinky1",
+      "weighted_vertices": 12,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.018973550486271907,
+      "opposite_side_max_displacement": 0.0
+    },
+    {
+      "bone": "R_Pinky2",
+      "weighted_vertices": 15,
+      "test_angle_degrees": 25.783100780887047,
+      "max_displacement_m": 0.01426118600319324,
+      "opposite_side_max_displacement": 0.0
+    }
+  ],
+  "vertices": 2278,
+  "faces": 4552,
+  "weights_normalized": true,
+  "geometry_unchanged": true,
+  "images_packed": true,
+  "actions": 0,
+  "status": "source_verified_not_godot_integrated"
+}

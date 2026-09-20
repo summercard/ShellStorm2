@@ -330,10 +330,21 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 
 **6.1 打开本关卡的数据驱动开关（先确认用户接受代价）**
 
-在 L1 `generation_policy` 加 `"runtime_enabled": true`。**这是逐关卡的**：只改这一关，
-不要碰 `expedition_01` / `battle_level01`（它们的设计源只是校验器的输入，运行时仍走内置房表）。
-打开会改这一关的 `layout_id`，`expedition_01` 的既有存档不受影响，但**这一关自己的旧档会失效** ——
-只有用户明确说「先不管存档」时才能开。
+在 L1 `generation_policy` 加 `"runtime_enabled": true`。**这是逐关卡的**，只改这一关。
+`expedition_01` 已于 2026-09-20 由主人决定打开；`battle_level01` 仍必须保持关闭。
+
+打开会改这一关的 `layout_id`（内置 `expedition_<id>_<hash>` → 数据驱动 `f%02d_<sha256[0:16]>`），
+但**「整档恢复失败」只发生在多层塔楼层**：`TowerDescent3D._restore_runtime_world_save_snapshot`
+的 `layout_id` 比对只遍历 `committed`，而 `committed` 的准入条件是 `floor_index > 1`；
+**单层关卡的 `floor_index = 0` 不进比对** ⇒ 不会整档失效。
+真实代价是**版图几何**：数据驱动是 `mode="authored"`、与种子无关，所以内置路径那套
+「每局 0/90/180/270 旋转 + Z 镜像」会整体消失（旋转只在 `.gd` 的 `generate_expedition` 里做）。
+进行中的存档会 resume 到未旋转的固定版图，`room_progress` 按 `room_id` 走、进度不丢。
+⇒ 开之前必须把这两件事讲给用户并拿到**明说同意**：版图随机性归零 + 旧档换图。
+
+翻开后**必然红两处逐关卡断言**（不要删，改成从设计源推期望 —— 见 §4 禁区表）：
+`verify_test_level_99_flow` 的「远征关卡01 开关必须关」反向哨兵、
+`verify_expedition_level01_flow` 的 `mode == "expedition"`。
 
 **6.2 关卡 id 登记进 `GameDesignConfig.EXPEDITION_LEVELS`**
 
@@ -393,8 +404,10 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 
 | 不要做 | 为什么 |
 |---|---|
-| 未经用户明确同意就打开 `generation_policy.runtime_enabled` | 切数据驱动会改 `layout_id`，存档按它比对，不一致**整档恢复失败**。05.2 §9 的 D4（存档兼容）尚未裁决 —— 只有用户明说「先不管存档」才能开，且只开他指定的那一关（见 §2 第 6 步） |
-| 打开 `expedition_01` / `battle_level01` 的 `runtime_enabled` | 这两关的设计源当前只是校验器输入，运行时走内置房表。打开会直接改动**已上线关卡**的存档指纹 |
+| 未经用户明确同意就打开 `generation_policy.runtime_enabled` | 切数据驱动会改 `layout_id`，且**版图几何从「每局旋转/镜像」变成设计源里的固定坐标**。05.2 §9 的 D4（存档兼容）尚未裁决 —— 只有用户明说接受这个代价才能开，且只开他指定的那一关（见 §2 第 6 步） |
+| 以为切数据驱动一律「整档恢复失败」 | 那是**多层塔楼层**的症状：恢复闸门的 `layout_id` 比对只遍历 `committed`，准入条件是 `floor_index > 1`。**单层关卡（远征 `floor_index = 0`）不进比对**，不会整档失效（2026-09-20 实测 + 反向对照，见 §2 第 6.1 步） |
+| 打开 `battle_level01` 的 `runtime_enabled` | 该关的设计源当前只是校验器输入，运行时走内置房表。打开会直接改动**已上线关卡**的存档指纹 |
+| 翻了开关却不改那两条逐关卡断言 | `verify_test_level_99_flow` 有一条「远征关卡01 的开关必须关」的反向哨兵，`verify_expedition_level01_flow` 有一条 `mode == "expedition"`。两处都会红。**不要删哨兵**，改成「期望由 `FloorPlanGenerator.data_driven_enabled(level_id)` 推出」，两个方向都还有牙 |
 | 给远征关卡的 L2 写 `f%02d_<key>` 形式的 `room_id` | 运行时按字面量认房（`start` / `extraction`），写错不报错，只是出生点与撤离信标静默失效（见 §5 坑 12） |
 | 手改已上线关卡的 `legacy_room_id` | 会打断旧档的 `room_progress` 索引 |
 | 在 Python / 其它语言里复刻门槽或走廊公式 | 这正是规范 §1.1 的病根；一律走 Godot 侧唯一实现 |
@@ -556,6 +569,8 @@ LEVEL_PLAN_RUNTIME_GUARD_OK levels=1 rooms=... checks=... plans=...
 - [ ] 若用户指定了某个 Boss 房出场的首领：`boss_content_id` 写在该房上且值在名册里
       （`boss_abyss_archivist_95` / `boss_furnace_warden_90` / `boss_hollow_choir_85`），
       该房是 Boss 房（`content_type: "BOSS"` 或 `role: "boss"`），且**没**给同一间房写 `enemy_spawn_plan`
+- [ ] 若翻了 `runtime_enabled`：两条逐关卡断言已改成「期望由设计源推出」（**别删**），
+      且**做过反向对照**（把开关关回去再跑一遍，确认新增的红项/报错不是自己引入的）
 - [ ] 若用户只要求「生成设计源」：`runtime_enabled` 仍是 `false`
 - [ ] 若用户要求「能玩到」：`runtime_enabled` 为 `true`**且只对他指定的那一关开**，
       `EXPEDITION_LEVELS` 已登记、独立场景已建、`room_id` 已对齐 `start`/`room_NN`/`extraction`、

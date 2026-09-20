@@ -1,0 +1,32 @@
+{
+  "asset_id": "ENV-TOWER-CORNER-L-5M",
+  "package_id": "block_00_master_office::runtime_v001",
+  "display_name": "runtime_v001",
+  "display_name_zh": "塔楼 L 型转角墙 5m（两份通用墙刚性拼 L）",
+  "asset_slug": "corner_l_5m",
+  "category": "architecture",
+  "ledger_version": "v001",
+  "prefab": "assets/art/props/dungeon_3d/prp_corner_l_5m.tscn",
+  "glb": "assets/art/environments/tower_descent_3d/components/env_tower_corner_l_5m_top3d.glb",
+  "ledger_source_blend": "assets/art/environments/tower_descent_3d/source/corner_l_5m/env_tower_corner_l_5m_source_v001.blend",
+  "linked_source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_descent_3d/source/corner_l_5m/env_tower_corner_l_5m_source_v001.blend",
+  "blender_collection": "runtime_v001",
+  "layout_collection": "L角墙_corner_l_5m_资产包",
+  "standard_size": "包围盒 5.15×5.15×11.9（两臂各 5m，臂厚 0.3 + 装饰）",
+  "origin_contract": "bottom_corner（原点=转角，两臂向 +X / -Z 伸出）；Blender 侧两臂向 +X / +Y 伸出",
+  "collision_contract": "两条墙臂各自一个 StaticBody3D，节点名 WallCollisionLong / WallCollisionShort",
+  "library_origin_blender_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "mesh_object_count": 1,
+  "decoration_side": {
+    "armA_y": 1,
+    "armB_x": 1
+  },
+  "used_instance_count_in_layout": 11,
+  "role_in_layout": "四角 L 型墙角；原点=角点，两臂各占所在墙平面 1 个 5m lane",
+  "export_status": "not_exported（本布局源停在 Blender 阶段，未导出 GLB/PackedScene）",
+  "measured_on": "2026-09-20"
+}

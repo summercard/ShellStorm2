@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "asset_id": "ENV-ROOFTOP-REFERENCE-COMPONENT-LIBRARY",
+  "category": "02_女儿墙",
+  "version": "v002",
+  "block_id": "rooftop",
+  "floor_range": "100F",
+  "design_scope": "参考组件库正式主库，方案A女儿墙与破损变种",
+  "source_blend": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "front_direction": "-Y",
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "dependencies": [
+    "shared_facility_palette"
+  ],
+  "attachment": "independent_module",
+  "exported": true,
+  "collision": "not_created",
+  "logical_wall_height": null,
+  "collision_bounds": null,
+  "camera_clearance": null,
+  "animation": false,
+  "emission": false,
+  "scene_design_docs": [
+    "docs/v0.1/design/rooftop_component_library.md",
+    "docs/v0.1/05.1_关卡区块设计.md"
+  ],
+  "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
+  "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
+  "dedupe_classification": "child_variant",
+  "geometry_revision": "plan_a_0p80m_2026-09-20",
+  "geometry_notes": "方案A平整墙板：基座带0.10m + 墙板0.64m + 压顶带0.10m；含压顶总高0.80m；取消中间密集竖向分块。",
+  "package_id": "ENV-ROOFTOP-REF-PARAPET-DMG-B",
+  "name_zh": "女儿墙直段破损B",
+  "slug": "parapet_dmg_b",
+  "blender_collection": "女儿墙直段破损B_资产包",
+  "root_object": "根_女儿墙直段破损B",
+  "objects": [
+    "女儿墙直段破损B_主体"
+  ],
+  "source_collection": "女儿墙直段破损B_制作组件",
+  "local_origin": [
+    0,
+    0,
+    0
+  ],
+  "world_position": [
+    0,
+    -34,
+    0
+  ],
+  "bounds_size": [
+    5.0,
+    0.5,
+    0.8
+  ],
+  "bounds_min": [
+    -2.5,
+    -0.25,
+    0.0
+  ],
+  "bounds_max": [
+    2.5,
+    0.25,
+    0.8
+  ],
+  "sockets": {
+    "left": [
+      -2.5,
+      0,
+      0
+    ],
+    "right": [
+      2.5,
+      0,
+      0
+    ]
+  },
+  "expected_export": "env_rooftop_ref_parapet_dmg_b_top3d.glb",
+  "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_damage_v003.py",
+  "damage_kind": "breach",
+  "derived_from_asset_id": "ENV-ROOFTOP-REF-PARAPET"
+}

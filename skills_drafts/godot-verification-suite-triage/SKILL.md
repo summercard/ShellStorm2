@@ -59,6 +59,24 @@ ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed
 
 **一批场景同时红，先看第一个 `SCRIPT ERROR` 指向谁。** 传播链会放大：一个 config 脚本坏掉 → 所有依赖它的模块坏掉 → 依赖那些模块的场景整批 exit 1。例：`GameDesignConfig.gd` 坏了 → `WastelandLight3D.gd` 编译失败 → 四个玩家/背包/动画场景全 exit 1，而**不依赖 WastelandLight3D 的资产导入场景照样 `[PASS]`**。
 
+**特例：`Class "X" hides a global script class`（同名 `class_name` 抢注）**
+
+报错形如 `错误 (1, 12)：Class "DungeonRoom3D" hides a global script class.`。列号 12 落在 `class_name ` 之后，说明冲突源在某个脚本的**第 1 行**。
+
+三步定位（第 2 步是铁证）：
+
+1. **扫全仓重复**（必须排除 `.godot`）。⚠️ 不要用 Grep 工具，本仓会 30s 超时；用 bash grep 或 Python `os.walk`，后者顺带打出每个重复项的 `文件:行号`：
+   `grep -rh --include=*.gd --exclude-dir=.godot -E "^class_name +" . | sed "s/class_name *//" | sort | uniq -d`
+2. **查类缓存**——它直接告诉你该类名**现在挂在哪个路径**（经常不是你以为的那份）：
+   `grep -n -B6 '"class": &"X"' .godot/global_script_class_cache.cfg | grep path`
+3. **重复源多半是快照/备份脚本**（`*.before.gd`）掉进了 res:// 内的 `_scratch/`。
+
+修法：把副本**移出 res://**（放到项目外，如 `<工作区根>/_scratch/godot_script_backups/`），`.gd` 与其 `.uid` 一起移；先 grep 全仓确认无引用，再 `--headless --path . --import` 重刷缓存，最后三重复核：**缓存 path 指回正本** + **重扫重复数为 0** + **直跑一条依赖该类的场景拿 `*_OK`**。
+
+⚠️ **别给 `_scratch` 加 `.gdignore`**：那里的 `probe_*.gd` / `*.tscn` 是要真跑的探针，加了就再也加载不了。**只搬带 `class_name` 的副本**。
+
+⚠️ **危害大于报错本身**：缓存被旧副本抢注后，`extends X` / `X.常量` 会**静默拿到旧版脚本**（2026-09-20 先例：`DungeonRoom3D` 被 `_scratch/task_house/DungeonRoom3D.before.gd` 顶掉，正是这个错把问题暴露出来的）。所以必须复核缓存 path，不能只看报错消失。
+
 ## 加速分诊：`--headless` 直跑单场景（只分诊，不替代套件）
 
 套件每跑一条都要重建隔离工程，实测**单场景 >7 分钟**；直跑同一条只要 **4–7 秒**：

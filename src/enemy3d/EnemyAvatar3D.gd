@@ -24,6 +24,12 @@ const FOOTPRINT_PROFILES := {
 	"boss": {"radius": 1.92, "height": 2.30},
 }
 
+# 正式普通怪（非精英 melee_chaser）分支：挂载独立小僵尸包装，替换程序化壳/核/附肢。
+# 视觉高度 1.857m 取自 normal_enemy_3d/melee_chaser 资产 README（碰撞 FOOTPRINT 仍为 1.30m，不动）。
+const FORMAL_MELEE_KIND := "melee_chaser"
+const FORMAL_MELEE_SCENE_PATH := "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn"
+const FORMAL_MELEE_VISUAL_HEIGHT := 1.857
+
 var enemy_kind := "melee_chaser"
 var ai_state := "idle"
 var _elapsed := 0.0
@@ -40,6 +46,8 @@ var _boss_content_id := ""
 var _formal_boss_root: Node3D
 var _elite_content_id := ""
 var _elite_presentation_asset_id := ""
+var _formal_normal_root: Node3D
+var _formal_normal_scene_path := ""
 var _formal_elite_root: Node3D
 
 
@@ -68,6 +76,7 @@ func configure_boss_content(content_id: String) -> bool:
 
 
 func configure_elite_content(content_id: String, asset_id: String, scene_path: String) -> bool:
+	disable_formal_normal()
 	_elite_content_id = content_id
 	_elite_presentation_asset_id = asset_id
 	if content_id.is_empty() or asset_id.is_empty() or scene_path.is_empty() or _root == null:
@@ -101,6 +110,8 @@ static func get_footprint_profile(kind: String) -> Dictionary:
 
 
 func flash_hit() -> void:
+	if has_formal_normal():
+		_formal_normal_root.flash_hit()
 	if _shell_material != null:
 		_shell_material.albedo_color = Color(1.0, 0.78, 0.60)
 
@@ -109,8 +120,11 @@ func get_component_snapshot() -> Dictionary:
 	return {
 		"enemy_kind": enemy_kind,
 		"ai_state": ai_state,
-		"components": ["core", "shell", "appendages", "state_vfx"],
-		"component_count": 4,
+		"components": ["skeletal_model", "state_vfx"] if has_formal_normal() else ["core", "shell", "appendages", "state_vfx"],
+		"component_count": 2 if has_formal_normal() else 4,
+		"formal_normal_asset": has_formal_normal(),
+		"presentation": _formal_normal_root.get_presentation_snapshot() if has_formal_normal() else {},
+		"procedural_pose": not has_formal_normal(),
 		"footprint": get_footprint_profile(enemy_kind),
 		"ambush_revealed": _ambush_revealed,
 		"boss_content_id": _boss_content_id,
@@ -125,6 +139,11 @@ func get_component_snapshot() -> Dictionary:
 func _process(delta: float) -> void:
 	_elapsed += delta
 	if _root == null:
+		return
+	if has_formal_normal():
+		_root.position = Vector3.ZERO
+		_root.scale = Vector3.ONE
+		_tell_ring.visible = ai_state == "telegraph"
 		return
 	var bob := sin(_elapsed * 3.3 + float(get_instance_id() % 11)) * 0.07
 	var hidden_offset := -0.58 if enemy_kind == "ambusher" and not _ambush_revealed else 0.0
@@ -154,6 +173,8 @@ func _rebuild() -> void:
 	_root = Node3D.new()
 	_formal_boss_root = null
 	_formal_elite_root = null
+	_formal_normal_root = null
+	_formal_normal_scene_path = ""
 	_elite_content_id = ""
 	_elite_presentation_asset_id = ""
 	_root.name = "VisualRoot"
@@ -207,6 +228,42 @@ func _rebuild() -> void:
 	_tell_ring.mesh = ring_mesh
 	_tell_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	_root.add_child(_tell_ring)
+	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
+	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
+	if enemy_kind == FORMAL_MELEE_KIND and _root != null:
+		_load_formal_normal_model()
+
+
+func _load_formal_normal_model() -> void:
+	var scene := load(FORMAL_MELEE_SCENE_PATH) as PackedScene
+	assert(scene != null, "Formal melee scene missing")
+	_formal_normal_root = scene.instantiate() as Node3D
+	_formal_normal_root.name = "FormalNormal"
+	_root.add_child(_formal_normal_root)
+	_formal_normal_scene_path = FORMAL_MELEE_SCENE_PATH
+	_shell.hide()
+	_core.hide()
+	_appendages.hide()
+
+
+func disable_formal_normal() -> void:
+	if is_instance_valid(_formal_normal_root):
+		_root.remove_child(_formal_normal_root)
+		_formal_normal_root.queue_free()
+	_formal_normal_root = null
+	_formal_normal_scene_path = ""
+	_shell.show()
+	_core.show()
+	_appendages.show()
+
+
+func has_formal_normal() -> bool:
+	return is_instance_valid(_formal_normal_root)
+
+
+func sync_presentation(state: String, state_time: float, speed: float, telegraph_duration: float, recovery_duration: float) -> void:
+	if has_formal_normal() and _formal_normal_root.has_method("sync_state"):
+		_formal_normal_root.call("sync_state", state, state_time, speed, telegraph_duration, recovery_duration)
 
 
 func _add_claws(radius: float, height: float) -> void:

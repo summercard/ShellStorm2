@@ -38,11 +38,12 @@
     "target_occupancy_ratio": 0.42,
     "reference_room_cost_m2": 1450.0,
     "enforce_core_exclusion": false,
-    "content_type_pool": ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"]
+    "content_type_pool": ["COMBAT", "COMBAT", "SCAVENGE", "STORAGE", "EVENT"],
+    "runtime_enabled": true
   },
   "provenance": {
     "mode": "authored",
     "extracted_from": "src/map/FloorPlanGenerator.gd::generate_expedition",
-    "note": "远征关卡01 设计源。由运行态房表口径转写，作为数据驱动路径的首个关卡与等价性基准。"
+    "note": "远征关卡01 设计源。runtime_enabled=true（2026-09-20）：本设计源已是运行时真源，FloorPlanGenerator.generate_from_level_plan 替代内置远征房表。代价是几何改用本文件里的固定蛇形坐标（mode=authored 与种子无关），生成器原本的 0/90/180/270 旋转 + Z 镜像随机因此取消；随机性只剩房型洗牌（content_type_pool）。房间运行时 id 靠 legacy_room_id 保持不变。"
   }
 }

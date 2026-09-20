@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间窗墙」（天台参考组件库 v002 · 房间墙体）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_window_top3d.glb
+;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
+;   来源包：房间窗墙_资产包（房间窗墙_主体，3 个表面：精工金属窗框 / 哑光水泥 / 清漆玻璃）。
+; 窗洞可视件：窗玻璃 4.40×4.45、窗框 4.70×4.82、窗台 4.75×0.16（均属本包，无需另挂件）。
+; 默认朝向 +Z（装饰面朝房间外）。⚠️ 与 99F 的 ENV-BASE99-WALL-WINDOW-5X12 朝向相反（见 room_wall）。
+; preserve_authored_palette / visual_only / 碰撞归属同 prp_rooftop_room_wall_5x12。
+; 用途：100F 上层围护的**南 / 东 / 西**三面若要做采光可换本件；北面带大窗，用户口径
+;   「先不替换，没有资产」，故北面暂留 99F 窗墙。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_window_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomWindow5x12" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-WINDOW"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-WINDOW"
+metadata/source_package = "房间窗墙_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_window_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 11.9
+metadata/logical_height_m = 12.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/bounds_note = "可视包络与结构包络逐值相同；窗框/玻璃/窗台均内嵌于 0.30m 厚度内。"
+metadata/visual_node_name = "房间窗墙_主体"
+metadata/window_surface_count = 3
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_window_run"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

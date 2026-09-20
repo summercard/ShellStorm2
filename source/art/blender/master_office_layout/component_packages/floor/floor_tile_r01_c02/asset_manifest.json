@@ -1,0 +1,29 @@
+{
+  "asset_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+  "package_id": "block_00_master_office::floor_tile_r01_c02_通用包",
+  "display_name": "floor_tile_r01_c02_通用包",
+  "display_name_zh": "战局通用地砖 R01_C02 4.94×4.94×0.081m（含砖面美术，外廓 0.0852m）",
+  "asset_slug": "floor_tile_r01_c02",
+  "category": "floor",
+  "ledger_version": "v006",
+  "prefab": "assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn",
+  "glb": "assets/art/environments/tower_zones/battle/components/common_components/floor_tile_5m/floor_tile_r01_c02_visual_top3d.glb",
+  "ledger_source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+  "linked_source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend",
+  "blender_collection": "floor_tile_r01_c02_通用包",
+  "layout_collection": "地砖B_floor_tile_r01_c02_资产包",
+  "standard_size": "4.94×4.94×0.081m 结构；含装饰外廓 4.94×4.94×0.0852m",
+  "origin_contract": "底面中心（Godot 底面 Y=0、XZ 居中）；朝 -Z",
+  "collision_contract": "BoxShape3D 4.94×0.081×4.94（装饰不改变体积）",
+  "library_origin_blender_m": [
+    11.910001,
+    -63.844406,
+    0.0
+  ],
+  "mesh_object_count": 24,
+  "decoration_side": null,
+  "used_instance_count_in_layout": 24,
+  "role_in_layout": "地砖；每 5m 格一块，相邻格用 A/B 两种砖面交替",
+  "export_status": "not_exported（本布局源停在 Blender 阶段，未导出 GLB/PackedScene）",
+  "measured_on": "2026-09-20"
+}

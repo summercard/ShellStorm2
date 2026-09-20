@@ -145,6 +145,8 @@ func _ready() -> void:
 	UIStyleFactory.apply_tactical_tree(self)
 	_resolve_flashlight()
 	_select_tab(TabId.LIGHT)
+	_setup_postfx_persist()
+	_apply_persisted_postfx()
 
 # 沿父链向上找 Player3D，再拿到挂在它下面的 PlayerFlashlight3D。
 # 节点未就绪时（早期 _ready 顺序）允许稍后重试。
@@ -361,6 +363,17 @@ func _build_ui() -> void:
 	clear_postfx_btn.text = "清除后处理调试覆盖"
 	clear_postfx_btn.pressed.connect(_on_clear_postfx_pressed)
 	root.add_child(clear_postfx_btn)
+
+	var export_postfx_btn := Button.new()
+	export_postfx_btn.name = "ExportPostfxButton"
+	export_postfx_btn.text = "导出当前后处理参数（剪贴板 + 日志）"
+	export_postfx_btn.pressed.connect(_on_export_postfx_pressed)
+	root.add_child(export_postfx_btn)
+
+	var persist_hint := Label.new()
+	persist_hint.name = "PersistHint"
+	persist_hint.text = "当前参数会自动记住，下次进游戏自动恢复"
+	root.add_child(persist_hint)
 
 func _build_tab_bar(parent: Container) -> void:
 	var bar := HBoxContainer.new()
@@ -780,4 +793,155 @@ func _on_clear_postfx_pressed() -> void:
 	var overlay := _get_postfx_overlay()
 	if overlay != null:
 		overlay.reset_to_defaults()
+	_sync_postfx_from_manager()
+	# 把“已清空”本身也记住，否则下次启动会把刚清掉的调试值又恢复回来。
+	_schedule_persist()
+
+
+# ---------- 当前参数导出 ----------
+# 把后处理 tab 的全部控件值导出成一行 JSON，同时走三条通道：
+#   1) 控制台带 [POSTFX-EXPORT] 前缀（便于日志 grep）
+#   2) 系统剪贴板（Ctrl+V 即可粘贴）
+#   3) user://postfx_export.json（便于外部脚本直接读文件）
+# 以控件当前值为唯一真源 —— 面板显示什么就导出什么，不依赖
+# GraphicsSettingsManager 里“改过才有键”的稀疏覆盖表。
+const POSTFX_PERSIST_PATH := "user://postfx_tuning.json"
+
+
+func _collect_postfx_params() -> Dictionary:
+	return {
+		"debug_postfx_anisotropy_strength": _postfx_aniso_strength_slider.value,
+		"debug_postfx_anisotropy_expansion": _postfx_aniso_expansion_slider.value,
+		"debug_postfx_adjustment_enabled": _postfx_adjustment_toggle.button_pressed,
+		"debug_postfx_adjustment_brightness": _postfx_brightness_slider.value,
+		"debug_postfx_adjustment_contrast": _postfx_contrast_slider.value,
+		"debug_postfx_adjustment_saturation": _postfx_saturation_slider.value,
+		"debug_postfx_grain_enabled": _postfx_grain_toggle.button_pressed,
+		"debug_postfx_grain_strength": _postfx_grain_strength_slider.value,
+		"debug_postfx_grain_size": _postfx_grain_size_slider.value,
+		"debug_postfx_tv_distortion_enabled": _postfx_tv_toggle.button_pressed,
+		"debug_postfx_tv_glow_anisotropy": _postfx_tv_glow_aniso_slider.value,
+		"debug_postfx_tv_glow_strength": _postfx_tv_glow_strength_slider.value,
+		"debug_postfx_tv_glow_hdr_threshold": _postfx_tv_glow_hdr_threshold_slider.value,
+		"debug_postfx_tv_glow_hdr_scale": _postfx_tv_glow_hdr_scale_slider.value,
+		# 色相与噪点实际走 PostfxOverlay autoload 的全屏 shader，
+		# Environment 没有对应属性；这里沿用 overlay 自己的键名。
+		"hue_shift": _postfx_hue_slider.value,
+	}
+
+
+func _on_export_postfx_pressed() -> void:
+	# 参数本来就一直在自动落盘；这个按钮只是把“当前这一套”额外
+	# 打印到控制台并复制到剪贴板，便于贴给别人或存档。
+	var line := _write_persist_file()
+	print("[POSTFX-EXPORT] %s" % line)
+	DisplayServer.clipboard_set(line)
+	_status_label.text = "后处理参数已导出 · 剪贴板 + 日志 + %s" % POSTFX_PERSIST_PATH
+
+# ---------- 后处理参数自动持久化 ----------
+# 面板里任何后处理改动都会在静默 PERSIST_DEBOUNCE_SECONDS 后写入
+# user://postfx_tuning.json；下次启动 _ready() 时自动读回并立即生效 ——
+# 也就是“调完不用再点导出，下次进游戏画面还是这一套”。
+# 导出按钮仍然保留：它额外负责打印到控制台 + 复制到剪贴板，便于把这一套给别人。
+#
+# 范围只含后处理（Environment 侧 + PostfxOverlay 侧）；手电三盏不属于滤镜，不参与。
+
+const PERSIST_DEBOUNCE_SECONDS := 0.4
+
+var _persist_timer: Timer
+
+
+func _setup_postfx_persist() -> void:
+	_persist_timer = Timer.new()
+	_persist_timer.name = "PostfxPersistTimer"
+	_persist_timer.one_shot = true
+	_persist_timer.wait_time = PERSIST_DEBOUNCE_SECONDS
+	_persist_timer.timeout.connect(_on_persist_timeout)
+	add_child(_persist_timer)
+	# 给所有后处理控件额外接一根“改动即排程保存”的线，原有回调不受影响。
+	# _sync_postfx_from_manager() 回填控件时用 set_block_signals(true)，
+	# 因此程序性同步不会误触发保存。
+	for slider in [
+		_postfx_aniso_strength_slider,
+		_postfx_aniso_expansion_slider,
+		_postfx_hue_slider,
+		_postfx_brightness_slider,
+		_postfx_contrast_slider,
+		_postfx_saturation_slider,
+		_postfx_grain_strength_slider,
+		_postfx_grain_size_slider,
+		_postfx_tv_glow_aniso_slider,
+		_postfx_tv_glow_strength_slider,
+		_postfx_tv_glow_hdr_threshold_slider,
+		_postfx_tv_glow_hdr_scale_slider,
+	]:
+		(slider as HSlider).value_changed.connect(_on_postfx_param_touched)
+	for toggle in [_postfx_adjustment_toggle, _postfx_grain_toggle, _postfx_tv_toggle]:
+		(toggle as CheckButton).toggled.connect(_on_postfx_param_touched)
+
+
+func _on_postfx_param_touched(_value: Variant = null) -> void:
+	_schedule_persist()
+
+
+func _schedule_persist() -> void:
+	if _persist_timer == null:
+		return
+	# one_shot Timer 每次 start() 都重置计时 —— 拖滑条时天然防抖，松手后才落盘。
+	_persist_timer.start()
+
+
+func _on_persist_timeout() -> void:
+	_write_persist_file()
+
+
+# 退出前把尚未落盘的改动补写一次，避免“调完立刻关游戏”丢参数。
+func _exit_tree() -> void:
+	if _persist_timer != null and not _persist_timer.is_stopped():
+		_write_persist_file()
+
+
+func _write_persist_file() -> String:
+	var line := JSON.stringify(_collect_postfx_params())
+	var file := FileAccess.open(POSTFX_PERSIST_PATH, FileAccess.WRITE)
+	if file != null:
+		# 单独一行 + 结尾换行，便于外部脚本按行读取。
+		file.store_string(line + "\n")
+		file.close()
+	return line
+
+
+func _load_persisted_postfx() -> Dictionary:
+	# 主路径 = 当前口径；user://postfx_export.json 是改名前的旧落点，保留兼容读取。
+	for path in [POSTFX_PERSIST_PATH, "user://postfx_export.json"]:
+		if not FileAccess.file_exists(path):
+			continue
+		var file := FileAccess.open(path, FileAccess.READ)
+		if file == null:
+			continue
+		var text := file.get_as_text().strip_edges()
+		file.close()
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			return parsed as Dictionary
+	return {}
+
+
+func _apply_persisted_postfx() -> void:
+	var data := _load_persisted_postfx()
+	if data.is_empty():
+		return
+	# 一次性写整组，绕开“逐控件设值时信号先后顺序”的坑：
+	# Environment 侧走 apply_debug_postfx（非 DEBUG_POSTFX_KEYS 的键自动忽略，
+	# 例如 hue_shift），overlay 侧走 apply_grain（噪点 + 色相）。
+	if GraphicsSettingsManager != null:
+		GraphicsSettingsManager.apply_debug_postfx(data)
+	var overlay := _get_postfx_overlay()
+	if overlay != null:
+		overlay.apply_grain(
+			bool(data.get("debug_postfx_grain_enabled", false)),
+			float(data.get("debug_postfx_grain_strength", 0.0)),
+			float(data.get("debug_postfx_grain_size", 1.0)),
+			float(data.get("hue_shift", 0.0))
+		)
 	_sync_postfx_from_manager()

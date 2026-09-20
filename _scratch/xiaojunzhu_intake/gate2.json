@@ -1,0 +1,26 @@
+{
+  "violations": true,
+  "stale_debt": false,
+  "new_versioned_files": [],
+  "new_versioned_dirs": [],
+  "new_backup_residue": [],
+  "reference_count_increase": {
+    "gd": [
+      24,
+      25
+    ]
+  },
+  "debt_paid_files": [],
+  "debt_paid_dirs": [],
+  "debt_paid_backup": [],
+  "reference_count_decrease": {},
+  "remaining": {
+    "versioned_files": 290,
+    "versioned_dirs": 13,
+    "backup_residue": 1,
+    "references": {
+      "gd": 25,
+      "tscn": 93
+    }
+  }
+}

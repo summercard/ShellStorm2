@@ -1,12 +1,18 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 ; Stable AssetID: ENV-BATTLE-L01-SAFE-ENTRY · package north_server_04
 ; 入口安全房 v007 · facilities · 服务器柜_north_server_04
-; 范式 B：视觉 GLB + 稳定根；房间摆位与契约写在 metadata。
-; 本包不含碰撞——玩法阻挡由引擎 0.30m 结构代理持有（见 asset_manifest.json 的
-; structural_geometry / collision_status / replacement_contract）。视觉资产不注册玩法组。
+; 范式 B（自包含可替换组件）：视觉 GLB + 稳定根 + 内嵌玩法阻挡，逐实例化。
+; 2026-09-20 补齐阻挡：旧注释声称碰撞「由引擎 0.30m 结构代理持有」，
+; 但该代理全仓无实现 → 设施可穿模。现改为与 v004 通用组件同款内嵌写法：
+;   BoxShape3D.size = metadata/bounds_size_m；原点 = 底面中心 → 盒中心 y = +height/2；
+;   StaticBody3D collision_layer = 1（与墙/门墙/地砖同层）、collision_mask = 0。
+; 视觉几何仍可整体替换，但替换件必须保持 bounds_size_m 与同名碰撞盒，阻挡才不变。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/entry_safe_room/north_server_04/north_server_04_visual_top3d.glb" id="1_visual"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_north_server_04_1"]
+size = Vector3(1.42, 3.696, 1.3384)
 
 [node name="EsrNorthServer04" type="Node3D"]
 metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
@@ -26,12 +32,13 @@ metadata/bounds_size_m = Vector3(1.42, 3.696, 1.3384)
 metadata/room_placement_position = Vector3(4.12, 0.29, -6.5408)
 metadata/room_placement_note = "实例化时 position 用本值、rotation 保持 identity。"
 metadata/preserve_authored_palette = true
-metadata/visual_only = true
+metadata/visual_only = false
 metadata/geometry_ownership = "room_owned_facility"
-metadata/replacement_contract = "decoration only; must not change room size, 5m grid, collision layer or navigation"
-metadata/collision_owner = "godot_0p30m_structural_proxy"
-metadata/collision_policy = "none_in_package"
-metadata/collision_shape_count = 0
+metadata/replacement_contract = "replaceable visual + embedded player blocker; a replacement must keep bounds_size_m, the BoxShape3D size and collision_layer 1 so blocking is unchanged; must not change room size, 5m grid or navigation"
+metadata/collision_owner = "self"
+metadata/collision_policy = "embedded_box_bottom_center"
+metadata/collision_shape_count = 1
+metadata/collision_structure_note = "内嵌 BoxShape3D；尺寸 = bounds_size_m；原点 = 包围盒底面中心，故 shape.position.y = height/2。层次与 v004 通用组件一致。"
 metadata/runtime_instantiation = "per_instance_prefab"
 metadata/emission = true
 metadata/animation = false
@@ -39,3 +46,11 @@ metadata/design_scope = "入口安全房"
 metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="NorthServer04Collision" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NorthServer04Collision"]
+position = Vector3(0, 1.848, 0)
+shape = SubResource("BoxShape3D_north_server_04_1")

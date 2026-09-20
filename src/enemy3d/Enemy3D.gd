@@ -211,6 +211,13 @@ func apply_profile(kind: String) -> void:
 
 func configure_from_enemy_data(data: Dictionary) -> void:
 	enemy_data = data.duplicate(true)
+	if str(data.get("enemy_type", enemy_kind)) == "melee_chaser" and not bool(data.get("is_elite", false)):
+		var old_name := str(enemy_data.get("name", "小僵尸"))
+		if old_name.ends_with("小菌猪"):
+			enemy_data["name"] = old_name.trim_suffix("小菌猪") + "小僵尸"
+		elif not enemy_data.has("name"):
+			enemy_data["name"] = "小僵尸"
+		enemy_data["emoji"] = "尸"
 	elite_modifier_id = ""
 	elite_id = str(data.get("elite_id", ""))
 	elite_behavior_id = str(data.get("elite_behavior_id", ""))
@@ -383,6 +390,8 @@ func _position_overhead_health_bar() -> void:
 		float(footprint.get("height", 1.3)),
 		float(_elite_health_bar_profile.get("visual_height", 0.0))
 	)
+	if avatar != null and avatar.has_formal_normal():
+		local_height = maxf(local_height, EnemyAvatar3D.FORMAL_MELEE_VISUAL_HEIGHT)
 	var world_height := local_height * maxf(scale.y, 0.01)
 	_overhead_health_root.global_position = global_position + Vector3.UP * (world_height + 0.58)
 	# top_level 已阻断父节点旋转；显式归零可清除热重载或旧实例留下的朝向。
@@ -557,6 +566,8 @@ func is_runtime_ai_active() -> bool:
 
 
 func _process(delta: float) -> void:
+	if avatar != null:
+		avatar.sync_presentation(ai_state, _state_time, Vector2(get_real_velocity().x, get_real_velocity().z).length(), _telegraph_duration(), _recovery_duration())
 	# 已加载但尚未进入近距离 AI 圈的怪物仍需低成本监听真实受光刺激。
 	# 否则其 physics_process 被暂停后，探照灯永远不可能将它唤醒。
 	if _runtime_ai_active or ai_state == "dead" or illumination_sensor == null:
@@ -1514,9 +1525,18 @@ func _die() -> void:
 			"floor_number": int(enemy_data.get("floor_number", enemy_data.get("floor", 0))),
 			"room_id": room_id,
 		})
-	var tween := create_tween()
-	tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
-	tween.tween_callback(queue_free)
+	if avatar != null and avatar.has_formal_normal():
+		if MonsterAIManager != null:
+			MonsterAIManager.unregister_enemy(self)
+		remove_from_group("enemy_3d")
+		remove_from_group("damageable_3d")
+		var death_tween := create_tween()
+		death_tween.tween_interval(2.4)
+		death_tween.tween_callback(queue_free)
+	else:
+		var tween := create_tween()
+		tween.tween_property(self, "scale", Vector3(1.25, 0.05, 1.25), 0.34)
+		tween.tween_callback(queue_free)
 
 
 func _should_begin_elite_escape() -> bool:

@@ -1470,6 +1470,15 @@ func _generate_layout() -> void:
 			"tower_module_shell": bool(record.get("tower_module_shell", false)),
 			"open_wall_directions": record.get("open_wall_directions", []),
 			"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+			"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
+			# 授权布局壳体（区块00 98F 入口房）：入口房由本路径在开局就实例化，
+			# 而其余房间在 FloorBundle 里走 TowerDescent3D._instantiate_dynamic_room。
+			# 两处 configure 必须同样透传，否则入口房会退回通用 5m 程序化壳体。
+			"authored_layout_shell": bool(record.get("authored_layout_shell", false)),
+			"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
+			"authored_layout_version": str(record.get("authored_layout_version", "")),
+			"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
+			"authored_layout_instances": record.get("authored_layout_instances", []),
 		})
 		room.position = record["position"]
 		$GeneratedRooms.add_child(room)

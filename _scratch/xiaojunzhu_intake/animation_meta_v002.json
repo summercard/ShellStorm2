@@ -1,0 +1,55 @@
+{
+  "skeleton_signature": "3ea6b2f527f00b0a28b98ac45bbcb20f45da15d1bab0461f8eee346c41bdfbd9",
+  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\model\\enm_melee_fungboar01_model_v002.blend",
+  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\melee_chaser\\source\\animation\\enm_melee_fungboar01_animation_v002.blend",
+  "clips": [
+    {
+      "id": "idle",
+      "action": "anim_melee_fungboar01_idle_v002",
+      "frames": 96,
+      "duration": 3.2,
+      "loop": true,
+      "scene": "01_待机_驼背晃身"
+    },
+    {
+      "id": "walking",
+      "action": "anim_melee_fungboar01_walking_v002",
+      "frames": 48,
+      "duration": 1.6,
+      "loop": true,
+      "scene": "02_慢走_跛脚拖步"
+    },
+    {
+      "id": "running",
+      "action": "anim_melee_fungboar01_running_v002",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": true,
+      "scene": "03_跑步_失衡前冲"
+    },
+    {
+      "id": "attack",
+      "action": "anim_melee_fungboar01_attack_v002",
+      "frames": 51,
+      "duration": 1.7,
+      "loop": false,
+      "scene": "04_近战_挥臂迟缓收势"
+    },
+    {
+      "id": "hurt",
+      "action": "anim_melee_fungboar01_hurt_v002",
+      "frames": 24,
+      "duration": 0.8,
+      "loop": false,
+      "scene": "05_受击_踉跄回神"
+    },
+    {
+      "id": "dead",
+      "action": "anim_melee_fungboar01_dead_v002",
+      "frames": 72,
+      "duration": 2.4,
+      "loop": false,
+      "scene": "06_死亡_后躺砸地回弹"
+    }
+  ]
+}

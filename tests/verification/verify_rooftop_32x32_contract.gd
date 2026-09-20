@@ -32,7 +32,10 @@ const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
 func _ready() -> void:
 	var failures: Array[String] = []
 	var rooftop := TowerFloorStage3D.new()
-	rooftop.configure(0, "rooftop", ["west"])
+	# 第 7 参 = 立面环**让位侧**（TowerDescent3D 运行时由「与 99F 相邻的竖直楼梯」推出）。
+	# 这里显式声明 east：99F→98F 的楼梯井外廓 x∈[35,50] 穿过天台东界 x=40，
+	# 天台立面环必须在那一段让位，否则会在井的上层平台正中立一道 12m 高的墙。
+	rooftop.configure(0, "rooftop", ["west"], [], false, Rect2(), ["east"])
 	add_child(rooftop)
 	var facility := TowerFloorStage3D.new()
 	facility.configure(1, "facility", [])
@@ -252,6 +255,12 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 ## 用户口径：「99 楼外墙在天台周边调用，围起来」——即从天台边缘往下不该是空的。
 ## 本函数把这句话落成可实测的不变量，并留一条**防假绿哨兵**（件数为 0 时直接报错，
 ## 否则「计划==摆放」会两边同为 0 而恒真）。
+##
+## 2026-09-20 追加：环必须为穿轮廓的楼梯井**让位**（99F→98F 的井外廓 x∈[35,50]
+## 穿过天台东界 x=40）。让位同时作用于可视件与碰撞，两处共用同一处真源；
+## 判据从「整格满铺 68 件」改成「68 件 - 缺口整格数」，并**正面**断言缺口存在、
+## 跨度与 `_stair_hole_world_rect("east")` 逐值相等 —— 否则日后有人把缺口补回去，
+## 只会看到件数变多而看不出「下行梯跑被封死」。
 func _verify_rooftop_facade(
 	rooftop: TowerFloorStage3D, snapshot: Dictionary, failures: Array[String]
 ) -> void:
@@ -279,11 +288,41 @@ func _verify_rooftop_facade(
 			% [planned_solid, planned_window, actual_solid, actual_window],
 		failures
 	)
-	# 整格铺满一圈：x 向 18 件、z 向 16 件，两侧各一遍，共 68 件。
+	# 整格铺满一圈（x 向 18 件、z 向 16 件，两侧各一遍，共 68 件），
+	# **再减去楼梯井让位缺口**：99F→98F 的井外廓 x∈[35,50] 穿过天台东界 x=40，
+	# 那一段（z∈[-25,5] = 6 件）必须让位，否则会在井的上层平台正中立一道
+	# 12m 高的墙连碰撞，把下行梯跑封死（2026-09-20 实测定位）。
+	var gap_spans := snapshot.get("outer_facade_gap_spans", {}) as Dictionary
+	var gap_modules := int(snapshot.get("outer_facade_gap_module_count", -1))
 	var expected_ring := 2 * (ROOFTOP_WORLD_RECT.size.x + ROOFTOP_WORLD_RECT.size.y) / 5.0
+	var east_gaps := gap_spans.get("east", []) as Array
+	print(
+		"    [外立面环让位] gap_sides=%s east_gaps=%s gap_modules=%d"
+			% [str(snapshot.get("facade_gap_sides", [])), str(east_gaps), gap_modules]
+	)
 	_expect(
-		ring_total == int(expected_ring),
-		"100层外立面环件数不是整格满铺的 %d 件（实际 %d）" % [int(expected_ring), ring_total],
+		not east_gaps.is_empty(),
+		"100层外立面东侧没有让位缺口 —— 楼梯井会重新被立面环封死",
+		failures
+	)
+	if not east_gaps.is_empty():
+		var east_gap := east_gaps[0] as Vector2
+		# 缺口必须与 _stair_hole_world_rect("east") 的 z 跨度逐值相等（真源不许各写一份）。
+		_expect(
+			is_equal_approx(east_gap.x, -25.0) and is_equal_approx(east_gap.y, 5.0),
+			"100层外立面东侧让位缺口不是楼梯井外廓的 z∈[-25, 5]（实际 %s）" % str(east_gap),
+			failures
+		)
+		var expected_gap_modules := int(round((east_gap.y - east_gap.x) / 5.0))
+		_expect(
+			gap_modules == expected_gap_modules,
+			"让位跳过件数 %d != 缺口跨度的整格数 %d" % [gap_modules, expected_gap_modules],
+			failures
+		)
+	_expect(
+		ring_total == int(expected_ring) - gap_modules,
+		"100层外立面环件数不是「整格满铺 %d 件 - 让位 %d 件 = %d 件」（实际 %d）"
+			% [int(expected_ring), gap_modules, int(expected_ring) - gap_modules, ring_total],
 		failures
 	)
 	_expect(
@@ -324,24 +363,26 @@ func _verify_rooftop_facade(
 					% [label, str(aabb)],
 				failures
 			)
-	# 环的四边碰撞代理：每边一个 body，代理盒厚 0.30m、高 12m。
+	# 环的四边碰撞代理：每边**一个** body，代理盒厚 0.30m、高 12m；
+	# 有让位缺口的边在同一个 body 内拆成多段（段数 = 缺口数 + 1）。
 	var facade_sides := ["North", "South", "West", "East"]
 	for side in facade_sides:
 		var body := rooftop.find_child("FacadeBoundaryCollision_%s" % side, false, false) as StaticBody3D
 		_expect(body != null, "100层外立面 %s 侧碰撞代理缺失" % side, failures)
 		if body == null:
 			continue
-		var shapes := 0
+		var side_key: String = str(side).to_lower()
+		var side_gaps: Array = gap_spans.get(side_key, []) as Array
+		var expected_shapes := (side_gaps.size() + 1) if not side_gaps.is_empty() else 1
+		var segments: Array[Vector2] = []
 		for child in body.get_children():
 			if child is not CollisionShape3D:
 				continue
-			shapes += 1
 			var shape := (child as CollisionShape3D).shape as BoxShape3D
 			if shape == null:
 				continue
-			var thickness: float = (
-				shape.size.x if side in ["West", "East"] else shape.size.z
-			)
+			var along_x: bool = side in ["North", "South"]
+			var thickness: float = shape.size.z if along_x else shape.size.x
 			_expect(
 				is_equal_approx(thickness, 0.30),
 				"100层外立面 %s 侧碰撞厚度不是 0.30m（实际 %.3f）" % [side, thickness],
@@ -352,7 +393,35 @@ func _verify_rooftop_facade(
 				"100层外立面 %s 侧碰撞高度不是一整层 12m（实际 %.3f）" % [side, shape.size.y],
 				failures
 			)
-		_expect(shapes == 1, "100层外立面 %s 侧碰撞不是一整条（实际 %d 段）" % [side, shapes], failures)
+			var along: float = shape.size.x if along_x else shape.size.z
+			var center: float = (child as CollisionShape3D).position.x if along_x else (child as CollisionShape3D).position.z
+			segments.append(Vector2(center - along * 0.5, center + along * 0.5))
+		segments.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
+		_expect(
+			segments.size() == expected_shapes,
+			"100层外立面 %s 侧碰撞段数 %d != 期望 %d（缺口数 %d）"
+				% [side, segments.size(), expected_shapes, side_gaps.size()],
+			failures
+		)
+		# 分段必须真的**断开**在缺口上：相邻两段之间的空洞要与让位跨度逐值相等，
+		# 否则「视觉让了位、碰撞还堵着」会反过来变成一道隐形墙。
+		_expect(
+			segments.size() == side_gaps.size() + 1,
+			"100层外立面 %s 侧碰撞分段数与缺口数不匹配（%d 段 / %d 缺口）"
+				% [side, segments.size(), side_gaps.size()],
+			failures
+		)
+		if segments.size() == side_gaps.size() + 1 and not side_gaps.is_empty():
+			for gap_index in range(side_gaps.size()):
+				var gap := side_gaps[gap_index] as Vector2
+				var seam_lo := segments[gap_index].y
+				var seam_hi := segments[gap_index + 1].x
+				_expect(
+					is_equal_approx(seam_lo, gap.x) and is_equal_approx(seam_hi, gap.y),
+					"100层外立面 %s 侧碰撞断口 [%.3f, %.3f] 与让位缺口 [%.3f, %.3f] 不吻合"
+						% [side, seam_lo, seam_hi, gap.x, gap.y],
+					failures
+				)
 	# 99F/普通层不得有立面环（否则会凭空多出一圈墙）。
 	# add_child() 会同步触发 _ready()（即整套装配），所以这里不需要 await；
 	# 保持本函数同步，避免协程被当普通函数调用时后半段断言根本不参与判定。

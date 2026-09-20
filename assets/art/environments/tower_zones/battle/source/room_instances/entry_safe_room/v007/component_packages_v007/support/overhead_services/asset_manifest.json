@@ -62,5 +62,5 @@
   "replacement_contract": "decoration only; must not change room size, 5m grid, collision layer or navigation",
   "exported": false,
   "expected_export": "overhead_services_v007.glb",
-  "collision_status": "未制作；玩法碰撞由 Godot 0.30m 结构代理负责"
+  "collision_status": "按设计不阻挡：顶部管线灯带，底部离走行面 3.60m，玩家 1.5m 够不着"
 }

@@ -1,0 +1,43 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间实墙挂藤」（天台参考组件库 v002 · 房间墙体 · 挂藤变体）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_wall_ivy_top3d.glb
+;   来源包：房间实墙挂藤_资产包（房间实墙挂藤_主体，单一合并网格：墙 + 藤蔓茎 4416v + 叶片 2415v）。
+; ⚠️ 参考组件库里挂藤是**合并进资产包主网格**的，不是另挂的子件 —— 所以本体包
+;   （房间标准墙_资产包）与挂藤包（房间实墙挂藤_资产包）是两件独立资产、各自出 GLB。
+; 底面中心原点、+Z 外向朝向、preserve_authored_palette 等口径与 prp_rooftop_room_wall_5x12 相同。
+; 包络说明：藤蔓向两侧与厚度方向外扩，可视包络比裸墙宽厚 ——
+;   裸墙模块 5.00×11.90×0.30（underlying_module_bounds_m），挂藤后 5.1412×12.013×0.8201（实测）。
+;   摆放仍按 5m 网格：相邻模块的藤蔓会有轻微交叠，这是挂藤装饰的正常表现。
+;   高度 12.013 > 11.90 是叶尖越过墙顶，不影响与 24m 封顶的净距（封顶底面 Y=24，
+;   本件顶面在 12+12.013=24.013 —— 与封顶 0.013 交叠属装饰穿插，故挂藤件只建议用在
+;   中间段，不建议用在顶层收口段）。
+; 视觉专用（visual_only）；碰撞由 Base100UpperShell3D 的结构层代理生成。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_wall_ivy_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomWallIvy5x12" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-WALL-IVY"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-WALL-IVY"
+metadata/source_package = "房间实墙挂藤_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_wall_ivy_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 12.013
+metadata/logical_height_m = 12.0
+metadata/underlying_module_bounds_m = Vector3(5, 11.9, 0.3)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5.1412, 12.013, 0.8201)
+metadata/visual_bounds_size_m = Vector3(5.1412, 12.013, 0.8201)
+metadata/bounds_note = "可视包络 = 裸墙 5×11.9×0.3 ∪ 藤蔓外扩后的实测并集；藤蔓为装饰，摆放仍按 5m 网格。"
+metadata/visual_node_name = "房间实墙挂藤_主体"
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_wall_ivy"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间房顶完整板」（天台参考组件库 v002 · 房顶模块）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_roof_full_top3d.glb
+;   5.00m × 0.30m × 5.00m；原点在**底面中心**（几何 Y=0..0.30，XZ 居中 ±2.5）。
+;   来源包：房顶完整板_资产包（房顶完整板_主体，1 个表面 = 纯顶面，无收口线脚）。
+;
+; 【铺法 · 6×6 网格的内圈】本件是「无收口」的中间格：只用在 6×6 网格的
+;   4×4 内圈 16 格（i、j 都不取首末）。外圈 20 格用 roof_edge / roof_corner，
+;   按参考拼装 reference_assembly.json 的同一口径：
+;     角格 (min x, max z) → 0°； (max x, max z) → +90°；
+;          (max x, min z) → 180°； (min x, min z) → -90°
+;     边格：max z 边 → 0°； min z 边 → 180°； max x 边 → +90°； min x 边 → -90°
+;   内圈 16 格 → 0°（本件各向同性，角度只是沿用同槽位口径）。
+;
+; 【为什么朝向规则长这样】本组件库（v002）朝外法线 = 局部 +Z，与
+;   TowerFloorStage3D._build_rooftop_facade_ring() 的立面环、以及美术自己的
+;   reference_assembly.json 摆法三处互相验证一致。⚠️ 与 99F 系（forward_axis=-Z）
+;   差 180°：同样一面墙，99F 件用 -90°，本套件用 +90°。
+;
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，保留美术自带的
+;   共享色盘 PaletteUV（由 tools/asset_pipeline/scene_facility_shared_palette_post_import.gd 绑定）。
+; 本 Prefab 视觉专用（visual_only）。房间 24m 封顶碰撞由 Base100UpperShell3D 的
+;   RoofCollision（30×0.30×30 @ y=24.15）代理生成，本件不带任何碰撞节点。
+; 高度口径：底面 Y=0..0.30，摆在 y=24 时占 24.00..24.30，与旧 base99 地砖封顶逐值同位
+;   （env_base99_floor_plain_5m 的 origin_contract=center_bottom 同样取底面为原点）；
+;   墙顶可视高 11.90 与楼板底 24.00 之间刻意留 0.10m（WALL_VISUAL_TOP_CLEARANCE），
+;   与 ENV-BASE99-WALL-* 同口径。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_roof_full_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoofFull5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOF-FULL"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOF-FULL"
+metadata/source_package = "房顶完整板_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_roof_full_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/slab_thickness_m = 0.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.3, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.3, 5)
+metadata/bounds_note = "可视包络与结构包络逐值相同（纯顶面，无外挂装饰）。"
+metadata/visual_node_name = "房顶完整板_主体"
+metadata/surface_count = 1
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_roof_full"
+metadata/roof_cell_role = "interior"
+metadata/placement_note = "只用于 6×6 网格内圈 16 格；外圈用 roof_edge / roof_corner。"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3]
+
+; Stable AssetID: ENV-BATTLE-L01-SAFE-ENTRY · package floor_base
+; 入口安全房 v007 · support · 承重底板与结构底台
+; 范式 B：视觉 GLB + 稳定根；房间摆位与契约写在 metadata。
+; 本包不含碰撞——玩法阻挡由引擎 0.30m 结构代理持有（见 asset_manifest.json 的
+; structural_geometry / collision_status / replacement_contract）。视觉资产不注册玩法组。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/battle/components/entry_safe_room/floor_base/floor_base_visual_top3d.glb" id="1_visual"]
+
+[node name="EsrFloorBase" type="Node3D"]
+metadata/asset_id = "ENV-BATTLE-L01-SAFE-ENTRY"
+metadata/package_id = "esr_floor_base"
+metadata/asset_version = "v007"
+metadata/block_id = "battle"
+metadata/category = "room_support"
+metadata/slug = "floor_base"
+metadata/logic_id = "floor_base"
+metadata/display_name_zh = "承重底板与结构底台"
+metadata/source_blend = "res://assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/env_battle_l01_safe_entry_layout_source_v007.blend"
+metadata/source_collection = "承重底板与结构底台_资产包"
+metadata/source_manifest = "res://assets/art/environments/tower_zones/battle/source/room_instances/entry_safe_room/v007/component_packages_v007/support/floor_base/asset_manifest.json"
+metadata/origin_contract = "bottom_center"
+metadata/orientation_contract = "geometry authored in room-world orientation; instance with identity rotation"
+metadata/bounds_size_m = Vector3(15, 0.26, 15)
+metadata/room_placement_position = Vector3(0, 0, 0)
+metadata/room_placement_note = "实例化时 position 用本值、rotation 保持 identity。"
+metadata/preserve_authored_palette = true
+metadata/visual_only = true
+metadata/geometry_ownership = "room_owned_structure"
+metadata/replacement_contract = "structural support, not a replaceable visual module; the 5m floor tile modules seat on its 0.26 top face and the 60 mm grout shows this surface. Godot keeps the 0.30 structural collision proxy."
+metadata/collision_owner = "godot_0p30m_structural_proxy"
+metadata/collision_policy = "none_in_package"
+metadata/collision_shape_count = 0
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/emission = false
+metadata/animation = false
+metadata/design_scope = "入口安全房"
+metadata/asset_ledger = "assets/registry/ShellStorm2_美术资产台账_v001.xlsx#3D-场景通用"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

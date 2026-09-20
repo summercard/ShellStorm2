@@ -1,4 +1,14 @@
 extends Node3D
+## 楼梯口通行净空验收。
+##
+## 2026-09-20 加严：原判据只要求胶囊体从 x=34 走到 **x=36.2**（刚过核心东界 x=35 就算过），
+## 于是完全看不见「天台外立面环」在东界 x=40 处立起的那道 12m 高墙 —— 玩家实际是走到
+## x≈39.4 就被挡住，永远进不了下行梯跑（用户报「在楼梯间被挡住了」）。
+## 现在判据改为「必须走到下行梯跑起点」：井外廓是 x∈[35,50]，梯跑中心线在 x=46.501，
+## 所以要求真的推进到 x ≥ 46.0；只要立面环（或任何东西）挡在中途就会红。
+
+## 必须推进到的世界 X（下行梯跑中心线 46.501 之前留 0.5m 余量）。
+const REQUIRED_REACH_X := 46.0
 
 
 func _ready() -> void:
@@ -33,7 +43,9 @@ func _ready() -> void:
 		add_child(actor)
 		actor.position = Vector3(34.0, -11.97, z)
 		var hit_names: Array[String] = []
-		for frame in range(240):
+		var best_x := actor.position.x
+		var stalled_frames := 0
+		for frame in range(600):
 			await get_tree().physics_frame
 			actor.velocity = Vector3(3.0, actor.velocity.y - 24.0 * get_physics_process_delta_time(), 0.0)
 			actor.move_and_slide()
@@ -41,10 +53,21 @@ func _ready() -> void:
 				var collider := actor.get_slide_collision(collision_index).get_collider() as Node
 				if collider != null and not collider.name in hit_names:
 					hit_names.append(collider.name)
-			if actor.position.x >= 36.2:
+			if actor.position.x >= REQUIRED_REACH_X:
 				break
-		if actor.position.x < 36.2:
-			failures.append("Stair_B upper entry movement blocked at z=%.2f x=%.3f by %s" % [z, actor.position.x, ",".join(hit_names)])
+			# 卡住就早退：被墙挡住时不必烧满 600 帧（否则红项要跑很久）。
+			if actor.position.x > best_x + 0.05:
+				best_x = actor.position.x
+				stalled_frames = 0
+			else:
+				stalled_frames += 1
+				if stalled_frames >= 90:
+					break
+		if actor.position.x < REQUIRED_REACH_X:
+			failures.append(
+				"Stair_B 进不去下行梯跑：z=%.2f 只推到 x=%.3f（要求 ≥ %.1f），中途撞到 %s"
+					% [z, actor.position.x, REQUIRED_REACH_X, ",".join(hit_names)]
+			)
 		actor.queue_free()
 		await get_tree().process_frame
 	for connector_value in (tower.get("_corridor_by_edge") as Dictionary).values():

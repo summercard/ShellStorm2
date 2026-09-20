@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间窗墙挂藤」（天台参考组件库 v002 · 房间墙体 · 挂藤变体）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_window_ivy_top3d.glb
+;   来源包：房间窗墙挂藤_资产包（房间窗墙挂藤_主体，单一合并网格：窗墙 + 藤蔓茎 + 叶片）。
+; 参考拼装 reference_assembly.json 里本件（slug=room_window_ivy）与 room_doorwall_ivy
+;   是唯二实际被摆出来的挂藤件 —— 说明这套挂藤的典型用法是「点几处」而不是满铺。
+; 底面中心原点、+Z 外向朝向、preserve_authored_palette 等口径与 prp_rooftop_room_wall_5x12 相同。
+; 包络说明：裸墙模块 5.00×11.90×0.30（underlying_module_bounds_m）；
+;   挂藤后实测 5.0000×12.0176×0.7703（X 未外扩，厚度方向被叶片撑到 0.77m）。
+;   顶面 12.0176 > 11.90，理由同 prp_rooftop_room_wall_ivy_5x12（装饰穿插）。
+; 视觉专用（visual_only）；碰撞由 Base100UpperShell3D 的结构层代理生成。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_window_ivy_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomWindowIvy5x12" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-WINDOW-IVY"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-WINDOW-IVY"
+metadata/source_package = "房间窗墙挂藤_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_window_ivy_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 12.0176
+metadata/logical_height_m = 12.0
+metadata/underlying_module_bounds_m = Vector3(5, 11.9, 0.3)
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 12.0176, 0.7703)
+metadata/visual_bounds_size_m = Vector3(5, 12.0176, 0.7703)
+metadata/bounds_note = "可视包络 = 裸窗墙 5×11.9×0.3 ∪ 藤蔓外扩后的实测并集（X 未外扩）。"
+metadata/visual_node_name = "房间窗墙挂藤_主体"
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_window_ivy"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

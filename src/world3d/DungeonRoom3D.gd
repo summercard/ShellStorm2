@@ -77,7 +77,11 @@ const BASE99_DOOR_LIFT_PREFAB: PackedScene = preload(
 # 地面为 3×3 格棋盘地砖。运行时按本层实际门向把整房旋转 0/90/180/270°，
 # 于是任意楼层的安全房都共用同一套资产，无需按方位分版本。
 # 墙/地/门三类构件复用战局区块通用组件库 v004（自带碰撞、自带色盘），
-# 房间设施由 17 个房间包按各自 metadata 的 room_placement_position 摆位。
+# 房间设施由房间包按各自 metadata 的 room_placement_position 摆位。
+# 2026-09-20：按需求移除 `central_terminal_island`（中央四屏终端岛）与
+# `west_glass_office`（西北玻璃办公室）两件，包数 17 → 15。两件的资产文件、
+# manifest 与台账行仍留在库里（可随时恢复），只是不再被运行时消费 ——
+# 与 door_5m 退场同口径。
 const SAFE_ROOM_RUNTIME_ROOT := "res://assets/art/environments/tower_zones/battle/runtime/"
 const SAFE_ROOM_ART_VERSION := "v007"
 const SAFE_ROOM_ART_ASSET_ID := "ENV-BATTLE-L01-SAFE-ENTRY"
@@ -85,7 +89,6 @@ const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"floor_base",
 	"overhead_services",
 	"debris_papers",
-	"central_terminal_island",
 	"north_server_00",
 	"north_server_01",
 	"north_server_02",
@@ -94,7 +97,6 @@ const SAFE_ROOM_PACKAGE_IDS: Array[String] = [
 	"north_server_05",
 	"north_broken_core",
 	"north_nexus_sign",
-	"west_glass_office",
 	"east_repair_bay",
 	"east_robot_arm",
 	"office_planter",
@@ -118,6 +120,16 @@ const SAFE_ROOM_FLOOR_TILE_C01_PREFAB: PackedScene = preload(
 const SAFE_ROOM_FLOOR_TILE_C02_PREFAB: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/battle/runtime/common_components/floor_tile_5m/floor_tile_r01_c02_root_top3d.tscn"
 )
+# —— 授权布局壳体的组件 ID 契约（2026-09-20）——
+# 摆位源（Blender 侧 layout.json）用组件 ID 说话，运行时用 PackedScene 说话；
+# 两侧靠这张表对齐。ID 取自战局通用组件库 v007 的台账名，不另起名。
+# 任一侧改名而另一侧没跟上 → _authored_component_prefab() 返回 null 并报错，
+# 不会静默换成别的组件。
+const WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-STANDARD-5M"
+const DOOR_WALL_COMPONENT_ASSET_ID := "ENV-BATTLE-COMMON-WALL-DOOR-5M"
+const FLOOR_TILE_C01_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01"
+const FLOOR_TILE_C02_COMPONENT_ID := "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02"
+const CORNER_L_COMPONENT_ID := "ENV-TOWER-CORNER-L-5M"
 # v007 墙槽位表，逐项源自 source/room_instances/entry_safe_room/v007/qa/slot_table.json。
 # 每项 = [房间局部 x_m, 房间局部 z_m, Godot rotation.y_deg, 是否门墙, 原生方位]。
 # 坐标换算按 Blender Z-up → Godot Y-up：(bx, by, bz) → (bx, bz, -by)，
@@ -145,6 +157,15 @@ const SAFE_ROOM_DOOR_SIDES: Array[String] = ["south", "east"]
 # 地砖不下沉固定值，改读每个组件自己的 snap_to_walk_plane_offset_m（c01 −0.056 / c02 −0.081）。
 const SAFE_ROOM_WALK_LIFT_M := 0.30
 const SAFE_ROOM_FLOOR_GRID_M := 5.0
+# 四角 L 型墙角（仅远征入口安全房开启，见 safe_room_corner_l）。
+# 直接引用塔楼 A 套 prp_corner_l_5m.tscn —— 它的正式美术就是「通用房通用墙组件」两份
+# 刚性拼成的 L（来源 tower_zones/battle/source/common_components/v007 的
+# ROOT_wall_standard_5m_通用组件），与安全房其余直墙同源、同色盘（01/02/04 角色）。
+# 它比两条 0.30m 直墙正交端接多包 0.15m：可视包络 5.15×11.9×5.15 正好补上四角
+# 外侧那道 0.15×0.15 的竖直缺口。两条臂各沿边覆盖 5m ⇒ 开启后每条边只保留中段槽位。
+# 顺序是「整房旋转一步」的置换环：NW→SW→SE→NE→NW（对应 rotation.y += 90°），
+# 所以按世界角位直接摆放等价于「原生四角 + art_root 整房旋转」。
+const SAFE_ROOM_CORNER_IDS: Array[String] = ["NW", "SW", "SE", "NE"]
 # 安全房沿用塔楼房间的边界约定：组件原点坐在 ±dimensions/2（= 5m 网格线）上，
 # 墙厚向房间外侧展开。授权美术（v007 README）把外墙皮写在 7.5 / 中线 7.35，
 # 运行时统一按塔楼口径把墙件原点落在 7.5，使门洞、走廊起点与楼板 5m 网格三者同线。
@@ -305,6 +326,23 @@ var open_wall_directions: Array[String] = []
 ## 设计源给出的房间级刷怪计划（波次 / 每波数量 / 怪物组成）。
 ## 空字典 = 该房走全局刷怪公式；非空时由 Dungeon3D._spawn_room_enemies 全量接管。
 var enemy_spawn_plan: Dictionary = {}
+## 入口安全房四角是否补 L 型墙角（默认关：塔楼安全房保持 12 段直墙口径）。
+## 只由「远征关卡」的房间记录置真，见 TowerDescent3D._build_expedition_records()。
+var safe_room_corner_l := false
+## —— 授权布局壳体（2026-09-20，区块00「主人的办公室」）——
+## 置真时本房**不生成任何程序化壳体**（4 墙 + 角柱 + 地板 + 天花 + 安全房 v007 整房），
+## 壳体全部由外部摆位源给出的 5m 组件实例清单拼出；本脚本只负责
+##   ① 按清单实例化组件（墙/门墙/地砖/L 角件），② 在门槽处把实墙顶替成门墙，
+##   ③ 仍然生成本房自己的 RoomDoor3D 通行门（门的开合/碰撞归它，不归组件）。
+## 清单里的 `door_leaf_preview` 是编辑器预览件，运行时**必须跳过**，
+## 否则会和 RoomDoor3D 的门扇重叠。
+var authored_layout_shell := false
+## 授权壳体实例清单（**房间局部坐标**，见 Block00MasterOfficeLayout3D.room_shell_instances）。
+## 每项 = { name, component_id, slot_role, corner_id, position: Vector3, rotation_y_deg: float }。
+var authored_layout_instances: Array = []
+var authored_layout_asset_id := ""
+var authored_layout_version := ""
+var authored_layout_room_id := ""
 
 
 func configure(config: Dictionary) -> void:
@@ -321,6 +359,12 @@ func configure(config: Dictionary) -> void:
 	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
 	open_wall_directions.assign(config.get("open_wall_directions", []))
 	enemy_spawn_plan = (config.get("enemy_spawn_plan", enemy_spawn_plan) as Dictionary).duplicate(true)
+	safe_room_corner_l = bool(config.get("safe_room_corner_l", safe_room_corner_l))
+	authored_layout_shell = bool(config.get("authored_layout_shell", authored_layout_shell))
+	authored_layout_instances = (config.get("authored_layout_instances", []) as Array).duplicate(true)
+	authored_layout_asset_id = str(config.get("authored_layout_asset_id", authored_layout_asset_id))
+	authored_layout_version = str(config.get("authored_layout_version", authored_layout_version))
+	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
 
 
 func _ready() -> void:
@@ -403,6 +447,21 @@ func get_room_snapshot() -> Dictionary:
 		"base100_roof_tile_count": _sum_int_meta_for_asset(
 			self, "ENV-BASE100-UPPER-SHELL-30X30-H12", "roof_tile_count"
 		),
+		# 2026-09-20：东西南三面外墙与 24m 封顶改由天台参考组件库 v002 承接。
+		# 这三面墙不再计入 base100_wall_plain_instance_count（base99 plain 只剩北面 2 块），
+		# 所以必须单独计数，否则「墙确实换成 v002」这件事没有任何断言看得见。
+		"base100_rooftop_room_wall_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-ROOFTOP-REF-ROOM-WALL"
+		),
+		"base100_rooftop_roof_corner_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-ROOFTOP-REF-ROOF-CORNER"
+		),
+		"base100_rooftop_roof_edge_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-ROOFTOP-REF-ROOF-EDGE"
+		),
+		"base100_rooftop_roof_full_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-ROOFTOP-REF-ROOF-FULL"
+		),
 		"base100_structure_collision_count": _count_nodes_with_meta(
 			self, "base100_upper_shell_collision", true
 		),
@@ -431,6 +490,13 @@ func get_room_snapshot() -> Dictionary:
 		"safe_room_door_wall_module_count": _count_nodes_with_meta(
 			self, "asset_id", "ENV-BATTLE-COMMON-WALL-DOOR-5M"
 		),
+		# 四角 L 型墙角（远征入口安全房专有）：live 计数按 asset_id 数节点，
+		# 不是读建造时自报的 meta —— 否则「声明了但一件没落地」看不出红。
+		"safe_room_corner_l": bool(get_meta("safe_room_corner_l", false)),
+		"safe_room_corner_module_count": _count_nodes_with_meta(
+			self, "asset_id", "ENV-TOWER-CORNER-L-5M"
+		),
+		"safe_room_wall_expected_count": int(get_meta("safe_room_wall_expected_count", -1)),
 		"safe_room_floor_tile_count": (
 			_count_nodes_with_meta(self, "asset_id", "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01")
 			+ _count_nodes_with_meta(self, "asset_id", "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02")
@@ -684,6 +750,12 @@ func _build_shell() -> void:
 	if room_type == "FACILITY":
 		_trim_material = FACILITY_TRIM_MATERIAL
 	if tower_module_shell:
+		# 授权布局优先：壳体由外部 5m 组件清单接管，程序化塔楼模块一律不生成。
+		# 顺序必须在 tower_module_shell 之前 —— 两个开关同时为真时（98F 区块00
+		# 的房间记录两处都置真），走授权路径。
+		if authored_layout_shell:
+			_build_authored_layout_shell(dimensions)
+			return
 		_build_tower_module_shell(dimensions)
 		return
 	# Floor：1×1×1 prefab + scale = (dim.x, 0.36, dim.y)
@@ -887,10 +959,22 @@ func _build_safe_room_shell(dimensions: Vector2) -> void:
 	art_root.set_meta("authoring_note", "v007 单一方位；按本层门向整房旋转，不按方位分版本。")
 	art_root.rotation.y = rotation_y
 	add_child(art_root)
+	# 四角补 L 型墙角（仅远征开启）。L 臂各沿边覆盖 5m，所以开启后每条边两端各 5m
+	# 让位给 L 臂，直墙只留「沿边偏移 = 0」的中段槽位；门洞本来就在中段槽位上，不受影响。
+	var use_corner_l := safe_room_corner_l and _safe_room_corner_layout_fits(dimensions)
+	if safe_room_corner_l and not use_corner_l:
+		push_warning("DungeonRoom3D: 安全房 %s 尺寸 %s 不满足四角 L 件布局，回退 12 段直墙" % [
+			room_id, str(dimensions)
+		])
 	var wall_count := 0
+	var expected_wall_count := 0
 	for slot in SAFE_ROOM_WALL_SLOTS:
+		if use_corner_l and not safe_room_slot_is_edge_middle(slot as Array):
+			continue
+		expected_wall_count += 1
 		if _build_safe_room_wall_slot(art_root, slot as Array, rotation_y):
 			wall_count += 1
+	var corner_count := _spawn_safe_room_corners(dimensions) if use_corner_l else 0
 	var tile_count := _build_safe_room_floor_tiles(art_root)
 	var package_count := _build_safe_room_packages(art_root)
 	# 门扇仍走通用 _build_door：v007 门洞切向中心就是 5m 网格中段（偏移 0），
@@ -899,13 +983,85 @@ func _build_safe_room_shell(dimensions: Vector2) -> void:
 		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
 	set_meta("safe_room_art_version", SAFE_ROOM_ART_VERSION)
 	set_meta("safe_room_orientation_steps", rotation_steps)
+	set_meta("safe_room_corner_l", use_corner_l)
+	set_meta("safe_room_corner_module_count", corner_count)
 	set_meta("safe_room_wall_module_count", wall_count)
+	# 期望值随布局模式变化（12 段直墙 / 4 段中段），写进 meta 让验收按同一口径推导，
+	# 不在验收脚本里硬编码 10 或 12。
+	set_meta("safe_room_wall_expected_count", expected_wall_count)
 	set_meta("safe_room_floor_tile_count", tile_count)
 	set_meta("safe_room_package_count", package_count)
-	if wall_count != SAFE_ROOM_WALL_SLOTS.size():
+	if wall_count != expected_wall_count:
 		push_warning("DungeonRoom3D: 安全房 %s 墙组件缺失 (%d/%d)" % [
-			room_id, wall_count, SAFE_ROOM_WALL_SLOTS.size()
+			room_id, wall_count, expected_wall_count
 		])
+	if use_corner_l and corner_count != SAFE_ROOM_CORNER_IDS.size():
+		push_warning("DungeonRoom3D: 安全房 %s 四角 L 件缺失 (%d/%d)" % [
+			room_id, corner_count, SAFE_ROOM_CORNER_IDS.size()
+		])
+
+
+## 四角 L 件布局是否成立：每条边的槽位数与尺寸必须能拆成「L 臂 5m + 中段 5m + L 臂 5m」。
+## 期望边长由清单推出（3 个 5m 槽位 = 15m），不硬编码 15；不成立时退回 12 段直墙，
+## 让「四角补 L」这件事有一条会失败的保护，而不是静默错位。
+func _safe_room_corner_layout_fits(dimensions: Vector2) -> bool:
+	var grid := TOWER_GEOMETRY.GRID_UNIT_M
+	var side_slots := 0
+	for slot in SAFE_ROOM_WALL_SLOTS:
+		if str((slot as Array)[4]) == "north":
+			side_slots += 1
+	if side_slots < 3:
+		return false
+	var side_length := grid * float(side_slots)
+	return (
+		is_equal_approx(dimensions.x, side_length)
+		and is_equal_approx(dimensions.y, side_length)
+	)
+
+
+## 槽位是否落在边的中段（沿边偏移 = 0）。北/南槽位沿 X 铺，东/西槽位沿 Z 铺。
+## 静态：验收脚本要按同一口径推导期望墙数，禁止各自复述一遍判据。
+static func safe_room_slot_is_edge_middle(slot: Array) -> bool:
+	if slot.size() < 5:
+		return false
+	var direction := str(slot[4])
+	var along := float(slot[0]) if direction in ["north", "south"] else float(slot[1])
+	return absf(along) < 0.001
+
+
+## 四角 L 件开启后保留的中段槽位数（= 每条边 1 段，四条边共 4 段）。
+static func safe_room_middle_slot_count() -> int:
+	var count := 0
+	for slot in SAFE_ROOM_WALL_SLOTS:
+		if safe_room_slot_is_edge_middle(slot as Array):
+			count += 1
+	return count
+
+
+## 按「世界角位」直接摆放四角 L 件。
+## 与「原生四角 + art_root 整房旋转」等价：SAFE_ROOM_CORNER_IDS 是 90° 旋转的置换环，
+## 且 _spawn_room_corner 的 rotation_y 与角位一一对应（SW 0° / SE 90° / NE 180° / NW −90°），
+## 两者相加正好等于整房旋转角。这样摆可以让 _configure_corner_camera_collisions()
+## 拿到世界朝向的角 id —— 镜头下压规则按世界南北墙判定，传原生 id 会转错向。
+func _spawn_safe_room_corners(dimensions: Vector2) -> int:
+	var half := dimensions * 0.5
+	var placed := 0
+	for corner_id in SAFE_ROOM_CORNER_IDS:
+		_spawn_room_corner(_safe_room_corner_position(half, corner_id), corner_id)
+		placed += 1
+	return placed
+
+
+func _safe_room_corner_position(half: Vector2, corner_id: String) -> Vector2:
+	match corner_id:
+		"NW":
+			return Vector2(-half.x, -half.y)
+		"NE":
+			return Vector2(half.x, -half.y)
+		"SW":
+			return Vector2(-half.x, half.y)
+		_:
+			return Vector2(half.x, half.y)
 
 
 ## 解析整房旋转步数：把授权布局的门轴墙集合 {南, 东} 转到本层实际门向集合。
@@ -1076,6 +1232,272 @@ func _disable_static_collision_descendants(root: Node) -> void:
 			var shape := shape_value as CollisionShape3D
 			if shape != null:
 				shape.disabled = true
+
+
+## —— 授权布局壳体装配（2026-09-20，区块00 主人的办公室 98F）——
+##
+## 输入是外部摆位源逐房导出的 5m 组件实例清单（房间局部坐标）。本函数只做四件事：
+##   ① 组件实例化（L 角件 / 实墙 / 门墙 / 地砖），位置与朝向一律取清单值，不重算；
+##   ② **门槽顶替**：清单里坐在「门墙面上 + 沿墙偏移 = 门槽」的实墙，自动换成门墙。
+##      门槽的唯一口径是 _plan_room_layout() 写进本节点的 tower_wall_door_offset_<side>，
+##      不在清单里另存一份 —— 否则布线一改，门扇与门洞就会静默错位。
+##   ③ 地砖关掉内嵌静态碰撞（承重归 TowerFloorStage3D._build_support()）；
+##   ④ 仍然用 _build_door() 生成本房通行门（开合与升降碰撞归 RoomDoor3D）。
+##
+## 不生成的东西：4 面程序化墙、角柱、地板、天花、安全房 v007 整房、房间包。
+func _build_authored_layout_shell(dimensions: Vector2) -> void:
+	var art_root := Node3D.new()
+	art_root.name = "AuthoredLayoutArtRoot"
+	art_root.set_meta("asset_id", authored_layout_asset_id)
+	art_root.set_meta("asset_version", authored_layout_version)
+	art_root.set_meta("authored_room_id", authored_layout_room_id)
+	art_root.set_meta("authored_layout_shell", true)
+	art_root.set_meta("layout_instance_total", authored_layout_instances.size())
+	add_child(art_root)
+
+	var half := dimensions * 0.5
+	var corner_count := 0
+	var solid_count := 0
+	var door_wall_count := 0
+	var tile_count := 0
+	var promoted: Array[String] = []
+	var unresolved: Array[String] = []
+	for value in authored_layout_instances:
+		var instance := value as Dictionary
+		var role := str(instance.get("slot_role", ""))
+		var local_position := instance.get("position", Vector3.ZERO) as Vector3
+		match role:
+			"corner_l":
+				# 复用塔楼正式角件路径（远征四角 L 件也是这条），
+				# 它负责 tower_wall_corner / 镜头下压臂两条契约。
+				_spawn_room_corner(
+					Vector2(local_position.x, local_position.z),
+					str(instance.get("corner_id", "SW"))
+				)
+				corner_count += 1
+			"solid_wall", "door_wall":
+				var door_side := _authored_wall_door_side(local_position, half)
+				var uses_door := role == "door_wall" or not door_side.is_empty()
+				if not _spawn_authored_layout_wall(art_root, instance, uses_door):
+					unresolved.append(str(instance.get("name", "")))
+					continue
+				if uses_door:
+					door_wall_count += 1
+					if role == "solid_wall":
+						promoted.append("%s@%s" % [str(instance.get("name", "")), door_side])
+				else:
+					solid_count += 1
+			"floor_tile":
+				if _spawn_authored_layout_floor_tile(art_root, instance):
+					tile_count += 1
+				else:
+					unresolved.append(str(instance.get("name", "")))
+			_:
+				# door_leaf_preview 等编辑器预览件在导出层已被剔除；漏到这里只可能是
+				# 摆位源加了新角色而没人接线 —— 报警而不是静默丢掉。
+				push_warning(
+					"DungeonRoom3D: 授权布局 %s 出现未接线的 slot_role=%s（实例 %s）"
+					% [room_id, role, str(instance.get("name", ""))]
+				)
+
+	# 通行门：与程序化路径同一实现，门偏移读同一个 tower_wall_door_offset_* 口径。
+	for direction in doors:
+		_build_door(direction, str(door_targets.get(direction, "")), dimensions)
+
+	# 每扇门都必须有一条门墙组件承接门洞；缺了就是「门开在实墙上」——
+	# 这是几何/门槽校验都查不出的隐形契约，必须有一条会失败的断言盯住。
+	#
+	# 但授权布局（区块00）的房间之间是**相邻共墙**：摆位源的 lane 归属模型规定
+	# 「同一 lane 全局只出一个实例」，一道共享墙只归声明它的那个房间。于是邻房那一侧
+	# 的门墙不在本房子树里 —— 门洞由持有该墙的邻房提供。所以判据必须分两种，
+	# 不能一律报错（否则共墙布局会稳定假红）：
+	#   · 本房在该侧墙面上有墙件 ⇒ 必须是门墙；是实墙就是「门开在实墙上」，报错；
+	#   · 本房该侧一件墙都没有 ⇒ 墙归邻房，本房不重复建门墙、不报错，
+	#     只把「该门洞已委派给邻房」记成事实，交区块级探针全局核对覆盖。
+	var door_wall_sides: Array[String] = []
+	var wall_sides: Array[String] = []
+	for value in art_root.find_children("*", "Node3D", true, false):
+		var module := value as Node3D
+		if module == null:
+			continue
+		var direction := str(module.get_meta("tower_wall_direction", ""))
+		if direction.is_empty():
+			continue
+		if direction not in wall_sides:
+			wall_sides.append(direction)
+		if str(module.get_meta("asset_id", "")) == DOOR_WALL_COMPONENT_ASSET_ID:
+			door_wall_sides.append(direction)
+	var delegated_sides: Array[String] = []
+	for direction in doors:
+		if direction in door_wall_sides:
+			continue
+		if direction in wall_sides:
+			push_error(
+				"DungeonRoom3D: 授权布局 %s 的 %s 门没有对应门墙组件（清单里该槽位是实墙或缺失）"
+				% [room_id, direction]
+			)
+		else:
+			delegated_sides.append(direction)
+	# 委派出去的门洞不建门扇面板：邻房已经建了一扇，两扇同面重叠会 z-fighting。
+	# 只藏面板 —— 门节点、升降碰撞、交互提示全部保留，两侧都仍能按 E 开启；
+	# 且一条边的两扇门由 _refresh_edge_visuals 同时开合，状态不会分叉。
+	for direction in delegated_sides:
+		var delegated_door := get_door_node(direction)
+		if delegated_door == null:
+			continue
+		var panel := delegated_door.get_node_or_null("DoorPanel") as Node3D
+		if panel != null:
+			panel.visible = false
+		delegated_door.set_meta("authored_shared_door_delegated", true)
+		delegated_door.set_meta("authored_shared_door_owner_side", true)
+	set_meta("authored_layout_door_wall_sides", door_wall_sides)
+	set_meta("authored_layout_wall_sides", wall_sides)
+	set_meta("authored_layout_delegated_door_sides", delegated_sides)
+
+	set_meta("authored_layout_shell", true)
+	set_meta("authored_layout_asset_id", authored_layout_asset_id)
+	set_meta("authored_layout_version", authored_layout_version)
+	set_meta("authored_layout_room_id", authored_layout_room_id)
+	set_meta("authored_layout_corner_count", corner_count)
+	set_meta("authored_layout_solid_wall_count", solid_count)
+	set_meta("authored_layout_door_wall_count", door_wall_count)
+	set_meta("authored_layout_floor_tile_count", tile_count)
+	set_meta("authored_layout_promoted_walls", promoted)
+	set_meta("authored_layout_unresolved_instances", unresolved)
+	if not unresolved.is_empty():
+		push_warning(
+			"DungeonRoom3D: 授权布局 %s 有 %d 件组件无法解析，已跳过"
+			% [room_id, unresolved.size()]
+		)
+
+
+## 授权墙件是否正好坐在本房某扇门的位置上（门槽唯一口径 = tower_wall_door_offset_<side>）。
+## 返回命中的门向，未命中返回 ""。
+func _authored_wall_door_side(local_position: Vector3, half: Vector2) -> String:
+	const TOLERANCE := 0.01
+	for side in doors:
+		var along := float(get_meta("tower_wall_door_offset_%s" % side, 0.0))
+		match side:
+			"east":
+				if is_equal_approx(local_position.x, half.x) and absf(local_position.z - along) <= TOLERANCE:
+					return side
+			"west":
+				if is_equal_approx(local_position.x, -half.x) and absf(local_position.z - along) <= TOLERANCE:
+					return side
+			"north":
+				if is_equal_approx(local_position.z, -half.y) and absf(local_position.x - along) <= TOLERANCE:
+					return side
+			"south":
+				if is_equal_approx(local_position.z, half.y) and absf(local_position.x - along) <= TOLERANCE:
+					return side
+	return ""
+
+
+## 摆位源组件 ID → 运行时 PackedScene。全部复用入口安全房 v007 已经在用的四个组件包，
+## 不新建资产：摆位源引用的就是同一批 5m 通用组件。
+static func _authored_component_prefab(component_id: String) -> PackedScene:
+	match component_id:
+		WALL_COMPONENT_ASSET_ID:
+			return SAFE_ROOM_WALL_STANDARD_PREFAB
+		DOOR_WALL_COMPONENT_ASSET_ID:
+			return SAFE_ROOM_WALL_DOOR_PREFAB
+		FLOOR_TILE_C01_COMPONENT_ID:
+			return SAFE_ROOM_FLOOR_TILE_C01_PREFAB
+		FLOOR_TILE_C02_COMPONENT_ID:
+			return SAFE_ROOM_FLOOR_TILE_C02_PREFAB
+		CORNER_L_COMPONENT_ID:
+			return TOWER_CORNER_L_PREFAB
+		_:
+			return null
+
+
+## 摆位源 rotation_z_deg → 世界门向。与摆位源 face_in_rotation_deg 互逆：
+## 0°=南墙、180°=北墙、−90°=西墙、90°=东墙。塔楼网格验收按 tower_wall_direction
+## 找门墙，方向标签错了会直接把「门开在实墙上」判成通过。
+static func _authored_wall_direction(rotation_y_deg: float) -> String:
+	var wrapped := fposmod(rotation_y_deg, 360.0)
+	if is_zero_approx(wrapped):
+		return "south"
+	if is_equal_approx(wrapped, 180.0):
+		return "north"
+	if is_equal_approx(wrapped, 90.0):
+		return "east"
+	if is_equal_approx(wrapped, 270.0):
+		return "west"
+	return ""
+
+
+func _spawn_authored_layout_wall(art_root: Node3D, instance: Dictionary, uses_door: bool) -> bool:
+	var component_id := str(instance.get("component_id", ""))
+	var prefab := (
+		SAFE_ROOM_WALL_DOOR_PREFAB if uses_door
+		else _authored_component_prefab(component_id)
+	)
+	if prefab == null:
+		push_error(
+			"DungeonRoom3D: 授权布局 %s 没有组件 %s 的 prefab 映射（实例 %s）"
+			% [room_id, component_id, str(instance.get("name", ""))]
+		)
+		return false
+	var module := prefab.instantiate() as Node3D
+	if module == null:
+		push_error("DungeonRoom3D: 授权墙组件实例化失败（%s）" % component_id)
+		return false
+	module.name = str(instance.get("name", "AuthoredWall"))
+	var rotation_y_deg := float(instance.get("rotation_y_deg", 0.0))
+	module.position = instance.get("position", Vector3.ZERO) as Vector3
+	module.rotation.y = deg_to_rad(rotation_y_deg)
+	var world_direction := _authored_wall_direction(rotation_y_deg)
+	if world_direction.is_empty():
+		push_error(
+			"DungeonRoom3D: 授权墙 %s 的 rotation_z_deg=%s 不是四种墙向之一"
+			% [module.name, str(rotation_y_deg)]
+		)
+	module.set_meta("tower_wall_direction", world_direction)
+	module.set_meta("grid_unit_m", TOWER_GEOMETRY.GRID_UNIT_M)
+	module.set_meta("authored_component_id", component_id)
+	if uses_door:
+		module.set_meta("authored_door_wall_promoted", component_id == WALL_COMPONENT_ASSET_ID)
+	_set_camera_lower_wall_on_static_bodies(
+		module, world_direction in ["north", "south"]
+	)
+	_set_geometry_shadow_casting(module, true)
+	module.set_meta("shadow_policy", "cast_and_receive")
+	art_root.add_child(module)
+	if uses_door and world_direction in ["north", "south"]:
+		# 南北向门洞开门后不能留实体碰撞：与安全房 v007 同契约，补 camera-only 代理。
+		_add_camera_only_door_wall_proxy(
+			world_direction, module.position, module.rotation.y, 0, art_root
+		)
+	return true
+
+
+func _spawn_authored_layout_floor_tile(art_root: Node3D, instance: Dictionary) -> bool:
+	var component_id := str(instance.get("component_id", ""))
+	var prefab := _authored_component_prefab(component_id)
+	if prefab == null:
+		push_error(
+			"DungeonRoom3D: 授权布局 %s 没有地砖组件 %s 的 prefab 映射（实例 %s）"
+			% [room_id, component_id, str(instance.get("name", ""))]
+		)
+		return false
+	var tile := prefab.instantiate() as Node3D
+	if tile == null:
+		push_error("DungeonRoom3D: 授权地砖实例化失败（%s）" % component_id)
+		return false
+	tile.name = str(instance.get("name", "AuthoredFloorTile"))
+	# 砖面顶面按每个组件自己声明的 snap_to_walk_plane_offset_m 落到 Y=0
+	#（c01/c02 结构厚不同，不能共用一个硬编码偏移）。
+	var snap_offset := float(tile.get_meta("snap_to_walk_plane_offset_m", 0.0))
+	var local_position := instance.get("position", Vector3.ZERO) as Vector3
+	tile.position = Vector3(local_position.x, snap_offset, local_position.z)
+	tile.rotation.y = deg_to_rad(float(instance.get("rotation_y_deg", 0.0)))
+	tile.set_meta("walk_plane_snap_y", snap_offset)
+	tile.set_meta("authored_component_id", component_id)
+	# 承重归 TowerFloorStage3D._build_support()，这里必须把内嵌静态碰撞关掉。
+	_disable_static_collision_descendants(tile)
+	art_root.add_child(tile)
+	return true
 
 
 func _build_base_facility_shell(dimensions: Vector2) -> void:

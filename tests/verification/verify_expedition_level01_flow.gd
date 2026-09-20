@@ -18,10 +18,16 @@ extends Node
 const SAFE_ROOM_SIZE := Vector2(15.0, 15.0)
 const EXPEDITION_ROOM_SIZE := Vector2(25.0, 25.0)
 const EXPEDITION_SCENE := "res://scenes/ExpeditionLevel01_3D.tscn"
+## 设计源 id（同时是 LevelPlanLoader 的目录名与「数据驱动开关」的载体）。
+## 与 EXPEDITION_SCENE 同样**有意写死**：作为独立旁证，不跟产品代码共用常量。
+const EXPEDITION_LEVEL_ID := "expedition_01"
 const LOADING_SCENE := "res://scenes/ExpeditionLoadingScreen.tscn"
 const MENU_SCENE := "res://scenes/RogueMapSelectMenu.tscn"
 const TOWER_SCENE := "res://scenes/TowerDescent3D.tscn"
 const SAFE_ROOM_ART_VERSION := "v007"
+## 家具碰撞盒必须覆盖「走行面以上这一段身位」才算真的挡住。用带宽而不是精确身高，
+## 是因为判据只要求「盒子的竖直区间与玩家身位区间有交」，避免绑死角色尺寸。
+const FACILITY_BLOCK_BAND_MAX_Y := 1.0
 const MAIN_ROOM_IDS: Array[String] = ["room_01", "room_02", "room_03", "room_04", "room_05"]
 const EXPECTED_ROOM_IDS: Array[String] = [
 	"start", "room_01", "room_02", "room_03", "room_04", "room_05", "extraction",
@@ -507,8 +513,25 @@ func _verify_expedition_plan(tower: TowerDescent3D, failures: Array[String]) -> 
 		return
 	if not bool(plan.get("valid", false)):
 		failures.append("远征关卡规划校验未通过：%s" % str(plan.get("validation_errors", [])))
-	if str(plan.get("mode", "")) != "expedition":
-		failures.append("远征关卡规划 mode 不正确：%s" % str(plan.get("mode", "")))
+	# 规划来源判据：期望**由设计源推出**，不写死「应该走哪条路」。
+	# 两条路径写进来的 mode 不是同一个概念 —— 内置远征生成器（generate_expedition）写
+	# mode="expedition" 并带 trigger="expedition_bootstrap"；数据驱动路径
+	# （generate_from_level_plan，由 L1 generation_policy.runtime_enabled 开启）写的是 L2
+	# 文件的 mode（合法值只有 LevelPlanLoader.VALID_MODES 的 authored / constrained），
+	# 来源改由 trigger="level_plan_data" 标明。
+	# 为什么从设计源推：开关被误开或被误关都必须红。若只放行「二者之一」，开关被悄悄关掉
+	# 时这条断言仍然绿 —— 那等于把「版图几何从哪来」的契约又丢了。
+	var plan_mode := str(plan.get("mode", ""))
+	var plan_trigger := str(plan.get("trigger", ""))
+	if FloorPlanGenerator.data_driven_enabled(EXPEDITION_LEVEL_ID):
+		if plan_trigger != "level_plan_data":
+			failures.append(
+				"远征关卡声明了 runtime_enabled 却仍走内置房表：trigger=%s" % plan_trigger
+			)
+	elif plan_mode != "expedition":
+		failures.append(
+			"远征关卡未声明 runtime_enabled，规划却不是内置远征口径：mode=%s" % plan_mode
+		)
 	if str(plan.get("terminal_mode", "")) != "extraction_room":
 		failures.append("远征关卡终局模式不是撤离房：%s" % str(plan.get("terminal_mode", "")))
 	var main_keys := plan.get("main_path_keys", []) as Array
@@ -553,14 +576,30 @@ func _verify_safe_room(tower: TowerDescent3D, failures: Array[String]) -> Dungeo
 	var snapshot := start_room.get_room_snapshot()
 	if str(snapshot.get("safe_room_art_version", "")) != SAFE_ROOM_ART_VERSION:
 		failures.append("远征关卡入口未接入 v007 安全房美术：%s" % snapshot)
-	if int(snapshot.get("safe_room_wall_module_count", -1)) != 10:
-		failures.append("安全房实墙不是 10 段：%s" % snapshot)
-	if int(snapshot.get("safe_room_door_wall_module_count", -1)) != 2:
-		failures.append("安全房门墙不是 2 段：%s" % snapshot)
+	# 期望值由 SAFE_ROOM_CORNER_IDS / SAFE_ROOM_WALL_SLOTS 推出，不硬编码：
+	# 四角补 L 件后每条边两端各 5m 让位给 L 臂，直墙只留中段槽位（15m = 5 + 5 + 5），
+	# 实墙 = 中段槽位数 − 门墙数（门洞本来就在中段）。见 DungeonRoom3D._build_safe_room_shell。
+	if not bool(snapshot.get("safe_room_corner_l", false)):
+		failures.append("远征入口安全房未启用四角 L 型墙角：%s" % snapshot)
+	var expected_corner_count := DungeonRoom3D.SAFE_ROOM_CORNER_IDS.size()
+	if int(snapshot.get("safe_room_corner_module_count", -1)) != expected_corner_count:
+		failures.append("安全房四角 L 件不是 %d 件：%s" % [expected_corner_count, snapshot])
+	var expected_door_wall_count := start_room.doors.size()
+	var expected_solid_wall_count := maxi(
+		0, DungeonRoom3D.safe_room_middle_slot_count() - expected_door_wall_count
+	)
+	if int(snapshot.get("safe_room_wall_module_count", -1)) != expected_solid_wall_count:
+		failures.append("安全房实墙不是 %d 段：%s" % [expected_solid_wall_count, snapshot])
+	if int(snapshot.get("safe_room_door_wall_module_count", -1)) != expected_door_wall_count:
+		failures.append("安全房门墙不是 %d 段：%s" % [expected_door_wall_count, snapshot])
 	if int(snapshot.get("safe_room_floor_tile_count", -1)) != 9:
 		failures.append("安全房地砖不是 9 块：%s" % snapshot)
-	if int(snapshot.get("safe_room_package_count", -1)) != 17:
-		failures.append("安全房房间包不是 17 个：%s" % snapshot)
+	# 期望值由常量推出，不硬编码数字：房间包清单会随美术需求增删（2026-09-20 已由
+	# 17 减到 15），硬编码会在每次去件时误红。此处只盯「清单里的包全部装配成功」。
+	var expected_package_count := DungeonRoom3D.SAFE_ROOM_PACKAGE_IDS.size()
+	if int(snapshot.get("safe_room_package_count", -1)) != expected_package_count:
+		failures.append("安全房房间包不是 %d 个：%s" % [expected_package_count, snapshot])
+	_verify_safe_room_facility_blocking(start_room, expected_package_count, failures)
 	if start_room.doors.size() != 2:
 		failures.append("安全房必须保留双门结构：%s" % [start_room.doors])
 	else:
@@ -599,6 +638,72 @@ func _verify_safe_room(tower: TowerDescent3D, failures: Array[String]) -> Dungeo
 	if front_targets != ["room_01"]:
 		failures.append("安全房前门目标不是 01 号房：%s" % [front_targets])
 	return start_room
+
+
+## 2026-09-20：安全房房间包补齐了「内嵌玩法阻挡」（范例 B：模型 + 碰撞同包）。
+## 在这之前 15 个包的 collision_owner 指向 godot_0p30m_structural_proxy —— 一个全仓
+## 并不存在的代理，于是设施全部可穿模。本函数盯三件事，期望值全部由包自身 metadata
+## 与走行面常量推出，不硬编码件数/尺寸：
+##   1. 元数据真实性：collision_shape_count 必须等于实测启用形状数（双向：多一个少一个都红）
+##   2. 几何契约：碰撞盒必须是 BoxShape3D 且尺寸 == bounds_size_m
+##   3. 可达性：盒子的竖直区间必须与「走行面以上 FACILITY_BLOCK_BAND_MAX_Y」有交
+##      —— 挡住看不到的东西不算挡，浮在 4m 高的盒子对玩家等价于不存在
+func _verify_safe_room_facility_blocking(
+	start_room: DungeonRoom3D, expected_package_count: int, failures: Array[String]
+) -> void:
+	var art_root := start_room.get_node_or_null("SafeRoomArtRoot")
+	if art_root == null:
+		failures.append("安全房缺少 SafeRoomArtRoot，无法核对房间包阻挡")
+		return
+	var checked := 0
+	var blocking := 0
+	var declared_total := 0
+	for value in art_root.get_children():
+		var package := value as Node3D
+		if package == null or not package.name.begins_with("SafeRoomPackage_"):
+			continue
+		checked += 1
+		var slug := str(package.get_meta("slug", package.name))
+		var declared := int(package.get_meta("collision_shape_count", -1))
+		var bounds := package.get_meta("bounds_size_m", Vector3.ZERO) as Vector3
+		var live := 0
+		for body_value in package.find_children("*", "StaticBody3D", true, false):
+			var body := body_value as StaticBody3D
+			if body.collision_layer == 0:
+				continue
+			for shape_value in body.find_children("*", "CollisionShape3D", true, false):
+				var shape := shape_value as CollisionShape3D
+				if shape.disabled or shape.shape == null:
+					continue
+				live += 1
+				var box := shape.shape as BoxShape3D
+				if box == null:
+					failures.append("%s 阻挡形状不是 BoxShape3D" % slug)
+					continue
+				if not box.size.is_equal_approx(bounds):
+					failures.append("%s 碰撞盒 %s != bounds_size_m %s" % [
+						slug, box.size, bounds
+					])
+				var bottom := shape.global_position.y - box.size.y * 0.5
+				var top := shape.global_position.y + box.size.y * 0.5
+				if bottom > FACILITY_BLOCK_BAND_MAX_Y or top < 0.0:
+					failures.append("%s 碰撞盒 y=[%.2f..%.2f] 与玩家身位无交，等于没挡" % [
+						slug, bottom, top
+					])
+		if declared != live:
+			failures.append("%s 元数据 collision_shape_count=%d 与实测启用形状数 %d 不一致" % [
+				slug, declared, live
+			])
+		declared_total += declared
+		if declared > 0:
+			blocking += 1
+	# 防假绿哨兵：脚本报错会静默中断，0 样本断言恒真。
+	if checked != expected_package_count:
+		failures.append("哨兵：核对到的房间包 %d 件 != 清单 %d 件" % [checked, expected_package_count])
+	if blocking == 0:
+		failures.append("哨兵：有阻挡的房间包样本为 0，阻挡断言恒真、结论不可信")
+	if declared_total == 0:
+		failures.append("哨兵：所有房间包声明的碰撞形状数合计为 0，设施可穿模")
 
 
 func _verify_door_policies(tower: TowerDescent3D, failures: Array[String]) -> void:

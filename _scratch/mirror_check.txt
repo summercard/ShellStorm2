@@ -1,0 +1,7 @@
+  XX B_drafts/04-battle-room-runtime-assembler miss=[] extra=[] diff=['04-battle-room-runtime-assembler/SKILL.md']
+  XX B_drafts/godzilla-pet-visual-probe miss=[] extra=[] diff=['godzilla-pet-visual-probe/SKILL.md']
+  XX C_project_codex/04-battle-room-runtime-assembler miss=[] extra=[] diff=['04-battle-room-runtime-assembler/SKILL.md']
+  XX C_project_codex/godzilla-pet-visual-probe miss=[] extra=[] diff=['godzilla-pet-visual-probe/SKILL.md']
+  XX D_user_codex/04-battle-room-runtime-assembler miss=[] extra=[] diff=['04-battle-room-runtime-assembler/SKILL.md']
+  XX D_user_codex/godzilla-pet-visual-probe miss=[] extra=[] diff=['godzilla-pet-visual-probe/SKILL.md']
+SKILL_MIRROR_CHECK_FAIL issues=6

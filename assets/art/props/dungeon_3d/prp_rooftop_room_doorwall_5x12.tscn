@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台「房间门洞墙」（天台参考组件库 v002 · 房间墙体）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_room_doorwall_top3d.glb
+;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
+;   来源包：房间门洞墙_资产包（房间门洞墙_主体；只有水泥结构 + 竖向结构 + 上下压边，无玻璃）。
+; ⚠️ 门洞实测（Blender 射线扫描 房间门洞墙_水泥结构_制作，2026-09-20）：
+;   洞宽 3.80m（x ∈ ±1.90，两侧垛各 0.60m）× 洞高 6.80m（z ∈ 0..6.80）。
+;   与 ENV-BASE99-WALL-DOOR-5X12 的 2.2×2.5 完全不同 —— 换成这套门必须同步
+;   Base100UpperShell3D 的 DOOR_CLEAR_WIDTH / DOOR_CLEAR_HEIGHT，否则出现隐形挡墙
+;   （美术开 3.8×6.8，碰撞只放 2.2×2.5）。
+; 本件**只有墙与洞，不含门扇**。门框/门柱/门楣/门槛/暖灯见 prp_rooftop_room_door；
+;   门扇见 prp_rooftop_room_door_leaf。三件同槽叠放。
+; 默认朝向 +Z（装饰面朝房间外），与 prp_rooftop_room_wall_5x12 同一朝向约定。
+; preserve_authored_palette / visual_only / 碰撞归属同 prp_rooftop_room_wall_5x12。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_doorwall_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopRoomDoorwall5x12" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-ROOM-DOORWALL"
+metadata/package_id = "ENV-ROOFTOP-REF-ROOM-DOORWALL"
+metadata/source_package = "房间门洞墙_资产包"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_room_doorwall_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 11.9
+metadata/logical_height_m = 12.0
+metadata/door_clear_width_m = 3.8
+metadata/door_clear_height_m = 6.8
+metadata/door_pier_width_m = 0.6
+metadata/door_hole_note = "门洞 3.80×6.80 由 Blender 射线扫描 房间门洞墙_水泥结构_制作 实测（洞宽 = 5.00 - 2×0.60 垛）。换美术时先核对本条：洞尺寸决定 Base100UpperShell3D 的门碰撞拆分。"
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/bounds_note = "可视包络与结构包络逐值相同；门洞为真洞（无填充几何），故可视包络仍是整块 5×11.9×0.3。"
+metadata/visual_node_name = "房间门洞墙_主体"
+metadata/visual_only = true
+metadata/collision_owner = "Base100UpperShell3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "rooftop_room_door_bay"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -27,6 +27,7 @@ metadata/package_id = "ENV-ROOFTOP-REF-PARAPET"
 metadata/asset_version = "v003"
 metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
 metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_v003.py"
+metadata/source_library_revision = "v002_writeback_plan_a_0p80m_2026-09-20"
 metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_top3d.glb"
 metadata/grid_unit_m = 5.0
 metadata/visual_height_m = 0.8

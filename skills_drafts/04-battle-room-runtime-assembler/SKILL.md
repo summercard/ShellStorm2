@@ -58,6 +58,18 @@ Blender 布局是视觉摆放事实源。Godot 不得再手工摆第二套视觉
 
 门验收必须同时证明 `RoomDoor3D/DoorPanel/ImportedDoorVisual` 存在且其后代至少有一个 `MeshInstance3D`；只验证 `RoomDoor3D` 节点数量和位置不能证明门扇可见。若 Blender 源包含 editor-only 门扇预览，运行时必须忽略它，由 `RoomDoor3D` 独占门扇视觉与动画。
 
+### 分支 A 扩展到「整层固定关卡」（2026-09-20 区块00 先例）
+
+当一个楼层由单一 Blender 布局源**整层接管**（不是补一间房）：
+
+- 翻译器独立成 `RefCounted`（先例 `Block00MasterOfficeLayout3D.gd`）：只把布局源翻成运行时 `plan`，不碰场景树；布局源不可用或自检失败时返回空 → 回退生成器，**绝不静默换布局**。
+- `build_plan_override(base_plan)` 必须**保留 base_plan 的 `layout_id`**（否则存档快照校验 mismatch），并**沿用原楼层的房间 id 键**（先例 `floor_01_entry/hub/main_02/exit`），否则存档 `room_progress` 错位。
+- 摆位源的绝对平移常缺（只块内相对正确）⇒ 由「楼层锚点 + 门槽」反解（先例 `_resolve_planar_z_shift()`）。
+- 运行时房间走**通用**授权壳体装配（`DungeonRoom3D._build_authored_layout_shell`）⇒ **不为某房新增专用拼装函数**。
+- ⚠️ **接线点不止一处**：楼层规划注入、plan→record 字段透传、record→`room.configure(...)`。`room.configure(...)` 在项目里有**两处调用点**，**少补一处不报错但该房静默退化成白盒** ⇒ 先 grep 出所有调用点再改。
+- ⚠️ **共墙 lane 归属**：布局源「同一 lane 全局只出一个实例」⇒ 共墙只归声明它的房间，邻房**不重复建门墙**。但门的开合是**双边联动**，两端门节点都要保留且状态同步，只把委托侧门扇 `visible=false` 防 z-fighting。
+- 授权楼层会使「生成器结构契约」类验收（网格 / 走廊计数 / 门墙归属）**设计性假红** ⇒ 加测试 seam 回落生成器（先例 `TowerDescent3D.force_standard_floor_plan_for_test`，默认 false 不影响运行时），授权楼层改由专用验收探针覆盖。
+
 ### 分支 B：没有具体房间 Blender 布局
 
 判定条件：没有合格的具体房间 `room_layout.json`，但存在：

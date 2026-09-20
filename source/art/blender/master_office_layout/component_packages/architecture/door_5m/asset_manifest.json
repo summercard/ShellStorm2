@@ -1,0 +1,29 @@
+{
+  "asset_id": "ENV-BATTLE-COMMON-DOOR-5M",
+  "package_id": "block_00_master_office::door_5m_通用包",
+  "display_name": "door_5m_通用包",
+  "display_name_zh": "战局通用门扇 2.2×0.18×2.5m",
+  "asset_slug": "door_5m",
+  "category": "architecture",
+  "ledger_version": "v006",
+  "prefab": "assets/art/environments/tower_zones/battle/runtime/common_components/door_5m/door_5m_root_top3d.tscn",
+  "glb": "assets/art/environments/tower_zones/battle/components/common_components/door_5m/door_5m_visual_top3d.glb",
+  "ledger_source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+  "linked_source_blend": "I:/工作项目/shellstrom2/ShellStorm2/assets/art/environments/tower_zones/battle/source/common_components/v007/env_battle_common_components_source_v007.blend",
+  "blender_collection": "door_5m_通用包",
+  "layout_collection": "门扇_door_5m_资产包",
+  "standard_size": "2.2×0.18×2.5m",
+  "origin_contract": "底边中心（Godot 底面 Y=0、XZ 居中）；朝 -Z；开门为垂直升起",
+  "collision_contract": "BoxShape3D 2.2×2.5×0.18，中心 y=1.25，底边中心原点",
+  "library_origin_blender_m": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "mesh_object_count": 2,
+  "decoration_side": null,
+  "used_instance_count_in_layout": 3,
+  "role_in_layout": "门扇（editor-only 预览；运行时由 RoomDoor3D 生成唯一门扇）",
+  "export_status": "not_exported（本布局源停在 Blender 阶段，未导出 GLB/PackedScene）",
+  "measured_on": "2026-09-20"
+}

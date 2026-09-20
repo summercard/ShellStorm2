@@ -32,16 +32,45 @@ func _init() -> void:
 	if facilities.get_child_count() != 3:
 		_fail("FACILITY_COUNT=%d" % facilities.get_child_count())
 		return
-	if not bool(facilities.get_meta("visual_only", false)):
-		_fail("FACILITY_VISUAL_ONLY_MISSING")
+	# 2026-09-20：kit 复用的 v007 房间包已按 v004 组件契约内嵌自身 BoxShape3D 碰撞，
+	# 因此 kit 不能再声明「设施纯视觉」。改为断言「声明值 == 实际启用形数」的一致性，
+	# 并强制至少一件真的会挡 —— 0 样本 / 全不挡都必须变红，否则等于静默退化成纯装饰。
+	if bool(facilities.get_meta("visual_only", false)):
+		_fail("FACILITY_VISUAL_ONLY_STILL_TRUE")
 		return
+	var checked := 0
+	var blocking := 0
 	for child in facilities.get_children():
-		if child.get_meta("collision_shape_count", 0) != 0:
-			_fail("FACILITY_COLLISION_NOT_ZERO:%s" % child.name)
+		checked += 1
+		var declared := int(child.get_meta("collision_shape_count", -1))
+		if declared < 0:
+			_fail("FACILITY_COLLISION_COUNT_MISSING:%s" % child.name)
 			return
+		var actual := _count_enabled_shapes(child)
+		if declared != actual:
+			_fail("FACILITY_COLLISION_MISMATCH:%s declared=%d actual=%d" % [child.name, declared, actual])
+			return
+		if actual > 0:
+			blocking += 1
+	if checked != 3:
+		_fail("FACILITY_SAMPLE_MISSING checked=%d" % checked)
+		return
+	if blocking == 0:
+		_fail("FACILITY_NONE_BLOCKING checked=%d" % checked)
+		return
 	root.free()
-	print("BATTLE_WALL_FLOOR_FACILITY_KIT_OK walls=12 floors=9 facilities=3")
+	print("BATTLE_WALL_FLOOR_FACILITY_KIT_OK walls=12 floors=9 facilities=3 blocking=%d" % blocking)
 	call_deferred("_finish", 0)
+
+func _count_enabled_shapes(node: Node) -> int:
+	var count := 0
+	if node is StaticBody3D:
+		for shape_holder in node.get_children():
+			if shape_holder is CollisionShape3D and not shape_holder.disabled and shape_holder.shape != null:
+				count += 1
+	for descendant in node.get_children():
+		count += _count_enabled_shapes(descendant)
+	return count
 
 func _fail(message: String) -> void:
 	printerr(message)

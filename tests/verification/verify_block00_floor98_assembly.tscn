@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_block00_floor98_assembly.gd" id="1_verify"]
+
+[node name="VerifyBlock00Floor98Assembly" type="Node"]
+script = ExtResource("1_verify")
