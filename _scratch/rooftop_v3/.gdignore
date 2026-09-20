@@ -1,0 +1,2 @@
+# Blender 工作台（work blend / 中间产物），不让 Godot 扫描导入。
+# 会在 _scratch/rooftop_v3/parapet_v003_work.blend 旁边生成 .import + .godot/imported 垃圾。

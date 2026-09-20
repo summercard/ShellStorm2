@@ -1,0 +1,21 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+PROBE_DMG_LAYOUT seed=20260919 slots=64
+PROBE_DMG_LAYOUT side=north slots=17 damaged= 6 longest_run=2 map=.CA...B....C...BC
+PROBE_DMG_LAYOUT side=south slots=17 damaged= 4 longest_run=1 map=A........C.C.A...
+PROBE_DMG_LAYOUT side=west  slots=15 damaged= 4 longest_run=2 map=CC...A..B......
+PROBE_DMG_LAYOUT side=east  slots=15 damaged= 4 longest_run=1 map=.....C.A..A...A
+PROBE_DMG_LAYOUT summary damaged=18 sides_with_damage=4/4 histogram={ "intact": 46, "dmg_a": 7, "dmg_b": 3, "dmg_c": 8 }
+PROBE_DMG_LAYOUT_DONE scattered=true variants_all_used=true slots_match=true

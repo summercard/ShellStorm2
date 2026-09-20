@@ -1,0 +1,35 @@
+verify_rooftop_32x32_contract                  exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_rooftop_railing                         exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_rooftop_door                            exit=0   ok_lines=0   err_lines=0   script_err=0
+verify_tower_grid_component_alignment          exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_tower_level_blocks                      exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_verification_runner_contract            exit=1   ok_lines=0   err_lines=2   script_err=0
+verify_tower_descent_flow                      exit=0   ok_lines=0   err_lines=0   script_err=0
+verify_full_3d_game_flow                       exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_3d_only_project_structure               exit=0   ok_lines=1   err_lines=0   script_err=0
+probe_rooftop_parapet_alignment                exit=0   ok_lines=1   err_lines=0   script_err=0
+probe_rooftop_parapet_components               exit=0   ok_lines=1   err_lines=0   script_err=0
+probe_rooftop_parapet_damage_prefabs           exit=0   ok_lines=1   err_lines=0   script_err=0
+probe_rooftop_parapet_damage_layout            exit=1   ok_lines=1   err_lines=1   script_err=0
+verify_base_world_flow                         exit=1   ok_lines=0   err_lines=4   script_err=0
+verify_3d_performance_budget                   exit=1   ok_lines=0   err_lines=2   script_err=0
+verify_expedition_level01_flow                 exit=0   ok_lines=1   err_lines=0   script_err=0
+verify_test_level_99_flow                      exit=0   ok_lines=1   err_lines=0   script_err=0
+---- 详情：每个场景最后一行 OK/PASS/DONE ----
+verify_rooftop_32x32_contract                  ROOFTOP_WEST_EXPANSION_CONTRACT_PASS
+verify_rooftop_railing                         ROOFTOP_RAILING_OK: 5 lower rails, 5 upper rails and 67 posts use the formal rooftop shell and align to Y 0.00..1.32
+verify_rooftop_door                            
+verify_tower_grid_component_alignment          TOWER_GRID_COMPONENT_ALIGNMENT_OK: 5m bounds, real door meshes, corridors, floor coverage and per-light avatar shadow separation pass
+verify_tower_level_blocks                      TOWER_LEVEL_BLOCKS_OK: Rooftop/Base/Battle/Stairs and source mappings pass
+verify_verification_runner_contract            
+verify_tower_descent_flow                      
+verify_full_3d_game_flow                       FULL_3D_GAME_FLOW_OK: four themes, seeded rooms including vertical levels, four sizes, streamed shells/lights/props, nine-state enemies, 59 valid rang
+verify_3d_only_project_structure               3D_ONLY_PROJECT_STRUCTURE_OK: formal entry and shared runtime remain; retired 2D roots are absent
+probe_rooftop_parapet_alignment                PROBE_ALIGN_DONE all_edges_seamless=true corners_seated=true
+probe_rooftop_parapet_components               PROBE_ROOFTOP_PARAPET_DONE
+probe_rooftop_parapet_damage_prefabs           PROBE_DMG_DONE seamless_band=true envelope_match=true palette_bound=true contract_ok=true
+probe_rooftop_parapet_damage_layout            PROBE_DMG_LAYOUT_DONE failures=1
+verify_base_world_flow                         
+verify_3d_performance_budget                   
+verify_expedition_level01_flow                 EXPEDITION_LEVEL01_FLOW_OK: catalog->menu->loading->expedition, single layer, Blocks/Expedition only (scene is structurally independent of TowerDescen
+verify_test_level_99_flow                      TEST_LEVEL_99_FLOW_OK: registry(99 -> ExpeditionLevel99_3D, run_id 99, resume route), design source loaded with runtime_enabled per-level (expedition_
