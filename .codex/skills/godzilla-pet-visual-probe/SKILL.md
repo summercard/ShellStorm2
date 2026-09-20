@@ -105,6 +105,39 @@ tasklist.exe /FI "IMAGENAME eq electron.exe" /FO CSV > "<out>.txt"   # 有输出
 反过来：「电视窗口已创建」**前面没有「启动」行** = 同进程重建窗口（second-instance
 或托盘左键），**不是新进程启动** —— 这是单实例问题最省事的判据，不用抓帧。
 
+### 7. 重启主人的桌宠：路径含中文时 explorer 那条路会**静默失效**
+
+`环境与缺口.md` 记的姿势是 `Start-Process explorer.exe -ArgumentList '"<bat 绝对路径>"'`。**路径里有中文时它不工作**：explorer 收到被吃掉字符的路径，什么都不做 —— 没有报错、没有弹窗、日志里连一行「启动」都没有。看起来和"electron 起不来"一模一样，很容易误判成环境问题。
+
+实测对照（同一台机器、同一次会话）：`%TEMP%` 下纯 ASCII 路径的探针 bat 经 explorer 执行 → **marker 文件立刻出现**；`I:\工作项目\...\start-godzilla.bat` 同法执行 → **零日志**。
+
+8.3 短名救不了：`GetShortPathNameW` 对 `工作项目` 不做缩短（4 个汉字 = 8 字节，本身就在 8.3 长度内），拿到的路径仍含中文。
+
+**解法**：在纯 ASCII 位置放一个启动器 bat，用 **GBK**（不是 UTF-8 —— cmd 按 OEM 代码页读 bat）写中文路径，再让 explorer 执行这个 ASCII 路径。
+
+```python
+# .workbuddy/_mk_launcher.py 已留档
+content = '@echo off\r\ncall "' + r'I:\工作项目\Godzilla\Godzilla\godzilla-pet\start-godzilla.bat' + '"\r\n'
+open(r'C:\Users\zhuangmenghong\AppData\Local\Temp\_wb_start_pet.bat', 'wb').write(content.encode('gbk'))
+```
+
+```powershell
+Start-Process explorer.exe -ArgumentList '"C:\Users\zhuangmenghong\AppData\Local\Temp\_wb_start_pet.bat"'
+```
+
+这样起的实例父链挂在 explorer 上，**能常驻**（实测存活 80s+ 且持续落盘；对照：工具直接 `Start-Process electron.exe` 的实例 40~60s 被回收）。启动器留在 `%TEMP%` 可反复用，别删。
+
+**完整重启流程**（改了 `tv/` 后让主人看到生效 —— `main.js` 直接 `loadFile` 源码、不复制不改写，所以**重启即生效，不需要重新打包**）：
+
+1. 备份 `save/tv.json` → `outputs/tv-save-snapshot-<时间>.json`
+2. 核对 PID 归属（`Get-CimInstance Win32_Process` 看 `CommandLine`/`CreationDate`；**不要从 tasklist 挑一个就杀**）
+3. `taskkill /PID <主pid> /T /F` → 再列一次确认 `all_gone`
+4. explorer + ASCII 启动器（见上）
+5. 判据：`.workbuddy/enum-win.py <新pid>` 出 `visible=1` 且 `size=600x394`；`main.log` 有「电视窗口已创建」+「窗口已可见」
+6. **逻辑修复不能只看窗口起来了** —— 要额外读存档快照验证（项目 `环境与缺口.md` 的真档探针条目）
+
+**PowerShell 工具的两个安全策略坑**（踩过）：脚本里出现 `%VAR%` 会被当作 cmd 语法直接拦掉（用 `$env:VAR` / `Join-Path`）；`New-Object -ComObject ...`（含 `Scripting.FileSystemObject`）也被拦，需要短路径这类功能改用 Python `ctypes.windll.kernel32`。
+
 ## 抓帧：读 canvas，别用 CDP clip
 
 **CDP `Page.captureScreenshot` 的 clip 坐标空间会被窗口缩放（0.46）重映射**，截出来是窗口外的空白。别用。
@@ -221,27 +254,89 @@ finally:
 一小段，**两端都不报错**。光读 CSS 也验不出来（`button { no-drag }` 写着呢，
 漏的是侧栏自己的 padding、组间距、`span` 小标题、装饰性旋钮）。
 
-```js
-const win = new BrowserWindow({ show: false, width: 1120, height: 736, x: -4000 });
-win.webContents.setZoomFactor(1);          // ← 关键：CSS 像素 == sendInputEvent 坐标
-await win.loadFile(...);
-await win.webContents.insertCSS(TV_DRAG_CSS);
-// 20×20 网格遍历目标容器：每个点问"这一像素归谁"，沿命中元素读有效值
-const el = document.elementFromPoint(x, y);
-getComputedStyle(el).getPropertyValue('-webkit-app-region');
-// 再打真实鼠标事件验 :active 是否生效
-win.webContents.sendInputEvent({ type: 'mouseDown', x, y, button: 'left', clickCount: 1 });
-getComputedStyle(btn).transform;           // 期望 matrix(1,0,0,1,3,3)（下沉 3px）
-```
+> ⛔ **已证伪的方法（2026-09-19 推翻，别再照抄）**：
+> `elementFromPoint()` + `getComputedStyle(el)['-webkit-app-region']` 读不出拖动判定。
+> 它读的是 **CSS 声明值**，而拖动判定发生在 **browser 进程的 NonClientHitTest
+> （WM_NCHITTEST）** 那一层 —— 两者不是一回事。更糟的是它**方向会反**：
+> `body{drag}` 时侧栏元素的 computed 值继承到 `drag`，看起来"确实被吞了"，
+> 但你以为挖洞已生效的判断同样只能靠这个值，于是**假绿**。
+> `.workbuddy/probe-sidebar-drag.cjs` 就是这么给出假绿的（`badCount===0` 全通过，
+> 真机上两个按钮点不动）。同理 `sendInputEvent` 也是**错的**：它走的是 renderer
+> 的 IPC 注入，**绕过 NonClientHitTest**，永远测不出"拖动区吞点击"。
+>
+> **正确判据：开真窗口，对锚点逐个问系统 `WM_NCHITTEST`。**
+> Chromium 在那里返回 `HTCAPTION`（算拖窗口）还是 `HTCLIENT`（算点页面）——
+> 这就是拖动判定的真源，不需要派发任何输入。
+> 现成脚本：`.workbuddy/probe-region-run.py`（起窗口 + 逐锚点问 + 打印判定），
+> `.workbuddy/probe-region-points.py`（锚点表）。
 
-- **`setZoomFactor(1)` 必须在 insertCSS 之前**：电视窗口实跑是 0.46，缩放状态下
-  输入事件坐标和 CSS 坐标不是一套，打点会全偏。
-- `-webkit-app-region` 是**继承属性**，所以从 `elementFromPoint` 的命中元素读到的
-  就是有效值，不用自己爬祖先链。
-- **先做对照采样**：同时读 `body` 与 `.shell`，两者应当是 `drag`。**属性读不到时
-  全部样本会是空串** —— 不设对照的话，`badCount === 0` 会被当成"全通过"，是假绿。
-- 现成脚本：`.workbuddy/probe-sidebar-drag.cjs`（侧栏覆盖率 + 连点换台能亮能暗 +
-  遥控器 `:active` 下沉，三条一起验）。
+**实测得到的形状规则（推翻了"大祖先 drag + 子级挖洞"这个直觉）**：
+
+真机逐锚点扫描四种形状，只有一种满足"侧栏可点 + 画面能拖"：
+
+| 形状 | 侧栏按钮 | 画面 / 台标 / 页脚 | 判定 |
+| --- | --- | --- | --- |
+| `body{drag}` + `.shell{drag}` + 侧栏 `no-drag` | HTCAPTION ✗ | HTCAPTION ✓ | 不满足 |
+| 去掉 `body`，留 `.shell{drag}` | HTCAPTION ✗ | HTCAPTION ✓ | 不满足 |
+| `body{no-drag}` + 三块 `drag` | HTCLIENT ✓ | 也全 HTCLIENT ✗ | 不满足 |
+| **`body` / `.shell` 留空，`drag` 只落三块** | **HTCLIENT ✓** | **HTCAPTION ✓** | **采用** |
+
+结论：**`body` 上一旦出现任何声明，整窗判定就退化成"全听 body 的"** ——
+`body{drag}` 时挖洞无效，`body{no-drag}` 时连子级的 `drag` 也一起失效。
+另外 `.shell{drag}` 时，作为它**兄弟**的 `.tv-sidebar` 同样挡不住。
+所以拖动区只能落在**互不包含**的几块上，且必须显式断言 `body`/`.shell` 声明为空。
+
+**仪器校准的教训**：矩阵探针早期给出"5 种配置全 0/9 可点"，看着像"全都坏"，
+其实是探针自己的坑。校准办法是拿一个**已知答案**的合成页（body=drag + 一块
+no-drag 绿地）先跑一遍，确认仪器在能出绿的地方确实出绿 ——
+`.workbuddy/probe-nchit-control.cjs` / `.py` 就是这个用途。
+
+**锁屏时真实鼠标输入不可用**：`SendInput` 在会话未激活时不被派发，
+`GetForegroundWindow()` 返回 0，真鼠标测试会全 FAIL 但**不可信**。
+`WM_NCHITTEST` 不需要输入派发，是锁屏下唯一可靠的判据。
+两者已在可交互环境下对过账，结论一致 —— 所以现在一律以 `WM_NCHITTEST` 为准。
+
+**真鼠标点击的正确做法（2026-09-19 打通，三件套）**
+
+想拿到"主人的手点下去到底会怎样"这个终局判据，必须**同时**满足三件事，
+少一件都会得到假结果：
+
+| 件 | 做法 | 错了会怎样 |
+| --- | --- | --- |
+| ① 输入走 OS | Python `ctypes` 调 `SetCursorPos` + `user32.mouse_event(LEFTDOWN/UP)` | 用 `sendInputEvent` → 绕过 NonClientHitTest，**永远假绿** |
+| ② 坐标由窗口侧算 | Electron 里 `getBoundingClientRect()` 取中心，**在窗口侧**换算成屏幕坐标：`bounds.x + cssX × zoomFactor`，直接把屏幕坐标打印出来 | 外部脚本自己换算，**漏乘 zoom** 就整条偏掉（我漏过一次：点到了「巨兽」小标题上，表现为"按钮没反应"）；靠截图目测也会偏十几像素 |
+| ③ 判据直接读 DOM | Electron 侧 `executeJavaScript` 读状态；再加一个**只在探针里挂**的监听器数 click（`document.addEventListener('click', …, true)` + 每个按钮各一个计数器） | 读 `#management.hidden` 会误判 —— 裸探针窗口**没有宿主**（无 `tv-preload` 桥），点遥控器本来就开不上面板（面板由宿主 `window.__tvHost.openPanel` 开）。**"面板没开"≠"点击没收到"** |
+
+现成实现：`.workbuddy/probe-realclick-live.cjs`（起真尺寸窗口 + 注入真 CSS + 打印屏幕坐标 + 打印探针计数）
++ `.workbuddy/probe-realclick-live-run.py`（驱动真鼠标点击）。
+
+**在运行中的真实实例上验（最硬的一档）**：
+- `.workbuddy/verify-live-pet.py <pid>` —— 枚举该 pid 的窗口拿 rect，按 tv 版面比例算锚点，
+  逐个问 `WM_NCHITTEST`；桌面可交互时再用真鼠标点遥控器、看面板窗口是否新生。
+- `.workbuddy/verify-live-click.py <pid>` —— 沿侧栏竖向**扫描**真鼠标点击（看面板窗口有没有新生），
+  绕开"锚点算不准"这个坑。实测能扫出按钮的完整连续命中区间。
+- ⚠️ 收尾记得 `_check-windows.py <pid>` 看有没有**被我点开的残留面板窗口**，有就用
+  `_close-stray-panel.py` 发 `WM_CLOSE` 关掉（只发消息给那个句柄，不动进程、不动电视窗口）。
+  别给主人留一个凭空多出来的窗口。
+
+### ⛔ 屏幕 BitBlt 抓不到 Electron 透明窗口的实时帧
+
+想用"点击前后截图对比"验换台这类**不开新窗口**的操作 —— 这条路在这个项目上不通：
+`user32.GetDC(0)` + `gdi32.BitBlt` 抓电视窗口矩形，**连续两次抓图逐像素 100% 相同**
+（画面明明是活的）。窗口可见、在前台、光标下顶层就是它，都没用。
+判据从"全屏差异"到"单像素取样"全都读到冻结帧。
+
+所以别再往这个方向烧时间：**要验不开窗口的操作，就读 DOM 状态**（上一节三件套的第 ③ 件）。
+
+顺带两条读像素的坑（写这类脚本时踩过）：
+- `GetDIBits` 32bpp 出来是 **BGRA**。`xxx.hex()` 看到的是 `#BBGGRR` ——
+  把 `432b15` 读成"暖棕"就错了，它其实是 `#152b43` 深蓝（电视按钮底色）。
+  读颜色前先确认字节序，否则会得出"抓到的不是这个窗口"的错误结论。
+- 多显示器时 `GetDC(0)` 只覆盖主屏。用 `GetSystemMetrics(SM_XVIRTUALSCREEN/…)`
+  先确认窗口在不在主屏内。
+- 那个 `Exception in thread Thread-2 (_readerthread) UnicodeDecodeError` 噪音：
+  Electron 的 GPU 报错是 **GBK**，混进 UTF-8 流会炸。Popen 别用 `text=True`，
+  读 bytes 再 `decode('utf-8', errors='replace')`。不影响结果，但会污染日志。
 
 **② 双态按钮能不能亮回去 / 暗下去**
 

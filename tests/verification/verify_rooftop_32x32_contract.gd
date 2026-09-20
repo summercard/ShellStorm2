@@ -4,7 +4,9 @@ extends Node
 const ROOFTOP_TILE_COUNT_WITH_OPENINGS := 234
 const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
 const WEST_STAIR_WORLD_RECT := Rect2(-45.0, 0.0, 15.0, 30.0)
-## 天台女儿墙换成参考组件库 v002（0.50m 厚 / 1.80m 高）后，边界内缩由 0.15m 变 0.25m。
+## 天台女儿墙换成参考组件库 v002 派生件（0.50m 厚；2026-09-20 起按业主口径改为
+## 总高 0.80m 的方案A 平整墙板）后，边界内缩由 0.15m 变 0.25m。
+## ⚠️ 内缩口径只由**厚度**决定，所以改高度不动边界；但反过来说，改厚度必然动边界。
 const WEST_PARAPET_X := -49.75
 ## 实体直段数 = 2×(17+15)：每边两端各让出 2.5m 转角件后比格数少一格。
 const ROOFTOP_SEGMENT_COUNT := 64
@@ -95,8 +97,14 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	)
 	_expect((snapshot.get("outer_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "100层围栏没有与扩展地板共用轮廓", failures)
 	_expect(
-		is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 1.8),
-		"100层女儿墙不是组件库v002的1.80m（旧值0.75m是几何×0.5缩放凑的）",
+		is_equal_approx(
+			float(snapshot.get("outer_wall_height", -1.0)), TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT
+		),
+		"100层女儿墙不是脚本口径的 %.2fm（快照实测 %.4f；2026-09-20 由 1.80m 改 0.80m）"
+		% [
+			TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT,
+			float(snapshot.get("outer_wall_height", -1.0)),
+		],
 		failures
 	)
 	_expect(not bool(snapshot.get("uses_formal_rooftop_art", true)), "天台仍加载设施美术", failures)
@@ -113,18 +121,30 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	_expect(floor_dark != null and floor_dark.visible, "100层原生深色地砖被设施导入隐藏", failures)
 	if outer != null and outer.multimesh != null:
 		# 不变量：被跳过的直段数 == 补位的门洞墙件数（缺口宽度由两者共同决定）。
-		# 不硬编码件数：天台让位 2.5m 后直段相位与旧排布差半格，洞口中心正好落在
-		# 某段中心上（判定为 ≤5m，含边界），因此命中段数由 2 变 3、缺口 10m→15m，
-		# 而 15m 恰好等于西侧楼梯间外廓宽度且在 z∈[0,30] 内居中。
+		#
+		# 2026-09-20：西侧楼梯口整体在轮廓**内部**（离西墙 5m 净距），「楼梯口 = 外墙
+		# 门洞」这条旧假设对天台不成立 —— 它只会在西墙留下一段带 2m 门洞的**系统
+		# 占位矮墙**，从里看就是没连起来的栏杆缺口（用户报的问题）。现在天台外墙
+		# 连成整圈：门洞件 0 件、直段槽位 64/64。判据仍写成「64 - 门洞件数」这条
+		# 关系式，是为了让它在普通层仍成立。
 		var doorway_walls := 0
 		for child in rooftop.get_children():
 			if child.name.begins_with("ParapetDoorWall_"):
 				doorway_walls += 1
-		_expect(doorway_walls > 0, "100层西侧楼梯门洞没有补位墙件", failures)
+		_expect(
+			doorway_walls == 0,
+			"100层西侧仍有 %d 件系统占位门洞矮墙，外墙没连成整圈" % doorway_walls,
+			failures
+		)
+		_expect(
+			int(snapshot.get("outer_doorway_wall_count", -1)) == doorway_walls,
+			"100层快照的门洞矮墙计数与实测不符",
+			failures
+		)
 		# 2026-09-19：直段可视件改为「按种子随机分档」——intact + 崩顶/贯穿/塌脚三件
 		# 破损变体各占一个 MultiMesh 批次，所以「实体直段数」不再等于 _outer_visual
 		# 单个 MultiMesh 的实例数。真源改为**槽位表**：破损只换外观、不增删槽位，
-		# 因此槽位总数必须仍等于「64 段 - 门洞补位墙」。四批次之和 == 槽位表
+		# 因此槽位总数必须等于「64 段 - 门洞补位墙」。四批次之和 == 槽位表
 		# 由 _verify_rooftop_parapet_damage() 逐项对账。
 		var slot_count := int(rooftop.call("get_outer_straight_slot_count"))
 		_expect(
@@ -134,15 +154,33 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 			failures
 		)
 		_verify_rooftop_parapet_damage(rooftop, slot_count, failures)
-	var doorway := rooftop.find_child("ParapetDoorWall_West*", false, false) as Node3D
+	# 西侧不再有门洞矮墙，改为断言「整圈 64 段槽位无缺口」——
+	# 旧写法只测门洞墙的位置，封口后没有对象可测，必须换成对整圈的断言，
+	# 否则这条覆盖判据会静默退化成 0 样本。
+	var west_slot_zs: Array[float] = []
+	for slot_transform in rooftop.call("get_outer_straight_slot_transforms"):
+		var slot := slot_transform as Transform3D
+		if is_equal_approx(slot.origin.x, WEST_PARAPET_X):
+			west_slot_zs.append(slot.origin.z)
+	west_slot_zs.sort()
 	_expect(
-		doorway != null and is_equal_approx(doorway.scale.y, 1.2),
-		"楼梯门洞旁矮墙没有同步到1.80m（基础几何1.5m×1.2）",
+		west_slot_zs.size() == 15,
+		"100层西侧直段不是15段（整圈封口后应为 80m/5m 减两角让位）实际 %d"
+			% west_slot_zs.size(),
 		failures
 	)
-	if doorway != null:
-		_expect(doorway.visible, "100层原生西侧门洞围护被设施导入隐藏", failures)
-		_expect(is_equal_approx(doorway.position.x, WEST_PARAPET_X), "西侧楼梯门洞墙仍位于旧边界并插入楼梯间", failures)
+	for index in range(west_slot_zs.size() - 1):
+		_expect(
+			is_equal_approx(west_slot_zs[index + 1] - west_slot_zs[index], 5.0),
+			"100层西侧直段之间有缺口：z=%.2f → z=%.2f"
+				% [west_slot_zs[index], west_slot_zs[index + 1]],
+			failures
+		)
+	_expect(
+		rooftop.find_child("ParapetDoorWall_West*", false, false) == null,
+		"100层西侧仍残留系统占位矮墙 ParapetDoorWall_West*",
+		failures
+	)
 	# 四角必须是 2.5m 转角件，而不是继续让两根直段在角上交叉。
 	# 期望位置 = 该角 2.5m 让位区中心；朝向按俯视逆时针 0 → PI/2 → PI → 3PI/2。
 	var corner_expectations := {
@@ -183,14 +221,167 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	var west_collision := rooftop.find_child("OuterBoundaryCollision_West", false, false) as StaticBody3D
 	_expect(west_collision != null, "100层西侧边界碰撞缺失", failures)
 	if west_collision != null:
+		var west_shapes := 0
 		for child in west_collision.get_children():
 			if child is CollisionShape3D:
+				west_shapes += 1
 				var collision := child as CollisionShape3D
 				var shape := collision.shape as BoxShape3D
 				_expect(is_equal_approx(collision.position.x, WEST_PARAPET_X), "100层西侧碰撞没有随围栏移动", failures)
 				if shape != null:
 					var collision_east_edge := collision.position.x + shape.size.x * 0.5
 					_expect(collision_east_edge < WEST_STAIR_WORLD_RECT.position.x, "100层西侧碰撞仍侵入楼梯外廓", failures)
+					# 封口后西侧碰撞必须是**一整条**（旧代码在楼梯口处切成两段、中间留 10m 缝）。
+					_expect(
+						is_equal_approx(shape.size.z, ROOFTOP_WORLD_RECT.size.y),
+						"100层西侧碰撞未覆盖全长，仍留缺口：size.z=%.2f 期望 %.2f"
+							% [shape.size.z, ROOFTOP_WORLD_RECT.size.y],
+						failures
+					)
+		_expect(west_shapes == 1, "100层西侧碰撞不是一整条（实际 %d 段，仍按门洞切分）" % west_shapes, failures)
+	# 2026-09-20 新增：天台外立面环（= 从边缘往下看到的那层「99 层外墙」）。
+	# 判据只认「计划 == 摆放 + 几何口径」，不认某个具体件数：
+	#   1. 快照里的立面件数与两个批次 MultiMesh 的实测实例数逐档相等（防空摆）；
+	#   2. 环件数 == 2×(18+16)=68（整格铺满一圈：x 向 18 件、z 向 16 件）；
+	#   3. 底面标高 = -12.0（低一整层）、厚度 = 0.30m，且与女儿墙外皮共面。
+	_verify_rooftop_facade(rooftop, snapshot, failures)
+
+
+## 天台外立面环的运行时对账。
+##
+## 用户口径：「99 楼外墙在天台周边调用，围起来」——即从天台边缘往下不该是空的。
+## 本函数把这句话落成可实测的不变量，并留一条**防假绿哨兵**（件数为 0 时直接报错，
+## 否则「计划==摆放」会两边同为 0 而恒真）。
+func _verify_rooftop_facade(
+	rooftop: TowerFloorStage3D, snapshot: Dictionary, failures: Array[String]
+) -> void:
+	var planned_solid := int(snapshot.get("outer_facade_solid_count", -1))
+	var planned_window := int(snapshot.get("outer_facade_window_count", -1))
+	var batches := snapshot.get("outer_facade_batch_counts", {}) as Dictionary
+	var actual_solid := int(batches.get("solid", -1))
+	var actual_window := int(batches.get("window", -1))
+	var ring_total := planned_solid + planned_window
+	print(
+		"    [外立面环] plan solid=%d window=%d total=%d | actual solid=%d window=%d"
+		% [planned_solid, planned_window, ring_total, actual_solid, actual_window]
+	)
+	# 哨兵：0 样本会让下面所有「相等」判据恒真 —— 必须先确认真摆了件。
+	_expect(
+		ring_total > 0,
+		"100层外立面环一件都没有（立面未接线，或哨兵为 0 样本）",
+		failures
+	)
+	_expect(planned_solid > 0, "100层外立面没有实墙件", failures)
+	_expect(planned_window > 0, "100层外立面没有窗墙件", failures)
+	_expect(
+		planned_solid == actual_solid and planned_window == actual_window,
+		"100层外立面计划(solid=%d/window=%d)与实际批次实例数(solid=%d/window=%d)不符"
+			% [planned_solid, planned_window, actual_solid, actual_window],
+		failures
+	)
+	# 整格铺满一圈：x 向 18 件、z 向 16 件，两侧各一遍，共 68 件。
+	var expected_ring := 2 * (ROOFTOP_WORLD_RECT.size.x + ROOFTOP_WORLD_RECT.size.y) / 5.0
+	_expect(
+		ring_total == int(expected_ring),
+		"100层外立面环件数不是整格满铺的 %d 件（实际 %d）" % [int(expected_ring), ring_total],
+		failures
+	)
+	_expect(
+		is_equal_approx(float(snapshot.get("outer_facade_bottom_y", 0.0)), -12.0),
+		"100层外立面底面标高不是 -12.0（应比女儿墙低一整层）",
+		failures
+	)
+	_expect(
+		is_equal_approx(float(snapshot.get("outer_facade_thickness", 0.0)), 0.30),
+		"100层外立面厚度不是组件库v002的0.30m",
+		failures
+	)
+	# 两个批次必须是 MultiMesh 且可见；网格自带 PaletteUV（无材质覆盖）。
+	for pair in [
+		{"key": "solid", "node": rooftop.get("_rooftop_facade_solid_visual")},
+		{"key": "window", "node": rooftop.get("_rooftop_facade_window_visual")},
+	]:
+		var node := pair["node"] as MultiMeshInstance3D
+		var label := str(pair["key"])
+		_expect(
+			node != null and node.multimesh != null and node.multimesh.mesh != null,
+			"100层外立面 %s 批次不是带网格的 MultiMeshInstance3D" % label,
+			failures
+		)
+		if node == null:
+			continue
+		_expect(node.visible, "100层外立面 %s 批次被隐藏（边缘往下会露空洞）" % label, failures)
+		_expect(
+			node.material_override == null,
+			"100层外立面 %s 批次被套了材质覆盖，PaletteUV 会被盖掉" % label,
+			failures
+		)
+		if node.multimesh != null and node.multimesh.mesh != null:
+			var aabb := node.multimesh.mesh.get_aabb()
+			_expect(
+				is_equal_approx(aabb.position.y, 0.0) and is_equal_approx(aabb.size.y, 11.9),
+				"100层外立面 %s 件不是「底面中心原点 + 11.90m 可视高」：%s"
+					% [label, str(aabb)],
+				failures
+			)
+	# 环的四边碰撞代理：每边一个 body，代理盒厚 0.30m、高 12m。
+	var facade_sides := ["North", "South", "West", "East"]
+	for side in facade_sides:
+		var body := rooftop.find_child("FacadeBoundaryCollision_%s" % side, false, false) as StaticBody3D
+		_expect(body != null, "100层外立面 %s 侧碰撞代理缺失" % side, failures)
+		if body == null:
+			continue
+		var shapes := 0
+		for child in body.get_children():
+			if child is not CollisionShape3D:
+				continue
+			shapes += 1
+			var shape := (child as CollisionShape3D).shape as BoxShape3D
+			if shape == null:
+				continue
+			var thickness: float = (
+				shape.size.x if side in ["West", "East"] else shape.size.z
+			)
+			_expect(
+				is_equal_approx(thickness, 0.30),
+				"100层外立面 %s 侧碰撞厚度不是 0.30m（实际 %.3f）" % [side, thickness],
+				failures
+			)
+			_expect(
+				is_equal_approx(shape.size.y, 12.0),
+				"100层外立面 %s 侧碰撞高度不是一整层 12m（实际 %.3f）" % [side, shape.size.y],
+				failures
+			)
+		_expect(shapes == 1, "100层外立面 %s 侧碰撞不是一整条（实际 %d 段）" % [side, shapes], failures)
+	# 99F/普通层不得有立面环（否则会凭空多出一圈墙）。
+	# add_child() 会同步触发 _ready()（即整套装配），所以这里不需要 await；
+	# 保持本函数同步，避免协程被当普通函数调用时后半段断言根本不参与判定。
+	var facility := TowerFloorStage3D.new()
+	facility.configure(1, "facility", [])
+	add_child(facility)
+	var combat := TowerFloorStage3D.new()
+	combat.configure(2, "combat", [])
+	add_child(combat)
+	for stage in [facility, combat] as Array[TowerFloorStage3D]:
+		var stage_snapshot: Dictionary = stage.get_snapshot()
+		_expect(
+			int(stage_snapshot.get("outer_facade_module_count", -1)) == 0,
+			"非天台层(%s)被误加外立面环" % str(stage_snapshot.get("floor_kind", "")),
+			failures
+		)
+		_expect(
+			stage.get("_rooftop_facade_solid_visual") == null
+				and stage.get("_rooftop_facade_window_visual") == null,
+			"非天台层(%s)被误加外立面批次节点" % str(stage_snapshot.get("floor_kind", "")),
+			failures
+		)
+		_expect(
+			stage.find_child("FacadeBoundaryCollision_*", false, false) == null,
+			"非天台层(%s)被误加外立面碰撞" % str(stage_snapshot.get("floor_kind", "")),
+			failures
+		)
+	facility.queue_free()
+	combat.queue_free()
 
 
 func _verify_facility(snapshot: Dictionary, failures: Array[String]) -> void:

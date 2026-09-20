@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台外立面·实墙（天台参考组件库 v002）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_facade_solid_top3d.glb
+;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
+; 这是「99 层外墙」的可视件：参考拼装 reference_assembly.json 把 facade_* 摆在
+;   z=-12.00（比女儿墙低一整层 12m），底面对齐 99F 楼面、顶面 11.90m 落在 100F 楼板下方
+;   0.10m 处 —— 与 TowerGeometry3D.WALL_VISUAL_HEIGHT_M(11.90) /
+;   WALL_VISUAL_TOP_CLEARANCE_M(0.10) 同一口径，不与上层楼板共面。
+; 默认朝向 +Z（装饰面朝场地外侧）；实例化时由脚本设置 rotation 适配各方向。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖。
+; 本 Prefab 视觉专用（visual_only）。立面环碰撞由 TowerFloorStage3D 的
+;   FacadeBoundaryCollision_* 按 0.30m 代理生成，本件不带任何碰撞节点。
+; 包络说明：厚度 0.30m 等于 TowerFloorStage3D.ROOFTOP_FACADE_THICKNESS，
+;   摆放时包络外皮正好贴合天台轮廓矩形，与女儿墙外皮共面。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_solid_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopFacadeSolid5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-FACADE-SOLID"
+metadata/package_id = "ENV-ROOFTOP-REF-FACADE-SOLID"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_solid_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 11.9
+metadata/logical_height_m = 12.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
+metadata/visual_node_name = "标准外墙实墙_主体"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "batched_multimesh"
+metadata/layout_role = "rooftop_facade_solid_run"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

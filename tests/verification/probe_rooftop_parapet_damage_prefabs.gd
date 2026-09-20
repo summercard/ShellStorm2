@@ -3,12 +3,17 @@ extends Node
 ##
 ## 用户口径：在 Blender 里做 3 个破损变种（三种不同破损），**但要能接起来**，
 ## 导入成新 prefab 后由外墙随机排布。本探针把「能接起来」翻译成可实测的判据：
-##   1. 三件破损件与 intact 件 **同包络**（5.00×1.80×0.50）且同原点（底面中心）；
-##   2. 三件破损件的 **端头带 |x|>=2.05m 顶点与 intact 件一致**（顶点数相等 + 点云最近邻
-##      最大距离 <= 0.2mm）—— 这是「接头无缝、槽位相位不变」的硬证据，光看包络相同
-##      抓不到。源文件的逐位相同由 source/verify_env_rooftop_parapet_damage_bands.py
-##      在 GLB 字节层证明（Godot 的固定导入管线做不了「源文件」级比对，见
-##      _compare_cross_variant 的说明）；
+##   1. 三件破损件与 intact 件 **同包络**（5.00×高度×0.50，高度取运行时口径常量，
+##      2026-09-20 起 = 0.80m）且同原点（底面中心）；
+##   2. 三件破损件的 **端头带 |x|>=2.05m 顶点与 intact 件一致**（去重后位置集合大小相等
+##      + 点云双向最近邻最大距离 <= 0.2mm）—— 这是「接头无缝、槽位相位不变」的硬证据，
+##      光看包络相同抓不到。源文件的逐位相同由
+##      source/verify_env_rooftop_parapet_damage_bands.py 在 GLB 字节层证明（Godot 的
+##      固定导入管线做不了「源文件」级比对，见 _compare_cross_variant 的说明）；
+##      ⚠️ 判据用「去重后位置集合」，不用「原始顶点数」：glTF 按 (position,normal,uv)
+##      三元组拆点，布尔切割会改变某个既有端头带顶点的 UV 参数化 → 同一位置被发射两次
+##      （实测 dmg_b 端头带原始 292 顶点 vs intact 288，去重后同为 72 个位置、Hausdorff=0）。
+##      原始顶点数是导入管线的记账产物，不是几何；拿它当判据会把「几何逐位相同」误报成不同。
 ##   3. 三件与 intact 件 **同色盘绑定**（PaletteUV 材质，albedo_texture != null）；
 ##   4. 三件与 intact 件 **同契约**（visual_only 无内嵌碰撞、无 material_override、
 ##      统一字段齐全、visual_node_name 能解析到真实节点且不靠回退）。
@@ -20,7 +25,9 @@ const GEOM := preload("res://src/world3d/TowerGeometry3D.gd")
 
 const END_BAND_START_M := 2.05
 const TOLERANCE_M := 0.01
-const EXPECTED_SIZE := Vector3(5.0, 1.8, 0.5)
+## 高度取运行时口径常量（2026-09-20 起 = 0.80m），不写字面量：
+## 破损件与 intact 件必须同包络，而「同包络」的绝对值就是脚本声明的高度。
+const EXPECTED_SIZE := Vector3(5.0, TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT, 0.5)
 
 const TARGETS: Array[Dictionary] = [
 	{
@@ -194,24 +201,27 @@ func _compare_cross_variant() -> void:
 	var intact_points: Array = _band_keys.get("intact", [])
 	if intact_points.is_empty():
 		return
+	var intact_unique := _dedup_points(intact_points)
 	var intact_size: Vector3 = _mesh_sizes.get("intact", Vector3.ZERO)
 	for target in TARGETS:
 		var key := str(target["key"])
 		if key == "intact":
 			continue
 		var points: Array = _band_keys.get(key, [])
-		if points.size() != intact_points.size():
+		var unique_points := _dedup_points(points)
+		# 判据 = 去重后位置集合大小（不是原始顶点数，见文件头说明）。
+		if unique_points.size() != intact_unique.size():
 			_failures.append(
-				"%s 端头带顶点数 %d != intact 件 %d —— 接头会错位"
-				% [key, points.size(), intact_points.size()]
+				"%s 端头带去重位置数 %d != intact 件 %d —— 接头会错位"
+				% [key, unique_points.size(), intact_unique.size()]
 			)
 		else:
-			var forward := _max_nearest_neighbour(intact_points, points)
-			var backward := _max_nearest_neighbour(points, intact_points)
+			var forward := _max_nearest_neighbour(intact_unique, unique_points)
+			var backward := _max_nearest_neighbour(unique_points, intact_unique)
 			var worst := maxf(forward, backward)
 			print(
-				"PROBE_DMG %-6s end_band_pointcloud_max_nn=%.7f m (intact->variant=%.7f variant->intact=%.7f)"
-				% [key, worst, forward, backward]
+				"PROBE_DMG %-6s end_band_unique=%d (raw=%d) pointcloud_max_nn=%.7f m (intact->variant=%.7f variant->intact=%.7f)"
+				% [key, unique_points.size(), points.size(), worst, forward, backward]
 			)
 			if worst > BAND_MAX_NEAREST_NEIGHBOUR_M:
 				_failures.append(
@@ -221,6 +231,15 @@ func _compare_cross_variant() -> void:
 		var variant_size: Vector3 = _mesh_sizes.get(key, Vector3.ZERO)
 		if not variant_size.is_equal_approx(intact_size):
 			_failures.append("%s 网格包络与 intact 件不同" % key)
+
+
+## 位置集合去重：glTF 会按 (position,normal,uv) 拆点，同一位置可能出现多次。
+## 几何判据只关心「位置集合」，故先按精确值去重（重复点是逐位相同的，无需容差）。
+func _dedup_points(points: Array) -> Array:
+	var seen := {}
+	for point in points:
+		seen[point] = true
+	return seen.keys()
 
 
 ## 点云 A 中每个点到点云 B 的最近距离的最大值（单向 Hausdorff 距离）。

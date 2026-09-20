@@ -1,27 +1,23 @@
-"""Export the rooftop reference parapet straight run and outer corner to runtime GLB.
+"""Export the rooftop reference FLOOR tile and FACADE (exterior wall) modules to runtime GLB.
 
-Source blend : the parapet work blend that currently holds the geometry to ship.
-               Since 2026-09-20 that is source/parapet_v003_work.blend -- the 0.80 m
-               "plan A" rebuild produced by author_env_rooftop_parapet_v003.py from
-               天台区块_参考组件库_v002.blend. (Before the 0.80 m change the same
-               script was pointed straight at the v002 reference library.)
-Run          : blender.exe --background <work blend> --python export_env_rooftop_parapet_v001.py
+Source blend : assets/art/environments/tower_zones/rooftop/source/reference_components/v002/
+               天台区块_参考组件库_v002.blend
+Run          : blender.exe --background <blend> --python export_env_rooftop_ref_floor_facade_v001.py
 
 Origin contract
 ---------------
-In the blend each package keeps its geometry parked at its showcase world position
-(直段 at y=-34, 外角 at (16,-34)) with the package 根_ empty marking the intended
-origin. This script re-bases every package onto its 根_ before exporting, so each GLB
-is XY-centred with the base face at local Z=0 — matching bounds_min / bounds_max in the
-package asset_manifest.json.
+Each package keeps its geometry parked at its showcase world position (地砖 at y=-17,
+外墙 at y=-170) with the package 根_ empty marking the intended origin. This script
+re-bases every package onto its 根_ before exporting, so each GLB is XY-centred with the
+base face at local Z=0 —— 与已导出的女儿墙 (env_rooftop_ref_parapet_top3d.glb) 完全同口径。
 
-Exported packages (category 02_女儿墙)
---------------------------------------
-女儿墙直段_资产包  -> env_rooftop_ref_parapet_top3d.glb        (5.0 x 0.5 x 0.8 m)
-女儿墙外角_资产包  -> env_rooftop_ref_parapet_outer_top3d.glb  (2.5 x 2.5 x 0.8 m)
+Exported packages
+-----------------
+完整地砖_资产包        -> env_rooftop_ref_floor_full_top3d.glb   (5.0 x 5.0 x 0.3 m)
+标准外墙实墙_资产包     -> env_rooftop_ref_facade_solid_top3d.glb (5.0 x 0.3 x 11.9 m)
+标准外墙窗墙_资产包     -> env_rooftop_ref_facade_window_top3d.glb (5.0 x 0.3 x 11.9 m)
 
-Only 直段 and 外角 are exported: the 100F rooftop is a plain rectangle, so all four of
-its corners are outer (陽) corners and the inner-corner package has no consumer yet.
+挂藤 (vine) 变体不导出：用户口径是「实墙 + 窗墙」两种，藤蔓件留给后续可选装饰波次。
 """
 
 from pathlib import Path
@@ -34,8 +30,9 @@ OUTPUT_DIR = SOURCE_DIR.parent / "components"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 EXPORTS = {
-    "女儿墙直段_资产包": ("根_女儿墙直段", "env_rooftop_ref_parapet_top3d.glb"),
-    "女儿墙外角_资产包": ("根_女儿墙外角", "env_rooftop_ref_parapet_outer_top3d.glb"),
+    "完整地砖_资产包": ("根_完整地砖", "env_rooftop_ref_floor_full_top3d.glb"),
+    "标准外墙实墙_资产包": ("根_标准外墙实墙", "env_rooftop_ref_facade_solid_top3d.glb"),
+    "标准外墙窗墙_资产包": ("根_标准外墙窗墙", "env_rooftop_ref_facade_window_top3d.glb"),
 }
 
 
@@ -57,8 +54,13 @@ def report_aabb(objects, label):
                 mins[axis] = min(mins[axis], world[axis])
                 maxs[axis] = max(maxs[axis], world[axis])
     print(
-        "AABB %-12s min=[%.4f, %.4f, %.4f] max=[%.4f, %.4f, %.4f]"
-        % (label, mins[0], mins[1], mins[2], maxs[0], maxs[1], maxs[2])
+        "AABB %-16s min=[%.4f, %.4f, %.4f] max=[%.4f, %.4f, %.4f] size=[%.4f, %.4f, %.4f]"
+        % (
+            label,
+            mins[0], mins[1], mins[2],
+            maxs[0], maxs[1], maxs[2],
+            maxs[0] - mins[0], maxs[1] - mins[1], maxs[2] - mins[2],
+        )
     )
 
 
@@ -83,9 +85,9 @@ def export_package(collection_name, root_name, filename):
     if not meshes:
         raise RuntimeError("Package has no mesh: %s" % collection_name)
 
-    # Re-base onto the package root: bake (world - root) into the mesh data and drop
-    # the object transform, so the exported node carries an identity transform with the
-    # package origin at its intended place.
+    # Re-base onto the package root: bake (world - root) into the mesh data and drop the
+    # object transform, so the exported node carries an identity transform with the package
+    # origin (底面中心) at local Z=0.
     offset = root.matrix_world.translation.copy()
     rebase = Matrix.Translation(-offset)
     for obj in meshes:

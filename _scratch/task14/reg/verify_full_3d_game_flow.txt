@@ -18,4 +18,4 @@ WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_d
 [MapFateTriggers] 已连接到 3D 局内运行时
 [MapFateTriggers] 已连接到 3D 局内运行时
 [MapFateTriggers] 已连接到 3D 局内运行时
-FULL_3D_GAME_FLOW_OK: four themes, seeded rooms including vertical levels, four sizes, streamed shells/lights/props, nine-state enemies, 59 valid ranged/melee combinations, combat and extraction pass (peak_nodes=2704)
+FULL_3D_GAME_FLOW_OK: four themes, seeded rooms including vertical levels, four sizes, streamed shells/lights/props, nine-state enemies, 59 valid ranged/melee combinations, combat and extraction pass (peak_nodes=2703)

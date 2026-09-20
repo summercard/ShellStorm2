@@ -8,12 +8,15 @@ extends Node
 ##   1. 破损不是全挤在一条边上（四条边里至少 3 条有破损）；
 ##   2. 同一条边上破损不是一整段连续（最长连续破损段 < 该边破损数）；
 ##   3. 三档破损都真的出现过；
-##   4. 槽位总数 = intact + 破损 = 61（64 段 - 西侧门洞补位 3 件）。
+##   4. 槽位总数 = intact + 破损 = 按几何推出的整圈直段数，并与 stage 快照对账。
+##      2026-09-20 起西侧围栏缺口已封（天台外墙不再挖门洞、门洞补位墙 0 件），
+##      故本轮实测 = 64 = 2×(17+15)；旧期望值 61 是「西墙挖 3 段」时代的产物。
 ##
 ## 纯诊断，不算门禁；输出 PROBE_DMG_LAYOUT_* 行供肉眼核对与留档。
 ## 跑法：Godot --headless --path <项目> res://tests/verification/probe_rooftop_parapet_damage_layout.tscn
 
-const SLOT_COUNT_EXPECTED := 61
+## 直段模块沿边长 5.00m（= 天台地砖网格）；转角件各占 2.5m 让位区。
+const SEGMENT_LEN_M := 5.0
 const SIDE_TOLERANCE_M := 0.01
 const VARIANT_KEYS: Array[String] = ["dmg_a", "dmg_b", "dmg_c"]
 
@@ -37,10 +40,27 @@ func _ready() -> void:
 		await _release(rooftop)
 		get_tree().quit(1)
 		return
+	# 期望值由「矩形 + 转角臂 + 模块长」算出，不引用 stage 自己的槽位表，避免循环自证。
+	var expected_slots := _expected_straight_slot_count()
 	_expect(
-		slot_transforms.size() == SLOT_COUNT_EXPECTED,
-		"直段槽位数 %d != %d" % [slot_transforms.size(), SLOT_COUNT_EXPECTED]
+		slot_transforms.size() == expected_slots,
+		"直段槽位数 %d != 几何期望 %d" % [slot_transforms.size(), expected_slots]
 	)
+	# 再与 stage 快照对账：槽位表长度、快照计数、几何期望 - 门洞补位墙 三者必须一致。
+	var snapshot: Dictionary = rooftop.get_snapshot()
+	var snapshot_slots := int(snapshot.get("outer_straight_slot_count", -1))
+	var doorway_walls := int(snapshot.get("outer_doorway_wall_count", -1))
+	_expect(
+		snapshot_slots == slot_transforms.size(),
+		"快照 outer_straight_slot_count(%d) != 槽位表长度(%d)"
+		% [snapshot_slots, slot_transforms.size()]
+	)
+	_expect(
+		snapshot_slots == expected_slots - doorway_walls,
+		"快照槽位数(%d) != 几何期望(%d) - 门洞补位墙(%d)"
+		% [snapshot_slots, expected_slots, doorway_walls]
+	)
+	_expect(doorway_walls == 0, "天台外墙仍残留 %d 件门洞补位矮墙（西侧缺口未封）" % doorway_walls)
 
 	var kinds := _resolve_slot_kinds(rooftop, slot_transforms)
 	var placements := _classify_sides(slot_transforms, kinds)
@@ -112,7 +132,7 @@ func _release(stage: Node) -> void:
 ##
 ## ⚠️ 刻意**不**从 MultiMesh 回读实例变换来判断「哪个槽位用了哪一档」：MultiMesh 的
 ## 实例变换存在 RenderingServer 侧，dummy 渲染器（--headless）下一律回读成单位阵，
-## 于是 61 个槽位会全部落到 (0,0,0)、匹配不上任何批次，探针会误报「槽位与批次脱钩」。
+## 于是所有槽位都会落到 (0,0,0)、匹配不上任何批次，探针会误报「槽位与批次脱钩」。
 ## 本探针改为读 stage 自己的档位表，因此可以在 --headless 下跑。
 func _resolve_slot_kinds(rooftop: TowerFloorStage3D, slot_transforms: Array) -> Array:
 	var kinds: Array = rooftop.call("get_outer_slot_kinds")
@@ -159,6 +179,15 @@ func _classify_sides(slot_transforms: Array, kinds: Array) -> Dictionary:
 			return float(a["along"]) < float(b["along"])
 		)
 	return placements
+
+
+## 期望直段槽位数：四条边各扣掉两端的 2.5m 转角让位后，按 5.00m 模块满铺。
+func _expected_straight_slot_count() -> int:
+	var rect: Rect2 = TowerFloorStage3D.ROOFTOP_WORLD_RECT
+	var arm: float = TowerFloorStage3D.ROOFTOP_CORNER_ARM_M
+	var along_x := int(round((rect.size.x - arm * 2.0) / SEGMENT_LEN_M))
+	var along_y := int(round((rect.size.y - arm * 2.0) / SEGMENT_LEN_M))
+	return 2 * (along_x + along_y)
 
 
 func _count_damaged(kinds: Array) -> int:

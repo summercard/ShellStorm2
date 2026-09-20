@@ -159,5 +159,6 @@ WARNING: [BaseFacility3D] Missing interaction/body shape: mission_operations
        [5] _ready (res://src/world3d/TowerDescent3D.gd:383)
        [6] _ready (res://tests/verification/verify_rooftop_32x32_contract.gd:45)
 [MapFateTriggers] 已连接到 3D 局内运行时
-    [破损排布] seed=20260919 slots=61 intact=44 dmg_a=6 dmg_b=3 dmg_c=8 damaged=17 ratio=0.2787
+    [破损排布] seed=20260919 slots=64 intact=46 dmg_a=7 dmg_b=3 dmg_c=8 damaged=18 ratio=0.2813
+    [外立面环] plan solid=24 window=44 total=68 | actual solid=24 window=44
 ROOFTOP_WEST_EXPANSION_CONTRACT_PASS

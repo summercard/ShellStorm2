@@ -62,7 +62,8 @@ agent_created: true
 5. **暴露「槽位真源」**：把每个槽位的 `Transform3D` 记进 `_outer_straight_slot_transforms`，并提供 `get_outer_straight_slot_transforms()` / `get_outer_damage_slot_kinds(): Array[String]` 与 `get_snapshot()` 里的计数。**这是给探针用的**（见下）。
 6. 比例常量命名清楚（本先例 `ROOFTOP_PARAPET_DAMAGE_CHANCE = 0.25`）。
 
-本先例实测（seed=20260919）：`slots=61 intact=44 dmg_a=6 dmg_b=3 dmg_c=8 damaged=17 ratio=0.2787`。
+本先例实测（seed=20260919）：`slots=64 intact=46 dmg_a=7 dmg_b=3 dmg_c=8 damaged=18 ratio=0.2813`。
+（注：**同一 seed 下槽位一变、分布就整体重排** —— 早期西侧围栏缺口未封时是 `slots=61 intact=44 damaged=17 ratio=0.2787`。所以**别把某一次的实测数字写成断言**。）
 
 ## 第 5 步：探针与门禁 —— 三个必须做对的地方
 
@@ -71,6 +72,7 @@ agent_created: true
    - 比对方法用**排序点云 + 最近邻最大偏差**，**不要用 `%.5f` 字符串 key** —— 1e-5 边界会让 key 撞号（本先例 `-2.47101` vs `-2.47100`）造成假红。
 2. **排布探针读「槽位真源」，不读 MultiMesh**：headless 下 `MultiMesh.get_instance_transform()` 一律回读成单位阵（老坑）→ 排布探针必须读 `get_outer_damage_slot_kinds()` 这类由 stage 落盘的真值。**顺带好处**：原来「alignment 探针必须带窗口跑」的坑对新链路消除，改读槽位真源后可 headless。
 3. **必做反向对照**：把新断言逐条改坏 → 必须变红 → 再逐字节还原源文件。证明不是假绿。
+4. ⚠️ **期望值必须由几何/常量推出，禁止硬编码数字**：排布探针里「槽位总数 = ?」一度写死（`SLOT_COUNT_EXPECTED := 61`）。本先例后来封闭西侧围栏缺口 → 直段 61→64，探针**误红**（`failures=1`，而实际排布完全正常）。正确做法：由 `rect` + 转角臂 + 模块长算出期望（本先例 = `2×((90-5)/5) + 2×((80-5)/5)` = 64），再**与 stage 快照对账**（`outer_straight_slot_count`、`outer_doorway_wall_count`），三者一致才算过。任何「件数 / 槽位 / 段数」类断言都适用这条纪律。
 
 本先例四道门禁全绿：`verify_*_contract`（契约保留 + 计数自洽 + 变体齐）、`probe_*_damage_prefabs`（seamless_band / envelope_match / palette_bound）、`probe_*_damage_layout`（scattered / variants_all_used / slots_match）、`probe_*_alignment`。
 

@@ -175,7 +175,7 @@ WARNING: [BaseFacility3D] Missing interaction/body shape: mission_operations
   Door_West: type=StaticBody3D global_pos=(-30.0, 0.0, 2.5)
 
 === 测试玩家靠近门 + 触发 ===
-  玩家 (-30.0, 0.0, 3.5) 门附近，nearest={ "direction": "west", "target_room_id": "facility", "is_open": false, "distance": 1.0, "door": Door_West:<StaticBody3D#268519348882> } door.global_pos=(-30.0, 0.0, 2.5)
+  玩家 (-30.0, 0.0, 3.5) 门附近，nearest={ "direction": "west", "target_room_id": "facility", "is_open": false, "distance": 1.0, "door": Door_West:<StaticBody3D#269811194537> } door.global_pos=(-30.0, 0.0, 2.5)
 
 === 直接调 door.set_open 看视觉/碰撞 ===
   门 west: set_open(true) 前 is_open=false collision.disabled=false

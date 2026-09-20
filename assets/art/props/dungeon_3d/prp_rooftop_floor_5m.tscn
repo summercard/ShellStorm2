@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台地砖（天台参考组件库 v002）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_floor_full_top3d.glb
+;   5.00m × 5.00m × 0.30m；底板 0.30m。原点在**底面中心**（几何 Y=0..0.30）。
+; 与旧占位地砖的差别：旧件 (env_tower_floor_tile_5m) 以几何中心为原点（Y≈-0.15..+0.15），
+;   本件原点在底面。因此 TowerFloorStage3D 不能沿用 -FLOOR_THICKNESS*0.5 的固定偏移，
+;   必须按模块 AABB 求「顶面贴承重面 Y=0」的偏移（见 _floor_visual_origin_y）。
+; 参考拼装 reference_assembly.json 同口径：floor_full 摆在 z=-0.30，即顶面刚好在 z=0。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，
+;   保留美术自带 PaletteUV 四角色材质。
+; 本 Prefab 纯视觉（visual_only）。承重面由 TowerFloorStage3D/FloorSupport 铺满，
+;   本件不带任何碰撞节点。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_floor_full_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopFloor5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-FLOOR-FULL"
+metadata/package_id = "ENV-ROOFTOP-REF-FLOOR-FULL"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_floor_full_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/slab_thickness_m = 0.3
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 0.3, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.3, 5)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
+metadata/visual_node_name = "完整地砖_主体"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "batched_multimesh"
+metadata/layout_role = "rooftop_floor_tile"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

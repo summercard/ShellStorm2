@@ -12,12 +12,12 @@ WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_w
    at: open (core/io/resource_format_binary.cpp:1089)
 WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
    at: open (core/io/resource_format_binary.cpp:1089)
-PROBE parapet aabb_pos=(-2.5, 0.0, -0.25) aabb_size=(5.0, 1.8, 0.5) expected=(5.0, 1.8, 0.5) size_match=true base_y=0.0000
+PROBE parapet aabb_pos=(-2.5, 0.0, -0.25) aabb_size=(5.0, 0.8, 0.5) expected=(5.0, 0.8, 0.5) size_match=true base_y=0.0000
 PROBE parapet surface_count=1
 PROBE parapet surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE parapet xz_bounds=[-2.500,-0.250]~[2.500,0.250] quadrant_vertex_counts={ "-X-Z": 510, "-X+Z": 510, "+X-Z": 510, "+X+Z": 510 }
-PROBE outer_corner aabb_pos=(-1.25, 0.0, -1.25) aabb_size=(2.5, 1.8, 2.5) expected=(2.5, 1.8, 2.5) size_match=true base_y=0.0000
+PROBE parapet xz_bounds=[-2.500,-0.250]~[2.500,0.250] quadrant_vertex_counts={ "-X-Z": 72, "-X+Z": 72, "+X-Z": 72, "+X+Z": 72 }
+PROBE outer_corner aabb_pos=(-1.25, 0.0, -1.25) aabb_size=(2.5, 0.8, 2.5) expected=(2.5, 0.8, 2.5) size_match=true base_y=0.0000
 PROBE outer_corner surface_count=1
 PROBE outer_corner surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE outer_corner xz_bounds=[-1.250,-1.250]~[1.250,1.250] quadrant_vertex_counts={ "-X-Z": 540, "-X+Z": 888, "+X-Z": 0, "+X+Z": 540 }
+PROBE outer_corner xz_bounds=[-1.250,-1.250]~[1.250,1.250] quadrant_vertex_counts={ "-X-Z": 144, "-X+Z": 288, "+X-Z": 0, "+X+Z": 144 }
 PROBE_ROOFTOP_PARAPET_DONE

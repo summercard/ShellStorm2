@@ -1,10 +1,13 @@
 [gd_scene load_steps=2 format=3]
 
-; 2.5m 天台女儿墙外角（天台参考组件库 v002）
+; 2.5m 天台女儿墙外角（天台参考组件库 v002 派生 · v003 方案A 平整墙板 · 总高0.80m）
 ; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb
-;   2.50m × 1.80m 高 × 2.50m；底面中心原点（几何 Y=0..1.80）。
+;   2.50m × 0.80m 高 × 2.50m；底面中心原点（几何 Y=0..0.80）。
 ; L 形：两条臂的外表面分别贴合局部 −X 边与 +Z 边，开口朝 +X/−Z；
 ;   臂厚 0.50m，两条臂的中心线分别在局部 x=−1.00 与 z=+1.00。
+; 形态与直段同套（方案A）：每条臂也是「基座带 + 平整墙板 + 压顶带」三段，
+;   无中部分隔带、无密集竖杠；两臂在角上按同高度闭合。
+; 生成脚本：source/author_env_rooftop_parapet_v003.py（从 v002 参考库只读重建）。
 ; 摆放契约（由 TowerFloorStage3D 按四角调用）：
 ;   本件 AABB 中心 = 角的 2.5m 让位区中心；rotation_y 取 90° 整数倍，
 ;   SW=0 / SE=PI/2 / NE=PI / NW=3PI/2（俯视逆时针）。
@@ -18,15 +21,16 @@
 [node name="PrpRooftopParapetOuter" type="Node3D"]
 metadata/asset_id = "ENV-ROOFTOP-REF-PARAPET-OUTER"
 metadata/package_id = "ENV-ROOFTOP-REF-PARAPET-OUTER"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
 metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_v003.py"
 metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb"
 metadata/grid_unit_m = 2.5
-metadata/visual_height_m = 1.8
+metadata/visual_height_m = 0.8
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
-metadata/bounds_size_m = Vector3(2.5, 1.8, 2.5)
-metadata/visual_bounds_size_m = Vector3(2.5, 1.8, 2.5)
+metadata/bounds_size_m = Vector3(2.5, 0.8, 2.5)
+metadata/visual_bounds_size_m = Vector3(2.5, 0.8, 2.5)
 metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
 metadata/visual_node_name = "女儿墙外角_主体"
 metadata/visual_only = true

@@ -1,8 +1,15 @@
 [gd_scene load_steps=2 format=3]
 
-; 5m 天台女儿墙直段（天台参考组件库 v002）
+; 5m 天台女儿墙直段（天台参考组件库 v002 派生 · v003 方案A 平整墙板 · 总高0.80m）
 ; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_parapet_top3d.glb
-;   5.00m 长 × 1.80m 高 × 0.50m 厚；底面中心原点（几何 Y=0..1.80）。
+;   5.00m 长 × 0.80m 高 × 0.50m 厚；底面中心原点（几何 Y=0..0.80）。
+; 形态（方案A，2026-09-20 业主口径「竖杠太密不好看，横杆在两边即可」）：
+;   上下各一道 0.10m 横向压带（基座带 z 0.00..0.10 + 压顶带 z 0.70..0.80），
+;   中间是一整片平整墙板（z 0.08..0.72）。没有中间的密集竖杠、也没有中部分隔带。
+;   压带截面 0.50m（= 边界内缩口径），墙板缩到 0.43m 形成一道阴影缝。
+;   ⚠️ 旧 v002 形态是「基座 + 分隔带 + 10 块 0.5m 墙身 + 10 块压顶」共 22 块积木，
+;     那 10 道竖缝就是被否决的「密集竖杠」。
+; 生成脚本：source/author_env_rooftop_parapet_v003.py（从 v002 参考库只读重建）。
 ; 默认朝向 +Z 方向（装饰面朝场地内侧）；实例化时由脚本设置 rotation 适配各方向。
 ; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖，
 ;   保留美术自带 PaletteUV 四角色材质（本件实际只用到 02_细腻哑光_青绿大面）。
@@ -17,15 +24,16 @@
 [node name="PrpRooftopParapet5m" type="Node3D"]
 metadata/asset_id = "ENV-ROOFTOP-REF-PARAPET"
 metadata/package_id = "ENV-ROOFTOP-REF-PARAPET"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
 metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_v003.py"
 metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_top3d.glb"
 metadata/grid_unit_m = 5.0
-metadata/visual_height_m = 1.8
+metadata/visual_height_m = 0.8
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
-metadata/bounds_size_m = Vector3(5, 1.8, 0.5)
-metadata/visual_bounds_size_m = Vector3(5, 1.8, 0.5)
+metadata/bounds_size_m = Vector3(5, 0.8, 0.5)
+metadata/visual_bounds_size_m = Vector3(5, 0.8, 0.5)
 metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
 metadata/visual_node_name = "女儿墙直段_主体"
 metadata/visual_only = true

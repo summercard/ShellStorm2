@@ -1,15 +1,17 @@
 [gd_scene load_steps=2 format=3]
 
-; 5m 天台女儿墙直段 · 破损A（崩顶）（天台参考组件库 v002 程序化派生件）
+; 5m 天台女儿墙直段 · 破损A（崩顶）（v003 方案A 派生件 · 总高0.80m）
 ; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_parapet_dmg_a_top3d.glb
-;   5.00m 长 × 1.80m 高 × 0.50m 厚；底面中心原点（几何 Y=0..1.80）。
-; 来源：本件不是新造型，而是 intact 件（ENV-ROOFTOP-REF-PARAPET）的程序化破损派生：
-;   脚本 author_env_rooftop_parapet_damage_v001.py 把 intact 网格按「积木」（22 块
-;   闭合倒角块：基座 + 分隔带 + 10 块墙身 + 10 块压顶）拆开，只对与破损区相交的
-;   积木做逐块布尔剔料，再合并；破损面 UV 钳回色盘色块，故不换材质、不掉色。
-; 破损口径（crown_spall / 崩顶）：压顶顶部被削 3 道豁口、中段崩落，断裂面粗化；下半身与两端头带完整。
+;   5.00m 长 × 0.80m 高 × 0.50m 厚；底面中心原点（几何 Y=0..0.80）。
+; 来源：本件不是新造型，而是 intact 件（ENV-ROOFTOP-REF-PARAPET v003）的程序化破损派生：
+;   脚本 author_env_rooftop_parapet_damage_v003.py 把 intact 网格按「积木」（v003 方案A
+;   只有 3 块闭合倒角块：基座带 + 平整墙板 + 压顶带）拆开，只对与破损区相交的积木做
+;   逐块布尔剔料，再合并；破损面 UV 钳回色盘色块，故不换材质、不掉色。
+;   ⚠️ 逐块精确布尔是必需的：把相邻壳体一起喂给同一个求解器会焊接并悄悄吃掉材料。
+; 破损口径（crown_spall / 崩顶）：压顶与墙板上缘被削 3 道尺寸递减的豁口、中段崩落，
+;   断裂面粗化，让女儿墙的天际线断成台阶；下半身与两端头带完整。
 ; 拼接契约（用户要求「需要能接起来」）：破损只发生在中段，两端头带 |x|>=2.05m 与
-;   intact 件逐位相同；包络仍是 5.00×0.50×1.80、原点仍是底面中心。
+;   intact 件逐位相同；包络仍是 5.00×0.50×0.80、原点仍是底面中心。
 ;   ⇒ 可与 intact 件 / 另两件破损件沿任一边、任意顺序对接，接头无缝且槽位相位不变。
 ; preserve_authored_palette：破损新面 UV 已钳在色盘色块内（U 0.923..0.977 /
 ;   V 0.123..0.477），禁止运行时用塔楼暖色 A/B 主题材质覆盖，否则破损面会掉色。
@@ -23,20 +25,20 @@
 [node name="PrpRooftopParapetDmgA5m" type="Node3D"]
 metadata/asset_id = "ENV-ROOFTOP-REF-PARAPET-DMG-A"
 metadata/package_id = "ENV-ROOFTOP-REF-PARAPET-DMG-A"
-metadata/asset_version = "v001"
+metadata/asset_version = "v002"
 metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
 metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_dmg_a_top3d.glb"
-metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_damage_v001.py"
+metadata/source_authoring_script = "res://assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_damage_v003.py"
 metadata/derived_from_asset_id = "ENV-ROOFTOP-REF-PARAPET"
 metadata/damage_kind = "crown_spall"
 metadata/damage_label = "崩顶"
-metadata/damage_note = "压顶顶部被削 3 道豁口、中段崩落，断裂面粗化；下半身与两端头带完整。"
+metadata/damage_note = "压顶与墙板上缘被削 3 道尺寸递减的豁口、中段崩落，断裂面粗化；下半身与两端头带完整。"
 metadata/grid_unit_m = 5.0
-metadata/visual_height_m = 1.8
+metadata/visual_height_m = 0.8
 metadata/origin_contract = "bottom_center"
 metadata/forward_axis = "+Z"
-metadata/bounds_size_m = Vector3(5, 1.8, 0.5)
-metadata/visual_bounds_size_m = Vector3(5, 1.8, 0.5)
+metadata/bounds_size_m = Vector3(5, 0.8, 0.5)
+metadata/visual_bounds_size_m = Vector3(5, 0.8, 0.5)
 metadata/bounds_note = "破损只在中段剔料，两端头带 |x|>=2.05m 未改动，包络与 intact 件逐值相同。"
 metadata/visual_node_name = "女儿墙直段破损A_主体"
 metadata/visual_only = true

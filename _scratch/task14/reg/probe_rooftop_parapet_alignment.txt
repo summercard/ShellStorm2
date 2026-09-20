@@ -12,7 +12,7 @@ WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_w
    at: open (core/io/resource_format_binary.cpp:1089)
 WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
    at: open (core/io/resource_format_binary.cpp:1089)
-PROBE_ALIGN counts segments=61 corners=4 doorway_walls=3
+PROBE_ALIGN counts segments=64 corners=4 doorway_walls=0 facade=68
 PROBE_ALIGN edge=north members=19 coverage=90.000/90.000 gap=0.000 overlap=0.000
 PROBE_ALIGN edge=south members=19 coverage=90.000/90.000 gap=0.000 overlap=0.000
 PROBE_ALIGN edge=west  members=17 coverage=80.000/80.000 gap=0.000 overlap=0.000
@@ -21,4 +21,10 @@ PROBE_ALIGN corner=0 span=(-50.000,42.500) size=(2.500,2.500)
 PROBE_ALIGN corner=1 span=(37.500,42.500) size=(2.500,2.500)
 PROBE_ALIGN corner=2 span=(37.500,-35.000) size=(2.500,2.500)
 PROBE_ALIGN corner=3 span=(-50.000,-35.000) size=(2.500,2.500)
+PROBE_ALIGN facade_kinds solid=24 window=44
+PROBE_ALIGN facade_edge=north members=18 coverage=90.000/90.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade_edge=south members=18 coverage=90.000/90.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade_edge=west  members=16 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade_edge=east  members=16 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade_bottom_y=-12.000
 PROBE_ALIGN_DONE all_edges_seamless=true corners_seated=true

@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3]
+
+; 5m 天台外立面·窗墙（天台参考组件库 v002）
+; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_facade_window_top3d.glb
+;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
+; 与实墙件同包络、同原点、同朝向，因此两者可沿任一边任意顺序对接：
+;   接头处宽度/厚度/高度逐值相同，只有「有没有窗」这一处外观差异
+;   （网格本身 3 个表面：水泥结构 / 窗框 / 窗玻璃）。
+; 参考拼装 reference_assembly.json 里 facade_solid / facade_window / facade_window_ivy
+;   三者共用同一槽位序列摆在同一圈（z=-12.00），即「同圈不同档」的用法。
+; 默认朝向 +Z（装饰面朝场地外侧）；实例化时由脚本设置 rotation 适配各方向。
+; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖。
+; 本 Prefab 视觉专用（visual_only）。立面环碰撞由 TowerFloorStage3D 的
+;   FacadeBoundaryCollision_* 按 0.30m 代理生成，本件不带任何碰撞节点。
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_window_top3d.glb" id="1_visual"]
+
+[node name="PrpRooftopFacadeWindow5m" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-FACADE-WINDOW"
+metadata/package_id = "ENV-ROOFTOP-REF-FACADE-WINDOW"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_window_top3d.glb"
+metadata/grid_unit_m = 5.0
+metadata/visual_height_m = 11.9
+metadata/logical_height_m = 12.0
+metadata/origin_contract = "bottom_center"
+metadata/forward_axis = "+Z"
+metadata/bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/visual_bounds_size_m = Vector3(5, 11.9, 0.3)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同（无外挂装饰）。"
+metadata/visual_node_name = "标准外墙窗墙_主体"
+metadata/surface_count = 3
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/shadow_policy = "cast_and_receive"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "batched_multimesh"
+metadata/layout_role = "rooftop_facade_window_run"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -4,9 +4,12 @@ extends Node
 
 const PARAPET_GLB := "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_top3d.glb"
 const CORNER_GLB := "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_parapet_outer_top3d.glb"
+## 高度不写字面量，直接取运行时的口径常量 —— 资产包络必须等于「脚本声明的女儿墙高度」，
+## 这条正是「BLENDER 改了高度而 TowerFloorStage3D 没跟着改」会立刻爆红的哨兵。
+## 2026-09-20 起该常量为 0.80m（方案A 平整墙板，含压顶总高）。
 const EXPECTED := {
-	"parapet": Vector3(5.0, 1.8, 0.5),
-	"outer_corner": Vector3(2.5, 1.8, 2.5),
+	"parapet": Vector3(5.0, TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT, 0.5),
+	"outer_corner": Vector3(2.5, TowerFloorStage3D.ROOFTOP_PARAPET_HEIGHT, 2.5),
 }
 
 

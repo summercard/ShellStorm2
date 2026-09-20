@@ -13,27 +13,27 @@ WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_w
 WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
    at: open (core/io/resource_format_binary.cpp:1089)
 PROBE_DMG intact asset_id=ENV-ROOFTOP-REF-PARAPET declared=女儿墙直段_主体 resolved=女儿墙直段_主体
-PROBE_DMG intact visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)
+PROBE_DMG intact visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)
 PROBE_DMG intact surfaces=1
 PROBE_DMG intact surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE_DMG intact end_band_vertices=312 (|x|>=2.05)
+PROBE_DMG intact end_band_vertices=288 (|x|>=2.05)
 PROBE_DMG dmg_a  asset_id=ENV-ROOFTOP-REF-PARAPET-DMG-A declared=女儿墙直段破损A_主体 resolved=女儿墙直段破损A_主体
-PROBE_DMG dmg_a  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)
+PROBE_DMG dmg_a  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)
 PROBE_DMG dmg_a  surfaces=1
 PROBE_DMG dmg_a  surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE_DMG dmg_a  end_band_vertices=312 (|x|>=2.05)
+PROBE_DMG dmg_a  end_band_vertices=288 (|x|>=2.05)
 PROBE_DMG dmg_b  asset_id=ENV-ROOFTOP-REF-PARAPET-DMG-B declared=女儿墙直段破损B_主体 resolved=女儿墙直段破损B_主体
-PROBE_DMG dmg_b  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)
+PROBE_DMG dmg_b  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)
 PROBE_DMG dmg_b  surfaces=1
 PROBE_DMG dmg_b  surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE_DMG dmg_b  end_band_vertices=312 (|x|>=2.05)
+PROBE_DMG dmg_b  end_band_vertices=292 (|x|>=2.05)
 PROBE_DMG dmg_c  asset_id=ENV-ROOFTOP-REF-PARAPET-DMG-C declared=女儿墙直段破损C_主体 resolved=女儿墙直段破损C_主体
-PROBE_DMG dmg_c  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 1.8000, 0.5000)
+PROBE_DMG dmg_c  visual_bounds pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)  mesh_aabb pos=(-2.5000, 0.0000, -0.2500) size=(5.0000, 0.8000, 0.5000)
 PROBE_DMG dmg_c  surfaces=1
 PROBE_DMG dmg_c  surface=0 material=02_细腻哑光_青绿大面 palette_texture_bound=true
-PROBE_DMG dmg_c  end_band_vertices=312 (|x|>=2.05)
+PROBE_DMG dmg_c  end_band_vertices=288 (|x|>=2.05)
 PROBE_DMG samples=4 (intact=1 + damaged=3)
-PROBE_DMG dmg_a  end_band_pointcloud_max_nn=0.0000707 m (intact->variant=0.0000707 variant->intact=0.0000707)
-PROBE_DMG dmg_b  end_band_pointcloud_max_nn=0.0000707 m (intact->variant=0.0000707 variant->intact=0.0000707)
-PROBE_DMG dmg_c  end_band_pointcloud_max_nn=0.0000707 m (intact->variant=0.0000707 variant->intact=0.0000707)
-PROBE_DMG_DONE seamless_band=true envelope_match=true palette_bound=true contract_ok=true
+PROBE_DMG dmg_a  end_band_pointcloud_max_nn=0.0000522 m (intact->variant=0.0000522 variant->intact=0.0000522)
+PROBE_DMG dmg_c  end_band_pointcloud_max_nn=0.0000522 m (intact->variant=0.0000522 variant->intact=0.0000522)
+PROBE_DMG_FAIL dmg_b 端头带顶点数 292 != intact 件 288 —— 接头会错位
+PROBE_DMG_DONE failures=1
