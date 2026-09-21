@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://fx0110"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxShellCasing3D.gd" id="1_shell"]
+
+[sub_resource type="CylinderMesh" id="Cylinder_shell"]
+top_radius = 0.042
+bottom_radius = 0.046
+height = 0.24
+radial_segments = 12
+
+[sub_resource type="TorusMesh" id="Torus_rim"]
+inner_radius = 0.038
+outer_radius = 0.058
+rings = 8
+ring_segments = 12
+
+[sub_resource type="SphereMesh" id="Sphere_primer"]
+radius = 0.025
+height = 0.05
+radial_segments = 8
+rings = 4
+
+[node name="VfxShellCasing3D" type="Node3D"]
+script = ExtResource("1_shell")
+metadata/asset_id = "VFX-SHELL-CASING-3D"
+metadata/asset_version = "v001"
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("Cylinder_shell")
+
+[node name="Rim" type="MeshInstance3D" parent="."]
+position = Vector3(0, 0.12, 0)
+mesh = SubResource("Torus_rim")
+
+[node name="Primer" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.12, 0)
+mesh = SubResource("Sphere_primer")

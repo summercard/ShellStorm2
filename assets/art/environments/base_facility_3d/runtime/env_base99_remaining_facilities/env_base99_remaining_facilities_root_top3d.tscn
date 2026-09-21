@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3]
+[gd_scene format=3 uid="uid://c5dsbdpedoi0d"]
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/air_compressor/air_compressor_root_top3d.tscn" id="1_air_compressor"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/backup_generator/backup_generator_root_top3d.tscn" id="2_backup_generator"]
@@ -40,13 +40,13 @@
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_root_top3d.tscn" id="39_understair_equipment_cabinet"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_green_bench/understair_green_bench_root_top3d.tscn" id="40_understair_green_bench"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_storage_shelf/understair_storage_shelf_root_top3d.tscn" id="41_understair_storage_shelf"]
-[ext_resource type="PackedScene" path="res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn" id="42_volumetric_dust_fx"]
+[ext_resource type="PackedScene" uid="uid://kiq33pblhiaq" path="res://assets/art/vfx/environment_3d/base_facility_dust_particles/vfx_base99_dust_particles_root_top3d.tscn" id="42_volumetric_dust_fx"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d.tscn" id="43_warehouse_pendant_light_group"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/water_purifier/water_purifier_root_top3d.tscn" id="44_water_purifier"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_facility_top3d.tscn" id="45_weapon_workshop_station"]
 [ext_resource type="PackedScene" path="res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d.tscn" id="46_rollup"]
 
-[node name="基地99层剩余非门非墙设施_V021" type="Node3D"]
+[node name="基地99层剩余非门非墙设施_V021" type="Node3D" unique_id=892882438]
 metadata/asset_id = "ENV-BASE99-REMAINING-FACILITIES-V021"
 metadata/asset_version = "v021"
 metadata/asset_category = "environment_facility_bundle"
@@ -60,104 +60,148 @@ metadata/optimized_package_count = 31
 metadata/v023_reoptimized_packages = "loft_bed_and_bedding"
 metadata/scene_vfx_count = 1
 
-[node name="58_空气压缩机_资产包" parent="." instance=ExtResource("1_air_compressor")]
+[node name="58_空气压缩机_资产包" parent="." unique_id=932704232 instance=ExtResource("1_air_compressor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.53520775, 0, -2.1931496)
 
-[node name="53_备用发电机_资产包" parent="." instance=ExtResource("2_backup_generator")]
+[node name="58_空气压缩机_资产包" parent="58_空气压缩机_资产包" unique_id=210147218 instance=ExtResource("1_air_compressor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0571394, 0, -0.047263145)
 
-[node name="54_蓄电池组_资产包" parent="." instance=ExtResource("3_battery_bank")]
+[node name="53_备用发电机_资产包" parent="." unique_id=1086715401 instance=ExtResource("2_backup_generator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.6020513)
 
-[node name="62_主通道应急灯组_资产包" parent="." instance=ExtResource("4_corridor_emergency_light_group")]
+[node name="54_蓄电池组_资产包" parent="." unique_id=509737436 instance=ExtResource("3_battery_bank")]
+transform = Transform3D(0.9552268, 0, -0.2958748, 0, 1, 0, 0.2958748, 0, 0.9552268, -10.906509, 0, -3.3581724)
 
-[node name="76_FLAMMABLE可燃垃圾设施_资产包" parent="." instance=ExtResource("5_east_flammable_bin")]
+[node name="54_蓄电池组_资产包" parent="54_蓄电池组_资产包" unique_id=65528088 instance=ExtResource("3_battery_bank")]
+transform = Transform3D(-0.13426292, 0, 0.9909455, 0, 1, 0, -0.9909455, 0, -0.13426292, 4.811342, 0, 26.180855)
 
-[node name="80_低矮储物收纳区_资产包" parent="." instance=ExtResource("6_east_low_storage_bench")]
+[node name="54_蓄电池组_资产包" parent="54_蓄电池组_资产包/54_蓄电池组_资产包" unique_id=941542443 instance=ExtResource("3_battery_bank")]
+transform = Transform3D(-0.9566053, 0, -0.29138678, 0, 1, 0, 0.29138678, 0, -0.9566053, 25.569954, 3.388462, 8.37286)
 
-[node name="78_维修工作台与工具墙_资产包" parent="." instance=ExtResource("7_east_maintenance_workstation")]
+[node name="62_主通道应急灯组_资产包" parent="." unique_id=284822631 instance=ExtResource("4_corridor_emergency_light_group")]
 
-[node name="83_东面植物点缀组_资产包" parent="." instance=ExtResource("8_east_plant_group")]
+[node name="76_FLAMMABLE可燃垃圾设施_资产包" parent="." unique_id=1272289296 instance=ExtResource("5_east_flammable_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.52330494, 0, 1.4593639)
 
-[node name="77_RECYCLE回收垃圾设施_资产包" parent="." instance=ExtResource("9_east_recycle_bin")]
+[node name="80_低矮储物收纳区_资产包" parent="." unique_id=1058140660 instance=ExtResource("6_east_low_storage_bench")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.536213, 0, -2.774907)
 
-[node name="84_东面圆形工业吊灯_资产包" parent="." instance=ExtResource("10_east_round_pendant_light")]
+[node name="80_低矮储物收纳区_资产包" parent="80_低矮储物收纳区_资产包" unique_id=806423496 instance=ExtResource("6_east_low_storage_bench")]
+transform = Transform3D(-0.00069813326, 0, 0.99999976, 0, 1, 0, -0.99999976, 0, -0.00069813326, 8.183045, 0, 26.048214)
 
-[node name="72_SUPPLY24H自动补给机_资产包" parent="." instance=ExtResource("11_east_supply_24h_station")]
+[node name="78_维修工作台与工具墙_资产包" parent="." unique_id=2120581976 instance=ExtResource("7_east_maintenance_workstation")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.48287868, 0, -2.458613)
 
-[node name="75_WASTE普通垃圾设施_资产包" parent="." instance=ExtResource("12_east_waste_bin")]
+[node name="83_东面植物点缀组_资产包" parent="." unique_id=1017543430 instance=ExtResource("8_east_plant_group")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0555534, 0, 3.2428255)
 
+[node name="77_RECYCLE回收垃圾设施_资产包" parent="." unique_id=445432346 instance=ExtResource("9_east_recycle_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0116377, 0, -0.14211226)
 
-[node name="51_重型货架与补给箱_资产包" parent="." instance=ExtResource("14_heavy_supply_shelf")]
+[node name="84_东面圆形工业吊灯_资产包" parent="." unique_id=900808385 instance=ExtResource("10_east_round_pendant_light")]
 
-[node name="51_圆形全息设备平台_资产包" parent="." instance=ExtResource("15_hologram_terminal_platform")]
+[node name="72_SUPPLY24H自动补给机_资产包" parent="." unique_id=1168382982 instance=ExtResource("11_east_supply_24h_station")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.8382297, 0, -7.0584545)
+
+[node name="75_WASTE普通垃圾设施_资产包" parent="." unique_id=1531666109 instance=ExtResource("12_east_waste_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0539312, 0, 4.233777)
+
+[node name="51_重型货架与补给箱_资产包" parent="." unique_id=566687070 instance=ExtResource("14_heavy_supply_shelf")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7618065, 0, -2.764369)
+
+[node name="51_圆形全息设备平台_资产包" parent="." unique_id=940962687 instance=ExtResource("15_hologram_terminal_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.014634132)
 metadata/placement_role = "基地中央远征情报室"
 metadata/interactive = true
 
-[node name="56_工业水箱_资产包" parent="." instance=ExtResource("16_industrial_water_tank")]
+[node name="56_工业水箱_资产包" parent="." unique_id=679804808 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.642848, 0, 3.4831305)
 
-[node name="46_BATTERY模块收纳箱_资产包" parent="." instance=ExtResource("17_loft_battery_cabinet")]
+[node name="56_工业水箱_资产包" parent="56_工业水箱_资产包" unique_id=1750499109 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09304428, 0, 2.3635864)
 
-[node name="31_参考床架床品与床下收纳_资产包" parent="." instance=ExtResource("18_loft_bed_and_bedding")]
+[node name="56_工业水箱_资产包" parent="56_工业水箱_资产包/56_工业水箱_资产包" unique_id=1950368633 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294715, 0, 0.005127907)
+
+[node name="56_工业水箱_资产包" parent="56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包" unique_id=666838986 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294715, 0, 0.005127907)
+
+[node name="56_工业水箱_资产包" parent="56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包" unique_id=829661085 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294715, 0, 0.005127907)
+
+[node name="56_工业水箱_资产包" parent="56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包/56_工业水箱_资产包" unique_id=2102926858 instance=ExtResource("16_industrial_water_tank")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.294715, 0, 0.005127907)
+
+[node name="46_BATTERY模块收纳箱_资产包" parent="." unique_id=1684392948 instance=ExtResource("17_loft_battery_cabinet")]
+
+[node name="31_参考床架床品与床下收纳_资产包" parent="." unique_id=466562610 instance=ExtResource("18_loft_bed_and_bedding")]
 metadata/layout_revision = "v021_loft_layout_adjustment_001"
 metadata/layout_note = "Clockwise 90 degrees about original package center; pillows face north beside privacy curtain."
 
-[node name="33_暖橙床头灯_资产包" parent="." instance=ExtResource("19_loft_bedside_lamp")]
+[node name="33_暖橙床头灯_资产包" parent="." unique_id=543002891 instance=ExtResource("19_loft_bedside_lamp")]
 
-[node name="34_床边暖灰地毯_资产包" parent="." instance=ExtResource("20_loft_bedside_rug")]
+[node name="34_床边暖灰地毯_资产包" parent="." unique_id=1028284954 instance=ExtResource("20_loft_bedside_rug")]
 
-[node name="37_红棕茶几与生活物件_资产包" parent="." instance=ExtResource("21_loft_coffee_table")]
-position = Vector3(-2.6, 0, 2.83)
+[node name="37_红棕茶几与生活物件_资产包" parent="." unique_id=1627938498 instance=ExtResource("21_loft_coffee_table")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.6, 0, 2.83)
 metadata/layout_revision = "v021_loft_layout_adjustment_001"
 metadata/layout_note = "Moved south-west to the clear floor space below the loft rug."
 
-[node name="42_双屏电脑完整工位_资产包" parent="." instance=ExtResource("22_loft_computer_workstation")]
+[node name="42_双屏电脑完整工位_资产包" parent="." unique_id=1629233796 instance=ExtResource("22_loft_computer_workstation")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6175, 7.56, -13.6025)
 
-[node name="47_FOOD模块收纳箱_资产包" parent="." instance=ExtResource("23_loft_food_cabinet")]
+[node name="47_FOOD模块收纳箱_资产包" parent="." unique_id=1511956915 instance=ExtResource("23_loft_food_cabinet")]
 
-[node name="50_二楼分层照明支持_资产包" parent="." instance=ExtResource("24_loft_lighting_support")]
+[node name="50_二楼分层照明支持_资产包" parent="." unique_id=1798607906 instance=ExtResource("24_loft_lighting_support")]
 
-[node name="38_休闲区低饱和地毯_资产包" parent="." instance=ExtResource("25_loft_lounge_rug")]
+[node name="38_休闲区低饱和地毯_资产包" parent="." unique_id=233689604 instance=ExtResource("25_loft_lounge_rug")]
 
-[node name="36_墨绿三人休闲沙发_资产包" parent="." instance=ExtResource("26_loft_lounge_sofa")]
+[node name="36_墨绿三人休闲沙发_资产包" parent="." unique_id=564593911 instance=ExtResource("26_loft_lounge_sofa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.25, 7.005823, -12.08931)
 
-[node name="45_MEDICAL模块收纳箱_资产包" parent="." instance=ExtResource("27_loft_medical_cabinet")]
+[node name="45_MEDICAL模块收纳箱_资产包" parent="." unique_id=441985452 instance=ExtResource("27_loft_medical_cabinet")]
 
-[node name="32_参考床头柜与生活物件_资产包" parent="." instance=ExtResource("28_loft_nightstand")]
-position = Vector3(7.62, 0, -10.435)
-rotation = Vector3(0, 1.5707963, 0)
+[node name="32_参考床头柜与生活物件_资产包" parent="." unique_id=1025383540 instance=ExtResource("28_loft_nightstand")]
+transform = Transform3D(7.54979e-08, 0, 1, 0, 1, 0, -1, 0, 7.54979e-08, 7.62, 0, -10.435)
 metadata/layout_revision = "v021_loft_layout_adjustment_001"
 metadata/layout_note = "Counter-clockwise 90 degrees about original package center; drawers face the south railing."
 
-[node name="43_带扶手办公椅_资产包" parent="." instance=ExtResource("29_loft_office_chair")]
+[node name="43_带扶手办公椅_资产包" parent="." unique_id=252210050 instance=ExtResource("29_loft_office_chair")]
 
-[node name="39_青绿圆形坐墩01_资产包" parent="." instance=ExtResource("30_loft_pouf_01")]
+[node name="39_青绿圆形坐墩01_资产包" parent="." unique_id=2112828412 instance=ExtResource("30_loft_pouf_01")]
 
-[node name="40_深绿圆形坐墩02_资产包" parent="." instance=ExtResource("31_loft_pouf_02")]
+[node name="40_深绿圆形坐墩02_资产包" parent="." unique_id=1773137458 instance=ExtResource("31_loft_pouf_02")]
 
-[node name="41_床前辅助小桌_资产包" parent="." instance=ExtResource("32_loft_side_table")]
+[node name="41_床前辅助小桌_资产包" parent="." unique_id=1474554021 instance=ExtResource("32_loft_side_table")]
 
-[node name="35_红紫条纹隔断帘_资产包" parent="." instance=ExtResource("33_loft_striped_privacy_curtain")]
+[node name="35_红紫条纹隔断帘_资产包" parent="." unique_id=106463020 instance=ExtResource("33_loft_striped_privacy_curtain")]
 
-[node name="43_主门下方低矮设备柜_资产包" parent="." instance=ExtResource("34_main_door_low_storage_cabinet")]
+[node name="43_主门下方低矮设备柜_资产包" parent="." unique_id=285188677 instance=ExtResource("34_main_door_low_storage_cabinet")]
 
-[node name="45_MEDICAL医疗柜_资产包" parent="." instance=ExtResource("35_medical_cabinet")]
+[node name="45_MEDICAL医疗柜_资产包" parent="." unique_id=588797042 instance=ExtResource("35_medical_cabinet")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.65, 1.685, -4.425)
 
-[node name="47_窄型电池柜_资产包" parent="." instance=ExtResource("36_narrow_battery_cabinet")]
+[node name="47_窄型电池柜_资产包" parent="." unique_id=218038922 instance=ExtResource("36_narrow_battery_cabinet")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.85, 1.63, -4.425)
 
-[node name="48_窄型应急柜_资产包" parent="." instance=ExtResource("37_narrow_emergency_cabinet")]
+[node name="48_窄型应急柜_资产包" parent="." unique_id=1065695322 instance=ExtResource("37_narrow_emergency_cabinet")]
 
-[node name="46_TOOLS工具柜_资产包" parent="." instance=ExtResource("38_tools_cabinet")]
+[node name="46_TOOLS工具柜_资产包" parent="." unique_id=1900452833 instance=ExtResource("38_tools_cabinet")]
 
-[node name="59_梯下立式设备柜_资产包" parent="." instance=ExtResource("39_understair_equipment_cabinet")]
+[node name="59_梯下立式设备柜_资产包" parent="." unique_id=549197209 instance=ExtResource("39_understair_equipment_cabinet")]
 
-[node name="57_梯下绿色软垫长凳_资产包" parent="." instance=ExtResource("40_understair_green_bench")]
+[node name="57_梯下绿色软垫长凳_资产包" parent="." unique_id=1164053235 instance=ExtResource("40_understair_green_bench")]
 
-[node name="60_梯下层架与收纳_资产包" parent="." instance=ExtResource("41_understair_storage_shelf")]
+[node name="60_梯下层架与收纳_资产包" parent="." unique_id=1704496657 instance=ExtResource("41_understair_storage_shelf")]
 
-[node name="场景特效_光束尘埃粒子" parent="." instance=ExtResource("42_volumetric_dust_fx")]
+[node name="场景特效_光束尘埃粒子" parent="." unique_id=1258450276 instance=ExtResource("42_volumetric_dust_fx")]
 
-[node name="61_仓库防爆吊灯组_资产包" parent="." instance=ExtResource("43_warehouse_pendant_light_group")]
+[node name="61_仓库防爆吊灯组_资产包" parent="." unique_id=1615478383 instance=ExtResource("43_warehouse_pendant_light_group")]
 
-[node name="57_净水器_资产包" parent="." instance=ExtResource("44_water_purifier")]
+[node name="57_净水器_资产包" parent="." unique_id=1063207972 instance=ExtResource("44_water_purifier")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.08383751, 0, -1.1006985)
 
-[node name="49_武器工作台与弹药附件_资产包" parent="." instance=ExtResource("45_weapon_workshop_station")]
+[node name="49_武器工作台与弹药附件_资产包" parent="." unique_id=1723165763 instance=ExtResource("45_weapon_workshop_station")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.838449, 1.4387904, 5.358942)
 
-[node name="42_BASE_CAMP大型卷帘主门_资产包" parent="." instance=ExtResource("46_rollup")]
+[node name="42_BASE_CAMP大型卷帘主门_资产包" parent="." unique_id=1237517249 instance=ExtResource("46_rollup")]

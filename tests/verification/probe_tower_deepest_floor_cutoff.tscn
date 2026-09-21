@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/probe_tower_deepest_floor_cutoff.gd" id="1_probe"]
+
+[node name="ProbeTowerDeepestFloorCutoff" type="Node"]
+script = ExtResource("1_probe")

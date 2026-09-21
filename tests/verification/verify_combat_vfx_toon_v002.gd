@@ -8,12 +8,15 @@ extends Node
 const MUZZLE_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_muzzle_flash_root_top3d.tscn")
 const IMPACT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_impact_root_top3d.tscn")
 const BULLET_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_bullet_visual_root_top3d.tscn")
+const SHELL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_shell_casing_root_top3d.tscn")
 
 const MUZZLE_ASSET_ID := "VFX-MUZZLE-FLASH-3D"
 const IMPACT_ASSET_ID := "VFX-IMPACT-3D"
 const BULLET_ASSET_ID := "VFX-BULLET-VISUAL-3D"
+const SHELL_ASSET_ID := "VFX-SHELL-CASING-3D"
 const EXPECTED_VERSION := "v002"
-const MIN_SAMPLES := 9
+const SHELL_VERSION := "v001"
+const MIN_SAMPLES := 12
 
 var _failures: Array[String] = []
 var _samples := 0
@@ -26,6 +29,7 @@ func _ready() -> void:
 	_check_muzzle_caller_wiring()
 	_check_impact()
 	_check_bullet()
+	_check_shell_casing()
 	_check_collision_free()
 	_report()
 
@@ -241,11 +245,58 @@ func _check_bullet() -> void:
 	bullet.free()
 
 
+func _check_shell_casing() -> void:
+	var shell := SHELL_SCENE.instantiate() as VfxShellCasing3D
+	if shell == null:
+		_failures.append("弹壳 Prefab 根节点不是 VfxShellCasing3D")
+		return
+	add_child(shell)
+	var spawn := Vector3(2.0, 1.2, -1.0)
+	shell.activate(spawn, Color(0.92, 0.56, 0.16), 1.0, {
+		"velocity": Vector3(1.8, 1.6, 0.0),
+		"spin_axis": Vector3(0.7, 1.0, 0.0),
+		"spin_speed": 18.0,
+		"floor_y": 0.0,
+	})
+	_samples += 1
+	var snapshot: Dictionary = shell.call("get_presentation_snapshot")
+	_expect(String(snapshot.get("asset_id", "")) == SHELL_ASSET_ID,
+		"弹壳 AssetID 不正确：%s" % snapshot.get("asset_id", ""))
+	_expect(String(snapshot.get("asset_version", "")) == SHELL_VERSION,
+		"弹壳版本不是 %s：%s" % [SHELL_VERSION, snapshot.get("asset_version", "")])
+	_expect(bool(snapshot.get("body_mesh", false)) and bool(snapshot.get("rim_mesh", false)),
+		"弹壳主体/底缘 mesh 未构建")
+	_expect(float(snapshot.get("gravity", 0.0)) > 9.0,
+		"弹壳未使用真实重力：%.2f" % float(snapshot.get("gravity", 0.0)))
+	_expect(int(snapshot.get("max_bounces", 0)) == 2,
+		"弹壳最大弹跳次数应为 2：%d" % int(snapshot.get("max_bounces", 0)))
+	var y_before := shell.global_position.y
+	shell.call("_on_tick", 0.10, shell.lifetime)
+	var y_after := shell.global_position.y
+	_expect(y_after > 0.0 and y_after != y_before, "弹壳未开始飞行：%.3f -> %.3f" % [y_before, y_after])
+	for index in range(1, 24):
+		shell.call("_on_tick", 0.10 + float(index) * 0.08, shell.lifetime)
+	_expect(shell.global_position.x > spawn.x, "弹壳未向枪械右侧飞出：x=%.3f" % shell.global_position.x)
+	_expect(shell.global_position.y >= -0.001, "弹壳穿过地板：y=%.3f" % shell.global_position.y)
+	_expect(int((shell.call("get_presentation_snapshot") as Dictionary).get("bounce_count", 0)) <= 2,
+		"弹壳超过最大弹跳次数")
+	# 反向对照：无水平初速度的弹壳不能满足"已向右飞出"判据。
+	var stationary := SHELL_SCENE.instantiate() as VfxShellCasing3D
+	add_child(stationary)
+	stationary.activate(spawn, Color.WHITE, 1.0, {"velocity": Vector3(0.0, 1.6, 0.0), "floor_y": 0.0})
+	stationary.call("_on_tick", 0.10, stationary.lifetime)
+	_expect(stationary.global_position.x <= spawn.x + 0.001,
+		"反向对照失效：零水平初速度也向右飞出")
+	stationary.free()
+	shell.free()
+
+
 func _check_collision_free() -> void:
 	var cases := [
 		["枪口花火", MUZZLE_SCENE, {"forward": Vector3.FORWARD}],
 		["命中爆点", IMPACT_SCENE, {"normal": Vector3.UP}],
 		["飞行子弹", BULLET_SCENE, {}],
+		["弹壳", SHELL_SCENE, {"floor_y": 0.0}],
 	]
 	for entry in cases:
 		var label := String(entry[0])
@@ -313,6 +364,21 @@ func _check_muzzle_caller_wiring() -> void:
 		% [WeaponModel3D.MUZZLE_FLASH_EFFECT_SIZE, effect.effect_size])
 	_expect(absf(WeaponModel3D.MUZZLE_FLASH_EFFECT_SIZE - 0.8) < 0.0001,
 		"枪口花火尺寸基准不是业主定档的 80%%：%.2f" % WeaponModel3D.MUZZLE_FLASH_EFFECT_SIZE)
+
+	# 真开火调用方还必须生成一枚弹壳，且从枪械右侧获得初速度。
+	var shell_before := pool.active_count(VfxPool3D.FX01_SHELL_CASING)
+	weapon.call("_spawn_shell_casing", self)
+	var shell_bucket: Array = pool._active.get(VfxPool3D.FX01_SHELL_CASING, [])
+	_samples += 1
+	_expect(shell_bucket.size() == shell_before + 1,
+		"调用方接线：开火未生成弹壳（%d -> %d）" % [shell_before, shell_bucket.size()])
+	if not shell_bucket.is_empty():
+		var shell := shell_bucket.back() as VfxShellCasing3D
+		var shell_velocity: Vector3 = (shell.call("get_presentation_snapshot") as Dictionary).get("velocity", Vector3.ZERO)
+		var right_velocity := shell_velocity.dot(weapon.global_basis.x)
+		_expect(right_velocity > 1.0,
+			"调用方接线：弹壳未从枪械右侧抛出，右向速度 %.3f" % right_velocity)
+		shell.call("_retire")
 
 	# 角色走动（武器跟着平移）⇒ 特效必须仍旧贴着 muzzle 挂点
 	weapon.global_position += Vector3(0.0, 0.0, -6.0)

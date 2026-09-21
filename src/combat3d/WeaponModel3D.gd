@@ -16,6 +16,8 @@ const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_co
 ## 口径：effect_size 线性作用于特效视觉体积，并同时线性作用于 MuzzleLight 范围（3.5m → 2.8m）；
 ## 灯能量为固定常量，不随尺寸缩放。
 const MUZZLE_FLASH_EFFECT_SIZE := 0.8
+const SHELL_CASING_SIZE := 1.0
+const SHELL_CASING_COLOR := Color(0.92, 0.56, 0.16)
 const MELEE_VISUAL_SCENES := {
 	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
 	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
@@ -100,6 +102,7 @@ var _charge_aim := Vector3.FORWARD
 var _charge_shooter: Node3D
 var _visual_root: Node3D
 var _muzzle: Marker3D
+var _ejection: Marker3D
 var _fate_visual_multiplier := DEFAULT_FATE_VISUAL_MULTIPLIER
 
 const GUN_NAME_TO_ID := {
@@ -326,6 +329,7 @@ func clear_weapon() -> void:
 		_visual_root.queue_free()
 		_visual_root = null
 	_muzzle = null
+	_ejection = null
 	_source_tree = null
 	_projectile_behavior.clear()
 	_secondary_guns.clear()
@@ -447,6 +451,7 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			behavior,
 		)
 	_spawn_muzzle_effect(world)
+	_spawn_shell_casing(world)
 	if AudioManager != null:
 		AudioManager.play_fire_sfx(fire_rate, emitted_count)
 	if MonsterAIManager != null:
@@ -754,6 +759,7 @@ func _rebuild_visual() -> void:
 			if melee_visual.has_method("configure"):
 				melee_visual.call("configure", render_layers)
 		_muzzle = null
+		_ejection = null
 		return
 	var profile: Dictionary = GUN_PROFILES.get(gun_id, GUN_PROFILES["bp_pistol"])
 	var length := float(profile["length"])
@@ -770,6 +776,9 @@ func _rebuild_visual() -> void:
 		_visual_root.add_child(imported_asset)
 		_apply_render_layers_recursive(imported_asset)
 		_muzzle = imported_asset.get_node_or_null("MuzzleSocket") as Marker3D
+		_ejection = imported_asset.get_node_or_null("EjectionSocket") as Marker3D
+		if _ejection == null:
+			_ejection = imported_asset.get_node_or_null("TacticalSocket") as Marker3D
 		_add_imported_attachment_visuals(imported_asset, accent_material)
 		return
 	_add_box("Receiver", Vector3(0, 0, -length * 0.42), Vector3(width, height, length), body_material)
@@ -813,6 +822,10 @@ func _rebuild_visual() -> void:
 	_muzzle.name = "Muzzle"
 	_muzzle.position = Vector3(0, 0, -length - barrel)
 	_visual_root.add_child(_muzzle)
+	_ejection = Marker3D.new()
+	_ejection.name = "EjectionSocket"
+	_ejection.position = Vector3(width * 0.62, height * 0.20, -length * 0.42)
+	_visual_root.add_child(_ejection)
 
 
 func _apply_render_layers_recursive(root: Node) -> void:
@@ -878,6 +891,32 @@ func _spawn_muzzle_effect(world: Node) -> void:
 	effect.configure("muzzle", bullet_color, MUZZLE_FLASH_EFFECT_SIZE)
 	world.add_child(effect)
 	effect.global_position = muzzle_world
+
+
+func _spawn_shell_casing(world: Node) -> void:
+	if _ejection == null or is_melee_weapon():
+		return
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if vfx_pools.is_empty() or not (vfx_pools[0] is VfxPool3D):
+		return
+	# 抛壳方向：枪械右侧 + 少量抬升 + 少量枪口前向；不绑定 follow，生成后进入世界空间弹道。
+	var right := global_basis.x.normalized()
+	var up := global_basis.y.normalized()
+	var forward := (-global_basis.z).normalized()
+	var ejection_velocity := right * 2.1 + up * 1.55 + forward * 0.22
+	(vfx_pools[0] as VfxPool3D).acquire(
+		VfxPool3D.FX01_SHELL_CASING,
+		_ejection.global_position,
+		SHELL_CASING_COLOR,
+		SHELL_CASING_SIZE,
+		{
+			"velocity": ejection_velocity,
+			"spin_axis": (right + up * 0.35).normalized(),
+			"spin_speed": 20.0,
+			"floor_y": 0.0,
+			"world_root": world,
+		}
+	)
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:

@@ -50,7 +50,28 @@ const STAIR_ROOFTOP_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/runtime/env_tower_stairwell_rooftop_12m/env_tower_stairwell_rooftop_12m_root_top3d.tscn"
 )
 const COMBAT_FLOOR_COUNT := 4
-const DEEPEST_PLANNED_FLOOR := 85
+## 可玩最深层的**楼层号**（不是 floor_index）。收缩/恢复塔楼深度改这一个数字。
+##
+## 消费点全项目只有一个：`_regenerate_floor_plans_for_current_seed()` 里的
+## `range(98, DEEPEST_PLANNED_FLOOR - 1, -1)`。被排除的层不生成 plan ⇒
+## `_floor_room_ids` 没有它 ⇒ `_build_floor_stages()` 不建 stage；而
+## `_commit_floor_bundle()` 里 `next_plan` 为空会整个跳过 `_append_next_arrival_shell()`，
+## 于是 `exit → 下层` 那条 `"vertical"` 边**根本不声明** —— 下行门是**不存在**，不是锁着。
+## 所以收缩深度不需要额外封门，改回数字即完全恢复。
+##
+## 2026-09-21 主人要求「把 97F 及以下的关卡先关闭」⇒ 本值由 85 收到 98（只留 98F）。
+## 依据：白盒设计源 `battle_level01/legacy/v011/data/whitebox_battle_98_95_v011.json`
+## 写死 `floorRange: "98F-95F"` / `designScope: "Blocks/Battle; Floor_98-Floor_95"`，
+## 且 `v004/data/floors/` 只有 `floor_98.json` —— 94F~85F 从无设计源，是程序化空壳。
+##
+## ⚠️ 两条硬约束（改本值前必读）：
+##   1. **撤离信标只长在 boss 层**（层号 %5 == 0 ⇒ 95/90/85F）的 boss 房上，见
+##      `_commit_floor_bundle()` 的 `plan.boss_floor` 分支；普通层一个都没有。
+##      若把终止层设到非 boss 层，塔内将没有任何撤离信标 —— 回基地只能靠
+##      98↔99 楼梯间那扇普通门（`INITIAL_LOOP_GATE_SEAL_ENABLED = false`）。
+##   2. **存档**：`_restore_runtime_world_save_snapshot()` 按 `committed_floor_indices`
+##      逐层比对 `floor_layout_ids`，旧档若已提交过被砍掉的层会整档恢复失败。
+const DEEPEST_PLANNED_FLOOR := 98
 const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
 ## 非行动下线时的固定重生点。数值使用世界坐标，集中在这里供场景微调。
 ## 100F保留原天台入口右上侧的安全落点；99F为基地房间中心。
@@ -1720,6 +1741,9 @@ func _regenerate_floor_plans_for_current_seed() -> void:
 					"expedition plan generator: %s" % str(error_value)
 				)
 		return
+	# `deepest_displayed` 是 range 的**排他上界**（不是最深层号）：值为 97 时循环只产出
+	# [98]（只留 98F），值为 84 时产出 [98..85]（原口径）。深度唯一由
+	# `DEEPEST_PLANNED_FLOOR` 决定，改那一个常量即可。
 	var deepest_displayed := DEEPEST_PLANNED_FLOOR - 1
 	for displayed_floor_number in range(98, deepest_displayed, -1):
 		var sequence_index := 99 - displayed_floor_number

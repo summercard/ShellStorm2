@@ -1,0 +1,2688 @@
+{
+ "record_id": "ENV-BASE99-REMAINING-FACILITIES-V021::placement_authority",
+ "asset_id": "ENV-BASE99-REMAINING-FACILITIES-V021",
+ "asset_version": "v021",
+ "authority": "runtime .tscn 手工摆位为布局真源；本文件是它的机器可读固化。不写回 Blender。",
+ "reason": "该 .tscn 被所有重生成通道覆盖，而反向固化通道不含这 45 个包 ⇒ 手改会静默丢失。",
+ "revision": {
+  "date": "2026-09-21",
+  "author": "业主（编辑器内手工调整）",
+  "recorded_by": "摩斯拉"
+ },
+ "scene_file": "assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/env_base99_remaining_facilities_root_top3d.tscn",
+ "scene_sha256": "d153967cd3c333b46dc8fbf2c89b73ffb095a834be12a7daf774fef0418af1a7",
+ "scene_sha256_at_head": "e85078895ef0cb4b52dcff4ebdb5891972fd974af90ab9e094df1f88bdda83ab",
+ "scene_node_line_count": 55,
+ "probe_log": "I:\\工作项目\\shellstrom2\\_scratch\\base99_placement_FROZEN.txt",
+ "coordinate_convention": {
+  "godot_to_blender": "bx = gx ; by = -gz ; bz = gy",
+  "blender_to_godot": "gx = bx ; gy = bz ; gz = -by",
+  "yaw": "Godot 绕 +Y 的偏航角 ≡ Blender 绕 +Z 的同值欧拉角（本批仅偏航、无缩放）"
+ },
+ "totals": {
+  "top_level_nodes": 45,
+  "identity": 24,
+  "new_override": 19,
+  "edited_existing": 0,
+  "unchanged_serialization_only": 2,
+  "override_removed": 0,
+  "moved_in_this_revision": 15,
+  "noop_override": 4,
+  "extra_nested_instances": 9
+ },
+ "nested_instances": [
+  {
+   "node_name": "58_空气压缩机_资产包",
+   "extra_instance_count": 1,
+   "original_center_godot": [
+    -6.1148,
+    0.9656,
+    11.2069
+   ],
+   "extra_instances": [
+    {
+     "node_name": "58_空气压缩机_资产包",
+     "nest_depth": 1,
+     "dup_local_godot": [
+      2.0571,
+      0.0,
+      -0.0473
+     ],
+     "world_origin_godot": [
+      2.5923,
+      0.0,
+      -2.2404
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -4.0577,
+      0.9656,
+      11.1596
+     ],
+     "world_size_godot": [
+      2.05,
+      1.6678,
+      1.3
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -4.0577,
+      0.9656,
+      11.1596
+     ],
+     "subtree_size_godot": [
+      2.05,
+      1.6678,
+      1.3
+     ],
+     "world_center_blender": [
+      -4.0577,
+      -11.1596,
+      0.9656
+     ],
+     "world_origin_blender": [
+      2.5923,
+      2.2404,
+      0.0
+     ]
+    }
+   ]
+  },
+  {
+   "node_name": "54_蓄电池组_资产包",
+   "extra_instance_count": 2,
+   "original_center_godot": [
+    -2.1739,
+    0.6643,
+    12.0237
+   ],
+   "extra_instances": [
+    {
+     "node_name": "54_蓄电池组_资产包",
+     "nest_depth": 1,
+     "dup_local_godot": [
+      4.8113,
+      0.0,
+      26.1809
+     ],
+     "world_origin_godot": [
+      -14.0568,
+      0.0,
+      23.074
+     ],
+     "yaw_deg": 97.716,
+     "world_center_godot": [
+      0.0133,
+      0.6643,
+      12.3553
+     ],
+     "world_size_godot": [
+      2.491,
+      1.0164,
+      1.6433
+     ],
+     "mesh_count": 2,
+     "subtree_center_godot": [
+      -5.9437,
+      2.3585,
+      12.9533
+     ],
+     "subtree_size_godot": [
+      14.405,
+      4.4049,
+      2.8394
+     ],
+     "world_center_blender": [
+      0.0133,
+      -12.3553,
+      0.6643
+     ],
+     "world_origin_blender": [
+      -14.0568,
+      -23.074,
+      0.0
+     ]
+    },
+    {
+     "node_name": "54_蓄电池组_资产包",
+     "nest_depth": 2,
+     "dup_local_godot": [
+      25.57,
+      3.3885,
+      8.3729
+     ],
+     "world_origin_godot": [
+      -1.5811,
+      3.3885,
+      -0.7646
+     ],
+     "yaw_deg": -163.059,
+     "world_center_godot": [
+      -11.9173,
+      4.0528,
+      13.5889
+     ],
+     "world_size_godot": [
+      2.4579,
+      1.0164,
+      1.5683
+     ],
+     "mesh_count": 2,
+     "subtree_center_godot": [
+      -11.9173,
+      4.0528,
+      13.5889
+     ],
+     "subtree_size_godot": [
+      2.4579,
+      1.0164,
+      1.5683
+     ],
+     "world_center_blender": [
+      -11.9173,
+      -13.5889,
+      4.0528
+     ],
+     "world_origin_blender": [
+      -1.5811,
+      0.7646,
+      3.3885
+     ]
+    }
+   ]
+  },
+  {
+   "node_name": "80_低矮储物收纳区_资产包",
+   "extra_instance_count": 1,
+   "original_center_godot": [
+    2.3138,
+    0.9655,
+    11.1988
+   ],
+   "extra_instances": [
+    {
+     "node_name": "80_低矮储物收纳区_资产包",
+     "nest_depth": 1,
+     "dup_local_godot": [
+      8.183,
+      0.0,
+      26.0482
+     ],
+     "world_origin_godot": [
+      -0.3532,
+      0.0,
+      23.2733
+     ],
+     "yaw_deg": 90.04,
+     "world_center_godot": [
+      13.613,
+      0.9655,
+      12.4136
+     ],
+     "world_size_godot": [
+      1.2246,
+      1.761,
+      3.0409
+     ],
+     "mesh_count": 2,
+     "subtree_center_godot": [
+      13.613,
+      0.9655,
+      12.4136
+     ],
+     "subtree_size_godot": [
+      1.2246,
+      1.761,
+      3.0409
+     ],
+     "world_center_blender": [
+      13.613,
+      -12.4136,
+      0.9655
+     ],
+     "world_origin_blender": [
+      -0.3532,
+      -23.2733,
+      0.0
+     ]
+    }
+   ]
+  },
+  {
+   "node_name": "56_工业水箱_资产包",
+   "extra_instance_count": 5,
+   "original_center_godot": [
+    -13.7928,
+    1.2963,
+    11.183
+   ],
+   "extra_instances": [
+    {
+     "node_name": "56_工业水箱_资产包",
+     "nest_depth": 1,
+     "dup_local_godot": [
+      0.093,
+      0.0,
+      2.3636
+     ],
+     "world_origin_godot": [
+      -0.5498,
+      0.0,
+      5.8467
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -13.6998,
+      1.2963,
+      13.5466
+     ],
+     "world_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -9.1104,
+      1.2963,
+      13.5569
+     ],
+     "subtree_size_godot": [
+      11.1669,
+      2.2325,
+      2.0083
+     ],
+     "world_center_blender": [
+      -13.6998,
+      -13.5466,
+      1.2963
+     ],
+     "world_origin_blender": [
+      -0.5498,
+      -5.8467,
+      0.0
+     ]
+    },
+    {
+     "node_name": "56_工业水箱_资产包",
+     "nest_depth": 2,
+     "dup_local_godot": [
+      2.2947,
+      0.0,
+      0.0051
+     ],
+     "world_origin_godot": [
+      1.7449,
+      0.0,
+      5.8518
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -11.4051,
+      1.2963,
+      13.5517
+     ],
+     "world_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -7.963,
+      1.2963,
+      13.5594
+     ],
+     "subtree_size_godot": [
+      8.8721,
+      2.2325,
+      2.0032
+     ],
+     "world_center_blender": [
+      -11.4051,
+      -13.5517,
+      1.2963
+     ],
+     "world_origin_blender": [
+      1.7449,
+      -5.8518,
+      0.0
+     ]
+    },
+    {
+     "node_name": "56_工业水箱_资产包",
+     "nest_depth": 3,
+     "dup_local_godot": [
+      2.2947,
+      0.0,
+      0.0051
+     ],
+     "world_origin_godot": [
+      4.0396,
+      0.0,
+      5.857
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -9.1104,
+      1.2963,
+      13.5569
+     ],
+     "world_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -6.8157,
+      1.2963,
+      13.562
+     ],
+     "subtree_size_godot": [
+      6.5774,
+      2.2325,
+      1.998
+     ],
+     "world_center_blender": [
+      -9.1104,
+      -13.5569,
+      1.2963
+     ],
+     "world_origin_blender": [
+      4.0396,
+      -5.857,
+      0.0
+     ]
+    },
+    {
+     "node_name": "56_工业水箱_资产包",
+     "nest_depth": 4,
+     "dup_local_godot": [
+      2.2947,
+      0.0,
+      0.0051
+     ],
+     "world_origin_godot": [
+      6.3343,
+      0.0,
+      5.8621
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -6.8157,
+      1.2963,
+      13.562
+     ],
+     "world_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -5.6683,
+      1.2963,
+      13.5646
+     ],
+     "subtree_size_godot": [
+      4.2827,
+      2.2325,
+      1.9929
+     ],
+     "world_center_blender": [
+      -6.8157,
+      -13.562,
+      1.2963
+     ],
+     "world_origin_blender": [
+      6.3343,
+      -5.8621,
+      0.0
+     ]
+    },
+    {
+     "node_name": "56_工业水箱_资产包",
+     "nest_depth": 5,
+     "dup_local_godot": [
+      2.2947,
+      0.0,
+      0.0051
+     ],
+     "world_origin_godot": [
+      8.6291,
+      0.0,
+      5.8672
+     ],
+     "yaw_deg": 0.0,
+     "world_center_godot": [
+      -4.5209,
+      1.2963,
+      13.5671
+     ],
+     "world_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "mesh_count": 1,
+     "subtree_center_godot": [
+      -4.5209,
+      1.2963,
+      13.5671
+     ],
+     "subtree_size_godot": [
+      1.988,
+      2.2325,
+      1.9878
+     ],
+     "world_center_blender": [
+      -4.5209,
+      -13.5671,
+      1.2963
+     ],
+     "world_origin_blender": [
+      8.6291,
+      -5.8672,
+      0.0
+     ]
+    }
+   ]
+  }
+ ],
+ "items": [
+  {
+   "index": 1,
+   "node_name": "58_空气压缩机_资产包",
+   "package_slug": "air_compressor",
+   "bpk_asset_id": "BPK-BASE99-AIR-COMPRESSOR",
+   "blender_source_collection": "58_空气压缩机_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/air_compressor/air_compressor_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.53520775,
+    0.0,
+    -2.1931496
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.53520775,
+    0.0,
+    -2.1931496
+   ],
+   "delta_blender": [
+    0.53520775,
+    2.1931496,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.53520775,
+    0.0,
+    -2.1931496
+   ],
+   "revision_delta_blender": [
+    0.53520775,
+    2.1931496,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -6.1148,
+    0.9656,
+    11.2069
+   ],
+   "envelope_size_godot": [
+    2.05,
+    1.6678,
+    1.3
+   ],
+   "envelope_center_blender": [
+    -6.1148,
+    -11.2069,
+    0.9656
+   ],
+   "mesh_count": 2,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 2,
+   "node_name": "53_备用发电机_资产包",
+   "package_slug": "backup_generator",
+   "bpk_asset_id": "BPK-BASE99-BACKUP-GENERATOR",
+   "blender_source_collection": "53_备用发电机_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/backup_generator/backup_generator_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    -1.6020513
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.0,
+    0.0,
+    -1.6020513
+   ],
+   "delta_blender": [
+    0.0,
+    1.6020513,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    -1.6020513
+   ],
+   "revision_delta_blender": [
+    0.0,
+    1.6020513,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    13.1927,
+    0.9924,
+    7.4979
+   ],
+   "envelope_size_godot": [
+    2.2645,
+    1.7355,
+    3.1
+   ],
+   "envelope_center_blender": [
+    13.1927,
+    -7.4979,
+    0.9924
+   ],
+   "mesh_count": 2,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 3,
+   "node_name": "54_蓄电池组_资产包",
+   "package_slug": "battery_bank",
+   "bpk_asset_id": "BPK-BASE99-BATTERY-BANK",
+   "blender_source_collection": "54_蓄电池组_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/battery_bank/battery_bank_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -10.906509,
+    0.0,
+    -3.3581724
+   ],
+   "scene_node_yaw_deg": -17.210000402400706,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -10.906509,
+    0.0,
+    -3.3581724
+   ],
+   "delta_blender": [
+    -10.906509,
+    3.3581724,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -10.906509,
+    0.0,
+    -3.3581724
+   ],
+   "revision_delta_blender": [
+    -10.906509,
+    3.3581724,
+    0.0
+   ],
+   "delta_yaw_deg": -17.210000402400706,
+   "envelope_center_godot": [
+    -2.1739,
+    0.6643,
+    12.0237
+   ],
+   "envelope_size_godot": [
+    1.9062,
+    1.0164,
+    2.5867
+   ],
+   "envelope_center_blender": [
+    -2.1739,
+    -12.0237,
+    0.6643
+   ],
+   "mesh_count": 6,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 4,
+   "node_name": "62_主通道应急灯组_资产包",
+   "package_slug": "corridor_emergency_light_group",
+   "bpk_asset_id": "BPK-BASE99-CORRIDOR-EMERGENCY-LIGHT-GROUP",
+   "blender_source_collection": "62_主通道应急灯组_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/corridor_emergency_light_group/corridor_emergency_light_group_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -0.01,
+    2.2066,
+    0.0
+   ],
+   "envelope_size_godot": [
+    29.44,
+    0.3068,
+    0.75
+   ],
+   "envelope_center_blender": [
+    -0.01,
+    -0.0,
+    2.2066
+   ],
+   "mesh_count": 2,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 5,
+   "node_name": "76_FLAMMABLE可燃垃圾设施_资产包",
+   "package_slug": "east_flammable_bin",
+   "bpk_asset_id": "BPK-BASE99-EAST-FLAMMABLE-BIN",
+   "blender_source_collection": "76_FLAMMABLE可燃垃圾设施_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_flammable_bin/east_flammable_bin_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.52330494,
+    0.0,
+    1.4593639
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.52330494,
+    0.0,
+    1.4593639
+   ],
+   "delta_blender": [
+    0.52330494,
+    -1.4593639,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.52330494,
+    0.0,
+    1.4593639
+   ],
+   "revision_delta_blender": [
+    0.52330494,
+    -1.4593639,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    11.2224,
+    0.7345,
+    8.1094
+   ],
+   "envelope_size_godot": [
+    1.2904,
+    1.4509,
+    1.1
+   ],
+   "envelope_center_blender": [
+    11.2224,
+    -8.1094,
+    0.7345
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 6,
+   "node_name": "80_低矮储物收纳区_资产包",
+   "package_slug": "east_low_storage_bench",
+   "bpk_asset_id": "BPK-BASE99-EAST-LOW-STORAGE-BENCH",
+   "blender_source_collection": "80_低矮储物收纳区_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_low_storage_bench/east_low_storage_bench_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -8.536213,
+    0.0,
+    -2.774907
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -8.536213,
+    0.0,
+    -2.774907
+   ],
+   "delta_blender": [
+    -8.536213,
+    2.774907,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -8.536213,
+    0.0,
+    -2.774907
+   ],
+   "revision_delta_blender": [
+    -8.536213,
+    2.774907,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    2.3138,
+    0.9655,
+    11.1988
+   ],
+   "envelope_size_godot": [
+    3.04,
+    1.761,
+    1.2225
+   ],
+   "envelope_center_blender": [
+    2.3138,
+    -11.1988,
+    0.9655
+   ],
+   "mesh_count": 4,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 7,
+   "node_name": "78_维修工作台与工具墙_资产包",
+   "package_slug": "east_maintenance_workstation",
+   "bpk_asset_id": "BPK-BASE99-EAST-MAINTENANCE-WORKSTATION",
+   "blender_source_collection": "78_维修工作台与工具墙_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_maintenance_workstation/east_maintenance_workstation_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.48287868,
+    0.0,
+    -2.458613
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.48287868,
+    0.0,
+    -2.458613
+   ],
+   "delta_blender": [
+    0.48287868,
+    2.458613,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.48287868,
+    0.0,
+    -2.458613
+   ],
+   "revision_delta_blender": [
+    0.48287868,
+    2.458613,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    6.6829,
+    2.145,
+    11.1989
+   ],
+   "envelope_size_godot": [
+    5.0,
+    4.24,
+    2.285
+   ],
+   "envelope_center_blender": [
+    6.6829,
+    -11.1989,
+    2.145
+   ],
+   "mesh_count": 3,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 8,
+   "node_name": "83_东面植物点缀组_资产包",
+   "package_slug": "east_plant_group",
+   "bpk_asset_id": "BPK-BASE99-EAST-PLANT-GROUP",
+   "blender_source_collection": "83_东面植物点缀组_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_plant_group/east_plant_group_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    1.0555534,
+    0.0,
+    3.2428255
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    1.0555534,
+    0.0,
+    3.2428255
+   ],
+   "delta_blender": [
+    1.0555534,
+    -3.2428255,
+    0.0
+   ],
+   "revision_delta_godot": [
+    1.0555534,
+    0.0,
+    3.2428255
+   ],
+   "revision_delta_blender": [
+    1.0555534,
+    -3.2428255,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    13.2456,
+    1.2818,
+    8.6228
+   ],
+   "envelope_size_godot": [
+    1.6548,
+    2.3436,
+    17.8542
+   ],
+   "envelope_center_blender": [
+    13.2456,
+    -8.6228,
+    1.2818
+   ],
+   "mesh_count": 3,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 9,
+   "node_name": "77_RECYCLE回收垃圾设施_资产包",
+   "package_slug": "east_recycle_bin",
+   "bpk_asset_id": "BPK-BASE99-EAST-RECYCLE-BIN",
+   "blender_source_collection": "77_RECYCLE回收垃圾设施_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_recycle_bin/east_recycle_bin_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -1.0116377,
+    0.0,
+    -0.14211226
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -1.0116377,
+    0.0,
+    -0.14211226
+   ],
+   "delta_blender": [
+    -1.0116377,
+    0.14211226,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -1.0116377,
+    0.0,
+    -0.14211226
+   ],
+   "revision_delta_blender": [
+    -1.0116377,
+    0.14211226,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    9.6874,
+    0.7345,
+    7.9579
+   ],
+   "envelope_size_godot": [
+    1.2904,
+    1.4509,
+    1.1
+   ],
+   "envelope_center_blender": [
+    9.6874,
+    -7.9579,
+    0.7345
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 10,
+   "node_name": "84_东面圆形工业吊灯_资产包",
+   "package_slug": "east_round_pendant_light",
+   "bpk_asset_id": "BPK-BASE99-EAST-ROUND-PENDANT-LIGHT",
+   "blender_source_collection": "84_东面圆形工业吊灯_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_round_pendant_light/east_round_pendant_light_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    10.0026,
+    7.6072,
+    3.396
+   ],
+   "envelope_size_godot": [
+    1.2403,
+    1.4264,
+    1.2444
+   ],
+   "envelope_center_blender": [
+    10.0026,
+    -3.396,
+    7.6072
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 11,
+   "node_name": "72_SUPPLY24H自动补给机_资产包",
+   "package_slug": "east_supply_24h_station",
+   "bpk_asset_id": "BPK-BASE99-EAST-SUPPLY-24H-STATION",
+   "blender_source_collection": "72_SUPPLY24H自动补给机_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_supply_24h_station/east_supply_24h_station_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -5.8382297,
+    0.0,
+    -7.0584545
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    13.52,
+    0.0,
+    3.45
+   ],
+   "delta_godot": [
+    -19.3582297,
+    0.0,
+    -10.5084545
+   ],
+   "delta_blender": [
+    -19.3582297,
+    10.5084545,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -19.3582297,
+    0.0,
+    -10.5084545
+   ],
+   "revision_delta_blender": [
+    -19.3582297,
+    10.5084545,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -5.9965,
+    2.3679,
+    -7.0347
+   ],
+   "envelope_size_godot": [
+    2.4765,
+    4.7041,
+    2.3275
+   ],
+   "envelope_center_blender": [
+    -5.9965,
+    7.0347,
+    2.3679
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 12,
+   "node_name": "75_WASTE普通垃圾设施_资产包",
+   "package_slug": "east_waste_bin",
+   "bpk_asset_id": "BPK-BASE99-EAST-WASTE-BIN",
+   "blender_source_collection": "75_WASTE普通垃圾设施_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/east_waste_bin/east_waste_bin_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -1.0539312,
+    0.0,
+    4.233777
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -1.0539312,
+    0.0,
+    4.233777
+   ],
+   "delta_blender": [
+    -1.0539312,
+    -4.233777,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -1.0539312,
+    0.0,
+    4.233777
+   ],
+   "revision_delta_blender": [
+    -1.0539312,
+    -4.233777,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    9.6451,
+    0.7345,
+    9.4338
+   ],
+   "envelope_size_godot": [
+    1.2904,
+    1.4509,
+    1.1
+   ],
+   "envelope_center_blender": [
+    9.6451,
+    -9.4338,
+    0.7345
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 13,
+   "node_name": "51_重型货架与补给箱_资产包",
+   "package_slug": "heavy_supply_shelf",
+   "bpk_asset_id": "BPK-BASE99-HEAVY-SUPPLY-SHELF",
+   "blender_source_collection": "51_重型货架与补给箱_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/heavy_supply_shelf/heavy_supply_shelf_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.7618065,
+    0.0,
+    -2.764369
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.7618065,
+    0.0,
+    -2.764369
+   ],
+   "delta_blender": [
+    0.7618065,
+    2.764369,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.7618065,
+    0.0,
+    -2.764369
+   ],
+   "revision_delta_blender": [
+    0.7618065,
+    2.764369,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -10.0382,
+    0.5253,
+    11.5406
+   ],
+   "envelope_size_godot": [
+    5.47,
+    0.79,
+    0.99
+   ],
+   "envelope_center_blender": [
+    -10.0382,
+    -11.5406,
+    0.5253
+   ],
+   "mesh_count": 5,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 14,
+   "node_name": "51_圆形全息设备平台_资产包",
+   "package_slug": "hologram_terminal_platform",
+   "bpk_asset_id": "BPK-BASE99-HOLOGRAM-TERMINAL-PLATFORM",
+   "blender_source_collection": "51_圆形全息设备平台_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    -0.014634132
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.0,
+    0.0,
+    -0.014634132
+   ],
+   "delta_blender": [
+    0.0,
+    0.014634132,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    -0.014634132
+   ],
+   "revision_delta_blender": [
+    0.0,
+    0.014634132,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    5.0,
+    0.9561,
+    -1.7346
+   ],
+   "envelope_size_godot": [
+    2.4087,
+    1.8175,
+    2.4087
+   ],
+   "envelope_center_blender": [
+    5.0,
+    1.7346,
+    0.9561
+   ],
+   "mesh_count": 38,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 15,
+   "node_name": "56_工业水箱_资产包",
+   "package_slug": "industrial_water_tank",
+   "bpk_asset_id": "BPK-BASE99-INDUSTRIAL-WATER-TANK",
+   "blender_source_collection": "56_工业水箱_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/industrial_water_tank/industrial_water_tank_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -0.642848,
+    0.0,
+    3.4831305
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -0.642848,
+    0.0,
+    3.4831305
+   ],
+   "delta_blender": [
+    -0.642848,
+    -3.4831305,
+    0.0
+   ],
+   "revision_delta_godot": [
+    -0.642848,
+    0.0,
+    3.4831305
+   ],
+   "revision_delta_blender": [
+    -0.642848,
+    -3.4831305,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -13.7928,
+    1.2963,
+    11.183
+   ],
+   "envelope_size_godot": [
+    1.988,
+    2.2325,
+    1.9878
+   ],
+   "envelope_center_blender": [
+    -13.7928,
+    -11.183,
+    1.2963
+   ],
+   "mesh_count": 6,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 16,
+   "node_name": "46_BATTERY模块收纳箱_资产包",
+   "package_slug": "loft_battery_cabinet",
+   "bpk_asset_id": "BPK-BASE99-LOFT-BATTERY-CABINET",
+   "blender_source_collection": "46_BATTERY模块收纳箱_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -1.95,
+    6.5531,
+    -13.8714
+   ],
+   "envelope_size_godot": [
+    1.2,
+    0.8338,
+    0.9878
+   ],
+   "envelope_center_blender": [
+    -1.95,
+    13.8714,
+    6.5531
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 17,
+   "node_name": "31_参考床架床品与床下收纳_资产包",
+   "package_slug": "loft_bed_and_bedding",
+   "bpk_asset_id": "BPK-BASE99-LOFT-BED-AND-BEDDING",
+   "blender_source_collection": "31_参考床架床品与床下收纳_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    1.75,
+    6.4222,
+    -11.55
+   ],
+   "envelope_size_godot": [
+    1.7,
+    0.8196,
+    3.1667
+   ],
+   "envelope_center_blender": [
+    1.75,
+    11.55,
+    6.4222
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 18,
+   "node_name": "33_暖橙床头灯_资产包",
+   "package_slug": "loft_bedside_lamp",
+   "bpk_asset_id": "BPK-BASE99-LOFT-BEDSIDE-LAMP",
+   "blender_source_collection": "33_暖橙床头灯_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_bedside_lamp/loft_bedside_lamp_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -3.7,
+    7.9274,
+    -7.7
+   ],
+   "envelope_size_godot": [
+    0.42,
+    0.9002,
+    0.42
+   ],
+   "envelope_center_blender": [
+    -3.7,
+    7.7,
+    7.9274
+   ],
+   "mesh_count": 2,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 19,
+   "node_name": "34_床边暖灰地毯_资产包",
+   "package_slug": "loft_bedside_rug",
+   "bpk_asset_id": "BPK-BASE99-LOFT-BEDSIDE-RUG",
+   "blender_source_collection": "34_床边暖灰地毯_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_bedside_rug/loft_bedside_rug_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    0.6625,
+    6.106,
+    -9.93
+   ],
+   "envelope_size_godot": [
+    5.375,
+    0.037,
+    5.25
+   ],
+   "envelope_center_blender": [
+    0.6625,
+    9.93,
+    6.106
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 20,
+   "node_name": "37_红棕茶几与生活物件_资产包",
+   "package_slug": "loft_coffee_table",
+   "bpk_asset_id": "BPK-BASE99-LOFT-COFFEE-TABLE",
+   "blender_source_collection": "37_红棕茶几与生活物件_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_coffee_table/loft_coffee_table_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "unchanged_serialization_only",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    -2.6,
+    0.0,
+    2.83
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    -2.6,
+    0.0,
+    2.83
+   ],
+   "delta_blender": [
+    -2.6,
+    -2.83,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    3.6,
+    6.608,
+    -6.55
+   ],
+   "envelope_size_godot": [
+    2.85,
+    1.0118,
+    1.28
+   ],
+   "envelope_center_blender": [
+    3.6,
+    6.55,
+    6.608
+   ],
+   "mesh_count": 9,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 21,
+   "node_name": "42_双屏电脑完整工位_资产包",
+   "package_slug": "loft_computer_workstation",
+   "bpk_asset_id": "BPK-BASE99-LOFT-COMPUTER-WORKSTATION",
+   "blender_source_collection": "42_双屏电脑完整工位_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    8.6175,
+    7.56,
+    -13.6025
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    8.6175,
+    7.56,
+    -13.6025
+   ],
+   "delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    8.6175,
+    7.5695,
+    -13.6025
+   ],
+   "envelope_size_godot": [
+    7.535,
+    3.021,
+    1.405
+   ],
+   "envelope_center_blender": [
+    8.6175,
+    13.6025,
+    7.5695
+   ],
+   "mesh_count": 3,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 22,
+   "node_name": "47_FOOD模块收纳箱_资产包",
+   "package_slug": "loft_food_cabinet",
+   "bpk_asset_id": "BPK-BASE99-LOFT-FOOD-CABINET",
+   "blender_source_collection": "47_FOOD模块收纳箱_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_food_cabinet/loft_food_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -0.65,
+    6.535,
+    -13.8697
+   ],
+   "envelope_size_godot": [
+    1.2,
+    0.87,
+    0.9913
+   ],
+   "envelope_center_blender": [
+    -0.65,
+    13.8697,
+    6.535
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 23,
+   "node_name": "50_二楼分层照明支持_资产包",
+   "package_slug": "loft_lighting_support",
+   "bpk_asset_id": "BPK-BASE99-LOFT-LIGHTING-SUPPORT",
+   "blender_source_collection": "50_二楼分层照明支持_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_lighting_support/loft_lighting_support_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    2.9593,
+    6.9403,
+    -9.9871
+   ],
+   "envelope_size_godot": [
+    18.3186,
+    1.4593,
+    9.4659
+   ],
+   "envelope_center_blender": [
+    2.9593,
+    9.9871,
+    6.9403
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 24,
+   "node_name": "38_休闲区低饱和地毯_资产包",
+   "package_slug": "loft_lounge_rug",
+   "bpk_asset_id": "BPK-BASE99-LOFT-LOUNGE-RUG",
+   "blender_source_collection": "38_休闲区低饱和地毯_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_lounge_rug/loft_lounge_rug_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    6.18,
+    6.1097,
+    -9.55
+   ],
+   "envelope_size_godot": [
+    4.9,
+    0.0425,
+    2.45
+   ],
+   "envelope_center_blender": [
+    6.18,
+    9.55,
+    6.1097
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 25,
+   "node_name": "36_墨绿三人休闲沙发_资产包",
+   "package_slug": "loft_lounge_sofa",
+   "bpk_asset_id": "BPK-BASE99-LOFT-LOUNGE-SOFA",
+   "blender_source_collection": "36_墨绿三人休闲沙发_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    6.25,
+    7.005823,
+    -12.08931
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    6.25,
+    7.005823,
+    -12.08931
+   ],
+   "delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    6.25,
+    7.0071,
+    -12.0893
+   ],
+   "envelope_size_godot": [
+    4.82,
+    1.8291,
+    1.8814
+   ],
+   "envelope_center_blender": [
+    6.25,
+    12.0893,
+    7.0071
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 26,
+   "node_name": "45_MEDICAL模块收纳箱_资产包",
+   "package_slug": "loft_medical_cabinet",
+   "bpk_asset_id": "BPK-BASE99-LOFT-MEDICAL-CABINET",
+   "blender_source_collection": "45_MEDICAL模块收纳箱_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_medical_cabinet/loft_medical_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -3.25,
+    6.5535,
+    -13.8808
+   ],
+   "envelope_size_godot": [
+    1.2,
+    0.8329,
+    0.9785
+   ],
+   "envelope_center_blender": [
+    -3.25,
+    13.8808,
+    6.5535
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 27,
+   "node_name": "32_参考床头柜与生活物件_资产包",
+   "package_slug": "loft_nightstand",
+   "bpk_asset_id": "BPK-BASE99-LOFT-NIGHTSTAND",
+   "blender_source_collection": "32_参考床头柜与生活物件_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_nightstand/loft_nightstand_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "unchanged_serialization_only",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    7.62,
+    0.0,
+    -10.435
+   ],
+   "scene_node_yaw_deg": 89.99999567428897,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    7.62,
+    0.0,
+    -10.435
+   ],
+   "delta_blender": [
+    7.62,
+    10.435,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": -2.790476543168552e-06,
+   "envelope_center_godot": [
+    -3.7,
+    6.8038,
+    -7.2
+   ],
+   "envelope_size_godot": [
+    1.06,
+    1.3325,
+    2.07
+   ],
+   "envelope_center_blender": [
+    -3.7,
+    7.2,
+    6.8038
+   ],
+   "mesh_count": 4,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 28,
+   "node_name": "43_带扶手办公椅_资产包",
+   "package_slug": "loft_office_chair",
+   "bpk_asset_id": "BPK-BASE99-LOFT-OFFICE-CHAIR",
+   "blender_source_collection": "43_带扶手办公椅_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_office_chair/loft_office_chair_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    10.45,
+    7.1309,
+    -12.2034
+   ],
+   "envelope_size_godot": [
+    1.28,
+    2.0157,
+    1.1223
+   ],
+   "envelope_center_blender": [
+    10.45,
+    12.2034,
+    7.1309
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 29,
+   "node_name": "39_青绿圆形坐墩01_资产包",
+   "package_slug": "loft_pouf_01",
+   "bpk_asset_id": "BPK-BASE99-LOFT-POUF-01",
+   "blender_source_collection": "39_青绿圆形坐墩01_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_pouf_01/loft_pouf_01_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    0.68,
+    6.5105,
+    -8.0
+   ],
+   "envelope_size_godot": [
+    0.88,
+    0.541,
+    0.88
+   ],
+   "envelope_center_blender": [
+    0.68,
+    8.0,
+    6.5105
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 30,
+   "node_name": "40_深绿圆形坐墩02_资产包",
+   "package_slug": "loft_pouf_02",
+   "bpk_asset_id": "BPK-BASE99-LOFT-POUF-02",
+   "blender_source_collection": "40_深绿圆形坐墩02_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_pouf_02/loft_pouf_02_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    8.72,
+    6.5105,
+    -8.62
+   ],
+   "envelope_size_godot": [
+    0.88,
+    0.541,
+    0.88
+   ],
+   "envelope_center_blender": [
+    8.72,
+    8.62,
+    6.5105
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 31,
+   "node_name": "41_床前辅助小桌_资产包",
+   "package_slug": "loft_side_table",
+   "bpk_asset_id": "BPK-BASE99-LOFT-SIDE-TABLE",
+   "blender_source_collection": "41_床前辅助小桌_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_side_table/loft_side_table_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    1.8028,
+    6.5341,
+    -8.42
+   ],
+   "envelope_size_godot": [
+    1.1256,
+    0.825,
+    0.76
+   ],
+   "envelope_center_blender": [
+    1.8028,
+    8.42,
+    6.5341
+   ],
+   "mesh_count": 14,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 32,
+   "node_name": "35_红紫条纹隔断帘_资产包",
+   "package_slug": "loft_striped_privacy_curtain",
+   "bpk_asset_id": "BPK-BASE99-LOFT-STRIPED-PRIVACY-CURTAIN",
+   "blender_source_collection": "35_红紫条纹隔断帘_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/loft_striped_privacy_curtain/loft_striped_privacy_curtain_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    3.527,
+    7.571,
+    -12.2946
+   ],
+   "envelope_size_godot": [
+    0.264,
+    2.818,
+    2.8807
+   ],
+   "envelope_center_blender": [
+    3.527,
+    12.2946,
+    7.571
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 33,
+   "node_name": "43_主门下方低矮设备柜_资产包",
+   "package_slug": "main_door_low_storage_cabinet",
+   "bpk_asset_id": "BPK-BASE99-MAIN-DOOR-LOW-STORAGE-CABINET",
+   "blender_source_collection": "43_主门下方低矮设备柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/main_door_low_storage_cabinet/main_door_low_storage_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    5.0,
+    1.0605,
+    -3.9581
+   ],
+   "envelope_size_godot": [
+    6.2685,
+    2.0584,
+    1.2238
+   ],
+   "envelope_center_blender": [
+    5.0,
+    3.9581,
+    1.0605
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 34,
+   "node_name": "45_MEDICAL医疗柜_资产包",
+   "package_slug": "medical_cabinet",
+   "bpk_asset_id": "BPK-BASE99-MEDICAL-CABINET",
+   "blender_source_collection": "45_MEDICAL医疗柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/medical_cabinet/medical_cabinet_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    -3.65,
+    1.685,
+    -4.425
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    -3.65,
+    1.685,
+    -4.425
+   ],
+   "delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -3.65,
+    1.6912,
+    -4.3335
+   ],
+   "envelope_size_godot": [
+    1.58,
+    3.3175,
+    0.973
+   ],
+   "envelope_center_blender": [
+    -3.65,
+    4.3335,
+    1.6912
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 35,
+   "node_name": "47_窄型电池柜_资产包",
+   "package_slug": "narrow_battery_cabinet",
+   "bpk_asset_id": "BPK-BASE99-NARROW-BATTERY-CABINET",
+   "blender_source_collection": "47_窄型电池柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/narrow_battery_cabinet/narrow_battery_cabinet_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    11.85,
+    1.63,
+    -4.425
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    11.85,
+    1.63,
+    -4.425
+   ],
+   "delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -0.0,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    11.85,
+    1.6362,
+    -4.3288
+   ],
+   "envelope_size_godot": [
+    1.58,
+    3.2075,
+    0.9825
+   ],
+   "envelope_center_blender": [
+    11.85,
+    4.3288,
+    1.6362
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 36,
+   "node_name": "48_窄型应急柜_资产包",
+   "package_slug": "narrow_emergency_cabinet",
+   "bpk_asset_id": "BPK-BASE99-NARROW-EMERGENCY-CABINET",
+   "blender_source_collection": "48_窄型应急柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/narrow_emergency_cabinet/narrow_emergency_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    13.65,
+    1.6362,
+    -4.3275
+   ],
+   "envelope_size_godot": [
+    1.58,
+    3.2075,
+    0.985
+   ],
+   "envelope_center_blender": [
+    13.65,
+    4.3275,
+    1.6362
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 37,
+   "node_name": "46_TOOLS工具柜_资产包",
+   "package_slug": "tools_cabinet",
+   "bpk_asset_id": "BPK-BASE99-TOOLS-CABINET",
+   "blender_source_collection": "46_TOOLS工具柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/tools_cabinet/tools_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -1.6615,
+    1.6362,
+    -4.3135
+   ],
+   "envelope_size_godot": [
+    1.9569,
+    3.2075,
+    1.013
+   ],
+   "envelope_center_blender": [
+    -1.6615,
+    4.3135,
+    1.6362
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 38,
+   "node_name": "59_梯下立式设备柜_资产包",
+   "package_slug": "understair_equipment_cabinet",
+   "bpk_asset_id": "BPK-BASE99-UNDERSTAIR-EQUIPMENT-CABINET",
+   "blender_source_collection": "59_梯下立式设备柜_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -6.82,
+    1.565,
+    -14.2165
+   ],
+   "envelope_size_godot": [
+    1.1,
+    3.13,
+    0.927
+   ],
+   "envelope_center_blender": [
+    -6.82,
+    14.2165,
+    1.565
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 39,
+   "node_name": "57_梯下绿色软垫长凳_资产包",
+   "package_slug": "understair_green_bench",
+   "bpk_asset_id": "BPK-BASE99-UNDERSTAIR-GREEN-BENCH",
+   "blender_source_collection": "57_梯下绿色软垫长凳_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_green_bench/understair_green_bench_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -11.15,
+    0.8325,
+    -14.1492
+   ],
+   "envelope_size_godot": [
+    2.58,
+    1.665,
+    0.9016
+   ],
+   "envelope_center_blender": [
+    -11.15,
+    14.1492,
+    0.8325
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 40,
+   "node_name": "60_梯下层架与收纳_资产包",
+   "package_slug": "understair_storage_shelf",
+   "bpk_asset_id": "BPK-BASE99-UNDERSTAIR-STORAGE-SHELF",
+   "blender_source_collection": "60_梯下层架与收纳_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/understair_storage_shelf/understair_storage_shelf_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -8.58,
+    1.3,
+    -14.2041
+   ],
+   "envelope_size_godot": [
+    1.24,
+    2.6,
+    0.9318
+   ],
+   "envelope_center_blender": [
+    -8.58,
+    14.2041,
+    1.3
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 41,
+   "node_name": "场景特效_光束尘埃粒子",
+   "package_slug": "",
+   "bpk_asset_id": null,
+   "blender_source_collection": null,
+   "prefab": "",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": null,
+   "envelope_size_godot": null,
+   "envelope_center_blender": null,
+   "mesh_count": 0,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 42,
+   "node_name": "61_仓库防爆吊灯组_资产包",
+   "package_slug": "warehouse_pendant_light_group",
+   "bpk_asset_id": "BPK-BASE99-WAREHOUSE-PENDANT-LIGHT-GROUP",
+   "blender_source_collection": "61_仓库防爆吊灯组_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_group_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    0.0031,
+    7.5083,
+    -0.005
+   ],
+   "envelope_size_godot": [
+    21.2397,
+    1.5178,
+    8.0438
+   ],
+   "envelope_center_blender": [
+    0.0031,
+    0.005,
+    7.5083
+   ],
+   "mesh_count": 1,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 43,
+   "node_name": "57_净水器_资产包",
+   "package_slug": "water_purifier",
+   "bpk_asset_id": "BPK-BASE99-WATER-PURIFIER",
+   "blender_source_collection": "57_净水器_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/water_purifier/water_purifier_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    0.08383751,
+    0.0,
+    -1.1006985
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": [
+    0.08383751,
+    0.0,
+    -1.1006985
+   ],
+   "delta_blender": [
+    0.08383751,
+    1.1006985,
+    0.0
+   ],
+   "revision_delta_godot": [
+    0.08383751,
+    0.0,
+    -1.1006985
+   ],
+   "revision_delta_blender": [
+    0.08383751,
+    1.1006985,
+    0.0
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -13.7387,
+    1.2603,
+    9.2493
+   ],
+   "envelope_size_godot": [
+    1.955,
+    2.2795,
+    1.5
+   ],
+   "envelope_center_blender": [
+    -13.7387,
+    -9.2493,
+    1.2603
+   ],
+   "mesh_count": 2,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 44,
+   "node_name": "49_武器工作台与弹药附件_资产包",
+   "package_slug": "weapon_workshop_station",
+   "bpk_asset_id": "BPK-BASE99-WEAPON-WORKSHOP-STATION",
+   "blender_source_collection": "49_武器工作台与弹药附件_资产包",
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_facility_top3d.tscn",
+   "wrapper_kind": "facility_wrapper",
+   "mechanism": "预制体根 Area3D 自带 pivot（= 件心绝对坐标），SourcePackage 子节点用 −pivot 抵消 ⇒ 覆盖值即新的绝对 pivot，实际位移 = 覆盖值 − 原 pivot。",
+   "status": "new_override",
+   "moved_in_this_revision": true,
+   "scene_node_transform_godot": [
+    -13.838449,
+    1.4387904,
+    5.358942
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": [
+    -13.838449,
+    1.995,
+    3.4
+   ],
+   "delta_godot": [
+    0.0,
+    -0.5562096000000001,
+    1.958942
+   ],
+   "delta_blender": [
+    0.0,
+    -1.958942,
+    -0.5562096000000001
+   ],
+   "revision_delta_godot": [
+    0.0,
+    -0.5562096000000001,
+    1.958942
+   ],
+   "revision_delta_blender": [
+    0.0,
+    -1.958942,
+    -0.5562096000000001
+   ],
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    -13.8384,
+    1.4388,
+    5.3589
+   ],
+   "envelope_size_godot": [
+    1.9231,
+    3.71,
+    5.75
+   ],
+   "envelope_center_blender": [
+    -13.8384,
+    -5.3589,
+    1.4388
+   ],
+   "mesh_count": 10,
+   "scale_uniform_one": true
+  },
+  {
+   "index": 45,
+   "node_name": "42_BASE_CAMP大型卷帘主门_资产包",
+   "package_slug": "base_camp_rollup_main_door",
+   "bpk_asset_id": null,
+   "blender_source_collection": null,
+   "prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_root_top3d.tscn",
+   "wrapper_kind": "plain_root",
+   "mechanism": "预制体根在原点保持 identity，几何在组件 GLB 内部烘成绝对坐标 ⇒ 覆盖值即纯位移量。",
+   "status": "identity",
+   "moved_in_this_revision": false,
+   "scene_node_transform_godot": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "scene_node_yaw_deg": 0.0,
+   "prefab_root_pivot_godot": null,
+   "delta_godot": null,
+   "delta_blender": null,
+   "revision_delta_godot": null,
+   "revision_delta_blender": null,
+   "delta_yaw_deg": 0.0,
+   "envelope_center_godot": [
+    5.07,
+    2.3451,
+    -4.385
+   ],
+   "envelope_size_godot": [
+    6.44,
+    2.9097,
+    0.91
+   ],
+   "envelope_center_blender": [
+    5.07,
+    4.385,
+    2.3451
+   ],
+   "mesh_count": 70,
+   "scale_uniform_one": true
+  }
+ ]
+}
