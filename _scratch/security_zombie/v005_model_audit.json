@@ -1,0 +1,177 @@
+{
+  "bone_count": 66,
+  "contract_missing": [],
+  "contract_present": 36,
+  "extra_bones": [
+    "HeadTop_End",
+    "L_Index3",
+    "L_Index4",
+    "L_Middle3",
+    "L_Middle4",
+    "L_Pinky3",
+    "L_Pinky4",
+    "L_Ring1",
+    "L_Ring2",
+    "L_Ring3",
+    "L_Ring4",
+    "L_Thumb3",
+    "L_Thumb4",
+    "L_ToeBase",
+    "L_Toe_End",
+    "R_Index3",
+    "R_Index4",
+    "R_Middle3",
+    "R_Middle4",
+    "R_Pinky3",
+    "R_Pinky4",
+    "R_Ring1",
+    "R_Ring2",
+    "R_Ring3",
+    "R_Ring4",
+    "R_Thumb3",
+    "R_Thumb4",
+    "R_ToeBase",
+    "R_Toe_End",
+    "Spine01"
+  ],
+  "skeleton_id": "SKEL-MELEE-FUNGBOAR01-002",
+  "root_is_parentless": true,
+  "hip_parent": "Root",
+  "vertex_groups": 50,
+  "groups_without_bone": [],
+  "contract_groups_missing": [
+    "Root",
+    "L_Middle2",
+    "R_Pinky2"
+  ],
+  "unbound_vertices": 0,
+  "weight_sum_off": 0,
+  "mesh_world_bbox": [
+    1.5995,
+    1.115,
+    1.8571
+  ],
+  "height": 1.857143,
+  "feet_z": 0.0,
+  "centre_x": -0.0,
+  "centre_y": 0.0,
+  "police_L_Foot_dir": [
+    -0.1802,
+    0.8649,
+    -0.4685
+  ],
+  "melee_L_Foot_dir": [
+    0.0,
+    0.8868,
+    -0.4622
+  ],
+  "locality_probe": {
+    "L_Hand": {
+      "moved": 121,
+      "weighted_ok": 121,
+      "dominant_groups": {
+        "L_Hand": 14,
+        "L_Index3": 12,
+        "L_Thumb1": 10
+      }
+    },
+    "R_Hand": {
+      "moved": 117,
+      "weighted_ok": 117,
+      "dominant_groups": {
+        "R_Pinky1": 12,
+        "R_Forearm": 11,
+        "R_Index1": 11
+      }
+    },
+    "Head": {
+      "moved": 949,
+      "weighted_ok": 949,
+      "dominant_groups": {
+        "Head": 915,
+        "R_Clavicle": 10,
+        "L_Clavicle": 9
+      }
+    },
+    "L_Foot": {
+      "moved": 233,
+      "weighted_ok": 233,
+      "dominant_groups": {
+        "L_Calf": 105,
+        "L_ToeBase": 66,
+        "L_Foot": 55
+      }
+    },
+    "R_Thigh": {
+      "moved": 424,
+      "weighted_ok": 424,
+      "dominant_groups": {
+        "R_Thigh": 117,
+        "R_Calf": 111,
+        "R_ToeBase": 66
+      }
+    }
+  },
+  "armed_vs_unarmed": {
+    "idle_vs_armed_idle": {
+      "max_deg": 114.574,
+      "per_bone": {
+        "Head": 0.0,
+        "L_Upperarm": 67.388,
+        "L_Forearm": 114.574,
+        "L_Hand": 94.962,
+        "R_Upperarm": 0.0,
+        "R_Forearm": 0.0,
+        "R_Hand": 0.0,
+        "L_Thigh": 0.0,
+        "R_Thigh": 0.0,
+        "Hip": 0.0
+      }
+    },
+    "walking_vs_walking_armed": {
+      "max_deg": 116.05,
+      "per_bone": {
+        "Head": 0.0,
+        "L_Upperarm": 84.209,
+        "L_Forearm": 116.05,
+        "L_Hand": 96.25,
+        "R_Upperarm": 0.0,
+        "R_Forearm": 0.0,
+        "R_Hand": 0.0,
+        "L_Thigh": 0.0,
+        "R_Thigh": 0.0,
+        "Hip": 0.0
+      }
+    },
+    "running_vs_running_armed": {
+      "max_deg": 124.402,
+      "per_bone": {
+        "Head": 0.0,
+        "L_Upperarm": 69.631,
+        "L_Forearm": 124.402,
+        "L_Hand": 107.861,
+        "R_Upperarm": 0.0,
+        "R_Forearm": 0.0,
+        "R_Hand": 0.0,
+        "L_Thigh": 0.0,
+        "R_Thigh": 0.0,
+        "Hip": 0.0
+      }
+    },
+    "attack_vs_shoot": {
+      "max_deg": 144.443,
+      "per_bone": {
+        "Head": 23.471,
+        "L_Upperarm": 132.455,
+        "L_Forearm": 135.966,
+        "L_Hand": 144.443,
+        "R_Upperarm": 19.527,
+        "R_Forearm": 22.062,
+        "R_Hand": 22.061,
+        "L_Thigh": 7.664,
+        "R_Thigh": 8.83,
+        "Hip": 6.592
+      }
+    }
+  }
+}

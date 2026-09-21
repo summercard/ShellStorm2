@@ -1,0 +1,38 @@
+========================================================================
+AUDIT FBX: 保安僵尸
+========================================================================
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+[IMPORT] C:/Users/zhuangmenghong/Desktop/保安僵尸/tripo_convert_4b763a81-adc3-4d88-95dc-f269024b8c4b.fbx
+FBX version: 7400
+
+[SCENE] unit=METRIC scale_length=1.0 frames=1-250
+
+[OBJECTS] total=1
+  [MESH      ] 'tripo_node_4b763a81' parent='-' loc=(+0.0000, +0.0312, +0.0000) scale=(+1.0000, +1.0000, +1.0000)
+        verts=2176 polys=4328 mats=['tripo_mat_4b763a81']
+        vgroups=[]
+        uv=['UVMap'] shape_keys=False
+
+[ARMATURES] n=0
+
+[MATERIALS] n=1
+  'tripo_mat_4b763a81' use_nodes=True
+      TEX_IMAGE '安保警卫3d模型_basecolor' size=(2048, 2048) packed=False path='C:\\Users\\zhuangmenghong\\Desktop\\保安僵尸\\tripo_convert_4b763a81-adc3-4d88-95dc-f269024b8c4b.fbm\\安保警卫3d模型_basecolor.JPEG'
+
+[IMAGES] n=1
+  '安保警卫3d模型_basecolor' size=(2048, 2048) path='C:\\Users\\zhuangmenghong\\Desktop\\保安僵尸\\tripo_convert_4b763a81-adc3-4d88-95dc-f269024b8c4b.fbm\\安保警卫3d模型_basecolor.JPEG' packed=False
+
+[ACTIONS] n=0
+
+[BOUNDS]
+  min=(-0.2771, -0.4011, -0.0000)
+  max=(+0.2771, +0.4636, +0.9995)
+  size=(X=0.5542, Y=0.8647, Z=0.9995)
+  height/display: if display mult 0.70 -> display Z=0.6997
+
+========================================================================
+AUDIT FBX END
+========================================================================

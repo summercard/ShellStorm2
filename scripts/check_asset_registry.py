@@ -63,8 +63,12 @@ ACCEPTED_STATUSES = {
 ARTIFACT_STATUSES = ACCEPTED_STATUSES - {"待制作", "程序占位", "弃用"}
 ACCEPTED_PRIORITIES = {"P0", "P1", "P2"}
 ASSET_ID_PATTERN = re.compile(r"^[A-Z0-9]+(?:-[A-Z0-9]+)+$")
+# `_vNNN` 可选。运行资产已被去版本化门禁（scripts/check_asset_runtime_naming.py）
+# 要求「路径恒定、不含版本号」，而 source/** 下的源文件仍按版本命名；本标记必须同时
+# 放行两种，否则「已完成」的行一旦换成去版本化的 runtime 路径就会被误判为不合规。
+# 保留的含义是「小写下划线命名 + 受管后缀」，版本号不再是必需项。
 PRODUCTION_NAME_PATTERN = re.compile(
-    r"^[a-z0-9]+(?:_[a-z0-9]+)*_v[0-9]{3}\.(?:png|webp|svg|wav|ogg|glb|gltf|tres|tscn|blend)$"
+    r"^[a-z0-9]+(?:_[a-z0-9]+)*(_v[0-9]{3})?\.(?:png|webp|svg|wav|ogg|glb|gltf|tres|tscn|blend)$"
 )
 PATH_SPLIT_PATTERN = re.compile(r"[;；\n]+")
 CANONICAL_FILENAME_EXCEPTIONS = {

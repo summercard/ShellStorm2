@@ -1,7 +1,7 @@
 extends Node
 
 const WEAPON_ASSETS := {
-	"water_tank_blaster": "res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn",
+	"water_tank_blaster": "res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d.tscn",
 	"megaphone_cannon": "res://assets/art/weapons/weapon_3d/runtime/megaphone_cannon/wpn_megaphone_cannon_root_top3d_v001.tscn",
 	"guitar_blaster": "res://assets/art/weapons/weapon_3d/runtime/guitar_blaster/wpn_guitar_blaster_root_top3d_v001.tscn",
 	"spatula_rifle": "res://assets/art/weapons/weapon_3d/runtime/spatula_rifle/wpn_spatula_rifle_root_top3d_v001.tscn",

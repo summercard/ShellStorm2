@@ -8,6 +8,10 @@ const COLLISION_DEPTH_M := 0.42
 const OPEN_LIFT_CLEARANCE_M := 0.32
 const DEFAULT_MOTION_DURATION_S := 0.24
 
+## 门扇动画结束（开到位或关到底）。门不是 Area3D，交互靠距离判定，
+## 因此"门关上了"这个事实只能从这里发出，供上层订阅。
+signal motion_finished(is_open: bool)
+
 var direction := "east"
 var target_room_id := ""
 var is_open := false
@@ -137,6 +141,7 @@ func _on_motion_finished(opened: bool, target_y: float) -> void:
 	if _target_open != opened:
 		return
 	_transitioning = false
+	motion_finished.emit(opened)
 	if _panel != null:
 		_panel.position.y = target_y
 	if _collision != null:

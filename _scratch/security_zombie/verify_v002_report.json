@@ -1,0 +1,24 @@
+{
+  "source_collection": "SECURITY_SHOTGUN_REFERENCE",
+  "weapon_root_parented": false,
+  "weapon_root_animated": false,
+  "mesh_count": 11,
+  "world_dims_m": [
+    0.146,
+    0.27,
+    0.595
+  ],
+  "measured_length_m": 0.595,
+  "support_hand_distance_m": 0.2433,
+  "materials": [
+    "01_精工金属_枪身骨架",
+    "02_细腻哑光_枪身大面",
+    "03_清漆反光_枪身点缀"
+  ],
+  "palette_embedded": false,
+  "armature_in_file": false,
+  "camera_in_file": false,
+  "pump_action": "fire_pump_cycle",
+  "support_follows_pump": true,
+  "errors": []
+}

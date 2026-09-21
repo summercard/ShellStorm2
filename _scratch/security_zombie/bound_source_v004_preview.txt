@@ -1,0 +1,68 @@
+﻿blender.exe : 12:21:33 - tripo_addon - [task.py:21] - INFO - WebSocket server s
+tarted on port 60600
+所在位置 行:445 字符: 42
++ ... ellStorm2"; & "D:\Program Files\Blender Foundation\Blender 4.5\blende ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (12:21:33 - trip...d on port 60600 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+12:21:33 - tripo_addon - [ws_server.py:113] - INFO - WebSocket server running o
+n ws://127.0.0.1:60600
+12:21:33 - tripo_addon - [ws_server.py:118] - INFO - Heartbeat monitoring start
+ed (timeout: 120s)
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+Read blend: "I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\enemies\normal_enemy_3d\ranged_caster\source\model\enm_ranged_sporeshooter01_model_v004.blend"
+甯?1 鍐呭瓨:80.44M (宄板€?94.44M) | 鏃堕棿:00:00.92 | Rendering 1 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?94.44M) | 鏃堕棿:00:01.47 | Rendering 25 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?94.44M) | 鏃堕棿:00:01.94 | Rendering 50 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?94.44M) | 鏃堕棿:00:02.09 | Rendering 64 / 64 samples
+Saved: 'I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\_scratch\security_zombie\bound_source_v003_preview\plusY.png'
+Time: 00:02.25 (Saving: 00:00.11)
+
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:00.17 | Rendering 1 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:01.11 | Rendering 25 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:02.28 | Rendering 50 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:02.81 | Rendering 64 / 64 samples
+Saved: 'I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\_scratch\security_zombie\bound_source_v003_preview\minusY.png'
+Time: 00:02.87 (Saving: 00:00.03)
+
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:00.17 | Rendering 1 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:01.25 | Rendering 25 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:02.19 | Rendering 50 / 64 samples
+甯?1 鍐呭瓨:80.44M (宄板€?80.44M) | 鏃堕棿:00:02.73 | Rendering 64 / 64 samples
+Saved: 'I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\_scratch\security_zombie\bound_source_v003_preview\plusX.png'
+Time: 00:02.84 (Saving: 00:00.02)
+
+甯?1 鍐呭瓨:84.23M (宄板€?84.23M) | 鏃堕棿:00:00.22 | Rendering 1 / 64 samples
+甯?1 鍐呭瓨:84.23M (宄板€?84.23M) | 鏃堕棿:00:01.10 | Rendering 25 / 64 samples
+甯?1 鍐呭瓨:84.23M (宄板€?84.23M) | 鏃堕棿:00:02.10 | Rendering 50 / 64 samples
+甯?1 鍐呭瓨:84.23M (宄板€?84.23M) | 鏃堕棿:00:02.65 | Rendering 64 / 64 samples
+Saved: 'I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\_scratch\security_zombie\bound_source_v003_preview\rest_bone_overlay_plusY.png'
+Time: 00:02.72 (Saving: 00:00.02)
+
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+12:21:44 - tripo_addon - [ws_server.py:88] - INFO - Stopping WebSocket server..
+.
+12:21:44 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested
+12:21:44 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+
+Blender quit

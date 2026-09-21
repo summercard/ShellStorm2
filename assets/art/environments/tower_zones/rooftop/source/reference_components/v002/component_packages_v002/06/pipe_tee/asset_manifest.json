@@ -69,8 +69,8 @@
     "shared_facility_palette"
   ],
   "attachment": "independent_module",
-  "exported": false,
-  "expected_export": "env_rooftop_ref_pipe_tee_v002.glb",
+  "exported": true,
+  "expected_export": "env_rooftop_ref_pipe_tee_top3d.glb",
   "collision": "not_created",
   "logical_wall_height": null,
   "collision_bounds": null,
@@ -85,5 +85,10 @@
   "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
   "dedupe_classification": "child_variant",
   "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-  "pipe_diameter": 0.3
+  "pipe_diameter": 0.3,
+  "runtime_integrated": true,
+  "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_tee.tscn",
+  "export_sha256": "3ea17b1e98a6d799fe01d31b61f5315c73443011ae5584339653d3b65bfd78d3",
+  "runtime_scene_sha256": "ce283883805878be084ed1cb8912bde5feff3b28054d9a55ae96d75b147a74df",
+  "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
 }

@@ -4,6 +4,11 @@ extends Dungeon3D
 ## 战斗/命运/掉落管线；这里只定义垂直拓扑、电梯、五层流送、固定镜头
 ## 下方墙平滑抬升收拢、双端楼梯门、独立墙边电梯与全局固定环境光。
 
+## 玩法**正式开始**：开场页动画播完（玩家点了开始 / 跳过之后），
+## 或没有开场页时 = 本帧末。开场类剧情挂这一发，不能挂 `room_entered` ——
+## `room_entered` 在 `_ready` 里就发了，那时开场页还没接管完相机与输入。
+signal gameplay_started(room_id: String)
+
 const FACILITY_SCENE: PackedScene = preload("res://assets/art/props/base_world_3d/prp_base_facility_root_top3d.tscn")
 const BASE_FACILITY_ART_LAYOUT_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_zones/base/runtime/zone_base.tscn"
@@ -22,6 +27,10 @@ const ATMOSPHERE_SCRIPT := preload("res://src/world3d/TowerAtmosphere3D.gd")
 const DYNAMIC_ROOM_SCENE: PackedScene = preload("res://assets/art/environments/dungeon_3d/env_dungeon_runtime_kit_top3d.tscn")
 const ROOM_DOOR_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_door_3d.tscn")
 const SIMPLE_TRANSIT_DOOR_SCRIPT := preload("res://src/world3d/SimpleTransitDoor3D.gd")
+## 基地欢迎语的短句 ID（在 BarkCatalog 里有同名条目 system_base_welcome）。
+## 写成局部常量而不引用 `BarkCatalog.SYSTEM_BASE_WELCOME`：ID 是调用方与内容目录
+## 之间的契约，调用方持有即可；取值是否真的存在由验收断言兜底。
+const BARK_BASE_WELCOME := "system_base_welcome"
 const TOWER_WALL_SCENE: PackedScene = preload(
 	"res://assets/art/environments/tower_descent_3d/components/env_tower_wall_solid_5m_top3d.glb"
 )
@@ -47,6 +56,50 @@ const FLOOR_HEIGHT := TOWER_GEOMETRY.FLOOR_HEIGHT_M
 ## 100F保留原天台入口右上侧的安全落点；99F为基地房间中心。
 const ROOFTOP_LOGOUT_SPAWN := Vector3(-17.5, 0.05, 2.5)
 const FACILITY_LOGOUT_SPAWN := Vector3(0.0, -FLOOR_HEIGHT + 0.05, 5.0)
+
+## —— 新游戏开场位置（2026-09-20 主人要求）——
+## 全新存档的第一次进场不再落 100F 天台，而是直接落进 **98F 区块00 最里面的房间**：
+## 摆位源房间 `master_office`（主人的办公室），运行时房间 id 沿用原 98F 规划键
+## `floor_01_exit`。开场页（MainEntryScreen3D 的 33° 正面近景）因此以这间办公室为背景，
+## 而不再以天台为背景。
+##
+## 与「从天台开始」严格互斥，判据复用 `_should_start_on_rooftop_for_entry()`：
+##   · 是全新存档（新手引导未完成，`BaseManager.should_start_on_rooftop()`）；
+##   · 不是死亡返城 / 撤离返航 —— 那两个路径显式声明 `SPAWN_BASE_99F`，落 99F 基地；
+##   · 不是远征单层关卡 —— 远征有自己的 15×15 入口安全房出生点。
+##
+## ⚠️ 98F 除入口房外的另外三间房在启动时**尚未实例化**（它们照常由到达门事务的
+## `_commit_floor_bundle(2)` 补齐）。所以本分支必须**先把整层 bundle 提交掉**再落位，
+## 顺序颠倒会拿到 null 房间并静默退回天台出生点。
+const NEW_GAME_OPENING_ROOM_ID := "floor_01_exit"
+const NEW_GAME_OPENING_AUTHORED_ROOM_ID := "master_office"
+const NEW_GAME_OPENING_FLOOR_INDEX := 2
+## 出生点相对房间原点的偏移。房间原点是规划中心、Y 即该层楼面，所以这里与
+## `FACILITY_LOGOUT_SPAWN` / `_expedition_entry_spawn_offset()` 同口径取 +0.05。
+##
+## ⚠️ 落在**房间中心**（局部 0,0）是安全的，但它依赖一个前提：98F 台座必须为
+## 授权房足迹保留承重面（`TowerFloorStage3D.support_keep_out_rects`）。
+## 实测过反例：固定楼梯井洞口 x[−45,−30]×z[0,30] 会伸进办公室西半 10m×15m，
+## 那时房中心脚下没有任何 FloorSupport，玩家从 −29.97 一路掉到 97F（−36.0）。
+## 洞口按足迹削掉压在房内那一段之后，房中心才有楼板。
+## 验收：`verify_new_game_opening`（落位 + 静止 + 承重覆盖）与
+## `verify_block00_floor98_assembly` K 段（四房足迹承重覆盖）。
+const NEW_GAME_OPENING_SPAWN_OFFSET := Vector3(0.0, 0.05, 0.0)
+
+## —— 98↔99 楼梯间门 = 普通门（2026-09-21 主人要求）——
+## 「这个区域的门都按普通门办：可以自由开关、不用条件、参考 99F 基地两边的门。」
+## 98F 门厅东门（`floor_01_entry` 东门 ↔ 99F 基地 `facility` 东门）从 98F 侧
+## 必须能随时打开，所以停用原「98F 大循环首门」那套条件：
+##   · 进 98F 后门在身后重新关闭（`_on_initial_loop_entry_physically_entered`）；
+##   · 从 98F 侧反向开门 = 放弃大循环、弹撤退二次确认（`_show_initial_loop_retreat_warning`）。
+## 原口径见 `docs/v0.1/05_技术施工_关卡生成与爬楼.md` §3.3.1 与
+## `docs/v0.1/12_全游戏完成度清单.md` 的 P0「98F大循环首门封闭与撤退」。
+##
+## 置回 true 即整条恢复（三处消费点：`_try_open_room_door` 的封印早退、
+## `_activate_stair_arrival` 的武装、`_on_initial_loop_entry_physically_entered` 的封门）。
+## ⚠️ 与 `authored_layout_peaceful` 无关：和平区只管门策略/刷怪/门扇，不碰这条。
+const INITIAL_LOOP_GATE_SEAL_ENABLED := false
+
 const STAIR_WIDTH := TOWER_GEOMETRY.PASSAGE_WIDTH_M
 const STAIR_RUN := TOWER_GEOMETRY.RUN_LENGTH_M
 const STAIR_LANE_SPACING := TOWER_GEOMETRY.LANE_CENTER_SPACING_M
@@ -233,6 +286,16 @@ const BATTLE_LEVEL_ID := "battle_level01"
 ## 在「纯净生成器」下验收；98F 被区块00 接管后的装配另由 verify_block00_floor98_assembly 验收。
 ## 默认 false = 运行时行为完全不变。
 @export var force_standard_floor_plan_for_test: bool = false
+## 测试接缝：在 test_mode 下强制走「新游戏开场」分支（开局站在 98F 主人的办公室）。
+## 存在意义 —— `test_mode` 的既有契约是「固定从天台开始、不碰开发者真实存档」，
+## 而开场分支只在真机（非 test_mode）才触发；没有这个钩子就无法在 headless 下
+## 断言这条路径真的装配成功。默认 false = 所有既有探针的出生点逐字不变。
+@export var force_new_game_opening_for_test: bool = false
+## 测试接缝：在 test_mode 下仍执行独立副本成功撤离的「结算提交 + 所有权交接写盘」。
+## 存在意义 —— 那两步在真机由 `if not test_mode:` 守护，headless 下拿不到交接快照，
+## 也就无法断言返航落点真的能把携带物装回。写盘目标由验收换成临时路径，
+## 场景切换仍被 `test_mode` 拦住。默认 false = 既有行为逐字不变。
+@export var force_extraction_settlement_for_test: bool = false
 
 func is_expedition() -> bool:
 	return expedition_mode
@@ -370,11 +433,19 @@ func _ready() -> void:
 		else:
 			base_art.visible = false
 	super()
+	# 新游戏开场要在 98F 最里面的房间落位，而那间房由 FloorBundle 创建 —— 现在就得提交。
+	var new_game_opening := _should_open_new_game_in_master_office()
+	var opening_ready := false
 	# 远征关卡没有 99F 到达门负责提交整层；进入场景时必须一次性提交唯一层，
 	# 否则玩家虽然出生在安全房门口，前门后方却只有尚未实例化的目标房。
 	if is_expedition():
 		_ensure_expedition_block()
 		_commit_floor_bundle(EXPEDITION_LAYER_INDEX, "expedition_bootstrap")
+	elif new_game_opening:
+		# 与到达门事务同一条路（`_commit_floor_bundle(2, "arrival_gate")`），只是触发时机
+		# 提前到开局：98F 四房 + 97F 到达壳 + 下行竖直边一次落地。失败则 opening_ready
+		# 保持 false，落位退回天台 —— 绝不半层落位。
+		opening_ready = _commit_floor_bundle(NEW_GAME_OPENING_FLOOR_INDEX, "new_game_opening")
 	_organize_existing_rooms_by_block()
 	_ensure_floor_generated(
 		EXPEDITION_LAYER_INDEX if is_expedition() else 0,
@@ -404,7 +475,9 @@ func _ready() -> void:
 			_current_room_id = ""
 			_on_room_entered(entry_room)
 	else:
-		if starts_on_rooftop:
+		if opening_ready and _place_player_at_new_game_opening():
+			starts_on_rooftop = false
+		elif starts_on_rooftop:
 			player.global_position = ROOFTOP_LOGOUT_SPAWN
 		else:
 			var facility_room := _room_by_id.get("facility") as DungeonRoom3D
@@ -420,16 +493,20 @@ func _ready() -> void:
 	else:
 		title_label.text = "弹壳风暴2 · 向下爬楼行动"
 		seed_label.text = "塔楼种子 %d" % run_seed
-		status_label.text = (
-			"风还在吹。沿西侧楼梯下去，寻找塔内的落脚点。"
-			if starts_on_rooftop
-			else "欢迎归航。先恢复状态、整理装备，再开始下一次下潜。"
-		)
+		if opening_ready and not starts_on_rooftop:
+			status_label.text = "你在主人的办公室里醒来。这里没有活物 —— 东门通往来路，西侧楼梯继续向下。"
+		else:
+			status_label.text = (
+				"风还在吹。沿西侧楼梯下去，寻找塔内的落脚点。"
+				if starts_on_rooftop
+				else "欢迎归航。先恢复状态、整理装备，再开始下一次下潜。"
+			)
 	_update_floor_visibility_state()
 	_refresh_physical_location_authority(true)
 	_refresh_tower_hud()
 	_refresh_facility_runtime()
 	_install_main_entry_screen()
+	_defer_gameplay_started()
 	_announce_floor_arrival(_current_floor_number())
 	var first_entry := _room_by_id.get("floor_01_entry") as DungeonRoom3D
 	if first_entry != null and not first_entry.player_entered.is_connected(_on_initial_loop_entry_physically_entered):
@@ -616,6 +693,43 @@ func _should_start_on_rooftop_for_entry() -> bool:
 	return test_mode or BaseManager == null or BaseManager.should_start_on_rooftop()
 
 
+## 本局是否走「新游戏开场」分支：开局直接站在 98F 主人的办公室里（见
+## NEW_GAME_OPENING_ROOM_ID 的契约注释）。与 `_should_start_on_rooftop_for_entry()`
+## 前两级判据刻意保持一致，只在最后一级分岔 —— 两者互为反面，不会同时成立。
+func _should_open_new_game_in_master_office() -> bool:
+	if is_expedition():
+		return false
+	# 死亡返城 / 撤离返航显式声明落 99F 基地，绝不改送 98F。
+	if str(_entry_context.get("spawn_target", "")) == GameEntryFlow.SPAWN_BASE_99F:
+		return false
+	# 验收钩子：把真机才走的分支搬到 headless 下（见 force_new_game_opening_for_test）。
+	if force_new_game_opening_for_test:
+		return true
+	# test_mode 的既有契约 = 固定从天台开始；`_should_start_on_rooftop_for_entry()`
+	# 因此在 test_mode 下恒为真，这里必须先把它挡掉，否则既有探针出生点全变。
+	if test_mode:
+		return false
+	return _should_start_on_rooftop_for_entry()
+
+
+## 把玩家放进 98F 主人的办公室，并走一次完整的「进入房间」事务
+## （与远征出生点同一套写法：置位 → 清零速度 → 清当前房 → `_on_room_entered`）。
+## 返回 false = 房间拿不到（bundle 提交失败或摆位源回退成生成器房表），
+## 调用方按原路退回天台出生点，绝不把玩家留在半空中。
+func _place_player_at_new_game_opening() -> bool:
+	var room := _room_by_id.get(NEW_GAME_OPENING_ROOM_ID) as DungeonRoom3D
+	if room == null:
+		push_warning(
+			"[TowerDescent3D] 新游戏开场房 %s 不存在，回退天台出生点" % NEW_GAME_OPENING_ROOM_ID
+		)
+		return false
+	player.global_position = room.global_position + NEW_GAME_OPENING_SPAWN_OFFSET
+	player.velocity = Vector3.ZERO
+	_current_room_id = ""
+	_on_room_entered(room)
+	return true
+
+
 func _process(delta: float) -> void:
 	super(delta)
 	_refresh_physical_location_authority()
@@ -627,10 +741,15 @@ func _process(delta: float) -> void:
 
 
 func _finish_run(success: bool) -> void:
-	# 独立图按 Dungeon3D 的标准独立副本结算：成功/死亡都返回 return_scene_path
-	# （即 99F 基地 TowerDescent3D.tscn），不执行塔楼“带物返航基地”逻辑。
+	# 独立图的死亡与「退出战局」走 Dungeon3D 的标准失败结算；但撤离信号塔的
+	# 成功返航必须带物，不能交给父类的成功路径 —— 父类会把携带物复制进
+	# extraction_loot 并重载场景，而那张待领取栏在 99F 没有任何入口，
+	# 玩家会看到「身上全空、物品消失」（文档 09 §5.1 离场语义表）。
 	if is_expedition():
-		super(success)
+		if not success:
+			super(success)
+			return
+		_finish_expedition_successful_extraction()
 		return
 	# 塔楼成功撤离是“带物返航99F”，不是重新加载塔楼。父类的成功路径会把
 	# 战利品复制到待处理集合后重载本场景，导致玩家回100F且I键背包为空。
@@ -679,6 +798,93 @@ func _finish_run(success: bool) -> void:
 	if not test_mode:
 		await get_tree().create_timer(0.8).timeout
 	_return_successful_extraction_to_facility()
+
+
+## 独立副本「撤离信号塔」的成功返航：背包、主副枪、装备背包、快捷栏、保险格
+## 全部保留，且不得复制进 extraction_loot（文档 09 §5.1 离场语义表第 4 行）。
+## 独立副本不生成 99F 基地房，因此不能像塔楼那样做场景内复位；改为把玩家所有权
+## 写成一条带标记的交接快照，由 return_scene_path（99F 塔楼主场景）启动时
+## 只恢复携带物、不恢复世界。带出物绝不能同时再复制到 extraction_loot。
+func _finish_expedition_successful_extraction() -> void:
+	if _completed:
+		return
+	_completed = true
+	_close_inventory_for_modal()
+	_sync_player_input_lock()
+	extraction_panel.visible = false
+	_run_loot = _collect_extracted_items(true)
+	var extracted_count := _death_settlement.process_extraction_settlement(
+		_inventory, _insurance, _quick_inventory
+	)
+	var summary := {
+		"success": true,
+		"kills": _kills,
+		"value": _run_value,
+		"loot": _run_loot.duplicate(true),
+		"seed": run_seed,
+		"theme_id": gameplay_theme.theme_id,
+		"settlement": {"retained": true, "extracted_count": extracted_count},
+		"inventory_capacity": _inventory.get_capacity(),
+		"insurance_capacity": _insurance.get_max_slots(),
+		"return_room_id": "facility",
+	}
+	if not test_mode or force_extraction_settlement_for_test:
+		var commit := BaseManager.commit_run_settlement({
+			"transaction_id": _get_run_settlement_transaction_id(true),
+			"success": true,
+			"kills": _kills,
+			"extraction_points": _run_value,
+			# 成功返航保留同一运行时物品实例，不复制到待领取栏。
+			"extraction_loot": [],
+		}) as Dictionary
+		if not bool(commit.get("success", false)):
+			_completed = false
+			status_label.text = "撤离结算保存失败 · 请重试撤离"
+			push_error("[TowerDescent3D] Expedition extraction settlement failed: %s" % commit)
+			return
+		# 顺序是契约：先摘掉运行时提供者，防止场景卸载把关卡内的旧状态刷回
+		# 检查点；再写交接快照，保证它就是存档里最后一份所有权。
+		BaseManager.unregister_runtime_checkpoint_provider(self, false)
+		_runtime_persistence_active = false
+		if not _write_successful_extraction_carry_checkpoint():
+			_completed = false
+			status_label.text = "撤离交接保存失败 · 请重试撤离"
+			push_error("[TowerDescent3D] Expedition extraction carry handoff failed")
+			return
+	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
+	run_completed.emit(true, summary)
+	if test_mode:
+		return
+	await get_tree().create_timer(0.8).timeout
+	var entry_request_id := _request_return_entry_context(true)
+	var change_error := get_tree().change_scene_to_file(return_scene_path)
+	if change_error != OK:
+		if entry_request_id > 0:
+			GameEntryFlow.cancel_request(entry_request_id)
+		push_error(
+			"[TowerDescent3D] Expedition return scene failed: %s" % error_string(change_error)
+		)
+
+
+## 把当前携带物写成返航交接快照。scope / 房间 / 楼层必须显式标成 99F 基地，
+## runtime_map_id 必须清空 —— 否则主场景会把它当成可续局的独立副本行动，
+## 把玩家再送回刚撤离的那张地图。world_state 与 edge_states 一并清空：
+## 这次交接只认玩家所有权。
+func _write_successful_extraction_carry_checkpoint() -> bool:
+	if BaseManager == null:
+		return false
+	var snapshot := build_runtime_save_snapshot()
+	if snapshot.is_empty():
+		return false
+	snapshot["scope"] = "base"
+	snapshot["current_room_id"] = "facility"
+	snapshot["current_floor_index"] = 1
+	snapshot["runtime_map_id"] = ""
+	snapshot["player_position"] = []
+	snapshot["world_state"] = {}
+	snapshot["edge_states"] = {}
+	snapshot[SUCCESSFUL_EXTRACTION_CARRY_KEY] = true
+	return BaseManager.set_active_run_checkpoint(snapshot, "expedition_success_return")
 
 
 func _return_successful_extraction_to_facility() -> void:
@@ -773,6 +979,10 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 		# 立面环让位：只有天台层真的会摆立面环，其余层拿到也无害。
 		facade_gaps_for_stage
 	)
+	# 承重保底：授权房间足迹压到固定楼梯井洞口上时，洞口必须先削掉压在房内的那一段
+	# （见 TowerFloorStage3D.support_keep_out_rects）。必须在 add_child 之前写入 ——
+	# stage 的 _build_support() 在它自己的 _ready() 里跑。
+	stage.set("support_keep_out_rects", _authored_layout_keep_out_rects(floor_index))
 	stage.position.y = -FLOOR_HEIGHT * float(floor_index)
 	_room_block_for_floor(floor_index).add_child(stage)
 	# PackedScene/运行时节点在 add_child() 时可能被分配内部名；挂载后再锁定短名。
@@ -789,28 +999,43 @@ func _rebuild_floor_stage(floor_index: int) -> void:
 ## 按 15×15 挖会在 15×20 的办公室里留下 2.5m 通用砖带与自持砖共面 —— 所以授权房间
 ## 一律按 custom_dimensions 精确挖，且不再叠加通用的 15×15 方格洞。
 func _stair_lobby_visual_holes(floor_index: int) -> Array[Rect2]:
-	var holes: Array[Rect2] = []
+	var holes := _authored_layout_keep_out_rects(floor_index)
 	var size := TowerGeometry3D.COMBAT_STAIR_LOBBY_SIZE_M
 	var half := size * 0.5
 	for room_id_value in _floor_room_ids.get(floor_index, []):
 		var record := _find_record(str(room_id_value))
-		if record.is_empty():
-			continue
-		var room_position := record.get("position", Vector3.ZERO) as Vector3
-		if bool(record.get("authored_layout_shell", false)):
-			var dimensions := record.get("custom_dimensions", Vector2.ZERO) as Vector2
-			if dimensions.x > 0.0 and dimensions.y > 0.0:
-				holes.append(Rect2(
-					room_position.x - dimensions.x * 0.5,
-					room_position.z - dimensions.y * 0.5,
-					dimensions.x,
-					dimensions.y
-				))
+		if record.is_empty() or bool(record.get("authored_layout_shell", false)):
 			continue
 		if str(record.get("type", "")) != "STAIR_LOBBY":
 			continue
+		var room_position := record.get("position", Vector3.ZERO) as Vector3
 		holes.append(Rect2(room_position.x - half, room_position.z - half, size, size))
 	return holes
+
+
+## 授权布局（区块00）房间的真实平面足迹。授权房间的自持地砖**内嵌碰撞是关掉的**
+## （承重统一归 TowerFloorStage3D），所以这些足迹必须由楼层台座保留承重面。
+## 一处两份用途、必须逐值一致：
+##   ① 台座可视地砖挖洞（_stair_lobby_visual_holes）；
+##   ② 台座承重保底（stage.support_keep_out_rects）—— 固定楼梯井洞口若压进足迹，
+##      必须先削掉压在房内的那一段，否则房间会缺一块地板（见区块00 办公室实测）。
+func _authored_layout_keep_out_rects(floor_index: int) -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for room_id_value in _floor_room_ids.get(floor_index, []):
+		var record := _find_record(str(room_id_value))
+		if record.is_empty() or not bool(record.get("authored_layout_shell", false)):
+			continue
+		var dimensions := record.get("custom_dimensions", Vector2.ZERO) as Vector2
+		if dimensions.x <= 0.0 or dimensions.y <= 0.0:
+			continue
+		var room_position := record.get("position", Vector3.ZERO) as Vector3
+		rects.append(Rect2(
+			room_position.x - dimensions.x * 0.5,
+			room_position.z - dimensions.y * 0.5,
+			dimensions.x,
+			dimensions.y
+		))
+	return rects
 
 
 func _update_floor_visibility_state() -> void:
@@ -985,6 +1210,14 @@ func _read_debug_camera_yaw_offset_deg() -> float:
 
 
 func _has_camera_presentation_override() -> bool:
+	# 剧情摄影机：与主菜单 / 设施菜单同坐標 —— 同样是一个「可查询的接管方」
+	# （这里是查询短路，真源在 NarrativeDirector.is_camera_override_active()）。
+	if (
+		NarrativeDirector != null
+		and NarrativeDirector.has_method("is_camera_override_active")
+		and bool(NarrativeDirector.is_camera_override_active())
+	):
+		return true
 	if (
 		_main_entry_screen != null
 		and is_instance_valid(_main_entry_screen)
@@ -1570,6 +1803,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		record["authored_layout_asset_id"] = str(spec.get("authored_layout_asset_id", ""))
 		record["authored_layout_version"] = str(spec.get("authored_layout_version", ""))
 		record["authored_layout_room_id"] = str(spec.get("authored_layout_room_id", ""))
+		# 和平区（区块00）：本房不刷怪、门只做普通开关、门扇走 99F 基地滑升门。
+		# 只在区域声明了才落字段 —— 未声明的楼层一个字段都不多，行为逐字不变。
+		if bool(spec.get("authored_layout_peaceful", false)):
+			record["authored_layout_peaceful"] = true
 		record["authored_layout_instances"] = (
 			spec.get("authored_layout_instances", []) as Array
 		).duplicate(true)
@@ -1800,13 +2037,22 @@ func _door_policy_for_edge(from_room_id: String, target_room_id: String) -> Dict
 
 func _try_open_room_door(target_room_id: String) -> bool:
 	var edge := _edge_key(_current_room_id, target_room_id)
+	# 98F 大循环首门的「反向开门=撤退」封印。2026-09-21 主人把 98↔99 楼梯间门
+	# 改成纯普通门后整体停用（见 INITIAL_LOOP_GATE_SEAL_ENABLED）。
 	if (
-		edge == _edge_key("facility", "floor_01_entry")
+		INITIAL_LOOP_GATE_SEAL_ENABLED
+		and edge == _edge_key("facility", "floor_01_entry")
 		and _current_room_id == "floor_01_entry"
 		and _initial_loop_gate_sealed
 	):
 		_show_initial_loop_retreat_warning()
 		return true
+	# 98↔99 楼梯间门从 98F 侧开启：走与 99F 基地门完全相同的普通交通门通道
+	# （E 开，挂 SimpleTransitDoor3D，走远自动关），不用清房/钥匙/命运卡，也不
+	# 弹撤退确认。下行方向（玩家在 facility）不走这里，仍由 stair_arrival 原子
+	# 提交 FloorBundle，所以「从下层往上走」不会绕过整层生成。
+	if edge == _edge_key("facility", "floor_01_entry") and _current_room_id == "floor_01_entry":
+		return _open_simple_room_edge_door(target_room_id, edge)
 	if _airlock_front_edges.has(edge) and _current_room_id == _active_airlock_room_id:
 		_finalize_airlock_commit(int(_airlock_front_edges[edge]))
 	if _boss_descent_gate_edges.has(edge) and not bool(_open_edges.get(edge, false)):
@@ -1817,10 +2063,34 @@ func _try_open_room_door(target_room_id: String) -> bool:
 	# 当前交互的这一扇，禁止刷新整条垂直边时远程联动另一端门。
 	if _is_facility_transit_edge(edge) and _current_room_id in ["start", "facility"]:
 		return _open_simple_room_edge_door(target_room_id, edge)
+	# 竖直边的「下端到达门」默认只在玩家走到下层门槛时由 stair_arrival 放行。
+	# 但玩家此刻本人就站在下层房间里开门时，他已经站在那道门槛上了，必须同步
+	# 放行——否则表现为「边已开启、面前门板纹丝不动、人过不去」。标准流程都是在
+	# 上层房间开向下（未触发本分支），只有「从下层房间回爬」会走到这里。
+	# 98↔99 楼梯间门已在上面分流到普通交通门通道，走不到这里。
+	_mark_vertical_arrival_open_from_lower_room(edge)
 	var opened := super(target_room_id)
 	if opened and _boss_descent_gate_edges.has(edge):
 		_boss_descent_key_count = maxi(0, _boss_descent_key_count - 1)
 	return opened
+
+
+## 玩家在下层房间内开启竖直边时，把自己就在的那一端标成「已到达」。
+## 只认连接器登记的 `to_room_id`（下层端点），上层房间开向下的边不受影响；
+## `start|facility` 与 `facility|<98F入口>` 两条交通边在本调用点之前就已分流到
+## 普通交通门通道，走不到这里，不会改写那些门的开合节奏。
+func _mark_vertical_arrival_open_from_lower_room(edge: String) -> void:
+	if str(_edge_kind_by_key.get(edge, "horizontal")) != "vertical":
+		return
+	if bool(_vertical_arrival_open.get(edge, false)):
+		return
+	var connector := _corridor_by_edge.get(edge) as Node3D
+	if connector == null:
+		return
+	var lower_id := str(connector.get_meta("to_room_id", ""))
+	if lower_id.is_empty() or lower_id != _current_room_id:
+		return
+	_vertical_arrival_open[edge] = true
 
 
 func _open_simple_room_edge_door(target_room_id: String, edge: String) -> bool:
@@ -1839,6 +2109,19 @@ func _open_simple_room_edge_door(target_room_id: String, edge: String) -> bool:
 	)
 
 
+## 同一条边在另一端房间里的那扇门。水平边两端门物理重合，需要成对放行。
+func _opposite_edge_door(owner_room_id: String, target_room_id: String) -> RoomDoor3D:
+	if owner_room_id.is_empty() or target_room_id.is_empty():
+		return null
+	var target_room := _room_by_id.get(target_room_id) as DungeonRoom3D
+	if target_room == null:
+		return null
+	for side_value in target_room.door_targets.keys():
+		if str(target_room.door_targets[side_value]) == owner_room_id:
+			return target_room.get_door_node(str(side_value))
+	return null
+
+
 func _open_bound_simple_room_edge_door(
 	door: RoomDoor3D,
 	owner_room_id: String,
@@ -1854,6 +2137,12 @@ func _open_bound_simple_room_edge_door(
 		_update_room_streaming(owner_room_id)
 	if not _request_simple_transit_door_open(door):
 		return false
+	# 水平边的两端门是同一条门洞上的两块门板（实测两端门世界坐标完全重合，
+	# 间距 0.0）。只放行玩家面前这一块会留下另一块继续挡路、表现为「门开了
+	# 人还是过不去」，所以水平边必须成对放行。竖直边（100↔99 基地、98↔99
+	# 入口）刻意保持「只开当前交互的这一扇」，禁止远程联动另一端门。
+	if str(_edge_kind_by_key.get(edge, "horizontal")) != "vertical":
+		_request_simple_transit_door_open(_opposite_edge_door(owner_room_id, target_room_id))
 	if MonsterAIManager != null and player != null:
 		MonsterAIManager.broadcast_sound_stimulus(player.global_position, 6.5, "door_open", player)
 	status_label.text = "普通交通门已开启"
@@ -3049,7 +3338,7 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 	_vertical_arrival_open[edge] = true
 	if not _request_simple_transit_door_open(lower_door):
 		lower_door.set_open(true)
-	if edge == _edge_key("facility", "floor_01_entry"):
+	if INITIAL_LOOP_GATE_SEAL_ENABLED and edge == _edge_key("facility", "floor_01_entry"):
 		_initial_loop_gate_armed = true
 	# 开门不等于进入房间；严格RoomTrigger/物理位置权威仍负责提交切换。
 	if bundle_floor_index >= 0:
@@ -3065,6 +3354,10 @@ func _activate_stair_arrival(candidate: Dictionary) -> bool:
 
 
 func _on_initial_loop_entry_physically_entered(room: DungeonRoom3D) -> void:
+	if not INITIAL_LOOP_GATE_SEAL_ENABLED:
+		# 98↔99 楼梯间门已按 2026-09-21 主人要求改成纯普通门：进 98F 后身后
+		# 不再封门，玩家可以随时从 98F 侧走回 99F 基地。
+		return
 	if room == null or room.room_id != "floor_01_entry" or not _initial_loop_gate_armed or _initial_loop_gate_sealed:
 		return
 	var edge := _edge_key("facility", room.room_id)
@@ -3644,6 +3937,25 @@ func _install_simple_transit_door_components() -> void:
 			var facility_door := facility.get_door_node(side)
 			if facility_door != null:
 				doors.append(facility_door)
+				_bind_facility_door_welcome(facility_door)
+	# 98↔99 楼梯间门的下端（区块00 门厅东门）：2026-09-21 主人指定按普通门办，
+	# 与 99F 基地门同一套组件（E 开 + 走远自动关）。这里**只挂组件**，不登记
+	# E 交互候选绑定：从 98F 侧开门走 `_try_open_room_door` 的普通交通门通道，
+	# 从 99F 侧下行仍由 `stair_arrival` 原子提交 FloorBundle，两边都不被抢。
+	# 上端是 `facility` 东门，已在上面按基地门挂过同一组件。
+	var lobby_room := _room_by_id.get("floor_01_entry") as DungeonRoom3D
+	if lobby_room != null:
+		for side_value in lobby_room.door_targets.keys():
+			if str(lobby_room.door_targets[side_value]) != "facility":
+				continue
+			var lobby_up_door := lobby_room.get_door_node(str(side_value))
+			if lobby_up_door != null:
+				doors.append(lobby_up_door)
+	# 和平区普通门与基地门同一套组件：E 开、走远自动关、不参与路线授权联动。
+	for entry in _peaceful_plain_door_entries():
+		var plain_door := entry.get("door") as RoomDoor3D
+		if plain_door != null:
+			doors.append(plain_door)
 	if _base_rooftop_transit_door != null:
 		doors.append(_base_rooftop_transit_door)
 	for door in doors:
@@ -3657,10 +3969,75 @@ func _install_simple_transit_door_components() -> void:
 		_simple_transit_door_components.append(component)
 
 
+## 基地两扇门（facility 的 west / east）**关上**时播报系统欢迎语。
+## 为什么挂在这里：门不是 Area3D，交互靠距离判定 —— "关上了"只有 RoomDoor3D.motion_finished
+## 能提供；而这两扇门的引用在本函数里已经拿到，就近订阅，不另引入跨模块耦合。
+func _bind_facility_door_welcome(door: RoomDoor3D) -> void:
+	if door == null or not is_instance_valid(door):
+		return
+	if door.motion_finished.is_connected(_on_facility_door_motion_finished):
+		return
+	door.motion_finished.connect(_on_facility_door_motion_finished)
+
+
+func _on_facility_door_motion_finished(is_open: bool) -> void:
+	if is_open:
+		return
+	# 只有"从外面进基地"才播报：门关的那一刻玩家必须在**基地内侧**。
+	# 否则出门时门同样会自动关上，会被误报成"欢迎回到基地"（2026-09-21 主人反馈）。
+	var facility := _room_by_id.get("facility") as DungeonRoom3D
+	if facility == null or player == null or not is_instance_valid(player):
+		return
+	# y 范围与 DungeonRoom3D._build_trigger 对 FACILITY 的口径保持一致。
+	if not facility.contains_world_position(
+		player.global_position, -1.0, TOWER_GEOMETRY.FLOOR_HEIGHT_M + 0.8
+	):
+		return
+	# 对话 UI 是独立系统：不在时静默跳过，绝不因播报失败影响玩法。
+	if DialogueUI == null or not DialogueUI.has_method("announce"):
+		return
+	DialogueUI.announce(BarkCatalog.pick_at(BARK_BASE_WELCOME, 0))
+
+
 func _simple_transit_component_for(door: RoomDoor3D) -> Node:
 	if door == null or not is_instance_valid(door):
 		return null
 	return door.get_node_or_null("SimpleTransitDoor3D")
+
+
+## 和平区（区块00 98F）里「像 99F 基地两边的门那样自由开关」的普通门清单。
+## 2026-09-20 主人要求：这个区域的门一律普通门，不看清房/钥匙/命运卡，E 开、
+## 走远自动关。刻意排除竖直边两端的楼梯间门（`floor_01_entry` 东门与
+## `floor_01_exit` 西门）——那两扇是 FloorBundle 的提交门槛，交互必须留给
+## `stair_arrival` / `stair_return`，被普通交通门抢走会让整层静默不生成。
+##
+## ⚠️ 98↔99 上行门（`floor_01_entry` 东门）虽然同样被排除在本清单外，但
+## **已经**在 `_install_simple_transit_door_components()` 里单独挂了同一套组件
+## （2026-09-21 主人要求它按普通门办），只是没登记 E 交互绑定。本清单管的是
+## 「E 交互绑定 + 组件」成套的那批，所以这里保持排除，不要把它挪进来。
+func _peaceful_plain_door_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	for room_id_value in _room_by_id.keys():
+		var room := _room_by_id.get(room_id_value) as DungeonRoom3D
+		if room == null or not room.authored_layout_peaceful:
+			continue
+		for side_value in room.door_targets.keys():
+			var target_room_id := str(room.door_targets[side_value])
+			if target_room_id.is_empty():
+				continue
+			var edge := _edge_key(room.room_id, target_room_id)
+			if str(_edge_kind_by_key.get(edge, "horizontal")) == "vertical":
+				continue
+			var door := room.get_door_node(str(side_value))
+			if door == null or not is_instance_valid(door):
+				continue
+			entries.append({
+				"door": door,
+				"owner_room_id": room.room_id,
+				"target_room_id": target_room_id,
+				"edge_key": edge,
+			})
+	return entries
 
 
 func _request_simple_transit_door_open(door: RoomDoor3D) -> bool:
@@ -3705,19 +4082,30 @@ func _get_configured_base_door_bindings() -> Array[Dictionary]:
 			"interaction_distance_m": float(SIMPLE_TRANSIT_DOOR_SCRIPT.INTERACTION_DISTANCE_M),
 		})
 	var facility := _room_by_id.get("facility") as DungeonRoom3D
-	if facility == null:
-		return bindings
-	var facility_sides: Array[String] = ["west", "east"]
-	for side in facility_sides:
-		var door := facility.get_door_node(side)
-		if door == null or not is_instance_valid(door):
-			continue
+	if facility != null:
+		for side in ["west", "east"]:
+			var door := facility.get_door_node(side)
+			if door == null or not is_instance_valid(door):
+				continue
+			bindings.append({
+				"door": door,
+				"mode": "room_edge",
+				"owner_room_id": "facility",
+				"target_room_id": door.target_room_id,
+				"edge_key": _edge_key("facility", door.target_room_id),
+				"interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
+			})
+	# 和平区（98F 区块00）的普通门走与基地门完全相同的 E 交互通道：
+	# 只开玩家面前这一扇、只写它自己那条边的授权，不远程联动另一端门板。
+	# 竖直边两端（98↔99 上行门、98↔97 下行门）已被 `_peaceful_plain_door_entries`
+	# 排除，仍走 stair_arrival / stair_return，FloorBundle 提交不会被绕过。
+	for entry in _peaceful_plain_door_entries():
 		bindings.append({
-			"door": door,
+			"door": entry.get("door"),
 			"mode": "room_edge",
-			"owner_room_id": "facility",
-			"target_room_id": door.target_room_id,
-			"edge_key": _edge_key("facility", door.target_room_id),
+			"owner_room_id": str(entry.get("owner_room_id", "")),
+			"target_room_id": str(entry.get("target_room_id", "")),
+			"edge_key": str(entry.get("edge_key", "")),
 			"interaction_distance_m": STAIR_ARRIVAL_INTERACTION_DISTANCE_M,
 		})
 	return bindings
@@ -4025,6 +4413,10 @@ func _commit_floor_bundle(floor_index: int, reason := "arrival_gate") -> bool:
 				95, current_exit_id, pose["position"] as Vector3, float(pose["rotation_y"])
 			)
 			level_elevator.set_meta("unique_level_elevator", true)
+	# 本层房间是在这里才实例化的：和平区普通门必须在生成之后补挂交通门组件
+	# （`_ready()` 那次只能覆盖开场就已在场的房间；98F 四房在标准流程里由到达门
+	# 事务才建）。安装器本身幂等，重复调用只会重新 configure 既有组件。
+	_install_simple_transit_door_components()
 	_update_floor_visibility_state()
 	return true
 
@@ -4131,6 +4523,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
 		"authored_layout_version": str(record.get("authored_layout_version", "")),
 		"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
+		"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 	})
 	room.position = record["position"]
@@ -4147,6 +4540,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 	room.player_entered.connect(_on_room_entered)
 	room.prop_searched.connect(_on_prop_searched)
 	room.service_activated.connect(_on_service_activated)
+	room.light_toggled.connect(_on_room_light_toggled)
 
 
 func generate_through_floor_for_test(target_floor_number: int) -> bool:
@@ -4656,6 +5050,32 @@ func _entry_context_requests_main_entry() -> bool:
 		str(_entry_context.get("kind", "")) == GameEntryFlow.KIND_MAIN_ENTRY
 		and bool(_entry_context.get("show_main_entry", false))
 	)
+
+
+## 把 gameplay_started 排到「开场页真的把相机与输入交回来」之后。
+## ⛔ 不能就在 _ready 里直接发：那一刻开场页的 present() 可能还没跑
+## （它自己 call_deferred），剧情会抢在开场页前面拿到输入锁，随后被开场页
+## 的 _finish_transition() 还原成"可操控"。
+func _defer_gameplay_started() -> void:
+	if _main_entry_screen != null and is_instance_valid(_main_entry_screen):
+		if (
+			_main_entry_screen.has_signal("transition_finished")
+			and not _main_entry_screen.is_connected(
+				"transition_finished", _on_entry_transition_finished
+			)
+		):
+			_main_entry_screen.connect("transition_finished", _on_entry_transition_finished)
+		return
+	# test_mode / headless / 非冷启动：没有开场页，玩法从本帧末起就正式开始。
+	call_deferred("_emit_gameplay_started")
+
+
+func _on_entry_transition_finished() -> void:
+	_emit_gameplay_started()
+
+
+func _emit_gameplay_started() -> void:
+	gameplay_started.emit(str(_current_room_id))
 
 
 func _refresh_tower_hud() -> void:

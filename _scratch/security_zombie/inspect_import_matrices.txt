@@ -1,0 +1,154 @@
+﻿blender.exe : 12:14:20 - tripo_addon - [task.py:21] - INFO - WebSocket server s
+tarted on port 60600
+所在位置 行:445 字符: 42
++ ... ellStorm2"; & "D:\Program Files\Blender Foundation\Blender 4.5\blende ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (12:14:20 - trip...d on port 60600 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+12:14:20 - tripo_addon - [ws_server.py:113] - INFO - WebSocket server running o
+n ws://127.0.0.1:60600
+12:14:20 - tripo_addon - [ws_server.py:118] - INFO - Heartbeat monitoring start
+ed (timeout: 120s)
+12:14:20 - tripo_addon - [ws_server.py:88] - INFO - Stopping WebSocket server..
+.
+12:14:20 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested
+12:14:20 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+FBX version: 7400
+{
+  "Armature": {
+    "type": "ARMATURE",
+    "parent": null,
+    "matrix_world": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        4.371138828673793e-08,
+        0.0
+      ],
+      [
+        0.0,
+        -4.371138828673793e-08,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "matrix_parent_inverse": [
+      [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  },
+  "tripo_node_3ae4046f": {
+    "type": "MESH",
+    "parent": "Armature",
+    "matrix_world": [
+      [
+        1.0,
+        -9.778887033462524e-09,
+        -1.1389147402951494e-09,
+        -4.6566128730773926e-09
+      ],
+      [
+        2.2817403078079224e-08,
+        1.0,
+        4.6561602573547134e-08,
+        -2.514571129097476e-08
+      ],
+      [
+        3.019180461194537e-09,
+        -4.53533388622418e-08,
+        1.0,
+        -4.64645601994107e-08
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "matrix_parent_inverse": [
+      [
+        1.0,
+        -9.778887033462524e-09,
+        -1.1389147402951494e-09,
+        -4.6566128730773926e-09
+      ],
+      [
+        2.2817403078079224e-08,
+        1.0,
+        2.850214286809205e-09,
+        -2.514570951461792e-08
+      ],
+      [
+        3.019181349372957e-09,
+        -1.64195057550387e-09,
+        1.0,
+        -4.64645601994107e-08
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ]
+  }
+}
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+
+Blender quit

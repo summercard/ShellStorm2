@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://_scratch/vfx_audit_20260921/probe_vfx_runtime_contract.gd" id="1_probe"]
+
+[node name="ProbeVfxRuntimeContract" type="Node"]
+script = ExtResource("1_probe")

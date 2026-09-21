@@ -1,0 +1,209 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_mezzanine_structure/east_mezzanine_structure_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_upper_transition_stair/east_upper_transition_stair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_window_5x12/env_base99_wall_window_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_full_replacement/env_base99_floor_full_replacement_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals/loft_floor_finish/loft_floor_finish_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_backwall_services/loft_backwall_services_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_tool_pegboard/loft_tool_pegboard_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_explore_poster/loft_explore_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_hanging_plant/loft_hanging_plant_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_camp_neon_sign/base_camp_neon_sign_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_status_terminal/base_status_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/storage_terminal/storage_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_bulletin_board/understair_bulletin_board_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_lighting_living_support/understair_lighting_living_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_power_distribution/east_power_distribution_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_small_safety_devices/east_small_safety_devices_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_work_together_poster/east_work_together_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_information_boards/south_wall_information_boards_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hose_reel/hose_reel_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/air_compressor/air_compressor_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/backup_generator/backup_generator_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/battery_bank/battery_bank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/corridor_emergency_light_group/corridor_emergency_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_flammable_bin/east_flammable_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_low_storage_bench/east_low_storage_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_maintenance_workstation/east_maintenance_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_plant_group/east_plant_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_recycle_bin/east_recycle_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_round_pendant_light/east_round_pendant_light_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_supply_24h_station/east_supply_24h_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_waste_bin/east_waste_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/heavy_supply_shelf/heavy_supply_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/industrial_water_tank/industrial_water_tank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_lamp/loft_bedside_lamp_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_rug/loft_bedside_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_coffee_table/loft_coffee_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_food_cabinet/loft_food_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lighting_support/loft_lighting_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_rug/loft_lounge_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_medical_cabinet/loft_medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_nightstand/loft_nightstand_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_office_chair/loft_office_chair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_01/loft_pouf_01_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_02/loft_pouf_02_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_side_table/loft_side_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/main_door_low_storage_cabinet/main_door_low_storage_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/medical_cabinet/medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_battery_cabinet/narrow_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_emergency_cabinet/narrow_emergency_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/tools_cabinet/tools_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_green_bench/understair_green_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_storage_shelf/understair_storage_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/water_purifier/water_purifier_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: [BaseFacility3D] Missing interaction/body shape: mission_operations
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] configure_front_interaction_toward (res://src/base3d/BaseFacility3D.gd:57)
+       [1] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4431)
+       [2] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4437)
+       [3] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4437)
+       [4] _install_facilities (res://src/world3d/TowerDescent3D.gd:4383)
+       [5] _ready (res://src/world3d/TowerDescent3D.gd:423)
+       [6] _probe (res://_scratch/probe_new_game_opening.gd:21)
+       [7] _ready (res://_scratch/probe_new_game_opening.gd:9)
+[MapFateTriggers] 已连接到 3D 局内运行时
+PROBE[A_opening_on] current_room_id=floor_01_exit
+PROBE[A_opening_on] player_pos=(-32.5, -30.25667, 5.0)
+PROBE[A_opening_on] generated=[0, 2] commit_reasons={ 2: "new_game_opening", 0: "rooftop_bootstrap" }
+PROBE[A_opening_on] loaded_floors=[2] floor_stages=[2, 3, 0, 1]
+PROBE[A_opening_on] floor_rooms={ 0: ["start"], 1: ["facility"], 2: ["floor_01_entry", "floor_01_hub", "floor_01_main_02", "floor_01_exit"], 3: ["floor_02_entry"] }
+PROBE[A_opening_on] floor_label=98层 · 探索区 · 警戒区 status=返回已探索房间 · 已肃清
+PROBE[A_opening_on] room floor_01_entry pos=(27.5, -24.0, 2.5) dims=(15.0, 15.0) type=STAIR_LOBBY authored=lobby peaceful=true local_player=(-60.0, -6.256672, 2.5)
+PROBE[A_opening_on]    inside_xz=false dx=60.0/7.5 dz=2.5/7.5 dy=-6.25667190551758
+PROBE[A_opening_on] room floor_01_hub pos=(17.5, -24.0, 5.0) dims=(5.0, 20.0) type=COMBAT authored=corridor peaceful=true local_player=(-50.0, -6.256672, 0.0)
+PROBE[A_opening_on]    inside_xz=false dx=50.0/2.5 dz=0.0/10.0 dy=-6.25667190551758
+PROBE[A_opening_on] room floor_01_main_02 pos=(-5.0, -24.0, 2.5) dims=(40.0, 15.0) type=COMBAT authored=meeting_room peaceful=true local_player=(-27.5, -6.256672, 2.5)
+PROBE[A_opening_on]    inside_xz=false dx=27.5/20.0 dz=2.5/7.5 dy=-6.25667190551758
+PROBE[A_opening_on] room floor_01_exit pos=(-32.5, -24.0, 5.0) dims=(15.0, 20.0) type=COMBAT authored=master_office peaceful=true local_player=(0.0, -6.256672, 0.0)
+PROBE[A_opening_on]    inside_xz=true dx=0.0/7.5 dz=0.0/10.0 dy=-6.25667190551758
+PROBE[A_opening_on] initial_loop_armed=false sealed=false
+PROBE[A_opening_on] ray_room_center from=(-32.5, -21.0, 5.0) hit=(-32.5, -29.05667, 5.0) collider=/root/ProbeNewGameOpening/TowerDescent3D/Player3D
+PROBE[A_opening_on] ray_player_now from=(-32.5, -27.25667, 5.0) hit=(-32.5, -29.05667, 5.0) collider=/root/ProbeNewGameOpening/TowerDescent3D/Player3D
+PROBE[A_opening_on] after_60_more_physics_frames player_pos=(-32.5, -35.99844, 5.0) velocity=(0.0, 0.0, 0.0)
+WARNING: [BaseFacility3D] Missing interaction/body shape: mission_operations
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] configure_front_interaction_toward (res://src/base3d/BaseFacility3D.gd:57)
+       [1] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4431)
+       [2] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4437)
+       [3] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4437)
+       [4] _install_facilities (res://src/world3d/TowerDescent3D.gd:4383)
+       [5] _ready (res://src/world3d/TowerDescent3D.gd:423)
+       [6] _probe (res://_scratch/probe_new_game_opening.gd:21)
+       [7] _ready (res://_scratch/probe_new_game_opening.gd:10)
+       [8] _probe (res://_scratch/probe_new_game_opening.gd:87)
+[MapFateTriggers] 已连接到 3D 局内运行时
+PROBE[B_opening_off] current_room_id=start
+PROBE[B_opening_off] player_pos=(-17.5, 0.03, 2.5)
+PROBE[B_opening_off] generated=[0] commit_reasons={ 0: "rooftop_bootstrap" }
+PROBE[B_opening_off] loaded_floors=[0, 1] floor_stages=[0, 1, 2]
+PROBE[B_opening_off] floor_rooms={ 0: ["start"], 1: ["facility"], 2: ["floor_01_entry"] }
+PROBE[B_opening_off] floor_label=100F · 天台避风港 status=返回已探索房间 · 已肃清
+PROBE[B_opening_off] room floor_01_entry pos=(27.5, -24.0, 2.5) dims=(15.0, 15.0) type=STAIR_LOBBY authored=lobby peaceful=true local_player=(-45.0, 24.03, 0.0)
+PROBE[B_opening_off]    inside_xz=false dx=45.0/7.5 dz=0.0/7.5 dy=24.0300006866455
+PROBE[B_opening_off] room floor_01_hub = null
+PROBE[B_opening_off] room floor_01_main_02 = null
+PROBE[B_opening_off] room floor_01_exit = null
+PROBE[B_opening_off] initial_loop_armed=false sealed=false
+PROBE[B_opening_off] ray_room_center from=(-32.5, -21.0, 5.0) hit=(-32.5, -24.0, 5.0) collider=/root/ProbeNewGameOpening/TowerDescent3D/Blocks/Battle/Floor_98/FloorSupport
+PROBE[B_opening_off] ray_player_now from=(-17.5, 3.03, 2.5) hit=(-17.5, 1.23, 2.5) collider=/root/ProbeNewGameOpening/TowerDescent3D/Player3D
+PROBE[B_opening_off] after_60_more_physics_frames player_pos=(-17.5, 0.03, 2.5) velocity=(0.0, 0.0, 0.0)
+PROBE_NEW_GAME_OPENING_DONE

@@ -1,0 +1,502 @@
+{
+  "V005(目标)": {
+    "armed_idle": {
+      "frames": 97,
+      "max_frame_to_frame_deg": 0.354,
+      "max_range_deg": 9.753,
+      "range_per_bone": {
+        "Head": 6.474,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 3.72,
+        "R_Forearm": 9.752,
+        "R_Hand": 9.753,
+        "L_Thigh": 1.84,
+        "L_Calf": 2.055,
+        "R_Thigh": 1.827,
+        "R_Calf": 1.501,
+        "Hip": 0.592
+      }
+    },
+    "attack": {
+      "frames": 52,
+      "max_frame_to_frame_deg": 45.159,
+      "max_range_deg": 139.407,
+      "range_per_bone": {
+        "Head": 27.084,
+        "L_Upperarm": 73.389,
+        "L_Forearm": 122.26,
+        "L_Hand": 139.407,
+        "R_Upperarm": 27.084,
+        "R_Forearm": 27.084,
+        "R_Hand": 27.084,
+        "L_Thigh": 5.934,
+        "L_Calf": 14.936,
+        "R_Thigh": 5.792,
+        "R_Calf": 7.928,
+        "Hip": 6.4
+      }
+    },
+    "dead": {
+      "frames": 73,
+      "max_frame_to_frame_deg": 8.519,
+      "max_range_deg": 116.958,
+      "range_per_bone": {
+        "Head": 105.013,
+        "L_Upperarm": 106.575,
+        "L_Forearm": 106.575,
+        "L_Hand": 106.575,
+        "R_Upperarm": 104.866,
+        "R_Forearm": 104.866,
+        "R_Hand": 104.866,
+        "L_Thigh": 101.0,
+        "L_Calf": 115.399,
+        "R_Thigh": 101.0,
+        "R_Calf": 116.958,
+        "Hip": 101.0
+      }
+    },
+    "hurt": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 38.793,
+      "max_range_deg": 69.102,
+      "range_per_bone": {
+        "Head": 13.989,
+        "L_Upperarm": 38.914,
+        "L_Forearm": 45.205,
+        "L_Hand": 45.205,
+        "R_Upperarm": 59.613,
+        "R_Forearm": 69.102,
+        "R_Hand": 69.102,
+        "L_Thigh": 4.963,
+        "L_Calf": 10.193,
+        "R_Thigh": 32.648,
+        "R_Calf": 19.089,
+        "Hip": 1.769
+      }
+    },
+    "idle": {
+      "frames": 97,
+      "max_frame_to_frame_deg": 0.5,
+      "max_range_deg": 11.333,
+      "range_per_bone": {
+        "Head": 6.474,
+        "L_Upperarm": 3.72,
+        "L_Forearm": 11.333,
+        "L_Hand": 11.333,
+        "R_Upperarm": 3.72,
+        "R_Forearm": 9.752,
+        "R_Hand": 9.753,
+        "L_Thigh": 1.84,
+        "L_Calf": 2.055,
+        "R_Thigh": 1.827,
+        "R_Calf": 1.501,
+        "Hip": 0.592
+      }
+    },
+    "running": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 27.881,
+      "max_range_deg": 105.434,
+      "range_per_bone": {
+        "Head": 6.64,
+        "L_Upperarm": 8.0,
+        "L_Forearm": 8.0,
+        "L_Hand": 8.0,
+        "R_Upperarm": 8.0,
+        "R_Forearm": 8.0,
+        "R_Hand": 8.0,
+        "L_Thigh": 68.188,
+        "L_Calf": 105.434,
+        "R_Thigh": 95.483,
+        "R_Calf": 62.351,
+        "Hip": 1.0
+      }
+    },
+    "running_armed": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 27.881,
+      "max_range_deg": 105.434,
+      "range_per_bone": {
+        "Head": 6.64,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 8.0,
+        "R_Forearm": 8.0,
+        "R_Hand": 8.0,
+        "L_Thigh": 68.188,
+        "L_Calf": 105.434,
+        "R_Thigh": 95.483,
+        "R_Calf": 62.351,
+        "Hip": 1.0
+      }
+    },
+    "shoot": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 4.167,
+      "max_range_deg": 10.333,
+      "range_per_bone": {
+        "Head": 0.0,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 10.333,
+        "L_Hand": 10.333,
+        "R_Upperarm": 0.0,
+        "R_Forearm": 0.0,
+        "R_Hand": 0.0,
+        "L_Thigh": 0.0,
+        "L_Calf": 0.0,
+        "R_Thigh": 0.0,
+        "R_Calf": 0.0,
+        "Hip": 0.0
+      }
+    },
+    "walking": {
+      "frames": 49,
+      "max_frame_to_frame_deg": 4.832,
+      "max_range_deg": 48.148,
+      "range_per_bone": {
+        "Head": 7.773,
+        "L_Upperarm": 27.883,
+        "L_Forearm": 26.101,
+        "L_Hand": 26.101,
+        "R_Upperarm": 23.183,
+        "R_Forearm": 17.736,
+        "R_Hand": 17.736,
+        "L_Thigh": 21.51,
+        "L_Calf": 48.148,
+        "R_Thigh": 31.677,
+        "R_Calf": 22.278,
+        "Hip": 1.0
+      }
+    },
+    "walking_armed": {
+      "frames": 49,
+      "max_frame_to_frame_deg": 4.832,
+      "max_range_deg": 48.148,
+      "range_per_bone": {
+        "Head": 7.773,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 23.183,
+        "R_Forearm": 17.736,
+        "R_Hand": 17.736,
+        "L_Thigh": 21.51,
+        "L_Calf": 48.148,
+        "R_Thigh": 31.677,
+        "R_Calf": 22.278,
+        "Hip": 1.0
+      }
+    }
+  },
+  "V003(源)": {
+    "armed_idle": {
+      "frames": 97,
+      "max_frame_to_frame_deg": 0.354,
+      "max_range_deg": 9.753,
+      "range_per_bone": {
+        "Head": 6.474,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 3.72,
+        "R_Forearm": 9.753,
+        "R_Hand": 9.753,
+        "L_Thigh": 1.84,
+        "L_Calf": 2.056,
+        "R_Thigh": 1.826,
+        "R_Calf": 1.501,
+        "Hip": 0.591
+      }
+    },
+    "attack": {
+      "frames": 52,
+      "max_frame_to_frame_deg": 45.159,
+      "max_range_deg": 139.407,
+      "range_per_bone": {
+        "Head": 27.084,
+        "L_Upperarm": 73.389,
+        "L_Forearm": 122.26,
+        "L_Hand": 139.407,
+        "R_Upperarm": 27.084,
+        "R_Forearm": 27.084,
+        "R_Hand": 27.084,
+        "L_Thigh": 5.934,
+        "L_Calf": 14.936,
+        "R_Thigh": 5.792,
+        "R_Calf": 7.928,
+        "Hip": 6.4
+      }
+    },
+    "dead": {
+      "frames": 73,
+      "max_frame_to_frame_deg": 8.519,
+      "max_range_deg": 116.958,
+      "range_per_bone": {
+        "Head": 105.013,
+        "L_Upperarm": 106.575,
+        "L_Forearm": 106.575,
+        "L_Hand": 106.575,
+        "R_Upperarm": 104.866,
+        "R_Forearm": 104.866,
+        "R_Hand": 104.866,
+        "L_Thigh": 101.0,
+        "L_Calf": 115.399,
+        "R_Thigh": 101.0,
+        "R_Calf": 116.958,
+        "Hip": 101.0
+      }
+    },
+    "hurt": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 38.793,
+      "max_range_deg": 69.102,
+      "range_per_bone": {
+        "Head": 13.989,
+        "L_Upperarm": 38.914,
+        "L_Forearm": 45.205,
+        "L_Hand": 45.205,
+        "R_Upperarm": 59.613,
+        "R_Forearm": 69.102,
+        "R_Hand": 69.102,
+        "L_Thigh": 4.963,
+        "L_Calf": 10.193,
+        "R_Thigh": 32.648,
+        "R_Calf": 19.089,
+        "Hip": 1.769
+      }
+    },
+    "idle": {
+      "frames": 97,
+      "max_frame_to_frame_deg": 0.5,
+      "max_range_deg": 11.333,
+      "range_per_bone": {
+        "Head": 6.474,
+        "L_Upperarm": 3.72,
+        "L_Forearm": 11.333,
+        "L_Hand": 11.333,
+        "R_Upperarm": 3.72,
+        "R_Forearm": 9.753,
+        "R_Hand": 9.753,
+        "L_Thigh": 1.84,
+        "L_Calf": 2.056,
+        "R_Thigh": 1.826,
+        "R_Calf": 1.501,
+        "Hip": 0.591
+      }
+    },
+    "running": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 27.881,
+      "max_range_deg": 105.434,
+      "range_per_bone": {
+        "Head": 6.64,
+        "L_Upperarm": 8.0,
+        "L_Forearm": 8.0,
+        "L_Hand": 8.0,
+        "R_Upperarm": 8.0,
+        "R_Forearm": 8.0,
+        "R_Hand": 8.0,
+        "L_Thigh": 68.188,
+        "L_Calf": 105.434,
+        "R_Thigh": 95.483,
+        "R_Calf": 62.351,
+        "Hip": 1.0
+      }
+    },
+    "running_armed": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 27.881,
+      "max_range_deg": 105.434,
+      "range_per_bone": {
+        "Head": 6.64,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 8.0,
+        "R_Forearm": 8.0,
+        "R_Hand": 8.0,
+        "L_Thigh": 68.188,
+        "L_Calf": 105.434,
+        "R_Thigh": 95.483,
+        "R_Calf": 62.351,
+        "Hip": 1.0
+      }
+    },
+    "shoot": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 4.167,
+      "max_range_deg": 10.333,
+      "range_per_bone": {
+        "Head": 0.0,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 10.333,
+        "L_Hand": 10.333,
+        "R_Upperarm": 0.0,
+        "R_Forearm": 0.0,
+        "R_Hand": 0.0,
+        "L_Thigh": 0.0,
+        "L_Calf": 0.0,
+        "R_Thigh": 0.0,
+        "R_Calf": 0.0,
+        "Hip": 0.0
+      }
+    },
+    "walking": {
+      "frames": 49,
+      "max_frame_to_frame_deg": 4.832,
+      "max_range_deg": 48.148,
+      "range_per_bone": {
+        "Head": 7.773,
+        "L_Upperarm": 27.883,
+        "L_Forearm": 26.101,
+        "L_Hand": 26.101,
+        "R_Upperarm": 23.183,
+        "R_Forearm": 17.736,
+        "R_Hand": 17.736,
+        "L_Thigh": 21.51,
+        "L_Calf": 48.148,
+        "R_Thigh": 31.677,
+        "R_Calf": 22.278,
+        "Hip": 1.0
+      }
+    },
+    "walking_armed": {
+      "frames": 49,
+      "max_frame_to_frame_deg": 4.832,
+      "max_range_deg": 48.148,
+      "range_per_bone": {
+        "Head": 7.773,
+        "L_Upperarm": 0.0,
+        "L_Forearm": 0.0,
+        "L_Hand": 0.0,
+        "R_Upperarm": 23.183,
+        "R_Forearm": 17.736,
+        "R_Hand": 17.736,
+        "L_Thigh": 21.51,
+        "L_Calf": 48.148,
+        "R_Thigh": 31.677,
+        "R_Calf": 22.278,
+        "Hip": 1.0
+      }
+    }
+  },
+  "MELEE(小僵尸)": {
+    "anim_melee_fungboar01_attack_v003": {
+      "frames": 52,
+      "max_frame_to_frame_deg": 45.159,
+      "max_range_deg": 139.407,
+      "range_per_bone": {
+        "Head": 27.084,
+        "L_Upperarm": 73.389,
+        "L_Forearm": 122.26,
+        "L_Hand": 139.407,
+        "R_Upperarm": 27.084,
+        "R_Forearm": 27.084,
+        "R_Hand": 27.084,
+        "L_Thigh": 5.934,
+        "L_Calf": 14.936,
+        "R_Thigh": 5.792,
+        "R_Calf": 7.928,
+        "Hip": 6.4
+      }
+    },
+    "anim_melee_fungboar01_dead_v002": {
+      "frames": 73,
+      "max_frame_to_frame_deg": 8.519,
+      "max_range_deg": 116.958,
+      "range_per_bone": {
+        "Head": 105.013,
+        "L_Upperarm": 106.575,
+        "L_Forearm": 106.575,
+        "L_Hand": 106.575,
+        "R_Upperarm": 104.866,
+        "R_Forearm": 104.866,
+        "R_Hand": 104.866,
+        "L_Thigh": 101.0,
+        "L_Calf": 115.399,
+        "R_Thigh": 101.0,
+        "R_Calf": 116.958,
+        "Hip": 101.0
+      }
+    },
+    "anim_melee_fungboar01_hurt_v002": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 38.793,
+      "max_range_deg": 69.102,
+      "range_per_bone": {
+        "Head": 13.989,
+        "L_Upperarm": 38.914,
+        "L_Forearm": 45.205,
+        "L_Hand": 45.205,
+        "R_Upperarm": 59.613,
+        "R_Forearm": 69.102,
+        "R_Hand": 69.102,
+        "L_Thigh": 4.963,
+        "L_Calf": 10.193,
+        "R_Thigh": 32.648,
+        "R_Calf": 19.089,
+        "Hip": 1.769
+      }
+    },
+    "anim_melee_fungboar01_idle_v002": {
+      "frames": 97,
+      "max_frame_to_frame_deg": 0.5,
+      "max_range_deg": 11.333,
+      "range_per_bone": {
+        "Head": 6.474,
+        "L_Upperarm": 3.72,
+        "L_Forearm": 11.333,
+        "L_Hand": 11.333,
+        "R_Upperarm": 3.72,
+        "R_Forearm": 9.753,
+        "R_Hand": 9.753,
+        "L_Thigh": 1.84,
+        "L_Calf": 2.055,
+        "R_Thigh": 1.826,
+        "R_Calf": 1.501,
+        "Hip": 0.591
+      }
+    },
+    "anim_melee_fungboar01_running_v003": {
+      "frames": 25,
+      "max_frame_to_frame_deg": 27.881,
+      "max_range_deg": 105.434,
+      "range_per_bone": {
+        "Head": 6.64,
+        "L_Upperarm": 8.0,
+        "L_Forearm": 8.0,
+        "L_Hand": 8.0,
+        "R_Upperarm": 8.0,
+        "R_Forearm": 8.0,
+        "R_Hand": 8.0,
+        "L_Thigh": 68.188,
+        "L_Calf": 105.434,
+        "R_Thigh": 95.483,
+        "R_Calf": 62.351,
+        "Hip": 1.0
+      }
+    },
+    "anim_melee_fungboar01_walking_v002": {
+      "frames": 49,
+      "max_frame_to_frame_deg": 4.833,
+      "max_range_deg": 48.148,
+      "range_per_bone": {
+        "Head": 7.773,
+        "L_Upperarm": 27.883,
+        "L_Forearm": 26.101,
+        "L_Hand": 26.101,
+        "R_Upperarm": 23.183,
+        "R_Forearm": 17.736,
+        "R_Hand": 17.736,
+        "L_Thigh": 21.51,
+        "L_Calf": 48.148,
+        "R_Thigh": 31.677,
+        "R_Calf": 22.278,
+        "Hip": 1.0
+      }
+    }
+  }
+}

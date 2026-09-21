@@ -19,7 +19,7 @@ agent_created: true
 
 ## 环境（本机）
 
-- Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64.exe`（注意 `...exe\` 是目录名）
+- Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe`（注意 `...exe\` 是目录名；**必须用 `_console.exe` 那个** —— 非 console 版在 Windows 下不挂 stdout，`> out.txt` 会拿到空文件，容易误判成「探针没跑」）
 - 项目：`I:\工作项目\shellstrom2\ShellStorm2`
 - Python（后处理/删文件）：`C:\Users\zhuangmenghong\.workbuddy\binaries\python\versions\3.13.12\python.exe`
 
@@ -268,6 +268,22 @@ tower._on_room_entered(room)
 `Array[FateCard]` 的元素是 RefCounted 对象（不是 `Dictionary`）。写 `choice.get("label", choice)` 会同时炸两条 parse error：`Expression is of type "FateCard" so it can't be of type "Dictionary"` 与 `Too many arguments for "get()" call`（对象上的 `get()` 只收 1 参）。读字段用属性（`card.card_name`）。
 
 同理，`var x := <Node>.get("prop")` 会因 Variant 推断而触发「warning treated as error」——**探针里尽量直接属性访问**（`tower._map_fate_triggers`），需要按名取时显式标注类型。
+
+## 第九条关键陷阱：读「姿态」时轴与欧拉序都会跟你想象的不一样（2026-09-21 实测）
+
+判「件朝向对不对 / 有没有倾倒 / 落地没有」时，有三处会得到看起来精确、实际反了的结论：
+
+1. **glTF Y-up 轴映射**：Blender 局部 **+Z** 经 glTF 导入 Godot 后是局部 **+Y**。
+   - 例：天台墙挂空调的**出风风扇**在 Blender 局部 +Z ⇒ Godot 里判「风扇朝外」必须读 **`basis.y`**。原来读 `basis.z` 会**恒判「没朝外」**（假红报 `fan axis=(0,-1,0)`），而 Blender 侧独立探针同时证明几何是对的 ⇒ 是**判据错**。
+   - 同一条：Godot 局部 **+Z** 是「原本朝下的那一面」（例：空调的进风格栅）。
+2. **欧拉序不同**：Blender 默认 **XYZ** 序（矩阵 = `Rz@Rx@Ry`）、Godot 默认 **YXZ** 序（矩阵 = `Ry@Rx@Rz`）。布局源若同时给 `rotation_y` 与 `rotation_z`，两引擎的 Rx/Rz 次序就**不一致**，角度不能逐值搬运。
+   - 本项目已定契约：布局源只用 `rotation_x_deg` + `rotation_y_deg`（`rz` 恒 0）⇒ `Rz@Rx` ≡ `Ry@Rx`，可 1:1 透传。
+   - **别推公式，取真值矩阵**：Blender `Euler((rx,0,rz)).to_matrix()` / Godot `Basis.from_euler(Vector3(rx,ry,0), EULER_ORDER_YXZ)`，取局部轴列向量比对。
+3. **「倒装件」的原点不在底面**：`rotation_x_deg=180` 的件（例：立管下段倒装）原点落在**上端**，`position.y` 读出来是「原点那截」的高度，**用它判落地会得到相反结论**。
+   - 正确判法：按**实测可视包络** —— 遍历 `VisualInstance3D`，取 `global_transform * get_aabb().get_endpoint(i)`（i=0..7）求并集，看最低点。例：立管两段（下段倒装、两段 `h` 都写件高 4.945）并集应连成 `0 ~ 9.890m`、最低点 y=0。
+   - ⚠️ 组件包络**不要读 `instance.location`**（那是摆放点）。Blender 侧同理：只认 `depsgraph.object_instances` 的 `io.matrix_world`。
+
+> 通用教训：**「姿态」类判据先问「这个轴/这个分量的语义，在目标引擎里是什么」**，再写断言。判据本身错了，会稳定地报出一个假红（或假绿），比没有判据更有害。
 
 ## 已知噪音（不影响结论）
 

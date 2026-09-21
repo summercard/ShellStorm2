@@ -1,4 +1,73 @@
 # 游戏设计文档 v0.1 变更记录
+## 2026-09-21｜四次修正 100F 天台装饰：花盆 / 花圃加上物理阻挡（可挡住玩家）
+
+业主实机反馈：「花盆和花圃没有阻挡」—— 走在天台上可以直接穿过长条花箱与大/小盆栽。根因：装饰布局的**所有**实例都被 `TowerFloorStage3D` 无条件关掉碰撞（原始设计是纯视觉装饰），而 `flowerbox / plant_large / plant_small` 三件 prefab 是**纯可视件**（`visual_only=true`、不带碰撞节点）⇒ 482 件装饰**全局零碰撞**，绿化自然拦不住人。
+
+**修法：给布局源加「实例级碰撞策略」，只让绿化 20 件 `blocking`**（原地修正，AssetID / layout_id / layout_version 不变）：
+
+1. **布局源**（`author_rooftop_decorated_layout_v001.py`）：`add()` 新增 `collision` 参数（默认 `visual_only`），词表 `{visual_only, blocking}` 并硬断言白名单；绿化 6 处调用点（8 花箱 + 6 大盆栽 + 6 小盆栽）传 `blocking`。导出时写 `scene.collision_policy = "per_instance:visual_only(default)+blocking(greenery)"`，`design_intent` / `validation` 记 `blocking_collision_count=20` / `visual_only_collision_count=462`，并自检声明白名单 == 实际 blocking slug。
+2. **运行时**（`TowerFloorStage3D.gd`）：新增 `_apply_rooftop_collision_policy(instance, slug, policy)` —— 不论策略**先关**组件自带碰撞（沿用旧行为），`blocking` 时用 **`TowerGeometry3D.resolve_visual_bounds()`** 量出该实例的**实测可视包络**，挂一个 `StaticBody3D`（名 `BlockingCollision`，`collision_layer=1`、`mask=0`、`PROCESS_MODE_ALWAYS`）+ 子 `CollisionShape3D`（`BoxShape3D`，尺寸 = 包络 size、位置 = 包络中心）。**碰撞盒尺寸随美术走、不写死常量**；`mask=0` 是因为玩家（`scenes/Player3D.tscn`，`layer=1/mask=1`）需要「撞得到」它，它自己不需要检测别人。未知策略值 → `push_error` 并跳过。候选根 meta 增 `collision_policy=per_instance` / `blocking_collision_count`。
+3. **校验器**（`validate_rooftop_decorated_layout_v001.py`）新增**第 5 层断言**：策略值必须在词表内、`blocking + visual_only == 482`、blocking 的 slug 集合必须 == 白名单、blocking 计数必须 == 8+6+6、`visual_only == 482-20`，且**清单的 `design_intent` / `validation` 与 .blend 实测交叉一致**。
+4. **两个运行时探针**（`probe_rooftop_decorated_layout.gd` / `probe_rooftop_decorated_stage_only.gd`）：绿化件必须**恰好 1 个启用碰撞形状**、且其 `BoxShape3D.size` / 中心必须与再算一遍的**实测可视包络**吻合（`BLOCKING_BOX_TOL=0.01`）、body 必须 `layer=1/mask=0/ALWAYS`；非绿化件必须 **0** 启用碰撞形状。
+
+**反向对照（改坏→变红→还原→逐字节一致）**：把 20 件绿化翻回 `visual_only` ⇒ ① 两份运行时探针 `exit 1`（`blocking INST_368_flowerbox enabled shapes=0 expected=1` …）；② 直接在 `.blend` 侧翻坏 ⇒ 布局 QA `ROOFTOP_DECOR_LAYOUT_QA_FAIL` 报 3 条（`blocking slugs=[] / blocking instances=0 / manifest blocking_collision_count=20, actual 0`）。还原后 `.blend`（sha256 `de1d7ce6…`）与 `.json`（sha256 `fcf892d7…`）与快照**逐字节一致**、三类验收全绿。
+
+门禁：`check_asset_registry --ledger scenes --scope full` 维持 **46**（**不新增资产、不新增条目**；布局 .blend 重生成 ⇒ 同步 row 240 的 SHA `09e9a917… → de1d7ce6…`）；场景账本 row 240 状态列 `static / visual_only → static / per_instance(visual_only+blocking)`、规格列 `0启用碰撞 → 20启用碰撞（绿化）`，`3D-场景通用` row 146（碰撞开关 未创建→开、碰撞归属 `引擎（visual_only）→ 引擎（per_instance：默认 visual_only，绿化 blocking）`、碰撞方式 → BoxShape3D 实测包络代理）与域变更日志 **v0.1.8** 同步；运行时清单 `rooftop_100f_decorated_runtime_manifest.json` 的 `collision_policy / enabled_collision_shapes(0→20) / collision_owner` 同步。**8/8 屋顶验收全绿 0 ERROR**：`probe_rooftop_decorated_layout`（`ROOFTOP_DECORATED_LAYOUT_RUNTIME_OK instances=120 groups=6 blocking=20 visual_collisions=0`）/ `probe_rooftop_decorated_stage_only`（`…_OK instances=120 blocking=20 visual_collisions=0`）/ 布局 QA（`…_QA_OK instances=482 … blocking=20 visual_only=462`）/ `verify_rooftop_32x32_contract` / `verify_rooftop_door` / `verify_base_rooftop_transit_door_motion` / `verify_rooftop_railing` / `verify_tower_grid_component_alignment` / `verify_rooftop_floor_facade_components`。
+
+<br>
+
+## 2026-09-21｜三次修正 100F 天台装饰：立管接到地板、墙挂空调 90° 倾倒让风扇朝外
+
+业主实机看截图反馈两条：「水管可以接下来一些，接到地板 上面基本看不到的」「空调机的在墙上的状态，需要 90 度旋转，让风扇朝外」。全部**原地修正**（AssetID / layout_id / layout_version 不变）：
+
+1. **立管落地**：`pipe_riser` 件高 **4.945m**、原点在**管底**、顶端是朝 +X 的鹅颈出水口。旧版放 `h=5.8` ⇒ 管底**悬空 5.8m**。现每处摆**两段、两段的 h 都是 4.945**：下段 `rotation_x_deg=180` **倒装**（几何绕原点翻到下方 ⇒ 包络 0~4.945m，原点即上端；鹅颈转到贴地 0.095m，读作立管底部的泄水口）、上段正装（4.945~9.89m，鹅颈仍在顶 9.795m），合成一根 **0~9.89m 连续落水管**；与 10.65m 环管之间残留 **0.76m**，由环管本体与支架轨遮住 ⇒ 达成业主「上面基本看不到」。支架同时补一段低位（1.5m）与原有 7.0m 位，覆盖 1.56~10.64m。立管 4 处 → **8 段**、支架 4 → **8 件**。
+2. **墙挂空调倾倒 90°**：新增实例朝向分量 **`rotation_x_deg`**（绕自身 X 轴的「倾倒」，此前 `add()` 只会绕 Z 轴转平面朝向）。组件 `hvac_small` 的**顶面**（Blender 局部 +Z）自带出风风扇、**前面**（局部 −Y）自带进风格栅 —— 落地摆放时风扇朝上是对的，**一挂到墙上风扇就朝天**。故 4 台墙挂机统一 `rotation_x_deg=90`，风扇转成朝墙外（南墙 → +Z、东墙 → +X、西墙 → −X）。⚠️ **欧拉序契约**：Blender 默认 XYZ 序（矩阵 = `Rz·Rx·Ry`）、Godot 默认 YXZ 序（矩阵 = `Ry·Rx·Rz`），**只有 `rz` 分量为 0 时** `Rz@Rx` 与 `Ry@Rx` 才同序、角度才可逐值搬运 ⇒ 布局源只用 `rotation_x_deg` + `rotation_y_deg` 两轴，**禁止同时给 ry 与 rz**。两个引擎分别取过真值矩阵验证，映射 `(bx,by,bz)→(bx,bz,−by)` 下等价。
+3. **6 个墙挂件贴墙**：4 空调 + 2 通风口的后背统一埋进墙外皮内 **0.05m**，不再悬空（旧版通风口后背离墙 0.63m）。立管与支架按各自墙面给 yaw（旧版立管一律 0 ⇒ 东西墙鹅颈朝墙里）。
+
+**运行时重放实例 112 → 120**（`pipe_risers` 8 → 16）：空调与通风口 6 + 绿化 20 + 藤蔓 16 + 女儿墙挂藤 8 + 水管 54 + 立管/支架 16；结构壳体（234 地砖 / 68 件女儿墙 / 楼梯与碰撞）与玩法不变。
+
+验收与防再犯：布局 QA（`validate_rooftop_decorated_layout_v001.py`）新增**第 4 层断言** —— ① 墙挂空调「倾倒后包络轴交换」：沿墙法线进深必须 = 原**高度** 1.87、竖向高度必须 = 原**进深** 2.365，且机背埋进外皮 0.05m；② 立管两段接地：下段 `rotation_x=180` 且**管底 z=0**、顶 z=4.945，两段合成顶 z=9.890。运行时探针 `probe_rooftop_decorated_layout.gd` 新增 `_check_fan_outward()`（**风扇轴必须指向该墙外法线**，外法线由 30×30 壳体中心推得、不查表）与 `_check_riser_runs()`（按**实测可视包络**判两段连成 0~9.89m、最低点落 y=0；⚠️ 倒装件原点在上端，**不能用 `position.y` 判落地**）。**两层断言都做了反向对照**（`HVAC_SMALL_TIP`、`PIPE_RISER_LOWER_TIP` 双双改 0 → 重生成 → 两侧同时变红：QA 报 14 条、运行时报 12 条；还原后 .json 与基线**逐字节一致**）。⚠️ 本轮还修掉探针自身的**判据错误**：风扇在 Blender 局部 +Z，经 glTF Y-up 导入 Godot 后是**局部 +Y**，原来读 `basis.z` 会恒判「没朝外」（改用 `basis.y`）。
+
+门禁：`check_asset_registry --ledger scenes --scope full` 维持 **46**（布局 .blend 重生成 ⇒ 同步 row 240 的 SHA `96f914c5… → 09e9a917…`）；账本 row 240（112/6 组 → 120/6 组）与域变更日志 **v0.1.7** 同步；运行时清单 `assets/art/environments/tower_zones/rooftop/runtime/rooftop_100f_decorated_runtime_manifest.json` 112 → 120。8/8 屋顶验收全绿 0 ERROR：`probe_rooftop_decorated_layout`（`ROOFTOP_DECORATED_LAYOUT_RUNTIME_OK instances=120`）/ `probe_rooftop_decorated_stage_only` / `verify_rooftop_32x32_contract` / `verify_rooftop_door` / `verify_base_rooftop_transit_door_motion` / `verify_rooftop_railing` / `verify_tower_grid_component_alignment` / `verify_rooftop_floor_facade_components`。视觉取证：`probe_rooftop_decor_fix_shots.{gd,tscn}` 扩到 **14 机位**（新增立管南/西落地侧视、俯视「上面看不到」、空调南/东正视图，并自加补光灯）→ `_scratch/rooftop/decor_fix_shots/*.png`。旧布局源码留档 `_scratch/rooftop/green_baseline.{blend,json}`、旧账本 `ShellStorm2_场景账本_v001.xlsx.bak_rooftop_decor_third_fix`。
+
+<br>
+
+## 2026-09-21｜修正 100F 天台装饰细节：竖向基准、挡门件、藤蔓错落与新增女儿墙挂藤
+
+业主实机看截图反馈四条：「花圃花盆这些在地面的会悬空」「藤蔓可以有的延展高一点。有的可以高一些，高低错落」「99-100 基地出口的藤蔓和花盆挡住门了，往北移动一些」「我有栏杆的藤蔓组件，帮我适当加进来」。全部**原地修正**（AssetID / layout_id / layout_version 不变）：
+
+1. **悬空根因：竖向基准写错一层**。运行时天台承重面是 **y=0**（`TowerFloorStage3D._floor_visual_origin_y()` 把地砖可视顶面对齐到 Y=0），而布局源把落地装饰写在 `h=0.3`（= 它自己那块地砖的顶面），偏偏地砖组 `rooftop_base` **不在** `ROOFTOP_LAYOUT_REPLAY_GROUPS` 里 ⇒ 实机花草整块砖厚悬空 0.30m、藤蔓 0.35m。修法：新增竖向基准常量 `GROUND_H=0.0` 与 `TILE_H=GROUND_H−0.30`，全部落地件（花箱 / 大小盆栽 / 藤蔓基座 / 女儿墙挂藤）统一 `h=GROUND_H`；自持参照地砖改 `h=TILE_H`，使**砖顶面落回 0.0**（Blender 侧校核图仍然贴地）。
+2. **基地东门净空**：东门净宽 2.2m（`Base100UpperShell3D.DOOR_CLEAR_WIDTH`）⇒ 门洞世界 `gz∈[−3.6,−1.4]`。东墙藤蔓 `gz −5.0 → −8.5`（原叶面包络 `gz∈[−7.13,−2.87]` 已盖进门洞）、东侧大盆栽 `−4.0 → −6.2`；另把**正插在门洞正中**的东墙立管 `gz −2.0 → +5.5`（连带其固定支架）。判据按**旋转后包络**，不只看中心点。
+3. **藤蔓高低错落**：运行时禁非单位缩放（重放遇 `scale≠1` 直接 `blockers++`），故不能用 scale 拉高 ⇒ 改为**叠件**：11 个基座全部落地，另在 5 个位置叠一层上层藤蔓，叠高 2.0 / 2.4 / 2.6 / 3.2 / 3.6m ⇒ 顶高 **5.80 ~ 7.40m**。
+4. **新增「女儿墙挂藤」**（业主提供的组件）：从 v002 主库导出 GLB `env_rooftop_ref_parapet_ivy_top3d.glb`（5.004×0.814×2.009m，原点在底面），生成运行时 prefab `parapet_ivy.tscn`，绑定色盘 post_import，注册进 `ROOFTOP_DECOR_SCENES` 与 `ROOFTOP_LAYOUT_REPLAY_GROUPS`，摆 **8 件**贴天台外圈女儿墙中心线（南 / 北 / 东 / 西各 2）；因挂藤件与 5m 直段同宽，四角让给 `parapet_outer` 转角件。
+
+**运行时重放实例 99 → 112（5 组 → 6 组）**：空调与通风口 6 + 绿化 20 + 藤蔓 16 + **女儿墙挂藤 8** + 水管 54 + 立管支架 8；结构壳体（234 地砖 / 68 件女儿墙 / 楼梯与碰撞）与玩法不变。
+
+验收与防再犯：布局 QA（`validate_rooftop_decorated_layout_v001.py`）**新增第 3 层断言**——① 落地件按 **depsgraph 真实几何包络**（不读 `location`，避免「摆放点对、渲染点错」的自欺）断言底面 `y=0`，并按组数出落地件数（greenery 20 / ivy 11 / parapet_ivy 8）；② 自持地砖**顶面**必须落 0.0；③ 东门净空按旋转后包络判侵入（门洞 gz 窗 + 门高 z∈[0,2.5] + 东侧 5m 通道）；④ 挂藤必须贴女儿墙中心线；⑤ 藤蔓顶高至少 5 档、落差 ≥3.0m。运行时探针 `probe_rooftop_decorated_layout.gd` 同步新增「落地件 y≈0」计数断言。**两层断言都做了反向对照**（改坏即红、还原即绿）：QA 侧把承重面基准改成 0.30 → 落地件全红、地砖顶面全红；把东门净空窗挪到 `gz∈[−7.2,−5.3]` → 抓出 `plant_large` 与 `ivy` 挡门；运行时侧把 greenery 落地数改成 21 → 立刻 exit 1。另新增视觉探针 `probe_rooftop_decor_fix_shots.{gd,tscn}`（9 机位，非 headless）出图逐条复核。
+
+门禁：`check_asset_registry --ledger scenes --scope full` 维持 **46**（无新增类别、无新增 `duplicate_asset_id`；布局 .blend 重生成后同步 row 240 的 SHA）。账本《资产主表》row 238（组件库：16 → 17 件导出、11 → 12 类装饰接入）与 row 240（布局：99/5 组 → 112/6 组）同步，域变更日志追加 **v0.1.6**。旧布局源与旧 prefab 留档 `_scratch/rooftop_ivy/backup_{components,runtime}`。
+
+
+## 2026-09-21｜修正 100F 天台装饰布局：坐标契约、装饰外皮与重复层
+
+业主实机反馈「天台的装饰坐标偏移了，范围也错了，没有和顶部的 99 层基地正上方的墙壁是一体的，目前围起来的整体偏小还往北偏了一点」。三处根因，全部**原地修正**（AssetID / layout_id / layout_version 不变）：
+
+1. **缺一步坐标换算**：布局源按 Godot 世界平面口径书写（x=+东、gz=+南），而项目约定 Blender 侧 `world.z = −by`（见 `Block00MasterOfficeLayout3D.gd` 的坐标契约注释：Blender X=东 / Y=北，Godot +z=南），作者脚本却直接 `by = gz`。于是整份布局在 Godot 里**南北镜像、整体偏北 10m**：地砖落在 z∈[−42.5, 32.5]、女儿墙 z∈[−44.75, 34.75]，而天台壳体是 z∈[−35, 45] ⇒ 北侧溢出边界、南侧缺 10m。修法：作者脚本新增 `gz_to_by(gz) = −gz`，摆位参数一律保持 Godot 口径，写入 Blender 时一步换算。
+2. **房屋 footprint 与所在建筑不符**：布局里的「房屋」不是独立小屋，而是 `Base100UpperShell3D`（30×30、世界 y=0..12）的外皮 —— 资产件契约写死 `metadata/collision_owner = "Base100UpperShell3D"`，`prp_rooftop_roof_full_5m.tscn` 明写「只用在 6×6 网格的 4×4 内圈 16 格」、封顶碰撞 `RoofCollision` 为 30×0.30×30。原 20×20（4×4 网格）既小 10m 又偏北 3m ⇒ 「偏小还往北偏」。改为 **6×6 = 30×30、同心于世界 (0, 5)、东墙门段对齐 `EAST_DOOR_CENTER_Z`（本地 −7.5 ⇒ 世界 z=−2.5）**；周边装饰（空调 / 花圃 / 藤蔓 / 水管）随之外扩贴到 30×30 墙皮，水管直段每边 8 → 12 段（2.5m 间距不变）。
+3. **重复层**：`env_base100_upper_shell_30x30_h12_root_top3d.tscn` 自 2026-09-20 起已自带 24 块墙 + 36 格封顶，布局源里同名 60 件若重放会**逐面 z-fighting**。这 60 件改名 `shell_reference`，只作 Blender 侧参照；`ROOFTOP_LAYOUT_REPLAY_GROUPS` 收为 5 组（hvac_wall / greenery / ivy / pipe_loop / pipe_risers）。**运行时重放实例 113 → 99**，结构壳体（234 地砖 / 68 件女儿墙 / 楼梯与碰撞）与玩法不变。
+
+验收与防再犯：布局 QA（`validate_rooftop_decorated_layout_v001.py`）新增「换算后必须落在 `ROOFTOP_WORLD_RECT` 内」「地砖 / 女儿墙贴边界」「墙中心线 / 门段 / 6×6 封顶网格对齐 Base100UpperShell」「不得出现 house_shell / house_roof 组名」四组断言；`TowerFloorStage3D._build_rooftop_authored_layout()` 同步加「越界即 blocker」的运行时断言 —— 旧算法在旧数据上会红，可反向对照。门禁 `check_asset_registry --ledger scenes` 维持 **46**（无新增、无新增类别）；`verify_ledger_split` **15 项与改前逐项一致**（含既有的 `ENV-ROOFTOP-DECOR-LAYOUT-100F` extra；用改前账本快照复跑对照确认，本批零增减）。账本《资产主表》row 240 与《3D-场景通用》11 行同步，域变更日志追加 **v0.1.5**；渲染预览重出 `outputs/rooftop_100f_decorated_layout_v001_{overview,closeup,top}.png`。旧布局源留档 `_scratch/rooftop_decor_fix/layout_before.{blend,json}`。
+
+## 2026-09-21｜100F 天台按组件库完成装饰布局并接入 Godot，场景账本同步跟进
+
+- 用户要求「用组件库里可装饰的组件装饰天台：墙上放空调、房子周围放花圃、加藤蔓、把水管接起来」。落地为**独立布局源 + 运行时重放**：Blender 侧新增 `source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.{blend,json}`（469 个 Collection Instance，布局集合自身 0 Mesh、全部缩放 1）；Godot 侧由 `TowerFloorStage3D` 读清单重放 **113 个装饰实例**（房屋墙体 16 + 屋顶 16 + 空调与通风口 6 + 绿化 18 + 藤蔓 11 + 水管 38 + 立管支架 8，共 7 组）。
+- 组件几何**不改**：11 类装饰（`ENV-ROOFTOP-REF-HVAC-SMALL/VENT`、`PIPE-STRAIGHT/ELBOW/TEE/RISER/BRACKET`、`IVY`、`FLOWERBOX`、`PLANT-LARGE/SMALL`）从 v002 主库逐件导出 GLB 到 `tower_zones/rooftop/components/`，并生成运行时 PackedScene `tower_zones/rooftop/runtime/<slug>.tscn`；11 件 `.import` 全部绑定 `tools/asset_pipeline/scene_facility_shared_palette_post_import.gd`（否则白板且不触发任何 `*_OK` 门禁），并把天台组件目录加入 `.gitignore` 的 `.import` 白名单。
+- 结构壳体不重复生成：234 块 5m 地砖、64 段女儿墙直段 + 4 个外角、楼梯与碰撞仍由 `TowerFloorStage3D` 负责；装饰件全部 `visual_only`，启用碰撞 0、非单位缩放 0。坐标转换固定 `Godot = (Blender X, Blender Z, -Blender Y)`。
+- 账本（`assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx`）：《3D-场景通用》**11 行**由「Blender源已完成」→「正式美术已接入」，补 runtime PackedScene / GLB 路径、功能脚本 `src/world3d/TowerFloorStage3D.gd`、碰撞归零与实测记录；**专页与《资产主表》各新增 1 条** `ENV-ROOFTOP-DECOR-LAYOUT-100F`（100F 天台装饰布局，SHA 指向布局 Blend）；《资产主表》row 238 库行刷新为 **47 包** + 方案A 0.80m + SHA `ca091c6d… → d9e96fa1…` + 更新时间 2026-09-21；域变更日志追加 **v0.1.4**。遵守 README「AssetID 已存在 → 升级既有行」：11 类装饰**未新增任何组件 ID**。
+- 扩容连带：新增主表行后，查重公式、数据校验、条件格式与筛选范围由 `$R$6:$R$239` 统一扩到 `$R$6:$R$240`，`总览` 10 格统计公式同步；旧范围 CF 条目已清理，不留重复范围。
+- 门禁：`check_asset_registry --ledger scenes --scope full` **47 → 46**（`sha_mismatch` 24 → 23，恰为库行；`invalid_status` 5 / `path_not_found` 18 不变，**无任何一类增加**、无新增 `duplicate_asset_id`）；`verify_ledger_split` 13 → 14，**唯一新增**为 `asset_not_in_baseline: ENV-ROOFTOP-DECOR-LAYOUT-100F`（本次有意新增条目，与上一批 `ENV-TOWER-DOOR-LEAF-5M` 同类），历史行**零丢失、零改写**（GONE=∅，`missing` 仍是既有的两条 shelter）。
+- 文档：`docs/v0.1/design/rooftop_component_library.md` 同步（女儿墙 1.8m → 0.80m 方案A、库内 47 包、「未接入」陈述改为「已按装饰布局接入」、接入边界改为装饰层 `visual_only`）。
+- 旧账本留档：`ledgers/ShellStorm2_场景账本_v001.xlsx.bak_rooftop_decor_ledger`。
 
 ## 2026-09-20｜100F 上层围护东西南三面与 24m 封顶换成天台参考组件库 v002（房间墙 + 房顶模块）
 

@@ -69,6 +69,10 @@ func _process(delta: float) -> void:
 		if ratio >= 1.0:
 			_finish_transition()
 		return
+	# 叙事接管相机期间启动页不抢镜头：两个系统都写同一台 Camera3D，
+	# 互不查询就会逐帧互相覆盖（运行时零报错，只表现为画面跳/抖）。
+	if _narrative_holds_presentation():
+		return
 	_set_player_presentation_facing()
 	_camera.transform = _closeup_transform
 	_camera.fov = CLOSEUP_FOV
@@ -130,6 +134,23 @@ func is_camera_override_active() -> bool:
 	return _presenting
 
 
+## 叙事系统是否持有本帧的相机/输入。两个系统都要写同一台 Camera3D 与同一个
+## input_locked，互不查询就会互相覆盖 —— 运行时零报错，只表现为画面错乱或
+## 剧情期间玩家仍能操控。
+func _narrative_holds_presentation() -> bool:
+	if NarrativeDirector == null:
+		return false
+	var holds_camera := (
+		NarrativeDirector.has_method("is_camera_override_active")
+		and bool(NarrativeDirector.is_camera_override_active())
+	)
+	var holds_input := (
+		NarrativeDirector.has_method("is_player_input_locked")
+		and bool(NarrativeDirector.is_player_input_locked())
+	)
+	return holds_camera or holds_input
+
+
 func get_entry_snapshot() -> Dictionary:
 	return {
 		"presenting": _presenting,
@@ -178,7 +199,9 @@ func _finish_transition() -> void:
 	if _camera != null and is_instance_valid(_camera):
 		_camera.transform = _gameplay_camera_transform
 		_camera.fov = _gameplay_fov
-	if _player != null and is_instance_valid(_player):
+	if _player != null and is_instance_valid(_player) and not _narrative_holds_presentation():
+		# 叙事持有输入/朝向时不得顶掉：写回 _previous_input_locked 会把剧情刚拿到的锁
+		# 还原成"可操控"，写回 aim_yaw/rotation 会把剧情刚摆好的朝向抹掉。
 		_player.set_input_locked(_previous_input_locked)
 		_player.aim_yaw = _saved_aim_yaw
 		if _player.avatar != null and _player.avatar.visual_root != null:

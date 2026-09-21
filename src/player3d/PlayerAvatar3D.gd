@@ -93,6 +93,12 @@ const FEET_COLORS := {
 
 var _player: Node = null
 var _authored_motion := CharacterMotionLibrary3D.new()
+
+# —— 叙事姿态覆盖（剧情演出用；动画数据全部来自角色自带动作库，不新增美术资产）——
+var _narrative_pose_active := false
+var _narrative_pose_clip := ""
+var _narrative_pose_phase := 0.0
+var _narrative_pose_frozen := true
 var _elapsed := 0.0
 var _state := "idle"
 var _previous_state := "idle"
@@ -329,6 +335,31 @@ func _ready() -> void:
 		_authored_motion.bind(self)
 
 
+## 剧情演出用：把表现钉在某一段**已验证剪辑**的某个时间点上。
+## 只改表现采样：不动状态机、不改碰撞/伤害/输入、不写存档。
+## 例：开场「趴在地上」= clip `dead` 的终点帧；「起身」= 让该相位反向推进。
+func set_narrative_pose(clip: String, phase: float, frozen := true) -> void:
+	if clip.is_empty():
+		clear_narrative_pose()
+		return
+	_narrative_pose_active = true
+	_narrative_pose_clip = clip
+	_narrative_pose_phase = clampf(phase, 0.0, 1.0)
+	_narrative_pose_frozen = frozen
+
+
+func clear_narrative_pose() -> void:
+	_narrative_pose_active = false
+	_narrative_pose_clip = ""
+	_narrative_pose_phase = 0.0
+	_narrative_pose_frozen = true
+	_authored_motion.pose_lock_enabled = false
+
+
+func has_narrative_pose() -> bool:
+	return _narrative_pose_active
+
+
 func _process(delta: float) -> void:
 	_elapsed += delta
 	_apply_bunny_attachment_scale()
@@ -341,6 +372,8 @@ func _process(delta: float) -> void:
 		_update_authored_motion_progress(delta)
 	else:
 		_update_state_motion(delta)
+	_authored_motion.pose_lock_enabled = _narrative_pose_active and _narrative_pose_frozen
+	_authored_motion.pose_lock_phase = _narrative_pose_phase
 	if assembly_version in ["v009", "v010", "v011", "v021"]:
 		_authored_motion.apply(self, delta)
 	_update_reload_progress_bar()
@@ -543,6 +576,13 @@ func get_customization() -> Dictionary:
 
 func _read_player_state() -> void:
 	if _player == null:
+		return
+	if _narrative_pose_active:
+		# 演出接管期间不读玩法表现态，否则「趴着」会被 idle/moving 立刻顶掉。
+		# 朝向不受影响：_update_orientation 在 _process 里独立执行，左右张望照常。
+		if _state != _narrative_pose_clip:
+			_previous_state = _state
+			_state = _narrative_pose_clip
 		return
 	var next_state := _state
 	if _player.has_method("get_presentation_state"):

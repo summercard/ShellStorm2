@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8euler0gt01"]
+
+[ext_resource type="Script" path="res://_scratch/rooftop/_euler_gt_godot.gd" id="1_eul"]
+
+[node name="Root" type="Node3D"]
+script = ExtResource("1_eul")

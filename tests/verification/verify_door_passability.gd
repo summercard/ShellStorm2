@@ -251,7 +251,15 @@ func _ready() -> void:
 		tower._current_room_id = test_room.room_id
 		await _settle_short()
 		var opened := tower.try_open_room_door(test_target_id)
-		await _settle_short()
+		# 挂普通交通门组件（99F 基地门 / 区块00 和平区门）的实体门是 0.72s 升降动画，
+		# 且碰撞随门板一起走 —— 动画落底才禁用碰撞（RoomDoor3D 的
+		# collision_tracks_panel_motion 分支）。与测试 3 同一处理：有组件就等动画走完
+		# 再断言，没有组件才用短 settle（旧门是即时放行，_settle_short 足够）。
+		if test_door_node.get_node_or_null("SimpleTransitDoor3D") != null:
+			await get_tree().create_timer(0.80).timeout
+			await get_tree().physics_frame
+		else:
+			await _settle_short()
 		if opened:
 			var new_edges: Dictionary = (tower.get("_open_edges") as Dictionary).duplicate(true)
 			var new_open_count := 0

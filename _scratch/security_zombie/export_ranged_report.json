@@ -1,0 +1,18 @@
+{
+  "output": "I:\\\u5de5\u4f5c\u9879\u76ee\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\components\\enm_ranged_sporeshooter01_visual_top3d.glb",
+  "sha256": "4f2f1a8ad31a9caedde595acdd84284043c1283e656ab9c015c0f03ecae6702d",
+  "bytes": 1345332,
+  "bones": 36,
+  "actions": [
+    "idle",
+    "armed_idle",
+    "walking",
+    "walking_armed",
+    "running",
+    "running_armed",
+    "attack",
+    "hurt",
+    "dead",
+    "shoot"
+  ]
+}

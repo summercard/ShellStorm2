@@ -59,6 +59,23 @@ ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed
 
 **一批场景同时红，先看第一个 `SCRIPT ERROR` 指向谁。** 传播链会放大：一个 config 脚本坏掉 → 所有依赖它的模块坏掉 → 依赖那些模块的场景整批 exit 1。例：`GameDesignConfig.gd` 坏了 → `WastelandLight3D.gd` 编译失败 → 四个玩家/背包/动画场景全 exit 1，而**不依赖 WastelandLight3D 的资产导入场景照样 `[PASS]`**。
 
+### 另有两类「假故障」，先排除再报并发会话（2026-09-21 实测）
+
+**A. 新增 `class_name` 后类缓存没刷新** —— headless 直跑场景**不会重扫** `class_name`。并行会话刚落一个带 `class_name` 的新脚本（如 `src/ui/bubble/CharacterBark3D.gd`），你这边立刻直跑就会得到
+`Could not resolve class "X", because of a parser error` / `Could not find type "X" in the current scope`，**看起来像半成品，其实文件已存在**。
+**判据**（秒判）：`grep -c "X" .godot/global_script_class_cache.cfg` 为 0，或缓存 mtime **晚于**你的启动时刻 ⇒ 就是它。
+**修法**：先 `--headless --path . --import` 刷缓存，再重跑。**别去「替它补定义」。**
+
+**B. 文件行尾被写成 CRCRLF（`0d 0d 0a`）** —— 用 Python **文本模式**重写一个已含 CRLF 的文件就会这样（每行被再插一个 `\r`）。两个后果：
+1. `git diff` 把**整个文件**报成改写（实测 1792 行的文件 → 3377 行 diff），且 **`--ignore-cr-at-eol` 也救不了**（clean 过滤器只能把 `\r\r\n` 削成 `\r\n` ≠ blob 的 LF）。**别据此判断「LF↔CRLF 转换」，那是误判。**
+2. **GDScript 解析器直接失败**：`Could not resolve class "X", because of a parser error`，该脚本整类不可用；依赖它的探针 `_ready()` 永不执行 ⇒ `get_tree().quit()` 永不被调 ⇒ **进程空转到超时**（实测空转 15m50s 才被杀）。
+
+**判据**：`head -c 120 <文件> | xxd` 看到 `0d 0d 0a`；或 `tr -cd '\r' < <文件> | wc -c` ≈ **2×行数**（对照：`grep -c $'\r' <文件>` 也会等于行数，**看不出双 CR，别用它判**）。
+**修法**：`\r\r\n` → `\r\n`（工作区口径 CRLF，git 入库时按 `core.autocrlf=true` 归一为 LF）。**闸门**：归一前后「剥掉全部 `\r`」的字节必须完全相同（内容零变化证明）+ 归一后不得残留 `0d0d0a`。`--ignore-cr-at-eol` **不能**当闸门。
+**预防**：写回一律 `open(p,"rb")/open(p,"wb")`，或文本模式显式 `newline=""`。
+
+> ⛔ **通用教训**：「探针/场景跑几分钟甚至几十分钟不结束」**先按解析失败查**（`grep -n "Parse Error\|Failed to load script" <日志>`），别当「慢」处理。解析失败的探针不会退出，会一直空转。
+
 **特例：`Class "X" hides a global script class`（同名 `class_name` 抢注）**
 
 报错形如 `错误 (1, 12)：Class "DungeonRoom3D" hides a global script class.`。列号 12 落在 `class_name ` 之后，说明冲突源在某个脚本的**第 1 行**。

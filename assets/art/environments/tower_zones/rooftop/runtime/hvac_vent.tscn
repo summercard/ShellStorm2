@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3]
+
+; 100F 天台装饰组件：小通风口（v002 参考组件库导出，纯视觉）
+; 稳定运行时路径：rooftop/runtime/hvac_vent.tscn
+; GLB：rooftop/components/env_rooftop_ref_hvac_vent_top3d.glb
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_hvac_vent_top3d.glb" id="1_visual"]
+
+[node name="RooftopHvacVent" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-HVAC-VENT"
+metadata/package_id = "ENV-ROOFTOP-REF-HVAC-VENT"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_hvac_vent_top3d.glb"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "wall_vent"
+metadata.component_slug = "hvac_vent"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

@@ -1,0 +1,12 @@
+{
+  "max_tip_position_err_m": {
+    "R_Hand": 0.9095,
+    "L_Hand": 0.4254,
+    "R_Foot": 0.5421,
+    "L_Foot": 0.5467,
+    "Head": 0.9586
+  },
+  "frames": 97,
+  "worst_bone": "Head",
+  "worst_m": 0.9586
+}

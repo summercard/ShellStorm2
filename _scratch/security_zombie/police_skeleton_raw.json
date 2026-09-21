@@ -1,0 +1,1030 @@
+{
+  "armature": "Armature",
+  "mesh": "tripo_node_f72ff985",
+  "bones": [
+    {
+      "name": "mixamorig:Hips",
+      "parent": null,
+      "head": [
+        -0.01367,
+        -0.02538,
+        0.30259
+      ],
+      "tail": [
+        -0.01367,
+        -0.02538,
+        0.35456
+      ]
+    },
+    {
+      "name": "mixamorig:LeftUpLeg",
+      "parent": "mixamorig:Hips",
+      "head": [
+        0.0488,
+        -0.02538,
+        0.27526
+      ],
+      "tail": [
+        0.05661,
+        -0.03319,
+        0.17765
+      ]
+    },
+    {
+      "name": "mixamorig:LeftLeg",
+      "parent": "mixamorig:LeftUpLeg",
+      "head": [
+        0.05661,
+        -0.03319,
+        0.17765
+      ],
+      "tail": [
+        0.06833,
+        -0.02538,
+        0.07613
+      ]
+    },
+    {
+      "name": "mixamorig:LeftFoot",
+      "parent": "mixamorig:LeftLeg",
+      "head": [
+        0.06833,
+        -0.02538,
+        0.07613
+      ],
+      "tail": [
+        0.08785,
+        -0.11908,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:LeftToeBase",
+      "parent": "mixamorig:LeftFoot",
+      "head": [
+        0.08785,
+        -0.11908,
+        0.02538
+      ],
+      "tail": [
+        0.10096,
+        -0.182,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:LeftToe_End",
+      "parent": "mixamorig:LeftToeBase",
+      "head": [
+        0.10096,
+        -0.182,
+        0.02538
+      ],
+      "tail": [
+        0.11407,
+        -0.24493,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:RightUpLeg",
+      "parent": "mixamorig:Hips",
+      "head": [
+        -0.07613,
+        -0.02538,
+        0.27916
+      ],
+      "tail": [
+        -0.08004,
+        -0.03319,
+        0.17765
+      ]
+    },
+    {
+      "name": "mixamorig:RightLeg",
+      "parent": "mixamorig:RightUpLeg",
+      "head": [
+        -0.08004,
+        -0.03319,
+        0.17765
+      ],
+      "tail": [
+        -0.09175,
+        -0.02538,
+        0.07613
+      ]
+    },
+    {
+      "name": "mixamorig:RightFoot",
+      "parent": "mixamorig:RightLeg",
+      "head": [
+        -0.09175,
+        -0.02538,
+        0.07613
+      ],
+      "tail": [
+        -0.10737,
+        -0.11908,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:RightToeBase",
+      "parent": "mixamorig:RightFoot",
+      "head": [
+        -0.10737,
+        -0.11908,
+        0.02538
+      ],
+      "tail": [
+        -0.11786,
+        -0.182,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:RightToe_End",
+      "parent": "mixamorig:RightToeBase",
+      "head": [
+        -0.11786,
+        -0.182,
+        0.02538
+      ],
+      "tail": [
+        -0.12834,
+        -0.24492,
+        0.02538
+      ]
+    },
+    {
+      "name": "mixamorig:Spine",
+      "parent": "mixamorig:Hips",
+      "head": [
+        -0.01367,
+        -0.03319,
+        0.32211
+      ],
+      "tail": [
+        -0.00976,
+        -0.02928,
+        0.36896
+      ]
+    },
+    {
+      "name": "mixamorig:Spine1",
+      "parent": "mixamorig:Spine",
+      "head": [
+        -0.00976,
+        -0.02928,
+        0.36896
+      ],
+      "tail": [
+        -0.00976,
+        -0.02147,
+        0.42753
+      ]
+    },
+    {
+      "name": "mixamorig:Spine2",
+      "parent": "mixamorig:Spine1",
+      "head": [
+        -0.00976,
+        -0.02147,
+        0.42753
+      ],
+      "tail": [
+        -0.00976,
+        -0.00428,
+        0.49259
+      ]
+    },
+    {
+      "name": "mixamorig:LeftShoulder",
+      "parent": "mixamorig:Spine2",
+      "head": [
+        0.00586,
+        -0.00586,
+        0.48609
+      ],
+      "tail": [
+        0.08394,
+        -0.00195,
+        0.47047
+      ]
+    },
+    {
+      "name": "mixamorig:LeftArm",
+      "parent": "mixamorig:LeftShoulder",
+      "head": [
+        0.08394,
+        -0.00195,
+        0.47047
+      ],
+      "tail": [
+        0.19327,
+        -0.00195,
+        0.46266
+      ]
+    },
+    {
+      "name": "mixamorig:LeftForeArm",
+      "parent": "mixamorig:LeftArm",
+      "head": [
+        0.19327,
+        -0.00195,
+        0.46266
+      ],
+      "tail": [
+        0.28983,
+        -0.00403,
+        0.46308
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHand",
+      "parent": "mixamorig:LeftForeArm",
+      "head": [
+        0.28983,
+        -0.00403,
+        0.46308
+      ],
+      "tail": [
+        0.36716,
+        -0.00403,
+        0.46285
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandIndex1",
+      "parent": "mixamorig:LeftHand",
+      "head": [
+        0.37111,
+        -0.03473,
+        0.46364
+      ],
+      "tail": [
+        0.39328,
+        -0.03757,
+        0.46364
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandIndex2",
+      "parent": "mixamorig:LeftHandIndex1",
+      "head": [
+        0.39328,
+        -0.03757,
+        0.46364
+      ],
+      "tail": [
+        0.41374,
+        -0.04041,
+        0.45796
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandIndex3",
+      "parent": "mixamorig:LeftHandIndex2",
+      "head": [
+        0.41374,
+        -0.04041,
+        0.45796
+      ],
+      "tail": [
+        0.43367,
+        -0.04318,
+        0.45243
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandIndex4",
+      "parent": "mixamorig:LeftHandIndex3",
+      "head": [
+        0.43367,
+        -0.04318,
+        0.45243
+      ],
+      "tail": [
+        0.45359,
+        -0.04595,
+        0.44689
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandMiddle1",
+      "parent": "mixamorig:LeftHand",
+      "head": [
+        0.37396,
+        -0.00744,
+        0.46364
+      ],
+      "tail": [
+        0.39669,
+        -0.00688,
+        0.46421
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandMiddle2",
+      "parent": "mixamorig:LeftHandMiddle1",
+      "head": [
+        0.39669,
+        -0.00688,
+        0.46421
+      ],
+      "tail": [
+        0.41545,
+        -0.00744,
+        0.46023
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandMiddle3",
+      "parent": "mixamorig:LeftHandMiddle2",
+      "head": [
+        0.41545,
+        -0.00744,
+        0.46023
+      ],
+      "tail": [
+        0.43422,
+        -0.00801,
+        0.45625
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandMiddle4",
+      "parent": "mixamorig:LeftHandMiddle3",
+      "head": [
+        0.43422,
+        -0.00801,
+        0.45625
+      ],
+      "tail": [
+        0.453,
+        -0.00858,
+        0.45227
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandPinky1",
+      "parent": "mixamorig:LeftHand",
+      "head": [
+        0.36373,
+        0.04485,
+        0.46023
+      ],
+      "tail": [
+        0.38191,
+        0.04883,
+        0.45796
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandPinky2",
+      "parent": "mixamorig:LeftHandPinky1",
+      "head": [
+        0.38191,
+        0.04883,
+        0.45796
+      ],
+      "tail": [
+        0.39726,
+        0.05224,
+        0.45398
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandPinky3",
+      "parent": "mixamorig:LeftHandPinky2",
+      "head": [
+        0.39726,
+        0.05224,
+        0.45398
+      ],
+      "tail": [
+        0.41279,
+        0.05569,
+        0.44995
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandPinky4",
+      "parent": "mixamorig:LeftHandPinky3",
+      "head": [
+        0.41279,
+        0.05569,
+        0.44995
+      ],
+      "tail": [
+        0.42833,
+        0.05914,
+        0.44593
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandRing1",
+      "parent": "mixamorig:LeftHand",
+      "head": [
+        0.37168,
+        0.02041,
+        0.46308
+      ],
+      "tail": [
+        0.39612,
+        0.02211,
+        0.4608
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandRing2",
+      "parent": "mixamorig:LeftHandRing1",
+      "head": [
+        0.39612,
+        0.02211,
+        0.4608
+      ],
+      "tail": [
+        0.41431,
+        0.02268,
+        0.45569
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandRing3",
+      "parent": "mixamorig:LeftHandRing2",
+      "head": [
+        0.41431,
+        0.02268,
+        0.45569
+      ],
+      "tail": [
+        0.43062,
+        0.02319,
+        0.4511
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandRing4",
+      "parent": "mixamorig:LeftHandRing3",
+      "head": [
+        0.43062,
+        0.02319,
+        0.4511
+      ],
+      "tail": [
+        0.44692,
+        0.0237,
+        0.44652
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandThumb1",
+      "parent": "mixamorig:LeftHand",
+      "head": [
+        0.3211,
+        -0.02904,
+        0.45228
+      ],
+      "tail": [
+        0.34156,
+        -0.05121,
+        0.44261
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandThumb2",
+      "parent": "mixamorig:LeftHandThumb1",
+      "head": [
+        0.34156,
+        -0.05121,
+        0.44261
+      ],
+      "tail": [
+        0.35747,
+        -0.06599,
+        0.43522
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandThumb3",
+      "parent": "mixamorig:LeftHandThumb2",
+      "head": [
+        0.35747,
+        -0.06599,
+        0.43522
+      ],
+      "tail": [
+        0.36949,
+        -0.07714,
+        0.42965
+      ]
+    },
+    {
+      "name": "mixamorig:LeftHandThumb4",
+      "parent": "mixamorig:LeftHandThumb3",
+      "head": [
+        0.36949,
+        -0.07714,
+        0.42965
+      ],
+      "tail": [
+        0.3815,
+        -0.0883,
+        0.42407
+      ]
+    },
+    {
+      "name": "mixamorig:Neck",
+      "parent": "mixamorig:Spine2",
+      "head": [
+        -0.00976,
+        -0.00195,
+        0.50171
+      ],
+      "tail": [
+        -0.00976,
+        -0.00976,
+        0.54856
+      ]
+    },
+    {
+      "name": "mixamorig:Head",
+      "parent": "mixamorig:Neck",
+      "head": [
+        -0.00976,
+        -0.00976,
+        0.54856
+      ],
+      "tail": [
+        -0.00976,
+        -0.02838,
+        0.66026
+      ]
+    },
+    {
+      "name": "mixamorig:HeadTop_End",
+      "parent": "mixamorig:Head",
+      "head": [
+        -0.00976,
+        -0.02838,
+        0.66026
+      ],
+      "tail": [
+        -0.00976,
+        -0.04699,
+        0.77196
+      ]
+    },
+    {
+      "name": "mixamorig:RightShoulder",
+      "parent": "mixamorig:Spine2",
+      "head": [
+        -0.02538,
+        -0.00586,
+        0.48609
+      ],
+      "tail": [
+        -0.10347,
+        -0.00195,
+        0.47047
+      ]
+    },
+    {
+      "name": "mixamorig:RightArm",
+      "parent": "mixamorig:RightShoulder",
+      "head": [
+        -0.10347,
+        -0.00195,
+        0.47047
+      ],
+      "tail": [
+        -0.21279,
+        -0.00195,
+        0.46657
+      ]
+    },
+    {
+      "name": "mixamorig:RightForeArm",
+      "parent": "mixamorig:RightArm",
+      "head": [
+        -0.21279,
+        -0.00195,
+        0.46657
+      ],
+      "tail": [
+        -0.30998,
+        -0.0043,
+        0.46771
+      ]
+    },
+    {
+      "name": "mixamorig:RightHand",
+      "parent": "mixamorig:RightForeArm",
+      "head": [
+        -0.30998,
+        -0.0043,
+        0.46771
+      ],
+      "tail": [
+        -0.37441,
+        -0.00314,
+        0.4645
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandIndex1",
+      "parent": "mixamorig:RightHand",
+      "head": [
+        -0.37469,
+        -0.03638,
+        0.46658
+      ],
+      "tail": [
+        -0.39269,
+        -0.03863,
+        0.46489
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandIndex2",
+      "parent": "mixamorig:RightHandIndex1",
+      "head": [
+        -0.39269,
+        -0.03863,
+        0.46489
+      ],
+      "tail": [
+        -0.40732,
+        -0.04088,
+        0.45814
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandIndex3",
+      "parent": "mixamorig:RightHandIndex2",
+      "head": [
+        -0.40732,
+        -0.04088,
+        0.45814
+      ],
+      "tail": [
+        -0.42155,
+        -0.04307,
+        0.45157
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandIndex4",
+      "parent": "mixamorig:RightHandIndex3",
+      "head": [
+        -0.42155,
+        -0.04307,
+        0.45157
+      ],
+      "tail": [
+        -0.43578,
+        -0.04526,
+        0.44501
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandMiddle1",
+      "parent": "mixamorig:RightHand",
+      "head": [
+        -0.37806,
+        -0.00712,
+        0.46489
+      ],
+      "tail": [
+        -0.39832,
+        -0.00599,
+        0.46489
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandMiddle2",
+      "parent": "mixamorig:RightHandMiddle1",
+      "head": [
+        -0.39832,
+        -0.00599,
+        0.46489
+      ],
+      "tail": [
+        -0.41633,
+        -0.00543,
+        0.45927
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandMiddle3",
+      "parent": "mixamorig:RightHandMiddle2",
+      "head": [
+        -0.41633,
+        -0.00543,
+        0.45927
+      ],
+      "tail": [
+        -0.43431,
+        -0.00487,
+        0.45365
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandMiddle4",
+      "parent": "mixamorig:RightHandMiddle3",
+      "head": [
+        -0.43431,
+        -0.00487,
+        0.45365
+      ],
+      "tail": [
+        -0.45229,
+        -0.00431,
+        0.44803
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandPinky1",
+      "parent": "mixamorig:RightHand",
+      "head": [
+        -0.3685,
+        0.04521,
+        0.46095
+      ],
+      "tail": [
+        -0.38369,
+        0.04802,
+        0.45758
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandPinky2",
+      "parent": "mixamorig:RightHandPinky1",
+      "head": [
+        -0.38369,
+        0.04802,
+        0.45758
+      ],
+      "tail": [
+        -0.39551,
+        0.05027,
+        0.45139
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandPinky3",
+      "parent": "mixamorig:RightHandPinky2",
+      "head": [
+        -0.39551,
+        0.05027,
+        0.45139
+      ],
+      "tail": [
+        -0.40741,
+        0.05254,
+        0.44515
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandPinky4",
+      "parent": "mixamorig:RightHandPinky3",
+      "head": [
+        -0.40741,
+        0.05254,
+        0.44515
+      ],
+      "tail": [
+        -0.41932,
+        0.05481,
+        0.43892
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandRing1",
+      "parent": "mixamorig:RightHand",
+      "head": [
+        -0.37806,
+        0.02045,
+        0.46433
+      ],
+      "tail": [
+        -0.39663,
+        0.02214,
+        0.46095
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandRing2",
+      "parent": "mixamorig:RightHandRing1",
+      "head": [
+        -0.39663,
+        0.02214,
+        0.46095
+      ],
+      "tail": [
+        -0.41126,
+        0.02327,
+        0.45308
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandRing3",
+      "parent": "mixamorig:RightHandRing2",
+      "head": [
+        -0.41126,
+        0.02327,
+        0.45308
+      ],
+      "tail": [
+        -0.42462,
+        0.02429,
+        0.44588
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandRing4",
+      "parent": "mixamorig:RightHandRing3",
+      "head": [
+        -0.42462,
+        0.02429,
+        0.44588
+      ],
+      "tail": [
+        -0.43798,
+        0.02532,
+        0.43869
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandThumb1",
+      "parent": "mixamorig:RightHand",
+      "head": [
+        -0.32967,
+        -0.02625,
+        0.45364
+      ],
+      "tail": [
+        -0.34487,
+        -0.04594,
+        0.44407
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandThumb2",
+      "parent": "mixamorig:RightHandThumb1",
+      "head": [
+        -0.34487,
+        -0.04594,
+        0.44407
+      ],
+      "tail": [
+        -0.36006,
+        -0.05832,
+        0.43563
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandThumb3",
+      "parent": "mixamorig:RightHandThumb2",
+      "head": [
+        -0.36006,
+        -0.05832,
+        0.43563
+      ],
+      "tail": [
+        -0.37151,
+        -0.06765,
+        0.42927
+      ]
+    },
+    {
+      "name": "mixamorig:RightHandThumb4",
+      "parent": "mixamorig:RightHandThumb3",
+      "head": [
+        -0.37151,
+        -0.06765,
+        0.42927
+      ],
+      "tail": [
+        -0.38296,
+        -0.07698,
+        0.42291
+      ]
+    }
+  ],
+  "groups": [
+    "mixamorig:Hips",
+    "mixamorig:LeftUpLeg",
+    "mixamorig:LeftLeg",
+    "mixamorig:LeftFoot",
+    "mixamorig:LeftToeBase",
+    "mixamorig:RightUpLeg",
+    "mixamorig:RightLeg",
+    "mixamorig:RightFoot",
+    "mixamorig:RightToeBase",
+    "mixamorig:Spine",
+    "mixamorig:Spine1",
+    "mixamorig:Spine2",
+    "mixamorig:LeftShoulder",
+    "mixamorig:LeftArm",
+    "mixamorig:LeftForeArm",
+    "mixamorig:LeftHand",
+    "mixamorig:LeftHandIndex1",
+    "mixamorig:LeftHandIndex2",
+    "mixamorig:LeftHandIndex3",
+    "mixamorig:LeftHandMiddle1",
+    "mixamorig:LeftHandMiddle3",
+    "mixamorig:LeftHandPinky1",
+    "mixamorig:LeftHandPinky2",
+    "mixamorig:LeftHandPinky3",
+    "mixamorig:LeftHandRing1",
+    "mixamorig:LeftHandRing2",
+    "mixamorig:LeftHandRing3",
+    "mixamorig:LeftHandThumb1",
+    "mixamorig:LeftHandThumb2",
+    "mixamorig:LeftHandThumb3",
+    "mixamorig:Neck",
+    "mixamorig:Head",
+    "mixamorig:RightShoulder",
+    "mixamorig:RightArm",
+    "mixamorig:RightForeArm",
+    "mixamorig:RightHand",
+    "mixamorig:RightHandIndex1",
+    "mixamorig:RightHandIndex2",
+    "mixamorig:RightHandIndex3",
+    "mixamorig:RightHandMiddle1",
+    "mixamorig:RightHandMiddle2",
+    "mixamorig:RightHandMiddle3",
+    "mixamorig:RightHandPinky1",
+    "mixamorig:RightHandPinky3",
+    "mixamorig:RightHandRing1",
+    "mixamorig:RightHandRing2",
+    "mixamorig:RightHandRing3",
+    "mixamorig:RightHandThumb1",
+    "mixamorig:RightHandThumb2",
+    "mixamorig:RightHandThumb3"
+  ],
+  "arm_matrix_world": [
+    [
+      1.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0,
+      4.371138828673793e-08,
+      0.0
+    ],
+    [
+      0.0,
+      -4.371138828673793e-08,
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "mesh_matrix_world": [
+    [
+      1.0,
+      -7.450580596923828e-09,
+      0.0,
+      -2.60770320892334e-08
+    ],
+    [
+      -7.450581485102248e-09,
+      0.9999999403953552,
+      4.371138473402425e-08,
+      -7.105427357601002e-15
+    ],
+    [
+      -1.4901161193847656e-08,
+      -4.371138473402425e-08,
+      0.9999999403953552,
+      -1.4901161193847656e-07
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "world_min": [
+    -0.430419921875,
+    -0.30004870891571045,
+    -2.3681508309891797e-07
+  ],
+  "world_max": [
+    0.43041980266571045,
+    0.30004870891571045,
+    0.9995114803314209
+  ]
+}

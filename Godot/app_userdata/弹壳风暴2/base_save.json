@@ -2,7 +2,442 @@
 	"manifest_version": 1,
 	"payload": {
 		"active_run_snapshot": {
+			"active_weapon_slot": 0.0,
+			"checkpoint_id": "checkpoint:run:2603918655:00065bf5e5b7e7f0:0028eb58",
+			"current_floor_index": 2.0,
+			"current_room_id": "floor_01_entry",
+			"edge_states": {
+				"facility|floor_01_entry": false,
+				"facility|start": true,
+				"floor_01_entry|floor_01_hub": false,
+				"floor_01_exit|floor_01_main_02": false,
+				"floor_01_exit|floor_02_entry": false,
+				"floor_01_hub|floor_01_main_02": false
+			},
+			"equipped_backpack_item": {
 
+			},
+			"equipped_weapon_items": [
+				{
+					"assembly_id": "bp_sprinkler",
+					"assembly_snapshot": {
+						"base_stats": {
+							"bullet_count": 1.0,
+							"damage": 8.0,
+							"fire_rate": 12.0,
+							"magazine_size": 100.0,
+							"reload_time": 2.8,
+							"spread": 0.15
+						},
+						"node_name": "GunBody_Sprinkler",
+						"node_type": 0.0,
+						"slots": {
+							"3": {
+								"base_stats": {
+									"bullet_damage": 6.0,
+									"bullet_speed": 0.8
+								},
+								"node_name": "Bullet_Sticky",
+								"node_type": 1.0,
+								"slots": {
+
+								},
+								"tags": [
+									"bullet",
+									"sticky",
+									"dot"
+								]
+							}
+						},
+						"tags": [
+							"auto",
+							"high_rate",
+							"spray",
+							"supports_scope",
+							"supports_muzzle",
+							"supports_magazine",
+							"supports_stock",
+							"supports_tactical"
+						]
+					},
+					"base_buy_price": 90.0,
+					"base_sell_price": 45.0,
+					"base_shelf_order": 0.0,
+					"base_shop_enabled": false,
+					"base_stock_rule": "not_listed",
+					"created_transaction_id": "create:wpn_00065bf5e5b51160_00261848_0001",
+					"current_ammo": 100.0,
+					"description": "出厂标配的连射武器。弹匣大、射速快、单发伤害低，靠持续泼洒火力压制走廊。左键装备为当前主武器。",
+					"fate_slot_capacity": 4.0,
+					"fate_upgrades": [],
+					"floor_loot_weights": {
+						"combat_floor_1": 0.4,
+						"combat_floor_2": 0.6,
+						"combat_floor_3": 0.75,
+						"elite_floor_1": 0.75,
+						"elite_floor_2": 1.25,
+						"loot_abyss": 1.25,
+						"loot_floor_1_2": 0.5,
+						"loot_floor_3_4": 0.75,
+						"loot_floor_5": 1.0,
+						"scavenge_floor_1": 0.25,
+						"scavenge_floor_2": 0.5,
+						"scavenge_floor_3": 0.6,
+						"scavenge_floor_4": 0.75,
+						"scavenge_floor_5": 1.25
+					},
+					"id": "weapon_sprinkler",
+					"loot_table_tier": 0.0,
+					"name": "花洒机枪",
+					"price": 90.0,
+					"rarity": "uncommon",
+					"stack_max": 1.0,
+					"subtype": "gun_body",
+					"tags": [
+						"weapon",
+						"gun_body",
+						"auto"
+					],
+					"type": "weapon",
+					"weapon_content_id": "weapon_sprinkler",
+					"weapon_instance": {
+						"assembly_id": "bp_sprinkler",
+						"assembly_snapshot": {
+							"base_stats": {
+								"bullet_count": 1.0,
+								"damage": 8.0,
+								"fire_rate": 12.0,
+								"magazine_size": 100.0,
+								"reload_time": 2.8,
+								"spread": 0.15
+							},
+							"node_name": "GunBody_Sprinkler",
+							"node_type": 0.0,
+							"slots": {
+								"3": {
+									"base_stats": {
+										"bullet_damage": 6.0,
+										"bullet_speed": 0.8
+									},
+									"node_name": "Bullet_Sticky",
+									"node_type": 1.0,
+									"slots": {
+
+									},
+									"tags": [
+										"bullet",
+										"sticky",
+										"dot"
+									]
+								}
+							},
+							"tags": [
+								"auto",
+								"high_rate",
+								"spray",
+								"supports_scope",
+								"supports_muzzle",
+								"supports_magazine",
+								"supports_stock",
+								"supports_tactical"
+							]
+						},
+						"created_transaction_id": "create:wpn_00065bf5e5b51160_00261848_0001",
+						"current_ammo": 100.0,
+						"fate_slot_capacity": 4.0,
+						"fate_upgrades": [],
+						"rarity": "uncommon",
+						"schema_version": 2.0,
+						"weapon_content_id": "weapon_sprinkler",
+						"weapon_instance_id": "wpn_00065bf5e5b51160_00261848_0001"
+					},
+					"weapon_instance_id": "wpn_00065bf5e5b51160_00261848_0001"
+				},
+				{
+
+				}
+			],
+			"flashlight_charge_ratio": 1.0,
+			"flashlight_module_id": "basic",
+			"insurance_capacity": 2.0,
+			"insurance_slots": [
+				{
+
+				},
+				{
+
+				}
+			],
+			"inventory_capacity": 12.0,
+			"inventory_slots": [
+				{
+					"count": 60.0,
+					"item": {
+						"base_buy_price": 30.0,
+						"base_sell_price": 15.0,
+						"base_shelf_order": 0.0,
+						"base_shop_enabled": false,
+						"base_stock_rule": "not_listed",
+						"description": "每个堆叠单位代表1发备弹；换弹按实际弹匣缺口消耗。",
+						"floor_loot_weights": {
+							"combat_floor_1": 2.0,
+							"combat_floor_2": 2.5,
+							"combat_floor_3": 2.0,
+							"combat_floor_4": 2.5,
+							"combat_floor_5": 2.0,
+							"loot_common": 1.5,
+							"loot_floor_1_2": 2.5,
+							"spawn_starter": 2.0
+						},
+						"id": "item_ammo_pack",
+						"name": "通用弹药",
+						"price": 30.0,
+						"rarity": "common",
+						"stack_max": 999.0,
+						"tags": [
+							"consumable",
+							"ammo"
+						],
+						"type": "consumable",
+						"use_action": "refill_ammo"
+					},
+					"slot": 0.0
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				}
+			],
+			"kills": 0.0,
+			"layout_id": "floor_98_3283592901",
+			"player_hp": 100.0,
+			"player_position": [
+				27.5,
+				-23.9700012207031,
+				2.5
+			],
+			"player_rotation_y": 0.0,
+			"quick_item_ids": [
+				"",
+				""
+			],
+			"quick_item_slots": [
+				{
+
+				},
+				{
+
+				}
+			],
+			"room_key_count": 3.0,
+			"run_currency": 0.0,
+			"run_id": "run:2603918655:00065bf5e5b7e7f0:0028eb58",
+			"run_seed": 2603918655.0,
+			"run_value": 0.0,
+			"runtime_map_id": "",
+			"saved_at_unix": 1789969351.0,
+			"schema": "runtime_player_state_v2",
+			"scope": "combat",
+			"valid": true,
+			"world_state": {
+				"committed_floor_indices": [
+					0.0,
+					2.0
+				],
+				"floor_layout_ids": {
+					"0": "bootstrap",
+					"2": "floor_98_3283592901"
+				},
+				"initial_loop_gate_armed": false,
+				"initial_loop_gate_sealed": false,
+				"room_progress": {
+					"facility": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"floor_01_entry": {
+						"cleared": true,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": true,
+						"key_unclaimed": true,
+						"spawned": true,
+						"visited": true
+					},
+					"floor_01_exit": {
+						"cleared": true,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": true,
+						"key_unclaimed": true,
+						"spawned": true,
+						"visited": true
+					},
+					"floor_01_hub": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"floor_01_main_02": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"floor_02_entry": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"start": {
+						"cleared": true,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": true,
+						"visited": false
+					}
+				},
+				"schema": "tower_world_state_v1",
+				"segment_runtime_state": {
+					"facility": {
+						"alive_count": 0.0,
+						"captured_at_msec": 2945.0,
+						"cleared": false,
+						"containers": {
+
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [],
+						"room_light_on": false,
+						"visited": false,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					},
+					"floor_01_entry": {
+						"alive_count": 0.0,
+						"captured_at_msec": 3080.0,
+						"cleared": true,
+						"containers": {
+
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [
+							{
+								"position": [
+									27.5,
+									-23.9500007629395,
+									2.5
+								],
+								"room_id": "floor_01_entry"
+							}
+						],
+						"room_light_on": true,
+						"visited": true,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					},
+					"floor_01_exit": {
+						"alive_count": 0.0,
+						"captured_at_msec": 3062.0,
+						"cleared": true,
+						"containers": {
+							"floor_01_exit_prop_00": false,
+							"floor_01_exit_prop_01": false,
+							"floor_01_exit_prop_02": false
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [
+							{
+								"position": [
+									-30.5535144805908,
+									-23.9500007629395,
+									6.02527618408203
+								],
+								"room_id": "floor_01_exit"
+							}
+						],
+						"room_light_on": false,
+						"visited": true,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					},
+					"start": {
+						"alive_count": 0.0,
+						"captured_at_msec": 2945.0,
+						"cleared": true,
+						"containers": {
+
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [],
+						"room_light_on": false,
+						"visited": false,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					}
+				},
+				"unloaded_segment_floor_indices": [],
+				"vertical_arrival_open": {
+					"facility|floor_01_entry": false,
+					"facility|start": false,
+					"floor_01_exit|floor_02_entry": false
+				}
+			}
 		},
 		"archive_level": 0.0,
 		"archive_unlocked": false,
@@ -11,7 +446,7 @@
 		},
 		"base_energy_capacity": 100.0,
 		"base_energy_current": 100.0,
-		"base_energy_last_synced_game_seconds": 55504.5529439961,
+		"base_energy_last_synced_game_seconds": 79286.1899039474,
 		"blackmarket_level": 0.0,
 		"blackmarket_unlocked": false,
 		"blueprint_attachment_tier": 0.0,
@@ -308,13 +743,13 @@
 		"greenhouse_level": 0.0,
 		"greenhouse_unlocked": false,
 		"last_save_reason": "world_time_interval",
-		"last_saved_at_unix": 1789901663.0,
+		"last_saved_at_unix": 1789969431.0,
 		"pending_fate_card": {
 
 		},
 		"pending_insurance_slots": [],
 		"pending_loadout_items": [],
-		"save_revision": 77.0,
+		"save_revision": 116.0,
 		"save_version": "2.0",
 		"scrapyard_level": 0.0,
 		"scrapyard_unlocked": false,
@@ -328,13 +763,13 @@
 		"vault_unlocked": false,
 		"workshop_level": 0.0,
 		"workshop_unlocked": false,
-		"world_time_elapsed_game_seconds": 55504.5529439961,
+		"world_time_elapsed_game_seconds": 79286.1899039474,
 		"zero_load_extraction": false
 	},
-	"payload_checksum": "61d0b1256ac18a14b46205c29e994184f9cf777fafee401e59861730319c65cd",
+	"payload_checksum": "b8bdfa512e56a3551a3544b8d17c335633fb1cbab032eebf8e553ce1c1cd39e0",
 	"payload_checksum_algorithm": "canonical_json_v3",
 	"profile_schema": "2.0",
 	"reason": "world_time_interval",
-	"revision": 77,
-	"saved_at_unix": 1789901663
+	"revision": 116,
+	"saved_at_unix": 1789969431
 }

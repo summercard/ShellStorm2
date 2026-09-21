@@ -16,6 +16,10 @@ var _state := ""
 var _nodes: Dictionary = {}
 var _weapon_socket_rest := Transform3D.IDENTITY
 var active_clip := ""
+## 叙事姿态锁：剧情演出期间把采样相位钉在某个值（倒地 / 起身的落脚点）。
+## 只影响采样相位，不改剪辑数据、不写玩家状态、不参与任何玩法判定。
+var pose_lock_enabled := false
+var pose_lock_phase := 0.0
 
 func bind(avatar: Node3D) -> void:
 	_version = str(avatar.get_meta("assembly_version", "v009"))
@@ -78,6 +82,8 @@ func apply(avatar: Node3D, delta: float) -> void:
 			if player != null and player.has_method("get_death_animation_progress"):
 				phase = player.get_death_animation_progress()
 	phase = fposmod(phase, 1.0) if bool(clip.loop) else clampf(phase, 0.0, 1.0)
+	if pose_lock_enabled:
+		phase = clampf(pose_lock_phase, 0.0, 1.0)
 	var frames: Array = clip.frames
 	var cursor := phase * (frames.size() - 1)
 	var first := mini(int(cursor), frames.size() - 1)

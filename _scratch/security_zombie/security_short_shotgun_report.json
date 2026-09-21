@@ -1,0 +1,28 @@
+{
+  "output": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\weapons\\weapon_3d\\source\\security_short_shotgun\\wpn_security_short_shotgun_source_v001.blend",
+  "asset_id": "WPN-GUN-SECURITY-SHORT-SHOTGUN",
+  "logic_id": "security_short_shotgun",
+  "display_name_zh": "警察短霰弹枪",
+  "dimensions_m": "0.18×0.18×0.80m",
+  "forward": "local -Z",
+  "sockets": [
+    "GripSocket",
+    "SupportHandSocket",
+    "MuzzleSocket",
+    "MuzzleAttachmentSocket",
+    "ScopeSocket",
+    "MagazineSocket",
+    "StockSocket",
+    "TacticalSocket",
+    "MutatorSocket"
+  ],
+  "materials": [
+    "01_精工金属_枪身骨架",
+    "02_细腻哑光_枪身大面",
+    "03_清漆反光_枪身点缀"
+  ],
+  "actions": [
+    "fire_pump_cycle"
+  ],
+  "mesh_count": 9
+}

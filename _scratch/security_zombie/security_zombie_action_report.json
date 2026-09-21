@@ -1,0 +1,126 @@
+{
+  "status": "authored_pending_godot_validation",
+  "model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\source\\model\\enm_security_zombie_model_v001.blend",
+  "animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\source\\animation\\enm_security_zombie_animation_v001.blend",
+  "gun_source": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\weapons\\weapon_3d\\source\\security_short_shotgun\\wpn_security_short_shotgun_source_v002.blend",
+  "asset_id": "ENM-NORMAL-SECURITY-ZOMBIE-3D",
+  "logic_id": "security_zombie",
+  "skeleton_id": "SKEL-MELEE-FUNGBOAR01-002",
+  "bone_count": 66,
+  "source_policy": "independent procedural FK actions; no melee or ranged action datablock reused",
+  "gun_mount": {
+    "weapon_asset_id": "WPN-GUN-SECURITY-SHORT-SHOTGUN",
+    "main_hand_bone": "L_Hand",
+    "support_hand_bone": "R_Hand",
+    "grip_world_m": [
+      0.18074947595596313,
+      0.33000004291534424,
+      0.8727576732635498
+    ],
+    "support_world_m": [
+      0.15999995172023773,
+      0.5699998736381531,
+      0.9099999070167542
+    ],
+    "weapon_forward": "local -Z -> character +Y"
+  },
+  "clips": {
+    "idle": {
+      "frames": [
+        1,
+        97
+      ],
+      "seconds": 3.2,
+      "loop": true,
+      "fcurves": 660
+    },
+    "walking": {
+      "frames": [
+        1,
+        49
+      ],
+      "seconds": 1.6,
+      "loop": true,
+      "fcurves": 660
+    },
+    "running": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": true,
+      "fcurves": 660
+    },
+    "attack": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": false,
+      "fcurves": 660
+    },
+    "hurt": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": false,
+      "fcurves": 660
+    },
+    "dead": {
+      "frames": [
+        1,
+        73
+      ],
+      "seconds": 2.4,
+      "loop": false,
+      "fcurves": 660
+    },
+    "armed_idle": {
+      "frames": [
+        1,
+        97
+      ],
+      "seconds": 3.2,
+      "loop": true,
+      "fcurves": 660
+    },
+    "walking_armed": {
+      "frames": [
+        1,
+        49
+      ],
+      "seconds": 1.6,
+      "loop": true,
+      "fcurves": 660
+    },
+    "running_armed": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": true,
+      "fcurves": 660
+    },
+    "shoot": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8,
+      "loop": false,
+      "fcurves": 660
+    }
+  },
+  "clip_count": 10,
+  "preview_files": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_armed_idle_front.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_attack_front.png"
+  ],
+  "model_sha256": "241781061a15001c196bdaf94683f419dd437ce50631cf908dcf8026ae270767",
+  "animation_sha256": "6dac6780eac4444dedf1e0526c9624d30fddab881d09d5c4488e04f3e852358b"
+}

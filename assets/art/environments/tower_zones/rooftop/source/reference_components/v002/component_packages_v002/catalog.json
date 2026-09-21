@@ -1507,8 +1507,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_hvac_small_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_hvac_small_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -1522,7 +1522,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/hvac_small.tscn",
+    "export_sha256": "a6c115780b9124477ba97f29eb2672ca8caf94b937854a8b6c4d1b5af14ad8b3",
+    "runtime_scene_sha256": "e32a6a6e9392d3fffe3302eadb3c6e2d9d108c3f67eab8487531918586855527",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -1651,8 +1656,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_hvac_vent_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_hvac_vent_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -1666,7 +1671,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/hvac_vent.tscn",
+    "export_sha256": "7bf9c80cf1c27d5a15a13913b04bd4163da7b6d207b20832e13d517f8d80470d",
+    "runtime_scene_sha256": "f8221b7ca48a3a91dab4e62e29c29dca46242aac8e0c2c502207b7ab3ec131d7",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -1878,8 +1888,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_pipe_straight_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_pipe_straight_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -1894,7 +1904,12 @@
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
     "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-    "pipe_diameter": 0.3
+    "pipe_diameter": 0.3,
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_straight.tscn",
+    "export_sha256": "3138e3414ffbb6351f8c01b12f420614d14b2d91b94bb5f0d8c987965b1c2c6a",
+    "runtime_scene_sha256": "18d976a8c388ac46ce00dc23439085d5066e1fb75bc247d7febf322b87e1799f",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -1962,8 +1977,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_pipe_elbow_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_pipe_elbow_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -1978,7 +1993,12 @@
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
     "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-    "pipe_diameter": 0.3
+    "pipe_diameter": 0.3,
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_elbow.tscn",
+    "export_sha256": "1f5e1a101fbadb47dedc1d2b6493213fd7b97050aecded8a02af2575baf04526",
+    "runtime_scene_sha256": "8ab4be50f03e3a123090bfffabec1f876ba203a3bb94f887156a31a15132f041",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2051,8 +2071,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_pipe_tee_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_pipe_tee_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2067,7 +2087,12 @@
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
     "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-    "pipe_diameter": 0.3
+    "pipe_diameter": 0.3,
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_tee.tscn",
+    "export_sha256": "3ea17b1e98a6d799fe01d31b61f5315c73443011ae5584339653d3b65bfd78d3",
+    "runtime_scene_sha256": "ce283883805878be084ed1cb8912bde5feff3b28054d9a55ae96d75b147a74df",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2135,8 +2160,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_pipe_riser_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_pipe_riser_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2151,7 +2176,12 @@
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
     "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-    "pipe_diameter": 0.3
+    "pipe_diameter": 0.3,
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_riser.tscn",
+    "export_sha256": "e815f0626f416baf6bd490676d62d9a0f8852b4386cd6ccd6f291f133b28fc48",
+    "runtime_scene_sha256": "3245ae05f3722b2f0e6fe7ed4c08527b13fcaec9a820ab5e7bbf336c3284ca78",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2208,8 +2238,8 @@
       "shared_facility_palette"
     ],
     "attachment": "independent_module",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_pipe_bracket_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_pipe_bracket_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2224,7 +2254,12 @@
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
     "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
-    "pipe_diameter": null
+    "pipe_diameter": null,
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/pipe_bracket.tscn",
+    "export_sha256": "50f208d92e99e8a9847b05fb79f8796bb0a86dcf0309a1f6efc6795c29a56a2d",
+    "runtime_scene_sha256": "76be31d4fb7236f0f786172a9c087f3113b9a037d67a61139ddbb43244cd2131",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2446,8 +2481,8 @@
       "shared_facility_palette"
     ],
     "attachment": "fixed_display_attachment",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_ivy_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_ivy_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2461,7 +2496,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/ivy.tscn",
+    "export_sha256": "8c54feeec0f700113695931d3b2db54f5cb079bb4a2a7ea07c4f47993d7bcb3a",
+    "runtime_scene_sha256": "8f8e5b3f6b86655249a866017b1cb7623fea1247916004ec09dbbf62b5727e6e",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2518,8 +2558,8 @@
       "shared_facility_palette"
     ],
     "attachment": "fixed_display_attachment",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_flowerbox_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_flowerbox_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2533,7 +2573,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/flowerbox.tscn",
+    "export_sha256": "8e7f91af2221d9ddfe5f65d6351eabf4e62ac9dc4bddc46df40a5319a5bc0781",
+    "runtime_scene_sha256": "1d94bd0a28907bcb064d9f54993e14023dd4d814e6c2d975b3dc27236414475a",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2590,8 +2635,8 @@
       "shared_facility_palette"
     ],
     "attachment": "fixed_display_attachment",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_plant_large_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_plant_large_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2605,7 +2650,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/plant_large.tscn",
+    "export_sha256": "138135d836c31fdad0d132d7470b2364ec088ca989ce94e9373da202b96ed7e3",
+    "runtime_scene_sha256": "b1eebfbde8dee4af4298f6dc4e6c075b179c543fdb3b0b0439d3795c24c61729",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,
@@ -2662,8 +2712,8 @@
       "shared_facility_palette"
     ],
     "attachment": "fixed_display_attachment",
-    "exported": false,
-    "expected_export": "env_rooftop_ref_plant_small_v002.glb",
+    "exported": true,
+    "expected_export": "env_rooftop_ref_plant_small_top3d.glb",
     "collision": "not_created",
     "logical_wall_height": null,
     "collision_bounds": null,
@@ -2677,7 +2727,12 @@
     "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
     "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
     "dedupe_classification": "child_variant",
-    "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+    "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+    "runtime_integrated": true,
+    "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/plant_small.tscn",
+    "export_sha256": "917d1ee052280496701217141d7b6090c8d5c23c7ca00afe3c6a7c4d982419e9",
+    "runtime_scene_sha256": "b3c34ef520427fc916f02cf81a4fe2fedab279bd11aeda2decc7058a834516af",
+    "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
   },
   {
     "schema": 1,

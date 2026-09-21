@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://fx0301"]
+
+[ext_resource type="Script" path="res://src/vfx/VfxBulletVisual3D.gd" id="1_bulletvis"]
+
+[node name="VfxBulletVisual3D" type="Node3D"]
+script = ExtResource("1_bulletvis")
+metadata/asset_id = "VFX-BULLET-VISUAL-3D"
+metadata/asset_version = "v001"

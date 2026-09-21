@@ -1,0 +1,93 @@
+{
+  "narrative_id": "nar_tower_opening_01_wake",
+  "schema_version": 1,
+  "priority": 10,
+  "trigger": {
+    "kind": "event",
+    "on": "gameplay_started",
+    "filter": {
+      "room_id": "floor_01_exit"
+    },
+    "once": "run"
+  },
+  "duration": 14.7,
+  "cues": [
+    {
+      "at": 0.0,
+      "do": "player.lock_input",
+      "locked": true
+    },
+    {
+      "at": 0.0,
+      "do": "actor.pose",
+      "clip": "dead",
+      "phase": 1.0,
+      "frozen": true
+    },
+    {
+      "at": 0.1,
+      "do": "camera.focus",
+      "distance": 6.0,
+      "elevation_deg": 34.0,
+      "duration": 6.0
+    },
+    {
+      "at": 7.0,
+      "do": "actor.pose",
+      "clip": "dead",
+      "phase": 1.0,
+      "to_phase": 0.0,
+      "duration": 1.5
+    },
+    {
+      "at": 9.0,
+      "do": "actor.face",
+      "yaw_deg": 32.0,
+      "relative": true,
+      "duration": 0.45
+    },
+    {
+      "at": 9.6,
+      "do": "actor.face",
+      "yaw_deg": -32.0,
+      "relative": true,
+      "duration": 0.6
+    },
+    {
+      "at": 10.3,
+      "do": "actor.face",
+      "yaw_deg": 32.0,
+      "relative": true,
+      "duration": 0.6
+    },
+    {
+      "at": 11.0,
+      "do": "actor.face",
+      "yaw_deg": -32.0,
+      "relative": true,
+      "duration": 0.6
+    },
+    {
+      "at": 11.7,
+      "do": "actor.face",
+      "yaw_deg": 0.0,
+      "relative": true,
+      "duration": 0.45
+    },
+    {
+      "at": 12.0,
+      "do": "actor.say",
+      "text": "人呢",
+      "hold": 1.6
+    },
+    {
+      "at": 13.8,
+      "do": "camera.restore",
+      "duration": 0.9
+    },
+    {
+      "at": 14.7,
+      "do": "flow.end"
+    }
+  ]
+}

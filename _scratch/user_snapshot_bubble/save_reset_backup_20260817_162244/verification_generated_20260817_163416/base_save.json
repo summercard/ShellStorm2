@@ -1,0 +1,630 @@
+{
+	"manifest_version": 1,
+	"payload": {
+		"active_run_snapshot": {
+			"active_weapon_slot": 0.0,
+			"checkpoint_id": "runtime_player_state_v2",
+			"current_floor_index": 1.0,
+			"current_room_id": "facility",
+			"edge_states": {
+				"facility|floor_01_entry": false,
+				"facility|start": true
+			},
+			"equipped_backpack_item": {
+
+			},
+			"equipped_weapon_items": [
+				{
+					"assembly_id": "bp_pistol",
+					"assembly_snapshot": {
+						"base_stats": {
+							"bullet_count": 1.0,
+							"damage": 18.0,
+							"fire_rate": 3.5,
+							"magazine_size": 12.0,
+							"reload_time": 1.5,
+							"spread": 0.03
+						},
+						"node_name": "GunBody_Pistol",
+						"node_type": 0.0,
+						"slots": {
+							"3": {
+								"base_stats": {
+									"bullet_damage": 6.0,
+									"bullet_speed": 0.8
+								},
+								"node_name": "Bullet_Sticky",
+								"node_type": 1.0,
+								"slots": {
+
+								},
+								"tags": [
+									"bullet",
+									"sticky",
+									"dot"
+								]
+							}
+						},
+						"tags": [
+							"pistol",
+							"semi_auto",
+							"sidearm",
+							"supports_scope",
+							"supports_muzzle",
+							"supports_magazine",
+							"supports_mutator"
+						]
+					},
+					"base_buy_price": 70.0,
+					"base_sell_price": 35.0,
+					"base_shelf_order": 2.0,
+					"base_shop_enabled": true,
+					"base_shop_entry_id": "base_stock_pistol",
+					"base_stock_rule": "unlimited",
+					"created_transaction_id": "create:wpn_00065939e0176b18_002323d0_0001",
+					"current_ammo": 12.0,
+					"description": "可靠的基础半自动武器。左键装备为当前主武器。",
+					"fate_slot_capacity": 8.0,
+					"fate_upgrades": [],
+					"floor_loot_weights": {
+						"combat_floor_1": 0.5,
+						"combat_floor_2": 0.8,
+						"loot_floor_1_2": 0.8,
+						"scavenge_floor_1": 0.8,
+						"scavenge_floor_2": 1.4
+					},
+					"id": "weapon_pistol",
+					"name": "豌豆手枪",
+					"price": 70.0,
+					"rarity": "common",
+					"stack_max": 1.0,
+					"subtype": "gun_body",
+					"tags": [
+						"weapon",
+						"gun_body",
+						"pistol"
+					],
+					"type": "weapon",
+					"weapon_content_id": "weapon_pistol",
+					"weapon_instance": {
+						"assembly_id": "bp_pistol",
+						"assembly_snapshot": {
+							"base_stats": {
+								"bullet_count": 1.0,
+								"damage": 18.0,
+								"fire_rate": 3.5,
+								"magazine_size": 12.0,
+								"reload_time": 1.5,
+								"spread": 0.03
+							},
+							"node_name": "GunBody_Pistol",
+							"node_type": 0.0,
+							"slots": {
+								"3": {
+									"base_stats": {
+										"bullet_damage": 6.0,
+										"bullet_speed": 0.8
+									},
+									"node_name": "Bullet_Sticky",
+									"node_type": 1.0,
+									"slots": {
+
+									},
+									"tags": [
+										"bullet",
+										"sticky",
+										"dot"
+									]
+								}
+							},
+							"tags": [
+								"pistol",
+								"semi_auto",
+								"sidearm",
+								"supports_scope",
+								"supports_muzzle",
+								"supports_magazine",
+								"supports_mutator"
+							]
+						},
+						"created_transaction_id": "create:wpn_00065939e0176b18_002323d0_0001",
+						"current_ammo": 12.0,
+						"fate_slot_capacity": 8.0,
+						"fate_upgrades": [],
+						"rarity": "common",
+						"schema_version": 2.0,
+						"weapon_content_id": "weapon_pistol",
+						"weapon_instance_id": "wpn_00065939e0176b18_002323d0_0001"
+					},
+					"weapon_instance_id": "wpn_00065939e0176b18_002323d0_0001"
+				},
+				{
+
+				}
+			],
+			"flashlight_charge_ratio": 0.84,
+			"flashlight_module_id": "basic",
+			"insurance_capacity": 2.0,
+			"insurance_slots": [
+				{
+
+				},
+				{
+
+				}
+			],
+			"inventory_capacity": 12.0,
+			"inventory_slots": [
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				},
+				{
+
+				}
+			],
+			"kills": 0.0,
+			"layout_id": "runtime_player_state_v2",
+			"player_hp": 100.0,
+			"player_position": [
+				-15.2930793762207,
+				-8.96939373016357,
+				2.89193797111511
+			],
+			"player_rotation_y": 0.0,
+			"quick_item_ids": [
+				"",
+				""
+			],
+			"quick_item_slots": [
+				{
+
+				},
+				{
+
+				}
+			],
+			"room_key_count": 1.0,
+			"run_currency": 0.0,
+			"run_seed": 2487833555.0,
+			"run_value": 0.0,
+			"saved_at_unix": 1786955034.0,
+			"schema": "runtime_player_state_v2",
+			"scope": "base",
+			"valid": true,
+			"world_state": {
+				"committed_floor_indices": [
+					0.0
+				],
+				"floor_layout_ids": {
+					"0": "bootstrap"
+				},
+				"initial_loop_gate_armed": false,
+				"initial_loop_gate_sealed": false,
+				"room_progress": {
+					"facility": {
+						"cleared": true,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": true,
+						"visited": false
+					},
+					"floor_01_entry": {
+						"cleared": false,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": false,
+						"visited": false
+					},
+					"start": {
+						"cleared": true,
+						"event_combat": false,
+						"event_resolved": false,
+						"key_spawned": false,
+						"key_unclaimed": false,
+						"spawned": true,
+						"visited": true
+					}
+				},
+				"schema": "tower_world_state_v1",
+				"segment_runtime_state": {
+					"facility": {
+						"alive_count": 0.0,
+						"captured_at_msec": 69236.0,
+						"cleared": true,
+						"containers": {
+
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [],
+						"room_light_on": false,
+						"visited": false,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					},
+					"start": {
+						"alive_count": 0.0,
+						"captured_at_msec": 69235.0,
+						"cleared": true,
+						"containers": {
+
+						},
+						"enemies": [],
+						"ground_items": [],
+						"room_keys": [],
+						"room_light_on": false,
+						"visited": true,
+						"wave_number": 1.0,
+						"wave_queue": [],
+						"wave_total": 1.0
+					}
+				},
+				"unloaded_segment_floor_indices": [],
+				"vertical_arrival_open": {
+					"facility|floor_01_entry": false,
+					"facility|start": true
+				}
+			}
+		},
+		"archive_level": 0,
+		"archive_unlocked": false,
+		"blackmarket_level": 0,
+		"blackmarket_unlocked": false,
+		"blueprint_attachment_tier": 0,
+		"blueprint_bullet_tier": 0,
+		"blueprint_gunbody_tier": 0,
+		"blueprint_progress": 0.0,
+		"boss_defeated": false,
+		"bullet_variant_progress": 0.0,
+		"completed_transaction_ids": [],
+		"divination_level": 0,
+		"divination_unlocked": false,
+		"elite_archive_records": {
+			"elite_arms_taker": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_arms_taker",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955597,
+				"last_floor_number": 95,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.WeaponParasite"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:extraction:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_blackneedle": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_blackneedle",
+				"encounter_count": 0.0,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 0.0,
+				"last_floor_number": 0.0,
+				"last_outcome": "unseen",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Huge"
+				],
+				"reservation_confirmed": false,
+				"reserved_encounter_id": "",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_echo_brood": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_echo_brood",
+				"encounter_count": 0.0,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 0.0,
+				"last_floor_number": 0.0,
+				"last_outcome": "unseen",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Parasite"
+				],
+				"reservation_confirmed": false,
+				"reserved_encounter_id": "",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_emberfruit": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_emberfruit",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955591,
+				"last_floor_number": 97,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.SpawnOnDeath"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_02_main_07:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_iron_carapace": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_iron_carapace",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955594,
+				"last_floor_number": 96,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Huge"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_03_main_10:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_mirror_shell": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_mirror_shell",
+				"encounter_count": 0.0,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 0.0,
+				"last_floor_number": 0.0,
+				"last_outcome": "unseen",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Ricochet"
+				],
+				"reservation_confirmed": false,
+				"reserved_encounter_id": "",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_nameless_crown": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_nameless_crown",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955592,
+				"last_floor_number": 96,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Huge"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_03_main_02:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_ninth_hive_queen": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_ninth_hive_queen",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955596,
+				"last_floor_number": 95,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Parasite"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_04_main_09:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_returning_king": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_returning_king",
+				"encounter_count": 0.0,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 0.0,
+				"last_floor_number": 0.0,
+				"last_outcome": "unseen",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.SpawnOnDeath"
+				],
+				"reservation_confirmed": false,
+				"reserved_encounter_id": "",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_rift_boar_armed": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_rift_boar_armed",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955595,
+				"last_floor_number": 95,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.WeaponParasite"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_04_hub:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_seven_signs": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_seven_signs",
+				"encounter_count": 1,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 1786955588,
+				"last_floor_number": 98,
+				"last_outcome": "active",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.Ricochet"
+				],
+				"reservation_confirmed": true,
+				"reserved_encounter_id": "runtime_player_state_v2:floor_01_main_07:elite",
+				"state": "Newborn",
+				"stolen_modules": []
+			},
+			"elite_spore_devourer": {
+				"archive_version": 1.0,
+				"bounty_reward_level": 0.0,
+				"death_count": 0.0,
+				"elite_id": "elite_spore_devourer",
+				"encounter_count": 0.0,
+				"escape_count": 0.0,
+				"history": {
+					"killed_player_count": 0.0
+				},
+				"last_encounter_at_unix": 0.0,
+				"last_floor_number": 0.0,
+				"last_outcome": "unseen",
+				"last_settled_at_unix": 0.0,
+				"level": 1.0,
+				"modifiers": [
+					"Elite.BulletEater"
+				],
+				"reservation_confirmed": false,
+				"reserved_encounter_id": "",
+				"state": "Newborn",
+				"stolen_modules": []
+			}
+		},
+		"equipped_flashlight_module_id": "basic",
+		"extraction_loot": [],
+		"extraction_points": 0,
+		"five_tier_weapon_made": false,
+		"greenhouse_level": 0,
+		"greenhouse_unlocked": false,
+		"last_save_reason": "elite_confirm:elite_arms_taker",
+		"last_saved_at_unix": 1786955597,
+		"pending_fate_card": {
+
+		},
+		"pending_insurance_slots": [],
+		"pending_loadout_items": [],
+		"save_revision": 28,
+		"save_version": "1.8",
+		"scrapyard_level": 0,
+		"scrapyard_unlocked": false,
+		"successful_extractions": 0,
+		"total_kills": 0,
+		"total_runs": 0,
+		"tutorial_completed": true,
+		"unlocked_flashlight_modules": [],
+		"vault_items": [],
+		"vault_level": 0,
+		"vault_unlocked": false,
+		"workshop_level": 0,
+		"workshop_unlocked": false,
+		"zero_load_extraction": false
+	},
+	"payload_checksum": "8a1060da832e87968a9d2a7fee33089acfb4c4bacc8c4fbf3095ced61d48042b",
+	"payload_checksum_algorithm": "canonical_json_v2",
+	"profile_schema": "1.8",
+	"reason": "elite_confirm:elite_arms_taker",
+	"revision": 28,
+	"saved_at_unix": 1786955597
+}

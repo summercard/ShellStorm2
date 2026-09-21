@@ -1,0 +1,256 @@
+﻿blender.exe : 11:55:49 - tripo_addon - [task.py:21] - INFO - WebSocket server s
+tarted on port 60600
+所在位置 行:463 字符: 78
++ ... w($false)); & "D:\Program Files\Blender Foundation\Blender 4.5\blende ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (11:55:49 - trip...d on port 60600 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+11:55:49 - tripo_addon - [ws_server.py:113] - INFO - WebSocket server running o
+n ws://127.0.0.1:60600
+11:55:49 - tripo_addon - [ws_server.py:118] - INFO - Heartbeat monitoring start
+ed (timeout: 120s)
+11:55:50 - tripo_addon - [ws_server.py:88] - INFO - Stopping WebSocket server..
+.
+11:55:50 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested
+11:55:50 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+FBX version: 7400
+{
+  "new": {
+    "armature": "Armature",
+    "mesh": "tripo_node_3ae4046f",
+    "bones": [
+      "Root",
+      "Hip",
+      "Pelvis",
+      "L_Thigh",
+      "L_Calf",
+      "L_Foot",
+      "L_ToeBase",
+      "L_CalfTwist01",
+      "L_CalfTwist02",
+      "L_ThighTwist01",
+      "L_ThighTwist02",
+      "R_Thigh",
+      "R_ThighTwist01",
+      "R_ThighTwist02",
+      "R_Calf",
+      "R_Foot",
+      "R_ToeBase",
+      "R_CalfTwist01",
+      "R_CalfTwist02",
+      "Waist",
+      "Spine01",
+      "Spine02",
+      "NeckTwist01",
+      "NeckTwist02",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "L_ForearmTwist01",
+      "L_ForearmTwist02",
+      "L_Hand",
+      "L_UpperarmTwist01",
+      "L_UpperarmTwist02",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_UpperarmTwist01",
+      "R_UpperarmTwist02",
+      "R_Forearm",
+      "R_ForearmTwist01",
+      "R_ForearmTwist02",
+      "R_Hand"
+    ],
+    "bone_count": 41,
+    "groups": [
+      "L_Foot",
+      "L_ToeBase",
+      "L_CalfTwist01",
+      "L_CalfTwist02",
+      "L_ThighTwist01",
+      "L_ThighTwist02",
+      "R_ThighTwist01",
+      "R_ThighTwist02",
+      "R_Foot",
+      "R_ToeBase",
+      "R_CalfTwist01",
+      "R_CalfTwist02",
+      "Waist",
+      "Spine01",
+      "Spine02",
+      "NeckTwist01",
+      "NeckTwist02",
+      "Head",
+      "L_Clavicle",
+      "L_ForearmTwist01",
+      "L_ForearmTwist02",
+      "L_Hand",
+      "L_UpperarmTwist01",
+      "L_UpperarmTwist02",
+      "R_Clavicle",
+      "R_UpperarmTwist01",
+      "R_UpperarmTwist02",
+      "R_ForearmTwist01",
+      "R_ForearmTwist02",
+      "R_Hand"
+    ],
+    "group_count": 30,
+    "bbox": [
+      0.5541992783546448,
+      0.8647464513778687,
+      0.9995118787745625
+    ],
+    "min": [
+      -0.27709949016571045,
+      -0.4323733448982239,
+      -1.0041991771458925e-07
+    ],
+    "max": [
+      0.2770997881889343,
+      0.4323731064796448,
+      0.9995117783546448
+    ],
+    "scene_objects": [
+      [
+        "Armature",
+        "ARMATURE"
+      ],
+      [
+        "tripo_node_3ae4046f",
+        "MESH"
+      ]
+    ]
+  },
+  "old": {
+    "armature": "enm_melee_fungboar01_armature",
+    "mesh": "enm_melee_fungboar01_mesh",
+    "bones": [
+      "Root",
+      "Hip",
+      "Waist",
+      "Spine02",
+      "Neck",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "L_Hand",
+      "L_Thumb1",
+      "L_Thumb2",
+      "L_Index1",
+      "L_Index2",
+      "L_Middle1",
+      "L_Middle2",
+      "L_Pinky1",
+      "L_Pinky2",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "R_Hand",
+      "R_Thumb1",
+      "R_Thumb2",
+      "R_Index1",
+      "R_Index2",
+      "R_Middle1",
+      "R_Middle2",
+      "R_Pinky1",
+      "R_Pinky2",
+      "L_Thigh",
+      "L_Calf",
+      "L_Foot",
+      "R_Thigh",
+      "R_Calf",
+      "R_Foot"
+    ],
+    "bone_count": 36,
+    "groups": [
+      "Root",
+      "Hip",
+      "Waist",
+      "Spine02",
+      "Neck",
+      "Head",
+      "L_Clavicle",
+      "L_Upperarm",
+      "L_Forearm",
+      "L_Hand",
+      "L_Thigh",
+      "L_Calf",
+      "L_Foot",
+      "L_Thumb1",
+      "L_Thumb2",
+      "L_Index1",
+      "L_Index2",
+      "L_Middle1",
+      "L_Middle2",
+      "L_Pinky1",
+      "L_Pinky2",
+      "R_Clavicle",
+      "R_Upperarm",
+      "R_Forearm",
+      "R_Hand",
+      "R_Thigh",
+      "R_Calf",
+      "R_Foot",
+      "R_Thumb1",
+      "R_Thumb2",
+      "R_Index1",
+      "R_Index2",
+      "R_Middle1",
+      "R_Middle2",
+      "R_Pinky1",
+      "R_Pinky2"
+    ],
+    "group_count": 36,
+    "bbox": [
+      1.281944751739502,
+      0.953520268201828,
+      1.857142537270846
+    ],
+    "min": [
+      -0.6409722566604614,
+      -0.4767600893974304,
+      -4.464734217890509e-07
+    ],
+    "max": [
+      0.6409724950790405,
+      0.4767601788043976,
+      1.8571420907974243
+    ],
+    "scene_objects": [
+      [
+        "enm_melee_fungboar01_mesh",
+        "MESH"
+      ],
+      [
+        "enm_melee_fungboar01_armature",
+        "ARMATURE"
+      ]
+    ]
+  }
+}
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+Read blend: "I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\enemies\normal_enemy_3d\melee_chaser\source\model\enm_melee_fungboar01_model_v002.blend"
+
+Blender quit

@@ -211,13 +211,18 @@ func apply_profile(kind: String) -> void:
 
 func configure_from_enemy_data(data: Dictionary) -> void:
 	enemy_data = data.duplicate(true)
-	if str(data.get("enemy_type", enemy_kind)) == "melee_chaser" and not bool(data.get("is_elite", false)):
-		var old_name := str(enemy_data.get("name", "小僵尸"))
-		if old_name.ends_with("小菌猪"):
-			enemy_data["name"] = old_name.trim_suffix("小菌猪") + "小僵尸"
-		elif not enemy_data.has("name"):
-			enemy_data["name"] = "小僵尸"
-		enemy_data["emoji"] = "尸"
+	if not bool(data.get("is_elite", false)):
+		var configured_kind := str(data.get("enemy_type", enemy_kind))
+		if configured_kind == "melee_chaser":
+			var old_name := str(enemy_data.get("name", "小僵尸"))
+			if old_name.ends_with("小菌猪"):
+				enemy_data["name"] = old_name.trim_suffix("小菌猪") + "小僵尸"
+			elif not enemy_data.has("name"):
+				enemy_data["name"] = "小僵尸"
+			enemy_data["emoji"] = "尸"
+		elif configured_kind == "ranged_caster" and not enemy_data.has("name"):
+			enemy_data["name"] = "保安僵尸"
+			enemy_data["emoji"] = "尸"
 	elite_modifier_id = ""
 	elite_id = str(data.get("elite_id", ""))
 	elite_behavior_id = str(data.get("elite_behavior_id", ""))
@@ -391,7 +396,7 @@ func _position_overhead_health_bar() -> void:
 		float(_elite_health_bar_profile.get("visual_height", 0.0))
 	)
 	if avatar != null and avatar.has_formal_normal():
-		local_height = maxf(local_height, EnemyAvatar3D.FORMAL_MELEE_VISUAL_HEIGHT)
+		local_height = maxf(local_height, float(EnemyAvatar3D.FORMAL_NORMAL_HEIGHTS.get(enemy_kind, 0.0)))
 	var world_height := local_height * maxf(scale.y, 0.01)
 	_overhead_health_root.global_position = global_position + Vector3.UP * (world_height + 0.58)
 	# top_level 已阻断父节点旋转；显式归零可清除热重载或旧实例留下的朝向。

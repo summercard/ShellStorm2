@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/verification/verify_expedition_extraction_carry_return.gd" id="1_test"]
+
+[node name="VerifyExpeditionExtractionCarryReturn" type="Node"]
+script = ExtResource("1_test")

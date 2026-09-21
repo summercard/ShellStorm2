@@ -1,0 +1,36 @@
+﻿{
+  "sheets": [
+    "鎬昏",
+    "璐︽湰璇存槑",
+    "璧勪骇涓昏〃",
+    "鏁屼汉鍔ㄧ敾涓庣姸鎬?,
+    "3D-鏁屼汉",
+    "鍩熷彉鏇存棩蹇?
+  ],
+  "rows": {
+    "鎬昏": 20,
+    "璐︽湰璇存槑": 23,
+    "璧勪骇涓昏〃": 17,
+    "鏁屼汉鍔ㄧ敾涓庣姸鎬?: 33,
+    "3D-鏁屼汉": 8,
+    "鍩熷彉鏇存棩蹇?: 8
+  },
+  "files": {
+    "assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend": {
+      "bytes": 1910010,
+      "sha256": "f3cfee9626df557dc32fe58ce40f698daa2c6a1abb9f9378b39b6f9f66cb5e7e"
+    },
+    "assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v003.blend": {
+      "bytes": 8367802,
+      "sha256": "5ceda79ebcef191c081011a048d8f2d4f4a5cd3543eefc7de3afb1f32738f15e"
+    },
+    "assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb": {
+      "bytes": 1345332,
+      "sha256": "4f2f1a8ad31a9caedde595acdd84284043c1283e656ab9c015c0f03ecae6702d"
+    },
+    "assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn": {
+      "bytes": 701,
+      "sha256": "09eca9c05e4c83e2994f0e2a888cf1f685e511f882b6005f8a3d282bdeb7365b"
+    }
+  }
+}

@@ -46,6 +46,11 @@ const BASE_INVENTORY_CAPACITY := 12
 ## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
 ## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
 const GUARANTEED_LOADOUT_AMMO_ROUNDS := 60
+## 玩家头顶气泡的挂高（米）。玩家是 1.5m 级小机器人，气泡放在头顶正上方；
+## 偏移**只含垂直分量**，角色绕 Y 轴转身不会带动气泡横向位移。
+## 2026-09-21 主人反馈"太低、挡住角色"：1.95 → 2.55。俯视角下原高度让气泡底边
+## 压在角色身上，抬高后与头顶拉开约 0.8m。
+const PLAYER_BARK_HEIGHT_M := 2.55
 
 @export var gameplay_theme: MapThemeProfile
 @export var visual_theme: DungeonTheme3D
@@ -188,6 +193,9 @@ var _hud_run_elapsed := 0.0
 var _hud_last_elapsed_second := -1
 var _minimap_runtime_accumulator := 0.0
 var _runtime_restore_snapshot: Dictionary = {}
+## 独立副本「撤离信号塔成功返航」的所有权交接快照。与 `_runtime_restore_snapshot`
+## 的区别是只交接玩家携带物，绝不恢复世界布局、房间状态与坐标。
+var _runtime_carry_restore_snapshot: Dictionary = {}
 var _runtime_persistence_active := false
 var _pending_run_settlement_transaction_id := ""
 var _pending_insurance_return_restore := false
@@ -213,6 +221,11 @@ func _ready() -> void:
 				_runtime_restore_snapshot = candidate
 				run_seed_override = int(candidate.get("run_seed", run_seed_override))
 				_run_id = str(candidate.get("run_id", ""))
+			elif _is_successful_extraction_carry_snapshot(candidate):
+				# 独立副本的成功撤离已经完成结算，这里只是把同一批物品实例
+				# 从关卡场景交接给返航落点（99F）。它绝不是一次可续局行动，
+				# 所以不走上面的 combat 分支，也不改 run_seed / run_id。
+				_runtime_carry_restore_snapshot = candidate
 	if gameplay_theme == null:
 		gameplay_theme = load("res://data/map_themes/iron_frontier.tres") as MapThemeProfile
 	if visual_theme == null:
@@ -280,6 +293,11 @@ func _activate_runtime_persistence() -> void:
 		return
 	if not _runtime_restore_snapshot.is_empty():
 		_restore_runtime_save_snapshot(_runtime_restore_snapshot)
+	if not _runtime_carry_restore_snapshot.is_empty():
+		# 独立副本成功撤离的交接只认玩家所有权：世界、房间、坐标一律按落点
+		# 场景自己生成，否则会把返航目标改成刚离开的那张关卡地图。
+		_restore_carried_ownership(_runtime_carry_restore_snapshot)
+		_runtime_carry_restore_snapshot = {}
 	if _pending_insurance_return_restore:
 		# 中转集合与当前基地检查点必须原子交接；失败时清掉内存投影，
 		# 长期中转仍在，下次进入基地可以安全重试且不会复制。
@@ -407,6 +425,17 @@ func _is_combat_runtime_snapshot(snapshot: Dictionary) -> bool:
 	return str(snapshot.get("current_room_id", "")) != "facility"
 
 
+const SUCCESSFUL_EXTRACTION_CARRY_KEY := "successful_extraction_carry"
+
+
+## 独立副本「撤离信号塔」成功返航写入的所有权交接快照。它与可续局行动快照
+## 互斥：标记存在时只交接携带物，绝不把玩家送回刚撤离的那张关卡地图。
+func _is_successful_extraction_carry_snapshot(snapshot: Dictionary) -> bool:
+	if not RUN_PERSISTENCE_SERVICE.supports_runtime_snapshot(snapshot):
+		return false
+	return bool(snapshot.get(SUCCESSFUL_EXTRACTION_CARRY_KEY, false))
+
+
 ## 运行时存档按 runtime_map_id 隔离：旧塔楼（空）只匹配缺失/空的 map id，
 ## 独立副本只匹配自身 ID，互不续对方的局。
 func _snapshot_matches_runtime_map(snapshot: Dictionary) -> bool:
@@ -432,6 +461,13 @@ func _restore_runtime_save_snapshot(snapshot: Dictionary) -> void:
 		snapshot["world_restore_failed"] = true
 		snapshot["current_room_id"] = ""
 		snapshot["player_position"] = []
+	_restore_carried_ownership(snapshot)
+
+
+## 玩家携带物的所有权恢复 —— 世界、房间与坐标不归这里管。
+## 独立副本「撤离信号塔成功返航」只走这一半（见 `_runtime_carry_restore_snapshot`），
+## 因此它必须自洽：按快照整格装回，重复调用幂等，不会留下第二份实例。
+func _restore_carried_ownership(snapshot: Dictionary) -> void:
 	var backpack := snapshot.get("equipped_backpack_item", {}) as Dictionary
 	if player.has_method("clear_equipped_backpack"):
 		player.clear_equipped_backpack()
@@ -1327,7 +1363,27 @@ func _sync_player_input_lock() -> void:
 	if player == null:
 		return
 	var inventory_open := _inventory_ui != null and _inventory_ui.is_inventory_open()
-	player.set_input_locked(_has_exclusive_modal() or inventory_open)
+	player.set_input_locked(
+		_has_exclusive_modal() or inventory_open or _narrative_holds_player_input()
+	)
+
+
+## 剧情演出期间的输入独占归叙事导演（08 文档 §5.5）。本函数被 15+ 处调用，
+## 不加这一条就会逐帧把演出的锁顶掉 —— 表现为"剧本说了停住，角色照常能动"，
+## 且运行时没有任何报错。所以这里显式让权。
+func _narrative_holds_player_input() -> bool:
+	return (
+		NarrativeDirector != null
+		and NarrativeDirector.has_method("is_player_input_locked")
+		and bool(NarrativeDirector.is_player_input_locked())
+	)
+
+
+## 供叙事收口时要求重算（08 文档 §5.5）。归还独占权后必须再裁决一次 ——
+## 本函数是事件驱动的（27 处调用），演出结束后没人再喊它，
+## 玩家就会一直锁着：键盘与开枪全废、鼠标仍能转向，且运行时零报错。
+func refresh_player_input_lock() -> void:
+	_sync_player_input_lock()
 
 
 func _close_inventory_for_modal() -> void:
@@ -1478,6 +1534,7 @@ func _generate_layout() -> void:
 			"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
 			"authored_layout_version": str(record.get("authored_layout_version", "")),
 			"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
+			"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 		})
 		room.position = record["position"]
@@ -1487,6 +1544,7 @@ func _generate_layout() -> void:
 		room.player_entered.connect(_on_room_entered)
 		room.prop_searched.connect(_on_prop_searched)
 		room.service_activated.connect(_on_service_activated)
+		room.light_toggled.connect(_on_room_light_toggled)
 	_plan_room_layout()
 	_ensure_structural_shells_resident()
 	for record in _records:
@@ -1667,6 +1725,17 @@ func _door_policies_for_record(record: Dictionary) -> Dictionary:
 	var policies := {}
 	var room_id := str(record.get("id", ""))
 	var targets := record.get("door_targets", {}) as Dictionary
+	# 和平区（区块00 等）：门**只做普通开关** —— 不看清房进度、不要钥匙、不弹命运卡。
+	# 覆盖放在这里而不是 `_door_policy_for_edge` 的逐边白名单里：区域内加门/改拓扑
+	# 都不需要再动一次策略表，区域的全部门天然同策。
+	if bool(record.get("authored_layout_peaceful", false)):
+		for direction in targets.keys():
+			policies[str(direction)] = {
+				"requires_clear": false,
+				"requires_key": false,
+				"triggers_fate": false,
+			}
+		return policies
 	for direction in targets.keys():
 		policies[str(direction)] = _door_policy_for_edge(
 			room_id,
@@ -1943,6 +2012,18 @@ func _on_room_entered(room: DungeonRoom3D) -> void:
 func _spawn_room_enemies(room: DungeonRoom3D) -> bool:
 	if room == null:
 		return false
+	# 和平区（区块00 等叙事固定关卡）：本房**不刷怪**，开局即放行。
+	#   · 房型保持 COMBAT 不变（HUD / 小地图 / 流送语义与塔楼其余楼层一致），
+	#     只是没有敌人 —— 与「未指派首领的 BOSS 房」同口径：立刻清房，绝不留下锁门。
+	#   · `cleared = true` 同时挡住 `_repair_hostile_room_progress` 的补刷路径
+	#     （它头一行就是 `room.cleared` 早退），所以这里不需要在那边再加分支。
+	#   · 不给钥匙奖励（spawn_key=false）：门策略已全放行，区域不产生战斗收益。
+	if room.authored_layout_peaceful:
+		_alive_by_room[room.room_id] = 0
+		_room_wave_queues[room.room_id] = []
+		_mark_room_cleared(room, false)
+		status_label.text = "和平区 · 无敌对信号"
+		return true
 	var floor := maxi(1, visual_theme.difficulty_rank)
 	var floor_level := clampi(int(float(_record_index(room.room_id)) / maxf(1.0, float(_records.size() - 1)) * 3.0), 0, 3)
 	# —— 设计源覆盖（房间级）——
@@ -2134,7 +2215,7 @@ func _spawn_starter_weapon_pickup(room: DungeonRoom3D) -> void:
 	status_label.text = "起始补给：拾取霰弹枪后按 I 打开背包并点击装备 · 墙边 E 可开中央灯"
 
 
-func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false) -> int:
+func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], additive: bool, count_reserved := false, positions: Array = []) -> int:
 	if room == null or enemy_configs.is_empty():
 		return 0
 	if not _enemy_nodes_by_room.has(room.room_id):
@@ -2156,6 +2237,9 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 				index,
 			]
 		enemy.configure_from_enemy_data(spawn_data)
+		# 剧情生成的怪打标记，剧情撤怪只认自己生成的那些。
+		if bool(spawn_data.get("narrative_spawned", false)):
+			enemy.set_meta("narrative_spawned", true)
 		var hp_multiplier := float(_room_enemy_hp_multipliers.get(room.room_id, 1.0))
 		if not is_equal_approx(hp_multiplier, 1.0):
 			enemy.apply_health_multiplier(hp_multiplier)
@@ -2165,7 +2249,11 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 		# 逐只取落点，而不是 points[index % size]：布局房只有 4 个环形点，而设计源的房间级
 		# 刷怪计划允许一波 24 只 —— 取模会让超出的敌人逐只叠在同一坐标（看起来只有一只）。
 		# 唯一落点算法在 DungeonRoom3D.spawn_point_for_index，公式路径与设计源路径共用。
-		enemy.global_position = room.spawn_point_for_index(index)
+		# 剧情可以在指定站位刷怪（剧本 scene.spawn）；未给站位时沿用房间环形落点。
+		enemy.global_position = (
+			positions[index] as Vector3 if index < positions.size()
+			else room.spawn_point_for_index(index)
+		)
 		enemy.killed.connect(_on_enemy_killed)
 		enemy.escaped.connect(_on_enemy_escaped)
 		enemy.summon_requested.connect(_on_summon_requested)
@@ -2190,6 +2278,78 @@ func _spawn_enemy_batch(room: DungeonRoom3D, enemy_configs: Array[Dictionary], a
 			- (enemy_configs.size() - spawned_count)
 		)
 	return spawned_count
+
+
+## —— 剧情系统正门（见 docs/v0.1/08_技术施工_剧情触发.md §5.2 / §5.4）——
+## 敌人生成要接 6 个信号、上 $ActiveEnemies、写存活账 —— 那是本系统的私事，
+## 剧情只许走这三个正门，不许自己 instantiate。
+
+
+## 玩家头顶气泡的稳定入口。台词内容由剧情给，气泡挂点与挂高由本系统决定。
+func narrative_player_bark() -> CharacterBark3D:
+	return _ensure_player_bark()
+
+
+## 剧情刷怪：在指定站位生成 count 只 kind。
+## 单只数值取自 MonsterInjector.BASE_ENEMY_TYPES（项目唯一真源），
+## 不在这里另写一套数值，避免剧情怪与玩法怪两套口径。
+## `origin` = 队列中心，`axis` = 展开轴（单位向量），沿轴 `spread` 米一字排开。
+## 返回实际生成数（0 = 房间不存在或生成失败）。
+func narrative_spawn_enemies(
+	room_id: String, kind: String, count: int, origin: Vector3,
+	axis: Vector3 = Vector3.RIGHT, spread: float = 1.6
+) -> int:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null or count <= 0:
+		return 0
+	var base_type: Dictionary = MonsterInjector.BASE_ENEMY_TYPES.get(kind, {})
+	if base_type.is_empty():
+		push_warning("[Dungeon3D] 剧情刷怪：未知怪物 kind『%s』。" % kind)
+		return 0
+	var presentation: Dictionary = MonsterInjector.ENEMY_PRESENTATION.get(kind, {})
+	var flat_axis := Vector3(axis.x, 0.0, axis.z)
+	flat_axis = flat_axis.normalized() if flat_axis.length_squared() > 0.000001 else Vector3.RIGHT
+	var row := float(count - 1) * 0.5
+	var configs: Array[Dictionary] = []
+	var positions: Array = []
+	for index in range(count):
+		configs.append({
+			"enemy_type": kind,
+			"name": str(base_type.get("name", kind)),
+			"emoji": str(presentation.get("emoji", "\u5c38")),
+			"hp": int(base_type.get("hp_base", 20)),
+			"max_hp": int(base_type.get("hp_base", 20)),
+			"damage": int(base_type.get("damage_base", 5)),
+			"speed": float(base_type.get("speed", 60.0)),
+			"narrative_spawned": true,
+		})
+		positions.append(origin + flat_axis * ((float(index) - row) * spread))
+	# additive=true：剧情刷的怪**加**在房间原有敌人之上，不覆盖存活账。
+	return _spawn_enemy_batch(room, configs, true, false, positions)
+
+
+## 剧情撤怪：清掉本房**剧情生成**的怪。按 `narrative_spawned` 元数据认领，
+## 不会误伤玩法刷出来的敌人。
+func narrative_despawn_enemies(room_id: String) -> int:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room == null:
+		return 0
+	var nodes: Array = _enemy_nodes_by_room.get(room_id, [])
+	var removed := 0
+	var kept: Array = []
+	for enemy in nodes:
+		if (
+			enemy is Node
+			and is_instance_valid(enemy)
+			and bool(enemy.get_meta("narrative_spawned", false))
+		):
+			(enemy as Node).queue_free()
+			removed += 1
+		else:
+			kept.append(enemy)
+	_enemy_nodes_by_room[room_id] = kept
+	_alive_by_room[room_id] = maxi(0, int(_alive_by_room.get(room_id, 0)) - removed)
+	return removed
 
 
 func _repair_room_progress(room: DungeonRoom3D) -> void:
@@ -2646,6 +2806,26 @@ func _on_service_activated(_room: DungeonRoom3D, station: ServiceStation3D) -> v
 		"event":
 			_resolve_event_room(_room)
 	_refresh_loot_label()
+
+
+## 玩家自己按下的灯开关，由玩家自己嘟囔一句（3 套随机文案）。
+## 剧情系统尚未建立前的最小直连实现：只做"开灯 → 说话"，不改任何玩法状态。
+## 台词取自 BarkCatalog，逻辑侧不出现文本字面量。
+func _on_room_light_toggled(_room: DungeonRoom3D, is_on: bool) -> void:
+	var bark := _ensure_player_bark()
+	if bark == null:
+		return
+	bark.say_bark(BarkCatalog.BARK_LAMP_ON if is_on else BarkCatalog.BARK_LAMP_OFF)
+
+
+## 玩家身上的说话能力按需挂载；重复调用复用同一个实例。
+func _ensure_player_bark() -> CharacterBark3D:
+	if player == null or not is_instance_valid(player):
+		return null
+	var existing := player.get_node_or_null("CharacterBark3D") as CharacterBark3D
+	if existing != null:
+		return existing
+	return CharacterBark3D.attach_to(player, PLAYER_BARK_HEIGHT_M)
 
 
 func _open_workbench() -> void:

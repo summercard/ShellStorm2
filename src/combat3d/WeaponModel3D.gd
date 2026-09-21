@@ -21,10 +21,10 @@ const GUN_VISUAL_SCENES := {
 	"bp_pistol": preload("res://assets/art/weapons/weapon_3d/runtime/hair_dryer/wpn_hair_dryer_root_top3d_v001.tscn"),
 	"bp_shotgun": preload("res://assets/art/weapons/weapon_3d/runtime/double_barrel_cannon/wpn_double_barrel_cannon_root_top3d_v001.tscn"),
 	"bp_rifle": preload("res://assets/art/weapons/weapon_3d/runtime/broom_rifle/wpn_broom_rifle_root_top3d_v001.tscn"),
-	"bp_machinegun": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn"),
+	"bp_machinegun": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d.tscn"),
 	# 花洒机枪是蜂窝机枪的出厂型号，共用同一份正式美术资产；它的独立身份
 	# 靠 assembly/bp ID 区分，不复制 GLB。
-	"bp_sprinkler": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn"),
+	"bp_sprinkler": preload("res://assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d.tscn"),
 	"bp_sniper": preload("res://assets/art/weapons/weapon_3d/runtime/candy_sniper/wpn_candy_sniper_root_top3d_v001.tscn"),
 	"bp_launcher": preload("res://assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn"),
 	"bp_charge": preload("res://assets/art/weapons/weapon_3d/runtime/gumball_cannon/wpn_gumball_cannon_root_top3d_v001.tscn"),
@@ -859,10 +859,15 @@ func _add_imported_attachment_visuals(asset: Node3D, accent_material: StandardMa
 func _spawn_muzzle_effect(world: Node) -> void:
 	if _muzzle == null:
 		return
-	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
-	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
-		(pools[0] as CombatEffectPool3D).acquire("muzzle", bullet_color, 1.0, _muzzle.global_position)
+	# 枪口闪光改走全局 VfxPool（AssetID 路由），传入真实射击方向（-global_basis.z）。
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
+		(vfx_pools[0] as VfxPool3D).acquire(
+			VfxPool3D.FX01_MUZZLE_FLASH, _muzzle.global_position, bullet_color, 1.0,
+			{"forward": -global_basis.z}
+		)
 		return
+	# 旧链兜底：VfxPool 不可用时退回 CombatEffect3D（EFFECT_SCENE 仍保留作兜底用途）。
 	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
 	effect.configure("muzzle", bullet_color, 1.0)
 	world.add_child(effect)

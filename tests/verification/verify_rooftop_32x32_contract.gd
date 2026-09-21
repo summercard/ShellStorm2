@@ -110,11 +110,17 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 		],
 		failures
 	)
-	_expect(not bool(snapshot.get("uses_formal_rooftop_art", true)), "天台仍加载设施美术", failures)
-	_expect(str(snapshot.get("formal_rooftop_art_version", "")) == "", "天台设施版本应为空", failures)
-	_expect(int(snapshot.get("formal_rooftop_art_blocker_count", -1)) == 0, "天台残留设施阻挡", failures)
+	_expect(bool(snapshot.get("uses_formal_rooftop_art", false)), "100层正式装饰布局没有加载", failures)
+	_expect(str(snapshot.get("formal_rooftop_art_version", "")) == "v001", "100层正式装饰布局版本不符", failures)
+	_expect(int(snapshot.get("formal_rooftop_art_blocker_count", -1)) == 0, "100层正式装饰布局存在阻塞", failures)
 	var facilities := rooftop.find_child("FormalRooftopFacilities*", false, false) as Node3D
-	_expect(facilities == null, "100层Stage残留设施实例", failures)
+	_expect(facilities != null, "100层正式装饰实例根缺失", failures)
+	if facilities != null:
+		# 2026-09-21：113 → 99。旧布局把房屋围护 60 件（house_shell/house_roof）也纳入
+		# 重放，且坐标整份偏北 10m、footprint 20×20 偏小；修正后房屋围护改名
+		# shell_reference 只作 Blender 侧参照、不进重放，装饰重放收敛为 6 组共 120 件
+		# （2026-09-21 三次修正：立管落地成两段 + 支架补低位 ⇒ pipe_risers 8 → 16）。
+		_expect(int(facilities.get_meta("instance_count", -1)) == 120, "100层正式装饰实例数不是120", failures)
 	var outer := rooftop.get("_outer_visual") as MultiMeshInstance3D
 	_expect(outer != null and outer.multimesh != null, "100层围栏MultiMesh缺失", failures)
 	_expect(outer != null and outer.visible, "100层原生围栏被设施导入隐藏", failures)

@@ -6,6 +6,9 @@ extends Node3D
 signal player_entered(room: DungeonRoom3D)
 signal prop_searched(room: DungeonRoom3D, loot: Dictionary)
 signal service_activated(room: DungeonRoom3D, station: ServiceStation3D)
+## 灯开关被玩家切换后上行一层。与 player_entered / service_activated 同一模式：
+## 房间不自己决定"开灯后要发生什么"，只负责把事实告诉上层。
+signal light_toggled(room: DungeonRoom3D, is_on: bool)
 
 const LIGHT_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_wasteland_light_root_top3d.tscn")
 const LIGHT_SWITCH_SCENE: PackedScene = preload("res://assets/art/props/dungeon_3d/prp_room_light_switch_root_top3d.tscn")
@@ -343,6 +346,12 @@ var authored_layout_instances: Array = []
 var authored_layout_asset_id := ""
 var authored_layout_version := ""
 var authored_layout_room_id := ""
+## 和平区（区块00「主人的办公室」等叙事固定关卡）：本房所属区域**不刷怪、门只做普通开关**
+## （无清房 / 无钥匙 / 无命运卡），门扇沿用 99F 基地的滑升门。开关声明在
+## `Block00MasterOfficeLayout3D.PEACEFUL_ZONE`，一路透传到 Dungeon3D 的三个消费点：
+## `_spawn_room_enemies()`（不刷怪）、`_door_policies_for_record()`（门策略全放行）、
+## `_build_door()`（基地门扇）。默认 false = 未声明的区域行为一字不变。
+var authored_layout_peaceful := false
 
 
 func configure(config: Dictionary) -> void:
@@ -365,6 +374,7 @@ func configure(config: Dictionary) -> void:
 	authored_layout_asset_id = str(config.get("authored_layout_asset_id", authored_layout_asset_id))
 	authored_layout_version = str(config.get("authored_layout_version", authored_layout_version))
 	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
+	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
 
 
 func _ready() -> void:
@@ -391,6 +401,8 @@ func get_room_snapshot() -> Dictionary:
 		"room_id": room_id, "room_type": room_type, "size_class": size_class,
 		"dimensions": get_dimensions(), "doors": doors.duplicate(), "visited": visited,
 		"cleared": cleared, "is_main_path": is_main_path,
+		"authored_layout_shell": authored_layout_shell,
+		"authored_layout_peaceful": authored_layout_peaceful,
 		"shell_built": _shell_built, "detail_built": _detail_built, "stream_state": _stream_state,
 		"stream_state_name": get_stream_state_name(),
 		"stream_transition_count": _stream_transition_count,
@@ -642,6 +654,19 @@ func _bind_facility_presentation_light_control(starts_on: bool) -> void:
 	# 总启动时长约五秒；第4.5秒中央顶灯先亮，剩余小灯继续完成启动。
 	_light_switch.configure_turn_on_presentation(art_layout, 5.0)
 	art_layout.call("set_presentation_lighting_enabled", starts_on)
+
+
+## 通用灯开关订阅（不限 FACILITY 房）。灯开关是 RuntimeDetail 子节点，进出房间会重建，
+## 因此订阅必须挂在创建路径上，不能只在 _ready 里连一次。
+func _bind_light_switch_signal() -> void:
+	if _light_switch == null:
+		return
+	if not _light_switch.light_toggled.is_connected(_on_light_switch_toggled):
+		_light_switch.light_toggled.connect(_on_light_switch_toggled)
+
+
+func _on_light_switch_toggled(is_on: bool) -> void:
+	light_toggled.emit(self, is_on)
 
 
 func _set_room_light_runtime_state(root: Node) -> void:
@@ -2467,7 +2492,8 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 		push_error("通用RoomDoor3D Prefab实例化失败")
 		return
 	# 门扇视觉二选一，两条都是正式美术，区别在语义而不是画质：
-	#   FACILITY（99F 基地）—— 滑升门，自带独立 logic_id 与状态灯，不随楼层主题换材质；
+	#   FACILITY（99F 基地）/ 和平区（区块00）—— 滑升门，自带独立 logic_id 与状态灯，
+	#   不随楼层主题换材质；
 	#   其余（普通战斗房 / BOSS 房 / 入口安全房）—— 塔楼 A 套门扇，与门墙共用 +Z 约定。
 	# 原先战斗房传 null 走程序化深色方块门板；2026-09-19 起统一换成正式门扇。
 	door.configure(
@@ -2475,7 +2501,7 @@ func _build_door(direction: String, target_room_id: String, dimensions: Vector2)
 		target_room_id,
 		theme.accent_color,
 		BASE99_DOOR_LIFT_PREFAB
-		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility")
+		if room_type == "FACILITY" or (room_id == "start" and target_room_id == "facility") or authored_layout_peaceful
 		else TOWER_DOOR_LEAF_PREFAB
 	)
 	door.set_access_policy(door_policies.get(direction, {}) as Dictionary)
@@ -2597,6 +2623,7 @@ func _build_content() -> void:
 	_light_switch.configure_group(_room_lights, starts_on)
 	_add_runtime_detail_child(_light_switch)
 	_bind_facility_presentation_light_control(starts_on)
+	_bind_light_switch_signal()
 	# 安全房原先还有程序画的地面标线 `_build_stair_lobby_markings()`：
 	# 正中一条 StairLobbyRouteGuide（13.00×0.035×1.20m）+ 两侧门内各一条
 	# StairLobbyThresholdGuide（0.26×0.045×4.2m），都是青色自发光、离地几厘米。

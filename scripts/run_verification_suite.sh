@@ -86,6 +86,10 @@ core_scenes=(
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
+  verify_speech_bubble_3d
+  verify_dialogue_ui_flow
+  verify_narrative_timeline
+  verify_opening_script_runtime
   verify_tower_journey_polish
   verify_arrival_gate_floor_bundle_flow
   verify_common_floor_tile_components_v004
@@ -107,6 +111,7 @@ core_scenes=(
   verify_monster_ai_light_effects
   verify_monster_ai_system_complete
   verify_vfx_pool_lifecycle
+  verify_combat_vfx_toon_v002
   verify_unique_elite_roster_flow
   verify_unique_boss_content_flow
   verify_three_segment_tower_generation_flow
@@ -135,6 +140,7 @@ core_scenes=(
   verify_tower_facility_inventory_binding
   verify_tower_base_facility_persistent_flow
   verify_tower_extraction_return_flow
+  verify_expedition_extraction_carry_return
   verify_game_entry_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow

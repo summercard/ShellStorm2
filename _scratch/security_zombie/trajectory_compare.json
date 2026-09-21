@@ -1,0 +1,86 @@
+{
+  "idle": {
+    "frames_compared": 97,
+    "max_delta_m": 0.6862,
+    "per_bone": {
+      "Head": 0.352,
+      "L_Hand": 0.6862,
+      "R_Hand": 0.63038,
+      "L_Foot": 0.03153,
+      "R_Foot": 0.08336,
+      "Spine02": 0.21509
+    },
+    "melee_frames": 97,
+    "new_frames": 97
+  },
+  "walking": {
+    "frames_compared": 49,
+    "max_delta_m": 0.72335,
+    "per_bone": {
+      "Head": 0.37025,
+      "L_Hand": 0.72335,
+      "R_Hand": 0.63059,
+      "L_Foot": 0.16274,
+      "R_Foot": 0.19689,
+      "Spine02": 0.23443
+    },
+    "melee_frames": 49,
+    "new_frames": 49
+  },
+  "running": {
+    "frames_compared": 25,
+    "max_delta_m": 0.82154,
+    "per_bone": {
+      "Head": 0.63104,
+      "L_Hand": 0.82154,
+      "R_Hand": 0.79028,
+      "L_Foot": 0.32244,
+      "R_Foot": 0.32669,
+      "Spine02": 0.27459
+    },
+    "melee_frames": 25,
+    "new_frames": 25
+  },
+  "attack": {
+    "frames_compared": 52,
+    "max_delta_m": 0.90216,
+    "per_bone": {
+      "Head": 0.49729,
+      "L_Hand": 0.90216,
+      "R_Hand": 0.67835,
+      "L_Foot": 0.09542,
+      "R_Foot": 0.12566,
+      "Spine02": 0.28073
+    },
+    "melee_frames": 52,
+    "new_frames": 52
+  },
+  "hurt": {
+    "frames_compared": 25,
+    "max_delta_m": 0.69439,
+    "per_bone": {
+      "Head": 0.41051,
+      "L_Hand": 0.69439,
+      "R_Hand": 0.67989,
+      "L_Foot": 0.05138,
+      "R_Foot": 0.17818,
+      "Spine02": 0.23887
+    },
+    "melee_frames": 25,
+    "new_frames": 25
+  },
+  "dead": {
+    "frames_compared": 73,
+    "max_delta_m": 1.62244,
+    "per_bone": {
+      "Head": 1.62244,
+      "L_Hand": 0.97372,
+      "R_Hand": 0.77714,
+      "L_Foot": 0.47308,
+      "R_Foot": 0.54611,
+      "Spine02": 0.7839
+    },
+    "melee_frames": 73,
+    "new_frames": 73
+  }
+}

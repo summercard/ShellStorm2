@@ -94,6 +94,59 @@ const ROOFTOP_FACADE_SOLID_SCENE: PackedScene = preload(
 const ROOFTOP_FACADE_WINDOW_SCENE: PackedScene = preload(
 	"res://assets/art/props/dungeon_3d/prp_rooftop_facade_window_5m.tscn"
 )
+# 100F 天台 Blender 布局重放：只接入房屋与装饰层；地砖、女儿墙、外立面和碰撞
+# 继续由本脚本的程序化壳体拥有，避免重复承重和重复边界碰撞。
+const ROOFTOP_DECOR_LAYOUT_PATH := "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json"
+const ROOFTOP_ROOM_WALL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_wall_5x12.tscn"
+)
+const ROOFTOP_ROOM_WINDOW_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_window_5x12.tscn"
+)
+const ROOFTOP_ROOM_DOORWALL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_doorwall_5x12.tscn"
+)
+const ROOFTOP_ROOF_FULL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_full_5m.tscn"
+)
+const ROOFTOP_ROOF_EDGE_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_edge_5m.tscn"
+)
+const ROOFTOP_ROOF_CORNER_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_corner_5m.tscn"
+)
+const ROOFTOP_DECOR_SCENES := {
+	"hvac_small": preload("res://assets/art/environments/tower_zones/rooftop/runtime/hvac_small.tscn"),
+	"hvac_vent": preload("res://assets/art/environments/tower_zones/rooftop/runtime/hvac_vent.tscn"),
+	"pipe_straight": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_straight.tscn"),
+	"pipe_elbow": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_elbow.tscn"),
+	"pipe_tee": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_tee.tscn"),
+	"pipe_riser": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_riser.tscn"),
+	"pipe_bracket": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_bracket.tscn"),
+	"ivy": preload("res://assets/art/environments/tower_zones/rooftop/runtime/ivy.tscn"),
+	"parapet_ivy": preload("res://assets/art/environments/tower_zones/rooftop/runtime/parapet_ivy.tscn"),
+	"flowerbox": preload("res://assets/art/environments/tower_zones/rooftop/runtime/flowerbox.tscn"),
+	"plant_large": preload("res://assets/art/environments/tower_zones/rooftop/runtime/plant_large.tscn"),
+	"plant_small": preload("res://assets/art/environments/tower_zones/rooftop/runtime/plant_small.tscn"),
+}
+# ⚠️ 只重放装饰组。房屋围护（布局源的 house_shell / house_roof，现已改名 shell_reference）
+# **不在**此列：Base100UpperShell3D 的 prefab（env_base100_upper_shell_30x30_h12）自
+# 2026-09-20 起已自带 24 块墙 + 36 格封顶，若把这 60 件也重放，会在同一世界坐标上逐面
+# z-fighting。布局源里它们只作 Blender 侧参照。
+const ROOFTOP_LAYOUT_REPLAY_GROUPS := ["hvac_wall", "greenery", "ivy", "parapet_ivy", "pipe_loop", "pipe_risers"]
+# 逐件碰撞策略（2026-09-21 四次修正；业主实机报「花盆和花圃没有阻挡」）。
+# 布局 JSON 的 collision_policy 是**唯一真源**，词表与
+# assets/art/environments/tower_zones/rooftop/source/author_rooftop_decorated_layout_v001.py 一致：
+#   visual_only —— 装饰默认：禁用组件自带碰撞（本文件旧行为，逐件无条件禁用）；
+#   blocking    —— 实体陈设（花箱 / 大盆栽 / 小盆栽）：禁用组件自带碰撞后，按**实测可视包络**
+#                  生成一个 BoxShape3D 代理，玩家不可穿过。
+# ⛔ 代理尺寸一律由实测包络推出（TowerGeometry3D.resolve_visual_bounds），不得写死常量 ——
+#    否则美术改件后碰撞会与实体脱节。
+const ROOFTOP_COLLISION_VISUAL_ONLY := "visual_only"
+const ROOFTOP_COLLISION_BLOCKING := "blocking"
+# 挡玩家用的世界静态层：与家具（RoomFurniture3D）/ 墙体 / 边界碰撞同层，
+# 玩家 scenes/Player3D.tscn 的 collision_mask 含该层。
+const ROOFTOP_COLLISION_BLOCKING_LAYER := 1
 # 天台女儿墙破损变体（A=崩顶 / B=贯穿 / C=塌脚）。三件与 intact 件同包络
 # （5.00×1.80×0.50）、同原点（底面中心），且端头带 |x|>=2.05m 与 intact 件逐位相同
 # （已在 GLB 字节层证明：source/verify_env_rooftop_parapet_damage_bands.py），
@@ -143,6 +196,17 @@ var stair_hole_sides: Array[String] = []
 # 房间自带正式地砖的区域（当前仅入口安全房 3×3 格）。只从通用可视地砖里挖掉，
 # 承重碰撞不受影响，仍由 _build_support() 用 _hole_rects() 铺满整个房间地面。
 var additional_visual_holes: Array[Rect2] = []
+## —— 承重保底：授权房间足迹 ——
+## 楼梯井洞口的平面矩形是**固定塔楼常量**（_stair_hole_world_rect），按「楼梯出口房的墙
+## 落在 5m 核心边」的标准塔楼模式定的。授权布局的房间足迹由摆位源给，可能与固定洞口
+## 错开：区块00 的办公室西墙在 x=−40，西侧洞口却从 x=−45 伸到 x=−30 ⇒ 洞口多伸进房间
+## 10m，那 10m 没有 FloorSupport，房中央实测一路掉到 97F（y=−29.97 → −36.0）。
+## 而楼梯资产本身是贴合房间界面摆的（实测 Stair_98_97 落在 x[−49.5,−40.5]，在房间以西）。
+## 所以洞要按「房间足迹」先削一刀：足迹内必须保留承重。
+## 标准塔楼里两者不相交 ⇒ 削完与原矩形逐值相同（回归零影响）。
+## 写入时机：TowerDescent3D._rebuild_floor_stage 必须在 add_child 之前 set() ——
+## _build_support() 在 stage 自己的 _ready() 里跑。
+var support_keep_out_rects: Array[Rect2] = []
 # 上述洞实际从通用可视地砖里移除了多少格（已扣除与楼梯洞重叠的部分）。
 var _additional_visual_hole_tile_count := 0
 var _floor_visual_light: MultiMeshInstance3D
@@ -192,8 +256,14 @@ var _outer_slot_kinds: Array = []
 var _base99_outer_corner_visuals: Array[Node3D] = []
 var _rooftop_outer_corner_visuals: Array[Node3D] = []
 var _support_root: StaticBody3D
-# 保留查询兼容字段；用户要求清空100F设施，当前始终为空。
+# 100F 正式装饰布局根。地砖/女儿墙/外立面等结构壳体继续由本类拥有；
+# 房屋与装饰组件由 Blender 布局清单重放到该根节点。
 var _rooftop_art_instance: Node3D
+var _rooftop_art_blocker_count := 0
+var _rooftop_art_instance_count := 0
+## 重放时按 collision_policy 生成的挡玩家碰撞代理数（blocking 件）。
+## 供验收读取：探针据此断言「绿化 20 件都挡人、其余 100 件都不挡」。
+var _rooftop_blocking_collision_count := 0
 var _shell_visible := true
 var _floor_visible := true
 var _outer_visible := true
@@ -244,6 +314,203 @@ func _ready() -> void:
 	_build_floor()
 	_build_outer_shell()
 	_build_support()
+	if _uses_rooftop_profile():
+		_build_rooftop_authored_layout()
+
+
+func _build_rooftop_authored_layout() -> void:
+	_rooftop_art_blocker_count = 0
+	_rooftop_art_instance_count = 0
+	var file := FileAccess.open(ROOFTOP_DECOR_LAYOUT_PATH, FileAccess.READ)
+	if file == null:
+		_rooftop_art_blocker_count = 1
+		push_error("Rooftop decorated layout missing: %s" % ROOFTOP_DECOR_LAYOUT_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not (parsed is Dictionary):
+		_rooftop_art_blocker_count = 1
+		push_error("Rooftop decorated layout is not a JSON object")
+		return
+	var layout := parsed as Dictionary
+	var schema_ok := str(layout.get("schema", "")) == "shellstrom2.rooftop.decorated_layout"
+	var version_ok := is_equal_approx(float(layout.get("schema_version", -1)), 1.0)
+	var identity_ok := str(layout.get("floor", "")) == "100F" and str(layout.get("block_id", "")) == "rooftop"
+	var dimensions := layout.get("dimensions_m", []) as Array
+	var dimensions_ok := dimensions.size() == 2 and is_equal_approx(float(dimensions[0]), ROOFTOP_MAP_DIMENSIONS.x) and is_equal_approx(float(dimensions[1]), ROOFTOP_MAP_DIMENSIONS.y)
+	var world_rect := layout.get("world_rect_m", []) as Array
+	var rect_ok := false
+	if world_rect.size() == 4:
+		var authored_rect := Rect2(float(world_rect[0]), float(world_rect[1]), float(world_rect[2]), float(world_rect[3]))
+		rect_ok = is_equal_approx(authored_rect.position.x, ROOFTOP_WORLD_RECT.position.x) and is_equal_approx(authored_rect.position.y, ROOFTOP_WORLD_RECT.position.y) and is_equal_approx(authored_rect.size.x, ROOFTOP_WORLD_RECT.size.x) and is_equal_approx(authored_rect.size.y, ROOFTOP_WORLD_RECT.size.y)
+	_rooftop_art_blocker_count = int(not schema_ok) + int(not version_ok) + int(not identity_ok) + int(not dimensions_ok) + int(not rect_ok)
+	if _rooftop_art_blocker_count > 0:
+		push_error("Rooftop decorated layout contract failed blockers=%d schema_ok=%s version_ok=%s identity_ok=%s dimensions_ok=%s rect_ok=%s" % [
+			_rooftop_art_blocker_count,
+			str(str(layout.get("schema", "")) == "shellstrom2.rooftop.decorated_layout"),
+			str(is_equal_approx(float(layout.get("schema_version", -1)), 1.0)),
+			str(str(layout.get("floor", "")) == "100F" and str(layout.get("block_id", "")) == "rooftop"),
+			str(dimensions.size() == 2 and is_equal_approx(float(dimensions[0]), ROOFTOP_MAP_DIMENSIONS.x) and is_equal_approx(float(dimensions[1]), ROOFTOP_MAP_DIMENSIONS.y)),
+			str(world_rect.size() == 4 and is_equal_approx(float(world_rect[0]), ROOFTOP_WORLD_RECT.position.x) and is_equal_approx(float(world_rect[1]), ROOFTOP_WORLD_RECT.position.y) and is_equal_approx(float(world_rect[2]), ROOFTOP_WORLD_RECT.size.x) and is_equal_approx(float(world_rect[3]), ROOFTOP_WORLD_RECT.size.y)),
+		])
+		return
+	var candidate := Node3D.new()
+	candidate.name = "FormalRooftopFacilities"
+	candidate.set_meta("layout_id", str(layout.get("layout_id", "")))
+	candidate.set_meta("version", str(layout.get("layout_version", "")))
+	candidate.set_meta("source_layout", ROOFTOP_DECOR_LAYOUT_PATH)
+	candidate.set_meta("independent_blocker_count", 0)
+	# ⚠️ 布局整体**不再是纯视觉**：绿化 20 件登记为 blocking，由本类生成挡玩家碰撞代理。
+	# 真源是逐件 collision_policy（见下方重放循环），这里只留总述与计数。
+	candidate.set_meta("visual_only", false)
+	candidate.set_meta("collision_policy", "per_instance")
+	_rooftop_blocking_collision_count = 0
+	var instances := layout.get("instances", []) as Array
+	for item_variant in instances:
+		if not (item_variant is Dictionary):
+			_rooftop_art_blocker_count += 1
+			continue
+		var item := item_variant as Dictionary
+		if not bool(item.get("enabled", false)):
+			continue
+		var group := str(item.get("group", ""))
+		if group not in ROOFTOP_LAYOUT_REPLAY_GROUPS:
+			continue
+		var slug := str(item.get("component_slug", ""))
+		var scene := _rooftop_scene_for_slug(slug)
+		if scene == null:
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout component has no runtime scene: %s" % slug)
+			continue
+		var scale_values := item.get("scale", []) as Array
+		if scale_values.size() != 3 or not is_equal_approx(float(scale_values[0]), 1.0) or not is_equal_approx(float(scale_values[1]), 1.0) or not is_equal_approx(float(scale_values[2]), 1.0):
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout component has non-unit scale: %s" % str(item.get("instance_id", slug)))
+			continue
+		var instance := scene.instantiate() as Node3D
+		if instance == null:
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout scene instantiate failed: %s" % slug)
+			continue
+		instance.name = str(item.get("instance_id", "Rooftop_%s_%d" % [slug, _rooftop_art_instance_count]))
+		var position_values := item.get("position_m", []) as Array
+		if position_values.size() != 3:
+			instance.free()
+			_rooftop_art_blocker_count += 1
+			continue
+		# 坐标契约（全项目统一，勿改）：Blender Z-up X=东 / Y=北，Godot 平面 +z = 南；
+		# 布局源按 Godot 世界平面口径书写、写入 Blender 时只做 by = -gz 一步换算
+		# （见 source/author_rooftop_decorated_layout_v001.py 的坐标契约段），
+		# 于是这里用 (x, h, -by) 还原。⛔ 改成 (x, h, +by) 会让整份布局南北镜像、
+		# 北侧整体溢出天台 10m —— 2026-09-21 业主实机报的就是这个症状。
+		instance.position = Vector3(float(position_values[0]), float(position_values[2]), -float(position_values[1]))
+		instance.rotation.y = deg_to_rad(float(item.get("rotation_y_deg", 0.0)))
+		# 绕**自身 X 轴**的倾倒（墙挂空调：组件是立式做的，顶面出风风扇；挂到墙上必须倾倒
+		# 90° 风扇才朝外 —— 业主 2026-09-21「空调机在墙上的状态需要 90 度旋转，让风扇朝外」）。
+		# 立管下段也用这个分量做 180° 倒装（原点在底 ⇒ 翻过来后包络落到地面以上，管底贴 y=0）。
+		# ⚠️ 欧拉序：Blender 默认 XYZ、Godot 默认 YXZ。布局源写 (rx, 0, rz)、这里写
+		# rotation=(rx, ry, 0) ⇒ Blender 的 Rz@Rx 与 Godot 的 Ry@Rx **同序**，角度可逐值搬运。
+		# ⛔ 若哪天布局源同时给出 ry 与 rz（即 rotation_y_deg 与「绕 Z 的 tip」并存），
+		# Rx/Rz 的先后会反过来，这套搬运就失效 —— 布局源侧的契约写在
+		# source/author_rooftop_decorated_layout_v001.py 的 rotation_euler_contract 里。
+		instance.rotation.x = deg_to_rad(float(item.get("rotation_x_deg", 0.0)))
+		# 防再犯：换算后的平面位置必须落在天台矩形内。布局源里没有这条断言之前，
+		# 少一步换算不会有任何报错，只会在实机上静默错位。
+		if not ROOFTOP_WORLD_RECT.has_point(Vector2(instance.position.x, instance.position.z)):
+			_rooftop_art_blocker_count += 1
+			push_error(
+				"Rooftop layout instance outside rooftop rect: %s at %s"
+				% [str(item.get("instance_id", slug)), str(instance.position)]
+			)
+			instance.free()
+			continue
+		instance.set_meta("layout_instance_id", str(item.get("instance_id", "")))
+		instance.set_meta("component_slug", slug)
+		instance.set_meta("layout_group", group)
+		var policy := str(item.get("collision_policy", ROOFTOP_COLLISION_VISUAL_ONLY))
+		instance.set_meta("collision_policy", policy)
+		instance.set_meta("design_note", str(item.get("design_note", "")))
+		if _apply_rooftop_collision_policy(instance, slug, policy):
+			_rooftop_blocking_collision_count += 1
+		candidate.add_child(instance)
+		_rooftop_art_instance_count += 1
+	if _rooftop_art_blocker_count > 0:
+		candidate.free()
+		push_error("Rooftop decorated layout replay blocked=%d" % _rooftop_art_blocker_count)
+		return
+	candidate.set_meta("instance_count", _rooftop_art_instance_count)
+	candidate.set_meta("blocking_collision_count", _rooftop_blocking_collision_count)
+	add_child(candidate)
+	_rooftop_art_instance = candidate
+
+
+func _rooftop_scene_for_slug(slug: String) -> PackedScene:
+	match slug:
+		"room_wall":
+			return ROOFTOP_ROOM_WALL_SCENE
+		"room_window":
+			return ROOFTOP_ROOM_WINDOW_SCENE
+		"room_doorwall":
+			return ROOFTOP_ROOM_DOORWALL_SCENE
+		"roof_full":
+			return ROOFTOP_ROOF_FULL_SCENE
+		"roof_edge":
+			return ROOFTOP_ROOF_EDGE_SCENE
+		"roof_corner":
+			return ROOFTOP_ROOF_CORNER_SCENE
+		_:
+			return ROOFTOP_DECOR_SCENES.get(slug) as PackedScene
+
+
+func _disable_rooftop_visual_collision(root: Node) -> void:
+	if root is CollisionShape3D:
+		(root as CollisionShape3D).disabled = true
+	if root is CollisionObject3D:
+		(root as CollisionObject3D).collision_layer = 0
+		(root as CollisionObject3D).collision_mask = 0
+	for child in root.get_children():
+		_disable_rooftop_visual_collision(child)
+
+
+## 施放逐件碰撞策略（2026-09-21 四次修正；业主实机报「花盆和花圃没有阻挡」）。
+## 返回 true 表示该件生成了挡玩家碰撞代理（blocking）。
+##
+## ⛔ 组件自带碰撞**一律先禁用**：运行时不信任组件 prefab 的碰撞（它们声明为 visual_only），
+##    这样 blocking 件也**恰好只有一个**代理形状，验收计数才有确定口径。
+## ⛔ 代理尺寸**不写死**：由实测可视包络（TowerGeometry3D.resolve_visual_bounds）推出 ——
+##    美术换件 / 改尺寸后碰撞自动跟随，不会与实体脱节。
+func _apply_rooftop_collision_policy(instance: Node3D, slug: String, policy: String) -> bool:
+	_disable_rooftop_visual_collision(instance)
+	if policy == ROOFTOP_COLLISION_VISUAL_ONLY:
+		return false
+	if policy != ROOFTOP_COLLISION_BLOCKING:
+		# 未知策略按「不挡人」处理并报错 —— 既不静默生成障碍，也不静默漏挡。
+		push_error("Rooftop layout unknown collision_policy %s on slug %s" % [policy, slug])
+		return false
+	var bounds := TowerGeometry3D.resolve_visual_bounds(instance)
+	# 退化包络（空心 / 未加载网格）不生成零尺寸代理，否则引擎会报形状错误。
+	if bounds.size.x <= 0.001 or bounds.size.y <= 0.001 or bounds.size.z <= 0.001:
+		push_error("Rooftop blocking instance has degenerate visual bounds: %s size=%s" % [slug, str(bounds.size)])
+		return false
+	var body := StaticBody3D.new()
+	body.name = "BlockingCollision"
+	body.collision_layer = ROOFTOP_COLLISION_BLOCKING_LAYER
+	body.collision_mask = 0
+	# 与外墙 / 立面环碰撞同款：显式 ALWAYS，避免从被流送停用的父节点继承物理停用状态
+	# （见 _install_rooftop_outer_boundary_collision 的同款说明）。
+	body.process_mode = Node.PROCESS_MODE_ALWAYS
+	body.set_meta("layout_collision_policy", policy)
+	body.set_meta("component_slug", slug)
+	var shape := CollisionShape3D.new()
+	shape.name = "BlockingBox"
+	var box := BoxShape3D.new()
+	box.size = bounds.size
+	shape.shape = box
+	# 代理挂在实例根下 ⇒ 自带实例的 position/rotation，局部中心即包络中心。
+	shape.position = bounds.get_center()
+	body.add_child(shape)
+	instance.add_child(body)
+	return true
 
 
 func set_shell_visible(show_shell: bool) -> void:
@@ -447,8 +714,12 @@ func get_snapshot() -> Dictionary:
 			str(_rooftop_art_instance.get_meta("version", ""))
 			if _rooftop_art_instance != null else ""
 		),
-		"formal_rooftop_art_blocker_count": (
-			int(_rooftop_art_instance.get_meta("independent_blocker_count", 0))
+			"formal_rooftop_art_blocker_count": _rooftop_art_blocker_count,
+		# 逐件碰撞策略的实测结果（业主「花盆和花圃没有阻挡」）：blocking 件数，
+		# 以及它们在 FormalRooftopFacilities 子树里实际生成的启用碰撞形状数（应相等）。
+		"rooftop_blocking_collision_count": _rooftop_blocking_collision_count,
+		"rooftop_blocking_shape_count": (
+			_enabled_collision_shape_count(_rooftop_art_instance)
 			if _rooftop_art_instance != null else 0
 		),
 		"checkerboard_pattern": true,
@@ -1473,8 +1744,25 @@ func _hole_rects() -> Array[Rect2i]:
 	if _uses_rooftop_profile():
 		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
 	for side in stair_hole_sides:
-		holes.append(_world_rect_to_grid(_stair_hole_world_rect(side)))
+		holes.append_array(_stair_hole_grid_pieces(side))
 	return holes
+
+
+## 楼梯井洞口扣除「承重保底足迹」（support_keep_out_rects）后剩下的栅格矩形。
+## 足迹压不到洞口时结果 == 原矩形（标准塔楼逐值不变）；压到时就只挖掉房外那一段。
+func _stair_hole_grid_pieces(side: String) -> Array[Rect2i]:
+	var pieces: Array[Rect2i] = [_world_rect_to_grid(_stair_hole_world_rect(side))]
+	for keep_out in support_keep_out_rects:
+		var keep := _world_rect_to_grid(keep_out)
+		var remainder: Array[Rect2i] = []
+		for piece in pieces:
+			remainder.append_array(_subtract_hole([piece], keep))
+		pieces = remainder
+	var kept: Array[Rect2i] = []
+	for piece in pieces:
+		if piece.size.x > 0 and piece.size.y > 0:
+			kept.append(piece)
+	return kept
 
 
 func _floor_visual_hole_rects() -> Array[Rect2i]:

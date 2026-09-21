@@ -78,9 +78,9 @@ normal_enemy_3d/melee_chaser/
 
 | 段 | 文件名 | 版本号 |
 |---|---|---|
-| 模型源 | `source/model/enm_melee_fungboar01_model_v001.blend` | ✅ 带 |
-| 贴图源 | `source/model/textures/enm_melee_fungboar01_basecolor_v001.jpg` | ✅ 带 |
-| 动作源 | `source/animation/enm_melee_fungboar01_animation_v001.blend` | ✅ 带 |
+| 模型源 | `source/model/enm_melee_fungboar01_model_v002.blend` | ✅ 带 |
+| 贴图源 | `source/model/textures/enm_melee_fungboar01_basecolor_v002.png` | ✅ 带 |
+| 动作源 | `source/animation/enm_melee_fungboar01_animation_v003.blend` | ✅ 带 |
 | 视觉 GLB | `components/enm_melee_fungboar01_visual_top3d.glb` | ❌ 不带 |
 | 运行时 Prefab | `runtime/enm_melee_fungboar01_root_top3d.tscn` | ❌ 不带 |
 
@@ -310,29 +310,42 @@ r6 现在仍是 2D 时代的字段：视角「侧面朝右（可水平翻转）�
 3D 化后照精英行 r17 改：视角 → `Top3D / local -Z 正面`、组件槽 → `root_3d`、
 变体父ID → `ENM-ECOSYSTEM-KIT-3D`、规格 → 真实包围盒、文件路径 → runtime tscn。
 
-## 当前待补（按顺序做）
+## 当前待补（按状态）
+
+已完成：
 
 - [x] 模型 blend 落地 `source/model/`，贴图落地 `source/model/textures/`
 - [x] **尺寸归一 → 源 1.857143 m（游戏内 1.30 m）**
 - [x] **朝向归正 → 源 +X 已转到契约要求的 +Y**（`fix_orientation.py`）
 - [x] 源级预览图（正面 / 侧面 / 顶视 / 三分之四 + 朝向前后对照）
+- [x] **动画前置决策 → 重建为 36 骨骨架**（`SKEL-MELEE-FUNGBOAR01-002`），未重定向到新造型骨架
+- [x] 动作 blend 落地 `source/animation/`（当前 v003），与模型共享骨架 ID，六段按 12 态契约产出
+- [x] 导出视觉 GLB 到 `components/`（无版本号），导入核对 36 骨 / 6 动画
+- [x] 生成 runtime Prefab 到 `runtime/`，并**补齐 5 条 `metadata/*`**（2026-09-20，照精英先例）
+- [x] **代码侧接线**（2026-09-20 完成）。⚠️ 更正旧描述：普通怪**不需要**也**没有**
+      `configure_enemy_content()` —— 正式表现由 `EnemyAvatar3D._rebuild()` 里的常量分支
+      `if enemy_kind == FORMAL_MELEE_KIND` 自动挂载（配合 `FORMAL_MELEE_KIND` /
+      `FORMAL_MELEE_SCENE_PATH` / `FORMAL_MELEE_VISUAL_HEIGHT` 三个常量）。
+      这与精英 / Boss 的 `configure_elite_content()` / `configure_boss_content()` 显式函数
+      是**两条不同路径**，不要按精英形态再造一个函数。
+- [x] 新建验收场景 `tests/verification/verify_melee_zombie_presentation`（含反向对照）
+- [x] 台账 r6 迁 3D 口径；《敌人动画与状态》补 动作来源 / 循环 / 挂点 / 首版实现 四列；
+      《3D-敌人》新增 r7；《域变更日志》记一条
+- [x] 中转记录 `runtime/character_transfer_ledger.json` 状态推进到 `active`（含 4 个源 / 组件文件
+      与 2 个运行文件的 sha256），并接入 `scripts/asset_guard.py`（该脚本已扩展支持敌人分账本命名）
+
+仍未闭合：
+
 - [ ] **补烘法线贴图**（当前只有 basecolor；不接受的话明确登记为「纯色平光」）
-- [ ] **动画前置决策**：沿用这套 41 骨人形架，还是重定向到更贴合小菌猪的骨架
-- [ ] 动作 blend 落地 `source/animation/`，与模型共享骨架 ID，
-      按 12 态契约产出（`telegraph` 前摇必须可读、`attack` 判定帧对齐）
-- [ ] 导出视觉 GLB 到 `components/`
-- [ ] 生成 runtime Prefab 到 `runtime/`
-- [ ] **代码侧前置**：`EnemyAvatar3D` 目前只给 Boss / 精英留了挂载函数
-      （`configure_boss_content` / `configure_elite_content`），**普通怪没有对应函数**。
-      需照 `configure_elite_content()` 的形态新增 `configure_enemy_content(kind, asset_id, scene_path)`，
-      并在 `Enemy3D.configure_from_enemy_data()`（现第 269 / 277 行两处内联 if）接入。
-- [ ] 同步 `FOOTPRINT_PROFILES` / `COLORS`（数值见上，待拍板）
-- [ ] 新建 / 更新验收场景（`tests/verification/`）
-- [ ] 台账 r6 迁 3D 口径登记；《敌人动画与状态》r21 补 循环 / 挂点 / 首版实现 三列
+- [ ] **同步 `FOOTPRINT_PROFILES`** —— 碰撞体积仍是旧程序网格口径（1.02 / 1.30），
+      按新几何应为 0.641 / 1.857。这是**玩法数值**（命中判定体积），缩半径会明显提高闪避难度，
+      **须主人拍板**，未擅改
+- [ ] 复核 `COLORS` 回落色（程序网格已隐藏，优先级低）
 
 ## 参考
 
 - 同域最近先例：`assets/art/enemies/elite_3d/rift_boar_armed/`
 - 全链路状态矩阵：`docs/v0.1/development/2026-09-17_3D资产正式制成链路总表.md`（P0「建立第一只标准怪物」）
 - 角色制作标准（模型 / 动作双 blend 口径）：`docs/v0.1/16.1_角色美术制作与动作导入流程.md`
-- 技能：`game-character-model-pipeline`
+- 技能：`game-character-model-pipeline`（Blender / GLB / PackedScene 段）；
+  `normal-enemy-model-pipeline`（普通怪全链路 + 玩法侧 6 处接线，2026-09-20 起）

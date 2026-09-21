@@ -1,0 +1,1982 @@
+{
+  "anim_melee_fungboar01_attack_v003": {
+    "frame_range": [
+      1.0,
+      52.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        },
+        "location": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 52,
+          "range": [
+            1.0,
+            52.0
+          ]
+        }
+      }
+    }
+  },
+  "anim_melee_fungboar01_dead_v002": {
+    "frame_range": [
+      1.0,
+      73.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        },
+        "location": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 73,
+          "range": [
+            1.0,
+            73.0
+          ]
+        }
+      }
+    }
+  },
+  "anim_melee_fungboar01_hurt_v002": {
+    "frame_range": [
+      1.0,
+      25.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        },
+        "location": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      }
+    }
+  },
+  "anim_melee_fungboar01_idle_v002": {
+    "frame_range": [
+      1.0,
+      97.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        },
+        "location": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 97,
+          "range": [
+            1.0,
+            97.0
+          ]
+        }
+      }
+    }
+  },
+  "anim_melee_fungboar01_running_v003": {
+    "frame_range": [
+      1.0,
+      25.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        },
+        "location": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 25,
+          "range": [
+            1.0,
+            25.0
+          ]
+        }
+      }
+    }
+  },
+  "anim_melee_fungboar01_walking_v002": {
+    "frame_range": [
+      1.0,
+      49.0
+    ],
+    "channels": {
+      "Hip": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        },
+        "location": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "Waist": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "Spine02": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "Neck": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "Head": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Forearm": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Hand": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Index1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Index2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Middle1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Middle2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Clavicle": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Upperarm": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Forearm": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Hand": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Thumb1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Thumb2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Index1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Index2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Middle1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Middle2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Pinky1": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Pinky2": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Thigh": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Calf": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "L_Foot": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Thigh": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Calf": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      },
+      "R_Foot": {
+        "rotation_quaternion": {
+          "keys": 49,
+          "range": [
+            1.0,
+            49.0
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "model": "I:/工作项目/shellstrom2/ShellStorm2\\assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v001.blend",
+  "animation": "I:/工作项目/shellstrom2/ShellStorm2\\assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v001.blend",
+  "skeleton_id": "SKEL-MELEE-FUNGBOAR01-002",
+  "skeleton_signature": "51bbcff836bb53d777e318845c3602c6ee311cb015f3ab76ea0a15685c633285",
+  "clips": [
+    {
+      "id": "anim_ranged_sporeshooter01_idle",
+      "action": "anim_ranged_sporeshooter01_idle",
+      "frames": 97,
+      "loop": true
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_walking",
+      "action": "anim_ranged_sporeshooter01_walking",
+      "frames": 49,
+      "loop": true
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_running",
+      "action": "anim_ranged_sporeshooter01_running",
+      "frames": 25,
+      "loop": true
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_attack",
+      "action": "anim_ranged_sporeshooter01_attack",
+      "frames": 52,
+      "loop": false
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_hurt",
+      "action": "anim_ranged_sporeshooter01_hurt",
+      "frames": 25,
+      "loop": false
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_dead",
+      "action": "anim_ranged_sporeshooter01_dead",
+      "frames": 73,
+      "loop": false
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_armed_idle",
+      "action": "anim_ranged_sporeshooter01_armed_idle",
+      "frames": 97,
+      "loop": true
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_shoot",
+      "action": "anim_ranged_sporeshooter01_shoot",
+      "frames": 24,
+      "loop": false
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_walking_armed",
+      "action": "anim_ranged_sporeshooter01_walking_armed",
+      "frames": 49,
+      "loop": true
+    },
+    {
+      "id": "anim_ranged_sporeshooter01_running_armed",
+      "action": "anim_ranged_sporeshooter01_running_armed",
+      "frames": 25,
+      "loop": true
+    }
+  ]
+}

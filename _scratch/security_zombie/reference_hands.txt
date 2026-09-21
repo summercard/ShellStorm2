@@ -1,0 +1,266 @@
+﻿blender.exe : 12:01:33 - tripo_addon - [task.py:21] - INFO - WebSocket server s
+tarted on port 60600
+所在位置 行:452 字符: 78
++ ... 8Encoding]::new($false)); & $blender -b --python $script 2>&1 | Out-F ...
++                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (12:01:33 - trip...d on port 60600 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+12:01:33 - tripo_addon - [ws_server.py:113] - INFO - WebSocket server running o
+n ws://127.0.0.1:60600
+12:01:33 - tripo_addon - [ws_server.py:118] - INFO - Heartbeat monitoring start
+ed (timeout: 120s)
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+[
+  {
+    "name": "L_Thumb1",
+    "parent": "L_Hand",
+    "head": [
+      -0.5149999856948853,
+      0.09000000357627869,
+      0.7549999952316284
+    ],
+    "tail": [
+      -0.5289999842643738,
+      0.13600000739097595,
+      0.7480000257492065
+    ]
+  },
+  {
+    "name": "L_Thumb2",
+    "parent": "L_Thumb1",
+    "head": [
+      -0.5289999842643738,
+      0.13600000739097595,
+      0.7480000257492065
+    ],
+    "tail": [
+      -0.5289999842643738,
+      0.17499999701976776,
+      0.7419999837875366
+    ]
+  },
+  {
+    "name": "L_Index1",
+    "parent": "L_Hand",
+    "head": [
+      -0.5720000267028809,
+      0.07100000232458115,
+      0.7699999809265137
+    ],
+    "tail": [
+      -0.6060000061988831,
+      0.07999999821186066,
+      0.7549999952316284
+    ]
+  },
+  {
+    "name": "L_Index2",
+    "parent": "L_Index1",
+    "head": [
+      -0.6060000061988831,
+      0.07999999821186066,
+      0.7549999952316284
+    ],
+    "tail": [
+      -0.6330000162124634,
+      0.08799999952316284,
+      0.75
+    ]
+  },
+  {
+    "name": "L_Middle1",
+    "parent": "L_Hand",
+    "head": [
+      -0.574999988079071,
+      0.012000000104308128,
+      0.7739999890327454
+    ],
+    "tail": [
+      -0.6100000143051147,
+      0.012000000104308128,
+      0.7639999985694885
+    ]
+  },
+  {
+    "name": "L_Middle2",
+    "parent": "L_Middle1",
+    "head": [
+      -0.6100000143051147,
+      0.012000000104308128,
+      0.7639999985694885
+    ],
+    "tail": [
+      -0.6380000114440918,
+      0.012000000104308128,
+      0.7559999823570251
+    ]
+  },
+  {
+    "name": "L_Pinky1",
+    "parent": "L_Hand",
+    "head": [
+      -0.5590000152587891,
+      -0.04399999976158142,
+      0.7689999938011169
+    ],
+    "tail": [
+      -0.5830000042915344,
+      -0.0560000017285347,
+      0.7580000162124634
+    ]
+  },
+  {
+    "name": "L_Pinky2",
+    "parent": "L_Pinky1",
+    "head": [
+      -0.5830000042915344,
+      -0.0560000017285347,
+      0.7580000162124634
+    ],
+    "tail": [
+      -0.6039999723434448,
+      -0.06499999761581421,
+      0.7459999918937683
+    ]
+  },
+  {
+    "name": "R_Thumb1",
+    "parent": "R_Hand",
+    "head": [
+      0.5149999856948853,
+      0.09000000357627869,
+      0.7549999952316284
+    ],
+    "tail": [
+      0.5289999842643738,
+      0.13600000739097595,
+      0.7480000257492065
+    ]
+  },
+  {
+    "name": "R_Thumb2",
+    "parent": "R_Thumb1",
+    "head": [
+      0.5289999842643738,
+      0.13600000739097595,
+      0.7480000257492065
+    ],
+    "tail": [
+      0.5289999842643738,
+      0.17499999701976776,
+      0.7419999837875366
+    ]
+  },
+  {
+    "name": "R_Index1",
+    "parent": "R_Hand",
+    "head": [
+      0.5720000267028809,
+      0.07100000232458115,
+      0.7699999809265137
+    ],
+    "tail": [
+      0.6060000061988831,
+      0.07999999821186066,
+      0.7549999952316284
+    ]
+  },
+  {
+    "name": "R_Index2",
+    "parent": "R_Index1",
+    "head": [
+      0.6060000061988831,
+      0.07999999821186066,
+      0.7549999952316284
+    ],
+    "tail": [
+      0.6330000162124634,
+      0.08799999952316284,
+      0.75
+    ]
+  },
+  {
+    "name": "R_Middle1",
+    "parent": "R_Hand",
+    "head": [
+      0.574999988079071,
+      0.012000000104308128,
+      0.7739999890327454
+    ],
+    "tail": [
+      0.6100000143051147,
+      0.012000000104308128,
+      0.7639999985694885
+    ]
+  },
+  {
+    "name": "R_Middle2",
+    "parent": "R_Middle1",
+    "head": [
+      0.6100000143051147,
+      0.012000000104308128,
+      0.7639999985694885
+    ],
+    "tail": [
+      0.6380000114440918,
+      0.012000000104308128,
+      0.7559999823570251
+    ]
+  },
+  {
+    "name": "R_Pinky1",
+    "parent": "R_Hand",
+    "head": [
+      0.5590000152587891,
+      -0.04399999976158142,
+      0.7689999938011169
+    ],
+    "tail": [
+      0.5830000042915344,
+      -0.0560000017285347,
+      0.7580000162124634
+    ]
+  },
+  {
+    "name": "R_Pinky2",
+    "parent": "R_Pinky1",
+    "head": [
+      0.5830000042915344,
+      -0.0560000017285347,
+      0.7580000162124634
+    ],
+    "tail": [
+      0.6039999723434448,
+      -0.06499999761581421,
+      0.7459999918937683
+    ]
+  }
+]
+12:01:35 - tripo_addon - [ws_server.py:88] - INFO - Stopping WebSocket server..
+.
+12:01:35 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested
+12:01:35 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+Read blend: "I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\enemies\normal_enemy_3d\melee_chaser\source\model\enm_melee_fungboar01_model_v002.blend"
+
+Blender quit

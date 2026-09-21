@@ -1,0 +1,37 @@
+﻿blender.exe : 13:24:04 - tripo_addon - [task.py:21] - INFO - WebSocket server started on port 60600
+所在位置 行:445 字符: 42
++ ... ellStorm2"; & "D:\Program Files\Blender Foundation\Blender 4.5\blende ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (13:24:04 - trip...d on port 60600:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+13:24:04 - tripo_addon - [ws_server.py:113] - INFO - WebSocket server running on ws://127.0.0.1:60600
+13:24:04 - tripo_addon - [ws_server.py:118] - INFO - Heartbeat monitoring started (timeout: 120s)
+LOADED UPDATER!
+Error: LZ4 module didn't load. Unsupported OS or Python version!
+Traceback (most recent call last):
+  File "C:\Users\zhuangmenghong\AppData\Roaming\Blender Foundation\Blender\4.5\scripts\addons\rokoko-studio-live-blender-1-4-2\core\login_manager.py", line 27, in <module>
+    import boto3
+ModuleNotFoundError: No module named 'boto3'
+
+
+### Loading Rokoko Studio Live for Blender...
+Custom bone list not found.
+Custom name list file is not a valid name list file
+### Loaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon registered
+[Tripo3D] Log file: C:\Users\ZHUANG~1\AppData\Local\Temp\tripo3d_blender_bridge.log
+SKELETON_NAME_AUDIT {"melee_bone_count": 36, "new_bone_count": 57, "count_equal": false, "missing_in_new": [], "extra_in_new": ["Pelvis", "L_ToeBase", "L_CalfTwist01", "L_CalfTwist02", "L_ThighTwist01", "L_ThighTwist02", "R_ThighTwist01", "R_ThighTwist02", "R_ToeBase", "R_CalfTwist01", "R_CalfTwist02", "Spine01", "NeckTwist01", "L_ForearmTwist01", "L_ForearmTwist02", "L_UpperarmTwist01", "L_UpperarmTwist02", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_ForearmTwist01", "R_ForearmTwist02"], "order_equal": false, "melee_only_order_sample": ["Root", "Hip", "Waist", "Spine02", "Neck", "Head", "L_Clavicle", "L_Upperarm", "L_Forearm", "L_Hand", "L_Thumb1", "L_Thumb2", "L_Index1", "L_Index2", "L_Middle1", "L_Middle2", "L_Pinky1", "L_Pinky2", "R_Clavicle", "R_Upperarm", "R_Forearm", "R_Hand", "R_Thumb1", "R_Thumb2", "R_Index1", "R_Index2", "R_Middle1", "R_Middle2", "R_Pinky1", "R_Pinky2", "L_Thigh", "L_Calf", "L_Foot", "R_Thigh", "R_Calf", "R_Foot"], "new_only_order_sample": ["Root", "Hip", "Pelvis", "L_Thigh", "L_Calf", "L_Foot", "L_ToeBase", "L_CalfTwist01", "L_CalfTwist02", "L_ThighTwist01", "L_ThighTwist02", "R_Thigh", "R_ThighTwist01", "R_ThighTwist02", "R_Calf", "R_Foot", "R_ToeBase", "R_CalfTwist01", "R_CalfTwist02", "Waist", "Spine01", "Spine02", "NeckTwist01", "Neck", "Head", "L_Clavicle", "L_Upperarm", "L_Forearm", "L_ForearmTwist01", "L_ForearmTwist02", "L_Hand", "L_Thumb1", "L_Thumb2", "L_Index1", "L_Index2", "L_Middle1", "L_Middle2", "L_Pinky1", "L_Pinky2", "L_UpperarmTwist01", "L_UpperarmTwist02", "R_Clavicle", "R_Upperarm", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_Forearm", "R_ForearmTwist01", "R_ForearmTwist02", "R_Hand", "R_Thumb1", "R_Thumb2", "R_Index1", "R_Index2", "R_Middle1", "R_Middle2", "R_Pinky1", "R_Pinky2"], "parent_mismatch": [{"bone": "Spine02", "melee_parent": "Waist", "new_parent": "Spine01"}, {"bone": "Neck", "melee_parent": "Spine02", "new_parent": "NeckTwist01"}, {"bone": "L_Thigh", "melee_parent": "Hip", "new_parent": "Pelvis"}, {"bone": "R_Thigh", "melee_parent": "Hip", "new_parent": "Pelvis"}], "melee_groups": ["Root", "Hip", "Waist", "Spine02", "Neck", "Head", "L_Clavicle", "L_Upperarm", "L_Forearm", "L_Hand", "L_Thigh", "L_Calf", "L_Foot", "L_Thumb1", "L_Thumb2", "L_Index1", "L_Index2", "L_Middle1", "L_Middle2", "L_Pinky1", "L_Pinky2", "R_Clavicle", "R_Upperarm", "R_Forearm", "R_Hand", "R_Thigh", "R_Calf", "R_Foot", "R_Thumb1", "R_Thumb2", "R_Index1", "R_Index2", "R_Middle1", "R_Middle2", "R_Pinky1", "R_Pinky2"], "new_groups": ["L_Foot", "L_ToeBase", "L_CalfTwist01", "L_CalfTwist02", "L_ThighTwist01", "L_ThighTwist02", "R_ThighTwist01", "R_ThighTwist02", "R_Foot", "R_ToeBase", "R_CalfTwist01", "R_CalfTwist02", "Waist", "Spine01", "Spine02", "NeckTwist01", "Neck", "Head", "L_Clavicle", "L_ForearmTwist01", "L_ForearmTwist02", "L_Hand", "L_UpperarmTwist01", "L_UpperarmTwist02", "R_Clavicle", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_ForearmTwist01", "R_ForearmTwist02", "R_Hand"], "groups_missing_in_new": ["Root", "Hip", "L_Upperarm", "L_Forearm", "L_Thigh", "L_Calf", "L_Thumb1", "L_Thumb2", "L_Index1", "L_Index2", "L_Middle1", "L_Middle2", "L_Pinky1", "L_Pinky2", "R_Upperarm", "R_Forearm", "R_Thigh", "R_Calf", "R_Thumb1", "R_Thumb2", "R_Index1", "R_Index2", "R_Middle1", "R_Middle2", "R_Pinky1", "R_Pinky2"], "groups_extra_in_new": ["L_ToeBase", "L_CalfTwist01", "L_CalfTwist02", "L_ThighTwist01", "L_ThighTwist02", "R_ThighTwist01", "R_ThighTwist02", "R_ToeBase", "R_CalfTwist01", "R_CalfTwist02", "Spine01", "NeckTwist01", "L_ForearmTwist01", "L_ForearmTwist02", "L_UpperarmTwist01", "L_UpperarmTwist02", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_ForearmTwist01", "R_ForearmTwist02"]}
+13:24:06 - tripo_addon - [ws_server.py:88] - INFO - Stopping WebSocket server...
+13:24:06 - tripo_addon - [task.py:27] - INFO - WebSocket server stop requested
+13:24:06 - tripo_addon - [ws_server.py:77] - INFO - Event loop closed
+### Unloading Rokoko Studio Live for Blender...
+### Unloaded Rokoko Studio Live for Blender successfully!
+
+BlenderMCP addon unregistered
+Blender 4.5.0 (hash 8cb6b388974a built 2025-07-15 01:36:24)
+Read blend: "I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\enemies\normal_enemy_3d\melee_chaser\source\model\enm_melee_fungboar01_model_v002.blend"
+Read blend: "I:\宸ヤ綔椤圭洰\shellstrom2\ShellStorm2\assets\art\enemies\normal_enemy_3d\ranged_caster\source\model\enm_ranged_sporeshooter01_model_v004.blend"
+
+Blender quit

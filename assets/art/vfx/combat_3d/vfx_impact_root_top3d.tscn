@@ -4,3 +4,5 @@
 
 [node name="VfxImpact3D" type="Node3D"]
 script = ExtResource("1_impact")
+metadata/asset_id = "VFX-IMPACT-3D"
+metadata/asset_version = "v002"

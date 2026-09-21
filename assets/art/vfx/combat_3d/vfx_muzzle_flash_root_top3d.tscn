@@ -4,3 +4,5 @@
 
 [node name="VfxMuzzleFlash3D" type="Node3D"]
 script = ExtResource("1_muzzle")
+metadata/asset_id = "VFX-MUZZLE-FLASH-3D"
+metadata/asset_version = "v002"

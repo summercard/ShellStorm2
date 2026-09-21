@@ -1,0 +1,83 @@
+{
+  "output": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\source\\animation\\enm_ranged_sporeshooter01_animation_v004.blend",
+  "source_animation": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\source\\animation\\enm_ranged_sporeshooter01_animation_v003.blend",
+  "target_model": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\source\\model\\enm_ranged_sporeshooter01_model_v005.blend",
+  "clips": {
+    "idle": {
+      "frames": [
+        1,
+        97
+      ],
+      "seconds": 3.2
+    },
+    "walking": {
+      "frames": [
+        1,
+        49
+      ],
+      "seconds": 1.6
+    },
+    "running": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8
+    },
+    "attack": {
+      "frames": [
+        1,
+        52
+      ],
+      "seconds": 1.7
+    },
+    "hurt": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8
+    },
+    "dead": {
+      "frames": [
+        1,
+        73
+      ],
+      "seconds": 2.4
+    },
+    "armed_idle": {
+      "frames": [
+        1,
+        97
+      ],
+      "seconds": 3.2
+    },
+    "walking_armed": {
+      "frames": [
+        1,
+        49
+      ],
+      "seconds": 1.6
+    },
+    "running_armed": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8
+    },
+    "shoot": {
+      "frames": [
+        1,
+        25
+      ],
+      "seconds": 0.8
+    }
+  },
+  "target_bones": 66,
+  "clips_made": 10,
+  "missing_clips": [],
+  "unexpected_actions": [],
+  "source_rest_matches_melee": true,
+  "side_convention_ok": true
+}

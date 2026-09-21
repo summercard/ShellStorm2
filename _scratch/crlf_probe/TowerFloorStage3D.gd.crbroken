@@ -1,0 +1,1792 @@
+class_name TowerFloorStage3D
+extends Node3D
+## 常规层为250m塔楼物理层；100层主区16×16格，西侧为楼梯净空扩展2格。
+## 重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；承重碰撞独立于渲染。
+
+const GRID_UNIT := 5.0
+const GRID_COUNT := 50
+const MAP_SIZE := GRID_UNIT * GRID_COUNT
+const MAP_HALF := MAP_SIZE * 0.5
+# 原16×16主天台以99层基地中心(0, 5)居中；只向西追加2格（10m），
+# 东/南/北边界保持不变，为100→99西侧楼梯外廓留下完整栏杆净空。
+const ROOFTOP_GRID_DIMENSIONS := Vector2i(18, 16)
+const ROOFTOP_MAP_DIMENSIONS := Vector2(90.0, 80.0)
+const ROOFTOP_GRID_COUNT := ROOFTOP_GRID_DIMENSIONS.x
+const ROOFTOP_MAP_SIZE := ROOFTOP_MAP_DIMENSIONS.x
+const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
+const FACILITY_OUTER_GRID_COUNT := 32
+const FACILITY_OUTER_MAP_SIZE := GRID_UNIT * FACILITY_OUTER_GRID_COUNT
+const FACILITY_OUTER_WORLD_RECT := Rect2(
+	-FACILITY_OUTER_MAP_SIZE * 0.5,
+	-FACILITY_OUTER_MAP_SIZE * 0.5,
+	FACILITY_OUTER_MAP_SIZE,
+	FACILITY_OUTER_MAP_SIZE
+)
+# 100F 天台女儿墙高度（含压顶总高）= 0.80m —— 2026-09-20 业主口径。
+# 沿革：v002 参考组件库的真尺寸是 1.80m（再往前是 0.75m，用 1.5m 几何乘 0.5 纵向
+# 缩放凑出来的，没有设计依据，而且让「看得见的墙」与「挡人的墙」长期分离）。
+# 业主看过 1.80m 的实机效果后要求「改成 0.8 米的」并去掉中段的密集竖杠，于是女儿墙
+# 源件按「方案A 平整墙板」重建为总高 0.80m
+# （assets/art/environments/tower_zones/rooftop/source/author_env_rooftop_parapet_v003.py）。
+# 「视觉包络 = 碰撞高度」这条不变量继续保持。
+# ⚠️ 玩家没有跳跃、也没有台阶攀爬（Player3D 只有重力 + move_and_slide），因此 0.80m
+# 与 1.80m 的阻挡效果等价：都是「走不出去」，不存在能被跨过去的低墙副作用。
+# 0.80m 只影响视觉高度、相机越过墙顶的视线，以及子弹射线在 0.80m 以上不再被边界拦下。
+const ROOFTOP_PARAPET_HEIGHT := 0.8
+# 天台女儿墙组件厚度（参考组件库 v002 的 bounds_size.z = 0.50m）。
+# 与普通层 WALL_THICKNESS(0.30m) 不同，因此边界内缩口径必须按层类型取。
+const ROOFTOP_PARAPET_THICKNESS := 0.5
+# 天台四角转角件的包络边长（2.5m×2.5m）。每条边两端各让出这么多，
+# 于是 90−5=85m 正好 17 个整格、80−5=75m 正好 15 个整格，格子不错位。
+const ROOFTOP_CORNER_ARM_M := 2.5
+# 楼梯口占位矮墙（prp_tower_wall_parapet_door_5m）的基础几何高度，
+# 用来把它的纵向缩放换算到与女儿墙同高。
+const ROOFTOP_PARAPET_DOOR_BASE_HEIGHT := 1.5
+const PROTECTED_FLOOR_PATCH_SIDE_M := 50.0
+const PROTECTED_FLOOR_PATCH_TILES_PER_SIDE := int(PROTECTED_FLOOR_PATCH_SIDE_M / GRID_UNIT)
+const FLOOR_THICKNESS := 0.30
+const WALL_THICKNESS := 0.30
+const FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_floor_tile_5m.tscn"
+)
+const POLISHED_FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/environments/tower_descent_3d/runtime/floor_tile_5m/env_tower_floor_tile_5m_root_top3d.tscn"
+)
+# 100F 天台正式地砖（天台参考组件库 v002 / ENV-ROOFTOP-REF-FLOOR-FULL 的 5m 件）。
+# ⚠️ 与上面两件旧砖的**原点契约不同**：本件是「底面中心」（几何 Y=0..0.30），
+# 旧件是「几何中心」（Y≈-0.15..+0.15）。因此摆放偏移不能再用固定
+# -FLOOR_THICKNESS*0.5，必须按模块 AABB 求「可视顶面对齐承重面 Y=0」的偏移
+# （见 _floor_visual_origin_y）。98F 与天台历史上共用抛光砖，本次只有天台换件。
+const ROOFTOP_FLOOR_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_floor_5m.tscn"
+)
+const WALL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_solid_5m.tscn"
+)
+const BASE99_CORNER_L_VISUAL: PackedScene = preload(
+	"res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb"
+)
+const PARAPET_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_parapet_5m.tscn"
+)
+const ROOFTOP_CORNER_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_parapet_outer_2p5m.tscn"
+)
+const PARAPET_DOOR_PREFAB: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_tower_wall_parapet_door_5m.tscn"
+)
+# 100F 天台外立面环（= 视觉上的「99 层外墙」）：与女儿墙同一圈轮廓、整体低一整层。
+# 参考拼装 reference_assembly.json 把 facade_* 摆在 z=-12.00：底面贴 99F 楼面，
+# 顶面 11.90m 落在 100F 楼板下方 0.10m —— 与 TowerGeometry3D 的
+# WALL_VISUAL_HEIGHT_M(11.90) / WALL_VISUAL_TOP_CLEARANCE_M(0.10) 同一口径。
+# 没有这圈墙时，从天台边缘往下看是一段 12m 的空洞（用户报的问题）。
+const ROOFTOP_FACADE_BOTTOM_Y := -12.0
+# 立面模块厚度（参考组件库 v002 facade_* 的 bounds_size.z = 0.30m）。
+# 与女儿墙(0.50m)不同，所以立面中心线内缩量必须按自己的厚度取 ——
+# 但**外皮与女儿墙外皮共面**（两者都贴在轮廓矩形上），上下一条线不错台。
+const ROOFTOP_FACADE_THICKNESS := 0.30
+# 立面「实墙 : 窗墙」节奏：每 3 个 5m 槽位「实 / 窗 / 窗」，侧内自最小坐标端起算。
+# 与参考拼装同相位（参考侧 10 槽正好 4 实 6 窗，两端都落在实墙上）。
+const ROOFTOP_FACADE_SOLID_EVERY := 3
+const ROOFTOP_FACADE_SOLID_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_facade_solid_5m.tscn"
+)
+const ROOFTOP_FACADE_WINDOW_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_facade_window_5m.tscn"
+)
+# 100F 天台 Blender 布局重放：只接入房屋与装饰层；地砖、女儿墙、外立面和碰撞
+# 继续由本脚本的程序化壳体拥有，避免重复承重和重复边界碰撞。
+const ROOFTOP_DECOR_LAYOUT_PATH := "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json"
+const ROOFTOP_ROOM_WALL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_wall_5x12.tscn"
+)
+const ROOFTOP_ROOM_WINDOW_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_window_5x12.tscn"
+)
+const ROOFTOP_ROOM_DOORWALL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_room_doorwall_5x12.tscn"
+)
+const ROOFTOP_ROOF_FULL_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_full_5m.tscn"
+)
+const ROOFTOP_ROOF_EDGE_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_edge_5m.tscn"
+)
+const ROOFTOP_ROOF_CORNER_SCENE: PackedScene = preload(
+	"res://assets/art/props/dungeon_3d/prp_rooftop_roof_corner_5m.tscn"
+)
+const ROOFTOP_DECOR_SCENES := {
+	"hvac_small": preload("res://assets/art/environments/tower_zones/rooftop/runtime/hvac_small.tscn"),
+	"hvac_vent": preload("res://assets/art/environments/tower_zones/rooftop/runtime/hvac_vent.tscn"),
+	"pipe_straight": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_straight.tscn"),
+	"pipe_elbow": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_elbow.tscn"),
+	"pipe_tee": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_tee.tscn"),
+	"pipe_riser": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_riser.tscn"),
+	"pipe_bracket": preload("res://assets/art/environments/tower_zones/rooftop/runtime/pipe_bracket.tscn"),
+	"ivy": preload("res://assets/art/environments/tower_zones/rooftop/runtime/ivy.tscn"),
+	"flowerbox": preload("res://assets/art/environments/tower_zones/rooftop/runtime/flowerbox.tscn"),
+	"plant_large": preload("res://assets/art/environments/tower_zones/rooftop/runtime/plant_large.tscn"),
+	"plant_small": preload("res://assets/art/environments/tower_zones/rooftop/runtime/plant_small.tscn"),
+}
+# ⚠️ 只重放装饰组。房屋围护（布局源的 house_shell / house_roof，现已改名 shell_reference）
+# **不在**此列：Base100UpperShell3D 的 prefab（env_base100_upper_shell_30x30_h12）自
+# 2026-09-20 起已自带 24 块墙 + 36 格封顶，若把这 60 件也重放，会在同一世界坐标上逐面
+# z-fighting。布局源里它们只作 Blender 侧参照。
+const ROOFTOP_LAYOUT_REPLAY_GROUPS := ["hvac_wall", "greenery", "ivy", "pipe_loop", "pipe_risers"]
+# 天台女儿墙破损变体（A=崩顶 / B=贯穿 / C=塌脚）。三件与 intact 件同包络
+# （5.00×1.80×0.50）、同原点（底面中心），且端头带 |x|>=2.05m 与 intact 件逐位相同
+# （已在 GLB 字节层证明：source/verify_env_rooftop_parapet_damage_bands.py），
+# 因此可沿任一边、任意顺序与原件 / 彼此对接，接头无缝、槽位相位不变。
+const PARAPET_DAMAGE_SCENES := [
+	preload("res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_a_5m.tscn"),
+	preload("res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_b_5m.tscn"),
+	preload("res://assets/art/props/dungeon_3d/prp_rooftop_parapet_dmg_c_5m.tscn"),
+]
+const PARAPET_DAMAGE_KEYS := ["dmg_a", "dmg_b", "dmg_c"]
+# 每段直段受损的概率（用户口径「约 1/4 随机」）；三档均分这 1/4。
+const ROOFTOP_PARAPET_DAMAGE_CHANCE := 0.25
+# 破损排布默认种子。固定值 ⇒ 每次进天台看到的破损分布一致（可复现、可门禁）；
+# 想要每局不同，在 add_child()（即 _ready）之前调用 set_outer_damage_seed()。
+const ROOFTOP_PARAPET_DAMAGE_SEED := 20260919
+const FLOOR_TILE_MATERIAL_LIGHT: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_override_top3d_v001.tres"
+)
+const FLOOR_TILE_MATERIAL_DARK: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_dark_top3d_v001.tres"
+)
+# v0.1 v2 拼接交替材质（A/B 微差异版）
+const FLOOR_TILE_MATERIAL_A: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_a_v001.tres"
+)
+const FLOOR_TILE_MATERIAL_B: StandardMaterial3D = preload(
+	"res://assets/art/environments/tower_descent_3d/components/mat_tower_floor_tile_warm_b_v001.tres"
+)
+const WALL_DOOR_GAP_HALF_WIDTH := 5.0
+const BASE_99_100_ATRIUM_WORLD_RECT := Rect2(-15.0, -10.0, 30.0, 30.0)
+const BASE_99_100_ATRIUM_TILE_COUNT := 36
+
+var floor_index := 0
+var floor_kind := "combat"
+# 单层关卡（远征）虽然 floor_index==0，但绝不继承「天台」窄轮廓：
+# 必须使用标准 250×250 网格，否则 x>40 / z<-35 的房间会既没有承重楼面、
+# 也没有外圈墙，玩家会直接掉出关卡。
+var force_standard_map := false
+## 独立单层关卡（远征）的实际内容外框。非空时楼面与外墙都按该矩形生成，
+## 不再套用塔楼整块 250×250 网格 —— 否则远处空地上会立着一圈没有内容的墙。
+var content_world_rect := Rect2()
+var _has_content_bounds := false
+## 外墙可视纵向缩放实测值。正常层与远征都是 1.0，只有 100F 天台女儿墙是 0.5。
+## 写入快照供门禁断言「可视高度 == 碰撞高度」，防止再次出现看不见的挡墙。
+var _outer_visual_scale_y := 1.0
+var stair_hole_sides: Array[String] = []
+# 房间自带正式地砖的区域（当前仅入口安全房 3×3 格）。只从通用可视地砖里挖掉，
+# 承重碰撞不受影响，仍由 _build_support() 用 _hole_rects() 铺满整个房间地面。
+var additional_visual_holes: Array[Rect2] = []
+## —— 承重保底：授权房间足迹 ——
+## 楼梯井洞口的平面矩形是**固定塔楼常量**（_stair_hole_world_rect），按「楼梯出口房的墙
+## 落在 5m 核心边」的标准塔楼模式定的。授权布局的房间足迹由摆位源给，可能与固定洞口
+## 错开：区块00 的办公室西墙在 x=−40，西侧洞口却从 x=−45 伸到 x=−30 ⇒ 洞口多伸进房间
+## 10m，那 10m 没有 FloorSupport，房中央实测一路掉到 97F（y=−29.97 → −36.0）。
+## 而楼梯资产本身是贴合房间界面摆的（实测 Stair_98_97 落在 x[−49.5,−40.5]，在房间以西）。
+## 所以洞要按「房间足迹」先削一刀：足迹内必须保留承重。
+## 标准塔楼里两者不相交 ⇒ 削完与原矩形逐值相同（回归零影响）。
+## 写入时机：TowerDescent3D._rebuild_floor_stage 必须在 add_child 之前 set() ——
+## _build_support() 在 stage 自己的 _ready() 里跑。
+var support_keep_out_rects: Array[Rect2] = []
+# 上述洞实际从通用可视地砖里移除了多少格（已扣除与楼梯洞重叠的部分）。
+var _additional_visual_hole_tile_count := 0
+var _floor_visual_light: MultiMeshInstance3D
+var _floor_visual_dark: MultiMeshInstance3D
+var _protected_floor_visual_light: MultiMeshInstance3D
+var _protected_floor_visual_dark: MultiMeshInstance3D
+var _outer_visual: MultiMeshInstance3D
+## 破损直段的批次节点（每档一个 MultiMesh）。intact 直段仍在 _outer_visual。
+var _outer_damage_visual: Array[MultiMeshInstance3D] = []
+## 天台外立面环的两个批次（实墙 / 窗墙）。只有 100F 天台非空。
+var _rooftop_facade_solid_visual: MultiMeshInstance3D
+var _rooftop_facade_window_visual: MultiMeshInstance3D
+## 立面环实测件数（按计划值写入，批次实例数由 _outer_facade_batch_counts 对账）。
+var _rooftop_facade_solid_count := 0
+var _rooftop_facade_window_count := 0
+## 立面环全部槽位变换（实墙 + 窗墙，同序）。与女儿墙的槽位表同一用途：
+## 「整圈覆盖到哪 / 有没有角缝」的唯一真源，探针按它算覆盖，不必回读 MultiMesh
+## （后者在 --headless 的 dummy 渲染器下恒为单位阵）。
+var _rooftop_facade_slot_transforms: Array[Transform3D] = []
+## 与 _rooftop_facade_slot_transforms 逐下标对应的档位表（"solid" / "window"）。
+var _rooftop_facade_slot_kinds: Array = []
+## 立面环必须**让出缺口**的楼梯侧别（= 楼梯井外廓穿过本层竖向层带的那些侧）。
+##
+## 由 TowerDescent3D 按「与本层 floor_index 相邻的竖直边」注入；塔楼里只有天台层
+## (floor_index 0) 会拿到非空值。见 _rooftop_facade_gap_spans() 的由来说明。
+var facade_gap_sides: Array[String] = []
+## 实测让位缺口跨度的真源：side -> Array[Vector2]（沿线轴的 min/max 世界坐标）。
+## 写快照供门禁核对「缺口在哪、有多宽」，不必回读 MultiMesh（--headless 下不可用）。
+var _rooftop_facade_gap_map: Dictionary = {}
+## 因让位而**未摆放**的立面模块件数（计划值口径，供件数对账）。
+var _rooftop_facade_gap_module_count := 0
+## 楼梯口占位矮墙（ParapetDoorWall_*）实测件数。天台封口后恒为 0；
+## 普通层若有楼梯口门洞则等于被跳过的直段数。
+var _outer_doorway_wall_count := 0
+## 直段槽位总数（intact + 破损；不含四角转角件与西侧门洞补位墙）。
+var _outer_straight_slot_count := 0
+## 各档直段件数，键为 intact / dmg_a / dmg_b / dmg_c。
+var _outer_damage_counts := {"intact": 0, "dmg_a": 0, "dmg_b": 0, "dmg_c": 0}
+## 破损排布种子（写快照供门禁断言，也可在 _ready 前用 set_outer_damage_seed 覆盖）。
+var _outer_damage_seed := ROOFTOP_PARAPET_DAMAGE_SEED
+## 全部直段槽位变换（intact + 破损）。破损只换外观、不挪槽位，因此这是「直段共几段、
+## 每条边覆盖到哪」的唯一真源：门禁与对齐探针按它核对，不必关心某槽位当前用哪一档。
+var _outer_straight_slot_transforms: Array[Transform3D] = []
+## 与 _outer_straight_slot_transforms 逐下标对应的档位表（"intact" / "dmg_a" / …）。
+## 与槽位表同源同序，且不经过 RenderingServer，所以 --headless 下也能读到。
+var _outer_slot_kinds: Array = []
+var _base99_outer_corner_visuals: Array[Node3D] = []
+var _rooftop_outer_corner_visuals: Array[Node3D] = []
+var _support_root: StaticBody3D
+# 100F 正式装饰布局根。地砖/女儿墙/外立面等结构壳体继续由本类拥有；
+# 房屋与装饰组件由 Blender 布局清单重放到该根节点。
+var _rooftop_art_instance: Node3D
+var _rooftop_art_blocker_count := 0
+var _rooftop_art_instance_count := 0
+var _shell_visible := true
+var _floor_visible := true
+var _outer_visible := true
+var _tile_count := 0
+var _support_rect_count := 0
+var _protected_floor_patch_enabled := false
+var _protected_floor_patch_grid_center := Vector2i(-1, -1)
+var _protected_floor_patch_tile_count := 0
+## 场景路径 → 资产侧声明的 preserve_authored_palette。按场景缓存（跨实例共享），
+## 让天台地砖 / 抛光砖 / 旧占位砖各只实例化探测一次，而不是共用一个全局布尔。
+static var _palette_preserve_cache := {}
+
+
+func configure(
+	index: int,
+	kind: String,
+	holes: Array[String],
+	extra_visual_holes: Array[Rect2] = [],
+	use_standard_map: bool = false,
+	content_bounds: Rect2 = Rect2(),
+	facade_gaps: Array[String] = []
+) -> void:
+	floor_index = index
+	floor_kind = kind
+	force_standard_map = use_standard_map
+	content_world_rect = content_bounds
+	_has_content_bounds = content_bounds.size.x > 0.0 and content_bounds.size.y > 0.0
+	stair_hole_sides.assign(holes)
+	additional_visual_holes.assign(extra_visual_holes)
+	facade_gap_sides.assign(facade_gaps)
+
+
+func _ready() -> void:
+	name = "Floor_%d" % (100 - floor_index)
+	set_meta("floor_index", floor_index)
+	set_meta("floor_number", 100 - floor_index)
+	set_meta(
+		"block_id",
+		"expedition"
+		if force_standard_map
+		else "rooftop"
+		if floor_index == 0
+		else "base"
+		if floor_index == 1
+		else "battle"
+	)
+	add_to_group("tower_floor_stage_3d")
+	_build_floor()
+	_build_outer_shell()
+	_build_support()
+	if _uses_rooftop_profile():
+		_build_rooftop_authored_layout()
+
+
+func _build_rooftop_authored_layout() -> void:
+	_rooftop_art_blocker_count = 0
+	_rooftop_art_instance_count = 0
+	var file := FileAccess.open(ROOFTOP_DECOR_LAYOUT_PATH, FileAccess.READ)
+	if file == null:
+		_rooftop_art_blocker_count = 1
+		push_error("Rooftop decorated layout missing: %s" % ROOFTOP_DECOR_LAYOUT_PATH)
+		return
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
+	file.close()
+	if not (parsed is Dictionary):
+		_rooftop_art_blocker_count = 1
+		push_error("Rooftop decorated layout is not a JSON object")
+		return
+	var layout := parsed as Dictionary
+	var schema_ok := str(layout.get("schema", "")) == "shellstrom2.rooftop.decorated_layout"
+	var version_ok := is_equal_approx(float(layout.get("schema_version", -1)), 1.0)
+	var identity_ok := str(layout.get("floor", "")) == "100F" and str(layout.get("block_id", "")) == "rooftop"
+	var dimensions := layout.get("dimensions_m", []) as Array
+	var dimensions_ok := dimensions.size() == 2 and is_equal_approx(float(dimensions[0]), ROOFTOP_MAP_DIMENSIONS.x) and is_equal_approx(float(dimensions[1]), ROOFTOP_MAP_DIMENSIONS.y)
+	var world_rect := layout.get("world_rect_m", []) as Array
+	var rect_ok := false
+	if world_rect.size() == 4:
+		var authored_rect := Rect2(float(world_rect[0]), float(world_rect[1]), float(world_rect[2]), float(world_rect[3]))
+		rect_ok = is_equal_approx(authored_rect.position.x, ROOFTOP_WORLD_RECT.position.x) and is_equal_approx(authored_rect.position.y, ROOFTOP_WORLD_RECT.position.y) and is_equal_approx(authored_rect.size.x, ROOFTOP_WORLD_RECT.size.x) and is_equal_approx(authored_rect.size.y, ROOFTOP_WORLD_RECT.size.y)
+	_rooftop_art_blocker_count = int(not schema_ok) + int(not version_ok) + int(not identity_ok) + int(not dimensions_ok) + int(not rect_ok)
+	if _rooftop_art_blocker_count > 0:
+		push_error("Rooftop decorated layout contract failed blockers=%d schema_ok=%s version_ok=%s identity_ok=%s dimensions_ok=%s rect_ok=%s" % [
+			_rooftop_art_blocker_count,
+			str(str(layout.get("schema", "")) == "shellstrom2.rooftop.decorated_layout"),
+			str(is_equal_approx(float(layout.get("schema_version", -1)), 1.0)),
+			str(str(layout.get("floor", "")) == "100F" and str(layout.get("block_id", "")) == "rooftop"),
+			str(dimensions.size() == 2 and is_equal_approx(float(dimensions[0]), ROOFTOP_MAP_DIMENSIONS.x) and is_equal_approx(float(dimensions[1]), ROOFTOP_MAP_DIMENSIONS.y)),
+			str(world_rect.size() == 4 and is_equal_approx(float(world_rect[0]), ROOFTOP_WORLD_RECT.position.x) and is_equal_approx(float(world_rect[1]), ROOFTOP_WORLD_RECT.position.y) and is_equal_approx(float(world_rect[2]), ROOFTOP_WORLD_RECT.size.x) and is_equal_approx(float(world_rect[3]), ROOFTOP_WORLD_RECT.size.y)),
+		])
+		return
+	var candidate := Node3D.new()
+	candidate.name = "FormalRooftopFacilities"
+	candidate.set_meta("layout_id", str(layout.get("layout_id", "")))
+	candidate.set_meta("version", str(layout.get("layout_version", "")))
+	candidate.set_meta("source_layout", ROOFTOP_DECOR_LAYOUT_PATH)
+	candidate.set_meta("independent_blocker_count", 0)
+	candidate.set_meta("visual_only", true)
+	var instances := layout.get("instances", []) as Array
+	for item_variant in instances:
+		if not (item_variant is Dictionary):
+			_rooftop_art_blocker_count += 1
+			continue
+		var item := item_variant as Dictionary
+		if not bool(item.get("enabled", false)):
+			continue
+		var group := str(item.get("group", ""))
+		if group not in ROOFTOP_LAYOUT_REPLAY_GROUPS:
+			continue
+		var slug := str(item.get("component_slug", ""))
+		var scene := _rooftop_scene_for_slug(slug)
+		if scene == null:
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout component has no runtime scene: %s" % slug)
+			continue
+		var scale_values := item.get("scale", []) as Array
+		if scale_values.size() != 3 or not is_equal_approx(float(scale_values[0]), 1.0) or not is_equal_approx(float(scale_values[1]), 1.0) or not is_equal_approx(float(scale_values[2]), 1.0):
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout component has non-unit scale: %s" % str(item.get("instance_id", slug)))
+			continue
+		var instance := scene.instantiate() as Node3D
+		if instance == null:
+			_rooftop_art_blocker_count += 1
+			push_error("Rooftop layout scene instantiate failed: %s" % slug)
+			continue
+		instance.name = str(item.get("instance_id", "Rooftop_%s_%d" % [slug, _rooftop_art_instance_count]))
+		var position_values := item.get("position_m", []) as Array
+		if position_values.size() != 3:
+			instance.free()
+			_rooftop_art_blocker_count += 1
+			continue
+		# 坐标契约（全项目统一，勿改）：Blender Z-up X=东 / Y=北，Godot 平面 +z = 南；
+		# 布局源按 Godot 世界平面口径书写、写入 Blender 时只做 by = -gz 一步换算
+		# （见 source/author_rooftop_decorated_layout_v001.py 的坐标契约段），
+		# 于是这里用 (x, h, -by) 还原。⛔ 改成 (x, h, +by) 会让整份布局南北镜像、
+		# 北侧整体溢出天台 10m —— 2026-09-21 业主实机报的就是这个症状。
+		instance.position = Vector3(float(position_values[0]), float(position_values[2]), -float(position_values[1]))
+		instance.rotation.y = deg_to_rad(float(item.get("rotation_y_deg", 0.0)))
+		# 防再犯：换算后的平面位置必须落在天台矩形内。布局源里没有这条断言之前，
+		# 少一步换算不会有任何报错，只会在实机上静默错位。
+		if not ROOFTOP_WORLD_RECT.has_point(Vector2(instance.position.x, instance.position.z)):
+			_rooftop_art_blocker_count += 1
+			push_error(
+				"Rooftop layout instance outside rooftop rect: %s at %s"
+				% [str(item.get("instance_id", slug)), str(instance.position)]
+			)
+			instance.free()
+			continue
+		instance.set_meta("layout_instance_id", str(item.get("instance_id", "")))
+		instance.set_meta("component_slug", slug)
+		instance.set_meta("layout_group", group)
+		instance.set_meta("collision_policy", str(item.get("collision_policy", "visual_only")))
+		instance.set_meta("design_note", str(item.get("design_note", "")))
+		_disable_rooftop_visual_collision(instance)
+		candidate.add_child(instance)
+		_rooftop_art_instance_count += 1
+	if _rooftop_art_blocker_count > 0:
+		candidate.free()
+		push_error("Rooftop decorated layout replay blocked=%d" % _rooftop_art_blocker_count)
+		return
+	candidate.set_meta("instance_count", _rooftop_art_instance_count)
+	add_child(candidate)
+	_rooftop_art_instance = candidate
+
+
+func _rooftop_scene_for_slug(slug: String) -> PackedScene:
+	match slug:
+		"room_wall":
+			return ROOFTOP_ROOM_WALL_SCENE
+		"room_window":
+			return ROOFTOP_ROOM_WINDOW_SCENE
+		"room_doorwall":
+			return ROOFTOP_ROOM_DOORWALL_SCENE
+		"roof_full":
+			return ROOFTOP_ROOF_FULL_SCENE
+		"roof_edge":
+			return ROOFTOP_ROOF_EDGE_SCENE
+		"roof_corner":
+			return ROOFTOP_ROOF_CORNER_SCENE
+		_:
+			return ROOFTOP_DECOR_SCENES.get(slug) as PackedScene
+
+
+func _disable_rooftop_visual_collision(root: Node) -> void:
+	if root is CollisionShape3D:
+		(root as CollisionShape3D).disabled = true
+	if root is CollisionObject3D:
+		(root as CollisionObject3D).collision_layer = 0
+		(root as CollisionObject3D).collision_mask = 0
+	for child in root.get_children():
+		_disable_rooftop_visual_collision(child)
+
+
+func set_shell_visible(show_shell: bool) -> void:
+	set_render_state(show_shell, show_shell)
+
+
+func set_render_state(_show_floor: bool, _show_outer: bool) -> void:
+	# 结构壳体永久驻留：任何流送调用都不得隐藏楼板或塔楼外圈墙。
+	var show_floor := true
+	var show_outer := true
+	_floor_visible = true
+	_outer_visible = true
+	_shell_visible = true
+	if _floor_visual_light != null:
+		_floor_visual_light.visible = show_floor
+	if _floor_visual_dark != null:
+		_floor_visual_dark.visible = show_floor
+	if _outer_visual != null:
+		_outer_visual.visible = show_outer
+	# 破损批次与 intact 批次同属外墙壳体，必须同开同关：只关一批会让破损位置
+	# 出现「整段消失」的空洞观感（碰撞还在，视觉上却像缺口）。
+	for damage_visual in _outer_damage_visual:
+		damage_visual.visible = show_outer
+	# 外立面环同样属于永久结构壳体：它填的是天台边缘下方那一整层的空洞，
+	# 被任何流送调用关掉都会让「天台下是空的」问题重现。
+	for facade_visual in [_rooftop_facade_solid_visual, _rooftop_facade_window_visual]:
+		if facade_visual != null:
+			facade_visual.visible = show_outer
+	for corner_visual in _base99_outer_corner_visuals:
+		corner_visual.visible = show_outer
+	for corner_visual in _rooftop_outer_corner_visuals:
+		corner_visual.visible = show_outer
+	if _rooftop_art_instance != null:
+		_rooftop_art_instance.visible = true
+	_apply_protected_floor_patch_visibility()
+
+
+## 兼容旧存档/测试入口。完整楼板已永久显示，局部补丁必须保持关闭，
+## 避免同位置重复渲染引发闪烁、阴影偏差或额外 draw call。
+func set_protected_floor_patch(_center_world_position: Vector3, _enabled: bool) -> void:
+	_protected_floor_patch_enabled = false
+	_apply_protected_floor_patch_visibility()
+
+
+func is_shell_visible() -> bool:
+	return _shell_visible
+
+
+## 覆盖破损排布种子。必须在 add_child()（即 _ready 里的 _build_outer_shell）之前调用，
+## 之后再改只影响快照字段、不重排已摆好的外墙。
+func set_outer_damage_seed(value: int) -> void:
+	_outer_damage_seed = value
+
+
+## 直段槽位总数（intact + 破损；不含四角转角件与门洞补位墙）。
+func get_outer_straight_slot_count() -> int:
+	return _outer_straight_slot_count
+
+
+## 全部直段槽位变换（intact + 破损）。破损只换外观、不挪槽位，故这是槽位真源。
+func get_outer_straight_slot_transforms() -> Array[Transform3D]:
+	return _outer_straight_slot_transforms.duplicate()
+
+
+## 与 get_outer_straight_slot_transforms() 逐下标对应的档位表（"intact" / "dmg_a" / …）。
+## 门禁与探针用它回答「第 i 个槽位用的是哪一档」，不依赖 MultiMesh 实例变换回读
+## （后者在 --headless 的 dummy 渲染器下恒为单位阵）。
+func get_outer_slot_kinds() -> Array:
+	return _outer_slot_kinds.duplicate()
+
+
+## 各档直段件数（计划值）。
+func get_outer_damage_counts() -> Dictionary:
+	return _outer_damage_counts.duplicate()
+
+
+## 立面环全部槽位变换（实墙 + 窗墙，同序）。与 get_outer_straight_slot_transforms()
+## 同一用途：探针/门禁按它核对「整圈是否满铺、角上是否留缝」。
+func get_outer_facade_slot_transforms() -> Array[Transform3D]:
+	return _rooftop_facade_slot_transforms.duplicate()
+
+
+## 与 get_outer_facade_slot_transforms() 逐下标对应的档位表（"solid" / "window"）。
+func get_outer_facade_slot_kinds() -> Array:
+	return _rooftop_facade_slot_kinds.duplicate()
+
+
+## 各批次 MultiMesh 的实测实例数。与 get_outer_damage_counts() 对账，
+## 防止「计划说换了 15 段、实际只摆了 3 段」这类静默漂移。
+func _outer_damage_batch_counts() -> Dictionary:
+	var counts := {"intact": 0, "dmg_a": 0, "dmg_b": 0, "dmg_c": 0}
+	if _outer_visual != null and _outer_visual.multimesh != null:
+		counts["intact"] = _outer_visual.multimesh.instance_count
+	for index in range(_outer_damage_visual.size()):
+		var visual := _outer_damage_visual[index]
+		if visual != null and visual.multimesh != null:
+			counts[str(PARAPET_DAMAGE_KEYS[index])] = visual.multimesh.instance_count
+	return counts
+
+
+## 外立面环两个批次的实测实例数。与计划值（_rooftop_facade_*_count）对账，
+## 防「计划说 64 件、实际只摆了 4 件」这类静默漂移 —— 与破损档同一套对账口径。
+func _outer_facade_batch_counts() -> Dictionary:
+	var counts := {"solid": 0, "window": 0}
+	if _rooftop_facade_solid_visual != null and _rooftop_facade_solid_visual.multimesh != null:
+		counts["solid"] = _rooftop_facade_solid_visual.multimesh.instance_count
+	if _rooftop_facade_window_visual != null and _rooftop_facade_window_visual.multimesh != null:
+		counts["window"] = _rooftop_facade_window_visual.multimesh.instance_count
+	return counts
+
+
+func get_snapshot() -> Dictionary:
+	return {
+		"floor_index": floor_index,
+		"floor_kind": floor_kind,
+		"map_size": _floor_map_size(),
+		"grid_count": _floor_grid_count(),
+		"map_dimensions": _floor_map_dimensions(),
+		"grid_dimensions": _floor_grid_dimensions(),
+		"floor_world_rect": _floor_world_rect(),
+		"grid_unit": GRID_UNIT,
+		"tile_count": _tile_count,
+		"tile_count_light": _floor_visual_light.multimesh.instance_count if _floor_visual_light != null and _floor_visual_light.multimesh != null else 0,
+		"tile_count_dark": _floor_visual_dark.multimesh.instance_count if _floor_visual_dark != null and _floor_visual_dark.multimesh != null else 0,
+		"outer_map_size": _outer_map_size(),
+		"outer_grid_count": _outer_grid_count(),
+		"outer_map_dimensions": _outer_map_dimensions(),
+		"outer_grid_dimensions": _outer_grid_dimensions(),
+		"outer_world_rect": _outer_world_rect(),
+		"outer_module_count": 2 * (_outer_grid_dimensions().x + _outer_grid_dimensions().y),
+		# 周长格数是几何事实；天台两端让位给转角件后，实体直段比它少「每边一段」。
+		"outer_segment_count": _outer_segment_total(),
+		"outer_corner_count": 4 if _uses_rooftop_parapet_modules() else 0,
+		"outer_wall_height": _outer_wall_height(),
+		"outer_wall_thickness": _outer_wall_thickness(),
+		# 直段槽位真源与破损排布。槽位总数恒为「整圈直段数 - 门洞补位墙件数」；
+		# 破损只把其中一部分槽位的可视件换成破损变体，不改槽位数、不改碰撞。
+		# outer_damage_counts 是计划值，outer_damage_batch_counts 是各批次 MultiMesh
+		# 的实测实例数 —— 两者不一致说明「计划与摆放」已经漂移，门禁据此对账。
+		"outer_straight_slot_count": _outer_straight_slot_count,
+		# 楼梯口占位矮墙（系统的 ParapetDoorWall_*）。天台外墙已连成整圈，恒为 0。
+		"outer_doorway_wall_count": _outer_doorway_wall_count,
+		# 外立面环（= 99 层外墙的可视件）。天台非 0，其余层为 0。
+		"outer_facade_solid_count": _rooftop_facade_solid_count,
+		"outer_facade_window_count": _rooftop_facade_window_count,
+		"outer_facade_batch_counts": _outer_facade_batch_counts(),
+		"outer_facade_module_count": (
+			_rooftop_facade_solid_count + _rooftop_facade_window_count
+		),
+		"outer_facade_slot_count": _rooftop_facade_slot_transforms.size(),
+		"outer_facade_bottom_y": (
+			ROOFTOP_FACADE_BOTTOM_Y if _uses_rooftop_parapet_modules() else 0.0
+		),
+		"outer_facade_thickness": (
+			ROOFTOP_FACADE_THICKNESS if _uses_rooftop_parapet_modules() else 0.0
+		),
+		# 立面环的让位缺口：楼梯井穿过某条边时不摆件、碰撞也断开这一段。
+		# 键 = side（north/south/west/east），值 = Array[Vector2] 的沿线跨度。
+		"outer_facade_gap_spans": _rooftop_facade_gap_map.duplicate(true),
+		"outer_facade_gap_module_count": _rooftop_facade_gap_module_count,
+		"facade_gap_sides": facade_gap_sides.duplicate(),
+		"outer_damage_seed": _outer_damage_seed,
+		"outer_damage_counts": _outer_damage_counts.duplicate(),
+		"outer_damage_batch_counts": _outer_damage_batch_counts(),
+		"support_rect_count": _support_rect_count,
+		"stair_hole_sides": stair_hole_sides.duplicate(),
+		"additional_visual_hole_count": additional_visual_holes.size(),
+		"additional_visual_hole_tile_count": _additional_visual_hole_tile_count,
+		"shell_visible": _shell_visible,
+		"floor_visible": _floor_visible,
+		"outer_visible": _outer_visible,
+		"protected_floor_patch_enabled": _protected_floor_patch_enabled,
+		"protected_floor_patch_visible": (
+			_protected_floor_patch_enabled and not _floor_visible
+		),
+		"protected_floor_patch_grid_center": _protected_floor_patch_grid_center,
+		"protected_floor_patch_tile_count": _protected_floor_patch_tile_count,
+		"protected_floor_patch_side_m": PROTECTED_FLOOR_PATCH_SIDE_M,
+		"protected_floor_patch_tiles_per_side": PROTECTED_FLOOR_PATCH_TILES_PER_SIDE,
+		"protected_floor_patch_casts_shadow": (
+			_protected_floor_visual_light != null
+			and _protected_floor_visual_dark != null
+			and _protected_floor_visual_light.cast_shadow
+				== GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+			and _protected_floor_visual_dark.cast_shadow
+				== GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		),
+		"support_collision_persistent": (
+			_support_root != null
+			and _support_root.process_mode == Node.PROCESS_MODE_ALWAYS
+			and _enabled_collision_shape_count(_support_root) > 0
+		),
+		"support_process_mode_always": (
+			_support_root != null
+			and _support_root.process_mode == Node.PROCESS_MODE_ALWAYS
+		),
+		"uses_imported_floor_mesh": _floor_visual_light != null and _floor_visual_light.multimesh != null,
+		"uses_imported_outer_mesh": _outer_visual != null and _outer_visual.multimesh != null,
+		"uses_formal_rooftop_art": _rooftop_art_instance != null,
+		"formal_rooftop_art_version": (
+			str(_rooftop_art_instance.get_meta("version", ""))
+			if _rooftop_art_instance != null else ""
+		),
+			"formal_rooftop_art_blocker_count": _rooftop_art_blocker_count,
+		"checkerboard_pattern": true,
+		"force_standard_map": force_standard_map,
+		"has_content_bounds": _has_content_bounds,
+		"content_world_rect": content_world_rect if _has_content_bounds else Rect2(),
+		"outer_visual_scale_y": _outer_visual_scale_y,
+		"base_99_100_atrium_enabled": _uses_rooftop_profile(),
+		"base_99_100_atrium_tile_count": BASE_99_100_ATRIUM_TILE_COUNT if _uses_rooftop_profile() else 0,
+		"base_99_100_atrium_world_rect": BASE_99_100_ATRIUM_WORLD_RECT if _uses_rooftop_profile() else Rect2(),
+	}
+
+
+func _floor_grid_count() -> int:
+	return _floor_grid_dimensions().x
+
+
+## 只有「真正的 100F 天台」才使用窄轮廓；远征单层关卡强制走标准 250×250 网格。
+func _uses_rooftop_profile() -> bool:
+	return floor_index == 0 and not force_standard_map
+
+
+func _floor_grid_dimensions() -> Vector2i:
+	if _uses_rooftop_profile():
+		return ROOFTOP_GRID_DIMENSIONS
+	if _has_content_bounds:
+		return Vector2i(
+			int(round(content_world_rect.size.x / GRID_UNIT)),
+			int(round(content_world_rect.size.y / GRID_UNIT))
+		)
+	return Vector2i(GRID_COUNT, GRID_COUNT)
+
+
+func _floor_map_size() -> float:
+	return _floor_map_dimensions().x
+
+
+func _floor_map_dimensions() -> Vector2:
+	return _floor_world_rect().size
+
+
+func _floor_world_rect() -> Rect2:
+	if _uses_rooftop_profile():
+		return ROOFTOP_WORLD_RECT
+	if _has_content_bounds:
+		return content_world_rect
+	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
+
+
+func _outer_grid_count() -> int:
+	# 此次只收缩100层。99层外墙保持此前的160m轮廓，基地和设施不移动。
+	return _outer_grid_dimensions().x
+
+
+func _outer_grid_dimensions() -> Vector2i:
+	if _uses_rooftop_profile():
+		return ROOFTOP_GRID_DIMENSIONS
+	if _has_content_bounds:
+		# 独立单层关卡：外墙贴着内容外框走，不套塔楼的整块 250×250。
+		return _floor_grid_dimensions()
+	if floor_index == 1:
+		return Vector2i(FACILITY_OUTER_GRID_COUNT, FACILITY_OUTER_GRID_COUNT)
+	return Vector2i(GRID_COUNT, GRID_COUNT)
+
+
+func _outer_map_size() -> float:
+	return _outer_map_dimensions().x
+
+
+func _outer_map_dimensions() -> Vector2:
+	return _outer_world_rect().size
+
+
+func _outer_world_rect() -> Rect2:
+	if _uses_rooftop_profile():
+		return ROOFTOP_WORLD_RECT
+	if _has_content_bounds:
+		return content_world_rect
+	if floor_index == 1:
+		return FACILITY_OUTER_WORLD_RECT
+	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
+
+
+func _outer_wall_height() -> float:
+	return (
+		ROOFTOP_PARAPET_HEIGHT if _uses_rooftop_profile() else TowerGeometry3D.WALL_LOGICAL_HEIGHT_M
+	)
+
+
+## 是否使用天台参考组件库 v002 的女儿墙模块（0.50m 厚 + 四角 2.5m 转角件）。
+## 判据刻意与 _build_outer_shell 里 PARAPET_SCENE 的选择口径一致（floor_kind），
+## 这样「用哪套模块」和「按几米内缩边界」永远同步。远征层 kind 是 combat，不含在内。
+func _uses_rooftop_parapet_modules() -> bool:
+	return floor_kind == "rooftop"
+
+
+## 外墙模块厚度：天台 0.50m（组件库 v002），其余层沿用 0.30m。
+func _outer_wall_thickness() -> float:
+	return ROOFTOP_PARAPET_THICKNESS if _uses_rooftop_parapet_modules() else WALL_THICKNESS
+
+
+## 外墙中心线相对包络矩形的内缩量（= 模块厚度的一半）。
+func _outer_wall_inset() -> float:
+	return _outer_wall_thickness() * 0.5
+
+
+## 一条边上的直段数量。天台两端各让出转角件长度，因此比格数少一段。
+func _outer_segment_count(side_length_in_grids: int) -> int:
+	if _uses_rooftop_parapet_modules():
+		return side_length_in_grids - 1
+	return side_length_in_grids
+
+
+## 整圈直段总数（不含转角件）。
+func _outer_segment_total() -> int:
+	var dimensions := _outer_grid_dimensions()
+	return 2 * (
+		_outer_segment_count(dimensions.x) + _outer_segment_count(dimensions.y)
+	)
+
+
+## 外墙直段沿边方向的中心坐标。天台从让位区之后起算，其余层从矩形起点起算。
+func _outer_segment_along(rect_start: float, index: int) -> float:
+	if _uses_rooftop_parapet_modules():
+		return rect_start + ROOFTOP_CORNER_ARM_M + GRID_UNIT * (float(index) + 0.5)
+	return rect_start + GRID_UNIT * (float(index) + 0.5)
+
+
+func _enabled_collision_shape_count(root: Node) -> int:
+	var count := 0
+	if root is CollisionShape3D and not (root as CollisionShape3D).disabled:
+		count += 1
+	for child in root.get_children():
+		count += _enabled_collision_shape_count(child)
+	return count
+
+
+func _build_floor() -> void:
+	# 100F 天台换用天台参考组件库 v002 的正式地砖（ENV-ROOFTOP-REF-FLOOR-FULL）。
+	# 98F 与天台历史上共用「抛光地砖」，天台换件后 98F 保持原样不动。
+	var uses_rooftop_floor := _uses_rooftop_profile()
+	var polished := floor_index in [0, 2] and not uses_rooftop_floor
+	var floor_scene := (
+		ROOFTOP_FLOOR_SCENE
+		if uses_rooftop_floor
+		else POLISHED_FLOOR_SCENE
+		if polished
+		else FLOOR_SCENE
+	)
+	var mesh := _mesh_from_scene(floor_scene)
+	if mesh == null:
+		push_error("Tower floor module GLB has no MeshInstance3D")
+		return
+	# 正式地砖 GLB 自带双表面 PaletteUV；只有旧占位地砖才需要暖色 A/B 主题材质。
+	var uses_authored_palette := polished or _scene_preserves_authored_palette(floor_scene)
+	# 可视顶面必须与承重面 Y=0 重合。天台正式地砖是「底面中心」原点（顶面在 AABB
+	# 顶端），要下沉整板厚；旧砖/抛光砖是「几何中心」原点，下沉半板厚即可。
+	# 两条口径分开写，避免无谓改动旧层的槽位相位。
+	var floor_visual_y := -FLOOR_THICKNESS * 0.5
+	if uses_rooftop_floor:
+		floor_visual_y = _floor_visual_origin_y(mesh)
+	# 国际象棋棋盘式地砖：按 (x_index + z_index) % 2 分流到浅/深两套 MultiMesh。
+	var light_transforms: Array[Transform3D] = []
+	var dark_transforms: Array[Transform3D] = []
+	var base_holes := _base_visual_hole_rects()
+	var extra_holes := _additional_visual_hole_rects()
+	var grid_dimensions := _floor_grid_dimensions()
+	var floor_rect := _floor_world_rect()
+	_additional_visual_hole_tile_count = 0
+	for z_index in range(grid_dimensions.y):
+		for x_index in range(grid_dimensions.x):
+			var point := Vector2i(x_index, z_index)
+			if _point_in_hole_rects(base_holes, point):
+				continue
+			if _point_in_hole_rects(extra_holes, point):
+				# 房间自带正式地砖顶掉通用砖：只减少可视覆盖，承重碰撞不受影响。
+				_additional_visual_hole_tile_count += 1
+				continue
+			var x := floor_rect.position.x + GRID_UNIT * (float(x_index) + 0.5)
+			var z := floor_rect.position.y + GRID_UNIT * (float(z_index) + 0.5)
+			var transform := Transform3D(
+				Basis.IDENTITY,
+				Vector3(x, floor_visual_y, z)
+			)
+			if (x_index + z_index) % 2 == 0:
+				light_transforms.append(transform)
+			else:
+				dark_transforms.append(transform)
+	_floor_visual_light = _create_floor_multimesh(
+		"ImportedFloorTileGrid5M_A", mesh, light_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_A
+	)
+	add_child(_floor_visual_light)
+	_floor_visual_dark = _create_floor_multimesh(
+		"ImportedFloorTileGrid5M_B", mesh, dark_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_B
+	)
+	add_child(_floor_visual_dark)
+	var empty_transforms: Array[Transform3D] = []
+	_protected_floor_visual_light = _create_floor_multimesh(
+		"ProtectedFloorPatch5M_A", mesh, empty_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_A
+	)
+	_protected_floor_visual_light.visible = false
+	add_child(_protected_floor_visual_light)
+	_protected_floor_visual_dark = _create_floor_multimesh(
+		"ProtectedFloorPatch5M_B", mesh, empty_transforms, null if uses_authored_palette else FLOOR_TILE_MATERIAL_B
+	)
+	_protected_floor_visual_dark.visible = false
+	add_child(_protected_floor_visual_dark)
+	_tile_count = light_transforms.size() + dark_transforms.size()
+
+
+## 地砖可视件的摆放 Y：把模块的**可视顶面**对齐承重面 Y=0。
+##   底面中心原点（天台正式地砖，AABB Y=0..0.30）→ 顶面在 AABB 顶端，下沉整板厚；
+##   几何中心原点（旧占位砖 / 抛光砖，AABB Y≈-0.15..+0.15）→ 顶面在 +0.15，
+## 若将来旧件也改走这里，结果与历史固定值只差 0.5mm 以内。
+## 之所以做成函数：换地砖件时不必再人肉去改一个魔数。
+func _floor_visual_origin_y(mesh: Mesh) -> float:
+	if mesh == null:
+		return -FLOOR_THICKNESS * 0.5
+	return -mesh.get_aabb().end.y
+
+
+## 模块 Prefab 由资产侧声明是否保留自带材质（preserve_authored_palette）。
+## 按场景路径缓存，避免每层重复实例化 Prefab；不同地砖件各有各的声明，
+## 不再共用一个全局布尔（天台砖与抛光砖的声明是不同的）。
+func _scene_preserves_authored_palette(scene: PackedScene) -> bool:
+	if scene == null:
+		return false
+	var key := scene.resource_path
+	if _palette_preserve_cache.has(key):
+		return bool(_palette_preserve_cache[key])
+	var probe := scene.instantiate()
+	var preserved := bool(probe.get_meta("preserve_authored_palette", false))
+	probe.free()
+	_palette_preserve_cache[key] = preserved
+	return preserved
+
+
+func _rebuild_protected_floor_patch(grid_center: Vector2i) -> void:
+	_protected_floor_patch_grid_center = grid_center
+	var light_transforms: Array[Transform3D] = []
+	var dark_transforms: Array[Transform3D] = []
+	var holes := _floor_visual_hole_rects()
+	var patch_start_offset := -int(PROTECTED_FLOOR_PATCH_TILES_PER_SIDE / 2)
+	var patch_end_offset := patch_start_offset + PROTECTED_FLOOR_PATCH_TILES_PER_SIDE
+	var grid_dimensions := _floor_grid_dimensions()
+	var floor_rect := _floor_world_rect()
+	for z_index in range(grid_center.y + patch_start_offset, grid_center.y + patch_end_offset):
+		if z_index < 0 or z_index >= grid_dimensions.y:
+			continue
+		for x_index in range(grid_center.x + patch_start_offset, grid_center.x + patch_end_offset):
+			if x_index < 0 or x_index >= grid_dimensions.x:
+				continue
+			var point := Vector2i(x_index, z_index)
+			var skipped := false
+			for hole in holes:
+				if (hole as Rect2i).has_point(point):
+					skipped = true
+					break
+			if skipped:
+				continue
+			var transform := Transform3D(
+				Basis.IDENTITY,
+				Vector3(
+					floor_rect.position.x + GRID_UNIT * (float(x_index) + 0.5),
+					-FLOOR_THICKNESS * 0.5,
+					floor_rect.position.y + GRID_UNIT * (float(z_index) + 0.5)
+				)
+			)
+			if (x_index + z_index) % 2 == 0:
+				light_transforms.append(transform)
+			else:
+				dark_transforms.append(transform)
+	_update_floor_multimesh_transforms(_protected_floor_visual_light, light_transforms)
+	_update_floor_multimesh_transforms(_protected_floor_visual_dark, dark_transforms)
+	_protected_floor_patch_tile_count = light_transforms.size() + dark_transforms.size()
+
+
+func _update_floor_multimesh_transforms(
+	visual: MultiMeshInstance3D, transforms: Array[Transform3D]
+) -> void:
+	if visual == null or visual.multimesh == null:
+		return
+	visual.multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		visual.multimesh.set_instance_transform(index, transforms[index])
+
+
+func _apply_protected_floor_patch_visibility() -> void:
+	var patch_visible := _protected_floor_patch_enabled and not _floor_visible
+	if _protected_floor_visual_light != null:
+		_protected_floor_visual_light.visible = patch_visible
+	if _protected_floor_visual_dark != null:
+		_protected_floor_visual_dark.visible = patch_visible
+
+
+func _create_floor_multimesh(
+	node_name: String, mesh: Mesh, transforms: Array[Transform3D], material: StandardMaterial3D
+) -> MultiMeshInstance3D:
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = transforms.size()
+	for index in range(transforms.size()):
+		multimesh.set_instance_transform(index, transforms[index])
+	var visual := MultiMeshInstance3D.new()
+	visual.name = node_name
+	visual.multimesh = multimesh
+	visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	visual.material_override = material
+	return visual
+
+
+func _build_outer_shell() -> void:
+	var module_scene := PARAPET_SCENE if floor_kind == "rooftop" else WALL_SCENE
+	var mesh := _mesh_from_scene(module_scene)
+	if mesh == null:
+		push_error("Tower outer-wall module GLB has no MeshInstance3D")
+		return
+	# 「用哪套模块」与「按几米内缩边界」是跨函数的隐形契约：模块厚度换了而内缩
+	# 口径没跟着换，墙就会与楼板边缘错台。留一条会失败的断言盯住这对判据。
+	assert(
+		_uses_rooftop_parapet_modules() == (floor_kind == "rooftop"),
+		"天台女儿墙模块判据与 PARAPET_SCENE 选择口径漂移"
+	)
+	# 楼梯口门洞：跳过门洞位置的实墙模块，碰撞盒也留缺口。
+	# 楼顶额外在缺口处摆放带门墙预制体（5m 宽组件含 2m 宽门洞），可通行。
+	var transforms: Array[Transform3D] = []
+	var outer_grid_dimensions := _outer_grid_dimensions()
+	var outer_rect := _outer_world_rect()
+	var outer_max := outer_rect.end
+	var wall_height := _outer_wall_height()
+	var wall_inset := _outer_wall_inset()
+	var segment_count_x := _outer_segment_count(outer_grid_dimensions.x)
+	var segment_count_y := _outer_segment_count(outer_grid_dimensions.y)
+	# 直接取真实摆放用的缩放值回填快照字段，避免与 _outer_visual_transform 各写一份。
+	_outer_visual_scale_y = _outer_visual_transform(
+		Basis.IDENTITY, Vector3.ZERO
+	).basis.get_scale().y
+	# 普通墙与女儿墙的正式 GLB 均以底面中心为原点；按包围盒底面贴合楼面
+	# （旧占位 BoxMesh 以几何中心为原点，同一表达式也能得出原中心高度）。
+	# 天台女儿墙为真尺寸 1.80m，不再有历史上的 0.5 纵向缩放补偿。
+	var visual_wall_center_y := -mesh.get_aabb().position.y
+	var north_boundary := outer_rect.position.y + wall_inset
+	var south_boundary := outer_max.y - wall_inset
+	var west_boundary := outer_rect.position.x + wall_inset
+	var east_boundary := outer_max.x - wall_inset
+	var door_transforms: Dictionary = {"north": [], "south": [], "west": [], "east": []}
+	for index in range(segment_count_x):
+		var offset_x := _outer_segment_along(outer_rect.position.x, index)
+		var is_outer_corner_segment := floor_index == 1 and index in [0, segment_count_x - 1]
+		if _is_in_wall_door_gap("north", index):
+			door_transforms["north"].append(Transform3D(Basis.IDENTITY, Vector3(offset_x, 0.0, north_boundary)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis.IDENTITY, Vector3(offset_x, visual_wall_center_y, north_boundary)))
+		if _is_in_wall_door_gap("south", index):
+			door_transforms["south"].append(Transform3D(Basis(Vector3.UP, PI), Vector3(offset_x, 0.0, south_boundary)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI), Vector3(offset_x, visual_wall_center_y, south_boundary)))
+	for index in range(segment_count_y):
+		var offset_z := _outer_segment_along(outer_rect.position.y, index)
+		var is_outer_corner_segment := floor_index == 1 and index in [0, segment_count_y - 1]
+		if _is_in_wall_door_gap("west", index):
+			door_transforms["west"].append(Transform3D(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, 0.0, offset_z)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, PI * 0.5), Vector3(west_boundary, visual_wall_center_y, offset_z)))
+		if _is_in_wall_door_gap("east", index):
+			door_transforms["east"].append(Transform3D(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, 0.0, offset_z)))
+		elif not is_outer_corner_segment:
+			transforms.append(_outer_visual_transform(Basis(Vector3.UP, -PI * 0.5), Vector3(east_boundary, visual_wall_center_y, offset_z)))
+	# 先把直段槽位表钉死，再决定每个槽位用哪一档可视件：破损只换外观、不增删槽位，
+	# 所以「直段共几段 / 每条边覆盖到哪」与破损比例完全解耦（这也是四个角的让位区、
+	# 西侧门洞缺口的宽度能保持不变的原因）。
+	_outer_straight_slot_transforms = transforms.duplicate()
+	_outer_straight_slot_count = transforms.size()
+	var batches := split_outer_parapet_damage(
+		transforms, _outer_damage_seed, _uses_rooftop_parapet_modules()
+	)
+	var planned_counts: Dictionary = batches["counts"]
+	_outer_damage_counts = planned_counts
+	# 与槽位表逐下标对应的档位表，供门禁/探针在 --headless 下也能读到「哪槽用哪档」。
+	var planned_kinds: Array = batches["kinds"]
+	_outer_slot_kinds = planned_kinds
+	var intact_transforms: Array = batches["intact"]
+	var multimesh := MultiMesh.new()
+	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.mesh = mesh
+	multimesh.instance_count = intact_transforms.size()
+	for index in range(intact_transforms.size()):
+		multimesh.set_instance_transform(index, intact_transforms[index] as Transform3D)
+	_outer_visual = MultiMeshInstance3D.new()
+	_outer_visual.name = "ImportedOuter%sGrid5M" % (
+		"Parapet" if floor_kind == "rooftop" else "Wall"
+	)
+	_outer_visual.multimesh = multimesh
+	_outer_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	add_child(_outer_visual)
+	var variant_batches: Array = batches["variants"]
+	_install_outer_damage_visuals(variant_batches, mesh)
+	if floor_index == 1:
+		_install_base99_outer_corner_visuals(
+			west_boundary, east_boundary, north_boundary, south_boundary
+		)
+	# 天台：四角换成 2.5m 转角件，替掉原来两根直段在角上交叉的旧画法。
+	if _uses_rooftop_parapet_modules():
+		_install_rooftop_outer_corner_visuals(outer_rect)
+	# 天台：在女儿墙正下方补一整圈外立面（= 视觉上的 99 层外墙），整体低一层。
+	# 顺序放在女儿墙之后，便于对照「上下两圈是否同轮廓、外皮是否共面」。
+	_build_rooftop_facade_ring()
+
+	# 楼顶：在每个缺口位置摆带门墙预制体（替代被跳过的实墙模块）。
+	# 件数 = 被跳过的直段数，两者共同决定缺口宽度；节点名带序号，避免同名靠
+	# Godot 自动去重，门禁才能靠名字稳定取到。
+	# ⚠️ 天台已不挖外墙门洞（见 _wall_side_has_door_gap），所以这里件数恒为 0；
+	# 保留代码是为了普通层将来仍可能有的楼梯口门洞。
+	if _uses_rooftop_parapet_modules():
+		var door_scale_y := ROOFTOP_PARAPET_HEIGHT / ROOFTOP_PARAPET_DOOR_BASE_HEIGHT
+		var door_index := 0
+		for side in door_transforms.keys():
+			for door_transform in (door_transforms[side] as Array):
+				var door_instance := PARAPET_DOOR_PREFAB.instantiate() as Node3D
+				if door_instance == null:
+					continue
+				door_instance.name = "ParapetDoorWall_%s_%02d" % [side.capitalize(), door_index]
+				door_instance.transform = door_transform
+				door_instance.scale = Vector3(1.0, door_scale_y, 1.0)
+				add_child(door_instance)
+				door_index += 1
+		_outer_doorway_wall_count = door_index
+
+	# 每一边使用独立碰撞体，避免一个共享 body 让摄像机无法判断命中方向。
+	for side in ["north", "south", "west", "east"]:
+		var body := StaticBody3D.new()
+		body.name = "OuterBoundaryCollision_%s" % side.capitalize()
+		# 远层 stage 会停用脚本处理，但永久结构碰撞必须继续服务移动、子弹和
+		# 受光射线。显式 ALWAYS 可避免从禁用父节点继承物理停用状态。
+		body.process_mode = Node.PROCESS_MODE_ALWAYS
+		body.collision_layer = 1
+		body.collision_mask = 0
+		body.set_meta("camera_lower_wall", side == "south")
+		add_child(body)
+		_add_wall_collision(body, side, wall_height)
+
+
+## 纯函数：把直段槽位按「带种子的随机排布」分成 intact + 三档破损。
+##
+## 做成 static 是为了让门禁能直接对「排布算法」做可复现性对照（同种子必同结果、
+## 换种子必换结果、非天台层必整批完好），而不必再建一个完整 stage —— 建 stage 会
+## 连带铺满整层地砖与外墙，代价远大于算一次分布。
+##
+## 只有天台参与破损（enabled=false 时整批走 intact）：三件破损变体是女儿墙专用件，
+## 普通层用 `prp_tower_wall_solid_5m`，与它们无关。
+## 掷骰顺序 = 槽位顺序，且「是否受损」与「哪一档」是顺序依赖的两次掷骰（未受损时
+## 只消耗一个随机数）；改动顺序会换排布，门禁的固定期望值随之失效。
+static func split_outer_parapet_damage(
+	transforms: Array, seed_value: int, enabled: bool
+) -> Dictionary:
+	var intact: Array = []
+	var variants: Array = [[], [], []]  # 与 PARAPET_DAMAGE_KEYS 同序
+	var counts := {"intact": 0, "dmg_a": 0, "dmg_b": 0, "dmg_c": 0}
+	# 与 transforms 逐下标对应的档位表（"intact"/"dmg_a"/…）。它让门禁与探针不必从
+	# MultiMesh 回读实例变换就能知道「哪个槽位用了哪一档」——MultiMesh 的实例变换
+	# 存在 RenderingServer 侧，dummy 渲染器（--headless）下一律回读成单位阵。
+	var kinds: Array = []
+	if not enabled:
+		intact = transforms.duplicate()
+		counts["intact"] = transforms.size()
+		for _index in range(transforms.size()):
+			kinds.append("intact")
+		return {"intact": intact, "variants": variants, "counts": counts, "kinds": kinds}
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	for transform in transforms:
+		# 先掷「是否受损」再掷「哪一档」：总受损率 = 0.25，三档各约 1/12。
+		if rng.randf() < ROOFTOP_PARAPET_DAMAGE_CHANCE:
+			var slot := rng.randi_range(0, PARAPET_DAMAGE_KEYS.size() - 1)
+			var key := str(PARAPET_DAMAGE_KEYS[slot])
+			variants[slot].append(transform)
+			counts[key] = int(counts[key]) + 1
+			kinds.append(key)
+		else:
+			intact.append(transform)
+			counts["intact"] = int(counts["intact"]) + 1
+			kinds.append("intact")
+	return {"intact": intact, "variants": variants, "counts": counts, "kinds": kinds}
+
+
+## 为三个破损档各建一个 MultiMesh 批次（intact 批次仍由 _outer_visual 承担）。
+##
+## 关键断言：破损件的包络必须与 intact 件逐值相同。破损只许换外观 —— 一旦包络变了，
+## 槽位相位与四角 2.5m 让位区就会错台，而「周长仍无缝 / 间隙为 0」这类覆盖判据是按
+## 槽位算的，抓不到「槽位还在、里面的件变大了」这种坏法。
+func _install_outer_damage_visuals(variant_batches: Array, intact_mesh: Mesh) -> void:
+	_outer_damage_visual.clear()
+	if not _uses_rooftop_parapet_modules():
+		return
+	var intact_aabb := intact_mesh.get_aabb()
+	for variant in range(PARAPET_DAMAGE_SCENES.size()):
+		var slot_transforms: Array = variant_batches[variant]
+		var variant_mesh := _mesh_from_scene(PARAPET_DAMAGE_SCENES[variant] as PackedScene)
+		if variant_mesh == null:
+			push_error(
+				"Rooftop parapet damage variant has no MeshInstance3D: %s"
+				% PARAPET_DAMAGE_KEYS[variant]
+			)
+			continue
+		assert(
+			variant_mesh.get_aabb().is_equal_approx(intact_aabb),
+			"女儿墙破损件 %s 的包络与 intact 件不同，槽位相位会错台" % PARAPET_DAMAGE_KEYS[variant]
+		)
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.mesh = variant_mesh
+		multimesh.instance_count = slot_transforms.size()
+		for index in range(slot_transforms.size()):
+			multimesh.set_instance_transform(index, slot_transforms[index] as Transform3D)
+		var visual := MultiMeshInstance3D.new()
+		visual.name = "ImportedOuterParapet%sGrid5M" % str(
+			PARAPET_DAMAGE_KEYS[variant]
+		).to_pascal_case()
+		visual.multimesh = multimesh
+		visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		add_child(visual)
+		_outer_damage_visual.append(visual)
+
+
+func _install_base99_outer_corner_visuals(
+	west_boundary: float, east_boundary: float, north_boundary: float, south_boundary: float
+) -> void:
+	# The facility stage is 160m wide. Its four visible perimeter corners used
+	# to be formed by eight generic straight-wall MultiMesh segments. Replace
+	# exactly those segments with the authored 5m L module; boundary collision
+	# remains the continuous existing four-side contract below.
+	var definitions := [
+		{"name": "Base99OuterCorner_NW", "position": Vector3(west_boundary, 0.0, north_boundary), "rotation_y": -PI * 0.5},
+		{"name": "Base99OuterCorner_NE", "position": Vector3(east_boundary, 0.0, north_boundary), "rotation_y": PI},
+		{"name": "Base99OuterCorner_SW", "position": Vector3(west_boundary, 0.0, south_boundary), "rotation_y": 0.0},
+		{"name": "Base99OuterCorner_SE", "position": Vector3(east_boundary, 0.0, south_boundary), "rotation_y": PI * 0.5},
+	]
+	for definition in definitions:
+		var corner := BASE99_CORNER_L_VISUAL.instantiate() as Node3D
+		if corner == null:
+			push_error("Base99 outer corner GLB instance failed")
+			continue
+		corner.name = str(definition["name"])
+		corner.position = definition["position"] as Vector3
+		corner.rotation.y = float(definition["rotation_y"])
+		corner.set_meta("asset_id", "ENV-TOWER-CORNER-L-5M")
+		corner.set_meta("visual_only", true)
+		corner.set_meta("collision_owner", "TowerFloorStage3D.OuterBoundaryCollision")
+		add_child(corner)
+		_base99_outer_corner_visuals.append(corner)
+
+
+## 天台四角安装 2.5m 转角件。
+## 四角全是阳角（矩形轮廓无内凹），所以只用「女儿墙外角」这一件；
+## 转角件包络 2.5×2.5，摆放位置就是「该角 2.5m 让位区的中心」，再按角旋转
+## 90° 的整数倍：SW=0、SE=PI/2、NE=PI、NW=3PI/2（俯视逆时针）。
+## 转角件自带的两条臂中心线分别在局部 x=-1.0 与 z=+1.0，这套放位正好让两条臂的
+## 中心线落在对应边的 boundary 上，包络端点与相邻直段无缝相接。
+## 碰撞仍是四边连续体，本函数只产生视觉节点。
+func _install_rooftop_outer_corner_visuals(outer_rect: Rect2) -> void:
+	var half := ROOFTOP_CORNER_ARM_M * 0.5
+	var definitions := [
+		{"name": "RooftopOuterCorner_SW", "position": Vector3(outer_rect.position.x + half, 0.0, outer_rect.end.y - half), "rotation_y": 0.0},
+		{"name": "RooftopOuterCorner_SE", "position": Vector3(outer_rect.end.x - half, 0.0, outer_rect.end.y - half), "rotation_y": PI * 0.5},
+		{"name": "RooftopOuterCorner_NE", "position": Vector3(outer_rect.end.x - half, 0.0, outer_rect.position.y + half), "rotation_y": PI},
+		{"name": "RooftopOuterCorner_NW", "position": Vector3(outer_rect.position.x + half, 0.0, outer_rect.position.y + half), "rotation_y": PI * 1.5},
+	]
+	for definition in definitions:
+		var corner := ROOFTOP_CORNER_PREFAB.instantiate() as Node3D
+		if corner == null:
+			push_error("Rooftop outer corner prefab instance failed")
+			continue
+		corner.name = str(definition["name"])
+		corner.position = definition["position"] as Vector3
+		corner.rotation.y = float(definition["rotation_y"])
+		corner.set_meta("asset_id", "ENV-ROOFTOP-REF-PARAPET-OUTER")
+		corner.set_meta("visual_only", true)
+		corner.set_meta("collision_owner", "TowerFloorStage3D.OuterBoundaryCollision")
+		add_child(corner)
+		_rooftop_outer_corner_visuals.append(corner)
+
+
+## 立面环必须让位的楼梯井缺口（唯一真源：可视件跳过 + 碰撞分段共用它）。
+##
+## 由来（2026-09-20 实测定位）：99F→98F 的楼梯井外廓是 x∈[35,50]（见
+## `_stair_hole_world_rect("east")`），而天台外轮廓东界只到 x=40 —— 井壁**穿过**
+## 了立面环所在的那条线。立面环若照旧整圈满铺，就会在井的**上层平台正中**立起一道
+## 12m 高的墙（连带 12m 高的碰撞代理），玩家从 99F 门厅一路向东走到 x≈39.4 就被挡住，
+## 永远进不了下行梯跑（`verify_stair_entry_clearance` 当时只把胶囊体推到 x=36.2，
+## 所以一直是绿的，没发现这件事）。
+##
+## 让位不会在立面上留真空洞：楼梯井自带封闭外壁（ImportedStairwell…EnclosureWall），
+## 缺口那一段由井壁自己封。
+##
+## @param side 立面环的边名（north / south / west / east）
+## @return 沿线轴的世界坐标跨度列表（north/south 取 X 轴，west/east 取 Z 轴）；
+##         空数组 = 这条边整条照旧铺满。
+func _rooftop_facade_gap_spans(side: String) -> Array[Vector2]:
+	var spans: Array[Vector2] = []
+	if side not in facade_gap_sides:
+		return spans
+	var hole := _stair_hole_world_rect(side)
+	if hole.size.x <= 0.0 or hole.size.y <= 0.0:
+		return spans
+	var outer_rect := _outer_world_rect()
+	var inset := ROOFTOP_FACADE_THICKNESS * 0.5
+	if side in ["north", "south"]:
+		var line_z := (
+			outer_rect.position.y + inset if side == "north" else outer_rect.end.y - inset
+		)
+		if line_z > hole.position.y and line_z < hole.end.y:
+			spans.append(Vector2(hole.position.x, hole.end.x))
+		return spans
+	var line_x := (
+		outer_rect.position.x + inset if side == "west" else outer_rect.end.x - inset
+	)
+	if line_x > hole.position.x and line_x < hole.end.x:
+		spans.append(Vector2(hole.position.y, hole.end.y))
+	return spans
+
+
+## 沿线轴的区间 [min, max] 是否落在任一让位跨度内（模块**中心**判据）。
+func _rooftop_facade_span_covers(spans: Array[Vector2], along: float) -> bool:
+	for span in spans:
+		if along >= span.x and along <= span.y:
+			return true
+	return false
+
+
+## 100F 天台外立面环（= 从天台边缘往下看到的那层「99 层外墙」）。
+##
+## 为什么需要它：天台是塔顶，边缘之外直接掉进 12m 空洞，看上去像一块悬空的平板。
+## 把参考组件库 v002 的 facade_solid / facade_window 沿**同一圈轮廓**摆一整圈、
+## 整体下沉一整层，就是「塔身外墙继续往下走」的观感。
+##
+## 两条与女儿墙一致的隐形契约：
+##   1. 模块厚度换了，中心线内缩量必须跟着换：女儿墙 0.50m → 内缩 0.25m；
+##      立面 0.30m → 内缩 0.15m。两者**外皮共面**（都贴轮廓矩形），上下不错台。
+##   2. 竖直定位按模块自己的 AABB 求，不用魔数：底面中心原点 ⇒
+##      位置 Y = 底面标高 − AABB 底部。两件各按自己的网格取，任一件日后加顶部
+##      压顶也不会让整环上下错缝。
+##
+## 四角的处理刻意与女儿墙不同：女儿墙留 2.5m 让位区放 L 形转角件，而立面件是
+## 5m 直段、没有对应转角件，所以按**整格**（轮廓起点起算、每边 x 向 18 件 /
+## z 向 16 件）铺满，相邻两侧在角上各占满 5m、只有 0.3m 立方体重叠 ——
+## 不共面，不会 z-fighting，也不会在角上留缝。
+##
+## ⚠️ 例外：楼梯井穿过的边必须让位（见 _rooftop_facade_gap_spans）。
+func _build_rooftop_facade_ring() -> void:
+	if not _uses_rooftop_parapet_modules():
+		return
+	var solid_mesh := _mesh_from_scene(ROOFTOP_FACADE_SOLID_SCENE)
+	var window_mesh := _mesh_from_scene(ROOFTOP_FACADE_WINDOW_SCENE)
+	if solid_mesh == null or window_mesh == null:
+		push_error("Rooftop facade module GLB has no MeshInstance3D")
+		return
+	var outer_rect := _outer_world_rect()
+	var outer_max := outer_rect.end
+	var inset := ROOFTOP_FACADE_THICKNESS * 0.5
+	var north_boundary := outer_rect.position.y + inset
+	var south_boundary := outer_max.y - inset
+	var west_boundary := outer_rect.position.x + inset
+	var east_boundary := outer_max.x - inset
+	var solid_y := ROOFTOP_FACADE_BOTTOM_Y - solid_mesh.get_aabb().position.y
+	var window_y := ROOFTOP_FACADE_BOTTOM_Y - window_mesh.get_aabb().position.y
+	var grid_dimensions := _outer_grid_dimensions()
+	# 朝向口径照抄参考拼装 reference_assembly.json（facade_* 与 parapet 同一约定，
+	# 且与 facade_* Prefab 声明的「默认 +Z 为装饰面、朝场地外侧」自洽）：
+	#   最小 Z 侧(west 记法里的 north) = PI，最大 Z 侧(south) = 0，
+	#   最小 X 侧(west) = -PI/2，最大 X 侧(east) = +PI/2。
+	var side_specs := [
+		{"side": "north", "rotation_y": PI, "fixed_z": true, "boundary": north_boundary, "count": grid_dimensions.x, "start": outer_rect.position.x},
+		{"side": "south", "rotation_y": 0.0, "fixed_z": true, "boundary": south_boundary, "count": grid_dimensions.x, "start": outer_rect.position.x},
+		{"side": "east", "rotation_y": PI * 0.5, "fixed_z": false, "boundary": east_boundary, "count": grid_dimensions.y, "start": outer_rect.position.y},
+		{"side": "west", "rotation_y": -PI * 0.5, "fixed_z": false, "boundary": west_boundary, "count": grid_dimensions.y, "start": outer_rect.position.y},
+	]
+	var solid_transforms: Array[Transform3D] = []
+	var window_transforms: Array[Transform3D] = []
+	var slot_transforms: Array[Transform3D] = []
+	var slot_kinds: Array = []
+	_rooftop_facade_gap_map.clear()
+	_rooftop_facade_gap_module_count = 0
+	for spec in side_specs:
+		var spec_side := str(spec.get("side", ""))
+		var gap_spans := _rooftop_facade_gap_spans(spec_side)
+		if not gap_spans.is_empty():
+			_rooftop_facade_gap_map[spec_side] = gap_spans
+		for index in range(int(spec["count"])):
+			var along := float(spec["start"]) + GRID_UNIT * (float(index) + 0.5)
+			# 楼梯井穿过这条边时不摆件：否则会在井的上层平台正中立起一道 12m 高的墙。
+			if _rooftop_facade_span_covers(gap_spans, along):
+				_rooftop_facade_gap_module_count += 1
+				continue
+			# 侧内自最小坐标端起算的「实/窗/窗」节奏，与参考拼装同相位。
+			var use_solid := index % ROOFTOP_FACADE_SOLID_EVERY == 0
+			var y := solid_y if use_solid else window_y
+			var position := (
+				Vector3(along, y, float(spec["boundary"]))
+				if bool(spec["fixed_z"])
+				else Vector3(float(spec["boundary"]), y, along)
+			)
+			var slot := Transform3D(Basis(Vector3.UP, float(spec["rotation_y"])), position)
+			slot_transforms.append(slot)
+			if use_solid:
+				solid_transforms.append(slot)
+				slot_kinds.append("solid")
+			else:
+				window_transforms.append(slot)
+				slot_kinds.append("window")
+	_rooftop_facade_slot_transforms = slot_transforms
+	_rooftop_facade_slot_kinds = slot_kinds
+	_rooftop_facade_solid_count = solid_transforms.size()
+	_rooftop_facade_window_count = window_transforms.size()
+	# 与女儿墙同一套批渲染口径：MultiMesh 自带 PaletteUV，禁止材质覆盖。
+	_rooftop_facade_solid_visual = _create_floor_multimesh(
+		"ImportedRooftopFacadeSolidGrid5M", solid_mesh, solid_transforms, null
+	)
+	add_child(_rooftop_facade_solid_visual)
+	_rooftop_facade_window_visual = _create_floor_multimesh(
+		"ImportedRooftopFacadeWindowGrid5M", window_mesh, window_transforms, null
+	)
+	add_child(_rooftop_facade_window_visual)
+	_install_rooftop_facade_collision(outer_rect)
+
+
+## 立面环的碰撞代理：每边一个 StaticBody3D（与外墙碰撞同风格，便于按名字定位）。
+##
+## 代理盒厚 0.30m（= 模块厚度）、高 = 一整层 12m，Y 从 -12.0 到 0，中心线取立面
+## 中心线（内缩 0.15m），因此外皮与女儿墙外皮共面。四边盒在角上互相咬合 0.3m，
+## 不留角缝。
+##
+## 影响面：99F 基地房间只有居中 30×30，距天台轮廓 20m 以上，所以这圈碰撞不挡
+## 任何玩家可达区域；它的作用只是让「天台之下」是一个真的实心块体，
+## 而不是靠视觉单方面封口。
+func _install_rooftop_facade_collision(outer_rect: Rect2) -> void:
+	var outer_max := outer_rect.end
+	var inset := ROOFTOP_FACADE_THICKNESS * 0.5
+	var height := absf(ROOFTOP_FACADE_BOTTOM_Y)
+	var center_y := ROOFTOP_FACADE_BOTTOM_Y + height * 0.5
+	var definitions := {
+		"North": {
+			"position": Vector3(outer_rect.get_center().x, center_y, outer_rect.position.y + inset),
+			"size": Vector3(outer_rect.size.x, height, ROOFTOP_FACADE_THICKNESS),
+		},
+		"South": {
+			"position": Vector3(outer_rect.get_center().x, center_y, outer_max.y - inset),
+			"size": Vector3(outer_rect.size.x, height, ROOFTOP_FACADE_THICKNESS),
+		},
+		"West": {
+			"position": Vector3(outer_rect.position.x + inset, center_y, outer_rect.get_center().y),
+			"size": Vector3(ROOFTOP_FACADE_THICKNESS, height, outer_rect.size.y),
+		},
+		"East": {
+			"position": Vector3(outer_max.x - inset, center_y, outer_rect.get_center().y),
+			"size": Vector3(ROOFTOP_FACADE_THICKNESS, height, outer_rect.size.y),
+		},
+	}
+	for side in ["North", "South", "West", "East"]:
+		var definition := definitions[side] as Dictionary
+		var body := StaticBody3D.new()
+		body.name = "FacadeBoundaryCollision_%s" % side
+		body.process_mode = Node.PROCESS_MODE_ALWAYS
+		body.collision_layer = 1
+		body.collision_mask = 0
+		body.set_meta("rooftop_facade_collision", true)
+		body.set_meta("visual_only", false)
+		add_child(body)
+		# 与可视件共用同一处让位真源：楼梯井穿过这条边时，碰撞也要断开那一段
+		# —— 否则会变成「井里看得见通路、却撞在 12m 高的隐形墙上」。
+		# 仍是**每边一个 body**（保持「按名字定位某侧碰撞」的既有口径），
+		# 只在 body 内部按缺口跨段拆成多个 CollisionShape3D。
+		for segment in _rooftop_facade_collision_segments(
+			side, definition["position"] as Vector3, definition["size"] as Vector3
+		):
+			_add_box_collision(body, segment["position"] as Vector3, segment["size"] as Vector3)
+
+
+## 把一条边的立面碰撞盒按让位缺口切成若干段（无缺口时就是原来的整条一段）。
+##
+## @return [{position, size}, …]，沿线轴拼接后正好覆盖 [边起点, 边终点] 减去所有缺口跨度。
+func _rooftop_facade_collision_segments(
+	side: String, center: Vector3, size: Vector3
+) -> Array:
+	var spans := _rooftop_facade_gap_spans(side.to_lower())
+	if spans.is_empty():
+		return [{"position": center, "size": size}]
+	var along_x := side in ["North", "South"]
+	var half := (size.x if along_x else size.z) * 0.5
+	var axis_center := center.x if along_x else center.z
+	var lo := axis_center - half
+	var hi := axis_center + half
+	var cuts: Array[Vector2] = []
+	for span in spans:
+		var cut_lo := maxf(lo, span.x)
+		var cut_hi := minf(hi, span.y)
+		if cut_hi > cut_lo:
+			cuts.append(Vector2(cut_lo, cut_hi))
+	cuts.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
+	var segments: Array = []
+	var cursor := lo
+	for cut in cuts:
+		if cut.x > cursor:
+			segments.append(_facade_segment(cursor, cut.x, center, size, along_x))
+		cursor = maxf(cursor, cut.y)
+	if hi > cursor:
+		segments.append(_facade_segment(cursor, hi, center, size, along_x))
+	if segments.is_empty():
+		# 整条边都被缺口吃掉：不留零长盒（BoxShape3D 零尺寸会被物理引擎丢弃且报警）。
+		push_warning("[TowerFloorStage3D] 立面环 %s 侧被让位缺口整条吃掉" % side)
+	return segments
+
+
+func _facade_segment(
+	from_along: float, to_along: float, center: Vector3, size: Vector3, along_x: bool
+) -> Dictionary:
+	var length := to_along - from_along
+	var mid := (from_along + to_along) * 0.5
+	var position := (
+		Vector3(mid, center.y, center.z) if along_x else Vector3(center.x, center.y, mid)
+	)
+	var seg_size := Vector3(length, size.y, size.z) if along_x else Vector3(size.x, size.y, length)
+	return {"position": position, "size": seg_size}
+
+
+func _outer_visual_transform(basis: Basis, position: Vector3) -> Transform3D:
+	# 天台女儿墙已换成参考组件库 v002 的真尺寸 1.80m 模块，不再需要当年
+	# 「1.50m 几何 × 0.5 纵向缩放凑 0.75m」的补偿；视觉包络即结构包络。
+	# 保留本函数是为了让快照字段 _outer_visual_scale_y 与快照导出共用同一处真源，
+	# 它现在对任何层都返回单位缩放（远征层历史上被误缩到半高，这里一并消掉）。
+	return Transform3D(basis, position)
+
+
+## 外墙该侧是否要留楼梯门洞。
+##
+## 天台例外：楼梯口（_stair_hole_world_rect）整体落在轮廓**内部**，西侧离外墙还有
+## 5m 净距，所以「楼梯口 = 外墙门洞」这条旧假设对天台根本不成立。旧代码会在那 5m
+## 处的西墙上挖掉 3 段实墙、塞进 3 件**系统占位矮墙**
+## (prp_tower_wall_parapet_door_5m，每件带 2m 门洞) —— 从里看就是一段没连起来的
+## 栏杆缺口（用户报的问题）。因此天台外墙必须连成整圈：不挖门洞、不放占位矮墙、
+## 碰撞也不留缝。
+##
+## 判定做成「一侧一函数」是为了让**可视跳过**与**碰撞留缝**共用同一处真源 ——
+## 这两处历史上就是分别写的（_is_in_wall_door_gap / _add_wall_collision），
+## 一改一漏就会变成「看得见墙、却走得出去」的假封口。
+func _wall_side_has_door_gap(side: String) -> bool:
+	return side in stair_hole_sides and not _uses_rooftop_parapet_modules()
+
+
+func _is_in_wall_door_gap(side: String, index: int) -> bool:
+	if not _wall_side_has_door_gap(side):
+		return false
+	for hole_side in stair_hole_sides:
+		if hole_side != side:
+			continue
+		var module_pos := _wall_module_position(side, index)
+		var hole_center := _stair_hole_center(hole_side)
+		var along_axis := module_pos.x if side in ["north", "south"] else module_pos.z
+		var hole_along := hole_center.x if side in ["north", "south"] else hole_center.z
+		return absf(along_axis - hole_along) <= WALL_DOOR_GAP_HALF_WIDTH
+	return false
+
+
+func _wall_module_position(side: String, index: int) -> Vector3:
+	# 必须与 _build_outer_shell 共用 _outer_segment_along / _outer_wall_inset，
+	# 否则门洞判定算的是旧排布，实墙却摆在新位置，楼梯口会错位。
+	var outer_rect := _outer_world_rect()
+	var outer_max := outer_rect.end
+	var wall_inset := _outer_wall_inset()
+	var offset_x := _outer_segment_along(outer_rect.position.x, index)
+	var offset_z := _outer_segment_along(outer_rect.position.y, index)
+	var north_boundary := outer_rect.position.y + wall_inset
+	var south_boundary := outer_max.y - wall_inset
+	var west_boundary := outer_rect.position.x + wall_inset
+	var east_boundary := outer_max.x - wall_inset
+	match side:
+		"north":
+			return Vector3(offset_x, 0.0, north_boundary)
+		"south":
+			return Vector3(offset_x, 0.0, south_boundary)
+		"west":
+			return Vector3(west_boundary, 0.0, offset_z)
+		"east":
+			return Vector3(east_boundary, 0.0, offset_z)
+	return Vector3.ZERO
+
+
+func _stair_hole_center(side: String) -> Vector3:
+	# 外墙缺口、楼板视觉和承重碰撞必须引用同一个洞口矩形。
+	var hole_rect := _stair_hole_world_rect(side)
+	return Vector3(
+		hole_rect.position.x + hole_rect.size.x * 0.5,
+		0.0,
+		hole_rect.position.y + hole_rect.size.y * 0.5
+	)
+
+
+func _add_wall_collision(body: StaticBody3D, side: String, height: float) -> void:
+	# 碰撞厚度与内缩口径都跟着模块走：天台 0.50m / 其余层 0.30m。
+	# 视觉模块换厚度而碰撞不换，玩家就会在外表面之内或之外撞到「空气」。
+	var outer_rect := _outer_world_rect()
+	var outer_max := outer_rect.end
+	var wall_inset := _outer_wall_inset()
+	var wall_thickness := _outer_wall_thickness()
+	var north_boundary := outer_rect.position.y + wall_inset
+	var south_boundary := outer_max.y - wall_inset
+	var west_boundary := outer_rect.position.x + wall_inset
+	var east_boundary := outer_max.x - wall_inset
+	if not _wall_side_has_door_gap(side):
+		match side:
+			"north":
+				_add_box_collision(body, Vector3(outer_rect.get_center().x, height * 0.5, north_boundary), Vector3(outer_rect.size.x, height, wall_thickness))
+			"south":
+				_add_box_collision(body, Vector3(outer_rect.get_center().x, height * 0.5, south_boundary), Vector3(outer_rect.size.x, height, wall_thickness))
+			"west":
+				_add_box_collision(body, Vector3(west_boundary, height * 0.5, outer_rect.get_center().y), Vector3(wall_thickness, height, outer_rect.size.y))
+			"east":
+				_add_box_collision(body, Vector3(east_boundary, height * 0.5, outer_rect.get_center().y), Vector3(wall_thickness, height, outer_rect.size.y))
+		return
+	var center := _stair_hole_center(side)
+	var gap_start := 0.0
+	var gap_end := 0.0
+	var axis_pos := 0.0
+	match side:
+		"north":
+			gap_start = clampf(center.x - WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.x, outer_max.x)
+			gap_end = clampf(center.x + WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.x, outer_max.x)
+			axis_pos = north_boundary
+		"south":
+			gap_start = clampf(center.x - WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.x, outer_max.x)
+			gap_end = clampf(center.x + WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.x, outer_max.x)
+			axis_pos = south_boundary
+		"west":
+			gap_start = clampf(center.z - WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.y, outer_max.y)
+			gap_end = clampf(center.z + WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.y, outer_max.y)
+			axis_pos = west_boundary
+		"east":
+			gap_start = clampf(center.z - WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.y, outer_max.y)
+			gap_end = clampf(center.z + WALL_DOOR_GAP_HALF_WIDTH, outer_rect.position.y, outer_max.y)
+			axis_pos = east_boundary
+	match side:
+		"north", "south":
+			var left_size := gap_start - outer_rect.position.x
+			var right_size := outer_max.x - gap_end
+			if left_size > 0.01:
+				_add_box_collision(
+					body,
+					Vector3(outer_rect.position.x + left_size * 0.5, height * 0.5, axis_pos),
+					Vector3(left_size, height, wall_thickness)
+				)
+			if right_size > 0.01:
+				_add_box_collision(
+					body,
+					Vector3(gap_end + right_size * 0.5, height * 0.5, axis_pos),
+					Vector3(right_size, height, wall_thickness)
+				)
+		"west", "east":
+			var left_size := gap_start - outer_rect.position.y
+			var right_size := outer_max.y - gap_end
+			if left_size > 0.01:
+				_add_box_collision(
+					body,
+					Vector3(axis_pos, height * 0.5, outer_rect.position.y + left_size * 0.5),
+					Vector3(wall_thickness, height, left_size)
+				)
+			if right_size > 0.01:
+				_add_box_collision(
+					body,
+					Vector3(axis_pos, height * 0.5, gap_end + right_size * 0.5),
+					Vector3(wall_thickness, height, right_size)
+				)
+
+
+func _add_box_collision(body: StaticBody3D, position: Vector3, size: Vector3) -> void:
+	var shape := BoxShape3D.new()
+	shape.size = size
+	var collision := CollisionShape3D.new()
+	collision.position = position
+	collision.shape = shape
+	body.add_child(collision)
+
+
+func _build_support() -> void:
+	_support_root = StaticBody3D.new()
+	_support_root.name = "FloorSupport"
+	# 楼板是跨层太阳遮挡体，不能随当前楼层的处理窗口退出物理空间。
+	_support_root.process_mode = Node.PROCESS_MODE_ALWAYS
+	_support_root.collision_layer = 1
+	_support_root.collision_mask = 0
+	add_child(_support_root)
+	var grid_dimensions := _floor_grid_dimensions()
+	var floor_rect := _floor_world_rect()
+	var rectangles: Array[Rect2i] = [Rect2i(Vector2i.ZERO, grid_dimensions)]
+	for hole in _hole_rects():
+		rectangles = _subtract_hole(rectangles, hole)
+	for rect in rectangles:
+		if rect.size.x <= 0 or rect.size.y <= 0:
+			continue
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(
+			float(rect.size.x) * GRID_UNIT,
+			FLOOR_THICKNESS,
+			float(rect.size.y) * GRID_UNIT
+		)
+		var collision := CollisionShape3D.new()
+		collision.name = "SupportRect_%02d" % _support_rect_count
+		collision.position = Vector3(
+			floor_rect.position.x + (float(rect.position.x) + float(rect.size.x) * 0.5) * GRID_UNIT,
+			-FLOOR_THICKNESS * 0.5,
+			floor_rect.position.y + (float(rect.position.y) + float(rect.size.y) * 0.5) * GRID_UNIT
+		)
+		collision.shape = shape
+		_support_root.add_child(collision)
+		_support_rect_count += 1
+
+
+func _hole_rects() -> Array[Rect2i]:
+	var holes: Array[Rect2i] = []
+	# 100层与99层基地打通：只从100层(stage 0)移除基地上方6×6地砖，
+	# 99层自身的36块地面仍由基地房间保留。
+	# 远征单层关卡没有「下方 99F 基地」，挖洞只会让入口安全房悬空。
+	if _uses_rooftop_profile():
+		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
+	for side in stair_hole_sides:
+		holes.append_array(_stair_hole_grid_pieces(side))
+	return holes
+
+
+## 楼梯井洞口扣除「承重保底足迹」（support_keep_out_rects）后剩下的栅格矩形。
+## 足迹压不到洞口时结果 == 原矩形（标准塔楼逐值不变）；压到时就只挖掉房外那一段。
+func _stair_hole_grid_pieces(side: String) -> Array[Rect2i]:
+	var pieces: Array[Rect2i] = [_world_rect_to_grid(_stair_hole_world_rect(side))]
+	for keep_out in support_keep_out_rects:
+		var keep := _world_rect_to_grid(keep_out)
+		var remainder: Array[Rect2i] = []
+		for piece in pieces:
+			remainder.append_array(_subtract_hole([piece], keep))
+		pieces = remainder
+	var kept: Array[Rect2i] = []
+	for piece in pieces:
+		if piece.size.x > 0 and piece.size.y > 0:
+			kept.append(piece)
+	return kept
+
+
+func _floor_visual_hole_rects() -> Array[Rect2i]:
+	var holes := _base_visual_hole_rects()
+	holes.append_array(_additional_visual_hole_rects())
+	return holes
+
+
+## 结构/通用美术本来就要留的洞：楼梯口，以及 99F 与 100F 的贯通中庭。
+func _base_visual_hole_rects() -> Array[Rect2i]:
+	var holes := _hole_rects()
+	# 99F的承重面仍由完整FloorSupport负责；这里只从通用可视地砖中挖出
+	# 基地地板区域，避免与两套正式基地地砖在Y=0处重叠闪烁。
+	if floor_index == 1:
+		holes.append(_world_rect_to_grid(BASE_99_100_ATRIUM_WORLD_RECT))
+	return holes
+
+
+## 房间自带的正式地砖（入口安全房 v007）与通用地砖都在 Y=0 共面，必须挖洞让位。
+func _additional_visual_hole_rects() -> Array[Rect2i]:
+	var holes: Array[Rect2i] = []
+	for extra_rect in additional_visual_holes:
+		holes.append(_world_rect_to_grid(extra_rect))
+	return holes
+
+
+func _point_in_hole_rects(holes: Array[Rect2i], point: Vector2i) -> bool:
+	for hole in holes:
+		if hole.has_point(point):
+			return true
+	return false
+
+
+func _stair_hole_world_rect(side: String) -> Rect2:
+	# 两条楼梯跑道的外廓按 5m 单元取整，边界全部落在整格线上。
+	match side:
+		"west":
+			return Rect2(-45.0, 0.0, 15.0, 30.0)
+		"east":
+			return Rect2(35.0, -25.0, 15.0, 30.0)
+		"north":
+			return Rect2(-25.0, -45.0, 30.0, 15.0)
+		"south":
+			return Rect2(0.0, 35.0, 30.0, 15.0)
+	return Rect2()
+
+
+func _world_rect_to_grid(world_rect: Rect2) -> Rect2i:
+	var floor_rect := _floor_world_rect()
+	return Rect2i(
+		int(round((world_rect.position.x - floor_rect.position.x) / GRID_UNIT)),
+		int(round((world_rect.position.y - floor_rect.position.y) / GRID_UNIT)),
+		int(round(world_rect.size.x / GRID_UNIT)),
+		int(round(world_rect.size.y / GRID_UNIT))
+	)
+
+
+func _subtract_hole(rectangles: Array[Rect2i], hole: Rect2i) -> Array[Rect2i]:
+	var result: Array[Rect2i] = []
+	for rect in rectangles:
+		var overlap := rect.intersection(hole)
+		if overlap.size.x <= 0 or overlap.size.y <= 0:
+			result.append(rect)
+			continue
+		var rect_end := rect.end
+		var overlap_end := overlap.end
+		if overlap.position.x > rect.position.x:
+			result.append(Rect2i(
+				rect.position.x,
+				rect.position.y,
+				overlap.position.x - rect.position.x,
+				rect.size.y
+			))
+		if overlap_end.x < rect_end.x:
+			result.append(Rect2i(
+				overlap_end.x,
+				rect.position.y,
+				rect_end.x - overlap_end.x,
+				rect.size.y
+			))
+		if overlap.position.y > rect.position.y:
+			result.append(Rect2i(
+				overlap.position.x,
+				rect.position.y,
+				overlap.size.x,
+				overlap.position.y - rect.position.y
+			))
+		if overlap_end.y < rect_end.y:
+			result.append(Rect2i(
+				overlap.position.x,
+				overlap_end.y,
+				overlap.size.x,
+				rect_end.y - overlap_end.y
+			))
+	return result
+
+
+## 从模块 Prefab 取「用于批渲染的单一 Mesh 资源」。
+## 走 TowerGeometry3D 的唯一解析入口（按 metadata/visual_node_name 声明），
+## 不再本地递归取第一个 MeshInstance3D —— 那个隐式约定在带门墙这类
+## 「首个网格是被隐藏的门扇」的资产上会取错。
+func _mesh_from_scene(scene: PackedScene) -> Mesh:
+	if scene == null:
+		return null
+	var instance := scene.instantiate()
+	var mesh := TowerGeometry3D.resolve_visual_mesh(instance)
+	instance.free()
+	return mesh

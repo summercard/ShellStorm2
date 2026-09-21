@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3]
+
+; 100F 天台装饰组件：转角弯管（v002 参考组件库导出，纯视觉）
+; 稳定运行时路径：rooftop/runtime/pipe_elbow.tscn
+; GLB：rooftop/components/env_rooftop_ref_pipe_elbow_top3d.glb
+
+[ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_pipe_elbow_top3d.glb" id="1_visual"]
+
+[node name="RooftopPipeElbow" type="Node3D"]
+metadata/asset_id = "ENV-ROOFTOP-REF-PIPE-ELBOW"
+metadata/package_id = "ENV-ROOFTOP-REF-PIPE-ELBOW"
+metadata/asset_version = "v002"
+metadata/source_blend = "res://assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend"
+metadata/source_glb = "res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_pipe_elbow_top3d.glb"
+metadata/visual_only = true
+metadata/collision_owner = "TowerFloorStage3D"
+metadata/preserve_authored_palette = true
+metadata/runtime_instantiation = "per_instance_prefab"
+metadata/layout_role = "pipe_loop_corner"
+metadata.component_slug = "pipe_elbow"
+
+[node name="ImportedModel" parent="." instance=ExtResource("1_visual")]

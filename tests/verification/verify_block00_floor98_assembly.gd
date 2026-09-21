@@ -15,6 +15,15 @@ extends Node
 ##   G. 委托门（墙归邻房的那一侧）面板已隐藏、门节点与交互仍在
 ##   H. 楼层台座按四房**真实足迹**挖洞（不是 15×15 方格）
 ##   I. 下行走办公室西墙：竖直边 side=west 且 seed gate 指向 97F
+##   J. **和平区**（2026-09-20 主人要求）：四房门只做普通开关（无清房/钥匙/命运卡）、
+##      不刷怪、门扇沿用 99F 基地滑升门 —— 真驱动进房后按运行时状态断言
+##   K. **新游戏开场**（2026-09-20 主人要求）：全新存档第一次进场落进最里面那间
+##      （主人的办公室 floor_01_exit），落点在房内、站在本层楼面、静止不下坠；
+##      反向对照：同一 test_mode 下不强制开场分支时仍落 100F 天台出生点
+##   L. **门一律普通门**（2026-09-21 主人要求）：四房水平门 + 98↔99 楼梯间门都挂
+##      99F 基地那套普通交通门组件（E 开 / 走远自动关 / 不带任何条件）；楼梯间门
+##      原「98F 大循环首门」封印整体停用，即使封印标志被强行置成「已封印」，
+##      从 98F 侧仍能开门放行、不弹撤退二次确认
 ##
 ## 期望值来源：摆位源逐房计数、几何常量（GRID_UNIT_M=5、层高 12、门厅锚点）
 ## 与 RoomDoorLane 的门槽推导 —— 装配结果一律不硬编码。
@@ -24,6 +33,10 @@ extends Node
 ##   · 把 DungeonRoom3D._build_shell 里 authored 分支注释掉 → B/C/E 全红；
 ##   · 把 _stair_lobby_visual_holes 的 authored 分支删掉 → H 红（退回 15×15 方格）；
 ##   · 把 Block00MasterOfficeLayout3D 的 exit_side 改回 "east" → A/I 红。
+##   · 把 PEACEFUL_ZONE 改成 false → J 全红（门策略退回清房/钥匙/命运卡、
+##     门扇退回塔楼 A 套、进房后按 COMBAT 公式刷出敌人）。
+##   · 把 TowerFloorStage3D 的 support_keep_out_rects 消费（_stair_hole_grid_pieces）
+##     去掉 → K 红（98F 西侧楼梯井洞口压进办公室，玩家在房内摔穿到 97F）。
 
 const FLOOR_INDEX := 2
 const FLOOR_NUMBER := 98
@@ -52,6 +65,11 @@ const EXPECTED_TOTAL_WALLS := 27
 const EXPECTED_TOTAL_TILES := 49
 const EXPECTED_ROOM_COUNT := 4
 
+## 和平区门扇 = 99F 基地滑升门（RoomDoor3D 把门扇包的 metadata/asset_id 记为 visual_asset_id）。
+const BASE99_DOOR_LIFT_ASSET_ID := "ENV-BASE99-DOOR-LIFT-22X25"
+## 对照：寻常战斗房/安全房用的塔楼 A 套门扇 —— 出现它即说明和平区分支没生效。
+const TOWER_DOOR_LEAF_ASSET_ID := "ENV-TOWER-DOOR-LEAF-5M"
+
 ## 摆位源房间 → 运行时房间 id（沿用原 98F 规划同名键，存档 room_progress 不受换拓扑影响）。
 const ROOM_ID_BY_AUTHORED := {
 	"lobby": "floor_01_entry",
@@ -77,6 +95,28 @@ const EXPECTED_DELEGATED_DOOR_SIDES := {
 	"floor_01_main_02": ["east"],
 	"floor_01_exit": ["east"],
 }
+
+## 新游戏开场（2026-09-20 主人要求）：全新存档第一次进场落进 98F 四房链**最里面**
+## 那间 —— 主人的办公室（运行时 id floor_01_exit），不再落 100F 天台。
+const NEW_GAME_OPENING_ROOM_ID := "floor_01_exit"
+## 反向对照：同一 test_mode 下不走开场分支时，必须仍是原天台出生点。
+const ROOFTOP_SPAWN_WORLD := Vector3(-17.5, 0.05, 2.5)
+## 「站在本层楼面」的判定容差。楼下（97F）在 −36，相差 12m，所以 0.5 足够区分
+## 「站在 98F」与「摔穿楼板掉下去」，又不会被玩家胶囊的落点微差（≈0.03）误伤。
+const FLOOR_STAND_TOL := 0.5
+
+## L 段：普通门（2026-09-21 主人要求）
+## 98↔99 楼梯间门 = 门厅东门 ↔ 99F 基地东门（竖直边）。
+const STAIR_DOOR_OWNER_ROOM := "floor_01_entry"
+const STAIR_DOOR_TARGET_ROOM := "facility"
+## 99F 基地门那套普通交通门组件写在门上的标记名（SimpleTransitDoor3D.configure）。
+const TRANSIT_COMPONENT_META := "simple_base_transit_v1"
+## 站在门前多远按 E（组件 INTERACTION_DISTANCE_M = 3.4，这里取门内 1.6m）。
+const PLAIN_DOOR_STAND_DISTANCE_M := 1.6
+## 走远自动关：组件 AUTO_CLOSE_DISTANCE_M = 2.85 + AUTO_CLOSE_DELAY_S = 0.40
+## + 门板 0.72s 行程，取 2.4s 留足余量。
+const PLAIN_DOOR_FAR_AWAY_M := 9.0
+const PLAIN_DOOR_AUTO_CLOSE_WAIT_S := 2.4
 
 var _failures: Array[String] = []
 var _checks := 0
@@ -126,6 +166,9 @@ func _ready() -> void:
 	_check_floor_tile_collision(rooms)
 	_check_stage_holes(tower)
 	_check_descent_side(tower)
+	await _check_peaceful_zone(rooms, snapshots, tower)
+	await _check_plain_doors(tower)
+	await _check_new_game_opening(tower)
 
 	_finish("")
 
@@ -571,3 +614,351 @@ func _check_descent_side(tower: Node) -> void:
 			"下层（floor_index=%d）没有到达房 %s" % [NEXT_FLOOR_INDEX, lower_id]
 		)
 	_check(found, "未找到 98F 出口房 %s 的竖直下行边" % exit_id)
+
+
+## J. 和平区：门只做普通开关、区域不刷怪、门扇走 99F 基地滑升门。
+##
+## 「不刷怪」必须**真驱动进房**才算证据 —— `_alive_by_room` 与状态栏都是进房那一刻
+## 在 `_spawn_room_enemies()` 里写的；只读 plan 数据什么都证明不了
+## （改坏成刷怪时 plan 依然带 peaceful 标记）。
+func _check_peaceful_zone(rooms: Dictionary, snapshots: Dictionary, tower: Node) -> void:
+	print("\n---- J. 和平区：门普通开关 / 不刷怪 / 基地门扇 ----")
+	var plan := snapshots.get(FLOOR_INDEX, {}) as Dictionary
+	_check(
+		bool(plan.get("authored_layout_peaceful", false)),
+		"98F plan 未声明和平区（authored_layout_peaceful != true）"
+	)
+	var door_samples := 0
+	var checked_rooms := 0
+	for room_id_value in rooms.keys():
+		var room_id := str(room_id_value)
+		var room := rooms[room_id] as DungeonRoom3D
+		checked_rooms += 1
+		var snapshot := room.get_room_snapshot()
+		_check(
+			bool(snapshot.get("authored_layout_peaceful", false)),
+			"房间 %s 未标和平区" % room_id
+		)
+		var door_snapshots := snapshot.get("door_snapshots", []) as Array
+		_check(not door_snapshots.is_empty(), "房间 %s 没有任何门（门策略断言空跑）" % room_id)
+		for value in door_snapshots:
+			var door := value as Dictionary
+			var direction := str(door.get("direction", ""))
+			door_samples += 1
+			_check(
+				not bool(door.get("requires_clear", true)),
+				"%s.%s 门仍要求清房（requires_clear=true）" % [room_id, direction]
+			)
+			_check(
+				not bool(door.get("requires_key", true)),
+				"%s.%s 门仍要求钥匙（requires_key=true）" % [room_id, direction]
+			)
+			_check(
+				not bool(door.get("triggers_fate", true)),
+				"%s.%s 门仍会弹命运卡（triggers_fate=true）" % [room_id, direction]
+			)
+			var leaf_id := str(door.get("visual_asset_id", ""))
+			_check(
+				leaf_id == BASE99_DOOR_LIFT_ASSET_ID,
+				"%s.%s 门扇=%s 期望基地滑升门 %s（塔楼 A 套=%s 即分支没生效）"
+				% [room_id, direction, leaf_id, BASE99_DOOR_LIFT_ASSET_ID, TOWER_DOOR_LEAF_ASSET_ID]
+			)
+	_check(
+		checked_rooms == EXPECTED_ROOM_COUNT,
+		"和平区房间样本=%d 期望 %d" % [checked_rooms, EXPECTED_ROOM_COUNT]
+	)
+	_check(door_samples > 0, "哨兵：门样本数为 0（门策略断言全是空跑）")
+
+	var alive_by_room := tower.get("_alive_by_room") as Dictionary
+	var spawned_rooms := tower.get("_spawned_rooms") as Dictionary
+	var enemy_nodes_by_room := tower.get("_enemy_nodes_by_room") as Dictionary
+	if not _check(alive_by_room != null, "取不到 _alive_by_room（不刷怪断言无法成立）"):
+		return
+	if not _check(enemy_nodes_by_room != null, "取不到 _enemy_nodes_by_room"):
+		return
+	for room_id_value in rooms.keys():
+		var room_id := str(room_id_value)
+		var room := rooms[room_id] as DungeonRoom3D
+		# 首访标记要在进房**之前**读：进房会把它写掉，之后读不出来。
+		var first_visit := not spawned_rooms.has(room_id)
+		tower.call("force_enter_room_for_test", room_id)
+		# 波次是延迟生成的（首波经 `_spawn_next_room_wave` 落到 `$ActiveEnemies`），
+		# 只等一帧会读到「登记有敌人、节点还没入树」的中间态 —— 那样断言在
+		# 改动前也照样绿，等于空跑。必须等够帧数。
+		await _settle()
+		# ⚠️ 不要数敌人节点：敌人挂 `$ActiveEnemies`，其存活由**流送**裁决
+		# （`_update_room_streaming` 按玩家实际位置算，非 ACTIVE 即回收）。本探针
+		# 不挪玩家（玩家人还在塔楼入口），98F 房恒非 ACTIVE ⇒ 节点数恒 0，
+		# 那个断言在改动前后都绿，是假绿。
+		# 有区分力的判据是**刷怪登记**（`_spawn_enemy_batch` 里写）与清房状态：
+		# 改动前 `alive=3 / cleared=false`，改动后 `alive=0 / cleared=true`。
+		var wave_queues := tower.get("_room_wave_queues") as Dictionary
+		var pending := (wave_queues.get(room_id, []) as Array).size()
+		print(
+			"  [证据] %s type=%s 首访=%s 刷怪登记=%d 待刷波次=%d cleared=%s"
+			% [room_id, room.room_type, str(first_visit), int(alive_by_room.get(room_id, 0)), pending, str(room.cleared)]
+		)
+		if room.room_type in ["COMBAT", "ELITE", "BOSS", "TRAP", "BASEMENT", "STORAGE"]:
+			_check(first_visit, "敌意房 %s 进房前已非首访（不刷怪断言会空跑）" % room_id)
+		_check(
+			int(alive_by_room.get(room_id, 0)) == 0,
+			"和平区房间 %s 刷怪登记=%d 期望 0（改动前为敌意房数量）"
+			% [room_id, int(alive_by_room.get(room_id, 0))]
+		)
+		_check(pending == 0, "和平区房间 %s 仍有 %d 个待刷波次" % [room_id, pending])
+		_check(room.cleared, "和平区房间 %s 进房后未放行（cleared=false，会锁住后续门）" % room_id)
+
+
+## L. 区块00 的门一律普通门（2026-09-21 主人要求）。
+##
+## 「普通门」的口径 = 99F 基地两边那两扇门：挂**同一个** `SimpleTransitDoor3D`
+## 组件（E 开、走远自动关），不看任何条件。98↔99 楼梯间门（`floor_01_entry` 东门
+## ↔ 99F 基地东门）此前还带一套「98F 大循环首门」封印 —— 进 98F 后门在身后关闭、
+## 从里面反向开门弹撤退二次确认。主人要求它也能自由开关，所以整套封印停用
+## （`TowerDescent3D.INITIAL_LOOP_GATE_SEAL_ENABLED = false`）。
+##
+## 判据全是**运行时行为**，不读设计自述：
+##   · 四房 6 扇水平门 + 楼梯间门都真的挂了普通交通门组件（meta 名逐值对上），
+##     且门策略一律不看清房/钥匙/命运卡；
+##   · **即使把封印标志强行置成「已封印」**，从 98F 侧开楼梯间门仍然成功、不弹
+##     撤退弹窗、门板真的升起放行 —— 这条同时兜住「边开了门板不动、人过不去」
+##     那个既有故障形态；
+##   · 走远之后门真的自动关回去（组件 `_process` 在跑，不是只挂了个空组件）。
+##
+## 反向对照：
+##   · `INITIAL_LOOP_GATE_SEAL_ENABLED` 置回 true → 第二组红；
+##   · `_peaceful_plain_door_entries()` 从装配列表删掉 → 第一组红。
+func _check_plain_doors(tower: Node) -> void:
+	print("\n---- L. 区块00 门 = 普通门（E 开 / 走远自动关 / 楼梯间门不带条件）----")
+	var room_by_id := tower.get("_room_by_id") as Dictionary
+	var edge_kind := tower.get("_edge_kind_by_key") as Dictionary
+	if not _check(
+		room_by_id != null and edge_kind != null,
+		"取不到 _room_by_id / _edge_kind_by_key（普通门断言无法成立）"
+	):
+		return
+
+	# —— 1) 组件挂载 + 门策略：逐个门节点核 ——
+	var plain_samples := 0
+	var stair_door: RoomDoor3D = null
+	var stair_owner: DungeonRoom3D = null
+	for room_id_value in ROOM_ID_BY_AUTHORED.values():
+		var room_id := str(room_id_value)
+		var room := room_by_id.get(room_id) as DungeonRoom3D
+		if not _check(room != null, "缺房间 %s（普通门断言无法成立）" % room_id):
+			continue
+		for side_value in room.door_targets.keys():
+			var side := str(side_value)
+			var target_id := str(room.door_targets[side_value])
+			var edge := str(tower.call("_edge_key", room_id, target_id))
+			var vertical := str(edge_kind.get(edge, "horizontal")) == "vertical"
+			var is_stair_door := (
+				room_id == STAIR_DOOR_OWNER_ROOM and target_id == STAIR_DOOR_TARGET_ROOM
+			)
+			var door := room.get_door_node(side)
+			if not _check(door != null, "%s.%s 门为 null" % [room_id, side]):
+				continue
+			var snapshot := door.get_snapshot()
+			_check(
+				not bool(snapshot.get("requires_clear", true)),
+				"%s.%s 门仍要求清房（requires_clear=true）" % [room_id, side]
+			)
+			_check(
+				not bool(snapshot.get("requires_key", true)),
+				"%s.%s 门仍要求钥匙（requires_key=true）" % [room_id, side]
+			)
+			_check(
+				not bool(snapshot.get("triggers_fate", true)),
+				"%s.%s 门仍会弹命运卡（triggers_fate=true）" % [room_id, side]
+			)
+			if vertical and not is_stair_door:
+				# 98↔97 下行门是 FloorBundle 的原子提交门槛，不在本次「这个区域的门」
+				# = 普通门 的范围内（它沿用楼梯到达/返回绑定）。
+				continue
+			plain_samples += 1
+			_check(
+				str(door.get_meta("transit_component", "")) == TRANSIT_COMPONENT_META,
+				"%s.%s 没挂 99F 基地那套普通交通门组件（transit_component=%s）"
+				% [room_id, side, str(door.get_meta("transit_component", "<无>"))]
+			)
+			_check(
+				door.get_node_or_null("SimpleTransitDoor3D") != null,
+				"%s.%s 门节点下没有 SimpleTransitDoor3D 子节点" % [room_id, side]
+			)
+			if is_stair_door:
+				stair_door = door
+				stair_owner = room
+	_check(
+		plain_samples == 7,
+		"哨兵：普通门样本=%d 期望 7（四房 6 扇水平门 + 98↔99 楼梯间门）" % plain_samples
+	)
+	if not _check(
+		stair_door != null and stair_owner != null,
+		"没找到 98↔99 楼梯间门（%s ↔ %s）" % [STAIR_DOOR_OWNER_ROOM, STAIR_DOOR_TARGET_ROOM]
+	):
+		return
+
+	# —— 2) 从 98F 侧开楼梯间门：封印标志被强行置成「已封印」也必须放行 ——
+	# 正常流程里封印已整体停用（INITIAL_LOOP_GATE_SEAL_ENABLED=false），所以直接
+	# 把运行时标志置 true 就是最坏情形：改动前这一下会弹撤退确认、门板纹丝不动。
+	tower.call("force_enter_room_for_test", STAIR_DOOR_OWNER_ROOM)
+	await _settle()
+	tower.set("_initial_loop_gate_sealed", true)
+	stair_door.set_open(false, true)
+	await _settle()
+	await _stand_near_door(tower, stair_owner, stair_door)
+	var candidate := tower.get_interaction_candidate(tower.player) as Dictionary
+	_check(
+		not candidate.is_empty() and candidate.get("door") != null,
+		"玩家站在楼梯间门前但拿不到门交互候选（E 交互链断了）"
+	)
+	var opened := (
+		bool(tower.perform_interaction(tower.player, candidate)) if not candidate.is_empty() else false
+	)
+	await _settle()
+	await get_tree().create_timer(1.0).timeout
+	_check(opened, "从 98F 侧开楼梯间门失败（perform_interaction=false）")
+	_check(
+		tower.get("_initial_loop_retreat_overlay") == null,
+		"从 98F 侧开楼梯间门弹出了撤退二次确认（封印没停用）"
+	)
+	_check(stair_door.is_open, "楼梯间门 is_open=false（边开了但门板没动）")
+	_check(
+		not bool(stair_door.get_snapshot().get("blocks_passage", true)),
+		"楼梯间门仍 blocks_passage=true（门开着但碰撞没放行，人过不去）"
+	)
+
+	# —— 3) 走远自动关：与 99F 基地门同口径 ——
+	var inward := stair_owner.global_position - stair_door.global_position
+	inward.y = 0.0
+	if inward.length() < 0.01:
+		inward = Vector3.LEFT
+	tower.player.global_position = (
+		stair_door.global_position + inward.normalized() * PLAIN_DOOR_FAR_AWAY_M
+	)
+	tower.player.global_position.y = stair_owner.global_position.y + 0.05
+	tower.player.velocity = Vector3.ZERO
+	tower.call("_refresh_physical_location_authority", true)
+	await _settle()
+	await get_tree().create_timer(PLAIN_DOOR_AUTO_CLOSE_WAIT_S).timeout
+	_check(
+		not stair_door.is_open,
+		"走远 %.1fm 并等 %.1fs 后楼梯间门没有自动关闭（组件 _process 没在跑）"
+		% [PLAIN_DOOR_FAR_AWAY_M, PLAIN_DOOR_AUTO_CLOSE_WAIT_S]
+	)
+	_check(
+		bool(stair_door.get_snapshot().get("blocks_passage", false)),
+		"楼梯间门自动关闭后没有恢复阻挡"
+	)
+	tower.set("_initial_loop_gate_sealed", false)
+
+
+## 把玩家摆到门前 1.6m（房内一侧）、贴本层楼面，并刷新物理位置归属。
+## 与 `test_mode` 下的既有做法一致：只写玩家位置会读到未流送的旧归属。
+func _stand_near_door(tower: Node, room: DungeonRoom3D, door: RoomDoor3D) -> void:
+	if tower == null or room == null or door == null:
+		return
+	tower.player.global_position = room.global_position + Vector3(0.0, 0.05, 0.0)
+	tower.player.velocity = Vector3.ZERO
+	tower.call("_refresh_physical_location_authority", true)
+	await _settle()
+	var inward := room.global_position - door.global_position
+	inward.y = 0.0
+	if inward.length() < 0.01:
+		inward = Vector3.LEFT
+	tower.player.global_position = (
+		door.global_position + inward.normalized() * PLAIN_DOOR_STAND_DISTANCE_M
+	)
+	tower.player.global_position.y = room.global_position.y + 0.05
+	tower.player.velocity = Vector3.ZERO
+	tower.call("_refresh_physical_location_authority", true)
+	await _settle()
+
+
+## K. 新游戏开场：全新存档第一次进场的落点。
+## 判据全部是**运行时行为**，不读设计自述：
+##   · 落点房 id == floor_01_exit（98F 四房链最里面那间 = 主人的办公室）；
+##   · 玩家在房内（房间局部坐标落在足迹内）；
+##   · 玩家站在**本层**楼面（世界 y ≈ 房间 y；楼下 97F 在 −36，相差 12m）；
+##   · 再等 60 个物理帧仍不下坠 —— 这条同时兜住「房间楼板被楼梯井洞口打穿」
+##     这类静默退化（见文件头反向对照）。
+## 反向对照：同一 test_mode、不强制开场分支 ⇒ 必须仍落 100F 天台出生点，
+## 证明本分支没有把常规进场路径一起改掉。
+func _check_new_game_opening(previous: Node) -> void:
+	print("\n---- K. 新游戏开场落进 98F 最里面的办公室 ----")
+	# 先清掉主塔楼再开新的：两套玩家/房间注册会互相污染，时序也没法独立算。
+	if previous != null and is_instance_valid(previous):
+		remove_child(previous)
+		previous.queue_free()
+		await _settle()
+
+	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
+	if not _check(scene != null, "开场塔楼场景加载失败"):
+		return
+
+	# —— 正向：强制走开场分支 ——
+	var opening := scene.instantiate() as TowerDescent3D
+	opening.test_mode = true
+	opening.run_seed_override = SEED
+	opening.force_new_game_opening_for_test = true
+	add_child(opening)
+	await _settle()
+
+	var player := opening.player
+	if not _check(player != null, "开场塔楼没有 player"):
+		return
+	var room := (opening.get("_room_by_id") as Dictionary).get(NEW_GAME_OPENING_ROOM_ID) as DungeonRoom3D
+	if not _check(room != null, "开场塔楼缺房间 %s（98F 未提交或区块00 未接管）" % NEW_GAME_OPENING_ROOM_ID):
+		return
+	_check(
+		str(opening.get("_current_room_id")) == NEW_GAME_OPENING_ROOM_ID,
+		"开场落点房 id=%s 期望 %s" % [str(opening.get("_current_room_id")), NEW_GAME_OPENING_ROOM_ID]
+	)
+	_check(
+		room.authored_layout_room_id == "master_office",
+		"%s 不是主人的办公室（authored=%s）" % [NEW_GAME_OPENING_ROOM_ID, room.authored_layout_room_id]
+	)
+	var dimensions := room.get_dimensions()
+	var local := room.to_local(player.global_position)
+	_check(
+		absf(local.x) <= dimensions.x * 0.5 + TOL and absf(local.z) <= dimensions.y * 0.5 + TOL,
+		"开场玩家不在房内：local=%s dims=%s" % [str(local), str(dimensions)]
+	)
+	_check(
+		absf(player.global_position.y - room.global_position.y) <= FLOOR_STAND_TOL,
+		"开场玩家没站在 98F 楼面：y=%.3f 房 y=%.3f（差 > %.1f 说明摔穿了）"
+		% [player.global_position.y, room.global_position.y, FLOOR_STAND_TOL]
+	)
+	# 静止判定：站着不动 60 物理帧，y 不许再掉。
+	var y_before := player.global_position.y
+	for index in range(60):
+		await get_tree().physics_frame
+	_check(
+		absf(player.global_position.y - y_before) <= TOL,
+		"开场玩家在房内持续下坠：%.3f → %.3f" % [y_before, player.global_position.y]
+	)
+
+	remove_child(opening)
+	opening.queue_free()
+	await _settle()
+
+	# —— 反向对照：同一 test_mode，不强制分支 ⇒ 必须仍落天台 ——
+	var rooftop := scene.instantiate() as TowerDescent3D
+	rooftop.test_mode = true
+	rooftop.run_seed_override = SEED
+	add_child(rooftop)
+	await _settle()
+	_check(
+		str(rooftop.get("_current_room_id")) == "start",
+		"test_mode 反向对照：落点房 id=%s 期望 start（天台）" % str(rooftop.get("_current_room_id"))
+	)
+	var rooftop_player := rooftop.player
+	if _check(rooftop_player != null, "反向对照塔楼没有 player"):
+		_check(
+			rooftop_player.global_position.distance_to(ROOFTOP_SPAWN_WORLD) <= FLOOR_STAND_TOL,
+			"test_mode 反向对照：未落天台出生点 actual=%s expected=%s"
+			% [str(rooftop_player.global_position), str(ROOFTOP_SPAWN_WORLD)]
+		)
+	remove_child(rooftop)
+	rooftop.queue_free()
+	await _settle()

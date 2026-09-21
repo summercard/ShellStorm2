@@ -1,0 +1,77 @@
+{
+  "animation": "I:\\\u5de5\u4f5c\u9879\u76ee\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\ranged_caster\\source\\animation\\enm_ranged_sporeshooter01_animation_v003.blend",
+  "status": "authored_pending_visual_validation",
+  "clips": {
+    "attack": {
+      "frames": [
+        1.0,
+        52.0
+      ],
+      "seconds": 1.7
+    },
+    "dead": {
+      "frames": [
+        1.0,
+        73.0
+      ],
+      "seconds": 2.4
+    },
+    "hurt": {
+      "frames": [
+        1.0,
+        25.0
+      ],
+      "seconds": 0.8
+    },
+    "idle": {
+      "frames": [
+        1.0,
+        97.0
+      ],
+      "seconds": 3.2
+    },
+    "running": {
+      "frames": [
+        1.0,
+        25.0
+      ],
+      "seconds": 0.8
+    },
+    "walking": {
+      "frames": [
+        1.0,
+        49.0
+      ],
+      "seconds": 1.6
+    },
+    "armed_idle": {
+      "frames": [
+        1.0,
+        97.0
+      ],
+      "seconds": 3.2
+    },
+    "walking_armed": {
+      "frames": [
+        1.0,
+        49.0
+      ],
+      "seconds": 1.6
+    },
+    "running_armed": {
+      "frames": [
+        1.0,
+        25.0
+      ],
+      "seconds": 0.8
+    },
+    "shoot": {
+      "frames": [
+        1.0,
+        25.0
+      ],
+      "seconds": 0.8
+    }
+  },
+  "bones": 36
+}

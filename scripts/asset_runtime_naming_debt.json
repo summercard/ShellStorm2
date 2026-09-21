@@ -291,7 +291,6 @@
     "assets/art/weapons/weapon_3d/runtime/spatula_rifle/wpn_spatula_rifle_root_top3d_v001.tscn",
     "assets/art/weapons/weapon_3d/runtime/tissue_box_cannon/wpn_tissue_box_cannon_root_top3d_v001.tscn",
     "assets/art/weapons/weapon_3d/runtime/toaster_launcher/wpn_toaster_launcher_root_top3d_v001.tscn",
-    "assets/art/weapons/weapon_3d/runtime/water_tank_blaster/wpn_water_tank_blaster_root_top3d_v001.tscn",
     "assets/art/weapons/weapon_3d/wpn_gun_kit_root_top3d_v001.tscn"
   ],
   "versioned_dirs": [
@@ -313,7 +312,7 @@
     "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png.import.bak_pre_standard_fix"
   ],
   "reference_counts": {
-    "gd": 24,
+    "gd": 23,
     "tscn": 93
   }
 }

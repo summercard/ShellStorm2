@@ -1,0 +1,4 @@
+# verify_narrative_timeline 的 B2 项刻意跑一条参数不全的 player.teleport，
+# 用来证明「执行失败要 push_error 诊断、但时间轴不许被卡死」。
+# 该 ERROR 属预期；断言本身失败仍会让本测试 exit 1。
+ERROR: \[NarrativeDirector\] cue『player.teleport』执行失败

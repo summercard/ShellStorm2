@@ -1,0 +1,69 @@
+{
+  "output": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\weapons\\weapon_3d\\source\\security_short_shotgun\\wpn_security_short_shotgun_source_v002.blend",
+  "source_collection": "SECURITY_SHOTGUN_REFERENCE",
+  "asset_id": "WPN-GUN-SECURITY-SHORT-SHOTGUN",
+  "logic_id": "security_short_shotgun",
+  "display_name_zh": "警察短霰弹枪",
+  "forward": "local -Z",
+  "world_bbox_min": [
+    -0.073,
+    -0.115,
+    -0.385
+  ],
+  "world_bbox_max": [
+    0.073,
+    0.155,
+    0.21
+  ],
+  "world_dims_m": [
+    0.146,
+    0.27,
+    0.595
+  ],
+  "local_dims_m": [
+    0.146,
+    0.27,
+    0.595
+  ],
+  "measured_length_m": 0.595,
+  "grip_socket_local": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "support_hand_socket_local": [
+    0.0,
+    0.04,
+    -0.24
+  ],
+  "support_hand_distance_m": 0.2433,
+  "materials": [
+    "01_精工金属_枪身骨架",
+    "02_细腻哑光_枪身大面",
+    "03_清漆反光_枪身点缀"
+  ],
+  "palette": "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\shared\\palette\\设施低亮多巴胺色盘_10x10_512.png",
+  "palette_embedded": false,
+  "uv_layer_per_mesh": "PaletteUV (only/active)",
+  "mesh_count": 11,
+  "sockets": [
+    "GripSocket",
+    "SupportHandSocket",
+    "MuzzleSocket",
+    "MuzzleAttachmentSocket",
+    "ScopeSocket",
+    "MagazineSocket",
+    "StockSocket",
+    "TacticalSocket",
+    "MutatorSocket"
+  ],
+  "actions": [
+    "fire_pump_cycle"
+  ],
+  "animated_object": "pump (independent, not WeaponRoot)",
+  "support_follows_pump": true,
+  "weapon_root_parented": false,
+  "armature_in_file": false,
+  "camera_in_file": false,
+  "all_scale_one": true
+}

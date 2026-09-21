@@ -53,8 +53,8 @@
     "shared_facility_palette"
   ],
   "attachment": "independent_module",
-  "exported": false,
-  "expected_export": "env_rooftop_ref_hvac_vent_v002.glb",
+  "exported": true,
+  "expected_export": "env_rooftop_ref_hvac_vent_top3d.glb",
   "collision": "not_created",
   "logical_wall_height": null,
   "collision_bounds": null,
@@ -68,5 +68,10 @@
   "asset_ledger": "assets/registry/ShellStorm2_美术资产台账_v002.xlsx#3D-场景通用",
   "parent_asset_id": "ENV-ROOFTOP-SHELTER-90X80",
   "dedupe_classification": "child_variant",
-  "variant_of": "ENV-ROOFTOP-SHELTER-90X80"
+  "variant_of": "ENV-ROOFTOP-SHELTER-90X80",
+  "runtime_integrated": true,
+  "runtime_scene": "assets/art/environments/tower_zones/rooftop/runtime/hvac_vent.tscn",
+  "export_sha256": "7bf9c80cf1c27d5a15a13913b04bd4163da7b6d207b20832e13d517f8d80470d",
+  "runtime_scene_sha256": "f8221b7ca48a3a91dab4e62e29c29dca46242aac8e0c2c502207b7ab3ec131d7",
+  "source_authoring_script": "assets/art/environments/tower_zones/rooftop/source/export_rooftop_decor_components_v001.py"
 }

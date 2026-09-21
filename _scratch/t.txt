@@ -1,0 +1,2 @@
+print("hello stdout test")
+print("which blender:", __import__("shutil").which("blender"))

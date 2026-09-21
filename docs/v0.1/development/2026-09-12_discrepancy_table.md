@@ -133,8 +133,9 @@
 
 - **是否已处理：`否`；处理状态：`部分完成（待续开发）`；优先级：`P1`。**
 - 判定：`开发中·部分完成`；修改方向：`工程对齐文档`。
-- 工程现状：枪械、弹丸仍走旧池；近战与敌人走新池；近战反馈测试仍查旧池。
-- 文档状态：14.6以 Prefab 注册、统一借出及回收为目标契约。
+- 工程现状（2026-09-21 复核）：枪械**枪口**与弹丸**命中**已迁新池——`WeaponModel3D._spawn_muzzle_effect` 改走 `get_tree().get_nodes_in_group("vfx_pool_3d")` + `VfxPool3D.acquire(FX01_MUZZLE_FLASH, …, {"forward": -global_basis.z})`；`Projectile3D._spawn_effect` 对已注册 AssetID 走 `FX01_IMPACT`，并保留「注册表直实例化」二段兜底。**未迁**：`explosion` 仍走旧 `CombatEffectPool3D`（以 `LEGACY_EFFECT_EXPLOSION` 常量显式标注）；`verify_3d_melee_feedback_flow` 仍查旧池；`verify_3d_enemy_behavior_flow` 的飘字断言按「测试节点直接子节点」扫描，而 `Enemy3D` 已把飘字投给 `VfxPool3D`，故该断言仍红（既有，非本次引入）。
+- 已消除（2026-09-21）：调用方中 `get_node_or_null("/root/VfxPool")` 硬编码路径与 `vfx_pool.call("acquire", "VFX-…")` 弱类型调用；改为 group 取池 + `VfxPool3D` 类型化常量路由。
+- 文档状态：14.6 以 Prefab 注册、统一借出及回收为目标契约；§6.2 已补 2026-09-21 实际进度（含 FX01-06 飞行子弹纯视觉）。
 - 差异说明：【开发到一半】正式调用者与验收对象分裂；旧池 slash/impact 断言失败。
 - 处理建议：依新 Prefab 契约迁移调用者及验收；迁移完成后再退役旧池。
 - 对应文件／定位：

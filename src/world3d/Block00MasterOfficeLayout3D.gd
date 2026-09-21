@@ -94,6 +94,17 @@ const SKIPPED_SLOT_ROLES: Array[String] = ["door_leaf_preview"]
 ## 壳体实例里「自持地砖」的角色：内嵌静态碰撞必须关掉，承重归 TowerFloorStage3D。
 const FLOOR_TILE_SLOT_ROLE := "floor_tile"
 
+## —— 和平区（2026-09-20 主人要求）——
+## 区块00 是叙事固定关卡，不是战斗楼层：区域内
+##   ① 门**只做普通开关**（无清房 / 无钥匙 / 无命运卡）；
+##   ② **不刷怪**（四房全部，含入口门厅）；
+##   ③ 门扇直接沿用 **99F 基地的滑升门**（`BASE99_DOOR_LIFT_PREFAB`），不另造门美术。
+## 声明点只此一处：`build_plan_override()` 把 `authored_layout_peaceful` 落到房间 spec，
+## 逐层透传 record → DungeonRoom3D，由 Dungeon3D 的三个消费点读它。
+## ⚠️ 门策略（requires_clear/key/fate）由 `Dungeon3D._door_policies_for_record` 统一覆盖，
+## 不在 `_door_policy_for_edge` 里按 room_id 逐边列举 —— 那样每加一扇门都要改一趟。
+const PEACEFUL_ZONE := true
+
 
 ## 读摆位源。失败一律返回空字典 + 报错，由调用方回退内置房表（绝不静默换布局）。
 static func load_manifest() -> Dictionary:
@@ -238,6 +249,7 @@ static func build_plan_override(base_plan: Dictionary) -> Dictionary:
 			"authored_layout_asset_id": LAYOUT_ASSET_ID,
 			"authored_layout_version": LAYOUT_VERSION,
 			"authored_layout_room_id": room_id,
+			"authored_layout_peaceful": PEACEFUL_ZONE,
 			"authored_layout_instances": room_shell_instances(manifest, room_id, planar_position),
 		})
 	# 入口房锚点必须逐值命中 base_plan 的入口房：位置与尺寸都不能动，
@@ -270,6 +282,8 @@ static func build_plan_override(base_plan: Dictionary) -> Dictionary:
 	result["authored_layout"] = true
 	result["authored_layout_asset_id"] = LAYOUT_ASSET_ID
 	result["authored_layout_version"] = LAYOUT_VERSION
+	# 整层和平区：探针按这条断言「本层不刷怪、门策略全放行」，不必逐房去问。
+	result["authored_layout_peaceful"] = PEACEFUL_ZONE
 	result["authored_layout_planar_z_shift_m"] = float(shifts[0])
 	return result
 

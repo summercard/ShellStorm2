@@ -5,5 +5,10 @@
 
 [node name="MeleeChaserFormalVisual" type="Node3D"]
 script = ExtResource("1_script")
+metadata/asset_id = "ENM-MELEE-FUNGBOAR01"
+metadata/content_id = "melee_chaser"
+metadata/presentation_only = true
+metadata/collision_owner = "Enemy3D"
+metadata/godot_forward = "-Z"
 
 [node name="VisualGLB" parent="." instance=ExtResource("2_glb")]

@@ -1,0 +1,10 @@
+﻿\u603b\u89c8 20 10
+\u8d26\u672c\u8bf4\u660e 23 6
+\u8d44\u4ea7\u4e3b\u8868 17 25
+\u654c\u4eba\u52a8\u753b\u4e0e\u72b6\u6001 33 9
+3D-\u654c\u4eba 8 16
+\u57df\u53d8\u66f4\u65e5\u5fd7 8 7
+璧勪骇涓昏〃 {'A7': 'ENM-RANGED-SPORESHOOTER01', 'M7': 'v002', 'O7': 'assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn', 'P7': 'assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v001.blend; assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v002.blend'}
+3D-鏁屼汉 {'A8': 'ENM-RANGED-SPORESHOOTER01', 'C8': 'assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn', 'D8': 'assets/art/enemies/normal_enemy_3d/ranged_caster/components/enm_ranged_sporeshooter01_visual_top3d.glb', 'E8': 'assets/art/enemies/normal_enemy_3d/ranged_caster/source/model/enm_ranged_sporeshooter01_model_v001.blend; assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v002.blend'}
+鏁屼汉鍔ㄧ敾涓庣姸鎬?{'B22': 'ENM-RANGED-SPORESHOOTER01', 'C22': '淇濆畨鍍靛案', 'D22': 'Blender 鍔ㄤ綔姣嶇増 v002锛堝鐢?6楠紱6鍩虹鍓緫 + armed_idle/walking_armed/running_armed/shoot锛?, 'G22': '鏈夛細assets/art/enemies/normal_enemy_3d/ranged_caster/source/animation/enm_ranged_sporeshooter01_animation_v002.blend'}
+鍩熷彉鏇存棩蹇?{'A8': 'v0.1.2', 'E8': 'ENM-RANGED-SPORESHOOTER01锛堜繚瀹夊兊灏革級鐢辩▼搴忓崰浣嶈浆姝ｄ负姝ｅ紡3D琛ㄧ幇锛氬鐢ㄥ皬鍍靛案36楠ㄤ笌鍩虹鍔ㄤ綔锛屾柊澧瀉rmed_idle/鎸佹灙绉诲姩/shoot锛屽弻绠＄偖浠呬綔涓篖_Hand瑙嗚闄勪欢锛況anged_caster閫昏緫涓庝笁寮瑰彂灏勮鍒欎笉鍙樸€?}

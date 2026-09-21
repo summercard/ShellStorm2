@@ -1,0 +1,43 @@
+{
+  "previews": [
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_armed_idle_side_r.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_armed_idle_side_l.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_armed_idle_threeq_r.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_armed_idle_top_hold.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_attack_side_r.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_attack_side_l.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_attack_threeq_r.png",
+    "I:\\工作项目\\shellstrom2\\ShellStorm2\\assets\\art\\enemies\\normal_enemy_3d\\security_zombie\\previews\\security_zombie_attack_top_hold.png"
+  ],
+  "mount_errors_m": {
+    "GripSocket": {
+      "bone": "L_Hand",
+      "bone_tail": [
+        0.17988380789756775,
+        0.3249661922454834,
+        0.8909130096435547
+      ],
+      "socket": [
+        0.17988380789756775,
+        0.3249661922454834,
+        0.8909130096435547
+      ],
+      "err_m": 0.0
+    },
+    "SupportHandSocket": {
+      "bone": "R_Hand",
+      "bone_tail": [
+        0.16097383201122284,
+        0.5645580887794495,
+        0.9316016435623169
+      ],
+      "socket": [
+        0.1610085517168045,
+        0.564119279384613,
+        0.9315271973609924
+      ],
+      "err_m": 0.0004464318311276988
+    }
+  },
+  "camera_policy": "side and three-quarter views expose barrel length; colored markers are preview-only"
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "bone": "Root",
+    "y_angle_deg": 0.0,
+    "x_angle_deg": 0.0,
+    "z_angle_deg": 0.0,
+    "melee_len": 0.12,
+    "police_len": 0.12,
+    "melee_head": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "police_head": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "bone": "Hip",
+    "y_angle_deg": 2.32,
+    "x_angle_deg": 90.0,
+    "z_angle_deg": 90.05,
+    "melee_len": 0.07006,
+    "police_len": 0.09657,
+    "melee_head": [
+      -0.012,
+      0.073,
+      0.43
+    ],
+    "police_head": [
+      0.02539,
+      0.04715,
+      0.56222
+    ]
+  },
+  {
+    "bone": "Waist",
+    "y_angle_deg": 5.02,
+    "x_angle_deg": 85.38,
+    "z_angle_deg": 85.6,
+    "melee_len": 0.14007,
+    "police_len": 0.08766,
+    "melee_head": [
+      -0.014,
+      0.071,
+      0.5
+    ],
+    "police_head": [
+      0.02539,
+      0.06166,
+      0.59849
+    ]
+  },
+  {
+    "bone": "Spine02",
+    "y_angle_deg": 13.98,
+    "x_angle_deg": 75.54,
+    "z_angle_deg": 75.66,
+    "melee_len": 0.13005,
+    "police_len": 0.12504,
+    "melee_head": [
+      -0.018,
+      0.069,
+      0.64
+    ],
+    "police_head": [
+      0.01814,
+      0.0399,
+      0.79436
+    ]
+  },
+  {
+    "bone": "Neck",
+    "y_angle_deg": 10.51,
+    "x_angle_deg": 99.22,
+    "z_angle_deg": 99.33,
+    "melee_len": 0.12005,
+    "police_len": 0.08825,
+    "melee_head": [
+      -0.021,
+      0.067,
+      0.77
+    ],
+    "police_head": [
+      0.01814,
+      0.00363,
+      0.9322
+    ]
+  },
+  {
+    "bone": "Head",
+    "y_angle_deg": 9.46,
+    "x_angle_deg": 99.45,
+    "z_angle_deg": 99.33,
+    "melee_len": 0.67,
+    "police_len": 0.21041,
+    "melee_head": [
+      -0.024,
+      0.065,
+      0.89
+    ],
+    "police_head": [
+      0.01814,
+      0.01814,
+      1.01925
+    ]
+  },
+  {
+    "bone": "L_Clavicle",
+    "y_angle_deg": 17.1,
+    "x_angle_deg": 89.53,
+    "z_angle_deg": 91.61,
+    "melee_len": 0.16453,
+    "police_len": 0.14814,
+    "melee_head": [
+      -0.05818,
+      0.06709,
+      0.7596
+    ],
+    "police_head": [
+      -0.01088,
+      0.01088,
+      0.90318
+    ]
+  },
+  {
+    "bone": "L_Upperarm",
+    "y_angle_deg": 6.55,
+    "x_angle_deg": 90.0,
+    "z_angle_deg": 90.21,
+    "melee_len": 0.20221,
+    "police_len": 0.20364,
+    "melee_head": [
+      -0.22168,
+      0.08174,
+      0.77063
+    ],
+    "police_head": [
+      -0.15597,
+      0.00363,
+      0.87416
+    ]
+  },
+  {
+    "bone": "L_Forearm",
+    "y_angle_deg": 14.65,
+    "x_angle_deg": 90.21,
+    "z_angle_deg": 88.37,
+    "melee_len": 0.12691,
+    "police_len": 0.17948,
+    "melee_head": [
+      -0.42159,
+      0.05966,
+      0.74962
+    ],
+    "police_head": [
+      -0.3591,
+      0.00363,
+      0.85965
+    ]
+  },
+  {
+    "bone": "L_Hand",
+    "y_angle_deg": 26.91,
+    "x_angle_deg": 90.0,
+    "z_angle_deg": 92.23,
+    "melee_len": 0.03278,
+    "police_len": 0.14367,
+    "melee_head": [
+      -0.54478,
+      0.03761,
+      0.77064
+    ],
+    "police_head": [
+      -0.53853,
+      0.0075,
+      0.86042
+    ]
+  },
+  {
+    "bone": "R_Clavicle",
+    "y_angle_deg": 19.7,
+    "x_angle_deg": 116.99,
+    "z_angle_deg": 119.55,
+    "melee_len": 0.16499,
+    "police_len": 0.14814,
+    "melee_head": [
+      0.01611,
+      0.06709,
+      0.7596
+    ],
+    "police_head": [
+      0.04715,
+      0.01088,
+      0.90318
+    ]
+  },
+  {
+    "bone": "R_Upperarm",
+    "y_angle_deg": 9.29,
+    "x_angle_deg": 90.0,
+    "z_angle_deg": 89.29,
+    "melee_len": 0.20366,
+    "police_len": 0.20325,
+    "melee_head": [
+      0.17868,
+      0.05182,
+      0.78325
+    ],
+    "police_head": [
+      0.19224,
+      0.00363,
+      0.87416
+    ]
+  },
+  {
+    "bone": "R_Forearm",
+    "y_angle_deg": 9.93,
+    "x_angle_deg": 141.12,
+    "z_angle_deg": 140.57,
+    "melee_len": 0.14206,
+    "police_len": 0.18066,
+    "melee_head": [
+      0.3786,
+      0.03237,
+      0.74962
+    ],
+    "police_head": [
+      0.39537,
+      0.00363,
+      0.86691
+    ]
+  },
+  {
+    "bone": "R_Hand",
+    "y_angle_deg": 3.35,
+    "x_angle_deg": 130.02,
+    "z_angle_deg": 129.93,
+    "melee_len": 0.05549,
+    "police_len": 0.11987,
+    "melee_head": [
+      0.51862,
+      0.02076,
+      0.77064
+    ],
+    "police_head": [
+      0.57596,
+      0.008,
+      0.86902
+    ]
+  },
+  {
+    "bone": "L_Thigh",
+    "y_angle_deg": 2.52,
+    "x_angle_deg": 85.73,
+    "z_angle_deg": 85.77,
+    "melee_len": 0.1394,
+    "police_len": 0.18252,
+    "melee_head": [
+      -0.14301,
+      0.06869,
+      0.42941
+    ],
+    "police_head": [
+      -0.09068,
+      0.04715,
+      0.51144
+    ]
+  },
+  {
+    "bone": "L_Calf",
+    "y_angle_deg": 7.03,
+    "x_angle_deg": 93.55,
+    "z_angle_deg": 93.96,
+    "melee_len": 0.16461,
+    "police_len": 0.19042,
+    "melee_head": [
+      -0.15235,
+      0.07392,
+      0.29041
+    ],
+    "police_head": [
+      -0.10519,
+      0.06166,
+      0.33008
+    ]
+  },
+  {
+    "bone": "L_Foot",
+    "y_angle_deg": 10.42,
+    "x_angle_deg": 30.13,
+    "z_angle_deg": 28.29,
+    "melee_len": 0.12732,
+    "police_len": 0.2013,
+    "melee_head": [
+      -0.18371,
+      0.0771,
+      0.12885
+    ],
+    "police_head": [
+      -0.12695,
+      0.04715,
+      0.14146
+    ]
+  },
+  {
+    "bone": "R_Thigh",
+    "y_angle_deg": 7.7,
+    "x_angle_deg": 85.02,
+    "z_angle_deg": 85.53,
+    "melee_len": 0.17851,
+    "police_len": 0.18931,
+    "melee_head": [
+      0.11865,
+      0.07653,
+      0.42937
+    ],
+    "police_head": [
+      0.14146,
+      0.04715,
+      0.51869
+    ]
+  },
+  {
+    "bone": "R_Calf",
+    "y_angle_deg": 11.59,
+    "x_angle_deg": 94.45,
+    "z_angle_deg": 93.41,
+    "melee_len": 0.13565,
+    "police_len": 0.19042,
+    "melee_head": [
+      0.143,
+      0.07388,
+      0.25254
+    ],
+    "police_head": [
+      0.14872,
+      0.06166,
+      0.33008
+    ]
+  },
+  {
+    "bone": "R_Foot",
+    "y_angle_deg": 12.69,
+    "x_angle_deg": 29.54,
+    "z_angle_deg": 31.19,
+    "melee_len": 0.15869,
+    "police_len": 0.20012,
+    "melee_head": [
+      0.14515,
+      0.03982,
+      0.12126
+    ],
+    "police_head": [
+      0.17048,
+      0.04716,
+      0.14146
+    ]
+  }
+]

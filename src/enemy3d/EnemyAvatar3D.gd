@@ -24,11 +24,16 @@ const FOOTPRINT_PROFILES := {
 	"boss": {"radius": 1.92, "height": 2.30},
 }
 
-# 正式普通怪（非精英 melee_chaser）分支：挂载独立小僵尸包装，替换程序化壳/核/附肢。
-# 视觉高度 1.857m 取自 normal_enemy_3d/melee_chaser 资产 README（碰撞 FOOTPRINT 仍为 1.30m，不动）。
+# 正式普通怪表现按逻辑 ID 路由；这里只替换视觉，不改变 Enemy3D 的 AI、碰撞、伤害与掉落。
+# 碰撞 FOOTPRINT 仍由各 kind 的既有玩法口径提供，不随美术替换自动收紧。
+const FORMAL_NORMAL_SCENES := {
+	"melee_chaser": "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn",
+	"ranged_caster": "res://assets/art/enemies/normal_enemy_3d/ranged_caster/runtime/enm_ranged_sporeshooter01_root_top3d.tscn",
+}
+const FORMAL_NORMAL_HEIGHTS := {"melee_chaser": 1.857143, "ranged_caster": 1.857143}
 const FORMAL_MELEE_KIND := "melee_chaser"
-const FORMAL_MELEE_SCENE_PATH := "res://assets/art/enemies/normal_enemy_3d/melee_chaser/runtime/enm_melee_fungboar01_root_top3d.tscn"
-const FORMAL_MELEE_VISUAL_HEIGHT := 1.857
+const FORMAL_MELEE_SCENE_PATH := FORMAL_NORMAL_SCENES[FORMAL_MELEE_KIND]
+const FORMAL_MELEE_VISUAL_HEIGHT := FORMAL_NORMAL_HEIGHTS[FORMAL_MELEE_KIND]
 
 var enemy_kind := "melee_chaser"
 var ai_state := "idle"
@@ -230,17 +235,18 @@ func _rebuild() -> void:
 	_root.add_child(_tell_ring)
 	# 正式普通怪分支：非精英 melee_chaser 在程序化外壳之后挂载独立小僵尸包装，
 	# 隐藏壳/核/附肢、保留 tell ring；动画由包装自驱动，避免旧 bob/appendage 程序姿势叠加。
-	if enemy_kind == FORMAL_MELEE_KIND and _root != null:
+	if FORMAL_NORMAL_SCENES.has(enemy_kind) and _root != null:
 		_load_formal_normal_model()
 
 
 func _load_formal_normal_model() -> void:
-	var scene := load(FORMAL_MELEE_SCENE_PATH) as PackedScene
-	assert(scene != null, "Formal melee scene missing")
+	var scene_path := str(FORMAL_NORMAL_SCENES.get(enemy_kind, ""))
+	var scene := load(scene_path) as PackedScene
+	assert(scene != null, "Formal normal scene missing for %s" % enemy_kind)
 	_formal_normal_root = scene.instantiate() as Node3D
-	_formal_normal_root.name = "FormalNormal"
+	_formal_normal_root.name = "FormalNormal_%s" % enemy_kind
 	_root.add_child(_formal_normal_root)
-	_formal_normal_scene_path = FORMAL_MELEE_SCENE_PATH
+	_formal_normal_scene_path = scene_path
 	_shell.hide()
 	_core.hide()
 	_appendages.hide()

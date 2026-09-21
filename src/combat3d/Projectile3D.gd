@@ -6,6 +6,9 @@ signal expired
 signal retired(projectile: Projectile3D)
 
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
+const BULLET_VISUAL_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_bullet_visual_root_top3d.tscn")
+## 旧链（CombatEffectPool3D）图例：爆炸仍走旧链，待 14.6 §6 迁移完成后统一删除。
+const LEGACY_EFFECT_EXPLOSION := &"explosion"
 
 var direction := Vector3(0, 0, -1)
 var speed := 24.0
@@ -25,10 +28,7 @@ var _pierces_left := 0
 var _built := false
 var _active := true
 var _collision_shape: CollisionShape3D
-var _visual: MeshInstance3D
-var _trail: MeshInstance3D
-var _visual_material: StandardMaterial3D
-var _trail_material: StandardMaterial3D
+var _visual: VfxEffectBase3D
 var _returning := false
 var _turret_active := false
 var _turret_remaining := 0.0
@@ -80,9 +80,9 @@ func activate(config: Dictionary, world_position: Vector3) -> void:
 	process_mode = Node.PROCESS_MODE_INHERIT
 	global_position = world_position
 	velocity = Vector3.ZERO
-	if _trail != null:
-		_trail.visible = true
 	_sync_visual_orientation()
+	if _visual != null:
+		_visual.activate(global_position, bullet_color, _visual_scale_factor(), {})
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", false)
 
@@ -127,6 +127,8 @@ func _physics_process(delta: float) -> void:
 	var collision := move_and_collide(velocity * delta)
 	if collision == null:
 		return
+	# 物理命中上下文（先于反弹方向变化），供命中特效读取法线/接触点。
+	var hit_context := {"normal": collision.get_normal(), "position": collision.get_position()}
 	var collider := collision.get_collider() as Node
 	if collider == shooter:
 		return
@@ -134,7 +136,7 @@ func _physics_process(delta: float) -> void:
 		if collider.has_method("can_absorb_projectile") and bool(collider.call("can_absorb_projectile", bullet_tags)):
 			if collider.has_method("on_projectile_absorbed"):
 				collider.call("on_projectile_absorbed", damage)
-			_spawn_effect("impact", global_position, bullet_color, 1.25)
+			_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.25, hit_context)
 			_retire()
 			return
 		if collider.has_method("take_projectile_damage"):
@@ -146,7 +148,7 @@ func _physics_process(delta: float) -> void:
 		_apply_secondary_effect(collider)
 		_apply_fate_on_hit(collider)
 		hit_confirmed.emit(collider, damage, critical)
-		_spawn_effect("impact", global_position, bullet_color, 1.0)
+		_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.0, hit_context)
 		if bool(fate_behavior.get("spawn_turret_on_land", false)):
 			_become_turret()
 			return
@@ -170,7 +172,7 @@ func _physics_process(delta: float) -> void:
 		damage = maxi(1, int(damage * float(fate_behavior.get("bounce_damage_scale", 0.85))))
 		_sync_visual_orientation()
 		_bounces_left -= 1
-		_spawn_effect("impact", global_position, bullet_color, 0.55)
+		_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 0.55, hit_context)
 		return
 	if bool(fate_behavior.get("spawn_turret_on_land", false)):
 		_become_turret()
@@ -180,7 +182,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if bullet_tags.has("explosive") or bullet_tags.has("blackhole") or bullet_tags.has("balloon") or bool(fate_behavior.get("nth_explosion", false)):
 		_explode()
-	_spawn_effect("impact", global_position, bullet_color, 0.7)
+	_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 0.7, hit_context)
 	_retire()
 
 
@@ -249,7 +251,7 @@ func _apply_chain_lightning(first_target: Node) -> void:
 			break
 		chain_damage = maxi(1, int(chain_damage * chain_scale))
 		nearest.take_projectile_damage(chain_damage, false, (nearest.global_position - current.global_position).normalized(), bullet_tags, fate_behavior, shooter)
-		_spawn_effect("impact", nearest.global_position + Vector3(0, 0.6, 0), bullet_color, 0.72)
+		_spawn_effect(VfxPool3D.FX01_IMPACT, nearest.global_position + Vector3(0, 0.6, 0), bullet_color, 0.72)
 		visited[nearest.get_instance_id()] = true
 		current = nearest
 
@@ -262,12 +264,10 @@ func _apply_growth() -> void:
 	var growth := maxf(0.02, float(fate_behavior.get("growth_per_hit", 0.12)))
 	damage = maxi(1, int(damage * (1.0 + growth)))
 	var growth_scale := 1.0 + growth
-	if _visual != null:
-		_visual.scale *= growth_scale
-	if _trail != null:
-		_trail.scale *= growth_scale
 	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
 		(_collision_shape.shape as SphereShape3D).radius *= growth_scale
+	if _visual != null and _visual.has_method("apply_growth"):
+		_visual.call("apply_growth", growth_scale)
 
 
 func _explode() -> void:
@@ -276,7 +276,7 @@ func _explode() -> void:
 		radius = 4.0
 	elif bullet_tags.has("balloon"):
 		radius = 3.6
-	_spawn_effect("explosion", global_position, bullet_color, radius * 0.42)
+	_spawn_effect(LEGACY_EFFECT_EXPLOSION, global_position, bullet_color, radius * 0.42)
 	if MonsterAIManager != null:
 		MonsterAIManager.broadcast_sound_stimulus(
 			global_position, maxf(12.0, radius * 4.0), "explosion", shooter
@@ -318,29 +318,10 @@ func _nearest_target() -> Node3D:
 
 
 func _build_visual() -> void:
-	var mesh := SphereMesh.new()
-	mesh.radius = 0.10
-	mesh.height = 0.20
-	mesh.radial_segments = 10
-	mesh.rings = 5
-	_visual_material = StandardMaterial3D.new()
-	_visual_material.emission_enabled = true
-	_visual_material.emission_energy_multiplier = 2.2
-	mesh.material = _visual_material
-	_visual = MeshInstance3D.new()
-	_visual.mesh = mesh
-	_visual.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	# 独立子弹纯视觉 Prefab：由 ProjectilePool3D 宿主生命周期管理，不放 VfxPool 自动计时。
+	_visual = BULLET_VISUAL_SCENE.instantiate() as VfxEffectBase3D
 	add_child(_visual)
-	var trail_mesh := BoxMesh.new()
-	trail_mesh.size = Vector3(0.035, 0.035, 0.65)
-	_trail_material = _visual_material.duplicate() as StandardMaterial3D
-	_trail_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	trail_mesh.material = _trail_material
-	_trail = MeshInstance3D.new()
-	_trail.position = Vector3(0, 0, 0.34)
-	_trail.mesh = trail_mesh
-	_trail.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	add_child(_trail)
+	# 单独建立球碰撞（半径 0.12，与命运缩放公式保持一致）。
 	var shape := SphereShape3D.new()
 	shape.radius = 0.12
 	_collision_shape = CollisionShape3D.new()
@@ -348,21 +329,17 @@ func _build_visual() -> void:
 	add_child(_collision_shape)
 
 
-func _apply_visual_configuration() -> void:
+func _visual_scale_factor() -> float:
 	var scale_factor := 1.55 if bullet_tags.has("balloon") else 1.0
 	scale_factor *= clampf(float(fate_behavior.get("fate_scale", 1.0)), 0.35, 4.0)
+	return scale_factor
+
+func _apply_visual_configuration() -> void:
+	var scale_factor := _visual_scale_factor()
 	if _visual != null:
-		_visual.scale = Vector3.ONE * scale_factor
-	if _trail != null:
-		_trail.scale = Vector3.ONE * scale_factor
+		_visual.configure(bullet_color, scale_factor, {})
 	if _collision_shape != null and _collision_shape.shape is SphereShape3D:
 		(_collision_shape.shape as SphereShape3D).radius = 0.12 * scale_factor
-	if _visual_material != null:
-		_visual_material.albedo_color = bullet_color
-		_visual_material.emission = bullet_color
-	if _trail_material != null:
-		_trail_material.albedo_color = Color(bullet_color.r, bullet_color.g, bullet_color.b, 0.36)
-		_trail_material.emission = bullet_color
 
 
 func _begin_return() -> void:
@@ -382,11 +359,12 @@ func _become_turret() -> void:
 	_turret_shot_timer = 0.0
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", true)
-	if _trail != null:
-		_trail.visible = false
 	if _visual != null:
-		_visual.scale *= 1.45
-	_spawn_effect("impact", global_position, bullet_color, 1.25)
+		if _visual.has_method("set_trail_visible"):
+			_visual.call("set_trail_visible", false)
+		if _visual.has_method("apply_growth"):
+			_visual.call("apply_growth", 1.45)
+	_spawn_effect(VfxPool3D.FX01_IMPACT, global_position, bullet_color, 1.25)
 
 
 func _tick_turret(delta: float) -> void:
@@ -464,13 +442,18 @@ func _sync_visual_orientation() -> void:
 
 
 func get_orientation_snapshot() -> Dictionary:
-	return {
+	var snapshot := {
 		"direction": direction,
 		"visual_forward": -global_basis.z,
 		"alignment": direction.normalized().dot((-global_basis.z).normalized()),
-		"trail_local_position": _trail.position if _trail != null else Vector3.ZERO,
-		"trail_is_behind": _trail != null and _trail.position.z > 0.0,
+		"trail_local_position": Vector3.ZERO,
+		"trail_is_behind": false,
 	}
+	if _visual != null and _visual.has_method("get_presentation_snapshot"):
+		var presentation := _visual.call("get_presentation_snapshot") as Dictionary
+		snapshot["trail_local_position"] = presentation.get("trail_local_position", Vector3.ZERO)
+		snapshot["trail_is_behind"] = presentation.get("trail_is_behind", false)
+	return snapshot
 
 
 func _retire() -> void:
@@ -479,6 +462,8 @@ func _retire() -> void:
 	_active = false
 	velocity = Vector3.ZERO
 	visible = false
+	if _visual != null and _visual.has_method("deactivate"):
+		_visual.call("deactivate")
 	if _collision_shape != null:
 		_collision_shape.set_deferred("disabled", true)
 	process_mode = Node.PROCESS_MODE_DISABLED
@@ -488,14 +473,27 @@ func _retire() -> void:
 		retired.emit(self)
 
 
-func _spawn_effect(kind: String, world_position: Vector3, color: Color, size: float) -> void:
+func _spawn_effect(effect_id: StringName, world_position: Vector3, color: Color, size: float, context: Dictionary = {}) -> void:
+	# 已注册 AssetID（FX01-* 战斗反馈）走全局 VfxPool 新体系，按 AssetID 路由。
+	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
+	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D and VfxPool3D._REGISTRY.has(effect_id):
+		(vfx_pools[0] as VfxPool3D).acquire(effect_id, world_position, color, size, context)
+		return
 	if get_tree().current_scene == null:
 		return
+	# 未注册 AssetID（爆炸等旧链图例）：仍走 CombatEffectPool3D，待 14.6 §6 迁移完成后删除。
 	var pools := get_tree().get_nodes_in_group("combat_effect_pool_3d")
 	if not pools.is_empty() and pools[0] is CombatEffectPool3D:
-		(pools[0] as CombatEffectPool3D).acquire(kind, color, size, world_position)
+		(pools[0] as CombatEffectPool3D).acquire(str(effect_id), color, size, world_position)
+		return
+	# VfxPool 不在场（异常态）且该 AssetID 已注册：直接从注册表实例化，保留 AssetID 语义。
+	if VfxPool3D._REGISTRY.has(effect_id):
+		var packed: PackedScene = VfxPool3D._REGISTRY[effect_id]
+		var pooled_effect: VfxEffectBase3D = packed.instantiate() as VfxEffectBase3D
+		get_tree().current_scene.add_child(pooled_effect)
+		pooled_effect.activate(world_position, color, size, context)
 		return
 	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
-	effect.configure(kind, color, size)
+	effect.configure(str(effect_id), color, size)
 	get_tree().current_scene.add_child(effect)
 	effect.global_position = world_position

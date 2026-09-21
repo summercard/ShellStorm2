@@ -1,0 +1,1 @@
+exec(open(r'I:/工作项目/shellstrom2/ShellStorm2/_scratch/security_zombie/diagnose_v003.py').read().replace("ranged_caster/source/model/enm_ranged_sporeshooter01_model_v002.blend","melee_chaser/source/model/enm_melee_fungboar01_model_v002.blend").replace("diagnostic'","diagnostic_melee'"))

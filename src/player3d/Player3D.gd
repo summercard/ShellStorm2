@@ -1802,6 +1802,11 @@ func _update_invincibility(delta: float) -> void:
 func _update_aim_from_mouse() -> void:
 	if camera == null or not camera.is_inside_tree():
 		return
+	# 叙事用 actor.face 接管朝向时鼠标瞄准必须让位：input_locked 不拦瞄准
+	# （锁定期间仍可转向），所以玩家一晃鼠标就会把剧本刚摆好的"左右张望"顶掉，
+	# 表现为中间画面/朝向错乱，且运行时零报错。
+	if _narrative_holds_aim():
+		return
 	# 移动端：触屏瞄准方向由摇杆控制时跳过鼠标射线
 	if _mobile_input_available and _mobile_face_active:
 		var aim_dir_3d := _get_mobile_face_direction()
@@ -1858,6 +1863,15 @@ func _update_aim_from_mouse() -> void:
 	aim_direction = next_aim_direction
 	aim_yaw = next_aim_yaw
 	aim_cursor.global_position = next_cursor_position
+
+
+## 叙事是否正在接管角色朝向（见 NarrativeDirector.is_actor_facing_overridden）。
+func _narrative_holds_aim() -> bool:
+	return (
+		NarrativeDirector != null
+		and NarrativeDirector.has_method("is_actor_facing_overridden")
+		and bool(NarrativeDirector.is_actor_facing_overridden())
+	)
 
 
 func _init_state_machine() -> void:

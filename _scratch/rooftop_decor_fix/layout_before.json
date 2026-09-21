@@ -1,0 +1,8402 @@
+{
+  "schema": "shellstrom2.rooftop.decorated_layout",
+  "schema_version": 1,
+  "layout_id": "ENV-ROOFTOP-100F-DECORATED-LAYOUT",
+  "layout_version": "v001",
+  "floor": "100F",
+  "block_id": "rooftop",
+  "source_blend": "assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.blend",
+  "component_library": "assets/art/environments/tower_zones/rooftop/source/reference_components/v002/天台区块_参考组件库_v002.blend",
+  "dimensions_m": [
+    90.0,
+    80.0
+  ],
+  "world_rect_m": [
+    -50.0,
+    -35.0,
+    90.0,
+    80.0
+  ],
+  "coordinate_contract": {
+    "up_axis": "+Z",
+    "horizontal_axes": [
+      "+X",
+      "+Y"
+    ],
+    "rotation_axis": "+Z",
+    "units": "meters"
+  },
+  "instances": [
+    {
+      "instance_id": "INST_000_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_001_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_002_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_003_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_004_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_005_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_006_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_007_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_008_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_009_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_010_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_011_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_012_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_013_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_014_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_015_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_016_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_017_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_018_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_019_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_020_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_021_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_022_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_023_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_024_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_025_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_026_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_027_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_028_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_029_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_030_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_031_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_032_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_033_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_034_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_035_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_036_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_037_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_038_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_039_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_040_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_041_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_042_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_043_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_044_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_045_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_046_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_047_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_048_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_049_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_050_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_051_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_052_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_053_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_054_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_055_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_056_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_057_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_058_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_059_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_060_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_061_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_062_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_063_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_064_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_065_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_066_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_067_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_068_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_069_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_070_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_071_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_072_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_073_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_074_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_075_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_076_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_077_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_078_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_079_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_080_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_081_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_082_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_083_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_084_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_085_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_086_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_087_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_088_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_089_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_090_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_091_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_092_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_093_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_094_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_095_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_096_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_097_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_098_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_099_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_100_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_101_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_102_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_103_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_104_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_105_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_106_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_107_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_108_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_109_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_110_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_111_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_112_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_113_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        -2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_114_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_115_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_116_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_117_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_118_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_119_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_120_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_121_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_122_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        2.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_123_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_124_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_125_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_126_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_127_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_128_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_129_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_130_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_131_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        7.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_132_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_133_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_134_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_135_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_136_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_137_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_138_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_139_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_140_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        12.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_141_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_142_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_143_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_144_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_145_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_146_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_147_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_148_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_149_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        17.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_150_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_151_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_152_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_153_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_154_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_155_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_156_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_157_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_158_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_159_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_160_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_161_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_162_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_163_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_164_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        22.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_165_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_166_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_167_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_168_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_169_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_170_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_171_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_172_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_173_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_174_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_175_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_176_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_177_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_178_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_179_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        27.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_180_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_181_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_182_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_183_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_184_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_185_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_186_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_187_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_188_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_189_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_190_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_191_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_192_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_193_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_194_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_195_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_196_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_197_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        32.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_198_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_199_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_200_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_201_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_202_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_203_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_204_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_205_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_206_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_207_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_208_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_209_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_210_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_211_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_212_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_213_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_214_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_215_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        37.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_216_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -47.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_217_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -42.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_218_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -37.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_219_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -32.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_220_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -27.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_221_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -22.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_222_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -17.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_223_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -12.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_224_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -7.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_225_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        -2.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_226_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        2.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_227_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        7.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_228_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        12.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_229_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        17.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_230_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        22.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_231_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        27.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_232_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        32.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_233_floor_full",
+      "component_slug": "floor_full",
+      "component_collection": "完整地砖_资产包",
+      "group": "rooftop_base",
+      "position_m": [
+        37.5,
+        42.5,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "100F 18x16地砖；已扣36格中庭与18格西侧楼梯口"
+    },
+    {
+      "instance_id": "INST_234_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -45.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_235_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -45.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_236_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -40.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_237_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -40.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_238_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -35.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_239_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -35.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_240_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -30.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_241_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -30.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_242_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -25.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_243_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -25.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_244_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -20.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_245_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -20.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_246_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -15.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_247_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -15.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_248_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -10.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_249_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -10.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_250_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -5.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_251_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -5.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_252_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        0.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_253_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        0.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_254_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        5.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_255_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        5.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_256_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        10.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_257_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        10.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_258_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        15.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_259_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        15.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_260_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        20.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_261_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        20.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_262_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        25.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_263_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        25.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_264_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        30.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_265_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        30.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_266_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        35.0,
+        -34.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_267_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        35.0,
+        44.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_268_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -30.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_269_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -30.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_270_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -25.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_271_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -25.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_272_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -20.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_273_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -20.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_274_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -15.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_275_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -15.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_276_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_277_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -10.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_278_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        -5.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_279_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        -5.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_280_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_281_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        0.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_282_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        5.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_283_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        5.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_284_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_285_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        10.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_286_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        15.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_287_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        15.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_288_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        20.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_289_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        20.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_290_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        25.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_291_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        25.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_292_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        30.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_293_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        30.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_294_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        35.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_295_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        35.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_296_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        39.75,
+        40.0,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_297_parapet",
+      "component_slug": "parapet",
+      "component_collection": "女儿墙直段_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -49.75,
+        40.0,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧女儿墙，贴运行时边界"
+    },
+    {
+      "instance_id": "INST_298_parapet_outer",
+      "component_slug": "parapet_outer",
+      "component_collection": "女儿墙外角_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -48.75,
+        43.75,
+        0.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "天台外围转角"
+    },
+    {
+      "instance_id": "INST_299_parapet_outer",
+      "component_slug": "parapet_outer",
+      "component_collection": "女儿墙外角_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        38.75,
+        43.75,
+        0.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "天台外围转角"
+    },
+    {
+      "instance_id": "INST_300_parapet_outer",
+      "component_slug": "parapet_outer",
+      "component_collection": "女儿墙外角_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        38.75,
+        -33.75,
+        0.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "天台外围转角"
+    },
+    {
+      "instance_id": "INST_301_parapet_outer",
+      "component_slug": "parapet_outer",
+      "component_collection": "女儿墙外角_资产包",
+      "group": "rooftop_edge",
+      "position_m": [
+        -48.75,
+        -33.75,
+        0.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "天台外围转角"
+    },
+    {
+      "instance_id": "INST_302_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -7.5,
+        -8.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋南立面"
+    },
+    {
+      "instance_id": "INST_303_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        7.5,
+        12.0,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋北立面"
+    },
+    {
+      "instance_id": "INST_304_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -10.0,
+        -5.5,
+        0.3
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_305_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        10.0,
+        -5.5,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_306_room_window",
+      "component_slug": "room_window",
+      "component_collection": "房间窗墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -2.5,
+        -8.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋南立面"
+    },
+    {
+      "instance_id": "INST_307_room_window",
+      "component_slug": "room_window",
+      "component_collection": "房间窗墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        2.5,
+        12.0,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋北立面"
+    },
+    {
+      "instance_id": "INST_308_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -10.0,
+        -0.5,
+        0.3
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_309_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        10.0,
+        -0.5,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_310_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        2.5,
+        -8.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋南立面"
+    },
+    {
+      "instance_id": "INST_311_room_window",
+      "component_slug": "room_window",
+      "component_collection": "房间窗墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -2.5,
+        12.0,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋北立面"
+    },
+    {
+      "instance_id": "INST_312_room_window",
+      "component_slug": "room_window",
+      "component_collection": "房间窗墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -10.0,
+        4.5,
+        0.3
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_313_room_window",
+      "component_slug": "room_window",
+      "component_collection": "房间窗墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        10.0,
+        4.5,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_314_room_doorwall",
+      "component_slug": "room_doorwall",
+      "component_collection": "房间门洞墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        7.5,
+        -8.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋南立面"
+    },
+    {
+      "instance_id": "INST_315_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -7.5,
+        12.0,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋北立面"
+    },
+    {
+      "instance_id": "INST_316_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        -10.0,
+        9.5,
+        0.3
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_317_room_wall",
+      "component_slug": "room_wall",
+      "component_collection": "房间标准墙_资产包",
+      "group": "house_shell",
+      "position_m": [
+        10.0,
+        9.5,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋侧立面"
+    },
+    {
+      "instance_id": "INST_318_roof_corner",
+      "component_slug": "roof_corner",
+      "component_collection": "房顶角板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -7.5,
+        -5.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_319_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -2.5,
+        -5.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_320_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        2.5,
+        -5.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_321_roof_corner",
+      "component_slug": "roof_corner",
+      "component_collection": "房顶角板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        7.5,
+        -5.5,
+        12.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_322_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -7.5,
+        -0.5,
+        12.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_323_roof_full",
+      "component_slug": "roof_full",
+      "component_collection": "房顶完整板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -2.5,
+        -0.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_324_roof_full",
+      "component_slug": "roof_full",
+      "component_collection": "房顶完整板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        2.5,
+        -0.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_325_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        7.5,
+        -0.5,
+        12.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_326_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -7.5,
+        4.5,
+        12.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_327_roof_full",
+      "component_slug": "roof_full",
+      "component_collection": "房顶完整板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -2.5,
+        4.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_328_roof_full",
+      "component_slug": "roof_full",
+      "component_collection": "房顶完整板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        2.5,
+        4.5,
+        12.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_329_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        7.5,
+        4.5,
+        12.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_330_roof_corner",
+      "component_slug": "roof_corner",
+      "component_collection": "房顶角板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -7.5,
+        9.5,
+        12.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_331_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        -2.5,
+        9.5,
+        12.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_332_roof_edge",
+      "component_slug": "roof_edge",
+      "component_collection": "房顶边缘板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        2.5,
+        9.5,
+        12.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_333_roof_corner",
+      "component_slug": "roof_corner",
+      "component_collection": "房顶角板_资产包",
+      "group": "house_roof",
+      "position_m": [
+        7.5,
+        9.5,
+        12.0
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "房屋24m封顶"
+    },
+    {
+      "instance_id": "INST_334_hvac_small",
+      "component_slug": "hvac_small",
+      "component_collection": "小型空调机组_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        -5.0,
+        -9.25,
+        5.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙挂式空调，避开门洞"
+    },
+    {
+      "instance_id": "INST_335_hvac_small",
+      "component_slug": "hvac_small",
+      "component_collection": "小型空调机组_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        0.5,
+        -9.25,
+        5.2
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙挂式空调，避开门洞"
+    },
+    {
+      "instance_id": "INST_336_hvac_small",
+      "component_slug": "hvac_small",
+      "component_collection": "小型空调机组_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        10.55,
+        -2.0,
+        4.9
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙挂式空调"
+    },
+    {
+      "instance_id": "INST_337_hvac_small",
+      "component_slug": "hvac_small",
+      "component_collection": "小型空调机组_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        -10.55,
+        4.0,
+        4.9
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙挂式空调"
+    },
+    {
+      "instance_id": "INST_338_hvac_vent",
+      "component_slug": "hvac_vent",
+      "component_collection": "小通风口_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        -7.4,
+        -9.22,
+        8.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙辅助通风口"
+    },
+    {
+      "instance_id": "INST_339_hvac_vent",
+      "component_slug": "hvac_vent",
+      "component_collection": "小通风口_资产包",
+      "group": "hvac_wall",
+      "position_m": [
+        10.52,
+        6.0,
+        7.8
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙辅助通风口"
+    },
+    {
+      "instance_id": "INST_340_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        -7.0,
+        -10.15,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧连续花圃"
+    },
+    {
+      "instance_id": "INST_341_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        -1.0,
+        -10.15,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南侧连续花圃"
+    },
+    {
+      "instance_id": "INST_342_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        -7.0,
+        14.15,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧连续花圃"
+    },
+    {
+      "instance_id": "INST_343_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        -1.0,
+        14.15,
+        0.3
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北侧连续花圃"
+    },
+    {
+      "instance_id": "INST_344_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        -12.15,
+        -3.0,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西侧花圃"
+    },
+    {
+      "instance_id": "INST_345_flowerbox",
+      "component_slug": "flowerbox",
+      "component_collection": "长条花箱_资产包",
+      "group": "greenery",
+      "position_m": [
+        12.15,
+        7.0,
+        0.3
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东侧花圃"
+    },
+    {
+      "instance_id": "INST_346_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -13.5,
+        -10.4,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_347_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        5.7,
+        -10.3,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_348_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -13.5,
+        14.4,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_349_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        5.7,
+        14.4,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_350_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -13.0,
+        7.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_351_plant_large",
+      "component_slug": "plant_large",
+      "component_collection": "大盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        13.0,
+        -4.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘高层植物"
+    },
+    {
+      "instance_id": "INST_352_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -10.8,
+        -10.3,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_353_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        3.4,
+        -10.3,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_354_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -10.8,
+        14.3,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_355_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        3.4,
+        14.3,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_356_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        -13.1,
+        0.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_357_plant_small",
+      "component_slug": "plant_small",
+      "component_collection": "小盆栽_资产包",
+      "group": "greenery",
+      "position_m": [
+        13.1,
+        2.0,
+        0.3
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "花圃边缘低层植物"
+    },
+    {
+      "instance_id": "INST_358_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -8.0,
+        -8.22,
+        0.35
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_359_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -3.0,
+        -8.22,
+        0.35
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_360_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        2.0,
+        -8.22,
+        0.35
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_361_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -7.0,
+        12.22,
+        0.35
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_362_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -1.5,
+        12.22,
+        0.35
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_363_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        4.0,
+        12.22,
+        0.35
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_364_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        10.22,
+        -5.0,
+        0.35
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_365_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        10.22,
+        1.0,
+        0.35
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_366_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        10.22,
+        7.0,
+        0.35
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_367_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -10.22,
+        -2.5,
+        0.35
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_368_ivy",
+      "component_slug": "ivy",
+      "component_collection": "墙面攀爬藤蔓_资产包",
+      "group": "ivy",
+      "position_m": [
+        -10.22,
+        4.0,
+        0.35
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙局部藤蔓"
+    },
+    {
+      "instance_id": "INST_369_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -8.75,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_370_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -6.25,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_371_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -3.75,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_372_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -1.25,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_373_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        1.25,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_374_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        3.75,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_375_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        6.25,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_376_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        8.75,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙连续水管",
+      "connection_id": "PIPE_LOOP_SOUTH"
+    },
+    {
+      "instance_id": "INST_377_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        -6.75,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_378_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        -4.25,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_379_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        -1.75,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_380_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        0.75,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_381_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        3.25,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_382_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        5.75,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_383_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        8.25,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_384_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.42,
+        10.75,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "东墙连续水管",
+      "connection_id": "PIPE_LOOP_EAST"
+    },
+    {
+      "instance_id": "INST_385_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        8.75,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_386_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        6.25,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_387_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        3.75,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_388_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        1.25,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_389_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -1.25,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_390_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -3.75,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_391_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -6.25,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_392_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -8.75,
+        12.42,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "北墙连续水管",
+      "connection_id": "PIPE_LOOP_NORTH"
+    },
+    {
+      "instance_id": "INST_393_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        10.75,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_394_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        8.25,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_395_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        5.75,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_396_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        3.25,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_397_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        0.75,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_398_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        -1.75,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_399_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        -4.25,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_400_pipe_straight",
+      "component_slug": "pipe_straight",
+      "component_collection": "直管段_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.42,
+        -6.75,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "西墙连续水管",
+      "connection_id": "PIPE_LOOP_WEST"
+    },
+    {
+      "instance_id": "INST_401_pipe_elbow",
+      "component_slug": "pipe_elbow",
+      "component_collection": "转角弯管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.15,
+        -8.15,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "水管四角转接",
+      "connection_id": "PIPE_LOOP_CORNER"
+    },
+    {
+      "instance_id": "INST_402_pipe_elbow",
+      "component_slug": "pipe_elbow",
+      "component_collection": "转角弯管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        10.15,
+        12.15,
+        10.65
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "水管四角转接",
+      "connection_id": "PIPE_LOOP_CORNER"
+    },
+    {
+      "instance_id": "INST_403_pipe_elbow",
+      "component_slug": "pipe_elbow",
+      "component_collection": "转角弯管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.15,
+        12.15,
+        10.65
+      ],
+      "rotation_y_deg": 180.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "水管四角转接",
+      "connection_id": "PIPE_LOOP_CORNER"
+    },
+    {
+      "instance_id": "INST_404_pipe_elbow",
+      "component_slug": "pipe_elbow",
+      "component_collection": "转角弯管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -10.15,
+        -8.15,
+        10.65
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "水管四角转接",
+      "connection_id": "PIPE_LOOP_CORNER"
+    },
+    {
+      "instance_id": "INST_405_pipe_tee",
+      "component_slug": "pipe_tee",
+      "component_collection": "三通管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        -7.5,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙花圃灌溉分支",
+      "connection_id": "PIPE_LOOP_BRANCH"
+    },
+    {
+      "instance_id": "INST_406_pipe_tee",
+      "component_slug": "pipe_tee",
+      "component_collection": "三通管_资产包",
+      "group": "pipe_loop",
+      "position_m": [
+        2.5,
+        -8.42,
+        10.65
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "南墙花圃灌溉分支",
+      "connection_id": "PIPE_LOOP_BRANCH"
+    },
+    {
+      "instance_id": "INST_407_pipe_riser",
+      "component_slug": "pipe_riser",
+      "component_collection": "立管下水管_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        -7.5,
+        -8.42,
+        5.8
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "从地面接入墙上环管，顶端接10.65m环管",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_408_pipe_riser",
+      "component_slug": "pipe_riser",
+      "component_collection": "立管下水管_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        2.5,
+        -8.42,
+        5.8
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "从地面接入墙上环管，顶端接10.65m环管",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_409_pipe_riser",
+      "component_slug": "pipe_riser",
+      "component_collection": "立管下水管_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        10.42,
+        -2.0,
+        5.8
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "从地面接入墙上环管，顶端接10.65m环管",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_410_pipe_riser",
+      "component_slug": "pipe_riser",
+      "component_collection": "立管下水管_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        -10.42,
+        4.0,
+        5.8
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "从地面接入墙上环管，顶端接10.65m环管",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_411_pipe_bracket",
+      "component_slug": "pipe_bracket",
+      "component_collection": "管道支架_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        -7.5,
+        -8.42,
+        7.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "立管墙面固定支架",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_412_pipe_bracket",
+      "component_slug": "pipe_bracket",
+      "component_collection": "管道支架_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        2.5,
+        -8.42,
+        7.0
+      ],
+      "rotation_y_deg": 0.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "立管墙面固定支架",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_413_pipe_bracket",
+      "component_slug": "pipe_bracket",
+      "component_collection": "管道支架_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        10.42,
+        -2.0,
+        7.0
+      ],
+      "rotation_y_deg": 90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "立管墙面固定支架",
+      "connection_id": "PIPE_RISER"
+    },
+    {
+      "instance_id": "INST_414_pipe_bracket",
+      "component_slug": "pipe_bracket",
+      "component_collection": "管道支架_资产包",
+      "group": "pipe_risers",
+      "position_m": [
+        -10.42,
+        4.0,
+        7.0
+      ],
+      "rotation_y_deg": -90.0,
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "enabled": true,
+      "collision_policy": "visual_only",
+      "design_note": "立管墙面固定支架",
+      "connection_id": "PIPE_RISER"
+    }
+  ],
+  "design_intent": {
+    "hvac_wall_mounts": 4,
+    "hvac_vents": 2,
+    "flowerboxes": 6,
+    "large_plants": 6,
+    "small_plants": 6,
+    "ivy_patches": 11,
+    "pipe_loop_straights": 32,
+    "pipe_loop_elbows": 4,
+    "pipe_branch_tees": 2,
+    "pipe_risers": 4,
+    "pipe_brackets": 4,
+    "door_clearance_kept": true,
+    "stair_clearance_kept": true
+  },
+  "validation": {
+    "room_owned_geometry": false,
+    "collection_instance_only": true,
+    "non_unit_scale_count": 0,
+    "missing_components": [],
+    "visual_only_collision_count": 415,
+    "component_library_modified": false,
+    "pipe_socket_spacing_m": 2.5,
+    "pipe_diameter_m": 0.3
+  }
+}

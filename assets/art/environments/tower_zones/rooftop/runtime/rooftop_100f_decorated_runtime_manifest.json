@@ -1,0 +1,81 @@
+{
+  "schema": "shellstorm2.rooftop.runtime_manifest",
+  "schema_version": 1,
+  "layout_id": "ENV-ROOFTOP-100F-DECORATED-LAYOUT",
+  "layout_version": "v001",
+  "floor": "100F",
+  "block_id": "rooftop",
+  "assembly_route": "blender_layout_replay",
+  "layout_source": "res://assets/art/environments/tower_zones/rooftop/source/layouts/100f_decorated_v001/rooftop_100f_decorated_layout_v001.json",
+  "runtime_owner": "res://src/world3d/TowerFloorStage3D.gd",
+  "stable_component_scene_root": "res://assets/art/environments/tower_zones/rooftop/runtime",
+  "visual_instance_count": 120,
+  "group_counts": {
+    "hvac_wall": 6,
+    "greenery": 20,
+    "ivy": 16,
+    "parapet_ivy": 8,
+    "pipe_loop": 54,
+    "pipe_risers": 16
+  },
+  "component_slugs": [
+    "room_wall",
+    "room_window",
+    "room_doorwall",
+    "roof_full",
+    "roof_edge",
+    "roof_corner",
+    "hvac_small",
+    "hvac_vent",
+    "flowerbox",
+    "plant_large",
+    "plant_small",
+    "ivy",
+    "parapet_ivy",
+    "pipe_straight",
+    "pipe_elbow",
+    "pipe_tee",
+    "pipe_riser",
+    "pipe_bracket"
+  ],
+  "coordinate_contract": {
+    "source_up_axis": "+Z",
+    "runtime_up_axis": "+Y",
+    "position_conversion": "godot=(blender_x,blender_z,-blender_y)  # 布局源按 Godot 世界平面口径书写，只做 by=-gz 换算",
+    "rotation_axis": "+Y (yaw)",
+    "tilt_axis": "+X (rotation_x_deg)",
+    "rotation_euler_contract": "Blender 默认 XYZ 序（Rz@Rx@Ry）；Godot 默认 YXZ 序（Ry@Rx@Rz）。同一实例同时给 ry 与 rz 会反转 Rx/Rz 次序 ⇒ 布局源只用 rotation_x_deg + rotation_y_deg 两轴（rz 恒 0），两式逐角等价、1:1 透传；GLB 导入已把 Blender +Z（风扇）映射到 Godot +Y。",
+    "units": "meters"
+  },
+  "collision_policy": "per_instance:visual_only(default)+blocking(greenery)",
+  "vertical_datum": {
+    "ground_y_m": 0.0,
+    "note": "运行时天台承重面 y=0（TowerFloorStage3D 把地砖可视顶面对齐到 Y=0）。落地装饰在布局源里一律 h=0；自持参照地砖写 h=-0.30 使砖顶面落 0。2026-09-21 修正前落地件写 h=0.3（= 自持地砖顶面），地砖组不重放 ⇒ 实机整块砖厚悬空。2026-09-21 二次修正：立管（pipe_riser）改为两段堆叠（下段 rotation_x_deg=180 倒装），合起来覆盖 0~9.89m 并落地 y=0；墙挂空调 rotation_x_deg=90 使顶部风扇朝外。"
+  },
+  "collision_owner": "TowerFloorStage3D (per-instance blocking proxies, layer=1) / Base100UpperShell3D",
+  "structural_shell_unchanged": true,
+  "runtime_probe": "res://tests/verification/probe_rooftop_decorated_layout.tscn",
+  "acceptance": {
+    "layout_replay": "ROOFTOP_DECORATED_LAYOUT_RUNTIME_OK",
+    "instance_count": 120,
+    "enabled_collision_shapes": 20,
+    "blocking_collision_count": 20,
+    "visual_only_collision_count": 462,
+    "non_unit_scale_count": 0
+  },
+  "base_shell_alignment": {
+    "structure_owner": "Base100UpperShell3D",
+    "structure_prefab": "res://assets/art/environments/base_facility_3d/runtime/env_base100_upper_shell_30x30_h12/env_base100_upper_shell_30x30_h12_root_top3d.tscn",
+    "footprint_m": [
+      30.0,
+      30.0
+    ],
+    "center_m": [
+      0.0,
+      5.0
+    ],
+    "door_gz_m": -2.5,
+    "note": "装饰（空调/花圃/藤蔓/水管）贴的是这栋 30×30 结构体的外墙皮；2026-09-21 修正前它们贴的是臆想的 20×20 房屋。"
+  },
+  "shell_reference_note": "布局源里的 shell_reference 组（24 墙 + 36 封顶）只作 Blender 侧参照；运行时房屋围护由 Base100UpperShell3D / env_base100_upper_shell_30x30_h12 独占，不重放（避免 z-fighting）。"
+}
