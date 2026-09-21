@@ -280,6 +280,55 @@ expect(len(set(ivy_tops)) >= 5, f"ivy 顶面档数={len(set(ivy_tops))}，应 �
 if ivy_tops:
     expect(ivy_tops[-1] - ivy_tops[0] >= 3.0, f"ivy 顶高落差={ivy_tops[-1] - ivy_tops[0]:.3f}，应 ≥3.0m")
 
+# 3e. 绿化背贴外皮（2026-09-21 五次修正，防再犯）：花箱 / 大盆栽 / 小盆栽必须**背贴**
+#     房屋外皮 —— 件心到外皮 = 半进深 − 埋入，即背面埋进外皮内 0.05m。三件进深不同 ⇒
+#     件心离外皮的距离不同，但**背面齐平**。判据取 depsgraph 实测包络：
+#       · 沿墙法线跨度必须 = 2 × 半进深（顺带验证朝向没把长边转到法线上）；
+#       · 背面埋进外皮量必须 = WALL_MOUNT_EMBED。
+#     反向对照：把 author 里的 wall_flush_pairs 换回「+2.15 环线」，本组立刻变红。
+GREENERY_HALF_DEPTH = {"flowerbox": 0.5925, "plant_large": 0.8727377, "plant_small": 0.5473868}
+SHELL_WALL_HALF_T = 0.15    # = author 的 WALL_HALF_THICKNESS（SHELL_WALL_T 0.30 / 2）
+GREENERY_EMBED = 0.05       # = author 的 WALL_MOUNT_EMBED（背面埋进外皮内 0.05m）
+greenery_snug = {slug: 0 for slug in GREENERY_HALF_DEPTH}
+for name, (mn, mx) in real_aabb.items():
+    slug = instancer_slug[name]
+    if slug not in GREENERY_HALF_DEPTH:
+        continue
+    cx = (mn.x + mx.x) * 0.5
+    cgz = (-mn.y + -mx.y) * 0.5
+    half = GREENERY_HALF_DEPTH[slug]
+    dx = cx - SHELL_CX
+    dgz = cgz - SHELL_CZ
+    if abs(dx) > abs(dgz):
+        face = SHELL_CX + (SHELL_HALF + SHELL_WALL_HALF_T) * (1 if dx > 0 else -1)
+        back = mn.x if dx > 0 else mx.x                       # 外法线朝 ±x 时的机背
+        inside = (face - back) if dx > 0 else (back - face)
+        span = mx.x - mn.x
+        center_gap = abs(cx - face)
+    else:
+        face = SHELL_CZ + (SHELL_HALF + SHELL_WALL_HALF_T) * (1 if dgz > 0 else -1)
+        back_gz = -mx.y if dgz > 0 else -mn.y                 # gz = −blenderY，机背取贴墙一侧
+        inside = (face - back_gz) if dgz > 0 else (back_gz - face)
+        span = -mn.y - (-mx.y)
+        center_gap = abs(cgz - face)
+    expect(
+        abs(span - 2 * half) < TOL,
+        f"{slug} {name} 沿墙法线跨度={span:.4f}，应={2 * half:.4f}（朝向把长边转到法线上了？）",
+    )
+    expect(
+        abs(inside - GREENERY_EMBED) < TOL,
+        f"{slug} {name} 没贴墙：背面埋进外皮={inside:.4f}，应={GREENERY_EMBED}"
+        f"（业主「花盆和花圃靠墙太远了，要挨着墙放」）",
+    )
+    expect(
+        abs(center_gap - (half - GREENERY_EMBED)) < TOL,
+        f"{slug} {name} 件心离外皮={center_gap:.4f}，应={half - GREENERY_EMBED:.4f}（= 半进深 − 埋入）",
+    )
+    greenery_snug[slug] += 1
+for slug, want in GREENERY_HALF_DEPTH.items():
+    expect(greenery_snug[slug] == EXPECTED[slug],
+           f"{slug} 贴墙件数={greenery_snug[slug]}，应={EXPECTED[slug]}")
+
 # ── 第 4 层：实例朝向分量（墙挂倾倒）与立管落地（2026-09-21 三次修正，防再犯） ──
 # 4a. 墙挂空调「风扇朝外」——组件顶面（局部 +Z）是出风风扇，挂到墙上必须绕自身 X 轴
 #     倾倒 90°。判据**不看欧拉角**（那样只验证了搬运、没验证几何），而是看实测包络的

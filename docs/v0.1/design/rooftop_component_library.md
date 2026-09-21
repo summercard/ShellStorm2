@@ -28,7 +28,7 @@
 
 无效尺寸、空包、多包归属、非唯一色盘、UV跨格/零面积均拒绝验收。生产失败保留旧源与游戏引用，重跑只发生在未发布的新版本；已发布几何更改升版。原天台v021、基地v026和通用组件库v003是范围外锁定文件，校验前后SHA256不变。
 
-接入边界：结构壳体（234块5m地砖、64段女儿墙直段+4外角、楼梯与碰撞）仍由`TowerFloorStage3D`拥有；装饰层由`source/layouts/100f_decorated_v001/`的布局清单重放 **99 件 / 5 组**（空调与通风口 6 + 绿化 20 + 藤蔓 11 + 水管 54 + 立管支架 8），装饰件全部`visual_only`（启用碰撞0）。布局源里的房屋围护 24 墙 + 36 封顶归组 `shell_reference`，**只作 Blender 侧参照、运行时不重放** —— `env_base100_upper_shell_30x30_h12` 自 2026-09-20 起已自带同名 60 件，重放会逐面 z-fighting。已导出 GLB **禁止内嵌色盘**，由共享导入器`tools/asset_pipeline/scene_facility_shared_palette_post_import.gd`绑定公共色盘；旧聚落设施加载入口已按用户要求移除。
+接入边界：结构壳体（234块5m地砖、64段女儿墙直段+4外角、楼梯与碰撞）仍由`TowerFloorStage3D`拥有；装饰层由`source/layouts/100f_decorated_v001/`的布局清单重放 **120 件 / 6 组**（空调与通风口 6 + 绿化 20 + 墙面藤蔓 16 + 女儿墙挂藤 8 + 闭环水管 54 + 立管与支架 16）。装饰件默认`visual_only`（禁用组件自带碰撞），**例外**是绿化三件（`flowerbox` / `plant_large` / `plant_small`，共 20 件）登记为 `blocking` —— 运行时由 `TowerGeometry3D.resolve_visual_bounds()` 量出**实测可视包络**再挂一个 `BoxShape3D`（`StaticBody3D`，layer=1）代理挡玩家，尺寸随美术自动跟随、不写死常量（业主 2026-09-21「花盆和花圃没有阻挡」）。布局源里的房屋围护 24 墙 + 36 封顶归组 `shell_reference`，**只作 Blender 侧参照、运行时不重放** —— `env_base100_upper_shell_30x30_h12` 自 2026-09-20 起已自带同名 60 件，重放会逐面 z-fighting。周边装饰一律**背贴建筑外皮**：墙挂件（4 空调 + 2 通风口）机背埋进外皮内 0.05m，绿化三件按**自身半进深**贴墙（件心离墙中心线 = 墙半厚 − 0.05 + 半进深，花箱 0.5925 / 大盆栽 0.8727377 / 小盆栽 0.5473868），四边各成对、背面齐平（业主 2026-09-21「花盆和花圃靠墙太远了，要挨着墙放」）。已导出 GLB **禁止内嵌色盘**，由共享导入器`tools/asset_pipeline/scene_facility_shared_palette_post_import.gd`绑定公共色盘；旧聚落设施加载入口已按用户要求移除。
 
 ## 独立验收
 

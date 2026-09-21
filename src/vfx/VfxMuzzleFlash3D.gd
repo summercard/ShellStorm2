@@ -39,6 +39,9 @@ func _on_activate(_world_pos: Vector3, color: Color, _size: float, context: Dict
 	if _forward.length_squared() < 0.0001:
 		_forward = Vector3.FORWARD
 	_forward = _forward.normalized()
+	# 绑定挂点后以挂点的 local -Z 为准：角色转身时枪口指向跟着变。
+	if has_follow_target():
+		_forward = follow_forward()
 	var ammo := color
 	if ammo.a < 0.001:
 		ammo = Color(1.0, 0.6, 0.2, 1.0)
@@ -155,6 +158,10 @@ func _reset_state(ammo: Color) -> void:
 
 
 func _on_tick(elapsed: float, total: float) -> void:
+	# 跟随挂点：位置由基类每帧同步，这里再按挂点当前朝向重算 local -Z，避免转向后弧光留在旧方向。
+	if has_follow_target():
+		_forward = follow_forward()
+		global_transform = Transform3D(Basis.looking_at(_forward), global_position)
 	var t: float = clamp(elapsed / total, 0.0, 1.0)
 	var sz := effect_size
 	# 亮芯：快速收缩并淡出

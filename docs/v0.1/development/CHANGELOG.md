@@ -1,4 +1,24 @@
 # 游戏设计文档 v0.1 变更记录
+## 2026-09-21｜五次修正 100F 天台装饰：绿化环背贴建筑外皮 + 天台不再生成室内照明设施
+
+业主实机反馈两条：「花盆和花圃靠墙太远了，要挨着墙放，不然还有个空虚」「天台为什么还会刷一个电灯开关？帮我去掉」。**原地修正**（AssetID / layout_id / layout_version 不变）：
+
+1. **绿化环贴墙**（`author_rooftop_decorated_layout_v001.py`）：旧版把整圈绿化压在**同一条「离墙中心线 2.15m」的环线**上（离外皮 2.00m），而三件绿化陈设的半进深只有 0.55~0.87m ⇒ 每件背后空出 **1.14~1.45m 的可见地砖带**（对比同墙空调是贴墙的，视觉上就是「悬空一截」）。现改为**逐件按自身半进深贴外皮**：件心到墙中心线 = `SHELL_WALL_T/2 − WALL_MOUNT_EMBED + half_depth`，即背面埋进外皮内 0.05m（与墙挂空调同口径，避免与墙皮共面 z-fighting）。三件进深不等 ⇒ **背面一条线齐平、正面自然错落**。新增 `wall_flush_pairs(half_depth)` 一处算四边，南/北/东/西各成对。
+2. **朝向补齐**：三件 catalog 的 `front_direction` 均为 `−Y`，yaw 取 0 / π / +π/2 / −π/2 分别朝南 / 北 / 东 / 西。旧版**西侧花圃写成 +π/2（正面朝墙里）**，与同墙藤蔓的 −π/2 自相矛盾，一并修正。
+3. **天台不再生成室内照明设施**（`DungeonRoom3D._build_content()`）：此前「清空屋顶设施」只把 `prop_count` 归零（清家具与可搜容器），**漏了照明** —— 露天甲板上仍会生成一盏玩法顶灯 `RoomCeilingLight` 与一个墙边**电灯开关** `RoomLightSwitch3D`（实测位于 `(-29.66, 0.0, 6.7)`）。天台自带室外光照（`TowerAtmosphere3D` 的天光反弹 `_rooftop_sky_bounce` + 太阳 + 城市背景），两者都是室内残留 ⇒ `size_class == "rooftop"` 时**顶灯与开关一并跳过**（`_room_lights` 留空、`_central_light` 保持 null、开关节点不实例化）。下游读取点全部已做保护：`get_debug_snapshot()` 的两个布尔位、`_apply_light_state()`、`_bind_facility_presentation_light_control()`、`_bind_light_switch_signal()`（后两者本就 `null` 早退）。
+
+**重放实例数不变**：仍 **120 / 6 组**（空调与通风口 6 + 绿化 20 + 墙面藤蔓 16 + 女儿墙挂藤 8 + 水管 54 + 立管与支架 16），构件计数与 `blocking` 20 件全部不变 —— 本批只动**平面位置与生成条件**，不动数量。
+
+验收与防再犯：布局 QA（`validate_rooftop_decorated_layout_v001.py`）新增**第 3e 组断言「绿化背贴外皮」** —— 按 depsgraph 实测包络判①沿墙法线跨度必须 = 2 × 半进深（顺带验证朝向没把长边转到法线上）、②背面埋进外皮量必须 = 0.05、③件心离外皮必须 = 半进深 − 0.05，并按 slug 清点件数（8/6/6）。**可反向对照**：把 `wall_flush_pairs` 换回「+2.15 环线」本组立刻变红。开关侧新建只读探针 `tests/verification/probe_rooftop_no_program_fixtures.{gd,tscn}` —— **改前实测为红**（`ROOFTOP_NO_PROGRAM_FIXTURES_FAIL rooftops=1 light=1 switch=1 furniture=0`，并打印开关样本路径与坐标），改后转绿（`..._OK rooftops=1 light=0 switch=0 furniture=0`）；探针自带**样本数哨兵**（必须找到 ≥1 个 rooftop 房间，否则判失效）。
+
+门禁（全部实测、0 ERROR）：布局作者脚本 `ROOFTOP_DECOR_LAYOUT_V001_OK instances=482`；布局 QA `ROOFTOP_DECOR_LAYOUT_QA_OK instances=482 collection_instances=482 mesh_owned=0 godot_rect_violations=0 grounded={...} door_blocks=0 ivy_top_span=3.60m wall_mount_tipped=4 riser_runs=4 riser_bottom=0.000 riser_top=9.890 blocking=20 visual_only=462`；运行时 `probe_rooftop_decorated_stage_only`（`..._OK instances=120 blocking=20 visual_collisions=0`）、`probe_rooftop_decorated_layout`（`ROOFTOP_DECORATED_LAYOUT_RUNTIME_OK instances=120 groups=6 blocking=20 visual_collisions=0`）、`verify_rooftop_32x32_contract`（`ROOFTOP_WEST_EXPANSION_CONTRACT_PASS`）、`probe_rooftop_no_program_fixtures`（`..._OK`）。
+
+账本（`assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx`）：《资产主表》row 240 同步重生成后的 `.blend` SHA-256 `de1d7ce6… → 7e8b2c51…` 并在备注列追加本批说明；《3D-场景通用》row 146 说明列追加贴墙口径，并把 11 行组件备注里**陈旧的「接入 100F 装饰布局＝99实例/7组/0启用碰撞」**修正为「120实例/6组（绿化20件blocking，其余visual_only）」；《域变更日志》追加 **v0.1.9**。`check_asset_registry --ledger scenes` **47 → 46（0 新增问题，顺手消掉 1 条陈旧 SHA 告警）**，`verify_ledger_split` 16 → 16（改前快照复跑对照，本批零增减）。旧账本留档 `ShellStorm2_场景账本_v001.xlsx.bak_rooftop_decor_greenery_flush`。
+
+视觉取证：`outputs/rooftop_100f_decorated_layout_v001_{overview,closeup,top}.png` 重出，特写可直接看到花箱背贴墙皮、背后不再有空地砖带。
+
+<br>
+
 ## 2026-09-21｜四次修正 100F 天台装饰：花盆 / 花圃加上物理阻挡（可挡住玩家）
 
 业主实机反馈：「花盆和花圃没有阻挡」—— 走在天台上可以直接穿过长条花箱与大/小盆栽。根因：装饰布局的**所有**实例都被 `TowerFloorStage3D` 无条件关掉碰撞（原始设计是纯视觉装饰），而 `flowerbox / plant_large / plant_small` 三件 prefab 是**纯可视件**（`visual_only=true`、不带碰撞节点）⇒ 482 件装饰**全局零碰撞**，绿化自然拦不住人。

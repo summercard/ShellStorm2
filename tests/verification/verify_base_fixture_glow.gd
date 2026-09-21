@@ -63,7 +63,13 @@ func _ready() -> void:
 		assert(not light.visible)
 	light_switch.toggle_light()
 	assert(bool(light_switch.get_snapshot().transitioning))
+	# 分段启动时序（RoomLightSwitch3D.STAGED_MAIN_LIGHT_START_SECONDS=4.5）：
+	# 4.2秒时主顶灯必须还没亮（反向对照），但启动序列在跑；
+	# 4.8秒时主顶灯已亮、序列仍未结束（约5.0秒收尾）。
 	await get_tree().create_timer(4.2).timeout
+	assert(not light_switch.is_light_on())
+	assert(bool(light_switch.get_snapshot().transitioning))
+	await get_tree().create_timer(0.6).timeout
 	assert(light_switch.is_light_on())
 	assert(bool(light_switch.get_snapshot().transitioning))
 	await get_tree().create_timer(3.0).timeout

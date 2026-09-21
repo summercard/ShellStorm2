@@ -7783,7 +7783,7 @@
       "group": "greenery",
       "position_m": [
         -9.0,
-        -22.15,
+        -20.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7795,7 +7795,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "南侧连续花圃（阻挡）"
+      "design_note": "南侧连续花圃（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_369_flowerbox",
@@ -7804,7 +7804,7 @@
       "group": "greenery",
       "position_m": [
         -1.0,
-        -22.15,
+        -20.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7816,7 +7816,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "南侧连续花圃（阻挡）"
+      "design_note": "南侧连续花圃（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_370_flowerbox",
@@ -7825,7 +7825,7 @@
       "group": "greenery",
       "position_m": [
         7.0,
-        -22.15,
+        -20.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7837,7 +7837,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "南侧连续花圃（阻挡）"
+      "design_note": "南侧连续花圃（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_371_flowerbox",
@@ -7846,7 +7846,7 @@
       "group": "greenery",
       "position_m": [
         -9.0,
-        12.15,
+        10.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7858,7 +7858,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "北侧连续花圃（阻挡）"
+      "design_note": "北侧连续花圃（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_372_flowerbox",
@@ -7867,7 +7867,7 @@
       "group": "greenery",
       "position_m": [
         -1.0,
-        12.15,
+        10.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7879,7 +7879,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "北侧连续花圃（阻挡）"
+      "design_note": "北侧连续花圃（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_373_flowerbox",
@@ -7888,7 +7888,7 @@
       "group": "greenery",
       "position_m": [
         7.0,
-        12.15,
+        10.6925,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7900,7 +7900,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "北侧连续花圃（阻挡）"
+      "design_note": "北侧连续花圃（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_374_flowerbox",
@@ -7908,12 +7908,12 @@
       "component_collection": "长条花箱_资产包",
       "group": "greenery",
       "position_m": [
-        -17.15,
+        -15.6925,
         2.0,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 90.0,
+      "rotation_y_deg": -90.0,
       "scale": [
         1.0,
         1.0,
@@ -7921,7 +7921,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "西侧花圃（阻挡）"
+      "design_note": "西侧花圃（阻挡；背贴西墙外皮，正面朝西）"
     },
     {
       "instance_id": "INST_375_flowerbox",
@@ -7929,7 +7929,7 @@
       "component_collection": "长条花箱_资产包",
       "group": "greenery",
       "position_m": [
-        17.15,
+        15.6925,
         -12.0,
         0.0
       ],
@@ -7942,7 +7942,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "东侧花圃（阻挡）"
+      "design_note": "东侧花圃（阻挡；背贴东墙外皮）"
     },
     {
       "instance_id": "INST_376_plant_large",
@@ -7951,7 +7951,7 @@
       "group": "greenery",
       "position_m": [
         -15.5,
-        12.4,
+        -20.9727,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -7963,7 +7963,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "南侧大盆栽（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_377_plant_large",
@@ -7971,12 +7971,12 @@
       "component_collection": "大盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        4.7,
-        12.3,
+        -15.5,
+        10.9727,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 180.0,
       "scale": [
         1.0,
         1.0,
@@ -7984,7 +7984,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "北侧大盆栽（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_378_plant_large",
@@ -7992,8 +7992,8 @@
       "component_collection": "大盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        -15.5,
-        -22.4,
+        4.7,
+        -20.9727,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -8005,7 +8005,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "南侧大盆栽（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_379_plant_large",
@@ -8014,11 +8014,11 @@
       "group": "greenery",
       "position_m": [
         4.7,
-        -22.4,
+        10.9727,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 180.0,
       "scale": [
         1.0,
         1.0,
@@ -8026,7 +8026,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "北侧大盆栽（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_380_plant_large",
@@ -8034,12 +8034,12 @@
       "component_collection": "大盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        -17.0,
-        -7.0,
+        15.9727,
+        6.2,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 90.0,
       "scale": [
         1.0,
         1.0,
@@ -8047,7 +8047,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "东侧大盆栽（阻挡；背贴东墙外皮；让开基地东门）"
     },
     {
       "instance_id": "INST_381_plant_large",
@@ -8055,12 +8055,12 @@
       "component_collection": "大盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        17.0,
-        6.2,
+        -15.9727,
+        -7.0,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": -90.0,
       "scale": [
         1.0,
         1.0,
@@ -8068,7 +8068,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘高层植物（阻挡）"
+      "design_note": "西侧大盆栽（阻挡；背贴西墙外皮）"
     },
     {
       "instance_id": "INST_382_plant_small",
@@ -8077,7 +8077,7 @@
       "group": "greenery",
       "position_m": [
         -12.8,
-        12.3,
+        -20.6474,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -8089,7 +8089,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "南侧小盆栽（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_383_plant_small",
@@ -8097,12 +8097,12 @@
       "component_collection": "小盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        1.4,
-        12.3,
+        -12.8,
+        10.6474,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 180.0,
       "scale": [
         1.0,
         1.0,
@@ -8110,7 +8110,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "北侧小盆栽（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_384_plant_small",
@@ -8118,8 +8118,8 @@
       "component_collection": "小盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        -12.8,
-        -22.3,
+        1.4,
+        -20.6474,
         0.0
       ],
       "rotation_x_deg": 0.0,
@@ -8131,7 +8131,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "南侧小盆栽（阻挡；背贴南墙外皮）"
     },
     {
       "instance_id": "INST_385_plant_small",
@@ -8140,11 +8140,11 @@
       "group": "greenery",
       "position_m": [
         1.4,
-        -22.3,
+        10.6474,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 180.0,
       "scale": [
         1.0,
         1.0,
@@ -8152,7 +8152,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "北侧小盆栽（阻挡；背贴北墙外皮）"
     },
     {
       "instance_id": "INST_386_plant_small",
@@ -8160,12 +8160,12 @@
       "component_collection": "小盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        -17.1,
-        -0.0,
+        15.6474,
+        -2.0,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": 90.0,
       "scale": [
         1.0,
         1.0,
@@ -8173,7 +8173,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "东侧小盆栽（阻挡；背贴东墙外皮）"
     },
     {
       "instance_id": "INST_387_plant_small",
@@ -8181,12 +8181,12 @@
       "component_collection": "小盆栽_资产包",
       "group": "greenery",
       "position_m": [
-        17.1,
-        -2.0,
+        -15.6474,
+        -0.0,
         0.0
       ],
       "rotation_x_deg": 0.0,
-      "rotation_y_deg": 0.0,
+      "rotation_y_deg": -90.0,
       "scale": [
         1.0,
         1.0,
@@ -8194,7 +8194,7 @@
       ],
       "enabled": true,
       "collision_policy": "blocking",
-      "design_note": "花圃边缘低层植物（阻挡）"
+      "design_note": "西侧小盆栽（阻挡；背贴西墙外皮）"
     },
     {
       "instance_id": "INST_388_ivy",

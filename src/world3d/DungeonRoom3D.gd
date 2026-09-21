@@ -243,6 +243,12 @@ const ROOFTOP_FACADE_HEIGHT := 6.0
 const BASE_ROOFTOP_TRANSIT_DIRECTION := "east"
 const BASE_ROOFTOP_TRANSIT_CENTER_ALONG_M := -7.5
 const BASE_ROOFTOP_TRANSIT_COLLISION_TOP_M := 8.45
+# 99F基地的墙面开关成对：西墙门（→100F天台）与东墙门（→98F）各一个，
+# 均落在「门洞一侧第一个5m墙段」内、从门洞边缘再向外取1/3网格（1.667m）。
+# 西墙取门洞北侧段、东墙取门洞南侧段——两侧关于房间中心镜像对称，
+# 于是两个开关离各自门洞的距离完全相同（业主 2026-09-21 指定）。
+const FACILITY_SWITCH_SIDES: Array[String] = ["west", "east"]
+const FACILITY_SWITCH_WALL_INSET_M := 0.34
 static var _tower_solid_wall_mesh: Mesh
 static var _tower_solid_wall_preserves_palette := false
 # 资产声明的装配方式。实墙实际走 MultiMesh 批渲染（节点树被丢弃），若资产仍
@@ -323,6 +329,10 @@ var _door_nodes: Dictionary = {}
 var _central_light: WastelandLight3D
 var _room_lights: Array[WastelandLight3D] = []
 var _light_switch: RoomLightSwitch3D
+# 99F基地的常驻开关全集（西墙→100F、东墙→98F）。其他房型本数组为空，
+# 只走 _light_switch 单开关路径。见 FACILITY_SWITCH_SIDES 与
+# _ensure_facility_permanent_lighting()。
+var _light_switches: Array[RoomLightSwitch3D] = []
 var custom_dimensions := Vector2.ZERO
 var tower_module_shell := false
 var open_wall_directions: Array[String] = []
@@ -568,6 +578,9 @@ func ensure_shell_built() -> void:
 	_shell_built = true
 	_build_shell()
 	_build_trigger()
+	# FACILITY（99F基地）的中央顶灯与墙面开关是壳体级常驻节点：
+	# 随壳体一次性建好，不走 RuntimeDetail 的进出重建「出现流程」。
+	_ensure_facility_permanent_lighting()
 	_keep_structural_physics_active(self)
 
 
@@ -627,9 +640,12 @@ func _unload_runtime_detail() -> void:
 		_detail_root.queue_free()
 	_detail_root = null
 	_detail_built = false
-	_central_light = null
-	_light_switch = null
-	_room_lights.clear()
+	# FACILITY 的顶灯与开关是壳体级常驻节点（不走出现流程），detail 卸载不回收；
+	# _room_lights 保留常驻灯登记，供阴影计数与快照读取。
+	if room_type != "FACILITY":
+		_central_light = null
+		_light_switch = null
+		_room_lights.clear()
 
 
 func _add_runtime_detail_child(node: Node) -> void:
@@ -639,30 +655,156 @@ func _add_runtime_detail_child(node: Node) -> void:
 		add_child(node)
 
 
+## 99F基地（FACILITY）的中央顶灯与墙面开关不走 RuntimeDetail「出现流程」：
+## 随壳体一次性建好、常驻在场（业主 2026-09-21 指定）。
+## 进出房间只重建家具/可搜容器等细节；灯与开关不销毁、不换实例，
+## 开关状态连续性仍由 apply_runtime_detail_state("room_light_on") 兜底。
+## 美术灯控（Art 的设备青色发光）依赖 _install_facilities 装入的 Art 节点，
+## 其绑定时机保持在 detail 构建期（_bind_facility_presentation_light_control）。
+func _ensure_facility_permanent_lighting() -> void:
+	if room_type != "FACILITY" or size_class == "rooftop":
+		return
+	_prune_facility_switches()
+	var light_valid := _central_light != null and is_instance_valid(_central_light)
+	var switches_valid := _light_switches.size() == FACILITY_SWITCH_SIDES.size()
+	if light_valid and switches_valid:
+		return
+	if not light_valid:
+		# 99F基地只保留一盏中央玩法顶灯。Compatibility默认每个Mesh最多
+		# 接收8盏OmniLight；28m范围覆盖30×30m主体区。
+		_central_light = _create_room_light(
+			"FacilityCeilingLight_Main",
+			Vector3.ZERO,
+			theme.fixture_energy * 3.00,
+			maxf(theme.fixture_range * 3.30, 28.0),
+			room_seed,
+			true
+		)
+		# 基地用接近中性的冷白主光保留真实色盘，青色由设备发光承担。
+		_central_light.configure(
+			Color(0.84, 0.90, 1.0), _central_light.energy,
+			_central_light.light_range, room_seed, true, false, "ceiling"
+		)
+		# 壳体期不在 detail 构建流程中，_add_runtime_detail_child 兜底直挂房间根。
+		if not _room_lights.has(_central_light):
+			_room_lights.append(_central_light)
+	if not switches_valid:
+		_build_facility_light_switches()
+	elif not light_valid:
+		# 顶灯被重建过：常驻开关仍持有旧灯句柄，必须重新指向当前灯组，
+		# 否则开关会控制一个已释放的灯对象。
+		for light_switch in _light_switches:
+			light_switch.configure_group(_room_lights, true)
+		_bind_light_switch_signal()
+
+
+## 建齐基地成对开关（西墙→100F、东墙→98F），全部直挂房间根、不走出现流程。
+## 两个开关共享同一组受控灯，并以 link_switch 互相并联（启动序列互锁 +
+## 指示灯/提示文字同步），避免同一盏灯上出现两个各自为政的开关。
+func _build_facility_light_switches() -> void:
+	for existing in _light_switches:
+		if existing != null and is_instance_valid(existing):
+			existing.queue_free()
+	_light_switches.clear()
+	for side in FACILITY_SWITCH_SIDES:
+		var light_switch := LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
+		if light_switch == null:
+			push_error("基地墙面灯开关 Prefab 实例化失败：%s" % side)
+			continue
+		light_switch.name = (
+			"RoomLightSwitch3D" if side == "west" else "RoomLightSwitch3D_East"
+		)
+		_place_facility_light_switch(light_switch, get_dimensions(), side)
+		light_switch.configure_group(_room_lights, true)
+		add_child(light_switch)
+		_light_switches.append(light_switch)
+	for index in range(_light_switches.size()):
+		for other_index in range(index + 1, _light_switches.size()):
+			_light_switches[index].link_switch(_light_switches[other_index])
+	_light_switch = _light_switches[0] if not _light_switches.is_empty() else null
+	_bind_light_switch_signal()
+
+
+func _prune_facility_switches() -> void:
+	for index in range(_light_switches.size() - 1, -1, -1):
+		var light_switch := _light_switches[index]
+		if light_switch == null or not is_instance_valid(light_switch):
+			_light_switches.remove_at(index)
+
+
+## 基地开关落位：贴门洞一侧的第一个 5m 墙段，从门洞边缘再向外取 1/3 网格。
+## west 取门洞北侧段、east 取门洞南侧段 ⇒ 两侧关于房间中心镜像、离门距离相同。
+## 朝向沿用通用落位口径：local −Z（面板正面）朝房间内。
+func _place_facility_light_switch(
+	light_switch: RoomLightSwitch3D, dimensions: Vector2, side: String
+) -> void:
+	var wall_unit := TOWER_GEOMETRY.GRID_UNIT_M
+	var door := get_door_node(side)
+	# 门缺失时退回「墙中心段」的同一口径，保证仍落在合法墙段内。
+	var door_along := door.position.z if door != null else -wall_unit * 0.5
+	var half_unit := wall_unit * 0.5
+	var third_unit := wall_unit / 3.0
+	if side == "east":
+		light_switch.position = Vector3(
+			dimensions.x * 0.5 - FACILITY_SWITCH_WALL_INSET_M,
+			0.0,
+			door_along + half_unit + third_unit
+		)
+		light_switch.rotation.y = PI * 0.5
+		light_switch.set_meta("facility_entry_switch_clearance_m", half_unit)
+		light_switch.set_meta("facility_entry_direction", "east_entry_south_first_wall")
+		return
+	light_switch.position = Vector3(
+		-dimensions.x * 0.5 + FACILITY_SWITCH_WALL_INSET_M,
+		0.0,
+		door_along - half_unit - third_unit
+	)
+	light_switch.rotation.y = -PI * 0.5
+	light_switch.set_meta("facility_entry_switch_clearance_m", half_unit)
+	light_switch.set_meta("facility_entry_direction", "west_entry_north_first_wall")
+
+
 func _bind_facility_presentation_light_control(starts_on: bool) -> void:
-	if room_type != "FACILITY" or _light_switch == null:
+	if room_type != "FACILITY":
 		return
 	var art_layout := get_node_or_null("Art")
 	if art_layout == null or not art_layout.has_method("set_presentation_lighting_enabled"):
 		push_warning("基地美术自发光灯控未就绪")
 		return
+	# 成对开关都要能播完整启动序列，也都要能把关灯状态转给美术自发光；
+	# set_presentation_lighting_enabled 幂等，重复连接同一 Callable 由判重挡住。
 	var presentation_callback := Callable(
 		art_layout, "set_presentation_lighting_enabled"
 	)
-	if not _light_switch.light_toggled.is_connected(presentation_callback):
-		_light_switch.light_toggled.connect(presentation_callback)
-	# 总启动时长约五秒；第4.5秒中央顶灯先亮，剩余小灯继续完成启动。
-	_light_switch.configure_turn_on_presentation(art_layout, 5.0)
+	for light_switch in _all_room_light_switches():
+		if not light_switch.light_toggled.is_connected(presentation_callback):
+			light_switch.light_toggled.connect(presentation_callback)
+		# 总启动时长约五秒；第4.5秒中央顶灯先亮，剩余小灯继续完成启动。
+		light_switch.configure_turn_on_presentation(art_layout, 5.0)
 	art_layout.call("set_presentation_lighting_enabled", starts_on)
 
 
-## 通用灯开关订阅（不限 FACILITY 房）。灯开关是 RuntimeDetail 子节点，进出房间会重建，
-## 因此订阅必须挂在创建路径上，不能只在 _ready 里连一次。
+## 本房全部墙面开关。FACILITY 返回成对常驻开关；其他房型沿用单开关。
+func _all_room_light_switches() -> Array[RoomLightSwitch3D]:
+	var result: Array[RoomLightSwitch3D] = []
+	if room_type == "FACILITY":
+		_prune_facility_switches()
+		for light_switch in _light_switches:
+			result.append(light_switch)
+		return result
+	if _light_switch != null and is_instance_valid(_light_switch):
+		result.append(_light_switch)
+	return result
+
+
+
+## 通用灯开关订阅（不限 FACILITY 房）。非基地房型的开关是 RuntimeDetail 子节点，
+## 进出房间会重建；基地开关是壳体级常驻（见 _ensure_facility_permanent_lighting）。
+## 两种情况都走本函数订阅，且对成对开关逐一订阅。
 func _bind_light_switch_signal() -> void:
-	if _light_switch == null:
-		return
-	if not _light_switch.light_toggled.is_connected(_on_light_switch_toggled):
-		_light_switch.light_toggled.connect(_on_light_switch_toggled)
+	for light_switch in _all_room_light_switches():
+		if not light_switch.light_toggled.is_connected(_on_light_switch_toggled):
+			light_switch.light_toggled.connect(_on_light_switch_toggled)
 
 
 func _on_light_switch_toggled(is_on: bool) -> void:
@@ -2558,25 +2700,23 @@ func _build_content() -> void:
 	var dimensions := get_dimensions()
 	_build_runtime_navigation_surface(dimensions)
 	_room_lights.clear()
-	if room_type == "FACILITY":
-		# 99F基地只保留一盏中央玩法顶灯。Compatibility默认每个Mesh最多
-		# 接收8盏OmniLight；旧四顶灯叠加美术灯和设施信标会超限，关后重开
-		# 可能重新排序并把主顶灯挤出地板灯表。28m范围覆盖30×30m主体区。
-		_central_light = null
-		_central_light = _create_room_light(
-			"FacilityCeilingLight_Main",
-			Vector3.ZERO,
-			theme.fixture_energy * 3.00,
-			maxf(theme.fixture_range * 3.30, 28.0),
-			room_seed,
-			true
-		)
-		# 基地用接近中性的冷白主光保留真实色盘，青色由设备发光承担。
-		_central_light.configure(
-			Color(0.84, 0.90, 1.0), _central_light.energy,
-			_central_light.light_range, room_seed, true, false, "ceiling"
-		)
-		_room_lights.append(_central_light)
+	if size_class == "rooftop":
+		# 100F 天台是露天甲板：本房自带室外光照（TowerAtmosphere3D 的天光反弹 +
+		# 太阳 + 城市背景），室内玩法顶灯与墙边开关都属于程序生成室内设施的残留。
+		# 业主 2026-09-21 指出「天台为什么还会刷一个电灯开关」⇒ 顶灯与开关一并
+		# 清除：_room_lights 留空、_central_light 保持 null、开关节点不实例化。
+		# 下游读取点均已做保护（get_debug_snapshot 的两个布尔位、_apply_light_state、
+		# _bind_facility_presentation_light_control 与 _bind_light_switch_signal）。
+		pass
+	elif room_type == "FACILITY":
+		# 顶灯与开关已随壳体常驻（_ensure_facility_permanent_lighting）。
+		# detail 重建只重新登记常驻灯并绑定美术灯控，不重建实例。
+		if (
+			_central_light != null
+			and is_instance_valid(_central_light)
+			and not _room_lights.has(_central_light)
+		):
+			_room_lights.append(_central_light)
 	elif room_type == "BOSS" and minf(dimensions.x, dimensions.y) >= 64.0:
 		# 90m终局竞技场不能依赖一盏超大范围点光源：四区灯具让中心与
 		# 四周都保持可读，同时仍由同一个墙边开关统一控制。
@@ -2616,14 +2756,19 @@ func _build_content() -> void:
 		)
 		_room_lights.append(_central_light)
 
-	_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
-	_light_switch.name = "RoomLightSwitch3D"
-	_place_light_switch(_light_switch, dimensions)
-	var starts_on := room_type in ["FACILITY", "STAIR_LOBBY", "BOSS"]
-	_light_switch.configure_group(_room_lights, starts_on)
-	_add_runtime_detail_child(_light_switch)
-	_bind_facility_presentation_light_control(starts_on)
-	_bind_light_switch_signal()
+	if size_class != "rooftop" and room_type == "FACILITY":
+		# FACILITY 的开关已随壳体常驻；detail 重建只需把美术灯控
+		# （Art 节点此时已由 _install_facilities 装入）重新绑回开关。
+		_bind_facility_presentation_light_control(true)
+		_bind_light_switch_signal()
+	elif size_class != "rooftop":
+		_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
+		_light_switch.name = "RoomLightSwitch3D"
+		_place_light_switch(_light_switch, dimensions)
+		var starts_on := room_type in ["STAIR_LOBBY", "BOSS"]
+		_light_switch.configure_group(_room_lights, starts_on)
+		_add_runtime_detail_child(_light_switch)
+		_bind_light_switch_signal()
 	# 安全房原先还有程序画的地面标线 `_build_stair_lobby_markings()`：
 	# 正中一条 StairLobbyRouteGuide（13.00×0.035×1.20m）+ 两侧门内各一条
 	# StairLobbyThresholdGuide（0.26×0.045×4.2m），都是青色自发光、离地几厘米。

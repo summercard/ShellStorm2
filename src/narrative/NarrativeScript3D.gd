@@ -216,14 +216,34 @@ func _ingest_trigger(source: Dictionary, source_label: String) -> void:
 
 
 func _validate_point_trigger(declared: Dictionary, source_label: String) -> Dictionary:
-	var point_raw: Variant = declared.get("point", null)
-	if not (point_raw is Array) or (point_raw as Array).size() != 3:
-		errors.append("%s：point 触发必须提供 point:[x, y, z]。" % source_label)
+	# 两种写法二选一：绝对世界坐标 `point`，或**房间相对** `point_room` + `point_offset`。
+	# 房间相对的世界坐标由导演在运行期解出 —— 房间/楼层是运行时生成的，把世界坐标写死
+	# 在换布局后会**静默失效**（表现为「剧情永不触发」）。
+	var point_room_id := str(declared.get("point_room", ""))
+	if not point_room_id.is_empty():
+		declared["point_room"] = point_room_id
+		declared.erase("point")
+		var offset_raw: Variant = declared.get("point_offset", [0.0, 0.0, 0.0])
+		if not (offset_raw is Array) or (offset_raw as Array).size() != 3:
+			errors.append(
+				"%s：point_room 的 point_offset 必须是 [x, y, z]（相对房间中心）。" % source_label
+			)
+		else:
+			var offsets: Array = offset_raw
+			declared["point_offset"] = Vector3(
+				float(offsets[0]), float(offsets[1]), float(offsets[2])
+			)
 	else:
-		var coordinates: Array = point_raw
-		declared["point"] = Vector3(
-			float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
-		)
+		var point_raw: Variant = declared.get("point", null)
+		if not (point_raw is Array) or (point_raw as Array).size() != 3:
+			errors.append(
+				"%s：point 触发必须提供 point:[x, y, z] 或 point_room + point_offset。" % source_label
+			)
+		else:
+			var coordinates: Array = point_raw
+			declared["point"] = Vector3(
+				float(coordinates[0]), float(coordinates[1]), float(coordinates[2])
+			)
 	var radius := float(declared.get("radius", MIN_POINT_RADIUS_M))
 	if radius < MIN_POINT_RADIUS_M:
 		errors.append(

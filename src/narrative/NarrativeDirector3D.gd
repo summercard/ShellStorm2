@@ -52,6 +52,17 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)
 	_arm_catalog_triggers()
 
+	# 复位存档 = 新档：本局内存态（once / 标记）必须归零。BaseManager 是 autoload 且
+	# 注册在本节点之前，其 game_save_reset_completed 只在复位**成功**时发（08 文档 §9）。
+	# 不接这条线：复位档走 change_scene_to_file，autoload 存活 ⇒ 冷启动开场剧本的
+	# fired_count 不随场景重载归零，once=run 会把它永久挡住（2026-09-21 真机实测）。
+	# ⛔ 不可用节点路径取 autoload（src/narrative/** 禁路径字面量，唯一耦合点是适配器）：
+	#    autoload 全局标识是既有写法（本文件的 DialogueUI 同款）。
+	if BaseManager != null and BaseManager.has_signal("game_save_reset_completed"):
+		BaseManager.game_save_reset_completed.connect(_on_game_save_reset_completed)
+	else:
+		_warn("未接上 BaseManager.game_save_reset_completed：复位存档后本局剧情标记不会归零。")
+
 
 # =========================================================================
 # 登记表与触发源
@@ -197,6 +208,29 @@ func _evaluate_event(event_name: String, room_id: String) -> void:
 		_try_fire(narrative_id, entry, {"event": event_name, "room_id": room_id})
 
 
+## 位置触发的原点。`point` 直接给世界坐标；`point_room` 用「房间节点原点 + point_offset」。
+## **惰性解析**：房间是运行时生成的，`arm()` 那一刻它还不存在 —— 解出后缓存进登记表。
+## 解不出（房间还没建/房间 id 写错）就返回 null，本轮跳过，不误触发。
+func _resolve_point_origin(entry: Dictionary) -> Variant:
+	if entry.has("point"):
+		return entry.get("point")
+	var room_id := str(entry.get("point_room", ""))
+	if room_id.is_empty():
+		return null
+	var cached: Variant = entry.get("point_resolved", null)
+	if cached is Vector3:
+		return cached
+	var room := _adapter.room_node(room_id)
+	if room == null:
+		return null
+	var offset: Vector3 = entry.get("point_offset", Vector3.ZERO)
+	# 走**房间局部系**（to_global）而不是直接加世界位移：房间若带旋转，
+	# 作者写的「往房间 x 方向 14m」应当跟着房间转。
+	var resolved := room.to_global(offset)
+	entry["point_resolved"] = resolved
+	return resolved
+
+
 func _evaluate_point() -> void:
 	var player := _adapter.player_node()
 	if player == null:
@@ -206,7 +240,7 @@ func _evaluate_point() -> void:
 		var entry: Dictionary = _armed[narrative_id]
 		if str(entry.get("kind", "")) != NarrativeScript3D.TRIGGER_KIND_POINT:
 			continue
-		var origin_value: Variant = entry.get("point", null)
+		var origin_value: Variant = _resolve_point_origin(entry)
 		if not (origin_value is Vector3):
 			continue
 		var origin := origin_value as Vector3
@@ -329,6 +363,19 @@ func bound_dungeon_for_test() -> Node:
 ## room_entered 信号路径），绕开信号接线本身，单独验证裁决逻辑。
 func evaluate_event_for_test(event_name: String, room_id: String) -> void:
 	_evaluate_event(event_name, room_id)
+
+
+## 仅供验收：走一遍真实的位置评估（等价于 _process 里 0.1s 轮询的那一发）。
+func evaluate_point_for_test() -> void:
+	_evaluate_point()
+
+
+## 仅供验收：把某条剧本的「位置触发原点」解析出来。房间相对写法必须靠它做真机几何校验
+## （假世界里的算术对了，不代表真实楼层上的房间位置/朝向也对）。
+func point_origin_for_test(narrative_id: String) -> Variant:
+	if not _armed.has(narrative_id):
+		return null
+	return _resolve_point_origin(_armed[narrative_id])
 
 
 func active_id() -> String:
@@ -538,6 +585,31 @@ func get_flag(key: String, fallback: Variant = false) -> Variant:
 
 func has_flag(key: String) -> bool:
 	return _flags.has(key)
+
+
+## 新档 / 新本局：把「本局内存态」整体归零，让 `once = run` 的剧本可以重新触发。
+##
+## 由 BaseManager.game_save_reset_completed 驱动（复位存档成功的唯一出口）。
+## 为什么必须有：`once` / `flow.mark` / `grant.flag` 全是本局内存态（08 文档 §9），
+## 而复位档走 `change_scene_to_file` —— autoload 存活，`_armed` 里的 `fired_count`
+## 不随场景重载归零 ⇒「复位存档 → 重新开始」后冷启动开场剧本不再播（真机实测）。
+## 只重挂登记表，不重解析剧本（`_scripts` 缓存保留）。
+func reset_run_state() -> void:
+	abort("new_profile")
+	_flags.clear()
+	# 先清空再重挂：arm() 会从既有登记里**继承** fired_count，不清空等于没复位。
+	_armed.clear()
+	_diagnostics.clear()
+	_arm_catalog_triggers()
+	_dispatch_log.clear()
+	_paused_dialogue_synced = false
+
+
+func _on_game_save_reset_completed(result: Dictionary) -> void:
+	# 契约上信号只在复位成功时发；这里再确认一次，避免将来 BaseManager 改口径后静默误复位。
+	if not bool(result.get("success", false)):
+		return
+	reset_run_state()
 
 
 ## 仅供验收与调试：清干净一切（不动场景，场景由归还机制负责）。

@@ -12,6 +12,10 @@ signal reload_ended(completed: bool)
 
 const PROJECTILE_SCRIPT := preload("res://src/combat3d/Projectile3D.gd")
 const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_combat_kit_root_top3d.tscn")
+## 枪口花火视觉体积基准（业主 2026-09-21 观感定档：取 v002 基准的 80%）。
+## 口径：effect_size 线性作用于特效视觉体积，并同时线性作用于 MuzzleLight 范围（3.5m → 2.8m）；
+## 灯能量为固定常量，不随尺寸缩放。
+const MUZZLE_FLASH_EFFECT_SIZE := 0.8
 const MELEE_VISUAL_SCENES := {
 	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
 	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
@@ -860,18 +864,20 @@ func _spawn_muzzle_effect(world: Node) -> void:
 	if _muzzle == null:
 		return
 	# 枪口闪光改走全局 VfxPool（AssetID 路由），传入真实射击方向（-global_basis.z）。
+	# 跟随目标是 muzzle 挂点本身：_visual_root 会被后坐力/换弹位移带动，跟武器根会差一截。
+	var muzzle_world := _muzzle.global_position
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
 	if not vfx_pools.is_empty() and vfx_pools[0] is VfxPool3D:
 		(vfx_pools[0] as VfxPool3D).acquire(
-			VfxPool3D.FX01_MUZZLE_FLASH, _muzzle.global_position, bullet_color, 1.0,
-			{"forward": -global_basis.z}
+			VfxPool3D.FX01_MUZZLE_FLASH, muzzle_world, bullet_color, MUZZLE_FLASH_EFFECT_SIZE,
+			{"forward": -global_basis.z, "follow": _muzzle}
 		)
 		return
 	# 旧链兜底：VfxPool 不可用时退回 CombatEffect3D（EFFECT_SCENE 仍保留作兜底用途）。
 	var effect := EFFECT_SCENE.instantiate() as CombatEffect3D
-	effect.configure("muzzle", bullet_color, 1.0)
+	effect.configure("muzzle", bullet_color, MUZZLE_FLASH_EFFECT_SIZE)
 	world.add_child(effect)
-	effect.global_position = _muzzle.global_position
+	effect.global_position = muzzle_world
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:

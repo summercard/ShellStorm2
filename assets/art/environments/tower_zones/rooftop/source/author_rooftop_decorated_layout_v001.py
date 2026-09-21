@@ -79,6 +79,17 @@ Run with Blender 4.5 background mode.
    ⚠️ 本项目 `collision_policy` 词表：`component_default`（房间装配默认）/ `visual_only` /
    `blocking`（本布局新增）；覆盖默认值必须在此登记原因（见本项）。
 
+—— 2026-09-21 五次修正（业主实机报「花盆和花圃靠墙太远了，要挨着墙放，不然还有个空虚」）——
+13. **绿化环改为背贴外皮**：旧版把整圈绿化压在「离墙中心线 2.15m」的单一环线上，而三件
+   绿化陈设的半进深只有 0.55~0.87m ⇒ 每件背后空出 1.14~1.45m 可见地砖带（对比同墙空调
+   是贴墙的，视觉上就是「悬空一截」）。现按**每件自身半进深**重算贴墙坐标
+   （件心离墙中心线 = SHELL_WALL_T/2 − WALL_MOUNT_EMBED + half_depth，背面埋进外皮 0.05m）：
+   南/北/东/西四边各自成对，背面一条线齐平、正面因进深不同自然错落。
+   同时把朝向补齐：三件 front_direction 均为 −Y，yaw 取 0 / π / +π/2 / −π/2 分别朝
+   南 / 北 / 东 / 西；旧版西侧花圃写成 +π/2（正面朝墙里，与同墙藤蔓的 −π/2 矛盾），已修。
+   ⚠️ 贴墙后花箱与同墙藤蔓基座在进深上重叠 ≤0.53m（藤蔓是叶幕、花箱是实体）—— 读作
+   「花坛落在爬藤前」，不做避让；若日后要分离，把藤蔓基座沿墙平移即可。
+
 > 天台壳体（地砖 / 女儿墙 / 外立面 / 结构碰撞）始终由 TowerFloorStage3D 程序化拥有；
 > 本布局只提供房屋围护与装饰。装饰默认 `visual_only`（不带碰撞），
 > **例外**：绿化三件（花箱 / 大盆栽 / 小盆栽）登记为 `blocking`，由运行时按实测包络生成
@@ -398,33 +409,65 @@ add("hvac_vent", -7.4, gz_shell_south_face - WALL_MOUNT_EMBED + HVAC_VENT_HALF_D
 add("hvac_vent", x_shell_east_face - WALL_MOUNT_EMBED + HVAC_VENT_HALF_DEPTH, 12.0,
     h=7.8, angle=math.pi / 2, group="hvac_wall", note="东墙辅助通风口（机背贴东墙外皮）")
 
-# ── 6. 花圃与植物：绕建筑外皮一圈，不挡门洞与楼梯口 ──
+# ── 6. 花圃与植物：背贴建筑外皮一圈，不挡门洞与楼梯口 ──
 # ⚠️ 花箱 / 大盆栽 / 小盆栽三件登记为 **BLOCKING**（业主 2026-09-21「花盆和花圃没有阻挡」）
 # —— 都是落地陈设，玩家不该穿过去。其余装饰维持 VISUAL_ONLY。
-box_south = gz_shell_south + 2.15   # 22.15
-box_north = gz_shell_north - 2.15   # -12.15
-box_west = x_shell_west - 2.15      # -17.15
-box_east = x_shell_east + 2.15      # 17.15
+# ⚠️ 贴墙基准（业主 2026-09-21「花盆和花圃靠墙太远了，要挨着墙放，不然还有个空虚」）：
+# 旧版整圈绿化压在同一条「离墙中心线 2.15m」的环线上（离外皮 2.00m），而三件的半进深
+# 只有 0.55~0.87m ⇒ 每件背后空出 1.14~1.45m 的可见地砖带。现改为**逐件按自身半进深贴
+# 外皮**：件心到墙中心线 = SHELL_WALL_T/2 − WALL_MOUNT_EMBED + half_depth，即「背面埋进
+# 外皮内 0.05m」（与墙挂空调同口径，避免与墙皮共面 z-fighting）。三件进深不等 ⇒ 背面
+# 齐平、正面自然错落 —— 花坛贴墙本该如此。
+# ⚠️ 朝向：三件 catalog 的 front_direction = −Y（正面朝局部 −Y）。绕 Z 转 yaw 后 local −Y
+# 指向：0 ⇒ 南、π ⇒ 北、+π/2 ⇒ 东、−π/2 ⇒ 西。旧版西侧花圃写成 +π/2（正面朝墙里），
+# 与同墙藤蔓的 −π/2 矛盾，本次一并修正。
+FLOWERBOX_HALF_DEPTH = 0.5925        # 长条花箱 catalog bounds_size[1] 1.185 / 2
+PLANT_LARGE_HALF_DEPTH = 0.8727377   # 大盆栽 1.745475 / 2
+PLANT_SMALL_HALF_DEPTH = 0.5473868   # 小盆栽 1.094774 / 2
+YAW_SOUTH, YAW_NORTH = 0.0, math.pi
+YAW_EAST, YAW_WEST = math.pi / 2, -math.pi / 2
+
+
+def wall_flush_pairs(half_depth):
+    """贴墙坐标组 (南 gz, 北 gz, 东 x, 西 x)：件心离墙中心线 = 半厚 − 埋入 + 半进深。"""
+    offset = WALL_HALF_THICKNESS - WALL_MOUNT_EMBED + half_depth
+    return (gz_shell_south + offset, gz_shell_north - offset,
+            x_shell_east + offset, x_shell_west - offset)
+
+
+box_south, box_north, box_east, box_west = wall_flush_pairs(FLOWERBOX_HALF_DEPTH)
 for x in (-9.0, -1.0, 7.0):
-    add("flowerbox", x, box_south, h=GROUND_H, group="greenery",
-        collision=BLOCKING, note="南侧连续花圃（阻挡）")
+    add("flowerbox", x, box_south, h=GROUND_H, angle=YAW_SOUTH, group="greenery",
+        collision=BLOCKING, note="南侧连续花圃（阻挡；背贴南墙外皮）")
 for x in (-9.0, -1.0, 7.0):
-    add("flowerbox", x, box_north, h=GROUND_H, angle=math.pi, group="greenery",
-        collision=BLOCKING, note="北侧连续花圃（阻挡）")
-add("flowerbox", box_west, -2.0, h=GROUND_H, angle=math.pi / 2, group="greenery",
-    collision=BLOCKING, note="西侧花圃（阻挡）")
-add("flowerbox", box_east, 12.0, h=GROUND_H, angle=math.pi / 2, group="greenery",
-    collision=BLOCKING, note="东侧花圃（阻挡）")
-for x, gz in [
-    (-15.5, -12.4), (4.7, -12.3), (-15.5, 22.4), (4.7, 22.4), (-17.0, 7.0), (17.0, -6.2),
-]:
-    add("plant_large", x, gz, h=GROUND_H, group="greenery",
-        collision=BLOCKING, note="花圃边缘高层植物（阻挡）")
-for x, gz in [
-    (-12.8, -12.3), (1.4, -12.3), (-12.8, 22.3), (1.4, 22.3), (-17.1, 0.0), (17.1, 2.0),
-]:
-    add("plant_small", x, gz, h=GROUND_H, group="greenery",
-        collision=BLOCKING, note="花圃边缘低层植物（阻挡）")
+    add("flowerbox", x, box_north, h=GROUND_H, angle=YAW_NORTH, group="greenery",
+        collision=BLOCKING, note="北侧连续花圃（阻挡；背贴北墙外皮）")
+add("flowerbox", box_west, -2.0, h=GROUND_H, angle=YAW_WEST, group="greenery",
+    collision=BLOCKING, note="西侧花圃（阻挡；背贴西墙外皮，正面朝西）")
+add("flowerbox", box_east, 12.0, h=GROUND_H, angle=YAW_EAST, group="greenery",
+    collision=BLOCKING, note="东侧花圃（阻挡；背贴东墙外皮）")
+
+pl_south, pl_north, pl_east, pl_west = wall_flush_pairs(PLANT_LARGE_HALF_DEPTH)
+for x in (-15.5, 4.7):
+    add("plant_large", x, pl_south, h=GROUND_H, angle=YAW_SOUTH, group="greenery",
+        collision=BLOCKING, note="南侧大盆栽（阻挡；背贴南墙外皮）")
+    add("plant_large", x, pl_north, h=GROUND_H, angle=YAW_NORTH, group="greenery",
+        collision=BLOCKING, note="北侧大盆栽（阻挡；背贴北墙外皮）")
+add("plant_large", pl_east, -6.2, h=GROUND_H, angle=YAW_EAST, group="greenery",
+    collision=BLOCKING, note="东侧大盆栽（阻挡；背贴东墙外皮；让开基地东门）")
+add("plant_large", pl_west, 7.0, h=GROUND_H, angle=YAW_WEST, group="greenery",
+    collision=BLOCKING, note="西侧大盆栽（阻挡；背贴西墙外皮）")
+
+ps_south, ps_north, ps_east, ps_west = wall_flush_pairs(PLANT_SMALL_HALF_DEPTH)
+for x in (-12.8, 1.4):
+    add("plant_small", x, ps_south, h=GROUND_H, angle=YAW_SOUTH, group="greenery",
+        collision=BLOCKING, note="南侧小盆栽（阻挡；背贴南墙外皮）")
+    add("plant_small", x, ps_north, h=GROUND_H, angle=YAW_NORTH, group="greenery",
+        collision=BLOCKING, note="北侧小盆栽（阻挡；背贴北墙外皮）")
+add("plant_small", ps_east, 2.0, h=GROUND_H, angle=YAW_EAST, group="greenery",
+    collision=BLOCKING, note="东侧小盆栽（阻挡；背贴东墙外皮）")
+add("plant_small", ps_west, 0.0, h=GROUND_H, angle=YAW_WEST, group="greenery",
+    collision=BLOCKING, note="西侧小盆栽（阻挡；背贴西墙外皮）")
 
 # ── 7. 墙面藤蔓：纯枝叶，不复刻墙体几何 ──
 # 藤蔓件 4.256×0.820×3.802m、原点在**底面**，运行时禁非单位缩放（重放时实例 scale

@@ -8,12 +8,30 @@ const INTERACTION_RANGE := 2.2
 const STAGED_MAIN_LIGHT_START_SECONDS := 4.5
 
 var _controlled_lights: Array[WastelandLight3D] = []
+## 同一空间的并联开关（99F基地东西墙各一个）。它们共享同一组受控灯：
+## 启动序列互相锁定（避免同一盏灯上叠两段启动动画），
+## 指示灯与提示文字互相跟随（否则并联的另一端会停留在过期状态）。
+var _linked_switches: Array[RoomLightSwitch3D] = []
 var _turn_on_presentation: Node
 var _turn_on_presentation_duration := 0.0
 var _transitioning := false
 var _player_in_range := false
 var _prompt: Label3D
 var _indicator_material: StandardMaterial3D
+
+
+## 双向注册一个并联开关。self 与 other 都会视对方为同伴。
+func link_switch(other: RoomLightSwitch3D) -> void:
+	if other == null or other == self or _linked_switches.has(other):
+		return
+	_linked_switches.append(other)
+	other._register_linked_switch(self)
+
+
+func _register_linked_switch(peer: RoomLightSwitch3D) -> void:
+	if peer == null or peer == self or _linked_switches.has(peer):
+		return
+	_linked_switches.append(peer)
 
 
 func configure(controlled_light: WastelandLight3D, starts_on := false) -> void:
@@ -75,7 +93,7 @@ func perform_interaction(_player: Player3D, _candidate: Dictionary) -> bool:
 
 func toggle_light() -> bool:
 	_prune_invalid_lights()
-	if _controlled_lights.is_empty() or _transitioning:
+	if _controlled_lights.is_empty() or _is_busy():
 		return false
 	var next_state := not is_light_on()
 	if next_state and _has_turn_on_presentation():
@@ -84,6 +102,7 @@ func toggle_light() -> bool:
 	for light in _controlled_lights:
 		light.set_light_enabled(next_state)
 	_update_state_visual()
+	_refresh_linked_visuals()
 	light_toggled.emit(next_state)
 	return true
 
@@ -97,6 +116,7 @@ func set_light_on(enabled: bool) -> bool:
 	for light in _controlled_lights:
 		light.set_light_enabled(enabled)
 	_update_state_visual()
+	_refresh_linked_visuals()
 	if changed:
 		light_toggled.emit(enabled)
 	return true
@@ -124,14 +144,35 @@ func get_snapshot() -> Dictionary:
 		"player_in_range": _player_in_range,
 		"has_prompt": _prompt != null,
 		"controlled_light_count": _controlled_lights.size(),
+		"linked_switch_count": _linked_switches.size(),
 		"is_3d": true,
 	}
+
+
+## 自身或任一并联开关正在跑启动序列时都算忙：两段序列不能压在同一个灯上。
+func _is_busy() -> bool:
+	if _transitioning:
+		return true
+	for linked in _linked_switches:
+		if linked != null and is_instance_valid(linked) and linked._transitioning:
+			return true
+	return false
+
+
+## 并联开关的视觉是各自缓存的，本端状态变化后要让对端重算指示灯与提示文字。
+func _refresh_linked_visuals() -> void:
+	for linked in _linked_switches:
+		if linked != null and is_instance_valid(linked):
+			linked._update_state_visual()
 
 
 func _prune_invalid_lights() -> void:
 	for index in range(_controlled_lights.size() - 1, -1, -1):
 		if not is_instance_valid(_controlled_lights[index]):
 			_controlled_lights.remove_at(index)
+	for index in range(_linked_switches.size() - 1, -1, -1):
+		if not is_instance_valid(_linked_switches[index]):
+			_linked_switches.remove_at(index)
 
 
 func _has_turn_on_presentation() -> bool:
@@ -146,6 +187,7 @@ func _has_turn_on_presentation() -> bool:
 func _run_turn_on_sequence() -> void:
 	_transitioning = true
 	_update_state_visual()
+	_refresh_linked_visuals()
 	var presentation_sequence: Variant = _turn_on_presentation.call(
 		"play_turn_on_sequence", _turn_on_presentation_duration
 	)
@@ -160,6 +202,7 @@ func _run_turn_on_sequence() -> void:
 		return
 	_transitioning = false
 	_update_state_visual()
+	_refresh_linked_visuals()
 	light_toggled.emit(true)
 
 
@@ -219,10 +262,13 @@ func _build_visual() -> void:
 
 func _update_state_visual() -> void:
 	var enabled := is_light_on()
+	# 用 _is_busy() 而非 _transitioning：并联开关启动期间，对端也要显示
+	# 「灯光启动中…」，否则玩家会在另一个开关上看到已经过期的「开启中央灯」。
+	var busy := _is_busy()
 	if _prompt != null:
 		_prompt.text = (
 			"灯光启动中…"
-			if _transitioning
+			if busy
 			else "[E] 关闭中央灯" if enabled else "[E] 开启中央灯"
 		)
 	if _indicator_material != null:

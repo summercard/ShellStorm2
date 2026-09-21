@@ -15,8 +15,10 @@ extends RefCounted
 
 ## 相机从「接管前位姿」到「叙事位姿」的过渡由本类逐帧推算。
 ## 关键：**不硬编码任何相机高度/构图常量** —— 接管瞬间抓一次真实位姿当基准，
-## 叙事只改「距离」「绕玩家竖轴的方位」与「俯角」，焦点完全继承，
+## 叙事只改「距离」「绕枢轴的方位」「俯角」与「枢轴点」，相对构图完全继承，
 ## 这样叙事镜头与玩法镜头永远同一套构图语言。
+## 枢轴默认 = 玩家（焦点钉在主角身上）。要「脱开主角、整台机位平移过去拍别处」，
+## 给 camera.focus / camera.pan 写 `pivot: last_spawn|room_center` 或 `pivot_m: [x,y,z]`。
 ## ⚠ 俯角必须**显式**给 `elevation_deg` 才会变 —— 只改距离的运镜只是沿同一条轴滑动，
 ## 观感是"推近拉远"，不是"镜头从上往下压"（实测差异极大，见 08 文档 §5.2）。
 const CAMERA_MIN_DISTANCE_M := 2.0
@@ -36,6 +38,14 @@ var _camera_channel := {}          # 距离通道 {from, to, t, duration}
 var _camera_yaw_channel := {}      # 方位通道（度）{from, to, t, duration}
 var _camera_elev_channel := {}     # 仰角通道（度）{from, to, t, duration}
 var _camera_rest_elevation_deg := 0.0  # 接管前那套俯角（度），elevation_deg 的缺省值
+
+# —— 运镜枢轴（2026-09-21）：默认钉在玩家身上，可脱开去拍别处 ——
+var _camera_pivot_channel := {}   # 枢轴通道（Vector3）{from, to, t, duration, value}
+var _camera_pivot_mode := "player"  # player / last_spawn / room_center / point
+var _camera_pivot_point := Vector3.ZERO  # mode=point（pivot_m）时的显式坐标
+var _camera_pivot_room_id := ""  # mode=room_center 时用哪个房间
+var _has_last_spawn := false      # 是否已经有过 scene.spawn
+var _last_spawn_origin := Vector3.ZERO  # 最近一次剧情刷怪的队列中心
 
 # —— 逐帧持续生效的接管项（朝向） ——
 var _facing_active := false
@@ -65,6 +75,11 @@ func tick(delta: float) -> void:
 		_advance_channel(_camera_channel, delta)
 		_advance_channel(_camera_yaw_channel, delta)
 		_advance_channel(_camera_elev_channel, delta)
+		var pivot_done := _advance_vector_channel(_camera_pivot_channel, delta)
+		# 枢轴平滑落回玩家后清空通道 ⇒ 焦点重新「实时跟随玩家」，与接管前一字不差
+		# （否则会钉在那一刻的玩家位置快照上）。
+		if pivot_done and _camera_pivot_mode == "player":
+			_camera_pivot_channel = {}
 		_apply_camera_pose()
 	if _facing_active:
 		_advance_channel(_facing_channel, delta)
@@ -74,6 +89,23 @@ func tick(delta: float) -> void:
 		_apply_pose()
 		if pose_finished:
 			_end_pose_transition()
+
+
+## 与 _advance_channel 同构，但值是 Vector3 —— 枢轴要能做空间位移，不能只 lerpf。
+func _advance_vector_channel(channel: Dictionary, delta: float) -> bool:
+	if channel.is_empty():
+		return false
+	var duration := float(channel.get("duration", 0.0))
+	var elapsed := float(channel.get("t", 0.0)) + delta
+	channel["t"] = elapsed
+	var to: Vector3 = channel.get("to", Vector3.ZERO)
+	if duration <= 0.0:
+		channel["value"] = to
+		return true
+	var weight := clampf(elapsed / duration, 0.0, 1.0)
+	var from: Vector3 = channel.get("from", Vector3.ZERO)
+	channel["value"] = from.lerp(to, weight)
+	return weight >= 1.0
 
 
 func _advance_channel(channel: Dictionary, delta: float) -> bool:
@@ -162,6 +194,12 @@ func _all_in_room(room: Node, method_name: String) -> Array:
 # =========================================================================
 # 指令派发
 # =========================================================================
+
+## 适配器自己的告警口。与导演的 _warn 同义：**只用于错用/接线缺口**
+## （例如 camera.pivot 写错），不影响时间轴照走；正常路径一声不响。
+func _warn(message: String) -> void:
+	push_warning("[NarrativeAdapter3D] %s" % message)
+
 
 static func _ok() -> Dictionary:
 	return {"ok": true, "degraded": false, "reason": "", "restore": Callable()}
@@ -361,6 +399,8 @@ func _ensure_camera_override() -> bool:
 			Vector2(_camera_rest_offset.x, _camera_rest_offset.z).length()
 		)
 	)
+	_camera_pivot_channel = {}
+	_camera_pivot_mode = "player"
 	_camera_override_active = true
 	return true
 
@@ -370,6 +410,7 @@ func _camera_focus(params: Dictionary) -> Dictionary:
 		return _degraded("camera.focus：拿不到玩家相机，本镜头的运镜被跳过。")
 	var target_distance := maxf(CAMERA_MIN_DISTANCE_M, float(params.get("distance", _camera_rest_offset.length())))
 	var duration := maxf(0.0, float(params.get("duration", 0.6)))
+	_apply_camera_pivot_params(params, duration)
 	_camera_channel = {
 		"from": _camera_distance(), "to": target_distance, "t": 0.0, "duration": duration,
 		"value": _camera_distance(),
@@ -391,6 +432,7 @@ func _camera_pan(params: Dictionary) -> Dictionary:
 		return _degraded("camera.pan：拿不到玩家相机，本镜头的运镜被跳过。")
 	var target_yaw := float(params.get("yaw_deg", 0.0))
 	var duration := maxf(0.0, float(params.get("duration", 0.6)))
+	_apply_camera_pivot_params(params, duration)
 	_camera_yaw_channel = {
 		"from": _camera_yaw_deg(), "to": target_yaw, "t": 0.0, "duration": duration,
 		"value": _camera_yaw_deg(),
@@ -412,6 +454,15 @@ func _camera_restore(params: Dictionary) -> Dictionary:
 	if not _camera_override_active:
 		return _ok()
 	var duration := maxf(0.0, float(params.get("duration", 0.6)))
+	# 回镜必须把**枢轴**也带回玩家：否则机位会绕着一个远处的点收镜，最后再「跳」回玩家。
+	var restore_player := player_node()
+	if restore_player != null:
+		var pivot_from := _current_camera_pivot(restore_player)
+		_camera_pivot_mode = "player"
+		_camera_pivot_channel = {
+			"from": pivot_from, "to": restore_player.global_position, "t": 0.0,
+			"duration": duration, "value": pivot_from,
+		}
 	_camera_channel = {
 		"from": _camera_distance(), "to": _camera_rest_offset.length(),
 		"t": 0.0, "duration": duration, "value": _camera_distance(),
@@ -447,6 +498,77 @@ func _camera_elev_deg() -> float:
 	return float(_camera_elev_channel.get("value", _camera_rest_elevation_deg))
 
 
+## 从 cue 里读枢轴声明。三个字段都没给 ⇒ 沿用当前枢轴（默认玩家）。
+##   `pivot`："player"（默认）/ "last_spawn" / "room_center"
+##   `room_id`：仅 "room_center" 用
+##   `pivot_m`：[x, y, z] 显式世界坐标（最优先，压过 pivot）
+func _apply_camera_pivot_params(params: Dictionary, duration: float) -> void:
+	var player := player_node()
+	if player == null:
+		return
+	if params.has("pivot_m"):
+		var raw: Variant = params.get("pivot_m")
+		if raw is Array and (raw as Array).size() == 3:
+			_camera_pivot_point = Vector3(
+				float((raw as Array)[0]), float((raw as Array)[1]), float((raw as Array)[2])
+			)
+			_camera_pivot_mode = "point"
+			_start_camera_pivot_move(player, duration)
+		else:
+			_warn("camera.pivot_m 必须是 [x, y, z] 三个数，本镜头枢轴未变。")
+		return
+	if not params.has("pivot"):
+		return
+	var mode := str(params.get("pivot", "player"))
+	if mode not in ["player", "last_spawn", "room_center"]:
+		_warn(
+			"camera.pivot『%s』未知（可选 player / last_spawn / room_center，或直接用 pivot_m），本镜头退回玩家。"
+			% mode
+		)
+		mode = "player"
+	_camera_pivot_mode = mode
+	if mode == "room_center":
+		_camera_pivot_room_id = str(params.get("room_id", ""))
+	_start_camera_pivot_move(player, duration)
+
+
+## 把枢轴从当前位置平滑移到「当前声明」解析出的目标点。
+func _start_camera_pivot_move(player: Node3D, duration: float) -> void:
+	var from := _current_camera_pivot(player)
+	var target := _resolve_camera_pivot(player)
+	_camera_pivot_channel = {
+		"from": from, "to": target, "t": 0.0,
+		"duration": maxf(0.0, duration), "value": from,
+	}
+
+
+## 当前枢轴世界坐标：有通道走通道值，否则按声明实时解析。
+func _current_camera_pivot(player: Node3D) -> Vector3:
+	if not _camera_pivot_channel.is_empty():
+		# 显式定型：Dictionary.get 返回 Variant，直接 return 会撞「警告即错误」。
+		var value: Vector3 = _camera_pivot_channel.get("value", player.global_position)
+		return value
+	return _resolve_camera_pivot(player)
+
+
+## 按 `_camera_pivot_mode` 解析枢轴目标点。拿不到就**告警并退回玩家**（不静默）。
+func _resolve_camera_pivot(player: Node3D) -> Vector3:
+	match _camera_pivot_mode:
+		"point":
+			return _camera_pivot_point
+		"last_spawn":
+			if _has_last_spawn:
+				return _last_spawn_origin
+			_warn("camera.pivot=last_spawn，但本段还没有 scene.spawn，退回玩家。")
+		"room_center":
+			var room := room_node(_camera_pivot_room_id)
+			if room != null:
+				# 房间节点原点即房间中心（DungeonRoom3D 的 ±dimensions/2 约定）。
+				return room.global_position
+			_warn("camera.pivot=room_center，但找不到房间『%s』，退回玩家。" % _camera_pivot_room_id)
+	return player.global_position
+
+
 func _apply_camera_pose() -> void:
 	if _camera == null or not is_instance_valid(_camera) or not _camera.is_inside_tree():
 		return
@@ -455,18 +577,21 @@ func _apply_camera_pose() -> void:
 		return
 	if _camera_rest_offset.length_squared() <= 0.000001:
 		return
-	# 相机绕玩家做**刚体轨道**：先把「接管前那条 玩家→相机 轴」绕水平轴抬/压到目标俯角，
-	# 再绕玩家竖轴转方位角。位置与朝向同步旋转，所以焦点始终钉在玩家身上，
+	# 相机绕**枢轴**做刚体轨道：先把「接管前那条 枢轴→相机 轴」绕水平轴抬/压到目标俯角，
+	# 再绕枢轴竖轴转方位角。位置与朝向同步旋转，所以焦点恒在枢轴上 ——
+	# 枢轴默认 = 玩家（焦点钉在主角身上，老行为一字不变）；显式给 pivot 时枢轴移到别处，
+	# 整台相机就「平移过去」并对准新焦点。
 	# 俯角变化 = 镜头真的从上方压下来，而不是沿同一条轴滑动。
-	var pivot := _camera_elevation_pivot()
+	var elev_pivot := _camera_elevation_pivot()
 	var orbit := Basis(Vector3.UP, deg_to_rad(_camera_yaw_deg()))
-	var offset := orbit * pivot * _camera_rest_offset
+	var offset := orbit * elev_pivot * _camera_rest_offset
 	if offset.length_squared() <= 0.000001:
 		return
 	var distance := maxf(CAMERA_MIN_DISTANCE_M, _camera_distance())
+	var center := _current_camera_pivot(player)
 	_camera.global_transform = Transform3D(
-		orbit * pivot * _camera_rest_basis,
-		player.global_position + offset.normalized() * distance
+		orbit * elev_pivot * _camera_rest_basis,
+		center + offset.normalized() * distance
 	)
 
 
@@ -490,6 +615,10 @@ func release_camera_override() -> void:
 	_camera_channel = {}
 	_camera_yaw_channel = {}
 	_camera_elev_channel = {}
+	_camera_pivot_channel = {}
+	_camera_pivot_mode = "player"
+	_camera_pivot_point = Vector3.ZERO
+	_camera_pivot_room_id = ""
 
 
 # -------------------------------------------------------------------------
@@ -874,7 +1003,10 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 	if count <= 0:
 		return _failed("scene.spawn 的 count 必须 > 0。")
 	var side := str(params.get("side", "right"))
-	var layout := _spawn_layout(side, float(params.get("distance", 3.6)))
+	# `forward_m` = 沿视线方向的**额外前推**（米）。不写则沿用旧的 distance*0.5。
+	var layout := _spawn_layout(
+		side, float(params.get("distance", 3.6)), params.get("forward_m", null)
+	)
 	var origin: Vector3 = layout["origin"]
 	var axis: Vector3 = layout["axis"]
 	var result: Variant = dungeon.call(
@@ -882,6 +1014,9 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 		float(params.get("spread", 1.5))
 	)
 	if result is int and int(result) > 0:
+		# 记下队列中心：相机枢轴 `pivot: "last_spawn"` 用它（作者不用写坐标）。
+		_has_last_spawn = true
+		_last_spawn_origin = origin
 		# 刷新出来的怪是**已发生的效果**，收口时不回滚（08 文档 §6.4）：
 		# 玩家看完这句就要自己动手清场，怪在这里消失才是 bug。
 		return _ok()
@@ -893,7 +1028,8 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 ## 玩家左右侧站位。返回 {"origin": 队列中心, "axis": 展开轴}。
 ## 用玩家朝向而不是房间朝向 —— 「画面的右边」在俯视角下就等于角色的右手边，
 ## 这样不需要为每个房间预写方位，房间换了构图也不会错。
-func _spawn_layout(side: String, distance: float) -> Dictionary:
+## `forward_override`（= cue 的 `forward_m`）：沿视线额外前推的米数；null = 用旧的 distance*0.5。
+func _spawn_layout(side: String, distance: float, forward_override: Variant = null) -> Dictionary:
 	var player := player_node()
 	if player == null:
 		return {"origin": Vector3.ZERO, "axis": Vector3.RIGHT}
@@ -904,9 +1040,16 @@ func _spawn_layout(side: String, distance: float) -> Dictionary:
 	forward = forward.normalized()
 	var right := forward.cross(Vector3.UP).normalized()
 	var lateral := right if side == "right" else -right
+	# 前向分量：默认 distance*0.5（原行为）。触发通常发生在玩家**刚跨进门**那一刻，
+	# 那时玩家还站在门口 ⇒ 默认值会把整条队列留在门口（实测最后一只几乎踩在门线上）。
+	# 房间进深大、或想让怪「在房间里侧」时，用 cue 的 `forward_m` 显式前推。
+	# ⚠️ 前推会同时拉大相机到队列的距离（运镜构图随之变化）——它是**作者的构图旋钮**。
+	var forward_m := maxf(0.0, distance * 0.5)
+	if forward_override != null:
+		forward_m = maxf(0.0, float(forward_override))
 	# 队列沿**视线方向**展开：镜头转向侧面看过去时，这条队形在画面里是横排。
 	return {
-		"origin": player.global_position + lateral * distance + forward * maxf(0.0, distance * 0.5),
+		"origin": player.global_position + lateral * distance + forward * forward_m,
 		"axis": forward,
 	}
 

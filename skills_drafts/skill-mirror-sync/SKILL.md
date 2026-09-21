@@ -26,6 +26,23 @@ python scripts/sync_skill_mirrors.py --check   # 只读校验
 
 `--sync` 对 A 拥有的每个 skill：先 `rmtree` 目标目录再整树复制，**杜绝残留旧文件**；排除 `__pycache__`。
 
+⛔ **本机（Windows + Safe-Delete 守卫）不要跑 `--sync`**：守卫会拦下 `rmtree` 的 trash 操作，
+`--sync` 会在**中途**抛 `OSError: [safe-delete] 操作失败: ... Some operations were aborted`，
+而**已经 rmtree 掉的目录不会被重建** —— 2026-09-21 实测把 `skills_drafts/game-character-model-pipeline`
+整目录删空（含 `SKILL.md` / `agents/` / `references/`），必须从 A 手动 `cp` 补回并逐文件校验 sha256。
+
+本机替代流程（等效且安全，只增不删）：
+
+```bash
+A="C:/Users/<user>/.workbuddy/skills"; B="<项目>/skills_drafts"; C="<项目>/.codex/skills"; D="C:/Users/<user>/.codex/skills"
+for t in "$B" "$C" "$D"; do mkdir -p "$t/<skill>" && cp -rf "$A/<skill>/." "$t/<skill>/"; done
+sha256sum "$A/<skill>/SKILL.md" "$B/<skill>/SKILL.md" "$C/<skill>/SKILL.md" "$D/<skill>/SKILL.md"  # 四行必须同哈希
+python scripts/sync_skill_mirrors.py --check                                                       # --check 只读，安全
+```
+
+⚠️ `cp -rf "$A/<skill>/." "$t/<skill>/"` 会把 A 里的 `scripts/__pycache__/*.pyc` **一并带过去**（`--sync` 原本会排除它）⇒ 复制后清一次副本里的 `__pycache__`：**只删 `.pyc` 再 `os.rmdir` 空目录，别整目录 rmtree**（守卫同样会拦它，且可能留下半删状态）。
+⚠️ 替代流程做的是「覆盖 + 补齐」，**不清理副本里的多余文件**。若某个 skill 在 A 里删过文件，副本会留下孤儿文件 ⇒ 那种情况要人工删副本里的孤儿（单独删那一个文件，别整目录 rmtree）。
+
 ⚠️ **不要把临时文件写进 skill 目录（`~/.workbuddy/skills/<name>/`）。** 那里是正本，
 任何临时日志都会被当成 skill 内容同步到 B/C/D —— 实测把 `_sync.log` 重定向进
 `skill-mirror-sync/` 后，`--check` 立刻报 `diff=['skill-mirror-sync/_sync.log', ...]`

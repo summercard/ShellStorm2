@@ -25,6 +25,10 @@ const FINISH_TIMEOUT_MS := 30000
 const TIME_SCALE := 8.0
 ## 接管前的朝向基线。刻意取非 0：归还若写成"归零"就会露馅。
 const FACING_BASELINE := 0.7
+## room_center 枢轴用的假房间中心（世界坐标）。
+const PROBE_ROOM_CENTER := Vector3(-11.0, 0.0, 7.0)
+## 第二段的位置触发点 = 房间中心 + point_offset(-14, 0, 0)，与剧本 02 的声明一致。
+const TRIGGER_POINT := Vector3(-25.0, 0.0, 7.0)
 
 
 class FakeActor:
@@ -84,6 +88,10 @@ class FakeRoom:
 	extends Node3D
 	var room_id := ""
 
+	# 适配器的 room_node() 只认「有 room_id 且带 contains_world_position」的节点。
+	func contains_world_position(_world_position: Vector3) -> bool:
+		return true
+
 
 ## 只带 room_entered 信号的最小"地牢"，用来验证导演的自动绑定链。
 class FakeDungeon:
@@ -100,6 +108,7 @@ var _camera: Camera3D = null
 ## 接管前那套俯角（度）。运镜是否真的"从上往下压"，只能拿它当基准比。
 var _camera_rest_elevation := 0.0
 var _bark: FakeBark = null
+var _probe_room: FakeRoom = null
 var _spawn_calls: Array = []
 var _finish_reasons: Array[String] = []
 
@@ -154,6 +163,13 @@ func _build_world() -> void:
 	_bark.name = "FakeBark"
 	add_child(_bark)
 
+	# 房间探针：room_center 枢轴用它。
+	_probe_room = FakeRoom.new()
+	_probe_room.name = "ProbeRoom"
+	_probe_room.room_id = NEXT_ROOM_ID
+	add_child(_probe_room)
+	_probe_room.global_position = PROBE_ROOM_CENTER
+
 	NarrativeDirector.narrative_finished.connect(_on_finished)
 
 
@@ -205,12 +221,18 @@ func _phase_a_static() -> void:
 				script.duration >= last_at - 0.0001,
 				"%s duration %.2f >= 末条 at %.2f" % [narrative_id, script.duration, last_at],
 			)
+		# 触发形式两种都合法：开头戏用**事件**（gameplay_started），第二段用**位置**
+		# （要玩家真的走进房间、门关上之后才起跑 —— room_entered 在刚跨进门那一刻就发，太早）。
+		# 两种都必须**点名房间**，且房间相对写法不许退化成写死世界坐标。
+		var kind := str(script.trigger.get("kind", ""))
 		_check(
-			str(script.trigger.get("kind", "")) == NarrativeScript3D.TRIGGER_KIND_EVENT,
-			"%s 触发类型是 event" % narrative_id,
+			kind in [NarrativeScript3D.TRIGGER_KIND_EVENT, NarrativeScript3D.TRIGGER_KIND_POINT],
+			"%s 触发类型是 event 或 point（实际 %s）" % [narrative_id, kind],
 		)
-		var filter: Dictionary = script.trigger.get("filter", {})
-		_check(str(filter.get("room_id", "")) != "", "%s 触发带 room_id 过滤" % narrative_id)
+		var room_ref := str(script.trigger.get("point_room", ""))
+		if kind == NarrativeScript3D.TRIGGER_KIND_EVENT:
+			room_ref = str((script.trigger.get("filter", {}) as Dictionary).get("room_id", ""))
+		_check(room_ref != "", "%s 触发点名了房间（room_id / point_room）" % narrative_id)
 
 	# 开场类剧本必须挂 gameplay_started，**不能挂 room_entered**：后者在场景 `_ready` 里就发了，
 	# 那一刻开场页还没把相机与输入接管完，剧情会在菜单背后空跑、并与开场页互相顶
@@ -265,6 +287,15 @@ func _phase_a_static() -> void:
 	_check(_no_path_literals(), "src/narrative/** 无节点路径字面量（注释除外）")
 	_check(_tower_camera_override_wired(), "TowerDescent3D 的相机接管查询已接入剧情导演")
 	_check(_dungeon_binding_wired(), "room_entered 信号节点入树即被导演绑定（触发链接线面）")
+	# 第三处"断了也不报错"的接线：复位存档 = 新档，本局内存态必须归零。
+	# 这条断了只表现为「复位存档 → 重新开始后开场剧本不播」，运行时没有任何报错。
+	_check(
+		BaseManager != null
+		and BaseManager.game_save_reset_completed.is_connected(
+			Callable(NarrativeDirector, "_on_game_save_reset_completed")
+		),
+		"复位存档信号已接入导演（否则复位档后冷启动开场不再播，运行时零报错）",
+	)
 	_check(
 		_dungeon_input_lock_yields(),
 		"Dungeon3D 的每帧输入锁同步已让权给演出（否则'停住'会被逐帧顶掉）",
@@ -495,16 +526,25 @@ func _phase_c_real_scripts() -> void:
 		"朝向归还到接管前的原值 %.3f（实际 %.4f）" % [FACING_BASELINE, _player.aim_yaw],
 	)
 
-	# ---- C2 下一间房：停住 → 镜头右移 → 右边五只小僵尸 → 挪回 → 「它们是什么？」
+	# ---- C2 第二段：**位置触发**（房间相对）→ 停住 → 镜头**平移过去**看僵尸 → 挪回 → 「它们是什么？」
+	# 触发已从 room_entered 改成 point：room_entered 在玩家**刚跨进门**那一刻就发，
+	# 那一刻门还没关、玩家还站在门口 —— 实机表现就是「怪刷在门口、镜头也在门口」。
+	# 现在要玩家真的走进房间（房间中心 + point_offset）才触发（2026-09-21 主人要求）。
 	_spawn_calls.clear()
 	_bark.lines.clear()
 	_finish_reasons.clear()
-	_emit_room(NEXT_ROOM_ID)
+	# 反向对照：站在触发点外（> radius）时轮询**不得**触发。
+	_place_player_and_camera(TRIGGER_POINT + Vector3(12.0, 0.0, 0.0))
+	NarrativeDirector.evaluate_point_for_test()
+	await _wait_frames(2)
+	_check(not NarrativeDirector.is_playing(), "位置触发：站在触发点外不触发（反向对照）")
+	# 走进房间、踩到触发点 → 轮询命中
+	_place_player_and_camera(TRIGGER_POINT)
+	NarrativeDirector.evaluate_point_for_test()
 	await _wait_frames(2)
 	_check(
 		NarrativeDirector.active_id() == ZOMBIES_ID,
-		"room_entered(%s) 触发 %s（实际 %s）"
-		% [NEXT_ROOM_ID, ZOMBIES_ID, NarrativeDirector.active_id()],
+		"走进房间触发点后起跑 %s（实际 %s）" % [ZOMBIES_ID, NarrativeDirector.active_id()],
 	)
 	_check(_player.input_locked, "第二段同样先停住角色")
 	_check(NarrativeDirector.is_camera_override_active(), "第二段接管了摄影机（只平移不改变构图距离）")
@@ -527,28 +567,55 @@ func _phase_c_real_scripts() -> void:
 			origin is Vector3 and (origin as Vector3).length() > 0.0,
 			"队列中心由玩家位置推出（不是原点）",
 		)
-	# 构图断言：镜头右移的驻留窗口（平移 0.1+1.3 结束 → 2.6 开始回摆）内逐帧测量。
+		# 队列必须**整体在玩家前方**。触发发生在玩家刚跨进房间那一刻（他还在门口），
+		# 若队列压在玩家身后/门线上，实机看到的就是「怪刷在门口」（2026-09-21 主人反馈）。
+		# 旧值 forward=distance*0.5=2.3 时，最后一只在 −0.7m —— 正是这个断言要挡住的情况。
+		var fwd_axis := -_player.global_basis.z
+		fwd_axis.y = 0.0
+		if origin is Vector3 and fwd_axis.length_squared() > 0.000001:
+			fwd_axis = fwd_axis.normalized()
+			var center_fwd := ((origin as Vector3) - _player.global_position).dot(fwd_axis)
+			var row := float(int(call.get("count", 1)) - 1) * 0.5
+			var rearmost := center_fwd - row * float(call.get("spread", 1.5))
+			_check(
+				rearmost > 1.0,
+				"队列最后一只也在玩家前方 %.2fm（不贴门口，须 >1.0m）" % rearmost,
+			)
+	# 构图断言：镜头**平移过去**看僵尸的驻留窗口（0.1+1.3 结束 → 2.6 开始回摆）内逐帧测量。
 	var framing: Dictionary = await _sample_framing(1.5, 2.55)
 	_check(
 		int(framing["samples"]) > 0,
-		"镜头右移驻留窗口内采到帧（%d 帧，峰值 t=%.2f）"
+		"运镜驻留窗口内采到帧（%d 帧，峰值 t=%.2f）"
 		% [int(framing["samples"]), float(framing["peak_t"])],
 	)
 	_check(
-		float(framing["depth"]) > 8.0 and float(framing["depth"]) < 13.5,
-		"僵尸队列在相机前方 8~13.5m（depth=%.2f）" % float(framing["depth"]),
+		float(framing["depth"]) > 4.0 and float(framing["depth"]) < 10.0,
+		"僵尸队列在相机前方 4~10m（depth=%.2f）" % float(framing["depth"]),
 	)
-	# 反向对照：把 camera.pan 的符号写反，队列会从 +16° 甩到 +37°（贴近画面边缘），
-	# 深度也从 10.7m 掉到 6.9m —— 所以角度带与深度带同时收紧才能抓住符号翻转。
+	# 构图契约变了：以前是「镜头绕主角右甩、僵尸落在画面右侧」（偏角 12~24°）；
+	# 现在是「镜头**平移过去正对僵尸**」⇒ 僵尸应在画面**正中**（|偏角| 小）。
+	# 反向对照：把 pivot 去掉（回到绕玩家），偏角会跳回 16°+ 且深度掉出这条带。
 	_check(
-		float(framing["angle_deg"]) > 12.0 and float(framing["angle_deg"]) < 24.0,
-		"僵尸队列落在画面**右侧**且与角色分离（水平偏角 %.1f°，目标 12~24°）"
+		absf(float(framing["angle_deg"])) < 6.0,
+		"镜头正对僵尸 ⇒ 僵尸在画面正中（水平偏角 %.1f°，目标 |偏角| < 6°）"
 		% float(framing["angle_deg"]),
 	)
+	# 机位真的绕**队列**而不是绕玩家：相机到队列距离 == 接管前的相机距离。
+	if not _spawn_calls.is_empty():
+		var queue_origin: Vector3 = _spawn_calls[0].get("origin", Vector3.ZERO)
+		var queue_rest_len := _CAMERA_REST_OFFSET.length()
+		_check(
+			absf(_camera.global_position.distance_to(queue_origin) - queue_rest_len) < 0.05,
+			"机位绕的是**僵尸队列**（距队列 %.2fm，接管前相机距离 %.2fm）"
+			% [_camera.global_position.distance_to(queue_origin), queue_rest_len],
+		)
 	_note(
 		"C2 构图采样：偏角=%.1f° 深度=%.2fm 峰值 t=%.2f"
 		% [float(framing["angle_deg"]), float(framing["depth"]), float(framing["peak_t"])]
 	)
+	# 把假玩家/相机放回原点：触发点就在房间中心附近，玩家一直站在上面会让后续用例
+	# （尤其 C5 复位存档后 `once` 归零的那一次轮询）被它误触发。
+	_place_player_and_camera(Vector3.ZERO)
 	await _wait_until_finished()
 	_check(
 		_finish_reasons.size() == 1 and _finish_reasons[0] == "flow.end",
@@ -563,9 +630,12 @@ func _phase_c_real_scripts() -> void:
 	_emit_gameplay_started(OPENING_ROOM_ID)
 	await _wait_frames(2)
 	_check(not NarrativeDirector.is_playing(), "once=run 的第一段不会重播")
-	_emit_room(NEXT_ROOM_ID)
+	_place_player_and_camera(TRIGGER_POINT)
+	NarrativeDirector.evaluate_point_for_test()
 	await _wait_frames(2)
 	_check(not NarrativeDirector.is_playing(), "once=run 的第二段不会重播")
+	# 离场：C5 复位存档会把 `once` 归零，玩家若还站在触发点上会被那一次轮询误触发。
+	_place_player_and_camera(Vector3.ZERO)
 
 	# ---- C4 中断路径：演到一半切场景前必须先把现场还回去
 	_emit_gameplay_started(OPENING_ROOM_ID)  # 已被 once 消耗，这里改用显式播放验证 abort
@@ -583,6 +653,111 @@ func _phase_c_real_scripts() -> void:
 		"C 统计：刷怪调用=%d，台词累计=%d，姿态指令=%d"
 		% [_spawn_calls.size(), _bark.lines.size(), _avatar.pose_calls]
 	)
+
+	# ---- C5 复位存档 = 新本局：本局内存态归零，冷启动开场剧本必须能重新触发（2026-09-21 真机）
+	# 根因：复位档走 change_scene_to_file、autoload 存活 ⇒ _armed 的 fired_count 不归零 ⇒
+	# once=run 把开场永久挡住。reset_run_state() 由 BaseManager.game_save_reset_completed 驱动。
+	_finish_reasons.clear()
+	# 走**真实信号**（暂停菜单复位存档发的就是这一发），顺带覆盖 _on_game_save_reset_completed；
+	# 不实际写 user://（本用例只验证「信号 → 归零 → 能重触发」这条链）。
+	BaseManager.game_save_reset_completed.emit({"success": true})
+	_check(not NarrativeDirector.is_playing(), "reset_run_state 之后没有在演剧本")
+	_emit_gameplay_started(OPENING_ROOM_ID)
+	await _wait_frames(2)
+	_check(
+		NarrativeDirector.active_id() == WAKE_ID,
+		"复位存档后开场剧本重新触发（实际 active=%s）" % NarrativeDirector.active_id(),
+	)
+	await _wait_until_finished()
+	_check(
+		_finish_reasons.size() == 1 and _finish_reasons[0] == "flow.end",
+		"重触发那次仍按 flow.end 正常收口（%s）" % str(_finish_reasons),
+	)
+	_check(not _player.input_locked, "重触发收口后输入归还")
+	# 反向对照：不调 reset_run_state、直接再发一次必须**不**播 —— 证明上面的绿不是漏检。
+	_finish_reasons.clear()
+	_emit_gameplay_started(OPENING_ROOM_ID)
+	await _wait_frames(2)
+	_check(not NarrativeDirector.is_playing(), "反向对照：once 未复位时再发一次仍被挡住")
+
+	# ---- C6 运镜枢轴：默认钉在玩家；显式 pivot 后**整台机位平移过去**（2026-09-21）
+	NarrativeDirector.reset_for_test()
+	await _wait_frames(2)
+	var rest_len := _CAMERA_REST_OFFSET.length()
+
+	# (a) 不给 pivot ⇒ 焦点仍在玩家（老行为，反向对照）
+	await _pivot_play([{"at": 0.0, "do": "camera.pan", "yaw_deg": 0.0, "duration": 0.0}])
+	_check(
+		absf(_camera.global_position.distance_to(_player.global_position) - rest_len) < 0.05,
+		"不给 pivot 时机位仍绕玩家（距玩家 %.2fm，期望 %.2fm）"
+		% [_camera.global_position.distance_to(_player.global_position), rest_len],
+	)
+	_check(
+		_camera.global_position.distance_to(PROBE_ROOM_CENTER) > 3.0,
+		"不给 pivot 时机位没有跑到别处",
+	)
+	NarrativeDirector.abort("c6a")
+	await _wait_frames(2)
+
+	# (b) pivot_m 显式坐标 ⇒ 脱开玩家、绕那个点
+	await _pivot_play([{
+		"at": 0.0, "do": "camera.pan", "pivot_m": [-11.0, 0.0, 7.0], "duration": 0.0,
+	}])
+	_check(
+		absf(_camera.global_position.distance_to(PROBE_ROOM_CENTER) - rest_len) < 0.05,
+		"pivot_m 后机位绕该点（距 %.2fm，期望 %.2fm）"
+		% [_camera.global_position.distance_to(PROBE_ROOM_CENTER), rest_len],
+	)
+	_check(
+		_camera.global_position.distance_to(_player.global_position) > 3.0,
+		"pivot_m 后机位真**脱开**了玩家（距玩家 %.2fm）"
+		% _camera.global_position.distance_to(_player.global_position),
+	)
+	NarrativeDirector.abort("c6b")
+	await _wait_frames(2)
+
+	# (c) last_spawn ⇒ 绕刚刷出来的那堆怪（作者不写坐标）
+	_spawn_calls.clear()
+	await _pivot_play([
+		{
+			"at": 0.0, "do": "scene.spawn", "room_id": NEXT_ROOM_ID,
+			"kind": "melee_chaser", "count": 5, "side": "right",
+			"distance": 5.6, "forward_m": 4.8,
+		},
+		{"at": 0.0, "do": "camera.pan", "pivot": "last_spawn", "duration": 0.0},
+	])
+	var spawn_origin: Vector3 = Vector3.ZERO
+	if not _spawn_calls.is_empty():
+		spawn_origin = _spawn_calls[0].get("origin", Vector3.ZERO)
+	_check(_spawn_calls.size() == 1, "last_spawn 用例先刷了一次怪（实际 %d）" % _spawn_calls.size())
+	_check(
+		absf(_camera.global_position.distance_to(spawn_origin) - rest_len) < 0.05,
+		"pivot=last_spawn 后机位绕刷怪点（距 %.2fm，期望 %.2fm）"
+		% [_camera.global_position.distance_to(spawn_origin), rest_len],
+	)
+	_check(
+		spawn_origin.distance_to(_player.global_position) > 3.0,
+		"（用例前提）刷怪点确实离玩家够远，脱开看得到",
+	)
+	NarrativeDirector.abort("c6c")
+	await _wait_frames(2)
+
+	# (d) room_center ⇒ 绕房间中心（房间节点原点即中心）
+	await _pivot_play([{
+		"at": 0.0, "do": "camera.pan", "pivot": "room_center",
+		"room_id": NEXT_ROOM_ID, "duration": 0.0,
+	}])
+	_check(
+		absf(_camera.global_position.distance_to(PROBE_ROOM_CENTER) - rest_len) < 0.05,
+		"pivot=room_center 后机位绕房间中心（距 %.2fm，期望 %.2fm）"
+		% [_camera.global_position.distance_to(PROBE_ROOM_CENTER), rest_len],
+	)
+	_check(
+		_camera.global_position.distance_to(_player.global_position) > 3.0,
+		"pivot=room_center 后机位真脱开了玩家",
+	)
+	NarrativeDirector.abort("c6d")
+	await _wait_frames(2)
 
 
 ## 驱动"进房"事件。走导演的真实事件评估入口（Dungeon3D 的 room_entered 信号路径
@@ -616,6 +791,31 @@ func _sample_framing(from_t: float, to_t: float) -> Dictionary:
 
 ## 驱动「玩法正式开始」。与 _emit_room 同路：走导演的真实事件评估入口，
 ## 绕开信号接线本身，单独验证裁决逻辑（once / room_id 过滤）。
+## 接管前的「玩家→相机」位移（_build_world 里给的真实第三人称位姿）。
+const _CAMERA_REST_OFFSET := Vector3(0.0, 3.5, 6.0)
+
+
+## 假相机**不会**自己跟着假玩家走 —— 要挪玩家时必须一起挪相机，否则接管瞬间抓到的
+## 「玩家→相机」位移会变成几十米，运镜断言全线失真（漏掉这步实测得到 25m 的假距离）。
+func _place_player_and_camera(target: Vector3) -> void:
+	_player.global_position = target
+	_camera.global_position = target + _CAMERA_REST_OFFSET
+	_camera.look_at(target + Vector3(0.0, 1.2, 0.0), Vector3.UP)
+
+
+## 起一段只跑运镜的测试剧本并等它接管（C6 用）。
+func _pivot_play(cues: Array) -> void:
+	var script := NarrativeScript3D.from_dictionary({
+		"narrative_id": "test_camera_pivot",
+		"schema_version": 1,
+		"duration": 30.0,
+		"cues": cues,
+	})
+	NarrativeDirector.register_script_for_test("test_camera_pivot", script)
+	NarrativeDirector.play("test_camera_pivot")
+	await _wait_frames(3)
+
+
 func _emit_gameplay_started(room_id: String) -> void:
 	NarrativeDirector.evaluate_event_for_test("gameplay_started", room_id)
 

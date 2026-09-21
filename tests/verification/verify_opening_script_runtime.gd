@@ -26,6 +26,9 @@ const ENTRY_SCENE := "res://scenes/ui/MainEntryScreen3D.tscn"
 const YIELD_SCRIPT_ID := "test_opening_entry_yield"
 const WAKE_ID := "nar_tower_opening_01_wake"
 const OPENING_ROOM_ID := "floor_01_exit"
+## 第二段：位置触发的真实几何校验用它。
+const ZOMBIES_ID := "nar_tower_opening_02_zombies"
+const ZOMBIES_ROOM_ID := "floor_01_main_02"
 const SEED := 990098
 
 const BOOT_TIMEOUT_MS := 30000
@@ -62,6 +65,7 @@ func _ready() -> void:
 	await _phase_b_runtime()
 	_phase_c_handback()
 	await _phase_d_entry_camera_yield()
+	_phase_e_zombie_trigger_geometry()
 	_report()
 
 
@@ -336,6 +340,42 @@ func _fatal(message: String) -> void:
 	_failures.append(message)
 	push_error("OPENING_SCRIPT_RUNTIME_FAIL: %s" % message)
 	_report()
+
+
+## 第二段触发器是**房间相对**的（`point_room` + `point_offset`）。假世界只能验证算术；
+## 这里在**真机几何**上验：解出来的点必须落在会议室内部、且**不在**玩家上一个房间（办公室）里
+## —— 证明「必须真的走进房间、门关上之后才触发」这条约束在真实楼层上成立。
+func _phase_e_zombie_trigger_geometry() -> void:
+	var rooms: Variant = _tower.get("_room_by_id")
+	if not (rooms is Dictionary):
+		_check(false, "拿不到塔楼房间表（本段几何校验无法进行）")
+		return
+	var room := (rooms as Dictionary).get(ZOMBIES_ROOM_ID) as DungeonRoom3D
+	_check(room != null, "98F 存在房间 %s" % ZOMBIES_ROOM_ID)
+	if room == null:
+		return
+	var origin: Variant = NarrativeDirector.point_origin_for_test(ZOMBIES_ID)
+	_check(origin is Vector3, "第二段的位置触发原点可解析（房间相对写法）")
+	if not (origin is Vector3):
+		return
+	var point := origin as Vector3
+	_check(
+		room.contains_world_position(point),
+		"触发点落在会议室**内部**（world=%.1f, %.1f, %.1f）" % [point.x, point.y, point.z],
+	)
+	var office := (rooms as Dictionary).get(OPENING_ROOM_ID) as DungeonRoom3D
+	if office != null:
+		_check(
+			not office.contains_world_position(point),
+			"触发点**不在**办公室内（玩家必须真的走进会议室才触发）",
+		)
+	_note(
+		"E 第二段触发点 = (%.1f, %.1f, %.1f)；会议室中心 = (%.1f, %.1f, %.1f)"
+		% [
+			point.x, point.y, point.z,
+			room.global_position.x, room.global_position.y, room.global_position.z,
+		]
+	)
 
 
 func _report() -> void:

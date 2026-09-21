@@ -107,10 +107,10 @@
       "sheet_scope": ["3D-特效"],
       "prefab_pages": ["3D-特效"],
       "animation_sheets": [],
-      "primary_skill": "godot-model-asset-import-standard",
-      "supporting_skills": [],
+      "primary_skill": "vfx-combat-effect-authoring",
+      "supporting_skills": ["godot-model-asset-import-standard"],
       "owner": "待分配",
-      "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范。"
+      "scope_note": "可独立实例化的3D战斗、环境与可见性特效。每个特效一个独立 Prefab，遵循 14.6 特效系统与制作规范；制作、修复与验收的流程标准见 skill `vfx-combat-effect-authoring`（2026-09-21 接管本域 primary_skill）。"
     },
     {
       "key": "media",

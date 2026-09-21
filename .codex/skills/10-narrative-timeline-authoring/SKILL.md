@@ -184,12 +184,12 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 | 指令 | 关键参数 | 备注 |
 |---|---|---|
 | `player.invulnerable` | `who` / `enabled` | 复用 `Player3D.is_invincible`（**不是新增开关**） |
-| `camera.focus` | `distance` / `elevation_deg` / `duration` | `elevation_deg` **可选**；不给时俯角沿用玩法镜头 |
-| `camera.pan` | `yaw_deg` / `elevation_deg` / `duration` | 绕玩家竖轴甩（可选压俯角）。**正角 = 视线向左摆**（见 §7 坑 13） |
-| `camera.restore` | `duration` | 距离 / 方位 / 俯角一起回，再放权给玩法镜头 |
+| `camera.focus` | `distance` / `elevation_deg` / **`pivot`** / `pivot_m` / `room_id` / `duration` | `elevation_deg` **可选**；不给时俯角沿用玩法镜头。`pivot` 默认玩家 |
+| `camera.pan` | `yaw_deg` / `elevation_deg` / **`pivot`** / `pivot_m` / `room_id` / `duration` | 绕**枢轴**竖轴甩（可选压俯角）。**正角 = 视线向左摆**（见 §7 坑 13） |
+| `camera.restore` | `duration` | 距离 / 方位 / 俯角 / **枢轴**一起回，再放权给玩法镜头 |
 | `actor.pose` | `clip` / `phase` / `to_phase` / `duration` / `frozen` | 相位锁。趴↔起身 = `dead` 相位 1.0↔0.0 |
 | `actor.face` | `yaw_deg` / `relative` / `duration` | `relative: true` = 在接管前朝向上叠加（张望用） |
-| `scene.spawn` | `room_id` / `kind` / `count` / `side` / `distance` / `spread` | 只有**和平区/空房**才是必要的；战斗房本来就会自己刷怪 |
+| `scene.spawn` | `room_id` / `kind` / `count` / `side` / `distance` / `forward_m` / `spread` | 只有**和平区/空房**才是必要的；战斗房本来就会自己刷怪 |
 | `scene.despawn` | `room_id` | 只清带 `narrative_spawned` 标记的怪，不动关卡原有的 |
 
 <span style="color:#791F1F">**要"镜头从上往下压"，必须给 `elevation_deg`；只改 `distance` 不叫俯冲。**</span>
@@ -197,6 +197,13 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 给 `elevation_deg: 34.0` 才真的 69.4° → 34.0°。`elevation_deg` 是相机相对玩家的**世界仰角**
 （`atan2(相机高出玩家, 水平距离)`），**不是增量**；不给 = 沿用接管前玩法镜头那套俯角。
 数值依赖房间几何，别照抄（见 §7 坑 17）。
+
+**运镜枢轴 `pivot`（可选，默认 `player` = 焦点钉在主角身上）**：要「脱开主角、整台机位平移过去拍别处」就给 ——
+`pivot: "last_spawn"`（绕最近一次 `scene.spawn` 的队列中心，**零坐标**）、
+`pivot: "room_center"` + `room_id`（绕房间中心）、
+`pivot_m: [x, y, z]`（显式世界坐标，最优先）。
+枢轴按同一个 `duration` **平滑插值** ⇒ 是平移不是瞬移；`restore` 会把它带回玩家。
+拿不到目标点会**告警并退回玩家**；脱开后**不处理遮挡**，取景处自己留空。
 
 **🔶 仍需新增，写了会降级跳过（会告警）：**
 
@@ -229,13 +236,22 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 
 | 方式 | 写法 | 适用 |
 |---|---|---|
-| **位置** | 剧本 `trigger` 里写 `kind: "point"` + `point` + `radius` | "走到这块地方" |
+| **位置** | `kind: "point"` + `point_room` + `point_offset`（**首选**，房间相对）或 `point`（世界坐标）+ `radius` | "走到这块地方" |
 | **事件** | 剧本 `trigger` 里写 `kind: "event"` + `event` + `filter` | "进房 / 清房 / 击杀 / 开门 / 撤离……" |
 | **脚本** | 写一个几行的 `NarrativeDirector.arm(...)` 挂到任意已有节点 | **任意特殊情况**（组合条件、自定义判定） |
 
 **位置触发的 `radius` 下限是 `1.0`**（校验器强制）。为什么：判定是 0.1s 轮询不是事件，玩家 8m/s 时单次间隔位移约 0.8m，半径太小会穿过去漏触发。
 
 **垂直带**：`point` 的 `y` 会与玩家高度比，默认容差 `2.0`m —— 防止楼上楼下误触发。写 `point` 时**要填真实世界坐标的 y**，不要一律写 `0`。
+
+**位置触发优先用房间相对写法。** `point` 要写世界坐标，而房间是运行时生成的 —— 写死坐标在换布局后会
+**静默失效**（症状是「剧情永不触发」）。改用 `point_room: "<房间id>"` + `point_offset: [dx,dy,dz]`
+（相对**房间中心**），世界坐标由导演运行期用 `room.to_global(offset)` 解出。
+实测：会议室中心 `(−5, −24, 2.5)` + offset `[-14, 0, 0]` ⇒ 进门 6m 处的触发点。
+
+**什么时候该换位置触发**：`room_entered` 在玩家**刚跨进门**那一刻就发 —— 那时门还没关、人还站在门口，
+一切「基于玩家位置」的刷怪与运镜都会贴着门口（第二段「怪刷在门口」就是这么来的）。要演出发生在
+**进门之后**，就换成位置触发 + 一个进深 offset（玩家走进来、门自动关上，才起跑）。
 
 ### 4.2 可用事实清单（**必须对照**）
 
@@ -398,6 +414,16 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
     别把"剧情里鼠标转不动"当 bug 去查。
 19. **姿态锁（`actor.pose`）在相位过渡走完时由系统自动交还角色系统。** 不交还的话角色会**永久僵在倒地剪辑的第一帧**、
     待机动画根本不播，观感是"起身之后硬转身体"，全错。所以 `to_phase` 那条 cue 之后不用（也不该）再写还原。
+
+20. **`once` 只活在「本局内存态」，它的归零点是「复位存档」，不是「重开场景」。** 冷启动开场剧本挂
+    `gameplay_started` + `once: run`，靠 `_armed[].fired_count` 记账（08 文档 §9：不进存档）。复位存档走
+    `change_scene_to_file`、autoload 存活 ⇒ 少了 `NarrativeDirector.reset_run_state()` 就**永远不再触发**。
+    症状是「复位存档、重新开始后开场剧情整个消失」，**零报错**。该复位由 `BaseManager.game_save_reset_completed`
+    驱动（已实装）。反面：**中途中存档 → 退出 → 续局，`once` 会重复触发**（08 §8.6，v0.2 明确接受）。
+    另：改叙事脚本时**不能**用 `get_node("/root/…")` 取别的 autoload —— `src/narrative/**` 禁路径字面量，
+    只能用全局标识（`BaseManager` / `DialogueUI` 同款），否则 `verify_narrative_timeline` 直接变红。
+
+21. **`scene.spawn` 的队列默认贴着玩家 —— 触发发生在你**刚跨进门**那一刻，`forward = distance*0.5` 只有两三米，最后一只甚至压在你身后（门线上）。要「怪在房间里侧」就写 `forward_m`（沿视线额外前推，独立于 `distance`）。⚠️ 两个连带效应：① 前推会把队列推向**画面正中**（相机右移构图被破坏）⇒ 要同时加大 `distance`；② 前推会拉大相机到队列的距离 ⇒ `verify_narrative_timeline` 的构图带宽（偏角 12~24°、深度 8~13.5m）会拦住你，别硬放宽带宽去迁就，先确认是你真的要换构图。
 
 ---
 
