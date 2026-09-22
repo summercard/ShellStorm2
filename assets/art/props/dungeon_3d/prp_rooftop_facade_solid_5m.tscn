@@ -3,16 +3,21 @@
 ; 5m 天台外立面·实墙（天台参考组件库 v002）
 ; 正式美术：tower_zones/rooftop/components/env_rooftop_ref_facade_solid_top3d.glb
 ;   5.00m 长 × 11.90m 高 × 0.30m 厚；原点在**底面中心**（几何 Y=0..11.90）。
-; 这是「99 层外墙」的可视件：参考拼装 reference_assembly.json 把 facade_* 摆在
-;   z=-12.00（比女儿墙低一整层 12m），底面对齐 99F 楼面、顶面 11.90m 落在 100F 楼板下方
+; 这是「99 层外墙」的可视件：最早由 100F 天台在女儿墙正下方补出（参考拼装
+;   reference_assembly.json 把 facade_* 摆在 z=-12.00，比女儿墙低一整层 12m）。
+;   ⚠️ 2026-09-22 业主裁定后改为**由 99F 自己提供**（99F 外墙整圈改用本套件、
+;   天台那圈整圈删除；三层壳体统一成 100×80 后两套墙同轮廓同层带会共面闪面）。
+;   现在本件挂在 99F stage 下、局部 Y=0 就是 99F 楼面 ⇒ 世界 y[-12, -0.1]，与
+;   旧「比天台低一整层」逐值相同，只是参照系换了。顶面 11.90m 落在上层楼板下方
 ;   0.10m 处 —— 与 TowerGeometry3D.WALL_VISUAL_HEIGHT_M(11.90) /
 ;   WALL_VISUAL_TOP_CLEARANCE_M(0.10) 同一口径，不与上层楼板共面。
 ; 默认朝向 +Z（装饰面朝场地外侧）；实例化时由脚本设置 rotation 适配各方向。
 ; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖。
-; 本 Prefab 视觉专用（visual_only）。立面环碰撞由 TowerFloorStage3D 的
-;   FacadeBoundaryCollision_* 按 0.30m 代理生成，本件不带任何碰撞节点。
-; 包络说明：厚度 0.30m 等于 TowerFloorStage3D.ROOFTOP_FACADE_THICKNESS，
-;   摆放时包络外皮正好贴合天台轮廓矩形，与女儿墙外皮共面。
+; 本 Prefab 视觉专用（visual_only）。碰撞**不**由本件提供，也**不再**有独立的
+;   FacadeBoundaryCollision_* —— 本件包络（0.30m 厚）正好落在 99F 既有的
+;   OuterBoundaryCollision_*（0.30m 厚、本层 y[-12,0]）里、世界同位，由它接管。
+; 包络说明：厚度 0.30m 等于 TowerFloorStage3D.FACADE_OUTER_THICKNESS，
+;   摆放时包络外皮正好贴合 99F 轮廓矩形（与骨架层同口径）。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_solid_top3d.glb" id="1_visual"]
 

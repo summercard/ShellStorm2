@@ -34,11 +34,9 @@ const TOWER_SCENE: PackedScene = preload("res://scenes/TowerDescent3D.tscn")
 func _ready() -> void:
 	var failures: Array[String] = []
 	var rooftop := TowerFloorStage3D.new()
-	# 第 7 参 = 立面环**让位侧**（TowerDescent3D 运行时由「与 99F 相邻的竖直楼梯」推出）。
-	# 这里显式声明 east：99F→98F 的楼梯井外廓 x∈[35,50] 虽已落在统一壳体（东界 x=50）
-	# 之内，但井腔仍横跨立面环中心线 x=49.85 ⇒ 环必须在那一段让位，否则会在井的
-	# 上层平台正中立一道 12m 高的墙。
-	rooftop.configure(0, "rooftop", ["west"], [], false, Rect2(), ["east"])
+	# 2026-09-22：configure() 第 7 参「立面环让位侧」已作废 —— 业主裁定天台立面环
+	# **整圈删除**、立面改由 99F 自己提供（见 _verify_outer_facade_ownership）。
+	rooftop.configure(0, "rooftop", ["west"])
 	add_child(rooftop)
 	var facility := TowerFloorStage3D.new()
 	facility.configure(1, "facility", [])
@@ -57,6 +55,8 @@ func _ready() -> void:
 
 	_verify_rooftop(rooftop, failures)
 	_verify_facility(facility.get_snapshot(), failures)
+	# 2026-09-22：立面环所有权从天台转到 99F，三个层一起对账（99F 有 / 天台与 98F 无）。
+	_verify_outer_facade_ownership(rooftop, facility, combat, failures)
 	_verify_combat_floor(combat.get_snapshot(), failures)
 	_verify_start_rooftop_shell(tower, failures)
 
@@ -251,220 +251,247 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 						failures
 					)
 		_expect(west_shapes == 1, "100层西侧碰撞不是一整条（实际 %d 段，仍按门洞切分）" % west_shapes, failures)
-	# 2026-09-20 新增：天台外立面环（= 从边缘往下看到的那层「99 层外墙」）。
-	# 判据只认「计划 == 摆放 + 几何口径」，不认某个具体件数：
-	#   1. 快照里的立面件数与两个批次 MultiMesh 的实测实例数逐档相等（防空摆）；
-	#   2. 环件数 == 2×(20+16)=72（整格铺满一圈：x 向 20 件、z 向 16 件）；
-	#   3. 底面标高 = -12.0（低一整层）、厚度 = 0.30m，且与女儿墙外皮共面。
-	_verify_rooftop_facade(rooftop, snapshot, failures)
+	# 2026-09-22 业主裁定：原「天台在女儿墙正下方补一整圈外立面」的画法**整圈删除** ——
+	# 它与 99F 自己那圈外墙在统一壳体下同轮廓、同竖向层带、四面共面（z-fighting 闪面）。
+	# 立面所有权改到 99F，这里反过来断言天台**不再**拥有立面
+	# （明细见 _verify_outer_facade_ownership）。
+	_expect(
+		not bool(snapshot.get("outer_facade_owned", false)),
+		"100层天台仍自称拥有外立面 —— 天台立面环应已整圈删除",
+		failures
+	)
 
 
-## 天台外立面环的运行时对账。
+## 外立面（= 99F 那圈塔身外墙）**所有权**的运行时对账（2026-09-22 重构后）。
 ##
-## 用户口径：「99 楼外墙在天台周边调用，围起来」——即从天台边缘往下不该是空的。
-## 本函数把这句话落成可实测的不变量，并留一条**防假绿哨兵**（件数为 0 时直接报错，
-## 否则「计划==摆放」会两边同为 0 而恒真）。
+## 业主裁定：99F 外墙全部改用天台那套立面资源（prp_rooftop_facade_solid / window_5m），
+## 同时把天台那圈立面**整圈删掉** —— 三层壳体统一成 100×80 后两套墙落到同一圈轮廓、
+## 同一竖向层带，四面共面（z-fighting 闪面）。
 ##
-## 2026-09-20 追加：环必须为**与立面环线相交**的楼梯井让位（99F→98F 的井外廓
-## x∈[35,50] 横跨环中心线 x=49.85）。2026-09-22 三层统一壳体后东界自 40 移到 50，
-## 井已落在壳体之内，但判据本来就是「环线是否落在井腔内」（严格不等式），
-## 故让位照旧生效 —— 这一点由本函数继续盯着。让位同时作用于可视件与碰撞，
-## 两处共用同一处真源；判据从「整格满铺 72 件」改成「72 件 - 缺口整格数」，
-## 并**正面**断言缺口存在、跨度与 `_stair_hole_world_rect("east")` 逐值相等 ——
-## 否则日后有人把缺口补回去，只会看到件数变多而看不出「下行梯跑被封死」。
-func _verify_rooftop_facade(
-	rooftop: TowerFloorStage3D, snapshot: Dictionary, failures: Array[String]
+## 判据只认「所有权 + 计划==摆放 + 几何口径」，不认某个具体件数：
+##   1. 99F(facility) 自称拥有立面，实墙/窗墙两档都 >0；
+##   2. 快照计划件数与两个批次 MultiMesh 的实测实例数逐档相等（防空摆）；
+##   3. 立面槽位数 == 99F 直段槽位数（立面**接管**原有直段，不另起一圈）；
+##   4. 立面槽位逐条落在 99F 轮廓线上（内缩 0.15m）、同侧相邻槽位间距恒为 5m；
+##   5. 底面标高 = 本层楼面 0.0（⇒ 世界 -12.0，比天台低一整层）、厚度 = 0.30m；
+##   6. 立面件网格 = 底面中心原点 + 11.90m 可视高 + 5.00m 沿边长度，无材质覆盖；
+##   7. 天台(rooftop) 与 98F(combat) 一律**不得**拥有立面，也不得有独立立面碰撞代理。
+##
+## 玩法相关的既有件必须原样留着（本函数顺带钉住）：99F 四角 Base99OuterCorner_* 与
+## 四边 OuterBoundaryCollision_*（south 带 camera_lower_wall=true）。
+func _verify_outer_facade_ownership(
+	rooftop: TowerFloorStage3D,
+	facility: TowerFloorStage3D,
+	combat: TowerFloorStage3D,
+	failures: Array[String]
 ) -> void:
+	var snapshot: Dictionary = facility.get_snapshot()
 	var planned_solid := int(snapshot.get("outer_facade_solid_count", -1))
 	var planned_window := int(snapshot.get("outer_facade_window_count", -1))
 	var batches := snapshot.get("outer_facade_batch_counts", {}) as Dictionary
 	var actual_solid := int(batches.get("solid", -1))
 	var actual_window := int(batches.get("window", -1))
-	var ring_total := planned_solid + planned_window
+	var facade_total := planned_solid + planned_window
 	print(
-		"    [外立面环] plan solid=%d window=%d total=%d | actual solid=%d window=%d"
-		% [planned_solid, planned_window, ring_total, actual_solid, actual_window]
+		"    [99F 立面] owned=%s plan solid=%d window=%d total=%d | actual solid=%d window=%d"
+		% [
+			str(snapshot.get("outer_facade_owned", false)),
+			planned_solid, planned_window, facade_total, actual_solid, actual_window
+		]
 	)
-	# 哨兵：0 样本会让下面所有「相等」判据恒真 —— 必须先确认真摆了件。
 	_expect(
-		ring_total > 0,
-		"100层外立面环一件都没有（立面未接线，或哨兵为 0 样本）",
+		bool(snapshot.get("outer_facade_owned", false)),
+		"99F 没有自称拥有外立面 —— 立面所有权应已从天台转到 99F",
 		failures
 	)
-	_expect(planned_solid > 0, "100层外立面没有实墙件", failures)
-	_expect(planned_window > 0, "100层外立面没有窗墙件", failures)
+	# 哨兵：0 样本会让下面所有「相等」判据恒真 —— 必须先确认真摆了件。
+	_expect(facade_total > 0, "99F 外立面一件都没有（立面未接线，或哨兵为 0 样本）", failures)
+	_expect(planned_solid > 0, "99F 外立面没有实墙件", failures)
+	_expect(planned_window > 0, "99F 外立面没有窗墙件", failures)
 	_expect(
 		planned_solid == actual_solid and planned_window == actual_window,
-		"100层外立面计划(solid=%d/window=%d)与实际批次实例数(solid=%d/window=%d)不符"
+		"99F 外立面计划(solid=%d/window=%d)与实际批次实例数(solid=%d/window=%d)不符"
 			% [planned_solid, planned_window, actual_solid, actual_window],
 		failures
 	)
-	# 整格铺满一圈（x 向 20 件、z 向 16 件，两侧各一遍，共 72 件），
-	# **再减去楼梯井让位缺口**：99F→98F 的井外廓 x∈[35,50] 横跨立面环中心线
-	# x=49.85（东界 2026-09-22 自 40 移到 50，井仍贴着环线），
-	# 那一段（z∈[-25,5] = 6 件）必须让位，否则会在井的上层平台正中立一道
-	# 12m 高的墙连碰撞，把下行梯跑封死（2026-09-20 实测定位）。
-	var gap_spans := snapshot.get("outer_facade_gap_spans", {}) as Dictionary
-	var gap_modules := int(snapshot.get("outer_facade_gap_module_count", -1))
-	var expected_ring := 2 * (ROOFTOP_WORLD_RECT.size.x + ROOFTOP_WORLD_RECT.size.y) / 5.0
-	var east_gaps := gap_spans.get("east", []) as Array
+	# 立面**接管**原有直段：两者槽位数必须逐值相等（否则要么多出一圈墙、要么漏了槽位）。
+	var straight_slots := int(snapshot.get("outer_straight_slot_count", -1))
+	var facade_slots := int(snapshot.get("outer_facade_slot_count", -1))
 	print(
-		"    [外立面环让位] gap_sides=%s east_gaps=%s gap_modules=%d"
-			% [str(snapshot.get("facade_gap_sides", [])), str(east_gaps), gap_modules]
+		"    [99F 立面槽位] facade=%d straight=%d（应相等：立面接管直段）"
+			% [facade_slots, straight_slots]
 	)
 	_expect(
-		not east_gaps.is_empty(),
-		"100层外立面东侧没有让位缺口 —— 楼梯井会重新被立面环封死",
+		facade_slots == straight_slots and straight_slots > 0,
+		"99F 立面槽位数 %d != 直段槽位数 %d（立面应整批接管直段）"
+			% [facade_slots, straight_slots],
 		failures
 	)
-	if not east_gaps.is_empty():
-		var east_gap := east_gaps[0] as Vector2
-		# 缺口必须与 _stair_hole_world_rect("east") 的 z 跨度逐值相等（真源不许各写一份）。
-		_expect(
-			is_equal_approx(east_gap.x, -25.0) and is_equal_approx(east_gap.y, 5.0),
-			"100层外立面东侧让位缺口不是楼梯井外廓的 z∈[-25, 5]（实际 %s）" % str(east_gap),
-			failures
-		)
-		var expected_gap_modules := int(round((east_gap.y - east_gap.x) / 5.0))
-		_expect(
-			gap_modules == expected_gap_modules,
-			"让位跳过件数 %d != 缺口跨度的整格数 %d" % [gap_modules, expected_gap_modules],
-			failures
-		)
+	# 立面件不走破损档（那是女儿墙专用件），所以 99F 的普通墙批必须留空 ——
+	# 否则两套墙会在同槽位共面闪面，正是本次要消灭的现象。
+	var outer := facility.get("_outer_visual") as MultiMeshInstance3D
 	_expect(
-		ring_total == int(expected_ring) - gap_modules,
-		"100层外立面环件数不是「整格满铺 %d 件 - 让位 %d 件 = %d 件」（实际 %d）"
-			% [int(expected_ring), gap_modules, int(expected_ring) - gap_modules, ring_total],
+		outer != null and outer.multimesh != null and outer.multimesh.instance_count == 0,
+		"99F 普通墙批仍有实例 —— 会与立面批次在同槽位共面闪面",
 		failures
 	)
 	_expect(
-		is_equal_approx(float(snapshot.get("outer_facade_bottom_y", 0.0)), -12.0),
-		"100层外立面底面标高不是 -12.0（应比女儿墙低一整层）",
+		is_equal_approx(float(snapshot.get("outer_facade_bottom_y", -1.0)), 0.0),
+		"99F 立面底面标高不是本层楼面 0.0（应比天台低一整层 ⇒ 世界 -12.0）",
 		failures
 	)
 	_expect(
 		is_equal_approx(float(snapshot.get("outer_facade_thickness", 0.0)), 0.30),
-		"100层外立面厚度不是组件库v002的0.30m",
+		"99F 立面厚度不是组件库 v002 的 0.30m",
 		failures
 	)
 	# 两个批次必须是 MultiMesh 且可见；网格自带 PaletteUV（无材质覆盖）。
 	for pair in [
-		{"key": "solid", "node": rooftop.get("_rooftop_facade_solid_visual")},
-		{"key": "window", "node": rooftop.get("_rooftop_facade_window_visual")},
+		{"key": "solid", "node": facility.get("_outer_facade_solid_visual")},
+		{"key": "window", "node": facility.get("_outer_facade_window_visual")},
 	]:
 		var node := pair["node"] as MultiMeshInstance3D
 		var label := str(pair["key"])
 		_expect(
 			node != null and node.multimesh != null and node.multimesh.mesh != null,
-			"100层外立面 %s 批次不是带网格的 MultiMeshInstance3D" % label,
+			"99F 立面 %s 批次不是带网格的 MultiMeshInstance3D" % label,
 			failures
 		)
 		if node == null:
 			continue
-		_expect(node.visible, "100层外立面 %s 批次被隐藏（边缘往下会露空洞）" % label, failures)
+		_expect(node.visible, "99F 立面 %s 批次被隐藏（边缘往下会露空洞）" % label, failures)
 		_expect(
 			node.material_override == null,
-			"100层外立面 %s 批次被套了材质覆盖，PaletteUV 会被盖掉" % label,
+			"99F 立面 %s 批次被套了材质覆盖，PaletteUV 会被盖掉" % label,
 			failures
 		)
 		if node.multimesh != null and node.multimesh.mesh != null:
 			var aabb := node.multimesh.mesh.get_aabb()
 			_expect(
 				is_equal_approx(aabb.position.y, 0.0) and is_equal_approx(aabb.size.y, 11.9),
-				"100层外立面 %s 件不是「底面中心原点 + 11.90m 可视高」：%s"
-					% [label, str(aabb)],
-				failures
-			)
-	# 环的四边碰撞代理：每边**一个** body，代理盒厚 0.30m、高 12m；
-	# 有让位缺口的边在同一个 body 内拆成多段（段数 = 缺口数 + 1）。
-	var facade_sides := ["North", "South", "West", "East"]
-	for side in facade_sides:
-		var body := rooftop.find_child("FacadeBoundaryCollision_%s" % side, false, false) as StaticBody3D
-		_expect(body != null, "100层外立面 %s 侧碰撞代理缺失" % side, failures)
-		if body == null:
-			continue
-		var side_key: String = str(side).to_lower()
-		var side_gaps: Array = gap_spans.get(side_key, []) as Array
-		var expected_shapes := (side_gaps.size() + 1) if not side_gaps.is_empty() else 1
-		var segments: Array[Vector2] = []
-		for child in body.get_children():
-			if child is not CollisionShape3D:
-				continue
-			var shape := (child as CollisionShape3D).shape as BoxShape3D
-			if shape == null:
-				continue
-			var along_x: bool = side in ["North", "South"]
-			var thickness: float = shape.size.z if along_x else shape.size.x
-			_expect(
-				is_equal_approx(thickness, 0.30),
-				"100层外立面 %s 侧碰撞厚度不是 0.30m（实际 %.3f）" % [side, thickness],
+				"99F 立面 %s 件不是「底面中心原点 + 11.90m 可视高」：%s" % [label, str(aabb)],
 				failures
 			)
 			_expect(
-				is_equal_approx(shape.size.y, 12.0),
-				"100层外立面 %s 侧碰撞高度不是一整层 12m（实际 %.3f）" % [side, shape.size.y],
+				is_equal_approx(aabb.size.x, 5.0),
+				"99F 立面 %s 件沿边长度不是 5.00m：%s" % [label, str(aabb)],
 				failures
 			)
-			var along: float = shape.size.x if along_x else shape.size.z
-			var center: float = (child as CollisionShape3D).position.x if along_x else (child as CollisionShape3D).position.z
-			segments.append(Vector2(center - along * 0.5, center + along * 0.5))
-		segments.sort_custom(func(a: Vector2, b: Vector2) -> bool: return a.x < b.x)
-		_expect(
-			segments.size() == expected_shapes,
-			"100层外立面 %s 侧碰撞段数 %d != 期望 %d（缺口数 %d）"
-				% [side, segments.size(), expected_shapes, side_gaps.size()],
-			failures
-		)
-		# 分段必须真的**断开**在缺口上：相邻两段之间的空洞要与让位跨度逐值相等，
-		# 否则「视觉让了位、碰撞还堵着」会反过来变成一道隐形墙。
-		_expect(
-			segments.size() == side_gaps.size() + 1,
-			"100层外立面 %s 侧碰撞分段数与缺口数不匹配（%d 段 / %d 缺口）"
-				% [side, segments.size(), side_gaps.size()],
-			failures
-		)
-		if segments.size() == side_gaps.size() + 1 and not side_gaps.is_empty():
-			for gap_index in range(side_gaps.size()):
-				var gap := side_gaps[gap_index] as Vector2
-				var seam_lo := segments[gap_index].y
-				var seam_hi := segments[gap_index + 1].x
-				_expect(
-					is_equal_approx(seam_lo, gap.x) and is_equal_approx(seam_hi, gap.y),
-					"100层外立面 %s 侧碰撞断口 [%.3f, %.3f] 与让位缺口 [%.3f, %.3f] 不吻合"
-						% [side, seam_lo, seam_hi, gap.x, gap.y],
-					failures
-				)
-	# 99F/普通层不得有立面环（否则会凭空多出一圈墙）。
-	# add_child() 会同步触发 _ready()（即整套装配），所以这里不需要 await；
-	# 保持本函数同步，避免协程被当普通函数调用时后半段断言根本不参与判定。
-	var facility := TowerFloorStage3D.new()
-	facility.configure(1, "facility", [])
-	add_child(facility)
-	var combat := TowerFloorStage3D.new()
-	combat.configure(2, "combat", [])
-	add_child(combat)
-	for stage in [facility, combat] as Array[TowerFloorStage3D]:
+	_verify_facade_ring_coverage(facility, failures)
+	_verify_facility_playable_keepsakes(facility, failures)
+	# 天台与 98F 一律不得拥有立面（否则会凭空多出一圈墙）。
+	for stage in [rooftop, combat] as Array[TowerFloorStage3D]:
 		var stage_snapshot: Dictionary = stage.get_snapshot()
+		var stage_kind := str(stage_snapshot.get("floor_kind", ""))
+		_expect(
+			not bool(stage_snapshot.get("outer_facade_owned", false)),
+			"%s 层被误判为拥有外立面" % stage_kind,
+			failures
+		)
 		_expect(
 			int(stage_snapshot.get("outer_facade_module_count", -1)) == 0,
-			"非天台层(%s)被误加外立面环" % str(stage_snapshot.get("floor_kind", "")),
+			"%s 层被误加外立面件" % stage_kind,
 			failures
 		)
 		_expect(
-			stage.get("_rooftop_facade_solid_visual") == null
-				and stage.get("_rooftop_facade_window_visual") == null,
-			"非天台层(%s)被误加外立面批次节点" % str(stage_snapshot.get("floor_kind", "")),
+			stage.get("_outer_facade_solid_visual") == null
+				and stage.get("_outer_facade_window_visual") == null,
+			"%s 层被误加外立面批次节点" % stage_kind,
 			failures
 		)
 		_expect(
 			stage.find_child("FacadeBoundaryCollision_*", false, false) == null,
-			"非天台层(%s)被误加外立面碰撞" % str(stage_snapshot.get("floor_kind", "")),
+			"%s 层被误加独立外立面碰撞（应改由 OuterBoundaryCollision_* 接管）" % stage_kind,
 			failures
 		)
-	facility.queue_free()
-	combat.queue_free()
 
 
+## 99F 立面槽位的几何对账：逐条落在轮廓线上、同侧相邻间距恒为 5m。
+##
+## 这里刻意**不**做「整圈无缝」判定：99F 的直段只有 index 1..n-2（首末两格让给四角
+## Base99OuterCorner_* L 件），所以每条边两端各留 5m 由角件自己封。整圈覆盖由
+## probe_floor_outer_wall_overlap / probe_rooftop_parapet_alignment 那类探针负责。
+func _verify_facade_ring_coverage(facility: TowerFloorStage3D, failures: Array[String]) -> void:
+	var rect := TowerFloorStage3D.TOWER_SHELL_WORLD_RECT
+	var inset := TowerFloorStage3D.FACADE_OUTER_THICKNESS * 0.5
+	var boundaries := {
+		"north": {"horizontal": true, "perp": rect.position.y + inset},
+		"south": {"horizontal": true, "perp": rect.end.y - inset},
+		"west": {"horizontal": false, "perp": rect.position.x + inset},
+		"east": {"horizontal": false, "perp": rect.end.x - inset},
+	}
+	var slots: Array = facility.call("get_outer_facade_slot_transforms")
+	var kinds: Array = facility.call("get_outer_facade_slot_kinds")
+	_expect(
+		kinds.size() == slots.size(),
+		"99F 立面档位表与槽位表不同长：%d vs %d" % [kinds.size(), slots.size()],
+		failures
+	)
+	var by_side := {"north": [], "south": [], "west": [], "east": []}
+	var orphan := 0
+	for value in slots:
+		var origin := (value as Transform3D).origin
+		var matched := ""
+		for side in boundaries.keys():
+			var spec := boundaries[side] as Dictionary
+			var perp := origin.z if bool(spec["horizontal"]) else origin.x
+			if absf(perp - float(spec["perp"])) <= 0.001:
+				matched = str(side)
+				break
+		if matched.is_empty():
+			orphan += 1
+			continue
+		(by_side[matched] as Array).append(origin.x if bool((boundaries[matched] as Dictionary)["horizontal"]) else origin.z)
+	_expect(orphan == 0, "99F 立面有 %d 个槽位不落在轮廓线上（内缩 %.2fm）" % [orphan, inset], failures)
+	# 20×16 格：x 向两边各 20 格 - 两端角件让位 2 格 = 18；z 向各 16 - 2 = 14。
+	# ⚠️ 本用例的 99F 是 configure(1,"facility",[]) —— 没有楼梯门洞，所以东侧同 14 件；
+	# 真实塔楼里 99F 带 east 门洞，东部会再少 2 件（见 probe_floor_outer_wall_overlap）。
+	var expected := {"north": 18, "south": 18, "west": 14, "east": 14}
+	for side in ["north", "south", "west", "east"]:
+		var along: Array = by_side[side]
+		along.sort()
+		print("    [99F 立面边] %-5s slots=%2d along=%s" % [side, along.size(), str(along)])
+		_expect(
+			along.size() == int(expected[side]),
+			"99F 立面 %s 边槽位数 %d != 期望 %d" % [side, along.size(), int(expected[side])],
+			failures
+		)
+		for index in range(along.size() - 1):
+			_expect(
+				is_equal_approx(float(along[index + 1]) - float(along[index]), 5.0),
+				"99F 立面 %s 边槽位间距不是 5m：%.3f → %.3f"
+					% [side, float(along[index]), float(along[index + 1])],
+				failures
+			)
+
+
+## 99F 换立面件时**不得**动到的玩法相关件：四角 L 件 + 四边边界碰撞。
+func _verify_facility_playable_keepsakes(
+	facility: TowerFloorStage3D, failures: Array[String]
+) -> void:
+	for corner_name in ["NW", "NE", "SW", "SE"]:
+		var corner := facility.find_child(
+			"Base99OuterCorner_%s" % corner_name, false, false
+		) as Node3D
+		_expect(corner != null, "99F %s 角 L 件在换立面件后丢失" % corner_name, failures)
+		if corner != null:
+			_expect(
+				str(corner.get_meta("asset_id", "")) == "ENV-TOWER-CORNER-L-5M",
+				"99F %s 角 L 件资产ID不符" % corner_name,
+				failures
+			)
+	for side in ["North", "South", "West", "East"]:
+		var body := facility.find_child(
+			"OuterBoundaryCollision_%s" % side, false, false
+		) as StaticBody3D
+		_expect(body != null, "99F %s 侧边界碰撞缺失" % side, failures)
+		if body == null:
+			continue
+		_expect(
+			bool(body.get_meta("camera_lower_wall", false)) == (side == "South"),
+			"99F %s 侧 camera_lower_wall 标记不对（只有 south 该为 true）" % side,
+			failures
+		)
 func _verify_facility(snapshot: Dictionary, failures: Array[String]) -> void:
 	# 2026-09-22：99层自「楼板 250 / 外墙 160」双口径改为与 100F 共用统一壳体。
 	# 标量断言与矩形断言都留 —— 前者防常量被误改，后者防「改了标量却漏改起点」。

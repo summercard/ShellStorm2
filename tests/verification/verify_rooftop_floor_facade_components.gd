@@ -3,8 +3,10 @@ extends Node
 ##
 ## 三类断言，缺一不可：
 ##   1. 包络与原点：每件 GLB 的实测包络 == 参考组件库 catalog 的 bounds_size，且原点在
-##      底面中心（AABB 底面 Y=0）。摆放公式（顶面贴 Y=0 / 底面贴 Y=-12）直接依赖这一点，
-##      写错就是整圈错台。
+##      底面中心（AABB 底面 Y=0）。摆放公式（底面贴 99F 楼面，局部 Y=0 ⇒ 世界 Y=-12；
+##      顶面 +11.90）直接依赖这一点，写错就是整圈错台。
+##      ⚠️ 2026-09-22 业主裁定：这圈立面改由 **99F 自己**提供（天台那圈整圈删除），
+##      所以「底面基准」从「天台 stage 的 -12.0」改成「99F stage 的 0.0」——世界值不变。
 ##   2. Prefab 契约：asset_id / origin_contract / bounds_size_m / visual_node_name 齐备，
 ##      且 TowerGeometry3D.resolve_visual_bounds(prefab) 与声明的 bounds_size_m 逐值相同
 ##      —— 防「声明的包络」与「实际摆出来的包络」各写一份而漂移。

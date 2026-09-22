@@ -1,0 +1,24 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+  [floor_full] surface=0 material=02_细腻哑光_青绿大面 palette=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+  [floor_full] bounds=(5.0, 0.3, 5.0) surfaces=1
+  [facade_solid] surface=0 material=02_细腻哑光_青绿大面 palette=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+  [facade_solid] bounds=(5.0, 11.9, 0.3) surfaces=1
+  [facade_window] surface=0 material=01_精工金属_紫色骨架 palette=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+  [facade_window] surface=1 material=02_细腻哑光_青绿大面 palette=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+  [facade_window] surface=2 material=03_清漆反光_紫粉点缀 palette=res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png
+  [facade_window] bounds=(5.0, 11.9, 0.3) surfaces=3
+  SAMPLES=3 surfaces_checked=5 palette_bound=5
+ROOFTOP_FLOOR_FACADE_COMPONENTS_PASS: 3 件 / 5 个表面，包络·原点·色盘全对

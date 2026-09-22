@@ -1,0 +1,49 @@
+diff --git a/src/world3d/TowerDescent3D.gd b/src/world3d/TowerDescent3D.gd
+index 89602c5d..7f7cc28b 100644
+--- a/src/world3d/TowerDescent3D.gd
++++ b/src/world3d/TowerDescent3D.gd
+@@ -953,29 +953,10 @@ func _rebuild_floor_stage(floor_index: int) -> void:
+ 		var side := str(declaration.get("side", "west"))
+ 		if side not in hole_sides:
+ 			hole_sides.append(side)
+-	# 天台立面环（= 天台边缘往下那一层的「塔身外墙」）长在 floor_index 0 的层带里，
+-	# 而它占的竖向空间正是 99F(floor_index 1) 的层带。凡是与 1 层相邻的竖直楼梯，
+-	# 井壁都可能**穿过**天台外轮廓 —— 这类楼梯的侧别要交给天台层去让位，
+-	# 否则立面环会在井的上层平台正中立一道 12m 高的墙，把下行梯跑封死。
+-	# 只有天台层会用到这份表；其余层拿到它也一律不摆立面环。
+-	var facade_gap_sides: Array[String] = []
+-	for declaration in _declared_edges:
+-		if str(declaration.get("kind", "")) != "vertical":
+-			continue
+-		var a_index := int(_room_floor_index.get(str(declaration["a"]), -1))
+-		var b_index := int(_room_floor_index.get(str(declaration["b"]), -1))
+-		if a_index != 1 and b_index != 1:
+-			continue
+-		var stair_side := str(declaration.get("side", "west"))
+-		if stair_side not in facade_gap_sides:
+-			facade_gap_sides.append(stair_side)
+-	# ⚠️ configure 的第 7 参是 typed `Array[String]`，传 `else []`（**无类型** Array）
+-	# 会被引擎拒绝；而 `call()` 的参数类型错误会**静默中断本函数后半段** ——
+-	# stage 既不注册进 `_floor_stages` 也不入树，现象是「98F 无 floor stage」。
+-	# 必须传同类型的空数组（天台层 = 真表；其余层 = 空表，反正不摆立面环）。
+-	var facade_gaps_for_stage: Array[String] = []
+-	if floor_index == 0:
+-		facade_gaps_for_stage = facade_gap_sides
++	# ⚠️ 2026-09-22 业主裁定：原「天台在女儿墙正下方补一圈外立面」的画法整圈删除 ——
++	# 那圈立面与 99F 自己的外墙在统一壳体下四面共面（z-fighting 闪面），现在立面改由
++	# 99F 自己提供（见 TowerFloorStage3D._uses_facade_outer_modules）。
++	# 因此 configure() 不再有第 7 参「立面让位侧」，这里也不再收集 facade_gap_sides。
+ 	var previous = _floor_stages.get(floor_index)
+ 	if previous != null and is_instance_valid(previous):
+ 		previous.queue_free()
+@@ -996,9 +977,7 @@ func _rebuild_floor_stage(floor_index: int) -> void:
+ 		# 否则 x>40 / z<-35 的房间与走廊都落在承重楼面之外。
+ 		is_expedition(),
+ 		# 独立单层关卡按实际内容外框生成楼面与外墙，不套塔楼整块 250×250。
+-		_expedition_content_world_rect() if is_expedition() else Rect2(),
+-		# 立面环让位：只有天台层真的会摆立面环，其余层拿到也无害。
+-		facade_gaps_for_stage
++		_expedition_content_world_rect() if is_expedition() else Rect2()
+ 	)
+ 	# 承重保底：授权房间足迹压到固定楼梯井洞口上时，洞口必须先削掉压在房内的那一段
+ 	# （见 TowerFloorStage3D.support_keep_out_rects）。必须在 add_child 之前写入 ——

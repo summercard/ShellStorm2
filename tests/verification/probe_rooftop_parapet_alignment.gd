@@ -1,7 +1,10 @@
 extends Node
-## 天台女儿墙装配对齐探针。
-## 实测 TowerFloorStage3D 装完后的 68 段直段（整圈 72 - 4 转角）+ 4 件转角件，在四条边上是否
-## 「无缝且不重叠」，以及转角件是否正好坐在 2.5m 让位区内。
+## 天台女儿墙 + 99F 外立面环装配对齐探针。
+## 实测 TowerFloorStage3D 装完后的：
+##   · 天台：68 段女儿墙直段（整圈 72 - 4 转角）+ 4 件 2.5m 转角件，四条边上是否
+##     「无缝且不重叠」，转角件是否正好坐在 2.5m 让位区内；
+##   · 99F：外立面环（2026-09-22 业主裁定后由 **99F 自己**提供，不再是天台在女儿墙
+##     正下方补出来的那圈）是否整圈无缝 —— 立面槽位件 + 四角 5m L 臂共同封边。
 ## 纯诊断，不算门禁；输出 PROBE_ALIGN_* 行供比对。
 ##
 ## ⚠️ 历史上必须带窗口跑（不要加 --headless）：MultiMesh 的实例变换存在
@@ -20,6 +23,9 @@ const RING_FULL_MODULES := 72
 const EDGE_TOLERANCE := 0.01
 ## 立面模块厚度 0.30m / 2 = 中心线相对包络矩形的内缩量（与女儿墙的 0.25 不同）。
 const FACADE_INSET := 0.15
+## 99F 角件（ENV-TOWER-CORNER-L-5M）在每条边替掉的边内长度 = 1 格 = 5.0m。
+## 角件实测包络 5.15×5.15（臂长 5.0 + 内端 0.15 外皮包边），覆盖判据按本值裁到格内。
+const FACADE_CORNER_ARM_M := 5.0
 
 var _failures: Array[String] = []
 
@@ -28,6 +34,12 @@ func _ready() -> void:
 	var rooftop := TowerFloorStage3D.new()
 	rooftop.configure(0, "rooftop", ["west"])
 	add_child(rooftop)
+	# 2026-09-22 业主裁定：99F 外墙整圈改用天台那套立面资源（prp_rooftop_facade_*），
+	# 天台那圈立面**整圈删除**。立面环的检查对象因此从天台 stage 换成 99F stage
+	# （见下面「外立面环」段）；女儿墙（68 直段 + 4 转角）仍归天台，判据不变。
+	var facility := TowerFloorStage3D.new()
+	facility.configure(1, "facility", [])
+	add_child(facility)
 	await get_tree().process_frame
 	await get_tree().physics_frame
 
@@ -63,16 +75,9 @@ func _ready() -> void:
 	_collect_prefixed_spans(rooftop, "ParapetDoorWall_", door_spans)
 
 	# 哨兵：数量不对说明装配没跑起来，后面的覆盖判定会假绿。
-	var facade_slots: Array = rooftop.call("get_outer_facade_slot_transforms")
-	var facade_kinds: Array = rooftop.call("get_outer_facade_slot_kinds")
 	print(
-		"PROBE_ALIGN counts segments=%d corners=%d doorway_walls=%d facade=%d"
-		% [
-			segment_spans.size(),
-			corner_spans.size(),
-			door_spans.size(),
-			facade_slots.size(),
-		]
+		"PROBE_ALIGN counts segments=%d corners=%d doorway_walls=%d"
+		% [segment_spans.size(), corner_spans.size(), door_spans.size()]
 	)
 	# 2026-09-20：天台外墙连成整圈 —— 西侧楼梯口整体在轮廓内部，不再算外墙门洞，
 	# 因此直段 68/68、门洞补位墙 0 件。旧期望值（61 / 3）是「西墙挖 3 段塞占位
@@ -100,29 +105,35 @@ func _ready() -> void:
 
 	_check_corner_seats(rect, corner_spans)
 
-	# 外立面环（= 从天台边缘往下看到的那层「99 层外墙」）也必须整圈满铺无缝。
-	# 成员按「槽位中心落在该边线上」选，长度取模块自己的 AABB（5m），
-	# 而不是沿用女儿墙那套「包络横跨 boundary 线」——后者会把垂直侧在角上占满的
-	# 那件也算进来，导致角上误报 0.3m 重叠。
-	#
-	# 2026-09-20：槽位数不再是恒定的整圈满铺 —— 楼梯井穿过轮廓的边要**让位**
-	# （99F→98F 的井外廓 x∈[35,50] 一直覆盖到壳体东界 x=50 的内侧，
-	#   于是东侧让出 z∈[-25,5] 共 6 件）。
-	# 这里改成「整圈满铺 RING_FULL_MODULES - 让位件数」，让位件数由快照真源给出，不另写一份。
-	var rooftop_snapshot: Dictionary = rooftop.get_snapshot()
-	var gap_modules := int(rooftop_snapshot.get("outer_facade_gap_module_count", 0))
+	# ── 外立面环：2026-09-22 业主裁定后归 **99F 自己** ─────────────────────────
+	# 业主口径：「99F 的外墙全部使用天台的那套外墙（prp_rooftop_facade_solid/window_5m），
+	# 然后天台那圈立面整圈删掉」。实现上立面件**整批接管 99F 的直段槽位**（同包络同原点
+	# 契约：5.00×11.90×0.30、底面中心、默认 +Z），所以第一条不变量是
+	# 「立面槽位数 == 99F 直段槽位数」；每边两端由四角 5m L 臂（Base99OuterCorner_*）
+	# 自己封 —— 于是整圈闭合要按「立面件 + 角件」一起算，不再是天台时代的独立 gap 表。
+	var facade_slots: Array = facility.call("get_outer_facade_slot_transforms")
+	var facade_kinds: Array = facility.call("get_outer_facade_slot_kinds")
+	var facility_straight: Array = facility.call("get_outer_straight_slot_transforms")
+	var rooftop_facade_modules := int(
+		(rooftop.get_snapshot() as Dictionary).get("outer_facade_module_count", -1)
+	)
 	print(
-		"PROBE_ALIGN facade_gap gap_sides=%s gap_modules=%d"
-			% [str(rooftop_snapshot.get("facade_gap_sides", [])), gap_modules]
+		"PROBE_ALIGN facade counts facility_straight=%d facade=%d rooftop_facade=%d"
+		% [facility_straight.size(), facade_slots.size(), rooftop_facade_modules]
 	)
 	_expect(
-		facade_slots.size() == RING_FULL_MODULES - gap_modules,
-		"外立面环槽位数不是「满铺%d - 让位%d = %d」（实际 %d）"
-			% [RING_FULL_MODULES, gap_modules, RING_FULL_MODULES - gap_modules, facade_slots.size()]
+		rooftop_facade_modules == 0,
+		"天台仍自称有 %d 件外立面 —— 天台立面环应已整圈删除" % rooftop_facade_modules
+	)
+	# 哨兵：0 样本会让下面所有「相等」判据恒真。
+	_expect(
+		facade_slots.size() == facility_straight.size() and facility_straight.size() > 0,
+		"99F 立面槽位(%d) != 直段槽位(%d)：立面应整批接管直段"
+			% [facade_slots.size(), facility_straight.size()]
 	)
 	_expect(
 		facade_kinds.size() == facade_slots.size(),
-		"外立面档位表与槽位表不同长：%d vs %d" % [facade_kinds.size(), facade_slots.size()]
+		"99F 立面档位表与槽位表不同长：%d vs %d" % [facade_kinds.size(), facade_slots.size()]
 	)
 	var facade_solid := 0
 	var facade_window := 0
@@ -132,11 +143,11 @@ func _ready() -> void:
 		else:
 			facade_window += 1
 	# 哨兵：两档都必须 >0，否则「实/窗/窗」节奏没接线也会看起来「自洽」。
-	_expect(facade_solid > 0, "外立面没有实墙件")
-	_expect(facade_window > 0, "外立面没有窗墙件")
+	_expect(facade_solid > 0, "99F 立面没有实墙件")
+	_expect(facade_window > 0, "99F 立面没有窗墙件")
 	print("PROBE_ALIGN facade_kinds solid=%d window=%d" % [facade_solid, facade_window])
-	var solid_visual := rooftop.get("_rooftop_facade_solid_visual") as MultiMeshInstance3D
-	var window_visual := rooftop.get("_rooftop_facade_window_visual") as MultiMeshInstance3D
+	var solid_visual := facility.get("_outer_facade_solid_visual") as MultiMeshInstance3D
+	var window_visual := facility.get("_outer_facade_window_visual") as MultiMeshInstance3D
 	if (
 		solid_visual == null
 		or solid_visual.multimesh == null
@@ -145,38 +156,82 @@ func _ready() -> void:
 		or window_visual.multimesh == null
 		or window_visual.multimesh.mesh == null
 	):
-		_expect(false, "外立面批次 MultiMesh 缺失，无法核对包络")
+		_expect(false, "99F 立面批次 MultiMesh 缺失，无法核对包络")
 	else:
 		# 两件都是 5m 长 × 0.30m 厚，包络相同，任取一件算边长即可。
 		var facade_aabb := window_visual.multimesh.mesh.get_aabb()
 		_expect(
 			is_equal_approx(facade_aabb.position.y, 0.0) and is_equal_approx(facade_aabb.size.y, 11.9),
-			"外立面件不是「底面中心原点 + 11.90m 可视高」：%s" % str(facade_aabb)
+			"99F 立面件不是「底面中心原点 + 11.90m 可视高」：%s" % str(facade_aabb)
 		)
 		# 覆盖判定拿 size.x 当沿边长度，所以先钉死「模块真是 5m 宽」这条前提，
 		# 否则 size.x 一旦变了，下面四条边的 coverage 会跟着假绿。
 		_expect(
 			is_equal_approx(facade_aabb.size.x, 5.0),
-			"外立面模块沿边长度不是 5.00m（实际 %.3f）：%s" % [facade_aabb.size.x, str(facade_aabb)]
+			"99F 立面模块沿边长度不是 5.00m（实际 %.3f）：%s" % [facade_aabb.size.x, str(facade_aabb)]
 		)
-		_check_facade_side(
-			"north", rect.position.x, rect.end.x, rect.position.y + FACADE_INSET, true, facade_slots, facade_aabb
+		# 整圈闭合：立面槽位件 + 四角 L 臂。复用女儿墙那套「包络横跨 boundary 线」的
+		# 口径，只把 boundary 换成立面自己的内缩线（0.30m 厚 → 内缩 0.15m）。
+		#
+		# ⚠️ 角件包络是 **5.15×5.15**（ENV-TOWER-CORNER-L-5M 的正式契约，见
+		# probe_corner_l_visual.gd 的 EXPECTED_SIZE）：臂长 5.0m，另在内端多 0.15m
+		# 外皮包边。那 0.15m 会与相邻直段包络重叠，若原样并入覆盖判据就会误报成
+		# 0.3m 重叠。所以覆盖判据里把角件**裁到它替掉的那一格**（1 格 = 5.0m），
+		# 另用「格必须被角件完整覆盖」这条单独盯住缺口。
+		var facade_spans: Array[Rect2] = []
+		for slot_transform in facade_slots:
+			facade_spans.append(_world_xz(slot_transform as Transform3D, facade_aabb))
+		var corner_cells := {
+			"NW": Rect2(rect.position.x, rect.position.y, FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M),
+			"NE": Rect2(rect.end.x - FACADE_CORNER_ARM_M, rect.position.y, FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M),
+			"SW": Rect2(rect.position.x, rect.end.y - FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M),
+			"SE": Rect2(rect.end.x - FACADE_CORNER_ARM_M, rect.end.y - FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M, FACADE_CORNER_ARM_M),
+		}
+		for corner_name in corner_names:
+			var corner := facility.find_child(
+				"Base99OuterCorner_%s" % corner_name, false, false
+			) as Node3D
+			if corner == null:
+				_expect(false, "99F 缺少角件 Base99OuterCorner_%s（立面两端会留洞）" % corner_name)
+				continue
+			var corner_span := _node_xz(corner)
+			var cell: Rect2 = corner_cells[corner_name]
+			print(
+				"PROBE_ALIGN facade_corner %s span=(%.3f,%.3f) size=(%.3f,%.3f) cell=(%.3f,%.3f)"
+				% [
+					corner_name,
+					corner_span.position.x, corner_span.position.y,
+					corner_span.size.x, corner_span.size.y,
+					cell.position.x, cell.position.y,
+				]
+			)
+			_expect(
+				_span_contains(corner_span, cell),
+				"99F 角件 %s 没有完整覆盖它替掉的边内格 %s：实际 %s"
+					% [corner_name, str(cell), str(corner_span)]
+			)
+			facade_spans.append(corner_span.intersection(cell))
+		_check_edge(
+			"north", rect.position.x, rect.end.x, rect.position.y + FACADE_INSET, facade_spans, "facade"
 		)
-		_check_facade_side(
-			"south", rect.position.x, rect.end.x, rect.end.y - FACADE_INSET, true, facade_slots, facade_aabb
+		_check_edge(
+			"south", rect.position.x, rect.end.x, rect.end.y - FACADE_INSET, facade_spans, "facade"
 		)
-		_check_facade_side(
-			"west", rect.position.y, rect.end.y, rect.position.x + FACADE_INSET, false, facade_slots, facade_aabb
+		_check_edge(
+			"west", rect.position.y, rect.end.y, rect.position.x + FACADE_INSET, facade_spans, "facade"
 		)
-		_check_facade_side(
-			"east", rect.position.y, rect.end.y, rect.end.x - FACADE_INSET, false, facade_slots, facade_aabb
+		_check_edge(
+			"east", rect.position.y, rect.end.y, rect.end.x - FACADE_INSET, facade_spans, "facade"
 		)
-		# 立面底/顶必须正好是「低一整层、顶面贴上层楼板下 0.10m」。
-		var facade_bottom := _facade_bottom_y(rooftop, facade_slots)
-		print("PROBE_ALIGN facade_bottom_y=%.3f" % facade_bottom)
+		# 立面底面 = 99F **本层楼面**（FACADE_OUTER_BOTTOM_Y = 0）；塔楼里 99F 在 y=-12，
+		# 于是世界区间仍是 y[-12, -0.1] —— 与旧「天台立面环低一整层」逐值相同，
+		# 只是参照系从天台换成了 99F。
+		var facade_bottom := _facade_bottom_y(facility, facade_slots)
+		print("PROBE_ALIGN facade_bottom_y=%.3f（99F 本层局部口径；塔楼世界值 = 本值 - 12）" % facade_bottom)
 		_expect(
-			is_equal_approx(facade_bottom, -12.0),
-			"外立面底面标高不是 -12.0（实际 %.3f）" % facade_bottom
+			is_equal_approx(facade_bottom, TowerFloorStage3D.FACADE_OUTER_BOTTOM_Y),
+			"99F 立面底面标高不是本层楼面 %.1f（实际 %.3f）"
+				% [TowerFloorStage3D.FACADE_OUTER_BOTTOM_Y, facade_bottom]
 		)
 
 	if _failures.is_empty():
@@ -190,12 +245,14 @@ func _ready() -> void:
 
 ## 检查一条边：把「贴着这条 boundary 的模块」沿边方向排开，
 ## 看覆盖区间是否恰好铺满全长、且相邻区间不重叠。
+## tag 只影响打印前缀（同一套算法既跑女儿墙 edge=…，也跑立面 facade=…）。
 func _check_edge(
 	label: String,
 	along_start: float,
 	along_end: float,
 	boundary: float,
-	module_spans: Array[Rect2]
+	module_spans: Array[Rect2],
+	tag: String = "edge"
 ) -> void:
 	var horizontal := label in ["north", "south"]
 	var intervals: Array[Vector2] = []
@@ -231,12 +288,12 @@ func _check_edge(
 		gap_total += along_end - cursor
 	var coverage := along_end - along_start - gap_total
 	print(
-		"PROBE_ALIGN edge=%-5s members=%2d coverage=%.3f/%.3f gap=%.3f overlap=%.3f"
-		% [label, intervals.size(), coverage, along_end - along_start, gap_total, overlap_total]
+		"PROBE_ALIGN %s=%-5s members=%2d coverage=%.3f/%.3f gap=%.3f overlap=%.3f"
+		% [tag, label, intervals.size(), coverage, along_end - along_start, gap_total, overlap_total]
 	)
-	_expect(not intervals.is_empty(), "%s 边没有任何模块" % label)
-	_expect(gap_total <= EDGE_TOLERANCE, "%s 边有 %.3fm 缺口" % [label, gap_total])
-	_expect(overlap_total <= EDGE_TOLERANCE, "%s 边有 %.3fm 重叠" % [label, overlap_total])
+	_expect(not intervals.is_empty(), "%s %s 边没有任何模块" % [tag, label])
+	_expect(gap_total <= EDGE_TOLERANCE, "%s %s 边有 %.3fm 缺口" % [tag, label, gap_total])
+	_expect(overlap_total <= EDGE_TOLERANCE, "%s %s 边有 %.3fm 重叠" % [tag, label, overlap_total])
 
 
 ## 转角件应正好坐进该角 2.5m 的让位区：包络 = 2.5×2.5，且内角贴着 rect 角点。
@@ -265,59 +322,25 @@ func _check_corner_seats(rect: Rect2, corner_spans: Array[Rect2]) -> void:
 		_expect(seated, "转角件%d 没有坐进任一2.5m让位区：%s" % [index, span.position])
 
 
-## 检查外立面环的一条边：成员按「槽位中心垂直于该边落在 boundary 线上」选，
-## 长度取模块自己的 AABB（5m），从中心往两侧各铺 2.5m。这是有意区别于女儿墙那套
-## 「包络横跨 boundary 线」的算法：立面是整格平铺、没有转角异形件，所以中心法
-## 才是它真实的口径，也不会在角上把垂直侧那件误算成重叠。
-func _check_facade_side(
-	label: String,
-	along_start: float,
-	along_end: float,
-	boundary: float,
-	horizontal: bool,
-	facade_slots: Array,
-	facade_aabb: AABB
-) -> void:
-	var half := facade_aabb.size.x * 0.5
-	var intervals: Array[Vector2] = []
-	for slot in facade_slots:
-		var slot_transform := slot as Transform3D
-		var origin := slot_transform.origin
-		var perp := origin.z if horizontal else origin.x
-		if absf(perp - boundary) > EDGE_TOLERANCE:
-			continue
-		var center := origin.x if horizontal else origin.z
-		intervals.append(Vector2(center - half, center + half))
-	intervals.sort_custom(func(a, b): return a.x < b.x)
-	var cursor := along_start
-	var gap_total := 0.0
-	var overlap_total := 0.0
-	for interval in intervals:
-		if interval.y <= cursor + EDGE_TOLERANCE:
-			overlap_total += maxf(0.0, cursor - interval.y)
-			cursor = maxf(cursor, interval.y)
-			continue
-		gap_total += interval.x - cursor
-		cursor = interval.y
-	if cursor < along_end - EDGE_TOLERANCE:
-		gap_total += along_end - cursor
-	var coverage := along_end - along_start - gap_total
-	print(
-		"PROBE_ALIGN facade_edge=%-5s members=%2d coverage=%.3f/%.3f gap=%.3f overlap=%.3f"
-		% [label, intervals.size(), coverage, along_end - along_start, gap_total, overlap_total]
-	)
-	_expect(not intervals.is_empty(), "外立面 %s 边没有任何模块" % label)
-	_expect(gap_total <= EDGE_TOLERANCE, "外立面 %s 边有 %.3fm 缺口" % [label, gap_total])
-	_expect(overlap_total <= EDGE_TOLERANCE, "外立面 %s 边有 %.3fm 重叠" % [label, overlap_total])
-
-
 ## 外立面件的底面标高：模块是「底面中心」原点，槽位原点的 y 就是它的底。
-## 返回的是世界高度（槽位表存的是相对该 stage 的局部阵，stage 自身可能有 y 偏移）。
-func _facade_bottom_y(rooftop: Node3D, facade_slots: Array) -> float:
+## 返回的是**世界**高度（槽位表存的是相对该 stage 的局部阵，stage 自身可能有 y 偏移）。
+## 注：本探针的 facility stage 独立挂在 y=0，所以这里读出的是 0.0；塔楼里 99F 的
+## stage 在 y=-12，世界值即 -12.0 —— 立面世界区间仍是 y[-12, -0.1]。
+func _facade_bottom_y(stage: Node3D, facade_slots: Array) -> float:
 	if facade_slots.is_empty():
 		return NAN
 	var slot := facade_slots[0] as Transform3D
-	return rooftop.global_position.y + slot.origin.y
+	return stage.global_position.y + slot.origin.y
+
+
+## outer 是否完整包住 inner（XZ，带 EDGE_TOLERANCE 容差）。
+func _span_contains(outer: Rect2, inner: Rect2) -> bool:
+	return (
+		outer.position.x <= inner.position.x + EDGE_TOLERANCE
+		and outer.position.y <= inner.position.y + EDGE_TOLERANCE
+		and outer.position.x + outer.size.x >= inner.position.x + inner.size.x - EDGE_TOLERANCE
+		and outer.position.y + outer.size.y >= inner.position.y + inner.size.y - EDGE_TOLERANCE
+	)
 
 
 func _world_xz(transform: Transform3D, aabb: AABB) -> Rect2:

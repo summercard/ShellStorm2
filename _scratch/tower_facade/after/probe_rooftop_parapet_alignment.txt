@@ -1,0 +1,35 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+PROBE_ALIGN counts segments=68 corners=4 doorway_walls=0
+PROBE_ALIGN edge=north members=21 coverage=100.000/100.000 gap=0.000 overlap=0.000
+PROBE_ALIGN edge=south members=21 coverage=100.000/100.000 gap=0.000 overlap=0.000
+PROBE_ALIGN edge=west  members=17 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN edge=east  members=17 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN corner=0 span=(-50.000,42.500) size=(2.500,2.500)
+PROBE_ALIGN corner=1 span=(47.500,42.500) size=(2.500,2.500)
+PROBE_ALIGN corner=2 span=(47.500,-35.000) size=(2.500,2.500)
+PROBE_ALIGN corner=3 span=(-50.000,-35.000) size=(2.500,2.500)
+PROBE_ALIGN facade counts facility_straight=64 facade=64 rooftop_facade=0
+PROBE_ALIGN facade_kinds solid=20 window=44
+PROBE_ALIGN facade_corner SW span=(-50.000,39.850) size=(5.150,5.150) cell=(-50.000,40.000)
+PROBE_ALIGN facade_corner SE span=(44.850,39.850) size=(5.150,5.150) cell=(45.000,40.000)
+PROBE_ALIGN facade_corner NE span=(44.850,-35.000) size=(5.150,5.150) cell=(45.000,-35.000)
+PROBE_ALIGN facade_corner NW span=(-50.000,-35.000) size=(5.150,5.150) cell=(-50.000,-35.000)
+PROBE_ALIGN facade=north members=20 coverage=100.000/100.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade=south members=20 coverage=100.000/100.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade=west  members=16 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade=east  members=16 coverage=80.000/80.000 gap=0.000 overlap=0.000
+PROBE_ALIGN facade_bottom_y=0.000（99F 本层局部口径；塔楼世界值 = 本值 - 12）
+PROBE_ALIGN_DONE all_edges_seamless=true corners_seated=true

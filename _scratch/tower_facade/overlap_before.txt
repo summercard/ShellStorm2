@@ -1,0 +1,388 @@
+Godot Engine v4.6.3.stable.official.7d41c59c4 - https://godotengine.org
+
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_corner_l_5m/env_base99_corner_l_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_plain_5x12/env_base99_wall_plain_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_plain_5m/env_base99_floor_plain_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_rivet_5m/env_base99_floor_rivet_5m_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_door_5x12/env_base99_wall_door_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_door_lift_2p2x2p5/env_base99_door_lift_2p2x2p5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_mezzanine_structure/east_mezzanine_structure_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/east_upper_transition_stair/east_upper_transition_stair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_stair_l_z5/env_base99_stair_l_z5_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_window_5x12/env_base99_wall_window_5x12_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_full_replacement/env_base99_floor_full_replacement_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_floor_visuals/loft_floor_finish/loft_floor_finish_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_backwall_services/loft_backwall_services_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_tool_pegboard/loft_tool_pegboard_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_explore_poster/loft_explore_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/loft_stay_curious_neon/loft_stay_curious_neon_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_hanging_plant/loft_hanging_plant_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_camp_neon_sign/base_camp_neon_sign_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/base_status_terminal/base_status_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_pipeline_system/south_wall_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/storage_terminal/storage_terminal_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_bulletin_board/understair_bulletin_board_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/understair_lighting_living_support/understair_lighting_living_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_industrial_pipeline_system/east_industrial_pipeline_system_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_power_distribution/east_power_distribution_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_small_safety_devices/east_small_safety_devices_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/east_work_together_poster/east_work_together_poster_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_wall_contents/south_wall_information_boards/south_wall_information_boards_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hose_reel/hose_reel_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/air_compressor/air_compressor_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/backup_generator/backup_generator_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/battery_bank/battery_bank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/corridor_emergency_light_group/corridor_emergency_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_flammable_bin/east_flammable_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_low_storage_bench/east_low_storage_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_maintenance_workstation/east_maintenance_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_plant_group/east_plant_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_recycle_bin/east_recycle_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_round_pendant_light/east_round_pendant_light_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_supply_24h_station/east_supply_24h_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/east_waste_bin/east_waste_bin_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/heavy_supply_shelf/heavy_supply_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/hologram_terminal_platform/hologram_terminal_platform_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/industrial_water_tank/industrial_water_tank_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_battery_cabinet/loft_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bed_and_bedding/loft_bed_and_bedding_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_lamp/loft_bedside_lamp_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_bedside_rug/loft_bedside_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_coffee_table/loft_coffee_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_computer_workstation/loft_computer_workstation_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_food_cabinet/loft_food_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lighting_support/loft_lighting_support_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_rug/loft_lounge_rug_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_lounge_sofa/loft_lounge_sofa_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_medical_cabinet/loft_medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_nightstand/loft_nightstand_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_office_chair/loft_office_chair_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_01/loft_pouf_01_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_pouf_02/loft_pouf_02_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_side_table/loft_side_table_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/loft_striped_privacy_curtain/loft_striped_privacy_curtain_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/main_door_low_storage_cabinet/main_door_low_storage_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/medical_cabinet/medical_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_battery_cabinet/narrow_battery_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/narrow_emergency_cabinet/narrow_emergency_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/tools_cabinet/tools_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_equipment_cabinet/understair_equipment_cabinet_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_green_bench/understair_green_bench_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/understair_storage_shelf/understair_storage_shelf_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/warehouse_pendant_light_group/warehouse_pendant_light_group_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/water_purifier/water_purifier_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/weapon_workshop_station/weapon_workshop_station_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_remaining_facilities/base_camp_rollup_main_door/base_camp_rollup_main_door_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: 'res://assets/art/environments/base_facility_3d/components/env_base99_structural/underdeck_sheet_blocker/underdeck_sheet_blocker_visual_top3d.glb': In external resource #0, invalid UID: 'uid://btvm31cxnmbdg' - using text path instead: 'res://assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png'.
+   at: open (core/io/resource_format_binary.cpp:1089)
+WARNING: [BaseFacility3D] Missing interaction/body shape: mission_operations
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] configure_front_interaction_toward (res://src/base3d/BaseFacility3D.gd:57)
+       [1] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4767)
+       [2] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4773)
+       [3] _collect_facility_art_nodes (res://src/world3d/TowerDescent3D.gd:4773)
+       [4] _install_facilities (res://src/world3d/TowerDescent3D.gd:4719)
+       [5] _ready (res://src/world3d/TowerDescent3D.gd:480)
+       [6] _ready (res://tests/verification/probe_floor_outer_wall_overlap.gd:31)
+[MapFateTriggers] 已连接到 3D 局内运行时
+
+########## 100F 天台 (floor_index=0) ##########
+  floor_kind=rooftop  stage.position=(0.0, 0.0, 0.0)
+  outer_world_rect=[P: (-50.0, -35.0), S: (100.0, 80.0)]  outer_grid_dimensions=(20, 16)
+  outer_segment_count=68  outer_straight_slot_count=68  outer_corner_count=4
+  外墙: height=0.8 thickness=0.5
+  立面环: solid=24 window=42 slot=66 bottom_y=-12.0 thickness=0.3
+  立面让位: gap_spans={ "east": [(-25.0, 5.0)] } module_count=6 facade_gap_sides=["west", "east"] stair_hole_sides=["west"]
+  -- 直接子节点 --
+     ImportedFloorTileGrid5M_A                MultiMeshInstance3D  instances=133 mesh_aabb=[P: (-2.5, 0.0, -2.5), S: (5.0, 0.3, 5.0)]
+     ImportedFloorTileGrid5M_B                MultiMeshInstance3D  instances=133 mesh_aabb=[P: (-2.5, 0.0, -2.5), S: (5.0, 0.3, 5.0)]
+     ProtectedFloorPatch5M_A                  MultiMeshInstance3D  instances=0 mesh_aabb=[P: (-2.5, 0.0, -2.5), S: (5.0, 0.3, 5.0)]
+     ProtectedFloorPatch5M_B                  MultiMeshInstance3D  instances=0 mesh_aabb=[P: (-2.5, 0.0, -2.5), S: (5.0, 0.3, 5.0)]
+     ImportedOuterParapetGrid5M               MultiMeshInstance3D  instances=50 mesh_aabb=[P: (-2.5, 0.0, -0.25), S: (5.0, 0.8, 0.5)]
+     ImportedOuterParapetDmgAGrid5M           MultiMeshInstance3D  instances=7 mesh_aabb=[P: (-2.5, 0.0, -0.25), S: (5.0, 0.8, 0.5)]
+     ImportedOuterParapetDmgBGrid5M           MultiMeshInstance3D  instances=3 mesh_aabb=[P: (-2.5, 0.0, -0.25), S: (5.0, 0.8, 0.5)]
+     ImportedOuterParapetDmgCGrid5M           MultiMeshInstance3D  instances=8 mesh_aabb=[P: (-2.5, 0.0, -0.25), S: (5.0, 0.8, 0.5)]
+     RooftopOuterCorner_SW                    Node3D
+     RooftopOuterCorner_SE                    Node3D
+     RooftopOuterCorner_NE                    Node3D
+     RooftopOuterCorner_NW                    Node3D
+     ImportedRooftopFacadeSolidGrid5M         MultiMeshInstance3D  instances=24 mesh_aabb=[P: (-2.5, 0.0, -0.15), S: (5.0, 11.9, 0.3)]
+     ImportedRooftopFacadeWindowGrid5M        MultiMeshInstance3D  instances=42 mesh_aabb=[P: (-2.5, 0.0, -0.15), S: (5.0, 11.9, 0.3)]
+     FacadeBoundaryCollision_North            StaticBody3D
+     FacadeBoundaryCollision_South            StaticBody3D
+     FacadeBoundaryCollision_West             StaticBody3D
+     FacadeBoundaryCollision_East             StaticBody3D
+     OuterBoundaryCollision_North             StaticBody3D
+     OuterBoundaryCollision_South             StaticBody3D
+     OuterBoundaryCollision_West              StaticBody3D
+     OuterBoundaryCollision_East              StaticBody3D
+     FloorSupport                             StaticBody3D
+     FormalRooftopFacilities                  Node3D
+             女儿墙外角_主体                           x[ -50.00, -47.50] y[   0.00,   0.80] z[  42.50,  45.00]
+             女儿墙外角_主体                           x[  47.50,  50.00] y[   0.00,   0.80] z[  42.50,  45.00]
+             女儿墙外角_主体                           x[  47.50,  50.00] y[   0.00,   0.80] z[ -35.00, -32.50]
+             女儿墙外角_主体                           x[ -50.00, -47.50] y[   0.00,   0.80] z[ -35.00, -32.50]
+                 小型空调机组_主体                          x[  -6.25,  -3.75] y[   5.20,   7.57] z[  20.10,  21.97]
+                 小型空调机组_主体                          x[  -0.75,   1.75] y[   5.20,   7.57] z[  20.10,  21.97]
+                 小型空调机组_主体                          x[  15.10,  16.97] y[   4.90,   7.26] z[   5.75,   8.25]
+                 小型空调机组_主体                          x[ -16.97, -15.10] y[   4.90,   7.26] z[   2.75,   5.25]
+                 小通风口_主体                            x[  -8.10,  -6.70] y[   8.00,   8.85] z[  20.10,  21.27]
+                 小通风口_主体                            x[  15.10,  16.26] y[   7.80,   8.65] z[  11.30,  12.70]
+                 长条花箱_主体                            x[ -11.25,  -6.75] y[   0.00,   2.13] z[  20.10,  21.28]
+                 长条花箱_主体                            x[  -3.25,   1.25] y[   0.00,   2.13] z[  20.10,  21.28]
+                 长条花箱_主体                            x[   4.75,   9.25] y[   0.00,   2.13] z[  20.10,  21.28]
+                 长条花箱_主体                            x[ -11.25,  -6.75] y[   0.00,   2.13] z[ -11.28, -10.10]
+                 长条花箱_主体                            x[  -3.25,   1.25] y[   0.00,   2.13] z[ -11.28, -10.10]
+                 长条花箱_主体                            x[   4.75,   9.25] y[   0.00,   2.13] z[ -11.28, -10.10]
+                 长条花箱_主体                            x[ -16.28, -15.10] y[   0.00,   2.13] z[  -4.25,   0.25]
+                 长条花箱_主体                            x[  15.10,  16.28] y[   0.00,   2.13] z[   9.75,  14.25]
+                 大盆栽_主体                             x[ -16.27, -14.73] y[   0.00,   2.77] z[  20.10,  21.85]
+                 大盆栽_主体                             x[ -16.27, -14.73] y[   0.00,   2.77] z[ -11.85, -10.10]
+                 大盆栽_主体                             x[   3.93,   5.47] y[   0.00,   2.77] z[  20.10,  21.85]
+                 大盆栽_主体                             x[   3.93,   5.47] y[   0.00,   2.77] z[ -11.85, -10.10]
+                 大盆栽_主体                             x[  15.10,  16.85] y[   0.00,   2.77] z[  -6.97,  -5.43]
+                 大盆栽_主体                             x[ -16.85, -15.10] y[   0.00,   2.77] z[   6.23,   7.77]
+                 小盆栽_主体                             x[ -13.35, -12.25] y[   0.00,   1.48] z[  20.10,  21.19]
+                 小盆栽_主体                             x[ -13.35, -12.25] y[   0.00,   1.48] z[ -11.19, -10.10]
+                 小盆栽_主体                             x[   0.85,   1.95] y[   0.00,   1.48] z[  20.10,  21.19]
+                 小盆栽_主体                             x[   0.85,   1.95] y[   0.00,   1.48] z[ -11.19, -10.10]
+                 小盆栽_主体                             x[  15.10,  16.19] y[   0.00,   1.48] z[   1.45,   2.55]
+                 小盆栽_主体                             x[ -16.19, -15.10] y[   0.00,   1.48] z[  -0.55,   0.55]
+                 墙面攀爬藤蔓_主体                          x[ -13.13,  -8.87] y[   0.00,   3.80] z[  19.81,  20.63]
+                 墙面攀爬藤蔓_主体                          x[  -5.13,  -0.87] y[   0.00,   3.80] z[  19.81,  20.63]
+                 墙面攀爬藤蔓_主体                          x[   2.87,   7.13] y[   0.00,   3.80] z[  19.81,  20.63]
+                 墙面攀爬藤蔓_主体                          x[ -13.13,  -8.87] y[   0.00,   3.80] z[ -10.63,  -9.81]
+                 墙面攀爬藤蔓_主体                          x[  -5.13,  -0.87] y[   0.00,   3.80] z[ -10.63,  -9.81]
+                 墙面攀爬藤蔓_主体                          x[   2.87,   7.13] y[   0.00,   3.80] z[ -10.63,  -9.81]
+                 墙面攀爬藤蔓_主体                          x[  14.81,  15.63] y[   0.00,   3.80] z[ -10.63,  -6.37]
+                 墙面攀爬藤蔓_主体                          x[  14.81,  15.63] y[   0.00,   3.80] z[   0.87,   5.13]
+                 墙面攀爬藤蔓_主体                          x[  14.81,  15.63] y[   0.00,   3.80] z[   8.87,  13.13]
+                 墙面攀爬藤蔓_主体                          x[ -15.63, -14.81] y[   0.00,   3.80] z[  -8.13,  -3.87]
+                 墙面攀爬藤蔓_主体                          x[ -15.63, -14.81] y[   0.00,   3.80] z[   5.87,  10.13]
+                 墙面攀爬藤蔓_主体                          x[  14.81,  15.63] y[   3.60,   7.40] z[   8.87,  13.13]
+                 墙面攀爬藤蔓_主体                          x[ -15.63, -14.81] y[   2.40,   6.20] z[   5.87,  10.13]
+                 墙面攀爬藤蔓_主体                          x[ -13.13,  -8.87] y[   2.00,   5.80] z[  19.81,  20.63]
+                 墙面攀爬藤蔓_主体                          x[   2.87,   7.13] y[   3.20,   7.00] z[  19.81,  20.63]
+                 墙面攀爬藤蔓_主体                          x[  -5.13,  -0.87] y[   2.60,   6.40] z[ -10.63,  -9.81]
+                 直管段_主体                             x[ -15.07, -12.43] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[ -12.57,  -9.93] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[ -10.07,  -7.43] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  -7.57,  -4.93] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  -5.07,  -2.43] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  -2.57,   0.07] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  -0.07,   2.57] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[   2.43,   5.07] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[   4.93,   7.57] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[   7.43,  10.07] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[   9.93,  12.57] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  12.43,  15.07] y[  10.65,  11.06] z[  20.22,  20.63]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[ -10.07,  -7.43]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  -7.57,  -4.93]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  -5.07,  -2.43]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  -2.57,   0.07]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  -0.07,   2.57]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[   2.43,   5.07]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[   4.93,   7.57]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[   7.43,  10.07]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[   9.93,  12.57]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  12.43,  15.07]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  14.93,  17.57]
+                 直管段_主体                             x[  15.22,  15.63] y[  10.65,  11.06] z[  17.43,  20.07]
+                 直管段_主体                             x[  12.43,  15.07] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[   9.93,  12.57] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[   7.43,  10.07] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[   4.93,   7.57] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[   2.43,   5.07] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[  -0.07,   2.57] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[  -2.57,   0.07] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[  -5.07,  -2.43] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[  -7.57,  -4.93] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[ -10.07,  -7.43] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[ -12.57,  -9.93] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[ -15.07, -12.43] y[  10.65,  11.06] z[ -10.63, -10.22]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  17.43,  20.07]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  14.93,  17.57]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  12.43,  15.07]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[   9.93,  12.57]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[   7.43,  10.07]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[   4.93,   7.57]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[   2.43,   5.07]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  -0.07,   2.57]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  -2.57,   0.07]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  -5.07,  -2.43]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[  -7.57,  -4.93]
+                 直管段_主体                             x[ -15.63, -15.22] y[  10.65,  11.06] z[ -10.07,  -7.43]
+                 转角弯管_主体                            x[  14.36,  15.94] y[  10.65,  11.92] z[ -10.35,  -9.94]
+                 转角弯管_主体                            x[  14.94,  15.35] y[  10.65,  11.92] z[  19.36,  20.94]
+                 转角弯管_主体                            x[ -15.94, -14.36] y[  10.65,  11.92] z[  19.94,  20.35]
+                 转角弯管_主体                            x[ -15.35, -14.94] y[  10.65,  11.92] z[ -10.94,  -9.36]
+                 三通管_主体                             x[  -8.82,  -6.18] y[  10.65,  12.00] z[  20.22,  20.63]
+                 三通管_主体                             x[   1.18,   3.82] y[  10.65,  12.00] z[  20.22,  20.63]
+                 立管下水管_主体                           x[  -7.90,  -7.10] y[   0.00,   4.95] z[  20.18,  20.66]
+                 立管下水管_主体                           x[  -7.90,  -7.10] y[   4.95,   9.89] z[  20.18,  20.66]
+                 管道支架_主体                            x[  -7.74,  -7.26] y[   1.50,   5.14] z[  19.98,  20.86]
+                 管道支架_主体                            x[  -7.74,  -7.26] y[   7.00,  10.64] z[  19.98,  20.86]
+                 立管下水管_主体                           x[   2.10,   2.90] y[   0.00,   4.95] z[  20.18,  20.66]
+                 立管下水管_主体                           x[   2.10,   2.90] y[   4.95,   9.89] z[  20.18,  20.66]
+                 管道支架_主体                            x[   2.26,   2.74] y[   1.50,   5.14] z[  19.98,  20.86]
+                 管道支架_主体                            x[   2.26,   2.74] y[   7.00,  10.64] z[  19.98,  20.86]
+                 立管下水管_主体                           x[  15.18,  15.66] y[   0.00,   4.95] z[   5.10,   5.90]
+                 立管下水管_主体                           x[  15.18,  15.66] y[   4.95,   9.89] z[   5.10,   5.90]
+                 管道支架_主体                            x[  14.98,  15.86] y[   1.50,   5.14] z[   5.26,   5.74]
+                 管道支架_主体                            x[  14.98,  15.86] y[   7.00,  10.64] z[   5.26,   5.74]
+                 立管下水管_主体                           x[ -15.66, -15.18] y[   0.00,   4.95] z[   3.60,   4.40]
+                 立管下水管_主体                           x[ -15.66, -15.18] y[   4.95,   9.89] z[   3.60,   4.40]
+                 管道支架_主体                            x[ -15.86, -14.98] y[   1.50,   5.14] z[   3.76,   4.24]
+                 管道支架_主体                            x[ -15.86, -14.98] y[   7.00,  10.64] z[   3.76,   4.24]
+                 女儿墙挂藤_主体                           x[ -27.50, -22.50] y[   0.00,   2.01] z[  44.34,  45.16]
+                 女儿墙挂藤_主体                           x[  -7.50,  -2.50] y[   0.00,   2.01] z[  44.34,  45.16]
+                 女儿墙挂藤_主体                           x[  12.50,  17.50] y[   0.00,   2.01] z[  44.34,  45.16]
+                 女儿墙挂藤_主体                           x[ -27.50, -22.50] y[   0.00,   2.01] z[ -35.16, -34.34]
+                 女儿墙挂藤_主体                           x[  -7.50,  -2.50] y[   0.00,   2.01] z[ -35.16, -34.34]
+                 女儿墙挂藤_主体                           x[  12.50,  17.50] y[   0.00,   2.01] z[ -35.16, -34.34]
+                 女儿墙挂藤_主体                           x[  49.34,  50.16] y[   0.00,   2.01] z[   7.50,  12.50]
+                 女儿墙挂藤_主体                           x[ -50.16, -49.34] y[   0.00,   2.01] z[   7.50,  12.50]
+  -- 碰撞代理 --
+     FacadeBoundaryCollision_North    camera_lower_wall=false  [pos=(0.0, -6.0, -34.85) size=(100.00,12.00,0.30)]
+     FacadeBoundaryCollision_South    camera_lower_wall=false  [pos=(0.0, -6.0, 44.85) size=(100.00,12.00,0.30)]
+     FacadeBoundaryCollision_West     camera_lower_wall=false  [pos=(-49.85, -6.0, 5.0) size=(0.30,12.00,80.00)]
+     FacadeBoundaryCollision_East     camera_lower_wall=false  [pos=(49.85, -6.0, -30.0) size=(0.30,12.00,10.00)]  [pos=(49.85, -6.0, 25.0) size=(0.30,12.00,40.00)]
+     OuterBoundaryCollision_North     camera_lower_wall=false  [pos=(0.0, 0.4, -34.75) size=(100.00,0.80,0.50)]
+     OuterBoundaryCollision_South     camera_lower_wall=true  [pos=(0.0, 0.4, 44.75) size=(100.00,0.80,0.50)]
+     OuterBoundaryCollision_West      camera_lower_wall=false  [pos=(-49.75, 0.4, 5.0) size=(0.50,0.80,80.00)]
+     OuterBoundaryCollision_East      camera_lower_wall=false  [pos=(49.75, 0.4, 5.0) size=(0.50,0.80,80.00)]
+     FloorSupport                     camera_lower_wall=false  [pos=(-47.5, -0.15, 5.0) size=(5.00,0.30,80.00)]  [pos=(-22.5, -0.15, 5.0) size=(15.00,0.30,80.00)]  [pos=(-37.5, -0.15, -17.5) size=(15.00,0.30,35.00)]  [pos=(-37.5, -0.15, 37.5) size=(15.00,0.30,15.00)]  [pos=(32.5, -0.15, 5.0) size=(35.00,0.30,80.00)]  [pos=(0.0, -0.15, -22.5) size=(30.00,0.30,25.00)]  [pos=(0.0, -0.15, 32.5) size=(30.00,0.30,25.00)]
+
+########## 99F 基地 (floor_index=1) ##########
+  floor_kind=facility  stage.position=(0.0, -12.0, 0.0)
+  outer_world_rect=[P: (-50.0, -35.0), S: (100.0, 80.0)]  outer_grid_dimensions=(20, 16)
+  outer_segment_count=72  outer_straight_slot_count=62  outer_corner_count=0
+  外墙: height=12.0 thickness=0.3
+  立面环: solid=0 window=0 slot=0 bottom_y=0.0 thickness=0.0
+  立面让位: gap_spans={  } module_count=0 facade_gap_sides=[] stair_hole_sides=["east"]
+  -- 直接子节点 --
+     ImportedFloorTileGrid5M_A                MultiMeshInstance3D  instances=133 mesh_aabb=[P: (-2.5, -0.15, -2.5), S: (5.0, 0.304, 5.0)]
+     ImportedFloorTileGrid5M_B                MultiMeshInstance3D  instances=133 mesh_aabb=[P: (-2.5, -0.15, -2.5), S: (5.0, 0.304, 5.0)]
+     ProtectedFloorPatch5M_A                  MultiMeshInstance3D  instances=0 mesh_aabb=[P: (-2.5, -0.15, -2.5), S: (5.0, 0.304, 5.0)]
+     ProtectedFloorPatch5M_B                  MultiMeshInstance3D  instances=0 mesh_aabb=[P: (-2.5, -0.15, -2.5), S: (5.0, 0.304, 5.0)]
+     ImportedOuterWallGrid5M                  MultiMeshInstance3D  instances=62 mesh_aabb=[P: (-2.5, 0.0, -0.150001), S: (5.0, 11.9, 0.467501)]
+     Base99OuterCorner_NW                     Node3D
+     Base99OuterCorner_NE                     Node3D
+     Base99OuterCorner_SW                     Node3D
+     Base99OuterCorner_SE                     Node3D
+     OuterBoundaryCollision_North             StaticBody3D
+     OuterBoundaryCollision_South             StaticBody3D
+     OuterBoundaryCollision_West              StaticBody3D
+     OuterBoundaryCollision_East              StaticBody3D
+     FloorSupport                             StaticBody3D
+         env_base99_corner_l_5m_visual_top3d_v001 x[ -50.00, -44.85] y[ -12.00,  -0.10] z[ -35.00, -29.85]
+         env_base99_corner_l_5m_visual_top3d_v001 x[  44.85,  50.00] y[ -12.00,  -0.10] z[ -35.00, -29.85]
+         env_base99_corner_l_5m_visual_top3d_v001 x[ -50.00, -44.85] y[ -12.00,  -0.10] z[  39.85,  45.00]
+         env_base99_corner_l_5m_visual_top3d_v001 x[  44.85,  50.00] y[ -12.00,  -0.10] z[  39.85,  45.00]
+  -- 碰撞代理 --
+     OuterBoundaryCollision_North     camera_lower_wall=false  [pos=(0.0, 6.0, -34.85) size=(100.00,12.00,0.30)]
+     OuterBoundaryCollision_South     camera_lower_wall=true  [pos=(0.0, 6.0, 44.85) size=(100.00,12.00,0.30)]
+     OuterBoundaryCollision_West      camera_lower_wall=false  [pos=(-49.85, 6.0, 5.0) size=(0.30,12.00,80.00)]
+     OuterBoundaryCollision_East      camera_lower_wall=false  [pos=(49.85, 6.0, -25.0) size=(0.30,12.00,20.00)]  [pos=(49.85, 6.0, 20.0) size=(0.30,12.00,50.00)]
+     FloorSupport                     camera_lower_wall=false  [pos=(-7.5, -0.15, 5.0) size=(85.00,0.30,80.00)]  [pos=(42.5, -0.15, -30.0) size=(15.00,0.30,10.00)]  [pos=(42.5, -0.15, 25.0) size=(15.00,0.30,40.00)]
+
+########## 重合判定：99F 外墙槽位 vs 100F 立面环槽位 ##########
+100F outer_world_rect=[P: (-50.0, -35.0), S: (100.0, 80.0)]  stage.position.y=-0.00
+ 99F outer_world_rect=[P: (-50.0, -35.0), S: (100.0, 80.0)]  stage.position.y=-12.00
+轮廓相同 = 是
+north  天台立面=20 槽   99F外墙=18 槽   沿轴同位=18 槽
+        天台立面 along=[-47.50, -42.50, -37.50, -32.50, -27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50, 47.50]
+        99F外墙 along=[-42.50, -37.50, -32.50, -27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50]
+south  天台立面=20 槽   99F外墙=18 槽   沿轴同位=18 槽
+        天台立面 along=[-47.50, -42.50, -37.50, -32.50, -27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50, 47.50]
+        99F外墙 along=[-42.50, -37.50, -32.50, -27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50]
+west   天台立面=16 槽   99F外墙=14 槽   沿轴同位=14 槽
+        天台立面 along=[-32.50, -27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50]
+        99F外墙 along=[-27.50, -22.50, -17.50, -12.50, -7.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50]
+east   天台立面=10 槽   99F外墙=12 槽   沿轴同位= 8 槽
+        天台立面 along=[-32.50, -27.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50, 42.50]
+        99F外墙 along=[-27.50, -22.50, -17.50, -2.50, 2.50, 7.50, 12.50, 17.50, 22.50, 27.50, 32.50, 37.50]
+合计：99F 外墙 62 槽中，有 58 槽与天台立面环同位（93.5%）
+
+########## 楼梯井封闭外壁（名字含 Stairwell / Enclosure）##########
+  StairwellArt_VisualOnly                          x[   35.05,   49.95] z[  -24.89,    5.10]
+  EnclosureWall_VisualCollision                    x[   35.00,   50.00] z[  -25.00,    5.30]
+  StairwellArt_VisualOnly                          x[  -44.95,  -30.05] z[   -0.10,   29.89]
+  EnclosureWall_VisualCollision                    x[  -45.00,  -30.00] z[   -0.30,   30.00]
+  命中 4 个
+
+PROBE_DONE

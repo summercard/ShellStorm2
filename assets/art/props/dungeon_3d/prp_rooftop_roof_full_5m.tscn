@@ -14,7 +14,8 @@
 ;   内圈 16 格 → 0°（本件各向同性，角度只是沿用同槽位口径）。
 ;
 ; 【为什么朝向规则长这样】本组件库（v002）朝外法线 = 局部 +Z，与
-;   TowerFloorStage3D._build_rooftop_facade_ring() 的立面环、以及美术自己的
+;   TowerFloorStage3D._build_outer_facade_visuals() 的立面环（2026-09-22 起由 99F
+;   消费，函数名原为 _build_rooftop_facade_ring）、以及美术自己的
 ;   reference_assembly.json 摆法三处互相验证一致。⚠️ 与 99F 系（forward_axis=-Z）
 ;   差 180°：同样一面墙，99F 件用 -90°，本套件用 +90°。
 ;

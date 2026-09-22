@@ -12,7 +12,8 @@ const ROOFTOP_BLOCKING_LAYER := 1
 
 func _ready() -> void:
 	var stage := TowerFloorStage3D.new()
-	stage.configure(0, "rooftop", ["west"], [], false, Rect2(), ["east"])
+	# 2026-09-22：configure() 第 7 参「立面让位侧」已随天台立面环整圈删除而作废。
+	stage.configure(0, "rooftop", ["west"], [], false, Rect2())
 	add_child(stage)
 	await get_tree().process_frame
 	var root := stage.find_child("FormalRooftopFacilities", false, false) as Node3D

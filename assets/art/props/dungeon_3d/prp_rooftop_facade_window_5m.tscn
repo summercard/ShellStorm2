@@ -8,10 +8,12 @@
 ;   （网格本身 3 个表面：水泥结构 / 窗框 / 窗玻璃）。
 ; 参考拼装 reference_assembly.json 里 facade_solid / facade_window / facade_window_ivy
 ;   三者共用同一槽位序列摆在同一圈（z=-12.00），即「同圈不同档」的用法。
+;   ⚠️ 2026-09-22 业主裁定后，这圈立面的所有权从 100F 天台转到 **99F**（同一套资源，
+;   局部 Y=0 = 99F 楼面 ⇒ 世界 y[-12, -0.1]）；天台那圈整圈删除。见实墙件的注释。
 ; 默认朝向 +Z（装饰面朝场地外侧）；实例化时由脚本设置 rotation 适配各方向。
 ; preserve_authored_palette：禁止运行时用塔楼暖色 A/B 主题材质覆盖。
-; 本 Prefab 视觉专用（visual_only）。立面环碰撞由 TowerFloorStage3D 的
-;   FacadeBoundaryCollision_* 按 0.30m 代理生成，本件不带任何碰撞节点。
+; 本 Prefab 视觉专用（visual_only）。碰撞**不**由本件提供，也**不再**有独立的
+;   FacadeBoundaryCollision_* —— 由 99F 既有的 OuterBoundaryCollision_* 接管。
 
 [ext_resource type="PackedScene" path="res://assets/art/environments/tower_zones/rooftop/components/env_rooftop_ref_facade_window_top3d.glb" id="1_visual"]
 

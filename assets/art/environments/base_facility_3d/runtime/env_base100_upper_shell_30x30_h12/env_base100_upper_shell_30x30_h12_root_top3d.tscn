@@ -18,7 +18,8 @@
 ;     | min x(西) | -90°           | +90°               |
 ;   本文件里东墙 5 块 v002 用 +90°、而东墙门洞槽的 base99 门墙仍用 -90°：
 ;   两者都朝 +X（房间外），视觉一致，别"顺手统一"成同一个角度。
-;   口径来源三方互证：TowerFloorStage3D._build_rooftop_facade_ring() 注释、
+;   口径来源三方互证：TowerFloorStage3D._build_outer_facade_visuals() 注释
+;   （2026-09-22 起由 99F 消费，原名 _build_rooftop_facade_ring）、
 ;   美术 reference_assembly.json 的四向 rotation_z、以及本文件实测反解。
 ;
 ; ⚠️【东面门洞槽为什么不换成 v002 的厚石门洞墙】

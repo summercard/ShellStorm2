@@ -1,17 +1,22 @@
 extends Node
-## 视觉 A/B 对照：同一机位拍两张 —— ①外立面环开着 ②外立面环隐藏。
+## 视觉 A/B 对照：同一机位拍两张 —— ①99F 外立面环开着 ②外立面环隐藏。
 ## 目的：用**像素差**回答「外立面环到底渲染出来没有」。因为本场景光照偏暗、立面
 ## 与背景都是低对比灰，单看一张图容易误判成「什么都没画」。
 ##
 ## 若两张图**有**明显差异 ⇒ 立面确实在渲染（差异区域 = 立面覆盖的像素）。
 ## 若两张图**几乎一样** ⇒ 立面没渲染出来（真 bug，不是观感问题）。
 ##
+## ⚠️ 2026-09-22 业主裁定后，这圈立面的**所有权从天台转到 99F**（99F 外墙整圈改用
+## 天台那套立面资源、天台那圈立面整圈删除）。世界坐标不变（仍是 99F 层带
+## y[-12, -0.1]），只是节点挂在 99F stage 下、名字从 ImportedRooftopFacade* 改成
+## ImportedOuterFacade*。机位与判据都不用动。
+##
 ## 只读；必须「不带 --headless」运行。
 
 const OUT_DIR := "res://_scratch/rooftop/ab"
 const FACADE_NODE_NAMES: Array[String] = [
-	"ImportedRooftopFacadeSolidGrid5M",
-	"ImportedRooftopFacadeWindowGrid5M",
+	"ImportedOuterFacadeSolidGrid5M",
+	"ImportedOuterFacadeWindowGrid5M",
 ]
 ## 机位：塔楼外侧看西面。立面外皮 x≈-49.95，相机在 x=-64，正对墙面。
 const CAM_FROM := Vector3(-64.0, 6.0, 15.0)
