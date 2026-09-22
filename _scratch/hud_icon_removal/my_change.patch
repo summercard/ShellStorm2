@@ -1,0 +1,88 @@
+--- _scratch/hud_icon_removal/Dungeon3D.gd.bak	2026-09-22 11:36:57.010354100 +0800
++++ _scratch/hud_icon_removal/Dungeon3D.gd.new	2026-09-22 11:38:02.158276600 +0800
+@@ -1098,22 +1098,8 @@
+ 		quick_box.add_child(quick_label)
+ 		_hud_quick_item_labels.append(quick_label)
+ 	_refresh_quick_item_hud()
+-
+-	var actions := HBoxContainer.new()
+-	actions.name = "ActionKeyStrip"
+-	actions.alignment = BoxContainer.ALIGNMENT_END
+-	actions.add_theme_constant_override("separation", _hud_int(8))
+-	_anchor_control(actions, 1.0, 1.0, 1.0, 1.0, -374, -108, -18, -18)
+-	_reference_hud_root.add_child(actions)
+-	# 4 个右下角动作按钮桥接到 input action：R 换弹 / SHIFT 冲刺 / F 探照 / E 交互。
+-	# 同时供 PC 端和移动端使用：移动端直接 tap，PC 端鼠标点击也会触发 Input.parse_input_event。
+-	for data in [
+-		["reload", "R", "换弹", "reload"],
+-		["dash", "SHIFT", "冲刺", "dash"],
+-		["shield", "F", "探照", "toggle_flashlight"],
+-		["interact", "E", "交互", "interact"],
+-	]:
+-		actions.add_child(_make_action_key(str(data[0]), str(data[1]), str(data[2]), str(data[3]), cyan))
++	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
++	# 这里只去掉 HUD 上的可视 + 点击入口。
+ 
+ 
+ func _on_weapon_panel_gui_input(event: InputEvent, panel: PanelContainer) -> void:
+@@ -1139,7 +1125,7 @@
+ 	get_viewport().set_input_as_handled()
+ 
+ func _is_panel_press(event: InputEvent) -> bool:
+-	# 同时识别 PC 鼠标左键和移动端触屏按下；用 _on_action_key_gui_input 的同款判断
++	# 同时识别 PC 鼠标左键和移动端触屏按下（武器栏 / 快捷物品 / 小地图 / 头像面板共用）
+ 	if event is InputEventMouseButton:
+ 		var mb := event as InputEventMouseButton
+ 		return mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed
+@@ -1203,51 +1189,6 @@
+ 		_inventory_ui.set_inventory_panel_open(false)
+ 
+ 
+-func _make_action_key(kind: String, key_text: String, caption: String, action_name: String, accent: Color) -> PanelContainer:
+-	var panel := _make_hud_panel(Color(accent, 0.72), Color(0.006, 0.014, 0.024, 0.88))
+-	panel.custom_minimum_size = _hud_size(Vector2(78, 82))
+-	# 关键：_make_hud_panel 默认 mouse_filter=IGNORE；动作键必须 STOP 才能收到 gui_input
+-	panel.mouse_filter = Control.MOUSE_FILTER_STOP
+-	panel.tooltip_text = "%s  ·  %s" % [key_text, caption]
+-	panel.gui_input.connect(_on_action_key_gui_input.bind(action_name, panel, accent))
+-	var margin := _make_margin(6, 4, 6, 3)
+-	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-	panel.add_child(margin)
+-	var vbox := VBoxContainer.new()
+-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+-	vbox.add_theme_constant_override("separation", 0)
+-	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-	margin.add_child(vbox)
+-	var icon := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
+-	icon.custom_minimum_size = _hud_size(Vector2(52, 46))
+-	icon.configure(kind, Color(0.90, 0.96, 1.0))
+-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+-	vbox.add_child(icon)
+-	var key_label := _make_hud_label("%s · %s" % [key_text, caption], 10, Color(0.86, 0.90, 0.94))
+-	key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+-	vbox.add_child(key_label)
+-	return panel
+-
+-
+-func _on_action_key_gui_input(event: InputEvent, action_name: String, panel: PanelContainer, accent: Color) -> void:
+-	# 同时处理鼠标（PC）和触屏（移动端）两种来源的按下事件
+-	var should_press := false
+-	if event is InputEventMouseButton:
+-		var button_event := event as InputEventMouseButton
+-		if button_event.button_index == MOUSE_BUTTON_LEFT and button_event.pressed:
+-			should_press = true
+-	elif event is InputEventScreenTouch:
+-		var touch_event := event as InputEventScreenTouch
+-		if touch_event.pressed:
+-			should_press = true
+-	if not should_press:
+-		return
+-	_tap_input_action(action_name)
+-	_flash_action_key(panel)
+-	# 标记为已处理：避免被 MobileInput 的 _input / aim zone 重复触发
+-	get_viewport().set_input_as_handled()
+-
+-
+ func _flash_action_key(panel: Control) -> void:
+ 	if not is_instance_valid(panel):
+ 		return

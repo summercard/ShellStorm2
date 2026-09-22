@@ -17,6 +17,7 @@ const SHADOW_MODES := ["low", "medium", "high"]
 const SHADOW_LABELS := ["低 · 1024", "中 · 2048", "高 · 4096（当前）"]
 const INDIRECT_DIFFUSE_MODES := ["low", "medium", "high"]
 const INDIRECT_DIFFUSE_LABELS := ["低 · 近域", "中 · 平衡", "高 · 完整"]
+const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 
 @onready var resume_button: Button = $Center/Panel/Margin/MainPage/ResumeButton
 @onready var graphics_button: Button = $Center/Panel/Margin/MainPage/GraphicsButton
@@ -27,6 +28,21 @@ const INDIRECT_DIFFUSE_LABELS := ["低 · 近域", "中 · 平衡", "高 · 完�
 @onready var reset_game_save_dialog: ConfirmationDialog = $ResetGameSaveDialog
 @onready var main_page: VBoxContainer = $Center/Panel/Margin/MainPage
 @onready var graphics_page: VBoxContainer = $Center/Panel/Margin/GraphicsPage
+@onready var controls_button: Button = $Center/Panel/Margin/MainPage/ControlsButton
+@onready var controls_page: VBoxContainer = $Center/Panel/Margin/ControlsPage
+@onready var device_status_label: Label = $Center/Panel/Margin/ControlsPage/Header/DeviceStatusLabel
+@onready var device_mode_option: OptionButton = $Center/Panel/Margin/ControlsPage/DeviceRow/DeviceModeOption
+@onready var gamepad_enabled_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/GamepadEnabled
+@onready var move_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneSlider
+@onready var move_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/MoveDeadzoneRow/MoveDeadzoneValue
+@onready var aim_deadzone_slider: HSlider = $Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneSlider
+@onready var aim_deadzone_value: Label = $Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneValue
+@onready var aim_smoothing_slider: HSlider = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingSlider
+@onready var aim_smoothing_value: Label = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingValue
+@onready var left_stick_aim_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/LeftStickAim
+@onready var vibration_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Vibration
+@onready var controls_back_button: Button = $Center/Panel/Margin/ControlsPage/Footer/BackButton
+@onready var controls_status_label: Label = $Center/Panel/Margin/ControlsPage/Footer/Status
 @onready var renderer_label: Label = $Center/Panel/Margin/GraphicsPage/Header/RendererLabel
 @onready var aa_option: OptionButton = $Center/Panel/Margin/GraphicsPage/AASection/AAOption
 @onready var shadow_option: OptionButton = $Center/Panel/Margin/GraphicsPage/Scroll/Grid/Shadows/ShadowOption
@@ -52,12 +68,15 @@ func _ready() -> void:
 	_apply_pause_visual(Global != null and Global.has_pause_reason("manual"))
 	resume_button.pressed.connect(resume_game)
 	graphics_button.pressed.connect(_show_graphics_page)
+	controls_button.pressed.connect(_show_controls_page)
 	return_to_base_button.pressed.connect(_request_return_to_base)
 	reset_game_save_button.pressed.connect(_request_game_save_reset)
 	reset_game_save_dialog.confirmed.connect(_confirm_game_save_reset)
 	back_button.pressed.connect(_show_main_page)
+	controls_back_button.pressed.connect(_show_main_page)
 	high_defaults_button.pressed.connect(_restore_high_defaults)
 	_setup_graphics_controls()
+	_setup_input_controls()
 	UIStyleFactory.apply_tactical_tree(self)
 
 
@@ -67,7 +86,7 @@ func try_consume_pause_input() -> bool:
 			reset_game_save_dialog.hide()
 			reset_game_save_button.grab_focus()
 			return true
-		if graphics_page.visible:
+		if graphics_page.visible or controls_page.visible:
 			_show_main_page()
 			return true
 		return false
@@ -144,6 +163,7 @@ func _setup_graphics_controls() -> void:
 
 
 func _show_graphics_page() -> void:
+	_hide_sub_pages()
 	main_page.visible = false
 	graphics_page.visible = true
 	renderer_label.text = GraphicsSettingsManager.get_renderer_summary()
@@ -152,11 +172,156 @@ func _show_graphics_page() -> void:
 
 
 func _show_main_page() -> void:
-	graphics_page.visible = false
+	_hide_sub_pages()
 	main_page.visible = true
 	_refresh_return_to_base_action()
 	if center.visible:
 		graphics_button.grab_focus()
+
+
+func _show_controls_page() -> void:
+	_hide_sub_pages()
+	main_page.visible = false
+	controls_page.visible = true
+	_sync_input_controls()
+	_refresh_device_status()
+	device_mode_option.grab_focus()
+
+
+func _hide_sub_pages() -> void:
+	graphics_page.visible = false
+	controls_page.visible = false
+
+
+## 页头状态行：只描述「现在是谁在操作」，不参与任何输入判定。
+func _refresh_device_status() -> void:
+	var device := InputDevice.get_active_device()
+	var label := "键盘与鼠标"
+	if device == InputDevice.DEVICE_GAMEPAD:
+		var pad_name := InputDevice.get_active_gamepad_name()
+		label = "手柄" if pad_name.is_empty() else "手柄 · %s" % pad_name
+	elif device == InputDevice.DEVICE_TOUCH:
+		label = "触屏"
+	var suffix := "" if InputDevice.has_connected_gamepad() else "（未检测到手柄）"
+	device_status_label.text = "当前输入：%s%s" % [label, suffix]
+	device_status_label.modulate = (
+		Color(0.45, 0.9, 0.68) if device == InputDevice.DEVICE_GAMEPAD else Color(0.58, 0.76, 0.84)
+	)
+
+
+func _setup_input_controls() -> void:
+	for index in DEVICE_MODE_LABELS.size():
+		device_mode_option.add_item(DEVICE_MODE_LABELS[index], index)
+	device_mode_option.item_selected.connect(_on_device_mode_selected)
+	gamepad_enabled_toggle.toggled.connect(_on_gamepad_enabled_toggled)
+	left_stick_aim_toggle.toggled.connect(_on_left_stick_aim_toggled)
+	vibration_toggle.toggled.connect(_on_vibration_toggled)
+	move_deadzone_slider.value_changed.connect(
+		_on_deadzone_changed.bind("gamepad_move_deadzone")
+	)
+	aim_deadzone_slider.value_changed.connect(
+		_on_deadzone_changed.bind("gamepad_aim_deadzone")
+	)
+	aim_smoothing_slider.value_changed.connect(_on_aim_smoothing_changed)
+	if not InputSettings.settings_changed.is_connected(_on_input_settings_changed):
+		InputSettings.settings_changed.connect(_on_input_settings_changed)
+	if not InputDevice.active_device_changed.is_connected(_on_active_device_changed):
+		InputDevice.active_device_changed.connect(_on_active_device_changed)
+	_sync_input_controls()
+
+
+func _on_device_mode_selected(index: int) -> void:
+	if _syncing_controls or index < 0 or index >= InputSettings.DEVICE_MODES.size():
+		return
+	var mode: String = str(InputSettings.DEVICE_MODES[index])
+	InputSettings.set_value("device_mode", mode)
+	if mode == InputSettings.DEVICE_MODE_GAMEPAD and not InputDevice.has_connected_gamepad():
+		controls_status_label.text = "已锁定手柄，但当前未检测到手柄，暂时回落键鼠"
+		controls_status_label.modulate = Color(1.0, 0.72, 0.42)
+	else:
+		controls_status_label.text = "操控方式已切换为%s · 设置已保存" % DEVICE_MODE_LABELS[index]
+		controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+	_refresh_device_status()
+
+
+func _on_gamepad_enabled_toggled(enabled: bool) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("gamepad_enabled", enabled)
+	controls_status_label.text = "手柄操控已%s · 设置已保存" % ("启用" if enabled else "关闭")
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+	_refresh_device_status()
+
+
+func _on_left_stick_aim_toggled(enabled: bool) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("gamepad_left_stick_aim", enabled)
+	controls_status_label.text = "左摇杆同控朝向已%s · 设置已保存" % ("开启" if enabled else "关闭")
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
+func _on_vibration_toggled(enabled: bool) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("gamepad_vibration", enabled)
+	if not enabled and GamepadInput != null:
+		GamepadInput.stop_rumble()
+	controls_status_label.text = "手柄震动已%s · 设置已保存" % ("开启" if enabled else "关闭")
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
+func _on_deadzone_changed(value: float, key: String) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value(key, value)
+	var formatted := "%.2f" % value
+	if key == "gamepad_move_deadzone":
+		move_deadzone_value.text = formatted
+	else:
+		aim_deadzone_value.text = formatted
+	controls_status_label.text = "摇杆死区已调整为 %s · 设置已保存" % formatted
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
+func _on_aim_smoothing_changed(value: float) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("gamepad_aim_smoothing", value)
+	aim_smoothing_value.text = "%.2f" % value
+	controls_status_label.text = "瞄准平滑已调整为 %.2f · 设置已保存" % value
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
+func _on_input_settings_changed(_settings: Dictionary) -> void:
+	_sync_input_controls()
+	_refresh_device_status()
+
+
+func _on_active_device_changed(_device: String) -> void:
+	_refresh_device_status()
+
+
+func _sync_input_controls() -> void:
+	_syncing_controls = true
+	var settings := InputSettings.get_settings_snapshot()
+	var mode_index := InputSettings.DEVICE_MODES.find(
+		str(settings.get("device_mode", InputSettings.DEVICE_MODE_AUTO))
+	)
+	device_mode_option.select(maxi(0, mode_index))
+	gamepad_enabled_toggle.button_pressed = bool(settings.get("gamepad_enabled", true))
+	left_stick_aim_toggle.button_pressed = bool(settings.get("gamepad_left_stick_aim", true))
+	vibration_toggle.button_pressed = bool(settings.get("gamepad_vibration", true))
+	var move_deadzone := float(settings.get("gamepad_move_deadzone", 0.20))
+	var aim_deadzone := float(settings.get("gamepad_aim_deadzone", 0.20))
+	var smoothing := float(settings.get("gamepad_aim_smoothing", 0.35))
+	move_deadzone_slider.value = move_deadzone
+	aim_deadzone_slider.value = aim_deadzone
+	aim_smoothing_slider.value = smoothing
+	move_deadzone_value.text = "%.2f" % move_deadzone
+	aim_deadzone_value.text = "%.2f" % aim_deadzone
+	aim_smoothing_value.text = "%.2f" % smoothing
+	_syncing_controls = false
 
 
 func get_return_to_base_availability() -> Dictionary:

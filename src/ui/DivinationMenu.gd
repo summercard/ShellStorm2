@@ -27,6 +27,8 @@ func _ready() -> void:
 	_selected_card_label_reset()
 	_draw_cards()
 	UIStyleFactory.apply_tactical_tree(self)
+	# 默认焦点落在「跳过」上：打开即按 A 不该直接定下命运卡。
+	UiMenuFocus.ensure_focus(self)
 
 
 func _draw_cards() -> void:

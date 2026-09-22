@@ -22,6 +22,9 @@ func _ready() -> void:
 	UIStyleFactory.apply_button_style(close_button, styles)
 	_build_vault_view()
 	UIStyleFactory.apply_tactical_tree(self)
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:

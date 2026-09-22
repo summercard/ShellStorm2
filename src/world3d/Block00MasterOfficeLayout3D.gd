@@ -250,6 +250,9 @@ static func build_plan_override(base_plan: Dictionary) -> Dictionary:
 			"authored_layout_version": LAYOUT_VERSION,
 			"authored_layout_room_id": room_id,
 			"authored_layout_peaceful": PEACEFUL_ZONE,
+			# 开局第一间房 = 主人办公室（binding key `exit`）：灯**默认打开**，
+			# 玩家在开场演出里一睁眼就不是黑的。其余三间仍要手动按开关。
+			"authored_room_light_on": str(binding["key"]) == "exit",
 			"authored_layout_instances": room_shell_instances(manifest, room_id, planar_position),
 		})
 	# 入口房锚点必须逐值命中 base_plan 的入口房：位置与尺寸都不能动，

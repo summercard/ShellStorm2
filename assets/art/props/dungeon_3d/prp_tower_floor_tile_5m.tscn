@@ -1,10 +1,13 @@
 [gd_scene load_steps=2 format=3]
 
 ; 5m × 5m 楼板砖 - 自包含独立模块
-; 正式美术：tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb
-;   5m × 0.3005m 厚 × 5m；2 材质（02_细腻哑光_青绿大面 / 01_精工金属_紫色骨架）。
-;   板厚居中（几何 Y=-0.15..+0.1505），与运行时的 -FLOOR_THICKNESS*0.5 偏移
-;   共同把可视顶面对齐到承重面 Y=0 —— 与 100F/98F 已验证的正式地砖同源同版。
+; 正式美术：tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb
+;   （已去版本化：文件名不含 _vNNN，版本只记在本行与 metadata/asset_version）
+;   5m × 0.304m 厚 × 5m；2 材质（02_细腻哑光_青绿大面 / 01_精工金属_紫色骨架）。
+;   板厚居中（几何 Y=-0.15..+0.1540），与运行时的 -FLOOR_THICKNESS*0.5 偏移
+;   共同把行走面对齐到承重面 Y=0 —— 与 100F/98F 已验证的正式地砖同源同版。
+;   v003：行走面锚点仍是 +0.1500；装饰件按反共面阶梯抬到 +0.1520 / +0.1540，
+;   故 AABB 顶端比行走面高 4mm（装饰凸起，不参与承重、不影响承重面）。
 ; 根节点下 ImportedModel 内的 MeshInstance3D 名为 FloorTile_5m，由
 ; metadata/visual_node_name 显式声明；TowerFloorStage3D 的 _resolve_visual_mesh()
 ; 按该声明取网格，不再依赖「递归取第一个 MeshInstance3D」的隐式约定。
@@ -17,16 +20,17 @@
 
 [node name="PrpTowerFloorTile5m" type="Node3D"]
 metadata/asset_id = "ENV-TOWER-FLOOR-TILE-5M"
-metadata/asset_version = "v002"
+metadata/asset_version = "v003"
 metadata/source_glb = "res://assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d.glb"
 metadata/grid_unit_m = 5.0
-metadata/thickness_m = 0.3005
+metadata/thickness_m = 0.304
 metadata/visual_top_offset_y = -0.15
 metadata/origin_contract = "centered_slab"
 metadata/forward_axis = "+Z"
-metadata/bounds_size_m = Vector3(5, 0.3005, 5)
-metadata/visual_bounds_size_m = Vector3(5, 0.3005, 5)
-metadata/bounds_note = "本件可视包络与结构包络逐值相同；板厚居中，承重面由运行时的 -FLOOR_THICKNESS_M*0.5 偏移对齐到 Y=0。地砖四向对称，forward_axis 仅用于满足统一契约。"
+metadata/bounds_size_m = Vector3(5, 0.304, 5)
+metadata/visual_bounds_size_m = Vector3(5, 0.304, 5)
+metadata/bounds_note = "本件可视包络与结构包络逐值相同；板厚居中，行走面（+0.1500）由运行时的 -FLOOR_THICKNESS_M*0.5 偏移对齐到 Y=0。顶部另有 +0.1540 的装饰凸起（反共面阶梯顶层），4mm 高，不参与承重。地砖四向对称，forward_axis 仅用于满足统一契约。"
+metadata/anti_coplanar_rule = "XY 重叠的可见面平面高度差 >= 0.0020m；行走面锚点 +0.1500 恒定"
 metadata/visual_node_name = "FloorTile_5m"
 metadata/visual_only = true
 metadata/collision_owner = "TowerFloorStage3D.FloorSupport"

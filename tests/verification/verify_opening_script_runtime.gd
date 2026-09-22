@@ -29,6 +29,10 @@ const OPENING_ROOM_ID := "floor_01_exit"
 ## 第二段：位置触发的真实几何校验用它。
 const ZOMBIES_ID := "nar_tower_opening_02_zombies"
 const ZOMBIES_ROOM_ID := "floor_01_main_02"
+## 98F 区块00 四房（和平区）：门策略必须三项全放行，否则每扇门都要清房+钥匙。
+const BLOCK00_ROOM_IDS: Array[String] = [
+	"floor_01_entry", "floor_01_hub", "floor_01_main_02", "floor_01_exit",
+]
 const SEED := 990098
 
 const BOOT_TIMEOUT_MS := 30000
@@ -66,6 +70,8 @@ func _ready() -> void:
 	_phase_c_handback()
 	await _phase_d_entry_camera_yield()
 	_phase_e_zombie_trigger_geometry()
+	_phase_f_block00_door_policies()
+	_phase_g_opening_room_light()
 	_report()
 
 
@@ -376,6 +382,116 @@ func _phase_e_zombie_trigger_geometry() -> void:
 			room.global_position.x, room.global_position.y, room.global_position.z,
 		]
 	)
+
+
+## 98F 区块00 是**和平区**：门只做普通开关（不清房 / 不要钥匙 / 不弹命运卡）。
+## 这里在真机上验门策略真的全放行了 —— 老实现门开启走的是硬编码默认策略，
+## 那句「门只做普通开关」是空承诺（人报「98 层每个房间都有钥匙」）。
+func _phase_f_block00_door_policies() -> void:
+	var rooms: Variant = _tower.get("_room_by_id")
+	if not (rooms is Dictionary):
+		_check(false, "拿不到塔楼房间表（门策略校验无法进行）")
+		return
+	var checked := 0
+	var leaked := 0
+	for room_id in BLOCK00_ROOM_IDS:
+		var room := (rooms as Dictionary).get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		checked += 1
+		_check(
+			room.authored_layout_peaceful,
+			"%s 带和平区标记（否则门策略会退回默认）" % room_id,
+		)
+		var policies: Dictionary = room.door_policies
+		for direction in policies.keys():
+			var policy: Dictionary = policies[direction]
+			if (
+				bool(policy.get("requires_clear", true))
+				or bool(policy.get("requires_key", true))
+				or bool(policy.get("triggers_fate", true))
+			):
+				leaked += 1
+		_check(
+			leaked == 0,
+			"%s 门策略全放行（实际有 %d 个方向仍要清房/钥匙/命运卡）" % [room_id, leaked],
+		)
+	_check(checked == BLOCK00_ROOM_IDS.size(), "四房全部在本层（实际 %d）" % checked)
+	# 关键：门**开启路径**读到的策略必须也是放行的（老 bug 就出在这一跳）。
+	for room_id in BLOCK00_ROOM_IDS:
+		var room := (rooms as Dictionary).get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		for direction in room.door_targets.keys():
+			var neighbour := str(room.door_targets[direction])
+			if neighbour.is_empty():
+				continue
+			var policy: Dictionary = _tower.call("_door_policy_towards", room_id, neighbour)
+			_check(
+				not bool(policy.get("requires_clear", true))
+				and not bool(policy.get("requires_key", true))
+				and not bool(policy.get("triggers_fate", true)),
+				"%s → %s 的开门策略放行（老 bug：这一跳读的是硬编码默认）"
+				% [room_id, neighbour],
+			)
+
+
+	# 源码级守卫：门**开启路径**必须走 `_door_policy_towards`（会读房间声明的策略）。
+	# 退回 `_door_policy_for_edge` 就是那个「98F 每扇门都要钥匙」的老 bug —— 运行时零报错，
+	# 只有人报才会发现，所以必须能断言。
+	var d3_source := FileAccess.get_file_as_string("res://src/world3d/Dungeon3D.gd")
+	var open_marker := "func _try_open_room_door(target_room_id: String) -> bool:"
+	var open_start := d3_source.find(open_marker)
+	_check(open_start >= 0, "Dungeon3D 有 _try_open_room_door（开门路径）")
+	if open_start >= 0:
+		var open_body := d3_source.substr(open_start, 900)
+		_check(
+			open_body.contains("_door_policy_towards("),
+			"开门路径读房间声明的门策略（老 bug：读硬编码默认 ⇒ 98F 每扇门都要钥匙）",
+		)
+
+
+## 开局第一间房（主人办公室 `floor_01_exit`）的灯必须**默认打开** ——
+## 玩家在开场演出里一睁眼不该是黑的。会议室仍是默认关（反向对照：不是全层都开）。
+## 顺带把「第二段刷怪点」也按声明在真机上验一遍几何（房间相对锚点解出来必须落在房内）。
+func _phase_g_opening_room_light() -> void:
+	var rooms: Variant = _tower.get("_room_by_id")
+	if not (rooms is Dictionary):
+		_check(false, "拿不到塔楼房间表（灯与刷怪点校验无法进行）")
+		return
+	var office := (rooms as Dictionary).get(OPENING_ROOM_ID) as DungeonRoom3D
+	_check(office != null, "有办公室房 %s" % OPENING_ROOM_ID)
+	if office != null:
+		_check(office.authored_room_light_on, "办公室声明了「灯默认开」")
+		_check(office.is_room_light_on(), "办公室的灯**确实亮着**（开局不该是黑的）")
+	var meeting := (rooms as Dictionary).get(ZOMBIES_ROOM_ID) as DungeonRoom3D
+	if meeting != null:
+		_check(
+			not meeting.is_room_light_on(),
+			"会议室仍默认关灯（反向对照：不是全层都点亮）",
+		)
+	var zombies := NarrativeScript3D.load_from_id(ZOMBIES_ID)
+	if zombies == null:
+		return
+	for cue in zombies.cues:
+		if str(cue.get("do", "")) != "scene.spawn":
+			continue
+		if str(cue.get("point_room", "")) != ZOMBIES_ROOM_ID:
+			continue
+		var offset_raw: Variant = cue.get("point_offset", null)
+		var room := (rooms as Dictionary).get(ZOMBIES_ROOM_ID) as DungeonRoom3D
+		if room == null or not (offset_raw is Array) or (offset_raw as Array).size() != 3:
+			continue
+		var off: Array = offset_raw
+		var spawn_point := room.to_global(Vector3(float(off[0]), float(off[1]), float(off[2])))
+		_check(
+			room.contains_world_position(spawn_point),
+			"第二段刷怪点落在会议室内部（world=%.1f, %.1f, %.1f）"
+			% [spawn_point.x, spawn_point.y, spawn_point.z],
+		)
+		_note(
+			"G 刷怪点 = (%.1f, %.1f, %.1f)" % [spawn_point.x, spawn_point.y, spawn_point.z]
+		)
 
 
 func _report() -> void:

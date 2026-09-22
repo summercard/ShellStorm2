@@ -127,8 +127,8 @@ func _verify_pause_and_performance_ui(failures: Array[String]) -> void:
 	var grid := pause.get_node("Center/Panel/Margin/GraphicsPage/Scroll/Grid") as GridContainer
 	if aa_option.item_count != 6:
 		failures.append("抗锯齿界面没有提供6档调节")
-	if grid.get_child_count() != 9:
-		failures.append("画面设置没有提供完整的9项效果控制")
+	if grid.get_child_count() != 10:
+		failures.append("画面设置没有提供完整的10项效果控制")
 	for child in grid.get_children():
 		if child.name not in ["Shadows", "IndirectDiffuse"] and not child is CheckButton:
 			failures.append("画面效果项不是可开关按钮：%s" % child.name)

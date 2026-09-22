@@ -7,9 +7,15 @@ size = Vector3(5, 0.3, 5)
 
 [node name="TowerFloorTile5m" type="Node3D"]
 metadata/asset_id = "ENV-TOWER-FLOOR-TILE-5M"
-metadata/asset_version = "v002"
-metadata/source_blend = "res://assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v002.blend"
+metadata/asset_version = "v003"
+metadata/source_blend = "res://assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v003.blend"
 metadata/collision_policy = "centered_5m_slab; stage_uses_shared_support"
+; v003：反共面阶梯。行走面锚点 +0.1500 不动（TowerFloorStage3D 按固定
+;   -FLOOR_THICKNESS*0.5 = -0.15 偏移对齐承重面 Y=0，本包不受影响）；
+;   装饰件抬到 +0.1520 / +0.1540，任何 XY 重叠的可见面平面高度差 >= 2mm，
+;   消除 v002 顶面四家族同落 +0.1500 造成的细节级 z-fighting 闪面。
+; 本包与 prp_tower_floor_tile_5m.tscn 共用同一个去版本化 GLB
+;   env_tower_floor_tile_5m_top3d.glb，两侧版本元数据必须同步升版。
 
 [node name="ImportedModel" parent="." instance=ExtResource("1")]
 

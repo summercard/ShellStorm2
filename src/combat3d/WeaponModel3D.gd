@@ -16,8 +16,45 @@ const EFFECT_SCENE: PackedScene = preload("res://assets/art/vfx/combat_3d/vfx_co
 ## 口径：effect_size 线性作用于特效视觉体积，并同时线性作用于 MuzzleLight 范围（3.5m → 2.8m）；
 ## 灯能量为固定常量，不随尺寸缩放。
 const MUZZLE_FLASH_EFFECT_SIZE := 0.8
-const SHELL_CASING_SIZE := 1.0
+## 弹壳视觉尺寸（业主 2026-09-22 观感定档：缩到原基准的 80% = 0.8）。
+## 口径：该值线性作用于弹壳三件（壳体/底缘/底火）的缩放，也同步决定贴地高度
+## （VfxShellCasing3D 的实际半径 = SHELL_BASE_RADIUS × 此值）⇒ 缩小后仍精确贴地不浮空。
+const SHELL_CASING_SIZE := 0.8
 const SHELL_CASING_COLOR := Color(0.92, 0.56, 0.16)
+
+## —— 抛壳随机化（业主 2026-09-22 观感定档：「不然太整齐了」）——
+##
+## 每一发弹壳的**方向 / 高度 / 前送 / 自旋 / 初始姿态**逐发独立扰动，落地散布随之自然散开。
+## 全部按**枪械局部基**（right / up / forward）施加 ⇒ 与枪当前朝向无关，
+## 扰动的永远是「相对抛壳窗」的手感，不会因为玩家转身而变味。
+##
+## 基准速度沿用上一版的固定值（保持同一手感中心，只把「点」摊成「一团」）：
+##   right 2.1 / up 1.55 / forward 0.22 m/s，自旋 20 rad/s
+## 抖动口径（randf_range 均匀分布，每次开火独立抽样）：
+##   右向速度 = SHELL_EJECT_RIGHT_SPEED   × randf_range(1 - RIGHT_SPREAD, 1 + RIGHT_SPREAD)
+##   抬升速度 = SHELL_EJECT_UP_SPEED      × randf_range(1 - UP_SPREAD,    1 + UP_SPREAD)
+##   前送速度 = SHELL_EJECT_FORWARD_JITTER × randf_range(-1, 1)   ← 绝对值抖动，可为负 ⇒ 也会落在枪身后方
+##   自旋速度 = SHELL_EJECT_SPIN_SPEED    × randf_range(1 - SPIN_SPREAD,  1 + SPIN_SPREAD)
+##   自旋轴   = (right + up × randf_range(0.1, 0.9) + forward × randf_range(-0.4, 0.4)).normalized()
+##   初始姿态 = 绕随机单位轴旋转 randf_range(-1, 1) × SHELL_INITIAL_TILT_DEG
+##
+## 推算的落地散布（重力 9.8、两次弹跳后切向摩擦 0.42² ⇒ 滚动段位移可忽略）：
+##   水平初速 ∈ [1.37, 2.84] m/s ⇒ 首次触地前位移 ≈ v·0.6s ⇒ 落点离枪 ≈ 0.9 ~ 2.5 m ⇒ 散布带 ≈ 1.6 m。
+##
+## ⛔ RIGHT_SPREAD 有硬上限：验收断言「弹壳从枪械右侧抛出」= 右向速度 > 1.0，
+##    即 SHELL_EJECT_RIGHT_SPEED × (1 - RIGHT_SPREAD) > 1.0 ⇒ RIGHT_SPREAD < 0.523。
+##    取 0.35 留 0.35 m/s 余量。调大这三个幅度常量请同步跑
+##    tests/verification/verify_combat_vfx_toon_v002.gd（`_check_shell_ejection_randomized` 钉住了它们）。
+const SHELL_EJECT_RIGHT_SPEED := 2.1
+const SHELL_EJECT_UP_SPEED := 1.55
+const SHELL_EJECT_SPIN_SPEED := 20.0
+const SHELL_EJECT_RIGHT_SPREAD := 0.35
+const SHELL_EJECT_UP_SPREAD := 0.45
+## 前送量基准很小（0.22 m/s），按比例抖动摇不出差别 ⇒ 直接给绝对值 ±，且允许为负（落到枪身后方）。
+const SHELL_EJECT_FORWARD_JITTER := 0.30
+const SHELL_EJECT_SPIN_SPREAD := 0.50
+## 初始姿态随机倾角上限（度）。> 45° 会像「被人乱扔」而不是「从抛壳窗崩出来」。
+const SHELL_INITIAL_TILT_DEG := 45.0
 const MELEE_VISUAL_SCENES := {
 	"bp_baseball_bat": preload("res://assets/art/weapons/melee_3d/wpn_melee_baseball_bat_root_top3d_v001.tscn"),
 	"bp_greatblade": preload("res://assets/art/weapons/melee_3d/wpn_melee_greatblade_root_top3d_v001.tscn"),
@@ -451,7 +488,7 @@ func _fire_now(aim_direction: Vector3, shooter: Node3D, shot_damage_multiplier: 
 			behavior,
 		)
 	_spawn_muzzle_effect(world)
-	_spawn_shell_casing(world)
+	_spawn_shell_casing(shooter)
 	if AudioManager != null:
 		AudioManager.play_fire_sfx(fire_rate, emitted_count)
 	if MonsterAIManager != null:
@@ -893,17 +930,32 @@ func _spawn_muzzle_effect(world: Node) -> void:
 	effect.global_position = muzzle_world
 
 
-func _spawn_shell_casing(world: Node) -> void:
+func _spawn_shell_casing(shooter: Node3D) -> void:
 	if _ejection == null or is_melee_weapon():
 		return
 	var vfx_pools: Array = get_tree().get_nodes_in_group("vfx_pool_3d")
 	if vfx_pools.is_empty() or not (vfx_pools[0] is VfxPool3D):
 		return
-	# 抛壳方向：枪械右侧 + 少量抬升 + 少量枪口前向；不绑定 follow，生成后进入世界空间弹道。
+	# 抛壳方向：枪械右侧 + 少量抬升 + 少量枪口前向；不绑定 follow，生成后进入世界空间。
+	# 落地由弹壳自己按 floor_y 程序化模拟（不接物理引擎），故不需传场景根节点。
+	#
+	# 每一发都带随机扰动（业主 2026-09-22：「不然太整齐了」）⇒ 连发弹壳不再排成一条整齐弧线。
+	# 幅度口径与推算散布见上方 SHELL_EJECT_* 常量块。
+	# ⛔ 出生点仍**精确**取抛壳挂点（业主口径：弹壳必须挂在枪上），扰动只作用于抛出去之后的运动量 ——
+	#    验收对出生点漂移的容差是 0.001 m，别往这里加位置抖动。
 	var right := global_basis.x.normalized()
 	var up := global_basis.y.normalized()
 	var forward := (-global_basis.z).normalized()
-	var ejection_velocity := right * 2.1 + up * 1.55 + forward * 0.22
+	var ejection_velocity := (
+		right * SHELL_EJECT_RIGHT_SPEED
+			* randf_range(1.0 - SHELL_EJECT_RIGHT_SPREAD, 1.0 + SHELL_EJECT_RIGHT_SPREAD)
+		+ up * SHELL_EJECT_UP_SPEED
+			* randf_range(1.0 - SHELL_EJECT_UP_SPREAD, 1.0 + SHELL_EJECT_UP_SPREAD)
+		+ forward * SHELL_EJECT_FORWARD_JITTER * randf_range(-1.0, 1.0)
+	)
+	var ejection_spin_axis := (
+		right + up * randf_range(0.1, 0.9) + forward * randf_range(-0.4, 0.4)
+	).normalized()
 	(vfx_pools[0] as VfxPool3D).acquire(
 		VfxPool3D.FX01_SHELL_CASING,
 		_ejection.global_position,
@@ -911,12 +963,44 @@ func _spawn_shell_casing(world: Node) -> void:
 		SHELL_CASING_SIZE,
 		{
 			"velocity": ejection_velocity,
-			"spin_axis": (right + up * 0.35).normalized(),
-			"spin_speed": 20.0,
-			"floor_y": 0.0,
-			"world_root": world,
+			"spin_axis": ejection_spin_axis,
+			"spin_speed": SHELL_EJECT_SPIN_SPEED
+				* randf_range(1.0 - SHELL_EJECT_SPIN_SPREAD, 1.0 + SHELL_EJECT_SPIN_SPREAD),
+			"initial_basis": _random_shell_initial_basis(),
+			"floor_y": _resolve_shell_floor_y(shooter),
 		}
 	)
+
+
+## 弹壳出生姿态的随机倾斜：绕**随机单位轴**旋转 randf_range(-1, 1) × SHELL_INITIAL_TILT_DEG。
+##
+## 随机轴在单位立方体内取点后归一化（而不是用球坐标的方位角/仰角）：
+## 球坐标取轴会在两极堆积，看起来只多出两三种姿态，随机感反而更差。
+## 立方体内取点、长度过短（概率 ≈ 0）才退回 UP，纯防御。
+func _random_shell_initial_basis() -> Basis:
+	var axis := Vector3(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0), randf_range(-1.0, 1.0))
+	if axis.length_squared() < 0.0001:
+		axis = Vector3.UP
+	var angle := deg_to_rad(randf_range(-1.0, 1.0) * SHELL_INITIAL_TILT_DEG)
+	return Basis(axis.normalized(), angle)
+
+
+## 弹壳落地的「地面高度」真源：射击者脚下的站立面世界 y。
+##
+## ⛔ 绝不能用 0 兜底。塔楼楼层是**向下**建造的（`TowerFloorStage3D` 挂在
+##    `stage.position.y = -FLOOR_HEIGHT_M(12.0) × floor_index` 之下），98F ≈ **-1176 m**。
+##    若 floor_y 取 0，弹壳出生点 y 就已经"低于地面"，弹壳第一帧即判定触地，
+##    被夹到 `floor_y + radius` ⇒ **瞬移到世界原点附近、掉出玩家视野**（2026-09-22 实机缺陷：
+##    「弹壳特效没了」）。这个坑只在**非零楼层**暴露，而验收场景恰好摆在 y≈0。
+##
+## 口径：射击者站在地板上 ⇒ 其 `global_position.y` 就是当前地面高度（玩家原点即脚底行走面，
+##    见 `TowerDescent3D` 把玩家摆在 `room.global_position + Vector3(0, 0.05, ...)`）。
+##    纯解析、不做任何物理查询 —— 与弹壳「不接物理引擎」的口径一致。
+func _resolve_shell_floor_y(shooter: Node3D) -> float:
+	if shooter != null and is_instance_valid(shooter):
+		return shooter.global_position.y
+	# 兜底用枪自身的 y（远优于 0：绝不会把弹壳瞬移到千里之外）。
+	return global_position.y
 
 
 func _add_box(node_name: String, position: Vector3, size: Vector3, material: StandardMaterial3D) -> void:

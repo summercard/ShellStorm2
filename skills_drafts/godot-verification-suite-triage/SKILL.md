@@ -1,6 +1,6 @@
 ---
 name: godot-verification-suite-triage
-description: 诊断并修复 Godot 验收套件（run_verification_suite.sh + check_verification_log.py）的门禁失败——exit 1/2（依赖脚本编译失败、场景压根跑不起来）与 exit 3（意外引擎错误）、exit 4（退出时资源泄漏）。用于「套件跑出红项 / 场景 exit 1、2、3 或 4 / Identifier not declared / Failed to compile depended scripts / resources still in use at exit / ObjectDB instances leaked / 判某红项是回归还是既有 / 要不要加 expected_errors 白名单 / 套件太慢想直跑单场景分诊」这类问题。不用于资产制作、也不用于正常通过时的收尾。
+description: 诊断并修复 Godot 验收套件（run_verification_suite.sh + check_verification_log.py）的门禁失败——exit 1/2（依赖脚本编译失败、场景压根跑不起来）与 exit 3（意外引擎错误）、exit 4（退出时资源泄漏）。用于「套件跑出红项 / 场景 exit 1、2、3 或 4 / Identifier not declared / Failed to compile depended scripts / resources still in use at exit / ObjectDB instances leaked / 判某红项是回归还是既有 / 改了一个配置常量或开关后一批用例同时红且要分清新红与既有红 / 要不要给用例加配置早退 / 要不要加 expected_errors 白名单 / 套件太慢想直跑单场景分诊」这类问题。不用于资产制作、也不用于正常通过时的收尾。
 agent_created: true
 ---
 
@@ -148,6 +148,64 @@ ERROR: \[MusicManager\] music_id 未注册
 - **正则里的 `[` 必须转义**：`[MusicManager]` 会被当成字符类，静默匹配不到。
 - 匹配的只是那一行；断言本身失败仍走 `get_tree().quit(1)`，不会被掩盖。
 - 先确认这不是本次改动引入的：`git stash push -- <改动文件>` 后在 HEAD 上复跑，同样的 exit 码即既有问题。
+
+## 改了一个配置常量/开关 → 一批用例同时红（2026-09-22 实测）
+
+场景：把 `TowerDescent3D.DEEPEST_PLANNED_FLOOR` 由 85 改成 98（塔楼只留 98F），
+12 个相关场景里 3 个变红。这类红**不是 bug，是用例的「前提」被配置改掉了**。
+
+### 归因铁律：不要用 stash，要**把那个常量改回旧值**再跑一遍
+
+`git stash` 只能回到 HEAD，而 HEAD 里常量**已经是新值** ⇒ 两边都红，分不出谁是谁。
+**临时把那个常量改回旧值**，同一条命令重跑，然后**逐条 diff ERROR 集合**：
+
+```bash
+# 注意：UNEXPECTED_ENGINE_ERROR 前缀只存在于 check_verification_log.py 的输出里，
+# **scene 日志里没有** —— grep 错文件就会得到「两次都 0 条」的假结论。
+grep -oE "^ERROR: .*" <场景>.after.log  | sed 's/[0-9]\{4,\}//g' | sort -u > a.txt
+grep -oE "^ERROR: .*" <场景>.before.log | sed 's/[0-9]\{4,\}//g' | sort -u > b.txt
+diff a.txt b.txt
+```
+
+⚠️ 归一化先行：把 `#500665691787` 这类**运行时对象 id** 和纯数字去掉（上面 `sed` 那步），
+否则同一句错误每次跑都不同，diff 全是假差异。
+
+三种判读：
+
+- **两次集合完全相同** ⇒ **纯既有红，与本次改动毫无关系**。铁证，不必再查。
+  （实测：`verify_tower_journey_polish` 的 3 条在 85/98 下逐字相同 ⇒ 与砍层无关。）
+- **新集合 ⊃ 旧集合** ⇒ 多出来的是本次造成的，少的那批是既有红，两边要分开报。
+- 旧为空、新非空 ⇒ 全部是本次造成的。
+
+改完**务必还原常量**，并用 `git status --porcelain -- <文件>` 确认为空。
+
+### 修法：让用例对常量**双向受检**，而不是改期望值
+
+直接把期望值改成新值 = **把门禁掰弯**（旧配置下的行为再也没人看着了，改回常量的那天
+用例不会自己长回来）。正确做法是让用例**实测**自己处在哪一支，两支都做**正向断言**：
+
+1. **判据取运行时事实，不读常量**。例：查 `_floor_plan_snapshots.has(3)`（物理层 3 在不在），
+   而不是读 `DEEPEST_PLANNED_FLOOR`。这样两种配置下判据都成立。
+2. **两支方向相反，且都不能是「找不到就放过」**。无那一支必须断「**一条都没有**」，
+   并配**哨兵**：断「无下行竖边」时同时断「98↔99 上行竖边仍在」——
+   否则塔楼根本没建起来也能通过。
+3. **早退必须有可判读的取证**。照本仓既有范式（`verify_tower_descent_flow` 的
+   `TOWER_DESCENT_FLOW_MIGRATED`）打印 `<用例名>_SKIPPED: <原因>` + **实测关键状态**，
+   再 `quit(0)`；不要静默 `return`。该目录下**没有** `expected_errors/<场景>.txt` 时，
+   早退后「零 ERROR」即日志门禁通过。
+4. **早退的判据必须在数据建出来之后再算**。例：`generate_through_floor_for_test(85)`
+   **之后**才查计划层；放在之前会因为计划层还没建而**永远早退**（假守卫）。
+
+> ⚠️ **假守卫必须反向对照**：把常量改回旧值跑一遍，必须**真的跑完整条用例并拿到 `*_OK`**。
+> 不验这一步就可能做出「永远跳过、永远绿」的守卫 —— 比红更糟。
+
+### 什么时候**不要**加早退
+
+用例本身已经因为**别的原因**是红的（既有红不为空）时，**别加早退** ——
+它会把那些既有红一起盖掉，信号反而丢了。原样留着，在报告里写清
+「N 条既有红（列出来源）+ M 条本次配置红」，等既有红对齐了再谈早退。
+（实测：`verify_arrival_gate_floor_bundle_flow` 基线就有 7 条红，全是 2026-09-21
+「门一律普通门」留下的陈旧期望，故刻意不加守卫。）
 
 ## 泄漏定位（exit 4）
 

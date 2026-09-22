@@ -11,6 +11,9 @@
   ],
   "source": "assets/art/environments/tower_descent_3d/source/floor_tile_5m/env_tower_floor_tile_5m_source_v002.blend",
   "visual": "assets/art/environments/tower_descent_3d/components/floor_tile_5m/env_tower_floor_tile_5m_top3d_v002.glb",
+  "visual_note": "本文件名是 v002 构建当时脚本产出的名字。此后 tools/asset_pipeline/deversion_batch.py 把运行时 GLB 去版本化为 env_tower_floor_tile_5m_top3d.glb，实体文件即该路径，_v002.glb 已不存在。本清单是 v002 的历史快照，勿据 visual 字段取文件。",
+  "superseded_by": "asset_manifest_v003.json",
+  "superseded_note": "v002 顶面四家族同落 +0.1500 致细节级 z-fighting 闪面，检修盖框 +0.1480 被埋没；v003 以反共面阶梯修复。",
   "shared_palette": "assets/art/shared/palette/设施低亮多巴胺色盘_10x10_512.png",
   "dimensions_m": [
     5,

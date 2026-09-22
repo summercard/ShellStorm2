@@ -73,6 +73,13 @@ size_flags_horizontal = 4
 text = "画面设置"
 theme_override_font_sizes/font_size = 18
 
+[node name="ControlsButton" type="Button" parent="Center/Panel/Margin/MainPage"]
+custom_minimum_size = Vector2(360, 52)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "操作设置"
+theme_override_font_sizes/font_size = 18
+
 [node name="ReturnToBaseButton" type="Button" parent="Center/Panel/Margin/MainPage"]
 custom_minimum_size = Vector2(360, 52)
 layout_mode = 2
@@ -279,6 +286,174 @@ vertical_alignment = 1
 theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
 
 [node name="BackButton" type="Button" parent="Center/Panel/Margin/GraphicsPage/Footer"]
+custom_minimum_size = Vector2(200, 44)
+layout_mode = 2
+text = "返回  [Esc]"
+
+[node name="ControlsPage" type="VBoxContainer" parent="Center/Panel/Margin"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Center/Panel/Margin/ControlsPage/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "操作设置  /  INPUT & GAMEPAD"
+theme_override_colors/font_color = Color(0.46, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 26
+
+[node name="DeviceStatusLabel" type="Label" parent="Center/Panel/Margin/ControlsPage/Header"]
+layout_mode = 2
+text = "当前输入：键盘与鼠标"
+horizontal_alignment = 2
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.58, 0.76, 0.84, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Rule" type="HSeparator" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+
+[node name="DeviceRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/DeviceRow"]
+custom_minimum_size = Vector2(420, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "操控方式\n自动 = 跟随最近一次真实输入，插着手柄但不操作时仍算键鼠"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="DeviceModeOption" type="OptionButton" parent="Center/Panel/Margin/ControlsPage/DeviceRow"]
+custom_minimum_size = Vector2(320, 48)
+layout_mode = 2
+
+[node name="GamepadEnabled" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "启用手柄操控\n关闭后手柄按键与摇杆不再驱动角色，可随时切回"
+
+[node name="MoveDeadzoneRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
+custom_minimum_size = Vector2(420, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "左摇杆死区\n越小越灵敏，越大越能压住手柄漂移"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="MoveDeadzoneSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+min_value = 0.05
+max_value = 0.5
+step = 0.01
+value = 0.2
+
+[node name="MoveDeadzoneValue" type="Label" parent="Center/Panel/Margin/ControlsPage/MoveDeadzoneRow"]
+custom_minimum_size = Vector2(72, 40)
+layout_mode = 2
+text = "0.20"
+horizontal_alignment = 2
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="AimDeadzoneRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
+custom_minimum_size = Vector2(420, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "右摇杆死区\n影响瞄准摇杆的起手灵敏度"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="AimDeadzoneSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+min_value = 0.05
+max_value = 0.5
+step = 0.01
+value = 0.2
+
+[node name="AimDeadzoneValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
+custom_minimum_size = Vector2(72, 40)
+layout_mode = 2
+text = "0.20"
+horizontal_alignment = 2
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="AimSmoothingRow" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Label" type="Label" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
+custom_minimum_size = Vector2(420, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "瞄准平滑\n0 = 跟手最快；越高越稳、转向越慢"
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="AimSmoothingSlider" type="HSlider" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+min_value = 0.0
+max_value = 0.9
+step = 0.01
+value = 0.35
+
+[node name="AimSmoothingValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
+custom_minimum_size = Vector2(72, 40)
+layout_mode = 2
+text = "0.35"
+horizontal_alignment = 2
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 16
+
+[node name="LeftStickAim" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "左摇杆同控朝向\n开启后推左摇杆时角色朝向跟随移动方向；右摇杆一动立刻抢回朝向"
+
+[node name="Vibration" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "手柄震动反馈\n受击、开火与冲刺时触发震动"
+
+[node name="Spacer" type="Control" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="BindingHint" type="Label" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+text = "默认键位：左摇杆 移动 · 右摇杆 瞄准 · RT 射击/近战 · A 交互 · B 冲刺 · X 换弹 · Y 探照灯\nLB 主武器 · RB 副武器 · 十字键左/右 快捷物品 · Select 背包 · 左摇杆按下 地图 · Start 暂停"
+theme_override_colors/font_color = Color(0.52, 0.78, 0.86, 1)
+theme_override_font_sizes/font_size = 14
+
+[node name="Footer" type="HBoxContainer" parent="Center/Panel/Margin/ControlsPage"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Status" type="Label" parent="Center/Panel/Margin/ControlsPage/Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "设置实时生效并自动保存"
+vertical_alignment = 1
+theme_override_colors/font_color = Color(0.45, 0.9, 0.68, 1)
+
+[node name="BackButton" type="Button" parent="Center/Panel/Margin/ControlsPage/Footer"]
 custom_minimum_size = Vector2(200, 44)
 layout_mode = 2
 text = "返回  [Esc]"

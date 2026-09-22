@@ -1002,16 +1002,16 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 	var count := int(params.get("count", 1))
 	if count <= 0:
 		return _failed("scene.spawn 的 count 必须 > 0。")
-	var side := str(params.get("side", "right"))
-	# `forward_m` = 沿视线方向的**额外前推**（米）。不写则沿用旧的 distance*0.5。
-	var layout := _spawn_layout(
-		side, float(params.get("distance", 3.6)), params.get("forward_m", null)
-	)
+	var layout := _spawn_layout(params)
+	if layout.is_empty():
+		return _degraded(
+			"scene.spawn：房间相对锚点『%s』解不出，本次刷怪跳过。" % str(params.get("point_room", ""))
+		)
 	var origin: Vector3 = layout["origin"]
 	var axis: Vector3 = layout["axis"]
 	var result: Variant = dungeon.call(
 		"narrative_spawn_enemies", room_id, kind, count, origin, axis,
-		float(params.get("spread", 1.5))
+		float(params.get("spread", 1.5)), layout.get("stagger", Vector3.ZERO)
 	)
 	if result is int and int(result) > 0:
 		# 记下队列中心：相机枢轴 `pivot: "last_spawn"` 用它（作者不用写坐标）。
@@ -1025,33 +1025,67 @@ func _scene_spawn(params: Dictionary) -> Dictionary:
 	)
 
 
-## 玩家左右侧站位。返回 {"origin": 队列中心, "axis": 展开轴}。
-## 用玩家朝向而不是房间朝向 —— 「画面的右边」在俯视角下就等于角色的右手边，
-## 这样不需要为每个房间预写方位，房间换了构图也不会错。
-## `forward_override`（= cue 的 `forward_m`）：沿视线额外前推的米数；null = 用旧的 distance*0.5。
-func _spawn_layout(side: String, distance: float, forward_override: Variant = null) -> Dictionary:
+## 剧情刷怪的站位。返回 {"origin": 队列中心, "axis": 展开轴, "stagger": 交错向量}。
+##
+## 两种锚法：
+##   · **房间相对**（`point_room` + `point_offset`）：队列钉在房间里的固定点。触发改成位置
+##     触发后，玩家落点会在一个半径内浮动 ⇒ 玩家相对的站位跟着抖，要钉住就得用这种。
+##   · 玩家相对（默认）：`origin = 玩家 + 右×distance + 前×forward_m`（老行为，逐值不变）。
+##
+## `axis`：队列沿哪个方向排开 —— `"forward"`（默认，沿玩家视线）/ `"x"`（东西）/ `"z"`（南北）。
+## `stagger_m`：相邻两只沿**排列轴的垂直方向**交替错开，别站成一条笔直的队。
+func _spawn_layout(params: Dictionary) -> Dictionary:
 	var player := player_node()
 	if player == null:
-		return {"origin": Vector3.ZERO, "axis": Vector3.RIGHT}
+		return {}
 	var forward := -player.global_basis.z
 	forward.y = 0.0
 	if forward.length_squared() <= 0.000001:
 		forward = Vector3.FORWARD
 	forward = forward.normalized()
 	var right := forward.cross(Vector3.UP).normalized()
-	var lateral := right if side == "right" else -right
-	# 前向分量：默认 distance*0.5（原行为）。触发通常发生在玩家**刚跨进门**那一刻，
-	# 那时玩家还站在门口 ⇒ 默认值会把整条队列留在门口（实测最后一只几乎踩在门线上）。
-	# 房间进深大、或想让怪「在房间里侧」时，用 cue 的 `forward_m` 显式前推。
-	# ⚠️ 前推会同时拉大相机到队列的距离（运镜构图随之变化）——它是**作者的构图旋钮**。
-	var forward_m := maxf(0.0, distance * 0.5)
-	if forward_override != null:
-		forward_m = maxf(0.0, float(forward_override))
-	# 队列沿**视线方向**展开：镜头转向侧面看过去时，这条队形在画面里是横排。
+	var origin := Vector3.ZERO
+	var anchor_room := str(params.get("point_room", ""))
+	if not anchor_room.is_empty():
+		var room := room_node(anchor_room)
+		if room == null:
+			return {}
+		var offset := Vector3.ZERO
+		var offset_raw: Variant = params.get("point_offset", null)
+		if offset_raw is Array and (offset_raw as Array).size() == 3:
+			offset = Vector3(
+				float((offset_raw as Array)[0]),
+				float((offset_raw as Array)[1]),
+				float((offset_raw as Array)[2])
+			)
+		origin = room.to_global(offset)
+	else:
+		var side := str(params.get("side", "right"))
+		var distance := float(params.get("distance", 3.6))
+		var lateral := right if side == "right" else -right
+		var forward_m := maxf(0.0, distance * 0.5)
+		if params.get("forward_m", null) != null:
+			forward_m = maxf(0.0, float(params.get("forward_m")))
+		origin = player.global_position + lateral * distance + forward * forward_m
+	var axis := forward
+	match str(params.get("axis", "forward")):
+		"x":
+			axis = Vector3.RIGHT
+		"z":
+			axis = Vector3.BACK
+	if axis.length_squared() <= 0.000001:
+		axis = forward
+	axis = axis.normalized()
+	var stagger_axis := axis.cross(Vector3.UP).normalized()
+	if stagger_axis.length_squared() <= 0.000001:
+		stagger_axis = right
+	# 队列沿 `axis` 展开（镜头转到侧面看过去时，这条队形在画面里是横排）。
 	return {
-		"origin": player.global_position + lateral * distance + forward * forward_m,
-		"axis": forward,
+		"origin": origin,
+		"axis": axis,
+		"stagger": stagger_axis * maxf(0.0, float(params.get("stagger_m", 0.0))),
 	}
+
 
 
 ## 撤掉本房剧情生成的怪（玩家真的不需要看见它们了时才用）。

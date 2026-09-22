@@ -51,11 +51,13 @@ func show_merchant(goods: Array[Dictionary]) -> void:
 	UIStyleFactory.apply_tactical_tree(self)
 	# 停止旧动画并显示面板（动画版本自动处理打断）
 	_show_panel_animated()
-	# 获取输入焦点以接收 Esc
+	# 取初始焦点。只设 focus_mode 是不够的 —— 没有 focus owner，
+	# 十字键导航与 A 键确认都没有派发对象，手柄在这个界面里是死的。
 	if has_node("CloseButton"):
 		var btn: Button = $CloseButton as Button
 		if btn:
 			btn.focus_mode = Control.FOCUS_ALL
+			UiMenuFocus.ensure_focus(self)
 
 ## 隐藏面板
 func hide_merchant() -> void:

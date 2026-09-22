@@ -105,7 +105,9 @@ func _physics_process(delta: float) -> void:
 		_tick_turret(delta)
 		return
 	_lifetime += delta
-	var max_lifetime := maxf(5.0, float(fate_behavior.get("home_lifetime", 5.0)))
+	# 子弹最大存活时间：默认下限 1.0 秒（23 m/s ≈ 23 m 理论射程）；
+	# 命运卡行为可注入更长的 home_lifetime（如 fate_card 追踪弹 5 秒），只增不减于下限。
+	var max_lifetime := maxf(1.0, float(fate_behavior.get("home_lifetime", 1.0)))
 	if _lifetime >= max_lifetime:
 		expired.emit()
 		_retire()

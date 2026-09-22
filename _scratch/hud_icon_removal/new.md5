@@ -1,0 +1,3 @@
+66c43e38235fabd57b6990c14797a314 *src/world3d/Dungeon3D.gd
+e43c71ea6238684d470ada4314b226cf *tests/verification/verify_reference_hud_fate_visual.gd
+ce883c6804cc7e1c4400d4dc0d1c067f *tests/verification/verify_finite_ammo_flow.gd

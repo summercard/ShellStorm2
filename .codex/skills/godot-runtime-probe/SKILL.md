@@ -17,6 +17,8 @@ agent_created: true
 
 **铁律：主人说"看游戏内的"时，禁止用 Blender headless 或读 `.blend` / `.glb` 源文件作答。** 一律跑 Godot headless 探针。
 
+> ⚠️ **headless 只对「结构 / 数值 / 坐标」类结论有效。** 一切与**输入派发**有关的结论（焦点有没有建立、按键有没有触发按钮、方向键有没有挪焦点）**都不能用 headless 下结论** —— 见文末「第十一条关键陷阱」。焦点锚点可以 headless 断言，但「按下去有没有反应」必须带窗口跑。
+
 ## 环境（本机）
 
 - Godot：`I:\Godot_v4.6.3-stable_win64.exe\Godot_v4.6.3-stable_win64_console.exe`（注意 `...exe\` 是目录名；**必须用 `_console.exe` 那个** —— 非 console 版在 Windows 下不挂 stdout，`> out.txt` 会拿到空文件，容易误判成「探针没跑」）
@@ -231,6 +233,19 @@ for fi in [2, 3, 4, 5]:
 
 > ⚠️ 别用回读值下「资产没缩放 / 没定位」的结论——会得到一个看起来精确、实际纯属虚构的判据，并据此改错代码。
 
+### 附：真渲染「出图探针」的三条纪律（2026-09-22）
+
+当探针的目的不是回读数值，而是**出一张能给人判读的图**（外观 / 姿态 / 散布 / 贴地），除了上面「把 `--headless` 去掉」，还有三条：
+
+1. **机位距离要按「目标占多少像素」反推，不能按「把场景装进画面」拍。**
+   实测：弹壳长 `0.15 m`，相机放在落点上空 `2.6 m` / 后 `1.4 m`（fov 50、1280×720）时弹壳只有 `30px` 量级 —— 而「随机化到底生效没有」这种判读**全靠这张图**，机位太远等于白拍。拉近到 `1.8 m / 1.1 m`（镜头距 ≈ `2.1 m`）后约占 `55px`、姿态可辨，同时被测对象的散布（8 发落点最大间距实测 `0.45 ~ 1.15 m`）仍完整入画。
+   ⇒ 定机位前先估：`投影像素 ≈ 目标尺寸 / 镜头距离 × (画高/2) / tan(fov/2)`，确认目标占 **≥ 40~50px** 再拍。
+2. **必须留一条「取景判据」。** `Camera3D.unproject_position()` 对**屏幕外**的点照样返回数值 ⇒ 「投影比 / 尺寸比」这类断言能在画面里**什么都没有**的情况下通过（本仓已踩过两次：出图是空图、比值却「通过」）。
+   ⇒ 断言每个目标的投影点落在视口的 `[0.05, 0.95]` 区间内；再加一条**画面亮度分层 ≥ N** 的防假绿（纯色空图只有 1 层）。
+3. **俯视机位不能正上方 90°。** `look_at()` 的 up 向量与视线平行会直接报错；且垂直俯视下躺平的物件只剩一个圆点，姿态全被压掉。取 55°~65° 俯角（略微后上方）兼得「看得出贴地」与「看得出姿态」。
+
+> 配套一条：手动步进模拟的探针，`_advance()` 推完必须把 `process_mode = Node.PROCESS_MODE_DISABLED` 冻结 —— 否则随后的 `await` 会让引擎继续替它跑，几个「不同时刻」的样本会全跑成同一状态（本仓实测：四个阶段里「下落中」那枚早已落地静止）。
+
 ### 第六条关键陷阱：动态实体挂在**专门的容器节点**下，不在业务对象子树里
 
 敌人不是房间的子节点。`_spawn_enemy_batch()` 里写的是 `$ActiveEnemies.add_child(enemy)` —— 全场敌人挂在关卡根同级的一个 `ActiveEnemies` 容器下，只用 `room_id` 字段标明归属。
@@ -332,6 +347,49 @@ headless 探针与编辑器**共享 `.godot/`**，于是：
 
 **规矩**：让主人先停编辑 → 钉 sha → 回读确认 sha 未变 → 再出正式记录。
 任何摆位记录必须显式写明「这是快照，不是活引用；文件再存一次即失效」。
+
+## 第十一条关键陷阱：`--headless` 下 **GUI 输入派发不工作**（2026-09-22 实测）
+
+与第五条的 `MultiMesh` 回读是同一类问题，但更隐蔽 —— 它**只污染「输入类」结论**，
+而且会让你误判成「我的 UI 接线写错了」。
+
+- headless 下 `Control.grab_focus()` **有效**：`get_viewport().gui_get_focus_owner()` 正常返回被聚焦的控件。
+  ⇒ 「**焦点锚点**」（菜单打开后有没有焦点持有者、焦点落在哪个控件）**可以 headless 断言，这条可信**。
+- 但 headless 下**合成输入事件永远走不到控件的 `pressed`**（GUI 输入派发循环不被驱动）。
+  实测六种注入方式全部无效：`Input.parse_input_event()` + `Input.flush_buffered_events()`、
+  `Viewport.push_input()`、`InputEventAction("ui_accept")`、`InputEventJoypadButton(JOY_BUTTON_A)`、
+  物理回车 key —— 同一份代码**去掉 `--headless`** 后全部命中。
+
+**规矩**：
+
+| 要验的东西 | 怎么验 |
+|---|---|
+| 焦点锚点（有没有焦点持有者、在哪个控件） | headless 跑 + **反向对照**（把 `grab_focus()` 停掉，断言必须变红） |
+| 确认键是否触发按钮 / 方向键是否挪焦点 | **必须带窗口跑**（去掉 `--headless`），别在 headless 里追，追不出来 |
+
+反向对照的开关写法很好用：把 `grab_focus()` 那一行换成注释、备份原文件，
+红一次 / 绿一次，就能证明断言真的会失败，而不是「本来就没跑到」。
+
+### 附：`ui_accept` / `ui_cancel` 绑的是 `physical_keycode`，导航键绑 `keycode`
+
+`project.godot` 的 `[input]` 段里两套键位用的是**不同字段**：
+`ui_up/down/left/right` → **`keycode`**；`ui_accept` / `ui_cancel` → **`physical_keycode`**。
+所以合成 `InputEventKey` **要按目标 action 选字段**，不是「两个都填更保险」——
+实测两个字段同时填时 `is_action("ui_up") == false`（`physical` 那一半不匹配 `keycode` 绑定）。
+
+实测对照（裸 `Control + Button`，`focus_mode = FOCUS_ALL` 且已 `grab_focus()`）：
+
+| 注入方式 | `pressed` 命中 |
+|---|---|
+| `InputEventAction("ui_accept")` | 1 |
+| `InputEventKey(physical_keycode = KEY_ENTER)` | 1 |
+| `InputEventKey(keycode = KEY_ENTER)` | **0** |
+| `InputEventJoypadButton(JOY_BUTTON_A)` | 1 |
+| `Viewport.push_input(物理 Enter)` | 1 |
+| `Viewport.push_input(InputEventAction("ui_accept"))` | 1 |
+
+⇒ 引擎机制本身没问题。**GUI 类问题先查「有没有焦点持有者」，再查事件形状**，
+最后才怀疑自己的接线 —— 顺序反了会白查半天。
 
 ## 已知噪音（不影响结论）
 

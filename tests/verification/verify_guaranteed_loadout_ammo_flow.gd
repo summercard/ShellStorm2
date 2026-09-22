@@ -41,8 +41,8 @@ func _verify_real_spawn_grant(failures: Array[String]) -> void:
 		await get_tree().process_frame
 
 	var expected_rounds := tower.get_guaranteed_loadout_ammo_rounds()
-	if expected_rounds != 60:
-		failures.append("保底备弹发数变成 %d，与设计输入 60 不一致" % expected_rounds)
+	if expected_rounds != 300:
+		failures.append("保底备弹发数变成 %d，与设计输入 300 不一致" % expected_rounds)
 
 	var weapon := tower.player.weapon
 	if weapon == null:

@@ -45,7 +45,7 @@ const BASE_INVENTORY_CAPACITY := 12
 ## 保底武装配套弹药：入场即给 `item_ammo_pack` 的发数（每单位 = 1 发真实备弹）。
 ## 白送手枪由 `Player3D.start_with_weapon` 负责，那条链路只给枪不给弹；
 ## 没有这份备弹时，弹匣打空且没捡到掉落 = 保底武装彻底哑火。数值是设计输入，不要就地写数字。
-const GUARANTEED_LOADOUT_AMMO_ROUNDS := 60
+const GUARANTEED_LOADOUT_AMMO_ROUNDS := 300
 ## 玩家头顶气泡的挂高（米）。玩家是 1.5m 级小机器人，气泡放在头顶正上方；
 ## 偏移**只含垂直分量**，角色绕 Y 轴转身不会带动气泡横向位移。
 ## 2026-09-21 主人反馈"太低、挡住角色"：1.95 → 2.55。俯视角下原高度让气泡底边
@@ -590,23 +590,36 @@ func _apply_persisted_flashlight_module() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	# 这一组走 InputMap action 而不是硬比 keycode：project.godot 里
+	# toggle_floor_map / select_primary_weapon / select_secondary_weapon /
+	# use_quick_item_1 / use_quick_item_2 已经绑好 M 与 1/2/3/4；手柄侧由
+	# GamepadInput 在运行时补上左摇杆按下 / LB / RB / 十字键左右，
+	# 因此键盘与手柄共用同一条通路，键位重绑也自动跟随。
+	if event.is_action_pressed("toggle_floor_map"):
+		_toggle_full_map()
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("select_primary_weapon") and _can_switch_weapon_slot():
+		_select_weapon_slot(0)
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("select_secondary_weapon") and _can_switch_weapon_slot():
+		_select_weapon_slot(1)
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("use_quick_item_1") and _can_switch_weapon_slot():
+		_use_quick_item(0)
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("use_quick_item_2") and _can_switch_weapon_slot():
+		_use_quick_item(1)
+		get_viewport().set_input_as_handled()
+		return
 	var key_event := event as InputEventKey
 	if key_event != null and key_event.pressed and not key_event.echo:
 		var key := key_event.keycode if key_event.keycode != 0 else key_event.physical_keycode
 		if key == KEY_ESCAPE and _door_fate_active:
 			_cancel_door_fate_selection()
-			get_viewport().set_input_as_handled()
-			return
-		if key == KEY_M:
-			_toggle_full_map()
-			get_viewport().set_input_as_handled()
-			return
-		if key in [KEY_1, KEY_2] and not _has_exclusive_modal() and not (_inventory_ui != null and _inventory_ui.is_inventory_open()):
-			_select_weapon_slot(0 if key == KEY_1 else 1)
-			get_viewport().set_input_as_handled()
-			return
-		if key in [KEY_3, KEY_4] and not _has_exclusive_modal() and not (_inventory_ui != null and _inventory_ui.is_inventory_open()):
-			_use_quick_item(0 if key == KEY_3 else 1)
 			get_viewport().set_input_as_handled()
 			return
 	if key_event != null and key_event.pressed and not key_event.echo and (key_event.keycode == KEY_K or key_event.physical_keycode == KEY_K):
@@ -615,6 +628,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			presentation_panel.toggle()
 			get_viewport().set_input_as_handled()
 		return
+
+
+## 换武器 / 用快捷物品的共同前置：没有独占弹窗、背包没打开。
+func _can_switch_weapon_slot() -> bool:
+	return not _has_exclusive_modal() and not (
+		_inventory_ui != null and _inventory_ui.is_inventory_open()
+	)
 
 
 func get_interaction_candidate(interacting_player: Player3D) -> Dictionary:
@@ -829,7 +849,7 @@ func _grant_guaranteed_loadout_ammo() -> int:
 	return added
 
 
-## 供验收读取的保底备弹发数；内容数值的唯一出口，禁止在测试里重复写死 60。
+## 供验收读取的保底备弹发数；内容数值的唯一出口，禁止在测试里重复写死数字。
 func get_guaranteed_loadout_ammo_rounds() -> int:
 	return GUARANTEED_LOADOUT_AMMO_ROUNDS
 
@@ -1078,22 +1098,8 @@ func _build_reference_main_hud() -> void:
 		quick_box.add_child(quick_label)
 		_hud_quick_item_labels.append(quick_label)
 	_refresh_quick_item_hud()
-
-	var actions := HBoxContainer.new()
-	actions.name = "ActionKeyStrip"
-	actions.alignment = BoxContainer.ALIGNMENT_END
-	actions.add_theme_constant_override("separation", _hud_int(8))
-	_anchor_control(actions, 1.0, 1.0, 1.0, 1.0, -374, -108, -18, -18)
-	_reference_hud_root.add_child(actions)
-	# 4 个右下角动作按钮桥接到 input action：R 换弹 / SHIFT 冲刺 / F 探照 / E 交互。
-	# 同时供 PC 端和移动端使用：移动端直接 tap，PC 端鼠标点击也会触发 Input.parse_input_event。
-	for data in [
-		["reload", "R", "换弹", "reload"],
-		["dash", "SHIFT", "冲刺", "dash"],
-		["shield", "F", "探照", "toggle_flashlight"],
-		["interact", "E", "交互", "interact"],
-	]:
-		actions.add_child(_make_action_key(str(data[0]), str(data[1]), str(data[2]), str(data[3]), cyan))
+	# 右下角不再放 R/SHIFT/F/E 四个动作键图标：动作本身仍走 InputMap（键盘与手柄照常），
+	# 这里只去掉 HUD 上的可视 + 点击入口。
 
 
 func _on_weapon_panel_gui_input(event: InputEvent, panel: PanelContainer) -> void:
@@ -1119,7 +1125,7 @@ func _on_quick_item_gui_input(event: InputEvent, quick_index: int, panel: PanelC
 	get_viewport().set_input_as_handled()
 
 func _is_panel_press(event: InputEvent) -> bool:
-	# 同时识别 PC 鼠标左键和移动端触屏按下；用 _on_action_key_gui_input 的同款判断
+	# 同时识别 PC 鼠标左键和移动端触屏按下（武器栏 / 快捷物品 / 小地图 / 头像面板共用）
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		return mb.button_index == MOUSE_BUTTON_LEFT and mb.pressed
@@ -1181,51 +1187,6 @@ func _teardown_inventory_close_button() -> void:
 func _close_inventory_via_button() -> void:
 	if _inventory_ui != null:
 		_inventory_ui.set_inventory_panel_open(false)
-
-
-func _make_action_key(kind: String, key_text: String, caption: String, action_name: String, accent: Color) -> PanelContainer:
-	var panel := _make_hud_panel(Color(accent, 0.72), Color(0.006, 0.014, 0.024, 0.88))
-	panel.custom_minimum_size = _hud_size(Vector2(78, 82))
-	# 关键：_make_hud_panel 默认 mouse_filter=IGNORE；动作键必须 STOP 才能收到 gui_input
-	panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	panel.tooltip_text = "%s  ·  %s" % [key_text, caption]
-	panel.gui_input.connect(_on_action_key_gui_input.bind(action_name, panel, accent))
-	var margin := _make_margin(6, 4, 6, 3)
-	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	panel.add_child(margin)
-	var vbox := VBoxContainer.new()
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 0)
-	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	margin.add_child(vbox)
-	var icon := CODE_HUD_GLYPH_SCRIPT.new() as CodeHUDGlyph
-	icon.custom_minimum_size = _hud_size(Vector2(52, 46))
-	icon.configure(kind, Color(0.90, 0.96, 1.0))
-	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(icon)
-	var key_label := _make_hud_label("%s · %s" % [key_text, caption], 10, Color(0.86, 0.90, 0.94))
-	key_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(key_label)
-	return panel
-
-
-func _on_action_key_gui_input(event: InputEvent, action_name: String, panel: PanelContainer, accent: Color) -> void:
-	# 同时处理鼠标（PC）和触屏（移动端）两种来源的按下事件
-	var should_press := false
-	if event is InputEventMouseButton:
-		var button_event := event as InputEventMouseButton
-		if button_event.button_index == MOUSE_BUTTON_LEFT and button_event.pressed:
-			should_press = true
-	elif event is InputEventScreenTouch:
-		var touch_event := event as InputEventScreenTouch
-		if touch_event.pressed:
-			should_press = true
-	if not should_press:
-		return
-	_tap_input_action(action_name)
-	_flash_action_key(panel)
-	# 标记为已处理：避免被 MobileInput 的 _input / aim zone 重复触发
-	get_viewport().set_input_as_handled()
 
 
 func _flash_action_key(panel: Control) -> void:
@@ -1535,6 +1496,7 @@ func _generate_layout() -> void:
 			"authored_layout_version": str(record.get("authored_layout_version", "")),
 			"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 			"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
+			"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 			"authored_layout_instances": record.get("authored_layout_instances", []),
 		})
 		room.position = record["position"]
@@ -2297,7 +2259,8 @@ func narrative_player_bark() -> CharacterBark3D:
 ## 返回实际生成数（0 = 房间不存在或生成失败）。
 func narrative_spawn_enemies(
 	room_id: String, kind: String, count: int, origin: Vector3,
-	axis: Vector3 = Vector3.RIGHT, spread: float = 1.6
+	axis: Vector3 = Vector3.RIGHT, spread: float = 1.6,
+	stagger: Vector3 = Vector3.ZERO
 ) -> int:
 	var room := _room_by_id.get(room_id) as DungeonRoom3D
 	if room == null or count <= 0:
@@ -2323,7 +2286,11 @@ func narrative_spawn_enemies(
 			"speed": float(base_type.get("speed", 60.0)),
 			"narrative_spawned": true,
 		})
-		positions.append(origin + flat_axis * ((float(index) - row) * spread))
+		# 交错：相邻两只沿垂直方向往两边让开一点，别站成一条笔直的队。
+		var lateral_stagger := stagger * (0.5 if index % 2 == 1 else -0.5)
+		positions.append(
+			origin + flat_axis * ((float(index) - row) * spread) + lateral_stagger
+		)
 	# additive=true：剧情刷的怪**加**在房间原有敌人之上，不覆盖存活账。
 	return _spawn_enemy_batch(room, configs, true, false, positions)
 
@@ -3158,6 +3125,22 @@ func _on_room_key_collected(_room_id: String) -> void:
 	_refresh_loot_label()
 
 
+## 取「从 `room_id` 走向 `target_room_id` 这扇门」的策略：**优先房间声明的那份**，
+## 缺失才回落到 `_door_policy_for_edge()`。`door_policies` 是按**门方向**存的，
+## 所以这里先用 `door_targets` 把目标房反查回方向。
+func _door_policy_towards(room_id: String, target_room_id: String) -> Dictionary:
+	var room := _room_by_id.get(room_id) as DungeonRoom3D
+	if room != null:
+		var declared: Dictionary = room.door_policies
+		var targets: Dictionary = room.door_targets
+		for direction in targets.keys():
+			if str(targets[direction]) != target_room_id:
+				continue
+			if declared.has(direction):
+				return declared[direction]
+	return _door_policy_for_edge(room_id, target_room_id)
+
+
 func _try_open_room_door(target_room_id: String) -> bool:
 	if target_room_id.is_empty() or _current_room_id.is_empty():
 		return false
@@ -3165,7 +3148,11 @@ func _try_open_room_door(target_room_id: String) -> bool:
 		status_label.text = "先选择当前命运卡片，再开启下一扇门"
 		return false
 	var edge := _edge_key(_current_room_id, target_room_id)
-	var policy := _door_policy_for_edge(_current_room_id, target_room_id)
+	# 门策略优先读**房间按方向声明的** `door_policies` —— 和平区（区块00）就是靠它把
+	# 「清房 / 钥匙 / 命运卡」三项全部关掉的。只有房间没声明该方向时才回落到默认策略。
+	# ⛔ 老实现直接调 `_door_policy_for_edge()`（硬编码三项全 true），于是和平区那句
+	# 「门只做普通开关」是**空承诺**：98F 每扇门都要清房 + 消耗房间钥匙（2026-09-22 人报）。
+	var policy := _door_policy_towards(_current_room_id, target_room_id)
 	if bool(_open_edges.get(edge, false)):
 		# 边已开启也要刷新门视觉：默认开的 vertical edge
 		# （如成顶↔99层基地）会在首次走到门附近时同时勾起门。

@@ -135,6 +135,10 @@ func _ready() -> void:
 			continue
 		_add_alternate_level_row(vbox, level_id, entry)
 
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
+
 
 ## 追加一条「其他远征关卡」的说明行 + 进入按钮。
 func _add_alternate_level_row(vbox: VBoxContainer, level_id: String, entry: Dictionary) -> void:

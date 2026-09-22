@@ -22,6 +22,9 @@ func _ready() -> void:
 	if time_source != null and time_source.has_signal("minute_changed"):
 		time_source.minute_changed.connect(_on_minute_changed)
 	_refresh()
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -106,6 +109,8 @@ func _build_interface() -> void:
 	_status_label.custom_minimum_size.y = 32.0
 	root.add_child(_status_label)
 	var close := Button.new()
+	# 命名成 CloseButton：UiMenuFocus 按这个名字挑「打开即被 A 触发的安全默认焦点」。
+	close.name = "CloseButton"
 	close.text = "关闭  ESC"
 	close.custom_minimum_size.y = 44.0
 	close.pressed.connect(queue_free)

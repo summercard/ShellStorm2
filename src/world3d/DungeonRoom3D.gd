@@ -362,6 +362,9 @@ var authored_layout_room_id := ""
 ## `_spawn_room_enemies()`（不刷怪）、`_door_policies_for_record()`（门策略全放行）、
 ## `_build_door()`（基地门扇）。默认 false = 未声明的区域行为一字不变。
 var authored_layout_peaceful := false
+## 本房**初始灯就亮**（不经玩家按开关、不播启动序列）。给「开局第一间房」用 ——
+## 玩家一睁眼不该是黑的。默认 false = 老行为（只有 STAIR_LOBBY / BOSS 默认亮）。
+var authored_room_light_on := false
 
 
 func configure(config: Dictionary) -> void:
@@ -385,6 +388,7 @@ func configure(config: Dictionary) -> void:
 	authored_layout_version = str(config.get("authored_layout_version", authored_layout_version))
 	authored_layout_room_id = str(config.get("authored_layout_room_id", authored_layout_room_id))
 	authored_layout_peaceful = bool(config.get("authored_layout_peaceful", authored_layout_peaceful))
+	authored_room_light_on = bool(config.get("authored_room_light_on", authored_room_light_on))
 
 
 func _ready() -> void:
@@ -623,7 +627,10 @@ func apply_runtime_detail_state(state: Dictionary) -> void:
 func _apply_pending_detail_runtime_state() -> void:
 	if _pending_detail_runtime_state.is_empty() or not _detail_built:
 		return
-	var wanted_light_on := bool(_pending_detail_runtime_state.get("room_light_on", false))
+		# 默认值必须跟着房间声明走：写死 false 会把「初始灯亮」在重建时顶掉。
+	var wanted_light_on := bool(
+		_pending_detail_runtime_state.get("room_light_on", authored_room_light_on)
+	)
 	if _light_switch != null and _light_switch.is_light_on() != wanted_light_on:
 		_light_switch.set_light_on(wanted_light_on)
 	var container_states := _pending_detail_runtime_state.get("containers", {}) as Dictionary
@@ -2765,7 +2772,8 @@ func _build_content() -> void:
 		_light_switch = LIGHT_SWITCH_SCENE.instantiate() as RoomLightSwitch3D
 		_light_switch.name = "RoomLightSwitch3D"
 		_place_light_switch(_light_switch, dimensions)
-		var starts_on := room_type in ["STAIR_LOBBY", "BOSS"]
+		# 房间声明的「初始灯亮」优先（开局第一间房），其次才是按房型的默认。
+		var starts_on := authored_room_light_on or room_type in ["STAIR_LOBBY", "BOSS"]
 		_light_switch.configure_group(_room_lights, starts_on)
 		_add_runtime_detail_child(_light_switch)
 		_bind_light_switch_signal()

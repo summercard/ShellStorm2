@@ -51,6 +51,9 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	layer = 120
 	_build_interface()
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 	call_deferred("_resolve_player")
 
 
@@ -357,6 +360,8 @@ func _build_interface() -> void:
 	title.add_theme_color_override("font_color", Color(0.48, 0.94, 1.0))
 	header_row.add_child(title)
 	var close_button := Button.new()
+	# 命名成 CloseButton：UiMenuFocus 按这个名字挑「打开即被 A 触发的安全默认焦点」。
+	close_button.name = "CloseButton"
 	close_button.text = "保存并关闭  ESC"
 	close_button.custom_minimum_size = Vector2(176, 44)
 	close_button.pressed.connect(request_close)

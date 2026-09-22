@@ -1,4 +1,118 @@
 # 游戏设计文档 v0.1 变更记录
+
+## 2026-09-22｜手柄左摇杆同控面朝向（三档优先级 + ESC 开关）
+
+**动机（业主指定）**：「如果左摇杆在控制移动方向的时候，同时控制角色面朝向，然后右摇杆在动的时候面朝向才会优先右摇杆，这样会不会体验更好一些？」—— 勘察确认这不是新机制，而是**把手柄对齐触屏**：触屏 `MobileInput._emit_face_direction()` 早已是「右摇杆优先，否则左摇杆」；手柄此前只有两档（右摇杆 / 保持上次），**没有第二档**。
+
+**关键事实链**：`GamepadInput` 的「瞄准」意图同时是**面朝向 + 弹道方向 + 准星位置**（`aim_direction` 三用）⇒ 改朝向 = 改弹道，落点只有 `_update_aim()` 一处。手柄**永不发零**（回中直接 `return` 保持上次），这是为**避免 `Player3D` 回落到鼠标射线导致准星瞬跳**、不是玩法选择 ⇒ 副作用是**纯手柄玩家若从未推过右摇杆，其朝向实际来自鼠标射线**（`_mobile_face_active` 恒 `false`），本次一并修掉。
+
+**改动（三档朝向优先级）**：`src/core/GamepadInput.gd` 新增 `FACE_SOURCE_AIM` / `FACE_SOURCE_MOVE` / `FACE_SOURCE_HOLD` 三档与纯函数 `resolve_face_source(...)`：右摇杆跨过瞄准死区即抢回（`AIM`）> 左摇杆跨过移动死区且开关开启时接管（`MOVE`）> 否则保持上次（`HOLD`，**永不发零**）。两处守卫：① **死区 + 滞回**，升级需跨过该摇杆死区、降级需回落到 `死区 × STICK_HYSTERESIS_FACTOR(0.7)` 以下，防止摇杆停在死区边界时来回抢档抖动；② **档位交接复用现有 aim 平滑**（`AIM_SMOOTHING_BASE_RATE`），松开右摇杆切到左摇杆那一帧不瞬间转正（防甩枪）。另加测试注入口 `set_test_stick_axes()` 与只读访问器 `get_face_source()` / `get_face_direction()` / `is_aim_active()`。
+
+**开关**：新增 `InputSettings` 键 `gamepad_left_stick_aim`（**默认 `true`**），可在 ESC 暂停菜单「操作设置」页的「左摇杆同控朝向」`CheckButton`（节点 `Center/Panel/Margin/ControlsPage/LeftStickAim`）切换；`PauseMenu3D` 增加 `_on_left_stick_aim_toggled()` 与同步。
+
+**验证**：`verify_gamepad_input_flow` 增 `_verify_face_source_tiers()`（纯函数：右优先于左、左接管的边界、开关关闭不返回 `MOVE`、双中位 → `HOLD`、滞回不回弹、升/降档单次跃变与滞回宽度）与 `_verify_left_stick_face_flow()`（端到端按 `1/60 s` 步进 `_update_aim`：A 右摇杆抢朝向首帧不跳；B 松右推左 → `MOVE` 档首帧角度变化 `>0` 且 `≤45°`、60 帧收敛到 +y；C 右摇杆 `0.19↔0.21` 抖动仍锁 `AIM`；D 关开关 → `HOLD`、朝向不变、不发广播；E 纯手柄新手只推左摇杆即激活 `is_aim_active()`；F `_release_all()` 复位到 `HOLD`），含 `[samples]` 行与**截断哨兵**（`frames≥80` / `checks≥15`，防 SCRIPT ERROR 静默截断假绿）。**反向对照三组**（`_scratch/gamepad_submenu/negctl_face.py`）：`tier`（左档失效）⇒ 5 红、`hyster`（滞回置 1.0）⇒ 5 红 + 哨兵报「74 帧」、`smooth`（交接瞬转）⇒ 1 红（「一帧内跳了 90.0°」），各自精准命中后还原复绿。复绿：`GAMEPAD_INPUT_FLOW_OK`（`[samples] 85 帧 / 断言 15 条`）。**回归**：`verify_graphics_settings_ui_flow` / `verify_pause_game_save_reset_flow`（两者都实例化暂停界面、会走 `_ready → _setup_input_controls → _sync_input_controls` 读新节点）均 `exit=0` 且 `*_OK`，无新增红。
+
+**未变更**：`aim_direction` 三用语义、`MobileInput` 触屏口径、键鼠路径、右摇杆死区/平滑既有取值、`Player3D` 的鼠标射线回落机制与 `default` 行走逻辑均未动。文档：本文 + `03_技术施工_玩家与操作.md` §3 输入动作契约表（「瞄准」→「瞄准/面朝向」，输入列补左摇杆）+ 表后新增已实装说明。
+
+<br>
+## 2026-09-22｜弹壳停留时长 +1.5 秒（3.2s → 4.7s）
+
+**动机（业主指定）**：「弹壳的停留时长加 1.5 秒。」
+
+**口径**：弹壳可见时长 = `VfxShellCasing3D.DEFAULT_LIFETIME`。其中飞行 / 弹跳 / 滚动三段的时长由物理常量与初速度决定、**不随寿命变化** ⇒ 寿命增加的部分**全部落在「落地静止后的停留」上**，故本诉求等价于「寿命 `3.2 → 4.7`」。实测（验收按 `1/60 s` 步进求静止时刻）：`t_settle = 1.15 s`、停留 `4.70 − 1.15 = 3.55 s`（上一版 `3.20 − 1.15 = 2.05 s`）。
+
+**改动（单点）**：
+- `src/vfx/VfxShellCasing3D.gd`：`DEFAULT_LIFETIME := 3.2 → 4.7`。
+- `tests/verification/verify_combat_vfx_toon_v002.gd`：新增 `_check_shell_settled_hold()`（`samples=15 → 16`）与三个外部真源常量 `EXPECTED_SHELL_LIFETIME_PREVIOUS := 3.2` / `EXPECTED_SHELL_SETTLED_HOLD_DELTA := 1.5` / `EXPECTED_SHELL_LIFETIME := 4.7`（**刻意各自硬编码、不写成派生式** `3.2 + 1.5` —— 派生式会让改坏一处时三处一起跟随，断言自我印证）。
+
+**三条互补断言**：① 寿命 = 定档值（外部真源硬编码，不引用被测常量）；② 增量 = 上一版 `3.2` + `1.5`（**业主诉求本身**的常量级钉子）；③ 行为级 —— 实测静止时刻后剩余停留 `≥ 1.5 s`（挡住「有人把初速度调大到飞行段吃掉这 1.5 s」这类隐形退化：那时 ①② 仍绿、只有 ③ 会红）。用例强制使用**新实例**（主用例那枚已被推进到 `1.94 s` 且早已 `SETTLED`，复用会让 `t_settle` 恒取第一个步长而失效），并带「未测到静止时刻」的防假绿哨兵。
+
+**反向对照 RC8**：`DEFAULT_LIFETIME` 退回 `3.2` ⇒ **精准 3 红**（`弹壳寿命不是定档值 4.70：3.200`、`弹壳实例寿命未按 DEFAULT_LIFETIME 初始化：3.200（检查 _ready）`、`弹壳停留增量不是 1.5s：寿命 3.20 − 上一版 3.20 = 0.00`），其余断言全绿、`EXIT=1`；还原后 `EXIT=0` 复绿。**如实说明**：③ 在退回 `3.2` 时仍为真（`hold = 2.05 ≥ 1.5`）—— 它是**下限守卫**，「+1.5」这条诉求由 ①② 钉住，不是 ③。
+
+**成本（如实核算，未做池化改动）**：`VfxPool3D` 对 **active 实例无上限**（`max_per_kind = 32` 只管 **inactive 回收桶**，见 `VfxPool3D.retire()`）⇒ 拉长寿命直接抬高同屏存活弹壳数：射速 `1.0 ~ 12.0 发/s`（`BlueprintRegistry` 全体枪械）× `4.7 s` ⇒ 最坏同屏约 `56` 枚（上一版约 `38` 枚，`+47%`）。每枚 `3` 个 `MeshInstance3D`、`288` 三角面（圆柱 `48` + 圆环 `192` + 球 `48`）⇒ 约 `16k` 三角面、约 `170` 次绘制，远低于预算。
+
+**未变更**：AssetID `VFX-SHELL-CASING-3D`、Prefab 路径与根节点版本 `v001`、PBR 定档（`0.8 / 0.6`）、尺寸基准（`0.8`）、抛壳随机化幅度、`floor_y` 契约与「不接物理引擎」口径均未动 ⇒ **账本无需改动**。真渲染探针四个机位沿用不动（其步进按**绝对秒数**驱动、寿命经 `shell.lifetime` 动态读取，寿命变化不影响取景与判据）。
+
+<br>
+## 2026-09-22｜保底武装配套备弹 60 发 → 300 发
+
+**动机（业主指定）**：游戏内保底装备的备弹从 60 发改成 300 发。
+
+**改动**（沿用既有单一真源，未新增分支）：
+- `src/world3d/Dungeon3D.gd`：`GUARANTEED_LOADOUT_AMMO_ROUNDS := 60 → 300`。发放链路 `_grant_guaranteed_loadout_ammo()` 与 `get_guaranteed_loadout_ammo_rounds()`（内容数值唯一出口）均未改动，只换常量值。
+- `tests/verification/verify_guaranteed_loadout_ammo_flow.gd`：设计值哨兵 `expected_rounds != 60` → `!= 300`。
+
+**占格影响**：`item_ammo_pack` 的 `stack_max = 999`、每堆叠单位 = 1 发真实备弹 ⇒ 300 发仍落在 1 格内，背包容量（`BASE_INVENTORY_CAPACITY = 12`）与堆叠口径均不变；换弹按弹匣缺口消耗的逻辑、HUD 备弹串格式（`%d备弹`）也不变。
+
+**验证**：`verify_guaranteed_loadout_ammo_flow` 判据 `GUARANTEED_LOADOUT_AMMO_OK`（`test_mode = false` + 隔离存档跑真实发放路径）：真实入场主背包恰好 300 发且与 `_get_reserve_ammo_count()` 口径一致、HUD 真串含 `300备弹`、留 10 发缺口换弹后弹匣满且备弹精确扣到 290、`restore_slots_snapshot()` 后备弹等于存档值（证明入场发放不叠加）。**反向对照**：常量临时改回 60 ⇒ 该哨兵单点判红（`保底备弹发数变成 60，与设计输入 300 不一致`，且仅此一条），还原后复绿。
+
+**未变更**：发放时机（`_setup_run_modules()` 内 `not test_mode` 边界）、与白送手枪共用的「每次装配场景」生命周期、`docs/v0.1/04_技术施工_战斗与局内成长.md` §6.6 记录的待裁决项（远征逐层逐次补发；98F 反向撤退不补）均未改变。**注意**：逐层补发的量级随本次调整放大 5 倍，该待裁决项的影响面需在下一次数值冻结前一并复核（已在 §6.6 就地标注）。
+
+<br>
+## 2026-09-22｜弹壳抛壳逐发随机化（方向 / 高度 / 前送 / 自旋 / 初始姿态）
+
+**动机（业主指定）**：「飞出去的弹壳，方向，高度，初始旋转位置，落地后的范围，旋转，等数值都需要做一个随机。不然太整齐了。」—— 上一版弹壳的抛出量全为固定常量，连发时 8 枚弹壳沿一条齐整弧线排开（视觉证据：真渲染探针把同一条摆头轨迹下的落点连起来，**离最佳拟合线的最大垂直偏差仅 0.0114 m**）。
+
+**随机化落点在调用方，不在特效脚本**。`VfxShellCasing3D` 保持**确定性**：给定同一 `context` 逐位可复现，`_on_activate` / `_on_tick` 内**不出现任何 `randf()`**。理由是它被逐帧断言驱动（`verify_combat_vfx_toon_v002` 与真渲染探针都手动步进到固定时刻再断言姿态与高度），一旦把随机数埋进特效脚本，这些断言会全部漂成随机红。逐发随机的职责交给 `WeaponModel3D._spawn_shell_casing`。
+
+**施加口径**（全部按**枪械局部基** `right/up/forward`，与枪当前朝向无关；基准速度沿用上一版的固定值，即只把「点」摊成「一团」，手感中心不变）：
+
+| 量 | 口径 | 幅度 |
+|---|---|---|
+| 右向速度 | `SHELL_EJECT_RIGHT_SPEED × randf_range(1−s, 1+s)` | `2.1 ±35%` |
+| 抬升速度 | `SHELL_EJECT_UP_SPEED × randf_range(1−s, 1+s)` | `1.55 ±45%` |
+| 前送速度 | `SHELL_EJECT_FORWARD_JITTER × randf_range(−1, 1)` | `±0.30`（绝对值抖动，可为负 ⇒ 也会落在枪身后方） |
+| 自旋轴 | `(right + up × r(0.1,0.9) + forward × r(−0.4,0.4)).normalized()` | — |
+| 自旋速度 | `SHELL_EJECT_SPIN_SPEED × randf_range(1−s, 1+s)` | `20 ±50%` |
+| 初始姿态 | 绕**随机单位轴**旋转 `randf_range(−1,1) × SHELL_INITIAL_TILT_DEG` | `±45°` |
+
+**落地散布推算**：重力 `9.8`、两次弹跳后切向速度乘 `GROUND_FRICTION² = 0.42²` ⇒ 滚动段位移可忽略 ⇒ 水平初速 `∈ [1.37, 2.84] m/s`，首次触地前约 `0.6 s` ⇒ 落点离枪 `0.9 ~ 2.5 m`、散布带约 `1.6 m`。实机量测（探针跑真实调用方路径）：8 发落点最大间距 `0.45 ~ 1.15 m`（逐批不同）、离最佳拟合线偏差 `0.37 ~ 0.45 m`。
+
+**硬约束**：`SHELL_EJECT_RIGHT_SPREAD` 有上限 `0.523` —— 验收断言「每发弹壳仍从枪械右侧抛出」= 右向速度 `> 1.0 m/s`，即 `2.1 × (1 − s) > 1.0`。取 `0.35` 留 `0.35 m/s` 余量。**出生点仍精确取抛壳挂点**，扰动只作用于抛出之后的运动量（验收对出生点漂移的容差是 `0.001 m`）。
+
+**契约扩展**：`VfxShellCasing3D` 新增 `context.initial_basis`（可选，缺省恒等）承接调用方传入的随机初始倾斜，写入前 `orthonormalized()`（根 basis 非正交会让旋转赋值报 `must be normalized in order to be casted to a Quaternion`）；`get_presentation_snapshot()` 增补自旋真值 `spin_axis` / `spin_speed` 与出生姿态 `spawn_basis` 供验收读取。
+
+**验收扩展**（`verify_combat_vfx_toon_v002`，`samples=14 → 15`）：新增 `_check_shell_ejection_randomized` —— 走**真实调用方**路径连打 **24 发**（枪先偏航 `0.5 rad` 并搬到非原点，验证扰动确实施加在枪械局部基上），统计各分量极差与初始倾角峰值，并在最后做**反向对照**：显式 `context` 的速度 / 自旋 / 姿态必须与传入值**逐位相同**，证明随机化没有污染确定路径。真渲染探针新增第 4 机位 `shell_casing_spread.png`：连发 8 发（复刻业主截图里的后坐摆头 `±6°`）走真实调用方路径后俯视落点，判据 = 「落点离最远两点连线的最大垂直偏差」`> 0.10 m`；同批次 A/B 出图 `shell_casing_spread_ab.png` 供前后对比。
+
+**反向对照**（全部精准变红后还原，`grep REVERSE-CONTROL src/ tests/` 为空）：RC7a 五个幅度常量清零 → 7 项统计断言 + 5 项常量断言全红（`24 发里只有 1 个不同速度`）；RC7b 掐断 `VfxShellCasing3D` 对 `context.initial_basis` 的采用 → 「初始倾角峰值 0.00° 不足 22.50°」单点命中；RC7c 探针侧关掉随机化重出散布图 → `off_line_residual=0.0114 m` 判据红。复绿：`COMBAT_VFX_TOON_V002_OK samples=15`、`VFX_POOL_LIFECYCLE_OK`、`SHELL_CASING_VISUAL_OK captured=4`，武器回归三条（`verify_dual_weapon_quick_map_fate_flow` / `verify_3d_inventory_weapon_flow` / `verify_unified_player_interaction_flow`）全绿。
+
+**未变更**：AssetID `VFX-SHELL-CASING-3D`、Prefab 路径、版本号 `v001`、PBR 定档（`0.8 / 0.6`）与尺寸基准（`0.8`）均未动，**账本无需改动**。
+
+<br>
+## 2026-09-22｜弹壳改为纯程序化模拟碰撞 + 缩到 80%，并修复「弹壳特效消失」
+
+**行为改造（业主指定：不要真实物理碰撞）**：`VfxShellCasing3D` 原先「优先物理射线打地板（collision layer 1）+ `context.floor_y` 兜底」的落地方案**整体作废**，改为**纯解析式越线判定** —— 弹壳中心 y 越过「地面高度 + 贴地半径」即视为碰撞。Prefab 无碰撞体、脚本内不出现任何物理查询 API（`intersect_ray` / `direct_space_state` / `RigidBody3D` …）。运动改为三阶段有限状态机 `FLYING → ROLLING → SETTLED`：抛物飞行与弹跳（恢复系数 `0.32`、地面摩擦 `0.42`、自旋保留 `0.68`、最多 2 次弹跳）→ 贴地指数衰减滚动（`v(t)=v₀·e^(−3.4t)`）→ `smoothstep` 过渡到长轴躺平；触地带 squash & stretch 挤压包络（压到 `0.72`、`0.14 s` 回弹）。手感参数全部收敛为脚本顶部一组常量。
+
+**尺寸缩到原基准 80%**：`WeaponModel3D.SHELL_CASING_SIZE = 0.8`。
+
+**修复实机缺陷「弹壳特效没了」（P0）**：`_spawn_shell_casing()` 把 `floor_y` 硬编码为 `0.0`。塔楼楼层是**向下**建造的（`stage.position.y = -FLOOR_HEIGHT_M(12.0) × floor_index`，98F ≈ **−1176 m**），于是弹壳出生点 y 就已「低于地面」，**第一帧即判定触地**、被夹到 `floor_y + 半径 ≈ 0.046` ⇒ 瞬移到世界原点附近、离玩家一千多米 ⇒ 实机完全看不见。改为由新增的 `WeaponModel3D._resolve_shell_floor_y(shooter)` 取**射击者站立面**世界 y（玩家胶囊底面恰在 `y=0`，原点即脚底行走面；射击者失效时回落枪自身 y，**不以 0 作通用兜底**）。`_spawn_shell_casing` 签名由 `(world: Node)` 改为 `(shooter: Node3D)` 以携带该信息。
+
+**同时修正两处几何缺陷**（均由真渲染探针实测抓出，headless 数值全绿时掩盖）：① 贴地半径原取壳体 `0.045`，但躺平后触地的是**底缘** `TorusMesh.outer_radius = 0.058` ⇒ 弹壳整圈陷进地板 1.3 cm；改为常量 `0.058` 并支持 `_measure_radial_half_extent()` 运行时从已挂载 mesh 实测。② 0.8 尺寸下三件装配**裂开**：缩放原只作用子节点 `scale` 而漏掉其 `position`（底缘/底火仍停在 ±0.12）；改为**缩放三件子节点并同步缩放其偏移**，根节点保持纯旋转（不可缩放根节点 —— 根 basis 非正交会让旋转赋值报 `must be normalized in order to be casted to a Quaternion`）。
+
+**验收扩展**（`verify_combat_vfx_toon_v002`，`samples=14`）：新增源码级**物理 API 静态门禁**（13 个禁用符号，行为层无法区分射线命中与解析越线，只有查源码看得住）、**逐帧最低点防穿地**（`min_y >= radius`，专防「终态贴地掩盖中间穿地」的假绿）、触地次数、装配随尺寸缩放、根节点恒单位缩放、**弹壳必须出生在枪械抛壳挂点上**、以及**非零楼层端到端**（把枪与射击者一起搬到 98F 开火，断言弹壳留在该层、精确贴该层地面、绝不出现于世界原点附近）。反向对照 RC1–RC6c 全部精准变红后还原，`grep REVERSE-CONTROL src/ tests/` 为空。新增真渲染探针 `probe_shell_casing_visual` 三个机位：阶段切片、0.8/1.0 尺寸同框（投影比 `0.7981`）、**深层楼 98F 贴地**（`gap_m=0.0000`）。
+
+文档与台账：`docs/v0.1/14.6_特效系统与制作规范.md` §10 版本历史新增 v002.4 / v002.5；账本**未变更**（AssetID、Prefab 路径、版本号与 PBR 定档值均未变，仅行为与尺寸常量调整）。
+
+<br>
+## 2026-09-22｜新开枪反馈：弹壳抛出并落地（VFX-SHELL-CASING-3D），材质定档 金属度 0.8 / 反光度 0.6
+
+`WeaponModel3D._fire_now()` 每次成功开火新增生成 **1 枚弹壳**（命运复制波次与霰弹多弹丸不额外重复抛壳）。弹壳脱离武器挂点进入世界空间：初速度 `v = 2.1·right + 1.55·up + 0.22·forward`（从枪械右侧抛出），受 `g = 9.8 m/s²` 下落，命中地板后**最多 2 次小弹跳**再静止，`lifetime 3.2 s` 回池；落地判定优先走物理射线（collision layer 1），无场景碰撞时用 `context.floor_y` 兜底以避免穿地。出生点取枪械 `EjectionSocket`，缺失时回落 `TacticalSocket`；近战武器不抛壳。
+
+新增独立 Prefab `assets/art/vfx/combat_3d/vfx_shell_casing_root_top3d.tscn`（AssetID `VFX-SHELL-CASING-3D`，v001，黄铜圆柱 + 底缘环 + 底火，**纯视觉无碰撞体**）与脚本 `src/vfx/VfxShellCasing3D.gd`，注册为 `VfxPool3D.FX01_SHELL_CASING`（按 AssetID 路由，调用方禁裸字符串）。
+
+**材质定档（业主指定）**：金属度 `metallic = 0.8`、反光度（roughness 通道）`= 0.6`，壳体 / 底缘 / 底火**三件统一**，各件仅保留基色差异；原先三件各自的分散数值收敛为单一常量组 `VfxShellCasing3D.SHELL_METALLIC` / `SHELL_ROUGHNESS`。
+
+验收 `verify_combat_vfx_toon_v002`（`samples=12`）新增弹壳用例（AssetID/版本、主体 mesh、重力、右侧飞出、不穿地、最大弹跳、无碰撞体、真实开火接线）与 **PBR 真值断言**（读已挂载材质，期望值硬编码在验收侧以防止「期望引用被测常量」的自印证）；两轮反向对照均精准命中后还原：右向初速度归零 → 红（实测 0.000 m/s），PBR 改 0.5/0.2 → 红（实测 0.500/0.200）；`verify_vfx_pool_lifecycle` 同步复绿，两者 headless 退出码 0。
+
+文档与台账：`docs/v0.1/14.6_特效系统与制作规范.md` §6.1 迁移表 + §10 版本历史 v002.2 / v002.3；`docs/v0.1/MODULE_INDEX.md` 的 `VFX-POOL` 行补弹壳与 PBR 口径；账本 `ShellStorm2_特效账本_v001.xlsx` 登记 `资产主表` row 22、`3D-特效` FX01-07、`域变更日志` v0.1.3 / v0.1.4，门禁 `check_asset_registry.py --ledger vfx` 无新增红项。
+
+<br>
+## 2026-09-22｜子弹默认最大存活时间 5 秒 → 1 秒
+
+`src/combat3d/Projectile3D.gd`（`_physics_process`）：投射物超时回收的默认寿命由 `maxf(5.0, home_lifetime, 默认5.0)` 下调为 **1.0 秒**（`maxf(1.0, …, 默认1.0)`；同日先落到 1.5 秒，经实机手感复核后定为 1.0 秒）。按出厂弹速 23 m/s 计算，理论最大飞行距离由 ≈115 m 降为 **≈23 m**；室内场景实际有效射程仍由撞墙决定，变化主要影响开阔场景（天台、大房）的流弹残留时间与对象池回收节奏。命运卡注入的 `home_lifetime`（追踪弹等，预设值 5 秒）不受影响，`maxf` 下限语义保证只增不减。设计文档同步：`docs/v0.1/04_技术施工_战斗与局内成长.md` §11 开火流程新增「投射物生命周期」段落。验证脚本无任何对旧值 5.0 的断言（`tests/` 全文检索 0 命中），无门禁受影响。
+
+<br>
+
 ## 2026-09-21｜五次修正 100F 天台装饰：绿化环背贴建筑外皮 + 天台不再生成室内照明设施
 
 业主实机反馈两条：「花盆和花圃靠墙太远了，要挨着墙放，不然还有个空虚」「天台为什么还会刷一个电灯开关？帮我去掉」。**原地修正**（AssetID / layout_id / layout_version 不变）：

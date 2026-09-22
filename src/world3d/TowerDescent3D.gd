@@ -1810,6 +1810,9 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 		# 只在区域声明了才落字段 —— 未声明的楼层一个字段都不多，行为逐字不变。
 		if bool(spec.get("authored_layout_peaceful", false)):
 			record["authored_layout_peaceful"] = true
+		# 初始灯亮：只在房表声明了才落字段，未声明的房间一个字段都不多。
+		if bool(spec.get("authored_room_light_on", false)):
+			record["authored_room_light_on"] = true
 		record["authored_layout_instances"] = (
 			spec.get("authored_layout_instances", []) as Array
 		).duplicate(true)
@@ -4527,6 +4530,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"authored_layout_version": str(record.get("authored_layout_version", "")),
 		"authored_layout_room_id": str(record.get("authored_layout_room_id", "")),
 		"authored_layout_peaceful": bool(record.get("authored_layout_peaceful", false)),
+		"authored_room_light_on": bool(record.get("authored_room_light_on", false)),
 		"authored_layout_instances": record.get("authored_layout_instances", []),
 	})
 	room.position = record["position"]

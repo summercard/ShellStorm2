@@ -184,11 +184,12 @@ func narrative_player_bark() -> Node:
 
 func narrative_spawn_enemies(
 	room_id: String, kind: String, count: int,
-	origin: Vector3, axis: Vector3 = Vector3.RIGHT, spread: float = 1.6
+	origin: Vector3, axis: Vector3 = Vector3.RIGHT, spread: float = 1.6,
+	stagger: Vector3 = Vector3.ZERO
 ) -> int:
 	_spawn_calls.append({
 		"room_id": room_id, "kind": kind, "count": count,
-		"origin": origin, "axis": axis, "spread": spread,
+		"origin": origin, "axis": axis, "spread": spread, "stagger": stagger,
 	})
 	return count
 
@@ -570,17 +571,25 @@ func _phase_c_real_scripts() -> void:
 		# 队列必须**整体在玩家前方**。触发发生在玩家刚跨进房间那一刻（他还在门口），
 		# 若队列压在玩家身后/门线上，实机看到的就是「怪刷在门口」（2026-09-21 主人反馈）。
 		# 旧值 forward=distance*0.5=2.3 时，最后一只在 −0.7m —— 正是这个断言要挡住的情况。
-		var fwd_axis := -_player.global_basis.z
-		fwd_axis.y = 0.0
-		if origin is Vector3 and fwd_axis.length_squared() > 0.000001:
-			fwd_axis = fwd_axis.normalized()
-			var center_fwd := ((origin as Vector3) - _player.global_position).dot(fwd_axis)
-			var row := float(int(call.get("count", 1)) - 1) * 0.5
-			var rearmost := center_fwd - row * float(call.get("spread", 1.5))
-			_check(
-				rearmost > 1.0,
-				"队列最后一只也在玩家前方 %.2fm（不贴门口，须 >1.0m）" % rearmost,
-			)
+		# 队列用**房间相对**锚点钉住（point_room + point_offset）：触发改成位置触发后，
+		# 玩家落点会在一个半径内浮动，玩家相对的站位会跟着抖，钉不住。
+		var want_center := PROBE_ROOM_CENTER + Vector3(6.0, 0.0, 0.0)
+		_check(
+			(origin as Vector3).distance_to(want_center) < 0.05,
+			"队列钉在房间相对点上（实际 %s，期望 %s）" % [str(origin), str(want_center)],
+		)
+		# 排列轴：剧本写的是南北（世界 z）
+		var spawn_axis: Vector3 = call.get("axis", Vector3.ZERO)
+		_check(
+			absf(absf(spawn_axis.z) - 1.0) < 0.05 and absf(spawn_axis.x) < 0.05,
+			"队列沿**南北**排开（axis=%s）" % str(spawn_axis),
+		)
+		# 交错：相邻两只沿垂直方向错开，不是一条笔直的队（实机观感「太整齐」的反向对照）
+		var stagger_vec: Vector3 = call.get("stagger", Vector3.ZERO)
+		_check(
+			stagger_vec.length() > 0.1 and absf(stagger_vec.dot(spawn_axis)) < 0.05,
+			"相邻两只交错错开且垂直于排列轴（stagger=%s）" % str(stagger_vec),
+		)
 	# 构图断言：镜头**平移过去**看僵尸的驻留窗口（0.1+1.3 结束 → 2.6 开始回摆）内逐帧测量。
 	var framing: Dictionary = await _sample_framing(1.5, 2.55)
 	_check(

@@ -32,6 +32,9 @@ func _ready() -> void:
 	_build_flashlight_module_panel()
 	_refresh_flashlight_module_panel()
 	UIStyleFactory.apply_tactical_tree(self)
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 
 ## 蓝图解锁阶段定义
 ## 每个类别有多个Tier，每个Tier解锁后增加该类别在局内的可用变体数量

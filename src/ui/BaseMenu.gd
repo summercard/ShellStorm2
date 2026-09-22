@@ -53,6 +53,9 @@ func _ready() -> void:
 	# 显示玩家数据
 	_refresh_stats()
 	UIStyleFactory.apply_tactical_tree(self)
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 
 func _refresh_stats() -> void:
 	# BaseManager 是 Autoload，通过全局名称访问

@@ -56,6 +56,9 @@ const DEBUG_CAMERA_YAW_MAX_DEG := 75.0
 const INTERACTION_CONTROLLER_SCRIPT := preload(
 	"res://src/player3d/PlayerInteractionController3D.gd"
 )
+## 虚拟输入源 autoload 名。移动端虚拟摇杆与手柄输出同名信号，
+## 接同一组处理函数，Player3D 不区分来源。
+const VIRTUAL_INPUT_SOURCES := ["MobileInput", "GamepadInput"]
 
 @export var max_hp := 100
 @export var combat_enabled := false
@@ -101,14 +104,14 @@ var equipped_backpack_item: Dictionary = {}
 var equipped_flashlight_module: Dictionary = {}
 var interaction_controller: PlayerInteractionController3D
 
-# 移动端虚拟输入状态（来自 MobileInput autoload 的信号）。
+# 虚拟输入状态（来自 MobileInput / GamepadInput 两个 autoload 的信号）。
+# 变量名沿用 _mobile_ 前缀：这条通路最初为触屏而建，手柄复用同一套语义。
 var _mobile_move_direction := Vector2.ZERO
 var _mobile_face_direction := Vector2.ZERO
 var _mobile_face_active := false
 var _mobile_shoot_active := false
 var _mobile_shoot_was_active := false
 var _mobile_input_available := false
-var _mobile_input: Node = null
 var _backpack_model: Node3D = null
 var _silence_remaining := 0.0
 var _named_damage_multipliers: Dictionary = {}
@@ -403,24 +406,27 @@ func _physics_process(delta: float) -> void:
 
 
 func _hook_mobile_input() -> void:
-	# 移动端 autoload 名为 MobileInput。autoload 加载顺序在 Player3D 之前。
-	# 找不到时（极端情况：autoload 没注册）静默退化，键盘鼠标照旧。
-	# v0.1 MobileInput 只暴露 move_direction / shoot_pressed / shoot_released / face_direction 。
+	# 虚拟输入源：移动端虚拟摇杆与手柄各是一个 autoload，但输出同一组信号
+	# （move_direction / face_direction / shoot_pressed / shoot_released）。
+	# 这里只做一次接线，Player3D 不区分来源、取最新值即可 —— 同一时刻实际
+	# 活动的源由 InputDevice 决定，两个源不会同时产生有效输入。
+	#
+	# 找不到 autoload 时（极端情况：未注册）静默退化，键盘鼠标照旧。
 	# R/SHIFT/F/E 四位动作以 Dungeon3D 的 HUD 按钮为准，走 Input.parse_input_event 入口。
-	var mi: Node = get_node_or_null("/root/MobileInput")
-	if mi == null:
-		_mobile_input_available = false
-		return
-	_mobile_input = mi
-	_mobile_input_available = true
-	if not mi.move_direction.is_connected(_on_mobile_move_direction):
-		mi.move_direction.connect(_on_mobile_move_direction)
-	if not mi.face_direction.is_connected(_on_mobile_face_direction):
-		mi.face_direction.connect(_on_mobile_face_direction)
-	if not mi.shoot_pressed.is_connected(_on_mobile_shoot_pressed):
-		mi.shoot_pressed.connect(_on_mobile_shoot_pressed)
-	if not mi.shoot_released.is_connected(_on_mobile_shoot_released):
-		mi.shoot_released.connect(_on_mobile_shoot_released)
+	_mobile_input_available = false
+	for source_name in VIRTUAL_INPUT_SOURCES:
+		var source: Node = get_node_or_null("/root/%s" % source_name)
+		if source == null:
+			continue
+		if not source.move_direction.is_connected(_on_mobile_move_direction):
+			source.move_direction.connect(_on_mobile_move_direction)
+		if not source.face_direction.is_connected(_on_mobile_face_direction):
+			source.face_direction.connect(_on_mobile_face_direction)
+		if not source.shoot_pressed.is_connected(_on_mobile_shoot_pressed):
+			source.shoot_pressed.connect(_on_mobile_shoot_pressed)
+		if not source.shoot_released.is_connected(_on_mobile_shoot_released):
+			source.shoot_released.connect(_on_mobile_shoot_released)
+		_mobile_input_available = true
 
 
 func _on_mobile_move_direction(direction: Vector2) -> void:
@@ -463,7 +469,11 @@ func _get_mobile_face_direction() -> Vector3:
 	# 屏幕坐标 → 世界空间：使用相机当前 yaw 投影，使右滑 = 玩家右转、上滑 = 玩家后退
 	var cam_basis := camera.global_basis if camera != null else global_basis
 	var forward_2d := -Vector2(cam_basis.z.x, cam_basis.z.z).normalized()
-	var right_2d := Vector2(forward_2d.y, -forward_2d.x)
+	# 屏幕右 = 把「前方」在俯视 (x,z) 平面上顺时针转 90°，即 (u,v) -> (-v,u)。
+	# 原式 (v,-u) 是逆时针，算出来的是「屏幕左」：右摇杆推右时准星会往左偏。
+	# 这与 MobileInput「右摇杆空载时退回左摇杆，让移动和面朝一致」的意图正好相反 ——
+	# 移动走的是 +X（推右 = 世界 +X），面朝却落在 -X。
+	var right_2d := Vector2(-forward_2d.y, forward_2d.x)
 	var aim := right_2d * _mobile_face_direction.x + forward_2d * (-_mobile_face_direction.y)
 	return Vector3(aim.x, 0.0, aim.y).normalized() if aim.length_squared() > 0.0001 else Vector3.ZERO
 

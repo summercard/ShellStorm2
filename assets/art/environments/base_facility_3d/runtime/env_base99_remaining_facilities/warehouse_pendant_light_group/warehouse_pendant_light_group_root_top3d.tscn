@@ -11,3 +11,6 @@ metadata/collision_policy = "visual_only_no_collision"
 metadata/placement_policy = "baked world coordinates from Blender; root stays at origin"
 
 [node name="ImportedModel" parent="." instance=ExtResource("1_visual")]
+
+[node name="ENV_BASE99_REMAINING_WAREHOUSE_PENDANT_LIGHT_GROUP_V021" parent="ImportedModel" index="0"]
+cast_shadow = 0

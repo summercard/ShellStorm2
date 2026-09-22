@@ -189,7 +189,7 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 | `camera.restore` | `duration` | 距离 / 方位 / 俯角 / **枢轴**一起回，再放权给玩法镜头 |
 | `actor.pose` | `clip` / `phase` / `to_phase` / `duration` / `frozen` | 相位锁。趴↔起身 = `dead` 相位 1.0↔0.0 |
 | `actor.face` | `yaw_deg` / `relative` / `duration` | `relative: true` = 在接管前朝向上叠加（张望用） |
-| `scene.spawn` | `room_id` / `kind` / `count` / `side` / `distance` / `forward_m` / `spread` | 只有**和平区/空房**才是必要的；战斗房本来就会自己刷怪 |
+| `scene.spawn` | `room_id` / `kind` / `count` / `spread` / **`point_room` + `point_offset`** / **`axis`** / **`stagger_m`** / `side` / `distance` / `forward_m` | 只有**和平区/空房**才是必要的；战斗房本来就会自己刷怪 |
 | `scene.despawn` | `room_id` | 只清带 `narrative_spawned` 标记的怪，不动关卡原有的 |
 
 <span style="color:#791F1F">**要"镜头从上往下压"，必须给 `elevation_deg`；只改 `distance` 不叫俯冲。**</span>
@@ -248,6 +248,10 @@ grep -E "verify_opening_script_runtime_(OK|FAIL)" _scratch/narrative/opening.log
 **静默失效**（症状是「剧情永不触发」）。改用 `point_room: "<房间id>"` + `point_offset: [dx,dy,dz]`
 （相对**房间中心**），世界坐标由导演运行期用 `room.to_global(offset)` 解出。
 实测：会议室中心 `(−5, −24, 2.5)` + offset `[-14, 0, 0]` ⇒ 进门 6m 处的触发点。
+
+**刷怪站位**：`scene.spawn` 也支持房间相对锚点（`point_room` + `point_offset`）—— 位置触发之后玩家落点会浮动，
+玩家相对的站位跟着抖，要钉住就用房间相对。`axis` 选排列方向（`"forward"`/`"x"`/`"z"`），`stagger_m` 让相邻两只
+沿垂直方向交错错开，别站成一条笔直的队。
 
 **什么时候该换位置触发**：`room_entered` 在玩家**刚跨进门**那一刻就发 —— 那时门还没关、人还站在门口，
 一切「基于玩家位置」的刷怪与运镜都会贴着门口（第二段「怪刷在门口」就是这么来的）。要演出发生在

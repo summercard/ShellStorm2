@@ -154,6 +154,7 @@ core_scenes=(
   verify_3d_performance_budget
   verify_performance_runtime_complete
   verify_graphics_settings_ui_flow
+  verify_gamepad_input_flow
   verify_pause_game_save_reset_flow
   verify_3d_flashlight_charge_flow
 )

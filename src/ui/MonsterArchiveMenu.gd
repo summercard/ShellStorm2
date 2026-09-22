@@ -26,6 +26,9 @@ func _ready() -> void:
 	_find_elite_archive()
 	_build_archive_view()
 	UIStyleFactory.apply_tactical_tree(self)
+	# 手柄通路：十字键/摇杆导航与 A 键确认都需要一个「焦点持有者」，
+	# 打开菜单时先抓焦点，否则手柄在子界面里没有入口。
+	UiMenuFocus.ensure_focus(self)
 
 func _find_elite_archive() -> void:
 	_elite_archive = get_tree().get_first_node_in_group("elite_archive")
