@@ -1,6 +1,6 @@
 extends Node
 ## 天台女儿墙装配对齐探针。
-## 实测 TowerFloorStage3D 装完后的 64 段直段 + 4 件转角件，在四条边上是否
+## 实测 TowerFloorStage3D 装完后的 68 段直段（整圈 72 - 4 转角）+ 4 件转角件，在四条边上是否
 ## 「无缝且不重叠」，以及转角件是否正好坐在 2.5m 让位区内。
 ## 纯诊断，不算门禁；输出 PROBE_ALIGN_* 行供比对。
 ##
@@ -12,8 +12,11 @@ extends Node
 ## 不再读 MultiMesh 实例变换，所以本探针现在 headless 也能跑对。上面那条窗口要求
 ## 对「仍想从 MultiMesh 回读实例变换」的写法继续成立，保留作为说明。
 
-const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
+const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 100.0, 80.0)
 const CORNER_ARM_M := 2.5
+## 统一壳体（楼板 / 外墙同为 20×16 格 × 5m = 100×80m）的整圈模块数：2×(20+16)=72。
+## 直段 = 整圈 - 4 件转角；立面环 = 整圈 - 楼梯井让位件数。
+const RING_FULL_MODULES := 72
 const EDGE_TOLERANCE := 0.01
 ## 立面模块厚度 0.30m / 2 = 中心线相对包络矩形的内缩量（与女儿墙的 0.25 不同）。
 const FACADE_INSET := 0.15
@@ -72,9 +75,13 @@ func _ready() -> void:
 		]
 	)
 	# 2026-09-20：天台外墙连成整圈 —— 西侧楼梯口整体在轮廓内部，不再算外墙门洞，
-	# 因此直段 64/64、门洞补位墙 0 件。旧期望值（61 / 3）是「西墙挖 3 段塞占位
+	# 因此直段 68/68、门洞补位墙 0 件。旧期望值（61 / 3）是「西墙挖 3 段塞占位
 	# 矮墙」时代的产物。
-	_expect(segment_spans.size() == 64, "直段槽位数不是64（西侧缺口已封，整圈满铺）")
+	_expect(
+		segment_spans.size() == RING_FULL_MODULES - 4,
+		"直段槽位数不是「整圈满铺%d - 4转角 = %d」（实际 %d）"
+			% [RING_FULL_MODULES, RING_FULL_MODULES - 4, segment_spans.size()]
+	)
 	_expect(corner_spans.size() == 4, "转角件不是4件")
 	_expect(door_spans.size() == 0, "西侧仍残留系统的门洞补位矮墙")
 
@@ -98,9 +105,10 @@ func _ready() -> void:
 	# 而不是沿用女儿墙那套「包络横跨 boundary 线」——后者会把垂直侧在角上占满的
 	# 那件也算进来，导致角上误报 0.3m 重叠。
 	#
-	# 2026-09-20：槽位数不再是恒定的 68 —— 楼梯井穿过轮廓的边要**让位**
-	# （99F→98F 的井外廓 x∈[35,50] 穿过天台东界 x=40，东侧让出 z∈[-25,5] 共 6 件）。
-	# 这里改成「满铺 68 - 让位件数」，让位件数由快照真源给出，不另写一份。
+	# 2026-09-20：槽位数不再是恒定的整圈满铺 —— 楼梯井穿过轮廓的边要**让位**
+	# （99F→98F 的井外廓 x∈[35,50] 一直覆盖到壳体东界 x=50 的内侧，
+	#   于是东侧让出 z∈[-25,5] 共 6 件）。
+	# 这里改成「整圈满铺 RING_FULL_MODULES - 让位件数」，让位件数由快照真源给出，不另写一份。
 	var rooftop_snapshot: Dictionary = rooftop.get_snapshot()
 	var gap_modules := int(rooftop_snapshot.get("outer_facade_gap_module_count", 0))
 	print(
@@ -108,9 +116,9 @@ func _ready() -> void:
 			% [str(rooftop_snapshot.get("facade_gap_sides", [])), gap_modules]
 	)
 	_expect(
-		facade_slots.size() == 68 - gap_modules,
-		"外立面环槽位数不是「满铺68 - 让位%d = %d」（实际 %d）"
-			% [gap_modules, 68 - gap_modules, facade_slots.size()]
+		facade_slots.size() == RING_FULL_MODULES - gap_modules,
+		"外立面环槽位数不是「满铺%d - 让位%d = %d」（实际 %d）"
+			% [RING_FULL_MODULES, gap_modules, RING_FULL_MODULES - gap_modules, facade_slots.size()]
 	)
 	_expect(
 		facade_kinds.size() == facade_slots.size(),

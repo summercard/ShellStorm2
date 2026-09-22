@@ -1,15 +1,17 @@
 extends Node
-## 100层保留原16×16主区，只向西扩2格为18×16；其他三边、99层和普通层不动。
+## 塔楼三层统一壳体平面（2026-09-22）：100层在 16×16 主区上向西、向东各扩 2 格
+## 成 20×16（100m×80m）；99层与普通层同步套用同一矩形（旧「99层 250/160、普通层
+## 250」三套口径作废）。
 
-const ROOFTOP_TILE_COUNT_WITH_OPENINGS := 234
-const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
+const ROOFTOP_TILE_COUNT_WITH_OPENINGS := 266
+const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 100.0, 80.0)
 const WEST_STAIR_WORLD_RECT := Rect2(-45.0, 0.0, 15.0, 30.0)
 ## 天台女儿墙换成参考组件库 v002 派生件（0.50m 厚；2026-09-20 起按业主口径改为
 ## 总高 0.80m 的方案A 平整墙板）后，边界内缩由 0.15m 变 0.25m。
 ## ⚠️ 内缩口径只由**厚度**决定，所以改高度不动边界；但反过来说，改厚度必然动边界。
 const WEST_PARAPET_X := -49.75
-## 实体直段数 = 2×(17+15)：每边两端各让出 2.5m 转角件后比格数少一格。
-const ROOFTOP_SEGMENT_COUNT := 64
+## 实体直段数 = 2×(19+15)：每边两端各让出 2.5m 转角件后比格数少一格。
+const ROOFTOP_SEGMENT_COUNT := 68
 ## 四角各一件 2.5m 转角件。
 const ROOFTOP_CORNER_COUNT := 4
 ## 2026-09-19：天台女儿墙直段改为「按种子随机分档」——intact + 三件破损变体
@@ -33,8 +35,9 @@ func _ready() -> void:
 	var failures: Array[String] = []
 	var rooftop := TowerFloorStage3D.new()
 	# 第 7 参 = 立面环**让位侧**（TowerDescent3D 运行时由「与 99F 相邻的竖直楼梯」推出）。
-	# 这里显式声明 east：99F→98F 的楼梯井外廓 x∈[35,50] 穿过天台东界 x=40，
-	# 天台立面环必须在那一段让位，否则会在井的上层平台正中立一道 12m 高的墙。
+	# 这里显式声明 east：99F→98F 的楼梯井外廓 x∈[35,50] 虽已落在统一壳体（东界 x=50）
+	# 之内，但井腔仍横跨立面环中心线 x=49.85 ⇒ 环必须在那一段让位，否则会在井的
+	# 上层平台正中立一道 12m 高的墙。
 	rooftop.configure(0, "rooftop", ["west"], [], false, Rect2(), ["east"])
 	add_child(rooftop)
 	var facility := TowerFloorStage3D.new()
@@ -74,15 +77,15 @@ func _ready() -> void:
 
 func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> void:
 	var snapshot := rooftop.get_snapshot()
-	_expect((snapshot.get("grid_dimensions", Vector2i.ZERO) as Vector2i) == Vector2i(18, 16), "100层地板没有只向西扩成18×16格", failures)
-	_expect((snapshot.get("map_dimensions", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(90.0, 80.0)), "100层地板尺寸不是90m×80m", failures)
-	_expect(int(snapshot.get("grid_count", -1)) == 18, "100层旧标量接口没有返回西向宽度18格", failures)
-	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 90.0), "100层旧标量接口没有返回西向宽度90m", failures)
-	_expect((snapshot.get("floor_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "100层没有保持东南北边界并向西扩10m", failures)
-	_expect(int(snapshot.get("tile_count", -1)) == ROOFTOP_TILE_COUNT_WITH_OPENINGS, "100层地砖数没有按18×16主面、36格基地开口和18格完整楼梯开口计算", failures)
-	_expect((snapshot.get("outer_grid_dimensions", Vector2i.ZERO) as Vector2i) == Vector2i(18, 16), "100层围栏没有同步改为18×16轮廓", failures)
-	_expect((snapshot.get("outer_map_dimensions", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(90.0, 80.0)), "100层围栏尺寸不是90m×80m", failures)
-	_expect(int(snapshot.get("outer_module_count", -1)) == 68, "100层围栏模块周长计数不是68", failures)
+	_expect((snapshot.get("grid_dimensions", Vector2i.ZERO) as Vector2i) == Vector2i(20, 16), "100层地板没有扩成20×16格", failures)
+	_expect((snapshot.get("map_dimensions", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(100.0, 80.0)), "100层地板尺寸不是100m×80m", failures)
+	_expect(int(snapshot.get("grid_count", -1)) == 20, "100层旧标量接口没有返回西向宽度20格", failures)
+	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 100.0), "100层旧标量接口没有返回西向宽度100m", failures)
+	_expect((snapshot.get("floor_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "100层没有保持西/南/北边界并向东扩10m", failures)
+	_expect(int(snapshot.get("tile_count", -1)) == ROOFTOP_TILE_COUNT_WITH_OPENINGS, "100层地砖数没有按20×16主面、36格基地开口和18格完整楼梯开口计算", failures)
+	_expect((snapshot.get("outer_grid_dimensions", Vector2i.ZERO) as Vector2i) == Vector2i(20, 16), "100层围栏没有同步改为20×16轮廓", failures)
+	_expect((snapshot.get("outer_map_dimensions", Vector2.ZERO) as Vector2).is_equal_approx(Vector2(100.0, 80.0)), "100层围栏尺寸不是100m×80m", failures)
+	_expect(int(snapshot.get("outer_module_count", -1)) == 72, "100层围栏模块周长计数不是72", failures)
 	_expect(
 		int(snapshot.get("outer_segment_count", -1)) == ROOFTOP_SEGMENT_COUNT,
 		"100层女儿墙实体直段数不是64（两角让位后每边少一段）",
@@ -194,8 +197,8 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	# 期望位置 = 该角 2.5m 让位区中心；朝向按俯视逆时针 0 → PI/2 → PI → 3PI/2。
 	var corner_expectations := {
 		"SW": {"position": Vector3(-48.75, 0.0, 43.75), "rotation_y": 0.0},
-		"SE": {"position": Vector3(38.75, 0.0, 43.75), "rotation_y": PI * 0.5},
-		"NE": {"position": Vector3(38.75, 0.0, -33.75), "rotation_y": PI},
+		"SE": {"position": Vector3(48.75, 0.0, 43.75), "rotation_y": PI * 0.5},
+		"NE": {"position": Vector3(48.75, 0.0, -33.75), "rotation_y": PI},
 		"NW": {"position": Vector3(-48.75, 0.0, -33.75), "rotation_y": PI * 1.5},
 	}
 	for corner_name in corner_expectations.keys():
@@ -251,7 +254,7 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 	# 2026-09-20 新增：天台外立面环（= 从边缘往下看到的那层「99 层外墙」）。
 	# 判据只认「计划 == 摆放 + 几何口径」，不认某个具体件数：
 	#   1. 快照里的立面件数与两个批次 MultiMesh 的实测实例数逐档相等（防空摆）；
-	#   2. 环件数 == 2×(18+16)=68（整格铺满一圈：x 向 18 件、z 向 16 件）；
+	#   2. 环件数 == 2×(20+16)=72（整格铺满一圈：x 向 20 件、z 向 16 件）；
 	#   3. 底面标高 = -12.0（低一整层）、厚度 = 0.30m，且与女儿墙外皮共面。
 	_verify_rooftop_facade(rooftop, snapshot, failures)
 
@@ -262,11 +265,13 @@ func _verify_rooftop(rooftop: TowerFloorStage3D, failures: Array[String]) -> voi
 ## 本函数把这句话落成可实测的不变量，并留一条**防假绿哨兵**（件数为 0 时直接报错，
 ## 否则「计划==摆放」会两边同为 0 而恒真）。
 ##
-## 2026-09-20 追加：环必须为穿轮廓的楼梯井**让位**（99F→98F 的井外廓 x∈[35,50]
-## 穿过天台东界 x=40）。让位同时作用于可视件与碰撞，两处共用同一处真源；
-## 判据从「整格满铺 68 件」改成「68 件 - 缺口整格数」，并**正面**断言缺口存在、
-## 跨度与 `_stair_hole_world_rect("east")` 逐值相等 —— 否则日后有人把缺口补回去，
-## 只会看到件数变多而看不出「下行梯跑被封死」。
+## 2026-09-20 追加：环必须为**与立面环线相交**的楼梯井让位（99F→98F 的井外廓
+## x∈[35,50] 横跨环中心线 x=49.85）。2026-09-22 三层统一壳体后东界自 40 移到 50，
+## 井已落在壳体之内，但判据本来就是「环线是否落在井腔内」（严格不等式），
+## 故让位照旧生效 —— 这一点由本函数继续盯着。让位同时作用于可视件与碰撞，
+## 两处共用同一处真源；判据从「整格满铺 72 件」改成「72 件 - 缺口整格数」，
+## 并**正面**断言缺口存在、跨度与 `_stair_hole_world_rect("east")` 逐值相等 ——
+## 否则日后有人把缺口补回去，只会看到件数变多而看不出「下行梯跑被封死」。
 func _verify_rooftop_facade(
 	rooftop: TowerFloorStage3D, snapshot: Dictionary, failures: Array[String]
 ) -> void:
@@ -294,8 +299,9 @@ func _verify_rooftop_facade(
 			% [planned_solid, planned_window, actual_solid, actual_window],
 		failures
 	)
-	# 整格铺满一圈（x 向 18 件、z 向 16 件，两侧各一遍，共 68 件），
-	# **再减去楼梯井让位缺口**：99F→98F 的井外廓 x∈[35,50] 穿过天台东界 x=40，
+	# 整格铺满一圈（x 向 20 件、z 向 16 件，两侧各一遍，共 72 件），
+	# **再减去楼梯井让位缺口**：99F→98F 的井外廓 x∈[35,50] 横跨立面环中心线
+	# x=49.85（东界 2026-09-22 自 40 移到 50，井仍贴着环线），
 	# 那一段（z∈[-25,5] = 6 件）必须让位，否则会在井的上层平台正中立一道
 	# 12m 高的墙连碰撞，把下行梯跑封死（2026-09-20 实测定位）。
 	var gap_spans := snapshot.get("outer_facade_gap_spans", {}) as Dictionary
@@ -460,18 +466,25 @@ func _verify_rooftop_facade(
 
 
 func _verify_facility(snapshot: Dictionary, failures: Array[String]) -> void:
-	_expect(int(snapshot.get("grid_count", -1)) == 50, "99层地板被错误缩小", failures)
-	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 250.0), "99层地板边长被错误修改", failures)
-	_expect(int(snapshot.get("outer_grid_count", -1)) == 32, "99层外墙被意外缩小", failures)
-	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 160.0), "99层外墙边长被意外改变", failures)
+	# 2026-09-22：99层自「楼板 250 / 外墙 160」双口径改为与 100F 共用统一壳体。
+	# 标量断言与矩形断言都留 —— 前者防常量被误改，后者防「改了标量却漏改起点」。
+	_expect(int(snapshot.get("grid_count", -1)) == 20, "99层地板没有与100层统一为20格", failures)
+	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 100.0), "99层地板边长不是100m", failures)
+	_expect((snapshot.get("floor_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "99层地板没有与100层共用统一壳体", failures)
+	_expect(int(snapshot.get("outer_grid_count", -1)) == 20, "99层外墙没有与100层统一为20格", failures)
+	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 100.0), "99层外墙宽度不是100m", failures)
+	_expect((snapshot.get("outer_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "99层外墙没有与100层共用统一壳体", failures)
 	_expect(is_equal_approx(float(snapshot.get("outer_wall_height", -1.0)), 12.0), "99层外墙不是12米", failures)
 
 
 func _verify_combat_floor(snapshot: Dictionary, failures: Array[String]) -> void:
-	_expect(int(snapshot.get("grid_count", -1)) == 50, "普通楼层地板被错误缩小", failures)
-	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 250.0), "普通楼层地板边长被错误修改", failures)
-	_expect(int(snapshot.get("outer_grid_count", -1)) == 50, "普通楼层外墙被错误收缩", failures)
-	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 250.0), "普通楼层外墙边长被错误修改", failures)
+	# 2026-09-22：普通层（98F）自 250×250 改为与 100F 共用统一壳体。
+	_expect(int(snapshot.get("grid_count", -1)) == 20, "普通楼层地板没有与100层统一为20格", failures)
+	_expect(is_equal_approx(float(snapshot.get("map_size", -1.0)), 100.0), "普通楼层地板边长不是100m", failures)
+	_expect((snapshot.get("floor_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "普通楼层地板没有与100层共用统一壳体", failures)
+	_expect(int(snapshot.get("outer_grid_count", -1)) == 20, "普通楼层外墙没有与100层统一为20格", failures)
+	_expect(is_equal_approx(float(snapshot.get("outer_map_size", -1.0)), 100.0), "普通楼层外墙宽度不是100m", failures)
+	_expect((snapshot.get("outer_world_rect", Rect2()) as Rect2).is_equal_approx(ROOFTOP_WORLD_RECT), "普通楼层外墙没有与100层共用统一壳体", failures)
 
 
 func _verify_start_rooftop_shell(tower: TowerDescent3D, failures: Array[String]) -> void:

@@ -90,6 +90,18 @@ Run with Blender 4.5 background mode.
    ⚠️ 贴墙后花箱与同墙藤蔓基座在进深上重叠 ≤0.53m（藤蔓是叶幕、花箱是实体）—— 读作
    「花坛落在爬藤前」，不做避让；若日后要分离，把藤蔓基座沿墙平移即可。
 
+—— 2026-09-22 六次修正（业主：「所有楼层面积都和 100 层一致」）——
+14. **壳体自 90×80 扩到 100×80**（`TowerFloorStage3D.TOWER_SHELL_WORLD_RECT`，东界
+   x=40 → 50；98F/99F 自 250×250、99F 外墙自 160×160 一并收敛到同一矩形）。
+   随之：ROOFTOP_RECT 更新、南/北边女儿墙参照段 17 → 19、自持地砖列 18 → 20、
+   manifest 的 dimensions_m / world_rect_m 同步。
+   ⚠️ 运行时**重放**的 6 组（hvac_wall / greenery / ivy / parapet_ivy / pipe_loop /
+   pipe_risers）里，绿化与空调贴的是**房屋 30×30 外皮**（`x_shell_*` / `gz_shell_*`），
+   与壳体边界无关 ⇒ 件数不变；只有东侧 `parapet_ivy` 贴 `x_east` 随之东移 10m
+   （39.75 → 49.75）。女儿墙 / 地砖 / 房屋围护三组**不在重放白名单**（见
+   TowerFloorStage3D.ROOFTOP_LAYOUT_REPLAY_GROUPS），本文件里的对应件只作 Blender
+   渲染与「源-运行时对齐」参照。
+
 > 天台壳体（地砖 / 女儿墙 / 外立面 / 结构碰撞）始终由 TowerFloorStage3D 程序化拥有；
 > 本布局只提供房屋围护与装饰。装饰默认 `visual_only`（不带碰撞），
 > **例外**：绿化三件（花箱 / 大盆栽 / 小盆栽）登记为 `blocking`，由运行时按实测包络生成
@@ -112,7 +124,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ── 楼层常量（Godot 世界平面口径，与 TowerFloorStage3D 逐个对齐） ──
 GRID = 5.0
-ROOFTOP_RECT = (-50.0, -35.0, 90.0, 80.0)   # ROOFTOP_WORLD_RECT
+ROOFTOP_RECT = (-50.0, -35.0, 100.0, 80.0)  # TOWER_SHELL_WORLD_RECT
 ATRIUM_RECT = (-15.0, -10.0, 30.0, 30.0)    # BASE_99_100_ATRIUM_WORLD_RECT
 WEST_STAIR_RECT = (-45.0, 0.0, 15.0, 30.0)  # _stair_hole_world_rect("west")
 PARAPET_INSET = 0.25                        # 女儿墙厚 0.50 ⇒ 中心线内缩半厚
@@ -303,10 +315,10 @@ def wall_slug(index, door_index=None):
     return "room_wall"
 
 
-# ── 1. 地砖：18×16 网格，扣 36 格中庭（= 30×30 建筑体足迹）与 18 格西侧楼梯口 ──
+# ── 1. 地砖：20×16 网格，扣 36 格中庭（= 30×30 建筑体足迹）与 18 格西侧楼梯口 ──
 for row in range(16):
     gz = -32.5 + row * GRID
-    for col in range(18):
+    for col in range(20):
         x = -47.5 + col * GRID
         if in_rect(x, gz, ATRIUM_RECT) or in_rect(x, gz, WEST_STAIR_RECT):
             continue
@@ -316,16 +328,16 @@ for row in range(16):
             gz,
             h=TILE_H,
             group="rooftop_base",
-            note="100F 18x16地砖；已扣36格中庭与18格西侧楼梯口",
+            note="100F 20x16地砖；已扣36格中庭与18格西侧楼梯口",
         )
 
 # ── 2. 女儿墙 0.80m：贴运行时边界（中心线内缩半厚 0.25m），西侧留楼梯净空 ──
 rect_x, rect_z, rect_w, rect_d = ROOFTOP_RECT
 gz_south = rect_z + rect_d - PARAPET_INSET   # 44.75
 gz_north = rect_z + PARAPET_INSET            # -34.75
-x_east = rect_x + rect_w - PARAPET_INSET     # 39.75
+x_east = rect_x + rect_w - PARAPET_INSET     # 49.75
 x_west = rect_x + PARAPET_INSET              # -49.75
-for col in range(17):
+for col in range(19):
     x = -45.0 + col * GRID
     add("parapet", x, gz_south, h=GROUND_H, angle=0.0, group="rooftop_edge", note="南侧女儿墙，贴运行时边界")
     add("parapet", x, gz_north, h=GROUND_H, angle=math.pi, group="rooftop_edge", note="北侧女儿墙，贴运行时边界")
@@ -646,8 +658,8 @@ manifest = {
     "block_id": "rooftop",
     "source_blend": str(OUT_BLEND.relative_to(PROJECT)).replace("\\", "/"),
     "component_library": str(LIBRARY.relative_to(PROJECT)).replace("\\", "/"),
-    "dimensions_m": [90.0, 80.0],
-    "world_rect_m": [-50.0, -35.0, 90.0, 80.0],
+    "dimensions_m": [100.0, 80.0],
+    "world_rect_m": [-50.0, -35.0, 100.0, 80.0],
     "coordinate_contract": {
         "up_axis": "+Z",
         "horizontal_axes": ["+X", "+Y"],

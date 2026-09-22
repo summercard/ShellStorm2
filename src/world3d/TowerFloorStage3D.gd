@@ -1,27 +1,36 @@
 class_name TowerFloorStage3D
 extends Node3D
-## 常规层为250m塔楼物理层；100层主区16×16格，西侧为楼梯净空扩展2格。
+## 塔楼三层（100F 天台 / 99F 基地 / 98F 战斗层）共用同一块平面壳体（见 TOWER_SHELL_*）。
+## 远征单层关卡与 use_standard_map 仍按各自口径（内容外框 / 250 标准图）。
 ## 重复地砖和外墙使用 Blender 导入 Mesh + MultiMesh；承重碰撞独立于渲染。
 
 const GRID_UNIT := 5.0
 const GRID_COUNT := 50
 const MAP_SIZE := GRID_UNIT * GRID_COUNT
 const MAP_HALF := MAP_SIZE * 0.5
-# 原16×16主天台以99层基地中心(0, 5)居中；只向西追加2格（10m），
-# 东/南/北边界保持不变，为100→99西侧楼梯外廓留下完整栏杆净空。
-const ROOFTOP_GRID_DIMENSIONS := Vector2i(18, 16)
-const ROOFTOP_MAP_DIMENSIONS := Vector2(90.0, 80.0)
-const ROOFTOP_GRID_COUNT := ROOFTOP_GRID_DIMENSIONS.x
-const ROOFTOP_MAP_SIZE := ROOFTOP_MAP_DIMENSIONS.x
-const ROOFTOP_WORLD_RECT := Rect2(-50.0, -35.0, 90.0, 80.0)
-const FACILITY_OUTER_GRID_COUNT := 32
-const FACILITY_OUTER_MAP_SIZE := GRID_UNIT * FACILITY_OUTER_GRID_COUNT
-const FACILITY_OUTER_WORLD_RECT := Rect2(
-	-FACILITY_OUTER_MAP_SIZE * 0.5,
-	-FACILITY_OUTER_MAP_SIZE * 0.5,
-	FACILITY_OUTER_MAP_SIZE,
-	FACILITY_OUTER_MAP_SIZE
-)
+# ── 塔楼壳体平面：98F / 99F / 100F 三层统一共用 ───────────────────────────
+# 沿革：原 16×16（80×80，以 99F 基地中心 (0,5) 居中）
+#   → 2026-09-19 向西扩 2 格得 18×16（90×80，为 100→99 西侧楼梯留栏杆净空）
+#   → 2026-09-22 向东再扩 2 格得 20×16（100×80）。
+# 本次口径（业主：「所有楼层都和 100 层面积一致」）：三层同矩形。原先
+# 「99F 楼板 250×250 / 外墙 160×160、普通层 250×250」的三套口径自本次起作废。
+# 为什么必须扩到 100m 而不是维持 90m：east 楼梯井（99↔98）外廓是**固定世界常量**
+# x∈[35,50]（_stair_hole_world_rect），90m 窗口（东界 x=40）装不下它，井壁会伸到
+# 楼板之外；100m 则两个在用井（west x[-45,-30]、east x[35,50]）全部落在壳体内。
+# ⚠️ 名字里的 ROOFTOP 是历史沿革（这套值最早只服务天台），语义已是**全塔壳体**；
+#    新代码请用 TOWER_SHELL_* 别名，ROOFTOP_* 保留只为不破坏既有引用。
+const TOWER_SHELL_GRID_DIMENSIONS := Vector2i(20, 16)
+const TOWER_SHELL_MAP_DIMENSIONS := Vector2(100.0, 80.0)
+const TOWER_SHELL_GRID_COUNT := TOWER_SHELL_GRID_DIMENSIONS.x
+const TOWER_SHELL_MAP_SIZE := TOWER_SHELL_MAP_DIMENSIONS.x
+const TOWER_SHELL_WORLD_RECT := Rect2(-50.0, -35.0, 100.0, 80.0)
+const ROOFTOP_GRID_DIMENSIONS := TOWER_SHELL_GRID_DIMENSIONS
+const ROOFTOP_MAP_DIMENSIONS := TOWER_SHELL_MAP_DIMENSIONS
+const ROOFTOP_GRID_COUNT := TOWER_SHELL_GRID_COUNT
+const ROOFTOP_MAP_SIZE := TOWER_SHELL_MAP_SIZE
+const ROOFTOP_WORLD_RECT := TOWER_SHELL_WORLD_RECT
+# 99F 旧「楼板 250 / 外墙 160」双口径已停用（2026-09-22 三层统一后不再有任何消费者，
+# 见 git 历史里的 FACILITY_OUTER_GRID_COUNT / FACILITY_OUTER_WORLD_RECT）。
 # 100F 天台女儿墙高度（含压顶总高）= 0.80m —— 2026-09-20 业主口径。
 # 沿革：v002 参考组件库的真尺寸是 1.80m（再往前是 0.75m，用 1.5m 几何乘 0.5 纵向
 # 缩放凑出来的，没有设计依据，而且让「看得见的墙」与「挡人的墙」长期分离）。
@@ -37,7 +46,7 @@ const ROOFTOP_PARAPET_HEIGHT := 0.8
 # 与普通层 WALL_THICKNESS(0.30m) 不同，因此边界内缩口径必须按层类型取。
 const ROOFTOP_PARAPET_THICKNESS := 0.5
 # 天台四角转角件的包络边长（2.5m×2.5m）。每条边两端各让出这么多，
-# 于是 90−5=85m 正好 17 个整格、80−5=75m 正好 15 个整格，格子不错位。
+# 于是 100−5=95m 正好 19 个整格、80−5=75m 正好 15 个整格，格子不错位。
 const ROOFTOP_CORNER_ARM_M := 2.5
 # 楼梯口占位矮墙（prp_tower_wall_parapet_door_5m）的基础几何高度，
 # 用来把它的纵向缩放换算到与女儿墙同高。
@@ -738,13 +747,25 @@ func _floor_grid_count() -> int:
 
 
 ## 只有「真正的 100F 天台」才使用窄轮廓；远征单层关卡强制走标准 250×250 网格。
+## ⚠️ 本判据自 2026-09-22 起**只**决定「天台专属渲染」（正式地砖 / 女儿墙组件 / 装饰
+## 布局 / 基地上空开口），**不再**决定壳体平面尺寸 —— 壳体已由 _uses_tower_shell_rect()
+## 统管三层。
 func _uses_rooftop_profile() -> bool:
 	return floor_index == 0 and not force_standard_map
 
 
+## 是否使用「塔楼统一壳体平面」（98F / 99F / 100F 同矩形，见 TOWER_SHELL_*）。
+##
+## `configure()` 的第 5 参 use_standard_map 落成 force_standard_map：塔楼三层传 false、
+## 远征单层关卡传 true。所以这条判据等价于「是不是塔楼」——远征仍按内容外框/250 标准图，
+## 与本次改动前逐值一致（改动前天台走 ROOFTOP_WORLD_RECT、99F 走 250/160、其余走 250）。
+func _uses_tower_shell_rect() -> bool:
+	return not force_standard_map
+
+
 func _floor_grid_dimensions() -> Vector2i:
-	if _uses_rooftop_profile():
-		return ROOFTOP_GRID_DIMENSIONS
+	if _uses_tower_shell_rect():
+		return TOWER_SHELL_GRID_DIMENSIONS
 	if _has_content_bounds:
 		return Vector2i(
 			int(round(content_world_rect.size.x / GRID_UNIT)),
@@ -762,26 +783,23 @@ func _floor_map_dimensions() -> Vector2:
 
 
 func _floor_world_rect() -> Rect2:
-	if _uses_rooftop_profile():
-		return ROOFTOP_WORLD_RECT
+	if _uses_tower_shell_rect():
+		return TOWER_SHELL_WORLD_RECT
 	if _has_content_bounds:
 		return content_world_rect
 	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
 
 
 func _outer_grid_count() -> int:
-	# 此次只收缩100层。99层外墙保持此前的160m轮廓，基地和设施不移动。
 	return _outer_grid_dimensions().x
 
 
 func _outer_grid_dimensions() -> Vector2i:
-	if _uses_rooftop_profile():
-		return ROOFTOP_GRID_DIMENSIONS
+	if _uses_tower_shell_rect():
+		return TOWER_SHELL_GRID_DIMENSIONS
 	if _has_content_bounds:
 		# 独立单层关卡：外墙贴着内容外框走，不套塔楼的整块 250×250。
 		return _floor_grid_dimensions()
-	if floor_index == 1:
-		return Vector2i(FACILITY_OUTER_GRID_COUNT, FACILITY_OUTER_GRID_COUNT)
 	return Vector2i(GRID_COUNT, GRID_COUNT)
 
 
@@ -794,12 +812,10 @@ func _outer_map_dimensions() -> Vector2:
 
 
 func _outer_world_rect() -> Rect2:
-	if _uses_rooftop_profile():
-		return ROOFTOP_WORLD_RECT
+	if _uses_tower_shell_rect():
+		return TOWER_SHELL_WORLD_RECT
 	if _has_content_bounds:
 		return content_world_rect
-	if floor_index == 1:
-		return FACILITY_OUTER_WORLD_RECT
 	return Rect2(-MAP_HALF, -MAP_HALF, MAP_SIZE, MAP_SIZE)
 
 

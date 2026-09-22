@@ -11,6 +11,20 @@ extends Node
 
 const FLOOR_INDICES: Array[int] = [0, 1, 2]
 
+## 与「内容包络」无关的壳体件名前缀 —— 统计层内**内容**时跳过它们，
+## 否则量到的永远是外墙/楼板自己的轮廓，看不出内容离边界还有多远。
+const SHELL_NODE_PREFIXES: Array[String] = [
+	"FloorTiles", "FloorTile", "Outer", "OuterBoundary", "Support", "Ceiling",
+	"Parapet", "Facade", "Roof",
+]
+
+## 塔楼统一壳体轮廓（2026-09-22 起 98F / 99F / 100F 三层共用）。
+const ROOFTOP_OUTLINE := Rect2(-50.0, -35.0, 100.0, 80.0)
+
+## 「越界」判定的容差。边界装饰件（天台女儿墙 0.5m 厚、立面环 0.30m 厚）本来就骑在
+## 轮廓线上，实测会超出约 0.2m —— 那不是内容跑到楼板外，别让它变成假警报。
+const ENVELOPE_BOUNDARY_TOL := 1.0
+
 
 func _ready() -> void:
 	var scene := load("res://scenes/TowerDescent3D.tscn") as PackedScene
@@ -120,6 +134,101 @@ func _dump_stage(tower: Node, floor_index: int) -> void:
 			side, str(stage.call("_stair_hole_world_rect", side))
 		])
 	_dump_derived_coverage(stage, snapshot)
+	_dump_content_envelope(stage)
+	_dump_child_groups(stage)
+
+
+## 层内**内容**（非壳体）的平面包络 —— 「轮廓能不能缩到 90×80」的直接判据。
+##
+## 用每个 MeshInstance3D 的 global AABB（**网格数据**，与 dummy 渲染驱动无关，
+## 不像 MultiMesh.get_instance_transform 那样在 headless 下回读为 0）。
+func _dump_content_envelope(stage: Node3D) -> void:
+	var world_rect := _content_envelope(stage)
+	if world_rect.size.x <= 0.0 and world_rect.size.y <= 0.0:
+		# ⚠️ 战斗层的内容（DungeonRoom3D 房间壳）不挂在 stage 下，而是挂在塔楼的
+		# RuntimeDetail 容器里，所以这里量不到 —— **不代表该层没有内容**。
+		# 战斗层的内容包络看本文件末尾「各层规划房间平面包络」那一节。
+		print("   [内容] stage 下未量到内容件（战斗层房间挂 RuntimeDetail，不在 stage 下）")
+		print("           ⇒ 本层内容包络见文末「各层规划房间平面包络」")
+		return
+	var fits := (
+		world_rect.position.x >= ROOFTOP_OUTLINE.position.x - ENVELOPE_BOUNDARY_TOL
+		and world_rect.end.x <= ROOFTOP_OUTLINE.end.x + ENVELOPE_BOUNDARY_TOL
+		and world_rect.position.y >= ROOFTOP_OUTLINE.position.y - ENVELOPE_BOUNDARY_TOL
+		and world_rect.end.y <= ROOFTOP_OUTLINE.end.y + ENVELOPE_BOUNDARY_TOL
+	)
+	print("   [内容] 包络 = [P: (%.1f, %.1f), S: (%.1f, %.1f)]（跨 %.1f × %.1f m）" % [
+		world_rect.position.x, world_rect.position.y,
+		world_rect.size.x, world_rect.size.y,
+		world_rect.size.x, world_rect.size.y,
+	])
+	print("   [内容] 对统一壳体轮廓 x[-50, 50] z[-35, 45]：%s" % (
+		"完全在内 ⇒ 缩轮廓不会把内容丢到楼板外" if fits else "**越界** ⇒ 直接缩轮廓会把内容丢到楼板外"
+	))
+
+
+## 逐「直接子节点组」量包络 —— 用于看清是**哪一组**件把包络撑出去的。
+func _dump_child_groups(stage: Node3D) -> void:
+	print("   [分组] 直接子节点内容包络（跳过壳体前缀）：")
+	var reported := 0
+	for child in stage.get_children():
+		var child_name := str(child.name)
+		var is_shell := false
+		for prefix in SHELL_NODE_PREFIXES:
+			if child_name.begins_with(prefix):
+				is_shell = true
+				break
+		if is_shell:
+			continue
+		var rect := _content_envelope(child)
+		if rect.size.x <= 0.0 and rect.size.y <= 0.0:
+			continue
+		reported += 1
+		print("      %-34s x[%7.1f,%7.1f] z[%7.1f,%7.1f]  跨 %6.1f × %6.1f" % [
+			child_name, rect.position.x, rect.end.x, rect.position.y, rect.end.y,
+			rect.size.x, rect.size.y,
+		])
+	if reported == 0:
+		print("      （无）")
+
+
+## 递归收集子树里所有可见网格的全局 AABB，返回其并集的**平面**（XZ）投影。
+func _content_envelope(root: Node) -> Rect2:
+	var found := false
+	var min_x := INF
+	var max_x := -INF
+	var min_z := INF
+	var max_z := -INF
+	var stack: Array[Node] = [root]
+	while not stack.is_empty():
+		var node: Node = stack.pop_back()
+		for child in node.get_children():
+			stack.append(child)
+		var mesh_node := node as MeshInstance3D
+		if mesh_node == null or mesh_node.mesh == null or not mesh_node.visible:
+			continue
+		var aabb: AABB = mesh_node.global_transform * mesh_node.get_aabb()
+		var corners: Array[Vector3] = [
+			Vector3(aabb.position.x, 0.0, aabb.position.z),
+			Vector3(aabb.end.x, 0.0, aabb.position.z),
+			Vector3(aabb.position.x, 0.0, aabb.end.z),
+			Vector3(aabb.end.x, 0.0, aabb.end.z),
+		]
+		for corner in corners:
+			found = true
+			if corner.x < min_x:
+				min_x = corner.x
+			if corner.x > max_x:
+				max_x = corner.x
+			if corner.z < min_z:
+				min_z = corner.z
+			if corner.z > max_z:
+				max_z = corner.z
+	if not found:
+		return Rect2()
+	return Rect2(
+		Vector2(min_x, min_z), Vector2(max_x - min_x, max_z - min_z)
+	)
 
 
 ## 由 snapshot 的**规划口径**推出实际铺设覆盖范围。
