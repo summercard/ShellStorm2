@@ -1,4 +1,0 @@
-src/base/BaseFacilityCatalog.gd	 CRLF=118 BareLF=0 BOM=False
-src/world3d/TowerDescent3D.gd	 CRLF=4924 BareLF=0 BOM=False
-src/world3d/Dungeon3D.gd	 CRLF=5153 BareLF=0 BOM=False
-src/world3d/RunPersistenceService.gd	 CRLF=104 BareLF=0 BOM=False
