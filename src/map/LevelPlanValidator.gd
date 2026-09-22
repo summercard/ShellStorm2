@@ -24,6 +24,11 @@ const MONSTER_INJECTOR := preload("res://src/map/MonsterInjector.gd")
 const GAME_DESIGN_CONFIG := preload("res://src/framework/GameDesignConfig.gd")
 ## 首领名册：只用来查 `boss_content_id` 是否指向真实存在的内容，绝不复制名册表本身。
 const BOSS_CONTENT_CATALOG := preload("res://src/enemy3d/BossContentCatalog.gd")
+## 掉落池登记表：查 `reward_plan` 里的池引用是否已登记且 active。
+## 只调 `has_pool / is_active / get_pool` —— 这三个不碰 ItemRegistry，静态校验可以独立跑。
+const REWARD_POOLS := preload("res://src/rewards/RewardPoolRegistry.gd")
+## 规格契约：trigger 列表与槽位写法取这里的唯一口径（禁止在本处复刻一份字面量）。
+const REWARD_SPEC := preload("res://src/rewards/RewardSpec.gd")
 ## 硬上限：设计源写超大数字不该变成性能事故或开局卡死，直接在静态校验拦住。
 const SPAWN_PLAN_MAX_WAVES := 6
 const SPAWN_PLAN_MAX_PER_WAVE := 24
@@ -338,6 +343,7 @@ static func _validate_room(room: Dictionary, templates: Dictionary) -> Array[Str
 							"port_lane_not_in_template_table:%s:%s:%s" % [key, side, str(lane)]
 						)
 	errors.append_array(_validate_enemy_spawn_plan(room))
+	errors.append_array(_validate_reward_plan(room))
 	return errors
 
 
@@ -433,6 +439,109 @@ static func _validate_enemy_spawn_plan(room: Dictionary) -> Array[String]:
 		errors.append(
 			"enemy_spawn_plan_total_too_large:%s:%d>%d" % [key, total, SPAWN_PLAN_MAX_TOTAL]
 		)
+	return errors
+
+
+## 校验房间级统一掉落计划 `reward_plan`（可选字段，04 §22.7 / 05 §11 `reward_slots[]`）。
+##
+## 结构：`{"clear": <slot_ref>, "search": <slot_ref>, "kill": <slot_ref>}`（键全可选）
+## 槽位引用三种写法：
+##   `{"spec_id": "exp01_room_03_clear"}`           命名规格
+##   `{"entries": [...]}` / `{"fallback": [...]}`   内联规格
+##   `{"pool_id": "loot_floor_1_2"}`                单条池简写（可带 draws / chance）
+##
+## 本校验器**只查它查得动的**：
+##   ① trigger 拼错（写成 `killed` 而非 `kill`）会静默失效 ⇒ 必须当场报；
+##   ② 三种写法必须**恰好给一种** —— 同时给是歧义（运行时按 spec_id 优先），
+##      写错的人不会知道自己另一份写废了；
+##   ③ 池引用（`pool_id` 或内联 pool 条目）**能在静态查证**（登记表是静态数据）⇒
+##      未登记报 `unknown_pool`、已弃用报 `deprecated_pool`；
+##   ④ 命名 `spec_id` 的**存在性查不了** —— 命名规格在运行时才装载。
+##      故这里只校验非空字符串；拼错的后果由 `RewardService` 的 `UNKNOWN_SPEC`
+##      在运行时拒绝且**不回退到别级**兜住（这是覆盖链的失败语义，不是静默）；
+##   ⑤ `kill` 槽位只对「会刷怪的房型」有意义：取与 `enemy_spawn_plan` 相同的判据
+##      （`is_spawn_plan_authorable_room`）。Boss 房不刷普通怪、安全/撤离房无击杀事件，
+##      写了 `kill` 永不触发 ⇒ 与"静默失效"同类，当场报。
+static func _validate_reward_plan(room: Dictionary) -> Array[String]:
+	var errors: Array[String] = []
+	var key := str(room.get("key", ""))
+	var raw: Variant = room.get("reward_plan", {})
+	if raw == null:
+		return errors
+	if not (raw is Dictionary):
+		errors.append("reward_plan_not_object:%s" % key)
+		return errors
+	var plan := raw as Dictionary
+	if plan.is_empty():
+		return errors
+
+	var content_type := str(room.get("content_type", ""))
+	var is_boss := GAME_DESIGN_CONFIG.is_boss_room(content_type, str(room.get("role", "")))
+	var hostile := GAME_DESIGN_CONFIG.is_spawn_plan_authorable_room(content_type)
+
+	for trigger_value in plan.keys():
+		var trigger := str(trigger_value)
+		if not REWARD_SPEC.TRIGGERS.has(trigger):
+			errors.append("reward_plan_unknown_trigger:%s:%s" % [key, trigger])
+			continue
+		var slot_value: Variant = plan[trigger_value]
+		if not (slot_value is Dictionary):
+			errors.append("reward_plan_slot_not_object:%s:%s" % [key, trigger])
+			continue
+		var slot := slot_value as Dictionary
+		if slot.is_empty():
+			errors.append("reward_plan_slot_empty:%s:%s" % [key, trigger])
+			continue
+
+		var forms := 0
+		if slot.has("spec_id"):
+			forms += 1
+		if slot.has("entries") or slot.has("fallback"):
+			forms += 1
+		if slot.has("pool_id"):
+			forms += 1
+		if forms == 0:
+			errors.append("reward_plan_slot_ambiguous:%s:%s:none" % [key, trigger])
+			continue
+		if forms > 1:
+			errors.append("reward_plan_slot_ambiguous:%s:%s:multiple" % [key, trigger])
+			continue
+
+		if slot.has("spec_id") and str(slot["spec_id"]).is_empty():
+			errors.append("reward_plan_spec_id_empty:%s:%s" % [key, trigger])
+		if slot.has("pool_id"):
+			errors.append_array(_validate_reward_pool_ref(str(slot["pool_id"]), key, trigger))
+		for list_key in ["entries", "fallback"]:
+			var list_value: Variant = slot.get(list_key, [])
+			if not (list_value is Array):
+				errors.append("reward_plan_%s_not_array:%s:%s" % [list_key, key, trigger])
+				continue
+			for entry_value in (list_value as Array):
+				if not (entry_value is Dictionary):
+					errors.append("reward_plan_entry_not_object:%s:%s" % [key, trigger])
+					continue
+				var entry := entry_value as Dictionary
+				if str(entry.get("kind", "")) == "pool":
+					errors.append_array(
+						_validate_reward_pool_ref(str(entry.get("pool_id", "")), key, trigger)
+					)
+		if trigger == "kill" and not hostile:
+			var reason := "boss_room" if is_boss else "non_hostile_room"
+			errors.append("reward_plan_kill_on_%s:%s:%s" % [reason, key, content_type])
+	return errors
+
+
+## 池引用查证：未登记 / 已弃用各自成码，空串另算（空 pool_id 是写漏，不是拼错）。
+static func _validate_reward_pool_ref(pool_id: String, key: String, trigger: String) -> Array[String]:
+	var errors: Array[String] = []
+	if pool_id.is_empty():
+		errors.append("reward_plan_pool_id_empty:%s:%s" % [key, trigger])
+		return errors
+	if not REWARD_POOLS.has_pool(pool_id):
+		errors.append("reward_plan_unknown_pool:%s:%s:%s" % [key, trigger, pool_id])
+		return errors
+	if not REWARD_POOLS.is_active(pool_id):
+		errors.append("reward_plan_deprecated_pool:%s:%s:%s" % [key, trigger, pool_id])
 	return errors
 
 

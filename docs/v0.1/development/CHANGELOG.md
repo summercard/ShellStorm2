@@ -1,5 +1,159 @@
 # 游戏设计文档 v0.1 变更记录
 
+## 2026-09-22｜撤离读条期间阵亡的终局归属修复（阵亡即中断读条 + 一次行动一个结算事务 ID）
+
+**动机（业主指定）**：「检查一下游戏中死亡，撤离的各种流程是否健康。」
+
+**根因（四时序实测全错，两处独立缺陷叠加）**：
+- **撤离读条不看玩家死活。** `ExtractionBeacon3D._process` 只认 `_remaining <= 0` 就发 `extraction_completed`；撤离是 30s 长读条且分 5 阶段刷拦截怪，读条期间被打死是设计内场景，而死亡**不暂停场景树**（全工程 `get_tree().paused` 只在主菜单与暂停菜单置位）⇒ 尸体旁的读条照常走完、照常判「撤离成功」。`Dungeon3D._on_extraction_completed` 又只有「同一个信标」这一条守卫，既无 `_completed`、也无玩家存活判断。
+- **终局复位把结算闸门重新打开。** `TowerDescent3D._return_successful_extraction_to_facility` 末尾 `_completed = false`（本意是「复位后本次行动可继续」）同时解除了 `_finish_run` 的 `if _completed: return`。而死亡动画 1.35s 比成功返航的 0.8s 窗口更长 ⇒ 死亡动画在复位**之后**才结束，于是「撤离成功」结算完再叠一次「阵亡」结算。
+- **幂等失效**：成功用 `run_success`、死亡用 `run_death` 两个事务 ID，`BaseManager.commit_run_settlement` 的 `completed_transaction_ids` 去重拦不住，两笔都真写盘 ⇒ 同一次行动 `total_runs +2`、`successful_extractions +1`，且未保险物资被按 50% 扣损。
+
+**实测四种时序（塔楼 / 独立副本 × 信标先/后）**：塔楼 ⇒ `success=true` 与 `success=false` 各一次（重复结算）；远征 ⇒ 只有 `success=true`，**死亡被完全吞掉**（违反文档 09 §5.1 与「重复请求不能重复发放或扣除」）。
+
+**改动**（`src/world3d/Dungeon3D.gd`、`src/world3d/TowerDescent3D.gd`、`src/player3d/Player3D.gd`）：
+- 新增 `_abort_extraction_on_death()`：HP 归零即作废进行中的信标。顺序是契约 —— **先清 `_active_extraction_beacon` 再 `abort()`**，让 `extraction_cancelled` 在「不再是当前信标」处直接返回，不要用「受击中断」文案顶掉死亡文案。
+- 新增 `_is_player_dead()`（状态机 `dead` + `current_hp <= 0` 双判据，只查状态机会漏掉 HP 刚归零那一帧），`_on_extraction_completed` 追加 `_completed or _is_player_dead()` 守卫，并顺带作废信标。
+- 新增**行动代际** `_run_generation` / `_death_recorded_generation`：复位 = 新一轮，代际 +1 使「返航窗口内阵亡、动画在复位后才结束」的那次死亡失效（`_on_player_death_animation_finished` 比对代际），并配 `_reset_death_settlement_state()` 清掉上一轮死亡框与就绪标志，保证新一轮阵亡还能重新弹框。
+- `_get_run_settlement_transaction_id()` **不再按 success 分叉**，成功与死亡共用同一行动 ID；三处提交点补 `_absorb_duplicate_settlement()`，命中即撤销本次内存改动并停手，不再给出与档案矛盾的第二套结算画面。
+- `Player3D` 新增 `hold/release_post_settlement_invulnerability()`：结算已提交到场景切走/复位完成之间（塔楼 0.8s、远征 0.8s）玩家输入被锁、无法走位，残留拦截怪足以把他拖死；`_update_invincibility` 尊重该标志、不参与倒计时。
+
+**验证**：
+- 新增专项 `verify_death_during_extraction_flow`（已登记进 `scripts/run_verification_suite.sh`）：4 种时序各断言「信标必须已中断 + 阵亡恰好结算 1 次 + 不得出现 success」；事务 ID 契约断言成功与死亡拿到同一 ID；4 条反向对照 —— ①健康玩家撤离仍恰好 1 次 success、②无撤离的阵亡仍恰好 1 次 failure、③返航复位后新一轮阵亡仍能弹框并结算、④结算后保护挡伤害且解除后能正常受伤。`DEATH_DURING_EXTRACTION_FLOW_OK` exit=0。
+- **反向对照（会失败证明）**：同时禁用「阵亡中断」与「完成守卫」两道防线后复跑 ⇒ 四种时序全部变红（`塔楼·信标先读完：阵亡被判成撤离成功，结算序列 ["success"]` 等 8 条），断言有分辨力、非假绿。
+- 回归：`verify_run_settlement_transaction`、`verify_tower_extraction_return_flow`、`verify_expedition_extraction_carry_return`、`probe_death_return_loadout` 全部 exit=0 且带原成功标记、零 ERROR。
+- preflight（`verify_scene_preflight.gd`）对新场景退出码 0。
+
+**未变更**：未改撤离时长/刷怪阶段/掉落与保险数值，未改安全房主动弃局（`_confirm_expedition_exit`）路径，未改任何资产/账本/设计源。**已知残留**：返航窗口内若玩家已被作废的阵亡拖到 hp=0，会停在基地原地（本次已由结算后保护前置规避，但未给 Player3D 加减伤免疫之外的复活路径）；`docs/v0.1/09` 与 `docs/v0.1/development/CHANGELOG.md` 已同步。
+
+## 2026-09-22｜命运卡三选一界面接上手柄操控（默认焦点 + 环绕导航 + ui_cancel 放弃 + 同帧撞名修复）
+
+**动机（业主指定）**：「命运卡片出现的那个界面，手柄不能操控。」
+
+**根因**：命运卡三选一是 `Dungeon3D._build_door_fate_overlay()` **代码构造**的覆盖层，不在 `UiMenuFocus.ensure_focus` 覆盖的那批静态场景菜单里 ⇒ 从未 `grab_focus()`。而 Godot 4 的 `ui_left/right/up/down`（十字键/左摇杆）与 `ui_accept`（A 键）**都必须先有 gui focus owner 才会被派发** ⇒ 键鼠可用（鼠标点击不依赖焦点）、**手柄完全不能操控**。同批还有两处缺口：① 卡片按钮在翻转动画期间 `disabled = true`（防翻面前误点），禁用按钮不可聚焦、`UiMenuFocus.is_focusable` 也会排除它 ⇒ 焦点只能等翻转结束后再抓；② 放弃走的是**硬比 `KEY_ESCAPE`**，手柄 B（`ui_cancel`）到不了该分支。
+
+**改动**（`src/world3d/Dungeon3D.gd` 6 处）：
+- 新增 `_maybe_focus_fate_card()`：在 `_finish_reference_tarot_flip()` 解除 `disabled` 的那一刻抓默认焦点（三张卡翻转带 stagger，第一张最早解锁 ⇒ 焦点落在第一张卡）；**只在当前无焦点持有者时抓**，不抢玩家已用鼠标/手柄选中的卡。
+- 新增 `_configure_fate_card_focus_navigation()`：显式指定三张卡的左右邻居并**首尾环绕**（逆位卡是整张旋转 180° 的实体卡面，自动 neighbor 推导依赖可见矩形方位、旋转后可能失准；自动推导也不做环绕，按到头就没反应）；上下接到同一组环绕，避免焦点被扔出弹窗。
+- `_build_door_fate_overlay()`：收集三张卡按钮，交给上面的导航配置。
+- `_unhandled_input()`：命运卡放弃改走 `event.is_action_pressed("ui_cancel")`（键盘 ESC 与手柄 B 共用）—— 与 0808 把 M/1/2/3/4 从硬比 keycode 改成 action 是同一类修正。
+- `_close_door_fate_overlay()`：**先摘除再 `queue_free()`**（本轮检修出的第二个真实缺陷）。`queue_free()` 要到帧末才真正释放节点；同一帧内再次打开弹窗（连续两次命运卡流程 / 验收用例）时，新节点会与仍挂在树上的旧节点**撞名**、被引擎静默改名为 `DoorFateOverlay3D2`，此后所有按名查询（探针/验收里的 `HUD/DoorFateOverlay3D`）永远找不到这个弹窗。
+
+**保持边界**：翻转动画、卡面美术、`tarot_face_ready` / `tarot_orientation` 元数据、三选一结算与满格转货币逻辑逐值不变；只在动画收尾补焦点、补邻居、换取消入口。
+
+**验证**：
+- `verify_dual_weapon_quick_map_fate_flow` 新增**手柄可操控契约**：等三张卡翻转完成后断言「弹窗节点存在 / 有 focus owner / focus owner 在弹窗内 / focus owner 是三张卡之一 / 卡有左右邻居」，再合成 `InputEventAction("ui_cancel")` 断言能放弃；复跑 `DUAL_WEAPON_QUICK_MAP_FATE_OK` exit=0。
+- **反向对照 4 组**（`_scratch/fate_focus/negctl_fate_focus.py`，行级替换后逐行还原）：`no_focus` ⇒ 3 红、`no_neighbor` ⇒ 2 红、`hardcoded_esc` ⇒ 2 红、`no_detach` ⇒ 3 红，各自精准命中，`ALL_VARIANTS_HIT_EXPECTED`。
+- 回归 `verify_gamepad_input_flow` `GAMEPAD_INPUT_FLOW_OK` exit=0。
+- `verify_reference_hud_fate_visual` 在 `--headless` 下 4 条 `Could not capture` 红 —— **既有 headless 限制**（无渲染目标，该用例本就须带窗口跑），无新增断言失败。
+
+**未变更**：未改命运卡内容 / 概率 / 结算，未改任何资产 / 账本 / 设计源；未提交（工作区混并行会话在制品）。
+
+## 2026-09-22｜远征关卡01 Boss竞技场白模 v001（50×40m）：由局内01 竞技场派生并登记场景账本
+
+**动机（业主指定）**：「把大小做成 1/3 的，复制一份过去给远征关卡01 用，作为远征01 的 boss 竞技场白盒，按照 skill 和规范存放到对应目录去。」
+
+**口径修正（本轮的关键判断）**：**精确 1/3 无法落地** —— 来源竞技场 190×90m 的线性 1/3 为 **63.33×30m**，而 63.33 不是 5m 的整数倍。两条硬约束同时被踩：① 墙件契约要求「非整模数边缘只用 2.5m 收边」⇒ 63.33m 的边会长出 3.33m 非标件；② `create_floor_grid` 用 `round(width/5)` 铺砖 ⇒ 非整模数时地砖网格溢出包络，包络校验 `FAIL`。且上一版组件策略明令禁止缩放与合并（`no scaling or joining`）⇒「缩小 copy」本身无效。**故本资产是「1/3 意图」的合规解，不是精确 1/3**：经业主裁决取 **50×40m**（10×8 整槽，`FIXED_TRIM` 归零），实际轴比 X `0.2632` / Y `0.4444`。
+
+**改动**：
+- 新增资产 `ENV-EXPEDITION-L01-BOSS-ARENA`：`source/art/whitebox/tower_zones/expedition_01/v001/blender/远征关卡01_白模_Boss竞技场_50x40m_v001.blend`，**50×40×11.9m / 121 网格**（80 地砖 + 1 整板 + 38 实墙 + 2 门墙）。
+- 新增 `scripts/blender/build_expedition01_whitebox_v001.py`（构建；`derivation.method = procedural_rebuild_on_5m_grid`，`scaled_in_blender = False`）、`scripts/blender/audit_expedition01_whitebox_v001.py`（**只读**探针）、`scripts/register_expedition01_boss_arena_ledger.py`（台账定点登记）。
+- 台账 `ShellStorm2_场景账本_v001.xlsx`（改前已备份 `…bak_expedition01_boss_arena`）：**资产主表第 241 行**（状态 `Blender源已完成`）、**3D-场景通用第 147 行**（`白模源已完成；QA PASS`，与既有 17 行白模条目同口径）、**域变更日志第 18 行**（`v0.1.12`）、**总览 10 处统计区间 `$240 → $241`**（A6/C6/E6/G6/B10/C10/B11/C11/B12/C12）。第 18/19 列查重公式为行自引用，区间末端须覆盖新末行，故第 6–241 行整体重算（235 行，属范围扩张的必然结果）。
+- 门：南 → `boss_prep`（净门心 +2.5m）+ 西 → `boss_exit`（−2.5m）；门位由来源门位**按墙面比例投影后吸附到净门心集合 `{±(2.5+5k)}`**。吸附到 2.5m 奇数倍是刻意的 —— 只有净门心落在该集合，门槽两侧才各剩整数个 5m 模数，`FIXED_TRIM` 才能归零。
+- 来源对照差异两处需留意：① 来源仅西侧一组门，本资产**补了一扇南侧进场门**（来源 .blend 无可继承对应门）；② 地砖 684 → **80**（非 684/9≈76），因为砖数按新尺寸重算，不沿用来源砖数。
+
+**验证**：
+- Blender headless 构建 → `EXPEDITION01_WHITEBOX_V001_ASSET_OK` / `..._READY`，`failed_assets: []`；资产级 `PASS`（failures/warnings 均 `[]`）；台账级 `PASS`，`asset_count = 1`。
+- 只读探针复核（重开 .blend 复测）：对象数 121、包络 `[-25,-20,0]..[25,20,11.9]`、最长墙件 **5.0m**（超 5m 件 0）、两门净跨均 **2.2m**、非单位缩放 `[]`、原点契约违规 `[]`。
+- 结构门禁 `check_asset_registry.py --scope structure`：**与基线逐项一致**（`index_row_mismatch 1` + `invalid_status 5` = 6 项，均为历史既存：主账本第 11 行索引漂移 + 第 233–237 行「白盒组件」非法状态），`asset_count` 425 → **426** ⇒ **未引入新门禁问题**。
+- 渲染口径：俯视图为正交、`ortho_scale = max(宽,深)×1.18`，11.9m 墙体几乎无侧影 ⇒ **俯视图只呈现地板足印**，与来源 v003 表现一致，非渲染缺陷；墙/门证据以探针实测与参考图为准。
+
+**未接入（阻塞项，非本轮责任）**：远征01 设计源 `data/floors/floor_00.json` 只有 entry + room_01…05 + extraction 共 **7 房，无 BOSS 房席位**；`level_plan.json` 的 `room_templates` **无 50×40 房型模板**；`FloorPlanGenerator.gd` 的 `_expedition_rooms()`（第 403 行）是写死的 7 间排布，**无远征 Boss 房生成器**（塔楼走 `generate()` + `_boss_rooms()` + `ROOM_SIZES.BOSS_ARENA = 90×90`）。⇒ 本资产为**美术侧先行**，账本状态只写到「源已完成」，**未写** `原型已接入` / `正式美术已接入`。运行时接入需 A 段补 ① Boss 房记录 ② 房型模板 ③ 生成器产出 ④ 放置与门连通。
+
+**未变更**：未导 GLB、未建 PackedScene、未制作碰撞、未改任何 `.gd` / `.tscn` / 设计源 JSON；塔楼 `BOSS_ARENA = 90×90` 与来源 190×90 的尺寸分歧（`docs/v0.1/05.2` 决策项 D2）**仍待裁决**，本资产不依赖该常量，未加剧分歧。
+
+**回滚**：`restore …xlsx.bak_expedition01_boss_arena`；删除 `source/art/whitebox/tower_zones/expedition_01/v001/` 与三个新增脚本。
+
+- 详见[交付记录](2026-09-22_远征01竞技场白盒.md)、[QA 报告](../../../source/art/whitebox/tower_zones/expedition_01/v001/QA_REPORT.md)。
+
+## 2026-09-22｜弹壳停留时长再缩短 1 秒（4.7s → 3.7s）
+
+**动机（业主指定）**：「弹壳的停留时长（再）缩短 1 秒。」—— 在上一版「+1.5 秒」的基础上回调 1 秒。
+
+**口径**：弹壳可见时长 = `VfxShellCasing3D.DEFAULT_LIFETIME`；飞行 / 弹跳 / 滚动三段时长由物理常量与初速度决定、**不随寿命变化** ⇒ 寿命增减的部分**全部落在「落地静止后的停留」上**，故「缩短 1 秒」等价于 `DEFAULT_LIFETIME: 4.7 → 3.7`（累计：`3.2 →（+1.5）4.7 →（−1.0）3.7`）。实测（验收按 `1/60 s` 步进求静止时刻）：`t_settle = 1.15 s`、停留 `3.70 − 1.15 = 2.55 s`（上一版 `3.55 s`）。
+
+**改动（单点）**：
+- `src/vfx/VfxShellCasing3D.gd`：`DEFAULT_LIFETIME := 4.7 → 3.7`（注释块补两轮定档沿革与新的成本对照）。
+- `tests/verification/verify_combat_vfx_toon_v002.gd`：`_check_shell_settled_hold()` 的常量组按「上一版 / 本轮缩短量 / 定档值」重排为 `EXPECTED_SHELL_LIFETIME_PREVIOUS := 4.7` / `EXPECTED_SHELL_DWELL_SHORTEN := 1.0` / `EXPECTED_SHELL_LIFETIME := 3.7`，并把原先被当作「增量」使用的那个数**独立成 `EXPECTED_SHELL_HOLD_FLOOR := 1.5`**（观感下限）。`samples=16` 不变。
+
+**断言结构（本轮的重要修正）**：上一版把「停留 ≥ 1.5 s」这条行为断言写在了「增量」常量的前提上 —— 数值上恰好相等，但语义是错的（增量是 ±N 的**需求量**，下限是**可感知门槛**，两者碰巧都是 1.5）。本轮把两者拆成独立常量，并在注释里写明各自守什么：
+- ① `lifetime == 3.7` —— 定档值（外部真源）；
+- ② `4.7 − lifetime == 1.0` —— **本轮缩短量**（业主诉求本身；换方向时减号语义要同步翻）；
+- ③ `lifetime − t_settle ≥ 1.5` —— **下限守卫**，守「飞行段被调长、把停留吃光」这类隐形退化；
+- ④ `MAX_SECONDS` 内必须测到静止时刻（哨兵）。
+
+**反向对照（两组，都精准变红后还原，`grep -rn "REVERSE-CONTROL" src/ tests/` 为空）**：
+- **RC9**：`DEFAULT_LIFETIME` 退回 `4.7` ⇒ **精准 3 红**（`寿命不是定档值 3.70：4.700`、`实例寿命未按 DEFAULT_LIFETIME 初始化：4.700`、`停留缩短量不是 1.0s：上一版 4.70 − 寿命 4.70 = 0.00`），其余全绿、`EXIT=1`；还原后 `EXIT=0`。
+- **RC9b（证明 ③ 是活的守卫，不是摆设）**：把 `ROLL_DAMPING: 3.4 → 0.2` 让飞行段吃满寿命 ⇒ ③ 精确命中 `弹壳落地静止后停留只有 1.23s（观感下限 1.5s）：t_settle=2.47 lifetime=3.70`。**这一步是必要的**：只跑 RC9 时 ③ 仍绿（`3.55 ≥ 1.5`），无法证明它被测到过。
+
+**成本（随寿命同步下降，未做池化改动）**：`VfxPool3D` 对 active 实例**无上限**（`max_per_kind` 只管 inactive 回收桶）⇒ 射速 `1.0 ~ 12.0 发/s`（`BlueprintRegistry` 全体枪械）× `3.7 s` ⇒ 最坏同屏约 `44` 枚（v002.7 的 `4.7 s` 下约 `56` 枚、v002.2 的 `3.2 s` 下约 `38` 枚）。每枚 `3` 个 `MeshInstance3D`、`288` 三角面 ⇒ 约 `13k` 三角面、约 `130` 次绘制。
+
+**未变更**：AssetID `VFX-SHELL-CASING-3D`、Prefab 路径与版本 `v001`、PBR 定档（`0.8 / 0.6`）、尺寸基准（`0.8`）、抛壳随机化幅度、`floor_y` 契约与「不接物理引擎」口径、探针四机位取景均未动 ⇒ **账本无需改动**。
+
+**验证**：`verify_combat_vfx_toon_v002` → `COMBAT_VFX_TOON_V002_OK (samples=16)`（`EXIT=0`、0 ERROR，抽样 `lifetime=3.70 settle_at=1.15 hold=2.55`）；`verify_vfx_pool_lifecycle` → `VFX_POOL_LIFECYCLE_OK`；真渲染探针 → `SHELL_CASING_VISUAL_OK captured=4 skipped_headless=0`（散布判据 `off_line_residual=0.3393`，四机位全部重出图）。
+
+<br>
+## 2026-09-22｜右摇杆瞄准手感重做：瞄准辅助 + 响应曲线（业主选「2+1」）
+
+**动机（业主指定）**：承接同日「左摇杆同控朝向改默认关」条目，业主确认「好，2+1调整一版」⇒ 采用候选方案 **2（瞄准辅助/磁吸）为主、1（响应曲线 + 幅度权威）为辅**。
+
+**问题根因（复述同日勘察）**：`gamepad_aim_deadzone=0.20` 吃掉 20% 行程、`gamepad_aim_smoothing=0.35`（≈60ms 滞后）、`_update_aim()` **只取摇杆方向角、丢弃幅度**（无响应曲线）⇒ 死区边缘轻推也产生大角度偏转、且无法「轻推精瞄 / 重推快转」；摇杆边缘角度分辨率物理上限约 **1mm≈3~4°**；`aim_direction` 三用 ⇒ 瞄准精度 = 命中精度。
+
+**改动 ①｜响应曲线 + 幅度权威**（`src/core/GamepadInput.gd`）：
+- 新增纯函数 `resolve_aim_speed_scale(magnitude_after_deadzone)`：`shaped = clampf(t,0,1)^AIM_RESPONSE_EXPONENT(1.60)`，返回 `AIM_PRECISION_SPEED_SCALE(0.35) + (AIM_FLICK_SPEED_SCALE(1.60) − 0.35) × shaped`（`t=0` 刚出死区→精瞄端、`t=1` 推到底→甩枪端）。
+- `_update_aim()` 的平滑率改为 `AIM_SMOOTHING_BASE_RATE × (1 − smoothing) × speed_scale`：**轻推慢转（精瞄）、重推快转（甩枪）**，把此前被丢弃的摇杆幅度重新纳入。
+- 默认值再平衡（`InputSettingsManager.DEFAULT_SETTINGS`）：`gamepad_aim_deadzone 0.20 → 0.12`、`gamepad_aim_smoothing 0.35 → 0.15`（对应 `rate = 30 × 0.85 = 25.5`，滞后从 ≈60ms 降到 ≈40ms）。
+
+**改动 ②｜瞄准辅助（磁吸，顶视角射击事实标准）**（新文件 `src/player3d/AimAssist3D.gd`，`class_name AimAssist3D`，`extends RefCounted` 纯静态）：
+- `is_eligible(alive, illumination_state, distance, angle_deg, ...)`：**只吸附「存活 + 已照亮（非 `STATE_DARKNESS`）+ 射程内 + 锥内」**的敌人。硬约束：**绝不吸附黑暗中的敌人**（本项目敌人只在光照下可见，吸黑暗 = 透视挂）；已死、超射程（默认 26m）、锥外（默认 30° 扫描锥）一律不吸。
+- `solve(aim_dir, candidates, options)`：取锥内**权重最大**的候选，`delta = clampf(angle_to, ±max_angle(默认 8°) × strength × weight)` —— **偏转有硬上限（不抢控制）**；无候选 / 强度 0 / 候选为空时原样返回，绝非「无脑吸附」。
+- 权重 `_weight(...)` = `angle_factor² × distance_factor`（角度项取平方 ⇒ 偏好贴近瞄准轴的近敌）。
+- `Player3D._collect_aim_assist_candidates()` 从 `enemy_3d` 分组收集候选（读 `current_hp` 与 `get_illumination_state()`），在 `_update_aim_from_mouse()` 的**移动端/手柄共用分支**对 `aim_dir_3d` 施加 `AimAssist3D.solve(...)` 后再赋给 `aim_direction`。
+
+**开关与 UI**：新增 `InputSettings` 键 `gamepad_aim_assist`（**默认 `true`**）+ `is_aim_assist_enabled()`；ESC 暂停菜单「操作设置」页新增「瞄准辅助」`CheckButton`（节点 `Center/Panel/Margin/ControlsPage/AimAssist`）+ `PauseMenu3D._on_aim_assist_toggled()` 与同步（`L3B_IND` 类状态标签）。
+
+**验收**（`verify_gamepad_input_flow`）：
+- `_verify_aim_response_curve()`：精瞄端/甩枪端端点值、单调不减、中段必须「够慢」（低于线性中线）、越界与负值钳位。
+- `_verify_aim_assist_solver()`：资格 5 条规则 + `solve` 空操作（无候选/强度 0/空数组）+ 锥外不吸 + 锥内偏转**有硬上限且非满偏** + 权重优先 + 距离衰减。
+- `_verify_aim_assist_candidate_collection()`：**端到端**（真实 `Player3D` + `Enemy3D` 竞技场）A) 黑暗敌人 → 空候选；B) 太阳照亮 → 恰 1 候选、方向与距离(8.0m)正确；C) 关开关 → 空；D) 敌人在背后 → 空；E) 超射程(z=−40) → 空；F) 已死 → 空。
+- **坑（新）**：`DirectionalLight3D` 默认朝 **−Z**，水平摆放时阳光射线从敌人射向太阳会被原点处的玩家挡住 ⇒ `sun_exposure_ratio` 恒 `0.0`、敌人一直停留黑暗态；**必须把太阳转成 `rotation_degrees=(−90,0,0)` 顶照**，才能造出「已照亮」样本。
+- **反向对照 4 组**（`_scratch/gamepad_submenu/negctl_assist.py`）：`curve`（曲线失效）⇒ 5 红、`dark`（放行黑暗敌人）⇒ 1 红（「黑暗中的敌人进入了瞄准辅助候选」）、`cap`（去偏转上限）⇒ 2 红、`glue`（撤 `Player3D` 接线）⇒ 1 红；各自精准命中后还原复绿。
+- 复绿：`GAMEPAD_INPUT_FLOW_OK`（`exit=0`）含新 OK 串「magnitude-authoritative aim response curve (slow precision / fast flick), aim assist pulls only lit living enemies within a hard deflection cap」。
+
+**回归**：`verify_graphics_settings_ui_flow` / `verify_pause_game_save_reset_flow` / `verify_enemy_illumination_states` 三场景 `exit=0` + `*_OK`。**基线对照**：`verify_3d_enemy_behavior_flow` 报 7 条「Enemy damage does not create a 3D floating number」——把本次 5 个改动文件临时换成 `HEAD` 版重跑，**7 条错误逐字相同** ⇒ **既存红、非本次引入**（已记入已知基线红，非本特性回归）。
+
+**未变更**：`aim_direction` 三用语义、`MobileInput` 触屏口径、键鼠路径、三档朝向机制与 `gamepad_left_stick_aim` 默认关、武器/弹药/伤害链路、账本。
+
+<br>
+## 2026-09-22｜「左摇杆同控朝向」改为默认关闭（保留能力）
+
+**动机（业主实测反馈）**：「还是操控不是很舒服，不要这个设计，或者先保留，默认关掉。」并指出**原始右摇杆瞄准本身「转向不够精确、无法瞄准」**，要求参考顶视角游戏的右摇杆做法另给方案。
+
+**改动（单点默认值，不撤功能）**：
+- `InputSettingsManager.DEFAULT_SETTINGS["gamepad_left_stick_aim"]`：`true → false`；`is_left_stick_aim_enabled()` 的回落值同步 `true → false`。
+- `PauseMenu3D._sync_input_controls()` 的读取回落值同步 `true → false`。
+- `ui_pause_overlay_screen.tscn` 的 `LeftStickAim` 文案补「默认关闭。」
+- 三档朝向机制（`FACE_SOURCE_AIM / MOVE / HOLD` + 死区滞回 + 平滑交接）**代码原样保留**，ESC 操作设置页开关仍在，需要时可自行打开。
+
+**验收适配**：`verify_gamepad_input_flow` 原断言「开关初始 `button_pressed == true`」改为**同步断言**（`button_pressed != is_left_stick_aim_enabled()` 即红，与默认值解耦）+ 新增**设计锁**：断言 `DEFAULT_SETTINGS["gamepad_left_stick_aim"] == false`（打在外部真源上、不引用被测函数）。OK 串补 `(left-stick tier default OFF)`。
+
+**反向对照**：默认值临时改回 `true` ⇒ **精准 1 红**（`「左摇杆同控朝向」的出厂默认不是关闭（业主指定默认关）`）、`exit=1`，其余断言全绿；还原后复绿。
+
+**复绿**：`GAMEPAD_INPUT_FLOW_OK` / `GRAPHICS_SETTINGS_UI_OK` / `PAUSE_GAME_SAVE_RESET_OK`，三场景 `exit=0`、无新增红。
+
+**后续（同日已施工）**：右摇杆瞄准手感（"转向不够精确、无法瞄准"）**已按业主选定方案落地**（瞄准辅助 + 响应曲线，见本文顶部「右摇杆瞄准手感重做」条目）。施工前勘察的现状：`gamepad_aim_deadzone = 0.20`、`gamepad_aim_smoothing = 0.35`（≈60ms 滞后），且 `_update_aim()` **只取摇杆方向角、丢弃幅度**（无响应曲线）；`aim_direction` 三用（面朝向 + 弹道 + 准星）使瞄准精度直接等于命中精度。
+
+<br>
 ## 2026-09-22｜手柄左摇杆同控面朝向（三档优先级 + ESC 开关）
 
 **动机（业主指定）**：「如果左摇杆在控制移动方向的时候，同时控制角色面朝向，然后右摇杆在动的时候面朝向才会优先右摇杆，这样会不会体验更好一些？」—— 勘察确认这不是新机制，而是**把手柄对齐触屏**：触屏 `MobileInput._emit_face_direction()` 早已是「右摇杆优先，否则左摇杆」；手柄此前只有两档（右摇杆 / 保持上次），**没有第二档**。
@@ -8,7 +162,7 @@
 
 **改动（三档朝向优先级）**：`src/core/GamepadInput.gd` 新增 `FACE_SOURCE_AIM` / `FACE_SOURCE_MOVE` / `FACE_SOURCE_HOLD` 三档与纯函数 `resolve_face_source(...)`：右摇杆跨过瞄准死区即抢回（`AIM`）> 左摇杆跨过移动死区且开关开启时接管（`MOVE`）> 否则保持上次（`HOLD`，**永不发零**）。两处守卫：① **死区 + 滞回**，升级需跨过该摇杆死区、降级需回落到 `死区 × STICK_HYSTERESIS_FACTOR(0.7)` 以下，防止摇杆停在死区边界时来回抢档抖动；② **档位交接复用现有 aim 平滑**（`AIM_SMOOTHING_BASE_RATE`），松开右摇杆切到左摇杆那一帧不瞬间转正（防甩枪）。另加测试注入口 `set_test_stick_axes()` 与只读访问器 `get_face_source()` / `get_face_direction()` / `is_aim_active()`。
 
-**开关**：新增 `InputSettings` 键 `gamepad_left_stick_aim`（**默认 `true`**），可在 ESC 暂停菜单「操作设置」页的「左摇杆同控朝向」`CheckButton`（节点 `Center/Panel/Margin/ControlsPage/LeftStickAim`）切换；`PauseMenu3D` 增加 `_on_left_stick_aim_toggled()` 与同步。
+**开关**：新增 `InputSettings` 键 `gamepad_left_stick_aim`（~~**默认 `true`**~~ **同日改为默认 `false`**，见本文上方「改为默认关闭」条目），可在 ESC 暂停菜单「操作设置」页的「左摇杆同控朝向」`CheckButton`（节点 `Center/Panel/Margin/ControlsPage/LeftStickAim`）切换；`PauseMenu3D` 增加 `_on_left_stick_aim_toggled()` 与同步。
 
 **验证**：`verify_gamepad_input_flow` 增 `_verify_face_source_tiers()`（纯函数：右优先于左、左接管的边界、开关关闭不返回 `MOVE`、双中位 → `HOLD`、滞回不回弹、升/降档单次跃变与滞回宽度）与 `_verify_left_stick_face_flow()`（端到端按 `1/60 s` 步进 `_update_aim`：A 右摇杆抢朝向首帧不跳；B 松右推左 → `MOVE` 档首帧角度变化 `>0` 且 `≤45°`、60 帧收敛到 +y；C 右摇杆 `0.19↔0.21` 抖动仍锁 `AIM`；D 关开关 → `HOLD`、朝向不变、不发广播；E 纯手柄新手只推左摇杆即激活 `is_aim_active()`；F `_release_all()` 复位到 `HOLD`），含 `[samples]` 行与**截断哨兵**（`frames≥80` / `checks≥15`，防 SCRIPT ERROR 静默截断假绿）。**反向对照三组**（`_scratch/gamepad_submenu/negctl_face.py`）：`tier`（左档失效）⇒ 5 红、`hyster`（滞回置 1.0）⇒ 5 红 + 哨兵报「74 帧」、`smooth`（交接瞬转）⇒ 1 红（「一帧内跳了 90.0°」），各自精准命中后还原复绿。复绿：`GAMEPAD_INPUT_FLOW_OK`（`[samples] 85 帧 / 断言 15 条`）。**回归**：`verify_graphics_settings_ui_flow` / `verify_pause_game_save_reset_flow`（两者都实例化暂停界面、会走 `_ready → _setup_input_controls → _sync_input_controls` 读新节点）均 `exit=0` 且 `*_OK`，无新增红。
 

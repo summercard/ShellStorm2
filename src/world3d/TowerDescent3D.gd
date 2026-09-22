@@ -107,6 +107,18 @@ const NEW_GAME_OPENING_FLOOR_INDEX := 2
 ## `verify_block00_floor98_assembly` K 段（四房足迹承重覆盖）。
 const NEW_GAME_OPENING_SPAWN_OFFSET := Vector3(0.0, 0.05, 0.0)
 
+## —— 新游戏开场的武装口径（2026-09-22 主人要求）——
+## 玩家**开局身上没有枪**，但**保底备弹照给**（300 发由 `GUARANTEED_LOADOUT_AMMO_ROUNDS`
+## 独立发放，与「有没有枪」无关，所以收回武器碰不到它）。他原本那把枪**放在地上**，
+## 就在办公室东门内侧靠右手边 —— 起身走过去捡起来，正好是自己该有的那把。
+##
+## 落点是**房间局部系**偏移（房间节点原点 = 房中心，见 `DungeonRoom3D` 的 ±dimensions/2 约定）。
+## 2026-09-22 真机实测：办公室局部尺寸 (15, 20)、东门在局部 **(7.5, 0, -2.5)**，
+## 所以本值 = 「离门 2.2m、出门方向（+x）的右手侧 1.8m」（朝 +x 时右手 = +z）。
+## ⚠️ 剧本 `nar_tower_opening_01_wake` 里 `actor.face` 的 `to_point_offset` 必须是**同一个值**
+## （「对着枪说」得朝它转）；真机验收有**等值断言**，改一处漏一处会变红。
+const NEW_GAME_OPENING_DROP_OFFSET := Vector3(5.3, 0.05, -0.7)
+
 ## —— 98↔99 楼梯间门 = 普通门（2026-09-21 主人要求）——
 ## 「这个区域的门都按普通门办：可以自由开关、不用条件、参考 99F 基地两边的门。」
 ## 98F 门厅东门（`floor_01_entry` 东门 ↔ 99F 基地 `facility` 东门）从 98F 侧
@@ -734,6 +746,8 @@ func _should_open_new_game_in_master_office() -> bool:
 
 
 ## 把玩家放进 98F 主人的办公室，并走一次完整的「进入房间」事务
+## 落位后立刻按开场口径重武装：收回身上的枪并把那把枪放到地上（见
+## `_reset_new_game_opening_loadout`）。
 ## （与远征出生点同一套写法：置位 → 清零速度 → 清当前房 → `_on_room_entered`）。
 ## 返回 false = 房间拿不到（bundle 提交失败或摆位源回退成生成器房表），
 ## 调用方按原路退回天台出生点，绝不把玩家留在半空中。
@@ -748,7 +762,47 @@ func _place_player_at_new_game_opening() -> bool:
 	player.velocity = Vector3.ZERO
 	_current_room_id = ""
 	_on_room_entered(room)
+	_reset_new_game_opening_loadout(room)
 	return true
+
+
+## 新游戏开场的武装口径：**收回玩家的枪 → 把那把枪放到地上**。
+## 为什么是「收回」而不是改 `Player3D.start_with_weapon` 的默认值：
+## 那条 export 同时服务天台出生 / 死亡返城 / 死亡返城直升等路径，那些路径仍然要白送枪；
+## 而且 `Player3D._ready()`（子节点先于塔楼 `_ready()`）早就把枪装好了，
+## 到了开场落位这一步只剩「收回来」这一条路。
+## ⚠️ 收回用的是 `clear_all_equipped_weapons()` 的**返回值**（= 玩家那一把的原样实例，
+## 含已装的命运改造），不是重新造一把 —— 主人要的是「他原本那把枪」躺在地上。
+func _reset_new_game_opening_loadout(room: DungeonRoom3D) -> void:
+	if player == null or not player.has_method("clear_all_equipped_weapons"):
+		push_warning("[TowerDescent3D] 开场收回武器失败：玩家没有 clear_all_equipped_weapons()")
+		return
+	var removed: Array = player.call("clear_all_equipped_weapons")
+	if removed.is_empty():
+		# 不静默：地上没枪 = 开场演到「对着枪说」却无枪可指，必须留痕。
+		push_warning("[TowerDescent3D] 开场玩家身上本来就没有枪，地上那把不会生成。")
+		return
+	var items: Array[Dictionary] = []
+	for value in removed:
+		if value is Dictionary:
+			items.append(value as Dictionary)
+	_drop_new_game_opening_weapon(room, items)
+
+
+func _drop_new_game_opening_weapon(room: DungeonRoom3D, items: Array[Dictionary]) -> void:
+	if room == null or not is_instance_valid(room) or items.is_empty():
+		return
+	var requested := room.to_global(NEW_GAME_OPENING_DROP_OFFSET)
+	# 与钥匙/补给同一套贴地口径：拿不到地面就退回房中心，绝不把枪埋进地板里。
+	# `spread = false`：剧本 `actor.face` 的目标点就是这个常量，枪必须**精确**落在它上面
+	# （默认散布会让 index=0 那件偏约 0.70m ⇒ 转身时会指偏）。
+	_spawn_loot_items(
+		room,
+		items,
+		_find_supported_spawn_position(requested, room.global_position),
+		0.0,
+		false
+	)
 
 
 func _process(delta: float) -> void:
@@ -809,11 +863,14 @@ func _finish_run(success: bool) -> void:
 			# 塔楼成功返航保留同一运行时物品实例，不复制到待领取栏。
 			"extraction_loot": [],
 		}) as Dictionary
+		if _absorb_duplicate_settlement(commit):
+			return
 		if not bool(commit.get("success", false)):
 			_completed = false
 			status_label.text = "撤离结算保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Successful extraction settlement failed: %s" % commit)
 			return
+	_hold_player_after_settlement()
 	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
 	run_completed.emit(true, summary)
 	if not test_mode:
@@ -858,6 +915,8 @@ func _finish_expedition_successful_extraction() -> void:
 			# 成功返航保留同一运行时物品实例，不复制到待领取栏。
 			"extraction_loot": [],
 		}) as Dictionary
+		if _absorb_duplicate_settlement(commit):
+			return
 		if not bool(commit.get("success", false)):
 			_completed = false
 			status_label.text = "撤离结算保存失败 · 请重试撤离"
@@ -872,6 +931,7 @@ func _finish_expedition_successful_extraction() -> void:
 			status_label.text = "撤离交接保存失败 · 请重试撤离"
 			push_error("[TowerDescent3D] Expedition extraction carry handoff failed")
 			return
+	_hold_player_after_settlement()
 	status_label.text = "撤离成功 · %d件物资完整保留 · 正在返航99F基地" % _run_loot.size()
 	run_completed.emit(true, summary)
 	if test_mode:
@@ -922,6 +982,14 @@ func _return_successful_extraction_to_facility() -> void:
 		_current_room_id = ""
 		_on_room_entered(facility_room)
 	_completed = false
+	# 这里同时是「新一轮行动开始」：代际 +1 让返航窗口内阵亡、动画却在复位之后
+	# 才结束的那次死亡失效（否则同一次行动先判撤离成功、再判阵亡结算）；
+	# 并清掉上一轮遗留的死亡框与 _death_animation_ready，新一轮阵亡才能重新弹框。
+	_run_generation += 1
+	_reset_death_settlement_state()
+	# 新一轮行动已经落到 99F 基地（安全房），解除结算后保护。
+	if player != null and is_instance_valid(player):
+		player.release_post_settlement_invulnerability()
 	_pending_run_settlement_transaction_id = ""
 	_extraction_defense_active = false
 	_active_extraction_beacon = null
@@ -1820,6 +1888,10 @@ func _append_plan_room_record(plan: Dictionary, spec: Dictionary, parent_id: Str
 	var spawn_plan := spec.get("enemy_spawn_plan", {}) as Dictionary
 	if not spawn_plan.is_empty():
 		record["enemy_spawn_plan"] = spawn_plan.duplicate(true)
+	# 房间级统一掉落计划（04 §22.7）：同样没写就不落字段，运行时见空即回退覆盖链下一级。
+	var reward_plan := spec.get("reward_plan", {}) as Dictionary
+	if not reward_plan.is_empty():
+		record["reward_plan"] = reward_plan.duplicate(true)
 	if str(spec.get("type", "")) == "BOSS":
 		# Boss 身份解析走唯一口径（BossContentCatalog.resolve_profile）：
 		# 设计源房间的 boss_content_id 优先，其次按层号指派。取不到 → 一条 boss 字段都不落，
@@ -4524,6 +4596,7 @@ func _instantiate_dynamic_room(record: Dictionary) -> void:
 		"tower_module_shell": bool(record.get("tower_module_shell", false)),
 		"open_wall_directions": record.get("open_wall_directions", []),
 		"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+		"reward_plan": record.get("reward_plan", {}),
 		"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 		"authored_layout_shell": bool(record.get("authored_layout_shell", false)),
 		"authored_layout_asset_id": str(record.get("authored_layout_asset_id", "")),
@@ -5145,6 +5218,10 @@ func _journey_objective(floor_number: int) -> String:
 	if not room.cleared:
 		var alive := int(_alive_by_room.get(room.room_id, 0))
 		return "肃清威胁 · 剩余 %d 个敌对信号" % alive if alive > 0 else "保持警戒，留意增援与周围掩体"
+	# 门不消耗钥匙的房间（和平区如 98F 区块00）不该提钥匙：
+	# 否则 HUD 会一边写「用钥匙开门」、一边地上没钥匙也不需要钥匙。
+	if not _room_produces_room_key(room):
+		return "区域已肃清 · 直接开启下一扇门"
 	if _get_total_room_keys() <= 0:
 		return "区域已肃清 · 拾取掉落钥匙，再选择下一扇门"
 	return "搜索剩余物资，用钥匙开门选择路线"
@@ -5173,6 +5250,8 @@ func _expedition_objective() -> String:
 			"肃清威胁 · 剩余 %d 个敌对信号" % alive
 			if alive > 0 else "保持警戒，留意增援与周围掩体"
 		)
+	if not _room_produces_room_key(room):
+		return "房间已肃清 · 直接开启下一扇门"
 	if _get_total_room_keys() <= 0:
 		return "房间已肃清 · 拾取掉落钥匙，再选择下一扇门"
 	return "搜索剩余物资，用钥匙开门选择路线"

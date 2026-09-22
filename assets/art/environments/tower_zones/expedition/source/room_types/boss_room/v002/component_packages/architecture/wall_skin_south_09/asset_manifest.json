@@ -1,0 +1,45 @@
+{
+  "package_id": "wall_skin_south_09",
+  "name_zh": "装甲墙_SOUTH_09",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "装甲墙_SOUTH_09_资产包",
+  "objects": [
+    "装甲墙_SOUTH_09_部件1",
+    "装甲墙_SOUTH_09_部件0"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    22.5,
+    -19.65000057220459,
+    0.05000000074505806
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      20.037500381469727,
+      -19.725000381469727,
+      0.05000000074505806
+    ],
+    "max": [
+      24.962499618530273,
+      -19.575000762939453,
+      11.850000381469727
+    ]
+  },
+  "dimensions_m": [
+    4.924999237060547,
+    0.14999961853027344,
+    11.800000380724669
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

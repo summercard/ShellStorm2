@@ -1,0 +1,20 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+  "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c03/base_floor_tile_r02_c03.blend",
+  "checks": {
+    "exact_output_object_set": true,
+    "one_component_scene": true,
+    "root_identity": true,
+    "mesh_identity": true,
+    "collection_offset_zero": true,
+    "nonempty": true,
+    "output_membership_unique": true,
+    "camera_ready": true,
+    "not_room_owned": true,
+    "bounds_match": true,
+    "bottom_zero": true,
+    "standard_material_uv": true
+  },
+  "passed": true,
+  "output_mesh_count": 4
+}

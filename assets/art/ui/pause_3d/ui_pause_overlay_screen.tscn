@@ -384,12 +384,12 @@ layout_mode = 2
 min_value = 0.05
 max_value = 0.5
 step = 0.01
-value = 0.2
+value = 0.12
 
 [node name="AimDeadzoneValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimDeadzoneRow"]
 custom_minimum_size = Vector2(72, 40)
 layout_mode = 2
-text = "0.20"
+text = "0.12"
 horizontal_alignment = 2
 vertical_alignment = 1
 theme_override_font_sizes/font_size = 16
@@ -412,20 +412,25 @@ layout_mode = 2
 min_value = 0.0
 max_value = 0.9
 step = 0.01
-value = 0.35
+value = 0.15
 
 [node name="AimSmoothingValue" type="Label" parent="Center/Panel/Margin/ControlsPage/AimSmoothingRow"]
 custom_minimum_size = Vector2(72, 40)
 layout_mode = 2
-text = "0.35"
+text = "0.15"
 horizontal_alignment = 2
 vertical_alignment = 1
 theme_override_font_sizes/font_size = 16
 
+[node name="AimAssist" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
+custom_minimum_size = Vector2(0, 46)
+layout_mode = 2
+text = "瞄准辅助\n摇杆瞄准时，准星被视野内已照亮的敌人轻微吸引（偏转有上限，不会抢走控制）"
+
 [node name="LeftStickAim" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
 custom_minimum_size = Vector2(0, 46)
 layout_mode = 2
-text = "左摇杆同控朝向\n开启后推左摇杆时角色朝向跟随移动方向；右摇杆一动立刻抢回朝向"
+text = "左摇杆同控朝向\n默认关闭。开启后推左摇杆时角色朝向跟随移动方向；右摇杆一动立刻抢回朝向"
 
 [node name="Vibration" type="CheckButton" parent="Center/Panel/Margin/ControlsPage"]
 custom_minimum_size = Vector2(0, 46)

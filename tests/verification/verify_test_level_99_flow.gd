@@ -353,6 +353,7 @@ func _verify_level_scene(failures: Array[String]) -> void:
 	_verify_extraction(tower, failures)
 	_verify_enemy_spawn_plan(tower, failures)
 	_verify_boss_identity(failures)
+	_verify_reward_plan(failures)
 
 	tower.queue_free()
 	await get_tree().process_frame
@@ -839,6 +840,197 @@ func _verify_boss_identity(failures: Array[String]) -> void:
 		)
 
 
+## 房间级掉落计划（`reward_plan`）的端到端落地断言。
+##
+## 与 `_verify_boss_identity` 末段同一处境：**当前没有任何关卡在数据里写
+## reward_plan**，纯读现成关卡会让端到端断言退化成 0 样本空跑并静默通过。
+## 故这里用手写 patch 直接驱动入口（Loader 白名单）与出口（Generator 透传）两侧，
+## 把四段契约各钉成一条真会失败的断言：
+##   ① 入口白名单：`LevelPlanLoader.normalize_floor` 漏登记 = 字段静默丢弃；
+##   ② 出口透传：`FloorPlanGenerator.room_from_source` 漏登记 = 字段静默丢弃；
+##   ③ 槽位投影：`reward_slots_from_rooms` 必须带 `ref`（池简写 / 内联两种写法
+##      **没有 spec_id**，只投影 spec_id 会在这一步静默丢内容）；
+##   ④ 指纹隔离：`reward_plan` 属于内容不属几何，改它**不得**改变 `layout_id`
+##      —— 否则调掉落会让既有存档的房间进度失配。
+## 另加静态校验两条正反例：合法槽位不得误报、未登记池 / Boss 房写 kill 必须拦住。
+## 失效方式全是静默的，作者只会看到「我明明填了却没生效」或「存档莫名其妙要我重打」。
+func _verify_reward_plan(failures: Array[String]) -> void:
+	var failures_before := failures.size()
+	# —— ① 入口白名单防漏登记 ——
+	var normalized := LevelPlanLoader.normalize_floor(LEVEL_ID, 0)
+	# 取不到规范化数据 = 下面 ①④ 两条断言退化成空跑并静默通过。宁可红，不要假绿。
+	if normalized.is_empty():
+		failures.append("取不到测试关卡99 的规范化层数据，reward_plan 断言会退化成空跑（不得静默通过）")
+	for value in normalized.get("rooms", []):
+		if not (value as Dictionary).has("reward_plan"):
+			failures.append(
+				"LevelPlanLoader 白名单漏登记 reward_plan，房间级该字段会被静默丢弃"
+			)
+			break
+
+	# —— ② 出口透传：三种合法写法各驱动一次（池简写 / 命名规格 / 内联）——
+	var active_pool := _first_active_pool_id()
+	if active_pool.is_empty():
+		failures.append("掉落池登记表里没有一个可用池，reward_plan 断言无法成立")
+		return
+	var authored := FloorPlanGenerator.room_from_source({
+		"key": "reward_probe", "room_id": "reward_probe", "role": "main",
+		"content_type": "COMBAT", "size": CONTENT_ROOM_SIZE,
+		"reward_plan": {
+			"clear": {"pool_id": active_pool, "draws": 2},
+			"search": {"spec_id": "probe_named_spec"},
+			"kill": {"entries": [
+				{"kind": "currency", "currency_id": "extraction_points", "amount": 3},
+			]},
+		},
+	})
+	var carried := authored.get("reward_plan", {}) as Dictionary
+	if carried.size() != 3:
+		failures.append(
+			"FloorPlanGenerator 未把 reward_plan 透传进运行时房间（应为 3 个 trigger 槽，实为 %d）：%s"
+			% [carried.size(), str(carried)]
+		)
+	else:
+		var pool_slot := carried.get("clear", {}) as Dictionary
+		if str(pool_slot.get("pool_id", "")) != active_pool:
+			failures.append("reward_plan 的 pool_id 写法透传后被改写：%s" % str(pool_slot))
+		elif int(pool_slot.get("draws", 0)) != 2:
+			failures.append("reward_plan 的 draws 在透传后被改写：%s" % str(pool_slot))
+		var spec_slot := carried.get("search", {}) as Dictionary
+		if str(spec_slot.get("spec_id", "")) != "probe_named_spec":
+			failures.append("reward_plan 的 spec_id 写法透传后被改写：%s" % str(spec_slot))
+		var inline_slot := carried.get("kill", {}) as Dictionary
+		var inline_entries := inline_slot.get("entries", []) as Array
+		if inline_entries.size() != 1 or str((inline_entries[0] as Dictionary).get("kind", "")) != "currency":
+			failures.append("reward_plan 的内联 entries 写法透传后被改写：%s" % str(inline_slot))
+	# 没写就不许凭空长出来 —— 否则「本房不覆盖」会被上游残留值污染成「已覆盖」。
+	var plain_room := FloorPlanGenerator.room_from_source({
+		"key": "plain_probe", "room_id": "plain_probe", "role": "main",
+		"content_type": "COMBAT", "size": CONTENT_ROOM_SIZE,
+	})
+	if not (plain_room.get("reward_plan", {}) as Dictionary).is_empty():
+		failures.append(
+			"没写 reward_plan 的普通房竟被赋了值：%s" % str(plain_room.get("reward_plan"))
+		)
+
+	# —— ③ 槽位投影（05 §11）——
+	var slots := FloorPlanGenerator.reward_slots_from_rooms([authored])
+	if slots.size() != 3:
+		failures.append("reward_slots 投影条数应为 3，实为 %d（槽位静默丢失）" % slots.size())
+	else:
+		var typed_pool := _slot_by_trigger(slots, "clear")
+		var typed_spec := _slot_by_trigger(slots, "search")
+		var typed_inline := _slot_by_trigger(slots, "kill")
+		# slot_id 必须稳定 = "<运行时 room_id>:<trigger>"：它是存档与事件去重的键。
+		if str(typed_pool.get("slot_id", "")) != "reward_probe:clear":
+			failures.append("clear 槽的 slot_id 不稳定：%s" % str(typed_pool.get("slot_id", "")))
+		if str(typed_pool.get("room_id", "")) != "reward_probe":
+			failures.append("reward_slots 的 room_id 不是运行时房间 ID：%s" % str(typed_pool))
+		if str(typed_spec.get("spec_id", "")) != "probe_named_spec":
+			failures.append("命名规格槽的 spec_id 没投影出来：%s" % str(typed_spec))
+		# 池简写与内联写法**没有 spec_id**，必须靠 ref 才能不丢内容。
+		if str(typed_pool.get("spec_id", "")) != "":
+			failures.append("池简写槽不该有 spec_id（写法里本就没有）：%s" % str(typed_pool))
+		if str((typed_pool.get("ref", {}) as Dictionary).get("pool_id", "")) != active_pool:
+			failures.append("reward_slots 丢掉池简写的 ref，该槽解析时会退化成空：%s" % str(typed_pool))
+		var inline_ref := typed_inline.get("ref", {}) as Dictionary
+		if (inline_ref.get("entries", []) as Array).size() != 1:
+			failures.append("reward_slots 丢掉内联槽的 ref，该槽解析时会退化成空：%s" % str(typed_inline))
+	# 没写 reward_plan 的房不产槽位（投影不得凭空造槽）。
+	var no_slots := FloorPlanGenerator.reward_slots_from_rooms([plain_room])
+	if not no_slots.is_empty():
+		failures.append("没写 reward_plan 的房竟投影出 %d 条槽位" % no_slots.size())
+
+	# —— ④ 指纹隔离：改掉落不得改 layout_id ——
+	# 直接拿真实关卡的规范化数据算两次指纹：一次原样、一次给每间房塞满 reward_plan。
+	# 两者必须逐字相同 —— 掉落是内容不是几何，绝不参与房间进度指纹。
+	# （若哪天有人把 reward_plan 加进 _data_driven_layout_id 的白名单，这条立刻红。）
+	if not normalized.is_empty():
+		var mode := str(normalized.get("mode", "authored"))
+		var baseline_id := FloorPlanGenerator._data_driven_layout_id(
+			LEVEL_ID, 0, normalized, mode, GENERATOR_SEED
+		)
+		var tainted := normalized.duplicate(true)
+		var tainted_rooms: Array = tainted.get("rooms", [])
+		for room_value in tainted_rooms:
+			(room_value as Dictionary)["reward_plan"] = {
+				"clear": { "pool_id": active_pool },
+				"search": { "entries": [{ "kind": "currency", "currency_id": "extraction_points", "amount": 1 }] },
+				"kill": { "spec_id": "probe_named_spec" },
+			}
+		var tainted_id := FloorPlanGenerator._data_driven_layout_id(
+			LEVEL_ID, 0, tainted, mode, GENERATOR_SEED
+		)
+		if tainted_id != baseline_id:
+			failures.append(
+				"reward_plan 竟参与了 layout_id 指纹（改掉落会让既有存档失配）：%s -> %s"
+				% [baseline_id, tainted_id]
+			)
+
+	# —— 静态校验：两条正反例 ——
+	var legal_probe := LevelPlanValidator._validate_reward_plan({
+		"key": "legal_probe", "role": "main", "content_type": "COMBAT",
+		"reward_plan": {
+			"clear": { "pool_id": active_pool, "draws": 1 },
+			"search": { "entries": [{ "kind": "currency", "currency_id": "extraction_points", "amount": 2 }] },
+			"kill": { "spec_id": "probe_named_spec" },
+		},
+	})
+	if not legal_probe.is_empty():
+		failures.append("合法的 reward_plan 竟被静态校验判错：%s" % [legal_probe])
+	var unknown_pool_probe := LevelPlanValidator._validate_reward_plan({
+		"key": "unknown_pool_probe", "role": "main", "content_type": "COMBAT",
+		"reward_plan": { "clear": { "pool_id": "pool_not_registered_at_all" } },
+	})
+	if not _has_error_prefix(unknown_pool_probe, "reward_plan_unknown_pool"):
+		failures.append("未登记的掉落池未被静态校验拦住：%s" % [unknown_pool_probe])
+	# Boss 房不刷普通怪 ⇒ 永不产生击杀事件，写 kill 槽等于静默失效；非战斗房同理。
+	var boss_kill_probe := LevelPlanValidator._validate_reward_plan({
+		"key": "boss_probe", "role": "boss", "content_type": "BOSS",
+		"reward_plan": { "kill": { "pool_id": active_pool } },
+	})
+	if not _has_error_prefix(boss_kill_probe, "reward_plan_kill_on_boss_room"):
+		failures.append("Boss 房写 kill 掉落槽未被拦住：%s" % [boss_kill_probe])
+	var safe_kill_probe := LevelPlanValidator._validate_reward_plan({
+		"key": "safe_probe", "role": "stair_entry", "content_type": "STAIR_LOBBY",
+		"reward_plan": { "kill": { "pool_id": active_pool } },
+	})
+	if not _has_error_prefix(safe_kill_probe, "reward_plan_kill_on_non_hostile_room"):
+		failures.append("安全房写 kill 掉落槽未被拦住：%s" % [safe_kill_probe])
+	# 一个槽位同时写两种写法 = 语义不明，必须当场拦（运行时只认其中一种，另一种静默失效）。
+	var ambiguous_probe := LevelPlanValidator._validate_reward_plan({
+		"key": "ambiguous_probe", "role": "main", "content_type": "COMBAT",
+		"reward_plan": { "clear": { "pool_id": active_pool, "spec_id": "probe_named_spec" } },
+	})
+	if not _has_error_prefix(ambiguous_probe, "reward_plan_slot_ambiguous"):
+		failures.append("同时写 pool_id 与 spec_id 的槽位未被拦住：%s" % [ambiguous_probe])
+
+	# 成功标记：本块的全部门禁是「设计源零样本 + 手写 patch」，静默通过极难与真跑区分，
+	# 故必须打一行可 grep 的绿标（其它分段级断言同此约定）。
+	if failures.size() == failures_before:
+		print(
+			"TEST_LEVEL_99_REWARD_OK 入口白名单/出口透传(池简写·命名规格·内联)/槽位投影(含 ref)"
+			+ "/layout_id 指纹隔离/静态校验正反例 全绿（设计源零样本，走手写 patch 探针）"
+		)
+
+
+## 取登记表里第一个可用（未弃用）的掉落池，供上面断言当「已知合法」样本。
+## 不写死池名：池会随版本弃用，写死会让这条断言在无关改动下变红（噪音）。
+func _first_active_pool_id() -> String:
+	for pool_id in RewardPoolRegistry.pool_ids():
+		if RewardPoolRegistry.is_active(pool_id):
+			return pool_id
+	return ""
+
+
+## 按 trigger 取投影出来的一条槽位；取不到返回空字典（调用方的判据自会红）。
+func _slot_by_trigger(slots: Array[Dictionary], trigger: String) -> Dictionary:
+	for slot in slots:
+		if str(slot.get("trigger", "")) == trigger:
+			return slot
+	return {}
+
+
 ## 断言错误列表里存在指定前缀的错误码。
 func _has_error_prefix(errors: Array, prefix: String) -> bool:
 	for error in errors:
@@ -880,6 +1072,10 @@ func _report(failures: Array[String]) -> void:
 			+ "and an unspecified single-layer boss room spawns no boss at all), "
 			+ "boss_content_id survives both the loader whitelist and the generator passthrough "
 			+ "(hand-written patch probe, since no shipped level authors the field yet), "
+			+ "reward_plan survives both the loader whitelist and the generator passthrough, "
+			+ "projects to reward_slots with ref intact for pool/inline forms, stays out of "
+			+ "layout_id, and is gated on unknown pools plus kill slots on non-hostile rooms "
+			+ "(hand-written patch probe, same reason), "
 			+ "suppressed fate-card reinforcements recorded instead of silently dropped, "
 			+ "spawn points stay pairwise distinct beyond the ring (cap is honorable), "
 			+ "loading screen follows the pending level and falls back to expedition_01 unchanged"

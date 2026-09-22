@@ -74,6 +74,53 @@ ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed
 **修法**：`\r\r\n` → `\r\n`（工作区口径 CRLF，git 入库时按 `core.autocrlf=true` 归一为 LF）。**闸门**：归一前后「剥掉全部 `\r`」的字节必须完全相同（内容零变化证明）+ 归一后不得残留 `0d0d0a`。`--ignore-cr-at-eol` **不能**当闸门。
 **预防**：写回一律 `open(p,"rb")/open(p,"wb")`，或文本模式显式 `newline=""`。
 
+**C. 本项目把「变量类型由 Variant 推断」当**硬 Parse Error**（warning-as-error）** —— 只要写 `var x := <某个返回 Variant 的表达式>`，GDScript 会抛
+`SCRIPT ERROR: Parse Error: The variable type is being inferred from a Variant value, so it will be typed as Variant.`（2026-09-22 实测，`verify_gamepad_input_flow.gd` 里 `var first_frame := face_of.call()`）。
+**最容易踩的源头是 `Object.call()` / `Callable.call()` / `Dictionary.get()` / `Array.pop_back()` 这类内置返回 Variant 的调用**：语法上完全合法、编辑器不标红，但一旦被 `:=` 接住就**整脚本编译失败**。
+**传染性症状（很迷惑）**：脚本是 autoload 时表现为 `Failed to instantiate an autoload`，且**别的会话的用例会跟着整批红**（本次实测另一会话的 `verify_finite_ammo_flow` 因此红，被误判成回归）。
+**修法**：给变量显式标注类型 —— `var first_frame: Vector2 = face_of.call()`；或先 `var raw: Variant = ...` 再显式转换。**别把 `:=` 用在任何 `call()` 返回值上。**
+**判据**：日志里 grep `inferred from a Variant` 命中即确诊，不用再往下查。
+
+**D. 自己的补丁把**注释前缀**丢了（漏一个 `## `）** —— 往 `##` 文档注释块里插行时，漏写前缀，
+那一行就**变成代码**（`（同一判据也给 … 用）` 这种以全角括号开头的行），整个脚本解析失败（2026-09-22 实测）。
+
+**传染性症状（最能骗人的一条）**：报的不是「某一行语法错」，而是一串**类名**：
+
+```text
+SCRIPT ERROR: Parse Error: Could not parse global class "Dungeon3D" from "res://src/world3d/Dungeon3D.gd".
+SCRIPT ERROR: Parse Error: Could not parse global class "TowerDescent3D" from "res://src/world3d/TowerDescent3D.gd".
+ERROR: Failed to instantiate an autoload, script 'res://src/enemy3d/MonsterAIManager.gd' does not inherit from 'Node'.
+ERROR: Failed to load script "res://tests/verification/verify_xxx.gd" with error "Parse error".
+```
+
+**基类挂了 ⇒ 子类也报「Could not parse global class」⇒ 引用它的 autoload 挂 ⇒ 探针压根没加载。**
+此时探针**一条 `ok` 都不会打印**、`verify_*_OK` 行永远不出现、进程**空转不退**（本次空转 7m52s 才被手动杀）。
+所以日志里「只有引擎噪音 + `Could not parse global class`」= 不是慢，是自己的脚本坏了。
+
+**判据**：`grep -n "Could not parse global class" <日志>` → 拿到文件名 → 只看它**最近改过的那几行**：
+`sed -n 'A,Bp' <文件> | cat -A`。**必须以 `cat -A` 看行首**（`^I` = tab，`^I## ` / `^I# ` 才是注释；
+直接看内容看不出丢没丢前缀）。
+
+**修法**：补齐注释前缀（`## ` / `# `）。**闸门**：改完必须 `cat -A` 复看整段；
+再跑一次探针，确认 `grep -c "Parse Error"` 为 0 且结果行出现。
+
+**预防**：任何「往注释块里插行」的补丁脚本，插入文本的每一行都要**自带注释前缀**，
+别依赖「上一行的前缀会延续」——GDScript 没有块注释延续，Markdown 侧也没有。
+
+**E. 自己写的「源码守卫」永久红 —— 先怀疑守卫自己**（2026-09-22 实测）
+
+探针里用 `FileAccess.get_file_as_string("res://src/xxx.gd")` 再 `contains("A\n\t\tB")` 搜**跨行片段**时：
+本仓 `.gd` 是 **CRLF**，用 `\n` 拼出来的多行模式**永远匹配不上** ⇒ 守卫**永久红**，
+看起来像「代码真的坏了」，其实坏的是守卫。
+
+**判据**：这条守卫红了、但它守的那段代码肉眼看着完全正常 ⇒ 立刻怀疑匹配串。
+`print(片段长度)` 或改成**分别按单行片段**搜，一次就能确诊。
+⚠️ 这类守卫**不能只跑一次就信**：它「红」可能与自己无关，它「绿」也可能是巧合 —— 所以
+**必须做反向对照**（把被守的代码改坏 ⇒ 守卫要变红；还原 ⇒ 要变绿），否则等于没验。
+
+**修法**：读源码后一律先归一 —— `.replace("\r\n", "\n")`，再做跨行 `contains`。
+单行片段不受影响，但统一归一最省心（也顺手把「脚本自己写死 CRLF」的隐患一起挡掉）。
+
 > ⛔ **通用教训**：「探针/场景跑几分钟甚至几十分钟不结束」**先按解析失败查**（`grep -n "Parse Error\|Failed to load script" <日志>`），别当「慢」处理。解析失败的探针不会退出，会一直空转。
 
 **特例：`Class "X" hides a global script class`（同名 `class_name` 抢注）**
@@ -108,7 +155,7 @@ ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed
 **三条限制，都必须记住**：
 
 - **只对非渲染场景**：`visual_scenes` / `renderer_scenes` 名单里的场景去掉 `--headless` 会挂死等 viewport 纹理（见铁律 2）。⚠️ 反过来更常见：**给截图类场景加了 `--headless`，`get_viewport().get_texture().get_image()` 返回 null** → 报 `Cannot save ... preview` / `Parameter "t" is null`。这是**跑法错了，不是代码坏了**。跑前先查该场景在不在 `visual_scenes`。
-- **用真实 user dir**：不隔离存档，会写存档的场景别这么跑。副作用之一：可能多出 `ERROR: Can't create shader cache folder`（套件的隔离 user dir 里不会出现），会让日志门禁误判 exit 3。
+- **先隔离 `APPDATA`**：默认用真实 user dir、不隔离存档，会写存档的场景别裸跑。**跑前 `export APPDATA="<独享纯 ASCII 目录>"` 即可隔离 `user://`**（见下文），并顺手消掉 `ERROR: Can't create shader cache folder`（不隔离时它会让日志门禁误判 exit 3）。
 - **跳过 `check_verification_log.py`**：`[PASS]` 里也可能夹带 `SCRIPT ERROR`，**不能据此判绿**。
 
 **要拿正式判定时的替身组合**：直跑场景取场景退出码 + 单独手跑日志门禁
@@ -130,10 +177,27 @@ ERROR: Failed to load script "res://src/.../A.gd" with error "Compilation failed
    cygpath -m /c/Users/…  -> C:/Users/…        # 对
    cygpath -m I:/…        -> I:/…              # 对（Windows 风格原样透传）
    ```
-   所以跑套件前**把 TMPDIR 设成 Windows 风格路径**（如 `I:/…/_scratch/vtmp`），别让它落到 `/tmp`。
+   所以要在**同一个 shell 里**把 `TMPDIR` 设成 Windows 风格路径（如 `I:/…/_scratch/vtmp`），别让它落到 `/tmp`。
+   ⚠️ **但这在本机救不了套件 —— 见下面第 3 条**（2026-09-22 实测修正：`export TMPDIR=…` 在子 shell 里会消失）。
 2. **退出清理被守卫拦下**（不可绕）。套件 EXIT trap 里的 `rm -rf` 会被本机 safe-delete 守卫拦，进程随之被终止——表现为启动阶段就被 SIGTERM，连第一个 `printf` 都写不进日志。
+3. **`TMPDIR` 根本传不进子 shell（2026-09-22 实测，两次归因被证伪后的定论）**。Bash 工具的 shim（`shell-runtime-bash-env.sh`）在拉起子进程时会**清掉 `TMPDIR`**：
+   ```
+   export TMPDIR="/i/_ss_tmp/tmp"; bash -c 'echo "[$TMPDIR]"'   # => []   ← 空的
+   ```
+   ⚠️ 危险之处：**同一个 shell 里直接 `mktemp` 却能落到 I:**，所以"我在同一行验过、能行"是**假绿**。于是套件里的 `mktemp -d "${TMPDIR:-/tmp}/shellstorm-verification.XXXXXX"` 永远回落 `/tmp` → 经上面第 1 条的 `cygpath` 错配变成 **`C:\windows`**（系统盘 + 要提权）。
+4. **`ln -s` 在本机是"整工程复制"不是软链（更致命）**。脚本靠 `ln -s <entry> <隔离工程>/<name>` 铺隔离工程，实测生成的是**真实目录**（`ls -la` 是 `d` 不是 `l`），单次 **5.6 GB**（`.godot` + `_scratch` + `outputs` + assets 全量）。
+   后果：① 每个场景**光复制就 10 分钟以上**（实测 13m32s 连第一个场景都没进断言阶段）；② 直接把系统盘撑满（历史上 `C:\$Recycle.Bin` 里 31.9 GB 的 `shellstorm-verification.*` 就是它产的）。
+   报错在 `No space left on device` 与 `Permission denied` 之间交替 —— **两者都会被误读成"磁盘满/符号链接权限"**，真相是路径落错盘 + 复制。
 
 **结论**：本机套件的正式判定不可得。用上面的「直跑 + 手跑日志门禁」组合做**定向回归**（把该功能相关的场景列出来逐条跑），并把套件留到能正常执行的环境上补跑。**不要因为套件跑不动就宣称验收通过**——要说清哪几项是用替身组合验的。
+
+**性价比实测对照（2026-09-22）**：套件 13min+/场景（还没跑完）vs 直跑 **21s/场景**、两个场景 49s。
+
+**直跑时的 user:// 隔离（修正上面那条"用真实 user dir"）**：只要**把 `APPDATA` 指到一个独享的纯 ASCII 目录**，Godot 的 `user://` 就整体搬过去，等价于套件的隔离，且不会再报 `Can't create shader cache folder`：
+```bash
+export APPDATA="I:/_ss_tmp/appdata"   # 纯 ASCII、非系统盘、独享
+```
+套件额外做的 `config/use_custom_user_dir` 改写只是为了让隔离目录在**真实 APPDATA 下**不串档，`APPDATA` 一换就不需要。
 
 ### 加白名单的正确姿势
 

@@ -1,0 +1,45 @@
+{
+  "package_id": "debris_04",
+  "name_zh": "固定碎屑_04",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "固定碎屑_04_资产包",
+  "objects": [
+    "固定碎屑_04_部件0",
+    "固定碎屑_04_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -0.8803734481334686,
+    15.659973621368408,
+    0.3305000066757202
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -2.247070789337158,
+      14.643095970153809,
+      0.3305000066757202
+    ],
+    "max": [
+      0.48632389307022095,
+      16.676851272583008,
+      0.550000011920929
+    ]
+  },
+  "dimensions_m": [
+    2.733394682407379,
+    2.033755302429199,
+    0.21950000524520874
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

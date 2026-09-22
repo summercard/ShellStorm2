@@ -58,8 +58,18 @@ const TRIGGER_THRESHOLD := 0.35
 ## 略大于字面量 0.2。不留容差时「正好等于死区」会漏出一个 ~4e-9 的残值，
 ## 使「死区边界以内一律归零」这条契约在边界点上失效。
 const DEADZONE_COMPARE_EPSILON := 1.0e-5
-## 瞄准平滑基准速率（次/秒）：rate = BASE × (1 − smoothing)。
+## 瞄准平滑基准速率（次/秒）：rate = BASE × (1 − smoothing) × 幅度倍率。
 const AIM_SMOOTHING_BASE_RATE := 30.0
+
+## 幅度权威（响应曲线）三常量。重映射后的幅度 t ∈ [0,1] 用来调制平滑速率倍率：
+##   轻推（t 小）→ 倍率低 → 平滑强 → 准星稳、可微调（补偿摇杆的物理分辨率上限）
+##   重推（t 大）→ 倍率高 → 平滑弱 → 立刻跟手，方便快速转身
+## 不做这条曲线时速率恒定，轻推与重推手感一样 —— 玩家「想微调时准星太飘、
+## 想转身时又追不上」，这正是「转向不够精确」的直接来源。
+const AIM_PRECISION_SPEED_SCALE := 0.35
+const AIM_FLICK_SPEED_SCALE := 1.60
+## 曲线指数 > 1：低幅度区间压得更低（精瞄更稳），高幅度区间快速抬升（转身更快）。
+const AIM_RESPONSE_EXPONENT := 1.60
 
 ## 朝向来源三档取值。第 1 档右摇杆、第 2 档左摇杆、第 3 档保持上次方向。
 const FACE_SOURCE_AIM := "aim"
@@ -209,6 +219,18 @@ func apply_radial_deadzone(raw: Vector2, deadzone: float) -> Vector2:
 	return raw / magnitude * scaled
 
 
+## 幅度权威：把「重映射后的幅度」映射成平滑速率倍率（纯函数，验收直接钉口径）。
+## t = 0（刚出死区）→ AIM_PRECISION_SPEED_SCALE；t = 1（推到底）→ AIM_FLICK_SPEED_SCALE。
+## 单调递增，且指数 > 1 让低幅度区间更平缓 —— 精瞄时准星更稳，转身时又能迅速跟上。
+func resolve_aim_speed_scale(magnitude_after_deadzone: float) -> float:
+	var t := clampf(magnitude_after_deadzone, 0.0, 1.0)
+	var shaped := pow(t, AIM_RESPONSE_EXPONENT)
+	return (
+		AIM_PRECISION_SPEED_SCALE
+		+ (AIM_FLICK_SPEED_SCALE - AIM_PRECISION_SPEED_SCALE) * shaped
+	)
+
+
 func rumble(weak: float, strong: float, duration := 0.12) -> void:
 	if not InputSettings.is_vibration_enabled():
 		return
@@ -297,7 +319,13 @@ func _update_aim(device: int, delta: float) -> void:
 		_aim_valid = true
 	else:
 		# 换档也走同一条平滑：从右摇杆切到左摇杆时角度是插值过去的，不是瞬跳。
-		var rate := AIM_SMOOTHING_BASE_RATE * (1.0 - InputSettings.get_aim_smoothing())
+		# 幅度权威：重映射后的幅度决定响应速度（轻推稳、重推快），见顶部常量注释。
+		var speed_scale := resolve_aim_speed_scale(direction.length())
+		var rate := (
+			AIM_SMOOTHING_BASE_RATE
+			* (1.0 - InputSettings.get_aim_smoothing())
+			* speed_scale
+		)
 		var weight := 1.0 - exp(-maxf(rate, 0.01) * delta)
 		_aim_angle = lerp_angle(_aim_angle, target_angle, clampf(weight, 0.0, 1.0))
 	_face_direction = Vector2.from_angle(_aim_angle)

@@ -1,0 +1,79 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-06",
+  "room_type": "BOSS_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_06/wall_skin_east_06.blend",
+  "collection": "装甲墙_EAST_06_输出包",
+  "editable_collection": "装甲墙_EAST_06_制作源",
+  "root_object": "ROOT_wall_skin_east_06_组件",
+  "bounds_size_m": [
+    0.360001,
+    4.924999,
+    11.8
+  ],
+  "bounds_lo_m": [
+    -0.18,
+    -2.4625,
+    0.0
+  ],
+  "bounds_hi_m": [
+    0.18,
+    2.4625,
+    11.8
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-X",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "装甲墙_EAST_06_输出_自发光"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "wall_skin_east_06",
+  "version": "v001",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "asset_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-06",
+  "category": "architecture",
+  "name_zh": "装甲墙_EAST_06",
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "source_world_origin_m": [
+    24.649999618530273,
+    12.5,
+    0.05000000074505806
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "godot_front_axis": "-X",
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend",
+  "objects": [
+    "装甲墙_EAST_06_输出_部件00",
+    "装甲墙_EAST_06_输出_部件01",
+    "装甲墙_EAST_06_输出_自发光"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "component_file_sha256": "7d8885d8a60e87e53011a1b280c40c28de459f4f7f1d234be7039e8b7f670216"
+}

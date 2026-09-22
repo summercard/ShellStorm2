@@ -1,0 +1,7 @@
+﻿C used=232.6GB free=0GB
+D used=3477.9GB free=248.14GB
+E used=1386.8GB free=476.2GB
+G used=86.9GB free=113.1GB
+H used=501.3GB free=329.67GB
+I used=738.9GB free=93.07GB
+Z used=38259.2GB free=18925.16GB

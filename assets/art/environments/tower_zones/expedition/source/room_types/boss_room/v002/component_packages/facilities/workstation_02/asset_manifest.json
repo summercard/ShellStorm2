@@ -1,0 +1,49 @@
+{
+  "package_id": "workstation_02",
+  "name_zh": "工作站_02",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "工作站_02_资产包",
+  "objects": [
+    "工作站_02_部件1",
+    "工作站_02_部件0",
+    "工作站_02_部件2",
+    "工作站_02_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -18.0,
+    -7.997499704360962,
+    0.30000001192092896
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -20.125,
+      -9.024999618530273,
+      0.30000001192092896
+    ],
+    "max": [
+      -15.875,
+      -6.96999979019165,
+      3.0799999237060547
+    ]
+  },
+  "dimensions_m": [
+    4.25,
+    2.054999828338623,
+    2.7799999117851257
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

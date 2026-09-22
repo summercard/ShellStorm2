@@ -1,0 +1,122 @@
+ASSET_REGISTRY_CHECK_FAILED scope=structure issues=6
+{
+  "project_root": "I:\\工作项目\\shellstrom2\\ShellStorm2",
+  "scope": "structure",
+  "master": {
+    "exists": true,
+    "sheets": [
+      "总览",
+      "分账本索引",
+      "分类与编码",
+      "命名与查重",
+      "版本记录",
+      "3D Prefab总控",
+      "Skill清单"
+    ],
+    "index_rows": 7,
+    "prefab_pages": 9
+  },
+  "ledger_index": {
+    "domains": [
+      "characters",
+      "enemies",
+      "scenes",
+      "props",
+      "weapons",
+      "vfx",
+      "media"
+    ],
+    "categories": [
+      "UI",
+      "场景",
+      "场景道具",
+      "基地资产包",
+      "敌人",
+      "武器",
+      "特效",
+      "角色",
+      "道具",
+      "音频"
+    ],
+    "prefix_pairs": [
+      "ART/场景",
+      "AUD/音频",
+      "BPK/基地资产包",
+      "CHR/角色",
+      "ENM/敌人",
+      "ENV/场景",
+      "ITM/道具",
+      "PRP/场景道具",
+      "PRP/道具",
+      "UI/UI",
+      "VFX/特效",
+      "WPN/武器"
+    ]
+  },
+  "ledgers": {
+    "characters": "assets/registry/ledgers/ShellStorm2_角色账本_v001.xlsx",
+    "enemies": "assets/registry/ledgers/ShellStorm2_敌人账本_v001.xlsx",
+    "scenes": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx",
+    "props": "assets/registry/ledgers/ShellStorm2_道具账本_v001.xlsx",
+    "weapons": "assets/registry/ledgers/ShellStorm2_武器账本_v001.xlsx",
+    "vfx": "assets/registry/ledgers/ShellStorm2_特效账本_v001.xlsx",
+    "media": "assets/registry/ledgers/ShellStorm2_表现资源账本_v001.xlsx"
+  },
+  "ledger_totals": {
+    "characters": 31,
+    "enemies": 12,
+    "scenes": 235,
+    "props": 20,
+    "weapons": 36,
+    "vfx": 17,
+    "media": 74
+  },
+  "asset_count": 425,
+  "issue_counts": {
+    "index_row_mismatch": 1,
+    "invalid_status": 5
+  },
+  "issues": {
+    "index_row_mismatch": [
+      {
+        "ledger": "master",
+        "row": 11,
+        "column": 11,
+        "expected": "vfx-combat-effect-authoring",
+        "actual": "godot-model-asset-import-standard"
+      }
+    ],
+    "invalid_status": [
+      {
+        "ledger": "scenes",
+        "row": 233,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-LOWER",
+        "value": "白盒组件"
+      },
+      {
+        "ledger": "scenes",
+        "row": 234,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-MID",
+        "value": "白盒组件"
+      },
+      {
+        "ledger": "scenes",
+        "row": 235,
+        "asset_id": "ENV-TOWER-STAIR-FLOOR-UPPER",
+        "value": "白盒组件"
+      },
+      {
+        "ledger": "scenes",
+        "row": 236,
+        "asset_id": "ENV-TOWER-STAIR-FLIGHT-ADJUSTABLE",
+        "value": "白盒组件"
+      },
+      {
+        "ledger": "scenes",
+        "row": 237,
+        "asset_id": "ENV-TOWER-CORNER-COLUMN-05M",
+        "value": "白盒组件"
+      }
+    ]
+  }
+}

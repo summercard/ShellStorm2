@@ -104,6 +104,9 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 		"branch_room_count": 0,
 		"room_size_catalog": {"EXPEDITION_STANDARD": EXPEDITION_ROOM_SIZE},
 		"terminal_mode": "extraction_room",
+		# 契约一致性：远征的房间由代码程序化生成（房表不含 reward_plan），故投影恒为空数组。
+		# 仍然落键 —— 消费方不必区分"没有这个键"与"没有槽位"。
+		"reward_slots": reward_slots_from_rooms(rooms),
 	}
 	var errors := validate_expedition(plan)
 	plan["valid"] = errors.is_empty()
@@ -116,8 +119,8 @@ static func generate_expedition(request: Dictionary) -> Dictionary:
 ## —— 单间房的「设计源 → 运行时计划」透传（唯一登记点）——
 ##
 ## 房间级**可选**字段只在此处登记一次：`enemy_spawn_plan`（刷怪计划）、
-## `boss_content_id`（首领指派）。两处消费方（`generate_from_level_plan` 与
-## 验收脚本）都走本函数，禁止各自复刻字段表。
+## `boss_content_id`（首领指派）、`reward_plan`（统一掉落计划）。两处消费方
+## （`generate_from_level_plan` 与验收脚本）都走本函数，禁止各自复刻字段表。
 ##
 ## 为什么抽成独立函数：这些字段**当前没有任何关卡在数据里写**，端到端断言
 ## 因此会退化成空跑（0 个样本、静默通过）。抽出来之后可以用手写 patch 直接
@@ -151,7 +154,53 @@ static func room_from_source(src: Dictionary) -> Dictionary:
 		# 塔楼按层号取名册条目，单层关卡则**不出 Boss**（口径见 BossContentCatalog.resolve_profile）。
 		# 只透传不解释；本字段**不进 layout_id**，故改它不会让既有存档失配。
 		"boss_content_id": str(src.get("boss_content_id", "")),
+		# 房间级统一掉落计划（04 §22.7 覆盖链：房间 > 关卡 > 怪物表 > 全局默认）。
+		# 空字典 = 本房在该 trigger 上不覆盖，逐级回退。**不进 layout_id**：
+		# 掉落是内容不是几何，改它不得让既有存档的房间进度失配。
+		"reward_plan": (src.get("reward_plan", {}) as Dictionary).duplicate(true),
 	}
+
+
+## —— 房间级掉落计划 → 运行时 `reward_slots[]` 投影（05 §11）——
+##
+## 每条 = `{slot_id, room_id, trigger, spec_id, ref}`：
+##   · `slot_id` 稳定 = `"<room_id>:<trigger>"` —— 房间与触发唯一确定一条；
+##   · `room_id` 取**运行时房间 ID**（`room_from_source` 已按 legacy 优先解析过），
+##     不是设计源的 `key` —— 运行时只认 room_id；
+##   · `spec_id` 是命名规格引用（槽位用命名规格时非空，其余写法为空串）；
+##   · `ref` 是**设计源原文**（`{spec_id}` / `{entries}` / `{pool_id}` 三种写法之一）。
+##
+## 为什么必须带 `ref` 而不是只留 `spec_id`：槽位允许写 `{pool_id}` 简写与内联
+## `{entries}`，这两种写法**压根没有 spec_id**。只投影 spec_id 会让它们在投影
+## 这一步静默丢内容（05 §11 的列定义只列了 spec_id，此处按实现需要补 ref）。
+##
+## 本函数是**纯投影**：不校验、不解释、不重算。合法性由 `LevelPlanValidator` 保证，
+## 解析由 `RewardService` 保证。它不进 `layout_id`（指纹见 `_data_driven_layout_id`，
+## 那是显式白名单，不含本字段）。
+static func reward_slots_from_rooms(rooms: Array) -> Array[Dictionary]:
+	var slots: Array[Dictionary] = []
+	for value in rooms:
+		var room := value as Dictionary
+		var room_id := str(room.get("id", ""))
+		if room_id.is_empty():
+			continue
+		var plan := room.get("reward_plan", {}) as Dictionary
+		if plan.is_empty():
+			continue
+		for trigger_value in plan.keys():
+			var ref_value: Variant = plan[trigger_value]
+			if not (ref_value is Dictionary):
+				continue
+			var ref := ref_value as Dictionary
+			slots.append({
+				"slot_id": "%s:%s" % [room_id, str(trigger_value)],
+				"room_id": room_id,
+				"trigger": str(trigger_value),
+				"spec_id": str(ref.get("spec_id", "")),
+				"ref": ref.duplicate(true),
+			})
+	slots.sort_custom(func(a, b): return str(a["slot_id"]) < str(b["slot_id"]))
+	return slots
 
 
 ## —— 数据驱动路径（依据 05.2 §3 / §8 S3）——
@@ -245,6 +294,8 @@ static func generate_from_level_plan(level_id: String, floor_number: int, run_se
 		"area_budget": _calculate_area_budget(rooms),
 		"room_size_catalog": catalog,
 		"terminal_mode": terminal_mode,
+		# 掉落调度投影（05 §11）。本路径的设计源房间可写 reward_plan，投影出真槽位。
+		"reward_slots": reward_slots_from_rooms(rooms),
 	}
 	plan["valid"] = errors.is_empty()
 	plan["validation_errors"] = errors
@@ -583,6 +634,8 @@ static func _build_candidate(
 		"area_budget": area_budget,
 		"room_size_catalog": ROOM_SIZES.duplicate(true),
 		"terminal_mode": "boss_down_stair_lobby" if boss_floor else "down_stair_lobby",
+		# 同上：内置房表路径的房间无 reward_plan，投影恒为空数组，仍落键保持契约一致。
+		"reward_slots": reward_slots_from_rooms(rooms),
 	}
 
 

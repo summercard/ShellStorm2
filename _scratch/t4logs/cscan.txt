@@ -1,0 +1,27 @@
+﻿=== C:\Users\zhuangmenghong\AppData\Local\Temp 子项 Top20 ===
+    3502.8 MB  lqrbgug0
+     498.1 MB  5e23f9b0-21e5-4047-97f9-8aa056f7cb05.tmp
+      83.9 MB  zms3u4gr.dkz
+      83.9 MB  aecx5yax.bul
+      83.9 MB  xebqut0h.fm0
+      74.8 MB  6275b70e-c33a-4f1e-9391-04dd7c3b07bd.tmp
+      62.8 MB  baidu
+      52.8 MB  codebuddy-marketplace-install-wSgruH
+      48.4 MB  codebuddy-marketplace-install-UFIrV1
+      37.8 MB  windowssdk
+      35.8 MB  VS
+      32.1 MB  node-compile-cache
+      27.8 MB  codebuddy-marketplace-install-29g568
+      26.4 MB  4dcfec46-12ab-42b4-b0fd-4db5a7173bde.tmp
+      25.7 MB  codebuddy-marketplace-install-wzZJ39
+      21.9 MB  ea742481-c7c9-4aa8-8cb8-e97823fcd42d.tmp
+      19.1 MB  qbcore
+      17.1 MB  tmpDA7.tmp
+      13.6 MB  codebuddy-marketplace-install-HuwyVy
+      12.6 MB  codebuddy-marketplace-install-MSYADB
+
+=== ss_probe 明细 ===
+       0.1 MB  Godot
+         0 MB  verify_flow.log
+         0 MB  levelplan.log
+         0 MB  census.log

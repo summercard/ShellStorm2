@@ -3,6 +3,7 @@
 工程版本：0.1.0。设计、规范与目标见 [设计目录](../design/README.md)；本目录仅保存交付事实。
 
 - [版本开发日志](CHANGELOG.md)：按交付记变更，新增记录使用 [模板](../../templates/development_record.md)。
+- [远征关卡01 Boss竞技场白模 v001（50×40m）](2026-09-22_远征01竞技场白盒.md)：由局内关卡01 竞技场 190×90m 白模在 5m 网格上程序化重建（非缩放；1/3 撞模数，业主裁决取 50×40m），121 网格校验通过，并登记场景账本第 241/147 行。
 - [WORLD-BLOCKS 四区块场景树与资产目录整理](2026-09-13_world_level_blocks.md)：统一天台、基地、首关战斗与楼梯区块，简化运行名并同步 Blender 对照和资产台账。
 - [Battle 与 Stairs 白盒目录归一](2026-09-14_battle_stairs_whitebox_relocation.md)：将98–95F战斗区和楼梯区重新定性为白盒阶段，统一数据、Blender输出和效果图目录。
 - [楼梯间 Godot 反推与正式 Blender 源](2026-09-14_stairs_formal_blender_from_godot.md)：按当前12米楼梯GLB反推白盒合同，生成只含两个楼梯间资产包的正式源且不重导入Godot。

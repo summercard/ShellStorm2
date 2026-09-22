@@ -1,0 +1,8 @@
+base_save.json
+base_save.json.bak
+dialogue_ui_preview.png
+dialogue_ui_preview.png.import
+logs
+speech_bubble_preview.png
+speech_bubble_preview.png.import
+vulkan

@@ -1,0 +1,46 @@
+{
+  "package_id": "north_wall_typography",
+  "name_zh": "数据库墙面标识",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "数据库墙面标识_资产包",
+  "objects": [
+    "自发光铭牌_SECTOR",
+    "自发光铭牌_A3",
+    "自发光铭牌_DATA CORE",
+    "自发光铭牌_KNOWLEDGE / PRESERVES / HUMANITY"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -0.2583770751953125,
+    19.449999809265137,
+    7.44612979888916
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -18.208499908447266,
+      19.429000854492188,
+      7.44612979888916
+    ],
+    "max": [
+      17.69174575805664,
+      19.470998764038086,
+      9.766229629516602
+    ]
+  },
+  "dimensions_m": [
+    35.900245666503906,
+    0.04199790954589844,
+    2.3200998306274414
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

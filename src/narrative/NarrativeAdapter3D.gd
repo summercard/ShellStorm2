@@ -669,6 +669,44 @@ func _actor_say(params: Dictionary) -> Dictionary:
 	return _degraded("actor.say：气泡挂载点不可用，本句被跳过。")
 
 
+## 解析 `actor.face` 的目标点：给了就返回世界坐标 `Vector3`，没给返回 `null`
+## （= 走 `yaw_deg` 老通道）。
+## · `to_point_room` + `to_point_offset` —— **房间相对**（推荐）。房间是运行时生成的，
+##   写死世界坐标会在换布局后**静默指偏**；世界坐标 = `room.to_global(offset)`。
+## · `point_m` —— 显式世界坐标 `[x, y, z]`（优先级最高）。
+## 为什么要有这条：「对着地上的某件东西说」不能写死相对角度 ——
+## 玩家出生朝向由鼠标决定、不确定，只有目标点反解出来的绝对方位才稳。
+func _resolve_face_point(params: Dictionary) -> Variant:
+	var raw_point: Variant = params.get("point_m", null)
+	if raw_point is Array and (raw_point as Array).size() == 3:
+		var point: Array = raw_point
+		return Vector3(float(point[0]), float(point[1]), float(point[2]))
+	var room_id := str(params.get("to_point_room", ""))
+	if room_id.is_empty():
+		return null
+	var room := room_node(room_id)
+	if room == null:
+		_warn("actor.face：找不到房间 %s，退回 yaw_deg。" % room_id)
+		return null
+	var raw_offset: Variant = params.get("to_point_offset", null)
+	if not (raw_offset is Array) or (raw_offset as Array).size() != 3:
+		_warn("actor.face：to_point_offset 需要 [x, y, z]，退回 yaw_deg。")
+		return null
+	var offset: Array = raw_offset
+	return room.to_global(Vector3(float(offset[0]), float(offset[1]), float(offset[2])))
+
+
+## 世界点 → `aim_yaw`。与 `Player3D` 同口径（`aim_yaw = atan2(-dir.x, -dir.z)`），
+## 只取水平分量；点与角色重合时保持当前朝向不动（不产生 NaN）。
+func _yaw_towards(from: Vector3, to: Vector3) -> float:
+	var delta := to - from
+	delta.y = 0.0
+	if delta.length_squared() <= 0.0001:
+		return float(_facing_base_yaw)
+	delta = delta.normalized()
+	return atan2(-delta.x, -delta.z)
+
+
 func _actor_face(params: Dictionary) -> Dictionary:
 	var actor := _resolve_actor(params)
 	if actor == null:
@@ -685,7 +723,11 @@ func _actor_face(params: Dictionary) -> Dictionary:
 	# relative=true：以序列基准偏转（「左右张望」用这个），
 	# 否则 yaw_deg 是绝对方位 —— 角色出生朝向不同也不该让「左看」变成「右看」。
 	var target_yaw := deg_to_rad(float(params.get("yaw_deg", 0.0)))
-	if bool(params.get("relative", false)):
+	var face_point: Variant = _resolve_face_point(params)
+	if face_point != null:
+		# 给了目标点就是**绝对**朝向，压过 yaw_deg / relative。
+		target_yaw = _yaw_towards(actor.global_position, face_point as Vector3)
+	elif bool(params.get("relative", false)):
 		target_yaw += _facing_base_yaw
 	_facing_active = true
 	_facing_channel = {

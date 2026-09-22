@@ -1,0 +1,86 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+  "room_type": "BOSS_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c03/base_floor_tile_r03_c03.blend",
+  "collection": "地板_FLOOR_TILE_R03_C03_输出包",
+  "editable_collection": "地板_FLOOR_TILE_R03_C03_制作源",
+  "root_object": "ROOT_base_floor_tile_r03_c03_组件",
+  "bounds_size_m": [
+    4.940001,
+    4.940001,
+    0.098
+  ],
+  "bounds_lo_m": [
+    -2.47,
+    -2.47,
+    0.0
+  ],
+  "bounds_hi_m": [
+    2.47,
+    2.47,
+    0.098
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "+Z",
+  "allowed_rotations_y_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [
+    "地板_FLOOR_TILE_R03_C03_输出_自发光"
+  ],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "source_package_id": "base_floor_tile_r03_c03",
+  "version": "v001",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "asset_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+  "category": "floor",
+  "name_zh": "地板_FLOOR_TILE_R03_C03",
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "source_world_origin_m": [
+    -12.5,
+    -7.5,
+    0.25999999046325684
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "godot_front_axis": "+Y",
+  "allowed_rotations_blender_z_deg": [
+    0,
+    90,
+    180,
+    270
+  ],
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend",
+  "objects": [
+    "地板_FLOOR_TILE_R03_C03_输出_部件00",
+    "地板_FLOOR_TILE_R03_C03_输出_部件01",
+    "地板_FLOOR_TILE_R03_C03_输出_自发光",
+    "地板_FLOOR_TILE_R03_C03_输出_部件03"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "component_file_sha256": "41268aa680f530d38e645edc0aa786d59000a66f0a988815d3e4473b0130dcab"
+}

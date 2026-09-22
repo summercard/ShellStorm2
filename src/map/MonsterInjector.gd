@@ -367,12 +367,149 @@ func _get_theme_fallback_enemy(default_enemy: String = "melee_chaser") -> String
 
 ## 获取掉落表名称
 func _get_loot_table(floor_level: int) -> String:
+	return get_loot_table_for_level(floor_level)
+
+
+## 楼层深度 → 掉落池。唯一口径：`drop_spec_for` 与旧 `loot_table` 字段共用本函数，
+## 不得在别处再写一份 match（那会让两处选池悄悄漂移）。
+static func get_loot_table_for_level(floor_level: int) -> String:
 	match floor_level:
 		RoomData.FloorLevel.SHALLOW: return "loot_floor_1_2"
 		RoomData.FloorLevel.MEDIUM: return "loot_floor_3_4"
 		RoomData.FloorLevel.DEEP: return "loot_floor_5"
 		RoomData.FloorLevel.ABYSS: return "loot_abyss"
 	return "loot_common"
+
+
+# ---------------------------------------------------------------------------
+# 怪物表「掉落/进度」列的结构化投影（2026-09-22，REWARD-SERVICE 契约）
+# ---------------------------------------------------------------------------
+#
+# 现状口径：该列在物品/怪物表里仍是自然语言，运行时散在 LootModule 的 26% / 34% / 魂公式里。
+# 本段把它**逐值**投影成结构化规格（RewardSpec），供 RewardService 解析。
+# **过渡期双写**：旧 `loot_table` 字段与旧 LootModule 分支保留不动（04 §22.11 第 2 步），
+# 第 3 步切消费点、第 4 步删旧路径。数值逐值保持，不得在切换过程中改动。
+
+## 普通怪：出 1 件非货币物品的概率。
+const DROP_ITEM_CHANCE_NORMAL := 0.26
+## 普通怪：备弹概率与数量区间。
+const DROP_AMMO_CHANCE_NORMAL := 0.34
+const DROP_AMMO_MIN_NORMAL := 3
+const DROP_AMMO_MAX_NORMAL := 8
+## 精英 / Boss：稳定单件 + 满额备弹。
+const DROP_AMMO_MIN_ELITE := 8
+const DROP_AMMO_MAX_ELITE := 16
+## 魂产量：`round(base + per_floor × floor)`。精英/Boss 的附加魂在现有实现里是**总额**
+## （Dungeon3D 见到已有货币就不再补基础魂），故此处直接给总额，不叠加。
+const DROP_CURRENCY_BASE_NORMAL := 2
+const DROP_CURRENCY_PER_FLOOR_NORMAL := 1
+const DROP_CURRENCY_BASE_ELITE := 50
+const DROP_CURRENCY_BASE_BOSS := 200
+const DROP_CURRENCY_PER_FLOOR_ELITE_BOSS := 20
+
+## 备弹物品 ID。与旧 LootModule 分支使用同一个物品，不得改成第二个 ID。
+const DROP_AMMO_ITEM_ID := "item_ammo_pack"
+
+const TIER_NORMAL := "normal"
+const TIER_ELITE := "elite"
+const TIER_BOSS := "boss"
+
+
+## 取某只怪在当前档位/层深下的结构化掉落规格（等价于怪物表该行的 `drop` 列）。
+##
+## 返回一份完整的 RewardSpec，可直接交给 `RewardService.resolve()`。
+## `tier` 取 normal / elite / boss；`boss` 时按 `floor` 取 `boss_floor_%d` 池名
+## （该名若未登记，RewardService 会**拒绝并报 UNKNOWN_POOL**，不静默返回空）。
+static func drop_spec_for(
+	monster_id: String, tier: String = TIER_NORMAL, floor_level: int = 0, floor: int = 1
+) -> Dictionary:
+	if not BASE_ENEMY_TYPES.has(monster_id):
+		return {}
+	var safe_floor := maxi(1, floor)
+	var resolved_tier := tier
+	if monster_id == "boss":
+		resolved_tier = TIER_BOSS
+
+	var pool_id := ""
+	var item_chance := 0.0
+	var ammo_chance := 0.0
+	var ammo_min := 0
+	var ammo_max := 0
+	var currency_base := 0
+	var currency_per_floor := 0
+
+	match resolved_tier:
+		TIER_BOSS:
+			pool_id = "boss_floor_%d" % [safe_floor]
+			item_chance = 1.0
+			ammo_chance = 1.0
+			ammo_min = DROP_AMMO_MIN_ELITE
+			ammo_max = DROP_AMMO_MAX_ELITE
+			currency_base = DROP_CURRENCY_BASE_BOSS
+			currency_per_floor = DROP_CURRENCY_PER_FLOOR_ELITE_BOSS
+		TIER_ELITE:
+			pool_id = "elite_floor_1" if safe_floor <= 2 else "elite_floor_2"
+			item_chance = 1.0
+			ammo_chance = 1.0
+			ammo_min = DROP_AMMO_MIN_ELITE
+			ammo_max = DROP_AMMO_MAX_ELITE
+			currency_base = DROP_CURRENCY_BASE_ELITE
+			currency_per_floor = DROP_CURRENCY_PER_FLOOR_ELITE_BOSS
+		_:
+			pool_id = get_loot_table_for_level(floor_level)
+			item_chance = DROP_ITEM_CHANCE_NORMAL
+			ammo_chance = DROP_AMMO_CHANCE_NORMAL
+			ammo_min = DROP_AMMO_MIN_NORMAL
+			ammo_max = DROP_AMMO_MAX_NORMAL
+			currency_base = DROP_CURRENCY_BASE_NORMAL
+			currency_per_floor = DROP_CURRENCY_PER_FLOOR_NORMAL
+
+	var entries: Array = []
+	if item_chance > 0.0:
+		entries.append({
+			"kind": "pool", "pool_id": pool_id, "draws": 1, "chance": item_chance,
+		})
+	if ammo_chance > 0.0:
+		entries.append({
+			"kind": "item", "item_id": DROP_AMMO_ITEM_ID,
+			"count": { "min": ammo_min, "max": ammo_max },
+			"chance": ammo_chance,
+			# 旧行为：池已抽出同一物品时，以整包数量**覆盖**该件，而不是多出一件。
+			"merge_same_item": true,
+		})
+	entries.append({
+		"kind": "currency", "currency_id": "extraction_points",
+		"amount": { "base": currency_base, "per_floor": currency_per_floor },
+	})
+
+	return {
+		"spec_id": "monster:%s:%s:%d" % [monster_id, resolved_tier, safe_floor],
+		"entries": entries,
+	}
+
+
+## 人类可读的掉落列文本（等价于旧自然语言，仅供工具/文档展示，不参与运行时判定）。
+static func describe_drop_spec(monster_id: String, tier: String = TIER_NORMAL, floor_level: int = 0, floor: int = 1) -> String:
+	var spec := drop_spec_for(monster_id, tier, floor_level, floor)
+	if spec.is_empty():
+		return ""
+	var parts: Array[String] = []
+	for entry in spec.get("entries", []):
+		var e: Dictionary = entry
+		match str(e.get("kind", "")):
+			"pool":
+				parts.append("loot_pool=%s; item_chance=%.2f" % [str(e.get("pool_id", "")), float(e.get("chance", 1.0))])
+			"item":
+				var rng: Dictionary = e.get("count", {})
+				parts.append("ammo=%.2f:%d-%d" % [
+					float(e.get("chance", 1.0)), int(rng.get("min", 0)), int(rng.get("max", 0)),
+				])
+			"currency":
+				var amount: Dictionary = e.get("amount", {})
+				parts.append("currency=base:%d+per_floor:%d" % [
+					int(amount.get("base", 0)), int(amount.get("per_floor", 0)),
+				])
+	return "%s; tier=%s" % ["; ".join(parts), tier]
 
 ## 获取精英词缀描述
 static func get_modifier_description(modifier: String) -> String:

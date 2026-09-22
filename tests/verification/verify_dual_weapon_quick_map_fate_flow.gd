@@ -115,6 +115,59 @@ func _ready() -> void:
 	dungeon.call("_on_door_fate_selected", 0)
 	_expect(not bool(dungeon.get("_door_fate_active")) and GameManager.currency > currency_before, "Second full-slot click did not convert card to currency", failures)
 	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen fate selection for ESC contract", failures)
+
+	# 手柄可操控契约：命运卡三选一是**代码构造**的覆盖层，不在 UiMenuFocus 那批静态
+	# 场景菜单里，因此它必须自己抓默认焦点 —— 否则手柄的十字键/左摇杆（ui_*）与 A 键
+	# （ui_accept）都不会被派发，表现为「命运卡界面手柄完全不能操控」。
+	# 焦点必须在翻转动画结束、卡片解除 disabled 之后才抓得到（禁用按钮不可聚焦）。
+	await _wait_fate_cards_flipped(dungeon, failures)
+	var fate_overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
+	var focus_owner := get_viewport().gui_get_focus_owner()
+	_expect(fate_overlay != null, "Fate overlay node is missing for the gamepad focus contract", failures)
+	_expect(
+		focus_owner != null,
+		"Fate overlay has no gui focus owner: gamepad ui_left/right and ui_accept are never dispatched",
+		failures
+	)
+	_expect(
+		focus_owner != null and fate_overlay != null and fate_overlay.is_ancestor_of(focus_owner),
+		"Fate overlay focus owner lives outside the overlay",
+		failures
+	)
+	_expect(
+		focus_owner != null and String(focus_owner.name).begins_with("FateChoiceCard_"),
+		"Fate overlay focus owner is not one of the three tarot cards",
+		failures
+	)
+	if focus_owner is Control:
+		var focus_card := focus_owner as Control
+		_expect(
+			not focus_card.focus_neighbor_left.is_empty(),
+			"Fate card has no left focus neighbour: gamepad cannot cycle between cards",
+			failures
+		)
+		_expect(
+			not focus_card.focus_neighbor_right.is_empty(),
+			"Fate card has no right focus neighbour: gamepad cannot cycle between cards",
+			failures
+		)
+	# 手柄 B 与键盘 ESC 共用 ui_cancel：合成该 action 必须能放弃。
+	# 这条同时盯住「硬比 KEY_ESCAPE」——改成硬比后合成 action 不再命中，本条即红。
+	var cancel_event := InputEventAction.new()
+	cancel_event.action = "ui_cancel"
+	cancel_event.pressed = true
+	cancel_event.strength = 1.0
+	Input.parse_input_event(cancel_event)
+	Input.flush_buffered_events()
+	await get_tree().process_frame
+	_expect(
+		not bool(dungeon.get("_door_fate_active")),
+		"ui_cancel did not cancel the fate selection: gamepad B cannot dismiss the overlay",
+		failures
+	)
+
+	# 函数级取消契约（键盘 ESC 与本条走同一入口，保留原断言）。
+	_expect(dungeon.show_reference_fate_overlay_for_test(), "Cannot reopen fate selection for cancellation contract", failures)
 	dungeon.call("_cancel_door_fate_selection")
 	_expect(not bool(dungeon.get("_door_fate_active")), "ESC fate cancellation contract did not close selection", failures)
 
@@ -140,6 +193,35 @@ func _find_slot(inventory: InventoryModule, item_id: String) -> int:
 		if str((entry.get("item", {}) as Dictionary).get("id", "")) == item_id:
 			return int(entry.get("slot", -1))
 	return -1
+
+
+## 等三张命运卡的翻转动画全部结束（等价于 `_finish_reference_tarot_flip` 已对每张执行）。
+## 必须按**真实时间**轮询而不是固定帧数：headless 下 process 帧不做垂直同步，
+## 固定帧数可能只累积极短的真实 delta，tween 根本走不完（带窗口跑时帧数才够用）。
+func _wait_fate_cards_flipped(dungeon: Node, failures: Array[String]) -> void:
+	var deadline_ms := 6000
+	var elapsed_ms := 0
+	while elapsed_ms < deadline_ms:
+		var overlay := dungeon.get_node_or_null("HUD/DoorFateOverlay3D") as Control
+		if overlay != null and _fate_cards_flipped(overlay):
+			return
+		await get_tree().create_timer(0.05).timeout
+		elapsed_ms += 50
+	failures.append("Fate cards did not finish flipping within %d ms" % deadline_ms)
+
+
+## 三张卡是否都已翻面（可见面就绪且已解除 disabled）。
+func _fate_cards_flipped(overlay: Control) -> bool:
+	if overlay == null or not is_instance_valid(overlay):
+		return false
+	var cards := overlay.find_children("FateChoiceCard_*", "Button", true, false)
+	if cards.size() != 3:
+		return false
+	for card_node in cards:
+		var card := card_node as Button
+		if card.disabled or not bool(card.get_meta("tarot_face_ready", false)):
+			return false
+	return true
 
 
 func _press_key(keycode: Key) -> void:
@@ -174,7 +256,7 @@ func _expect(condition: bool, message: String, failures: Array[String]) -> void:
 
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
-		print("DUAL_WEAPON_QUICK_MAP_FATE_OK: two weapon instances, back stow, 1/2 switch, quick 3/4 items, full map, ESC and full-slot currency conversion pass")
+		print("DUAL_WEAPON_QUICK_MAP_FATE_OK: two weapon instances, back stow, 1/2 switch, quick 3/4 items, full map, the fate overlay hands gamepad focus to a card with left/right neighbours and ui_cancel dismisses it, and full-slot currency conversion passes")
 		get_tree().quit(0)
 		return
 	for failure in failures:

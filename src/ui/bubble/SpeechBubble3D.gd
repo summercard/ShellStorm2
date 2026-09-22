@@ -156,6 +156,11 @@ func _build_nodes() -> void:
 	_panel.name = "Panel"
 	# 面向摄像机：材质层求解，不依赖父节点旋转。
 	_panel.material_override = null
+	_panel.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	# 气泡是**贴在角色头上的 UI**，不该在世界里落投影（2026-09-22 主人要求）。
+	# ⚠️ 元凶只有**底板**：`MeshInstance3D.cast_shadow` 默认 ON；
+	# `Label3D` 的默认值**实测就是 OFF**（`_scratch/nar_fix/probe_default_shadow.gd`，
+	# Label3D=0 / MeshInstance3D=1），所以文字那件不需要（写了也是死代码）。
 	add_child(_panel)
 
 	_label = Label3D.new()

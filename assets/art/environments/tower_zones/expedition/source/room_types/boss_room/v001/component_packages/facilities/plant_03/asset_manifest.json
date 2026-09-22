@@ -1,0 +1,43 @@
+{
+  "package_id": "plant_03",
+  "name_zh": "固定绿植_03",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "固定绿植_03_资产包",
+  "objects": [
+    "固定绿植_03_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -14.974369049072266,
+    -17.0,
+    0.30000001192092896
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -15.798738479614258,
+      -17.837085723876953,
+      0.30000001192092896
+    ],
+    "max": [
+      -14.149999618530273,
+      -16.162914276123047,
+      2.0054891109466553
+    ]
+  },
+  "dimensions_m": [
+    1.6487388610839844,
+    1.6741714477539062,
+    1.7054890990257263
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

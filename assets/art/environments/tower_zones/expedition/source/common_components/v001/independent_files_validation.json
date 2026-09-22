@@ -1,0 +1,4289 @@
+{
+  "passed": true,
+  "independent_blend_count": 214,
+  "output_mesh_count": 602,
+  "source_hash_unchanged": true,
+  "source_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "files": [
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-01-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_01_solid/base_wall_north_slot_01_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-02-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_02_solid/base_wall_north_slot_02_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-03-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_03_solid/base_wall_north_slot_03_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-04-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_04_solid/base_wall_north_slot_04_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-05-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_05_solid/base_wall_north_slot_05_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-06-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_06_solid/base_wall_north_slot_06_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-07-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_07_solid/base_wall_north_slot_07_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-08-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_08_solid/base_wall_north_slot_08_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-09-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_09_solid/base_wall_north_slot_09_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-NORTH-SLOT-10-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_north_slot_10_solid/base_wall_north_slot_10_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-01-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_01_solid/base_wall_south_slot_01_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-02-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_02_solid/base_wall_south_slot_02_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-03-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_03_solid/base_wall_south_slot_03_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-04-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_04_solid/base_wall_south_slot_04_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-05-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_05_solid/base_wall_south_slot_05_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LEFT",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_06_door_left/base_wall_south_slot_06_door_left.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-RIGHT",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_06_door_right/base_wall_south_slot_06_door_right.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-06-DOOR-LINTEL",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_06_door_lintel/base_wall_south_slot_06_door_lintel.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-07-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_07_solid/base_wall_south_slot_07_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-08-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_08_solid/base_wall_south_slot_08_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-09-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_09_solid/base_wall_south_slot_09_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-SOUTH-SLOT-10-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_south_slot_10_solid/base_wall_south_slot_10_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-01-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_01_solid/base_wall_east_slot_01_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-02-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_02_solid/base_wall_east_slot_02_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-03-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_03_solid/base_wall_east_slot_03_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-04-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_04_solid/base_wall_east_slot_04_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-05-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_05_solid/base_wall_east_slot_05_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-06-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_06_solid/base_wall_east_slot_06_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-07-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_07_solid/base_wall_east_slot_07_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-EAST-SLOT-08-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_east_slot_08_solid/base_wall_east_slot_08_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-01-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_01_solid/base_wall_west_slot_01_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-02-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_02_solid/base_wall_west_slot_02_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-03-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_03_solid/base_wall_west_slot_03_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LEFT",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_04_door_left/base_wall_west_slot_04_door_left.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-RIGHT",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_04_door_right/base_wall_west_slot_04_door_right.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-04-DOOR-LINTEL",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_04_door_lintel/base_wall_west_slot_04_door_lintel.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-05-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_05_solid/base_wall_west_slot_05_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-06-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_06_solid/base_wall_west_slot_06_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-07-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_07_solid/base_wall_west_slot_07_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-08-SOLID",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_08_solid/base_wall_west_slot_08_solid.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-BASE",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_base/base_floor_base.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c01/base_floor_tile_r01_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c02/base_floor_tile_r01_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c03/base_floor_tile_r01_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c04/base_floor_tile_r01_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c05/base_floor_tile_r01_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c06/base_floor_tile_r01_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c07/base_floor_tile_r01_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c08/base_floor_tile_r01_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c09/base_floor_tile_r01_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R01-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r01_c10/base_floor_tile_r01_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c01/base_floor_tile_r02_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c02/base_floor_tile_r02_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c03/base_floor_tile_r02_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c04/base_floor_tile_r02_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c05/base_floor_tile_r02_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c06/base_floor_tile_r02_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c07/base_floor_tile_r02_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c08/base_floor_tile_r02_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c09/base_floor_tile_r02_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R02-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r02_c10/base_floor_tile_r02_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c01/base_floor_tile_r03_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c02/base_floor_tile_r03_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c03/base_floor_tile_r03_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c04/base_floor_tile_r03_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c05/base_floor_tile_r03_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c06/base_floor_tile_r03_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c07/base_floor_tile_r03_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c08/base_floor_tile_r03_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c09/base_floor_tile_r03_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R03-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r03_c10/base_floor_tile_r03_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c01/base_floor_tile_r04_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c02/base_floor_tile_r04_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c03/base_floor_tile_r04_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c04/base_floor_tile_r04_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c05/base_floor_tile_r04_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c06/base_floor_tile_r04_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c07/base_floor_tile_r04_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c08/base_floor_tile_r04_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c09/base_floor_tile_r04_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R04-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r04_c10/base_floor_tile_r04_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c01/base_floor_tile_r05_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c02/base_floor_tile_r05_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c03/base_floor_tile_r05_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c04/base_floor_tile_r05_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c05/base_floor_tile_r05_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c06/base_floor_tile_r05_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c07/base_floor_tile_r05_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c08/base_floor_tile_r05_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c09/base_floor_tile_r05_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R05-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r05_c10/base_floor_tile_r05_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c01/base_floor_tile_r06_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c02/base_floor_tile_r06_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c03/base_floor_tile_r06_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c04/base_floor_tile_r06_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c05/base_floor_tile_r06_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c06/base_floor_tile_r06_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c07/base_floor_tile_r06_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c08/base_floor_tile_r06_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c09/base_floor_tile_r06_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R06-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r06_c10/base_floor_tile_r06_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c01/base_floor_tile_r07_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c02/base_floor_tile_r07_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c03/base_floor_tile_r07_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c04/base_floor_tile_r07_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c05/base_floor_tile_r07_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c06/base_floor_tile_r07_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c07/base_floor_tile_r07_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c08/base_floor_tile_r07_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c09/base_floor_tile_r07_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R07-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r07_c10/base_floor_tile_r07_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c01/base_floor_tile_r08_c01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c02/base_floor_tile_r08_c02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c03/base_floor_tile_r08_c03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c04/base_floor_tile_r08_c04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c05/base_floor_tile_r08_c05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c06/base_floor_tile_r08_c06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c07/base_floor_tile_r08_c07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c08/base_floor_tile_r08_c08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c09/base_floor_tile_r08_c09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-FLOOR-TILE-R08-C10",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_floor_tile_r08_c10/base_floor_tile_r08_c10.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_00/wall_skin_north_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_01/wall_skin_north_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_02/wall_skin_north_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_03/wall_skin_north_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_04/wall_skin_north_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_05/wall_skin_north_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_06/wall_skin_north_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_07/wall_skin_north_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_08/wall_skin_north_08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-NORTH-09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_north_09/wall_skin_north_09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_00/wall_skin_south_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_01/wall_skin_south_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_02/wall_skin_south_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_03/wall_skin_south_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_04/wall_skin_south_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_05/wall_skin_south_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_06/wall_skin_south_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_07/wall_skin_south_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_08/wall_skin_south_08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-SOUTH-09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_south_09/wall_skin_south_09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_00/wall_skin_east_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_01/wall_skin_east_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_02/wall_skin_east_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_03/wall_skin_east_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_04/wall_skin_east_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_05/wall_skin_east_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_06/wall_skin_east_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-EAST-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_east_07/wall_skin_east_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_00/wall_skin_west_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_01/wall_skin_west_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_02/wall_skin_west_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_03/wall_skin_west_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_04/wall_skin_west_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_05/wall_skin_west_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_06/wall_skin_west_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WALL-SKIN-WEST-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/wall_skin_west_07/wall_skin_west_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-MAIN-FAULT-SCREEN",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/main_fault_screen/main_fault_screen.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 7
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_complete_00/north_complete_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_damaged_01/north_damaged_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_complete_02/north_complete_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_complete_03/north_complete_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_complete_04/north_complete_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-DAMAGED-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_damaged_05/north_damaged_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-COMPLETE-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_complete_06/north_complete_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_00/under_screen_complete_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_01/under_screen_complete_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_02/under_screen_complete_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_03/under_screen_complete_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_04/under_screen_complete_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-DAMAGED-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_damaged_05/under_screen_damaged_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_06/under_screen_complete_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-UNDER-SCREEN-COMPLETE-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/under_screen_complete_07/under_screen_complete_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_complete_00/east_complete_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_complete_01/east_complete_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_damaged_02/east_damaged_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_complete_03/east_complete_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-COMPLETE-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_complete_04/east_complete_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-EAST-DAMAGED-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/east_damaged_05/east_damaged_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/west_complete_00/west_complete_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WEST-DAMAGED-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/west_damaged_01/west_damaged_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WEST-COMPLETE-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/west_complete_02/west_complete_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 3
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/workstation_00/workstation_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/chair_00/chair_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/workstation_01/workstation_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/chair_01/chair_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/workstation_02/workstation_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/chair_02/chair_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/workstation_03/workstation_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/chair_03/chair_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-WORKSTATION-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/workstation_04/workstation_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-CHAIR-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/chair_04/chair_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/plant_00/plant_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/plant_01/plant_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/plant_02/plant_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/plant_03/plant_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-PLANT-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/plant_04/plant_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/archive_shelf_00/archive_shelf_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/archive_shelf_01/archive_shelf_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/archive_shelf_02/archive_shelf_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-ARCHIVE-SHELF-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/archive_shelf_03/archive_shelf_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/heavy_conduits/heavy_conduits.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 1
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-00",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_00/debris_00.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-01",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_01/debris_01.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-02",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_02/debris_02.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-03",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_03/debris_03.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-04",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_04/debris_04.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-05",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_05/debris_05.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-06",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_06/debris_06.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_07/debris_07.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-08",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_08/debris_08.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-09",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_09/debris_09.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-NORTH-WALL-TYPOGRAPHY",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/north_wall_typography/north_wall_typography.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 4
+    },
+    {
+      "component_id": "ENV-EXPEDITION-BOSSROOM-SOUTH-FLOOR-MARKING",
+      "file": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/south_floor_marking/south_floor_marking.blend",
+      "checks": {
+        "exact_output_object_set": true,
+        "one_component_scene": true,
+        "root_identity": true,
+        "mesh_identity": true,
+        "collection_offset_zero": true,
+        "nonempty": true,
+        "output_membership_unique": true,
+        "camera_ready": true,
+        "not_room_owned": true,
+        "bounds_match": true,
+        "bottom_zero": true,
+        "standard_material_uv": true
+      },
+      "passed": true,
+      "output_mesh_count": 2
+    }
+  ]
+}

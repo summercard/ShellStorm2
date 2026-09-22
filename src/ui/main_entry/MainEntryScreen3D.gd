@@ -8,9 +8,16 @@ signal transition_finished()
 signal camera_override_changed(active: bool)
 
 const Persistence = preload("res://src/player3d/customization/AvatarCustomizationPersistence.gd")
-const CLOSEUP_HEIGHT_M := 1.42
-const CLOSEUP_DISTANCE_M := 3.10
-const CLOSEUP_FOV := 33.0
+const CLOSEUP_HEIGHT_M := 0.30
+const CLOSEUP_DISTANCE_M := 3.05
+const CLOSEUP_FOV := 52.0
+const CLOSEUP_CAMERA_ROLL_DEG := -7.0
+## 开场页专用景深：只改「近景虚化距离」这一个值。
+## 玩家相机共用的 cam_attrs_player3d_practical_v001.tres 把近景虚化设在 5.0m
+## （全虚化阈值 5.0 − 2.0 = 3.0m），而开场页角色距相机仅约 3.06m，
+## 恰好落进虚化区 ⇒ 角色发糊。展示期间改用本地副本改这一个值，
+## 共享资源不动，玩法态视觉一字不变。
+const PRESENTATION_DOF_NEAR_DISTANCE_M := 2.5
 const TRANSITION_DURATION_S := 1.15
 const INTRO_SPOTLIGHT_HEIGHT_M := 5.2
 const INTRO_FACE_FILL_ENERGY := 2.0
@@ -44,6 +51,8 @@ var _gameplay_hud_previous_visible := true
 var _gameplay_hud_prepared := false
 var _intro_spotlight: SpotLight3D = null
 var _intro_face_fill: OmniLight3D = null
+var _saved_camera_attributes: CameraAttributes = null
+var _presentation_attributes: CameraAttributesPractical = null
 
 
 func _ready() -> void:
@@ -51,6 +60,9 @@ func _ready() -> void:
 	layer = 110
 	screen.visible = false
 	start_button.pressed.connect(start_game)
+	# 启动页的标题、六边形霓虹按钮与菜单壳全部自绘：声明豁免，避免被战术皮肤
+	# 重新套上矩形描边与底色（会在按钮/面板背后露出一圈多余边框）。
+	set_meta("ui_style_exempt", true)
 	UIStyleFactory.apply_tactical_tree(self)
 	if auto_present_when_player_found:
 		call_deferred("_auto_present")
@@ -95,6 +107,7 @@ func present(player: Player3D, gameplay_transform: Transform3D = Transform3D.IDE
 	_place_camera_in_front_of_player()
 	_camera.fov = CLOSEUP_FOV
 	_closeup_transform = _camera.transform
+	_apply_presentation_camera_attributes()
 	_presenting = true
 	_transitioning = false
 	_transition_elapsed = 0.0
@@ -151,6 +164,31 @@ func _narrative_holds_presentation() -> bool:
 	return holds_camera or holds_input
 
 
+## 开场页景深：在玩家相机共用的属性资源上做一份本地副本，只改「近景虚化距离」，
+## 因此玩法态使用的原资源完全不受影响。展示结束由 _restore_camera_attributes() 归还。
+func _apply_presentation_camera_attributes() -> void:
+	if _camera == null or not is_instance_valid(_camera):
+		return
+	if _saved_camera_attributes == null:
+		_saved_camera_attributes = _camera.attributes
+	var source := _saved_camera_attributes as CameraAttributesPractical
+	var attrs: CameraAttributesPractical
+	if source != null:
+		attrs = source.duplicate() as CameraAttributesPractical
+	else:
+		attrs = CameraAttributesPractical.new()
+	attrs.dof_blur_near_distance = PRESENTATION_DOF_NEAR_DISTANCE_M
+	_presentation_attributes = attrs
+	_camera.attributes = attrs
+
+
+func _restore_camera_attributes() -> void:
+	if _camera != null and is_instance_valid(_camera) and _saved_camera_attributes != null:
+		_camera.attributes = _saved_camera_attributes
+	_saved_camera_attributes = null
+	_presentation_attributes = null
+
+
 func get_entry_snapshot() -> Dictionary:
 	return {
 		"presenting": _presenting,
@@ -176,6 +214,11 @@ func get_entry_snapshot() -> Dictionary:
 		"presentation_facing_south": _is_player_facing_south(),
 		"camera_on_south_side": _is_camera_on_south_side(),
 		"avatar_follows_mouse": false,
+		"presentation_dof_near_distance": (
+			_presentation_attributes.dof_blur_near_distance
+			if _presentation_attributes != null and is_instance_valid(_presentation_attributes)
+			else -1.0
+		),
 	}
 
 
@@ -209,6 +252,7 @@ func _finish_transition() -> void:
 	_presenting = false
 	_transitioning = false
 	_remove_intro_spotlight()
+	_restore_camera_attributes()
 	_restore_gameplay_hud()
 	screen.visible = false
 	screen.modulate = Color.WHITE
@@ -218,6 +262,7 @@ func _finish_transition() -> void:
 
 func _exit_tree() -> void:
 	_remove_intro_spotlight()
+	_restore_camera_attributes()
 	_restore_gameplay_hud()
 
 
@@ -229,7 +274,8 @@ func _place_camera_in_front_of_player() -> void:
 		+ Vector3.UP * CLOSEUP_HEIGHT_M
 		+ PRESENTATION_SOUTH_DIRECTION * CLOSEUP_DISTANCE_M
 	)
-	_camera.look_at(_player.global_position + Vector3.UP * 0.70, Vector3.UP)
+	_camera.look_at(_player.global_position + Vector3.UP * 0.92, Vector3.UP)
+	_camera.rotate_object_local(Vector3.FORWARD, deg_to_rad(CLOSEUP_CAMERA_ROLL_DEG))
 
 
 func _get_avatar_front_direction() -> Vector3:

@@ -1,0 +1,47 @@
+{
+  "package_id": "wall_skin_west_06",
+  "name_zh": "装甲墙_WEST_06",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "装甲墙_WEST_06_资产包",
+  "objects": [
+    "装甲墙_WEST_06_部件1",
+    "装甲墙_WEST_06_部件0",
+    "装甲墙_WEST_06_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -24.649999618530273,
+    12.5,
+    0.05000000074505806
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -24.829999923706055,
+      10.037500381469727,
+      0.05000000074505806
+    ],
+    "max": [
+      -24.469999313354492,
+      14.962499618530273,
+      11.850000381469727
+    ]
+  },
+  "dimensions_m": [
+    0.3600006103515625,
+    4.924999237060547,
+    11.800000380724669
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

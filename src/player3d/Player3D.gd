@@ -60,6 +60,9 @@ const INTERACTION_CONTROLLER_SCRIPT := preload(
 ## 接同一组处理函数，Player3D 不区分来源。
 const VIRTUAL_INPUT_SOURCES := ["MobileInput", "GamepadInput"]
 
+## 敌人分组名（Enemy3D._ready 里 add_to_group 的那个）。瞄准辅助按它收集候选。
+const ENEMY_GROUP := "enemy_3d"
+
 @export var max_hp := 100
 @export var combat_enabled := false
 @export var start_with_weapon := true
@@ -88,6 +91,10 @@ var _last_damage_source_at_msec := 0
 var _death_animation_progress := 0.0
 var _death_animation_finished_emitted := false
 var _invincible_remaining := 0.0
+## 结算后保护：撤离/阵亡已经提交、但场景还没切走或复位完成的那段时间。
+## 此时玩家输入被锁、站着挨打，若被拖死就会在「已结算」之上再叠一次死亡，
+## 或者被作废后以 hp=0 卡在原地。由 _update_invincibility 保活，不走倒计时。
+var _post_settlement_invulnerable := false
 var _state_machine: StateMachine = null
 var melee_combat: PlayerMeleeCombat3D = null
 var _test_move_direction: Variant = null
@@ -476,6 +483,40 @@ func _get_mobile_face_direction() -> Vector3:
 	var right_2d := Vector2(-forward_2d.y, forward_2d.x)
 	var aim := right_2d * _mobile_face_direction.x + forward_2d * (-_mobile_face_direction.y)
 	return Vector3(aim.x, 0.0, aim.y).normalized() if aim.length_squared() > 0.0001 else Vector3.ZERO
+
+
+## 收集瞄准辅助的候选敌人（已过滤）。准入规则本身是纯函数 `AimAssist3D.is_eligible`
+## （便于 headless 逐值断言），本函数只负责取数并组装成 solve 要的形状。
+func _collect_aim_assist_candidates(aim_dir: Vector3) -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = []
+	if not InputSettings.is_aim_assist_enabled():
+		return candidates
+	var tree := get_tree()
+	if tree == null:
+		return candidates
+	var flat_aim := Vector2(aim_dir.x, aim_dir.z)
+	if flat_aim.length_squared() <= 0.000001:
+		return candidates
+	var origin := global_position
+	for node in tree.get_nodes_in_group(ENEMY_GROUP):
+		var enemy := node as Enemy3D
+		if enemy == null:
+			continue
+		var to_enemy := enemy.global_position - origin
+		to_enemy.y = 0.0
+		var distance := to_enemy.length()
+		var direction := to_enemy / distance if distance > 0.0001 else Vector3.ZERO
+		var angle_deg := rad_to_deg(absf(flat_aim.angle_to(Vector2(direction.x, direction.z))))
+		var eligible: bool = AimAssist3D.is_eligible(
+			enemy.current_hp > 0,
+			enemy.get_illumination_state(),
+			distance,
+			angle_deg
+		)
+		if not eligible:
+			continue
+		candidates.append({AimAssist3D.KEY_DIRECTION: direction, AimAssist3D.KEY_DISTANCE: distance})
+	return candidates
 
 
 func set_test_move_direction(direction: Variant) -> void:
@@ -1804,9 +1845,29 @@ func _complete_death_animation() -> void:
 func _update_invincibility(delta: float) -> void:
 	if not is_invincible:
 		return
+	# 结算后保护不参与倒计时：撤离/阵亡已定，返航窗口内不能再被伤害改变结局。
+	if _post_settlement_invulnerable:
+		return
 	_invincible_remaining = maxf(0.0, _invincible_remaining - delta)
 	if _invincible_remaining <= 0.0 and not is_dashing:
 		is_invincible = false
+
+
+## 行动结算已提交、场景尚未切换或复位完成时调用：屏蔽返航窗口内的伤害。
+## 玩家此时输入被锁、无法走位，被残留拦截怪拖死会污染已写盘的结算结果。
+func hold_post_settlement_invulnerability() -> void:
+	_post_settlement_invulnerable = true
+	is_invincible = true
+	_invincible_remaining = 0.0
+
+
+## 进入新一轮行动（例如塔楼成功返航复位）时解除结算后保护。
+func release_post_settlement_invulnerability() -> void:
+	if not _post_settlement_invulnerable:
+		return
+	_post_settlement_invulnerable = false
+	is_invincible = false
+	_invincible_remaining = 0.0
 
 
 func _update_aim_from_mouse() -> void:
@@ -1821,6 +1882,9 @@ func _update_aim_from_mouse() -> void:
 	if _mobile_input_available and _mobile_face_active:
 		var aim_dir_3d := _get_mobile_face_direction()
 		if aim_dir_3d.length_squared() > 0.0001:
+			# 虚拟摇杆瞄准辅助（磁吸）：只对摇杆输入生效 —— 键鼠走鼠标射线，
+			# 精度本来就够，加吸附反而变成「准星不听话」。触屏虚拟摇杆同样受益。
+			aim_dir_3d = AimAssist3D.solve(aim_dir_3d, _collect_aim_assist_candidates(aim_dir_3d))
 			aim_direction = aim_dir_3d
 			aim_yaw = atan2(-aim_dir_3d.x, -aim_dir_3d.z)
 			var aim_cursor_distance := 3.2

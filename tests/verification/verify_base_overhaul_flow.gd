@@ -222,14 +222,30 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	entry.prepare_gameplay_hud(tower.get_node("HUD") as CanvasLayer)
 	tower.add_child(entry)
 	await get_tree().process_frame
-	_expect(entry.present(tower.player), "主页面没有使用实时角色与玩法摄像机", failures)
+	_expect(entry.present(tower.player), "主页面没有以纯视觉代理方案接管", failures)
 	var entry_snapshot := entry.get_entry_snapshot()
-	_expect(bool(entry_snapshot.get("seamless_scene_change", false)) and bool(entry_snapshot.get("uses_live_player", false)), "主页面不是无缝实时角色方案", failures)
+	_expect(bool(entry_snapshot.get("seamless_scene_change", false)) and bool(entry_snapshot.get("uses_visual_snapshot", false)), "主页面不是视觉快照代理方案", failures)
+	_expect(bool(entry_snapshot.get("dedicated_camera", false)), "主页面没有建立独立展示摄像机", failures)
+	_expect(bool(entry_snapshot.get("dedicated_attributes", false)), "主页面展示摄像机没有独立attributes", failures)
 	_expect(bool(entry_snapshot.get("gameplay_hud_hidden", false)), "主页面显示时玩法HUD没有隐藏", failures)
-	_expect(bool(entry_snapshot.get("intro_spotlight_active", false)), "主页面缺少角色头顶聚光灯", failures)
-	_expect(bool(entry_snapshot.get("intro_face_fill_active", false)), "主页面缺少面部补光", failures)
-	_expect(bool(entry_snapshot.get("intro_face_fill_player_only", false)), "主页面面部补光没有隔离到角色层", failures)
-	_expect(float(entry_snapshot.get("intro_face_fill_energy", 0.0)) >= 1.5, "主页面面部补光强度不足", failures)
+	_expect(bool(entry_snapshot.get("presentation_lights_only", false)), "主页面灯光没有限定为展示层专用", failures)
+	# 四盏独立展示灯：检查FaceFill能量与单一展示层，不断言原玩家层或聚光灯。
+	var entry_rig := entry.get("_rig") as Node3D
+	var face_fill: OmniLight3D = null
+	if entry_rig != null:
+		face_fill = entry_rig.find_child("FaceFill", true, false) as OmniLight3D
+	_expect(face_fill != null, "主页面缺少独立FaceFill展示灯", failures)
+	if face_fill != null:
+		_expect(is_equal_approx(face_fill.light_energy, 1.3), "主页面FaceFill展示灯能量不是1.3", failures)
+		_expect(face_fill.light_cull_mask == (1 << 18), "主页面FaceFill没有限定为独立展示层", failures)
+	var entry_light_count := 0
+	if entry_rig != null:
+		for entry_light_value in entry_rig.find_children("*", "Light3D", true, false):
+			var entry_light := entry_light_value as Light3D
+			entry_light_count += 1
+			_expect(entry_light.light_cull_mask == (1 << 18), "主页面存在非展示层灯光", failures)
+			_expect(entry_light is OmniLight3D, "主页面展示灯不应使用聚光灯", failures)
+	_expect(entry_light_count == 4, "主页面展示灯不是四盏独立展示灯", failures)
 	_expect(bool(entry_snapshot.get("camera_on_avatar_front", false)), "主页面摄像机没有位于角色正面", failures)
 	_expect(bool(entry_snapshot.get("presentation_facing_south", false)), "主页面角色没有固定面向南方", failures)
 	_expect(bool(entry_snapshot.get("camera_on_south_side", false)), "主页面摄像机没有固定在角色南侧", failures)
@@ -237,20 +253,20 @@ func _verify_tower_location_and_ui(failures: Array[String]) -> void:
 	tower.player.aim_yaw = entry_mouse_yaw
 	entry.call("_process", 0.0)
 	_expect(
-		not bool(entry_snapshot.get("avatar_follows_mouse", true))
-		and bool(entry.get_entry_snapshot().get("presentation_facing_south", false))
-		and not is_equal_approx(tower.player.aim_yaw, entry_mouse_yaw),
+		not bool(entry.get_entry_snapshot().get("avatar_follows_mouse", true))
+		and bool(entry.get_entry_snapshot().get("presentation_facing_south", false)),
 		"主页面没有锁定角色南向展示朝向",
 		failures
 	)
+	_expect(is_equal_approx(tower.player.aim_yaw, entry_mouse_yaw), "主页面错误地修改了真实玩家yaw", failures)
 	entry.start_game()
 	var transition_snapshot := entry.get_entry_snapshot()
-	_expect(not bool(transition_snapshot.get("intro_spotlight_active", true)), "点击开始后开场聚光灯没有立即熄灭", failures)
+	_expect(bool(transition_snapshot.get("transitioning", false)), "点击开始后开场过渡没有启动", failures)
 	entry.skip_to_gameplay()
 	await get_tree().process_frame
 	var gameplay_snapshot := entry.get_entry_snapshot()
 	_expect((tower.get_node("HUD") as CanvasLayer).visible, "开始游戏后玩法HUD没有恢复", failures)
-	_expect(not bool(gameplay_snapshot.get("intro_spotlight_active", true)), "开始游戏后开场聚光灯没有熄灭", failures)
+	_expect(entry.get("_rig") == null, "过渡结束后展示rig没有释放", failures)
 	entry.queue_free()
 
 	var wardrobe_scene := load("res://scenes/ui/WardrobeMenu3D.tscn") as PackedScene

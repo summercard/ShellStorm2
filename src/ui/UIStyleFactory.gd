@@ -214,6 +214,11 @@ static func make_tactical_panel(
 static func apply_tactical_tree(root: Node) -> void:
 	if root == null:
 		return
+	# 全自绘 UI（启动页的品牌标题 / 六边形霓虹按钮等）用该 meta 声明整棵子树豁免。
+	# 子节点 _ready 先于父节点执行，这里不加豁免就会把矩形 StyleBox 重新套回按钮与面板，
+	# 在自绘图形背后露出一圈多余的边框和底色。
+	if root.has_meta("ui_style_exempt"):
+		return
 	if root is PanelContainer:
 		var panel := root as PanelContainer
 		var lowered := panel.name.to_lower()

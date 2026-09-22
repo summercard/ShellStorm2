@@ -5,11 +5,15 @@
   "trigger": {
     "kind": "point",
     "point_room": "floor_01_main_02",
-    "point_offset": [-14.0, 0.0, 0.0],
+    "point_offset": [
+      -14.0,
+      0.0,
+      0.0
+    ],
     "radius": 2.5,
     "once": "run"
   },
-  "duration": 7.0,
+  "duration": 10.6,
   "cues": [
     {
       "at": 0.0,
@@ -23,7 +27,11 @@
       "kind": "melee_chaser",
       "count": 5,
       "point_room": "floor_01_main_02",
-      "point_offset": [6.0, 0.0, 0.0],
+      "point_offset": [
+        6.0,
+        0.0,
+        0.0
+      ],
       "axis": "z",
       "spread": 1.6,
       "stagger_m": 1.4
@@ -45,11 +53,17 @@
     {
       "at": 4.6,
       "do": "actor.say",
-      "text": "它们是什么？",
+      "text": "黑暗中是什么东西！",
       "hold": 1.8
     },
     {
-      "at": 7.0,
+      "at": 6.4,
+      "do": "ui.hint",
+      "text": "打开你身上的手电，那里有危险！按F开启手电",
+      "auto": 4.0
+    },
+    {
+      "at": 10.6,
       "do": "flow.end"
     }
   ]

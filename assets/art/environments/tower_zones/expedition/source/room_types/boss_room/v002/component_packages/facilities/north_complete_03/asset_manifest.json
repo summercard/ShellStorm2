@@ -1,0 +1,47 @@
+{
+  "package_id": "north_complete_03",
+  "name_zh": "完整服务器_north_complete_03",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "完整服务器_north_complete_03_资产包",
+  "objects": [
+    "完整服务器_north_complete_03_部件0",
+    "完整服务器_north_complete_03_部件1",
+    "完整服务器_north_complete_03_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    14.0,
+    17.917500495910645,
+    0.12999999523162842
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      12.414999961853027,
+      16.420000076293945,
+      0.12999999523162842
+    ],
+    "max": [
+      15.585000038146973,
+      19.415000915527344,
+      5.730000019073486
+    ]
+  },
+  "dimensions_m": [
+    3.1700000762939453,
+    2.9950008392333984,
+    5.600000023841858
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

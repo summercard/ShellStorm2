@@ -1,0 +1,43 @@
+{
+  "package_id": "floor_cables",
+  "name_zh": "跨设施电缆束",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "跨设施电缆束_资产包",
+  "objects": [
+    "跨设施电缆束_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -0.7942671775817871,
+    15.895994663238525,
+    0.3269999623298645
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -13.042951583862305,
+      13.741011619567871,
+      0.3269999623298645
+    ],
+    "max": [
+      11.45441722869873,
+      18.05097770690918,
+      2.9354605674743652
+    ]
+  },
+  "dimensions_m": [
+    24.497368812561035,
+    4.309966087341309,
+    2.6084606051445007
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

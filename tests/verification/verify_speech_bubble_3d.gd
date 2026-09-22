@@ -109,6 +109,12 @@ func _check_facing_camera(stage: Node3D) -> void:
 		"Label3D 启用了 billboard（会与底板更新不同步，造成走路重影）")
 	_expect(label.alpha_cut == Label3D.ALPHA_CUT_DISCARD,
 		"Label3D 未启用 alpha 裁剪（移动时 TAA 会在文字上拖出残影）")
+	# 气泡是贴在角色头上的 UI，**不许在世界里投影**（2026-09-22 主人：「头上的对话框会投射投影」）。
+	# 面板与文字**两件都要关**：`Label3D` 也是 `GeometryInstance3D`，默认同样投影。
+	_expect(panel.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF,
+		"底板仍在投影（头顶的对话框会在地面/墙上留下影子）")
+	# ⛐ 不要给 Label3D 写这条：它的 `cast_shadow` **默认就是 OFF**
+	# （实测 Label3D=0 / MeshInstance3D=1），断言永远为绿 = 假绿。
 
 	# 真正的"对着相机"判据：气泡朝向必须与相机朝向一致。
 	# 用真实相机而不是"材质开了 billboard"—— 后者只是配置，前者才是行为。

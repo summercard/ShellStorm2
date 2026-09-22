@@ -1,0 +1,17 @@
+﻿可用字节总数        :      10,932,224 ( 10.4 MB)
+总字节数             : 249,726,930,944 (232.6 GB)
+配额可用字节总数  :      10,932,224 ( 10.4 MB)
+
+=== C:\ 一层目录占用 ===
+  111348.1 MB  Users
+   31906.2 MB  $Recycle.Bin
+   31612.3 MB  Windows
+   22208.9 MB  Program Files
+   17297.2 MB  ProgramData
+   11135.5 MB  Program Files (x86)
+    7977.7 MB  .alma-snapshots
+     575.4 MB  Recovery
+       296 MB  ffmpeg
+       0.1 MB  ttnet
+       0.1 MB  tmp
+         0 MB  PerfLogs

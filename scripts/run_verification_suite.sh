@@ -83,6 +83,7 @@ core_scenes=(
   "${smoke_scenes[@]}"
   verify_floor_plan_generator
   verify_level_plan_design_source
+  verify_reward_service_flow
   verify_room_graph_persistence_services
   verify_verification_runner_contract
   verify_hud_presenter_3d
@@ -141,6 +142,7 @@ core_scenes=(
   verify_tower_base_facility_persistent_flow
   verify_tower_extraction_return_flow
   verify_expedition_extraction_carry_return
+  verify_death_during_extraction_flow
   verify_game_entry_flow
   verify_base_world_flow
   verify_dual_weapon_quick_map_fate_flow

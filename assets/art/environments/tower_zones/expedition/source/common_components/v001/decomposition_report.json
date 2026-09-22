@@ -1,0 +1,12 @@
+{
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_count": 214,
+  "object_assignment_count": 602,
+  "duplicate_source_objects": false,
+  "all_output_instance_offsets_zero": true,
+  "all_output_roots_identity": true,
+  "room_owned_geometry": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "godot_runtime_connected": false
+}

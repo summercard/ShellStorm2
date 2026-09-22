@@ -1,0 +1,9 @@
+expedition_01/v001
+├─ blender/ (1 .blend)
+├─ data/
+│  ├─ level_plan.json / floors/ / room_templates/   ← A 段设计源（09-level-plan-authoring）
+│  ├─ component_packages/
+│  │  ├─ catalog.json
+│  │  ├─ boss_arena/ (1)
+│  └─ validation/
+└─ renders/

@@ -1,0 +1,43 @@
+{
+  "package_id": "base_wall_south_slot_06_door_lintel",
+  "name_zh": "结构_WALL_SOUTH_SLOT_06_DOOR_LINTEL",
+  "category": "architecture",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "结构_WALL_SOUTH_SLOT_06_DOOR_LINTEL_资产包",
+  "objects": [
+    "WALL_SOUTH_SLOT_06_DOOR_LINTEL"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    2.4999999403953552,
+    -19.850000381469727,
+    2.799999952316284
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      1.399999976158142,
+      -20.0,
+      2.799999952316284
+    ],
+    "max": [
+      3.5999999046325684,
+      -19.700000762939453,
+      11.90000057220459
+    ]
+  },
+  "dimensions_m": [
+    2.1999999284744263,
+    0.2999992370605469,
+    9.100000619888306
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

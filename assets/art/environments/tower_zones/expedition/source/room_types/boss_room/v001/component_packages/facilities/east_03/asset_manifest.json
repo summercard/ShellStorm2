@@ -1,0 +1,47 @@
+{
+  "package_id": "east_03",
+  "name_zh": "服务器_east_03",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "服务器_east_03_资产包",
+  "objects": [
+    "服务器_east_03_部件0",
+    "服务器_east_03_部件1",
+    "服务器_east_03_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    23.166250228881836,
+    0.0,
+    0.30000001192092896
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      22.207500457763672,
+      -1.0,
+      0.30000001192092896
+    ],
+    "max": [
+      24.125,
+      1.0,
+      5.514999866485596
+    ]
+  },
+  "dimensions_m": [
+    1.9174995422363281,
+    2.0,
+    5.214999854564667
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

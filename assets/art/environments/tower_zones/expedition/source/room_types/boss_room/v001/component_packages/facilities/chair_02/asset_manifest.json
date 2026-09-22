@@ -1,0 +1,45 @@
+{
+  "package_id": "chair_02",
+  "name_zh": "独立座椅_02",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "独立座椅_02_资产包",
+  "objects": [
+    "独立座椅_02_部件1",
+    "独立座椅_02_部件0"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -17.949774742126465,
+    -9.730000019073486,
+    0.34508493542671204
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -18.55231285095215,
+      -10.362092018127441,
+      0.34508493542671204
+    ],
+    "max": [
+      -17.34723663330078,
+      -9.097908020019531,
+      2.174999952316284
+    ]
+  },
+  "dimensions_m": [
+    1.2050762176513672,
+    1.2641839981079102,
+    1.8299150168895721
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

@@ -88,6 +88,13 @@ var _kills := 0
 var _completed := false
 var _death_dialog: Control = null
 var _death_animation_ready := false
+## 行动代际：每次「本次行动已终局结算并把世界复位成新一轮」时 +1。
+## 死亡动画 1.35s 比成功撤离的 0.8s 返航窗口更长，复位之后才结束的那次死亡
+## 属于上一代行动，必须作废 —— 否则同一次行动会先判撤离成功、再判阵亡结算。
+var _run_generation := 0
+## 当前这次死亡是在哪一代行动里发生的。与 _run_generation 不一致即表示
+## 该死亡已被终局结算覆盖，不得再弹框、不得再结算。
+var _death_recorded_generation := -1
 var _extraction: ExtractionBeacon3D = null
 var _standard_extraction: ExtractionBeacon3D = null
 var _emergency_extraction: ExtractionBeacon3D = null
@@ -615,13 +622,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		_use_quick_item(1)
 		get_viewport().set_input_as_handled()
 		return
+	# 命运卡弹窗的「放弃」走 InputMap action：键盘 ESC 与手柄 B 都能放弃。
+	# 硬比 KEY_ESCAPE 只有键盘能触发，手柄的 ui_cancel（B 键）到不了这里
+	# —— 与 0808 记录里把 M/1/2/3/4 从硬比 keycode 改成 action 是同一类修正。
+	if _door_fate_active and event.is_action_pressed("ui_cancel"):
+		_cancel_door_fate_selection()
+		get_viewport().set_input_as_handled()
+		return
 	var key_event := event as InputEventKey
-	if key_event != null and key_event.pressed and not key_event.echo:
-		var key := key_event.keycode if key_event.keycode != 0 else key_event.physical_keycode
-		if key == KEY_ESCAPE and _door_fate_active:
-			_cancel_door_fate_selection()
-			get_viewport().set_input_as_handled()
-			return
 	if key_event != null and key_event.pressed and not key_event.echo and (key_event.keycode == KEY_K or key_event.physical_keycode == KEY_K):
 		var presentation_panel := _ensure_weapon_presentation_panel()
 		if presentation_panel != null:
@@ -1487,6 +1495,7 @@ func _generate_layout() -> void:
 			"tower_module_shell": bool(record.get("tower_module_shell", false)),
 			"open_wall_directions": record.get("open_wall_directions", []),
 			"enemy_spawn_plan": record.get("enemy_spawn_plan", {}),
+			"reward_plan": record.get("reward_plan", {}),
 			"safe_room_corner_l": bool(record.get("safe_room_corner_l", false)),
 			# 授权布局壳体（区块00 98F 入口房）：入口房由本路径在开局就实例化，
 			# 而其余房间在 FloorBundle 里走 TowerDescent3D._instantiate_dynamic_room。
@@ -2665,11 +2674,16 @@ func _on_prop_searched(room: DungeonRoom3D, loot_hint: Dictionary) -> void:
 	status_label.text = "搜索完成 · 1 件物资落地"
 
 
+## `spread`：是否按「第几件」做确定性散布（多件掉落才需要，避免叠在一起）。
+## 单件、且落点要被别处（如剧本的朝向目标点）精确引用时传 `false` ——
+## 实测散布在 index=0 时是 `(cos0.45, 0, sin0.45) * 0.7` ≈ 偏 0.70m，
+## 会让「指那个常量点」与「枪实际在哪」对不上（2026-09-22 开场那把枪）。
 func _spawn_loot_items(
 	room: DungeonRoom3D,
 	items: Array[Dictionary],
 	world_position: Vector3,
-	pickup_grace_seconds: float = 0.0
+	pickup_grace_seconds: float = 0.0,
+	spread := true
 ) -> void:
 	for index in range(items.size()):
 		var item := items[index].duplicate(true)
@@ -2680,11 +2694,10 @@ func _spawn_loot_items(
 		pickup.configure(item, color)
 		pickup.set_pickup_grace_seconds(pickup_grace_seconds)
 		room.add_child(pickup)
-		var angle := float(index) * 2.1 + 0.45
-		var requested_position := (
-			world_position
-			+ Vector3(cos(angle), 0.0, sin(angle)) * (0.7 + index * 0.18)
-		)
+		var requested_position := world_position
+		if spread:
+			var angle := float(index) * 2.1 + 0.45
+			requested_position += Vector3(cos(angle), 0.0, sin(angle)) * (0.7 + index * 0.18)
 		pickup.global_position = _find_supported_spawn_position(
 			requested_position,
 			room.global_position
@@ -3053,11 +3066,31 @@ func _mark_room_cleared(room: DungeonRoom3D, spawn_key: bool) -> void:
 		call_deferred("_ensure_room_key_reward", room)
 
 
+## 本房该不该产出「房间钥匙」奖励（= 本房的门是否消耗钥匙）。
+## （同一判据也给 HUD 目标文案用：不消耗钥匙时不提「用钥匙开门」。）
+## 钥匙的唯一用途是开下一扇门；若本房所有门都不消耗钥匙（和平区如 98F 区块00），
+## 钥匙就是永远用不掉的垃圾道具 —— 必须一并不发。
+## ⛔ 这里必须**自检**，不能只信调用方的 `spawn_key` 形参：
+## `_on_room_entered()` 的「重进已探索房间」分支是无条件调用本函数的，
+## 于是玩家回头走一趟刚清过的和平区，地上就会掉出一把钥匙（2026-09-22 人报截图）。
+func _room_produces_room_key(room: DungeonRoom3D) -> bool:
+	if room == null:
+		return false
+	if room.authored_layout_peaceful:
+		return false
+	var declared: Dictionary = room.door_policies
+	for direction in declared.keys():
+		if bool((declared[direction] as Dictionary).get("requires_key", true)):
+			return true
+	return declared.is_empty()
+
+
 func _ensure_room_key_reward(room: DungeonRoom3D) -> void:
 	if (
 		room == null
 		or not is_instance_valid(room)
 		or not room.cleared
+		or not _room_produces_room_key(room)
 		or room.room_type in ["START", "EXTRACTION", "FACILITY", "ELEVATOR"]
 		or _spawned_key_rooms.has(room.room_id)
 	):
@@ -3256,11 +3289,14 @@ func _build_door_fate_overlay() -> void:
 	row.add_theme_constant_override("separation", _hud_int(64))
 	_anchor_control(row, 0.5, 0.0, 0.5, 0.0, -570, 134, 570, 706)
 	_fate_overlay.add_child(row)
+	var card_buttons: Array[Button] = []
 	for choice_index in range(_door_fate_choices.size()):
 		var card := _door_fate_choices[choice_index]
 		var card_button := _create_reference_fate_card(card, choice_index)
 		row.add_child(card_button)
+		card_buttons.append(card_button)
 		_play_reference_tarot_flip(card_button, card, choice_index)
+	_configure_fate_card_focus_navigation(card_buttons)
 
 	var info_panel := _make_hud_panel(Color(0.23, 0.88, 1.0), Color(0.006, 0.036, 0.055, 0.94))
 	_anchor_control(info_panel, 0.5, 0.0, 0.5, 0.0, -380, 730, 380, 806)
@@ -3456,6 +3492,53 @@ func _finish_reference_tarot_flip(button: Button, card: FateCard) -> void:
 	button.set_meta("tarot_face_ready", true)
 	button.set_meta("tarot_orientation", card.orientation_name())
 	button.set_meta("tarot_face_rotation", button.rotation)
+	_maybe_focus_fate_card(button)
+
+
+## 命运卡三选一是**代码构造**的覆盖层（不是场景菜单），因此不在
+## `UiMenuFocus.ensure_focus` 的那批静态菜单里，需要自己抓默认焦点。
+##
+## 时机是硬约束：卡片在翻转动画期间 `disabled = true`（防止翻面前误点），
+## 而 `UiMenuFocus.is_focusable` 会排除禁用按钮、`grab_focus()` 对禁用按钮也无效
+## ⇒ 只有 `_finish_reference_tarot_flip` 解除 disabled 的那一刻才抓得到。
+## 三张卡的翻转动画带 stagger，第一张最早解锁，于是焦点落在第一张卡上。
+##
+## 只在当前没有焦点持有者时抓：玩家若已用鼠标/手柄选中了某张卡，不抢回来。
+func _maybe_focus_fate_card(button: Button) -> void:
+	if not _door_fate_active:
+		return
+	if _fate_overlay == null or not is_instance_valid(_fate_overlay):
+		return
+	if button == null or not is_instance_valid(button):
+		return
+	if not button.is_inside_tree() or not button.is_visible_in_tree():
+		return
+	var viewport := get_viewport()
+	if viewport != null and viewport.gui_get_focus_owner() != null:
+		return
+	button.grab_focus()
+
+
+## 三张命运卡横向排布，显式指定左右邻居并首尾环绕。
+##
+## 为什么要显式指定而不是靠引擎自动推导：逆位卡是**整张旋转 180°** 的实体卡面，
+## 自动 neighbor 推导依赖控件可见矩形的方位关系，旋转后可能失准；显式指定同时补上
+## 「第一张按左回到最后一张」的环绕（自动推导不做环绕，按到头就没反应了）。
+## 上下也接到同一组环绕：本弹窗只有一维排布，让上下有反应好过把焦点扔出弹窗。
+func _configure_fate_card_focus_navigation(buttons: Array[Button]) -> void:
+	var count := buttons.size()
+	if count <= 0:
+		return
+	for index in range(count):
+		var button := buttons[index]
+		if button == null or not is_instance_valid(button):
+			continue
+		var previous := buttons[(index - 1 + count) % count]
+		var following := buttons[(index + 1) % count]
+		button.focus_neighbor_left = button.get_path_to(previous)
+		button.focus_neighbor_right = button.get_path_to(following)
+		button.focus_neighbor_top = button.get_path_to(previous)
+		button.focus_neighbor_bottom = button.get_path_to(following)
 
 
 func _get_fate_target_preview(card: FateCard) -> String:
@@ -3566,6 +3649,13 @@ func _close_door_fate_overlay() -> void:
 	_door_fate_choices.clear()
 	_pending_fate_currency_choice = -1
 	if _fate_overlay != null and is_instance_valid(_fate_overlay):
+		# 先摘除再回收：queue_free() 要等到帧末才真正释放节点。若同一帧内再次
+		# 打开弹窗（连续两次命运卡流程/验收用例），新节点会与仍挂在树上的旧节点
+		# 撞名、被引擎静默改名为 DoorFateOverlay3D2，此后所有按名查询
+		# （探针/验收里的 HUD/DoorFateOverlay3D）就再也找不到这个弹窗。
+		var overlay_parent := _fate_overlay.get_parent()
+		if overlay_parent != null:
+			overlay_parent.remove_child(_fate_overlay)
 		_fate_overlay.queue_free()
 	_fate_overlay = null
 	_fate_feedback_label = null
@@ -4751,11 +4841,40 @@ func _on_extraction_cancelled(beacon: ExtractionBeacon3D) -> void:
 func _on_extraction_completed(beacon: ExtractionBeacon3D) -> void:
 	if _active_extraction_beacon != null and beacon != _active_extraction_beacon:
 		return
+	# 阵亡优先，双条件缺一不可：
+	# `_completed` 防一次行动结算两次；`_is_player_dead()` 防「阵亡被判撤离成功」——
+	# 信标 _process 只认读条归零，不看玩家死活，尸体旁的读条会照常走完。
+	if _completed or _is_player_dead():
+		_extraction_defense_active = false
+		_active_extraction_beacon = null
+		if is_instance_valid(beacon):
+			beacon.abort_extraction()
+		return
 	_extraction_defense_active = false
 	_active_extraction_beacon = null
 	if AudioManager != null:
 		AudioManager.play_sfx("extraction_done")
 	_finish_run(true)
+
+
+## 玩家是否已阵亡。状态机负责「死亡动画进行中」，HP 负责「动画尚未开始」，
+## 两个判据都要看：只查状态机会漏掉 take_damage 里 HP 刚归零的那一帧。
+func _is_player_dead() -> bool:
+	if player == null or not is_instance_valid(player):
+		return false
+	return player.get_state_machine_state() == "dead" or player.current_hp <= 0
+
+
+## 阵亡时作废进行中的撤离：中断读条并解绑，避免信标在尸体旁读到 0 秒后判撤离成功。
+## 顺序是契约 —— 先清 _active_extraction_beacon 再 abort，让 extraction_cancelled
+## 回调在「不再是当前信标」处直接返回，不要用「受击中断」文案顶掉死亡文案。
+func _abort_extraction_on_death() -> void:
+	var beacon := _active_extraction_beacon
+	_active_extraction_beacon = null
+	_extraction_defense_active = false
+	if beacon != null and is_instance_valid(beacon):
+		beacon.abort_extraction()
+	extraction_panel.visible = false
 
 
 func _spawn_extraction_attackers(stage: int) -> void:
@@ -4811,6 +4930,12 @@ func _on_player_hp_changed(current: int, maximum: int) -> void:
 	# 自由撤离：玩家可以被打但不被中断。
 	# 只要 HP 不归零就读条继续。
 	if current <= 0:
+		# 阵亡必须中断撤离读条。信标只认 _remaining <= 0，不看玩家死活，
+		# 读条期间被打死本来就会被判「撤离成功」（塔楼双结算、独立副本吞掉死亡）。
+		# 注意调用顺序：先作废信标，再写状态文案 —— abort 会同步触发
+		# extraction_cancelled，写在前面会被中断文案顶掉。
+		_death_recorded_generation = _run_generation
+		_abort_extraction_on_death()
 		status_label.text = "生命信号中断 · 正在确认防护体状态"
 
 
@@ -4947,8 +5072,27 @@ func _settle_player_killer_elite() -> void:
 func _on_player_death_animation_finished() -> void:
 	if _completed or _death_animation_ready:
 		return
+	# 这次阵亡发生在一个已经被终局结算覆盖的旧代行动里：成功撤离提交后有 0.8s
+	# 返航窗口，此时玩家输入被锁、站着挨打，而死亡动画要 1.35s —— 复位成新一轮
+	# 之后动画才结束。再弹死亡框就会让同一次行动既记撤离成功、又记阵亡结算。
+	# -1 表示本次行动没登记过死亡，保持既有行为放行。
+	if _death_recorded_generation >= 0 and _death_recorded_generation != _run_generation:
+		push_warning(
+			"[Dungeon3D] 阵亡已被终局结算覆盖，跳过死亡结算：死亡代际 %d / 当前行动代际 %d"
+			% [_death_recorded_generation, _run_generation]
+		)
+		return
 	_death_animation_ready = true
 	_show_death_confirmation_dialog()
+
+
+## 清除上一轮行动遗留的死亡状态。终局复位（塔楼成功返航）后必须调用，
+## 否则新一轮再阵亡时 `_death_animation_ready` 仍是 true，死亡框不会再弹。
+func _reset_death_settlement_state() -> void:
+	_death_animation_ready = false
+	if _death_dialog != null and is_instance_valid(_death_dialog):
+		_death_dialog.queue_free()
+	_death_dialog = null
 
 
 func _show_death_confirmation_dialog() -> void:
@@ -5058,6 +5202,13 @@ func _finish_run(success: bool) -> void:
 			"extraction_loot": _run_loot if success else [],
 			"insurance_saved": settlement.get("insurance_saved", []) if not success else [],
 		}) as Dictionary
+		if _absorb_duplicate_settlement(commit):
+			# 本次行动已经结算过：内存里刚做的那套改动必须整体撤销，
+			# 否则玩家会看到「行动失败」而档案其实是上一套结果。
+			_inventory.restore_slots_snapshot(inventory_before)
+			_insurance.restore_slots_snapshot(insurance_before)
+			_quick_inventory.restore_slots_snapshot(quick_before)
+			return
 		if not bool(commit.get("success", false)):
 			_inventory.restore_slots_snapshot(inventory_before)
 			_insurance.restore_slots_snapshot(insurance_before)
@@ -5073,6 +5224,10 @@ func _finish_run(success: bool) -> void:
 		# 结算后的场景卸载不再回写旧运行态；保险/战利品已经进入长期事务。
 		BaseManager.unregister_runtime_checkpoint_provider(self, false)
 		_runtime_persistence_active = false
+	# 终局已提交：返航窗口内玩家输入被锁、站着挨打，残留拦截怪能把他拖死，
+	# 从而在已写盘的结果之上再叠一次死亡结算（或作废后以 hp=0 卡住）。
+	if success:
+		_hold_player_after_settlement()
 	status_label.text = "撤离成功 · %d 击杀 · %d件物资" % [_kills, _run_loot.size()] if success else "行动失败 · 按原规则结算未保险物资"
 	run_completed.emit(success, summary)
 	if not test_mode:
@@ -5085,12 +5240,33 @@ func _finish_run(success: bool) -> void:
 			push_error("行动结算后的场景返回失败：%s" % error_string(change_error))
 
 
-func _get_run_settlement_transaction_id(success: bool) -> String:
+func _get_run_settlement_transaction_id(_success: bool) -> String:
+	# 一次行动共用一个结算事务 ID —— 成功与死亡必须撞同一个 ID，幂等才成立。
+	# 原先按 run_success / run_death 生成两个 ID，`commit_run_settlement` 的
+	# completed_transaction_ids 去重就形同虚设，同一次行动能被真写盘两次。
+	# success 参数保留仅为兼容既有调用点，不参与 ID 生成。
 	if _pending_run_settlement_transaction_id.is_empty():
 		_pending_run_settlement_transaction_id = BaseShopService.generate_transaction_id(
-			"run_success" if success else "run_death"
+			"run_settlement"
 		)
 	return _pending_run_settlement_transaction_id
+
+
+## 幂等拦截：同一次行动的结算已经写盘过。数据以第一次为准，必须停手 ——
+## 再 emit 一次 run_completed 会给出与档案相矛盾的第二套结算画面。
+func _absorb_duplicate_settlement(commit: Dictionary) -> bool:
+	if not bool(commit.get("duplicate", false)):
+		return false
+	push_error("[Dungeon3D] 行动结算已提交过，忽略重复请求：%s" % commit)
+	return true
+
+
+## 结算已提交后保护玩家。返航/返回场景的窗口里（塔楼 0.8s、远征 0.8s）玩家输入
+## 已被锁定、无法走位，残留拦截怪足以把他打死；一旦打死就会在已写盘的结算之上
+## 再叠一次死亡，或者被防御性作废后以 hp=0 卡在原地。
+func _hold_player_after_settlement() -> void:
+	if player != null and is_instance_valid(player):
+		player.hold_post_settlement_invulnerability()
 
 
 func _request_return_entry_context(success: bool) -> int:

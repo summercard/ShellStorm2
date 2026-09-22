@@ -1,0 +1,52 @@
+{
+  "package_id": "main_fault_screen",
+  "name_zh": "主屏_破损数据库",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "主屏_破损数据库_资产包",
+  "objects": [
+    "自发光铭牌_DATABASE OFFLINE",
+    "自发光铭牌_CRITICAL FAILURE  /  ARCHIVE CONNECTION LOST",
+    "自发光铭牌_!",
+    "主屏_破损数据库_部件0",
+    "主屏_破损数据库_部件2",
+    "主屏_破损数据库_自发光",
+    "主屏_破损数据库_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    1.0,
+    18.75749969482422,
+    3.805000066757202
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -9.760000228881836,
+      17.969999313354492,
+      3.805000066757202
+    ],
+    "max": [
+      11.760000228881836,
+      19.545000076293945,
+      10.895000457763672
+    ]
+  },
+  "dimensions_m": [
+    21.520000457763672,
+    1.5750007629394531,
+    7.09000039100647
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "03_清漆反光_紫粉点缀",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

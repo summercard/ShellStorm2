@@ -40,6 +40,7 @@ const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 @onready var aim_smoothing_slider: HSlider = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingSlider
 @onready var aim_smoothing_value: Label = $Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingValue
 @onready var left_stick_aim_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/LeftStickAim
+@onready var aim_assist_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/AimAssist
 @onready var vibration_toggle: CheckButton = $Center/Panel/Margin/ControlsPage/Vibration
 @onready var controls_back_button: Button = $Center/Panel/Margin/ControlsPage/Footer/BackButton
 @onready var controls_status_label: Label = $Center/Panel/Margin/ControlsPage/Footer/Status
@@ -52,11 +53,16 @@ const DEVICE_MODE_LABELS := ["自动跟随", "锁定键鼠", "锁定手柄"]
 @onready var status_label: Label = $Center/Panel/Margin/GraphicsPage/Footer/Status
 @onready var dim: ColorRect = $Dim
 @onready var center: CenterContainer = $Center
+@onready var main_page_title: Label = $Center/Panel/Margin/MainPage/Title
 
 var _toggle_nodes: Dictionary = {}
 var _syncing_controls := false
 var _reset_in_progress := false
 var _main_entry_request_id := -1
+## 是否以「主页设置」上下文复用本覆盖层（主代理临时 reparent 到主页 CanvasLayer）。
+var _entry_settings_context := false
+var _main_page_title_default_text := "行动暂停"
+var _resume_button_default_text := "继续行动  [Esc]"
 
 
 func _ready() -> void:
@@ -78,6 +84,8 @@ func _ready() -> void:
 	_setup_graphics_controls()
 	_setup_input_controls()
 	UIStyleFactory.apply_tactical_tree(self)
+	_main_page_title_default_text = main_page_title.text
+	_resume_button_default_text = resume_button.text
 
 
 func try_consume_pause_input() -> bool:
@@ -112,6 +120,46 @@ func set_paused(paused: bool) -> void:
 func resume_game() -> void:
 	set_paused(false)
 
+
+## 以「主页设置」上下文打开本覆盖层：标题改为设置、resume 改为返回主界面，
+## 隐藏返回基地 / 复位存档相关按钮，画面与操作设置仍可用。
+func open_entry_settings() -> void:
+	if _entry_settings_context:
+		return
+	_entry_settings_context = true
+	set_paused(true)
+	# Global 总暂停状态可能本已为 true（例如从暂停模式切来），
+	# _on_global_pause_changed 不会重新触发，因此显式刷新一次视觉与主页面。
+	_apply_pause_visual(true)
+	_show_main_page()
+	_apply_entry_settings_overrides()
+
+
+## 退出「主页设置」上下文：先复位上下文标记（幂等、防递归），再解除暂停，
+## 最后把主页面标题 / resume 文案 / 隐藏按钮恢复原状并交回原刷新方法。
+func close_entry_settings() -> void:
+	if not _entry_settings_context:
+		return
+	_entry_settings_context = false
+	set_paused(false)
+	main_page_title.text = _main_page_title_default_text
+	resume_button.text = _resume_button_default_text
+	return_to_base_button.visible = true
+	return_to_base_hint.visible = true
+	reset_game_save_button.visible = true
+	reset_game_save_hint.visible = true
+	_refresh_return_to_base_action()
+
+
+## 套用「主页设置」上下文的视觉覆盖：隐藏与战局 / 存档相关的按钮与提示，
+## 并将标题与 resume 文案改为设置语义。
+func _apply_entry_settings_overrides() -> void:
+	return_to_base_button.visible = false
+	return_to_base_hint.visible = false
+	reset_game_save_button.visible = false
+	reset_game_save_hint.visible = false
+	main_page_title.text = "设置"
+	resume_button.text = "返回主界面"
 
 func is_pause_open() -> bool:
 	return center.visible and Global != null and Global.has_pause_reason("manual")
@@ -177,6 +225,8 @@ func _show_main_page() -> void:
 	_refresh_return_to_base_action()
 	if center.visible:
 		graphics_button.grab_focus()
+	if _entry_settings_context:
+		_apply_entry_settings_overrides()
 
 
 func _show_controls_page() -> void:
@@ -215,6 +265,7 @@ func _setup_input_controls() -> void:
 	device_mode_option.item_selected.connect(_on_device_mode_selected)
 	gamepad_enabled_toggle.toggled.connect(_on_gamepad_enabled_toggled)
 	left_stick_aim_toggle.toggled.connect(_on_left_stick_aim_toggled)
+	aim_assist_toggle.toggled.connect(_on_aim_assist_toggled)
 	vibration_toggle.toggled.connect(_on_vibration_toggled)
 	move_deadzone_slider.value_changed.connect(
 		_on_deadzone_changed.bind("gamepad_move_deadzone")
@@ -258,6 +309,14 @@ func _on_left_stick_aim_toggled(enabled: bool) -> void:
 		return
 	InputSettings.set_value("gamepad_left_stick_aim", enabled)
 	controls_status_label.text = "左摇杆同控朝向已%s · 设置已保存" % ("开启" if enabled else "关闭")
+	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
+
+
+func _on_aim_assist_toggled(enabled: bool) -> void:
+	if _syncing_controls:
+		return
+	InputSettings.set_value("gamepad_aim_assist", enabled)
+	controls_status_label.text = "瞄准辅助已%s · 设置已保存" % ("开启" if enabled else "关闭")
 	controls_status_label.modulate = Color(0.45, 0.9, 0.68)
 
 
@@ -310,11 +369,12 @@ func _sync_input_controls() -> void:
 	)
 	device_mode_option.select(maxi(0, mode_index))
 	gamepad_enabled_toggle.button_pressed = bool(settings.get("gamepad_enabled", true))
-	left_stick_aim_toggle.button_pressed = bool(settings.get("gamepad_left_stick_aim", true))
+	left_stick_aim_toggle.button_pressed = bool(settings.get("gamepad_left_stick_aim", false))
+	aim_assist_toggle.button_pressed = bool(settings.get("gamepad_aim_assist", true))
 	vibration_toggle.button_pressed = bool(settings.get("gamepad_vibration", true))
 	var move_deadzone := float(settings.get("gamepad_move_deadzone", 0.20))
-	var aim_deadzone := float(settings.get("gamepad_aim_deadzone", 0.20))
-	var smoothing := float(settings.get("gamepad_aim_smoothing", 0.35))
+	var aim_deadzone := float(settings.get("gamepad_aim_deadzone", 0.12))
+	var smoothing := float(settings.get("gamepad_aim_smoothing", 0.15))
 	move_deadzone_slider.value = move_deadzone
 	aim_deadzone_slider.value = aim_deadzone
 	aim_smoothing_slider.value = smoothing

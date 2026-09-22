@@ -25,9 +25,14 @@ const DEFAULT_SETTINGS := {
 	"device_mode": DEVICE_MODE_AUTO,
 	"gamepad_enabled": true,
 	"gamepad_move_deadzone": 0.20,
-	"gamepad_aim_deadzone": 0.20,
-	"gamepad_aim_smoothing": 0.35,
-	"gamepad_left_stick_aim": true,
+	# 瞄准死区 0.20 → 0.12、平滑 0.35 → 0.15（2026-09-22 手感调整）：原值吃掉
+	# 20% 行程、平滑时间常数约 60ms，玩家反馈「转向不够精确、无法瞄准」。
+	# 幅度权威的响应曲线（见 GamepadInput.AIM_*_SPEED_SCALE）只在死区更小、
+	# 基础平滑更低时才发挥得出「轻推精瞄」的效果 —— 否则轻推段仍被旧平滑拖住。
+	"gamepad_aim_deadzone": 0.12,
+	"gamepad_aim_smoothing": 0.15,
+	"gamepad_left_stick_aim": false,
+	"gamepad_aim_assist": true,
 	"gamepad_vibration": true,
 }
 
@@ -69,17 +74,26 @@ func get_move_deadzone() -> float:
 
 
 func get_aim_deadzone() -> float:
-	return float(_settings.get("gamepad_aim_deadzone", 0.20))
+	return float(_settings.get("gamepad_aim_deadzone", 0.12))
 
 
 func get_aim_smoothing() -> float:
-	return float(_settings.get("gamepad_aim_smoothing", 0.35))
+	return float(_settings.get("gamepad_aim_smoothing", 0.15))
+
+
+## 虚拟摇杆瞄准辅助（磁吸）是否开启。
+## 开启后，瞄准方向会被视野内**已照亮**的敌人轻轻吸引（偏转有硬上限，见 AimAssist3D）。
+## **出厂默认 true**：这是顶视角射击手柄操作的标准配件，且偏转受限不会抢控制。
+func is_aim_assist_enabled() -> bool:
+	return bool(_settings.get("gamepad_aim_assist", true))
 
 
 ## 左摇杆是否也参与控制朝向（右摇杆一动就抢回去）。
 ## 关掉后朝向只由右摇杆驱动，摇杆全部回中时保持最后方向。
+## **出厂默认 false**（2026-09-22 业主实测：左摇杆同控朝向与右摇杆精确瞄准互相干扰，
+## 改为「保留能力、默认关闭」，需要时在 ESC 操作设置页自行打开）。
 func is_left_stick_aim_enabled() -> bool:
-	return bool(_settings.get("gamepad_left_stick_aim", true))
+	return bool(_settings.get("gamepad_left_stick_aim", false))
 
 
 func is_vibration_enabled() -> bool:

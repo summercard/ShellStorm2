@@ -1,0 +1,44 @@
+{
+  "package_id": "south_floor_marking",
+  "name_zh": "入口地砖_标识附件",
+  "category": "support",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "入口地砖_标识附件_资产包",
+  "objects": [
+    "自发光铭牌_A3 - DB",
+    "入口地砖_标识附件_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    2.5000000596046448,
+    -17.175994396209717,
+    0.33399999141693115
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      0.6515671014785767,
+      -18.539339065551758,
+      0.33399999141693115
+    ],
+    "max": [
+      4.348433017730713,
+      -15.812649726867676,
+      0.34599998593330383
+    ]
+  },
+  "dimensions_m": [
+    3.6968659162521362,
+    2.726689338684082,
+    0.01199999451637268
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

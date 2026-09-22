@@ -1,0 +1,73 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+  "room_type": "BOSS_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/heavy_conduits/heavy_conduits.blend",
+  "collection": "粗重电线管与桥架_输出包",
+  "editable_collection": "粗重电线管与桥架_制作源",
+  "root_object": "ROOT_heavy_conduits_组件",
+  "bounds_size_m": [
+    47.305603,
+    32.303619,
+    3.672169
+  ],
+  "bounds_lo_m": [
+    -23.652802,
+    -16.15181,
+    0.0
+  ],
+  "bounds_hi_m": [
+    23.652802,
+    16.15181,
+    3.672169
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架"
+  ],
+  "source_package_id": "heavy_conduits",
+  "version": "v001",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "asset_id": "ENV-EXPEDITION-BOSSROOM-HEAVY-CONDUITS",
+  "category": "support",
+  "name_zh": "粗重电线管与桥架",
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "source_world_origin_m": [
+    0.4934806823730469,
+    1.9818086624145508,
+    0.18000000715255737
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "godot_front_axis": "+Z",
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend",
+  "objects": [
+    "粗重电线管与桥架_输出_部件00"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "component_file_sha256": "3e317fd7541d97c66a1ef6c71876de5dae5e8490350d1b75020c8e25031014fb"
+}

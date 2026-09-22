@@ -1,0 +1,48 @@
+{
+  "package_id": "base_floor_tile_r06_c03",
+  "name_zh": "地板_FLOOR_TILE_R06_C03",
+  "category": "floor",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "地板_FLOOR_TILE_R06_C03_资产包",
+  "objects": [
+    "FLOOR_TILE_R06_C03",
+    "地板_FLOOR_TILE_R06_C03_部件0",
+    "地板_FLOOR_TILE_R06_C03_自发光",
+    "地板_FLOOR_TILE_R06_C03_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -12.5,
+    7.5,
+    0.25999999046325684
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -14.970000267028809,
+      5.029999732971191,
+      0.25999999046325684
+    ],
+    "max": [
+      -10.029999732971191,
+      9.970000267028809,
+      0.3474999964237213
+    ]
+  },
+  "dimensions_m": [
+    4.940000534057617,
+    4.940000534057617,
+    0.08750000596046448
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

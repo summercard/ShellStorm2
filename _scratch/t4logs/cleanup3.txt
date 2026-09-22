@@ -1,0 +1,3 @@
+﻿vol C Win 10 Pro x64 free=0MB size=232.6GB
+DriveInfo free=0MB total=232.6GB
+C:\windows size=30.87GB

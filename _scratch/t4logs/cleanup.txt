@@ -1,0 +1,17 @@
+﻿found=11
+    1888.4 MB  C:\windows\shellstorm-verification.1dOlCK
+    3088.4 MB  C:\windows\shellstorm-verification.Awzg8I
+    4508.5 MB  C:\windows\shellstorm-verification.dmMfej
+    1587.9 MB  C:\windows\shellstorm-verification.dwdSgD
+    4368.6 MB  C:\windows\shellstorm-verification.e3tYoy
+    5847.9 MB  C:\windows\shellstorm-verification.Ka4LTw
+    1794.8 MB  C:\windows\shellstorm-verification.Kd4XV9
+    1617.1 MB  C:\windows\shellstorm-verification.l5B20U
+       0.9 MB  C:\windows\shellstorm-verification.l7WXAv
+    5740.8 MB  C:\windows\shellstorm-verification.r3UiUZ
+    1453.1 MB  C:\windows\shellstorm-verification.u2atu2
+total=31896.3 MB
+free_before=0MB
+free_after=0MB
+--- C:\Users\zhuangmenghong\.workbuddy 占用 ---
+9116.2 MB

@@ -1,6 +1,7 @@
 extends Node
 ## 手柄操控验收：输入设置持久化与夹取、设备自动检测/锁定、运行时按键注入、
-## 摇杆死区口径、朝向来源三档（右摇杆 → 左摇杆 → 保持上次）与滞回，
+## 摇杆死区口径、幅度权威的瞄准响应曲线、瞄准辅助（磁吸）求解与准入规则、
+## 朝向来源三档（右摇杆 → 左摇杆 → 保持上次）与滞回，
 ## 以及 ESC「操作设置」页的接线完整性。
 ##
 ## 手柄硬件在 headless 下不存在，因此这里全部用「合成事件 + 纯函数口径 +
@@ -9,6 +10,7 @@ extends Node
 const PAUSE_SCENE: PackedScene = preload("res://assets/art/ui/pause_3d/ui_pause_overlay_screen.tscn")
 const DUNGEON_SCRIPT := "res://src/world3d/Dungeon3D.gd"
 const PLAYER_SCENE: PackedScene = preload("res://scenes/Player3D.tscn")
+const ENEMY_SCENE: PackedScene = preload("res://assets/art/enemies/enemy_3d/enm_ecosystem_kit_root_top3d_v001.tscn")
 
 ## 期望的手柄键位表：action → 手柄键。与 GamepadInput.GAMEPAD_ACTION_BINDINGS 对齐。
 const EXPECTED_BINDINGS := {
@@ -59,11 +61,14 @@ func _ready() -> void:
 	_verify_settings_sanitize(failures)
 	_verify_runtime_bindings(failures)
 	_verify_deadzone_math(failures)
+	_verify_aim_response_curve(failures)
+	_verify_aim_assist_solver(failures)
 	_verify_face_source_tiers(failures)
 	_verify_device_tracking(failures)
 	_verify_action_channels(failures)
 	_verify_menu_navigation(failures)
 	_verify_face_case_sentinel(_verify_left_stick_face_flow(failures), failures)
+	await _verify_aim_assist_candidate_collection(failures)
 	await _verify_submenu_focus_anchor(failures)
 	await _verify_aim_projection(failures)
 	await _verify_pause_controls_page(failures)
@@ -85,6 +90,7 @@ func _verify_autoloads(failures: Array[String]) -> void:
 	for method in [
 		"apply_radial_deadzone",
 		"resolve_face_source",
+		"resolve_aim_speed_scale",
 		"set_test_stick_axes",
 		"get_face_source",
 		"get_face_direction",
@@ -95,6 +101,12 @@ func _verify_autoloads(failures: Array[String]) -> void:
 	]:
 		if not GamepadInput.has_method(method):
 			failures.append("GamepadInput 缺少方法：%s" % method)
+	# 瞄准辅助是纯静态类（非 autoload）：用实例探测静态方法是否还在。
+	var assist_probe := AimAssist3D.new()
+	for method in ["solve", "is_eligible", "_weight"]:
+		if not assist_probe.has_method(method):
+			failures.append("AimAssist3D 缺少方法：%s" % method)
+	assist_probe = null
 	if InputSettings.DEVICE_MODES.size() != 3:
 		failures.append("操控方式没有提供自动/键鼠/手柄三种取值")
 
@@ -112,7 +124,20 @@ func _verify_settings_sanitize(failures: Array[String]) -> void:
 	InputSettings.set_value("gamepad_left_stick_aim", 1.0, false)
 	if not InputSettings.is_left_stick_aim_enabled():
 		failures.append("「左摇杆同控朝向」的数值 1 没有回落为 true")
+	# 设计锁（2026-09-22 业主实测）：出厂默认必须是 false —— 保留能力但默认关。
+	# 断言打在外部真源上，不引用被测函数，避免「默认值被改坏时断言跟着一起漂」。
+	if InputSettings.DEFAULT_SETTINGS["gamepad_left_stick_aim"] != false:
+		failures.append("「左摇杆同控朝向」的出厂默认不是关闭（业主指定默认关）")
 	InputSettings.set_value("gamepad_left_stick_aim", true, false)
+	InputSettings.set_value("gamepad_aim_assist", 0.0, false)
+	if InputSettings.is_aim_assist_enabled():
+		failures.append("「瞄准辅助」的数值 0 没有回落为 false")
+	InputSettings.set_value("gamepad_aim_assist", 1.0, false)
+	if not InputSettings.is_aim_assist_enabled():
+		failures.append("「瞄准辅助」的数值 1 没有回落为 true")
+	# 设计锁：瞄准辅助出厂默认开启（顶视角射击手柄操作的标准配件）。
+	if InputSettings.DEFAULT_SETTINGS["gamepad_aim_assist"] != true:
+		failures.append("「瞄准辅助」的出厂默认不是开启")
 	InputSettings.set_value("gamepad_aim_smoothing", 7.0, false)
 	if not is_equal_approx(InputSettings.get_aim_smoothing(), InputSettings.AIM_SMOOTHING_RANGE.y):
 		failures.append("瞄准平滑超上限没有被夹取")
@@ -128,6 +153,8 @@ func _verify_settings_sanitize(failures: Array[String]) -> void:
 	InputSettings.set_value("gamepad_move_deadzone", InputSettings.DEFAULT_SETTINGS["gamepad_move_deadzone"], false)
 	InputSettings.set_value("gamepad_aim_smoothing", InputSettings.DEFAULT_SETTINGS["gamepad_aim_smoothing"], false)
 	InputSettings.set_value("gamepad_left_stick_aim", InputSettings.DEFAULT_SETTINGS["gamepad_left_stick_aim"], false)
+	InputSettings.set_value("gamepad_aim_assist", InputSettings.DEFAULT_SETTINGS["gamepad_aim_assist"], false)
+	InputSettings.set_value("gamepad_aim_deadzone", InputSettings.DEFAULT_SETTINGS["gamepad_aim_deadzone"], false)
 
 
 func _verify_runtime_bindings(failures: Array[String]) -> void:
@@ -182,6 +209,229 @@ func _verify_deadzone_math(failures: Array[String]) -> void:
 			failures.append("死区重映射不是单调递增（%f → %f）" % [previous, mapped])
 			break
 		previous = mapped
+
+
+## 幅度权威（响应曲线）口径：轻推稳、重推快，且全程单调、两端落在定档值上。
+## 这条曲线是「转向不够精确」的主治 —— 被拿掉后退化成恒定速率，这里必须变红。
+func _verify_aim_response_curve(failures: Array[String]) -> void:
+	var precision := GamepadInput.AIM_PRECISION_SPEED_SCALE
+	var flick := GamepadInput.AIM_FLICK_SPEED_SCALE
+	if precision <= 0.0 or flick <= precision:
+		failures.append("幅度权威的倍率区间不合法：precision=%f flick=%f" % [precision, flick])
+	# 两端定档：t=0 落在 precision、t=1 落在 flick（外部真源硬编码，不写派生式）。
+	if not is_equal_approx(GamepadInput.resolve_aim_speed_scale(0.0), precision):
+		failures.append(
+			"轻推（幅度 0）没有落在精瞄倍率上：%f" % GamepadInput.resolve_aim_speed_scale(0.0)
+		)
+	if not is_equal_approx(GamepadInput.resolve_aim_speed_scale(1.0), flick):
+		failures.append(
+			"推满（幅度 1）没有落在快转倍率上：%f" % GamepadInput.resolve_aim_speed_scale(1.0)
+		)
+	# 单调递增：幅度越大响应越快，否则「轻推稳/重推快」的直觉会失效。
+	var previous := -1.0
+	for step in 21:
+		var t := float(step) / 20.0
+		var scale := GamepadInput.resolve_aim_speed_scale(t)
+		if scale < previous - 0.0001:
+			failures.append("幅度权威曲线不是单调递增（%f → %f）" % [previous, scale])
+			break
+		previous = scale
+	# 关键手感判据：轻推必须明显比推满慢，否则「精瞄」无从谈起。
+	var mid := GamepadInput.resolve_aim_speed_scale(0.35)
+	if mid >= (precision + flick) * 0.5:
+		failures.append("轻推段的响应倍率不够低，精瞄手感没有建立：%f" % mid)
+	# 越界输入夹取（合成轴值可能略超 1）。
+	if not is_equal_approx(GamepadInput.resolve_aim_speed_scale(3.0), flick):
+		failures.append("幅度权威曲线对超量程输入没有夹取")
+	if not is_equal_approx(GamepadInput.resolve_aim_speed_scale(-1.0), precision):
+		failures.append("幅度权威曲线对负幅度没有夹取")
+
+
+## 瞄准辅助求解器口径（纯函数）。这是「摇杆瞄准不准」的兜底手段，
+## 其中「黑暗中的敌人一律不可被吸附」是硬约束 —— 破了就等于给玩家透视。
+func _verify_aim_assist_solver(failures: Array[String]) -> void:
+	var enemy_state := EnemyIllumination3D.STATE_ARTIFICIAL_LIGHT
+	var dark_state := EnemyIllumination3D.STATE_DARKNESS
+	if dark_state == enemy_state:
+		failures.append("敌人照明状态常量异常：黑暗与人工光同值")
+
+	# 1) 准入规则：四条各自单独判红。
+	if not AimAssist3D.is_eligible(true, enemy_state, 8.0, 3.0):
+		failures.append("正常敌人（存活 / 已照亮 / 在范围内 / 在锥内）被判为不可吸附")
+	if AimAssist3D.is_eligible(false, enemy_state, 8.0, 3.0):
+		failures.append("已死亡的敌人仍被算作可吸附候选")
+	if AimAssist3D.is_eligible(true, dark_state, 8.0, 3.0):
+		failures.append("黑暗中的敌人被算作可吸附候选（等于给玩家透视）")
+	if AimAssist3D.is_eligible(true, enemy_state, 99.0, 3.0):
+		failures.append("超出扫描半径的敌人仍被算作可吸附候选")
+	if AimAssist3D.is_eligible(true, enemy_state, 8.0, 89.0):
+		failures.append("预筛锥外的敌人仍被算作可吸附候选")
+	if AimAssist3D.is_eligible(true, enemy_state, 0.0, 0.0):
+		failures.append("零距离的敌人仍被算作可吸附候选")
+
+	# 2) 求解：空候选 / 强度 0 / 零方向都必须原样返回，不制造朝向。
+	var straight := Vector3(0.0, 0.0, -1.0)
+	var no_candidates: Array[Dictionary] = []
+	if not AimAssist3D.solve(straight, no_candidates).is_equal_approx(straight):
+		failures.append("没有候选时瞄准辅助改动了朝向")
+	# 目标落在吸附锥内（偏 10° < 20° 锥半角），但偏角够大以便考验「权重上限」。
+	var target_deg := 10.0
+	var target_rad := deg_to_rad(target_deg)
+	var biased := Vector3(sin(target_rad), 0.0, -cos(target_rad))
+	var one_candidate: Array[Dictionary] = [
+		{AimAssist3D.KEY_DIRECTION: biased, AimAssist3D.KEY_DISTANCE: 8.0}
+	]
+	var zero_strength := AimAssist3D.solve(straight, one_candidate, {"strength": 0.0})
+	if not zero_strength.is_equal_approx(straight):
+		failures.append("强度为 0 时瞄准辅助仍然吸附（关闭开关必须彻底失效）")
+	if not AimAssist3D.solve(Vector3.ZERO, one_candidate).is_equal_approx(Vector3.ZERO):
+		failures.append("零瞄准方向时瞄准辅助没有原样返回")
+
+	# 3) 锥外候选不吸附。
+	var outside: Array[Dictionary] = [
+		{AimAssist3D.KEY_DIRECTION: Vector3(0.0, 0.0, 1.0), AimAssist3D.KEY_DISTANCE: 8.0}
+	]
+	if not AimAssist3D.solve(straight, outside).is_equal_approx(straight):
+		failures.append("吸附锥外的敌人仍然拉动了准星")
+
+	# 4) 锥内候选：朝目标偏转，但偏转量必须严格受「权重 × 硬上限」约束（不抢控制）。
+	var pulled := AimAssist3D.solve(straight, one_candidate)
+	if pulled.y != 0.0:
+		failures.append("瞄准辅助产生了垂直分量，破坏水平瞄准")
+	if not is_equal_approx(pulled.length(), 1.0):
+		failures.append("瞄准辅助的返回值不是单位向量：%f" % pulled.length())
+	var pulled_angle := rad_to_deg(Vector2(straight.x, straight.z).angle_to(Vector2(pulled.x, pulled.z)))
+	if pulled_angle <= 0.0:
+		failures.append("锥内敌人没有被吸附（准星没有向目标偏转）")
+	if pulled_angle > AimAssist3D.DEFAULT_MAX_ANGLE_DEG + 0.001:
+		failures.append("瞄准辅助偏转超过了硬上限：%f°" % pulled_angle)
+	# 权重 < 1 时不许一次吸满目标角度 —— 否则等于「准星被夺走」，不是辅助。
+	if pulled_angle >= target_deg - 0.001:
+		failures.append(
+			"瞄准辅助一帧就吸满了目标角度（%f° / %f°），权重没有约束住偏转" % [pulled_angle, target_deg]
+		)
+	# 吸附必须朝目标那一侧（不能被拽到反方向）。
+	if pulled.x <= 0.0:
+		failures.append("瞄准辅助把准星偏到了目标的相反方向")
+
+	# 5) 权重择优：正对轴向的近目标必须强于锥边缘的远目标。
+	var near_axis: Array[Dictionary] = [
+		{AimAssist3D.KEY_DIRECTION: Vector3(0.0, 0.0, -1.0), AimAssist3D.KEY_DISTANCE: 5.0},
+		{AimAssist3D.KEY_DIRECTION: Vector3(1.0, 0.0, 0.0), AimAssist3D.KEY_DISTANCE: 24.0},
+	]
+	var toward_axis := AimAssist3D.solve(straight, near_axis)
+	var axis_angle := rad_to_deg(
+		Vector2(straight.x, straight.z).angle_to(Vector2(toward_axis.x, toward_axis.z))
+	)
+	if absf(axis_angle) > 1.0:
+		failures.append("多目标时没有优先吸附正对轴心的近目标：偏转 %f°" % axis_angle)
+
+	# 6) 距离衰减：极远目标（仍在小锥内但接近射程上限）权重应趋近于 0。
+	var far_axis: Array[Dictionary] = [
+		{
+			AimAssist3D.KEY_DIRECTION: Vector3(0.0, 0.0, -1.0),
+			AimAssist3D.KEY_DISTANCE: AimAssist3D.DEFAULT_FAR_RANGE + 1.0,
+		}
+	]
+	if not AimAssist3D.solve(straight, far_axis).is_equal_approx(straight):
+		failures.append("超出有效射程的敌人仍然产生吸附（距离衰减未生效）")
+
+
+## 瞄准辅助的**端到端接线**：真敌人 + 真 Player3D。
+## 纯函数 is_eligible / solve 已在别处逐值测过，这里测的是 Player3D 是否真的按
+## 敌人的「存活 / 照明状态 / 距离 / 夹角」取到了正确的数据 —— 胶水层取错字段
+## （例如把照明状态读成别的属性）纯函数测试是看不出来的。
+func _verify_aim_assist_candidate_collection(failures: Array[String]) -> void:
+	var was_enabled := InputSettings.is_aim_assist_enabled()
+	InputSettings.set_value("gamepad_aim_assist", true, false)
+
+	var arena := Node3D.new()
+	arena.name = "AimAssistArena"
+	add_child(arena)
+	var player := PLAYER_SCENE.instantiate() as Player3D
+	player.start_with_weapon = false
+	player.position = Vector3.ZERO
+	arena.add_child(player)
+	var enemy := ENEMY_SCENE.instantiate() as Enemy3D
+	enemy.enemy_kind = "melee_chaser"
+	enemy.position = Vector3(0.0, 0.0, -8.0)
+	arena.add_child(enemy)
+	enemy.set_runtime_active(false, true)
+	await get_tree().physics_frame
+	await get_tree().process_frame
+	player.set_physics_process(false)
+
+	var forward := Vector3(0.0, 0.0, -1.0)
+	# A) 无光源 ⇒ 敌人处于黑暗 ⇒ 不得进入候选（等于透视，是本模块最硬的约束）。
+	enemy.force_refresh_illumination()
+	if enemy.get_illumination_state() != EnemyIllumination3D.STATE_DARKNESS:
+		failures.append("用例前提不成立：无光源时敌人不是黑暗态")
+	var dark_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if not dark_candidates.is_empty():
+		failures.append("黑暗中的敌人进入了瞄准辅助候选（端到端：等于给玩家透视）")
+
+	# B) 加太阳 ⇒ 敌人可见 ⇒ 恰好一个候选，且方向指向敌人。
+	var sun := DirectionalLight3D.new()
+	sun.name = "AimAssistTestSun"
+	sun.light_energy = 1.0
+	sun.light_cull_mask = 1
+	# 必须让太阳从上往下照：DirectionalLight3D 默认沿 -Z 照射，而敌人采样点朝
+	# 光源方向反向 raycast —— 水平光会被站在敌人与光源之间的玩家挡住，
+	# 阳光暴露率恒为 0，敌人永远是黑暗态（本用例第一版就栽在这里）。
+	sun.rotation_degrees = Vector3(-90.0, 0.0, 0.0)
+	arena.add_child(sun)
+	sun.add_to_group(EnemyIllumination3D.SUN_GROUP)
+	await get_tree().physics_frame
+	enemy.force_refresh_illumination()
+	if enemy.get_illumination_state() == EnemyIllumination3D.STATE_DARKNESS:
+		failures.append("用例前提不成立：阳光下敌人仍是黑暗态")
+	var lit_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if lit_candidates.size() != 1:
+		failures.append("照亮后候选数不是 1：%d" % lit_candidates.size())
+	else:
+		var candidate: Dictionary = lit_candidates[0]
+		var raw_direction: Variant = candidate.get(AimAssist3D.KEY_DIRECTION)
+		if not (raw_direction is Vector3):
+			failures.append("候选缺少方向字段")
+		elif not (raw_direction as Vector3).is_equal_approx(forward):
+			failures.append("候选方向与敌人实际方位不符：%s" % str(raw_direction))
+		var raw_distance: Variant = candidate.get(AimAssist3D.KEY_DISTANCE)
+		if not (raw_distance is float) or not is_equal_approx(float(raw_distance), 8.0):
+			failures.append("候选距离与敌人实际距离不符：%s" % str(raw_distance))
+
+	# C) 关掉开关 ⇒ 一律不收集（关闭后必须彻底失效，而不是「只弱一点」）。
+	InputSettings.set_value("gamepad_aim_assist", false, false)
+	var off_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if not off_candidates.is_empty():
+		failures.append("关掉瞄准辅助后仍然收集到候选")
+	InputSettings.set_value("gamepad_aim_assist", true, false)
+
+	# D) 敌人移到瞄准方向背后 ⇒ 预筛锥外，不收集。
+	enemy.position = Vector3(0.0, 0.0, 8.0)
+	await get_tree().physics_frame
+	var behind_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if not behind_candidates.is_empty():
+		failures.append("瞄准方向背后的敌人进入了候选")
+
+	# E) 敌人移到扫描半径之外 ⇒ 不收集。
+	enemy.position = Vector3(0.0, 0.0, -40.0)
+	await get_tree().physics_frame
+	var far_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if not far_candidates.is_empty():
+		failures.append("超出扫描半径的敌人进入了候选")
+
+	# F) 敌人死亡 ⇒ 不收集（尸体不该吸准星）。
+	enemy.position = Vector3(0.0, 0.0, -8.0)
+	await get_tree().physics_frame
+	enemy.current_hp = 0
+	var dead_candidates: Array = player.call("_collect_aim_assist_candidates", forward)
+	if not dead_candidates.is_empty():
+		failures.append("已死亡的敌人进入了瞄准辅助候选")
+	enemy.current_hp = 1
+
+	InputSettings.set_value("gamepad_aim_assist", was_enabled, false)
+	arena.queue_free()
+	await get_tree().process_frame
 
 
 ## 朝向来源三档的口径（纯函数）。这套判定决定了「左摇杆到底算不算在控朝向」，
@@ -641,6 +891,7 @@ func _verify_pause_controls_page(failures: Array[String]) -> void:
 	var aim_slider := pause.get_node("Center/Panel/Margin/ControlsPage/AimDeadzoneRow/AimDeadzoneSlider") as HSlider
 	var smoothing_slider := pause.get_node("Center/Panel/Margin/ControlsPage/AimSmoothingRow/AimSmoothingSlider") as HSlider
 	var left_stick_aim_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/LeftStickAim") as CheckButton
+	var aim_assist_toggle := pause.get_node_or_null("Center/Panel/Margin/ControlsPage/AimAssist") as CheckButton
 	var status := pause.get_node("Center/Panel/Margin/ControlsPage/Footer/Status") as Label
 	var device_status := pause.get_node("Center/Panel/Margin/ControlsPage/Header/DeviceStatusLabel") as Label
 	if mode_option.item_count != InputSettings.DEVICE_MODES.size():
@@ -661,8 +912,12 @@ func _verify_pause_controls_page(failures: Array[String]) -> void:
 		failures.append("操作设置页没有同步手柄开关初值")
 	if left_stick_aim_toggle == null:
 		failures.append("操作设置页缺少「左摇杆同控朝向」开关")
-	elif not left_stick_aim_toggle.button_pressed:
+	elif left_stick_aim_toggle.button_pressed != InputSettings.is_left_stick_aim_enabled():
 		failures.append("「左摇杆同控朝向」开关没有同步初值")
+	if aim_assist_toggle == null:
+		failures.append("操作设置页缺少「瞄准辅助」开关")
+	elif aim_assist_toggle.button_pressed != InputSettings.is_aim_assist_enabled():
+		failures.append("「瞄准辅助」开关没有同步初值")
 
 	# 界面 → 设置：每类控件都必须真的写进 InputSettings。
 	enabled_toggle.button_pressed = false
@@ -686,6 +941,15 @@ func _verify_pause_controls_page(failures: Array[String]) -> void:
 		left_stick_aim_toggle.button_pressed = true
 		if not InputSettings.is_left_stick_aim_enabled():
 			failures.append("重新开启「左摇杆同控朝向」没有写回设置")
+	if aim_assist_toggle != null:
+		aim_assist_toggle.button_pressed = false
+		if InputSettings.is_aim_assist_enabled():
+			failures.append("关闭「瞄准辅助」没有写回设置")
+		if InputSettings.get_settings_snapshot().get("gamepad_aim_assist") != false:
+			failures.append("「瞄准辅助」没有落到持久化快照里")
+		aim_assist_toggle.button_pressed = true
+		if not InputSettings.is_aim_assist_enabled():
+			failures.append("重新开启「瞄准辅助」没有写回设置")
 	move_slider.value = 0.33
 	if not is_equal_approx(InputSettings.get_move_deadzone(), 0.33):
 		failures.append("拖动左摇杆死区滑条没有写回设置")
@@ -774,7 +1038,7 @@ func _verify_submenu_focus_anchor(failures: Array[String]) -> void:
 func _finish(failures: Array[String]) -> void:
 	if failures.is_empty():
 		print(
-			"GAMEPAD_INPUT_FLOW_OK: input settings persist with clamping, 13 runtime joypad bindings toggle live, radial deadzone remap matches (m-dz)/(1-dz), device auto-detect/lock honours the mode, Dungeon3D M/1/2/3/4 ride input actions, the ESC controls page round-trips every control, virtual aim projects to the matching screen side, facing resolves right-stick > left-stick > keep-last with deadzone hysteresis and smoothed tier hand-off, and every facility menu opens with a focus anchor for gamepad navigation"
+			"GAMEPAD_INPUT_FLOW_OK: input settings persist with clamping, 13 runtime joypad bindings toggle live, radial deadzone remap matches (m-dz)/(1-dz), magnitude-authoritative aim response curve (slow precision / fast flick), aim assist pulls only lit living enemies within a hard deflection cap, device auto-detect/lock honours the mode, Dungeon3D M/1/2/3/4 ride input actions, the ESC controls page round-trips every control, virtual aim projects to the matching screen side, facing resolves right-stick > left-stick > keep-last with deadzone hysteresis and smoothed tier hand-off (left-stick tier default OFF), and every facility menu opens with a focus anchor for gamepad navigation"
 		)
 		get_tree().quit(0)
 		return

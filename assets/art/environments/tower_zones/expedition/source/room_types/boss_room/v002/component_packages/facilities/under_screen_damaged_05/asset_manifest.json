@@ -1,0 +1,47 @@
+{
+  "package_id": "under_screen_damaged_05",
+  "name_zh": "破损服务器_under_screen_damaged_05",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "破损服务器_under_screen_damaged_05_资产包",
+  "objects": [
+    "破损服务器_under_screen_damaged_05_部件0",
+    "破损服务器_under_screen_damaged_05_部件1",
+    "破损服务器_under_screen_damaged_05_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    6.0,
+    17.621094703674316,
+    0.12999999523162842
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      4.639999866485596,
+      16.20218849182129,
+      0.12999999523162842
+    ],
+    "max": [
+      7.360000133514404,
+      19.040000915527344,
+      4.079999923706055
+    ]
+  },
+  "dimensions_m": [
+    2.7200002670288086,
+    2.8378124237060547,
+    3.9499999284744263
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

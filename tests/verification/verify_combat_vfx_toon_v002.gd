@@ -49,14 +49,19 @@ const EXPECTED_SHELL_EJECT_UP_SPREAD := 0.45
 const EXPECTED_SHELL_EJECT_FORWARD_JITTER := 0.30
 const EXPECTED_SHELL_EJECT_SPIN_SPREAD := 0.50
 const EXPECTED_SHELL_INITIAL_TILT_DEG := 45.0
-## —— 弹壳停留时长（业主 2026-09-22 追加：「弹壳的停留时长加 1.5 秒」）——
+## —— 弹壳停留时长（业主 2026-09-22 两轮定档）——
+## v002.7「停留 +1.5 秒」：3.2 → 4.7；v002.8「停留再缩短 1 秒」：4.7 → 3.7。
 ## 口径：寿命 = 飞行 + 弹跳 + 滚动 + **落地后的停留**；前三段由物理常量与初速度决定、
-## 不随寿命变化 ⇒ 「停留 +1.5s」= 寿命 3.2 → 4.7。
-## ⚠️ 三个数**刻意各自硬编码、不写成派生式**（4.7 = 3.2 + 1.5）：若写成
-##    `PREVIOUS + DELTA`，改坏一处会让三处一起跟随，自我印证就抓不到了。
-const EXPECTED_SHELL_LIFETIME_PREVIOUS := 3.2
-const EXPECTED_SHELL_SETTLED_HOLD_DELTA := 1.5
-const EXPECTED_SHELL_LIFETIME := 4.7
+## 不随寿命变化 ⇒ 加/缩短寿命就是加/缩短停留。
+## ⚠️ 四个数**刻意各自硬编码、不写成派生式**（3.7 = 4.7 − 1.0）：若写成
+##    `PREVIOUS − SHORTEN`，改坏一处会让全部一起跟随，自我印证就抓不到了。
+const EXPECTED_SHELL_LIFETIME_PREVIOUS := 4.7
+const EXPECTED_SHELL_DWELL_SHORTEN := 1.0
+const EXPECTED_SHELL_LIFETIME := 3.7
+## 停留**观感下限**（独立于上面三档数值）：弹壳躺在地上至少要被看清这么久。
+## v002.7 定这个口径时即取 1.5s，本轮沿用；专供 ③ 使用。
+## ⛔ 它不是「增量」—— 别拿它去钉「加了几秒 / 缩短了几秒」，那是 ② 的职责（见 ③ 注释）。
+const EXPECTED_SHELL_HOLD_FLOOR := 1.5
 ## 连发抽样发数。24 发是「能稳定量出散布、又不拖慢验收」的折中：
 ## 对均匀分布，n 个样本的极差不足理论极差一半的概率 ≈ 2×0.5ⁿ ⇒ n=24 时 ≈ 1e-7，不会假红。
 const EJECTION_SAMPLE_SHOTS := 24
@@ -453,19 +458,27 @@ func _check_shell_nonzero_floor() -> void:
 	deep.free()
 
 
-## 停留时长定档（业主 2026-09-22 追加：「弹壳的停留时长加 1.5 秒」）。
+## 停留时长定档（业主 2026-09-22 两轮：「停留加 1.5 秒」→「停留再缩短 1 秒」）。
 ##
 ## 口径：弹壳「在地上的停留」= `lifetime − 落地静止时刻`。飞行 / 弹跳 / 滚动三段的时长
-## 由物理常量与初速度决定，**不随寿命变化** ⇒ 加寿命就是加停留，业主的「+1.5 秒」
-## 据此落成 `VfxShellCasing3D.DEFAULT_LIFETIME: 3.2 → 4.7`。
+## 由物理常量与初速度决定，**不随寿命变化** ⇒ 加/缩短寿命就是加/缩短停留。
+## 两轮落成 `VfxShellCasing3D.DEFAULT_LIFETIME`：`3.2 →（+1.5）4.7 →（−1.0）**3.7**`。
 ##
-## 三条断言互补：
+## 四条断言互补（**各自守不同的东西，别混为一谈**）：
 ##   ① 寿命 = 定档值（外部真源硬编码，不引用被测常量 ⇒ 改坏常量才抓得到）；
-##   ② 增量 = 上一版 3.2 + 1.5（**业主诉求本身**，常量级钉子）；
-##   ③ 行为级：实测静止时刻后剩余停留 ≥ 1.5s —— 挡住「有人把初速度调大到飞行段
-##      吃掉这 1.5s」这类隐形退化（那时 ①② 仍绿，只有 ③ 会红）。
+##   ② 本轮增量 = 上一版 4.7 − 1.0（**业主诉求本身**，常量级钉子）。
+##      换方向（加 ↔ 缩短）时这条的减号语义要同步翻，别只改数字；
+##   ③ 行为级：实测静止时刻后剩余停留 ≥ **观测下限 1.5s**。⛔ 它是**下限守卫**、
+##      不是增量钉子 —— 寿命 3.7 / 4.7 下都成立，守的是「飞行段被调长、把停留吃光」
+##      这类隐形退化（那时 ①② 仍绿，只有 ③ 会红）。v002.7 曾把「增量」当它的前提，
+##      本轮已把两者拆开（各自独立的常量）；
+##   ④ 哨兵：MAX_SECONDS 内必须测到静止时刻，否则 ③ 会拿 -1.0 参与比较而恒真。
+##
 ## ⚠️ 必须用**新实例**：主用例那枚已被推进到 1.94s 且早已 SETTLED，
 ##    复用它时 t_settle 会取到第一个步长（恒真），③ 就废了。
+##
+## 成本核对（**寿命每变一次都要照做**，式子见 `VfxShellCasing3D.DEFAULT_LIFETIME` 注释）：
+## 射速 1.0 ~ 12.0 发/s × 3.7s ⇒ 最坏同屏 ≈ 44 枚（v002.7 的 4.7s 下为 ≈ 56 枚）。
 func _check_shell_settled_hold() -> void:
 	const STEP := 1.0 / 60.0
 	const MAX_SECONDS := 12.0
@@ -504,19 +517,19 @@ func _check_shell_settled_hold() -> void:
 		"弹壳寿命不是定档值 %.2f：%.3f" % [EXPECTED_SHELL_LIFETIME, lifetime])
 	_expect(absf(shell.lifetime - EXPECTED_SHELL_LIFETIME) < 0.0001,
 		"弹壳实例寿命未按 DEFAULT_LIFETIME 初始化：%.3f（检查 _ready）" % shell.lifetime)
-	# ② 增量 = 上一版 + 1.5s（业主诉求本身）。
-	_expect(absf(lifetime - EXPECTED_SHELL_LIFETIME_PREVIOUS - EXPECTED_SHELL_SETTLED_HOLD_DELTA) < 0.0001,
-		"弹壳停留增量不是 %.1fs：寿命 %.2f − 上一版 %.2f = %.2f"
+	# ② 本轮缩短量 = 上一版 4.7 − 1.0s（业主诉求本身，常量级钉子）。
+	_expect(absf(EXPECTED_SHELL_LIFETIME_PREVIOUS - lifetime - EXPECTED_SHELL_DWELL_SHORTEN) < 0.0001,
+		"弹壳停留缩短量不是 %.1fs：上一版 %.2f − 寿命 %.2f = %.2f"
 		% [
-			EXPECTED_SHELL_SETTLED_HOLD_DELTA,
-			lifetime,
+			EXPECTED_SHELL_DWELL_SHORTEN,
 			EXPECTED_SHELL_LIFETIME_PREVIOUS,
-			lifetime - EXPECTED_SHELL_LIFETIME_PREVIOUS,
+			lifetime,
+			EXPECTED_SHELL_LIFETIME_PREVIOUS - lifetime,
 		])
-	# ③ 行为级：静止后真的还能停留 ≥ 1.5s。
-	_expect(hold >= EXPECTED_SHELL_SETTLED_HOLD_DELTA,
-		"弹壳落地静止后停留只有 %.2fs（要求 ≥ %.1fs）：t_settle=%.2f lifetime=%.2f"
-		% [hold, EXPECTED_SHELL_SETTLED_HOLD_DELTA, settle_elapsed, lifetime])
+	# ③ 行为级：静止后真的还能停留 ≥ 观感下限（**下限守卫**，不是增量钉子 —— 见函数头）。
+	_expect(hold >= EXPECTED_SHELL_HOLD_FLOOR,
+		"弹壳落地静止后停留只有 %.2fs（观感下限 %.1fs）：t_settle=%.2f lifetime=%.2f"
+		% [hold, EXPECTED_SHELL_HOLD_FLOOR, settle_elapsed, lifetime])
 	shell.free()
 
 

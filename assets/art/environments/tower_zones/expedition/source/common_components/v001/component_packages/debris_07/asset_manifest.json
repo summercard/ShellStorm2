@@ -1,0 +1,75 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+  "room_type": "BOSS_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/debris_07/debris_07.blend",
+  "collection": "固定碎屑_07_输出包",
+  "editable_collection": "固定碎屑_07_制作源",
+  "root_object": "ROOT_debris_07_组件",
+  "bounds_size_m": [
+    2.390353,
+    1.66899,
+    0.2195
+  ],
+  "bounds_lo_m": [
+    -1.195176,
+    -0.834495,
+    0.0
+  ],
+  "bounds_hi_m": [
+    1.195177,
+    0.834496,
+    0.2195
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "-Y",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [],
+  "material_roles": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "source_package_id": "debris_07",
+  "version": "v001",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "asset_id": "ENV-EXPEDITION-BOSSROOM-DEBRIS-07",
+  "category": "support",
+  "name_zh": "固定碎屑_07",
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "source_world_origin_m": [
+    6.7711145877838135,
+    15.716286182403564,
+    0.3305000066757202
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "godot_front_axis": "+Z",
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend",
+  "objects": [
+    "固定碎屑_07_输出_部件00",
+    "固定碎屑_07_输出_部件01"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "component_file_sha256": "52f52644941932f69f6f8ac12946cd60692c21f509c15e01393661bae59ac008"
+}

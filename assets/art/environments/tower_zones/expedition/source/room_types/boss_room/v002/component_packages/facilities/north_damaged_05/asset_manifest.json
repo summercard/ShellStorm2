@@ -1,0 +1,47 @@
+{
+  "package_id": "north_damaged_05",
+  "name_zh": "破损服务器_north_damaged_05",
+  "category": "facilities",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "破损服务器_north_damaged_05_资产包",
+  "objects": [
+    "破损服务器_north_damaged_05_部件0",
+    "破损服务器_north_damaged_05_部件1",
+    "破损服务器_north_damaged_05_自发光"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    20.59999942779541,
+    17.76203155517578,
+    0.12999999523162842
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      19.014999389648438,
+      16.10906219482422,
+      0.12999999523162842
+    ],
+    "max": [
+      22.184999465942383,
+      19.415000915527344,
+      6.289999961853027
+    ]
+  },
+  "dimensions_m": [
+    3.1700000762939453,
+    3.305938720703125,
+    6.159999966621399
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面",
+    "04_柔和自发光_UI灯光"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

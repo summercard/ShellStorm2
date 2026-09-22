@@ -1,0 +1,22 @@
+{
+  "blend_exists": true,
+  "source_hash_match": true,
+  "package_count": 214,
+  "catalog_collection_count": 214,
+  "mesh_count": 602,
+  "output_instance_offset_violations": [],
+  "root_transform_violations": [],
+  "mesh_transform_violations": [],
+  "palette_uv_violations": [],
+  "material_role_violations": [],
+  "duplicate_output_object_names": false,
+  "room_owned_geometry_violations": [],
+  "missing_package_collections": [],
+  "all_instance_offsets_zero": true,
+  "all_roots_identity": true,
+  "all_mesh_transforms_identity": true,
+  "all_palette_uv_present": true,
+  "all_material_roles_shared": true,
+  "all_packages_nonempty": true,
+  "all_pass": true
+}

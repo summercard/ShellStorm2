@@ -1,0 +1,21 @@
+﻿=== C:\windows 子目录 Top10 ===
+    8675.3 MB  WinSxS
+    7878.1 MB  System32
+    6493.7 MB  assembly
+    3653.1 MB  Installer
+      1236 MB  SysWOW64
+    1083.1 MB  servicing
+     785.3 MB  Microsoft.NET
+     454.5 MB  Fonts
+       185 MB  SystemApps
+     160.6 MB  SystemResources
+
+=== 全盘 Top15 大文件（扫描 C:\ 一层 + 常见大户）===
+         0 MB  C:\$WinREAgent
+        --  C:\hiberfil.sys
+        --  C:\pagefile.sys
+        --  C:\swapfile.sys
+        --  C:\Windows.old
+   45883.8 MB  C:\Users\zhuangmenghong\AppData\Local
+   17511.9 MB  C:\Users\zhuangmenghong\AppData\Roaming
+   17294.6 MB  C:\ProgramData

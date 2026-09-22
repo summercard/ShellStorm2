@@ -1,0 +1,45 @@
+{
+  "package_id": "archive_shelf_03",
+  "name_zh": "档案货架_03",
+  "category": "facilities",
+  "version": "v001",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v001/Boss房种类_故障数据库_50x40m_v001.blend",
+  "collection": "档案货架_03_资产包",
+  "objects": [
+    "档案货架_03_部件0",
+    "档案货架_03_部件1"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    21.0,
+    10.0,
+    0.30000001192092896
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      19.774999618530273,
+      9.199999809265137,
+      0.30000001192092896
+    ],
+    "max": [
+      22.225000381469727,
+      10.800000190734863,
+      5.650000095367432
+    ]
+  },
+  "dimensions_m": [
+    2.450000762939453,
+    1.6000003814697266,
+    5.350000083446503
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

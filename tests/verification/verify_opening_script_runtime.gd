@@ -72,6 +72,8 @@ func _ready() -> void:
 	_phase_e_zombie_trigger_geometry()
 	_phase_f_block00_door_policies()
 	_phase_g_opening_room_light()
+	await _phase_h_no_room_key_in_peaceful()
+	_phase_i_opening_loadout()
 	_report()
 
 
@@ -435,6 +437,30 @@ func _phase_f_block00_door_policies() -> void:
 				% [room_id, neighbour],
 			)
 
+	# 门**节点**上也必须落下放行策略 —— 门口那句提示语就是它渲的：
+	# `requires_key` 为真时显示「[E] 使用房间钥匙」，等于给玩家一个假提示。
+	for room_id in BLOCK00_ROOM_IDS:
+		var room := (rooms as Dictionary).get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		var doors := 0
+		for direction in room.door_targets.keys():
+			var door := room.get_door_node(str(direction))
+			if door == null:
+				continue
+			doors += 1
+			_check(
+				not door.requires_key,
+				"%s 的 %s 门节点不要求钥匙（否则门口会写「使用房间钥匙」）"
+				% [room_id, str(direction)],
+			)
+			_check(
+				not door.get_interaction_prompt_text().contains("钥匙"),
+				"%s 的 %s 门提示语不提钥匙（实际「%s」）"
+				% [room_id, str(direction), door.get_interaction_prompt_text()],
+			)
+		_check(doors > 0, "%s 至少有一扇门节点参与策略校验（实际 %d）" % [room_id, doors])
+
 
 	# 源码级守卫：门**开启路径**必须走 `_door_policy_towards`（会读房间声明的策略）。
 	# 退回 `_door_policy_for_edge` 就是那个「98F 每扇门都要钥匙」的老 bug —— 运行时零报错，
@@ -491,6 +517,232 @@ func _phase_g_opening_room_light() -> void:
 		)
 		_note(
 			"G 刷怪点 = (%.1f, %.1f, %.1f)" % [spawn_point.x, spawn_point.y, spawn_point.z]
+		)
+
+
+## 98F 和平区**不该产出「房间钥匙」**：钥匙的唯一用途是开下一扇门，
+## 而和平区四扇门都 `requires_key: false` —— 掉了就是永远用不掉的垃圾道具。
+## ⛔ 真凶不是清房那条路（它本来就传 `spawn_key = false`），而是
+## `_on_room_entered()` 的「重进已探索房间」分支**无条件**调 `_ensure_room_key_reward()`：
+## 玩家回头再走进同一间，`cleared == true` 且 room_type 是 COMBAT（不在排除表里）
+## ⇒ 地上掉一把钥匙。这里就按那条路复现（2026-09-22 人报截图）。
+func _phase_h_no_room_key_in_peaceful() -> void:
+	var rooms: Variant = _tower.get("_room_by_id")
+	if not (rooms is Dictionary):
+		_check(false, "拿不到塔楼房间表（钥匙闸口校验无法进行）")
+		return
+	var table := rooms as Dictionary
+	var probed := 0
+	for room_id in BLOCK00_ROOM_IDS:
+		var room := table.get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		probed += 1
+		_check(
+			not bool(_tower.call("_room_produces_room_key", room)),
+			"%s 不该产出房间钥匙（和平区门不消耗钥匙）" % room_id,
+		)
+	_check(probed == BLOCK00_ROOM_IDS.size(), "四房都参与了钥匙闸口校验（实际 %d）" % probed)
+
+	# 端到端复现：把每间都推到「已清房」再走那条无条件调用，地上必须**一颗都没有**。
+	for room_id in BLOCK00_ROOM_IDS:
+		var room := table.get(room_id) as DungeonRoom3D
+		if room == null:
+			continue
+		if not room.cleared:
+			# 和平区首次进房的真实清房路径（spawn_key = false）。
+			_tower.call("_mark_room_cleared", room, false)
+		_check(room.cleared, "%s 已进入已清房状态（重进房分支的前提）" % room_id)
+		# 这一句就是 `_on_room_entered()` 重进分支里那一句，一字不差。
+		_tower.call("_ensure_room_key_reward", room)
+		# `_spawn_room_key` 由 `call_deferred` 触发，等两帧再点。
+		await get_tree().process_frame
+		await get_tree().process_frame
+		var keys := _count_room_keys_in(room)
+		_check(
+			keys == 0,
+			"%s 重进后地上没有房间钥匙（老 bug：这里会掉一把）实际 %d 颗" % [room_id, keys],
+		)
+
+	var total := get_tree().get_nodes_in_group("room_key_pickup_3d").size()
+	_note("H 本层地上的房间钥匙总数 = %d" % total)
+	_check(total == 0, "98F 全层地上没有房间钥匙（实际 %d 颗）" % total)
+
+	# HUD 目标文案（主人截图里那行「用钥匙开门选择路线」）靠的是同一声明：
+	# 只看「我有没有钥匙」、不看「这扇门要不要钥匙」就会写出假提示。
+	var saved_room_id := str(_tower.get("_current_room_id"))
+	_tower.set("_current_room_id", OPENING_ROOM_ID)
+	var objective := str(_tower.call("_journey_objective", 98))
+	_tower.set("_current_room_id", saved_room_id)
+	_check(
+		not objective.contains("钥匙"),
+		"和平区的 HUD 目标文案不提钥匙（实际「%s」）" % objective,
+	)
+	_note("H 和平区 HUD 目标文案 = %s" % objective)
+
+	# 源码级守卫：闸口必须**自检**（不能只信调用方的 `spawn_key`），否则重进房那条路会绕过去。
+	var d3_source := FileAccess.get_file_as_string("res://src/world3d/Dungeon3D.gd")
+	var guard_marker := "func _ensure_room_key_reward(room: DungeonRoom3D) -> void:"
+	var guard_start := d3_source.find(guard_marker)
+	_check(guard_start >= 0, "Dungeon3D 有 _ensure_room_key_reward（钥匙补发闸口）")
+	if guard_start >= 0:
+		var guard_body := d3_source.substr(guard_start, 900)
+		_check(
+			guard_body.contains("_room_produces_room_key("),
+			"钥匙补发闸口自检房间门策略（老 bug：只信调用方 spawn_key ⇒ 重进和平区掉钥匙）",
+		)
+
+
+func _count_room_keys_in(room: DungeonRoom3D) -> int:
+	var count := 0
+	for value in get_tree().get_nodes_in_group("room_key_pickup_3d"):
+		var node := value as Node
+		if node != null and room.is_ancestor_of(node):
+			count += 1
+	return count
+
+
+## 开场武装口径（2026-09-22 主人要求）：**身上没有枪、备弹照给、他原本那把枪躺在地上**。
+## 三条都必须真机验 —— 它们全都「零报错就能是错的」：
+## 收回武器的调用点漏了、地上那把枪指错房间、剧本里的目标点与落位常量各写各的，
+## 运行时都只会安静地演成另一个样子。
+func _phase_i_opening_loadout() -> void:
+	var rooms: Variant = _tower.get("_room_by_id")
+	if not (rooms is Dictionary):
+		_check(false, "拿不到塔楼房间表（开场武装校验无法进行）")
+		return
+	var table := rooms as Dictionary
+	var office := table.get(OPENING_ROOM_ID) as DungeonRoom3D
+	_check(office != null, "有办公室房 %s" % OPENING_ROOM_ID)
+	if office == null:
+		return
+
+	# ① 身上没有枪
+	var equipped: Variant = _player.call("get_equipped_weapon_item")
+	var equipped_empty := equipped is Dictionary and (equipped as Dictionary).is_empty()
+	_check(
+		equipped_empty,
+		"开场玩家身上没有枪（实际 %s）" % ("空" if equipped_empty else str(equipped)),
+	)
+
+	# ② 备弹照给。⚠️ 探针是 `test_mode`，真机那条自动发放（`if not test_mode:`）被挡住，
+	# 所以这里**显式调一次**发放函数：要验的是「**把枪收回之后**备弹照样能进包」这条关系
+	# —— 保底备弹与「有没有枪」必须解耦，否则玩家就变成「有 300 发、但打不出去」。
+	var expected_ammo := int(_tower.call("get_guaranteed_loadout_ammo_rounds"))
+	var ammo_before := int(_tower.call("_get_reserve_ammo_count"))
+	var ammo_added := int(_tower.call("_grant_guaranteed_loadout_ammo"))
+	var ammo_after := int(_tower.call("_get_reserve_ammo_count"))
+	_check(
+		ammo_added == expected_ammo and ammo_after == ammo_before + ammo_added,
+		"无枪状态下保底备弹 %d 发真的入包（入包 %d 发：%d → %d）"
+		% [expected_ammo, ammo_added, ammo_before, ammo_after],
+	)
+	_note("I 保底备弹 = %d 发（显式发放后 %d → %d）" % [expected_ammo, ammo_before, ammo_after])
+	# 源码守卫：这条发放的**唯一**条件必须是「非 test_mode」，不能被「有没有枪」挟持。
+	# ⚠️ 先把 CRLF 归一：本仓源码是 CRLF，用 `\n` 搜跨行片段会**永远搜不到** ——
+	# 守卫自己就成了「永远红」（2026-09-22 实测踩过这一脚）。
+	var d3_source := FileAccess.get_file_as_string(
+		"res://src/world3d/Dungeon3D.gd"
+	).replace("\r\n", "\n")
+	_check(
+		d3_source.contains("\tif not test_mode:\n\t\t_grant_guaranteed_loadout_ammo()"),
+		"保底备弹的发放条件只有『非 test_mode』，与有没有枪无关",
+	)
+
+	# ③ 地上那把枪：在办公室里、靠近东门
+	var drops: Array = []
+	for value in get_tree().get_nodes_in_group("ground_loot_3d"):
+		var node := value as Node3D
+		if node != null and office.is_ancestor_of(node):
+			drops.append(node)
+	_check(drops.size() == 1, "办公室地上正好一件掉落物（实际 %d）" % drops.size())
+	var door := office.get_door_node("east")
+	_check(door != null, "办公室有东门（通往 floor_01_main_02）")
+	if drops.size() >= 1 and door != null:
+		var gun := drops[0] as Node3D
+		var gun_data: Variant = gun.get("item_data")
+		var gun_type := (
+			str((gun_data as Dictionary).get("type", "")) if gun_data is Dictionary else "?"
+		)
+		_check(gun_type == "weapon", "地上那件是武器（实际 type=%s）" % gun_type)
+		_check(
+			office.contains_world_position(gun.global_position),
+			"那把枪落在办公室内部（world=%.1f, %.1f, %.1f）"
+			% [gun.global_position.x, gun.global_position.y, gun.global_position.z],
+		)
+		var to_door := door.global_position - gun.global_position
+		to_door.y = 0.0
+		_check(
+			to_door.length() <= 3.0,
+			"那把枪离东门 <= 3m（实际 %.2fm）" % to_door.length(),
+		)
+		_note(
+			"I 地上那把枪 = (%.1f, %.1f, %.1f)，离东门 %.2fm"
+			% [gun.global_position.x, gun.global_position.y, gun.global_position.z, to_door.length()]
+		)
+
+	# ④ 剧本与常量必须同值（剧本是 JSON、常量在 GDScript，两处写死就必须互相咬住）
+	var consts: Dictionary = _tower.get_script().get_script_constant_map()
+	var drop_offset: Variant = consts.get("NEW_GAME_OPENING_DROP_OFFSET", null)
+	_check(drop_offset is Vector3, "塔楼声明了 NEW_GAME_OPENING_DROP_OFFSET（落位常量）")
+	var wake := NarrativeScript3D.load_from_id(WAKE_ID)
+	_check(wake != null, "剧本 01 可加载（nar_tower_opening_01_wake）")
+	if wake != null:
+		var face_cue: Dictionary = {}
+		var gift_say := ""
+		var gift_at := -1.0
+		var end_at := -1.0
+		for cue in wake.cues:
+			var verb := str(cue.get("do", ""))
+			if verb == "actor.face" and str(cue.get("to_point_room", "")) == OPENING_ROOM_ID:
+				face_cue = cue
+			elif verb == "actor.say" and str(cue.get("text", "")).contains("主人留下的礼物"):
+				gift_say = str(cue.get("text", ""))
+				gift_at = float(cue.get("at", -1.0))
+			elif verb == "flow.end":
+				end_at = float(cue.get("at", -1.0))
+		_check(not face_cue.is_empty(), "剧本 01 有「朝办公室里的枪转过去」的 actor.face")
+		_check(
+			gift_say.contains("主人留下的礼物"),
+			"剧本 01 有「那是主人留下的礼物。。」这句台词",
+		)
+		_check(
+			end_at > gift_at and gift_at >= 0.0,
+			"剧本 01 是「说完那句才解锁」（台词 %.1fs / flow.end %.1fs）" % [gift_at, end_at],
+		)
+		if not face_cue.is_empty() and drop_offset is Vector3:
+			var raw_off: Variant = face_cue.get("to_point_offset", null)
+			var matched := false
+			var from_script := Vector3.ZERO
+			if raw_off is Array and (raw_off as Array).size() == 3:
+				var arr: Array = raw_off
+				from_script = Vector3(float(arr[0]), float(arr[1]), float(arr[2]))
+				matched = from_script.is_equal_approx(drop_offset as Vector3)
+			_check(
+				matched,
+				"剧本 01 的 to_point_offset 与塔楼落位常量同值（剧本 %s / 常量 %s）"
+				% [str(from_script), str(drop_offset)],
+			)
+
+	# ⑤ 剧本 02 的台词与系统提示
+	var zombies := NarrativeScript3D.load_from_id(ZOMBIES_ID)
+	_check(zombies != null, "剧本 02 可加载（nar_tower_opening_02_zombies）")
+	if zombies != null:
+		var hint := ""
+		var line := ""
+		for cue in zombies.cues:
+			var verb := str(cue.get("do", ""))
+			if verb == "ui.hint":
+				hint = str(cue.get("text", ""))
+			elif verb == "actor.say":
+				line = str(cue.get("text", ""))
+		_check(
+			line.contains("黑暗中是什么东西"),
+			"剧本 02 台词是「黑暗中是什么东西！」（实际「%s」）" % line,
+		)
+		_check(
+			hint.contains("手电") and hint.contains("F"),
+			"剧本 02 有「按F开启手电」的系统提示（实际「%s」）" % hint,
 		)
 
 

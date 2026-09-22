@@ -145,11 +145,19 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 		var raw := value as Dictionary
 		# 本字典是**白名单重建**，不是原样透传：设计源新增字段若忘记在此登记，
 		# 会被静默丢掉（不会报错、也不会红），因此每次扩字段都要连这里一起改。
-		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）。
+		# 已登记的房间级可选字段：enemy_spawn_plan（刷怪计划）、boss_content_id（首领指派）、
+		# reward_plan（统一掉落计划，04 §22.7 / 05 §11 reward_slots）。
 		var spawn_plan: Dictionary = {}
 		var raw_spawn_plan: Variant = raw.get("enemy_spawn_plan", {})
 		if raw_spawn_plan is Dictionary:
 			spawn_plan = (raw_spawn_plan as Dictionary).duplicate(true)
+		# 统一掉落计划：键是 trigger（clear / search / kill），值是槽位引用。
+		# 本层只做**类型守卫 + 深拷贝**，语义（trigger 合法、spec 存在、池已登记）由
+		# LevelPlanValidator 与 RewardSpec 负责 —— 与 enemy_spawn_plan 同样「只透传不解释」。
+		var reward_plan: Dictionary = {}
+		var raw_reward_plan: Variant = raw.get("reward_plan", {})
+		if raw_reward_plan is Dictionary:
+			reward_plan = (raw_reward_plan as Dictionary).duplicate(true)
 		var room := {
 			"key": str(raw.get("key", "")),
 			"room_id": str(raw.get("room_id", "")),
@@ -165,6 +173,7 @@ static func normalize_floor(level_id: String, floor_number: int) -> Dictionary:
 			"content_type": str(raw.get("content_type", "")),
 			"boss_content_id": str(raw.get("boss_content_id", "")),
 			"enemy_spawn_plan": spawn_plan,
+			"reward_plan": reward_plan,
 			"declared_ports": raw.get("ports", []),
 			"ports": [],
 			"ports_derived": false,

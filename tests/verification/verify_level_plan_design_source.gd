@@ -10,7 +10,12 @@ extends Node
 ##   省略 --level 时校验 TARGET_LEVELS 全部。
 ##
 ## 判据：LEVEL_PLAN_VALIDATE_OK levels=N checks=K rooms=R templates=T
-##       LEVEL_PLAN_RUNTIME_GUARD_OK levels=N rooms=R checks=K
+##       LEVEL_PLAN_RUNTIME_GUARD_OK levels=N rooms=R checks=K plans=P boss_ids=B rewards=W
+##   plans=P    = 设计源里填了 enemy_spawn_plan 的房数（真的带到运行时的条数）
+##   boss_ids=B = 设计源里填了 boss_content_id 的房数
+##   rewards=W  = 设计源里填了 reward_plan 的**槽位数**（trigger 条数，真的带到运行时的条数）
+## 三个样本计数为 0 时另打 LEVEL_PLAN_RUNTIME_NOTE，避免「0 样本」伪装成通过
+## （透传机制由 verify_test_level_99_flow 的手写 patch 探针单独覆盖）。
 ## 失败：LEVEL_PLAN_VALIDATE_FAILED <level_id> errors=<n> 并逐条打印
 ##       LEVEL_PLAN_ERROR <level_id> <error>
 ##       LEVEL_PLAN_RUNTIME_GUARD_FAILED <level_id> errors=<n>
@@ -112,6 +117,8 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 	# 意味着「设计源 → 运行时」的透传断言是空跑。必须把它打出来，别让 0 样本
 	# 伪装成通过；透传机制本身由 verify_test_level_99_flow 的手写 patch 探针单独覆盖。
 	var guard_boss_ids := 0
+	# 掉落计划的样本数（槽位数）。与 boss_ids 同理：0 样本必须显式声明。
+	var guard_reward_slots := 0
 	for level_id in targets:
 		var level_plan := LOADER.load_level_plan(level_id)
 		if level_plan.is_empty():
@@ -131,6 +138,7 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				errors.append("floor %d: 生成器自校验未通过" % floor_number)
 			var source_plans := _source_spawn_plans(level_id, floor_number)
 			var source_boss_ids := _source_boss_content_ids(level_id, floor_number)
+			var source_rewards := _source_reward_plans(level_id, floor_number)
 			level_plans += source_plans.size()
 			guard_plans += source_plans.size()
 			guard_boss_ids += source_boss_ids.size()
@@ -156,6 +164,12 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				errors.append_array(
 					_verify_boss_content_id_carried(floor_number, key, room, source_boss_ids)
 				)
+				errors.append_array(
+					_verify_reward_plan_carried(floor_number, key, room, source_rewards)
+				)
+				# 计数器只数「真的带到了运行时」的槽位：源写了、运行时也有、且逐值一致。
+				# 不一致时上面那条断言已经会让本关判失败，这里不需要再重复计错。
+				guard_reward_slots += _carried_reward_slot_count(room, source_rewards)
 				if ROLE_EXPECTED_TYPE.has(role):
 					var expected := str(ROLE_EXPECTED_TYPE[role])
 					if room_type != expected:
@@ -202,12 +216,17 @@ func _verify_runtime_outputs(targets: Array[String]) -> int:
 				print("LEVEL_PLAN_RUNTIME_ERROR %s %s" % [level_id, str(error)])
 	if failed_levels == 0:
 		print(
-			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d boss_ids=%d"
-			% [targets.size(), guard_rooms, guard_checks, guard_plans, guard_boss_ids]
+			"LEVEL_PLAN_RUNTIME_GUARD_OK levels=%d rooms=%d checks=%d plans=%d boss_ids=%d rewards=%d"
+			% [targets.size(), guard_rooms, guard_checks, guard_plans, guard_boss_ids, guard_reward_slots]
 		)
 		if guard_boss_ids == 0:
 			print(
 				"LEVEL_PLAN_RUNTIME_NOTE 设计源暂无 boss_content_id 样本，"
+				+ "该字段的透传由 verify_test_level_99_flow 的手写 patch 探针覆盖"
+			)
+		if guard_reward_slots == 0:
+			print(
+				"LEVEL_PLAN_RUNTIME_NOTE 设计源暂无 reward_plan 样本，"
 				+ "该字段的透传由 verify_test_level_99_flow 的手写 patch 探针覆盖"
 			)
 	return failed_levels
@@ -306,6 +325,115 @@ func _verify_boss_content_id_carried(
 			% [floor_number, key, expected, carried]
 		)
 	return errors
+
+
+## 读该层设计源里每个房间的 `reward_plan`（按 key 索引），用于下面的透传断言。
+func _source_reward_plans(level_id: String, floor_number: int) -> Dictionary:
+	var out: Dictionary = {}
+	var floor_plan := LOADER.load_floor_plan(level_id, floor_number)
+	for value in floor_plan.get("rooms", []):
+		if not (value is Dictionary):
+			continue
+		var raw := value as Dictionary
+		var plan_value: Variant = raw.get("reward_plan", {})
+		if plan_value is Dictionary and not (plan_value as Dictionary).is_empty():
+			out[str(raw.get("key", ""))] = (plan_value as Dictionary).duplicate(true)
+	return out
+
+
+## 断言设计源的掉落计划 `reward_plan` **原样透传到运行时计划**。
+##
+## 与 `_verify_spawn_plan_carried` 同源理由：`LevelPlanLoader.normalize_floor` 是白名单
+## 重建，房间级新字段忘登记就会被静默丢掉 —— 不报错、不警告，运行时退化成
+## 「按全局默认公式抽奖」，表现为「我明明填了却没生效」。此处按 trigger 逐槽比对签名。
+##
+## 签名不含顺序、只含每个 trigger 的引用形态（spec_id / pool_id+draws+chance /
+## inline+条目种类），因此「字段被中途改写」与「槽位被整条丢」都会红。
+func _verify_reward_plan_carried(
+	floor_number: int, key: String, room: Dictionary, source_rewards: Dictionary
+) -> Array[String]:
+	var errors: Array[String] = []
+	if not source_rewards.has(key):
+		return errors
+	var expected := _reward_plan_signature(source_rewards[key] as Dictionary)
+	var carried := room.get("reward_plan", {}) as Dictionary
+	if carried.is_empty():
+		errors.append(
+			"floor %d room %s: reward_plan 未透传到运行时计划（应为 %s）"
+			% [floor_number, key, expected]
+		)
+		return errors
+	var actual := _reward_plan_signature(carried)
+	if actual != expected:
+		errors.append(
+			"floor %d room %s: reward_plan 透传后被改写 %s -> %s"
+			% [floor_number, key, expected, actual]
+		)
+	return errors
+
+
+## 真的带到了运行时的槽位数：源里有、运行时也有、且引用签名逐值一致的 trigger 条数。
+## 这是 `LEVEL_PLAN_RUNTIME_GUARD_OK ... rewards=W` 里 W 的口径 ——
+## 「1.9 填了几条，这里就该是几」，填了却是 0 说明没接通。
+func _carried_reward_slot_count(room: Dictionary, source_rewards: Dictionary) -> int:
+	var key := str(room.get("key", ""))
+	if not source_rewards.has(key):
+		return 0
+	var source := source_rewards[key] as Dictionary
+	var carried := room.get("reward_plan", {}) as Dictionary
+	var count := 0
+	for trigger_value in source.keys():
+		if not carried.has(trigger_value):
+			continue
+		if _reward_slot_signature(carried[trigger_value]) == _reward_slot_signature(source[trigger_value]):
+			count += 1
+	return count
+
+
+## 掉落计划的紧凑签名：`trigger=引用形态,...,trigger=引用形态`（trigger 已排序，与书写顺序无关）。
+func _reward_plan_signature(plan: Dictionary) -> String:
+	var triggers: Array = plan.keys()
+	triggers.sort()
+	var parts: Array[String] = []
+	for trigger_value in triggers:
+		parts.append("%s=%s" % [str(trigger_value), _reward_slot_signature(plan[trigger_value])])
+	return ",".join(parts)
+
+
+## 单个 trigger 槽位的引用形态签名。四种合法写法各给一个可区分的形态：
+##   {spec_id}          -> spec:<id>
+##   {pool_id[,draws][,chance]} -> pool:<id>[/d=<n>][/c=<chance>]
+##   {entries|fallback} -> inline:<条数>[<各条 kind>][|fb=<fallback 形态>]
+## 其它 -> <unknown>/<not-object>/<empty>（静态校验另行拦住，这里只保证签名可区分）。
+func _reward_slot_signature(slot_value: Variant) -> String:
+	if not (slot_value is Dictionary):
+		return "<not-object>"
+	var slot := slot_value as Dictionary
+	if slot.is_empty():
+		return "<empty>"
+	if slot.has("spec_id"):
+		return "spec:%s" % [str(slot["spec_id"])]
+	if slot.has("pool_id"):
+		var pool_text := "pool:%s" % [str(slot["pool_id"])]
+		if slot.has("draws"):
+			pool_text += "/d=%d" % int(slot["draws"])
+		if slot.has("chance"):
+			pool_text += "/c=%.4f" % float(slot["chance"])
+		return pool_text
+	if slot.has("entries") or slot.has("fallback"):
+		var raw_entries: Variant = slot.get("entries", [])
+		var kinds: Array[String] = []
+		if raw_entries is Array:
+			for entry_value in (raw_entries as Array):
+				if entry_value is Dictionary:
+					kinds.append(str((entry_value as Dictionary).get("kind", "?")))
+				else:
+					kinds.append("<not-object>")
+		var inline_text := "inline:%d[%s]" % [kinds.size(), ",".join(kinds)]
+		if slot.has("fallback"):
+			inline_text += "|fb=%s" % _reward_slot_signature(slot["fallback"])
+		return inline_text
+	return "<unknown>"
 
 
 ## 支持 --level=<id> 覆盖默认目标；无参数时校验 TARGET_LEVELS。

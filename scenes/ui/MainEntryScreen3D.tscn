@@ -1,18 +1,10 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://src/ui/main_entry/MainEntryScreen3D.gd" id="1_entry"]
+[ext_resource type="Script" path="res://src/ui/main_entry/EntryBrand.gd" id="2_brand"]
+[ext_resource type="Script" path="res://src/ui/main_entry/EntryNeonButton.gd" id="3_neon"]
 
-[sub_resource type="StyleBoxFlat" id="StyleMenu"]
-bg_color = Color(0.012, 0.032, 0.046, 0.95)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.12, 0.66, 0.82, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+[sub_resource type="StyleBoxEmpty" id="StyleMenu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleStatus"]
 bg_color = Color(0.025, 0.065, 0.082, 0.88)
@@ -50,15 +42,28 @@ grow_vertical = 2
 color = Color(0.002, 0.008, 0.014, 0.28)
 mouse_filter = 2
 
+[node name="Brand" type="Control" parent="Screen"]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 42.0
+offset_top = 112.0
+offset_right = 450.0
+offset_bottom = 290.0
+mouse_filter = 2
+script = ExtResource("2_brand")
+
 [node name="MenuPanel" type="PanelContainer" parent="Screen"]
+; 菜单面板只是布局壳（StyleBoxEmpty），不自绘任何底色。
+; VBox 底部有弹性 Spacer，按钮块贴着面板底边 —— 因此面板底边高度即按钮块高度。
+; 缩短底边 = 按钮块整体上移（品牌标题与眉标在顶部，不受影响）。
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 46.0
-offset_top = -276.0
-offset_right = 466.0
-offset_bottom = 276.0
+offset_left = 40.0
+offset_top = -278.0
+offset_right = 460.0
+offset_bottom = 155.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleMenu")
 
@@ -80,21 +85,22 @@ theme_override_colors/font_color = Color(0.38, 0.78, 0.9, 1)
 theme_override_font_sizes/font_size = 15
 
 [node name="Title" type="Label" parent="Screen/MenuPanel/Margin/Content"]
+visible = false
 layout_mode = 2
 text = "弹壳风暴 2"
-theme_override_colors/font_color = Color(0.62, 0.96, 1, 1)
-theme_override_font_sizes/font_size = 38
 
 [node name="Subtitle" type="Label" parent="Screen/MenuPanel/Margin/Content"]
+visible = false
 layout_mode = 2
 text = "2075 · 基地生存档案"
-theme_override_colors/font_color = Color(0.72, 0.8, 0.84, 1)
+theme_override_colors/font_color = Color(0.48, 0.68, 0.74, 1)
 theme_override_font_sizes/font_size = 18
 
 [node name="Rule" type="HSeparator" parent="Screen/MenuPanel/Margin/Content"]
 layout_mode = 2
 
 [node name="PlayerStatus" type="Label" parent="Screen/MenuPanel/Margin/Content"]
+visible = false
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 text = "角色状态  HP -- / --"
@@ -104,6 +110,7 @@ theme_override_font_sizes/font_size = 18
 theme_override_styles/normal = SubResource("StyleStatus")
 
 [node name="OutfitStatus" type="Label" parent="Screen/MenuPanel/Margin/Content"]
+visible = false
 custom_minimum_size = Vector2(0, 142)
 layout_mode = 2
 text = "当前外观"
@@ -117,12 +124,26 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="StartButton" type="Button" parent="Screen/MenuPanel/Margin/Content"]
-custom_minimum_size = Vector2(0, 58)
+custom_minimum_size = Vector2(0, 62)
 layout_mode = 2
-text = "开始游戏"
-theme_override_font_sizes/font_size = 21
+text = "开始游戏 >>"
+script = ExtResource("3_neon")
+label_text = "开始游戏 >>"
+chamfer = 18.0
+glow_strength = 1.15
+
+[node name="SettingsButton" type="Button" parent="Screen/MenuPanel/Margin/Content"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+text = "设置"
+script = ExtResource("3_neon")
+label_text = "设置"
+draw_gear = true
+chamfer = 18.0
+glow_strength = 0.95
 
 [node name="Hint" type="Label" parent="Screen/MenuPanel/Margin/Content"]
+visible = false
 layout_mode = 2
 text = "点击后镜头将无缝返回正常游戏视角"
 horizontal_alignment = 1

@@ -1,0 +1,43 @@
+{
+  "package_id": "base_wall_north_slot_02_solid",
+  "name_zh": "结构_WALL_NORTH_SLOT_02_SOLID",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "结构_WALL_NORTH_SLOT_02_SOLID_资产包",
+  "objects": [
+    "WALL_NORTH_SLOT_02_SOLID"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    -17.5,
+    19.850000381469727,
+    0.0
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      -20.0,
+      19.700000762939453,
+      0.0
+    ],
+    "max": [
+      -15.0,
+      20.0,
+      11.899999618530273
+    ]
+  },
+  "dimensions_m": [
+    5.0,
+    0.2999992370605469,
+    11.899999618530273
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

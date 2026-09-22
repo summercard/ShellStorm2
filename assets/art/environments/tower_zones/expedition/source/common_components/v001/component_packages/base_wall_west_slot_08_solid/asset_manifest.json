@@ -1,0 +1,73 @@
+{
+  "component_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-08-SOLID",
+  "room_type": "BOSS_ROOM",
+  "source_room_type_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "source_room_type_sha256": "e61a8ca0dcd5b133a09bc13d6567bbcba513838709ea77fbac951670b9ad0b29",
+  "component_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/component_packages/base_wall_west_slot_08_solid/base_wall_west_slot_08_solid.blend",
+  "collection": "结构_WALL_WEST_SLOT_08_SOLID_输出包",
+  "editable_collection": "结构_WALL_WEST_SLOT_08_SOLID_制作源",
+  "root_object": "ROOT_base_wall_west_slot_08_solid_组件",
+  "bounds_size_m": [
+    0.299999,
+    5.0,
+    11.9
+  ],
+  "bounds_lo_m": [
+    -0.15,
+    -2.5,
+    0.0
+  ],
+  "bounds_hi_m": [
+    0.15,
+    2.5,
+    11.9
+  ],
+  "local_origin": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "front_axis": "+X",
+  "allowed_rotations_y_deg": [
+    0
+  ],
+  "collision_owner": "godot_wrapper",
+  "palette_uv_layer": "PaletteUV",
+  "asset_ledger": "assets/registry/ledgers/ShellStorm2_场景账本_v001.xlsx::3D-场景通用",
+  "room_owned_geometry": false,
+  "instance_offset": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "emissive_objects": [],
+  "material_roles": [
+    "02_细腻哑光_青绿大面"
+  ],
+  "source_package_id": "base_wall_west_slot_08_solid",
+  "version": "v001",
+  "collision": "not_authored",
+  "exported": false,
+  "runtime_connected": false,
+  "asset_id": "ENV-EXPEDITION-BOSSROOM-BASE-WALL-WEST-SLOT-08-SOLID",
+  "category": "architecture",
+  "name_zh": "结构_WALL_WEST_SLOT_08_SOLID",
+  "ledger_registration": "pending; component source only, not formal runtime asset",
+  "source_world_origin_m": [
+    -24.850000381469727,
+    17.5,
+    0.0
+  ],
+  "origin_contract": "bottom-center of component bounds; source placement only in traceability metadata",
+  "front_axis_coordinate_system": "Blender Z-up",
+  "godot_front_axis": "+X",
+  "allowed_rotations_blender_z_deg": [
+    0
+  ],
+  "component_library_blend": "assets/art/environments/tower_zones/expedition/source/common_components/v001/expedition_boss_room_components_source_v001.blend",
+  "objects": [
+    "结构_WALL_WEST_SLOT_08_SOLID_输出_部件00"
+  ],
+  "preview_render_status": "camera_ready; representative renders only",
+  "component_file_sha256": "5a14df47d35b5246ca318ceb6d243209f3a469d303d58502bc9fc297c5a5278e"
+}

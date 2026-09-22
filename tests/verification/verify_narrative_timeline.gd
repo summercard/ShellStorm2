@@ -109,6 +109,7 @@ var _camera: Camera3D = null
 var _camera_rest_elevation := 0.0
 var _bark: FakeBark = null
 var _probe_room: FakeRoom = null
+var _opening_room: FakeRoom = null
 var _spawn_calls: Array = []
 var _finish_reasons: Array[String] = []
 
@@ -169,6 +170,12 @@ func _build_world() -> void:
 	_probe_room.room_id = NEXT_ROOM_ID
 	add_child(_probe_room)
 	_probe_room.global_position = PROBE_ROOM_CENTER
+	# 开场房（办公室）：剧本 01 尾段用 `actor.face` 的目标点（房间相对）指地上的枪，
+	# 假世界里没有这个房就会降级成 yaw_deg —— 不报错，但也没验到那条真路径。
+	_opening_room = FakeRoom.new()
+	_opening_room.name = "OpeningRoom"
+	_opening_room.room_id = OPENING_ROOM_ID
+	add_child(_opening_room)
 
 	NarrativeDirector.narrative_finished.connect(_on_finished)
 
@@ -516,7 +523,11 @@ func _phase_c_real_scripts() -> void:
 			"俯角到达剧本写的 %.1f°（实测 %.1f°）" % [c1_elev, float(track["elev_best"])],
 		)
 	_check(_avatar.pose_calls >= 2, "姿态被下过至少两次指令（实际 %d）" % _avatar.pose_calls)
-	_check(_bark.lines == ["人呢"], "台词是『人呢』（实际 %s）" % str(_bark.lines))
+	# 2026-09-22 主人要求：起身后补一段「对着地上的枪说」——台词因此从 1 句变 2 句。
+	_check(
+		_bark.lines == ["人呢", "那是主人留下的礼物。。"],
+		"台词是『人呢』+『那是主人留下的礼物。。』（实际 %s）" % str(_bark.lines),
+	)
 	_check(not _player.input_locked, "收口后输入归还")
 	_check(not NarrativeDirector.is_player_input_locked(), "收口后交回输入独占权")
 	_check(not NarrativeDirector.is_camera_override_active(), "收口后摄影机归还")
@@ -527,7 +538,7 @@ func _phase_c_real_scripts() -> void:
 		"朝向归还到接管前的原值 %.3f（实际 %.4f）" % [FACING_BASELINE, _player.aim_yaw],
 	)
 
-	# ---- C2 第二段：**位置触发**（房间相对）→ 停住 → 镜头**平移过去**看僵尸 → 挪回 → 「它们是什么？」
+	# ---- C2 第二段：**位置触发**（房间相对）→ 停住 → 镜头**平移过去**看僵尸 → 挪回 →「黑暗中是什么东西！」
 	# 触发已从 room_entered 改成 point：room_entered 在玩家**刚跨进门**那一刻就发，
 	# 那一刻门还没关、玩家还站在门口 —— 实机表现就是「怪刷在门口、镜头也在门口」。
 	# 现在要玩家真的走进房间（房间中心 + point_offset）才触发（2026-09-21 主人要求）。
@@ -632,7 +643,10 @@ func _phase_c_real_scripts() -> void:
 	)
 	_check(not NarrativeDirector.is_camera_override_active(), "第二段收口后摄影机归还")
 	_check(not _player.input_locked, "第二段收口后输入归还")
-	_check(_bark.lines == ["它们是什么？"], "台词是『它们是什么？』（实际 %s）" % str(_bark.lines))
+	_check(
+		_bark.lines == ["黑暗中是什么东西！"],
+		"台词是『黑暗中是什么东西！』（实际 %s）" % str(_bark.lines),
+	)
 
 	# ---- C3 once=run：同一局内不许重播
 	_finish_reasons.clear()

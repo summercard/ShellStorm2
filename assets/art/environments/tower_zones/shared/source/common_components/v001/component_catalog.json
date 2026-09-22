@@ -1,0 +1,407 @@
+{
+  "schema": "shellstorm2.shared_generic_component_catalog.v001",
+  "library": "generic_scene_components_source_v001.blend",
+  "purpose": "shared reusable L-corner, wall, door wall, door leaf and floor tile source",
+  "component_count": 6,
+  "requested_counts": {
+    "L型转角": 1,
+    "通用墙": 1,
+    "门墙": 1,
+    "门": 1,
+    "地砖": 2
+  },
+  "source_libraries": [
+    "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+    "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend"
+  ],
+  "runtime_connected": false,
+  "collision_authored": false,
+  "glb_exported": false,
+  "ledger_registration": "pending; source subset only",
+  "packages": [
+    {
+      "component_id": "ENV-SHARED-GENERIC-WALL-STANDARD-5M",
+      "slug": "wall_standard_5m",
+      "category": "通用墙",
+      "source_package_id": "ENV-BATTLE-COMMON-WALL-STANDARD-5M",
+      "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+      "source_collection": "wall_standard_5m_源切片",
+      "collection": "输出_wall_standard_5m",
+      "editable_collection": "制作_wall_standard_5m",
+      "root_object": "ROOT_wall_standard_5m_通用组件.001",
+      "bounds_lo_m": [
+        -6.5,
+        58.19440460205078,
+        0.0
+      ],
+      "bounds_hi_m": [
+        -1.5,
+        58.66190719604492,
+        11.899999618530273
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.4675025939941406,
+        11.899999618530273
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "98828546e627b2e0a2dab80320a7a93b8c12a91f4896fd3aa2f05dd766327bd2",
+      "selection_reason": "validated battle common component; not reconstructed from the Boss room instance",
+      "objects": [
+        "wall_standard_5m_输出_wall_standard_5m_主体_输出",
+        "wall_standard_5m_输出_wall_standard_5m_UI灯光_柔和自发"
+      ]
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-WALL-DOOR-5M",
+      "slug": "wall_door_5m",
+      "category": "门墙",
+      "source_package_id": "ENV-BATTLE-COMMON-WALL-DOOR-5M",
+      "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+      "source_collection": "wall_door_5m_源切片",
+      "collection": "输出_wall_door_5m",
+      "editable_collection": "制作_wall_door_5m",
+      "root_object": "ROOT_wall_door_5m_通用组件.001",
+      "bounds_lo_m": [
+        -10.5,
+        58.19439697265625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        -5.5,
+        58.68589782714844,
+        11.899999618530273
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.4915008544921875,
+        11.899999618530273
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "98828546e627b2e0a2dab80320a7a93b8c12a91f4896fd3aa2f05dd766327bd2",
+      "selection_reason": "validated battle common component; not reconstructed from the Boss room instance",
+      "objects": [
+        "wall_door_5m_输出_wall_door_5m_主体_输出",
+        "wall_door_5m_输出_wall_door_5m_UI灯光_柔和自发光"
+      ]
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-DOOR-5M",
+      "slug": "door_5m",
+      "category": "门",
+      "source_package_id": "ENV-BATTLE-COMMON-DOOR-5M",
+      "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+      "source_collection": "door_5m_源切片",
+      "collection": "输出_door_5m",
+      "editable_collection": "制作_door_5m",
+      "root_object": "ROOT_door_5m_通用组件.001",
+      "bounds_lo_m": [
+        -5.099999904632568,
+        69.19439697265625,
+        0.0
+      ],
+      "bounds_hi_m": [
+        -0.09999990463256836,
+        69.68589782714844,
+        11.899999618530273
+      ],
+      "bounds_size_m": [
+        5.0,
+        0.4915008544921875,
+        11.899999618530273
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "98828546e627b2e0a2dab80320a7a93b8c12a91f4896fd3aa2f05dd766327bd2",
+      "selection_reason": "validated battle common component; not reconstructed from the Boss room instance",
+      "objects": [
+        "door_5m_输出_wall_door_5m_主体_输出",
+        "door_5m_输出_wall_door_5m_UI灯光_柔和自发光",
+        "door_5m_输出_door_5m_门扇_输出",
+        "door_5m_输出_door_5m_UI灯光_柔和自发光"
+      ]
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C01",
+      "slug": "floor_tile_r01_c01",
+      "category": "地砖",
+      "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C01",
+      "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+      "source_collection": "floor_tile_r01_c01_源切片",
+      "collection": "输出_floor_tile_r01_c01",
+      "editable_collection": "制作_floor_tile_r01_c01",
+      "root_object": "ROOT_floor_tile_r01_c01_通用组件.001",
+      "bounds_lo_m": [
+        -6.440000534057617,
+        61.37440490722656,
+        0.0
+      ],
+      "bounds_hi_m": [
+        -1.499999761581421,
+        66.31440734863281,
+        0.08300000429153442
+      ],
+      "bounds_size_m": [
+        4.940000772476196,
+        4.94000244140625,
+        0.08300000429153442
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "98828546e627b2e0a2dab80320a7a93b8c12a91f4896fd3aa2f05dd766327bd2",
+      "selection_reason": "validated battle common component; not reconstructed from the Boss room instance",
+      "objects": [
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_主体_输出",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_主体_输出.001",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_01",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_02",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_03",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_04",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_05",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_06",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_07",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_08",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_09",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_10",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_11",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_12",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_13",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_14",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_15",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_16",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_17",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_18",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_19",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_20",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_21",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_22",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_23",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_24",
+        "floor_tile_r01_c01_输出_floor_tile_r01_c01_砖面美术_25"
+      ]
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-FLOOR-TILE-R01-C02",
+      "slug": "floor_tile_r01_c02",
+      "category": "地砖",
+      "source_package_id": "ENV-BATTLE-COMMON-FLOOR-TILE-R01-C02",
+      "source_blend": "assets/art/environments/tower_zones/battle/source/common_components/v006/env_battle_common_components_source_v006.blend",
+      "source_collection": "floor_tile_r01_c02_源切片",
+      "collection": "输出_floor_tile_r01_c02",
+      "editable_collection": "制作_floor_tile_r01_c02",
+      "root_object": "ROOT_floor_tile_r01_c02_通用组件.001",
+      "bounds_lo_m": [
+        -14.380001068115234,
+        61.37440490722656,
+        0.0
+      ],
+      "bounds_hi_m": [
+        -9.440000534057617,
+        66.31440734863281,
+        0.08520001173019409
+      ],
+      "bounds_size_m": [
+        4.940000534057617,
+        4.94000244140625,
+        0.08520001173019409
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "98828546e627b2e0a2dab80320a7a93b8c12a91f4896fd3aa2f05dd766327bd2",
+      "selection_reason": "validated battle common component; not reconstructed from the Boss room instance",
+      "objects": [
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_主体_输出",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_主体_输出.001",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_01",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_02",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_03",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_04",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_05",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_06",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_07",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_08",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_09",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_10",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_11",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_12",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_13",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_14",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_15",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_16",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_17",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_18",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_19",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_20",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_21",
+        "floor_tile_r01_c02_输出_floor_tile_r01_c02_砖面美术_22"
+      ]
+    },
+    {
+      "component_id": "ENV-SHARED-GENERIC-CORNER-L-5M",
+      "slug": "base_corner_l_5m",
+      "category": "L型转角",
+      "source_package_id": "ENV-TOWER-CORNER-L-5M",
+      "source_blend": "source/art/blender/base_facility_layout/component_packages/architecture/base_corner_l_5m/base_corner_l_5m_source_v024.blend",
+      "source_collection": "02_游戏输出_整合模型",
+      "collection": "输出_base_corner_l_5m",
+      "editable_collection": "制作_base_corner_l_5m",
+      "root_object": "ROOT_base_corner_l_5m_通用组件",
+      "bounds_lo_m": [
+        -0.15000000596046448,
+        -0.15000000596046448,
+        0.0
+      ],
+      "bounds_hi_m": [
+        5.0,
+        5.0,
+        8.899999618530273
+      ],
+      "bounds_size_m": [
+        5.1500000059604645,
+        5.1500000059604645,
+        8.899999618530273
+      ],
+      "local_origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "front_axis": "+Y",
+      "godot_front_axis": "-Z",
+      "allowed_rotations_blender_z_deg": [
+        0,
+        90,
+        180,
+        270
+      ],
+      "collision_owner": "godot_wrapper",
+      "palette_uv_layer": "PaletteUV",
+      "room_owned_geometry": false,
+      "instance_offset": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "collision_authored": false,
+      "glb_exported": false,
+      "runtime_connected": false,
+      "source_sha256": "1b5c0603a104c77a1f0686ae619c800de7df4999bd50739a9a93c73564d887d8",
+      "selection_reason": "validated Base99 generic L-corner component; not reconstructed from the Boss room instance",
+      "objects": [
+        "base_corner_l_5m_输出_基地5米L型转角墙_主体_金属"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "package_id": "wall_skin_north_05",
+  "name_zh": "装甲墙_NORTH_05",
+  "category": "architecture",
+  "version": "v002",
+  "source_blend": "assets/art/environments/tower_zones/expedition/source/room_types/boss_room/v002/Boss房种类_故障数据库_50x40m_v002.blend",
+  "collection": "装甲墙_NORTH_05_资产包",
+  "objects": [
+    "装甲墙_NORTH_05_部件1",
+    "装甲墙_NORTH_05_部件0"
+  ],
+  "root_object": null,
+  "world_origin_m": [
+    2.500000048428774,
+    19.65000057220459,
+    0.05000000074505806
+  ],
+  "local_origin_contract": "bottom_center_recorded; room-world geometry retained",
+  "bounds": {
+    "min": [
+      0.03750000149011612,
+      19.575000762939453,
+      0.05000000074505806
+    ],
+    "max": [
+      4.962500095367432,
+      19.725000381469727,
+      11.850000381469727
+    ]
+  },
+  "dimensions_m": [
+    4.9250000938773155,
+    0.14999961853027344,
+    11.800000380724669
+  ],
+  "front": "-Y Blender / +Z Godot; per placement",
+  "materials": [
+    "01_精工金属_紫色骨架",
+    "02_细腻哑光_青绿大面"
+  ],
+  "collision": "not_authored",
+  "exported": false,
+  "dependencies": [],
+  "interaction": "none; fixed display"
+}

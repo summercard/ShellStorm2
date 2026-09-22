@@ -339,6 +339,11 @@ var open_wall_directions: Array[String] = []
 ## 设计源给出的房间级刷怪计划（波次 / 每波数量 / 怪物组成）。
 ## 空字典 = 该房走全局刷怪公式；非空时由 Dungeon3D._spawn_room_enemies 全量接管。
 var enemy_spawn_plan: Dictionary = {}
+## 设计源给出的房间级统一掉落计划（04 §22.7）：键 = trigger（clear / search / kill），
+## 值 = 槽位引用（`{spec_id}` / `{entries}` / `{pool_id}`）。空字典 = 本房不覆盖，
+## 由 RewardService.resolve_dispatch 的覆盖链逐级回退（关卡 → 怪物表 → 全局默认）。
+## **只承载不解释**：本类不解析规格、不抽表 —— 抽表只有 RewardService 一处。
+var reward_plan: Dictionary = {}
 ## 入口安全房四角是否补 L 型墙角（默认关：塔楼安全房保持 12 段直墙口径）。
 ## 只由「远征关卡」的房间记录置真，见 TowerDescent3D._build_expedition_records()。
 var safe_room_corner_l := false
@@ -381,6 +386,7 @@ func configure(config: Dictionary) -> void:
 	tower_module_shell = bool(config.get("tower_module_shell", tower_module_shell))
 	open_wall_directions.assign(config.get("open_wall_directions", []))
 	enemy_spawn_plan = (config.get("enemy_spawn_plan", enemy_spawn_plan) as Dictionary).duplicate(true)
+	reward_plan = (config.get("reward_plan", reward_plan) as Dictionary).duplicate(true)
 	safe_room_corner_l = bool(config.get("safe_room_corner_l", safe_room_corner_l))
 	authored_layout_shell = bool(config.get("authored_layout_shell", authored_layout_shell))
 	authored_layout_instances = (config.get("authored_layout_instances", []) as Array).duplicate(true)
