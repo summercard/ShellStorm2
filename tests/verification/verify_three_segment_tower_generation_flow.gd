@@ -1,5 +1,11 @@
 extends Node
 ## 98—95、94—90、89—85连续三区段真实塔楼生成、独立Boss内容与顺序卸载验收。
+##
+## ⚠️ 砍层早退（2026-09-22）：塔楼当前配置为「98F 即最深层」（TowerDescent3D.
+## DEEPEST_PLANNED_FLOOR == 98），本用例的三个区段前提整体不存在。判据取**运行时
+## 计划层集合**（`_floor_plan_snapshots` 是否含物理层索引 3），不读常量，所以两种
+## 配置下都成立；并把实测层集合打出来，避免「没跑还报绿」。砍层本身的正向断言在
+## `probe_tower_deepest_floor_cutoff.gd`（竖边数、层种子门、撤离信标全查）。
 
 
 func _ready() -> void:
@@ -10,9 +16,27 @@ func _ready() -> void:
 	tower.run_seed_override = 95009085
 	add_child(tower)
 	await get_tree().process_frame
-	if not tower.generate_through_floor_for_test(85):
-		failures.append("真实塔楼无法连续提交到85层")
+	# 先按原口径驱动到 85F（砍层模式下会在提交 97F 时失败并返回 false），
+	# 再判定塔楼是不是被砍成单层 —— 判定必须在驱动**之后**，否则计划层还没建出来。
+	var reached_85 := tower.generate_through_floor_for_test(85)
 	await get_tree().process_frame
+	var plan_snapshots := tower.get("_floor_plan_snapshots") as Dictionary
+	if not plan_snapshots.has(3):
+		var floor_rooms := tower.get("_floor_room_ids") as Dictionary
+		print(
+			"THREE_SEGMENT_TOWER_SKIPPED: 98F 即最深层（砍层模式），"
+			+ "98—95/94—90/89—85 三区段前提不成立"
+		)
+		print(
+			"  实测：计划层索引=%s；_floor_room_ids 层索引=%s；generate_through_floor_for_test(85)=%s"
+			% [str(plan_snapshots.keys()), str(floor_rooms.keys()), str(reached_85)]
+		)
+		tower.queue_free()
+		await get_tree().process_frame
+		get_tree().quit(0)
+		return
+	if not reached_85:
+		failures.append("真实塔楼无法连续提交到85层")
 	var snapshot := tower.get_tower_snapshot()
 	var generated := snapshot.get("generated_floor_indices", []) as Array
 	for floor_index in range(2, 16):

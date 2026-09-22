@@ -14,7 +14,10 @@ extends Node
 ##   F. 地砖内嵌静态碰撞全关（承重归 TowerFloorStage3D）
 ##   G. 委托门（墙归邻房的那一侧）面板已隐藏、门节点与交互仍在
 ##   H. 楼层台座按四房**真实足迹**挖洞（不是 15×15 方格）
-##   I. 下行走办公室西墙：竖直边 side=west 且 seed gate 指向 97F
+##   I. 办公室西墙的下行口 —— **按 98F 之下有没有层分流**：
+##      · 有下层（DEEPEST_PLANNED_FLOOR < 98）：竖直边 side=west 且 seed gate 指向 97F；
+##      · 98F 即塔底（== 98）：断言**一条下行竖边都没有**、无层种子门、`_floor_room_ids`
+##        不含 97F，而 98↔99 上行竖边仍在（哨兵）。见 EXPECTED_ROOM_DOORS_AT_DEEPEST。
 ##   J. **和平区**（2026-09-20 主人要求）：四房门只做普通开关（无清房/钥匙/命运卡）、
 ##      不刷怪、门扇沿用 99F 基地滑升门 —— 真驱动进房后按运行时状态断言
 ##   K. **新游戏开场**（2026-09-20 主人要求）：全新存档第一次进场落进最里面那间
@@ -32,7 +35,12 @@ extends Node
 ## 反向对照（改坏会变红）：
 ##   · 把 DungeonRoom3D._build_shell 里 authored 分支注释掉 → B/C/E 全红；
 ##   · 把 _stair_lobby_visual_holes 的 authored 分支删掉 → H 红（退回 15×15 方格）；
-##   · 把 Block00MasterOfficeLayout3D 的 exit_side 改回 "east" → A/I 红。
+##   · 把 Block00MasterOfficeLayout3D 的 exit_side 改回 "east" → A/I 红
+##     （C 段门向也会红：不管哪种分支，办公室的门向表里都没有 "east" 以外的门，
+##       西向那扇只由下行竖边追加）；
+##   · 把 TowerDescent3D.DEEPEST_PLANNED_FLOOR 改回 85 → `_has_lower_floor` 翻真，
+##     C 段自动回到「四房各两门」、I 段回到「竖边 side=west 且指 97F」——
+##     即这条常量是**双向**受检的，两个方向都有断言盯着。
 ##   · 把 PEACEFUL_ZONE 改成 false → J 全红（门策略退回清房/钥匙/命运卡、
 ##     门扇退回塔楼 A 套、进房后按 COMBAT 公式刷出敌人）。
 ##   · 把 TowerFloorStage3D 的 support_keep_out_rects 消费（_stair_hole_grid_pieces）
@@ -96,13 +104,32 @@ const EXPECTED_DELEGATED_DOOR_SIDES := {
 	"floor_01_exit": ["east"],
 }
 
+## ⚠️ 砍层模式（TowerDescent3D.DEEPEST_PLANNED_FLOOR == 98，98F 即最深层）下的门向。
+##
+## 办公室（floor_01_exit）的西向门**不是**摆位源给的装饰门，它**就是**下行口：
+## `TowerDescent3D._append_next_arrival_shell()` 末尾那句
+## `_declare_and_register_edge(exit, lower_entry, "vertical", side…)`
+## 会把 side（plan 的 exit_side = "west"）追加进该房 record 的 doors。
+## 所以「97F 不存在」⇒ 那句不执行 ⇒ 西向门与门墙一并消失，办公室只剩东向那扇。
+## 这不是退化，是**预期结果**：此模式下 98F 是塔底，不该再有下行口。
+##
+## 反向对照：把 DEEPEST_PLANNED_FLOOR 调回 85 ⇒ `_has_lower_floor = true`，
+## 本表不被使用，自动回到 EXPECTED_ROOM_DOORS 的口径（四房各两门 + I 段竖边）。
+const EXPECTED_ROOM_DOORS_AT_DEEPEST := {
+	"floor_01_entry": ["east", "west"],
+	"floor_01_hub": ["east", "west"],
+	"floor_01_main_02": ["east", "west"],
+	"floor_01_exit": ["east"],
+}
+
 ## 新游戏开场（2026-09-20 主人要求）：全新存档第一次进场落进 98F 四房链**最里面**
 ## 那间 —— 主人的办公室（运行时 id floor_01_exit），不再落 100F 天台。
 const NEW_GAME_OPENING_ROOM_ID := "floor_01_exit"
 ## 反向对照：同一 test_mode 下不走开场分支时，必须仍是原天台出生点。
 const ROOFTOP_SPAWN_WORLD := Vector3(-17.5, 0.05, 2.5)
-## 「站在本层楼面」的判定容差。楼下（97F）在 −36，相差 12m，所以 0.5 足够区分
+## 「站在本层楼面」的判定容差。下层（97F）楼面在 −36，相差 12m，所以 0.5 足够区分
 ## 「站在 98F」与「摔穿楼板掉下去」，又不会被玩家胶囊的落点微差（≈0.03）误伤。
+## ⚠️ 砍层模式下 97F 已不存在，摔穿就掉进虚空（仍由本容差判出）。
 const FLOOR_STAND_TOL := 0.5
 
 ## L 段：普通门（2026-09-21 主人要求）
@@ -120,6 +147,11 @@ const PLAIN_DOOR_AUTO_CLOSE_WAIT_S := 2.4
 
 var _failures: Array[String] = []
 var _checks := 0
+
+## 「98F 之下还有没有层」—— 由运行时 `_floor_room_ids` 实测得出，不读常量：
+## TowerDescent3D.DEEPEST_PLANNED_FLOOR 被砍到 98 时，97F 不再进 `_floor_room_ids`。
+## C 段门向与 I 段下行边都以此分流（见 EXPECTED_ROOM_DOORS_AT_DEEPEST）。
+var _has_lower_floor := false
 
 
 func _ready() -> void:
@@ -151,6 +183,9 @@ func _ready() -> void:
 	if snapshots == null or room_by_id == null or records_by_id == null:
 		_finish("塔楼内部状态不可读")
 		return
+
+	# 砍层分流：97F 在不在 `_floor_room_ids` 里，决定 C 段门向与 I 段下行边怎么断言。
+	_has_lower_floor = floor_rooms.has(NEXT_FLOOR_INDEX)
 
 	var rooms := _collect_block00_rooms(room_by_id, floor_rooms)
 	_check(
@@ -362,11 +397,20 @@ func _check_shells(rooms: Dictionary) -> void:
 		# 门向 + 委托门集合（共墙 lane 归属）。
 		var doors := room.doors.duplicate()
 		doors.sort()
-		var want_doors := (EXPECTED_ROOM_DOORS.get(room_id, []) as Array).duplicate()
+		var want_doors := (
+			EXPECTED_ROOM_DOORS_AT_DEEPEST if not _has_lower_floor else EXPECTED_ROOM_DOORS
+		).get(room_id, []) as Array
+		want_doors = want_doors.duplicate()
 		want_doors.sort()
 		_check(
 			doors == want_doors,
-			"%s 门向=%s 期望 %s" % [room_id, str(doors), str(want_doors)]
+			"%s 门向=%s 期望 %s（%s）"
+			% [
+				room_id,
+				str(doors),
+				str(want_doors),
+				"98F 为最深层，无下行口" if not _has_lower_floor else "98F 之下还有层，含下行口"
+			]
 		)
 		var delegated := (room.get_meta("authored_layout_delegated_door_sides", []) as Array).duplicate()
 		delegated.sort()
@@ -582,6 +626,14 @@ func _check_descent_side(tower: Node) -> void:
 	print("\n---- I. 下行走办公室西墙 ----")
 	var declared := tower.get("_declared_edges") as Array
 	var exit_id := str(ROOM_ID_BY_AUTHORED["master_office"])
+	# 哨兵：边表为空时下面的「找不到」断言会空跑通过。
+	if not _check(not declared.is_empty(), "哨兵：_declared_edges 为空，本节断言全空跑"):
+		return
+
+	if not _has_lower_floor:
+		_check_deepest_floor_descent(tower, declared, exit_id)
+		return
+
 	var found := false
 	for value in declared:
 		var declaration := value as Dictionary
@@ -614,6 +666,59 @@ func _check_descent_side(tower: Node) -> void:
 			"下层（floor_index=%d）没有到达房 %s" % [NEXT_FLOOR_INDEX, lower_id]
 		)
 	_check(found, "未找到 98F 出口房 %s 的竖直下行边" % exit_id)
+
+
+## I′. 砍层模式：98F 即塔底，**必须完全没有**从办公室出去的下行口。
+##
+## 断言方向与上一支相反 —— 上一支查「下行边在且指向 97F」，本支查「下行边一条都没有」，
+## 两者都是正向断言，不存在「因为找不到所以放过」。若哪天 DEEPEST_PLANNED_FLOOR
+## 被改回 85 而本支仍在跑，这里会立刻红（那时 _has_lower_floor 已为 true，不会进本支）。
+func _check_deepest_floor_descent(tower: Node, declared: Array, exit_id: String) -> void:
+	var vertical_total := 0
+	var from_exit: Array[String] = []
+	var from_stair_total := 0
+	for value in declared:
+		var declaration := value as Dictionary
+		if str(declaration.get("kind", "")) != "vertical":
+			continue
+		vertical_total += 1
+		var a := str(declaration.get("a", ""))
+		var b := str(declaration.get("b", ""))
+		if a == exit_id or b == exit_id:
+			from_exit.append("%s→%s(side=%s)" % [a, b, str(declaration.get("side", ""))])
+		# 反向对照哨兵：98↔99 楼梯间那条**上行**竖边必须还在，否则「竖边数为 0」
+		# 这种断言连塔楼没建起来都能通过。
+		if a == STAIR_DOOR_TARGET_ROOM or b == STAIR_DOOR_TARGET_ROOM:
+			from_stair_total += 1
+
+	_check(
+		from_stair_total >= 1,
+		"哨兵：98↔99 楼梯间竖边不见了（竖边总数 %d），本节断言无意义" % vertical_total
+	)
+	_check(
+		from_exit.is_empty(),
+		"98F 已是最深层，办公室 %s 仍有下行竖边：%s" % [exit_id, str(from_exit)]
+	)
+	var gate := tower.get("_floor_seed_gate_edges") as Dictionary
+	var gate_hits: Array[String] = []
+	for gate_key in gate.keys():
+		if str(gate_key).contains(exit_id):
+			gate_hits.append(str(gate_key))
+	_check(gate_hits.is_empty(), "最深层仍登记了层种子门：%s" % str(gate_hits))
+	var floor_rooms := tower.get("_floor_room_ids") as Dictionary
+	_check(
+		not floor_rooms.has(NEXT_FLOOR_INDEX),
+		"_floor_room_ids 竟含 floor_index=%d（%s），砍层没生效"
+		% [NEXT_FLOOR_INDEX, str(floor_rooms.get(NEXT_FLOOR_INDEX, []))]
+	)
+	# 平面口径不变：plan 仍声明 exit_side=west（摆位源的几何口径），只是没有下层可接。
+	var snapshots := tower.get("_floor_plan_snapshots") as Dictionary
+	var plan := snapshots.get(FLOOR_INDEX, {}) as Dictionary
+	_check(
+		str(plan.get("exit_side", "")) == "west",
+		"最深层 plan exit_side=%s 期望仍为 west（摆位源口径不随砍层改）"
+		% str(plan.get("exit_side", ""))
+	)
 
 
 ## J. 和平区：门只做普通开关、区域不刷怪、门扇走 99F 基地滑升门。
